@@ -10,7 +10,7 @@ Writing \TB\ tools in SWI-Prolog is greatly simplified by the
 \subsection{\tt swipl-adapter}
 
 \paragraph{Synopsis.} Execute a SWI-Prolog program as a tool. For each request
-a query is sent to the prolog program and the result sent back to the \TB\.
+a query is sent to the prolog program and the result sent back to the \TB.
 
 \paragraph{Example.} {\tt swipl-adapter -binary a.out}
 
@@ -83,7 +83,7 @@ Figure~\ref{fig:succ.output}
 
 \begin{figure}
 \rule{\textwidth}{0.5mm}
-\input{succ.pl.tex}
+\input{adapters/succ.pl.tex}
 	\caption{{\tt succ.pl}: the successor tool in SWI-Prolog}
 	\label{fig:succ.pl}
 \rule{\textwidth}{0.5mm}
@@ -91,7 +91,7 @@ Figure~\ref{fig:succ.output}
 
 \begin{figure}
 \rule{\textwidth}{0.5mm}
-\input{succ.tb.tex}
+\input{adapters/succ.tb.tex}
 	\caption{{\tt succ.tb}: the successor \T\ script}
 	\label{fig:succ.tb}
 \rule{\textwidth}{0.5mm}
@@ -99,10 +99,9 @@ Figure~\ref{fig:succ.output}
 
 \begin{figure}
 \rule{\textwidth}{0.5mm}
-\input{succ.output.tex}
+\input{adapters/succ.output.tex}
 	\caption{The output of the \T\ script}
 	\label{fig:succ.output}
 \rule{\textwidth}{0.5mm}
 \end{figure}
 
-\end{document}
