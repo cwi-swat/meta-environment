@@ -204,6 +204,7 @@ equations
 
 [css-1] collect-start-sorts($Module) = collect-start-sorts($Module, )
 [css-2] collect-start-sorts(sorts $Symbol*1,$Symbol*2) = $Symbol*1 $Symbol*2
+[css-3] collect-start-sorts(hiddens $Grammar, $Symbol*) = $Symbol*
 
 [0] $Symbol* = collect-start-sorts($Module),
    $ADT = start-sorts-to-adt($Symbol*)

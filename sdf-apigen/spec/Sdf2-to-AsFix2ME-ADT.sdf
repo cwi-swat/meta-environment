@@ -22,6 +22,8 @@ context-free syntax
   collect-start-sorts(Module) -> Symbol*
   collect-start-sorts(Module, Symbol*) -> Symbol* {traversal(accu,top-down,break)}
   collect-start-sorts(Grammar, Symbol*) -> Symbol* {traversal(accu,top-down,break)}
+ collect-start-sorts(Section, Symbol*) -> Symbol* {traversal(accu,top-down,break)}
+  
 
   start-sorts-to-adt(Symbol*) -> ATerm
   start-sorts-to-adt(Symbol*, ATerm) -> ATerm 
