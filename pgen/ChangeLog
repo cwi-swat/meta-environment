@@ -18,15 +18,18 @@
 
 $Id$
 
-2000-0329 <mdejonge@cwi.nl>
+2000/3/31 (mdejonge @cwi.nl)
+   * The toolbus is no longer required during the build process of pgen
+
+2000/03/29 (mdejonge@cwi.nl)
    * Some installation instructions written 
    * Added sdf2table and gen-table scripts, and the SDF2 grammar as used by
      pgen
    * Added default value for ASC in configure.in
 
-2000-0328 <mdejonge@cwi.nl>
+2000/03/28 (mdejonge@cwi.nl)
    * No longer distribute DEVELOPERS-INFO and reconf
 
-2000-0303 <mdejonge@cwi.nl>
+2000/03/03 (mdejonge@cwi.nl)
    * pgen is now a self-cotained component build and configured
      using automake/autoconf
