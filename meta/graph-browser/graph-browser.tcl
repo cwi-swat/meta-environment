@@ -833,6 +833,25 @@ proc AddUniqueEdge { graph from to } {
     }
 }
 
+#--
+# OnlineHelp()
+#-
+# generates the toolbus event to start the online help facility.
+#--
+proc OnlineHelp { } { 
+
+    GBevent [format "online-help"]
+}
+
+#--
+# NoOnlineHelp()
+#-
+# generates the toolbus event to start the online help facility.
+#--
+proc NoOnlineHelp { } { 
+
+    GBevent [format "no-online-help"]
+}
 
 proc Help {msg just class} {
     global toolname
@@ -1035,6 +1054,10 @@ proc define-menu-bar {} {
         -command {Help $help_about center b}
     .menu.help.menu add command -label "Mouse Operations" -underline 0 \
         -command {Help $help_mouse left c}
+    .menu.help.menu add command -label "Activate Online Help" -underline 10 \
+        -command {OnlineHelp}
+    .menu.help.menu add command -label "Deactivate Online Help" -underline 0 \
+        -command {NoOnlineHelp}
 
     menubutton .menu.debug -text "Debug" -underline 0 -menu .menu.debug.menu
     set m .menu.debug.menu

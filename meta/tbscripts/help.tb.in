@@ -6,8 +6,7 @@ process BROWSER(Id : gen, Cmd : str, Inp : str) is
 let
   Out : str
 in
-   snd-eval(Id,cmd(Cmd, input(Inp)))
-   +
+   snd-eval(Id,cmd(Cmd, input(Inp))).
    rec-value(Id, output(Out?))
 endlet
 
@@ -16,14 +15,33 @@ let
   HELP : gen,
   Id   : int
 in
+  Id := process-id.  
+  execute(gen,HELP?).
+  subscribe(online-help(<term>)).
+  Started := false.
   (
-    Id := process-id.
     rec-msg(online-help-wanted).
-    execute(gen,HELP?).
     BROWSER(HELP,
-            "netscape @prefix@/new-meta/doc/html/meta.html", 
+            "netscape -remote openUrl(@prefix@/new-meta/doc/html/meta.html)", 
             "").
+    Started := true.
     snd-msg(done)
+  +
+    rec-msg(no-online-help-wanted).
+    Started := false.
+    snd-msg(done)
+  +
+    rec-note(online-help(open-module)).
+    (
+      if Started then
+        BROWSER(HELP,
+                "netscape -remote openUrl(@prefix@/new-meta/doc/html/open-module.html)")
+      fi
+    +
+      if not(Started) then
+        tau
+      fi
+    )
   )*
   delta
 endlet
