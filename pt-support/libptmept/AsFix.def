@@ -1,0 +1,204 @@
+definition
+
+module asfix/syntax/Annotations
+imports asfix/syntax/Tree
+imports aterm/ATerms
+
+exports
+
+context-free syntax
+
+Tree Ann -> Tree {cons("annotated")}
+
+module asfix/syntax/Attributes
+imports asfix/syntax/Literals aterm/ATerms
+
+exports
+
+sorts Attributes Attrs Attr Associativity
+
+context-free syntax
+
+"no-attrs"                -> Attributes  {cons("no-attrs")}
+attrs(attributes:Attrs)        -> Attributes  {cons("attrs")}
+
+"[" {Attr ","}+ "]"       -> Attrs {cons("many")}
+
+"assoc"("associativity":Associativity)  -> Attr {cons("assoc")}
+term(aterm:ATerm)                -> Attr {cons("term")}
+id(module-name:Literal)         -> Attr {cons("id")}
+
+"bracket" -> Attr {cons("bracket")}
+"reject"  -> Attr {cons("reject")}
+"prefer"  -> Attr {cons("prefer")}
+"avoid"   -> Attr {cons("avoid")}
+
+"bracket" | "reject" | "prefer" | "avoid" -> ATerm {reject}
+id(Literal)                               -> ATerm {reject}
+
+module asfix/syntax/Literals
+
+imports basic/Whitespace
+
+exports
+
+sorts Literal Integer L-Char EscChar DecimalEscChar AlphaNumericalEscChar
+lexical syntax
+"\\" ~ []                   -> AlphaNumericalEscChar     {cons("default")}
+"\\" [01] [0-9] [0-9]       -> DecimalEscChar {cons("dec0_199")}
+"\\" "2" [0-4] [0-9]        -> DecimalEscChar {cons("dec200_249")}
+"\\" "2" "5" [0-5]          -> DecimalEscChar {cons("dec250_255")}
+alpha:AlphaNumericalEscChar -> EscChar {cons("alpha-numeric")}
+decimal:DecimalEscChar      -> EscChar   {cons("decimal")}
+~ [\0-\31\"\\] \/ [\t\n]    -> L-Char    {cons("normal")}
+EscChar                     -> L-Char    {cons("escaped")}
+"\"" chars:L-Char* "\""     -> Literal    {cons("quoted")}
+
+[A-Za-z\-\_][A-Za-z0-9\_\-]*[A-Za-z0-9]   -> Literal
+[A-Za-z]   -> Literal
+
+[0-9]+                      -> Integer
+module asfix/syntax/Parsetree
+ 
+imports asfix/syntax/Attributes
+imports asfix/syntax/Symbol
+imports asfix/syntax/Tree 
+imports aterm/IntCon
+
+exports
+sorts ParseTree 
+
+context-free syntax
+
+parsetree(top:Tree,amb-cnt:NatCon) -> ParseTree {cons("top")}
+module asfix/syntax/Symbol
+
+imports asfix/syntax/Literals
+
+exports
+
+sorts Symbol Symbols CharRange CharRanges
+
+context-free syntax
+
+empty                                                    -> Symbol {cons("empty")}
+lit(string:Literal)                                      -> Symbol {cons("lit")}
+cf(symbol:Symbol)                                        -> Symbol {cons("cf")}
+lex(symbol:Symbol)                                       -> Symbol {cons("lex")}
+opt(symbol:Symbol)                                       -> Symbol {cons("opt")}
+alt(lhs:Symbol,rhs:Symbol)                               -> Symbol {cons("alt")}
+pair(lhs:Symbol,rhs:Symbol)                              -> Symbol {cons("pair")}
+sort(string:Literal)                                     -> Symbol {cons("sort")}
+iter(symbol:Symbol)                                      -> Symbol {cons("iter")}
+iter-star(symbol:Symbol)                                 -> Symbol {cons("iter-star")}
+iter-sep(symbol:Symbol,separator:Symbol)                 -> Symbol {cons("iter-sep")}
+iter-star-sep(symbol:Symbol,separator:Symbol)            -> Symbol {cons("iter-star-sep")}
+iter-n(symbol:Symbol,number:NatCon)                      -> Symbol {cons("iter-n")}
+"iter-sep-n" "(" symbol:Symbol comma1:"," separator:Symbol comma2:"," number:Integer ")" -> Symbol {cons("iter-sep-n")}
+perm(symbols:Symbols)                                    -> Symbol {cons("perm")}
+set(symbol:Symbol)                                       -> Symbol {cons("set")}
+func(symbols:Symbols,symbol:Symbol)                      -> Symbol {cons("func")}
+varsym(symbol:Symbol)                                    -> Symbol {cons("varsym")}
+layout                                                   -> Symbol {cons("layout")}
+char-class(CharRanges)                                   -> Symbol {cons("char-class")}
+strategy(lhs:Symbol,rhs:Symbol)                          -> Symbol {cons("strategy")}
+parametrized-sort(sort:Literal,parameters:Symbols)       -> Symbol {cons("parametrized-sort")}
+
+"[" {Symbol ","}* "]"          -> Symbols {cons("list")}
+
+"[" { CharRange ","}* "]"      -> CharRanges  {cons("list")}
+
+integer: Integer                 -> CharRange {cons("character")}
+range(start:Integer,end:Integer) -> CharRange {cons("range")}
+module asfix/syntax/Tree
+
+imports asfix/syntax/Annotations
+imports asfix/syntax/Literals
+
+exports
+
+sorts Tree Args Production
+
+context-free syntax
+
+appl(prod:Production,args:Args) -> Tree  {cons("appl")}
+character:Integer               -> Tree  {cons("char")}
+lit(string:Literal)             -> Tree  {cons("lit")}
+amb(args:Args)                  -> Tree  {cons("amb")}
+"[" {Tree ","}* "]"             -> Args  {cons("list")}
+
+"prod" "(" lhs:Symbols comma1:"," rhs:Symbol comma2:"," attributes:Attributes ")" -> Production {cons("default")}
+list(rhs:Symbol)                                   -> Production {cons("list")}
+               
+module aterm/ATerms
+imports aterm/Literals aterm/IntCon aterm/RealCon
+exports
+  sorts ATermList ACon AFun ATerm Ann
+  context-free syntax
+
+    "[" list:{ ATerm ","}* "]"             -> ATermList {cons("list")}
+    arg:IntCon                            -> ACon      {cons("int")}
+    arg:RealCon                           -> ACon      {cons("real")}
+    lit:Literal                           -> AFun      {cons("lit")}
+    "<" type:ATerm ">"                     -> ATerm     {cons("placeholder")}
+    arg:ACon                              -> ATerm     {cons("aconstant")}
+    arg:ATermList                         -> ATerm     {cons("list")}
+    name:AFun                              -> ATerm     {cons("constant")}
+    name:AFun "(" args:{ ATerm ","}+  ")"       -> ATerm     {cons("appl")}
+    "{" list:{ ATerm ","}+  "}"            -> Ann       {cons("list")}
+    arg:ACon  anno:Ann          -> ATerm     {cons("annotated-aconstant")}
+    arg:ATermList  anno:Ann          -> ATerm     {cons("annotated-list")}
+    name:AFun     anno:Ann          -> ATerm     {cons("annotated-constant")}
+    name:AFun "(" args:{ ATerm ","}+  ")"  Ann  -> ATerm     {cons("annotated-appl")}
+                                  
+module aterm/IntCon
+imports aterm/Layout
+exports
+  sorts NatCon IntCon
+  lexical syntax
+    [0-9]+ -> NatCon {cons("default")}
+  context-free syntax
+    NatCon     -> IntCon {cons("nat")}
+    "+" NatCon -> IntCon {cons("plus")}
+    "-" NatCon -> IntCon {cons("minus")}      
+
+module aterm/Layout
+exports
+  lexical syntax
+    [\ \t\n]           -> LAYOUT
+    "%%" ~[\n]* [\n]   -> LAYOUT
+    "%" ~[\n\%]+ "%"   -> LAYOUT
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\%]
+
+module aterm/Literals
+imports aterm/Layout
+
+hiddens
+  sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
+
+exports
+  sorts Literal
+  lexical syntax
+    "\\" ~ []                  -> AlphaNumericalEscChar
+    "\\" [01] [0-9] [0-9]      -> DecimalEscChar
+    "\\" "2" [0-4] [0-9]       -> DecimalEscChar
+    "\\" "2" "5" [0-5]         -> DecimalEscChar
+    AlphaNumericalEscChar      -> EscChar
+    DecimalEscChar             -> EscChar
+    ~ [\0-\31\"\\] \/ [\t\n]   -> L-Char
+    EscChar                    -> L-Char
+    "\"" L-Char* "\""          -> Literal
+
+  lexical restrictions
+    AlphaNumericalEscChar     -/- [0-9]
+                                                   
+module aterm/RealCon
+imports aterm/IntCon
+exports
+  sorts OptExp RealCon
+  context-free syntax
+    "e" IntCon                -> OptExp {cons("present")}
+                              -> OptExp {cons("absent")}
+    IntCon "." NatCon OptExp  -> RealCon {cons("default")}  
