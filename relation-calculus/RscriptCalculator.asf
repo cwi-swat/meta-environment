@@ -701,7 +701,7 @@ $Rstore, 1)
 	========================================
 	evalx(average($Exp), $Rstore) = $Integer1 / $Integer2
 
-[avg2]	evalx(average($Exp), $Rstore) = 0
+[default-avg2]	evalx(average($Exp), $Rstore) = 0
 
 
 %% ---- max

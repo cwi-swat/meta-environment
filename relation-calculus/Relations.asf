@@ -183,7 +183,7 @@ equations
 
 [ranX-2] is-empty-iter($BagIter) = false,
 	 <$Elem, $Elem+> = head($BagIter),
-	 in(<$Elem>, $Bag) = false
+	 in(<$Elem+>, $Bag) = false
 	 ===================================================
 	 ranX($BagIter, $Bag) = union1(<$Elem, $Elem+>, ranX(tail($BagIter), $Bag))
 
