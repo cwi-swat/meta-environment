@@ -13,6 +13,8 @@ lexical syntax
 context-free syntax
 
 String String -> String {left}
+Identifier String -> String 
+String Identifier -> String 
 
 context-free syntax
 
