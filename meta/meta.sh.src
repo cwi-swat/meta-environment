@@ -43,7 +43,7 @@ xargs=""
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="bc:dhi:o:tT:vV"
+myarguments="bc:C:dhi:o:tT:vV"
 
 # Usage: displays helpful usage information
 Usage() {
@@ -51,6 +51,7 @@ cat << E_O_USAGE >&2
 Usage: $myname [options]
 Options:
     -c dir          specifies compiler output directory
+    -C file         specifies the configuration file to be processed
     -d              run in debug mode (with viewer)
     -h              display help information (usage)
     -T <port>       specifies TB_PORT for toolbus
@@ -87,6 +88,9 @@ fi
 set -- $args
 
 # Argument interpretation...
+
+configfile="meta.conf"        
+
 while [ $#  -gt 0 ]
 do
     case "$1"
@@ -101,6 +105,10 @@ do
 		else
 			echo "$myname: Ignoring invalid COMPILER_OUTPUT \`$1'"
 		fi ;;
+        -C)
+                shift
+                configfile=$1
+                ;;    
         -d)
 		xargs="$xargs -viewer" ;;
         -h)
@@ -130,6 +138,8 @@ done
 ###
 #  Get to the real work now...
 ###
+
+toolbusdefs="${toolbusdefs} -DCONFIG_FILE=\\\"${configfile}\\\""
 
 if [ $verbose -gt 0 ] ; then
 	echo CLASSPATH: $CLASSPATH
