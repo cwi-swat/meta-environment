@@ -1,7 +1,7 @@
 equations
 
 [display-result-1]
-  display-result($Elem) = convertl($Elem)
+  display-result($Rstore) = convert-rstore($Rstore)
 
 [evaluate-rscript-1]
   evaluate-query($Script, $Rstore)

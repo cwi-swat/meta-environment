@@ -6,7 +6,7 @@ imports RscriptCalculator
 exports
   context-free syntax
     evaluate-query(RSCRIPT, RSTORE) -> RSTORE
-    display-result(Elem) -> List
+    display-result(RSTORE) -> List
     result-to-html(Elem) -> HTML
 
 exports

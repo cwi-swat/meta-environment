@@ -7,10 +7,14 @@ exports
   context-free syntax
     convert(String, Area # String) -> ListItem
     convertl(Elem) -> List
+    convert-rstore(RSTORE) -> List
 
 hiddens
   variables
     "$Area"[0-9]* -> Area
     "$String"[0-9]* -> String
     "$Elem*"[0-9]* -> {Elem ","}*
+    "$Var" -> RVAR
+    "$Value" -> Elem
+    "$VPair*" -> {RVAR # RVALUE ","}*
     "$ListItem*"[0-9]* -> {ListItem ","}*
