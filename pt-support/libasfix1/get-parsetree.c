@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
   contents = ATreadFromNamedFile(argv[1]);
   assert(contents != NULL);
 
-  ATprintf("%t\n", PT_getAsFixTree(PT_makeAsFixFromTerm(contents)));
+  ATprintf("%t\n", PT_getParseTreeTree(PT_makeParseTreeFromTerm(contents)));
 
   return 0;
 }
