@@ -1,0 +1,21 @@
+module Booleans
+
+imports basic/Whitespace
+exports
+  sorts Bool
+
+  context-free syntax
+    "true"             -> Bool
+    "false"            -> Bool
+    Bool "|" Bool      -> Bool {left}
+    Bool "&" Bool      -> Bool {left}
+    "not" "(" Bool ")" -> Bool
+    "(" Bool ")"       -> Bool {bracket}
+
+  context-free priorities
+    Bool "&" Bool -> Bool >
+    Bool "|" Bool -> Bool
+
+hiddens
+  variables
+    "Bool"[0-9]* -> Bool
