@@ -4,8 +4,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT
 AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(error-support, 0.1)
-
-ACLOCAL="${ACLOCAL} -I ."
+AC_PREREQ(2.59)
 
 dnl NOTA BENE: This package is not used in all meta-environment packages
 dnl            YET. But the plan is to use it as widely as possible.
