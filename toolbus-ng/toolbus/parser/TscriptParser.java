@@ -15,8 +15,8 @@ public class TscriptParser {
   private static ATermFactory factory = TBTerm.factory;
   private ExternalParser externalparser;
 
-  public TscriptParser(ExternalParser ep){
-    externalparser  = ep;
+  public TscriptParser(ExternalParser ep) {
+    externalparser = ep;
     factory = TBTerm.factory;
     initParser();
   }
@@ -62,6 +62,9 @@ public class TscriptParser {
   private static final int negint = posint + 1;
   private static final int id = negint + 1;
 
+  private static final int trueFun = id + 1;
+  private static final int falseFun = trueFun + 1;
+
   private boolean shouldBuildArgs(int op) {
     return op < apply;
   }
@@ -103,6 +106,8 @@ public class TscriptParser {
     Funs.put("posint", new Integer(posint));
     Funs.put("negint", new Integer(negint));
     Funs.put("id", new Integer(id));
+    Funs.put("true", new Integer(trueFun));
+    Funs.put("false", new Integer(falseFun));
   }
 
   private ATerm unquote(ATerm type) {
@@ -222,6 +227,12 @@ public class TscriptParser {
 
       case id :
         return args[0];
+
+      case trueFun :
+        return TBTerm.True;
+
+      case falseFun :
+        return TBTerm.False;
 
       case Alternative :
         return new Alternative((ProcessExpression) oargs[0], (ProcessExpression) oargs[1]);

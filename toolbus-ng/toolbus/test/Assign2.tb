@@ -1,0 +1,6 @@
+process P is
+  let X : int
+  in
+	X := 122 . X := add(X,1) . print X
+  endlet
+toolbus(P)

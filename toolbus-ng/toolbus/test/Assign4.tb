@@ -1,0 +1,6 @@
+process P is
+  let X : bool, N :int, M : int
+  in
+	N := 20 . M := 10 . X := greater(N, M) . print X
+  endlet
+toolbus(P)

@@ -53,11 +53,11 @@ class FunctionDescriptor {
   }
 
   public boolean checkStatic(ATerm actual[]) throws ToolBusException {
-    //    System.err.println("checkStatic: " + name);
-    //    for(int i = 0; i < actual.length; i++){
-    //        System.err.println("actual[" + i + "] = " + actual[i]);
-    //        System.err.println("argtypes[" + i + "] = " + argtypes[i]);   
-    //    }
+    //          System.err.println("checkStatic: " + name);
+    //           for(int i = 0; i < actual.length; i++){
+    //               System.err.println("actual[" + i + "] = " + actual[i]);
+    //               System.err.println("argtypes[" + i + "] = " + argtypes[i]);   
+    //           }
     if (argtypes.length != actual.length)
       throw new ToolBusException(name + " has wrong number of arguments");
     for (int i = 0; i < argtypes.length; i++) {
@@ -101,6 +101,9 @@ class FunctionDescriptor {
 public class TBTerm {
 
   public static ATermFactory factory;
+  private static Hashtable Funs;
+  private static boolean initDone = false;
+
   public static ATerm True;
   public static ATerm False;
   public static ATerm BoolType;
@@ -119,8 +122,6 @@ public class TBTerm {
   public static ATerm TermPlaceholder;
   public static ATerm ListPlaceholder;
 
-  private static Hashtable Funs = new Hashtable();
-
   public static final int Not = 0;
   public static final int And = 1;
   public static final int Or = 2;
@@ -138,13 +139,20 @@ public class TBTerm {
   public static final int Mod = 15;
 
   public static final int processId = 16;
-  
-  public static void init(){
-    factory = new PureFactory();
+
+  public static final int trueFun = 17;
+  public static final int falseFun = 18;
+
+  public static void init() {
+    if (!initDone) {
+      init(new PureFactory());
+    }
+    initDone = true;
   }
 
-  public static void init(ATermFactory fact) {
+  private static void init(ATermFactory fact) {
     factory = fact;
+    Funs = new Hashtable();
     True = factory.make("true");
     False = factory.make("false");
     BoolType = factory.make("bool");
@@ -182,6 +190,8 @@ public class TBTerm {
     Funs.put("mod", new FunctionDescriptor("mod", Mod, IntType, IntType, IntType));
 
     Funs.put("processId", new FunctionDescriptor("processId", processId, TermType));
+    Funs.put("true", new FunctionDescriptor("true", trueFun, BoolType));
+    Funs.put("false", new FunctionDescriptor("false", falseFun, BoolType));
   }
 
   public static boolean isTrue(ATerm t) {
@@ -281,11 +291,17 @@ public class TBTerm {
   }
 
   public static ATerm checkType(ATerm t, Environment env) throws ToolBusException {
+    //System.err.println("checkType(" + t + ")");
     switch (t.getType()) {
-      case ATerm.BLOB : // ??
+      case ATerm.BLOB :
+        throw new ToolBusInternalError("checkType: BLOB");
+
       case ATerm.INT :
         return IntType;
+
       case ATerm.PLACEHOLDER : // ??
+        throw new ToolBusInternalError("checkType: PLACEHOLDER");
+
       case ATerm.REAL :
         return RealType;
 
@@ -295,8 +311,12 @@ public class TBTerm {
           //System.out.println("getType(" + t + ") => " + res);
           return res;
         }
-        if (TBTerm.isBoolean(t))
+        if (TBTerm.isBoolean(t)) {
           return BoolType;
+        }
+        if (((ATermAppl) t).isQuoted() && ((ATermAppl) t).getArity() == 0) {
+          return StrType;
+        }
         String fun = ((ATermAppl) t).getName();
         ATerm args[] = ((ATermAppl) t).getArgumentArray();
         //        if (args.length == 0)
@@ -531,6 +551,10 @@ public class TBTerm {
 
       case processId :
         return process.getProcessId();
+      case trueFun :
+        return True;
+      case falseFun :
+        return False;
     }
     throw new ToolBusInternalError("unknown function : " + fun);
   }
@@ -569,7 +593,7 @@ public class TBTerm {
         return true;
       }
 
-    if (TBTerm.isResVar(tb))
+    if (TBTerm.isVar(tb))
       if (fullMatch) {
         tb = envb.getVar(tb);
       } else {
@@ -601,7 +625,7 @@ public class TBTerm {
         return ta.equals(tb) || (tb == TBTerm.RealPlaceholder);
 
       case ATerm.PLACEHOLDER :
-        if (ta == IntPlaceholder && tb.getType() == ATerm.INT)
+        if (ta.equals(IntPlaceholder) && tb.getType() == ATerm.INT)
           return true;
         else if (ta == RealPlaceholder && tb.getType() == ATerm.REAL)
           return true;
