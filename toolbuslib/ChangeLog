@@ -1,5 +1,9 @@
 $Id$
 
+Thu Mar  4 13:15:02 CET 2004 <{paulk,jurgenv}@cwi.nl>
+ * Fixed a nice bug in toolbuslib: uninitialized field of a struct
+   for symbols.
+
 Tue Feb 10 17:09:13 CET 2004 <{jurgenv,jong}@cwi.nl>
  * added new ATBinit commandline option: -TB_COLLECT_LOOP <N>
    - if N == 0, then ATBeventloop does not do an AT_collect();
