@@ -33,7 +33,7 @@ public class Graph
 
   public static Graph fromImportList(ATermList nodeList, ATermList imports)
   {
-    Set nodeSet = new LinkedHashSet();
+    Set nodeSet = new HashSet();
     ATermList edges = imports.getFactory().makeList();
 
     while (!nodeList.isEmpty()) {
