@@ -29,6 +29,22 @@ public class GraphWrapper
 
   //}}}
 
+  public static Shape getNodeShape(Node n) {
+      AttributeList list = n.getAttributes();
+
+      while (!list.isEmpty()) {
+        Attribute head = list.getHead();
+     
+        if (head.isShape()) {
+          return head.getShape();
+        }
+
+        list = list.getTail();
+      }
+  
+      return null;
+    }
+    
   //{{{ public Node getNode(String id)
 
   public Node getNode(String id)

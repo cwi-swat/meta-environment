@@ -21,8 +21,6 @@ import javax.swing.JViewport;
 import javax.swing.Scrollable;
 import javax.swing.SwingConstants;
 
-import metastudio.graph.Attribute;
-import metastudio.graph.AttributeList;
 import metastudio.graph.Edge;
 import metastudio.graph.EdgeList;
 import metastudio.graph.Node;
@@ -198,12 +196,9 @@ public class GraphPanel
     while (!nodes.isEmpty()) {
       Node node = nodes.getHead();
       nodes = nodes.getTail();
-      double growFactor = shapeBoundingBoxGrowFactor(getNodeShape(node));
-      int width = (int) (((double) node.getWidth()) * growFactor);
-      int height = (int) (((double) node.getHeight()) * growFactor);
 
-      int right_x = node.getX()+width/2;
-      int bottom_y = node.getY()+height/2;
+      int right_x = node.getX()+node.getWidth()/2;
+      int bottom_y = node.getY()+node.getHeight()/2;
 
       max_x = Math.max(right_x, max_x);
       max_y = Math.max(bottom_y, max_y);
@@ -218,22 +213,6 @@ public class GraphPanel
   }
 
   //}}}
-  
-  private double shapeBoundingBoxGrowFactor(Shape shape) 
-  {
-      if (shape.isBox()) {
-          return 1;
-      }
-      if (shape.isDiamond()) {
-          return 1.5;
-      }
-      if (shape.isEllipse()) { 
-         return 1.2;
-      }
-      else {
-          return 1;
-      }
-   }
 
   //{{{ public void paint(Graphics g)
 
@@ -354,7 +333,7 @@ public class GraphPanel
       node_border = nodeBorder;
     }
    
-    Shape shape = getNodeShape(node);
+    Shape shape = GraphWrapper.getNodeShape(node);
     
     if (shape.isBox()) {
         paintBox(g, x, y, w, h, node_bg, node_border);
@@ -472,21 +451,7 @@ private void paintBox(Graphics2D g, int x, int y, int w, int h, Color node_bg, C
   }
 
   //}}}
-  private Shape getNodeShape(Node n) {
-    AttributeList list = n.getAttributes();
-
-    while (!list.isEmpty()) {
-      Attribute head = list.getHead();
-     
-      if (head.isShape()) {
-        return head.getShape();
-      }
-
-      list = list.getTail();
-    }
   
-    return null;
-  }
 
   //{{{ public Node getNodeAt(int x, int y)
 
