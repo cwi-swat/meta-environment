@@ -1,0 +1,55 @@
+#!/bin/sh
+# $Id$
+
+VERBOSE=1
+ERROR=0
+
+A2TOA1="a2toa1 -t"
+SGLR="sglr"
+
+cd `dirname $0`;
+mydir=`pwd`
+languages=$mydir/lang-types
+tables=$mydir/tables
+terms=$mydir/terms
+
+extensions=`egrep -v '^#' $languages |cut -f1`
+
+Notify () {
+	if [ $VERBOSE -gt 0 ]
+	then
+		echo $*                                   >&2
+	fi
+}
+
+for ext in $extensions
+do
+	files=`ls $terms/*.$ext`
+	lang=`egrep "^$ext" $languages | cut -f2`
+	ptbl=$tables/$lang.tbl
+        for file in $files
+        do
+		base=`basename $file`
+		out=`echo $file | sed -e "s/$ext\$/asfix/"`
+		out2=${out}2
+		if sglr -p $ptbl -i $file -o $out2
+		then
+		        out1=${out}1
+			$A2TOA1 < $out2 > $out1		2> /dev/null
+			rm -f $out2
+	                if diff -w $out1 $out1.org	> /dev/null 2>&1
+	                then
+		                Notify "Regression test for $base succeeded."
+		                rm -f $out1
+	                else
+		                Notify "Regression test for $base failed."
+				ERROR=1
+	                fi
+		else
+			echo "Error parsing $file!"	>&2
+			ERROR=1
+		fi
+	done
+done
+
+exit $ERROR

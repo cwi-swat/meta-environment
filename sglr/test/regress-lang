@@ -1,0 +1,47 @@
+#!/bin/sh
+# $Id$
+
+VERBOSE=1
+
+cd `dirname $0`;
+mydir=`pwd`
+reference=$mydir/tables
+
+dirs="first grammars"
+
+Notify () {
+	if [ $VERBOSE -gt 0 ]
+	then
+		echo $*                                   >&2
+	fi
+}
+
+GenTable() {
+	if sdf2table $1
+	then
+	        ptbl=`basename $1 .sdf2`.tbl
+	        Notify Comparing $ptbl...
+	        if diff -w $ptbl $reference/$ptbl		> /dev/null 2>&1
+	        then
+		        Notify "Regress test for $1 successful."
+		        rm -f $ptbl
+	        else
+		        Notify "Differences detected in parse table $ptbl!"
+	        fi
+	else
+		Notify "Failed to generate parse table for $1"
+		exit 1
+	fi
+}
+
+
+for dir in $dirs
+do
+	cd $dir
+        for stx in *.sdf2
+        do
+	        GenTable $stx
+        done
+	rm -f *.asfix*
+	cd ..
+done
