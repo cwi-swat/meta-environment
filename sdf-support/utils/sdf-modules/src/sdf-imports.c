@@ -630,6 +630,7 @@ static SDF_ImportList inheritUserRenamings(SDF_Import import,
 static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
 {
   SDF_ImportList result = SDF_makeImportListEmpty();
+  SDF_ImportList processed = SDF_makeImportListEmpty();
 
   /* The todo list contains imports with actual module parameters and
    * with the renamings associated to the import.
@@ -641,9 +642,10 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
   assert(moduleTable != NULL && "module table not initialized");
 
   while (!SDF_isImportListEmpty(todo)) {
-    SDF_Import     import;
+    SDF_Import     import, plainImport;
 
     import = SDF_removeImportAnnotations(SDF_getImportListHead(todo));
+    plainImport = import;
 
     if (SDF_hasImportListTail(todo)) {
       todo = SDF_getImportListTail(todo);
@@ -652,7 +654,7 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
       todo = SDF_makeImportListEmpty();
     }
 
-    if (!SDF_containsImportListImport(result, import)) {
+    if (!SDF_containsImportListImport(processed, import)) {
       SDF_Renamings renamings;
       SDF_ImportList imports;
       SDF_Module module = getModuleByImport(import);
@@ -669,7 +671,8 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
       todo = SDF_mergeImportList(todo, imports);
       import = makeRenamedImport(actualName, renamings);
     
-      if (!SDF_containsImportListImport(result, import)) { 
+      if (!SDF_containsImportListImport(processed, plainImport)) { 
+	processed = SDF_insertImport(plainImport, processed);
 	result = SDF_insertImport(import, result);
       }
     }
