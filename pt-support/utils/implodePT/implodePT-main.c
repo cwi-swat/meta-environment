@@ -18,7 +18,7 @@ static char myversion[] = "1.0";
  explanation.
  */
 
-static char myarguments[] = "aAbchi:lo:ptvILVqX";
+static char myarguments[] = "aAbchi:lOo:ptvILVqX";
 
 /*
  Usage: displays helpful usage information
@@ -36,6 +36,7 @@ void usage(void)
           "\t-i filename     input from file (default stdin)\n"
           "\t-l              remove layout\n"
           "\t-o filename     output to file (default stdout)\n"
+          "\t-o              interpret optionals\n"
           "\t-p              remove parsetree\n"
           "\t-t              output terms in plaintext format\n"
           "\t-v              verbose mode\n"
@@ -73,6 +74,7 @@ int main(int argc, char **argv)
   extern ATbool keep_annotations;
   extern ATbool interpret_alt;
   extern ATbool interpret_seq;
+  extern ATbool interpret_opt;
 
   /*  Commandline mode  */
 
@@ -85,6 +87,7 @@ int main(int argc, char **argv)
       case 'i':  input=optarg;                           break;
       case 'l':  remove_layout = ATtrue;                 break;
       case 'o':  output=optarg;                          break;
+      case 'O':  interpret_opt = ATtrue;                 break;
       case 'p':  remove_parsetree = ATtrue;              break;
       case 't':  bafmode = ATfalse;                      break;
       case 'v':  verbose = ATtrue;                       break;
