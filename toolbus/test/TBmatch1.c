@@ -207,6 +207,17 @@ void main(int argc, char *argv[])
   TST_S(174, "f({attr(x) : b})", "f({%f(x):b})", "attr");
   TST_T(175, "f({attr(x) : b})", "f({attr(x):%t})", "b");
 
+  TST_OK(180, "\"abc\"(1)");
+  TST_OK(181, "\"a\\\\bc\"(2)");
+  TST_OK(182, "\"a\\\"b\"(3)");
+  TST_OK(183, "\"a\\bc\"(4)");
+  TST_OK(184, "\"a\\fc\"(5)");
+  TST_OK(185, "\"a\\nc\"(6)");
+  TST_OK(186, "\"a\\rc\"(7)");
+  TST_OK(187, "\"a\\tc\"(8)");
+  TST_OK(188, "\"a\\vc\"(9)");
+  TST_OK(189, "\"a\\\nc\"(10)");
+
   if(nerr)
     fprintf(stderr, "TBmatch1: %d ERRORS\n", nerr);
   else
