@@ -21,7 +21,7 @@ typedef struct _SDF_Symbol *SDF_Symbol;
 typedef struct _SDF_Grammar *SDF_Grammar;
 typedef struct _SDF_SDF *SDF_SDF;
 typedef struct _SDF_Attributes *SDF_Attributes;
-typedef struct _SDF_AttributeAttributes *SDF_AttributeAttributes;
+typedef struct _SDF_AttributeList *SDF_AttributeList;
 typedef struct _SDF_Production *SDF_Production;
 typedef struct _SDF_Productions *SDF_Productions;
 typedef struct _SDF_ProductionList *SDF_ProductionList;
@@ -46,24 +46,24 @@ typedef struct _SDF_Group *SDF_Group;
 typedef struct _SDF_Priority *SDF_Priority;
 typedef struct _SDF_GroupGroupp *SDF_GroupGroupp;
 typedef struct _SDF_Priorities *SDF_Priorities;
-typedef struct _SDF_PriorityPrioritys *SDF_PriorityPrioritys;
+typedef struct _SDF_PriorityList *SDF_PriorityList;
 typedef struct _SDF_Sort *SDF_Sort;
 typedef struct _SDF_UQLiteral *SDF_UQLiteral;
 typedef struct _SDF_Literal *SDF_Literal;
 typedef struct _SDF_SymbolArguments *SDF_SymbolArguments;
 typedef struct _SDF_Lookahead *SDF_Lookahead;
 typedef struct _SDF_Lookaheads *SDF_Lookaheads;
-typedef struct _SDF_LookaheadLookaheads *SDF_LookaheadLookaheads;
+typedef struct _SDF_LookaheadList *SDF_LookaheadList;
 typedef struct _SDF_Restriction *SDF_Restriction;
 typedef struct _SDF_Restrictions *SDF_Restrictions;
-typedef struct _SDF_RestrictionRestrictions *SDF_RestrictionRestrictions;
+typedef struct _SDF_RestrictionList *SDF_RestrictionList;
 typedef struct _SDF_Alias *SDF_Alias;
 typedef struct _SDF_Aliases *SDF_Aliases;
-typedef struct _SDF_AliasAliass *SDF_AliasAliass;
+typedef struct _SDF_AliasList *SDF_AliasList;
 typedef struct _SDF_Symbols *SDF_Symbols;
 typedef struct _SDF_SymbolList *SDF_SymbolList;
 typedef struct _SDF_Renamings *SDF_Renamings;
-typedef struct _SDF_RenamingRenamings *SDF_RenamingRenamings;
+typedef struct _SDF_RenamingList *SDF_RenamingList;
 typedef struct _SDF_Renaming *SDF_Renaming;
 typedef struct _SDF_NatCon *SDF_NatCon;
 typedef struct _SDF_IntCon *SDF_IntCon;
@@ -100,8 +100,8 @@ SDF_SDF SDF_makeSDFFromTerm(ATerm t);
 ATerm SDF_makeTermFromSDF(SDF_SDF arg);
 SDF_Attributes SDF_makeAttributesFromTerm(ATerm t);
 ATerm SDF_makeTermFromAttributes(SDF_Attributes arg);
-SDF_AttributeAttributes SDF_makeAttributeAttributesFromTerm(ATerm t);
-ATerm SDF_makeTermFromAttributeAttributes(SDF_AttributeAttributes arg);
+SDF_AttributeList SDF_makeAttributeListFromTerm(ATerm t);
+ATerm SDF_makeTermFromAttributeList(SDF_AttributeList arg);
 SDF_Production SDF_makeProductionFromTerm(ATerm t);
 ATerm SDF_makeTermFromProduction(SDF_Production arg);
 SDF_Productions SDF_makeProductionsFromTerm(ATerm t);
@@ -150,8 +150,8 @@ SDF_GroupGroupp SDF_makeGroupGrouppFromTerm(ATerm t);
 ATerm SDF_makeTermFromGroupGroupp(SDF_GroupGroupp arg);
 SDF_Priorities SDF_makePrioritiesFromTerm(ATerm t);
 ATerm SDF_makeTermFromPriorities(SDF_Priorities arg);
-SDF_PriorityPrioritys SDF_makePriorityPrioritysFromTerm(ATerm t);
-ATerm SDF_makeTermFromPriorityPrioritys(SDF_PriorityPrioritys arg);
+SDF_PriorityList SDF_makePriorityListFromTerm(ATerm t);
+ATerm SDF_makeTermFromPriorityList(SDF_PriorityList arg);
 SDF_Sort SDF_makeSortFromTerm(ATerm t);
 ATerm SDF_makeTermFromSort(SDF_Sort arg);
 SDF_UQLiteral SDF_makeUQLiteralFromTerm(ATerm t);
@@ -164,28 +164,28 @@ SDF_Lookahead SDF_makeLookaheadFromTerm(ATerm t);
 ATerm SDF_makeTermFromLookahead(SDF_Lookahead arg);
 SDF_Lookaheads SDF_makeLookaheadsFromTerm(ATerm t);
 ATerm SDF_makeTermFromLookaheads(SDF_Lookaheads arg);
-SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsFromTerm(ATerm t);
-ATerm SDF_makeTermFromLookaheadLookaheads(SDF_LookaheadLookaheads arg);
+SDF_LookaheadList SDF_makeLookaheadListFromTerm(ATerm t);
+ATerm SDF_makeTermFromLookaheadList(SDF_LookaheadList arg);
 SDF_Restriction SDF_makeRestrictionFromTerm(ATerm t);
 ATerm SDF_makeTermFromRestriction(SDF_Restriction arg);
 SDF_Restrictions SDF_makeRestrictionsFromTerm(ATerm t);
 ATerm SDF_makeTermFromRestrictions(SDF_Restrictions arg);
-SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsFromTerm(ATerm t);
-ATerm SDF_makeTermFromRestrictionRestrictions(SDF_RestrictionRestrictions arg);
+SDF_RestrictionList SDF_makeRestrictionListFromTerm(ATerm t);
+ATerm SDF_makeTermFromRestrictionList(SDF_RestrictionList arg);
 SDF_Alias SDF_makeAliasFromTerm(ATerm t);
 ATerm SDF_makeTermFromAlias(SDF_Alias arg);
 SDF_Aliases SDF_makeAliasesFromTerm(ATerm t);
 ATerm SDF_makeTermFromAliases(SDF_Aliases arg);
-SDF_AliasAliass SDF_makeAliasAliassFromTerm(ATerm t);
-ATerm SDF_makeTermFromAliasAliass(SDF_AliasAliass arg);
+SDF_AliasList SDF_makeAliasListFromTerm(ATerm t);
+ATerm SDF_makeTermFromAliasList(SDF_AliasList arg);
 SDF_Symbols SDF_makeSymbolsFromTerm(ATerm t);
 ATerm SDF_makeTermFromSymbols(SDF_Symbols arg);
 SDF_SymbolList SDF_makeSymbolListFromTerm(ATerm t);
 ATerm SDF_makeTermFromSymbolList(SDF_SymbolList arg);
 SDF_Renamings SDF_makeRenamingsFromTerm(ATerm t);
 ATerm SDF_makeTermFromRenamings(SDF_Renamings arg);
-SDF_RenamingRenamings SDF_makeRenamingRenamingsFromTerm(ATerm t);
-ATerm SDF_makeTermFromRenamingRenamings(SDF_RenamingRenamings arg);
+SDF_RenamingList SDF_makeRenamingListFromTerm(ATerm t);
+ATerm SDF_makeTermFromRenamingList(SDF_RenamingList arg);
 SDF_Renaming SDF_makeRenamingFromTerm(ATerm t);
 ATerm SDF_makeTermFromRenaming(SDF_Renaming arg);
 SDF_NatCon SDF_makeNatConFromTerm(ATerm t);
@@ -276,11 +276,11 @@ SDF_Grammar SDF_makeGrammarEmptyGrammar();
 SDF_Grammar SDF_makeGrammarConcGrammars(SDF_Grammar left, SDF_Layout wsAfterLeft, SDF_Grammar right);
 SDF_Grammar SDF_makeGrammarBracket(SDF_Layout wsAfterParenOpen, SDF_Grammar grammar, SDF_Layout wsAfterGrammar);
 SDF_SDF SDF_makeSDFDefinition(SDF_Layout wsAfterDefinition, SDF_Definition definition);
-SDF_Attributes SDF_makeAttributesAttrs(SDF_Layout wsAfterBraceOpen, SDF_AttributeAttributes attributes, SDF_Layout wsAfterAttributes);
+SDF_Attributes SDF_makeAttributesAttrs(SDF_Layout wsAfterBraceOpen, SDF_AttributeList list, SDF_Layout wsAfterList);
 SDF_Attributes SDF_makeAttributesNoAttrs();
-SDF_AttributeAttributes SDF_makeAttributeAttributesEmpty();
-SDF_AttributeAttributes SDF_makeAttributeAttributesSingle(SDF_Attribute head);
-SDF_AttributeAttributes SDF_makeAttributeAttributesMany(SDF_Attribute head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_AttributeAttributes tail);
+SDF_AttributeList SDF_makeAttributeListEmpty();
+SDF_AttributeList SDF_makeAttributeListSingle(SDF_Attribute head);
+SDF_AttributeList SDF_makeAttributeListMany(SDF_Attribute head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_AttributeList tail);
 SDF_Production SDF_makeProductionProd(SDF_Symbols symbols, SDF_Layout wsAfterSymbols, SDF_Layout wsAfterGreaterThan, SDF_Symbol result, SDF_Layout wsAfterResult, SDF_Attributes attributes);
 SDF_Production SDF_makeProductionProdFun(SDF_Literal functionSymbol, SDF_Layout wsAfterFunctionSymbol, SDF_Layout wsAfterParenOpen, SDF_SymbolArguments arguments, SDF_Layout wsAfterArguments, SDF_Layout wsAfterParenClose, SDF_Layout wsAfterGreaterThan, SDF_Symbol result, SDF_Layout wsAfterResult, SDF_Attributes attributes);
 SDF_Productions SDF_makeProductionsDefault(SDF_ProductionList list);
@@ -337,10 +337,10 @@ SDF_Priority SDF_makePriorityPriorityChain(SDF_GroupGroupp groupp);
 SDF_Priority SDF_makePriorityPriorityAssoc(SDF_Group left, SDF_Layout wsAfterLeft, SDF_Associativity associativity, SDF_Layout wsAfterAssociativity, SDF_Group right);
 SDF_GroupGroupp SDF_makeGroupGrouppSingle(SDF_Group head);
 SDF_GroupGroupp SDF_makeGroupGrouppMany(SDF_Group head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_GroupGroupp tail);
-SDF_Priorities SDF_makePrioritiesDefault(SDF_PriorityPrioritys prioritys);
-SDF_PriorityPrioritys SDF_makePriorityPrioritysEmpty();
-SDF_PriorityPrioritys SDF_makePriorityPrioritysSingle(SDF_Priority head);
-SDF_PriorityPrioritys SDF_makePriorityPrioritysMany(SDF_Priority head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_PriorityPrioritys tail);
+SDF_Priorities SDF_makePrioritiesDefault(SDF_PriorityList list);
+SDF_PriorityList SDF_makePriorityListEmpty();
+SDF_PriorityList SDF_makePriorityListSingle(SDF_Priority head);
+SDF_PriorityList SDF_makePriorityListMany(SDF_Priority head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_PriorityList tail);
 SDF_Sort SDF_makeSortOneChar(SDF_Lexical lex);
 SDF_Sort SDF_makeSortMoreChars(SDF_Lexical lex);
 SDF_UQLiteral SDF_makeUQLiteralOneChar(SDF_Lexical lex);
@@ -355,28 +355,28 @@ SDF_Lookahead SDF_makeLookaheadSeq(SDF_CharClass head, SDF_Layout wsAfterHead, S
 SDF_Lookaheads SDF_makeLookaheadsSingle(SDF_Lookahead lookahead);
 SDF_Lookaheads SDF_makeLookaheadsAlt(SDF_Lookaheads left, SDF_Layout wsAfterLeft, SDF_Layout wsAfterBar, SDF_Lookaheads right);
 SDF_Lookaheads SDF_makeLookaheadsBracket(SDF_Layout wsAfterParenOpen, SDF_Lookaheads lookaheads, SDF_Layout wsAfterLookaheads);
-SDF_Lookaheads SDF_makeLookaheadsList(SDF_Layout wsAfterBracketOpenBracketOpen, SDF_Lookaheads lookaheads, SDF_Layout wsAfterLookaheads);
-SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsEmpty();
-SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsSingle(SDF_Lookahead head);
-SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsMany(SDF_Lookahead head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_LookaheadLookaheads tail);
+SDF_Lookaheads SDF_makeLookaheadsList(SDF_Layout wsAfterBracketOpenBracketOpen, SDF_LookaheadList list, SDF_Layout wsAfterList);
+SDF_LookaheadList SDF_makeLookaheadListEmpty();
+SDF_LookaheadList SDF_makeLookaheadListSingle(SDF_Lookahead head);
+SDF_LookaheadList SDF_makeLookaheadListMany(SDF_Lookahead head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_LookaheadList tail);
 SDF_Restriction SDF_makeRestrictionFollow(SDF_Symbols symbols, SDF_Layout wsAfterSymbols, SDF_Layout wsAfterSlash, SDF_Lookaheads lookaheads);
-SDF_Restrictions SDF_makeRestrictionsDefault(SDF_RestrictionRestrictions restrictions);
-SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsEmpty();
-SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsSingle(SDF_Restriction head);
-SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsMany(SDF_Restriction head, SDF_Layout wsAfterFirst, SDF_RestrictionRestrictions tail);
+SDF_Restrictions SDF_makeRestrictionsDefault(SDF_RestrictionList list);
+SDF_RestrictionList SDF_makeRestrictionListEmpty();
+SDF_RestrictionList SDF_makeRestrictionListSingle(SDF_Restriction head);
+SDF_RestrictionList SDF_makeRestrictionListMany(SDF_Restriction head, SDF_Layout wsAfterFirst, SDF_RestrictionList tail);
 SDF_Alias SDF_makeAliasAlias(SDF_Symbol symbol, SDF_Layout wsAfterSymbol, SDF_Layout wsAfterArrow, SDF_Symbol alias);
-SDF_Aliases SDF_makeAliasesDefault(SDF_AliasAliass aliass);
-SDF_AliasAliass SDF_makeAliasAliassEmpty();
-SDF_AliasAliass SDF_makeAliasAliassSingle(SDF_Alias head);
-SDF_AliasAliass SDF_makeAliasAliassMany(SDF_Alias head, SDF_Layout wsAfterFirst, SDF_AliasAliass tail);
+SDF_Aliases SDF_makeAliasesDefault(SDF_AliasList list);
+SDF_AliasList SDF_makeAliasListEmpty();
+SDF_AliasList SDF_makeAliasListSingle(SDF_Alias head);
+SDF_AliasList SDF_makeAliasListMany(SDF_Alias head, SDF_Layout wsAfterFirst, SDF_AliasList tail);
 SDF_Symbols SDF_makeSymbolsDefault(SDF_SymbolList list);
 SDF_SymbolList SDF_makeSymbolListEmpty();
 SDF_SymbolList SDF_makeSymbolListSingle(SDF_Symbol head);
 SDF_SymbolList SDF_makeSymbolListMany(SDF_Symbol head, SDF_Layout wsAfterFirst, SDF_SymbolList tail);
-SDF_Renamings SDF_makeRenamingsRenamings(SDF_Layout wsAfterBracketOpen, SDF_RenamingRenamings renamings, SDF_Layout wsAfterRenamings);
-SDF_RenamingRenamings SDF_makeRenamingRenamingsEmpty();
-SDF_RenamingRenamings SDF_makeRenamingRenamingsSingle(SDF_Renaming head);
-SDF_RenamingRenamings SDF_makeRenamingRenamingsMany(SDF_Renaming head, SDF_Layout wsAfterFirst, SDF_RenamingRenamings tail);
+SDF_Renamings SDF_makeRenamingsRenamings(SDF_Layout wsAfterBracketOpen, SDF_RenamingList list, SDF_Layout wsAfterList);
+SDF_RenamingList SDF_makeRenamingListEmpty();
+SDF_RenamingList SDF_makeRenamingListSingle(SDF_Renaming head);
+SDF_RenamingList SDF_makeRenamingListMany(SDF_Renaming head, SDF_Layout wsAfterFirst, SDF_RenamingList tail);
 SDF_Renaming SDF_makeRenamingSymbol(SDF_Symbol from, SDF_Layout wsAfterFrom, SDF_Layout wsAfterEqualsGreaterThan, SDF_Symbol to);
 SDF_Renaming SDF_makeRenamingProduction(SDF_Symbol from, SDF_Layout wsAfterFrom, SDF_Layout wsAfterEqualsGreaterThan, SDF_Symbol to);
 SDF_NatCon SDF_makeNatConDigits(SDF_Lexical lex);
@@ -439,7 +439,7 @@ ATbool SDF_isEqualSymbol(SDF_Symbol arg0, SDF_Symbol arg1);
 ATbool SDF_isEqualGrammar(SDF_Grammar arg0, SDF_Grammar arg1);
 ATbool SDF_isEqualSDF(SDF_SDF arg0, SDF_SDF arg1);
 ATbool SDF_isEqualAttributes(SDF_Attributes arg0, SDF_Attributes arg1);
-ATbool SDF_isEqualAttributeAttributes(SDF_AttributeAttributes arg0, SDF_AttributeAttributes arg1);
+ATbool SDF_isEqualAttributeList(SDF_AttributeList arg0, SDF_AttributeList arg1);
 ATbool SDF_isEqualProduction(SDF_Production arg0, SDF_Production arg1);
 ATbool SDF_isEqualProductions(SDF_Productions arg0, SDF_Productions arg1);
 ATbool SDF_isEqualProductionList(SDF_ProductionList arg0, SDF_ProductionList arg1);
@@ -464,24 +464,24 @@ ATbool SDF_isEqualGroup(SDF_Group arg0, SDF_Group arg1);
 ATbool SDF_isEqualPriority(SDF_Priority arg0, SDF_Priority arg1);
 ATbool SDF_isEqualGroupGroupp(SDF_GroupGroupp arg0, SDF_GroupGroupp arg1);
 ATbool SDF_isEqualPriorities(SDF_Priorities arg0, SDF_Priorities arg1);
-ATbool SDF_isEqualPriorityPrioritys(SDF_PriorityPrioritys arg0, SDF_PriorityPrioritys arg1);
+ATbool SDF_isEqualPriorityList(SDF_PriorityList arg0, SDF_PriorityList arg1);
 ATbool SDF_isEqualSort(SDF_Sort arg0, SDF_Sort arg1);
 ATbool SDF_isEqualUQLiteral(SDF_UQLiteral arg0, SDF_UQLiteral arg1);
 ATbool SDF_isEqualLiteral(SDF_Literal arg0, SDF_Literal arg1);
 ATbool SDF_isEqualSymbolArguments(SDF_SymbolArguments arg0, SDF_SymbolArguments arg1);
 ATbool SDF_isEqualLookahead(SDF_Lookahead arg0, SDF_Lookahead arg1);
 ATbool SDF_isEqualLookaheads(SDF_Lookaheads arg0, SDF_Lookaheads arg1);
-ATbool SDF_isEqualLookaheadLookaheads(SDF_LookaheadLookaheads arg0, SDF_LookaheadLookaheads arg1);
+ATbool SDF_isEqualLookaheadList(SDF_LookaheadList arg0, SDF_LookaheadList arg1);
 ATbool SDF_isEqualRestriction(SDF_Restriction arg0, SDF_Restriction arg1);
 ATbool SDF_isEqualRestrictions(SDF_Restrictions arg0, SDF_Restrictions arg1);
-ATbool SDF_isEqualRestrictionRestrictions(SDF_RestrictionRestrictions arg0, SDF_RestrictionRestrictions arg1);
+ATbool SDF_isEqualRestrictionList(SDF_RestrictionList arg0, SDF_RestrictionList arg1);
 ATbool SDF_isEqualAlias(SDF_Alias arg0, SDF_Alias arg1);
 ATbool SDF_isEqualAliases(SDF_Aliases arg0, SDF_Aliases arg1);
-ATbool SDF_isEqualAliasAliass(SDF_AliasAliass arg0, SDF_AliasAliass arg1);
+ATbool SDF_isEqualAliasList(SDF_AliasList arg0, SDF_AliasList arg1);
 ATbool SDF_isEqualSymbols(SDF_Symbols arg0, SDF_Symbols arg1);
 ATbool SDF_isEqualSymbolList(SDF_SymbolList arg0, SDF_SymbolList arg1);
 ATbool SDF_isEqualRenamings(SDF_Renamings arg0, SDF_Renamings arg1);
-ATbool SDF_isEqualRenamingRenamings(SDF_RenamingRenamings arg0, SDF_RenamingRenamings arg1);
+ATbool SDF_isEqualRenamingList(SDF_RenamingList arg0, SDF_RenamingList arg1);
 ATbool SDF_isEqualRenaming(SDF_Renaming arg0, SDF_Renaming arg1);
 ATbool SDF_isEqualNatCon(SDF_NatCon arg0, SDF_NatCon arg1);
 ATbool SDF_isEqualIntCon(SDF_IntCon arg0, SDF_IntCon arg1);
@@ -750,38 +750,38 @@ SDF_SDF SDF_setSDFWsAfterDefinition(SDF_SDF arg, SDF_Layout wsAfterDefinition);
 ATbool SDF_isValidAttributes(SDF_Attributes arg);
 ATbool SDF_isAttributesAttrs(SDF_Attributes arg);
 ATbool SDF_isAttributesNoAttrs(SDF_Attributes arg);
+ATbool SDF_hasAttributesWsAfterList(SDF_Attributes arg);
+SDF_Layout SDF_getAttributesWsAfterList(SDF_Attributes arg);
+SDF_Attributes SDF_setAttributesWsAfterList(SDF_Attributes arg, SDF_Layout wsAfterList);
 ATbool SDF_hasAttributesWsAfterBraceOpen(SDF_Attributes arg);
 SDF_Layout SDF_getAttributesWsAfterBraceOpen(SDF_Attributes arg);
 SDF_Attributes SDF_setAttributesWsAfterBraceOpen(SDF_Attributes arg, SDF_Layout wsAfterBraceOpen);
-ATbool SDF_hasAttributesAttributes(SDF_Attributes arg);
-SDF_AttributeAttributes SDF_getAttributesAttributes(SDF_Attributes arg);
-SDF_Attributes SDF_setAttributesAttributes(SDF_Attributes arg, SDF_AttributeAttributes attributes);
-ATbool SDF_hasAttributesWsAfterAttributes(SDF_Attributes arg);
-SDF_Layout SDF_getAttributesWsAfterAttributes(SDF_Attributes arg);
-SDF_Attributes SDF_setAttributesWsAfterAttributes(SDF_Attributes arg, SDF_Layout wsAfterAttributes);
+ATbool SDF_hasAttributesList(SDF_Attributes arg);
+SDF_AttributeList SDF_getAttributesList(SDF_Attributes arg);
+SDF_Attributes SDF_setAttributesList(SDF_Attributes arg, SDF_AttributeList list);
 
 /*}}}  */
-/*{{{  SDF_AttributeAttributes accessor prototypes */
+/*{{{  SDF_AttributeList accessor prototypes */
 
-ATbool SDF_isValidAttributeAttributes(SDF_AttributeAttributes arg);
-ATbool SDF_isAttributeAttributesEmpty(SDF_AttributeAttributes arg);
-ATbool SDF_isAttributeAttributesSingle(SDF_AttributeAttributes arg);
-ATbool SDF_isAttributeAttributesMany(SDF_AttributeAttributes arg);
-ATbool SDF_hasAttributeAttributesWsAfterFirst(SDF_AttributeAttributes arg);
-SDF_Layout SDF_getAttributeAttributesWsAfterFirst(SDF_AttributeAttributes arg);
-SDF_AttributeAttributes SDF_setAttributeAttributesWsAfterFirst(SDF_AttributeAttributes arg, SDF_Layout wsAfterFirst);
-ATbool SDF_hasAttributeAttributesWsAfterSep(SDF_AttributeAttributes arg);
-SDF_Layout SDF_getAttributeAttributesWsAfterSep(SDF_AttributeAttributes arg);
-SDF_AttributeAttributes SDF_setAttributeAttributesWsAfterSep(SDF_AttributeAttributes arg, SDF_Layout wsAfterSep);
-ATbool SDF_hasAttributeAttributesTail(SDF_AttributeAttributes arg);
-SDF_AttributeAttributes SDF_getAttributeAttributesTail(SDF_AttributeAttributes arg);
-SDF_AttributeAttributes SDF_setAttributeAttributesTail(SDF_AttributeAttributes arg, SDF_AttributeAttributes tail);
-ATbool SDF_hasAttributeAttributesHead(SDF_AttributeAttributes arg);
-SDF_Attribute SDF_getAttributeAttributesHead(SDF_AttributeAttributes arg);
-SDF_AttributeAttributes SDF_setAttributeAttributesHead(SDF_AttributeAttributes arg, SDF_Attribute head);
-ATbool SDF_hasAttributeAttributesSep(SDF_AttributeAttributes arg);
-SDF_Separator SDF_getAttributeAttributesSep(SDF_AttributeAttributes arg);
-SDF_AttributeAttributes SDF_setAttributeAttributesSep(SDF_AttributeAttributes arg, SDF_Separator sep);
+ATbool SDF_isValidAttributeList(SDF_AttributeList arg);
+ATbool SDF_isAttributeListEmpty(SDF_AttributeList arg);
+ATbool SDF_isAttributeListSingle(SDF_AttributeList arg);
+ATbool SDF_isAttributeListMany(SDF_AttributeList arg);
+ATbool SDF_hasAttributeListWsAfterFirst(SDF_AttributeList arg);
+SDF_Layout SDF_getAttributeListWsAfterFirst(SDF_AttributeList arg);
+SDF_AttributeList SDF_setAttributeListWsAfterFirst(SDF_AttributeList arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasAttributeListWsAfterSep(SDF_AttributeList arg);
+SDF_Layout SDF_getAttributeListWsAfterSep(SDF_AttributeList arg);
+SDF_AttributeList SDF_setAttributeListWsAfterSep(SDF_AttributeList arg, SDF_Layout wsAfterSep);
+ATbool SDF_hasAttributeListTail(SDF_AttributeList arg);
+SDF_AttributeList SDF_getAttributeListTail(SDF_AttributeList arg);
+SDF_AttributeList SDF_setAttributeListTail(SDF_AttributeList arg, SDF_AttributeList tail);
+ATbool SDF_hasAttributeListHead(SDF_AttributeList arg);
+SDF_Attribute SDF_getAttributeListHead(SDF_AttributeList arg);
+SDF_AttributeList SDF_setAttributeListHead(SDF_AttributeList arg, SDF_Attribute head);
+ATbool SDF_hasAttributeListSep(SDF_AttributeList arg);
+SDF_Separator SDF_getAttributeListSep(SDF_AttributeList arg);
+SDF_AttributeList SDF_setAttributeListSep(SDF_AttributeList arg, SDF_Separator sep);
 
 /*}}}  */
 /*{{{  SDF_Production accessor prototypes */
@@ -1211,32 +1211,32 @@ SDF_GroupGroupp SDF_setGroupGrouppSep(SDF_GroupGroupp arg, SDF_Separator sep);
 
 ATbool SDF_isValidPriorities(SDF_Priorities arg);
 ATbool SDF_isPrioritiesDefault(SDF_Priorities arg);
-ATbool SDF_hasPrioritiesPrioritys(SDF_Priorities arg);
-SDF_PriorityPrioritys SDF_getPrioritiesPrioritys(SDF_Priorities arg);
-SDF_Priorities SDF_setPrioritiesPrioritys(SDF_Priorities arg, SDF_PriorityPrioritys prioritys);
+ATbool SDF_hasPrioritiesList(SDF_Priorities arg);
+SDF_PriorityList SDF_getPrioritiesList(SDF_Priorities arg);
+SDF_Priorities SDF_setPrioritiesList(SDF_Priorities arg, SDF_PriorityList list);
 
 /*}}}  */
-/*{{{  SDF_PriorityPrioritys accessor prototypes */
+/*{{{  SDF_PriorityList accessor prototypes */
 
-ATbool SDF_isValidPriorityPrioritys(SDF_PriorityPrioritys arg);
-ATbool SDF_isPriorityPrioritysEmpty(SDF_PriorityPrioritys arg);
-ATbool SDF_isPriorityPrioritysSingle(SDF_PriorityPrioritys arg);
-ATbool SDF_isPriorityPrioritysMany(SDF_PriorityPrioritys arg);
-ATbool SDF_hasPriorityPrioritysWsAfterFirst(SDF_PriorityPrioritys arg);
-SDF_Layout SDF_getPriorityPrioritysWsAfterFirst(SDF_PriorityPrioritys arg);
-SDF_PriorityPrioritys SDF_setPriorityPrioritysWsAfterFirst(SDF_PriorityPrioritys arg, SDF_Layout wsAfterFirst);
-ATbool SDF_hasPriorityPrioritysWsAfterSep(SDF_PriorityPrioritys arg);
-SDF_Layout SDF_getPriorityPrioritysWsAfterSep(SDF_PriorityPrioritys arg);
-SDF_PriorityPrioritys SDF_setPriorityPrioritysWsAfterSep(SDF_PriorityPrioritys arg, SDF_Layout wsAfterSep);
-ATbool SDF_hasPriorityPrioritysTail(SDF_PriorityPrioritys arg);
-SDF_PriorityPrioritys SDF_getPriorityPrioritysTail(SDF_PriorityPrioritys arg);
-SDF_PriorityPrioritys SDF_setPriorityPrioritysTail(SDF_PriorityPrioritys arg, SDF_PriorityPrioritys tail);
-ATbool SDF_hasPriorityPrioritysHead(SDF_PriorityPrioritys arg);
-SDF_Priority SDF_getPriorityPrioritysHead(SDF_PriorityPrioritys arg);
-SDF_PriorityPrioritys SDF_setPriorityPrioritysHead(SDF_PriorityPrioritys arg, SDF_Priority head);
-ATbool SDF_hasPriorityPrioritysSep(SDF_PriorityPrioritys arg);
-SDF_Separator SDF_getPriorityPrioritysSep(SDF_PriorityPrioritys arg);
-SDF_PriorityPrioritys SDF_setPriorityPrioritysSep(SDF_PriorityPrioritys arg, SDF_Separator sep);
+ATbool SDF_isValidPriorityList(SDF_PriorityList arg);
+ATbool SDF_isPriorityListEmpty(SDF_PriorityList arg);
+ATbool SDF_isPriorityListSingle(SDF_PriorityList arg);
+ATbool SDF_isPriorityListMany(SDF_PriorityList arg);
+ATbool SDF_hasPriorityListWsAfterFirst(SDF_PriorityList arg);
+SDF_Layout SDF_getPriorityListWsAfterFirst(SDF_PriorityList arg);
+SDF_PriorityList SDF_setPriorityListWsAfterFirst(SDF_PriorityList arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasPriorityListWsAfterSep(SDF_PriorityList arg);
+SDF_Layout SDF_getPriorityListWsAfterSep(SDF_PriorityList arg);
+SDF_PriorityList SDF_setPriorityListWsAfterSep(SDF_PriorityList arg, SDF_Layout wsAfterSep);
+ATbool SDF_hasPriorityListTail(SDF_PriorityList arg);
+SDF_PriorityList SDF_getPriorityListTail(SDF_PriorityList arg);
+SDF_PriorityList SDF_setPriorityListTail(SDF_PriorityList arg, SDF_PriorityList tail);
+ATbool SDF_hasPriorityListHead(SDF_PriorityList arg);
+SDF_Priority SDF_getPriorityListHead(SDF_PriorityList arg);
+SDF_PriorityList SDF_setPriorityListHead(SDF_PriorityList arg, SDF_Priority head);
+ATbool SDF_hasPriorityListSep(SDF_PriorityList arg);
+SDF_Separator SDF_getPriorityListSep(SDF_PriorityList arg);
+SDF_PriorityList SDF_setPriorityListSep(SDF_PriorityList arg, SDF_Separator sep);
 
 /*}}}  */
 /*{{{  SDF_Sort accessor prototypes */
@@ -1327,6 +1327,9 @@ ATbool SDF_isLookaheadsList(SDF_Lookaheads arg);
 ATbool SDF_hasLookaheadsRight(SDF_Lookaheads arg);
 SDF_Lookaheads SDF_getLookaheadsRight(SDF_Lookaheads arg);
 SDF_Lookaheads SDF_setLookaheadsRight(SDF_Lookaheads arg, SDF_Lookaheads right);
+ATbool SDF_hasLookaheadsWsAfterList(SDF_Lookaheads arg);
+SDF_Layout SDF_getLookaheadsWsAfterList(SDF_Lookaheads arg);
+SDF_Lookaheads SDF_setLookaheadsWsAfterList(SDF_Lookaheads arg, SDF_Layout wsAfterList);
 ATbool SDF_hasLookaheadsLookaheads(SDF_Lookaheads arg);
 SDF_Lookaheads SDF_getLookaheadsLookaheads(SDF_Lookaheads arg);
 SDF_Lookaheads SDF_setLookaheadsLookaheads(SDF_Lookaheads arg, SDF_Lookaheads lookaheads);
@@ -1345,6 +1348,9 @@ SDF_Lookaheads SDF_setLookaheadsLookahead(SDF_Lookaheads arg, SDF_Lookahead look
 ATbool SDF_hasLookaheadsWsAfterBar(SDF_Lookaheads arg);
 SDF_Layout SDF_getLookaheadsWsAfterBar(SDF_Lookaheads arg);
 SDF_Lookaheads SDF_setLookaheadsWsAfterBar(SDF_Lookaheads arg, SDF_Layout wsAfterBar);
+ATbool SDF_hasLookaheadsList(SDF_Lookaheads arg);
+SDF_LookaheadList SDF_getLookaheadsList(SDF_Lookaheads arg);
+SDF_Lookaheads SDF_setLookaheadsList(SDF_Lookaheads arg, SDF_LookaheadList list);
 ATbool SDF_hasLookaheadsLeft(SDF_Lookaheads arg);
 SDF_Lookaheads SDF_getLookaheadsLeft(SDF_Lookaheads arg);
 SDF_Lookaheads SDF_setLookaheadsLeft(SDF_Lookaheads arg, SDF_Lookaheads left);
@@ -1353,27 +1359,27 @@ SDF_Layout SDF_getLookaheadsWsAfterLookaheads(SDF_Lookaheads arg);
 SDF_Lookaheads SDF_setLookaheadsWsAfterLookaheads(SDF_Lookaheads arg, SDF_Layout wsAfterLookaheads);
 
 /*}}}  */
-/*{{{  SDF_LookaheadLookaheads accessor prototypes */
+/*{{{  SDF_LookaheadList accessor prototypes */
 
-ATbool SDF_isValidLookaheadLookaheads(SDF_LookaheadLookaheads arg);
-ATbool SDF_isLookaheadLookaheadsEmpty(SDF_LookaheadLookaheads arg);
-ATbool SDF_isLookaheadLookaheadsSingle(SDF_LookaheadLookaheads arg);
-ATbool SDF_isLookaheadLookaheadsMany(SDF_LookaheadLookaheads arg);
-ATbool SDF_hasLookaheadLookaheadsWsAfterFirst(SDF_LookaheadLookaheads arg);
-SDF_Layout SDF_getLookaheadLookaheadsWsAfterFirst(SDF_LookaheadLookaheads arg);
-SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsWsAfterFirst(SDF_LookaheadLookaheads arg, SDF_Layout wsAfterFirst);
-ATbool SDF_hasLookaheadLookaheadsWsAfterSep(SDF_LookaheadLookaheads arg);
-SDF_Layout SDF_getLookaheadLookaheadsWsAfterSep(SDF_LookaheadLookaheads arg);
-SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsWsAfterSep(SDF_LookaheadLookaheads arg, SDF_Layout wsAfterSep);
-ATbool SDF_hasLookaheadLookaheadsTail(SDF_LookaheadLookaheads arg);
-SDF_LookaheadLookaheads SDF_getLookaheadLookaheadsTail(SDF_LookaheadLookaheads arg);
-SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsTail(SDF_LookaheadLookaheads arg, SDF_LookaheadLookaheads tail);
-ATbool SDF_hasLookaheadLookaheadsHead(SDF_LookaheadLookaheads arg);
-SDF_Lookahead SDF_getLookaheadLookaheadsHead(SDF_LookaheadLookaheads arg);
-SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsHead(SDF_LookaheadLookaheads arg, SDF_Lookahead head);
-ATbool SDF_hasLookaheadLookaheadsSep(SDF_LookaheadLookaheads arg);
-SDF_Separator SDF_getLookaheadLookaheadsSep(SDF_LookaheadLookaheads arg);
-SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsSep(SDF_LookaheadLookaheads arg, SDF_Separator sep);
+ATbool SDF_isValidLookaheadList(SDF_LookaheadList arg);
+ATbool SDF_isLookaheadListEmpty(SDF_LookaheadList arg);
+ATbool SDF_isLookaheadListSingle(SDF_LookaheadList arg);
+ATbool SDF_isLookaheadListMany(SDF_LookaheadList arg);
+ATbool SDF_hasLookaheadListWsAfterFirst(SDF_LookaheadList arg);
+SDF_Layout SDF_getLookaheadListWsAfterFirst(SDF_LookaheadList arg);
+SDF_LookaheadList SDF_setLookaheadListWsAfterFirst(SDF_LookaheadList arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasLookaheadListWsAfterSep(SDF_LookaheadList arg);
+SDF_Layout SDF_getLookaheadListWsAfterSep(SDF_LookaheadList arg);
+SDF_LookaheadList SDF_setLookaheadListWsAfterSep(SDF_LookaheadList arg, SDF_Layout wsAfterSep);
+ATbool SDF_hasLookaheadListTail(SDF_LookaheadList arg);
+SDF_LookaheadList SDF_getLookaheadListTail(SDF_LookaheadList arg);
+SDF_LookaheadList SDF_setLookaheadListTail(SDF_LookaheadList arg, SDF_LookaheadList tail);
+ATbool SDF_hasLookaheadListHead(SDF_LookaheadList arg);
+SDF_Lookahead SDF_getLookaheadListHead(SDF_LookaheadList arg);
+SDF_LookaheadList SDF_setLookaheadListHead(SDF_LookaheadList arg, SDF_Lookahead head);
+ATbool SDF_hasLookaheadListSep(SDF_LookaheadList arg);
+SDF_Separator SDF_getLookaheadListSep(SDF_LookaheadList arg);
+SDF_LookaheadList SDF_setLookaheadListSep(SDF_LookaheadList arg, SDF_Separator sep);
 
 /*}}}  */
 /*{{{  SDF_Restriction accessor prototypes */
@@ -1398,26 +1404,26 @@ SDF_Restriction SDF_setRestrictionSymbols(SDF_Restriction arg, SDF_Symbols symbo
 
 ATbool SDF_isValidRestrictions(SDF_Restrictions arg);
 ATbool SDF_isRestrictionsDefault(SDF_Restrictions arg);
-ATbool SDF_hasRestrictionsRestrictions(SDF_Restrictions arg);
-SDF_RestrictionRestrictions SDF_getRestrictionsRestrictions(SDF_Restrictions arg);
-SDF_Restrictions SDF_setRestrictionsRestrictions(SDF_Restrictions arg, SDF_RestrictionRestrictions restrictions);
+ATbool SDF_hasRestrictionsList(SDF_Restrictions arg);
+SDF_RestrictionList SDF_getRestrictionsList(SDF_Restrictions arg);
+SDF_Restrictions SDF_setRestrictionsList(SDF_Restrictions arg, SDF_RestrictionList list);
 
 /*}}}  */
-/*{{{  SDF_RestrictionRestrictions accessor prototypes */
+/*{{{  SDF_RestrictionList accessor prototypes */
 
-ATbool SDF_isValidRestrictionRestrictions(SDF_RestrictionRestrictions arg);
-ATbool SDF_isRestrictionRestrictionsEmpty(SDF_RestrictionRestrictions arg);
-ATbool SDF_isRestrictionRestrictionsSingle(SDF_RestrictionRestrictions arg);
-ATbool SDF_isRestrictionRestrictionsMany(SDF_RestrictionRestrictions arg);
-ATbool SDF_hasRestrictionRestrictionsWsAfterFirst(SDF_RestrictionRestrictions arg);
-SDF_Layout SDF_getRestrictionRestrictionsWsAfterFirst(SDF_RestrictionRestrictions arg);
-SDF_RestrictionRestrictions SDF_setRestrictionRestrictionsWsAfterFirst(SDF_RestrictionRestrictions arg, SDF_Layout wsAfterFirst);
-ATbool SDF_hasRestrictionRestrictionsTail(SDF_RestrictionRestrictions arg);
-SDF_RestrictionRestrictions SDF_getRestrictionRestrictionsTail(SDF_RestrictionRestrictions arg);
-SDF_RestrictionRestrictions SDF_setRestrictionRestrictionsTail(SDF_RestrictionRestrictions arg, SDF_RestrictionRestrictions tail);
-ATbool SDF_hasRestrictionRestrictionsHead(SDF_RestrictionRestrictions arg);
-SDF_Restriction SDF_getRestrictionRestrictionsHead(SDF_RestrictionRestrictions arg);
-SDF_RestrictionRestrictions SDF_setRestrictionRestrictionsHead(SDF_RestrictionRestrictions arg, SDF_Restriction head);
+ATbool SDF_isValidRestrictionList(SDF_RestrictionList arg);
+ATbool SDF_isRestrictionListEmpty(SDF_RestrictionList arg);
+ATbool SDF_isRestrictionListSingle(SDF_RestrictionList arg);
+ATbool SDF_isRestrictionListMany(SDF_RestrictionList arg);
+ATbool SDF_hasRestrictionListWsAfterFirst(SDF_RestrictionList arg);
+SDF_Layout SDF_getRestrictionListWsAfterFirst(SDF_RestrictionList arg);
+SDF_RestrictionList SDF_setRestrictionListWsAfterFirst(SDF_RestrictionList arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasRestrictionListTail(SDF_RestrictionList arg);
+SDF_RestrictionList SDF_getRestrictionListTail(SDF_RestrictionList arg);
+SDF_RestrictionList SDF_setRestrictionListTail(SDF_RestrictionList arg, SDF_RestrictionList tail);
+ATbool SDF_hasRestrictionListHead(SDF_RestrictionList arg);
+SDF_Restriction SDF_getRestrictionListHead(SDF_RestrictionList arg);
+SDF_RestrictionList SDF_setRestrictionListHead(SDF_RestrictionList arg, SDF_Restriction head);
 
 /*}}}  */
 /*{{{  SDF_Alias accessor prototypes */
@@ -1442,26 +1448,26 @@ SDF_Alias SDF_setAliasWsAfterArrow(SDF_Alias arg, SDF_Layout wsAfterArrow);
 
 ATbool SDF_isValidAliases(SDF_Aliases arg);
 ATbool SDF_isAliasesDefault(SDF_Aliases arg);
-ATbool SDF_hasAliasesAliass(SDF_Aliases arg);
-SDF_AliasAliass SDF_getAliasesAliass(SDF_Aliases arg);
-SDF_Aliases SDF_setAliasesAliass(SDF_Aliases arg, SDF_AliasAliass aliass);
+ATbool SDF_hasAliasesList(SDF_Aliases arg);
+SDF_AliasList SDF_getAliasesList(SDF_Aliases arg);
+SDF_Aliases SDF_setAliasesList(SDF_Aliases arg, SDF_AliasList list);
 
 /*}}}  */
-/*{{{  SDF_AliasAliass accessor prototypes */
+/*{{{  SDF_AliasList accessor prototypes */
 
-ATbool SDF_isValidAliasAliass(SDF_AliasAliass arg);
-ATbool SDF_isAliasAliassEmpty(SDF_AliasAliass arg);
-ATbool SDF_isAliasAliassSingle(SDF_AliasAliass arg);
-ATbool SDF_isAliasAliassMany(SDF_AliasAliass arg);
-ATbool SDF_hasAliasAliassWsAfterFirst(SDF_AliasAliass arg);
-SDF_Layout SDF_getAliasAliassWsAfterFirst(SDF_AliasAliass arg);
-SDF_AliasAliass SDF_setAliasAliassWsAfterFirst(SDF_AliasAliass arg, SDF_Layout wsAfterFirst);
-ATbool SDF_hasAliasAliassTail(SDF_AliasAliass arg);
-SDF_AliasAliass SDF_getAliasAliassTail(SDF_AliasAliass arg);
-SDF_AliasAliass SDF_setAliasAliassTail(SDF_AliasAliass arg, SDF_AliasAliass tail);
-ATbool SDF_hasAliasAliassHead(SDF_AliasAliass arg);
-SDF_Alias SDF_getAliasAliassHead(SDF_AliasAliass arg);
-SDF_AliasAliass SDF_setAliasAliassHead(SDF_AliasAliass arg, SDF_Alias head);
+ATbool SDF_isValidAliasList(SDF_AliasList arg);
+ATbool SDF_isAliasListEmpty(SDF_AliasList arg);
+ATbool SDF_isAliasListSingle(SDF_AliasList arg);
+ATbool SDF_isAliasListMany(SDF_AliasList arg);
+ATbool SDF_hasAliasListWsAfterFirst(SDF_AliasList arg);
+SDF_Layout SDF_getAliasListWsAfterFirst(SDF_AliasList arg);
+SDF_AliasList SDF_setAliasListWsAfterFirst(SDF_AliasList arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasAliasListTail(SDF_AliasList arg);
+SDF_AliasList SDF_getAliasListTail(SDF_AliasList arg);
+SDF_AliasList SDF_setAliasListTail(SDF_AliasList arg, SDF_AliasList tail);
+ATbool SDF_hasAliasListHead(SDF_AliasList arg);
+SDF_Alias SDF_getAliasListHead(SDF_AliasList arg);
+SDF_AliasList SDF_setAliasListHead(SDF_AliasList arg, SDF_Alias head);
 
 /*}}}  */
 /*{{{  SDF_Symbols accessor prototypes */
@@ -1494,32 +1500,32 @@ SDF_SymbolList SDF_setSymbolListHead(SDF_SymbolList arg, SDF_Symbol head);
 
 ATbool SDF_isValidRenamings(SDF_Renamings arg);
 ATbool SDF_isRenamingsRenamings(SDF_Renamings arg);
-ATbool SDF_hasRenamingsRenamings(SDF_Renamings arg);
-SDF_RenamingRenamings SDF_getRenamingsRenamings(SDF_Renamings arg);
-SDF_Renamings SDF_setRenamingsRenamings(SDF_Renamings arg, SDF_RenamingRenamings renamings);
-ATbool SDF_hasRenamingsWsAfterRenamings(SDF_Renamings arg);
-SDF_Layout SDF_getRenamingsWsAfterRenamings(SDF_Renamings arg);
-SDF_Renamings SDF_setRenamingsWsAfterRenamings(SDF_Renamings arg, SDF_Layout wsAfterRenamings);
+ATbool SDF_hasRenamingsWsAfterList(SDF_Renamings arg);
+SDF_Layout SDF_getRenamingsWsAfterList(SDF_Renamings arg);
+SDF_Renamings SDF_setRenamingsWsAfterList(SDF_Renamings arg, SDF_Layout wsAfterList);
 ATbool SDF_hasRenamingsWsAfterBracketOpen(SDF_Renamings arg);
 SDF_Layout SDF_getRenamingsWsAfterBracketOpen(SDF_Renamings arg);
 SDF_Renamings SDF_setRenamingsWsAfterBracketOpen(SDF_Renamings arg, SDF_Layout wsAfterBracketOpen);
+ATbool SDF_hasRenamingsList(SDF_Renamings arg);
+SDF_RenamingList SDF_getRenamingsList(SDF_Renamings arg);
+SDF_Renamings SDF_setRenamingsList(SDF_Renamings arg, SDF_RenamingList list);
 
 /*}}}  */
-/*{{{  SDF_RenamingRenamings accessor prototypes */
+/*{{{  SDF_RenamingList accessor prototypes */
 
-ATbool SDF_isValidRenamingRenamings(SDF_RenamingRenamings arg);
-ATbool SDF_isRenamingRenamingsEmpty(SDF_RenamingRenamings arg);
-ATbool SDF_isRenamingRenamingsSingle(SDF_RenamingRenamings arg);
-ATbool SDF_isRenamingRenamingsMany(SDF_RenamingRenamings arg);
-ATbool SDF_hasRenamingRenamingsWsAfterFirst(SDF_RenamingRenamings arg);
-SDF_Layout SDF_getRenamingRenamingsWsAfterFirst(SDF_RenamingRenamings arg);
-SDF_RenamingRenamings SDF_setRenamingRenamingsWsAfterFirst(SDF_RenamingRenamings arg, SDF_Layout wsAfterFirst);
-ATbool SDF_hasRenamingRenamingsTail(SDF_RenamingRenamings arg);
-SDF_RenamingRenamings SDF_getRenamingRenamingsTail(SDF_RenamingRenamings arg);
-SDF_RenamingRenamings SDF_setRenamingRenamingsTail(SDF_RenamingRenamings arg, SDF_RenamingRenamings tail);
-ATbool SDF_hasRenamingRenamingsHead(SDF_RenamingRenamings arg);
-SDF_Renaming SDF_getRenamingRenamingsHead(SDF_RenamingRenamings arg);
-SDF_RenamingRenamings SDF_setRenamingRenamingsHead(SDF_RenamingRenamings arg, SDF_Renaming head);
+ATbool SDF_isValidRenamingList(SDF_RenamingList arg);
+ATbool SDF_isRenamingListEmpty(SDF_RenamingList arg);
+ATbool SDF_isRenamingListSingle(SDF_RenamingList arg);
+ATbool SDF_isRenamingListMany(SDF_RenamingList arg);
+ATbool SDF_hasRenamingListWsAfterFirst(SDF_RenamingList arg);
+SDF_Layout SDF_getRenamingListWsAfterFirst(SDF_RenamingList arg);
+SDF_RenamingList SDF_setRenamingListWsAfterFirst(SDF_RenamingList arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasRenamingListTail(SDF_RenamingList arg);
+SDF_RenamingList SDF_getRenamingListTail(SDF_RenamingList arg);
+SDF_RenamingList SDF_setRenamingListTail(SDF_RenamingList arg, SDF_RenamingList tail);
+ATbool SDF_hasRenamingListHead(SDF_RenamingList arg);
+SDF_Renaming SDF_getRenamingListHead(SDF_RenamingList arg);
+SDF_RenamingList SDF_setRenamingListHead(SDF_RenamingList arg, SDF_Renaming head);
 
 /*}}}  */
 /*{{{  SDF_Renaming accessor prototypes */

@@ -887,14 +887,14 @@ w (
 "" )
 , 
 < 
-attributes ( 
+list ( 
 
-Attribute-attributes ) > )
+Attribute-list ) > )
 , 
 w ( 
 
 < 
-ws-after-attributes ( 
+ws-after-list ( 
 
 Layout ) > )
 , 
@@ -906,7 +906,7 @@ l (
 
 [ 
 
-Attribute-attributes
+Attribute-list
 , 
 empty
 , 
@@ -917,7 +917,7 @@ empty
 
 [ 
 
-Attribute-attributes
+Attribute-list
 , 
 single
 , 
@@ -932,7 +932,7 @@ Attribute ) > ] ]
 
 [ 
 
-Attribute-attributes
+Attribute-list
 , 
 many
 , 
@@ -969,7 +969,7 @@ Layout ) > )
 
 tail ( 
 
-Attribute-attributes ) ] > ] ]
+Attribute-list ) ] > ] ]
 , 
 
 [ 
@@ -7254,14 +7254,14 @@ w (
 "" )
 , 
 < 
-prioritys ( 
+list ( 
 
-Priority-prioritys ) > ) ] ) ]
+Priority-list ) > ) ] ) ]
 , 
 
 [ 
 
-Priority-prioritys
+Priority-list
 , 
 empty
 , 
@@ -7272,7 +7272,7 @@ empty
 
 [ 
 
-Priority-prioritys
+Priority-list
 , 
 single
 , 
@@ -7287,7 +7287,7 @@ Priority ) > ] ]
 
 [ 
 
-Priority-prioritys
+Priority-list
 , 
 many
 , 
@@ -7324,7 +7324,7 @@ Layout ) > )
 
 tail ( 
 
-Priority-prioritys ) ] > ] ]
+Priority-list ) ] > ] ]
 , 
 
 [ 
@@ -9349,14 +9349,14 @@ w (
 "" )
 , 
 < 
-lookaheads ( 
+list ( 
 
-Lookahead-lookaheads ) > )
+Lookahead-list ) > )
 , 
 w ( 
 
 < 
-ws-after-lookaheads ( 
+ws-after-list ( 
 
 Layout ) > )
 , 
@@ -9368,7 +9368,7 @@ l (
 
 [ 
 
-Lookahead-lookaheads
+Lookahead-list
 , 
 empty
 , 
@@ -9379,7 +9379,7 @@ empty
 
 [ 
 
-Lookahead-lookaheads
+Lookahead-list
 , 
 single
 , 
@@ -9394,7 +9394,7 @@ Lookahead ) > ] ]
 
 [ 
 
-Lookahead-lookaheads
+Lookahead-list
 , 
 many
 , 
@@ -9431,7 +9431,7 @@ Layout ) > )
 
 tail ( 
 
-Lookahead-lookaheads ) ] > ] ]
+Lookahead-list ) ] > ] ]
 , 
 
 [ 
@@ -9648,14 +9648,14 @@ w (
 "" )
 , 
 < 
-restrictions ( 
+list ( 
 
-Restriction-restrictions ) > ) ] ) ]
+Restriction-list ) > ) ] ) ]
 , 
 
 [ 
 
-Restriction-restrictions
+Restriction-list
 , 
 empty
 , 
@@ -9666,7 +9666,7 @@ empty
 
 [ 
 
-Restriction-restrictions
+Restriction-list
 , 
 single
 , 
@@ -9681,7 +9681,7 @@ Restriction ) > ] ]
 
 [ 
 
-Restriction-restrictions
+Restriction-list
 , 
 many
 , 
@@ -9706,7 +9706,7 @@ Layout ) > )
 
 tail ( 
 
-Restriction-restrictions ) ] > ] ]
+Restriction-list ) ] > ] ]
 , 
 
 [ 
@@ -10313,14 +10313,14 @@ w (
 "" )
 , 
 < 
-aliass ( 
+list ( 
 
-Alias-aliass ) > ) ] ) ]
+Alias-list ) > ) ] ) ]
 , 
 
 [ 
 
-Alias-aliass
+Alias-list
 , 
 empty
 , 
@@ -10331,7 +10331,7 @@ empty
 
 [ 
 
-Alias-aliass
+Alias-list
 , 
 single
 , 
@@ -10346,7 +10346,7 @@ Alias ) > ] ]
 
 [ 
 
-Alias-aliass
+Alias-list
 , 
 many
 , 
@@ -10371,7 +10371,7 @@ Layout ) > )
 
 tail ( 
 
-Alias-aliass ) ] > ] ]
+Alias-list ) ] > ] ]
 , 
 
 [ 
@@ -11140,14 +11140,14 @@ w (
 "" )
 , 
 < 
-renamings ( 
+list ( 
 
-Renaming-renamings ) > )
+Renaming-list ) > )
 , 
 w ( 
 
 < 
-ws-after-renamings ( 
+ws-after-list ( 
 
 Layout ) > )
 , 
@@ -11159,7 +11159,7 @@ l (
 
 [ 
 
-Renaming-renamings
+Renaming-list
 , 
 empty
 , 
@@ -11170,7 +11170,7 @@ empty
 
 [ 
 
-Renaming-renamings
+Renaming-list
 , 
 single
 , 
@@ -11185,7 +11185,7 @@ Renaming ) > ] ]
 
 [ 
 
-Renaming-renamings
+Renaming-list
 , 
 many
 , 
@@ -11210,7 +11210,7 @@ Layout ) > )
 
 tail ( 
 
-Renaming-renamings ) ] > ] ]
+Renaming-list ) ] > ] ]
 , 
 
 [ 

@@ -8,7 +8,7 @@ typedef struct ATerm _SDF_Symbol;
 typedef struct ATerm _SDF_Grammar;
 typedef struct ATerm _SDF_SDF;
 typedef struct ATerm _SDF_Attributes;
-typedef struct ATerm _SDF_AttributeAttributes;
+typedef struct ATerm _SDF_AttributeList;
 typedef struct ATerm _SDF_Production;
 typedef struct ATerm _SDF_Productions;
 typedef struct ATerm _SDF_ProductionList;
@@ -33,24 +33,24 @@ typedef struct ATerm _SDF_Group;
 typedef struct ATerm _SDF_Priority;
 typedef struct ATerm _SDF_GroupGroupp;
 typedef struct ATerm _SDF_Priorities;
-typedef struct ATerm _SDF_PriorityPrioritys;
+typedef struct ATerm _SDF_PriorityList;
 typedef struct ATerm _SDF_Sort;
 typedef struct ATerm _SDF_UQLiteral;
 typedef struct ATerm _SDF_Literal;
 typedef struct ATerm _SDF_SymbolArguments;
 typedef struct ATerm _SDF_Lookahead;
 typedef struct ATerm _SDF_Lookaheads;
-typedef struct ATerm _SDF_LookaheadLookaheads;
+typedef struct ATerm _SDF_LookaheadList;
 typedef struct ATerm _SDF_Restriction;
 typedef struct ATerm _SDF_Restrictions;
-typedef struct ATerm _SDF_RestrictionRestrictions;
+typedef struct ATerm _SDF_RestrictionList;
 typedef struct ATerm _SDF_Alias;
 typedef struct ATerm _SDF_Aliases;
-typedef struct ATerm _SDF_AliasAliass;
+typedef struct ATerm _SDF_AliasList;
 typedef struct ATerm _SDF_Symbols;
 typedef struct ATerm _SDF_SymbolList;
 typedef struct ATerm _SDF_Renamings;
-typedef struct ATerm _SDF_RenamingRenamings;
+typedef struct ATerm _SDF_RenamingList;
 typedef struct ATerm _SDF_Renaming;
 typedef struct ATerm _SDF_NatCon;
 typedef struct ATerm _SDF_IntCon;
@@ -150,17 +150,17 @@ ATerm SDF_makeTermFromAttributes(SDF_Attributes arg)
 }
 
 /*}}}  */
-/*{{{  SDF_AttributeAttributes SDF_makeAttributeAttributesFromTerm(ATerm t) */
+/*{{{  SDF_AttributeList SDF_makeAttributeListFromTerm(ATerm t) */
 
-SDF_AttributeAttributes SDF_makeAttributeAttributesFromTerm(ATerm t)
+SDF_AttributeList SDF_makeAttributeListFromTerm(ATerm t)
 {
-  return (SDF_AttributeAttributes)t;
+  return (SDF_AttributeList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromAttributeAttributes(SDF_AttributeAttributes arg) */
+/*{{{  ATerm SDF_makeTermFromAttributeList(SDF_AttributeList arg) */
 
-ATerm SDF_makeTermFromAttributeAttributes(SDF_AttributeAttributes arg)
+ATerm SDF_makeTermFromAttributeList(SDF_AttributeList arg)
 {
   return (ATerm)arg;
 }
@@ -550,17 +550,17 @@ ATerm SDF_makeTermFromPriorities(SDF_Priorities arg)
 }
 
 /*}}}  */
-/*{{{  SDF_PriorityPrioritys SDF_makePriorityPrioritysFromTerm(ATerm t) */
+/*{{{  SDF_PriorityList SDF_makePriorityListFromTerm(ATerm t) */
 
-SDF_PriorityPrioritys SDF_makePriorityPrioritysFromTerm(ATerm t)
+SDF_PriorityList SDF_makePriorityListFromTerm(ATerm t)
 {
-  return (SDF_PriorityPrioritys)t;
+  return (SDF_PriorityList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromPriorityPrioritys(SDF_PriorityPrioritys arg) */
+/*{{{  ATerm SDF_makeTermFromPriorityList(SDF_PriorityList arg) */
 
-ATerm SDF_makeTermFromPriorityPrioritys(SDF_PriorityPrioritys arg)
+ATerm SDF_makeTermFromPriorityList(SDF_PriorityList arg)
 {
   return (ATerm)arg;
 }
@@ -662,17 +662,17 @@ ATerm SDF_makeTermFromLookaheads(SDF_Lookaheads arg)
 }
 
 /*}}}  */
-/*{{{  SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsFromTerm(ATerm t) */
+/*{{{  SDF_LookaheadList SDF_makeLookaheadListFromTerm(ATerm t) */
 
-SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsFromTerm(ATerm t)
+SDF_LookaheadList SDF_makeLookaheadListFromTerm(ATerm t)
 {
-  return (SDF_LookaheadLookaheads)t;
+  return (SDF_LookaheadList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromLookaheadLookaheads(SDF_LookaheadLookaheads arg) */
+/*{{{  ATerm SDF_makeTermFromLookaheadList(SDF_LookaheadList arg) */
 
-ATerm SDF_makeTermFromLookaheadLookaheads(SDF_LookaheadLookaheads arg)
+ATerm SDF_makeTermFromLookaheadList(SDF_LookaheadList arg)
 {
   return (ATerm)arg;
 }
@@ -710,17 +710,17 @@ ATerm SDF_makeTermFromRestrictions(SDF_Restrictions arg)
 }
 
 /*}}}  */
-/*{{{  SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsFromTerm(ATerm t) */
+/*{{{  SDF_RestrictionList SDF_makeRestrictionListFromTerm(ATerm t) */
 
-SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsFromTerm(ATerm t)
+SDF_RestrictionList SDF_makeRestrictionListFromTerm(ATerm t)
 {
-  return (SDF_RestrictionRestrictions)t;
+  return (SDF_RestrictionList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromRestrictionRestrictions(SDF_RestrictionRestrictions arg) */
+/*{{{  ATerm SDF_makeTermFromRestrictionList(SDF_RestrictionList arg) */
 
-ATerm SDF_makeTermFromRestrictionRestrictions(SDF_RestrictionRestrictions arg)
+ATerm SDF_makeTermFromRestrictionList(SDF_RestrictionList arg)
 {
   return (ATerm)arg;
 }
@@ -758,17 +758,17 @@ ATerm SDF_makeTermFromAliases(SDF_Aliases arg)
 }
 
 /*}}}  */
-/*{{{  SDF_AliasAliass SDF_makeAliasAliassFromTerm(ATerm t) */
+/*{{{  SDF_AliasList SDF_makeAliasListFromTerm(ATerm t) */
 
-SDF_AliasAliass SDF_makeAliasAliassFromTerm(ATerm t)
+SDF_AliasList SDF_makeAliasListFromTerm(ATerm t)
 {
-  return (SDF_AliasAliass)t;
+  return (SDF_AliasList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromAliasAliass(SDF_AliasAliass arg) */
+/*{{{  ATerm SDF_makeTermFromAliasList(SDF_AliasList arg) */
 
-ATerm SDF_makeTermFromAliasAliass(SDF_AliasAliass arg)
+ATerm SDF_makeTermFromAliasList(SDF_AliasList arg)
 {
   return (ATerm)arg;
 }
@@ -822,17 +822,17 @@ ATerm SDF_makeTermFromRenamings(SDF_Renamings arg)
 }
 
 /*}}}  */
-/*{{{  SDF_RenamingRenamings SDF_makeRenamingRenamingsFromTerm(ATerm t) */
+/*{{{  SDF_RenamingList SDF_makeRenamingListFromTerm(ATerm t) */
 
-SDF_RenamingRenamings SDF_makeRenamingRenamingsFromTerm(ATerm t)
+SDF_RenamingList SDF_makeRenamingListFromTerm(ATerm t)
 {
-  return (SDF_RenamingRenamings)t;
+  return (SDF_RenamingList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromRenamingRenamings(SDF_RenamingRenamings arg) */
+/*{{{  ATerm SDF_makeTermFromRenamingList(SDF_RenamingList arg) */
 
-ATerm SDF_makeTermFromRenamingRenamings(SDF_RenamingRenamings arg)
+ATerm SDF_makeTermFromRenamingList(SDF_RenamingList arg)
 {
   return (ATerm)arg;
 }
@@ -1551,11 +1551,11 @@ SDF_SDF SDF_makeSDFDefinition(SDF_Layout wsAfterDefinition, SDF_Definition defin
 }
 
 /*}}}  */
-/*{{{  SDF_Attributes SDF_makeAttributesAttrs(SDF_Layout wsAfterBraceOpen, SDF_AttributeAttributes attributes, SDF_Layout wsAfterAttributes) */
+/*{{{  SDF_Attributes SDF_makeAttributesAttrs(SDF_Layout wsAfterBraceOpen, SDF_AttributeList list, SDF_Layout wsAfterList) */
 
-SDF_Attributes SDF_makeAttributesAttrs(SDF_Layout wsAfterBraceOpen, SDF_AttributeAttributes attributes, SDF_Layout wsAfterAttributes)
+SDF_Attributes SDF_makeAttributesAttrs(SDF_Layout wsAfterBraceOpen, SDF_AttributeList list, SDF_Layout wsAfterList)
 {
-  return (SDF_Attributes)ATmakeTerm(SDF_patternAttributesAttrs, wsAfterBraceOpen, attributes, wsAfterAttributes);
+  return (SDF_Attributes)ATmakeTerm(SDF_patternAttributesAttrs, wsAfterBraceOpen, list, wsAfterList);
 }
 
 /*}}}  */
@@ -1567,27 +1567,27 @@ SDF_Attributes SDF_makeAttributesNoAttrs()
 }
 
 /*}}}  */
-/*{{{  SDF_AttributeAttributes SDF_makeAttributeAttributesEmpty() */
+/*{{{  SDF_AttributeList SDF_makeAttributeListEmpty() */
 
-SDF_AttributeAttributes SDF_makeAttributeAttributesEmpty()
+SDF_AttributeList SDF_makeAttributeListEmpty()
 {
-  return (SDF_AttributeAttributes)ATmakeTerm(SDF_patternAttributeAttributesEmpty);
+  return (SDF_AttributeList)ATmakeTerm(SDF_patternAttributeListEmpty);
 }
 
 /*}}}  */
-/*{{{  SDF_AttributeAttributes SDF_makeAttributeAttributesSingle(SDF_Attribute head) */
+/*{{{  SDF_AttributeList SDF_makeAttributeListSingle(SDF_Attribute head) */
 
-SDF_AttributeAttributes SDF_makeAttributeAttributesSingle(SDF_Attribute head)
+SDF_AttributeList SDF_makeAttributeListSingle(SDF_Attribute head)
 {
-  return (SDF_AttributeAttributes)ATmakeTerm(SDF_patternAttributeAttributesSingle, head);
+  return (SDF_AttributeList)ATmakeTerm(SDF_patternAttributeListSingle, head);
 }
 
 /*}}}  */
-/*{{{  SDF_AttributeAttributes SDF_makeAttributeAttributesMany(SDF_Attribute head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_AttributeAttributes tail) */
+/*{{{  SDF_AttributeList SDF_makeAttributeListMany(SDF_Attribute head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_AttributeList tail) */
 
-SDF_AttributeAttributes SDF_makeAttributeAttributesMany(SDF_Attribute head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_AttributeAttributes tail)
+SDF_AttributeList SDF_makeAttributeListMany(SDF_Attribute head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_AttributeList tail)
 {
-  return (SDF_AttributeAttributes)ATmakeTerm(SDF_patternAttributeAttributesMany, head, wsAfterFirst, sep, wsAfterSep, tail);
+  return (SDF_AttributeList)ATmakeTerm(SDF_patternAttributeListMany, head, wsAfterFirst, sep, wsAfterSep, tail);
 }
 
 /*}}}  */
@@ -2039,35 +2039,35 @@ SDF_GroupGroupp SDF_makeGroupGrouppMany(SDF_Group head, SDF_Layout wsAfterFirst,
 }
 
 /*}}}  */
-/*{{{  SDF_Priorities SDF_makePrioritiesDefault(SDF_PriorityPrioritys prioritys) */
+/*{{{  SDF_Priorities SDF_makePrioritiesDefault(SDF_PriorityList list) */
 
-SDF_Priorities SDF_makePrioritiesDefault(SDF_PriorityPrioritys prioritys)
+SDF_Priorities SDF_makePrioritiesDefault(SDF_PriorityList list)
 {
-  return (SDF_Priorities)ATmakeTerm(SDF_patternPrioritiesDefault, prioritys);
+  return (SDF_Priorities)ATmakeTerm(SDF_patternPrioritiesDefault, list);
 }
 
 /*}}}  */
-/*{{{  SDF_PriorityPrioritys SDF_makePriorityPrioritysEmpty() */
+/*{{{  SDF_PriorityList SDF_makePriorityListEmpty() */
 
-SDF_PriorityPrioritys SDF_makePriorityPrioritysEmpty()
+SDF_PriorityList SDF_makePriorityListEmpty()
 {
-  return (SDF_PriorityPrioritys)ATmakeTerm(SDF_patternPriorityPrioritysEmpty);
+  return (SDF_PriorityList)ATmakeTerm(SDF_patternPriorityListEmpty);
 }
 
 /*}}}  */
-/*{{{  SDF_PriorityPrioritys SDF_makePriorityPrioritysSingle(SDF_Priority head) */
+/*{{{  SDF_PriorityList SDF_makePriorityListSingle(SDF_Priority head) */
 
-SDF_PriorityPrioritys SDF_makePriorityPrioritysSingle(SDF_Priority head)
+SDF_PriorityList SDF_makePriorityListSingle(SDF_Priority head)
 {
-  return (SDF_PriorityPrioritys)ATmakeTerm(SDF_patternPriorityPrioritysSingle, head);
+  return (SDF_PriorityList)ATmakeTerm(SDF_patternPriorityListSingle, head);
 }
 
 /*}}}  */
-/*{{{  SDF_PriorityPrioritys SDF_makePriorityPrioritysMany(SDF_Priority head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_PriorityPrioritys tail) */
+/*{{{  SDF_PriorityList SDF_makePriorityListMany(SDF_Priority head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_PriorityList tail) */
 
-SDF_PriorityPrioritys SDF_makePriorityPrioritysMany(SDF_Priority head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_PriorityPrioritys tail)
+SDF_PriorityList SDF_makePriorityListMany(SDF_Priority head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_PriorityList tail)
 {
-  return (SDF_PriorityPrioritys)ATmakeTerm(SDF_patternPriorityPrioritysMany, head, wsAfterFirst, sep, wsAfterSep, tail);
+  return (SDF_PriorityList)ATmakeTerm(SDF_patternPriorityListMany, head, wsAfterFirst, sep, wsAfterSep, tail);
 }
 
 /*}}}  */
@@ -2183,35 +2183,35 @@ SDF_Lookaheads SDF_makeLookaheadsBracket(SDF_Layout wsAfterParenOpen, SDF_Lookah
 }
 
 /*}}}  */
-/*{{{  SDF_Lookaheads SDF_makeLookaheadsList(SDF_Layout wsAfterBracketOpenBracketOpen, SDF_Lookaheads lookaheads, SDF_Layout wsAfterLookaheads) */
+/*{{{  SDF_Lookaheads SDF_makeLookaheadsList(SDF_Layout wsAfterBracketOpenBracketOpen, SDF_LookaheadList list, SDF_Layout wsAfterList) */
 
-SDF_Lookaheads SDF_makeLookaheadsList(SDF_Layout wsAfterBracketOpenBracketOpen, SDF_Lookaheads lookaheads, SDF_Layout wsAfterLookaheads)
+SDF_Lookaheads SDF_makeLookaheadsList(SDF_Layout wsAfterBracketOpenBracketOpen, SDF_LookaheadList list, SDF_Layout wsAfterList)
 {
-  return (SDF_Lookaheads)ATmakeTerm(SDF_patternLookaheadsList, wsAfterBracketOpenBracketOpen, lookaheads, wsAfterLookaheads);
+  return (SDF_Lookaheads)ATmakeTerm(SDF_patternLookaheadsList, wsAfterBracketOpenBracketOpen, list, wsAfterList);
 }
 
 /*}}}  */
-/*{{{  SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsEmpty() */
+/*{{{  SDF_LookaheadList SDF_makeLookaheadListEmpty() */
 
-SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsEmpty()
+SDF_LookaheadList SDF_makeLookaheadListEmpty()
 {
-  return (SDF_LookaheadLookaheads)ATmakeTerm(SDF_patternLookaheadLookaheadsEmpty);
+  return (SDF_LookaheadList)ATmakeTerm(SDF_patternLookaheadListEmpty);
 }
 
 /*}}}  */
-/*{{{  SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsSingle(SDF_Lookahead head) */
+/*{{{  SDF_LookaheadList SDF_makeLookaheadListSingle(SDF_Lookahead head) */
 
-SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsSingle(SDF_Lookahead head)
+SDF_LookaheadList SDF_makeLookaheadListSingle(SDF_Lookahead head)
 {
-  return (SDF_LookaheadLookaheads)ATmakeTerm(SDF_patternLookaheadLookaheadsSingle, head);
+  return (SDF_LookaheadList)ATmakeTerm(SDF_patternLookaheadListSingle, head);
 }
 
 /*}}}  */
-/*{{{  SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsMany(SDF_Lookahead head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_LookaheadLookaheads tail) */
+/*{{{  SDF_LookaheadList SDF_makeLookaheadListMany(SDF_Lookahead head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_LookaheadList tail) */
 
-SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsMany(SDF_Lookahead head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_LookaheadLookaheads tail)
+SDF_LookaheadList SDF_makeLookaheadListMany(SDF_Lookahead head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_LookaheadList tail)
 {
-  return (SDF_LookaheadLookaheads)ATmakeTerm(SDF_patternLookaheadLookaheadsMany, head, wsAfterFirst, sep, wsAfterSep, tail);
+  return (SDF_LookaheadList)ATmakeTerm(SDF_patternLookaheadListMany, head, wsAfterFirst, sep, wsAfterSep, tail);
 }
 
 /*}}}  */
@@ -2223,35 +2223,35 @@ SDF_Restriction SDF_makeRestrictionFollow(SDF_Symbols symbols, SDF_Layout wsAfte
 }
 
 /*}}}  */
-/*{{{  SDF_Restrictions SDF_makeRestrictionsDefault(SDF_RestrictionRestrictions restrictions) */
+/*{{{  SDF_Restrictions SDF_makeRestrictionsDefault(SDF_RestrictionList list) */
 
-SDF_Restrictions SDF_makeRestrictionsDefault(SDF_RestrictionRestrictions restrictions)
+SDF_Restrictions SDF_makeRestrictionsDefault(SDF_RestrictionList list)
 {
-  return (SDF_Restrictions)ATmakeTerm(SDF_patternRestrictionsDefault, restrictions);
+  return (SDF_Restrictions)ATmakeTerm(SDF_patternRestrictionsDefault, list);
 }
 
 /*}}}  */
-/*{{{  SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsEmpty() */
+/*{{{  SDF_RestrictionList SDF_makeRestrictionListEmpty() */
 
-SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsEmpty()
+SDF_RestrictionList SDF_makeRestrictionListEmpty()
 {
-  return (SDF_RestrictionRestrictions)ATmakeTerm(SDF_patternRestrictionRestrictionsEmpty);
+  return (SDF_RestrictionList)ATmakeTerm(SDF_patternRestrictionListEmpty);
 }
 
 /*}}}  */
-/*{{{  SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsSingle(SDF_Restriction head) */
+/*{{{  SDF_RestrictionList SDF_makeRestrictionListSingle(SDF_Restriction head) */
 
-SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsSingle(SDF_Restriction head)
+SDF_RestrictionList SDF_makeRestrictionListSingle(SDF_Restriction head)
 {
-  return (SDF_RestrictionRestrictions)ATmakeTerm(SDF_patternRestrictionRestrictionsSingle, head);
+  return (SDF_RestrictionList)ATmakeTerm(SDF_patternRestrictionListSingle, head);
 }
 
 /*}}}  */
-/*{{{  SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsMany(SDF_Restriction head, SDF_Layout wsAfterFirst, SDF_RestrictionRestrictions tail) */
+/*{{{  SDF_RestrictionList SDF_makeRestrictionListMany(SDF_Restriction head, SDF_Layout wsAfterFirst, SDF_RestrictionList tail) */
 
-SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsMany(SDF_Restriction head, SDF_Layout wsAfterFirst, SDF_RestrictionRestrictions tail)
+SDF_RestrictionList SDF_makeRestrictionListMany(SDF_Restriction head, SDF_Layout wsAfterFirst, SDF_RestrictionList tail)
 {
-  return (SDF_RestrictionRestrictions)ATmakeTerm(SDF_patternRestrictionRestrictionsMany, head, wsAfterFirst, tail);
+  return (SDF_RestrictionList)ATmakeTerm(SDF_patternRestrictionListMany, head, wsAfterFirst, tail);
 }
 
 /*}}}  */
@@ -2263,35 +2263,35 @@ SDF_Alias SDF_makeAliasAlias(SDF_Symbol symbol, SDF_Layout wsAfterSymbol, SDF_La
 }
 
 /*}}}  */
-/*{{{  SDF_Aliases SDF_makeAliasesDefault(SDF_AliasAliass aliass) */
+/*{{{  SDF_Aliases SDF_makeAliasesDefault(SDF_AliasList list) */
 
-SDF_Aliases SDF_makeAliasesDefault(SDF_AliasAliass aliass)
+SDF_Aliases SDF_makeAliasesDefault(SDF_AliasList list)
 {
-  return (SDF_Aliases)ATmakeTerm(SDF_patternAliasesDefault, aliass);
+  return (SDF_Aliases)ATmakeTerm(SDF_patternAliasesDefault, list);
 }
 
 /*}}}  */
-/*{{{  SDF_AliasAliass SDF_makeAliasAliassEmpty() */
+/*{{{  SDF_AliasList SDF_makeAliasListEmpty() */
 
-SDF_AliasAliass SDF_makeAliasAliassEmpty()
+SDF_AliasList SDF_makeAliasListEmpty()
 {
-  return (SDF_AliasAliass)ATmakeTerm(SDF_patternAliasAliassEmpty);
+  return (SDF_AliasList)ATmakeTerm(SDF_patternAliasListEmpty);
 }
 
 /*}}}  */
-/*{{{  SDF_AliasAliass SDF_makeAliasAliassSingle(SDF_Alias head) */
+/*{{{  SDF_AliasList SDF_makeAliasListSingle(SDF_Alias head) */
 
-SDF_AliasAliass SDF_makeAliasAliassSingle(SDF_Alias head)
+SDF_AliasList SDF_makeAliasListSingle(SDF_Alias head)
 {
-  return (SDF_AliasAliass)ATmakeTerm(SDF_patternAliasAliassSingle, head);
+  return (SDF_AliasList)ATmakeTerm(SDF_patternAliasListSingle, head);
 }
 
 /*}}}  */
-/*{{{  SDF_AliasAliass SDF_makeAliasAliassMany(SDF_Alias head, SDF_Layout wsAfterFirst, SDF_AliasAliass tail) */
+/*{{{  SDF_AliasList SDF_makeAliasListMany(SDF_Alias head, SDF_Layout wsAfterFirst, SDF_AliasList tail) */
 
-SDF_AliasAliass SDF_makeAliasAliassMany(SDF_Alias head, SDF_Layout wsAfterFirst, SDF_AliasAliass tail)
+SDF_AliasList SDF_makeAliasListMany(SDF_Alias head, SDF_Layout wsAfterFirst, SDF_AliasList tail)
 {
-  return (SDF_AliasAliass)ATmakeTerm(SDF_patternAliasAliassMany, head, wsAfterFirst, tail);
+  return (SDF_AliasList)ATmakeTerm(SDF_patternAliasListMany, head, wsAfterFirst, tail);
 }
 
 /*}}}  */
@@ -2327,35 +2327,35 @@ SDF_SymbolList SDF_makeSymbolListMany(SDF_Symbol head, SDF_Layout wsAfterFirst, 
 }
 
 /*}}}  */
-/*{{{  SDF_Renamings SDF_makeRenamingsRenamings(SDF_Layout wsAfterBracketOpen, SDF_RenamingRenamings renamings, SDF_Layout wsAfterRenamings) */
+/*{{{  SDF_Renamings SDF_makeRenamingsRenamings(SDF_Layout wsAfterBracketOpen, SDF_RenamingList list, SDF_Layout wsAfterList) */
 
-SDF_Renamings SDF_makeRenamingsRenamings(SDF_Layout wsAfterBracketOpen, SDF_RenamingRenamings renamings, SDF_Layout wsAfterRenamings)
+SDF_Renamings SDF_makeRenamingsRenamings(SDF_Layout wsAfterBracketOpen, SDF_RenamingList list, SDF_Layout wsAfterList)
 {
-  return (SDF_Renamings)ATmakeTerm(SDF_patternRenamingsRenamings, wsAfterBracketOpen, renamings, wsAfterRenamings);
+  return (SDF_Renamings)ATmakeTerm(SDF_patternRenamingsRenamings, wsAfterBracketOpen, list, wsAfterList);
 }
 
 /*}}}  */
-/*{{{  SDF_RenamingRenamings SDF_makeRenamingRenamingsEmpty() */
+/*{{{  SDF_RenamingList SDF_makeRenamingListEmpty() */
 
-SDF_RenamingRenamings SDF_makeRenamingRenamingsEmpty()
+SDF_RenamingList SDF_makeRenamingListEmpty()
 {
-  return (SDF_RenamingRenamings)ATmakeTerm(SDF_patternRenamingRenamingsEmpty);
+  return (SDF_RenamingList)ATmakeTerm(SDF_patternRenamingListEmpty);
 }
 
 /*}}}  */
-/*{{{  SDF_RenamingRenamings SDF_makeRenamingRenamingsSingle(SDF_Renaming head) */
+/*{{{  SDF_RenamingList SDF_makeRenamingListSingle(SDF_Renaming head) */
 
-SDF_RenamingRenamings SDF_makeRenamingRenamingsSingle(SDF_Renaming head)
+SDF_RenamingList SDF_makeRenamingListSingle(SDF_Renaming head)
 {
-  return (SDF_RenamingRenamings)ATmakeTerm(SDF_patternRenamingRenamingsSingle, head);
+  return (SDF_RenamingList)ATmakeTerm(SDF_patternRenamingListSingle, head);
 }
 
 /*}}}  */
-/*{{{  SDF_RenamingRenamings SDF_makeRenamingRenamingsMany(SDF_Renaming head, SDF_Layout wsAfterFirst, SDF_RenamingRenamings tail) */
+/*{{{  SDF_RenamingList SDF_makeRenamingListMany(SDF_Renaming head, SDF_Layout wsAfterFirst, SDF_RenamingList tail) */
 
-SDF_RenamingRenamings SDF_makeRenamingRenamingsMany(SDF_Renaming head, SDF_Layout wsAfterFirst, SDF_RenamingRenamings tail)
+SDF_RenamingList SDF_makeRenamingListMany(SDF_Renaming head, SDF_Layout wsAfterFirst, SDF_RenamingList tail)
 {
-  return (SDF_RenamingRenamings)ATmakeTerm(SDF_patternRenamingRenamingsMany, head, wsAfterFirst, tail);
+  return (SDF_RenamingList)ATmakeTerm(SDF_patternRenamingListMany, head, wsAfterFirst, tail);
 }
 
 /*}}}  */
@@ -2822,7 +2822,7 @@ ATbool SDF_isEqualAttributes(SDF_Attributes arg0, SDF_Attributes arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool SDF_isEqualAttributeAttributes(SDF_AttributeAttributes arg0, SDF_AttributeAttributes arg1)
+ATbool SDF_isEqualAttributeList(SDF_AttributeList arg0, SDF_AttributeList arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -2947,7 +2947,7 @@ ATbool SDF_isEqualPriorities(SDF_Priorities arg0, SDF_Priorities arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool SDF_isEqualPriorityPrioritys(SDF_PriorityPrioritys arg0, SDF_PriorityPrioritys arg1)
+ATbool SDF_isEqualPriorityList(SDF_PriorityList arg0, SDF_PriorityList arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -2982,7 +2982,7 @@ ATbool SDF_isEqualLookaheads(SDF_Lookaheads arg0, SDF_Lookaheads arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool SDF_isEqualLookaheadLookaheads(SDF_LookaheadLookaheads arg0, SDF_LookaheadLookaheads arg1)
+ATbool SDF_isEqualLookaheadList(SDF_LookaheadList arg0, SDF_LookaheadList arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -2997,7 +2997,7 @@ ATbool SDF_isEqualRestrictions(SDF_Restrictions arg0, SDF_Restrictions arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool SDF_isEqualRestrictionRestrictions(SDF_RestrictionRestrictions arg0, SDF_RestrictionRestrictions arg1)
+ATbool SDF_isEqualRestrictionList(SDF_RestrictionList arg0, SDF_RestrictionList arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -3012,7 +3012,7 @@ ATbool SDF_isEqualAliases(SDF_Aliases arg0, SDF_Aliases arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool SDF_isEqualAliasAliass(SDF_AliasAliass arg0, SDF_AliasAliass arg1)
+ATbool SDF_isEqualAliasList(SDF_AliasList arg0, SDF_AliasList arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -3032,7 +3032,7 @@ ATbool SDF_isEqualRenamings(SDF_Renamings arg0, SDF_Renamings arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool SDF_isEqualRenamingRenamings(SDF_RenamingRenamings arg0, SDF_RenamingRenamings arg1)
+ATbool SDF_isEqualRenamingList(SDF_RenamingList arg0, SDF_RenamingList arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -6463,6 +6463,43 @@ ATbool SDF_isAttributesNoAttrs(SDF_Attributes arg)
 }
 
 /*}}}  */
+/*{{{  ATbool SDF_hasAttributesWsAfterList(SDF_Attributes arg) */
+
+ATbool SDF_hasAttributesWsAfterList(SDF_Attributes arg)
+{
+  if (SDF_isAttributesAttrs(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  SDF_Layout SDF_getAttributesWsAfterList(SDF_Attributes arg) */
+
+SDF_Layout SDF_getAttributesWsAfterList(SDF_Attributes arg)
+{
+  if (SDF_isAttributesAttrs(arg)) {
+    return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 3), 0);
+  }
+
+  ATabort("Attributes has no WsAfterList: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  SDF_Attributes SDF_setAttributesWsAfterList(SDF_Attributes arg, SDF_Layout wsAfterList) */
+
+SDF_Attributes SDF_setAttributesWsAfterList(SDF_Attributes arg, SDF_Layout wsAfterList)
+{
+  if (SDF_isAttributesAttrs(arg)) {
+    return (SDF_Attributes)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 3), (ATerm)wsAfterList, 0), 3), 2);
+  }
+
+  ATabort("Attributes has no WsAfterList: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
 /*{{{  ATbool SDF_hasAttributesWsAfterBraceOpen(SDF_Attributes arg) */
 
 ATbool SDF_hasAttributesWsAfterBraceOpen(SDF_Attributes arg)
@@ -6500,9 +6537,9 @@ SDF_Attributes SDF_setAttributesWsAfterBraceOpen(SDF_Attributes arg, SDF_Layout 
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasAttributesAttributes(SDF_Attributes arg) */
+/*{{{  ATbool SDF_hasAttributesList(SDF_Attributes arg) */
 
-ATbool SDF_hasAttributesAttributes(SDF_Attributes arg)
+ATbool SDF_hasAttributesList(SDF_Attributes arg)
 {
   if (SDF_isAttributesAttrs(arg)) {
     return ATtrue;
@@ -6511,304 +6548,267 @@ ATbool SDF_hasAttributesAttributes(SDF_Attributes arg)
 }
 
 /*}}}  */
-/*{{{  SDF_AttributeAttributes SDF_getAttributesAttributes(SDF_Attributes arg) */
+/*{{{  SDF_AttributeList SDF_getAttributesList(SDF_Attributes arg) */
 
-SDF_AttributeAttributes SDF_getAttributesAttributes(SDF_Attributes arg)
+SDF_AttributeList SDF_getAttributesList(SDF_Attributes arg)
 {
   if (SDF_isAttributesAttrs(arg)) {
-    return (SDF_AttributeAttributes)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 2), 2);
+    return (SDF_AttributeList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 2), 2);
   }
 
-  ATabort("Attributes has no Attributes: %t\n", arg);
+  ATabort("Attributes has no List: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_Attributes SDF_setAttributesAttributes(SDF_Attributes arg, SDF_AttributeAttributes attributes) */
+/*{{{  SDF_Attributes SDF_setAttributesList(SDF_Attributes arg, SDF_AttributeList list) */
 
-SDF_Attributes SDF_setAttributesAttributes(SDF_Attributes arg, SDF_AttributeAttributes attributes)
+SDF_Attributes SDF_setAttributesList(SDF_Attributes arg, SDF_AttributeList list)
 {
   if (SDF_isAttributesAttrs(arg)) {
-    return (SDF_Attributes)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 2), (ATerm)attributes, 2), 2), 2);
+    return (SDF_Attributes)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 2), (ATerm)list, 2), 2), 2);
   }
 
-  ATabort("Attributes has no Attributes: %t\n", arg);
+  ATabort("Attributes has no List: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasAttributesWsAfterAttributes(SDF_Attributes arg) */
 
-ATbool SDF_hasAttributesWsAfterAttributes(SDF_Attributes arg)
+/*}}}  */
+/*{{{  SDF_AttributeList accessor implementations */
+
+/*{{{  ATbool SDF_isValidAttributeList(SDF_AttributeList arg) */
+
+ATbool SDF_isValidAttributeList(SDF_AttributeList arg)
 {
-  if (SDF_isAttributesAttrs(arg)) {
+  if (SDF_isAttributeListEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (SDF_isAttributeListSingle(arg)) {
+    return ATtrue;
+  }
+  else if (SDF_isAttributeListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Layout SDF_getAttributesWsAfterAttributes(SDF_Attributes arg) */
+/*{{{  ATbool SDF_isAttributeListEmpty(SDF_AttributeList arg) */
 
-SDF_Layout SDF_getAttributesWsAfterAttributes(SDF_Attributes arg)
+ATbool SDF_isAttributeListEmpty(SDF_AttributeList arg)
 {
-  if (SDF_isAttributesAttrs(arg)) {
-    return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 3), 0);
-  }
-
-  ATabort("Attributes has no WsAfterAttributes: %t\n", arg);
-  return NULL;
+  return ATmatchTerm((ATerm)arg, SDF_patternAttributeListEmpty);
 }
 
 /*}}}  */
-/*{{{  SDF_Attributes SDF_setAttributesWsAfterAttributes(SDF_Attributes arg, SDF_Layout wsAfterAttributes) */
+/*{{{  ATbool SDF_isAttributeListSingle(SDF_AttributeList arg) */
 
-SDF_Attributes SDF_setAttributesWsAfterAttributes(SDF_Attributes arg, SDF_Layout wsAfterAttributes)
+ATbool SDF_isAttributeListSingle(SDF_AttributeList arg)
 {
-  if (SDF_isAttributesAttrs(arg)) {
-    return (SDF_Attributes)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 3), (ATerm)wsAfterAttributes, 0), 3), 2);
-  }
-
-  ATabort("Attributes has no WsAfterAttributes: %t\n", arg);
-  return NULL;
+  return ATmatchTerm((ATerm)arg, SDF_patternAttributeListSingle, NULL);
 }
 
 /*}}}  */
+/*{{{  ATbool SDF_isAttributeListMany(SDF_AttributeList arg) */
+
+ATbool SDF_isAttributeListMany(SDF_AttributeList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternAttributeListMany, NULL, NULL, NULL, NULL, NULL);
+}
 
 /*}}}  */
-/*{{{  SDF_AttributeAttributes accessor implementations */
+/*{{{  ATbool SDF_hasAttributeListWsAfterFirst(SDF_AttributeList arg) */
 
-/*{{{  ATbool SDF_isValidAttributeAttributes(SDF_AttributeAttributes arg) */
-
-ATbool SDF_isValidAttributeAttributes(SDF_AttributeAttributes arg)
+ATbool SDF_hasAttributeListWsAfterFirst(SDF_AttributeList arg)
 {
-  if (SDF_isAttributeAttributesEmpty(arg)) {
-    return ATtrue;
-  }
-  else if (SDF_isAttributeAttributesSingle(arg)) {
-    return ATtrue;
-  }
-  else if (SDF_isAttributeAttributesMany(arg)) {
+  if (SDF_isAttributeListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_isAttributeAttributesEmpty(SDF_AttributeAttributes arg) */
+/*{{{  SDF_Layout SDF_getAttributeListWsAfterFirst(SDF_AttributeList arg) */
 
-ATbool SDF_isAttributeAttributesEmpty(SDF_AttributeAttributes arg)
+SDF_Layout SDF_getAttributeListWsAfterFirst(SDF_AttributeList arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternAttributeAttributesEmpty);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isAttributeAttributesSingle(SDF_AttributeAttributes arg) */
-
-ATbool SDF_isAttributeAttributesSingle(SDF_AttributeAttributes arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternAttributeAttributesSingle, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isAttributeAttributesMany(SDF_AttributeAttributes arg) */
-
-ATbool SDF_isAttributeAttributesMany(SDF_AttributeAttributes arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternAttributeAttributesMany, NULL, NULL, NULL, NULL, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_hasAttributeAttributesWsAfterFirst(SDF_AttributeAttributes arg) */
-
-ATbool SDF_hasAttributeAttributesWsAfterFirst(SDF_AttributeAttributes arg)
-{
-  if (SDF_isAttributeAttributesMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  SDF_Layout SDF_getAttributeAttributesWsAfterFirst(SDF_AttributeAttributes arg) */
-
-SDF_Layout SDF_getAttributeAttributesWsAfterFirst(SDF_AttributeAttributes arg)
-{
-  if (SDF_isAttributeAttributesMany(arg)) {
+  if (SDF_isAttributeListMany(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), 0);
   }
 
-  ATabort("AttributeAttributes has no WsAfterFirst: %t\n", arg);
+  ATabort("AttributeList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_AttributeAttributes SDF_setAttributeAttributesWsAfterFirst(SDF_AttributeAttributes arg, SDF_Layout wsAfterFirst) */
+/*{{{  SDF_AttributeList SDF_setAttributeListWsAfterFirst(SDF_AttributeList arg, SDF_Layout wsAfterFirst) */
 
-SDF_AttributeAttributes SDF_setAttributeAttributesWsAfterFirst(SDF_AttributeAttributes arg, SDF_Layout wsAfterFirst)
+SDF_AttributeList SDF_setAttributeListWsAfterFirst(SDF_AttributeList arg, SDF_Layout wsAfterFirst)
 {
-  if (SDF_isAttributeAttributesMany(arg)) {
-    return (SDF_AttributeAttributes)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
+  if (SDF_isAttributeListMany(arg)) {
+    return (SDF_AttributeList)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
   }
 
-  ATabort("AttributeAttributes has no WsAfterFirst: %t\n", arg);
+  ATabort("AttributeList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasAttributeAttributesWsAfterSep(SDF_AttributeAttributes arg) */
+/*{{{  ATbool SDF_hasAttributeListWsAfterSep(SDF_AttributeList arg) */
 
-ATbool SDF_hasAttributeAttributesWsAfterSep(SDF_AttributeAttributes arg)
+ATbool SDF_hasAttributeListWsAfterSep(SDF_AttributeList arg)
 {
-  if (SDF_isAttributeAttributesMany(arg)) {
+  if (SDF_isAttributeListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Layout SDF_getAttributeAttributesWsAfterSep(SDF_AttributeAttributes arg) */
+/*{{{  SDF_Layout SDF_getAttributeListWsAfterSep(SDF_AttributeList arg) */
 
-SDF_Layout SDF_getAttributeAttributesWsAfterSep(SDF_AttributeAttributes arg)
+SDF_Layout SDF_getAttributeListWsAfterSep(SDF_AttributeList arg)
 {
-  if (SDF_isAttributeAttributesMany(arg)) {
+  if (SDF_isAttributeListMany(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)arg, 3), 0);
   }
 
-  ATabort("AttributeAttributes has no WsAfterSep: %t\n", arg);
+  ATabort("AttributeList has no WsAfterSep: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_AttributeAttributes SDF_setAttributeAttributesWsAfterSep(SDF_AttributeAttributes arg, SDF_Layout wsAfterSep) */
+/*{{{  SDF_AttributeList SDF_setAttributeListWsAfterSep(SDF_AttributeList arg, SDF_Layout wsAfterSep) */
 
-SDF_AttributeAttributes SDF_setAttributeAttributesWsAfterSep(SDF_AttributeAttributes arg, SDF_Layout wsAfterSep)
+SDF_AttributeList SDF_setAttributeListWsAfterSep(SDF_AttributeList arg, SDF_Layout wsAfterSep)
 {
-  if (SDF_isAttributeAttributesMany(arg)) {
-    return (SDF_AttributeAttributes)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 3), (ATerm)wsAfterSep, 0), 3);
+  if (SDF_isAttributeListMany(arg)) {
+    return (SDF_AttributeList)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 3), (ATerm)wsAfterSep, 0), 3);
   }
 
-  ATabort("AttributeAttributes has no WsAfterSep: %t\n", arg);
+  ATabort("AttributeList has no WsAfterSep: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasAttributeAttributesTail(SDF_AttributeAttributes arg) */
+/*{{{  ATbool SDF_hasAttributeListTail(SDF_AttributeList arg) */
 
-ATbool SDF_hasAttributeAttributesTail(SDF_AttributeAttributes arg)
+ATbool SDF_hasAttributeListTail(SDF_AttributeList arg)
 {
-  if (SDF_isAttributeAttributesMany(arg)) {
+  if (SDF_isAttributeListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_AttributeAttributes SDF_getAttributeAttributesTail(SDF_AttributeAttributes arg) */
+/*{{{  SDF_AttributeList SDF_getAttributeListTail(SDF_AttributeList arg) */
 
-SDF_AttributeAttributes SDF_getAttributeAttributesTail(SDF_AttributeAttributes arg)
+SDF_AttributeList SDF_getAttributeListTail(SDF_AttributeList arg)
 {
-  if (SDF_isAttributeAttributesMany(arg)) {
-    return (SDF_AttributeAttributes)ATgetTail((ATermList)arg, 4);
+  if (SDF_isAttributeListMany(arg)) {
+    return (SDF_AttributeList)ATgetTail((ATermList)arg, 4);
   }
 
-  ATabort("AttributeAttributes has no Tail: %t\n", arg);
+  ATabort("AttributeList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_AttributeAttributes SDF_setAttributeAttributesTail(SDF_AttributeAttributes arg, SDF_AttributeAttributes tail) */
+/*{{{  SDF_AttributeList SDF_setAttributeListTail(SDF_AttributeList arg, SDF_AttributeList tail) */
 
-SDF_AttributeAttributes SDF_setAttributeAttributesTail(SDF_AttributeAttributes arg, SDF_AttributeAttributes tail)
+SDF_AttributeList SDF_setAttributeListTail(SDF_AttributeList arg, SDF_AttributeList tail)
 {
-  if (SDF_isAttributeAttributesMany(arg)) {
-    return (SDF_AttributeAttributes)ATreplaceTail((ATermList)arg, (ATermList)tail, 4);
+  if (SDF_isAttributeListMany(arg)) {
+    return (SDF_AttributeList)ATreplaceTail((ATermList)arg, (ATermList)tail, 4);
   }
 
-  ATabort("AttributeAttributes has no Tail: %t\n", arg);
+  ATabort("AttributeList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasAttributeAttributesHead(SDF_AttributeAttributes arg) */
+/*{{{  ATbool SDF_hasAttributeListHead(SDF_AttributeList arg) */
 
-ATbool SDF_hasAttributeAttributesHead(SDF_AttributeAttributes arg)
+ATbool SDF_hasAttributeListHead(SDF_AttributeList arg)
 {
-  if (SDF_isAttributeAttributesSingle(arg)) {
+  if (SDF_isAttributeListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isAttributeAttributesMany(arg)) {
+  else if (SDF_isAttributeListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Attribute SDF_getAttributeAttributesHead(SDF_AttributeAttributes arg) */
+/*{{{  SDF_Attribute SDF_getAttributeListHead(SDF_AttributeList arg) */
 
-SDF_Attribute SDF_getAttributeAttributesHead(SDF_AttributeAttributes arg)
+SDF_Attribute SDF_getAttributeListHead(SDF_AttributeList arg)
 {
-  if (SDF_isAttributeAttributesSingle(arg)) {
+  if (SDF_isAttributeListSingle(arg)) {
     return (SDF_Attribute)ATelementAt((ATermList)arg, 0);
   }
-  else if (SDF_isAttributeAttributesMany(arg)) {
+  else if (SDF_isAttributeListMany(arg)) {
     return (SDF_Attribute)ATelementAt((ATermList)arg, 0);
   }
 
-  ATabort("AttributeAttributes has no Head: %t\n", arg);
+  ATabort("AttributeList has no Head: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_AttributeAttributes SDF_setAttributeAttributesHead(SDF_AttributeAttributes arg, SDF_Attribute head) */
+/*{{{  SDF_AttributeList SDF_setAttributeListHead(SDF_AttributeList arg, SDF_Attribute head) */
 
-SDF_AttributeAttributes SDF_setAttributeAttributesHead(SDF_AttributeAttributes arg, SDF_Attribute head)
+SDF_AttributeList SDF_setAttributeListHead(SDF_AttributeList arg, SDF_Attribute head)
 {
-  if (SDF_isAttributeAttributesSingle(arg)) {
-    return (SDF_AttributeAttributes)ATreplace((ATermList)arg, (ATerm)head, 0);
+  if (SDF_isAttributeListSingle(arg)) {
+    return (SDF_AttributeList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
-  else if (SDF_isAttributeAttributesMany(arg)) {
-    return (SDF_AttributeAttributes)ATreplace((ATermList)arg, (ATerm)head, 0);
+  else if (SDF_isAttributeListMany(arg)) {
+    return (SDF_AttributeList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
 
-  ATabort("AttributeAttributes has no Head: %t\n", arg);
+  ATabort("AttributeList has no Head: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasAttributeAttributesSep(SDF_AttributeAttributes arg) */
+/*{{{  ATbool SDF_hasAttributeListSep(SDF_AttributeList arg) */
 
-ATbool SDF_hasAttributeAttributesSep(SDF_AttributeAttributes arg)
+ATbool SDF_hasAttributeListSep(SDF_AttributeList arg)
 {
-  if (SDF_isAttributeAttributesMany(arg)) {
+  if (SDF_isAttributeListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Separator SDF_getAttributeAttributesSep(SDF_AttributeAttributes arg) */
+/*{{{  SDF_Separator SDF_getAttributeListSep(SDF_AttributeList arg) */
 
-SDF_Separator SDF_getAttributeAttributesSep(SDF_AttributeAttributes arg)
+SDF_Separator SDF_getAttributeListSep(SDF_AttributeList arg)
 {
-  if (SDF_isAttributeAttributesMany(arg)) {
+  if (SDF_isAttributeListMany(arg)) {
     return (SDF_Separator)ATelementAt((ATermList)arg, 2);
   }
 
-  ATabort("AttributeAttributes has no Sep: %t\n", arg);
+  ATabort("AttributeList has no Sep: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_AttributeAttributes SDF_setAttributeAttributesSep(SDF_AttributeAttributes arg, SDF_Separator sep) */
+/*{{{  SDF_AttributeList SDF_setAttributeListSep(SDF_AttributeList arg, SDF_Separator sep) */
 
-SDF_AttributeAttributes SDF_setAttributeAttributesSep(SDF_AttributeAttributes arg, SDF_Separator sep)
+SDF_AttributeList SDF_setAttributeListSep(SDF_AttributeList arg, SDF_Separator sep)
 {
-  if (SDF_isAttributeAttributesMany(arg)) {
-    return (SDF_AttributeAttributes)ATreplace((ATermList)arg, (ATerm)sep, 2);
+  if (SDF_isAttributeListMany(arg)) {
+    return (SDF_AttributeList)ATreplace((ATermList)arg, (ATerm)sep, 2);
   }
 
-  ATabort("AttributeAttributes has no Sep: %t\n", arg);
+  ATabort("AttributeList has no Sep: %t\n", arg);
   return NULL;
 }
 
@@ -11016,9 +11016,9 @@ ATbool SDF_isPrioritiesDefault(SDF_Priorities arg)
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasPrioritiesPrioritys(SDF_Priorities arg) */
+/*{{{  ATbool SDF_hasPrioritiesList(SDF_Priorities arg) */
 
-ATbool SDF_hasPrioritiesPrioritys(SDF_Priorities arg)
+ATbool SDF_hasPrioritiesList(SDF_Priorities arg)
 {
   if (SDF_isPrioritiesDefault(arg)) {
     return ATtrue;
@@ -11027,267 +11027,267 @@ ATbool SDF_hasPrioritiesPrioritys(SDF_Priorities arg)
 }
 
 /*}}}  */
-/*{{{  SDF_PriorityPrioritys SDF_getPrioritiesPrioritys(SDF_Priorities arg) */
+/*{{{  SDF_PriorityList SDF_getPrioritiesList(SDF_Priorities arg) */
 
-SDF_PriorityPrioritys SDF_getPrioritiesPrioritys(SDF_Priorities arg)
+SDF_PriorityList SDF_getPrioritiesList(SDF_Priorities arg)
 {
   if (SDF_isPrioritiesDefault(arg)) {
-    return (SDF_PriorityPrioritys)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), 2);
+    return (SDF_PriorityList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), 2);
   }
 
-  ATabort("Priorities has no Prioritys: %t\n", arg);
+  ATabort("Priorities has no List: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_Priorities SDF_setPrioritiesPrioritys(SDF_Priorities arg, SDF_PriorityPrioritys prioritys) */
+/*{{{  SDF_Priorities SDF_setPrioritiesList(SDF_Priorities arg, SDF_PriorityList list) */
 
-SDF_Priorities SDF_setPrioritiesPrioritys(SDF_Priorities arg, SDF_PriorityPrioritys prioritys)
+SDF_Priorities SDF_setPrioritiesList(SDF_Priorities arg, SDF_PriorityList list)
 {
   if (SDF_isPrioritiesDefault(arg)) {
-    return (SDF_Priorities)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), (ATerm)prioritys, 2), 0), 2);
+    return (SDF_Priorities)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), (ATerm)list, 2), 0), 2);
   }
 
-  ATabort("Priorities has no Prioritys: %t\n", arg);
+  ATabort("Priorities has no List: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
 
 /*}}}  */
-/*{{{  SDF_PriorityPrioritys accessor implementations */
+/*{{{  SDF_PriorityList accessor implementations */
 
-/*{{{  ATbool SDF_isValidPriorityPrioritys(SDF_PriorityPrioritys arg) */
+/*{{{  ATbool SDF_isValidPriorityList(SDF_PriorityList arg) */
 
-ATbool SDF_isValidPriorityPrioritys(SDF_PriorityPrioritys arg)
+ATbool SDF_isValidPriorityList(SDF_PriorityList arg)
 {
-  if (SDF_isPriorityPrioritysEmpty(arg)) {
+  if (SDF_isPriorityListEmpty(arg)) {
     return ATtrue;
   }
-  else if (SDF_isPriorityPrioritysSingle(arg)) {
+  else if (SDF_isPriorityListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isPriorityPrioritysMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isPriorityPrioritysEmpty(SDF_PriorityPrioritys arg) */
-
-ATbool SDF_isPriorityPrioritysEmpty(SDF_PriorityPrioritys arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternPriorityPrioritysEmpty);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isPriorityPrioritysSingle(SDF_PriorityPrioritys arg) */
-
-ATbool SDF_isPriorityPrioritysSingle(SDF_PriorityPrioritys arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternPriorityPrioritysSingle, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isPriorityPrioritysMany(SDF_PriorityPrioritys arg) */
-
-ATbool SDF_isPriorityPrioritysMany(SDF_PriorityPrioritys arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternPriorityPrioritysMany, NULL, NULL, NULL, NULL, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_hasPriorityPrioritysWsAfterFirst(SDF_PriorityPrioritys arg) */
-
-ATbool SDF_hasPriorityPrioritysWsAfterFirst(SDF_PriorityPrioritys arg)
-{
-  if (SDF_isPriorityPrioritysMany(arg)) {
+  else if (SDF_isPriorityListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Layout SDF_getPriorityPrioritysWsAfterFirst(SDF_PriorityPrioritys arg) */
+/*{{{  ATbool SDF_isPriorityListEmpty(SDF_PriorityList arg) */
 
-SDF_Layout SDF_getPriorityPrioritysWsAfterFirst(SDF_PriorityPrioritys arg)
+ATbool SDF_isPriorityListEmpty(SDF_PriorityList arg)
 {
-  if (SDF_isPriorityPrioritysMany(arg)) {
+  return ATmatchTerm((ATerm)arg, SDF_patternPriorityListEmpty);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isPriorityListSingle(SDF_PriorityList arg) */
+
+ATbool SDF_isPriorityListSingle(SDF_PriorityList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternPriorityListSingle, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isPriorityListMany(SDF_PriorityList arg) */
+
+ATbool SDF_isPriorityListMany(SDF_PriorityList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternPriorityListMany, NULL, NULL, NULL, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_hasPriorityListWsAfterFirst(SDF_PriorityList arg) */
+
+ATbool SDF_hasPriorityListWsAfterFirst(SDF_PriorityList arg)
+{
+  if (SDF_isPriorityListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  SDF_Layout SDF_getPriorityListWsAfterFirst(SDF_PriorityList arg) */
+
+SDF_Layout SDF_getPriorityListWsAfterFirst(SDF_PriorityList arg)
+{
+  if (SDF_isPriorityListMany(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), 0);
   }
 
-  ATabort("PriorityPrioritys has no WsAfterFirst: %t\n", arg);
+  ATabort("PriorityList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_PriorityPrioritys SDF_setPriorityPrioritysWsAfterFirst(SDF_PriorityPrioritys arg, SDF_Layout wsAfterFirst) */
+/*{{{  SDF_PriorityList SDF_setPriorityListWsAfterFirst(SDF_PriorityList arg, SDF_Layout wsAfterFirst) */
 
-SDF_PriorityPrioritys SDF_setPriorityPrioritysWsAfterFirst(SDF_PriorityPrioritys arg, SDF_Layout wsAfterFirst)
+SDF_PriorityList SDF_setPriorityListWsAfterFirst(SDF_PriorityList arg, SDF_Layout wsAfterFirst)
 {
-  if (SDF_isPriorityPrioritysMany(arg)) {
-    return (SDF_PriorityPrioritys)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
+  if (SDF_isPriorityListMany(arg)) {
+    return (SDF_PriorityList)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
   }
 
-  ATabort("PriorityPrioritys has no WsAfterFirst: %t\n", arg);
+  ATabort("PriorityList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasPriorityPrioritysWsAfterSep(SDF_PriorityPrioritys arg) */
+/*{{{  ATbool SDF_hasPriorityListWsAfterSep(SDF_PriorityList arg) */
 
-ATbool SDF_hasPriorityPrioritysWsAfterSep(SDF_PriorityPrioritys arg)
+ATbool SDF_hasPriorityListWsAfterSep(SDF_PriorityList arg)
 {
-  if (SDF_isPriorityPrioritysMany(arg)) {
+  if (SDF_isPriorityListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Layout SDF_getPriorityPrioritysWsAfterSep(SDF_PriorityPrioritys arg) */
+/*{{{  SDF_Layout SDF_getPriorityListWsAfterSep(SDF_PriorityList arg) */
 
-SDF_Layout SDF_getPriorityPrioritysWsAfterSep(SDF_PriorityPrioritys arg)
+SDF_Layout SDF_getPriorityListWsAfterSep(SDF_PriorityList arg)
 {
-  if (SDF_isPriorityPrioritysMany(arg)) {
+  if (SDF_isPriorityListMany(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)arg, 3), 0);
   }
 
-  ATabort("PriorityPrioritys has no WsAfterSep: %t\n", arg);
+  ATabort("PriorityList has no WsAfterSep: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_PriorityPrioritys SDF_setPriorityPrioritysWsAfterSep(SDF_PriorityPrioritys arg, SDF_Layout wsAfterSep) */
+/*{{{  SDF_PriorityList SDF_setPriorityListWsAfterSep(SDF_PriorityList arg, SDF_Layout wsAfterSep) */
 
-SDF_PriorityPrioritys SDF_setPriorityPrioritysWsAfterSep(SDF_PriorityPrioritys arg, SDF_Layout wsAfterSep)
+SDF_PriorityList SDF_setPriorityListWsAfterSep(SDF_PriorityList arg, SDF_Layout wsAfterSep)
 {
-  if (SDF_isPriorityPrioritysMany(arg)) {
-    return (SDF_PriorityPrioritys)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 3), (ATerm)wsAfterSep, 0), 3);
+  if (SDF_isPriorityListMany(arg)) {
+    return (SDF_PriorityList)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 3), (ATerm)wsAfterSep, 0), 3);
   }
 
-  ATabort("PriorityPrioritys has no WsAfterSep: %t\n", arg);
+  ATabort("PriorityList has no WsAfterSep: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasPriorityPrioritysTail(SDF_PriorityPrioritys arg) */
+/*{{{  ATbool SDF_hasPriorityListTail(SDF_PriorityList arg) */
 
-ATbool SDF_hasPriorityPrioritysTail(SDF_PriorityPrioritys arg)
+ATbool SDF_hasPriorityListTail(SDF_PriorityList arg)
 {
-  if (SDF_isPriorityPrioritysMany(arg)) {
+  if (SDF_isPriorityListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_PriorityPrioritys SDF_getPriorityPrioritysTail(SDF_PriorityPrioritys arg) */
+/*{{{  SDF_PriorityList SDF_getPriorityListTail(SDF_PriorityList arg) */
 
-SDF_PriorityPrioritys SDF_getPriorityPrioritysTail(SDF_PriorityPrioritys arg)
+SDF_PriorityList SDF_getPriorityListTail(SDF_PriorityList arg)
 {
-  if (SDF_isPriorityPrioritysMany(arg)) {
-    return (SDF_PriorityPrioritys)ATgetTail((ATermList)arg, 4);
+  if (SDF_isPriorityListMany(arg)) {
+    return (SDF_PriorityList)ATgetTail((ATermList)arg, 4);
   }
 
-  ATabort("PriorityPrioritys has no Tail: %t\n", arg);
+  ATabort("PriorityList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_PriorityPrioritys SDF_setPriorityPrioritysTail(SDF_PriorityPrioritys arg, SDF_PriorityPrioritys tail) */
+/*{{{  SDF_PriorityList SDF_setPriorityListTail(SDF_PriorityList arg, SDF_PriorityList tail) */
 
-SDF_PriorityPrioritys SDF_setPriorityPrioritysTail(SDF_PriorityPrioritys arg, SDF_PriorityPrioritys tail)
+SDF_PriorityList SDF_setPriorityListTail(SDF_PriorityList arg, SDF_PriorityList tail)
 {
-  if (SDF_isPriorityPrioritysMany(arg)) {
-    return (SDF_PriorityPrioritys)ATreplaceTail((ATermList)arg, (ATermList)tail, 4);
+  if (SDF_isPriorityListMany(arg)) {
+    return (SDF_PriorityList)ATreplaceTail((ATermList)arg, (ATermList)tail, 4);
   }
 
-  ATabort("PriorityPrioritys has no Tail: %t\n", arg);
+  ATabort("PriorityList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasPriorityPrioritysHead(SDF_PriorityPrioritys arg) */
+/*{{{  ATbool SDF_hasPriorityListHead(SDF_PriorityList arg) */
 
-ATbool SDF_hasPriorityPrioritysHead(SDF_PriorityPrioritys arg)
+ATbool SDF_hasPriorityListHead(SDF_PriorityList arg)
 {
-  if (SDF_isPriorityPrioritysSingle(arg)) {
+  if (SDF_isPriorityListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isPriorityPrioritysMany(arg)) {
+  else if (SDF_isPriorityListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Priority SDF_getPriorityPrioritysHead(SDF_PriorityPrioritys arg) */
+/*{{{  SDF_Priority SDF_getPriorityListHead(SDF_PriorityList arg) */
 
-SDF_Priority SDF_getPriorityPrioritysHead(SDF_PriorityPrioritys arg)
+SDF_Priority SDF_getPriorityListHead(SDF_PriorityList arg)
 {
-  if (SDF_isPriorityPrioritysSingle(arg)) {
+  if (SDF_isPriorityListSingle(arg)) {
     return (SDF_Priority)ATelementAt((ATermList)arg, 0);
   }
-  else if (SDF_isPriorityPrioritysMany(arg)) {
+  else if (SDF_isPriorityListMany(arg)) {
     return (SDF_Priority)ATelementAt((ATermList)arg, 0);
   }
 
-  ATabort("PriorityPrioritys has no Head: %t\n", arg);
+  ATabort("PriorityList has no Head: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_PriorityPrioritys SDF_setPriorityPrioritysHead(SDF_PriorityPrioritys arg, SDF_Priority head) */
+/*{{{  SDF_PriorityList SDF_setPriorityListHead(SDF_PriorityList arg, SDF_Priority head) */
 
-SDF_PriorityPrioritys SDF_setPriorityPrioritysHead(SDF_PriorityPrioritys arg, SDF_Priority head)
+SDF_PriorityList SDF_setPriorityListHead(SDF_PriorityList arg, SDF_Priority head)
 {
-  if (SDF_isPriorityPrioritysSingle(arg)) {
-    return (SDF_PriorityPrioritys)ATreplace((ATermList)arg, (ATerm)head, 0);
+  if (SDF_isPriorityListSingle(arg)) {
+    return (SDF_PriorityList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
-  else if (SDF_isPriorityPrioritysMany(arg)) {
-    return (SDF_PriorityPrioritys)ATreplace((ATermList)arg, (ATerm)head, 0);
+  else if (SDF_isPriorityListMany(arg)) {
+    return (SDF_PriorityList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
 
-  ATabort("PriorityPrioritys has no Head: %t\n", arg);
+  ATabort("PriorityList has no Head: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasPriorityPrioritysSep(SDF_PriorityPrioritys arg) */
+/*{{{  ATbool SDF_hasPriorityListSep(SDF_PriorityList arg) */
 
-ATbool SDF_hasPriorityPrioritysSep(SDF_PriorityPrioritys arg)
+ATbool SDF_hasPriorityListSep(SDF_PriorityList arg)
 {
-  if (SDF_isPriorityPrioritysMany(arg)) {
+  if (SDF_isPriorityListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Separator SDF_getPriorityPrioritysSep(SDF_PriorityPrioritys arg) */
+/*{{{  SDF_Separator SDF_getPriorityListSep(SDF_PriorityList arg) */
 
-SDF_Separator SDF_getPriorityPrioritysSep(SDF_PriorityPrioritys arg)
+SDF_Separator SDF_getPriorityListSep(SDF_PriorityList arg)
 {
-  if (SDF_isPriorityPrioritysMany(arg)) {
+  if (SDF_isPriorityListMany(arg)) {
     return (SDF_Separator)ATelementAt((ATermList)arg, 2);
   }
 
-  ATabort("PriorityPrioritys has no Sep: %t\n", arg);
+  ATabort("PriorityList has no Sep: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_PriorityPrioritys SDF_setPriorityPrioritysSep(SDF_PriorityPrioritys arg, SDF_Separator sep) */
+/*{{{  SDF_PriorityList SDF_setPriorityListSep(SDF_PriorityList arg, SDF_Separator sep) */
 
-SDF_PriorityPrioritys SDF_setPriorityPrioritysSep(SDF_PriorityPrioritys arg, SDF_Separator sep)
+SDF_PriorityList SDF_setPriorityListSep(SDF_PriorityList arg, SDF_Separator sep)
 {
-  if (SDF_isPriorityPrioritysMany(arg)) {
-    return (SDF_PriorityPrioritys)ATreplace((ATermList)arg, (ATerm)sep, 2);
+  if (SDF_isPriorityListMany(arg)) {
+    return (SDF_PriorityList)ATreplace((ATermList)arg, (ATerm)sep, 2);
   }
 
-  ATabort("PriorityPrioritys has no Sep: %t\n", arg);
+  ATabort("PriorityList has no Sep: %t\n", arg);
   return NULL;
 }
 
@@ -12111,14 +12111,48 @@ SDF_Lookaheads SDF_setLookaheadsRight(SDF_Lookaheads arg, SDF_Lookaheads right)
 }
 
 /*}}}  */
+/*{{{  ATbool SDF_hasLookaheadsWsAfterList(SDF_Lookaheads arg) */
+
+ATbool SDF_hasLookaheadsWsAfterList(SDF_Lookaheads arg)
+{
+  if (SDF_isLookaheadsList(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  SDF_Layout SDF_getLookaheadsWsAfterList(SDF_Lookaheads arg) */
+
+SDF_Layout SDF_getLookaheadsWsAfterList(SDF_Lookaheads arg)
+{
+  if (SDF_isLookaheadsList(arg)) {
+    return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 3), 0);
+  }
+
+  ATabort("Lookaheads has no WsAfterList: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  SDF_Lookaheads SDF_setLookaheadsWsAfterList(SDF_Lookaheads arg, SDF_Layout wsAfterList) */
+
+SDF_Lookaheads SDF_setLookaheadsWsAfterList(SDF_Lookaheads arg, SDF_Layout wsAfterList)
+{
+  if (SDF_isLookaheadsList(arg)) {
+    return (SDF_Lookaheads)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 3), (ATerm)wsAfterList, 0), 3), 2);
+  }
+
+  ATabort("Lookaheads has no WsAfterList: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
 /*{{{  ATbool SDF_hasLookaheadsLookaheads(SDF_Lookaheads arg) */
 
 ATbool SDF_hasLookaheadsLookaheads(SDF_Lookaheads arg)
 {
   if (SDF_isLookaheadsBracket(arg)) {
-    return ATtrue;
-  }
-  else if (SDF_isLookaheadsList(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -12132,9 +12166,6 @@ SDF_Lookaheads SDF_getLookaheadsLookaheads(SDF_Lookaheads arg)
   if (SDF_isLookaheadsBracket(arg)) {
     return (SDF_Lookaheads)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 2);
   }
-  else if (SDF_isLookaheadsList(arg)) {
-    return (SDF_Lookaheads)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 2), 2);
-  }
 
   ATabort("Lookaheads has no Lookaheads: %t\n", arg);
   return NULL;
@@ -12147,9 +12178,6 @@ SDF_Lookaheads SDF_setLookaheadsLookaheads(SDF_Lookaheads arg, SDF_Lookaheads lo
 {
   if (SDF_isLookaheadsBracket(arg)) {
     return (SDF_Lookaheads)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)lookaheads, 2), 2);
-  }
-  else if (SDF_isLookaheadsList(arg)) {
-    return (SDF_Lookaheads)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 2), (ATerm)lookaheads, 2), 2), 2);
   }
 
   ATabort("Lookaheads has no Lookaheads: %t\n", arg);
@@ -12342,6 +12370,43 @@ SDF_Lookaheads SDF_setLookaheadsWsAfterBar(SDF_Lookaheads arg, SDF_Layout wsAfte
 }
 
 /*}}}  */
+/*{{{  ATbool SDF_hasLookaheadsList(SDF_Lookaheads arg) */
+
+ATbool SDF_hasLookaheadsList(SDF_Lookaheads arg)
+{
+  if (SDF_isLookaheadsList(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  SDF_LookaheadList SDF_getLookaheadsList(SDF_Lookaheads arg) */
+
+SDF_LookaheadList SDF_getLookaheadsList(SDF_Lookaheads arg)
+{
+  if (SDF_isLookaheadsList(arg)) {
+    return (SDF_LookaheadList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 2), 2);
+  }
+
+  ATabort("Lookaheads has no List: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
+/*{{{  SDF_Lookaheads SDF_setLookaheadsList(SDF_Lookaheads arg, SDF_LookaheadList list) */
+
+SDF_Lookaheads SDF_setLookaheadsList(SDF_Lookaheads arg, SDF_LookaheadList list)
+{
+  if (SDF_isLookaheadsList(arg)) {
+    return (SDF_Lookaheads)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 2), (ATerm)list, 2), 2), 2);
+  }
+
+  ATabort("Lookaheads has no List: %t\n", arg);
+  return NULL;
+}
+
+/*}}}  */
 /*{{{  ATbool SDF_hasLookaheadsLeft(SDF_Lookaheads arg) */
 
 ATbool SDF_hasLookaheadsLeft(SDF_Lookaheads arg)
@@ -12386,9 +12451,6 @@ ATbool SDF_hasLookaheadsWsAfterLookaheads(SDF_Lookaheads arg)
   if (SDF_isLookaheadsBracket(arg)) {
     return ATtrue;
   }
-  else if (SDF_isLookaheadsList(arg)) {
-    return ATtrue;
-  }
   return ATfalse;
 }
 
@@ -12398,9 +12460,6 @@ ATbool SDF_hasLookaheadsWsAfterLookaheads(SDF_Lookaheads arg)
 SDF_Layout SDF_getLookaheadsWsAfterLookaheads(SDF_Lookaheads arg)
 {
   if (SDF_isLookaheadsBracket(arg)) {
-    return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 3), 0);
-  }
-  else if (SDF_isLookaheadsList(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 3), 0);
   }
 
@@ -12416,9 +12475,6 @@ SDF_Lookaheads SDF_setLookaheadsWsAfterLookaheads(SDF_Lookaheads arg, SDF_Layout
   if (SDF_isLookaheadsBracket(arg)) {
     return (SDF_Lookaheads)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 3), (ATerm)wsAfterLookaheads, 0), 3), 2);
   }
-  else if (SDF_isLookaheadsList(arg)) {
-    return (SDF_Lookaheads)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 3), (ATerm)wsAfterLookaheads, 0), 3), 2);
-  }
 
   ATabort("Lookaheads has no WsAfterLookaheads: %t\n", arg);
   return NULL;
@@ -12427,239 +12483,239 @@ SDF_Lookaheads SDF_setLookaheadsWsAfterLookaheads(SDF_Lookaheads arg, SDF_Layout
 /*}}}  */
 
 /*}}}  */
-/*{{{  SDF_LookaheadLookaheads accessor implementations */
+/*{{{  SDF_LookaheadList accessor implementations */
 
-/*{{{  ATbool SDF_isValidLookaheadLookaheads(SDF_LookaheadLookaheads arg) */
+/*{{{  ATbool SDF_isValidLookaheadList(SDF_LookaheadList arg) */
 
-ATbool SDF_isValidLookaheadLookaheads(SDF_LookaheadLookaheads arg)
+ATbool SDF_isValidLookaheadList(SDF_LookaheadList arg)
 {
-  if (SDF_isLookaheadLookaheadsEmpty(arg)) {
+  if (SDF_isLookaheadListEmpty(arg)) {
     return ATtrue;
   }
-  else if (SDF_isLookaheadLookaheadsSingle(arg)) {
+  else if (SDF_isLookaheadListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isLookaheadLookaheadsMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isLookaheadLookaheadsEmpty(SDF_LookaheadLookaheads arg) */
-
-ATbool SDF_isLookaheadLookaheadsEmpty(SDF_LookaheadLookaheads arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternLookaheadLookaheadsEmpty);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isLookaheadLookaheadsSingle(SDF_LookaheadLookaheads arg) */
-
-ATbool SDF_isLookaheadLookaheadsSingle(SDF_LookaheadLookaheads arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternLookaheadLookaheadsSingle, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isLookaheadLookaheadsMany(SDF_LookaheadLookaheads arg) */
-
-ATbool SDF_isLookaheadLookaheadsMany(SDF_LookaheadLookaheads arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternLookaheadLookaheadsMany, NULL, NULL, NULL, NULL, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_hasLookaheadLookaheadsWsAfterFirst(SDF_LookaheadLookaheads arg) */
-
-ATbool SDF_hasLookaheadLookaheadsWsAfterFirst(SDF_LookaheadLookaheads arg)
-{
-  if (SDF_isLookaheadLookaheadsMany(arg)) {
+  else if (SDF_isLookaheadListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Layout SDF_getLookaheadLookaheadsWsAfterFirst(SDF_LookaheadLookaheads arg) */
+/*{{{  ATbool SDF_isLookaheadListEmpty(SDF_LookaheadList arg) */
 
-SDF_Layout SDF_getLookaheadLookaheadsWsAfterFirst(SDF_LookaheadLookaheads arg)
+ATbool SDF_isLookaheadListEmpty(SDF_LookaheadList arg)
 {
-  if (SDF_isLookaheadLookaheadsMany(arg)) {
+  return ATmatchTerm((ATerm)arg, SDF_patternLookaheadListEmpty);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isLookaheadListSingle(SDF_LookaheadList arg) */
+
+ATbool SDF_isLookaheadListSingle(SDF_LookaheadList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternLookaheadListSingle, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isLookaheadListMany(SDF_LookaheadList arg) */
+
+ATbool SDF_isLookaheadListMany(SDF_LookaheadList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternLookaheadListMany, NULL, NULL, NULL, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_hasLookaheadListWsAfterFirst(SDF_LookaheadList arg) */
+
+ATbool SDF_hasLookaheadListWsAfterFirst(SDF_LookaheadList arg)
+{
+  if (SDF_isLookaheadListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  SDF_Layout SDF_getLookaheadListWsAfterFirst(SDF_LookaheadList arg) */
+
+SDF_Layout SDF_getLookaheadListWsAfterFirst(SDF_LookaheadList arg)
+{
+  if (SDF_isLookaheadListMany(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), 0);
   }
 
-  ATabort("LookaheadLookaheads has no WsAfterFirst: %t\n", arg);
+  ATabort("LookaheadList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsWsAfterFirst(SDF_LookaheadLookaheads arg, SDF_Layout wsAfterFirst) */
+/*{{{  SDF_LookaheadList SDF_setLookaheadListWsAfterFirst(SDF_LookaheadList arg, SDF_Layout wsAfterFirst) */
 
-SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsWsAfterFirst(SDF_LookaheadLookaheads arg, SDF_Layout wsAfterFirst)
+SDF_LookaheadList SDF_setLookaheadListWsAfterFirst(SDF_LookaheadList arg, SDF_Layout wsAfterFirst)
 {
-  if (SDF_isLookaheadLookaheadsMany(arg)) {
-    return (SDF_LookaheadLookaheads)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
+  if (SDF_isLookaheadListMany(arg)) {
+    return (SDF_LookaheadList)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
   }
 
-  ATabort("LookaheadLookaheads has no WsAfterFirst: %t\n", arg);
+  ATabort("LookaheadList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasLookaheadLookaheadsWsAfterSep(SDF_LookaheadLookaheads arg) */
+/*{{{  ATbool SDF_hasLookaheadListWsAfterSep(SDF_LookaheadList arg) */
 
-ATbool SDF_hasLookaheadLookaheadsWsAfterSep(SDF_LookaheadLookaheads arg)
+ATbool SDF_hasLookaheadListWsAfterSep(SDF_LookaheadList arg)
 {
-  if (SDF_isLookaheadLookaheadsMany(arg)) {
+  if (SDF_isLookaheadListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Layout SDF_getLookaheadLookaheadsWsAfterSep(SDF_LookaheadLookaheads arg) */
+/*{{{  SDF_Layout SDF_getLookaheadListWsAfterSep(SDF_LookaheadList arg) */
 
-SDF_Layout SDF_getLookaheadLookaheadsWsAfterSep(SDF_LookaheadLookaheads arg)
+SDF_Layout SDF_getLookaheadListWsAfterSep(SDF_LookaheadList arg)
 {
-  if (SDF_isLookaheadLookaheadsMany(arg)) {
+  if (SDF_isLookaheadListMany(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)arg, 3), 0);
   }
 
-  ATabort("LookaheadLookaheads has no WsAfterSep: %t\n", arg);
+  ATabort("LookaheadList has no WsAfterSep: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsWsAfterSep(SDF_LookaheadLookaheads arg, SDF_Layout wsAfterSep) */
+/*{{{  SDF_LookaheadList SDF_setLookaheadListWsAfterSep(SDF_LookaheadList arg, SDF_Layout wsAfterSep) */
 
-SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsWsAfterSep(SDF_LookaheadLookaheads arg, SDF_Layout wsAfterSep)
+SDF_LookaheadList SDF_setLookaheadListWsAfterSep(SDF_LookaheadList arg, SDF_Layout wsAfterSep)
 {
-  if (SDF_isLookaheadLookaheadsMany(arg)) {
-    return (SDF_LookaheadLookaheads)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 3), (ATerm)wsAfterSep, 0), 3);
+  if (SDF_isLookaheadListMany(arg)) {
+    return (SDF_LookaheadList)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 3), (ATerm)wsAfterSep, 0), 3);
   }
 
-  ATabort("LookaheadLookaheads has no WsAfterSep: %t\n", arg);
+  ATabort("LookaheadList has no WsAfterSep: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasLookaheadLookaheadsTail(SDF_LookaheadLookaheads arg) */
+/*{{{  ATbool SDF_hasLookaheadListTail(SDF_LookaheadList arg) */
 
-ATbool SDF_hasLookaheadLookaheadsTail(SDF_LookaheadLookaheads arg)
+ATbool SDF_hasLookaheadListTail(SDF_LookaheadList arg)
 {
-  if (SDF_isLookaheadLookaheadsMany(arg)) {
+  if (SDF_isLookaheadListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_LookaheadLookaheads SDF_getLookaheadLookaheadsTail(SDF_LookaheadLookaheads arg) */
+/*{{{  SDF_LookaheadList SDF_getLookaheadListTail(SDF_LookaheadList arg) */
 
-SDF_LookaheadLookaheads SDF_getLookaheadLookaheadsTail(SDF_LookaheadLookaheads arg)
+SDF_LookaheadList SDF_getLookaheadListTail(SDF_LookaheadList arg)
 {
-  if (SDF_isLookaheadLookaheadsMany(arg)) {
-    return (SDF_LookaheadLookaheads)ATgetTail((ATermList)arg, 4);
+  if (SDF_isLookaheadListMany(arg)) {
+    return (SDF_LookaheadList)ATgetTail((ATermList)arg, 4);
   }
 
-  ATabort("LookaheadLookaheads has no Tail: %t\n", arg);
+  ATabort("LookaheadList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsTail(SDF_LookaheadLookaheads arg, SDF_LookaheadLookaheads tail) */
+/*{{{  SDF_LookaheadList SDF_setLookaheadListTail(SDF_LookaheadList arg, SDF_LookaheadList tail) */
 
-SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsTail(SDF_LookaheadLookaheads arg, SDF_LookaheadLookaheads tail)
+SDF_LookaheadList SDF_setLookaheadListTail(SDF_LookaheadList arg, SDF_LookaheadList tail)
 {
-  if (SDF_isLookaheadLookaheadsMany(arg)) {
-    return (SDF_LookaheadLookaheads)ATreplaceTail((ATermList)arg, (ATermList)tail, 4);
+  if (SDF_isLookaheadListMany(arg)) {
+    return (SDF_LookaheadList)ATreplaceTail((ATermList)arg, (ATermList)tail, 4);
   }
 
-  ATabort("LookaheadLookaheads has no Tail: %t\n", arg);
+  ATabort("LookaheadList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasLookaheadLookaheadsHead(SDF_LookaheadLookaheads arg) */
+/*{{{  ATbool SDF_hasLookaheadListHead(SDF_LookaheadList arg) */
 
-ATbool SDF_hasLookaheadLookaheadsHead(SDF_LookaheadLookaheads arg)
+ATbool SDF_hasLookaheadListHead(SDF_LookaheadList arg)
 {
-  if (SDF_isLookaheadLookaheadsSingle(arg)) {
+  if (SDF_isLookaheadListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isLookaheadLookaheadsMany(arg)) {
+  else if (SDF_isLookaheadListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Lookahead SDF_getLookaheadLookaheadsHead(SDF_LookaheadLookaheads arg) */
+/*{{{  SDF_Lookahead SDF_getLookaheadListHead(SDF_LookaheadList arg) */
 
-SDF_Lookahead SDF_getLookaheadLookaheadsHead(SDF_LookaheadLookaheads arg)
+SDF_Lookahead SDF_getLookaheadListHead(SDF_LookaheadList arg)
 {
-  if (SDF_isLookaheadLookaheadsSingle(arg)) {
+  if (SDF_isLookaheadListSingle(arg)) {
     return (SDF_Lookahead)ATelementAt((ATermList)arg, 0);
   }
-  else if (SDF_isLookaheadLookaheadsMany(arg)) {
+  else if (SDF_isLookaheadListMany(arg)) {
     return (SDF_Lookahead)ATelementAt((ATermList)arg, 0);
   }
 
-  ATabort("LookaheadLookaheads has no Head: %t\n", arg);
+  ATabort("LookaheadList has no Head: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsHead(SDF_LookaheadLookaheads arg, SDF_Lookahead head) */
+/*{{{  SDF_LookaheadList SDF_setLookaheadListHead(SDF_LookaheadList arg, SDF_Lookahead head) */
 
-SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsHead(SDF_LookaheadLookaheads arg, SDF_Lookahead head)
+SDF_LookaheadList SDF_setLookaheadListHead(SDF_LookaheadList arg, SDF_Lookahead head)
 {
-  if (SDF_isLookaheadLookaheadsSingle(arg)) {
-    return (SDF_LookaheadLookaheads)ATreplace((ATermList)arg, (ATerm)head, 0);
+  if (SDF_isLookaheadListSingle(arg)) {
+    return (SDF_LookaheadList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
-  else if (SDF_isLookaheadLookaheadsMany(arg)) {
-    return (SDF_LookaheadLookaheads)ATreplace((ATermList)arg, (ATerm)head, 0);
+  else if (SDF_isLookaheadListMany(arg)) {
+    return (SDF_LookaheadList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
 
-  ATabort("LookaheadLookaheads has no Head: %t\n", arg);
+  ATabort("LookaheadList has no Head: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasLookaheadLookaheadsSep(SDF_LookaheadLookaheads arg) */
+/*{{{  ATbool SDF_hasLookaheadListSep(SDF_LookaheadList arg) */
 
-ATbool SDF_hasLookaheadLookaheadsSep(SDF_LookaheadLookaheads arg)
+ATbool SDF_hasLookaheadListSep(SDF_LookaheadList arg)
 {
-  if (SDF_isLookaheadLookaheadsMany(arg)) {
+  if (SDF_isLookaheadListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Separator SDF_getLookaheadLookaheadsSep(SDF_LookaheadLookaheads arg) */
+/*{{{  SDF_Separator SDF_getLookaheadListSep(SDF_LookaheadList arg) */
 
-SDF_Separator SDF_getLookaheadLookaheadsSep(SDF_LookaheadLookaheads arg)
+SDF_Separator SDF_getLookaheadListSep(SDF_LookaheadList arg)
 {
-  if (SDF_isLookaheadLookaheadsMany(arg)) {
+  if (SDF_isLookaheadListMany(arg)) {
     return (SDF_Separator)ATelementAt((ATermList)arg, 2);
   }
 
-  ATabort("LookaheadLookaheads has no Sep: %t\n", arg);
+  ATabort("LookaheadList has no Sep: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsSep(SDF_LookaheadLookaheads arg, SDF_Separator sep) */
+/*{{{  SDF_LookaheadList SDF_setLookaheadListSep(SDF_LookaheadList arg, SDF_Separator sep) */
 
-SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsSep(SDF_LookaheadLookaheads arg, SDF_Separator sep)
+SDF_LookaheadList SDF_setLookaheadListSep(SDF_LookaheadList arg, SDF_Separator sep)
 {
-  if (SDF_isLookaheadLookaheadsMany(arg)) {
-    return (SDF_LookaheadLookaheads)ATreplace((ATermList)arg, (ATerm)sep, 2);
+  if (SDF_isLookaheadListMany(arg)) {
+    return (SDF_LookaheadList)ATreplace((ATermList)arg, (ATerm)sep, 2);
   }
 
-  ATabort("LookaheadLookaheads has no Sep: %t\n", arg);
+  ATabort("LookaheadList has no Sep: %t\n", arg);
   return NULL;
 }
 
@@ -12858,9 +12914,9 @@ ATbool SDF_isRestrictionsDefault(SDF_Restrictions arg)
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasRestrictionsRestrictions(SDF_Restrictions arg) */
+/*{{{  ATbool SDF_hasRestrictionsList(SDF_Restrictions arg) */
 
-ATbool SDF_hasRestrictionsRestrictions(SDF_Restrictions arg)
+ATbool SDF_hasRestrictionsList(SDF_Restrictions arg)
 {
   if (SDF_isRestrictionsDefault(arg)) {
     return ATtrue;
@@ -12869,193 +12925,193 @@ ATbool SDF_hasRestrictionsRestrictions(SDF_Restrictions arg)
 }
 
 /*}}}  */
-/*{{{  SDF_RestrictionRestrictions SDF_getRestrictionsRestrictions(SDF_Restrictions arg) */
+/*{{{  SDF_RestrictionList SDF_getRestrictionsList(SDF_Restrictions arg) */
 
-SDF_RestrictionRestrictions SDF_getRestrictionsRestrictions(SDF_Restrictions arg)
+SDF_RestrictionList SDF_getRestrictionsList(SDF_Restrictions arg)
 {
   if (SDF_isRestrictionsDefault(arg)) {
-    return (SDF_RestrictionRestrictions)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), 2);
+    return (SDF_RestrictionList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), 2);
   }
 
-  ATabort("Restrictions has no Restrictions: %t\n", arg);
+  ATabort("Restrictions has no List: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_Restrictions SDF_setRestrictionsRestrictions(SDF_Restrictions arg, SDF_RestrictionRestrictions restrictions) */
+/*{{{  SDF_Restrictions SDF_setRestrictionsList(SDF_Restrictions arg, SDF_RestrictionList list) */
 
-SDF_Restrictions SDF_setRestrictionsRestrictions(SDF_Restrictions arg, SDF_RestrictionRestrictions restrictions)
+SDF_Restrictions SDF_setRestrictionsList(SDF_Restrictions arg, SDF_RestrictionList list)
 {
   if (SDF_isRestrictionsDefault(arg)) {
-    return (SDF_Restrictions)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), (ATerm)restrictions, 2), 0), 2);
+    return (SDF_Restrictions)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), (ATerm)list, 2), 0), 2);
   }
 
-  ATabort("Restrictions has no Restrictions: %t\n", arg);
+  ATabort("Restrictions has no List: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
 
 /*}}}  */
-/*{{{  SDF_RestrictionRestrictions accessor implementations */
+/*{{{  SDF_RestrictionList accessor implementations */
 
-/*{{{  ATbool SDF_isValidRestrictionRestrictions(SDF_RestrictionRestrictions arg) */
+/*{{{  ATbool SDF_isValidRestrictionList(SDF_RestrictionList arg) */
 
-ATbool SDF_isValidRestrictionRestrictions(SDF_RestrictionRestrictions arg)
+ATbool SDF_isValidRestrictionList(SDF_RestrictionList arg)
 {
-  if (SDF_isRestrictionRestrictionsEmpty(arg)) {
+  if (SDF_isRestrictionListEmpty(arg)) {
     return ATtrue;
   }
-  else if (SDF_isRestrictionRestrictionsSingle(arg)) {
+  else if (SDF_isRestrictionListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isRestrictionRestrictionsMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isRestrictionRestrictionsEmpty(SDF_RestrictionRestrictions arg) */
-
-ATbool SDF_isRestrictionRestrictionsEmpty(SDF_RestrictionRestrictions arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternRestrictionRestrictionsEmpty);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isRestrictionRestrictionsSingle(SDF_RestrictionRestrictions arg) */
-
-ATbool SDF_isRestrictionRestrictionsSingle(SDF_RestrictionRestrictions arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternRestrictionRestrictionsSingle, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isRestrictionRestrictionsMany(SDF_RestrictionRestrictions arg) */
-
-ATbool SDF_isRestrictionRestrictionsMany(SDF_RestrictionRestrictions arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternRestrictionRestrictionsMany, NULL, NULL, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_hasRestrictionRestrictionsWsAfterFirst(SDF_RestrictionRestrictions arg) */
-
-ATbool SDF_hasRestrictionRestrictionsWsAfterFirst(SDF_RestrictionRestrictions arg)
-{
-  if (SDF_isRestrictionRestrictionsMany(arg)) {
+  else if (SDF_isRestrictionListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Layout SDF_getRestrictionRestrictionsWsAfterFirst(SDF_RestrictionRestrictions arg) */
+/*{{{  ATbool SDF_isRestrictionListEmpty(SDF_RestrictionList arg) */
 
-SDF_Layout SDF_getRestrictionRestrictionsWsAfterFirst(SDF_RestrictionRestrictions arg)
+ATbool SDF_isRestrictionListEmpty(SDF_RestrictionList arg)
 {
-  if (SDF_isRestrictionRestrictionsMany(arg)) {
+  return ATmatchTerm((ATerm)arg, SDF_patternRestrictionListEmpty);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isRestrictionListSingle(SDF_RestrictionList arg) */
+
+ATbool SDF_isRestrictionListSingle(SDF_RestrictionList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternRestrictionListSingle, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isRestrictionListMany(SDF_RestrictionList arg) */
+
+ATbool SDF_isRestrictionListMany(SDF_RestrictionList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternRestrictionListMany, NULL, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_hasRestrictionListWsAfterFirst(SDF_RestrictionList arg) */
+
+ATbool SDF_hasRestrictionListWsAfterFirst(SDF_RestrictionList arg)
+{
+  if (SDF_isRestrictionListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  SDF_Layout SDF_getRestrictionListWsAfterFirst(SDF_RestrictionList arg) */
+
+SDF_Layout SDF_getRestrictionListWsAfterFirst(SDF_RestrictionList arg)
+{
+  if (SDF_isRestrictionListMany(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), 0);
   }
 
-  ATabort("RestrictionRestrictions has no WsAfterFirst: %t\n", arg);
+  ATabort("RestrictionList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_RestrictionRestrictions SDF_setRestrictionRestrictionsWsAfterFirst(SDF_RestrictionRestrictions arg, SDF_Layout wsAfterFirst) */
+/*{{{  SDF_RestrictionList SDF_setRestrictionListWsAfterFirst(SDF_RestrictionList arg, SDF_Layout wsAfterFirst) */
 
-SDF_RestrictionRestrictions SDF_setRestrictionRestrictionsWsAfterFirst(SDF_RestrictionRestrictions arg, SDF_Layout wsAfterFirst)
+SDF_RestrictionList SDF_setRestrictionListWsAfterFirst(SDF_RestrictionList arg, SDF_Layout wsAfterFirst)
 {
-  if (SDF_isRestrictionRestrictionsMany(arg)) {
-    return (SDF_RestrictionRestrictions)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
+  if (SDF_isRestrictionListMany(arg)) {
+    return (SDF_RestrictionList)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
   }
 
-  ATabort("RestrictionRestrictions has no WsAfterFirst: %t\n", arg);
+  ATabort("RestrictionList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasRestrictionRestrictionsTail(SDF_RestrictionRestrictions arg) */
+/*{{{  ATbool SDF_hasRestrictionListTail(SDF_RestrictionList arg) */
 
-ATbool SDF_hasRestrictionRestrictionsTail(SDF_RestrictionRestrictions arg)
+ATbool SDF_hasRestrictionListTail(SDF_RestrictionList arg)
 {
-  if (SDF_isRestrictionRestrictionsMany(arg)) {
+  if (SDF_isRestrictionListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_RestrictionRestrictions SDF_getRestrictionRestrictionsTail(SDF_RestrictionRestrictions arg) */
+/*{{{  SDF_RestrictionList SDF_getRestrictionListTail(SDF_RestrictionList arg) */
 
-SDF_RestrictionRestrictions SDF_getRestrictionRestrictionsTail(SDF_RestrictionRestrictions arg)
+SDF_RestrictionList SDF_getRestrictionListTail(SDF_RestrictionList arg)
 {
-  if (SDF_isRestrictionRestrictionsMany(arg)) {
-    return (SDF_RestrictionRestrictions)ATgetTail((ATermList)arg, 2);
+  if (SDF_isRestrictionListMany(arg)) {
+    return (SDF_RestrictionList)ATgetTail((ATermList)arg, 2);
   }
 
-  ATabort("RestrictionRestrictions has no Tail: %t\n", arg);
+  ATabort("RestrictionList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_RestrictionRestrictions SDF_setRestrictionRestrictionsTail(SDF_RestrictionRestrictions arg, SDF_RestrictionRestrictions tail) */
+/*{{{  SDF_RestrictionList SDF_setRestrictionListTail(SDF_RestrictionList arg, SDF_RestrictionList tail) */
 
-SDF_RestrictionRestrictions SDF_setRestrictionRestrictionsTail(SDF_RestrictionRestrictions arg, SDF_RestrictionRestrictions tail)
+SDF_RestrictionList SDF_setRestrictionListTail(SDF_RestrictionList arg, SDF_RestrictionList tail)
 {
-  if (SDF_isRestrictionRestrictionsMany(arg)) {
-    return (SDF_RestrictionRestrictions)ATreplaceTail((ATermList)arg, (ATermList)tail, 2);
+  if (SDF_isRestrictionListMany(arg)) {
+    return (SDF_RestrictionList)ATreplaceTail((ATermList)arg, (ATermList)tail, 2);
   }
 
-  ATabort("RestrictionRestrictions has no Tail: %t\n", arg);
+  ATabort("RestrictionList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasRestrictionRestrictionsHead(SDF_RestrictionRestrictions arg) */
+/*{{{  ATbool SDF_hasRestrictionListHead(SDF_RestrictionList arg) */
 
-ATbool SDF_hasRestrictionRestrictionsHead(SDF_RestrictionRestrictions arg)
+ATbool SDF_hasRestrictionListHead(SDF_RestrictionList arg)
 {
-  if (SDF_isRestrictionRestrictionsSingle(arg)) {
+  if (SDF_isRestrictionListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isRestrictionRestrictionsMany(arg)) {
+  else if (SDF_isRestrictionListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Restriction SDF_getRestrictionRestrictionsHead(SDF_RestrictionRestrictions arg) */
+/*{{{  SDF_Restriction SDF_getRestrictionListHead(SDF_RestrictionList arg) */
 
-SDF_Restriction SDF_getRestrictionRestrictionsHead(SDF_RestrictionRestrictions arg)
+SDF_Restriction SDF_getRestrictionListHead(SDF_RestrictionList arg)
 {
-  if (SDF_isRestrictionRestrictionsSingle(arg)) {
+  if (SDF_isRestrictionListSingle(arg)) {
     return (SDF_Restriction)ATelementAt((ATermList)arg, 0);
   }
-  else if (SDF_isRestrictionRestrictionsMany(arg)) {
+  else if (SDF_isRestrictionListMany(arg)) {
     return (SDF_Restriction)ATelementAt((ATermList)arg, 0);
   }
 
-  ATabort("RestrictionRestrictions has no Head: %t\n", arg);
+  ATabort("RestrictionList has no Head: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_RestrictionRestrictions SDF_setRestrictionRestrictionsHead(SDF_RestrictionRestrictions arg, SDF_Restriction head) */
+/*{{{  SDF_RestrictionList SDF_setRestrictionListHead(SDF_RestrictionList arg, SDF_Restriction head) */
 
-SDF_RestrictionRestrictions SDF_setRestrictionRestrictionsHead(SDF_RestrictionRestrictions arg, SDF_Restriction head)
+SDF_RestrictionList SDF_setRestrictionListHead(SDF_RestrictionList arg, SDF_Restriction head)
 {
-  if (SDF_isRestrictionRestrictionsSingle(arg)) {
-    return (SDF_RestrictionRestrictions)ATreplace((ATermList)arg, (ATerm)head, 0);
+  if (SDF_isRestrictionListSingle(arg)) {
+    return (SDF_RestrictionList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
-  else if (SDF_isRestrictionRestrictionsMany(arg)) {
-    return (SDF_RestrictionRestrictions)ATreplace((ATermList)arg, (ATerm)head, 0);
+  else if (SDF_isRestrictionListMany(arg)) {
+    return (SDF_RestrictionList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
 
-  ATabort("RestrictionRestrictions has no Head: %t\n", arg);
+  ATabort("RestrictionList has no Head: %t\n", arg);
   return NULL;
 }
 
@@ -13254,9 +13310,9 @@ ATbool SDF_isAliasesDefault(SDF_Aliases arg)
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasAliasesAliass(SDF_Aliases arg) */
+/*{{{  ATbool SDF_hasAliasesList(SDF_Aliases arg) */
 
-ATbool SDF_hasAliasesAliass(SDF_Aliases arg)
+ATbool SDF_hasAliasesList(SDF_Aliases arg)
 {
   if (SDF_isAliasesDefault(arg)) {
     return ATtrue;
@@ -13265,193 +13321,193 @@ ATbool SDF_hasAliasesAliass(SDF_Aliases arg)
 }
 
 /*}}}  */
-/*{{{  SDF_AliasAliass SDF_getAliasesAliass(SDF_Aliases arg) */
+/*{{{  SDF_AliasList SDF_getAliasesList(SDF_Aliases arg) */
 
-SDF_AliasAliass SDF_getAliasesAliass(SDF_Aliases arg)
+SDF_AliasList SDF_getAliasesList(SDF_Aliases arg)
 {
   if (SDF_isAliasesDefault(arg)) {
-    return (SDF_AliasAliass)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), 2);
+    return (SDF_AliasList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), 2);
   }
 
-  ATabort("Aliases has no Aliass: %t\n", arg);
+  ATabort("Aliases has no List: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_Aliases SDF_setAliasesAliass(SDF_Aliases arg, SDF_AliasAliass aliass) */
+/*{{{  SDF_Aliases SDF_setAliasesList(SDF_Aliases arg, SDF_AliasList list) */
 
-SDF_Aliases SDF_setAliasesAliass(SDF_Aliases arg, SDF_AliasAliass aliass)
+SDF_Aliases SDF_setAliasesList(SDF_Aliases arg, SDF_AliasList list)
 {
   if (SDF_isAliasesDefault(arg)) {
-    return (SDF_Aliases)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), (ATerm)aliass, 2), 0), 2);
+    return (SDF_Aliases)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), (ATerm)list, 2), 0), 2);
   }
 
-  ATabort("Aliases has no Aliass: %t\n", arg);
+  ATabort("Aliases has no List: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
 
 /*}}}  */
-/*{{{  SDF_AliasAliass accessor implementations */
+/*{{{  SDF_AliasList accessor implementations */
 
-/*{{{  ATbool SDF_isValidAliasAliass(SDF_AliasAliass arg) */
+/*{{{  ATbool SDF_isValidAliasList(SDF_AliasList arg) */
 
-ATbool SDF_isValidAliasAliass(SDF_AliasAliass arg)
+ATbool SDF_isValidAliasList(SDF_AliasList arg)
 {
-  if (SDF_isAliasAliassEmpty(arg)) {
+  if (SDF_isAliasListEmpty(arg)) {
     return ATtrue;
   }
-  else if (SDF_isAliasAliassSingle(arg)) {
+  else if (SDF_isAliasListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isAliasAliassMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isAliasAliassEmpty(SDF_AliasAliass arg) */
-
-ATbool SDF_isAliasAliassEmpty(SDF_AliasAliass arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternAliasAliassEmpty);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isAliasAliassSingle(SDF_AliasAliass arg) */
-
-ATbool SDF_isAliasAliassSingle(SDF_AliasAliass arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternAliasAliassSingle, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isAliasAliassMany(SDF_AliasAliass arg) */
-
-ATbool SDF_isAliasAliassMany(SDF_AliasAliass arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternAliasAliassMany, NULL, NULL, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_hasAliasAliassWsAfterFirst(SDF_AliasAliass arg) */
-
-ATbool SDF_hasAliasAliassWsAfterFirst(SDF_AliasAliass arg)
-{
-  if (SDF_isAliasAliassMany(arg)) {
+  else if (SDF_isAliasListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Layout SDF_getAliasAliassWsAfterFirst(SDF_AliasAliass arg) */
+/*{{{  ATbool SDF_isAliasListEmpty(SDF_AliasList arg) */
 
-SDF_Layout SDF_getAliasAliassWsAfterFirst(SDF_AliasAliass arg)
+ATbool SDF_isAliasListEmpty(SDF_AliasList arg)
 {
-  if (SDF_isAliasAliassMany(arg)) {
+  return ATmatchTerm((ATerm)arg, SDF_patternAliasListEmpty);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isAliasListSingle(SDF_AliasList arg) */
+
+ATbool SDF_isAliasListSingle(SDF_AliasList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternAliasListSingle, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isAliasListMany(SDF_AliasList arg) */
+
+ATbool SDF_isAliasListMany(SDF_AliasList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternAliasListMany, NULL, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_hasAliasListWsAfterFirst(SDF_AliasList arg) */
+
+ATbool SDF_hasAliasListWsAfterFirst(SDF_AliasList arg)
+{
+  if (SDF_isAliasListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  SDF_Layout SDF_getAliasListWsAfterFirst(SDF_AliasList arg) */
+
+SDF_Layout SDF_getAliasListWsAfterFirst(SDF_AliasList arg)
+{
+  if (SDF_isAliasListMany(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), 0);
   }
 
-  ATabort("AliasAliass has no WsAfterFirst: %t\n", arg);
+  ATabort("AliasList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_AliasAliass SDF_setAliasAliassWsAfterFirst(SDF_AliasAliass arg, SDF_Layout wsAfterFirst) */
+/*{{{  SDF_AliasList SDF_setAliasListWsAfterFirst(SDF_AliasList arg, SDF_Layout wsAfterFirst) */
 
-SDF_AliasAliass SDF_setAliasAliassWsAfterFirst(SDF_AliasAliass arg, SDF_Layout wsAfterFirst)
+SDF_AliasList SDF_setAliasListWsAfterFirst(SDF_AliasList arg, SDF_Layout wsAfterFirst)
 {
-  if (SDF_isAliasAliassMany(arg)) {
-    return (SDF_AliasAliass)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
+  if (SDF_isAliasListMany(arg)) {
+    return (SDF_AliasList)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
   }
 
-  ATabort("AliasAliass has no WsAfterFirst: %t\n", arg);
+  ATabort("AliasList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasAliasAliassTail(SDF_AliasAliass arg) */
+/*{{{  ATbool SDF_hasAliasListTail(SDF_AliasList arg) */
 
-ATbool SDF_hasAliasAliassTail(SDF_AliasAliass arg)
+ATbool SDF_hasAliasListTail(SDF_AliasList arg)
 {
-  if (SDF_isAliasAliassMany(arg)) {
+  if (SDF_isAliasListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_AliasAliass SDF_getAliasAliassTail(SDF_AliasAliass arg) */
+/*{{{  SDF_AliasList SDF_getAliasListTail(SDF_AliasList arg) */
 
-SDF_AliasAliass SDF_getAliasAliassTail(SDF_AliasAliass arg)
+SDF_AliasList SDF_getAliasListTail(SDF_AliasList arg)
 {
-  if (SDF_isAliasAliassMany(arg)) {
-    return (SDF_AliasAliass)ATgetTail((ATermList)arg, 2);
+  if (SDF_isAliasListMany(arg)) {
+    return (SDF_AliasList)ATgetTail((ATermList)arg, 2);
   }
 
-  ATabort("AliasAliass has no Tail: %t\n", arg);
+  ATabort("AliasList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_AliasAliass SDF_setAliasAliassTail(SDF_AliasAliass arg, SDF_AliasAliass tail) */
+/*{{{  SDF_AliasList SDF_setAliasListTail(SDF_AliasList arg, SDF_AliasList tail) */
 
-SDF_AliasAliass SDF_setAliasAliassTail(SDF_AliasAliass arg, SDF_AliasAliass tail)
+SDF_AliasList SDF_setAliasListTail(SDF_AliasList arg, SDF_AliasList tail)
 {
-  if (SDF_isAliasAliassMany(arg)) {
-    return (SDF_AliasAliass)ATreplaceTail((ATermList)arg, (ATermList)tail, 2);
+  if (SDF_isAliasListMany(arg)) {
+    return (SDF_AliasList)ATreplaceTail((ATermList)arg, (ATermList)tail, 2);
   }
 
-  ATabort("AliasAliass has no Tail: %t\n", arg);
+  ATabort("AliasList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasAliasAliassHead(SDF_AliasAliass arg) */
+/*{{{  ATbool SDF_hasAliasListHead(SDF_AliasList arg) */
 
-ATbool SDF_hasAliasAliassHead(SDF_AliasAliass arg)
+ATbool SDF_hasAliasListHead(SDF_AliasList arg)
 {
-  if (SDF_isAliasAliassSingle(arg)) {
+  if (SDF_isAliasListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isAliasAliassMany(arg)) {
+  else if (SDF_isAliasListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Alias SDF_getAliasAliassHead(SDF_AliasAliass arg) */
+/*{{{  SDF_Alias SDF_getAliasListHead(SDF_AliasList arg) */
 
-SDF_Alias SDF_getAliasAliassHead(SDF_AliasAliass arg)
+SDF_Alias SDF_getAliasListHead(SDF_AliasList arg)
 {
-  if (SDF_isAliasAliassSingle(arg)) {
+  if (SDF_isAliasListSingle(arg)) {
     return (SDF_Alias)ATelementAt((ATermList)arg, 0);
   }
-  else if (SDF_isAliasAliassMany(arg)) {
+  else if (SDF_isAliasListMany(arg)) {
     return (SDF_Alias)ATelementAt((ATermList)arg, 0);
   }
 
-  ATabort("AliasAliass has no Head: %t\n", arg);
+  ATabort("AliasList has no Head: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_AliasAliass SDF_setAliasAliassHead(SDF_AliasAliass arg, SDF_Alias head) */
+/*{{{  SDF_AliasList SDF_setAliasListHead(SDF_AliasList arg, SDF_Alias head) */
 
-SDF_AliasAliass SDF_setAliasAliassHead(SDF_AliasAliass arg, SDF_Alias head)
+SDF_AliasList SDF_setAliasListHead(SDF_AliasList arg, SDF_Alias head)
 {
-  if (SDF_isAliasAliassSingle(arg)) {
-    return (SDF_AliasAliass)ATreplace((ATermList)arg, (ATerm)head, 0);
+  if (SDF_isAliasListSingle(arg)) {
+    return (SDF_AliasList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
-  else if (SDF_isAliasAliassMany(arg)) {
-    return (SDF_AliasAliass)ATreplace((ATermList)arg, (ATerm)head, 0);
+  else if (SDF_isAliasListMany(arg)) {
+    return (SDF_AliasList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
 
-  ATabort("AliasAliass has no Head: %t\n", arg);
+  ATabort("AliasList has no Head: %t\n", arg);
   return NULL;
 }
 
@@ -13704,9 +13760,9 @@ ATbool SDF_isRenamingsRenamings(SDF_Renamings arg)
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasRenamingsRenamings(SDF_Renamings arg) */
+/*{{{  ATbool SDF_hasRenamingsWsAfterList(SDF_Renamings arg) */
 
-ATbool SDF_hasRenamingsRenamings(SDF_Renamings arg)
+ATbool SDF_hasRenamingsWsAfterList(SDF_Renamings arg)
 {
   if (SDF_isRenamingsRenamings(arg)) {
     return ATtrue;
@@ -13715,65 +13771,28 @@ ATbool SDF_hasRenamingsRenamings(SDF_Renamings arg)
 }
 
 /*}}}  */
-/*{{{  SDF_RenamingRenamings SDF_getRenamingsRenamings(SDF_Renamings arg) */
+/*{{{  SDF_Layout SDF_getRenamingsWsAfterList(SDF_Renamings arg) */
 
-SDF_RenamingRenamings SDF_getRenamingsRenamings(SDF_Renamings arg)
-{
-  if (SDF_isRenamingsRenamings(arg)) {
-    return (SDF_RenamingRenamings)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 2), 2);
-  }
-
-  ATabort("Renamings has no Renamings: %t\n", arg);
-  return NULL;
-}
-
-/*}}}  */
-/*{{{  SDF_Renamings SDF_setRenamingsRenamings(SDF_Renamings arg, SDF_RenamingRenamings renamings) */
-
-SDF_Renamings SDF_setRenamingsRenamings(SDF_Renamings arg, SDF_RenamingRenamings renamings)
-{
-  if (SDF_isRenamingsRenamings(arg)) {
-    return (SDF_Renamings)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 2), (ATerm)renamings, 2), 2), 2);
-  }
-
-  ATabort("Renamings has no Renamings: %t\n", arg);
-  return NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_hasRenamingsWsAfterRenamings(SDF_Renamings arg) */
-
-ATbool SDF_hasRenamingsWsAfterRenamings(SDF_Renamings arg)
-{
-  if (SDF_isRenamingsRenamings(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  SDF_Layout SDF_getRenamingsWsAfterRenamings(SDF_Renamings arg) */
-
-SDF_Layout SDF_getRenamingsWsAfterRenamings(SDF_Renamings arg)
+SDF_Layout SDF_getRenamingsWsAfterList(SDF_Renamings arg)
 {
   if (SDF_isRenamingsRenamings(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 3), 0);
   }
 
-  ATabort("Renamings has no WsAfterRenamings: %t\n", arg);
+  ATabort("Renamings has no WsAfterList: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_Renamings SDF_setRenamingsWsAfterRenamings(SDF_Renamings arg, SDF_Layout wsAfterRenamings) */
+/*{{{  SDF_Renamings SDF_setRenamingsWsAfterList(SDF_Renamings arg, SDF_Layout wsAfterList) */
 
-SDF_Renamings SDF_setRenamingsWsAfterRenamings(SDF_Renamings arg, SDF_Layout wsAfterRenamings)
+SDF_Renamings SDF_setRenamingsWsAfterList(SDF_Renamings arg, SDF_Layout wsAfterList)
 {
   if (SDF_isRenamingsRenamings(arg)) {
-    return (SDF_Renamings)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 3), (ATerm)wsAfterRenamings, 0), 3), 2);
+    return (SDF_Renamings)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 3), (ATerm)wsAfterList, 0), 3), 2);
   }
 
-  ATabort("Renamings has no WsAfterRenamings: %t\n", arg);
+  ATabort("Renamings has no WsAfterList: %t\n", arg);
   return NULL;
 }
 
@@ -13815,167 +13834,204 @@ SDF_Renamings SDF_setRenamingsWsAfterBracketOpen(SDF_Renamings arg, SDF_Layout w
 }
 
 /*}}}  */
+/*{{{  ATbool SDF_hasRenamingsList(SDF_Renamings arg) */
 
-/*}}}  */
-/*{{{  SDF_RenamingRenamings accessor implementations */
-
-/*{{{  ATbool SDF_isValidRenamingRenamings(SDF_RenamingRenamings arg) */
-
-ATbool SDF_isValidRenamingRenamings(SDF_RenamingRenamings arg)
+ATbool SDF_hasRenamingsList(SDF_Renamings arg)
 {
-  if (SDF_isRenamingRenamingsEmpty(arg)) {
-    return ATtrue;
-  }
-  else if (SDF_isRenamingRenamingsSingle(arg)) {
-    return ATtrue;
-  }
-  else if (SDF_isRenamingRenamingsMany(arg)) {
+  if (SDF_isRenamingsRenamings(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_isRenamingRenamingsEmpty(SDF_RenamingRenamings arg) */
+/*{{{  SDF_RenamingList SDF_getRenamingsList(SDF_Renamings arg) */
 
-ATbool SDF_isRenamingRenamingsEmpty(SDF_RenamingRenamings arg)
+SDF_RenamingList SDF_getRenamingsList(SDF_Renamings arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternRenamingRenamingsEmpty);
+  if (SDF_isRenamingsRenamings(arg)) {
+    return (SDF_RenamingList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 2), 2);
+  }
+
+  ATabort("Renamings has no List: %t\n", arg);
+  return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_isRenamingRenamingsSingle(SDF_RenamingRenamings arg) */
+/*{{{  SDF_Renamings SDF_setRenamingsList(SDF_Renamings arg, SDF_RenamingList list) */
 
-ATbool SDF_isRenamingRenamingsSingle(SDF_RenamingRenamings arg)
+SDF_Renamings SDF_setRenamingsList(SDF_Renamings arg, SDF_RenamingList list)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternRenamingRenamingsSingle, NULL);
+  if (SDF_isRenamingsRenamings(arg)) {
+    return (SDF_Renamings)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 2), (ATerm)list, 2), 2), 2);
+  }
+
+  ATabort("Renamings has no List: %t\n", arg);
+  return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_isRenamingRenamingsMany(SDF_RenamingRenamings arg) */
-
-ATbool SDF_isRenamingRenamingsMany(SDF_RenamingRenamings arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternRenamingRenamingsMany, NULL, NULL, NULL);
-}
 
 /*}}}  */
-/*{{{  ATbool SDF_hasRenamingRenamingsWsAfterFirst(SDF_RenamingRenamings arg) */
+/*{{{  SDF_RenamingList accessor implementations */
 
-ATbool SDF_hasRenamingRenamingsWsAfterFirst(SDF_RenamingRenamings arg)
+/*{{{  ATbool SDF_isValidRenamingList(SDF_RenamingList arg) */
+
+ATbool SDF_isValidRenamingList(SDF_RenamingList arg)
 {
-  if (SDF_isRenamingRenamingsMany(arg)) {
+  if (SDF_isRenamingListEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (SDF_isRenamingListSingle(arg)) {
+    return ATtrue;
+  }
+  else if (SDF_isRenamingListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Layout SDF_getRenamingRenamingsWsAfterFirst(SDF_RenamingRenamings arg) */
+/*{{{  ATbool SDF_isRenamingListEmpty(SDF_RenamingList arg) */
 
-SDF_Layout SDF_getRenamingRenamingsWsAfterFirst(SDF_RenamingRenamings arg)
+ATbool SDF_isRenamingListEmpty(SDF_RenamingList arg)
 {
-  if (SDF_isRenamingRenamingsMany(arg)) {
+  return ATmatchTerm((ATerm)arg, SDF_patternRenamingListEmpty);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isRenamingListSingle(SDF_RenamingList arg) */
+
+ATbool SDF_isRenamingListSingle(SDF_RenamingList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternRenamingListSingle, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isRenamingListMany(SDF_RenamingList arg) */
+
+ATbool SDF_isRenamingListMany(SDF_RenamingList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternRenamingListMany, NULL, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_hasRenamingListWsAfterFirst(SDF_RenamingList arg) */
+
+ATbool SDF_hasRenamingListWsAfterFirst(SDF_RenamingList arg)
+{
+  if (SDF_isRenamingListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  SDF_Layout SDF_getRenamingListWsAfterFirst(SDF_RenamingList arg) */
+
+SDF_Layout SDF_getRenamingListWsAfterFirst(SDF_RenamingList arg)
+{
+  if (SDF_isRenamingListMany(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), 0);
   }
 
-  ATabort("RenamingRenamings has no WsAfterFirst: %t\n", arg);
+  ATabort("RenamingList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_RenamingRenamings SDF_setRenamingRenamingsWsAfterFirst(SDF_RenamingRenamings arg, SDF_Layout wsAfterFirst) */
+/*{{{  SDF_RenamingList SDF_setRenamingListWsAfterFirst(SDF_RenamingList arg, SDF_Layout wsAfterFirst) */
 
-SDF_RenamingRenamings SDF_setRenamingRenamingsWsAfterFirst(SDF_RenamingRenamings arg, SDF_Layout wsAfterFirst)
+SDF_RenamingList SDF_setRenamingListWsAfterFirst(SDF_RenamingList arg, SDF_Layout wsAfterFirst)
 {
-  if (SDF_isRenamingRenamingsMany(arg)) {
-    return (SDF_RenamingRenamings)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
+  if (SDF_isRenamingListMany(arg)) {
+    return (SDF_RenamingList)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
   }
 
-  ATabort("RenamingRenamings has no WsAfterFirst: %t\n", arg);
+  ATabort("RenamingList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasRenamingRenamingsTail(SDF_RenamingRenamings arg) */
+/*{{{  ATbool SDF_hasRenamingListTail(SDF_RenamingList arg) */
 
-ATbool SDF_hasRenamingRenamingsTail(SDF_RenamingRenamings arg)
+ATbool SDF_hasRenamingListTail(SDF_RenamingList arg)
 {
-  if (SDF_isRenamingRenamingsMany(arg)) {
+  if (SDF_isRenamingListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_RenamingRenamings SDF_getRenamingRenamingsTail(SDF_RenamingRenamings arg) */
+/*{{{  SDF_RenamingList SDF_getRenamingListTail(SDF_RenamingList arg) */
 
-SDF_RenamingRenamings SDF_getRenamingRenamingsTail(SDF_RenamingRenamings arg)
+SDF_RenamingList SDF_getRenamingListTail(SDF_RenamingList arg)
 {
-  if (SDF_isRenamingRenamingsMany(arg)) {
-    return (SDF_RenamingRenamings)ATgetTail((ATermList)arg, 2);
+  if (SDF_isRenamingListMany(arg)) {
+    return (SDF_RenamingList)ATgetTail((ATermList)arg, 2);
   }
 
-  ATabort("RenamingRenamings has no Tail: %t\n", arg);
+  ATabort("RenamingList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_RenamingRenamings SDF_setRenamingRenamingsTail(SDF_RenamingRenamings arg, SDF_RenamingRenamings tail) */
+/*{{{  SDF_RenamingList SDF_setRenamingListTail(SDF_RenamingList arg, SDF_RenamingList tail) */
 
-SDF_RenamingRenamings SDF_setRenamingRenamingsTail(SDF_RenamingRenamings arg, SDF_RenamingRenamings tail)
+SDF_RenamingList SDF_setRenamingListTail(SDF_RenamingList arg, SDF_RenamingList tail)
 {
-  if (SDF_isRenamingRenamingsMany(arg)) {
-    return (SDF_RenamingRenamings)ATreplaceTail((ATermList)arg, (ATermList)tail, 2);
+  if (SDF_isRenamingListMany(arg)) {
+    return (SDF_RenamingList)ATreplaceTail((ATermList)arg, (ATermList)tail, 2);
   }
 
-  ATabort("RenamingRenamings has no Tail: %t\n", arg);
+  ATabort("RenamingList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasRenamingRenamingsHead(SDF_RenamingRenamings arg) */
+/*{{{  ATbool SDF_hasRenamingListHead(SDF_RenamingList arg) */
 
-ATbool SDF_hasRenamingRenamingsHead(SDF_RenamingRenamings arg)
+ATbool SDF_hasRenamingListHead(SDF_RenamingList arg)
 {
-  if (SDF_isRenamingRenamingsSingle(arg)) {
+  if (SDF_isRenamingListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isRenamingRenamingsMany(arg)) {
+  else if (SDF_isRenamingListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Renaming SDF_getRenamingRenamingsHead(SDF_RenamingRenamings arg) */
+/*{{{  SDF_Renaming SDF_getRenamingListHead(SDF_RenamingList arg) */
 
-SDF_Renaming SDF_getRenamingRenamingsHead(SDF_RenamingRenamings arg)
+SDF_Renaming SDF_getRenamingListHead(SDF_RenamingList arg)
 {
-  if (SDF_isRenamingRenamingsSingle(arg)) {
+  if (SDF_isRenamingListSingle(arg)) {
     return (SDF_Renaming)ATelementAt((ATermList)arg, 0);
   }
-  else if (SDF_isRenamingRenamingsMany(arg)) {
+  else if (SDF_isRenamingListMany(arg)) {
     return (SDF_Renaming)ATelementAt((ATermList)arg, 0);
   }
 
-  ATabort("RenamingRenamings has no Head: %t\n", arg);
+  ATabort("RenamingList has no Head: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_RenamingRenamings SDF_setRenamingRenamingsHead(SDF_RenamingRenamings arg, SDF_Renaming head) */
+/*{{{  SDF_RenamingList SDF_setRenamingListHead(SDF_RenamingList arg, SDF_Renaming head) */
 
-SDF_RenamingRenamings SDF_setRenamingRenamingsHead(SDF_RenamingRenamings arg, SDF_Renaming head)
+SDF_RenamingList SDF_setRenamingListHead(SDF_RenamingList arg, SDF_Renaming head)
 {
-  if (SDF_isRenamingRenamingsSingle(arg)) {
-    return (SDF_RenamingRenamings)ATreplace((ATermList)arg, (ATerm)head, 0);
+  if (SDF_isRenamingListSingle(arg)) {
+    return (SDF_RenamingList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
-  else if (SDF_isRenamingRenamingsMany(arg)) {
-    return (SDF_RenamingRenamings)ATreplace((ATermList)arg, (ATerm)head, 0);
+  else if (SDF_isRenamingListMany(arg)) {
+    return (SDF_RenamingList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
 
-  ATabort("RenamingRenamings has no Head: %t\n", arg);
+  ATabort("RenamingList has no Head: %t\n", arg);
   return NULL;
 }
 

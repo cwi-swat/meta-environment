@@ -1,5 +1,5 @@
 /*
- * Generated at Wed Jan 24 14:43:06 2001
+ * Generated at Fri Jan 26 13:25:47 2001
  */
 
 #ifndef __SDF_dict_H
@@ -63,27 +63,27 @@ extern ATerm SDF_patternIntConNatural;
 extern ATerm SDF_patternNatConDigits;
 extern ATerm SDF_patternRenamingProduction;
 extern ATerm SDF_patternRenamingSymbol;
-extern ATerm SDF_patternRenamingRenamingsMany;
-extern ATerm SDF_patternRenamingRenamingsSingle;
-extern ATerm SDF_patternRenamingRenamingsEmpty;
+extern ATerm SDF_patternRenamingListMany;
+extern ATerm SDF_patternRenamingListSingle;
+extern ATerm SDF_patternRenamingListEmpty;
 extern ATerm SDF_patternRenamingsRenamings;
 extern ATerm SDF_patternSymbolListMany;
 extern ATerm SDF_patternSymbolListSingle;
 extern ATerm SDF_patternSymbolListEmpty;
 extern ATerm SDF_patternSymbolsDefault;
-extern ATerm SDF_patternAliasAliassMany;
-extern ATerm SDF_patternAliasAliassSingle;
-extern ATerm SDF_patternAliasAliassEmpty;
+extern ATerm SDF_patternAliasListMany;
+extern ATerm SDF_patternAliasListSingle;
+extern ATerm SDF_patternAliasListEmpty;
 extern ATerm SDF_patternAliasesDefault;
 extern ATerm SDF_patternAliasAlias;
-extern ATerm SDF_patternRestrictionRestrictionsMany;
-extern ATerm SDF_patternRestrictionRestrictionsSingle;
-extern ATerm SDF_patternRestrictionRestrictionsEmpty;
+extern ATerm SDF_patternRestrictionListMany;
+extern ATerm SDF_patternRestrictionListSingle;
+extern ATerm SDF_patternRestrictionListEmpty;
 extern ATerm SDF_patternRestrictionsDefault;
 extern ATerm SDF_patternRestrictionFollow;
-extern ATerm SDF_patternLookaheadLookaheadsMany;
-extern ATerm SDF_patternLookaheadLookaheadsSingle;
-extern ATerm SDF_patternLookaheadLookaheadsEmpty;
+extern ATerm SDF_patternLookaheadListMany;
+extern ATerm SDF_patternLookaheadListSingle;
+extern ATerm SDF_patternLookaheadListEmpty;
 extern ATerm SDF_patternLookaheadsList;
 extern ATerm SDF_patternLookaheadsBracket;
 extern ATerm SDF_patternLookaheadsAlt;
@@ -99,9 +99,9 @@ extern ATerm SDF_patternUQLiteralMoreChars;
 extern ATerm SDF_patternUQLiteralOneChar;
 extern ATerm SDF_patternSortMoreChars;
 extern ATerm SDF_patternSortOneChar;
-extern ATerm SDF_patternPriorityPrioritysMany;
-extern ATerm SDF_patternPriorityPrioritysSingle;
-extern ATerm SDF_patternPriorityPrioritysEmpty;
+extern ATerm SDF_patternPriorityListMany;
+extern ATerm SDF_patternPriorityListSingle;
+extern ATerm SDF_patternPriorityListEmpty;
 extern ATerm SDF_patternPrioritiesDefault;
 extern ATerm SDF_patternGroupGrouppMany;
 extern ATerm SDF_patternGroupGrouppSingle;
@@ -159,9 +159,9 @@ extern ATerm SDF_patternProductionListEmpty;
 extern ATerm SDF_patternProductionsDefault;
 extern ATerm SDF_patternProductionProdFun;
 extern ATerm SDF_patternProductionProd;
-extern ATerm SDF_patternAttributeAttributesMany;
-extern ATerm SDF_patternAttributeAttributesSingle;
-extern ATerm SDF_patternAttributeAttributesEmpty;
+extern ATerm SDF_patternAttributeListMany;
+extern ATerm SDF_patternAttributeListSingle;
+extern ATerm SDF_patternAttributeListEmpty;
 extern ATerm SDF_patternAttributesNoAttrs;
 extern ATerm SDF_patternAttributesAttrs;
 extern ATerm SDF_patternSDFDefinition;
