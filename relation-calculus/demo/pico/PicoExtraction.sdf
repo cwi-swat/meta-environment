@@ -5,34 +5,34 @@ imports basic/Integers
 imports utilities/PosInfo[STATEMENT]
 imports utilities/PosInfo[PICO-ID]
 
-imports basic/feedback
+imports basic/Feedback
 
 exports
    imports Rstore
 
  context-free syntax
 
-      extractRelations(PROGRAM)                	-> RSTORE
-      convertl(Elem)				-> List
+      extractRelations(PROGRAM)                	     -> RSTORE
+      convert2summary(Elem)			     -> Summary
 
 hiddens
   context-free syntax
 
-      get-first({STATEMENT ";"}*)               -> Area
-      get-last({STATEMENT ";"}*)                -> Bag[[Elem]]
+      get-first({STATEMENT ";"}*)                    -> Location
+      get-last({STATEMENT ";"}*)                     -> Bag[[Elem]]
 
-      add-pred(Bag[[Elem]], RSTORE)             -> RSTORE
-      add-last({STATEMENT ";"}*, Area, RSTORE)  -> RSTORE
+      add-pred(Bag[[Elem]], RSTORE)                  -> RSTORE
+      add-last({STATEMENT ";"}*, Location, RSTORE)   -> RSTORE
 
-      extract(PROGRAM, RSTORE)                  -> RSTORE {traversal(accu, bottom-up, continue)}
-      extract({ STATEMENT ";"}*, RSTORE)        -> RSTORE {traversal(accu, bottom-up, continue)}
+      extract(PROGRAM, RSTORE)                       -> RSTORE {traversal(accu, bottom-up, continue)}
+      extract({ STATEMENT ";"}*, RSTORE)             -> RSTORE {traversal(accu, bottom-up, continue)}
 
-      extract-used-vars(STATEMENT, RSTORE, Area)-> RSTORE  {traversal(accu,top-down,break)}
-      extract-used-vars(EXP, RSTORE, Area)      -> RSTORE  {traversal(accu,top-down,break)}
+      extract-used-vars(STATEMENT, RSTORE, Location) -> RSTORE  {traversal(accu,top-down,break)}
+      extract-used-vars(EXP, RSTORE, Location)       -> RSTORE  {traversal(accu,top-down,break)}
 
-
-      convert(<String, Area>)                   -> ListItem
-      id2str(PICO-ID)		 	        -> String
+      convert2feedbacklist(Elem)		     -> {Feedback ","}*
+      convert2feedback(<String, Location>)           -> Feedback
+      id2str(PICO-ID)		 	             -> String
 
  hiddens
 %%  imports asf/syntax/Comments
@@ -42,10 +42,11 @@ hiddens
       
       "$Rel" [0-9\']*     	-> Bag[[Elem]]
       "$Bag" [0-9\']*     	-> Bag[[Elem]]
-      "$Area" [0-9\']*	 	-> Area
+      "$Loc" [0-9\']*	 	-> Location
       "$Elem" [0-9\']*   	-> Elem
       "$Elem*" [0-9\']*  	-> {Elem ","}*
 
-      "$ListItem*" [0-9\']*	-> {ListItem ","}*
-      "$Chars" [0-9]*   	-> CHAR*
+      "$Feedback*" [0-9\']*	-> {Feedback ","}*
+      "$Char*" [0-9]*   	-> CHAR*
       "$String" [0-9\']*	-> String
+      "$StrCon" [0-9\']*	-> StrCon
