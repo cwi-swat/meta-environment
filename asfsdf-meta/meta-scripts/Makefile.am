@@ -16,9 +16,12 @@ CLEANFILES = \
 	meta-interface.tb \
 	standard.asfsdf.buttons
 
-pkgdata_DATA     = $(TBSCRIPTS) standard.asfsdf.buttons
+pkgdata_DATA = \
+	$(TBSCRIPTS) \
+	standard.asfsdf.buttons
 
-LIBRARY_LOCATION =${ASF_LIBRARY}/share/asf-library/library
+LIBRARY_LOCATION = \
+	${ASF_LIBRARY}/share/asf-library/library
 
 %.tb : %.tb.src Makefile
 	sed 's@__ASF__@${ASF}@g;\

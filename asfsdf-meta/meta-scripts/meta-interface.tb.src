@@ -216,16 +216,19 @@ in
   ) * delta
 endlet
 
-process GetActions(Actions : str?) is
+process AddAsfProperties is
 let
-  ErrorMessage : str
+  Contents: str,
+  Error: str
 in
   snd-msg(io-read-file("__ASFSDF_META__/standard.asfsdf.buttons")) .
   (
-    rec-msg(io-file-contents(Actions?))
+    rec-msg(io-file-contents(Contents?))
+    . snd-msg(cm-add-system-properties(Contents))
+    . rec-msg(cm-system-properties-added)
   +
-    rec-msg(io-error-reading(ErrorMessage?)) .
-    Actions := "buttons([])"
+    rec-msg(io-error-reading(Error?))
+    . printf("AddAsfProperties: %s\n", Error)
   )
 endlet
 
@@ -238,14 +241,12 @@ let
   ModuleNames : list,
   Modules : list
 in
-  Id := process-id.
-  Create-Asf-Processes.
-  create(ParseTable-hooks, Pid?) .
+  Id := process-id
+  . Create-Asf-Processes
+  . create(ParseTable-hooks, Pid?)
+  . AddAsfProperties()
+  .
   (
-    rec-msg(actions-hook) .
-    GetActions(Actions?) .
-    snd-msg(actions-hook-result(Actions))
-  +
     rec-msg(environment-name-hook).
     snd-msg(environment-name-hook-result("ASF+SDF Meta-Environment"))
   +
