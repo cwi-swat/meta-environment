@@ -59,10 +59,11 @@ void rec_terminate(int cid, ATerm t)
 /*}}}  */
 /*{{{  ATerm tree2graph(int cid, char *name, ATerm tree) */
 
-ATerm tree2graph(int cid, const char *name, ATerm tree)
+ATerm tree2graph(int cid, const char *name, ATerm tree, ATerm leafs_on)
 {
-  Graph graph = PT_printAnyToGraph(name, tree, ATtrue, ATtrue,
-			           ATfalse, ATtrue);
+  ATbool flag = ATmatch(leafs_on, "true");
+
+  Graph graph = PT_printAnyToGraph(name, tree, flag, ATtrue, flag, flag);
 
   return ATmake("snd-value(graph(<term>))", GraphToTerm(graph));
 }

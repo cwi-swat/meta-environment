@@ -1,5 +1,8 @@
 $Id$
 
+Fri Apr 16 11:45:51 CEST 2004 <jurgenv@cwi.nl>
+ * Improved tree2graph on the character level
+
 Fri Mar 19 08:39:10 CET 2004 <jong@cwi.nl>
  * graph-support/utils/layoutgraph/dot.y:
    #define YY_NO_UNPUT to suppress generation of static yyunput() function

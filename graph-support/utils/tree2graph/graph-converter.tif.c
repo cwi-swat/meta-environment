@@ -8,7 +8,7 @@
 #define NR_SIG_ENTRIES	2
 
 static char *signature[NR_SIG_ENTRIES] = {
-  "rec-eval(<graph-converter>,tree2graph(<str>,<term>))",
+  "rec-eval(<graph-converter>,tree2graph(<str>,<term>,<term>))",
   "rec-terminate(<graph-converter>,<term>)",
 };
 
@@ -18,10 +18,10 @@ ATerm graph_converter_handler(int conn, ATerm term)
   ATerm in, out;
   /* We need some temporary variables during matching */
   char *s0;
-  ATerm t0;
+  ATerm t0, t1;
 
-  if(ATmatch(term, "rec-eval(tree2graph(<str>,<term>))", &s0, &t0)) {
-    return tree2graph(conn, s0, t0);
+  if(ATmatch(term, "rec-eval(tree2graph(<str>,<term>,<term>))", &s0, &t0, &t1)) {
+    return tree2graph(conn, s0, t0, t1);
   }
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
     rec_terminate(conn, t0);

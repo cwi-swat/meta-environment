@@ -1,5 +1,4 @@
 /* $Id$ */
-
 /*{{{  includes */
 
 #include <MEPT-utils.h>
@@ -28,6 +27,52 @@ static int nr_of_nodes;
 #define  INITIAL_SIZE 4096
 #define  STEP_SIZE    2048
 #define XOR(p,q) ((!p && q) || (!q && p))
+/*}}}  */
+
+/*{{{  char* escape(const char* str, const char* escaped_chars, ATbool quoted) */
+
+char* escape(const char* str)
+{
+  int i,j;
+  int len = strlen(str);
+  char *escaped = (char*) malloc(2 * len * sizeof(char) + 1);
+
+  if (escaped == NULL) {
+    ATerror("escape: could not allocate enough memory for escaping:\n%s\n",str);
+    return NULL;
+  }
+
+  i = 0;
+  j = 0;
+
+  for (; i < len; i++, j++) {
+    switch(str[i]) {
+      case '\n':
+	escaped[j++] = '\\';
+	escaped[j] = 'n';
+	break;
+      case '\t':
+	escaped[j++] = '\\';
+	escaped[j] = 't';
+	break;
+      case '\r':
+	escaped[j++] = '\\';
+	escaped[j] = 'r';
+	break;
+      case ' ':
+	escaped[j++] = '\\';
+	escaped[j] = ' ';
+	break;
+      default:
+	escaped[j] = str[i];
+    }
+  }
+
+  escaped[j] = '\0';
+
+  return escaped;
+}
+
 /*}}}  */
 
 /*{{{  static long makeNodeId(PT_Tree tree) */
@@ -122,7 +167,7 @@ static Graph printNode(const char *name,
   sprintf(str, "N%d", parentNr);
   parentId = makeNodeIdDefault(str);
    
-  nameAttr = makeAttributeLabel(contents);
+  nameAttr = makeAttributeLabel(escape(contents));
   attrList = makeAttributeListMulti(nameAttr, attrList);
   
   shapeAttr = makeAttributeShape(shape);
@@ -272,10 +317,12 @@ static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent
 				PT_yieldProduction(PT_getTreeProd(tree)) :
 				PT_yieldSymbol(rhs),
 				productions_on ? "" :
-				PT_yieldProduction(PT_getTreeProd(tree)), posInfoArea);
-    } 
-    else if (layout_on && layout) {
-      graph = printNode(name, graph,shape,parent,key, "LAYOUT?","layout", posInfoArea);
+				PT_yieldProduction(PT_getTreeProd(tree)), 
+				posInfoArea);
+    }
+    else if (layout && layout_on) {
+      graph = printNode(name, graph,shape,parent,key, "LAYOUT?","layout", 
+			posInfoArea); 
     }
 
     if (!characters_on && PT_isLexicalInjectionProd(prod)) {

@@ -9,12 +9,13 @@ let
   GC : graph-converter,
   Name : str,
   Tree : term,
-  Graph : term
+  Graph : term,
+  LeafsOn : term
 in
   (
-    rec-msg(tree2graph(Name?, Tree?))
+    rec-msg(tree2graph(Name?, Tree?, LeafsOn?))
     . execute(graph-converter, GC?)
-    . snd-eval(GC, tree2graph(Name, Tree))
+    . snd-eval(GC, tree2graph(Name, Tree, LeafsOn))
     . rec-value(GC, graph(Graph?))
     . snd-terminate(GC, "done")
     . snd-msg(graph(Graph))
