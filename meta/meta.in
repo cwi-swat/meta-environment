@@ -110,6 +110,7 @@ done
 if [ $verbose -gt 0 ] ; then
 	echo CLASSPATH: $CLASSPATH
 	echo COMPILER_OUTPUT: $COMPILER_OUTPUT
+	echo "Running \`$toolbus $xargs -I${datadir} ${datadir}/meta.tb'"
 fi
 
 $toolbus $xargs -I${datadir} ${datadir}/meta.tb
