@@ -1,9 +1,3 @@
-.deps
-.libs
 Makefile
 Makefile.in
 emacs-editor
-gvim-editor
-libmeta_gvim.la
-meta.vim
-meta_gvim.lo

@@ -136,27 +136,6 @@ AC_SUBST(TIDEDEF)
 AC_SUBST(TIDEINC)
 AC_SUBST(USE_TIDE)
 
-
-dnl The following lines are needed for the gvim experiment
-dnl (commented out in the official distribution)
-
-AC_ARG_ENABLE(gvim,
-   [  --enable-gvim           Enable gvim support (experimental)],
-   [case "${enableval}" in
-       yes) gvim=true ;;
-       no)  gvim=false ;;
-       *) AC_MSG_ERROR(bad value ${enableval} for --enable-gvim) ;;
-     esac],[gvim=false]
-)
-
-AM_CONDITIONAL(GVIM, test x$gvim = xtrue)
-
-if test x$gvim = xtrue ; then
-   AM_PROG_LIBTOOL
-   AC_SUBST(LIBTOOL)
-dnl    AC_CHECK_LIB(dl, dlopen)
-fi
-
 dnl Determine which libraries to use for programs using sockets
 NOSOCKLIBS=$LIBS
 dnl first, the socket functions
