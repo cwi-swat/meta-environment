@@ -30,7 +30,7 @@ call_toolbus () {
     echo ${result}
     exit 1
   else
-    echo -n .
+    printf .
   fi
 }
 
