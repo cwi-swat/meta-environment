@@ -6,19 +6,21 @@ include $(top_srcdir)/make_rules
 
 bin_PROGRAMS      = asfe
 
-pkgdata_DATA         = asfe.idef
+pkgdata_DATA      = asfe.idef
 EXTRA_DIST        = asfe.idef
 CLEANFILES        = asfe.tifs
 
-noinst_HEADERS = asf-api.h matching.h reduction.h environment.h values.h \
+noinst_HEADERS = asfe.tif.h asf-api.h matching.h reduction.h environment.h\
+		 values.h \
                  errors.h debug.h traversalfunctions.h equations.h \
                  pre-post.h memotable.h  evaluator.h
 
-asfe_SOURCES = asfe.c evaluator.c equations.c debug.c traversalfunctions.c \
+asfe_SOURCES = asfe.tif.c asfe.c evaluator.c equations.c debug.c \
+	       traversalfunctions.c \
                memotable.c asf-api.c matching.c reduction.c environment.c \
                values.c errors.c pre-post.c
 
-asfe_LDADD		= asfe.tif.o \
+asfe_LDADD		= \
                         -L$(PT_SUPPORT)/lib -lmept \
 			-L$(ASF_SUPPORT)/lib -lASFME \
 			-L$(top_builddir)/semantics/builtins/lib \

@@ -1,6 +1,5 @@
 Makefile.in
 Makefile
 .deps
-asfe.tif.h
-asfe.tif.c
+*.tifs
 asfe
