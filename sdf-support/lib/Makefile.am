@@ -1,6 +1,7 @@
 # $Id$
 
-CFLAGS += -DDISABLE_DYNAMIC_CHECKING
+# During development, DO NOT COMMIT ME!
+#CFLAGS += -DDISABLE_DYNAMIC_CHECKING
 
 EXTRA_DIST = Sdf.label.def
 

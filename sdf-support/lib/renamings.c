@@ -52,21 +52,27 @@ SDF_Renamings SDF_makeRenamingsFromModuleNames(SDF_ModuleName formal,
 static SDF_Symbol SDF_renameSymbol(SDF_Symbol symbol, SDF_Symbol formalParam, SDF_Symbol actualParam)
 {
   SDF_Symbol argSymbol;
+  SDF_Symbol newArgSymbol;
+
+  symbol = SDF_removeSymbolAnnotations(symbol);
 
   if (SDF_isEqualSymbol(symbol, formalParam)) {
     return actualParam;
   }
   if (SDF_hasSymbolSymbol(symbol)) {
     argSymbol = SDF_getSymbolSymbol(symbol);
-    symbol = SDF_setSymbolSymbol(symbol, SDF_renameSymbol(argSymbol, formalParam, actualParam));
+    newArgSymbol = SDF_renameSymbol(argSymbol, formalParam, actualParam);
+    symbol = SDF_setSymbolSymbol(symbol, newArgSymbol);
   }
   if (SDF_hasSymbolLeft(symbol)) {
     argSymbol = SDF_getSymbolLeft(symbol);
-    symbol = SDF_setSymbolLeft(symbol, SDF_renameSymbol(argSymbol, formalParam, actualParam));
+    newArgSymbol = SDF_renameSymbol(argSymbol, formalParam, actualParam);
+    symbol = SDF_setSymbolLeft(symbol, newArgSymbol);
   }
   if (SDF_hasSymbolRight(symbol)) {
     argSymbol = SDF_getSymbolRight(symbol);
-    symbol = SDF_setSymbolRight(symbol, SDF_renameSymbol(argSymbol, formalParam, actualParam));
+    newArgSymbol = SDF_renameSymbol(argSymbol, formalParam, actualParam);
+    symbol = SDF_setSymbolRight(symbol, newArgSymbol);
   }
   return symbol;
 }
@@ -78,14 +84,18 @@ static SDF_RenamingList SDF_renameInRenamingList(SDF_RenamingList targets,
   if (SDF_hasRenamingListHead(targets)) {
     SDF_Renaming head = SDF_getRenamingListHead(targets);
     SDF_Symbol toTarget = SDF_getRenamingTo(head);
-    SDF_Symbol newToTarget = SDF_renameSymbol(toTarget, formalParam, actualParam); 
+    SDF_Symbol newToTarget = SDF_renameSymbol(toTarget, 
+                                              formalParam, 
+                                              actualParam); 
 
     head = SDF_setRenamingTo(head, newToTarget);
     targets = SDF_setRenamingListHead(targets, head);
   }
   if (SDF_hasRenamingListTail(targets)) {
     SDF_RenamingList tail = SDF_getRenamingListTail(targets);
-    SDF_RenamingList newTail = SDF_renameInRenamingList(tail, formalParam, actualParam);
+    SDF_RenamingList newTail = SDF_renameInRenamingList(tail, 
+                                                        formalParam, 
+                                                        actualParam);
 
     targets = SDF_setRenamingListTail(targets, newTail);
   }
@@ -103,6 +113,8 @@ SDF_Renamings SDF_renameRenamings(SDF_Renamings sources, SDF_Renamings targets)
     SDF_Symbol fromSource = SDF_getRenamingFrom(head);
     SDF_Symbol toSource = SDF_getRenamingTo(head);
 
+    fromSource = SDF_removeSymbolAnnotations(fromSource);
+    toSource = SDF_removeSymbolAnnotations(toSource);
     listTargets = SDF_renameInRenamingList(listTargets, fromSource, toSource);
 
     if (SDF_hasRenamingListTail(listSources)) {

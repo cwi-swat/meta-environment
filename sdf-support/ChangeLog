@@ -1,5 +1,8 @@
 $Id$
 
+2003/04/29 (markvdb@cwi.nl)
+ * Fixed a bug in the renaming due to annotations.
+
 Tue Mar  4 10:18:52 CET 2003 <{markvdb,jong}@cwi.nl>
  * some refactorings, weeding out of (hopefully) dead code
  * add support to extract variable productions
