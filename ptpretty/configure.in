@@ -1,12 +1,11 @@
 dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(configure.in)
+AC_INIT
+AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(ptpretty, 1.0)
+AC_PREREQ(2.59)
 
-ACLOCAL="${ACLOCAL} -I ."
-
-dnl Which compiler to use?
 AC_PROG_CC
 
 dnl Handle --with-cflags option
@@ -47,7 +46,7 @@ AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config,
 AC_SUBST(SDF_SUPPORT)
 
 dnl What commands are needed to set the variable MAKE in Makefiles?
-AC_SET_MAKE
+AC_PROG_MAKE_SET([])
 
 dnl {{{  Require socket/gethostname
 
@@ -76,8 +75,8 @@ LIBS=$NOSOCKLIBS
 dnl }}}
 
 dnl Which files need updating?
-AC_OUTPUT(
-   Makefile
+AC_CONFIG_FILES([Makefile
    src/Makefile 
    src/examples/Makefile 
-)
+])
+AC_OUTPUT

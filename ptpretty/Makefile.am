@@ -1,5 +1,8 @@
+# $Id$
 
 SUBDIRS = src
+
+ACLOCAL_FLAGS = -I .
 
 CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 
