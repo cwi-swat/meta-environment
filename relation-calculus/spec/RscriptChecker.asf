@@ -1236,7 +1236,11 @@ $Error]>
 		<endcol,	fun [ loc ]				to int >,
 
 		<sum,		fun [ set[int] ]			to int >,
+		<sum-domain,	fun [ rel[int,&T] ]			to int >,
+		<sum-range,	fun [ rel[&T,int] ]			to int >,
 		<average,	fun [ set[int] ]			to int >,
+		<average-domain,fun [ rel[int,&T] ]			to int >,
+		<average-range,	fun [ rel[&T,int] ]			to int >,
 		<max,		fun [ set[int] ]			to int >,
 		<min,		fun [ set[int] ]			to int >
 

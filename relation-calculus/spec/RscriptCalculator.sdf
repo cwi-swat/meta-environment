@@ -7,9 +7,6 @@ exports
    context-free start-symbols StrCon	%% For the benefit of parsing in meta.buttons
 
    context-free syntax
-
-%% Main evaluation functions for Rscripts
-
         eval-rscript(RSCRIPT)                 				-> RSTORE
         eval-rscript-and-yield(RSCRIPT, StrCon)             		-> Elem
         eval-rscript-and-yield(RSCRIPT, RVAR)             		-> Elem
@@ -23,20 +20,24 @@ exports
 	"[|" RSTAT* "|]"						-> RSTORE
 
 	"[|" RSTAT* "|]" "yield" RVAR					-> RVALUE
-        "[|" REXP "|]"							-> RVALUE
+        "[|" REXP "|]"							->
+        RVALUE
 
-%% should be hidden
+        %% Visible functions for the benefit of Testsuite execution
 
+        eval-rstat(RSTAT, RSTORE)					-> RSTORE
+        eval-rstats(RSTAT*, RSTORE)					-> RSTORE
+        evale(REXP, RSTORE)						-> Elem
+
+exports
    context-free syntax
 
-        eval-rstat(RSTAT, RSTORE)           			-> RSTORE { complete}
-        eval-rstats(RSTAT*, RSTORE)          			-> RSTORE {complete}
 
 	"{" {GENERATOR ","}+ "::" {REXP ","}+  "}"		-> REXP
  
         evalp(REXP, RSTORE)            				-> Boolean {complete}
         evali(REXP, RSTORE)            				-> Integer {complete}
-        evale(REXP, RSTORE)            				-> Elem {complete}
+
         evalt(REXP, RSTORE)            				-> Tuple {complete}
         evalb(REXP, RSTORE)            				-> Bag[[Elem]] {complete}
         evalr(REXP, RSTORE)            				-> Bag[[Elem]] {complete}
@@ -87,6 +88,8 @@ exports
 	solve2(Integer, RVAR, REXP, RVAR, REXP, RSTORE)		-> RSTORE
 
 	sumx(BagIterator[[Elem]], Integer)			-> Integer
+	sum-domainx(BagIterator[[Elem]], Integer)		-> Integer
+	sum-rangex(BagIterator[[Elem]], Integer)		-> Integer
 	max1(BagIterator[[Elem]])				-> Integer
 	max2(BagIterator[[Elem]], Integer)			-> Integer
 

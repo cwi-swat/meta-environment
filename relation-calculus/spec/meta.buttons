@@ -146,7 +146,7 @@ button("Rscript",
 	   )]),
 
  button("Rscript",
-	  [description(term-editor, menu(["Rscript", "TestSuite interpreted"]))],
+	  [description(term-editor, menu(["Rscript", "TestSuite (interpreted)"]))],
           [push-active-module,
            get-root,
 	   push-string("RSCRIPT"),
