@@ -50,7 +50,8 @@ SPEC_SRCS1=\
    AUX-Sorts-Sdf-Syntax1.c AUX-Literals-Sdf-Syntax1.c AUX-Label-Sdf-Syntax1.c\
    AUX-Restrictions-Sdf-Syntax1.c AUX-Alias-Sdf-Syntax1.c AUX-Sdf2-Syntax1.c\
    AUX-Layout1.c AUX-Sdf21.c AUX-Booleans6.c AUX-Booleans5.c AUX-Booleans4.c\
-   AUX-Booleans3.c AUX-Booleans2.c AUX-Booleans1.c AUX-Add-Eqs-Conds7.c\
+   AUX-Booleans3.c AUX-Booleans2.c AUX-Booleans1.c AUX-Add-Eqs-Conds10.c\
+   AUX-Add-Eqs-Conds9.c AUX-Add-Eqs-Conds8.c AUX-Add-Eqs-Conds7.c\
    AUX-Add-Eqs-Conds6.c AUX-Add-Eqs-Conds5.c AUX-Add-Eqs-Conds4.c\
    AUX-Add-Eqs-Conds3.c AUX-Add-Eqs-Conds2.c AUX-Add-Eqs-Conds1.c\
    AUX-Add-Lex-Syntax9.c AUX-Add-Lex-Syntax8.c AUX-Add-Lex-Syntax7.c\
