@@ -7,7 +7,7 @@ datadir=__DATADIR__
 
 RM=rm
 ACTIONTBL=${datadir}/ActionScriptChecker.trm.tbl
-PRETTYTBL=../spec/ActionScript.def.pt
+PRETTYTBL=${datadir}/ActionScript.def.pt
 PARSER="__SGLR__/bin/sglr -p ${ACTIONTBL}"
 CHECKER="__BINDIR__/ActionScriptChecker"
 PRETTYPRINTER="__PTPRETTY__/bin/ptpretty"
