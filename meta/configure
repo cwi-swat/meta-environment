@@ -1592,26 +1592,14 @@ fi
 
 
 
-ac_aux_dir=
-for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
-  if test -f $ac_dir/install-sh; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/install-sh -c"
-    break
-  elif test -f $ac_dir/install.sh; then
-    ac_aux_dir=$ac_dir
-    ac_install_sh="$ac_aux_dir/install.sh -c"
-    break
-  fi
-done
-if test -z "$ac_aux_dir"; then
-  { echo "configure: error: can not find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." 1>&2; exit 1; }
-fi
-ac_config_guess=$ac_aux_dir/config.guess
-ac_config_sub=$ac_aux_dir/config.sub
-ac_configure=$ac_aux_dir/configure # This should be Cygnus configure.
+ASFIX='${top_srcdir}/asfix'
+ASFIXBIN='$(ASFIX)'
+ASFIXINC='$(ASFIX)/libasfix'
+ASFIXLIB='$(ASFIX)/libasfix'
 
-subdirs="asc-support sglr pgen"
+
+
+
 
 
 trap '' 1 2 15
@@ -1727,8 +1715,8 @@ done
 ac_given_srcdir=$srcdir
 
 trap 'rm -fr `echo "Makefile Makefile.skel meta \
-	asource/Makefile \
 	compiler/Makefile compiler/c-source/Makefile \
+        asfix2c-compiler/Makefile \
 	editor/Makefile editor/editor \
 	evaluator/Makefile evaluator/test/Makefile evaluator/test/reduce-test \
 	graph-browser/Makefile graph-browser/graph-browser \
@@ -1736,9 +1724,9 @@ trap 'rm -fr `echo "Makefile Makefile.skel meta \
 	module-db/Makefile module-db/test/Makefile \
 	stred/nl/cwi/gipe/stred/Makefile \
 	toolbus/Makefile toolbus/test/Makefile \
-        utils/Makefile utils/genmakefile.sh utils/gen-table \
-        utils/normalize-sdf utils/parse-sdf2  utils/parse-file \
-        utils/ps-dot utils/sdf2table \
+        utils/Makefile utils/genmakefile.sh \
+        utils/parse-sdf2 utils/parse-file \
+        utils/ps-dot \
         grammars/Makefile \
 	grammars/sdf2/Makefile \
   " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
@@ -1801,7 +1789,10 @@ s%@TOOLBUSINC@%$TOOLBUSINC%g
 s%@TCLDOT@%$TCLDOT%g
 s%@WISH@%$WISH%g
 s%@SOCKLIBS@%$SOCKLIBS%g
-s%@subdirs@%$subdirs%g
+s%@ASFIX@%$ASFIX%g
+s%@ASFIXBIN@%$ASFIXBIN%g
+s%@ASFIXINC@%$ASFIXINC%g
+s%@ASFIXLIB@%$ASFIXLIB%g
 
 CEOF
 EOF
@@ -1844,8 +1835,8 @@ EOF
 cat >> $CONFIG_STATUS <<EOF
 
 CONFIG_FILES=\${CONFIG_FILES-"Makefile Makefile.skel meta \
-	asource/Makefile \
 	compiler/Makefile compiler/c-source/Makefile \
+        asfix2c-compiler/Makefile \
 	editor/Makefile editor/editor \
 	evaluator/Makefile evaluator/test/Makefile evaluator/test/reduce-test \
 	graph-browser/Makefile graph-browser/graph-browser \
@@ -1853,9 +1844,9 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile Makefile.skel meta \
 	module-db/Makefile module-db/test/Makefile \
 	stred/nl/cwi/gipe/stred/Makefile \
 	toolbus/Makefile toolbus/test/Makefile \
-        utils/Makefile utils/genmakefile.sh utils/gen-table \
-        utils/normalize-sdf utils/parse-sdf2  utils/parse-file \
-        utils/ps-dot utils/sdf2table \
+        utils/Makefile utils/genmakefile.sh \
+        utils/parse-sdf2 utils/parse-file \
+        utils/ps-dot \
         grammars/Makefile \
 	grammars/sdf2/Makefile \
   "}
@@ -1919,9 +1910,8 @@ EOF
 cat >> $CONFIG_STATUS <<\EOF
 chmod +x meta install-prog-sh install-data-sh; \
     chmod +x graph-browser/graph-browser editor/editor; \
-    chmod +x utils/gen-table utils/normalize-sdf \
-             utils/parse-sdf2 utils/ps-dot utils/sdf2table \
-						 utils/genmakefile.sh utils/parse-file
+    chmod +x utils/parse-sdf2 utils/ps-dot \
+             utils/genmakefile.sh utils/parse-file
 
 exit 0
 EOF
@@ -1929,6 +1919,32 @@ chmod +x $CONFIG_STATUS
 rm -fr confdefs* $ac_clean_files
 test "$no_create" = yes || ${CONFIG_SHELL-/bin/sh} $CONFIG_STATUS || exit 1
 
+
+
+ac_aux_dir=
+for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
+  if test -f $ac_dir/install-sh; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/install-sh -c"
+    break
+  elif test -f $ac_dir/install.sh; then
+    ac_aux_dir=$ac_dir
+    ac_install_sh="$ac_aux_dir/install.sh -c"
+    break
+  fi
+done
+if test -z "$ac_aux_dir"; then
+  { echo "configure: error: can not find install-sh or install.sh in $srcdir $srcdir/.. $srcdir/../.." 1>&2; exit 1; }
+fi
+ac_config_guess=$ac_aux_dir/config.guess
+ac_config_sub=$ac_aux_dir/config.sub
+ac_configure=$ac_aux_dir/configure # This should be Cygnus configure.
+
+
+   
+      ac_saved_args=$ac_configure_args
+      ac_configure_args=" $ac_configure_args"
+      
 if test "$no_recursion" != yes; then
 
   # Remove --cache-file and --srcdir arguments so they do not pile up.
@@ -1954,7 +1970,7 @@ if test "$no_recursion" != yes; then
     esac
   done
 
-  for ac_config_dir in asc-support sglr pgen; do
+  for ac_config_dir in asfix; do
 
     # Do not complain, so a configure script can configure whichever
     # parts of a large source tree are present.
@@ -2021,4 +2037,318 @@ if test "$no_recursion" != yes; then
     cd $ac_popdir
   done
 fi
+
+      ac_configure_args=$ac_saved_args
+
+
+
+   
+      ac_saved_args=$ac_configure_args
+      ac_configure_args="--with-asfix-inc='\${top_builddir}/../asfix/libasfix'
+                           --with-asfix-lib='\${top_builddir}/../asfix/libasfix' $ac_configure_args"
+      
+if test "$no_recursion" != yes; then
+
+  # Remove --cache-file and --srcdir arguments so they do not pile up.
+  ac_sub_configure_args=
+  ac_prev=
+  for ac_arg in $ac_configure_args; do
+    if test -n "$ac_prev"; then
+      ac_prev=
+      continue
+    fi
+    case "$ac_arg" in
+    -cache-file | --cache-file | --cache-fil | --cache-fi \
+    | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
+      ac_prev=cache_file ;;
+    -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
+    | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
+      ;;
+    -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
+      ac_prev=srcdir ;;
+    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
+      ;;
+    *) ac_sub_configure_args="$ac_sub_configure_args $ac_arg" ;;
+    esac
+  done
+
+  for ac_config_dir in asc-support; do
+
+    # Do not complain, so a configure script can configure whichever
+    # parts of a large source tree are present.
+    if test ! -d $srcdir/$ac_config_dir; then
+      continue
+    fi
+
+    echo configuring in $ac_config_dir
+
+    case "$srcdir" in
+    .) ;;
+    *)
+      if test -d ./$ac_config_dir || mkdir ./$ac_config_dir; then :;
+      else
+        { echo "configure: error: can not create `pwd`/$ac_config_dir" 1>&2; exit 1; }
+      fi
+      ;;
+    esac
+
+    ac_popdir=`pwd`
+    cd $ac_config_dir
+
+      # A "../" for each directory in /$ac_config_dir.
+      ac_dots=`echo $ac_config_dir|sed -e 's%^\./%%' -e 's%[^/]$%&/%' -e 's%[^/]*/%../%g'`
+
+    case "$srcdir" in
+    .) # No --srcdir option.  We are building in place.
+      ac_sub_srcdir=$srcdir ;;
+    /*) # Absolute path.
+      ac_sub_srcdir=$srcdir/$ac_config_dir ;;
+    *) # Relative path.
+      ac_sub_srcdir=$ac_dots$srcdir/$ac_config_dir ;;
+    esac
+
+    # Check for guested configure; otherwise get Cygnus style configure.
+    if test -f $ac_sub_srcdir/configure; then
+      ac_sub_configure=$ac_sub_srcdir/configure
+    elif test -f $ac_sub_srcdir/configure.in; then
+      ac_sub_configure=$ac_configure
+    else
+      echo "configure: warning: no configuration information is in $ac_config_dir" 1>&2
+      ac_sub_configure=
+    fi
+
+    # The recursion is here.
+    if test -n "$ac_sub_configure"; then
+
+      # Make the cache file name correct relative to the subdirectory.
+      case "$cache_file" in
+      /*) ac_sub_cache_file=$cache_file ;;
+      *) # Relative path.
+        ac_sub_cache_file="$ac_dots$cache_file" ;;
+      esac
+
+      echo "running ${CONFIG_SHELL-/bin/sh} $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir"
+      # The eval makes quoting arguments work.
+      if eval ${CONFIG_SHELL-/bin/sh} $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir
+      then :
+      else
+        { echo "configure: error: $ac_sub_configure failed for $ac_config_dir" 1>&2; exit 1; }
+      fi
+    fi
+
+    cd $ac_popdir
+  done
+fi
+
+      ac_configure_args=$ac_saved_args
+
+
+
+   
+      ac_saved_args=$ac_configure_args
+      ac_configure_args="--with-asfix-inc='\${top_builddir}/../asfix/libasfix'
+                           --with-asfix-lib='\${top_builddir}/../asfix/libasfix' $ac_configure_args"
+      
+if test "$no_recursion" != yes; then
+
+  # Remove --cache-file and --srcdir arguments so they do not pile up.
+  ac_sub_configure_args=
+  ac_prev=
+  for ac_arg in $ac_configure_args; do
+    if test -n "$ac_prev"; then
+      ac_prev=
+      continue
+    fi
+    case "$ac_arg" in
+    -cache-file | --cache-file | --cache-fil | --cache-fi \
+    | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
+      ac_prev=cache_file ;;
+    -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
+    | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
+      ;;
+    -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
+      ac_prev=srcdir ;;
+    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
+      ;;
+    *) ac_sub_configure_args="$ac_sub_configure_args $ac_arg" ;;
+    esac
+  done
+
+  for ac_config_dir in sglr; do
+
+    # Do not complain, so a configure script can configure whichever
+    # parts of a large source tree are present.
+    if test ! -d $srcdir/$ac_config_dir; then
+      continue
+    fi
+
+    echo configuring in $ac_config_dir
+
+    case "$srcdir" in
+    .) ;;
+    *)
+      if test -d ./$ac_config_dir || mkdir ./$ac_config_dir; then :;
+      else
+        { echo "configure: error: can not create `pwd`/$ac_config_dir" 1>&2; exit 1; }
+      fi
+      ;;
+    esac
+
+    ac_popdir=`pwd`
+    cd $ac_config_dir
+
+      # A "../" for each directory in /$ac_config_dir.
+      ac_dots=`echo $ac_config_dir|sed -e 's%^\./%%' -e 's%[^/]$%&/%' -e 's%[^/]*/%../%g'`
+
+    case "$srcdir" in
+    .) # No --srcdir option.  We are building in place.
+      ac_sub_srcdir=$srcdir ;;
+    /*) # Absolute path.
+      ac_sub_srcdir=$srcdir/$ac_config_dir ;;
+    *) # Relative path.
+      ac_sub_srcdir=$ac_dots$srcdir/$ac_config_dir ;;
+    esac
+
+    # Check for guested configure; otherwise get Cygnus style configure.
+    if test -f $ac_sub_srcdir/configure; then
+      ac_sub_configure=$ac_sub_srcdir/configure
+    elif test -f $ac_sub_srcdir/configure.in; then
+      ac_sub_configure=$ac_configure
+    else
+      echo "configure: warning: no configuration information is in $ac_config_dir" 1>&2
+      ac_sub_configure=
+    fi
+
+    # The recursion is here.
+    if test -n "$ac_sub_configure"; then
+
+      # Make the cache file name correct relative to the subdirectory.
+      case "$cache_file" in
+      /*) ac_sub_cache_file=$cache_file ;;
+      *) # Relative path.
+        ac_sub_cache_file="$ac_dots$cache_file" ;;
+      esac
+
+      echo "running ${CONFIG_SHELL-/bin/sh} $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir"
+      # The eval makes quoting arguments work.
+      if eval ${CONFIG_SHELL-/bin/sh} $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir
+      then :
+      else
+        { echo "configure: error: $ac_sub_configure failed for $ac_config_dir" 1>&2; exit 1; }
+      fi
+    fi
+
+    cd $ac_popdir
+  done
+fi
+
+      ac_configure_args=$ac_saved_args
+
+
+
+
+   
+      ac_saved_args=$ac_configure_args
+      ac_configure_args="--with-asfix-inc='\${top_builddir}/../asfix/libasfix'
+                           --with-asfix-lib='\${top_builddir}/../asfix/libasfix'
+                           --with-asc-inc='\${top_builddir}/../asc-support'
+                           --with-asc-lib='\${top_builddir}/../asc-support'
+                           --with-sglr='\${top_builddir}/../sglr/sglr' $ac_configure_args"
+      
+if test "$no_recursion" != yes; then
+
+  # Remove --cache-file and --srcdir arguments so they do not pile up.
+  ac_sub_configure_args=
+  ac_prev=
+  for ac_arg in $ac_configure_args; do
+    if test -n "$ac_prev"; then
+      ac_prev=
+      continue
+    fi
+    case "$ac_arg" in
+    -cache-file | --cache-file | --cache-fil | --cache-fi \
+    | --cache-f | --cache- | --cache | --cach | --cac | --ca | --c)
+      ac_prev=cache_file ;;
+    -cache-file=* | --cache-file=* | --cache-fil=* | --cache-fi=* \
+    | --cache-f=* | --cache-=* | --cache=* | --cach=* | --cac=* | --ca=* | --c=*)
+      ;;
+    -srcdir | --srcdir | --srcdi | --srcd | --src | --sr)
+      ac_prev=srcdir ;;
+    -srcdir=* | --srcdir=* | --srcdi=* | --srcd=* | --src=* | --sr=*)
+      ;;
+    *) ac_sub_configure_args="$ac_sub_configure_args $ac_arg" ;;
+    esac
+  done
+
+  for ac_config_dir in pgen; do
+
+    # Do not complain, so a configure script can configure whichever
+    # parts of a large source tree are present.
+    if test ! -d $srcdir/$ac_config_dir; then
+      continue
+    fi
+
+    echo configuring in $ac_config_dir
+
+    case "$srcdir" in
+    .) ;;
+    *)
+      if test -d ./$ac_config_dir || mkdir ./$ac_config_dir; then :;
+      else
+        { echo "configure: error: can not create `pwd`/$ac_config_dir" 1>&2; exit 1; }
+      fi
+      ;;
+    esac
+
+    ac_popdir=`pwd`
+    cd $ac_config_dir
+
+      # A "../" for each directory in /$ac_config_dir.
+      ac_dots=`echo $ac_config_dir|sed -e 's%^\./%%' -e 's%[^/]$%&/%' -e 's%[^/]*/%../%g'`
+
+    case "$srcdir" in
+    .) # No --srcdir option.  We are building in place.
+      ac_sub_srcdir=$srcdir ;;
+    /*) # Absolute path.
+      ac_sub_srcdir=$srcdir/$ac_config_dir ;;
+    *) # Relative path.
+      ac_sub_srcdir=$ac_dots$srcdir/$ac_config_dir ;;
+    esac
+
+    # Check for guested configure; otherwise get Cygnus style configure.
+    if test -f $ac_sub_srcdir/configure; then
+      ac_sub_configure=$ac_sub_srcdir/configure
+    elif test -f $ac_sub_srcdir/configure.in; then
+      ac_sub_configure=$ac_configure
+    else
+      echo "configure: warning: no configuration information is in $ac_config_dir" 1>&2
+      ac_sub_configure=
+    fi
+
+    # The recursion is here.
+    if test -n "$ac_sub_configure"; then
+
+      # Make the cache file name correct relative to the subdirectory.
+      case "$cache_file" in
+      /*) ac_sub_cache_file=$cache_file ;;
+      *) # Relative path.
+        ac_sub_cache_file="$ac_dots$cache_file" ;;
+      esac
+
+      echo "running ${CONFIG_SHELL-/bin/sh} $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir"
+      # The eval makes quoting arguments work.
+      if eval ${CONFIG_SHELL-/bin/sh} $ac_sub_configure $ac_sub_configure_args --cache-file=$ac_sub_cache_file --srcdir=$ac_sub_srcdir
+      then :
+      else
+        { echo "configure: error: $ac_sub_configure failed for $ac_config_dir" 1>&2; exit 1; }
+      fi
+    fi
+
+    cd $ac_popdir
+  done
+fi
+
+      ac_configure_args=$ac_saved_args
+
+
 
