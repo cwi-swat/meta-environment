@@ -24,4 +24,8 @@ public class FeedbackItem {
     public String getSummaryId() {
         return summaryId;
     }
+    
+    public String toString() {
+        return "item[" + producer +"," + summaryId + "," + feedback.toString() +"]";
+    }
 }

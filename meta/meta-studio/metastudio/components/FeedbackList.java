@@ -3,7 +3,9 @@ package metastudio.components;
 import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -129,13 +131,16 @@ public class FeedbackList extends UserInterfacePanel {
     }
 
     public void removeFeedbackSummary(String producer, String summaryId) {
-        for (int i = 0; i < data.getSize(); i++) {
-            FeedbackItem item = (FeedbackItem) data.getElementAt(i);
-
+        Iterator iter = data.iterator();
+        List removed = new LinkedList();
+        while (iter.hasNext()) {
+            FeedbackItem item = (FeedbackItem) iter.next();
             if (item.getProducer().equals(producer)
                 && item.getSummaryId().equals(summaryId)) {
-                data.remove(item);
+                removed.add(item);
             }
         }
+        
+        data.removeAll(removed);
     }
 }
