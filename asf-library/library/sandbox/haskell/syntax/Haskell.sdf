@@ -1,0 +1,650 @@
+definition
+
+module Main
+imports Haskell-Syntax
+
+%% Lists with extra separators
+
+module ExtraSepLists1 [A B C]
+exports
+  context-free syntax
+    {A B}+   -> C
+    {A B}+ B -> {A B}+
+  context-free priorities
+    {left: 
+	{A B}+ B	-> {A B}+
+    	{A B}+ B {A B}+ -> {A B}+
+    }
+
+module ExtraSepLists [Elt Sep List]
+exports
+  context-free syntax
+    Elt          -> List {cons("Ins")}
+    List Sep Elt -> List {cons("Snoc")}
+    List Sep     -> List
+
+module ExtraSepLists0 [Elt Sep List]
+exports
+  context-free syntax
+    Elt          -> List {cons("Ins")}
+    List Sep Elt -> List {cons("Snoc")}
+    List Sep     -> List
+                 -> List {cons("Nil")}
+
+module Haskell-Kernel
+imports Haskell-Layout
+
+	Haskell-Identifiers
+	Haskell-Keywords
+	Haskell-Identifier-Sorts
+
+	Haskell-Numbers
+	Haskell-Strings
+        Haskell-Literals
+
+	Haskell-Modules
+
+	Haskell-Types
+	Haskell-Type-Declarations
+	Haskell-Signature-Declarations
+
+	Haskell-Expressions
+	Haskell-Case-Alternatives
+	Haskell-Value-Definitions
+
+module Haskell-Syntax
+imports Haskell-Layout
+
+	Haskell-Identifiers
+	Haskell-Keywords
+	Haskell-Identifier-Sorts
+
+	Haskell-Numbers
+	Haskell-Strings
+        Haskell-Literals
+
+	Haskell-Modules
+	Haskell-Import-Export
+
+	Haskell-Types
+	Haskell-Records
+	Haskell-Type-Declarations
+	Haskell-Type-Classes
+	Haskell-Signature-Declarations
+
+	Haskell-Expressions
+	Haskell-Case-Alternatives
+	Haskell-Value-Definitions
+
+	Haskell-Infix
+
+	Haskell-Qualifiers
+	Haskell-List-Comprehensions
+	Haskell-Statements
+
+	%%Haskell-Pragmas	%% GHC-specific
+	%%Haskell-Rules		%% GHC-specific
+	%%Haskell-Foreign	%% GHC-specific
+exports
+  sorts Module
+
+module Haskell-Layout
+exports
+  lexical syntax
+    WhiteChar                     -> LAYOUT
+    Comment                       -> LAYOUT
+    NComment                      -> LAYOUT
+
+    [\ \t\n]                      -> WhiteChar
+
+    "--" ~[\n]* [\n]              -> Comment
+
+    "{-" {L-Char* NComment}* "-}" -> NComment
+
+    ~[\-\{]                       -> L-Char
+    Hyphen                        -> L-Char
+    CurlyOpen                     -> L-Char
+    [\-]                          -> Hyphen
+    [\{]	                  -> CurlyOpen
+  lexical restrictions
+    Hyphen    -/- [\}]
+    CurlyOpen -/- [\-]
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n] | [\-].[\-] | [\{].[\-]
+
+module Haskell-Identifiers
+exports
+  lexical syntax
+    [a-z][A-Za-z0-9\']*       -> VARID
+    [A-Z][A-Za-z0-9\']*       -> CONID
+
+    [\!\#\$\%\&\*\+\.\/]
+    \/ [\<\=\>\?\@\\\^\|\-\~] -> Symbol
+    Symbol (Symbol | [\:])*   -> VARSYM
+    [\:] (Symbol | [\:])*     -> CONSYM
+    ReservedOp                -> VARSYM {reject}
+    ReservedOp                -> CONSYM {reject}
+
+  lexical restrictions
+    CONID VARID -/- [A-Za-z0-9]
+    VARSYM      -/- [\!\#\$\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~]
+
+   context-free syntax
+    Modid "." VARID           -> QVARID  {cons("QVarId")}
+    Modid "." CONID           -> QCONID  {cons("QConId")}
+    Modid "." VARSYM          -> QVARSYM {cons("QVarSym")}
+    Modid "." CONSYM          -> QCONSYM {cons("QConSym")}
+
+module Haskell-Keywords
+exports
+  lexical syntax
+    "case" 	| "class" 	| "data" 	|
+    "default" 	| "deriving" 	| "do" 		|
+    "else" 	| "if" 	        | "import" 	|
+    "in" 	| "infix" 	| "infixl" 	|
+    "infixr" 	| "instance" 	| "let" 	|
+    "module" 	| "newtype" 	| "of" 		|
+    "then" 	| "type" 	| "where" 	|
+    "_"        					-> ReservedId
+    "as" 	| "hiding" 	| "qualified" 	|
+    "export" 	| "label" 	| "dynamic" 	-> ReservedId0
+    "forall" 					-> ReservedId2
+
+    ".." | ":" | "::" | "=" | "\\" | "|" | "<-" |
+    "->" | "@" | "~" | "=>" |
+    "-" | "!" | "." | "/\\" | "{" | "}" | "[" | 
+    "]" | "(" | ")" | "(#" | "#)" | ";" | "," | "`" -> ReservedOp
+
+module Haskell-Identifier-Sorts
+exports
+  lexical syntax
+    VARID       	-> Varid
+    ReservedId  	-> Varid {reject}
+
+    VARID 		-> Tyvar
+    ReservedId 		-> Varid {reject}
+    ReservedId2 	-> Varid {reject}
+
+  context-free syntax
+    Vars "," Var 	-> Vars 	{cons("Snoc")}
+    Qvar 	 	-> Vars 	{cons("Ins")}
+
+  context-free syntax
+    "(" ")"        	-> Gcon 	{cons("Unit")}
+    "[" "]"        	-> Gcon		{cons("EmptyList")}
+    "(" ","+ ")"   	-> Gcon		{cons("Product")}
+    Qcon           	-> Gcon		
+
+  context-free syntax
+
+    %% variable identifiers
+
+    Varid          	-> Var		{cons("VarId")}
+    Qvarid          	-> Qvar
+    Varid  		-> Qvarid
+    QVARID 		-> Qvarid
+
+    %% constructor identifiers
+
+    Conid          	-> Con		{cons("ConId")}
+    Qconid          	-> Qcon
+    Conid  		-> Qconid
+    QCONID 		-> Qconid
+    CONID 		-> Conid
+
+  %% The following portion can be put into module Haskell-Infix
+  %% in order to factor out infix operators from the kernel language
+
+  context-free syntax
+
+    %% infix operators
+
+    Varop 		-> Op		{cons("Op")}
+    Conop 		-> Op		{cons("ConOp")}
+
+    %% variable operators
+
+    Varsym        	-> Varop
+    Qvarsym        	-> Qvarop
+    Qvarsymm       	-> Qvaropm
+    Varsym  		-> Qvarsym
+    Qvarsym1 		-> Qvarsym
+    Varsymm  		-> Qvarsymm
+    Qvarsym1 		-> Qvarsymm
+
+    %% constructor operators
+
+    Consym  		-> Qconsym
+    QCONSYM 		-> Qconsym
+    CONSYM 		-> Consym
+    Consym        	-> Conop
+    Qconsym        	-> Qconop
+
+    Qvarop 		  -> Qop
+    Qconop 		  -> Qop
+    Qvaropm 		  -> Qopm
+    Qconop  		  -> Qopm
+
+    %% make prefix symbols from infix symbols
+
+    "(" Varsym ")" 	-> Var 		{cons("BinOp")}
+    "(" Qvarsym ")" 	-> Qvar 	{cons("BinOp")}
+    "(" Consym ")" 	-> Con 		{cons("BinCon")}
+    "(" Qconsym ")" 	-> Qcon 	{cons("BinCon")}
+
+    %% make infix symbols from prefix symbols
+
+    "`" Varid "`" 	-> Varop 	{cons("PrefOp")}
+    "`" Qvarid "`" 	-> Qvarop 	{cons("PrefOp")}
+    "`" Qvarid "`" 	-> Qvaropm 	{cons("PrefOp")}
+    "`" Conid "`" 	-> Conop 	{cons("PrefCon")}
+    "`" Qconid "`" 	-> Qconop 	{cons("PrefCon")}
+
+  context-free syntax
+    VARSYM 		-> Varsym
+    "-"    		-> Varsym 	{cons("Subtraction")}
+    "!"    		-> Varsym
+    "."    		-> Varsym
+
+    VARSYM 		-> Varsymm
+    "!"    		-> Varsymm
+    "."    		-> Varsymm
+   
+    QVARSYM 		-> Qvarsym1
+
+  context-free syntax
+    CONID 		-> Modid
+    CONID 		-> Tycon
+    Tycon  		-> Qtycon
+    QCONID 		-> Qtycon
+    Qtycon 		-> Qtycls
+   
+module Haskell-Numbers
+exports
+  lexical syntax
+    [0-9]                -> Digit
+    [0-7]                -> Octit
+    [0-9A-Fa-f]          -> Hexit
+
+    Digit+               -> Decimal
+    Octit+               -> Octal
+    Hexit+               -> Hexadecimal    
+
+    Decimal              -> INTEGER
+    [0] [Oo] Octal       -> INTEGER
+    [0] [Xx] Hexadecimal -> INTEGER
+  lexical restrictions
+    INTEGER -/- [0-9]
+
+  lexical syntax
+    Decimal "." Decimal ([eE] [\-\+]? Decimal) -> RATIONAL
+  lexical restrictions
+    RATIONAL -/- [0-9]
+
+  lexical syntax
+    [] -> PRIMCHAR
+    [] -> PRIMSTRING
+    [] -> PRIMINTEGER
+    [] -> PRIMFLOAT
+    [] -> PRIMDOUBLE
+
+    [] -> CLITLIT
+    [] -> UNKNOWN
+
+module Haskell-Strings
+exports
+  lexical syntax
+    "'" CharChar "'" 	   -> CHAR
+    "\"" StringChar* "\""  -> STRING
+
+    ~[\0-\31\"\\] 	   -> StringChar
+    Escape 		   -> StringChar
+    Gap                    -> StringChar
+
+    [\\] [\ \t\n]+ [\\]    -> Gap
+
+    [\\] (CharEsc | ASCII 
+         | Decimal 
+         | ([o] Octal) 
+         | [x] Hexadecimal) -> Escape
+
+    [abfnrtv\\\"\'\&]       -> CharEsc
+
+  lexical syntax
+    "^" [A-Z\@\[\]\\\^\_]                   -> ASCII
+
+    "NUL" | "SOH" | "STX" | "ETX" | "EOT" |
+    "ENQ" | "ACK" | "BEL" | "BS"  | "HT"  |
+    "LF"  | "VT"  | "FF"  | "CR"  | "SO"  |
+    "SI"  | "DLE" | "DC1" | "DC2" | "DC3" |
+    "DC4" | "NAK" | "SYN" | "ETB" | "CAN" |
+    "EM"  | "SUB" | "ESC" | "FS"  | "GS"  |
+    "RS"  | "US"  | "SP"  | "DEL"           -> ASCCI
+
+module Haskell-Literals
+exports
+  context-free syntax
+    INTEGER 		-> Literal {cons("Int")}
+    CHAR 		-> Literal {cons("Char")}
+    RATIONAL 		-> Literal {cons("Float")}
+    STRING 		-> Literal {cons("String")}
+    PRIMINTEGER 	-> Literal {cons("PrimInt")}
+    PRIMCHAR 		-> Literal {cons("PrimChar")}
+    PRIMSTRING 		-> Literal {cons("PrimString")}
+    PRIMFLOAT 		-> Literal {cons("PrimFloat")}
+    PRIMDOUBLE 		-> Literal {cons("PrimDouble")}
+    CLITLIT 		-> Literal {cons("CLitLit")}
+
+module Haskell-Modules
+imports ExtraSepLists[Topdecl ";" Topdecls]
+exports
+  context-free syntax
+    "module" Modid Exports?
+            "where" Body 	-> Module 	{cons("Module")}
+    Body 			-> Module 	{cons("Program")}
+    "{" Top "}" 		-> Body
+    Topdecls 			-> Top 		{cons("TopDecls")}
+    Decl 		   	-> Topdecl
+
+module Haskell-Import-Export
+imports ExtraSepLists[Export "," Exportlist]
+exports
+  context-free syntax  
+    Importdecls ";" Topdecls 	-> Top 		{cons("Top")}
+    Importdecls 		-> Top 		{cons("TopImports")}
+
+    "(" Exportlist ")" 		-> Exports
+
+    Qvar 			-> Export
+    Gtycon 			-> Export
+    Gtycon "(" ".." ")" 	-> Export
+    Gtycon "(" ")" 		-> Export
+    Gtycon "("{Qcname ","}+ ")" -> Export
+    "module" Modid 		-> Export
+
+    Qvar 			-> Qcname
+    Gcon 			-> Qcname
+
+  context-free syntax  
+    "import" Src? Qualified?
+             CONID As? Impspec? -> Importdecl 	{cons("Import")}
+    "{-# SOURCE" "#-}" 		-> Src 		{cons("SOURCE")}
+    "qualified" 		-> Qualified 	{cons("Qualified")}
+    "as" Modid 			-> As 		{cons("As")}
+    "(" Exportlist ")" 		-> Impspec 	
+    "hiding" "(" Exportlist ")" -> Impspec 	{cons("Hiding")}
+
+module Haskell-Types
+exports
+  context-free syntax
+    ("::" Type)?   	   -> OptSig
+
+  context-free syntax
+    Qtycon 	   	   -> Gtycon
+    "(" "->" ")"           -> Gtycon 	{cons("TArrow")}
+
+  context-free syntax
+    {Type ","}+ 	   -> Types
+    Type "," {Type ","}+   -> Types2 	{cons("Cons")}
+    "forall" Tyvar* "."    -> Forall 
+    Type "=>"              -> Context 
+
+  context-free syntax
+    Gtycon 		   -> Type 	{cons("TCon")}
+    Tyvar 		   -> Type 	{cons("TVar")}
+    Type Type 	   	   -> Type 	{cons("TAppBin"),left}
+    Type "->" Type 	   -> Type 	{cons("TFunBin"),right}
+    Forall Type  	   -> Type 	{cons("Forall")}
+    Forall Context Type    -> Type 	{cons("ForallContext")}
+
+    "(" Type ")" 	   -> Type 	{bracket}
+
+  context-free priorities
+    Type Type 	   	   -> Type 
+  > Type "->" Type 	   -> Type
+  > {Forall Type  	   -> Type 	
+     Forall Context Type   -> Type}
+
+  %% The following productions are syntactic sugar for
+  %% [] Type and (,,,) Type ... Type
+
+  context-free syntax
+    "[" Type "]" 	   -> Type 	{cons("TList")}
+    "(" Types2 ")" 	   -> Type 	{cons("TProd")}
+    "(" ")" 	           -> Gtycon 	{cons("TUnit")}
+    "[" "]"                -> Gtycon 	{cons("TList")}
+    "(" ","+ ")"           -> Gtycon 	{cons("TProduct")}
+
+module Haskell-Records
+exports
+  context-free syntax
+    Forall? Context? Con "{" Fielddecls "}" -> Constr {cons("RecordConstr")}
+    {Fielddecl ","}+ 			    -> Fielddecls
+    Vars "::" Stype  			    -> Fielddecl
+    Type 				    -> Stype
+    "!" Type 				    -> Stype
+
+module Haskell-Type-Declarations
+exports
+  context-free syntax
+    "type" Tycon Tyvar* "=" Type	  -> Topdecl {cons("TypeDecl")}
+    "data" Type "=" Constrs Deriving 	  -> Topdecl {cons("Data")}
+    "newtype" Type "=" Newconstr Deriving -> Topdecl {cons("NewTypeDecl")}
+
+  context-free syntax
+    "deriving" Qtycls 		     	-> Deriving
+    "deriving" "(" ")" 		     	-> Deriving
+    "deriving" "(" {Qtycls ","}+ ")" 	-> Deriving
+    				     	-> Deriving {cons("NoDeriving")}
+  context-free syntax
+    {Constr "|"}+                        -> Constrs
+
+    Forall? Context? Conid Satype*       -> Constr {cons("ConstrDecl")}
+    Forall? Context? Sbtype Conop Sbtype -> Constr {cons("InfixConstr")}
+
+    Conid Type 			 	 -> Newconstr
+    Conid "{" Var "::" Type "}" 	 -> Newconstr
+   
+    Type 				 -> Satype
+    "!" Type 				 -> Satype
+    Type     				 -> Sbtype
+    "!" Type 				 -> Sbtype
+ 
+  context-free priorities
+    Type      -> Satype
+  > Type Type -> Type 
+
+module Haskell-Type-Classes
+exports
+  context-free syntax
+    "class"    Type Where? 		-> Topdecl {cons("Class")}
+    "instance" CType Where? 		-> Topdecl {cons("Instance")}
+    "default"  "(" {Type ","}* ")" 	-> Topdecl {cons("Default")}
+
+module Haskell-Signature-Declarations
+exports
+  context-free syntax
+    Signdecl 	   -> Decl 
+    Vars "::" Type -> Signdecl {cons("SignDecl")}
+   
+module Haskell-Expressions
+exports   
+  context-free syntax
+    Exp 				 -> AnyExp
+
+    Qvar 				 -> Exp 	{cons("Var")}
+    Gcon 				 -> Exp 	{cons("Constr")}
+    Literal 				 -> Exp 	{cons("Lit")}
+    "_" 				 -> Exp 	{cons("Wildcard")}
+    "(" Exps2 ")" 			 -> Exp 	{cons("Product")}
+    "(#" Exps "#)" 			 -> Exp 	{cons("Unboxed?")}
+    "(" Exp ")" 			 -> Exp 	{bracket}
+
+    {Exp ","}+ 				 -> Exps
+    Exp "," {Exp ","}+ 			 -> Exps2 	{cons("Cons")}
+    Aexp+				 -> Fargs
+
+  context-free priorities
+    "~" Exp 				  -> Exp 	{cons("TILDE?")}
+  > Qvar "@" Exp 			  -> Exp  	{cons("AT?")}
+  > Exp 				  -> Aexp1
+  > Exp "{" Fbinds "}" 			  -> Exp  	{cons("Labeled")}
+  > Exp				  	  -> Aexp
+  > Exp Exp				  -> Exp 	{cons("AppBin"),left}
+  > Exp 				  -> Infixexp
+  > Exp "::" Type 			  -> Exp 	{cons("Typed")}
+  > {"\\" Fargs OptSig "->" Exp		  -> Exp 	{cons("Abs")}
+     "let" Declbinds "in" Exp 		  -> Exp 	{cons("Let")} 
+     "if" AnyExp "then" AnyExp "else" Exp -> Exp 	{cons("If")}
+     "case" AnyExp "of" Altslist          -> Exp  	{cons("Case")}
+    }
+  > Exp                                   -> Exp10
+
+%% Notes:
+%% AnyExp is used to prevent priorities from forbidding expressions
+%% where the do not cause ambiguities.
+%% Fargs is used instead of Aexp+ because of a bug in the SDF2 
+%% normalizer; regular expression expansion does not take into
+%% account symbols used only in priority rules.
+
+module Haskell-Case-Alternatives
+imports ExtraSepLists0[Alt ";" Alts]
+exports
+  context-free syntax
+    "{" Alts "}" 			-> Altslist
+    Infixexp OptSig "->" Exp       	-> Alt   {cons("Alt")}
+    Infixexp OptSig "->" Exp Where 	-> Alt   {cons("AltW")}
+
+    Infixexp OptSig Gdpat+   Where? 	-> Alt   {cons("GdAlt")}
+    "|" Quals "->" Exp                  -> Gdpat {cons("GdPat")}
+
+module Haskell-Value-Definitions
+imports ExtraSepLists0[Decl ";" Decls]
+exports
+  context-free syntax
+    Valdef 		   -> Decl
+    Infixexp "=" Exp       -> Valdef 	{cons("Valdef")}
+    Infixexp "=" Exp Where -> Valdef 	{cons("ValdefW")}
+
+    Infixexp Gdrh+ Where?  -> Valdef 	{cons("GdValdef")}
+    "|" Quals "=" Exp 	   -> Gdrh   	{cons("Guarded")}   
+
+    "where" Decllist       -> Where     {cons("Where")}
+    Decllist 		   -> Declbinds
+    "{" Decls "}"          -> Decllist
+
+module Haskell-Infix
+exports
+  context-free syntax
+    "infix"  	   	  -> Infix 	{cons("Infix")}
+    "infixl" 	   	  -> Infix 	{cons("InfixL")}
+    "infixr" 	   	  -> Infix 	{cons("InfixR")}
+    INTEGER? 	   	  -> Prec
+    {Op ","}+ 	   	  -> Ops
+    Infix Prec Ops 	  -> Fixdecl 	{cons("FixDecl")}
+    Fixdecl 	   	  -> Decl 
+
+    "(" Infixexp Qop ")"  -> Exp 	{cons("LSection")}
+    "(" Qopm Infixexp ")" -> Exp 	{cons("RSection")}
+  context-free priorities
+    "-" Exp               -> Exp  {cons("Negation")}
+  > "~" Exp 		  -> Exp
+  , Exp                   -> Exp10
+  > Exp Qop Exp           -> Exp  {cons("OpApp"),left}
+
+module Haskell-Qualifiers
+exports
+  context-free syntax
+    {Qual ","}+ 	 -> Quals
+    Infixexp "<-" Exp 	 -> Qual {cons("QualBind")}
+    Exp 	      	 -> Qual
+    "let" Declbinds   	 -> Qual {cons("QualLet")}
+
+module Haskell-List-Comprehensions
+exports
+  context-free syntax
+    "[" List "]" 	 -> Exp {cons("List")}
+    Exp 		 -> List
+    Lexps 		 -> List
+    Exp ".." 		 -> List
+    Exp "," Exp ".." 	 -> List
+    Exp ".." Exp 	 -> List
+    Exp "," Exp ".." Exp -> List
+    Exp "|" Quals        -> List
+   
+    Lexps "," Exp 	 -> Lexps
+    Exp "," Exp   	 -> Lexps
+     
+module Haskell-Statements
+imports ExtraSepLists[Stmt ";" Stmts]
+	ExtraSepLists0[Fbind "," Fbinds]
+exports
+  context-free syntax
+    "do" Stmtlist 	-> Exp10 	{cons("Do")}
+    "{" ";"? Stmts "}"  -> Stmtlist
+    Infixexp "<-" Exp 	-> Stmt 	{cons("DoBind")}
+    Exp               	-> Stmt 	{cons("DoExp")}
+    "let" Declbinds   	-> Stmt 	{cons("DoLet")}
+    Qvar "=" Exp 	-> Fbind	{cons("FBind")}
+
+module Haskell-GHC-Pragmas
+exports
+  context-free syntax
+    "(#" Types "#)" 	   			 -> Type {cons("TUnboxed?")}
+
+    "{-# INLINE" Qvar "#-}" 		         -> Decl {cons("Inline")}
+    "{-# NOINLINE" Qvar "#-}" 		         -> Decl {cons("NoInline")}
+    "{-# SPECIALISE" Qvar "::" {Type ","}+ "#-}" -> Decl {cons("Spec")}
+    "{-# SPECIALISE" "instance" CType "#-}"      -> Decl {cons("SpecInst")}
+
+module Haskell-GHC-Rules
+imports ExtraSepLists0[Rule ";" Rules]
+exports
+  context-free syntax
+    "{-# RULES" Rules "#-}"        -> Decl 	 {cons("Rules")}
+    STRING RuleForall Fexp "=" Exp -> Rule 	 {cons("Rule")}
+    ("forall" RuleVarList "." )?   -> RuleForall {cons("RuleForall")}
+    {RuleVar ","}+                 -> RuleVarList
+    Varid 	     		   -> RuleVar
+    Varid "::" Type 		   -> RuleVar
+   
+module Haskell-GHC-Foreign
+exports
+  context-free syntax
+    "foreign" "import" 
+	Callconv ExtName 
+      	UnsafeFlag 
+	VaridNoUnsafe "::" Type  	-> Topdecl {cons("ForeignImport")}
+
+    "foreign" "export" 
+     	Callconv ExtName 
+      	Varid "::" Type 		-> Topdecl {cons("ForeignExport")}
+
+    "foreign" "label" 
+	ExtName 
+	Varid "::" Type 		-> Topdecl {cons("ForeignLabel")}
+
+  context-free syntax
+    VARID 				-> Ccallid
+    CONID 				-> Ccallid
+    VARID? 				-> Callconv
+    "unsafe"? 				-> UnsafeFlag
+    "dynamic" 	  			-> ExtName
+    STRING 	  			-> ExtName
+    STRING STRING 			-> ExtName
+
+  lexical syntax
+    VARID 				-> VaridNoUnsafe
+    ReservedId 				-> VaridNoUnsafe {reject}
+    "unsafe" 				-> VaridNoUnsafe {reject}
+
+    "foreign" 	| "_scc_" 	| "_ccall_" 	| 
+    "_ccall_GC_"| "_casm_" 	| "_casm_GC_" 	-> ReservedId
+
+  context-free syntax
+    "_ccall_"    Ccallid Aexp* 		-> Exp {cons("CCALL")}
+    "_ccall_GC_" Ccallid Aexp* 		-> Exp {cons("CCALL_GC")}
+    "_casm_"     CLITLIT Aexp* 		-> Exp {cons("CASM")}
+    "_casm_GC_"  CLITLIT Aexp* 		-> Exp {cons("CASM_GC")}
+    "_scc_"      STRING Exp 		-> Exp {cons("SCC")}
+   

@@ -1,0 +1,15 @@
+module Haskell-Value-Definitions
+imports ExtraSepLists0[Decl ";" Decls]
+exports
+  context-free syntax
+    Valdef 		   -> Decl
+    Infixexp "=" Exp       -> Valdef 	{cons("Valdef")}
+    Infixexp "=" Exp Where -> Valdef 	{cons("ValdefW")}
+
+    Infixexp Gdrh+ Where?  -> Valdef 	{cons("GdValdef")}
+    "|" Quals "=" Exp 	   -> Gdrh   	{cons("Guarded")}   
+
+    "where" Decllist       -> Where     {cons("Where")}
+    Decllist 		   -> Declbinds
+    "{" Decls "}"          -> Decllist
+

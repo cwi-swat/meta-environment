@@ -1,0 +1,28 @@
+module Haskell-Import-Export
+imports ExtraSepLists[Export "," Exportlist]
+exports
+  context-free syntax  
+    Importdecls ";" Topdecls 	-> Top 		{cons("Top")}
+    Importdecls 		-> Top 		{cons("TopImports")}
+
+    "(" Exportlist ")" 		-> Exports
+
+    Qvar 			-> Export
+    Gtycon 			-> Export
+    Gtycon "(" ".." ")" 	-> Export
+    Gtycon "(" ")" 		-> Export
+    Gtycon "("{Qcname ","}+ ")" -> Export
+    "module" Modid 		-> Export
+
+    Qvar 			-> Qcname
+    Gcon 			-> Qcname
+
+  context-free syntax  
+    "import" Src? Qualified?
+             CONID As? Impspec? -> Importdecl 	{cons("Import")}
+    "{-# SOURCE" "#-}" 		-> Src 		{cons("SOURCE")}
+    "qualified" 		-> Qualified 	{cons("Qualified")}
+    "as" Modid 			-> As 		{cons("As")}
+    "(" Exportlist ")" 		-> Impspec 	
+    "hiding" "(" Exportlist ")" -> Impspec 	{cons("Hiding")}
+

@@ -1,0 +1,40 @@
+module Haskell-GHC-Foreign
+exports
+  context-free syntax
+    "foreign" "import" 
+	Callconv ExtName 
+      	UnsafeFlag 
+	VaridNoUnsafe "::" Type  	-> Topdecl {cons("ForeignImport")}
+
+    "foreign" "export" 
+     	Callconv ExtName 
+      	Varid "::" Type 		-> Topdecl {cons("ForeignExport")}
+
+    "foreign" "label" 
+	ExtName 
+	Varid "::" Type 		-> Topdecl {cons("ForeignLabel")}
+
+  context-free syntax
+    VARID 				-> Ccallid
+    CONID 				-> Ccallid
+    VARID? 				-> Callconv
+    "unsafe"? 				-> UnsafeFlag
+    "dynamic" 	  			-> ExtName
+    STRING 	  			-> ExtName
+    STRING STRING 			-> ExtName
+
+  lexical syntax
+    VARID 				-> VaridNoUnsafe
+    ReservedId 				-> VaridNoUnsafe {reject}
+    "unsafe" 				-> VaridNoUnsafe {reject}
+
+    "foreign" 	| "_scc_" 	| "_ccall_" 	| 
+    "_ccall_GC_"| "_casm_" 	| "_casm_GC_" 	-> ReservedId
+
+  context-free syntax
+    "_ccall_"    Ccallid Aexp* 		-> Exp {cons("CCALL")}
+    "_ccall_GC_" Ccallid Aexp* 		-> Exp {cons("CCALL_GC")}
+    "_casm_"     CLITLIT Aexp* 		-> Exp {cons("CASM")}
+    "_casm_GC_"  CLITLIT Aexp* 		-> Exp {cons("CASM_GC")}
+    "_scc_"      STRING Exp 		-> Exp {cons("SCC")}
+   

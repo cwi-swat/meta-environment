@@ -1,0 +1,36 @@
+module Haskell-Types-Original
+exports
+  context-free syntax
+    ("::" Type)?   	   -> OptSig
+    ("::" Atype )? 	   -> OptAsig
+
+    ArgTypes "->" Type 	   -> Type 	{cons("TFun")}
+    Btype 	    	   -> Type
+    Btype                  -> ArgTypes 	{cons("Ins")}
+   
+    Atype Atype+ 	   -> Btype 	{cons("TApp")}
+    Atype       	   -> Btype
+   
+    Gtycon 		   -> Atype {cons("TCon")}
+    Tyvar 		   -> Atype {cons("TVar")}
+    "(#" Types "#)" 	   -> Atype {cons("TUnboxed?")}
+    "[" Type "]" 	   -> Atype {cons("TList")}
+    "(" Ctype ")" 	   -> Atype {bracket}
+
+    "(" Type "," Types ")" -> ProdType {cons("Cons")}
+    ProdType               -> Atype {cons("TProd")}
+   
+    Qtycon 	   	   -> Gtycon
+    "(" ")" 	           -> Gtycon {cons("TUnit")}
+    "(" "->" ")"           -> Gtycon {cons("TArrow")}
+    "[" "]"                -> Gtycon {cons("TList")}
+    "(" ","+ ")"           -> Gtycon {cons("TProduct")}
+   
+    Forall? Context? Type  -> Ctype {cons("CType")}
+   
+    {Type ","}* 	   -> Types0
+    {Type ","}+ 	   -> Types
+    Tyvar* 		   -> Tyvars
+
+    "forall" Tyvars "."    -> Forall {cons("Forall")}
+    Btype "=>"             -> Context {cons("Context")}

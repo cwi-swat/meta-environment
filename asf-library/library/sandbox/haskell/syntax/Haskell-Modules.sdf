@@ -1,0 +1,11 @@
+module Haskell-Modules
+imports ExtraSepLists[Topdecl ";" Topdecls]
+exports
+  context-free syntax
+    "module" Modid Exports?
+            "where" Body 	-> Module 	{cons("Module")}
+    Body 			-> Module 	{cons("Program")}
+    "{" Top "}" 		-> Body
+    Topdecls 			-> Top 		{cons("TopDecls")}
+    Decl 		   	-> Topdecl
+

@@ -1,0 +1,7 @@
+module Haskell-Type-Classes
+exports
+  context-free syntax
+    "class"    Type Where? 		-> Topdecl {cons("Class")}
+    "instance" CType Where? 		-> Topdecl {cons("Instance")}
+    "default"  "(" {Type ","}* ")" 	-> Topdecl {cons("Default")}
+

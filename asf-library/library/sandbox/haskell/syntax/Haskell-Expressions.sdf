@@ -1,0 +1,40 @@
+module Haskell-Expressions
+exports   
+  context-free syntax
+    Exp 				 -> AnyExp
+
+    Qvar 				 -> Exp 	{cons("Var")}
+    Gcon 				 -> Exp 	{cons("Constr")}
+    Literal 				 -> Exp 	{cons("Lit")}
+    "_" 				 -> Exp 	{cons("Wildcard")}
+    "(" Exps2 ")" 			 -> Exp 	{cons("Product")}
+    "(#" Exps "#)" 			 -> Exp 	{cons("Unboxed?")}
+    "(" Exp ")" 			 -> Exp 	{bracket}
+
+    {Exp ","}+ 				 -> Exps
+    Exp "," {Exp ","}+ 			 -> Exps2 	{cons("Cons")}
+    Aexp+				 -> Fargs
+
+  context-free priorities
+    "~" Exp 				  -> Exp 	{cons("TILDE?")}
+  > Qvar "@" Exp 			  -> Exp  	{cons("AT?")}
+  > Exp 				  -> Aexp1
+  > Exp "{" Fbinds "}" 			  -> Exp  	{cons("Labeled")}
+  > Exp				  	  -> Aexp
+  > Exp Exp				  -> Exp 	{cons("AppBin"),left}
+  > Exp 				  -> Infixexp
+  > Exp "::" Type 			  -> Exp 	{cons("Typed")}
+  > {"\\" Fargs OptSig "->" Exp		  -> Exp 	{cons("Abs")}
+     "let" Declbinds "in" Exp 		  -> Exp 	{cons("Let")} 
+     "if" AnyExp "then" AnyExp "else" Exp -> Exp 	{cons("If")}
+     "case" AnyExp "of" Altslist          -> Exp  	{cons("Case")}
+    }
+  > Exp                                   -> Exp10
+
+%% Notes:
+%% AnyExp is used to prevent priorities from forbidding expressions
+%% where the do not cause ambiguities.
+%% Fargs is used instead of Aexp+ because of a bug in the SDF2 
+%% normalizer; regular expression expansion does not take into
+%% account symbols used only in priority rules.
+

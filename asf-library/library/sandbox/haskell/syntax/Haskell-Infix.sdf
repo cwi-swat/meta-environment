@@ -1,0 +1,19 @@
+module Haskell-Infix
+exports
+  context-free syntax
+    "infix"  	   	  -> Infix 	{cons("Infix")}
+    "infixl" 	   	  -> Infix 	{cons("InfixL")}
+    "infixr" 	   	  -> Infix 	{cons("InfixR")}
+    INTEGER? 	   	  -> Prec
+    {Op ","}+ 	   	  -> Ops
+    Infix Prec Ops 	  -> Fixdecl 	{cons("FixDecl")}
+    Fixdecl 	   	  -> Decl 
+
+    "(" Infixexp Qop ")"  -> Exp 	{cons("LSection")}
+    "(" Qopm Infixexp ")" -> Exp 	{cons("RSection")}
+  context-free priorities
+    "-" Exp               -> Exp  {cons("Negation")}
+  > "~" Exp 		  -> Exp
+  , Exp                   -> Exp10
+  > Exp Qop Exp           -> Exp  {cons("OpApp"),left}
+
