@@ -524,13 +524,13 @@ proc EditModules { modlist } {
     }
 }
 
-proc EditSdf2Modules { modlist } {
+proc EditSyntaxModules { modlist } {
     foreach mod $modlist {
 	GBpost [format "edit-module(%s)" [ToId $mod]]
     }
 }
 
-proc EditEqsModules { modlist } {
+proc EditEquationsModules { modlist } {
     foreach mod $modlist {
 	GBpost [format "edit-eqs-module(%s)" [ToId $mod]]
     }
@@ -663,26 +663,6 @@ proc SaveAll {} {
     GBevent "save-all"
 }
 
-
-
-#--
-# RevertAll
-#-
-# generates the toolbus event to request reverting of all modules
-#--
-proc RevertAll {} {
-    GBevent "revert-all"
-}
-
-
-#--
-# CompileAll
-#-
-# generates the toolbus event to request compilation of all modules
-#--
-proc CompileAll {} {
-    GBevent "compile-all"
-}
 
 
 #--
@@ -989,7 +969,6 @@ proc define-menu-bar {} {
     $m add command -label "Save" -underline 0 -command {SaveAll}
     $m add separator
     $m add command -label "Clear" -underline 0 -command {ClearAll $c $g}
-    $m add command -label "Revert" -underline 0 -command {RevertAll}
     $m add separator
     $m add cascade -label "Export" -underline 1 -menu $m.export
 
@@ -1010,22 +989,12 @@ proc define-menu-bar {} {
     menubutton .menu.edit -text "Edit" -underline 0 -menu .menu.edit.menu
     set m .menu.edit.menu
     menu $m -tearoff 0
-    $m add command -label "Undo" -state disabled    -underline 0 -command {}
-    $m add separator
-    $m add command -label "Cut" -state disabled     -underline 2 -command {}
-    $m add command -label "Copy" -state disabled    -underline 0 -command {}
-    $m add command -label "Paste" -state disabled   -underline 0 -command {}
-    $m add separator
     $m add command -label "Preferences..." -state disabled  -underline 1 -command {}
 
 #    menubutton .menu.specification -text "Specification" -underline 0 \
 #	-menu .menu.specification.menu
 #    set m .menu.specification.menu
 #    menu $m
-
-# Adapted by Mark
-#    $m add separator
-#    $m add command -label "Compile All" -underline 0 -command {CompileAll}
 
     menubutton .menu.window -text "Graph" -underline 0 -menu .menu.window.menu
     set m .menu.window.menu
@@ -1073,11 +1042,11 @@ proc define-modules-frame {} {
 
     frame .modules.buttons
 
-    button .modules.buttons.editsdfmod -text "Edit Sdf2" \
-	-command {EditSdf2Modules [SelectedModules]}
-    button .modules.buttons.editeqsmod -text "Edit Eqs" \
-	-command {EditEqsModules [SelectedModules]}
-    button .modules.buttons.editterm -text "Term" \
+    button .modules.buttons.editsdfmod -text "Edit Syntax" \
+	-command {EditSyntaxModules [SelectedModules]}
+    button .modules.buttons.editeqsmod -text "Edit Equations" \
+	-command {EditEquationsModules [SelectedModules]}
+    button .modules.buttons.editterm -text "Edit Term" \
 	-command {foreach i [SelectedModules] {
 	    EditTermWidget $i
 	} }
@@ -1166,11 +1135,11 @@ proc define-status-frame {} {
 proc define-module-popup {} {
     set m .module-popup
     menu $m -tearoff 0
-    $m add command -label "Edit Sdf2 module" \
-        -command {EditSdf2Modules [GetObjectName $c]}
-    $m add command -label "Edit Eqs module" \
-        -command {EditEqsModules [GetObjectName $c]}
-    $m add command -label "Edit term" \
+    $m add command -label "Edit Syntax" \
+        -command {EditSyntaxModules [GetObjectName $c]}
+    $m add command -label "Edit Equations" \
+        -command {EditEquationsModules [GetObjectName $c]}
+    $m add command -label "Edit Term" \
         -command {EditTermWidget [GetObjectName $c]}
     $m add separator
     $m add command -label "Save module" \
