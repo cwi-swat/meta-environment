@@ -4,8 +4,8 @@ import sys
 
 from Tkinter import *
 
-def doit(A):
-	print "doit: ", A
+def doit(A,B):
+	print "doit: ", A, ", ", B
 
 def evalit(B):
 	print "evalit: ", B

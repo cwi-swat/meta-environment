@@ -5,7 +5,7 @@ let
   T : term
 in
   execute(p, P?) .
-  ( snd-do(P, doit(abc)) delay(sec(3)) .
+  ( snd-do(P, doit("abc", 4)) delay(sec(3)) .
     snd-eval(P, evalit(["rst", "uvw"])) .
     rec-value(P, evalit(T?)) .
     printf("Received %t from tool P\n", T)

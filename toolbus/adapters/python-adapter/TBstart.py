@@ -189,6 +189,7 @@ def dispatch_term(T):
 			if result:
 				TB.send(result)
 			else:
+				# <PO>: print warning?
 				TB.send("snd-void()")
 			return
 		elif T[1] == 'rec-terminate':
@@ -228,6 +229,7 @@ def dispatch_user(T):
 					cmd = cmd + "A[%d]" % i
 				else:
 					cmd = cmd + ",A[%d]" % i
+				i = i + 1
 			cmd = cmd + ")"
 				
 			try:
