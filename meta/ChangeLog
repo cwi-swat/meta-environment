@@ -20,6 +20,11 @@
 #
 # $Id$
 
+2001/01/09 (jurgenv@cwi.nl)
+   * removed generation of syntax for traversal functions. From now
+     on, write a traversal production for each sort that you wish to
+     write an equation for.
+
 2001/01/08 (jurgenv@cwi.nl)
    * added printing of versions of wish and tcldot to meta -V
 

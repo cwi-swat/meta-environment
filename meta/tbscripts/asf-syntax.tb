@@ -32,26 +32,13 @@ let
 in
   (
     rec-msg(make-asf-syntax(eqs(ModuleName?), Syntax?)) .
-
-#ifdef TRAVERSALS
-    snd-msg(generate-traversals(ModuleName, Syntax)) .
-    rec-msg(changed-syntax(Syntax?)) .
-#endif
-
-
     snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
     rec-msg(extended-syntax(Syntax?)) .
     snd-msg(asf-syntax(Syntax))  
   +
     rec-msg(make-asf-syntax(trm(ModuleName?), Syntax?)) .
-
-#ifdef TRAVERSALS
-    snd-msg(generate-traversals(ModuleName, Syntax)) .
+    snd-msg(remove-var-syntax(ModuleName, Syntax)) .
     rec-msg(changed-syntax(Syntax?)) .
-#endif
-
-   snd-msg(remove-var-syntax(ModuleName, Syntax)) .
-   rec-msg(changed-syntax(Syntax?)) .
-   snd-msg(asf-syntax(Syntax))  
+    snd-msg(asf-syntax(Syntax))  
   ) * delta
 endlet
