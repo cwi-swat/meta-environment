@@ -1,0 +1,26 @@
+module ExtClass
+
+imports Rstore
+imports JavaOperations
+imports MyPosInfo[CompilationUnit]
+imports MyPosInfo[ClassDeclaration]
+
+exports
+  context-free syntax
+    extractClass(CompilationUnit, RSTORE) -> RSTORE
+
+hiddens
+  context-free syntax
+    extractClass(CompilationUnit, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractClass(ClassDeclaration, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  variables
+    "&Area" -> Area
+    "&CompilationUnit" -> CompilationUnit
+    "&ClassDeclaration" -> ClassDeclaration
+    "&Rstore"[0-9]* -> RSTORE
+    "&Tuple" -> Elem # Elem

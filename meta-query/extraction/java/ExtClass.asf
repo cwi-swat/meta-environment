@@ -1,0 +1,7 @@
+equations
+
+[extractClass-start]
+  &Area = get-area(&CompilationUnit),
+  &Rstore2 = extractClass(&CompilationUnit, &Rstore1, &Area)
+  ===>
+  extractClass(&CompilationUnit, &Rstore1) = &Rstore2
