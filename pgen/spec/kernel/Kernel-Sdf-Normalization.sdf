@@ -15,11 +15,6 @@ hiddens
     attr-collect(Production,Productions) -> Productions
     prod-contains(Production,Productions) -> Bool
 
-
-exports
-  context-free syntax
-    "filter-attributes" ( Attributes ) -> Attributes
-
 hiddens
   variables
     "!"[0-9\']*         -> Attributes

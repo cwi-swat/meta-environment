@@ -53,8 +53,8 @@ ef5 = lookup_func ( ATreadFromString ( "prod(id(\"Basic-Sdf-Syntax\"),w(\"\"),[q
 ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Basic-Sdf-Syntax\"),w(\"\"),[ql(\"<\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"-VAR\"),w(\"\"),ql(\">\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
 ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Basic-Sdf-Syntax\"),w(\"\"),[ql(\"<\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"-CF\"),w(\"\"),ql(\">\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Basic-Sdf-Syntax\"),w(\"\"),[ql(\"<\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"-CF\"),w(\"\"),ql(\">\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
-ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Normalization\"),w(\"\"),[ql(\"filter-attributes\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Attributes\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attributes\"),w(\"\"),no-attrs)" ) ) ;
-ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Normalization\"),w(\"\"),[ql(\"filter-attributes\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Attributes\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attributes\"),w(\"\"),no-attrs)" ) ) ;
+ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attributes\"),w(\"\"),no-attrs)" ) ) ;
+ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attributes\"),w(\"\"),no-attrs)" ) ) ;
 ef8 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Productions\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
 ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Productions\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
 }
@@ -64,7 +64,7 @@ ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Basic_Sdf_Normalization12_1 ( ATerm arg0 ) {
 {
-ATerm tmp [ 7 ] ;
+ATerm tmp [ 6 ] ;
 FUNC_ENTRY ( lf_AUX_Basic_Sdf_Normalization12_1sym , ATmakeAppl ( lf_AUX_Basic_Sdf_Normalization12_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
@@ -82,8 +82,7 @@ if ( check_sym ( tmp [ 1 ] , ef3sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 4 ] , lf3sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-( tmp [ 6 ] = ( * ef7 ) ( tmp [ 3 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( ( * ef2 ) ( ( * ef4 ) ( make_nf1 ( ef3sym , lf3 ( make_list ( tmp [ 5 ] ) ) ) ) , ( * ef5 ) ( ( * ef6 ) ( tmp [ 2 ] ) ) , tmp [ 3 ] ) ) , make_list ( ( * ef2 ) ( make_nf1 ( ef3sym , lf3 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( tmp [ 2 ] ) ) ) ) ) , ( * ef6 ) ( tmp [ 2 ] ) , tmp [ 6 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( ( * ef2 ) ( ( * ef4 ) ( make_nf1 ( ef3sym , lf3 ( make_list ( tmp [ 5 ] ) ) ) ) , ( * ef5 ) ( ( * ef6 ) ( tmp [ 2 ] ) ) , tmp [ 3 ] ) ) , make_list ( ( * ef2 ) ( make_nf1 ( ef3sym , lf3 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( tmp [ 2 ] ) ) ) ) ) , ( * ef6 ) ( tmp [ 2 ] ) , ( * ef7 ) ( ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -121,7 +120,7 @@ FUNC_EXIT ( make_nf1 ( lf_AUX_Basic_Sdf_Normalization12_1sym , arg0 ) ) ;
 }
 ATerm lf_AUX_Basic_Sdf_Normalization12_1_recursive ( ATerm arg0 ) {
 {
-ATerm tmp [ 7 ] ;
+ATerm tmp [ 6 ] ;
 FUNC_ENTRY ( lf_AUX_Basic_Sdf_Normalization12_1_recursivesym , ATmakeAppl ( lf_AUX_Basic_Sdf_Normalization12_1_recursivesym , arg0 ) ) ;
 {
 ATerm atmp00 = arg0 ;
@@ -137,8 +136,7 @@ if ( check_sym ( tmp [ 1 ] , ef3sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 4 ] , lf3sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
-( tmp [ 6 ] = ( * ef7 ) ( tmp [ 3 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( ( * ef2 ) ( ( * ef4 ) ( make_nf1 ( ef3sym , lf3 ( make_list ( tmp [ 5 ] ) ) ) ) , ( * ef5 ) ( ( * ef6 ) ( tmp [ 2 ] ) ) , tmp [ 3 ] ) ) , make_list ( ( * ef2 ) ( make_nf1 ( ef3sym , lf3 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( tmp [ 2 ] ) ) ) ) ) , ( * ef6 ) ( tmp [ 2 ] ) , tmp [ 6 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( ( * ef2 ) ( ( * ef4 ) ( make_nf1 ( ef3sym , lf3 ( make_list ( tmp [ 5 ] ) ) ) ) , ( * ef5 ) ( ( * ef6 ) ( tmp [ 2 ] ) ) , tmp [ 3 ] ) ) , make_list ( ( * ef2 ) ( make_nf1 ( ef3sym , lf3 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( tmp [ 2 ] ) ) ) ) ) , ( * ef6 ) ( tmp [ 2 ] ) , ( * ef7 ) ( ) ) ) ) ) ) ) ;
 }
 }
 }

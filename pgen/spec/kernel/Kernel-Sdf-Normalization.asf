@@ -76,7 +76,3 @@ equations
            attr-collect(p1,p2 p*) = attr-collect(p3,p*)
 
   [default-ac-2'2] attr-collect(p1,p2 p*) = attr-collect(p1,p*)
-
-%% Filter attributes removes the attributes.
-
-  [default-fa-0] filter-attributes(!) =

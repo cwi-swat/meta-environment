@@ -39,9 +39,7 @@ equations
    [0] <_A      -LEXs>   = <_A -LEX>
    [0] <'a+ 'b+ -LEXs>   = <'a+ -LEXs> ++ <'b+ -LEXs>
    [0] <'a -> _A! -LEX>   = <'a -LEXs> -> <_A-LEX> !
-   [0] filter-attributes(!) = !1
-       =========================
-       <'a -> _A! -LEXs> = <'a -> _A! -LEX> <_A -LEXs> -> <_A-CF> !1
+   [0] <'a -> _A! -LEXs> = <'a -> _A! -LEX> <_A -LEXs> -> <_A-CF>
    [0] <p*        -LEXs> =   when p* =
    [0] <p+1 p+2   -LEXs> = <p+1 -LEXs> ++ <p+2 -LEXs>
    [0] <syntax p* -LEX>  = syntax <p* -LEXs>
@@ -86,10 +84,8 @@ equations
    [0] b-aux[[variables p*]]     = syntax <p* -VARs>
    [0] < -VARs>                  =
    [0] <p+1 p+2-VARs>            = <p+1-VARs> ++ <p+2-VARs>
-   [0] filter-attributes(!) = !1
-       =========================
-       <'a -> _A !-VARs>         = <'a-LEXs> -> <<_A-CF>-VAR> !
-                                    <<_A-CF>-VAR> -> <_A-CF> !1
+   [0] <'a -> _A !-VARs>         = <'a-LEXs> -> <<_A-CF>-VAR> !
+                                    <<_A-CF>-VAR> -> <_A-CF>
 
 %% Lexical variables are treated similarly, but their
 %% result sort is the corresponding lexical sort.

@@ -50,9 +50,3 @@ equations
         =======================================================================
         [[la*1, cc1 . las1, la*2, cc2 . las2, la*3]] =
         [[la*1, cc1 / cc3 . las1, cc3 . (las1 | las2), la*2, cc2 / cc3 . las2, la*3]]
-
-%% Filter attributes removes the attributes except for the prefer and avoid attributes.
-
-  [fa-1] filter-attributes({attr*1, prefer, attr*2}) = {prefer}
-
-  [fa-2] filter-attributes({attr*1, avoid, attr*2}) = {avoid}

@@ -58,7 +58,6 @@ AUX-Kernel-Sdf-Renaming4.c
 AUX-Kernel-Sdf-Renaming3.c
 AUX-Kernel-Sdf-Renaming2.c
 AUX-Kernel-Sdf-Renaming1.c
-AUX-Kernel-Sdf-Normalization7.c
 AUX-Kernel-Sdf-Normalization6.c
 AUX-Kernel-Sdf-Normalization5.c
 AUX-Kernel-Sdf-Normalization4.c
@@ -165,7 +164,6 @@ AUX-Kernel-Sdf-Syntax3.c
 AUX-Kernel-Sdf-Syntax2.c
 AUX-Kernel-Sdf-Syntax1.c
 AUX-Literals1.c
-AUX-IntCon2.c
 AUX-IntCon1.c
 AUX-Booleans6.c
 AUX-Booleans5.c

@@ -1,5 +1,9 @@
 $Id$
 
+2001/04/07 (markvdb@cwi.nl)
+  * removed the function filter-attributes which was used
+    to "propagate" avoid and prefer over generated injection chains.
+
 2001/05/30
   * Fixed a bug with respect to the Symbol Int+ construction, the
     normalizer still used the old notation {Symbol}Int+.
