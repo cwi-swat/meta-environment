@@ -91,9 +91,12 @@ in
     printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
     snd-msg(sm-module-renamed(Module))
   +
-    rec-msg(sm-add-import(Module?, ModuleId?)) .
-    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
-    snd-msg(sm-added-import(Module))
+    rec-msg(sm-add-import-to-module(Module?, ModuleId?)) .
+    snd-eval(SM, add-import-to-module(Module, ModuleId)) .
+    Module := no-tree .
+    rec-value(SM, module(Module?)) .
+    snd-msg(sm-import-added-to-module(Module)) .
+    Module := no-tree
   )
   * delta
 endlet
