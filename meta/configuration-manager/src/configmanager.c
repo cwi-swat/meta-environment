@@ -73,7 +73,7 @@ ATerm process_config_file(int cid, char *filename, char *contents)
     paths = ATinsert(paths, ATmake("<str>", pathline));
   }
 
-  return ATmake("snd-value(search-paths(<term>))", paths);
+  return ATmake("snd-value(search-paths(<term>))", ATreverse(paths));
 }
 
 void usage(char *prg, ATbool is_err)
