@@ -45,9 +45,12 @@ in
   +
     rec-msg(se-move-focus(EditorId?, Move?)) .
     snd-eval(SE, move-focus(EditorId, Move)) .
-    rec-value(SE, focus(Focus?)) .
-    /* TODO: remove reference to Text Editor internals */
-    snd-msg(te-set-focus(EditorId, Focus))
+    (
+      rec-value(SE, focus(Focus?)) .
+      snd-msg(te-set-focus(EditorId, Focus))
+    +
+      rec-value(SE, no-such-editor)
+    )
   +
     rec-msg(se-invalidate-tree(EditorId?)) .
     snd-eval(SE, invalidate-tree(EditorId)) .

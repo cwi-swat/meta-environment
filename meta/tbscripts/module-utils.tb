@@ -412,7 +412,7 @@ let
   Tree : term,
   DependingModules : list,
   Imports : list,
-  Status : term,
+  Error : term,
   Extension : str,
   Type : term
 in
@@ -431,10 +431,8 @@ in
       rec-msg(no-updating-needed)
     +
       rec-msg(updating-succeeded(DependingModules?)) .
-      Error("Check consistency: syntax of module %s changed on disk", [ModuleName]) .
-      Status := success .
-      Parse-Syntax(FileName, FileText, Type, Tree?, Status?) .
-      if equal(Status, success) then
+      Parse-Syntax(FileName, FileText, Type, Tree?, Error?) .
+      if equal(Error, no-errors) then
         snd-msg(update-module-in-db(ModuleName, Tree, Type)) .
 	(
           rec-msg(updating-succeeded(Imports?)).
@@ -445,14 +443,13 @@ in
           Error("Check consistency: module name %s contains an error", [ModuleName])
         )
       else
-        Error("Check consistency: syntax of module %s has %t", [ModuleName, Status])
+        ProcessParseError(Error)
       fi
     )
   +
     rec-msg(io-file-not-exists) .
     snd-msg(close-module-in-db(ModuleName)) .
-    rec-msg(changed-modules(DependingModules?)) .
-    Error("Check consistency: syntax of module %s removed on disk", [ModuleName])
+    rec-msg(changed-modules(DependingModules?))
   )
 endlet
 
@@ -476,11 +473,9 @@ in
     (
       rec-msg(no-updating-needed)
     +
-      rec-msg(eqs-text-updated(ModuleName)) .
-      Error("Check consistency: equations of module %s changed on disk", [ModuleName])
+      rec-msg(eqs-text-updated(ModuleName))
     +
-      rec-msg(eqs-text-added(ModuleName)) .
-      Error("Check consistency: equations of module %s did not exist yet", [ModuleName])
+      rec-msg(eqs-text-added(ModuleName))
     )
   +
     rec-msg(io-file-not-exists) .
@@ -488,8 +483,7 @@ in
     (
       rec-msg(eqs-text(ModuleName, RepositoryText?)) .
       snd-msg(remove-eqs-from-db(ModuleName)) .
-      rec-msg(eqs-removed-from-db) .
-      Error("Check consistency: equations of module %s removed on disk", [ModuleName])
+      rec-msg(eqs-removed-from-db)
     +
       rec-msg(no-eqs-text(ModuleName))
     )

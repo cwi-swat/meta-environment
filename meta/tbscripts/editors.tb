@@ -326,8 +326,7 @@ process KillModuleEditor(EditorId : term, ModuleName : str, Type : term, Editors
   if equal(EditorsSynchronized, false)
   then
     snd-msg(revert-module(ModuleName, Type)) .
-    rec-msg(module-reverted(ModuleName)) .
-    snd-note(ui-status(errorf("Dirty module %s is reread from disk", [ModuleName])))
+    rec-msg(module-reverted(ModuleName))
   else
     tau
   fi

@@ -307,7 +307,7 @@ in
       StackPushTerm(Stack,Stack?,RTree).
       ReturnSuccess(EditorId,Stack)
     else
-      ReturnFailed(EditorId,Stack)
+      ReturnAbort(EditorId,Stack)
     fi
       +
         rec-msg(set-root, Stack?, EditorId?) .
@@ -321,7 +321,7 @@ in
           StackPushTerm(Stack,Stack?,RTree) .
           ReturnSuccess(EditorId,Stack)
         else
-          ReturnFailed(EditorId,Stack)
+          ReturnAbort(EditorId,Stack)
         fi
       +
         rec-msg(get-focus-location, Stack?, EditorId?) .

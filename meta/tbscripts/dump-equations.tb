@@ -41,7 +41,9 @@ in
       )
     +
       rec-msg(equations-incomplete) .
-      snd-note(ui-status(errorf("Specification incomplete for %s", [ModuleName])))
+      snd-note(ui-status(statf(Id, 
+                               "Specification incomplete for %s", 
+			       [ModuleName])))
     ) .
     snd-note(ui-status(endstat(Id))) .
     snd-msg(equations-dumped)

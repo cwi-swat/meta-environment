@@ -22,8 +22,8 @@ in
 	rec-msg(compile-semantics-hook-done(ModuleName))
       +
         rec-msg(equations-incomplete) .
-        snd-note(ui-status(errorf("Specification incomplete for %s",
-                                  [ModuleName])))
+        snd-note(ui-status(statf(Id, "Specification incomplete for %s",
+                                     [ModuleName])))
       ) .
       snd-msg(compilation-ready(ModuleName)) .
       snd-note(ui-status(endstat(Id))) 
