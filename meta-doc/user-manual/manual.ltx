@@ -307,7 +307,7 @@ to \asfsdf\ in Section~\ref{ASF+SDF}.
 
 \subsection{Further Reading}
 
-\cite{DHK96}
+%%\cite{DHK96}
 
 \section{Starting the System}
 
@@ -709,7 +709,7 @@ successful the bottom line in the \xemacs\ window contains the message
 and changes the bottom line message.
 
 \begin{figure}[t]
-  \centerline{\epsfig{file=meta-env-menu.ps,width=2cm}}
+  \centerline{\epsfig{file=meta-env-menu.ps,width=1.5cm}}
   \caption{\label{FIG:meta-env-menu} {\tt Meta-Environment} menu (editor)}
 \end{figure}
 
@@ -1714,7 +1714,10 @@ The following operators are available for character classes
 \end{itemize}
 The three binary operators are left-associative.
 See Figure \ref{CODE:charclasses} of lexical definitions
-using character classes. (** UITLEG **)
+using character classes. This definition of characters contains
+all possible characters, either by means of the ordinary representation
+or via the decimal representation of characters. The character class union
+is used as a kind of abbreviation mechanism.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -2379,17 +2382,80 @@ exports
 \subsection{Restrictions} \label{Restrictions} \label{ContextFreeRestrictions}
 \label{LexicalRestrictions}
 
-The use of restrictions have already been demonstrated in Section 
-\ref{lexical-syntax} where this mechanism is used to specified
-the lexical disambiguation rule ``longest match per sort''.
+One of the disambiguation rules on the lexical level is prefer longest match,
+the disambiguation will be discussed in more detail in \ref{lex-ambiguaty}.
+The restrictions offer the notion to express this lexical disambiguation
+rule.
 
-Restrictions come in two flavours:
+Via the restriction it is possible to indicate that a symbol may not be
+followed by a letter from some character class (lookahead). 
+There is the possibility to have a lookahead of more than one character. 
+There are two different restrictions:
+
 \begin{itemize}
 \item lexical restrictions;
 \item context-free restrictions.
 \end{itemize}
 
-(*** Verder uitwerken ***)
+The general form of a restriction is 
+
+\begin{verbatim}
+<Symbol>+ -/- <Lookaheads>
+\end{verbatim}
+
+Where <Symbol> is in case of lexical restrictions either a literal
+or a sort, and in case of context-free restrictions only sort is
+allowed. The {\tt Lookaheads} are slightly more complex.
+The most compact way is to give the \sdf\ definition of the
+{\tt Lookaheads} and illustrate its use by means of some examples.
+
+\begin{verbatim}
+  context-free syntax
+    CharClass                    -> Lookahead
+    CharClass "." Lookaheads     -> Lookahead
+    Lookahead                    -> Lookaheads
+    Lookaheads "|" Lookaheads    -> Lookaheads {right}
+    "(" Lookaheads ")"           -> Lookaheads {bracket}
+    "[[" {Lookahead ","}* "]]"   -> Lookaheads 
+\end{verbatim}
+
+The first example is how the lexical restrictions can be used to
+prevent the recognition of erroneous expressions in a small functional
+language, see Figure \ref{CODE:functional}, this example is initial presented
+in \cite{Vis97}.
+The lexical restriction enforces the recognition of for instance {\tt letter}
+as a 6 character long lexical token instead of the keyword {\tt let}
+followed by {\tt ter} which is then recognized as a {\tt Var}.
+The context-free restriction forbids that a variable may be directly
+followed by a letter. This latter context-free restriction ....
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Functional
+
+imports Layout
+
+exports
+  sorts Var Term
+  lexical syntax
+    [a-z]+ -> Var
+  context-free syntax
+    Var                          -> Term
+    Term Term                    -> Term {left}
+    "let" Var "=" Term "in" Term -> Term
+
+  lexical restrictions
+    "let" "in" -/- [a-z]
+
+  context-free restrictions
+    Var -/- [a-z]
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Simple functional language}\label{CODE:functional}
+\end{figure}   
+
+
 
 \subsection{Variables} \label{Variables}
 
