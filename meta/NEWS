@@ -20,7 +20,11 @@
 #
 # $Id$
 
-Version 0.12
+Version 0.0.13
+   * Online help files are now installed in <prefix>/share/meta
+   * replaced --with-tcldot option by --with-graphviz option to make
+     configuration more easy.
+Version 0.0.12
 
    * ASF+SDF Meta-Environment is now configured/build using automake
 
