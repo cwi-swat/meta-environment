@@ -57,7 +57,7 @@ elt-list(Balanced-Tree[[Elt]]) -> Elt*
 
 hiddens
 
-imports asf/syntax/Comments
+imports basic/Comments
 
 variables
 "e*"[0-9\']* -> Elt*
