@@ -1,6 +1,7 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
+%%                        The Netherlands.
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -64,11 +65,11 @@ equations
 
   [default-iist-1'3] is-iter-sep-term(Aterm) = false
 
-  [ivt-1'1] is-var-term(var(Literal,SortIter)) = true
+  [ivt-1'1] is-var-term(var($Literal,SortIter)) = true
 
   [default-ivt-1'2] is-var-term(Aterm) = false
 
-  [ilt-1'1] is-lex-term(lex(Literal,SortIter)) = true
+  [ilt-1'1] is-lex-term(lex($Literal,SortIter)) = true
 
   [default-ilt-1'2] is-lex-term(Aterm) = false
 
@@ -81,7 +82,7 @@ equations
   [default-ilt-1'2] is-list-term(Aterm) = false
 
   [idt-1'1] is-tag-prod(Prod1) = true,
-            index(Args1,2) = lex(literal(""" "d" "e" "f" "a" "u" "l" "t" "-" Char* """),Sort)
+            index(Args1,2) = lex(literal(""" "d" "e" "f" "a" "u" "l" "t" "-" Char* """),$Sort)
             =================================================================================
             is-default-tag(appl(Prod1,Ws1,Args1)) = true
 
@@ -199,30 +200,30 @@ equations
              SymbolList = list(Iter,Ws5,CfArgs),
              is-symbol-iter(Iter) = true
              ===========================
-             term-get-args-prod(appl(Prod1,Ws0,[Symbols,Ws1,l("->"),Ws2,Symbol,Ws3,Attr])) = CfArgs
+             term-get-args-prod(appl(Prod1,Ws0,[Symbols,Ws1,l("->"),Ws2,$Symbol,Ws3,Attr])) = CfArgs
 
   [tgap-1'2] is-prefix-production-prod(Prod1) = true,
-             Symbol2 = list(Iter,w(""),CfArgs)
+             $Symbol2 = list(Iter,w(""),CfArgs)
              =======================================
-             term-get-args-prod(appl(Prod1,Ws0,[Symbol1,Ws1,l("("),Ws2,Symbol2,Ws3,l(")"),Ws4,
-                                     l("->"),Ws5,Symbol3,Ws6,Attr])) = CfArgs
+             term-get-args-prod(appl(Prod1,Ws0,[$Symbol1,Ws1,l("("),Ws2,$Symbol2,Ws3,l(")"),Ws4,
+                                     l("->"),Ws5,$Symbol3,Ws6,Attr])) = CfArgs
 
   [tgsp-1'1] is-production-prod(Prod) = true,
-             Symbol = appl(Prod2,Ws4,[Sort]),
+             $Symbol = appl(Prod2,Ws4,[$Sort]),
              is-sort-symbol-prod(Prod2) = true,
-             Sort = lex(literal(Char*),sort("Sort"))
+             $Sort = lex(literal(Char*),sort("Sort"))
              =======================================
-             term-get-symbol-prod(appl(Prod,Ws0,[Symbols,Ws1,l("->"),Ws2,Symbol,Ws3,Attr])) =
+             term-get-symbol-prod(appl(Prod,Ws0,[Symbols,Ws1,l("->"),Ws2,$Symbol,Ws3,Attr])) =
                sort(literal(Char*))
 
   [tgap-1'1] is-production-prod(Prod) = true
              ===============================
-             term-get-attrs-prod(appl(Prod,Ws0,[Symbols,Ws1,l("->"),Ws2,Symbol,Ws3,Attr])) = Attr
+             term-get-attrs-prod(appl(Prod,Ws0,[Symbols,Ws1,l("->"),Ws2,$Symbol,Ws3,Attr])) = Attr
 
   [tgap-1'2] is-prefix-production-prod(Prod) = true
              =======================================
-             term-get-attrs-prod(appl(Prod,Ws0,[Symbol1,Ws1,l("("),Ws2,Symbol2,Ws3,l(")"),Ws4,
-                                     l("->"),Ws5,Symbol3,Ws6,Attr])) = Attr
+             term-get-attrs-prod(appl(Prod,Ws0,[$Symbol1,Ws1,l("("),Ws2,$Symbol2,Ws3,l(")"),Ws4,
+                                     l("->"),Ws5,$Symbol3,Ws6,Attr])) = Attr
 
 %% Various functions to check the productions.
 
@@ -365,8 +366,8 @@ equations
 
   [default-icip-1'2] is-ceq-impl-prod(Prod) = false
 
-  [icp-1'1] is-general-equ-prod(prod(id("GEN-Equations"),w(""),[Sort,w(""),ql("="),
-                                w(""),Sort],w(""),l("->"),w(""),sort("Equation"),w(""),no-attrs)) = true
+  [icp-1'1] is-general-equ-prod(prod(id("GEN-Equations"),w(""),[$Sort,w(""),ql("="),
+                                w(""),$Sort],w(""),l("->"),w(""),sort("Equation"),w(""),no-attrs)) = true
 
   [default-icp-1'2] is-general-equ-prod(Prod) = false
 
@@ -409,13 +410,13 @@ equations
   [default-isp-1'2] is-condition-iter(Iter) = false
 
   [iip-1'1] is-pos-cond-prod(prod(id("GEN-Equations"),
-                             w(""),[Sort,w(""),ql("="),w(""),Sort],w(""),l("->"),
+                             w(""),[$Sort,w(""),ql("="),w(""),$Sort],w(""),l("->"),
                              w(""),sort("Condition"),w(""),no-attrs)) = true
 
   [default-iip-1'2] is-pos-cond-prod(Prod) = false
 
   [iip-1'1] is-neg-cond-prod(prod(id("GEN-Equations"),
-                             w(""),[Sort,w(""),ql("!="),w(""),Sort],w(""),l("->"),
+                             w(""),[$Sort,w(""),ql("!="),w(""),$Sort],w(""),l("->"),
                              w(""),sort("Condition"),w(""),no-attrs)) = true
 
   [default-iip-1'2] is-neg-cond-prod(Prod) = false

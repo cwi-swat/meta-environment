@@ -19,15 +19,15 @@
 %%
 equations
 
-  [tlf2e-1'1] term-get-symbol-prod(LexFunc) = Symbol,
-              includes-sortname(Symbol,Sortlist) = true
+  [tlf2e-1'1] term-get-symbol-prod(LexFunc) = $Symbol,
+              includes-sortname($Symbol,Sortlist) = true
               =========================================
               term-lexfunc2sign(LexFunc,Sortlist,Nametable) = (,Sortlist,Nametable)
 
-  [tlf2e-1'2] term-get-symbol-prod(LexFunc) = Symbol,
-              includes-sortname(Symbol,{Lexsort*}) = false,
-              Symbol = sort($L),
-              sort2id(Symbol) = Funid1,
+  [tlf2e-1'2] term-get-symbol-prod(LexFunc) = $Symbol,
+              includes-sortname($Symbol,{Lexsort*}) = false,
+              $Symbol = sort($L),
+              sort2id($Symbol) = Funid1,
               make-lex-cons-func($L) = Funid3,
               nt-lookup("{sort(\"CHAR\")}",Nametable1) =
                 (Funid4,Nametable2),
@@ -36,7 +36,7 @@ equations
               =========================================
               term-lexfunc2sign(LexFunc,{Lexsort*},Nametable1) =
                ("{sort(\"CHAR\")}"( _ );
-                Funid5( _ ),{Lexsort*;Symbol},Nametable3)
+                Funid5( _ ),{Lexsort*;$Symbol},Nametable3)
 
   [tcf2e-1'1] term-cffunc2id(Aname,CfFunc) = Funid1,
               term-get-args-prod(CfFunc) = CfArgs,
@@ -65,44 +65,44 @@ equations
   [tcf2a-2'1] is-sort-symbol-prod(Prod) = true,
               gen-var(1) = Varid
               ==================
-              term-cfelem2args(appl(Prod,Ws,[Sort]),Nametable) = (,Varid,Nametable)
+              term-cfelem2args(appl(Prod,Ws,[$Sort]),Nametable) = (,Varid,Nametable)
 
-  [tcf2a-2'2] is-iter-sep-term(Symbol) = true,
+  [tcf2a-2'2] is-iter-sep-term($Symbol) = true,
               gen-var(1) = Varid,
-              term-iter2id(Symbol) = Funid1,
+              term-iter2id($Symbol) = Funid1,
               nt-lookup(Funid1,Nametable1) = (Funid2,Nametable2),
               make-funcdef(Funid1,Varid) = Funcdef
               ====================================
-              term-cfelem2args(Symbol,Nametable1) = (Funcdef,Varid,Nametable2)
+              term-cfelem2args($Symbol,Nametable1) = (Funcdef,Varid,Nametable2)
 
-  [tcf2a-2'3] is-iter-term(Symbol) = true,
+  [tcf2a-2'3] is-iter-term($Symbol) = true,
               gen-var(1) = Varid,
-              term-iter2id(Symbol) = Funid1,
+              term-iter2id($Symbol) = Funid1,
               nt-lookup(Funid1,Nametable1) = (Funid2,Nametable2),
               make-funcdef(Funid1,Varid) = Funcdef
               ====================================
-              term-cfelem2args(Symbol,Nametable1) = (Funcdef,Varid,Nametable2)
+              term-cfelem2args($Symbol,Nametable1) = (Funcdef,Varid,Nametable2)
 
   [default-cf2a-2'4] term-cfelem2args(CfElem,Nametable) = (,,Nametable)
 
 
   [tcf2i-1'1] is-production-prod(Prod) = true,
               symbols2id(Symbols) = Funid1,
-              symbol2id(Symbol) = Funid2,
+              symbol2id($Symbol) = Funid2,
               attrs2id(Attr) = Funid3
               =======================
               term-cffunc2id(id(literal(""" Char* """)),appl(Prod,w(""),
-                                  [Symbols,Ws1,l("->"),Ws2,Symbol,Ws3,Attr])) =
+                                  [Symbols,Ws1,l("->"),Ws2,$Symbol,Ws3,Attr])) =
                 "prod(id(" ++ funid(""" "\" """ Char* "\" """ """) ++ "),w(\"\")," ++ Funid1 ++ ",w(\"\"),l(\"->\"),w(\"\")," ++ Funid2 ++  ",w(\"\")," ++ Funid3 ++ ")"
 
   [tcf2i-1'2] is-prefix-production-prod(Prod) = true,
-              literal2id(Symbol1) = Funid1,
-              argslist2id(Symbol2) = Funid2,
-              symbol2id(Symbol3) = Funid3,
+              literal2id($Symbol1) = Funid1,
+              argslist2id($Symbol2) = Funid2,
+              symbol2id($Symbol3) = Funid3,
               attrs2id(Attr) = Funid4
               =======================
               term-cffunc2id(id(literal(""" Char* """)),appl(Prod,w(""),
-                                  [Symbol1,Ws1,l("("),Ws2,Symbol2,Ws3,l(")"),Ws4,l("->"),Ws5,Symbol3,Ws6,Attr])) =
+                                  [$Symbol1,Ws1,l("("),Ws2,$Symbol2,Ws3,l(")"),Ws4,l("->"),Ws5,$Symbol3,Ws6,Attr])) =
                 "prod(id(" ++ funid(""" "\" """ Char* "\" """ """) ++ "),w(\"\"),[" ++ Funid1 ++
                 ",w(\"\"),ql(\"(\"),w(\"\")," ++ Funid2 ++
                 ",w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\")," ++ Funid3 ++
@@ -123,12 +123,12 @@ equations
              ==============================
              symbollist2id(list(Iter,w(""),[Symbol+])) = Funid
 
-  [sp2i-1'1] symbolplus2id(Symbol) = symbol2id(Symbol)
+  [sp2i-1'1] symbolplus2id($Symbol) = symbol2id($Symbol)
 
-  [sp2i-1'2] symbol2id(Symbol) = Funid1,
+  [sp2i-1'2] symbol2id($Symbol) = Funid1,
              symbolplus2id(Symbol+) = Funid2
              ===============================
-             symbolplus2id(Symbol,Ws,Symbol+) = Funid1 ++  ",w(\"\")," ++ Funid2
+             symbolplus2id($Symbol,Ws,Symbol+) = Funid1 ++  ",w(\"\")," ++ Funid2
 
   [al2i-1'1] is-symbol-itersep(Iter) = true
              ==============================
@@ -139,12 +139,12 @@ equations
              ==============================
              argslist2id(list(Iter,w(""),[Symbol+])) = Funid
 
-  [ap2i-1'1] argsplus2id(Symbol) = symbol2id(Symbol)
+  [ap2i-1'1] argsplus2id($Symbol) = symbol2id($Symbol)
 
-  [ap2i-1'2] symbol2id(Symbol) = Funid1,
+  [ap2i-1'2] symbol2id($Symbol) = Funid1,
              argsplus2id(Symbol+) = Funid2
              ===============================
-             argsplus2id(Symbol,Ws1,Sep,Ws2,Symbol+) = Funid1 ++ ",w(\"\"),ql(\",\"),w(\"\")," ++ Funid2
+             argsplus2id($Symbol,Ws1,Sep,Ws2,Symbol+) = Funid1 ++ ",w(\"\"),ql(\",\"),w(\"\")," ++ Funid2
 
   [s2i-1'1] is-literal-symbol-prod(Prod) = true,
             literal2id($Literal) = Funid
@@ -152,17 +152,17 @@ equations
             symbol2id(appl(Prod,Ws,[$Literal])) = Funid
 
   [s2i-1'2] is-sort-symbol-prod(Prod) = true,
-            term-sort2id(Sort) = Funid
+            term-sort2id($Sort) = Funid
             ==========================
-            symbol2id(appl(Prod,Ws,[Sort])) = Funid
+            symbol2id(appl(Prod,Ws,[$Sort])) = Funid
 
-  [s2i-1'3] is-iter-term(Symbol) = true
+  [s2i-1'3] is-iter-term($Symbol) = true
             ===========================
-            symbol2id(Symbol) = ext-term-iter2id(Symbol)
+            symbol2id($Symbol) = ext-term-iter2id($Symbol)
 
-  [s2i-1'4] is-iter-sep-term(Symbol) = true
+  [s2i-1'4] is-iter-sep-term($Symbol) = true
             ===============================
-            symbol2id(Symbol) = ext-term-iter2id(Symbol)
+            symbol2id($Symbol) = ext-term-iter2id($Symbol)
 
   [ts2i-1'1] term-sort2id(lex(literal(Char*),sort("Sort"))) = "sort(\"" ++ funid(Char*) ++ "\")"
 
@@ -171,22 +171,23 @@ equations
             ===========================
             literal2id(appl(Prod,Ws,[$Literal])) = Funid
 
-  [l2i-1'1] escape(literal(""" Char*1 """)) = literal(""" Char*2 """)
+  [l2i-1'2] escape(literal(""" Char*1 """)) = literal(""" Char*2 """),
+            "ql(\"" ++ funid(""" Char*2 """) ++ "\")" = Funid
             =========================================================
             literal2id(lex(literal(""" "\" """ Char*1 "\" """ """),sort("Literal"))) =
-              "ql(\"" ++ funid(""" Char*2 """) ++ "\")"
+              Funid %%"ql(\"" ++ funid(""" Char*2 """) ++ "\")"
 
-  [default-l2i-1'2] escape(literal(""" Char*1 """)) = literal(""" Char*2 """)
+  [default-l2i-1'3] escape(literal(""" Char*1 """)) = literal(""" Char*2 """)
                     =========================================================
                     literal2id(lex(literal(""" Char*1 """),sort("Literal"))) =
                       "l(" ++ funid(""" Char*2 """) ++ ")"
 
-  [l2i-1'3] escape(literal(""" Char*1 """)) = literal(""" Char*2 """)
+  [l2i-1'4] escape(literal(""" Char*1 """)) = literal(""" Char*2 """)
             =========================================================
             literal2id(lex(literal(""" "\" """ Char*1 "\" """ """),sort("UQLiteral"))) =
               "ql(\"" ++ funid(""" Char*2 """) ++ "\")"
 
-  [default-l2i-1'4] escape(literal(""" Char*1 """)) = literal(""" Char*2 """)
+  [default-l2i-1'5] escape(literal(""" Char*1 """)) = literal(""" Char*2 """)
                     =========================================================
                     literal2id(lex(literal(""" Char*1 """),sort("UQLiteral"))) = "ql(\"" ++ funid(""" Char*2 """) ++ "\")"
 
@@ -261,53 +262,53 @@ equations
               associativity-attr2id(appl(Prod,Ws,Attr)) = "l(\"non-assoc\")"
 
   [ti2i-1'1] is-iter-star-prod(Prod) = true,
-             symbol2id(Symbol) = Funid
+             symbol2id($Symbol) = Funid
              =========================
-             term-iter2id(appl(Prod,Ws,[Symbol,Ws2,l("*")])) = "{" ++ Funid ++ "}"
+             term-iter2id(appl(Prod,Ws,[$Symbol,Ws2,l("*")])) = "{" ++ Funid ++ "}"
 
   [ti2i-1'2] is-iter-plus-prod(Prod) = true,
-             symbol2id(Symbol) = Funid
+             symbol2id($Symbol) = Funid
              =========================
-             term-iter2id(appl(Prod,Ws,[Symbol,Ws2,l("+")])) = "{" ++ Funid ++ "}"
+             term-iter2id(appl(Prod,Ws,[$Symbol,Ws2,l("+")])) = "{" ++ Funid ++ "}"
 
   [ti2i-1'3] is-iter-sep-star-prod(Prod) = true,
-             symbol2id(Symbol1) = Funid1,
-             symbol2id(Symbol2) = Funid2
+             symbol2id($Symbol1) = Funid1,
+             symbol2id($Symbol2) = Funid2
              ===========================
-             term-iter2id(appl(Prod,Ws1,[l("{"),Ws2,Symbol1,Ws3,Symbol2,Ws4,l("}"),Ws5,l("*")])) =
+             term-iter2id(appl(Prod,Ws1,[l("{"),Ws2,$Symbol1,Ws3,$Symbol2,Ws4,l("}"),Ws5,l("*")])) =
                "{" ++ Funid1 ++ "," ++ Funid2 ++ "}"
 
   [ti2i-1'4] is-iter-sep-plus-prod(Prod) = true,
-             symbol2id(Symbol1) = Funid1,
-             symbol2id(Symbol2) = Funid2
+             symbol2id($Symbol1) = Funid1,
+             symbol2id($Symbol2) = Funid2
              ===========================
-             term-iter2id(appl(Prod,Ws1,[l("{"),Ws2,Symbol1,Ws3,Symbol2,Ws4,l("}"),Ws5,l("+")])) =
+             term-iter2id(appl(Prod,Ws1,[l("{"),Ws2,$Symbol1,Ws3,$Symbol2,Ws4,l("}"),Ws5,l("+")])) =
                "{" ++ Funid1 ++ "," ++ Funid2 ++ "}"
 
   [ti2i-1'1] is-iter-star-prod(Prod) = true,
-             symbol2id(Symbol) = Funid
+             symbol2id($Symbol) = Funid
              =========================
-             ext-term-iter2id(appl(Prod,Ws,[Symbol,Ws2,l("*")])) =
+             ext-term-iter2id(appl(Prod,Ws,[$Symbol,Ws2,l("*")])) =
                "iter(" ++ Funid ++ ",w(\"\"),l(\"*\"))"
 
   [ti2i-1'2] is-iter-plus-prod(Prod) = true,
-             symbol2id(Symbol) = Funid
+             symbol2id($Symbol) = Funid
              =========================
-             ext-term-iter2id(appl(Prod,Ws,[Symbol,Ws2,l("+")])) = "iter(" ++ Funid ++ ",w(\"\"),l(\"+\"))"
+             ext-term-iter2id(appl(Prod,Ws,[$Symbol,Ws2,l("+")])) = "iter(" ++ Funid ++ ",w(\"\"),l(\"+\"))"
 
   [ti2i-1'3] is-iter-sep-star-prod(Prod) = true,
-             symbol2id(Symbol1) = Funid1,
-             symbol2id(Symbol2) = Funid2
+             symbol2id($Symbol1) = Funid1,
+             symbol2id($Symbol2) = Funid2
              ===========================
-             ext-term-iter2id(appl(Prod,Ws1,[l("{"),Ws2,Symbol1,Ws3,Symbol2,Ws4,l("}"),Ws5,l("*")])) =
+             ext-term-iter2id(appl(Prod,Ws1,[l("{"),Ws2,$Symbol1,Ws3,$Symbol2,Ws4,l("}"),Ws5,l("*")])) =
                "iter-sep(l(\"{\"),w(\"\")," ++ Funid1 ++ ",w(\"\")," ++
                Funid2 ++ ",w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))"
 
   [ti2i-1'4] is-iter-sep-plus-prod(Prod) = true,
-             symbol2id(Symbol1) = Funid1,
-             symbol2id(Symbol2) = Funid2
+             symbol2id($Symbol1) = Funid1,
+             symbol2id($Symbol2) = Funid2
              ===========================
-             ext-term-iter2id(appl(Prod,Ws1,[l("{"),Ws2,Symbol1,Ws3,Symbol2,Ws4,l("}"),Ws5,l("+")])) =
+             ext-term-iter2id(appl(Prod,Ws1,[l("{"),Ws2,$Symbol1,Ws3,$Symbol2,Ws4,l("}"),Ws5,l("+")])) =
                "iter-sep(l(\"{\"),w(\"\")," ++ Funid1 ++ ",w(\"\")," ++
                Funid2 ++ ",w(\"\"),l(\"}\"),w(\"\"),l(\"+\"))"
 

@@ -1,6 +1,7 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+%%                        The Netherlands. 
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -91,21 +92,21 @@ exports
 
 hiddens
   variables
-    "Literal"[0-9\']*      -> Literal
+    "$Literal"[0-9\']*     -> Literal
     "CfArgs"[0-9\']*       -> ATermList
     "Aarg"[0-9\']*         -> ATerm
     "Args"[0-9\']*         -> ATermList
     "Aterm"[0-9\']*        -> ATerm
     "Prod"[0-9\']*         -> ATerm
     "Ws"[0-9\']*           -> ATerm
-    "Symbol"[0-9\']*       -> ATerm
+    "$Symbol"[0-9\']*      -> ATerm
     "Symbols"[0-9\']*      -> ATerm
     "SymbolList"[0-9\']*   -> ATerm
     "Attr"[0-9\']*         -> ATerm
     "Iter"[0-9\']*         -> ATerm
     "CeCeq"[0-9\']*        -> ATerm
     "Anno"[0-9\']*         -> ATerm
-    "Sort"[0-9\']*         -> ATerm
+    "$Sort"[0-9\']*        -> ATerm
     "SortIter"[0-9\']*     -> ATerm
     "Alhs"[0-9\']*         -> ATerm
     "Arhs"[0-9\']*         -> ATerm

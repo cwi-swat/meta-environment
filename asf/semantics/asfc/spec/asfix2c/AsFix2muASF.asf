@@ -1,6 +1,7 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+%%                        The Netherlands. 
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -34,10 +35,10 @@ equations
 
   [e2r-1'1] eqs2rules(no-equations,Nametable) = (,,Nametable)
 
-  [e2r-1'2] get-cons(Equations) = equations,
-            Equations[cond-equations] = CeqEqs
+  [e2r-1'2] get-cons($Equations) = equations,
+            $Equations[cond-equations] = CeqEqs
             ==================================
-            eqs2rules(Equations,Nametable) = ceqeqs2rules(CeqEqs,Nametable)
+            eqs2rules($Equations,Nametable) = ceqeqs2rules(CeqEqs,Nametable)
 
   [ces2r-1'1] ceqeqs2rules([],Nametable) = (,,Nametable)
 
@@ -127,21 +128,21 @@ equations
                 (Funcdef*2,make-list-func(Funid1,Term*),Nametable3)
 
   [at2ma-1'5] Aterm[sym] = sort("CHAR"),
-              Aterm[name] = L,
-              qlit2str(L) = Term
+              Aterm[name] = $L,
+              qlit2str($L) = Term
               ==================
               aterm2muasf(lex,Aterm,Nametable) = (,Term,Nametable)
 
-  [at2ma-1'6] Aterm[sym] = sort(L1),
-              L1 != literal(""" "C""H""A""R" """),
-              Aterm[name] = L2,
+  [at2ma-1'6] Aterm[sym] = sort($L1),
+              $L1 != literal(""" "C""H""A""R" """),
+              Aterm[name] = $L2,
               "{sort(\"CHAR\")}" = Funid1,
               ntl-lookup(Funid1,Nametable1) = (Funid2,Nametable2),
               make-funcdef(Funid1,null) = Funcdef1,
-              make-caller-func(L1) = Funid3,
+              make-caller-func($L1) = Funid3,
               nt-lookup(Funid3,Nametable2) = (Funid4,Nametable3),
               make-external-funcdef(Funid4,null) = Funcdef2,
-              lit2str(L2) = Term
+              lit2str($L2) = Term
               ==================
               aterm2muasf(lex,Aterm,Nametable1) =
                 (Funcdef1;Funcdef2,Funid4(Funid1(Term)),Nametable3)

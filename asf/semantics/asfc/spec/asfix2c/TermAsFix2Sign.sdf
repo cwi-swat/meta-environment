@@ -71,7 +71,7 @@ hiddens
     "CfArgs"[0-9\']*       -> ATermList
     "Symbols"[0-9\']*      -> ATerm
     "Symbol+"[0-9\']*      -> ATerms
-    "Symbol"[0-9\']*       -> ATerm
+    "$Symbol"[0-9\']*      -> ATerm
     "SymbolList"[0-9\']*   -> ATerm
     "Attr"[0-9\']*         -> ATerm
     "AttrList"[0-9\']*     -> ATerm
@@ -82,9 +82,9 @@ hiddens
     "Ws"[0-9\']*           -> ATerm
     "Prod"[0-9\']*         -> ATerm
     "Iter"[0-9\']*         -> ATerm
-    "Sort"[0-9\']*         -> ATerm
-    "$Literal"[0-9\']*      -> ATerm
-    "$Lexical"[0-9\']*      -> Literal
+    "$Sort"[0-9\']*        -> ATerm
+    "$Literal"[0-9\']*     -> ATerm
+    "$Lexical"[0-9\']*     -> Literal
     "CfElems"[0-9\']*      -> ATermList
     "CfElem*"[0-9\']*      -> ATerms
     "CfElem"[0-9\']*       -> ATerm

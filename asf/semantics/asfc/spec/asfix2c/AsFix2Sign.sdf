@@ -1,6 +1,7 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+%%                        The Netherlands. 
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -58,13 +59,12 @@ hiddens
     "Mname"[0-9\']*        -> ModId
     "Defrules"[0-9\']*     -> MsFuncRulePair
     "$L"[0-9\']*           -> Literal
-    "$Lit"[0-9\']*         -> Literal
     "SynSecs"[0-9\']*      -> ATermList
     "SynSec*"[0-9\']*      -> ATerms
     "SynSec"[0-9\']*       -> ATerm
     "Sections"[0-9\']*     -> ATermList
     "Section*"[0-9\']*     -> ATerms
-    "$Section"[0-9\']*      -> ATerm
+    "$Section"[0-9\']*     -> ATerm
     "LexFuncs"[0-9\']*     -> ATermList
     "LexFunc*"[0-9\']*     -> ATerms
     "LexFunc"[0-9\']*      -> ATerm
@@ -77,7 +77,6 @@ hiddens
     "Iter"[0-9\']*         -> ATerm
     "Sort*"[0-9\']*        -> ATerms
     "Sorts"[0-9\']*        -> ATermList
-    "Sort"[0-9\']*         -> ATerm
     "Attr"[0-9\']*         -> ATerm
     "Attrlist"[0-9\']*     -> ATermList
     "Char*"[0-9]*          -> CHAR*

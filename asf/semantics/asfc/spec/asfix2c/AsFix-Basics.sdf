@@ -63,7 +63,7 @@ exports
   variables
     "Cffunc"[0-9\']*  -> ATerm
     "Lexsort*"[0-9]*  -> {ATerm ";"}*
-    "Symbol"[0-9\']*  -> ATerm
+    "$Symbol"[0-9\']* -> ATerm
     "Attrib"[0-9\']*  -> ATerm
     "Attribs"[0-9\']* -> ATermList
     "Aname"[0-9\']*   -> ATerm

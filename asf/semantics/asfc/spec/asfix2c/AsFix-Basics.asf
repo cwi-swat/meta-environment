@@ -20,14 +20,14 @@ equations
 
 %% The function {\tt includes-sortname} checks whether
 %% a sortname is defined in the sort definition list.
-  [in-1'1] includes-sortname(Symbol,{Symbol;Lexsort*}) = true
+  [in-1'1] includes-sortname($Symbol,{$Symbol;Lexsort*}) = true
 
-  [in-1'2] Symbol1 != Symbol2
+  [in-1'2] $Symbol1 != $Symbol2
            ==================
-           includes-sortname(Symbol1,{Symbol2;Lexsort*}) =
-             includes-sortname(Symbol1,{Lexsort*})
+           includes-sortname($Symbol1,{$Symbol2;Lexsort*}) =
+             includes-sortname($Symbol1,{Lexsort*})
 
-  [in-1'3] includes-sortname(Symbol,{}) = false
+  [in-1'3] includes-sortname($Symbol,{}) = false
 
 %% The function {\tt get-itersep-tail} retrieves the
 %% tail of an ``itersep'' list.
