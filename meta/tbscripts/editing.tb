@@ -366,6 +366,7 @@ in
   . FindModuleFilename(Modulename, sdf, Filename?)
   . Edit(Filename, Modulename, Sid?)
   . EditText(Sid, EditorType)
+  . snd-msg(syntax-editor-started(Modulename, Sid))
   . GetSyntaxTree(Modulename, Tree?, Available?)
   .
   if equal(Available, true)
@@ -419,6 +420,7 @@ in
   . FindModuleFilename(Modulename, asf, Filename?)
   . Edit(Filename, Modulename, Sid?)
   . EditText(Sid, EditorType)
+  . snd-msg(equations-editor-started(Modulename, Sid))
   . GetEquationsTree(Modulename, Tree?, Available?)
   .
   if equal(Available, true)
@@ -494,6 +496,7 @@ in
   then
     Edit(Filename, Modulename, Sid?)
     . EditText(Sid, EditorType)
+    . snd-msg(term-editor-started(Filename, Modulename, Sid))
     . GetTermTree(Filename, Tree?, Available?)
     .
     if equal(Available, true)
@@ -561,7 +564,9 @@ endlet
 process StartEditor(Path: str, EditorType: term) is
 let
   Available: bool,
-  Modulename: str
+  Modulename: str,
+  Pid: int,
+  Sid: term
 in
   if equal(EditorType, term-editor)
   then
@@ -569,7 +574,8 @@ in
     .
     if equal(Available, true)
     then
-      snd-msg(edit-term(Path, Modulename))
+      create(EditTerm(Filename, Modulename), Pid?)
+      . rec-msg(term-editor-started(Filename, Modulename, Sid?))
     else
       snd-note(ui-status(errorf("Unable to determine modulename for: %s",
       [Path])))
@@ -579,33 +585,13 @@ in
     .
     if equal(EditorType, syntax-editor)
     then
-      snd-msg(edit-syntax(Modulename))
+      create(EditSyntax(Modulename), Pid?)
+      . rec-msg(syntax-editor-started(Modulename, Sid?))
     else
-      snd-msg(edit-equations(Modulename))
+      create(EditEquations(Modulename), Pid?)
+      . rec-msg(equations-editor-started(Modulename, Sid?))
     fi
   fi
-endlet
-
-/*}}}  */
-/*{{{  process EditorCreator */
-
-process EditorCreator is
-let
-  Filename: str,
-  Modulename: str,
-  Pid: int
-in
-  (
-    rec-msg(edit-syntax(Modulename?))
-    . create(EditSyntax(Modulename), Pid?)
-  +
-    rec-msg(edit-equations(Modulename?))
-    . create(EditEquations(Modulename), Pid?)
-  +
-    rec-msg(edit-term(Filename?, Modulename?))
-    . create(EditTerm(Filename, Modulename), Pid?)
-  )
-  * delta
 endlet
 
 /*}}}  */

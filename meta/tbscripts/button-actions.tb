@@ -633,24 +633,28 @@ in
 	  ReturnAbort(EditorId, Stack)
         )
       +
-	rec-msg(edit-syntax, Stack?, EditorId?) .
-	StackIsEmpty(Stack, Empty?) .
+	rec-msg(edit-syntax, Stack?, EditorId?)
+	. StackIsEmpty(Stack, Empty?)
+	.
 	if equal(Empty, true) then
 	  ReturnSuccess(EditorId, Stack)
         else
-          StackPopString(Stack,Stack?,ModuleName?) .
-	  snd-msg(edit-syntax(ModuleName)) .
-	  ReturnSuccess(EditorId, Stack)
+          StackPopString(Stack,Stack?,ModuleName?)
+	  . create(EditSyntax(ModuleName), Pid?)
+	  . rec-msg(syntax-editor-started(ModuleName, Sid?))
+	  . ReturnSuccess(EditorId, Stack)
 	fi   
       +
-	rec-msg(edit-equations, Stack?, EditorId?) .
-	StackIsEmpty(Stack, Empty?) .
+	rec-msg(edit-equations, Stack?, EditorId?)
+	. StackIsEmpty(Stack, Empty?)
+	.
 	if equal(Empty, true) then
 	  ReturnSuccess(EditorId, Stack)
         else
-          StackPopString(Stack, Stack?, ModuleName?) .
-	  snd-msg(edit-equations(ModuleName)) .
-	  ReturnSuccess(EditorId, Stack)
+          StackPopString(Stack, Stack?, ModuleName?)
+	  . create(EditEquations(Modulename), Pid?)
+	  . rec-msg(equations-editor-started(Modulename, Sid?))
+	  . ReturnSuccess(EditorId, Stack)
 	fi   
       +
 	rec-msg(dump-module, Stack?, EditorId?) .
@@ -745,16 +749,19 @@ in
 	StackPushString(Stack, Stack?, Filename) .
 	ReturnSuccess(EditorId, Stack)
       +
-	rec-msg(edit-term, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,Filename?) .
-	StackIsEmpty(Stack, Empty?) .
-	if equal(Empty, true) then
-	  snd-msg(edit-general(Filename)) .
-	  ReturnSuccess(EditorId, Stack)
+	rec-msg(edit-term, Stack?, EditorId?)
+        . StackPopString(Stack,Stack?,Filename?)
+	. StackIsEmpty(Stack, Empty?)
+	.
+	if equal(Empty, true)
+	then
+	  snd-msg(edit-general(Filename))
+	  . ReturnSuccess(EditorId, Stack)
         else
-          StackPopString(Stack,Stack?,ModuleName?) .
-          snd-msg(edit-term(Filename, ModuleName)) .
-	  ReturnSuccess(EditorId, Stack)	
+          StackPopString(Stack,Stack?,ModuleName?)
+	  . create(EditTerm(Filename, ModuleName), Pid?)
+	  . rec-msg(term-editor-started(Filename, ModuleName, Sid?))
+	  . ReturnSuccess(EditorId, Stack)	
         fi
       +
 	rec-msg(ask-question(String?), Stack?, EditorId?) .
@@ -1334,7 +1341,9 @@ in
   .
   (
     rec-msg(session(Pid, Sid?))
+    . printf("before ShowLocation\n")
     . ShowLocation(Sid, Location, Message)
+    . printf("after ShowLocation\n")
   +
     rec-msg(no-such-session(Pid))
   )

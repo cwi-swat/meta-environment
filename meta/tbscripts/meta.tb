@@ -88,7 +88,6 @@ in
   . create(DumpEquations, Pid?)
   . create(DumpParseTable, Pid?)
   . create(DumpSdfDefinition, Pid?)
-  . create(EditorCreator, Pid?)
   . create(File-creator, Pid?)
   . create(BuildParseTable, Pid?)
   . create(Meta-Interface, Pid?)
