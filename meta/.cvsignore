@@ -1,5 +1,4 @@
 Makefile
-diff.out
 configure
 aclocal.m4
 config.h.in
