@@ -274,7 +274,7 @@ ATerm SGparseFileUsingTable(const char *prg,
 
   if (!SGopenLanguage(L, ptblfil, infil)) {
     return SGtermToFile(prg,
-			ERR_SummaryToTerm(SG_makeParseTableErrorSummary(infil)),
+			ERR_ErrorToTerm(SG_makeParseTableErrorError()),
 			outfil);
   }
   return SGtermToFile(prg, SGparseFile(prg, L, sort, infil), outfil);

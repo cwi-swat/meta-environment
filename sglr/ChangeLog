@@ -1,5 +1,9 @@
 $Id$
 
+Sat Aug 21 16:46:32 CEST 2004 <markvdb@cwi.nl>
+ * Fixed a bug in the reporting of non existing start states.
+ * Regenerated the test.
+
 Fri Aug 20 10:39:07 CEST 2004 <markvdb@cwi.nl>
  * Fixed a small bug wrt reading in parsetables.
 
