@@ -97,6 +97,7 @@ static long makeNodeId(PT_Tree tree)
 /*{{{  static Graph printNode(Graph graph, int parent, int node, char *contents) */
 
 static Graph printNode(Graph graph, 
+		       Shape shape,
                        int parentNr, 
                        int nodeNr, 
                        char *contents, 
@@ -106,7 +107,6 @@ static Graph printNode(Graph graph,
   Attribute nameAttr;
   AttributeList attrList = makeAttributeListEmpty();
   Node node;
-  Shape shape;
   NodeList nodes;
   Edge edge;
   EdgeList edges;
@@ -211,7 +211,7 @@ static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
       char ch[2] = { '\0', '\0'};
       ch[0] = PT_getTreeCharacter(tree);
 
-      graph = printNode(graph,parent,key,ch,"character");
+      graph = printNode(graph, makeShapeEllipse(), parent,key,ch,"character");
     }
 
     /*}}}  */
@@ -220,7 +220,7 @@ static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
     /*{{{  handle literal */
 
     if (literals_on) {
-      graph = printNode(graph,parent,key,PT_getTreeString(tree),"literal");
+      graph = printNode(graph,makeShapeEllipse(),parent,key,PT_getTreeString(tree),"literal");
     }
 
     /*}}}  */
@@ -232,16 +232,18 @@ static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
     PT_Symbol rhs = PT_getProductionRhs(prod);
     ATbool layout = PT_isTreeLayout(tree);
     ATbool literal = PT_isSymbolLit(rhs); /* for asfix2 compliance */
+    Shape shape = PT_isProductionList(prod) ? makeShapeBox() : 
+                                              makeShapeEllipse();
 
     if (!layout && (literals_on || !literal)) {
-      graph = printNode(graph,parent,key,productions_on ?
+      graph = printNode(graph, shape, parent,key,productions_on ?
 				PT_yieldProduction(PT_getTreeProd(tree)) :
 				PT_yieldSymbol(rhs),
 				productions_on ? "" :
 				PT_yieldProduction(PT_getTreeProd(tree)));
     } 
     else if (layout_on && layout) {
-      graph = printNode(graph,parent,key, "LAYOUT?","layout");
+      graph = printNode(graph,shape,parent,key, "LAYOUT?","layout");
     }
 
     if (!characters_on && PT_isLexicalInjectionProd(prod)) {
