@@ -24,7 +24,6 @@ endlet
 
 process DELETE(AB : address-book) is
 let
-  Name : str,
   AID : int
 in
   rec-msg(delete-address(AID?)) .
