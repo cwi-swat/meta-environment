@@ -1194,7 +1194,7 @@ listMatching(ATerm env, PT_Production listProd,
 /*{{{  static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth) */
 
 /* Function ``condSatisfied'' check whether the conditions
-   of an equation can be satisfied.
+   of an equation can be satisfied. 
    Remark access functions needed to retrieve the operator,
    lhs, and rhs. */
 
@@ -1336,14 +1336,9 @@ static ATermList apply_rule(PT_Tree trm, int depth)
     if (PT_isTreeAppl(firstArg)) {
       first_ofs = PT_getTreeProd(PT_getArgsHead(tmpargs));
 
-    /* <PO:opt> we could build a table for each ofs in the
-       specification, containing an entry for each first_ofs.
-       Each entry consists of all the equations for this combination.
-     */
       while ((entry = find_equation(entry, top_ofs, first_ofs))) {
-
         if (runVerbose) {
-	  ATwarning("Trying equation: %s.\n", PT_yieldTree((PT_Tree)entry->tag));
+	  ATwarning("Trying equation: %s\n", PT_yieldTree((PT_Tree)entry->tag));
         }
 
         tagCurrentRule = entry->tag;
@@ -1382,12 +1377,12 @@ static ATermList apply_rule(PT_Tree trm, int depth)
   }
 
   while ((entry = find_equation(entry, top_ofs, (PT_Production) NULL))) {
-
     if (runVerbose) {
       ATwarning("Trying equation: %s.\n", PT_yieldTree((PT_Tree) entry->tag));
     }
 
     tagCurrentRule = entry->tag;
+    currentRule = entry;
 
     conds = entry->conds;
     equargs = PT_getTreeArgs(entry->lhs);
@@ -1402,6 +1397,7 @@ static ATermList apply_rule(PT_Tree trm, int depth)
 			 PT_getTreeAnnotation(entry->lhs, posinfo), depth);
     }
     tagCurrentRule = entry->tag;
+    currentRule = entry;
 
     if (!is_fail_env(env)) {
       TIDE_STEP(PT_getTreeAnnotation(entry->rhs, posinfo), env, depth);
@@ -1628,6 +1624,7 @@ rewriteInnermost(PT_Tree trm, ATerm env, int depth, Traversal *traversal)
 {
   PT_Tree newtrm, rewtrm;
   PT_Args args, newargs;
+  equation_entry *entry = currentRule;
 
   /* fix me, control flow guidance by using arguments ;-( */
   if (traversal != NO_TRAVERSAL) {
@@ -1731,6 +1728,8 @@ rewriteInnermost(PT_Tree trm, ATerm env, int depth, Traversal *traversal)
   else {
     rewtrm = trm;
   }
+
+  currentRule = entry;
 
   return rewtrm;
 }

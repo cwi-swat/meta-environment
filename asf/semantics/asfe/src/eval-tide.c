@@ -159,8 +159,12 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
   equ_tree =
     PT_makeTreeFromTerm(ASF_makeTermFromCondEquation(currentRule->equation));
   pos_anno = PT_getTreeAnnotation(equ_tree, posinfo);
-  /*ATfprintf(stderr, "finding variable at line %d, col %d in %s (%t)\n",*/
-	    /*req_line, req_col, PT_yieldTree(equ_tree), pos_anno);*/
+
+  /*
+  ATfprintf(stderr, "finding variable at line %d, col %d in %s (%t)\n",
+	    req_line, req_col, PT_yieldTree(equ_tree), pos_anno);
+   */
+
   if (!pos_anno) {
     return TA_makeExprError("no position information on equation", NULL);
   }
@@ -252,9 +256,16 @@ void Tide_disconnect()
 
 void Tide_step(ATerm position, ATerm newenv, int level)
 {
+  /*
+  PT_Tree equ_tree =
+    PT_makeTreeFromTerm(ASF_makeTermFromCondEquation(currentRule->equation));
+  fprintf(stderr, "Tide_step: cureq = %s\n", PT_yieldTree(equ_tree));
+   */
+
   if (TA_isConnected()) {
     int old_state = TA_getProcessState(pid);
     env = newenv;
+
 
     TA_atCPE(pid, TA_makeLocationFromTerm(position));
     TA_activateRules(pid, TA_makePortStep());
