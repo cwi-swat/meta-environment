@@ -26,23 +26,24 @@
 # help texts
 #----------------------------------------------------------------------
 
-set toolname "Meta-Environment"
-set metaname "NewMeta"
+#set toolname "Meta-Environment"
+set toolname "Graph Browser"
+set metaname "Meta-Environment"
 
 set help_meta "$metaname
 
-A New Standalone Meta-environment for ASF+SDF
-Copyright (C) 1997  UvA, CWI
+A Meta-environment for ASF+SDF
+Copyright (C) 2000  CWI
 
 $metaname development team:
-Mark van den Brand, Leon Moonen, Tobias Kuipers,
-Pieter Olivier, Jeroen Scheerder
+Mark van den Brand, Hayco de Jong, Merijn de Jonge,
+Tobias Kuipers, Leon Moonen, Pieter Olivier, 
+Jeroen Scheerder, Jurgen Vinju
 
-Programming Research Group, University of Amsterdam
 Department of Software Technology, CWI"
 
 set help_about "$toolname  -  ASF+SDF Import Graph Browser
-Copyright (C) 1997  Leon Moonen <leon@wins.uva.nl>
+Copyright (C) 2000  Leon Moonen <leon@cwi.nl>
 
 $toolname provides a graphical view of an ASF+SDF import graph.
 The layout of this graph is computed using the dot layout algorithm
@@ -825,8 +826,8 @@ proc Help {msg just class} {
     set w ".help$class"
     catch {destroy $w}
     toplevel $w
-    wm title $w "$toolname Help"
-    wm iconname $w $toolname
+    wm title $w "$metaname Help"
+    wm iconname $w $metaname
     frame $w.menu -relief raised -bd 2
     pack $w.menu -side top -fill x
     label $w.msg -justify $just -text $msg
@@ -1206,8 +1207,8 @@ set saveFill {}
 set fileName {no_name.dot}
 set printCommand {lpr}
 
-wm title . $toolname
-wm iconname . $toolname
+wm title . $metaname
+wm iconname . $metaname
 
 define-menu-bar
 define-graph-frame
