@@ -1,5 +1,8 @@
 $Id$
 
+2001/07/06 (markvdb@cwi.nl, jurgenv@cwi.nl)
+ * Inserted a missing layout before the separator of a list.
+
 2001/07/03 (jurgenv@cwi.nl)
  * Several bugfixes in list support
 
