@@ -10,7 +10,6 @@ equations
 
 [xxx]	<$Etype> = $Etype
 
-
 %% ---- Type of element
 
 [to1]	type-of($Integer) = int 
@@ -77,30 +76,6 @@ equations
 [default-eqt]
 	equal-type($Etype1, $Etype2, $Tenv) = false
 
-%%[eqt1]	equal-type($Etype, $Etype, $Tenv) = true
-%%
-%%[eqt2]	equal-type(bag[$Etype1], bag[$Etype2], $Tenv) = equal-type($Etype1, $Etype2, $Tenv)
-%%
-%%[eqt3]	equal-type(rel[$Etype+], rel[$Etype+'], $Tenv) = equal-type(<$Etype+>, <$Etype+'>, $Tenv)
-%%
-%%[eqt4]	equal-type(rel[$Etype+], bag[<$Etype+'>], $Tenv) = equal-type(<$Etype+>, <$Etype+'>, $Tenv)
-%%
-%%[eqt5]	equal-type(bag[<$Etype+>], rel[$Etype+'], $Tenv) = equal-type(<$Etype+>, <$Etype+'>, $Tenv)
-%%
-%%[eqt6]	equal-type($Var, $Etype, $Tenv) = equal-type(lookup($Tenv, $Var), $Etype, $Tenv)
-%%
-%%[eqt7]	equal-type($Etype, $Var, $Tenv) = equal-type($Etype, lookup($Tenv, $Var), $Tenv)
-%%
-%%[eqt8]	equal-type(<$DclVar+>, $Etype, $Tenv) = equal-type(get-tuple-type(<$DclVar+>), $Etype, $Tenv)
-%%
-%%[eqt9]	equal-type($Etype, <$DclVar+>, $Tenv) = equal-type($Etype, get-tuple-type(<$DclVar+>), $Tenv)
-%%
-%%[eqt10]	equal-type(<$Etype1, $Etype+>, <$Etype1', $Etype+'>, $Tenv) =
-%%	equal-type($Etype1, $Etype1', $Tenv) & equal-type(<$Etype+>, <$Etype+'>, $Tenv)
-%%
-%%[default-eqt]
-%%	equal-type($Etype1, $Etype2, $Tenv) = false
-%%
 %% ---- get-tuple-type
 
 [gtt1]	get-tuple-type(<$Etype1 $Var1, $Etype2 $Var2>) = <$Etype1, $Etype2>
@@ -185,6 +160,7 @@ $Error]>
 
 [t2s-8] t2s([$Etype*]) 			= "[" || tl2sl($Etype*) || "]"
 [t2s-9] t2s($Var) 			= rvar2str($Var)
+[t2s-10] t2s(& $Var) 			= "&" || rvar2str($Var)
 
 [tl2sl-1]
 	tl2sl($Etype, $Etype+)		= t2s($Etype) || "," || tl2sl($Etype+)
@@ -1059,7 +1035,7 @@ $Error]>
        		<domainX,    	fun [ rel[&T1,&T2], bag[&T1] ] 		to rel[&T1,&T2]>,
        		<rangeX,    	fun [ rel[&T1,&T2], bag[&T2] ] 		to rel[&T1,&T2]>,
        		<carrierX,    	fun [	rel[&T,&T], bag[&T] ] 		to rel[&T,&T]>,
-                <first,     	fun [ <&T1,&T2>] 				to &T1>,
+                <first,     	fun [ <&T1,&T2>] 			to &T1>,
                 <second,     	fun [ <&T1,&T2> ] 			to &T2>,
 
 		<power0,	fun[ bag[&T] ]				to bag[bag[&T]]>,
