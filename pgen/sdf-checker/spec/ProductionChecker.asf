@@ -54,14 +54,16 @@ equations
 
         check-priorities(Module, {}, $ModuleId, productions(Prod*6)) = Msgs1,
         check-right-hand-sides(Module, {}, $ModuleId) = Msgs2,
+        check-right-hand-side-lexical-prod(Module, {}, $ModuleId) = Msgs3,
 
-        Msgs3 = get-messages(InfoMsgTuple1),
-        Msgs4 = Msgs3 + 
+        Msgs4 = get-messages(InfoMsgTuple1),
+        Msgs5 = Msgs4 + 
 used-in-priorities-but-undefined($ModuleId, diff(productions(Prod*3), 
                                                  productions(Prod*6))),
-        Msgs5 = Msgs4 ++ Msgs1,
-        Msgs6 = Msgs5 ++ Msgs2,
-        InfoMsgTuple3 = put-messages(Msgs6, InfoMsgTuple1),
+        Msgs6 = Msgs5 ++ Msgs1,
+        Msgs7 = Msgs6 ++ Msgs2,
+        Msgs8 = Msgs7 ++ Msgs3,
+        InfoMsgTuple3 = put-messages(Msgs8, InfoMsgTuple1),
 
         get-module-info(InfoMsgTuple3) = ModuleInfoTable1,
         put-production-info($ModuleId, 
@@ -127,4 +129,23 @@ literal-in-right-hand-side-not-allowed($ModuleId, Symbol* -> $Literal Attrs)
   [crhs-1'2] check-right-hand-sides($Literal1 (Symbol,*) -> $Literal2 Attrs, Msgs, $ModuleId) =
                Msgs +
 literal-in-right-hand-side-not-allowed($ModuleId, $Literal1 (Symbol,*) -> $Literal2 Attrs)
-  
+
+  [crl-1'1] check-right-hand-side-lexical-prod(lexical syntax Prod*, Msgs, $ModuleId) =
+              check-right-hand-side-lexical-prod(Prod*, Msgs, $ModuleId)
+
+  [default-crl-1'1] check-right-hand-side-lexical-prod(Grammar, Msgs, $ModuleId) = Msgs
+
+  [crl-1'2] check-right-hand-side-lexical-prod(Symbol* -> $Sort Attrs, Msgs, $ModuleId) = Msgs
+
+  [crl-1'3] check-right-hand-side-lexical-prod(Symbol* -> LAYOUT Attrs, Msgs, $ModuleId) = Msgs
+
+  [default-crl-1'1] check-right-hand-side-lexical-prod(Symbol* -> Symbol Attrs, Msgs, $ModuleId) =
+               Msgs +
+only-sort-allowed-in-right-hand-side-of-lexical-function($ModuleId, Symbol* -> Symbol Attrs)
+
+  [crl-1'2] check-right-hand-side-lexical-prod($Literal (Symbol,*) -> $Sort Attrs, Msgs, $ModuleId) = Msgs
+
+  [crl-1'2] check-right-hand-side-lexical-prod($Literal (Symbol,*) -> Symbol Attrs, Msgs, $ModuleId) =
+               Msgs +
+only-sort-allowed-in-right-hand-side-of-lexical-function($ModuleId, $Literal (Symbol,*) -> Symbol Attrs)
+ 

@@ -1,5 +1,10 @@
 $Id$
 
+2003/10/17 (markvdb@cwi.nl)
+ * Added a message on deprecated unquoted literals.
+ * Added a message on usage of non Sort symbols in
+   right hand side of lexical functions.
+
 2003/10/09 (markvdb@cwi.nl)
  * Added linking of PTMEPT library to parsetablegen
 

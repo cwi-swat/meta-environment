@@ -19,6 +19,7 @@ exports
     constructor-has-already-been-used(ModuleId, Literal, Production) -> Message
     unknown-constructor-used-in-priorities(ModuleId, Production)     -> Message
     literal-in-right-hand-side-not-allowed(ModuleId, Production)     -> Message
+    only-sort-allowed-in-right-hand-side-of-lexical-function(ModuleId, Production)     -> Message
     deprecated-symbol(ModuleId, Symbol)                              -> Message
 
   context-free syntax

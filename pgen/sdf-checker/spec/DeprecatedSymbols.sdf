@@ -20,3 +20,4 @@ hiddens
     "Definition"[0-9]* -> Definition 
     "Msgs"[0-9]*       -> Messages
     "$Symbol"[0-9]*    -> Symbol
+    "$UQLiteral"[0-9]* -> UQLiteral
