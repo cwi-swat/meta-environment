@@ -24,7 +24,7 @@ public class Do extends ToolAtom {
       return false;
 
     ToolInstance ti = getToolInstance();
-    ti.sndDoToTool(getSubstitutedCall(), getSubstitutedId());
+    ti.sndDoToTool(getSubstitutedId(), getSubstitutedCall());
     return nextState();
   }
 

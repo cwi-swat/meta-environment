@@ -25,7 +25,7 @@ public class Event extends ToolAtom {
       return false;
 
     ToolInstance ti = getToolInstance();
-    if (ti.getEventFromTool(getToolTerm(), getEnv())){
+    if (ti.getEventFromTool(getId(), getToolTerm(), getEnv())){
       //mr.getLeft().update(getEnv());
       return nextState();
     } else

@@ -49,7 +49,7 @@ public class ProcessInstance {
     currentState = call.getStartState();
     tid = TBTerm.resolveVars(tid, env);
     env.setExecuting();
-    env.assignVar(tid, processId);
+    env.assignVar(tid, TBTerm.newTransactionId());
 
     Vector procs = TB.getProcesses();
     elements = call.getAtoms();

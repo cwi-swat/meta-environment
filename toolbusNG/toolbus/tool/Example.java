@@ -51,12 +51,13 @@ public class Example extends Frame implements ActionListener {
     return factory.make("count(<int>))", new Integer(count++));
   }
 
-  public void ackEvent(ATerm event) {
+  public void ackEvent(ATerm event, ATerm result) {
     // This simple tool ignores event acknowledgements
+    System.err.println("ackEvent(" + event + ", " + result);
   }
 
   public void terminate(String msg) {
-    // Just exit when the ToolBus terminate
+    // Just exit when the ToolBus terminates
     bridge.terminate(msg);
   }
 

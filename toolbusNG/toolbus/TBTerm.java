@@ -44,6 +44,8 @@ public class TBTerm {
 
   public static ATerm TransactionIdVar;
   public static ATerm TransactionIdResVar;
+  
+  private static int nTransactions = 0;
 
   public static void init() {
     if (!initDone) {
@@ -73,8 +75,8 @@ public class TBTerm {
     TermPlaceholder = factory.makePlaceholder(TermType);
     ListPlaceholder = factory.makePlaceholder(ListType);
 
-    TransactionIdVar = factory.make("var(-1,term,TransactionId))");
-    TransactionIdResVar = factory.make("rvar(-1,term,TransactionId))");
+    TransactionIdVar = factory.make("var(-1,transaction,TransactionId))");
+    TransactionIdResVar = factory.make("rvar(-1,transaction,TransactionId))");
 
     FunctionDescriptors.init(factory);
   }
@@ -141,6 +143,12 @@ public class TBTerm {
     ATermList args = ((ATermAppl) t).getArguments();
     AFun afun = t.getFactory().makeAFun("var", args.getLength(), false);
     return TBTerm.factory.makeAppl(afun, args);
+  }
+  
+  public static ATerm newTransactionId(){
+    AFun afun = factory.makeAFun("transaction", 1, false);
+    ATerm arg = factory.makeInt(nTransactions++);
+    return factory.makeAppl(afun, arg);
   }
 
   /**

@@ -8,16 +8,18 @@ import aterm.*;
  */
 public interface ToolInstance {
 
-  public ATerm getToolId();
+  // public ATerm getToolId();
 
-  public void sndEvalToTool(ATermAppl call, ATerm id);
+  public void sndEvalToTool(ATerm id, ATermAppl call);
 
-  public void sndDoToTool(ATermAppl call, ATerm id);
+  public boolean getValueFromTool(ATerm id, ATerm trm, Environment env);
+
+  public void sndDoToTool(ATerm id, ATermAppl call);
+
+  public boolean getEventFromTool(ATerm id, ATerm trm, Environment environment);
+
+  public void sndAckToTool(ATerm id, ATerm result) throws ToolBusException;
 
   public void terminate(String msg);
-
-  public boolean getValueFromTool(ATerm trm, Environment env);
-
-  public boolean getEventFromTool(ATerm trm, Environment environment);
 
 }

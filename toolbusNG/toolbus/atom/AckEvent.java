@@ -29,7 +29,7 @@ public class AckEvent extends ToolAtom {
 
     ToolInstance ti = getToolInstance();
 
-    ti.sndEvalToTool(getSubstitutedCall(), getSubstitutedId());
+    ti.sndAckToTool(getSubstitutedId(), getSubstitutedCall());
     return nextState();
   }
 
