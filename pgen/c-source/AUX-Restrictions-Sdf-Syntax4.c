@@ -1,0 +1,205 @@
+#include  "support.h"
+static Symbol lf_AUX_Restrictions_Sdf_Syntax4_2sym ;
+static ATerm lf_AUX_Restrictions_Sdf_Syntax4_2 ( ATerm arg1 ) ;
+static Symbol ef5sym ;
+static funcptr ef5 ;
+static Symbol ef1sym ;
+static funcptr ef1 ;
+static Symbol lf_AUX_Restrictions_Sdf_Syntax4_1sym ;
+static ATerm lf_AUX_Restrictions_Sdf_Syntax4_1 ( ATerm arg1 ) ;
+static Symbol ef8sym ;
+static funcptr ef8 ;
+static Symbol ef4sym ;
+static funcptr ef4 ;
+static Symbol ef6sym ;
+static funcptr ef6 ;
+static Symbol ef7sym ;
+static funcptr ef7 ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
+void register_AUX_Restrictions_Sdf_Syntax4 ( ) {
+lf_AUX_Restrictions_Sdf_Syntax4_2sym = ATmakeSymbol ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[ql(\"[[\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Lookahead\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"]]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Lookaheads\"),w(\"\"),no-attrs)"
+ , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_AUX_Restrictions_Sdf_Syntax4_2sym ) ;
+lf_AUX_Restrictions_Sdf_Syntax4_1sym = ATmakeSymbol ( "listtype(sort(\"Lookahead\"),ql(\",\"))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_AUX_Restrictions_Sdf_Syntax4_1sym ) ;
+register_prod ( ATparse ( "listtype(sort(\"Lookahead\"),ql(\",\"))" ) , lf_AUX_Restrictions_Sdf_Syntax4_1 , lf_AUX_Restrictions_Sdf_Syntax4_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[ql(\"[[\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Lookahead\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"]]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Lookaheads\"),w(\"\"),no-attrs)" ) , lf_AUX_Restrictions_Sdf_Syntax4_2 , lf_AUX_Restrictions_Sdf_Syntax4_2sym ) ;
+}
+void resolve_AUX_Restrictions_Sdf_Syntax4 ( ) {
+ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Lookahead\"),w(\"\"),no-attrs)" ) ) ;
+ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Lookahead\"),w(\"\"),no-attrs)" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[ql(\"[\"),w(\"\"),sort(\"OptCharRanges\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClass\"),w(\"\"),no-attrs)" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[ql(\"[\"),w(\"\"),sort(\"OptCharRanges\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClass\"),w(\"\"),no-attrs)" ) ) ;
+ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"OptCharRanges\"),w(\"\"),no-attrs)" ) ) ;
+ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"OptCharRanges\"),w(\"\"),no-attrs)" ) ) ;
+ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[sort(\"CharClass\"),w(\"\"),ql(\".\"),w(\"\"),sort(\"Lookaheads\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Lookahead\"),w(\"\"),no-attrs)" ) ) ;
+ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[sort(\"CharClass\"),w(\"\"),ql(\".\"),w(\"\"),sort(\"Lookaheads\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Lookahead\"),w(\"\"),no-attrs)" ) ) ;
+ef5 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"CharClass\"),w(\"\"),ql(\"\\\\\\\\/\"),w(\"\"),sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClass\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
+ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"CharClass\"),w(\"\"),ql(\"\\\\\\\\/\"),w(\"\"),sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClass\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
+ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"CharClass\"),w(\"\"),ql(\"/\"),w(\"\"),sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClass\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\"),w(\"\"),sep(\",\"),w(\"\"),l(\"memo\")],w(\"\"),l(\"}\")))" ) ) ;
+ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"CharClass\"),w(\"\"),ql(\"/\"),w(\"\"),sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClass\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\"),w(\"\"),sep(\",\"),w(\"\"),l(\"memo\")],w(\"\"),l(\"}\")))" ) ) ;
+ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"CharClass\"),w(\"\"),ql(\"/\\\\\\\\\"),w(\"\"),sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClass\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\"),w(\"\"),sep(\",\"),w(\"\"),l(\"memo\")],w(\"\"),l(\"}\")))" ) ) ;
+ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"CharClass\"),w(\"\"),ql(\"/\\\\\\\\\"),w(\"\"),sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClass\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\"),w(\"\"),sep(\",\"),w(\"\"),l(\"memo\")],w(\"\"),l(\"}\")))" ) ) ;
+ef8 = lookup_func ( ATreadFromString ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[sort(\"Lookaheads\"),w(\"\"),ql(\"|\"),w(\"\"),sort(\"Lookaheads\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Lookaheads\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
+ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[sort(\"Lookaheads\"),w(\"\"),ql(\"|\"),w(\"\"),sort(\"Lookaheads\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Lookaheads\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
+}
+static ATerm constant0 = NULL ;
+void init_AUX_Restrictions_Sdf_Syntax4 ( ) {
+ATprotect ( & constant0 ) ;
+}
+ATerm lf_AUX_Restrictions_Sdf_Syntax4_2 ( ATerm arg0 ) {
+{
+ATerm tmp [ 17 ] ;
+FUNC_ENTRY ( lf_AUX_Restrictions_Sdf_Syntax4_2sym , ATmakeAppl ( lf_AUX_Restrictions_Sdf_Syntax4_2sym , arg0 ) ) ;
+{
+ATerm ltmp [ 1 ] ;
+lbl_lf_AUX_Restrictions_Sdf_Syntax4_2 : ltmp [ 0 ] = arg0 ;
+if ( check_sym ( ltmp [ 0 ] , lf_AUX_Restrictions_Sdf_Syntax4_1sym ) ) {
+tmp [ 0 ] = arg_0 ( ltmp [ 0 ] ) ;
+{
+ATerm atmp0010 ;
+ATerm atmp000 [ 2 ] ;
+atmp000 [ 0 ] = tmp [ 0 ] ;
+atmp000 [ 1 ] = tmp [ 0 ] ;
+while ( not_empty_list ( tmp [ 0 ] ) ) {
+atmp0010 = list_head ( tmp [ 0 ] ) ;
+tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
+if ( check_sym ( atmp0010 , ef1sym ) ) {
+tmp [ 1 ] = arg_0 ( atmp0010 ) ;
+if ( check_sym ( tmp [ 1 ] , ef2sym ) ) {
+tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
+if ( term_equal ( tmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+arg0 = lf_AUX_Restrictions_Sdf_Syntax4_1 ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , tmp [ 0 ] ) ) ;
+goto lbl_lf_AUX_Restrictions_Sdf_Syntax4_2 ;
+}
+}
+}
+atmp000 [ 1 ] = list_tail ( atmp000 [ 1 ] ) ;
+tmp [ 0 ] = atmp000 [ 1 ] ;
+}
+}
+tmp [ 0 ] = arg_0 ( ltmp [ 0 ] ) ;
+{
+ATerm atmp00110 ;
+ATerm atmp0010 [ 2 ] ;
+ATerm atmp000 ;
+if ( not_empty_list ( tmp [ 0 ] ) ) {
+atmp000 = list_head ( tmp [ 0 ] ) ;
+tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
+atmp0010 [ 0 ] = tmp [ 0 ] ;
+atmp0010 [ 1 ] = tmp [ 0 ] ;
+while ( not_empty_list ( tmp [ 0 ] ) ) {
+atmp00110 = list_head ( tmp [ 0 ] ) ;
+tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
+if ( check_sym ( atmp000 , ef4sym ) ) {
+tmp [ 3 ] = arg_0 ( atmp000 ) ;
+tmp [ 4 ] = arg_1 ( atmp000 ) ;
+if ( check_sym ( atmp00110 , ef1sym ) ) {
+tmp [ 5 ] = arg_0 ( atmp00110 ) ;
+arg0 = lf_AUX_Restrictions_Sdf_Syntax4_1 ( cons ( make_list ( ( * ef1 ) ( tmp [ 5 ] ) ) , cons ( make_list ( ( * ef4 ) ( tmp [ 3 ] , tmp [ 4 ] ) ) , cons ( slice ( atmp0010 [ 0 ] , atmp0010 [ 1 ] ) , tmp [ 0 ] ) ) ) ) ;
+goto lbl_lf_AUX_Restrictions_Sdf_Syntax4_2 ;
+}
+}
+atmp0010 [ 1 ] = list_tail ( atmp0010 [ 1 ] ) ;
+tmp [ 0 ] = atmp0010 [ 1 ] ;
+}
+}
+}
+tmp [ 0 ] = arg_0 ( ltmp [ 0 ] ) ;
+{
+ATerm atmp001110 ;
+ATerm atmp00110 [ 2 ] ;
+ATerm atmp0010 ;
+ATerm atmp000 [ 2 ] ;
+atmp000 [ 0 ] = tmp [ 0 ] ;
+atmp000 [ 1 ] = tmp [ 0 ] ;
+while ( not_empty_list ( tmp [ 0 ] ) ) {
+atmp0010 = list_head ( tmp [ 0 ] ) ;
+tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
+atmp00110 [ 0 ] = tmp [ 0 ] ;
+atmp00110 [ 1 ] = tmp [ 0 ] ;
+while ( not_empty_list ( tmp [ 0 ] ) ) {
+atmp001110 = list_head ( tmp [ 0 ] ) ;
+tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
+if ( check_sym ( atmp0010 , ef4sym ) ) {
+tmp [ 6 ] = arg_0 ( atmp0010 ) ;
+tmp [ 7 ] = arg_1 ( atmp0010 ) ;
+if ( check_sym ( atmp001110 , ef4sym ) ) {
+tmp [ 8 ] = arg_0 ( atmp001110 ) ;
+tmp [ 9 ] = arg_1 ( atmp001110 ) ;
+tmp [ 10 ] = ( * ef7 ) ( tmp [ 6 ] , tmp [ 8 ] ) ;
+if ( ! term_equal ( tmp [ 10 ] , ( * ef2 ) ( ( * ef3 ) ( ) ) ) ) {
+arg0 = lf_AUX_Restrictions_Sdf_Syntax4_1 ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( ( * ef4 ) ( ( * ef6 ) ( tmp [ 6 ] , tmp [ 10 ] ) , tmp [ 7 ] ) ) , cons ( make_list ( ( * ef4 ) ( tmp [ 10 ] , ( * ef8 ) ( tmp [ 7 ] , tmp [ 9 ] ) ) ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , cons ( make_list ( ( * ef4 ) ( ( * ef6 ) ( tmp [ 8 ] , tmp [ 10 ] ) , tmp [ 9 ] ) ) , tmp [ 0 ] ) ) ) ) ) ) ;
+goto lbl_lf_AUX_Restrictions_Sdf_Syntax4_2 ;
+}
+}
+}
+if ( check_sym ( atmp0010 , ef1sym ) ) {
+tmp [ 6 ] = arg_0 ( atmp0010 ) ;
+if ( check_sym ( atmp001110 , ef1sym ) ) {
+tmp [ 7 ] = arg_0 ( atmp001110 ) ;
+tmp [ 8 ] = lf_AUX_Restrictions_Sdf_Syntax4_2 ( lf_AUX_Restrictions_Sdf_Syntax4_1 ( cons ( make_list ( atmp0010 ) , tmp [ 0 ] ) ) ) ;
+if ( check_sym ( tmp [ 8 ] , lf_AUX_Restrictions_Sdf_Syntax4_2sym ) ) {
+tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ;
+if ( check_sym ( tmp [ 9 ] , lf_AUX_Restrictions_Sdf_Syntax4_1sym ) ) {
+tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ;
+if ( not_empty_list ( tmp [ 10 ] ) ) {
+tmp [ 11 ] = list_head ( tmp [ 10 ] ) ;
+tmp [ 10 ] = list_tail ( tmp [ 10 ] ) ;
+tmp [ 12 ] = lf_AUX_Restrictions_Sdf_Syntax4_2 ( lf_AUX_Restrictions_Sdf_Syntax4_1 ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( tmp [ 11 ] ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 10 ] ) ) ) ) ) ;
+FUNC_EXIT ( tmp [ 12 ] ) ;
+}
+}
+}
+}
+}
+atmp00110 [ 1 ] = list_tail ( atmp00110 [ 1 ] ) ;
+tmp [ 0 ] = atmp00110 [ 1 ] ;
+}
+atmp000 [ 1 ] = list_tail ( atmp000 [ 1 ] ) ;
+tmp [ 0 ] = atmp000 [ 1 ] ;
+}
+}
+tmp [ 0 ] = arg_0 ( ltmp [ 0 ] ) ;
+{
+ATerm atmp00110 ;
+ATerm atmp0010 [ 2 ] ;
+ATerm atmp000 ;
+if ( not_empty_list ( tmp [ 0 ] ) ) {
+atmp000 = list_head ( tmp [ 0 ] ) ;
+tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
+atmp0010 [ 0 ] = tmp [ 0 ] ;
+atmp0010 [ 1 ] = tmp [ 0 ] ;
+while ( not_empty_list ( tmp [ 0 ] ) ) {
+atmp00110 = list_head ( tmp [ 0 ] ) ;
+tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
+if ( check_sym ( atmp000 , ef1sym ) ) {
+tmp [ 13 ] = arg_0 ( atmp000 ) ;
+if ( check_sym ( atmp00110 , ef4sym ) ) {
+tmp [ 14 ] = arg_0 ( atmp00110 ) ;
+tmp [ 15 ] = arg_1 ( atmp00110 ) ;
+tmp [ 16 ] = ( * ef7 ) ( tmp [ 13 ] , tmp [ 14 ] ) ;
+if ( ! term_equal ( tmp [ 16 ] , ( * ef2 ) ( ( * ef3 ) ( ) ) ) ) {
+arg0 = lf_AUX_Restrictions_Sdf_Syntax4_1 ( cons ( make_list ( ( * ef1 ) ( tmp [ 13 ] ) ) , cons ( slice ( atmp0010 [ 0 ] , atmp0010 [ 1 ] ) , cons ( make_list ( ( * ef4 ) ( ( * ef6 ) ( tmp [ 14 ] , tmp [ 16 ] ) , tmp [ 15 ] ) ) , tmp [ 0 ] ) ) ) ) ;
+goto lbl_lf_AUX_Restrictions_Sdf_Syntax4_2 ;
+}
+}
+}
+atmp0010 [ 1 ] = list_tail ( atmp0010 [ 1 ] ) ;
+tmp [ 0 ] = atmp0010 [ 1 ] ;
+}
+}
+}
+}
+FUNC_EXIT ( make_nf1 ( lf_AUX_Restrictions_Sdf_Syntax4_2sym , ltmp [ 0 ] ) ) ;
+}
+}
+}
+ATerm lf_AUX_Restrictions_Sdf_Syntax4_1 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_AUX_Restrictions_Sdf_Syntax4_1sym , ATmakeAppl ( lf_AUX_Restrictions_Sdf_Syntax4_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Restrictions_Sdf_Syntax4_1sym , arg0 ) ) ;
+}
+
