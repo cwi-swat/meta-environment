@@ -667,6 +667,16 @@ ATerm trans_prod(ATerm t, ATbool interpret_cons)
       else if(ATmatchTerm(attr, asfix2_id_pattern, NULL)) {
         /* the ModuleName identifier */
         id = attr;
+      }
+      else if(ATmatchTerm(attr,ATparse("traverse"))) {
+        if(!res_attr) { /* first attr */
+           res_attr = (ATerm) ATmakeList1(ATmake("l(\"traverse\")"));
+        } else {
+           res_attr = (ATerm) ATconcat(
+                                      (ATermList) res_attr,
+                                      (ATermList) ATmake("[w(\"\"),sep(\",\"),w(\"\"),"
+                                                         "l(\"traverse\")]", lit));
+        }
       } else {
         /* unrecognized ATerm */
         ATerror("trans_prod[0]: strange term \"%t\"\n", attr);

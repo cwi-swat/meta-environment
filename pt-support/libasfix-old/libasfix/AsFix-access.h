@@ -171,6 +171,8 @@ ATerm AFTflattenSdf2Prod(ATerm modname, ATerm prod);
                                                   af_prod_constructor_assoc)) 
 #define AFTisMemoAssoc(attr)        (AFTcheckAppl(attr, af_prod_memo_assoc)) 
 
+#define AFTisTraverseAttr(attr)     (AFTcheckAppl(attr, af_prod_traverse_attr))
+
 #define AFTisList(list)		(ATgetAFun((ATermAppl)list) == af_symbol_list)
 
 #define AFTisSimpleEqu(equ)	(asfix_is_appl(equ))
@@ -599,6 +601,7 @@ extern ATerm af_prod_nonassoc_assoc;
 extern ATerm af_prod_bracket_assoc;
 extern ATerm af_prod_constructor_assoc;
 extern ATerm af_prod_memo_assoc;
+extern ATerm af_prod_traverse_attr;
 
 extern ATerm af_prod_afun2aterm;
 extern ATerm af_prod_literal2afun;

@@ -186,6 +186,7 @@ ATerm af_prod_nonassoc_assoc = NULL;
 ATerm af_prod_bracket_assoc = NULL;
 ATerm af_prod_constructor_assoc = NULL;
 ATerm af_prod_memo_assoc = NULL;
+ATerm af_prod_traverse_attr = NULL;
 
 ATerm af_prod_afun2aterm = NULL;
 ATerm af_prod_literal2afun = NULL;
@@ -450,6 +451,7 @@ void AFinitAsFixPatterns()
     ATprotect(&af_prod_bracket_assoc);
     ATprotect(&af_prod_constructor_assoc);
     ATprotect(&af_prod_memo_assoc);
+    ATprotect(&af_prod_traverse_attr);
     ATprotect(&af_iter_eqlist);
     ATprotect(&af_prod_afun2aterm);
     ATprotect(&af_prod_literal2afun);
@@ -876,6 +878,11 @@ void AFinitAsFixPatterns()
 
     af_prod_memo_assoc =
       ATparse("prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[ql(\"memo\")],"
+              "w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),"
+              "w(\"\"),no-attrs)");
+
+    af_prod_traverse_attr =
+      ATparse("prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[ql(\"traverse\")],"
               "w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),"
               "w(\"\"),no-attrs)");
 
