@@ -77,8 +77,7 @@ public class MessageWindow extends JFrame implements ListSelectionListener {
 
 	public void valueChanged(ListSelectionEvent e) {
 		if (!(e.getValueIsAdjusting())) {
-//			int index = ((JList) (e.getSource())).getMinSelectionIndex();
-			int index = e.getFirstIndex();
+			int index = list.getSelectedIndex();
 
 			if (index != -1) {
 				ATerm sel = data.elementAt(index);
