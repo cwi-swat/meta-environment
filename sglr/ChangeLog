@@ -1,5 +1,9 @@
 $Id$
 
+2003/01/22 (jurgenv@cwi.nl)
+ * Release 3.9
+ * LGPL license
+
 2002/11/22 (vandenbr@loria.fr)
  * Removed the check that a preferred/avoided subtree occurring in both
    trees are not counted as preferred/avoided when counting nested
