@@ -1,5 +1,5 @@
 
-Mon Feb 24 11:44:22 CET 2003 <jong@cwi.nl>
+2003/02/14 (jong@cwi.nl)
  * Fix some #include issues with strlen/strcmp
 
 2003/02/18 (jurgenv@cwi.nl)
