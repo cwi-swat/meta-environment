@@ -1,5 +1,9 @@
 # $Id$
 
+2003/05/19 ({jong,markvdb}@cwi.nl)   
+ * Added explicit ATBpack and ATBunpack.   
+ * Introduced write-term-file.
+
 2003/05/16 ({jurgenv,markvdb}@cwi.nl)
  * Major revision of UI, IO, MDB.
  * NOT YET FINISHED, SO DO NOT UPDATE!
