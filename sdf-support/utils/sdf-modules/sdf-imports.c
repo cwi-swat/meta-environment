@@ -44,26 +44,10 @@ static void version(const char *msg)
 ATerm get_all_imports(int cid, ATerm atModules, char* name) 
 {
   ATermList list = (ATermList) atModules;
-  SDF_ModuleList modules = SDF_makeModuleListEmpty();
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
-  SDF_OptLayout space = SDF_makeLayoutSpace();
-  SDF_ImportList imports = NULL;
-  SDF_Definition def;
-
-  for(;!ATisEmpty(list); list = ATgetNext(list)) {
-    SDF_Module module = SDF_ModuleFromTerm(ATgetFirst(list));
-
-    if (SDF_isModuleListEmpty(modules)) {
-      modules = SDF_makeModuleListSingle(module);
-    }
-    else {
-      modules = SDF_makeModuleListMany(module, space, modules);
-    }
-  }
-
-  def = SDF_makeDefinitionDefault(modules);
-
-  imports = SDF_getTransitiveImports(def, id);
+  ATermList imports;
+ 
+  imports = SDF_getTransitiveImports(list, id);
 
   return ATmake("snd-result(all-imports(<term>))", imports);
 }
