@@ -22,7 +22,7 @@ TEST_MODULES=Bracket \
              Pico-Xml \
              Lookup
 
-TEST_MODULES_ASFE_ONLY=BoolAPI
+TEST_MODULES_ASFE_ONLY=BoolAPI Tree
 
 ASFC=${top_builddir}/asfc/src/asfc
 ASFE=${top_builddir}/asfe/src/asfe
