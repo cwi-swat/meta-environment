@@ -12,7 +12,7 @@ in
   execute(in-output,IO?).
   ( rec-msg(Id?,open-file(id(Name?))).
     snd-eval(IO, open-old-asfix-file(Name)).
-    ( rec-value(IO,opened-file(asfix,Name?,T?,Path?)).
+    ( rec-value(IO,opened-file("asfix",Name?,T?,Path?)).
       snd-msg(Id,opened-file(asfix,id(Name),T,Path))
     + rec-value(IO,error-opening(Name?)).
       snd-eval(IO,open-sdf2-file(Name)).
