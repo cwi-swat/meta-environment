@@ -94,25 +94,25 @@ CC=gcc
 # DEBUG-LIBS:     libraries containing debugging information
 # DEBUG-CC-FLAGS: compiler flags to store debugging information in object files
 # DEBUG-LD-FLAGS: optional flags for linking with debugging information
-DEBUG-LIBS     = -L$(ATERM)/lib $(LOCALLIBS:=-dbg) $(LIBS)
+DEBUG-LIBS     = -L\$(ATERM)/lib \$(LOCALLIBS:=-dbg) \$(LIBS)
 DEBUG-CC-FLAGS = ${DEBUG_CC_FLAGS}
 DEBUG-LD-FLAGS = ${DEBUG_LD_FLAGS}
 
 # PROFILE-LIBS:     libraries containing profile information
 # PROFILE-CC-FLAGS: compiler flags to store profile information in object files
 # PROFILE-LD-FLAGS: optional flags for linking profiled object code
-PROFILE-LIBS     = -L$(ATERM)/lib $(LOCALLIBS:=-prof) $(LIBS)
+PROFILE-LIBS     = -L\$(ATERM)/lib \$(LOCALLIBS:=-prof) \$(LIBS)
 PROFILE-CC-FLAGS = ${PROFILE_CC_FLAGS}
 PROFILE-LD-FLAGS = ${PROFILE_LD_FLAGS}
 
 # STD-LIBS:     normal libraries
 # STD-CC-FLAGS: normal compiler flags
 # STD-LD-FLAGS: optional flags
-STD-LIBS      = -L$(ATERM)/lib $(LOCALLIBS:=-$(CC)) $(LIBS)
+STD-LIBS      = -L\$(ATERM)/lib \$(LOCALLIBS:=-\$(CC)) \$(LIBS)
 STD-CC-FLAGS  = ${STD_CC_FLAGS}
 STD-LD-FLAGS  = ${STD_LD_FLAGS}
 
-# FLAGS_$(CC): compiler dependent flags (e.g., FLAGS-gcc=-Wall)
+# FLAGS_\$(CC): compiler dependent flags (e.g., FLAGS-gcc=-Wall)
 FLAGS-cc      =${FLAGS_cc}
 FLAGS-gcc     =${FLAGS_gcc}
 
@@ -120,57 +120,55 @@ FLAGS-gcc     =${FLAGS_gcc}
 
 prefix          = @prefix@
 exec_prefix     = @exec_prefix@
-bindir          = $(exec_prefix)/bin
-libdir          = $(exec_prefix)/lib
-includedir      = $(prefix)/include
+bindir          = \$(exec_prefix)/bin
+libdir          = \$(exec_prefix)/lib
+includedir      = \$(prefix)/include
 
-DEFS            = @DEFS@ $(XDEFS)
-INCLUDES        = @INCLUDES@ $(XINCLUDES)
-LIBS            = @LIBS@ $(XLIBS)
+DEFS            = @DEFS@ \$(XDEFS)
+INCLUDES        = @INCLUDES@ \$(XINCLUDES)
+LIBS            = @LIBS@ \$(XLIBS)
 SOCKLIBS        = @SOCKLIBS@
-GELLIBS         = @GELLIBS@
 
-GEL             = @GEL@
 ATERM           = @ATERM@
 
-XINCLUDES       = -I$(ATERM)/include -I$(includedir)
-XLIBS           = $(GELLIBS) -L$(prefix)/lib $(SOCKLIBS) 
+XINCLUDES       = -I\$(ATERM)/include -I\$(includedir)
+XLIBS           = \$(GELLIBS) -L\$(prefix)/lib \$(SOCKLIBS) 
 
 SPEC_SRCS=`cat $1.module-list |\
           grep -v '#' | awk '{printf "\\\\\n          %s", $1;}'`
-SRCS=$(SPEC_SRCS) init.c
+SRCS=\$(SPEC_SRCS) init.c
 
-STD-OBJS=$(SRCS:.c=-$(CC).o)
-DEBUG-OBJS=$(SRCS:.c=-dbg.o)
-PROFILE-OBJS=$(SRCS:.c=-prof.o)
+STD-OBJS=\$(SRCS:.c=-\$(CC).o)
+DEBUG-OBJS=\$(SRCS:.c=-dbg.o)
+PROFILE-OBJS=\$(SRCS:.c=-prof.o)
 
 # Make rules 
-%-$(CC).o: %.c
-	$(CC) $(FLAGS-$(CC)) $(STD-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o \$@
+%-\$(CC).o: %.c
+	\$(CC) \$(FLAGS-\$(CC)) \$(STD-CC-FLAGS) \$(DEFS) \$(INCLUDES) -c $< -o \$@
 
 %-dbg.o: %.c
-	$(CC) $(FLAGS-$(CC)) $(DEBUG-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o \$@
+	\$(CC) \$(FLAGS-\$(CC)) \$(DEBUG-CC-FLAGS) \$(DEFS) \$(INCLUDES) -c $< -o \$@
 
 %-prof.o: %.c
-	$(CC) $(FLAGS-$(CC)) $(PROFILE-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o \$@
+	\$(CC) \$(FLAGS-\$(CC)) \$(PROFILE-CC-FLAGS) \$(DEFS) \$(INCLUDES) -c $< -o \$@
 
-$1 : $(STD-OBJS)
-	$(CC) $(STD-LD-FLAGS) -o \$@ $(STD-OBJS) $(LIBDIR) $(STD-LIBS)
+$1 : \$(STD-OBJS)
+	\$(CC) \$(STD-LD-FLAGS) -o \$@ \$(STD-OBJS) \$(LIBDIR) \$(STD-LIBS)
 
-$1-debug : $(DEBUG-OBJS)
-	$(CC) $(DEBUG-LD-FLAGS) -o \$@ $(DEBUG-OBJS) $(LIBDIR) $(DEBUG-LIBS)
+$1-debug : \$(DEBUG-OBJS)
+	\$(CC) \$(DEBUG-LD-FLAGS) -o \$@ \$(DEBUG-OBJS) \$(LIBDIR) \$(DEBUG-LIBS)
 
-$1-prof : $(PROFILE-OBJS)
-	$(CC) $(PROFILE-LD-FLAGS) -o \$@ $(PROFILE-OBJS) $(LIBDIR) $(PROFILE-LIBS)
+$1-prof : \$(PROFILE-OBJS)
+	\$(CC) \$(PROFILE-LD-FLAGS) -o \$@ \$(PROFILE-OBJS) \$(LIBDIR) \$(PROFILE-LIBS)
 
 debug:  $1-debug
 
 profile: $1-prof
 
 
-init.c: $(SPEC_SRCS)
+init.c: \$(SPEC_SRCS)
 	@(echo "/*GENERATED AUTOMATICALLY, DO NOT MODIFY */" ;\\
-	SPEC_SRCS="$(SPEC_SRCS)" ;\\
+	SPEC_SRCS="\$(SPEC_SRCS)" ;\\
 	for file in \$\$SPEC_SRCS; do \\
 		echo "extern void register_\$\$file();" ;\\
 		echo "extern void resolve_\$\$file();"  ;\\
@@ -193,5 +191,5 @@ init.c: $(SPEC_SRCS)
 	echo "}" ) | sed 's/.c()/()/g;s/-/_/g;' > \$@
 
 clean:
-	$(RM) *.o init.c $1 $1-db $1-prof
+	\$(RM) *.o init.c $1 $1-db $1-prof
 ENDCAT
