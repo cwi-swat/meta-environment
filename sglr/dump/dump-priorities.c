@@ -8,22 +8,26 @@ void DumpOnePriority(FILE *out, parse_table *pt, int l)
 {
   ATermList pr;
 
-  if((pr = SG_LookupGtrPriority(pt, SG_SETLABEL(l))))
+  if((pr = SG_LookupGtrPriority(pt, ATmakeInt(l)))) {
     ATfprintf(out,"%d\t%t\n", l, pr);
+  }
 }
 
 void DumpAllPriorities(FILE *out, parse_table *pt)
 {
   int l;
 
-  for(l=SG_PROD_START; l < (SG_PROD_START + pt->numprods); l++)
+  for(l=SG_PROD_START; l < (SG_PROD_START + pt->numprods); l++) {
     DumpOnePriority(out, pt, l);
+  }
 }
 
 void DoDump(parse_table *pt, int requested, ATbool unparsed)
 {
-  if(requested >= 0)
+  if(requested >= 0) {
     DumpOnePriority(stdout, pt, requested);
-  else
+  }
+  else {
     DumpAllPriorities(stdout, pt);
+  }
 }
