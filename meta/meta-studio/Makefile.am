@@ -1,4 +1,4 @@
-SUBDIRS		= metastudio scripts .
+SUBDIRS		= metastudio scripts . META-INF
 
 include ${top_srcdir}/make_rules
 
