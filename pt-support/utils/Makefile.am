@@ -1,11 +1,22 @@
-#
-# vim:ts=8:sw=8:sts=0
-#
 # $Id$
-#
+
+EXTRA_DIST		= unparsePT.idef
 
 bin_PROGRAMS		= flattenPT unparsePT implodePT unparseProd \
                           addPosInfo
+
+CFLAGS			= -g -Wall -O2
+INCLUDES		= -I${top_srcdir}/libmept \
+                          -I${top_srcdir}/libasfix2 \
+                          -I${top_srcdir}/libconversion \
+			  -I${ATERM}/include \
+			  -I${TOOLBUS}/include
+
+data_DATA		= unparsePT.idef
+
+CLEANFILES		= unparsePT.tifs unparsePT.tif.[ch]
+
+noinst_HEADERS		= unparsePT.tif.h
 
 addPosInfo_SOURCES      = addPosInfo.c
 addPosInfo_LDADD        = -L../libmept -lmept \
@@ -17,8 +28,9 @@ flattenPT_LDADD		= -L../libconversion -lconversion \
                           -L../libasfix2 -lasfix2 \
 			  -L${ATERM}/lib -lATerm
 
-unparsePT_SOURCES	= unparsePT-main.c
+unparsePT_SOURCES	= unparsePT.tif.c unparsePT-main.c
 unparsePT_LDADD		= -L../libmept -lmept \
+			  -L${TOOLBUS}/lib -lATB \
 			  -L${ATERM}/lib -lATerm
 
 unparseProd_SOURCES	= unparseProd-main.c
@@ -29,8 +41,11 @@ implodePT_SOURCES	= implodePT-main.c
 implodePT_LDADD		= -L../libmept -lmept \
 			  -L${ATERM}/lib -lATerm
 
-CFLAGS			= -g -Wall -O2
-INCLUDES		= -I${top_srcdir}/libmept \
-                          -I${top_srcdir}/libasfix2 \
-                          -I${top_srcdir}/libconversion \
-			  -I${ATERM}/include
+%.tif.c %.tif.h: %.tifs
+	$(TOOLBUS)/bin/tifstoc -tool $* $<
+
+%.tifs: %.idef
+	$(TOOLBUS)/bin/idef2tif $<
+	@if [ "a${VPATH}" != "a" ]; then \
+		mv ${srcdir}/$@ $@ ;\
+	fi
