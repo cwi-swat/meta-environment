@@ -40,7 +40,7 @@ libeval_a_LIBADD  = asfe.tif.o
 asfe_SOURCES = main.c
 asfe_LDADD   = libeval.a \
                    -L$(ASC)/lib -lasc-support \
-                   -L$(PT_SUPPORT)/lib -lAsFix \
+                   -L$(PT_SUPPORT)/lib -lPT -lASF \
                    -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 INCLUDES          = ${TIDE} \

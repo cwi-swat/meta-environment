@@ -30,48 +30,50 @@
 #include "memotable.h"
 
 /* Standard properties of the memo table */
-#define MemoTableInitialSize 1000 
+#define MemoTableInitialSize 1000
 #define MemoTableMaxLoadPercentage 70
 
 MemoTable MemoTableCreate(void)
 {
-	ATermTable table = ATtableCreate(MemoTableInitialSize, MemoTableMaxLoadPercentage);
+  ATermTable table =
+    ATtableCreate(MemoTableInitialSize, MemoTableMaxLoadPercentage);
 
-	return (MemoTable) table;
+  return (MemoTable) table;
 }
 
 MemoTable MemoTableClear(MemoTable table)
 {
-	ATermTable t = (ATermTable) table;
-	ATermList keys = ATtableKeys(t);
-	
-	for(;!ATisEmpty(keys); keys = ATgetNext(keys)) {
-		ATtableRemove(t, ATgetFirst(keys));
-	}
-	
-	return (MemoTable) t;
+  ATermTable t = (ATermTable) table;
+  ATermList keys = ATtableKeys(t);
+
+  for (; !ATisEmpty(keys); keys = ATgetNext(keys)) {
+    ATtableRemove(t, ATgetFirst(keys));
+  }
+
+  return (MemoTable) t;
 }
 
-void MemoTableDestroy(MemoTable table)
+void
+MemoTableDestroy(MemoTable table)
 {
-	ATtableDestroy((ATermTable) table);
+  ATtableDestroy((ATermTable) table);
 
-	return;
+  return;
 }
 
-MemoTable MemoTableAdd(MemoTable table, ATerm term, ATerm normalform)
+MemoTable MemoTableAdd(MemoTable table, PT_Tree term, PT_Tree normalform)
 {
-	ATermTable t = (ATermTable) table;
+  ATermTable t = (ATermTable) table;
 
-	ATtablePut(t, term, normalform);
+  ATtablePut(t, (ATerm) term, (ATerm) normalform);
 
-	return (MemoTable) t;
+  return (MemoTable) t;
 }
 
-ATerm MemoTableLookup(MemoTable table, ATerm term)
+PT_Tree MemoTableLookup(MemoTable table, PT_Tree term)
 {
-	ATermTable t = (ATermTable) table;
-	ATerm normalform = ATtableGet(t, term);
-	
-	return normalform;
+  ATermTable t = (ATermTable) table;
+  ATerm normalform = ATtableGet(t, (ATerm) term);
+
+  return (PT_Tree) normalform;
 }

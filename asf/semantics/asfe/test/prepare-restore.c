@@ -33,13 +33,15 @@
 #include <stdlib.h>
 #include "preparation.h"
 #include "asfix_utils.h"
-#include <AsFix.h>
+#include <PT.h>
+#include <ASF.h>
 
 int main(int argc, char *argv[])
 {
 	ATbool usage = ATfalse;
 	ATerm bottomOfStack;
-	ATerm in, term, prepared, restored, out;
+	ATerm in, out;
+        PT_Tree term, prepared, restored;
 	
 	if(argc == 2) {
 		if(!strcmp(argv[1],"--no-whitespace") || !strcmp(argv[1],"-n")) {
@@ -57,24 +59,27 @@ int main(int argc, char *argv[])
 		ATerror("Usage: prepare-restore [--no-whitespace] [-n]\nThis test reads an asfix term from stdin, prepares it for rewriting, restores it again and tests the input with the output for equality.\n");
 				
 
-	AFinit(argc,argv,&bottomOfStack);
+	ATinit(argc,argv,&bottomOfStack);
+        PT_initPTApi();
+        ASF_initASFApi();
 
 	in = ATreadFromFile(stdin);
 	
 	in = ATremoveAllAnnotations(in); 
 
-	term = asfix_get_term(in);
+	term = PT_getParseTreeTree(PT_makeParseTreeFromTerm(in));
 
 	prepared = RWprepareTerm(term);
 
 	restored = RWrestoreTerm(prepared);
 
-	out = asfix_put_term(in, restored);
+	out = PT_makeTermFromParseTree(PT_setParseTreeTree(in, restored));
 
 	ATprintf("%t", out);
 
-	if(!ATisEqual(in, out)) 
+	if(!ATisEqual(in, out)) {
 		ATerror("Error: Output term is different from input term.\n");
+        }
 	
 	return 0;
 }

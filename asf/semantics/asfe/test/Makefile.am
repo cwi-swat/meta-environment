@@ -22,14 +22,12 @@
 
 SUBDIRS         = terms eqs ref fail
 
-TESTS           = reduce-test prepare-restore-test \
-                  equalModuloWhitespace-test whitespace-test regress-test
+TESTS           = reduce-test prepare-restore-test  regress-test
 
 EXTRA_DIST      = reduce-test.sh.src prepare-restore-test.sh.src \
-                  equalModuloWhitespace-test.sh.src whitespace-test.sh.src \
                   reduce-test-1.tb reduce-test-2.tb regress-test.sh.src 
 
-noinst_PROGRAMS = prepare-restore equalModuloWhitespace whitespace
+noinst_PROGRAMS = prepare-restore 
 
 CLEANFILES                    = $(TESTS)
 
@@ -38,28 +36,10 @@ prepare_restore_SOURCES = \
 
 prepare_restore_LDADD = \
                   -L../src -leval \
-                  -L$(PT_SUPPORT)/lib -lAsFix \
+                  -L$(PT_SUPPORT)/lib -lPT -lASF \
                   -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
-equalModuloWhitespace_SOURCES = \
-                  equalModuloWhitespace.c
-
-equalModuloWhitespace_LDADD   = \
-                 -L../src -leval \
-                 -L$(PT_SUPPORT)/lib -lAsFix \
-                 -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
-
-whitespace_SOURCES = \
-                 whitespace.c
-
 prepare-restore.o: ../src/libeval.a
-equalModuloWhitespace.o: ../src/libeval.a
-whitespace.o: ../src/libeval.a
-
-whitespace_LDADD   = \
-                 -L../src -leval \
-                 -L$(PT_SUPPORT)/lib -lAsFix \
-                 -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 INCLUDES       = -I$(srcdir)/../src -I$(ASC)/include -I$(PT_SUPPORT)/include \
                  -I$(ATERM)/include
@@ -67,5 +47,6 @@ INCLUDES       = -I$(srcdir)/../src -I$(ASC)/include -I$(PT_SUPPORT)/include \
 % : %.sh.src Makefile
 	sed 's@__TOOLBUS__@$(TOOLBUS)/bin/toolbus@g;\
 	     s@__DATADIR__@$(datadir)@g;\
+	     s@__ATERM__@$(ATERM)@g;\
 	     s@__SRCDIR__@$(srcdir)@g' < $< > $@ && \
 	chmod +x $@

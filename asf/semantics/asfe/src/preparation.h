@@ -23,18 +23,22 @@
 #define PREPARATION_H
 
 #include <aterm2.h>
+#include <PT-utils.h>
+#include <ASF.h>
 
 typedef struct equation_entry
 {
   struct equation_entry *hnext;
   unsigned hashnr;
-  ATerm top_ofs;
-  ATerm first_ofs;
-  ATerm equation;
-  ATerm tag;
-  ATerm lhs;
-  ATerm rhs;
-  ATermList conds;
+
+  ASF_Tag tag;
+  ASF_CondEquation equation;
+  ASF_ConditionList conds;
+
+  PT_Production top_ofs;
+  PT_Production first_ofs;
+  PT_Tree lhs;
+  PT_Tree rhs;
 } equation_entry;
 
 typedef struct equation_table
@@ -45,19 +49,20 @@ typedef struct equation_table
   equation_entry **table;
 } equation_table;
 
+#define ASFtoPT(tree) (PT_makeTreeFromTerm(ASF_makeTermFromTree(tree)))
+#define PTtoASF(tree) (ASF_makeTreeFromTerm(PT_makeTermFromTree(tree)))
 
-ATerm RWprepareTerm(ATerm t);
-ATermList RWprepareEqs(ATermList eqs);
-ATerm RWgetEqsList(ATerm t);
-ATerm RWrestoreTerm(ATerm t);
+PT_Tree RWprepareTerm(PT_Tree t);
+ASF_CondEquationList RWprepareEquations(ASF_CondEquationList eqsList);
+PT_Tree RWrestoreTerm(PT_Tree t);
 void RWflushEquations();
-ATermList AFfilterLayout(ATermList elems);
-ATerm AFremoveTermLayout(ATerm t);
+PT_Args AFfilterLayout(PT_Args elems);
+PT_Tree AFremoveTermLayout(PT_Tree t);
 
-equation_entry *find_equation(equation_entry *prev, 
-															ATerm top_ofs, ATerm first_ofs);
+equation_entry *find_equation(equation_entry *prev, PT_Production top_ofs, 
+                              PT_Production first_ofs);
 void select_equations(char *module);
-void enter_equations(char *module, ATermList eqs);
+void enter_equations(char *module, ASF_CondEquationList eqs);
 ATbool find_module(char *module);
 void delete_equations(char *module);
 

@@ -25,34 +25,30 @@
 #ifndef TRAVERSALS_H
 #define TRAVERSALS_H
 #include <aterm2.h>
+#include <PT-utils.h>
 
 extern ATbool traversals_on;
 
 typedef enum { UNDEFINED = 0, TRANSFORMER = 1, ANALYZER = 2 } TraversalType;
 typedef struct Traversal_tag {
-	TraversalType type;
-	ATerm     prod;
-	ATermList symbols;
-	ATermList args;
+	TraversalType  type;
+	PT_Production  prod;
+	PT_Symbols     symbols;
+	PT_Args        args;
 } Traversal;
 
-#define ACCUMULATED_POS (keep_layout ? 8 : 4)
-#define TRAVERSED_POS (keep_layout ? 4 : 2)
+#define ACCUMULATED_ARG_POS  8
+#define TRAVERSED_ARG_POS    4 
 #define TRAVERSED_SYMBOL_POS 4
 
+#define selectTraversedArg(args) (selectTree(args, TRAVERSED_ARG_POS))
+#define selectAccumulatedArg(args) (selectTree(args, ACCUMULATED_ARG_POS))
+
 /* operations  on Traversals */
-Traversal create_traversal_pattern(ATerm term);
-Traversal update_accumulator(Traversal trav, ATerm newarg);
-ATerm     make_traversal_appl(ATerm trm, Traversal traversal);
-ATerm     choose_normalform(ATerm term, Traversal trav);
-ATerm     select_traversed_arg(ATermList args);
-
-
-/* rewriting functionality */
-ATerm rewrite_traversal(ATerm trm, ATerm env, int depth, Traversal *traversal);
-ATermList rewrite_args_traversal(ATermList args, ATerm env, int depth, 
-																 Traversal *traversal);
-ATermList rewrite_elems_traversal(ATerm sym, ATermList elems, ATerm env, int depth, 
-																	Traversal *traversal);
+Traversal createTraversalPattern(PT_Tree term);
+Traversal updateAccumulator(Traversal trav, PT_Tree newarg);
+PT_Tree   makeTraversalAppl(PT_Tree trm, Traversal traversal);
+PT_Tree   chooseNormalform(PT_Tree term, Traversal trav);
+PT_Tree   selectTree(PT_Args args, int pos);
 
 #endif

@@ -32,7 +32,7 @@
 #ifndef EVALUATOR_UTILS_H
 #define EVALUATOR_UTILS_H
 
-extern ATerm tagCurrentRule;
+#include <PT-utils.h>
 
 /* This global indicates if whitespace will be saved as much as possible
  * during rewriting.
@@ -47,28 +47,28 @@ extern ATbool keep_layout;
 /* isEqualModuloWhitespace computes equality disregarding any whitespace in the 
  * asfix. Both terms must contain whitespace keywords, but they may be different.
  */
-ATbool isEqualModuloWhitespace(ATerm asfix1, ATerm asfix2);
+ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2);
 
 /* skipWhiteSpace. This function moves the list pointer to an 
  * element that is not layout (whitespace or a separator).
  */
-ATermList skipWhitespace(ATermList list);
+PT_Args skipWhitespace(PT_Args list);
 
 /* skipToEndOfWhitespace. this function moves the list pointer
  * while the pointer is on whitespace.
  */
-ATermList skipToEndOfWhitespace(ATermList list);
+PT_Args skipToEndOfWhitespace(PT_Args list);
 
 /* asource. This function asources an asfix term to text and 
  * creates a quoted literal ATerm for it.
  */
-ATerm asource(ATerm asfix);
+ATerm asource(PT_Tree asfix);
 
 /*
  * isValidList, isValidSlice both check:
  *    - if no consecutive whitespace nodes occur in a list
  */
-ATbool isValidList(ATermList list);
-ATbool isValidSlice(ATermList begin, ATermList end);
+ATbool isValidList(PT_Args list);
+ATbool isValidSlice(PT_Args begin, PT_Args end);
 
 #endif

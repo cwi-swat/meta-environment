@@ -25,60 +25,129 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <aterm2.h>
-#include <AsFix.h>
-#include <AsFix-access.h>
-#include <AsFix2src.h>
 #include <assert.h>
 #include <deprecated.h>
 #include "asfix_utils.h"
 #include "asfe.h"
 #include "traversals.h"
 
+typedef struct PositionSymbolTuple_tag {
+  int pos;
+  PT_Symbol symbol;
+} PositionSymbolTuple;
+
+typedef struct PositionTreeTuple_tag {
+  int pos;
+  PT_Tree tree;
+} PositionTreeTuple;
+
 extern ATbool run_verbose;
 
-/* select_traversed_arg
+/* first we define a number of visitors for Tree and Symbol */
+PT_Symbol getSymbol(PT_Symbol symbol, PT_SymbolVisitorData data)
+{
+  if (((PositionSymbolTuple*)data)->pos == 0) {
+    ((PositionSymbolTuple*)data)->symbol = symbol;
+  }
+
+  ((PositionSymbolTuple*)data)->pos--;
+ 
+  return symbol;
+}
+
+PT_Symbol replaceSymbol(PT_Symbol symbol, PT_SymbolVisitorData data)
+{
+  if (((PositionSymbolTuple*)data)->pos == 0) {
+    symbol = ((PositionSymbolTuple*)data)->symbol;
+  }
+
+  ((PositionSymbolTuple*)data)->pos--;
+  return symbol;
+}
+
+PT_Tree getTree(PT_Tree tree, PT_TreeVisitorData data)
+{
+  if (((PositionSymbolTuple*)data)->pos == 0) {
+    ((PositionTreeTuple*)data)->tree = tree;
+  }
+
+  ((PositionTreeTuple*)data)->pos--;
+
+  return tree;
+}
+
+PT_Tree replaceTree(PT_Tree tree, PT_TreeVisitorData data)
+{
+  if (((PositionTreeTuple*)data)->pos == 0) {
+    tree = ((PositionTreeTuple*)data)->tree;
+  }
+
+  ((PositionTreeTuple*)data)->pos--;
+  return tree;
+}
+
+/* selectTree
  *
  * input: a traversal appl
- * output: The first argument term of this appl. 
+ * output: The argument term at pos of this appl. 
  *
- * note: This function depends on the quoted prefix syntax of traversal
- *       prods and the fact that the first argument is always traversed.
  */
-ATerm select_traversed_arg(ATermList args)
+PT_Tree selectTree(PT_Args args, int pos)
 {
-	return ATelementAt(args, TRAVERSED_POS);
+  PositionTreeTuple data;
+
+  data.pos = pos;
+  data.tree = NULL;
+
+  PT_foreachTreeInArgs(args, getTree, (PT_TreeVisitorData) &data);
+
+  assert(data.tree);
+
+  return data.tree;
 }
 
 /* create_traversal_pattern
  *
- * input: an asfix appl.
+ * input: a PT_TreeAppl
  * output: a Traversal struct, containing the original traversal term
  *         and an indication if it is a transformer or an analyzer.
  * 
  */
-Traversal create_traversal_pattern(ATerm term)
+Traversal
+createTraversalPattern(PT_Tree term)
 {
-	ATerm prod;
-	ATermList args;
-	ATermList symbols;
-	ATerm symbol;
-	ATerm traversed;
-	Traversal traversal;
+  PT_Production prod;
+  PT_Args args;
+  PT_Symbols symbols, symbolList;
+  PT_Symbol symbol;
+  PT_Symbol traversed;
+  PositionSymbolTuple symbolVisitorData;
+  Traversal traversal;
+  int pos;
 
-	prod = asfix_get_appl_prod(term);
-	args = asfix_get_appl_args(term);
+  prod = PT_getTreeProd(term);
+  args = PT_getTreeArgs(term);
 
-	symbols = (ATermList) AFgetProdSymbols(prod);
-	symbol = AFgetProdSymbol(prod);
-	traversed = ATelementAt(symbols, TRAVERSED_SYMBOL_POS);
-	
-	traversal.type = ATisEqual(traversed, symbol) ? TRANSFORMER : ANALYZER;
-	traversal.prod = prod;
-	traversal.symbols = symbols;
-	traversal.args = args;
+  symbols = PT_getProductionLhs(prod);
+  symbol = PT_getProductionRhs(prod);
 
-	return traversal;
+  /* get the symbol of the traversed arg */
+  symbolVisitorData.pos = TRAVERSED_SYMBOL_POS;
+  symbolVisitorData.symbol = NULL;
+  PT_foreachSymbolInSymbols(symbols, getSymbol, 
+                         (PT_SymbolVisitorData) &symbolVisitorData); 
+  traversed = symbolVisitorData.symbol;
+  assert(traversed != NULL);
+ 
+  traversal.type = PT_isEqualSymbol(traversed, symbol) ? TRANSFORMER : ANALYZER;
+  traversal.prod = prod;
+  traversal.args = args;
+  traversal.symbols = symbols;
+
+  return traversal;
 }
+
+
 
 /* make_traversal_appl
  *
@@ -86,26 +155,43 @@ Traversal create_traversal_pattern(ATerm term)
  * output: the traversal pattern instantiated by the symbol and the term 
  *         of the first argument.
  */
-ATerm make_traversal_appl(ATerm appl, Traversal traversal)
+PT_Tree
+makeTraversalAppl(PT_Tree appl, Traversal traversal)
 {
-  ATerm prod;
-	ATermList args;
-	ATerm sort; 
-	ATerm newappl;
-	ATermList symbols;
+  PT_Production prod;
+  PT_Args args;
+  PT_Symbol symbol;
+  PT_Tree newappl;
+  PT_Symbols symbols;
+  PositionSymbolTuple symbolVisitorData;
+  PositionTreeTuple treeVisitorData;
+  int pos;
 
-	sort = AFgetProdSymbol(asfix_get_appl_prod(appl)); 
-	symbols = ATreplace(traversal.symbols, sort, TRAVERSED_SYMBOL_POS);
-	prod = AFsetProdSymbols(traversal.prod, symbols);
-	args = ATreplace(traversal.args, appl, TRAVERSED_POS);
+  symbol = PT_getProductionRhs(PT_getTreeProd(appl));
 
-	if(traversal.type == TRANSFORMER) {
-		prod = AFsetProdSymbol(prod, sort);	
-	}
+  symbolVisitorData.pos = TRAVERSED_SYMBOL_POS;
+  symbolVisitorData.symbol = symbol;
+  symbols = PT_foreachSymbolInSymbols(traversal.symbols, 
+                                      replaceSymbol, 
+                                      (PT_SymbolVisitorData) 
+                                        &symbolVisitorData);
 
-	newappl = AFmakeAppl(prod,args);
-	
-	return newappl;
+  prod = PT_setProductionLhs(traversal.prod, symbols);
+ 
+  treeVisitorData.pos = TRAVERSED_ARG_POS;
+  treeVisitorData.tree = appl;
+
+  args = PT_foreachTreeInArgs(traversal.args, replaceTree, 
+                              (PT_TreeVisitorData) &treeVisitorData); 
+
+  if (traversal.type == TRANSFORMER) {
+    prod = PT_setProductionRhs(prod, symbol);
+  }
+
+  newappl = PT_setTreeProd(appl, prod);
+  newappl = PT_setTreeArgs(newappl, args);
+
+  return newappl;
 }
 
 /* update_accumulator
@@ -113,181 +199,41 @@ ATerm make_traversal_appl(ATerm appl, Traversal traversal)
  * Changes the second argument of the traversal pattern. This is used
  * as a value environment for traversals.
  */
-Traversal update_accumulator(Traversal traversal, ATerm newarg)
+Traversal
+updateAccumulator(Traversal traversal, PT_Tree newarg)
 {
-	assert(traversal.type == ANALYZER);
+  PositionTreeTuple data;
+  data.pos = ACCUMULATED_ARG_POS;
+  data.tree = newarg;
 
-	traversal.args = ATreplace(traversal.args, newarg, ACCUMULATED_POS);
-	
-	return traversal;
+  assert(traversal.type == ANALYZER);
+
+  traversal.args = PT_foreachTreeInArgs(traversal.args, replaceTree,
+                                     (PT_TreeVisitorData) &data);
+
+  return traversal;
 }
 
-/* choose_normalform
+/* chooseNormalform
  *
  * depending on the type of traversal, constructs a normal form.
  * This function is used after the toplevel traversal prod returns.
  */
-ATerm choose_normalform(ATerm term, Traversal traversal) 
+PT_Tree
+chooseNormalform(PT_Tree term, Traversal traversal)
 {
-	switch(traversal.type) {
-	case TRANSFORMER:
-		/* we just return the term */
-		break;
-	case ANALYZER:
-		/* we only return the accumulated value */
-		term = ATelementAt(traversal.args, ACCUMULATED_POS);
-		break;
-	default:
-		ATerror("Unknown traversal type");
-		break;
-	}
-
-	return term;
-}
-
-ATerm rewrite_traversal(ATerm trm, ATerm env, int depth, Traversal *traversal)
-{
-  ATerm newtrm, sym, rewtrm, travtrm;
-  ATermList args, newargs;
-  ATermList elems, newelems;
-
-  if(asfix_is_appl(trm)) {
-		if(asfix_is_bracket_func(trm)) {
-			args = (ATermList) asfix_get_appl_args(trm);
-			newargs = rewrite_args_traversal(args,env, depth, traversal);
-      newtrm = ATgetFirst(ATgetNext(newargs));
-      rewtrm = newtrm;
-    } else {
-			/* check for a match */
-			travtrm = make_traversal_appl(trm, *traversal);
-			rewtrm = select_and_rewrite(travtrm, depth);
-
-			if(ATisEqual(rewtrm, travtrm)) {
-				/* if no match, traverse down to the children */
-				args = (ATermList) asfix_get_appl_args(trm);
-				newargs = rewrite_args_traversal(args,env,depth,traversal);
-        /* on the way back, we check for new redices */
-				rewtrm = select_and_rewrite(asfix_put_appl_args(trm,newargs), depth);
-			 
-			} else { /* reduction occurred, we need postprocessing */
-
-				if(traversal->type == ANALYZER) {
-					/* We update the traversal with the rhs */
-					*traversal = update_accumulator(*traversal, rewtrm);
-					/* We just return the input to construct a well-formed term */
-					rewtrm = trm;
-				} 
-			}
-		}
-  } else if(asfix_is_var(trm)) {
-      rewtrm = v_lookup_plain(env, trm);
-      if(!rewtrm)
-	rewtrm = trm;
-  } else if(asfix_is_list(trm)) {
-    elems = (ATermList) asfix_get_list_elems(trm);
-    sym = asfix_get_list_sym(trm);
-    newelems = rewrite_elems_traversal(sym, elems, env, depth,  traversal); 
-    rewtrm = (ATerm) asfix_put_list_elems(trm, (ATerm) newelems);
-  }
-  else {
-    rewtrm = trm;
-  }
-  return rewtrm;
-}
-
-ATermList rewrite_args_traversal(ATermList args, ATerm env, int depth, 
-																 Traversal *traversal)
-{
-  ATerm arg, newarg;
-  ATermList newargs = ATempty;
-  int len = ATgetLength(args);
-
-  if(len > 32) {
-    while(!ATisEmpty(args)) {
-      arg = ATgetFirst(args);
-      if(asfix_is_appl(arg) || asfix_is_var(arg) ||
-         asfix_is_list(arg) || asfix_is_lex(arg))
-        newarg = rewrite_traversal(arg,env, depth + 1, traversal);
-      else
-        newarg = arg;
-      newargs = ATappend(newargs, newarg);
-      args = ATgetNext(args);
-    }
-  } else {
-    ATerm newarg_table[32];
-    int i = 0;
-    while(!ATisEmpty(args)) {
-      arg = ATgetFirst(args);
-      if(asfix_is_appl(arg) || asfix_is_var(arg) ||
-         asfix_is_list(arg) || asfix_is_lex(arg)) {
-				newarg_table[i] = rewrite_traversal(arg, env, depth + 1, traversal);
-			} else {
-        newarg_table[i] = arg;
-			}
-      args = ATgetNext(args);
-      ++i;
-    }
-    assert(i==len);
-    for(--i; i >= 0; i--)
-      newargs = ATinsert(newargs,newarg_table[i]);
-  }
-  return newargs;
-}
-
-
-ATermList rewrite_elems_traversal(ATerm sym, ATermList elems, ATerm env, int depth,
-																	Traversal *traversal)
-{
-  ATerm elem, newelem;
-  ATermList newelems = ATempty;
-  int len = ATgetLength(elems);
-
-	/* <PO:opt> why not first do the first len-32 elements and then
-     the last 32 using the 'fast' method below? */
-  if(len >= 32) {
-    while(!ATisEmpty(elems)) {
-      elem = ATgetFirst(elems);
-			if(asfix_is_list_var(elem)) {
-				ATermAppl tuple = v_lookup_list(env, elem);
-				assert(tuple);
-				newelems = append_slice(newelems, tuple);
-			} else {
-				newelem = rewrite_traversal(elem, env, depth + 1, traversal);
-        newelems = ATappend(newelems, newelem);
-			}
-      elems = ATgetNext(elems);
-    }
-  } else {
-    ATerm newelem_table[32];
-    int i = 0;
-    while(!ATisEmpty(elems)) {
-			elem = ATgetFirst(elems);
-			if(asfix_is_list_var(elem)) {
-				newelem_table[i] = (ATerm)v_lookup_list(env, elem);
-				assert(newelem_table[i]);
-			} else {
-				newelem_table[i] = rewrite_traversal(elem, env, depth + 1, traversal);
-			}
-      elems = ATgetNext(elems);
-			i++;
-    }
-
-    for(--i; i>=0; i--) {
-      newelem = newelem_table[i];
-      if(ATgetAFun((ATermAppl)newelem) == list_var) {
-				if(keep_layout && v_is_empty_slice(newelem)) {
-					newelems = skipWhitespace(newelems);
-				} else {
-					newelems = prepend_slice((ATermAppl)newelem, newelems);
-				}
-			} else {
-				if(!(keep_layout && ATisEmpty(newelems) &&
-						 (asfix_is_list_sep(newelem) || asfix_is_whitespace(newelem)))) {												newelems = ATinsert(newelems, newelem);
-				}
-			}
-		}
+  switch (traversal.type) {
+  case TRANSFORMER:
+    /* we just return the term */
+    break;
+  case ANALYZER:
+    /* we only return the accumulated value */
+    term = selectAccumulatedArg(traversal.args);
+    break;
+  default:
+    ATerror("Unknown traversal type");
+    break;
   }
 
-  return newelems;
+  return term;
 }
-

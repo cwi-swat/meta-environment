@@ -32,70 +32,64 @@
 #include <signal.h>
 
 #include <aterm2.h>
-#include <AsFix.h>
-#include <AsFix2src.h>
-#include <AsFix-access.h>
+
+#include <PT.h>
+#include <ASF.h>
 
 #include "preparation.h"
 #include "asfe.tif.h"
 #include "traversals.h"
 #include "asfe.h"
 
-/*{{{  variables */
 
 static char myarguments[] = "be:hi:o:w:tvVl";
 static char myname[] = "asfe";
 static char myversion[] = "0.1";
 
-/*}}}  */
-/*{{{  void usage(char *prg) */
 
 /*     Usage: displays helpful usage information
  */
 
-void usage(char *prg, ATbool is_err)
+void
+usage(char *prg, ATbool is_err)
 {
-  ATwarning(
-	    "Usage: %s [options]\n"
+  ATwarning("Usage: %s [options]\n"
 	    "Options:\n"
-	    "\t-b              output terms in BAF format (default)\n"   
-	    "\t-t              output terms in plaintext format\n"    
+	    "\t-b              output terms in BAF format (default)\n"
+	    "\t-t              output terms in plaintext format\n"
 	    "\t-h              display help information (usage)\n"
 	    "\t-e file         use the equations |file|\n"
 	    "\t-i filename     input from file (default stdin)\n"
 	    "\t-o filename     output to file (default stdout)\n"
-            "\t-l              toggle keep layout (default %s)\n"
-            "\t-w (on | off)   toggle traversals (default %s)\n"
+	    "\t-l              toggle keep layout (default %s)\n"
+	    "\t-w (on | off)   toggle traversals (default %s)\n"
 	    "\t-v              verbose mode\n"
 	    "\t-V              reveal program version (i.e. %s)\n",
-	    prg, keep_layout ? "true" : "false", 
-            traversals_on ? "on" : "off", myversion);
+	    prg, keep_layout ? "true" : "false",
+	    traversals_on ? "on" : "off", myversion);
   exit(is_err ? 1 : 0);
 }
 
-/*}}}  */
-/*{{{  void version(char *prg) */
 
-void version(char *prg)
+void
+version(char *prg)
 {
   ATwarning("%s v%s\n", prg, myversion);
   exit(1);
 }
 
-/*}}}  */
 
-/*{{{  void abort_handler(int signal) */
 
-void abort_handler(int signal)
+void
+abort_handler(int signal)
 {
-  RWsetError("aborted by user", (ATerm)ATempty);
+  RWsetError("aborted by user", (ATerm) ATempty);
 }
 
-/*}}}  */
 
-/*{{{  int main(int argc, char *argv[]) */
 
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
   ATerm bottomOfStack;
 
@@ -113,17 +107,19 @@ int main(int argc, char *argv[])
   char *name = "Standalone";
   int returncode = 0;
   ATerm eqs, term, result;
-  ATermList neweqs;
+  ASF_CondEquationList neweqs;
 
 
   /*  Check whether we're a ToolBus process  */
-  for (c=1; !toolbus_mode && c < argc; c++) {
+  for (c = 1; !toolbus_mode && c < argc; c++) {
     toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
   }
 
   signal(SIGUSR1, abort_handler);
 
-  AFinit(argc, argv, &bottomOfStack);
+  ATinit(argc, argv, &bottomOfStack);
+  PT_initPTApi();
+  ASF_initASFApi();
 
   equations_db = ATdictCreate();
   ATprotect(&equations_db);
@@ -134,7 +130,7 @@ int main(int argc, char *argv[])
   posinfo = ATparse("pos-info");
   ATprotect(&posinfo);
 
-  list_var  = ATmakeAFun("*list-var*", 3, ATtrue);
+  list_var = ATmakeAFun("*list-var*", 3, ATtrue);
   ATprotectAFun(list_var);
 
   plain_var = ATmakeAFun("*plain-var*", 2, ATtrue);
@@ -142,40 +138,41 @@ int main(int argc, char *argv[])
 
   RWclearError();
 
-  ATprotect(&tagCurrentRule);
+  ATprotect((ATerm*)&tagCurrentRule);
 
-  if(toolbus_mode) {
-#ifndef WIN32 /* Code with Toolbus calls, non Windows */
-    ATBinit(argc, argv, &bottomOfStack); 
-    cid = ATBconnect(NULL, NULL, -1,asfe_handler); 
+  if (toolbus_mode) {
+#ifndef WIN32			/* Code with Toolbus calls, non Windows */
+    ATBinit(argc, argv, &bottomOfStack);
+    cid = ATBconnect(NULL, NULL, -1, asfe_handler);
     ATBeventloop();
 #else
     ATwarning("asfe: Toolbus cannot be used in Windows.\n");
 #endif
-  } 
+  }
   else {
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
-      case 'b':  bafmode = 1;                            break;
-      case 't':  bafmode = 0;                            break; 
-      case 'v':  run_verbose = ATtrue;                   break;
-      case 'e':  eqsfile=optarg;                         break;
-      case 'i':  input=optarg;                           break;
-      case 'o':  output=optarg;                          break;
-      case 'l':  keep_layout = !keep_layout;             break;
-      case 'w':  
-        if(!strcmp(optarg, "on")) {
-           traversals_on = ATtrue;
-        } else if(!strcmp(optarg, "off")) {
-           traversals_on = ATfalse;
-        } else {
-          usage(argv[0], ATtrue);
-        }
-        break;
-      case 'V':  version(argv[0]);                       break;
-
-      case 'h':  usage(argv[0], ATfalse);                break;
-      default:   usage(argv[0], ATtrue);                 break;
+      case 'b': bafmode = 1;                     break;
+      case 't': bafmode = 0;                     break;
+      case 'v': runVerbose = ATtrue;             break;
+      case 'e': eqsfile = optarg;                break;
+      case 'i': input = optarg;                  break;
+      case 'o': output = optarg;                 break;
+      case 'l': keep_layout = !keep_layout;      break;
+      case 'w':
+	if (!strcmp(optarg, "on")) {
+	  traversals_on = ATtrue;
+	}
+	else if (!strcmp(optarg, "off")) {
+	  traversals_on = ATfalse;
+	}
+	else {
+	  usage(argv[0], ATtrue);
+	}
+	break;
+      case 'V': version(argv[0]);                break;
+      case 'h': usage(argv[0], ATfalse);         break;
+      default: usage(argv[0], ATtrue);           break;
       }
     }
 
@@ -187,7 +184,7 @@ int main(int argc, char *argv[])
     fclose(iofile);
 
     /* Prepare the equations and put them in the database */
-    neweqs = RWprepareEqs((ATermList) eqs);
+    neweqs = RWprepareEquations(ASF_makeCondEquationListFromTerm(eqs));
 
     enter_equations(name, neweqs);
 
@@ -196,41 +193,41 @@ int main(int argc, char *argv[])
       iofile = stdin;
     else if (!(iofile = fopen(input, "r")))
       ATerror("%s: cannot open %s\n", myname, input);
- 
+
     term = ATreadFromFile(iofile);
     fclose(iofile);
 
-		/* Rewrite the term */
-		result = evaluator(name, term);
+    /* Rewrite the term */
+    result = evaluator(name, term);
 
     /* If we have collected errors, pretty print them now */
     returncode = (RWgetError() == NULL) ? 0 : 1;
 
     if (RWgetError() != NULL) {
       ATerm message, tag, subject;
-      char *messageText = NULL, *tagText = NULL, *subjectText = NULL;
+      char *messageText, *tagText, *subjectText;
       ATermList error;
-								
+
       /* The errors are tuples containing a message and a subject */
       error = (ATermList) RWgetError();
       message = ATgetFirst(error);
       tag = ATgetFirst(ATgetNext(error));
       subject = ATgetFirst(ATgetNext(ATgetNext(error)));
-				
-      /* Now unparse these fields to text */
-      messageText = (char*) malloc(AFsourceSize(message)+1);
-      tagText = (char*) malloc(AFsourceSize(tag)+1);
-      subjectText = (char*) malloc(AFsourceSize(subject));
-			
-      if(messageText && tagText && subjectText) {
-				AFsource(message, messageText);
-				AFsource(tag,tagText);
-				AFsource(subject,subjectText);
-				
-				ATwarning("%s (%s, %s)\n", messageText,tagText,subjectText);
-      } else {
-				ATerror("No memory available to print errors.\n");
+      
+      tagText = strdup(PT_yieldTree(PT_makeTreeFromTerm(tag)));
+      subjectText = strdup(PT_yieldTree(PT_makeTreeFromTerm(subject)));
+
+      if(tagText != NULL &&
+         subjectText != NULL) {
+        ATwarning("%t (%s, %s)\n", message, tagText, subjectText);
+
       }
+      else {
+        ATwarning("Unable to show error message (no memory).\n");
+      }
+        
+      free(tagText);
+      free(subjectText);
     }
 
     /* Communicate the reduct out of here */
@@ -238,16 +235,14 @@ int main(int argc, char *argv[])
       iofile = stdout;
     else if (!(iofile = fopen(output, "w")))
       ATerror("%s: cannot open %s\n", myname, output);
-		
-    if(bafmode)
+
+    if (bafmode)
       ATwriteToBinaryFile(result, iofile);
     else
       ATwriteToTextFile(result, iofile);
-		
+
     fclose(iofile);
   }
-  
+
   return returncode;
 }
-
-/*}}}  */

@@ -20,8 +20,13 @@
 #    $Id$
 
 toolbus=__TOOLBUS__
+aterm=__ATERM__
 datadir=__DATADIR__
 srcdir=__SRCDIR__
+
+evaluator=../src/asfe
+removeannos="${aterm}/bin/atremove-annotation -a"
+diff=${aterm}/bin/atdiff
 
 # HOW TO ADD A REGRESSION TEST:
 #
@@ -45,8 +50,8 @@ for e in ${srcdir}/eqs/*.eqs.asfix1; do
     res=`basename $t .trm.asfix1`.res.asfix1
     rm -f $res
     ref=${srcdir}/ref/`basename $t .trm.asfix1`.ref.asfix1
-    ../src/asfe -w on -e $e -i $t -o $res
-    ./equalModuloWhitespace $ref $res
+    ${evaluator} -w on -e $e -i $t | ${removeannos} -o $res
+    ${diff} $ref $res
     if [ $? -ne 0 ]; then
        echo "term failed: $t"
        exit 1
@@ -63,7 +68,7 @@ for e in ${srcdir}/fail/*.eqs.asfix1; do
     res=`basename $t .trm.asfix1`.res.asfix1
     rm -f $res
     ref=${srcdir}/ref/`basename $t .trm.asfix1`.ref.asfix1
-    ../src/asfe -w on -e $e -i $t -o $res > /dev/null 2>&1
+    ${evaluator} -w on -e $e -i $t -o /dev/null 2> /dev/null
     if [ $? -eq 0 ]; then
        echo "term failed: $t"
        exit 1

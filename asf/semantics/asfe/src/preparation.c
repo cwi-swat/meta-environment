@@ -24,69 +24,66 @@
 #include <assert.h>
 #include <strings.h>
 #include <string.h>
-
-#include <AsFix.h>
-#include <AsFix2src.h>
 #include <aterm2.h>
-#include "AsFix-access.h"
 #include <deprecated.h>
 #include "preparation.h"
 #include "asfix_utils.h"
 
+#include <PT.h>
+#include <ASF-utils.h>
+
 static equation_table *tables = NULL;
 static equation_table *equations = NULL;
 
-extern ATbool run_verbose;
-
-/*{{{  equation_table *create_equation_table(int size) */
+extern ATbool runVerbose;
 
 /*
 Allocate memory for an equation table.
 */
 
-equation_table *create_equation_table(int size)
+equation_table *
+create_equation_table(int size)
 {
   int i;
-  equation_table *table = (equation_table *)malloc(sizeof(equation_table));
+  equation_table *table = (equation_table *) malloc(sizeof(equation_table));
 
-  if(!table)
+  if (!table)
     ATerror("out of memory in create_equation_table\n");
   table->next = NULL;
   table->module = NULL;
   ATprotect(&table->module);
   table->size = size;
-  table->table = (equation_entry **)malloc(sizeof(equation_entry *)*size);
-  if(!table->table) {
+  table->table = (equation_entry **) malloc(sizeof(equation_entry *) * size);
+  if (!table->table) {
     ATerror("out of memory in create_equation_table\n");
   }
 
-  for(i=0; i<size; i++) {
+  for (i = 0; i < size; i++) {
     table->table[i] = NULL;
   }
 
   return table;
 }
 
-/*}}}  */
-/*{{{  void flush_equations(equation_table *table) */
 
-void flush_equations(equation_table *table)
+void
+flush_equations(equation_table * table)
 {
   int i;
   equation_entry *old, *entry;
 
-  for(i=0; i<table->size; i++) {
+  for (i = 0; i < table->size; i++) {
     entry = table->table[i];
-    while(entry) {
+    while (entry) {
       old = entry;
       entry = entry->hnext;
-      ATunprotect(&old->equation);
-      ATunprotect(&old->top_ofs);
-      ATunprotect(&old->first_ofs);
-      ATunprotect(&old->tag);    
-      ATunprotect(&old->lhs);     
-      ATunprotect(&old->rhs);     
-      ATunprotect((ATerm *) (&old->conds));
+      ATunprotect((ATerm*)&old->equation);
+      ATunprotect((ATerm*)&old->top_ofs);
+      ATunprotect((ATerm*)&old->first_ofs);
+      ATunprotect((ATerm*)&old->tag);
+      ATunprotect((ATerm*)&old->lhs);
+      ATunprotect((ATerm*)&old->rhs);
+      ATunprotect((ATerm*)&old->conds);
       free(old);
     }
     table->table[i] = NULL;
@@ -94,14 +91,13 @@ void flush_equations(equation_table *table)
 }
 
 
-/*}}}  */
-/*{{{  void destroy_equation_table(equation_table *table) */
 
 /*
 Free all memory associated with an equation table.
 */
 
-void destroy_equation_table(equation_table *table)
+void
+destroy_equation_table(equation_table * table)
 {
   flush_equations(table);
   ATunprotect(&table->module);
@@ -109,217 +105,205 @@ void destroy_equation_table(equation_table *table)
   free(table);
 }
 
-/*}}}  */
-/*{{{  unsigned hash_function(equation_table *table, ATerm top_ofs, ATerm first_ofs) */
 
-static unsigned 
-hash_function(equation_table *table, ATerm top_ofs, ATerm first_ofs)
+static unsigned
+hash_function(equation_table * table, PT_Production top_ofs, PT_Production first_ofs)
 {
-  return (((int)top_ofs >> 2) * 3007 + ((int)first_ofs >> 2)) % table->size;
+  return (((int) top_ofs >> 2) * 3007 + ((int) first_ofs >> 2)) % table->size;
 }
 
-/*}}}  */
-/*{{{  void enter_equation(equation_table *table, ATerm equation) */
 
 /*
 Enter an equation in an equation table.
 */
 
-void enter_equation(equation_table *table, ATerm equation)
-{ 
+void
+enter_equation(equation_table * table, ASF_CondEquation equation)
+{
   equation_entry *entry;
 
-  ATerm equ, lhs = NULL, top_ofs,first_ofs, tag = NULL , rhs = NULL;
-  ATermList lhsargs, conds = ATempty;
-  ATerm condlist, conditions;
+  ASF_Equation equ;
+  PT_Tree lhs = NULL, rhs = NULL;
+  PT_Production top_ofs, first_ofs;
+  ASF_Tag tag = NULL; 
+  PT_Args lhsargs;
+  ASF_ConditionList conds; 
+  ASF_Conditions conditions;
   unsigned hnr;
 
-  if(AFTisSimpleCondEqu(equation)) {
-    tag = AFTgetSimpleCondEquTag(equation); 
-    equ = AFTgetSimpleCondEquEqu(equation); 
+  if (ASF_isCondEquationImplies(equation) 
+      || ASF_isCondEquationWhen(equation)) {
+    conditions = ASF_getCondEquationConditions(equation);
+    conds = ASF_getConditionsList(conditions);
+  }
+  else {
+    conds = (ASF_ConditionList) NULL;
+  }
+
+  tag = ASF_getCondEquationTag(equation);
+  equ = ASF_getCondEquationEquation(equation);
  
-    lhs = AFTgetSimpleEquLHS(equ); 
-    rhs = AFTgetSimpleEquRHS(equ); 
-    conds = ATempty;
-  }
-  else if(AFTisImpliesCondEqu(equation)) {
-    tag = AFTgetImpliesCondEquTag(equation); 
-    equ = AFTgetImpliesCondEquEqu(equation);  
-		conditions = AFTgetImpliesCondEquConds(equation);
-		condlist = AFTgetCondsCondList(conditions);
-    conds = AFTgetListElements(condlist);
- 
-    lhs = AFTgetSimpleEquLHS(equ); 
-    rhs = AFTgetSimpleEquRHS(equ);
-  }
-  else if(AFTisWhenCondEqu(equation)) {
-    tag = AFTgetWhenCondEquTag(equation); 
-    equ = AFTgetWhenCondEquEqu(equation);  
-		conditions = AFTgetWhenCondEquConds(equation);
-		condlist = AFTgetCondsCondList(conditions);
-    conds = AFTgetListElements(condlist);
+  /* this is where we switch API's from ASF_ to PT_ for the user-defined
+   * term syntax
+   */
+  lhs = ASFtoPT(ASF_getEquationLhs(equ));
+  rhs = ASFtoPT(ASF_getEquationRhs(equ));
 
-    lhs = AFTgetSimpleEquLHS(equ); 
-    rhs = AFTgetSimpleEquRHS(equ);
+  lhsargs = PT_getTreeArgs(lhs);
+  top_ofs = PT_getTreeProd(lhs);
+
+  /* find first appl or var argument of the outermost function symbol */ 
+  while ( PT_hasArgsHead(lhsargs) && 
+         !PT_isTreeAppl(PT_getArgsHead(lhsargs)) && 
+         !PT_isTreeVar(PT_getArgsHead(lhsargs))) {
+    lhsargs = PT_getArgsTail(lhsargs);
   }
-  else
-    ATerror("Strange equation %t\n",equation); 
 
-  lhsargs = (ATermList)asfix_get_appl_args(lhs); 
-  top_ofs = asfix_get_appl_ofs(lhs);  
+  /* if it is a variable or we have a default equation */
+  if (PT_isArgsEmpty(lhsargs) || 
+      PT_isTreeVar(PT_getArgsHead(lhsargs)) || 
+      ASF_isTagDefault(tag)) {
+    first_ofs = (PT_Production) NULL;
+  }
+  else {
+    first_ofs = PT_getTreeProd(PT_getArgsHead(lhsargs));
+  }
 
-  entry = (equation_entry *)malloc(sizeof(equation_entry)); 
-  if(!entry)
+  hnr = hash_function(table, top_ofs, first_ofs);
+
+  /* now fill in the entry */
+  entry = (equation_entry *) malloc(sizeof(equation_entry));
+  if (!entry) {
     ATerror("out of memory in enter_equation");
-
-  while(!ATisEmpty(lhsargs) && !asfix_is_appl(ATgetFirst(lhsargs)) 
-				&& !asfix_is_var(ATgetFirst(lhsargs))) {
-    lhsargs = ATgetNext(lhsargs);
   }
-
-  if(ATisEmpty(lhsargs) || asfix_is_var(ATgetFirst(lhsargs))
-		 || AFTisDefaultTag(tag))
-    first_ofs = (ATerm)ATempty; /* <PO> ? */
-  else
-    first_ofs = asfix_get_appl_ofs(ATgetFirst(lhsargs));
-
-  hnr = hash_function(table, top_ofs, first_ofs); 
 
   entry->hashnr = hnr;
 
   entry->top_ofs = top_ofs;
-  ATprotect(&entry->top_ofs);
+  ATprotect((ATerm*)&entry->top_ofs);
 
   entry->first_ofs = first_ofs;
-  ATprotect(&entry->first_ofs);
+  ATprotect((ATerm*)&entry->first_ofs);
 
   entry->equation = equation;
-  ATprotect(&entry->equation); 
+  ATprotect((ATerm*)&entry->equation);
 
   entry->tag = tag;
-  ATprotect(&entry->tag);    
+  ATprotect((ATerm*)&entry->tag);
 
   entry->lhs = lhs;
-  ATprotect(&entry->lhs);     
+  ATprotect((ATerm*)&entry->lhs);
 
   entry->rhs = rhs;
-  ATprotect(&entry->rhs);       
+  ATprotect((ATerm*)&entry->rhs);
 
   entry->conds = conds;
   ATprotect((ATerm *) (&entry->conds));
 
-  if(AFTisDefaultTag(tag)) {
+  if (ASF_isTagDefault(tag)) {
     equation_entry *cur = table->table[hnr];
     entry->hnext = NULL;
-    if(cur) {
-      while(cur->hnext)
-        cur = cur->hnext;
+    if (cur) {
+      while (cur->hnext)
+	cur = cur->hnext;
       cur->hnext = entry;
-    } else {
+    }
+    else {
       table->table[hnr] = entry;
     }
-  } else {
+  }
+  else {
     entry->hnext = table->table[hnr];
     table->table[hnr] = entry;
   }
 }
 
-/*}}}  */
-
-/*{{{  equation_entry *find_equation(equation_entry *prev, ATerm top_ofs, ATerm first) */
-
-
-equation_entry *find_equation(equation_entry *from, ATerm top_ofs,
-                              ATerm first_ofs)
+equation_entry *
+find_equation(equation_entry * from, PT_Production top_ofs, 
+              PT_Production first_ofs)
 {
-	if(run_verbose) {
-		ATwarning("looking for equation with ofs: %t\n", asource(top_ofs)); 
-	}
+  if (runVerbose) {
+    ATwarning("looking for equation with ofs: %t\n", top_ofs);
+  }
 
-  if(equations->size == 0)
+  if (equations->size == 0) {
     return NULL;
-  if(from) {
+  }
+  if (from) {
     from = from->hnext;
-  } else {
+  }
+  else {
     int hnr = hash_function(equations, top_ofs, first_ofs);
-/*    ATfprintf(stderr, "first try, finding top_ofs=%t, first_ofs=%t\n", top_ofs,first_ofs);
-    ATfprintf(stderr, "\t hnr = %d\n", hnr);
-*/
     from = equations->table[hnr];
   }
-  while(from && (!ATisEqual(from->top_ofs,top_ofs) || 
-		 !ATisEqual(from->first_ofs,first_ofs))) {
-    from = from->hnext;
-  }
 
-/*	if(from) {
-		equation_entry *result;
-    ATfprintf(stderr, "found: %t\n", from->tag);
-		result = from;
-		from = from->hnext;
-		while(from) {
-			ATfprintf(stderr, "todo: %t\n", from->tag);
-			from = from->hnext;
-		}
-		return result;
-  } else
-    ATfprintf(stderr, "no luck!\n");
-		*/
+  if (first_ofs != NULL) {
+    while (from && (!PT_isEqualProduction(from->top_ofs, top_ofs))) {
+      from = from->hnext;
+    }
+  }
+  else {
+    while (from && (!PT_isEqualProduction(from->top_ofs, top_ofs) ||
+		    !PT_isEqualProduction(from->first_ofs, first_ofs))) {
+      from = from->hnext;
+    }
+  }
 
   return from;
 }
 
-/*}}}  */
-/*{{{  void select_equations(char *module) */
 
-void select_equations(char *module)
+void
+select_equations(char *module)
 {
   equation_table *cur = tables;
   ATerm t_module = ATmake("<str>", module);
 
-  while(cur && !ATisEqual(cur->module, t_module))
+  while (cur && !ATisEqual(cur->module, t_module)) {
     cur = cur->next;
+  }
 
-  if(!cur)
+  if (!cur) {
     ATerror("equations of module %s have not been registered.\n", module);
+  }
 
   equations = cur;
 }
 
 
-/*}}}  */
-/*{{{  ATbool find_module(char *module) */
-ATbool find_module(char *module)
+ATbool 
+find_module(char *module)
 {
   equation_table *cur = tables;
   ATerm t_module = ATmake("<str>", module);
- 
-  while(cur && !ATisEqual(cur->module, t_module))
+
+  while (cur && !ATisEqual(cur->module, t_module)) {
     cur = cur->next;
+  }
 
-  if(cur) 
+  if (cur) {
     return ATtrue;
-  else
+  }
+  else {
     return ATfalse;
+  }
 }
-/*}}}  */
-/*{{{  equation_table *find_equation_table(char *modname) */
 
-equation_table *find_equation_table(char *modname)
+
+equation_table *
+find_equation_table(char *modname)
 {
   equation_table *cur = tables;
   ATerm t_module = ATmake("<str>", modname);
- 
-  while(cur && !ATisEqual(cur->module, t_module)) {
+
+  while (cur && !ATisEqual(cur->module, t_module)) {
     cur = cur->next;
   }
-  
+
   return cur;
 }
 
-/*}}}  */
 
-/*{{{  void enter_equations(char *modname, ATermList eqs) */
 
 /*
   The equations are ``sorted'' by outermost function symbols.
@@ -330,14 +314,15 @@ equation_table *find_equation_table(char *modname)
   where stored.
 */
 
-void enter_equations(char *modname, ATermList eqs)
+void
+enter_equations(char *modname, ASF_CondEquationList eqsList)
 {
   equation_table *table;
 
   table = find_equation_table(modname);
 
-  if(!table) {
-    table = create_equation_table(ATgetLength(eqs)*2);
+  if (!table) {
+    table = create_equation_table(ASF_getCondEquationListLength(eqsList) * 2);
     table->module = ATmake("<str>", modname);
     table->next = tables;
     tables = table;
@@ -345,274 +330,150 @@ void enter_equations(char *modname, ATermList eqs)
 
   flush_equations(table);
 
-  while(!ATisEmpty(eqs)) {
-    enter_equation(table, ATgetFirst(eqs));
-    do {
-      eqs = ATgetNext(eqs);
-    } while(!ATisEmpty(eqs) && asfix_is_layout(ATgetFirst(eqs)));
+  while (ASF_hasCondEquationListHead(eqsList)) {
+    enter_equation(table, ASF_getCondEquationListHead(eqsList));
+
+    if (ASF_hasCondEquationListTail(eqsList)) {
+      eqsList = ASF_getCondEquationListTail(eqsList);
+    }
+    else {
+      break;
+    }
   }
 }
 
-/*}}}  */
-/*{{{  void delete_equations(char *modname)  */
 
-void delete_equations(char *modname)
+void
+delete_equations(char *modname)
 {
   equation_table *cur = tables, *prev = NULL;
   ATerm t_module = ATmake("<str>", modname);
- 
-  while(cur && !ATisEqual(cur->module, t_module)) {
+
+  while (cur && !ATisEqual(cur->module, t_module)) {
     prev = cur;
     cur = cur->next;
   }
-  
-  if(cur) {
-    if(prev) {
+
+  if (cur) {
+    if (prev) {
       prev->next = cur->next;
-    } else {
+    }
+    else {
       tables = cur->next;
     }
     destroy_equation_table(cur);
   }
 }
 
-/*}}}  */
-
-
-/*{{{  Preparation */
-
-/*{{{  ATermList *prepare_list(ATermList *l, ATbool lexcons)*/
-
-/*
-Prepare a list of AsFix terms. This includes removing any layout,
-and translating lexical constructors into lists.
-*/
-
-ATerm prepare_term(ATerm el, ATbool lexcons);
-
-ATermList prepare_list(ATermList l, ATbool lexcons)
+ASF_Condition prepare_cond(ASF_Condition cond)
 {
-  ATerm el;
-  ATermList result = ATempty;
-
-  while(!ATisEmpty(l)) {
-    do {
-      el = ATgetFirst(l);
-      l = ATgetNext(l);
-		} while((asfix_is_whitespace(el) || asfix_is_list_sep(el)) && !keep_layout); 
-
-    result = ATappend(result, prepare_term(el, lexcons)); 
-  }
-  return result;
-}
-
-/*}}}  */
-/*{{{  ATermList prepare_conds(ATermList conds)*/
-
-/*
-Remove all layout from a list of conditions.
-*/
-ATerm prepare_cond(ATerm cond)
-{
-  ATerm prod, lhs, w[2], lit, rhs, newlhs, newrhs, annos, newcond;
-
-  annos = AT_getAnnotations(cond);  
-  if(AFTisCond(cond)) {
-    prod = AFTgetCondProd(cond);
-    lhs  = AFTgetCondLHS(cond);
-    newlhs = prepare_term(lhs, ATfalse);
-    w[0] = AFTgetCondWS0(cond);
-    lit  = AT_removeAnnotations(AFTgetCondLit(cond));
-    w[1] = AFTgetCondWS1(cond);
-    rhs  = AFTgetCondRHS(cond);
-    newrhs = prepare_term(rhs, ATfalse);
-
-    newcond = AFTbuildCond(prod, newlhs, w[0], lit, w[1], newrhs);
+  PT_Tree lhs, rhs;
+  
+  lhs = ASFtoPT(ASF_getConditionLhs(cond));
+  cond = ASF_setConditionLhs(cond, PTtoASF(RWprepareTerm(lhs)));
     
-    if(annos) {
-      newcond = AT_setAnnotations(newcond, annos);
-		}
+  rhs = ASFtoPT(ASF_getConditionRhs(cond));
+  cond = ASF_setConditionRhs(cond, PTtoASF(RWprepareTerm(rhs)));
 
-    return newcond;
-  }
-
-  ATerror("expected condition, got: %t\n", cond);
-  return NULL;
+  return cond;
 }
 
-ATerm prepare_condlist(ATerm conds)
+ASF_Conditions prepareConditions(ASF_Conditions conds)
 {
-  ATerm cond, iter, wl;
-  ATerm newcond;
-  ATermList newconds = ATempty, list;
+  ASF_ConditionList  condList = ASF_getConditionsList(conds);
+  
+  condList = ASF_visitConditionList(condList, prepare_cond, NULL, NULL, NULL);
 
-  if(!AFTisList(conds))
-    ATerror("expected condition list, got: %t\n", conds);
-
-  iter = AFTgetListIter(conds);
-  wl   = AFTgetListWS(conds);
-  list = AFTgetListElements(conds);
-
-  while(!ATisEmpty(list)) {
-    do {
-      cond = ATgetFirst(list);
-      list = ATgetNext(list);
-    } while((asfix_is_whitespace(cond)|| asfix_is_list_sep(cond)));
-    newcond = prepare_cond(cond);
-    newconds = ATappend(newconds, newcond);
-  }
-  return AFTbuildList(iter, wl, newconds);
+  return ASF_setConditionsList(conds, condList);
 }
-
-ATerm prepare_conds(ATerm conds)
-{
-	if(AFTisConds(conds)) {
-		ATerm condlist = AFTgetCondsCondList(conds);
-		condlist = prepare_condlist(condlist);
-		return AFTbuildConds(condlist);
-	}
-
-	ATerror("expected conds, got: %t\n", conds);
-	return NULL;
-}
-
-/*}}}  */
-/*{{{  ATerm prepare_equ(ATerm equ) */
 
 /*
 Prepare an equation for rewriting. This includes removing the layout,
 and translating lexicals into lists.
 */
 
-ATerm prepare_simple_equ(ATerm equ)
+ASF_CondEquation prepareEquation(ASF_CondEquation equ)
 {
-  ATerm prod, w[2], l, lhs, rhs, newlhs, newrhs;
+  ASF_Equation equation;
 
-  if(AFTisSimpleEqu(equ)) {
-    prod = AFTgetSimpleEquProd(equ);
-    lhs  = AFTgetSimpleEquLHS(equ); 
-    newlhs = prepare_term(lhs, ATfalse);
-    w[0] = AFTgetSimpleEquWS0(equ);
-    l = AFTgetSimpleEquLit(equ);
-    w[1] = AFTgetSimpleEquWS1(equ);
-    rhs  = AFTgetSimpleEquRHS(equ);
-    newrhs = prepare_term(rhs, ATfalse);
-    return AFTbuildSimpleEqu(prod, newlhs, w[0], l, w[1], newrhs);
+  if (ASF_isCondEquationWhen(equ) || ASF_isCondEquationImplies(equ)) {
+    equ = ASF_setCondEquationConditions(equ,
+            prepareConditions(ASF_getCondEquationConditions(equ)));
   }
-  else {
-    ATerror("expected simple equ, got %t\n", equ);
-    return NULL;
-  }  
+
+  equation = ASF_getCondEquationEquation(equ);
+
+  equation = ASF_setEquationLhs(equation,
+          PTtoASF(RWprepareTerm(ASFtoPT(ASF_getEquationLhs(equation)))));
+
+  equation = ASF_setEquationRhs(equation,
+          PTtoASF(RWprepareTerm(ASFtoPT(ASF_getEquationRhs(equation)))));
+
+  return ASF_setCondEquationEquation(equ, equation); 
 }
-
-ATerm prepare_equ(ATerm equ)
-{
-  ATerm w[6], tag, simplequ, newequ, lit, lex;
-  ATerm annos;
-  ATerm conds, newconds;
-
-  annos = AT_getAnnotations(equ); 
-
-  if(AFTisSimpleCondEqu(equ)) {
-    tag  = AFTgetSimpleCondEquTag(equ);
-    w[0] = AFTgetSimpleCondEquWS(equ);
-    simplequ = AFTgetSimpleCondEquEqu(equ);
-    newequ = prepare_simple_equ(simplequ);
-
-    equ = AFTbuildSimpleCondEqu(tag, w[0], newequ);
-  }
-  else if(AFTisImpliesCondEqu(equ)) {
-    tag  = AFTgetImpliesCondEquTag(equ);
-    w[0] = AFTgetImpliesCondEquWS0(equ);
-    conds = AFTgetImpliesCondEquConds(equ);
-    newconds = prepare_conds(conds);
-    w[1] = AFTgetImpliesCondEquWS1(equ);
-    lex  = AFTgetImpliesCondEquBarLex(equ);
-    w[2] = AFTgetImpliesCondEquWS2(equ);
-    simplequ = AFTgetImpliesCondEquEqu(equ);
-    newequ = prepare_simple_equ(simplequ);
-    equ = AFTbuildImpliesCondEqu(tag, w[0], newconds, w[1], 
-                                     lex, w[2], newequ);
-  }
-  else if(AFTisWhenCondEqu(equ)) {
-    tag  = AFTgetWhenCondEquTag(equ);
-    w[0] = AFTgetWhenCondEquWS0(equ);
-    simplequ = AFTgetWhenCondEquEqu(equ);
-    newequ = prepare_simple_equ(simplequ);
-    w[1] = AFTgetWhenCondEquWS1(equ);
-    lit  = AFTgetWhenCondEquLit(equ);
-    w[2] = AFTgetWhenCondEquWS2(equ); 
-    conds = AFTgetWhenCondEquConds(equ);
-    newconds = prepare_conds(conds); 
-    equ = AFTbuildWhenCondEqu(tag, w[0], newequ, w[1], 
-                                     lit, w[2], newconds);
-  } else {
-    ATabort("equation: %t not supported..\n", equ);
-  }
-
-  if(annos)
-    equ = AT_setAnnotations(equ, annos);
-  return equ;
-}
-
-/*}}}  */
-/*{{{  ATerm lexical_to_list(ATerm lextrm)*/
 
 /*
-{\tt lexical\_to\_list} converts a lexical into a list.
-*/
+ * lexicalToList converts a lexical into a list.
+ */
 
-ATerm lexical_to_list(ATerm lextrm)
+static PT_Tree lexicalToList(PT_Tree lextrm)
 {
-  ATerm sort, newtrm, newlex, newname, qnewname, newiter;
-  ATerm newargs, newfargs, newprod, newappl;
-  int i, l;
+  PT_Symbol sort; 
+  ASF_CHAR newChar; 
+  ASF_Symbol qnewname;
+  ASF_Tree newname;
+  ASF_Tree newTree;
+  char emptyLayout[] = "";
   char cbuf[4] = "\" \"", *lexstr, *sortstr;
-  ATermList newtrmlist = ATempty;
+  ASF_CHARList newCharList;
+  int i, l;
 
-  sort = asfix_get_lex_sort(lextrm);
-  if(!ATmatch(sort, "sort(<str>)", &sortstr))
-		ATerror("not a sort: %t\n", sort);
-  sortstr = strdup(sortstr);
-  for(i=0; sortstr[i]; i++)
-     sortstr[i] = tolower(sortstr[i]);
-  /* Get the string name that represents the lexical */
-  lexstr = ATgetName(ATgetAFun((ATermAppl)asfix_get_lex_str(lextrm)));
-  l = strlen(lexstr);
-  for(i=0; i<l; i++) {
-		cbuf[1] = lexstr[i];
-    newtrm = ATmake("lex(<str>,sort(\"CHAR\"))", cbuf, sort);
-		if(keep_layout && i != 0) {
-			newtrmlist = ATappend(newtrmlist, ATmake("w(\"\")"));
-		}
-    newtrmlist = ATappend(newtrmlist, newtrm);
+  sort = PT_getTreeSymbol(lextrm);
+
+  if (!PT_isSymbolSort(sort)) {
+    ATerror("not a sort: %t\n", (ATerm) sort);
   }
-  newname  = ATmake("l(<str>)", sortstr);
-  qnewname = ATmake("ql(<str>)", sortstr);
-  newiter  = ATmake("iter(sort(\"CHAR\"),w(\"\"),l(\"*\"))");
-  newlex   = ATmake("list(<term>,w(\"\"),<term>)", newiter, newtrmlist);
-  newfargs = ATmake("[<term>,w(\"\"),ql(\"(\"),w(\"\"),<term>,w(\"\"),ql(\")\")]",
-										qnewname, newiter);
-	if(keep_layout) {
-		newargs  = ATmake("[<term>,w(\"\"),l(\"(\"),w(\"\"),<term>,w(\"\"),l(\")\")]", 
-											newname, newlex);
-	} else {
-		newargs  = ATmake("[<term>,l(\"(\"),<term>,l(\")\")]", newname, newlex);
-	}
-  newprod  = ATmake("prod(id(\"GEN-LexConsFuncs\"),w(\"\"),<term>,w(\"\")," \
-			"l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)",newfargs,sort);
-  newappl  = ATmake("appl(<term>,w(\"\"),<term>)", newprod, newargs);
+  sortstr = strdup(PT_getSymbolString(sort));
+  
+  for (i = 0; sortstr[i]; i++) {
+    sortstr[i] = tolower(sortstr[i]);
+  }
 
+  /* Get the string name that represents the lexical */
+  lexstr = PT_getTreeString(lextrm);
+  l = strlen(lexstr);
+  for (i = l-1; i >= 0; i--) {
+    cbuf[1] = lexstr[i];
+    newChar = ASF_makeCHARDefault(cbuf);
+    if (i != l-1) {
+      newCharList = ASF_makeCHARListMany(newChar, emptyLayout, newCharList);
+    }
+    else {
+      newCharList = ASF_makeCHARListSingle(newChar);
+    }
+  }
+
+  newname = PTtoASF(PT_makeTreeUnquotedLiteral(sortstr));
+  qnewname = (ASF_Symbol)PT_makeTermFromSymbol(
+                           PT_makeSymbolQuotedLiteral(sortstr));
+
+  newTree = ASF_makeTreeLexicalConstructor(
+              qnewname,
+              (ASF_Symbol) sort, 
+              newname,
+              emptyLayout,
+              emptyLayout,
+              newCharList,
+              emptyLayout);
+  
   free(sortstr);
-  return newappl;
+  return ASFtoPT(newTree);
 }
 
-/*}}}  */
-/*{{{  ATerm prepare_annos(ATerm annos) */
 
 /* Strip all annotations except "pos-info" */
 
-ATerm prepare_annos(ATermList annos)
+static ATerm prepare_annos(ATermList annos)
 {
   extern ATerm posinfo;
 
@@ -631,286 +492,139 @@ ATerm prepare_annos(ATermList annos)
   return NULL;
 }
 
-/*}}}  */
-/*{{{  ATerm prepare_term(ATerm t, ATbool lexcons)*/
+static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
+{
+  PT_Tree result;
+  PT_Args args, elems, newargs;
 
 /*
-Remove the layout of a term.
+  ATerm annos = AT_getAnnotations((ATerm)tree);
 */
 
-ATerm prepare_term(ATerm t, ATbool lexcons)
-{
-  ATerm result, annos;
-  ATermList args, elems, newargs;
+  if (ASF_isTreeLexicalConstructor(PTtoASF(tree))) {
+    return tree;
+  }
+  if (PT_isTreeAppl(tree) || PT_isTreeList(tree)) {
+    args = PT_getTreeArgs(tree);
+    newargs = PT_foreachTreeInArgs(args, prepareTerm, data);
+    result = PT_setTreeArgs(tree, newargs);
+  }
+  else if (PT_isTreeLexical(tree)) {
+    result = lexicalToList(tree);
+  }
+  else {
+    result = tree;
+  }
 
-  annos = AT_getAnnotations(t);
-  if(asfix_is_appl(t)) {
-    args = asfix_get_appl_args(t);
-    if(AFTisLexConstructor(t)) {
-      newargs = prepare_list(args, ATtrue);
-    } else
-      newargs = prepare_list(args, ATfalse); 
-    result = asfix_put_appl_args(t, newargs); 
-  } else if(asfix_is_list(t)) {
-    elems = asfix_get_list_elems(t);
-    result = asfix_put_list_elems(t, prepare_list(elems, lexcons));
-  } else if(asfix_is_lex(t) && !lexcons)
-    result = lexical_to_list(t);
-  else 
-    result = t;
-
-	if(annos) {
+/*
+  if (annos) {
     ATerm preparedAnnos = prepare_annos((ATermList) annos);
     if (preparedAnnos) {
-		  result = AT_setAnnotations(result, preparedAnnos);
-    } else {
+      result = AT_setAnnotations(result, preparedAnnos);
+    }
+    else {
       result = AT_removeAnnotations(result);
     }
   }
+*/
 
   return result;
 }
 
-/*}}}  */
-
-/*{{{  ATerm RWprepareTerm(ATerm t)*/
-
-ATerm RWprepareTerm(ATerm t)
+PT_Tree RWprepareTerm(PT_Tree tree)
 {
-  return prepare_term(t, ATfalse);
+  return prepareTerm(tree, NULL);
 }
-
-
-/*}}}  */
-
-/* RWgetEqsList: this function is used in the standalone version
- * of the evaluator to retrieve the list of equations from a parsed
- * equations module
- */
-ATerm
-RWgetEqsList (ATerm t)
-{
-  /* if the input is a list and the first element is not an AsFix term,
-   * then we assume that we already have a list of equations. This is for
-   * backward compatibility
-   */
-  if (ATgetType (t) == AT_LIST)
-    {
-      if (!ATisEmpty ((ATermList) t)
-	  && !ATmatchTerm (ATgetFirst ((ATermList) t), pattern_asfix_term,
-			   NULL, NULL, NULL, NULL, NULL,
-			   NULL, NULL, NULL, NULL))
-	{
-	  return t;
-	}
-    }
-
-  /* If the input is  a list of parsed modules (terms), 
-   * then we retrieve the list of equations for each of them
-   */
-  if (ATgetType (t) == AT_LIST)
-    {
-      ATermList old = (ATermList) t;
-      ATermList new;
-
-      for (new = ATempty; !ATisEmpty (old); old = ATgetNext (old))
-	{
-	  ATerm first = ATgetFirst (old);
-	  if (ATmatchTerm (first, pattern_asfix_term,
-			   NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-			   NULL))
-	    {
-	      new = ATconcat (new, AFTgetEqs (first));
-	    }
-	  else
-	    {
-	      ATerror ("Unexpected term in equations.");
-	    }
-	}
-
-      return (ATerm) new;
-    }
-
-  /* Otherwise we assume the input is the asfix representation of
-   * an eqs file and we retrieve the list of equations from it:
-   */
-
-  return (ATerm) AFTgetEqs (t);
-}
-
-/*{{{  ATermList RWprepareEqs(ATermList eqs)*/
 
 /*
 Prepare a list of equations for rewriting.
 */
 
-ATermList RWprepareEqs(ATermList eqs)
+ASF_CondEquationList RWprepareEquations(ASF_CondEquationList eqsList)
 {
-  ATerm el;
-  ATermList result = ATempty;
-
-	eqs = (ATermList) RWgetEqsList((ATerm) eqs);
-
-  while(!ATisEmpty(eqs)) {
-    do {
-      el = ATgetFirst(eqs);
-      eqs = ATgetNext(eqs);
-    } while(asfix_is_whitespace(el) || asfix_is_list_sep(el)); 
-    result = ATappend(result, prepare_equ(el)); 
-  } 
-  return result;
+  return ASF_visitCondEquationList(eqsList, prepareEquation, NULL);
 }
 
 
-/*}}}  */
-/*{{{  void RWflushEquations()*/
-
-void RWflushEquations()
+void
+RWflushEquations()
 {
   equation_table *table;
-  while(tables) {
+  while (tables) {
     table = tables;
     tables = tables->next;
     destroy_equation_table(table);
   }
 }
 
+/* list_to_lexical converts  a list representing a lexical into a
+ * lexical again. 
+ */
 
-/*}}}  */
-
-/*}}}  */
-/*{{{  Restoration*/
-
-/*{{{  ATermList restore_list(ATerm sym, ATermList l)*/
-
-/*
-Restore a list after reweriting. Insert whitespace and optionally
-separators.
-*/
-
-ATermList restore_list(ATerm sym, ATermList l)
+PT_Tree listToLexical(PT_Tree lexappl)
 {
-  ATerm lit;
-  ATerm el, sep, newsep, ws[2];
-  ATermList newl = ATempty;
-
-  ws[0] = ATmake("w(\" \")");
-  ws[1] = ATmake("w(\"\\n\")");
-  if(asfix_is_itersep(sym)) {
-    sep = asfix_get_separator(sym);
-    if(!ATmatch(sep, "ql(<term>)", &lit))
-			ATerror("not a quoted literal: %t\n", sep);
-    newsep = ATmake("sep(<term>)", lit);
-    while(!ATisEmpty(l)) {
-      el = ATgetFirst(l);
-      newl  = ATappend(newl, RWrestoreTerm(el));
-      l = ATgetNext(l);
-      if(!ATisEmpty(l) && !keep_layout) {
-				newl = ATconcat(newl, ATmakeList3(ws[0], newsep, ws[1]));
-			}
-		}
-  } else {
-    while(!ATisEmpty(l)) {
-      el = ATgetFirst(l);
-      newl  = ATappend(newl, RWrestoreTerm(el));
-      l = ATgetNext(l);
-      if(!ATisEmpty(l) && !keep_layout)
-        newl = ATappend(newl, ws[0]);
-    }
-  }
-  return newl;
-}
-
-
-/*}}}  */
-/*{{{  ATermList restore_args(ATermList l)*/
-
-/*
-Restore a list of arguments after rewriting. This includes
-the restoration of layout between arguments.
-*/
-
-ATermList restore_args(ATermList l)
-{
-  ATerm arg, ws;
-  ATermList newl = ATempty;
-
-	ws = ATmake("w(\" \")");
-	while(!ATisEmpty(l)) {
-		arg = ATgetFirst(l);
-		newl = ATappend(newl, RWrestoreTerm(arg));
-		l = ATgetNext(l);
-		if(!ATisEmpty(l) && !keep_layout)
-			newl = ATappend(newl, ws);
-	}
-	return newl;
-	
-}
-
-
-/*}}}  */
-/*{{{  ATerm list_to_lexical(ATerm lexappl)*/
-
-/*{\tt list_to_lexical} converts  a list representing a lexical into a
-lexical again. 
-*/
-
-ATerm list_to_lexical(ATerm lexappl)
-{
-  ATerm modname, lit, sort, w[4], prod, sym, lexlist;
-  ATerm listarg, charsort, newlexappl;
   char *lexstr, *newlexstr;
-  ATermList args, lexargs, listargs;
-  int len, i;
-	
-  if(!ATmatch(lexappl, "appl(<term>,<term>,<term>)", &prod, &w[0], &lexargs))
-    ATerror("not an appl: %t\n", lexappl);
-	
-  if(!ATmatch(prod, "prod(<term>,<term>,<term>,<term>,<term>,<term>," \
-							"<term>,<term>,no-attrs)", &modname, &w[0], &args, &w[1], 
-							&lit, &w[2], &sort, &w[3]))
-		ATerror("not a prod: %t\n", prod);
-  lexlist = ATelementAt(lexargs, keep_layout ? 4 : 2);
-  if(!ATmatch(lexlist,"list(<term>,<term>,<term>)",&sym,&w[0],&listargs))
-		ATerror("not a list: %t\n", lexlist);
-  len = ATgetLength(listargs);
-  newlexstr = (char *)malloc(len+1);
-  i = 0;
-  while(!ATisEmpty(listargs)) {
-    listarg = ATgetFirst(listargs);
-    if(ATmatch(listarg, "lex(<str>,<term>)", &lexstr, &charsort))
+  int charListLength, i;
+  PT_Tree newLexical;
+  ASF_Tree tree = PTtoASF(lexappl);
+  ASF_CHARList charList;
+  PT_Symbol symbol;
+
+  if (!ASF_isTreeLexicalConstructor(tree)) {
+    ATerror("listToLexical: not a lexical constructor %t\n", lexappl);
+  }
+
+  symbol = (PT_Symbol) ASF_getTreeSymbol(tree);
+
+  charList = ASF_getTreeList(tree);
+  charListLength = ASF_getCHARListLength(charList);
+  
+  newlexstr = (char*) malloc(charListLength + 1);
+  if (newlexstr == NULL) {
+    ATerror("listToLexical: memory request failure\n");
+  }
+
+  i = 0; 
+  while(ASF_hasCHARListHead(charList)) {
+    ASF_CHAR ch = ASF_getCHARListHead(charList);
+    if (ASF_isCHARDefault(ch)) {
+      char *lexstr = (char*) ASF_getCHARLex(ch);
       newlexstr[i++] = lexstr[1];
-    listargs = ATgetNext(listargs);
+    }
+    if (ASF_hasCHARListTail(charList)) {  
+      charList = ASF_getCHARListTail(charList);
+    } 
+    else {
+      break;
+    } 
   }
   newlexstr[i] = '\0';
-  newlexappl = ATmake("lex(<str>,<term>)", newlexstr, sort);
-  free(newlexstr);
-  return newlexappl;
+    
+  return PT_makeTreeLexical(newlexstr, symbol);
 }
 
 
-/*}}}  */
-/*{{{  ATerm RWrestoreTerm(ATerm t)*/
-
-ATerm RWrestoreTerm(ATerm t)
+static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data)
 {
-  ATermList args, elems;
-  ATerm sym, result;
-	
-  if(asfix_is_appl(t)) {
-    if(AFTisLexConstructor(t))
-      return list_to_lexical(t);
-    args = asfix_get_appl_args(t);
-    result = asfix_put_appl_args(t, restore_args(args));    
-  } else if(asfix_is_list(t)) {
-    elems = asfix_get_list_elems(t);
-    sym   = asfix_get_list_sym(t);
-    return asfix_put_list_elems(t, restore_list(sym, elems));
-  } else
-    result = t;
+  PT_Args args;
+  PT_Tree result;
+  PT_Symbol iter;
 
-	return result;
+  if (PT_isTreeAppl(tree) || PT_isTreeList(tree)) {
+    if (ASF_isTreeLexicalConstructor(PTtoASF(tree))) {
+      return listToLexical(tree);
+    }
+
+    args = PT_getTreeArgs(tree);
+    args = PT_foreachTreeInArgs(args, restoreTerm, data);
+    return PT_setTreeArgs(tree, args);
+  }
+
+  return tree;
 }
 
-/*}}}  */
-/*}}}  */
+
+PT_Tree RWrestoreTerm(PT_Tree tree)
+{
+  return restoreTerm(tree, NULL);
+}
