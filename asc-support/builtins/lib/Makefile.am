@@ -2,7 +2,6 @@ BUILTIN_NAMES_ARITY=\
         set-anno_3\
 	get-anno_2\
 	get-term-anno_2 \
-	asf-normalize_1 \
 	read-term-from-file_1 \
 	write-term-to-file_2\
 	shell_1 \
@@ -14,7 +13,6 @@ BUILTIN_NAMES_ARITY=\
 BUILTIN_SOURCES=common.c \
                 annos.c \
 		fileio.c \
-		normalize.c \
 		shell.c \
 		term-compare.c \
 		lifting.c\
