@@ -579,7 +579,7 @@ proc RevertModules { modlist } {
 #-
 # generates the toolbus event to delete modules ML.
 #--
-proc DeleteModules { modlist graph } {
+proc DeleteModules { modlist } {
     foreach mod $modlist {
         GBpost [format "delete-module(%s)" [ToId $mod]]
     }
@@ -1056,11 +1056,11 @@ proc define-modules-frame {} {
     button .modules.buttons.revertmod -text "Revert" \
 	-command {RevertModules [SelectedModules]}
     button .modules.buttons.deletemod -text "Delete" \
-	-command {DeleteModules [SelectedModules] $g}
-    button .modules.buttons.modinfo -text "Info" \
-	-command {GetModuleInfo [SelectedModules]}
+	-command {DeleteModules [SelectedModules]}
     button .modules.buttons.compile -text "Compile" \
 	-command {CompileModules [SelectedModules]}
+    button .modules.buttons.modinfo -text "Info" \
+	-command {GetModuleInfo [SelectedModules]}
 
     pack append .modules.buttons \
         .modules.buttons.editsdfmod {top fillx} \
@@ -1069,8 +1069,8 @@ proc define-modules-frame {} {
         .modules.buttons.savemod {top fillx} \
         .modules.buttons.revertmod {top fillx} \
         .modules.buttons.deletemod {top fillx} \
-        .modules.buttons.modinfo {top fillx} \
-        .modules.buttons.compile {top fillx} 
+        .modules.buttons.compile {top fillx} \
+        .modules.buttons.modinfo {top fillx}
 
     grid .modules.list    -row 0 -column 0 -rowspan 1 \
         -columnspan 1 -sticky news
@@ -1148,13 +1148,13 @@ proc define-module-popup {} {
     $m add command -label "Revert module" \
         -command {RevertModules [GetObjectName $c]}
     $m add command -label "Delete module" \
-        -command {DeleteModules [GetObjectName $c] $g}
-    $m add separator
-    $m add command -label "Module info" \
-        -command {GetModuleInfo [GetObjectName $c]}
+        -command {DeleteModules [GetObjectName $c]}
     $m add separator
     $m add command -label "Compile module" \
         -command {CompileModules [GetObjectName $c]}
+    $m add separator
+    $m add command -label "Module info" \
+        -command {GetModuleInfo [GetObjectName $c]}
 }
 
 proc define-shadowmodule-popup {} {
@@ -1177,7 +1177,7 @@ proc define-modlist-popup {} {
     $m add command -label "Revert modules" \
         -command {RevertModules [SelectedModules]}
     $m add command -label "Delete modules" \
-        -command {DeleteModules [SelectedModules] $g}
+        -command {DeleteModules [SelectedModules]}
     $m add separator
     $m add command -label "Modules info" \
         -command {GetModuleInfo [SelectedModules]}
