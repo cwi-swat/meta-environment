@@ -78,5 +78,4 @@ TESTS = \
 	 echo 'for i in ${IN}/$*.*.pt; do ' ;\
 	 echo ' ./$* -i $$i -o `basename $$i`.asfc.out '; \
 	 echo ' ${ATDIFF} `basename $$i`.asfc.out ${OUT}/`basename $$i` '; \
-	 echo ' rm ./$*' ; \
 	 echo 'done' ) > $@ && chmod +x $@
