@@ -1,3 +1,5 @@
+module Pico-Semantic-Functions
+module Pico-Semantic-Functions
 imports Pico-Abstract-Syntax Pico-Semantic-Entities Layout 
   exports                                                  
   context-free                                             

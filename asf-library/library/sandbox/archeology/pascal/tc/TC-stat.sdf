@@ -1,3 +1,4 @@
+module TC-stat
 %% Type check statements; Goto statements are not dealt with.
 imports TC-expr
 

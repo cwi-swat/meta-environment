@@ -1,3 +1,4 @@
+module Context-search
 %% Define search functions on contexts.
 imports Context-defs
 

@@ -1,3 +1,5 @@
+module ASF-Syntax
+module ASF-Syntax
 %%  ASF-Syntax
 %%
 %%  Define the syntax of the equations as occurring in ASF+SDF.

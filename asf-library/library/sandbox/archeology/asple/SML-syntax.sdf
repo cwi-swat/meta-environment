@@ -1,3 +1,4 @@
+module SML-syntax
 imports Bool-con Nat-con Identifiers
   exports
      sorts SML-PROGRAM COM CONSTANT OPER

@@ -1,3 +1,5 @@
+module Pico-Semantic-Functions-X
+module Pico-Semantic-Functions-X
 imports
 MetaNotation-X Pico-Abstract-Syntax-X Pico-Semantic-Entities-X Layout
   exports

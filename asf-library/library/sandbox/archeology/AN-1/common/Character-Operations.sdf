@@ -1,3 +1,5 @@
+module Character-Operations
+module Character-Operations
 %%  Character-Operations
 %%
 %%  The MetaNotation and SDF syntax both have several lexical entities

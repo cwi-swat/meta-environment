@@ -1,2 +1,3 @@
+module TC-spec-funs
 %% Type check special, predefined, functions.
 imports  Expr-misc

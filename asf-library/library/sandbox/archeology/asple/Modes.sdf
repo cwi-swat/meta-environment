@@ -1,3 +1,4 @@
+module Modes
 imports Booleans Mode-con
 exports
   context-free syntax

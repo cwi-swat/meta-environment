@@ -1,3 +1,4 @@
+module Integers
 imports Booleans SyntaxNumbers
 
 exports

@@ -1,3 +1,4 @@
+module TC-spec-procs
 %% Check the predefined procedures: input/output, dynamic allocation, (un)pack
 imports Expr-misc
 

@@ -1,3 +1,4 @@
+module SEAL-Compiler
 %%  Compiler
 
 imports

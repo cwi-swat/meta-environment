@@ -1,3 +1,4 @@
+module Lambda
 %%
 %% Top module for Lambda expressions
 %%

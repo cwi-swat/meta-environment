@@ -1,3 +1,4 @@
+module SyntaxStats
 %% Specify statements of Pascal, ISO section 6.8.
 %% module SyntaxStats
 imports SyntaxExpr

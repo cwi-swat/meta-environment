@@ -1,3 +1,4 @@
+module SyntaxExpr
 %% Specify Pascal Expressions, ISO section 6.7.
 %% A sligtly more general specification is given, allowing expressions like
 %% 1 * -1 (instead of " 1 * (-1) " in ISO) as well.

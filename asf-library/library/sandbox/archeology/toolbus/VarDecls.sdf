@@ -1,3 +1,4 @@
+module VarDecls
 %%  VarDecls
 
 imports Terms

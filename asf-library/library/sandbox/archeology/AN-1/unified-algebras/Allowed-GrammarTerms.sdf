@@ -1,3 +1,5 @@
+module Allowed-GrammarTerms
+module Allowed-GrammarTerms
 %%  Allowed-GrammarTerms
 %%
 %%  The MetaNotation has special notation for describing "grammar:"s.

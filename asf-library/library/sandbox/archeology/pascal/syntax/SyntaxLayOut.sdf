@@ -1,3 +1,4 @@
+module SyntaxLayOut
 %% Define lay out symbols of Pascal programs. Note that in this specification 
 %% no * between comment delimitters (* and *) is allowed.
 

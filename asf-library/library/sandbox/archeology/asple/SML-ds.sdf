@@ -1,3 +1,4 @@
+module SML-ds
 imports SML-syntax SML-states
 exports
   context-free syntax

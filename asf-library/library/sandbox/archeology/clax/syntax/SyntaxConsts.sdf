@@ -1,3 +1,4 @@
+module SyntaxConsts
 imports SyntaxLayout  SyntaxTokens
 
 exports

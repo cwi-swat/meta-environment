@@ -1,3 +1,4 @@
+module SyntaxProgram
 %% Define programs and blocks, according to ISO section 6.2.1 and 6.10
 imports SyntaxHeaders SyntaxStats
 

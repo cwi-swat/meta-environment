@@ -1,3 +1,4 @@
+module Slice
 %%  Slice
 
 imports

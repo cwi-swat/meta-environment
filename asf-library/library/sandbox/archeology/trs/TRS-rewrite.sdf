@@ -1,3 +1,4 @@
+module TRS-rewrite
 %%  TRS-rewrite
 
 imports

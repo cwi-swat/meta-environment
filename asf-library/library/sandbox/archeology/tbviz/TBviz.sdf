@@ -1,3 +1,4 @@
+module TBviz
 %%  TBviz
 
 imports MatchTable Dot-operations

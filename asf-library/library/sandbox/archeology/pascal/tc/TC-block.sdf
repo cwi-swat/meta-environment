@@ -1,3 +1,4 @@
+module TC-block
 %% Type check a block of a Pascal Program (ISO section 6.2.1.)
 %% Most of the work is done in the checks for procedure and function
 %% declarations:

@@ -1,3 +1,4 @@
+module TRS-check
 %%  TRS-check
 
 imports

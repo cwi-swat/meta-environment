@@ -1,3 +1,4 @@
+module Errors
 %%  Errors
 
 imports

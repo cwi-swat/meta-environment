@@ -1,3 +1,4 @@
+module Terms
 imports Integers Booleans
 exports
   sorts ID VNAME STRING TERM TERM-LIST VAR GEN-VAR

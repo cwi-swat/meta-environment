@@ -1,3 +1,5 @@
+module Grammar-to-SDF
+module Grammar-to-SDF
 %%  Grammar-to-SDF
 %%
 %%  Grammar sections are translated directly to an SDF section.

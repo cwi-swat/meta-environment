@@ -1,3 +1,4 @@
+module Pico-syntax-new
 %%  Pico-syntax-new
 
 imports Layout Identifiers Integers Strings Booleans Pico-tokens

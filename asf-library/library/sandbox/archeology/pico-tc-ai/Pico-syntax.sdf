@@ -1,3 +1,4 @@
+module Pico-syntax
 imports Layout Identifiers Integers Strings Booleans
 exports
   sorts PROGRAM DECLS ID-TYPE SERIES STATEMENT EXP TYPE

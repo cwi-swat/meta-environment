@@ -1,3 +1,5 @@
+module Allowed-Symbols
+module Allowed-Symbols
 %%  Allowed-Symbols
 %%
 %%  Appendix F.3, [Mosses 92] does not contain an exact definition of

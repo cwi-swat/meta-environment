@@ -1,3 +1,4 @@
+module Erasple-ds
 imports Erasple-stat Asple-states  Naturals
   exports
   sorts OUTPUT-ERROR STATE-ERROR

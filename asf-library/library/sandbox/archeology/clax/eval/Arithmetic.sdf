@@ -1,3 +1,4 @@
+module Arithmetic
 %%  Arithmetic
 
 imports SyntaxProgram Lisp

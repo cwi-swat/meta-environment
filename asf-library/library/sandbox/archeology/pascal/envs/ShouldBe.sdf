@@ -1,3 +1,4 @@
+module ShouldBe
 %% Define several basic should-be functions
 %% These functions operate on an Environment. With each should-be function
 %% a boolean condition is associated.

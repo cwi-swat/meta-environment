@@ -1,3 +1,4 @@
+module SyntaxLayout
 %% Define lay out symbols of Clax programs. Note that in this specification 
 %% no * between comment delimitters (* and *) is allowed (Arie).
 

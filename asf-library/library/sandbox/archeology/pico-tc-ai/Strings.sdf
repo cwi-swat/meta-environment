@@ -1,3 +1,4 @@
+module Strings
    imports Layout
    exports
      sorts STR-CON STRING

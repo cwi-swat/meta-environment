@@ -1,3 +1,4 @@
+module Integers
    imports Layout Booleans
    exports
       sorts NAT-CON NAT INT

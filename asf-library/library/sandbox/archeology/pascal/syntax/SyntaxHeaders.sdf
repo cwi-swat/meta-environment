@@ -1,3 +1,4 @@
+module SyntaxHeaders
 %% Define Syntax formal parameters, ISO section 6.6.3.
 %% (i.e. level 0).
 imports SyntaxTypes

@@ -1,3 +1,5 @@
+module Variables-in-Terms
+module Variables-in-Terms
 %%  Variables-in-Terms
 %%
 %%  Variable declarations in the MetaNotation are inside terms.

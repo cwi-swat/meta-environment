@@ -1,3 +1,4 @@
+module Asple-extended-syntax
   imports Asple
   exports
       sorts   VAR

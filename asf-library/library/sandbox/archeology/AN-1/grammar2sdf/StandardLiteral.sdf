@@ -1,3 +1,5 @@
+module StandardLiteral
+module StandardLiteral
 exports
 sorts
 MN-SEMI-COLON

@@ -1,3 +1,4 @@
+module Mode-environments
  imports Identifiers Modes
  exports
    sorts MPAIR MENV

@@ -1,3 +1,4 @@
+module Substitute
 imports Booleans  Lambda-syntax Varsets
 
 exports

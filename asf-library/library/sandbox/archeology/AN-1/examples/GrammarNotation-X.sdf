@@ -1,3 +1,5 @@
+module GrammarNotation-X
+module GrammarNotation-X
 imports MetaNotation-X
 
 exports

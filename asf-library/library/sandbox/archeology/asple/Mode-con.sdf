@@ -1,3 +1,4 @@
+module Mode-con
 exports
    sorts MODE
    context-free syntax

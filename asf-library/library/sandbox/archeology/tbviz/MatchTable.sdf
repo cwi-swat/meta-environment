@@ -1,3 +1,4 @@
+module MatchTable
 %%  MatchTable
 
 imports GraphEnv  Dot-operations PrettyPrint

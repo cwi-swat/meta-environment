@@ -1,3 +1,5 @@
+module Module-to-SDF
+module Module-to-SDF
 %%  Module-to-SDF
 %%
 %%  The functions in this module take a MetaNotation module, and produce

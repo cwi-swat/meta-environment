@@ -1,3 +1,4 @@
+module SyntaxProgram
 imports SyntaxHeaders SyntaxStats
 
 exports

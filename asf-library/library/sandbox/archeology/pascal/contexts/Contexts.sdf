@@ -1,3 +1,4 @@
+module Contexts
 %% Specify the context containing all declarations found so far.
 imports  SyntaxHeaders
 

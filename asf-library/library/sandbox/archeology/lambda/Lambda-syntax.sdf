@@ -1,3 +1,4 @@
+module Lambda-syntax
 %%
 %% Define the syntax of Lambda expressions
 %%

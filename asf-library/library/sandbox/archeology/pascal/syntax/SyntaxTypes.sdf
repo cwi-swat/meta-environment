@@ -1,3 +1,4 @@
+module SyntaxTypes
 %% The definitions in this module are according to the syntax as
 %% specified in section 6.4.1, 6.4.2 and 6.4.3 in the ISO standard.
 imports SyntaxConsts

@@ -1,3 +1,4 @@
+module TcErrors
 %%  TcErrors
 
 imports Tc

@@ -1,3 +1,4 @@
+module SyntaxNumbers
 %% Specify the syntax of real and integer numbers
 exports 
   sorts UNS-NUMBER UNS-INT UNS-REAL DIGIT

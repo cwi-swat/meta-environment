@@ -1,3 +1,5 @@
+module MetaNotation
+module MetaNotation
 %%  MetaNotation
 %%
 %%  This module contains the syntax of the MetaNotation, closely following

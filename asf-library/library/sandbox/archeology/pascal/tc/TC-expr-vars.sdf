@@ -1,3 +1,4 @@
+module TC-expr-vars
 %% Typecheck a variable access.
 imports Expr-misc
 

@@ -1,3 +1,4 @@
+module Erasple-stat
  imports Asple-extended-syntax Erasple-tc
  exports
      sorts PROG-CHECK

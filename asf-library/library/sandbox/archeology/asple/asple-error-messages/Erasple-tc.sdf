@@ -1,3 +1,4 @@
+module Erasple-tc
 imports Type-errors  Mode-environments
   exports
   sorts  MENV-ERROR MODE-ERROR

@@ -1,3 +1,5 @@
+module MetaNotation-X
+module MetaNotation-X
 %% Derived from Meta-Notation.syn
 %% added: sorts TERMS TERM SYMBOLS SYMBOL
 %% removed: imports Allowed-*

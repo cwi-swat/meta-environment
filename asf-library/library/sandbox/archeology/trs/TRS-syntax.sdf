@@ -1,3 +1,4 @@
+module TRS-syntax
 %%  TRS-syntax
 
 imports

@@ -1,3 +1,4 @@
+module Errors
 %% Module Errors
 imports SyntaxProgram OperatorTables
 

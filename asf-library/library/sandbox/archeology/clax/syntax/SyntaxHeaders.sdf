@@ -1,3 +1,4 @@
+module SyntaxHeaders
 imports SyntaxTypes
 
 exports

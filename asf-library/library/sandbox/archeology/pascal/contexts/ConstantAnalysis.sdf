@@ -1,3 +1,4 @@
+module ConstantAnalysis
 %% Analyze elementary constants.
 imports Context-search ASCII
 

@@ -1,3 +1,5 @@
+module Literals
+module Literals
 %%  Literals
 %%
 %%  In order to make " " behave as {bracket}s around literals

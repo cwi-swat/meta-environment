@@ -1,3 +1,4 @@
+module Booleans
    exports
       sorts BOOL
       context-free syntax

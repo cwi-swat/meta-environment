@@ -1,3 +1,5 @@
+module SDF-Syntax
+module SDF-Syntax
 %%  SDF-Syntax
 %%
 %%  This module defines the syntax of SDF definitions.

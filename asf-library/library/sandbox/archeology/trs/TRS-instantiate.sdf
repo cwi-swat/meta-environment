@@ -1,3 +1,4 @@
+module TRS-instantiate
 %%  TRS-instantiate
 
 imports

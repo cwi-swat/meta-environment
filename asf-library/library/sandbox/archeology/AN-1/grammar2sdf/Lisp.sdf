@@ -1,3 +1,5 @@
+module Lisp
+module Lisp
 %% The module LISP
 %%
 %% General module allowing to use Lisp functions within algebraic specifications.

@@ -1,3 +1,4 @@
+module OperatorTables
 %% Specify Operator Tables
 imports Booleans
 

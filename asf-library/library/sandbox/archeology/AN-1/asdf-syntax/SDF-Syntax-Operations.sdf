@@ -1,3 +1,5 @@
+module SDF-Syntax-Operations
+module SDF-Syntax-Operations
 %% Module SDF-Syntax-Operations.
 %%
 %% Define some operations on the SDF syntax, e.g. to concatenate to SDF definitions,

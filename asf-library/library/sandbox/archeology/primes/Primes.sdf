@@ -1,3 +1,4 @@
+module Primes
 %%  Primes according to Eratosthenes; 
 %%  Yet another experiment by Arie van Deursen
 

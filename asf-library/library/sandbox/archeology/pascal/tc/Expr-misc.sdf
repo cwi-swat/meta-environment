@@ -1,3 +1,4 @@
+module Expr-misc
 %% Several general functions needed for typechecking expressions.
 imports TC-defs
 

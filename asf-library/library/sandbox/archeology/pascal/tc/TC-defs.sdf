@@ -1,3 +1,4 @@
+module TC-defs
 %% Type check the definitions and declarations of a Pascal Program.
 imports ShouldBe
 

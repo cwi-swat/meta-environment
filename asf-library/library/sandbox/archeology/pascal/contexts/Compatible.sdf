@@ -1,3 +1,4 @@
+module Compatible
 %% Define compatible types.
 imports Context-sen-funs
 
