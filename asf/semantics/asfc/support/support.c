@@ -76,6 +76,7 @@ Symbol sym_quote3;
 Symbol sym_quote4;
 Symbol sym_quote5;
 Symbol sym_quote6;
+Symbol sym_quote7;
 Symbol make_listsym;
 Symbol concsym;
 Symbol conssym;
@@ -553,7 +554,7 @@ static ATermList innermost_list(ATermList l)
 ATerm unquote(ATerm t)
 {
   Symbol s;
-  ATerm a0,a1,a2,a3,a4,a5;
+  ATerm a0,a1,a2,a3,a4,a5,a6;
 
   if (ATmatch(t,"quote(<int>)",&s)) {
     funcptr func = lookup_func_given_sym(s);
@@ -593,6 +594,11 @@ ATerm unquote(ATerm t)
               &s,&a0,&a1,&a2,&a3,&a4,&a5)) {
     funcptr func = lookup_func_given_sym(s);
     return (*func)(unquote(a0),unquote(a1),unquote(a2),unquote(a3),unquote(a4),unquote(a5));
+  }
+  if (ATmatch(t,"quote(<int>,<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
+              &s,&a0,&a1,&a2,&a3,&a4,&a5,&a6)) {
+    funcptr func = lookup_func_given_sym(s);
+    return (*func)(unquote(a0),unquote(a1),unquote(a2),unquote(a3),unquote(a4),unquote(a5),unquote(a6));
   }
   return t;
 }
@@ -964,6 +970,8 @@ void init_patterns()
   ATprotectSymbol(sym_quote5);
   sym_quote6 = ATmakeSymbol("quote", 7, ATfalse);
   ATprotectSymbol(sym_quote6);
+  sym_quote7 = ATmakeSymbol("quote", 8, ATfalse);
+  ATprotectSymbol(sym_quote7);
   make_listsym = ATmakeSymbol("make_list", 1, ATfalse);
   ATprotectSymbol(make_listsym);
   concsym = ATmakeSymbol("conc", 2, ATfalse);
