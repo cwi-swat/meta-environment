@@ -1,7 +1,10 @@
 # $Id$
 
 Mon Mar 29 11:09:10 CEST 2004 <{jong,kooiker}@cwi.nl>
- * Some refactoring in editing scenarios to improve re-use.
+ * tbscripts/editing.tb:
+   - Added EditEquations scenario
+   - Improved EditSyntax scenario
+   - Some refactoring in editing scenarios to improve re-use.
 
 Fri Mar 26 16:31:12 CET 2004 <{jong,kooiker}@cwi.nl>
  * lotsa work done in refactoring the editing scripts

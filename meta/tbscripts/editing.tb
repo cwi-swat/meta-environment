@@ -110,30 +110,19 @@ endlet
 /*}}}  */
 /*{{{  process EditStructure(Sid: term) */
 
-process EditStructure(Sid: term) is
+process EditStructure(Sid: term, Tree: term) is
 let
-  Modulename: str,
-  Registered: bool,
-  Tree: term
+  Registered: bool
 in
   IsStructureEditorRegistered(Sid, Registered?)
   .
-  if equal(Registered, false)
+  if equal(Registered, true)
   then
-    GetModulename(Sid, Modulename?)
-    . snd-msg(get-syntax-tree(Modulename))
-    .
-    (
-      rec-msg(syntax(Tree?))
-      . snd-msg(em-register-editor(Sid, structure))
-      . snd-msg(se-create(Sid, Tree))
-    +
-      rec-msg(unavailable)
-      . printf("EditStructure: no tree available for %s\n", Modulename)
-    )
+    snd-msg(se-delete(Sid))
   else
-    tau
+    snd-msg(em-register-editor(Sid, structure))
   fi
+  . snd-msg(se-create(Sid, Tree))
 endlet
 
 /*}}}  */
@@ -306,10 +295,25 @@ process CommitPendingChanges(Modulename: str, HasChanges: bool) is
 
 /*}}}  */
 
+/*{{{  process GetSyntaxTree(Modulename: str, Tree: term?, Available: bool?) */
+
+process GetSyntaxTree(Modulename: str, Tree: term?, Available: bool?) is
+  snd-msg(get-syntax-tree(Modulename))
+  .
+  (
+    rec-msg(syntax(Tree?))
+    . Available := true
+  +
+    rec-msg(unavailable)
+    . Available := false
+  )
+
+/*}}}  */
 /*{{{  process EditSyntax(Modulename: str) */
 
 process EditSyntax(Modulename: str) is
 let
+  Available: bool,
   EditorType: term,
   Filename: str,
   HasChanges: bool,
@@ -321,7 +325,14 @@ in
   . Edit(Filename, Modulename, Sid?)
   . AssertModuleSanity(Sid, Modulename)
   . EditText(Sid, EditorType)
-  . EditStructure(Sid)
+  . GetSyntaxTree(Modulename, Tree?, Available?)
+  .
+  if equal(Available, true)
+  then
+    EditStructure(Sid, Tree)
+  else
+    tau
+  fi
   .
   (
     MenuSelected(Sid, EditorType)
@@ -331,13 +342,67 @@ in
     TextChanged(Sid)
   +
     rec-msg(replace-focus(Sid, Tree?))
-    . EditStructure(Sid)
+    . EditStructure(Sid, Tree)
   )
   *
   EditorDisconnected(Sid)
   . GetPendingChanges(Sid, HasChanges?)
   . DeleteSession(Sid)
   . CommitPendingChanges(Modulename, HasChanges)
+endlet
+
+/*}}}  */
+
+/*{{{  process GetEquationsTree(Modulename: str, Tree: term?, Available: bool?) */
+
+process GetEquationsTree(Modulename: str, Tree: term?, Available: bool?) is
+  snd-msg(get-eqs-tree(Modulename))
+  .
+  (
+    rec-msg(tree(Tree?))
+    . Available := true
+  +
+    rec-msg(unavailable)
+    . Available := false
+  )
+
+/*}}}  */
+/*{{{ process EditEquations(Modulename: str) */
+
+process EditEquations(Modulename: str) is
+let
+  Available: bool,
+  EditorType: term,
+  Filename: str,
+  Sid: term,
+  Tree: term
+in
+  EditorType := equations-editor
+  . FindModuleFilename(Modulename, asf, Filename?)
+  . Edit(Filename, Modulename, Sid?)
+  . EditText(Sid, EditorType)
+  . GetEquationsTree(Modulename, Tree?, Available?)
+  .
+  if equal(Available, true)
+  then
+    EditStructure(Sid, Tree)
+  else
+    tau
+  fi
+  .
+  (
+    MenuSelected(Sid, EditorType)
+  +
+    MouseClicked(Sid)
+  +
+    TextChanged(Sid)
+  +
+    rec-msg(replace-focus(Sid, Tree?))
+    . EditStructure(Sid, Tree)
+  )
+  *
+  EditorDisconnected(Sid)
+  . DeleteSession(Sid)
 endlet
 
 /*}}}  */
@@ -352,6 +417,9 @@ in
   (
     rec-msg(edit-syntax(Modulename?))
     . create(EditSyntax(Modulename), Pid?)
+  +
+    rec-msg(edit-equations(Modulename?))
+    . create(EditEquations(Modulename), Pid?)
   )
   * delta
 endlet
