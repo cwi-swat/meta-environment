@@ -15,6 +15,10 @@ PT_Args PT_appendArgs(PT_Args args, PT_Tree arg);
 typedef PT_Tree (*PT_TreeVisitor)(PT_Tree tree);
 PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor);
 
+typedef void* PT_SymbolVisitorData;
+typedef PT_Symbol (*PT_SymbolVisitor)(PT_Symbol symbol, 
+                                      PT_SymbolVisitorData data);
+
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg);
 ATerm   PT_getTreeAnnotation(PT_Tree arg, ATerm label);
 int     PT_getArgsLength(PT_Args args);

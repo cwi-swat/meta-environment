@@ -79,6 +79,31 @@ PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor)
   return newArgs;
 }
 
+PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols, 
+                                     PT_SymbolVisitor visitor, 
+                                     PT_SymbolVisitorData data) 
+{
+  ATermList store;
+  PT_Symbols newSymbols = PT_makeSymbolsEmpty();
+
+  /* apply func to each element */
+  for (store = ATempty;
+      PT_hasSymbolsHead(symbols);
+      newSymbols = PT_getSymbolsTail(symbols)) {
+    store = ATinsert(store,
+                     PT_makeTermFromSymbol(
+                     visitor(PT_getSymbolsHead(symbols), data)));
+  }
+
+  /* create new list */
+  for (; !ATisEmpty(store); store = ATgetNext(store)) {
+    PT_Symbol newSymbol = PT_makeSymbolFromTerm(ATgetFirst(store));
+    newSymbols = PT_makeSymbolsList(newSymbol,newSymbols);
+  }
+
+  return newSymbols;
+}
+
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg)
 {
   ATerm atArg = PT_makeTermFromTree(arg);
