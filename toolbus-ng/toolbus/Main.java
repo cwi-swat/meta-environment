@@ -5,7 +5,6 @@
 package toolbus;
 import toolbus.atom.*;
 import toolbus.process.*;
-import toolbus.parser.*;
 
 import aterm.*;
 import aterm.pure.PureFactory;
@@ -628,9 +627,10 @@ static void producerTest(){
   
   static void ParseTest(){
     
-    Parser P = new Parser();
+    ToolBus T = new ToolBus();
+
     try {
-      P.parse("toolbus/parser/sieve.aterm");
+      T.parse("toolbus/parser/sieve.aterm");
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}
     

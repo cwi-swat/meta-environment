@@ -28,10 +28,9 @@ public class ProcessCall implements ProcessExpression, StateElement {
     startState.add(this);
     //System.out.println("ProcessCall(\"" + name + "\", " + actuals + ")");
   }
-   public ProcessCall(ATerm name, ATermList actuals) {
-    this(((ATermAppl) name).getName(), actuals);
-   }
-  
+  public ProcessCall(ATerm call) {
+    this(((ATermAppl) call).getName(), ((ATermAppl) call).getArguments());
+  }
 
   public ProcessExpression copy() {
     //System.out.println("ProcessCall.copy: " + name);
@@ -79,6 +78,10 @@ public class ProcessCall implements ProcessExpression, StateElement {
   public State getAtoms() {
     return PE.getAtoms();
   }
+  
+  public String getName(){
+    return name;
+  }
 
   public String toString() {
     return "ProcessCall(" + name + ", " + actuals + ")";
@@ -92,13 +95,13 @@ public class ProcessCall implements ProcessExpression, StateElement {
 
   public void addPartner(StateElement a) {
   }
-  
-   public ProcessInstance getProcess(){
+
+  public ProcessInstance getProcess() {
     return processInstance;
   }
-  
-  public boolean contains(StateElement b){
-    System.out.println(this + " contains " + b);
+
+  public boolean contains(StateElement b) {
+    System.out.println(this +" contains " + b);
     return startState.contains(b);
   }
 
@@ -118,7 +121,7 @@ public class ProcessCall implements ProcessExpression, StateElement {
       formals1 = formals1.getNext();
       ATerm actual = actuals1.getFirst();
       actuals1 = actuals1.getNext();
-      if(!TBTerm.isResVar(formal)){
+      if (!TBTerm.isResVar(formal)) {
         env.putVar(formal, TBTerm.substitute(actual, env));
         System.out.println(formal + " gets value " + env.getVar(formal));
       }
