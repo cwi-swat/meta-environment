@@ -1,5 +1,8 @@
 # $Id$
 
+2001/11/21 (jurgenv@cwi.nl)
+ * Added visualization of variables symbols in editor.
+
 2001/11/20 (jurgenv@cwi.nl)
  * disabled the gvim text-editor.
 
