@@ -20,7 +20,7 @@ in
       rec-msg(syntax(Syntax?)) .
       snd-msg(get-path-from-db(ModuleName)) .
       rec-msg(path(Path?)) .
-      snd-msg(io-get-filename(Path, ModuleName, ".def")) .
+      snd-msg(io-get-filename(Path, ModuleName, ".def.pt")) .
       rec-msg(io-filename(FileName?))  .
       printf("file: %s\n", FileName) .
       snd-msg(io-write-term-file(FileName, Syntax)) .
