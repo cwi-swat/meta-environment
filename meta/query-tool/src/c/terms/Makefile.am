@@ -1,11 +1,13 @@
-all: Bool.sdf.pt boollist.pt boolseplist.pt booland.pt boolor.pt
+terms: Bool.sdf.pt boollist.pt boolseplist.pt booland.pt boolor.pt
+
+SDF2TABLE = $(PGEN)/bin/sdf2table
 
 %.sdf.pt: %.sdf
 	sglr -p $(PGEN)/share/pgen/Sdf2.baf -i $< \
 	| addPosInfo -p Test -o $@
 
 %.trm.tbl: %.sdf
-	pt-dump -m `basename $< .sdf`
+	$(SDF2TABLE) -i $< -o $@
 
 boollist.pt: Bool.trm.tbl boollist.trm
 	sglr -p Bool.trm.tbl -i boollist.trm -o boollist.pt
