@@ -124,6 +124,7 @@ PT_Symbol PT_makeSymbolIterSepN(PT_Symbol symbol, PT_Symbol separator, int numbe
 PT_Symbol PT_makeSymbolPerm(PT_Symbols symbols);
 PT_Symbol PT_makeSymbolSet(PT_Symbol symbol);
 PT_Symbol PT_makeSymbolFunc(PT_Symbols symbols, PT_Symbol symbol);
+PT_Symbol PT_makeSymbolParameter(PT_Symbol symbol, PT_Symbols symbols);
 PT_Symbol PT_makeSymbolVarSym(PT_Symbol symbol);
 PT_Symbol PT_makeSymbolLayout();
 PT_Symbol PT_makeSymbolCharClass(PT_CharRanges ranges);
@@ -297,6 +298,7 @@ inline ATbool PT_isSymbolIterSepN(PT_Symbol arg);
 inline ATbool PT_isSymbolPerm(PT_Symbol arg);
 inline ATbool PT_isSymbolSet(PT_Symbol arg);
 inline ATbool PT_isSymbolFunc(PT_Symbol arg);
+inline ATbool PT_isSymbolParameter(PT_Symbol arg);
 inline ATbool PT_isSymbolVarSym(PT_Symbol arg);
 inline ATbool PT_isSymbolLayout(PT_Symbol arg);
 inline ATbool PT_isSymbolCharClass(PT_Symbol arg);

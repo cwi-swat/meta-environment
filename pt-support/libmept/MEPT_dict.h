@@ -1,5 +1,5 @@
 /*
- * Generated at Thu Nov 29 14:44:43 2001
+ * Generated at Sat Mar  2 19:31:28 2002
  */
 
 #ifndef __MEPT_dict_H
@@ -49,6 +49,7 @@ extern AFun PT_afun38;
 extern AFun PT_afun39;
 extern AFun PT_afun40;
 extern AFun PT_afun41;
+extern AFun PT_afun42;
 
 extern ATerm PT_patternCharRangesEmpty;
 extern ATerm PT_patternCharRangesList;
@@ -59,6 +60,7 @@ extern ATerm PT_patternSymbolsList;
 extern ATerm PT_patternSymbolCharClass;
 extern ATerm PT_patternSymbolLayout;
 extern ATerm PT_patternSymbolVarSym;
+extern ATerm PT_patternSymbolParameter;
 extern ATerm PT_patternSymbolFunc;
 extern ATerm PT_patternSymbolSet;
 extern ATerm PT_patternSymbolPerm;

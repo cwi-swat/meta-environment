@@ -85,6 +85,8 @@
 
   [Symbol, func, func(<symbols(Symbols)>,<symbol(Symbol)>)],
 
+  [Symbol, parameter, parameter(<symbol(Symbol)>,<symbols(Symbols)>)],
+
   [Symbol, var-sym, varsym(<symbol(Symbol)>)],
 
   [Symbol, layout, layout],

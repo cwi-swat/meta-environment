@@ -139,6 +139,11 @@ lengthOfSymbol(PT_Symbol symbol)
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
     return lengthOfSymbol(newSymbol) + 5;
   }
+  if (PT_isSymbolParameter(symbol)) {
+    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
+    PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
+    return lengthOfSymbols(newSymbols) + lengthOfSymbol(newSymbol) + 4;
+  }
   if (PT_isSymbolFunc(symbol)) {
     PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
@@ -299,6 +304,7 @@ static int yieldCharRanges(PT_CharRanges charRanges, int idx, char *buf, int buf
   return idx;
 }
 
+static int yieldSymbolParameters(PT_Symbols symbols, int idx, char *buf, int bufSize);
 static int yieldSymbols(PT_Symbols symbols, int idx, char *buf, int bufSize);
 
 static int 
@@ -474,6 +480,17 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
     buf[idx++] = ']';
     return idx;
   }
+  if (PT_isSymbolParameter(symbol)) {
+    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
+    PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
+    idx = yieldSymbol(newSymbol, idx, buf, bufSize);
+    buf[idx++] = '[';
+    buf[idx++] = '[';
+    idx = yieldSymbolParameters(newSymbols, idx, buf, bufSize);
+    buf[idx++] = ']';
+    buf[idx++] = ']';
+    return idx;
+  }
   if (PT_isSymbolFunc(symbol)) {
     PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
@@ -510,6 +527,20 @@ yieldSymbols(PT_Symbols symbols, int idx, char *buf, int bufSize)
     idx = yieldSymbol(PT_getSymbolsHead(symbols), idx, buf, bufSize);
     buf[idx++] = ' ';
     symbols = PT_getSymbolsTail(symbols);
+  }
+
+  return idx;
+}
+
+static int 
+yieldSymbolParameters(PT_Symbols symbols, int idx, char *buf, int bufSize)
+{
+  while (PT_hasSymbolsHead(symbols)) {
+    idx = yieldSymbol(PT_getSymbolsHead(symbols), idx, buf, bufSize);
+    symbols = PT_getSymbolsTail(symbols);
+    if (PT_hasSymbolsHead(symbols)) {
+      buf[idx++] = ',';
+    }
   }
 
   return idx;

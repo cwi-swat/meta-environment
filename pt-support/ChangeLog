@@ -1,3 +1,6 @@
+2002/03/04 (vandenbr@loria.fr)
+ * Introduced parameterized sorts.
+
 2002/02/07 (jurgenv@cwi.nl)
  * Changed -v option of addPosInfo to -V option
  * Set version of addPosInfo to 1.2

@@ -572,11 +572,19 @@ PT_Symbol PT_makeSymbolFunc(PT_Symbols symbols, PT_Symbol symbol)
 }
 
 /*}}}  */
+/*{{{  PT_Symbol PT_makeSymbolParameter(PT_Symbol symbol, PT_Symbols symbols) */
+
+PT_Symbol PT_makeSymbolParameter(PT_Symbol symbol, PT_Symbols symbols)
+{
+  return (PT_Symbol)(ATerm)ATmakeAppl2(PT_afun38, (ATerm)symbol, (ATerm)symbols);
+}
+
+/*}}}  */
 /*{{{  PT_Symbol PT_makeSymbolVarSym(PT_Symbol symbol) */
 
 PT_Symbol PT_makeSymbolVarSym(PT_Symbol symbol)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun38, (ATerm)symbol);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun39, (ATerm)symbol);
 }
 
 /*}}}  */
@@ -584,7 +592,7 @@ PT_Symbol PT_makeSymbolVarSym(PT_Symbol symbol)
 
 PT_Symbol PT_makeSymbolLayout()
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl0(PT_afun39);
+  return (PT_Symbol)(ATerm)ATmakeAppl0(PT_afun40);
 }
 
 /*}}}  */
@@ -592,7 +600,7 @@ PT_Symbol PT_makeSymbolLayout()
 
 PT_Symbol PT_makeSymbolCharClass(PT_CharRanges ranges)
 {
-  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun40, (ATerm)ranges);
+  return (PT_Symbol)(ATerm)ATmakeAppl1(PT_afun41, (ATerm)ranges);
 }
 
 /*}}}  */
@@ -624,7 +632,7 @@ PT_CharRange PT_makeCharRangeCharacter(int integer)
 
 PT_CharRange PT_makeCharRangeRange(int start, int end)
 {
-  return (PT_CharRange)(ATerm)ATmakeAppl2(PT_afun41, (ATerm)ATmakeInt(start), (ATerm)ATmakeInt(end));
+  return (PT_CharRange)(ATerm)ATmakeAppl2(PT_afun42, (ATerm)ATmakeInt(start), (ATerm)ATmakeInt(end));
 }
 
 /*}}}  */
@@ -2040,6 +2048,9 @@ ATbool PT_isValidSymbol(PT_Symbol arg)
   else if (PT_isSymbolFunc(arg)) {
     return ATtrue;
   }
+  else if (PT_isSymbolParameter(arg)) {
+    return ATtrue;
+  }
   else if (PT_isSymbolVarSym(arg)) {
     return ATtrue;
   }
@@ -2323,6 +2334,21 @@ inline ATbool PT_isSymbolFunc(PT_Symbol arg)
 }
 
 /*}}}  */
+/*{{{  inline ATbool PT_isSymbolParameter(PT_Symbol arg) */
+
+inline ATbool PT_isSymbolParameter(PT_Symbol arg)
+{
+  if (ATgetAFun((ATermAppl)arg) != ATgetAFun(PT_patternSymbolParameter)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolParameter, NULL, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
 /*{{{  inline ATbool PT_isSymbolVarSym(PT_Symbol arg) */
 
 inline ATbool PT_isSymbolVarSym(PT_Symbol arg)
@@ -2447,6 +2473,9 @@ ATbool PT_hasSymbolSymbol(PT_Symbol arg)
   else if (PT_isSymbolFunc(arg)) {
     return ATtrue;
   }
+  else if (PT_isSymbolParameter(arg)) {
+    return ATtrue;
+  }
   else if (PT_isSymbolVarSym(arg)) {
     return ATtrue;
   }
@@ -2491,6 +2520,9 @@ PT_Symbol PT_getSymbolSymbol(PT_Symbol arg)
   else if (PT_isSymbolFunc(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 1);
   }
+  else if (PT_isSymbolParameter(arg)) {
+    return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
+  }
   else 
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
 }
@@ -2533,6 +2565,9 @@ PT_Symbol PT_setSymbolSymbol(PT_Symbol arg, PT_Symbol symbol)
   else if (PT_isSymbolFunc(arg)) {
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 1);
   }
+  else if (PT_isSymbolParameter(arg)) {
+    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 0);
+  }
   else if (PT_isSymbolVarSym(arg)) {
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbol, 0);
   }
@@ -2555,6 +2590,9 @@ ATbool PT_hasSymbolSymbols(PT_Symbol arg)
   else if (PT_isSymbolFunc(arg)) {
     return ATtrue;
   }
+  else if (PT_isSymbolParameter(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -2569,8 +2607,11 @@ PT_Symbols PT_getSymbolSymbols(PT_Symbol arg)
   else if (PT_isSymbolPerm(arg)) {
     return (PT_Symbols)ATgetArgument((ATermAppl)arg, 0);
   }
-  else 
+  else if (PT_isSymbolFunc(arg)) {
     return (PT_Symbols)ATgetArgument((ATermAppl)arg, 0);
+  }
+  else 
+    return (PT_Symbols)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
@@ -2586,6 +2627,9 @@ PT_Symbol PT_setSymbolSymbols(PT_Symbol arg, PT_Symbols symbols)
   }
   else if (PT_isSymbolFunc(arg)) {
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbols, 0);
+  }
+  else if (PT_isSymbolParameter(arg)) {
+    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)symbols, 1);
   }
 
   ATabort("Symbol has no Symbols: %t\n", arg);
@@ -3435,6 +3479,11 @@ PT_Symbol PT_visitSymbol(PT_Symbol arg, char * (*acceptString)(char *), PT_Symbo
     return PT_makeSymbolFunc(
         acceptSymbols ? acceptSymbols(PT_getSymbolSymbols(arg)) : PT_getSymbolSymbols(arg),
         PT_visitSymbol(PT_getSymbolSymbol(arg), acceptString, acceptSymbols, acceptNumber, acceptRanges));
+  }
+  if (PT_isSymbolParameter(arg)) {
+    return PT_makeSymbolParameter(
+        PT_visitSymbol(PT_getSymbolSymbol(arg), acceptString, acceptSymbols, acceptNumber, acceptRanges),
+        acceptSymbols ? acceptSymbols(PT_getSymbolSymbols(arg)) : PT_getSymbolSymbols(arg));
   }
   if (PT_isSymbolVarSym(arg)) {
     return PT_makeSymbolVarSym(
