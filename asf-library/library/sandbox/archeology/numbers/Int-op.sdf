@@ -1,3 +1,4 @@
+module Int-op
 %% All operations allowed on Integers.
 
 %% imports SuccPred

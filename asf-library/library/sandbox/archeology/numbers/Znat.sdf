@@ -1,3 +1,4 @@
+module Znat
 imports Int-op Dig-ops
 
 exports

@@ -1,3 +1,4 @@
+module Int-con
 %% The way constants of type integers are constructed.
 
 exports

@@ -1,3 +1,4 @@
+module Nint
 %% Equational definition of integers.
 
 imports Int-op

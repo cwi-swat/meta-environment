@@ -1,3 +1,4 @@
+module Dig-ops
 %% Basic operations on digit sequences
 
 imports Int-con Booleans
