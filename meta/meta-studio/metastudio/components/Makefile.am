@@ -1,6 +1,6 @@
 include ${top_srcdir}/make_rules
 
-SUBDIRS = graphs statusbar errorlist infolist filedialog .
+SUBDIRS = graphs statusbar errorlist infolist dialogtool .
 
 CLASSPATH_ENV = CLASSPATH=${JAVAROOT}:${top_srcdir}/meta-studio:${EXTERNAL_JARS}
 
