@@ -97,7 +97,6 @@ snd-do(Mdb, create-module-db).
   if equal(Language,"Sdf2") then
     snd-eval(Mdb,update-sdf2-module(AsFixModule)).
     rec-value(Mdb,imports(Name?,changed-modules(ChngMods?),need-modules(Modules?),irels(Pairs?))).
-printf("Changed mods %t\n", ChngMods).
     (
       /* For each changed module a message is sent to the
        * sglr in order to remove the associated parse table, if available.
@@ -105,9 +104,9 @@ printf("Changed mods %t\n", ChngMods).
       if not-equal(ChngMods,[]) then
         Language := first(ChngMods).
         ChngMods := next(ChngMods).
-	printf("Closing language %s\n", Language).
 	snd-note(language-changed(Language)).
 	snd-msg(close-language(Language))
+	/* How about a failing close language??? */
       fi
     )*
     if equal(ChngMods,[]) then
