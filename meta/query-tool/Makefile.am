@@ -1,1 +1,1 @@
-SUBDIRS = src spec
+SUBDIRS = c-src spec

@@ -22,9 +22,6 @@ AC_SUBST(CFLAGS)
 
 dnl Check for required packages and perform version checks when needed.
 
-dnl Try to find xemacs
-AC_PACKAGE_REQUIRE(xemacs, xemacs,
-   [  --with-xemacs=DIR       Xemacs is in DIR])
 AC_SUBST(XEMACS)
 
 dnl Require ATerm library
@@ -176,5 +173,5 @@ AC_OUTPUT(
    configuration-manager/src/Makefile
    query-tool/Makefile
    query-tool/spec/Makefile
-   query-tool/src/Makefile
+   query-tool/c-src/Makefile
 )
