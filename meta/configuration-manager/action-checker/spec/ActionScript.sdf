@@ -1,0 +1,106 @@
+module ActionScript
+
+imports basic/Integers
+imports basic/Strings
+imports basic/Whitespace
+
+exports
+  sorts ActionScript
+  context-free syntax
+    "buttons" "(" ActionItemList ")" -> ActionScript {constructor}
+
+  sorts ActionItemList
+  context-free syntax
+    "[" {ActionItem ","}* "]" -> ActionItemList {constructor}
+
+  sorts ActionItem
+  context-free syntax
+    "button" "(" String "," DescriptionList "," ActionList ")" -> ActionItem {constructor}
+
+  sorts DescriptionList
+  context-free syntax
+    "[" {Description ","}+ "]" -> DescriptionList {constructor}
+
+  sorts Description
+  context-free syntax
+    "description" "(" UI-Item "," ActionDescription ")" -> Description {constructor}
+
+  sorts UI-Item
+  context-free syntax
+    "term-editor"       -> UI-Item {constructor}
+    "tree-panel"        -> UI-Item {constructor}
+    "message-list"      -> UI-Item {constructor}
+    "module-popup"      -> UI-Item {constructor}
+    "new-module-popup"  -> UI-Item {constructor}
+    "studio-menubar"    -> UI-Item {constructor}
+    "studio-toolbar"    -> UI-Item {constructor}
+
+  sorts ActionDescription
+  context-free syntax
+    "click"                     -> ActionDescription {constructor}
+    "menu" "(" MenuItemList ")" -> ActionDescription {constructor}
+
+  sorts MenuItemList
+  context-free syntax
+    "[" {MenuItem ","}+ "]" -> MenuItemList {constructor}
+
+  sorts MenuItem
+  context-free syntax
+    String -> MenuItem {constructor}
+
+  sorts ActionList
+  context-free syntax
+    "[" {Action ","}* "]" -> ActionList {constructor}
+
+  sorts Action
+  context-free syntax
+    "activate" "(" String ")"                     -> Action {constructor}
+    "activate-editor"                             -> Action {constructor}
+    "activate-given-tree" "(" String ")"          -> Action {constructor}
+    "apply" "(" String "," String "," Integer ")" -> Action {constructor}
+    "ask-question" "(" String ")"                 -> Action {constructor}
+    "check-sort" "(" String ")"                   -> Action {constructor}
+    "close-editor"                                -> Action {constructor}
+    "dup"                                         -> Action {constructor}
+    "execute-action" "(" String ")"               -> Action {constructor}
+    "exists" "(" String ")"                       -> Action {constructor}
+    "get-argument" "(" Integer ")"                -> Action {constructor}
+    "get-focus"                                   -> Action {constructor}
+    "get-other-focus" "(" String ")"              -> Action {constructor}
+    "get-root"                                    -> Action {constructor}
+    "locate" "(" String ")"                       -> Action {constructor}
+    "message" "(" String ")"                      -> Action {constructor}
+    "pack-tree"                                   -> Action {constructor}
+    "parse" "(" String "," String ")"             -> Action {constructor}
+    "pop"                                         -> Action {constructor}
+    "prompt-for-file" "(" String "," String "," 
+                          String ")"              -> Action {constructor}
+    "push-active-module"                          -> Action {constructor}
+    "push-editor-name"                            -> Action {constructor}
+    "push-filename" "(" String ")"                -> Action {constructor}
+    "push-integer" "(" Integer ")"                -> Action {constructor}
+    "push-modulename" "(" String ")"              -> Action {constructor}
+    "push-string" "(" String ")"                  -> Action {constructor}
+    "push-term" "(" Term ")"                      -> Action {constructor}
+    "read-tree"                                   -> Action {constructor}
+    "receive"                                     -> Action {constructor}
+    "reduce"                                      -> Action {constructor}
+    "rewrite" "(" String ")"                      -> Action {constructor}
+    "save-tree"                                   -> Action {constructor}
+    "send"                                        -> Action {constructor}
+    "set-focus"                                   -> Action {constructor}
+    "set-root"                                    -> Action {constructor}
+    "show-area"                                   -> Action {constructor}
+    "show-list"                                   -> Action {constructor}
+    "show-tree"                                   -> Action {constructor}
+    "split-file-name" "(" String ")"              -> Action {constructor}
+    "unpack-tree"                                 -> Action {constructor}
+    "unparse"                                     -> Action {constructor}
+
+  context-free syntax
+    "if-equal" "(" ActionList "," ActionList ")"  -> Action {constructor}
+
+  sorts Term
+  context-free syntax
+    "yes" -> Term
+    "no"  -> Term

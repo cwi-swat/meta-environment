@@ -1,0 +1,117 @@
+equations
+
+  [activate-editor-check]
+    [$Action*1, TREE, STRING, STRING, activate-editor, $Action*2] = 
+      [$Action*1, $Action*2]
+
+  [apply-check] 
+    [$Action*1, TREE, apply($String1, $String2, $Integer), $Action*2] = 
+      [$Action*1, TREE, $Action*2]
+
+  [check-sort-check] 
+    [$Action*1, TREE, check-sort($String), $Action*2] = 
+      [$Action*1, TREE, $Action*2]
+
+  [close-editor-check]
+    [$Action*1, STRING, STRING, close-editor, $Action*2] = 
+      [$Action*1, $Action*2]
+
+  [dup-check]
+    [$Action*1, STRING, dup, $Action*2] = 
+      [$Action*1, STRING, STRING, $Action*2]
+
+  [dup-check]
+    [$Action*1, TREE, dup, $Action*2] = 
+      [$Action*1, TREE, TREE, $Action*2]
+
+  [execute-action-check] 
+    [$Action*1, execute-action($String), $Action*2] = 
+      [$Action*1, $Action*2]
+
+  [exists-check] 
+    [$Action*1, exists($String), $Action*2] = 
+      [$Action*1, $Action*2]
+
+  [get-focus-check] 
+    [$Action*1, get-focus, $Action*2] = 
+      [$Action*1, TREE, $Action*2]
+
+  [get-other-focus-check] 
+    [$Action*1, get-other-focus($String), $Action*2] = 
+      [$Action*1, TREE, $Action*2]
+
+  [get-root-check] 
+    [$Action*1, STRING, get-root, $Action*2] = 
+      [$Action*1, TREE, $Action*2]
+
+  [message-check]
+    [$Action*1, message($String), $Action*2] = 
+      [$Action*1, $Action*2]
+
+  [pack-tree-check] 
+    [$Action*1, TREE, pack-tree, $Action*2] = 
+      [$Action*1, TREE, $Action*2]
+
+  [parse-check]
+    [$Action*1, STRING, parse($String1, $String2), $Action*2] = 
+      [$Action*1, TREE, $Action*2]
+
+  [push-active-module-check] 
+    [$Action*1, push-active-module, $Action*2] = 
+      [$Action*1, STRING, $Action*2]
+
+  [push-filename-check]
+    [$Action*1, push-filename($String), $Action*2] = 
+      [$Action*1, STRING, $Action*2]
+
+  [push-modulename-check]
+    [$Action*1, push-modulename($String), $Action*2] = 
+      [$Action*1, STRING, $Action*2]
+
+  [push-string-check]
+    [$Action*1, push-string($String), $Action*2] = 
+      [$Action*1, STRING, $Action*2]
+
+  [set-focus-check]
+    [$Action*1, TREE, set-focus, $Action*2] = 
+      [$Action*1, $Action*2]
+
+  [show-list-check]
+    [$Action*1, STRING, STRING, show-list, $Action*2] = 
+      [$Action*1, $Action*2]
+
+  [reduce-check] 
+    [$Action*1, TREE, STRING, reduce, $Action*2] = 
+      [$Action*1, TREE, $Action*2]
+
+  [unpack-tree-check] 
+    [$Action*1, TREE, unpack-tree, $Action*2] = 
+      [$Action*1, TREE, $Action*2]
+
+  [unparse-check] 
+    [$Action*1, TREE, unparse, $Action*2] = 
+      [$Action*1, STRING, $Action*2]
+
+  [if-equal-check]
+    [$Action*1, TREE, TREE, if-equal([],[]), $Action*2] = 
+      [$Action*1, $Action*2]
+
+  [if-equal-check]
+    [$Action*1, TREE, TREE, if-equal([$Action*2],[]), $Action*3] = 
+      [$Action*1, $Action*2, $Action*3]
+
+  [if-equal-check]
+    [$Action*1, TREE, TREE, if-equal([],[$Action*2]), $Action*3] = 
+      [$Action*1, $Action*2, $Action*3]
+
+  [if-equal-check]
+    [$Action*1, STRING, STRING, if-equal([],[]), $Action*2] = 
+      [$Action*1, $Action*2]
+
+  [if-equal-check]
+    [$Action*1, STRING, STRING, if-equal([$Action*2],[]), $Action*3] = 
+      [$Action*1, $Action*2, $Action*3]
+
+  [if-equal-check]
+    [$Action*1, STRING, STRING, if-equal([],[$Action*2]), $Action*3] = 
+      [$Action*1, $Action*2, $Action*3]

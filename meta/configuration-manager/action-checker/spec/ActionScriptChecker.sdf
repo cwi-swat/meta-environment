@@ -1,0 +1,15 @@
+module ActionScriptChecker
+
+imports ActionScript
+
+exports
+  context-free syntax
+    "INTEGER" -> Action
+    "STRING"  -> Action
+    "TREE"    -> Action
+
+hiddens
+  variables
+    "$Action*"[0-9]* -> {Action ","}*
+    "$Integer"[0-9]* -> Integer
+    "$String"[0-9]* -> String
