@@ -3,8 +3,6 @@
 
 include $(top_srcdir)/make_rules
 
-SUBDIRS			= test
-
 bin_PROGRAMS		= module-db
 data_DATA		= module-db.idef
 
