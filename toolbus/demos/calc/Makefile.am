@@ -39,7 +39,7 @@ batch_LDADD     	= -L${top_builddir}/aterm -lATB \
 			-L$(ATERM)/lib -lATerm
 
 %.tif.c %.tif.h: calc.tifs
-	${ATERM}/bin/tifstoc -tool $* $<
+	${top_builddir}/aterm/tifstoc -tool $* $<
 
 %.tifs: %.tb
 	$(top_builddir)/toolbus/toolbus -gentifs $<
