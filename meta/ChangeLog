@@ -1,5 +1,8 @@
 # $Id$
 
+2002/05/07 <olivierp@cwi.nl>
+ * Fixed 'empty module list' syndrome
+
 2002/05/06 (jurgenv@cwi.nl)
  * Opening initial module with a compound module name fixed.
  * Removed check on module name consistency for the moment.
