@@ -52,7 +52,7 @@ equations
   $FieldId := afun($c* "-" "s""o""r""t")
   ===>
   build-asfix-prod-arg($SymbolType, $Label : <$Symbol-PARAM>) = 
-  cf(<$FieldId(str)>)
+  cf(sort(<$FieldId(str)>))
     
 
 [equ-build-asfix-prod-arg-sort]

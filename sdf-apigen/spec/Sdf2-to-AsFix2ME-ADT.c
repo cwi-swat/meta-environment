@@ -2344,7 +2344,7 @@ if ( check_sym ( tmp [ 0 ] , lf_7sym ) ) {
 if ( check_sym ( tmp [ 1 ] , lf_list_6sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
 ( tmp [ 3 ] = make_nf1 ( lf_7sym , make_nf1 ( lf_list_6sym , cons ( make_list ( tmp [ 2 ] ) , ( ATerm ) ATmakeList ( 5 , char_table [ 45 ] , char_table [ 115 ] , char_table [ 111 ] , char_table [ 114 ] , char_table [ 116 ] ) ) ) ) ) ;
-FUNC_EXIT ( make_nf2 ( lf_10sym , make_nf1 ( lf_7sym , make_nf1 ( lf_list_6sym , ( ATerm ) ATmakeList ( 2 , char_table [ 99 ] , char_table [ 102 ] ) ) ) , make_nf1 ( lf_list_9sym , make_list ( make_nf1 ( lf_13sym , make_nf2 ( lf_10sym , tmp [ 3 ] , make_nf1 ( lf_list_9sym , make_list ( make_nf1 ( lf_8sym , make_nf1 ( lf_7sym , make_nf1 ( lf_list_6sym , ( ATerm ) ATmakeList ( 3 , char_table [ 115 ] , char_table [ 116 ] , char_table [ 114 ] ) ) ) ) ) ) ) ) ) ) ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_10sym , make_nf1 ( lf_7sym , make_nf1 ( lf_list_6sym , ( ATerm ) ATmakeList ( 2 , char_table [ 99 ] , char_table [ 102 ] ) ) ) , make_nf1 ( lf_list_9sym , make_list ( make_nf2 ( lf_10sym , make_nf1 ( lf_7sym , make_nf1 ( lf_list_6sym , ( ATerm ) ATmakeList ( 4 , char_table [ 115 ] , char_table [ 111 ] , char_table [ 114 ] , char_table [ 116 ] ) ) ) , make_nf1 ( lf_list_9sym , make_list ( make_nf1 ( lf_13sym , make_nf2 ( lf_10sym , tmp [ 3 ] , make_nf1 ( lf_list_9sym , make_list ( make_nf1 ( lf_8sym , make_nf1 ( lf_7sym , make_nf1 ( lf_list_6sym , ( ATerm ) ATmakeList ( 3 , char_table [ 115 ] , char_table [ 116 ] , char_table [ 114 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -9788,7 +9788,6 @@ int main(int argc, char *argv[])
   return asc_support_main(&bottom, argc, argv,           
                           register_Sdf2_to_AsFix2ME_ADT,                   
                           resolve_Sdf2_to_AsFix2ME_ADT,                    
-                          init_Sdf2_to_AsFix2ME_ADT, NULL, -1
-);}                                                        
+                          init_Sdf2_to_AsFix2ME_ADT, NULL, -1);}                                                        
 #endif                                                   
 
