@@ -209,40 +209,40 @@ static void init_asfix_patterns()
 
 static void init_patterns(void)
 {
-  static ATbool patterns_initialized = ATfalse;
+  static int patterns_initialized = 0;
 
   if (patterns_initialized) {
     return;
   }
-  patterns_initialized = ATtrue;
+  patterns_initialized = 1;
 
   init_asfix_patterns();
 }
 
-ATbool isLexicalListProd(ATerm prod)
+ATbool isLexicalListProd(PT_Production prod)
 {
   ATerm sort1, sort2, sort3;
 
-  if (ATmatchTerm(prod, asfix2_empty_to_star_lex_sort, NULL)) {
+  if (ATmatchTerm((ATerm)prod, asfix2_empty_to_star_lex_sort, NULL)) {
     return ATtrue;
   }
 
-  if (ATmatchTerm(prod, asfix2_single_to_plus_lex_sort, &sort1, &sort2)
+  if (ATmatchTerm((ATerm)prod, asfix2_single_to_plus_lex_sort, &sort1, &sort2)
       ||
-      ATmatchTerm(prod, asfix2_plus_to_star_lex_sort, &sort1, &sort2)) {
+      ATmatchTerm((ATerm)prod, asfix2_plus_to_star_lex_sort, &sort1, &sort2)) {
     return ATisEqual(sort1, sort2);
   } 
 
-  if (ATmatchTerm(prod, asfix2_plus_plus_to_plus_lex_sort,
+  if (ATmatchTerm((ATerm)prod, asfix2_plus_plus_to_plus_lex_sort,
                   &sort1, &sort2, &sort3, NULL)
       ||
-      ATmatchTerm(prod, asfix2_star_star_to_star_lex_sort,
+      ATmatchTerm((ATerm)prod, asfix2_star_star_to_star_lex_sort,
                   &sort1, &sort2, &sort3, NULL)
       ||
-      ATmatchTerm(prod, asfix2_star_plus_to_plus_lex_sort,
+      ATmatchTerm((ATerm)prod, asfix2_star_plus_to_plus_lex_sort,
                   &sort1, &sort2, &sort3, NULL)
       ||
-      ATmatchTerm(prod, asfix2_plus_star_to_plus_lex_sort,
+      ATmatchTerm((ATerm)prod, asfix2_plus_star_to_plus_lex_sort,
                   &sort1, &sort2, &sort3, NULL)) {
     return ATisEqual(sort1, sort2) && ATisEqual(sort1, sort3);
   }
@@ -250,30 +250,30 @@ ATbool isLexicalListProd(ATerm prod)
   return ATfalse;
 }
 
-ATbool isCharClassListProd(ATerm prod)
+ATbool isCharClassListProd(PT_Production prod)
 {
   ATerm cc1, cc2, cc3;
 
-  if (ATmatchTerm(prod, asfix2_empty_to_star_lex_charclass, NULL)) {
+  if (ATmatchTerm((ATerm)prod, asfix2_empty_to_star_lex_charclass, NULL)) {
     return ATtrue;
   }
 
-  if (ATmatchTerm(prod, asfix2_single_to_plus_lex_charclass, &cc1, &cc2)
+  if (ATmatchTerm((ATerm)prod, asfix2_single_to_plus_lex_charclass, &cc1, &cc2)
       ||
-      ATmatchTerm(prod, asfix2_plus_to_star_lex_charclass, &cc1, &cc2)) {
+      ATmatchTerm((ATerm)prod, asfix2_plus_to_star_lex_charclass, &cc1, &cc2)) {
     return ATisEqual(cc1, cc2);
   }
 
-  if (ATmatchTerm(prod, asfix2_plus_plus_to_plus_lex_charclass,
+  if (ATmatchTerm((ATerm)prod, asfix2_plus_plus_to_plus_lex_charclass,
                   &cc1, &cc2, &cc3, NULL)
       ||
-      ATmatchTerm(prod, asfix2_star_star_to_star_lex_charclass,
+      ATmatchTerm((ATerm)prod, asfix2_star_star_to_star_lex_charclass,
                   &cc1, &cc2, &cc3, NULL)
       ||
-      ATmatchTerm(prod, asfix2_star_plus_to_plus_lex_charclass,
+      ATmatchTerm((ATerm)prod, asfix2_star_plus_to_plus_lex_charclass,
                   &cc1, &cc2, &cc3, NULL)
       ||
-      ATmatchTerm(prod, asfix2_plus_star_to_plus_lex_charclass,
+      ATmatchTerm((ATerm)prod, asfix2_plus_star_to_plus_lex_charclass,
                   &cc1, &cc2, &cc3, NULL)) {
     return ATisEqual(cc1, cc2) && ATisEqual(cc1, cc3);
   }
@@ -281,30 +281,30 @@ ATbool isCharClassListProd(ATerm prod)
   return ATfalse;
 }
 
-ATbool isListProd(ATerm prod)
+ATbool isListProd(PT_Production prod)
 {
   ATerm sort1, sort2, sort3;
 
-  if (ATmatchTerm(prod, asfix2_empty_to_star, NULL)) {
+  if (ATmatchTerm((ATerm)prod, asfix2_empty_to_star, NULL)) {
     return ATtrue;
   }
 
-  if (ATmatchTerm(prod, asfix2_single_to_plus, &sort1, &sort2)
+  if (ATmatchTerm((ATerm)prod, asfix2_single_to_plus, &sort1, &sort2)
       ||
-      ATmatchTerm(prod, asfix2_plus_to_star, &sort1, &sort2)) {
+      ATmatchTerm((ATerm)prod, asfix2_plus_to_star, &sort1, &sort2)) {
     return ATisEqual(sort1, sort2);
   }
 
-  if (ATmatchTerm(prod, asfix2_plus_plus_to_plus,
+  if (ATmatchTerm((ATerm)prod, asfix2_plus_plus_to_plus,
                   &sort1, &sort2, &sort3, NULL)
       ||
-      ATmatchTerm(prod, asfix2_star_star_to_star,
+      ATmatchTerm((ATerm)prod, asfix2_star_star_to_star,
                   &sort1, &sort2, &sort3, NULL)
       ||
-      ATmatchTerm(prod, asfix2_star_plus_to_plus,
+      ATmatchTerm((ATerm)prod, asfix2_star_plus_to_plus,
                   &sort1, &sort2, &sort3, NULL)
       ||
-      ATmatchTerm(prod, asfix2_plus_star_to_plus,
+      ATmatchTerm((ATerm)prod, asfix2_plus_star_to_plus,
                   &sort1, &sort2, &sort3, NULL)) {
     return ATisEqual(sort1, sort2) && ATisEqual(sort1, sort3);
   }
@@ -312,33 +312,33 @@ ATbool isListProd(ATerm prod)
   return ATfalse;
 }
 
-ATbool isSepListProd(ATerm prod)
+ATbool isSepListProd(PT_Production prod)
 {
   ATerm sort1, sort2;
   ATermList sortSep1, sortSep2, sortSep3;
 
-  if (ATmatchTerm(prod, asfix2_empty_to_star_sep, NULL, NULL)) {
+  if (ATmatchTerm((ATerm)prod, asfix2_empty_to_star_sep, NULL, NULL)) {
     return ATtrue;
   }
 
-  if (ATmatchTerm(prod, asfix2_single_to_plus_sep, &sort1, &sort2, NULL)) {
+  if (ATmatchTerm((ATerm)prod, asfix2_single_to_plus_sep, &sort1, &sort2, NULL)) {
     return ATisEqual(sort1, sort2);
   }
 
-  if (ATmatchTerm(prod, asfix2_plus_sep_to_star_sep, &sortSep1, &sortSep2, NULL)) {
+  if (ATmatchTerm((ATerm)prod, asfix2_plus_sep_to_star_sep, &sortSep1, &sortSep2, NULL)) {
     return ATisEqual(sortSep1, sortSep2);
   }
 
-  if (ATmatchTerm(prod, asfix2_plus_sep_plus_sep_to_plus_sep,
+  if (ATmatchTerm((ATerm)prod, asfix2_plus_sep_plus_sep_to_plus_sep,
                   &sortSep1, NULL, &sortSep2, &sortSep3, NULL)
       ||
-      ATmatchTerm(prod, asfix2_star_sep_star_sep_to_star_sep,
+      ATmatchTerm((ATerm)prod, asfix2_star_sep_star_sep_to_star_sep,
                   &sortSep1, NULL, &sortSep2, &sortSep3, NULL)
       ||
-      ATmatchTerm(prod, asfix2_star_sep_plus_sep_to_plus_sep,
+      ATmatchTerm((ATerm)prod, asfix2_star_sep_plus_sep_to_plus_sep,
                   &sortSep1, NULL, &sortSep2, &sortSep3, NULL)
       ||
-      ATmatchTerm(prod, asfix2_plus_sep_star_sep_to_plus_sep,
+      ATmatchTerm((ATerm)prod, asfix2_plus_sep_star_sep_to_plus_sep,
                   &sortSep1, NULL, &sortSep2, &sortSep3, NULL)) {
     return ATisEqual(sortSep1, sortSep2) && ATisEqual(sortSep1, sortSep3);
   }
