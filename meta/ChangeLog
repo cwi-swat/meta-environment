@@ -1,4 +1,11 @@
 # $Id$
+2001/10/23 (markvdb@cwi.nl)
+ * Fixed the reading from terms in directories which are not
+   in meta.conf.
+ * Improved reading and creation of Sdf modules:
+  - located in directories not in meta.conf
+  - creation of files in subdirectories
+
 2001/10/11 (mdejonge@cwi.nl)
  * Added (generated) manual pages to EXTRA_DIST variable because not
    everybody has pod2man available
