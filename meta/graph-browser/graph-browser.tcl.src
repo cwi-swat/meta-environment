@@ -799,9 +799,12 @@ proc OpenModuleWidget {} {
   OpenWidget "Open Module..." "."
 }
 
-proc initialize-ui {libloc syn_ext sem_ext t_ext} {
-global library_dir syntax_ext semantics_ext term_ext
- 
+proc initialize-ui {name libloc syn_ext sem_ext t_ext} {
+global metaname library_dir syntax_ext semantics_ext term_ext
+
+  set metaname [TCLstring $name] 
+  wm title . $metaname
+
   set library_dir [TCLstring $libloc]
   set syntax_ext  [TCLstring $syn_ext]
   set semantics_ext  [TCLstring $sem_ext]
@@ -868,10 +871,10 @@ proc NewModuleWidget {} {
 proc EditTermWidget {mod operation} {
 global term_ext
 
-  set sdftype {{SDF}}
-  lappend sdftype $term_ext
+  set termtype {{Terms}}
+  lappend termtype $term_ext
   set anytype {{Any}    *          }
-  lappend types $sdftype
+  lappend types $termtype
   lappend types $anytype
 
 if {$operation == "open"} {
