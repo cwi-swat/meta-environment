@@ -56,6 +56,10 @@ ATERM		= @ATERM@
 ATERMBIN	= @ATERMBIN@
 ATERMLIB	= @ATERMLIB@
 ATERMINC	= @ATERMINC@
+ASFIX		= @ASFIX@
+ASFIXBIN	= @ASFIXBIN@
+ASFIXLIB	= @ASFIXLIB@
+ASFIXINC	= @ASFIXINC@
 TOOLBUS		= @TOOLBUS@
 TOOLBUSBIN	= @TOOLBUSBIN@
 TOOLBUSLIB	= @TOOLBUSLIB@
@@ -67,8 +71,8 @@ include ${top_srcdir}/implicit-rules
 # The eXtra parts of some variables
 XCFLAGS		=
 XCPPFLAGS	=
-XINCLUDES	= -I${top_srcdir}/asc-support -I$(ATERMINC)
-XLIBS		= -L${top_srcdir}/asc-support -lasc-support \
+XINCLUDES	= -I${top_srcdir}/asc-support -I$(ASFIXINC) -I$(ATERMINC)
+XLIBS		= -L${top_srcdir}/asc-support -L$(ASFIXLIB) -lasc-support \
 		  -Lc-source -lAsFix2C \
 		  -L$(ATERMLIB) -lATerm -lAsFix -lATB \
 		  $(SOCKLIBS)

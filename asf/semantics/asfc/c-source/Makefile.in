@@ -101,13 +101,19 @@ bindir		:= @bindir@
 libdir		:= @libdir@
 includedir	:= @includedir@
 
-ATERM		:= @ATERM@
-NEW_META	:= @exec_prefix@
+ATERM           = @ATERM@
+ATERMBIN        = @ATERMBIN@
+ATERMLIB        = @ATERMLIB@
+ATERMINC        = @ATERMINC@
+ASFIX           = @ASFIX@
+ASFIXBIN        = @ASFIXBIN@
+ASFIXLIB        = @ASFIXLIB@
+ASFIXINC        = @ASFIXINC@
 
 
 SOCKLIBS	:= @SOCKLIBS@
-XINCLUDES	:= -I$(top_srcdir)/asc-support -I$(ATERM)/include -I$(NEW_META)/include -I$(includedir)
-XLIBS		:= -L$(srcdir) -L$(top_srcdir)/asc-support -L$(ATERM)/lib -L$(NEW_META)/lib -L$(libdir) $(SOCKLIBS)
+XINCLUDES	:= -I$(top_srcdir)/asc-support -I$(ASFIXINC) -I$(ATERMINC) -I$(includedir)
+XLIBS		:= -L$(srcdir) -L$(top_srcdir)/asc-support -L$(ASFIXLIB) -L$(ATERMLIB) -L$(libdir) $(SOCKLIBS)
 
 DEFS		:= @DEFS@
 INCLUDES	:= @INCLUDES@ $(XINCLUDES)

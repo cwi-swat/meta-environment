@@ -102,8 +102,8 @@ NEW_META	:= @exec_prefix@
 
 
 SOCKLIBS	:= @SOCKLIBS@
-XINCLUDES	:= -I$(top_srcdir)/asc-support -I$(ATERM)/include -I$(NEW_META)/include -I$(includedir)
-XLIBS		:= -L$(srcdir) -L$(top_srcdir)/asc-support -L$(ATERM)/lib -L$(NEW_META)/lib -L$(libdir) $(SOCKLIBS)
+XINCLUDES	:= -I$(top_srcdir)/asc-support -I$(ASFIX)/include -I$(ATERM)/include -I$(includedir)
+XLIBS		:= -L$(srcdir) -L$(top_srcdir)/asc-support -L$(ASFIX)/lib -L$(ATERM)/lib -L$(libdir) $(SOCKLIBS)
 
 DEFS		:= @DEFS@
 INCLUDES	:= @INCLUDES@ $(XINCLUDES)
