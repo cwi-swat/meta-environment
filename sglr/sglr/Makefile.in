@@ -84,7 +84,9 @@ CSRC            = sglr-main.c
 OBJ             = ${patsubst %.c,%.o,${CSRC}}
 OBJA2TOA1       = ${patsubst %.c,%-a2toa1.o,${CSRC}}
 
-all:	${PROG}
+all:	depend ${PROG}
+
+.SILENT:	depend
 
 pure:	${PURE}
 
@@ -110,11 +112,11 @@ bininstall:	${PROG}
 		${INSTALL_PROG} ${INSTALL} ${bindir} $$PROG; \
 	done
 
-distclean realclean:	clean
+distclean realclean spotless:	clean
 	rm -f	 ${GETOPTOBJ} ${SGLRLIBS} ${PROGS} ${PUREPROGS} Makefile
 
 clean:
-	rm -f	core sglr.tifs sglr.tif.[ch]
+	rm -f	core depend sglr.tifs sglr.tif.[ch]
 	rm -f	${OBJ} ${LIBOBJ}
 	rm -f	${OBJA2TOA1} ${LIBOBJA2TOA1}
 	rm -f	${LIBOBJA2TOA1GC}
@@ -125,8 +127,6 @@ clean:
 
 %.pure:	%
 	purify $<
-
-%.c:	%.h
 
 %-a2toa1.o:	%.c
 	${CC} ${CFLAGS} ${XA2TOA1CFLAG} ${INCLUDES} -c $< -o $@
@@ -202,3 +202,17 @@ getopt.o: getopt.c
 
 getopt1.o: getopt1.c
 	${CC} -O3 -c $<
+
+# Handle dependencies
+depend: ${CSRC} ${GETOPTSRC} ${LIBSRC} sglr.tif.c
+	makedepend ${INCLUDES} ${CSRC} ${GETOPTC} -f -		>	$@
+	makedepend ${INCLUDES} ${LIBSRC} -f -			>	$@.tmp
+	cat	$@.tmp						>>	$@
+	sed -e 's/^\([^ :]*\).o:/\1-a2toa1.o:/'	$@.tmp		>>	$@
+	sed -e 's/^\([^ :]*\).o:/\1-gc.o:/'	$@.tmp		>>	$@
+	sed -e 's/^\([^ :]*\).o:/\1-a2toa1-gc.o:/'	$@.tmp	>>	$@
+	sed -e 's/^\([^ :]*\).o:/\1-prof.o:/'	$@.tmp		>>	$@
+	@rm -f $@.tmp
+	@echo "Dependencies updated: you may have to ${MAKE} again."
+
+-include depend
