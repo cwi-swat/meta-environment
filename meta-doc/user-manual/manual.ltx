@@ -917,7 +917,7 @@ Via the entry {\tt Parse Buffer} in the {\tt Meta-Environment} menu of the
 editor, the parser can be activated.  The parser is finished when the
 status line in the main window displays ``{\tt Idle}'' again.
 
-\paragraph{Note:} when parsing a large term it may take
+Note: when parsing a large term it may take
 some time for the editor to be active again. If the parse was
 successful, the bottom line in the \xemacs\ window displays the message
 {\tt Focus sort: None}. If the term contains an error, the cursor is
@@ -1156,8 +1156,13 @@ module Bool-example
     [B6] not(true) = false
 \end{verbatim}
 
-For an explanation of the \asfsdf\ features used in this specification we
-refer to Section~\ref{ASF+SDF}.
+For an explanation of the \asfsdf\ features used in this specification 
+\begin{iftex}
+we refer to Section~\ref{ASF+SDF}.
+\end{iftex}
+\begin{ifhtml}
+\link{click here}[]{ASF+SDF}.
+\end{ifhtml}
 
 \begin{figure}
 \begin{iftex}
@@ -1239,7 +1244,14 @@ Click \link{here}[]{FIG:Bool-example.asf} for inspecting the editor window.
   \htmlimage{Bool-example.trm2.gif}
 \end{center}
 \end{ifhtml}
-  \caption{\label{FIG:Bool-example.trm2} Same term editor as in Figure~\ref{FIG:Bool-example.trm} after parse}
+\begin{iftex}
+  \caption{\label{FIG:Bool-example.trm2} Same term editor as in
+Figure~\ref{FIG:Bool-example.trm} after parsing}
+\end{iftex}
+\begin{ifhtml}
+  \caption{\label{FIG:Bool-example.trm2} Same term editor 
+\link{for the Booleans example}[]{FIG:Bool-example.trm} after parsing}
+\end{ifhtml}
 \end{figure}
 
 \begin{figure}
@@ -1472,7 +1484,7 @@ Modifying layout in the lexical section:
 
 \end{itemize}
 
-\paragraph{Note:} Omitting the {\tt LAYOUT} definition is one of most common
+\paragraph{Frequently occurring errors} Omitting the {\tt LAYOUT} definition is one of most common
 errors made when writing a new specification; always make sure your syntax
 definitions define at least spaces and newlines to be {\tt LAYOUT}.
 
@@ -1597,7 +1609,7 @@ editor for the equations.
   has also expressions for adding and subtracting natural numbers and
   for concatenating strings.
 
-\paragraph{Notes:}
+\noindent Notes:
 
 \begin{itemize}
   
@@ -1916,7 +1928,7 @@ of the grammars:
 \item \link{Attributes of Lexical and Context-free Functions}[
 (Section~\ref{Attributes})]{Attributes}.
 \item \link{Parameterization and Renamings}[
-(Section~\ref{Renamings})]{Renamings}.
+(Section~\ref{ParametersRenamings})]{ParametersRenamings}.
 \item \link{Disambiguation}[ (Section~\ref{Disambiguation})]{Disambiguation}.
 \item \link{Equations}[ (Section~\ref{Equations})]{Equations}.
 \end{itemize}
@@ -1979,10 +1991,10 @@ importing module but they are not exported by the importing module.
 
 An imported module can be parameterized or decorated with renamings, 
 \begin{iftex}
-see Section~\ref{Renamings} for more details.
+see Section~\ref{ParametersRenamings} for more details.
 \end{iftex}
 \begin{ifhtml}
-see Section \link{Renamings}[]{Renamings} for more details.
+see Section \link{ParametersRenamings}[]{ParametersRenamings} for more details.
 \end{ifhtml}
 
 \subsection{Symbols} \label{Symbols}
@@ -2108,17 +2120,21 @@ and a result type {\tt Int}.
 
 Sort names can have parameters. This provides a way of distinguishing 
 a generic sort {\tt List} for integers, e.g. {\tt List[[Int]]},
-and for booleans, e.g. {\tt List[[Bool]]}.
+from booleans, e.g. {\tt List[[Bool]]}.
 These sort parameters can be instantiated via the parameters of 
-the module name.
+the module name. A parameterized sort may have the form
+{\tt List[[X,Y]]} where {\tt X} and {\tt Y} are generic sorts
+which will be provided via the parameters of the module name.
 See
 \begin{iftex} 
-Section~\ref{Renamings}
+Section~\ref{ParametersRenamings}
 \end{iftex}
 \begin{ifhtml}
-Section  \link{Parameterization and Renamings}[]{Renamings}
+Section  \link{Parameterization and Renamings}[]{ParametersRenamings}
 \end{ifhtml}
 for more details.
+The context-free syntax rule for parameterized sorts is:
+{\tt Sort "[[" {Symbol ","}+ "]]" -> Symbol}.
 
 \subsection{Aliases} \label{Aliases}
 
@@ -3384,8 +3400,9 @@ exports
 \subsubsection{Restrictions} \label{Restrictions} \label{ContextFreeRestrictions}
 \label{LexicalRestrictions}
 
-Lexical syntax can be highly ambiguous.  Consider a simple lexical definition
-for identifiers like the one in Figure~\ref{CODE:repetition}.  When
+Lexical syntax can be highly ambiguous.  Consider 
+\link{a simple lexical definition for identifiers}[ like the one in
+Figure~\ref{CODE:repetition}]{CODE:repetition}.  When
 recognizing the text {\tt abc}, what should we return: {\tt a}, {\tt ab}
 or, {\tt abc}? 
 \link{We discuss the strategy \emph{Prefer Longest Match} for
@@ -3691,7 +3708,8 @@ general lexical tokens (such as identifier) this causes ambiguities.
 The strategy \emph{Prefer Literals} gives preference to interpretation
 as a literal, over interpretation as a more general lexical token.
 For instance, the keyword {\tt begin} may be recognized as an identifier
-given the lexical definition of Figure \ref{CODE:restrict-id}.  There are
+given \link{the lexical definition}[ of Figure
+\ref{CODE:restrict-id}]{CODE:restrict-id}.  There are
 two approaches to implement Prefer Literals.
 
 In the first approach, we can explicitly forbid the recognition of
@@ -3700,8 +3718,9 @@ literals as tokens of a specific sort using
 Section~\ref{PreferAvoidReject})]{PreferAvoidReject}.  
 The idea is to define context-free
 grammar rules for all literals with the undesired lexical sort (e.g.,
-{\tt Id}) in the right-hand side followed by the attribute {\tt reject},
-Figure \ref{CODE:reject-id} illustrates this.  The {\tt reject} attribute
+{\tt Id}) in the right-hand side followed by the 
+\link{attribute {\tt reject}}[, Figure \ref{CODE:reject-id} illustrates
+this]{CODE:reject-id}.  The {\tt reject} attribute
 indicates that the recognizition of a keyword as a literal of the sort
 {\tt Id} should be rejected. This approach has the major disadvantage
 that the addition of a literal in any context-free rule also requires
@@ -3734,7 +3753,12 @@ only used as a last resort. In other words, it is avoided as much as possible
 and is only used when no alternative exists.  
 \link{The attribute {\tt avoid} defines precisely this behaviour}[ 
 (Section~\ref{PreferAvoidReject})]{PreferAvoidReject}.
-Figure \ref{CODE:avoid-id} shows how the lexical 
+\begin{iftex}Figure \ref{CODE:avoid-id} shows
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:avoid-id} for an example of
+\end{ifhtml}
+how the lexical 
 definition of {\tt Id} is attributed with {\tt avoid}.
 
 Although the first approach is more tedious, it allows more flexibility
@@ -3799,7 +3823,8 @@ elimination of trees that contain conflicts:
 
 \end{itemize}
 
-Given the example of Figure \ref{CODE:complex-prio} we will give a
+Given the \link{example}[ of Figure
+\ref{CODE:complex-prio}]{CODE:complex-prio} we will give a
 number of example sentences and the interpretation given the
 language definition in this example.
 
@@ -3900,9 +3925,16 @@ for typesetting reasons, we want to treat a subscript followed by a
 superscript in a special way. Therefore, the special case `{\tt E sub E sup E
   -> E}' is introduced, which is prefered over a combination of the two
 functions `{\tt E sub E -> E}' and `{\tt E sup E -> E}'.
-See, Figure \ref{CODE:eqn-exprs} for the \sdf\ definition.
+\link{See}[, Figure \ref{CODE:eqn-exprs}]{CODE:eqn-exprs} 
+for the \sdf\ definition.
 
-In Figure~\ref{CODE:dangling-else} the {\tt prefer} attribute is used to
+\begin{iftex}
+In Figure~\ref{CODE:dangling-else}
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:dangling-else} for an example of how
+\end{ifhtml}
+the {\tt prefer} attribute is used to
 solve the dangling else problem in a nice way.
 The input sentence {\tt "if 0 then if 1 then hi else ho"} can be parsed
 in two ways: {\tt if 0 then (if 1 then hi) else ho} and
@@ -3917,7 +3949,141 @@ But given the fact that the \emph{top} node of the latter derivation tree
 has the prefer attribute this derivation is selected and the other
 tree is removed from the ambiguity node.
 
-\subsection{Parametrization and Renaming} \label{Renamings}
+\subsection{Parameterization and Renaming} \label{ParametersRenamings}
+
+Parameterization and renaming were in fact features of 
+the original \asf\ as described
+in \cite{BHK89}, but they were never supported by the \asfsdf\
+used in the first version of the \ASmetaenv~\cite{Kli93}. 
+Based on the work described in \cite{Vis97}, \asfsdf\ is extended
+with parameterization and symbol renaming\footnote{In \cite{Vis97} the
+notion of production renaming is also introduced, but this
+is not yet supported.}. We will first explain the notion
+of parameterization, later we will give details on symbol renaming.
+
+\subsubsection{Parameterization} \label{Parameters}
+
+Modules can have formal parameters when defining them. The module name
+is then followed by a list of symbols, representing the formal
+parameters of this module. 
+\begin{iftex}
+Figure~\ref{CODE:generic-pairs} shows 
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:generic-pairs} for 
+\end{ifhtml}
+an example of an parameterized module. In this example the
+formal parameters are used in the parameterized sorts as well,
+this in order to increase readability.
+
+\begin{figure}
+\begin{IncCode}
+\begin{verbatim}
+module Pair[X Y]
+
+imports Booleans
+
+hiddens
+  sorts X Y
+exports
+  sorts Pair[[X,Y]]
+
+  context-free syntax
+    "[" X "," Y "]"      -> Pair[[X,Y]]
+
+    make-pair(X, Y)      -> Pair[[X,Y]]
+    first(Pair[[X,Y]])   -> X
+    second(Pair[[X,Y]])  -> Y
+    is-pair(Pair[[X,Y]]) -> Bool
+\end{verbatim}
+\end{IncCode}
+\caption{Definition of generic pairs}\label{CODE:generic-pairs}
+\end{figure}
+
+When importing a parameterized module the formal parameters have
+to be replaced by actual parameters. 
+\begin{iftex}
+Figure~\ref{CODE:importing-pairs} shows 
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:importing-pairs} for 
+\end{ifhtml}
+an example of a rather complicated importation of an parameterized module. 
+The symbols {\tt Pair[[Bool,Bool]]} and {\tt Pair[[Int,Int]]} are the
+actual parameters of the module {\tt Pair[X Y]} in the last import.
+
+\begin{figure}
+\begin{IncCode}
+\begin{verbatim}
+module TestPair
+
+imports Booleans Pair[Bool Bool]
+        Integers Pair[Int Int]
+        Pair[Pair[[Bool,Bool]] Pair[[Int,Int]]]
+\end{verbatim}
+\end{IncCode}
+\caption{Use of generic pair module}\label{CODE:importing-pairs}
+\end{figure}
+
+\subsubsection{Symbol Renaming} \label{Renamings}
+
+Symbol renaming is in fact very similar to parameterization except
+that it is not necessary to give the a module formal parameters.
+\begin{iftex}
+Figure~\ref{CODE:pairs} shows 
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:pairs} for 
+\end{ifhtml}
+an example of the {\tt Pair} module without parameters. 
+
+\begin{figure}
+\begin{IncCode}
+\begin{verbatim}
+module Pair
+
+imports Booleans
+
+hiddens
+  sorts X Y
+exports
+  sorts Pair[[X,Y]]
+
+  context-free syntax
+    "[" X "," Y "]"      -> Pair[[X,Y]]
+
+    make-pair(X, Y)      -> Pair[[X,Y]]
+    first(Pair[[X,Y]])   -> X
+    second(Pair[[X,Y]])  -> Y
+    is-pair(Pair[[X,Y]]) -> Bool
+\end{verbatim}
+\end{IncCode}
+\caption{Definition of generic pairs}\label{CODE:pairs}
+\end{figure}
+
+When importing a such module symbols can be renamed via
+symbol renaming.
+\begin{iftex}
+Figure~\ref{CODE:renaming-pairs} shows 
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:renaming-pairs} for 
+\end{ifhtml}
+the example of a rather complicated importation of the module {\tt Pair}
+using renamings. 
+
+\begin{figure}
+\begin{IncCode}
+\begin{verbatim}
+module TestPair
+
+imports Booleans Pair[X => Bool Y => Bool]
+        Integers Pair[X => Int  Y => Int]
+        Pair[X => Pair[[Bool,Bool]] Y => Pair[[Int,Int]]]
+\end{verbatim}
+\end{IncCode}
+\caption{Use of generic pair module}\label{CODE:renaming-pairs}
+\end{figure}
 
 \subsection{Variables} \label{Variables}
 
@@ -3985,8 +4151,9 @@ Section \link{Lexical Ambiguities}[]{lex-ambiguity}.
 \link{The set operator}[ (see Section~\ref{SetOperator})]{SetOperator} 
 is an abbrevation for
 representing sets. However, to obtain access to the elements of such
-a set an auxilary variable has to be defined, see
-Figure~\ref{CODE:set-variable} for an example.
+a set an 
+\link{auxilary variable has to be defined}[, see
+Figure~\ref{CODE:set-variable} for an example]{CODE:set-variable}.
 
 \begin{figure}
 \begin{IncCode}
@@ -4194,9 +4361,14 @@ further reductions are possible and a normal form is reached (if any).
 \subsubsection{List Matching}
 
 List matching, also known as associative matching, is a powerful
-mechanism to describe complex functionality in a compact way.  See Figure
-\ref{CODE:sets} for a compact specification to remove double elements
-from a set.
+mechanism to describe complex functionality in a compact way.  
+\begin{iftex}
+See Figure \ref{CODE:sets} for
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:sets} for an example of
+\end{ifhtml}
+a compact specification to remove double elements from a set.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -4248,10 +4420,10 @@ conditions are present, the failure of a condition following the match of a
 list variable leads to the trial of the next possible match of the list
 variable and the repeated evaluation of following conditions.
 
-This is exemplified by the Set specification presented in 
-Figure \ref{CODE:sets}.
+This is exemplified by the 
+\link{Set specification}[ presented in Figure \ref{CODE:sets}]{CODE:sets}.
 Yet another example of list matching in combination with the evaluation
-of conditions is shown in Figure \ref{CODE:split}.
+of conditions is \link{shown}[ in Figure \ref{CODE:split}]{CODE:split}.
 A list of elements is split into two parts of equal length, if the list
 has an even number of elements. In case of a list of uneven length
 the middle element is ignored. The first part of the list is returned
@@ -4293,8 +4465,8 @@ The sort {\tt CHAR} is a predefined sort to access the characters.
 Characters can be directly addressed by the representation or via
 variables which are either of the sort {\tt CHAR}, {\tt CHAR*}, or
 {\tt CHAR+}, where the latter two represent lists of characters.
-In Figure \ref{CODE:lcfs} a lexical constructor function is used
-to remove the leading zeros for a number.
+A \link{lexical constructor function}[, in Figure
+\ref{CODE:lcfs},]{CODE:lcfs} is used to remove the leading zeros for a number.
 
 \noindent Note: there is no check on the use of characters within the
 lexical constructor function.
@@ -4311,7 +4483,13 @@ if all other rules fail}''.  A kind of default behaviour is needed. \asf\
 offers functionality in order to obtain this behaviour. If the $TagId$
 of an equation starts with {\tt default-} this equation is considered to
 be a special equation which will only be applied if no other rule matches.
-Figure \ref{CODE:types} shows an example of the use of a default equation.
+\begin{iftex} 
+Figure \ref{CODE:types} shows
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:types} for
+\end{ifhtml}
+an example of the use of a default equation.
 
 \begin{figure}
 \begin{IncCode}
@@ -4362,8 +4540,10 @@ There is some overhead involved in accessing the memo-table.  Therefore,
 it is not wise to add the memo attribute to each function.  With respect
 to the operational behaviour adding a memo attribute does not have any
 effect.  In Figure~\ref{CODE:fib} the Fibonacci function is decorated with
-the memo attribute, improving its efficiency. See Table~\ref{TABLE:fibn}
-for some figures on the performance improvement.
+the memo attribute, improving its efficiency.
+For 
+\link{some figures}[, see Table~\ref{TABLE:fibn},]{TABLE:fibn}
+on the performance improvement.
 
 \begin{table}
 \begin{center}
@@ -4452,6 +4632,8 @@ equations
 %%\end{IncCode}
 %%\caption{Equations for conditions}\label{CODE:conditional}
 %%\end{figure}   
+
+\subsubsection{Getters and Setters Functions} \label{GettersSetters}
 
 \subsubsection{Traversal Functions} \label{Traversal}
 
@@ -4635,8 +4817,10 @@ equations
 
 \subsubsection{Which Specifications are Executable?}
 
-Which \asfsdf\ specifications can be executed? The specification of sets
-in Figure~\ref{CODE:itemsets} illustrates a non-executable specification,
+Which \asfsdf\ specifications can be executed? 
+The \link{specification of sets}[ in
+Figure~\ref{CODE:itemsets}]{CODE:itemsets} 
+illustrates a non-executable specification,
 since equation {\tt [2]}, which expresses that two elements in a set may
 be exchanged, will lead to an infinite rewriting loop.
 
@@ -4769,7 +4953,8 @@ equations
 \subsection{Sorting}
 
 The use of list structures is illustrated by the specification of
-the "Dutch National Flag" problem presented in Figure \ref{CODE:flag}: 
+the \link{"Dutch National Flag" problem}[ presented in Figure
+\ref{CODE:flag}]{CODE:flag}: 
 given an arbitrary list of the colours red,
 white and blue, sort them in the order as they appear in the Dutch National
 Flag. We want:
@@ -4777,7 +4962,7 @@ Flag. We want:
 {\tt \{white blue red blue red white red\} $\Rightarrow$ \{red red red white
  white blue blue\}}
 
-In the specification of Figure~\ref{CODE:flag}, 
+In the \link{specification}[ of Figure~\ref{CODE:flag}]{CODE:flag}, 
 the list variables {\tt Cs1} and {\tt Cs2}
 permit a succinct formulation of the search for adjacent colours that are in
 the wrong order.
@@ -5024,27 +5209,23 @@ goto xx ;
 label xxx
 \end{verbatim}
 
-\noindent Figure \ref{CODE:basicnotions} defines the 
+\noindent 
+The \link{specification}[, in Figure
+\ref{CODE:basicnotions},]{CODE:basicnotions} defines the 
 sorts {\tt Nat} (numbers) and {\tt Id} (identifiers).
-Given these basic notions the expressions and statements of our little 
-source language are defined, see Figure \ref{CODE:expressions} and
-\ref{CODE:statements}, respectively.
+Given these basic notions the \link{expressions}[, see Figure
+\ref{CODE:expressions}]{CODE:expressions}, and 
+\link{statements}[, see Figure \ref{CODE:statements},]{CODE:statements}
+of our little source language are defined.
 
-
-
-
-
-
-The instructions of the stack machine are defined in 
-Figure \ref{CODE:assemblylanguage}.
+The instructions of the \link{stack machine are defined}[ in 
+Figure \ref{CODE:assemblylanguage}]{CODE:assemblylanguage}.
 Next, we define a function to construct a next label given the
 previous one. It is defined on the lexical notion of labels ({\tt Label}). 
-The scheme of appending the character `{\tt x}' to the previous label is, of
-course, naive and will in real life be replaced by a more sophisticated one,
-see Figure \ref{CODE:nextlabel} for the actual definition.
-
-
-
+The \link{scheme}[, see Figure \ref{CODE:nextlabel} for the actual
+definition,]{CODE:nextlabel} of appending the 
+character `{\tt x}' to the previous label is, of
+course, naive and will in real life be replaced by a more sophisticated one.
 
 
 It remains to define a function `{\tt tr}' that translates statements into
@@ -5054,8 +5235,15 @@ frequently occurring problem: how do we maintain global information (in this
 case: the last label name generated)? A standard solution is to introduce an
 auxiliary sort ({\tt Instrs-Lab}) that contains both the generated instruction
 sequence and the last label name generated so far.
+\begin{iftex}
 The Figures \ref{CODE:codegenerator.sdf} and \ref{CODE:codegenerator.asf} 
 show the module containing this actual translation function.
+\end{iftex}
+\begin{ifhtml}
+The \link{\sdf\ part}[]{CODE:codegenerator.sdf} and
+\link{\asf\ part}[]{CODE:codegenerator.asf} define
+the actual translation function.
+\end{ifhtml}
 
 This completes the specification of our code generator.
 
@@ -5088,8 +5276,9 @@ describing financial products.
 \section{Compiling Specifications}
 \label{compiling-specs}
 
-By means of the button {\tt Compile ...} in the pop up menu for module
-operations (Figure \ref{FIG:module-menu}) or the button pane the \asfsdf2C
+By means of the button {\tt Compile ...} in the 
+\link{pop up menu for module operations}[ (Figure
+\ref{FIG:module-menu})]{FIG:module-menu} or the button pane the \asfsdf2C
 compiler can be activated. C code is generated for the selected module
 (exactly {\em one} module can be selected for compilation) including
 the imported modules. The C code is immediately compiled into an
