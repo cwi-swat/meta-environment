@@ -3,7 +3,15 @@
 #
 # Template for Makefile(.in) for use with genmakefile.sh
 #
-# You might want to change some of the variables below:
+#
+TARGET=@TARGET@
+DEBUG_EXT=dbg
+PROFILE_EXT=prof
+DEBUG_TARGET=${TARGET}-${DEBUG_EXT}
+PROFILE_TARGET=${TARGET}-${PROFILE_EXT}
+#
+#
+# You might need to change some of the variables below:
 #	STD_CC_FLAGS: default compiler flags
 #	STD_LD_FLAGS: default linker flags
 
@@ -27,7 +35,7 @@ DEBUG_LD_FLAGS	:=
 PROFILE_CC_FLAGS:= -pg
 PROFILE_LD_FLAGS:= -pg
 
-LOCALLIBS	:= -lasc-support -lATB -lAsFix -lATerm -l@TARGET@
+LOCALLIBS	:= -lasc-support -lATB -lAsFix -lATerm -l${TARGET}
 
 VPATH		:= @srcdir@
 srcdir		:= @srcdir@
@@ -41,14 +49,14 @@ AR_FLAGS=cr
 RANLIB=@RANLIB@
 
 # DEBUG-LIBS: libraries containing debugging information
-DEBUG-LIBS	 = $(LOCALLIBS:=-dbg) $(LIBS)
+DEBUG-LIBS	 = $(LOCALLIBS:=-${DEBUG_EXT}) $(LIBS)
 DEBUG-CC-FLAGS	:= ${DEBUG_CC_FLAGS}
 DEBUG-LD-FLAGS	:= ${DEBUG_LD_FLAGS}
 
 # PROFILE-LIBS: libraries containing profile information
 # PROFILE-CC-FLAGS: compiler flags to store profile information in object files
 # PROFILE-LD-FLAGS: optional flags for linking profiled object code
-PROFILE-LIBS	 = $(LOCALLIBS:=-prof) $(LIBS)
+PROFILE-LIBS	 = $(LOCALLIBS:=-${PROFILE_EXT}) $(LIBS)
 PROFILE-CC-FLAGS:= ${PROFILE_CC_FLAGS}
 PROFILE-LD-FLAGS:= ${PROFILE_LD_FLAGS}
 
@@ -83,18 +91,18 @@ DEFS		:= @DEFS@
 INCLUDES	:= @INCLUDES@ $(XINCLUDES)
 LIBS		:= @LIBS@ $(XLIBS)
 
-SPEC_SRCS	:= $(shell grep -v '^\#' $(srcdir)/@TARGET@.module-list)
+SPEC_SRCS	:= $(shell grep -v '^\#' $(srcdir)/${TARGET}.module-list)
 SRCS		:= $(SPEC_SRCS) init.c
 
 STD-OBJS	:= $(SRCS:.c=-$(CC).o)
-DEBUG-OBJS	:= $(SRCS:.c=-dbg.o)
-PROFILE-OBJS	:= $(SRCS:.c=-prof.o)
+DEBUG-OBJS	:= $(SRCS:.c=-${DEBUG_EXT}.o)
+PROFILE-OBJS	:= $(SRCS:.c=-${PROFILE_EXT}.o)
 
-STD-LIBFILES	:= lib@TARGET@-$(CC).a
-DEBUG-LIBFILES	:= lib@TARGET@-dbg.a
-PROFILE-LIBFILES:= lib@TARGET@-prof.a
+STD-LIB		:= lib${TARGET}-$(CC).a
+DEBUG-LIB	:= lib${DEBUG_TARGET}.a
+PROFILE-LIB	:= lib${PROFILE_TARGET}.a
 
-BINFILES	:= @TARGET@
+BINFILES	:= ${TARGET}
 LIBFILES	:=
 INCLUDEFILES	:=
 
@@ -110,28 +118,36 @@ install:	${BINFILES}
 %-$(CC).o:	%.c
 	$(CC) $(FLAGS-$(CC)) $(STD-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
 
-%-dbg.o:	%.c
+%-${DEBUG_EXT}.o:	%.c
 	$(CC) $(FLAGS-$(CC)) $(DEBUG-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
 
-%-prof.o:	%.c
+%-${PROFILE_EXT}.o:	%.c
 	$(CC) $(FLAGS-$(CC)) $(PROFILE-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
 
-lib@TARGET@-$(CC).a:	$(STD-OBJS)
-	$(AR) $(AR_FLAGS) $@ $(STD-OBJS)
+$(STD-LIB):	$(STD-OBJS)
+	$(AR) $(AR_FLAGS) $@ $^
 	$(RANLIB) $@
 
-@TARGET@:	$(STD-LIBFILES)
+$(DEBUG-LIB):	$(DEBUG-OBJS)
+	$(AR) $(AR_FLAGS) $@ $^
+	$(RANLIB) $@
+
+$(PROFILE-LIB):	$(PROFILE-OBJS)
+	$(AR) $(AR_FLAGS) $@ $^
+	$(RANLIB) $@
+
+${TARGET}:	$(STD-LIB)
 	$(CC) $(STD-LD-FLAGS)     -o $@ $(LIBDIR) $(STD-LIBS)
 
-@TARGET@-dbg:	$(DEBUG-LIBFILES)
+${DEBUG_TARGET}:	$(DEBUG-LIB)
 	$(CC) $(DEBUG-LD-FLAGS)   -o $@ $(LIBDIR) $(DEBUG-LIBS)
 
-@TARGET@-prof:	$(PROFILE-LIBFILES)
+${PROFILE_TARGET}:	$(PROFILE-LIB)
 	$(CC) $(PROFILE-LD-FLAGS) -o $@ $(LIBDIR) $(PROFILE-LIBS)
 
-debug:	@TARGET@-dbg
+debug:	${DEBUG_TARGET}
 
-profile: @TARGET@-prof
+profile prof: ${PROFILE_TARGET}
 
 init.c: $(SPEC_SRCS)
 	@(echo "/*GENERATED AUTOMATICALLY, DO NOT MODIFY */" ;\
@@ -158,7 +174,7 @@ init.c: $(SPEC_SRCS)
 	echo "}" ) | sed 's/.c()/()/g;s/-/_/g;' > $@
 
 clean:
-	$(RM) *.asfix *.o init.c @TARGET@ @TARGET@-db @TARGET@-prof
+	$(RM) *.asfix *.o init.c ${STD-LIB} ${DEBUG-LIB} ${PROFILE-LIB} ${TARGET} ${DEBUG_TARGET} ${PROFILE_TARGET}
 
 realclean spotless distclean:	clean
 	$(RM) Makefile
