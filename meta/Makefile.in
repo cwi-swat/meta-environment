@@ -86,6 +86,10 @@ distclean:
 		cd ..; \
 	done
 
+# Get `dist' target from separate Makefile.dist, so we can always
+# explicitly build `dist' using "gmake -f Makefile.dist dist"
+include	Makefile.dist
+
 # ObTribute to Larry Wall
 love:
 	@echo "not war"

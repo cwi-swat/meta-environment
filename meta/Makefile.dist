@@ -1,0 +1,8 @@
+# $Id$
+
+dist:   distclean
+	( dir=`basename \`pwd\`` ; cd .. ;			\
+	  files=`find $$dir -type f -print  |  grep -v CVS` ;	\
+	  tar cf $$dir.tar $$files ;				\
+	  rm -f $$dir.tar.gz ;					\
+	  gzip $$dir.tar )
