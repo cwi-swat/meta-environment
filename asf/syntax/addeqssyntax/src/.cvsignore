@@ -1,7 +1,5 @@
 Makefile.in
 Makefile
 .deps
-addeqssyntax.tif.h
-addeqssyntax.tif.c
 addeqssyntax
-addeqssyntax.1
+*.tifs

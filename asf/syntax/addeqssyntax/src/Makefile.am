@@ -13,18 +13,14 @@ bin_PROGRAMS = addeqssyntax
 
 pkgdata_DATA = addeqssyntax.idef
 
-EXTRA_DIST   = addeqssyntax.idef addeqssyntax.tif.c addeqssyntax.tif.h 
+EXTRA_DIST   = addeqssyntax.idef 
 
-addeqssyntax_SOURCES = addeqssyntax.c Add-Eqs-Syntax.c
-addeqssyntax_LDADD   = addeqssyntax.tif.o \
-                       -L$(ASC_SUPPORT)/lib -lasc-support-me \
+noinst_HEADERS = addeqssyntax.tif.h
+addeqssyntax_SOURCES = addeqssyntax.c Add-Eqs-Syntax.c addeqssyntax.tif.c
+addeqssyntax_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                        -L$(SDF_SUPPORT)/lib -lSDFME \
                        -L$(ASF_SUPPORT)/lib -lASFME \
                        -L$(PT_SUPPORT)/lib -lmept \
                        -L$(TOOLBUSLIB)/lib -lATB \
                        -L$(ATERM)/lib -lATerm \
 			$(SOCKLIBS)
-
-CLEANFILES = addeqssyntax.tifs 
-
-addeqssyntax.o: addeqssyntax.tif.h
