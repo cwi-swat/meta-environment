@@ -155,6 +155,34 @@ ATbool PT_prodHasLexAsLhsAndCfAsRhs(PT_Production prod)
   return ATfalse;
 }
 
+ATbool PT_isIterSepSymbol(PT_Symbol symbol)
+{
+  /* This implements: 
+   * "cf(iter-star-sep(<term>,lit(<str>)))" and
+   * "cf(iter-sep(<term>,lit(<str>)))" 
+   */
+  if (PT_isSymbolCf(symbol)) {
+    PT_Symbol listsym = PT_getSymbolSymbol(symbol);
+    return PT_isSymbolIterPlusSep(listsym) || PT_isSymbolIterStarSep(listsym);
+  }
+
+  return ATfalse;
+}
+
+ATbool PT_isIterSymbol(PT_Symbol symbol)
+{
+  /* This implements: 
+   * "cf(iter-star(<term>,lit(<str>)))"
+   * "cf(iter(<term>,lit(<str>)))"
+   */
+  if (PT_isSymbolCf(symbol)) {
+    PT_Symbol listsym = PT_getSymbolSymbol(symbol);
+    return PT_isSymbolIterPlus(listsym) || PT_isSymbolIterStar(listsym);
+  }
+
+  return ATfalse;
+}
+
 ATbool PT_prodHasIterSepAsRhs(PT_Production prod)
 {
   /* This implements: 
@@ -163,10 +191,7 @@ ATbool PT_prodHasIterSepAsRhs(PT_Production prod)
    */
   if (PT_isProductionDefault(prod)) {
     PT_Symbol rhs = PT_getProductionRhs(prod);
-    if (PT_isSymbolCf(rhs)) {
-      PT_Symbol listsym = PT_getSymbolSymbol(rhs);
-      return PT_isSymbolIterPlusSep(listsym) || PT_isSymbolIterStarSep(listsym);
-    }
+    return PT_isIterSepSymbol(rhs);
   }
 
   ATabort("PT_prodHasIterSepAsRhs: not a production: %t\n", prod);
@@ -181,10 +206,7 @@ ATbool PT_prodHasIterAsRhs(PT_Production prod)
    */
   if (PT_isProductionDefault(prod)) {
     PT_Symbol rhs = PT_getProductionRhs(prod);
-    if (PT_isSymbolCf(rhs)) {
-      PT_Symbol listsym = PT_getSymbolSymbol(rhs);
-      return PT_isSymbolIterPlus(listsym) || PT_isSymbolIterStar(listsym);
-    }
+    return PT_isIterSymbol(rhs);
   }
 
   ATerror("PT_prodHasListSepAsRhs: not a production: %t\n", prod);

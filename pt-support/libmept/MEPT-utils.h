@@ -39,6 +39,8 @@ ATbool PT_isVarDefault(PT_Production arg);
 ATbool PT_prodHasLexAsLhsAndCfAsRhs(PT_Production prod);
 ATbool PT_prodHasIterSepAsRhs(PT_Production prod);
 ATbool PT_prodHasIterAsRhs(PT_Production prod);
+ATbool PT_isIterSepSymbol(PT_Symbol sym);
+ATbool PT_isIterSymbol(PT_Symbol sym);
 ATbool PT_prodHasSTARTAsRhs(PT_Production prod);
 ATbool PT_isOptLayoutSymbol(PT_Symbol arg);
 
