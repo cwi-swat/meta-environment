@@ -179,6 +179,11 @@ sg_growbuf *SG_PrintSymbolToGrowBuf(sg_growbuf *gb, ATerm t, ATbool escaped)
     }
     SG_AddStringToGrowBuf(gb, ">>");
   }
+  else if (ATmatch(t, "set(<term>)", &arg)) {
+    SG_AddStringToGrowBuf(gb, "Set[");
+    SG_PrintSymbolToGrowBuf(gb, arg, escaped);
+    SG_AddStringToGrowBuf(gb, "]");
+  }
   else if (ATmatch(t, "func([<list>], <term>)", &args, &arg2)) {
     SG_AddStringToGrowBuf(gb, "(");
     while (!ATisEmpty(args)) {
