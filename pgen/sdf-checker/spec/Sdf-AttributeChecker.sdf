@@ -1,7 +1,8 @@
 module Sdf-AttributeChecker
 
 %%imports utilities/PosInfo[Production]
-imports Sdf-Messages ModuleOperations
+imports SdfCheckerFeedback
+imports ModuleOperations
 
 exports
   context-free start-symbols {Feedback ","}*

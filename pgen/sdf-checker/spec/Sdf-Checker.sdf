@@ -9,6 +9,7 @@ exports
 
   context-free syntax
     check-sdf(SDF) -> Summary
+    check-sdf(Definition) -> {Feedback ","}*
 
 hiddens
   context-free syntax

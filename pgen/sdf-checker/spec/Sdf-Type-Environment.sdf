@@ -1,6 +1,6 @@
 module Sdf-Type-Environment
 
-imports Sdf-Messages
+imports SdfCheckerFeedback
         ImportOperations ConstructorSetOperations
 
 exports

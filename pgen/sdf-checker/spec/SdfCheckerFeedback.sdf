@@ -2,6 +2,9 @@ module SdfCheckerFeedback
 
 imports basic/Feedback
 imports basic/Comments
+imports SymbolSetOperations 
+imports SdfOperations
+imports ProductionSetOperations
 
 exports
   context-free syntax

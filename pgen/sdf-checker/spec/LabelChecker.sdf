@@ -1,7 +1,7 @@
 module LabelChecker
 
 %%imports utilities/PosInfo[Literal]
-imports Sdf-Messages 
+imports SdfCheckerFeedback
 imports ModuleOperations
 
 exports

@@ -1,13 +1,17 @@
 equations
 
+  [cs-1'1] Msg* := check-sdf(Definition)
+           ====>
+           check-sdf(definition Definition) =
+             feedback("SdfChecker", "Unknown", [Msg*])
+
   [cs-1'1] Msg*1 := check-labels(Definition1),
            Definition2 := remove-labels(Definition1),
            Msg*2 := check-sorts-and-prods(Definition2),
            Msg*3 := check-sdf-attributes(Definition2),
            Msg*4 := check-for-deprecated-symbols(Definition2)
            =================================================
-           check-sdf(definition Definition1) =
-             feedback("SdfChecker", "Unknown", [Msg*1, Msg*2, Msg*3, Msg*4])
+           check-sdf(Definition1) = Msg*1, Msg*2, Msg*3, Msg*4
  
   [cms-1'1] InfoMsgTuple2 := check-module(Module, Definition, InfoMsgTuple1)
             ===============================================================
