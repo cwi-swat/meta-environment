@@ -831,6 +831,7 @@ int mread(int fd, char *buf, int len)
       cnt += n;
     /* TBmsg("mread: cnt := %d\n", cnt); */
   }
+
   assert(cnt == len);
   return cnt;
 }
