@@ -3,344 +3,360 @@
 
   file: tree-to-dot.c
 
-  purpose: dumping parse trees as dot graphs, i.e., input for
+  Purpose: dumping parse trees as dot graphs, i.e., input for
   the dot graph layout program.
 
 */
 
-#include <TB.h>
-#include "bool.h"
+#include <ctype.h>
+
+#include <aterm2.h>
+
 #include "parse-table.h"
 #include "stack.h"
 #include "parser.h"
 #include "forest.h"
 
-extern char *program_name;
-
-term *prev_char_parent;
+ATerm prev_char_parent;
 char  prev_char;
 
-#define PRINTED(t) has_conds(t)
 
-void print_character(FILE *dot, int c)
+void SG_PrintChar(FILE *dot, int c)
 {
   switch(c) {
-  case '\n' : fprintf(dot, "\\\\n");
+  case '\n' : ATfprintf(dot, "\\\\n");
     break;
-  case 32 : fprintf(dot, "\\\\32");
+  case 32   : ATfprintf(dot, "\\\\32");
     break;
-  case '\t' : fprintf(dot, "\\\\t");
+  case '\t' : ATfprintf(dot, "\\\\t");
     break;
 
 /*
-        JS -- handle the next chars with extra care
+ * %%   J$ -- handle the next chars with extra care
  */
-  case '\\' : fprintf(dot, "\\\\");
+  case '\\' : ATfprintf(dot, "\\\\");
     break;
-  case '"' : fprintf(dot, "\\\"");
+  case '"'  : ATfprintf(dot, "\\\"");
     break;
 
   default :
-    if(!isprint(c))
-      fprintf(dot, "\\\\%i", c);
-    else
-      fprintf(dot, "%c", c);
+    if(isprint(c)) ATfprintf(dot, "%c", c);
+    else ATfprintf(dot, "\\\\%i", c);
   }
 }
 
-void print_symbol(FILE *dot, term *t)
+void SG_PrintSymbol(FILE *dot, ATerm t)
 {
   char *name;
-  term *arg, *arg2, *args;
+  ATerm     arg, arg2;
+  ATermList args;
   int  c1, c2;
 
-  if (TBmatch(t, "layout", &name))
-    fprintf(dot, "L");
-   else if (TBmatch(t, "sort(%s)", &name))
-    fprintf(dot, "%s", name);
-  else if (TBmatch(t, "lit(%s)", &name)) {
+  if (ATmatch(t, "layout"))
+    ATfprintf(dot, "L");
+  else if (ATmatch(t, "sort(<str>)", &name))
+    ATfprintf(dot, "%s", name);
+  else if (ATmatch(t, "lit(<str>)", &name)) {
     int n;
-    fprintf(dot, "\\\"");
+
+    ATfprintf(dot, "\\\"");
     for(n = 0; name[n] != '\0'; n++)
       switch (name[n]) {
-        case '\\': fprintf(dot, "\\\\"); break;
-        case '"':  fprintf(dot, "\\\""); break;
-        default:  fprintf(dot, "%c", name[n]);
+        case '\\': ATfprintf(dot, "\\\\"); break;
+        case '"' : ATfprintf(dot, "\\\""); break;
+        default  : ATfprintf(dot, "%c", name[n]);
     }
-    fprintf(dot, "\\\"");
-  } else if (TBmatch(t, "lex(%t)", &arg)) {
-    fprintf(dot, "<");
-    print_symbol(dot, arg);
-    fprintf(dot, "-LEX>");
+    ATfprintf(dot, "\\\"");
+  } else if (ATmatch(t, "lex(<term>)", &arg)) {
+    ATfprintf(dot, "<");
+    SG_PrintSymbol(dot, arg);
+    ATfprintf(dot, "-LEX>");
   }
-  else if (TBmatch(t, "cf(%t)", &arg)) {
-    fprintf(dot, "<");
-    print_symbol(dot, arg);
-    fprintf(dot, "-CF>");
-  } else if (TBmatch(t, "iter-star(%t)", &arg)) {
-    print_symbol(dot, arg);
-    fprintf(dot, "*");
-  } else if (TBmatch(t, "iter(%t)", &arg)) {
-    print_symbol(dot, arg);
-    fprintf(dot, "+");
-  } else if (TBmatch(t, "iter-sep(%t, %t)", &arg, &arg2)) {
-    fprintf(dot, "{");
-    print_symbol(dot, arg);
-    fprintf(dot, "\\ ");
-    print_symbol(dot, arg2);
-    fprintf(dot, "}+");
-  } else if (TBmatch(t, "iter-star-sep(%t, %t)", &arg, &arg2)) {
-    fprintf(dot, "{");
-    print_symbol(dot, arg);
-    fprintf(dot, "\\ ");
-    print_symbol(dot, arg2);
-    fprintf(dot, "}*");
-  } else if (TBmatch(t, "iter-n(%t, %d)", &arg, &c1)) {
-    print_symbol(dot, arg);
-    fprintf(dot, "%d+", c1);
-  } else if (TBmatch(t, "iter-sep-n(%t, %t, %d)", &arg, &arg2, &c1)) {
-    fprintf(dot, "{");
-    print_symbol(dot, arg);
-    fprintf(dot, "\\ ");
-    print_symbol(dot, arg2);
-    fprintf(dot, "}%d+", c1);
-  } else if (TBmatch(t, "seq([%l])", &args)) {
-    fprintf(dot, "(");
-    while (args) {
-      arg = first(args);
-      args = next(args);
-      print_symbol(dot, arg);
-      if (args)
-        fprintf(dot, "\\ ");
+  else if (ATmatch(t, "cf(<term>)", &arg)) {
+    ATfprintf(dot, "<");
+    SG_PrintSymbol(dot, arg);
+    ATfprintf(dot, "-CF>");
+  } else if (ATmatch(t, "iter-star(<term>)", &arg)) {
+    SG_PrintSymbol(dot, arg);
+    ATfprintf(dot, "*");
+  } else if (ATmatch(t, "iter(<term>)", &arg)) {
+    SG_PrintSymbol(dot, arg);
+    ATfprintf(dot, "+");
+  } else if (ATmatch(t, "iter-sep(<term>,<term>)", &arg, &arg2)) {
+    ATfprintf(dot, "{");
+    SG_PrintSymbol(dot, arg);
+    ATfprintf(dot, "\\ ");
+    SG_PrintSymbol(dot, arg2);
+    ATfprintf(dot, "}+");
+  } else if (ATmatch(t, "iter-star-sep(<term>,<term>)", &arg, &arg2)) {
+    ATfprintf(dot, "{");
+    SG_PrintSymbol(dot, arg);
+    ATfprintf(dot, "\\ ");
+    SG_PrintSymbol(dot, arg2);
+    ATfprintf(dot, "}*");
+  } else if (ATmatch(t, "iter-n(<term>, <int>)", &arg, &c1)) {
+    SG_PrintSymbol(dot, arg);
+    ATfprintf(dot, "%d+", c1);
+  } else if (ATmatch(t, "iter-sep-n(<term>,<term>,<int>)", &arg, &arg2, &c1)) {
+    ATfprintf(dot, "{");
+    SG_PrintSymbol(dot, arg);
+    ATfprintf(dot, "\\ ");
+    SG_PrintSymbol(dot, arg2);
+    ATfprintf(dot, "}%d+", c1);
+  } else if (ATmatch(t, "seq([<list>])", &args)) {
+    ATfprintf(dot, "(");
+    while (!ATisEmpty(args)) {
+      arg = ATgetFirst(args);
+      args = ATgetNext(args);
+      SG_PrintSymbol(dot, arg);
+      if (args) ATfprintf(dot, "\\ ");
     }
-    fprintf(dot, ")");
-  }
-  else if (TBmatch(t, "opt(%t)", &arg))
-  {
-    print_symbol(dot, arg);
-    fprintf(dot, "?");
-  }
-  else if (TBmatch(t, "alt(%t, %t)", &arg, &arg2))
-  {
-    print_symbol(dot, arg);
-    fprintf(dot, "|");
-    print_symbol(dot, arg2);
-  }
-  else if (TBmatch(t, "char-class([%l])", &args))
-  {
-    fprintf(dot, "[");
-    while (args) {
-      arg = first(args);
-      args = next(args);
-      if (TBmatch(arg, "range(%d,%d)", &c1, &c2)) {
-        print_character(dot, c1);
-        fprintf(dot, "-");
-        print_character(dot, c2);
-      } else if (TBmatch(arg, "%d", &c1))
-        print_character(dot, c1);
+    ATfprintf(dot, ")");
+  } else if (ATmatch(t, "opt(<term>)", &arg)) {
+    SG_PrintSymbol(dot, arg);
+    ATfprintf(dot, "?");
+  } else if (ATmatch(t, "alt(<term>,<term>)", &arg, &arg2)) {
+    SG_PrintSymbol(dot, arg);
+    ATfprintf(dot, "|");
+    SG_PrintSymbol(dot, arg2);
+  } else if (ATmatch(t, "char-class([<list>])", &args)) {
+    ATfprintf(dot, "[");
+    while (!ATisEmpty(args)) {
+      arg = ATgetFirst(args);
+      args = ATgetNext(args);
+      if (ATmatch(arg, "range(<int>,<int>)", &c1, &c2)) {
+        SG_PrintChar(dot, c1);
+        ATfprintf(dot, "-");
+        SG_PrintChar(dot, c2);
+      } else if (ATmatch(arg, "<int>", &c1))
+        SG_PrintChar(dot, c1);
     }
-    fprintf(dot, "]");
+    ATfprintf(dot, "]");
+  } else if (ATmatch(t, "varsym(<term>)", &arg)) {
+    ATfprintf(dot, "<");
+    SG_PrintSymbol(dot, arg);
+    ATfprintf(dot, "-VAR>");
   }
-  else if (TBmatch(t, "varsym(%t)", &arg)) {
-    fprintf(dot, "<");
-    print_symbol(dot, arg);
-    fprintf(dot, "-VAR>");
-  }
-  else {
-    TBprintf(stderr, "%s: print_symbol: strange symbol %t\n", program_name, t);
-    exit(1);
-  }
+  else
+    ATerror("SG_PrintSymbol: strange symbol %t\n", t);
 }
 
-void appl_node(FILE *dot, term* t, term *fun, int n)
-{
-  term *args, *res, *attrs;
-
-  if (TBmatch(fun, "prod([%l], %t, %t)", &args, &res, &attrs)) {
-    TBprintf(dot, "\tN%d [label=\"", (int)t);
-    print_symbol(dot, res);
-    if(TBmatch(attrs,"attrs([atr(\"reject\"),%l])", &attrs))
-      TBprintf(dot, " (reject)");
-    TBprintf(dot, "\"]\n", n);
-  } else {
-    TBprintf(stderr, "%s: appl_node: not a production %t\n", program_name, fun);
-    exit(1);
-  }
-}
-
-void amb_node(FILE *dot, term *t, term *arg)
-{
-  term *args, *res, *attrs, *args2;
-  if (TBmatch(arg, "appl(prod([%l],%t,%t),[%l])",
-              &args, &res, &attrs, &args2)) {
-    TBprintf(dot, "\tN%d [label=\"", (int)t);
-    print_symbol(dot, res);
-    TBprintf(dot, " (amb)\"]\n");
-  } else
-    TBprintf(stderr, "amb_node: warning strange node %d\n", t);
-}
 
 /*
- * Check whether a term is the top of a `lexical' tree
- */
-bool is_lexical(term *fun)
+    The following #defines are TEMPORARY, until there's a true
+    interface (sort of) to access the internal `mark' bit in aterms
+    we're abusing here
+*/
+/* Taken from @ATERMDIST@/aterm/encoding.h */
+#define MASK_MARK         (1<<1)
+#define IS_MARKED(h)      ((h) & MASK_MARK)
+#define SET_MARK(h)       ((h) |= MASK_MARK)
+#define CLR_MARK(h)       ((h) &= ~MASK_MARK)
+
+#define SG_IS_PRINTED(t)     IS_MARKED(t->header)
+#define SG_MARK_PRINTED(t)   SET_MARK(t->header)
+#define SG_MARK_UNPRINTED(t) CLR_MARK(t->header)
+/*   End of TEMPORARY hack */
+
+
+void SG_ApplNode(FILE *dot, ATerm t, ATerm fun, int n)
 {
-  term *dummy;
+  ATerm args, res, attrs;
 
-  if(TBmatch(fun, "prod(%t,cf(layout),%t)", &dummy, &dummy))
-    return(TRUE);
+  if (SG_IS_PRINTED(t)) return;
+  SG_MARK_PRINTED(t);
 
-  if(TBmatch(fun, "prod(%t,lit(%t),%t)", &dummy, &dummy, &dummy))
-    return(TRUE);
-
-  if(TBmatch(fun, "prod(%t,lex(%t),%t)", &dummy, &dummy, &dummy))
-    return(TRUE);
-
-  return(FALSE);
+  if (ATmatch(fun, "prod([<list>], <term>, <term>)", &args, &res, &attrs)) {
+    ATfprintf(dot, "\tN%d [label=\"", (int)t);
+    SG_PrintSymbol(dot, res);
+    if(ATmatch(attrs,"attrs([atr(\"reject\"),<list>])", &attrs))
+      ATfprintf(dot, " (reject)");
+    ATfprintf(dot, "\"]\n", n);
+  } else
+    ATerror("SG_ApplNode: not a production %t\n", fun);
 }
 
-void tree_to_dot(FILE *dot, term *t, int child, term *parent, bool suppress_lexicals)
+void SG_AmbNode(FILE *dot, ATerm t, ATerm arg)
 {
-  term *fun, *args, *arg;
-  int  c;
+  ATerm args, res, attrs, args2;
 
-  PRINTED(t) = FALSE;
-  if (TBmatch(t, "%d", &c)) {
-    TBprintf(dot, "\tN%d%d%d [label=\"", parent, child, c);
-    print_character(dot, c);
-    TBprintf(dot, "\"]\n", 0);
-    TBprintf(dot, "\tN%d -> N%d%d%d\n", parent, parent, child, c);
+  if (ATmatch(arg, "appl(prod([<list>],<term>,<term>),[<list>])",
+              &args, &res, &attrs, &args2)) {
+    ATfprintf(dot, "\tN%d [label=\"", (int)t);
+    SG_PrintSymbol(dot, res);
+    ATfprintf(dot, " (amb)\"]\n");
+  } else
+    ATerror("SG_AmbNode: warning strange node %d\n", t);
+}
+
+
+/* Check whether a term is the top of a `lexical' tree */
+
+ATbool SG_IsLexical(ATerm fun)
+{
+  ATerm dummy;
+
+  if(ATmatch(fun, "prod(<term>,cf(layout),<term>)", &dummy, &dummy))
+    return(ATtrue);
+
+  if(ATmatch(fun, "prod(<term>,lit(<term>),<term>)", &dummy, &dummy, &dummy))
+    return(ATtrue);
+
+  if(ATmatch(fun, "prod(<term>,lex(<term>),<term>)", &dummy, &dummy, &dummy))
+    return(ATtrue);
+
+  return(ATfalse);
+}
+
+
+void SG_TreeToDot(FILE *dot, ATerm t, int child, ATerm parent,
+                  ATbool suppress_lexicals)
+{
+  ATerm     fun, arg;
+  ATermList args;
+  int       c, n=0;
+
+//  SG_MARK_UNPRINTED(t);
+  if (ATmatch(t, "<int>", &c)) {
+    ATfprintf(dot, "\tN%d%d%d [label=\"", (int) parent, child, c);
+    SG_PrintChar(dot, c);
+    ATfprintf(dot, "\"]\n", 0);
+    ATfprintf(dot, "\tN%d -> N%d%d%d\n", parent, parent, child, c);
     prev_char_parent = parent;
     prev_char = c;
-  } else if (PRINTED(t)) {
-    /* fprintf(stderr, "term already printed\n"); */
-    return;
   }
-  PRINTED(t) = TRUE;
+  if (SG_IS_PRINTED(t)) return;
+//  SG_MARK_PRINTED(t);
 
-  if (TBmatch(t, "appl(%t,[%l])", &fun, &args)) {
-    int n = 0;
-
-    if(!suppress_lexicals || !is_lexical(fun))
-      while (args) {
+  if (ATmatch(t, "appl(<term>,[<list>])", &fun, &args)) {
+    if(!suppress_lexicals || !SG_IsLexical(fun)) {
+      while (!ATisEmpty(args)) {
+        arg = ATgetFirst(args);
+        args = ATgetNext(args);
         n++;
-        arg = first(args);
-        args = next(args);
-        if (!TBmatch(arg, "%d", &c))
-          fprintf(dot, "\tN%d -> N%d;\n", (int)t, (int)arg);
-        tree_to_dot(dot, arg, n, t, suppress_lexicals);
+        if (ATgetType(arg) != AT_INT)
+          ATfprintf(dot, "\tN%d -> N%d;\n", (int)t, (int)arg);
+        SG_TreeToDot(dot, arg, n, t, suppress_lexicals);
       }
-    appl_node(dot, t, fun, n);
-  } else if (TBmatch(t, "amb([%l])", &args)) {
-      int n = 0;
-      if(args) amb_node(dot, t, first(args));
-      while (args) {
+    }
+    SG_ApplNode(dot, t, fun, n);
+  } else if (ATmatch(t, "amb(<list>)", &args)) {
+      if(!ATisEmpty(args)) SG_AmbNode(dot, t, ATgetFirst(args));
+      while (!ATisEmpty(args)) {
+        arg = ATgetFirst(args);
+        args = ATgetNext(args);
         n++;
-        arg = first(args);
-        args = next(args);
-        fprintf(dot, "\tN%d -> N%d;\n", (int)t, (int)arg);
-        tree_to_dot(dot, arg, n, t, suppress_lexicals);
+        ATfprintf(dot, "\tN%d -> N%d;\n", (int)t, (int)arg);
+        SG_TreeToDot(dot, arg, n, t, suppress_lexicals);
       }
-  } else if (TBmatch(t, "parsetree(%t, %d)", &arg, &c))
-      tree_to_dot(dot, arg, 1, t, suppress_lexicals);
+  } else if (ATmatch(t, "parsetree(<term>, <int>)", &arg, &c))
+      SG_TreeToDot(dot, arg, 1, t, suppress_lexicals);
 }
 
-void tree_to_dotfile(char *file, term *t, bool suppress)
+void SGtreeToDotFile(char *prg, char *file, ATerm t, ATbool suppress)
 {
   FILE *dot;
 
   if (strcmp(file, "") == 0)
     file = "parse.dot";
-  if ((dot = fopen(file, "w")) == NULL) {
-    fprintf(stderr, "%s: cannot create dotfile %s\n", program_name, file);
-    exit(1);
-  }
+  if ((dot = fopen(file, "w")) == NULL)
+    ATerror("%s: cannot create dotfile %s\n", prg, file);
 
   prev_char_parent = NULL;
 
-  fprintf(dot, "strict digraph ParseTree { \n\tordering=out;\n");
-  tree_to_dot(dot, t, 0, NULL, suppress);
-  fprintf(dot, "}\n");
+  ATfprintf(dot, "strict digraph ParseTree { \n\tordering=out;\n");
+  SG_TreeToDot(dot, t, 0, NULL, suppress);
+  ATfprintf(dot, "}\n");
 }
 
-void link_to_dot(FILE *dot, stack *st, st_link *l)
+void SG_LinkToDot(FILE *dot, stack *st, st_link *l)
 {
   int  c;
-  term *t;
+  ATerm t, tree;
 
-  fprintf(dot, "N%d [label = \"%d\" shape=box height=0.2, width=0.2];\n",
-          (int) st, STATE(st));
-  fprintf(dot, "N%d -> N%d [label=\"", (int) STACK(l), (int) st);
-  t = tree_type(TREE(l));
-  if(TBmatch(t, "%d", &c))
-    print_character(dot, c);
-  else {
-    TBprintf(dot, "%t : ", dot_term_yield(TREE(l)));
-    print_symbol(dot, t);
+  ATfprintf(dot, "N%d [label=\"%d\" shape=box height=0.2, width=0.2];\n",
+            (int) st, SG_ST_STATE(st));
+  ATfprintf(dot, "N%d -> N%d [label=\"", (int) SG_LK_STACK(l), (int) st);
+  tree = SG_LK_TREE(l);
+  t = SG_TreeType(tree);
+  if(ATmatch(t, "<int>", &c)) {
+    SG_PrintChar(dot, c);
+  } else {
+    ATfprintf(dot, "%s : ", SG_DotTermYield(tree));
+    SG_PrintSymbol(dot, t);
   }
-  fprintf(dot, "\"");
-  if(REJECTED(l))
-    fprintf(dot, " style = dotted");
-  fprintf(dot, "];\n");
+  ATfprintf(dot, "\"");
+  if(SG_LK_REJECTED(l)) ATfprintf(dot, " style = dotted");
+  ATfprintf(dot, "];\n");
 }
 
-void links_to_dot(FILE *dot, stack *st)
+void SG_LinksToDot(FILE *dot, stack *st)
 {
   st_link  *l;
   st_links *ls;
 
-  ls = LINKS(st);
+  ls = SG_ST_LINKS(st);
   while(shift(l, ls))
-    link_to_dot(dot, st, l);
+    SG_LinkToDot(dot, st, l);
 }
 
-void stack_to_dot(FILE *dot, stack *st)
+void SG_StackToDot(FILE *dot, stack *st)
 {
   st_link  *l;
   st_links *ls;
 
   if(st == NULL) return;
-  fprintf(dot, "N%d [label=\"%d\" shape=box height=0.2, width=0.2];\n",
-          (int) st, STATE(st));
-  ls = LINKS(st);
-  links_to_dot(dot, st);
+  ATfprintf(dot, "N%d [label=\"%d\" shape=box height=0.2, width=0.2];\n",
+            (int) st, SG_ST_STATE(st));
+  ls = SG_ST_LINKS(st);
+  SG_LinksToDot(dot, st);
   while(shift(l, ls))
-    stack_to_dot(dot, STACK(l));
+    SG_StackToDot(dot, SG_LK_STACK(l));
 }
 
-void stacks_to_dot(FILE *dot, stacks *sts1)
+void SG_StacksToDot(FILE *dot, stacks *sts1)
 {
   stack  *st;
   stacks *sts2;
 
   sts2 = sts1;
   while(shift(st, sts2))
-    stack_to_dot(dot, st);
+    SG_StackToDot(dot, st);
 }
 
-extern char *stack_dotoutput;
-extern int text_length;
-char stack_file[256];
+FILE *SG_StackDotFP = NULL;
 
-FILE *stack_dot;
-
-void stacks_to_dotfile(stacks *sts)
+FILE  *SG_StackDot(void)
 {
-  sprintf(stack_file, "%s%d.dot", stack_dotoutput, text_length);
+  return SG_StackDotFP;
+}
 
-  if ((stack_dot = fopen(stack_file, "w")) == NULL) {
-    fprintf(stderr, "%s: cannot create dotfile %s\n",
-            program_name, stack_file);
+char *SG_StackDotOut(char *s)
+{
+  static char *sdo = NULL;
+
+  if(s != NULL) sdo = s;
+  return sdo;
+}
+
+void SG_StacksToDotFile(stacks *sts, int text_length)
+{
+  char stk_file[256];
+
+  sprintf(stk_file, "%s%d.dot", SG_StackDotOut(NULL), text_length);
+
+  if ((SG_StackDotFP = fopen(stk_file, "w")) == NULL) {
+    ATfprintf(stderr, "Cannot create stack dotfile %s\n", stk_file);
     return;
   }
 
   prev_char_parent = NULL;
 
-  fprintf(stack_dot, "strict digraph ParseTree { \n"
-          "rankdir = LR; \n"
-          "edge [dir = back]; \n"
-         );
-  stacks_to_dot(stack_dot, sts);
-  fprintf(stack_dot, "}\n");
-  fclose(stack_dot);
+  ATfprintf(SG_StackDotFP, "strict digraph ParseTree { \n"
+            "rankdir = LR; \n"
+            "edge [dir = back]; \n"
+           );
+  SG_StacksToDot(SG_StackDotFP, sts);
+  ATfprintf(SG_StackDotFP, "}\n");
+  fclose(SG_StackDotFP);
 }

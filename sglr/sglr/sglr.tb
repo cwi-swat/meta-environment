@@ -24,9 +24,9 @@ process Parser is
 	rec-value(P, language-opened(L?, FN)) .
 	snd-note(language-available(L))
       +
-	rec-value(P, open-language-failed(L, FN)) 
+	rec-value(P, open-language-failed(L, FN))
       )
-    ) 
+    )
     * rec-disconnect(P)
   endlet
 

@@ -1,8 +1,6 @@
-/*
-  file: tree-to-dot.h
-*/
+/* %% $Id$ */
 
-void tree_to_dotfile(char *, term *, bool);
-void stacks_to_dotfile(stacks *);
-void link_to_dot(FILE *, stack *, st_link *);
-void links_to_dot(FILE *, stack *);
+void SG_StacksToDotFile(stacks *, int);
+void SG_LinksToDot(FILE *, stack *);
+
+FILE  *SG_StackDot(void);

@@ -17,184 +17,110 @@
   \paragraph{Includes}
 */
 #include <stdio.h>
-#include <TB.h>
+#include <string.h>
+
 #include "parse-table.h"
-#include "bool.h"
-
-#ifndef DONT_USE_BOEHMGC
-  #include <gc.h>
-  #define malloc(n)  GC_malloc(n)
-  #define free(n)    ;
-#endif
-
-
-extern int   verboseflag;
-extern int   debugflag;
-extern int   show_statistics;
-extern FILE *log;
+#include "mem-alloc.h"
+#include  "sglr.h"
 
 /*
   \paragraph{Actions}
 
-  The function |A_KIND| analyses an action and returns its
+  The function |SG_A_KIND| analyses an action and returns its
   kind.
 */
-int A_KIND(action *a)
+int     SG_A_KIND(action a)
 {
-  int i, j, k;
-  if (TBmatch(a, "shift(%d)", &i))
+  if(!a) {
+    ATfprintf(stderr, "SG_A_KIND error!\n");ATerror(NULL);
+    return ERROR;
+  } else if (ATmatch(a, "shift(<int>)", NULL))
     return SHIFT;
-  else if (TBmatch(a, "reduce(%d,%d,%d)", &i, &j, &k))
+  else if (ATmatch(a, "reduce(<int>,<int>,<int>)", NULL, NULL, NULL))
     return REDUCE;
-  else if (TBmatch(a, "accept"))
+  else if (ATmatch(a, "accept"))
     return ACCEPT;
   else
     return ERROR;
 }
 
-/*
-  \subsection{Binary Search Trees}
-
-  The goto and action tables consist of an array with an entry for
-  each state.  The entries are binary search trees based on character
-  ranges that contain as value a term, either a state or a list of
-  actions. The nodes of the search trees are of the form |node(first,
-  left, last, right, val)|, with |first-last| the range for which
-  |val| is the value and |left| and |right| search trees for keys
-  smaller than |first| and larger than |last| respectively. The
-  function |bst_find| looks up the value for a key in a search
-  tree. If the key does not fit in any of the ranges |NULL| is
-  returned.
-*/
-term *bst_find(term *tree, int key)
+#ifdef SG_A_FUNCS
+state   SG_A_STATE(action a)
 {
-  term *left, *right, *val;
-  int first, last;
-  if (debugflag)
-    TBprintf(log, "looking for %d in %t\n", key, tree);
-  while (tree != NULL)
-    if (TBmatch(tree, "node(%d,%t,%d,%t,%t)",
-                 &first, &left, &last, &right, &val)) {
-      if (key < first) {
-          tree = left;
-          continue;
-      }
-      if (key > last) {
-          tree = right;
-          continue;
-      }
-      if (debugflag)
-        TBprintf(log, " = %t\n", val);
-      return val;
-    }
-  return NULL;
+  return ATgetInt((ATermInt) ATgetArgument(a, 0));
 }
 
-/*
-  A new node can be added to a search tree by means of the function
-  |bst_add|.  It is assumed that the range added does not overlap with
-  any of the ranges already in the tree. It is an error if this is not
-  the case. The address of the root pointer of the tree should be
-  supplied. It is overwritten if the tree was empty. Note that the
-  functions use iteration instead of recursion.
-*/
-void bst_add(term **tree, int first, int last, term *val)
+int     SG_A_NR_ARGS(action a)
 {
-  term *left2, *right2, *val2;
-  int first2, last2;
-  while (TRUE) {
-     if (*tree == NULL) {
-       *tree = TBmake("node(%d,%t,%d,%t,%t)", first, NULL, last, NULL, val);
-       if (debugflag) {
-         fprintf(log, "\nAdded : ");
-         TBprintf(log, "%t", *tree);
-       }
-       return;
-     } else if (!TBmatch(*tree, "node(%d,%t,%d,%t,%t)",
-                  &first2, &left2, &last2, &right2, &val2)) {
-       fprintf(stderr, "malformed bst\n");
-       exit(1);
-    } else if (last < first2) {
-      tree = &(elm2(fun_args(*tree)));
-      continue;
-    } else if (first > last2) {
-      tree = &(elm4(fun_args(*tree)));
-       continue;
-    } else {
-      fprintf(stderr, "\noverlapping character range %d-%d\n", first, last);
-      TBprintf(stderr, "value = %t\n", val);
-      exit(1);
-    }
-  }
+  return ATgetInt((ATermInt) ATgetArgument(a, 0));
 }
+
+int     SG_A_PROD(action a)
+{
+  return ATgetInt((ATermInt) ATgetArgument(a, 1));
+}
+
+ATbool  SG_A_REJECT(action a)
+{
+  ATbool r;
+
+  r = ATgetInt((ATermInt) ATgetArgument(a, 2));
+  return r ? ATtrue : ATfalse;
+}
+#endif
 
 /*
    \subsection{Parse Table Lookup}
 */
-state GOTO(parse_table *pt, state s, int c)
-{
-  state s2; term *val;
 
-  val = bst_find(pt->goto_table[s], c);
-  if (val == NULL)
-    s2 = -1;
-  else
-    s2 = int_val(val);
-  if (debugflag)
-    fprintf(log, "GOTO(%d,%d) = %d\n", s, c, s2);
-  return s2;
+state SG_LookupGoto(parse_table *pt, state s, int token)
+{
+  state retstate;
+  ATerm val;
+
+  val = ATtableGet(pt->goto_table,
+                  (ATerm) ATmakeList2((ATerm) ATmakeInt(s),
+                                      (ATerm) ATmakeInt(token)));
+  retstate = (val == NULL)?-1:ATgetInt((ATermInt) val);
+
+  if (SG_DEBUG) ATfprintf(SGlog(), "Goto(%d,%d) == %d\n", s, token, retstate);
+
+  return retstate;
 }
 
-actions *ACTIONS(parse_table *pt, state s, int c)
+actions SG_LookupAction(parse_table *pt, state s, int token)
 {
-  actions *as;
-/*
-  if(debugflag) TBprintf(log, "state %d = %t\n\n", s, pt->vertices[s]);
-*/
-  as = bst_find(pt->action_table[s], c);
-  if (debugflag) {
-      fprintf(log, "ACTION(%d,%d) = ", s, c);
-      TBprintf(log, "%t\n\n", as);
-  }
+  actions as;
+
+  as = (actions) ATtableGet(pt->action_table,
+                 (ATerm) ATmakeList2((ATerm) ATmakeInt(s),
+                                     (ATerm) ATmakeInt(token)));
+  as = as ? as : ATempty;
+
+  if (SG_DEBUG) ATfprintf(SGlog(), "Action(%d,%d) = %l\n", s, token, as);
+
   return as;
 }
 
 /*
    \subsection{Parse Table Creation}
 */
-parse_table *new_parse_table(int states, int productions)
+
+parse_table *SG_NewParseTable(int states, int productions)
 {
   parse_table *pt;
-  int i;
 
-  pt               = malloc(sizeof(struct _parse_table));
+  pt               = SG_Malloc(sizeof(struct _parse_table));
   pt->init         = -1;
-  pt->action_table = malloc(sizeof(term *) * states);
-  pt->goto_table   = malloc(sizeof(term *) * states);
-  pt->productions  = malloc(sizeof(struct _production) * (productions + 256));
-  pt->vertices     = malloc(sizeof(term *) * states);
-  pt->org_table    = NULL;
 
-  for (i = 0; i <= states; i++) {
-    pt->action_table[i] = NULL;
-    pt->goto_table[i]   = NULL;
-  }
+  pt->action_table = ATtableCreate(1024,    75);
+  pt->goto_table   = ATtableCreate(states, 100);
+  pt->productions  = ATtableCreate(productions + 256, 100);
 
-  for (i = 0; i <= productions; i++) {
-    pt->productions[i].aterm = NULL;
-    pt->productions[i].cons = NULL;
-  }
+//  pt->vertices     = SG_Malloc(sizeof(ATerm ) * states);
+//  pt->org_table    = ATempty;
+
   return pt;
-}
-
-void add_goto(parse_table *pt, state s1, int first, int last, state s2)
-{
-  bst_add(&(pt->goto_table[s1]), first, last, mk_int(s2));
-}
-
-void add_actions(parse_table *pt, state s, int first, int last, actions *as)
-{
-  bst_add(&(pt->action_table[s]), first, last, as);
 }
 
 
@@ -207,115 +133,179 @@ void add_actions(parse_table *pt, state s, int first, int last, actions *as)
   \subsection{Parse Table Term to Parse Table}
 */
 
-state nr_of_states;
+/*
+  Storing and accessing character classes
 
-void max_state(state s)
-{
-  if (s > nr_of_states)
-    nr_of_states = s;
-}
+  Parsing is done token bij token.  When looking up matching
+  actions (or states), we have to return all actions (states)
+  belonging to all character classes containing the token.
 
-void bst_add_classes(term ** entry, term *classes, actions *as)
+  This is fairly difficult when the lookup tables for actions and
+  gotos are represented in a straightforward manner, i.e. when the
+  parse table's character class terms are used as keys in an ATerm
+  hash table: in that approach, we'd have to find out first which
+  character class keys in the lookup table contain the token,
+  which is quite cumbersome (and could be costly).
+
+  For that reason, character classes are `expanded' in
+  representation: whenever a charater range occurs in the
+  parse table, the corresponding action (state) is seperately
+  incorporated in the lookup table for all characters in the
+  range; because of the Aterm Libary's maximal sharing, this can
+  be done at the cost of minimal overhead.
+
+  As an advantage, lookups are speeded up: no searching, other
+  than hash key driven access provided by the high-performance
+  Aterm Library, has to be performed, making lookups `immediate'.
+
+ */
+
+void SG_AddToTable(ATermTable tbl, state s, int c, ATermList as, ATbool make_list)
 {
-  int first, last;
-  while(classes != NULL) {
-    if (TBmatch(first(classes), "%d", &first))
-      last = first;
-    else if (!TBmatch(first(classes), "range(%d,%d)", &first, &last)) {
-      fprintf(stderr, "bst_add_classes: cannot parse character class\n");
-      TBprintf(stderr, "%t", classes);
-      fprintf(stderr, "\n");
-      exit(1);
+  ATerm key;
+  ATermList prev;
+
+  key = (ATerm) ATmakeList2((ATerm) ATmakeInt(s), (ATerm) ATmakeInt(c));
+  prev = (ATermList) ATtableGet(tbl, key);
+
+//  ATfprintf(stderr, "adding %t for key %t\n", as, key);
+
+  if(!prev) {             /* New key, add a new list */
+// ATfprintf(stderr, "adding %t for new key %t\n", as, key);
+    if(ATgetType(as) == AT_LIST)
+      ATtablePut(tbl, key, (ATerm) as);
+    else
+      if(make_list)
+        ATtablePut(tbl, key, (ATerm) ATmakeList1((ATerm) as));
+      else
+        ATtablePut(tbl, key, (ATerm) as);
+  } else {                /* Existing key, insert into existing list */
+// ATfprintf(stderr, "adding %t to existing key %t\n", as, key);
+    if(!make_list)
+        ATerror("SG_AddToTable: attempt to add value to non-list table\n");
+    switch(ATgetType(prev)) {
+      case  AT_LIST:
+        if(ATgetType(as) == AT_LIST)
+          ATtablePut(tbl, key, (ATerm) ATconcat(prev, as));
+        else
+          ATtablePut(tbl, key, (ATerm) ATinsert(prev, (ATerm) as));
+        break;
+      default:
+        ATerror("SG_AddToTable: bad value in table (must be list): %t\n",(ATerm)prev);
+        break;
     }
-    bst_add(entry, first, last, as);
-    classes = next(classes);
   }
 }
 
-void PT_actions(term *action_table, parse_table *pt, state s)
+void SG_AddClassesToTable(ATermTable tbl, state s, ATermList classes, ATermList as, ATbool make_list)
 {
-  term *classes, *as, *action;
+  int       first, last;
+  ATermList currClass;
+  ATerm     firstTerm;
 
-  while (action_table != NULL) {
-    action = first(action_table);
-    if (TBmatch(action, "action(char-class(%t),%t)",
-                &classes, &as)) {
-      bst_add_classes(&(pt->action_table[s]), classes, as);
-    } else {
-      TBprintf(stderr, "PT_actions: cannot match action %t\n", action);
-      exit(1);
+  for(; !ATisEmpty(classes); classes = ATgetNext(classes)) {
+    currClass = (ATermList) ATgetFirst(classes);
+    for(; !ATisEmpty(currClass); currClass = ATgetNext(currClass)) {
+      firstTerm = ATgetFirst(currClass);
+//      ATfprintf(stderr, "adding class %t for state %d, action %t\n", firstTerm, s, as);
+      if (ATmatch(firstTerm, "<int>", &first)) {
+        SG_AddToTable(tbl, s, first, as, make_list);
+      } else {
+        if (ATmatch(firstTerm, "range(<int>,<int>)", &first, &last))
+          for(; first <= last; first++) {
+            SG_AddToTable(tbl, s, first, as, make_list);
+        }else
+          ATerror("SG_AddClassesToTable: bad character class\n%t\n", firstTerm);
+      }
     }
-    action_table = next(action_table);
   }
 }
 
-void PT_gotos(term *goto_table, parse_table *pt, state s1)
+void SG_AddPTActions(ATermList acts, parse_table *pt, state s)
 {
-  term *classes;
-  state s2;
+  ATerm     action;
+  ATermList classes, actions;
 
-  while (goto_table != NULL) {
-    if (TBmatch(first(goto_table), "goto(char-class(%t), %d)",
-                 &classes, &s2)) {
-      bst_add_classes(&(pt->goto_table[s1]), classes, mk_int(s2));
-    } else {
-      fprintf(stderr, "PT_gotos: cannot parse goto entry\n");
-      exit(1);
-    }
-    goto_table = next(goto_table);
+  for (; !ATisEmpty(acts); acts = ATgetNext(acts)) {
+    action = ATgetFirst(acts);
+    if (ATmatch(action, "action(char-class(<list>),<term>)",
+                &classes, &actions)) {
+        SG_AddClassesToTable(pt->action_table, s, classes, actions, ATtrue);
+    } else
+      ATerror("SG_AddPTActions: cannot match action %t\n", action);
   }
 }
+
+void SG_AddPTGotos(ATermList goto_table, parse_table *pt, state s)
+{
+  ATermList classes;
+  ATerm     curTerm;
+  state     s2;
+
+  for (; !ATisEmpty(goto_table); goto_table = ATgetNext(goto_table)) {
+    curTerm = ATgetFirst(goto_table);
+    if (ATmatch(curTerm, "goto(char-class(<list>),<int>)",
+                &classes, &s2)) {
+      SG_AddClassesToTable(pt->goto_table, s, classes, (ATermList)ATmakeInt(s2), ATfalse);
+    } else
+      ATerror("SG_AddPTGotos: cannot parse goto entry %t\n", curTerm);
+  }
+}
+
 
 /*
-  Adds the ATerm encodings of the itemssets to the parse table
+  States
 */
-void PT_items(term *vertices, parse_table *pt)
+void SG_AddPTStates(ATermList states, parse_table *pt)
 {
-  term *vertex, *itemset;
-  int pr_num;
+  ATerm     curstate;
+  ATermList gotos, actions;
+  int       s, nr_of_states = 0;
 
-  for ( ; vertices != NULL; vertices = next(vertices)) {
-    vertex = first(vertices);
-    if (!TBmatch(vertex, "vertex(%d, %t)", &pr_num, &itemset)) {
-        fprintf(stderr, "PT_actions: cannot parse vertex\n");
-        exit(1);
-    }
-    pt->vertices[pr_num] = itemset;
-    TBprotect(&(pt->vertices[pr_num]));
-  }
-}
-
-/*
-  states
-*/
-void PT_states(term *states, parse_table *pt)
-{
-  term *state, *gotos, *actions;
-  int s;
-
-  nr_of_states = 0;
-
-  while (states != NULL) {
-    state = first(states);
-    if (TBmatch(state, "state-rec(%d, %t, actions(%t))",
+  for (; !ATisEmpty(states); states=ATgetNext(states)) {
+    curstate=ATgetFirst(states);
+    if (ATmatch(curstate, "state-rec(<int>,[<list>],actions([<list>]))",
                 &s, &gotos, &actions)) {
-      if(debugflag)
-        TBprintf(log, "\nstate %d = %t\n\n", s, state);
-      max_state(s);
-      PT_gotos(gotos, pt, s);
-      PT_actions(actions, pt, s);
-    } else {
-      TBprintf(stderr, "PT_states: cannot parse state: %t\n", first(states));
-      exit(1);
-    }
-    states = next(states);
+      if(SG_DEBUG)
+        ATfprintf(SGlog(), "State %d: %t\n", s, curstate);
+      nr_of_states = SG_Max(nr_of_states, s);
+      SG_AddPTGotos(gotos, pt, s);
+      SG_AddPTActions(actions, pt, s);
+    } else
+      ATerror("SG_AddPTStates: cannot parse curstate: %t\n", curstate);
   }
-  if (debugflag || show_statistics)
-    fprintf(log, "%d states\n", nr_of_states);
-  for (s = 0; s <= nr_of_states; s++) {
-    TBprotect(&(pt->goto_table[s]));
-    TBprotect(&(pt->action_table[s]));
+  if (SG_DEBUG || SG_SHOWSTAT)
+    ATfprintf(SGlog(), "No. of states: %d\n", nr_of_states);
+}
+
+production SG_LookupProduction(parse_table *pt, int token)
+{
+/*
+  return(ATgetFirst((ATermList) ATtableGet(pt->productions,
+                                           (ATerm) ATmakeInt(token))));
+*/
+  return(ATtableGet(pt->productions, (ATerm) ATmakeInt(token)));
+}
+
+void AddProduction(ATermTable tbl, int pr_num, production prod)
+{
+  ATerm key, prev;
+
+  key = (ATerm) ATmakeInt(pr_num);
+  if((prev = ATtableGet(tbl, key))) {
+    ATerror("AddProduction: production %d (%t) already present, previous: %t\n",
+            pr_num, prod, prev);
+  } else {
+    ATtablePut(tbl, (ATerm) ATmakeInt(pr_num), prod);
   }
+/*
+  key = (ATerm) ATmakeInt(pr_num);
+  if(ATtableGet(tbl, key)) {
+    ATtablePut(tbl, key, (ATerm) ATinsert(prev, prod));
+  } else {
+    ATtablePut(tbl, key, (ATerm) ATmakeList1(prod));
+  }
+*/
 }
 
 /*
@@ -323,35 +313,37 @@ void PT_states(term *states, parse_table *pt)
   The label is the pointer in the table. It is used in reduce actions
   to refer to the production.
 */
-void PT_grammar(term *grammar, parse_table *pt)
+void SG_AddPTGrammar(ATermList grammar, parse_table *pt)
 {
-  term *production;
+  production prod;
   int pr_num;
   int c;
-  char str[2];
-  int nr_of_productions;
+  int nr_of_prods = 0;
 
-  while (grammar != NULL) {
-    production = first(grammar);
-    grammar = next(grammar);
-    if (!TBmatch(production, "label(%t, %d)", &production, &pr_num)) {
-      fprintf(stderr, "PT_actions: cannot parse production\n");
-      exit(1);
-    }
-    PROD(pt, pr_num) = production;
-    TBprotect(&(PROD(pt, pr_num)));
-    if (pr_num > nr_of_productions)
-      nr_of_productions = pr_num;
+  for (; !ATisEmpty(grammar); grammar = ATgetNext(grammar)) {
+    prod = ATgetFirst(grammar);
+    if (!ATmatch(prod, "label(<term>,<int>)", &prod, &pr_num))
+      ATerror("SG_AddPTGrammar: cannot parse production %t\n", prod);
+    AddProduction(pt->productions, pr_num, prod);
+    nr_of_prods = SG_Max(pr_num, nr_of_prods);
   }
-  if (debugflag || show_statistics)
-    fprintf(log, "%d productions\n", nr_of_productions - 256);
-  str[1] = '\0';
+  if (SG_DEBUG || SG_SHOWSTAT)
+    ATfprintf(SGlog(), "No. of productions: %d\n", nr_of_prods + 256);
   for (c = 0; c <= 255; c++) {
-    str[0] = c;
-     PROD(pt, c) = TBmake("%d", c);
-    TBprotect(&(PROD(pt, c)));
+    AddProduction(pt->productions, c, (production) ATmakeInt(c));
   }
 }
+
+// TEMPORARY debugging
+void dump_ATtable(ATermTable t, char *s)
+{
+  ATermList keys;
+
+  if(t) for(keys = ATtableKeys(t); keys && !ATisEmpty(keys);
+            keys=ATgetNext(keys))
+    ATfprintf(stderr,"%s %t == %t\n", s, ATgetFirst(keys), ATtableGet(t, ATgetFirst(keys)));
+}
+
 
 /*
 
@@ -363,22 +355,23 @@ void PT_grammar(term *grammar, parse_table *pt)
   table data structure.
 
 */
-parse_table *build_parse_table(term *t)
+parse_table *SG_BuildParseTable(ATerm t)
 {
-  term *prods, *sts;
+  ATermList   prods, sts;
   parse_table *pt;
 
-  pt = new_parse_table(3000, 2000);
-  pt->org_table = t;
-  TBprotect(&(pt->org_table));
+  pt = SG_NewParseTable(4000, 2000);
+//  pt->org_table = t;
 
-  if(!TBmatch(t, "parse-table(%d,%t,states(%t))",
+  if(!ATmatch(t, "parse-table(<int>,[<list>],states([<list>]))",
               &(pt->init), &prods, &sts)) {
-    fprintf(stderr, "error: Cannot parse parse table\n");
+    ATfprintf(stderr, "error: Cannot parse parse table\n");
     return NULL;
   }
-  PT_states(sts, pt);
-  PT_grammar(prods, pt);
+  SG_AddPTStates(sts, pt);
+//  dump_ATtable(pt->goto_table, "goto");
+  SG_AddPTGrammar(prods, pt);
+//  dump_ATtable(pt->action_table, "action");
   return pt;
 }
 
@@ -386,7 +379,7 @@ parse_table *build_parse_table(term *t)
   \subsection{A Parse Table Database}
 
 */
-#define MAX_TABLES 100
+#define MAX_TABLES 32
 
 typedef struct _ptdb {
   char *name;
@@ -395,45 +388,43 @@ typedef struct _ptdb {
 static PTDB tables[MAX_TABLES];
 int last_table = 0;
 
-void save_parse_table(char *L, parse_table *pt)
+void SG_SaveParseTable(char *L, parse_table *pt)
 {
   int i;
   for (i = 0; i < last_table && strcmp(L, tables[i].name); i++) ;
-  if (i > MAX_TABLES) {
-    fprintf(stderr, "maximum number (%d) of languages exceeded\n", MAX_TABLES);
-    exit(1);
-  }
+  if (i > MAX_TABLES)
+    ATerror("maximum number (%d) of languages exceeded\n", MAX_TABLES);
+
   if (i == last_table)
     last_table++;
   else
     ; /* free tables[i].table */
   tables[i].name = strdup(L);
   tables[i].table = pt;
-  if (debugflag)
-    fprintf(log, "language %s has index %d\n", L, i);
+  if (SG_DEBUG)
+    ATfprintf(SGlog(), "Language %s has index %d\n", L, i);
   return;
 }
 
-parse_table *lookup_parse_table(char *L)
+parse_table *SG_LookupParseTable(char *L, ATbool may_fail)
 {
   int i;
 
-  if (debugflag)
-    fprintf(log, "request for language %s\n", L);
+  if (SG_DEBUG)
+    ATfprintf(SGlog(), "Request for language %s\n", L);
 
   for (i = 0; i < last_table; i++)
     if (!strcmp(L, tables[i].name)) {
-      if (debugflag)
-        fprintf(log, "table for language %s found at index %d\n", L, i);
+      if (SG_DEBUG)
+        ATfprintf(SGlog(), "table for language %s found at index %d\n", L, i);
       return tables[i].table;
-    } else if (debugflag)
-      fprintf(log, "language %s not at index %d (%s)\n", L, i, tables[i].name);
+    } else if (SG_DEBUG)
+      ATfprintf(SGlog(), "language %s not at index %d (%s)\n",
+                L, i, tables[i].name);
 
-  if (i > MAX_TABLES) {
-    fprintf(stderr, "maximum number (%d) of languages exceeded\n", MAX_TABLES);
-    exit(1);
-  } else {
-    fprintf(stderr, "no language %s open\n", L);
-    exit(1);
-  }
+  if (i > MAX_TABLES)
+    ATerror("maximum number (%d) of languages exceeded\n", MAX_TABLES);
+  else
+    if(!may_fail) ATerror("no language %s open\n", L);
+  return NULL;    /* Silence the compiler */
 }

@@ -13,34 +13,53 @@
 
 */
 
-extern FILE *stack_dot;
-extern int show_stack;
+/*
+ The macro |shift(h, l)| indicates whether a list-type data
+ structure (containing head and tail pointers) |l| is empty. If it
+ is not, the head of the list is assigned to the variable |h| and
+ the list is reduced to its tail.  The macro can be used to loop
+ over the structure as follows:
+\begin{verbatim}
+  listElt hd; listPtr lst;
+  while(pop(hd, lst)) {
+    [do something with hd and/or lst]
+  }
+\end{verbatim}
+ */
+
+#define head(l)    ((l)->head)
+#define tail(l)    ((l)->tail)
+#define shift(h,l) ((l) ? (h)=head(l), (l)=tail(l), ATtrue : ATfalse)
 
 /*
-  The macro |pop(hd, lst)| indicates whether a list |lst| is empty. If
+  The macro |pop(hd, lst)| indicates whether an AtermList |lst| is empty. If
   it is not, the head of the list is assigned to the variable |hd| and
   the list is reduced to its tail.  The macro can be used to loop over
   the elements of a list as follows:
 \begin{verbatim}
-  term *hd; term_list *lst;
+  ATerm hd;  ATermList lst;
   while(pop(hd, lst)) {
-    do something with hd
+    [do something with hd and/or lst]
   }
 \end{verbatim}
 */
-#define pop(hd, lst) ((lst)? (hd) = first(lst), \
-                      (lst) = next(lst), TRUE : FALSE)
+
+/*
+#define pop(hd, lst) (((lst) && !ATisEmpty(lst)) ?                         \
+                        (hd)=ATgetFirst(lst),(lst)=ATgetNext(lst),ATtrue : \
+                        ATfalse)
+*/
+
 
 
 /**** Stack/link datastructures ****/
 
-typedef term *tree;
-// typedef int  state;
+typedef ATerm tree;
 
 typedef struct link {
   tree          tree;
   struct stack  *stack;
-  bool          rejected;
+  ATbool        rejected;
 } st_link;
 
 typedef struct links {
@@ -53,7 +72,7 @@ typedef struct stack {
   struct stack  *parent;
   struct stack  *kid;
   st_links      *links;
-  bool          rejected;
+  ATbool        rejected;
 } stack;
 
 typedef struct stacks {
@@ -62,43 +81,27 @@ typedef struct stacks {
 } stacks;
 
 
-#define STATE(s)          ((s)->state)     /* state of a stack * */
-#define LINKS(s)          ((s)->links)     /* list of links of a stack * */
-#define PARENT(s)         ((s)->parent     /* parent stack of a stack * */
-#define KID(s)            ((s)->kid        /* kid stack of a stack * */
+#define SG_ST_STATE(s)          ((s)->state)     /* State of a stack * */
+#define SG_ST_LINKS(s)          ((s)->links)     /* List of links of a stack * */
+#define SG_ST_PARENT(s)         ((s)->parent     /* Parent stack of a stack * */
+#define SG_ST_KID(s)            ((s)->kid        /* Kid stack of a stack * */
 
-#define TREE(l)           ((l)->tree)      /* tree of a link * */
-#define STACK(l)          ((l)->stack)     /* stack of a link * */
+#define SG_LK_TREE(l)           ((l)->tree)      /* Tree of a link * */
+#define SG_LK_STACK(l)          ((l)->stack)     /* Stack of a link * */
 
-#define REJECTED(x)       (x)->rejected
-
-/*
- The macro |shift(h, l)| indicates whether a list |l| is empty. If
- it is not, the head of the list is assigned to the variable |h| and
- the list is reduced to its tail.  The macro can be used to loop over
- the elements of a list as follows:
-\begin{verbatim}
-  term *hd; term_list *lst;
-  while(pop(hd, lst)) {
-    do something with hd
-  }
-\end{verbatim}
- */
-#define head(l)    ((l)->head)
-#define tail(l)    ((l)->tail)
-#define shift(h,l) ((l) ? (h)=head(l), (l)=tail(l), TRUE : FALSE)
-
-stack  *new_stack(state s, stack *st);
-stacks *add_stacks(stack *st, stacks *sts);
-st_link *add_link(stack *st0, stack *st1,  tree t);
-
-#define new_stacks(s)   add_stacks(s, NULL)
+#define SG_LK_REJECTED(x)       (x)->rejected
 
 
-stack *find_stack(state , stacks *);
-st_link *find_direct_link(stack *, stack *);
-void mark_stack_rejected(stack *, st_link *);
-void mark_link_rejected1(stack *, st_link *);
-void mark_link_rejected2(stack *, st_link *);
-bool  rejected(stack *);
-bool in_stacks(stack *, stacks *);
+stack   *SG_NewStack(state s, stack *st);
+#define  SG_NewStacks(s)	SG_AddStacks(s, NULL)
+stacks  *SG_AddStacks(stack *st, stacks *sts);
+st_link *SG_AddLink(stack *st0, stack *st1,  tree t);
+
+stack * SG_FindStack(state , stacks *);
+st_link *SG_FindDirectLink(stack *, stack *);
+
+void    SG_MarkStackRejected(stack *, st_link *);
+void    SG_MarkLinkRejected(stack *, st_link *);
+void    SG_MarkLinkRejected2(stack *, st_link *);
+ATbool  SG_Rejected(stack *);
+ATbool  SG_InStacks(stack *, stacks *);

@@ -13,32 +13,185 @@
   \subsection{forest.c}
 
 */
-#include <TB.h>
-#include "bool.h"
+#include <stdlib.h>
+
+#include <aterm2.h>
+
 #include "parse-table.h"
 #include "stack.h"
 #include "parser.h"
 #include "forest.h"
+#include "mem-alloc.h"
+#include "sglr.h"
 
-int nr_ambiguities = 0;
-extern int abbreviation_flag;
-extern int debugflag;
-extern FILE *log;
+
+int SGnrAmb(int mode)
+{
+  static int nr_ambiguities = 0;
+
+  switch(mode) {
+    case SG_NRAMB_ASK:
+      return nr_ambiguities;
+    case SG_NRAMB_ZERO:
+      return nr_ambiguities = 0;
+    case SG_NRAMB_INC:
+      return ++nr_ambiguities;
+    default:
+      return nr_ambiguities;  /* silence the compiler */
+  }
+}
+
+int SG_ApplID(void)
+{
+  static int count = 0;
+
+  return count++;
+}
 
 /*
   The functions |apply| and |cons| are defined directly in terms
-  of ToolBus term functions.
+  of ATerm functions.
 */
-term *apply(parse_table *pt, label l, terms *ts)
+ATerm SG_Apply(parse_table *pt, label l, ATermList ts)
 {
-  term *t;
-  if (abbreviation_flag)
-    t = TBmake("appl(aprod(%d),%t)", l, ts);
-  else {
-    t = TBmake("appl(%t,%t)", PROD(pt,l), ts);
-  }
-  return t;
+  ATerm t;
+/* Abbreviated:
+  t =  ATmake("appl(aprod(<int>),<term>)", l, ts);
+ */
+  t= ATmake("appl(<term>,<term>,<int>)", SG_LookupProduction(pt,l), ts, SG_ApplID());
+  ATprotect(&t);
+  return(t);
 }
+
+
+/* The next bit will have to do while waiting for this to be implemented */
+#define AFun  Symbol
+#define ATmakeAFun(s, t, f) ATmakeSymbol(s, t, f);
+
+
+AFun  SG_Amb2Afun(void)
+{
+  static ATbool inited = ATfalse;
+  static AFun fun;
+
+  if(!inited) {
+    fun = ATmakeSymbol("appl", 2, ATfalse);
+    ATprotect((ATerm *) &fun);
+  }
+  return fun;
+}
+
+AFun  SG_Amb3Afun(void)
+{
+  static ATbool inited = ATfalse;
+  static AFun fun;
+
+  if(!inited) {
+    fun = ATmakeSymbol("appl", 3, ATfalse);
+    ATprotect((ATerm *) &fun);
+  }
+  return fun;
+}
+
+ATerm SG_YieldPT(ATerm t)
+{
+  ATerm     ret, t2;
+  ATermList args, l;
+  Symbol    appl2= SG_Amb2Afun(), appl3 = SG_Amb3Afun(), fun;
+
+//  static  int have_amb = 0;
+
+//if(have_amb) ATfprintf(stderr, "\nYIELD %t\n", t);
+
+  switch(ATgetType(t)) {
+    case AT_APPL:
+      fun = ATgetSymbol(t);
+      args = ATgetArguments((ATermAppl) t);
+//      args = args?args:ATempty;
+      if(fun == appl3) {
+        ATermList ambs;
+
+        /* Are we indeed encountering an ambiguity cluster? */
+        ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, (ATermInt) ATgetLast(args), NULL);
+        if(ATisEmpty(ambs))
+          ret = (ATerm)ATmakeAppl2(appl2,
+                                 SG_YieldPT(ATgetFirst(args)),
+                                 SG_YieldPT(ATelementAt(args, 1)));
+        else {
+          ambs = (ATermList) ATgetFirst((ATermList)ambs);
+          ret = (ATerm)ATmake("amb(<list>)",
+                              (ATermList)SG_YieldPT((ATerm) ambs));
+        }
+      } else {
+        ret = (ATerm) ATmakeApplList(fun,
+                                    (ATermList) SG_YieldPT((ATerm)args));
+      }
+      return ret;
+    case AT_LIST:
+      if(ATisEmpty((ATermList) t)) return (ATerm) ATempty;
+      for(l = ATempty, args = (ATermList) t;
+          !ATisEmpty(args); args = ATgetPrefix(args)) {
+        t2 = ATgetLast(args);
+//        if(have_amb) ATfprintf(stderr, "\nLIST arg %t\n", t2);
+        l = ATinsert(l, SG_YieldPT(t2));
+      }
+      return (ATerm) l;
+/*
+    case AT_INT:
+    case AT_REAL:
+    case AT_PLACEHOLDER:
+    case AT_BLOB:
+*/
+    default:
+      return t;
+  }
+}
+
+ATermList SG_AmbTable(int Mode, ATermInt index, ATermList value)
+{
+  ATerm   t;
+  static  ATermTable  ambtbl = NULL;
+  ATermList           keys, ambs;
+
+  switch(Mode) {
+    case SG_AMBTBL_INIT:
+      if(ambtbl != NULL) SG_AmbTable(SG_AMBTBL_CLEAR, NULL, NULL);
+      ambtbl = ATtableCreate(256, 90);
+      break;
+    case SG_AMBTBL_CLEAR:
+      if(ambtbl)
+        for(keys = ATtableKeys(ambtbl); keys && !ATisEmpty(keys);
+            keys=ATgetNext(keys)) {
+          t = ATtableGet(ambtbl, ATgetFirst(keys));
+          ATunprotect(&t);
+      }
+      if(ambtbl) ATtableDestroy(ambtbl);
+      ambtbl = NULL;
+      break;
+    case SG_AMBTBL_ADD:
+      if(!ambtbl) SG_AmbTable(SG_AMBTBL_INIT, NULL, NULL);
+      ATprotect((ATerm *) &value);
+      ATtablePut(ambtbl, (ATerm) index, (ATerm) value);
+      break;
+    case SG_AMBTBL_REMOVE:
+
+
+      if(ambtbl) ATtableRemove(ambtbl, (ATerm) index);
+      break;
+    case SG_AMBTBL_LOOKUP:
+      if (    ambtbl
+          && (ambs = (ATermList) ATtableGet(ambtbl, (ATerm) index)))
+        return ambs;
+      break;
+/*
+    case SG_AMBTBL_DUMP:
+      if(ambtbl) dump_ATtable(ambtbl, "AmbTable");
+      break;
+*/
+  }
+  return ATempty;
+}
+
 
 /*
   The function |amb| creates a term of the form |amb([t1,...,tn])|,
@@ -49,127 +202,177 @@ term *apply(parse_table *pt, label l, terms *ts)
   this |amb| node. If |t1| is already an ambiguous node the new
   term |t2| is simply added to the list of its arguments.
 */
-void amb(term *t1, term *t2) {
-  term *prod, *args;
+void SG_Amb(ATerm existing, ATerm new) {
+  ATermList newidxs, newtrms, ambs, lst;
+  ATerm     e0, e1, n0, n1, exist2, new2;
+  ATermInt  index, e2, n2;
 
-  if(debugflag)
-    TBprintf(log, "creating ambiguity node for\n %t and %t\n",
-             dot_term_yield(t1), dot_term_yield(t2));
+  /* Sanity check cum variable instantiation */
+  if (   ATmatch(existing, "appl(<term>,<term>,<term>)", &e0, &e1, &e2)
+      && ATmatch(new,      "appl(<term>,<term>,<term>)", &n0, &n1, &n2)) {
+    /* Create/update ambiguity node. */
+    ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, e2, NULL);
+    /* Add ambterms sans index, to prevent circular lookup when yielding */
+    new2   = (ATerm) ATmakeAppl2(SG_Amb2Afun(), n0, n1);
+    if(ATisEmpty(ambs)) {
+      /* New ambiguity */
+      exist2 = (ATerm) ATmakeAppl2(SG_Amb2Afun(), e0, e1);
+      newtrms = ATmakeList2(exist2, new2);
+      newidxs = ATmakeList2((ATerm) e2, (ATerm) n2);
+    } else {
+      /* Expand existing ambiguity */
+//      ATfprintf(stderr, "Existing amb; args (%t,%t), found %t\n", existing,new,ambs);
+      newtrms = ATinsert((ATermList) ATgetFirst(ambs), new2);
+      newidxs = ATinsert((ATermList)  ATgetLast(ambs), (ATerm) n2);
+    }
+    ambs = ATmakeList2((ATerm) newtrms, (ATerm) newidxs);
 
-  if (TBmatch(t1, "appl(%t, %t)", &prod, &args)) {
-    /* Create ambiguity node. */
-    fun_sym(t1)  = TBlookup("amb");
-    fun_args(t1) = TBmake("[[appl(%t,%t),%t]]", prod, args, t2);
-    nr_ambiguities++;
-  } else if (TBmatch(t1, "amb([%l])", &args)) {
-    first(fun_args(t1)) = mk_list(t2, args);
-    nr_ambiguities++;
-  } else {
-    fprintf(stderr, "error: amb: symbolnode is not appl or amb\n");
-    TBprintf(stderr, "%t\n", t1);
-    exit(1);
-  }
+    /* Now update ambiguity list for all affected nodes */
+    for(lst = newidxs; !ATisEmpty(lst); lst = ATgetNext(lst)) {
+      index = (ATermInt) ATgetFirst(lst);
+//      ATfprintf(stderr, "AMB: updating index %t\n",index);
+      SG_AmbTable(SG_AMBTBL_ADD, index, ambs);
+    }
+  } else
+    ATerror("SG_Amb: symbolnode is not appl or amb\n%t\n", existing);
+
+  SGnrAmb(SG_NRAMB_INC);
   return;
 }
 
-term *tree_type(term *t)
+ATerm SG_TreeType(ATerm t)
 {
-  term *types, *type, *attrs, *args;
-  int n;
+  ATerm     type;
+  ATermList args;
 
-  if (TBmatch(t, "appl(prod(%t,%t,%t), %t)", &types, &type, &attrs, &args))
+  if (ATmatch(t, "appl(prod(<term>,<term>,<term>),<term>,<int>)", NULL, &type, NULL,NULL,NULL))
     return type;
-   else if (TBmatch(t, "amb([%l])", &args))
-    return tree_type(first(first(fun_args(t))));
-  else if (TBmatch(t, "%d", &n))
+  if (ATmatch(t, "appl(prod(<term>,<term>,<term>), <term>)", NULL, &type, NULL,NULL))
+    return type;
+  else if (ATmatch(t, "amb([<list>])", &args))
+    return SG_TreeType(ATgetFirst(args));
+  else if (ATgetType(t) == AT_INT)
     return t;
+  else
+    ATerror("SG_TreeType: tree not well-formed\n%t\n", t);
+  return NULL;   /* Silence the compiler */
+}
+
+#define TYA_TMPCHUNK 64
+#define TYA_INIT     0
+#define TYA_INQUIRE  1
+#define TYA_ADD      2
+
+char *SG_TYAuxBuf(int Mode, char c) {
+  static char   *tmp = NULL;
+  static size_t  tmpsize = 0;
+  static int    index = 0;
+
+  switch(Mode) {
+    case TYA_INIT:
+        if(tmp == NULL) {
+          tmp = (char *) SG_Malloc(TYA_TMPCHUNK);
+          if(tmp == NULL)
+            ATerror("memory allocation error\n");
+          else
+            tmpsize = TYA_TMPCHUNK;
+        }
+        tmp[0] = index = 0;
+        break;
+    case TYA_INQUIRE:
+        break;
+    case TYA_ADD:
+        if((index+2) > tmpsize) {
+          tmp = (char *)SG_Realloc(tmp, tmpsize + TYA_TMPCHUNK);
+          if(tmp == NULL)
+            ATerror("memory reallocation error\n");
+          else
+            tmpsize += TYA_TMPCHUNK;
+        }
+        tmp[index++] = c;
+        tmp[index] = 0;
+        break;
+  }
+  return tmp;
+}
+
+void SG_TYAux(ATerm t)
+{
+  ATermList args;
+
+  if (ATisEmpty((ATermList) t))
+    return;
+
+  if (ATgetType(t) == AT_INT) {
+   SG_TYAuxBuf(TYA_ADD, ATgetInt((ATermInt) t));
+  }
+  else if (ATmatch(t, "appl(<term>,[<list>])", NULL, &args)) {
+    SG_TYAux((ATerm) args);
+  } else if (ATmatch(t, "[<list>]", &args)) {
+      SG_TYAux(ATgetFirst(args));
+      SG_TYAux((ATerm) ATgetNext(args));
+  }
   else {
-    fprintf(stderr, "error: tree_type: tree not well-formed\n");
-    TBprintf(stderr, "%t\n", t);
-    exit(1);
+     ATerror("SG_TYAux: strange term: %t\n", t);
   }
 }
 
-static char temp[10240];
-static int index;
-
-void term_yield_aux(term *t)
+ATerm SG_TermYield(ATerm t)
 {
-  term *fun, *args, *first, *rest;
-  int c;
-
-  if (t == NULL)
-    return;
-  else if (TBmatch(t, "%d", &c)) {
-    temp[index++] = c;
-    temp[index] = '\0';
-  } else if (TBmatch(t, "appl(%t,[%l])", &fun, &args))
-    term_yield_aux(args);
-   else if (TBmatch(t, "[%t,%l]", &first, &rest)) {
-    term_yield_aux(first);
-    term_yield_aux(rest);
-  } else {
-    TBprintf(stderr, "term_yield_aux: strange term: %t\n", t);
-    exit(1);
-  }
+  SG_TYAuxBuf(TYA_INIT, 0);         /* Initialize (hidden) buffer */
+  SG_TYAux(t);                      /* Yield to (hidden) buffer   */
+                                    /* Collect & return buffer    */
+  return ATmake("<str>", SG_TYAuxBuf(TYA_INQUIRE, 0));
 }
 
-term *term_yield(term *t)
+void SG_DotTermYieldAux(ATerm t)
 {
-  index = 0;
-  temp[index] = '\0';
-  term_yield_aux(t);
-  return TBmake("%s", temp);
-}
-
-void dot_term_yield_aux(term *t)
-{
-  term *fun, *args, *first, *rest;
+  ATermList args;
   int c;
 
-  /* TBprintf(stderr, "yield_aux(%t)\n", t); */
+  /* ATfprintf(stderr, "yield_aux(%t)\n", t); */
 
-  if (t == NULL)
+  if (ATisEmpty((ATermList) t))
     return;
-  else if (TBmatch(t, "%d", &c)) {
-    switch(c) {
+  else if (ATgetType(t) == AT_INT) {
+    switch(c = ATgetInt((ATermInt) t)) {
       case '\n':
-        temp[index++] = '\\';
-        temp[index++] = '\\';
-        temp[index++] = 'n';
+        SG_TYAuxBuf(TYA_ADD, '\\');
+        SG_TYAuxBuf(TYA_ADD, '\\');
+        SG_TYAuxBuf(TYA_ADD, 'n');
         break;
       default:
-        temp[index++] = c;
+        SG_TYAuxBuf(TYA_ADD, c);
         break;
     }
-  } else if (TBmatch(t, "appl(%t,[%l])", &fun, &args)) {
-    if(list_length(args) > 1) {
-      temp[index++] = '[';
-      dot_term_yield_aux(args);
-      temp[index++] = ']';
-    } else
-      dot_term_yield_aux(args);
-  } else if (TBmatch(t, "[%t,%l]", &first, &rest)) {
-    dot_term_yield_aux(first);
-    dot_term_yield_aux(rest);
-  } else if (TBmatch(t, "amb([%l])", &rest)) {
-    while(pop(first, rest)) {
-      dot_term_yield_aux(first);
-      if(rest != NULL) {
-        temp[index++] = '|';
+  } else if (ATmatch(t, "appl(<term>,[<list>])", NULL, &args)) {
+    if(ATgetLength(args) > 1) {
+      SG_TYAuxBuf(TYA_ADD, '[');
+      SG_TYAux((ATerm) args);
+      SG_TYAuxBuf(TYA_ADD, ']');
+    } else {
+      SG_TYAux((ATerm) args);
+    }
+  } else if (ATmatch(t, "[<list>]", &args)) {
+      SG_TYAux(ATgetFirst(args));
+      SG_TYAux((ATerm) ATgetNext(args));
+  } else if (ATmatch(t, "amb([<list>])", &args)) {
+    while(!ATisEmpty(args)) {
+      SG_DotTermYieldAux(ATgetFirst(args));
+      args = ATgetNext(args);
+      if(!ATisEmpty(args)) {
+        SG_TYAuxBuf(TYA_ADD, '|');
       }
     }
-  } else {
-    TBprintf(stderr, "term_yield_aux: strange term: %t\n", t);
-    exit(1);
-  }
+  } else
+     ATerror("SG_DotTermYieldAux: strange term: %t\n", t);
 }
 
-term *dot_term_yield(term *t)
+ATerm SG_DotTermYield(ATerm t)
 {
-  index = 0;
-  temp[index] = '\0';
-  dot_term_yield_aux(t);
-  temp[index] = '\0';
-  return TBmake("%s", temp);
+  SG_TYAuxBuf(TYA_INIT, 0);          /* Initialize (hidden) buffer */
+  SG_DotTermYieldAux(t);            /* Yield to (hidden) buffer   */
+                                    /* Collect & return buffer    */
+//ATfprintf(stderr, "Final Yield: ->%s<-\n", SG_TYAuxBuf(TYA_INQUIRE, 0));
+  return ATmake("<str>", SG_TYAuxBuf(TYA_INQUIRE, 0));
 }

@@ -15,19 +15,17 @@
    means that all trees with a pointer to the first tree will share
    the newly created ambiguous node.
 
-   The variable |nr_ambiguities| keeps track of the number of times an
-   ambiguous node is created.
 */
-extern int nr_ambiguities;
-/*
-  We use the |term_has_conds| fields of terms to indicate that a tree
-  is invalid.
-*/
-#define cons(t, ts)       mk_list(t, ts)
-term *apply(parse_table *, label , terms *);
-void amb(term *, term *);
-term *tree_type(term *);
-term *term_yield(term *t);
 
-term *dot_term_yield(term *);
+enum SG_AmbTblKind { SG_AMBTBL_INIT, SG_AMBTBL_CLEAR, SG_AMBTBL_ADD,
+                     SG_AMBTBL_REMOVE, SG_AMBTBL_LOOKUP, SG_AMBTBL_DUMP};
+
+ATermList SG_AmbTable(int Mode, ATermInt key, ATermList value);
+void  SG_Amb(ATerm, ATerm);
+ATerm SG_YieldPT(ATerm t);
+ATerm SG_Apply(parse_table *, label, ATermList);
+ATerm SG_TreeType(ATerm);
+ATerm SG_TermYield(ATerm);
+
+ATerm SG_DotTermYield(ATerm);
 

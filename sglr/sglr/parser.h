@@ -5,16 +5,15 @@
 #ifndef _PARSER
 #define _PARSER
 
-#include <TB.h>
 #include "parse-table.h"
 
-term *parse(parse_table *lr, int(*getchar)(void));
+ATerm SG_Parse(parse_table *lr, int(*getchar)(void));
 
-void zero_stack_hist(void);
-void add_stack_hist(stack *parent, stack *kid);
-void show_stack_offspring(stack *);
-void show_stack_ancestors(stack *);
-void propagate_reject(stack *st);
+void SG_ZeroStackHist(void);
+void SG_AddStackHist(stack *parent, stack *kid);
+void SG_ShowStackOffspring(stack *);
+void SG_ShowStackAncestors(stack *);
+void SG_PropagateReject(stack *st);
 
 typedef int label;
 

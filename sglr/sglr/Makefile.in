@@ -4,11 +4,12 @@
 # Configure variable substitutions
 PRODUCT		= @PRODUCT@
 VERSION		= @VERSION@
+DATE            = `date`
 
 @SET_MAKE@
 
-srcdir		= @srcdir@
 VPATH		= @srcdir@
+srcdir		= @srcdir@
 top_srcdir	= @top_srcdir@
 prefix		= @prefix@
 exec_prefix	= @exec_prefix@
@@ -18,11 +19,17 @@ includedir	= $(prefix)/include
 docdir		= $(top_srcdir)/docs
 
 SHELL		= @SHELL@
+
+AR              = @AR@
+AR_FLAGS        = cr
+
 CC		= @CC@
-MAKE		= gmake
 CFLAGS		= @CFLAGS@ ${XCFLAGS}
 CPP		= @CPP@
 CPPFLAGS	= @CPP@ ${XCPPFLAGS}
+
+MAKE		= gmake
+
 DEFS		= @DEFS@ ${XDEFS}
 INCLUDES	= @INCLUDES@ ${XINCLUDES}
 LIBS		= @LIBS@ ${XLIBS}
@@ -33,63 +40,87 @@ INSTALL_DATA	= @INSTALL_DATA@
 INSTALL_PROG	= @INSTALL_PROG@
 UNINSTALL	= @UNINSTALL@
 
+ATERM           = @ATERM@
 TOOLBUS         = @TOOLBUS@
 
-
 # The eXtra parts of some variables
-XCFLAGS		= -DDONT_USE_BOEHMGC
+XCFLAGS		= # -DDONT_USE_BOEHMGC
 XCPPFLAGS	=
-XINCLUDES	= -I$(TOOLBUS)/include
-XLIBS		= -L$(TOOLBUS)/lib $(SOCKLIBS) -ltb
+XINCLUDES	= -I$(ATERM)/include
+XLIBS		= -L${libdir} -L. -lsglr -la2toa1 -lgc         \
+                  -lATerm-${CC} -lAsFix-${CC} -lATB-${CC}
 
+
+SGLRLIBS        = libsglr.a
+SGLRINC         = sglr.h
+LIBSRC          = sglr-interface.c parse-table.c parser.c forest.c stack.c tree-to-dot.c
+LIBOBJ          = $(patsubst %.c,%.o,$(LIBSRC))
 
 PROGS           = sglr
-CSRC            = main.c getopt.c getopt1.c parse-table.c parser.c \
-                  forest.c stack.c tree-to-dot.c
-OBJ             = $(subst .c,.o,$(CSRC))
+GETOPTC         = getopt.c getopt1.c
+GETOPTOBJ       = $(patsubst %.c,%.o,$(GETOPTC))
+CSRC            = sglr-main.c
+OBJ             = $(patsubst %.c,%.o,$(CSRC))
 
-all:	$(PROGS)
+all:	${SGLRLIBS} ${PROGS}
 
-install:	all
+iinstall:	incinstall libinstall bininstall
+
+incinstall:	${SGLRINC}
+	@for INC in $(SGLRINC);	\
+	do \
+		$(INSTALL_PROG) $(INSTALL) $(includedir) $$INC; \
+	done
+
+libinstall:	${SGLRLIBS}
+	@for LIB in $(SGLRLIBS);	\
+	do \
+		$(INSTALL_PROG) $(INSTALL) $(libdir) $$LIB; \
+	done
+
+bininstall:	${PROGS}
 	@for PROG in $(PROGS);	\
 	do \
 		$(INSTALL_PROG) $(INSTALL) $(bindir) $$PROG; \
 	done
 
-uninstall:
-	@for PROG in $(PROGS);	\
-	do \
-		echo $@ $$PROG from $(bindir); \
-		rm -f $(bindir)/$$PROG; \
-	done
-
 distclean realclean:	clean
-	rm -f $(PROGS) longest_match
+	rm -f ${SGLRLIBS} ${PROGS} Makefile.in
 
 clean:
-	rm -f core sglr.tif.c $(OBJ)
-
+	rm -f core sglr.tifs sglr.tif.[ch] ${OBJ} ${GETOPTOBJ} ${LIBOBJ}
 
 # Generic rules
 
-%.o: %.c
+%.c:	%.h
+
+%.o:	%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $<
 
 %.tif.c: %.tifs
-	$(TOOLBUS)/bin/ctif -tifs $< -tool $*
+	$(prefix)/bin/tifstoc -tool $* $<
 
 %.tifs: %.tb
-	$(TOOLBUS)/bin/toolbus -gentifs $<
+	$(prefix)/bin/toolbus -gentifs $<
 
 
 # Specific dependencies
 
-sglr:	$(CSRC) $(OBJ)
-	$(CC) $(LDFLAGS) $(OBJ) $(LIBS) -o $@
+libsglr.a:  ${LIBOBJ}
+	$(AR) $(AR_FLAGS) $@ $(LIBOBJ)
 
-main.o:	sglr.tif.c
+sglr: ${GETOPTOBJ} ${OBJ} ${SGLRLIBS}
+	${CC} ${LDFLAGS} ${OBJ} ${GETOPTOBJ} $(LIBS) -o $@
+
+sglr-main.o:	sglr.tif.c
 
 parse-table.o: parse-table.h
 
-longest_match: longest_match.c
-	$(CC) $(CFLAGS) $(INCLUDES) $(LDFLAGS) -DMAIN $^ $(LIBS) -o $@
+
+# The GNU getopt sources $(GETOPTC) don't compile silently
+
+getopt.o: getopt.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< 2> /dev/null
+
+getopt1.o: getopt1.c
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< 2> /dev/null
