@@ -4,9 +4,9 @@
 #define _PARSE_TABLE_  1
 
 #include <aterm2.h>
-  /*  Internal ATerm function: sglr happens to know to collect garbage.  */
-  void AT_collect(int size);
-  #define ATcollect()  AT_collect(2)
+/*  Internal ATerm function: sglr happens to know to collect garbage.  */
+void AT_collect(int size);
+#define ATcollect()  AT_collect(2)
 
 #include "sglr.h"
 
@@ -16,29 +16,29 @@
 typedef unsigned int  hashkey;
 
 typedef struct _abucket {
-  struct _abucket *next;
-  state            s;
-  token            c;
-  actions          a;
+    struct _abucket *next;
+    state            s;
+    token            c;
+    actions          a;
 } actionbucket;
 
 typedef struct _actiontable {
-  actionbucket **table;
-  size_t         size;
-  size_t         sizeclass;
+    actionbucket **table;
+    size_t         size;
+    size_t         sizeclass;
 } actiontable;
 
 typedef struct _gbucket {
-  struct _gbucket *next;
-  state            from;
-  label            l;
-  state            to;
+    struct _gbucket *next;
+    state            from;
+    label            l;
+    state            to;
 } gotobucket;
 
 typedef struct _gototable {
-  gotobucket **table;
-  size_t     size;
-  size_t     sizeclass;
+    gotobucket **table;
+    size_t     size;
+    size_t     sizeclass;
 } gototable;
 
 typedef production *productiontable;
@@ -46,14 +46,14 @@ typedef ATbool     *injectiontable;
 typedef ATermTable  prioritytable;
 
 typedef struct _parse_table  {
-  state            initial;
-  size_t           numstates;
-  size_t           numprods;
-  actiontable      actions;
-  gototable        gotos;
-  productiontable  productions;
-  injectiontable   injections;
-  prioritytable    priorities;
+    state            initial;
+    size_t           numstates;
+    size_t           numprods;
+    actiontable      actions;
+    gototable        gotos;
+    productiontable  productions;
+    injectiontable   injections;
+    prioritytable    priorities;
 } parse_table;
 
 typedef enum ActionKind {ERROR, SHIFT, REDUCE, REDUCE_LA, ACCEPT}  actionkind;
@@ -68,9 +68,9 @@ extern  token SG_Zero_Token;
 
 extern  AFun  SG_Regular_AFun, SG_Reject_AFun,
 #ifndef NO_EAGERNESS
-              SG_Eager_AFun, SG_Uneager_AFun,
+SG_Eager_AFun, SG_Uneager_AFun,
 #endif
-              SG_Aprod_AFun, SG_Amb_AFun;
+SG_Aprod_AFun, SG_Amb_AFun;
 
 /*  Function prototypes  */
 
@@ -84,9 +84,9 @@ ATermList     SG_LookupPriority(parse_table *pt, label l);
 ATermInt      SG_GetATint(int l, size_t numprods);
 
 #ifdef HAVE_REJECTABILITY_DETERMINATION
-  ATbool SG_Rejectable(state s);
+ATbool SG_Rejectable(state s);
 #else
-  #define SG_Rejectable(s)  ATtrue
+#define SG_Rejectable(s)  ATtrue
 #endif
 
 

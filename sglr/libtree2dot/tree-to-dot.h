@@ -1,4 +1,4 @@
-/* %% $Id$ */
+/*  $Id$  */
 
 #ifndef _TREE_TO_DOT_H_
 #define _TREE_TO_DOT_H_ 1

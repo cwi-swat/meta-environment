@@ -1,18 +1,17 @@
 /*  $Id$  */
 
 /*
-   Graph Structured Stack
+ Graph Structured Stack
 
-   The parser maintains a graph structured stack to keep track
-   of all possible parses in parallel. If there is more than
-   one possible continuation for a stack, a new stack is created
-   for each possibility. All these stacks share the common prefix
-   of the stack. If later on different stacks reach the same state,
-   they can be joined again. This leads to a graph structure.
+ The parser maintains a graph structured stack to keep track
+ of all possible parses in parallel. If there is more than
+ one possible continuation for a stack, a new stack is created
+ for each possibility. All these stacks share the common prefix
+ of the stack. If later on different stacks reach the same state,
+ they can be joined again. This leads to a graph structure.
 
-   Stacks are defined by means of dedicated data structures.
-
-*/
+ Stacks are defined by means of dedicated data structures.
+ */
 
 #ifndef _STACK_H_
 #define _STACK_H_ 1
@@ -25,8 +24,8 @@
 
 
 typedef struct list {
-  struct list   *tail;
-  void          *head;
+    struct list   *tail;
+    void          *head;
 } list;
 
 
@@ -36,18 +35,18 @@ typedef list stacks;
 typedef list st_links;
 
 typedef struct link {
-  struct stack   *stack;
-  tree           tree;
-  ATbool         rejected;
+    struct stack   *stack;
+    tree           tree;
+    ATbool         rejected;
 } st_link;
 
 typedef struct stack {
-  st_links       *links;
-  state          state;
-  short          refcount;
-  ATbool         isshift;
+    st_links       *links;
+    state          state;
+    short          refcount;
+    ATbool         isshift;
 #ifdef DEBUG
-  struct stack   *parent;
+    struct stack   *parent;
 #endif
 } stack;
 
@@ -65,16 +64,16 @@ typedef struct stack {
 #define SG_LK_REJECTED(l)       (((st_link *)l)->rejected)  /* Rejected attribute of a link * */
 
 #ifdef  MEMSTATS
-  void      SG_ZeroAllocStats(void);
-  void      SG_PrintCurAllocStats(void);
-  void      SG_PrintMaxAllocStats(void);
-  void      SG_MaxAllocStats(void);
+void      SG_ZeroAllocStats(void);
+void      SG_PrintCurAllocStats(void);
+void      SG_PrintMaxAllocStats(void);
+void      SG_MaxAllocStats(void);
 #endif
 
 #ifndef DEBUG
-  stack    *SG_NewStack(state s, ATbool isshift);
+stack    *SG_NewStack(state s, ATbool isshift);
 #else
-  stack    *SG_NewStack(state s, stack *st, ATbool isshift);
+stack    *SG_NewStack(state s, stack *st, ATbool isshift);
 #endif
 #define   SG_NewStacks(s)  SG_AddStack(s, NULL)
 stacks   *SG_AddStack(stack *st, stacks *sts);

@@ -83,7 +83,7 @@ process Parser is
 	snd-msg(language-opened(L)) .
 	snd-note(language-available(L))
       +
-	rec-value(P, open-language-failed(L?, FN)) .
+	rec-value(P, language-not-opened(L?, FN)) .
 	snd-msg(language-not-opened(L))
       )
     +

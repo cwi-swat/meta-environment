@@ -1,5 +1,5 @@
 /*
-  $Id$
+ $Id$
  */
 
 double SG_Timer(void);

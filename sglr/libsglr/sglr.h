@@ -8,8 +8,8 @@
 #define _SGLR_H_  1
 
 #if defined(DEBUG) && !defined(MEMSTAT)
-  #define MEMSTATS
-  void SG_Dump_ATtable(ATermTable t, char *s);
+#define MEMSTATS
+void SG_Dump_ATtable(ATermTable t, char *s);
 #endif
 
 #include  <aterm1.h>
@@ -30,13 +30,13 @@ typedef ATermAppl tree;
 typedef ATermAppl forest;
 
 /*
-    Needed all the time...
+ Needed all the time...
  */
 
 #define SG_MAX(a,b)     (a>b?a:b)
 /*
-    When interfacing, some data type conversion may be necessary.
-    Some macros implement the necessary abstraction.
+ When interfacing, some data type conversion may be necessary.
+ Some macros implement the necessary abstraction.
  */
 
 #define SG_GETSTATE(s)  (s)
@@ -47,8 +47,8 @@ typedef ATermAppl forest;
 #define SG_SETLABEL(l)  (l)
 
 /*
-    Char class max defines where PT production numbering starts,
-    in other words, it reflects a reserved character range...
+ Char class max defines where PT production numbering starts,
+ in other words, it reflects a reserved character range...
  */
 
 #define SG_CHAR_CLASS_BOT 0                     /*  Lowest ordinary char  */
@@ -58,7 +58,7 @@ typedef ATermAppl forest;
 #define SG_PROD_START     (SG_CHAR_CLASS_EOF+1) /*  Start of prods  */
 
 /*
-    Function prototypes
+ Function prototypes
  */
 
 ATerm SGparseFileUsingTable(char *prg, char *tbl, char *sort,
@@ -97,20 +97,20 @@ void SG_UnGetChar(void);
 char *SG_StackDotOut(char *);
 
 /*
-    Controlling global behaviour: verbosity, debugging mode, dot
-    output of parse forests/parse stacks, and so on.
+ Controlling global behaviour: verbosity, debugging mode, dot
+ output of parse forests/parse stacks, and so on.
 
-    This is done by using access macro's on a global variable.
+ This is done by using access macro's on a global variable.
  */
 
 void  SGinitParser(void);
 extern int  _SG_Mode;
 
 enum SGmodeFlags {
-  SG_ERRORFLAG, SG_VERBOSEFLAG, SG_DEBUGFLAG, SG_SHOWSTATFLAG,
-  SG_OUTPUTFLAG, SG_ASFIX1FLAG, SG_BINARYFLAG, SG_DOTOUTFLAG,
-  SG_NOLEXFLAG, SG_SHOWSTACKFLAG, SG_FILTERFLAG, SG_STARTSYMBOLFLAG,
-  SG_GCFLAG, SG_CYCLEFLAG, SG_POSINFOFLAG
+    SG_ERRORFLAG, SG_VERBOSEFLAG, SG_DEBUGFLAG, SG_SHOWSTATFLAG,
+    SG_OUTPUTFLAG, SG_ASFIX1FLAG, SG_BINARYFLAG, SG_DOTOUTFLAG,
+    SG_NOLEXFLAG, SG_SHOWSTACKFLAG, SG_FILTERFLAG, SG_STARTSYMBOLFLAG,
+    SG_GCFLAG, SG_CYCLEFLAG, SG_POSINFOFLAG
 };
 
 #define SG_BIT(i)            (1 << i)
@@ -165,9 +165,9 @@ enum SGmodeFlags {
 #define SG_POSINFO_OFF()     (_SG_Mode &= ~SG_BIT(SG_POSINFOFLAG))
 
 #if !defined(HAVE_BOEHMGC)
-  #define SG_GC              (_SG_Mode  &  SG_BIT(SG_GCFLAG))
-  #define SG_GC_ON()         (_SG_Mode |=  SG_BIT(SG_GCFLAG))
-  #define SG_GC_OFF()        (_SG_Mode &= ~SG_BIT(SG_GCFLAG))
+#define SG_GC              (_SG_Mode  &  SG_BIT(SG_GCFLAG))
+#define SG_GC_ON()         (_SG_Mode |=  SG_BIT(SG_GCFLAG))
+#define SG_GC_OFF()        (_SG_Mode &= ~SG_BIT(SG_GCFLAG))
 #endif
 
 
@@ -181,9 +181,9 @@ enum SGmodeFlags {
 
 /*  A few global AFuns, used by several routines  */
 extern AFun SG_EOF_Error_AFun, SG_Plain_Error_AFun, SG_Cycle_Error_AFun,
-            SG_Amb_Error_AFun, SG_SndValue_AFun, SG_ParseTree_AFun,
-            SG_Appl_AFun, SG_Term_AFun, SG_ParseTreeAF1_AFun,
-            SG_ParseError_AFun, SG_Character_AFun, SG_Line_AFun,
-            SG_Col_AFun, SG_Offset_AFun;
+SG_Amb_Error_AFun, SG_SndValue_AFun, SG_ParseTree_AFun,
+SG_Appl_AFun, SG_Term_AFun, SG_ParseTreeAF1_AFun,
+SG_ParseError_AFun, SG_Character_AFun, SG_Line_AFun,
+SG_Col_AFun, SG_Offset_AFun;
 
 #endif  /* _SGLR_H_ */
