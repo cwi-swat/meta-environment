@@ -11,6 +11,8 @@ public class ATermsRef extends ATermRef
 
   public ATermsRef(ATerms term)
   {
+    if(term == null)
+      throw new NullPointerException();
     update(term);
   }
 

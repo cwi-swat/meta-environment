@@ -107,7 +107,9 @@ public class ATermListRef extends ATermRef
 
   public ATermsRef getATerms()
   {
-    return list == null ? null : new ATermsRef(list.getATerms());
+    if(list == null || list.getATerms() == null)
+      return null;
+    return new ATermsRef(list.getATerms());
   }
 
   //}

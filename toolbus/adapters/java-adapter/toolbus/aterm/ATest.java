@@ -29,6 +29,7 @@ public class ATest
       testATermsRef();
       testATermPatternMatch();
       testATermPatternMake();
+      testAnno();
     } catch (TestFailedException e) {
       System.out.println("test failed: " + e.explain());
     }
@@ -95,7 +96,7 @@ public class ATest
   }
 
   //}
-  //{ protected static void testATermRef()
+  //{ protected static void tFestATermRef()
 
   protected static void testATermRef()
     throws IOException
@@ -273,6 +274,25 @@ public class ATest
     test(P[6].make(T[3], "b", new ATermsRef(T[5], null)).equals(T[6]), "make-7");
     test(P[7].make("f", new Integer(2)).equals(T[8]), "make-8");
     test(P[8].make(((ATermListRef)T[7]).getATerms()).equals(T[7]), "make-9");
+  }
+
+  //}
+  //{ protected static void testAnno()
+
+  /**
+    * Test annotations.
+    */
+
+  protected static void testAnno()
+    throws ParseError, TestFailedException
+  {
+    ATermRef T[] = new ATermRef[5];
+
+    T[0] = ATermParser.makeSimple("f(1,2,3)");
+    T[1] = ATermParser.makeSimple("color(red)");
+    T[0].setAnno(T[1]);
+    test(T[0].getAnno().equals(T[1]), "anno-1");
+    test(T[1].getAnno() == null, "anno-2");
   }
 
   //}

@@ -32,10 +32,18 @@ abstract public class ATerm implements SimpleHashtableEntry, Cloneable
   private SimpleHashtableEntry hnext = dummy;
 
   public void print(Writer w)	   { print(new PrintWriter(w)); }
-  public void print(PrintWriter w) { if(anno != null) anno.print(w); }
+  public void print(PrintWriter w)
+  { 
+    if(anno != null) { 
+      w.print(':'); 
+      anno.print(w);
+    }
+  }
   public void write(OutputStream o) throws java.io.IOException {
-	if(anno != null)
-	  anno.write(o);
+    if(anno != null) {
+      o.write(':');
+      anno.write(o);
+    }
   }
   abstract public int getType();
   public boolean match(ATerm trm, Vector subterms) { return equals(trm); }
@@ -65,7 +73,8 @@ abstract public class ATerm implements SimpleHashtableEntry, Cloneable
     try {
       ATerm term = (ATerm)super.clone();
       term.anno = anno;
-      term.anno.increaseRef();
+      if(term.anno != null)
+	term.anno.increaseRef();
       return term;
     } catch (CloneNotSupportedException e) {
       throw new InternalError();

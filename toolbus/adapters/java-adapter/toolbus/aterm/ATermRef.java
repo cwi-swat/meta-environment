@@ -60,14 +60,17 @@ abstract public class ATermRef implements Cloneable
 
   public ATermRef getAnno()
   {
-    switch(getATerm().getType()) {
-      case ATerm.APPL:   return new ATermApplRef((ATermAppl)getATerm());
-      case ATerm.ATERMS: return new ATermsRef((ATerms)getATerm());
-      case ATerm.LIST:   return new ATermListRef((ATermList)getATerm());
-      case ATerm.INT:    return new ATermIntRef((ATermInt)getATerm());
-      case ATerm.REAL:   return new ATermRealRef((ATermReal)getATerm());
+    if(getATerm().getAnno() == null)
+      return null;
+
+    switch(getATerm().getAnno().getType()) {
+      case ATerm.APPL:   return new ATermApplRef((ATermAppl)getATerm().getAnno());
+      case ATerm.ATERMS: return new ATermsRef((ATerms)getATerm().getAnno());
+      case ATerm.LIST:   return new ATermListRef((ATermList)getATerm().getAnno());
+      case ATerm.INT:    return new ATermIntRef((ATermInt)getATerm().getAnno());
+      case ATerm.REAL:   return new ATermRealRef((ATermReal)getATerm().getAnno());
       case ATerm.PLACEHOLDER: 
-	return new ATermPlaceholderRef((ATermPlaceholder)getATerm());
+	return new ATermPlaceholderRef((ATermPlaceholder)getATerm().getAnno());
     }
     throw new IllegalArgumentException("illegal term type: " + getType());
   }
