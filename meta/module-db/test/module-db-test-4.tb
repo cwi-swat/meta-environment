@@ -1,6 +1,7 @@
 #include "../../in-output/in-output.idef"
 #include "../module-db.idef"
 #include "../../toolbus/prettyprinter.tb"
+#include "../../toolbus/notification.tb"
 
 process Test is
 let
@@ -35,4 +36,4 @@ in
   shutdown("") delay(sec(2))
 endlet
 
-toolbus(Test, ModuleDB, Io, Prettyprinter)
+toolbus(Test, ModuleDB, Io, Prettyprinter, Notify-about-changed-modules)

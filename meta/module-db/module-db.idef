@@ -143,8 +143,11 @@ snd-do(Mdb, create-module-db).
 +
   /* Update the equations as tree in the database.
    */
-  rec-msg(update-eqs-tree-in-db(Name?, tree(EqsTree?))) .
-  snd-do(Mdb, update-eqs-tree(Name, EqsTree)) .
+  rec-msg(update-eqs-tree-in-db(Language?, tree(EqsTree?))) .
+  snd-eval(Mdb, update-eqs-tree(Language, EqsTree)) .
+  rec-value(Mdb, changed-modules(ChngMods?)) .
+  snd-msg(notify-about-changed-modules(ChngMods, "eqs")) .
+  rec-msg(notify-about-changed-modules-done) .
   snd-msg(eqs-updated)
 +
 /* Add parse table to the database for the given module name */
@@ -193,8 +196,13 @@ snd-do(Mdb, create-module-db).
 /* Get all equations for a list of modules */
   rec-msg(get-all-equations(Name?)).
   snd-eval(Mdb, get-all-equations(Name)).
-  rec-value(Mdb, equations(Equations?)).
-  snd-msg(all-equations(Equations))
+  (
+    rec-value(Mdb, equations(Equations?)).
+    snd-msg(all-equations(Equations))
+  +
+    rec-value(Mdb, equations-incomplete) .
+    snd-msg(equations-incomplete)
+  )
 +
 /* Get the syntax for a list of modules */
   rec-msg(get-all-sdf2-definitions(Name?)).
@@ -220,26 +228,14 @@ snd-do(Mdb, create-module-db).
     snd-msg(unavailable)
   )
 +
-  rec-msg(get-eqs-asfix(Name?)).
+  rec-msg(get-eqs-tree(Name?)).
   snd-eval(Mdb, get-asfix(Name, eqs)).
-  ( rec-value(Mdb, eqs(EqsTree?)).
-    snd-msg(eqs(EqsTree))
-  +
-    rec-value(Mdb, eqs-unchanged(EqsTree?)).
-    snd-msg(eqs-unchanged(EqsTree))
-  +
-    rec-value(Mdb, no-eqs).
-    snd-msg(no-eqs)
-  +
-    rec-value(Mdb, unavailable).
-    snd-msg(unavailable)
-  )
+  rec-value(Mdb, EqsTree?).
+  snd-msg(EqsTree)
 +
 /* Validate the parse table */
-  rec-msg(validate-parse-tables(Name?)).
-  snd-eval(Mdb, validate-parse-tables(Name)).
-  rec-value(Mdb, validation-done).
-  snd-msg(validation-done)
+  rec-msg(invalidate-parse-tables(Name?)).
+  snd-do(Mdb, invalidate-parse-tables(Name))
 ) *
 delta
 endlet
