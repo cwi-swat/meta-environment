@@ -1,5 +1,11 @@
 $Id$
 
+Fri May 28 12:04:52 CEST 2004 <markvdb@cwi.nl>
+ * Removed the Symbol Natcon+ -> Symbol
+ * Removed the "{" {Symbol Symbol "}" Natcon+ -> Symbol
+ * Changed the priorities for lists in to prioritis
+   based on arguments.
+
 Tue May 11 15:30:00 CEST 2004 <kooiker@cwi.nl>
  * library/sandbox/toolbus: 
    - Added Tscript-pretty-traversal which does pretty-printing using traversal
