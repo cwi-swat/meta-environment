@@ -10,7 +10,8 @@ let
   Module  : term,
   Path    : str,
   Modules : list,
-  Table   : term
+  Table   : term,
+  Text    : str
 in
   Id := process-id. 
   ( rec-msg(save-module(Module?)).
@@ -56,7 +57,55 @@ in
     ).
     snd-note(ui-status(endstat(Id))) .
     snd-msg(saved-module(Module))
+  +
+    rec-msg(save-sdf-module(Module?)).
+    snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
+    snd-msg(get-sdf2-path-from-db(Module)).
+    rec-msg(path(Path?)).
+    snd-msg(get-sdf2-asfix(Module)).
+    (
+      ( 
+        rec-msg(syntax(Syntax?))
+      +
+        rec-msg(syntax-unchanged(Syntax?))
+      ) .
+      snd-msg(unparse(Syntax)) .
+      rec-msg(unparsed-text(Text?)) .
+      snd-msg(save-text-file(Path, Text)) .
+      rec-msg(save-done(Path))
+    ) .
+    snd-note(ui-status(endstat(Id))) .
+    snd-msg(saved-sdf-module(Module))
+  +
+    rec-msg(save-asfsdf-module(Module?)).
+    snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
+    snd-msg(get-sdf2-path-from-db(Module)).
+    rec-msg(path(Path?)).
+    snd-msg(get-sdf2-asfix(Module)).
+    (
+      (
+        rec-msg(syntax(Syntax?))
+      +
+        rec-msg(syntax-unchanged(Syntax?))
+      ) .
+      snd-msg(unparse(Syntax)) .
+      rec-msg(unparsed-text(Text?)) .
+      snd-msg(save-text-file(Path, Text)) .
+      rec-msg(save-done(Path))
+    ) .
+    snd-msg(get-eqs-text(Module)).
+    (
+      rec-msg(eqs-text(Module, Text?)) .
+      snd-msg(get-eqs-path-from-db(Module)) .
+      rec-msg(path(Path?)) .
+      snd-msg(save-text-file(Path, Text)) .
+      rec-msg(save-done(Path))
     +
+      rec-msg(no-eqs-text(Module))
+    ).
+    snd-note(ui-status(endstat(Id))) .
+    snd-msg(saved-asfsdf-module(Module))
+  +
     rec-msg(save-all).
     snd-msg(get-all-modules).
     rec-msg(all-modules(Modules?)).

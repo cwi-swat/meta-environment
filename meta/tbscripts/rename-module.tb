@@ -4,7 +4,9 @@
 process RenameModule is
 let 
   Id            : term,
+  Modules       : list,
   OldModuleName : str,
+  Module        : str,
   NewModuleName : str
 in 
   Id := process-id. 
@@ -12,8 +14,31 @@ in
     rec-msg(rename-module(OldModuleName?, NewModuleName?)) .
     snd-note(ui-status(statf(Id, "Renaming %s",[OldModuleName]))) .
     snd-msg(delete-editors-for-module(OldModuleName)) .
+    snd-msg(get-all-depending-modules(OldModuleName)) .
+    rec-msg(all-depending-modules(Modules?)) .
+    (
+      if not-equal(Modules, []) then
+        Module := first(Modules) .
+        snd-msg(delete-editors-for-module(Module)) .
+        Modules := next(Modules)
+      fi
+    ) * if equal(Modules, []) then
+      tau
+    fi .
     snd-msg(rename-module-in-db(OldModuleName, NewModuleName)) .
-    rec-msg(renaming-done(OldModuleName)) .
+    rec-msg(renaming-done(OldModuleName, Modules?)) .
+    (
+      if not-equal(Modules, []) then
+        Module := first(Modules) .
+        snd-msg(save-sdf-module(Module)) .
+        rec-msg(saved-sdf-module(Module)) .
+        Modules := next(Modules)
+      fi
+    ) * if equal(Modules, []) then
+      tau
+    fi .
+    snd-msg(save-asfsdf-module(NewModuleName)) .
+    rec-msg(saved-asfsdf-module(NewModuleName)) .
     snd-note(ui-status(endstat(Id)))
   ) *
   delta
