@@ -10,12 +10,12 @@ comment		"//".*\n
 ws		{layout}|{comment}
 id		[a-zA-Z_][a-zA-Z0-9_]*
 %%
-subgraph { return SUBGRAPH; }
 digraph { return DIGRAPH; }
 edge { return EDGE; }
 graph { return GRAPH; }
 node { return NODE; }
 strict { return STRICT; }
+subgraph { return SUBGRAPH; }
 
 {ws} { }
 {id} {

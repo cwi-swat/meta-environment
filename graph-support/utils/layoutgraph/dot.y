@@ -63,7 +63,6 @@ stmt:
 	node_stmt { }
 	| edge_stmt { }
 	| attr_stmt { }
-  | subgraph_stmt { }
 	| ID '=' ID { }
 	;
 
@@ -120,10 +119,6 @@ edge_stmt:
 		addEdge($1.nodeId, $2.nodeId, buildAttributeList(EDGE,$3.attributes));
 	}
 	;
-
-subgraph_stmt:
-  SUBGRAPH node_id '{' stmt_list '}' { };
-    
 
 node_id:
 	ID opt_port { $$.nodeId = buildNodeId($1.string); }

@@ -260,14 +260,6 @@ Node makeNodeDefault(NodeId id, AttributeList attributes)
 }
 
 /*}}}  */
-/*{{{  Node makeNodeSubGraph(NodeId id, Graph graph) */
-
-Node makeNodeSubGraph(NodeId id, Graph graph)
-{
-  return (Node)(ATerm)ATmakeAppl2(afun2, (ATerm)id, (ATerm)graph);
-}
-
-/*}}}  */
 /*{{{  NodeId makeNodeIdDefault(char* id) */
 
 NodeId makeNodeIdDefault(char* id)
@@ -296,7 +288,7 @@ AttributeList makeAttributeListMulti(Attribute head, AttributeList tail)
 
 Attribute makeAttributeLabel(char* label)
 {
-  return (Attribute)(ATerm)ATmakeAppl1(afun3, (ATerm)ATmakeAppl0(ATmakeAFun(label, 0, ATtrue)));
+  return (Attribute)(ATerm)ATmakeAppl1(afun2, (ATerm)ATmakeAppl0(ATmakeAFun(label, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -304,7 +296,7 @@ Attribute makeAttributeLabel(char* label)
 
 Attribute makeAttributeShape(Shape shape)
 {
-  return (Attribute)(ATerm)ATmakeAppl1(afun4, (ATerm)shape);
+  return (Attribute)(ATerm)ATmakeAppl1(afun3, (ATerm)shape);
 }
 
 /*}}}  */
@@ -312,7 +304,7 @@ Attribute makeAttributeShape(Shape shape)
 
 Attribute makeAttributeLocation(int x, int y)
 {
-  return (Attribute)(ATerm)ATmakeAppl2(afun5, (ATerm)ATmakeInt(x), (ATerm)ATmakeInt(y));
+  return (Attribute)(ATerm)ATmakeAppl2(afun4, (ATerm)ATmakeInt(x), (ATerm)ATmakeInt(y));
 }
 
 /*}}}  */
@@ -320,7 +312,7 @@ Attribute makeAttributeLocation(int x, int y)
 
 Attribute makeAttributeSize(int width, int height)
 {
-  return (Attribute)(ATerm)ATmakeAppl2(afun6, (ATerm)ATmakeInt(width), (ATerm)ATmakeInt(height));
+  return (Attribute)(ATerm)ATmakeAppl2(afun5, (ATerm)ATmakeInt(width), (ATerm)ATmakeInt(height));
 }
 
 /*}}}  */
@@ -328,7 +320,7 @@ Attribute makeAttributeSize(int width, int height)
 
 Attribute makeAttributeCurvePoints(Polygon points)
 {
-  return (Attribute)(ATerm)ATmakeAppl1(afun7, (ATerm)points);
+  return (Attribute)(ATerm)ATmakeAppl1(afun6, (ATerm)points);
 }
 
 /*}}}  */
@@ -336,7 +328,7 @@ Attribute makeAttributeCurvePoints(Polygon points)
 
 Attribute makeAttributeBoundingBox(Point first, Point second)
 {
-  return (Attribute)(ATerm)ATmakeAppl2(afun8, (ATerm)first, (ATerm)second);
+  return (Attribute)(ATerm)ATmakeAppl2(afun7, (ATerm)first, (ATerm)second);
 }
 
 /*}}}  */
@@ -344,7 +336,7 @@ Attribute makeAttributeBoundingBox(Point first, Point second)
 
 Attribute makeAttributeDirection(Direction direction)
 {
-  return (Attribute)(ATerm)ATmakeAppl1(afun9, (ATerm)direction);
+  return (Attribute)(ATerm)ATmakeAppl1(afun8, (ATerm)direction);
 }
 
 /*}}}  */
@@ -352,7 +344,7 @@ Attribute makeAttributeDirection(Direction direction)
 
 Attribute makeAttributeInfo(char* key, ATerm value)
 {
-  return (Attribute)(ATerm)ATmakeAppl2(afun10, (ATerm)ATmakeAppl0(ATmakeAFun(key, 0, ATtrue)), (ATerm)value);
+  return (Attribute)(ATerm)ATmakeAppl2(afun9, (ATerm)ATmakeAppl0(ATmakeAFun(key, 0, ATtrue)), (ATerm)value);
 }
 
 /*}}}  */
@@ -360,7 +352,7 @@ Attribute makeAttributeInfo(char* key, ATerm value)
 
 Shape makeShapePlaintext()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun11);
+  return (Shape)(ATerm)ATmakeAppl0(afun10);
 }
 
 /*}}}  */
@@ -368,7 +360,7 @@ Shape makeShapePlaintext()
 
 Shape makeShapeEllipse()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun12);
+  return (Shape)(ATerm)ATmakeAppl0(afun11);
 }
 
 /*}}}  */
@@ -376,7 +368,7 @@ Shape makeShapeEllipse()
 
 Shape makeShapeCircle()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun13);
+  return (Shape)(ATerm)ATmakeAppl0(afun12);
 }
 
 /*}}}  */
@@ -384,7 +376,7 @@ Shape makeShapeCircle()
 
 Shape makeShapeEgg()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun14);
+  return (Shape)(ATerm)ATmakeAppl0(afun13);
 }
 
 /*}}}  */
@@ -392,7 +384,7 @@ Shape makeShapeEgg()
 
 Shape makeShapeTriangle()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun15);
+  return (Shape)(ATerm)ATmakeAppl0(afun14);
 }
 
 /*}}}  */
@@ -400,7 +392,7 @@ Shape makeShapeTriangle()
 
 Shape makeShapeBox()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun16);
+  return (Shape)(ATerm)ATmakeAppl0(afun15);
 }
 
 /*}}}  */
@@ -408,7 +400,7 @@ Shape makeShapeBox()
 
 Shape makeShapeDiamond()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun17);
+  return (Shape)(ATerm)ATmakeAppl0(afun16);
 }
 
 /*}}}  */
@@ -416,7 +408,7 @@ Shape makeShapeDiamond()
 
 Shape makeShapeTrapezium()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun18);
+  return (Shape)(ATerm)ATmakeAppl0(afun17);
 }
 
 /*}}}  */
@@ -424,7 +416,7 @@ Shape makeShapeTrapezium()
 
 Shape makeShapeParallelogram()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun19);
+  return (Shape)(ATerm)ATmakeAppl0(afun18);
 }
 
 /*}}}  */
@@ -432,7 +424,7 @@ Shape makeShapeParallelogram()
 
 Shape makeShapeHouse()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun20);
+  return (Shape)(ATerm)ATmakeAppl0(afun19);
 }
 
 /*}}}  */
@@ -440,7 +432,7 @@ Shape makeShapeHouse()
 
 Shape makeShapeHexagon()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun21);
+  return (Shape)(ATerm)ATmakeAppl0(afun20);
 }
 
 /*}}}  */
@@ -448,7 +440,7 @@ Shape makeShapeHexagon()
 
 Shape makeShapeOctagon()
 {
-  return (Shape)(ATerm)ATmakeAppl0(afun22);
+  return (Shape)(ATerm)ATmakeAppl0(afun21);
 }
 
 /*}}}  */
@@ -456,7 +448,7 @@ Shape makeShapeOctagon()
 
 Direction makeDirectionForward()
 {
-  return (Direction)(ATerm)ATmakeAppl0(afun23);
+  return (Direction)(ATerm)ATmakeAppl0(afun22);
 }
 
 /*}}}  */
@@ -464,7 +456,7 @@ Direction makeDirectionForward()
 
 Direction makeDirectionBack()
 {
-  return (Direction)(ATerm)ATmakeAppl0(afun24);
+  return (Direction)(ATerm)ATmakeAppl0(afun23);
 }
 
 /*}}}  */
@@ -472,7 +464,7 @@ Direction makeDirectionBack()
 
 Direction makeDirectionBoth()
 {
-  return (Direction)(ATerm)ATmakeAppl0(afun25);
+  return (Direction)(ATerm)ATmakeAppl0(afun24);
 }
 
 /*}}}  */
@@ -480,7 +472,7 @@ Direction makeDirectionBoth()
 
 Direction makeDirectionNone()
 {
-  return (Direction)(ATerm)ATmakeAppl0(afun26);
+  return (Direction)(ATerm)ATmakeAppl0(afun25);
 }
 
 /*}}}  */
@@ -504,7 +496,7 @@ EdgeList makeEdgeListMulti(Edge head, EdgeList tail)
 
 Edge makeEdgeDefault(NodeId from, NodeId to, AttributeList attributes)
 {
-  return (Edge)(ATerm)ATmakeAppl3(afun27, (ATerm)from, (ATerm)to, (ATerm)attributes);
+  return (Edge)(ATerm)ATmakeAppl3(afun26, (ATerm)from, (ATerm)to, (ATerm)attributes);
 }
 
 /*}}}  */
@@ -528,7 +520,7 @@ Polygon makePolygonMulti(Point head, Polygon tail)
 
 Point makePointDefault(int x, int y)
 {
-  return (Point)(ATerm)ATmakeAppl2(afun28, (ATerm)ATmakeInt(x), (ATerm)ATmakeInt(y));
+  return (Point)(ATerm)ATmakeAppl2(afun27, (ATerm)ATmakeInt(x), (ATerm)ATmakeInt(y));
 }
 
 /*}}}  */
@@ -846,9 +838,6 @@ ATbool isValidNode(Node arg)
   if (isNodeDefault(arg)) {
     return ATtrue;
   }
-  else if (isNodeSubGraph(arg)) {
-    return ATtrue;
-  }
   return ATfalse;
 }
 
@@ -857,43 +846,11 @@ ATbool isValidNode(Node arg)
 
 inline ATbool isNodeDefault(Node arg)
 {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternNodeDefault, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  inline ATbool isNodeSubGraph(Node arg) */
-
-inline ATbool isNodeSubGraph(Node arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, patternNodeSubGraph, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, patternNodeDefault, NULL, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -904,9 +861,6 @@ ATbool hasNodeId(Node arg)
   if (isNodeDefault(arg)) {
     return ATtrue;
   }
-  else if (isNodeSubGraph(arg)) {
-    return ATtrue;
-  }
   return ATfalse;
 }
 
@@ -915,10 +869,7 @@ ATbool hasNodeId(Node arg)
 
 NodeId getNodeId(Node arg)
 {
-  if (isNodeDefault(arg)) {
-    return (NodeId)ATgetArgument((ATermAppl)arg, 0);
-  }
-  else 
+  
     return (NodeId)ATgetArgument((ATermAppl)arg, 0);
 }
 
@@ -928,9 +879,6 @@ NodeId getNodeId(Node arg)
 Node setNodeId(Node arg, NodeId id)
 {
   if (isNodeDefault(arg)) {
-    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)id, 0);
-  }
-  else if (isNodeSubGraph(arg)) {
     return (Node)ATsetArgument((ATermAppl)arg, (ATerm)id, 0);
   }
 
@@ -968,39 +916,6 @@ Node setNodeAttributes(Node arg, AttributeList attributes)
   }
 
   ATabort("Node has no Attributes: %t\n", arg);
-  return (Node)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool hasNodeGraph(Node arg) */
-
-ATbool hasNodeGraph(Node arg)
-{
-  if (isNodeSubGraph(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  Graph getNodeGraph(Node arg) */
-
-Graph getNodeGraph(Node arg)
-{
-  
-    return (Graph)ATgetArgument((ATermAppl)arg, 1);
-}
-
-/*}}}  */
-/*{{{  Node setNodeGraph(Node arg, Graph graph) */
-
-Node setNodeGraph(Node arg, Graph graph)
-{
-  if (isNodeSubGraph(arg)) {
-    return (Node)ATsetArgument((ATermAppl)arg, (ATerm)graph, 1);
-  }
-
-  ATabort("Node has no Graph: %t\n", arg);
   return (Node)NULL;
 }
 
@@ -2694,19 +2609,14 @@ NodeList visitNodeList(NodeList arg, Node (*acceptHead)(Node))
 }
 
 /*}}}  */
-/*{{{  Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList), Graph (*acceptGraph)(Graph)) */
+/*{{{  Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList)) */
 
-Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList), Graph (*acceptGraph)(Graph))
+Node visitNode(Node arg, NodeId (*acceptId)(NodeId), AttributeList (*acceptAttributes)(AttributeList))
 {
   if (isNodeDefault(arg)) {
     return makeNodeDefault(
         acceptId ? acceptId(getNodeId(arg)) : getNodeId(arg),
         acceptAttributes ? acceptAttributes(getNodeAttributes(arg)) : getNodeAttributes(arg));
-  }
-  if (isNodeSubGraph(arg)) {
-    return makeNodeSubGraph(
-        acceptId ? acceptId(getNodeId(arg)) : getNodeId(arg),
-        acceptGraph ? acceptGraph(getNodeGraph(arg)) : getNodeGraph(arg));
   }
   ATabort("not a Node: %t\n", arg);
   return (Node)NULL;
