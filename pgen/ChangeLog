@@ -1,5 +1,9 @@
 $Id$
 
+Mon Feb 28 16:34:22 CET 2005 <{jurgenv,markvdb}@cwi.nl>
+ * Added syntax for chain priorities with specific argument selection.
+ * Implemented transitive closure for priorities with argument selection.
+
 Wed Jan 26 11:25:22 CET 2005 <jurgenv@cwi.nl>
  * SGLR now produces structured lexicals because of changes in the 
    flattener, also literals are no longer mapped to lit(<str>) trees.
