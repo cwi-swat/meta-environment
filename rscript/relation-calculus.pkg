@@ -1,0 +1,15 @@
+package 
+identification
+   name=__PACKAGE__
+   version=__VERSION__
+   location=http://www.cwi.nl/projects/MetaEnv/meta-errors
+   info=http://www.cwi.nl/projects/MetaEnv/meta-errors
+   description='A calculator for relational expressions'
+
+
+   keywords=program understanding, program analysis, fact extraction, reengineering
+
+configuration interface
+
+requires
+  meta	1.7.2
