@@ -99,9 +99,11 @@ static void test_sets()
 
   CC_partitionSet(&set);
 
+  /*
   printf("partitioned set:\n");
   CC_writeSetToFile(stdout, &set);
   printf("\n");
+  */
 
   CC_flushSet(&set);
 
@@ -116,9 +118,11 @@ static void test_sets()
 
   CC_partitionSet(&set);
 
+  /*
   printf("partitioned set:\n");
   CC_writeSetToFile(stdout, &set);
   printf("\n");
+  */
 }
 
 /*}}}  */

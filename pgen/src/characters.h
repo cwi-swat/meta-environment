@@ -19,6 +19,8 @@ typedef struct
   CC_Class *classes;
 } CC_Set;
 
+extern ATerm empty_set;
+
 void	 CC_init();
 
 CC_Class *CC_alloc();

@@ -42,7 +42,6 @@ extern AFun afun_non_assoc_prio;
 extern AFun afun_gtr_prio;
 extern AFun afun_lit;
 
-extern ATerm empty_set;
 extern ATerm eof_token;
 extern ATerm all_chars;  
 

@@ -37,6 +37,8 @@ static CC_Class **char_classes     = NULL;
 static int        nr_char_classes  = 0;
 static int        max_char_classes = 0;
 
+ATerm empty_set = NULL;
+
 /*}}}  */
 
 /*{{{  void CC_init() */
@@ -58,6 +60,10 @@ void CC_init()
   if (!char_classes) {
     ATerror("out of memory in CC_init %d\n", max_char_classes);
   }
+
+  empty_set = ATparse("epsilon");
+  ATprotect(&empty_set);
+
 }
 
 /*}}}  */

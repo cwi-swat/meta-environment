@@ -36,7 +36,6 @@ int nr_of_lhs_members;
 int max_nr_lhs_members;
 extern int nr_of_items;
 extern int max_nr_items;
-ATerm empty_set;
 ATerm eof_token;
 ATerm all_chars;   
 extern ATbool run_verbose;
@@ -108,9 +107,6 @@ void init_table_gen()
   state_actions_pairs = ATtableCreate(1024,75);
   state_sos = ATsosCreate(8501);
   
-  empty_set = ATparse("epsilon");
-  ATprotect(&empty_set);
-
   eof_token = ATmake("[<list>]",ATmakeList1((ATerm)ATmakeInt(SDF_EOF)));
   ATprotect(&eof_token);
 

@@ -7,7 +7,6 @@
 #include "first.h"
 #include "intset.h"
 
-extern ATerm empty_set;
 extern int MAX_PROD;
 
 CC_Class  **follow_table = NULL;
