@@ -140,7 +140,7 @@
 
 %----[ TITLE PAGE ]----           
 \title{\ASmetaenv\ User Manual}
-\author{All\\
+\author{M.G.J. van den Brand and P. Klint\\
         {\small\sl Centrum voor Wiskunde en Informatica (CWI),}\\
 {\small\sl Kruislaan 413, 1098 SJ Amsterdam, The Netherlands}}
 
@@ -306,7 +306,8 @@ to \asfsdf\ in Section~\ref{ASF+SDF}.
 \end{itemize}
 
 \subsection{Further Reading}
-(** To be done **)
+
+\cite{DHK96}
 
 \section{Starting the System}
 
@@ -538,6 +539,9 @@ the available mouse operations.
 to enter a bug report. This offers the users of the \ASmetaenv\ an online
 facility to report bugs to the developers.
 
+Both {\tt Online Help} and {\tt JitterBug Activated} assume that there
+is a {\tt Netscape}, other browsers are not yet supported.
+
 \section{The Panes of the Main Window}
 
 The two left-most panes of the main window give two, alternative,
@@ -648,7 +652,7 @@ will be written. It can be modified as well.
 Pushing the {\tt Cancel} button aborts the compilation. Section~\ref{compiling-specs}
 gives more details on the compilation of \asfsdf\ specifications.
 
-{\tt Info} gives module information  not yet implemented).
+{\tt Info} gives module information (not yet implemented).
 
 \begin{figure}[t]
   \centerline{\epsfig{file=compiler-warning.ps,width=4cm}}
@@ -700,7 +704,7 @@ status line in the main window displays ``{\tt Idle}'' again.
 \paragraph{Note:} if the term to be parsed is a large one, it may take
 some time for the editor to be active again. If the parse was
 successful the bottom line in the \xemacs\ window contains the message
-{\tt Focus sort: Non}. Clicking on an arbitrary place sets the focus
+{\tt Focus sort: None}. Clicking on an arbitrary place sets the focus
 and changes the bottom line message.
 
 \begin{figure}[t]
@@ -891,7 +895,7 @@ module Bool-example
   instance of Emacs by adding a new buffer to it containing the semantic part
   of the {\tt Bool-example} specification: a list of conditional equations.
   Note that the syntax of the equations is determined by the syntax defined in
-  the SDF section. Use the {\tt Buffers} menu of Emacs to see which buffers
+  the \sdf\ section. Use the {\tt Buffers} menu of Emacs to see which buffers
   are open and to switch between buffers.
 The result is shown in Figure~\ref{FIG:Bool-example.eqs}.
 
@@ -930,7 +934,7 @@ The result is shown in Figure~\ref{FIG:Bool-example.eqs}.
 \item Click in the focus, this will move the cursor (a single character-sized
   red rectangle) 
   
-\item From menu {\tt Meta-Envrionment} click the {\tt Parse} button.  The text
+\item From menu {\tt Meta-Environment} click the {\tt Parse} button.  The text
   in the focus is now parsed and the blue background has disappeared.
   The result is shown in Figure~\ref{FIG:Bool-example.trm2}.
 
@@ -969,8 +973,8 @@ will be selected and becomes the focus.
   
 \item Edit the term `{\tt true \& false}' such that the new term will be
   syntactically incorrect. For instance, type `{\tt true \& wrong}'. Force a
-  parse of the term by selecting the {\tt Parse } button of the {\tt
-    Meta-Envrionment} menu.
+  parse of the term by selecting the {\tt Parse} button of the 
+  {\tt Meta-Environment} menu.
   
   In the status line at the bottom of the edit window a message will appear
   message `{\tt Parse error near cursor}' and the cursor will be positioned in
@@ -992,7 +996,7 @@ will be selected and becomes the focus.
 
 \end{itemize}
 
-The {\tt left} attribute in the SDF definition indicates that the `{\tt \&}'
+The {\tt left} attribute in the \sdf\ definition indicates that the `{\tt \&}'
 operator is left associative. The term will thus be parsed as `{\tt (true \&
   false) \& true}'. Clicking on the left or right {\tt \&} yields a focus that
 corresponds with this parse.
@@ -1008,7 +1012,8 @@ corresponds with this parse.
 
 \end{itemize}
 
-The {\tt context-free priorities} definitions in the SDF definition state that the `{\tt
+The {\tt context-free priorities} definitions in the \sdf\ 
+definition state that the `{\tt
   \&}' operator binds stronger than the `{\tt |}' operator.
 
 \begin{itemize}
@@ -1024,7 +1029,7 @@ The {\tt context-free priorities} definitions in the SDF definition state that t
 \end{itemize}
   
 To resolve a priority conflict `{\tt (}' and `{\tt )}' which are defined as
-brackets in the SDF definition are put around the term `{\tt false | true}'.
+brackets in the \sdf\ definition are put around the term `{\tt false | true}'.
 Thus `{\tt true \& (false | true})' is more likely to express what you
 intended.
 
@@ -1058,8 +1063,8 @@ and is saved in files ending on `{\tt .eqs}'.
 The syntax part of a module starts with the keyword {\tt module}
 and  is saved in files ending on `{\tt .sdf2}'.
 Modifying the syntax causes the generated scanner and parser to be adapted.
-After each edit operation in the SDF section that is followed by a parse of
-the SDF section, the focus in both the equations section and the term editor
+After each edit operation in the \sdf\ section that is followed by a parse of
+the \sdf\ section, the focus in both the equations section and the term editor
 is extended to completely contain the text in these editors.
 
 Modifying the context-free syntax:
@@ -1188,7 +1193,7 @@ Figures \ref{FIG:Pico-Booleans-sdf2} and \ref{FIG:Pico-Booleans-eqs}.
 \begin{itemize}
   
 \item Open an editor for the syntax of {\tt Pico-syntax} (using the {\tt Edit
-    Syntax} button.
+    Syntax} button).
 
 \end{itemize}
   
@@ -1204,18 +1209,21 @@ Figures \ref{FIG:Pico-Booleans-sdf2} and \ref{FIG:Pico-Booleans-eqs}.
 
 \begin{itemize}
   
-\item A module{\tt Layout} is imported, in which the sort {\tt LAYOUT} has been
+\item A module {\tt Layout} is imported, in which the 
+sort {\tt LAYOUT} has been
   specified.
   
-\item The use of list constructs in the context-free section: `{\tt {-ID-TYPE
-      ","}*}' and `{\tt {STATEMENT ","}*}'. In fact, the sort {\tt SERIES}
-  could have been left out entirely and be replaced by `{\tt {STATEMENT
-      ","}*}' all through the specification. {\tt SERIES} is only used for
+\item The use of list constructs in the context-free section: 
+`{\tt \{ID-TYPE ","\}*}' and 
+`{\tt \{STATEMENT ","\}*}'. In fact, the sort {\tt SERIES}
+  could have been left out entirely and be replaced by 
+`{\tt \{STATEMENT ","\}*}' all through the specification. 
+{\tt SERIES} is only used for
   abbreviation in the syntax rules. Also, variables over list constructs are
   being declared.
   
 \item When a literal in a context-free function consists only of lower case
-  letters and digits, and it is not a SDF-keyword, it need not be quoted.
+  letters and digits, and it is not a \sdf-keyword, it need not be quoted.
 
 \item  The Pico-syntax module naturally contains no equations.
 
@@ -1280,8 +1288,8 @@ This has the following effects:
 
 \item  The module {\tt Pico-typecheck} is added to the specification. 
   
-\item The term in {\tt smalltc.pico} is identical to the one in {\tt
-    small.pico}, except that the program has been surrounded by `{\tt tcp(}
+\item The term in {\tt smalltc.pico} is identical to the one in 
+  {\tt small.pico}, except that the program has been surrounded by `{\tt tcp(}'
   and `{\tt )}'.  The function {\tt tcp} (for type check program), applies the
   typing rules for the Pico language to its single argument: a complete Pico
   program. The result is {\tt true} or {\tt false}.
@@ -1306,8 +1314,8 @@ modules have been added already and the equations have been compiled.
   
 \item Open term-editors with other pico programs (`{\tt fac.pico}', `{\tt
     big.pico}') or create your own program. The corresponding applications of
-  the type check function are in `{\tt factc.pico}', respectively, `{\tt
-    bigtc.pico}'.  Typecheck these programs.
+  the type check function are in `{\tt factc.pico}' and `{\tt bigtc.pico}', 
+  respectively.  Typecheck these programs.
 
 \end{itemize}
 
@@ -1345,7 +1353,7 @@ found in `{\tt smallev.pico}', `{\tt facev.pico}', and `{\tt bigev.pico}.
 
 \begin{itemize}
 
-\item Open an editor for the syntax and equations of {\tt Pico-typecheck}.
+\item Open an editor for the syntax of {\tt Pico-typecheck}.
 
 \end{itemize}
 
@@ -1357,6 +1365,13 @@ identifiers and their types. This type-environment, and the `{\tt lookup}'
 function is specified in the module {\tt Type-environments}. The typechecking
 of statements uses a type-environment and yields a Boolean value.
 
+
+\begin{itemize}
+
+\item Open an editor for the equations of {\tt Pico-typecheck}.
+
+\end{itemize}
+
 In the equations is defined how a Pico-program is typechecked. Equation {\tt
   [Tc1]} says that the typechecking of a program is `{\tt true}' if the
 typechecking of the Series in the type-environments, `{\tt tcd(Decls)}', is
@@ -1367,7 +1382,7 @@ constructed, when the declarations are typechecked.
 
 Equations {\tt [Tc3a]} and {\tt [Tc3b]} specify the typechecking of a,
 possibly empty, list of statements. Equations {\tt [Tc4a]} through {\tt
-  [default-Tc6} specify how the three kinds of Statements are typechecked
+  [default-Tc6]} specify how the three kinds of Statements are typechecked
 using the information from the type-environment.
 
 The rest of the equations deal with the typechecking of expressions.
@@ -1376,7 +1391,7 @@ The rest of the equations deal with the typechecking of expressions.
 
 \begin{itemize}
 
-\item Open an editor for the syntax and equations of {\tt Pico-eval}.
+\item Open an editor for the syntax of {\tt Pico-eval}.
 
 \end{itemize}
 
@@ -1384,6 +1399,13 @@ The functions `{\tt evp}' and variants are defined for describing the dynamic se
 Pico. The result of evaluation is a value-environment: a table of identifiers
 and values with the final values of the declared identifiers. (Note that Pico
 does not have an output-statement.)
+
+
+\begin{itemize}
+
+\item Open an editor for the equations of {\tt Pico-eval}.
+
+\end{itemize}
 
 In the equations is defined how a program is evaluated. Equation {\tt [Ev1]}
 says that the evaluation of a program is the evaluation of the Series in the
@@ -2032,14 +2054,12 @@ comments may be nested like in C.
 \begin{boxedverbatim}
 module Comment
 
+imports Layout
+
 exports
   sorts ComWord Comment
   lexical syntax
-    [\ \n\t]     -> LAYOUT
     ~[\ \n\t\/]+ -> ComWord
-
-  context-free restrictions
-    LAYOUT? -/- [\ \t\n]
 
   context-free syntax
     "/*" ComWord * "*/" -> Comment
@@ -2090,15 +2110,13 @@ Figure \ref{CODE:simple-cf}.
 \begin{boxedverbatim}
 module DrawingCommands
 
+imports Layout
+
 exports
   sorts NAT COORD CMND 
 
   lexical syntax
     [0-9]+ -> NAT 
-    [\ \n] -> LAYOUT 
-
-  context-free restrictions
-    LAYOUT? -/- [\ \n]
 
   context-free syntax
     "(" NAT "," NAT ")" -> COORD
@@ -2180,15 +2198,13 @@ in a Pascal-like language).
 \begin{boxedverbatim}
 module Decls
 
+imports Layout
+
 exports
   sorts ID DECL TYPE 
 
   lexical syntax
     [a-z]+ -> ID 
-    [\ \n] -> LAYOUT
-
-  context-free restrictions
-    LAYOUT? -/- [\ \n] 
 
   context-free syntax
     "decl" {ID ","}+ ":" TYPE -> DECL
@@ -2257,15 +2273,13 @@ functions are declared for the argument and result sorts of
 \begin{boxedverbatim}
 module BracketExpr
 
+imports Layout
+
 exports
   sorts EXPR
 
   lexical syntax
     [0-9]+ -> EXPR
-    [\ \n] -> LAYOUT
-
-  context-free restrictions
-    LAYOUT? -/- [\ \n] 
 
   context-free syntax
     "(" EXPR ")" -> EXPR {bracket}
@@ -2355,15 +2369,13 @@ associativities.
 \begin{boxedverbatim}
 module Expr1
 
+imports Layout
+
 exports
   sorts E 
 
   lexical syntax
     [0-9]+ -> E 
-    [\ \n] -> LAYOUT 
-
-  context-free restrictions
-    LAYOUT? -/- [\ \n]
 
   context-free syntax
     E "+" E   -> E {left}
@@ -2402,15 +2414,13 @@ associativity.
 \begin{boxedverbatim}
 module Expr2
 
+imports Layout
+
 exports
   sorts E 
 
   lexical syntax
     [0-9]+ -> E
-    [\ \n] -> LAYOUT 
-
-  context-free restrictions
-    LAYOUT? -/- [\ \n]
 
   context-free syntax
     E "+" E   -> E {left}
@@ -2575,15 +2585,13 @@ the following specification presented in Figure \ref{CODE:variables}.
 \begin{boxedverbatim}
 module VarDecls
 
+imports Layout
+
 exports
   sorts ID DECL TYPE 
 
   lexical syntax
     [a-z]+ -> ID
-    [\ \n] -> LAYOUT
-
-  context-free restrictions
-    LAYOUT? -/- [\ \n]
  
   context-free syntax
     "decl" {ID ","}+ ":" TYPE -> DECL 
@@ -2978,7 +2986,11 @@ label xxx
 \end{verbatim}
 
 
-\noindent First, define {\tt NAT} (numbers) and {\tt ID} (identifiers):
+\noindent Figure \ref{CODE:basicnotions} defines the 
+sorts {\tt Nat} (numbers) and {\tt Id} (identifiers).
+Given these basic notions the expressions and statements of our little 
+source language are defined, see Figure \ref{CODE:expressions} and
+\ref{CODE:statements}, respectively.
 
 \begin{figure}[!h]
 \begin{IncCode}
@@ -2998,8 +3010,6 @@ variables
 \caption{\asfsdf\ specification for BasicNotions}\label{CODE:basicnotions}
 \end{figure}
 
-\noindent Next, define the expressions and statements of our little source language:
-
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
@@ -3007,14 +3017,14 @@ module Expressions
 
 imports BasicNotions
 
-  exports
-    sorts Exp 
-    context-free syntax
-      Nat         -> Exp 
-      Id          -> Exp 
-      Exp "+" Exp -> Exp {left}
-      Exp "-" Exp -> Exp {left}
-      Exp "*" Exp -> Exp {left}
+exports
+  sorts Exp 
+  context-free syntax
+    Nat         -> Exp 
+    Id          -> Exp 
+    Exp "+" Exp -> Exp {left}
+    Exp "-" Exp -> Exp {left}
+    Exp "*" Exp -> Exp {left}
 
   variables
     "Exp"[0-9\']* -> Exp 
@@ -3037,10 +3047,10 @@ imports Expressions
 exports
   sorts Stat Stats 
   context-free syntax
-    Id ":=" Exp           -> Stat 
-    if Exp then Stats fi  -> Stat 
-    while Exp do Stats od -> Stat
-    {Stat ";"}+           -> Stats 
+    Id ":=" Exp                 -> Stat 
+    "if" Exp "then" Stats "fi"  -> Stat 
+    "while" Exp "do" Stats "od" -> Stat
+    {Stat ";"}+                 -> Stats 
 
   variables
     "Stat"[0-9\']*  -> Stat
@@ -3050,84 +3060,110 @@ exports
 \caption{\asfsdf\ specification for Statements}\label{CODE:statements}
 \end{figure}
 
-\noindent The instructions of the stack machine are defined as follows:
 
-\begin{verbatim}
+The instructions of the stack machine are defined in 
+Figure \ref{CODE:assemblylanguage}.
+Next, we define a function to construct a next label given the
+previous one. It is defined on the lexical notion of labels ({\tt Label}). 
+The scheme of appending the character `{\tt x}' to the previous label is, of
+course, naive and will in real life be replaced by a more sophisticated one,
+see Figure \ref{CODE:nextlabel} for the actual definition.
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
 module AssemblyLanguage
-  imports BasicNotions 
-  exports 
-    sorts LABEL INSTR INSTRS 
-    lexical syntax
-      [a-z0-9]+ -> LABEL 
-    context-free syntax
-      push NAT      -> INSTR
-      rvalue ID     -> INSTR 
-      lvalue ID     -> INSTR 
-      assign        -> INSTR 
-      add           -> INSTR 
-      sub           -> INSTR 
-      mul           -> INSTR 
-      label LABEL   -> INSTR 
-      goto LABEL    -> INSTR 
-      gotrue LABEL  -> INSTR 
-      gofalse LABEL -> INSTR
-      {INSTR ";" }+ -> INSTRS 
+
+imports BasicNotions 
+exports 
+  sorts Label Instr Instrs
+  lexical syntax
+    [a-z0-9]+ -> Label 
+  context-free syntax
+    "push" Nat      -> Instr
+    "rvalue" Id     -> Instr 
+    "lvalue" Id     -> Instr 
+    "assign"        -> Instr 
+    "add"           -> Instr 
+    "sub"           -> Instr 
+    "mul"           -> Instr 
+    "label" Label   -> Instr 
+    "goto" Label    -> Instr 
+    "gotrue" Label  -> Instr 
+    "gofalse" Label -> Instr
+    {Instr ";"}+   -> Instrs 
 
   variables
-    Instr [0-9']*      -> INSTR 
-    Instr-list [0-9']* -> { INSTR ";" }+
-    Label [0-9']*      -> LABEL
-\end{verbatim}
+    "Instr"[0-9\']*      -> Instr 
+    "Instr-list"[0-9\']* -> {Instr ";"}+
+    "Label"[0-9\']*      -> Label
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for AssemblyLanguage}\label{CODE:assemblylanguage}
+\end{figure}
 
-\noindent Next, we define a function to construct a next label given the
-previous one. It is defined on the lexical notion of labels ({\tt LABEL}). The
-scheme of appending the character `{\tt x}' to the previous label is, of
-course, naive and will in real life be replaced by a more sophisticated one
-(see below).
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+module NextLabel
+  
+imports AssemblyLanguage
+  
+exports
+  context-free syntax
+    "nextlabel" "(" Label ")" -> Label 
+  variables
+    "Label"[0-9\']* -> LABEL
 
-\begin{verbatim}
+hiddens
+  variables
+    "Char*"[0-9]* -> CHAR*
 
-module NextLabel1 
-  imports AssemblyLanguage
-  exports
-    context-free syntax
-      nextlabel "(" LABEL ")" -> LABEL 
-    variables
-      Label [0-9']* -> LABEL
-
-  hiddens
-    variables
-      Chars -> CHAR*
-
+%% NextLabel.eqs
 equations
- [1] nextlabel(label(Chars)) = label(Chars "x")
-\end{verbatim}
+
+ [1] nextlabel(label(Char*)) = label(Char* "x")
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for NextLabel}\label{CODE:nextlabel}
+\end{figure}
 
 It remains to define a function `{\tt tr}' that translates statements into
 instructions. During code generation we should generate new label names for
 the translation of if- and while-statements. This is an instance of a
 frequently occurring problem: how do we maintain global information (in this
 case: the last label name generated)? A standard solution is to introduce an
-auxiliary sort ({\tt INSTRS-LAB}) that contains both the generated instruction
+auxiliary sort ({\tt Instrs-Lab}) that contains both the generated instruction
 sequence and the last label name generated so far.
+Figure \ref{CODE:codegeneration} show the module containing this actual
+translation function.
 
-\begin{verbatim}
-module CodeGenerator1 
-  imports Statements AssemblyLanguage NextLabel1 
-  exports
-    context-free syntax
-      tr "(" STATS ")" -> INSTRS 
-  hiddens
-    sorts INSTRS-LAB 
-    context-free syntax
-      "<" INSTRS "," LABEL ">"   -> INSTRS-LAB 
-      tr "(" STATS "," LABEL ")" -> INSTRS-LAB 
-      tr "(" EXP ")"             -> INSTRS
- 
+This completes the specification of our code generator.
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+module CodeGenerator
+
+imports Statements AssemblyLanguage NextLabel 
+  
+exports
+  context-free syntax
+    "tr" "(" Stats ")" -> Instrs
+  
+hiddens
+  sorts Instrs-lab 
+  context-free syntax
+    "<" Instrs "," Label ">"     -> Instrs-lab 
+    "tr" "(" Stats "," Label ")" -> Instrs-lab 
+    "tr" "(" Exp ")"             -> Instrs
+
+%% CodeGenerator.eqs
 equations 
+
 [1] tr(Stat-list, x) = <Instr-list, Label>
     ======================================
-        tr(Stat-list) = Instr-list
+    tr(Stat-list) = Instr-list
 
 [2] tr(Stat, Label) = <Instr-list1, Label'>, 
     tr(Stat-list, Label') = <Instr-list2, Label''>
@@ -3135,8 +3171,8 @@ equations
     tr(Stat ; Stat-list, Label) = <Instr-list1 ; Instr-list2, Label''>
 
 [3] tr(Exp) = Instr-list
-    =============================================================== 
-    tr(Id := Exp, Label) = < lvalue Id; Instr-list; assign, Label >
+    ============================================================= 
+    tr(Id := Exp, Label) = <lvalue Id; Instr-list; assign, Label>
 
 [4] tr(Exp) = Instr-list1, tr(Stat-list, Label) = <Instr-list2, Label'>,
     Label'' = nextlabel(Label') 
@@ -3163,14 +3199,12 @@ equations
     =============================================== 
     tr(Exp1 * Exp2) = Instr-list1; Instr-list2; mul
 
-[9] tr(Nat) = push Nat [10] tr(Id) = rvalue Id
-\end{verbatim}
-
-\noindent This completes the specification of our code generator.
-
-\subsection{Larger Examples of ASF+SDF Specifications}
-
-See Chapter [Guided Tour] for an ASF+SDF specification of typechecking and execution of the toy language Pico. Other specifications are available describing (*******)
+[9] tr(Nat) = push Nat 
+[10] tr(Id) = rvalue Id
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for CodeGenerator}\label{CODE:codegenerator}
+\end{figure}
 
 \section{Miscellaneous}
 
