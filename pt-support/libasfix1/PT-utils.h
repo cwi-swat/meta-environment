@@ -29,6 +29,11 @@ typedef PT_Attr (*PT_AttrVisitor)(PT_Attr attr, PT_AttrVisitorData data);
 PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
                                PT_AttrVisitorData data);
 
+ATbool PT_hasProductionCertainAttr(PT_Production prod, PT_Attr attr);
+ATbool PT_hasProductionBracketAttr(PT_Production prod);
+ATbool PT_hasProductionMemoAttr(PT_Production prod);
+ATbool PT_hasProductionTraverseAttr(PT_Production prod);
+
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg);
 ATerm   PT_getTreeAnnotation(PT_Tree arg, ATerm label);
 int     PT_getArgsLength(PT_Args args);

@@ -137,6 +137,49 @@ PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
   return newAttrs;
 }
 
+typedef struct PT_BoolAttrTuple_Tag {
+  ATbool bool;
+  PT_Attr attr;
+} PT_BoolAttrTuple;
+
+static PT_Attr PT_matchAttr(PT_Attr attr, PT_AttrVisitorData data)
+{
+  if (PT_isEqualAttr(((PT_BoolAttrTuple*)data)->attr,attr)) {
+    ((PT_BoolAttrTuple*)data)->bool = ATtrue;
+  }
+
+  return attr;
+}
+
+ATbool PT_hasProductionCertainAttr(PT_Production prod, PT_Attr attr)
+{
+  PT_Attributes attributes = PT_getProductionAttributes(prod);
+  PT_Attrs attrs= PT_getAttributesAttrs(attributes); 
+  PT_BoolAttrTuple data;
+
+  data.bool = ATfalse;
+  data.attr = attr;
+
+  PT_foreachAttrInAttrs(attrs, PT_matchAttr, (PT_AttrVisitorData)&data);
+
+  return data.bool;
+}
+
+ATbool PT_hasProductionBracketAttr(PT_Production prod)
+{
+  return PT_hasProductionCertainAttr(prod, PT_makeAttrBracket());
+}
+
+ATbool PT_hasProductionMemoAttr(PT_Production prod)
+{
+  return PT_hasProductionCertainAttr(prod, PT_makeAttrMemo());
+}
+
+ATbool PT_hasProductionTraverseAttr(PT_Production prod)
+{
+  return PT_hasProductionCertainAttr(prod, PT_makeAttrTraverse());
+}
+
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg)
 {
   ATerm atArg = PT_makeTermFromTree(arg);

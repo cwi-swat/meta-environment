@@ -85,7 +85,7 @@ PT_Tree PT_makeTreeUnquotedLiteral(PT_Literal literal);
 PT_Tree PT_makeTreeQuotedLiteral(PT_QLiteral qliteral);
 PT_Tree PT_makeTreeSeparator(PT_Separator separator);
 PT_Var PT_makeVarDefault(PT_String name, PT_Symbol symbol);
-PT_Production PT_makeProductionDefault(PT_String moduleName, PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attrs);
+PT_Production PT_makeProductionDefault(PT_String moduleName, PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attributes);
 PT_Attributes PT_makeAttributesNoAttrs();
 PT_Attributes PT_makeAttributesAttrs(PT_Attrs attrs);
 PT_Attrs PT_makeAttrsMany(PT_Attr head, PT_Attrs tail);
@@ -222,9 +222,9 @@ PT_Production PT_setProductionLhs(PT_Production arg, PT_Symbols lhs);
 ATbool PT_hasProductionRhs(PT_Production arg);
 PT_Symbol PT_getProductionRhs(PT_Production arg);
 PT_Production PT_setProductionRhs(PT_Production arg, PT_Symbol rhs);
-ATbool PT_hasProductionAttrs(PT_Production arg);
-PT_Attributes PT_getProductionAttrs(PT_Production arg);
-PT_Production PT_setProductionAttrs(PT_Production arg, PT_Attributes attrs);
+ATbool PT_hasProductionAttributes(PT_Production arg);
+PT_Attributes PT_getProductionAttributes(PT_Production arg);
+PT_Production PT_setProductionAttributes(PT_Production arg, PT_Attributes attributes);
 
 /*}}}  */
 /*{{{  PT_Attributes accessors */
@@ -370,7 +370,7 @@ PT_ParseTree visitParseTree(PT_ParseTree arg, PT_Layout (*acceptLayoutBeforeTree
 PT_ModuleName visitModuleName(PT_ModuleName arg, PT_String (*acceptId)(PT_String));
 PT_Tree visitTree(PT_Tree arg, PT_Layout (*acceptLayout)(PT_Layout), PT_Var (*acceptVar)(PT_Var), PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), PT_Symbol (*acceptIter)(PT_Symbol), PT_Lexical (*acceptLexical)(PT_Lexical), PT_Literal (*acceptLiteral)(PT_Literal), PT_QLiteral (*acceptQliteral)(PT_QLiteral), PT_Separator (*acceptSeparator)(PT_Separator));
 PT_Var visitVar(PT_Var arg, PT_String (*acceptName)(PT_String), PT_Symbol (*acceptSymbol)(PT_Symbol));
-PT_Production visitProduction(PT_Production arg, PT_String (*acceptModuleName)(PT_String), PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttrs)(PT_Attributes));
+PT_Production visitProduction(PT_Production arg, PT_String (*acceptModuleName)(PT_String), PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes));
 PT_Attributes visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_Attrs));
 PT_Attrs visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr));
 PT_Attr visitAttr(PT_Attr arg, char * (*acceptString)(char *));

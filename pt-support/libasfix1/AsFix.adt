@@ -41,7 +41,7 @@
                        w(""),
                        <rhs(Symbol)>,
                        w(""),
-                       <attrs(Attributes)>
+                       <attributes(Attributes)>
                       )
   ],
 

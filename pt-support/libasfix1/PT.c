@@ -382,11 +382,11 @@ PT_Var PT_makeVarDefault(PT_String name, PT_Symbol symbol)
 }
 
 /*}}}  */
-/*{{{  PT_Production PT_makeProductionDefault(PT_String moduleName, PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attrs) */
+/*{{{  PT_Production PT_makeProductionDefault(PT_String moduleName, PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attributes) */
 
-PT_Production PT_makeProductionDefault(PT_String moduleName, PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attrs)
+PT_Production PT_makeProductionDefault(PT_String moduleName, PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attributes)
 {
-  return (PT_Production)ATmakeTerm(PT_patternProductionDefault, moduleName, lhs, rhs, attrs);
+  return (PT_Production)ATmakeTerm(PT_patternProductionDefault, moduleName, lhs, rhs, attributes);
 }
 
 /*}}}  */
@@ -1540,9 +1540,9 @@ PT_Production PT_setProductionRhs(PT_Production arg, PT_Symbol rhs)
 }
 
 /*}}}  */
-/*{{{  ATbool PT_hasProductionAttrs(PT_Production arg) */
+/*{{{  ATbool PT_hasProductionAttributes(PT_Production arg) */
 
-ATbool PT_hasProductionAttrs(PT_Production arg)
+ATbool PT_hasProductionAttributes(PT_Production arg)
 {
   if (PT_isProductionDefault(arg)) {
     return ATtrue;
@@ -1551,28 +1551,28 @@ ATbool PT_hasProductionAttrs(PT_Production arg)
 }
 
 /*}}}  */
-/*{{{  PT_Attributes PT_getProductionAttrs(PT_Production arg) */
+/*{{{  PT_Attributes PT_getProductionAttributes(PT_Production arg) */
 
-PT_Attributes PT_getProductionAttrs(PT_Production arg)
+PT_Attributes PT_getProductionAttributes(PT_Production arg)
 {
   if (PT_isProductionDefault(arg)) {
     return (PT_Attributes)ATgetArgument((ATermAppl)arg, 8);
   }
 
-  ATabort("Production has no Attrs: %t\n", arg);
+  ATabort("Production has no Attributes: %t\n", arg);
   return (PT_Attributes)NULL;
 }
 
 /*}}}  */
-/*{{{  PT_Production PT_setProductionAttrs(PT_Production arg, PT_Attributes attrs) */
+/*{{{  PT_Production PT_setProductionAttributes(PT_Production arg, PT_Attributes attributes) */
 
-PT_Production PT_setProductionAttrs(PT_Production arg, PT_Attributes attrs)
+PT_Production PT_setProductionAttributes(PT_Production arg, PT_Attributes attributes)
 {
   if (PT_isProductionDefault(arg)) {
-    return (PT_Production)ATsetArgument((ATermAppl)arg, (ATerm)attrs, 8);
+    return (PT_Production)ATsetArgument((ATermAppl)arg, (ATerm)attributes, 8);
   }
 
-  ATabort("Production has no Attrs: %t\n", arg);
+  ATabort("Production has no Attributes: %t\n", arg);
   return (PT_Production)NULL;
 }
 
@@ -2821,16 +2821,16 @@ PT_Var visitVar(PT_Var arg, PT_String (*acceptName)(PT_String), PT_Symbol (*acce
 }
 
 /*}}}  */
-/*{{{  PT_Production visitProduction(PT_Production arg, PT_String (*acceptModuleName)(PT_String), PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttrs)(PT_Attributes)) */
+/*{{{  PT_Production visitProduction(PT_Production arg, PT_String (*acceptModuleName)(PT_String), PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes)) */
 
-PT_Production visitProduction(PT_Production arg, PT_String (*acceptModuleName)(PT_String), PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttrs)(PT_Attributes))
+PT_Production visitProduction(PT_Production arg, PT_String (*acceptModuleName)(PT_String), PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes))
 {
   if (PT_isProductionDefault(arg)) {
     return PT_makeProductionDefault(
         acceptModuleName ? acceptModuleName(PT_getProductionModuleName(arg)) : PT_getProductionModuleName(arg),
         acceptLhs ? acceptLhs(PT_getProductionLhs(arg)) : PT_getProductionLhs(arg),
         acceptRhs ? acceptRhs(PT_getProductionRhs(arg)) : PT_getProductionRhs(arg),
-        acceptAttrs ? acceptAttrs(PT_getProductionAttrs(arg)) : PT_getProductionAttrs(arg));
+        acceptAttributes ? acceptAttributes(PT_getProductionAttributes(arg)) : PT_getProductionAttributes(arg));
   }
   ATabort("not a Production: %t\n", arg);
   return (PT_Production)NULL;
