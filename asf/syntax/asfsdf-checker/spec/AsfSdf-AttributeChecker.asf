@@ -3,174 +3,147 @@ equations
   [ca-1'1] check-asf-attributes(Definition) =
              check-attributes(Definition, {})
 
-  [ca-1'2] get-module-name(Module) = $ModuleId
-           ====================================
-           check-attributes(Module, Msgs) = 
-             check-attributes(Module, Msgs, $ModuleId)
+  [ca-1'2] get-module-name(Module) = $ModuleId,
+           check-attributes-in-module(Module, <Msgs1,>, $ModuleId) = <Msgs2, Production*>
+           ==============================================================================
+           check-attributes(Module, Msgs1) = Msgs2
 
-  [ca-2'1] check-attributes($Symbol* -> $Symbol 
-                            {Attr*1, traversal(Aterm+), Attr*2},
-                            Msgs, $ModuleId) = Msgs +
-traversal-attributes-in-non-prefix-function($ModuleId, $Symbol* -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
+  [ca-2'1] is-prefix-function(Production) = false,
+           has-traversal-attribute(Production) = true
+           ==========================================
+           check-attributes-in-module(Production,
+                                      <Msgs, Production*>, $ModuleId) = 
+<Msgs +
+traversal-attributes-in-non-prefix-function($ModuleId, Production), Production*>
 
-  [ca-2'2] contains-accu(Aterm+) |
-             contains-trafo(Aterm+) = true,
-           contains-break(Aterm+) |
-             contains-continue(Aterm+) = true,
-           contains-top-down(Aterm+) |
-             contains-bottom-up(Aterm+) = true,
+  [ca-2'2] has-traversal-attribute(Attributes1) = true,
+           Attributes1 != Attributes2
+           ==========================
+           check-attributes-in-module($Literal ( $Symbol1 , $Symbol,* ) -> $Symbol2 Attributes1,
+                                      <Msgs,
+                                       Production*1
+                                       $Literal ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes2
+                                       Production*2>, $ModuleId) = 
+<Msgs +
+inconsistent-traversal-attributes($ModuleId, $Literal ( $Symbol1 , $Symbol,* ) -> $Symbol2 Attributes1,
+                                             $Literal ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes2),
+ Production*1
+ $Literal ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes2
+ Production*2>
+
+  [default-ca-2'3] is-prefix-function(Production) = true,
+                   has-traversal-attribute(Production) = true,
+                   check-attributes-in-production(Production, Msgs1, $ModuleId) = Msgs2
+                   ====================================================================
+                   check-attributes-in-module(Production, <Msgs1, Production*>, $ModuleId) = 
+<Msgs2, 
+ Production Production*>
+
+  [ca-3'1] get-traversal-arguments(Production) = Aterm+,
+           contains-accu(Aterm+) | contains-trafo(Aterm+) = true,
+           contains-break-or-continue(Aterm+) = true,
+           contains-top-down-or-bottom-up(Aterm+) = true,
            contains-only-traversal-attributes(Aterm+) = false
            ==================================================
-           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
-                            {Attr*1, traversal(Aterm+), Attr*2},
-                            Msgs, $ModuleId) = Msgs +
-illegal-traversal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
+           check-attributes-in-production(Production, Msgs, $ModuleId) = 
+Msgs +
+illegal-traversal-attribute($ModuleId, Production)
 
-  [ca-2'3] contains-accu(Aterm+) |
-             contains-trafo(Aterm+) = false,
-           contains-break(Aterm+) |
-             contains-continue(Aterm+) = true,
-           contains-top-down(Aterm+) |
-             contains-bottom-up(Aterm+) = true
-           ===================================
-           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
-                            {Attr*1, traversal(Aterm+), Attr*2},
-                            Msgs, $ModuleId) = Msgs +
-missing-trafo-and-or-accu-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
+  [ca-3'2] get-traversal-arguments(Production) = Aterm+,
+           contains-accu(Aterm+) | contains-trafo(Aterm+) = false,
+           contains-break-or-continue(Aterm+) = true,
+           contains-top-down-or-bottom-up(Aterm+) = true
+           =============================================
+           check-attributes-in-production(Production, Msgs, $ModuleId) = 
+Msgs +
+missing-trafo-and-or-accu-attribute($ModuleId, Production)
 
-  [ca-2'4] contains-accu(Aterm+) |
-             contains-trafo(Aterm+) = true,
-           contains-break(Aterm+) |
-             contains-continue(Aterm+) = false,
-           contains-top-down(Aterm+) |
-             contains-bottom-up(Aterm+) = true
-           ===================================
-           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
-                            {Attr*1, traversal(Aterm+), Attr*2},
-                            Msgs, $ModuleId) = Msgs +
-missing-break-or-continue-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
+  [ca-3'3] get-traversal-arguments(Production) = Aterm+,
+           contains-accu(Aterm+) | contains-trafo(Aterm+) = true,
+           contains-break-or-continue(Aterm+) = false,
+           contains-top-down-or-bottom-up(Aterm+) = true
+           =============================================
+           check-attributes-in-production(Production, Msgs, $ModuleId) = 
+Msgs +
+missing-break-or-continue-attribute($ModuleId, Production)
 
-  [ca-2'5] contains-accu(Aterm+) |
-             contains-trafo(Aterm+) = true,
-           contains-break(Aterm+) |
-             contains-continue(Aterm+) = true,
-           contains-top-down(Aterm+) |
-             contains-bottom-up(Aterm+) = false
-           ====================================
-           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
-                            {Attr*1, traversal(Aterm+), Attr*2},
-                            Msgs, $ModuleId) = Msgs +
-missing-bottom-up-or-top-down-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
+  [ca-3'4] get-traversal-arguments(Production) = Aterm+,
+           contains-accu(Aterm+) | contains-trafo(Aterm+) = true,
+           contains-break-or-continue(Aterm+) = true,
+           contains-top-down-or-bottom-up(Aterm+) = false
+           ==============================================
+           check-attributes-in-production(Production, Msgs, $ModuleId) = 
+Msgs +
+missing-bottom-up-or-top-down-attribute($ModuleId, Production)
 
-  [ca-2'6] contains-accu(Aterm+) = true,
-           contains-trafo(Aterm+) = false,
-           is-accu-definition($Literal ( $Symbol,* ) -> $Symbol) = false
-           =============================================================
-           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
-                            {Attr*1, traversal(Aterm+), Attr*2},
-                            Msgs, $ModuleId) = Msgs +
-accu-should-return-accumulated-type($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
-
-  [ca-2'6] contains-trafo(Aterm+) = true,
-           contains-accu(Aterm+) = false,
-           is-trafo-definition($Literal ( $Symbol,* ) -> $Symbol) = false
-           ==============================================================
-           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
-                            {Attr*1, traversal(Aterm+), Attr*2},
-                            Msgs, $ModuleId) = Msgs +
-trafo-should-return-traversed-type($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
-
-  [ca-2'7] contains-trafo(Aterm+) = true,
+  [ca-3'5] get-traversal-arguments(Production) = Aterm+,
            contains-accu(Aterm+) = true,
-           is-accu-trafo-definition($Literal ( $Symbol,* ) -> $Symbol) = false
-           ===================================================================
-           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
-                            {Attr*1, traversal(Aterm+), Attr*2},
-                            Msgs, $ModuleId) = Msgs +
-accutrafo-should-return-tuple-of-correct-types($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
-
-  [ca-2'5] contains-accu(Aterm+) = true,
            contains-trafo(Aterm+) = false,
-           is-accu-definition($Literal ( $Symbol,* ) -> $Symbol) = true,
-           contains-break(Aterm+) |
-             contains-continue(Aterm+) = true,
-           contains-top-down(Aterm+) |
-             contains-bottom-up(Aterm+) = true,
-           contains-only-traversal-attributes(Aterm+) = true
-           =================================================
-           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
-                            {Attr*1, traversal(Aterm+), Attr*2},
-                            Msgs, $ModuleId) = Msgs
+           is-accu-definition(Production) = false
+           ======================================
+           check-attributes-in-production(Production, Msgs, $ModuleId) = 
+Msgs +
+accu-should-return-accumulated-type($ModuleId, Production)
 
-  [ca-2'6] contains-trafo(Aterm+) = true,
-           contains-accu(Aterm+) = false,
-           is-trafo-definition($Literal ( $Symbol,* ) -> $Symbol) = true,
-           contains-break(Aterm+) |
-             contains-continue(Aterm+) = true,
-           contains-top-down(Aterm+) |
-             contains-bottom-up(Aterm+) = true,
-           contains-only-traversal-attributes(Aterm+) = true
-           =================================================
-           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
-                            {Attr*1, traversal(Aterm+), Attr*2},
-                            Msgs, $ModuleId) = Msgs
-
-  [ca-2'7] contains-accu(Aterm+) = true,
+  [ca-3'6] get-traversal-arguments(Production) = Aterm+,
            contains-trafo(Aterm+) = true,
-           is-accu-trafo-definition($Literal ( $Symbol,* ) -> $Symbol) = true,
-           contains-break(Aterm+) |
-             contains-continue(Aterm+) = true,
-           contains-top-down(Aterm+) |
-             contains-bottom-up(Aterm+) = true,
+           contains-accu(Aterm+) = false,
+           is-trafo-definition(Production) = false
+           =======================================
+           check-attributes-in-production(Production, Msgs, $ModuleId) = Msgs +
+trafo-should-return-traversed-type($ModuleId, Production)
+
+  [ca-2'7] get-traversal-arguments(Production) = Aterm+,
+           contains-trafo(Aterm+) = true,
+           contains-accu(Aterm+) = true,
+           is-accu-trafo-definition(Production) = false
+           ============================================
+           check-attributes-in-production(Production, Msgs, $ModuleId) = Msgs +
+accutrafo-should-return-tuple-of-correct-types($ModuleId, Production)
+
+  [ca-2'5] get-traversal-arguments(Production) = Aterm+,
+           contains-accu(Aterm+) = true,
+           contains-trafo(Aterm+) = false,
+           is-accu-definition(Production) = true,
+           contains-break-or-continue(Aterm+) = true,
+           contains-top-down-or-bottom-up(Aterm+) = true,
            contains-only-traversal-attributes(Aterm+) = true
            =================================================
-           check-attributes($Literal ( $Symbol,* ) -> $Symbol 
-                            {Attr*1, traversal(Aterm+), Attr*2},
-                            Msgs, $ModuleId) = Msgs
+           check-attributes-in-production(Production, Msgs, $ModuleId) = Msgs
 
-  [default-ca-2'8] check-attributes($Literal ( $Symbol,* ) -> $Symbol 
-                                     {Attr*1, traversal(Aterm+), Attr*2},
-                             Msgs, $ModuleId) = 
-              Msgs + 
-illegal-traversal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2})
+  [ca-2'6] get-traversal-arguments(Production) = Aterm+,
+           contains-trafo(Aterm+) = true,
+           contains-accu(Aterm+) = false,
+           is-trafo-definition(Production) = true,
+           contains-break-or-continue(Aterm+) = true,
+           contains-top-down-or-bottom-up(Aterm+) = true,
+           contains-only-traversal-attributes(Aterm+) = true
+           =================================================
+           check-attributes-in-production(Production, Msgs, $ModuleId) = Msgs
 
-  [ca-2'9]  $Literal2 != traversal,
-            contains-accu(Aterm+) | 
-              contains-trafo(Aterm+) |
-              contains-break(Aterm+) |
-              contains-continue(Aterm+) |
-              contains-top-down(Aterm+) |
-              contains-bottom-up(Aterm+) = true
-            ===================================
-            check-attributes($Literal1 ( $Symbol,* ) -> $Symbol 
-                             {Attr*1, $Literal2(Aterm+), Attr*2},
-                             Msgs, $ModuleId) = 
-              Msgs + 
-illegal-attribute($ModuleId, $Literal1 ( $Symbol,* ) -> $Symbol {Attr*1, $Literal2(Aterm+), Attr*2})
+  [ca-2'7] get-traversal-arguments(Production) = Aterm+,
+           contains-accu(Aterm+) = true,
+           contains-trafo(Aterm+) = true,
+           is-accu-trafo-definition(Production) = true,
+           contains-break-or-continue(Aterm+) = true,
+           contains-top-down-or-bottom-up(Aterm+) = true,
+           contains-only-traversal-attributes(Aterm+) = true
+           =================================================
+           check-attributes-in-production(Production, Msgs, $ModuleId) = Msgs
 
-  [ca-2'10] $Literal2 != traversal,
-            contains-accu(Aterm+) | 
-              contains-trafo(Aterm+) |
-              contains-break(Aterm+) |
-              contains-continue(Aterm+) |
-              contains-top-down(Aterm+) |
-              contains-bottom-up(Aterm+) = true
-            ===================================
-            check-attributes($Symbol* -> $Symbol 
-                             {Attr*1, $Literal2(Aterm+), Attr*2},
-                             Msgs, $ModuleId) = 
-              Msgs + 
-illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, $Literal2(Aterm+), Attr*2})
+  [default-ca-2'8] check-attributes-in-production(Production, Msgs, $ModuleId) = 
+Msgs + 
+illegal-traversal-attribute($ModuleId, Production)
 
-  [iad-1'1] is-accu-definition($Literal1 ( $Symbol1, $Symbol2, $Symbol,*) -> $Symbol2) = true
+  [iad-1'1] is-accu-definition($Literal1 ( $Symbol1, $Symbol2, $Symbol,*) -> $Symbol2 Attributes) = true
 
   [default-iad-1'2] is-accu-definition(Production) = false
 
-  [itd-1'1] is-trafo-definition($Literal1 ( $Symbol, $Symbol,*) -> $Symbol) = true
+  [itd-1'1] is-trafo-definition($Literal1 ( $Symbol, $Symbol,*) -> $Symbol Attributes) = true
 
   [default-itd-1'2] is-trafo-definition(Production) = false
 
-  [iatd-1'1] is-accu-trafo-definition($Literal1 ( $Symbol1, $Symbol2, $Symbol,*) -> $Symbol1 # $Symbol2) = true
+  [iatd-1'1] is-accu-trafo-definition($Literal1 ( $Symbol1, $Symbol2, $Symbol,*) -> $Symbol1 # $Symbol2 Attributes) = true
 
   [default-iatd-1'2] is-accu-trafo-definition(Production) = false
 
@@ -182,21 +155,17 @@ illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, $Literal2(Aterm+), Att
 
   [default-ct-3'2] contains-trafo(Aterm*) = false
 
-  [cb-1'1] contains-break(Aterm*1, break, Aterm*2) = true
+  [cb-1'1] contains-break-or-continue(Aterm*1, break, Aterm*2) = true
 
-  [default-cb-1'2] contains-break(Aterm*) = false
+  [cc-1'1] contains-break-continue(Aterm*1, continue, Aterm*2) = true
 
-  [cc-1'1] contains-continue(Aterm*1, continue, Aterm*2) = true
+  [default-cc-1'2] contains-break-or-continue(Aterm*) = false
 
-  [default-cc-1'2] contains-continue(Aterm*) = false
+  [ctd-1'1] contains-top-down-or-bottom-up(Aterm*1, top-down, Aterm*2) = true
 
-  [ctd-1'1] contains-top-down(Aterm*1, top-down, Aterm*2) = true
+  [cbu-1'1] contains-top-down-or-bottom-up(Aterm*1, bottom-up, Aterm*2) = true
 
-  [default-ctd-1'2] contains-top-down(Aterm*) = false
-
-  [cbu-1'1] contains-bottom-up(Aterm*1, bottom-up, Aterm*2) = true
-
-  [default-cbu-1'2] contains-bottom-up(Aterm*) = false
+  [default-cbu-1'2] contains-top-down-or-bottom-up(Aterm*) = false
 
   [cota-1'1] contains-only-traversal-attributes() = true
 
@@ -219,3 +188,17 @@ illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, $Literal2(Aterm+), Att
                contains-only-traversal-attributes(Aterm*1, Aterm*2)
 
   [default-cota-1'8] contains-only-traversal-attributes(Aterm+) = false
+
+  [ipf-1'1] is-prefix-function($Literal($Symbol,*) -> $Symbol Attributes) = true 
+
+  [default-ipf-1'2] is-prefix-function(Production) = false 
+
+  [gta-1'1] get-traversal-arguments($Literal($Symbol,*) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2}) = Aterm+
+
+  [hta-1'1] has-traversal-attribute($Literal($Symbol,*) -> $Symbol {Attr*1, traversal(Aterm+), Attr*2}) = true
+
+  [default-hta-1'1] has-traversal-attribute(Production) = false
+
+  [hta-1'1] has-traversal-attribute({Attr*1, traversal(Aterm+), Attr*2}) = true
+
+  [default-hta-1'1] has-traversal-attribute(Attributes) = false

@@ -11,8 +11,7 @@ exports
     missing-bottom-up-or-top-down-attribute(ModuleId, Production)           -> Message
     missing-break-or-continue-attribute(ModuleId, Production)               -> Message
     missing-trafo-and-or-accu-attribute(ModuleId, Production)               -> Message
-    ambiguous-traversal-attribute-break-or-continue(ModuleId,Attribute)     -> Message
-    ambiguous-traversal-attribute-top-down-or-bottom-up(ModuleId,Attribute) -> Message
+    inconsistent-traversal-attributes(ModuleId, Production, Production)     -> Message
     trafo-should-return-traversed-type(ModuleId, Production)                -> Message
     accu-should-return-accumulated-type(ModuleId, Production)               -> Message
     accutrafo-should-return-tuple-of-correct-types(ModuleId, Production)    -> Message

@@ -8,23 +8,32 @@ exports
 
 hiddens
   context-free syntax
-    check-attributes(Definition, Messages)           -> Messages {traversal(accu, break, top-down)}
-    check-attributes(Module, Messages)               -> Messages {traversal(accu, break, top-down)}
-    check-attributes(Module, Messages, ModuleId)     -> Messages {traversal(accu, break, top-down)}
-    check-attributes(Production, Messages, ModuleId) -> Messages {traversal(accu, break, top-down)}
+    check-attributes(Definition, Messages)                        -> Messages {traversal(accu, break, top-down)}
+    check-attributes(Module, Messages)                            -> Messages {traversal(accu, break, top-down)}
+    check-attributes-in-module(Module, 
+                               Messages # Production*, 
+                               ModuleId)                -> Messages # Production* {traversal(accu, break, top-down)}
+    check-attributes-in-module(Production, 
+                               Messages # Production*, 
+                               ModuleId)                -> Messages # Production* {traversal(accu, break, top-down)}
+
+  context-free syntax
+    check-attributes-in-production(Production, Messages, ModuleId) -> Messages
 
   context-free syntax
     contains-accu({ATerm ","}*)      -> Boolean
     contains-trafo({ATerm ","}*)     -> Boolean
-    contains-break({ATerm ","}*)     -> Boolean
-    contains-continue({ATerm ","}*)  -> Boolean
-    contains-top-down({ATerm ","}*)  -> Boolean
-    contains-bottom-up({ATerm ","}*) -> Boolean
+    contains-break-or-continue({ATerm ","}*)      -> Boolean
+    contains-top-down-or-bottom-up({ATerm ","}*)  -> Boolean
 
   context-free syntax
-    contains-only-traversal-attributes({ATerm ","}*) -> Boolean
+    contains-only-traversal-attributes({ATerm ","}*)      -> Boolean
 
   context-free syntax
+    is-prefix-function(Production)        -> Boolean
+    get-traversal-arguments(Production)   -> {ATerm ","}+
+    has-traversal-attribute(Production)   -> Boolean
+    has-traversal-attribute(Attributes)   -> Boolean
     is-accu-definition(Production)        -> Boolean
     is-trafo-definition(Production)       -> Boolean
     is-accu-trafo-definition(Production)  -> Boolean
@@ -39,6 +48,7 @@ hiddens
     "Attr*"[0-9]*      -> {Attribute ","}*
     "Definition"[0-9]* -> Definition
     "Production"[0-9]* -> Production
+    "Production*"[0-9]* -> Production*
     "$Sort"  [0-9]*    -> Sort
     "$Symbol*"[0-9]*   -> Symbol*
     "$Symbol,*"[0-9]*  -> {Symbol ","}*
