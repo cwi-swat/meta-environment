@@ -106,7 +106,7 @@ in
     +
       rec-msg(opened-file(Module,text(Text?), RealPath?,Time?))
     ).
-    Parse-Syntax(Module,Text, Status?, Tree?)
+    Parse-Syntax(Text, Status?, Tree?)
   +
     rec-msg(error-opening(Module)).
     Status := no-such-file
@@ -125,7 +125,7 @@ in
   fi
 endlet
 
-process Parse-Syntax (Module : str, Text : str, Status : term?, Tree : term?) is
+process Parse-Syntax (Text : str, Status : term?, Tree : term?) is
 let
   Id : int,
   Errors : list,
