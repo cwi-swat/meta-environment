@@ -23,6 +23,8 @@ in
       tau
     fi .
     snd-msg(clear-module-db) .
+    rec-msg(module-db-cleared) .
+    MDB-DisplayGraph .
     snd-note(ui-status(endstat(Id))) .
     snd-msg(cleared-all)
   ) *

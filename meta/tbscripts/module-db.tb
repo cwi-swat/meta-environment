@@ -38,7 +38,8 @@ in
     Pairs := []
   +
     rec-msg(clear-module-db) .
-    MDB-ClearModuleDb()
+    MDB-ClearModuleDb() .
+    snd-msg(module-db-cleared)
   +
     rec-msg(delete-module-from-db(Name?)).
     MDB-GetAllDependingModules(Name, DependingModules?) .
