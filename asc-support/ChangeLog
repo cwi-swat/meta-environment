@@ -1,5 +1,9 @@
 $Id$
 
+2001/11/05 ({jurgenv,markvdb}@cwi.nl)
+  * Removed module identifiers from productions:
+   - apply function adapted.
+
 2001/11/02 (jurgenv@cwi.nl)
  * Added support for transformers and accumulators 
 

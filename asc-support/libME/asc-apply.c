@@ -1,7 +1,7 @@
 #include "asc-support2-me.h"
 
 static PT_Tree
-applyFunctionToArgs(char *function, char* module, char* sort, PT_Args args)
+applyFunctionToArgs(char *function, char* sort, PT_Args args)
 {
   PT_Tree   layoutTree   = PT_makeTreeLayoutEmpty();
   PT_Symbol layoutSymbol = PT_makeOptLayoutSymbol();
@@ -15,9 +15,7 @@ applyFunctionToArgs(char *function, char* module, char* sort, PT_Args args)
   PT_Symbol functionSymbol = PT_makeSymbolLit(function);
   PT_Symbol rhs = PT_makeSymbolCf(PT_makeSymbolSort(sort));
   PT_Production prod;
-  PT_Attributes attributes = PT_makeAttributesAttrs(
-                               PT_makeAttrsSingle(
-                                 PT_makeAttrId(module)));
+  PT_Attributes attributes = PT_makeAttributesNoAttrs();
 
   /* initialize with empty symbols and trees */
   PT_Args argList = PT_makeArgsEmpty();
@@ -84,7 +82,7 @@ ASC_applyFunction(char *function, char* module, char* sort, int nArgs, ...)
 
   va_end(args);
 
-  return applyFunctionToArgs(function, module, sort, ptArgs);
+  return applyFunctionToArgs(function, sort, ptArgs);
 }
 
 
