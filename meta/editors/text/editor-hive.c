@@ -272,6 +272,18 @@ void set_focus_at_location(int c, ATerm editorId, ATerm location)
 }
 
 /*}}}  */
+/*{{{  void write_contents(int c, ATerm editorId) */
+
+void write_contents(int c, ATerm editorId)
+{
+  TE_Process process = getEditorProcess(editorId);
+
+  if (process != NULL) {
+    sendToEditor(process, TE_makeActionWriteContents());
+  }
+}
+
+/*}}}  */
 /*{{{  void reread_contents(int c, ATerm editorId) */
 
 void reread_contents(int c, ATerm editorId)

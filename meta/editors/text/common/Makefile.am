@@ -26,4 +26,6 @@ libTextEditor_a_SOURCES = \
 	TextEditor_dict.c
 
 api: TextEditor.adt
-	adt-to-c --prefix TE_ --input $<
+	upgrade-adt -i $< -o $<.upgraded
+	adt-to-c --prefix TE_ --input $<.upgraded --output TextEditor
+	rm -f $<.upgraded

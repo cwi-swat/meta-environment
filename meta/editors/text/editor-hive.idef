@@ -29,6 +29,9 @@ in
     . snd-do(Hive, edit-file(EditorId, Editor, FileName))
     . snd-do(Hive, set-actions(EditorId, ActionList))
   +
+    rec-msg(write-contents(EditorId?))
+    . snd-do(Hive, write-contents(EditorId))
+  +
     rec-msg(reread-contents(EditorId?))
     . snd-do(Hive, reread-contents(EditorId))
   +

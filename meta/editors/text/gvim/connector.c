@@ -268,6 +268,14 @@ static void getContents(int write_to_hive_fd, TE_Action edAction)
 /*}}}  */
 /*{{{  static void rereadContents(int write_to_editor_fd) */
 
+static void writeContents(int write_to_editor_fd)
+{
+  sendToVim(":w!");
+}
+
+/*}}}  */
+/*{{{  static void rereadContents(int write_to_editor_fd) */
+
 static void rereadContents(int write_to_editor_fd)
 {
   sendToVim(":e!");
@@ -396,7 +404,6 @@ static void setCursorAtLocation(int write_to_editor_fd, TE_Action edAction)
 
 /*}}}  */
 
-
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
@@ -433,6 +440,7 @@ int main(int argc, char *argv[])
   gvimEditor = initTextEditor(hiveClosed,
 			      clearFocus,
 			      moveToFront,
+			      writeContents,
 			      rereadContents,
 			      displayMessage,
 			      setCursorAtFocus,

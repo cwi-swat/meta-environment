@@ -31,6 +31,7 @@ struct _TextEditor
   hive_closed_t hiveClosed;
   clear_focus_t clearFocus;
   move_to_front_t moveToFront;
+  write_contents_t writeContents;
   reread_contents_t rereadContents;
   display_message_t displayMessage;
   set_cursor_at_focus_t setCursorAtFocus;
@@ -38,7 +39,7 @@ struct _TextEditor
   set_focus_t setFocus;
   set_cursor_at_location_t setCursorAtLocation;
   set_focus_at_location_t setFocusAtLocation;
-  get_contents getContents;
+  get_contents_t getContents;
 };
 
 /*}}}  */
@@ -88,6 +89,9 @@ static void handleHiveInput(TextEditor editor,
   else if (TE_isActionToFront(action)) {
     editor->moveToFront(write_to_editor_fd);
   }
+  else if (TE_isActionWriteContents(action)) {
+    editor->writeContents(write_to_editor_fd);
+  }
   else if (TE_isActionRereadContents(action)) {
     editor->rereadContents(write_to_editor_fd);
   }
@@ -121,6 +125,7 @@ static void handleHiveInput(TextEditor editor,
 TextEditor initTextEditor(hive_closed_t hiveClosed,
 			  clear_focus_t clearFocus,
 			  move_to_front_t moveToFront,
+			  write_contents_t writeContents,
 			  reread_contents_t rereadContents,
 			  display_message_t displayMessage,
 			  set_cursor_at_focus_t setCursorAtFocus,
@@ -128,32 +133,44 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
 			  set_focus_t setFocus,
 			  set_cursor_at_location_t setCursorAtLocation,
                           set_focus_at_location_t setFocusAtLocation,
-			  get_contents getContents)
+			  get_contents_t getContents)
 {
   TextEditor textEditorImpl = (TextEditor) calloc(1, sizeof(struct _TextEditor));
 
   assert(hiveClosed != NULL);
-  assert(clearFocus != NULL);
-  assert(moveToFront != NULL);
-  assert(rereadContents != NULL);
-  assert(displayMessage != NULL);
-  assert(setCursorAtFocus != NULL);
-  assert(setActions != NULL);
-  assert(setFocus != NULL);
-  assert(setCursorAtLocation != NULL);
-  assert(setFocusAtLocation != NULL);
-  assert(getContents != NULL);
-
   textEditorImpl->hiveClosed = hiveClosed;
+
+  assert(clearFocus != NULL);
   textEditorImpl->clearFocus = clearFocus;
+
+  assert(moveToFront != NULL);
   textEditorImpl->moveToFront = moveToFront;
+
+  assert(writeContents != NULL);
+  textEditorImpl->writeContents = writeContents;
+
+  assert(rereadContents != NULL);
   textEditorImpl->rereadContents = rereadContents;
+
+  assert(displayMessage != NULL);
   textEditorImpl->displayMessage = displayMessage;
+
+  assert(setCursorAtFocus != NULL);
   textEditorImpl->setCursorAtFocus = setCursorAtFocus;
+
+  assert(setActions != NULL);
   textEditorImpl->setActions = setActions;
+
+  assert(setFocus != NULL);
   textEditorImpl->setFocus = setFocus;
+
+  assert(setCursorAtLocation != NULL);
   textEditorImpl->setCursorAtLocation = setCursorAtLocation;
+
+  assert(setFocusAtLocation != NULL);
   textEditorImpl->setFocusAtLocation = setFocusAtLocation;
+
+  assert(getContents != NULL);
   textEditorImpl->getContents = getContents;
 
   return textEditorImpl;

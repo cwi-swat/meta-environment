@@ -1,5 +1,6 @@
 [
   [Action, to-front, action(to-front)],
+  [Action, write-contents, action(write-contents)],
   [Action, reread-contents, action(reread-contents)],
   [Action, display-message, action(display-message(<message(str)>))],
   [Action, set-cursor-at-focus, action(set-cursor-at-focus(<focus(term)>))],

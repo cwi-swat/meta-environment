@@ -415,6 +415,14 @@ static void rereadContents(int write_to_editor_fd)
 }
 
 /*}}}  */
+/*{{{  static void writeContents(int write_to_editor_fd) */
+
+static void writeContents(int write_to_editor_fd)
+{
+  sendToEmacs(write_to_editor_fd, "(save-buffer)");
+}
+
+/*}}}  */
 
 /*{{{  int main(int argc, char *argv[]) */
 
@@ -450,6 +458,7 @@ int main(int argc, char *argv[])
   emacsEditor = initTextEditor(hiveClosed,
 			       clearFocus,
 			       moveToFront,
+			       writeContents,
 			       rereadContents,
 			       displayMessage,
 			       setCursorAtFocus,

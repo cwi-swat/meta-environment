@@ -1,5 +1,5 @@
 /*
- * Generated at Tue Jan 20 17:35:26 2004
+ * Generated at Mon Jan 26 14:42:57 2004
  */
 
 #ifndef __TextEditor_dict_H
@@ -7,25 +7,26 @@
 
 #include <aterm2.h>
 
-extern AFun TE_afun0;
-extern AFun TE_afun1;
-extern AFun TE_afun2;
-extern AFun TE_afun3;
-extern AFun TE_afun4;
-extern AFun TE_afun5;
-extern AFun TE_afun6;
-extern AFun TE_afun7;
 extern AFun TE_afun8;
-extern AFun TE_afun9;
-extern AFun TE_afun10;
+extern AFun TE_afun17;
+extern AFun TE_afun0;
 extern AFun TE_afun11;
-extern AFun TE_afun12;
+extern AFun TE_afun5;
+extern AFun TE_afun3;
+extern AFun TE_afun9;
+extern AFun TE_afun16;
+extern AFun TE_afun10;
+extern AFun TE_afun4;
 extern AFun TE_afun13;
 extern AFun TE_afun14;
+extern AFun TE_afun19;
+extern AFun TE_afun2;
+extern AFun TE_afun7;
+extern AFun TE_afun12;
 extern AFun TE_afun15;
-extern AFun TE_afun16;
-extern AFun TE_afun17;
 extern AFun TE_afun18;
+extern AFun TE_afun6;
+extern AFun TE_afun1;
 
 extern ATerm TE_patternPipeDefault;
 extern ATerm TE_patternProcessDefault;
@@ -46,6 +47,7 @@ extern ATerm TE_patternActionSetCursorAtLocation;
 extern ATerm TE_patternActionSetCursorAtFocus;
 extern ATerm TE_patternActionDisplayMessage;
 extern ATerm TE_patternActionRereadContents;
+extern ATerm TE_patternActionWriteContents;
 extern ATerm TE_patternActionToFront;
 
 extern void init_TextEditor_dict();
