@@ -83,11 +83,10 @@ exports
 %% Bag and relation formers
 
      "{" REXP "|" {FROM ","}+ "}"		-> REXP
-%%     "[" REXP "|" {FROM ","}+ "]"		-> REXP
 
-	RVAR 					-> TARGET
-	"<" RVAR "," RVAR ">"			-> TARGET
-	"<" RVAR "," RVAR "," {RVAR ","}+ ">"	-> TARGET
+     RVAR 					-> TARGET
+     "<" RVAR "," RVAR ">"			-> TARGET
+     "<" RVAR "," RVAR "," {RVAR ","}+ ">"	-> TARGET
 
      TARGET ":" REXP                           	-> FROM
      REXP					-> FROM

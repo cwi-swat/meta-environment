@@ -1,0 +1,68 @@
+equations
+
+%% Get value of a variable
+
+[VL1]	value($Var, rstore(<$Var, $Val>, $VPair*)) = $Val
+[VL2]	$Var != $Var' ===> value($Var, rstore(<$Var', $Val>, $VPair*)) = value($Var, rstore($VPair*))
+
+%% Added by Mark van den Brand on 9th of July 2003
+[VL3]   value($Var, rstore()) = *undefined*
+
+%% Assign value to variable
+
+[ASG1]  assign($Var, $Val, rstore($VPair*1, <$Var, $Val'>, $VPair*2)) = rstore($VPair*1, <$Var, $Val>, $VPair*2)
+	
+
+[default-ASG1]	
+	assign($Var, $Val, rstore($VPair*)) = rstore(<$Var, $Val>, $VPair*)
+
+%% Assign when undefined
+
+[AWU1]  assign-when-undef($Var, $Val, rstore($VPair*1, <$Var, $Val'>, $VPair*2)) = rstore($VPair*1, <$Var, $Val'>, $VPair*2)
+	
+
+[default-AWU2]	
+	assign-when-undef($Var, $Val, rstore($VPair*)) = rstore(<$Var, $Val>, $VPair*)
+
+%% Add elem to tuple
+
+[AE1]	add-elem($Var, $Elem, $Rstore) = assign($Var, xappend(value($Var, $Rstore), $Elem), $Rstore)
+
+%% Add tuple to a relation
+
+[AT1]	add-tuple($Var, <$Elem1, $Elem2>, rstore(<$Var, $Val>, $VPair*)) = 
+	rstore(<$Var, xunion({<$Elem1, $Elem2>}, $Val)>, $VPair*)
+
+[AT2]	$Var != $Var', 
+	rstore($VPair*') = add-tuple($Var, <$Elem1, $Elem2>, rstore($VPair*))
+	===============================================================
+	add-tuple($Var, <$Elem1, $Elem2>, rstore(<$Var', $Val>, $VPair*)) = rstore(<$Var', $Val>, $VPair*')
+
+[AT3]	add-tuple($Var, <$Elem1, $Elem2>, rstore()) = rstore(< $Var, {<$Elem1, $Elem2>} >)
+
+%% Extend a relation
+
+[ER1]	extend-rel($Var, $Rel, rstore(<$Var, $Val>, $VPair*)) = rstore(<$Var, xunion($Rel, $Val)>, $VPair*)
+
+[ER2]	$Var != $Var', 
+	rstore($VPair*') = extend-rel($Var, $Rel, rstore($VPair*))
+	===============================================================
+	extend-rel($Var, $Rel, rstore(<$Var', $Val>, $VPair*)) = rstore(<$Var', $Val>, $VPair*')
+
+[ER3]	extend-rel($Var, $Rel, rstore()) = rstore(< $Var, $Rel >)
+
+[UN2]	xunion($Bag1, $Bag2)	= union($Bag1, $Bag2)
+[UN3]	xunion($Elem, $Bag) 	= union({$Elem}, $Bag)
+[UN4]	xunion($Bag, $Elem) 	= union($Bag, {$Elem})
+[UN5]	xunion($Elem1, $Elem2)	= union({$Elem1}, {$Elem2})
+
+[AP0]	xappend($Elem, *undefined*) = $Elem
+
+[AP1]	xappend($Bag, $Elem) = union2($Bag, $Elem)
+[AP2]	xappend($Bag1, $Bag2) = union($Bag1, $Bag2)
+
+
+%%---- if on RVALUEs
+
+[if1]	if true then $Val1 else $Val2 fi  = $Val1
+[if2]	if false then $Val1 else $Val2 fi = $Val2

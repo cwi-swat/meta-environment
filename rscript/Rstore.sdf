@@ -1,0 +1,51 @@
+module Rstore
+
+imports Rscript
+
+exports 
+  sorts RVALUE RSTORE
+
+  context-free syntax
+%% The values that a variable in the RSTORE may have
+
+        Elem                          			-> RVALUE
+        "*undefined*"                     		-> RVALUE
+        {RVAR ","}+ # REXP              		-> RVALUE
+
+        "if" Boolean "then" RVALUE "else" RVALUE "fi"   -> RVALUE
+
+%% The RSTORE itself, maps RVARs to RVALUEs
+
+       "rstore" "(" { RVAR # RVALUE ","}* ")"         	-> RSTORE {prefer}
+        assign(RVAR, RVALUE, RSTORE)          		-> RSTORE
+	assign-when-undef(RVAR, RVALUE, RSTORE)		-> RSTORE
+        value(RVAR, RSTORE)                   		-> RVALUE
+
+        rval2rel(RVALUE)	 	      		-> Bag[[Elem]]
+        rval2bag(RVALUE)		      		-> Bag[[Elem]]
+
+%% Extension functions on RSTORE
+	add-elem(RVAR, Elem, RSTORE)			-> RSTORE
+	add-tuple(RVAR, Elem # Elem, RSTORE)  		-> RSTORE
+	extend-rel(RVAR, Bag[[Elem]], RSTORE) 		-> RSTORE
+
+hiddens
+
+  context-free syntax
+	xunion(RVALUE, RVALUE)		-> Elem
+	xappend(RVALUE, RVALUE)		-> Elem
+  variables
+       "$Rstore" [0-9\']*             -> RSTORE
+        "$Val" [0-9\']*                -> RVALUE
+        "$VPair*" [0-9\']*             -> { RVAR # RVALUE ","}*
+
+        "$Var" [0-9\']*                -> RVAR
+        "$Var*" [0-9\']*               -> {RVAR ","}*
+        "$Var+" [0-9\']*               -> {RVAR ","}+
+
+
+	        "$Elem"   [0-9\']*             -> Elem
+        "$Elem*"  [0-9\']*             -> {Elem ","}*
+        "$Elem+"  [0-9\']*             -> {Elem ","}+
+	"$Bag" [0-9\']*			-> Bag[[Elem]]
+	"$Rel" [0-9\']*			-> Bag[[Elem]]
