@@ -230,7 +230,7 @@ endlet
 process AddAsfProperties is
 let
   Contents: str,
-  Error: str
+  Error: term
 in
   snd-msg(io-read-file("__ASFSDF_META__/standard.asfsdf.buttons")) .
   (
@@ -239,7 +239,7 @@ in
     . rec-msg(cm-system-properties-added)
   +
     rec-msg(io-error-reading(Error?))
-    . printf("AddAsfProperties: %s\n", Error)
+    . printf("AddAsfProperties: %t\n", Error)
   )
 endlet
 
