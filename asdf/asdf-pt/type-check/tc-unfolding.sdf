@@ -1,0 +1,21 @@
+module type-check/tc-unfolding
+
+imports
+
+  type-check/tc-dataop
+
+exports
+
+context-free syntax
+
+  fix(Integer, Action, Type, Environment)	-> Type
+  iter(Integer, Action, Type, Environment)	-> Type
+
+hiddens variables
+
+  "$A"[0-9]?	-> Action
+  "$TY"[0-9]?	-> Type
+  "$EN"[0-9]?	-> Environment
+  "$STS"[0-9]?	-> SubTypes
+  "$N"[0-9]?	-> Integer
+  "$ANS"[0-9]?	-> Answer

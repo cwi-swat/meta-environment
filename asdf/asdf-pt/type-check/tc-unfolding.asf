@@ -1,0 +1,20 @@
+equations
+
+[fix-1] fix(0, $A, $TY, $EN) = AR[nor=empty, exc=empty, no]
+
+[fix-2] fix($N, $A, $TY, $EN) = 
+	lub(fix($N-1, $A, $TY, $EN), iter($N, $A, $TY, $EN), get-subtypes($EN))
+
+[iter-1] iter(0, $A, $TY, $EN) = AR[nor=empty, exc=empty, no]
+
+[iter-2] 
+
+  AR[nor=$TY1, exc=$TY2, $ANS1] := iter($N-1, $A, $TY, $EN1),
+  $EN2 := set-unfold-type($EN1, action[using $TY giving $TY1 raising $TY2])
+  ========================================================================
+  iter($N, $A, $TY, $EN1) = typecheck-action($A, $TY, $EN2)
+
+[lub-1] lub(AR[nor=$TY1, exc=$TY2, $ANS1], 
+	    AR[nor=$TY3, exc=$TY4, $ANS2], $STS) =
+      AR[nor=lub($TY1, $TY3, $STS), exc=lub($TY2, $TY4, $STS), 
+						  $ANS1 answerOr $ANS2]
