@@ -34,27 +34,47 @@ equations
       make-constructor(Lhs, Rhs, unquote(Literal), 
         sdf2pt(Lhs -> Rhs {Attribute*1, cons(Literal), Attribute*2}, lex|cf))
 
+[c] constructor(Literal(Symbol,*) -> Rhs Attributes,lex|cf) =
+
 [p] predicate(Lhs -> Rhs {Attribute*1, cons(Literal), Attribute*2},lex|cf) =
       make-predicate(Lhs, Rhs, unquote(Literal),
         sdf2pt(Lhs -> Rhs {Attribute*1, cons(Literal), Attribute*2}, lex|cf))
 
-[g] getters(Lhs -> Rhs {Attribute*1, cons(Literal), Attribute*2},lex|cf) =
-      make-getters(Lhs, Rhs, unquote(Literal), 
-        sdf2pt(Lhs -> Rhs {Attribute*1, cons(Literal), Attribute*2}, lex|cf)) 
+[p] normal(Literal(Symbol,*) -> Rhs Attributes) = Lhs -> Rhs Attributes
+    ===>
+    predicate(Literal(Symbol,*) -> Rhs Attributes,lex|cf) = 
+      make-predicate(Lhs, Rhs, unquote(Literal), 
+        sdf2pt(Lhs -> Rhs Attributes, lex|cf))
 
-[s] setters(Lhs -> Rhs {Attribute*1, cons(Literal), Attribute*2},lex|cf) =
-      make-setters(Lhs, Rhs, unquote(Literal),
-        sdf2pt(Lhs -> Rhs {Attribute*1, cons(Literal), Attribute*2}, lex|cf))
+[g] getters(Lhs -> Rhs Attributes,lex|cf) =
+      make-getters(Lhs, Rhs, unavailable, 
+        sdf2pt(Lhs -> Rhs Attributes, lex|cf)) 
+
+[g] normal(Literal(Symbol,*) -> Rhs) = Lhs -> Rhs Attributes
+    ===>
+    getters(Literal(Symbol,*) -> Rhs Attributes,lex|cf) =
+      make-getters(Lhs, Rhs, unavailable, 
+        sdf2pt(Lhs -> Rhs Attributes, lex|cf))
+     
+[s] setters(Lhs -> Rhs Attributes,lex|cf) =
+      make-setters(Lhs, Rhs, unavailable,
+        sdf2pt(Lhs -> Rhs Attributes, lex|cf))
+
+[s] normal(Literal(Symbol,*) -> Rhs) = Lhs -> Rhs Attributes
+    ===>
+    setters(Literal(Symbol,*) -> Rhs Attributes,lex|cf) =
+      make-setters(Lhs, Rhs, unavailable, 
+        sdf2pt(Lhs -> Rhs Attributes, lex|cf))
 
 [default-c] constructor(Production,lex|cf) =
 [default-p] predicate(Production,lex|cf) =
 [default-g] getters(Production,lex|cf) =
 [default-s] setters(Production,lex|cf) =
 
-[mc] get-arguments(Lhs) = $Symbol,*
+[mc] get-arguments(Lhs) = Symbol,*
      ===>
      make-constructor(Lhs,Rhs,Literal,Term) = 
-      quote(Literal) ( $Symbol,* ) -> Rhs {asf-constructor(Term)} 
+      quote(Literal) ( Symbol,* ) -> Rhs {asf-constructor(Term)} 
 
 [mp] make-predicate(Lhs,Rhs,uqliteral(c*),Term) = 
        literal(""""i""s""-" c*""") "(" Rhs ")" -> "true" | "false" {asf-predicate(Term)}

@@ -1,5 +1,14 @@
 equations
 
+[n] normal(Symbol,*) = Symbol*
+    ===>
+    normal(Literal ( Symbol,*) -> Rhs Attributes) =
+      Literal "(" Symbol* ")" -> Rhs Attributes
+
+[n1] normal() =
+[n2] normal(Symbol) = Symbol
+[n3] normal(Symbol, Symbol,*) = Symbol normal(Symbol,*)
+
 [0] sdf2pt(Lhs -> Rhs Attributes, cf) =
     prod([asyms(Lhs,cf)],cf(asym(Rhs)),aattributes(Attributes)) 
 

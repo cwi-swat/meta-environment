@@ -54,16 +54,15 @@ variables
 "Production"[0-9]*   -> Production
 "Production*"[0-9]*  -> Production*
 "$"?"Literal"[0-9]*  -> Literal
-"$"?"Symbol*"[0-9]*  -> Symbol*
 "$"?"Symbol"[0-9]*   -> Symbol
 "Lhs"                -> Symbol*
 "Rhs"                -> Symbol
 "Attributes"         -> Attributes
-"$"?"Symbol,*"[0-9]* -> {Symbol ","}*
 "c*"[0-9]*           -> CHAR*
 "c+"[0-9]*           -> CHAR+
 "c"[0-9]*            -> CHAR
 "Term"[0-9]*         -> ATerm
 "Intcon"[0-9]*       -> IntCon
 "Attribute*"[0-9]*   -> {Attribute ","}*
-%% "$Symbol,*"[0-9]*     -> {Symbol ","}*
+"Symbol,*"[0-9]* -> {Symbol ","}*
+"Symbol*"[0-9]*  -> Symbol*

@@ -7,8 +7,12 @@ exports
 context-free syntax
 
 sdf2pt(Production, "lex" | "cf") -> ATerm
+normal(Production)               -> Production
 
 hiddens
+
+context-free syntax
+normal({Symbol ","}*) -> Symbol*
 
 context-free syntax
 
@@ -28,6 +32,8 @@ variables
 "Production"[0-9]*   -> Production
 "Lhs"                -> Symbol*
 "Rhs"                -> Symbol
+"Symbol,*"[0-9]* -> {Symbol ","}*
+"Symbol*"[0-9]*  -> Symbol*
 "c*"[0-9]*           -> CHAR*
 "c+"[0-9]*           -> CHAR+
 "c"[0-9]*            -> CHAR

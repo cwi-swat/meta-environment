@@ -1,3 +1,9 @@
+2002/01/22 (jurgenv@cwi.nl)
+ * Changed addapisyntax a bit after suggestions of P. Mosses. 
+   1. You can use labels without a cons now.
+   2. Added support for prefix functions. No constructor is generated
+      but there is a predicate (is-<function-name>).
+
 2002/01/16 (jurgenv@cwi.nl)
  * Added '-m' switch to asfe. If this switch is given the interpreter marks
    all new layout (introduced by the equations) such that a (partial)
