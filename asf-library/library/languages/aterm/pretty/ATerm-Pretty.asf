@@ -1,0 +1,21 @@
+equations
+
+[appl]
+	AFun ( ATerm+ ) = 
+	<H hs=0 [ [AFun] "(" I is=2 [HOVlist2box(ATerm+)] ")" ]>
+
+[placeholder]
+	<ATerm> = <H hs=0 ["<" [ATerm] ">"]>
+
+[empty-list]
+	[] = <H hs=0 [ "[" "]" ]>
+
+[many-list]
+	[ATerm+] = <HOV hs=0 [ "[" I is=2 [HOVlist2box(ATerm+)] "]" ]>
+
+[annotated]
+	ATerm Ann = <HOV hs=0 [ [ATerm] [Ann] ]>
+
+[annotation]
+	{ ATerm+ } = <HOV hs=0 [ "{" I is=2 [HOVlist2box(ATerm+)] "}" ]>
+

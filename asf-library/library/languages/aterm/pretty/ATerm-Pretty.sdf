@@ -1,0 +1,30 @@
+module languages/aterm/pretty/ATerm-Pretty
+
+imports languages/aterm/syntax/ATerms
+imports languages/box/syntax/Box
+imports languages/box/utilities/PPSeparatedList["ATermList" ATerm ","]
+
+hiddens
+
+context-free start-symbols
+	ATerm
+
+
+context-free syntax
+
+"[" ATerm "]" -> Box {to-box}
+"[" AFun  "]" -> Box {to-box}
+"[" Annotation "]" -> Box {to-box}
+"[" {ATerm ","}+ "]" -> Box {to-box}
+
+"<" Box ">" -> ATerm {from-box}
+"<" Box ">" -> Annotation {from-box}
+"<" Box ">" -> {ATerm ","}+ {from-box}
+
+variables
+
+"ATerm"[0-9]* -> ATerm {strict}
+"ATerm+"[0-9]* -> {ATerm ","}+ {strict}
+"AFun"[0-9]*  -> AFun {strict}
+"Ann"[0-9]* -> Annotation {strict}
+"Box*"[0-9]* -> Box* {strict}
