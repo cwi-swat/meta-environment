@@ -38,7 +38,6 @@ abstract class ToolAtom extends Atom {
 
   public ATermAppl getSubstitutedArg() throws ToolBusException {
     ATerm trm = TBTerm.substitute(toolarg.value, getEnv());
-    System.err.println("getSubstitutedarg: " + trm);
     if (trm.getType() != ATerm.APPL) {
       throw new ToolBusException("tool argument " + trm + " should be an application");
     } else

@@ -6,7 +6,6 @@ package toolbus.process;
 import java.util.*;
 
 import toolbus.*;
-import toolbus.atom.State;
 
 import aterm.*;
 

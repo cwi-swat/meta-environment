@@ -9,12 +9,11 @@ process UI is
 process CALC-BUTTON is
   let  E : expr, V : int
   in
-     event button(calc) {                       << genereert nieuwe id
-     	eval get-expr-dialog  { } . value E?  .	%% expr get-expr-dialog(); genereert lokaal nieuwe id
-     	snd-msg compute(E) . 
-     	rec-msg V? .
-     	do display-value(V) .            		%% void display-value(expr)
-     }
+     event button(calc) {            
+     	eval get-expr-dialog { } value E?  .
+     	snd-msg compute(E) { } rec-msg V? .
+     	do display-value(V) .                 %% void display-value(expr)
+     } ack-event
      >> 
      event cancel { }
   endlet
@@ -22,21 +21,19 @@ process CALC-BUTTON is
 process LOG-BUTTON is
   let N : int, L : log
   in
-      event button(showLog)  {                  << genereert nieuwe id
-      	snd-msg showLog  .  
-      	rec-msg L? .
-      	do display-log(L) .             		%% void display-log(log)
-      }
+      event button(showLog)  {
+      	snd-msg showLog  { } rec-msg L? .
+      	do display-log(L) .             	  %% void display-log(log)
+      } ack-event
   endlet
 
 process TIME-BUTTON is
   let T : time, P : process
   in
-      event button(showTime) {                  %% genereert nieuwe id
-      	snd-msg showTime . 
-      	rec-msg T? .
-        do display-time(T) .            		%% void display-time(time)
-      }
+      event button(showTime) {                 %% genereert nieuwe id
+      	snd-msg showTime { } rec-msg T? .
+        do display-time(T) .                   %% void display-time(time)
+      } ack-event
   endlet
 
 process QUIT-BUTTON is
@@ -51,10 +48,10 @@ tool user-interface-tool defines
 		void display-log(log)
 		void display-time(time)
 	events
-		button(calc)
-		button(showLog)
-		button(showTime)
-		button(quit)
+		void button(calc)
+		void button(showLog)
+		void button(showTime)
+		void button(quit)
 	kind = external/tcl
 	command="wish-adapter -script ui-calc.tcl"
 end
@@ -64,11 +61,11 @@ end
 process CALC is
   let E : expr, V : int, P : process
   in
-     ( rec-msg compute(E?) . 
-       eval compute(E) { } value V? .          	%% int compute(expr)
-       snd-msg  V . 
-       snd-note compute(E, V)
-     ) * delta
+     rec-msg compute(E?) {
+       	eval compute(E) { } value V? .          	%% int compute(expr)
+       	snd-note compute(E, V)
+       } snd-msg  V 
+     * delta
   endlet
   
 %% Hoe worden hierboven de rec-msg en de snd-msg met elkaar verbonden?
@@ -77,14 +74,13 @@ process CALC is
 process CALC is
   let E : expr, V : int, P : process
   in
-     rec-msg compute(E?) {						<< ontvangt een id van buiten
-       eval compute(E) { } value V? .          	%% int compute(expr); nieuwe lokale id
-       snd-msg  V .                             %% gebruikt de ontvangen id
+     rec-msg compute(E?) { 
+       eval compute(E) { } value V? .          	%% int compute(expr)
        snd-note compute(E, V)
-     } * delta
+     } snd-msg  V                
+     * delta
   endlet
-
-
+  
 tool calc-tool defines
      signature
      	functions
@@ -100,8 +96,8 @@ process CLOCK is
  in
      rec-msg showTime {
        eval readTime { } value T? .            	%% time readtime()
-       snd-msg T
-     } * delta
+     } snd-msg T
+     * delta
  endlet
 
 tool clock-tool defines
@@ -120,7 +116,7 @@ process BATCH is
      ( eval fromFile { } value E? .            	%% expr fromFile()
        snd-msg compute(E). 
        rec-msg V? .
-       do toFile(E, V)                			%% void toFile(expr, int)
+       do toFile(E, V)                          %% void toFile(expr, int)
      ) * delta
   endlet
 
@@ -142,9 +138,8 @@ process  LOG is
        do writeLog(E, V)             			%% void writeLog(expr,int)
      + 
        rec-msg showLog {
-       		eval readLog { } value L? .            	%% log readLog()
-       		snd-msg L
-       }
+       		eval readLog { } value L? .         %% log readLog()
+       } snd-msg L
      ) * delta
   endlet
 
