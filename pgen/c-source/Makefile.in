@@ -56,7 +56,7 @@ SOCKLIBS        = @SOCKLIBS@
  
 ATERM           = @ATERM@
 
-XINCLUDES       = -I$(ATERM)/include -I$(includedir)
+XINCLUDES       = -I$(ATERM)/include -I$(top_srcdir)/compiler/support -I$(includedir)
 XLIBS           = -L$(prefix)/lib $(SOCKLIBS) 
 
 SPEC_SRCS=\
