@@ -75,5 +75,8 @@ AC_CONFIG_FILES([Makefile
   asdf-pt/Makefile
   asdf-pt/asdf/Makefile
   asdf-pt/src/Makefile
+  asdf-pt/type-check/Makefile
+  asdf-pt/type-check/types/Makefile
+  asdf-pt/type-check/data/Makefile
 ])
 AC_OUTPUT
