@@ -35,13 +35,12 @@ let
   Text          : str,
   Fid           : str,
   Paths         : list,
-  ButtonName    : str,
+  ButtonName    : list,
   ButtonNames   : list,
   ButtonActions : list,
   ModuleName    : str,
   EditorType    : str,
   Tree          : term,
-  EditorId      : term,
   Term          : term,
   Pid           : int,
   LibraryPath   : str
@@ -76,7 +75,7 @@ in
     rec-msg(get-button-actions(ButtonName?, EditorType?, ModuleName?)) .
     snd-eval(CMNG, get-button-actions(ButtonName, EditorType, ModuleName)) .
     rec-value(CMNG, button-actions(ButtonActions?)) .
-    printf("button actions for <%t,%t,%t,%t> are %t\n",ButtonName,EditorType,ModuleName,EditorId,ButtonActions).
+    printf("button actions for <%t,%t,%t> are %t\n",ButtonName,EditorType,ModuleName,ButtonActions).
     snd-msg(button-actions(ButtonName,EditorType,ModuleName,ButtonActions))
   ) * delta
 endlet

@@ -72,6 +72,11 @@ ATerm get_button_names(int cid, char *editortype, char *modulename)
   ATermList localButtons = buttons;
   ATermList buttonNames = ATempty;
 
+  buttonNames = ATinsert(buttonNames, ATparse("[\"Move\",\"Down\"]"));
+  buttonNames = ATinsert(buttonNames, ATparse("[\"Move\",\"Up\"]"));
+  buttonNames = ATinsert(buttonNames, ATparse("[\"Move\",\"Right\"]"));
+  buttonNames = ATinsert(buttonNames, ATparse("[\"Move\",\"Left\"]"));
+
   while (!ATisEmpty(localButtons)) {
     ATerm buttonDesc = ATgetFirst(localButtons);
     ATermList buttonArgs = ATgetArguments((ATermAppl)buttonDesc);
@@ -86,20 +91,21 @@ ATerm get_button_names(int cid, char *editortype, char *modulename)
   }
 
   if (strcmp(editortype, "term") == 0) {
-    buttonNames = ATinsert(buttonNames, ATmake("<str>", "ViewTree")); 
-    buttonNames = ATinsert(buttonNames, ATmake("<str>", "Reduce"));
-    buttonNames = ATinsert(buttonNames, ATmake("<str>", "Parse"));
+    buttonNames = ATinsert(buttonNames, ATparse("[\"Actions\",\"ViewTree\"]"));
+    buttonNames = ATinsert(buttonNames, ATparse("[\"Actions\",\"Reduce\"]"));
+    buttonNames = ATinsert(buttonNames, ATparse("[\"Actions\",\"Parse\"]"));
   }
   if (strcmp(editortype, "equations") == 0 ||
       strcmp(editortype, "syntax") == 0) {
-    buttonNames = ATinsert(buttonNames, ATmake("<str>", "ViewTree")); 
-    buttonNames = ATinsert(buttonNames, ATmake("<str>", "Parse"));
+    buttonNames = ATinsert(buttonNames, ATparse("[\"Actions\",\"ViewTree\"]"));
+    buttonNames = ATinsert(buttonNames, ATparse("[\"Actions\",\"Parse\"]"));
   }
+
 
   return ATmake("snd-value(button-names(<term>))", buttonNames);
 }
 
-ATerm get_button_actions(int cid, char *buttonName, char *type, char *moduleName)
+ATerm get_button_actions(int cid, ATerm buttonName, char *type, char *moduleName)
 {
   ATermList localButtons = buttons;
   ATermList buttonActions = ATempty;
@@ -110,7 +116,7 @@ ATerm get_button_actions(int cid, char *buttonName, char *type, char *moduleName
     if (ATisEqual(ATgetFirst(buttonArgs), ATmake("<str>", moduleName))) {
       buttonArgs = ATgetNext(buttonArgs);
       buttonArgs = ATgetNext(buttonArgs);
-      if (ATisEqual(ATgetFirst(buttonArgs), ATmake("<str>", buttonName))) {
+      if (ATisEqual(ATgetFirst(buttonArgs), buttonName)) {
 	buttonArgs = ATgetNext(buttonArgs);
 	buttonActions = (ATermList)ATgetFirst(buttonArgs);
       }
@@ -119,7 +125,7 @@ ATerm get_button_actions(int cid, char *buttonName, char *type, char *moduleName
   }
 
   if (ATisEmpty(buttonActions)) {
-    if (strcmp(buttonName, "Parse") == 0) {
+    if (ATisEqual(buttonName, ATparse("[\"Actions\",\"Parse\"]"))) {
       ATerm action = NULL;
 
       if (strcmp(type,"equations") == 0) {
@@ -133,7 +139,7 @@ ATerm get_button_actions(int cid, char *buttonName, char *type, char *moduleName
       }
       buttonActions = ATinsert(buttonActions,  action);
     }
-    else if (strcmp(buttonName, "Reduce") == 0) {
+    else if (ATisEqual(buttonName, ATparse("[\"Actions\",\"Reduce\"]"))) {
       buttonActions = ATinsert(buttonActions, 
 			       ATmake("edit-given-filename(<str>)",
 				      moduleName));
@@ -144,11 +150,23 @@ ATerm get_button_actions(int cid, char *buttonName, char *type, char *moduleName
       buttonActions = ATinsert(buttonActions, 
 			       ATmake("get-root"));
     }
-    else if (strcmp(buttonName, "ViewTree") == 0) {
+    else if (ATisEqual(buttonName, ATparse("[\"Actions\",\"ViewTree\"]"))) {
       buttonActions = ATinsert(buttonActions,
 			       ATmake("show-tree"));
       buttonActions = ATinsert(buttonActions, 
 			       ATmake("get-focus"));
+    }
+    else if (ATisEqual(buttonName, ATparse("[\"Move\",\"Left\"]"))) {
+      buttonActions = ATinsert(buttonActions,ATparse("move-left"));
+    }
+    else if (ATisEqual(buttonName, ATparse("[\"Move\",\"Right\"]"))) {
+      buttonActions = ATinsert(buttonActions,ATparse("move-right"));
+    }
+    else if (ATisEqual(buttonName, ATparse("[\"Move\",\"Up\"]"))) {
+      buttonActions = ATinsert(buttonActions,ATparse("move-up"));
+    }
+    else if (ATisEqual(buttonName, ATparse("[\"Move\",\"Down\"]"))) {
+      buttonActions = ATinsert(buttonActions,ATparse("move-down"));
     }
   }
   return ATmake("snd-value(button-actions(<term>))", buttonActions);
