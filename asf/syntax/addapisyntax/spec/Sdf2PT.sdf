@@ -17,6 +17,7 @@ normal({Symbol ","}*) -> Symbol*
 context-free syntax
 
 asyms(Symbol*, "lex" | "cf")  -> {ATerm ","}*
+asymsep({Symbol ","}+)        -> {ATerm ","}+
 asym(Symbol)                  -> ATerm
 aattributes(Attributes)       -> ATermList
 aattrs({Attribute ","}+)      -> {ATerm ","}+
@@ -34,6 +35,7 @@ variables
 "Lhs"                -> Symbol*
 "Rhs"                -> Symbol
 "Symbol,*"[0-9]* -> {Symbol ","}*
+"Symbol,+"[0-9]* -> {Symbol ","}+
 "Symbol*"[0-9]*  -> Symbol*
 "c*"[0-9]*           -> CHAR*
 "c+"[0-9]*           -> CHAR+

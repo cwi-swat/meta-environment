@@ -1,4 +1,5 @@
 2002/04/18 (vandenbr@loria.fr)
+ * addapisyntax can now deal with parameterized sorts.
  * AsfSdfChecker checks whether production renamings are used,
    if so an error message is generated:
    "production-renamings-not-supported".

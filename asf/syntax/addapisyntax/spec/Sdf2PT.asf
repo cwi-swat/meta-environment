@@ -53,6 +53,10 @@ equations
 [24] asym(Set [ Symbol ])      = set(asym(Symbol))
 [25] asym((Symbol* => Symbol)) = func([asyms(Symbol*,cf)],asym(Symbol))
 [26] asym(<<Symbol*>>)         = perm([asyms(Symbol*,cf)])
+[27] asym(sort(c*)[[Symbol,+]]) = parameterized-sort(sort(literal(""" c* """)),[asymsep(Symbol,+)])
+
+[ass-1] asymsep(Symbol) = asym(Symbol)
+[ass-1] asymsep(Symbol, Symbol,+) = asym(Symbol),asymsep(Symbol,+)
 
 [13] aattributes()             = no-attrs
 [14] aattributes({})           = no-attrs
