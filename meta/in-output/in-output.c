@@ -539,18 +539,7 @@ ATerm open_asf_file(int cid, char *name, char *sdfPath)
 
 ATerm open_trm_file(int cid, char *name)
 {
-  char *full;
-  ATerm t;
-
-  if((full = find_in_path(name))) {
-    t = read_raw_from_named_file(full, name);
-  } else {
-    if (run_verbose) {
-      ATwarning("unable to read: %s\n", name);
-    }
-    t = open_error(name);
-  }
-  return t;
+  return read_raw_from_named_file(name, name);
 }
 
 /*}}}  */
