@@ -1,5 +1,4 @@
-
-SUBDIRS		= . tool
+SUBDIRS		= tool .
 
 CLASSPATH	:= ${ATERM}/classes:${TOOLBUS}/classes
 
