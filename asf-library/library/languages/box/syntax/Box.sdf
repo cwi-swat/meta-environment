@@ -53,21 +53,13 @@ exports
 %%\smallskip
 
 exports
-  sorts Box BoxList
-  context-free syntax
-    boxes:Box*    -> BoxList
+  sorts Box
 
   context-free syntax
     StrCon  -> Box {cons("string")}
-    "H"   SOptions "[" BoxList "]" -> Box {cons("H")}
-    "V"   SOptions "[" BoxList "]" -> Box {cons("V")}
-    "HV"  SOptions "[" BoxList "]" -> Box {cons("HV")}
-    "HOV" SOptions "[" BoxList "]" -> Box {cons("HOV")}
-    "I"   SOptions "[" Box "]"     -> Box {cons("I")}
-    "WD"            "[" Box "]"    -> Box {cons("WD")}
-
-  context-free syntax
-    "I*" SOptions "[" BoxList "]" -> BoxList {cons("Istar")}
-    "LST" "[" BoxList "]"         -> Box     {cons("LST")}
-
-
+    "H" SOptions "[" list:Box* "]" -> Box {cons("H")}
+    "V" SOptions "[" list:Box* "]" -> Box {cons("V")}
+    "HV" SOptions "[" list:Box* "]" -> Box {cons("HV")}
+    "HOV" SOptions "[" list:Box* "]" -> Box {cons("HOV")}
+    "I" SOptions "[" Box "]" -> Box {cons("I")}
+    "WD" "[" Box "]" -> Box {cons("WD")}
