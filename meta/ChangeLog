@@ -1,5 +1,8 @@
 # $Id$
 
+2003/07/17 (markvdb@cwi.nl)
+ * Repaired the Move-Down bug reported by Hayco.
+
 2003/07/17 ({markvdb,jurgenv}@cwi.nl)
  * Show area now sets the focus and lets the cursor jump to the beginning
    of the focus. The normal set-focus does not set the cursor anymore.
