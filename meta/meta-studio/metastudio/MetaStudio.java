@@ -23,9 +23,9 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -42,7 +42,6 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
@@ -113,12 +112,10 @@ public class MetaStudio
     private StyleContext historyStyles;
     private DefaultStyledDocument historyDoc;
     private JTextPane history;
-    private Style styleError;
-    private Style styleWarning;
-    private Style styleMessage;
-    private JLabel statusBar;
-    private JCheckBox statusLog;
-    private List statusMessages;
+    
+    public Style styleError;
+    public Style styleWarning;
+    public Style styleMessage;
 
     private JTabbedPane graphTabs;
 
@@ -139,6 +136,8 @@ public class MetaStudio
     private ModuleTreeModel moduleManager;
 
     private MessageList messageWindow;
+    
+    private LinkedList panels;
 
     public static final void main(String[] args) throws IOException {
         MetaStudio studio = new MetaStudio(args);
@@ -182,9 +181,12 @@ public class MetaStudio
         graphPanels = new HashMap();
 
         factory = new PureFactory();
+        
+        panels = new LinkedList();
+        
         metaGraphFactory = new MetaGraphFactory(factory);
         moduleManager = new ModuleTreeModel();
-        statusMessages = new LinkedList();
+
 
         initializeProperties();
         initializeATermPatterns(); // TODO: apification
@@ -193,9 +195,7 @@ public class MetaStudio
         handleCloseRequests();
 
         moduleManager.addModuleSelectionListener(this);
-        //		popupMenu = createPopupMenu();
         createContentPane();
-//        messageWindow = createMessageWindow();
 
         makeStudioVisible();
     }
@@ -259,7 +259,10 @@ public class MetaStudio
         JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
         container.add(createMessageTabs(), BorderLayout.CENTER);
-        container.add(createStatusBarPanel(), BorderLayout.SOUTH);
+        
+        StatusBar bar = new StatusBar(factory, bridge, this);
+        panels.add(bar);
+        container.add(bar, BorderLayout.SOUTH);
         
         return container;
     }
@@ -348,32 +351,7 @@ public class MetaStudio
         return historyPanel;
     }
 
-    private JPanel createStatusBarPanel() {
-        Color bgColor =
-            Preferences.getColor(Preferences.PREF_MSGPANE_STATUS + ".background");
-        Color fgColor =
-            Preferences.getColor(Preferences.PREF_MSGPANE_STATUS + ".foreground");
-        Font font = Preferences.getFont(Preferences.PREF_MSGPANE_STATUS + ".font");
-
-        JPanel statusBarPanel = new JPanel();
-        statusBarPanel.setBackground(bgColor);
-        statusBarPanel.setForeground(fgColor);
-        statusBarPanel.setLayout(new BorderLayout());
-
-        statusLog = new JCheckBox("Log Status");
-        statusLog.setSelected(
-            Preferences.getBoolean(Preferences.PREF_MSGPANE_STATUS + ".log"));
-        statusLog.setBackground(bgColor);
-        statusLog.setForeground(fgColor);
-        statusLog.setFont(font);
-        statusBarPanel.add(statusLog, BorderLayout.EAST);
-
-        statusBar = new JLabel("idle");
-        statusBar.setFont(font);
-        statusBarPanel.add(statusBar, BorderLayout.CENTER);
-
-        return statusBarPanel;
-    }
+    
 
     private void createModuleStatusPanel() {
         Color color;
@@ -628,66 +606,37 @@ public class MetaStudio
         }
     }
 
-    void clearStatus(String id) {
-        ListIterator iter = statusMessages.listIterator();
-        while (iter.hasNext()) {
-            String[] pair = (String[]) iter.next();
-            if (pair[0].equals(id)) {
-                iter.remove();
-            }
-        }
-
-        if (statusMessages.size() == 0) {
-            statusBar.setText("idle");
-        } else {
-            statusBar.setText(((String[]) statusMessages.get(0))[1]);
-        }
-    }
-
-    String formatString(String format, ATermList args) {
-        int index;
-        String prefix = "";
-        String postfix = format;
-        while ((index = postfix.indexOf("%")) != -1) {
-            prefix += postfix.substring(0, index);
-            switch (postfix.charAt(index + 1)) {
-                case 't' :
-                case 'd' :
-                    prefix += args.getFirst().toString();
-                    break;
-                case 's' :
-                    prefix += ((ATermAppl) args.getFirst()).getName();
-                    break;
-                default :
-                    prefix += "%" + postfix.charAt(index + 1);
-            }
-            postfix = postfix.substring(index + 2);
-            args = args.getNext();
-        }
-        return prefix + postfix;
-    }
+    
 
     public void addStatus(ATerm id, String message) {
-        String ids = id.toString();
-        if (statusLog.isSelected()) {
-            addMessage(styleMessage, ids, message);
+        Iterator iter = panels.iterator();
+        
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.addStatus(id, message);
         }
-        statusBar.setText(message);
-        String[] pair = { ids, message };
-        statusMessages.add(pair);
     }
 
     public void addStatusf(ATerm id, String format, ATerm args) {
-        String message = formatString(format, (ATermList) args);
-        addStatus(id, message);
+        Iterator iter = panels.iterator();
+        
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.addStatusf(id, format, args);
+        }
     }
 
     public void endStatus(ATerm id) {
-        clearStatus(id.toString());
+        Iterator iter = panels.iterator();
+        
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.endStatus(id);
+        }
     }
 
     public void errorf(String format, ATerm args) {
-        String message = formatString(format, (ATermList) args);
+        String message = StringFormatter.format(format, (ATermList) args);
         addMessage(styleError, null, message);
     }
 
@@ -696,7 +645,7 @@ public class MetaStudio
     }
 
     public void messagef(String format, ATerm args) {
-        String message = formatString(format, (ATermList) args);
+        String message = StringFormatter.format(format, (ATermList) args);
         addMessage(styleMessage, null, message);
     }
 
@@ -705,7 +654,7 @@ public class MetaStudio
     }
 
     public void warningf(String format, ATerm args) {
-        String message = formatString(format, (ATermList) args);
+        String message = StringFormatter.format(format, (ATermList) args);
         addMessage(styleWarning, null, message);
     }
 

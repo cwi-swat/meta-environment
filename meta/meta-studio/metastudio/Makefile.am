@@ -50,4 +50,5 @@ java_JAVA = \
 	TreeModelSupport.java \
 	TreeNode.java \
 	ModuleSelectionModel.java\
-	JPanelTool.java
+	JPanelTool.java\
+	StatusBar.java
