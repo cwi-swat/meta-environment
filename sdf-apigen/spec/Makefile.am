@@ -30,6 +30,7 @@ Sdf2_to_ADT_LDADD	= -L$(ASCLIB) -lasc-support-me \
 			-L$(ASF_SUPPORT)/lib -lASFME \
 			-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 			-L$(ERROR_SUPPORT)/lib -lErrorAPI \
+			-L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm
 
 Sdf2_to_Imploded_ADT_SOURCES = Sdf2-to-Imploded-ADT.c
@@ -38,6 +39,7 @@ Sdf2_to_Imploded_ADT_LDADD = -L$(ASCLIB) -lasc-support-me \
 			-L$(ASF_SUPPORT)/lib -lASFME \
 			-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 			-L$(ERROR_SUPPORT)/lib -lErrorAPI \
+			-L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm
 
 table:
