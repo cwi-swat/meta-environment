@@ -42,7 +42,7 @@
 #include "ui.tb"
 #include "status-display.tb"
 #include "clear-all.tb"
-#include "compiler.idef"
+#include "asfc.idef"
 #include "module-db.idef"
 #include "process-eqs.tb"
 #include "save-module.tb" 
@@ -65,7 +65,7 @@ toolbus(Parser, Unparser, Io, ConfigManager, Ui, EditorCreator, ModuleDB,
 	ProcessEqs, Save-modules, RevertModule, File-creator, SE,
 	Set-parsetable, Open-Sdf2-Language, Evaluator, 
 	Notify-about-changed-modules, Rewrite-Errors,
-	Asf-Syntax, AddEqSyn, RemoveVars, Open-modules, Compiler, PGen, 
+	Asf-Syntax, AddEqSyn, RemoveVars, Open-modules, Asfc, PGen, 
 	Help, ClearAll, CloseModule, ParseFocusses, DumpEquations,
         Compile-module) 
 
