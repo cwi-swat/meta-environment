@@ -6,12 +6,19 @@
 #include <unistd.h> 
 
 static char myversion[] = "1.0";     
-static ATermList buttons;
+static ATermList buttons = NULL;
+static ATermList standard_buttons = NULL;
+
+/*{{{  void rec_terminate(int cid, ATerm t) */
 
 void rec_terminate(int cid, ATerm t)
 {
   exit(0);
 }
+
+/*}}}  */
+
+/*{{{  ATerm process_config_file(int cid, char *filename, char *contents) */
 
 ATerm process_config_file(int cid, char *filename, char *contents)
 {
@@ -54,6 +61,9 @@ ATerm process_config_file(int cid, char *filename, char *contents)
   return ATmake("snd-value(search-paths(<term>))", ATreverse(paths));
 }
 
+/*}}}  */
+/*{{{  ATerm process_button_file(int cid, char *filename, ATerm contents) */
+
 ATerm process_button_file(int cid, char *filename, ATerm contents)
 {
   ATermList buttonList = ATgetArguments((ATermAppl)contents);
@@ -67,111 +77,79 @@ ATerm process_button_file(int cid, char *filename, ATerm contents)
   return ATmake("snd-value(buttons-processed)");
 }
 
+/*}}}  */
+/*{{{  ATerm get_button_names(int cid, char *editortype, char *modulename) */
+
 ATerm get_button_names(int cid, char *editortype, char *modulename)
 {
-  ATermList localButtons = buttons;
+  ATermList localButtons = ATconcat(buttons,standard_buttons);
   ATermList buttonNames = ATempty;
-
-  buttonNames = ATinsert(buttonNames, ATparse("[\"Move\",\"Down\"]"));
-  buttonNames = ATinsert(buttonNames, ATparse("[\"Move\",\"Up\"]"));
-  buttonNames = ATinsert(buttonNames, ATparse("[\"Move\",\"Right\"]"));
-  buttonNames = ATinsert(buttonNames, ATparse("[\"Move\",\"Left\"]"));
+  ATerm editorType = ATmake("<str>",editortype);
+  ATerm allEditorTypes = ATmake("\"*\"");
+  ATerm moduleName = ATmake("<str>",modulename);
+  ATerm allModuleNames = ATmake("\"*\"");
 
   while (!ATisEmpty(localButtons)) {
     ATerm buttonDesc = ATgetFirst(localButtons);
     ATermList buttonArgs = ATgetArguments((ATermAppl)buttonDesc);
-    if (ATisEqual(ATgetFirst(buttonArgs), ATmake("<str>",modulename))) {
-      buttonArgs = ATgetNext(buttonArgs);
-      if (ATisEqual(ATgetFirst(buttonArgs), ATmake("<str>",editortype))) {
-	buttonArgs = ATgetNext(buttonArgs);
-	buttonNames = ATinsert(buttonNames,ATgetFirst(buttonArgs));
+    ATerm buttonDescModule = ATelementAt(buttonArgs,0);
+    ATerm buttonDescType = ATelementAt(buttonArgs,1);
+    ATerm buttonDescName = ATelementAt(buttonArgs,2);
+
+    if (ATisEqual(buttonDescModule, moduleName) ||
+	ATisEqual(buttonDescModule, allModuleNames)) {
+      if (ATisEqual(buttonDescType, editorType) ||
+	  ATisEqual(buttonDescType, allEditorTypes)) {
+	buttonNames = ATinsert(buttonNames,buttonDescName);
       }
     }
     localButtons = ATgetNext(localButtons);
   }
-
-  if (strcmp(editortype, "term") == 0) {
-    buttonNames = ATinsert(buttonNames, ATparse("[\"Actions\",\"ViewTree\"]"));
-    buttonNames = ATinsert(buttonNames, ATparse("[\"Actions\",\"Reduce\"]"));
-    buttonNames = ATinsert(buttonNames, ATparse("[\"Actions\",\"Parse\"]"));
-  }
-  if (strcmp(editortype, "equations") == 0 ||
-      strcmp(editortype, "syntax") == 0) {
-    buttonNames = ATinsert(buttonNames, ATparse("[\"Actions\",\"ViewTree\"]"));
-    buttonNames = ATinsert(buttonNames, ATparse("[\"Actions\",\"Parse\"]"));
-  }
-
 
   return ATmake("snd-value(button-names(<term>))", buttonNames);
 }
 
-ATerm get_button_actions(int cid, ATerm buttonName, char *type, char *moduleName)
+/*}}}  */
+/*{{{  ATerm get_button_actions(int cid, ATerm buttonName, char *editortype,  */
+
+ATerm get_button_actions(int cid, ATerm buttonName, char *editortype, 
+			 char *modulename)
 {
-  ATermList localButtons = buttons;
-  ATermList buttonActions = ATempty;
+  ATermList localButtons = ATconcat(buttons,standard_buttons);
+  ATerm editorType = ATmake("<str>",editortype);
+  ATerm allEditorTypes = ATmake("\"*\"");
+  ATerm moduleName = ATmake("<str>",modulename);
+  ATerm allModuleNames = ATmake("\"*\"");
+  ATermList buttonActions = (ATermList) 
+    ATparse("[message(\"undefined button\")]");
 
   while (!ATisEmpty(localButtons)) {
     ATerm buttonDesc = ATgetFirst(localButtons);
     ATermList buttonArgs = ATgetArguments((ATermAppl)buttonDesc);
-    if (ATisEqual(ATgetFirst(buttonArgs), ATmake("<str>", moduleName))) {
-      buttonArgs = ATgetNext(buttonArgs);
-      buttonArgs = ATgetNext(buttonArgs);
-      if (ATisEqual(ATgetFirst(buttonArgs), buttonName)) {
-	buttonArgs = ATgetNext(buttonArgs);
-	buttonActions = (ATermList)ATgetFirst(buttonArgs);
+    ATerm buttonDescModule = ATelementAt(buttonArgs,0);
+    ATerm buttonDescType = ATelementAt(buttonArgs,1);
+    ATerm buttonDescName = ATelementAt(buttonArgs,2);
+    ATerm buttonDescActions = ATelementAt(buttonArgs,3);
+
+    if (ATisEqual(buttonDescModule, moduleName) ||
+	ATisEqual(buttonDescModule, allModuleNames)) {
+      if (ATisEqual(buttonDescType, editorType) ||
+	  ATisEqual(buttonDescType, allEditorTypes)) {
+	if (ATisEqual(buttonDescName, buttonName)) {
+	  buttonActions = (ATermList) buttonDescActions;
+	}
       }
     }
     localButtons = ATgetNext(localButtons);
   }
 
-  if (ATisEmpty(buttonActions)) {
-    if (ATisEqual(buttonName, ATparse("[\"Actions\",\"Parse\"]"))) {
-      ATerm action = NULL;
-
-      if (strcmp(type,"equations") == 0) {
-	action = ATmake("parse-equations-action");
-      }
-      else if (strcmp(type,"syntax") == 0) {
-	action = ATmake("parse-syntax-action");
-      }
-      else {
-	action = ATmake("parse-action");
-      }
-      buttonActions = ATinsert(buttonActions, action);
-      buttonActions = ATinsert(buttonActions, ATmake("push-modulename)"));
-    }
-    else if (ATisEqual(buttonName, ATparse("[\"Actions\",\"Reduce\"]"))) {
-      buttonActions = ATinsert(buttonActions, 
-			       ATmake("edit-given-filename"));
-      buttonActions = ATinsert(buttonActions, 
-			       ATmake("push-modulename)"));
-      buttonActions = ATinsert(buttonActions, 
-			       ATmake("push-filename(\"reduct.out\")"));
-      buttonActions = ATinsert(buttonActions, ATmake("reduce"));
-      buttonActions = ATinsert(buttonActions, 
-			       ATmake("push-modulename)"));
-      buttonActions = ATinsert(buttonActions, 
-			       ATmake("get-root"));
-    }
-    else if (ATisEqual(buttonName, ATparse("[\"Actions\",\"ViewTree\"]"))) {
-      buttonActions = ATinsert(buttonActions, ATmake("show-tree"));
-      buttonActions = ATinsert(buttonActions, ATmake("get-focus"));
-    }
-    else if (ATisEqual(buttonName, ATparse("[\"Move\",\"Left\"]"))) {
-      buttonActions = ATinsert(buttonActions,ATparse("move-left"));
-    }
-    else if (ATisEqual(buttonName, ATparse("[\"Move\",\"Right\"]"))) {
-      buttonActions = ATinsert(buttonActions,ATparse("move-right"));
-    }
-    else if (ATisEqual(buttonName, ATparse("[\"Move\",\"Up\"]"))) {
-      buttonActions = ATinsert(buttonActions,ATparse("move-up"));
-    }
-    else if (ATisEqual(buttonName, ATparse("[\"Move\",\"Down\"]"))) {
-      buttonActions = ATinsert(buttonActions,ATparse("move-down"));
-    }
-  }
+  ATwarning("actions for %s are %t\n", buttonName, buttonActions);
   return ATmake("snd-value(button-actions(<term>))", buttonActions);
 }
+
+/*}}}  */
+
+/*{{{  void usage(char *prg, ATbool is_err) */
 
 void usage(char *prg, ATbool is_err)
 {
@@ -181,17 +159,24 @@ void usage(char *prg, ATbool is_err)
   exit(is_err ? 1 : 0);
 }
 
+/*}}}  */
+/*{{{  void version(const char *msg) */
+
 void version(const char *msg)
 {
   ATwarning("%s v%s\n", msg, myversion);
   exit(1);
 }    
 
-/* Main program */
+/*}}}  */
+
+/*{{{  int main(int argc, char *argv[]) */
+
 int main(int argc, char *argv[])
 {
   int i, cid;
   ATerm bottomOfStack;
+  ATerm standard = NULL;
 
   for (i=1; i<argc; i++) {
     if (strcmp(argv[i], "-h") == 0) {
@@ -203,9 +188,20 @@ int main(int argc, char *argv[])
 
   ATBinit(argc, argv,&bottomOfStack);
 
+  standard = ATreadFromNamedFile(STANDARD_BUTTONS);
+
+  if (standard != NULL) {
+    standard_buttons = (ATermList) ATgetArgument((ATermAppl)standard,0);
+  }
+  else {
+    ATwarning("Could not read in: " STANDARD_BUTTONS "\n");
+  }
+
   cid = ATBconnect(NULL, NULL, -1, configmanager_handler);
 
   ATBeventloop();
 
   return 0;
 }         
+
+/*}}}  */

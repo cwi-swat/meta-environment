@@ -20,15 +20,15 @@ buttons([
          ["Actions","ViewTree"],
          [get-focus, show-tree]),
   button("*",
-         "syntax"
+         "syntax",
          ["Actions","Parse"],
          [push-modulename,parse-syntax-action]),
   button("*",
-         "equations"
+         "equations",
          ["Actions","Parse"],
          [push-modulename,parse-equations-action]),
   button("*",
-         "equations"
+         "term",
          ["Actions","Reduce"],
          [get-root,
           push-modulename,
@@ -38,7 +38,7 @@ buttons([
           edit-given-filename
          ]),
   button("*",
-         "term"
+         "term",
          ["Actions","Parse"],
-         [push-modulename,parse-action]),
+         [push-modulename,parse-action])
 ])

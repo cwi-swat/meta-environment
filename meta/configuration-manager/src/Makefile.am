@@ -18,5 +18,6 @@ configmanager_LDADD   = -L$(TOOLBUSLIB)/lib -lATB \
 
 INCLUDES		= -I$(ATERM)/include \
 			-I$(TOOLBUSLIB)/include \
-			-DBINDIR=\"$(bindir)\"
+			-DBINDIR=\"$(bindir)\" \
+                        -DSTANDARD_BUTTONS=\"$(pkgdatadir)/standard.buttons\"
 
