@@ -81,9 +81,9 @@ in
 endlet
 
 /*}}}  */
-/*{{{  process ADAPTER(A : debug-adapter) */
+/*{{{  process TIDE-ADAPTER(A : debug-adapter) */
 
-process ADAPTER(A : debug-adapter) is
+process TIDE-ADAPTER(A : debug-adapter) is
 let
   Process : proc(<debug-adapter>, <int>),
   Port    : term,
@@ -167,15 +167,15 @@ endlet
 
 
 /*}}}  */
-/*{{{  process ADAPTER-CONNECT */
+/*{{{  process TIDE-ADAPTER-CONNECT */
 
-process ADAPTER-CONNECT is
+process TIDE-ADAPTER-CONNECT is
 let
   A : debug-adapter,
   P : int
 in
   ( rec-connect(A?) .
-    create(ADAPTER(A), P?)
+    create(TIDE-ADAPTER(A), P?)
   ) * delta
 endlet
     
@@ -194,5 +194,5 @@ in
   shutdown("Thank you for using tide!\n")
 endlet
 
-toolbus(CONTROL, TOOL-CONNECT, ADAPTER-CONNECT)
+toolbus(CONTROL, TOOL-CONNECT, TIDE-ADAPTER-CONNECT)
 
