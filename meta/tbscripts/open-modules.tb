@@ -238,8 +238,13 @@ in
     ( 
       rec-msg(parse-result-asfix2me(Id?, parse-tree(Tree?)))
     +
+      rec-msg(parse-result-asfix2me(Id?, ambiguous-tree(Tree?,
+                                                        Errors?,
+                                                        Error?))) .
+      Status := ambiguous
+    +
       rec-msg(parse-result-asfix2me(Id?, parse-error(Errors?, Error?))) .
-      Tree := no-tree.
+      Tree := no-tree .
       Status := parse-error 
     )
   +
