@@ -214,7 +214,7 @@ void rec_ack_event(int cid, ATerm t)
 
 ATerm compile_module(int cid, char *moduleName, ATerm equations)
 {
-  char output[2000];
+  char output[_POSIX_PATH_MAX];
   PT_ParseTree result;
 
   toolbus_id = cid;
@@ -227,6 +227,17 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations)
 }                              
 
 /*}}}  */
+
+static char *basename(const char *source, char separator)
+{
+  char *duplicate = strdup(source);
+  char *p;
+  p = strrchr(duplicate, separator);
+  if (p != NULL) {
+    *p = '\0';
+  }
+  return duplicate;
+}
 
 /*{{{  int main(int argc, char *argv[]) */
 
@@ -293,20 +304,12 @@ int main(int argc, char *argv[])
 	exit(1);
       }
       else {
-	int i;
-        name = strdup(equations);
-
-	for(i = 0; i < strlen(name); i++) {
-	  if (name[i] == '.') {
-	    name[i] = '\0';
-	    break;
-	  }
-	}
+	name = basename(equations, '.');
       }
     }
 
     if (use_c_compiler && !output_muasf && strcmp(output, "-") == 0) {
-      char tmp[1024];
+      char tmp[_POSIX_PATH_MAX];
       sprintf(tmp,"%s.c",name);
       output = strdup(tmp);
       if (!output) {
