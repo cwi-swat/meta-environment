@@ -27,7 +27,7 @@ void write_read(char *name, term *t1)
     err_fatal("Terms are unequal\n");
 }
 
-void main()
+int main()
 {
   char cbuf[50000];
   int i, n;
