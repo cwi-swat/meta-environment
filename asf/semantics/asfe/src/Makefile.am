@@ -8,7 +8,6 @@ bin_PROGRAMS      = asfe
 
 pkgdata_DATA      = asfe.idef
 EXTRA_DIST        = asfe.idef
-CLEANFILES        = asfe.tifs
 
 noinst_HEADERS = asfe.tif.h asf-api.h matching.h reduction.h environment.h\
 		 values.h \
