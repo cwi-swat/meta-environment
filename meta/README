@@ -26,43 +26,55 @@ This is the README file for the ASF+SDF Meta-Environment distribution.
 Installation instructions:
 
 
- * Prerequisite tools
+  * Prerequisite tools
 
-   To compile this distribution you will need the following items:
+     To compile this distribution you will need the following items:
 
-    -- gmake (GNU make, from <http://www.gnu.org/software/make/>)
-    -- jdk (The Java Development Kit, from
-         <http://www.javasoft.com/products/jdk/>). Make sure you get version
-         1.1 or higher.
-    -- wish (A user-interface system, part of Tcl/Tk, from
-         <http://dev.scriptics.com/software/>). Make sure you
-         get version 8.0.1 or higher.
-    -- graphviz (A graph visualization library from AT&T), from
-         <http://www.research.att.com/sw/tools/graphviz/>)
-    -- xemacs (A text editor for X-windows systems, available from
-         <http://www.xemacs.org/>). Make sure you get version 20.4 or newer.
-         The Meta-Environment is untested with other versions of xemacs, but
-         may very well work. (Or may not...)
-    -- the common development utilities typically existent in a basic
-         UNIXish environment.
+     -- gmake (GNU make, from <http://www.gnu.org/software/make/>)
+     -- jdk (The Java Development Kit, from
+          <http://www.javasoft.com/products/jdk/>). Make sure you get
+         version 1.1 or higher.
+     -- wish (A user-interface system, part of Tcl/Tk, from
+          <http://dev.scriptics.com/software/>). Make sure you
+          get version 8.0.1 or higher.
+     -- graphviz (A graph visualization library from AT&T), from
+          <http://www.research.att.com/sw/tools/graphviz/>)
+     -- xemacs (A text editor for X-windows systems, available from
+          <http://www.xemacs.org/>). Make sure you get version 20.4 or
+          newer.  The Meta-Environment is untested with other versions
+          of xemacs, but may very well work. (Or may not...)
+     -- the common development utilities typically existent in a basic
+          UNIXish environment.
 
 
-* Prerequisites for testing
+  * Prerequisites for testing
 
      In order to be able to test meta by executing
          $ make check
      you will need the JUnit Java Unit Testing framework. It is available
      from <http://www.xprogramming.com/software.htm>.
-     Note that some components have substantial memory requirements.
-     These may differ somewhat across machine architectures; for the
-     check target, experiences have shown a practical minimum of about
-     110-120MB, roughly.
 
 
-* Platform support
+  * Resource requirements
 
-     The new-meta environment has been installed successfully on
-     the following platforms:
+     -- About 200 megabytes (depending somewhat on platform specifics)
+        of disk space is required to build the entire Meta-Environment
+        and its related tools.  An additional 40M (or so) is used upon
+        installation.
+     -- A minimum of about 96M of physical or virtual memory is required
+        to build the Meta-Environment.  Since some of the components
+        inherently have a non-negligable memory footprint, it is also
+        advisable to allow for a sensible minimum of physical memory
+        on machines on which the Meta-Environment is deployed.
+        As an indication of the bare minimum, the `check' target takes
+        of about 20-30 megabytes to to run.  Serious usage will involve
+        seriously more.
+
+
+  * Platform support
+
+     The Meta-Environment has been installed successfully on the
+     following platforms:
 
      -- Sun Solaris/Sparc >= 2.5, Sun Solaris/iX86 >= 2.6
      -- SGI IRIX/Mips >= 6.2
@@ -71,8 +83,8 @@ Installation instructions:
      -- Mac OS X/PPC DP2, DP3
      -- LinuxPPC/PowerPC >= 2.0, MkLinux/PowerPC 3.0, Linux/iX86 >= 2.0
 
-     The new-meta environment has been tried without success on
-     the following platforms:
+     The Meta-Environment has been tried without success on the
+     following platforms:
 
      -- Digital (`Compaq') Alpha & OSF1 v4.0 (`Compaq Tru64 Unix')
 
@@ -80,33 +92,34 @@ Installation instructions:
   * Dependencies
 
     The Meta-Environment distribution depends on the aterm and toolbus
-    distributions which can be downloaded from the CWi web-site:
+    distributions which can be downloaded from the CWI web-site:
 
        http://www.cwi.nl/projects/MetaEnv/aterm/
        http://www.cwi.nl/projects/MetaEnv/toolbus/
 
-    Before building the ASF+SDF Meta-Environment download and install both
-    distributions. Please consult the web-site for installation
+    Before building the ASF+SDF Meta-Environment download and install
+    both distributions.  Please consult the web-site for installation
     instructions.
 
     To ease the compilation and installation process of the
-    Meta-Environment, we also offer a complete distribution (Meta Completa),
-    which bundles all required CWI software packages and contains a strongly
-    simplified installation. See the web-site
+    Meta-Environment, we also offer a complete distribution (Meta
+    Completa), which bundles all required CWI software packages and
+    contains a strongly simplified installation. See the web-site
     http://www.cwi.nl/projects/MetaEnv/ for more information.
 
 
   * Configuring and compiling: final installation
 
-    Let's assume the `aterm' and `toolbus' directories are located in the
-    directory `/some/prefix', that graphviz is installed in `/path/to/graphviz',
-    and that you want to install the ASF+SDF Meta-Enironment in
-    `/some/prefix'. Further we assume that the Meta-Environment sources are
-    unpacked in `/meta/source/` and that the `make' command is in fact GNU
-    make (you may have to use `gmake' or `gnumake', depending on your site's
-    configuration).  Furthermore, you should make sure that your java
-    installation's setup is correct, and that your CLASSPATH variable points
-    to the Java classes that came with your JDK.
+    Let's assume the `aterm' and `toolbus' directories are located
+    in the directory `/some/prefix', that graphviz is installed in
+    `/path/to/graphviz', and that you want to install the ASF+SDF
+    Meta-Enironment in `/some/prefix'. Further we assume that the
+    Meta-Environment sources are unpacked in `/meta/source/` and that
+    the `make' command is in fact GNU make (you may have to use `gmake'
+    or `gnumake', depending on your site's configuration).  Furthermore,
+    you should make sure that your java installation's setup is correct,
+    and that your CLASSPATH variable points to the Java classes that
+    came with your JDK.
 
     Here is the basic set-up.  These commands are the minimal config
     options for the Meta-Environment to compile.  Note that the order
@@ -130,7 +143,7 @@ Installation instructions:
                     --with-toolbus=/some/prefix \
                     --with-aterm=/some/prefix \
                     --with-graphviz=/path/to/graphviz
-      $ make 
+      $ make
       $ make install
 
     At this point, everything should be configured, compiled, and
