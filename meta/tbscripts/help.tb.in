@@ -41,6 +41,12 @@ in
   subscribe(online-help(<term>)).
   Started := false.
   (
+    rec-msg(jitterbug-wanted).
+    BROWSER(HELP,
+            "netscape -remote openUrl(http://www.cwi.nl/htbin/MetaEnv/meta-bugs)", 
+            "").
+    snd-msg(jitterbug-activated)
+  +
     rec-msg(online-help-wanted).
     BROWSER(HELP,
             "netscape -remote openUrl(__prefix__/new-meta/doc/html/meta.html)", 

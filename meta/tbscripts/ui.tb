@@ -149,6 +149,11 @@ in
      create(Edit-term(ModName,Str),ET?).
      snd-ack-event(UI,edit-term(ModName,Str))
    ) +
+   ( rec-event(UI,jitterbug-wanted).
+     snd-msg(jitterbug-wanted).
+     rec-msg(jitterbug-activated).
+     snd-ack-event(UI,jitterbug-wanted)
+   ) +
    ( rec-event(UI,online-help).
      snd-msg(online-help-wanted).
      rec-msg(done).
