@@ -532,7 +532,7 @@ in
       +
         rec-msg(save-text, Stack?, EditorId?) .
         StackPopString(Stack,Stack?,FileName?) .
-        StackPopTerm(Stack,Stack?,String?) .
+        StackPopString(Stack,Stack?,String?) .
         snd-msg(io-write-text-file(FileName,[String])) .
 	(
           rec-msg(io-file-written) .
