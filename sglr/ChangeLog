@@ -1,5 +1,8 @@
 $Id$
 
+2001/07/12 (markvdb@cwi.nl)
+  * Bug fix: a single node is never ambiguous, so "amb" removed!
+
 2001/07/11 (jong@cwi.nl)
  * patched Makefile.am's to comply with new location of -lATB.
 

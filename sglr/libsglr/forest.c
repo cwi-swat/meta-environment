@@ -1437,7 +1437,7 @@ static tree SG_Priority_Filter(parse_table *pt, tree t, label prodl)
         if (ATgetType(injAmb) == AT_APPL) {
           proda = SG_GetApplProdLabel(injAmb);
           l1 = SG_GetATint(proda, 0);
-  
+ 
           if (!SG_GtrPriority(pt, l0, l1)) {
             newambs = ATinsert(newambs, (ATerm) amb);
           }
@@ -1554,8 +1554,12 @@ static tree SG_FilterAmbs(parse_table *pt, MultiSetTable mst, ATermList ambs)
   IF_DEBUG(ATfprintf(SG_log(), 
                      "Ambiguity cluster: %d equivalent node(s).\n", 
                      ATgetLength(ambs)))
-
-  return (tree)ATmakeAppl1(SG_Amb_AFun,(ATerm) ambs);
+  if (ATgetLength(ambs) > 1) {
+    return (tree)ATmakeAppl1(SG_Amb_AFun,(ATerm) ambs);
+  }
+  else {
+    return (tree)ATgetFirst(ambs);
+  }
 }
 
 static tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst, 
