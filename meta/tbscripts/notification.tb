@@ -20,8 +20,8 @@ in
         if equal(Type, "sdf") then
           snd-note(syntax-changed(ChangedMod)).
           snd-msg(close-language(ChangedMod))
-        else
-          snd-note(equations-changed(ChangedMod))
+        then
+          tau
         fi
       fi
     )*
