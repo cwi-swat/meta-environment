@@ -216,7 +216,7 @@ PT_Tree ASC_parse_file(ATerm aterm)
 
 static PT_Tree parse_bytes(PT_Tree bytes)
 {
-  char  toolname[] = "parse-file-builtin";
+  char  toolname[] = "parse-bytes";
   ATerm language = ATparse(toolname);
 
   if (initParser(toolname, language)) {
