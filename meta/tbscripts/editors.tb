@@ -170,7 +170,7 @@ in
      * process available to the next request.
      */
     snd-msg(get-auxilary-buttons(Type, ModuleName)) .
-    rec-msg(button-list(ModuleName,ButtonList?)).
+    rec-msg(button-list(ModuleName, ButtonList?)).
     snd-msg(get-editor-id(FileName, ModuleName)) .
     (
       rec-msg(new-editor(EditorId?)) .
@@ -182,8 +182,12 @@ in
       rec-msg(text-editor-initialized(EditorId)) .
       snd-msg(editor-opened(ModuleName, EditorId))
     +
-      rec-msg(existing-editor(EditorId?)) .
+      rec-msg(consistent-existing-editor(EditorId?)) .
       snd-note(move-editor-to-front(EditorId)) .
+      snd-msg(editor-opened(ModuleName, EditorId))
+    +
+      rec-msg(inconsistent-existing-editor(EditorId?)) .
+      Error("Term %s is already being edited for a different module", [FileName]) .
       snd-msg(editor-opened(ModuleName, EditorId))
     )
 endlet

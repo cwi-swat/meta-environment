@@ -218,7 +218,14 @@ ATerm get_editor_id(int conn, char *nameAsString, char *moduleAsString)
 
   if (editor != NULL) {
     editorId = getEditorId(editor);
-    return sndValue(ATmake("existing-editor(<term>)", editorId));
+
+    moduleAsTerm = moduleStringToTerm(moduleAsString);
+    if (ATisEqual(moduleAsTerm, getModule(editorId))) {
+      return sndValue(ATmake("consistent-existing-editor(<term>)", editorId));
+    }
+    else {
+      return sndValue(ATmake("inconsistent-existing-editor(<term>)", editorId));
+    }
   }
 
   editorId = getUniqueId();

@@ -19,8 +19,11 @@ in
       rec-value(EM, new-editor(EditorId?)) .
       snd-msg(new-editor(EditorId))
     +
-      rec-value(EM, existing-editor(EditorId?)) .
-      snd-msg(existing-editor(EditorId))
+      rec-value(EM, consistent-existing-editor(EditorId?)) .
+      snd-msg(consistent-existing-editor(EditorId))
+    +
+      rec-value(EM, inconsistent-existing-editor(EditorId?)) .
+      snd-msg(inconsistent-existing-editor(EditorId))
     )
   +
     rec-msg(check-editor-id(Name?, ModuleName?)) .
