@@ -1,6 +1,7 @@
 # $Id$
 
-SUBDIRS			= . java
+SUBDIRS			= . @JAVA@
+DIST_SUBDIRS		= . java
 
 DICTTOC			= $(ATERM)/bin/dicttoc
 TIFSTOC			= ${top_builddir}/aterm/tifstoc
