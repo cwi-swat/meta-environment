@@ -23,6 +23,7 @@
 \documentclass[a4paper,twoside]{article}
 
 %\usepackage{fullpage}
+\usepackage{times}
 \usepackage{a4wide}
 \usepackage{verbatim}
 \usepackage{makeidx}
@@ -328,6 +329,9 @@ and continue with Section~\ref{MainWindow}.
 \item {\tt -c \emph{dir}} instructs the \asfsdf\ compiler to generate
 C files in the directory \emph{dir}. Note that this directory is also
 controlled by the environment variable {\tt COMPILER\_OUTPUT}.
+
+\item {\tt -C \emph{file}} specifies the configuration file to be used,
+in the default case the configuration file {\tt meta.conf} is used.
 
 \item {\tt -d} starts the \ASmetaenv\ in debug mode. As a result,
 an interactive viewer (``ToolBus viewer'') will be started that 
@@ -669,7 +673,10 @@ Pushing the {\tt Cancel} button aborts the compilation.
 Section~\ref{compiling-specs}
 gives more details on the compilation of \asfsdf\ specifications.
 
-{\tt Info} {{\tt Module Info}) gives detailed information for the selected modules (not yet implemented).
+{\tt Dump} ({\tt Dump Equations...}) dumps the equation of the selected
+module and all its imports. This feature is needed in order to run
+the evaluator in a standalone way, see Section \ref{SEC:interpretationgofterms}.
+{\tt Info} ({\tt Module Info}) gives detailed information for the selected modules (not yet implemented).
 
 \begin{figure}[t]
   \centerline{\epsfig{file=compiler-warning.ps,width=4cm}}
@@ -694,8 +701,8 @@ There are two additions to the standard user-interface of \xemacs:
 \begin{itemize}
 \item The {\tt Meta-Environment} pull-down menu
 (Figure~\ref{FIG:meta-env-menu1}) for applying the \asfsdf\ parser to
-the complete text buffer ({\tt Parse Buffer}) or only to the current
-focus ({\tt Parse Focus}). For term editors this menu also contains a
+the complete text buffer ({\tt Parse}).
+For term editors this menu also contains a
 ({\tt Reduce}) entry, that applies the evaluator to the text in
 the editor (Figure~\ref{FIG:meta-env-menu2}).
 
@@ -1655,7 +1662,7 @@ such syntax sections after appropriate insertion of optional layout
 between the elements of context-free functions. In rare cases,
 the specification writer may want to control this process explicitly
 and write syntax sections directly. This will not be discussed
-in this manual, but further details can be found in \cite{Vis9?.thesis}.
+in this manual, but further details can be found in \cite{Vis97}.
 
 \subsubsection{Lexical Functions} \label{LexicalFunctions}
 
@@ -1928,8 +1935,8 @@ imports Layout
 exports
   sorts Letter Digit
   lexical syntax
-    [a-z]+   -> Letter
-    [0-9]    -> Digit
+    [a-z]  -> Letter
+    [0-9]  -> Digit
 
     Letter Digit? -> Id
 \end{boxedverbatim}
@@ -2343,8 +2350,7 @@ and then the various forms of defining priorities.
 
 A bracket function has the form `{\tt $open$ $S$ $close$ -> $S$}' where $open$
 and $close$ are literals acting as opening and closing parenthesis for sort
-$S$. Examples are `{\tt (}' and `{\tt )}' in arithmetic expressions 
-and `{\tt begin}' and `{\tt end}' in programs. 
+$S$. Examples are `{\tt (}' and `{\tt )}' in arithmetic expressions.
 In most cases, such brackets are only
 introduced for grouping and disambiguation, but have no further meaning. By
 adding the attribute {\tt bracket} to the function declaration, it will not be
@@ -2541,8 +2547,13 @@ in two flavors:
  
 \noindent In case of lexical restrictions {\tt <Symbol>} may be   
 either a literal or a sort.  In case of context-free restrictions only a sort
-is allowed. The restriction operator {\tt -/-} should be read as ``may not be
+is allowed.
+The restriction operator {\tt -/-} should be read as ``may not be
 followed by''.
+Before the restriction operator {\tt -/-} a list of symbols
+is given for which the restriction holds, see Figure \ref{CODE:functional}
+for an example, both {\tt let} and {\tt in} may not be followed
+by a letter.
 
 {\tt <Lookaheads>} are slightly more complex.  The most compact way is to
 give the \sdf\ definition of the {\tt <Lookaheads>} and illustrate their use by
@@ -2661,7 +2672,7 @@ exports
 Priorities can be used to define a priority between two functions or between
 two groups of functions. In both cases the functions involved have to be
 listed explicitly in the priority declaration. In certain cases, however, it
-is desirable to define that a single rules has higher or lower priority than
+is desirable to define that a single rule has higher or lower priority than
 all other functions or the explicitly reject certain syntactic constructs.
 The former is achieved by the attributes {\tt prefer} and {\tt avoid}. The
 latter by the attribute {\tt reject}.
@@ -3867,13 +3878,6 @@ in the {\tt COMPILER\_OUTPUT} directory.
 
 XXX Example??? XXX
 
-Upon completion of the code generation process a {\tt Makefile} is 
-generated.
-When compiling this generated C code, a library is constructed
-as well an executable. This library can be used in order to
-combine various compiled specifications in an efficient way
-or to combine compiled specifications with `hand-written' C code.
-
 The \asfsdf2C compiler has some notion of incremental compilation.
 The intermediate $\mbox{\tt AUX-M}_{ij}$ modules are stored
 in the {\tt COMPILER\_OUTPUT} directory together with the generated
@@ -3887,9 +3891,60 @@ if they are equal {\em no} new C code will be generated.
 \section{Miscellaneous}
 
 \subsection{Parsing a term outside the \ASmetaenv}
+\label{SEC:parsingofterms}
+
+Before we can parse terms over a module {\tt M}
+outside the \ASmetaenv\ we have to obtain a parse table for this module
+{\tt M}.
+Currently the only way to obtain this parse table is by 
+opening a term editor for module {\tt M}, parse the contents
+of the editor by pressing the button {\tt Parse Buffer},
+if it is necessary a parse table will be generated.
+However, this parse table is only internally available,
+in order to get this parse table in a directory, select
+the {\tt Save} button on the file menu \ref{FIG:file-menu} of
+module {\tt M}. The parse table is now saved in the same directory
+as where {\tt M.sdf} exists. The name of the parse table is
+{\tt M.trm.tbl}.
+
+A term can now be parsed using this parse table in the following
+way:
+{\tt sglr -p M.trm.tbl -i term.txt -o term.tree -1}, or
+via {\tt sglr -p M.trm.tbl < term.txt > term.tree -1}.
+To get a detail overview of all option of {\tt sglr}, enter
+{\tt sglr -h}.
+The option {\tt -1} is essentail if this term is to be rewritten
+using compiled specification, see Section \ref{SEC:reducingofterms}.
+
+\subsection{Rewriting a term using the evaluator}
+\label{SEC:interpretationgofterms}   
 
 \subsection{Rewriting a term using a compiled specification}
+\label{SEC:reducingofterms}
+
+After having generated the C code, it must be compiled using
+a standard C compiler. So, go to the directory where the \asfsdf2C compiler
+has `written' the C code. Check whether the is a {\tt Makefile}, if not
+or whether you expected it to be invalid, generated a new one as
+follows: {\tt genmakefile -m ModuleName > Makefile}, where {\tt ModuleName}
+corresponds to the name of the top module for which the C code 
+was generated, there should exist a file {\tt ModuleName.module-list} 
+in the directory with generated C code. This {\tt Makefile} can now
+be used to compile this C code, the result is library {\tt libModuleName.a}
+and an executable {\tt ModuleName}. This library can be used in order to
+combine various compiled specifications in an efficient way
+or to combine compiled specifications with `hand-written' C code.
+
+Having parsed the term that has to be reduced,
+see Section \ref{SEC:parsingofterms}, this term can
+be reduced via the compiled code as follows.
+
+{\tt COMPILER\_OUTPUT/ModuleName < term.tree > reduct.tree}
 
 \subsection{Unparsing a (parsed/normalized) term}
+
+The unparsing of parsed/normalized terms is currently quite primitive.
+
+{\tt asource < reduct.tree > reduct.txt}
 
 \end{document}
