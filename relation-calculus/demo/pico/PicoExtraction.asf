@@ -57,10 +57,10 @@ equations
 
 [er-1] begin Decls Stat+ end := Program,
        $Loc :=  area-in-file("", area(0,0,0,0,0,0)),
-       $Rstore1 := assign(ROOT, area, $Loc, rstore()),
-       $Rstore2 := assign(USES, rel[area,str], {}, $Rstore1),
-       $Rstore3 := assign(OCCURS, rel[str,area], {}, $Rstore2),
-       $Rstore4 := assign(PRED, rel[area,area], {}, $Rstore3),
+       $Rstore1 := assign(ROOT, loc, $Loc, rstore()),
+       $Rstore2 := assign(USES, rel[loc,str], {}, $Rstore1),
+       $Rstore3 := assign(OCCURS, rel[str,loc], {}, $Rstore2),
+       $Rstore4 := assign(PRED, rel[loc,loc], {}, $Rstore3),
        $Rstore5 := add-pred({<$Loc, get-first(Stat+)>}, $Rstore4)
        =======================================================
        extractRelations(Program) = extract(Program, $Rstore5)

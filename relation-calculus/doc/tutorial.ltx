@@ -32,7 +32,7 @@
   Software Analysis---}
 \author{Paul Klint}
 
-\date{\today}
+\date{DRAFT: \today}
 
 \begin{document}
 \maketitle
@@ -420,8 +420,8 @@ of character sequences surrounded by double quotes. e.g., {\tt "a"} or
 \paragraph{Locations}
 Location values are represented by the type {\tt loc} and serve as
 source text coordinates, they are always generated automatically but
-can be written as {\tt location(("/usr/paulk/myfile.c", area(2, 3, 7,
-55)}.
+can be written as {\tt area-in-file("/usr/paulk/myfile.c", area(2, 3, 7,
+55))}.
 
 \section{Tuples, Bags and Relations}
 
@@ -909,16 +909,21 @@ and {\tt false} otherwise\\ \hline
 \end{tabular}
 
 \paragraph{Examples}
+In the following examples the offset and length part of an area are set to
+{\tt 0}; they are not used when determining the outcome of the comparison operators.
 
 \begin{itemize}
 
- \item {\tt location(``f'', area(11, 1, 11, 9))  < location("f", area(10, 2, 12, 8))} yields {\tt
+ \item {\tt area-in-file(``f'', area(11, 1, 11, 9, 0, 0))  < area-in-file("f",
+ area(10, 2, 12, 8, 0, 0))} yields {\tt
  true}.
 
- \item {\tt location("f", area(10, 3, 11, 7))  < location("f", area(10, 2, 11, 8))} yields {\tt
+ \item {\tt area-in-file("f", area(10, 3, 11, 7, 0,0))  < area-in-file("f",
+ area(10, 2, 11, 8, 0, 0))} yields {\tt
  true}.
 
- \item {\tt location("f", area(10, 3, 11, 7))  < location("g", area(10, 3, 11, 7))} yields {\tt
+ \item {\tt area-in-file("f", area(10, 3, 11, 7, 0, 0))  < area-in-file("g",
+ area(10, 3, 11, 7, 0, 0))} yields {\tt
  false}.
 
 \end{itemize}
@@ -1582,7 +1587,7 @@ str filename(loc A) = primitive
 {Yields the file name of location {\tt A}.}
 { Example:
 \begin{itemize}
-\item \verb@filename(location("pico1.trm",area(5,2,6,8)))@ yields {\tt "pico1.trm"}.
+\item \verb@filename(area-in-file("pico1.trm",area(5,2,6,8,0,0)))@ yields {\tt "pico1.trm"}.
 \end{itemize}
 }
 %%----
@@ -1595,7 +1600,7 @@ int beginline(loc A) = primitive
 {Yields the first line of location {\tt A}.}
 { Example:
 \begin{itemize}
-\item \verb@beginline(location("pico1.trm",area(5,2,6,8)))@ yields {\tt 5}.
+\item \verb@beginline(area-in-file("pico1.trm",area(5,2,6,8,0,0)))@ yields {\tt 5}.
 \end{itemize}
 }
 %%----
@@ -1608,7 +1613,7 @@ int begincol(loc A) = primitive
 {Yields the first column of location {\tt A}.}
 { Example:
 \begin{itemize}
-\item \verb@begincol(location("pico1.trm",area(5,2,6,8)))@ yields {\tt 2}.
+\item \verb@begincol(area-in-file("pico1.trm",area(5,2,6,8,0,0)))@ yields {\tt 2}.
 \end{itemize}
 }
 %%----
@@ -1621,7 +1626,7 @@ int endline(loc A) = primitive
 {Yields the last line of location {\tt A}.}
 { Example:
 \begin{itemize}
-\item \verb@endline(location("pico1.trm",area(5,2,6,8)))@ yields {\tt 6}.
+\item \verb@endline(area-in-file("pico1.trm",area(5,2,6,8,0,0)))@ yields {\tt 6}.
 \end{itemize}
 }
 %%----
@@ -1634,7 +1639,7 @@ int endcol(loc A) = primitive
 {Yields the last column of location {\tt A}.}
 { Example:
 \begin{itemize}
-\item \verb@endcol(location("pico1.trm",area(5,2,6,8)))@ yields {\tt 8}.
+\item \verb@endcol(area-in-file("pico1.trm",area(5,2,6,8,0,0)))@ yields {\tt 8}.
 \end{itemize}
 }
 %%----
@@ -2026,7 +2031,7 @@ type var = str
 \end{exam}
 
 Of course, the actual relations are now represented differently.
-For instance,  the {\tt USES} relation may now look like:
+For instance,  the {\tt USES} relation may now look like \note{update example}
 \begin{exam}
 \begin{verbatim}
 { < location("/home/paulk/pico1.trm", area(11, 2, 11, 8)), "z">, 
@@ -2738,7 +2743,7 @@ The \rscript is executed using an initial rstore taken from file \emph{name}.
 By default, the initial rstore is empty.
 
 
-\item \texttt{-t} ot \texttt{--testsuite}:
+\item \texttt{-t} or \texttt{--testsuite}:
 Execute the \rscript as a testsuite, i.e., execute all \texttt{assert} statements and report
 which ones failed.
 
@@ -2816,7 +2821,7 @@ a file named \texttt{result.rviz}.
 
 \end{itemize}
 Example:
-   -i query.rstore -o query.rviz
+   \texttt{rstore2rviz -i query.rstore -o query.rviz}
 
 \subsection{\texttt{rviz}: visualize an rstore}
 
