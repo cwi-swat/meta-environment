@@ -292,9 +292,9 @@ ATerm SG_Parse(parse_table *ptable, char *sort, int(*get_next_char)(void))
     current_token = SG_NexToken(get_next_char);
     if(SG_DEBUG || SG_SHOWSTAT) {
       if(isprint(current_token))
-        ATfprintf(SGlog(), "Token:  '%c'\n", current_token);
+        ATfprintf(SGlog(), "Token: '%c'\n", current_token);
       else
-        ATfprintf(SGlog(), "Token:  '\\%d'\n", current_token);
+        ATfprintf(SGlog(), "Token: '\\%d'\n", current_token);
     }
     SG_ParseChar();
     SG_Shifter();
@@ -459,8 +459,10 @@ void SG_Actor(stack *st)
   actions as;
   action  a;
 
+/*  This never happens
   if(SG_Rejected(st))
     return;
+ */
 
   as = SG_LookupAction(table, SG_ST_STATE(st), current_token);
 /*
@@ -546,7 +548,10 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
   st_link *nl;
   stack *st1;
 
-  if(SG_Rejected(stpt)) return;
+/*  This never happens
+  if(SG_Rejected(stpt))
+    return;
+ */
 
   t = SG_Apply(table, prodl, kids, reject);
 
@@ -684,13 +689,16 @@ void SG_Shifter(void)
       }
       l = SG_AddLink(st1, st0, t);
       if(SG_SHOWSTACK) SG_LinksToDot(SG_StackDot(), st1);
-    }
+    } else if (SG_DEBUG)
+      ATfprintf(SGlog(), "Shifter: skipping rejected stack %d\n",
+                SG_ST_STATE(st0));
   }
 
   if(SG_GC)
     SG_PurgeOldStacks(active_stacks, new_active_stacks, accepting_stack);
 
-  active_stacks = new_active_stacks;
+  if((active_stacks = new_active_stacks) == NULL && (SG_SHOWSTAT || SG_DEBUG))
+      ATfprintf(SGlog(), "Shifter: no more stacks left\n");
 } /*  Shifter  */
 
 
@@ -729,6 +737,7 @@ void SG_PropagateReject(stack *st)
   if(st == NULL)
     return;
 
+  st->rejected = ATtrue;
   compost = SG_LK_TREE(head(SG_ST_LINKS(st)));
   cmpstid = (ATermInt) ATgetAnnotation(compost, SG_ApplLabel()),
   amb = SG_AmbTable(SG_AMBTBL_LOOKUP, cmpstid, NULL);

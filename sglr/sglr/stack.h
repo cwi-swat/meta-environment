@@ -84,9 +84,7 @@ typedef struct stack {
   struct stack  **kids;
   int            kidcount;
   st_links       *links;
-/*
-  ATbool        rejected;
- */
+  ATbool         rejected;
   ATbool         protected;
 } stack;
 

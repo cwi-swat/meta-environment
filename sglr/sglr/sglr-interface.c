@@ -248,7 +248,7 @@ ATerm SGtermToFile(char *prgname, ATerm t, char *FN)
       ATfprintf(stderr, "%s: cannot create %s\n", prgname, FN);
       exit(1);
     } if (SG_VERBOSE)
-      ATfprintf(stderr, "%s: writing parse tree to %s\n", prgname, FN);
+      ATfprintf(stderr, "%s: writing parse result to %s\n", prgname, FN);
     if(SG_BINARY)
       ATwriteToBinaryFile(t, output_file);
     else

@@ -50,9 +50,7 @@ stack *SG_NewStack(state s, stack *ancestor) {
     res->kids      = NULL;
     res->kidcount  = 0;
     res->links     = NULL;
-/*
     res->rejected = ATfalse;
- */
     res->protected = ATtrue;
   }
   return res;
@@ -376,6 +374,8 @@ ATbool SG_SomeRejected(stack *st)
 */
 ATbool SG_Rejected(stack *st)
 {
+  return st->rejected;
+/*
   st_links *ls;
 
   if (!(ls = SG_ST_LINKS(st))) return ATfalse;
@@ -385,4 +385,5 @@ ATbool SG_Rejected(stack *st)
     }
   }
   return ATfalse;
+ */
 }
