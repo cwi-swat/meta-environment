@@ -26,7 +26,7 @@ void call_c_compiler(const char* binary, const char* name, const char* source)
 	 "  -I" ASF_SUPPORT "/include \\\n"
 	 "  -I" PT_SUPPORT "/include \\\n"
 	 "  -I" ATERM "/include \\\n"
-	 "  -L" ASC_SUPPORT "/lib" " -l%sasc-support-me -lasf-builtins \\\n"
+	 "  -L" ASC_SUPPORT "/lib" " -l%sasc-support-me \\\n"
 	 "  -L" ASF_SUPPORT "/lib" " -lASFME \\\n"
 	 "  -L" PT_SUPPORT "/lib" " -lmept -lPTMEPT \\\n"
 	 "  -L" ATERM "/lib" " -lATerm \\\n"

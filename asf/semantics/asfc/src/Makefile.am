@@ -30,7 +30,7 @@ noinst_HEADERS = asfc.tif.h \
                  c-compiler.h \
                  idef.h
 
-asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me -lasf-builtins \
+asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                -L$(PT_SUPPORT)/lib -lmept -lPTMEPT -lconversion -lasfix2  \
                -L$(ASF_SUPPORT)/lib -lASFME \
                -L./muasf -lMuASF \
