@@ -8,8 +8,8 @@ exports
 
 hiddens
   context-free syntax
-    check-attributes(Definition, Messages)                        -> Messages {traversal(accu, break, top-down)}
-    check-attributes(Module, Messages)                            -> Messages {traversal(accu, break, top-down)}
+    check-attributes(Definition, Messages)              -> Messages {traversal(accu, break, top-down)}
+    check-attributes(Module, Messages)                  -> Messages {traversal(accu, break, top-down)}
     check-attributes-in-module(Module, 
                                Messages # Production*, 
                                ModuleId)                -> Messages # Production* {traversal(accu, break, top-down)}
@@ -18,6 +18,12 @@ hiddens
                                ModuleId)                -> Messages # Production* {traversal(accu, break, top-down)}
 
   context-free syntax
+    "consistent"                                          -> Message
+    "not-found"                                           -> Message      
+    consistent-defined(Production, Production*, ModuleId) -> Message
+
+  context-free syntax
+    check-form-production(Production, Messages, ModuleId)          -> Messages
     check-attributes-in-production(Production, Messages, ModuleId) -> Messages
 
   context-free syntax
@@ -53,5 +59,6 @@ hiddens
     "$Symbol*"[0-9]*   -> Symbol*
     "$Symbol,*"[0-9]*  -> {Symbol ","}*
     "$Symbol"[0-9]*    -> Symbol
+    "Msg"[0-9]*        -> Message
     "Msgs"[0-9]*       -> Messages
     "$Literal"[0-9]*   -> Literal
