@@ -161,28 +161,29 @@ usage(FILE *stream, int long_message)
 {
   if( !long_message )
     fprintf (stream, 
-	     "Usage: %s -p file [-i file] [-o file] [-adhsSvVDn?]\n", 
+	     "Usage: %s -p file [-i file] [-o file] [-adDfghlnsSvV?]\n", 
 	     program_name);
   else {
     fprintf 
 (stream, 
- "Usage: %s -p file [-i file] [-o file] [-adhsSvV?]\n"
+ "Usage: %s -p file [-i file] [-o file] [-adDfghlnsSvV?]\n"
  "\n"
  "\t-p file : use parse table |file| (obligatory)\n"
  "\t-i file : input from |file| (optional, default is stdin)\n"
  "\t-o file : output to |file| (optional, default is stdout)\n"
- "\t-n      : don't write tree to output\n"
+ "\t-a      : abbreviate productions in parse trees\n"
  "\t-d      : debugging mode\n"
+ "\t-D file : generate dot output for parse tree\n"
+ "\t-f      : turn filtering on\n"
  "\t-g      : no garbage collect\n"
  "\t-h      : help (print usage information)\n"
- "\t-v      : verbose mode\n"
- "\t-V      : print version information\n"
  "\t-l      : write log info to file .parse-log\n"
- "\t-a      : abbreviate productions in parse trees\n"
+ "\t-n      : don't write tree to output\n"
  "\t-s      : show statistics\n"
  "\t-S file : show stacks as dot files\n"
- "\t-f      : turn filtering on\n"
- "\t-D file : generate dot output for parse tree\n"
+ "\t-v      : verbose mode\n"
+ "\t-V      : print version information\n"
+ "\t-?      : print version information\n"
 	     , program_name);
   }
 }
