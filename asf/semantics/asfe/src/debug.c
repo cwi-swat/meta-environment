@@ -352,13 +352,6 @@ void Tide_disconnect()
 
 void Tide_step(ATerm position, ATerm newenv, int level)
 {
-  /*
-  PT_Tree equ_tree =
-    PT_makeTreeFromTerm(ASF_makeTermFromCondEquation(currentRule->equation));
-  fprintf(stderr, "Tide_step: cureq = %s\n", PT_yieldTree(equ_tree));
-   */
-
-
   stack_level       = level;
   tag_stack[level]  = tagCurrentRule;
   rule_stack[level] = currentRule;
