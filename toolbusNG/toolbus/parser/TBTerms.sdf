@@ -34,7 +34,7 @@ exports
 
     Id 				-> TBTerm  %% {cons("Id")}
 
-    Id "(" TBTermList ")" 	-> TBTerm  {cons("appl")}
+    Id "(" TBTermList ")" 	-> TBTerm  {cons("apply")}
 
     {TBTerm ","}* 		-> TBTermList
 
