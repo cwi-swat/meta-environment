@@ -1,6 +1,5 @@
-/*
-  $Id $
- */
+
+toolbus(ApplyFunc)
 
 process ApplyFunc is
 let
