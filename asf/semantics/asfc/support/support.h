@@ -55,6 +55,12 @@ extern Symbol record_sym;
 #define FUNC_EXIT_CONST(constant,rhs) return ( constant ? constant : ( constant = rhs)) ;
 
 #endif
+
+#ifdef WIN32
+	#include <string.h>
+	#define streq(a,b) (!strcmp((a),(b)))
+#endif
+
 /*
 #define streq(a,b) (!strcmp((a),(b)))
 */

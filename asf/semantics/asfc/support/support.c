@@ -751,7 +751,7 @@ static char *get_chars_from_list(char *buf, ATermList chars)
     if(t_is_asfix_list(el))
       buf = get_chars_from_list(buf,(ATermList) el);
     else
-      *buf++ = ATgetInt((ATermInt) el);
+      *buf++ = (char)ATgetInt((ATermInt) el);
   }
   return buf;
 }

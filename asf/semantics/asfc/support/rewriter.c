@@ -5,6 +5,14 @@
   * Thu Aug 14 11:36:34 MET DST 1997
   */
 
+#ifndef WIN32
+	/* These files can not be included in Windows NT*/
+	#include <atb-tool.h>
+	#include "rewriter.tif.h"
+#else
+	#include <stdlib.h>	/* used for exit(0) */
+#endif
+
 #include <stdio.h>
 #include <assert.h>
 #include <ctype.h>
@@ -12,11 +20,10 @@
 #include <AsFix.h>
 #include <AsFix-expand.h>
 #include <AsFix-init-patterns.h>
-#include <atb-tool.h>
 #include <deprecated.h>
+/* #include <gc.h> */
 
 #include "support.h"
-#include "rewriter.tif.h"
 
 /*{{{  globals */
 
@@ -77,7 +84,8 @@ ATfprintf(stderr,"reducing finished\n");
   strcpy(full, name);
   strcat(full, ".");
   strcat(full, ext);
-  if (!(file = fopen(full, "w"))) {
+  file = fopen(full, "w");
+  if (!file) {
     ATfprintf(stderr, "asource: Could not open %s\n", full);
     exit(1);
   }
@@ -99,64 +107,73 @@ void rec_terminate(int cid, ATerm arg)
 
 int main(int argc, char *argv[])
 {
-  ATerm t, trm, reduct, asfix, file, modname;
-  ATbool printstats = ATfalse, use_toolbus = ATfalse;
-  int i, cid;
-  ATerm bottomOfStack;
-
-  name = argv[0];
-  for(i=1; i<argc; i++) {
-    if(streq(argv[i], "-stats"))
-      printstats = ATtrue;
-    else if(streq(argv[i], "-TB_TOOL_NAME"))
-      use_toolbus = ATtrue;
-    else if(streq(argv[i], "-name"))
-      name = argv[++i];
-  }
+	ATerm t, trm, reduct, asfix, file, modname;
+	ATbool printstats = ATfalse, use_toolbus = ATfalse;
+	int i, cid;
+	ATerm bottomOfStack;
+	name = argv[0];
+	for(i=1; i<argc; i++) {
+		if(streq(argv[i], "-stats"))
+			printstats = ATtrue;
+		else if(streq(argv[i], "-TB_TOOL_NAME"))
+			use_toolbus = ATtrue;
+		else if(streq(argv[i], "-name"))
+			name = argv[++i];
+	}
  
-  if(use_toolbus) {
-    ATBinit(argc, argv, &bottomOfStack);
-    cid = ATBconnect(NULL, NULL, -1, rewriter_handler);
-  }
-  AFinit(argc, argv, &bottomOfStack);
+	if(use_toolbus) {
+		#ifndef WIN32 /* Code with Toolbus calls, non Windows */
+			ATBinit(argc, argv, &bottomOfStack);  /* Initialize the Aterm library */
+			cid = ATBconnect(NULL, NULL, -1, rewriter_handler);
+		#else
+			fprintf(stderr, "asource: Toolbus cannot be used in Windows.\n");
+		#endif
+	}
 
-  init_patterns();
-  AFinitAsFixPatterns();
+	AFinit(argc, argv, &bottomOfStack);
 
-  c_rehash(INITIAL_TABLE_SIZE);
-  register_all();
-  resolve_all();
-  init_all();
+	init_patterns();
+	AFinitAsFixPatterns();
 
-  if(use_toolbus) {
-    ATBeventloop();
-  } 
-  else {
-    t = ATreadFromFile(stdin);
-    t = AFexpandTerm(t);
+	c_rehash(INITIAL_TABLE_SIZE);
+	register_all();
+	resolve_all();
+	init_all();
 
-    if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
+	if(use_toolbus) {
+		#ifndef WIN32 /* Code with Toolbus calls, non Windows */
+			ATBeventloop();
+		#endif
+	} 
+	else {
+		t = ATreadFromFile(stdin);
+		t = AFexpandTerm(t);
+
+		if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
                   &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
-ATfprintf(stderr,"Reducing ...\n");
-      reduct = innermost(trm);
-ATfprintf(stderr,"Reducing finished.\n");
-/*
-{
-  FILE *f = fopen("/tmp/pgen.out", "w");
-  assert(f);
-  AT_collect(2);
-  AT_printAllAFunCounts(f);
-  fclose(f);
+			ATfprintf(stderr,"Reducing ...\n");
+			reduct = innermost(trm);
+			ATfprintf(stderr,"Reducing finished.\n");
+			/*
+			{
+			FILE *f = fopen("/tmp/pgen.out", "w");
+			assert(f);
+			AT_collect(2);
+			AT_printAllAFunCounts(f);
+			fclose(f);
+			}
+			*/
+			asfix = toasfix(reduct, file, modname);
+			ATwriteToBinaryFile(asfix,stdout);
+			/*ATwriteToTextFile(asfix,stdout);*/
+		}
+		else { /* Alex added {} after 'else' for readability */
+			ATfprintf(stderr, "not an asfix term: %t\n", t);
+		}
+	}
+	return 0;
 }
-*/
-      asfix = toasfix(reduct, file, modname);
-      ATwriteToBinaryFile(asfix,stdout);
-      /*ATwriteToTextFile(asfix,stdout);*/
-    }
-    else
-      ATfprintf(stderr, "not an asfix term: %t\n", t);
-  }
-  return 0;
-}
+
+/*}}}  */
 
 /*}}}  */
