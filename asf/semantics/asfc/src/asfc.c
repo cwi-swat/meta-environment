@@ -62,7 +62,7 @@ static char *outputDirName = NULL;
     explanation.
  */
 
-static char myarguments[] = "hi:o:vV";
+static char myarguments[] = "hi:o:cvV";
 
 extern ATerm pattern_asfix_id;
 extern ATerm pattern_asfix_term;
@@ -405,13 +405,14 @@ int main(int argc, char *argv[])
   } else {
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
-      case 'v':  run_verbose = ATtrue; break;
-      case 'i':  input=optarg;         break;
-      case 'o':  output=optarg;        break;
-      case 'V':  version();            break;
+      case 'v':  run_verbose = ATtrue;  break;
+      case 'i':  input=optarg;          break;
+      case 'o':  output=optarg;         break;
+      case 'V':  version();             break;
+      case 'c':  ATsetChecking(ATtrue); break;    
 
       case 'h':  /* drop intended */
-      default:   usage();              break;
+      default:   usage();               break;
       }
     }
 
