@@ -22,6 +22,7 @@ typedef struct
 extern ATerm empty_set;
 
 void	 CC_init();
+void     CC_cleanup();
 
 CC_Class *CC_alloc();
 void     CC_free(CC_Class *c);

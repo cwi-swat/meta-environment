@@ -34,7 +34,6 @@ static AFun afun_char_class = -1;
 static unsigned long last_mask = 0;
 
 static CC_Class **char_classes     = NULL;
-static int        nr_char_classes  = 0;
 static int        max_char_classes = 0;
 
 ATerm empty_set = NULL;
@@ -73,12 +72,14 @@ void CC_cleanup()
 {
   int i;
 
-  for (i=0; i<nr_char_classes; i++) {
-    CC_free(char_classes[i]);
+  for (i=0; i<max_char_classes; i++) {
+    if (char_classes[i]) {
+      CC_free(char_classes[i]);
+    }
   }
   free(char_classes);
   char_classes = NULL;
-  nr_char_classes = 0;
+  max_char_classes = 0;
 }
 
 /*}}}  */

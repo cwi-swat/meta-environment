@@ -144,6 +144,7 @@ void init_table_gen()
   ATprotectAFun(afun_lit);
 
   initSymbols();
+  CC_init();
   init_first();
 }
 
@@ -155,6 +156,7 @@ void destroy_table_gen()
   int i;
 
   destroy_first();
+  CC_cleanup();
   destroySymbols();
 
   ATunprotectArray((ATerm *)nr_prod_table+MIN_PROD);
