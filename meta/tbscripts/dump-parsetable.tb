@@ -9,25 +9,28 @@ let
   FileName   : str,
   Table      : term,
   Path       : str,
-  ErrorMessage : str
+  ErrorMessage : str,
+  Extension : str,
+  Type : term
 in
   Id := process-id.
-
   (
     (
-      rec-msg(dump-parse-table(ModuleName?)) .
+      rec-msg(dump-parse-table(ModuleName?, Type?)) .
       FileName := ""
     +
-      rec-msg(dump-parse-table-given-file(ModuleName?, FileName?)) 
+      rec-msg(dump-parse-table-given-file(ModuleName?, FileName?, Type?)) 
     ) .
     snd-note(ui-status(statf(Id,"Dumping parse table for %s",[ModuleName]))) .
-    snd-msg(get-parsetable(trm(ModuleName))) .
+    snd-msg(get-parsetable(ModuleName, Type)) .
     (
       rec-msg(parse-table(Table?)) .
       snd-msg(get-path-from-db(ModuleName)) .
       rec-msg(path(Path?)) .
       if equal(FileName, "") then
-        snd-msg(io-get-filename(Path, ModuleName, ".trm.tbl")) .
+	snd-msg(parsetable-extension-hook(Type)) .
+	rec-msg(parsetable-extension-hook-result(Extension?)) .
+        snd-msg(io-get-filename(Path, ModuleName, Extension)) .
 	rec-msg(io-filename(FileName?)) 
       else
         tau

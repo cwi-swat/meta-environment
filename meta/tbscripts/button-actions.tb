@@ -652,7 +652,13 @@ in
       +
 	rec-msg(dump-parse-table, Stack?, EditorId?) .
         StackPopString(Stack,Stack?,ModuleName?) .
-	snd-msg(dump-parse-table(ModuleName)) .
+	snd-msg(dump-parse-table(ModuleName, trm)) .
+	rec-msg(parse-table-dumped) .
+	ReturnSuccess(EditorId, Stack)	
+      +
+	rec-msg(dump-eqs-parse-table, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+	snd-msg(dump-parse-table(ModuleName, eqs)) .
 	rec-msg(parse-table-dumped) .
 	ReturnSuccess(EditorId, Stack)	
       +
@@ -670,6 +676,7 @@ in
         rec-msg(save-all, Stack?, EditorId?) .
 	snd-msg(save-all) .
 	rec-msg(saved) .
+        snd-note(ui-status(errorf("Saving done"))) .
 	ReturnSuccess(EditorId, Stack)		
       +
         rec-msg(clear-history-list, Stack?, EditorId?) .
@@ -752,12 +759,12 @@ let
   Focus  : term
 in
   InvalidateEditor(EditorId).
-  snd-msg(parse-focusses(EditorId, trm(ModuleName))) .
+  snd-msg(parse-focusses(EditorId, ModuleName, trm)) .
   (
-    rec-msg(parse-ok(trm(ModuleName))) .
+    rec-msg(parse-ok(ModuleName)) .
     snd-note(clear-focus(EditorId))
   +
-    rec-msg(parse-failed(trm(ModuleName), Focus?))
+    rec-msg(parse-failed(ModuleName, Focus?))
   )
 endlet
 
@@ -785,8 +792,7 @@ in
   Id := process-id . 
   snd-msg(open-modules([ModuleName], sdf)) .
   rec-msg(finished-opening-modules) .
-  ModuleId := quote(trm(ModuleName)) .
-  ParseString(ModuleId, Nonterminal, Text, Tree?, ParseError?)
+  ParseString(ModuleName, trm, Nonterminal, Text, Tree?, ParseError?)
 endlet
  
 process ParseSyntax(EditorId : term, ModuleName : str, Type : term) is
@@ -803,34 +809,40 @@ in
   rec-msg(get-module-id-hook-result(ModuleId?)) .
   snd-msg(notify-about-changed-modules([ModuleName], Type)) .
   rec-msg(notify-about-changed-modules-done) .
-  snd-msg(parse-focusses(EditorId, trm(ModuleId))) .
+  snd-msg(parse-focusses(EditorId, ModuleId, trm)) .
   (
-    rec-msg(parse-ok(trm(ModuleId))) .
+    rec-msg(parse-ok(ModuleId)) .
     snd-msg(get-tree(EditorId)) .
     (
       rec-msg(tree(Tree?)) .
       snd-msg(unparse(Tree)) .
       rec-msg(unparsed-text(Text?)) .
-      snd-msg(update-module-in-db(ModuleName, Text, Tree, Type)) .
+      snd-msg(update-module-text-in-db(ModuleName, Text, Type)) .
       (
-        rec-msg(updating-succeeded(DependingModules?, NewModules?)).
-	snd-msg(notify-about-changed-modules(DependingModules, Type)) .
-	rec-msg(notify-about-changed-modules-done) .
-        snd-msg(open-modules(NewModules, Type)).
-        rec-msg(finished-opening-modules) .
-        snd-note(clear-focus(EditorId))
+	rec-msg(no-updating-needed)
       +
-        rec-msg(error-opening(ModuleName, name-inconsistent)).
-        snd-msg(invalidate-sdf-in-db(ModuleName)).
-        InvalidateEditor(EditorId).
-        snd-note(ui-status(
-          errorf("Changing the name of %s is not permitted.",[ModuleName])))
+        rec-msg(updating-succeeded(DependingModules?)).
+	(
+          snd-msg(update-module-in-db(ModuleName, Tree, Type)) .
+          rec-msg(updating-succeeded(NewModules?)).
+	  snd-msg(notify-about-changed-modules(DependingModules, Type)) .
+	  rec-msg(notify-about-changed-modules-done) .
+          snd-msg(open-modules(NewModules, Type)).
+          rec-msg(finished-opening-modules) .
+          snd-note(clear-focus(EditorId))
+        +
+          rec-msg(error-opening(ModuleName, name-inconsistent)).
+          snd-msg(invalidate-sdf-in-db(ModuleName)).
+          InvalidateEditor(EditorId).
+          snd-note(ui-status(
+            errorf("Changing the name of %s is not permitted.",[ModuleName])))
+        )
       )
     +
       rec-msg(no-tree) /* editor dissappeared */
     )
   +
-    rec-msg(parse-failed(trm(ModuleId), Focus?)) .
+    rec-msg(parse-failed(ModuleId, Focus?)) .
     snd-msg(invalidate-sdf-in-db(ModuleName))
   ) 
 endlet
@@ -841,9 +853,9 @@ let
   Focus : term
 in
   InvalidateEditor(EditorId).
-  snd-msg(parse-focusses(EditorId, eqs(ModuleName))) .
+  snd-msg(parse-focusses(EditorId, ModuleName, eqs)) .
   (
-    rec-msg(parse-ok(eqs(ModuleName))) .
+    rec-msg(parse-ok(ModuleName)) .
     snd-msg(get-tree(EditorId)) .
     (
       rec-msg(tree(Tree?)) .
@@ -856,7 +868,7 @@ in
       rec-msg(no-tree)
     )
   +
-    rec-msg(parse-failed(eqs(ModuleName), Focus?))
+    rec-msg(parse-failed(ModuleName, Focus?))
   )
 endlet
 

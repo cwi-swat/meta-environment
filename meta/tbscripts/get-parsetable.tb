@@ -7,35 +7,34 @@
 /* get the table from the database or create a new table */
 process GetParseTable is
 let
-  ModuleId   : term, 
+  ModuleName : str, 
+  Type       : term, 
   TableType  : term,
   Table      : term,
   Syntax     : term,
   ErrorMsg   : str,
-  Id         : int,
-  Str        : str
+  Id         : int
 in
 Id := process-id.
 ( 
-  rec-msg(get-parsetable(ModuleId?)) .
-  Str := first(args(ModuleId)).
-  snd-msg(get-table-from-db(ModuleId)) .
+  rec-msg(get-parsetable(ModuleName?, Type?)) .
+  snd-msg(get-table-from-db(ModuleName, Type)) .
   (
     rec-msg(table(Table?)).
     snd-msg(parse-table(Table))
   +
     rec-msg(no-table) .
-    snd-note(ui-status(statf(Id, "Generating parsetable %s",[Str]))).
-    snd-msg(get-all-sdf2-definitions(Str)).
+    snd-note(ui-status(statf(Id, "Generating parsetable %s",[ModuleName]))).
+    snd-msg(get-all-sdf2-definitions(ModuleName)).
     (
       rec-msg(syntax(Syntax?)).
-      snd-msg(preprocess-syntax-hook(ModuleId, Syntax)).
-      rec-msg(preprocess-syntax-hook-result(ModuleId, Syntax?)).
-      snd-msg(generate-parsetable(Syntax, ModuleId)).
+      snd-msg(preprocess-syntax-hook(ModuleName, Type, Syntax)).
+      rec-msg(preprocess-syntax-hook-result(ModuleName, Syntax?)).
+      snd-msg(generate-parsetable(Syntax, ModuleName, Type)).
       Syntax := no-tree .
       (
         rec-msg(parsetable(Table?)).
-        snd-msg(add-parse-table-to-db(ModuleId, Table)) .
+        snd-msg(add-parse-table-to-db(ModuleName, Type, Table)) .
         rec-msg(parse-table-added).
         snd-note(ui-status(endstat(Id))) .
         snd-msg(parse-table(Table)) .
@@ -44,13 +43,13 @@ Id := process-id.
         rec-msg(no-parsetable).
         snd-note(ui-status(endstat(Id))) .
         snd-note(ui-status(error("Unexpected error in definition"))).
-	snd-msg(no-parse-table(ModuleId))
+	snd-msg(no-parse-table(ModuleName))
       )
     +
       rec-msg(no-syntax(ErrorMsg?)) .
       snd-note(ui-status(endstat(Id))) .
       snd-note(ui-status(errorf("%s",[ErrorMsg]))).
-      snd-msg(no-parse-table(ModuleId))
+      snd-msg(no-parse-table(ModuleName))
     )
   )
 ) *

@@ -9,10 +9,21 @@ in
   create(StatusDisplay, Pid?) .
   create(MetaCreator, Pid?) .
   rec-msg(creation-finished) .
+  if not-equal(TERMSTORENAME, "") then
+    TermStoreActivation(TERMSTORENAME)
+  else
+    tau
+  fi .
   snd-msg(open-modules([MODULENAME], sdf)) .
   rec-msg(finished-opening-modules) .
   snd-msg(dump-equations-given-file(MODULENAME, OUTFILENAME)) .
   rec-msg(equations-dumped) .
+  if equal(SAVING, "true") then
+    snd-msg(save-all) .
+    rec-msg(saved) 
+  else 
+    tau
+  fi .
   shutdown("")
 endlet   
 

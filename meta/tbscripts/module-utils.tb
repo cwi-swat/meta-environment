@@ -406,3 +406,130 @@ process HandleCopyModuleErrors(Old : str, New : str, Status : term) is
   else
     tau
   fi
+
+process CheckSyntaxConsistency(ModuleName : str, Path : str, Extension : str) is
+let
+  ErrorMessage : str,
+  FileName : str,
+  FileText : str,
+  RepositoryText : str,
+  Tree : term,
+  DependingModules : list,
+  Imports : list,
+  Status : term,
+  Type : term
+in
+  snd-msg(io-get-filename(Path, ModuleName, Extension)) .
+  rec-msg(io-filename(FileName?)) .
+  snd-msg(extension-to-type-hook(Extension)) .
+  rec-msg(extension-to-type-hook-result(Type?)) .
+  snd-msg(io-exists-file(FileName)) . 
+  (
+    rec-msg(io-file-exists) .
+    snd-msg(io-read-file(FileName)) . 
+    rec-msg(io-file-contents(FileText?)) .
+    snd-msg(update-module-text-in-db(ModuleName, FileText, Type)) .
+    (
+      rec-msg(no-updating-needed)
+    +
+      rec-msg(updating-succeeded(DependingModules?)) .
+      Error("Check consistency: syntax of module %s changed on disk", [ModuleName]) .
+      Status := success .
+      Parse-Syntax(FileText, Type, Status?, Tree?) .
+      if equal(Status, success) then
+        snd-msg(update-module-in-db(ModuleName, Tree, Type)) .
+        rec-msg(updating-succeeded(Imports?)).
+        snd-msg(open-modules(Imports, Type)) .
+        rec-msg(finished-opening-modules)
+      else
+        Error("Check consistency: syntax of module %s contains an error", [ModuleName])
+      fi
+    )
+  +
+    rec-msg(io-file-not-exists) .
+    snd-msg(close-module-in-db(ModuleName)) .
+    rec-msg(changed-modules(DependingModules?)) .
+    Error("Check consistency: syntax of module %s removed on disk", [ModuleName])
+  )
+endlet
+
+process CheckEquationConsistency(ModuleName : str, Path : str) is
+let
+  FileName : str,
+  FileText : str,
+  RepositoryText : str
+in
+  snd-msg(io-get-filename(Path, ModuleName, ".asf")) .
+  rec-msg(io-filename(FileName?)) .
+  snd-msg(io-exists-file(FileName)) . 
+  (
+    rec-msg(io-file-exists) .
+    snd-msg(io-read-file(FileName)) . 
+    rec-msg(io-file-contents(FileText?)) .
+    snd-msg(update-eqs-text-in-db(ModuleName, text(FileText))) .
+    (
+      rec-msg(no-updating-needed)
+    +
+      rec-msg(eqs-text-updated(ModuleName)) .
+      Error("Check consistency: equations of module %s changed on disk", [ModuleName])
+    +
+      rec-msg(eqs-text-added(ModuleName)) .
+      Error("Check consistency: equations of module %s did not exist yet", [ModuleName])
+    )
+  +
+    rec-msg(io-file-not-exists) .
+    snd-msg(get-eqs-text(ModuleName)) .
+    (
+      rec-msg(eqs-text(ModuleName, RepositoryText?)) .
+      snd-msg(remove-eqs-from-db(ModuleName)) .
+      rec-msg(eqs-removed-from-db) .
+      Error("Check consistency: equations of module %s removed on disk", [ModuleName])
+    +
+      rec-msg(no-eqs-text(ModuleName))
+    )
+  )
+endlet
+
+process CheckModuleConsistency(ModuleName : str) is
+let
+  Path : str
+in
+  snd-msg(get-path-from-db(ModuleName)) .
+  rec-msg(path(Path?)) .
+  CheckSyntaxConsistency(ModuleName, Path, ".sdf") .
+  CheckEquationConsistency(ModuleName, Path)
+endlet
+
+process TermStoreActivation(Name : str) is
+let
+  TermStoreContents : term,
+  ErrorMessage : str,
+  ModuleNames : list,
+  ModuleName : str
+in
+  snd-msg(io-exists-file(Name)) .
+  (
+    rec-msg(io-file-exists) .
+    snd-msg(io-read-term-file(Name)) .
+    (
+      rec-msg(io-file-contents(TermStoreContents?)) .
+      snd-msg(ts-load-snapshot(TermStoreContents)) .
+      rec-msg(ts-snapshot-loaded) .
+      snd-msg(get-all-module-names) .
+      rec-msg(all-module-names(ModuleNames?)) .
+      if not-equal(ModuleNames, []) then
+        ModuleName := first(ModuleNames) .
+        ModuleNames := next(ModuleNames) .
+        CheckModuleConsistency(ModuleName)
+      fi *
+      if equal(ModuleNames, []) then
+        tau
+      fi .
+      DrawImportGraph()
+    +
+      rec-msg(io-error-reading(ErrorMessage?))
+    )
+  +
+    rec-msg(io-file-not-exists)
+  )
+endlet

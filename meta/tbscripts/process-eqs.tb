@@ -38,8 +38,7 @@ in
      snd-msg(get-eqs-text(Module)).
      (
       rec-msg(eqs-text(Module, EqsText?)).
-      ModuleId := quote(eqs(Module)) .
-      ParseString(ModuleId, Nonterminal, EqsText, ParseTree?, Errors?) .
+      ParseString(Module, eqs, Nonterminal, EqsText, ParseTree?, Errors?) .
       ProcessParseError(Module, Errors, "asf") .
       ProcessEqsTree(Module, ParseTree) .
       ParseTree := no-tree

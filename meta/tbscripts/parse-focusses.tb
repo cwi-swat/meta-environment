@@ -32,22 +32,20 @@ let
   Id           : term,
   Focus        : term,
   Text         : str,
-  Type         : str,
+  FunType      : str,
+  Type         : term,
   ModuleName   : str,
   EditorId     : term,
   Nonterminal  : str,
   Tree         : term,
   Errors       : term,
-  ModuleId     : term,
   Status       : term
 in                     
   Id := process-id .     
   (
-    rec-msg(parse-focusses(EditorId?, ModuleId?)) .
+    rec-msg(parse-focusses(EditorId?, ModuleName?, Type?)) .
     subscribe(delete-editor(EditorId)) .
-    Type := fun(ModuleId) .
-    ModuleName := first(args(ModuleId)).
-    if equal(Type, "eqs") then
+    if equal(Type, eqs) then
       snd-msg(get-rules-top-sort) .
       rec-msg(set-rules-top-sort(sort(Nonterminal?)))
     else
@@ -56,12 +54,12 @@ in
     GetText(EditorId, Text?, Focus?, Status?) .
     if equal(Status, parse-needed) then
       UpdateTextInModuleDb(Type, ModuleName, Text).
-      ParseString(ModuleId, Nonterminal, Text, Tree?, Errors?) .
-      PrepareParseErrorForEditor(ModuleId, EditorId, Focus, Errors) .
-      ProcessTree(ModuleId, EditorId, Focus, Tree) .
+      ParseString(ModuleName, Type, Nonterminal, Text, Tree?, Errors?) .
+      PrepareParseErrorForEditor(ModuleName, EditorId, Focus, Errors) .
+      ProcessTree(ModuleName, EditorId, Focus, Tree) .
       Tree := no-tree
     else
-      snd-msg(parse-ok(ModuleId))
+      snd-msg(parse-ok(ModuleName))
     fi .
     unsubscribe(delete-editor(EditorId))
   )
@@ -69,8 +67,8 @@ in
   delta
 endlet
 
-process UpdateTextInModuleDb(Type : str, ModuleName : str, Text : str) is
-  if equal(Type, "eqs") then
+process UpdateTextInModuleDb(Type : term, ModuleName : str, Text : str) is
+  if equal(Type, eqs) then
     snd-msg(update-eqs-text-in-db(ModuleName, text(Text))) .
     rec-msg(eqs-text-updated(ModuleName))
   else

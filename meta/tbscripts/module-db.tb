@@ -13,6 +13,7 @@ process ModuleDB is
 let
   Path      : str,
   Table     : term,
+  Type     : term,
   ModuleId  : str,
   Syntax    : term,
   OldSyntaxTree : term,
@@ -20,6 +21,7 @@ let
   SyntaxText: str,
   EqsTree   : term,
   EqsText   : str,
+  LocalText : str,
   Name      : str,
   OldName   : str,
   NewName   : str,
@@ -94,26 +96,38 @@ in
     rec-msg(invalidate-sdf-in-db(Name?)) .
     snd-msg(ts-remove-value("sdf-tree", Name))
   +
-    rec-msg(update-module-in-db(Name?, SyntaxText?, SyntaxTree?, sdf)).
+    rec-msg(update-module-in-db(Name?, SyntaxTree?, sdf)).
     snd-msg(sm-get-module-id(SyntaxTree)) .
     rec-msg(sm-module-id(ModuleId?)) .
     if equal(Name, ModuleId) then
       MDB-AddModulePosInfo(ModuleId, SyntaxTree, SyntaxTree?) .
       snd-msg(ts-put-term-value("sdf-tree", Name, SyntaxTree)) .
-      snd-msg(ts-put-str-value("sdf-text", Name, SyntaxText)) .
       snd-msg(sm-get-imported-module-names(SyntaxTree)) .
       SyntaxTree := no-tree .
-      SyntaxText := "" .
       rec-msg(sm-imported-module-names(Modules?)) .
       snd-msg(ts-put-term-value("import-relations", ModuleId, Modules)) .
       snd-msg(ts-filter-keys("active-modules", Modules)) .
       rec-msg(ts-keys(Modules?)) .
+      snd-msg(updating-succeeded(Modules))
+    else
+      snd-msg(error-opening(Name, name-inconsistent))
+    fi
+  +
+    rec-msg(update-module-text-in-db(Name?, SyntaxText?, sdf)).
+    snd-msg(ts-get-str-value("sdf-text", Name)) .
+    rec-msg(ts-value(LocalText?)) .
+    if equal(SyntaxText, LocalText) then
+      SyntaxText := "" .
+      snd-msg(no-updating-needed)
+    else
+      snd-msg(ts-put-str-value("sdf-text", Name, SyntaxText)) .
+      snd-msg(ts-remove-value("sdf-tree", Name)) .
+      snd-msg(ts-put-term-value("import-relations", Name, [])) .
+      SyntaxText := "" .
       MDB-GetAllDependingModules(Name, DependingModules?) .
       MDB-InvalidateModule(Name, sdf) .
       MDB-InvalidateModules(DependingModules, sdf) .
-      snd-msg(updating-succeeded(DependingModules, Modules))
-    else
-      snd-msg(error-opening(Name, name-inconsistent))
+      snd-msg(updating-succeeded(DependingModules))
     fi
   +
     rec-msg(rename-module-in-db(OldName?, NewName?, Path?)) .
@@ -138,16 +152,6 @@ in
     MDB-AllEquationsAvailable(Name, ModuleNames?) .
     snd-msg(eqs-needed-for-modules(ModuleNames))
   +
-    rec-msg(get-sdf-text(Name?)).
-    snd-msg(ts-get-str-value("sdf-text", Name)) .
-    (
-      rec-msg(ts-value(EqsText?)) .
-      snd-msg(sdf-text(Name, EqsText))
-    +
-      rec-msg(ts-no-value) .
-      snd-msg(no-sdf-text(Name))
-    )
-  +
     rec-msg(get-eqs-text(Name?)).
     snd-msg(ts-get-str-value("asf-text", Name)) .
     (
@@ -157,6 +161,11 @@ in
       rec-msg(ts-no-value) .
       snd-msg(no-eqs-text(Name))
     )
+  +
+    rec-msg(remove-eqs-from-db(Name?)) .
+    snd-msg(ts-remove-value("asf-tree", Name)) .
+    snd-msg(ts-remove-value("asf-text", Name)) .
+    snd-msg(eqs-removed-from-db)
   +
     rec-msg(add-eqs-to-db(Name?, text(EqsText?))) .
     snd-msg(ts-put-str-value("asf-text", Name, EqsText)) .
@@ -174,16 +183,29 @@ in
     snd-msg(eqs-updated)
   +
     rec-msg(update-eqs-text-in-db(Name?, text(EqsText?))).
-    snd-msg(ts-remove-value("asf-tree", Name)) .
-    snd-msg(ts-put-str-value("asf-text", Name, EqsText)) .
-    snd-msg(eqs-text-updated(Name))
+    snd-msg(ts-get-str-value("asf-text", Name)) .
+    (
+      rec-msg(ts-value(LocalText?)) .
+      if not-equal(EqsText, LocalText) then
+        snd-msg(ts-remove-value("asf-tree", Name)) .
+        snd-msg(ts-put-str-value("asf-text", Name, EqsText)) .
+        snd-msg(eqs-text-updated(Name))
+      else 
+        snd-msg(no-updating-needed)
+      fi 
+    +
+      rec-msg(ts-no-value) .
+      snd-msg(ts-put-str-value("asf-text", Name, EqsText)) .
+      snd-msg(eqs-text-added(Name))
+    ) .
+    EqsText := ""
   +
-    rec-msg(add-parse-table-to-db(eqs(Name?), Table?)) .
+    rec-msg(add-parse-table-to-db(Name?, eqs, Table?)) .
     snd-msg(ts-put-term-value("asf-parse-table", Name, Table)) .
     Table := no-table .
     snd-msg(parse-table-added)
   +
-    rec-msg(add-parse-table-to-db(trm(Name?), Table?)) .
+    rec-msg(add-parse-table-to-db(Name?, trm, Table?)) .
     snd-msg(ts-put-term-value("term-parse-table", Name, Table)) .
     Table := no-table .
     snd-msg(parse-table-added)
@@ -198,13 +220,13 @@ in
       snd-msg(no-path)
     )
   +
-    (
-      rec-msg(get-table-from-db(eqs(Name?))) .
-      snd-msg(ts-get-term-value("asf-parse-table", Name)) 
+    ( 
+      rec-msg(get-table-from-db(Name?, trm)) .
+      snd-msg(ts-get-term-value("term-parse-table", Name))
     +
-      rec-msg(get-table-from-db(trm(Name?))) .
-      snd-msg(ts-get-term-value("term-parse-table", Name)) 
-    ).
+      rec-msg(get-table-from-db(Name?, eqs)) .
+      snd-msg(ts-get-term-value("asf-parse-table", Name))
+    ) .
     (
       rec-msg(ts-value(Table?)) .
       snd-msg(table(Table)) .

@@ -7,34 +7,41 @@
 /* get the table from the database or create a new table */
 process Set-parsetable is
 let
-  ModuleId   : term, 
-  TableType  : term,
-  Table      : term,
-  Id         : int
+  ModuleName : str, 
+  Type : term,
+  Table : term
 in
-Id := process-id.
 ( 
-  rec-msg(set-parsetable(ModuleId?)) .
-  snd-msg(get-parsetable(ModuleId)) .
+  rec-msg(set-parsetable(ModuleName?, Type?)) .
+  snd-msg(get-parsetable(ModuleName, Type)) .
   (
     rec-msg(parse-table(Table?)) .
-    ReopenLanguage(ModuleId, Table)
+    ReopenLanguage(ModuleName, Type, Table)
   +
-    rec-msg(no-parse-table(ModuleId)) .
-    snd-msg(parsetable-not-set(ModuleId))
+    rec-msg(no-parse-table(ModuleName)) .
+    snd-msg(parsetable-not-set(ModuleName))
   )
 ) *
 delta
 endlet
 
 /* Ask the parser to reopen the language */
-process ReopenLanguage(ModuleId : term, Table : term) is
+process ReopenLanguage(ModuleName : str, Type : term, Table : term) is
+let
+  ModuleId : term
+in
+  if equal(Type, trm) then
+    ModuleId := quote(trm(ModuleName))
+  else
+    ModuleId := quote(eqs(ModuleName))
+  fi .
   snd-msg(close-language(ModuleId)) .
   snd-msg(open-language-from-term(ModuleId, Table)).
   (
     rec-msg(language-opened(ModuleId)).
-    snd-msg(parsetable-set(ModuleId))
+    snd-msg(parsetable-set(ModuleName))
     +
     rec-msg(language-not-opened(ModuleId)).
-    snd-msg(parsetable-not-set(ModuleId))
+    snd-msg(parsetable-not-set(ModuleName))
   )
+endlet
