@@ -24,31 +24,42 @@ In particular, we will discuss:
 From the scenarios, we can derive the following minimum set of
 tools needed to get the Meta-Environment running:
 <UL>
-     <LI> The <EM>control tool</EM>, 
+     <LI> A <A HREF="../meta/features.html#control-tool">control tool</A>, 
 	  offering the basic user interface functionality
           to control the rest of the system.
-     <LI> The <EM>hybrid editor</EM>, consisting of two subcomponents,
+     <LI> A <A HREF="../meta/features.html#hybrid-editor">hybrid editor</A>,
+	  consisting of two subcomponents,
           the <EM>structured editor</EM> and the <EM>text editor</EM>.
 	  An editor instance of the hybrid editor can be used to edit the
 	  syntax of a module, the equations of a module, or a term over
           a specific module.
-     <LI> The <EM>parser</EM>, which can parse terms given a parse table
+     <LI> A <A HREF="../meta/features.html#parser">parser</A>, w
+          hich can parse terms given a parse table
           and an input string.
-     <LI> The <EM>parser generator</EM>, which can generate parse tables
+     <LI> A <A HREF="../meta/features.html#parser-generator">parser 
+          generator</A>,
+	  which can generate parse tables
           giving the complete syntax of a module and its submodules.
-     <LI> The <EM>evaluator</EM>, which can evaluate a term given an
+     <LI> A <A HREF="../meta/features.html#evaluator">evaluator</A>,
+	  which can evaluate a term given an
           input term and a list of equations.
-     <LI> The <EM>compiler</EM>, which can compile a specification and
+     <LI> A <A HREF="../meta/features.html#compiler">compiler</A>,
+          which can compile a specification and
           generate C code for it.
-     <LI> A <EM>module database</EM>, which keeps track of all modules
+     <LI> A <A HREF="../meta/features.html#module-database">module 
+	  database</A>,
+          which keeps track of all modules
           and relations between modules in the system.
-     <LI> A <EM>term database</EM>, which keeps track of all terms
-          in the system.
-     <LI> An <EM>unparser</EM>, which can unparse terms, either to text
+     <LI> A <A HREF="../meta/features.html#term-database">term database</A>,
+          which keeps track of all terms in the system, and acts as an
+          <EM>AsFix term cache</EM>, caching the results of parsing terms. 
+     <LI> An <A HREF="../meta/features.html#unparser">unparser</A>, 
+          which can unparse terms, either to text
           (by updating the layout in the AsFix representation of the term),
           TeX code, or HTML code, given a list consisting of pairs of
           syntax rules and box expressions.
-     <LI> An <EM>unparser generator</EM>, which can generate lists consisting
+     <LI> An <A HREF="../meta/features.html#unparser-generator">unparser 
+          generator</A>, which can generate lists consisting
           of pairs of syntax rules and box expressions.
 </UL>
 
@@ -108,8 +119,7 @@ of syntax change propagation can occur:
      An advantage of this approach
      lies in the fact that the user will be forced to save his/her
      work often. This in turn provides excellent minor synchronization
-     points for version management (see Section 
-     <A HREF="versions.html">Version Management</A>).
+     points for version management.
      A disadvantage is that the user must remember to save before
      changes take effect, but some form of visual feedback would
      make a huge difference in this area.
