@@ -311,7 +311,6 @@ in
         rec-msg(reduce(NewModName?), Stack?, EditorId) .
         STree := first(Stack) .
         Stack := next(Stack) .
-	printf("%t\n", STree) .
         ReduceTerm(STree, NewModName, RTree?) .
         if not-equal(RTree, error-tree) then
           Stack := join(RTree, Stack) .
