@@ -1,2 +1,12 @@
 Makefile.in
 Makefile
+manual.log
+manual.idx
+manual.aux
+manual.toc
+manual.dvi
+manual.blg
+manual.bbl
+manual.ind
+manual.ilg
+manual.ps
