@@ -4,6 +4,10 @@
  * Added a "Delete this module" for a non-existing module, this
    omission was reported by PDM.
 
+2003/03/20 (jurgenv@cwi.nl)
+ * Removed dependency on shared-objects and jjtraveler. This is taken care
+   of by aterm-java-config from now on.
+
 2003/03/19 (markvdb@cs.vu.nl)
  * Reduce-button adapted to the new button actions.
 
