@@ -44,7 +44,7 @@ public class PeanoTest {
   }
 
   public final static void main(String[] args) {
-    PeanoTest test = new PeanoTest(new PeanoFactory());
+    PeanoTest test = new PeanoTest(new PeanoFactory(new PureFactory()));
     test.run();
   }
 
