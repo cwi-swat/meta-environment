@@ -11,7 +11,7 @@
 ac_help=
 ac_default_prefix=/usr/local
 # Any additions from configure.in:
-ac_default_prefix=`pwd`/..
+ac_default_prefix=`echo $PWD`/..
 ac_help="$ac_help
   --with-gel              use GeL for interfacing with ASF+SDF system"
 ac_help="$ac_help
@@ -530,10 +530,10 @@ VERSION=0.02
 
 
 
-EPIC=`pwd`/..
-GEL=`pwd`/..
-TOOLBUS=`pwd`/..
-ATERM=`pwd`/..
+EPIC=`echo $PWD`/..
+GEL=`echo $PWD`/..
+TOOLBUS=`echo $PWD`/..
+ATERM=`echo $PWD`/..
 
 INSTALL='$(top_srcdir)/install-sh'
 INSTALL_PROG='$(top_srcdir)/install-prog-sh'
@@ -1259,6 +1259,7 @@ trap 'rm -fr `echo "Makefile meta install-prog-sh install-data-sh \
 	graph-browser/Makefile graph-browser/graph-browser \
 	editor/Makefile editor/editor \
 	compiler/Makefile \
+	stred/nl/cwi/gipe/stred/Makefile \
 " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -1326,6 +1327,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile meta install-prog-sh install-data-sh \
 	graph-browser/Makefile graph-browser/graph-browser \
 	editor/Makefile editor/editor \
 	compiler/Makefile \
+	stred/nl/cwi/gipe/stred/Makefile \
 "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

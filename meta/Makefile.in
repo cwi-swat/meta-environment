@@ -15,6 +15,7 @@ exec_prefix	= @exec_prefix@
 bindir		= ${exec_prefix}/bin
 libdir		= ${exec_prefix}/lib
 includedir	= ${prefix}/include
+classdir        = ${prefix}/classes/nl/cwi/gipe/stred
 
 SHELL		= @SHELL@
 
@@ -25,14 +26,14 @@ UNINSTALL	= @UNINSTALL@
 
 # Ordering is important here: the toolbus dir. should come first
 SUBDIRS		= toolbus editor evaluator graph-browser import-db \
-		in-output tree-db compiler
+		in-output tree-db compiler stred
 
 all doc clean:
 	@for DIR in $(SUBDIRS);	\
 	do \
 		echo Make $@ in $$DIR; \
 		cd $$DIR; \
-		$(MAKE) $@; \
+		$(MAKE) $(MAKEFLAGS) $@; \
 		cd ..; \
 	done
 
@@ -47,7 +48,7 @@ uninstall:
 	done
 
 install:
-	mkinstalldirs $(bindir) $(libdir) $(includedir)
+	mkinstalldirs $(bindir) $(libdir) $(includedir) $(classdir)
 	$(INSTALL_PROG) $(INSTALL) $(bindir) meta
 	@for DIR in $(SUBDIRS);	\
 	do \
