@@ -17,7 +17,6 @@ RSTORE_PARSE_TABLE=${datadir}/Rstore.trm.tbl
 EVALUATOR=${bindir}/RscriptCalculator
 
 PRG=`basename $0`
-OUTPUT_DIR=./extracted-rstores
 TOP_SORT=
 INPUT_FILES=
 EXTRACTION_FUNCTION=extractRelations
@@ -33,7 +32,7 @@ Usage: $PRG [options] <input-files>
 
 Parameters:
 
-  -o | --output <file>      specify output directory (default: $RESULTING_RSTORE)
+  -o | --output <file>      specify resulting rstore (default: $RESULTING_RSTORE)
   -e | --executable <file>  specify executable for perforing extraction extraction (default: none)
   -s | --sort <sort>        specify top sort for parsing input files (default: none)
   -f | --function <name>    specificy the extraction function to be applied (default: extractRelations)
@@ -122,8 +121,6 @@ do
   esac
   shift
 done
-
-mkdir -p ${OUTPUT_DIR}
 
 $EVALUATOR -f empty-rstore -r RSTORE -o $RESULTING_RSTORE
 

@@ -1,38 +1,45 @@
-type Class = str
-type ClassUse = str
-type Package = str
-type Method = str
-type Interface = str
 
-rel [ ClassUse , loc ] CLASS_USES
-rel [ Class , loc ] CLASSES
-rel [ Package , loc ] PACKAGES
-rel [ Method , loc ] METHODS
-rel [ Interface , loc ] INTERFACES
-rel [ Class , Interface ] IMPLEMENTS
-rel [ Class , Class ]  EXTENDS_CLASS
-rel [ Interface , Interface ] EXTENDS_INTERFACE
+type FileName = str
+type ClassName = str
+type ClassUseName = str
+type PackageName = str
+type MethodName = str
+type InterfaceName = str
+type VarName = str
+type TypeName = str
+type FieldName = str
 
-rel [Class, Class] CONTAINMENT = {<C1, C2> | <Class C1, loc l1> : CLASS_USES, <Class C2, loc l2> : CLASSES, l1 < l2 }
+rel[FileName, loc] FILES
+rel[InterfaceName,loc] INTERFACES
+rel[PackageName,loc] PACKAGES
+rel[ClassName,loc] CLASSES
+rel[MethodName, loc] METHODS
+rel[ClassUseName,loc] CLASS_USES
+rel[VarName, loc, TypeName] VARIABLE_DECLS
+rel[FieldName, loc, TypeName] FIELD_DECLS
 
-rel[Class,Class] CALL
-rel[Class,Class] CONTAINMENT
-rel[Class,Class] INHERITANCE =  EXTENDS_CLASS
+rel[ClassName,ClassName] EXTENDS_CLASS
+rel[ClassName,InterfaceName] IMPLEMENTS
+rel[InterfaceName,InterfaceName] EXTENDS_INTERFACE
 
-%% rel[Class,Class] USE = CALL union CONTAINMENT union INHERITANCE
+rel[VarName, loc, MethodName] METHOD_CALLS
 
-rel[Class,Class] USE = CALL union CONTAINMENT union INHERITANCE
+rel[str,str] INHERITANCE
+rel [str, str] CONTAINMENT
+rel[ClassName, ClassName] CALLS
 
-bag[Class] ClassesInCycle = {C1 | <Class C1, Class C2> : USE+, C1 == C2}
+rel[ClassName,ClassName] USE = CALLS union CONTAINMENT union INHERITANCE
 
-int size = # ClassesInCycle
+%%bag[ClassName] ClassesInCycle = {C1 | <ClassName C1, ClassName C2> : USE+, C1 == C2}
 
-yield size
+%%int size = # ClassesInCycle
 
-bag[Class] CLASS_NAMES = domain(CLASSES)
+%%yield size
 
-rel[Class,Class] USETRANS = USE+
+bag[ClassName] CLASS_NAMES = domain(CLASSES)
 
-rel[Class,bag[Class]] ClassCycles = {<C, USETRANS[C]> | Class C : CLASS_NAMES, <C, C> in USETRANS }
+rel[ClassName,ClassName] USETRANS = USE+
+
+rel[ClassName,bag[ClassName]] ClassCycles = {<C, USETRANS[C]> | ClassName C : CLASS_NAMES, <C, C> in USETRANS }
 yield ClassCycles
 

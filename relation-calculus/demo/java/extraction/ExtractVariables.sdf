@@ -8,9 +8,6 @@ exports
   context-free syntax
     extractVariables(CompilationUnit, Rel[[Elem]]) -> Rel[[Elem]] {traversal(accu, top-down, break)}
 
-hiddens
-  context-free syntax
-
     extractVariables(LocalVariableDeclaration, Rel[[Elem]]) -> Rel[[Elem]] {traversal(accu, top-down, break)}
 
     analyseVariableDeclarator({VariableDeclarator ","}+, Rel[[Elem]], Type)
@@ -24,9 +21,6 @@ hiddens
 exports
   context-free syntax
     extractFields(CompilationUnit, Rel[[Elem]])    -> Rel[[Elem]]  {traversal(accu, top-down, break)}
-
-hiddens
-  context-free syntax
 
     extractFields(FieldDeclaration, Rel[[Elem]])    -> Rel[[Elem]]
     {traversal(accu, top-down, break)}

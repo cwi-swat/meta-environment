@@ -1,38 +1,26 @@
-1. Extract facts from a given source package, e.g.
+1. Extract facts from a given source package. The general format is
 
-	 extract-java /home/paulk/software/source/sources/CH/ifa/draw
+	   extract-java sourcedir my.rstore.pt
 
-   This will take 3 minutes on a 1 Gig machine for 15 Kloc of souce code.
+   where sourcedir contains all the Java source files (possibly in
+   subdirectories) and my.rstore.pt is the file that will contain an rstore
+   with extracted facts.  The extension .pt indicates that the restore is in
+   binary parse tree format, recognized by the tools we use.
 
-   This command creates a local directory called `extracted-rstores'.
-   For each file F.java it creates a new file extracted-rstores/F.java.rstore.pt
+   Example:
 
-   This is an rstore that contains the facts extracted from that file.
-   The extension .pt indicates that the restore is in binary 
-   parse tree format, recognized by the tools we use.
+	 extract-java /home/paulk/software/source/sources/CH/ifa/draw jhotdraw.rstore.pt
 
-   If you want to inspect the contents of such a generated file do
+   This will take some 3 minutes on a 1 Gig machine for 15 Kloc of souce code.
 
-	 unparsePT -i extracted-rstores/F.java.rstore.pt
+    If you want to inspect the contents of such a generated file do
+
+	 unparsePT -i jhotdraw.rstore.pt
 
    and this will give you the extracted data as text.
 
-2. Merge the resulting rstores, e.g.
-
-	 merge-rstores extracted-rstores/*.pt
-
-   This will take another minute.
-
-   The result is a combined Rstore called `result.rstore.pt'
-
-   If you prefer, you can name the output file yourself
-   (e.g. hotdraw.rstore.pt) and set the verbose option to see what is
-   going on:
-	 merge-rstores -v -o jhotdraw.rstore.pt extracted-rstores/*.pt
-
-3. Convert the merged rstore to visualization data:
+2. Convert the merged rstore to visualization data:
 	rstore2rviz -i jhotdraw.rstore.pt -o jhotdraw.rviz
 
-
-4. Visualize the resulting data:
+3. Visualize the resulting data:
 	rviz jhotdraw.rviz

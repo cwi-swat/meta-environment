@@ -118,13 +118,13 @@ equations
 
 %% ---- Export an RVIZ file
 
-%%[erv1]	export-rviz($Rstore) = export($Rstore)
+[erv1]	export-rviz($Rstore) = export($Rstore)
 
-%%[exp1]	export(rstore(<$Var, $Type, $Val>, $VPair*)) = 
-%%export-pair($Var, $Type, $Val) 
-%%export(rstore($VPair*))
+[exp1]	export(rstore(<$Var, $Type, $Val>, $VPair*)) = 
+export-pair($Var, $Type, $Val) 
+export(rstore($VPair*))
 
-%%[exp1]	export(rstore()) =
+[exp1]	export(rstore()) =
 
 [expp1]	$Area := get-area($Loc)
 	==============================================================

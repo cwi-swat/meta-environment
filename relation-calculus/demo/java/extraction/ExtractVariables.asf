@@ -22,8 +22,8 @@ equations
 
 [add-declaration-1]
   addDeclaration(&VariableDeclaratorId, &Rel, &Type) = 
-  &Rel union {< get-location(&VariableDeclaratorId), 
-		var2str(&VariableDeclaratorId), 
+  &Rel union {< var2str(&VariableDeclaratorId),
+		get-location(&VariableDeclaratorId), 
 		type2str(&Type)>}
 
 %% ---- field declarations

@@ -7,18 +7,28 @@ equations
 [extractRelations-2]
   extractRelations(&CompilationUnit, &Rstore) = 
   &Rstore
-  [| rel[File, loc] FILES               += extractCompilationUnit(&CompilationUnit, {})
-     rel[Interface,loc] INTERFACES      += extractInterface(&CompilationUnit, {})
-     rel[Package,loc] PACKAGES          += extractPackage(&CompilationUnit, {})
-     rel[Class,loc] CLASSES             += extractClasses(&CompilationUnit, {})
-     rel[Method, loc] METHODS           += extractMethod(&CompilationUnit,{})
-     rel[ClassUse,loc] CLASS_USES       += extractClassUses(&CompilationUnit, {})
-     rel[Var, loc, Type] VARIABLE_DECLS += extractVariables(&CompilationUnit,  {})
-     rel[Field, loc, Type] FIELD_DECLS  += extractFields(&CompilationUnit, {})
+  [| type FileName = str
+     type ClassName = str
+     type ClassUseName = str
+     type PackageName = str
+     type MethodName = str
+     type InterfaceName = str
+     type VarName = str
+     type TypeName = str
+     type FieldName = str
 
-     rel[Class,Class] EXTENDS_CLASS     += extractExtendsClass(&CompilationUnit, {})
-     rel[Class,Interface] IMPLEMENTS    += extractImplements(&CompilationUnit, {})
-     rel[Interface,Interface] EXTENDS_INTERFACE     
-					+= extractExtendsInterface(&CompilationUnit, {})
-     rel[Var, loc, Id] METHOD_CALLS     += extractMethodCalls(&CompilationUnit, {})
+     rel[FileName, loc] FILE                   += extractCompilationUnit(&CompilationUnit, {})
+     rel[InterfaceName,loc] INTERFACE          += extractInterface(&CompilationUnit, {})
+     rel[PackageName,loc] PACKAGE              += extractPackage(&CompilationUnit, {})
+     rel[ClassName,loc] CLASS                  += extractClasses(&CompilationUnit, {})
+     rel[MethodName, loc] METHOD               += extractMethod(&CompilationUnit,{})
+     rel[ClassUseName,loc] CLASS_USE           += extractClassUses(&CompilationUnit, {})
+     rel[VarName, loc, TypeName] VARIABLE_DECL += extractVariables(&CompilationUnit,  {})
+     rel[FieldName, loc, TypeName] FIELD_DECL  += extractFields(&CompilationUnit, {})
+
+     rel[ClassName,ClassName] EXTENDS_CLASS     += extractExtendsClass(&CompilationUnit, {})
+     rel[ClassName,InterfaceName] IMPLEMENTS    += extractImplements(&CompilationUnit, {})
+     rel[InterfaceName,InterfaceName] EXTENDS_INTERFACE     
+					        += extractExtendsInterface(&CompilationUnit, {})
+     rel[VarName, loc] METHOD_CALL		+= extractMethodCalls(&CompilationUnit, {})
   |]
