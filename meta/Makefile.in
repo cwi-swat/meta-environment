@@ -44,7 +44,7 @@ INSTALL_PROG	= @INSTALL_PROG@
 UNINSTALL	= @UNINSTALL@
 
 # Ordering is important here: the toolbus dir. should come first
-SUBDIRS		= toolbus editor evaluator graph-browser \
+SUBDIRS		= asfix toolbus editor evaluator graph-browser \
 		  in-output module-db asc-support compiler stred asource \
 		  sglr pgen utils grammars
 
