@@ -9788,7 +9788,7 @@ int main(int argc, char *argv[])
   return asc_support_main(&bottom, argc, argv,           
                           register_Sdf2_to_AsFix2ME_ADT,                   
                           resolve_Sdf2_to_AsFix2ME_ADT,                    
-                          init_Sdf2_to_AsFix2ME_ADT
+                          init_Sdf2_to_AsFix2ME_ADT, NULL, -1
 );}                                                        
 #endif                                                   
 
