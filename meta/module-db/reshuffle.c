@@ -377,6 +377,8 @@ ATfprintf(stderr,"reshuffle_per_sort finished\n");
       ATBhandleOne(cid);
     mods = ATgetNext(mods);
   }
+  if(!compiling && ATisEmpty(modules_to_process))
+    ATBwriteTerm(cid,ATmake("snd-event(done)"));
 }
 
 extern ATermList GetallKeys(ATermList compile_db);
@@ -543,6 +545,8 @@ void compile_module(int cid, ATerm mod)
     imports = get_imported_modules(mod);
     reshuffle_modules(cid,imports);
   }
-  else
+  else {
     ATfprintf(stderr,"Specification is incomplete and can not be compiled!\n");
+    ATBwriteTerm(cid,ATmake("snd-event(done)"));
+  }
 }

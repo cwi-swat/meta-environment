@@ -146,6 +146,7 @@ ATfprintf(stderr, "gives: %t\n", imports);
 
 ATerm delete_module(int cid, ATerm name)
 {
+ATfprintf(stderr, "Deleting: %t\n", name);
   change_modules_db(RemoveKey(modules_db,name));
   change_import_db(RemoveKey(import_db,name));
   change_trans_db(CreateValueStore());
