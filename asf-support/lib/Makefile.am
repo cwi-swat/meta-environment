@@ -10,7 +10,7 @@ INCLUDES =\
 	-I${ERROR_SUPPORT}/include \
 	-I${PT_SUPPORT}/include
 
-CFLAGS	+= -DDISABLE_DYNAMIC_CHECKING
+AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 
 ADT=/ufs/sen1/software/installed/apigen-bundle-1.5/linux/i386
 
