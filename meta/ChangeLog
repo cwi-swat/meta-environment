@@ -16,6 +16,10 @@
   * Button names are now list of strings. For example: ["Action","Parse"].
     This will add the "Parse" button to the menu "Action".
     Note that all button scripts will have to be adapted to deal with this.
+  * The button language was changed. All actions that had a modulename
+    as a direct argument now read it from the stack as a string.
+  * Added a new primitive to the button language: 'push-modulename' that
+    pushed the modulename of the current editor onto the stack
 
 2003/04/25 (jurgenv@cwi.nl)
  * Refactored button-actions to use StackPush/Pop operations
