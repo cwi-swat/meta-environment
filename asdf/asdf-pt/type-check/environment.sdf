@@ -33,6 +33,7 @@ context-free syntax
   get-giving(AS-FunctionSig)	-> Type
   get-raising(AS-FunctionSig)	-> Type
   terminates(AS-FunctionSig)	-> Answer
+  stable(AS-FunctionSig)	-> Answer
   remove-using(FunResult)	-> { SingleFunResult "&" }*
   remove-giving(FunResult)	-> { SingleFunResult "&" }*
   remove-raising(FunResult)	-> { SingleFunResult "&" }*
@@ -42,6 +43,8 @@ context-free syntax
   join-results({ SingleFunResult "&" }*, FunResult, SubTypes)	
 				-> { SingleFunResult "&" }+
 
+  Error		-> Answer
+  Answer+	-> Answers
 
 hiddens variables
 

@@ -93,16 +93,17 @@ equations
 
 [tca-catch] 
 
-    AR[nor=$TY2, exc=$TY3, no] := typecheck-action($A1, $TY1, $EN),
+    AR[nor=$TY2, exc=$TY3, $END1] := typecheck-action($A1, $TY1, $EN),
     $TY3 != empty, 
     AR[nor=$TY4, exc=$TY5, $END2] := typecheck-action($A2, $TY3, $EN),
-    $TY6 := unify($TY2, $TY4, get-subtypes($EN))
+    $TY6 := unify($TY2, $TY4, get-subtypes($EN)),
+    $END3 := $END1 answerOr $END2
     ===================================================================
-    typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY5, $END2] 
+    typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY5, $END3] 
 
 [tca-catch] 
 
-    AR[nor=$TY2, exc=$TY3, no] := typecheck-action($A1, $TY1, $EN),
+    AR[nor=$TY2, exc=$TY3, $END1] := typecheck-action($A1, $TY1, $EN),
     $TY3 != empty, 
     $ER+ := typecheck-action($A2, $TY3, $EN)
     ===================================================
@@ -117,22 +118,23 @@ equations
 
 [tca-catch] 
 
-    AR[nor=$TY2, exc=empty, no] := typecheck-action($A1, $TY1, $EN)
+    AR[nor=$TY2, exc=empty, $END1] := typecheck-action($A1, $TY1, $EN)
     ===================================================================
-    typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY2, exc=empty, no] 
+    typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY2, exc=empty,$END1] 
        
 
 [default-tca-catch] 
 
-    AR[nor=$TY2, exc=$TY3, no] := typecheck-action($A1, $TY1, $EN),
+    AR[nor=$TY2, exc=$TY3, $END1] := typecheck-action($A1, $TY1, $EN),
     AR[nor=$TY4, exc=$TY5, $END2] := typecheck-action($A2, (), $EN),
-    $TY6 := unify($TY2, $TY4, get-subtypes($EN))
+    $TY6 := unify($TY2, $TY4, get-subtypes($EN)),
+    $END3 := $END1 answerOr $END2
     ===================================================================
-    typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY5, $END2] 
+    typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY5, $END3] 
 
 [default-tca-catch] 
 
-    AR[nor=$TY2, exc=$TY3, no] := typecheck-action($A1, $TY1, $EN),
+    AR[nor=$TY2, exc=$TY3, $END1] := typecheck-action($A1, $TY1, $EN),
     $ER+ := typecheck-action($A2, (), $EN)
     ==========================================================
     typecheck-action($A1 catch $A2, $TY1, $EN) = $ER+

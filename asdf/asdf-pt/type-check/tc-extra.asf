@@ -1,0 +1,98 @@
+equations
+
+[check-terminates-1] 
+
+  $ANS := terminates($FD, yes, get-signatures($ENV))
+  ======================================================
+  check-terminates($FD, $LT : $SO -> $SFR1* & terminates & $SFR2*, $ENV) = $ANS
+
+[default-check-terminates-1] check-terminates($FD, $AFS, $ENV) = yes
+
+[terminates-1] 
+
+     $AC == unfold
+     ===================================
+     terminates($AC, $ANS, $SS) = $ANS error("Type error", 
+          [localized("Semantic function might not terminate due to unfold", 
+			get-location($AC))])
+
+[terminates-2] 
+
+     $AC == enact
+     ===================================
+     terminates($AC, $ANS, $SS) = $ANS error("Type error", 
+          [localized("Semantic function might not terminate due to enact", 
+			get-location($AC))])
+
+[terminates-3] 
+
+     $AC == apply
+     ===================================
+     terminates($AC, $ANS, $SS) = $ANS error("Type error", 
+          [localized("Semantic function might not terminate due to apply", 
+			get-location($AC))])
+
+[terminates-3] 
+
+     $LT $CO := $AC,
+     sigs($AFS1*, $AFS1, $AFS2*) := $SS,
+     $LT == get-fun-name($AFS1),
+     terminates($AFS1) == no
+     ===================================
+     terminates($AC, $ANS, $SS) = $ANS error("Type error", 
+[localized("Semantic function might not terminate due to semantic function not terminating", 
+			get-location($AC))])
+
+[check-stable-1] 
+
+  $ANS := stable($FD, yes, get-signatures($ENV))
+  ======================================================
+  check-stable($FD, $LT : $SO -> $SFR1* & stable & $SFR2*, $ENV) = $ANS
+
+[default-check-stable-1] check-stable($FD, $AFS, $ENV) = yes
+
+[stable-1]      
+
+     $AC == update
+     ===================================
+     stable($AC, $ANS, $SS) = $ANS error("Type error", 
+          [localized("Semantic function is not stable due to use of update", 
+			get-location($AC))])
+
+[stable-2] 
+
+     $LT $CO := $AC,
+     sigs($AFS1*, $AFS1, $AFS2*) := $SS,
+     $LT == get-fun-name($AFS1),
+     stable($AFS1) == no
+     ===================================
+     stable($AC, $ANS, $SS) = $ANS error("Type error", 
+[localized("Semantic function is not stable due to semantic function not being stable", 
+			get-location($AC))])
+
+[check-uncreative-1] 
+
+  $ANS := uncreative($FD, yes, get-signatures($ENV))
+  ======================================================
+  check-uncreative($FD, $LT : $SO -> $SFR1* & uncreative & $SFR2*, $ENV) = $ANS
+
+[default-check-uncreative-1] check-uncreative($FD, $AFS, $ENV) = yes
+
+[uncreative-1]      
+
+     $AC == create
+     ===================================
+     uncreative($AC, $ANS, $SS) = $ANS error("Type error", 
+       [localized("Semantic function is not uncreative due to use of update", 
+			get-location($AC))])
+
+[uncreative-2] 
+
+     $LT $CO := $AC,
+     sigs($AFS1*, $AFS1, $AFS2*) := $SS,
+     $LT == get-fun-name($AFS1),
+     uncreative($AFS1) == no
+     ===================================
+     uncreative($AC, $ANS, $SS) = $ANS error("Type error", 
+[localized("Semantic function is not uncreative due to semantic function not being uncreative", 
+			get-location($AC))])

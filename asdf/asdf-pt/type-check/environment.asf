@@ -45,6 +45,10 @@ equations
 
 [default-terminates-1] terminates($FS) = no
 
+[stable-1] stable($LT : $SO -> $SFR1* & stable & $SFR2*) = yes
+
+[default-stable-1] stable($FS) = no
+
 [remove-using-1] remove-using($SFR1* & using $TY & $SFR2*) = $SFR1* & $SFR2*
 
 [default-remove-using-1] remove-using($SFR+) = $SFR+

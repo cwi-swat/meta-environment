@@ -3,6 +3,7 @@ module type-check/tc-functions
 imports
 
   type-check/tc-actions
+  type-check/tc-extra
 
 exports
 
@@ -15,19 +16,14 @@ context-free syntax
   typecheck(AS-Module, TypeInfo)		-> Summary
   typecheck-definitions(FunctionDefs, Environment) -> Answers
 
-  terminates(AS-FunctionDef, Answers, Signatures)	
-				-> Answers {traversal(accu, break, top-down)}
+  check-typing(AS-FunctionDef, AS-FunctionSig, Environment)
+				-> Answers
 
-  terminates(Action, Answers, Signatures)	
-				-> Answers {traversal(accu, break, top-down)}
-  
 
   gen-summary(Answers)	-> Summary
 
   {AS-FunctionDef ","}* 	-> SortWithPosition
 
-  Error		-> Answer
-  Answer+	-> Answers
 
 hiddens 
 

@@ -24,29 +24,37 @@ equations
 
 [tcd-3] 	
 
+      $ET $LT $CO = $AC := $FD,
       sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($ENV),
       $LT == get-fun-name($AFS1),
-      $TY1 := get-using($AFS1),
-      $TY2 := get-giving($AFS1),
-      $TY3 := get-raising($AFS1),
+      $ANS1 := check-typing($FD, $AFS1, $ENV),
+      $ANS2 := check-terminates($FD, $AFS1, $ENV)
+      =========================================================================
+      typecheck-definitions(defs($FD), $ENV) = $ANS1 $ANS2
+
+[check-typing-1]
+
+      $TY1 := get-using($AFS),
+      $TY2 := get-giving($AFS),
+      $TY3 := get-raising($AFS),
       AR[nor=$TY4, exc=$TY5, $END] := typecheck-action($AC, $TY1, $ENV),
       yes == subtype-of($TY4, $TY2, get-subtypes($ENV)), 
       yes == subtype-of($TY5, $TY3, get-subtypes($ENV))
       =========================================================================
-      typecheck-definitions(defs($ET $LT $CO = $AC), $ENV) = yes
+      check-typing($ET $LT $CO = $AC, $AFS, $ENV) = yes
 
-[tcd-4] 
+[check-typing-2] 
 
-      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($ENV),
-      $LT == get-fun-name($AFS1),
-      $TY1 := get-using($AFS1),
-      $ER := typecheck-action($AC, $TY1, $ENV)
+      $TY := get-using($AFS),
+      $ER := typecheck-action($AC, $TY, $ENV)
       ========================================================================
-      typecheck-definitions(defs($ET $LT $CO = $AC), $ENV) = $ER
+      check-typing($ET $LT $CO = $AC, $AFS, $ENV) = $ER
 
-[default-tcd] typecheck-definitions(defs($FD*), $ENV) = 
-	      error("Type error", 
-	         [localized("Error in function definitions", get-location($FD*))])
+[default-check-typing] 
+
+  check-typing($FD, $AFS, $ENV) = 
+	 error("Type error", 
+	     [localized("Error in function definitions", get-location($FD))])
 
 [tca-function] 
 
@@ -63,41 +71,6 @@ equations
 		error("Type error", 
           [localized("Unable to find semantic function with right type", 
 			get-location($LT $CO))])
-
-[terminates-1] 
-
-     $AC == unfold
-     ===================================
-     terminates($AC, $ANS, $SS) = $ANS error("Type error", 
-          [localized("Semantic function might not terminate due to unfold", 
-			get-location($AC))])
-
-[terminates-2] 
-
-     $AC == enact
-     ===================================
-     terminates($AC, $ANS, $SS) = $ANS error("Type error", 
-          [localized("Semantic function might not terminate due to enact", 
-			get-location($AC))])
-
-[terminates-3] 
-
-     $AC == apply
-     ===================================
-     terminates($AC, $ANS, $SS) = $ANS error("Type error", 
-          [localized("Semantic function might not terminate due to apply", 
-			get-location($AC))])
-
-[terminates-3] 
-
-     $LT $CO := $AC,
-     sigs($AFS1*, $AFS1, $AFS2*) := $SS,
-     $LT == get-fun-name($AFS1),
-     terminates($AFS1) == no
-     ===================================
-     terminates($AC, $ANS, $SS) = $ANS error("Type error", 
-[localized("Semantic function might not terminate due to semantic function not terminating", 
-			get-location($AC))])
 
 [feedback-0] yes $ANS = $ANS
 

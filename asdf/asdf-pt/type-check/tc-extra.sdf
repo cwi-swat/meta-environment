@@ -1,0 +1,45 @@
+module type-check/tc-extra
+
+imports
+
+  type-check/environment
+  asdf/an-supplement 
+
+exports
+
+sorts
+
+  Answers
+
+context-free syntax
+
+  check-terminates(AS-FunctionDef, AS-FunctionSig, Environment)
+				-> Answers
+  terminates(AS-FunctionDef, Answers, Signatures)	
+				-> Answers {traversal(accu, break, top-down)}
+  terminates(Action, Answers, Signatures)	
+				-> Answers {traversal(accu, break, top-down)}
+
+  check-stable(AS-FunctionDef, AS-FunctionSig, Environment)
+				-> Answers
+  stable(AS-FunctionDef, Answers, Signatures)	
+				-> Answers {traversal(accu, break, top-down)}
+  stable(Action, Answers, Signatures)	
+				-> Answers {traversal(accu, break, top-down)}
+  
+hiddens
+
+variables
+
+  "$AC"[1-9]?	-> Action
+  "$ANS"[1-9]?	-> Answer
+  "$SS"[0-9]?	-> Signatures
+  "$CO"[1-9]?	-> Constructor
+  "$LT"[1-9]?	-> Literal
+  "$SO"[1-9]?	-> Sort
+  "$AFS"[1-9]?	-> AS-FunctionSig
+  "$AFS"[1-9]?"*"	-> {AS-FunctionSig ","}*
+  "$FD"[1-9]?	-> AS-FunctionDef
+  "$SFR"[0-9]?	-> SingleFunResult
+  "$SFR"[0-9]?"*"	-> { SingleFunResult "&" }*
+  "$ENV"[0-9]?	-> Environment
