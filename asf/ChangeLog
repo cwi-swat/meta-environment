@@ -1,5 +1,8 @@
 # $Id$
 
+2004/02/16 (markvdb@cwi.nl)
+ * Added the top module name to the asfsdf-checker.
+
 Wed Feb 11 15:00:11 CET 2004 <jurgenv@cwi.nl>
  * Added a phase to asfc that removes unused variables after generating
    the C code
