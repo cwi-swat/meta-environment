@@ -52,7 +52,7 @@
 /* New layout is marked by a layout tree that exists, but is empty.
  * This can never be the result of parsing, but it is still valid AsFix.
  */
-#define PRETTY_PRINT_MARKER ""
+#define DIRTY_LAYOUT_MARKER "layout-place-holder"
 
 /*}}}  */
 /*{{{  variables */
@@ -666,7 +666,10 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
     result = prepareTerm(PT_getTreeBracketTree(tree), data);
   }
   else if (mark_new_layout && in_equations && PT_isTreeLayout(tree)) {
-    result = PT_makeTreeLayoutFromString(PRETTY_PRINT_MARKER);
+    result = tree;
+    /* add a special annotation */
+    annos = (ATerm) ATinsert((ATermList) (annos ? annos : (ATerm) ATempty),
+		     ATparse("["DIRTY_LAYOUT_MARKER","DIRTY_LAYOUT_MARKER"]"));
   }
   else if (PT_isTreeAppl(tree)) {
     args = PT_getTreeArgs(tree);
