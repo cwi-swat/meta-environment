@@ -23,6 +23,7 @@ INCLUDES = \
 	-I${top_srcdir}/libconversion \
 	-I${top_srcdir}/libptmept \
 	-I${ATERM}/include \
+	-I${ERROR_API}/include \
 	-I${TOOLBUSLIB}/include
 
 pkgdata_DATA = \
