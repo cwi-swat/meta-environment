@@ -404,7 +404,8 @@ static ATerm matchArgument(ATerm env,
   else if (PT_isTreeLayout(arg1)) {
     newenv = matchArguments(env, conds, orgargs1, orgargs2, lhs_posinfo, depth);
   }
-  else if (PT_isTreeApplList(arg1)) {
+  else if (PT_isTreeApplList(arg1) &&
+	   PT_isTreeApplList(arg2)) {
     PT_Args elems1 = PT_getTreeArgs(arg1);
     PT_Args elems2 = PT_getTreeArgs(arg2);
     PT_Production prod1 = PT_getTreeProd(arg1);
