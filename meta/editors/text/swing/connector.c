@@ -203,10 +203,17 @@ static int handleEditorInput(TE_Pipe hiveToEditor, TE_Pipe editorToHive)
   write_to_editor_fd = TE_getPipeWrite(hiveToEditor);
 
   t = ATBreadTerm(read_from_editor_fd);
+  if (t == NULL) {
+    return -1;
+  }
 
   if (ATmatch(t, "snd-event(<term>)", &event)) {
+    ATwarning("%s:handleEditorInput: %t\n", __FILE__, t);
     ATBwriteTerm(write_to_hive_fd, event);
-    ATBwriteTerm(write_to_editor_fd, ATmake("snd-ack-event(<term>)", event));
+    ATBwriteTerm(write_to_editor_fd, ATmake("rec-ack-event(<term>)", event));
+  }
+  else if (ATisEqual(t, ATparse("snd-void"))) {
+    /* ignore */
   }
   else {
     ATwarning("%s:handleEditorInput: ignored: %t\n", __FILE__, t);
