@@ -762,7 +762,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   //{{{ public void run()
 
   public void run() {
-    layoutGraph(importGraphPanel);
+    layoutGraph(importGraphPanel, graph);
   }
 
   //}}}
@@ -1008,7 +1008,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       }
     }
     moduleManager.selectModule(currentModule);
-    layoutGraph(importGraphPanel);
+    layoutGraph(importGraphPanel, graph);
   }
 
   //}}}
@@ -1019,13 +1019,13 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     setImports((ATermList) importRelations);
 
     graph = GraphWrapper.fromImportList(factory, (ATermList) moduleList, (ATermList) importRelations);
-    layoutGraph(importGraphPanel);
+    layoutGraph(importGraphPanel, graph);
   }
 
   //}}}
   //{{{ public void layoutGraph()
 
-  public void layoutGraph(GraphPanel graphPanel) {
+  public void layoutGraph(GraphPanel graphPanel, GraphWrapper graph) {
     final FontMetrics metrics = graphPanel.getFontMetrics(Preferences.getFont(GraphPanel.PREF_NODE_FONT));
 
     NodeSizer sizer = new NodeSizer() {
@@ -1049,9 +1049,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   public void displayGraph(String id, ATerm graphTerm)
   {
-    Graph graph = GraphWrapper.fromTerm(graphTerm);
-
-    bridge.postEvent(factory.make("layout-graph(<str>,<term>)", graphPanel.getId(), graph.toTerm()));
+    GraphWrapper graph = GraphWrapper.fromTerm(graphTerm);
+    GraphPanel panel = getGraphPanel(id);
+    layoutGraph(panel, graph);
   }
 
   //}}}

@@ -5,7 +5,6 @@
 package metastudio;
 
 import aterm.*;
-import toolbus.*;
 
 public class UserInterfaceBridge
   extends UserInterfaceTool
