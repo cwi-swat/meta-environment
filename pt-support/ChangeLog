@@ -1,6 +1,9 @@
 $Id$
 
 Wed Mar 24 10:31:40 CET 2004 <{jong,kooiker}@cwi.nl>
+ * libmept/{posInfo,MEPT-utils}.c:
+   - add PT_findArgsWithLocation
+   - move PT_findTreeParent from posInfo to MEPT-utils
  * utils/addPosInfo: use Location API instead of Error API
 
 Tue Mar 23 09:37:57 CET 2004 <{jong,kooiker}@cwi.nl>
