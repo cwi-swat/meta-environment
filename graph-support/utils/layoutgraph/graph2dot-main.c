@@ -1,6 +1,4 @@
-/*
- * $Id$
- */
+/* $Id$ */
 
 /*{{{  standard includes */
 

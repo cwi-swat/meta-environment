@@ -3,7 +3,6 @@
 /*{{{  includes */
 
 #include <MEPT-utils.h>
-#include <ErrorAPI.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>

@@ -1,3 +1,7 @@
+/* $Id$ */
+
+/*{{{  includes */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -7,10 +11,15 @@
 #include "layoutgraph.tif.h"
 #include <Graph.h>
 
+/*}}}  */
+
+/*{{{  globals */
+
 static char myname[] = "layoutgraph";
 static char myversion[] = "1.0";
 static char myarguments[] = "hi:o:tV";
 
+/*}}}  */
 
 /*{{{  void rec_terminate(int conn, ATerm arg) */
 
