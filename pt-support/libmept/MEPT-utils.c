@@ -632,7 +632,7 @@ ATbool PT_isTreeVar(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
-    return PT_prodHasVarSymAsRhs(prod);
+    return PT_isVarDefault(prod);
   }
   return ATfalse;
 }
