@@ -35,7 +35,7 @@ toolbus_adapter_LDADD   = -L${top_builddir}/libtb -ltb \
 			-L$(ATERM)/lib -lATerm
 
 %.tif.c %.tif.h: %.tifs
-	${ATERM}/bin/tifstoc -tool $* $<
+	${top_builddir}/aterm/tifstoc -tool $* $<
 
 %.tb: %.tbi
 	cp $< $@
