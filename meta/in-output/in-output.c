@@ -59,7 +59,7 @@
 
 ATbool run_verbose = ATfalse;
 
-static char myversion[] = "1.3";
+static char myversion[] = "1.4";
 
 /*
    The argument vector: list of option letters, colons denote option
