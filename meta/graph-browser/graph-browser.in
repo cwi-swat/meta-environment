@@ -1,4 +1,6 @@
-#!/bin/sh
+#! @SHELL@
+# $Id$
+
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 libdir=$exec_prefix/lib

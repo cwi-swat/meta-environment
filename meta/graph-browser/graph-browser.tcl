@@ -8,7 +8,7 @@
 # help texts
 #----------------------------------------------------------------------
 
-set toolname "GraphBrowser"
+set toolname "Graph Browser"
 set metaname "NewMeta"
 
 set help_meta "$metaname
@@ -17,42 +17,33 @@ A New Standalone Meta-environment for ASF+SDF
 Copyright (C) 1997  UvA, CWI
 
 $metaname development team:
-Mark van den Brand, Leon Moonen, 
-Tobias Kuipers, Pieter Olivier
+Mark van den Brand, Leon Moonen, Tobias Kuipers,
+Pieter Olivier, Jeroen Scheerder
 
 Programming Research Group, University of Amsterdam
 Department of Software Technology, CWI"
-                 
+
 set help_about "$toolname  -  ASF+SDF Import Graph Browser
 Copyright (C) 1997  Leon Moonen <leon@wins.uva.nl>
 
 $toolname provides a graphical view of an ASF+SDF import graph.
 The layout of this graph is computed using the dot layout algorithm
 developed by AT&T."
-  
-set help_mouse "                       $toolname - Mouse Operations
 
-Button-1: 
-   There are no actions associated with Button 1 yet.
+set help_mouse "               $toolname - Mouse Operations
 
-Button-2: 
-- Button-2-Motion (click and drag) on the canvas will 
-   reposition the canvas under the window. 
-- Button-2-Motion in the modules list will scroll through 
-   the list.
+Mouse Button:
+  - Pops up a contextual menu on the canvas.
+  - Selects modules in the Modules list.
+Secondary Button (usually Middle or Rightmost, if it exists):
+  - Repositions the canvas under the window.
+  - Scrolls through the module list.
+Tertiary Button (usually Rightmost, if it exists):
+  - Pops up a contextual menu on canvas and Modules list.
 
-Button-3: 
-- When the cursor is over a module on the canvas,
-   Button-3-Press will popup a menu with actions that can be 
-   performed on that module. Otherwise, Button-3-Press will 
-   popup a menu with general actions.
-- When the cursor is in the modules list, Button-3-Press 
-   will popup a menu with actions that can be performed on 
-   the modules selected in that list.
+The dot layout algorithm can be (re-)applied by clicking on
+the ``button'' in the lower right corner of the canvas."
 
-The dot layout algorithm can be (re-)applied by clicking on 
-the ``button'' in the lower right corner of the window."
- 
 #----------------------------------------------------------------------
 # packages
 #----------------------------------------------------------------------
@@ -62,7 +53,7 @@ package require Tcldot
 # constants
 #----------------------------------------------------------------------
 
-# switch to enable/diable printing of diagnostics to stderr
+# switch to enable/disable printing of diagnostics to stderr
 set DIAG 0
 
 set MAXWINSIZE {1000 800}
@@ -79,10 +70,13 @@ set MODULESTYLE box
 #----------------------------------------------------------------------
 # global variables (bweghh!)
 #----------------------------------------------------------------------
-global saveFill fileName printCommand g c statuslist 
+global saveFill fileName printCommand g c statuslist
 
 # animation of loading of modules
 set animate 1
+
+# resizing after loading of modules
+set autoresize 1
 
 # toggle during opening of modules (to turn of animation)
 set opening 0
@@ -105,12 +99,12 @@ set statuslist {}
 #---
 # snd-do(new-graph(graph(nodes([M1,..,Mn]),edges([Mi,Mj],..,[Mm,Mn]))))
 #-
-# Adds the named modules (nodes) and their import relations 
-# (directed edges). 
-# Modules and edges are added only once. 
-# The proc update-graph is performed afterwards. 
+# Adds the named modules (nodes) and their import relations
+# (directed edges).
+# Modules and edges are added only once.
+# The proc update-graph is performed afterwards.
 #---
-proc new-graph { graph } { 
+proc new-graph { graph } {
     global g
 
     GBin "new-graph($graph)"
@@ -135,7 +129,7 @@ proc new-graph { graph } {
     # (2) a list of edges
     # each edge is in turn a list of two nodes
     # all nodes are `wrapped' in id("...") function appl's
-  
+
     foreach node [lindex $graph 0] {
 	$g addnode [StripId $node]
     }
@@ -151,11 +145,11 @@ proc new-graph { graph } {
 #---
 # snd-do(open-module(Mod))
 #-
-# Adds the named module. 
-# Modules are added only once. 
-# The proc update-graph is performed afterwards. 
+# Adds the named module.
+# Modules are added only once.
+# The proc update-graph is performed afterwards.
 #---
-proc open-module { mod } { 
+proc open-module { mod } {
     global g MODULESTYLE
     GBin "open-module($mod)"
     $g addnode [StripId $mod] shape $MODULESTYLE
@@ -167,13 +161,13 @@ proc open-module { mod } {
 # snd-do(delete-module(Mod))
 #-
 # "Deletes" the named module i.e. turns it into shadowstyle
-# and deletes all edges that start in that module. 
-# The proc update-graph is performed afterwards. 
+# and deletes all edges that start in that module.
+# The proc update-graph is performed afterwards.
 #---
-proc delete-module { mod } { 
+proc delete-module { mod } {
     global g SHADOWSTYLE
     GBin "delete-module($mod)"
-    set node [$g findnode [StripId $mod]] 
+    set node [$g findnode [StripId $mod]]
     $node setattributes shape $SHADOWSTYLE
 
     foreach edge [$node listoutedges] {
@@ -186,10 +180,10 @@ proc delete-module { mod } {
 #---
 # snd-do(imports(Mod, [Mod1, ..., Modn]))
 #-
-# Adds the named modules (nodes) and their import relations 
+# Adds the named modules (nodes) and their import relations
 # (directed edges) using a module and a list of modules it imports.
-# Modules and edges are added only once. 
-# The proc update-graph is performed afterwards. 
+# Modules and edges are added only once.
+# The proc update-graph is performed afterwards.
 #---
 proc imports { mod modlist } {
     global g SHADOWSTYLE
@@ -240,16 +234,19 @@ proc finished-opening-modules { mod } {
 # redraws the canvas based on the internal TclDot graph-structure
 #---
 proc update-graph {} {
-    global g c opening animate
+    global g c opening animate autoresize
 
     if {$animate || !$opening} {
 	$c delete all
 	$g layout .b.h .a.v
-	eval [$g render]   
-	set bbox [$c bbox all]  
+	eval [$g render]
+	set bbox [$c bbox all]
 	if {$bbox == {}} { set bbox {0 0 0 0} }
-	$c configure -scrollregion $bbox 
+	$c configure -scrollregion $bbox
 	UpdateModuleList $g
+    }
+    if {$autoresize  && !$opening} {
+        ViewAll
     }
 }
 
@@ -262,7 +259,7 @@ proc update-graph {} {
 #-
 # sets the status message to s
 #---
-proc set-status { str } {  
+proc set-status { str } {
     global status
     set status [TCLstring $str]
 }
@@ -287,12 +284,12 @@ proc add-status { id str } {
 #---
 # snd-do(end-status(id))
 #-
-# remove all status messages for process id from the status list. Only called 
+# remove all status messages for process id from the status list. Only called
 # from process Status-display. Should not be called directly.
 #---
 proc end-status { id } {
     global statuslist
-    
+
     set listrm {}
     for {set i [expr [llength $statuslist]-1]} {$i >= 0} {incr i -1} {
 	if {[lindex [lindex $statuslist $i] 0] == $id} {
@@ -444,10 +441,10 @@ proc mouse_anyleave {c} {
     }
 }
 
-proc mouse_b3_press {c x y} {
+proc mouse_b1_press {c x y} {
     global g SHADOWSTYLE
 
-    set obj [GetObject $c]   
+    set obj [GetObject $c]
     if {$obj != {}} {
 	set type [string range $obj 0 3]
 	if {$type == "node"} {
@@ -458,7 +455,7 @@ proc mouse_b3_press {c x y} {
           }
 	} else {
           tk_popup .canvas-popup $x $y
-        } 
+        }
     } else {
         tk_popup .canvas-popup $x $y
     }
@@ -566,7 +563,7 @@ proc SelectedModules {} {
 #--
 proc EditModules { modlist } {
     foreach mod $modlist {
-	GBpost [format "edit-module(%s)" [ToId $mod]] 
+	GBpost [format "edit-module(%s)" [ToId $mod]]
     }
 }
 
@@ -626,7 +623,7 @@ proc DeleteModules { modlist graph } {
 #--
 proc CompileModules { modlist } {
     foreach mod $modlist {
-	GBpost [format "compile-module(%s)" [ToId $mod]] 
+	GBpost [format "compile-module(%s)" [ToId $mod]]
     }
 }
 
@@ -646,7 +643,7 @@ proc ParseEquations { modlist } {
 #--
 # OpenModule(M)
 #-
-# generates the toolbus event to request addition of a module 
+# generates the toolbus event to request addition of a module
 # and destroys the widget $w.
 #--
 proc OpenModule { mod } {
@@ -891,14 +888,14 @@ proc saveFileAs {type} {
     set file [fileDialog . save]
     saveFileByName $file $type
 }
- 
+
 proc saveFileByName {name type} {
     global fileName g
     if {[catch {open $name w} f]} {
         Warning "Unable to open file for write:\n$name; return"
     }
-    if {$type == "ig"} { 
-	set fileName $name 
+    if {$type == "ig"} {
+	set fileName $name
 	set nodes {}
 	set edges {}
 	foreach node [$g listnodes] {
@@ -968,10 +965,21 @@ proc define-menu-bar {} {
     $m add command -label "Print Setup ..." -underline 0 -command {printSetup}
     $m add command -label "Print" -underline 0 -command {Print}
     $m add separator
+    $m add command -label "Preferences ..."   -underline 1 -command {}
+    $m add separator
     $m add command -label "Exit" -underline 0 -command {GBevent button(quit)}
-    
+
+    menubutton .menu.edit -text "Edit" -underline 0 -menu .menu.edit.menu
+    set m .menu.edit.menu
+    menu $m
+    $m add command -label "Undo"    -underline 0 -command {}
+    $m add separator
+    $m add command -label "Cut"     -underline 2 -command {}
+    $m add command -label "Copy"    -underline 0 -command {}
+    $m add command -label "Paste"   -underline 0 -command {}
+
     menubutton .menu.specification -text "Specification" -underline 0 \
-	-menu .menu.specification.menu 
+	-menu .menu.specification.menu
     set m .menu.specification.menu
     menu $m
     $m add command -label "Open module" -underline 0 -command {OpenModuleWidget}
@@ -984,13 +992,15 @@ proc define-menu-bar {} {
 # Adapted by Mark
 #    $m add separator
 #    $m add command -label "Compile All" -underline 0 -command {CompileAll}
-    
-    menubutton .menu.window -text "Window" -underline 0 -menu .menu.window.menu
+
+    menubutton .menu.window -text "Graph" -underline 0 -menu .menu.window.menu
     set m .menu.window.menu
     menu $m
     $m add command -label "View all" -underline 0 -command {ViewAll}
-    $m add check -label "Animate loading" -underline 0 -variable animate
-    
+    $m add check -label "Autoresize after loading" -underline 0 -variable autoresize
+    $m add separator
+    $m add check -label "Animate while loading" -underline 0 -variable animate
+
     menubutton .menu.help -text "Help" -underline 0 -menu .menu.help.menu
     menu .menu.help.menu
     .menu.help.menu add command -label "About $metaname" -underline 0 \
@@ -999,16 +1009,17 @@ proc define-menu-bar {} {
         -command {Help $help_about center b}
     .menu.help.menu add command -label "Mouse Operations" -underline 0 \
         -command {Help $help_mouse left c}
-    
+
     menubutton .menu.debug -text "Debug" -underline 0 -menu .menu.debug.menu
     set m .menu.debug.menu
     menu $m
     $m add check -label "Diagnostic messages"  -variable DIAG
 
-    pack append .menu .menu.file {left} .menu.specification {left} \
-	.menu.window {left} .menu.debug {left} .menu.help {right}
+    pack append .menu .menu.file {left} .menu.edit {left} \
+        .menu.specification {left} .menu.window {left} \
+        .menu.debug {left} .menu.help {right}
 
-    tk_menuBar .menu.file .menu.specification .menu.window .menu.help  
+    tk_menuBar .menu.file .menu.specification .menu.window .menu.help
 }
 
 proc define-modules-frame {} {
@@ -1073,24 +1084,24 @@ proc define-modules-frame {} {
 proc define-graph-frame {} {
     global c SBW
     frame .graph -borderwidth 2 -relief groove
- 
+
     set c [canvas .graph.canvas -cursor crosshair \
         -xscrollcommand {.graph.xscroll set} \
         -yscrollcommand {.graph.yscroll set} \
         -borderwidth 0]
-    
+
     $c xview scroll 10 unit
     $c yview scroll 10 unit
-    
+
     scrollbar .graph.xscroll -width $SBW -orient horizontal \
         -command "$c xview"
     scrollbar .graph.yscroll -width $SBW -orient vertical \
-        -command "$c yview"                 
+        -command "$c yview"
 
     set buttonwidth [expr $SBW - 2]
     button .graph.layout -width $buttonwidth -height $buttonwidth \
     	-bitmap gray50 -command "update-graph"
-    
+
     grid .graph.canvas  -row 0 -column 0 -rowspan 1 \
         -columnspan 1 -sticky news
     grid .graph.yscroll -row 0 -column 1 -rowspan 1 \
@@ -1109,7 +1120,7 @@ proc define-graph-frame {} {
 
 proc define-status-frame {} {
     frame .status -relief raised
-    label .status.label -text "Status:" 
+    label .status.label -text "Status:"
     label .status.msg -borderwidth 2 -relief sunken -anchor w -textvariable status
     pack append .status .status.label {left} .status.msg {left expand fill}
 }
@@ -1210,13 +1221,13 @@ define-shadowmodule-popup
 define-modlist-popup
 define-canvas-popup
 
-bind $c <ButtonPress-3> "mouse_b3_press $c %X %Y"      
+bind $c <ButtonPress-1> "mouse_b1_press $c %X %Y"
+bind $c <ButtonPress-3> "mouse_b1_press $c %X %Y"
 
 $c bind all <Any-Enter> "mouse_anyenter $c"
 $c bind all <Any-Leave> "mouse_anyleave $c"
 
-bind $c <ButtonPress-2> "$c scan mark %x %y"    
+bind $c <ButtonPress-2> "$c scan mark %x %y"
 bind $c <B2-Motion> "$c scan dragto %x %y"
 
-bind .modules.list <ButtonPress-3> "tk_popup .modlist-popup %X %Y"      
-
+bind .modules.list <ButtonPress-3> "tk_popup .modlist-popup %X %Y"
