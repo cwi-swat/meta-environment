@@ -440,7 +440,8 @@ in
         ReturnSuccess(EditorId,Stack)
       +
         rec-msg(show-area(NewModName?), Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,FileName?).
+        StackPopTerm(Stack,Stack?,STree?) .
+        FileName := first(args(STree)) .
         snd-msg(edit-term-file(NewModName, FileName)) .
         rec-msg(editor-opened(NewModName, EditorId2?)).
         ParseTerm(EditorId2, NewModName) .
