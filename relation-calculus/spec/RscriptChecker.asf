@@ -1116,11 +1116,13 @@ $Error]>
 	cover-empty($Etype) = $Etype
 
 %% ---- Substitute type
+%% ---- We assume here that type variables &V that are undefined are the
+%% ---- result of an occurrence of empty-bag-type.
 
 [sb1]	$Etype := lookup($Table, $Var)
 	======================================================
 	substitute(& $Var, $Table, $Tenv) = 
-	if equal-type($Etype, not-in-table, $Tenv) then <undefined, $Tenv + Undeclared $Var>
+	if equal-type($Etype, not-in-table, $Tenv) then <undefined, $Tenv > %%+ Undeclared $Var>
 						   else <$Etype, $Tenv> fi
 
 [sb2]   <$Etype', $Tenv'> := substitute($Etype, $Table, $Tenv)

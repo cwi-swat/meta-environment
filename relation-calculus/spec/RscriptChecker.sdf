@@ -16,7 +16,8 @@ imports Rstore
 exports
     sorts ERROR ERRORS TENV DCLRVARS  
 
-    context-free start-symbols Summary
+    context-free start-symbols Summary 
+    context-free start-symbols TENV <REXPTYPE, TENV> <Boolean, Table[[RVAR,REXPTYPE]]>
 
     context-free syntax
 

@@ -1,6 +1,8 @@
 module Pico-syntax
 imports Pico-Identifiers basic/Integers basic/Strings Types
 exports
+  context-free start-symbols PROGRAM
+
   sorts PROGRAM DECLS ID-TYPE STATEMENT EXP
   start-symbols PROGRAM
   context-free syntax

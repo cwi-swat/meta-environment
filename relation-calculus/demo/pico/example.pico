@@ -1,4 +1,3 @@
-
 begin declare x : natural, y : natural, 
               z : natural, p : natural;
   x := 3;

@@ -14,12 +14,12 @@ exports
 
      "file" | "area-in-file"                    -> RVAR {reject}
 
-     "and" | "or" | "implies" | "in" | "notin" |
+     "and" | "or" | "not" | "implies" | "in" | "notin" |
      "union" | "inter" | "o" | "x" | "exists" |
      "forall" | "bool" | "int" | "str" | 
      "loc" | "bag" | "rel" | "init" | "yield" | 
      "equations" | "limit" | "initial" | 
-     "satisfy" | "end"				-> RVAR {reject}
+     "satisfy" | "end"	| "type"			-> RVAR {reject}
 
   context-free restrictions
      RVAR -/- [A-Za-z0-9\_\-]
@@ -101,7 +101,7 @@ exports
 
 %% Functions
 
-     RVAR "(" {REXP ","}* ")"                 	-> REXP {avoid}
+     RVAR "(" {REXP ","}* ")"                 	-> REXP
 
 
 %% Types
@@ -181,6 +181,10 @@ exports
     REXP "or" REXP -> REXP 		>
     "not" REXP -> REXP			>
     REXP "implies" REXP -> REXP
+%%,
+
+%%      RVAR "(" {REXP ","}* ")"  -> REXP  >
+%%      "(" REXP ")"		        -> REXP0 
  
 
      
