@@ -45,6 +45,7 @@ Symbol symbol_ceq_equ;
 Symbol symbol_ceq_when;
 Symbol symbol_ceq_impl;
 Symbol symbol_asfix_appl;
+Symbol symbol_term;
 Symbol symbol_prod;
 Symbol symbol_appl;
 Symbol symbol_term;

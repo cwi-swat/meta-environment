@@ -119,6 +119,7 @@ ATerm af_prod_reject_attr = NULL;
 ATerm af_prod_prefer_attr = NULL;
 ATerm af_prod_uneager_attr = NULL;
 ATerm af_prod_cons_attr = NULL;
+ATerm af_prod_alias_attr = NULL;
 ATerm af_prod_simple_module_id = NULL;
 ATerm af_prod_complex_module_id = NULL;
 ATerm af_prod_sections = NULL;
@@ -384,6 +385,7 @@ void AFinitAsFixPatterns()
     ATprotect(&af_prod_prefer_attr);
     ATprotect(&af_prod_uneager_attr);
     ATprotect(&af_prod_cons_attr);
+    ATprotect(&af_prod_alias_attr);
     ATprotect(&af_prod_simple_module_id);
     ATprotect(&af_prod_complex_module_id);
     ATprotect(&af_prod_sections);
@@ -522,6 +524,12 @@ void AFinitAsFixPatterns()
     af_prod_cons_attr =
       ATparse("prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[ql(\"cons\"),"
               "w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],"
+              "w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),"
+              "w(\"\"),no-attrs)");
+
+    af_prod_alias_attr =
+      ATparse("prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[ql(\"alias\"),"
+              "w(\"\"),ql(\"(\"),w(\"\"),sort(\"Production\"),w(\"\"),ql(\")\")],"
               "w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),"
               "w(\"\"),no-attrs)");
 

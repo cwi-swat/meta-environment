@@ -57,6 +57,7 @@ ATerm AFTflattenSdf2Prod(ATerm modname, ATerm prod);
 #define AFTisPreferAttr(attr)	 (AFTcheckAppl(attr, af_prod_prefer_attr))
 #define AFTisUneagerAttr(attr)	 (AFTcheckAppl(attr, af_prod_uneager_attr))
 #define AFTisConsAttr(attr)	 (AFTcheckAppl(attr, af_prod_cons_attr))
+#define AFTisAliasAttr(attr)	 (AFTcheckAppl(attr, af_prod_alias_attr))
 #define AFTisSimpleModuleId(module) (AFTcheckAppl(module, af_prod_simple_module_id))
 #define AFTisComplexModuleId(module) (AFTcheckAppl(module, af_prod_complex_module_id))
 #define AFTisSections(sections)	 (AFTcheckAppl(sections, af_prod_sections))
@@ -261,6 +262,8 @@ extern ATerm AFTgetEquLhs(ATerm equ);
 #define AFTgetComplexModuleIdLit1(m)    (AFTarg((m), 6))
 
 #define AFTgetConsArg(a)     (AFTarg((a), 4))
+
+#define AFTgetAliasProd(a)   (AFTarg((a), 4))
 
 #define AFTgetSectionsList(s)     (AFTarg((s), 0))
 
@@ -534,6 +537,7 @@ extern ATerm af_prod_reject_attr;
 extern ATerm af_prod_prefer_attr;
 extern ATerm af_prod_uneager_attr;
 extern ATerm af_prod_cons_attr;
+extern ATerm af_prod_alias_attr;
 extern ATerm af_prod_simple_module_id;
 extern ATerm af_prod_complex_module_id;
 extern ATerm af_prod_sections;

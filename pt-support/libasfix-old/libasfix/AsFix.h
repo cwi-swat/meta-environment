@@ -205,6 +205,7 @@ extern Symbol symbol_l;
 extern Symbol symbol_ceq_equ;
 extern Symbol symbol_ceq_when;
 extern Symbol symbol_ceq_impl;
+extern Symbol symbol_term;
 extern Symbol symbol_asfix_appl;
 extern Symbol symbol_asfix_term;
 extern Symbol symbol_prod;
@@ -288,6 +289,7 @@ a lexical.}
 */
 
 #define asfix_is_lex(t)		(ATgetSymbol((ATermAppl) t) == symbol_lex)
+#define asfix_is_literal(t)	(ATgetSymbol((ATermAppl) t) == symbol_l)
 
 
 /*
@@ -295,6 +297,7 @@ a lexical.}
 */
 
 #define asfix_is_list(t)	(ATgetSymbol((ATermAppl) t) == symbol_asfix_list)
+#define asfix_is_sep(t)	(ATgetSymbol((ATermAppl) t) == symbol_sep)
 
 /*
 \Macro{asfix\_is\_itersep}{ATbool }{ATerm }{Check if an AsFix term is an
