@@ -52,10 +52,11 @@ PT_Args skipWhitespace(PT_Args list);
  */
 PT_Args skipToEndOfWhitespace(PT_Args list);
 
-/* asource. This function asources an asfix term to text and 
+/* yield. This function asources an asfix term to text and 
  * creates a quoted literal ATerm for it.
  */
-ATerm asource(PT_Tree asfix);
+ATerm yieldTree(PT_Tree asfix);
+ATerm yieldArgs(PT_Args asfix);
 
 /*
  * isValidList, isValidSlice both check:

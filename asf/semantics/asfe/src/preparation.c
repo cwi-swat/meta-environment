@@ -153,7 +153,7 @@ enter_equation(equation_table * table, ASF_CondEquation equation)
   top_ofs = PT_getTreeProd(lhs);
 
   if (runVerbose) {
-    ATwarning("enter_equation: top_ofs = %t\n", top_ofs);
+    ATwarning("enter_equation:  top_ofs = %s\n", PT_yieldProduction(top_ofs));
   } 
 
   /* find first appl or var argument of the outermost function symbol */ 
@@ -176,7 +176,8 @@ enter_equation(equation_table * table, ASF_CondEquation equation)
       first_ofs = PT_getTreeProd(firstArg);
 
       if (runVerbose) {
-        ATwarning("enter_equation: first_ofs = %t\n", first_ofs);
+        ATwarning("...............first_ofs = %s\n", 
+          PT_yieldProduction(first_ofs));
       } 
     }
   }
@@ -236,9 +237,9 @@ find_equation(equation_entry * from, PT_Production top_ofs,
               PT_Production first_ofs)
 {
   if (runVerbose) {
-    ATwarning("looking for equation with ofs: %t\n", top_ofs);
+    ATwarning("looking for equation with ofs: %s\n", PT_yieldProduction(top_ofs));
     if (first_ofs) {
-      ATwarning("and first ofs: %t\n", first_ofs);
+    ATwarning("................and first ofs: %s\n", PT_yieldProduction(first_ofs));
     }
   }
 

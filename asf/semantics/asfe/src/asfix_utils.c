@@ -86,7 +86,7 @@ ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2)
       if (PT_isTreeLayout(asfix1) || PT_isTreeLayout(asfix2)) {
 	ATabort
 	  ("Internal error. Normal term compared with whitespace in %t\n",
-	   asource((PT_Tree)tagCurrentRule));
+	   yieldTree((PT_Tree)tagCurrentRule));
       }
 
       return ATfalse;
@@ -99,9 +99,24 @@ ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2)
   return ATtrue;
 }
 
-ATerm asource(PT_Tree asfix)
+ATerm yieldTree(PT_Tree asfix)
 {
   char *temp = strdup(PT_yieldTree(asfix));
+  ATerm term;
+
+  if (!temp) {
+    ATerror("MRF in asource");
+  }
+
+  term = ATmake("<str>", temp);
+  free(temp);
+
+  return term;
+}
+
+ATerm yieldArgs(PT_Args asfix)
+{
+  char *temp = strdup(PT_yieldArgs(asfix));
   ATerm term;
 
   if (!temp) {

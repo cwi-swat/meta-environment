@@ -530,8 +530,9 @@ argMatching(ATerm env,
   ATerm newenv = env;
 
   if (runVerbose) {
-    ATwarning("%t:matching arguments: %t\nwith\n%t\n\n",
-	      asource((PT_Tree) tagCurrentRule), arg1, arg2);
+    ATwarning("%t:matching: %t\nwith\n%t\n\n",
+	      yieldTree((PT_Tree) tagCurrentRule), yieldTree(arg1), 
+              yieldTree(arg2));
   }
 
   if (PT_isTreeApplList(arg1) && PT_isTreeApplList(arg2)) {
@@ -911,8 +912,11 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
   PT_Args newargs1, newargs2;
 
   if (runVerbose) {
-    ATwarning("%t:matching next element: %t\ngiven %t\n and %t\n\n\n",
-	      asource((PT_Tree) tagCurrentRule), elem1, elems2, listProd);
+    ATwarning("%t:matching next element: %t\ngiven %t\n and %s\n\n\n",
+	      yieldTree((PT_Tree) tagCurrentRule), 
+              yieldTree(elem1), 
+              yieldArgs(elems2), 
+              PT_yieldProduction(listProd));
   }
 
   if (PT_isTreeVarList(elem1)) {
@@ -1023,8 +1027,11 @@ listMatching(ATerm env, PT_Production listProd,
   assert(isValidList(elems2));
 
   if (runVerbose) {
-    ATwarning("%t:matching elements: %t\nwith\n%t given %t\n\n\n",
-	      asource((PT_Tree) tagCurrentRule), elems1, elems2, listProd);
+    ATwarning("%t:matching elements: %t\nwith\n%t given %s\n\n\n",
+	      yieldTree((PT_Tree) tagCurrentRule), 
+              yieldArgs(elems1), 
+              yieldArgs(elems2), 
+              PT_yieldProduction(listProd));
   }
 
 
@@ -1210,7 +1217,7 @@ apply_rule(PT_Tree trm, int depth)
       while ((entry = find_equation(entry, top_ofs, first_ofs))) {
 
         if (runVerbose) {
-	  ATwarning("Trying equation: %t.\n", asource((PT_Tree)entry->tag));
+	  ATwarning("Trying equation: %s.\n", PT_yieldTree((PT_Tree)entry->tag));
         }
 
         tagCurrentRule = entry->tag;
@@ -1232,15 +1239,15 @@ apply_rule(PT_Tree trm, int depth)
         if (!is_fail_env(env)) {
 	  TIDE_STEP(ATgetAnnotation(entry->rhs, posinfo), env, depth);
 	  if (runVerbose) {
-	    ATwarning("Equation %t was successful.\n", 
-                      asource((PT_Tree)entry->tag));
+	    ATwarning("Equation %s was successful.\n", 
+                      PT_yieldTree((PT_Tree)entry->tag));
 	  }
 
 	  rewrite_steps++;
 	  return make_cenv(entry->rhs, env);
         }
         else if (runVerbose) {
-	  ATwarning("Equation %t failed.\n", asource((PT_Tree)entry->tag));
+	  ATwarning("Equation %s failed.\n", PT_yieldTree((PT_Tree)entry->tag));
         }
       }
     }
@@ -1249,7 +1256,7 @@ apply_rule(PT_Tree trm, int depth)
   while ((entry = find_equation(entry, top_ofs, (PT_Production) NULL))) {
 
     if (runVerbose) {
-      ATwarning("Trying equation: %t.\n", asource((PT_Tree) entry->tag));
+      ATwarning("Trying equation: %s.\n", PT_yieldTree((PT_Tree) entry->tag));
     }
 
     tagCurrentRule = entry->tag;
@@ -1271,15 +1278,15 @@ apply_rule(PT_Tree trm, int depth)
     if (!is_fail_env(env)) {
       TIDE_STEP(ATgetAnnotation(entry->rhs, posinfo), env, depth);
       if (runVerbose) {
-	ATwarning("Equation: %t was successful.\n", 
-                  asource((PT_Tree)entry->tag));
+	ATwarning("Equation: %s was successful.\n", 
+                  PT_yieldTree((PT_Tree)entry->tag));
       }
 
       rewrite_steps++;
       return make_cenv(entry->rhs, env);
     }
     else if (runVerbose) {
-      ATwarning("Equation %t failed.\n", asource((PT_Tree)entry->tag));
+      ATwarning("Equation %s failed.\n", PT_yieldTree((PT_Tree)entry->tag));
     }
   }
 
