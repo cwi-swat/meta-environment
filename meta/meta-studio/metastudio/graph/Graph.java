@@ -80,7 +80,8 @@ extends GraphImpl
 	  }
 
 	  NodeList newNodes = factory.makeNodeList_Empty();
-	  for (int i = nodeVector.size() - 1; i >= 0; i--) {
+	  //for (int i = nodeVector.size() - 1; i >= 0; i--) {
+	  for (int i = 0; i < nodeVector.size(); i++) {
 		  Node node = (Node) nodeVector.elementAt(i);
 		  newNodes = factory.makeNodeList_Multi(node, newNodes);
 	  }
@@ -102,12 +103,8 @@ extends GraphImpl
 	  return newEdges;
   }
 
-  public void deleteNode(String id) {
-	  setNodes(deleteNodeFromNodes(id, getNodes()));
-	  setEdges(deleteNodeFromEdges(id, getEdges()));
-  }
-
-  public void sizeNodes(NodeSizer nodeSizer) {
+  public Graph sizeNodes(NodeSizer nodeSizer) {
+          Graph newGraph;
 	  NodeList nodes = getNodes();
 	  List nodeList = new ArrayList();
 
@@ -125,7 +122,8 @@ extends GraphImpl
 		  Node node = (Node) nodeList.get(i);
 		  result = factory.makeNodeList_Multi(node, result);
 	  }
-	  setNodes(result);
+	  newGraph = setNodes(result);
+	  return newGraph;
   }
 
   /**
@@ -133,13 +131,14 @@ extends GraphImpl
 	* not imported by any other nodes) are listed first.
 	**/
 
-  public void orderNodes() {
+  public Graph orderNodes() {
+          Graph newGraph;
 	  NodeList nodes = getNodes();
 	  NodeList topNodes = factory.makeNodeList_Empty();
 
 	  while (!nodes.isEmpty()) {
 		  Node node = nodes.getHead();
-		  if (!isTopNode(node)) {
+		  if (isTopNode(node)) {
 			  topNodes = factory.makeNodeList_Multi(node, topNodes);
 		  }
 
@@ -154,14 +153,15 @@ extends GraphImpl
 		  topNodes = topNodes.getTail();
 	  }
 
-	  setNodes(nodes);
+	  newGraph = setNodes(nodes);
+	  return newGraph;
   }
 
   private boolean isTopNode(Node node) {
 	  EdgeList edges = getEdges();
 	  while (!edges.isEmpty()) {
 		  Edge edge = edges.getHead();
-		  if (edge.getTo().isEqual(node.getId())) {
+		  if (edge.getFrom().isEqual(node.getId())) {
 			  return false;
 		  }
 		  edges = edges.getTail();
