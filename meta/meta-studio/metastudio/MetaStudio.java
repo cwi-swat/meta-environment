@@ -52,9 +52,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
 
     private MenuBar createMenuBar(String []args) {
         MenuBar menuBar = new MenuBar(factory, args, this);
-        Thread mThread = new Thread(menuBar);
-        mThread.setName("menu-bar");
-        mThread.start();
+        spawn(menuBar, "menu-bar");
 
         return menuBar;
     }
