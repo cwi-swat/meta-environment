@@ -1,0 +1,60 @@
+equations
+
+[get-eval-info-1]
+
+    get-eval-info($ASM) = 
+	   <get-subtypes($ASM, []), 
+	    get-eval-dataop($ASM, []),
+	    get-data-constants($ASM, [])>
+
+[get-eval-use-1]
+    get-eval-use($LT : $ASA, $LS*) = use-to-type($ASA)
+
+[use-to-type-1] 
+
+   bytes($CH2) := lower-case(bytes($CH1))
+   =================================================================
+   use-to-type(sort($CH1$CH1*)) = atomictype($CH2$CH1*)
+
+[use-to-type-2] 
+
+   $TY := action
+   =======================================================================
+   use-to-type(Action & $SFR1*) = $TY
+
+[get-eval-prefixdataop-1]
+    get-eval-prefixdataop($LT : $ASA, $LS*) = use-to-char($ASA)
+
+[use-to-char-1] 
+
+   bytes($CH2) := lower-case(bytes($CH1))
+   =================================================================
+   use-to-char(sort($CH1$CH1*)) = prefixdataop($CH2$CH1*)
+
+[use-to-char-2] 
+   use-to-char(Action & $SFR1*) = prefixdataop("a" "c" "t" "i" "o" "n")
+
+[get-eval-dataop-1]
+   get-eval-dataop($SO ::= $ARR, $DOS) = 
+   get-eval-dataop(sort-to-type($SO), $ARR, $DOS)
+
+[get-eval-dataop-2]
+   $DOS2 := concat([<get-eval-prefixdataop($LS*),datasel(prefixdataop($CH+),give the get-eval-use($LS*))>], $DOS1)
+   =======================================================================
+   get-eval-dataop($ATY, uqliteral($CH+)($LS*), $DOS1) = 
+      <prefixdataop($CH+),datacon(prefixdataop($CH+),get-eval-use($LS*))>:$DOS2
+
+[get-eval-dataop-3]
+   get-eval-dataop($ATY, $ARR1 | $ARR2, $DOS) = 
+      get-eval-dataop($ATY, $ARR1, get-eval-dataop($ATY, $ARR2, $DOS))
+
+[default-get-eval-dataop-1]
+   get-eval-dataop($ATY, $ARR, $DOS) = $DOS
+
+[join-sigs-1] 
+
+   join-eval-info(<$STS1,$DOS1,$DCS1>, 
+		  <$STS2,$DOS2,$DCS2>) = 
+			<concat-unique($STS1, $STS2),
+			 concat-unique($DOS1, $DOS2),
+			 concat-unique($DCS1, $DCS2)>

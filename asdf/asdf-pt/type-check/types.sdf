@@ -1,9 +1,10 @@
 module type-check/types
 
+imports type-check/pos-annotate
+imports basic/Whitespace
 imports 
 
   basic/Errors
-  type-check/pos-annotate
   basic/Integers
 
 exports 

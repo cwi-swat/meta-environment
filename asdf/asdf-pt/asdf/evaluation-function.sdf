@@ -1,0 +1,79 @@
+module asdf/evaluation-function
+
+imports
+  asdf/functions
+  containers/List[EvalData]
+  asdf/concat[EvalData]
+  asdf/concat[<DataOp, Type>]
+  asdf/concat[<AtomicType, AtomicType>]
+
+exports
+  context-free start-symbols  EvalInfo EvalDataOpSigs
+
+sorts
+  EvalDataOpSigs Datacon Datasel DataOp EvalData
+
+aliases
+  List[[EvalData]] -> EvalDataOpSigs
+
+context-free syntax
+
+%% Equations:
+  get-eval-info(AS-Module)	-> EvalInfo
+
+  join-eval-info(EvalInfo, EvalInfo) -> EvalInfo
+
+  get-eval-dataop(AS-Module, EvalDataOpSigs)  
+			     -> EvalDataOpSigs {traversal(accu, break, top-down)}
+
+  get-eval-dataop(AS-Requires-Production, EvalDataOpSigs)  
+			     -> EvalDataOpSigs {traversal(accu, break, top-down)}
+
+  get-eval-dataop(AtomicType, AS-Requires-Rhs, EvalDataOpSigs)	 ->
+  EvalDataOpSigs 
+
+  get-eval-use({(Literal ":" AS-Argument) ","}*)  -> Type
+
+  use-to-type(AS-Argument)	  -> AtomicType
+
+  get-eval-prefixdataop({(Literal ":" AS-Argument) ","}*)  -> DataOp
+
+  use-to-char(AS-Argument)	  -> DataOp
+
+%% Sorts
+
+  <SubTypes, EvalDataOpSigs, DataConstants>	-> EvalInfo
+
+  (<DataOp, Datacon> | <DataOp, Datasel>) -> EvalData
+
+  "datacon" "(" DataOp "," Type ")" -> Datacon
+
+  "datasel" "(" DataOp "," Action ")" -> Datasel
+
+
+hiddens variables
+
+  "$ASM"		-> AS-Module
+  "$LT"[0-9]?		-> Literal
+  "$SO"[0-9]?		-> Sort
+  "$ATY"[0-9]?		-> AtomicType    
+  "$TY"[0-9]?"*"	-> { Type ","}*
+  "$TY"[0-9]?		-> Type
+  "$SFR"[0-9]?"*"	-> { SingleActionType "&" }*
+
+  "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
+  "$DOS"[0-9]?		-> EvalDataOpSigs
+  "$EDOS"		-> EvalData
+%%  "$EDOS"[0-9]?		-> EvalDataOpSigs
+  "$DCS"[0-9]?		-> List[[<DataOp, Type>]]
+
+  "$ARR"[0-9]?		-> AS-Requires-Rhs
+  "$CH"[0-9]?		-> CHAR
+  "$CH"[0-9]?"*"	-> CHAR*
+  "$CH"[0-9]?"+"	-> CHAR+
+  "$LT"[0-9]?		-> Literal
+
+  "$LS"[0-9]?"*"	-> {(Literal ":" AS-Argument) ","}*
+  "$ASA"[0-9]?		-> AS-Argument
+
+

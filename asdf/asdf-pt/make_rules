@@ -3,7 +3,7 @@
 LIBROOT=${top_srcdir}/lib
 
 # What gets installed, distributed, cleaned
-MODULES=$(wildcard *.asf *.sdf *.eqs *.tbl) 
+MODULES=$(wildcard *.asf *.sdf *.eqs *.tbl *.termstore) 
 EXTRA_DIST = $(MODULES)
 
 # Determine installation directory

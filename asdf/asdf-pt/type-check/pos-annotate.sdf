@@ -1,8 +1,8 @@
 module type-check/pos-annotate
 
+imports basic/Whitespace
 imports 
 
-  utilities/PosInfo[SortWithPosition]
   asdf/an
 
 exports

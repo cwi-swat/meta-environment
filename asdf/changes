@@ -1,4 +1,7 @@
 
+
+----------------- Bugs: -----------------
+
 When using dump parsetable from actions menu in term editor in
 asfsdf-meta env. ToolBus reports "type mismatch in assignment:
 Modulename$ButtonActionExecutor:str? := []"
@@ -10,7 +13,40 @@ operation in standard.asfsdf.buttons.src as in:
           dump-parse-table]),
 
 
-    
+
+SetFocus when parse error occurs is not working when the error is the
+result of a single character, due to a mismatch between the area
+definition and the set-focus elisp function in
+meta/editors/text/emacs/gnu-emacs.el.
+The area definition define the start and end to be equal. When this is
+true the set-focus functions does not highlight the area, because the
+it is designed to highligt areas from and including the start and up
+to but NOT including the end! This can be changed by using the
+following fix:
+
+(defun set-focus (start end)
+
+
+  (if (equal start end)
+      (setq start (- start 1))
+  )
+
+
+  (setq must-send-modified ())
+  (let ((modified (buffer-modified-p)))
+    (clear-overlays 'FOCUS)
+    (let ((overlay (make-overlay start end nil nil)))
+      (overlay-put overlay 'face (get-focus-properties))
+      (overlay-put overlay 'category 'FOCUS)
+      (overlay-put overlay 'priority 200)
+    )
+    (set-buffer-modified-p modified)
+  )
+  (setq must-send-modified t)
+)
+
+If start is equal to 1, corresponding to the top left most, it is
+still working although start would be set to zero!?!
 
 
 
@@ -35,9 +71,78 @@ operation in standard.asfsdf.buttons.src as in:
 - Description of concrete syntax in the Action env.
 - - Consistency check, maybe a problem when including asf+sdf modules.
 
+- Initial termstore, should be part of the distribution.
+
+Husk at tilføje til cvs
+ evaluation
+? evaluation.sh.src
+? initial.termstore
+? reduct.out
+? typecheck
+? asdf/concat.asf
+? asdf/concat.sdf
+? asdf/evaluation-function.asf
+? asdf/evaluation-function.sdf
+
 
 
 --------------------- Changes: --------------------
+
+Thu Sep 9
+Note:
+Changes made to
+- Twisting the sdf and asf modules to make them parse correctly.
+
+Wed Sep 8
+Note:
+Changes made to
+- process-eqs.tb: GetAsfModule, replaced an occurence of the variable
+  Filename with ModuleId, because Filename is no longer being used. This
+  was discovered due to an error when calling ParseErrorToSummary.
+
+Tue Sep 7
+Note:
+Changes made to
+- evaluation-function.sdf, evaluation-function.sdf: Finishing
+  concat-unique, and making it more generel.
+
+- asdf-modules.tb.src: EvalutateASDFTerm, integrating the evaluator.
+
+Mon Sep 6
+Note:
+Changes made to
+- evaluation-function.sdf, evaluation-function.sdf: Creating
+concat-unique
+
+- asdf-modules.tb.src: GetEvalInfo, Created.
+
+
+
+Thu Aug 31
+Note:
+Changes made to
+- asdf-modules.tb.src: EvalutateASDFTerm, Created.
+
+
+
+Wed Aug 30
+Note:
+Changes made to
+- evaluation-function.sdf, evaluation-function.asf: Done writing functions
+  to gather info used by the action evaluator.
+
+- Committing changes to CVS.
+
+- Figuring out why the cursor is not positioned in a parse error.
+
+
+Tue Aug 29
+Note:
+Changes made to
+- evaluation-function.sdf, evaluation-function.asf: Writing functions
+  to gather info used by the action evaluator.
+
+
 
 Mon Aug 28
 Note:
@@ -47,7 +152,6 @@ Changes made to
   editor. Menues should be grouped together. - Due to a system failure
   a backup was to be used.
 
-- 
 
 
 Sat Aug 28
@@ -107,7 +211,7 @@ Changes made to
   get-asf-equations-text-hook(ModuleId) doing the
   BuildEquationsFilename directly, not using a call.
 
-- hooks, created a list of descripsions of the newly introduced hooks.
+- hooks, created a list of descriptions of the newly introduced hooks.
 
 Mon Aug 23
 Note:

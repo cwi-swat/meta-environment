@@ -49,8 +49,8 @@ INCLUDES = \
 	-I${TOOLBUSLIB}/include  \
 	-I${ATERM}/include 
 
-support: ${top_builddir}/asdf-pt/asdf/asdfsupport.eqs
-	asfc -i $< -o asdfsupport.c -t -v -c
+support: ${top_builddir}/asdf-pt/asdf/Asdfsupport.eqs
+	${prefix}/bin/asfc -i $< -o asdfsupport.c -t -v -c
 
 typecheck: ${top_builddir}/asdf-pt/type-check/typecheck.eqs
 	asfc -i $< -o typecheck.c -t -v -c

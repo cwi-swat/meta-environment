@@ -3,7 +3,6 @@
 #include "Typecheck.idef"
 
 #define USEINITTERMSTORE
-#define DEBUGGING
 
 /* copy of Open-initial-module in open-modules.tb */
 process ASDF is
@@ -1170,6 +1169,26 @@ in
       ReturnAbort(EditorId, Stack)
     fi
 +
+  /* Term editor, evaluate term. */
+  rec-msg(asdf-evaluate, Stack?, EditorId?)
+  . StackPopString(Stack, Stack?, ModuleName?) .
+  StackPopTerm(Stack, Stack?, STree?) .
+  printf("Evaluating...%t\n", ModuleName) .
+  EvalutateASDFTerm(STree, ModuleName, RTree?).
+  RTree := error-tree
+/* ReduceASDFTerm(STree, ModuleName, RTree?) */
+    .
+    if not-equal(RTree, error-tree) then
+      snd-msg(promote-posinfo-to-origin(RTree))
+      . rec-msg(promoted-posinfo-to-origin(RTree?))
+      . AnnotateTree(RTree, "eval.out", RTree?)
+      . snd-msg(put-term-tree("eval.out", RTree))
+      . StackPushTerm(Stack, Stack?, RTree)
+      . ReturnSuccess(EditorId, Stack)
+    else
+      ReturnAbort(EditorId, Stack)
+    fi
++
   /* , type check of ASDF */
   rec-msg(type-check-asdf, Stack?, EditorId?) .
 printf("Stack = %t\n", Stack) .
@@ -1326,15 +1345,15 @@ endlet
    information and the module */
 process TypeCheckModule(ModuleName : str, ConstraintsModule : str) is
 let
-   ModuleNames : list,
-   ImModuleTrees : list,
-   ImModuleTree : term,
-   ModuleTree : term,
-   ModuleText : str,
-   TypeInfo : term,
    AllTypeInfo : term, 
+   ErrorText : str,
    ErrorTree : term,
-   ErrorText : str
+   ImModuleTree : term,
+   ImModuleTrees : list,
+   ModuleNames : list,
+   ModuleText : str,
+   ModuleTree : term,
+   TypeInfo : term
 in
    /* get definition of signatures etc. in imported modules */
    snd-msg(get-all-imported-module-names(ModuleName)) .
@@ -1411,23 +1430,96 @@ printf("ErrorTree = %t\n", ErrorTree).
    snd-note(show-feedback-summary(ErrorTree))
 endlet
 
+process GetEvalInfo(InfoModules: list, EvalInfo: term?) is
+let
+  ModuleTree: term,
+  ModuleTrees: list,
+  TempInfo: term
+in
+   ModuleTree := first(InfoModules)
+   . ModuleTrees := next(InfoModules)
+   /* Collect info from one module */
+   . snd-msg(apply-rewrite("Asdfsupport", "get-eval-info", "EvalInfo", [ModuleTree]))
+   . rec-msg(normalform("Asdfsupport", EvalInfo?))
+   .
+   (
+     if not-equal(ModuleTrees, []) then
+       ModuleTree := first(ModuleTrees)
+       . ModuleTrees := next(ModuleTrees)
+       /* Collect info from one module */
+       . snd-msg(apply-rewrite("Asdfsupport", "get-eval-info", "EvalInfo", [ModuleTree]))
+       . rec-msg(normalform("Asdfsupport", TempInfo?)) 
+       . printf("Got the info from one module...\n")
+        /* and concat it with already collected info */
+       . snd-msg(apply-rewrite("Asdfsupport", "join-eval-info", "EvalInfo", [EvalInfo, TempInfo]))
+       . rec-msg(normalform("Asdfsupport", EvalInfo?)) 
+       . printf("Joined the info\n")
+     fi
+   )
+   *
+   if equal(ModuleTrees, []) then
+     tau
+   fi
+endlet
+
+process EvalutateASDFTerm(STree : term, ModuleName : str, RTree : term?) is
+let
+   AllInfo : term, 
+   ErrorText : str,
+   ErrorTree : term,
+   ImModuleTree : term,
+   ImModuleTrees : list,
+   ModuleNames : list,
+   ModuleText : str,
+   ModuleTree : term,
+   TypeInfo : term
+in
+   printf("EvalutateASDFTerm, ModuleName = %t\n", ModuleName) .
+   snd-msg(get-all-imported-module-names(ModuleName)) .
+   rec-msg(all-imported-module-names(ModuleNames?)) .
+   PrintList(ModuleNames) .
+   snd-msg(ts-get-values("asdf-tree", ModuleNames)) .
+   (
+     rec-msg(ts-values(ImModuleTrees?)) 
+   + 
+     rec-msg(ts-no-values) .
+     ImModuleTrees := []    
+   )
+   . GetEvalInfo(ImModuleTrees, AllInfo?)
+   . snd-msg(io-unpack-term(AllInfo))
+   . rec-msg(io-term(AllInfo?))
+   . snd-msg(io-write-term-in-baf(".module", STree))
+   . rec-msg(io-file-written)
+   . printf("module written \n")
+   . snd-msg(io-write-term-in-baf(".info", AllInfo))
+   . rec-msg(io-file-written)
+   . printf("info written \n")
+
+/*
+   . snd-msg(gen-adapter-term-evaluate(asdf-eval-id,"__ASDF_BIN__/evaluation", hest))
+   . rec-msg(gen-adapter-term-result(asdf-eval-id, ErrorTree?))
+
+   . printf("ErrorTree = %t\n", ErrorTree)
+   . snd-note(show-feedback-summary(ErrorTree))
+*/
+endlet
+
 /* Prints the contents of the given list */
 process PrintList(Ls: list) is
 let
-  FirstStr: term,
+  First: term,
   Todo: list
 in
   Todo := Ls
   . printf("\n")
   . 
   if not-equal(Todo, []) then
-    FirstStr := first(Todo)
+    First := first(Todo)
     . Todo := next(Todo)
-    . printf("Item = %t\n", FirstStr)
+    . printf("Item = %t\n", First)
   fi
   *
   if equal(Todo, []) then
    printf("\n")
-   . snd-note(end-open-modules-batch)
   fi
 endlet
