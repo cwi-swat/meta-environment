@@ -46,12 +46,10 @@ abstract public class AutocodeGenerator
 
   protected void generateType(PropertyContext typeContext)
   {
-    System.out.println("generateType: " + typeContext);
     Set operations = typeContext.getValueSet("operation");
     Iterator iter = operations.iterator();
     while (iter.hasNext()) {
       String operationName = (String)iter.next();
-      System.out.println("  operationName: " + operationName);
       PropertyContext operationContext
 	= new PropertyContext(typeContext, "operation", operationName);
       generateTypeOperation(typeContext, operationContext);
@@ -61,7 +59,6 @@ abstract public class AutocodeGenerator
     iter = fields.iterator();
     while (iter.hasNext()) {
       String fieldName = (String)iter.next();
-      System.out.println("  fieldName: " + fieldName);
       PropertyContext fieldContext =
         new PropertyContext(typeContext, "field", fieldName);
       generateField(typeContext, fieldContext);
@@ -86,8 +83,6 @@ abstract public class AutocodeGenerator
 
       Set providedOperations = providesContext.getValueSet("type");
       if (providedOperations.contains(operationName)) {
-	System.out.println("plugin '" + pluginName
-			   + "' provides type-operation: " + operationName);
 	invokeType(typeContext, operationContext, pluginContext);
 	return;
       }
@@ -166,8 +161,6 @@ abstract public class AutocodeGenerator
       providesContext.descend("provides", "operations");
       Set providedOperations = providesContext.getValueSet("field");
       if (providedOperations.contains(operationName)) {
-	System.out.println("plugin '" + pluginName
-			   + "' provides field-operation: " + operationName);
 	invokeField(typeContext, fieldContext, operationContext, pluginContext);
 	return;
       }
@@ -272,15 +265,7 @@ abstract public class AutocodeGenerator
 
   public static String javaAttributeName(String name)
   {
-    StringBuffer buf = new StringBuffer("_");
-
-    WordIterator iter = new WordIterator(name);
-    buf.append(iter.next());
-    while (iter.hasNext()) {
-      buf.append(capitalize(iter.next()));
-    }
-
-    return buf.toString();
+    return "_" + javaParameterName(name);
   }
 
   //}}}
