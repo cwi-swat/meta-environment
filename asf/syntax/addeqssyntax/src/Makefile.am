@@ -17,7 +17,9 @@ EXTRA_DIST   = addeqssyntax.idef
 
 noinst_HEADERS = addeqssyntax.tif.h
 addeqssyntax_SOURCES = addeqssyntax.c Add-Eqs-Syntax.c addeqssyntax.tif.c
-addeqssyntax_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
+addeqssyntax_LDADD   = \
+		       -L$(ASC_SUPPORT)/lib -lasc-support-me \
+		       -L$(SGLR)/lib -lsglr \
                        -L$(SDF_SUPPORT)/lib -lSDFME \
                        -L$(ASF_SUPPORT)/lib -lASFME \
                        -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
