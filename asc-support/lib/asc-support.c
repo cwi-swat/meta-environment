@@ -526,7 +526,7 @@ ATerm make_list(ATerm t)
 #ifdef MEMO_PROFILING
 void write_memo_profile()
 {
-  FILE *f = fopen("memo.prof", "w");
+  FILE *f = fopen("memo.prof", "wb");
   ATermList keys;
 
   if(!f)
