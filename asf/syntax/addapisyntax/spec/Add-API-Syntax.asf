@@ -40,10 +40,11 @@ equations
       make-predicate(Lhs, Rhs, unquote(Literal),
         sdf2pt(Lhs -> Rhs {Attribute*1, cons(Literal), Attribute*2}, lex|cf))
 
-[p] normal(Literal(Symbol,*) -> Rhs Attributes) = Lhs -> Rhs Attributes
+[p] normal(Literal(Symbol,*) -> Rhs {Attribute*1, cons(Literal2), Attribute*2}) = 
+      Lhs -> Rhs Attributes
     ===>
-    predicate(Literal(Symbol,*) -> Rhs Attributes,lex|cf) = 
-      make-predicate(Lhs, Rhs, unquote(Literal), 
+    predicate(Literal(Symbol,*) -> Rhs{Attribute*1,cons(Literal2),Attribute*2},lex|cf) = 
+      make-predicate(Lhs, Rhs, unquote(Literal2), 
         sdf2pt(Lhs -> Rhs Attributes, lex|cf))
 
 [g] getters(Lhs -> Rhs Attributes,lex|cf) =
