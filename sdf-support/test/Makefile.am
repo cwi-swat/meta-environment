@@ -9,7 +9,7 @@ TESTS			= grammars sorts
 noinst_PROGRAMS		= ${TESTS}
 CFLAGS			= -g -Wall -O2
 INCLUDES		= -I$(ATERM)/include -I../lib -DSRC_DIR=\"${srcdir}\"
-LDLIBS			= $(ATERM)/lib/libATerm.a ../lib/libSDF.a
+LDLIBS			= -L$(ATERM)/lib -lATerm -L../lib -lSDF
 
 grammars_SOURCES	= grammars.c
 grammars_LDADD		= $(LDLIBS)
