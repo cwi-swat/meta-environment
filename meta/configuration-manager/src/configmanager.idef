@@ -19,6 +19,11 @@
 
     $Id$
 */        
+
+#ifndef CONFIG_FILE
+#define CONFIG_FILE "meta.conf"
+#endif
+
 process ConfigManager is
 let
   CMNG  : configmanager,
@@ -26,17 +31,18 @@ let
   Paths : list
 in
   execute(configmanager, CMNG?) .
-  snd-msg(get-config-file("meta.conf")) .
+printf("Config file used %s\n", CONFIG_FILE) .
+  snd-msg(get-config-file(CONFIG_FILE)) .
   (
-    rec-msg(config-file("meta.conf", Text?)) .
-    snd-eval(CMNG, process-config-file("meta.conf", Text))
+    rec-msg(config-file(CONFIG_FILE, Text?)) .
+    snd-eval(CMNG, process-config-file(CONFIG_FILE, Text))
   +
-    rec-msg(no-config-file("meta.conf")) .
-    snd-eval(CMNG, process-config-file("meta.conf", "."))
+    rec-msg(no-config-file(CONFIG_FILE)) .
+    snd-eval(CMNG, process-config-file(CONFIG_FILE, "."))
   ) .
   rec-value(CMNG, search-paths(Paths?)) .
-  snd-msg(process-search-paths("meta.conf", Paths)) .
-  rec-msg(search-paths-processed("meta.conf"))
+  snd-msg(process-search-paths(CONFIG_FILE, Paths)) .
+  rec-msg(search-paths-processed(CONFIG_FILE))
 endlet
 
 tool configmanager is { command = "configmanager" }
