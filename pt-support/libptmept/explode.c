@@ -484,11 +484,24 @@ static PTPT_Args PTPT_explodeArgs(PT_Args args)
 
 /*}}}  */
 
+/*{{{  static PTPT_Ann PTPT_explodeAnnotations(ATermList annos) */
+
+static PTPT_Ann PTPT_explodeAnnotations(ATermList annos)
+{
+  PTPT_ATermList ptlist = PTPT_explodeATermList(annos);
+  PTPT_ATermElems elems = PTPT_getATermListElems(ptlist);
+  
+  return PTPT_makeAnnList(e,elems,e);
+}
+
+/*}}}  */
+
 /*{{{  PT_Tree PTPT_explodeTree(PT_Tree pt) */
 
 PTPT_Tree PTPT_explodeTree(PT_Tree pt)
 {
   PTPT_Tree result = NULL;
+  ATerm annos = NULL;
 
   e = PTPT_makeOptLayoutAbsent();
   ATprotect((ATerm*) &e);
@@ -519,6 +532,12 @@ PTPT_Tree PTPT_explodeTree(PT_Tree pt)
     ATwarning("explode: unknown term %t\n", pt);
   }
 
+  if ((annos = PT_getTreeAnnotations(pt)) != NULL) {
+    PTPT_Ann ann = PTPT_explodeAnnotations((ATermList) annos);
+
+    result = PTPT_makeTreeAnnotated(result,e,ann);
+  }
+
   return result;
 }
 
@@ -530,7 +549,6 @@ PTPT_ParseTree PTPT_explodeParseTree(PT_ParseTree pt)
   PT_Tree tree = PT_getParseTreeTop(pt);
   int ambCnt = PT_getParseTreeAmbCnt(pt);
 
-
   e = PTPT_makeOptLayoutAbsent();
   ATprotect((ATerm*) &e);
 
@@ -539,6 +557,7 @@ PTPT_ParseTree PTPT_explodeParseTree(PT_ParseTree pt)
 			       e,e,
 			       PTPT_explodeNatCon(ambCnt),
 			       e);
+
 }
 
 /*}}}  */

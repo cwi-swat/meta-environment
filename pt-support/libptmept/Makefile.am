@@ -8,8 +8,8 @@ UTILSRCS		= explode.c utils.c
 
 EXTRA_DIST		= AsFix.def
 
-INCLUDES		= -I${ATERM}/include \
-                          -I${top_srcdir}/libmept
+INCLUDES		= -I${top_srcdir}/libmept \
+                          -I${ATERM}/include 
 
 CFLAGS                  += -DDISABLE_DYNAMIC_CHECKING
 
