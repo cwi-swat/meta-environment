@@ -1,0 +1,54 @@
+process CREATE-ADDRESS(AB : AddressBook) is
+let
+  Name : str,
+  AddressId : term
+in
+  rec-msg(create-address(Name?)) .
+  snd-eval(AB, create-address(Name)) .
+  rec-value(AB, AddressId?) .
+  snd-msg(create-address(Name, AddressId)) .
+endlet
+
+process UPDATE-ADDRESS(AB : AddressBook) is
+let
+  AddressId : term,
+  Street : str,
+  Number : int,
+  Zip : str
+in
+  rec-msg(set-address-street(AddressId, Street?)) .
+  snd-do(AB, set-street(AddressId, Street)) .
+  rec-msg(set-address-number(AddressId, Number?)) .
+  snd-do(AB, set-number(AddressId, Number)) .
+  rec-msg(set-address-zip(AddressId, Zip?)) .
+  snd-do(AB, set-number(AddressId, Zip))
+endlet
+
+process DELETE-ADDRESS(AB : AddressBook) is
+let
+  Name : str,
+  AddressId : term
+in
+  rec-msg(delete-address(AddressId?)) .
+  snd-do(AB, delete(AddressId)) .
+  snd-msg(address-deleted(AddressId))
+endlet
+
+process ADDRESS-BOOK is
+let
+  AddressBook : addressbook,
+  Address : term
+in
+  execute(AddressBook, AB?) .
+  (
+    CREATE-ADDRESS(AB)
+    +
+    UPDATE-ADDRESS(AB)
+    +
+    DELETE-ADDRESS(AB)
+  ) * delta
+endlet
+
+tool addressbook is { command = "java-adapter -class AddressBook" }
+
+toolbus(ADDRESS-BOOK)

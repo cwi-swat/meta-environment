@@ -3,11 +3,12 @@ package casestudy.rmi;
 import java.io.Serializable;
 
 public class Address implements Serializable {
-  private String name;
+  private String zip;
   private String street;
   private int number;
 
-  public Address(String name) { this.name = name; }
+  public void setZip(String zip) { this.zip = zip;}
+  public String getZip() { return zip; }
   public void setStreet(String street) { this.street = street; }
   public String getStreet() { return street; }
   public void setNumber(int number) { this.number = number; }

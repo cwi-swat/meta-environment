@@ -11,9 +11,10 @@ public class AddressBookImpl extends UnicastRemoteObject implements AddressBook 
     super();
     addressMap = new HashMap();
 
-    Address address = new Address("John Doe");
+    Address address = new Address();
     address.setStreet("Elmstreet");
     address.setNumber(7);
+    address.setZip("SK93AB");
 
     addressMap.put("john", address);
     addressMap.put("guest", address);
