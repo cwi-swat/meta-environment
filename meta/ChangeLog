@@ -1,5 +1,8 @@
 # $Id$
 
+Mon Mar 17 14:18:19 CET 2003 <jong@cwi.nl>
+ * more aterm (jjtraveler) dependency issues fixed
+
 2003/03/13 (vandenbr@loria.fr)
  * Introduced standalone editors for syntax, equations, and terms.
  * Introduced the notion of "application-status".
