@@ -30,7 +30,8 @@ let
   ModuleNames : list,
   FileName : str,
   Pairs    : list,
-  ErrorMsg : str
+  ErrorMsg : str,
+  Extension : str
 in
   MDB-InitializeModuleDb() .
   MDB-InitializeFileExtensions() .
@@ -174,7 +175,9 @@ in
     rec-msg(update-eqs-tree-in-db(Name?, tree(EqsTree?))) .
     snd-msg(ts-get-str-value("module-paths", Name)) .
     rec-msg(ts-value(Path?)) .
-    snd-msg(io-get-filename(Path, Name, ".asf")) .
+    snd-msg(file-extension-hook(asf)) .
+    rec-msg(file-extension-hook-result(Extension?)) .
+    snd-msg(io-get-filename(Path, Name, Extension)) .
     rec-msg(io-filename(FileName?)) .
     snd-msg(add-posinfo-to-depth(FileName,EqsTree, POSINFO_DEPTH)) .
     rec-msg(tree-with-pos-info(EqsTree?)) .
@@ -647,11 +650,14 @@ process MDB-InvalidateModule(Module : str, Type : term) is
 process MDB-AddModulePosInfo(Module : str, In : term , Out : term?) is
 let
   Path : str,
-  FileName : str
+  FileName : str,
+  Extension : str
 in
   snd-msg(ts-get-str-value("module-paths", Module)) .
   rec-msg(ts-value(Path?)) .
-  snd-msg(io-get-filename(Path, Module, ".sdf")) .
+  snd-msg(file-extension-hook(sdf)) .
+  rec-msg(file-extension-hook-result(Extension?)) .
+  snd-msg(io-get-filename(Path, Module, Extension)) .
   rec-msg(io-filename(FileName?)) .
   snd-msg(add-posinfo-packed(FileName, In)) .
   rec-msg(tree-with-pos-info(Out?)) 

@@ -255,9 +255,12 @@ let
   Tree : term,
   Text : str,
   ErrorMessage : str,
-  FileName : str
+  FileName : str,
+  Extension : str
 in
-  snd-msg(io-get-filename(Path, Module, ".asf")) .
+  snd-msg(file-extension-hook(asf)) .
+  rec-msg(file-extension-hook-result(Extension?)) .
+  snd-msg(io-get-filename(Path, Module, Extension)) .
   rec-msg(io-filename(FileName?)) .
   snd-msg(io-read-file(FileName)) .
   (

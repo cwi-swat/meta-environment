@@ -1010,7 +1010,7 @@ in
     rec-msg(equations-incomplete) .
     NormalForm := error-tree .
     snd-note(ui-status(endstat(Id))) .
-    snd-note(ui-status(errorf("Equations incomplete for %s.asf", [ModuleName])))
+    snd-note(ui-status(errorf("Equations incomplete for %s", [ModuleName])))
   )
 endlet
 

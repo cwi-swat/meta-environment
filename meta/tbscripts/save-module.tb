@@ -13,7 +13,8 @@ let
   Table        : term,
   Text         : str,
   ErrorMessage : str,
-  FileName     : str
+  FileName     : str,
+  Extension    : str
 in
   Id := process-id. 
   (
@@ -22,7 +23,9 @@ in
     snd-msg(get-path-from-db(Module)).
     (
       rec-msg(path(Path?)).
-      snd-msg(io-get-filename(Path, Module, ".sdf")) .
+      snd-msg(file-extension-hook(sdf)) .
+      rec-msg(file-extension-hook-result(Extension?)) .
+      snd-msg(io-get-filename(Path, Module, Extension)) .
       rec-msg(io-filename(FileName?)) .
       snd-msg(get-sdf2-asfix(Module)).
       (
@@ -48,7 +51,9 @@ in
     snd-msg(get-path-from-db(Module)).
     (
       rec-msg(path(Path?)).
-      snd-msg(io-get-filename(Path, Module, ".sdf")) .
+      snd-msg(file-extension-hook(sdf)) .
+      rec-msg(file-extension-hook-result(Extension?)) .
+      snd-msg(io-get-filename(Path, Module, Extension)) .
       rec-msg(io-filename(FileName?)) .
       snd-msg(get-sdf2-asfix(Module)).
       (
@@ -66,7 +71,9 @@ in
       snd-msg(get-eqs-text(Module)).
       (
         rec-msg(eqs-text(Module, Text?)) .
-        snd-msg(io-get-filename(Path, Module, ".asf")) .
+        snd-msg(file-extension-hook(asf)) .
+        rec-msg(file-extension-hook-result(Extension?)) .
+        snd-msg(io-get-filename(Path, Module, Extension)) .
         rec-msg(io-filename(FileName?)) .
         snd-msg(io-write-text-file(FileName, [Text])) .
         (

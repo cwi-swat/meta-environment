@@ -66,7 +66,9 @@ in
       rec-msg(exists-in-module-db(ModuleName)) .
       snd-msg(get-path-from-db(ModuleName)) .
       rec-msg(path(Path?)) .
-      snd-msg(io-get-filename(Path, ModuleName, ".asf")) .
+      snd-msg(file-extension-hook(asf)) . 
+      rec-msg(file-extension-hook-result(Extension?)) .
+      snd-msg(io-get-filename(Path, ModuleName, Extension)) .
       rec-msg(io-filename(FileName?)) .
       snd-msg(io-exists-file(FileName)) .
       (

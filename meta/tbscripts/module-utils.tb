@@ -144,11 +144,14 @@ process DoDeleteModule(ModuleName : str) is
 let
   Directories : list,
   Changed : list,
-  Path : str
+  Path : str,
+  Extension : str
 in
     snd-msg(get-search-paths) . 
     rec-msg(search-paths(Directories?)) .
-    snd-msg(io-find-file(Directories, ModuleName, ".sdf")) . 
+    snd-msg(file-extension-hook(sdf)) .
+    rec-msg(file-extension-hook-result(Extension?)) .
+    snd-msg(io-find-file(Directories, ModuleName, Extension)) . 
     rec-msg(io-file-found([Path?])) .
     RemoveModuleFromDisk(Path, ModuleName).
     DeleteEditors(ModuleName).
@@ -293,10 +296,18 @@ process SaveAsfSdfModule(Module : str) is
    rec-msg(saved-asfsdf-module(Module))
 
 process RemoveModuleFromDisk(Path : str, Module : str) is
-  snd-msg(io-remove-file(Path, Module, ".sdf")) .
+let
+  Extension : str
+in
+  snd-msg(file-extension-hook(sdf)) .
+  rec-msg(file-extension-hook-result(Extension?)) .
+  snd-msg(io-remove-file(Path, Module, Extension)) .
   rec-msg(io-file-removed) .
-  snd-msg(io-remove-file(Path, Module, ".asf")) .
+  snd-msg(file-extension-hook(asf)) .
+  rec-msg(file-extension-hook-result(Extension?)) .
+  snd-msg(io-remove-file(Path, Module, Extension)) .
   rec-msg(io-file-removed)
+endlet
 
 process SoftCloseModuleInDB(ModuleName : str, Status : term?) is
 let 
@@ -353,7 +364,8 @@ is
 
 process CheckExistence(Name : str, Path : str, Status : term?) is
 let
-  FileName : str
+  FileName : str,
+  Extension : str
 in
     snd-msg(is-module-in-db(Name)) .
     (
@@ -362,7 +374,9 @@ in
     +
       rec-msg(not-exists-in-module-db(Name))
     ).
-    snd-msg(io-get-filename(Name, Path, ".sdf")) .
+    snd-msg(file-extension-hook(sdf)) .
+    rec-msg(file-extension-hook-result(Extension?)) .
+    snd-msg(io-get-filename(Name, Path, Extension)) .
     rec-msg(io-filename(FileName?)) .
     snd-msg(io-exists-file(FileName)) .
     (
@@ -407,7 +421,7 @@ process HandleCopyModuleErrors(Old : str, New : str, Status : term) is
     tau
   fi
 
-process CheckSyntaxConsistency(ModuleName : str, Path : str, Extension : str) is
+process CheckSyntaxConsistency(ModuleName : str, Path : str) is
 let
   ErrorMessage : str,
   FileName : str,
@@ -417,12 +431,14 @@ let
   DependingModules : list,
   Imports : list,
   Status : term,
+  Extension : str,
   Type : term
 in
+  Type := quote(sdf) .
+  snd-msg(file-extension-hook(Type)) .
+  rec-msg(file-extension-hook-result(Extension?)) .
   snd-msg(io-get-filename(Path, ModuleName, Extension)) .
   rec-msg(io-filename(FileName?)) .
-  snd-msg(extension-to-type-hook(Extension)) .
-  rec-msg(extension-to-type-hook-result(Type?)) .
   snd-msg(io-exists-file(FileName)) . 
   (
     rec-msg(io-file-exists) .
@@ -457,9 +473,12 @@ process CheckEquationConsistency(ModuleName : str, Path : str) is
 let
   FileName : str,
   FileText : str,
-  RepositoryText : str
+  RepositoryText : str,
+  Extension : str
 in
-  snd-msg(io-get-filename(Path, ModuleName, ".asf")) .
+  snd-msg(file-extension-hook(asf)) .
+  rec-msg(file-extension-hook-result(Extension?)) .
+  snd-msg(io-get-filename(Path, ModuleName, Extension)) .
   rec-msg(io-filename(FileName?)) .
   snd-msg(io-exists-file(FileName)) . 
   (
@@ -496,7 +515,7 @@ let
 in
   snd-msg(get-path-from-db(ModuleName)) .
   rec-msg(path(Path?)) .
-  CheckSyntaxConsistency(ModuleName, Path, ".sdf") .
+  CheckSyntaxConsistency(ModuleName, Path) .
   CheckEquationConsistency(ModuleName, Path)
 endlet
 

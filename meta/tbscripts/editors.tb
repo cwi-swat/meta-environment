@@ -41,13 +41,16 @@ let
   Text : str,
   FileName : str,
   Message : str,
-  Path : str
+  Path : str,
+  Extension : str
 in
   Tree := none.
   Text := "".
   snd-msg(get-path-from-db(ModuleName)) .
   rec-msg(path(Path?)) .
-  snd-msg(io-get-filename(Path, ModuleName, ".sdf")) .
+  snd-msg(file-extension-hook(sdf)) .
+  rec-msg(file-extension-hook-result(Extension?)) .
+  snd-msg(io-get-filename(Path, ModuleName, Extension)) .
   rec-msg(io-filename(FileName?)) .
   snd-msg(get-sdf2-asfix(ModuleName)).
   (
@@ -71,14 +74,17 @@ let
   FileName : str,
   Path : str,
   Time : int,
-  Status : term
+  Status : term,
+  Extension : str
 in
   Status := success .
   Tree := none .
   Text := "" .
   snd-msg(get-path-from-db(ModuleName)) .
   rec-msg(path(Path?)) .
-  snd-msg(io-get-filename(Path, ModuleName, ".asf")) .
+  snd-msg(file-extension-hook(asf)) .
+  rec-msg(file-extension-hook-result(Extension?)) .
+  snd-msg(io-get-filename(Path, ModuleName, Extension)) .
   rec-msg(io-filename(FileName?)) .
   snd-msg(get-eqs-tree(ModuleName)) .
   (
