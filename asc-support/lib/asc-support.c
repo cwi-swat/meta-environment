@@ -132,6 +132,7 @@ void print_memo_table_sizes()
 ATerm innermost(PT_Tree tree)
 {
   ATerm result = (ATerm) tree;
+  ATerm annos = PT_getTreeAnnotations(tree);
 
   if (PT_isTreeLayout(tree)) {
     result = NULL;
@@ -167,6 +168,10 @@ ATerm innermost(PT_Tree tree)
   } else if (PT_isTreeAmb(tree)) {
     ATerror("Ambiguous parse tree not supported\n");
     return NULL;
+  }
+
+  if (annos != NULL) {
+    result = ATsetAnnotations(result, annos);
   }
 
   return result;

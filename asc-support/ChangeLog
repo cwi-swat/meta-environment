@@ -1,5 +1,9 @@
 $Id$
 
+2003/10/05 (jurgenv@cwi.nl)
+ * First attempt at retaining annotations on terms during the mappings
+   from and to muASF representation
+
 2003/08/01 (jurgenv@cwi.nl)
  * Set version to  0.7.1
 
