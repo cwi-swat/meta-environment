@@ -22,20 +22,6 @@ equations
 
   [default-ilc-1'2] is-list-cons(Term2) = false
 
-  [ipv-1'1] is-plus-var(+ Varid) = true
-
-  [default-ipv-1'2] is-plus-var(Term2) = false
-
-  [isv-1'1] is-star-var(* Varid) = true
-
-  [default-isv-1'2] is-star-var(Term2) = false
-
-%%%  [af-4'1] add-funid(Funid,Term) = Funid(Term)
-
-%%%  [af-4'2] add-funid(Funid,Term+1) = Term+2
-%%%           ================================
-%%%           add-funid(Funid,Term,Term+1) = Funid(Term),Term+2
-
   [mnc-1'1] term-contains-var(Term2) = true
             ===============================
             make-new-cond(Term1,Term2) = Term1 =: Term2

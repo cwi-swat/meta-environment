@@ -41,6 +41,8 @@ exports
     prefix-id(FunId,FunId,IntCon)                  -> FunId
     is-internal-funid(FunId)                       -> Bool
     is-quoted-funid(FunId)                         -> Bool
+    is-plus-var(Term)                              -> Bool
+    is-star-var(Term)                              -> Bool
 
   context-free syntax
     make-list-args({Term ","}*)  -> Term

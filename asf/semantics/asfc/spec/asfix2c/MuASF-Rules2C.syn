@@ -1,6 +1,6 @@
 %%  MuASF-Rules2C
 
-imports RenameVars Improve-C-code Transform-Constructors Locate-Constants
+imports RenameVars Improve-C-code Transform-Constructors Locate-Constants Remove-Lists-Aux
 
 exports
   context-free syntax

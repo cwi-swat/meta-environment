@@ -196,3 +196,11 @@ equations
   [mdr-1'1] make-default-rule(Term1 = Term2) = default:Term1 = Term2
 
   [mdr-1'2] make-default-rule(Cond+ ==> Term1 = Term2) = default:Cond+ ==> Term1 = Term2
+
+  [ipv-1'1] is-plus-var(+ Varid) = true
+
+  [default-ipv-1'2] is-plus-var(Term2) = false
+
+  [isv-1'1] is-star-var(* Varid) = true
+
+  [default-isv-1'2] is-star-var(Term2) = false
