@@ -79,12 +79,22 @@ static void skip_layout(void)
 static void parse_error(char *s)
 {
   if(!parse_error_msg) {
+    char msg[50];
+    int i;
+    buf_ptr--;
+    for(i = 0; i < 49 && *buf_ptr; i++)
+      msg[i] = *buf_ptr++;
+    msg[i] = '\0';
     parse_error_msg = s;
-    TBmsg("%s\n", s);
+    if(i > 0)
+      err_warn("%s in term, near `%s'", s, msg);
+    else
+      err_warn("%s in term", s);    
   }
 }
 
 va_list mk_term_args = NULL;
+
 static term *parse_term0(void);
 
 static type *parse_type(void)
@@ -109,7 +119,7 @@ static term *parse_term0(void)
   skip_layout();
   begin = buf_ptr - 1;
 
-  /*fprintf(stderr, "parse_term0: %s\n", buf_ptr);*/
+  /* fprintf(stderr, "parse_term0: %s\n", buf_ptr); */
   if(isupper(lastc) || (lastc == '_')){     /* variable or formal */
 
     get_char();
@@ -144,7 +154,7 @@ static term *parse_term0(void)
       double d;
       d = strtod(buf_ptr-1, &endp); /* start at '.' */
       if(endp == buf_ptr){
-	parse_error("real constant");
+	parse_error("Malformed real constant");
 	return NULL;
       }
       buf_ptr = endp;
@@ -172,9 +182,9 @@ static term *parse_term0(void)
 	get_char();
       }
       if(lastc != STRING_MARK)
-	parse_error("length field in binary string");
+	parse_error("Wrong length field in binary string");
       if(buf_ptr + len >= &buffer[buf_size]){
-	parse_error("String length > buffer size");
+	parse_error("String length exceeds buffer size");
 	return NULL;
       }
 /*
@@ -187,7 +197,7 @@ static term *parse_term0(void)
 
       
       if(*(buf_ptr + len) != '"'){
-	parse_error("Missing end quote in binary string");
+	parse_error("Binary string does not end with double quote");
 	return NULL;
       }
       res = mk_bstr(buf_ptr, len);
@@ -326,7 +336,7 @@ static term *parse_term0(void)
     case 'l':
       return va_arg(mk_term_args, term_list *);	
     default:
-      parse_error("Illegal character follows %% in input");
+      parse_error("Illegal character follows percent character");
       return NULL;
       } 
   } else if(lastc == '<'){
@@ -340,9 +350,26 @@ static term *parse_term0(void)
       get_char();
       return mk_placeholder(tp);
     } else{
-      parse_error("Missing > in placeholder");
+      parse_error("Placeholder does not end with `>'");
       return NULL;
     }
+  } else if(lastc == '{'){   /* annotated term */ 
+    term *t1, *t2;
+
+    get_char();
+    t1 = parse_term0();
+    skip_layout();
+    if(t1 && (lastc == ':')){
+      get_char();
+      t2 = parse_term0();
+      skip_layout();
+      if(t2 && (lastc == '}')){
+	get_char();
+	return mk_anno(t1, t2);
+      } else
+	return NULL;
+    } else
+      return NULL;
   } else {
     parse_error("Unexpected character");
     return NULL;
@@ -358,15 +385,12 @@ term *parse_term(void)
   get_char();
   res = parse_term0();
   skip_layout();
-  return res;
-  /*****
-  <PO> suspicious removal of code?
-  if(buf_ptr[-1]){
-    parse_error("Cannot parse whole string");
+  /* return res; */
+  if(lastc){
+    parse_error("Syntax error");
     return NULL;
   } 
   return res;
-  */
 }
 
 static void extend_buffer();
@@ -386,22 +410,19 @@ term *TBmake(char * fmt, ...)
   memcpy(buffer, fmt, n+1);
   buf_ptr = buffer;
 
-  /*fprintf(stderr, "TBmake %s\n", fmt);*/
+  /* fprintf(stderr, "TBmake %s\n", fmt); */
   parse_error_msg = NULL;
   get_char();
   res = parse_term0();
   va_end(mk_term_args);
   mk_term_args = NULL;
   skip_layout();
-  return res;
-  /****
-  <PO> suspicious removal of code? 
-  if(buf_ptr[-1]) {
-    parse_error("Cannot parse whole string");
+  /* return res; */
+  if(lastc) {
+    parse_error("Syntax error");
     return NULL; 
   } else
     return res;
-  */
 }
 
 /*--- read a term from a given file descriptor ---*/
@@ -906,14 +927,17 @@ TBbool TBmatch1(term *t)
   term_list **ptl;
   int close_char;
 
-
   skip_layout();
+
+  if(is_anno(t) && (lastc != '{')){
+      t = anno_term(t);
+  }
 
   switch(lastc){
   case '%':
     get_char();
     switch(lastc){
-    case 's':
+    case 's':             /* string */
       if(!is_str(t))
 	return TBfalse;
       else {
@@ -922,7 +946,8 @@ TBbool TBmatch1(term *t)
 	get_char();
 	return TBtrue;
       }
-    case 'b':
+
+    case 'b':              /* binary string */
       if(!is_bstr(t))
 	return TBfalse;
       else {         
@@ -1042,6 +1067,25 @@ TBbool TBmatch1(term *t)
       get_char();
       return require_type(rt, t) ? TBtrue : TBfalse;
     }
+
+  case '{':
+
+    if(!is_anno(t))
+      return TBfalse;
+    else {
+      get_char();
+      if(!TBmatch1(anno_val(t)))
+	return TBfalse;
+	skip_layout();
+	if(lastc != ':')
+	  return TBfalse;
+	get_char();
+	if(TBmatch1(anno_term(t)) && (lastc == '}')){
+	  get_char();
+	  return TBtrue;
+	} else
+	  return TBfalse;
+    }
       
   case '[':
     if(!is_list(t))
@@ -1129,7 +1173,7 @@ TBbool TBmatch1(term *t)
 	}
       }
     } else if(isalpha(lastc)){
-      /* -- must function symbol -- */
+      /* -- must be function symbol -- */
       /* -- but permit symbols starting with uppercase */
     match_appl:
       if(!is_appl(t))

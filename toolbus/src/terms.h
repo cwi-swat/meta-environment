@@ -4,7 +4,8 @@
 typedef enum tkind
 {
   t_term=0, t_bool, t_int, t_real, t_str, t_bstr, 
-  t_var, t_placeholder, t_appl, t_env, t_list
+  t_var, t_placeholder, t_appl, t_anno, t_env, 
+  t_list     /* should be last */
 } tkind;
 
 #define N_TERM_KINDS t_list+1
@@ -36,6 +37,10 @@ typedef struct term
       sym_idx  sym;             /* its function symbol */
       struct term *args;        /* list of arguments */
     } appl;
+    struct anno {               /* an annotated term */
+      struct term *an_val;      /* the annotation itself */
+      struct term *an_term;     /* the annotated term */
+    } anno;
     struct list {               /* a list */
       struct term *lst_first;
       struct term *lst_next;
@@ -76,6 +81,8 @@ typedef term env;
 #define next(t)         (t)->u.list.lst_next
 #define fun_sym(t)      (t)->u.appl.sym
 #define fun_args(t)     (t)->u.appl.args
+#define anno_val(t)     (t)->u.anno.an_val
+#define anno_term(t)    (t)->u.anno.an_term
 #define env_sym(t)      (t)->u.env.sym
 #define env_var(t)      (t)->u.env.var
 #define env_val(t)      (t)->u.env.val
@@ -93,6 +100,7 @@ typedef term env;
 #define is_env(t)       ((t == NULL) || (tkind(t) == t_env))
 
 #define is_appl(t)      (tkind(t) == t_appl)
+#define is_anno(t)      (tkind(t) == t_anno)
 #define is_list(t)      (tkind(t) == t_list)   
 
 #define LENSPEC 8          /* size of length field for binary strings */
@@ -109,6 +117,7 @@ term      *mk_result_var(char *, char *, type *);
 term      *mk_result_var_idx(sym_idx, type *);
 term      *mk_formal(char *, char *, type *);
 term      *mk_appl(sym_idx, term *);
+term      *mk_anno(term *, term *);
 term      *mk_placeholder(type *);
 env       *mk_env(var *, term *, env *);
 

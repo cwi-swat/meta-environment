@@ -17,7 +17,7 @@ static inport inportset[TB_MAX_INPORT];
 static int toToolBus;       /* port to ToolBus  */
 static int fromToolBus;	    /* port from ToolBus */
 
-static term_list *tool_in_sign = NULL;
+term_list *tool_in_sign = NULL;  /* used by wish-adapter, etc. */
 static term_list *tool_out_sign = NULL;
 
 static term *Snd_Void; /* PROTECTED */

@@ -22,6 +22,8 @@ term *substitute(term *t, env *loc_env)
       return t;
     else
       return mk_appl(fun_sym(t), substitute_list(fun_args(t), loc_env));
+  case t_anno:
+    return mk_anno(anno_val(t), substitute(anno_term(t), loc_env));
   case t_list:
     return substitute_list(t, loc_env);
   default: err_fatal("substitute");
@@ -66,6 +68,9 @@ static TBbool match1(term *t1, term *t2)
   MATCHDB(TBmsg("match1(%t, %t)\n", t1, t2));
   if(t1 == t2)
     return TBtrue;
+
+  if(is_anno(t2))
+    return match1(t1, anno_term(t2));
 
   switch(tkind(t1)){
   case t_bool: 
@@ -116,6 +121,8 @@ static TBbool match1(term *t1, term *t2)
       return match_list(fun_args(t1), fun_args(t2));
     } else
       goto t2_is_result_var;
+  case t_anno:
+    return match1(anno_term(t1), t2);
   case t_list:
     if(is_list(t2))
       return match_list(t1, t2);

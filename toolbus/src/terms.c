@@ -464,6 +464,18 @@ term *mk_appl(sym_idx sym, term *args)
   return t;
 }
 
+term *mk_anno(term *an, term *at)
+{  
+  register term *t;
+  new_term(t);
+
+  t->trm_kind = t_anno;
+  mark(t) = has_conds(t) = TBfalse;
+  anno_val(t) = an;
+  anno_term(t) = at;
+  return t;
+}
+
 term *mk_list(register term *fst, register term *nxt)
 {  
   register term *t;
@@ -609,6 +621,10 @@ void pr_term(const term *t)
       printn(")", 1);
     }
     break;
+  case t_anno:
+    printn("{", 1);pr_term(anno_val(t)); printn(":", 1); 
+    pr_term(anno_term(t)); printn("}", 1);
+    break;
   case t_list:
     printn("[", 1); pr_term_list(t); printn("]", 1);
     break;
@@ -686,6 +702,8 @@ TBbool has_no_vars(term *T)
 	  return TBfalse;
       }
       return TBtrue;
+    case t_anno:
+      return has_no_vars(anno_term(T));
     case t_list:
       args = T;
       goto case_appl;
@@ -719,6 +737,8 @@ TBbool has_result_vars(term *T)
 	  return TBtrue;
       }
       return TBfalse;
+    case t_anno:
+      return has_result_vars(anno_term(T));
     case t_list:
       args = T;
       goto case_appl;
@@ -746,6 +766,8 @@ type *type_of(term *T)
       return var_type(T);
     case t_appl:
       return mk_appl(fun_sym(T), NULL);
+    case t_anno:
+      return type_of(anno_term(T));
     default:
       err_fatal("type_of: %t", T);
       return Term; /* pedantic */
@@ -771,6 +793,12 @@ TBbool comp_type(type *tp1, type *tp2)
 
   if(term_equal(tp1, tp2))
     return TBtrue;  /* desired type is equal to given type */
+
+  if(is_anno(tp1))
+    return comp_type(anno_term(tp1), tp2);
+
+  if(is_anno(tp2))
+    return comp_type(tp1, anno_term(tp2));
 
   if(is_appl(tp1) && is_appl(tp2) && (fun_sym(tp1) == fun_sym(tp2)) &&
      !fun_args(tp1))
@@ -812,6 +840,10 @@ TBbool require_type(register type *tp, register term *T)
   register term_list *targs, *args;
 
   /* TBmsg("require_type(%t, %t)\n", tp, T); */
+  if(is_anno(tp))
+    return require_type(anno_term(tp), T);
+  if(is_anno(T))
+    return require_type(tp, anno_term(T));
   if(is_var(T))
     return comp_type(tp, var_type(T));
   if(is_placeholder(tp))
@@ -929,7 +961,9 @@ term *convert_to_sign(term *t)
 	}
 	return mk_appl(fun_sym(t), nw_args);
       }
-      default: return t;
+    case t_anno:
+      return convert_to_sign(anno_term(t));
+    default: return t;
     }
 }
 
@@ -952,7 +986,12 @@ TBbool term_equal(register term *t1, register term *t2)
   if(t1 == t2)
     return TBtrue;
   if(tkind(t1) != tkind(t2))
-    return TBfalse;
+    if(tkind(t1) == t_anno)
+      return term_equal(anno_term(t1), t2);
+    else if(tkind(t2) == t_anno)
+      return term_equal(t1, anno_term(t2));
+    else
+      return TBfalse;
 
   switch(tkind(t1)){
   case t_bool:
@@ -1341,6 +1380,8 @@ static term *first_function_sym(sym_idx fsym, term *t)
   case t_list:
     elems = t;
     goto case_args;
+  case t_anno:
+    return first_function_sym(fsym, anno_term(t));
   default:
     return NULL;
   }
@@ -1376,6 +1417,8 @@ static term *all_functions_sym(sym_idx fsym, term *t)
   case t_list:
     elems = t;
     goto case_args;
+  case t_anno:
+    return all_functions_sym(fsym, anno_term(t));
   default:
     return NULL;
   }
