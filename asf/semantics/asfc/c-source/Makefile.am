@@ -24,8 +24,6 @@ LDLIBS          	= -lasc-support -lAsFix -lATB -lATerm
 
 noinst_LIBRARIES	= libAsFix2C.a
 
-BUILT_SOURCES		= init.c
-
 bin_PROGRAMS		= AsFix2C
 
 AsFix2C_SOURCES		= init.c
