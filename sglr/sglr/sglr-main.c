@@ -383,11 +383,12 @@ int SG_Batch (int argc, char **argv)
                 program_name, input_file_name, line, col);
     } else if(err == SG_Plain_Error_AFun) {
       if(isprint(c)) {
-        ATwarning("%s: error in %s, line %d, col %d: character `%c'"
-                  " (`\\x%2.2x') unexpected\n",
+        ATwarning("%s: error in %s, line %d, col %d: character `%c' (\\x%2.2x)"
+                  " unexpected\n",
                   program_name, input_file_name, line, col, c, c);
       } else {
-        ATwarning("%s: error in %s, line %d, col %d: character `\\x%2.2x' unexpected\n",
+        ATwarning("%s: error in %s, line %d, col %d: character \\x%2.2x"
+                  " unexpected\n",
                   program_name, input_file_name, line, col, c);
       }
     } else if(err == SG_Cycle_Error_AFun) {
