@@ -10,6 +10,19 @@ public class World
   public ATermsImpl emptyImpl;
   public ATerms empty;
 
+  //{ public World()
+
+  /**
+    * Build a new term world with default table size.
+    */
+
+  public World()
+  {
+    this(131071);
+  }
+
+  
+  //}
   //{ public World(int table_size)
 
   /**
@@ -19,7 +32,7 @@ public class World
   public World(int table_size)
   {
     this.table_size = table_size;
-    table = new Hashtable(43117);
+    table = new Hashtable(table_size);
     emptyImpl = (ATermsImpl)intern(new ATermsImpl(this));
     empty = new ATerms(emptyImpl);
   }
