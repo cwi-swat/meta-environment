@@ -4,6 +4,8 @@ tool rewriter is { }
 process REWRITER(R : rewriter) is
 let
   N : str,
+  F : str,
+  E : str,
   T : term
 in
   snd-eval(R, get-name) .
@@ -13,6 +15,10 @@ in
     snd-eval(R, reduce(T)) .
     rec-value(R, reduct(T?)) .
     snd-msg(N, reduct(T))
+    +
+    rec-msg(N, reduce-and-asource(T?,F?,E?)).
+    snd-do(R, reduce-and-asource(T,F?,E?)).
+    snd-msg(N, reducing-done)
   ) * rec-disconnect(R) .
   printf("Rewriter disconnected: %s\n", N)
 endlet

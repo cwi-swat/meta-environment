@@ -21,7 +21,7 @@
 
 /*{{{  globals */
 
-static char *name;
+static char *name; 
 
 extern ATerm pattern_asfix_term;
 
@@ -45,6 +45,7 @@ ATerm reduce(int cid, ATerm t)
 {
   ATerm reduct, asfix = NULL, file, modname, trm;
 
+ATfprintf(stderr,"reducing entered\n");
   t = AFexpandTerm(t);
   if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
                 &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
@@ -52,7 +53,37 @@ ATerm reduce(int cid, ATerm t)
     asfix = toasfix(reduct, file, modname);
   } else
     ATerror("not an asfix term: %t\n", t);
+ATfprintf(stderr,"reducing finished\n");
   return ATmake("snd-value(reduct(<term>))", asfix);
+}
+
+/*}}}  */
+
+void reduce_and_asource(int cid, ATerm t, char *name, char *ext)
+{
+  FILE *file;
+  char full[1024];
+  ATerm reduct, asfix = NULL, filename, modname, trm; 
+
+ATfprintf(stderr,"reducing entered\n");
+  t = AFexpandTerm(t);
+  if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
+                 &filename, NULL, &modname, NULL, &trm, NULL, NULL)) {
+    reduct = innermost(trm);
+    asfix = toasfix(reduct, filename, modname);
+  } else
+    ATerror("not an asfix term: %t\n", t);
+
+ATfprintf(stderr,"reducing finished\n");
+  strcat(full, name);
+  strcat(full, ".");
+  strcat(full, ext);
+  if (!(file = fopen(full, "w"))) {
+    ATfprintf(stderr, "asource: Could not open %s\n", full);
+    exit(1);
+  }
+  AFsourceToFile(asfix, file); 
+  fclose(file);
 }
 
 /*}}}  */
