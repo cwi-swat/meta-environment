@@ -123,6 +123,9 @@ proc delete-module { mod } {
     foreach edge [$node listoutedges] {
 	$edge delete
     }
+    foreach edge [$node listinedges] {
+        $edge delete
+    }
     update-graph
 }
 
@@ -664,7 +667,7 @@ proc ImportModule { mod newmod newpath} {
 # generates the toolbus event to request importing of a module M
 #--
 proc UnimportModule { mod newmod newpath} {
-    GBevent "unimport-module([ToId $mod],[ToId $newmod], [ToId $newpath])"
+  GBevent "unimport-module([ToId $mod],[ToId $newmod], [ToId $newpath])"
 }
 #--
 # RenameModuleWidget(M)
