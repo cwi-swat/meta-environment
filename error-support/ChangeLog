@@ -1,5 +1,8 @@
 $Id$
 
+2004/01/29 (markvdb@cwi.nl)
+ * Added a ToolBus component for manipulating errors.
+
 2004/01/27 (markvdb@cwi.nl)
  * Added the mapping from parsed errors to abstract errors.
 
