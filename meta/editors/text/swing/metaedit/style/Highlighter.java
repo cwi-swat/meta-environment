@@ -1,4 +1,4 @@
-package nl.cwi.editor.styles;
+package metaedit.style;
 
 import javax.swing.text.StyledDocument;
 

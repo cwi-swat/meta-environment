@@ -1,4 +1,4 @@
-package nl.cwi.editor.util;
+package metaedit.util;
 import java.util.HashMap;
 import java.util.Map;
 

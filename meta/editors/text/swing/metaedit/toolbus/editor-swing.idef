@@ -13,17 +13,16 @@ let
   MenuEvent : term,
   Message : str,
   Modified : term,
-  SortName: str,
-  Location : term
+  SortName: str
 in
   execute(swing-editor, Editor?)
   .
   (
-    rec-msg(edit-file(Filename?))
+    rec-msg(te-edit-text(Filename?))
     . snd-do(Editor, edit-file(Filename))
   +
-    rec-msg(set-actions(ActionList?))
-    . snd-do(Editor, set-actions(ActionList))
+    rec-msg(te-add-actions(ActionList?))
+    . snd-do(Editor, add-actions(ActionList))
   +
     rec-msg(te-write-contents)
     . snd-do(Editor, write-contents)
@@ -31,18 +30,15 @@ in
     rec-msg(te-reread-contents)
     . snd-do(Editor, reread-contents)
   +
+    rec-msg(te-is-modified)
+    . snd-do(Editor, is-modified)
+  +
     rec-msg(te-set-focus(Area?))
     . snd-do(Editor, set-focus(Area))
   +
     rec-msg(te-set-cursor-at-offset(Offset?))
     . snd-do(Editor, set-cursor-at-offset(Offset))
   +
-    rec-msg(te-set-focus-at-location(Location?))
-    . snd-do(Editor, set-focus-at-location(Location))
-  +
-    rec-msg(te-get-contents)
-    . snd-do(Editor, get-contents)
-  + 
     rec-msg(te-clear-focus)
     . snd-do(Editor, clear-focus)
   +
@@ -82,9 +78,8 @@ in
   * delta
 endlet
 
-
 tool swing-editor is {
-  command="java-adapter -class metaedit.Main"
+  command="java-adapter -class Main"
 }
 
 toolbus(Swing-Editor)

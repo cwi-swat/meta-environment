@@ -1,8 +1,6 @@
-package nl.cwi.editor.util;
+package metaedit.util;
 
 import java.util.EventObject;
-
-import nl.cwi.editor.util.FindReplaceDialog;
 
 /**
  * This is simply overriding EventObject by storing a FindReplaceDialog

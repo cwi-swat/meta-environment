@@ -1,9 +1,8 @@
-package nl.cwi.editor.toolbus;
-
 // Java tool bridge SwingEditorBridge
 // This file is generated automatically, please do not edit!
-// generation time: Jul 1, 2004 4:53:36 PM
+// generation time: Oct 21, 2004 11:57:29 AM
 
+package metaedit.toolbus;
 
 import aterm.*;
 
@@ -22,19 +21,6 @@ public class SwingEditorBridge
 
   //}}}
 
-  //{{{  public void getContents()
-
-  public void getContents()
-  {
-    if (tool != null) {
-      tool.getContents();
-    }
-    else {
-      throw new UnsupportedOperationException("method `getContents' not supported.");
-    }
-  }
-
-  //}}}
   //{{{  public void isModified()
 
   public void isModified()
@@ -74,15 +60,15 @@ public class SwingEditorBridge
   }
 
   //}}}
-  //{{{  public void registerTextCategories(ATerm t0)
+  //{{{  public void addActions(ATerm t0)
 
-  public void registerTextCategories(ATerm t0)
+  public void addActions(ATerm t0)
   {
     if (tool != null) {
-      tool.registerTextCategories(t0);
+      tool.addActions(t0);
     }
     else {
-      throw new UnsupportedOperationException("method `registerTextCategories' not supported.");
+      throw new UnsupportedOperationException("method `addActions' not supported.");
     }
   }
 
@@ -96,19 +82,6 @@ public class SwingEditorBridge
     }
     else {
       throw new UnsupportedOperationException("method `clearFocus' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void addActions(ATerm t0)
-
-  public void addActions(ATerm t0)
-  {
-    if (tool != null) {
-      tool.addActions(t0);
-    }
-    else {
-      throw new UnsupportedOperationException("method `addActions' not supported.");
     }
   }
 
@@ -161,19 +134,6 @@ public class SwingEditorBridge
     }
     else {
       throw new UnsupportedOperationException("method `editFile' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void highlightSlices(ATerm t0)
-
-  public void highlightSlices(ATerm t0)
-  {
-    if (tool != null) {
-      tool.highlightSlices(t0);
-    }
-    else {
-      throw new UnsupportedOperationException("method `highlightSlices' not supported.");
     }
   }
 

@@ -6,7 +6,6 @@ import java.util.Vector;
 import javax.swing.JMenuBar;
 
 import locationapi.types.Area;
-import metaconfig.types.Items;
 import metaconfig.types.Properties;
 import metaconfig.types.Property;
 import metaedit.style.EditorStyle;

@@ -1,4 +1,4 @@
-package nl.cwi.editor.util;
+package metaedit.util;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
