@@ -1,5 +1,10 @@
 # $Id$
 
+Thu Mar  4 13:30:18 CET 2004 <iversen,jurgenv@cwi.nl>
+ * Fixed a bug: Parse-Syntax was called with wrong argument order 
+   (everything is a term). Probably loading a term-store always failed
+   to see that nothing changed due to this.
+
 Wed Mar  3 11:37:44 CET 2004 <kooiker@cwi.nl>
  * tbscripts/button-actions.tb:
    - To be solved: te-set-cursor-at-focus call changed to printf of call

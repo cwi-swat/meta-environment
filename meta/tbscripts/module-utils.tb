@@ -433,7 +433,7 @@ in
       rec-msg(updating-succeeded(DependingModules?)) .
       Error("Check consistency: syntax of module %s changed on disk", [ModuleName]) .
       Status := success .
-      Parse-Syntax(FileName, FileText, Type, Status?, Tree?) .
+      Parse-Syntax(FileName, FileText, Type, Tree?, Status?) .
       if equal(Status, success) then
         snd-msg(update-module-in-db(ModuleName, Tree, Type)) .
 	(
