@@ -1,3 +1,7 @@
+2003/09/26 (jurgenv@cwi.nl)
+  * Added some grammars to the sandbox
+  * Added C language to the languages
+
 2003/09/25 ({storm,jurgenv}@cwi.nl)
   * Reimplemented TermCompare module using better ordering builtin
   * Added Measure.sdf
