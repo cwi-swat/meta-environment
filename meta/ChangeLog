@@ -1,5 +1,19 @@
 # $Id$
 
+2003/05/26 ({markvdb,jurgenv}@cwi.nl)
+ * In-output idef messages are all prefix with "io-"
+ * A path in the module name is always up to the module name, not
+   even including a part of the compound module name
+ * ...-named-... functions removed from in-output because there are
+   now only two representations of a filename:
+     1. A full absolute filename including path and extension
+     2. [Path,Name,Extension] where the concatenation should form
+        a path of type 1. Name can contain directory separators.
+ * Editor-manager takes a name of type 1 and does not concatenate
+   extensions anymore
+ * All tools and processes adapted to use the new filename conventions
+ * Posinfo is now added with the correct full filenames (style 1) again
+
 2003/05/21 ({markvdb,jurgenv}@cwi.nl)
  * The coordination part of the old module-db is now implemented
    in ToolBus scripts.
