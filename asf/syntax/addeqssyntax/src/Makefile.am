@@ -11,7 +11,7 @@ INCLUDES         = -I$(ASC_SUPPORT)/include \
 
 bin_PROGRAMS = addeqssyntax
 
-pkgdata_DATA    = addeqssyntax.idef
+pkgdata_DATA = addeqssyntax.idef
 
 EXTRA_DIST   = addeqssyntax.idef addeqssyntax.tif.c addeqssyntax.tif.h 
 
