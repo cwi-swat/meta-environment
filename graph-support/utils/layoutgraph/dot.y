@@ -12,7 +12,6 @@
 #include "layoutgraph.h"
 
 #define YYERROR_VERBOSE
-#define YY_NO_UNPUT
 
 static ATermList buildDotAttributes(NodeId key, NodeId value, ATermList attrs);
 static AttributeList buildAttributeList(int type,ATermList dotAttributes);

@@ -3,6 +3,8 @@
 
 #include "dot.h"
 #include "y.tab.h"
+
+#define YY_NO_UNPUT
 %}
 
 layout		[ \t\n\r]
