@@ -21,9 +21,8 @@ static PT_Tree constructorVarToLexicalVar(ASF_CHAR var)
   PT_Tree nameTree = PT_makeTreeLit(name);
   PT_Symbol nameSymbol = PT_makeSymbolLit(name);
   PT_Symbol all = PT_makeSymbolCharClass(
-	    	    PT_makeCharRangesList(
-                    PT_makeCharRangeRange(0,255),
-		    PT_makeCharRangesEmpty()));
+	    	    PT_makeCharRangesSingle(
+                    PT_makeCharRangeRange(0,255)));
   PT_Attributes noattrs = PT_makeAttributesNoAttrs();
   PT_Symbol symbol;
   PT_Symbols lhs1, lhs2;
@@ -43,14 +42,14 @@ static PT_Tree constructorVarToLexicalVar(ASF_CHAR var)
 
   symbol = PT_makeSymbolLex(symbol);
 
-  lhs1 = PT_makeSymbolsList(nameSymbol, PT_makeSymbolsEmpty());
+  lhs1 = PT_makeSymbolsSingle(nameSymbol);
   prod1 = PT_makeProductionDefault(lhs1,symbol,noattrs);
-  args1 = PT_makeArgsList(nameTree, PT_makeArgsEmpty());
+  args1 = PT_makeArgsSingle(nameTree);
   appl1 = PT_makeTreeAppl(prod1,args1);
 
-  lhs2 = PT_makeSymbolsList(PT_makeSymbolVarSym(symbol),PT_makeSymbolsEmpty());
+  lhs2 = PT_makeSymbolsSingle(PT_makeSymbolVarSym(symbol));
   prod2 = PT_makeProductionDefault(lhs2,symbol,noattrs);
-  args2 = PT_makeArgsList(appl1, PT_makeArgsEmpty());
+  args2 = PT_makeArgsSingle(appl1);
   appl2 = PT_makeTreeAppl(prod2, args2);
 
   
@@ -71,7 +70,7 @@ static PT_Args constructorArgsToLexicalArgs(ASF_CHARList chars)
     else {
       elem = constructorCharToLexicalChar(head);
     }
-    list = PT_makeArgsList(elem, list);
+    list = PT_makeArgsMany(elem, list);
 
     if (!ASF_hasCHARListTail(chars)) {
       break;
