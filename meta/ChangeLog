@@ -1,5 +1,19 @@
 # $Id$
 
+Wed Jul 14 10:03:26 CEST 2004 <jurgenv@cwi.nl>
+ * Bumped to 1.6
+ * ./reconf: Added generation of libltdl directory using libtoolize
+ * Renamed configure.in to configure.ac (necessary to get ./libltdl
+   compiled)
+ * Added recursive configure using AC_CONFIG_SUBDIRS to get ./libltdl
+   configured properly
+ * Added ESSENTIAL --warnings=gnu to call to autoreconf. Due to a bug
+   in libtoolize (or the files that it add links too), the distcheck
+   target in the libltdl directory only works when in gnu warning mode.
+ * editors/text/Makefile.am: linking editor-hive now with local copy
+   of ltdl library. 
+ * Users do not need to install libtool any more before compiling meta.
+
 Wed Jul 14 08:12:08 CEST 2004 <kooiker@cwi.nl>
  * Removed 10 unused processes 
 

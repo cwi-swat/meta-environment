@@ -4,11 +4,17 @@ ACLOCAL_FLAGS = -I .
 
 include ${top_srcdir}/make_rules
 
-EXTRA_DIST = make_rules program-check.m4 $(wildcard *.pkg)
+EXTRA_DIST = make_rules program-check.m4 $(wildcard *.pkg) libltdl/config-h.in
 
-CLEANFILES = ${PACKAGE}-${VERSION}.pkg
+CLEANFILES = \
+	${PACKAGE}-${VERSION}.pkg \
+	libltdl/config.log \
+	libltdl/config.h \
+	libltdl/config.status \
+	libltdl/stamp-h1
 
 SUBDIRS = \
+	libltdl \
 	meta-studio \
 	src \
 	in-output \

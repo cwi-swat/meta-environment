@@ -17,6 +17,7 @@ configure
 depcomp
 install-sh
 libtool
+libltdl
 ltmain.sh
 meta-*.pkg
 missing

@@ -1,11 +1,23 @@
 dptprettynl Process this file with autoconf to produce a configure script.
 AC_INIT
-AC_CONFIG_SRCDIR([configure.in])
-AM_INIT_AUTOMAKE(meta, 1.5)
+AC_CONFIG_SRCDIR([configure.ac])
+AM_INIT_AUTOMAKE(meta, 1.6)
 AC_PREREQ(2.59)
 
 AC_PROG_CC
+
+dnl libltdl was installed by 'libtoolize --ltdl', now configure it:
+AC_LIBLTDL_CONVENIENCE
+
+AM_CONDITIONAL(INSTALL_LTDL, [false] )
+AM_CONDITIONAL(CONVENIENCE_LTDL, [true] )
+AC_SUBST(LIBLTDL)
+AC_SUBST(INCLTDL)
+AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
+AC_SUBST(LIBADD_DL)
+AC_CONFIG_SUBDIRS(libltdl)
+
 
 dnl Handle cflags option
 AC_ARG_WITH(cflags,
@@ -47,18 +59,13 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
-dnl Require ToolBus Java library
-AC_PACKAGE_REQUIRE(toolbus-java-adapter, toolbus-java-adapter-config,
-   [  --with-toolbus-java-adapter=DIR   ToolBus Java library is in DIR])
-AC_SUBST(TOOLBUS_JAVA_ADAPTER)
-
 dnl Require toolbus package
 AC_PACKAGE_REQUIRE(toolbus, toolbus,
    [  --with-toolbus=DIR      ToolBus distribution is in DIR])
 AC_SUBST(TOOLBUS)
 
 dnl This variable holds all external jarfiles
-EXTERNAL_JARS=${JAVA_ATERM}:\`${ERROR_SUPPORT}/bin/error-support-config\`:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`
+EXTERNAL_JARS=${JAVA_ATERM}:${TOOLBUS}/classes:\`${ERROR_SUPPORT}/bin/error-support-config\`
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Require sglr package
@@ -158,6 +165,7 @@ AC_CHECK_HEADER(getopt.h)
 dnl Which files need updating?
 AC_CONFIG_FILES([Makefile
    src/Makefile
+   libltdl/Makefile
    meta-studio/Makefile
    meta-studio/META-INF/Makefile
    meta-studio/images/Makefile
@@ -174,12 +182,13 @@ AC_CONFIG_FILES([Makefile
    term-store/snapshot/Makefile
    editors/Makefile
    editors/manager/Makefile
+   editors/manager/src/Makefile
    editors/text/Makefile
    editors/text/common/Makefile
    editors/text/gvim/Makefile
    editors/text/emacs/Makefile
-   editors/text/swing/Makefile
    editors/structure/Makefile
+   editors/structure/src/Makefile
    tbscripts/Makefile
    configuration-manager/Makefile
    configuration-manager/src/Makefile
