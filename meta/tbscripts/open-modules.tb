@@ -59,6 +59,7 @@ in
     snd-note(ui-status(stat(Id,"Opening Modules"))). (
       if not-equal(Ms, []) then
         Name := first(Ms).
+        snd-note(ui-status(statf(Id,"Opening %s",[Name]))).
         Ms   := next(Ms).
        /* First we should check here whether this module has already been 
         * opened..
@@ -158,7 +159,8 @@ in
               snd-note(ui-status(endstat(Id)))
             )
           )
-        )
+        ).
+        snd-note(ui-status(endstat(Id)))
       fi
     ) *
     if equal(Ms,[]) then
