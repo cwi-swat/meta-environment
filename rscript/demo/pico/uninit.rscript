@@ -1,23 +1,19 @@
 type stat = area
 type var = str
-
 type var-occ = area
 
-type var-in-stat = <stat Stat, var Var>
+stat ROOT
+ 
+rel[stat,stat] PRED
+rel[stat,var] USES
+rel[stat,var] DEFS
+rel[var,var-occ] OCCURS
 
- stat ROOT
- rel[stat,stat] PRED
-
- rel[var-in-stat,var-occ] USE_OCCURS
- rel[var-in-stat,var-occ] DEF_OCCURS
-
- bag[var-in-stat] USES
- bag[var-in-stat] DEFS
-
- rel[str,area] occurrences(var-in-stat VS) = {VS.Var} x USE_OCCURS[VS]
-
-rel[str,area] UNINIT = 
-   { occurrences(<S,V>) | <stat S, var V> : USES, <ROOT, S> in reachX({ROOT}, DEFS[-,V], PRED)
+rel[stat, var] UNINIT = 
+   { <S, V>| <stat S, var V> : USES, <ROOT, S> in reachX({ROOT}, DEFS[-,V], PRED)
    }
+
+rel[var, var-occ] UNINIT-OCC =
+   { <V, VO> | <stat S, var V> : UNINIT, var-occ VO : OCCURS[V], VO <= S }
 
                          

@@ -121,6 +121,8 @@ assert "== 27" : {<1, {1,2,3}>, <2, {2,3,4}>} ==  {<2, {2,3,4}>, <1, {1,2,3}>}
 
 area A1 = area("f", 10, 3, 11, 7)
 area A2 = area("f", 10, 2, 11, 8)
+area A30 = area("f", 10, 5, 10, 7)
+area A31 = area("f", 10, 4, 10, 6)
 area A3 = area("f", 10, 4, 10, 7)
 area A4 = area("f", 10, 3, 10, 8)
 
@@ -156,6 +158,8 @@ assert "<= 2b" : "b" <= "b"
 assert "<= 3" : A1 <= A1
 assert "<= 4" : A1 <= A2
 assert "<= 5" : A3 <= A4
+assert "<= 5a": A30 <= A3
+assert "<= 5b": A31 <= A3
 
 assert "<= 6": EMPTYBAG <= EMPTYBAG
 assert "<= 7": EMPTYBAG <= BigBag
@@ -172,6 +176,8 @@ assert "< 2b" : not "b" < "b"
 assert "< 3" : not(A1 < A1)
 assert "< 4" : A1 < A2
 assert "< 5" : A3 < A4
+assert "< 5a": A30 < A3
+assert "< 5b": A31 < A3
 
 assert "< 6": not(EMPTYBAG < EMPTYBAG)
 assert "< 7": EMPTYBAG < BigBag
@@ -188,6 +194,8 @@ assert ">= 2b" : "b" >= "b"
 assert ">= 3" : A1 >= A1
 assert ">= 4" : not(A1 >= A2)
 assert ">= 5" : not(A3 >= A4)
+assert ">= 5a": not(A30 >= A3)
+assert ">= 5b": not(A31 >= A3)
 
 assert ">= 6": EMPTYBAG >= EMPTYBAG
 assert ">= 7": not(EMPTYBAG >= BigBag)
@@ -204,6 +212,8 @@ assert "> 2b" : not("b" > "b")
 assert "> 3" : not(A1 > A1)
 assert "> 4" : not(A1 > A2)
 assert "> 5" : not(A3 > A4)
+assert "> 5a": not(A30 > A3)
+assert "> 5b": not(A31 > A3)
 
 assert "> 6": not(EMPTYBAG > EMPTYBAG)
 assert "> 7": not(EMPTYBAG > BigBag)

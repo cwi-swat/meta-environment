@@ -17,19 +17,23 @@ equations
 [default-aeq]
 	equal($Area1, $Area2) = false
 
-[alt]	less(area($Literal, $NatCon1, $NatCon2, $NatCon3, $NatCon4),
+[aleq]	less-equal(area($Literal, $NatCon1, $NatCon2, $NatCon3, $NatCon4),
              area($Literal, $NatCon1', $NatCon2', $NatCon3', $NatCon4')) =
-	     (($NatCon1 > $NatCon1') | (($NatCon1 == $NatCon1') & ($NatCon2 > $NatCon2'))) &
-	     (($NatCon3 < $NatCon3') | (($NatCon3 == $NatCon3') & ($NatCon4 < $NatCon4')))
+	     (($NatCon1 > $NatCon1') | (($NatCon1 == $NatCon1') & ($NatCon2 >= $NatCon2'))) &
+	     (($NatCon3 < $NatCon3') | (($NatCon3 == $NatCon3') & ($NatCon4 <= $NatCon4')))
 
-[default-alt]
-	less($Area1, $Area2) = false
+[default-aleq]
+	less-equal($Area1, $Area2) = false
 
-[ale]	less-equal($Area1, $Area2) = equal($Area1, $Area2) | less($Area1, $Area2)
+[alt]	less($Area1, $Area2) =  less-equal($Area1, $Area2) & not(equal($Area1, $Area2))
 
-[agt]	greater(area($Literal, $NatCon1, $NatCon2, $NatCon3, $NatCon4),
+[ageq]	greater-equal(area($Literal, $NatCon1, $NatCon2, $NatCon3, $NatCon4),
                 area($Literal, $NatCon1', $NatCon2', $NatCon3', $NatCon4')) =
-	        (($NatCon1 < $NatCon1') | (($NatCon1 == $NatCon1') & ($NatCon2 < $NatCon2'))) &
-	        (($NatCon3 > $NatCon3') | (($NatCon3 == $NatCon3') & ($NatCon4 > $NatCon4')))
+	        (($NatCon1 < $NatCon1') | (($NatCon1 == $NatCon1') & ($NatCon2 <= $NatCon2'))) &
+	        (($NatCon3 > $NatCon3') | (($NatCon3 == $NatCon3') & ($NatCon4
+                >= $NatCon4')))
 
-[age]	 greater-equal($Area1, $Area2) = equal($Area1, $Area2) | greater($Area1, $Area2)
+[default-ageq]
+	greater-equal($Area1, $Area2) = false
+
+[age]	greater-equal($Area1, $Area2) = greater-equal($Area1, $Area2) & not(equal($Area1, $Area2))

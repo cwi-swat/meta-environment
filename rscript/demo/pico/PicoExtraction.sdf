@@ -13,8 +13,7 @@ exports
  context-free syntax
 
       extractRelations(PROGRAM)                	-> RSTORE
-%%      convertl(Bag[[Elem]])                   	-> List
-      convertl(Elem)                   	-> List
+      convertl(Elem)				-> List
 
 hiddens
   context-free syntax
