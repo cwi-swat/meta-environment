@@ -230,8 +230,27 @@ amb_node(FILE *dot, term *t, term *arg)
     }
 }
 
+/*
+ * Check whether a term is the top of a `lexical' tree
+ */
+bool	is_lexical(term *fun)
+{
+	term *dummy;
+
+	if(TBmatch(fun, "prod(%t,cf(layout),%t)", &dummy, &dummy))
+		return(TRUE);
+
+	if(TBmatch(fun, "prod(%t,lit(%t),%t)", &dummy, &dummy, &dummy))
+		return(TRUE);
+	
+	if(TBmatch(fun, "prod(%t,lex(%t),%t)", &dummy, &dummy, &dummy))
+		return(TRUE);
+
+	return(FALSE);
+}
+
 void
-tree_to_dot(FILE *dot, term *t, int child, term *parent)
+tree_to_dot(FILE *dot, term *t, int child, term *parent, bool suppress_lexicals)
 {
   term *fun, *args, *arg;
   int c;
@@ -263,15 +282,17 @@ tree_to_dot(FILE *dot, term *t, int child, term *parent)
   if (TBmatch(t, "appl(%t,[%l])", &fun, &args))
     {
       int n = 0;
-      while (args)
-	{
-	  n++;
-	  arg = first(args);
-	  args = next(args);
-	  if (!TBmatch(arg, "%d", &c))
-	    fprintf(dot, "\tN%d -> N%d;\n", (int)t, (int)arg);
-	  tree_to_dot(dot, arg, n, t);
-	}
+
+      if(!suppress_lexicals || !is_lexical(fun))
+	while (args)
+	  {
+	    n++;
+	    arg = first(args);
+	    args = next(args);
+	    if (!TBmatch(arg, "%d", &c))
+	      fprintf(dot, "\tN%d -> N%d;\n", (int)t, (int)arg);
+	    tree_to_dot(dot, arg, n, t, suppress_lexicals);
+	  }
       appl_node(dot, t, fun, n);
     }
   else if (TBmatch(t, "amb([%l])", &args))
@@ -284,17 +305,17 @@ tree_to_dot(FILE *dot, term *t, int child, term *parent)
 	  arg = first(args);
 	  args = next(args);
 	  fprintf(dot, "\tN%d -> N%d;\n", (int)t, (int)arg);
-	  tree_to_dot(dot, arg, n, t);
+	  tree_to_dot(dot, arg, n, t, suppress_lexicals);
 	}
     }
   else if (TBmatch(t, "parsetree(%t, %d)", &arg, &c))
     {
-      tree_to_dot(dot, arg, 1, t);
+      tree_to_dot(dot, arg, 1, t, suppress_lexicals);
     }
 }
 
 void
-tree_to_dotfile(char *file, term *t)
+tree_to_dotfile(char *file, term *t, bool suppress)
 {
   FILE *dot;
   if (strcmp(file, "") == 0)
@@ -311,13 +332,13 @@ tree_to_dotfile(char *file, term *t)
 
   fprintf(dot, "strict digraph ParseTree { \n"
 	       "\tordering=out;\n"
-/* These belong on dot's command line, really
+/* These belong on dot's command line, really */
 	       "\tcenter=true;\n"
 	       "\tranksep=.44;\n"
 	       "\tnode[shape=plaintext fontname=\"Helvetica-Bold\" fontsize=12 height=.32];\n\n"
-*/
+/* */
 	  );
-  tree_to_dot(dot, t, 0, NULL);
+  tree_to_dot(dot, t, 0, NULL, suppress);
   fprintf(dot, "}\n");
 }
 

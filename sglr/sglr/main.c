@@ -38,6 +38,7 @@ int   write_output = TRUE;
 char *parse_table_name = NULL;
 int   abbreviation_flag = FALSE;
 int   show_statistics = FALSE;
+int   suppress_lexicals = FALSE;
 int   filtering = FALSE;
 char *dotoutput = "";
 int   generate_dot = FALSE;
@@ -126,7 +127,7 @@ batch (int argc, char **argv)
     }
 
   if (generate_dot)
-    tree_to_dotfile(dotoutput, parse_tree);
+    tree_to_dotfile(dotoutput, parse_tree, suppress_lexicals);
 
   fprintf(stderr, "parsing succeeded\n");
 
@@ -145,6 +146,7 @@ batch (int argc, char **argv)
   \item |-d|       : debugging mode
   \item |-g|       : no garbage collects
   \item |-h|, |-?| : help (print usage information)
+  \item |-l]       : suppress lexical information in dot output
   \item |-v|       : verbose mode
   \item |-V|       : print version information
   \item |-a|       : abbreviate productions in parse trees
@@ -159,12 +161,12 @@ usage(FILE *stream, int long_message)
 {
   if( !long_message )
     fprintf (stream,
-	     "Usage: %s -p file [-i file] [-o file] [-adDfghnsSvV?]\n",
+	     "Usage: %s -p file [-i file] [-o file] [-adDfghlnsSvV?]\n",
 	     program_name);
   else {
     fprintf
 (stream,
- "Usage: %s -p file [-i file] [-o file] [-adDfghnsSvV?]\n"
+ "Usage: %s -p file [-i file] [-o file] [-adDfghlnsSvV?]\n"
  "\n"
  "\t-p file : use parse table |file| (obligatory)\n"
  "\t-i file : input from |file| (optional, default is stdin)\n"
@@ -172,10 +174,9 @@ usage(FILE *stream, int long_message)
  "\t-a      : abbreviate productions in parse trees\n"
  "\t-d      : debugging mode\n"
  "\t-D file : generate dot output for parse tree\n"
- "\t-f      : turn filtering on\n"
  "\t-g      : no garbage collect\n"
  "\t-h      : help (print usage information)\n"
-/* "\t-l      : write log info to file .parse-log\n" */
+ "\t-l      : suppress lexical information in dot output\n"
  "\t-n      : don't write tree to output\n"
  "\t-s      : show statistics\n"
  "\t-S file : show stacks as dot files\n"
@@ -199,7 +200,7 @@ struct option longopts[] =
   {"abbreviate",  no_argument,       &abbreviation_flag, FALSE},
   {"debug",       no_argument,       &debugflag,         TRUE},
   {"dot",         no_argument,       NULL,               'D'},
-  {"filtering",   no_argument,       &filtering,         'f'},
+  {"suppress",    no_argument,       NULL,               'l'},
   {"garbagecollect", no_argument,    &gc,                TRUE},
   {"help",        no_argument,       NULL,               'h'},
   {"input",       required_argument, NULL,               'i'},
@@ -226,7 +227,7 @@ handle_options (int argc, char **argv)
   verboseflag = FALSE;
   debugflag   = FALSE;
   while ((c = getopt_long(argc, argv,
-			  "?adD:fghi:no:p:sS:vV", longopts, NULL))
+			  "?adD:fghi:lno:p:sS:vV", longopts, NULL))
 	 != EOF)
     switch (c) {
     case 0:   break;
@@ -236,11 +237,11 @@ handle_options (int argc, char **argv)
     case 'd': debugflag = TRUE; printf("debugging %s\n", debugflag?"on":"off");
                log = open_log(".parse-log"); break;
     case 'f': filtering = !filtering;
-              printf("filtering on\n", debugflag); break;
     case 'g': gc = !gc; break;
     case 'h': usage(stdout, TRUE); exit(0);
     case 'i': input_file_name  = optarg; break;
-/*    case 'l': log = open_log(".parse-log"); break;	*/
+              break;
+    case 'l': suppress_lexicals = TRUE; break;
     case 'n': write_output = FALSE; break;
     case 'o': output_file_name = optarg; break;
     case 'p': parse_table_name = optarg; break;
@@ -349,7 +350,7 @@ getchar_from_string(void)
   return the_text[text_index++];
 }
 /*
-  Beacause the string passed to |parse_string| might be a string that was
+  Because the string passed to |parse_string| might be a string that was
   contained in a term we have to save it from being garbage collected.
   This is done now by making a duplicate of it, which is not efficient
   and clean.
