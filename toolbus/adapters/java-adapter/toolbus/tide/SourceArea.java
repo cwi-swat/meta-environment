@@ -116,4 +116,88 @@ public class SourceArea
   }
 
   //}
+  //{ public String toString()
+
+  /**
+    * Generate the string representation of this area.
+    * An area is represented lie -12#-23:-14#--7
+    */
+
+  public String toString()
+  {
+    String result = "" + start_line + "#";
+    if(start_col == -1)
+      result += "end";
+    else result += start_col;
+
+    result += ".." + end_line + "#";
+    if(end_col == -1)
+      result += "end";
+    else
+      result += end_col;
+
+    return result;
+  }
+
+  //}
+  //{ public void setModule(String mod)
+
+  /**
+    * Change the module this area refers to.
+    */
+
+  public void setModule(String mod)
+  {
+    module = mod;
+  }
+
+  //}
+  //{ public void setStartLine(int line)
+
+  /**
+    * Change the starting line of this area.
+    */
+
+  public void setStartLine(int line)
+  {
+    start_line = line;
+  }
+
+  //}
+  //{ public void setStartColumn(int col)
+
+  /**
+    * Change the starting column of this area.
+    */
+
+  public void setStartColumn(int col)
+  {
+    start_col = col;
+  }
+
+  //}
+  //{ public void setEndLine(int line)
+
+  /**
+    * Change the end line of this area.
+    */
+
+  public void setEndLine(int line)
+  {
+    end_line = line;
+  }
+
+  //}
+  //{ public void setEndColumn(int col)
+
+  /**
+    * Change the end column of this area.
+    */
+
+  public void setEndColumn(int col)
+  {
+    end_col = col;
+  }
+
+  //}
 }

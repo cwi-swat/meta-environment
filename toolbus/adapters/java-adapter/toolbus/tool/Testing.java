@@ -1,6 +1,6 @@
 // Java tool interface class Testing
 // This file is generated automatically, please do not edit!
-// generation time: 10-Apr-97 5:11:41 PM
+// generation time: 12-May-97 4:24:42 PM
 
 package toolbus.tool;
 import toolbus.aterm.*;
@@ -34,12 +34,14 @@ abstract public class Testing extends toolbus.tool.Tool
   // This method initializes the table with input signatures
   private void initSigTable()
   {
-    try { sigTable.put(ATermParser.makeSimple("rec-terminate(<testing>,<term>)"), new Boolean(true)); } catch (ParseError e) { }
-    try { sigTable.put(ATermParser.makeSimple("rec-ack-event(<testing>,<term>)"), new Boolean(true)); } catch (ParseError e) { }
-    try { sigTable.put(ATermParser.makeSimple("rec-eval(<testing>,question(square))"), new Boolean(true)); } catch (ParseError e) { }
-    try { sigTable.put(ATermParser.makeSimple("rec-do(<testing>,testit(<str>,f(<int>)))"), new Boolean(true)); } catch (ParseError e) { }
-    try { sigTable.put(ATermParser.makeSimple("rec-do(<testing>,testit(<str>,<int>))"), new Boolean(true)); } catch (ParseError e) { }
-    try { sigTable.put(ATermParser.makeSimple("rec-do(<testing>,testit(<str>))"), new Boolean(true)); } catch (ParseError e) { }
+    try {
+      sigTable.put(ATermParser.makeSimple("rec-terminate(<testing>,<term>)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-ack-event(<testing>,<term>)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-eval(<testing>,question(square))"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<testing>,testit(<str>,f(<int>)))"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<testing>,testit(<str>,<int>))"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<testing>,testit(<str>))"), new Boolean(true));
+    } catch (ParseError e) { }
   }
 
   // Initialize the patterns that are used to match against incoming terms

@@ -986,8 +986,8 @@ void tcl_tide_handler(ClientData data, int mask)
 \nwenddocs{}\nwbegincode{87}\sublabel{NWtclI-tidF-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWtclI-tidF-1}}}\moddef{tide_event_loop~{\nwtagstyle{}\subpageref{NWtclI-tidF-1}}}\endmoddef\let\nwnotused=\nwoutput{}
 void tide_event_loop()
 \{
-  while(use_tide && (dap_get_exec_state(0, 0) == ES_STOP || 
-        dap_get_exec_state(0, 0) == ES_HIGH_WATER)) \{
+  while(use_tide && (dap_get_exec_state(0, 0) == ES_STOP)) \{
+ // <PO> was:       dap_get_exec_state(0, 0) == ES_HIGH_WATER)) \{
     TB_handle_one(tide_cid);
   \}
 \}

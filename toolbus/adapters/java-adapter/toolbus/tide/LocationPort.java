@@ -21,6 +21,9 @@ public class LocationPort extends DebugPort
   {
     super(LOCATION, when);
     location = loc;
+    if(location == null)
+      throw new IllegalArgumentException("location cannot be null");
+    init();
   }
 
   //}
@@ -35,6 +38,7 @@ public class LocationPort extends DebugPort
   {
     super(LOCATION, when);
     location = new SourceArea(loc);
+    init();
   }
 
   //}

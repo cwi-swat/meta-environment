@@ -304,7 +304,7 @@ public class ProcessViewer extends Frame
 
   public void addAlias(int dapid, int pid, ATermRef alias)
   {
-    System.out.println("add alias " + alias + " to pid " + pid);
+    //System.out.println("add alias " + alias + " to pid " + pid);
     ProcessPicture proc;
     proc = getProcess(alias);
     if(proc != null && proc.getDap() == ANON_DAPID && 
@@ -396,7 +396,7 @@ public class ProcessViewer extends Frame
 
   public void processDestroyed(int dapid, int pid)
   {
-    System.out.println("process " + pid + " destroyed in dap " + dapid);
+    //System.out.println("process " + pid + " destroyed in dap " + dapid);
     ProcessPicture proc = getProcess(dapid, pid);
     processGrid[proc.getColumn()][proc.getRow()] = null;
     processes[dapid].remove(new Integer(pid));

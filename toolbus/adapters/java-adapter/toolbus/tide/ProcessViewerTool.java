@@ -204,7 +204,7 @@ public class ProcessViewerTool extends ProcessViewerTif
 
   private void watchpoint(int dapid, ATermRef proc, ATermRef expr, ATermRef val)
   {
-    System.out.println("### watchpoint: " + expr + ", val=" + val);
+    //System.out.println("### watchpoint: " + expr + ", val=" + val);
 
     if(!patternSingleProcess.match(proc))
       throw new IllegalArgumentException("illegal process spec: " + proc.toString());

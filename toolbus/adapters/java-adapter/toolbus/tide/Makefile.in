@@ -37,7 +37,8 @@ TOOLSOURCE	= ProcessViewerTif.java ProcessViewerTool.java \
 		ProcessViewer.java \
 		DebugAdapterTif.java DebugAdapterTool.java \
 		JavaDebugger.java SourceViewerTif.java SourceViewerTool.java \
-		DebugProcessGroup.java
+		WatchpointViewerTif.java WatchpointViewerTool.java \
+		DebugProcessGroup.java StringDialog.java
 CLASSES		= DebugPort.class LocationPort.class ExecStatePort.class \
 		ExceptionPort.class ProcessCreationPort.class \
 		ProcessDestructionPort.class SendPort.class ReceivePort.class\
@@ -54,7 +55,10 @@ TOOLCLASSES	= ProcessViewerTif.class ProcessViewerTool.class \
 		DebugAdapterTif.class DebugAdapterTool.class \
 		JavaDebugger.class SourceViewerTif.class \
 		SourceViewerTool.class SourceViewer.class TextBrowser.class \
-		TextBrowserCanvas.class \
+		TextBrowserCanvas.class TextLine.class Tag.class \
+		TextHandler.class StringDialog.class \
+		WatchpointViewerTif.class WatchpointViewerTool.class \
+		WatchpointDialog.class \
 		DebugProcessGroup.class DebugProcessGroupAll.class \
 		DebugProcessGroupNone.class DebugProcessGroupOne.class \
 		DebugProcessGroupList.class
@@ -78,6 +82,10 @@ DebugAdapterTif.java: $(top_srcdir)/tide/tide.tifs
 SourceViewerTif.java: $(top_srcdir)/tide/tide.tifs
 	$(JAVATIF) -package toolbus.tide -class SourceViewerTif  \
 		-tool source-viewer -tifs $(top_srcdir)/tide/tide.tifs
+
+WatchpointViewerTif.java: $(top_srcdir)/tide/tide.tifs
+	$(JAVATIF) -package toolbus.tide -class WatchpointViewerTif \
+		-tool watchpoint-viewer -tifs $(top_srcdir)/tide/tide.tifs
 
 # The rules below this line are general rules and are based on the
 # defines listed above. You probably won't have to change them.

@@ -21,6 +21,9 @@ public class DebugRule
   private int lifetime;
   private DebugProcess[] processes;
 
+  private ATermPattern patternBreak;
+  private ATermPattern patternWatch;
+
   //{ static public int lifeTerm2Int(ATermRef lifetime)
 
   /**
@@ -65,6 +68,7 @@ public class DebugRule
     actions = acts;
     this.lifetime = lifetime;
     id = idCount++;
+    init();
   }
 
   //}
@@ -83,6 +87,25 @@ public class DebugRule
     actions = acts;
     this.lifetime = lifetime;
     id = idCount++;
+    init();
+  }
+
+  //}
+  //{ public void init()
+
+  /**
+    * Initialize this debug rule
+    */
+
+  public void init()
+  {
+    try {
+      // Initialize a bunch of term patterns
+      patternBreak = new ATermPattern("break");
+      patternWatch = new ATermPattern("watch(<term>)");
+    } catch (ParseError e) {
+      throw new IllegalArgumentException("internal parse error");
+    }
   }
 
   //}
@@ -123,4 +146,44 @@ public class DebugRule
   }
 
   //}
+
+  //{ public boolean isBreakpoint()
+
+  /**
+    * Check if this debugrule represents a breakpoint.
+    */
+
+  public boolean isBreakpoint()
+  {
+    ATermsRef acts = actions;
+    while(acts != null) {
+      if(patternBreak.match(acts.getFirst()))
+	return true;
+      acts = acts.getNext();
+    }
+
+    return false;
+  }
+
+  //}
+  //{ public boolean isWatchpoint()
+
+  /**
+    * Check if this debugrule represents a watchpoint.
+    */
+
+  public boolean isWatchpoint()
+  {
+    ATermsRef acts = actions;
+    while(acts != null) {
+      if(patternWatch.match(acts.getFirst()))
+	return true;
+      acts = acts.getNext();
+    }
+
+    return false;
+  }
+
+  //}
+
 }

@@ -192,6 +192,35 @@ public class DebugAdapterInfo
   }
 
   //}
+  //{ public Enumeration getSourcePaths()
+
+  /**
+    * Get source search paths of this adapter.
+    */
+
+  public Enumeration getSourcePaths()
+  {
+    Vector vector = new Vector();
+    ATermsRef paths = ((ATermListRef)getInfo("search-paths")).getATerms();
+    while(paths != null) {
+      ATermsRef pair = ((ATermListRef)paths.getFirst()).getATerms();
+      ATermApplRef kind = (ATermApplRef)pair.getFirst();
+      if(kind.getFun().equals("source")) {
+	paths = ((ATermListRef)pair.getNext().getFirst()).getATerms();
+	while(paths != null) {
+	  ATermApplRef path = (ATermApplRef)paths.getFirst();
+	  vector.addElement(path.getFun());
+	  paths = paths.getNext();
+	}
+	return vector.elements();
+      }
+      paths = paths.getNext();
+    }
+    // Return an empty enumeration.
+    return vector.elements();
+  }
+
+  //}
 
   //{ public void addRule(Rule rule)
 

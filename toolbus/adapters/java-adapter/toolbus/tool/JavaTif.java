@@ -255,7 +255,7 @@ class TifGenerator
     String trw = " throws UnknownHostException ";
     out.println("  // Mimic the three constructors from the Tool class");
     out.println(hdr + "(String name)"+trw+"{ super(name); init(); }");
-    out.println(hdr + "(String name, InetAddress address, int port)"+trw+" { super(name, address, port); initSigTable(); }");
+    out.println(hdr + "(String name, InetAddress address, int port)"+trw+" { super(name, address, port); init(); }");
     out.println(hdr + "(String[] args)"+trw+"{ super(args); init(); }");
     out.println("");
 

@@ -20,8 +20,10 @@ CLEAN           = @CLEAN@
 .SUFFIXES: .c .o
 
 PROGRAMS	= www-bidder
-CLASSES		= BidderTif.class BidderTool.class BidderUI.class
-JAVASRC		= BidderTif.java BidderTool.java BidderUI.java
+CLASSES		= BidderTif.class BidderTool.class BidderUI.class \
+		BidderApplet.class
+JAVASRC		= BidderTif.java BidderTool.java BidderUI.java \
+		BidderApplet.java
 DISTFILES	= Makefile.in master.tcl bidder.tcl auction.tb bidder \
 		www-auction.tb www-bidder $(JAVASRC)
 
@@ -41,6 +43,9 @@ BidderTool.class: BidderTool.java
 
 BidderUI.class: BidderUI.java
 	javac BidderUI.java
+
+BidderApplet.class: BidderApplet.java
+	javac BidderApplet.java
 
 auction.tb.tex: auction.tb
 	${bindir}/script2latex <auction.tb >auction.tb.tex
