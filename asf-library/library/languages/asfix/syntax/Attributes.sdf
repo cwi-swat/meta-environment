@@ -2,25 +2,35 @@ module asfix/syntax/Attributes
 imports asfix/syntax/Literals aterm/ATerms
 
 exports
+  sorts Attributes Attrs Attr Associativity
 
-sorts Attributes Attrs Attr Associativity
+  context-free syntax
+    "no-attrs"                       -> Attributes  
+    "attrs" "(" attributes:Attrs ")" -> Attributes  
 
-context-free syntax
+    "[" {Attr ","}+ "]" -> Attrs 
 
-"no-attrs"                -> Attributes  
-attrs(attributes:Attrs)        -> Attributes  
+    "assoc" "(" associativity:Associativity ")" -> Attr 
+    "term" "(" aterm:ATerm ")"                  -> Attr 
+    "id" "(" module-name:Literal ")"            -> Attr 
 
-"[" {Attr ","}+ "]"       -> Attrs 
+    "bracket" -> Attr 
+    "reject"  -> Attr 
+    "prefer"  -> Attr
+    "avoid"   -> Attr
 
-"assoc"("assocativity":Associativity)  -> Attr 
-term(aterm:ATerm)                -> Attr 
-id(module-name:Literal)         -> Attr 
+    "left"      -> Associativity
+    "right"     -> Associativity
+    "assoc"     -> Associativity
+    "non-assoc" -> Associativity
 
-"bracket" -> Attr 
-"reject"  -> Attr 
-"prefer"  -> Attr
-"avoid"   -> Attr
-
-"bracket" | "reject" | "prefer" | "avoid" -> ATerm {reject}
-id(Literal)                               -> ATerm {reject}
+    "bracket"   -> ATerm {reject}
+    "reject"    -> ATerm {reject}
+    "prefer"    -> ATerm {reject}
+    "avoid"     -> ATerm {reject}
+    "left"      -> ATerm {reject}
+    "right"     -> ATerm {reject}
+    "assoc"     -> ATerm {reject}
+    "non-assoc" -> ATerm {reject}
+    id(Literal) -> ATerm {reject}
 
