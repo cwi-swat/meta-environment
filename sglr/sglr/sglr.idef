@@ -52,6 +52,9 @@ process Parser is
         rec-value(P, parse-error(Err?,eof)) .
         snd-msg(parse-result-asfix2me(Id, parse-error(Err,eof)))
       +
+        rec-value(P, ambiguous-tree(T?, Err?, ambiguities(Amb?, Ambs?))) .
+        snd-msg(parse-result-asfix2me(Id, ambiguous-tree(parsetree(T, Amb), Err,ambiguities(Amb, Ambs))))
+      +
         rec-value(P, parse-error(Err?,ambiguities(Amb?, Ambs?))) .
         snd-msg(parse-result-asfix2me(Id, parse-error(Err,ambiguities(Amb, Ambs))))
       +

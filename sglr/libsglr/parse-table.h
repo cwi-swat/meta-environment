@@ -54,7 +54,7 @@ typedef struct _parse_table  {
 #endif
 } parse_table;
 
-typedef enum ActionKind {ERROR, SHIFT, SHIFT_KW, REDUCE, REDUCE_LA, ACCEPT}  actionkind;
+typedef enum ActionKind {ERROR, SHIFT, REDUCE, REDUCE_LA, ACCEPT}  actionkind;
 
 
 /*  Some global variables/macros  */

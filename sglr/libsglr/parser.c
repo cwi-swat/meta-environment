@@ -35,22 +35,6 @@ typedef struct shift_pair {
 #define SG_SP_STATE(x)                  (x).state
 #define SG_SP_STACK(x)                  (x).stack
 
-typedef struct shift_tuple {
-  struct shift_tuple *next;
-  label     prod;
-  ATermList token;
-  int       index;
-  int       length;
-  stack     *stack;
-} shift_tuple;
-
-#define SG_STPL_STATE(x)                  (x)->state
-#define SG_STPL_TOKEN(x)                  (x)->token
-#define SG_STPL_INDEX(x)                  (x)->index
-#define SG_STPL_STACK(x)                  (x)->stack
-#define SG_STPL_LENGTH(x)                 (x)->length
-#define SG_STPL_PROD(x)                   (x)->prod
-
 /*
  A path is a pair of a stack and a list of terms.  A path represents the
  path from a certain point |p1| in a stack to another point |p2| in a
@@ -98,6 +82,7 @@ void      SG_DoLimitedReductions(stack*, action, st_link*);
 void      SG_Shifter(void);
 ATermList SG_CurrentPosInfo(void);
 forest    SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak);
+forest    SG_AmbiguousParse(tree t, ATerm ambtrak);
 tree      SG_ParseResult(char *sort);
 
 /*
@@ -134,8 +119,6 @@ void SG_InitInput(void)
   SG_ResetCoordinates();
   sg_tokens_read = 0;
 }
-
-static shift_tuple *sg_shift_tuples = NULL;
 
 #define     SG_SHIFT_PAIR_CHUNK 16
 shift_pair  *sg_shift_pairs = NULL;
@@ -174,72 +157,6 @@ void  SG_DiscardShiftPair(void)
 void  SG_DiscardShiftPairs(void)
 {
   sg_sp_idx = 0;
-}
-
-#define SG_SHIFT_TUPLE_CHUNK 16
-static shift_tuple *sg_shift_tuple_pool = NULL;
-
-static shift_tuple *alloc_shift_tuple() {
-  shift_tuple *new_tuple;
-
-  if (sg_shift_tuple_pool == NULL) {
-    int i;
-    sg_shift_tuple_pool = SG_Calloc(SG_SHIFT_TUPLE_CHUNK, sizeof(shift_tuple));
-    for (i=SG_SHIFT_TUPLE_CHUNK-1; i>0; i--) {
-      sg_shift_tuple_pool[i-1].next = &sg_shift_tuple_pool[i];
-    }
-  }
-
-  new_tuple = sg_shift_tuple_pool;
-  sg_shift_tuple_pool = new_tuple->next;
-  new_tuple->next = NULL;
-
-  return new_tuple;
-}
-
-static void free_shift_tuple(shift_tuple *tuple)
-{
-  tuple->next = sg_shift_tuple_pool;
-  sg_shift_tuple_pool = tuple;
-}
-
-
-
-static void SG_AddShiftTuple(stack *st, action a)
-{
-  shift_tuple *tuple;
-
-/*ATwarning("SG_AddShiftTuple: token = %t and stack = %d\n", SG_A_TOKEN(a), SG_ST_STATE(st)); */
-
-  tuple = alloc_shift_tuple();
-  tuple->next = sg_shift_tuples;
-  sg_shift_tuples = tuple;
-
-  tuple->stack = st;
-  tuple->prod = SG_A_KWPROD(a);
-  tuple->token = (ATermList)SG_A_TOKEN(a);
-  tuple->index = 0;
-  tuple->length = ATgetLength((ATermList)SG_A_TOKEN(a))-1;
-}
-
-static void SG_DiscardShiftTuple(shift_tuple *tuple)
-{
-  if (sg_shift_tuples == tuple) {
-    sg_shift_tuples = tuple->next;
-  }
-  else {
-    shift_tuple *cur;
-    for (cur = sg_shift_tuples; cur; cur = cur->next) {
-      if (cur->next == tuple) {
-	break;
-      }
-    }
-    assert(cur != NULL);
-    assert(cur->next == tuple);
-    cur->next = tuple->next;
-  }
-
-  free_shift_tuple(tuple);
 }
 
 path *SG_NewPath(stack *st, ATermList sons, size_t length, path *ps)
@@ -684,13 +601,6 @@ void SG_Actor(stack *st)
 {
   register actions as;
   action  a;
-  shift_tuple *cur_tuple;
-
-  for (cur_tuple = sg_shift_tuples; cur_tuple; cur_tuple = cur_tuple->next) {
-    if (SG_STPL_STACK(cur_tuple) == st && SG_STPL_INDEX(cur_tuple) != 0) {
-      return;
-    }
-  }
 
   as = SG_LookupAction(table, SG_ST_STATE(st), current_token);
 
@@ -699,9 +609,6 @@ void SG_Actor(stack *st)
     switch(SG_ActionKind(a)) {
       case SHIFT:
 	SG_AddShiftPair(st, SG_A_STATE(a));
-	break;
-      case SHIFT_KW:
-	SG_AddShiftTuple(st, a);
 	break;
       case REDUCE:
 	SG_DoReductions(st, a);
@@ -981,9 +888,7 @@ void SG_Shifter(void)
   stacks *new_active_stacks = NULL;
   state s;
   st_link *l;
-  shift_tuple *cur_tuple, *next_tuple;
   int i;
-  tree rt;
 
   IF_DEBUG(
     fprintf(SG_log(), "#%ld: shifting %d parser(s) -- token ",
@@ -993,42 +898,6 @@ void SG_Shifter(void)
   );
 
   t = SG_LookupProduction(table, current_token);
-
-  for (cur_tuple = sg_shift_tuples; cur_tuple; cur_tuple = next_tuple) {
-    ATermList token = SG_STPL_TOKEN(cur_tuple);
-    int index       = SG_STPL_INDEX(cur_tuple);
-    int length      = SG_STPL_LENGTH(cur_tuple);
-    label prod      = SG_STPL_PROD(cur_tuple);
-    st0             = SG_STPL_STACK(cur_tuple);
-
-    next_tuple = cur_tuple->next;
-
-    /*ATwarning("entering shifter with token %t, index %d and stack %d\n", token, index, SG_ST_STATE(st0));*/
-
-    if (index == length &&
-        current_token == ATgetInt((ATermInt) ATelementAt(token, index))) {
-      if (!SG_PT_HAS_REJECTS(table) || !SG_Rejected(st0)) { 
-        state rs = SG_LookupGoto(table, SG_ST_STATE(st0), prod);
-        if (!(st1 = SG_FindStack(rs, new_active_stacks))) {
-          st1 = SG_NewStack(rs, ATfalse);
-          new_active_stacks = SG_AddStack(st1, new_active_stacks);
-        }
-        rt = SG_Apply(table, prod, token, 0); 
-        l = SG_AddLink(st1, st0, rt, 1);
-      }
-      SG_DiscardShiftTuple(cur_tuple);
-    }
-    else {
-      if (current_token == ATgetInt((ATermInt) ATelementAt(token, index))) {
-        index++;
-	SG_STPL_INDEX(cur_tuple) = index;
-        new_active_stacks = SG_AddStack(st0, new_active_stacks);
-      } 
-      else {
-        SG_DiscardShiftTuple(cur_tuple);
-      }
-    }
-  }
 
   for(i = 0; i < sg_sp_idx; i++) {
     s   = SG_SP_STATE(sg_shift_pairs[i]);
@@ -1186,6 +1055,17 @@ forest SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak)
   return (forest) ATmakeAppl2(SG_ParseError_AFun, posinfo, (ATerm) errcode);
 }
 
+forest SG_AmbiguousParse(tree t, ATerm ambtrak)
+{
+  ATerm posinfo;
+ 
+  SG_ERROR_ON();
+
+  posinfo = (ATerm) SG_GetFirstAmbiguityPosInfo(ambtrak);
+ 
+  return (forest) ATmakeAppl3(SG_AmbiguousTree_AFun, (ATerm)t, posinfo, ambtrak);
+}
+
 tree SG_ConvertA2ToA2ME(tree t)
 {
   IF_VERBOSE(ATwarning("converting AsFix2 parse tree to AsFix2ME\n"));
@@ -1265,7 +1145,13 @@ tree SG_ParseResult(char *sort)
             ambtrak = PT_reportTreeAmbiguities((PT_Tree) t);
 
             if(ambtrak && !ATmatch(ambtrak, "ambiguities(0,[])")) {
-              return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
+              if (SG_AMBIGUITY_ERROR) {  
+                return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
+              }
+              if (SG_ASFIX2ME) {
+                t = SG_ConvertA2ToA2ME(t);
+              }
+              return SG_AmbiguousParse(t, ambtrak);
             }
           }
 

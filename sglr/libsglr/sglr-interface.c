@@ -237,7 +237,7 @@ ATerm SGparseStringAsAsFix2ME(language L, char *G, char *S)
 
   t = SGparseString(L, G, S);
 
-  if (!SGisParseError(t)) {
+  if (SGisParseTree(t)) {
     tree = ATgetArgument(t, 0);
     amb  = ATgetArgument(t, 1); 
     if (SG_TOOLBUS) {

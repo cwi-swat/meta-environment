@@ -35,16 +35,16 @@ token SG_EOF_Token;
 token SG_Zero_Token;
 AFun  SG_GtrPrio_AFun, SG_LeftPrio_AFun, SG_RightPrio_AFun, 
       SG_NonAssocPrio_AFun,
-      SG_Shift_AFun, SG_ShiftKW_AFun, SG_Reduce_AFun, 
+      SG_Shift_AFun, SG_Reduce_AFun, 
       SG_ReduceLA_AFun, SG_Accept_AFun,
       SG_Appl_AFun, SG_Regular_AFun, SG_Reject_AFun,
       SG_Eager_AFun, SG_Uneager_AFun,
       SG_Aprod_AFun, SG_Amb_AFun, SG_Range_AFun, SG_CharClass_AFun,
       SG_Action_AFun, SG_Goto_AFun, SG_PT5_AFun,
       SG_StateRec_AFun, SG_Label_AFun, SG_ParseTree_AFun, SG_Term_AFun,
-      SG_ParseTreeAF1_AFun, SG_ParseError_AFun, SG_EOF_Error_AFun,
+      SG_ParseError_AFun, SG_EOF_Error_AFun,
       SG_Plain_Error_AFun, SG_Cycle_Error_AFun, SG_Amb_Node_AFun,
-      SG_Too_Many_Ambiguities_Error_AFun,
+      SG_Too_Many_Ambiguities_Error_AFun, SG_AmbiguousTree_AFun,
       SG_Position_AFun, SG_Productions_AFun, SG_Amb_Error_AFun,
       SG_SndValue_AFun, SG_Character_AFun, SG_Line_AFun, SG_Col_AFun,
       SG_Offset_AFun;
@@ -79,7 +79,6 @@ void SG_InitPTGlobals(void)
   SG_AFUN_INIT(SG_NonAssocPrio_AFun, ATmakeAFun(SG_NONASSOCPRIO_AFUN, 2, ATfalse));
 	
   SG_AFUN_INIT(SG_Shift_AFun,       ATmakeAFun(SG_SHIFT_AFUN,       1, ATfalse));
-  SG_AFUN_INIT(SG_ShiftKW_AFun,     ATmakeAFun(SG_SHIFT_KW_AFUN,    2, ATfalse));
   SG_AFUN_INIT(SG_Reduce_AFun,      ATmakeAFun(SG_REDUCE_AFUN,      3, ATfalse));
   SG_AFUN_INIT(SG_ReduceLA_AFun,    ATmakeAFun(SG_REDUCE_AFUN,      4, ATfalse));
   SG_AFUN_INIT(SG_Accept_AFun,      ATmakeAFun(SG_ACCEPT_AFUN,      0, ATfalse));
@@ -95,18 +94,18 @@ void SG_InitPTGlobals(void)
   SG_AFUN_INIT(SG_Appl_AFun,        ATmakeAFun(SG_APPL_AFUN,        2, ATfalse));
   SG_AFUN_INIT(SG_ParseTree_AFun,   ATmakeAFun(SG_PARSETREE_AFUN,   2, ATfalse));
   SG_AFUN_INIT(SG_Term_AFun,        ATmakeAFun(SG_TERM_AFUN,        9, ATfalse));
-  SG_AFUN_INIT(SG_ParseTreeAF1_AFun,ATmakeAFun(SG_AF1PARSETREE_AFUN,1, ATfalse));
   SG_AFUN_INIT(SG_ParseError_AFun,  ATmakeAFun(SG_PARSEERROR_AFUN,  2, ATfalse));
 
   SG_AFUN_INIT(SG_EOF_Error_AFun,   ATmakeAFun(SG_EOF_AFUN,         0, ATfalse));
   SG_AFUN_INIT(SG_Plain_Error_AFun, ATmakeAFun(SG_PLAIN_AFUN,       0, ATfalse));
   SG_AFUN_INIT(SG_Cycle_Error_AFun, ATmakeAFun(SG_CYCLE_AFUN,       1, ATfalse));
   SG_AFUN_INIT(SG_Too_Many_Ambiguities_Error_AFun, ATmakeAFun(SG_TOO_MANY_AMBS_AFUN,       0, ATfalse));
+  SG_AFUN_INIT(SG_AmbiguousTree_AFun, ATmakeAFun(SG_AMBIGUOUS_TREE_AFUN, 3, ATfalse));
   SG_AFUN_INIT(SG_Amb_Node_AFun,    ATmakeAFun(SG_AMBIGUITY_AFUN,   2, ATfalse));
   SG_AFUN_INIT(SG_Position_AFun,    ATmakeAFun(SG_POSITION_AFUN,    4, ATfalse));
   SG_AFUN_INIT(SG_Productions_AFun, ATmakeAFun(SG_PRODUCTIONS_AFUN, 1, ATfalse));
-  SG_AFUN_INIT(SG_Amb_Error_AFun,   ATmakeAFun(SG_AMBIGUITIES_AFUN, 2, ATfalse));
 
+  SG_AFUN_INIT(SG_Amb_Error_AFun,   ATmakeAFun(SG_AMBIGUITIES_AFUN, 2, ATfalse));
   SG_AFUN_INIT(SG_SndValue_AFun,    ATmakeAFun(SG_SNDVALUE_AFUN,    1, ATfalse));
 
   SG_AFUN_INIT(SG_Character_AFun,   ATmakeAFun(SG_CHARACTER_AFUN,   1, ATfalse));
@@ -136,8 +135,6 @@ actionkind SG_ActionKind(action a)
     return REDUCE_LA;
   } else if(ATisEqualAFun(fun, SG_Shift_AFun)) {
     return SHIFT;
-  } else if(ATisEqualAFun(fun, SG_ShiftKW_AFun)) {
-    return SHIFT_KW;
   } else if(ATisEqualAFun(fun, SG_Accept_AFun)) {
     return ACCEPT;
   }
