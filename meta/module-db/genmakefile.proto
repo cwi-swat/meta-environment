@@ -28,7 +28,7 @@
 PROFILE_CC_FLAGS=-pg
 PROFILE_LD_FLAGS=-pg
 
-LOCALLIBS=-lsupport -lATB -lAsFix -lATerm
+LOCALLIBS=-lasc-support -lATB -lAsFix -lATerm
 
 VPATH           = @srcdir@
 srcdir          = @srcdir@

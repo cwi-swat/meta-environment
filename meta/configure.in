@@ -147,14 +147,14 @@ AC_CHECK_HEADER(getopt.h)
 AC_SUBST(SOCKLIBS)
 
 dnl Handle subpackages...
-AC_CONFIG_SUBDIRS(sglr)
+AC_CONFIG_SUBDIRS(asc-support sglr)
 
 dnl Which files need updating?
 AC_OUTPUT(
 	Makefile Makefile.skel meta \
 	asource/Makefile \
 	compiler/Makefile compiler/c-source/Makefile \
-	compiler/support/Makefile compiler/support-muasf/Makefile \
+	compiler/support-muasf/Makefile \
 	editor/Makefile editor/editor \
 	evaluator/Makefile \
 	graph-browser/Makefile graph-browser/graph-browser \
