@@ -1,20 +1,26 @@
 #include <Library.h>
 #include "common.h"
-#include <aterm2.h>
+#include <MEPT-utils.h>
 
 
-PT_Tree term_compare_less(PT_Tree input)
+PT_Tree term_compare(PT_Tree input)
 {
-  PT_Tree left = CO_getFunctionArgument(input,0);
-  PT_Tree right = CO_getFunctionArgument(input,1);
-  
-  left = PT_removeTreeAllLayoutAndAnnotations(left);
-  right = PT_removeTreeAllLayoutAndAnnotations(right);
+  PT_Tree left;
+  PT_Tree right;
+  int result;
 
-  if (((int) left) < ((int) right)) {
-   return (PT_Tree) CO_makeBooleanConstant(CO_makeBoolConTrue());
+  left = CO_getFunctionArgument(input,0);
+  right = CO_getFunctionArgument(input,1);
+
+  result = PT_compareTree(left, right);
+
+  if (result == 0) {
+    return PT_TreeFromTerm(CO_MeasureToTerm(CO_makeMeasureEqual()));
+  }
+  else if (result < 0) {
+    return PT_TreeFromTerm(CO_MeasureToTerm(CO_makeMeasureLess()));
   }
   else {
-   return (PT_Tree) CO_makeBooleanConstant(CO_makeBoolConFalse());
-  } 
+    return PT_TreeFromTerm(CO_MeasureToTerm(CO_makeMeasureGreater()));
+  }
 }

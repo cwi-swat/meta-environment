@@ -1,5 +1,10 @@
 # $Id$
 
+2003/09/22 ({storm,jurgenv}@cwi.nl)
+ * Changed implementation of ordering builtin to use a stable complete
+   ordering.
+ * Added Measure.sdf to generation of builtin term api.
+
 2003/09/22 (jurgenv@cwi.nl)
  * Added lifting to PT_Trees and ATerms to builtin library
  * Added generic unparser to Bytes to builtin library
