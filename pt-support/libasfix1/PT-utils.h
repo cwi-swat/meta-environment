@@ -8,11 +8,22 @@ ATbool PT_isStarVar(PT_Tree arg);
 ATbool PT_isPlusVar(PT_Tree arg);
 ATbool PT_isSymbolIter(PT_Symbol arg);
 
-
 PT_Args PT_concatArgs(PT_Args args1, PT_Args args2);
 PT_Args PT_appendArgs(PT_Args args, PT_Tree arg);
-PT_Tree PT_getArgsTreeAt(PT_Args args, int index);
 int     PT_getArgsLength(PT_Args args);
+PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr);
+PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr);
+
+ATerm   PT_getTreeAnnotation(PT_Tree tree, ATerm key);
+PT_Tree PT_setTreeAnnotation(PT_Tree tree, ATerm key, ATerm value);
+PT_Tree	PT_annotateTreeWithLength(PT_Tree tree);
+PT_ParseTree PT_annotateParseTreeWithLength(PT_ParseTree parse_tree);
+int     PT_getParseTreeLengthAnno(PT_ParseTree parse_tree);
+int     PT_getTreeLengthAnno(PT_Tree tree);
+PT_Tree PT_setTreeLengthAnno(PT_Tree tree, int length);
+int     PT_getParseTreeLengthAnno(PT_ParseTree parse_tree);
+PT_ParseTree PT_setParseTreeLengthAnno(PT_ParseTree parse_tree, int length);
+
 
 typedef void* PT_TreeVisitorData;
 typedef PT_Tree (*PT_TreeVisitor)(PT_Tree tree, PT_TreeVisitorData data);

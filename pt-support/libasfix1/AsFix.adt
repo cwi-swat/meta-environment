@@ -1,13 +1,13 @@
 [
   [ParseTree, tree, term(l("term"),
-		            w(""),
-					l("X"),
-					w(""),
-					id("X"),
-					w(<layout-before-tree(str)>),
-					<tree(Tree)>,
-					w(<layout-after-tree(str)>),
-					no-abbreviations) 
+                    w(""),
+                    l("X"),
+                    w(""),
+                    id("X"),
+                    w(<layout-before-tree(str)>),
+                    <tree(Tree)>,
+                    w(<layout-after-tree(str)>),
+                    no-abbreviations) 
   ],
   
 
