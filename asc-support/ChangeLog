@@ -1,5 +1,8 @@
 $Id$
 
+Thu Jun 19 16:15:16 CEST 2003 <jong@cwi.nl>
+ * libME/tb/client.c: add explicit ATBunpack
+
 2003/01/22 (jurgenv@cwi.nl)
  * Release 1.6
  * LGPL license

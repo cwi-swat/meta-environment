@@ -10,7 +10,7 @@ ATerm rec_terminate(int cid, char* message)
 
 ATerm rewrite(int cid, ATerm trm)
 {
-    PT_Tree tree = PT_getParseTreeTree((PT_ParseTree) trm);
+    PT_Tree tree = PT_getParseTreeTree((PT_ParseTree) ATBunpack(trm));
     ATerm reduct = innermost(tree);
     PT_ParseTree asfix = toasfix(reduct);
     return ATmake("snd-value(normalform(<term>))", (ATerm) asfix);
