@@ -20,13 +20,13 @@
 #
 # $Id$
 
-EXTRA_DIST = Bool-example.eqs Bool-example.sdf Layout.sdf \
-             Pico-Booleans.eqs Pico-Booleans.sdf Pico-Identifiers.sdf \
-             Pico-Integers.eqs Pico-Integers.sdf Pico-Strings.eqs \
-             Pico-Strings.sdf Pico-eval.eqs Pico-eval.sdf Pico-syntax.sdf \
-             Pico-syntax.sdf Pico-typecheck.eqs Pico-typecheck.sdf \
-             Type-environments.eqs Type-environments.sdf Types.eqs \
-             Types.sdf Value-environments.eqs Value-environments.sdf \
+EXTRA_DIST = Bool-example.asf Bool-example.sdf Layout.sdf \
+             Pico-Booleans.asf Pico-Booleans.sdf Pico-Identifiers.sdf \
+             Pico-Integers.asf Pico-Integers.sdf Pico-Strings.asf \
+             Pico-Strings.sdf Pico-eval.asf Pico-eval.sdf Pico-syntax.sdf \
+             Pico-syntax.sdf Pico-typecheck.asf Pico-typecheck.sdf \
+             Type-environments.asf Type-environments.sdf Types.asf \
+             Types.sdf Value-environments.asf Value-environments.sdf \
              Values.sdf big.pico bigev.pico bigtc.pico bin.pico bool1.pico \
              fac.pico facev.pico factc.pico meta.conf smallev.pico \
              smalltc.pico
