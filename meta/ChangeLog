@@ -1,5 +1,11 @@
 # $Id$
 
+2002/10/10 (vinju@loria.fr)
+ * Changed functionality concerning ambiguities in the editor. If you click 
+   inside a cluster, the focus is set around the entire cluster 
+   (to easily identify ambiguities). But if you choose 'move down' on a 
+   cluster you are allowed to go inside the cluster and inspect it.
+
 2002/10/09 (vinju@loria.fr)
  * Major refactoring of ToolBus scripts: 
      - All ASF specific scripts are removed and put into the asf package.
