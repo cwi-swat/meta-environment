@@ -6,7 +6,7 @@ MANUAL		= manual.ltx
 EXTRA_DIST	= $(MANUAL) manual.ps
 CLEANFILES	= manual.{aux,bbl,blg,dvi,ilg,ind,idx,log,ps,toc}
 
-all:
+all: manual.ps
 
 doc: manual.ps
 

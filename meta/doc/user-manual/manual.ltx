@@ -785,12 +785,15 @@ user-manual where detailed information can be found.
 
 \subsection{Before you start the Guided Tour}
 
-The Meta-Environment is usually installed in a directory named {\tt
-  meta-$version$}. For Release 1, this may, for instance, be {\tt meta-1.0.0}.
-You will then find the files needed for this Guided Tour in the directory {\tt
-  meta-1.0.0/demo/pico}. It is advisable to make your personal copy of this
+When configuring the Meta-Environment a directory was giving where
+the Meta-Environment will be installed, e.g., {\tt <path>/asfsdf-meta}. 
+You will then find the files needed for this Guided Tour in the directory 
+{\tt <path>/asfsdf-meta/share/demo/pico}. 
+It is advisable to make your personal copy of this
 directory.  In this Guided Tour we will use `{\tt pico}' to refer to your own
-copy of the directory.
+copy of the directory. Furthermore, all the examples given in this
+manual can be found in {\tt
+<path>/asfsdf-meta/share/demo/user-manual-examples}.
 
 For each module in a specification two files exist: `{\tt
   $module$.sdf}' contains the syntax of $module$ and `{\tt
@@ -2474,6 +2477,11 @@ syntactic ambiguity (Section~\ref{PreferAvoidReject}).
 
 \begin{itemize}
 
+\item {\tt constructor} declares a function to be a \emph{constructor
+function}, this means that for this function \emph{no} equations
+may be defined with this function as outermost function symbol
+in the left hand side.
+
 \item {\tt memo} declares a function to be a \emph{memo function} for
 which all calls and results will be cached during evaluation
 (Section~\ref{MemoFunctions}).
@@ -3300,13 +3308,13 @@ i.e., an equality with one or more associated conditions (premises).  The
 equality is sometimes called the \emph{conclusion} of the conditional
 equation.
 
-In \asfsdf\ a conditional equaltion can be written in two (syntactically
+In \asfsdf\ a conditional equation can be written in three (syntactically
 different) ways:
 
 \begin{tabbing}
 (a) \= {\tt [$TagId$]} \= {\tt $L$ = $R$ when $C_1$, $C_2$, ...} \\\\
-%(b) \> {\tt [$TagId$]} \> {\tt $C_1$, $C_2$, ... ====> $L$ = $R$} \\ 
-(b) \> {\tt [$TagId$]} \> {\tt $C_1$, $C_2$, ...} \\
+(b) \> {\tt [$TagId$]} \> {\tt $C_1$, $C_2$, ... ===> $L$ = $R$} \\ 
+(c) \> {\tt [$TagId$]} \> {\tt $C_1$, $C_2$, ...} \\
              \>    \> {\tt =================} \\
              \>    \> \ \ \ \ \ {\tt $L$ = $R$}
 \end{tabbing}
@@ -4707,14 +4715,14 @@ constructing the term {\tt tc(T)} and then reducing it.
 
 The construction of this new term is achieved by the following command:
 \begin{verbatim}
-   apply-function -f <name> -s <sort> -m <modulename> -i <ifile> -o <ofile> 
+   apply-function -f <name> -s <sort> -m <modulename> -i <in> -o <out> 
 \end{verbatim}
 
 A term is constructed consisting of an application of function {\tt <name>}
 with result sort {\tt <sort>} defined in module {\tt <modulename>} to a term
-{\tt <ifile>}.  The resulting term is written to {\tt <ofile> }.
-In order to actually \emph{apply} {\tt <name>}, the term {\tt ofile} has to
-be reduced.
+{\tt <in>}.  The resulting term is written to {\tt <out> }.
+In order to actually \emph{apply} {\tt <name>}, the term {\tt out} has to
+be reduced by {\tt asfe}.
 
 \newpage 
 \section{Examples of Stand-alone Tools}
