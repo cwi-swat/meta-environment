@@ -1,5 +1,12 @@
 /* $Id$ */
 
+Fri Feb 13 11:10:17 CET 2004 <jurgenv@cwi.nl>
+ * Added new button to module popup: Generate ASF+SDF API. This functionality
+   takes a module, and generates a module on top of it that implements
+   getters, setters, 'is' predicates and 'make' functions for all productions
+   defined locally in the source module. The generation is based on 
+   the cons attributes and the labels that are found the productions.
+
 Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
  * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
 
