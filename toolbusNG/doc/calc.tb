@@ -1,4 +1,4 @@
-process UI is														// command="wish-adapter -script ui-calc.tcl"
+process UI is                     // command="wish-adapter -script ui-calc.tcl"
      ( ( CALC-BUTTON() + LOG-BUTTON() ) * delta
      ||
        TIME-BUTTON() * delta
@@ -11,9 +11,9 @@ process CALC-BUTTON is
   let  E : expr, V : int
   in
      event button(calc) .
-     eval get-expr-dialog : expr .								// expr get-expr-dialog()
-     ( value cancel               <<<<<<<<
-     + value E?  . do display-value(V)						// void display-value(expr)
+     eval get-expr-dialog : expr .          // expr get-expr-dialog()
+     ( value cancel                                 // <<<<<<<<
+     + value E?  . do display-value(V)   // void display-value(expr)
      ) . ack-event button(calc)
   endlet
 
@@ -22,7 +22,7 @@ process LOG-BUTTON is
   in
       event button(showLog)  .
       snd-msg showLog  .  rec-msg showLog(L?) .
-      do display-log(L) .												// void display-log(log)
+      do display-log(L) .                        // void display-log(log)
       ack-event button(calc)
   endlet
 
@@ -31,7 +31,7 @@ process TIME-BUTTON is
   in
       event button(showTime) .
       snd-msg showTime to P? . rec-msg showTime(T?) from P .
-      do display-time(T) .				 								// void display-time(time)
+      do display-time(T) .                    // void display-time(time)
       ack-event(showTime)
   endlet
 
@@ -41,11 +41,11 @@ tool QUIT-BUTTON is
 
 // -------------------------------------------------------------------------------
 
-process CALC is															// command = "./calc"
+process CALC is               // command = "./calc"
   let E : expr, V : int
   in
      ( rec-msg compute(E?) from P? . 
-       eval compute(E) : int .											// int compute(expr)
+       eval compute(E) : int . // int compute(expr)
        value V? .
        snd-msg compute(E, V) to P . 
        snd-note compute(E, V)
@@ -54,11 +54,11 @@ process CALC is															// command = "./calc"
 
 // -------------------------------------------------------------------------------
 
-process Clock is															// command = "./clock"
+process Clock is                // command = "./clock"
  let T : time, P : process
  in
      ( rec-msg showTime from P? .
-       eval readTime : time .												// time readtime()
+       eval readTime : time . // time readtime()
        value T? .
        snd-msg showTime(T) to P
      ) * delta
@@ -66,26 +66,26 @@ process Clock is															// command = "./clock"
 
 // -------------------------------------------------------------------------------
 
-process BATCH is														// command = "./batch"
+process BATCH is             // command = "./batch"
   let E : expr, V : int
   in
-     ( eval(fromFile) : expr .												// expr fromFile()
+     ( eval(fromFile) : expr .  // expr fromFile()
        value(E?)  .
        snd-msg compute(E). 
        rec-msg compute(E, V?).
-       do toFile(E, V)															// void toFile(expr, int)
+       do toFile(E, V)            // void toFile(expr, int)
      ) * delta
   endlet
 
 // -------------------------------------------------------------------------------
 
-process  LOG is															 // command = "./log"
+process  LOG is              // command = "./log"
   let  E : str, V : int, L : log
   in
-     ( rec-note compute(E?, V?) . do writeLog(E, V)			// void writeLog(expr,int)
+     ( rec-note compute(E?, V?) . do writeLog(E, V)	// void writeLog(expr,int)
      + 
        rec-msg(showLog) from P? . 
-       eval(readLog) : log .													// log readLog()
+       eval(readLog) : log .  // log readLog()
        value(L?) .
        snd-msg readLog(L) to P
      ) * delta

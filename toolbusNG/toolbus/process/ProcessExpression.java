@@ -14,4 +14,5 @@ public interface ProcessExpression {
   public AtomSet getFirst();
   public AtomSet getFollow();
   public AtomSet getAtoms();
+  public ProcessState getStartState();
 }

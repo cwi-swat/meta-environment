@@ -6,11 +6,12 @@ package toolbus.atom;
 import java.util.*;
 
 import toolbus.ToolBusException;
+import toolbus.process.*;
 import toolbus.process.ProcessInstance;
 
 import aterm.ATerm;
 
-public class AtomSet {
+public class AtomSet implements ProcessState {
   private Vector atoms;
   private static Random rand = new Random();
 
@@ -45,10 +46,6 @@ public class AtomSet {
     return atoms.size();
   }
 
-  public boolean contains(Atom a) {
-    return atoms.contains(a);
-  }
-
   public void findPartners(AtomSet set) {
     for (Iterator ita = atoms.iterator(); ita.hasNext();) {
       Atom a = (Atom) ita.next();
@@ -70,6 +67,27 @@ public class AtomSet {
     }
   }
 
+  public String toString() {
+    String s = "{";
+    String sep = "";
+    for (Iterator it = atoms.iterator(); it.hasNext();) {
+      Atom a = (Atom) it.next();
+      s += sep + a;
+      sep = ", ";
+    }
+    return s + "}";
+  }
+
+  // The ProcessState interface
+
+  public boolean contains(Atom a) {
+    return atoms.contains(a);
+  }
+
+  public ProcessState nextState(Atom a) {
+    return a.getFollow();
+  }
+
   public boolean execute() throws ToolBusException {
     int size = atoms.size();
 
@@ -82,21 +100,11 @@ public class AtomSet {
       if (a.execute()) {
         ProcessInstance pa = a.getProcess();
         System.out.println("--- " + pa.getProcessId() + " / " + a.toString() + " / " + pa.getEnv() + " / ");
-        pa.follow(a);
+        pa.nestState(a);
         return true;
       }
     }
     return false;
   }
 
-  public String toString() {
-    String s = "{";
-    String sep = "";
-    for (Iterator it = atoms.iterator(); it.hasNext();) {
-      Atom a = (Atom) it.next();
-      s += sep + a;
-      sep = ", ";
-    }
-    return s + "}";
-  }
 }

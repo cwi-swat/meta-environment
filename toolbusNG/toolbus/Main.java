@@ -22,9 +22,11 @@ public class Main {
      //CallTest2();
     //IfTest(); 
     //CreateTest();
-    NestedIterTest();
-    // MergeTest();
-    //ieveTest();
+    //NestedIterTest();
+     //DisruptTest();
+    MergeTest();
+    //SieveTest();
+    //NestedIterTest();
     //producerTest();
     //ToolTest();
   }
@@ -293,6 +295,44 @@ public class Main {
     } catch (ToolBusException e) { System.out.println(e.getMessage()); }
   }
   
+  
+  static void DisruptTest(){
+    
+    ProcessExpression Pa = new Print((ATermList) aterms.make("[a]"));
+    ProcessExpression Pb = new Print((ATermList) aterms.make("[b]"));
+    ProcessExpression Pc = new Print((ATermList) aterms.make("[c]"));
+    ProcessExpression Pd = new Print((ATermList) aterms.make("[d]"));
+    
+    ProcessDefinition Pmain = new ProcessDefinition("Pmain",
+      new Disrupt(
+        new Sequence( Pa, Pb, Pc, Pd),
+        new Alternative(new RecMsg((ATermList) aterms.make("[m1]")),
+                new RecMsg((ATermList) aterms.make("[m2]"))
+        )
+      )
+    );
+    
+    ProcessDefinition P1 = new ProcessDefinition("P1",
+      new SndMsg((ATermList) aterms.make("[m1]"))
+      );
+      
+     ProcessDefinition P2 = new ProcessDefinition("P2",
+      new SndMsg((ATermList) aterms.make("[m2]"))
+      );
+    
+    try {
+        ToolBus T = new ToolBus();
+          T.addProcessDefinition(Pmain);
+          T.addProcessDefinition(P1);
+          T.addProcessDefinition(P2);
+          T.addProcess("Pmain");
+          T.addProcess("P1");
+          T.addProcess("P2");
+          T.execute();
+          
+    } catch (ToolBusException e) { System.out.println(e.getMessage()); }
+  }
+  
   static void MergeTest()
   {
     
@@ -300,12 +340,14 @@ public class Main {
     ProcessExpression Pb = new Print((ATermList) aterms.make("[b]"));
     ProcessExpression Pc = new Print((ATermList) aterms.make("[c]"));
     ProcessExpression Pd = new Print((ATermList) aterms.make("[d]"));
-    
+    ProcessExpression Pe = new Print((ATermList) aterms.make("[e]"));
+    ProcessExpression Pf = new Print((ATermList) aterms.make("[f]"));
+ 
     ProcessDefinition MERGE =
       new ProcessDefinition("MERGE",
         new Merge(
-          new Sequence(Pa,Pb),
-          new Sequence(Pc,Pd)
+          new Sequence(Pa,Pb, Pc),
+          new Sequence(Pd,Pe, Pf)
         )
       );
         

@@ -50,7 +50,7 @@ class CommAtom extends Atom {
 			for (int pindex = rand.nextInt(psize), pleft = psize; pleft > 0; pindex = (pindex + 1) % psize,pleft--) {
 				Atom b = (Atom) partnervec.elementAt(pindex);
 				ProcessInstance pb = b.getProcess();
-				if (pb.prefixContains(b) && b.isEnabled()){
+				if (pb.contains(b) && b.isEnabled()){
 					MatchResult r = matchArgs(b);
 					if (r.matches()) {
 //								System.out.println(
@@ -67,7 +67,7 @@ class CommAtom extends Atom {
 			
 							
 						// pa.follow(this) is done by AtomSet.execute
-						pb.follow(b);
+						pb.nestState(b);
 						return true;
 					}
 				}
