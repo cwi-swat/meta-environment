@@ -16,7 +16,6 @@ bin_PROGRAMS = \
 
 INCLUDES = \
 	-I${top_srcdir}/lib \
-	-I${PT_SUPPORT}/include \
 	-I${ATERM}/include \
 	-I${TOOLBUSLIB}/include 
 
@@ -26,7 +25,6 @@ error_support_SOURCES = \
 
 error_support_LDADD = \
 	-L../lib -lErrorAPI \
-	-L${PT_SUPPORT}/lib -lmept \
 	-L${TOOLBUSLIB}/lib -lATB \
 	-L${ATERM}/lib -lATerm \
 	${SOCKLIBS}

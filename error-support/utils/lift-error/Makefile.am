@@ -4,14 +4,12 @@ bin_PROGRAMS = lift-error
 
 INCLUDES= \
 	-I${top_srcdir}/lib \
-	-I${PT_SUPPORT}/include
 	-I${ATERM}/include
 
 lift_error_SOURCES=\
 	lift-error.c
 
 lift_error_LDADD=\
-	-L${PT_SUPPORT}/lib -lmept \
 	-L${ATERM}/lib -lATerm\
 	-L${top_builddir}/lib -lErrorAPI
 
