@@ -138,6 +138,7 @@ AC_OUTPUT(
    config/Makefile
    meta-studio/Makefile
    meta-studio/META-INF/Makefile
+   meta-studio/images/Makefile
    meta-studio/scripts/Makefile
    meta-studio/metastudio/Makefile
    meta-studio/metastudio/graph/Makefile
