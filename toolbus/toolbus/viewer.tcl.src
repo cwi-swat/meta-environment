@@ -150,8 +150,8 @@ option add *activeBackground SeaGreen
 option add *Scrollbar.Foreground honeydew2
 option add *Scrollbar.activeForeground SeaGreen
 
-option add *Scale.Foreground honeydew2
-option add *Scale.activeForeground SeaGreen
+#option add *Scale.Foreground honeydew2
+#option add *Scale.activeForeground SeaGreen
 
 # option add *font "-adobe-palatino-medium-r-normal--17-120-100-100-p-89-iso8859-1"
 option add *Text.font 8x13
@@ -221,7 +221,7 @@ proc reset_name {} {
 }
 
 proc mkViewer {} {
-   global tb_glob
+   global tb_glob tracer_state
 
    set w .tbviewer
    toplevel $w
@@ -234,7 +234,7 @@ proc mkViewer {} {
    canvas $w.canvas -relief raised -width [expr $tb_glob(xp0) + (1 + $tb_glob(maxcol)) * $tb_glob(dx)] -height [canvas_height $w.canvas]
 
    defHelp $w.canvas \
-   "Click on process to view its text ; Double click on process to view its variables"
+   "Click on process to view its text ; Double click on process to view its variables ; Right click to (re)set a breakpoint"
    pack $w.help -side bottom -fill both
    pack $w.canvas -side bottom -expand true -fill both ;#y
    bind $w.canvas <Configure> "drawBus $w.canvas %w"
@@ -244,12 +244,14 @@ proc mkViewer {} {
    frame $w.buttons
    label $w.buttons.txt -text "Name:"
    label $w.buttons.name -text "" -width 25 -anchor w
+   scale $w.buttons.scale -from 5 -to 200 -length 200 -variable tracer_state(delay) \
+      -orient horizontal -tickinterval 0 -showvalue true -label "Delay time"
    button $w.buttons.go -text "Go" -command "do_go"
    button $w.buttons.stop -text "Stop" -command "do_stop" -state disabled
    button $w.buttons.step -text "Step" -command "do_step"
    pack $w.buttons -side bottom -fill x
    pack $w.buttons.txt $w.buttons.name -side left 
-   pack $w.buttons.step $w.buttons.go $w.buttons.stop -side right -padx 10m
+   pack $w.buttons.step $w.buttons.go $w.buttons.stop $w.buttons.scale -side right -padx 10m
    defHelp $w.buttons.txt "Move cursor to process or tool to display its full name here"
    defHelp $w.buttons.name "Move cursor to process or tool to display its full name here"
  
@@ -267,7 +269,7 @@ proc mkViewer {} {
 
    bind $w.text <Double-Button-1> "addBreak $w.text"
    bind $w.text <Button-3> "addBreak $w.text"
-   defHelp $w.text "Double click to (re)set breakpoint on a line"
+   defHelp $w.text "Right click to (re)set breakpoint on a line"
    defHelp $w.scroll "Scroll text of script"
 
    #Create Options menu
@@ -288,7 +290,7 @@ proc newDelay {sc value} {
 }
 
 # delay time between two succeeding communications
-set tracer_state(delay) 150
+set tracer_state(delay) 50
 
 # initial trace mode
 set tracer_state(mode) step_mode

@@ -1,11 +1,16 @@
 $Id$
 
-2003-07-13 <kooiker@cwi.nl>
+2003-06-17 <kooiker@cwi.nl>
+
+  * toolbus/viewer.tcl.src: added slider to be able to shorten the delay
+    time dynamically
+
+2003-06-13 <kooiker@cwi.nl>
 
   * fix toolbus/viewer.tcl.src: for some reason double click to show the
     process variables didn't work anymore
 
-2003-07-13 <kooiker@cwi.nl>
+2003-06-13 <kooiker@cwi.nl>
 
   * toolbus/viewer.tcl.src:
     - Tool and process breakpoints do work now
