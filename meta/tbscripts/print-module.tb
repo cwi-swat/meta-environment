@@ -8,27 +8,39 @@ let
   SdfText    : str,
   AsfText    : str,
   ModuleName : str,
-  Path       : str
+  Path       : str,
+  FileName : str,
+  ErrMsg : str
 in 
   Id := process-id. 
   (
     rec-msg(print-module(ModuleName?)) .
     snd-note(ui-status(statf(Id,"Printing %s",[ModuleName]))) .
-    snd-msg(get-sdf2-path-from-db(ModuleName)) .
+    snd-msg(get-path-from-db(ModuleName)) .
     rec-msg(path(Path?)) .
-    snd-msg(get-sdf2-asfix(ModuleName)) .
-    rec-msg(syntax(SdfTree?)) .
-    snd-msg(unparse-to-html(SdfTree)) .
-    rec-msg(unparsed-text(SdfText?)) .
-    snd-msg(get-eqs-text(ModuleName)) .
+    snd-msg(io-get-filename(Path, ModuleName, ".txt")) .
+    rec-msg(io-filename(FileName?)) .
+    snd-msg(get-sdf-text(ModuleName)) .
     (
-      rec-msg(eqs-text(ModuleName, AsfText?)) .
-      snd-msg(print-module-text(ModuleName, Path, SdfText, AsfText))
+      rec-msg(sdf-text(ModuleName,SdfText?)) .
+      snd-msg(get-eqs-text(ModuleName)) .
+      (
+        rec-msg(eqs-text(ModuleName, AsfText?)) .
+        snd-msg(io-write-text-file(FileName,[SdfText,"\n",AsfText]))
+      +
+        rec-msg(no-eqs-text(ModuleName)) .
+        snd-msg(io-write-text-file(FileName,[SdfText]))
+      ) . 
+      (
+        rec-msg(io-file-written)
+      +
+        rec-msg(io-file-not-written(ErrMsg?)) .
+	snd-note(ui-status(errorf("Printing of %s failed: %s",[ModuleName,ErrMsg])))
+      )
     +
-      rec-msg(no-eqs-text(ModuleName)) .
-      snd-msg(print-module-text(ModuleName, Path, SdfText))
-    ) . 
-    rec-msg(module-text-printed(ModuleName)) .
+      rec-msg(no-sdf-text(ModuleName)) .
+      snd-note(ui-status(errorf("Printing of %s failed",[ModuleName])))
+    ) .
     snd-note(ui-status(endstat(Id))) .  
     snd-msg(module-printed(ModuleName))
   ) *
