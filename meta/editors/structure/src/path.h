@@ -1,51 +1,17 @@
-
-/*{{{   file header */
-
-/*
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
-                        The Netherlands.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/*
-  $Id$
- */                                                          
-
-/*
- * The version of se is written by Mark van den Brand. 
- */
-
-/*}}}  */
-
 #ifndef PATH_H
 #define PATH_H
 
-ATerm newPath();
-ATerm goRight(ATerm path);
-ATerm goLeft(ATerm path);
-ATerm goDown(ATerm path); 
-ATerm goUp(ATerm path);
-ATerm getPathInTree(ATerm tree, int i);
-ATbool isRootPath(ATerm path);
-ATbool isHeadZero(ATerm path); 
-ATerm getTail(ATerm path); 
-ATerm decreaseHead(ATerm path); 
-ATbool isChildPath(ATerm pathOne, ATerm pathTwo);
-ATermList getSteps(ATerm path);
+#include <PT.h>
+
+#include "Editor.h"
+
+SE_Steps stepUp(SE_Steps steps);
+SE_Path pathUp(SE_Path path);
+SE_Path pathDown(SE_Path path);
+SE_Path pathLeft(SE_Path path);
+SE_Path pathRight(SE_Path path);
+
+SE_Path getPathInParseTree(PT_ParseTree parse_tree, int location, int length);
+ATbool isChildPath(SE_Path child, SE_Path parent);
 
 #endif

@@ -35,28 +35,23 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-#define MOVE_LEFT      "Left"
-#define MOVE_RIGHT     "Right"
-#define MOVE_UP        "Up"
-#define MOVE_DOWN      "Down"
+#include <PT.h>
 
-extern ATermTable editorInstances;
+#include "Editor.h"
 
-ATerm newEditorInstanceGivenText(char *text);
-ATerm newEditorInstanceGivenTree(ATerm tree);
-ATerm getTreeInEditor(ATerm editor);
-ATerm getFocuses(ATerm editor);
-ATerm getCurrentFocus(ATerm editor);
-ATerm setCurrentFocus(ATerm editor, ATerm focus);
-ATerm setFocuses(ATerm editor, ATerm newFocusList);
-ATerm getStartSymbols(ATerm editor);
-ATerm putStartSymbols(ATerm editor, ATerm newStartSymbols);
-ATerm replaceFocusByTree(ATerm editor, ATerm focus, ATerm tree);
-ATerm makeTreeInvalidInEditor(ATerm editor);
-ATerm insertCharsAtLocation(ATerm editor, int location, char *text);
-ATerm deleteCharsAtLocation(ATerm editor, int location, int count);
-ATerm moveFocusInEditor(ATerm editor, ATerm move);
-ATerm getFocusGivenLocation(ATerm editorTree, int location);
-ATerm getModifiedStatus(ATerm editor);
+#define SORT_INVALID "invalid"
+
+SE_Editor insertChars(SE_Editor editor, int location, int nr_chars);
+SE_Editor deleteChars(SE_Editor editor, int location, int nr_chars);
+
+SE_Editor replaceEditorTreeAtFocus(SE_Editor editor, SE_Focus focus, PT_Tree tree,
+				   char *left_layout, char *right_layout);
+SE_Editor moveFocus(SE_Editor editor, SE_Move move);
+SE_Editor moveFocusToTop(SE_Editor editor);
+SE_Focus getFocusAt(PT_ParseTree parse_tree, int location);
+
+SE_Editor newEditorGivenTree(PT_ParseTree parse_tree, ATbool dirty);
+SE_Editor newEditorGivenText(char *text);
+SE_Editor newEditorGivenLength(int length);
 
 #endif /* EDITOR_H */

@@ -1,48 +1,16 @@
-/*{{{  file header */
-
-/*
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
-                        The Netherlands.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/*
-  $Id$  
- */
-
-/*
- * The version of gse is written by Mark van den Brand.
- */
-
-/*}}}  */
 /*{{{  includes */
 
 #include <stdlib.h>
 #include <assert.h>
 
-#include "se.h"
+#include <PT-utils.h>
+
 #include "area.h"
 #include "editor.h"
 #include "focus.h"
 #include "path.h"
 #include "sort.h"
 #include "tree.h"
-#include "posinfo.h"
 
 /*}}}  */
 /*{{{  defines */
@@ -52,449 +20,198 @@
 #define POS_AREA 2
 
 /*}}}  */
-/*{{{  ATerm newFocus(ATerm path, ATerm sort, ATerm area) */
 
-ATerm
-newFocus(ATerm path, ATerm sort, ATerm area)
+/*{{{  static ATbool isSubFocus(SE_Focus f1, SE_Focus f2) */
+
+static ATbool isSubFocus(SE_Focus child, SE_Focus parent)
 {
-  return ATmake("focus(<term>,<term>,<term>)", path, sort, area);
+  SE_Path childPath, parentPath;
+
+  childPath = SE_getFocusPath(child);
+  parentPath = SE_getFocusPath(parent);
+
+  return SE_isEqualPath(childPath, parentPath) || isChildPath(childPath, parentPath);
 }
 
 /*}}}  */
-/*{{{  ATerm makeEmptyFocus() */
 
-ATerm
-makeEmptyFocus()
+/*{{{  SE_Focus createFocus(PT_ParseTree parse_tree, SE_Path path, int focus_status) */
+
+SE_Focus createFocus(PT_ParseTree parse_tree, SE_Path path, int focus_status)
 {
-  return ATparse("empty-focus");
-}
+  int length;
 
-/*}}}  */
-/*{{{  ATbool isEmptyFocus(ATerm focus) */
-
-ATbool
-isEmptyFocus(ATerm focus)
-{
-  return ATisEqual(focus, makeEmptyFocus());
-}
-
-/*}}}  */
-/*{{{  ATerm setDirty(ATerm focus) */
-
-ATerm
-setDirty(ATerm focus)
-{
-  return ATsetAnnotation(focus, ATparse("focusstatus"), ATparse("dirty"));
-}
-
-/*}}}  */
-/*{{{  static ATbool isDirty(ATerm focus) */
-
-static ATbool
-isDirty(ATerm focus)
-{
-  return ATisEqual(ATgetAnnotation(focus, ATparse("focusstatus")),
-		   ATparse("dirty"));
-}
-
-/*}}}  */
-/*{{{  ATerm setClean(ATerm focus) */
-
-ATerm
-setClean(ATerm focus)
-{
-  return ATsetAnnotation(focus, ATparse("focusstatus"), ATparse("clean"));
-}
-
-/*}}}  */
-/*{{{  ATerm newFocusList(ATerm focus) */
-
-ATerm
-newFocusList(ATerm focus)
-{
-  return (ATerm) ATmakeList1(focus);
-}
-
-/*}}}  */
-/*{{{  ATerm setFocusPath(ATerm focus, ATerm newPath) */
-
-ATerm
-setFocusPath(ATerm focus, ATerm newPath)
-{
-  return (ATerm) ATsetArgument((ATermAppl) focus, newPath, POS_PATH);
-}
-
-/*}}}  */
-/*{{{  ATerm getFocusPath(ATerm focus) */
-
-ATerm
-getFocusPath(ATerm focus)
-{
-  return ATgetArgument((ATermAppl) focus, POS_PATH);
-}
-
-/*}}}  */
-/*{{{  ATerm setFocusSort(ATerm focus, ATerm newSort) */
-
-ATerm
-setFocusSort(ATerm focus, ATerm newSort)
-{
-  return (ATerm) ATsetArgument((ATermAppl) focus, newSort, POS_SORT);
-}
-
-/*}}}  */
-/*{{{  ATerm getFocusSort(ATerm focus) */
-
-ATerm
-getFocusSort(ATerm focus)
-{
-  return ATgetArgument((ATermAppl) focus, POS_SORT);
-}
-
-/*}}}  */
-/*{{{  ATerm setFocusArea(ATerm focus, ATerm newArea) */
-
-ATerm
-setFocusArea(ATerm focus, ATerm newArea)
-{
-  return (ATerm) ATsetArgument((ATermAppl) focus, newArea, POS_AREA);
-}
-
-/*}}}  */
-/*{{{  ATerm getFocusArea(ATerm focus) */
-
-ATerm
-getFocusArea(ATerm focus)
-{
-  return ATgetArgument((ATermAppl) focus, POS_AREA);
-}
-
-/*}}}  */
-/*{{{  ATerm createFocus(ATerm tree, ATerm path) */
-
-ATerm
-createFocus(ATerm tree, ATerm path)
-{
-  ATerm subTree, sort, area;
-
-  subTree = getSubTree(tree, path);
-  sort = getReadableSort(getTreeSort(subTree));
-  area = createArea(tree, path);
-
-  return ATmake("focus(<term>,<term>,<term>)", path, sort, area);
-}
-
-/*}}}  */
-/*{{{  ATbool inFocusArea(ATerm focus, int loc) */
-
-ATbool
-inFocusArea(ATerm focus, int loc)
-{
-  return inArea(getFocusArea(focus), loc);
-}
-
-/*}}}  */
-/*{{{  ATbool beforeFocusArea(ATerm focus, int loc) */
-
-ATbool
-beforeFocusArea(ATerm focus, int loc)
-{
-  ATerm area = getFocusArea(focus);
-
-  return beforeArea(area, loc);
-}
-
-/*}}}  */
-/*{{{  ATbool afterFocusArea(ATerm focus, int loc) */
-
-ATbool
-afterFocusArea(ATerm focus, int loc)
-{
-  ATerm area = getFocusArea(focus);
-
-  return afterArea(area, loc);
-}
-
-/*}}}  */
-/*{{{  static ATbool isSubFocus(ATerm focusOne, ATerm focusTwo) */
-
-static ATbool
-isSubFocus(ATerm focusOne, ATerm focusTwo)
-{
-  ATerm pathOne = getFocusPath(focusOne);
-  ATerm pathTwo = getFocusPath(focusTwo);
-
-  if (ATisEqual(pathOne, pathTwo)) {
-    return ATtrue;
-  }
-  else {
-    return isChildPath(pathOne, pathTwo);
-  }
-}
-
-/*}}}  */
-/*{{{  ATerm expandFocusToStartSymbol(ATerm editor, ATerm focus) */
-
-ATerm
-expandFocusToStartSymbol(ATerm editor, ATerm focus)
-{
-  ATermList startSymbols;
-  ATerm editorTree, path, newPath, sort;
-  ATerm subTree, readableSort, newArea;
-
-  startSymbols = (ATermList) getStartSymbols(editor);
-  editorTree = getTreeInEditor(editor);
-
-  path = getFocusPath(focus);
-  newPath = path;
-  sort = getFocusSort(focus);
-  readableSort = getReadableSort(sort);
-
-  while (!isStartSymbol(readableSort, startSymbols) && !isRootPath(newPath)) {
-    newPath = goUp(newPath);
-    subTree = getSubTree(editorTree, newPath);
-    sort = getTreeSort(subTree);
-    readableSort = getReadableSort(sort);
+  if (SE_isPathRoot(path)) {
+    length = PT_getParseTreeLengthAnno(parse_tree);
+    SE_makeAreaDefault(0, length);
+    return SE_makeFocusNotEmpty(path, "term", 
+				createArea(parse_tree, path), focus_status);
+  } else {
+    PT_Tree tree = getTreeAt(PT_getParseTreeTree(parse_tree), SE_getPathSteps(path));
+    length = PT_getTreeLengthAnno(tree);
+    SE_makeAreaDefault(calcParseTreeStart(parse_tree, path), length);
+    return SE_makeFocusNotEmpty(path, PT_yieldSymbol(getTreeSort(tree)),
+				createArea(parse_tree, path), focus_status);
   }
 
-  if (!ATisEqual(path, newPath)) {
-    newArea = createArea(editorTree, newPath);
-    focus = newFocus(newPath, sort, newArea);
-  }
-  return focus;
 }
 
 /*}}}  */
-/*{{{  ATerm joinFocuses(ATerm editor) */
+/*{{{  SE_Focus createRootFocus(PT_ParseTree parse_tree, int focus_status) */
 
-ATerm
-joinFocuses(ATerm editor)
+SE_Focus createRootFocus(PT_ParseTree parse_tree, int focus_status)
 {
-  ATerm dirtyFocus;
-  ATermList dirtyFocusList = ATempty;
-  ATbool isCurFocusClean = ATtrue;
-  ATermList dirtyFocuses;
-  ATerm curFocus;
+  return createFocus(parse_tree, SE_makePathRoot(), focus_status);
+}
 
-  curFocus = getCurrentFocus(editor);
+/*}}}  */
 
-  if (isDirty(curFocus)) {
+/*{{{  SE_Focus expandFocusToStartSymbol(SE_Editor editor, SE_Focus focus) */
+
+SE_Focus expandFocusToStartSymbol(SE_Editor editor, SE_Focus focus)
+{
+  SE_SymbolList startSymbols;
+  SE_Path path;
+  SE_Steps steps;
+  PT_ParseTree parse_tree;
+  PT_Tree tree;
+  int focus_status;
+
+  focus_status = SE_getFocusDirty(focus);
+  parse_tree = SE_getEditorParseTree(editor);
+  path = SE_getFocusPath(focus);
+  if (SE_isPathRoot(path)
+      || SE_isPathLeftLayout(path) || SE_isPathRightLayout(path)) {
+    return createRootFocus(parse_tree, focus_status);
+  }
+
+  startSymbols = SE_getEditorStartSymbols(editor);
+
+  steps = SE_getPathSteps(path);
+  tree  = PT_getParseTreeTree(parse_tree);
+  while (!SE_isStepsEmpty(steps)) {
+    PT_Tree sub_tree = getTreeAt(tree, steps);
+    char *sort_name = PT_yieldSymbol(getTreeSort(sub_tree));
+    if (isStartSymbol(sort_name, startSymbols)) {
+      return createFocus(parse_tree, SE_makePathTerm(steps), focus_status);
+    }
+    steps = stepUp(steps);
+  }
+
+  return createRootFocus(parse_tree, focus_status);
+}
+
+/*}}}  */
+/*{{{  SE_Focus updateFocus(SE_Focus focus, int location, int length) */
+
+SE_Focus updateFocus(SE_Focus focus, int location, int length)
+{
+  SE_Area area = SE_getFocusArea(focus);
+
+  /* Let's find out if insertions outside current focus are possible
+   * See editor.c:updateEditor()
+   */
+  assert(inArea(SE_getFocusArea(focus), location));
+
+  area = SE_setAreaLength(area, SE_getAreaLength(area) + length);
+
+  return SE_setFocusArea(focus, area);
+}
+
+/*}}}  */
+
+/*{{{  SE_Editor joinFoci(SE_Editor editor) */
+
+SE_Editor joinFoci(SE_Editor editor)
+{
+  SE_FocusList todo, done;
+  SE_Focus curFocus;
+  int focusStatus = FOCUS_CLEAN;
+
+  curFocus = SE_getEditorFocus(editor);
+
+  if (SE_getFocusDirty(curFocus) == FOCUS_DIRTY) {
     return editor;
   }
-  else {
-    dirtyFocuses = (ATermList) getFocuses(editor);
-    while (!ATisEmpty(dirtyFocuses)) {
-      dirtyFocus = ATgetFirst(dirtyFocuses);
-      if (!isSubFocus(dirtyFocus, curFocus)) {
-	dirtyFocusList = ATinsert(dirtyFocusList, dirtyFocus);
-      }
-      else {
-	isCurFocusClean = ATfalse;
-      }
-      dirtyFocuses = ATgetNext(dirtyFocuses);
+
+  done = SE_makeFocusListEmpty();
+  todo = SE_getEditorDirtyFoci(editor);
+
+  while (!SE_isFocusListEmpty(todo)) {
+    SE_Focus focus = SE_getFocusListHead(todo);
+    if (!isSubFocus(focus, curFocus)) {
+      done = SE_makeFocusListMulti(focus, done);
     }
-    if (!isCurFocusClean) {
-      curFocus = expandFocusToStartSymbol(editor, curFocus);
-      curFocus = setDirty(curFocus);
-      dirtyFocusList = ATinsert(dirtyFocusList, curFocus);
+    else {
+      focusStatus = FOCUS_DIRTY;
     }
-    return setFocuses(editor, (ATerm) dirtyFocusList);
+    todo = SE_getFocusListTail(todo);
   }
+
+  if (focusStatus == FOCUS_DIRTY) {
+    curFocus = expandFocusToStartSymbol(editor, curFocus);
+    curFocus = SE_setFocusDirty(curFocus, FOCUS_DIRTY);
+    done = SE_makeFocusListMulti(curFocus, done);
+  }
+
+  return SE_setEditorDirtyFoci(editor, done);
 }
 
 /*}}}  */
-/*{{{  ATerm joinDirtyFocuses(ATerm editor) */
+/*{{{  SE_Editor joinDirtyFoci(SE_Editor editor) */
 
-ATerm
-joinDirtyFocuses(ATerm editor)
+SE_Editor joinDirtyFoci(SE_Editor editor)
 {
-  ATerm dirtyFocus;
-  ATermList dirtyFocusList = ATempty;
-  ATermList dirtyFocuses;
-  ATerm curFocus;
+  SE_FocusList result_foci;
+  SE_FocusList dirty_foci;
+  SE_Focus focus;
 
-  curFocus = getCurrentFocus(editor);
-  assert(isDirty(curFocus));
+  focus = SE_getEditorFocus(editor);
+  assert(SE_getFocusDirty(focus) == FOCUS_DIRTY);
 
-/* Check whether the current focus is a subfocus
- * of one of the dirty focuses. If so,
- * replace the current focus with the dirty focus.
- */
-  dirtyFocuses = (ATermList) getFocuses(editor);
-  while (!ATisEmpty(dirtyFocuses)) {
-    dirtyFocus = ATgetFirst(dirtyFocuses);
-    if (isSubFocus(curFocus, dirtyFocus)) {
-      return setCurrentFocus(editor, dirtyFocus);
+  /* Check whether the current focus is a subfocus
+   * of one of the dirty focuses. If so,
+   * replace the current focus with the dirty focus.
+   */
+  dirty_foci = SE_getEditorDirtyFoci(editor);
+  while (!SE_isFocusListEmpty(dirty_foci)) {
+    SE_Focus head = SE_getFocusListHead(dirty_foci);
+    if (isSubFocus(focus, head)) {
+      return SE_setEditorFocus(editor, head);
     }
-    dirtyFocuses = ATgetNext(dirtyFocuses);
+    dirty_foci = SE_getFocusListTail(dirty_foci);
   }
 
-/* Check whether the current focus is a superfocus
- * of one or more of the dirty focuses, if so,
- * replace all these focuses by the current focus.
- */
-  dirtyFocuses = (ATermList) getFocuses(editor);
-  while (!ATisEmpty(dirtyFocuses)) {
-    dirtyFocus = ATgetFirst(dirtyFocuses);
-    if (!isSubFocus(dirtyFocus, curFocus)) {
-      dirtyFocusList = ATinsert(dirtyFocusList, dirtyFocus);
+  /* Check whether the current focus is a superfocus
+   * of one or more of the dirty focuses, if so,
+   * replace all these focuses by the current focus.
+   */
+  result_foci = SE_makeFocusListEmpty();
+  dirty_foci = SE_getEditorDirtyFoci(editor);
+  while (!SE_isFocusListEmpty(dirty_foci)) {
+    SE_Focus head = SE_getFocusListHead(dirty_foci);
+    if (!isSubFocus(head, focus)) {
+      result_foci = SE_makeFocusListMulti(head, result_foci);
     }
-    dirtyFocuses = ATgetNext(dirtyFocuses);
+    dirty_foci = SE_getFocusListTail(dirty_foci);
   }
-  dirtyFocusList = ATinsert(dirtyFocusList, curFocus);
+  result_foci = SE_makeFocusListMulti(focus, result_foci);
 
-  return setFocuses(editor, (ATerm) dirtyFocusList);
+  return SE_setEditorDirtyFoci(editor, result_foci);
 }
 
 /*}}}  */
-/*{{{  ATerm updateFocus(ATerm tree, ATerm focus, int location, int length) */
 
-ATerm
-updateFocus(ATerm tree, ATerm focus, int location, int length)
+/*{{{  SE_FocusList removeFocus(SE_FocusList foci, SE_Focus focus) */
+
+SE_FocusList removeFocus(SE_FocusList foci, SE_Focus focus)
 {
-  int areaLength;
-  ATerm area, newArea;
+  ATermList focuslist = (ATermList) SE_makeTermFromFocusList(foci);
 
-  area = getFocusArea(focus);
-  if (inFocusArea(focus, location)) {
-    areaLength = getIntLengthOfArea(area);
-    newArea = setIntLengthOfArea(area, areaLength + length);
-    return setFocusArea(focus, newArea);
-  }
-  else {
-    return focus;
-  }
+  focuslist = ATremoveElement(focuslist, SE_makeTermFromFocus(focus));
+
+  return SE_makeFocusListFromTerm((ATerm)focuslist);
 }
 
 /*}}}  */
-/*{{{  static ATerm moveFocusUp(ATerm editor) */
-static ATerm
-moveFocusLeft(ATerm editor);
 
-static ATerm
-moveFocusUp(ATerm editor)
-{
-  ATerm curFocus = getCurrentFocus(editor), newFocus;
-  ATerm path = getFocusPath(curFocus);
-  ATerm tree = getTreeInEditor(editor);
-
-  newFocus = createFocus(tree, goUp(path));
-  return setCurrentFocus(editor, newFocus);
-}
-
-/*}}}  */
-/*{{{  static ATerm moveFocusRight(ATerm editor) */
-
-static ATerm
-moveFocusRight(ATerm editor)
-{
-  ATerm curFocus = getCurrentFocus(editor), newFocus;
-  ATerm path = getFocusPath(curFocus), newPath;
-  ATerm tree = getTreeInEditor(editor), subTree;
-
-  subTree = getSubTree(tree, path);
-  if (subTree) {
-    newPath = goRight(path);
-		if(!ATisEqual(path, newPath)) {
-			subTree = getSubTree(tree, newPath);
-			if (subTree) {
-				newFocus = createFocus(tree, newPath);
-				editor = setCurrentFocus(editor, newFocus);
-				if (asfix_is_appl(subTree) ||
-						asfix_is_list(subTree) ||
-						asfix_is_lex(subTree)  || 
-						asfix_is_var(subTree)) {
-					return editor;
-				}
-
-				return moveFocusRight(editor);
-			}
-		}
-	}
-		
-	return moveFocusUp(editor);
-}
-	
-/*}}}  */
-/*{{{  static ATerm moveFocusDown(ATerm editor) */
-
-static ATerm
-moveFocusDown(ATerm editor)
-{
-  ATerm curFocus = getCurrentFocus(editor), newFocus;
-  ATerm path = getFocusPath(curFocus), newPath;
-  ATerm tree = getTreeInEditor(editor), subTree;
-
-	subTree = getSubTree(tree, path);
-	
-	if (subTree) {
-    if (asfix_is_appl(subTree) || asfix_is_list(subTree) || isRootPath(path)) {
-      newPath = goDown(path);
-      subTree = getSubTree(tree, newPath);
-      newFocus = createFocus(tree, newPath);
-      editor = setCurrentFocus(editor, newFocus);
-      if (asfix_is_appl(subTree) ||
-					asfix_is_list(subTree) ||
-					asfix_is_lex(subTree) || asfix_is_var(subTree)) {
-				return editor;
-      }
-      return moveFocusRight(editor);
-    }
-  } 
-
-  return editor;
-}
-
-/*}}}  */
-/*{{{  static ATerm moveFocusLeft(ATerm editor) */
-
-static ATerm
-moveFocusLeft(ATerm editor)
-{
-  ATerm curFocus = getCurrentFocus(editor), newFocus;
-  ATerm path = getFocusPath(curFocus), newPath;
-  ATerm tree = getTreeInEditor(editor), subTree;
-
-  subTree = getSubTree(tree, path);
-  if (subTree) {
-    newPath = goLeft(path);
-    if (!ATisEqual(path, newPath)) {
-      subTree = getSubTree(tree, newPath);
-      newFocus = createFocus(tree, newPath);
-      editor = setCurrentFocus(editor, newFocus);
-      if (asfix_is_appl(subTree) ||
-					asfix_is_list(subTree) ||
-					asfix_is_lex(subTree) || asfix_is_var(subTree)) {
-				return editor;
-      }
-      return moveFocusLeft(editor);
-    }
-  }
-  return moveFocusUp(editor);
-}
-
-/*}}}  */
-/*{{{  ATerm applyMoveToFocus(ATerm editor, ATerm move) */
-
-ATerm
-applyMoveToFocus(ATerm editor, ATerm move)
-{
-  if (ATisEqual(move, ATparse(MOVE_UP))) {
-    return moveFocusUp(editor);
-  }
-  else if (ATisEqual(move, ATparse(MOVE_DOWN))) {
-    return moveFocusDown(editor);
-  }
-  else if (ATisEqual(move, ATparse(MOVE_RIGHT))) {
-    return moveFocusRight(editor);
-  }
-  else if (ATisEqual(move, ATparse(MOVE_LEFT))) {
-    return moveFocusLeft(editor);
-  }
-  else {
-    ATerror("Illegal move action\n");
-    return editor;
-  }
-}
-
-/*}}}  */

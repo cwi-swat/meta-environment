@@ -1,43 +1,13 @@
-/*{{{  file header */
 
-/*
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
-                        The Netherlands.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/*
-  $Id$  
- */
-
-/*
- * The version of se is written by Mark van den Brand.
- */
-
-/*}}}  */
 /*{{{  includes */
 
 #include <stdlib.h>
 #include <assert.h>
 
-#include "se.h"
+#include <PT.h>
+#include <PT-utils.h>
+
 #include "path.h"
-#include "posinfo.h"
 #include "sort.h"
 #include "tree.h"
 #include "area.h"
@@ -45,240 +15,310 @@
 
 /*}}}  */
 
-/*{{{  ATerm getTreeSort(ATerm tree) */
 
-ATerm
-getTreeSort(ATerm tree)
+/*{{{  PT_Symbol getParseTreeSort(PT_ParseTree parse_tree) */
+
+PT_Symbol getParseTreeSort(PT_ParseTree parse_tree)
 {
-  ATerm t0;
+  return getTreeSort(PT_getParseTreeTree(parse_tree));
+}
 
-  assert(ATgetType(tree) == AT_APPL);
+/*}}}  */
+/*{{{  PT_Symbol getTreeSort(PT_Tree tree) */
 
-  if (asfix_is_term(tree)) {
-    return getTreeSort(ATgetArgument(tree, 6));
+PT_Symbol
+getTreeSort(PT_Tree tree)
+{
+  if (PT_hasTreeSymbol(tree)) {
+    return PT_getTreeSymbol(tree);
   }
-  else if (asfix_is_lex(tree) || asfix_is_var(tree)) {
-    return ATgetArgument(tree, 1);
+  else if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    return PT_getProductionRhs(prod);
   }
-  else if (asfix_is_appl(tree)) {
-    t0 = ATgetArgument(tree, 0);
-    return ATgetArgument(t0, 6);
-  }
-  else if (asfix_is_list(tree)) {
-    return ATgetArgument(tree, 0);
+  else if (PT_isTreeList(tree)) {
+    return PT_getTreeIter(tree);
   }
   else {
-    return newSort("invalid");
+    return PT_makeSymbolSort("invalid");
   }
 }
 
 /*}}}  */
-/*{{{  ATerm getSubTree(ATerm tree, ATerm path) */
 
-ATerm
-getSubTree(ATerm tree, ATerm path)
+/*{{{  PT_Tree getTreeAt(PT_Tree tree, SE_Steps steps) */
+
+PT_Tree getTreeAt(PT_Tree tree, SE_Steps steps)
 {
-  ATerm subTree;
-  ATermList steps;
   int step;
+  PT_Args args;
 
-  assert(asfix_is_term(tree));
-
-  if (isRootPath(path)) {
+  if (SE_isStepsEmpty(steps)) {
     return tree;
   }
 
-  steps = getSteps(path);
-  step = ATgetInt((ATermInt) ATgetFirst(steps));
-  steps = ATgetNext(steps);
+  while (!SE_isStepsEmpty(steps)) {
+    step = SE_getStepsHead(steps);
 
-  /* extract appl from term(..., ws, appl, ws) */
-  subTree = ATgetArgument((ATermAppl) tree, step);
-
-  while (!ATisEmpty(steps)) {
-    step = ATgetInt((ATermInt) ATgetFirst(steps));
-    steps = ATgetNext(steps);
-
-    assert(ATgetType(subTree) == AT_APPL);
-
-    if (isBasicLeafNode(subTree)) {
+    if (!PT_hasTreeArgs(tree)) {
       return NULL;
     }
 
-    /* Extract args from appl */
-    subTree = ATgetArgument((ATermAppl) subTree, 2);
-
-    /* Continue with arguments of appl-node */
-    subTree = ATelementAt((ATermList) subTree, step);
+    args  = PT_getTreeArgs(tree);
+    tree  = PT_getArgsArgumentAt(args, step);
+    steps = SE_getStepsTail(steps);
   }
 
-  return subTree;
+  return tree;
+}
+
+/*}}}  */
+/*{{{  PT_Tree setTreeAt(PT_Tree tree, PT_Tree sub_tree, SE_Steps steps) */
+
+PT_Tree setTreeAt(PT_Tree tree, PT_Tree sub_tree, SE_Steps steps)
+{
+  PT_Tree arg;
+  SE_Steps tail;
+  int step;
+  PT_Args args;
+
+  if (SE_isStepsEmpty(steps)) {
+    return sub_tree;
+  }
+
+  step = SE_getStepsHead(steps);
+  tail = SE_getStepsTail(steps);
+  args = PT_getTreeArgs(tree);
+  arg  = PT_getArgsArgumentAt(args, step);
+  sub_tree = setTreeAt(arg, sub_tree, tail);
+  args = PT_setArgsArgumentAt(args, sub_tree, step);
+  return PT_setTreeArgs(tree, args);
+}
+
+/*}}}  */
+/*{{{  PT_Tree getParseTreeTreeAt(PT_ParseTree parse_tree, SE_Path path) */
+
+PT_Tree getParseTreeTreeAt(PT_ParseTree parse_tree, SE_Path path)
+{
+  if (SE_hasPathSteps(path)) {
+    SE_Steps steps = SE_getPathSteps(path);
+    return getTreeAt(PT_getParseTreeTree(parse_tree), steps);
+  }
+
+  return NULL;
 }
 
 /*}}}  */
 
-static char *leftWs = NULL;
-static char *rightWs = NULL;
+/*{{{  static char *concatStrings(const char *s, const char *t) */
 
-/*{{{  ATerm concatLeftWs(ATerm ws) */
-
-ATerm
-concatLeftWs(ATerm ws)
+static char *concatStrings(const char *s, const char *t)
 {
-  char *localLeftWs;
-  char *newWs;
-  ATerm atNewWs;
+  static char *buf = NULL;
+  static int   buf_len = 0;
 
-  if (ATmatch(ws, "w(<str>)", &localLeftWs)) {
-    newWs = (char *) malloc(strlen(localLeftWs) + strlen(leftWs) + 1);
-    sprintf(newWs, "%s%s", localLeftWs, leftWs);
-    atNewWs = ATmake("w(<str>)", newWs);
-    free(newWs);
-    return atNewWs;
+  int len_needed = strlen(s) + strlen(t) + 1;
+
+  if (len_needed > buf_len) {
+    buf = realloc(buf, len_needed);
+    if (buf == NULL) {
+      ATerror("out of memory in concatStrings (%d)\n", len_needed);
+    }
+    buf_len = len_needed;
   }
-  else {
-    ATerror("Illegal whitespace construct %t\n", ws);
-    return NULL;
-  }
+
+  sprintf(buf, "%s%s", s, t);
+
+  return buf;
 }
 
 /*}}}  */
-/*{{{  ATerm concatRightWs(ATerm ws) */
+/*{{{  char *concatLeftLayout(char *l1, char *l2) */
 
-ATerm
-concatRightWs(ATerm ws)
+char *concatLeftLayout(char *l1, char *l2)
 {
-  char *localRightWs;
-  char *newWs;
-  ATerm atNewWs;
-
-  if (ATmatch(ws, "w(<str>)", &localRightWs)) {
-    newWs = (char *) malloc(strlen(localRightWs) + strlen(rightWs) + 1);
-    sprintf(newWs, "%s%s", rightWs, localRightWs);
-    atNewWs = ATmake("w(<str>)", newWs);
-    free(newWs);
-    return atNewWs;
-  }
-  else {
-    ATerror("Illegal whitespace construct %t\n", ws);
-    return NULL;
-  }
+  return concatStrings(l1, l2);
 }
 
 /*}}}  */
-/*{{{  ATerm updateTermRecursive(ATerm tree, ATerm path, ATerm newTree) */
+/*{{{  char *concatRightLayout(char *l1, char *l2) */
 
-ATerm
-updateTermRecursive(ATerm tree, ATermList steps, ATerm subTree)
+char *concatRightLayout(char *l1, char *l2)
 {
-  ATermList oldArgs, newArgs;
-  ATerm newTree, oldArg, newArg, posInfo;
-  ATerm argLeftWs, argRightWs;
+  return concatStrings(l2, l1);
+}
+
+/*}}}  */
+
+static char *leftLayout = NULL;
+static char *rightLayout = NULL;
+
+/*{{{  PT_Tree updateTreeTermSteps(PT_Tree tree, SE_Steps steps, PT_Tree sub_tree) */
+
+PT_Tree updateTreeTermSteps(PT_Tree tree, SE_Steps steps, PT_Tree sub_tree)
+{
+  PT_Args oldArgs, newArgs;
+  PT_Tree oldArg, newArg;
+  SE_Steps tail;
   int step;
 
-  if (ATisEmpty(steps)) {
-    return subTree;
+  if (SE_isStepsEmpty(steps)) {
+    return sub_tree;
   }
 
-  posInfo = ATgetAnnotation(tree, ATparse("length"));
-  step = ATgetInt((ATermInt) ATgetFirst(steps));
+  step = SE_getStepsHead(steps);
+  tail = SE_getStepsTail(steps);
 
-  oldArgs = (ATermList) ATgetArgument((ATermAppl) tree, 2);
-  oldArg = ATelementAt((ATermList) oldArgs, step);
+  oldArgs = PT_getTreeArgs(tree);
+  oldArg  = PT_getArgsArgumentAt(oldArgs, step);
 
-  if (ATgetLength(steps) == 1) {
-    newArg = subTree;
+  if (SE_isStepsEmpty(tail)) {
+    newArg = sub_tree;
   }
   else {
-    newArg = updateTermRecursive(oldArg, ATgetNext(steps), subTree);
+    newArg = updateTreeTermSteps(oldArg, tail, sub_tree);
   }
-  newArgs = ATreplace(oldArgs, newArg, step);
+  newArgs = PT_setArgsArgumentAt(oldArgs, newArg, step);
 
-  if (leftWs != NULL && step > 0) {
-    /* concat leftWs with leftWs in argumentlist */
-    argLeftWs = ATelementAt((ATermList) oldArgs, step - 1);
-    argLeftWs = concatLeftWs(argLeftWs);
-    newArgs = ATreplace(newArgs, argLeftWs, step - 1);
-    leftWs = NULL;
-  }
-
-  if (rightWs != NULL && step < ATgetLength(oldArgs) - 1) {
-    /* concat rightWs with rightWs in argumentlist */
-    argRightWs = ATelementAt((ATermList) oldArgs, step + 1);
-    argRightWs = concatRightWs(argRightWs);
-    newArgs = ATreplace(newArgs, argRightWs, step + 1);
-    rightWs = NULL;
+  if (leftLayout != NULL && step > 0) {
+    char *layoutString;
+    PT_Tree layout = PT_getArgsArgumentAt(oldArgs, step-1);
+    assert(PT_isTreeLayout(layout));
+    layoutString = PT_getTreeString(layout);
+    layoutString = concatLeftLayout(layoutString, leftLayout);
+    layout = PT_makeTreeLayout(layoutString);
+    newArgs = PT_setArgsArgumentAt(newArgs, layout, step-1);
+    leftLayout = NULL;
   }
 
-  newTree = (ATerm) ATsetArgument((ATermAppl) tree, (ATerm) newArgs, 2);
-  return ATsetAnnotation(newTree, ATparse("length"), posInfo);
+  if (rightLayout != NULL && step < (PT_getArgsLength(oldArgs)-1)) {
+    char *layoutString;
+    PT_Tree layout = PT_getArgsArgumentAt(oldArgs, step-1);
+    assert(PT_isTreeLayout(layout));
+    layoutString = PT_getTreeString(layout);
+    layoutString = concatRightLayout(layoutString, rightLayout);
+    layout = PT_makeTreeLayout(layoutString);
+    newArgs = PT_setArgsArgumentAt(newArgs, layout, step-1);
+    rightLayout = NULL;
+  } 
+
+  return PT_setTreeArgs(tree, newArgs);
 }
 
 /*}}}  */
-/*{{{  ATerm updateTerm(ATerm tree, ATerm path, ATerm newTree) */
 
-ATerm
-updateTerm(ATerm tree, ATerm path, ATerm subTree)
+/*{{{  PT_ParseTree updateParseTree(parse_tree, path, tree,left_layout,right_layout) */
+
+PT_ParseTree updateParseTree(PT_ParseTree parse_tree, SE_Path path,
+			     PT_Tree tree, char *left_layout, char *right_layout)
 {
-  ATermList steps;
-  ATerm oldArg, newArg, newTree, atLeftWs, atRightWs;
-  ATerm treeLeftWs, treeRightWs, posInfo;
+  SE_Steps steps;
+  PT_Tree new_tree;
 
-  assert(asfix_is_term(tree));
+  if (SE_isPathRoot(path)) {
+    return PT_makeParseTreeTree(left_layout, tree, right_layout);
+  }
+  
+  assert(SE_isPathTerm(path));
 
-  if (isRootPath(path)) {
-    assert(asfix_is_term(subTree));
-    return subTree;
+  steps = SE_getPathSteps(path);
+
+  leftLayout = left_layout;
+  rightLayout = right_layout;
+
+  new_tree = updateTreeTermSteps(PT_getParseTreeTree(parse_tree), steps, tree);
+
+  if (leftLayout != NULL) {
+    char *localLeftLayout = PT_getParseTreeLayoutBeforeTree(parse_tree);
+    char *newLeftLayout = concatLeftLayout(localLeftLayout, leftLayout);
+    parse_tree = PT_setParseTreeLayoutBeforeTree(parse_tree, newLeftLayout);
   }
 
-  posInfo = ATgetAnnotation(tree, ATparse("length"));
-
-  if (asfix_is_term(subTree)) {
-    atLeftWs = (ATerm) ATgetArgument((ATermAppl) subTree, 5);
-    if (ATmatch(atLeftWs, "w(<str>)", &leftWs) && strlen(leftWs) == 0) {
-      leftWs = NULL;
-    }
-
-    atRightWs = (ATerm) ATgetArgument((ATermAppl) subTree, 7);
-    if (ATmatch(atRightWs, "w(<str>)", &rightWs) && strlen(rightWs) == 0) {
-      rightWs = NULL;
-    }
-
-    subTree = (ATerm) ATgetArgument((ATermAppl) subTree, 6);
-
+  if (rightLayout != NULL) {
+    char *localRightLayout = PT_getParseTreeLayoutBeforeTree(parse_tree);
+    char *newRightLayout = concatRightLayout(localRightLayout, rightLayout);
+    parse_tree = PT_setParseTreeLayoutBeforeTree(parse_tree, newRightLayout);
   }
 
-  steps = getSteps(path);
-  oldArg = (ATerm) ATgetArgument((ATermAppl) tree, 6);
-  newArg = updateTermRecursive(oldArg, ATgetNext(steps), subTree);
-
-  if (leftWs != NULL) {
-    treeLeftWs = ATgetArgument((ATermAppl) tree, 5);
-    treeLeftWs = concatLeftWs(treeLeftWs);
-    tree = (ATerm) ATsetArgument((ATermAppl) tree, treeLeftWs, 5);
-    leftWs = NULL;
-  }
-
-  if (rightWs != NULL) {
-    treeRightWs = ATgetArgument((ATermAppl) tree, 7);
-    treeRightWs = concatRightWs(treeRightWs);
-    tree = (ATerm) ATsetArgument((ATermAppl) tree, treeRightWs, 7);
-    rightWs = NULL;
-  }
-
-  newTree = (ATerm) ATsetArgument((ATermAppl) tree, newArg, 6);
-  return ATsetAnnotation(newTree, ATparse("length"), posInfo);
+  return PT_setParseTreeTree(parse_tree, new_tree);
 }
 
 /*}}}  */
-/*{{{  ATbool isBasicLeafNode(ATerm tree) */
+/*{{{  PT_Tree updateTreeTerm(PT_Tree tree, ATerm path, PT_Tree sub_tree) */
 
-ATbool
-isBasicLeafNode(ATerm tree)
+PT_Tree updateTreeTerm(PT_Tree tree, SE_Steps steps, PT_Tree sub_tree)
 {
-  return !(asfix_is_appl(tree) ||
-	   asfix_is_list(tree) ||
-	   asfix_is_term(tree) || asfix_is_var(tree) || asfix_is_lex(tree));
+  leftLayout = NULL;
+  rightLayout = NULL;
+  return updateTreeTermSteps(tree, steps, sub_tree);
 }
 
 /*}}}  */
+
+/*{{{  ATbool isBasicLeafNode(PT_Tree tree) */
+
+ATbool isBasicLeafNode(PT_Tree tree)
+{
+  return !PT_isTreeAppl(tree) && !PT_isTreeList(tree)
+    && !PT_isTreeVar(tree) && !PT_isTreeLexical(tree);
+}
+
+/*}}}  */
+
+/*{{{  int calcTreeStart(PT_Tree tree, SE_Steps steps) */
+
+int calcTreeStart(PT_Tree tree, SE_Steps steps)
+{
+  PT_Tree head;
+  PT_Args args;
+  int i, step, length;
+
+  if (SE_isStepsEmpty(steps)) {
+    return 0;
+  }
+
+  step = SE_getStepsHead(steps);
+  length = 0;
+
+  assert(PT_hasTreeArgs(tree));
+  args = PT_getTreeArgs(tree);
+
+  for (i=0; i<step; i++) {
+    head = PT_getArgsHead(args);
+    length += PT_getTreeLengthAnno(head);
+    args = PT_getArgsTail(args);
+  }
+  head = PT_getArgsHead(args);
+
+  return length + calcTreeStart(head, SE_getStepsTail(steps));
+}
+
+/*}}}  */
+/*{{{  int calcParseTreeStart(PT_ParseTree parse_tree, SE_Path path) */
+
+int calcParseTreeStart(PT_ParseTree parse_tree, SE_Path path)
+{
+  int start;
+  PT_Tree tree;
+
+  if (SE_isPathRoot(path) || SE_isPathLeftLayout(path)) {
+    return 0;
+  }
+
+  start = strlen(PT_getParseTreeLayoutBeforeTree(parse_tree));
+
+  tree = PT_getParseTreeTree(parse_tree);
+
+  if (SE_isPathRightLayout(path)) {
+    start += PT_getTreeLengthAnno(tree);
+    assert(start == (PT_getParseTreeLengthAnno(parse_tree)
+		     - strlen(PT_getParseTreeLayoutAfterTree(parse_tree))));
+  } else {
+    start += calcTreeStart(tree, SE_getPathSteps(path));
+  }
+
+  return start;
+}
+
+/*}}}  */
+

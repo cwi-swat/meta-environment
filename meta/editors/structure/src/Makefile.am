@@ -25,18 +25,21 @@ include $(top_srcdir)/make_rules
 bin_PROGRAMS      = se
 data_DATA         = se.idef
 
-EXTRA_DIST        = se.idef
+EXTRA_DIST        = se.idef \
+				  Editor.h Editor_dict.h \
+                  area.h editor.h focus.h path.h se.h sort.h tree.h \
+				  length.h
 
 CLEANFILES        = se.tifs se.tif.c se.tif.h
 
-se_SOURCES = area.c editor.c focus.c path.c posinfo.c se.c sort.c tree.c \
-	     area.h editor.h focus.h path.h posinfo.h se.h sort.h tree.h
+	     
+
+se_SOURCES = Editor.c Editor_dict.c se.c \
+			 area.c editor.c focus.c path.c sort.c tree.c length.c
+
 se_LDADD   = se.tif.o \
-                    -L$(ASC_SUPPORT)/lib -lasc-support \
-                    -L$(PT_SUPPORT)/lib -lAsFix \
-                    -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
+			-L$(PT_SUPPORT)/lib -lPT -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES          = -I$(ASC_SUPPORT)/include -I$(PT_SUPPORT)/include -I$(ATERM)/include \
-                    -DBINDIR=\"$(bindir)\"
+INCLUDES          = -I$(PT_SUPPORT)/include -I$(ATERM)/include
 
-area.o : se.tif.h
+se.o : se.tif.h

@@ -1,43 +1,21 @@
 
-/*{{{   file header */
-
-/*
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
-                        The Netherlands.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/*
-  $Id$
- */                                                          
-
-/*
- * The version of se is written by Mark van den Brand. 
- */
-
-/*}}}  */
-
 #ifndef TREE_H
 #define TREE_H
 
-ATerm getTreeSort(ATerm tree);
-ATerm getSubTree(ATerm tree, ATerm path);
-ATerm updateTerm(ATerm tree, ATerm path, ATerm newTree);
-ATbool isBasicLeafNode(ATerm tree);
+#include "Editor.h"
+
+PT_Symbol getParseTreeSort(PT_ParseTree tree);
+PT_Tree getParseTreeTreeAt(PT_ParseTree parse_tree, SE_Path path);
+
+PT_Symbol getTreeSort(PT_Tree tree);
+PT_Tree getTreeAt(PT_Tree tree, SE_Steps steps);
+PT_Tree setTreeAt(PT_Tree tree, PT_Tree sub_tree, SE_Steps steps);
+int calcParseTreeStart(PT_ParseTree parse_tree, SE_Path path);
+int calcTreeStart(PT_Tree tree, SE_Steps steps);
+
+ATbool isBasicLeafNode(PT_Tree tree);
+PT_Tree updateTreeTerm(PT_Tree tree, SE_Steps steps, PT_Tree sub_tree);
+PT_ParseTree updateParseTree(PT_ParseTree tree, SE_Path path, PT_Tree sub_tree,
+			     char *left_layout, char *right_layout);
 
 #endif /* TREE_H */

@@ -1,277 +1,244 @@
-/*
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
-                        The Netherlands.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/*
-  $Id$  
- */
-
-/*
- * The version of se is written by Mark van den Brand.
- */
-
-
 #include <stdlib.h>
 #include <assert.h>
 
-#include "se.h"
+#include <PT-utils.h>
+
 #include "path.h"
-#include "posinfo.h"
+#include "length.h"
 
-#define POS_ELEMENTS 0
+/*{{{  SE_Steps stepUp(SE_Steps steps) */
 
-ATerm
-newPath()
+SE_Steps stepUp(SE_Steps steps)
 {
-  return ATmake("path(<list>)", ATempty);
+  ATermList steplist = (ATermList)SE_makeTermFromSteps(steps);
+
+  return SE_makeStepsFromTerm((ATerm)ATgetPrefix(steplist));
 }
 
-ATermList
-getSteps(ATerm path)
-{
-  ATermList steps = ATempty;
+/*}}}  */
 
-  ATmatch(path, "path(<list>)", &steps);
-  return steps;
+/*{{{  static SE_Steps stepRight(SE_Steps steps) */
+
+static SE_Steps stepRight(SE_Steps steps)
+{
+  ATermList steplist = (ATermList)SE_makeTermFromSteps(steps);
+  ATermList prefix = ATgetPrefix(steplist);
+  int step = ATgetInt((ATermInt)ATgetLast(steplist));
+
+  return SE_makeStepsFromTerm((ATerm)ATappend(prefix, (ATerm)ATmakeInt(step + 1)));
 }
 
-ATbool
-isRootPath(ATerm path)
+/*}}}  */
+/*{{{  static int getLastStep(SE_Steps steps) */
+
+static int getLastStep(SE_Steps steps)
 {
-  return ATisEqual(path, newPath());
+  ATermList list = (ATermList)SE_makeTermFromSteps(steps);
+
+  return ATgetInt((ATermInt)ATgetLast(list));
 }
 
-ATerm
-makeLeftWsPath()
+/*}}}  */
+/*{{{  static SE_Steps replaceLastStep(SE_Steps steps, int step) */
+
+static SE_Steps replaceLastStep(SE_Steps steps, int step)
 {
-  return ATmake("path(<list>)", ATmakeList1((ATerm) ATmakeInt(5)));
+  ATermList list = (ATermList)SE_makeTermFromSteps(steps);
+
+  list = ATreplace(list, (ATerm)ATmakeInt(step), ATgetLength(list)-1);
+
+  return SE_makeStepsFromTerm((ATerm)list);
 }
 
-ATerm
-makeAsFixTermPath()
+/*}}}  */
+/*{{{  static SE_Steps appendStep(SE_Steps steps, int step) */
+
+static SE_Steps appendStep(SE_Steps steps, int step)
 {
-  return ATmake("path(<list>)", ATmakeList1((ATerm) ATmakeInt(6)));
+  ATermList list = (ATermList)SE_makeTermFromSteps(steps);
+
+  list = ATappend(list, (ATerm)ATmakeInt(step));
+
+  return SE_makeStepsFromTerm((ATerm)list);
 }
 
-ATerm
-makeRightWsPath()
+/*}}}  */
+
+/*{{{  SE_Path pathUp(SE_Path path) */
+
+SE_Path pathUp(SE_Path path)
 {
-  return ATmake("path(<list>)", ATmakeList1((ATerm) ATmakeInt(7)));
-}
-
-ATerm
-goRight(ATerm path)
-{
-  ATermList steps;
-  ATerm lastStep;
-  int argNumber, idx;
-
-  if (isRootPath(path)) {
-    return path;
-  } else if (ATisEqual(path, makeRightWsPath())) {
-		return newPath();
-	}
-  else {
-    steps = getSteps(path);
-    idx = ATgetLength(steps) - 1;
-    lastStep = ATgetLast(steps);
-
-    argNumber = ATgetInt((ATermInt) lastStep) + 1;
-    lastStep = (ATerm) ATmakeInt(argNumber);
-
-    steps = ATreplace(steps, lastStep, idx);
-    return ATmake("path(<list>)", steps);
-  }
-}
-
-ATerm
-goLeft(ATerm path)
-{
-  ATermList steps;
-  ATerm lastStep;
-  int argNumber, idx;
-
-  if (isRootPath(path)) {
-    return path;
-  } else if (ATisEqual(path, makeLeftWsPath())) {
-		return newPath();
-	}
-  else {
-    steps = getSteps(path);
-
-    idx = ATgetLength(steps) - 1;
-    lastStep = ATgetLast(steps);
-
-    argNumber = ATgetInt((ATermInt) lastStep);
-    if (argNumber > 0) {
-      argNumber--;
-      lastStep = (ATerm) ATmakeInt(argNumber);
-
-      steps = ATreplace(steps, lastStep, idx);
-      return ATmake("path(<list>)", steps);
-    }
-    else {
-      return path;
+  if (SE_hasPathSteps(path)) {
+    SE_Steps steps = SE_getPathSteps(path);
+    if (SE_isStepsMulti(steps)) {
+      return SE_makePathTerm(stepUp(steps));
     }
   }
+
+  return SE_makePathRoot();
 }
 
-ATerm
-goDown(ATerm path)
+/*}}}  */
+/*{{{  SE_Path pathDown(SE_Path path) */
+
+SE_Path pathDown(SE_Path path)
 {
-  ATermList steps;
-  ATerm newStep;
+  SE_Steps steps = SE_getPathSteps(path);
 
-	if(isRootPath(path)) {
-		return makeAsFixTermPath();
-	}
+  steps = appendStep(steps, 0);
 
-  steps = getSteps(path);
-  newStep = (ATerm) ATmakeInt(0);
-
-  steps = ATappend(steps, newStep);
-  return ATmake("path(<list>)", steps);
+  return SE_makePathTerm(steps);
 }
 
-ATerm
-goUp(ATerm path)
-{
-  ATermList steps;
+/*}}}  */
+/*{{{  SE_Path pathLeft(SE_Path path) */
 
-  if (isRootPath(path)) {
+SE_Path pathLeft(SE_Path path)
+{
+  int last_step;
+  SE_Steps steps;
+
+  if (SE_isPathRoot(path) || SE_isPathLeftLayout(path)) {
     return path;
   }
-  else {
-    steps = getSteps(path);
-    steps = ATgetPrefix(steps);
-    return ATmake("path(<list>)", steps);
-  }
-}
 
-static ATerm
-getPathToLastNode(ATerm tree, ATerm path)
-{
-  int nrOfArgs, i;
-  ATerm arg = NULL;
-  ATermList args;
-
-  if (asfix_is_appl(tree) || asfix_is_list(tree)) {
-    path = goDown(path);
-    args = (ATermList) ATgetArgument((ATermAppl) tree, 2);
-    nrOfArgs = ATgetLength(args) - 1;
-    for (i = 0; i < nrOfArgs; i++) {
-      path = goRight(path);
-    }
-    arg = ATelementAt(args, nrOfArgs);
-    return getPathToLastNode(arg, path);
+  if (SE_isPathRightLayout(path)) {
+    return SE_makePathTerm(SE_makeStepsEmpty());
   }
-  else {
+
+  steps = SE_getPathSteps(path);
+
+  if (SE_isStepsEmpty(steps)) {
     return path;
   }
-}
 
-ATerm
-getPathInTreeRecursive(ATerm tree, int location, ATerm path)
-{
-  int argLength, i;
-  ATerm arg = NULL;
-  ATermList args;
+  last_step = getLastStep(steps);
 
-  if (asfix_is_appl(tree) || asfix_is_list(tree)) {
-    path = goDown(path);
-    args = (ATermList) ATgetArgument((ATermAppl) tree, 2);
-    for (i = 0; i < ATgetLength(args); i++) {
-      arg = ATelementAt(args, i);
-      argLength = getTreeLength(arg);
-      if (location <= argLength) {
-	break;
-      }
-      path = goRight(path);
-      location -= argLength;
-    }
-    return getPathInTreeRecursive(arg, location, path);
-  }
-  else {
+  if (last_step <= 0) {
     return path;
   }
+
+  steps = replaceLastStep(steps, last_step-1);
+  
+  return SE_makePathTerm(steps);
 }
 
-ATerm
-getPathInTree(ATerm tree, int location)
+/*}}}  */
+/*{{{  SE_Path pathRight(SE_Path path) */
+
+SE_Path pathRight(SE_Path path)
 {
-  int termLength, leftWsLength;
-  ATerm subTree, leftWs, path;
+  if (SE_isPathLeftLayout(path)) {
+    return SE_makePathTerm(SE_makeStepsEmpty());
+  }
+  else if (SE_isPathTerm(path)) {
+    SE_Steps steps = SE_getPathSteps(path);
 
-  assert(asfix_is_term(tree));
-
-  leftWs = ATgetArgument(tree, 5);
-  leftWsLength = getTreeLength(leftWs);
-  if (location > leftWsLength) {
-    location -= leftWsLength;
-    subTree = ATgetArgument(tree, 6);
-    termLength = getTreeLength(subTree);
-    if (location > termLength) {
-      /* You have clicked beyond end of term */
-      path = makeRightWsPath();
-    }
-    else {
-      path = getPathInTreeRecursive(subTree, location, makeAsFixTermPath());
+    if (!SE_isStepsEmpty(steps)) {
+      return SE_makePathTerm(stepRight(steps));
     }
   }
-  else {
-    path = makeLeftWsPath();
-  }
+
   return path;
 }
 
-static ATbool
-isChildPathRecursive(ATermList child, ATermList parent)
+/*}}}  */
+
+/*{{{  static SE_Steps getStepsInTree(PT_Tree tree, int location, int length) */
+
+static SE_Steps getStepsInTree(PT_Tree tree, int location, int length)
+{
+  SE_Steps steps = SE_makeStepsEmpty();
+
+  if (PT_hasTreeArgs(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
+    int nr_args = PT_getArgsLength(args);
+    int step;
+    for (step = 0; step < nr_args; step++) {
+      PT_Tree arg = PT_getArgsArgumentAt(args, step);
+      int arg_len = PT_getTreeLengthAnno(arg);
+      if (location <= arg_len) {
+	if (location+length > arg_len) {
+	  return steps;
+	}
+	steps = SE_makeStepsMulti(step, getStepsInTree(arg, location, length));
+	break;
+      }
+      location -= arg_len;
+    }
+  }
+
+  return steps;
+}
+
+/*}}}  */
+/*{{{  SE_Path getPathInParseTree(PT_ParseTree parse_tree, int location, int length) */
+
+SE_Path getPathInParseTree(PT_ParseTree parse_tree, int location, int length)
+{
+  PT_Tree tree;
+  SE_Path path;
+  char *leftLayout;
+  int treeLength, leftLayoutLength;
+
+  if (length < 0) {
+    length = -length;
+    location -= length;
+  }
+
+  leftLayout = PT_getParseTreeLayoutBeforeTree(parse_tree);
+  leftLayoutLength = strlen(leftLayout);
+
+  if (location <= leftLayoutLength) {
+    path = SE_makePathRoot();
+  }
+  else {
+    location -= leftLayoutLength;
+    tree = PT_getParseTreeTree(parse_tree);
+    treeLength = PT_getTreeLengthAnno(tree);
+
+    if (location > treeLength || location+length > treeLength) {
+      path = SE_makePathRoot();
+    }
+    else {
+      path = SE_makePathTerm(getStepsInTree(tree, location, length));
+    }
+  }
+
+  return path;
+}
+
+/*}}}  */
+
+/*{{{  static ATbool isChildSteps(SE_Steps child, SE_Steps parent) */
+
+static ATbool isChildSteps(SE_Steps child, SE_Steps parent)
 {
   /* Child may be shorter than parent */
-  if (ATisEmpty(child) && !ATisEmpty(parent)) {
+  if (SE_isStepsEmpty(child) && !SE_isStepsEmpty(parent)) {
     return ATfalse;
   }
 
   /* Child may be longer than parent */
-  if (ATisEmpty(parent)) {
+  if (SE_isStepsEmpty(parent)) {
     return ATtrue;
   }
 
   /* Head of parent and child may differ -=> disjoint paths */
-  if (!ATisEqual(ATgetFirst(child), ATgetFirst(parent))) {
+  if (SE_getStepsHead(child) != SE_getStepsHead(parent)) {
     return ATfalse;
   }
 
   /* No decision possible yet, continue with tail of paths */
-  return isChildPathRecursive(ATgetNext(child), ATgetNext(parent));
+  return isChildSteps(SE_getStepsTail(child), SE_getStepsTail(parent));
 }
 
-/* Is <child> a child (a longer path) of <parent>?
- * E.g., path(0,1,4,1,0) is a child of path(0,1,4,1).
- * This is a strict function: <P> is not a child of <P>
- */
-ATbool
-isChildPath(ATerm child, ATerm parent)
+/*}}}  */
+/*{{{  ATbool isChildPath(SE_Path child, SE_Path parent) */
+
+ATbool isChildPath(SE_Path child, SE_Path parent)
 {
-  ATermList childPath = (ATermList) ATgetArguments((ATermAppl) child);
-  ATermList parentPath = (ATermList) ATgetArguments((ATermAppl) parent);
-
-  return isChildPathRecursive(childPath, parentPath);
+  return isChildSteps(SE_getPathSteps(child), SE_getPathSteps(parent));
 }
+
+/*}}}  */
