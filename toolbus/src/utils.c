@@ -196,6 +196,34 @@ static term *parse_term0(void)
     } else
       return mk_int(sign * n);
   } else
+  if(lastc == '\'' || lastc == '\\'){ /* integer as char */
+    if(lastc == '\\') {
+      int c, i;
+      get_char();
+      c = lastc;
+      get_char();
+      switch(c) {
+        case 'n': return mk_int('\n');
+	case 'r': return mk_int('\r');
+	case 't': return mk_int('\t');
+	case '\\': return mk_int('\\');
+        case '0': assert(isdigit(lastc));
+		  c = lastc;
+		  get_char();
+	          assert(isdigit(c) && isdigit(lastc));
+		  i = 10*c+lastc;
+		  get_char();
+		  return mk_int(i);
+        default:  parse_error("illegal character constant");
+      }
+    } else {
+      int i;
+      get_char();
+      i = lastc;
+      get_char();
+      return mk_int(i);
+    }
+  } else
   if(lastc == '"'){                   /* string */
 
     get_char();
@@ -365,6 +393,8 @@ static term *parse_term0(void)
     c = get_char();
     get_char(); skip_layout();
     switch(c){
+    case 'B':
+      return mk_int(va_arg(mk_term_args, TBbool));
     case 'd':               
       return mk_int(va_arg(mk_term_args, int));
     case 'r':
@@ -972,6 +1002,7 @@ TBbool TBmatch1(term *t)
 {
   char **ps, *q;
   int *pi;
+  TBbool *pb;
   double *pr;
   term **pt;
   term_list *tl;
@@ -1015,6 +1046,15 @@ TBbool TBmatch1(term *t)
       else {
 	pi = va_arg(match_args, int *);
 	*pi = int_val(t);
+	get_char();
+	return TBtrue;
+      }
+    case 'B':
+      if(tkind(t) != t_bool)
+        return TBfalse;
+      else {
+        pb = va_arg(match_args, TBbool *);
+	*pb = bool_val(t);
 	get_char();
 	return TBtrue;
       }

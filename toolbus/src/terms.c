@@ -280,7 +280,8 @@ static void mark_terms(void)
       t1 = env_next(t); push_term(t1);
       break;
 
-    default: err_fatal("mark_terms: %t", t);
+    default: err_fatal("mark_terms: illegal term encountered. check if all " \
+		       "of your protected terms are legal or NULL!");
     }
   }
 }

@@ -102,7 +102,10 @@ int main(int argc, char *argv[])
   extern time_t startup_time;
   extern TBbool parse_script(char *, int, char **);
   extern int mk_server_ports(TBbool);
+  extern void chld_handler(int);
 
+  signal(SIGCHILD, chld_handler);
+  
   if(time(&startup_time) == -1)
     err_sys_fatal("Cannot read current time");
 

@@ -1053,7 +1053,7 @@ withval="$with_shared"
 if test -n "$withval"; then
   SHARED_TB_LIB=libtb.so
 else
-  SHARED_TB_LIB=libtb.so
+  SHARED_TB_LIB=
 fi
 
 

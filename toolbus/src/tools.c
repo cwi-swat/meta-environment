@@ -16,12 +16,31 @@
 
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <signal.h>
+#include <sys/wait.h>
+#include <errno.h>
 
 extern int mk_server_ports(TBbool);
 extern int accept_client(TBbool);
 extern TBbool parse_script(char *);
 
 TBbool local_ports = TBfalse;
+
+static int pgid = -1;
+
+/*--- child handler ---------------------------------------*/
+
+void chld_handler(int sig)
+{
+   signal(sig, SIG_IGN);
+   if( pgid != -1 )
+   {
+      /* wait for childs in process group pgid */
+      waitpid( -pgid, NULL, WNOHANG );
+   }
+   signal(sig, chld_handler);
+}
+
 
 /*--- tool definitions ------------------------------------*/
 
@@ -595,6 +614,9 @@ tool_id *create_tool(term *creator, term_list *args)
       err_sys_warn("can't fork while executing `%s'", command);
       return NULL;
     }
+    if(pgid == -1)
+      pgid = pid;	/* One processgroup for all slaves */
+    setpgid(pid, pgid);
     /* lcc generated bad code for the next line (Probably because of
        the many recursive calls when the preprocessor expands it. I've
        tried many experiments, but haven't been able to reproduce it in
@@ -691,7 +713,8 @@ retry:
     }
     goto retry;
   } else {
-    err_sys_warn("select failed");
+    if(errno != EINTR)
+      err_sys_warn("select failed");
     goto retry;
   }   
 }

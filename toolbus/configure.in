@@ -67,7 +67,7 @@ dnl shared libraries?
 AC_ARG_WITH(shared,
 [  --with-shared	create shared ToolBus library (libtb.so)],
 SHARED_TB_LIB=libtb.so,
-SHARED_TB_LIB=libtb.so)
+SHARED_TB_LIB=)
 AC_SUBST(SHARED_TB_LIB)
 
 

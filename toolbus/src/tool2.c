@@ -4,6 +4,7 @@
 #include "tool2.h"
 #include "procs.h"
 #include "sockets.h"
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
 
@@ -18,6 +19,7 @@ tb_connection *connections[MAX_CONNECTIONS] = { NULL };
 int TB_init()
 {
   ToolBus = TBfalse;
+  setsid();
   init_terms();
   init_utils();
   return gethostname(this_host, MAXHOSTNAMELEN);

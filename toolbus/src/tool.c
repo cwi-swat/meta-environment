@@ -3,8 +3,10 @@
 #include "tools.h"
 #include "utils.h"
 #include "tool.h"
+#include <sys/types.h>
 #include <sys/socket.h>
 #include <netdb.h>
+#include <errno.h>
 #include "sockets.h"
 
 extern int mkports(TBbool, char *, char *, int *, int *, int *);
@@ -107,6 +109,8 @@ int TBinit(char *tname, int argc, char *argv[],
   int fromToolBus, i = 1;
   TBbool local_ports = TBfalse;
   term *trm;
+
+  setsid();
 
   tool_name = (tname) ? tname : "anonymous_tool";
   ToolBus = TBfalse;
@@ -273,7 +277,8 @@ retry:
       }
     }
   } else {
-    err_sys_warn("select failed");
+    if(errno != EINTR)
+      err_sys_warn("select failed");
     goto retry;
   }
   return TB_ERROR;
@@ -306,7 +311,8 @@ retry:
     *inp = NULL;
     return 0;
   }
-  err_sys_warn("select failed");
+  if(errno != EINTR)
+    err_sys_warn("select failed");
   goto retry;
   /* <PO> unreachable code from lcc: return TB_ERROR; */
 }

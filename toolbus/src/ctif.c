@@ -60,7 +60,7 @@ void gen_var_decls(FILE *fout)
     if(tot[i] > 0){
       switch(i)
 	{    
-	case t_bool:      fprintf(fout, "\tint bool_arg[%d];\n", tot[i]); break;
+	case t_bool:      fprintf(fout, "\tterm *bool_arg[%d];\n", tot[i]); break;
 	case t_int:       fprintf(fout, "\tint int_arg[%d];\n", tot[i]); break;
 	case t_real:      fprintf(fout, "\tdouble real_arg[%d];\n", tot[i]); break;
 	case t_str:       fprintf(fout, "\tchar *str_arg[%d];\n", tot[i]); break;
@@ -106,7 +106,7 @@ void C_visit_args(term_list *args, char *pref, void (*f)(term *, char *, int))
 
 void C_proto_arg(term *a, char *pref, int n)
 {
-       if(TBmatch(a, "<bool>")) fprintf(fout, "int");
+       if(TBmatch(a, "<bool>")) fprintf(fout, "term *");
   else if(TBmatch(a, "<int>"))  fprintf(fout, "int");
   else if(TBmatch(a, "<real>")) fprintf(fout, "double");
   else if(TBmatch(a, "<str>"))  fprintf(fout, "char *");
@@ -122,7 +122,7 @@ void C_proto_arg(term *a, char *pref, int n)
 
 void C_format_arg(term *a, char *pref, int n)
 {
-       if(TBmatch(a, "<bool>")) fprintf(fout, "%%d");
+  if(TBmatch(a, "<bool>")) fprintf(fout, "%%t");
   else if(TBmatch(a, "<int>"))  fprintf(fout, "%%d");
   else if(TBmatch(a, "<real>")) fprintf(fout, "%%r");
   else if(TBmatch(a, "<str>"))  fprintf(fout, "%%s");
@@ -140,7 +140,7 @@ void C_var_arg(term *a, char *pref, int n)
 {
   tkind vt = t_bool;
 
-  if(TBmatch(a, "<bool>")){      vt = t_bool; fprintf(fout, "%sint_arg[%d]", pref, cur[vt]); }
+  if(TBmatch(a, "<bool>")){      vt = t_bool; fprintf(fout, "%sbool_arg[%d]", pref, cur[vt]); }
   else if(TBmatch(a, "<int>")){  vt = t_int; fprintf(fout, "%sint_arg[%d]", pref, cur[vt]); }
   else if(TBmatch(a, "<real>")){ vt = t_real; fprintf(fout, "%sreal_arg[%d]", pref, cur[vt]); }
   else if(TBmatch(a, "<str>")){  vt = t_str; fprintf(fout, "%sstr_arg[%d]", pref, cur[vt]); }
