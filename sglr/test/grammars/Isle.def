@@ -36,8 +36,6 @@ exports
 	"ELSE"           -> CIG-ClosedIfNesting {reject}
 	"IF"             -> CIG-ClosedIfNesting {reject}
 	"END-IF"         -> CIG-ClosedIfNesting {reject}
-	%%"END-IF"         -> CIG-Drop {reject}
-
 
 	CIG-ClosedIfNesting -> CIG-OpenIfNesting
 	CIG-ClosedIf        -> CIG-OpenIfNesting {reject}
