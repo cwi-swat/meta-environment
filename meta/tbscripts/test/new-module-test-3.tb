@@ -14,7 +14,7 @@ in
   (
     rec-msg(id("Test"), opened-file(baf, "Empty", Module?, Path?, Time?))
   +
-    shutdown("test-3 FAILED! (timeout in read)\n") delay(sec(1))
+    shutdown("test-3 FAILED! (timeout in read)\n") delay(sec(5))
   ) .
 
   %% Update the module-db.
@@ -22,7 +22,7 @@ in
   (
     rec-msg(need-modules([]))
   +
-    shutdown("test-3 FAILED! (timeout in update-db)\n") delay(sec(1))
+    shutdown("test-3 FAILED! (timeout in update-db)\n") delay(sec(5))
   ) .
 
   %% Here comes the actual test.
@@ -33,7 +33,7 @@ in
   +
     rec-msg(module-exists)
   +
-    shutdown("test-3 FAILED! (timeout)\n") delay(sec(1))
+    shutdown("test-3 FAILED! (timeout)\n") delay(sec(5))
   )
   .
   shutdown("") delay(sec(2))

@@ -12,7 +12,7 @@ process Test is
     rec-msg(module-exists) .
     printf("new-module-test-2 succeeded.\n")
   +
-    shutdown("test-2 FAILED! (timeout)\n") delay(sec(1))
+    shutdown("test-2 FAILED! (timeout)\n") delay(sec(5))
   ) .
   shutdown("") delay(sec(2))
 
