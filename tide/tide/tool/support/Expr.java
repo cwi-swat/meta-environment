@@ -564,6 +564,7 @@ public class Expr
   {
     List result = term.match(PAT_STACK_TRACE);
     if (result != null) {
+      System.err.println("stacktrace: nieuwe frameIterator");
       return new ExprIterator((ATermList)result.get(0));
     }
 

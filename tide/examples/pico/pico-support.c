@@ -350,12 +350,12 @@ static void init_debugging()
 {
   char *name;
 
-  TA_connect(TIDE_PORT);
+  TA_connect(8999);
 
-  TA_registerFunction(ATmakeAFun("resume", 0, ATfalse), eval_resume);
-  TA_registerFunction(ATmakeAFun("break",  0, ATfalse), eval_break);
-  TA_registerFunction(ATmakeAFun("var",    1, ATfalse), eval_var);
-  TA_registerFunction(ATmakeAFun("source-var", 5, ATfalse), eval_source_var);
+  TA_registerFunction(1, ATmakeAFun("resume", 0, ATfalse), eval_resume);
+  TA_registerFunction(1, ATmakeAFun("break",  0, ATfalse), eval_break);
+  TA_registerFunction(1, ATmakeAFun("var",    1, ATfalse), eval_var);
+  TA_registerFunction(1, ATmakeAFun("source-var", 5, ATfalse), eval_source_var);
 
   name = strrchr(source, '/');
   if (name) {

@@ -92,7 +92,5 @@ AC_CONFIG_FILES([\
 	tide/tool/stackviewer/Makefile \
 	images/Makefile \
 	META-INF/Makefile \
-        examples/Makefile \
-	examples/pico/Makefile \
 	])
 AC_OUTPUT

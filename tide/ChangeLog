@@ -1,5 +1,12 @@
 
 
+Mon Oct 11 14:42:05 CEST 2004 <sgmcorne@science.uva.nl,jurgenv@cwi.nl>
+ * lib-c: tide-adapter changed such that it supports multiple processes
+   and multiple adapters running in the same C process.
+ * added 'step-up' (step-return) functionality to the SourceViewer.
+ * fixed a number of small bugs in the Tide interface (lock-ups during
+   stepping)
+
 Wed Sep 22 11:43:13 CEST 2004 <jurgenv@cwi.nl>
  * Many small changes in the Makefile.am's to get tide through distcheck
 

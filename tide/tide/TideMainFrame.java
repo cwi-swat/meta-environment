@@ -29,7 +29,6 @@ implements ActionListener {
 	
 	public final static void main(String[] args) throws IOException {
 		ATermFactory factory = new aterm.pure.PureFactory();
-System.err.println("printje");
 		new TideMainFrame(factory, args);
 	}
 

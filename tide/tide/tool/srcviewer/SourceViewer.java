@@ -22,6 +22,7 @@ public class SourceViewer
 
 	private static final String TAG_STEP_INTO = "sv-step-into";
 	private static final String TAG_STEP_OVER = "sv-step-over";
+	private static final String TAG_STEP_UP = "sv-step-up";
 	private static final String TAG_VIEW_VAR = "sv-view-var";
 	private static final String TAG_ADD_SOURCE = "sv-add-source";
 
@@ -37,11 +38,13 @@ public class SourceViewer
 
 	private String tag_step_into;
 	private String tag_step_over;
+	private String tag_step_up;
 	private String tag_view_var;
 	private String tag_add_source;
 
 	private Action stepInto;
 	private Action stepOver;
+	private Action stepUp;
 	private Action run;
 	private Action stop;
 
@@ -51,17 +54,20 @@ public class SourceViewer
 	private DebugProcess process;
 	private Rule ruleStepInto;
 	private Rule ruleStepOver;
+	private Rule ruleStepUp;
 
 	private String currentFile;
 	private SourceFileViewer currentViewer;
 	private Map residentViewers;
 
+	private int prevDepth = -1;
 	//}}}
 
 	//{{{ public SourceViewer(ToolManager manager, final DebugProcess process)
 
 	public SourceViewer(ToolManager manager, final DebugProcess process) {
 		super(manager, process);
+		System.out.println("[SourceViewer] creating Viewer for process ("+process.getPid()+","+process.getName()+")");
 
 		setSize(360, 350);
 		setTitle("SourceViewer: " + process.getName());
@@ -73,6 +79,7 @@ public class SourceViewer
 
 		tag_step_into = TAG_STEP_INTO + "-" + getId();
 		tag_step_over = TAG_STEP_OVER + "-" + getId();
+		tag_step_up = TAG_STEP_UP + "-" + getId();
 		tag_view_var = TAG_VIEW_VAR + "-" + getId();
 		tag_add_source = TAG_ADD_SOURCE + "-" + getId();
 
@@ -95,6 +102,14 @@ public class SourceViewer
 				}
 			}
 		};
+		stepUp = new AbstractAction("Step Up", loadIcon("step-up.gif")) {
+			public void actionPerformed(ActionEvent event) {
+				if (process.isStopped()) {
+					process.requestRuleEnabling(ruleStepUp, true);
+					process.requestResume();
+				}
+			}
+		};
 		run = new AbstractAction("Run", loadIcon("run.gif")) {
 			public void actionPerformed(ActionEvent event) {
 				if (process.isStopped()) {
@@ -113,6 +128,7 @@ public class SourceViewer
 		boolean stopped = process.isStopped();
 		stepInto.setEnabled(stopped);
 		stepOver.setEnabled(stopped);
+		stepUp.setEnabled(stopped);
 		run.setEnabled(stopped);
 		stop.setEnabled(!stopped);
 
@@ -145,6 +161,7 @@ public class SourceViewer
 		tools = new JToolBar();
 		tools.add(stepInto).setToolTipText("Step Into");
 		tools.add(stepOver).setToolTipText("Step Over");
+		tools.add(stepUp).setToolTipText("Step Up");
 		tools.add(run).setToolTipText("Run");
 		tools.add(stop).setToolTipText("Stop");
 		tools.addSeparator();
@@ -200,6 +217,14 @@ public class SourceViewer
 			tag_step_over,
 			false);
 
+		Expr stepUpCondition =
+			Expr.make("less(stack-level,start-level)");
+		process.requestRuleCreation(
+			Port.makeStep(),
+			stepUpCondition,
+			Expr.makeBreak(),
+			tag_step_up,
+			false);
 		//}}}
 
 		highlightCpe();
@@ -212,9 +237,11 @@ public class SourceViewer
 		if (ruleStepInto != null) {
 			process.requestRuleDeletion(ruleStepInto);
 		}
-
 		if (ruleStepOver != null) {
 			process.requestRuleDeletion(ruleStepOver);
+		}
+		if (ruleStepUp != null) {
+			process.requestRuleDeletion(ruleStepUp);
 		}
 
 		Iterator iter = residentViewers.values().iterator();
@@ -248,6 +275,7 @@ public class SourceViewer
 			// Rules do not need to be removed!
 			ruleStepInto = null;
 			ruleStepOver = null;
+			ruleStepUp = null;
 			destroy();
 		}
 	}
@@ -267,6 +295,8 @@ public class SourceViewer
 			ruleStepInto = rule;
 		} else if (rule.getTag().equals(tag_step_over)) {
 			ruleStepOver = rule;
+		} else if (rule.getTag().equals(tag_step_up)) {
+			ruleStepUp = rule;
 		}
 	}
 
@@ -277,9 +307,11 @@ public class SourceViewer
 		if (rule == ruleStepInto) {
 			ruleStepInto = null;
 		}
-
 		if (rule == ruleStepOver) {
 			ruleStepOver = null;
+		}
+		if (rule == ruleStepUp) {
+			ruleStepUp = null;
 		}
 	}
 
@@ -370,6 +402,7 @@ public class SourceViewer
 
 		stepInto.setEnabled(stopped);
 		stepOver.setEnabled(stopped);
+		stepUp.setEnabled(stopped);
 		run.setEnabled(stopped);
 		stop.setEnabled(!stopped);
 
@@ -380,6 +413,10 @@ public class SourceViewer
 
 			if (ruleStepOver.isEnabled()) {
 				process.requestRuleEnabling(ruleStepOver, false);
+			}
+
+			if (ruleStepUp.isEnabled()) {
+				process.requestRuleEnabling(ruleStepUp, false);
 			}
 			highlightCpe();
 		} else {

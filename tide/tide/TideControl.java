@@ -62,7 +62,7 @@ public class TideControl
 		debugTool = new DebugTool(factory);
 
 		desktop = new JDesktopPane();
-		desktop.setPreferredSize(new Dimension(1000, 700));
+		desktop.setPreferredSize(new Dimension(750, 500));
 
 		Properties defaults = loadProperties();
 

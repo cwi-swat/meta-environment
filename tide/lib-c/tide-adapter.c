@@ -15,8 +15,11 @@
 #define RID_FREE -1
 #define MAX_FUNCTIONS 256
 
+/*
 #define ASSERT_VALID_PID(pid)	(assert((pid) >= 0 && (pid) < MAX_PROCESSES && \
 					processes[(pid)].id == (pid)))
+*/
+#define ASSERT_VALID_PID(pid)	(assert((pid) >= 0 && (pid) < MAX_PROCESSES))
 
 /*}}}  */
 
@@ -42,6 +45,7 @@ typedef struct TA_Rule
 typedef struct
 {
   int         id;
+  int         cid;
   char       *name;
   int         state;
   int         stack_level;
@@ -64,13 +68,13 @@ typedef struct
 
 /*{{{  globals */
 
-static int tide_cid = -1;
+//static int tide_cid = -1;
 static ATbool connected = ATfalse;
 
 static TA_Process processes[MAX_PROCESSES];
 
-static int nr_functions = 0;
-static TA_FunctionRecord functions[MAX_FUNCTIONS];
+static TA_FunctionRecord functions[MAX_PROCESSES][MAX_FUNCTIONS];	// functions are associated with a certain process
+static int nr_functions[MAX_PROCESSES];									// and so are function amounts
 
 #if DEVELOP
 static int message_mask = TA_WARNING | TA_DEBUG;
@@ -190,6 +194,43 @@ TA_Expr eval_location(int pid, AFun fun, TA_ExprList args)
 }
 
 /*}}}  */
+/*{{{  TA_Expr eval_stack_level(int pid, AFun fun, TA_ExprList args) */
+
+TA_Expr eval_stack_level(int pid, AFun fun, TA_ExprList args)
+{
+  TA_debug("stack_level=%d\n", processes[pid].stack_level);
+  return (ATerm)ATmakeInt(processes[pid].stack_level);
+}
+
+/*}}}  */
+/*{{{  TA_Expr eval_start_level(int pid, AFun fun, TA_ExprList args) */
+
+TA_Expr eval_start_level(int pid, AFun fun, TA_ExprList args)
+{
+  TA_debug("start_level=%d\n", processes[pid].start_level);
+  return (ATerm)ATmakeInt(processes[pid].start_level);
+}
+
+/*}}}  */
+/*{{{  TA_Expr eval_equal(int pid, AFun fun, TA_ExprList args) */
+
+TA_Expr eval_equal(int pid, AFun fun, TA_ExprList args)
+{
+  TA_Expr left = ATgetFirst(args);
+  TA_Expr right = ATgetFirst(ATgetNext(args));
+
+  if (ATgetType(left) != AT_INT || ATgetType(right) != AT_INT) {
+    return ATmake("error(\"equal expects two integers\",<term>)", args);
+  }
+
+  if (ATgetInt((ATermInt)left) == ATgetInt((ATermInt)right)) {
+    return ATparse("true");
+  } else {
+    return ATparse("false");
+  }
+}
+
+/*}}}  */
 /*{{{  TA_Expr eval_higher_equal(int pid, AFun fun, TA_ExprList args) */
 
 TA_Expr eval_higher_equal(int pid, AFun fun, TA_ExprList args)
@@ -209,52 +250,101 @@ TA_Expr eval_higher_equal(int pid, AFun fun, TA_ExprList args)
 }
 
 /*}}}  */
-/*{{{  TA_Expr eval_stack_level(int pid, AFun fun, TA_ExprList args) */
+/*{{{  TA_Expr eval_less_equal(int pid, AFun fun, TA_ExprList args) */
 
-TA_Expr eval_stack_level(int pid, AFun fun, TA_ExprList args)
+TA_Expr eval_less_equal(int pid, AFun fun, TA_ExprList args)
 {
-  TA_debug("stack_level=%d\n", processes[pid].stack_level);
-  return (ATerm)ATmakeInt(processes[pid].stack_level);
+  TA_Expr left = ATgetFirst(args);
+  TA_Expr right = ATgetFirst(ATgetNext(args));
+
+  if (ATgetType(left) != AT_INT || ATgetType(right) != AT_INT) {
+    return ATmake("error(\"less-equal expects two integers\",<term>)", args);
+  }
+
+  if (ATgetInt((ATermInt)left) <= ATgetInt((ATermInt)right)) {
+    return ATparse("true");
+  } else {
+    return ATparse("false");
+  }
 }
 
 /*}}}  */
-/*{{{  TA_Expr eval_start_level(int pid, AFun fun, TA_ExprList args) */
+/*{{{  TA_Expr eval_higher(int pid, AFun fun, TA_ExprList args) */
 
-TA_Expr eval_start_level(int pid, AFun fun, TA_ExprList args)
+TA_Expr eval_higher(int pid, AFun fun, TA_ExprList args)
 {
-  TA_debug("start_level=%d\n", processes[pid].start_level);
-  return (ATerm)ATmakeInt(processes[pid].start_level);
+  TA_Expr left = ATgetFirst(args);
+  TA_Expr right = ATgetFirst(ATgetNext(args));
+
+  if (ATgetType(left) != AT_INT || ATgetType(right) != AT_INT) {
+    return ATmake("error(\"higher expects two integers\",<term>)", args);
+  }
+
+  if (ATgetInt((ATermInt)left) > ATgetInt((ATermInt)right)) {
+    return ATparse("true");
+  } else {
+    return ATparse("false");
+  }
 }
 
 /*}}}  */
+/*{{{  TA_Expr eval_less(int pid, AFun fun, TA_ExprList args) */
 
+TA_Expr eval_less(int pid, AFun fun, TA_ExprList args)
+{
+  TA_Expr left = ATgetFirst(args);
+  TA_Expr right = ATgetFirst(ATgetNext(args));
+
+  if (ATgetType(left) != AT_INT || ATgetType(right) != AT_INT) {
+    return ATmake("error(\"less expects two integers\",<term>)", args);
+  }
+
+  if (ATgetInt((ATermInt)left) < ATgetInt((ATermInt)right)) {
+    return ATparse("true");
+  } else {
+    return ATparse("false");
+  }
+}
+
+/*}}}  */
 /*{{{  void TA_connect() */
 
-void TA_connect(int port)
+int TA_connect(int port)
 {
-  int pid;
-
-  tide_cid = ATBconnect("debug-adapter", NULL, port, debug_adapter_handler);
-
-  if (tide_cid < 0) {
+  int proc_cid = ATBconnect("debug-adapter", NULL, port, debug_adapter_handler);
+  
+  if (proc_cid < 0) {
     ATerror("could not connect to tide.\n");
   }
 
+  if (connected) {	// already a process in existence, so skip remaining inits
+    return proc_cid;
+  }
+
+  int pid;
+
   TA_initTAApi();
 
-  for (pid=0; pid<MAX_PROCESSES; pid++) {
+  for (pid=1; pid<MAX_PROCESSES; pid++) {
     processes[pid].id = PID_FREE;
   }
 
-  TA_registerFunction(ATmakeAFun("true",     0, ATfalse),    eval_true);
-  TA_registerFunction(ATmakeAFun("false",    0, ATfalse),    eval_false);
-  TA_registerFunction(ATmakeAFun("cpe",      0, ATfalse),    eval_cpe);
-  TA_registerFunction(ATmakeAFun("location", 1, ATfalse),    eval_location);
-  TA_registerFunction(ATmakeAFun("higher-equal", 2, ATfalse),eval_higher_equal);
-  TA_registerFunction(ATmakeAFun("stack-level", 0, ATfalse), eval_stack_level);
-  TA_registerFunction(ATmakeAFun("start-level", 0, ATfalse), eval_start_level);
+/* general functions are associated with pid=0 */
+  TA_registerFunction(0, ATmakeAFun("true",         0, ATfalse), eval_true);
+  TA_registerFunction(0, ATmakeAFun("false",        0, ATfalse), eval_false);
+  TA_registerFunction(0, ATmakeAFun("cpe",          0, ATfalse), eval_cpe);
+  TA_registerFunction(0, ATmakeAFun("location",     1, ATfalse), eval_location);
+  TA_registerFunction(0, ATmakeAFun("stack-level",  0, ATfalse), eval_stack_level);
+  TA_registerFunction(0, ATmakeAFun("start-level",  0, ATfalse), eval_start_level);
+  TA_registerFunction(0, ATmakeAFun("equal",        2, ATfalse), eval_equal);
+  TA_registerFunction(0, ATmakeAFun("higher-equal", 2, ATfalse), eval_higher_equal);
+  TA_registerFunction(0, ATmakeAFun("less-equal",   2, ATfalse), eval_less_equal);
+  TA_registerFunction(0, ATmakeAFun("higher",       2, ATfalse), eval_higher);
+  TA_registerFunction(0, ATmakeAFun("less",         2, ATfalse), eval_less);
 
   connected = ATtrue;
+
+  return proc_cid;
 }
 
 /*}}}  */
@@ -268,10 +358,23 @@ ATbool TA_isConnected()
 /*}}}  */
 /*{{{  void TA_handleOne() */
 
-void TA_handleOne()
+void TA_handleOne(int pid)
 {
-  if (ATBhandleOne(tide_cid) < 0) {
-    TA_disconnect(ATfalse);
+  int cid = findProcess(pid)->cid;
+  
+  if (ATBhandleOne(cid) < 0) {
+    TA_disconnect(ATfalse, cid);
+  }
+}
+
+void TA_handleAny(int pid)
+{
+  int cid = findProcess(pid)->cid;
+  
+  while (ATBhandleAny() != cid) {
+	  if (!ATBisValidConnection(cid)) {
+		  TA_disconnect(ATfalse, cid);
+	  }
   }
 }
 
@@ -279,31 +382,31 @@ void TA_handleOne()
 
 /*{{{  void TA_registerFunction(AFun name, TA_Function func) */
 
-void TA_registerFunction(AFun name, TA_Function func)
+void TA_registerFunction(int pid, AFun name, TA_Function func)
 {
-  if (nr_functions == MAX_FUNCTIONS) {
-    ATabort("TA_registerFunction: too many functions (%d)\n", MAX_FUNCTIONS);
+  if (nr_functions[pid] == MAX_FUNCTIONS) {
+    ATabort("TA_registerFunction: too many functions (%d) for this process\n", MAX_FUNCTIONS);
   }
-  functions[nr_functions].name = name;
-  ATprotectAFun(functions[nr_functions].name);
-  functions[nr_functions].function = func;
-  nr_functions++;
+  functions[pid][nr_functions[pid]].name = name;
+  ATprotectAFun(functions[pid][nr_functions[pid]].name);
+  functions[pid][nr_functions[pid]].function = func;
+  nr_functions[pid]++;
 }
 
 /*}}}  */
 /*{{{  void TA_disconnect(ATbool close) */
 
-void TA_disconnect(ATbool close)
+void TA_disconnect(ATbool close, int pid)
 {
-  int pid;
+  int cid = findProcess(pid)->cid;
 
   if (close) {
-    ATBwriteTerm(tide_cid, ATparse("snd-disconnect"));
+    ATBwriteTerm(cid, ATparse("snd-disconnect"));
   }
-  ATBdisconnect(tide_cid);
+  ATBdisconnect(cid);
 
   /* Activate all processes */
-  for (pid=0; pid<MAX_PROCESSES; pid++) {
+  for (pid=1; pid<MAX_PROCESSES; pid++) {
     if (processes[pid].id != PID_FREE) {
       TA_setProcessState(pid, STATE_RUNNING);
     }
@@ -314,31 +417,33 @@ void TA_disconnect(ATbool close)
 
 /*}}}  */
 
-/*{{{  int TA_createProcess(char *name) */
+/*{{{  int TA_createProcess(int proc_cid, char *name) */
 
-int TA_createProcess(char *name)
+int TA_createProcess(int proc_cid, char *name)
 {
   int pid;
 
-  for (pid=0; pid<MAX_PROCESSES; pid++) {
+  for (pid=1; pid<MAX_PROCESSES; pid++) {
     if (processes[pid].id == PID_FREE) {
       int port, rid;
 
       processes[pid].id = pid;
+      processes[pid].cid = proc_cid;
       processes[pid].name = strdup(name);
       if (processes[pid].name == NULL) {
-	ATerror("TA_createProcess: out of memory\n");
+        ATerror("TA_createProcess: out of memory\n");
       }
       processes[pid].state = STATE_STOPPED;
       processes[pid].cpe = TA_makeLocationUnknown();
       ATprotect((ATerm *)&processes[pid].cpe);
       for (port=0; port<MAX_PORT_TYPES; port++) {
-	processes[pid].enabled_rules[port] = NULL;
+        processes[pid].enabled_rules[port] = NULL;
       }
       for (rid=0; rid<MAX_EVENT_RULES; rid++) {
-	processes[pid].rules[rid].id = RID_FREE;
-      } 
-      ATBpostEvent(tide_cid, ATmake("process-created(<int>,<str>)", pid, name));
+        processes[pid].rules[rid].id = RID_FREE;
+      }
+      ATBpostEvent(proc_cid, ATmake("process-created(<int>,<str>)", pid, name));
+
       return pid;
     }
   }
@@ -380,7 +485,7 @@ int TA_createRule(int pid, TA_Port port, TA_Expr cond, TA_Expr act, ATerm tag,
       ATprotect((ATerm *)&rule->tag);
 
       if (enabled) {
-	TA_enableRule(pid, rid);
+	     TA_enableRule(pid, rid);
       }
 
       return rid;
@@ -500,20 +605,27 @@ void TA_atCPE(int pid, TA_Location cpe, int stack_level)
   ASSERT_VALID_PID(pid);
   processes[pid].cpe = cpe;
   processes[pid].stack_level = stack_level;
+//  ATwarning("[%s] cpe updated : %t\n", findProcess(pid)->name, TA_LocationToTerm(cpe));
 }
 
 /*}}}  */
+
 /*{{{  static void triggerRule(int pid, TA_Rule *rule) */
 
 static void triggerRule(int pid, TA_Rule *rule)
 {
+  int cid = findProcess(pid)->cid;
+
+  ATwarning("[%s] Triggering rule: pid %d, cid %d, tag %t, id %d, action: %t ...\n",processes[pid].name,pid,cid,rule->tag,rule->id,rule->action);
   TA_Expr value = TA_evaluate(pid, rule->action);
 
-  TA_debug("actions of rule %d (%t) evaluate to %t\n",
+/*  ATwarning("actions of rule %d (%t) evaluate to %t\n",
 	   rule->id, rule->action, value);
-
-  ATBpostEvent(tide_cid, ATmake("event(<int>,<int>,<term>)",
-				pid, rule->id, value));
+*/
+/*
+    ATwarning("[%s] ATBpostEvent(%d, ATmake(\"event(%d,%d,%t)\"))\n", processes[pid].name, cid, pid, rule->id, value);
+    ATBpostEvent(cid, ATmake("event(<int>,<int>,<term>)", pid, rule->id, value));
+*/
 }
 
 /*}}}  */
@@ -523,8 +635,10 @@ static void activateRule(int pid, TA_Rule *rule)
 {
   TA_Expr value = TA_evaluate(pid, rule->condition);
 
-  TA_debug("condition of rule %d (%t,%t) evaluates to %t\n",
-	    rule->id, rule->port, rule->condition, value);
+/*
+  ATwarning("[%s] ... rule (%t,%t,%t) evaluates to %t\n", findProcess(pid)->name,
+	    rule->port, rule->condition, rule->action, value);
+*/
 
   if (ATisEqual(value, ATparse("true"))) {
     triggerRule(pid, rule);
@@ -539,11 +653,10 @@ void TA_activateRules(int pid, TA_Port port)
   TA_Rule *rules;
   int port_type;
 
+//  ATwarning("[%s] activating rules ...\n", findProcess(pid)->name);
   ASSERT_VALID_PID(pid);
 
   port_type = TA_getPortType(port);
-
-  /*ATfprintf(stderr, "activating rules of type %d (%t)\n", port_type, port);*/
 
   rules = processes[pid].enabled_rules[port_type];
 
@@ -571,7 +684,6 @@ void TA_setProcessState(int pid, int state)
   processes[pid].state = state;
 
   if (state == STATE_RUNNING) {
-    TA_debug("starting process %d\n", pid);
     processes[pid].start_level = processes[pid].stack_level;
   }
 }
@@ -580,13 +692,18 @@ void TA_setProcessState(int pid, int state)
 
 /*{{{  TA_Function findFunction(AFun name) */
 
-TA_Function findFunction(AFun name)
+TA_Function findFunction(int pid, AFun name)
 {
   int i;
 
-  for (i=0; i<nr_functions; i++) {
-    if (functions[i].name == name) {
-      return functions[i].function;
+  for (i=0; i<nr_functions[0]; i++) {	  // search general functions
+    if (functions[0][i].name == name) {
+      return functions[0][i].function;
+    }
+  }
+  for (i=0; i<nr_functions[pid]; i++) {  // search pid specific functions
+    if (functions[pid][i].name == name) {
+      return functions[pid][i].function;
     }
   }
 
@@ -615,27 +732,29 @@ TA_Expr TA_evaluate(int pid, TA_Expr expr)
   switch (ATgetType(expr)) {
     case AT_APPL:
       {
-	ATermAppl appl   = (ATermAppl)expr;
-	AFun afun        = ATgetAFun(appl);
-	TA_Function fun  = findFunction(afun);
-	TA_ExprList args = evaluateList(pid, ATgetArguments(appl));
-	if (fun == NULL) {
-	  return (TA_Expr)ATmakeApplList(afun, args);
-	} else {
-	  return (*fun)(pid, afun, args);
-	}
-      }
+			ATermAppl appl   = (ATermAppl)expr;
+			AFun afun        = ATgetAFun(appl);
+			
+			TA_Function fun  = findFunction(pid, afun);
+			TA_ExprList args = evaluateList(pid, ATgetArguments(appl));
+
+			if (fun == NULL) {
+			  return (TA_Expr)ATmakeApplList(afun, args);
+			} else {
+			  return (*fun)(pid, afun, args);
+			}
+		}
       break;
 
     case AT_LIST:
       {
-	TA_ExprList list = (TA_ExprList)expr;
-	return (TA_Expr)evaluateList(pid, list);
+			TA_ExprList list = (TA_ExprList)expr;
+			return (TA_Expr)evaluateList(pid, list);
       }
       break;
 
     default:
-      return expr;
+		return expr;
   }
 }
 

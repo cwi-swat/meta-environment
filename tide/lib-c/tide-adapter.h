@@ -16,14 +16,14 @@ ATerm debug_adapter_handler(int conn, ATerm term);
 
 /* tide functions */
 typedef TA_Expr (*TA_Function)(int pid, AFun fun, TA_ExprList args);
-
-void TA_connect(int port);
+int TA_connect(int port);
 ATbool TA_isConnected();
-void TA_registerFunction(AFun name, TA_Function func);
-void TA_disconnect(ATbool close);
-void TA_handleOne();
+void TA_registerFunction(int pid, AFun name, TA_Function func);
+void TA_disconnect(ATbool close, int pid);
+void TA_handleOne(int pid);
+void TA_handleAny(int pid);
 
-int  TA_createProcess(char *name);
+int  TA_createProcess(int proc_cid, char *name);
 int  TA_createRule(int pid, TA_Port port, TA_Expr cond, TA_Expr act, ATerm tag,
 		   ATbool enabled);
 void TA_modifyRule(int pid, int rid, TA_Port port, TA_Expr cond,

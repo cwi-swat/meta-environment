@@ -36,7 +36,31 @@ public class DebugAdapter
 
   public void event(int pid, int rid, ATerm result)
   {
+/*
+    Set keys = processes.keySet();
+    Collection values = processes.values();
+
+    Iterator itkeys = keys.iterator();
+    Iterator itvalues = values.iterator();
+
+
+    System.out.println("<---------------- process listing (dap = "+this.getName()+") ------------------>");
+    while (itkeys.hasNext()) {
+      System.out.println("--- key: "+itkeys.next());
+    }
+    while (itvalues.hasNext()) {
+      DebugProcess procje = (DebugProcess) itvalues.next();
+      System.out.println("--- val: "+procje.getName());
+    }
+*/
     DebugProcess proc = findProcess(pid);
+/*
+    if (proc==null) {
+		 System.out.println("shiiiiiiiiiiiiiiiiiiiiiiiiiiiit geen proc\n");
+	 }
+    System.out.println("<-------------------------------------------------------->");
+//	 System.out.println("[DebugAdapter] event() process: "+proc.getName()+", rid: "+rid+", result: "+result);
+*/
     proc.event(rid, result);
   }
 
@@ -112,6 +136,7 @@ public class DebugAdapter
   {
     DebugProcess proc = findProcess(pid);
     fireProcessDestroyed(proc);
+	 System.out.println("===================================================== "+pid+","+proc.getName()+" DESTROYED ==============================================");
     processes.remove(new Integer(pid));
   }
 

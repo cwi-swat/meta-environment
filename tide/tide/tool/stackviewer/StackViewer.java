@@ -72,9 +72,10 @@ public class StackViewer
 
 		unwind = new AbstractAction("Unwind", loadIcon("unwind.gif")) {
 			public void actionPerformed(ActionEvent event) {
-				if (process.isStopped()) {
-					// <PO> we need to adjust the rule to break at the
-					// indicate stack level
+				if (selectedFrame == null) {
+					getManager().displayError("Select a stackframe.");
+				}
+				else if (process.isStopped()) {
 					process.requestRuleModification(
 						ruleStackUnwind,
 						Port.makeStep(),
@@ -300,7 +301,7 @@ public class StackViewer
 			frameName.setText(name);
 			frameDepth.setText(String.valueOf(depth));
 			frameLocation.setText(location.toString());
-			unwind.setEnabled(false); // TODO: set back to true and fix functionality (what is it?)
+			unwind.setEnabled(true);
 			viewSource.setEnabled(!location.isLocationUnknown());
 			inspectVar.setEnabled(false);
 
@@ -408,6 +409,7 @@ class StackFrame {
 		this.name = name;
 		this.location = location;
 		this.vars = vars;
+		System.out.println(depth + " :: " + name);
 	}
 
 	//}}}
