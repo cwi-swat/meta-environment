@@ -256,12 +256,12 @@ ATerm open_sdf2_file(int cid, char *name)
   return t;
 }
 
-ATerm open_eqs2_asfix_file(int cid, char *name)
+ATerm open_eqs_asfix_file(int cid, char *name)
 {
   char *full, fullname[PATH_LEN];
   ATerm t;
 
-  sprintf(fullname, "%s%s", name, ".eqs2.baf");
+  sprintf(fullname, "%s%s", name, ".eqs.baf");
 
   if((full = find_newest_in_path(fullname))) {
     t = read_term_from_named_file(full, name, ATfalse);
@@ -271,17 +271,17 @@ ATerm open_eqs2_asfix_file(int cid, char *name)
   return t;
 }
 
-ATerm open_eqs2_text_file(int cid, char *name)
+ATerm open_eqs_text_file(int cid, char *name)
 {
   char  *full, fullname[PATH_LEN];
   ATerm t;
 
-  sprintf(fullname, "%s%s", name, ".eqs2");
+  sprintf(fullname, "%s%s", name, ".eqs");
 
   if((full = find_newest_in_path(fullname))) {
     t = read_raw_from_named_file(full, name);
   } else {
-    ATfprintf(stderr,"no such file: %s.eqs2\n", name);
+    ATfprintf(stderr,"no such file: %s.eqs\n", name);
     t = open_error(name);
   }
   return t;
@@ -318,7 +318,7 @@ ATerm save_sdf2_asfix(int cid, char *name, char *fn, ATerm syntax)
   return write_term_to_named_file(syntax, fn, name);
 }
 
-ATerm save_eqs2_asfix(int cid, char *name, char *fn, ATerm eqs)
+ATerm save_eqs_asfix(int cid, char *name, char *fn, ATerm eqs)
 { 
   return write_term_to_named_file(eqs, fn, name);
 }

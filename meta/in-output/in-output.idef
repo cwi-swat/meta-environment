@@ -56,8 +56,8 @@ in
       )
     )
   +
-    rec-msg(Id?,open-eqs2-asfix-file(id(Name?))).
-    snd-eval(IO,open-eqs2-asfix-file(Name)).
+    rec-msg(Id?,open-eqs-asfix-file(id(Name?))).
+    snd-eval(IO,open-eqs-asfix-file(Name)).
     ( rec-value(IO,opened-file("baf",Name?,T?,Path?)).
       snd-msg(Id,opened-file(baf,id(Name),T,Path))
       +
@@ -65,8 +65,8 @@ in
       snd-msg(Id, error-opening(Name))
     )
   +
-    rec-msg(Id?,open-eqs2-text-file(id(Name?))).
-    snd-eval(IO,open-eqs2-text-file(Name)).
+    rec-msg(Id?,open-eqs-text-file(id(Name?))).
+    snd-eval(IO,open-eqs-text-file(Name)).
     ( rec-value(IO,opened-file("raw",Name?,Text?,Path?)).
       snd-msg(Id,opened-file(raw,id(Name),Text,Path)) 
       +
@@ -80,7 +80,7 @@ in
     snd-msg(save-done)
   +
     rec-msg(save-eqs-asfix(id(Name?),Path?,Asfix?)).
-    snd-eval(IO,save-eqs2-asfix(Name,Path,Asfix)).
+    snd-eval(IO,save-eqs-asfix(Name,Path,Asfix)).
     rec-value(IO,save-done(Name?)).
     snd-msg(save-done)
   )*
