@@ -442,6 +442,19 @@ void rec_terminate(int cid, ATerm arg)
   exit(0);
 }
 
+void make_absolute_path(char *path) 
+{
+  /* expands . .. and ../.. 's to absolute paths */
+  char cwd[PATH_LEN];
+  
+  getwd(cwd);
+  chdir(path);
+  getwd(path);
+  chdir(cwd);
+
+  return;
+}
+
 void read_conf(char *cfg)
 {
   FILE *fd;
@@ -457,13 +470,18 @@ void read_conf(char *cfg)
       if(*paths[nr_paths] != '#'){
         int len = strlen(paths[nr_paths])-1;
 
-        while(isspace((int) paths[nr_paths][len]))
+        while(isspace((int) paths[nr_paths][len])) {
           paths[nr_paths][len--] = '\0';
+        }
+        
+        make_absolute_path(paths[nr_paths]);
+
         nr_paths++;
       } else
         *paths[nr_paths] = '\0';
     }
   }
+
   fclose(fd);
 }
 
