@@ -2,7 +2,6 @@
 #ifndef SUPPORT_H
 #define SUPPORT_H
 
-#include <assert.h>
 #include <aterm2.h> 
 
 #define INITIAL_TABLE_SIZE 8191
@@ -117,7 +116,7 @@ extern Symbol record_sym;
 #define arg_19(t)  (ATgetArgument(t,19))
 
 #define make_nf0(s) (ATerm)(ATmakeAppl0((Symbol)s))
-#define make_nf1(s,t0) (assert(t0),(ATerm)(ATmakeAppl1((Symbol)s,t0)))
+#define make_nf1(s,t0) ((ATerm)(ATmakeAppl1((Symbol)s,t0)))
 #define make_nf2(s,t0,t1) (ATerm)(ATmakeAppl2((Symbol)s,t0,t1))
 #define make_nf3(s,t0,t1,t2) (ATerm)(ATmakeAppl3((Symbol)s,t0,t1,t2))
 #define make_nf4(s,t0,t1,t2,t3) (ATerm)(ATmakeAppl4((Symbol)s,t0,t1,t2,t3))
