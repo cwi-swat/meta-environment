@@ -33,9 +33,10 @@
 
 %% ---- Eval complete script and yield value of a variable
 
-[ERS3]	$Elem :=  value($Var, eval-rstats($Stat*, $Rstore))
+[ERS3]	$Var := str2rvar($String),
+	$Elem :=  value($Var, eval-rstats($Stat*, $Rstore))
 	===================================================
-	eval-rscript-with-rstore($Stat*, $Var, $Rstore) = $Elem
+	eval-rscript-with-rstore($Stat*, $String, $Rstore) = $Elem
 
 %% ---- Eval statements
 
@@ -765,6 +766,9 @@
 	========================================
 	evalx(min($Exp), $Rstore) = min1(mk-iterator($Bag))
 
+%% Misc
+
+[sv1] str2rvar(strcon("""  $Char* """)) = rvar($Char*)
 
 
 

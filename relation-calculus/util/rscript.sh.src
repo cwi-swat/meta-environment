@@ -19,6 +19,7 @@ CHECK_ONLY=
 EVALUATOR=${bindir}/RscriptCalculator
 TESTSUITES=${bindir}/RscriptTestsuites
 USE_TESTSUITES=no
+YIELD=
 RSCRIPT_PARSE_TABLE=${datadir}/Rscript.trm.tbl
 RSTORE_PARSE_TABLE=${datadir}/Rstore.trm.tbl
 THE_RSCRIPT=
@@ -127,7 +128,7 @@ evaluate() {
   else
       parse_rstore
       $EVALUATOR $VERBOSE -f "eval-rscript-with-rstore" \
-	  -i $THE_RSCRIPT.pt -i $PARSED_RSTORE -r RSTORE \
+	  -i $THE_RSCRIPT.pt $YIELD -i $PARSED_RSTORE -r RSTORE \
 	  | $OUTPUT
   fi
   echo ""
@@ -153,6 +154,8 @@ do
       USE_TESTSUITES=yes ;;
      -c | --check-only)
       CHECK_ONLY=yes ;;
+     -y | --yield)
+      shift; YIELD="-s $1"  ;;
     -v | --verbose)
       VERBOSE=-v ;;
     *.rscript)
