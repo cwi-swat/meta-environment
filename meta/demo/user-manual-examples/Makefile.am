@@ -20,15 +20,15 @@
 #
 # $Id$
 
-EXTRA_DIST = AssemblyLanguage.sdf2 BasicNotions.sdf2 Booleans.eqs \
-             Booleans.sdf2 BracketExpr.sdf2 Characters.sdf2 \
-             CodeGenerator.eqs CodeGenerator.sdf2 Comment.sdf2 Decls.sdf2 \
-             Diff.eqs Diff.sdf2 DrawingCommands.sdf2 Eqn.sdf2 Expr1.sdf2 \
-             Expr2.sdf2 Expressions.sdf2 Flag.eqs Flag.sdf2 \
-             Identifiers-alternative1.sdf2 Identifiers-alternative2.sdf2 \
-             Identifiers-avoid.sdf2 Identifiers-optional.sdf2 \
-             Identifiers-reject.sdf2 Identifiers-repetition.sdf2 \
-             Identifiers-restrict.sdf2 Layout.sdf2 LeesPlank.sdf2 Nats.eqs \
-             Nats.sdf2 NextLabel.eqs NextLabel.sdf2 Numbers.sdf2 Sets.eqs \
-             Sets.sdf2 Statements.sdf2 Strings.sdf2 Types.eqs Types.sdf2 \
-             VarDecls.eqs VarDecls.sdf2 meta.conf
+EXTRA_DIST = AssemblyLanguage.sdf BasicNotions.sdf Booleans.eqs \
+             Booleans.sdf BracketExpr.sdf Characters.sdf \
+             CodeGenerator.eqs CodeGenerator.sdf Comment.sdf Decls.sdf \
+             Diff.eqs Diff.sdf DrawingCommands.sdf Eqn.sdf Expr1.sdf \
+             Expr2.sdf Expressions.sdf Flag.eqs Flag.sdf \
+             Identifiers-alternative1.sdf Identifiers-alternative2.sdf \
+             Identifiers-avoid.sdf Identifiers-optional.sdf \
+             Identifiers-reject.sdf Identifiers-repetition.sdf \
+             Identifiers-restrict.sdf Layout.sdf LeesPlank.sdf Nats.eqs \
+             Nats.sdf NextLabel.eqs NextLabel.sdf Numbers.sdf Sets.eqs \
+             Sets.sdf Statements.sdf Strings.sdf Types.eqs Types.sdf \
+             VarDecls.eqs VarDecls.sdf meta.conf

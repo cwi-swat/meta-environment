@@ -22,7 +22,7 @@
 
 TESTS      = module-db-test
 
-EXTRA_DIST = Pico-Booleans.eqs.baf Pico-Booleans.sdf2.baf Test.sdf2.baf \
+EXTRA_DIST = Pico-Booleans.eqs.baf Pico-Booleans.sdf.baf Test.sdf.baf \
              module-db-test-1.tb module-db-test-2.tb module-db-test-3.tb \
              module-db-test-4.tb module-db-test.sh.src
 

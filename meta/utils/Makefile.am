@@ -24,7 +24,7 @@ include ${top_srcdir}/make_rules
 
 bin_PROGRAMS       = meta-paths imports
 bin_SCRIPTS        = genmakefile parse-file parse-sdf2 ps-dot insert-license \
-                     insert-header genamakefile change-sdf-ext
+                     insert-header genamakefile 
 
 man_MANS           = parse-sdf2.1
 

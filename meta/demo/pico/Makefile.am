@@ -20,13 +20,13 @@
 #
 # $Id$
 
-EXTRA_DIST = Bool-example.eqs Bool-example.sdf2 Layout.sdf2 \
-             Pico-Booleans.eqs Pico-Booleans.sdf2 Pico-Identifiers.sdf2 \
-             Pico-Integers.eqs Pico-Integers.sdf2 Pico-Strings.eqs \
-             Pico-Strings.sdf2 Pico-eval.eqs Pico-eval.sdf2 Pico-syntax.sdf \
-             Pico-syntax.sdf2 Pico-typecheck.eqs Pico-typecheck.sdf2 \
-             Type-environments.eqs Type-environments.sdf2 Types.eqs \
-             Types.sdf2 Value-environments.eqs Value-environments.sdf2 \
-             Values.sdf2 big.pico bigev.pico bigtc.pico bin.pico bool1.pico \
+EXTRA_DIST = Bool-example.eqs Bool-example.sdf Layout.sdf \
+             Pico-Booleans.eqs Pico-Booleans.sdf Pico-Identifiers.sdf \
+             Pico-Integers.eqs Pico-Integers.sdf Pico-Strings.eqs \
+             Pico-Strings.sdf Pico-eval.eqs Pico-eval.sdf Pico-syntax.sdf \
+             Pico-syntax.sdf Pico-typecheck.eqs Pico-typecheck.sdf \
+             Type-environments.eqs Type-environments.sdf Types.eqs \
+             Types.sdf Value-environments.eqs Value-environments.sdf \
+             Values.sdf big.pico bigev.pico bigtc.pico bin.pico bool1.pico \
              fac.pico facev.pico factc.pico meta.conf smallev.pico \
              smalltc.pico
