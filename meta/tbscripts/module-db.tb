@@ -229,7 +229,7 @@ in
     MDB-GetAllImportedModuleNames(Name, ModuleNames?) .
     snd-msg(ts-get-values("sdf-tree", ModuleNames)) .
     rec-msg(ts-values(Modules?)) .
-    snd-msg(sm-make-sdf-definition(Modules, Name)) .
+    snd-msg(sm-make-sdf-definition(Modules)) .
     Modules := [] .
     rec-msg(sm-sdf-definition(Syntax?)) .
     snd-msg(syntax(Syntax)) .
@@ -327,12 +327,12 @@ endlet
  
 process MDB-GetAllDependingModules(Name : str, DependingModules : list?) is
 let
-  Modules : list
+  Pairs : list
 in
-    snd-msg(ts-get-all-values("sdf-tree")) .
-    rec-msg(ts-all-values(Modules?)) .
-    snd-msg(sm-get-all-depending-module-names(Modules, Name)) .
-    Modules := [] .
+    snd-msg(ts-get-key-value-pairs("import-relations")) .
+    rec-msg(ts-pairs(Pairs?)) .
+    snd-msg(sm-get-all-depending-module-names(Pairs, Name)) .
+    Pairs := [] .
     rec-msg(sm-all-depending-module-names(DependingModules?)) 
 endlet
 

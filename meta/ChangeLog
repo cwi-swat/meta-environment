@@ -10,6 +10,9 @@
    then compute a transitive closure based on this simple relations,
    then only get the needed modules out of the store and create a definition
    from that.
+ * get-depending-modules also reused the cached import relation now, such
+   that no entire sdf-modules have to be transferred anymore just to throw
+   away some parsetables.
 
 2003/05/28 (markvdb@cs.vu.nl)
  * Added a number of "empty" assignments.
