@@ -6,7 +6,7 @@ exports
 
 context-free syntax
 
-  sections:ASF-Section* -> ASF-Module {cons("default")}
+  list:ASF-Section* -> ASF-Module {cons("default")}
 
   "equations" list:ASF-ConditionalEquation* -> ASF-Section {cons("equations")}
   "tests" list:ASF-TestEquation*            -> ASF-Section {cons("tests")}
