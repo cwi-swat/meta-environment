@@ -664,6 +664,8 @@ void rec_terminate(int cid, ATerm arg)
 
 void add_path(char *pathname)
 {
+  int i;
+
   /* Ward off illegal entries */
   assert(pathname != NULL);
 
@@ -673,6 +675,16 @@ void add_path(char *pathname)
 		pathname, MAX_PATHS);
     }
     return;
+  }
+
+  /* ignore duplicate entries */
+  for (i=0; i<nr_paths; i++) {
+    if (strcmp(paths[i], pathname) == 0) {
+      if (run_verbose) {
+	ATwarning("ignoring duplicate entry in searchpath: %s\n", pathname);
+      }
+      return;
+    }
   }
 
   if (run_verbose) {
