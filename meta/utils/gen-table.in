@@ -53,7 +53,8 @@ case $FASTGEN in
 		ADDFUNC=$ADDPTFUNC
 		TABLEGEN="cat -u" ;;
 	*)
-		ADDFUNC=$ADDNORMFUNC ;;
+		PGEN="cat -u"
+		ADDFUNC="cat -u" ;;
 esac
 
 for f in $Files
