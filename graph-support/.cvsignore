@@ -9,3 +9,5 @@ config.h.in
 config.log
 config.status
 configure
+*.classpath
+*.project
