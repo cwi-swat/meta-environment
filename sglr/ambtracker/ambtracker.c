@@ -44,8 +44,8 @@ void SG_InitPTGlobals(void);
 ATerm SG_AmbTracker(ATerm t);
 
 
-static char myname[]    = "ambtrakker";
-static char myversion[] = "1.1";
+static char myname[]    = "ambtracker";
+static char myversion[] = "1.2";
 
 /*
     The argument vector: list of option letters, colons denote option
@@ -61,37 +61,8 @@ static char myarguments[] = "bhi:o:tvVp";
  */
 void usage(void)
 {
-    static char *myargumentsexplained = NULL;
-
-    /*  Represent the argument string in a slightly friendlier manner  */
-    if(!myargumentsexplained && *myarguments) {
-        int  i, hyphen = 0;
-        char *ptr0, *ptr1;
-
-        for(ptr0 = myarguments, i=0; *ptr0; ptr0++)
-            if(*ptr0 == ':')
-                i++;
-        ptr1 = myargumentsexplained =
-            (char *) malloc(strlen(myarguments) + 7*i + 2);
-        for(ptr0 = myarguments; *ptr0; ptr0++)
-            if(!*(ptr0+1) || *(ptr0+1) != ':') {
-                if(!hyphen++) {
-                    *ptr1++ = ' ';
-                    *ptr1++ = '-';
-                }
-                *ptr1++ = *ptr0;
-            } else {
-                hyphen = 0;
-                if(*(ptr1-1) != ' ')
-                    *ptr1++ = ' ';
-                *ptr1++ = '-'; *ptr1++ = *ptr0++; *ptr1++ = ' ';
-                *ptr1++ = 'a'; *ptr1++ = 'r'; *ptr1++ = 'g';
-            }
-        *ptr1++ = '\0';
-    }
-
     fprintf(stderr,
-        "Usage: %s%s . . .\n"
+        "Usage: %s -bh -i arg -o arg -tvVp . . .\n"
         "Options:\n"
         "\t-b              binary output mode (default)\n"
         "\t-h              display help information (usage)\n"
@@ -101,7 +72,39 @@ void usage(void)
         "\t-v              ignored\n"
         "\t-p              pretty printed output\n"
         "\t-V              reveal program version (i.e. %s)\n",
-        myname, myargumentsexplained, myversion);
+        myname, myversion);
+}
+
+ATerm deslash(ATerm atstr)
+{
+  char *tmp, *str = NULL;
+  int i, length, found;
+  ATerm result;
+
+  if(ATmatch(atstr,"<str>", &tmp)) {
+    str = strdup(tmp);
+    length = strlen(str);
+
+    /* copy string without slashes and quotes, 
+     * including the EOS character
+     */
+    for(found = 0, i = 0; i <= length; i++) {
+      switch(str[i]) {
+	case '\\':
+	case '"':
+	  found++;
+	  break;
+	default:
+	    str[i - found] = str[i];
+	 break; 
+      }	  
+    }  
+  }
+
+  result = ATmake("<str>",str);
+  free(str);
+ 
+  return result;
 }
 
 int main (int argc, char **argv)
@@ -116,7 +119,7 @@ int main (int argc, char **argv)
   char   *input_file_name  = "-";
   char   *output_file_name = "-";
   
-  while ((c = getopt(argc, argv, "bhi:o:tvVp")) != EOF)
+  while ((c = getopt(argc, argv, myarguments)) != EOF)
     switch (c) {
       case 'h':  usage();                      exit(0);
       case 'i':  input_file_name  = optarg;    break;
@@ -171,7 +174,7 @@ int main (int argc, char **argv)
           ATfprintf(fp,"number: %d, line: %t, col: %t productions:\n", i, line, col);
           
           for(;!ATisEmpty(productions); productions = ATgetNext(productions)) {
-            ATfprintf(fp,"  %t\n", ATgetFirst(productions));
+            ATfprintf(fp,"  %t\n", deslash(ATgetFirst(productions)));
           }
 
           ATfprintf(fp,"\n");
