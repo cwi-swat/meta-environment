@@ -259,6 +259,14 @@ static BOX_Box sepListToBox(PT_Args args)
 {
   BOX_OptLayout optLayout = BOX_makeOptLayoutAbsent();
   BOX_BoxList boxList = BOX_makeBoxListEmpty();
+  BOX_SpaceSymbol spaceSymbol = BOX_makeSpaceSymbolHorizontal();
+  BOX_NatCon spaceValue = BOX_makeNatConDefault("0");
+  BOX_SpaceOption spaceOption = BOX_makeSpaceOptionDefault(spaceSymbol,
+							   optLayout,
+							   optLayout,
+							   spaceValue);
+  BOX_SpaceOptionOptions spaceOptions = 
+    BOX_makeSpaceOptionOptionsSingle(spaceOption);
 
   while (!PT_isArgsEmpty(args)) 
   {
@@ -278,7 +286,13 @@ static BOX_Box sepListToBox(PT_Args args)
       listBoxList = BOX_makeBoxListMany(sepBox, optLayout, listBoxList);
       listBoxList = BOX_reverseBoxList(listBoxList);
 
-      listArgBox = BOX_makeBoxHEmptyLayout(listBoxList);
+      /* list separators don't have preceding spaces */
+      listArgBox = BOX_makeBoxH(optLayout,
+				spaceOptions,
+				optLayout,
+				optLayout,
+				listBoxList,
+				optLayout);
 
       args = PT_getArgsTail(args);
     }

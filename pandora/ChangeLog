@@ -7,6 +7,8 @@ Fri Mar  5 10:08:44 CET 2004 <kooiker@cwi.nl>
    - Regenerated: concatenates bytes with newlines correct now
  * generator/pandora.c:
    - Return Box term on first match in processBox(tree)
+   - List separators are concatenated to the previous listelement without
+     separating space
  * generator/Makefile.am:
    - added target asfc 
 
