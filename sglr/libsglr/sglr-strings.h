@@ -29,6 +29,7 @@
 #define SG_PLAIN_AFUN        "plain"
 #define SG_CYCLE_AFUN        "cycle"
 #define SG_AMBIGUITY_AFUN    "ambiguity"
+#define SG_TOO_MANY_AMBS_AFUN    "too_many_ambiguities"
 #define SG_POSITION_AFUN     "position"
 #define SG_PRODUCTIONS_AFUN  "productions"
 #define SG_AMBIGUITIES_AFUN  "ambiguities"

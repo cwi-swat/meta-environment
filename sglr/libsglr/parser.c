@@ -88,7 +88,7 @@ void      SG_DoLimitedReductions(stack*, action, st_link*);
 void      SG_Shifter(void);
 ATermList SG_CurrentPosInfo(void);
 forest    SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak);
-forest    SG_ParseResult(char *sort);
+tree      SG_ParseResult(char *sort);
 
 /*
  Some global vars, used for collecting statistics
@@ -1065,17 +1065,23 @@ forest SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak)
   if (!ATisEmpty(cycle)) {
     errcode = ATmakeAppl1(SG_Cycle_Error_AFun, (ATerm) cycle);
   }
-  else if(excess_ambs) {
-    errcode = (ATermAppl) ambtrak; 
+  else if (excess_ambs) {
+    if (ambtrak) {
+      errcode = (ATermAppl) ambtrak; 
+    }
+    else {
+       errcode = ATmakeAppl0(SG_Too_Many_Ambiguities_Error_AFun);
+    }
   }
-  else if(current_token == SG_GETTOKEN(SG_EOF_Token)) {
+  else if (current_token == SG_GETTOKEN(SG_EOF_Token)) {
     errcode = ATmakeAppl0(SG_EOF_Error_AFun);
   }
   else {
     errcode = ATmakeAppl0(SG_Plain_Error_AFun); 
   }
 
-  posinfo = excess_ambs ? (ATerm) SG_GetFirstAmbiguityPosInfo(ambtrak) : 
+  posinfo = excess_ambs && ambtrak ?
+	                  (ATerm) SG_GetFirstAmbiguityPosInfo(ambtrak) : 
                           (ATerm) SG_CurrentPosInfo();
 
   return (forest) ATmakeAppl2(SG_ParseError_AFun, posinfo, (ATerm) errcode);
@@ -1098,10 +1104,7 @@ tree SG_ParseResult(char *sort)
   ATermList cycle;
   tree      t;
 
-  if (!accepting_stack) {
-    return SG_ParseError(ATempty, 0, NULL);
-  } 
-  else {
+  if (accepting_stack) {
     /* During parsing no filtering is performed.
      * So, before printing the tree (forest) cycle detection,
      * and filtering is performed. 
@@ -1150,38 +1153,42 @@ tree SG_ParseResult(char *sort)
 
       if (t) {
         t = SG_YieldTree(table, t);
-        IF_STATISTICS(fprintf(SG_log(),
-                              "Aprod expansion took %.6fs\n", SG_Timer()));
 
-        SGsort(SG_SET, t);     
+        if (t) {
+          IF_STATISTICS(fprintf(SG_log(),
+                                "Aprod expansion took %.6fs\n", SG_Timer()));
 
-        if (SG_TOOLBUS || SG_AMBIGUITY_ERROR) {
-	  ATerm ambtrak = NULL;
+          SGsort(SG_SET, t);     
+
+          if (SG_TOOLBUS || SG_AMBIGUITY_ERROR) {
+	    ATerm ambtrak = NULL;
 	  
-          ambtrak = PT_reportTreeAmbiguities((PT_Tree) t);
+            ambtrak = PT_reportTreeAmbiguities((PT_Tree) t);
 
-          if(ambtrak && !ATmatch(ambtrak, "ambiguities(0,[])")) {
-            return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
+            if(ambtrak && !ATmatch(ambtrak, "ambiguities(0,[])")) {
+              return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
+            }
           }
+
+          if (SG_ASFIX2ME) {
+            t = SG_ConvertA2ToA2ME(t);
+          }
+
+          t = (tree) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) t,
+                                 (ATerm) SG_GetATint(SGnrAmb(SG_NR_ASK), 0));
+
+          return t;
         }
-
-        if (SG_ASFIX2ME) {
-          t = SG_ConvertA2ToA2ME(t);
-        }
-
-        t = (tree) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) t,
-                               (ATerm) SG_GetATint(SGnrAmb(SG_NR_ASK), 0));
-
-        return t;
+	else {
+          if (SGnrAmb(SG_NR_ASK) > SG_TOO_MANY_AMBS) {
+		  ATwarning("Too many ambiguities\n");
+            return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), NULL);
+          }
+	}
       }
-      else {
-        return SG_ParseError(ATempty, 0, NULL);
-      }
-    }
-    else {
-      return SG_ParseError(ATempty, 0, NULL);
     }
   }
+  return SG_ParseError(ATempty, 0, NULL);
 }
 
 /* a function to print a status bar on a tty */

@@ -27,6 +27,7 @@ typedef   ATermTable      multiset;
 #define SG_UNMARK(t)        CLR_MARK(t->header)
 #define SG_PROD_TO_NR(l)    (l-257)
 #define SG_NR_TO_PROD(l)    (ATmakeInt(ATgetInt((ATermInt)l)+257))
+#define SG_TOO_MANY_AMBS    10000
 
 int        SG_InjectionFilterSucceeded(int mode);
 int        SG_CountEagernessFilterSucceeded(int mode);

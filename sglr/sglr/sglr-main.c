@@ -392,8 +392,12 @@ int SG_Batch (int argc, char **argv)
                 ambiescount,
                 (ambiescount > 1) ? "ies" : "y" );
     }
+    else if (err == SG_Too_Many_Ambiguities_Error_AFun) {
+      ATwarning("%s: error in %s, line %d, col %d: too many ambiguities\n",
+                program_name, input_file_name, line, col);
+    }
     else {
-      ATwarning("%s: error in %s, line %d, col %d: unknown error",
+      ATwarning("%s: error in %s, line %d, col %d: unknown error\n",
                 program_name, input_file_name, line, col);
     }
     return 1;

@@ -399,6 +399,10 @@ tree SG_YieldTree(parse_table *pt, tree t)
     return NULL;
   }
 
+  if (SGnrAmb(SG_NR_ASK) > SG_TOO_MANY_AMBS) {
+    return NULL;
+  }
+
   switch(ATgetType(t)) {
   case AT_LIST:
     args = (ATermList) t;
@@ -414,10 +418,15 @@ tree SG_YieldTree(parse_table *pt, tree t)
       }
     
       newarg = (tree) SG_YieldTree(pt, arg);
-      if (ATisEqual(newarg, arg) && ATisEqual(newargs, tail)) {
-	newargs = args;
-      } else {
-        newargs = ATinsert(newargs, (ATerm)newarg); 
+      if (newarg) {
+        if (ATisEqual(newarg, arg) && ATisEqual(newargs, tail)) {
+	  newargs = args;
+        } else {
+          newargs = ATinsert(newargs, (ATerm)newarg); 
+        }
+      }
+      else {
+	return NULL;
       }
     }
     else {
@@ -435,7 +444,12 @@ tree SG_YieldTree(parse_table *pt, tree t)
        if (ATgetLength(ambs) > 1) {
          SGnrAmb(SG_NR_INC);
          ambs = (ATermList) SG_YieldTree(pt, (tree) ambs);
-         res  = ATsetArgument((ATermAppl) t, (ATerm) ambs, 0);
+	 if (ambs) {
+           res  = ATsetArgument((ATermAppl) t, (ATerm) ambs, 0);
+	 }
+	 else {
+           res = NULL;
+	 }
        }
        else {
          res = SG_YieldTree(pt, (tree)ATgetFirst(ambs));
@@ -445,9 +459,14 @@ tree SG_YieldTree(parse_table *pt, tree t)
       prod = ATgetArgument((ATerm) t, 0); /* get the prod */
       args = (ATermList) ATgetArgument((ATerm) t, 1); /* get the args */
       args = (ATermList) SG_YieldTree(pt, (tree) args);
-      prod = (ATerm) SG_LookupProduction(pt, SG_GetProdLabel((tree) prod));
+      if (args) {
+        prod = (ATerm) SG_LookupProduction(pt, SG_GetProdLabel((tree) prod));
  
-      res  = ATmakeAppl2(SG_Appl_AFun, prod, (ATerm) args);
+        res  = ATmakeAppl2(SG_Appl_AFun, prod, (ATerm) args);
+      }
+      else {
+        res = NULL;
+      }
     }
     return res;
   }
