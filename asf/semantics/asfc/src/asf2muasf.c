@@ -22,7 +22,6 @@
 
 #include "asf2muasf.h"
 #include "chars.h"
-#include "lex-cons.h"
 
 /*}}}  */
 
