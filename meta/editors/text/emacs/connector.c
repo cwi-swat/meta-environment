@@ -88,6 +88,8 @@ static char *stripIllegalMenuChars(const char *input)
 
 /*}}}  */
 
+#define RGB "\"RGB:%02x/%02x/%02x\""
+
 /*{{{  static char *attributesToProperties(MC_TextAttributes attributes) */
 
 static char *attributesToProperties(MC_TextAttributes attributes)
@@ -100,12 +102,12 @@ static char *attributesToProperties(MC_TextAttributes attributes)
     MC_TextAttribute attr = MC_getTextAttributesHead(attributes);
     char *end = buffer+strlen(buffer);
     int len = strlen(buffer);
-    int spaceLeft = BUFSIZ - len;
+    int spaceLeft = BUFSIZ - len - 1;
 
     if (MC_isTextAttributeForegroundColor(attr)) {
       MC_Color color = MC_getTextAttributeColor(attr);
       assert(MC_isColorRgb(color));
-      snprintf(end, spaceLeft, " :foreground \"RGB:%02x/%02x/%02x\"",
+      snprintf(end, spaceLeft, " :foreground " RGB,
 	      MC_getColorRed(color),
 	      MC_getColorGreen(color),
 	      MC_getColorBlue(color));
@@ -113,7 +115,7 @@ static char *attributesToProperties(MC_TextAttributes attributes)
     else if (MC_isTextAttributeBackgroundColor(attr)) {
       MC_Color color = MC_getTextAttributeColor(attr);
       assert(MC_isColorRgb(color));
-      snprintf(end, spaceLeft," :background \"RGB:%02x/%02x/%02x\"",
+      snprintf(end, spaceLeft," :background " RGB,
 	      MC_getColorRed(color),
 	      MC_getColorGreen(color),
 	      MC_getColorBlue(color));
@@ -128,11 +130,12 @@ static char *attributesToProperties(MC_TextAttributes attributes)
 	snprintf(end, spaceLeft, " :slant 'italic");
       }
       else if (MC_isTextStyleUnderlined(style)) {
-	snprintf(end, spaceLeft,  " :underline t");
+	snprintf(end, spaceLeft, " :underline t");
       }
     }
     else if (MC_isTextAttributeSize(attr)) {
-      snprintf(end, spaceLeft," :height %d", 10*MC_getTextAttributePoints(attr));
+      snprintf(end, spaceLeft, " :height %d", 
+	       10*MC_getTextAttributePoints(attr));
     }
     else if (MC_isTextAttributeFont(attr)) {
       snprintf(end, spaceLeft, 
