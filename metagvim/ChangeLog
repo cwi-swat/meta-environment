@@ -3,6 +3,7 @@
 Wed Jun  4 13:59:55 CEST 2003 <jong@cwi.nl>
  * version 0.4.2
  * escape spaces in menu-items by two backslashes each
+ * fixed another off-by-one error in focus visualization
 
 Wed Jan 22 13:02:45 CET 2003 <jong@cwi.nl>
  * version 0.4.1
