@@ -23,7 +23,8 @@ include $(top_srcdir)/make_rules
 
 INCLUDES		= -I$(top_srcdir)/libsglr \
 			-I$(top_srcdir)/libtree2dot \
-			-I$(PT_SUPPORT)/include
+			-I$(PT_SUPPORT)/include \
+			-I$(ATERM)/include
 
 bin_PROGRAMS		= sglr 
 sglr_SOURCES		= sglr-main.c getopt.c getopt1.c
