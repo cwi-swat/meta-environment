@@ -36,7 +36,7 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
 AC_SUBST(TOOLBUSLIB)
 
 dnl Setup LIBTOOL
-AM_PROG_LIBTOOL
+AC_PROG_LIBTOOL
 AC_SUBST(LIBTOOL)
 
 dnl Determine which libraries to use for programs using sockets
