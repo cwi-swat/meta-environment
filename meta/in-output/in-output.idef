@@ -24,7 +24,8 @@ let
   RulesExt   : str,
   TermExt    : str,
   Stack      : list,
-  RealName   : str
+  RealName   : str,
+  EditorId   : term
 in
   execute(in-output,IO?).
   (
@@ -160,14 +161,14 @@ in
       snd-msg(error-opening(Name))
     )
   +
-    rec-msg(save-tree-action(Name?, Path?), Stack?) .
+    rec-msg(save-tree-action(Name?, Path?), Stack?, EditorId?) .
     Tree := first(Stack) .
     Stack := next(Stack) .
     snd-eval(IO, save-tree(Name, Path, Tree)) .
     rec-value(IO, save-done(Name?)) .
     snd-msg(stack(Stack))
   +
-    rec-msg(read-tree-action(Path?), Stack?) .
+    rec-msg(read-tree-action(Path?), Stack?, EditorId?) .
     snd-eval(IO,open-file(Path)) .
     (
       rec-value(IO,opened-file(Name?,tree(Tree?),Path?,TimeStamp?)) .
