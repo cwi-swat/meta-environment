@@ -160,7 +160,6 @@ AC_OUTPUT(
    removevarsyntax/c-source/Makefile
    asfc/Makefile
    asfc/src/Makefile
-   asfc/src/muasf/Makefile
    asfc/c-source/Makefile
    asfc/test/Makefile
    asfc/test/terms/Makefile
