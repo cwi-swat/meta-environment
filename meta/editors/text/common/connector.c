@@ -4,10 +4,12 @@
 
 #include <assert.h>
 #include <ctype.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/select.h>
+#include <sys/stat.h>
 #include <unistd.h>
 
 #include <aterm1.h>
@@ -38,20 +40,86 @@ struct _TextEditor
   set_focus_t setFocus;
   set_cursor_at_offset_t setCursorAtOffset;
   set_focus_at_location_t setFocusAtLocation;
-  get_contents_t getContents;
 };
 
 /*}}}  */
+/*{{{  variables */
 
-/*{{{  void sendToHive(int write_to_hive_fd, TE_Event event) */
+static char filename[PATH_MAX + 1] = { 0 };
 
-void sendToHive(int write_to_hive_fd, TE_Event event)
+/*}}}  */
+
+/*{{{  void setFileName(const char *name) */
+
+void setFileName(const char *name)
 {
-  ATBwriteTerm(write_to_hive_fd, TE_EventToTerm(event));
+  assert(name != NULL);
+  assert(strlen(name) <= PATH_MAX);
+
+  strcpy(filename, name);
+}
+
+/*}}}  */
+/*{{{  const char *getFileName() */
+
+const char *getFileName()
+{
+  return filename;
 }
 
 /*}}}  */
 
+/*{{{  static void getContents(int write_to_hive_fd) */
+
+static void getContents(int write_to_hive_fd)
+{
+  static char *contents = NULL;
+  struct stat statrec;
+  int size;
+
+  if (stat(getFileName(), &statrec) == -1) {
+    perror("stat");
+    size = 0;
+  }
+  else {
+    size = statrec.st_size;
+  }
+
+  if (size > 0) {
+    FILE *f;
+    int needed = size + 1; /* for terminating '\0' */
+
+    contents = realloc(contents, needed);
+    if (contents == NULL) {
+      ATerror("getContents: failed to realloc to %d bytes\n", needed);
+    }
+
+    f = fopen(getFileName(), "rb");
+    if (f == NULL) {
+      ATwarning("getContents: failed to read %s\n", getFileName());
+      strcpy(contents, "");
+    }
+    else {
+      int nr_read = fread(contents, sizeof(char), size, f);
+      if (nr_read == size) {
+	fclose(f);
+	contents[size] = '\0';
+      }
+      else {
+	perror("fread");
+      }
+    }
+  }
+
+  if (contents == NULL) {
+    ATwarning("editor: No focus text available, winging it.\n");
+    contents = strdup("");
+  }
+
+  sendToHive(write_to_hive_fd, TE_makeEventContents(contents));
+}
+
+/*}}}  */
 /*{{{  static void handleEditorInput(int write_to_hive_fd, const char *input) */
 
 static void handleEditorInput(int write_to_hive_fd, const char *input)
@@ -82,7 +150,10 @@ static void handleHiveInput(TextEditor editor,
 {
   assert(editor != NULL);
 
-  if (TE_isActionClearFocus(action)) {
+  if (TE_isActionGetContents(action)) {
+    getContents(write_to_hive_fd);
+  }
+  else if (TE_isActionClearFocus(action)) {
     editor->clearFocus(write_to_editor_fd);
   }
   else if (TE_isActionToFront(action)) {
@@ -109,9 +180,15 @@ static void handleHiveInput(TextEditor editor,
   else if (TE_isActionSetFocusAtLocation(action)) {
     editor->setFocusAtLocation(write_to_editor_fd, action);
   }
-  else if (TE_isActionGetContents(action)) {
-    editor->getContents(write_to_hive_fd, action);
-  }
+}
+
+/*}}}  */
+
+/*{{{  void sendToHive(int write_to_hive_fd, TE_Event event) */
+
+void sendToHive(int write_to_hive_fd, TE_Event event)
+{
+  ATBwriteTerm(write_to_hive_fd, TE_EventToTerm(event));
 }
 
 /*}}}  */
@@ -127,8 +204,7 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
 			  set_actions_t setActions,
 			  set_focus_t setFocus,
 			  set_cursor_at_offset_t setCursorAtOffset,
-                          set_focus_at_location_t setFocusAtLocation,
-			  get_contents_t getContents)
+                          set_focus_at_location_t setFocusAtLocation)
 {
   TextEditor textEditorImpl = (TextEditor) calloc(1, sizeof(struct _TextEditor));
 
@@ -161,9 +237,6 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
 
   assert(setFocusAtLocation != NULL);
   textEditorImpl->setFocusAtLocation = setFocusAtLocation;
-
-  assert(getContents != NULL);
-  textEditorImpl->getContents = getContents;
 
   return textEditorImpl;
 }

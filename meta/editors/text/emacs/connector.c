@@ -34,11 +34,6 @@
 #define QUOTE '"'
 
 /*}}}  */
-/*{{{  variables */
-
-static char filename[BUFSIZ] = { 0 };
-
-/*}}}  */
 
 /*{{{  static char *escapeQuotes(const char *input) */
 
@@ -305,57 +300,6 @@ static void clearFocus(int write_to_editor_fd)
 }
 
 /*}}}  */
-/*{{{  static void getContents(int write_to_hive_fd, TE_Action edAction) */
-
-static void getContents(int write_to_hive_fd, TE_Action edAction)
-{
-  static char *contents = NULL;
-  struct stat statrec;
-  int size;
-
-  if (stat(filename, &statrec) == -1) {
-    perror("stat");
-    size = 0;
-  }
-  else {
-    size = statrec.st_size;
-  }
-
-  if (size > 0) {
-    FILE *f;
-    int needed = size + 1; /* for terminating '\0' */
-
-    contents = realloc(contents, needed);
-    if (contents == NULL) {
-      ATerror("getContents: failed to realloc to %d bytes\n", needed);
-    }
-
-    f = fopen(filename, "rb");
-    if (f == NULL) {
-      ATwarning("getContents: failed to read %s\n", filename);
-      strcpy(contents, "");
-    }
-    else {
-      int nr_read = fread(contents, sizeof(char), size, f);
-      if (nr_read == size) {
-	fclose(f);
-	contents[size] = '\0';
-      }
-      else {
-	perror("fread");
-      }
-    }
-  }
-
-  if (contents == NULL) {
-    ATwarning("emacs-editor: No focus text available, winging it.\n");
-    contents = strdup("");
-  }
-
-  sendToHive(write_to_hive_fd, TE_makeEventContents(contents));
-}
-
-/*}}}  */
 /*{{{  static void displayMessage(int write_to_editor_fd, TE_Action edAction) */
 
 static void displayMessage(int write_to_editor_fd, TE_Action edAction)
@@ -434,7 +378,7 @@ int main(int argc, char *argv[])
       write_to_hive_fd = atoi(argv[++i]);
     }
     else if (strcmp(cur, FILENAME) == 0) {
-      strcpy(filename, argv[++i]);
+      setFileName(argv[++i]);
     }
   }
 
@@ -447,8 +391,7 @@ int main(int argc, char *argv[])
 			       setActions,
 			       setFocus,
 			       setCursorAtOffset,
-			       setFocusAtLocation,
-			       getContents);
+			       setFocusAtLocation);
 
   hiveToEditor = TE_makePipeDefault(read_from_hive_fd, fileno(stdout));
   editorToHive = TE_makePipeDefault(fileno(stdin), write_to_hive_fd);
