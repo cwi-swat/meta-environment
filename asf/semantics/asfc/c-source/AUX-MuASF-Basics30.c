@@ -55,8 +55,12 @@ if( m_not_empty_list( tmp[ 0])) {
 tmp[ 2]= m_list_head( tmp[ 0]);
 tmp[ 0]= m_list_tail( tmp[ 0]);
 if( is_char( tmp[ 2] , 95)) {
+t_protect( atmp0000[ 0]);
+t_protect( atmp0000[ 1]);
 tmp[ 3]= ( * ef3)( lf2( slice( atmp0000[ 0] , atmp0000[ 1])));
 t_unprotect( arg0);
+t_unprotect( atmp0000[ 0]);
+t_unprotect( atmp0000[ 1]);
 t_unprotect( tmp[ 3]);
 return ( * ef2)( );
 }
