@@ -4,9 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- XML file produced from file: manual.ltx
      using Hyperlatex v 2.7 (c) Otfried Cheong
-     on Emacs 21.3.1, Wed May 26 11:12:44 2004 -->
+     on Emacs 21.3.1, Mon Sep 20 12:21:36 2004 -->
 <head>
-<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 2.14 Parameterization and Renaming</title>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 2.14 Disambiguation</title>
 
 <style type="text/css">
 .maketitle { align : center }
@@ -22,149 +22,321 @@ div.verse, div.quote, div.quotation {
 </head>
 <body bgcolor= "#ffffe6">
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_24.html"><img border="0" alt="2.15 Variables" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_22.html"><img border="0" alt="Examples" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.14 Parameterization and Renaming</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_58.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Index</a></td></tr></table>
-<h2>2.14 Parameterization and Renaming</h2>
-
-<p>Parameterization and renaming were in fact features of 
-the original ASF&#32;as described
-in <a href="user-manual_56.html#BHK89">[1]</a>, but they were never supported by the ASF+SDF&#10;used in the first version of the ASF+SDF Meta-Environment&nbsp;<a href="user-manual_56.html#Kli93">[30]</a>. 
-Based on the work described in <a href="user-manual_56.html#Vis97">[35]</a>, ASF+SDF&#32;is extended
-with parameterization and symbol renaming<sup><a href="user-manual_59.html#id2">2</a></sup>. We will first explain the notion
-of parameterization, later we will give details on symbol renaming.
-
-<h3><a name="Parameters">2.14.1 Parameterization</a></h3>
-
-<p>Module parameterization allows the definition of generic modules
-for lists, pairs, sets, etc. The operations defined in these
-modules are independent of a specific type. When importing a
-parameterized module and instantiating the formal by actual
-parameters the operations become "sort" specific.
-<p>Modules can have formal parameters when defining them. The module name
-is then followed by a list of symbols, representing the formal
-parameters of this module. 
-The specification <a href="#id2">below</a> shows 
-an example of a parameterized module. In this example the
-formal parameters are used in the parameterized sorts as well,
-in order to increase readability and to avoid name clashes between
-different instances of the same module.
-<p><p><a name="id2">
-
-   <hr />
-
-<font size="-1">
-<pre>
-module Pair[X Y]
-
-imports Booleans
-
-hiddens
-  sorts X Y
-exports
-  sorts Pair[[X,Y]]
-
-  context-free syntax
-    "[" X "," Y "]"      -&gt; Pair[[X,Y]]
-
-    make-pair(X, Y)      -&gt; Pair[[X,Y]]
-    first(Pair[[X,Y]])   -&gt; X
-    second(Pair[[X,Y]])  -&gt; Y
-    is-pair(Pair[[X,Y]]) -&gt; Bool
-</pre>
-</font></font> 
-   <hr />
+    <td bgcolor="#99ccff"><a href="user-manual_24.html"><img border="0" alt="2.15 Parameterization and Renaming" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_22.html"><img border="0" alt="2.13.6 Preferring, Avoiding or Rejecting Parses" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.14 Disambiguation</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table>
+<h2>2.14 Disambiguation</h2>
 
 
-<div align="center">Definition of generic pairs</div>
-</a>
-<p><p>When importing a parameterized module the formal parameters have
-to be replaced by actual parameters. 
-The specification <a href="#id3">below</a> shows 
-an example of a rather complicated import of a parameterized module. 
-The symbols <tt>Pair[[Bool,Bool]]</tt> and <tt>Pair[[Int,Int]]</tt> are the
-actual parameters of the module <tt>Pair[X Y]</tt> in the last import.
+<h3><a name="id1">2.14.1 Lexical Ambiguities</a></h3>
+
+<p>SDF&#32;provides a number of elementary lexical disambiguation features but does
+not offer <em>fully automated</em> lexical disambiguation.
+As a result, the specification writer has to be aware of lexical ambiguities
+and has to specify disambiguation rules explicitly.
+We will discuss various
+approaches to lexical disambiguation and illustrate them by means of examples.
+<p>We will discuss:
+<ul>
+<li><a href="#id2">Prefer Longest Match per Sort</a>
+<li><a href="#id4">Prefer Literals</a>
+<li><a href="#id7">Prefer Non-Layout</a>
+<li><a href="#id8">Prefer Variables</a>
+</ul>
+
+
+<h4><a name="id2">Prefer Longest Match per Sort</a></h4>
+Reject all interpretations of 
+the input text that are included in a longer interpretation of the same 
+sort. Given a standard definition of identifiers, the input `<tt>xyz</tt>' 
+will thus lead to recognition of the identifier `<tt>xyz</tt>' and not to 
+either `<tt>x</tt>' or `<tt>xy</tt>'.
+<p>This is achieved by defining a restriction on this lexical sort. This
+can be done using either lexical or context-free
+<a href="user-manual_22.html#LexicalRestrictions">restrictions</a>.
+The specification <a href="#id3">below</a> 
+shows how to enforce the longest match for the sort <tt>Id</tt>.
 <p><p><a name="id3">
 
    <hr />
 
 <font size="-1">
 <pre>
-module TestPair
+module Identifiers-restrict
 
-imports Booleans Pair[Bool Bool]
-        Integers Pair[Int Int]
-        Pair[Pair[[Bool,Bool]] Pair[[Int,Int]]]
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Id
+  sorts Id
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9]* -&gt; Id
+
+  context-free restrictions
+    Id -/- [a-zA-Z0-9]  
 </pre>
 </font></font> 
    <hr />
 
 
-<div align="center">Use of generic pair module</div>
+<div align="center">Using context-free restrictions to define a longest match for
+    identifiers</div>
 </a>
+   
 
-<h3><a name="Renamings">2.14.2 Symbol Renaming</a></h3>
-
-<p>Symbol renaming is in fact very similar to parameterization except
-that it is not necessary to add formal parameters to a module.
-The mechanism of symbol renaming allows the overriding of one
-symbol or a set of symbols by another symbol or symbols, respectively. 
-It allows a flexible and concise way of adapting specifications.
-The specification <a href="#CODE:pairs">below</a> shows 
-an example of the <tt>Pair</tt> module without parameters. 
-The idea is to achieve the same effect as parameterization
-by explicitly renaming <tt>X</tt> and <tt>Y</tt> to the desired
-names when <tt>Pair</tt> is imported.
-<p><p><a name="CODE:pairs">
+<h4><a name="id4">Prefer Literals</a></h4>
+<p>In the left-hand side of a context-free syntax rule literals (keywords
+and/or operators) may be used.  If these literals overlap with  more
+general lexical tokens (such as identifier) this causes ambiguities.
+<p>The strategy <em>Prefer Literals</em> gives preference to interpretation
+as a literal, over interpretation as a more general lexical token.
+For instance, the keyword <tt>begin</tt> may be recognized as an identifier
+given the lexical definition <a href="#id3">below</a>.
+<p>There are two approaches to implement Prefer Literals.
+<p>In the first approach, we can explicitly forbid the recognition of
+literals as tokens of a specific sort using the
+<a href="user-manual_22.html#PreferAvoidReject">reject mechanism</a>.  
+The idea is to define context-free
+grammar rules for all literals with the undesired lexical sort (e.g.,
+<tt>Id</tt>) in the right-hand side followed by the attribute <tt>reject</tt>.
+This is illustrated <a href="#id5">below</a>.
+The <tt>reject</tt> attribute
+indicates here that the recognition of a keyword as a literal of the sort
+<tt>Id</tt> should be rejected. This approach has the major disadvantage
+that the addition of a literal in any context-free rule also requires
+the addition of a new reject rule for that literal.
+<p><p><a name="id5">
 
    <hr />
 
 <font size="-1">
 <pre>
-module Pair
+module Identifiers-reject
 
-imports Booleans
+imports basic/Whitespace
 
-hiddens
-  sorts X Y
 exports
-  sorts Pair[[X,Y]]
+  context-free start-symbols Id
+  sorts Id
+
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9]* -&gt; Id
+
+  context-free restrictions
+    Id -/- [a-zA-Z0-9]  
 
   context-free syntax
-    "[" X "," Y "]"      -&gt; Pair[[X,Y]]
-
-    make-pair(X, Y)      -&gt; Pair[[X,Y]]
-    first(Pair[[X,Y]])   -&gt; X
-    second(Pair[[X,Y]])  -&gt; Y
-    is-pair(Pair[[X,Y]]) -&gt; Bool
+    "begin" -&gt; Id {reject}
 </pre>
 </font></font> 
    <hr />
 
 
-<div align="center">Definition of generic pairs</div>
+<div align="center">Using <tt>reject</tt> to implement Prefer Literals</div>
 </a>
-<p><p>During import such module symbols can be renamed via symbol renaming.
-The specification <a href="#id6">below</a> shows 
-an example of a rather complicated import of the module <tt>Pair</tt>
-using renamings. Renaming <tt>X</tt> to <tt>Bool</tt> is, for instance,
-written as <tt>X =&gt; Bool</tt>.
+<p>   
+<p>The second approach is more attractive. The lexical definition of the general
+notion that interferes with our literals is written in such a way that it is
+only used as a last resort. In other words, it is avoided as much as possible
+and is only used when no alternative exists.  
+The attribute <tt>avoid</tt> defines precisely this behaviour
+(see <a href="user-manual_22.html#PreferAvoidReject">Preferring, Avoiding or Rejecting Parses</a>).
+<a href="#id6">The next example</a> shows
+how the lexical definition of <tt>Id</tt> is attributed with <tt>avoid</tt>.
+<p>Although the first approach is more tedious, it allows more flexibility
+than the second one.
 <p><p><a name="id6">
 
    <hr />
 
 <font size="-1">
 <pre>
-module TestPair
+module Identifiers-avoid
 
-imports Booleans Pair[X =&gt; Bool Y =&gt; Bool]
-        Integers Pair[X =&gt; Int  Y =&gt; Int]
-        Pair[X =&gt; Pair[[Bool,Bool]] Y =&gt; Pair[[Int,Int]]]
+imports basic/Whitespace
+
+exports
+  context-free start-symbols Id
+  sorts Id
+
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9]* -&gt; Id {avoid}
+
+  context-free restrictions
+    Id -/- [a-zA-Z0-9]  
 </pre>
 </font></font> 
    <hr />
 
 
-<div align="center">Use of generic pair module</div>
+<div align="center">Using <tt>avoid</tt> to implement Prefer Literals</div>
 </a>
-<hr /><address>M.G.J. van den Brand and P. Klint, May 26, 2004</address><br />
+   
+
+<h4><a name="id7">Prefer Non-Layout</a></h4>
+If there are interpretations of the text as
+layout symbol and as non-layout symbol, eliminate all interpretations as layout
+symbol. This is built-in behaviour of ASF+SDF.
+
+<h4><a name="id8">Prefer Variables</a></h4>
+Give preference to interpretation as a 
+variable (as defined in a variables section) over interpretation as a lexical
+token. Thus built-in behaviour of ASF+SDF. It is achieved by automatically
+extending each variable declaration with 
+the attribute <tt>prefer</tt>
+(see <a href="user-manual_22.html#PreferAvoidReject">Preferring, Avoiding or Rejecting Parses</a>).
+
+<h3><a name="id9">2.14.2 Context-free Ambiguities</a></h3>
+
+<p>Context-free grammars may be ambiguous and, as a result, the parser may yield
+different parses of a text. More precisely, the result of a parse is a single
+tree in which the ambiguities are explicitly marked. Each marked ambiguity
+consists of a set of different parse trees for that ambiguity.  Many--but not
+all!-- of these different parses can be eliminated by the following
+strategies that are built-in the ASF+SDF Meta-Environment. These strategies use the
+priorities and associativities as defined in the specification. In addition,
+some standard heuristics are used.
+
+<h4><a name="id10">Associativity filtering</a></h4>
+The associativity filtering
+is performed during the generation of the parse table. Based
+on the associativity relations certain entries in the parse table
+are removed.
+
+<h4><a name="id11">Removing Trees containing Conflicts</a></h4>
+<p>The simplest application of priority and associativity declarations is the
+elimination of trees that contain conflicts:
+<ul><li>A parent node has a child with a lower priority than the parent itself.
+<li>A parent has a first or last child that is in conflict with
+  an associativity relation between this parent and child.
+</ul>
+<p>Reconsidering the example of complex priorities shown <a href="user-manual_22.html#id8">earlier</a> we will give a number of example sentences and
+the interpretation given to them by that language definition.
+<div align="center"><p>
+<table><tbody><tr><td colspan="1" align="LEFT">
+
+  Sentence   </td><td colspan="1" align="LEFT"> Interpretation </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1^2^3</code> </td><td colspan="1" align="LEFT"> <code>1^(2^3)</code> </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1^2*3</code> </td><td colspan="1" align="LEFT"> <code>(1^2)*3</code> </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1*2*3</code> </td><td colspan="1" align="LEFT"> <code>(1*2)*3</code> </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1/2/3</code> </td><td colspan="1" align="LEFT"> error </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1*2/3</code> </td><td colspan="1" align="LEFT"> error </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1-2-3</code> </td><td colspan="1" align="LEFT"> error </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1+2+3</code> </td><td colspan="1" align="LEFT"> <code>(1+2)+3</code> </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1-2+3</code> </td><td colspan="1" align="LEFT"> <code>(1-2)+3</code> </td></tr>
+<tr><td colspan="1" align="LEFT">
+<code>1+2-3</code> </td><td colspan="1" align="LEFT"> <code>(1+2)-3</code></td></tr>
+<tr><td colspan="1" align="LEFT">
+</td></tr></tbody></table>
+
+</p></div>
+
+<h4><a name="id12">Removing Trees using <tt>prefer</tt>/<tt>avoid</tt> Attributes at the Root</a></h4>
+<p>The priority declarations are used to eliminate trees 
+in three phases: 
+<ol><li>If there are trees of which the syntax rule at the top node has a <tt>prefer</tt> attribute, all other trees are removed.
+<li>If there are trees of which the syntax rule at the top node has an <tt>avoid</tt> attribute and there are other trees without an <tt>avoid</tt> attribute at
+  the root node, then all trees with <tt>avoid</tt> attribute are removed.
+</ol>
+
+<h4><a name="id13">Removing Trees containing <tt>prefer</tt>/<tt>avoid</tt> Attributes</a></h4>
+<p>After removing all trees containing conflicts, more than one tree may
+still remain.  To further reduce this set of remaining trees, the number
+of context-free functions with <tt>prefer</tt>/<tt>avoid</tt> attributes is
+calculated and compared.  A tree in the set is then rejected if there
+is another tree in the set with more <tt>prefer</tt>s and less or equal
+<tt>avoid</tt>s, or with equal <tt>prefer</tt>s and more <tt>avoid</tt>s.
+
+<h4><a name="id14">Injection count</a></h4>
+Finally, the number of injections in each of the resulting trees
+is calculated, the tree with the smallest number of injections
+is prefered.
+
+<h4><a name="id15">Examples</a></h4>
+<p>The following examples show how the interaction (and resulting ambiguities)
+between general context-free functions and special case functions can be
+described using <tt>prefer</tt> attribute. 
+<p>The <a href="#id16">first example</a> concerns expressions
+for describing subscripts and superscripts in the typesetting language EQN.
+The crucial point is that, for typesetting reasons, we want to treat a
+subscript followed by a superscript in a special way. Therefore, the special
+case `<tt>E sub E sup E -&gt; E</tt>' is introduced, which is prefered over a
+combination of the two functions `<tt>E sub E -&gt; E</tt>' and `<tt>E sup E -&gt;
+  E</tt>'.
+<p><p><a name="id16">
+
+   <hr />
+
+<font size="-1">
+<pre>
+module Eqn
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols E
+  sorts E 
+
+  context-free syntax
+    E "sub" E         -&gt; E {left}
+    E "sup" E         -&gt; E {left}
+    E "sub" E "sup" E -&gt; E {prefer}
+    "{" E "}"         -&gt; E {bracket}
+    "a"               -&gt; E 
+</pre>
+</font></font> 
+   <hr />
+
+
+<div align="center">Syntax definition of EQN expressions</div>
+</a>
+<p><p>In the <a href="#id17">second example</a>
+the <tt>prefer</tt> attribute is used to
+solve the dangling else problem in a nice way.
+The input sentence <tt>"if 0 then if 1 then hi else ho"</tt> can be parsed
+in two ways: <tt>if 0 then (if 1 then hi) else ho</tt> and
+<tt>if 0 then (if 1 then hi else ho)</tt>.
+We can select the latter derivation by adding the <tt>prefer</tt>
+attribute to the production without the <tt>else</tt> part.
+The parser will still construct an ambiguity node containing both
+deriviations,
+namely, <tt>if 0 then (if 1 then hi &#123;prefer&#125;) else ho</tt> and
+<tt>if 0 then (if 1 then hi else ho) &#123;prefer&#125;</tt>.
+But given the fact that the <em>top</em> node of the latter derivation tree
+has the prefer attribute this derivation is selected and the other
+tree is removed from the ambiguity node.
+<p><p><a name="id17">
+
+   <hr />
+
+<font size="-1">
+<pre>
+module DanglingElse
+
+imports basic/Whitespace
+
+exports
+  context-free start-symbols S
+  sorts E S
+
+  context-free syntax
+    "a"                      -&gt; E 
+    "if" E "then" S          -&gt; S {prefer}
+    "if" E "then" S "else" S -&gt; S
+    "s"                      -&gt; S
+</pre>
+</font></font> 
+   <hr />
+
+
+<div align="center">Syntax definition of conditionals</div>
+</a>
+<hr /><address>M.G.J. van den Brand and P. Klint, September 20, 2004</address><br />
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_24.html"><img border="0" alt="2.15 Variables" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_22.html"><img border="0" alt="Examples" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.14 Parameterization and Renaming</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_58.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Index</a></td></tr></table></body></html>
+    <td bgcolor="#99ccff"><a href="user-manual_24.html"><img border="0" alt="2.15 Parameterization and Renaming" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_9.html"><img border="0" alt="2 An Introduction to ASF+SDF" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_22.html"><img border="0" alt="2.13.6 Preferring, Avoiding or Rejecting Parses" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>2.14 Disambiguation</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table></body></html>

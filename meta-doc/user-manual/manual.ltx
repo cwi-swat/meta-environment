@@ -343,7 +343,7 @@ We give here a brief overview of selected publications:
 \end{description}
 
 \section*{Acknowledgements}
-Peter D. Mosses, Albert Hofkamp, Akim Demaille, Jurgen Vinju.
+Peter D. Mosses, Albert Hofkamp, Akim Demaille, Jurgen Vinju, Bas Terwijn.
 
 \section{An Introduction to \asfsdf}
 \label{ASF+SDF}
@@ -1093,8 +1093,7 @@ exports
 \end{figure}
 
 
-Another example is shown 
-\W \link*{below}[in Figure \Ref]{CODE:charclasses}.
+Another example is shown \link*{below}[in Figure \Ref]{CODE:charclasses}.
 This definition of characters contains
 all possible characters, either by means of the ordinary representation
 or via their decimal representation.
@@ -1269,7 +1268,7 @@ As an aside, note that moving the {\tt *} outside the parentheses as in
 yields a completely different definition: it describes identifiers starting
 with an uppercase letter followed by zero or more lower-case letters,
 uppercase letters or digits. According to this definition {\tt MiES}, {\tt
-  B49a} and {\tt 007} would, for instance, be acceptable.
+  B49a} and {\tt Bond007} would, for instance, be acceptable.
 
 \noindent A slightly more readable definition that is equivalent to the 
 \link{previous one}[ in Figure~\Ref]{CODE:alternative1}
@@ -1317,7 +1316,7 @@ Definitions of integers and real numbers are shown
 \link*{below}[in Figure~\Ref]{CODE:numbers}.
 Note the use of the alternative operator in the
 definitions of {\tt UnsignedInt} and {\tt Number}.  Also note the use
-of the option operator in the definitions of {\tt SignedReal} and {\tt
+of the option operator in the definitions of {\tt SignedInt} and {\tt
 UnsignedReal}.
 
 \begin{figure}[t]
@@ -1585,8 +1584,8 @@ when using this operators.
 In the example \link*{below}[ in Figure~\Ref]{CODE:lists-usage},
 two different lists are defined, 
 {\tt List1} represents a list of naturals separated
-by commas whereas {\tt List2} represents a list of naturals terminated
-by commas.
+by commas whereas {\tt List2} represents a list of naturals separated by
+commas and terminated by a comma.
 
 \begin{figure}[t]
 \begin{Label}{CODE:lists-usage}
@@ -1657,7 +1656,7 @@ sorts}
 
 The combination of lists and optionals or empty producing sorts leads to
 cycles in the parse tree. Cycles are considered parse errors.
-The parser will be produce an error message whenever during parsing
+The parser will produce an error message whenever during parsing
 a cycle is detected. No parse tree is constructed in such a case.
 Cycles will not lead to non-termination during parsing.
 See \link*{below}[ Figure~\Ref]{CODE:listcycle}
@@ -2626,7 +2625,7 @@ different instances of the same module.
 \begin{verbatim}
 module Pair[X Y]
 
-imports basicr/Booleans
+imports basic/Booleans
 
 hiddens
   sorts X Y
@@ -2909,7 +2908,7 @@ For the evaluation of matching conditions we have the following case:
   new or fresh variable not in $V$.
   Reduce the right-hand side of the matching condition to a normal form 
   and the matching condition succeeds if this normal form and the 
-  left-hand side side of the condition match. 
+  left-hand side of the condition match. 
   The new variables resulting from this match are added
   to $V$. This kind of condition is called a \emph{match} condition.
   The variables occurring in both $V$ and the left-hand side must
@@ -3732,10 +3731,10 @@ Computing the derivative of an expression with respect to some variable is a
 classical problem. 
 Computing the derivative of {\tt X * (X + Y + Z)} with respect to {\tt X gives:}
 \begin{quote}
-{\tt d(X * (X + Y + Z)) / dX ) = X + Y + Z + X}
+{\tt d(X * (X + Y + Z)) / dX = X + Y + Z + X}
 \end{quote}
 
-\noindent Differentiation is defined in three stages in the specification
+\noindent Differentiation is defined in several stages in the specification
 \link*{below}[in Figure~\Ref]{CODE:diff}.
 First, the sorts {\tt Nat}
 (natural numbers), {\tt Var} (variables), and {\tt Exp} (expressions) are

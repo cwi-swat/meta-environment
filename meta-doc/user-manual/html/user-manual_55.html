@@ -4,9 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- XML file produced from file: manual.ltx
      using Hyperlatex v 2.7 (c) Otfried Cheong
-     on Emacs 21.3.1, Wed May 26 11:12:45 2004 -->
+     on Emacs 21.3.1, Mon Sep 20 12:21:37 2004 -->
 <head>
-<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 8.2 A Stand-alone Pico Typechecker</title>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- Index</title>
 
 <style type="text/css">
 .maketitle { align : center }
@@ -22,25 +22,101 @@ div.verse, div.quote, div.quotation {
 </head>
 <body bgcolor= "#ffffe6">
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_56.html"><img border="0" alt="References" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_53.html"><img border="0" alt="8 Examples of Stand-alone Tools" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_54.html"><img border="0" alt="8.1 A Stand-alone Boolean Tool" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>8.2 A Stand-alone Pico Typechecker</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_58.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Index</a></td></tr></table>
-<h2>8.2 A Stand-alone Pico Typechecker</h2>
-<p>Now we show how to create a stand-alone typechecker for the Pico language.  We
-follow the same steps as in the previous example, but there is one additional
-step required: given a parsed Pico program, we have to wrap the function
-symbol <tt>tcp( )</tt> around the Pico program, before we reduce the term.  The
-steps are as follows:
-<ul><li>As before, generate a parse table for <tt>Pico-syntax</tt> (result: <tt>Pico-syntax.trm.tbl</tt>) and equations for <tt>Pico-typecheck</tt> (result: <tt>Pico-typecheck.eqs</tt>).
-<li>Parse the input term <tt>term.txt</tt> (result: <tt>term.tree</tt>).
-<li>Wrap  <tt>tcp(  )</tt> around <tt>term.tree</tt>:
-<pre>
-  apply-function -f tcp                       \
-                 -s PICO-BOOL                 \
-                 -m Pico-typecheck            \
-                 -i term.tree -o tcterm.tree
-</pre>
-<li>Reduce <tt>tcterm.tree</tt> and unparse the result as before.
-</ul>
+    <td bgcolor="#99ccff"><a href="user-manual_56.html"><img border="0" alt="Contents" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_0.html"><img border="0" alt="ASF+SDF Meta-Environment User Manual" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_54.html"><img border="0" alt="References" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>Index</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table>
+<h1>Index</h1>
+<a href="#2" name="1">Symbols</a> <a href="#4">A</a> <a href="#5">B</a> <a href="#6">C</a> <a href="#7">D</a> <a href="#8">E</a> <a href="#9">F</a> <a href="#10">G</a> <a href="#11">H</a> <a href="#12">I</a> J K <a href="#15">L</a> <a href="#16">M</a> <a href="#17">N</a> <a href="#18">O</a> <a href="#19">P</a> Q <a href="#21">R</a> <a href="#22">S</a> <a href="#23">T</a> <a href="#24">U</a> <a href="#25">V</a> W X Y Z
+<dl><dt><b><a href="#1" name="2">Symbols</a></b><dd>
+<a href="user-manual_14.html#SequenceOperator"><tt>(...)</tt></a>
+<br /><a href="user-manual_14.html#FunctionOperator"><tt>(...=&gt;...)</tt></a>
+<br /><a href="user-manual_14.html#RepetitionOperator"><tt>*</tt></a>
+<br /><a href="user-manual_14.html#RepetitionOperator"><tt>+</tt></a>
+<br /><a href="user-manual_22.html#LexicalRestrictions"><tt>-/-</tt></a>
+<br /><a href="user-manual_14.html#ParameterizedSorts"><tt>...[[...]]</tt></a>
+<br /><a href="user-manual_13.html"><tt>&lt;ImportSection&gt;</tt></a>
+<br /><a href="user-manual_22.html#LexicalRestrictions"><tt>&lt;Lookaheads&gt;</tt></a>
+<br /><a href="user-manual_14.html#OptionOperator"><tt>?</tt></a>
+<br /><a href="user-manual_14.html#AlternativeOperator"><tt>|</tt></a>
+<dt><b><a href="#1" name="4">A</a></b><dd>
+<a href="user-manual_27.html#Traversal">accumulator</a>
+<br /><a href="user-manual_18.html#id15">alternative operator</a>
+<br /><a href="user-manual_14.html#AlternativeOperator">alternative operator</a>
+<br /><a href="user-manual_27.html">ASF+SDF</a>
+<br /><a href="user-manual_3.html">ASF+SDF&#32;formalism</a>
+<br /><a href="user-manual_3.html">ASF+SDF Meta-Environment</a>
+<br /><a href="user-manual_21.html#id2">assoc attribute</a>
+<br /><a href="user-manual_27.html#id4">associative matching</a>
+<br /><a href="user-manual_22.html#id1">associativity</a>
+<br /><a href="user-manual_22.html#AssociativeFunctions">associativity functions</a>
+<br /><a href="user-manual_22.html#GroupAssoc">associativity groups</a>
+<br /><a href="user-manual_21.html#id9">ATerm attribute</a>
+<br /><a href="user-manual_21.html">attribute</a>
+<br /><a href="user-manual_21.html#id4">avoid attribute</a>
+<dt><b><a href="#1" name="5">B</a></b><dd>
+<a href="user-manual_21.html#id1">bracket attribute</a>
+<br /><a href="user-manual_22.html#BracketFunctions">bracket functions</a>
+<dt><b><a href="#1" name="6">C</a></b><dd>
+<a href="user-manual_11.html#id1">compound module name</a>
+<br /><a href="user-manual_27.html#id2">conditional equations</a>
+<br /><a href="user-manual_21.html#id6">constructor attribute</a>
+<br /><a href="user-manual_22.html#LexicalRestrictions">context-free restrictions</a>
+<dt><b><a href="#1" name="7">D</a></b><dd>
+<a href="user-manual_27.html#DefaultEquations">default equations</a>
+<br /><a href="user-manual_27.html#ExecutingEquations">default equations</a>
+<br /><a href="user-manual_6.html">download</a>
+<dt><b><a href="#1" name="8">E</a></b><dd>
+<a href="user-manual_27.html">equations</a>
+<br /><a href="user-manual_11.html#id2"><tt>exports</tt> section</a>
+<dt><b><a href="#1" name="9">F</a></b><dd>
+<a href="user-manual_14.html#FunctionOperator">function operator</a>
+<dt><b><a href="#1" name="10">G</a></b><dd>
+<a href="user-manual_4.html">generic syntax-directed editor</a>
+<dt><b><a href="#1" name="11">H</a></b><dd>
+<a href="user-manual_11.html#id2"><tt>hiddens</tt> section</a>
+<dt><b><a href="#1" name="12">I</a></b><dd>
+<a href="user-manual_13.html"><tt>imports</tt></a>
+<dt><b><a href="#1" name="15">L</a></b><dd>
+<a href="user-manual_21.html#id2">left attribute</a>
+<br /><a href="user-manual_27.html#ExecutingEquations">leftmost-innermost</a>
+<br /><a href="user-manual_22.html#LexicalRestrictions">lexical restrictions</a>
+<br /><a href="user-manual_14.html#RepetitionOperator">list</a>
+<br /><a href="user-manual_27.html#id4">list matching</a>
+<dt><b><a href="#1" name="16">M</a></b><dd>
+<a href="user-manual_21.html#id7">memo attribute</a>
+<br /><a href="user-manual_27.html#MemoFunctions">memo functions</a>
+<dt><b><a href="#1" name="17">N</a></b><dd>
+<a href="user-manual_21.html#id2">non-assoc attribute</a>
+<dt><b><a href="#1" name="18">O</a></b><dd>
+<a href="user-manual_18.html#id13">option operator</a>
+<br /><a href="user-manual_14.html#OptionOperator">option operator</a>
+<dt><b><a href="#1" name="19">P</a></b><dd>
+<a href="user-manual_14.html#ParameterizedSorts">parameterized sort</a>
+<br /><a href="user-manual_21.html#id3">prefer attribute</a>
+<br /><a href="user-manual_22.html">priorities</a>
+<dt><b><a href="#1" name="21">R</a></b><dd>
+<a href="user-manual_21.html#id5">reject attribute</a>
+<br /><a href="user-manual_22.html#RelativePriorities">relative priorities</a>
+<br /><a href="user-manual_18.html#id11">repetition operator</a>
+<br /><a href="user-manual_14.html#RepetitionOperator">repetition operator</a>
+<br /><a href="user-manual_22.html#LexicalRestrictions">restrictions</a>
+<br /><a href="user-manual_27.html#ExecutingEquations">rewrite rules</a>
+<br /><a href="user-manual_21.html#id2">right attribute</a>
+<dt><b><a href="#1" name="22">S</a></b><dd>
+<a href="user-manual_12.html">SDF&#32;comment</a>
+<br /><a href="user-manual_14.html#SequenceOperator">sequence operator</a>
+<br /><a href="user-manual_4.html">syntax-directed editor</a>
+<dt><b><a href="#1" name="23">T</a></b><dd>
+<a href="user-manual_4.html">term editor</a>
+<br /><a href="user-manual_27.html#Traversal">transformer</a>
+<br /><a href="user-manual_21.html#id8">traversal attribute</a>
+<br /><a href="user-manual_27.html#Traversal">traversal functions</a>
+<br /><a href="user-manual_14.html#TupleOperator">tuple operator</a>
+<dt><b><a href="#1" name="24">U</a></b><dd>
+<a href="user-manual_27.html#id1">unconditional equations</a>
+<br /><a href="user-manual_3.html#id1">user-defined syntax</a>
+<dt><b><a href="#1" name="25">V</a></b><dd>
+<a href="user-manual_25.html">variables</a>
+</dl>
 
-<hr /><address>M.G.J. van den Brand and P. Klint, May 26, 2004</address><br />
+<hr /><address>M.G.J. van den Brand and P. Klint, September 20, 2004</address><br />
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_56.html"><img border="0" alt="References" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_53.html"><img border="0" alt="8 Examples of Stand-alone Tools" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_54.html"><img border="0" alt="8.1 A Stand-alone Boolean Tool" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>8.2 A Stand-alone Pico Typechecker</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_58.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Index</a></td></tr></table></body></html>
+    <td bgcolor="#99ccff"><a href="user-manual_56.html"><img border="0" alt="Contents" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_0.html"><img border="0" alt="ASF+SDF Meta-Environment User Manual" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_54.html"><img border="0" alt="References" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>Index</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table></body></html>

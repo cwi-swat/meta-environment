@@ -4,9 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <!-- XML file produced from file: manual.ltx
      using Hyperlatex v 2.7 (c) Otfried Cheong
-     on Emacs 21.3.1, Wed May 26 11:12:45 2004 -->
+     on Emacs 21.3.1, Mon Sep 20 12:21:36 2004 -->
 <head>
-<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 7.2 Parsing</title>
+<title>ASF+SDF Meta-Environment&#32;User Manual <br />$Revision$ -- 5.4 Rewriting a Term using the Evaluator</title>
 
 <style type="text/css">
 .maketitle { align : center }
@@ -22,28 +22,33 @@ div.verse, div.quote, div.quotation {
 </head>
 <body bgcolor= "#ffffe6">
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_47.html"><img border="0" alt="7.3 Obtaining Equations" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_44.html"><img border="0" alt="7 Selected Components of the ASF+SDF Meta-Environment" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_45.html"><img border="0" alt="7.1 Parse Table Generation" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>7.2 Parsing</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_58.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Index</a></td></tr></table>
-<h2>7.2 Parsing</h2>
+    <td bgcolor="#99ccff"><a href="user-manual_47.html"><img border="0" alt="5.5 Compiling a Specification" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_42.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
+Meta-Environment technology" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_45.html"><img border="0" alt="5.3 Parsing" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5.4 Rewriting a Term using the Evaluator</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table>
+<h2>5.4 Rewriting a Term using the Evaluator</h2>
 
-<p>Given a parse table <tt>M.trm.tbl</tt> for module <tt>M</tt>,
-terms can be parsed by using the command <tt>sglr</tt>:
-<pre>
-   sglr -m -p M.trm.tbl -i term.txt -o term.tree
-</pre>
-or, alternatively, via
-<pre>
-   sglr -m -p M.trm.tbl &lt; term.txt &gt; term.tree
-</pre>
-<p>The output of <tt>sglr</tt> is either an error message (if the input
-contains a syntax error) or a parse tree in a format called AsFixMe.&#10;Note that <tt>sglr</tt> can generate parse trees in several formats:
-<ul><li>Use the flag <tt>-2</tt> to generate AsFix2: this is the format
-introduced for the latest version of SDF.  This format is only in use
-by some tools outside the ASF+SDF Meta-Environment.  AsFix2 is very verbose: even
-lexical tokens and layout are represented as trees.  For efficiency
-reasons, the ASF+SDF Meta-Environment&#32;uses the more concise format AsFixMe.
-<li>Use the flag <tt>-m</tt> to generate AsFix2ME: this is the preferred
-parse tree format that is becoming the standard inside the ASF+SDF Meta-Environment.
+<p>In order to rewrite a term <tt>term.txt</tt> using the ASF+SDF&#32;evaluator 
+<tt>asfe</tt> two inputs are required:
+<ul><li>The parse tree of <tt>term.txt</tt>. See <a href="user-manual_45.html">parsing of
+terms</a> how to do this.
+The result is <tt>term.tree</tt>.
+<li>The equations to be used for rewriting.  See 
+<a href="user-manual_44.html#SEC:obtainingequations">obtaing of equations</a> for
+obtaining the equations given an ASF+SDF&#32;specification.
 </ul>
-<hr /><address>M.G.J. van den Brand and P. Klint, May 26, 2004</address><br />
+<p>Given this two inputs it is possible to call the interpreter and
+reduce terms via the command line. This can be performed in two
+different manners:
+The first is:
+<pre>
+   asfe -e M.eqs &lt; term.tree &gt; reduct.tree 
+</pre>  
+The second is:
+<pre>
+   asfe -e M.eqs -i term.tree -o reduct.tree 
+</pre>  
+<p><a href="user-manual_49.html">Unparsing</a>
+explains how <tt>reduct.tree</tt> can be converted to a textual representation.
+<hr /><address>M.G.J. van den Brand and P. Klint, September 20, 2004</address><br />
 <table width="100%" cellpadding=0 cellspacing=2><tr>
-    <td bgcolor="#99ccff"><a href="user-manual_47.html"><img border="0" alt="7.3 Obtaining Equations" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_44.html"><img border="0" alt="7 Selected Components of the ASF+SDF Meta-Environment" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_45.html"><img border="0" alt="7.1 Parse Table Generation" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>7.2 Parsing</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_58.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_57.html">Index</a></td></tr></table></body></html>
+    <td bgcolor="#99ccff"><a href="user-manual_47.html"><img border="0" alt="5.5 Compiling a Specification" src="next.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_42.html"><img border="0" alt="5 Building stand-alone environments using ASF+SDF 
+Meta-Environment technology" src="up.png"></a></td><td bgcolor="#99ccff"><a href="user-manual_45.html"><img border="0" alt="5.3 Parsing" src="previous.png"></a></td><td align="center" bgcolor="#99ccff" width="100%"><b>5.4 Rewriting a Term using the Evaluator</b></td><td bgcolor="#99ccff" align="center"><a href="user-manual_56.html">Contents</a></td><td bgcolor="#99ccff" align="center"><a href="user-manual_55.html">Index</a></td></tr></table></body></html>
