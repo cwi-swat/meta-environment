@@ -492,10 +492,6 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
     result = tree;
   }
 
-  /* remove all annotations from the term to make matching more easy */
-  result = PT_makeTreeFromTerm(
-             ATremoveAllAnnotations(PT_makeTermFromTree(result)));
-
   return result;
 }
 

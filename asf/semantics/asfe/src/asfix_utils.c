@@ -43,6 +43,11 @@
 
 ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2)
 {
+  asfix1 = PT_makeTreeFromTerm(
+	     ATremoveAllAnnotations(PT_makeTermFromTree(asfix1)));
+  asfix2 = PT_makeTreeFromTerm(
+	     ATremoveAllAnnotations(PT_makeTermFromTree(asfix2)));
+
   if (!PT_isEqualTree(asfix1, asfix2)) {
     if (PT_isTreeAppl(asfix1) && PT_isTreeAppl(asfix2)) {
       /* If it is an appl, prods should be ATequal and kids should be

@@ -439,8 +439,6 @@ ATerm evaluator(char *name, ATerm term)
   PT_ParseTree parseTree;
   PT_Tree tree;
 
-  term = ATremoveAllAnnotations(term);
-
   parseTree = PT_makeParseTreeFromTerm(term);
   tree = PT_getParseTreeTree(parseTree);
   tree = RWprepareTerm(tree);
@@ -760,9 +758,7 @@ subListMatching(PT_Symbol asym, ATerm env, PT_Tree elem,
 {
   ATerm subenv, newenv;
   PT_Args last;
-
-  elem = PT_removeTreeAnnotations(elem);
-
+  
   if (PT_isStarVar(elem)) {
     /* try to match with zero elements for star variable */
     newenv = putListVariableValue(env, elem, PT_makeArgsEmpty(),
@@ -853,8 +849,6 @@ listMatching(PT_Symbol sym, ATerm env, PT_Args elems1, PT_Args elems2,
 	    }
 	  }
 	  else {
-	    elem1 = PT_removeTreeAnnotations(elem1);
-
 	      elems2 = skipWhitespace(elems2);
 	      assert(isValidList(elems2));
 
