@@ -7,6 +7,6 @@ Makefile.in
 config.log
 config.cache
 config.status
-*-*.pkg
+error-support-*.pkg
 autom*.cache
-meta-errors-*.tar.gz
+error-support-*.tar.gz
