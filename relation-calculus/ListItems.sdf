@@ -6,5 +6,5 @@ imports basic/Strings MyArea
      sorts List ListItem
   context-free syntax
 
-    "list" "(" "[" { ListItem "," }* "]" ")"               -> List
-    "listitem" "(" String "," "[" String "]" "," Area ")"  -> ListItem
+    "list" "(" "[" { ListItem "," }* "]" ")" -> List
+    "listitem" "(" String "," Area ")"       -> ListItem
