@@ -3,8 +3,6 @@
 2003/10/07 (markvdb@cwi.nl)
  * Adapted to new tuples.
 
-2003/10/03 (markvdb@cwi.nl)
- * Removed the set and perm symbol in the library.
 
 2003/10/06 (jurgenv@cwi.nl)
  * Extended asfc compiler to support calls to builtin functions. For each
@@ -16,6 +14,9 @@
    conversion from AsFix to muASF terms.
  * Removed toolbus communication builtins and support for these builtins
    from asfe.idef
+
+2003/10/03 (markvdb@cwi.nl)
+ * Removed the set and perm symbol in the library.
 
 2003/10/03 (jurgenv@cwi.nl)
  * Fixed some tests by retrieving the original specification and regenerating
