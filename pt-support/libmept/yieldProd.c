@@ -164,9 +164,11 @@ static int lengthOfAttr(PT_Attr attr)
 {
   ATerm attribute;
 
-
-  if (PT_isAttrAterm(attr)) {
-    attribute = PT_ATermToTerm(PT_getAttrTerm(attr));
+  if (PT_isAttrAssoc(attr)) {
+    attribute = PT_AssociativityToTerm(PT_getAttrAssoc(attr));
+  }
+  else if (PT_isAttrTerm(attr)) {
+    attribute = PT_getAttrTerm(attr);
   }
   else {
     attribute = PT_AttrToTerm(attr);
@@ -507,8 +509,11 @@ yieldAttr(PT_Attr attr, int idx, char *buf, int bufSize)
   char *str; 
   ATerm attribute;
 
-  if (PT_isAttrAterm(attr)) {
-    attribute = PT_ATermToTerm(PT_getAttrTerm(attr));
+  if (PT_isAttrAssoc(attr)) {
+    attribute = PT_AssociativityToTerm(PT_getAttrAssoc(attr));
+  }
+  else if (PT_isAttrTerm(attr)) {
+    attribute = PT_getAttrTerm(attr);
   }
   else {
     attribute = PT_AttrToTerm(attr);

@@ -1,3 +1,25 @@
+2001/09/27 (jurgenv@cwi.nl)
+ * Made some important changes to the AsFix format. These changes are
+   necessary to support some changes in the SDF syntax, and to fix some
+   irregularities. The main benefit is the ability to have arbitrary ATerm
+   attributes to productions. Other changes were made to have a slightly better
+   correspondence between the SDF formalism and AsFix.
+ * The following changes were made in the attributes of productions:
+     - the constructors: "traverse", "memo" and "constructor" were removed.
+     - the constructor: "assoc(x)" was added in order to comply
+       with changes in the SDF grammar and its cons annotations. Only "left",
+       "right", "assoc" and "non-assoc" can be children of assoc(x).
+       Note that assoc(x) replaces the old atr(x) constructor.
+     - the constructor: "term(term)" was added. The 'term' type corresponds to
+       any ATerm.
+     - the "atr(x)" constructor was removed around "bracket", "prefer", 
+       "avoid" and "reject" in order to comply with the cons annotations of
+       the SDF grammar.
+ * See ChangeLog of sdf-support for the details on changes in SDF.
+ * NOTE: these changes affect any tool using pt-support. The new version of
+   pt-support will not be backward compatible with older versions. Therefor,
+   any tool based on this package will also not be backward compatible.
+                       
 2001/08/28 (jong@cwi.nl)
  * Added #include directives to satisfy gcc-3.0.1
  * version 0.7beta

@@ -1,5 +1,5 @@
 /*
- * Generated at Thu Aug  2 12:53:17 2001
+ * Generated at Mon Oct  1 11:40:34 2001
  */
 
 #ifndef __MEPT_dict_H
@@ -49,9 +49,6 @@ extern AFun PT_afun38;
 extern AFun PT_afun39;
 extern AFun PT_afun40;
 extern AFun PT_afun41;
-extern AFun PT_afun42;
-extern AFun PT_afun43;
-extern AFun PT_afun44;
 
 extern ATerm PT_patternCharRangesEmpty;
 extern ATerm PT_patternCharRangesList;
@@ -82,20 +79,17 @@ extern ATerm PT_patternSymbolCf;
 extern ATerm PT_patternSymbolLit;
 extern ATerm PT_patternArgsEmpty;
 extern ATerm PT_patternArgsList;
-extern ATerm PT_patternATermTraverse;
-extern ATerm PT_patternATermConstructor;
-extern ATerm PT_patternATermAvoid;
-extern ATerm PT_patternATermPrefer;
-extern ATerm PT_patternATermReject;
-extern ATerm PT_patternATermMemo;
-extern ATerm PT_patternATermNonAssoc;
-extern ATerm PT_patternATermAssoc;
-extern ATerm PT_patternATermRight;
-extern ATerm PT_patternATermLeft;
-extern ATerm PT_patternATermBracket;
-extern ATerm PT_patternAttrAterm;
+extern ATerm PT_patternAssociativityNonAssoc;
+extern ATerm PT_patternAssociativityAssoc;
+extern ATerm PT_patternAssociativityRight;
+extern ATerm PT_patternAssociativityLeft;
+extern ATerm PT_patternAttrAvoid;
+extern ATerm PT_patternAttrPrefer;
+extern ATerm PT_patternAttrReject;
+extern ATerm PT_patternAttrBracket;
 extern ATerm PT_patternAttrId;
-extern ATerm PT_patternAttrCons;
+extern ATerm PT_patternAttrTerm;
+extern ATerm PT_patternAttrAssoc;
 extern ATerm PT_patternAttrsSingle;
 extern ATerm PT_patternAttrsMany;
 extern ATerm PT_patternAttributesAttrs;
