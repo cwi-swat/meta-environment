@@ -31,6 +31,18 @@ typedef ATerm CO_Feedback;
 
 /*}}}  */
 
+/*{{{  protect macros */
+
+#define CO_protectBoolCon(arg) (ATprotect((ATerm*)((void*) arg)))
+#define CO_protectBoolean(arg) (ATprotect((ATerm*)((void*) arg)))
+#define CO_protectMeasure(arg) (ATprotect((ATerm*)((void*) arg)))
+#define CO_protectParseResult(arg) (ATprotect((ATerm*)((void*) arg)))
+#define CO_protectBytesResult(arg) (ATprotect((ATerm*)((void*) arg)))
+#define CO_protectWriteResult(arg) (ATprotect((ATerm*)((void*) arg)))
+#define CO_protectStart(arg) (ATprotect((ATerm*)((void*) arg)))
+#define CO_protectOptLayout(arg) (ATprotect((ATerm*)((void*) arg)))
+
+/*}}}  */
 void CO_initLibraryApi(void);
 
 /*{{{  term conversion functions */
@@ -71,10 +83,10 @@ CO_Measure CO_makeMeasureGreater();
 CO_Measure CO_makeMeasureEqual();
 CO_ParseResult CO_makeParseResultSuccess(char* treeSort, CO_OptLayout wsAfterParseTree, CO_OptLayout wsAfterParenOpen, CO_Bytes leftLayout, CO_OptLayout wsAfterLeftLayout, CO_OptLayout wsAfterComma, ATerm tree, CO_OptLayout wsAfterTree, CO_OptLayout wsAfterComma1, CO_Bytes rightLayout, CO_OptLayout wsAfterRightLayout, CO_OptLayout wsAfterComma2, CO_NatCon ambCnt, CO_OptLayout wsAfterAmbCnt);
 CO_ParseResult CO_makeParseResultFailure(CO_OptLayout wsAfterParseError, CO_OptLayout wsAfterParenOpen, CO_Feedback Feedback, CO_OptLayout wsAfterFeedback);
-CO_BytesResult CO_makeBytesResultSuccess(CO_OptLayout wsAfterRead, CO_OptLayout wsAfterParenOpen, CO_Bytes Bytes, CO_OptLayout wsAfterBytes);
-CO_BytesResult CO_makeBytesResultFailure(CO_OptLayout wsAfterReadError, CO_OptLayout wsAfterParenOpen, CO_Feedback Feedback, CO_OptLayout wsAfterFeedback);
+CO_BytesResult CO_makeBytesResultSuccess(CO_OptLayout wsAfterBytes, CO_OptLayout wsAfterParenOpen, CO_Bytes value, CO_OptLayout wsAfterValue);
+CO_BytesResult CO_makeBytesResultFailure(CO_OptLayout wsAfterBytesError, CO_OptLayout wsAfterParenOpen, CO_Feedback Feedback, CO_OptLayout wsAfterFeedback);
 CO_WriteResult CO_makeWriteResultSuccess();
-CO_WriteResult CO_makeWriteResultFailure();
+CO_WriteResult CO_makeWriteResultFailure(CO_OptLayout wsAfterWriteError, CO_OptLayout wsAfterParenOpen, CO_Feedback Feedback, CO_OptLayout wsAfterFeedback);
 CO_Start CO_makeStartParseResult(CO_OptLayout wsBefore, CO_ParseResult topParseResult, CO_OptLayout wsAfter, int ambCnt);
 CO_Start CO_makeStartBytesResult(CO_OptLayout wsBefore, CO_BytesResult topBytesResult, CO_OptLayout wsAfter, int ambCnt);
 CO_Start CO_makeStartWriteResult(CO_OptLayout wsBefore, CO_WriteResult topWriteResult, CO_OptLayout wsAfter, int ambCnt);
@@ -215,21 +227,21 @@ CO_ParseResult CO_setParseResultWsAfterFeedback(CO_ParseResult arg, CO_OptLayout
 ATbool CO_isValidBytesResult(CO_BytesResult arg);
 inline ATbool CO_isBytesResultSuccess(CO_BytesResult arg);
 inline ATbool CO_isBytesResultFailure(CO_BytesResult arg);
-ATbool CO_hasBytesResultWsAfterRead(CO_BytesResult arg);
-CO_OptLayout CO_getBytesResultWsAfterRead(CO_BytesResult arg);
-CO_BytesResult CO_setBytesResultWsAfterRead(CO_BytesResult arg, CO_OptLayout wsAfterRead);
-ATbool CO_hasBytesResultWsAfterParenOpen(CO_BytesResult arg);
-CO_OptLayout CO_getBytesResultWsAfterParenOpen(CO_BytesResult arg);
-CO_BytesResult CO_setBytesResultWsAfterParenOpen(CO_BytesResult arg, CO_OptLayout wsAfterParenOpen);
-ATbool CO_hasBytesResultBytes(CO_BytesResult arg);
-CO_Bytes CO_getBytesResultBytes(CO_BytesResult arg);
-CO_BytesResult CO_setBytesResultBytes(CO_BytesResult arg, CO_Bytes Bytes);
 ATbool CO_hasBytesResultWsAfterBytes(CO_BytesResult arg);
 CO_OptLayout CO_getBytesResultWsAfterBytes(CO_BytesResult arg);
 CO_BytesResult CO_setBytesResultWsAfterBytes(CO_BytesResult arg, CO_OptLayout wsAfterBytes);
-ATbool CO_hasBytesResultWsAfterReadError(CO_BytesResult arg);
-CO_OptLayout CO_getBytesResultWsAfterReadError(CO_BytesResult arg);
-CO_BytesResult CO_setBytesResultWsAfterReadError(CO_BytesResult arg, CO_OptLayout wsAfterReadError);
+ATbool CO_hasBytesResultWsAfterParenOpen(CO_BytesResult arg);
+CO_OptLayout CO_getBytesResultWsAfterParenOpen(CO_BytesResult arg);
+CO_BytesResult CO_setBytesResultWsAfterParenOpen(CO_BytesResult arg, CO_OptLayout wsAfterParenOpen);
+ATbool CO_hasBytesResultValue(CO_BytesResult arg);
+CO_Bytes CO_getBytesResultValue(CO_BytesResult arg);
+CO_BytesResult CO_setBytesResultValue(CO_BytesResult arg, CO_Bytes value);
+ATbool CO_hasBytesResultWsAfterValue(CO_BytesResult arg);
+CO_OptLayout CO_getBytesResultWsAfterValue(CO_BytesResult arg);
+CO_BytesResult CO_setBytesResultWsAfterValue(CO_BytesResult arg, CO_OptLayout wsAfterValue);
+ATbool CO_hasBytesResultWsAfterBytesError(CO_BytesResult arg);
+CO_OptLayout CO_getBytesResultWsAfterBytesError(CO_BytesResult arg);
+CO_BytesResult CO_setBytesResultWsAfterBytesError(CO_BytesResult arg, CO_OptLayout wsAfterBytesError);
 ATbool CO_hasBytesResultFeedback(CO_BytesResult arg);
 CO_Feedback CO_getBytesResultFeedback(CO_BytesResult arg);
 CO_BytesResult CO_setBytesResultFeedback(CO_BytesResult arg, CO_Feedback Feedback);
@@ -243,6 +255,18 @@ CO_BytesResult CO_setBytesResultWsAfterFeedback(CO_BytesResult arg, CO_OptLayout
 ATbool CO_isValidWriteResult(CO_WriteResult arg);
 inline ATbool CO_isWriteResultSuccess(CO_WriteResult arg);
 inline ATbool CO_isWriteResultFailure(CO_WriteResult arg);
+ATbool CO_hasWriteResultWsAfterWriteError(CO_WriteResult arg);
+CO_OptLayout CO_getWriteResultWsAfterWriteError(CO_WriteResult arg);
+CO_WriteResult CO_setWriteResultWsAfterWriteError(CO_WriteResult arg, CO_OptLayout wsAfterWriteError);
+ATbool CO_hasWriteResultWsAfterParenOpen(CO_WriteResult arg);
+CO_OptLayout CO_getWriteResultWsAfterParenOpen(CO_WriteResult arg);
+CO_WriteResult CO_setWriteResultWsAfterParenOpen(CO_WriteResult arg, CO_OptLayout wsAfterParenOpen);
+ATbool CO_hasWriteResultFeedback(CO_WriteResult arg);
+CO_Feedback CO_getWriteResultFeedback(CO_WriteResult arg);
+CO_WriteResult CO_setWriteResultFeedback(CO_WriteResult arg, CO_Feedback Feedback);
+ATbool CO_hasWriteResultWsAfterFeedback(CO_WriteResult arg);
+CO_OptLayout CO_getWriteResultWsAfterFeedback(CO_WriteResult arg);
+CO_WriteResult CO_setWriteResultWsAfterFeedback(CO_WriteResult arg, CO_OptLayout wsAfterFeedback);
 
 /*}}}  */
 /*{{{  CO_Start accessors */
@@ -299,8 +323,8 @@ CO_BoolCon CO_visitBoolCon(CO_BoolCon arg);
 CO_Boolean CO_visitBoolean(CO_Boolean arg, CO_BoolCon (*acceptBoolCon)(CO_BoolCon), CO_OptLayout (*acceptWsAfterLhs)(CO_OptLayout), CO_OptLayout (*acceptWsAfterBar)(CO_OptLayout), CO_OptLayout (*acceptWsAfterAmp)(CO_OptLayout), CO_OptLayout (*acceptWsAfterNot)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParenOpen)(CO_OptLayout), CO_OptLayout (*acceptWsAfterBoolean)(CO_OptLayout));
 CO_Measure CO_visitMeasure(CO_Measure arg);
 CO_ParseResult CO_visitParseResult(CO_ParseResult arg, char* (*acceptTreeSort)(char*), CO_OptLayout (*acceptWsAfterParseTree)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParenOpen)(CO_OptLayout), CO_Bytes (*acceptLeftLayout)(CO_Bytes), CO_OptLayout (*acceptWsAfterLeftLayout)(CO_OptLayout), CO_OptLayout (*acceptWsAfterComma)(CO_OptLayout), ATerm (*acceptTree)(ATerm), CO_OptLayout (*acceptWsAfterTree)(CO_OptLayout), CO_OptLayout (*acceptWsAfterComma1)(CO_OptLayout), CO_Bytes (*acceptRightLayout)(CO_Bytes), CO_OptLayout (*acceptWsAfterRightLayout)(CO_OptLayout), CO_OptLayout (*acceptWsAfterComma2)(CO_OptLayout), CO_NatCon (*acceptAmbCnt)(CO_NatCon), CO_OptLayout (*acceptWsAfterAmbCnt)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParseError)(CO_OptLayout), CO_Feedback (*acceptFeedback)(CO_Feedback), CO_OptLayout (*acceptWsAfterFeedback)(CO_OptLayout));
-CO_BytesResult CO_visitBytesResult(CO_BytesResult arg, CO_OptLayout (*acceptWsAfterRead)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParenOpen)(CO_OptLayout), CO_Bytes (*acceptBytes)(CO_Bytes), CO_OptLayout (*acceptWsAfterBytes)(CO_OptLayout), CO_OptLayout (*acceptWsAfterReadError)(CO_OptLayout), CO_Feedback (*acceptFeedback)(CO_Feedback), CO_OptLayout (*acceptWsAfterFeedback)(CO_OptLayout));
-CO_WriteResult CO_visitWriteResult(CO_WriteResult arg);
+CO_BytesResult CO_visitBytesResult(CO_BytesResult arg, CO_OptLayout (*acceptWsAfterBytes)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParenOpen)(CO_OptLayout), CO_Bytes (*acceptValue)(CO_Bytes), CO_OptLayout (*acceptWsAfterValue)(CO_OptLayout), CO_OptLayout (*acceptWsAfterBytesError)(CO_OptLayout), CO_Feedback (*acceptFeedback)(CO_Feedback), CO_OptLayout (*acceptWsAfterFeedback)(CO_OptLayout));
+CO_WriteResult CO_visitWriteResult(CO_WriteResult arg, CO_OptLayout (*acceptWsAfterWriteError)(CO_OptLayout), CO_OptLayout (*acceptWsAfterParenOpen)(CO_OptLayout), CO_Feedback (*acceptFeedback)(CO_Feedback), CO_OptLayout (*acceptWsAfterFeedback)(CO_OptLayout));
 CO_Start CO_visitStart(CO_Start arg, CO_OptLayout (*acceptWsBefore)(CO_OptLayout), CO_ParseResult (*acceptTopParseResult)(CO_ParseResult), CO_OptLayout (*acceptWsAfter)(CO_OptLayout), int (*acceptAmbCnt)(int), CO_BytesResult (*acceptTopBytesResult)(CO_BytesResult), CO_WriteResult (*acceptTopWriteResult)(CO_WriteResult), CO_Measure (*acceptTopMeasure)(CO_Measure), CO_BoolCon (*acceptTopBoolCon)(CO_BoolCon), CO_Boolean (*acceptTopBoolean)(CO_Boolean));
 CO_OptLayout CO_visitOptLayout(CO_OptLayout arg, char* (*acceptString)(char*));
 

@@ -368,7 +368,7 @@ static PT_Tree write_term_to_file(PT_Tree file_arg, PT_Tree tree_arg)
   else {
     return (PT_Tree) CO_makeWriteResultFailure(l,l,
 			       makeGeneralError("write-term-to-file",
-						(char*) sys_errlist[errno]));
+						(char*) sys_errlist[errno]),l);
   }
 
   return tree_arg;
@@ -488,6 +488,7 @@ static PT_Tree write_bytes_to_file(PT_Tree input, PT_Tree bytes)
 {
   char *filename = getFilename(input);
   FILE *fp = NULL;
+  CO_OptLayout l = CO_makeOptLayoutAbsent();
 
   fp = fopen(filename, "wb");
 
@@ -497,8 +498,10 @@ static PT_Tree write_bytes_to_file(PT_Tree input, PT_Tree bytes)
   }
   else {
     return (PT_Tree) 
-      CO_makeWriteResultFailure("write-bytes-to-file",
-				(char*) sys_errlist[errno]);
+      CO_makeWriteResultFailure(l,l,
+				makeGeneralError("write-bytes-to-file",
+				(char*) sys_errlist[errno]),
+				l);
   } 
 
   return (PT_Tree) CO_makeWriteResultSuccess();
