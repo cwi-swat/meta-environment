@@ -1,4 +1,4 @@
-#    Meta-Environment - An environment for language prototyping.
+#   Meta-Environment - An environment for language prototyping.
 #    Copyright (C) 2000  Stichting Mathematisch Centrum, 
 #                        Amsterdam, The Netherlands.
 #
@@ -19,6 +19,11 @@
 #
 #
 # $Id$
+
+2001/02/01 (jurgenv@cwi.nl)
+   * moved Booleans from spec-lib to addeqs/spec.
+   * removed spec-lib
+
 2001/01/31 (mdejonge@cwi.nl)
    * Added --with-wish and --with-xemacs configuration switches
    * Extended PATH in meta script with location of xemacs
