@@ -19,7 +19,9 @@ typedef struct _MC_ButtonDescriptionList *MC_ButtonDescriptionList;
 typedef struct _MC_ButtonDescription *MC_ButtonDescription;
 typedef struct _MC_ButtonType *MC_ButtonType;
 typedef struct _MC_ButtonArgs *MC_ButtonArgs;
-typedef struct _MC_MenuTitles *MC_MenuTitles;
+typedef struct _MC_Menu *MC_Menu;
+typedef struct _MC_ActionList *MC_ActionList;
+typedef struct _MC_Items *MC_Items;
 typedef struct _MC_ModuleName *MC_ModuleName;
 
 /*}}}  */
@@ -35,7 +37,9 @@ void MC_protectButtonDescriptionList(MC_ButtonDescriptionList *arg);
 void MC_protectButtonDescription(MC_ButtonDescription *arg);
 void MC_protectButtonType(MC_ButtonType *arg);
 void MC_protectButtonArgs(MC_ButtonArgs *arg);
-void MC_protectMenuTitles(MC_MenuTitles *arg);
+void MC_protectMenu(MC_Menu *arg);
+void MC_protectActionList(MC_ActionList *arg);
+void MC_protectItems(MC_Items *arg);
 void MC_protectModuleName(MC_ModuleName *arg);
 
 /*}}}  */
@@ -55,8 +59,12 @@ MC_ButtonType MC_ButtonTypeFromTerm(ATerm t);
 ATerm MC_ButtonTypeToTerm(MC_ButtonType arg);
 MC_ButtonArgs MC_ButtonArgsFromTerm(ATerm t);
 ATerm MC_ButtonArgsToTerm(MC_ButtonArgs arg);
-MC_MenuTitles MC_MenuTitlesFromTerm(ATerm t);
-ATerm MC_MenuTitlesToTerm(MC_MenuTitles arg);
+MC_Menu MC_MenuFromTerm(ATerm t);
+ATerm MC_MenuToTerm(MC_Menu arg);
+MC_ActionList MC_ActionListFromTerm(ATerm t);
+ATerm MC_ActionListToTerm(MC_ActionList arg);
+MC_Items MC_ItemsFromTerm(ATerm t);
+ATerm MC_ItemsToTerm(MC_Items arg);
 MC_ModuleName MC_ModuleNameFromTerm(ATerm t);
 ATerm MC_ModuleNameToTerm(MC_ModuleName arg);
 
@@ -87,18 +95,30 @@ MC_ButtonDescriptionList MC_makeButtonDescriptionList3(MC_ButtonDescription elem
 MC_ButtonDescriptionList MC_makeButtonDescriptionList4(MC_ButtonDescription elem1, MC_ButtonDescription elem2, MC_ButtonDescription elem3, MC_ButtonDescription elem4);
 MC_ButtonDescriptionList MC_makeButtonDescriptionList5(MC_ButtonDescription elem1, MC_ButtonDescription elem2, MC_ButtonDescription elem3, MC_ButtonDescription elem4, MC_ButtonDescription elem5);
 MC_ButtonDescriptionList MC_makeButtonDescriptionList6(MC_ButtonDescription elem1, MC_ButtonDescription elem2, MC_ButtonDescription elem3, MC_ButtonDescription elem4, MC_ButtonDescription elem5, MC_ButtonDescription elem6);
-int MC_getMenuTitlesLength (MC_MenuTitles arg);
-MC_MenuTitles MC_reverseMenuTitles(MC_MenuTitles arg);
-MC_MenuTitles MC_appendMenuTitles(MC_MenuTitles arg, char* elem);
-MC_MenuTitles MC_concatMenuTitles(MC_MenuTitles arg0, MC_MenuTitles arg1);
-MC_MenuTitles MC_sliceMenuTitles(MC_MenuTitles arg, int start, int end);
-char* MC_getMenuTitlesstrAt(MC_MenuTitles arg, int index);
-MC_MenuTitles MC_replaceMenuTitlesstrAt(MC_MenuTitles arg, char* elem, int index);
-MC_MenuTitles MC_makeMenuTitles2(char* elem1, char* elem2);
-MC_MenuTitles MC_makeMenuTitles3(char* elem1, char* elem2, char* elem3);
-MC_MenuTitles MC_makeMenuTitles4(char* elem1, char* elem2, char* elem3, char* elem4);
-MC_MenuTitles MC_makeMenuTitles5(char* elem1, char* elem2, char* elem3, char* elem4, char* elem5);
-MC_MenuTitles MC_makeMenuTitles6(char* elem1, char* elem2, char* elem3, char* elem4, char* elem5, char* elem6);
+int MC_getActionListLength (MC_ActionList arg);
+MC_ActionList MC_reverseActionList(MC_ActionList arg);
+MC_ActionList MC_appendActionList(MC_ActionList arg, MC_Menu elem);
+MC_ActionList MC_concatActionList(MC_ActionList arg0, MC_ActionList arg1);
+MC_ActionList MC_sliceActionList(MC_ActionList arg, int start, int end);
+MC_Menu MC_getActionListMenuAt(MC_ActionList arg, int index);
+MC_ActionList MC_replaceActionListMenuAt(MC_ActionList arg, MC_Menu elem, int index);
+MC_ActionList MC_makeActionList2(MC_Menu elem1, MC_Menu elem2);
+MC_ActionList MC_makeActionList3(MC_Menu elem1, MC_Menu elem2, MC_Menu elem3);
+MC_ActionList MC_makeActionList4(MC_Menu elem1, MC_Menu elem2, MC_Menu elem3, MC_Menu elem4);
+MC_ActionList MC_makeActionList5(MC_Menu elem1, MC_Menu elem2, MC_Menu elem3, MC_Menu elem4, MC_Menu elem5);
+MC_ActionList MC_makeActionList6(MC_Menu elem1, MC_Menu elem2, MC_Menu elem3, MC_Menu elem4, MC_Menu elem5, MC_Menu elem6);
+int MC_getItemsLength (MC_Items arg);
+MC_Items MC_reverseItems(MC_Items arg);
+MC_Items MC_appendItems(MC_Items arg, char* elem);
+MC_Items MC_concatItems(MC_Items arg0, MC_Items arg1);
+MC_Items MC_sliceItems(MC_Items arg, int start, int end);
+char* MC_getItemsstrAt(MC_Items arg, int index);
+MC_Items MC_replaceItemsstrAt(MC_Items arg, char* elem, int index);
+MC_Items MC_makeItems2(char* elem1, char* elem2);
+MC_Items MC_makeItems3(char* elem1, char* elem2, char* elem3);
+MC_Items MC_makeItems4(char* elem1, char* elem2, char* elem3, char* elem4);
+MC_Items MC_makeItems5(char* elem1, char* elem2, char* elem3, char* elem4, char* elem5);
+MC_Items MC_makeItems6(char* elem1, char* elem2, char* elem3, char* elem4, char* elem5, char* elem6);
 
 /*}}}  */
 /*{{{  constructors */
@@ -124,12 +144,15 @@ MC_ButtonType MC_makeButtonTypeStudioMenubar(void);
 MC_ButtonType MC_makeButtonTypeStudioToolbar(void);
 MC_ButtonType MC_makeButtonTypeWildcard(void);
 MC_ButtonArgs MC_makeButtonArgsClick(void);
-MC_ButtonArgs MC_makeButtonArgsMenu(MC_MenuTitles list);
-MC_ButtonArgs MC_makeButtonArgsMenuwithshortcut(MC_MenuTitles list, const char* shortcut);
 MC_ButtonArgs MC_makeButtonArgsIcon(const char* title, const char* path);
-MC_MenuTitles MC_makeMenuTitlesEmpty(void);
-MC_MenuTitles MC_makeMenuTitlesSingle(const char* head);
-MC_MenuTitles MC_makeMenuTitlesMany(const char* head, MC_MenuTitles tail);
+MC_Menu MC_makeMenuDefault(MC_Items items);
+MC_Menu MC_makeMenuShortcut(MC_Items items, const char* shortcut);
+MC_ActionList MC_makeActionListEmpty(void);
+MC_ActionList MC_makeActionListSingle(MC_Menu head);
+MC_ActionList MC_makeActionListMany(MC_Menu head, MC_ActionList tail);
+MC_Items MC_makeItemsEmpty(void);
+MC_Items MC_makeItemsSingle(const char* head);
+MC_Items MC_makeItemsMany(const char* head, MC_Items tail);
 MC_ModuleName MC_makeModuleNameWildcard(void);
 
 /*}}}  */
@@ -142,7 +165,9 @@ ATbool MC_isEqualButtonDescriptionList(MC_ButtonDescriptionList arg0, MC_ButtonD
 ATbool MC_isEqualButtonDescription(MC_ButtonDescription arg0, MC_ButtonDescription arg1);
 ATbool MC_isEqualButtonType(MC_ButtonType arg0, MC_ButtonType arg1);
 ATbool MC_isEqualButtonArgs(MC_ButtonArgs arg0, MC_ButtonArgs arg1);
-ATbool MC_isEqualMenuTitles(MC_MenuTitles arg0, MC_MenuTitles arg1);
+ATbool MC_isEqualMenu(MC_Menu arg0, MC_Menu arg1);
+ATbool MC_isEqualActionList(MC_ActionList arg0, MC_ActionList arg1);
+ATbool MC_isEqualItems(MC_Items arg0, MC_Items arg1);
 ATbool MC_isEqualModuleName(MC_ModuleName arg0, MC_ModuleName arg1);
 
 /*}}}  */
@@ -236,15 +261,7 @@ inline ATbool MC_isButtonTypeWildcard(MC_ButtonType arg);
 
 ATbool MC_isValidButtonArgs(MC_ButtonArgs arg);
 inline ATbool MC_isButtonArgsClick(MC_ButtonArgs arg);
-inline ATbool MC_isButtonArgsMenu(MC_ButtonArgs arg);
-inline ATbool MC_isButtonArgsMenuwithshortcut(MC_ButtonArgs arg);
 inline ATbool MC_isButtonArgsIcon(MC_ButtonArgs arg);
-ATbool MC_hasButtonArgsList(MC_ButtonArgs arg);
-MC_MenuTitles MC_getButtonArgsList(MC_ButtonArgs arg);
-MC_ButtonArgs MC_setButtonArgsList(MC_ButtonArgs arg, MC_MenuTitles list);
-ATbool MC_hasButtonArgsShortcut(MC_ButtonArgs arg);
-char* MC_getButtonArgsShortcut(MC_ButtonArgs arg);
-MC_ButtonArgs MC_setButtonArgsShortcut(MC_ButtonArgs arg, const char* shortcut);
 ATbool MC_hasButtonArgsTitle(MC_ButtonArgs arg);
 char* MC_getButtonArgsTitle(MC_ButtonArgs arg);
 MC_ButtonArgs MC_setButtonArgsTitle(MC_ButtonArgs arg, const char* title);
@@ -253,18 +270,45 @@ char* MC_getButtonArgsPath(MC_ButtonArgs arg);
 MC_ButtonArgs MC_setButtonArgsPath(MC_ButtonArgs arg, const char* path);
 
 /*}}}  */
-/*{{{  MC_MenuTitles accessors */
+/*{{{  MC_Menu accessors */
 
-ATbool MC_isValidMenuTitles(MC_MenuTitles arg);
-inline ATbool MC_isMenuTitlesEmpty(MC_MenuTitles arg);
-inline ATbool MC_isMenuTitlesSingle(MC_MenuTitles arg);
-inline ATbool MC_isMenuTitlesMany(MC_MenuTitles arg);
-ATbool MC_hasMenuTitlesHead(MC_MenuTitles arg);
-char* MC_getMenuTitlesHead(MC_MenuTitles arg);
-MC_MenuTitles MC_setMenuTitlesHead(MC_MenuTitles arg, const char* head);
-ATbool MC_hasMenuTitlesTail(MC_MenuTitles arg);
-MC_MenuTitles MC_getMenuTitlesTail(MC_MenuTitles arg);
-MC_MenuTitles MC_setMenuTitlesTail(MC_MenuTitles arg, MC_MenuTitles tail);
+ATbool MC_isValidMenu(MC_Menu arg);
+inline ATbool MC_isMenuDefault(MC_Menu arg);
+inline ATbool MC_isMenuShortcut(MC_Menu arg);
+ATbool MC_hasMenuItems(MC_Menu arg);
+MC_Items MC_getMenuItems(MC_Menu arg);
+MC_Menu MC_setMenuItems(MC_Menu arg, MC_Items items);
+ATbool MC_hasMenuShortcut(MC_Menu arg);
+char* MC_getMenuShortcut(MC_Menu arg);
+MC_Menu MC_setMenuShortcut(MC_Menu arg, const char* shortcut);
+
+/*}}}  */
+/*{{{  MC_ActionList accessors */
+
+ATbool MC_isValidActionList(MC_ActionList arg);
+inline ATbool MC_isActionListEmpty(MC_ActionList arg);
+inline ATbool MC_isActionListSingle(MC_ActionList arg);
+inline ATbool MC_isActionListMany(MC_ActionList arg);
+ATbool MC_hasActionListHead(MC_ActionList arg);
+MC_Menu MC_getActionListHead(MC_ActionList arg);
+MC_ActionList MC_setActionListHead(MC_ActionList arg, MC_Menu head);
+ATbool MC_hasActionListTail(MC_ActionList arg);
+MC_ActionList MC_getActionListTail(MC_ActionList arg);
+MC_ActionList MC_setActionListTail(MC_ActionList arg, MC_ActionList tail);
+
+/*}}}  */
+/*{{{  MC_Items accessors */
+
+ATbool MC_isValidItems(MC_Items arg);
+inline ATbool MC_isItemsEmpty(MC_Items arg);
+inline ATbool MC_isItemsSingle(MC_Items arg);
+inline ATbool MC_isItemsMany(MC_Items arg);
+ATbool MC_hasItemsHead(MC_Items arg);
+char* MC_getItemsHead(MC_Items arg);
+MC_Items MC_setItemsHead(MC_Items arg, const char* head);
+ATbool MC_hasItemsTail(MC_Items arg);
+MC_Items MC_getItemsTail(MC_Items arg);
+MC_Items MC_setItemsTail(MC_Items arg, MC_Items tail);
 
 /*}}}  */
 /*{{{  MC_ModuleName accessors */
@@ -281,8 +325,10 @@ MC_Property MC_visitProperty(MC_Property arg, char* (*acceptModule)(char*), MC_B
 MC_ButtonDescriptionList MC_visitButtonDescriptionList(MC_ButtonDescriptionList arg, MC_ButtonDescription (*acceptHead)(MC_ButtonDescription));
 MC_ButtonDescription MC_visitButtonDescription(MC_ButtonDescription arg, MC_ButtonType (*acceptType)(MC_ButtonType), MC_ButtonArgs (*acceptArgs)(MC_ButtonArgs));
 MC_ButtonType MC_visitButtonType(MC_ButtonType arg);
-MC_ButtonArgs MC_visitButtonArgs(MC_ButtonArgs arg, MC_MenuTitles (*acceptList)(MC_MenuTitles), char* (*acceptShortcut)(char*), char* (*acceptTitle)(char*), char* (*acceptPath)(char*));
-MC_MenuTitles MC_visitMenuTitles(MC_MenuTitles arg, char* (*acceptHead)(char*));
+MC_ButtonArgs MC_visitButtonArgs(MC_ButtonArgs arg, char* (*acceptTitle)(char*), char* (*acceptPath)(char*));
+MC_Menu MC_visitMenu(MC_Menu arg, MC_Items (*acceptItems)(MC_Items), char* (*acceptShortcut)(char*));
+MC_ActionList MC_visitActionList(MC_ActionList arg, MC_Menu (*acceptHead)(MC_Menu));
+MC_Items MC_visitItems(MC_Items arg, char* (*acceptHead)(char*));
 MC_ModuleName MC_visitModuleName(MC_ModuleName arg);
 
 /*}}}  */

@@ -36,4 +36,4 @@ api:
 		--name MetaConfig \
 		--prefix MC_ \
 		--output . \
-		--verbose
+		--version 1.04

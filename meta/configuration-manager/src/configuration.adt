@@ -19,11 +19,12 @@
   constructor(ButtonType,wildcard,"*"),
 
   constructor(ButtonArgs,click,click),
-  constructor(ButtonArgs,menu,menu(<list(MenuTitles)>)),
-  constructor(ButtonArgs,menuwithshortcut,menuwithshortcut(<list(MenuTitles)>,<shortcut(str)>)),
   constructor(ButtonArgs,icon,icon(<title(str)>,<path(str)>)),
 
-  list(MenuTitles,str),
+  constructor(Menu, default, menu-entry(<items(Items)>)),
+  constructor(Menu, shortcut, menu-entry(<items(Items)>, <shortcut(str)>)),
+  list(ActionList, Menu),
+  list(Items, str),
 
-  constructor(ModuleName,wildcard,"*")
+  constructor(ModuleName, wildcard, "*")
 ]

@@ -51,7 +51,9 @@ typedef struct ATerm _MC_ButtonDescriptionList;
 typedef struct ATerm _MC_ButtonDescription;
 typedef struct ATerm _MC_ButtonType;
 typedef struct ATerm _MC_ButtonArgs;
-typedef struct ATerm _MC_MenuTitles;
+typedef struct ATerm _MC_Menu;
+typedef struct ATerm _MC_ActionList;
+typedef struct ATerm _MC_Items;
 typedef struct ATerm _MC_ModuleName;
 
 /*}}}  */
@@ -102,7 +104,17 @@ void MC_protectButtonArgs(MC_ButtonArgs *arg)
   ATprotect((ATerm*)((void*) arg));
 }
 
-void MC_protectMenuTitles(MC_MenuTitles *arg)
+void MC_protectMenu(MC_Menu *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void MC_protectActionList(MC_ActionList *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void MC_protectItems(MC_Items *arg)
 {
   ATprotect((ATerm*)((void*) arg));
 }
@@ -228,17 +240,49 @@ ATerm MC_ButtonArgsToTerm(MC_ButtonArgs arg)
 }
 
 /*}}}  */
-/*{{{  MC_MenuTitles MC_MenuTitlesFromTerm(ATerm t) */
+/*{{{  MC_Menu MC_MenuFromTerm(ATerm t) */
 
-MC_MenuTitles MC_MenuTitlesFromTerm(ATerm t)
+MC_Menu MC_MenuFromTerm(ATerm t)
 {
-  return (MC_MenuTitles)t;
+  return (MC_Menu)t;
 }
 
 /*}}}  */
-/*{{{  ATerm MC_MenuTitlesToTerm(MC_MenuTitles arg) */
+/*{{{  ATerm MC_MenuToTerm(MC_Menu arg) */
 
-ATerm MC_MenuTitlesToTerm(MC_MenuTitles arg)
+ATerm MC_MenuToTerm(MC_Menu arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  MC_ActionList MC_ActionListFromTerm(ATerm t) */
+
+MC_ActionList MC_ActionListFromTerm(ATerm t)
+{
+  return (MC_ActionList)t;
+}
+
+/*}}}  */
+/*{{{  ATerm MC_ActionListToTerm(MC_ActionList arg) */
+
+ATerm MC_ActionListToTerm(MC_ActionList arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  MC_Items MC_ItemsFromTerm(ATerm t) */
+
+MC_Items MC_ItemsFromTerm(ATerm t)
+{
+  return (MC_Items)t;
+}
+
+/*}}}  */
+/*{{{  ATerm MC_ItemsToTerm(MC_Items arg) */
+
+ATerm MC_ItemsToTerm(MC_Items arg)
 {
   return (ATerm)arg;
 }
@@ -336,41 +380,77 @@ MC_ButtonDescriptionList MC_makeButtonDescriptionList5(MC_ButtonDescription elem
 MC_ButtonDescriptionList MC_makeButtonDescriptionList6(MC_ButtonDescription elem1, MC_ButtonDescription elem2, MC_ButtonDescription elem3, MC_ButtonDescription elem4, MC_ButtonDescription elem5, MC_ButtonDescription elem6) {
   return (MC_ButtonDescriptionList) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
 }
-int MC_getMenuTitlesLength (MC_MenuTitles arg) {
+int MC_getActionListLength (MC_ActionList arg) {
   return ATgetLength((ATermList) arg);
 }
-MC_MenuTitles MC_reverseMenuTitles(MC_MenuTitles arg) {
-  return (MC_MenuTitles) ATreverse((ATermList) arg);
+MC_ActionList MC_reverseActionList(MC_ActionList arg) {
+  return (MC_ActionList) ATreverse((ATermList) arg);
 }
-MC_MenuTitles MC_appendMenuTitles(MC_MenuTitles arg, char* elem) {
-  return (MC_MenuTitles) ATappend((ATermList) arg, (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem, 0, ATtrue))));
+MC_ActionList MC_appendActionList(MC_ActionList arg, MC_Menu elem) {
+  return (MC_ActionList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
 }
-MC_MenuTitles MC_concatMenuTitles(MC_MenuTitles arg0, MC_MenuTitles arg1) {
-  return (MC_MenuTitles) ATconcat((ATermList) arg0, (ATermList) arg1);
+MC_ActionList MC_concatActionList(MC_ActionList arg0, MC_ActionList arg1) {
+  return (MC_ActionList) ATconcat((ATermList) arg0, (ATermList) arg1);
 }
-MC_MenuTitles MC_sliceMenuTitles(MC_MenuTitles arg, int start, int end) {
-  return (MC_MenuTitles) ATgetSlice((ATermList) arg, start, end);
+MC_ActionList MC_sliceActionList(MC_ActionList arg, int start, int end) {
+  return (MC_ActionList) ATgetSlice((ATermList) arg, start, end);
 }
-char* MC_getMenuTitlesstrAt(MC_MenuTitles arg, int index) {
+MC_Menu MC_getActionListMenuAt(MC_ActionList arg, int index) {
+ return (MC_Menu)ATelementAt((ATermList) arg,index);
+}
+MC_ActionList MC_replaceActionListMenuAt(MC_ActionList arg, MC_Menu elem, int index) {
+ return (MC_ActionList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
+}
+MC_ActionList MC_makeActionList2(MC_Menu elem1, MC_Menu elem2) {
+  return (MC_ActionList) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+}
+MC_ActionList MC_makeActionList3(MC_Menu elem1, MC_Menu elem2, MC_Menu elem3) {
+  return (MC_ActionList) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+}
+MC_ActionList MC_makeActionList4(MC_Menu elem1, MC_Menu elem2, MC_Menu elem3, MC_Menu elem4) {
+  return (MC_ActionList) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+}
+MC_ActionList MC_makeActionList5(MC_Menu elem1, MC_Menu elem2, MC_Menu elem3, MC_Menu elem4, MC_Menu elem5) {
+  return (MC_ActionList) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+}
+MC_ActionList MC_makeActionList6(MC_Menu elem1, MC_Menu elem2, MC_Menu elem3, MC_Menu elem4, MC_Menu elem5, MC_Menu elem6) {
+  return (MC_ActionList) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+}
+int MC_getItemsLength (MC_Items arg) {
+  return ATgetLength((ATermList) arg);
+}
+MC_Items MC_reverseItems(MC_Items arg) {
+  return (MC_Items) ATreverse((ATermList) arg);
+}
+MC_Items MC_appendItems(MC_Items arg, char* elem) {
+  return (MC_Items) ATappend((ATermList) arg, (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem, 0, ATtrue))));
+}
+MC_Items MC_concatItems(MC_Items arg0, MC_Items arg1) {
+  return (MC_Items) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+MC_Items MC_sliceItems(MC_Items arg, int start, int end) {
+  return (MC_Items) ATgetSlice((ATermList) arg, start, end);
+}
+char* MC_getItemsstrAt(MC_Items arg, int index) {
  return (char*)ATgetName(ATgetAFun((ATermAppl) ATelementAt((ATermList) arg,index)));
 }
-MC_MenuTitles MC_replaceMenuTitlesstrAt(MC_MenuTitles arg, char* elem, int index) {
- return (MC_MenuTitles) ATreplace((ATermList) arg, (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem, 0, ATtrue))), index);
+MC_Items MC_replaceItemsstrAt(MC_Items arg, char* elem, int index) {
+ return (MC_Items) ATreplace((ATermList) arg, (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem, 0, ATtrue))), index);
 }
-MC_MenuTitles MC_makeMenuTitles2(char* elem1, char* elem2) {
-  return (MC_MenuTitles) ATmakeList2((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem2, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem2, 0, ATtrue))));
+MC_Items MC_makeItems2(char* elem1, char* elem2) {
+  return (MC_Items) ATmakeList2((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem2, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem2, 0, ATtrue))));
 }
-MC_MenuTitles MC_makeMenuTitles3(char* elem1, char* elem2, char* elem3) {
-  return (MC_MenuTitles) ATmakeList3((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem3, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem3, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem3, 0, ATtrue))));
+MC_Items MC_makeItems3(char* elem1, char* elem2, char* elem3) {
+  return (MC_Items) ATmakeList3((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem3, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem3, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem3, 0, ATtrue))));
 }
-MC_MenuTitles MC_makeMenuTitles4(char* elem1, char* elem2, char* elem3, char* elem4) {
-  return (MC_MenuTitles) ATmakeList4((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem4, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem4, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem4, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem4, 0, ATtrue))));
+MC_Items MC_makeItems4(char* elem1, char* elem2, char* elem3, char* elem4) {
+  return (MC_Items) ATmakeList4((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem4, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem4, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem4, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem4, 0, ATtrue))));
 }
-MC_MenuTitles MC_makeMenuTitles5(char* elem1, char* elem2, char* elem3, char* elem4, char* elem5) {
-  return (MC_MenuTitles) ATmakeList5((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem5, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem5, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem5, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem5, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem5, 0, ATtrue))));
+MC_Items MC_makeItems5(char* elem1, char* elem2, char* elem3, char* elem4, char* elem5) {
+  return (MC_Items) ATmakeList5((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem5, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem5, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem5, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem5, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem5, 0, ATtrue))));
 }
-MC_MenuTitles MC_makeMenuTitles6(char* elem1, char* elem2, char* elem3, char* elem4, char* elem5, char* elem6) {
-  return (MC_MenuTitles) ATmakeList6((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))));
+MC_Items MC_makeItems6(char* elem1, char* elem2, char* elem3, char* elem4, char* elem5, char* elem6) {
+  return (MC_Items) ATmakeList6((ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))), (ATerm) ((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(elem6, 0, ATtrue))));
 }
 
 /*}}}  */
@@ -544,51 +624,75 @@ MC_ButtonArgs MC_makeButtonArgsClick(void)
 }
 
 /*}}}  */
-/*{{{  MC_ButtonArgs MC_makeButtonArgsMenu(MC_MenuTitles list) */
-
-MC_ButtonArgs MC_makeButtonArgsMenu(MC_MenuTitles list)
-{
-  return (MC_ButtonArgs)(ATerm)ATmakeAppl1(MC_afun15, (ATerm) list);
-}
-
-/*}}}  */
-/*{{{  MC_ButtonArgs MC_makeButtonArgsMenuwithshortcut(MC_MenuTitles list, const char* shortcut) */
-
-MC_ButtonArgs MC_makeButtonArgsMenuwithshortcut(MC_MenuTitles list, const char* shortcut)
-{
-  return (MC_ButtonArgs)(ATerm)ATmakeAppl2(MC_afun16, (ATerm) list, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
-}
-
-/*}}}  */
 /*{{{  MC_ButtonArgs MC_makeButtonArgsIcon(const char* title, const char* path) */
 
 MC_ButtonArgs MC_makeButtonArgsIcon(const char* title, const char* path)
 {
-  return (MC_ButtonArgs)(ATerm)ATmakeAppl2(MC_afun17, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(title, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
+  return (MC_ButtonArgs)(ATerm)ATmakeAppl2(MC_afun15, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(title, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(path, 0, ATtrue)));
 }
 
 /*}}}  */
-/*{{{  MC_MenuTitles MC_makeMenuTitlesEmpty(void) */
+/*{{{  MC_Menu MC_makeMenuDefault(MC_Items items) */
 
-MC_MenuTitles MC_makeMenuTitlesEmpty(void)
+MC_Menu MC_makeMenuDefault(MC_Items items)
 {
-  return (MC_MenuTitles)(ATerm)ATempty;
+  return (MC_Menu)(ATerm)ATmakeAppl1(MC_afun16, (ATerm) items);
 }
 
 /*}}}  */
-/*{{{  MC_MenuTitles MC_makeMenuTitlesSingle(const char* head) */
+/*{{{  MC_Menu MC_makeMenuShortcut(MC_Items items, const char* shortcut) */
 
-MC_MenuTitles MC_makeMenuTitlesSingle(const char* head)
+MC_Menu MC_makeMenuShortcut(MC_Items items, const char* shortcut)
 {
-  return (MC_MenuTitles)(ATerm)ATmakeList1((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(head, 0, ATtrue)));
+  return (MC_Menu)(ATerm)ATmakeAppl2(MC_afun17, (ATerm) items, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
 }
 
 /*}}}  */
-/*{{{  MC_MenuTitles MC_makeMenuTitlesMany(const char* head, MC_MenuTitles tail) */
+/*{{{  MC_ActionList MC_makeActionListEmpty(void) */
 
-MC_MenuTitles MC_makeMenuTitlesMany(const char* head, MC_MenuTitles tail)
+MC_ActionList MC_makeActionListEmpty(void)
 {
-  return (MC_MenuTitles)(ATerm)ATinsert((ATermList)tail, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(head, 0, ATtrue)));
+  return (MC_ActionList)(ATerm)ATempty;
+}
+
+/*}}}  */
+/*{{{  MC_ActionList MC_makeActionListSingle(MC_Menu head) */
+
+MC_ActionList MC_makeActionListSingle(MC_Menu head)
+{
+  return (MC_ActionList)(ATerm)ATmakeList1((ATerm) head);
+}
+
+/*}}}  */
+/*{{{  MC_ActionList MC_makeActionListMany(MC_Menu head, MC_ActionList tail) */
+
+MC_ActionList MC_makeActionListMany(MC_Menu head, MC_ActionList tail)
+{
+  return (MC_ActionList)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
+}
+
+/*}}}  */
+/*{{{  MC_Items MC_makeItemsEmpty(void) */
+
+MC_Items MC_makeItemsEmpty(void)
+{
+  return (MC_Items)(ATerm)ATempty;
+}
+
+/*}}}  */
+/*{{{  MC_Items MC_makeItemsSingle(const char* head) */
+
+MC_Items MC_makeItemsSingle(const char* head)
+{
+  return (MC_Items)(ATerm)ATmakeList1((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(head, 0, ATtrue)));
+}
+
+/*}}}  */
+/*{{{  MC_Items MC_makeItemsMany(const char* head, MC_Items tail) */
+
+MC_Items MC_makeItemsMany(const char* head, MC_Items tail)
+{
+  return (MC_Items)(ATerm)ATinsert((ATermList)tail, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(head, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -639,7 +743,17 @@ ATbool MC_isEqualButtonArgs(MC_ButtonArgs arg0, MC_ButtonArgs arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool MC_isEqualMenuTitles(MC_MenuTitles arg0, MC_MenuTitles arg1)
+ATbool MC_isEqualMenu(MC_Menu arg0, MC_Menu arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool MC_isEqualActionList(MC_ActionList arg0, MC_ActionList arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool MC_isEqualItems(MC_Items arg0, MC_Items arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -1623,12 +1737,6 @@ ATbool MC_isValidButtonArgs(MC_ButtonArgs arg)
   if (MC_isButtonArgsClick(arg)) {
     return ATtrue;
   }
-  else if (MC_isButtonArgsMenu(arg)) {
-    return ATtrue;
-  }
-  else if (MC_isButtonArgsMenuwithshortcut(arg)) {
-    return ATtrue;
-  }
   else if (MC_isButtonArgsIcon(arg)) {
     return ATtrue;
   }
@@ -1658,50 +1766,6 @@ inline ATbool MC_isButtonArgsClick(MC_ButtonArgs arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool MC_isButtonArgsMenu(MC_ButtonArgs arg) */
-
-inline ATbool MC_isButtonArgsMenu(MC_ButtonArgs arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, MC_patternButtonArgsMenu, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  inline ATbool MC_isButtonArgsMenuwithshortcut(MC_ButtonArgs arg) */
-
-inline ATbool MC_isButtonArgsMenuwithshortcut(MC_ButtonArgs arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, MC_patternButtonArgsMenuwithshortcut, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
 /*{{{  inline ATbool MC_isButtonArgsIcon(MC_ButtonArgs arg) */
 
 inline ATbool MC_isButtonArgsIcon(MC_ButtonArgs arg)
@@ -1721,81 +1785,6 @@ inline ATbool MC_isButtonArgsIcon(MC_ButtonArgs arg)
 
     return last_result;
   }
-}
-
-/*}}}  */
-/*{{{  ATbool MC_hasButtonArgsList(MC_ButtonArgs arg) */
-
-ATbool MC_hasButtonArgsList(MC_ButtonArgs arg)
-{
-  if (MC_isButtonArgsMenu(arg)) {
-    return ATtrue;
-  }
-  else if (MC_isButtonArgsMenuwithshortcut(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  MC_MenuTitles MC_getButtonArgsList(MC_ButtonArgs arg) */
-
-MC_MenuTitles MC_getButtonArgsList(MC_ButtonArgs arg)
-{
-  if (MC_isButtonArgsMenu(arg)) {
-    return (MC_MenuTitles)ATgetArgument((ATermAppl)arg, 0);
-  }
-  else 
-    return (MC_MenuTitles)ATgetArgument((ATermAppl)arg, 0);
-}
-
-/*}}}  */
-/*{{{  MC_ButtonArgs MC_setButtonArgsList(MC_ButtonArgs arg, MC_MenuTitles list) */
-
-MC_ButtonArgs MC_setButtonArgsList(MC_ButtonArgs arg, MC_MenuTitles list)
-{
-  if (MC_isButtonArgsMenu(arg)) {
-    return (MC_ButtonArgs)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 0);
-  }
-  else if (MC_isButtonArgsMenuwithshortcut(arg)) {
-    return (MC_ButtonArgs)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 0);
-  }
-
-  ATabort("ButtonArgs has no List: %t\n", arg);
-  return (MC_ButtonArgs)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool MC_hasButtonArgsShortcut(MC_ButtonArgs arg) */
-
-ATbool MC_hasButtonArgsShortcut(MC_ButtonArgs arg)
-{
-  if (MC_isButtonArgsMenuwithshortcut(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* MC_getButtonArgsShortcut(MC_ButtonArgs arg) */
-
-char* MC_getButtonArgsShortcut(MC_ButtonArgs arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
-}
-
-/*}}}  */
-/*{{{  MC_ButtonArgs MC_setButtonArgsShortcut(MC_ButtonArgs arg, const char* shortcut) */
-
-MC_ButtonArgs MC_setButtonArgsShortcut(MC_ButtonArgs arg, const char* shortcut)
-{
-  if (MC_isButtonArgsMenuwithshortcut(arg)) {
-    return (MC_ButtonArgs)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue))), 1);
-  }
-
-  ATabort("ButtonArgs has no Shortcut: %t\n", arg);
-  return (MC_ButtonArgs)NULL;
 }
 
 /*}}}  */
@@ -1867,43 +1856,180 @@ MC_ButtonArgs MC_setButtonArgsPath(MC_ButtonArgs arg, const char* path)
 /*}}}  */
 
 /*}}}  */
-/*{{{  MC_MenuTitles accessors */
+/*{{{  MC_Menu accessors */
 
-/*{{{  ATbool MC_isValidMenuTitles(MC_MenuTitles arg) */
+/*{{{  ATbool MC_isValidMenu(MC_Menu arg) */
 
-ATbool MC_isValidMenuTitles(MC_MenuTitles arg)
+ATbool MC_isValidMenu(MC_Menu arg)
 {
-  if (MC_isMenuTitlesEmpty(arg)) {
+  if (MC_isMenuDefault(arg)) {
     return ATtrue;
   }
-  else if (MC_isMenuTitlesSingle(arg)) {
-    return ATtrue;
-  }
-  else if (MC_isMenuTitlesMany(arg)) {
+  else if (MC_isMenuShortcut(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  inline ATbool MC_isMenuTitlesEmpty(MC_MenuTitles arg) */
+/*{{{  inline ATbool MC_isMenuDefault(MC_Menu arg) */
 
-inline ATbool MC_isMenuTitlesEmpty(MC_MenuTitles arg)
+inline ATbool MC_isMenuDefault(MC_Menu arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternMenuDefault, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isMenuShortcut(MC_Menu arg) */
+
+inline ATbool MC_isMenuShortcut(MC_Menu arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternMenuShortcut, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasMenuItems(MC_Menu arg) */
+
+ATbool MC_hasMenuItems(MC_Menu arg)
+{
+  if (MC_isMenuDefault(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isMenuShortcut(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  MC_Items MC_getMenuItems(MC_Menu arg) */
+
+MC_Items MC_getMenuItems(MC_Menu arg)
+{
+  if (MC_isMenuDefault(arg)) {
+    return (MC_Items)ATgetArgument((ATermAppl)arg, 0);
+  }
+  else 
+    return (MC_Items)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  MC_Menu MC_setMenuItems(MC_Menu arg, MC_Items items) */
+
+MC_Menu MC_setMenuItems(MC_Menu arg, MC_Items items)
+{
+  if (MC_isMenuDefault(arg)) {
+    return (MC_Menu)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) items), 0);
+  }
+  else if (MC_isMenuShortcut(arg)) {
+    return (MC_Menu)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) items), 0);
+  }
+
+  ATabort("Menu has no Items: %t\n", arg);
+  return (MC_Menu)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasMenuShortcut(MC_Menu arg) */
+
+ATbool MC_hasMenuShortcut(MC_Menu arg)
+{
+  if (MC_isMenuShortcut(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* MC_getMenuShortcut(MC_Menu arg) */
+
+char* MC_getMenuShortcut(MC_Menu arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
+}
+
+/*}}}  */
+/*{{{  MC_Menu MC_setMenuShortcut(MC_Menu arg, const char* shortcut) */
+
+MC_Menu MC_setMenuShortcut(MC_Menu arg, const char* shortcut)
+{
+  if (MC_isMenuShortcut(arg)) {
+    return (MC_Menu)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue))), 1);
+  }
+
+  ATabort("Menu has no Shortcut: %t\n", arg);
+  return (MC_Menu)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  MC_ActionList accessors */
+
+/*{{{  ATbool MC_isValidActionList(MC_ActionList arg) */
+
+ATbool MC_isValidActionList(MC_ActionList arg)
+{
+  if (MC_isActionListEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isActionListSingle(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isActionListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isActionListEmpty(MC_ActionList arg) */
+
+inline ATbool MC_isActionListEmpty(MC_ActionList arg)
 {
   if (!ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, MC_patternMenuTitlesEmpty));
+  assert(ATmatchTerm((ATerm)arg, MC_patternActionListEmpty));
 #endif
   return ATtrue;
 }
 
 /*}}}  */
-/*{{{  inline ATbool MC_isMenuTitlesSingle(MC_MenuTitles arg) */
+/*{{{  inline ATbool MC_isActionListSingle(MC_ActionList arg) */
 
-inline ATbool MC_isMenuTitlesSingle(MC_MenuTitles arg)
+inline ATbool MC_isActionListSingle(MC_ActionList arg)
 {
   if (ATisEmpty((ATermList)arg)) {
     return ATfalse;
@@ -1917,7 +2043,7 @@ inline ATbool MC_isMenuTitlesSingle(MC_MenuTitles arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, MC_patternMenuTitlesSingle, NULL);
+      last_result = ATmatchTerm((ATerm)arg, MC_patternActionListSingle, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -1926,9 +2052,9 @@ inline ATbool MC_isMenuTitlesSingle(MC_MenuTitles arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool MC_isMenuTitlesMany(MC_MenuTitles arg) */
+/*{{{  inline ATbool MC_isActionListMany(MC_ActionList arg) */
 
-inline ATbool MC_isMenuTitlesMany(MC_MenuTitles arg)
+inline ATbool MC_isActionListMany(MC_ActionList arg)
 {
   if (ATisEmpty((ATermList)arg)) {
     return ATfalse;
@@ -1942,7 +2068,7 @@ inline ATbool MC_isMenuTitlesMany(MC_MenuTitles arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, MC_patternMenuTitlesMany, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, MC_patternActionListMany, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -1951,25 +2077,186 @@ inline ATbool MC_isMenuTitlesMany(MC_MenuTitles arg)
 }
 
 /*}}}  */
-/*{{{  ATbool MC_hasMenuTitlesHead(MC_MenuTitles arg) */
+/*{{{  ATbool MC_hasActionListHead(MC_ActionList arg) */
 
-ATbool MC_hasMenuTitlesHead(MC_MenuTitles arg)
+ATbool MC_hasActionListHead(MC_ActionList arg)
 {
-  if (MC_isMenuTitlesSingle(arg)) {
+  if (MC_isActionListSingle(arg)) {
     return ATtrue;
   }
-  else if (MC_isMenuTitlesMany(arg)) {
+  else if (MC_isActionListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  char* MC_getMenuTitlesHead(MC_MenuTitles arg) */
+/*{{{  MC_Menu MC_getActionListHead(MC_ActionList arg) */
 
-char* MC_getMenuTitlesHead(MC_MenuTitles arg)
+MC_Menu MC_getActionListHead(MC_ActionList arg)
 {
-  if (MC_isMenuTitlesSingle(arg)) {
+  if (MC_isActionListSingle(arg)) {
+    return (MC_Menu)ATgetFirst((ATermList)arg);
+  }
+  else 
+    return (MC_Menu)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  MC_ActionList MC_setActionListHead(MC_ActionList arg, MC_Menu head) */
+
+MC_ActionList MC_setActionListHead(MC_ActionList arg, MC_Menu head)
+{
+  if (MC_isActionListSingle(arg)) {
+    return (MC_ActionList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+  else if (MC_isActionListMany(arg)) {
+    return (MC_ActionList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+
+  ATabort("ActionList has no Head: %t\n", arg);
+  return (MC_ActionList)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasActionListTail(MC_ActionList arg) */
+
+ATbool MC_hasActionListTail(MC_ActionList arg)
+{
+  if (MC_isActionListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  MC_ActionList MC_getActionListTail(MC_ActionList arg) */
+
+MC_ActionList MC_getActionListTail(MC_ActionList arg)
+{
+  
+    return (MC_ActionList)ATgetNext((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  MC_ActionList MC_setActionListTail(MC_ActionList arg, MC_ActionList tail) */
+
+MC_ActionList MC_setActionListTail(MC_ActionList arg, MC_ActionList tail)
+{
+  if (MC_isActionListMany(arg)) {
+    return (MC_ActionList)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
+  }
+
+  ATabort("ActionList has no Tail: %t\n", arg);
+  return (MC_ActionList)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  MC_Items accessors */
+
+/*{{{  ATbool MC_isValidItems(MC_Items arg) */
+
+ATbool MC_isValidItems(MC_Items arg)
+{
+  if (MC_isItemsEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isItemsSingle(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isItemsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isItemsEmpty(MC_Items arg) */
+
+inline ATbool MC_isItemsEmpty(MC_Items arg)
+{
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, MC_patternItemsEmpty));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isItemsSingle(MC_Items arg) */
+
+inline ATbool MC_isItemsSingle(MC_Items arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternItemsSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MC_isItemsMany(MC_Items arg) */
+
+inline ATbool MC_isItemsMany(MC_Items arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MC_patternItemsMany, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool MC_hasItemsHead(MC_Items arg) */
+
+ATbool MC_hasItemsHead(MC_Items arg)
+{
+  if (MC_isItemsSingle(arg)) {
+    return ATtrue;
+  }
+  else if (MC_isItemsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* MC_getItemsHead(MC_Items arg) */
+
+char* MC_getItemsHead(MC_Items arg)
+{
+  if (MC_isItemsSingle(arg)) {
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetFirst((ATermList)arg)));
   }
   else 
@@ -1977,52 +2264,52 @@ char* MC_getMenuTitlesHead(MC_MenuTitles arg)
 }
 
 /*}}}  */
-/*{{{  MC_MenuTitles MC_setMenuTitlesHead(MC_MenuTitles arg, const char* head) */
+/*{{{  MC_Items MC_setItemsHead(MC_Items arg, const char* head) */
 
-MC_MenuTitles MC_setMenuTitlesHead(MC_MenuTitles arg, const char* head)
+MC_Items MC_setItemsHead(MC_Items arg, const char* head)
 {
-  if (MC_isMenuTitlesSingle(arg)) {
-    return (MC_MenuTitles)ATreplace((ATermList)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(head, 0, ATtrue))), 0);
+  if (MC_isItemsSingle(arg)) {
+    return (MC_Items)ATreplace((ATermList)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(head, 0, ATtrue))), 0);
   }
-  else if (MC_isMenuTitlesMany(arg)) {
-    return (MC_MenuTitles)ATreplace((ATermList)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(head, 0, ATtrue))), 0);
+  else if (MC_isItemsMany(arg)) {
+    return (MC_Items)ATreplace((ATermList)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(head, 0, ATtrue))), 0);
   }
 
-  ATabort("MenuTitles has no Head: %t\n", arg);
-  return (MC_MenuTitles)NULL;
+  ATabort("Items has no Head: %t\n", arg);
+  return (MC_Items)NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool MC_hasMenuTitlesTail(MC_MenuTitles arg) */
+/*{{{  ATbool MC_hasItemsTail(MC_Items arg) */
 
-ATbool MC_hasMenuTitlesTail(MC_MenuTitles arg)
+ATbool MC_hasItemsTail(MC_Items arg)
 {
-  if (MC_isMenuTitlesMany(arg)) {
+  if (MC_isItemsMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  MC_MenuTitles MC_getMenuTitlesTail(MC_MenuTitles arg) */
+/*{{{  MC_Items MC_getItemsTail(MC_Items arg) */
 
-MC_MenuTitles MC_getMenuTitlesTail(MC_MenuTitles arg)
+MC_Items MC_getItemsTail(MC_Items arg)
 {
   
-    return (MC_MenuTitles)ATgetNext((ATermList)arg);
+    return (MC_Items)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
-/*{{{  MC_MenuTitles MC_setMenuTitlesTail(MC_MenuTitles arg, MC_MenuTitles tail) */
+/*{{{  MC_Items MC_setItemsTail(MC_Items arg, MC_Items tail) */
 
-MC_MenuTitles MC_setMenuTitlesTail(MC_MenuTitles arg, MC_MenuTitles tail)
+MC_Items MC_setItemsTail(MC_Items arg, MC_Items tail)
 {
-  if (MC_isMenuTitlesMany(arg)) {
-    return (MC_MenuTitles)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
+  if (MC_isItemsMany(arg)) {
+    return (MC_Items)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
   }
 
-  ATabort("MenuTitles has no Tail: %t\n", arg);
-  return (MC_MenuTitles)NULL;
+  ATabort("Items has no Tail: %t\n", arg);
+  return (MC_Items)NULL;
 }
 
 /*}}}  */
@@ -2185,21 +2472,12 @@ MC_ButtonType MC_visitButtonType(MC_ButtonType arg)
 }
 
 /*}}}  */
-/*{{{  MC_ButtonArgs MC_visitButtonArgs(MC_ButtonArgs arg, MC_MenuTitles (*acceptList)(MC_MenuTitles), char* (*acceptShortcut)(char*), char* (*acceptTitle)(char*), char* (*acceptPath)(char*)) */
+/*{{{  MC_ButtonArgs MC_visitButtonArgs(MC_ButtonArgs arg, char* (*acceptTitle)(char*), char* (*acceptPath)(char*)) */
 
-MC_ButtonArgs MC_visitButtonArgs(MC_ButtonArgs arg, MC_MenuTitles (*acceptList)(MC_MenuTitles), char* (*acceptShortcut)(char*), char* (*acceptTitle)(char*), char* (*acceptPath)(char*))
+MC_ButtonArgs MC_visitButtonArgs(MC_ButtonArgs arg, char* (*acceptTitle)(char*), char* (*acceptPath)(char*))
 {
   if (MC_isButtonArgsClick(arg)) {
     return MC_makeButtonArgsClick();
-  }
-  if (MC_isButtonArgsMenu(arg)) {
-    return MC_makeButtonArgsMenu(
-        acceptList ? acceptList(MC_getButtonArgsList(arg)) : MC_getButtonArgsList(arg));
-  }
-  if (MC_isButtonArgsMenuwithshortcut(arg)) {
-    return MC_makeButtonArgsMenuwithshortcut(
-        acceptList ? acceptList(MC_getButtonArgsList(arg)) : MC_getButtonArgsList(arg),
-        acceptShortcut ? acceptShortcut(MC_getButtonArgsShortcut(arg)) : MC_getButtonArgsShortcut(arg));
   }
   if (MC_isButtonArgsIcon(arg)) {
     return MC_makeButtonArgsIcon(
@@ -2211,24 +2489,63 @@ MC_ButtonArgs MC_visitButtonArgs(MC_ButtonArgs arg, MC_MenuTitles (*acceptList)(
 }
 
 /*}}}  */
-/*{{{  MC_MenuTitles MC_visitMenuTitles(MC_MenuTitles arg, char* (*acceptHead)(char*)) */
+/*{{{  MC_Menu MC_visitMenu(MC_Menu arg, MC_Items (*acceptItems)(MC_Items), char* (*acceptShortcut)(char*)) */
 
-MC_MenuTitles MC_visitMenuTitles(MC_MenuTitles arg, char* (*acceptHead)(char*))
+MC_Menu MC_visitMenu(MC_Menu arg, MC_Items (*acceptItems)(MC_Items), char* (*acceptShortcut)(char*))
 {
-  if (MC_isMenuTitlesEmpty(arg)) {
-    return MC_makeMenuTitlesEmpty();
+  if (MC_isMenuDefault(arg)) {
+    return MC_makeMenuDefault(
+        acceptItems ? acceptItems(MC_getMenuItems(arg)) : MC_getMenuItems(arg));
   }
-  if (MC_isMenuTitlesSingle(arg)) {
-    return MC_makeMenuTitlesSingle(
-        acceptHead ? acceptHead(MC_getMenuTitlesHead(arg)) : MC_getMenuTitlesHead(arg));
+  if (MC_isMenuShortcut(arg)) {
+    return MC_makeMenuShortcut(
+        acceptItems ? acceptItems(MC_getMenuItems(arg)) : MC_getMenuItems(arg),
+        acceptShortcut ? acceptShortcut(MC_getMenuShortcut(arg)) : MC_getMenuShortcut(arg));
   }
-  if (MC_isMenuTitlesMany(arg)) {
-    return MC_makeMenuTitlesMany(
-        acceptHead ? acceptHead(MC_getMenuTitlesHead(arg)) : MC_getMenuTitlesHead(arg),
-        MC_visitMenuTitles(MC_getMenuTitlesTail(arg), acceptHead));
+  ATabort("not a Menu: %t\n", arg);
+  return (MC_Menu)NULL;
+}
+
+/*}}}  */
+/*{{{  MC_ActionList MC_visitActionList(MC_ActionList arg, MC_Menu (*acceptHead)(MC_Menu)) */
+
+MC_ActionList MC_visitActionList(MC_ActionList arg, MC_Menu (*acceptHead)(MC_Menu))
+{
+  if (MC_isActionListEmpty(arg)) {
+    return MC_makeActionListEmpty();
   }
-  ATabort("not a MenuTitles: %t\n", arg);
-  return (MC_MenuTitles)NULL;
+  if (MC_isActionListSingle(arg)) {
+    return MC_makeActionListSingle(
+        acceptHead ? acceptHead(MC_getActionListHead(arg)) : MC_getActionListHead(arg));
+  }
+  if (MC_isActionListMany(arg)) {
+    return MC_makeActionListMany(
+        acceptHead ? acceptHead(MC_getActionListHead(arg)) : MC_getActionListHead(arg),
+        MC_visitActionList(MC_getActionListTail(arg), acceptHead));
+  }
+  ATabort("not a ActionList: %t\n", arg);
+  return (MC_ActionList)NULL;
+}
+
+/*}}}  */
+/*{{{  MC_Items MC_visitItems(MC_Items arg, char* (*acceptHead)(char*)) */
+
+MC_Items MC_visitItems(MC_Items arg, char* (*acceptHead)(char*))
+{
+  if (MC_isItemsEmpty(arg)) {
+    return MC_makeItemsEmpty();
+  }
+  if (MC_isItemsSingle(arg)) {
+    return MC_makeItemsSingle(
+        acceptHead ? acceptHead(MC_getItemsHead(arg)) : MC_getItemsHead(arg));
+  }
+  if (MC_isItemsMany(arg)) {
+    return MC_makeItemsMany(
+        acceptHead ? acceptHead(MC_getItemsHead(arg)) : MC_getItemsHead(arg),
+        MC_visitItems(MC_getItemsTail(arg), acceptHead));
+  }
+  ATabort("not a Items: %t\n", arg);
+  return (MC_Items)NULL;
 }
 
 /*}}}  */
