@@ -1267,7 +1267,12 @@ static tree SG_InjectionCount_Filter(parse_table *pt, tree t0, tree t1)
   ATermInt  l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
   size_t in0   = SG_CountInjectionsInTree(pt, t0);
   size_t in1   = SG_CountInjectionsInTree(pt, t1);
-  
+ 
+/* 
+ATwarning("tree %t has %d injections\n", l0, in0);
+ATwarning("tree %t has %d injections\n", l1, in1);
+*/
+
   IF_STATISTICS(
     SG_InjectionCountCalls(SG_NR_INC);
     if (in0 != in1) {
