@@ -23,8 +23,8 @@ ATbool ASF_isTagDefault(ASF_Tag tag)
     ASF_TagId tagId = ASF_getTagTagId(tag);
 
     if (ASF_isTagIdLexToCf(tagId)) {
-      char* lex = PT_yieldTree(PT_makeTreeFromTerm(
-                                 ASF_makeTermFromTagId(tagId)));
+      char* lex = PT_yieldTree(PT_TreeFromTerm(
+                                 ASF_TagIdToTerm(tagId)));
       return !strncmp(lex, DEFAULT_TAG_PREFIX, strlen(DEFAULT_TAG_PREFIX)) 
                ||
                !strcmp(lex, DEFAULT_TAG);
