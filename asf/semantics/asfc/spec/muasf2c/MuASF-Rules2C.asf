@@ -1,6 +1,6 @@
 equations
 
-  [ro2c-1'1] Decl* := locate-constants-in-decls(Modid,)
+ [ro2c-1'1] Decl* := locate-constants-in-decls(Modid,)
              =========================================
              rulesopt2cfuncs(Modid,Funcdef*,,Nametable) = (Funcdef*,Decl*)
 
@@ -58,14 +58,15 @@ equations
               Stat*5 := Stat*4 ++r Stat*3,
               ActualArgs2 := identifier(Char* "s""y""m") ++ ActualArgs,
               Stat*7 := remove-tail-rec(Stat*5,identifier(Char*),Aint0),
-              Stat*8 := make-traversal-stats(Funid,ActualArgs,Aint0),
               Stat*9 := FUNC_ENTRY(identifier(Char* "s""y""m"),
-                         ATmakeAppl(ActualArgs2)); ++ Stat*8 ++ Stat*7,
+                         ATmakeAppl(ActualArgs2)); ++ Stat*7,
               Stat*10 := Decl* ++d Stat*9
               =========================
               asfrules2cfunc(Rule;Rule*1,Namepair*) =
+                add-traversal-code(Funid,ActualArgs,
                 ATerm identifier(Char*)(FormalArgs)
                 { Stat*10 }
+                )
 
   [ar2cf-3'1] funid(""""{"Char*"}"""") := get-funid(Rule),
               is-memo(funid(""""{"Char*"}""""),Namepair*) == false,
@@ -91,8 +92,10 @@ equations
               Stat*9 := Decl* ++d Stat*8
               =========================
               asfrules2cfunc(Rule;Rule*1,Namepair*) =
+                add-traversal-code(get-funid(Rule), ActualArgs,
                 ATerm identifier(Char*)(FormalArgs)
                 { Stat*9 }
+                )
 
  [ar2cf-3'2] Funid := get-funid(Rule),
               funid(Char*) := remove-returns-list(Funid),
@@ -115,11 +118,10 @@ equations
               Stat*7 := remove-tail-rec(Stat*5,identifier(Char*),Aint0),
               ActualArgs2 := identifier(Char* "s""y""m") ++ ActualArgs,
               Stat*8 := Decl* ++d Stat*7,
-              Stat*9 := make-traversal-stats(Funid,ActualArgs,Aint0),
-              Stat*10 := Stat*9 ++ Stat*8,
               natcon(Char*2) := Aint0
               =========================
               asfrules2cfunc(Rule;Rule*1,Namepair*) =
+                add-traversal-code(Funid, ActualArgs,
                 ATerm identifier(Char*)(FormalArgs)
                 {
                   ATerm interm = identifier("m""a""k""e""_""t""u""p""l""e" Char*2)(ActualArgs);
@@ -128,9 +130,9 @@ equations
                   if(result)
                     return result;
                   else {
-                    Stat*10
+                    Stat*8
                   }
-                }
+                })
 
 
   [ar2cf-3'3] Funid := get-funid(Rule),
@@ -408,7 +410,7 @@ asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
   [fa2cs-1'1] funargs2cstats(funid(Char*1),,,Namepair*,0) =
                 (FUNC_EXIT(make_nf0(identifier(Char*1 "s""y""m")));,0)
 
-  [fa2cs-1'2] is-traversal-funid(funid(Char*1)) == false,
+  [fa2cs-1'2] is-traversal-funid(funid(Char*1)) == false, %% traversals are never constants
               ActualArgs' := restore-ignored-funids-in-nf(ActualArgs, Term+, Namepair*),
               ActualArgs'' := identifier(Char*1 "s""y""m") ++ ActualArgs',
               Stat*2 := FUNC_EXIT(identifier("m""a""k""e""_""n""f"Char*2)(ActualArgs''));
@@ -417,22 +419,13 @@ asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
                 (Stat*2,0)
 
   [fa2cs-1'3] is-traversal-funid(Funid) == true,
-              get-traversal-strategy(Funid) == bottom-up,
-              Expression := traversal-result-argument(Funid),
-              Stat*2 := FUNC_EXIT(Expression);
+              ActualArgs' := restore-ignored-funids-in-nf(ActualArgs, Term+, Namepair*),
+              Stat*2 := FUNC_EXIT(Funid(ActualArgs'));
               =========================================================================
               funargs2cstats(Funid,ActualArgs,Term+,Namepair*,natcon(Char*2)) = 
                 (Stat*2,0)
-
- [fa2cs-1'2]  is-traversal-funid(funid(Char*1)) == true,
-              get-traversal-strategy(funid(Char*1)) == top-down,
-              ActualArgs' := restore-ignored-funids-in-nf(ActualArgs, Term+, Namepair*),
-              Expression := 
-                 make-traversal-expression(funid(Char*1),ActualArgs',natcon(Char*2)),
-              Stat*2 := FUNC_EXIT(Expression);
-              =========================================================================
-              funargs2cstats(funid(Char*1),ActualArgs,Term+,Namepair*,natcon(Char*2)) = 
-                (Stat*2,0)
+ 
+equations
 
 %% Here we put previously ignored symbols around the normal form.  This is part
 %% of the optimization improves efficiency of recursive functions over lists. Ignored
@@ -487,6 +480,16 @@ asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
                Funid4 := pn-lookup(Funid3, Namepair*)
                ====
                lookup-ignored-funid(Funid, Namepair*) = Funid4
+
+equations
+
+[sa2aa-0] (ActualArgs,Stat*,Aint) := sigargs2cbuild(Sigarg+,0)
+          ===>
+          sigargs2actualargs(Sigarg+) = ActualArgs
+
+[sa2aa-1] sigargs2actualargs() =
+
+equations
 
 
   [sa2cs-1'1] (ActualArgs,Stat*1,natcon(Char*2)) :=

@@ -46,6 +46,7 @@ hiddens
    strategy-id(TermList) -> FunId
    type-id(TermList)     -> FunId
    cons-id(TermList)     -> FunId
+   continuation-id(TermList) -> FunId
 
 hiddens
 

@@ -8,7 +8,8 @@ exports
   sorts FuncRuleTuple FuncRulePair
         RuleListPair FuncTermTableTuple 
         FuncRuleTableTuple FuncCondTableTuple
-        TraversalType TraversalStrategy 
+        TraversalType TraversalStrategy TraversalContinuation
+
   context-free syntax
     "(" {FuncDef ";"}* "," {Rule ";"}* "," IntCon ")"    -> FuncRuleTuple
     "(" {FuncDef ";"}* "," {Rule ";"}* ")"               -> FuncRulePair
@@ -24,16 +25,31 @@ exports
   aliases
     "bottom-up" | "top-down"        -> TraversalStrategy
      "trafo" | "accu" | "accutrafo" -> TraversalType
+    "break" | "continue"            -> TraversalContinuation
 
   context-free syntax
     get-funid(Term)                   -> FunId
+    get-funid({Rule ";"}+)            -> FunId
     get-funid(Rule)                   -> FunId
     get-funid(Term,{NamePair ","}*)   -> FunId
     get-funargs(Term)                 -> TermList
     get-funargs(Rule)                 -> TermList
     is-traversal-funid(FunId)         -> Bool
+
+  context-free syntax
     get-traversal-strategy(FunId)     -> TraversalStrategy
     get-traversal-type(FunId)         -> TraversalType
+    get-traversal-continuation(FunId) -> TraversalContinuation
+
+    is-traversal-top-down(FunId) -> Bool
+    is-traversal-bottom-up(FunId) -> Bool
+    is-traversal-break(FunId) -> Bool
+    is-traversal-continue(FunId) -> Bool
+    is-traversal-trafo(FunId) -> Bool
+    is-traversal-accu(FunId) -> Bool
+    is-traversal-accutrafo(FunId) -> Bool
+
+  context-free syntax
     is-list-funid(FunId)              -> Bool
     is-trans-list-funid(FunId)        -> Bool
     is-returns-list-funid(FunId)      -> Bool {prefer}

@@ -21,6 +21,8 @@ equations
  [ats-1'4] addto-rulesopt(rules Rule+1,Rule+2) =
              rules Rule+1;Rule+2
 
+equations
+
 %% An auxilary function to get the function name of
 %% a rewrite rule.
  [gfi-1'1] get-funid(Funid) = Funid
@@ -61,6 +63,8 @@ equations
 
  [gfa-2'4] get-funargs(default:Cond+ ==> Term1 = Term2) = get-funargs(Term1)
 
+ [gfa-extra] get-funid(Rule; Rule*) = get-funid(Rule)
+ 
 %% The next rule adds conditions to a non-conditional rule
 %% if this is needed.
  [mcr-1'1] make-conditional-rule(,Rule) = Rule
@@ -92,6 +96,8 @@ equations
 
 [default-isf] is-string-funid(Funid) = false
 
+equations
+
 %% A function to check whether we are dealing with a transformer
 [itfi-1] is-traversal-funid(funid("l""f""_""t""r""a""f""o""_" Char+ )) = true
 [itfi-2] is-traversal-funid(funid("l""f""_""a""c""c""u""_" Char+ )) = true
@@ -100,7 +106,7 @@ equations
 [itfi-4] is-traversal-funid(funid(""""[" Char+ "]" """)) = 
            is-traversal-funid(funid(Char+))
 [default-itfi] is-traversal-funid(Funid) = false
-
+ 
 [gtt-1] get-traversal-type(funid(Char+1 "_""t""r""a""f""o""_" Char+2)) = trafo
 [gtt-2] get-traversal-type(funid(Char+1 "_""a""c""c""u""_" Char+2)) = accu
 [gtt-3] get-traversal-type(funid(Char+1 "_""a""c""c""u""t""r""a""f""o""_" Char+2)) = 
@@ -112,6 +118,33 @@ equations
 [default-gts] is-traversal-funid(Funid) == true
               ===>
               get-traversal-strategy(Funid) = bottom-up
+
+[gtc-1] get-traversal-continuation(funid(Char+1 "_" "c""o""n""t""i""n""u""e" "_" Char+2)) = continue
+[default-gtc] get-traversal-continuation(Funid) = break
+
+[] is-traversal-top-down(Funid) = true when get-traversal-strategy(Funid) == top-down
+[default] is-traversal-top-down(Funid) = false
+
+[] is-traversal-bottom-up(Funid) = true when get-traversal-strategy(Funid) == bottom-up
+[default] is-traversal-bottom-up(Funid) = false
+
+[] is-traversal-break(Funid) = true when get-traversal-continuation(Funid) == break
+[default] is-traversal-break(Funid) = false
+
+[] is-traversal-continue(Funid) = true when get-traversal-continuation(Funid) == continue
+[default] is-traversal-continue(Funid) = false
+
+[] is-traversal-trafo(Funid) = true when get-traversal-type(Funid) == trafo
+[default] is-traversal-trafo(Funid) = false
+
+[] is-traversal-accu(Funid) = true when get-traversal-type(Funid) == accu
+[default] is-traversal-accu(Funid) = false
+
+[] is-traversal-accutrafo(Funid) = true when get-traversal-type(Funid) == accutrafo
+[default] is-traversal-accutrafo(Funid) = false
+
+equations
+
 
 %% A function to check whether we are dealing with a list.
   [ilfi-1'1] is-list-funid(funid(""" "{" Char+ "}" """)) = true

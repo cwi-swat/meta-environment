@@ -49,6 +49,11 @@ equations
                ((identifier("t""a""b""l""e""_" Char*),NULL),ce-pair*2,
                 ATerm Ident(FormalArgs) { Decl+ Stat*2 },Aint2)
 
+  [default] locate-constants-in-decl(Decl,(ce-pair*,Aint)) = 
+            (ce-pair*,Decl,Aint)
+
+equations
+
   [lcis-1'1] locate-constants-in-stats(,(ce-pair*,Aint)) = (ce-pair*,,Aint)
 
   [lcis-1'2] (ce-pair*2,Stat+2,Aint2) :=
@@ -119,13 +124,6 @@ equations
              =========================
              locate-constants-in-stat(while (Expression1) Stat1,(ce-pair*1,Aint1)) =
                (ce-pair*3,while (Expression3) Stat2,Aint3)
-
-%%%  [lcis-3'6] flatten-list-of-chars(Expression1) = Expression2,
-%%%             locate-constants-in-expression(Expression2,(ce-pair*1,Aint1)) =
-%%%               (ce-pair*2,Expression3,Aint2)
-%%%             ==============================
-%%%             locate-constants-in-stat(EXIT_FUNC(Expression1) ;,(ce-pair*1,Aint1)) =
-%%%               (ce-pair*2,EXIT_FUNC(Expression3) ;,Aint2)
 
   [default-lcis-3'7] locate-constants-in-stat(Stat,(ce-pair*,Aint)) =
                        (ce-pair*,Stat,Aint)
@@ -206,6 +204,8 @@ equations
              Bool2 := expressions-contain-variables(ActualArg*1)
              ==================================================
              expressions-contain-variables(ActualArg1, ActualArg*1) = Bool1 \/ Bool2
+
+equations
 
   [ifc-1'1] is-make-char-function-call(make_char(integer-constant(Char*))) = true
 

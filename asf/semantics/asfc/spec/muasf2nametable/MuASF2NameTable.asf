@@ -219,23 +219,27 @@ funid(""""[" "l""f""_" Char+ "]"""")
 
 [cf-3]
 funid(Char*1) := strategy-id(Term+),
-funid(Char*2)  := type-id(Term+)
+funid(Char*2)  := type-id(Term+),
+funid(Char*3) := continuation-id(Term+)
 ====>
 construct-funid(funid(""""L""I""S""T""p""r""o""d""(" Char+2 ")""""),natcon(Char+),
                 Term*1,traversal(Term+),Term*2) =
-funid(""""[" "l""f""_" Char*2 "_" Char*1 "_" Char+ "]"""")
+funid(""""[" "l""f""_" Char*2 "_" Char*1 "_" Char*3 "_" Char+ "]"""")
 
 [cf-5]
 funid(Char*1) := strategy-id(Term+),
-funid(Char*2)  := type-id(Term+)
+funid(Char*2)  := type-id(Term+),
+funid(Char*3) := continuation-id(Term+)
 ====>
 construct-funid(funid(""""p""r""o""d""("Char+3")""""),natcon(Char+),
                 Term*1,traversal(Term+),Term*2) =
-  funid("l""f""_" Char*2 "_" Char*1 "_" Char+)
+  funid("l""f""_" Char*2 "_" Char*1 "_" Char*3 "_" Char+)
 
 [default-cf-2]
 construct-funid(Funid,Aint0, Term+) = 
 construct-funid(Funid,Aint0)
+
+equations
 
 [si] strategy-id(Term*1,top-down,Term*2) = td
 [default-si] strategy-id(Term*) = bu
@@ -244,6 +248,13 @@ construct-funid(Funid,Aint0)
 [ti] type-id(Term*1,accu,Term*2,trafo,Term*3) = accutrafo
 [default-ti] type-id(Term*1,trafo,Term*2) = trafo
 [default-ti] type-id(Term*1,accu,Term*2)  = accu
+
+[ci-cont] continuation-id(Term*1, continue, Term*2) = continue
+[ci-break] continuation-id(Term*1, break, Term*2) = break
+[default] continuation-id(Term*1, bottom-up, Term*2) = continue
+[default] continuation-id(Term*1, top-down, Term*2) = break
+
+equations
 
 [np-0] 
 normal-prod(funid(""""L""I""S""T""p""r""o""d""(" Char+3 ")"""")) =

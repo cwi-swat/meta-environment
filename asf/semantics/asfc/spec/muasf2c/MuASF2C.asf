@@ -25,23 +25,22 @@ Decl* := funcdefs2cfuncs(Funcdef*)
 funcdefs2cfuncs(Funcdef;Funcdef*) = Decl* ++ Decl
 
 [fd2c-1'1] Stat* := sigargs2cstats(funid(Char*),)
-             =====================================
-             funcdef2cfuncs(funid(Char*)) =
-               ATerm identifier(Char*)() { Stat* }
+           =====================================
+           funcdef2cfuncs(funid(Char*)) =
+             ATerm identifier(Char*)() { Stat* }
 
-[fd2c-1'2] Stat* := sigargs2cstats(funid(Char*),)
-             =====================================
-             funcdef2cfuncs(funid(Char*) Attrs) =
-               ATerm identifier(Char*)() { Stat* }
+[fd2c-1'2] funcdef2cfuncs(Funid Attrs) =  funcdef2cfuncs(Funid)
 
-[fd2c-1'3] FormalArgs := sigargs2cargs(Sigarg+,0),
-             Stat* := sigargs2cstats(funid(Char*),Sigarg+)
-             ============================================
-             funcdef2cfuncs(funid(Char*)(Sigarg+)) =
-               ATerm identifier(Char*)(FormalArgs) { Stat* }
+[fd2c-1'3] funid(Char*) := Funid,
+           FormalArgs := sigargs2cargs(Sigarg+,0),
+           ActualArgs := sigargs2actualargs(Sigarg+),
+           Stat* := sigargs2cstats(Funid,Sigarg+)
+           ============================================
+             funcdef2cfuncs(Funid(Sigarg+)) =
+               add-traversal-code(Funid, ActualArgs,
+                  ATerm identifier(Char*)(FormalArgs) { Stat* }
+               )
 
-[fd2c-1'4] FormalArgs := sigargs2cargs(Sigarg+,0),
-             Stat* := sigargs2cstats(funid(Char*),Sigarg+)
-             ============================================
-             funcdef2cfuncs(funid(Char*)(Sigarg+) Attrs) =
-               ATerm identifier(Char*)(FormalArgs) { Stat* }
+[fd2c-1'4] funcdef2cfuncs(Funid(Sigarg+) Attrs) =
+           funcdef2cfuncs(Funid(Sigarg+))
+

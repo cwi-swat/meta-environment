@@ -77,14 +77,6 @@ exports
     make-if-then-else(Term,Expression, Statement-list-opt,
                       Statement-list-opt)                  -> Statement-list-opt
     make-if-then-else(Expression, Statement-list-opt)      -> Statement-list-opt
-
-exports
-  context-free syntax
-    wrap-extra-kids(TraversalType, Argument-expression-list,Int) -> Expression
-    make-traversal-stats(FunId,Argument-expression-list, IntCon) -> Statement-list-opt
-    make-traversal-expression(FunId,Argument-expression-list,IntCon) -> Expression
-    traversal-result-argument(FunId) -> Expression
-
 hiddens
   context-free syntax
     remove-c-brackets(Statement-list-opt) -> Statement-list-opt
@@ -111,3 +103,5 @@ hiddens
     "Char+"[0-9]*   -> CHAR+
     "Ct-lhs"[0-9]*  -> Term
     "Ct-rhs"[0-9]*  -> Term
+    "Arg*"[0-9]* -> {Expression ","}*
+    "Identifier"[0-9]* -> Identifier

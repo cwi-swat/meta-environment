@@ -1,5 +1,6 @@
 module muasf2c/MuASF-Rules2C
 
+imports muasf2c/Add-Traversal-Code
 imports muasf/RenameVars
 imports muasf2c/Locate-Constants
 imports muasf2c/Improve-C-code
@@ -12,6 +13,7 @@ exports
     sigargs2cstats(FunId,{SigArg ","}*)                 -> Statement-list-opt
     funargs2cstats(FunId,Argument-expression-list,TermList,{NamePair ","}*, IntCon) -> 
         SlI-tuple
+    sigargs2actualargs({SigArg ","}*) -> Argument-expression-list
 
 hiddens
   context-free syntax

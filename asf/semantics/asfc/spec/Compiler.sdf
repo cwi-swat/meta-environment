@@ -15,7 +15,10 @@ context-free syntax
   "compile-muasf" -> FunId {reject}
   "muasf2muasf" -> FunId {reject}
 
+hiddens
 
+context-free start-symbols 
+  Module CProgram
 
 
 variables
