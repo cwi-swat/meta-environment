@@ -1,9 +1,15 @@
 package toolbus.atom;
 
-import aterm.*;
-import toolbus.process.*;
-import toolbus.tool.*;
-import toolbus.*;
+import toolbus.TBTerm;
+import toolbus.ToolBus;
+import toolbus.ToolBusException;
+import toolbus.process.ProcessInstance;
+import toolbus.tool.ToolDefinition;
+import toolbus.tool.ToolInstance;
+
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermList;
 
 /**
  * @author paulk, Jul 29, 2002

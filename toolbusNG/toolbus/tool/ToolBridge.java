@@ -1,5 +1,6 @@
 package toolbus.tool;
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermFactory;
 
 /**
  * @author paulk, Jul 31, 2002
@@ -8,8 +9,8 @@ public interface ToolBridge {
 	
 	public ATermFactory getFactory();
 	
-	public void sndValue(ATerm trm);
+	public void sndValueToToolBus(ATerm trm);
 	
-	public void sndEvent(ATerm trm);
+	public void sndEventToToolBus(ATerm trm);
 
 }

@@ -3,8 +3,8 @@ package toolbus.process;
  * @author paulk
  */
 
-import toolbus.atom.*;
-import toolbus.*;
+import toolbus.ToolBusException;
+import toolbus.atom.AtomSet;
 
 public class Sequence implements ProcessExpression {
 	private ProcessExpression left, right;
@@ -13,7 +13,6 @@ public class Sequence implements ProcessExpression {
 	public Sequence(ProcessExpression left, ProcessExpression right){
 		this.left = left;
 		this.right = right;
-		// first = left.getFirst();
 	}
 	
 	public Sequence(ProcessExpression PE1, ProcessExpression PE2, ProcessExpression PE3){

@@ -3,9 +3,9 @@
  */
 package toolbus.process;
 
-import toolbus.atom.*;
+import toolbus.atom.Delta;
 
-import aterm.*;
+import aterm.ATerm;
 public class IfThen extends IfElse {
 	public IfThen(ATerm test, ProcessExpression Pthen){
 		super(test, Pthen, new Delta());

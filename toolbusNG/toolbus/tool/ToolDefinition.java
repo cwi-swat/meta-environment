@@ -1,9 +1,14 @@
 package toolbus.tool;
 import java.util.Vector;
 
-import toolbus.*;
+import toolbus.TBTerm;
+import toolbus.ToolBus;
+import toolbus.ToolBusException;
 
-import aterm.*;
+import aterm.AFun;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermList;
 
 /**
  * @author paulk

@@ -3,12 +3,17 @@
  */
 
 package toolbus;
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import toolbus.process.*;
-import toolbus.tool.*;
+import toolbus.process.ProcessDefinition;
+import toolbus.process.ProcessExpression;
+import toolbus.process.ProcessInstance;
+import toolbus.tool.ToolDefinition;
+import toolbus.tool.ToolInstance;
 
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermFactory;
 
 public class ToolBus {
 	private ATermFactory factory;

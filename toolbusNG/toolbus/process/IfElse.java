@@ -3,10 +3,10 @@
  */
 
 package toolbus.process;
-import aterm.*;
+import toolbus.ToolBusException;
+import toolbus.atom.AtomSet;
 
-import toolbus.atom.*;
-import toolbus.*;
+import aterm.ATerm;
 
 public class IfElse implements ProcessExpression {
 	private ATerm test;

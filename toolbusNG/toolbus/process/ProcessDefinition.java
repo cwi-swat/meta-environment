@@ -3,9 +3,14 @@
  */
 
 package toolbus.process;
-import aterm.*;
-import toolbus.atom.*;
-import toolbus.*;
+import toolbus.Environment;
+import toolbus.TBTerm;
+import toolbus.ToolBusException;
+import toolbus.atom.Assign;
+import toolbus.atom.AtomSet;
+
+import aterm.ATerm;
+import aterm.ATermList;
 
 public class ProcessDefinition {
 	private String name;

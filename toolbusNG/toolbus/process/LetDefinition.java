@@ -3,9 +3,11 @@
  */
 
 package toolbus.process;
-import aterm.*;
-import toolbus.*;
-import toolbus.atom.*;
+import toolbus.Environment;
+import toolbus.ToolBusException;
+import toolbus.atom.AtomSet;
+
+import aterm.ATermList;
 
 public class LetDefinition implements ProcessExpression {
 	private ATermList formals;

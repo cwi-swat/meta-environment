@@ -5,7 +5,9 @@
 package toolbus;
 import java.util.Vector;
 
-import aterm.*;
+import aterm.ATerm;
+import aterm.ATermAppl;
+import aterm.ATermList;
 
 
 public class Environment{
