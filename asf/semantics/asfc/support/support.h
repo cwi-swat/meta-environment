@@ -2,24 +2,19 @@
 #ifndef SUPPORT_H
 #define SUPPORT_H
 
-#include <aterm.h>
+#include <aterm2.h>
 
 #define INITIAL_TABLE_SIZE 8191
 #define MAX_LOAD 75
 
 #define PROF(var)
+#define streq(a,b) (!strcmp((a),(b)))
 
-#define is_char(t,c) (t_is_int(t) && t_int_val(t) == (c))
-#define make_char(c) (t_sharing(char_table[c])++, char_table[c])
-#define singleton(t) (TbuildList(w, (t), t_empty(w)))
-#define check_sym(t,s) (t_appl_sym(t) == (s))
-
-#define m_term_equal(t1,t2) t_equal(t1,t2)
-#define m_not_empty_list(l) (!t_is_empty(l))
-#define m_is_single_element(l) (t_is_list(l) && (!t_is_empty(l) && \
-                                                 t_is_empty(t_list_next(l))))
-#define m_list_head(l) (t_sharing(t_list_first(l))++,t_list_first(l))
-#define m_list_tail(l) (t_sharing(t_list_next(l))++,t_list_next(l))
+#define is_char(t,c) (ATgetType(t) == AT_INT && ATgetInt((ATermInt) t) == (c))
+#define make_char(c) (char_table[c])
+#define make_list_char(c) ((ATerm)(ATmakeList1(char_table[c])))
+#define singleton(t) (ATerm)(ATmakeList1((t)))
+#define check_sym(t,s) (ATgetSymbol((ATermAppl) t) == (s))
 
 #define tail_1(l) (t_list_next(l))
 #define tail_2(l) (t_list_next(tail_1(l)))
@@ -37,100 +32,91 @@
 #define tail_14(l) (t_list_next(tail_13(l)))
 #define tail_15(l) (t_list_next(tail_14(l)))
 
-#define arg_0(t) (t_list_first(t_appl_args(t)))
-#define arg_1(t) (t_list_first(tail_1(t_appl_args(t))))
-#define arg_2(t) (t_list_first(tail_2(t_appl_args(t))))
-#define arg_3(t) (t_list_first(tail_3(t_appl_args(t))))
-#define arg_4(t) (t_list_first(tail_4(t_appl_args(t))))
-#define arg_5(t) (t_list_first(tail_5(t_appl_args(t))))
-#define arg_6(t) (t_list_first(tail_6(t_appl_args(t))))
-#define arg_7(t) (t_list_first(tail_7(t_appl_args(t))))
-#define arg_8(t) (t_list_first(tail_8(t_appl_args(t))))
-#define arg_9(t) (t_list_first(tail_9(t_appl_args(t))))
-#define arg_10(t) (t_list_first(tail_10(t_appl_args(t))))
-#define arg_11(t) (t_list_first(tail_11(t_appl_args(t))))
-#define arg_12(t) (t_list_first(tail_12(t_appl_args(t))))
-#define arg_14(t) (t_list_first(tail_13(t_appl_args(t))))
-#define arg_15(t) (t_list_first(tail_14(t_appl_args(t))))
+#define arg_0(t) (ATgetArgument(t,0))
+#define arg_1(t) (ATgetArgument(t,1))
+#define arg_2(t) (ATgetArgument(t,2))
+#define arg_3(t)  (ATgetArgument(t,3))
+#define arg_4(t)  (ATgetArgument(t,4))
+#define arg_5(t)  (ATgetArgument(t,5))
+#define arg_6(t)  (ATgetArgument(t,6))
+#define arg_7(t)  (ATgetArgument(t,7))
+#define arg_8(t)  (ATgetArgument(t,8))
+#define arg_9(t)  (ATgetArgument(t,9))
+#define arg_10(t)  (ATgetArgument(t,10))
+#define arg_11(t)  (ATgetArgument(t,11))
+#define arg_12(t)  (ATgetArgument(t,12))
+#define arg_13(t)  (ATgetArgument(t,13))
+#define arg_14(t)  (ATgetArgument(t,14))
+#define arg_15(t)  (ATgetArgument(t,15))
 
-typedef aterm *(*funcptr)();
+#define make_nf0(s) (ATerm)(ATmakeAppl0((Symbol)s))
+#define make_nf1(s,t0) (ATerm)(ATmakeAppl1((Symbol)s,t0))
+#define make_nf2(s,t0,t1) (ATerm)(ATmakeAppl2((Symbol)s,t0,t1))
+#define make_nf3(s,t0,t1,t2) (ATerm)(ATmakeAppl3((Symbol)s,t0,t1,t2))
+#define make_nf4(s,t0,t1,t2,t3) (ATerm)(ATmakeAppl4((Symbol)s,t0,t1,t2,t3))
+#define make_nf5(s,t0,t1,t2,t3,t4) (ATerm)(ATmakeAppl5((Symbol)s,t0,t1,t2,t3,t4))
+#define make_nf6(s,t0,t1,t2,t3,t4,t5) (ATerm)(ATmakeAppl6((Symbol)s,t0,t1,t2,t3,t4,t5))
+#define make_nf7(s,t0,t1,t2,t3,t4,t5,t6) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,t4,t5,t6))
+#define make_nf8(s,t0,t1,t2,t3,t4,t5,t6,t7) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,t4,t5,\
+						t6,t7))
+#define make_nf9(s,t0,t1,t2,t3,t4,t5,t6,t7,t8) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,t4,\
+						t5,t6,t7,t8))
+#define make_nf10(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,\
+						t4,t5,t6,t7,t8,t9))
+#define make_nf11(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10))
+#define make_nf12(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11))
+#define make_nf13(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12))
+#define make_nf14(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13))
+#define make_nf15(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14))
 
-extern aterm *char_table[];
+#define ok(t) (ATmakeAppl1(oksym,t))
 
-extern asymbol *oksym;
-extern asymbol *tuplesym;
-extern asymbol *tuple2sym;
-extern asymbol *tuple3sym;
-extern asymbol *nullsym;
+#define term_equal(t1,t2) (ATisEqual(t1,t2))
+
+/* List functions */
+#define null() (ATerm)(ATempty)
+#define list_head(l) (ATgetFirst((ATermList)l))
+#define list_tail(l) (ATerm)(ATgetNext((ATermList)l))
+#define cons(l1,l2) (ATerm)(ATconcat((ATermList)l1,(ATermList)l2))
+#define append(l,t) (ATerm)(ATappend((ATermList)l,t))
+#define list_last(l) (ATgetLast((ATermList)l))
+#define list_prefix(l) (ATerm)(ATgetPrefix((ATermList)l))
+#define not_empty_list(l) (!ATisEmpty((ATermList)l))
+#define is_single_element(l) (ATgetType(l) == AT_LIST && \
+                              (!ATisEmpty((ATermList)l) && \
+                              ATisEmpty(ATgetNext((ATermList)l))))
+
+#define t()           (c_true)
+#define f()           (c_false)
+#define or(t0,t1)     (ATisEqual(t0, c_true) ? c_true : t1)
+
+typedef ATerm (*funcptr)();
+
+extern ATerm c_false;
+extern ATerm c_true;
+extern ATerm char_table[];
+
+/*
+extern Symbol oksym;
+extern Symbol nullsym;
+*/
 
 extern void c_rehash(int size);
-extern void register_prod(aterm *pord, funcptr func, asymbol *sym);
-extern funcptr lookup_func(aterm *prod);
-extern asymbol *lookup_sym(aterm *prod);
-extern aterm *lookup_prod(asymbol *sym);
-extern aworld *w;
-extern aterm *null();
-extern aterm *list_equal(aterm *t1, aterm *t2);
-extern aterm *list_head(aterm_list *l1);
-extern aterm_list *list_tail(aterm_list *l1);
-extern aterm_list *list_prefix(aterm_list *l1);
-extern aterm *list_last(aterm_list *l1);
-extern aterm_list *cons(aterm_list *l1, aterm_list *l2);
-extern aterm *c_false;
-extern aterm *c_true;
-extern aterm *t();
-extern aterm *f();
-extern aterm *or(aterm *t0, aterm *t1);
-extern Tbool term_equal(aterm *t1, aterm *t2);
-extern Tbool not_empty_list(aterm *l);
-extern Tbool is_single_element(aterm_list *l);
-extern aterm_list *make_list(aterm *t);
-extern aterm *ok(aterm *t);
-extern aterm *tuple(aterm *t0, aterm *t1);
-extern aterm *tuple2(aterm *t0, aterm *t1);
-extern aterm *tuple3(aterm *t0, aterm *t1, aterm *t2);
-extern aterm_list *slice(aterm_list *l1, aterm_list *l2);
+extern void register_prod(ATerm prod, funcptr func, Symbol sym);
+extern funcptr lookup_func(ATerm prod);
+extern Symbol lookup_sym(ATerm prod);
+extern ATerm lookup_prod(Symbol sym);
+extern ATerm list_equal(ATerm t1, ATerm t2);
+extern ATerm slice(ATerm l1, ATerm l2);
+extern ATerm make_list(ATerm t);
 
-extern aterm *make_nf0(asymbol *s);
-extern aterm *make_nf1(asymbol *s, aterm *t0);
-extern aterm *make_nf2(asymbol *s, aterm *t0, aterm *t1);
-extern aterm *make_nf3(asymbol *s, aterm *t0, aterm *t1, aterm *t2);
-extern aterm *make_nf4(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3);
-extern aterm *make_nf5(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
-		       aterm *t4);
-extern aterm *make_nf6(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
-		       aterm *t4, aterm *t5);
-extern aterm *make_nf7(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
-		       aterm *t4, aterm *t5, aterm *t6);
-extern aterm *make_nf8(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
-		       aterm *t4, aterm *t5, aterm *t6, aterm *t7);
-extern aterm *make_nf9(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
-		       aterm *t4, aterm *t5, aterm *t6, aterm *t7, aterm *t8);
-extern aterm *make_nf10(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
-		       aterm *t4, aterm *t5, aterm *t6, aterm *t7, aterm *t8,
-		       aterm *t9);
-extern aterm *make_nf11(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
-		       aterm *t4, aterm *t5, aterm *t6, aterm *t7, aterm *t8,
-		       aterm *t9, aterm *t10);
-extern aterm *make_nf12(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
-		       aterm *t4, aterm *t5, aterm *t6, aterm *t7, aterm *t8,
-		       aterm *t9, aterm *t10, aterm *t11);
-extern aterm *make_nf13(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
-		       aterm *t4, aterm *t5, aterm *t6, aterm *t7, aterm *t8,
-		       aterm *t9, aterm *t10, aterm *t11, aterm *t12);
-extern aterm *make_nf14(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
-		       aterm *t4, aterm *t5, aterm *t6, aterm *t7, aterm *t8,
-		       aterm *t9, aterm *t10, aterm *t11, aterm *t12,
-		       aterm *t13);
-extern aterm *make_nf15(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
-		       aterm *t4, aterm *t5, aterm *t6, aterm *t7, aterm *t8,
-		       aterm *t9, aterm *t10, aterm *t11, aterm *t12,
-		       aterm *t13, aterm *t14);
-
-
-extern void ToC_code(aterm *asfix, FILE *file);
+extern void ToC_code(ATerm asfix, FILE *file);
 
 extern void register_all();
 extern void resolve_all();
+extern void init_all();
+
+/* Hack voor de code generatie */
+#define TmakeSimple(ar,str) (ATreadFromString(str))
 
 #endif

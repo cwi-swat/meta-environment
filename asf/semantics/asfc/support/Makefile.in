@@ -1,5 +1,4 @@
-# @configure_input@
-# Directory: compiler
+# Directory: compiler/support
 
 # Configure variable substitutions
 PRODUCT		= @PRODUCT@
@@ -51,24 +50,31 @@ include ${top_srcdir}/implicit-rules
 XCFLAGS		=
 XCPPFLAGS	=
 XINCLUDES	= -I$(ATERM)/include
-XLIBS		= -L$(ATERM)/lib -ltoolbus -lasfix -laterm-dbg \
-		$(SOCKLIBS) $(GELLIBS)
+XLIBS		= 
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
-CSRC		= support.c rewriter.c
-CHDR		= rewriter.tif.c rewriter.tif.h
+CSRC		= support.c rewriter.c rewriter.tif.c
+CHDR		= rewriter.tif.h
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= 
 # All files in LIBFILES are installed in $(libdir)
-LIBFILES	= libsupport.a
+LIBFILES	= libsupport-cc.a libsupport-gcc.a \
+		libsupport-prof.a libsupport-dbg.a
 # All files in INCLUDEFILES are installed in $(includedir)
 INCLUDEFILES	= support.h libsupport.h
 # All files in DOCFILES are copied to $(docdir)
 DOCFILES	=
 
+OBJ_CC          = $(patsubst %.c,%-cc.o,$(CSRC))
+OBJ_GCC         = $(patsubst %.c,%-gcc.o,$(CSRC))
+OBJ_DBG         = $(patsubst %.c,%-dbg.o,$(CSRC))
+OBJ_PROF        = $(patsubst %.c,%-prof.o,$(CSRC))
+
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= rewriter.tif.c rewriter.tif.h libsupport.a
+CLEANFILES	= rewriter.tif.c rewriter.tif.h \
+		libsupport-cc.a libsupport-gcc.a \
+		libsupport-prof.a libsupport-dbg.a
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	= 
 
@@ -78,16 +84,45 @@ all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
 
-rewriter.tif.h: rewriter.tifs
-	$(TOOLBUS)/bin/ctif -split -newstyle -tool rewriter -tifs rewriter.tifs
+rewriter.tif.c: rewriter.tifs
+	$(ATERM)/bin/tifstoc -tool rewriter rewriter.tifs
 
-rewriter.tif.c: rewriter.tif.h
+rewriter.tif.h: rewriter.tifs
+	$(ATERM)/bin/tifstoc -tool rewriter rewriter.tifs
 
 rewriter.tifs: rewriter.tb
 	$(TOOLBUS)/bin/toolbus -gentifs rewriter.tb
 
-libsupport.a: support.o rewriter.tif.o rewriter.o
-	$(AR) cr $@ support.o rewriter.tif.o rewriter.o
+%-cc.o: %.c
+	cc -O $(INCLUDES) -c -o $@ $<
+
+%-gcc.o: %.c
+	gcc -Wall -pedantic -O4 $(INCLUDES) -c -o $@ $<
+
+%-dbg.o: %.c
+	gcc -Wall -pedantic -g $(INCLUDES) -c -o $@ $<
+
+%-prof.o: %.c
+	gcc -Wall -pedantic -pg $(INCLUDES) -c -o $@ $<
+
+libsupport-cc.a: $(OBJ_CC)
+	$(AR) cr $@ $(OBJ_CC)
+
+libsupport-gcc.a: $(OBJ_GCC)
+	$(AR) cr $@ $(OBJ_GCC)
+
+libsupport-dbg.a: $(OBJ_DBG)
+	$(AR) cr $@ $(OBJ_DBG)
+
+libsupport-prof.a: $(OBJ_PROF)
+	$(AR) cr $@ $(OBJ_PROF)
+
+depend:
+	gcc -MM $(INCLUDES) $(CSRC) > /tmp/.gendep
+	cat /tmp/.gendep | sed "s/.o:/-cc.o:/"   >  .depend
+	cat /tmp/.gendep | sed "s/.o:/-gcc.o:/"  >> .depend
+	cat /tmp/.gendep | sed "s/.o:/-dbg.o:/"  >> .depend
+	cat /tmp/.gendep | sed "s/.o:/-prof.o:/" >> .depend
 
 ##########################################################
 ### Everything below this line should remain unchanged ###
@@ -121,9 +156,3 @@ distclean: clean
 
 # Included dependencies
 include .depend
-
-# Updating of included dependencies (CC needs to be gcc!)
-depend: $(CSRC) $(CHDR)
-	$(CC) -MM $(CFLAGS) $(INCLUDES) $(CSRC) > .depend
-
-
