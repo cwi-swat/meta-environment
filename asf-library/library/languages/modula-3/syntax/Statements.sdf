@@ -37,7 +37,7 @@ context-free syntax
 	"IF" Expr "THEN" Stmts ("ELSIF" Expr "THEN" Stmts)* ("ELSE" Stmts)? "END" -> IfStmt
 	"LOCK" Expr "DO" Stmts "END" -> LockStmt
 	"LOOP" Stmts "END" -> LoopStmt
-	"RAISE" ExceptionID ( "(" Expr ")" )? -> RaiseStmt
+	"RAISE" QualId ( "(" Expr ")" )? -> RaiseStmt
 	"REPEAT" Stmts "UNTIL" Expr -> RepeatStmt
 	"RETURN" Expr? -> ReturnStmt
 	"TYPECASE" Expr "OF" "|"? {TCase "|"}+ ("ELSE" Stmts)? "END" -> TCaseStmt

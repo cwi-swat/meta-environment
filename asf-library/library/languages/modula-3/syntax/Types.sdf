@@ -64,6 +64,13 @@ context-free syntax
 context-free restrictions
 	"REF" -/- [A-Za-z\_0-9]
 	"SET" -/- [A-Za-z\_0-9]
+	"END" -/- [A-Za-z\_0-9]
+	"OF" -/- [A-Za-z\_0-9]
 	"UNTRACED" -/- [A-Za-z\_0-9]
 	"RECORD" -/- [A-Za-z\_0-9]
+	"OBJECT" -/- [A-Za-z\_0-9]
+	"BRANDED" -/- [A-Za-z\_0-9]
+	"ARRAY" -/- [A-Za-z\_0-9]
+	"BITS" -/- [A-Za-z\_0-9]
+	"FOR" -/- [A-Za-z\_0-9]
 	"PROCEDURE" -/- [A-Za-z\_0-9]

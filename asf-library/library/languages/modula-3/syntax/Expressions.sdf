@@ -12,6 +12,9 @@ Expr "OR" Expr -> Expr {left}
 Expr "AND" Expr -> Expr {left}
 "NOT" Expr -> Expr
 
+%% Becaue of amb with bracket ().
+"NOT" -> Id {reject}
+
 Expr Relop Expr -> Expr {left}
 Expr Addop Expr -> Expr {left}
 Expr Mulop Expr -> Expr {left}
@@ -31,13 +34,20 @@ Id | Literal | Constructor -> Expr
 "[" {Expr ","}+ "]" -> Selector
 "(" {Actual ","}* ")" -> Selector
 
-Type "{" (SetCons | RecordCons | ArrayCons)? "}" -> Constructor
+%%Type "{" (SetCons | RecordCons | ArrayCons)? "}" -> Constructor
+%%{RecordElt ","}+ -> RecordCons
+%%(Id ":=")? Expr -> RecordElt
+%%{SetElt ","}+ -> SetCons
+%%Expr (".." Expr)? -> SetElt
+%%{Expr ","}+ ("," "..")? -> ArrayCons
 
-{SetElt ","}+ -> SetCons
-Expr (".." Expr)? -> SetElt
-{RecordElt ","}+ -> RecordCons
-(Id ":=")? Expr -> RecordElt
-{Expr ","}+ ("," "..")? -> ArrayCons
+%% FIX THIS! Too general! But perhaps a typechecking problem...
+Expr ".." Expr -> Elt
+Expr -> Elt
+Id ":=" Expr -> Elt
+{Elt ","}+ ("," "..")? -> AnyCons
+Type "{" AnyCons? "}" -> Constructor
+
 
 context-free restrictions
 	"IN" -/- [a-zA-Z0-9\_]

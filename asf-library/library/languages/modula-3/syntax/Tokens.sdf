@@ -22,13 +22,13 @@ lexical syntax
 	Digit Digit* -> Number
 	Digit Digit* "_" HexDigit HexDigit* -> Number
 	Digit Digit* "." Digit Digit* Exponent? -> FloatNumber
-	[EeDdXx] [\+\-] Digit Digit* -> Exponent
+	[EeDdXx] [\+\-]? Digit Digit* -> Exponent
 	Letter | Digit | OtherChar -> PrintingChar
 	Digit | [A-Fa-f] -> HexDigit
 	[0-9] -> Digit
 	[0-7] -> OctalDigit
 	[A-Za-z] -> Letter
-	[\ \!\?\#\$\%\&\(\)\*\+\,\-\.\/\:\;\_\`\{\}\~\[\]\|\^\=] -> OtherChar
+	[\<\>\ \!\?\#\$\%\&\(\)\*\+\,\-\.\/\:\;\_\`\{\}\~\[\]\|\^\=] -> OtherChar
 
 lexical restrictions
 	Number -/- [0-9]
