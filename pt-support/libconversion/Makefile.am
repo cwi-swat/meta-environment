@@ -5,7 +5,7 @@
 #
 
 lib_LIBRARIES           = libconversion.a
-include_HEADERS         = conversion.h a2metoa1.h
+include_HEADERS         = conversion.h
 libconversion_a_SOURCES = flattenPT.c inflatePT.c a2metoa1.c
 
 CFLAGS                  = -g -Wall -O2

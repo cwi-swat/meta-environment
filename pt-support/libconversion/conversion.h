@@ -27,9 +27,10 @@
 
 #include <aterm2.h>
 #include <deprecated.h>
+#include <MEPT-utils.h>
 
-ATerm a2metoa1(ATerm tree);
-ATerm flattenPT(ATerm tree);
+ATerm a2metoa1(PT_ParseTree tree);
+PT_ParseTree flattenPT(PT_ParseTree tree);
 ATerm inflatePT(ATerm tree);
 
 #endif /* _CONVERSION_H */

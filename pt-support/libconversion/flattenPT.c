@@ -26,84 +26,84 @@
 #include <string.h>
 #include <assert.h>
 
-#include <mept.h>
+#include <MEPT-utils.h>
 #include <asfix2.h>
 #include "conversion.h"
 
 ATbool char_to_string = ATfalse;
  
-static ATerm flattenTerm(ATerm);
-static ATerm flattenLayout(ATerm t);
-static ATerm flattenLexical(ATerm t);
-static ATerm flattenVar(ATerm t);
-static ATerm flattenProd(ATerm prod);
+static PT_Tree flattenTerm(PT_Tree t);
+static PT_Tree flattenLayout(PT_Tree t);
 
-static ATermList flattenArgs(ATermList tl)
+static PT_Args flattenArgs(PT_Args tl)
 {
-  ATerm newTerm;
+  PT_Tree newTerm;
 
-  if (ATisEmpty(tl)) {
-    return ATempty;
+  if (PT_isArgsEmpty(tl)) {
+    return tl;
   }
 
-  newTerm = flattenTerm(ATgetFirst(tl));
+  newTerm = flattenTerm(PT_getArgsHead(tl));
   if (newTerm) {
-    return ATinsert(flattenArgs(ATgetNext(tl)), newTerm);
+    return PT_makeArgsList(newTerm, flattenArgs(PT_getArgsTail(tl)));
   }
   else {
-    return flattenArgs(ATgetNext(tl));
+    return flattenArgs(PT_getArgsTail(tl));
   }
 }
 
-static ATerm makeCharFromInt(ATermInt i)
+static PT_Tree makeCharFromInt(PT_Tree i)
 {
   if (char_to_string) {
     char strbuf[2];  
     
-    strbuf[0] = (char)ATgetInt(i);
+    strbuf[0] = (char)ATgetInt((ATermInt)i);
     strbuf[1] = '\0';
-    return ATmake("<str>", strbuf);
+    return (PT_Tree)ATmake("<str>", strbuf);
   }
   else {
-    return (ATerm) i;
+    return i;
   }
 }
 
-static ATermList flattenLexicalList(ATerm t, ATermList tail)
+static PT_Args flattenLexicalList(PT_Tree t, PT_Args tail)
 {
-  ATerm     prod;
-  ATermList list;
+  PT_Production prod;
+  PT_Args       args;
+  PT_Tree       leftBranch, rightBranch;
 
   if (!PT_isTreeAppl(t)) {
     ATerror("flattenLexicalList: not an application: %t\n", t);
   } 
   
   prod = PT_getTreeProd(t);
-  list = PT_getTreeArgs(t);
+  args = PT_getTreeArgs(t);
 
   if (!isLexicalListProd(prod)) {
-    ATerm newTerm;
-    newTerm = flattenTerm(t);
+    PT_Tree newTerm = flattenTerm(t);
     if (newTerm) {
-      return ATinsert(tail, newTerm);
+      return PT_makeArgsList(newTerm, tail);
     }
     else {
       return tail;
     }
   }  
 
-  if (ATisEmpty(list)) {
+  if (PT_isArgsEmpty(args)) {
     return tail;
   }
 
-  if (ATgetLength(list) == 1) {
-    return flattenLexicalList(ATgetFirst(list), tail);
+  leftBranch = PT_getArgsHead(args);
+  args = PT_getArgsTail(args);
+
+  if (PT_isArgsEmpty(args)) {
+    return flattenLexicalList(leftBranch, tail);
   }
   
-  if (ATgetLength(list) == 2) {
-    ATerm leftBranch = ATelementAt(list,0);
-    ATerm rightBranch = ATelementAt(list,1);
+  rightBranch = PT_getArgsHead(args);
+  args = PT_getArgsTail(args);
 
+  if (PT_isArgsEmpty(args)) {
     tail = flattenLexicalList(rightBranch, tail);
     tail = flattenLexicalList(leftBranch, tail);
 
@@ -111,355 +111,370 @@ static ATermList flattenLexicalList(ATerm t, ATermList tail)
   }
   
   ATerror("flattenLexicalList: illegal list: %t\n", t);
-  return NULL;
+  return PT_makeArgsEmpty();
 }
 
-static ATermList flattenCharClassList(ATerm t, ATermList tail)
+static PT_Args flattenCharClassList(PT_Tree tree, PT_Args tail)
 {
-  ATerm     prod;
-  ATermList list;
+  PT_Production prod;
+  PT_Args       args;
+  PT_Tree       leftBranch, rightBranch;
 
-  if (ATgetType(t) == AT_INT) {
-    return ATinsert(tail, makeCharFromInt((ATermInt) t));
-  }
+  if (PT_isTreeAppl(tree)) { 
+    prod = PT_getTreeProd(tree);
+    args = PT_getTreeArgs(tree);
 
-  if (!PT_isTreeAppl(t)) { 
-    ATerror("flattenCharClassList: not an application: %t\n", t);
-  }
-  
-  prod = PT_getTreeProd(t);
-  list = PT_getTreeArgs(t);
-
-  if (!isCharClassListProd(prod)) {
-    ATerm newTerm;
-    newTerm = flattenTerm(t);
-    if (newTerm) {
-      return ATinsert(tail, newTerm);
+    if (!isCharClassListProd(prod)) {
+      PT_Tree newTerm = flattenTerm(tree);
+      if (newTerm) {
+        return PT_makeArgsList(newTerm, tail);
+      }
+      else {
+        return tail;
+      }
     }
-    else {
+  
+    if (PT_isArgsEmpty(args)) {
       return tail;
     }
+  
+    leftBranch = PT_getArgsHead(args);
+    args = PT_getArgsTail(args);
+
+    if (PT_isArgsEmpty(args)) {
+      return flattenCharClassList(leftBranch, tail);
+    }
+  
+    rightBranch = PT_getArgsHead(args);
+    args = PT_getArgsTail(args);
+
+    if (PT_isArgsEmpty(args)) {
+      tail = flattenCharClassList(rightBranch, tail);
+      tail = flattenCharClassList(leftBranch, tail);
+
+      return tail;
+    }                 
+
+    ATerror("flattenCharClassList: illegal list: %t\n", tree);
+    return PT_makeArgsEmpty();
   }
-
-  if (ATisEmpty(list)) {
-    return tail;
+  else /*if (ATgetType(t) == AT_INT)*/ {
+    return PT_makeArgsList(makeCharFromInt(tree), tail);
   }
-
-  if (ATgetLength(list) == 1) {
-    return flattenCharClassList(ATgetFirst(list), tail);
-  }
-
-  if (ATgetLength(list) == 2) {
-    ATerm leftBranch = ATelementAt(list,0);
-    ATerm rightBranch = ATelementAt(list,1);
-
-    tail = flattenCharClassList(rightBranch, tail);
-    tail = flattenCharClassList(leftBranch, tail);
-
-    return tail;
-  }                 
-
-  ATerror("flattenCharClassList: illegal list: %t\n", t);
-  return NULL;
 }
 
-static ATermList flattenList(ATerm t, ATermList tail)
+static PT_Args flattenList(PT_Tree tree, PT_Args tail)
 {
-  ATerm     prod;
-  ATermList list;
+  PT_Production prod;
+  PT_Args       args;
+  PT_Tree       leftBranch, layoutAfterLeft, rightBranch;
 
-  if (!PT_isTreeAppl(t)) {
-    ATerror("flattenList: not an application: %t\n", t);
+  if (!PT_isTreeAppl(tree)) {
+    ATerror("flattenList: not an application: %t\n", tree);
   }
 
-  prod = PT_getTreeProd(t);
-  list = PT_getTreeArgs(t);
+  prod = PT_getTreeProd(tree);
+  args = PT_getTreeArgs(tree);
 
   if (!isListProd(prod)) {
-    ATerm newTerm = flattenTerm(t);
+    PT_Tree newTerm = flattenTerm(tree);
     if (newTerm) {
-      return ATinsert(tail, newTerm);
+      return PT_makeArgsList(newTerm, tail);
     }
     else {
       return tail;
     }
   }
    
-  if (ATisEmpty(list)) {  
+  if (PT_isArgsEmpty(args)) {  
     return tail;
   }
 
-  if (ATgetLength(list) == 1) {
-    return flattenList(ATgetFirst(list), tail);
+  leftBranch = PT_getArgsHead(args);
+  args = PT_getArgsTail(args);
+
+  if (PT_isArgsEmpty(args)) {
+    return flattenList(leftBranch, tail);
   }                                    
   
-  if (ATgetLength(list) == 3) {
-    ATerm leftBranch = ATgetFirst(list);
-    ATerm layoutAfterLeft = ATelementAt(list,1);
-    ATerm rightBranch = ATelementAt(list,2);
+  layoutAfterLeft = PT_getArgsHead(args);
+  args = PT_getArgsTail(args);
+
+  if (PT_hasArgsHead(args)) {
+    rightBranch = PT_getArgsHead(args);
+    args = PT_getArgsTail(args);
+
+    if (PT_isArgsEmpty(args)) {
+      tail = flattenList(rightBranch, tail);
+      tail = PT_makeArgsList(flattenLayout(layoutAfterLeft), tail);
+      tail = flattenList(leftBranch, tail);
   
-    tail = flattenList(rightBranch, tail);
-    tail = ATinsert(tail, flattenLayout(layoutAfterLeft));
-    tail = flattenList(leftBranch, tail);
-  
-    return tail;
+      return tail;
+    }
   }
 
-  ATerror("flattenList: illegal list: %t\n", t);
-  return NULL;
+  ATerror("flattenList: illegal list: %t\n", tree);
+  return PT_makeArgsEmpty();
 }
 
-static ATermList flattenSepList(ATerm t, ATermList tail)
+static PT_Args flattenSepList(PT_Tree tree, PT_Args tail)
 {
-  ATerm     prod;
-  ATermList list;
+  PT_Production prod;
+  PT_Args       args;
+  PT_Tree       leftBranch, layoutAfterLeft, 
+                separator, layoutAfterSep, rightBranch;
 
-  if (!PT_isTreeAppl(t)) {
-    ATerror("flattenSepList: not an application: %t\n", t);
+  if (!PT_isTreeAppl(tree)) {
+    ATerror("flattenSepList: not an application: %t\n", tree);
   }
 
-  prod = PT_getTreeProd(t);
-  list = PT_getTreeArgs(t);
+  prod = PT_getTreeProd(tree);
+  args = PT_getTreeArgs(tree);
 
   if (!isSepListProd(prod)) {
-    ATerm newTerm = flattenTerm(t);
+    PT_Tree newTerm = flattenTerm(tree);
     if (newTerm) {
-      return ATinsert(tail, newTerm);
+      return PT_makeArgsList(newTerm, tail);
     }
     else {
       return tail;
     }
   }
 
-  if (ATisEmpty(list)) {
+  if (PT_isArgsEmpty(args)) {  
     return tail;
   }
 
-  if (ATgetLength(list) == 1) {
-    return flattenSepList(ATgetFirst(list), tail);
+  leftBranch = PT_getArgsHead(args);
+  args = PT_getArgsTail(args);
+
+  if (PT_isArgsEmpty(args)) {
+    return flattenSepList(leftBranch, tail);
+  }                                    
+
+  layoutAfterLeft = PT_getArgsHead(args);
+  args = PT_getArgsTail(args);
+
+  if (PT_hasArgsHead(args)) {
+    separator = PT_getArgsHead(args);
+    args = PT_getArgsTail(args);
+
+    if (PT_hasArgsHead(args)) {
+      layoutAfterSep = PT_getArgsHead(args);
+      args = PT_getArgsTail(args);
+
+      if (PT_hasArgsHead(args)) {
+        rightBranch = PT_getArgsHead(args);
+        args = PT_getArgsTail(args);
+
+        if (PT_isArgsEmpty(args)) {
+          tail = flattenSepList(rightBranch, tail);
+          tail = PT_makeArgsList(flattenLayout(layoutAfterSep), tail);
+          tail = PT_makeArgsList(flattenTerm(separator), tail);
+          tail = PT_makeArgsList(flattenLayout(layoutAfterLeft), tail);
+          tail = flattenSepList(leftBranch, tail);
+
+          return tail;
+        }
+      }
+    }
   }
 
-  if (ATgetLength(list) == 5) {
-    ATerm leftBranch      = ATgetFirst(list);
-    ATerm layoutAfterLeft = ATelementAt(list,1);
-    ATerm separator       = ATelementAt(list,2);
-    ATerm layoutAfterSep  = ATelementAt(list,3); 
-    ATerm rightBranch     = ATelementAt(list,4); 
-
-    tail = flattenSepList(rightBranch, tail);
-    tail = ATinsert(tail, flattenLayout(layoutAfterSep));
-    tail = ATinsert(tail, flattenTerm(separator));
-    tail = ATinsert(tail, flattenLayout(layoutAfterLeft));
-    tail = flattenSepList(leftBranch, tail);
-  
-    return tail;
-  }
-
-  ATerror("flattenSepList: illegal list: %t\n", t);
-  return NULL;
+  ATerror("flattenSepList: illegal list: %t\n", tree);
+  return PT_makeArgsEmpty();
 }
 
-static ATerm flattenProd(ATerm prod)
+static PT_Production flattenProd(PT_Production prod)
 {
-  if(!PT_isProductionDefault(prod)) {
+  if (!PT_isProductionDefault(prod)) {
     ATerror("flattenProd: not a production: %t\n", prod);
   }
   return prod;
 }
 
-static ATerm flattenLexical(ATerm t)
+static PT_Tree flattenLexical(PT_Tree tree)
 {
-  ATerm outerProd;
-  ATermList args;
-  ATermList newArgs = ATempty;
+  if (PT_isTreeAppl(tree)) {
+    PT_Production outerProd = PT_getTreeProd(tree);
+    PT_Args       args      = PT_getTreeArgs(tree);
+    PT_Args       newArgs   = PT_makeArgsEmpty();
 
-  if (PT_isTreeAppl(t)) {
-    outerProd = PT_getTreeProd(t);
-    args      = PT_getTreeArgs(t);
-
-    while (!ATisEmpty(args)) {
-      ATerm arg = ATgetFirst(args);
-      ATerm newTerm = flattenTerm(arg);
+    while (PT_hasArgsHead(args)) {
+      PT_Tree arg = PT_getArgsHead(args);
+      PT_Tree newTerm = flattenTerm(arg);
 
       if (newTerm) {
-        newArgs = ATappend(newArgs, newTerm);
+        newArgs = PT_appendArgs(newArgs, newTerm);
       }
-      args = ATgetNext(args);
+      args = PT_getArgsTail(args);
     }
     return PT_makeTreeAppl(flattenProd(outerProd), newArgs);
   }
   else { 
-    return t;
+    return tree;
   }
 }
 
-static ATermList flattenLayoutList(ATermList args, ATermList tail)
+static PT_Args flattenLayoutList(PT_Args args, PT_Args tail)
 {
-  ATerm     arg, prod;
-  ATermList list;
+  while (PT_hasArgsHead(args)) {
+    PT_Tree arg = PT_getArgsHead(args);
 
-  while (!ATisEmpty(args)) {
-    arg = ATgetFirst(args);
-
-    if (ATgetType(arg) == AT_INT) {
-      tail = ATinsert(tail, makeCharFromInt((ATermInt) arg));
-    }
-    else if (PT_isTreeAppl(arg)) {
-      prod = PT_getTreeProd(arg);
-      list = PT_getTreeArgs(arg);
+    if (PT_isTreeAppl(arg)) {
+      PT_Production prod = PT_getTreeProd(arg);
+      PT_Args       list = PT_getTreeArgs(arg);
   
       if (PT_prodHasLexLayoutAsRhs(prod)
           ||
           PT_prodHasCfLayoutAsRhs(prod)) {
-        tail = flattenLayoutList(ATreverse(list), tail);
+        tail = flattenLayoutList(PT_reverseArgs(list), tail);
       }
+/*
+      else if (isCharClassListProd(prod)) {
+        tail = flattenCharClassList(arg, tail);
+      }
+*/
       else {
-        ATerm newArg = flattenTerm(arg);
+        PT_Tree newArg = flattenTerm(arg);
         if (newArg) {
-          tail = ATinsert(tail, newArg);
+          tail = PT_makeArgsList(newArg, tail);
         }
       }
     }
-    args = ATgetNext(args);
+    else /* if (PT_isTreeChar(arg)) */ {
+      tail = PT_makeArgsList(makeCharFromInt(arg), tail);
+    }
+    args = PT_getArgsTail(args);
   }
   return tail;
 }
 
-static ATerm flattenLayout(ATerm t)
+static PT_Tree flattenLayout(PT_Tree tree)
 {
-  ATermList args;
+  PT_Production prod = PT_getTreeProd(tree);
 
-  if (PT_isTreeAppl(t)) {
-    ATermList newArgs;
+  if (PT_isOptLayoutProd(prod)) {
+    PT_Args args       = PT_getTreeArgs(tree);
+    PT_Args newArgs    = flattenLayoutList(args, PT_makeArgsEmpty());
 
-    args = PT_getTreeArgs(t);
-    newArgs = flattenLayoutList(args, ATempty);
-
-    return PT_makeLayout(newArgs);
+    return PT_makeTreeAppl(prod, newArgs);
   }
-  ATerror("flattenLayout: not an application: %t\n", t);
-  return NULL;
+
+  ATerror("flattenLayout: not layout: %t\n", tree);
+  return (PT_Tree)NULL;
 }
 
-static ATerm flattenLiteral(ATerm prod)
+static PT_Tree flattenLiteral(PT_Production prod)
 {
-  ATerm rhs = PT_getProductionRhs(prod);
-  char *lit = PT_getLitString(rhs);
+  PT_Symbol  rhs = PT_getProductionRhs(prod);
+  char      *lit = PT_getSymbolString(rhs);
 
-  return PT_makeSymbolLit(lit);
+  return PT_makeTreeLit(lit);
 }
 
-static ATerm flattenVar(ATerm t)
+static PT_Tree flattenVar(PT_Tree tree)
 {
-  ATerm prodVarsymOuter, prodVarsymInner;
-  ATermList argsOuter, argsInner;
-  ATerm outerArg;
+  PT_Production prodVarsymOuter = PT_getTreeProd(tree);
+  PT_Args       argsOuter       = PT_getTreeArgs(tree);
 
-  if (!PT_isTreeAppl(t)) {
-    ATerror("flattenVar: not an application: %t\n", t);
-  }
-
-  prodVarsymOuter = PT_getTreeProd(t);
-  argsOuter       = PT_getTreeArgs(t);
-
-  if (!PT_prodHasVarSymAsLhs(prodVarsymOuter)) {
-    ATerror("flattenVar: illegal var symbol: %t\n", t);
-  }
-
-  outerArg = ATgetFirst(argsOuter);
+  PT_Tree outerArg = PT_getArgsHead(argsOuter);
 
   if (PT_isTreeAppl(outerArg)) {
-    prodVarsymInner = PT_getTreeProd(outerArg);
-    argsInner       = PT_getTreeArgs(outerArg);
+    PT_Production prodVarsymInner = PT_getTreeProd(outerArg);
+    PT_Args       argsInner       = PT_getTreeArgs(outerArg);
 
     if (PT_prodHasVarSymAsRhs(prodVarsymInner)) {
-      ATermList newVarArg;
-      ATermList newVarArgs = ATempty;
+      PT_Args newVarArg = PT_makeArgsEmpty();
+      PT_Args newVarArgs = PT_makeArgsEmpty();
 
-      while (!ATisEmpty(argsInner)) {
-        ATerm arg = ATgetFirst(argsInner);
-        ATerm newArg = flattenTerm(arg);
+      while (PT_hasArgsHead(argsInner)) {
+        PT_Tree arg = PT_getArgsHead(argsInner);
+        PT_Tree newArg = flattenTerm(arg);
         if (newArg) {
-          newVarArgs = ATappend(newVarArgs, newArg);
+          newVarArgs = PT_appendArgs(newVarArgs, newArg);
         }
-        argsInner = ATgetNext(argsInner);
+        argsInner = PT_getArgsTail(argsInner);
       }
-      newVarArg = ATmakeList1(PT_makeTreeAppl(flattenProd(prodVarsymInner),
-                                              newVarArgs));
+      newVarArg = PT_makeArgsList(PT_makeTreeAppl(flattenProd(prodVarsymInner),
+                                                  newVarArgs),
+                                  newVarArg);
       return PT_makeTreeAppl(flattenProd(prodVarsymOuter), newVarArg);
     }
   }
-  return NULL;
+  return (PT_Tree)NULL;
 }
 
-static ATerm flattenTerm(ATerm t)
+static PT_Tree flattenTerm(PT_Tree tree)
 {
-  ATerm prod;
-  ATermList args;
+  PT_Production prod;
+  PT_Args args;
 
-  if (ATgetType(t) == AT_INT) {
-    return makeCharFromInt((ATermInt) t);
+  if (PT_isTreeChar(tree)) {
+    return makeCharFromInt(tree);
   }
 
-  if (PT_isTreeAmb(t)) {
-    args = PT_getAmbArgs(t);
+  if (PT_isTreeAmb(tree)) {
+    args = PT_getTreeArgs(tree);
     return PT_makeTreeAmb(flattenArgs(args));
   }
 
-  if (!PT_isTreeAppl(t)) {
-    ATerror("flattenTerm: not an appl pattern: %t\n", t);
-    return NULL;
+  if (!PT_isTreeAppl(tree)) {
+    ATerror("flattenTerm: not an appl pattern: %t\n", tree);
+    return (PT_Tree)NULL;
   }
-  prod = PT_getTreeProd(t);
-  args = PT_getTreeArgs(t);
+  prod = PT_getTreeProd(tree);
+  args = PT_getTreeArgs(tree);
 
   if (PT_prodHasLitAsRhs(prod)) {
     return flattenLiteral(prod);
   }
 
-  /* Layout */
-  if (PT_prodHasCfOptLayoutAsRhs(prod)) {
-    return flattenLayout(t);
+  if (PT_isOptLayoutProd(prod)) {
+    return flattenLayout(tree);
   }
 
-  /* Lexical */
-  if (PT_prodHasLexSortAsRhs(prod)) {
-    return flattenLexical(t);
+  if (PT_isLexicalProd(prod)) {
+    return flattenLexical(tree);
   }
 
-  /* Variable */
-  if (PT_prodHasVarSymAsLhs(prod)) {
-    return flattenVar(t);
+  if (PT_isVarDefault(prod)) {
+    return flattenVar(tree);
   }
 
   /* Lists */
   if (isSepListProd(prod)) {
-    ATermList newList = ATmakeList1((ATerm)flattenSepList(t, ATempty));
-    return PT_makeTreeAppl(flattenProd(prod), newList);
+    PT_Args newArgs = PT_makeArgsList(
+                        PT_makeTreeList(flattenSepList(tree,
+                                                       PT_makeArgsEmpty())),
+                        PT_makeArgsEmpty());
+    return PT_makeTreeAppl(flattenProd(prod), newArgs);
   }
 
   if (isListProd(prod)) {
-    ATermList newList = ATmakeList1((ATerm)flattenList(t, ATempty));
-    return PT_makeTreeAppl(flattenProd(prod), newList);
+    PT_Args newArgs = PT_makeArgsList(
+                        PT_makeTreeList(flattenList(tree,
+                                                    PT_makeArgsEmpty())),
+                        PT_makeArgsEmpty());
+    return PT_makeTreeAppl(flattenProd(prod), newArgs);
   }
 
   if (isLexicalListProd(prod)) {
-    return (ATerm)flattenLexicalList(t, ATempty);
+    return PT_makeTreeList(flattenLexicalList(tree, PT_makeArgsEmpty()));
   }
 
   if (isCharClassListProd(prod)) {
-    return (ATerm)flattenCharClassList(t, ATempty);
+    return PT_makeTreeList(flattenCharClassList(tree, PT_makeArgsEmpty()));
   }
 
   /* Default: application */
   return PT_makeTreeAppl(flattenProd(prod), flattenArgs(args));
 }
 
-ATerm flattenPT(ATerm tree)
+PT_ParseTree flattenPT(PT_ParseTree tree)
 {
   if (PT_isParseTreeTree(tree)) {
-    ATerm newTree = PT_getParseTreeTree(tree);
-    ATerm ambCnt = PT_getParseTreeAmbCnt(tree);
+    PT_Tree newTree = PT_getParseTreeTree(tree);
+    PT_AmbCnt ambCnt = PT_getParseTreeAmbCnt(tree);
 
     return PT_makeParseTreeTree(flattenTerm(newTree), ambCnt);
   }
