@@ -1,0 +1,80 @@
+equations
+    
+
+[as-1] add-succ(Rel, Rstore) = extend-rel(SUCC, Rel, Rstore)
+ 
+
+[ex1] Stat = while Exp do Stat* od,
+      NodeId = get-area(Stat),
+      Rstore' = add-succ({<NodeId, get-first(Stat*)>}, Rstore),
+      Rstore''= add-last(Stat*, NodeId, Rstore'),
+      Rstore''' = extract-used-vars(Exp, Rstore'', NodeId)
+      =========================================================
+      extract(Stat, Rstore) = Rstore'''
+
+[ex2]
+      Stat = if Exp then Stat*1 else Stat*2 fi,
+      NodeId = get-area(Stat),
+      Rstore' = add-succ({ <NodeId, get-first(Stat*1)>,
+                           <NodeId, get-first(Stat*2)> }, Rstore),
+      Rstore'' =  extract-used-vars(Exp, Rstore', NodeId)
+      ========================================================
+      extract(Stat, Rstore) = Rstore''
+
+[ex3] extract(Stat, Rstore) = Rstore',
+      extract(Stat+, Rstore') = Rstore''
+      ========================================================
+      extract(Stat ; Stat+, Rstore) = 
+      add-succ(product(get-last(Stat), {get-first(Stat+)}), Rstore'')
+
+[ex4] Stat = Id := Exp,
+      NodeId = get-area(Stat),
+      Rstore' = extract-used-vars(Exp, Rstore, NodeId),
+      Rstore'' = add-tuple(DEFS, <Id, NodeId>, Rstore')
+      ========================================================
+      extract(Stat, Rstore) = Rstore''
+
+[default-ex]
+     extract(Stat, Rstore) = extract-used-vars(Stat, Rstore, get-area(Stat))
+
+
+[exv-1] NodeId' = get-area(Id),
+	add-tuple(USES, <Id, NodeId'> , Rstore) = Rstore',
+        add-tuple(OCCURS, <NodeId', NodeId>, Rstore') = Rstore''
+	=====================================================
+        extract-used-vars(Id, Rstore, NodeId) = Rstore''
+
+[gf-1] get-first(Stat; Stat*) = get-area(Stat)
+
+[gl-2] get-last(Stat*; if Exp then Stat*1 else Stat*2 fi) = 
+       union(get-last(Stat*1), get-last(Stat*2))
+
+[default-gl-3] 
+       get-last(Stat*; Stat) = {get-area(Stat)}
+
+[al-1] get-last(Stat*) = Bag
+       ========================================================
+       add-last(Stat*, NodeId, Rstore) = add-succ(product(Bag, {NodeId}), Rstore)
+
+
+[rt-1] rootNode = area("",0,0,0,0)
+
+[er-1] Program = begin Decls Stat+ end,
+       Rstore = assign(ROOT, rootNode, []),
+       Rstore' = add-succ({<rootNode, get-first(Stat+)>}, Rstore),
+       extract(Program, Rstore') = Rstore''
+       =======================================================
+       extractRelations(Program) = Rstore''
+
+
+[i2s] id2str(pico-id(Char*)) = strcon(""" Char* """)
+
+[cvt-1] convert(<Id, Area>) = listitem("Unitialized variable " || id2str(Id), [ "ShowSource" ], Area)
+
+[cvt-2] convertl({Tuple*}) = list([ListItem*]),
+        Tuple = <Id, Area>
+        ================================================
+        convertl({Tuple, Tuple*})= list([convert(<Id, Area>), ListItem*])
+
+[cvt-3] convertl({}) = list([])
+
