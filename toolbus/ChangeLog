@@ -1,5 +1,9 @@
 $Id$
 
+Mon Feb  9 14:48:28 CET 2004 <jurgenv@cwi.nl>
+ * Generating 'const char*' instead of 'char*' pointers to be able
+   to find errors quicker in ToolBus components.
+
 Mon Feb  2 16:34:09 CET 2004 <{jong,kooiker}@cwi.nl>
  * upgraded several Makefile.am files to get 'distcheck' working
 
