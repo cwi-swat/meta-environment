@@ -38,4 +38,4 @@ api: metastudio.ace ${TYPES}
 jtif: 
 	${IDEF} meta-studio.idef
 	${TOOLBUS}/bin/tifstojava -tool user-interface -tifs meta-studio.tifs \
-		-package metastudio
+		-package metastudio -swing

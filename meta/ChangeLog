@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Feb 12 14:35:50 CET 2003 <olivierp@cwi.nl>
+ * Fixed 'hang' bug in gui.
+ * Node order is no longer changed when deleting nodes.
+
 2003/02/07 <{markvdb,jong}@cwi.nl>
  * Improved the query tool a bit.
  * Added meta-studio to cleaning.

@@ -28,29 +28,43 @@ public class GraphWrapper
       if (node.getId().getId().equals(id)) {
 	return node;
       }
+
+      nodes = nodes.getTail();
     }
 
     return null;
   }
 
   //}}}
-  //{{{ public void deleteNode(String id)
 
-  public void deleteNode(String id)
+  //{{{ private void deleteNodeFromNodes(String id)
+
+  private NodeList deleteNodeFromNodes(String id, NodeList nodes)
   {
-    NodeList nodes = getNodes();
-    NodeList newNodes = factory.makeNodeList_Empty();
+    Vector nodeVector = new Vector();
     while (!nodes.isEmpty()) {
       Node node = nodes.getHead();
       if (!node.getId().getId().equals(id)) {
-	newNodes = factory.makeNodeList_Multi(node, newNodes);
+	nodeVector.addElement(node);
       }
 
       nodes = nodes.getTail();
     }
-    graph = graph.setNodes(newNodes);
 
-    EdgeList edges = getEdges();
+    NodeList newNodes = factory.makeNodeList_Empty();
+    for (int i=nodeVector.size()-1; i>=0; i--) {
+      Node node = (Node)nodeVector.elementAt(i);
+      newNodes = factory.makeNodeList_Multi(node, newNodes);
+    }
+
+    return newNodes;
+  }
+
+  //}}}
+  //{{{ private void deleteNodeFromEdges(String id)
+
+  private EdgeList deleteNodeFromEdges(String id, EdgeList edges)
+  {
     EdgeList newEdges = factory.makeEdgeList_Empty();
     while (!edges.isEmpty()) {
       Edge edge = edges.getHead();
@@ -60,7 +74,18 @@ public class GraphWrapper
 
       edges = edges.getTail();
     }
-    graph = graph.setEdges(newEdges);
+
+    return newEdges;
+  }
+
+  //}}}
+
+  //{{{ public void deleteNode(String id)
+
+  public void deleteNode(String id)
+  {
+    graph = graph.setNodes(deleteNodeFromNodes(id, graph.getNodes()));
+    graph = graph.setEdges(deleteNodeFromEdges(id, graph.getEdges()));
   }
 
   //}}}
@@ -69,17 +94,75 @@ public class GraphWrapper
   public void sizeNodes(NodeSizer nodeSizer)
   {
     NodeList nodes = graph.getNodes();
-    NodeList result = factory.makeNodeList_Empty();
+    List nodeList = new ArrayList();
+
     while (!nodes.isEmpty()) {
       Node node = nodes.getHead();
 
       node = nodeSizer.sizeNode(node);
-      result = factory.makeNodeList_Multi(node, result);
+      nodeList.add(node);
 
       nodes = nodes.getTail();
     }
 
+    NodeList result = factory.makeNodeList_Empty();
+    for (int i=nodeList.size()-1; i>=0; i--) {
+      Node node = (Node)nodeList.get(i);
+      result = factory.makeNodeList_Multi(node, result);
+    }
     graph = graph.setNodes(result);
+  }
+
+  //}}}
+
+  //{{{ public void orderNodes()
+
+  /**
+    * This function makes sure the top nodes (those nodes which are
+    * not imported by any other nodes) are listed first.
+    **/
+
+  public void orderNodes()
+  {
+    NodeList nodes = graph.getNodes();
+    NodeList topNodes = factory.makeNodeList_Empty();
+
+    while (!nodes.isEmpty()) {
+      Node node = nodes.getHead();
+      if (!isTopNode(node)) {
+	topNodes = factory.makeNodeList_Multi(node, topNodes);
+      }
+
+      nodes = nodes.getTail();
+    }
+
+    nodes = graph.getNodes();
+    while (!topNodes.isEmpty()) {
+      Node node = topNodes.getHead();
+      nodes = deleteNodeFromNodes(node.getId().getId(), nodes);
+      nodes = factory.makeNodeList_Multi(node, nodes);
+      topNodes = topNodes.getTail();
+    }
+
+    graph = graph.setNodes(nodes);
+  }
+
+  //}}}
+
+  //{{{ private boolean isTopNode(Node node)
+
+  private boolean isTopNode(Node node)
+  {
+    EdgeList edges = graph.getEdges();
+    while (!edges.isEmpty()) {
+      Edge edge = edges.getHead();
+      if (edge.getTo().isEqual(node.getId())) {
+	return false;
+      }
+      edges = edges.getTail();
+    }
+
+    return true;
   }
 
   //}}}

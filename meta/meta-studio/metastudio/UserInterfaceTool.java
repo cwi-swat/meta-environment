@@ -1,16 +1,16 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Jan 30, 2003 2:36:41 PM
+// generation time: Feb 12, 2003 11:25:07 AM
 
 package metastudio;
 
+import aterm.*;
+import toolbus.*;
+import java.net.*;
 import java.util.*;
 
-import toolbus.AbstractTool;
-import aterm.*;
-
 abstract public class UserInterfaceTool
-  extends AbstractTool
+  extends SwingTool
   implements UserInterfaceTif
 {
   // This table will hold the complete input signature

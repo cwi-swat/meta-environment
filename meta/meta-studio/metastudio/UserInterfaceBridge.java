@@ -1,10 +1,11 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: Jan 30, 2003 2:36:41 PM
+// generation time: Feb 12, 2003 11:25:07 AM
 
 package metastudio;
 
 import aterm.*;
+import toolbus.*;
 
 public class UserInterfaceBridge
   extends UserInterfaceTool

@@ -1037,6 +1037,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       }
     };
 
+    graph.orderNodes();
     graph.sizeNodes(sizer);
 
     bridge.postEvent(factory.make("layout-graph(<str>,<term>)", graphPanel.getId(), graph.toTerm()));
