@@ -8,9 +8,9 @@ noinst_PROGRAMS=mept-test
 
 mept_test_SOURCES=mept-test.c
 mept_test_LDADD=\
-	-L$(ATERM)/lib -lATerm\
 	-L$(top_builddir)/libmept -lmept\
-	-L$(top_builddir)/test/terms -ltestTerms
+	-L$(top_builddir)/test/terms -ltestTerms \
+	-L$(ATERM)/lib -lATerm
 
 INCLUDES =\
 	-I${top_srcdir}/libmept\
