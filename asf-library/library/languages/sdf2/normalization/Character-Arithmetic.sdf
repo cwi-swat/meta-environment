@@ -13,6 +13,8 @@ exports
     min(Character,Character)  -> Character
 
 hiddens
+  imports basic/Whitespace basic/Comments
+
   context-free start-symbols
 	Character
 	Boolean

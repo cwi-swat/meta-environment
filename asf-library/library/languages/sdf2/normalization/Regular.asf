@@ -91,7 +91,7 @@ equations
 %%                  priorities {left: p1 p2 p3 p4} > {p5 p6}
 %%                  priorities {right: p3 p4}
                    priorities {p1 p2 p3 p4} > {p5 p6}
-                   priorities p3 <0>> p4 
+%%                   priorities p3 <0>> p4 
                    priorities p2 <1>> p4
                    priorities p3 <1>> p2
                    priorities p3 <1>> p1 
@@ -121,7 +121,7 @@ equations
 %%                        priorities {left: p1 p2 p3 p4} > {p5 p6}
 %%                        priorities {right: p3 p4}
                    priorities {p1 p2 p3 p4} > {p5 p6}
-                   priorities p3 <0>> p4 
+%%                   priorities p3 <0>> p4 
                    priorities p2 <2>> p4
                    priorities p3 <2>> p2
                    priorities p3 <2>> p1 
