@@ -53,15 +53,13 @@ PRGS	= buscontrol
 SCRIPTS	= tide query
 SRC	= browser.py.nw buscontrol.c.nw evq.c.nw extui.py.nw fset.py.nw \
 	stub.tb tbview.py.nw tide-main.tcl.nw tide.tb.nw
-TEST	= test-browser.tb test-tbview.tb test-tide-main.tb \
-	testevq.c testevq.tb
 GENSRC	= tide.tb tbview.py browser.py fset.py extui.py evq.c buscontrol.c \
 	tide-main.tcl
 PRGDOC	= tide.tb.tex tbview.py.tex browser.py.tex fset.py.tex extui.py.tex \
 	tide-main.tcl.tex buscontrol.c.tex
 DIRS	= bitmaps test help
 
-DISTFILES = $(SCRIPTS) $(SRC) $(TEST) $(GENSRC) $(PRGDOC) tide.tex $(DIRS) \
+DISTFILES = $(SCRIPTS) $(SRC) $(GENSRC) $(PRGDOC) tide.tex $(DIRS) \
 	Makefile.in
 
 all:  $(PRGS) $(GENSRC) testevq
