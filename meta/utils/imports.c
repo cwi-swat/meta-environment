@@ -1,14 +1,24 @@
 /*
  * $Id$
  *
- * (C) 1999, Merijn de Jonge (mdejonge@wins.uva.nl)
+ * (C) 1999, Merijn de Jonge (mdejonge@cwi.nl)
  *
  * imports: generates list of the names on standard output of all modules
  *          that are imported by an ASF+SDF module.
  *
  * usage:
- *   imports <module>
- *      <module> AsFix representation of ASF+SDF module
+ *    imports [-option] meta.conf-file module
+ *  
+ *    meta.conf-file file containing search paths
+ *    module         AsFix representation of ASF+SDF module
+ *  
+ *    options:
+ *       -g  outpur graph corresponding to import graph
+ *       -h  displays this message
+ *       -l  print full paths names of modules
+ *       -r  construct a list of modules recursively
+ *       -s  stop when a module cannot be found
+ *  
  *
  */
 
@@ -35,7 +45,7 @@ extern char* optarg;
 
 #define USAGE_MSG \
    "\n"\
-   "imports: (C) 1999, Merijn de Jonge (mdejonge@wins.uva.nl)\n"\
+   "imports: (C) 1999, Merijn de Jonge (mdejonge@cwi.nl)\n"\
    "\n"\
    "   generates list of the names on standard output of all modules \n"\
    "   that are imported by an ASF+SDF module.\n"\
@@ -47,6 +57,7 @@ extern char* optarg;
    "      module         AsFix representation of ASF+SDF module\n"\
    "\n"\
    "      options:\n"\
+   "         -g  outpur graph corresponding to import graph\n"\
    "         -h  displays this message\n"\
    "         -l  print full paths names of modules\n"\
    "         -r  construct a list of modules recursively\n"\
@@ -54,7 +65,7 @@ extern char* optarg;
    "\n"
 
 /* Command line options used by imports */
-static char* opt_string = "hlrs";
+static char* opt_string = "ghlrs";
 
 
 extern ATbool silent;
@@ -73,13 +84,28 @@ static void usage()
    fprintf( stderr, USAGE_MSG );
 }
 
+static char* basename( const char* s )
+{ 
+   static char buffer[_POSIX_PATH_MAX];
+   char* ptr;
+   
+   /* short listing: remove directory and extension from file name */
+   strcpy( buffer, s );
+   ptr = strrchr( buffer, '/' );
+   if( ptr != NULL )
+      strcpy( buffer, ptr + 1 );
+   ptr = strrchr( buffer, '.' );
+   if( ptr != NULL )
+      *ptr = '\0';
+   return buffer;
+}
+
 int main( int argc, char* argv[] )
 {
    ATerm     bs;
    ATermList imports;
    ATbool    long_listing;
    char*     s;
-   char      buffer[_POSIX_PATH_MAX];
    int       options;
    int      c;
 
@@ -95,6 +121,9 @@ int main( int argc, char* argv[] )
          break;
       switch( c )
       {
+         case 'g':
+            options |= Graph;
+            break;
          case 'h':
             usage();
             exit( 0 );
@@ -126,29 +155,84 @@ int main( int argc, char* argv[] )
    /* Obtain list of imported modules */
    imports = getImports( argv[optind], argv[optind + 1], options );
 
-   /* traverse list of modules. Depending on value of long_listing we have
-    * to remove location and extension from file names */
-   while( ATisEmpty( imports ) == ATfalse )
+   if( imports == NULL )
+      return 1;
+
+   /* Convert to graph format:
+    *    graph(nodes([id("node_1"),...,id("node_n")]),
+    *          edges([ [id("node_i"), id("node_j")], ... ]) )
+   if( options & Graph )
    {
-      ATmatch( ATgetFirst( imports ), "<str>", &s );
+      ATermList nodes;
+      ATermList edges;
+      int i;
+      ATerm t;
+      char* s;
+      char* s1;
+      char* s2;
+      
+      /* Obtain list of nodes and edges as returned by getImport */
+      ATmatch( (ATerm)imports, "[<term>,<term>]", &nodes, &edges );
+      
+      /* Traverse all nodes */
+      for( i = 0; i < ATgetLength( nodes ); i++ )
+      {
+         t = ATelementAt( nodes, i );
+         ATmatch( t, "<str>", &s );
 
-      /* long_listing: print full path name */
-      if( long_listing == ATtrue )
-         printf( "%s\n", s );
-      else
-      { /* short listing: remove directory and extension from file name */
-         strcpy( buffer, s );
-         s = strrchr( buffer, '/' );
-         if( s != NULL )
-            strcpy( buffer, s + 1 );
-         s = strrchr( buffer, '.' );
-         if( s != NULL )
-            *s = '\0';
-         printf( "%s\n", buffer );
+         /* if the '-l' option was not specified, we strip of the path and
+          * extension of the file name 
+          */
+         if( long_listing == ATfalse )
+            s = basename ( s );
+         
+         /* Finally, we create a term with function symbol "id" */
+         nodes = ATreplace( nodes, ATmake( "id(<str>)", s ), i);
       }
-      imports = ATgetNext( imports );
-   }
 
-   /* ... and termiate */
+      /* Traverse all edges */
+      for( i = 0; i < ATgetLength( edges ); i++ )
+      {
+         t = ATelementAt( edges, i );
+         ATmatch( t, "[<str>,<str>]", &s1, &s2 );
+
+         /* if the '-l' option was not specified, we strip of the path and
+          * extension of both file names of the edge, and we create a new
+          * node [id(p1), id(p2)].
+          */  
+         if( long_listing == ATfalse )
+            edges = ATreplace( edges, 
+               ATmake( "[<term>,<term>]", ATmake( "id(<str>)", basename( s1 ) ),
+                                         ATmake( "id(<str>)", basename( s2 ) ) ), i );
+         else
+         /* Otherwise (In case the '-l' option was specified, we just create
+          * a new node [id(p1), id(p2)].
+          */
+            edges = ATreplace( edges, 
+               ATmake( "[id(<str>),id(<str>)]", s1, s2 ), i );
+         
+      }
+      
+      /* Then we create the final graph term and write it to standard output */
+      ATfprintf( stdout, "%t\n", 
+         ATmake( "graph(nodes(<term>),edges(<term>))", nodes, edges ) );
+   } 
+   else /* options & Graph */
+   {
+      /* traverse list of modules. Depending on value of long_listing we have
+       * to remove location and extension from file names */
+      while( ATisEmpty( imports ) == ATfalse )
+      {
+         ATmatch( ATgetFirst( imports ), "<str>", &s );
+
+         /* long_listing: print full path name */
+         if( long_listing == ATtrue )
+            printf( "%s\n", s );
+         else
+            printf( "%s\n", basename( s ) );
+         imports = ATgetNext( imports );
+      }
+   }
+   /* ... and terminate */
    exit( 0 );
 }

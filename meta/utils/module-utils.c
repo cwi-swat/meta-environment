@@ -131,8 +131,8 @@ ATermList _getImports( char* path )
       n--;
    }
    return imports;
-
 }
+
 /*
  * Return a list of modules that are imported by the module
  * topModule. The behavior of getImports is controlled by options:
@@ -141,6 +141,10 @@ ATermList _getImports( char* path )
  *                   a module could not be located.
  * Recursive:        a list of modules is constructing by traversing the
  *                   modules recursively.
+ * Graph:            a a graph structure is constructed representing the
+ *                   import structure of an ASF+SDF module. The structure
+ *                   holds a lists of nodes and a list of edges.
+ *
  * These options can be 'or-ed' together.
  *
  * location of modules is performed relatively to the directories
@@ -151,19 +155,26 @@ ATermList getImports( char* metaPathsFile, char* topModule, ModuleOptions option
 {
    meta_paths mp;
    char*  path;
+   char*  path1;
    char   module[_POSIX_PATH_MAX];
+
    ATermList imports;
    ATermList modules;
+   ATermList nodes;
+   ATermList edges;
    ATerm t;
    int   index;
 
    /* Initialize AsFix routines */
-  AFinitExpansionTerms();
-  AFinitAsFixPatterns();
+   AFinitExpansionTerms();
+   AFinitAsFixPatterns();
 
    /* Create empty imports list */
    imports = ATmakeList0();
 
+   /* Initialize empty nodes and edges list */
+   nodes = ATmakeList0();
+   edges = ATmakeList0();
 
    /* open meta.conf-paths file */
    if( metaPathsOpen( &mp, metaPathsFile ) == -1 )
@@ -171,7 +182,6 @@ ATermList getImports( char* metaPathsFile, char* topModule, ModuleOptions option
       FAIL1( "metaPathsOpen", metaPathsFile );
       exit( 1 );
    }
-
 
    /*
     * construct file name from topModule name by appending the extension
@@ -181,13 +191,23 @@ ATermList getImports( char* metaPathsFile, char* topModule, ModuleOptions option
    if( strstr( module, ".asfix" ) == NULL )
       strcat( module, ".asfix" );
 
-   /* locate teh top module... */
+   /* locate the top module... */
    path = metaPathsLocate( &mp, module );
    if( path == NULL )
-      return imports;
+   {
+      FAIL( "getImports" );
+      exit( 1 );
+   }
 
    /* ... and append it to the list of imported modules */
-   imports = ATappend( imports, ATmake( "<str>", path ) );
+   t = ATmake( "<str>", path );
+   imports = ATappend( imports, t );
+
+   /* Append the node to the list of nodes when it not already
+    * occurs in the list
+    */
+   if( options & Graph )
+      nodes = ATappend( nodes, t );
 
 
    /* We now traverse all elements in the list and collect all module
@@ -203,7 +223,7 @@ ATermList getImports( char* metaPathsFile, char* topModule, ModuleOptions option
 
       /* obtain sting from term t */
       ATmatch( t, "<str>", &path );
-
+      
       /* collect names of modules that are imported by the module
        * located at path
        */
@@ -218,23 +238,44 @@ ATermList getImports( char* metaPathsFile, char* topModule, ModuleOptions option
          t = ATgetFirst( modules );
          modules = ATgetNext( modules );
 
-         ATmatch( t, "<str>", &path );
-         sprintf( module, "%s.asfix", path );
-         path = metaPathsLocate( &mp, module );
-         if( path == NULL )
+         ATmatch( t, "<str>", &path1 );
+         sprintf( module, "%s.asfix", path1 );
+         path1 = metaPathsLocate( &mp, module );
+         if( path1 == NULL )
          {
             /* module could not be located. FailWhenNotFound option
              * was specified so we quit and return the list of
              * modules obtained thus far
              */
             if( options & FailWhenNotFound )
-               return imports;
+            {
+               /* Construct list from nodes and edges */
+               if( options & Graph )
+                  return (ATermList)ATmake( "[<term>,<term>]", nodes, edges );
+               else
+                  return imports;
+            }
          }
          else
          {
-            t = ATmake( "<str>", path );
+            t = ATmake( "<str>", path1 );
             if( contains( imports, t ) == ATfalse )
+            {
                imports = ATappend( imports, t );
+               if( options & Graph )
+                  if( contains( nodes, t ) == ATfalse )
+                     nodes = ATappend( nodes, t );
+
+            }
+            if( options & Graph )
+            {
+               /* Add new edge to list of edges when it does not
+                *  already occur in the list.
+                */
+               t = ATmake( "[<str>,<str>]", path, path1 );
+               if( contains( edges, t ) == ATfalse )
+                  edges = ATappend( edges, t );
+            }
          }
       }
       /* When the option Recursive was not specified, we terminate
@@ -242,9 +283,18 @@ ATermList getImports( char* metaPathsFile, char* topModule, ModuleOptions option
        * after removing the first element (was is the top module).
        */
       if( !(options & Recursive ) )
-         return ATgetNext( imports );
+      {
+         /* Construct list from nodes and edges */
+         if( options & Graph )
+            return (ATermList)ATmake( "[<term>,<term>]", nodes, edges );
+         else
+            return ATgetNext( imports );
+      }
    }
 
-   /* we are done. Return the list of modules. */
-   return imports;
+   /* we are done. Return the list of modules or list of nodes and edges. */
+   if( options & Graph )
+      return (ATermList)ATmake( "[<term>,<term>]", nodes, edges );
+   else
+      return imports;
 }

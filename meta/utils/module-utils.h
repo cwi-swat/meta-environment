@@ -8,8 +8,10 @@
 
 /* Flags which contral behavior of the function getImports */
 typedef enum { 
-   FailWhenNotFound, /* stop as soon as a module could not be located */
-   Recursive         /* construct a list of imported modules recursively */
+   FailWhenNotFound = 0x01, /* stop as soon as a module could not be located */
+   Recursive        = 0x02, /* construct a list of imported modules recursively */
+   Graph            = 0x04  /* construct a graph representing the import sturcture 
+                             * the top module*/
 } ModuleOptions;
 
 /*
