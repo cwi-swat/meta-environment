@@ -29,6 +29,7 @@
 
 char *version_string = "$Revision$";
 char *program_name   = "sglr";
+int   output_old_asfix;
 int   debugflag;
 int   verboseflag;
 FILE *log = NULL;
@@ -39,12 +40,14 @@ char *parse_table_name = NULL;
 int   abbreviation_flag = FALSE;
 int   show_statistics = FALSE;
 int   suppress_lexicals = FALSE;
-int   filtering = FALSE;
 char *dotoutput = "";
 int   generate_dot = FALSE;
 int   show_stack = FALSE;
 char *stack_dotoutput = "";
-int  gc = TRUE;
+int   gc = TRUE;
+int   standalone=TRUE;
+
+term	*trans(term *, int);
 
 void batch (int argc, char **argv);
 bool called_from_toolbus(int argc, char **argv);
@@ -67,9 +70,11 @@ int
 main (int argc, char **argv)
 {
   if (called_from_toolbus(argc, argv)) {
+    standalone = FALSE;
     TBinit("sglr", argc, argv, sglr_handler, sglr_check_in_sign);
     TBeventloop();
   } else {
+    standalone = TRUE;
     batch(argc, argv);
   }
   return(0);
@@ -145,6 +150,8 @@ batch (int argc, char **argv)
   The function |usage| writes a short summary of the usage of the program.
   The following options are recognized:
   \begin{itemize}
+  \item |-1|       : output AsFix1 format
+  \item |-2|       : output AsFix2 format (default)
   \item |-p file|  : use parse table file (obligatory)
   \item |-i file|  : input from file (optional, default is stdin)
   \item |-o file|  : output to file (optional, default is stdout)
@@ -158,7 +165,6 @@ batch (int argc, char **argv)
   \item |-a|       : abbreviate productions in parse trees
   \item |-s|       : write show statistics to log file
   \item |-S|       : show stacks as dot files
-  \item |-f|       : turn filtering on
   \item |-D [file]| : draw tree as graph.
   \end{itemize}
 */
@@ -167,23 +173,25 @@ usage(FILE *stream, int long_message)
 {
   if( !long_message )
     fprintf (stream,
-	     "Usage: %s -p file [-i file] [-o file] [-adDfghlnsSvV?]\n",
+	     "Usage: %s -p file [-i file] [-o file] [-12adDghlnsSvV?]\n",
 	     program_name);
   else {
     fprintf
 (stream,
- "Usage: %s -p file [-i file] [-o file] [-adDfghlnsSvV?]\n"
+ "Usage: %s -p file [-i file] [-o file] [-12adDghlnsSvV?]\n"
  "\n"
- "\t-p file : use parse table |file| (obligatory)\n"
- "\t-i file : input from |file| (optional, default is stdin)\n"
- "\t-o file : output to |file| (optional, default is stdout)\n"
+ "\t-1      : use AsFix1 output format\n"
+ "\t-2      : use AsFix2 output format (default)\n"
  "\t-a      : abbreviate productions in parse trees\n"
  "\t-d      : debugging mode\n"
  "\t-D file : generate dot output for parse tree\n"
  "\t-g      : no garbage collect\n"
  "\t-h      : help (print usage information)\n"
+ "\t-i file : input from |file| (optional, default is stdin)\n"
  "\t-l      : suppress lexical information in dot output\n"
  "\t-n      : don't write tree to output\n"
+ "\t-o file : output to |file| (optional, default is stdout)\n"
+ "\t-p file : use parse table |file| (obligatory)\n"
  "\t-s      : show statistics\n"
  "\t-S file : show stacks as dot files\n"
  "\t-v      : verbose mode\n"
@@ -204,6 +212,8 @@ usage(FILE *stream, int long_message)
 struct option longopts[] =
 {
   {"abbreviate",  no_argument,       &abbreviation_flag, FALSE},
+  {"asfix1",      no_argument,       &output_old_asfix,  TRUE},
+  {"asfix2",      no_argument,       &output_old_asfix,  FALSE},
   {"debug",       no_argument,       &debugflag,         TRUE},
   {"dot",         no_argument,       NULL,               'D'},
   {"suppress",    no_argument,       NULL,               'l'},
@@ -230,19 +240,21 @@ void
 handle_options (int argc, char **argv)
 {
   int c; /* option character */
+  output_old_asfix = FALSE;
   verboseflag = FALSE;
   debugflag   = FALSE;
   while ((c = getopt_long(argc, argv,
-			  "?adD:fghi:lno:p:sS:vV", longopts, NULL))
+			  "12?adD:ghi:lno:p:sS:vV", longopts, NULL))
 	 != EOF)
     switch (c) {
     case 0:   break;
+    case '1': output_old_asfix = TRUE;  break;
+    case '2': output_old_asfix = FALSE; break;
     case '?': usage(stderr, TRUE); exit(0);
     case 'a': abbreviation_flag = TRUE; break;
     case 'D': dotoutput = optarg; generate_dot = TRUE; break;
     case 'd': debugflag = TRUE; printf("debugging %s\n", debugflag?"on":"off");
                log = open_log(".parse-log"); break;
-    case 'f': filtering = !filtering;
     case 'g': gc = !gc; break;
     case 'h': usage(stdout, TRUE); exit(0);
     case 'i': input_file_name  = optarg; break;
@@ -282,11 +294,13 @@ handle_options (int argc, char **argv)
   On receipt of a termination request the program exits with code 0.
 
 */
+
 void
 rec_terminate(term *t)
 {
   exit(0);
 }
+
 /*
   \paragraph{Open File}
 
@@ -417,7 +431,10 @@ term_to_file(term *t, char *FN)
 	}
       if (verboseflag)
 	fprintf(stdout, "%s: writing parse tree to %s\n", program_name, FN);
-      TBprintf(output_file, "%t\n", t);
+      if(output_old_asfix != TRUE)
+        TBprintf(output_file, "%t\n", t);
+      else
+        TBprintf(output_file, "%t\n", trans(t, standalone));
     }
 }
 /*

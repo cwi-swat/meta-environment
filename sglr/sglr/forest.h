@@ -20,14 +20,14 @@
 */
 extern int nr_ambiguities;
 /*
-  We use the |trm_has_conds| fields of terms to indicate that a tree
+  We use the |term_has_conds| fields of terms to indicate that a tree
   is invalid.
 */
 #define cons(t, ts)       mk_list(t, ts)
 term * apply(parse_table *, label , terms *);
 void amb(term *, term *);
 term *tree_type(term *);
-term *trm_yield(term *t);
+term *term_yield(term *t);
 
-term *dot_trm_yield(term *);
+term *dot_term_yield(term *);
 

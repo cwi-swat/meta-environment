@@ -375,7 +375,7 @@ reducer(stack *st0, state s, label prod, term_list *kids, bool reject)
   t = apply(table, prod, kids);
 
   if(debugflag)
-    TBprintf(log, "reducing %t\n", dot_trm_yield(t));
+    TBprintf(log, "reducing %t\n", dot_term_yield(t));
 
   /* new stack */
   if((st1 = find_stack(s, active_stacks)) == NULL) {

@@ -357,7 +357,7 @@ link_to_dot(FILE *dot, stack *st, st_link *l)
   if(TBmatch(t, "%d", &c))
     print_character(dot, c);
   else {
-    TBprintf(dot, "%t : ", dot_trm_yield(TREE(l)));
+    TBprintf(dot, "%t : ", dot_term_yield(TREE(l)));
     print_symbol(dot, t);
   }
   fprintf(dot, "\"");

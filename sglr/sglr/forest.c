@@ -55,7 +55,7 @@ amb(term *t1, term *t2)
 
   if(debugflag)
     TBprintf(log, "creating ambiguity node for\n %t and %t\n",
-	     dot_trm_yield(t1), dot_trm_yield(t2));
+	     dot_term_yield(t1), dot_term_yield(t2));
 
   if (TBmatch(t1, "appl(%t, %t)", &prod, &args))
     {
@@ -109,7 +109,7 @@ static char temp[10240];
 static int index;
 
 void
-trm_yield_aux(term *t)
+term_yield_aux(term *t)
 {
   term *fun, *args, *first, *rest;
   int c;
@@ -126,31 +126,31 @@ trm_yield_aux(term *t)
     }
   else if (TBmatch(t, "appl(%t,[%l])", &fun, &args))
     {
-      trm_yield_aux(args);
+      term_yield_aux(args);
     }
   else if (TBmatch(t, "[%t,%l]", &first, &rest))
     {
-      trm_yield_aux(first);
-      trm_yield_aux(rest);
+      term_yield_aux(first);
+      term_yield_aux(rest);
     }
   else
     {
-      TBprintf(stderr, "trm_yield_aux: strange term: %t\n", t);
+      TBprintf(stderr, "term_yield_aux: strange term: %t\n", t);
       exit(1);
     }
 }
 
 term *
-trm_yield(term *t)
+term_yield(term *t)
 {
   index = 0;
   temp[index] = '\0';
-  trm_yield_aux(t);
+  term_yield_aux(t);
   return TBmake("%s", temp);
 }
 
 void
-dot_trm_yield_aux(term *t)
+dot_term_yield_aux(term *t)
 {
   term *fun, *args, *first, *rest;
   int c;
@@ -169,21 +169,21 @@ dot_trm_yield_aux(term *t)
       if(list_length(args) > 1) {
 	temp[index] = '[';
 	index++;
-	dot_trm_yield_aux(args);
+	dot_term_yield_aux(args);
 	temp[index] = ']';
 	index++;
       } else
-	dot_trm_yield_aux(args);
+	dot_term_yield_aux(args);
     }
   else if (TBmatch(t, "[%t,%l]", &first, &rest))
     {
-      dot_trm_yield_aux(first);
-      dot_trm_yield_aux(rest);
+      dot_term_yield_aux(first);
+      dot_term_yield_aux(rest);
     }
   else if (TBmatch(t, "amb([%l])", &rest))
     {
       while(pop(first, rest)) {
-	dot_trm_yield_aux(first);
+	dot_term_yield_aux(first);
 	if(rest != NULL) {
 	  temp[index] = '|';
 	  index++;
@@ -192,17 +192,17 @@ dot_trm_yield_aux(term *t)
     }
   else
     {
-      TBprintf(stderr, "trm_yield_aux: strange term: %t\n", t);
+      TBprintf(stderr, "term_yield_aux: strange term: %t\n", t);
       exit(1);
     }
 }
 
 term *
-dot_trm_yield(term *t)
+dot_term_yield(term *t)
 {
   index = 0;
   temp[index] = '\0';
-  dot_trm_yield_aux(t);
+  dot_term_yield_aux(t);
   temp[index] = '\0';
   return TBmake("%s", temp);
 }
