@@ -25,7 +25,7 @@ extern int buf_size;
 extern int overflowPort;
 */
 extern TBbool  stand_alone;
-extern TBbool  verbose;
+extern TBbool  TBverbose;
 
 extern char this_host[MAXHOSTNAMELEN];
 extern char single_prompt[];

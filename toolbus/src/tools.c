@@ -292,7 +292,7 @@ TBbool write_to_tool(sym_idx af, term_list *args)
   tool_id *tid;
   term *e;
   
-  if(verbose) TBmsg("write_to_tool(%s,%t)\n", get_txt(af), args);
+  if(TBverbose) TBmsg("write_to_tool(%s,%t)\n", get_txt(af), args);
   
   if(!(is_appl(first(args)) && (list_length(fun_args(first(args))) == 1) &&
 	 is_int(first(fun_args(first(args)))))){
@@ -344,7 +344,7 @@ TBbool connect_tool(int tid, int in, int out)
     if(int_val(ti_tid(ti)) == tid){
       ti_in(ti) = in;
       ti_out(ti) = out;    
-      if(verbose) TBmsg("connect_tool(%d,%d,%d) ... %t\n", tid, in, out, ti);
+      if(TBverbose) TBmsg("connect_tool(%d,%d,%d) ... %t\n", tid, in, out, ti);
       rec_from_tool_step(ti, 
 			 mk_appl1(a_snd_connect,
 				  mk_appl1(fun_sym(ti_creator(ti)),  mk_int(tid))));
@@ -366,7 +366,7 @@ int add_tool(char *id, char *host)
     return -1;
   }
 
-  if(verbose)
+  if(TBverbose)
     TBmsg("adding tool, id=%s, host=%s, tid=%d\n", id, host, n_tool_inst);
 
   Tools = mk_list(mk_tool_inst(creator, n_tool_inst, host, -1,-1,PHASE1), Tools);
@@ -528,7 +528,7 @@ tool_id *create_tool(term *creator, term_list *args)
   if(!td)
     err_fatal("missing tool definition: %t\n", creator);
 
-  if(verbose)
+  if(TBverbose)
     TBmsg("create_tool(%t), td = %t\n", creator, td);
 
   if(list_length(td_formals(td)) != list_length(fun_args(creator)))
@@ -663,7 +663,7 @@ retry:
              err_warn("could not accept client");
       all_internal_steps();
     } else if(error == 0){           /* timeout expired */
-      if(verbose)
+      if(TBverbose)
 	TBmsg("select: timeout expired\n");
       all_internal_steps();
       retry_cnt = 0;

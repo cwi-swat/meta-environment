@@ -18,7 +18,7 @@ real          -?[0-9]+"."[0-9]+([eE][-+]?[0-9]+)?
 {ws}          { ll_inc_pos(strlen(yytext)); }
 {linedir}     { int n; char name[512];
                 if(sscanf(yytext, "# %d \"%[^\"]\"", &n, name) < 1){
-		  if(verbose)
+		  if(TBverbose)
 		    TBmsg("Skipping line directive: %s\n", yytext);
 		  /* yyerror("Unrecognized line directive"); */
 		 } else

@@ -50,7 +50,7 @@ char this_host[MAXHOSTNAMELEN];
 char single_prompt [] = "Enter term (followed by ; character):\n";
 
 TBbool ToolBus = TBtrue;
-TBbool verbose = TBfalse;     /* no verbose logging */
+TBbool TBverbose = TBfalse;     /* no verbose logging */
 TBbool stand_alone = TBfalse; /* not running alone  */
 char *tool_name = "ToolBus";
 
@@ -562,7 +562,7 @@ term *parse_buffer(void)
   skip_layout();
 
   if((trm = parse_term())){
-    if(verbose)
+    if(TBverbose)
       TBmsg("receive: %t\n", trm);
     return trm;
   }

@@ -76,7 +76,7 @@ static proc_id *create_process(sym_idx pname, term_list *args,
   if(!pd)
     err_fatal("process %s not defined\n", get_txt(pname));
 
-  if(verbose) fprintf(stderr, "create_process %d: %s\n", nproc, get_txt(pname));
+  if(TBverbose) fprintf(stderr, "create_process %d: %s\n", nproc, get_txt(pname));
 
   pid = mk_int(nproc);
   Env1 = NULL;
@@ -1606,7 +1606,7 @@ static TBbool pending_events(void)
 */
 
     if((next_phase >= 0) && rec_from_tool_step1(ti1, ev1, next_phase)){
-      if(verbose)TBmsg("DEQUEU EVENT: %t\n", ev1);
+      if(TBverbose)TBmsg("DEQUEU EVENT: %t\n", ev1);
       next(prev) = next(events);
       k++;
     }
@@ -1621,7 +1621,7 @@ void rec_from_tool_step(tool_inst *ti, term *Inp)
 
   pending_events();
 
-  if(verbose) TBmsg("rec_from_tool_step(%t,%t)\n", ti, Inp);
+  if(TBverbose) TBmsg("rec_from_tool_step(%t,%t)\n", ti, Inp);
   if(!is_legal_from_tool(fun_sym(Inp))){
     err_warn("%t: illegal function received from tool -- %t\n", Inp);
     return;
@@ -1644,12 +1644,12 @@ void rec_from_tool_step(tool_inst *ti, term *Inp)
 	destroy_ports_for_tool(ti);
 	Tools = list_delete(Tools, ti);
       } 
-      if(verbose)TBmsg("QUEUED EVENT: %t FROM TOOL %t\n", Inp, ti);
+      if(TBverbose)TBmsg("QUEUED EVENT: %t FROM TOOL %t\n", Inp, ti);
       Pending = list_append(Pending, mk_list(mk_list2(ti, Inp), NULL));
     } else 
       TBmsg("UNEXPECTED INPUT %t FROM TOOL %t IGNORED\n", Inp, ti);
   } else {
-    if(verbose)TBmsg("new ti = %t\n", ti);
+    if(TBverbose)TBmsg("new ti = %t\n", ti);
     pending_events();
   }
 }
@@ -1693,7 +1693,7 @@ void all_internal_steps(void)
   time(&current_time);
   next_abs_delay = -1;
   do {
-    if(verbose)
+    if(TBverbose)
       fprintf(stderr, "current_time = %ld, next_abs_delay = %ld\n", 
 	      (long)current_time, (long)next_abs_delay);
     next_abs_delay = -1;
@@ -1718,7 +1718,7 @@ void interpreter(void)
 { term * e;
   tool_id *tid;
 
-  if(verbose)
+  if(TBverbose)
     fprintf(stderr, "Starting ToolBus interpreter ...\n");
   
   all_internal_steps();

@@ -112,14 +112,14 @@ int main(int argc, char *argv[])
   WellKnownSocketPort = TB_PORT;
 
   if((s = getenv("TB_VERBOSE")) && streq(s ,"true"))
-    verbose = TBtrue;
+    TBverbose = TBtrue;
 
   if((s = getenv("TB_LOCAL_PORTS")) && streq(s ,"true"))
     local_ports = TBtrue;
 
   for(i = 1; i < argc; i++){
     if(streq(argv[i], "-verbose")){
-      verbose = TBtrue;
+      TBverbose = TBtrue;
     } else if(streq(argv[i], "-help")){
       help(); exit(0);
     } else if(streq(argv[i], "-version")){
@@ -170,11 +170,11 @@ int main(int argc, char *argv[])
     usage();
 
   if(parse_script(sname, argc, argv)){
-    if (verbose) TBmsg("parsing completed\n");
+    if (TBverbose) TBmsg("parsing completed\n");
     monitor = init_monitoring();
     if(typecheck(sname, gen_tifs)){
  
-      if (verbose) TBmsg("typechecking completed\n");
+      if (TBverbose) TBmsg("typechecking completed\n");
       expand_all_calls();
       if(gen_tifs)
 	exit(0);
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
 	err_sys_fatal("Cannot create input/output ports of ToolBus");
 
       create_toolbus(monitor);
-      if (verbose) TBmsg("ToolBus created\n");
+      if (TBverbose) TBmsg("ToolBus created\n");
       interpreter();
     } else
       err_fatal("execution stopped due to the above error(s)");

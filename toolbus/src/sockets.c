@@ -36,7 +36,7 @@ int getInt(int port, const char *tname)
   nitems = sscanf(buf,"%s %d",got_tool_name,&n);
   if(nitems != 2 || streq(tname, got_tool_name) == TBfalse)
     n = -1;
-  if(verbose)
+  if(TBverbose)
     TBmsg("getInt: got \"%s\", return: %d\n", buf, n);
   return n;
 }
@@ -49,7 +49,7 @@ int putInt(int port, const char *tname, int n)
   char buf[TB_MAX_HANDSHAKE];
   int res;
   sprintf(buf, "%s %d", tname, n);
-  if(verbose)
+  if(TBverbose)
     TBmsg("putInt(%d, %s, %d)\n", port, tname, n);
   if((res = write(port, buf, TB_MAX_HANDSHAKE)) < 0){
     err_sys_warn("putInt -- write error");
@@ -63,10 +63,10 @@ int putInt(int port, const char *tname, int n)
 
 static void set_connect_options(int sock)
 {
-  if((setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (char *)&sock, sizeof sock) < 0) && verbose)
+  if((setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (char *)&sock, sizeof sock) < 0) && TBverbose)
 	err_sys_warn("setsockopt TCP_NODELAY");
 
-  if((setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (char *)&buf_size, sizeof(int)) < 0) && verbose)
+  if((setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (char *)&buf_size, sizeof(int)) < 0) && TBverbose)
 	err_sys_warn("setsockopt SO_SNDBUF");
 }
 
@@ -85,7 +85,7 @@ static int connect_unix_socket(int port)
     if((sock = socket(AF_UNIX,SOCK_STREAM,0)) < 0)
       err_sys_fatal("cannot open socket");
 
-    if(verbose)
+    if(TBverbose)
       TBmsg("created AF_UNIX socket %d\n", sock);
 
     /* Initialize the socket address to the server's address. */
@@ -94,7 +94,7 @@ static int connect_unix_socket(int port)
     strcpy (usin.sun_path, name);
 
     /* Connect to the server. */
-    if(verbose)
+    if(TBverbose)
       TBmsg("connecting to address %s\n", name);
     if(connect(sock, (struct sockaddr *) &usin,sizeof(usin)) < 0) {
       close(sock);
@@ -125,7 +125,7 @@ static int connect_inet_socket(const char *host, int port)
     if((sock = socket(AF_INET,SOCK_STREAM,0)) < 0)
       err_sys_fatal("cannot open socket");
 
-    if(verbose)
+    if(TBverbose)
       TBmsg("created AF_INET socket %d\n", sock);
 
     /* Initialize the socket address to the server's address. */
@@ -141,7 +141,7 @@ static int connect_inet_socket(const char *host, int port)
     isin.sin_port = htons(port);
 
     /* Connect to the server. */
-    if(verbose)
+    if(TBverbose)
       TBmsg("connecting to INET host %s, port %d\n", host, port);
     if(connect(sock, (struct sockaddr *)&isin, sizeof(isin)) < 0){
       close(sock);
@@ -180,12 +180,12 @@ static void set_create_options(int  sock)
 
 #ifdef sgi
   /* Solaris doesn't know SO_REUSEPORT */
-  if((setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, (char *)&opt, sizeof opt) < 0) && verbose)
+  if((setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, (char *)&opt, sizeof opt) < 0) && TBverbose)
     err_sys_warn("setsockopt SO_REUSEPORT");
 #endif
-  if((setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof opt) < 0) && verbose)
+  if((setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof opt) < 0) && TBverbose)
     err_sys_warn("setsockopt SO_REUSEADDR");
-  if((setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (char *)&buf_size, sizeof(int)) < 0) && verbose)
+  if((setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (char *)&buf_size, sizeof(int)) < 0) && TBverbose)
      err_sys_warn("setsockopt SO_RCVBUF");
 }
 
@@ -213,7 +213,7 @@ static int create_unix_socket(int port)
   strcpy (usin.sun_path, name);
 
   /* Assign an address to this socket */
-  if(verbose)
+  if(TBverbose)
     TBmsg("Binding %s\n", name);
 
   while(bind(sock,(struct sockaddr *)&usin,
@@ -289,7 +289,7 @@ void TBdestroyPort (int port)
 int createWellKnownSocket(char *host, int port)
 {
   int sock = create_socket(host, port);
-  if(verbose)
+  if(TBverbose)
     TBmsg("createWellKnownSocket(%s,%d) returns %d\n", host ? host : "NULL", port, sock);
   return sock;
 }
@@ -300,7 +300,7 @@ int createWellKnownSocket(char *host, int port)
 int connectWellKnownSocket(char *host, int port)
 {
   int sock = connect_socket(host, port);
-  if(verbose)
+  if(TBverbose)
     TBmsg("connectWellKnownSocket(%s,%d) returns %d\n", host ? host : "NULL", port, sock);
   return sock;
 }

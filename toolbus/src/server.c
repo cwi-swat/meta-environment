@@ -65,7 +65,7 @@ int accept_client(TBbool local)
     close(sock);
     return TB_ERROR;
   }
-  if(verbose)
+  if(TBverbose)
     TBmsg("got toolname & host & tool_id: %s, %s, %d\n", 
 	  tname, hname, that_tool_id);
 

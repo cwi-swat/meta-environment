@@ -122,7 +122,7 @@ int TBinit(char *tname, int argc, char *argv[],
     if(streq(argv[i], "-help")){
       help(); exit(0);
     } else if(streq(argv[i], "-verbose")){
-      verbose = TBtrue;
+      TBverbose = TBtrue;
     } else if(streq(argv[i], "-TB_HOST")){
       i++;
       if(strlen(argv[i]) > MAXHOSTNAMELEN)
@@ -150,7 +150,7 @@ int TBinit(char *tname, int argc, char *argv[],
 
   if((s = getenv("TB_VERBOSE")) && 
      streq(s ,"true"))
-    verbose = TBtrue;
+    TBverbose = TBtrue;
 
   if((s = getenv("TB_LOCAL_PORTS")) && 
      streq(s ,"true"))
