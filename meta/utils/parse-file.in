@@ -75,6 +75,10 @@ fi
 
 for f in $Files
 do
+	if [ ! -e $f ] ; then
+		Warning "$f does not exist"
+		continue
+	fi
 	dir=${OUTPUTDIR:-`dirname $f`}
 	base=`basename $f`
 	ext=`echo $base | sed 's/.*\.\([^.]*\)/\1/'`
