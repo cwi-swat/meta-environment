@@ -114,12 +114,7 @@ AC_ARG_WITH(wish,
 AC_SUBST(WISH_ADAPTER)
 
 AC_ARG_WITH(graphviz,
-   [  --with-graphviz=DIR     include dot support (same as --with-dot)],
-   DOT=${withval}
-   DOT_ADAPTER=dot-adapter
-)
-AC_ARG_WITH(dot,
-   [  --with-dot=DIR          add dot support (dot-adapter, graph layouting)],
+   [  --with-graphviz=DIR     include dot support from DIR],
    DOT=${withval}
    DOT_ADAPTER=dot-adapter
 )

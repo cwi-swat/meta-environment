@@ -2,6 +2,7 @@ $Id$
 
 2002/04/19 (jurgenv@cwi.nl)
  * Release 0.23
+ * removed --with-dot (was redundant, use --with-graphviz)
 
 2002/04/03 (jurgenv@cwi.nl)
  * Fixed CLASSPATH in tifstojava to locate aterm classes correctly.
