@@ -56,7 +56,7 @@ require_fun(FILE *ftmp, char *fname, term_list *fargs)
   print_fun_name(ftmp, fname);
   TBprintf(ftmp, "){print STDERR \"%s: *** WARNING: subroutine ", tool_name);
   print_fun_name(ftmp, fname);
-  TBprintf(ftmp, " (with %d arguments) is missing\\n\";}\n", length_list(fargs));
+  TBprintf(ftmp, " (with %d arguments) is missing\\n\";}\n", list_length(fargs));
 }
 
 check_in_sign(FILE *ftmp)
