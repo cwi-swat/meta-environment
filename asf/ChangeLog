@@ -1,3 +1,7 @@
+
+Mon Feb 24 11:44:22 CET 2003 <jong@cwi.nl>
+ * Fix some #include issues with strlen/strcmp
+
 2003/02/18 (jurgenv@cwi.nl)
  * The files of the installed ASF+SDF library are no longer write-protected
    either. A different solution must be found to make these files read-only

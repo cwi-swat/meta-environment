@@ -1,10 +1,11 @@
 #ifndef PREFIX_FUNCTIONS_H
 #define PREFIX_FUNCTIONS_H
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <string.h>
 #include <MEPT.h>
 #include <MEPT-utils.h>
-#include <assert.h>
-#include <stdlib.h>
-#include <stdio.h>
 
 /* Sneaky global access to interpreter functionality */
 extern PT_Tree rewrite(PT_Tree term);

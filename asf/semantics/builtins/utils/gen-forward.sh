@@ -8,6 +8,7 @@ BUILTIN_NAMES=$1
 cat  << END_OF_FILE 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <assert.h>
 #include <MEPT-utils.h>
 #include <aterm2.h>
