@@ -1,9 +1,10 @@
 equations
 
-  [cs-1'1] Msg* := check-sdf(Definition)
+  [cs-1'1] Msg* := check-sdf(Definition),
+           moduleid($Char*) := $ModuleId
            ====>
-           check-sdf(definition Definition, $String) =
-             feedback("SdfChecker", $String, [Msg*])
+           check-sdf(definition Definition, $ModuleId) =
+             feedback("SdfChecker", strcon(""" $Char* """), [Msg*])
 
   [cs-1'1] Msg* := check-sdf(Definition)
            ====>
