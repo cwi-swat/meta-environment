@@ -1,5 +1,8 @@
 configuration([
    extension("languages/pico/syntax/Pico-Syntax", ".pico"),
+   extension("Pico-typecheck", ".ptc"),
+   extension("Pico-eval", ".pev"),
+   extension("Pico-compile", ".ptr"),
 
    button("languages/pico/syntax/Pico-Syntax",
           [description(term-editor, menu(["Pico","TypeCheck"]))],

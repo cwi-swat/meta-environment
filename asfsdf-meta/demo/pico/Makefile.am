@@ -4,8 +4,15 @@
 demodir   = $(pkgdatadir)/demo
 picodir   = $(demodir)/pico
 
-PICO_DEMO = $(wildcard *.sdf) $(wildcard *.asf) $(wildcard *.trm) \
-            meta.conf meta.buttons
+PICO_DEMO = \
+	$(wildcard *.sdf) \
+	$(wildcard *.asf) \
+	$(wildcard *.pico) \
+	$(wildcard *.pev) \
+	$(wildcard *.ptr) \
+	$(wildcard *.ptc) \
+        meta.conf \
+	meta.buttons
 
 EXTRA_DIST = $(PICO_DEMO)
 
