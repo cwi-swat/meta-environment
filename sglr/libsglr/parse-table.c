@@ -388,10 +388,6 @@ ATbool SG_Rejectable(state s)
 /*actionbucket *sg_action_pool_free = NULL;*/
 gotobucket   *sg_goto_pool_free = NULL;
 
-static ATerm *action_term_table = NULL;
-static int    action_term_index = 0;
-
-
 /*{{{  void SG_AddToActionTable(parse_table *pt, state s, token c, actions acts) */
 
 void SG_AddToActionTable(parse_table *pt, state s, token c, actions acts)
