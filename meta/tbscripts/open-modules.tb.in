@@ -27,6 +27,7 @@ let
 in
   Id := process-id. (
     rec-msg(open-modules(Ms?)).
+    M2s := Ms.
     snd-note(ui-status(stat(Id,"Opening Modules"))). (
       if not-equal(Ms, []) then
         Name := first(Ms).
@@ -121,6 +122,20 @@ in
       fi
     ) *
     if equal(Ms,[]) then
+      (
+        if not-equal(M2s, []) then
+          Name := first(M2s).
+          M2s   := next(M2s).
+          snd-msg(is-module-in-db(Name)).
+          (
+            rec-msg(exists-in-module-db(Name2?)).
+            snd-msg(validate-parse-tables(Name)).
+            rec-msg(validation-done)
+          +
+            rec-msg(not-exists-in-module-db(Name2?))
+          )
+        fi
+      ) *
      /* We are finished. Inform UI */
       snd-msg(finished-opening-modules)
     fi.

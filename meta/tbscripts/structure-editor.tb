@@ -3,7 +3,7 @@
  */
 
 tool se is {
-  command = "java-adapter -TB_HOST localhost -class nl.cwi.gipe.stred.SeTool"
+  command = "java-adapter -TB_HOST localhost -class nl.cwi.gipe.stred.SeTool -arg -mx64M"
 }
 
 tool anno is { 
@@ -16,7 +16,7 @@ let
   Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
   I: int, T: term, T1: term, T2: term, Ch: int, Li: int, Co: int,
   Char: term, G: str, ErrList: list, Cycle: list, Src:str,
-  Fun: str, Args: list, Fid2: str, Anno: anno
+  Fun: str, Args: list, Fid2: str, Anno: anno, Modules: list
 in
   Id := process-id.
   subscribe(disconnected(<term>)).
@@ -87,6 +87,12 @@ in
     if equal(Fl,[]) then
       if equal(FF,[]) then
         /* All parses succeeded */
+        snd-eval(SE,getTree(Fid)).
+        rec-value(SE,T1?).
+        snd-msg(update-module-in-db(T1,Language)).
+        rec-msg(extra-modules(Modules?)).
+        snd-msg(open-modules(Modules)).
+        rec-msg(finished-opening-modules).
         snd-msg(TE,clear-focus)
       else
         /* Some parses were ambiguous */

@@ -48,6 +48,9 @@ in
       snd-do(UI,finished-opening-modules(Str)).
       snd-ack-event(UI, open-module(Str))
     ) +
+    ( rec-msg(ui, open-module(Str1?)).
+      snd-do(UI,open-module(Str1))
+    ) + 
     ( rec-event(UI,delete-module(Str?)).
       snd-msg(close-module(Str)).
       rec-msg(closed-module(Str)).
