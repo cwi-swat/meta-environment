@@ -10,6 +10,7 @@
 
 #define ANNO_LENGTH "length"  
 
+/* Productions */
 /*{{{  ATbool PT_prodHasLitAsRhs(PT_Production prod) */
 
 ATbool PT_prodHasLitAsRhs(PT_Production prod)
@@ -174,6 +175,61 @@ ATbool PT_isLexicalInjectionProd(PT_Production prod)
 }
 
 /*}}}  */
+/*{{{  ATbool PT_prodHasIterSepAsRhs(PT_Production prod) */
+
+ATbool PT_prodHasIterSepAsRhs(PT_Production prod)
+{
+  /* This implements: 
+   * "prod([<list>],cf(iter-star-sep(<term>,lit(<str>))),<term>)" and
+   * "prod([<list>],cf(iter-sep(<term>,lit(<str>))),<term>)" 
+   */
+  if (PT_isProductionDefault(prod)) {
+    PT_Symbol rhs = PT_getProductionRhs(prod);
+    return PT_isIterSepSymbol(rhs);
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PT_prodHasIterAsRhs(PT_Production prod) */
+
+ATbool PT_prodHasIterAsRhs(PT_Production prod)
+{
+  /* This implements: 
+   * "prod([<list>],cf(iter-star(<term>,lit(<str>))),<term>)"
+   * "prod([<list>],cf(iter(<term>,lit(<str>))),<term>)"
+   */
+  if (PT_isProductionDefault(prod)) {
+    PT_Symbol rhs = PT_getProductionRhs(prod);
+    return PT_isIterSymbol(rhs);
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PT_prodHasSTARTAsRhs(PT_Production prod) */
+
+ATbool PT_prodHasSTARTAsRhs(PT_Production prod)
+{
+  /* This implements: 
+   * "prod([<list>],sort(\"<START>\"),no-attrs)"
+   */
+  if (PT_isProductionDefault(prod)) {
+    PT_Symbol rhs = PT_getProductionRhs(prod);
+    if (PT_isSymbolSort(rhs)) {
+      char *startsym = PT_getSymbolString(rhs);
+      return strcmp(startsym,"<START>") == 0;
+    }
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
+
+/* Symbols */
 /*{{{  ATbool PT_isIterSepSymbol(PT_Symbol symbol) */
 
 ATbool PT_isIterSepSymbol(PT_Symbol symbol)
@@ -217,40 +273,123 @@ ATbool PT_isIterSymbol(PT_Symbol symbol)
 }
 
 /*}}}  */
-/*{{{  ATbool PT_prodHasIterSepAsRhs(PT_Production prod) */
+/*{{{  ATbool PT_isOptLayoutSymbol(PT_Symbol symbol) */
 
-ATbool PT_prodHasIterSepAsRhs(PT_Production prod)
+ATbool PT_isOptLayoutSymbol(PT_Symbol symbol)
 {
-  /* This implements: 
-   * "prod([<list>],cf(iter-star-sep(<term>,lit(<str>))),<term>)" and
-   * "prod([<list>],cf(iter-sep(<term>,lit(<str>))),<term>)" 
-   */
-  if (PT_isProductionDefault(prod)) {
-    PT_Symbol rhs = PT_getProductionRhs(prod);
-    return PT_isIterSepSymbol(rhs);
+  /* This implements: "cf(opt(layout))" */
+  if (PT_isSymbolCf(symbol)) {
+    PT_Symbol cfsym = PT_getSymbolSymbol(symbol);
+    if (PT_isSymbolOpt(cfsym)) {
+      PT_Symbol optsym = PT_getSymbolSymbol(cfsym);
+      return PT_isSymbolLayout(optsym);
+    }
+    return ATfalse;
   }
-
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  ATbool PT_prodHasIterAsRhs(PT_Production prod) */
+/*{{{  PT_Symbol PT_makeOptLayoutSymbol() */
 
-ATbool PT_prodHasIterAsRhs(PT_Production prod)
+PT_Symbol PT_makeOptLayoutSymbol()
 {
-  /* This implements: 
-   * "prod([<list>],cf(iter-star(<term>,lit(<str>))),<term>)"
-   * "prod([<list>],cf(iter(<term>,lit(<str>))),<term>)"
-   */
-  if (PT_isProductionDefault(prod)) {
-    PT_Symbol rhs = PT_getProductionRhs(prod);
-    return PT_isIterSymbol(rhs);
-  }
-
-  return ATfalse;
+  return PT_makeSymbolCf(PT_makeSymbolOpt(PT_makeSymbolLayout()));
 }
 
 /*}}}  */
+
+/*{{{  PT_Symbols PT_appendSymbols(PT_Symbols symbols, PT_Symbol symbol)  */
+
+PT_Symbols PT_appendSymbols(PT_Symbols symbols, PT_Symbol symbol)
+{
+  return PT_SymbolsFromTerm(
+           (ATerm)ATappend((ATermList)PT_SymbolsToTerm(symbols),
+                           PT_SymbolToTerm(symbol)));
+
+}   
+/*{{{  int PT_getSymbolsLength(PT_Symbols symbols)  */
+
+int PT_getSymbolsLength(PT_Symbols symbols) 
+{
+  return ATgetLength(PT_SymbolsToTerm(symbols));
+}
+
+/*}}}  */
+/*{{{  PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols symbols, int index) */
+
+PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols symbols, int index)
+{
+    return PT_makeSymbolFromTerm(
+	 ATelementAt((ATermList)PT_makeTermFromSymbols(symbols), index));
+}
+
+/*}}}  */
+/*}}}  */
+/*{{{  PT_Symbols PT_reverseSymbols(PT_Symbols symbols) */
+
+PT_Symbols PT_reverseSymbols(PT_Symbols symbols)
+{
+  return (PT_Symbols) ATreverse((ATermList) symbols);
+}
+
+/*}}}  */
+/*{{{  PT_Symbols PT_foreachSymbolInSymbols(symbols, visitor, data)  */
+
+PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols, PT_SymbolVisitor visitor,
+                                     PT_SymbolVisitorData data)
+{
+  ATermList store;
+  PT_Symbols newSymbols = PT_makeSymbolsEmpty();
+
+  /* apply func to each element */
+  store = ATempty;
+  while (PT_hasSymbolsHead(symbols)) {
+    store = ATinsert(store,
+                     PT_SymbolToTerm(
+                     visitor(PT_getSymbolsHead(symbols), data)));
+    if (PT_hasSymbolsTail(symbols)) {
+      symbols = PT_getSymbolsTail(symbols);
+    }
+    else {
+      break;
+    }
+  }
+
+  /* create new list */
+  for (; !ATisEmpty(store); store = ATgetNext(store)) {
+    PT_Symbol newSymbol = PT_SymbolFromTerm(ATgetFirst(store));
+    newSymbols = PT_makeSymbolsList(newSymbol,newSymbols);
+  }
+
+  return newSymbols;
+}
+
+/*}}}  */
+
+/*{{{  PT_Symbol makeSymbolAllChars() */
+
+PT_Symbol makeSymbolAllChars()
+{
+  PT_CharRanges ranges = PT_makeCharRangesList(
+                           PT_makeCharRangeRange(0,255),
+                           PT_makeCharRangesEmpty());
+  return PT_makeSymbolIterStar(
+           PT_makeSymbolCharClass(ranges));
+}  
+
+/*}}}  */
+/*{{{  PT_CharRanges PT_concatCharRanges(PT_CharRanges ranges1, PT_CharRanges ranges2) */
+
+PT_CharRanges PT_concatCharRanges(PT_CharRanges ranges1, PT_CharRanges ranges2)
+{
+  return PT_CharRangesFromTerm((ATerm)ATconcat((ATermList) ranges1,
+                                               (ATermList) ranges2));
+}
+
+/*}}}  */
+
+/* Trees */
 /*{{{  ATbool PT_isTreeAlt(PT_Tree tree) */
 
 ATbool PT_isTreeAlt(PT_Tree tree)
@@ -334,50 +473,147 @@ ATbool PT_isTreeApplList(PT_Tree tree)
 }
 
 /*}}}  */
-/*{{{  ATbool PT_prodHasSTARTAsRhs(PT_Production prod) */
 
-ATbool PT_prodHasSTARTAsRhs(PT_Production prod)
+/*{{{  ATbool PT_isTreeVar(PT_Tree tree)  */
+
+ATbool PT_isTreeVar(PT_Tree tree) 
 {
-  /* This implements: 
-   * "prod([<list>],sort(\"<START>\"),no-attrs)"
-   */
-  if (PT_isProductionDefault(prod)) {
-    PT_Symbol rhs = PT_getProductionRhs(prod);
-    if (PT_isSymbolSort(rhs)) {
-      char *startsym = PT_getSymbolString(rhs);
-      return strcmp(startsym,"<START>") == 0;
-    }
-  }
-
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATbool PT_isOptLayoutSymbol(PT_Symbol symbol) */
-
-ATbool PT_isOptLayoutSymbol(PT_Symbol symbol)
-{
-  /* This implements: "cf(opt(layout))" */
-  if (PT_isSymbolCf(symbol)) {
-    PT_Symbol cfsym = PT_getSymbolSymbol(symbol);
-    if (PT_isSymbolOpt(cfsym)) {
-      PT_Symbol optsym = PT_getSymbolSymbol(cfsym);
-      return PT_isSymbolLayout(optsym);
-    }
-    return ATfalse;
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    return PT_isVarDefault(prod);
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  PT_Symbol PT_makeOptLayoutSymbol() */
+/*{{{  ATbool PT_isTreeVarList(PT_Tree tree) */
 
-PT_Symbol PT_makeOptLayoutSymbol()
+ATbool PT_isTreeVarList(PT_Tree tree)
 {
-  return PT_makeSymbolCf(PT_makeSymbolOpt(PT_makeSymbolLayout()));
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    if (PT_isVarDefault(prod)) {
+      PT_Symbol rhssym = PT_getProductionRhs(prod);
+      if (PT_isSymbolCf(rhssym) || PT_isSymbolLex(rhssym)) {
+        PT_Symbol sym = PT_getSymbolSymbol(rhssym);
+        return PT_isSymbolIterPlus(sym) 
+               || PT_isSymbolIterStar(sym)
+               || PT_isSymbolIterPlusSep(sym) 
+               || PT_isSymbolIterStarSep(sym);
+      }
+    }
+  }
+  return ATfalse;
 }
 
 /*}}}  */
+/*{{{  ATbool PT_isTreeVarListStar(PT_Tree tree) */
+
+ATbool PT_isTreeVarListStar(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    if (PT_isVarDefault(prod)) {
+      PT_Symbol rhssym = PT_getProductionRhs(prod);
+      if (PT_isSymbolCf(rhssym) || PT_isSymbolLex(rhssym)) {
+        PT_Symbol sym = PT_getSymbolSymbol(rhssym);
+        return PT_isSymbolIterStar(sym)
+               || PT_isSymbolIterStarSep(sym);
+      }
+    }
+  }
+  return ATfalse;
+}              
+
+/*}}}  */
+/*{{{  ATbool PT_isTreeVarListPlus(PT_Tree tree) */
+
+ATbool PT_isTreeVarListPlus(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    if (PT_isVarDefault(prod)) {
+      PT_Symbol rhssym = PT_getProductionRhs(prod);
+      if (PT_isSymbolCf(rhssym) || PT_isSymbolLex(rhssym)) {
+        PT_Symbol sym = PT_getSymbolSymbol(rhssym);
+        return PT_isSymbolIterPlus(sym) 
+               || PT_isSymbolIterPlusSep(sym);
+      }
+    }
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+
+/*{{{  ATbool PT_isTreeBracket(PT_Tree tree) */
+
+ATbool PT_isTreeBracket(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    if (PT_isProductionDefault(prod)) {
+      return PT_hasProductionBracketAttr(prod);
+    }
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_getTreeBracketTree(PT_Tree tree) */
+
+PT_Tree PT_getTreeBracketTree(PT_Tree tree)
+{
+  if (PT_isTreeBracket(tree)) {
+    return PT_getArgsArgumentAt(PT_getTreeArgs(tree),2);
+  }
+  return NULL;
+}
+
+/*}}}  */
+
+/*{{{  PT_Tree PT_makeTreeFlatLexical(PT_Args charList) */
+
+PT_Tree PT_makeTreeFlatLexical(PT_Args charList)
+{
+  return PT_makeTreeAppl(PT_makeProductionList(makeSymbolAllChars()), 
+			 charList);
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_makeTreeFlatLexicalFromString(const char *str) */
+
+PT_Tree PT_makeTreeFlatLexicalFromString(const char *str)
+{
+  PT_Args args = PT_makeArgsEmpty();
+  int i;
+
+  for (i = strlen(str) - 1; i >= 0; i--) {
+    args = PT_makeArgsList(PT_makeTreeChar((int) str[i]), args);
+  }
+
+  return PT_makeTreeFlatLexical(args);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isTreeFlatLexical(PT_Tree tree) */
+
+ATbool PT_isTreeFlatLexical(PT_Tree tree)
+{
+  static PT_Symbol allCharsSymbol;
+  allCharsSymbol = makeSymbolAllChars();
+
+  if (PT_isTreeAppl(tree)) {
+    PT_Production listProd = PT_getTreeProd(tree);
+    PT_Symbol listSymbol = PT_getProductionRhs(listProd);
+    return PT_isEqualSymbol(listSymbol, allCharsSymbol);
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+
+/* Args */
 /*{{{  PT_Args PT_concatArgs(PT_Args args1, PT_Args args2) */
 
 PT_Args PT_concatArgs(PT_Args args1, PT_Args args2)
@@ -434,7 +670,14 @@ PT_Args PT_makeArgsSingle(PT_Tree arg)
 }
 
 /*}}}  */
+/*{{{  int PT_getArgsLength(PT_Args args) */
 
+int PT_getArgsLength(PT_Args args)
+{
+   return ATgetLength((ATermList)PT_ArgsToTerm(args));
+}
+
+/*}}}  */ 
 /*{{{  PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor, */
 
 PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor,
@@ -462,71 +705,115 @@ PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor,
 }
 
 /*}}}  */   
-/*{{{  PT_Symbols PT_appendSymbols(PT_Symbols symbols, PT_Symbol symbol)  */
+/*{{{  PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr) */
 
-PT_Symbols PT_appendSymbols(PT_Symbols symbols, PT_Symbol symbol)
+PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr)
 {
-  return PT_SymbolsFromTerm(
-           (ATerm)ATappend((ATermList)PT_SymbolsToTerm(symbols),
-                           PT_SymbolToTerm(symbol)));
-
-}   
-/*{{{  int PT_getSymbolsLength(PT_Symbols symbols)  */
-
-int PT_getSymbolsLength(PT_Symbols symbols) 
-{
-  return ATgetLength(PT_SymbolsToTerm(symbols));
+  ATermList arg_list = (ATermList)PT_ArgsToTerm(args);
+  ATerm arg = ATelementAt(arg_list, arg_nr);
+  return PT_TreeFromTerm(arg);
 }
 
 /*}}}  */
-/*{{{  PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols symbols, int index) */
+/*{{{  PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr) */
 
-PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols symbols, int index)
+PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr)
 {
-    return PT_makeSymbolFromTerm(
-	 ATelementAt((ATermList)PT_makeTermFromSymbols(symbols), index));
+  ATermList arg_list = (ATermList)PT_ArgsToTerm(args);
+  arg_list = ATreplace(arg_list, PT_TreeToTerm(arg), arg_nr);
+  return PT_ArgsFromTerm((ATerm)arg_list);
 }
 
-/*}}}  */
-/*}}}  */
-/*{{{  PT_Symbols PT_reverseSymbols(PT_Symbols symbols) */
-
-PT_Symbols PT_reverseSymbols(PT_Symbols symbols)
+PT_Tree PT_makeTreeLayoutEmpty()
 {
-  return (PT_Symbols) ATreverse((ATermList) symbols);
+  PT_Symbol layoutSymbol = PT_makeSymbolCf(
+                             PT_makeSymbolOpt(PT_makeSymbolLayout()));
+  PT_Production optLayoutProd = PT_makeProductionDefault(
+                                  PT_makeSymbolsEmpty(),
+                                  layoutSymbol,
+                                  PT_makeAttributesNoAttrs());
+  return PT_makeTreeAppl(optLayoutProd, PT_makeArgsEmpty());
 }
 
-/*}}}  */
-
-/*{{{  PT_Symbols PT_foreachSymbolInSymbols(symbols, visitor, data)  */
-
-PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols, PT_SymbolVisitor visitor,
-                                     PT_SymbolVisitorData data)
+PT_Tree PT_makeTreeLayoutNonEmpty(PT_Args args)
 {
-  ATermList store;
-  PT_Symbols newSymbols = PT_makeSymbolsEmpty();
+  PT_Symbol layoutSymbolRhs = PT_makeSymbolCf(
+                                PT_makeSymbolOpt(PT_makeSymbolLayout()));
+  PT_Symbol layoutSymbolLhs = PT_makeSymbolCf(PT_makeSymbolLayout());
+  PT_Symbols layoutLhs = PT_makeSymbolsList(layoutSymbolLhs, 
+                                            PT_makeSymbolsEmpty());
+  PT_Production optLayoutProd = PT_makeProductionDefault(
+                                  layoutLhs,
+                                  layoutSymbolRhs,
+                                  PT_makeAttributesNoAttrs());
+  return PT_makeTreeAppl(optLayoutProd, args);
+}
 
-  /* apply func to each element */
-  store = ATempty;
-  while (PT_hasSymbolsHead(symbols)) {
-    store = ATinsert(store,
-                     PT_SymbolToTerm(
-                     visitor(PT_getSymbolsHead(symbols), data)));
-    if (PT_hasSymbolsTail(symbols)) {
-      symbols = PT_getSymbolsTail(symbols);
-    }
-    else {
-      break;
-    }
+PT_Tree PT_makeTreeLayoutFromString(const char *str)
+{
+  PT_Args args = PT_makeArgsEmpty();
+  int i;
+
+  for (i = strlen(str) -1; i >= 0; i--) {
+    args = PT_makeArgsList(PT_makeTreeChar((int) str[i]), args);
   }
 
-  /* create new list */
-  for (; !ATisEmpty(store); store = ATgetNext(store)) {
-    PT_Symbol newSymbol = PT_SymbolFromTerm(ATgetFirst(store));
-    newSymbols = PT_makeSymbolsList(newSymbol,newSymbols);
+  return PT_makeTreeLayoutNonEmpty(args);
+}
+
+
+PT_Tree PT_makeTreeLexToCf(PT_Symbol sym, PT_Tree tree)
+{
+  PT_Symbol lexSymbol = PT_makeSymbolLex(sym);
+  PT_Symbol cfSymbol = PT_makeSymbolCf(sym);
+  PT_Symbols lhs = PT_makeSymbolsList(lexSymbol, PT_makeSymbolsEmpty());
+  PT_Attributes noattrs = PT_makeAttributesNoAttrs();
+  PT_Production prod = PT_makeProductionDefault(lhs, cfSymbol, noattrs);
+  PT_Args args = PT_makeArgsList(tree, PT_makeArgsEmpty());
+
+  return PT_makeTreeAppl(prod, args);
+}
+
+ATbool PT_isTreeLayout(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    return PT_isOptLayoutProd(prod);
   }
 
-  return newSymbols;
+  return ATfalse;
+}
+
+ATbool PT_isTreeLexical(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    return PT_isLexicalInjectionProd(prod);
+  }
+  return ATfalse;
+}
+/*}}}  */ 
+
+/* ATerm annotations */
+/*{{{  ATermList PT_getTreeAnnotations(PT_Tree tree) */
+
+ATerm PT_getTreeAnnotations(PT_Tree tree)
+{
+  return AT_getAnnotations((ATerm) tree);
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_removeTreeAnnotations(PT_Tree arg) */
+
+PT_Tree PT_removeTreeAnnotations(PT_Tree arg)
+{
+  ATerm atArg = PT_TreeToTerm(arg);
+
+  if (AT_getAnnotations(atArg) != NULL) {
+    atArg = AT_removeAnnotations(atArg);
+  }
+
+  return PT_TreeFromTerm(atArg);
 }
 
 /*}}}  */
@@ -573,14 +860,16 @@ PT_ParseTree PT_setParseTreeAnnotation(PT_ParseTree parse_tree, ATerm key, ATerm
 }
 
 /*}}}  */
-/*{{{  int PT_getArgsLength(PT_Args args) */
+/*{{{  ATermList PT_getParseTreeAnnotations(PT_ParseTree pt) */
 
-int PT_getArgsLength(PT_Args args)
+ATerm PT_getParseTreeAnnotations(PT_ParseTree pt)
 {
-   return ATgetLength((ATermList)PT_ArgsToTerm(args));
+  return AT_getAnnotations((ATerm) pt);
 }
 
-/*}}}  */ 
+/*}}}  */
+
+/* Length annotations */
 /*{{{  static PT_Args annotateAmbArgsWithLength(PT_Args args, int *length) */
  
 static PT_Tree annotateTreeWithLength(PT_Tree tree, int *length);
@@ -740,181 +1029,8 @@ PT_Tree PT_setTreeLengthAnno(PT_Tree tree, int length)
 }
 
 /*}}}  */
-/*{{{  PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr) */
 
-PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr)
-{
-  ATermList arg_list = (ATermList)PT_ArgsToTerm(args);
-  ATerm arg = ATelementAt(arg_list, arg_nr);
-  return PT_TreeFromTerm(arg);
-}
-
-/*}}}  */
-/*{{{  PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr) */
-
-PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr)
-{
-  ATermList arg_list = (ATermList)PT_ArgsToTerm(args);
-  arg_list = ATreplace(arg_list, PT_TreeToTerm(arg), arg_nr);
-  return PT_ArgsFromTerm((ATerm)arg_list);
-}
-
-PT_Tree PT_makeTreeLayoutEmpty()
-{
-  PT_Symbol layoutSymbol = PT_makeSymbolCf(
-                             PT_makeSymbolOpt(PT_makeSymbolLayout()));
-  PT_Production optLayoutProd = PT_makeProductionDefault(
-                                  PT_makeSymbolsEmpty(),
-                                  layoutSymbol,
-                                  PT_makeAttributesNoAttrs());
-  return PT_makeTreeAppl(optLayoutProd, PT_makeArgsEmpty());
-}
-
-PT_Tree PT_makeTreeLayoutNonEmpty(PT_Args args)
-{
-  PT_Symbol layoutSymbolRhs = PT_makeSymbolCf(
-                                PT_makeSymbolOpt(PT_makeSymbolLayout()));
-  PT_Symbol layoutSymbolLhs = PT_makeSymbolCf(PT_makeSymbolLayout());
-  PT_Symbols layoutLhs = PT_makeSymbolsList(layoutSymbolLhs, 
-                                            PT_makeSymbolsEmpty());
-  PT_Production optLayoutProd = PT_makeProductionDefault(
-                                  layoutLhs,
-                                  layoutSymbolRhs,
-                                  PT_makeAttributesNoAttrs());
-  return PT_makeTreeAppl(optLayoutProd, args);
-}
-
-PT_Tree PT_makeTreeLayoutFromString(const char *str)
-{
-  PT_Args args = PT_makeArgsEmpty();
-  int i;
-
-  for (i = strlen(str) -1; i >= 0; i--) {
-    args = PT_makeArgsList(PT_makeTreeChar((int) str[i]), args);
-  }
-
-  return PT_makeTreeLayoutNonEmpty(args);
-}
-
-
-PT_Tree PT_makeTreeLexToCf(PT_Symbol sym, PT_Tree tree)
-{
-  PT_Symbol lexSymbol = PT_makeSymbolLex(sym);
-  PT_Symbol cfSymbol = PT_makeSymbolCf(sym);
-  PT_Symbols lhs = PT_makeSymbolsList(lexSymbol, PT_makeSymbolsEmpty());
-  PT_Attributes noattrs = PT_makeAttributesNoAttrs();
-  PT_Production prod = PT_makeProductionDefault(lhs, cfSymbol, noattrs);
-  PT_Args args = PT_makeArgsList(tree, PT_makeArgsEmpty());
-
-  return PT_makeTreeAppl(prod, args);
-}
-
-ATbool PT_isTreeLayout(PT_Tree tree)
-{
-  if (PT_isTreeAppl(tree)) {
-    PT_Production prod = PT_getTreeProd(tree);
-    return PT_isOptLayoutProd(prod);
-  }
-
-  return ATfalse;
-}
-
-ATbool PT_isTreeLexical(PT_Tree tree)
-{
-  if (PT_isTreeAppl(tree)) {
-    PT_Production prod = PT_getTreeProd(tree);
-    return PT_isLexicalInjectionProd(prod);
-  }
-  return ATfalse;
-}
-/*}}}  */ 
-/*{{{  PT_Tree PT_removeTreeAnnotations(PT_Tree arg) */
-
-PT_Tree PT_removeTreeAnnotations(PT_Tree arg)
-{
-  ATerm atArg = PT_TreeToTerm(arg);
-
-  if (AT_getAnnotations(atArg) != NULL) {
-    atArg = AT_removeAnnotations(atArg);
-  }
-
-  return PT_TreeFromTerm(atArg);
-}
-
-/*}}}  */
-
-/*{{{  ATbool PT_isTreeVar(PT_Tree tree)  */
-
-ATbool PT_isTreeVar(PT_Tree tree) 
-{
-  if (PT_isTreeAppl(tree)) {
-    PT_Production prod = PT_getTreeProd(tree);
-    return PT_isVarDefault(prod);
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATbool PT_isTreeVarList(PT_Tree tree) */
-
-ATbool PT_isTreeVarList(PT_Tree tree)
-{
-  if (PT_isTreeAppl(tree)) {
-    PT_Production prod = PT_getTreeProd(tree);
-    if (PT_isVarDefault(prod)) {
-      PT_Symbol rhssym = PT_getProductionRhs(prod);
-      if (PT_isSymbolCf(rhssym) || PT_isSymbolLex(rhssym)) {
-        PT_Symbol sym = PT_getSymbolSymbol(rhssym);
-        return PT_isSymbolIterPlus(sym) 
-               || PT_isSymbolIterStar(sym)
-               || PT_isSymbolIterPlusSep(sym) 
-               || PT_isSymbolIterStarSep(sym);
-      }
-    }
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATbool PT_isTreeVarListStar(PT_Tree tree) */
-
-ATbool PT_isTreeVarListStar(PT_Tree tree)
-{
-  if (PT_isTreeAppl(tree)) {
-    PT_Production prod = PT_getTreeProd(tree);
-    if (PT_isVarDefault(prod)) {
-      PT_Symbol rhssym = PT_getProductionRhs(prod);
-      if (PT_isSymbolCf(rhssym) || PT_isSymbolLex(rhssym)) {
-        PT_Symbol sym = PT_getSymbolSymbol(rhssym);
-        return PT_isSymbolIterStar(sym)
-               || PT_isSymbolIterStarSep(sym);
-      }
-    }
-  }
-  return ATfalse;
-}              
-
-/*}}}  */
-/*{{{  ATbool PT_isTreeVarListPlus(PT_Tree tree) */
-
-ATbool PT_isTreeVarListPlus(PT_Tree tree)
-{
-  if (PT_isTreeAppl(tree)) {
-    PT_Production prod = PT_getTreeProd(tree);
-    if (PT_isVarDefault(prod)) {
-      PT_Symbol rhssym = PT_getProductionRhs(prod);
-      if (PT_isSymbolCf(rhssym) || PT_isSymbolLex(rhssym)) {
-        PT_Symbol sym = PT_getSymbolSymbol(rhssym);
-        return PT_isSymbolIterPlus(sym) 
-               || PT_isSymbolIterPlusSep(sym);
-      }
-    }
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-
+/* Production Attributes */
 /*{{{  PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor, */
 
 PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
@@ -955,7 +1071,6 @@ PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
 }
 
 /*}}}  */   
-
 /*{{{  static PT_Attr PT_matchAttr(PT_Attr attr, PT_AttrVisitorData data) */
 
 /*{{{  typedef struct PT_BoolAttrTuple_Tag */
@@ -1039,86 +1154,6 @@ ATbool PT_hasProductionLexicalConstructorAttr(PT_Production prod)
 }
 
 /*}}}  */       
-/*{{{  PT_Symbol makeSymbolAllChars() */
-
-PT_Symbol makeSymbolAllChars()
-{
-  PT_CharRanges ranges = PT_makeCharRangesList(
-                           PT_makeCharRangeRange(0,255),
-                           PT_makeCharRangesEmpty());
-  return PT_makeSymbolIterStar(
-           PT_makeSymbolCharClass(ranges));
-}  
-
-/*}}}  */
-
-/*{{{  PT_Tree PT_makeTreeFlatLexical(PT_Args charList) */
-
-PT_Tree PT_makeTreeFlatLexical(PT_Args charList)
-{
-  return PT_makeTreeAppl(PT_makeProductionList(makeSymbolAllChars()), 
-			 charList);
-}
-
-/*}}}  */
-/*{{{  PT_Tree PT_makeTreeFlatLexicalFromString(const char *str) */
-
-PT_Tree PT_makeTreeFlatLexicalFromString(const char *str)
-{
-  PT_Args args = PT_makeArgsEmpty();
-  int i;
-
-  for (i = strlen(str) - 1; i >= 0; i--) {
-    args = PT_makeArgsList(PT_makeTreeChar((int) str[i]), args);
-  }
-
-  return PT_makeTreeFlatLexical(args);
-}
-
-/*}}}  */
-/*{{{  ATbool PT_isTreeFlatLexical(PT_Tree tree) */
-
-ATbool PT_isTreeFlatLexical(PT_Tree tree)
-{
-  static PT_Symbol allCharsSymbol;
-  allCharsSymbol = makeSymbolAllChars();
-
-  if (PT_isTreeAppl(tree)) {
-    PT_Production listProd = PT_getTreeProd(tree);
-    PT_Symbol listSymbol = PT_getProductionRhs(listProd);
-    return PT_isEqualSymbol(listSymbol, allCharsSymbol);
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-
-/*{{{  ATbool PT_isTreeBracket(PT_Tree tree) */
-
-ATbool PT_isTreeBracket(PT_Tree tree)
-{
-  if (PT_isTreeAppl(tree)) {
-    PT_Production prod = PT_getTreeProd(tree);
-    if (PT_isProductionDefault(prod)) {
-      return PT_hasProductionBracketAttr(prod);
-    }
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PT_Tree PT_getTreeBracketTree(PT_Tree tree) */
-
-PT_Tree PT_getTreeBracketTree(PT_Tree tree)
-{
-  if (PT_isTreeBracket(tree)) {
-    return PT_getArgsArgumentAt(PT_getTreeArgs(tree),2);
-  }
-  return NULL;
-}
-
-/*}}}  */
-
 /*{{{  PT_Attrs PT_reverseAttrs(PT_Attrs attrs) */
 
 PT_Attrs PT_reverseAttrs(PT_Attrs attrs)
@@ -1130,15 +1165,8 @@ PT_Attrs PT_reverseAttrs(PT_Attrs attrs)
 
 /*}}}  */
 
-/*{{{  PT_CharRanges PT_concatCharRanges(PT_CharRanges ranges1, PT_CharRanges ranges2) */
 
-PT_CharRanges PT_concatCharRanges(PT_CharRanges ranges1, PT_CharRanges ranges2)
-{
-  return PT_CharRangesFromTerm((ATerm)ATconcat((ATermList) ranges1,
-                                               (ATermList) ranges2));
-}
-
-/*}}}  */
+/* Parse trees */
 /*{{{  PT_ParseTree PT_makeParseTree(PT_Tree tree) */
 PT_ParseTree PT_makeValidParseTreeFromTree(PT_Tree tree)
 {
@@ -1168,7 +1196,6 @@ PT_ParseTree PT_makeValidParseTreeFromTree(PT_Tree tree)
 }
 
 /*}}}  */
-
 /*{{{  PT_ParseTree PT_makeParseTreeTree(PT_Symbols lhs, PT_Tree wsBefore,  */
 
 PT_ParseTree PT_makeParseTreeTree(PT_Symbols lhs, PT_Tree wsBefore, 
@@ -1193,7 +1220,6 @@ PT_ParseTree PT_makeParseTreeTree(PT_Symbols lhs, PT_Tree wsBefore,
 }
 
 /*}}}  */
-
 /*{{{  PT_Tree PT_getParseTreeTree(PT_ParseTree parsetree) */
 
 PT_Tree PT_getParseTreeTree(PT_ParseTree parsetree)
