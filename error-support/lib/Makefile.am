@@ -1,5 +1,14 @@
 # $Id$
 
+lib_LIBRARIES=libmerrors.a
+
+libmerrors_a_SOURCES = \
+	Errors.c \
+	Errors_dict.c\
+	ParsedErrors.c \
+	ParsedErrors_dict.c \
+	ParsedErrors_bottom.c
+
 CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
 INCLUDES                = -I${ATERM}/include
 
@@ -17,7 +26,7 @@ parsed-api: MetaErrors.def Makefile
 	sdf2-to-c --input $< --prefix PME_ --output ParsedErrors	
 
 imploded-api: MetaErrors.def Makefile 
-	sdf2-to-c --imploded --input $< --prefix PME_ --output Errors	
+	sdf2-to-c --imploded --input $< --prefix ME_ --output Errors	
 
 api-clean:
 	${RM} MEPT.[ch] MEPT_dict.[ch] MEPT.dict

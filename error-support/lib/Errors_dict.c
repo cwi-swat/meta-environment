@@ -1,73 +1,73 @@
 #include "Errors_dict.h"
 
-AFun PME_afun8;
-AFun PME_afun0;
-AFun PME_afun11;
-AFun PME_afun5;
-AFun PME_afun3;
-AFun PME_afun9;
-AFun PME_afun10;
-AFun PME_afun4;
-AFun PME_afun13;
-AFun PME_afun14;
-AFun PME_afun2;
-AFun PME_afun7;
-AFun PME_afun12;
-AFun PME_afun6;
-AFun PME_afun1;
+AFun ME_afun8;
+AFun ME_afun0;
+AFun ME_afun11;
+AFun ME_afun5;
+AFun ME_afun3;
+AFun ME_afun9;
+AFun ME_afun10;
+AFun ME_afun4;
+AFun ME_afun13;
+AFun ME_afun14;
+AFun ME_afun2;
+AFun ME_afun7;
+AFun ME_afun12;
+AFun ME_afun6;
+AFun ME_afun1;
 
-ATerm PME_patternAreaArea = NULL;
-ATerm PME_patternLocationLocation = NULL;
-ATerm PME_patternSubjectWithLocation = NULL;
-ATerm PME_patternSubjectWithoutLocation = NULL;
-ATerm PME_patternSubjectSubjectListEmpty = NULL;
-ATerm PME_patternSubjectSubjectListMany = NULL;
-ATerm PME_patternSubjectsSubjects = NULL;
-ATerm PME_patternDescriptionDescription = NULL;
-ATerm PME_patternProducerProducer = NULL;
-ATerm PME_patternFatalErrorFatalError = NULL;
-ATerm PME_patternErrorError = NULL;
-ATerm PME_patternWarningWarning = NULL;
-ATerm PME_patternInformationInformation = NULL;
-ATerm PME_patternFeedbackFatalError = NULL;
-ATerm PME_patternFeedbackError = NULL;
-ATerm PME_patternFeedbackWarning = NULL;
-ATerm PME_patternFeedbackInfo = NULL;
+ATerm ME_patternAreaArea = NULL;
+ATerm ME_patternLocationLocation = NULL;
+ATerm ME_patternSubjectWithLocation = NULL;
+ATerm ME_patternSubjectWithoutLocation = NULL;
+ATerm ME_patternSubjectSubjectListEmpty = NULL;
+ATerm ME_patternSubjectSubjectListMany = NULL;
+ATerm ME_patternSubjectsSubjects = NULL;
+ATerm ME_patternDescriptionDescription = NULL;
+ATerm ME_patternProducerProducer = NULL;
+ATerm ME_patternFatalErrorFatalError = NULL;
+ATerm ME_patternErrorError = NULL;
+ATerm ME_patternWarningWarning = NULL;
+ATerm ME_patternInformationInformation = NULL;
+ATerm ME_patternFeedbackFatalError = NULL;
+ATerm ME_patternFeedbackError = NULL;
+ATerm ME_patternFeedbackWarning = NULL;
+ATerm ME_patternFeedbackInfo = NULL;
 
 /*
- * PME_afun8 = producer(x,x)
- * PME_afun0 = info(x)
- * PME_afun11 = without-location(x,x)
- * PME_afun5 = warning(x,x,x,x)
- * PME_afun3 = fatal-error(x)
- * PME_afun9 = description(x)
- * PME_afun10 = subjects(x)
- * PME_afun4 = information(x,x,x,x)
- * PME_afun13 = location(x,x)
- * PME_afun14 = area(x,x,x,x,x,x)
- * PME_afun2 = error(x)
- * PME_afun7 = fatal-error(x,x,x,x)
- * PME_afun12 = with-location(x)
- * PME_afun6 = error(x,x,x,x)
- * PME_afun1 = warning(x)
+ * ME_afun8 = producer(x,x)
+ * ME_afun0 = info(x)
+ * ME_afun11 = without-location(x,x)
+ * ME_afun5 = warning(x,x,x,x)
+ * ME_afun3 = fatal-error(x)
+ * ME_afun9 = description(x)
+ * ME_afun10 = subjects(x)
+ * ME_afun4 = information(x,x,x,x)
+ * ME_afun13 = location(x,x)
+ * ME_afun14 = area(x,x,x,x,x,x)
+ * ME_afun2 = error(x)
+ * ME_afun7 = fatal-error(x,x,x,x)
+ * ME_afun12 = with-location(x)
+ * ME_afun6 = error(x,x,x,x)
+ * ME_afun1 = warning(x)
  *
- * PME_patternAreaArea = area(<term>,<term>,<term>,<term>,<term>,<term>)
- * PME_patternLocationLocation = location(<term>,<term>)
- * PME_patternSubjectWithLocation = with-location(<term>)
- * PME_patternSubjectWithoutLocation = without-location(<term>,<term>)
- * PME_patternSubjectSubjectListEmpty = []
- * PME_patternSubjectSubjectListMany = [<term>,<list>]
- * PME_patternSubjectsSubjects = subjects(<term>)
- * PME_patternDescriptionDescription = description(<term>)
- * PME_patternProducerProducer = producer(<term>,<term>)
- * PME_patternFatalErrorFatalError = fatal-error(<term>,<term>,<term>,<term>)
- * PME_patternErrorError = error(<term>,<term>,<term>,<term>)
- * PME_patternWarningWarning = warning(<term>,<term>,<term>,<term>)
- * PME_patternInformationInformation = information(<term>,<term>,<term>,<term>)
- * PME_patternFeedbackFatalError = fatal-error(<term>)
- * PME_patternFeedbackError = error(<term>)
- * PME_patternFeedbackWarning = warning(<term>)
- * PME_patternFeedbackInfo = info(<term>)
+ * ME_patternAreaArea = area(<term>,<term>,<term>,<term>,<term>,<term>)
+ * ME_patternLocationLocation = location(<term>,<term>)
+ * ME_patternSubjectWithLocation = with-location(<term>)
+ * ME_patternSubjectWithoutLocation = without-location(<term>,<term>)
+ * ME_patternSubjectSubjectListEmpty = []
+ * ME_patternSubjectSubjectListMany = [<term>,<list>]
+ * ME_patternSubjectsSubjects = subjects(<term>)
+ * ME_patternDescriptionDescription = description(<term>)
+ * ME_patternProducerProducer = producer(<term>,<term>)
+ * ME_patternFatalErrorFatalError = fatal-error(<term>,<term>,<term>,<term>)
+ * ME_patternErrorError = error(<term>,<term>,<term>,<term>)
+ * ME_patternWarningWarning = warning(<term>,<term>,<term>,<term>)
+ * ME_patternInformationInformation = information(<term>,<term>,<term>,<term>)
+ * ME_patternFeedbackFatalError = fatal-error(<term>)
+ * ME_patternFeedbackError = error(<term>)
+ * ME_patternFeedbackWarning = warning(<term>)
+ * ME_patternFeedbackInfo = info(<term>)
  *
  */
 
@@ -117,71 +117,71 @@ void init_Errors_dict()
 
   afuns = (ATermList)ATelementAt((ATermList)_Errors_dict, 0);
 
-  PME_afun8 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ME_afun8 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun0 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ME_afun0 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun11 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ME_afun11 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun5 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ME_afun5 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun3 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ME_afun3 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun9 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ME_afun9 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun10 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ME_afun10 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun4 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ME_afun4 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun13 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ME_afun13 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun14 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ME_afun14 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun2 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ME_afun2 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun7 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ME_afun7 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun12 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ME_afun12 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun6 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ME_afun6 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
-  PME_afun1 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
+  ME_afun1 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
 
   terms = (ATermList)ATelementAt((ATermList)_Errors_dict, 1);
 
-  PME_patternAreaArea = ATgetFirst(terms);
+  ME_patternAreaArea = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternLocationLocation = ATgetFirst(terms);
+  ME_patternLocationLocation = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternSubjectWithLocation = ATgetFirst(terms);
+  ME_patternSubjectWithLocation = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternSubjectWithoutLocation = ATgetFirst(terms);
+  ME_patternSubjectWithoutLocation = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternSubjectSubjectListEmpty = ATgetFirst(terms);
+  ME_patternSubjectSubjectListEmpty = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternSubjectSubjectListMany = ATgetFirst(terms);
+  ME_patternSubjectSubjectListMany = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternSubjectsSubjects = ATgetFirst(terms);
+  ME_patternSubjectsSubjects = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternDescriptionDescription = ATgetFirst(terms);
+  ME_patternDescriptionDescription = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternProducerProducer = ATgetFirst(terms);
+  ME_patternProducerProducer = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternFatalErrorFatalError = ATgetFirst(terms);
+  ME_patternFatalErrorFatalError = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternErrorError = ATgetFirst(terms);
+  ME_patternErrorError = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternWarningWarning = ATgetFirst(terms);
+  ME_patternWarningWarning = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternInformationInformation = ATgetFirst(terms);
+  ME_patternInformationInformation = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternFeedbackFatalError = ATgetFirst(terms);
+  ME_patternFeedbackFatalError = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternFeedbackError = ATgetFirst(terms);
+  ME_patternFeedbackError = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternFeedbackWarning = ATgetFirst(terms);
+  ME_patternFeedbackWarning = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  PME_patternFeedbackInfo = ATgetFirst(terms);
+  ME_patternFeedbackInfo = ATgetFirst(terms);
   terms = ATgetNext(terms);
 }
