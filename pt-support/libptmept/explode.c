@@ -75,25 +75,53 @@ static PTPT_ATermList PTPT_explodeATermList(ATermList elems)
 }
 
 /*}}}  */
+/*{{{  static PTPT_Ann PTPT_explodeAnnotations(ATermList annos) */
+
+static PTPT_Ann PTPT_explodeAnnotations(ATermList annos)
+{
+  PTPT_ATermList ptlist = PTPT_explodeATermList(annos);
+  PTPT_ATermElems elems = PTPT_getATermListElems(ptlist);
+  
+  return PTPT_makeAnnList(e,elems,e);
+}
+
+/*}}}  */
 /*{{{  static PTPT_ATerm PTPT_explodeATermAppl(ATermAppl appl) */
 
 static PTPT_ATerm PTPT_explodeATermAppl(ATermAppl appl)
 {
+  ATerm annos = AT_getAnnotations((ATerm) appl);
   AFun fun = ATgetAFun(appl);
   char *name = ATgetName(fun);
   int arity = ATgetArity(fun);
   ATermList args = ATgetArguments(appl);
   PTPT_ATerm result = NULL;
   PTPT_AFun pfun = PTPT_makeAFunLit(PTPT_explodeLiteral(name, ATfalse));
+  PTPT_Ann ann = NULL;
+
+  if (annos != NULL) {
+    ann = PTPT_explodeAnnotations((ATermList) annos);
+  }
 
   if (arity == 0) {
-    result = PTPT_makeATermConstant(pfun);
+    if (ann != NULL) {
+      result = PTPT_makeATermAnnotatedConstant(pfun, e, ann);
+    }
+    else {
+      result = PTPT_makeATermConstant(pfun);
+    }
   }
   else {
     /* hack alert, PTPT_ATermArgs is the same as an ATermList by coincidence */
     PTPT_ATermArgs pargs  = 
       (PTPT_ATermArgs) PTPT_getATermListElems(PTPT_explodeATermList(args));
-    result = PTPT_makeATermAppl(pfun,e,e,pargs,e);
+
+    if (ann != NULL) {
+      result = PTPT_makeATermAnnotatedAppl(pfun,e,e,pargs,e,e,ann);
+    }
+    else {
+      result = PTPT_makeATermAppl(pfun,e,e,pargs,e);
+    }
   }
 
   return result;
@@ -106,13 +134,25 @@ static PTPT_ATerm PTPT_explodeATermAppl(ATermAppl appl)
 PTPT_ATerm PTPT_explodeATerm(ATerm term)
 {
   PTPT_ATerm result = NULL;
+  ATerm annos = AT_getAnnotations(term);
+  PTPT_Ann ann = NULL;
+
+  if (annos != NULL) {
+    ann = PTPT_explodeAnnotations((ATermList) annos);
+  }
 
   e = PTPT_makeOptLayoutAbsent();
   ATprotect((ATerm*) &e);
 
   if (ATgetType(term) == AT_LIST) {
     PTPT_ATermList list = PTPT_explodeATermList((ATermList) term);
-    result = PTPT_makeATermList(list);
+
+    if (ann != NULL) {
+      result = PTPT_makeATermAnnotatedList(list,e,ann);
+    }
+    else {
+      result = PTPT_makeATermList(list);
+    }
   }
   else if (ATgetType(term) == AT_APPL) {
     result = PTPT_explodeATermAppl((ATermAppl) term);
@@ -125,12 +165,24 @@ PTPT_ATerm PTPT_explodeATerm(ATerm term)
   else if (ATgetType(term) == AT_INT) {
     int nat = ATgetInt((ATermInt) term);
     PTPT_ACon con = PTPT_makeAConInt(PTPT_explodeIntCon(nat));
-    result = PTPT_makeATermAconstant(con);
+
+    if (ann != NULL) {
+      result = PTPT_makeATermAnnotatedAconstant(con,e,ann);
+    }
+    else {
+      result = PTPT_makeATermAconstant(con);
+    }
   }
   else if (ATgetType(term) == AT_REAL) {
     double real = ATgetInt((ATermInt) term);
     PTPT_ACon con = PTPT_makeAConInt(PTPT_explodeRealCon(real));
-    result = PTPT_makeATermAconstant(con);
+    
+    if (ann != NULL) {
+      result = PTPT_makeATermAnnotatedAconstant(con,e,ann);
+    }
+    else {
+      result = PTPT_makeATermAconstant(con);
+    }
   }
   else {
     ATwarning("explode: unsupported ATerm %t\n", term);
@@ -484,17 +536,6 @@ static PTPT_Args PTPT_explodeArgs(PT_Args args)
 
 /*}}}  */
 
-/*{{{  static PTPT_Ann PTPT_explodeAnnotations(ATermList annos) */
-
-static PTPT_Ann PTPT_explodeAnnotations(ATermList annos)
-{
-  PTPT_ATermList ptlist = PTPT_explodeATermList(annos);
-  PTPT_ATermElems elems = PTPT_getATermListElems(ptlist);
-  
-  return PTPT_makeAnnList(e,elems,e);
-}
-
-/*}}}  */
 
 /*{{{  PT_Tree PTPT_explodeTree(PT_Tree pt) */
 
