@@ -19,7 +19,7 @@ asfsdfchecker_SOURCES = asfsdfchecker.c AsfSdf-Checker.c asfsdfchecker.tif.c
 asfsdfchecker_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                        -L$(SDF_SUPPORT)/lib -lSDFME \
                        -L$(ASF_SUPPORT)/lib -lASFME \
-                       -L$(PT_SUPPORT)/lib -lmept \
+                       -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
                        -L$(TOOLBUSLIB)/lib -lATB \
                        -L$(ATERM)/lib -lATerm \
 			$(SOCKLIBS)

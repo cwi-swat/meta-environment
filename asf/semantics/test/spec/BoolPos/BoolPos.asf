@@ -1,5 +1,0 @@
-equations
-
-[] tag(Bool) = annotate(Bool)
-[] annotate(Bool) = Bool {{ ATerm }} 
-     when get-start-column(Bool) = ATerm
