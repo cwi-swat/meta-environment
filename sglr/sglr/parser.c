@@ -224,6 +224,20 @@ void  SG_DoLimitedReductions(stack*, action, st_link*);
 void  SG_Shifter(void);
 ATerm SG_Result(void);
 
+void  SG_ParserPreparation(void)
+{
+  accepting_stack = NULL;
+  active_stacks = SG_NewStacks(SG_NewStack(SG_INIT(table), NULL));
+
+}
+
+
+void  SG_ParserCleanup(void)
+{
+//    active_stacks = SG_AddStacks(accepting_stack, active_stacks);
+    active_stacks = SG_DeleteStacks(active_stacks);
+}
+
 /*
    \paragraph{Parse}
 
@@ -243,11 +257,12 @@ ATerm SG_Result(void);
 */
 ATerm SG_Parse(parse_table *ptable, int(*get_next_char)(void))
 {
+  ATerm result;
+
   SG_InitInput();
   table = ptable;
 
-  accepting_stack = NULL;
-  active_stacks = SG_NewStacks(SG_NewStack(SG_INIT(table), NULL));
+  SG_ParserPreparation();
 
   do {
     if(SG_SHOWSTACK) SG_StacksToDotFile(active_stacks, text_length);
@@ -265,7 +280,11 @@ ATerm SG_Parse(parse_table *ptable, int(*get_next_char)(void))
   if(SG_SHOWSTACK)
     SG_StacksToDotFile(SG_NewStacks(accepting_stack), text_length);
 
-  return SG_Result();
+  result = SG_Result();
+
+  SG_ParserCleanup();
+
+  return result;
 }
 
 /*
@@ -283,9 +302,6 @@ ATerm SG_Result(void)
 {
   if (accepting_stack != NULL) {
     ATerm t;
-
-//    active_stacks = SG_AddStacks(accepting_stack, active_stacks);
-    active_stacks = NULL;
 
     t = SG_YieldPT(SG_LK_TREE(head(SG_ST_LINKS(accepting_stack))));
 
@@ -345,22 +361,8 @@ void SG_Actor(stack *st)
   actions as;
   action  a;
 
-#ifdef DEBUG
-  ATbool sr, ar;
-
-  sr = SG_SomeRejected(st); ar = SG_Rejected(st);
-  if(sr != ar) {
-    ATfprintf(stderr, "\nRA: state %d, SR (%d) != AR (%d)\n", STATE(st),sr,ar);
-    show_stack_rejects(st, 0);
-  }
-#endif
-
-  if(SG_Rejected(st)) {
-#ifdef DEBUG
-    ATfprintf(stderr, "RA: Rejected state %d: %t\n", STATE(st), TREE(st));
-#endif
+  if(SG_Rejected(st))
     return;
-  }
 
   as = SG_LookupAction(table, SG_ST_STATE(st), current_token);
 //ATfprintf(stderr, "SG_Actor: actions[%d,%d] = %t\n", SG_ST_STATE(st), current_token, as);
@@ -377,7 +379,10 @@ void SG_Actor(stack *st)
          if(!SG_Rejected(st))
            accepting_stack = st;
          break;
+      default:
       case ERROR:
+        ATfprintf(stderr, "SG_Actor: deleting hopeless stack\n");
+        SG_DeleteStack(st);
         break;
     }
   }
@@ -531,13 +536,16 @@ void SG_DoLimitedReductions(stack *st, action a, st_link *l)
 */
 void SG_Shifter(void)
 {
-  ATerm t;
-  stack *st0, *st1;
+  ATerm  t;
+  stack  *st0, *st1;
+  stacks *new_active_stacks = NULL;
   shift_pair *shift_pair;
   state s;
   st_link *l;
 
-  active_stacks = NULL;
+//  SG_DeleteStacks(active_stacks);
+//  active_stacks = NULL;
+
   t = SG_LookupProduction(table, current_token);
 
 //  if(for_shifter == NULL) return;
@@ -546,15 +554,20 @@ void SG_Shifter(void)
     s = SG_SP_STATE(shift_pair);
     st0 = SG_SP_STACK(shift_pair);
     if(!SG_Rejected(st0)) {
-      if((st1 = SG_FindStack(s, active_stacks)) == NULL) {
+      if((st1 = SG_FindStack(s, new_active_stacks)) == NULL) {
         st1 = SG_NewStack(s, NULL);
-        active_stacks = SG_AddStacks(st1, active_stacks);
+        new_active_stacks = SG_AddStacks(st1, new_active_stacks);
       }
       l = SG_AddLink(st1, st0, t);
       if(SG_SHOWSTACK) SG_LinksToDot(SG_StackDot(), st1);
     }
 //  else ATfprintf(stderr,"Shifter: rejected stack %d\n", STATE(st0));
   }
+
+// ATfprintf(stderr, "Before:\n"); SG_ShowActiveStackLinks();
+// active_stacks = SG_DeleteOldStacks(active_stacks, new_active_stacks);
+// ATfprintf(stderr, "After:\n"); SG_ShowActiveStackLinks();
+  active_stacks = new_active_stacks;
 } /* shifter */
 
 
@@ -597,8 +610,8 @@ void SG_ShowStackOffspring(stack *st)
 {
   while(st != NULL && st->kid != NULL) {
     ATfprintf(stderr, "%d%s created %d%s\n",
-                     STATE(st), SG_Rejected(st)?"r":"",
-                     STATE(st->kid), SG_Rejected(st->kid)?"r":"");
+                     SG_ST_STATE(st), SG_Rejected(st)?"r":"",
+                     SG_ST_STATE(st->kid), SG_Rejected(st->kid)?"r":"");
     st = st->kid;
   }
 }
@@ -607,8 +620,8 @@ void SG_ShowStackAncestors(stack *st)
 {
   while(st != NULL && st->parent != NULL) {
     ATfprintf(stderr, "%d%s induced %d%s\n",
-                     STATE(st->parent), SG_Rejected(st->parent)?"r":"",
-                     STATE(st), SG_Rejected(st)?"r":"");
+                     SG_ST_STATE(st->parent), SG_Rejected(st->parent)?"r":"",
+                     SG_ST_STATE(st), SG_Rejected(st)?"r":"");
     st = st->parent;
   }
 }
@@ -624,23 +637,23 @@ void SG_ShowActiveStackStates(signed int c)
   while(astks != NULL) {
     stk   =  astks->head;
     astks =  astks->tail;
-    ATfprintf(stderr, "%d%s ", STATE(stk), SG_Rejected(stk)?"r":"");
+    ATfprintf(stderr, "%d%s ", SG_ST_STATE(stk), SG_Rejected(stk)?"r":"");
   }
   ATfprintf(stderr, "\n");
 }
 
 void SG_ShowStackRejects(stack *st, int depth)
 {
-  st_links *ls = LINKS(st);
+  st_links *ls = SG_ST_LINKS(st);
   st_link *l;
 
-//  if(depth > 666) return;
+  if(depth > 666) return;
 
-  for (; ls != NULL; ls = next(ls)) {
-    l = first(ls);
-    ATfprintf(stderr, "%*.*s%s state %d ==> state %d\n", 2*depth, 2*depth,
-                      "", REJECTED(l)?"+":"-", STATE(st), STATE(STACK(l)));
-    show_stack_rejects(STACK(l), depth+1);
+  for (; ls != NULL; ls = tail(ls)) {
+    l = head(ls);
+    fprintf(stderr, "%*.*s%s state %d ==> state %d\n", 2*depth, 2*depth, "",
+            SG_LK_REJECTED(l)?"+":"-", SG_ST_STATE(st), SG_ST_STATE(SG_LK_STACK(l)));
+    SG_ShowStackRejects(SG_LK_STACK(l), depth+1);
   }
 }
 
@@ -653,7 +666,7 @@ void SG_ShowActiveStackLinks()
   while(astks != NULL) {
     stk   =  astks->head;
     astks =  astks->tail;
-    show_stack_rejects(stk,2);
+    SG_ShowStackRejects(stk,2);
   }
 }
 

@@ -33,13 +33,55 @@ stack *SG_NewStack(state s, stack *ancestor) {
   return res;
 }
 
+stacks *SG_DeleteOldStacks(stacks *old, stacks *new)
+{
+  stack *st;
+
+  while(shift(st, old))
+    if(!SG_InStacks(st, new))
+;//      SG_DeleteStack(st);
+
+  return new;
+}
+
+stacks *SG_DeleteStacks(stacks *sts)
+{
+  stack *st;
+
+  while(shift(st, sts))
+    SG_DeleteStack(st);
+  return NULL;
+}
+
+void SG_DeleteStack(stack *st)
+{
+  ATfprintf(stderr, "deleting stack %d\n", (int) st);
+  SG_DeleteLinks(SG_ST_LINKS(st));
+  SG_free(st);
+}
+
+st_links *SG_DeleteLinks(st_links *lks)
+{
+  for (; lks != NULL; lks = tail(lks))
+    SG_DeleteLink(head(lks));
+
+  return NULL;
+}
+
+void SG_DeleteLink(st_link *lk)
+{
+  ATfprintf(stderr, "  deleting link %d\n", (int) lk);
+  ATunprotect(&(lk->tree));
+  SG_free(lk);
+}
+
+
 st_link *SG_NewLink(tree t, stack *st) {
   st_link *res;
 
   if((res = SG_Malloc(sizeof(st_link))) != NULL) {
-    ATprotect(&t);
     res->tree = t;
-    ATprotect(&t);
+    ATprotect(&(res->tree));
     res->stack = st;
     res->rejected = ATfalse;
   }
@@ -80,8 +122,9 @@ st_link *SG_AddLink(stack *frm, stack *to, tree t)
 ATbool SG_InStacks(stack *st1, stacks *sts)
 {
   stack *st2;
+
   while(shift(st2, sts))
-    if(st2 == st1) return ATtrue;
+    if(st1 == st2) return ATtrue;
   return ATfalse;
 }
 
@@ -143,7 +186,7 @@ void SG_MarkLinkRejected2(stack *st, st_link *l)
  */
 ATbool SG_SomeRejected(stack *st)
 {
-  register st_links *ls = LINKS(st);
+  st_links *ls = SG_ST_LINKS(st);
   stack *kid;
   st_link *l;
   int count = 0;
@@ -168,13 +211,14 @@ ATbool SG_SomeRejected(stack *st)
 */
 ATbool SG_Rejected(stack *st)
 {
-  register st_links *ls = SG_ST_LINKS(st);
+  st_links *ls;
 
-  if (!ls) return ATfalse;
-  for (; ls != NULL; ls = tail(ls))
+  if (!(ls = SG_ST_LINKS(st))) return ATfalse;
+  for (; ls != NULL; ls = tail(ls)) {
     if(SG_LK_REJECTED(head(ls))) {
 //      ATfprintf(stderr, "A stack link with state %d unrejected\n", STATE(st));
       return ATtrue;
     }
+  }
   return ATfalse;
 }

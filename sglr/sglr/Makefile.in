@@ -33,7 +33,7 @@ LDFLAGSPROF     = ${LDFLAGS} -pg
 
 MAKE		= gmake
 
-DEFS		= @DEFS@ ${XDEFS}
+DEFS		= @DEFS@ ${XDEFS} # -DHAVE_BOEHMGC
 INCLUDES	= @INCLUDES@ ${XINCLUDES}
 LIBS		= @LIBS@ ${SOCKLIBS} ${XLIBS}
 LIBSPROF	= @LIBS@ ${SOCKLIBS} ${XLIBSPROF}
@@ -48,7 +48,7 @@ ATERM           = @ATERM@
 TOOLBUS         = @TOOLBUS@
 
 # The eXtra parts of some variables
-XCFLAGS		= # -DHAVE_BOEHMGC
+XCFLAGS		= ${DEFS}
 # BOEHMGC         = -lgc
 XCPPFLAGS	=
 XINCLUDES	= -I$(ATERM)/include

@@ -113,7 +113,7 @@ parse_table *SG_NewParseTable(int states, int productions)
   pt               = SG_Malloc(sizeof(struct _parse_table));
   pt->init         = -1;
 
-  pt->action_table = ATtableCreate(65536,    75);
+  pt->action_table = ATtableCreate(states*1.4,    75);
   pt->goto_table   = ATtableCreate(states*1.4,  75);
   pt->productions  = ATtableCreate((productions + 256)*1.4, 75);
 
@@ -360,7 +360,7 @@ parse_table *SG_BuildParseTable(ATerm t)
   ATermList   prods, sts;
   parse_table *pt;
 
-  pt = SG_NewParseTable(4000, 2000);
+  pt = SG_NewParseTable(16384, 4096);
 //  pt->org_table = t;
 
   if(!ATmatch(t, "parse-table(<int>,[<list>],states([<list>]))",

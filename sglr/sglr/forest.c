@@ -66,8 +66,9 @@ ATerm SG_Apply(parse_table *pt, label l, ATermList ts)
 
 /* The next bit will have to do while waiting for this to be implemented */
 #define AFun  Symbol
-#define ATmakeAFun(s, t, f) ATmakeSymbol(s, t, f);
-
+#define ATmakeAFun(s, t, f) ATmakeSymbol(s, t, f)
+#define ATprotectAFun(t)    ATprotectSymbol(t)
+#define ATgetAFun(t)        ATgetSymbol(t)
 
 AFun  SG_Amb2Afun(void)
 {
@@ -75,8 +76,8 @@ AFun  SG_Amb2Afun(void)
   static AFun fun;
 
   if(!inited) {
-    fun = ATmakeSymbol("appl", 2, ATfalse);
-    ATprotectSymbol(fun);
+    fun = ATmakeAFun("appl", 2, ATfalse);
+    ATprotectAFun(fun);
   }
   return fun;
 }
@@ -87,8 +88,8 @@ AFun  SG_Amb3Afun(void)
   static AFun fun;
 
   if(!inited) {
-    fun = ATmakeSymbol("appl", 3, ATfalse);
-    ATprotectSymbol(fun);
+    fun = ATmakeAFun("appl", 3, ATfalse);
+    ATprotectAFun(fun);
   }
   return fun;
 }
@@ -97,24 +98,19 @@ ATerm SG_YieldPT(ATerm t)
 {
   ATerm     ret, t2;
   ATermList args, l;
-  Symbol    appl2= SG_Amb2Afun(), appl3 = SG_Amb3Afun(), fun;
-
-//  static  int have_amb = 0;
-
-//if(have_amb) ATfprintf(stderr, "\nYIELD %t\n", t);
+  AFun      fun;
 
   switch(ATgetType(t)) {
     case AT_APPL:
-      fun = ATgetSymbol(t);
+      fun = ATgetAFun(t);
       args = ATgetArguments((ATermAppl) t);
-//      args = args?args:ATempty;
-      if(fun == appl3) {
+      if(fun == SG_Amb3Afun()) {
         ATermList ambs;
 
         /* Are we indeed encountering an ambiguity cluster? */
         ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, (ATermInt) ATgetLast(args), NULL);
         if(ATisEmpty(ambs))
-          ret = (ATerm)ATmakeAppl2(appl2,
+          ret = (ATerm)ATmakeAppl2(SG_Amb2Afun(),
                                  SG_YieldPT(ATgetFirst(args)),
                                  SG_YieldPT(ATelementAt(args, 1)));
         else {
@@ -132,7 +128,6 @@ ATerm SG_YieldPT(ATerm t)
       for(l = ATempty, args = (ATermList) t;
           !ATisEmpty(args); args = ATgetPrefix(args)) {
         t2 = ATgetLast(args);
-//        if(have_amb) ATfprintf(stderr, "\nLIST arg %t\n", t2);
         l = ATinsert(l, SG_YieldPT(t2));
       }
       return (ATerm) l;
@@ -149,28 +144,35 @@ ATerm SG_YieldPT(ATerm t)
 
 ATermList SG_AmbTable(int Mode, ATermInt index, ATermList value)
 {
-  ATerm   t;
   static  ATermTable  ambtbl = NULL;
-  ATermList           keys, ambs;
+  ATermList           ambs;
 
   switch(Mode) {
     case SG_AMBTBL_INIT:
       if(ambtbl != NULL) SG_AmbTable(SG_AMBTBL_CLEAR, NULL, NULL);
-      ambtbl = ATtableCreate(256, 90);
+      ambtbl = ATtableCreate(512, 75);
       break;
     case SG_AMBTBL_CLEAR:
-      if(ambtbl)
+      if(ambtbl) {
+/*
+        ATerm   t;
+        ATermList   keys;
+
         for(keys = ATtableKeys(ambtbl); keys && !ATisEmpty(keys);
             keys=ATgetNext(keys)) {
           t = ATtableGet(ambtbl, ATgetFirst(keys));
           ATunprotect(&t);
       }
-      if(ambtbl) ATtableDestroy(ambtbl);
-      ambtbl = NULL;
+*/
+        ATtableDestroy(ambtbl);
+        ambtbl = NULL;
+      }
       break;
     case SG_AMBTBL_ADD:
       if(!ambtbl) SG_AmbTable(SG_AMBTBL_INIT, NULL, NULL);
+/*
       ATprotect((ATerm *) &value);
+*/
       ATtablePut(ambtbl, (ATerm) index, (ATerm) value);
       break;
     case SG_AMBTBL_REMOVE:
@@ -306,7 +308,8 @@ void SG_TYAux(ATerm t)
   if (ATgetType(t) == AT_INT) {
    SG_TYAuxBuf(TYA_ADD, ATgetInt((ATermInt) t));
   }
-  else if (ATmatch(t, "appl(<term>,[<list>])", NULL, &args)) {
+  else if (ATmatch(t, "appl(<term>,[<list>])", NULL, &args) ||
+           ATmatch(t, "appl(<term>,[<list>],<int>)", NULL, &args, NULL)) {
     SG_TYAux((ATerm) args);
   } else if (ATmatch(t, "[<list>]", &args)) {
       SG_TYAux(ATgetFirst(args));
@@ -345,7 +348,8 @@ void SG_DotTermYieldAux(ATerm t)
         SG_TYAuxBuf(TYA_ADD, c);
         break;
     }
-  } else if (ATmatch(t, "appl(<term>,[<list>])", NULL, &args)) {
+  } else if (ATmatch(t, "appl(<term>,[<list>])", NULL, &args) ||
+             ATmatch(t, "appl(<term>,[<list>],<int>)", NULL, &args, NULL)) {
     if(ATgetLength(args) > 1) {
       SG_TYAuxBuf(TYA_ADD, '[');
       SG_TYAux((ATerm) args);
