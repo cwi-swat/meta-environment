@@ -16,6 +16,7 @@ In particular, we will discuss:
      that is needed to implement the scenarios discussed earlier.
 <LI> How should <A HREF="#SyntaxChanges">changes in the syntax</A>
       be propagated.
+<LI> How should <A HREF="#ErrorHandling">errors</A> be handled?
 </UL>
 
 
@@ -180,6 +181,26 @@ For the time being, we are inclined to choose the lazy approach,
 because we feel that this enables a simpler design to which we can
 easily add some eager features at a later stage using heuristics 
 that are based on observed behaviour of users.
+
+<H2><A NAME="ErrorHandling">Error Handling</A>
+
+A lot of operations in the Asf+Sdf Meta-Environment can fail, sometimes
+for unexpected reasons. Handling these failures by anticipating all possible
+failures would add a lot of code in the controlling ToolBus script, as
+wel as in the different tools.
+
+<P>Another solution would be to abort a particular operation (scenario?)
+as soon as an error has been detected. This is an attractive alternative,
+because no extensive error propagation has to be done, making it possible
+to write short and concise ToolBus scripts. However, this approach does
+not take into account that the user must be informed when an operation
+fails, and why it fails, so he or she can take action to correct the problem.
+
+<P>We propose to handle this notification to the user by sending 
+<EM>error notes</EM> as soon as a problem is detected, and then aborting
+the operation. The error note must contain an indication of the
+operation that failed, so the correct user interface component can
+signal the error to the user.
 
 </BODY>
 </HTML>
