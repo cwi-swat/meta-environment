@@ -1,5 +1,8 @@
 # $Id$
 
+Fri Jul  9 14:08:06 CEST 2004 <jong@cwi.nl>
+ * include make_rules so pkg file can be generated
+
 Thu Jul  8 23:04:23 CEST 2004 <jurgenv@cwi.nl>
  * Added a generic mapping from parse trees to RSTORE. The parse trees
    must contain pos-info. After using the lift-to-tree builtin, it extracts:
