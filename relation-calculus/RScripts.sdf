@@ -6,7 +6,7 @@ exports
   sorts SCRIPT STAT VAR FROM TEXP REXP
 
   lexical syntax
-     [\$]?[A-Za-z][A-Za-z0-9\_]*             -> VAR
+     [\$]?[A-Za-z][A-Za-z0-9\_]*             -> VAR {avoid}
 
   context-free restrictions
      VAR -/- [A-Za-z0-9\_]
@@ -32,8 +32,8 @@ exports
      "'" Bag[[Elem]]                         -> REXP
      "'" Rel[[Elem]]                         -> REXP
      VAR                                     -> REXP
-     "{" {REXP ","}* "}"                      -> REXP
-     "<" REXP "," REXP ">"                     -> TEXP
+     "{" {REXP ","}* "}"                     -> REXP
+     "<" REXP "," REXP ">"                   -> TEXP
      "{" {TEXP ","}* "}"                     -> REXP
      TEXP                                    -> REXP
 
@@ -59,8 +59,8 @@ exports
 %% functions
 
      VAR "(" REXP ")"                         -> REXP {avoid}
-     VAR "(" REXP "," REXP ")"                 -> REXP {avoid}
-     VAR "(" REXP "," REXP "," REXP")"          -> REXP {avoid}
+     VAR "(" REXP "," REXP ")"                -> REXP {avoid}
+     VAR "(" REXP "," REXP "," REXP")"        -> REXP {avoid}
      "(" REXP ")"                             -> REXP {bracket}
 
      "def" VAR "=" REXP                       -> STAT

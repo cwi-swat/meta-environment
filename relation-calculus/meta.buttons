@@ -4,8 +4,8 @@ buttons([
           ["Actions", "Undefined Vars"],
           [get-root,
            check-sort("PROGRAM"),
-           apply("analyze", "List", 1),
-           push-modulename("PosAnalysis"),
+           apply("undefinedVars", "List", 1),
+           push-modulename("UndefinedQuery"),
            reduce,
            execute-action("unparsePT"),
            show-list]),
@@ -13,6 +13,12 @@ buttons([
     button("*",
           "message-list",
           ["ShowSource"],
-          [show-area("Pico-syntax")]) 
+          [show-area("Pico-syntax")]) ,
 
+    button("*",
+	"term",
+	["Actions", "Show List"],
+	[get-root,
+	execute-action("unparsePT"),
+	show-list])
 ])

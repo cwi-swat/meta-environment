@@ -2,39 +2,7 @@ equations
 
 [empty]   EmptyRel = {}
 
-%% [eq-1]   Rel1 = BagEE1, Rel2 = BagEE2
-%%           =========================
-%%          equal(Rel1, Rel2) = equal(BagEE1, BagEE2)
-%% 
-%% [le-1]   Rel1 = BagEE1, Rel2 = BagEE2
-%%          =========================
-%%          subset(Rel1, Rel2) = subset(BagEE1, BagEE2)
-%% 
-%% [lt-1]   Rel1 = BagEE1, Rel2 = BagEE2
-%%          =========================
-%%          strict-subset(Rel1, Rel2) = strict-subset(BagEE1, BagEE2)
-%% 
-%% [ge-1]   Rel1 = BagEE1, Rel2 = BagEE2
-%%          =========================
-%%          superset(Rel1, Rel2) = superset(BagEE1, BagEE2)
-%% 
-%% [gt-1]   Rel1 = BagEE1, Rel2 = BagEE2
-%%          =========================
-%%          strict-superset(Rel1, Rel2) = strict-superset(BagEE1, BagEE2)
-%% 
-%% [un-1]   Rel1 = BagEE1, Rel2 = BagEE2
-%%          =========================
-%%          union(Rel1, Rel2) = union(BagEE1, BagEE2)
-%% 
-%% [intr-1] Rel1 = BagEE1, Rel2 = BagEE2
-%%          =========================
-%%          inter(Rel1, Rel2) = inter(BagEE1, BagEE2)
-%% 
-%% [diff-1] Rel1 = BagEE1, Rel2 = BagEE2
-%%          =========================
-%%          diff(Rel1, Rel2) = diff(BagEE1, BagEE2)	
-%% 
- [comp-1] compose({<E, E'>, Tuple*1}, {Tuple*2}) = 
+[comp-1] compose({<E, E'>, Tuple*1}, {Tuple*2}) = 
          union(product(E, E' . {Tuple*2}), compose({Tuple*1}, {Tuple*2}))
 [comp-2] compose({}, {Tuple*}) = {}
 
@@ -139,9 +107,9 @@ equations
 
 [tcl-1]  Rel+ = closure(Rel, {}, Rel)
 
-[rtcl-1] Rel* = closure(Rel, id(carrier(Rel)), Rel)
+[rtcl-1] Rel* = union(Rel+, id(carrier(Rel)))
 
-%%[icl-1]  Bag .+ Rel = closure(Rel, {}, domR(Rel, Bag))
+[bcl-1] closure(Bag, Rel) = range(closure(Rel, {}, domR(Rel, Bag)))
 
 
 [dm1-1]  compose(Rel4, Rel3) = Rel', Rel' != {}, Rel'' = diff(Rel', Rel2)

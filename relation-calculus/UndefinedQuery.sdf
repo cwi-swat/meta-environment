@@ -1,0 +1,13 @@
+module UndefinedQuery
+
+imports PicoExtraction
+
+exports
+  context-free syntax
+	undefinedVars(PROGRAM)   -> List
+        undefined-query(RSTORE)  -> RSTORE
+
+hiddens
+  variables
+	      "Rstore" [0-9\']*  -> RSTORE
+

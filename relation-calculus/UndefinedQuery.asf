@@ -1,0 +1,18 @@
+equations
+
+[an-1] extractRelations(Program) = Rstore,
+       undefined-query(Rstore) = Rstore'
+       =========================================================
+       undefinedVars(Program) = convertl(rel-value(UNDEF, Rstore'))
+
+
+[uq-1] undefined-query(Rstore) =
+       eval-rscript(
+      	def PRED   = inv(SUCC)
+        fun reaches_root(R) = elem(ROOT, range(R))
+        fun get_stat(N) =  domR(OCCURS, {N})
+        def UNDEF = { <V, N> in USES | reaches_root(dominators(get_stat(N), DEFS, PRED)) },
+        Rstore
+       )
+
+

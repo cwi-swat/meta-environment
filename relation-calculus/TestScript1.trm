@@ -63,5 +63,7 @@ def bag6     = fdom(DEFS)
 
 %%def bag9 =  left(DEFS, 'x)
 
+def bag10 = closure('{n5}, PRED)
+
 )
 
