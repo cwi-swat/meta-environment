@@ -1,22 +1,8 @@
-%%%%
-%%%% $Id$
-%%%%
-%%%% This file is part of the specification
-%%%%    "Box: Language, Laws and Formatters"
-%%%%
-%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
-%%%%
-%%%% Programming Research Group, University of Amsterdam
-%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
-%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
-%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
-%%%%
-
 equations
 
   [0] T-ESC[""]       = ""
   [0] MTH[""]         = ""
-  [0] MTH[a] * MTH[b] = MTH[a * b]
+  [0] MTH[a] || MTH[b] = MTH[c] when c := a || b
 
 %% Several (combinations of) {\ascii} characters can be mapped
 %% to mathematical symbols. To indicate that this is desired
@@ -25,60 +11,60 @@ equations
 
 %% brackets
 
-   [Esc] ESC["{"]      = MTH["\{"]        [Esc] ESC["}"]      = MTH["\}"]
+   [Esc] ESC["{"]      = MTH["\\{"]        [Esc] ESC["}"]      = MTH["\\}"]
    [Esc] ESC["["]      = MTH["["]         [Esc] ESC["]"]      = MTH["]"]
    [Esc] ESC["("]      = MTH["("]         [Esc] ESC[")"]      = MTH[")"]
 
 %% relational
 
-   [Esc] ESC[">"]      = MTH[">"]         [Esc] ESC[">="]     = MTH["\geq"]
-   [Esc] ESC["<"]      = MTH["<"]         [Esc] ESC["<="]     = MTH["\leq"]
+   [Esc] ESC[">"]      = MTH[">"]         [Esc] ESC[">="]     = MTH["\\geq"]
+   [Esc] ESC["<"]      = MTH["<"]         [Esc] ESC["<="]     = MTH["\\leq"]
 
-   [Esc] ESC["<<"]      = MTH["\ll"]
-   [Esc] ESC[">>"]      = MTH["\gg"]
+   [Esc] ESC["<<"]      = MTH["\\ll"]
+   [Esc] ESC[">>"]      = MTH["\\gg"]
 
-   [Esc] ESC["~"]      = MTH["\sim"]
+   [Esc] ESC["~"]      = MTH["\\sim"]
 
 %% operators
 
-   [Esc] ESC["#"]      = "#"              [Esc] ESC["\"] = "\"
+   [Esc] ESC["#"]      = "#"              [Esc] ESC["\\"] = "\\"
    [Esc] ESC["_"]      = "_"
 
-   [Esc] ESC["^"]      = MTH["\HAT"]      [Esc] ESC["="]      = MTH["="]
+   [Esc] ESC["^"]      = MTH["\\HAT"]      [Esc] ESC["="]      = MTH["="]
    [Esc] ESC["||"]     = MTH["||"]
-   [Esc] ESC["."]      = MTH["\cdot"]     [Esc] ESC["|"]      = MTH["|"]
+   [Esc] ESC["."]      = MTH["\\cdot"]     [Esc] ESC["|"]      = MTH["|"]
    [Esc] ESC[":"]      = MTH[":"]
    [Esc] ESC["-"]      = MTH["-"]         [Esc] ESC["+"]      = MTH["+"]
    [Esc] ESC["/"]      = MTH["/"]         [Esc] ESC["*"]      = MTH["*"]
-   [Esc] ESC["++"]     = MTH["\conc"]
+   [Esc] ESC["++"]     = MTH["\\conc"]
 
 %% arrows
 
-   [Esc] ESC["->"]     = MTH["\rightarrow"]
-   [Esc] ESC["<-"]     = MTH["\leftarrow"]
-   [Esc] ESC["=>"]     = MTH["\Rightarrow"]
-   [Esc] ESC["-->"]    = MTH["\longrightarrow"]
-   [Esc] ESC["<--"]    = MTH["\longleftarrow"]
-   [Esc] ESC["==>"]    = MTH["\Longrightarrow"]
+   [Esc] ESC["->"]     = MTH["\\rightarrow"]
+   [Esc] ESC["<-"]     = MTH["\\leftarrow"]
+   [Esc] ESC["=>"]     = MTH["\\Rightarrow"]
+   [Esc] ESC["-->"]    = MTH["\\longrightarrow"]
+   [Esc] ESC["<--"]    = MTH["\\longleftarrow"]
+   [Esc] ESC["==>"]    = MTH["\\Longrightarrow"]
 
-   [Esc] ESC["forall"] = MTH["\forall"]
+   [Esc] ESC["forall"] = MTH["\\forall"]
 
 %% comment signs
 
-   [Esc] ESC["--"]     = MTH["\MinMin{}"]
-   [Esc] ESC["..."]    = MTH["\ELISION{}"]
-   [Esc] ESC["%%"]     = MTH["\PRCNT\PRCNT"]
-   [Esc] ESC["%"]      = MTH["\PRCNT"]
+   [Esc] ESC["--"]     = MTH["\\MinMin{}"]
+   [Esc] ESC["..."]    = MTH["\\ELISION{}"]
+   [Esc] ESC["%%"]     = MTH["\\PRCNT\\PRCNT"]
+   [Esc] ESC["%"]      = MTH["\\PRCNT"]
 
 
    [Esc] ESC[""]       = ""
 
 %% vod stuff
 
-   [Esc] ESC["_wa"] = MTH["\oplus"]
+   [Esc] ESC["_wa"] = MTH["\\oplus"]
 
-   [Esc] ESC["_co"] = MTH["\lhd"]
+   [Esc] ESC["_co"] = MTH["\\lhd"]
 
-   [Esc] ESC["_comp"] = MTH["\otimes"]
+   [Esc] ESC["_comp"] = MTH["\\otimes"]
 
-   [Esc] ESC["_empty-set"] = MTH["\phi_c"]
+   [Esc] ESC["_empty-set"] = MTH["\\phi_c"]

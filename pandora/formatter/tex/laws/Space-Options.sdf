@@ -26,9 +26,9 @@ imports basic/Integers
 
 exports
   context-free syntax
-    "H" ( SpaceOption* ) -> Integer
-    "V" ( SpaceOption* ) -> Integer
-    "I" ( SpaceOption* ) -> Integer
+    "H" ( SpaceOption* ) -> NatCon
+    "V" ( SpaceOption* ) -> NatCon
+    "I" ( SpaceOption* ) -> NatCon
 hiddens
   variables
     [hvi][0-9\']* -> NatCon

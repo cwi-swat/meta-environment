@@ -1,12 +1,17 @@
 module laws/Basic-Box-Laws
 
-imports languages/box/syntax/Box 
 imports laws/Empty-Box-Laws 
 imports laws/S-Option-Laws
 imports basic/Strings
+imports basic/Integers
+
+exports
+  context-free syntax
+    "I*" SpaceOption* "[" Box* "]" -> Box*
 
 hiddens
   variables
+    "indent"[0-9]* -> NatCon
     [abc][0-9]*     -> StrCon
     [B-E][0-9]*    -> Box
     [B-E]"+"[0-9]* -> Box+

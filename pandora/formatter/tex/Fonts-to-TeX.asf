@@ -1,17 +1,3 @@
-%%%%
-%%%% $Id$
-%%%%
-%%%% This file is part of the specification
-%%%%    "Box: Language, Laws and Formatters"
-%%%%
-%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
-%%%%
-%%%% Programming Research Group, University of Amsterdam
-%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
-%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
-%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
-%%%%
-
 equations
 
 %% \paragraph{Font Operators}
@@ -20,7 +6,7 @@ equations
 %% the font.
 
    [Fname]
-        fname(F fn = fid(chr*)) = box-str-con(""" "\" chr* "{" "}" """)
+        fname(F fn = fontid(chr*)) = strcon(""" "\" chr* "{" "}" """)
 
    [Fnt]
         fname(f) = b, ["~" / " "] rm-adj(" ", specials(deslash(a))) = a'

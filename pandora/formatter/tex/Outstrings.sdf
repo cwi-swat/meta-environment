@@ -12,7 +12,7 @@ module Outstrings
     context-free syntax
       "string" "of" Integer "layoutchars"  -> String
       "string" "of" Integer String "chars" -> String
-      deslash(String)                      -> String 
+      deslash(StrCon)                      -> StrCon 
 
   hiddens
     context-free syntax

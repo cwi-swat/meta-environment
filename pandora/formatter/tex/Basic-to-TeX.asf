@@ -1,17 +1,3 @@
-%%%%
-%%%% $Id$
-%%%%
-%%%% This file is part of the specification
-%%%%    "Box: Language, Laws and Formatters"
-%%%%
-%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
-%%%%
-%%%% Programming Research Group, University of Amsterdam
-%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
-%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
-%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
-%%%%
-
 equations
 
 %% \paragraph{Documentation}
@@ -42,7 +28,7 @@ equations
 %% Strings are translated by removing their doublequotes.
 
    [TeX'str]          tex("")  = (\S{})
-   [default-TeX'str]  tex(a)   = (\S{rmq(["~" / " "] specials(deslash(a)))})
+   [default-TeX'str]  tex(a)   = (\S{rmq(specials(deslash(a)))})
 
 %% [This is not very decent because it implies that the resulting
 %% code does not conform to the syntax of \TeX\ as we defined
@@ -82,35 +68,35 @@ equations
 %%}
 
     [0] specials("") = ""
-    [0] specials(box-str-con(""" "#" chr* """))
-        = "\#" * specials(box-str-con(""" chr* """))
-    [0] specials(box-str-con(""" "_" chr* """))
-        = "\_" * specials(box-str-con(""" chr* """))
-    [0] specials(box-str-con(""" "\" chr* """))
-        = "$\backslash{}$" * specials(box-str-con(""" chr* """))
-    [0] specials(box-str-con(""" "<" chr* """))
-        = "$<$" * specials(box-str-con(""" chr* """))
-    [0] specials(box-str-con(""" ">" chr* """))
-        = "$>$" * specials(box-str-con(""" chr* """))
-    [0] specials(box-str-con(""" "|" chr* """))
-        = "$|$" * specials(box-str-con(""" chr* """))
-    [0] specials(box-str-con(""" "*" chr* """))
-        = "$*$" * specials(box-str-con(""" chr* """))
-    [0] specials(box-str-con(""" "{" chr* """))
-        = "$\{$" * specials(box-str-con(""" chr* """))
-    [0] specials(box-str-con(""" "}" chr* """))
-        = "$\}$" * specials(box-str-con(""" chr* """))
-    [0] specials(box-str-con(""" "~" chr* """))
-        = "$\sim$" * specials(box-str-con(""" chr* """))
-    [0] specials(box-str-con(""" "%" chr* """))
-        = "\%" * specials(box-str-con(""" chr* """))
-    [0] specials(box-str-con(""" "&" chr* """))
-        = "\&" * specials(box-str-con(""" chr* """))
+    [0] specials(strcon(""" "#" chr* """)) = a when
+          a := "\\#" || specials(strcon(""" chr* """))
+    [0] specials(strcon(""" "_" chr* """)) = a when
+          a := "\\_" || specials(strcon(""" chr* """))
+    [0] specials(strcon(""" "\" chr* """)) = a when
+          a := "$\\backslash$" || specials(strcon(""" chr* """))
+    [0] specials(strcon(""" "<" chr* """)) = a when
+          a := "$<$" || specials(strcon(""" chr* """))
+    [0] specials(strcon(""" ">" chr* """)) = a when
+          a := "$>$" || specials(strcon(""" chr* """))
+    [0] specials(strcon(""" "|" chr* """)) = a when
+          a := "$|$" || specials(strcon(""" chr* """))
+    [0] specials(strcon(""" "*" chr* """)) = a when
+          a := "$*$" || specials(strcon(""" chr* """))
+    [0] specials(strcon(""" "{" chr* """)) = a when
+          a := "$\\{$" || specials(strcon(""" chr* """))
+    [0] specials(strcon(""" "}" chr* """)) = a when
+          a := "$\\}$" || specials(strcon(""" chr* """))
+    [0] specials(strcon(""" "~" chr* """)) = a when
+          a := "$\\sim$" || specials(strcon(""" chr* """))
+    [0] specials(strcon(""" "%" chr* """)) = a when
+          a := "\\%" || specials(strcon(""" chr* """))
+    [0] specials(strcon(""" "&" chr* """)) = a when
+          a := "\\&" || specials(strcon(""" chr* """))
 
-    [0] specials(box-str-con(""" """ chr* """))
-        = "{\tt{}" * box-str-con(""" """ """) * "}" * specials(box-str-con(""" chr* """))
+    [0] specials(strcon(""" """ chr* """)) = a when
+          a := "{\\tt{}" || strcon(""" """ """) || "}" || specials(strcon(""" chr* """))
 
-    [default-0] specials(box-str-con(""" chr chr* """))
-        = box-str-con(""" chr """) * specials(box-str-con(""" chr* """))
+    [default-0] specials(strcon(""" chr chr* """)) = a when
+                  a := strcon(""" chr """) || specials(strcon(""" chr* """))
 
 %%%

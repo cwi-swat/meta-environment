@@ -24,8 +24,8 @@ equations
 %% Strings can be concatenated in a {\sf H} box when its horizontal space is zero.
 
    [C'H'str]  
-      H(o*) = 0,
-      c = a || b
+      H(o*) == 0,
+      c := a || b
       ===>
       Ho*[B* a b C*] = Ho*[B* c C*]
 
@@ -104,7 +104,9 @@ equations
 %% indented {\sf I} box we can derive the following equation independent
 %% of the context.
 
-   [C'IinI]     Io*1[Io*2[B]]             = I is = I(o*1) + I(o*2) [B]
+   [C'IinI]  indent := I(o*1) + I(o*2)
+             ====>
+             Io*1[Io*2[B]] = I is=indent [B]
 
 %% \paragraph{Singleton Boxes}
 %%
@@ -216,3 +218,7 @@ equations
 
 
 %%%
+  [0] I* o* [   ]    =
+  [0] I* o* [ B B* ] = I o*[B] I* o* [ B* ]
+
+  

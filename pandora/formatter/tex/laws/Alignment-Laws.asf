@@ -1,23 +1,9 @@
-%%%%
-%%%% $Id$
-%%%%
-%%%% This file is part of the specification
-%%%%    "Box: Language, Laws and Formatters"
-%%%%
-%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
-%%%%
-%%%% Programming Research Group, University of Amsterdam
-%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
-%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
-%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
-%%%%
-
 equations
 
 %% \paragraph{RWD}
 
   [0] RWD[]     =
-  [0] RWD[B B*] = "" ++ RWD[B*]
+  [0] RWD[B B*] = "" RWD[B*]
 
 %% \paragraph{One Row}
 
@@ -25,7 +11,7 @@ equations
   [default-0] A(ao*) so* [ B       ] = V[B]
 
   [0] H* so*[B*, , D*]     =
-  [0] H* so*[B*, C C*, D*] = H so*[B* C D*] ++ H* so*[B*, C*, D*]
+  [0] H* so*[B*, C C*, D*] = H so*[B* C D*] H* so*[B*, C*, D*]
 
   [0] V so*1 [ B* R[C*] D* ]    =  V so*1 [ B* H[C*] D* ]
   [0] V so*1 [ A(ao*)so*2[B*] ] = A(ao*)so*2[B*]
@@ -44,9 +30,9 @@ equations
         B* E* !=
         ===========================
         A(ao*)so*[B* R[C*1 Vso*[D+1 D+2] C*2] E*] =
-        A(ao*)so*[B* R[C*1 Vso*[D+1]] R[RWD[C*1] ++ Vso*[D+2] C*2] E*]
+        A(ao*)so*[B* R[C*1 Vso*[D+1]] R[RWD[C*1]  Vso*[D+2] C*2] E*]
 
-  [0] Hso*[B* A(ao*)so*2[C1 C* C2] D*] = A(ao*)so*2[Hso*[B* C1] ++ H* so*[WD[Hso*[B*]], C* Hso*[C2 D*], ]]
+  [0] Hso*[B* A(ao*)so*2[C1 C* C2] D*] = A(ao*)so*2[Hso*[B* C1]  H* so*[WD[Hso*[B*]], C* Hso*[C2 D*], ]]
 
 %% An aligment with more than one line acts as a vertical box
 
@@ -56,7 +42,8 @@ equations
 
 %% \paragraph{H}
 
-  [0] H so*1 [ B* A(ao*) so*2 [ C1 C* C2 ] D+ ] = A(ao*) so*2 [ H so*1 [ B* C1] ++ H* so*1[WD[Hso*1[B*]], C* H so*1[ C2 D+ ], ] ]
+  [0] H so*1 [ B* A(ao*) so*2 [ C1 C* C2 ] D+ ] = 
+        A(ao*) so*2 [ H so*1 [ B* C1] H* so*1[WD[Hso*1[B*]], C* H so*1[ C2 D+ ], ] ]
 
   [0] H so*1 [ B* R[ C1 C* C2 ] D* ]        = R[ H so*1 [ B* C1] C* H so*1 [ C2 D* ] ]
 

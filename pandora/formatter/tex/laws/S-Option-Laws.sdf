@@ -1,6 +1,5 @@
 module laws/S-Option-Laws
 
-imports languages/box/syntax/Box 
 imports laws/Space-Options
 
 hiddens
