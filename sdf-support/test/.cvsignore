@@ -4,3 +4,4 @@ Makefile.in
 *.o
 grammars
 sorts
+pt2sdf
