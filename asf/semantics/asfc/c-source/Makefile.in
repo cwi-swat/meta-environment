@@ -1,41 +1,44 @@
 # Directory: compiler/c-source
 
 # Configure variable substitutions
-PRODUCT     = new-meta
-VERSION     = 0.02
+PRODUCT     = @PRODUCT@
+VERSION     = @VERSION@
 
-srcdir      = .
-top_srcdir  = ../..
-prefix      = ../..
-exec_prefix = ${prefix}
+@SET_MAKE@
+
+srcdir      = @srcdir@
+VPATH       = @srcdir@
+top_srcdir  = @top_srcdir@
+prefix      = @prefix@
+exec_prefix = @exec_prefix@
 bindir      = $(exec_prefix)/bin
 libdir      = $(exec_prefix)/lib
 includedir  = $(prefix)/include
 docdir      = $(top_srcdir)/docs
 
-SHELL       = /bin/sh
-CC          = cc
-MAKE        = gmake
-CFLAGS      = -O ${XCFLAGS}
-DEFS        =  -DHAVE_LIBDL=1  ${XDEFS}
-INCLUDES    =  ${XINCLUDES}
-LIBS        = -ldl  ${XLIBS}
-SOCKLIBS    = -lsocket -lnsl
+SHELL       = @SHELL@
+CC          = @CC@
+CFLAGS      = @CFLAGS@ ${XCFLAGS}
+CPP         = @CPP@
+CPPFLAGS    = @CPP@ ${XCPPFLAGS}
+DEFS        = @DEFS@ ${XDEFS}
+INCLUDES    = @INCLUDES@ ${XINCLUDES}
+LIBS        = @LIBS@ ${XLIBS}
+SOCKLIBS    = @SOCKLIBS@
+GELLIBS     = @GELLIBS@
 
-INSTALL     = $(top_srcdir)/install-sh
-INSTALL_DATA= $(top_srcdir)/install-data-sh
-INSTALL_PROG= $(top_srcdir)/install-prog-sh
-UNINSTALL   = $(top_srcdir)/uninstall-sh
+INSTALL     = @INSTALL@
+INSTALL_DATA    = @INSTALL_DATA@
+INSTALL_PROG    = @INSTALL_PROG@
+UNINSTALL   = @UNINSTALL@
 
-AR          = ar
-
-ATERM       = /home/markvdb/NEW-META/aterm
+ATERM       = @NEWATERM@/aterm
 
 include Make.modules
 
 CC	= cc
 INCLUDE = -I$(ATERM)/aterm -I$(ATERM)/asfix -I$(ATERM)/toolbus \
-          -I/home/markvdb/NEW-META/new-meta/compiler/support
+          -I../support
 CFLAGS	= -O $(INCLUDE)
 LIBS	= -L$(ATERM)/aterm  -L$(ATERM)/asfix -L$(ATERM)/toolbus \
         -lATerm-cc -lAsFix-cc -lATB-cc -L../support -lsupport-cc \
