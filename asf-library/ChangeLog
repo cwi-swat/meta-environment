@@ -1,3 +1,13 @@
+2001/05/21 ({jurgenv,markvdb}@cwi.nl)
+  * Made built-in compilation more sophisticated. 
+    - Every subdirectory can declare a PACKAGE_SRC variable that tells in which 
+      files the built-ins are implemented
+    - Every declared built-in in a sdf file is tested to have an
+      implementation in one of the declared PACKAGE_SRC files.
+    - Every PACKAGE_SRC is registered in ${top}/src/objects.lst
+    - Every built-in is registered in ${top}/src/builtins.lst
+    - Using these files the library is finally collected and built.
+      
 2001/05/17 ({jurgenv,markvdb}@cwi.nl)
   * Added sdf2 syntax
   * Refactored sdf2 syntax
