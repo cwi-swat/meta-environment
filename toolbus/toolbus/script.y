@@ -521,6 +521,7 @@ read_print:
 		   mk_coords(script_name, $1.lino, $1.pos, $4.elino, $4.epos));
            range($$,$1,$4);
          }
+     ;
 
 shutdown:
        SHUTDOWN '(' term ')'
@@ -626,6 +627,7 @@ form_decl:
                                var_result($$.u.term) = $4.u.bool;
 			       free($1.u.string);
                              }
+     ;
 
 form_list:   
        form_decl             { $$.u.term_list =  mk_list1($1.u.term); range($$,$1,$1); }     
@@ -642,6 +644,7 @@ type:
 
 var_decl:
        NAME ':' type         { $$.u.term = mk_var($1.u.string, current_def_name, $3.u.term); free($1.u.string);}
+     ;
 
 var_list:   
        var_decl              { $$.u.term_list =  mk_list1($1.u.term); range($$,$1,$1); }     
@@ -658,6 +661,7 @@ let  : let_head let_tail
 		       mk_atom(a_endlet, $1.u.term_list, 
 			       mk_coords(script_name, $2.lino, $2.pos, $2.elino, $2.epos))));
        }
+     ;
 
 let_head:
        LET var_list IN       { $$.u.term_list = $2.u.term_list;
@@ -685,6 +689,7 @@ proc_def:
            current_vars = NULL;
            range($$,$1,$4);
          }
+     ;
 
 host:
        HOST '=' STRING         { $$.u.string = $3.u.string; range($$,$1,$3); }
@@ -705,6 +710,7 @@ details:
 
 tool_def_name:
       TOOL IDENT               { $$.u.string = current_def_name = $2.u.string; range($$,$1,$2); }
+     ;
 
 tool_def:       
      tool_def_name formals IS '{' host command details '}'
@@ -743,6 +749,7 @@ proc_call_in_tb_list:
        proc_call_in_tb
      | proc_call_in_tb ',' proc_call_in_tb_list 
          { $$.u.proc = mk_dot($1.u.proc, $3.u.proc); range($$,$1,$3); }
+     ;
 
 toolbus:
        TOOLBUS '(' proc_call_in_tb_list ')'

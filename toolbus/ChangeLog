@@ -3,8 +3,10 @@ $Id$
 2002-11-25  Hayco de Jong  <jong@cwi.nl>
   * ChangeLog:
     - adopted new ChangeLog style which seems to be in use :-)
+  * toolbus/script.y:
+    - fix: new version of bison found 7 missing ';' separators
   * adapters/java-adapter/toolbus/tifstojava.in:
-    - fix aterm-java classes are in @ATERM_JAVA@, no longer in @ATERM@
+    - fix: aterm-java classes are in @ATERM_JAVA@, no longer in @ATERM@
 
 2002/10/30 (vinju@cwi.nl)
  * Added new dependency on aterm-java package
