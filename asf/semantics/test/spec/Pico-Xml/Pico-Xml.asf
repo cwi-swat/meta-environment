@@ -1,0 +1,3 @@
+equations
+
+[] xml(Str-con, Int) = <<string Id=Int> Str-con </string>, Int + 1>
