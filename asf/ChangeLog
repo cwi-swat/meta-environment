@@ -1,3 +1,10 @@
+2001/11/12 (jurgenv@cwi.nl)
+ * Added a '-l' option to asfe that replaces all layout by a single space
+   in the output term (used for testing compatibility with compiled
+   specificatons).
+ * Moved tests of asfc and asfe to shared test directory. Results for
+   interpreted and compiled specifications are now checked to be equal.
+ * Added a number of tests for traversal functions and sdf2 symbols.
 
 2001/11/07 (jurgenv@cwi.nl)
  * Fixed a bug in the compiler. More than one rewrite rules DIRECTLY over a 

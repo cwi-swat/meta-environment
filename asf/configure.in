@@ -148,6 +148,11 @@ AC_OUTPUT(
    asfe/test/ref/Makefile
    asfe/test/terms/Makefile
    utils/Makefile
+   test/Makefile
+   test/eqs/Makefile
+   test/input/Makefile
+   test/output/Makefile
+   test/c-code/Makefile
 )
 
 dnl }}}
