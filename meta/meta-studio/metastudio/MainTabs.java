@@ -1,5 +1,6 @@
 package metastudio;
 
+import java.awt.BorderLayout;
 import java.io.IOException;
 
 import javax.swing.JComponent;
@@ -26,8 +27,10 @@ public class MainTabs extends JPanel {
     
     public MainTabs(ATermFactory factory, String[] args) {
         this.factory = factory;
+        setLayout(new BorderLayout());
         createMainTabs(args);
         add(tabs);
+        
     }
     
     private void spawn(Runnable component, String name) {
@@ -40,11 +43,10 @@ public class MainTabs extends JPanel {
         tabs = new JTabbedPane();
         ModuleBrowser moduleBrowser = new ModuleBrowser(factory, args);
         spawn(moduleBrowser, "module-browser");
+        addTab(tabs, MODULES, moduleBrowser);
         
         TreeBrowser parseTreeBrowser = new TreeBrowser(new MetaGraphFactory((PureFactory) factory), args);
         spawn(parseTreeBrowser, "tree-browser");
-        
-        addTab(tabs, MODULES, moduleBrowser);
         addTab(tabs, PARSE_TREE, parseTreeBrowser);
         
 		try {

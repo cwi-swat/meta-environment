@@ -8,8 +8,6 @@ javadir = ${prefix}/classes/metastudio
 EXTRA_DIST = ${java_JAVA}
 
 java_JAVA = \
-	BoxTree.java \
 	GraphPanel.java \
-	NodeBox.java \
 	NodeSizer.java \
 	ZoomableGraphPanel.java
