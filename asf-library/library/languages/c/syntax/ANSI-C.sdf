@@ -394,215 +394,215 @@ context-free syntax
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 context-free syntax
-	DeclarationSpecifiers ";" -> Declaration
-	DeclarationSpecifiers InitDeclaratorList ";" -> Declaration
+DeclarationSpecifiers ";" -> Declaration
+DeclarationSpecifiers InitDeclaratorList ";" -> Declaration
 
 context-free syntax
-	StorageClassSpecifier -> DeclarationSpecifiers
-	StorageClassSpecifier DeclarationSpecifiers -> DeclarationSpecifiers
-	TypeSpecifier -> DeclarationSpecifiers
-	TypeSpecifier DeclarationSpecifiers -> DeclarationSpecifiers
-	TypeQualifier -> DeclarationSpecifiers
-	TypeQualifier DeclarationSpecifiers -> DeclarationSpecifiers
+StorageClassSpecifier -> DeclarationSpecifiers
+StorageClassSpecifier DeclarationSpecifiers -> DeclarationSpecifiers
+TypeSpecifier -> DeclarationSpecifiers
+TypeSpecifier DeclarationSpecifiers -> DeclarationSpecifiers
+TypeQualifier -> DeclarationSpecifiers
+TypeQualifier DeclarationSpecifiers -> DeclarationSpecifiers
 
 context-free syntax
 
 {InitDeclarator ","}+ -> InitDeclaratorList
 
 context-free syntax
-	Declarator -> InitDeclarator
-	Declarator "=" Initializer -> InitDeclarator
+Declarator -> InitDeclarator
+Declarator "=" Initializer -> InitDeclarator
 
 context-free syntax
-	"typedef"
-	| "extern"
-	| "static"
-	| "auto"
-	| "register"
-	-> StorageClassSpecifier
+"typedef"
+| "extern"
+| "static"
+| "auto"
+| "register"
+-> StorageClassSpecifier
 
 context-free syntax
-	"void"
-	| "char"
-	| "short"
-	| "int"
-	| "long"
-	| "float"
-	| "double"
-	| "signed"
-	| "unsigned"
-	| StructOrUnionSpecifier
-	| EnumSpecifier
-	| Identifier
-	-> TypeSpecifier
+"void"
+| "char"
+| "short"
+| "int"
+| "long"
+| "float"
+| "double"
+| "signed"
+| "unsigned"
+| StructOrUnionSpecifier
+| EnumSpecifier
+| Identifier
+-> TypeSpecifier
 
 context-free syntax
-	StructOrUnion Identifier ("{"|"<%") StructDeclarationList ("}"|"%>")	-> StructOrUnionSpecifier
-	StructOrUnion ("{"|"<%") StructDeclarationList  ("}"|"%>")	-> StructOrUnionSpecifier
-	StructOrUnion Identifier-> StructOrUnionSpecifier
+StructOrUnion Identifier ("{"|"<%") StructDeclarationList ("}"|"%>")	-> StructOrUnionSpecifier
+StructOrUnion ("{"|"<%") StructDeclarationList  ("}"|"%>")	-> StructOrUnionSpecifier
+StructOrUnion Identifier-> StructOrUnionSpecifier
 
 context-free syntax
-	"struct"
-	| "union"
-	-> StructOrUnion
+"struct"
+| "union"
+-> StructOrUnion
 
 context-free syntax
-	StructDeclaration+ -> StructDeclarationList
+StructDeclaration+ -> StructDeclarationList
 
 context-free syntax
-	SpecifierQualifierList StructDeclaratorList ";" -> StructDeclaration
+SpecifierQualifierList StructDeclaratorList ";" -> StructDeclaration
 
 context-free syntax
 
 (TypeSpecifier | TypeQualifier)+ -> SpecifierQualifierList
 
 context-free syntax
-	{StructDeclarator ","}+ -> StructDeclaratorList
+{StructDeclarator ","}+ -> StructDeclaratorList
 
 context-free syntax
-	Declarator -> StructDeclarator
-	":" ConstantExpression -> StructDeclarator
-	Declarator ":" ConstantExpression -> StructDeclarator
+Declarator -> StructDeclarator
+":" ConstantExpression -> StructDeclarator
+Declarator ":" ConstantExpression -> StructDeclarator
 
 context-free syntax
-	"enum" ("{"|"<%") EnumeratorList  ("}"|"%>")	 -> EnumSpecifier
-	"enum" Identifier ("{"|"<%") EnumeratorList  ("}"|"%>")	 -> EnumSpecifier
-	"enum" Identifier -> EnumSpecifier
+"enum" ("{"|"<%") EnumeratorList  ("}"|"%>")	 -> EnumSpecifier
+"enum" Identifier ("{"|"<%") EnumeratorList  ("}"|"%>")	 -> EnumSpecifier
+"enum" Identifier -> EnumSpecifier
 
 context-free syntax
-	{Enumerator ","}+ -> EnumeratorList
+{Enumerator ","}+ -> EnumeratorList
 
 context-free syntax
-	Identifier -> Enumerator
-	Identifier "=" ConstantExpression -> Enumerator
+Identifier -> Enumerator
+Identifier "=" ConstantExpression -> Enumerator
 
 context-free syntax
-	"const" -> TypeQualifier
-	"volatile" -> TypeQualifier
+"const" -> TypeQualifier
+"volatile" -> TypeQualifier
 
 context-free syntax
-	Pointer DirectDeclarator -> Declarator
-	DirectDeclarator -> Declarator
+Pointer DirectDeclarator -> Declarator
+DirectDeclarator -> Declarator
 
 context-free syntax
-	Identifier -> DirectDeclarator
-	"(" Declarator ")" -> DirectDeclarator
-	DirectDeclarator ("["|"<:")	 ConstantExpression ("]"|":>")	 -> DirectDeclarator
-	DirectDeclarator ("["|"<:")	 ("]"|":>")	 -> DirectDeclarator
-	DirectDeclarator "(" ParameterTypeList ")" -> DirectDeclarator
-	DirectDeclarator "(" IdentifierList ")" -> DirectDeclarator
-	DirectDeclarator "(" ")" -> DirectDeclarator
+Identifier -> DirectDeclarator
+"(" Declarator ")" -> DirectDeclarator
+DirectDeclarator ("["|"<:")	 ConstantExpression ("]"|":>")	 -> DirectDeclarator
+DirectDeclarator ("["|"<:")	 ("]"|":>")	 -> DirectDeclarator
+DirectDeclarator "(" ParameterTypeList ")" -> DirectDeclarator
+DirectDeclarator "(" IdentifierList ")" -> DirectDeclarator
+DirectDeclarator "(" ")" -> DirectDeclarator
 
 context-free syntax
-	"*" -> Pointer
-	"*" TypeQualifierList -> Pointer
-	"*" Pointer -> Pointer
-	"*" TypeQualifierList Pointer -> Pointer
+"*" -> Pointer
+"*" TypeQualifierList -> Pointer
+"*" Pointer -> Pointer
+"*" TypeQualifierList Pointer -> Pointer
 
 context-free syntax
-	TypeQualifier+ -> TypeQualifierList
+TypeQualifier+ -> TypeQualifierList
 
 context-free syntax
-	ParameterList -> ParameterTypeList
-	ParameterList "," "..." -> ParameterTypeList
+ParameterList -> ParameterTypeList
+ParameterList "," "..." -> ParameterTypeList
 
 context-free syntax
-	{ParameterDeclaration ","}+ -> ParameterList
+{ParameterDeclaration ","}+ -> ParameterList
 
 context-free syntax
-	DeclarationSpecifiers Declarator -> ParameterDeclaration
-	DeclarationSpecifiers AbstractDeclarator -> ParameterDeclaration
-	DeclarationSpecifiers -> ParameterDeclaration
+DeclarationSpecifiers Declarator -> ParameterDeclaration
+DeclarationSpecifiers AbstractDeclarator -> ParameterDeclaration
+DeclarationSpecifiers -> ParameterDeclaration
 
 context-free syntax
-	{Identifier ","}+ -> IdentifierList
+{Identifier ","}+ -> IdentifierList
 
 context-free syntax
-	SpecifierQualifierList -> TypeName
-	SpecifierQualifierList AbstractDeclarator -> TypeName
+SpecifierQualifierList -> TypeName
+SpecifierQualifierList AbstractDeclarator -> TypeName
 
 context-free syntax
-	Pointer -> AbstractDeclarator
-	DirectAbstractDeclarator -> AbstractDeclarator
-	Pointer DirectAbstractDeclarator -> AbstractDeclarator
+Pointer -> AbstractDeclarator
+DirectAbstractDeclarator -> AbstractDeclarator
+Pointer DirectAbstractDeclarator -> AbstractDeclarator
 
 context-free syntax
-	"(" AbstractDeclarator ")" -> DirectAbstractDeclarator
-	("["|"<:")	 ("]"|":>")	 -> DirectAbstractDeclarator
-	("["|"<:")	 ConstantExpression ("]"|":>")	 -> DirectAbstractDeclarator
-	DirectAbstractDeclarator ("["|"<:")	 ("]"|":>")	 -> DirectAbstractDeclarator
-	DirectAbstractDeclarator ("["|"<:")	 ConstantExpression ("]"|":>")	 -> DirectAbstractDeclarator
-	"(" ")" -> DirectAbstractDeclarator
-	"(" ParameterTypeList ")" -> DirectAbstractDeclarator
-	DirectAbstractDeclarator "(" ")" -> DirectAbstractDeclarator
-	DirectAbstractDeclarator "(" ParameterTypeList ")" -> DirectAbstractDeclarator
+"(" AbstractDeclarator ")" -> DirectAbstractDeclarator
+("["|"<:")	 ("]"|":>")	 -> DirectAbstractDeclarator
+("["|"<:")	 ConstantExpression ("]"|":>")	 -> DirectAbstractDeclarator
+DirectAbstractDeclarator ("["|"<:")	 ("]"|":>")	 -> DirectAbstractDeclarator
+DirectAbstractDeclarator ("["|"<:")	 ConstantExpression ("]"|":>")	 -> DirectAbstractDeclarator
+"(" ")" -> DirectAbstractDeclarator
+"(" ParameterTypeList ")" -> DirectAbstractDeclarator
+DirectAbstractDeclarator "(" ")" -> DirectAbstractDeclarator
+DirectAbstractDeclarator "(" ParameterTypeList ")" -> DirectAbstractDeclarator
 
 context-free syntax
-	AssignmentExpression -> Initializer
-	("{"|"<%") InitializerList  ("}"|"%>")	 -> Initializer
-	("{"|"<%") InitializerList ","  ("}"|"%>")	 -> Initializer
+AssignmentExpression -> Initializer
+("{"|"<%") InitializerList  ("}"|"%>")	 -> Initializer
+("{"|"<%") InitializerList ","  ("}"|"%>")	 -> Initializer
 
 context-free syntax
-	{Initializer ","}+ -> InitializerList
+{Initializer ","}+ -> InitializerList
 
 context-free syntax
-	LabeledStatement -> Statement
-	CompoundStatement -> Statement
-	ExpressionStatement -> Statement
-	SelectionStatement -> Statement
-	IterationStatement -> Statement
-	JumpStatement -> Statement
+LabeledStatement -> Statement
+CompoundStatement -> Statement
+ExpressionStatement -> Statement
+SelectionStatement -> Statement
+IterationStatement -> Statement
+JumpStatement -> Statement
 
 context-free syntax
-	Identifier ":" Statement -> LabeledStatement
-	"case" ConstantExpression ":" Statement -> LabeledStatement
-	"default" ":" Statement -> LabeledStatement
+Identifier ":" Statement -> LabeledStatement
+"case" ConstantExpression ":" Statement -> LabeledStatement
+"default" ":" Statement -> LabeledStatement
 
 context-free syntax
-	("{"|"<%")  ("}"|"%>")	 -> CompoundStatement
-	("{"|"<%") StatementList  ("}"|"%>")	 -> CompoundStatement
-	("{"|"<%") DeclarationList  ("}"|"%>")	 -> CompoundStatement
-	("{"|"<%") DeclarationList StatementList  ("}"|"%>")	 -> CompoundStatement
+("{"|"<%")  ("}"|"%>")	 -> CompoundStatement
+("{"|"<%") StatementList  ("}"|"%>")	 -> CompoundStatement
+("{"|"<%") DeclarationList  ("}"|"%>")	 -> CompoundStatement
+("{"|"<%") DeclarationList StatementList  ("}"|"%>")	 -> CompoundStatement
 
 context-free syntax
-	Declaration+ -> DeclarationList
+Declaration+ -> DeclarationList
 
 context-free syntax
-	Statement+ -> StatementList
+Statement+ -> StatementList
 
-	";" -> ExpressionStatement
-	Expression ";" -> ExpressionStatement
-
-context-free syntax
-	"if" "(" Expression ")" Statement -> SelectionStatement
-	"if" "(" Expression ")" Statement "else" Statement -> SelectionStatement
-	"switch" "(" Expression ")" Statement -> SelectionStatement
+";" -> ExpressionStatement
+Expression ";" -> ExpressionStatement
 
 context-free syntax
-	"while" "(" Expression ")" Statement -> IterationStatement
-	"do" Statement "while" "(" Expression ")" ";" -> IterationStatement
-	"for" "(" ExpressionStatement ExpressionStatement ")" Statement -> IterationStatement
-	"for" "(" ExpressionStatement ExpressionStatement Expression ")" Statement -> IterationStatement
+"if" "(" Expression ")" Statement -> SelectionStatement
+"if" "(" Expression ")" Statement "else" Statement -> SelectionStatement
+"switch" "(" Expression ")" Statement -> SelectionStatement
 
 context-free syntax
-	"goto" Identifier ";" -> JumpStatement
-	"continue" ";" -> JumpStatement
-	"break" ";" -> JumpStatement
-	"return" ";" -> JumpStatement
-	"return" Expression ";" -> JumpStatement
+"while" "(" Expression ")" Statement -> IterationStatement
+"do" Statement "while" "(" Expression ")" ";" -> IterationStatement
+"for" "(" ExpressionStatement ExpressionStatement ")" Statement -> IterationStatement
+"for" "(" ExpressionStatement ExpressionStatement Expression ")" Statement -> IterationStatement
 
 context-free syntax
-	ExternalDeclaration -> TranslationUnit
-	TranslationUnit ExternalDeclaration -> TranslationUnit
+"goto" Identifier ";" -> JumpStatement
+"continue" ";" -> JumpStatement
+"break" ";" -> JumpStatement
+"return" ";" -> JumpStatement
+"return" Expression ";" -> JumpStatement
 
 context-free syntax
-	FunctionDefinition -> ExternalDeclaration
-	Declaration -> ExternalDeclaration
+ExternalDeclaration -> TranslationUnit
+TranslationUnit ExternalDeclaration -> TranslationUnit
 
 context-free syntax
-	DeclarationSpecifiers Declarator DeclarationList CompoundStatement-> FunctionDefinition
-	DeclarationSpecifiers Declarator CompoundStatement-> FunctionDefinition
-	Declarator DeclarationList CompoundStatement-> FunctionDefinition
-	Declarator CompoundStatement-> FunctionDefinition
+FunctionDefinition -> ExternalDeclaration
+Declaration -> ExternalDeclaration
+
+context-free syntax
+DeclarationSpecifiers Declarator DeclarationList CompoundStatement-> FunctionDefinition
+DeclarationSpecifiers Declarator CompoundStatement-> FunctionDefinition
+Declarator DeclarationList CompoundStatement-> FunctionDefinition
+Declarator CompoundStatement-> FunctionDefinition
 
 
