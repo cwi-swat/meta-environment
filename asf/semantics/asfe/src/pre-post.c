@@ -107,12 +107,12 @@ static PT_Tree ambToAmbConstructor(PT_Tree tree, PT_TreeVisitorData data)
 
   for (; PT_hasArgsHead(ambs); ambs = PT_getArgsTail(ambs)) {
     PT_Tree amb = PT_getArgsHead(ambs);
-    listargs = PT_makeArgsList(amb, listargs);
+    listargs = PT_makeArgsMany(amb, listargs);
 
     if (PT_hasArgsHead(PT_getArgsTail(ambs))) {
-      listargs = PT_makeArgsList(l,listargs);
-      listargs = PT_makeArgsList(s,listargs);
-      listargs = PT_makeArgsList(l,listargs);
+      listargs = PT_makeArgsMany(l, listargs);
+      listargs = PT_makeArgsMany(s, listargs);
+      listargs = PT_makeArgsMany(l, listargs);
     }
   }
 
@@ -224,7 +224,7 @@ static PT_Tree ambConstructorToAmb(PT_Tree tree, PT_TreeVisitorData data)
     arg = PT_getArgsHead(args);
     args = PT_getArgsTail(args);
     amb = restoreTerm(arg, data);
-    ambs = PT_makeArgsList(amb,ambs);
+    ambs = PT_makeArgsMany(amb, ambs);
 
    
     len = PT_getArgsLength(args);

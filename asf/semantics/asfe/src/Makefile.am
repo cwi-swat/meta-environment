@@ -40,22 +40,23 @@ asfe_SOURCES =\
 	test-runner.c\
 	builtins.c
 
-asfe_LDADD		= \
-			-L$(ASF_SUPPORT)/lib -lASFME \
-			-L$(ASC_SUPPORT)/lib -lasc-support-me \
-			-L$(SGLR)/lib -lsglr \
-                        -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
-			-L$(TOOLBUSLIB)/lib -lATB \
-			-L$(ERROR_SUPPORT)/lib -lErrorAPI \
-			-L$(ATERM)/lib -lATerm \
-			${TIDELIB} $(SOCKLIBS)
+asfe_LDADD = \
+	-L$(ASF_SUPPORT)/lib -lASFME \
+	-L$(ASC_SUPPORT)/lib -lasc-support-me \
+	-L$(SGLR)/lib -lsglr \
+	-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
+	-L$(TOOLBUSLIB)/lib -lATB \
+	-L$(ERROR_SUPPORT)/lib -lErrorAPI -lLocationAPI \
+	-L$(ATERM)/lib -lATerm \
+	${TIDELIB} $(SOCKLIBS)
 
-INCLUDES		= ${TIDEINC} \
-			-I$(PT_SUPPORT)/include \
-			-I$(ATERM)/include \
-			-I$(ERROR_SUPPORT)/include \
-			-I$(TOOLBUSLIB)/include \
-			-I$(ASF_SUPPORT)/include \
-			-I$(ASC_SUPPORT)/include \
-			-I$(top_builddir)/semantics/builtins/lib \
-			${TIDEDEF} ${TRAVERSALSDEF} ${LAYOUTDEF}
+INCLUDES = \
+	${TIDEINC} \
+	-I$(PT_SUPPORT)/include \
+	-I$(ATERM)/include \
+	-I$(ERROR_SUPPORT)/include \
+	-I$(TOOLBUSLIB)/include \
+	-I$(ASF_SUPPORT)/include \
+	-I$(ASC_SUPPORT)/include \
+	-I$(top_builddir)/semantics/builtins/lib \
+	${TIDEDEF} ${TRAVERSALSDEF} ${LAYOUTDEF}

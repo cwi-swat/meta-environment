@@ -88,7 +88,7 @@ static PT_Args collectVariables(PT_Tree tree, PT_Args varList)
     return varList;
   }
   if (PT_isTreeVar(tree)) {
-    return PT_makeArgsList(tree, varList);
+    return PT_makeArgsMany(tree, varList);
   }
   
   if (PT_isTreeAppl(tree)) {

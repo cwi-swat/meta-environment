@@ -78,7 +78,7 @@ ATbool isListSeparator(PT_Tree elem, PT_Production listProd)
     return PT_makeArgsEmpty();
   }
 
-  return PT_makeArgsList(elem, temp);
+  return PT_makeArgsMany(elem, temp);
 }
 
 /*}}}  */
@@ -177,7 +177,7 @@ PT_Args appendElem(PT_Production listProd, PT_Args elems, PT_Tree elem)
 PT_Args addElemsToArgs(PT_Production listProd, PT_Args elems, PT_Args args) 
 {
   PT_Tree listArg = PT_makeTreeAppl(listProd, elems);
-  return PT_makeArgsList(listArg, args);
+  return PT_makeArgsMany(listArg, args);
 }
 
 /*}}}  */

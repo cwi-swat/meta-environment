@@ -403,10 +403,9 @@ PT_Tree makeTraversalAppl(PT_Tree appl, Traversal traversal)
     break;
   case COMBINATION:
     prod = PT_setProductionRhs(prod, 
-                               PT_makeSymbolCf(
-                                 PT_makeSymbolTuple(PT_getSymbolSymbol(symbol), 
-                                                    PT_makeSymbolsList(traversal.accumulated,
-                                                                       PT_makeSymbolsEmpty()))));
+      PT_makeSymbolCf(
+        PT_makeSymbolTuple(PT_getSymbolSymbol(symbol), 
+          PT_makeSymbolsSingle(traversal.accumulated))));
     break;
   case ACCUMULATOR:
   case UNDEFINED_TYPE:
@@ -493,50 +492,47 @@ static PT_Tree makeTuple(PT_Tree tree, PT_Tree accu)
      accuSymbol = PT_getSymbolSymbol(accuSymbolCf);
    }
 
-   lhs = PT_makeSymbolsList(
+   lhs = PT_makeSymbolsMany(
             PT_makeSymbolLit("<"),
-            PT_makeSymbolsList(
+            PT_makeSymbolsMany(
               layoutSymbol, 
-            PT_makeSymbolsList(
+            PT_makeSymbolsMany(
               treeSymbolCf,
-            PT_makeSymbolsList(
+            PT_makeSymbolsMany(
               layoutSymbol,
-            PT_makeSymbolsList(
+            PT_makeSymbolsMany(
               PT_makeSymbolLit(","),
-            PT_makeSymbolsList(
+            PT_makeSymbolsMany(
               layoutSymbol,
-            PT_makeSymbolsList(
+            PT_makeSymbolsMany(
               accuSymbolCf,
-            PT_makeSymbolsList(
+            PT_makeSymbolsMany(
               layoutSymbol,
-            PT_makeSymbolsList(
-              PT_makeSymbolLit(">"),
-            PT_makeSymbolsEmpty())))))))));
+            PT_makeSymbolsSingle(
+              PT_makeSymbolLit(">"))))))))));
                        
-   rhs = PT_makeSymbolCf(PT_makeSymbolTuple(treeSymbol, PT_makeSymbolsList(accuSymbol,
-                                                                           PT_makeSymbolsEmpty())));
+   rhs = PT_makeSymbolCf(PT_makeSymbolTuple(treeSymbol,
+					    PT_makeSymbolsSingle(accuSymbol)));
    attrs = PT_makeAttributesNoAttrs();
    prod = PT_makeProductionDefault(lhs,rhs,attrs);
    layoutTree = PT_makeTreeLayoutEmpty();
-   args = PT_makeArgsList(
+   args = PT_makeArgsMany(
              PT_makeTreeLit("<"),
-             PT_makeArgsList(
+             PT_makeArgsMany(
 		    layoutTree, 
-		  PT_makeArgsList(
+		  PT_makeArgsMany(
 		    tree,
-		  PT_makeArgsList(
+		  PT_makeArgsMany(
 		    layoutTree,
-		  PT_makeArgsList(
+		  PT_makeArgsMany(
 		    PT_makeTreeLit(","),
-		  PT_makeArgsList(
+		  PT_makeArgsMany(
 		    layoutTree,
-		  PT_makeArgsList(
+		  PT_makeArgsMany(
 		    accu,
-		  PT_makeArgsList(
+		  PT_makeArgsMany(
 		    layoutTree,
-		  PT_makeArgsList(
-		    PT_makeTreeLit(">"),
-		  PT_makeArgsEmpty())))))))));
+		  PT_makeArgsSingle(PT_makeTreeLit(">"))))))))));
 
    return PT_makeTreeAppl(prod,args);
 }

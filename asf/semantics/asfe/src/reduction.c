@@ -252,7 +252,7 @@ static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra)
     }
     assert(i == len);
     for (--i; i >= 0; i--) {
-      newargs = PT_makeArgsList(newarg_table[i], newargs);
+      newargs = PT_makeArgsMany(newarg_table[i], newargs);
     }
   }
 

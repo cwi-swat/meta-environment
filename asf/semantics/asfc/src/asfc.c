@@ -158,7 +158,7 @@ static PT_ParseTree compile(char *name, ATerm eqs, ATerm parseTable,
   if (output_muasf) {
     PT_ParseTree pt =
       PT_makeParseTreeTree(
-        PT_makeSymbolsList(PT_makeSymbolSort("Module"), PT_makeSymbolsEmpty()),
+        PT_makeSymbolsSingle(PT_makeSymbolSort("Module")),
         PT_makeTreeLayoutEmpty(),
         (PT_Tree) muasf,
         PT_makeTreeLayoutEmpty(),

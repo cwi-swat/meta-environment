@@ -27,7 +27,7 @@
 static ERR_Error prettyTag(ASF_ASFTag tag)
 {
   char *description;
-  ERR_Location location = PT_getTreeLocation((PT_Tree) tag);
+  LOC_Location location = PT_getTreeLocation((PT_Tree) tag);
   ERR_Subject subject;
 
   if (!ASF_isASFTagEmpty(tag)) {
@@ -41,7 +41,7 @@ static ERR_Error prettyTag(ASF_ASFTag tag)
   if (location == NULL) {
     subject = ERR_makeSubjectSubject(description);
   } else {
-    subject = ERR_makeSubjectLocalized(description, location);
+    subject = ERR_makeSubjectLocalized(description, (ERR_Location) location);
   }
 
   return ERR_makeErrorError("failed test", ERR_makeSubjectListSingle(subject));
