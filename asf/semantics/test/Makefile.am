@@ -21,6 +21,8 @@ TEST_MODULES=Bracket \
              Combination-Typecheck \
              Pico-Xml
 
+TEST_MODULES_ASFE_ONLY=BoolAPI
+
 ASFC=${top_builddir}/asfc/src/asfc
 ASFE=${top_builddir}/asfe/src/asfe
 ATRMANNOS=${ATERM}/bin/atrmannos
@@ -32,7 +34,8 @@ CODE=${srcdir}/c-code
 
 CLEANFILES = *.out *.c ${TEST_MODULES} *.sh
 
-TESTS = $(foreach f, ${TEST_MODULES}, $f.asfe.sh $f.asfc.sh) 
+TESTS = $(foreach f, ${TEST_MODULES}, $f.asfe.sh $f.asfc.sh) \
+        $(foreach f, ${TEST_MODULES_ASFE_ONLY}, $f.asfe.sh)
 
 %.asfe.sh:
 	@(echo 'set -e'  ;\

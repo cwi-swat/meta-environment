@@ -1,0 +1,13 @@
+equations
+
+[] complex-term = and(true(), true | false())
+
+%% Complex description of some strange distribution law
+[] is-constant(Bool1) = true,
+   is-or(Bool2) = true,
+   lhs(Bool2) = Bool3,
+   rhs(Bool2) = Bool4
+   ===>
+   Bool1 & Bool2 = or(set-rhs(set-lhs(and(true,true),Bool1),Bool3),
+                   set-rhs(and(Bool1,false), Bool4))
+  

@@ -1,0 +1,29 @@
+module BoolAPI
+
+imports Layout
+
+exports
+
+context-free syntax
+  "complex-term" -> PICO-BOOL
+
+exports
+  sorts PICO-BOOL PICO-BOOL-CON
+  context-free syntax
+    "true"  -> PICO-BOOL-CON {cons("true")}
+    "false" -> PICO-BOOL-CON {cons("false")}
+
+  context-free syntax
+    PICO-BOOL-CON -> PICO-BOOL {cons("constant")}
+
+    lhs:PICO-BOOL "|" rhs:PICO-BOOL -> PICO-BOOL {cons("or"), left}
+    lhs:PICO-BOOL "&" rhs:PICO-BOOL -> PICO-BOOL {cons("and"), left}
+    "not" "(" PICO-BOOL ")" -> PICO-BOOL {cons("not")}
+    "(" PICO-BOOL ")"       -> PICO-BOOL {cons("bracket"), bracket}
+  variables
+    "Bool"[0-9]* -> PICO-BOOL
+    "Bool-con"[0-9]* -> PICO-BOOL-CON
+
+  context-free priorities
+    PICO-BOOL "&" PICO-BOOL -> PICO-BOOL >
+    PICO-BOOL "|" PICO-BOOL -> PICO-BOOL
