@@ -28,6 +28,11 @@ attrs(attributes:Attrs)        -> Attributes  {cons("attrs")}
 term(aterm:ATerm)                -> Attr {cons("term")}
 id(module-name:Literal)         -> Attr {cons("id")}
 
+"left" -> Associativity {cons("left")}
+"right" -> Associativity {cons("right")}
+"assoc" -> Associativity {cons("assoc")}
+"non-assoc" -> Associativity {cons("non-assoc")}
+
 "bracket" -> Attr {cons("bracket")}
 "reject"  -> Attr {cons("reject")}
 "prefer"  -> Attr {cons("prefer")}
@@ -42,7 +47,7 @@ imports basic/Whitespace
 
 exports
 
-sorts Literal Integer L-Char EscChar DecimalEscChar AlphaNumericalEscChar
+sorts Literal L-Char EscChar DecimalEscChar AlphaNumericalEscChar
 lexical syntax
 "\\" ~ []                   -> AlphaNumericalEscChar     {cons("default")}
 "\\" [01] [0-9] [0-9]       -> DecimalEscChar {cons("dec0_199")}
@@ -54,10 +59,9 @@ decimal:DecimalEscChar      -> EscChar   {cons("decimal")}
 EscChar                     -> L-Char    {cons("escaped")}
 "\"" chars:L-Char* "\""     -> Literal    {cons("quoted")}
 
-[A-Za-z\-\_][A-Za-z0-9\_\-]*[A-Za-z0-9]   -> Literal
-[A-Za-z]   -> Literal
+[A-Za-z\-\_][A-Za-z0-9\_\-]*[A-Za-z0-9]   -> Literal {cons("unquoted")}
+[A-Za-z]   -> Literal                                {cons("single")}
 
-[0-9]+                      -> Integer
 module asfix/syntax/Parsetree
  
 imports asfix/syntax/Attributes
@@ -94,7 +98,7 @@ iter-star(symbol:Symbol)                                 -> Symbol {cons("iter-s
 iter-sep(symbol:Symbol,separator:Symbol)                 -> Symbol {cons("iter-sep")}
 iter-star-sep(symbol:Symbol,separator:Symbol)            -> Symbol {cons("iter-star-sep")}
 iter-n(symbol:Symbol,number:NatCon)                      -> Symbol {cons("iter-n")}
-"iter-sep-n" "(" symbol:Symbol comma1:"," separator:Symbol comma2:"," number:Integer ")" -> Symbol {cons("iter-sep-n")}
+"iter-sep-n" "(" symbol:Symbol comma1:"," separator:Symbol comma2:"," number:NatCon ")" -> Symbol {cons("iter-sep-n")}
 perm(symbols:Symbols)                                    -> Symbol {cons("perm")}
 set(symbol:Symbol)                                       -> Symbol {cons("set")}
 func(symbols:Symbols,symbol:Symbol)                      -> Symbol {cons("func")}
@@ -108,8 +112,8 @@ parametrized-sort(sort:Literal,parameters:Symbols)       -> Symbol {cons("parame
 
 "[" { CharRange ","}* "]"      -> CharRanges  {cons("list")}
 
-integer: Integer                 -> CharRange {cons("character")}
-range(start:Integer,end:Integer) -> CharRange {cons("range")}
+integer: NatCon                 -> CharRange {cons("character")}
+range(start:NatCon,end:NatCon) -> CharRange {cons("range")}
 module asfix/syntax/Tree
 
 imports asfix/syntax/Annotations
@@ -122,7 +126,7 @@ sorts Tree Args Production
 context-free syntax
 
 appl(prod:Production,args:Args) -> Tree  {cons("appl")}
-character:Integer               -> Tree  {cons("char")}
+character:NatCon               -> Tree  {cons("char")}
 lit(string:Literal)             -> Tree  {cons("lit")}
 amb(args:Args)                  -> Tree  {cons("amb")}
 "[" {Tree ","}* "]"             -> Args  {cons("list")}
@@ -136,18 +140,18 @@ exports
   sorts ATermList ACon AFun ATerm Ann
   context-free syntax
 
-    "[" list:{ ATerm ","}* "]"             -> ATermList {cons("list")}
-    arg:IntCon                            -> ACon      {cons("int")}
-    arg:RealCon                           -> ACon      {cons("real")}
+    "[" elems:{ ATerm ","}* "]"             -> ATermList {cons("list")}
+    integer:IntCon                            -> ACon      {cons("int")}
+    real:RealCon                           -> ACon      {cons("real")}
     lit:Literal                           -> AFun      {cons("lit")}
     "<" type:ATerm ">"                     -> ATerm     {cons("placeholder")}
-    arg:ACon                              -> ATerm     {cons("aconstant")}
-    arg:ATermList                         -> ATerm     {cons("list")}
+    con:ACon                              -> ATerm     {cons("aconstant")}
+    list:ATermList                         -> ATerm     {cons("list")}
     name:AFun                              -> ATerm     {cons("constant")}
     name:AFun "(" args:{ ATerm ","}+  ")"       -> ATerm     {cons("appl")}
-    "{" list:{ ATerm ","}+  "}"            -> Ann       {cons("list")}
-    arg:ACon  anno:Ann          -> ATerm     {cons("annotated-aconstant")}
-    arg:ATermList  anno:Ann          -> ATerm     {cons("annotated-list")}
+    "{" elems:{ ATerm ","}+  "}"            -> Ann       {cons("list")}
+    con:ACon  anno:Ann          -> ATerm     {cons("annotated-aconstant")}
+    list:ATermList  anno:Ann          -> ATerm     {cons("annotated-list")}
     name:AFun     anno:Ann          -> ATerm     {cons("annotated-constant")}
     name:AFun "(" args:{ ATerm ","}+  ")"  Ann  -> ATerm     {cons("annotated-appl")}
                                   

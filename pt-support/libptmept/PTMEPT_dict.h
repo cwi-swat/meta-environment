@@ -1,5 +1,5 @@
 /*
- * Generated at Thu Jan  9 15:08:50 2003
+ * Generated at Thu Jan  9 15:27:37 2003
  */
 
 #ifndef __PTMEPT_dict_H
@@ -101,6 +101,8 @@ extern AFun PTPT_afun90;
 extern AFun PTPT_afun91;
 extern AFun PTPT_afun92;
 extern AFun PTPT_afun93;
+extern AFun PTPT_afun94;
+extern AFun PTPT_afun95;
 
 extern ATerm PTPT_patternOptLayoutPresent;
 extern ATerm PTPT_patternOptLayoutAbsent;
@@ -108,7 +110,6 @@ extern ATerm PTPT_patternStartAttributes;
 extern ATerm PTPT_patternStartAttrs;
 extern ATerm PTPT_patternStartAttr;
 extern ATerm PTPT_patternStartAssociativity;
-extern ATerm PTPT_patternStartInteger;
 extern ATerm PTPT_patternStartLChar;
 extern ATerm PTPT_patternStartEscChar;
 extern ATerm PTPT_patternStartDecimalEscChar;
@@ -153,9 +154,9 @@ extern ATerm PTPT_patternATermPlaceholder;
 extern ATerm PTPT_patternAFunLit;
 extern ATerm PTPT_patternAConReal;
 extern ATerm PTPT_patternAConInt;
-extern ATerm PTPT_patternATermListMany;
-extern ATerm PTPT_patternATermListSingle;
-extern ATerm PTPT_patternATermListEmpty;
+extern ATerm PTPT_patternATermElemsMany;
+extern ATerm PTPT_patternATermElemsSingle;
+extern ATerm PTPT_patternATermElemsEmpty;
 extern ATerm PTPT_patternATermListList;
 extern ATerm PTPT_patternProductionList;
 extern ATerm PTPT_patternProductionDefault;
@@ -196,6 +197,21 @@ extern ATerm PTPT_patternSymbolCf;
 extern ATerm PTPT_patternSymbolLit;
 extern ATerm PTPT_patternSymbolEmpty;
 extern ATerm PTPT_patternParseTreeTop;
+extern ATerm PTPT_patternLiteralSingle;
+extern ATerm PTPT_patternLiteralUnquoted;
+extern ATerm PTPT_patternLiteralQuoted;
+extern ATerm PTPT_patternLCharEscaped;
+extern ATerm PTPT_patternLCharNormal;
+extern ATerm PTPT_patternEscCharDecimal;
+extern ATerm PTPT_patternEscCharAlphaNumeric;
+extern ATerm PTPT_patternDecimalEscCharDec250Underscore255;
+extern ATerm PTPT_patternDecimalEscCharDec200Underscore249;
+extern ATerm PTPT_patternDecimalEscCharDec0Underscore199;
+extern ATerm PTPT_patternAlphaNumericalEscCharDefault;
+extern ATerm PTPT_patternAssociativityNonAssoc;
+extern ATerm PTPT_patternAssociativityAssoc;
+extern ATerm PTPT_patternAssociativityRight;
+extern ATerm PTPT_patternAssociativityLeft;
 extern ATerm PTPT_patternAttrAvoid;
 extern ATerm PTPT_patternAttrPrefer;
 extern ATerm PTPT_patternAttrReject;

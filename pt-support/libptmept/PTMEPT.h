@@ -28,6 +28,12 @@ typedef struct _PTPT_Attributes *PTPT_Attributes;
 typedef struct _PTPT_Attrs *PTPT_Attrs;
 typedef struct _PTPT_AttrList *PTPT_AttrList;
 typedef struct _PTPT_Attr *PTPT_Attr;
+typedef struct _PTPT_Associativity *PTPT_Associativity;
+typedef struct _PTPT_AlphaNumericalEscChar *PTPT_AlphaNumericalEscChar;
+typedef struct _PTPT_DecimalEscChar *PTPT_DecimalEscChar;
+typedef struct _PTPT_EscChar *PTPT_EscChar;
+typedef struct _PTPT_LChar *PTPT_LChar;
+typedef struct _PTPT_Literal *PTPT_Literal;
 typedef struct _PTPT_ParseTree *PTPT_ParseTree;
 typedef struct _PTPT_Symbol *PTPT_Symbol;
 typedef struct _PTPT_Symbols *PTPT_Symbols;
@@ -39,7 +45,7 @@ typedef struct _PTPT_Args *PTPT_Args;
 typedef struct _PTPT_TreeList *PTPT_TreeList;
 typedef struct _PTPT_Production *PTPT_Production;
 typedef struct _PTPT_ATermList *PTPT_ATermList;
-typedef struct _PTPT_ATermList *PTPT_ATermList;
+typedef struct _PTPT_ATermElems *PTPT_ATermElems;
 typedef struct _PTPT_ACon *PTPT_ACon;
 typedef struct _PTPT_AFun *PTPT_AFun;
 typedef struct _PTPT_ATerm *PTPT_ATerm;
@@ -68,6 +74,18 @@ PTPT_AttrList PTPT_AttrListFromTerm(ATerm t);
 ATerm PTPT_AttrListToTerm(PTPT_AttrList arg);
 PTPT_Attr PTPT_AttrFromTerm(ATerm t);
 ATerm PTPT_AttrToTerm(PTPT_Attr arg);
+PTPT_Associativity PTPT_AssociativityFromTerm(ATerm t);
+ATerm PTPT_AssociativityToTerm(PTPT_Associativity arg);
+PTPT_AlphaNumericalEscChar PTPT_AlphaNumericalEscCharFromTerm(ATerm t);
+ATerm PTPT_AlphaNumericalEscCharToTerm(PTPT_AlphaNumericalEscChar arg);
+PTPT_DecimalEscChar PTPT_DecimalEscCharFromTerm(ATerm t);
+ATerm PTPT_DecimalEscCharToTerm(PTPT_DecimalEscChar arg);
+PTPT_EscChar PTPT_EscCharFromTerm(ATerm t);
+ATerm PTPT_EscCharToTerm(PTPT_EscChar arg);
+PTPT_LChar PTPT_LCharFromTerm(ATerm t);
+ATerm PTPT_LCharToTerm(PTPT_LChar arg);
+PTPT_Literal PTPT_LiteralFromTerm(ATerm t);
+ATerm PTPT_LiteralToTerm(PTPT_Literal arg);
 PTPT_ParseTree PTPT_ParseTreeFromTerm(ATerm t);
 ATerm PTPT_ParseTreeToTerm(PTPT_ParseTree arg);
 PTPT_Symbol PTPT_SymbolFromTerm(ATerm t);
@@ -90,8 +108,8 @@ PTPT_Production PTPT_ProductionFromTerm(ATerm t);
 ATerm PTPT_ProductionToTerm(PTPT_Production arg);
 PTPT_ATermList PTPT_ATermListFromTerm(ATerm t);
 ATerm PTPT_ATermListToTerm(PTPT_ATermList arg);
-PTPT_ATermList PTPT_ATermListFromTerm(ATerm t);
-ATerm PTPT_ATermListToTerm(PTPT_ATermList arg);
+PTPT_ATermElems PTPT_ATermElemsFromTerm(ATerm t);
+ATerm PTPT_ATermElemsToTerm(PTPT_ATermElems arg);
 PTPT_ACon PTPT_AConFromTerm(ATerm t);
 ATerm PTPT_AConToTerm(PTPT_ACon arg);
 PTPT_AFun PTPT_AFunFromTerm(ATerm t);
@@ -120,7 +138,7 @@ ATerm PTPT_OptLayoutToTerm(PTPT_OptLayout arg);
 
 PTPT_Tree PTPT_makeTreeAnnotated(PTPT_Tree Tree, PTPT_OptLayout wsAfterTree, PTPT_Ann Ann);
 PTPT_Tree PTPT_makeTreeAppl(PTPT_OptLayout wsAfterAppl, PTPT_OptLayout wsAfterParenOpen, PTPT_Production prod, PTPT_OptLayout wsAfterProd, PTPT_OptLayout wsAfterComma, PTPT_Args args, PTPT_OptLayout wsAfterArgs);
-PTPT_Tree PTPT_makeTreeChar(PTPT_Integer character);
+PTPT_Tree PTPT_makeTreeChar(PTPT_NatCon character);
 PTPT_Tree PTPT_makeTreeLit(PTPT_OptLayout wsAfterLit, PTPT_OptLayout wsAfterParenOpen, PTPT_Literal string, PTPT_OptLayout wsAfterString);
 PTPT_Tree PTPT_makeTreeAmb(PTPT_OptLayout wsAfterAmb, PTPT_OptLayout wsAfterParenOpen, PTPT_Args args, PTPT_OptLayout wsAfterArgs);
 PTPT_Attributes PTPT_makeAttributesNoAttrs();
@@ -135,6 +153,21 @@ PTPT_Attr PTPT_makeAttrBracket();
 PTPT_Attr PTPT_makeAttrReject();
 PTPT_Attr PTPT_makeAttrPrefer();
 PTPT_Attr PTPT_makeAttrAvoid();
+PTPT_Associativity PTPT_makeAssociativityLeft();
+PTPT_Associativity PTPT_makeAssociativityRight();
+PTPT_Associativity PTPT_makeAssociativityAssoc();
+PTPT_Associativity PTPT_makeAssociativityNonAssoc();
+PTPT_AlphaNumericalEscChar PTPT_makeAlphaNumericalEscCharDefault(PTPT_CHARLIST chars);
+PTPT_DecimalEscChar PTPT_makeDecimalEscCharDec0Underscore199(PTPT_CHARLIST chars);
+PTPT_DecimalEscChar PTPT_makeDecimalEscCharDec200Underscore249(PTPT_CHARLIST chars);
+PTPT_DecimalEscChar PTPT_makeDecimalEscCharDec250Underscore255(PTPT_CHARLIST chars);
+PTPT_EscChar PTPT_makeEscCharAlphaNumeric(PTPT_CHARLIST chars);
+PTPT_EscChar PTPT_makeEscCharDecimal(PTPT_CHARLIST chars);
+PTPT_LChar PTPT_makeLCharNormal(PTPT_CHARLIST chars);
+PTPT_LChar PTPT_makeLCharEscaped(PTPT_CHARLIST chars);
+PTPT_Literal PTPT_makeLiteralQuoted(PTPT_CHARLIST chars);
+PTPT_Literal PTPT_makeLiteralUnquoted(PTPT_CHARLIST chars);
+PTPT_Literal PTPT_makeLiteralSingle(PTPT_CHARLIST chars);
 PTPT_ParseTree PTPT_makeParseTreeTop(PTPT_OptLayout wsAfterParsetree, PTPT_OptLayout wsAfterParenOpen, PTPT_Tree top, PTPT_OptLayout wsAfterTop, PTPT_OptLayout wsAfterComma, PTPT_NatCon ambCnt, PTPT_OptLayout wsAfterAmbCnt);
 PTPT_Symbol PTPT_makeSymbolEmpty();
 PTPT_Symbol PTPT_makeSymbolLit(PTPT_OptLayout wsAfterLit, PTPT_OptLayout wsAfterParenOpen, PTPT_Literal string, PTPT_OptLayout wsAfterString);
@@ -166,33 +199,33 @@ PTPT_CharRanges PTPT_makeCharRangesList(PTPT_OptLayout wsAfterBracketOpen, PTPT_
 PTPT_CharRangeList PTPT_makeCharRangeListEmpty();
 PTPT_CharRangeList PTPT_makeCharRangeListSingle(PTPT_CharRange head);
 PTPT_CharRangeList PTPT_makeCharRangeListMany(PTPT_CharRange head, PTPT_OptLayout wsAfterFirst, char * sep, PTPT_OptLayout wsAfterSep, PTPT_CharRangeList tail);
-PTPT_CharRange PTPT_makeCharRangeCharacter(PTPT_Integer integer);
-PTPT_CharRange PTPT_makeCharRangeRange(PTPT_OptLayout wsAfterRange, PTPT_OptLayout wsAfterParenOpen, PTPT_Integer start, PTPT_OptLayout wsAfterStart, PTPT_OptLayout wsAfterComma, PTPT_Integer end, PTPT_OptLayout wsAfterEnd);
+PTPT_CharRange PTPT_makeCharRangeCharacter(PTPT_NatCon integer);
+PTPT_CharRange PTPT_makeCharRangeRange(PTPT_OptLayout wsAfterRange, PTPT_OptLayout wsAfterParenOpen, PTPT_NatCon start, PTPT_OptLayout wsAfterStart, PTPT_OptLayout wsAfterComma, PTPT_NatCon end, PTPT_OptLayout wsAfterEnd);
 PTPT_Args PTPT_makeArgsList(PTPT_OptLayout wsAfterBracketOpen, PTPT_TreeList list, PTPT_OptLayout wsAfterList);
 PTPT_TreeList PTPT_makeTreeListEmpty();
 PTPT_TreeList PTPT_makeTreeListSingle(PTPT_Tree head);
 PTPT_TreeList PTPT_makeTreeListMany(PTPT_Tree head, PTPT_OptLayout wsAfterFirst, char * sep, PTPT_OptLayout wsAfterSep, PTPT_TreeList tail);
 PTPT_Production PTPT_makeProductionDefault(PTPT_OptLayout wsAfterProd, PTPT_OptLayout wsAfterParenOpen, PTPT_Symbols lhs, PTPT_OptLayout wsAfterLhs, PTPT_OptLayout wsAfterComma1, PTPT_Symbol rhs, PTPT_OptLayout wsAfterRhs, PTPT_OptLayout wsAfterComma2, PTPT_Attributes attributes, PTPT_OptLayout wsAfterAttributes);
 PTPT_Production PTPT_makeProductionList(PTPT_OptLayout wsAfterList, PTPT_OptLayout wsAfterParenOpen, PTPT_Symbol rhs, PTPT_OptLayout wsAfterRhs);
-PTPT_ATermList PTPT_makeATermListList(PTPT_OptLayout wsAfterBracketOpen, PTPT_ATermList list, PTPT_OptLayout wsAfterList);
-PTPT_ATermList PTPT_makeATermListEmpty();
-PTPT_ATermList PTPT_makeATermListSingle(PTPT_ATerm head);
-PTPT_ATermList PTPT_makeATermListMany(PTPT_ATerm head, PTPT_OptLayout wsAfterFirst, char * sep, PTPT_OptLayout wsAfterSep, PTPT_ATermList tail);
-PTPT_ACon PTPT_makeAConInt(PTPT_IntCon arg);
-PTPT_ACon PTPT_makeAConReal(PTPT_IntCon arg);
+PTPT_ATermList PTPT_makeATermListList(PTPT_OptLayout wsAfterBracketOpen, PTPT_ATermElems elems, PTPT_OptLayout wsAfterElems);
+PTPT_ATermElems PTPT_makeATermElemsEmpty();
+PTPT_ATermElems PTPT_makeATermElemsSingle(PTPT_ATerm head);
+PTPT_ATermElems PTPT_makeATermElemsMany(PTPT_ATerm head, PTPT_OptLayout wsAfterFirst, char * sep, PTPT_OptLayout wsAfterSep, PTPT_ATermElems tail);
+PTPT_ACon PTPT_makeAConInt(PTPT_IntCon integer);
+PTPT_ACon PTPT_makeAConReal(PTPT_RealCon real);
 PTPT_AFun PTPT_makeAFunLit(PTPT_Literal lit);
 PTPT_ATerm PTPT_makeATermPlaceholder(PTPT_OptLayout wsAfterLessThan, PTPT_ATerm type, PTPT_OptLayout wsAfterType);
-PTPT_ATerm PTPT_makeATermAconstant(PTPT_ACon arg);
-PTPT_ATerm PTPT_makeATermList(PTPT_ACon arg);
+PTPT_ATerm PTPT_makeATermAconstant(PTPT_ACon con);
+PTPT_ATerm PTPT_makeATermList(PTPT_ATermList list);
 PTPT_ATerm PTPT_makeATermConstant(PTPT_AFun name);
 PTPT_ATerm PTPT_makeATermAppl(PTPT_AFun name, PTPT_OptLayout wsAfterName, PTPT_OptLayout wsAfterParenOpen, PTPT_ATermArgs args, PTPT_OptLayout wsAfterArgs);
-PTPT_ATerm PTPT_makeATermAnnotatedAconstant(PTPT_ACon arg, PTPT_OptLayout wsAfterArg, PTPT_Ann anno);
-PTPT_ATerm PTPT_makeATermAnnotatedList(PTPT_ACon arg, PTPT_OptLayout wsAfterArg, PTPT_Ann anno);
+PTPT_ATerm PTPT_makeATermAnnotatedAconstant(PTPT_ACon con, PTPT_OptLayout wsAfterCon, PTPT_Ann anno);
+PTPT_ATerm PTPT_makeATermAnnotatedList(PTPT_ATermList list, PTPT_OptLayout wsAfterList, PTPT_Ann anno);
 PTPT_ATerm PTPT_makeATermAnnotatedConstant(PTPT_AFun name, PTPT_OptLayout wsAfterName, PTPT_Ann anno);
 PTPT_ATerm PTPT_makeATermAnnotatedAppl(PTPT_AFun name, PTPT_OptLayout wsAfterName, PTPT_OptLayout wsAfterParenOpen, PTPT_ATermArgs args, PTPT_OptLayout wsAfterArgs, PTPT_OptLayout wsAfterParenClose, PTPT_Ann Ann);
 PTPT_ATermArgs PTPT_makeATermArgsSingle(PTPT_ATerm head);
 PTPT_ATermArgs PTPT_makeATermArgsMany(PTPT_ATerm head, PTPT_OptLayout wsAfterFirst, char * sep, PTPT_OptLayout wsAfterSep, PTPT_ATermArgs tail);
-PTPT_Ann PTPT_makeAnnList(PTPT_OptLayout wsAfterBraceOpen, PTPT_ATermList list, PTPT_OptLayout wsAfterList);
+PTPT_Ann PTPT_makeAnnList(PTPT_OptLayout wsAfterBraceOpen, PTPT_ATermElems elems, PTPT_OptLayout wsAfterElems);
 PTPT_NatCon PTPT_makeNatConDefault(PTPT_CHARLIST chars);
 PTPT_IntCon PTPT_makeIntConNat(PTPT_NatCon NatCon);
 PTPT_IntCon PTPT_makeIntConPlus(PTPT_OptLayout wsAfterPlus, PTPT_NatCon NatCon);
@@ -222,7 +255,6 @@ PTPT_Start PTPT_makeStartAlphaNumericalEscChar(PTPT_OptLayout wsBefore, PTPT_Alp
 PTPT_Start PTPT_makeStartDecimalEscChar(PTPT_OptLayout wsBefore, PTPT_DecimalEscChar topDecimalEscChar, PTPT_OptLayout wsAfter, int ambCnt);
 PTPT_Start PTPT_makeStartEscChar(PTPT_OptLayout wsBefore, PTPT_EscChar topEscChar, PTPT_OptLayout wsAfter, int ambCnt);
 PTPT_Start PTPT_makeStartLChar(PTPT_OptLayout wsBefore, PTPT_LChar topLChar, PTPT_OptLayout wsAfter, int ambCnt);
-PTPT_Start PTPT_makeStartInteger(PTPT_OptLayout wsBefore, PTPT_Integer topInteger, PTPT_OptLayout wsAfter, int ambCnt);
 PTPT_Start PTPT_makeStartAssociativity(PTPT_OptLayout wsBefore, PTPT_Associativity topAssociativity, PTPT_OptLayout wsAfter, int ambCnt);
 PTPT_Start PTPT_makeStartAttr(PTPT_OptLayout wsBefore, PTPT_Attr topAttr, PTPT_OptLayout wsAfter, int ambCnt);
 PTPT_Start PTPT_makeStartAttrs(PTPT_OptLayout wsBefore, PTPT_Attrs topAttrs, PTPT_OptLayout wsAfter, int ambCnt);
@@ -238,6 +270,12 @@ ATbool PTPT_isEqualAttributes(PTPT_Attributes arg0, PTPT_Attributes arg1);
 ATbool PTPT_isEqualAttrs(PTPT_Attrs arg0, PTPT_Attrs arg1);
 ATbool PTPT_isEqualAttrList(PTPT_AttrList arg0, PTPT_AttrList arg1);
 ATbool PTPT_isEqualAttr(PTPT_Attr arg0, PTPT_Attr arg1);
+ATbool PTPT_isEqualAssociativity(PTPT_Associativity arg0, PTPT_Associativity arg1);
+ATbool PTPT_isEqualAlphaNumericalEscChar(PTPT_AlphaNumericalEscChar arg0, PTPT_AlphaNumericalEscChar arg1);
+ATbool PTPT_isEqualDecimalEscChar(PTPT_DecimalEscChar arg0, PTPT_DecimalEscChar arg1);
+ATbool PTPT_isEqualEscChar(PTPT_EscChar arg0, PTPT_EscChar arg1);
+ATbool PTPT_isEqualLChar(PTPT_LChar arg0, PTPT_LChar arg1);
+ATbool PTPT_isEqualLiteral(PTPT_Literal arg0, PTPT_Literal arg1);
 ATbool PTPT_isEqualParseTree(PTPT_ParseTree arg0, PTPT_ParseTree arg1);
 ATbool PTPT_isEqualSymbol(PTPT_Symbol arg0, PTPT_Symbol arg1);
 ATbool PTPT_isEqualSymbols(PTPT_Symbols arg0, PTPT_Symbols arg1);
@@ -249,7 +287,7 @@ ATbool PTPT_isEqualArgs(PTPT_Args arg0, PTPT_Args arg1);
 ATbool PTPT_isEqualTreeList(PTPT_TreeList arg0, PTPT_TreeList arg1);
 ATbool PTPT_isEqualProduction(PTPT_Production arg0, PTPT_Production arg1);
 ATbool PTPT_isEqualATermList(PTPT_ATermList arg0, PTPT_ATermList arg1);
-ATbool PTPT_isEqualATermList(PTPT_ATermList arg0, PTPT_ATermList arg1);
+ATbool PTPT_isEqualATermElems(PTPT_ATermElems arg0, PTPT_ATermElems arg1);
 ATbool PTPT_isEqualACon(PTPT_ACon arg0, PTPT_ACon arg1);
 ATbool PTPT_isEqualAFun(PTPT_AFun arg0, PTPT_AFun arg1);
 ATbool PTPT_isEqualATerm(PTPT_ATerm arg0, PTPT_ATerm arg1);
@@ -302,8 +340,8 @@ ATbool PTPT_hasTreeWsAfterArgs(PTPT_Tree arg);
 PTPT_OptLayout PTPT_getTreeWsAfterArgs(PTPT_Tree arg);
 PTPT_Tree PTPT_setTreeWsAfterArgs(PTPT_Tree arg, PTPT_OptLayout wsAfterArgs);
 ATbool PTPT_hasTreeCharacter(PTPT_Tree arg);
-PTPT_Integer PTPT_getTreeCharacter(PTPT_Tree arg);
-PTPT_Tree PTPT_setTreeCharacter(PTPT_Tree arg, PTPT_Integer character);
+PTPT_NatCon PTPT_getTreeCharacter(PTPT_Tree arg);
+PTPT_Tree PTPT_setTreeCharacter(PTPT_Tree arg, PTPT_NatCon character);
 ATbool PTPT_hasTreeWsAfterLit(PTPT_Tree arg);
 PTPT_OptLayout PTPT_getTreeWsAfterLit(PTPT_Tree arg);
 PTPT_Tree PTPT_setTreeWsAfterLit(PTPT_Tree arg, PTPT_OptLayout wsAfterLit);
@@ -414,6 +452,66 @@ PTPT_Attr PTPT_setAttrModuleName(PTPT_Attr arg, PTPT_Literal moduleName);
 ATbool PTPT_hasAttrWsAfterModuleName(PTPT_Attr arg);
 PTPT_OptLayout PTPT_getAttrWsAfterModuleName(PTPT_Attr arg);
 PTPT_Attr PTPT_setAttrWsAfterModuleName(PTPT_Attr arg, PTPT_OptLayout wsAfterModuleName);
+
+/*}}}  */
+/*{{{  PTPT_Associativity accessors */
+
+ATbool PTPT_isValidAssociativity(PTPT_Associativity arg);
+inline ATbool PTPT_isAssociativityLeft(PTPT_Associativity arg);
+inline ATbool PTPT_isAssociativityRight(PTPT_Associativity arg);
+inline ATbool PTPT_isAssociativityAssoc(PTPT_Associativity arg);
+inline ATbool PTPT_isAssociativityNonAssoc(PTPT_Associativity arg);
+
+/*}}}  */
+/*{{{  PTPT_AlphaNumericalEscChar accessors */
+
+ATbool PTPT_isValidAlphaNumericalEscChar(PTPT_AlphaNumericalEscChar arg);
+inline ATbool PTPT_isAlphaNumericalEscCharDefault(PTPT_AlphaNumericalEscChar arg);
+ATbool PTPT_hasAlphaNumericalEscCharChars(PTPT_AlphaNumericalEscChar arg);
+PTPT_CHARLIST PTPT_getAlphaNumericalEscCharChars(PTPT_AlphaNumericalEscChar arg);
+PTPT_AlphaNumericalEscChar PTPT_setAlphaNumericalEscCharChars(PTPT_AlphaNumericalEscChar arg, PTPT_CHARLIST chars);
+
+/*}}}  */
+/*{{{  PTPT_DecimalEscChar accessors */
+
+ATbool PTPT_isValidDecimalEscChar(PTPT_DecimalEscChar arg);
+inline ATbool PTPT_isDecimalEscCharDec0Underscore199(PTPT_DecimalEscChar arg);
+inline ATbool PTPT_isDecimalEscCharDec200Underscore249(PTPT_DecimalEscChar arg);
+inline ATbool PTPT_isDecimalEscCharDec250Underscore255(PTPT_DecimalEscChar arg);
+ATbool PTPT_hasDecimalEscCharChars(PTPT_DecimalEscChar arg);
+PTPT_CHARLIST PTPT_getDecimalEscCharChars(PTPT_DecimalEscChar arg);
+PTPT_DecimalEscChar PTPT_setDecimalEscCharChars(PTPT_DecimalEscChar arg, PTPT_CHARLIST chars);
+
+/*}}}  */
+/*{{{  PTPT_EscChar accessors */
+
+ATbool PTPT_isValidEscChar(PTPT_EscChar arg);
+inline ATbool PTPT_isEscCharAlphaNumeric(PTPT_EscChar arg);
+inline ATbool PTPT_isEscCharDecimal(PTPT_EscChar arg);
+ATbool PTPT_hasEscCharChars(PTPT_EscChar arg);
+PTPT_CHARLIST PTPT_getEscCharChars(PTPT_EscChar arg);
+PTPT_EscChar PTPT_setEscCharChars(PTPT_EscChar arg, PTPT_CHARLIST chars);
+
+/*}}}  */
+/*{{{  PTPT_LChar accessors */
+
+ATbool PTPT_isValidLChar(PTPT_LChar arg);
+inline ATbool PTPT_isLCharNormal(PTPT_LChar arg);
+inline ATbool PTPT_isLCharEscaped(PTPT_LChar arg);
+ATbool PTPT_hasLCharChars(PTPT_LChar arg);
+PTPT_CHARLIST PTPT_getLCharChars(PTPT_LChar arg);
+PTPT_LChar PTPT_setLCharChars(PTPT_LChar arg, PTPT_CHARLIST chars);
+
+/*}}}  */
+/*{{{  PTPT_Literal accessors */
+
+ATbool PTPT_isValidLiteral(PTPT_Literal arg);
+inline ATbool PTPT_isLiteralQuoted(PTPT_Literal arg);
+inline ATbool PTPT_isLiteralUnquoted(PTPT_Literal arg);
+inline ATbool PTPT_isLiteralSingle(PTPT_Literal arg);
+ATbool PTPT_hasLiteralChars(PTPT_Literal arg);
+PTPT_CHARLIST PTPT_getLiteralChars(PTPT_Literal arg);
+PTPT_Literal PTPT_setLiteralChars(PTPT_Literal arg, PTPT_CHARLIST chars);
 
 /*}}}  */
 /*{{{  PTPT_ParseTree accessors */
@@ -681,8 +779,8 @@ ATbool PTPT_isValidCharRange(PTPT_CharRange arg);
 inline ATbool PTPT_isCharRangeCharacter(PTPT_CharRange arg);
 inline ATbool PTPT_isCharRangeRange(PTPT_CharRange arg);
 ATbool PTPT_hasCharRangeInteger(PTPT_CharRange arg);
-PTPT_Integer PTPT_getCharRangeInteger(PTPT_CharRange arg);
-PTPT_CharRange PTPT_setCharRangeInteger(PTPT_CharRange arg, PTPT_Integer integer);
+PTPT_NatCon PTPT_getCharRangeInteger(PTPT_CharRange arg);
+PTPT_CharRange PTPT_setCharRangeInteger(PTPT_CharRange arg, PTPT_NatCon integer);
 ATbool PTPT_hasCharRangeWsAfterRange(PTPT_CharRange arg);
 PTPT_OptLayout PTPT_getCharRangeWsAfterRange(PTPT_CharRange arg);
 PTPT_CharRange PTPT_setCharRangeWsAfterRange(PTPT_CharRange arg, PTPT_OptLayout wsAfterRange);
@@ -690,8 +788,8 @@ ATbool PTPT_hasCharRangeWsAfterParenOpen(PTPT_CharRange arg);
 PTPT_OptLayout PTPT_getCharRangeWsAfterParenOpen(PTPT_CharRange arg);
 PTPT_CharRange PTPT_setCharRangeWsAfterParenOpen(PTPT_CharRange arg, PTPT_OptLayout wsAfterParenOpen);
 ATbool PTPT_hasCharRangeStart(PTPT_CharRange arg);
-PTPT_Integer PTPT_getCharRangeStart(PTPT_CharRange arg);
-PTPT_CharRange PTPT_setCharRangeStart(PTPT_CharRange arg, PTPT_Integer start);
+PTPT_NatCon PTPT_getCharRangeStart(PTPT_CharRange arg);
+PTPT_CharRange PTPT_setCharRangeStart(PTPT_CharRange arg, PTPT_NatCon start);
 ATbool PTPT_hasCharRangeWsAfterStart(PTPT_CharRange arg);
 PTPT_OptLayout PTPT_getCharRangeWsAfterStart(PTPT_CharRange arg);
 PTPT_CharRange PTPT_setCharRangeWsAfterStart(PTPT_CharRange arg, PTPT_OptLayout wsAfterStart);
@@ -699,8 +797,8 @@ ATbool PTPT_hasCharRangeWsAfterComma(PTPT_CharRange arg);
 PTPT_OptLayout PTPT_getCharRangeWsAfterComma(PTPT_CharRange arg);
 PTPT_CharRange PTPT_setCharRangeWsAfterComma(PTPT_CharRange arg, PTPT_OptLayout wsAfterComma);
 ATbool PTPT_hasCharRangeEnd(PTPT_CharRange arg);
-PTPT_Integer PTPT_getCharRangeEnd(PTPT_CharRange arg);
-PTPT_CharRange PTPT_setCharRangeEnd(PTPT_CharRange arg, PTPT_Integer end);
+PTPT_NatCon PTPT_getCharRangeEnd(PTPT_CharRange arg);
+PTPT_CharRange PTPT_setCharRangeEnd(PTPT_CharRange arg, PTPT_NatCon end);
 ATbool PTPT_hasCharRangeWsAfterEnd(PTPT_CharRange arg);
 PTPT_OptLayout PTPT_getCharRangeWsAfterEnd(PTPT_CharRange arg);
 PTPT_CharRange PTPT_setCharRangeWsAfterEnd(PTPT_CharRange arg, PTPT_OptLayout wsAfterEnd);
@@ -791,35 +889,35 @@ inline ATbool PTPT_isATermListList(PTPT_ATermList arg);
 ATbool PTPT_hasATermListWsAfterBracketOpen(PTPT_ATermList arg);
 PTPT_OptLayout PTPT_getATermListWsAfterBracketOpen(PTPT_ATermList arg);
 PTPT_ATermList PTPT_setATermListWsAfterBracketOpen(PTPT_ATermList arg, PTPT_OptLayout wsAfterBracketOpen);
-ATbool PTPT_hasATermListList(PTPT_ATermList arg);
-PTPT_ATermList PTPT_getATermListList(PTPT_ATermList arg);
-PTPT_ATermList PTPT_setATermListList(PTPT_ATermList arg, PTPT_ATermList list);
-ATbool PTPT_hasATermListWsAfterList(PTPT_ATermList arg);
-PTPT_OptLayout PTPT_getATermListWsAfterList(PTPT_ATermList arg);
-PTPT_ATermList PTPT_setATermListWsAfterList(PTPT_ATermList arg, PTPT_OptLayout wsAfterList);
+ATbool PTPT_hasATermListElems(PTPT_ATermList arg);
+PTPT_ATermElems PTPT_getATermListElems(PTPT_ATermList arg);
+PTPT_ATermList PTPT_setATermListElems(PTPT_ATermList arg, PTPT_ATermElems elems);
+ATbool PTPT_hasATermListWsAfterElems(PTPT_ATermList arg);
+PTPT_OptLayout PTPT_getATermListWsAfterElems(PTPT_ATermList arg);
+PTPT_ATermList PTPT_setATermListWsAfterElems(PTPT_ATermList arg, PTPT_OptLayout wsAfterElems);
 
 /*}}}  */
-/*{{{  PTPT_ATermList accessors */
+/*{{{  PTPT_ATermElems accessors */
 
-ATbool PTPT_isValidATermList(PTPT_ATermList arg);
-inline ATbool PTPT_isATermListEmpty(PTPT_ATermList arg);
-inline ATbool PTPT_isATermListSingle(PTPT_ATermList arg);
-inline ATbool PTPT_isATermListMany(PTPT_ATermList arg);
-ATbool PTPT_hasATermListHead(PTPT_ATermList arg);
-PTPT_ATerm PTPT_getATermListHead(PTPT_ATermList arg);
-PTPT_ATermList PTPT_setATermListHead(PTPT_ATermList arg, PTPT_ATerm head);
-ATbool PTPT_hasATermListWsAfterFirst(PTPT_ATermList arg);
-PTPT_OptLayout PTPT_getATermListWsAfterFirst(PTPT_ATermList arg);
-PTPT_ATermList PTPT_setATermListWsAfterFirst(PTPT_ATermList arg, PTPT_OptLayout wsAfterFirst);
-ATbool PTPT_hasATermListSep(PTPT_ATermList arg);
-char * PTPT_getATermListSep(PTPT_ATermList arg);
-PTPT_ATermList PTPT_setATermListSep(PTPT_ATermList arg, char * sep);
-ATbool PTPT_hasATermListWsAfterSep(PTPT_ATermList arg);
-PTPT_OptLayout PTPT_getATermListWsAfterSep(PTPT_ATermList arg);
-PTPT_ATermList PTPT_setATermListWsAfterSep(PTPT_ATermList arg, PTPT_OptLayout wsAfterSep);
-ATbool PTPT_hasATermListTail(PTPT_ATermList arg);
-PTPT_ATermList PTPT_getATermListTail(PTPT_ATermList arg);
-PTPT_ATermList PTPT_setATermListTail(PTPT_ATermList arg, PTPT_ATermList tail);
+ATbool PTPT_isValidATermElems(PTPT_ATermElems arg);
+inline ATbool PTPT_isATermElemsEmpty(PTPT_ATermElems arg);
+inline ATbool PTPT_isATermElemsSingle(PTPT_ATermElems arg);
+inline ATbool PTPT_isATermElemsMany(PTPT_ATermElems arg);
+ATbool PTPT_hasATermElemsHead(PTPT_ATermElems arg);
+PTPT_ATerm PTPT_getATermElemsHead(PTPT_ATermElems arg);
+PTPT_ATermElems PTPT_setATermElemsHead(PTPT_ATermElems arg, PTPT_ATerm head);
+ATbool PTPT_hasATermElemsWsAfterFirst(PTPT_ATermElems arg);
+PTPT_OptLayout PTPT_getATermElemsWsAfterFirst(PTPT_ATermElems arg);
+PTPT_ATermElems PTPT_setATermElemsWsAfterFirst(PTPT_ATermElems arg, PTPT_OptLayout wsAfterFirst);
+ATbool PTPT_hasATermElemsSep(PTPT_ATermElems arg);
+char * PTPT_getATermElemsSep(PTPT_ATermElems arg);
+PTPT_ATermElems PTPT_setATermElemsSep(PTPT_ATermElems arg, char * sep);
+ATbool PTPT_hasATermElemsWsAfterSep(PTPT_ATermElems arg);
+PTPT_OptLayout PTPT_getATermElemsWsAfterSep(PTPT_ATermElems arg);
+PTPT_ATermElems PTPT_setATermElemsWsAfterSep(PTPT_ATermElems arg, PTPT_OptLayout wsAfterSep);
+ATbool PTPT_hasATermElemsTail(PTPT_ATermElems arg);
+PTPT_ATermElems PTPT_getATermElemsTail(PTPT_ATermElems arg);
+PTPT_ATermElems PTPT_setATermElemsTail(PTPT_ATermElems arg, PTPT_ATermElems tail);
 
 /*}}}  */
 /*{{{  PTPT_ACon accessors */
@@ -827,9 +925,12 @@ PTPT_ATermList PTPT_setATermListTail(PTPT_ATermList arg, PTPT_ATermList tail);
 ATbool PTPT_isValidACon(PTPT_ACon arg);
 inline ATbool PTPT_isAConInt(PTPT_ACon arg);
 inline ATbool PTPT_isAConReal(PTPT_ACon arg);
-ATbool PTPT_hasAConArg(PTPT_ACon arg);
-PTPT_IntCon PTPT_getAConArg(PTPT_ACon arg);
-PTPT_ACon PTPT_setAConArg(PTPT_ACon arg, PTPT_IntCon arg);
+ATbool PTPT_hasAConInteger(PTPT_ACon arg);
+PTPT_IntCon PTPT_getAConInteger(PTPT_ACon arg);
+PTPT_ACon PTPT_setAConInteger(PTPT_ACon arg, PTPT_IntCon integer);
+ATbool PTPT_hasAConReal(PTPT_ACon arg);
+PTPT_RealCon PTPT_getAConReal(PTPT_ACon arg);
+PTPT_ACon PTPT_setAConReal(PTPT_ACon arg, PTPT_RealCon real);
 
 /*}}}  */
 /*{{{  PTPT_AFun accessors */
@@ -862,9 +963,12 @@ PTPT_ATerm PTPT_setATermType(PTPT_ATerm arg, PTPT_ATerm type);
 ATbool PTPT_hasATermWsAfterType(PTPT_ATerm arg);
 PTPT_OptLayout PTPT_getATermWsAfterType(PTPT_ATerm arg);
 PTPT_ATerm PTPT_setATermWsAfterType(PTPT_ATerm arg, PTPT_OptLayout wsAfterType);
-ATbool PTPT_hasATermArg(PTPT_ATerm arg);
-PTPT_ACon PTPT_getATermArg(PTPT_ATerm arg);
-PTPT_ATerm PTPT_setATermArg(PTPT_ATerm arg, PTPT_ACon arg);
+ATbool PTPT_hasATermCon(PTPT_ATerm arg);
+PTPT_ACon PTPT_getATermCon(PTPT_ATerm arg);
+PTPT_ATerm PTPT_setATermCon(PTPT_ATerm arg, PTPT_ACon con);
+ATbool PTPT_hasATermList(PTPT_ATerm arg);
+PTPT_ATermList PTPT_getATermList(PTPT_ATerm arg);
+PTPT_ATerm PTPT_setATermList(PTPT_ATerm arg, PTPT_ATermList list);
 ATbool PTPT_hasATermName(PTPT_ATerm arg);
 PTPT_AFun PTPT_getATermName(PTPT_ATerm arg);
 PTPT_ATerm PTPT_setATermName(PTPT_ATerm arg, PTPT_AFun name);
@@ -880,12 +984,15 @@ PTPT_ATerm PTPT_setATermArgs(PTPT_ATerm arg, PTPT_ATermArgs args);
 ATbool PTPT_hasATermWsAfterArgs(PTPT_ATerm arg);
 PTPT_OptLayout PTPT_getATermWsAfterArgs(PTPT_ATerm arg);
 PTPT_ATerm PTPT_setATermWsAfterArgs(PTPT_ATerm arg, PTPT_OptLayout wsAfterArgs);
-ATbool PTPT_hasATermWsAfterArg(PTPT_ATerm arg);
-PTPT_OptLayout PTPT_getATermWsAfterArg(PTPT_ATerm arg);
-PTPT_ATerm PTPT_setATermWsAfterArg(PTPT_ATerm arg, PTPT_OptLayout wsAfterArg);
+ATbool PTPT_hasATermWsAfterCon(PTPT_ATerm arg);
+PTPT_OptLayout PTPT_getATermWsAfterCon(PTPT_ATerm arg);
+PTPT_ATerm PTPT_setATermWsAfterCon(PTPT_ATerm arg, PTPT_OptLayout wsAfterCon);
 ATbool PTPT_hasATermAnno(PTPT_ATerm arg);
 PTPT_Ann PTPT_getATermAnno(PTPT_ATerm arg);
 PTPT_ATerm PTPT_setATermAnno(PTPT_ATerm arg, PTPT_Ann anno);
+ATbool PTPT_hasATermWsAfterList(PTPT_ATerm arg);
+PTPT_OptLayout PTPT_getATermWsAfterList(PTPT_ATerm arg);
+PTPT_ATerm PTPT_setATermWsAfterList(PTPT_ATerm arg, PTPT_OptLayout wsAfterList);
 ATbool PTPT_hasATermWsAfterParenClose(PTPT_ATerm arg);
 PTPT_OptLayout PTPT_getATermWsAfterParenClose(PTPT_ATerm arg);
 PTPT_ATerm PTPT_setATermWsAfterParenClose(PTPT_ATerm arg, PTPT_OptLayout wsAfterParenClose);
@@ -923,12 +1030,12 @@ inline ATbool PTPT_isAnnList(PTPT_Ann arg);
 ATbool PTPT_hasAnnWsAfterBraceOpen(PTPT_Ann arg);
 PTPT_OptLayout PTPT_getAnnWsAfterBraceOpen(PTPT_Ann arg);
 PTPT_Ann PTPT_setAnnWsAfterBraceOpen(PTPT_Ann arg, PTPT_OptLayout wsAfterBraceOpen);
-ATbool PTPT_hasAnnList(PTPT_Ann arg);
-PTPT_ATermList PTPT_getAnnList(PTPT_Ann arg);
-PTPT_Ann PTPT_setAnnList(PTPT_Ann arg, PTPT_ATermList list);
-ATbool PTPT_hasAnnWsAfterList(PTPT_Ann arg);
-PTPT_OptLayout PTPT_getAnnWsAfterList(PTPT_Ann arg);
-PTPT_Ann PTPT_setAnnWsAfterList(PTPT_Ann arg, PTPT_OptLayout wsAfterList);
+ATbool PTPT_hasAnnElems(PTPT_Ann arg);
+PTPT_ATermElems PTPT_getAnnElems(PTPT_Ann arg);
+PTPT_Ann PTPT_setAnnElems(PTPT_Ann arg, PTPT_ATermElems elems);
+ATbool PTPT_hasAnnWsAfterElems(PTPT_Ann arg);
+PTPT_OptLayout PTPT_getAnnWsAfterElems(PTPT_Ann arg);
+PTPT_Ann PTPT_setAnnWsAfterElems(PTPT_Ann arg, PTPT_OptLayout wsAfterElems);
 
 /*}}}  */
 /*{{{  PTPT_NatCon accessors */
@@ -1019,7 +1126,6 @@ inline ATbool PTPT_isStartAlphaNumericalEscChar(PTPT_Start arg);
 inline ATbool PTPT_isStartDecimalEscChar(PTPT_Start arg);
 inline ATbool PTPT_isStartEscChar(PTPT_Start arg);
 inline ATbool PTPT_isStartLChar(PTPT_Start arg);
-inline ATbool PTPT_isStartInteger(PTPT_Start arg);
 inline ATbool PTPT_isStartAssociativity(PTPT_Start arg);
 inline ATbool PTPT_isStartAttr(PTPT_Start arg);
 inline ATbool PTPT_isStartAttrs(PTPT_Start arg);
@@ -1099,9 +1205,6 @@ PTPT_Start PTPT_setStartTopEscChar(PTPT_Start arg, PTPT_EscChar topEscChar);
 ATbool PTPT_hasStartTopLChar(PTPT_Start arg);
 PTPT_LChar PTPT_getStartTopLChar(PTPT_Start arg);
 PTPT_Start PTPT_setStartTopLChar(PTPT_Start arg, PTPT_LChar topLChar);
-ATbool PTPT_hasStartTopInteger(PTPT_Start arg);
-PTPT_Integer PTPT_getStartTopInteger(PTPT_Start arg);
-PTPT_Start PTPT_setStartTopInteger(PTPT_Start arg, PTPT_Integer topInteger);
 ATbool PTPT_hasStartTopAssociativity(PTPT_Start arg);
 PTPT_Associativity PTPT_getStartTopAssociativity(PTPT_Start arg);
 PTPT_Start PTPT_setStartTopAssociativity(PTPT_Start arg, PTPT_Associativity topAssociativity);
@@ -1128,33 +1231,39 @@ PTPT_OptLayout PTPT_setOptLayoutChars(PTPT_OptLayout arg, PTPT_CHARLIST chars);
 /*}}}  */
 /*{{{  sort visitors */
 
-PTPT_Tree PTPT_visitTree(PTPT_Tree arg, PTPT_OptLayout (*acceptWsAfterTree)(PTPT_OptLayout), PTPT_Ann (*acceptAnn)(PTPT_Ann), PTPT_OptLayout (*acceptWsAfterAppl)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenOpen)(PTPT_OptLayout), PTPT_Production (*acceptProd)(PTPT_Production), PTPT_OptLayout (*acceptWsAfterProd)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma)(PTPT_OptLayout), PTPT_Args (*acceptArgs)(PTPT_Args), PTPT_OptLayout (*acceptWsAfterArgs)(PTPT_OptLayout), PTPT_Integer (*acceptCharacter)(PTPT_Integer), PTPT_OptLayout (*acceptWsAfterLit)(PTPT_OptLayout), PTPT_Literal (*acceptString)(PTPT_Literal), PTPT_OptLayout (*acceptWsAfterString)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterAmb)(PTPT_OptLayout));
+PTPT_Tree PTPT_visitTree(PTPT_Tree arg, PTPT_OptLayout (*acceptWsAfterTree)(PTPT_OptLayout), PTPT_Ann (*acceptAnn)(PTPT_Ann), PTPT_OptLayout (*acceptWsAfterAppl)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenOpen)(PTPT_OptLayout), PTPT_Production (*acceptProd)(PTPT_Production), PTPT_OptLayout (*acceptWsAfterProd)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma)(PTPT_OptLayout), PTPT_Args (*acceptArgs)(PTPT_Args), PTPT_OptLayout (*acceptWsAfterArgs)(PTPT_OptLayout), PTPT_NatCon (*acceptCharacter)(PTPT_NatCon), PTPT_OptLayout (*acceptWsAfterLit)(PTPT_OptLayout), PTPT_Literal (*acceptString)(PTPT_Literal), PTPT_OptLayout (*acceptWsAfterString)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterAmb)(PTPT_OptLayout));
 PTPT_Attributes PTPT_visitAttributes(PTPT_Attributes arg, PTPT_OptLayout (*acceptWsAfterAttrs)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenOpen)(PTPT_OptLayout), PTPT_Attrs (*acceptAttributes)(PTPT_Attrs), PTPT_OptLayout (*acceptWsAfterAttributes)(PTPT_OptLayout));
 PTPT_Attrs PTPT_visitAttrs(PTPT_Attrs arg, PTPT_OptLayout (*acceptWsAfterBracketOpen)(PTPT_OptLayout), PTPT_AttrList (*acceptList)(PTPT_AttrList), PTPT_OptLayout (*acceptWsAfterList)(PTPT_OptLayout));
 PTPT_AttrList PTPT_visitAttrList(PTPT_AttrList arg, PTPT_Attr (*acceptHead)(PTPT_Attr), PTPT_OptLayout (*acceptWsAfterFirst)(PTPT_OptLayout), char * (*acceptSep)(char *), PTPT_OptLayout (*acceptWsAfterSep)(PTPT_OptLayout));
 PTPT_Attr PTPT_visitAttr(PTPT_Attr arg, PTPT_OptLayout (*acceptWsAfterAssoc)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenOpen)(PTPT_OptLayout), PTPT_Associativity (*acceptAssociativity)(PTPT_Associativity), PTPT_OptLayout (*acceptWsAfterAssociativity)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterTerm)(PTPT_OptLayout), PTPT_ATerm (*acceptAterm)(PTPT_ATerm), PTPT_OptLayout (*acceptWsAfterAterm)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterId)(PTPT_OptLayout), PTPT_Literal (*acceptModuleName)(PTPT_Literal), PTPT_OptLayout (*acceptWsAfterModuleName)(PTPT_OptLayout));
+PTPT_Associativity PTPT_visitAssociativity(PTPT_Associativity arg);
+PTPT_AlphaNumericalEscChar PTPT_visitAlphaNumericalEscChar(PTPT_AlphaNumericalEscChar arg, PTPT_CHARLIST (*acceptChars)(PTPT_CHARLIST));
+PTPT_DecimalEscChar PTPT_visitDecimalEscChar(PTPT_DecimalEscChar arg, PTPT_CHARLIST (*acceptChars)(PTPT_CHARLIST));
+PTPT_EscChar PTPT_visitEscChar(PTPT_EscChar arg, PTPT_CHARLIST (*acceptChars)(PTPT_CHARLIST));
+PTPT_LChar PTPT_visitLChar(PTPT_LChar arg, PTPT_CHARLIST (*acceptChars)(PTPT_CHARLIST));
+PTPT_Literal PTPT_visitLiteral(PTPT_Literal arg, PTPT_CHARLIST (*acceptChars)(PTPT_CHARLIST));
 PTPT_ParseTree PTPT_visitParseTree(PTPT_ParseTree arg, PTPT_OptLayout (*acceptWsAfterParsetree)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenOpen)(PTPT_OptLayout), PTPT_Tree (*acceptTop)(PTPT_Tree), PTPT_OptLayout (*acceptWsAfterTop)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma)(PTPT_OptLayout), PTPT_NatCon (*acceptAmbCnt)(PTPT_NatCon), PTPT_OptLayout (*acceptWsAfterAmbCnt)(PTPT_OptLayout));
 PTPT_Symbol PTPT_visitSymbol(PTPT_Symbol arg, PTPT_OptLayout (*acceptWsAfterLit)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenOpen)(PTPT_OptLayout), PTPT_Literal (*acceptString)(PTPT_Literal), PTPT_OptLayout (*acceptWsAfterString)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterCf)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSymbol)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterLex)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterOpt)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterAlt)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterLhs)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterRhs)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterPair)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSort)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIter)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterStar)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterSep)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSeparator)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterStarSep)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterN)(PTPT_OptLayout), PTPT_NatCon (*acceptNumber)(PTPT_NatCon), PTPT_OptLayout (*acceptWsAfterNumber)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterIterSepN)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma1)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma2)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterPerm)(PTPT_OptLayout), PTPT_Symbols (*acceptSymbols)(PTPT_Symbols), PTPT_OptLayout (*acceptWsAfterSymbols)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterSet)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterFunc)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterVarsym)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterCharClass)(PTPT_OptLayout), PTPT_CharRanges (*acceptCharRanges)(PTPT_CharRanges), PTPT_OptLayout (*acceptWsAfterCharRanges)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterStrategy)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParametrizedSort)(PTPT_OptLayout), PTPT_Literal (*acceptSort)(PTPT_Literal), PTPT_Symbols (*acceptParameters)(PTPT_Symbols), PTPT_OptLayout (*acceptWsAfterParameters)(PTPT_OptLayout));
 PTPT_Symbols PTPT_visitSymbols(PTPT_Symbols arg, PTPT_OptLayout (*acceptWsAfterBracketOpen)(PTPT_OptLayout), PTPT_SymbolList (*acceptList)(PTPT_SymbolList), PTPT_OptLayout (*acceptWsAfterList)(PTPT_OptLayout));
 PTPT_SymbolList PTPT_visitSymbolList(PTPT_SymbolList arg, PTPT_Symbol (*acceptHead)(PTPT_Symbol), PTPT_OptLayout (*acceptWsAfterFirst)(PTPT_OptLayout), char * (*acceptSep)(char *), PTPT_OptLayout (*acceptWsAfterSep)(PTPT_OptLayout));
 PTPT_CharRanges PTPT_visitCharRanges(PTPT_CharRanges arg, PTPT_OptLayout (*acceptWsAfterBracketOpen)(PTPT_OptLayout), PTPT_CharRangeList (*acceptList)(PTPT_CharRangeList), PTPT_OptLayout (*acceptWsAfterList)(PTPT_OptLayout));
 PTPT_CharRangeList PTPT_visitCharRangeList(PTPT_CharRangeList arg, PTPT_CharRange (*acceptHead)(PTPT_CharRange), PTPT_OptLayout (*acceptWsAfterFirst)(PTPT_OptLayout), char * (*acceptSep)(char *), PTPT_OptLayout (*acceptWsAfterSep)(PTPT_OptLayout));
-PTPT_CharRange PTPT_visitCharRange(PTPT_CharRange arg, PTPT_Integer (*acceptInteger)(PTPT_Integer), PTPT_OptLayout (*acceptWsAfterRange)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenOpen)(PTPT_OptLayout), PTPT_Integer (*acceptStart)(PTPT_Integer), PTPT_OptLayout (*acceptWsAfterStart)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma)(PTPT_OptLayout), PTPT_Integer (*acceptEnd)(PTPT_Integer), PTPT_OptLayout (*acceptWsAfterEnd)(PTPT_OptLayout));
+PTPT_CharRange PTPT_visitCharRange(PTPT_CharRange arg, PTPT_NatCon (*acceptInteger)(PTPT_NatCon), PTPT_OptLayout (*acceptWsAfterRange)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenOpen)(PTPT_OptLayout), PTPT_NatCon (*acceptStart)(PTPT_NatCon), PTPT_OptLayout (*acceptWsAfterStart)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma)(PTPT_OptLayout), PTPT_NatCon (*acceptEnd)(PTPT_NatCon), PTPT_OptLayout (*acceptWsAfterEnd)(PTPT_OptLayout));
 PTPT_Args PTPT_visitArgs(PTPT_Args arg, PTPT_OptLayout (*acceptWsAfterBracketOpen)(PTPT_OptLayout), PTPT_TreeList (*acceptList)(PTPT_TreeList), PTPT_OptLayout (*acceptWsAfterList)(PTPT_OptLayout));
 PTPT_TreeList PTPT_visitTreeList(PTPT_TreeList arg, PTPT_Tree (*acceptHead)(PTPT_Tree), PTPT_OptLayout (*acceptWsAfterFirst)(PTPT_OptLayout), char * (*acceptSep)(char *), PTPT_OptLayout (*acceptWsAfterSep)(PTPT_OptLayout));
 PTPT_Production PTPT_visitProduction(PTPT_Production arg, PTPT_OptLayout (*acceptWsAfterProd)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenOpen)(PTPT_OptLayout), PTPT_Symbols (*acceptLhs)(PTPT_Symbols), PTPT_OptLayout (*acceptWsAfterLhs)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma1)(PTPT_OptLayout), PTPT_Symbol (*acceptRhs)(PTPT_Symbol), PTPT_OptLayout (*acceptWsAfterRhs)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterComma2)(PTPT_OptLayout), PTPT_Attributes (*acceptAttributes)(PTPT_Attributes), PTPT_OptLayout (*acceptWsAfterAttributes)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterList)(PTPT_OptLayout));
-PTPT_ATermList PTPT_visitATermList(PTPT_ATermList arg, PTPT_OptLayout (*acceptWsAfterBracketOpen)(PTPT_OptLayout), PTPT_ATermList (*acceptList)(PTPT_ATermList), PTPT_OptLayout (*acceptWsAfterList)(PTPT_OptLayout));
-PTPT_ATermList PTPT_visitATermList(PTPT_ATermList arg, PTPT_ATerm (*acceptHead)(PTPT_ATerm), PTPT_OptLayout (*acceptWsAfterFirst)(PTPT_OptLayout), char * (*acceptSep)(char *), PTPT_OptLayout (*acceptWsAfterSep)(PTPT_OptLayout));
-PTPT_ACon PTPT_visitACon(PTPT_ACon arg, PTPT_IntCon (*acceptArg)(PTPT_IntCon));
+PTPT_ATermList PTPT_visitATermList(PTPT_ATermList arg, PTPT_OptLayout (*acceptWsAfterBracketOpen)(PTPT_OptLayout), PTPT_ATermElems (*acceptElems)(PTPT_ATermElems), PTPT_OptLayout (*acceptWsAfterElems)(PTPT_OptLayout));
+PTPT_ATermElems PTPT_visitATermElems(PTPT_ATermElems arg, PTPT_ATerm (*acceptHead)(PTPT_ATerm), PTPT_OptLayout (*acceptWsAfterFirst)(PTPT_OptLayout), char * (*acceptSep)(char *), PTPT_OptLayout (*acceptWsAfterSep)(PTPT_OptLayout));
+PTPT_ACon PTPT_visitACon(PTPT_ACon arg, PTPT_IntCon (*acceptInteger)(PTPT_IntCon), PTPT_RealCon (*acceptReal)(PTPT_RealCon));
 PTPT_AFun PTPT_visitAFun(PTPT_AFun arg, PTPT_Literal (*acceptLit)(PTPT_Literal));
-PTPT_ATerm PTPT_visitATerm(PTPT_ATerm arg, PTPT_OptLayout (*acceptWsAfterLessThan)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterType)(PTPT_OptLayout), PTPT_ACon (*acceptArg)(PTPT_ACon), PTPT_AFun (*acceptName)(PTPT_AFun), PTPT_OptLayout (*acceptWsAfterName)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenOpen)(PTPT_OptLayout), PTPT_ATermArgs (*acceptArgs)(PTPT_ATermArgs), PTPT_OptLayout (*acceptWsAfterArgs)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterArg)(PTPT_OptLayout), PTPT_Ann (*acceptAnno)(PTPT_Ann), PTPT_OptLayout (*acceptWsAfterParenClose)(PTPT_OptLayout), PTPT_Ann (*acceptAnn)(PTPT_Ann));
+PTPT_ATerm PTPT_visitATerm(PTPT_ATerm arg, PTPT_OptLayout (*acceptWsAfterLessThan)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterType)(PTPT_OptLayout), PTPT_ACon (*acceptCon)(PTPT_ACon), PTPT_ATermList (*acceptList)(PTPT_ATermList), PTPT_AFun (*acceptName)(PTPT_AFun), PTPT_OptLayout (*acceptWsAfterName)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenOpen)(PTPT_OptLayout), PTPT_ATermArgs (*acceptArgs)(PTPT_ATermArgs), PTPT_OptLayout (*acceptWsAfterArgs)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterCon)(PTPT_OptLayout), PTPT_Ann (*acceptAnno)(PTPT_Ann), PTPT_OptLayout (*acceptWsAfterList)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterParenClose)(PTPT_OptLayout), PTPT_Ann (*acceptAnn)(PTPT_Ann));
 PTPT_ATermArgs PTPT_visitATermArgs(PTPT_ATermArgs arg, PTPT_ATerm (*acceptHead)(PTPT_ATerm), PTPT_OptLayout (*acceptWsAfterFirst)(PTPT_OptLayout), char * (*acceptSep)(char *), PTPT_OptLayout (*acceptWsAfterSep)(PTPT_OptLayout));
-PTPT_Ann PTPT_visitAnn(PTPT_Ann arg, PTPT_OptLayout (*acceptWsAfterBraceOpen)(PTPT_OptLayout), PTPT_ATermList (*acceptList)(PTPT_ATermList), PTPT_OptLayout (*acceptWsAfterList)(PTPT_OptLayout));
+PTPT_Ann PTPT_visitAnn(PTPT_Ann arg, PTPT_OptLayout (*acceptWsAfterBraceOpen)(PTPT_OptLayout), PTPT_ATermElems (*acceptElems)(PTPT_ATermElems), PTPT_OptLayout (*acceptWsAfterElems)(PTPT_OptLayout));
 PTPT_NatCon PTPT_visitNatCon(PTPT_NatCon arg, PTPT_CHARLIST (*acceptChars)(PTPT_CHARLIST));
 PTPT_IntCon PTPT_visitIntCon(PTPT_IntCon arg, PTPT_NatCon (*acceptNatCon)(PTPT_NatCon), PTPT_OptLayout (*acceptWsAfterPlus)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfter)(PTPT_OptLayout));
 PTPT_OptExp PTPT_visitOptExp(PTPT_OptExp arg, PTPT_OptLayout (*acceptWsAfterE)(PTPT_OptLayout), PTPT_IntCon (*acceptIntCon)(PTPT_IntCon));
 PTPT_RealCon PTPT_visitRealCon(PTPT_RealCon arg, PTPT_IntCon (*acceptIntCon)(PTPT_IntCon), PTPT_OptLayout (*acceptWsAfterIntCon)(PTPT_OptLayout), PTPT_OptLayout (*acceptWsAfterPeriod)(PTPT_OptLayout), PTPT_NatCon (*acceptNatCon)(PTPT_NatCon), PTPT_OptLayout (*acceptWsAfterNatCon)(PTPT_OptLayout), PTPT_OptExp (*acceptOptExp)(PTPT_OptExp));
-PTPT_Start PTPT_visitStart(PTPT_Start arg, PTPT_OptLayout (*acceptWsBefore)(PTPT_OptLayout), PTPT_RealCon (*acceptTopRealCon)(PTPT_RealCon), PTPT_OptLayout (*acceptWsAfter)(PTPT_OptLayout), int (*acceptAmbCnt)(int), PTPT_OptExp (*acceptTopOptExp)(PTPT_OptExp), PTPT_Literal (*acceptTopLiteral)(PTPT_Literal), PTPT_IntCon (*acceptTopIntCon)(PTPT_IntCon), PTPT_NatCon (*acceptTopNatCon)(PTPT_NatCon), PTPT_Ann (*acceptTopAnn)(PTPT_Ann), PTPT_ATerm (*acceptTopATerm)(PTPT_ATerm), PTPT_AFun (*acceptTopAFun)(PTPT_AFun), PTPT_ACon (*acceptTopACon)(PTPT_ACon), PTPT_ATermList (*acceptTopATermList)(PTPT_ATermList), PTPT_Production (*acceptTopProduction)(PTPT_Production), PTPT_Args (*acceptTopArgs)(PTPT_Args), PTPT_Tree (*acceptTopTree)(PTPT_Tree), PTPT_CharRanges (*acceptTopCharRanges)(PTPT_CharRanges), PTPT_CharRange (*acceptTopCharRange)(PTPT_CharRange), PTPT_Symbols (*acceptTopSymbols)(PTPT_Symbols), PTPT_Symbol (*acceptTopSymbol)(PTPT_Symbol), PTPT_ParseTree (*acceptTopParseTree)(PTPT_ParseTree), PTPT_AlphaNumericalEscChar (*acceptTopAlphaNumericalEscChar)(PTPT_AlphaNumericalEscChar), PTPT_DecimalEscChar (*acceptTopDecimalEscChar)(PTPT_DecimalEscChar), PTPT_EscChar (*acceptTopEscChar)(PTPT_EscChar), PTPT_LChar (*acceptTopLChar)(PTPT_LChar), PTPT_Integer (*acceptTopInteger)(PTPT_Integer), PTPT_Associativity (*acceptTopAssociativity)(PTPT_Associativity), PTPT_Attr (*acceptTopAttr)(PTPT_Attr), PTPT_Attrs (*acceptTopAttrs)(PTPT_Attrs), PTPT_Attributes (*acceptTopAttributes)(PTPT_Attributes));
+PTPT_Start PTPT_visitStart(PTPT_Start arg, PTPT_OptLayout (*acceptWsBefore)(PTPT_OptLayout), PTPT_RealCon (*acceptTopRealCon)(PTPT_RealCon), PTPT_OptLayout (*acceptWsAfter)(PTPT_OptLayout), int (*acceptAmbCnt)(int), PTPT_OptExp (*acceptTopOptExp)(PTPT_OptExp), PTPT_Literal (*acceptTopLiteral)(PTPT_Literal), PTPT_IntCon (*acceptTopIntCon)(PTPT_IntCon), PTPT_NatCon (*acceptTopNatCon)(PTPT_NatCon), PTPT_Ann (*acceptTopAnn)(PTPT_Ann), PTPT_ATerm (*acceptTopATerm)(PTPT_ATerm), PTPT_AFun (*acceptTopAFun)(PTPT_AFun), PTPT_ACon (*acceptTopACon)(PTPT_ACon), PTPT_ATermList (*acceptTopATermList)(PTPT_ATermList), PTPT_Production (*acceptTopProduction)(PTPT_Production), PTPT_Args (*acceptTopArgs)(PTPT_Args), PTPT_Tree (*acceptTopTree)(PTPT_Tree), PTPT_CharRanges (*acceptTopCharRanges)(PTPT_CharRanges), PTPT_CharRange (*acceptTopCharRange)(PTPT_CharRange), PTPT_Symbols (*acceptTopSymbols)(PTPT_Symbols), PTPT_Symbol (*acceptTopSymbol)(PTPT_Symbol), PTPT_ParseTree (*acceptTopParseTree)(PTPT_ParseTree), PTPT_AlphaNumericalEscChar (*acceptTopAlphaNumericalEscChar)(PTPT_AlphaNumericalEscChar), PTPT_DecimalEscChar (*acceptTopDecimalEscChar)(PTPT_DecimalEscChar), PTPT_EscChar (*acceptTopEscChar)(PTPT_EscChar), PTPT_LChar (*acceptTopLChar)(PTPT_LChar), PTPT_Associativity (*acceptTopAssociativity)(PTPT_Associativity), PTPT_Attr (*acceptTopAttr)(PTPT_Attr), PTPT_Attrs (*acceptTopAttrs)(PTPT_Attrs), PTPT_Attributes (*acceptTopAttributes)(PTPT_Attributes));
 PTPT_OptLayout PTPT_visitOptLayout(PTPT_OptLayout arg, PTPT_CHARLIST (*acceptChars)(PTPT_CHARLIST));
 
 /*}}}  */
