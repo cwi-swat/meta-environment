@@ -559,6 +559,16 @@ RWflushEquations()
   }
 }
 
+static PT_Production makeLexToCfProd(PT_Symbol symbol)
+{
+  PT_Symbol lex = PT_makeSymbolLex(symbol);
+  PT_Symbol cf = PT_makeSymbolCf(symbol);
+  
+  PT_Symbols symbols = PT_makeSymbolsList(lex, PT_makeSymbolsEmpty());
+
+  return PT_makeProductionDefault(symbols, cf, PT_makeAttributesNoAttrs());
+}
+
 /* list_to_lexical converts  a list representing a lexical into a
  * lexical again. 
  */
@@ -578,7 +588,7 @@ PT_Tree listToLexical(PT_Tree lexappl)
     ATerror("listToLexical: not a lexical constructor %t\n", lexappl);
   }
 
-  symbol = (PT_Symbol) ASF_getTreeSymbol(tree);
+  symbol = PT_getSymbolSymbol((PT_Symbol) ASF_getTreeSymbol(tree));
 
   charList = ASF_getTreeList(tree);
   charListLength = ASF_getCHARListLength(charList);
@@ -607,7 +617,10 @@ PT_Tree listToLexical(PT_Tree lexappl)
   newlexstr[i] = '\0';
     
   newTree = PT_makeTreeFlatLexical(newCharList);
- 
+  newTree = PT_makeTreeAppl(makeLexToCfProd(symbol), 
+              PT_makeArgsList(newTree,
+                PT_makeArgsEmpty()));
+
   if (annos != NULL) {
     newTree = PT_makeTreeFromTerm(
                  AT_setAnnotations(PT_makeTermFromTree(newTree), annos));
