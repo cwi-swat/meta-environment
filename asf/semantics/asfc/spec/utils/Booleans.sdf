@@ -1,6 +1,6 @@
 module utils/Booleans
 
-imports utils/Layout
+imports asf/syntax/Comments
 
 exports
   sorts Bool

@@ -1,6 +1,6 @@
 module utils/IntCon
 
-imports utils/Layout
+imports asf/syntax/Comments
 
 exports
   sorts NatCon IntCon
