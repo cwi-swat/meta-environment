@@ -1315,7 +1315,6 @@ void process_next_module(int cid)
     compiling = ATfalse;
     if(!reshuffling) {
       gen_makefile(top_module);
-      ATwarning("Compilation completed\n");
       ATBwriteTerm(cid,ATmake("snd-event(done)"));
     }
   }
