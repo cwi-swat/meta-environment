@@ -69,7 +69,8 @@ context-free syntax
   find-la-term(Term) -> Embedding
 
   are-constructors(Embedding, NameTable) -> Bool
-  is-constructor(FunId, NameTable) -> Bool
+  is-constructor(FunId, NameTable) -> Bool 
+  is-list-injection(FunId, NameTable) -> Bool 
 
   check-emb-term(Term, Embedding) -> Bool
   check-emb-terms(TermList, EmbeddingAt) -> Bool

@@ -41,14 +41,12 @@ equations
 %% 2. one of it's argument should be an (embedded) list
 %% 3. the embedding should be made of only constructors
 %% 4. the embedding should be the same for the left-hand side of all rules
-%% 5. the embedding should be part of the right-hand-side too
+
 
 %%
 %% It is this embedding that we are going to factorize out of 
 %% the recursive calls, so we return the embedding if all requiments
 %% are satisfied. We assume that only ONE function is defined!
-
-%% **** Requirement 1-4 are implemented so far ****
 
 [default-cr] get-list-embedding(Rule+, Nametable) = unavailable
 
@@ -157,7 +155,7 @@ equations
 
 %% We check if these FunId's are either list constructors or
 %% refer to productions that are annotated with the 'constructor'
-%% keyword in SDF
+%% keyword in SDF. 
 
 [ac-0] are-constructors([FunId], Nametable) = is-constructor(FunId, Nametable)
 [ac-1] are-constructors([FunId FunId+], Nametable) = 
@@ -357,9 +355,10 @@ equations
 
 [default-rec] remove-emb-cond(Cond,FunIdHasEmbeddingAt) = Cond
 
-[rets-0] remove-emb-terms(Term, FunIdHasEmbeddingAt) = 
-           remove-emb-term(Term, FunIdHasEmbeddingAt)
-
+[rets-0] remove-emb-term(Term, FunIdHasEmbeddingAt) = Term+
+         ====
+         remove-emb-terms(Term, FunIdHasEmbeddingAt) = Term+
+           
 [rets-1] remove-emb-term(Term, FunIdHasEmbeddingAt) = Term2,
          remove-emb-terms(Term+, FunIdHasEmbeddingAt) = Term+2
          ====
