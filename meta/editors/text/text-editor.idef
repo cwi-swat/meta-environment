@@ -37,7 +37,7 @@ in
   (
     if not-equal(ButtonList, []) then
       ButtonName := first(ButtonList) .
-      snd-do(TE, tb-add-menu-item("Term-Actions", ButtonName)) .
+      snd-do(TE, tb-add-menu-item("Actions", ButtonName)) .
       ButtonList := next(ButtonList)
     fi
   )*
