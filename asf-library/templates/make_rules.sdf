@@ -1,0 +1,5 @@
+# $Id$
+
+# Use sdf2table to generate a parse table from a definition file.
+%.tbl: %.def
+	PATH=$(PGEN)/bin:$${PATH} sdf2table -i $< -o $@

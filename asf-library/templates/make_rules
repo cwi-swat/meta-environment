@@ -1,0 +1,25 @@
+# $Id$
+
+diff :
+	patch_name="$(PACKAGE)-$(VERSION)-`echo $(subdir) | sed 's@/@_@g'`.patch" ;\
+	echo "Updating sources" >&2 ;\
+	cvs -Q upd -d;\
+	echo "Determine differences" >&2 ;\
+	cvs -Q diff > $${patch_name}|| true ;\
+	echo "Patch is saved in \"$${patch_name}\".\
+	 Please send this patchfile to the maintainers of $(PACKAGE)." | fmt >&2
+
+%_check : Makefile
+	(\
+	  echo set -e ;\
+	  prog=./$($(*)_check_prog) ;\
+	  input=$($(*)_check_input) ;\
+	  if [ "a$${input}" != "a" ]; then input="-i $(srcdir)/$${input}"; fi ;\
+	  output=$($(*)_check_output) ;\
+	  correct=$(srcdir)/$($(*)_check_correct) ;\
+	  switches="$($(*)_check_switches)" ;\
+	  echo $${prog} $${switches} -i $${input} -o $${output};\
+	  echo diff $${output} $${correct}  ;\
+	  echo rm $${output} ;\
+	) >$@ && \
+	chmod +x $@
