@@ -172,6 +172,9 @@ in
     rec-msg(get-module-id-hook(sdf)) .
     snd-msg(get-module-id-hook-result("Sdf2")) 
   +
+    rec-msg(extension-to-type-hook(".sdf")).
+    snd-msg(extension-to-type-hook-result(sdf))
+  +
     rec-msg(file-extensions-hook).
     snd-msg(file-extensions-hook-result(".sdf",".asf",".trm"))
   +
