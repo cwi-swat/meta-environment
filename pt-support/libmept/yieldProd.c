@@ -46,6 +46,10 @@ lengthOfSymbol(PT_Symbol symbol)
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
     return lengthOfSymbol(newSymbol) + 1;
   }
+  if (PT_isSymbolVarSym(symbol)) {
+    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
+    return lengthOfSymbol(newSymbol);
+  }
   if (PT_isSymbolCf(symbol) 
       ||
       PT_isSymbolLex(symbol)) {
@@ -142,6 +146,12 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
     idx = yieldSymbol(newSymbol, idx, buf, bufSize);
     buf[idx++] = '?';
+    return idx;
+  }
+  if (PT_isSymbolVarSym(symbol)) {
+    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
+    idx = yieldSymbol(newSymbol, idx, buf, bufSize);
+
     return idx;
   }
   if (PT_isSymbolCf(symbol) 

@@ -329,6 +329,22 @@ PT_Attr PT_makeAttrBracket()
 }
 
 /*}}}  */
+/*{{{  PT_Attr PT_makeAttrMemo() */
+
+PT_Attr PT_makeAttrMemo()
+{
+  return (PT_Attr)ATmakeTerm(PT_patternAttrMemo);
+}
+
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrTraverse() */
+
+PT_Attr PT_makeAttrTraverse()
+{
+  return (PT_Attr)ATmakeTerm(PT_patternAttrTraverse);
+}
+
+/*}}}  */
 /*{{{  PT_Args PT_makeArgsList(PT_Tree head, PT_Args tail) */
 
 PT_Args PT_makeArgsList(PT_Tree head, PT_Args tail)
@@ -1220,7 +1236,7 @@ ATbool PT_hasAttributesAttrs(PT_Attributes arg)
 PT_Attrs PT_getAttributesAttrs(PT_Attributes arg)
 {
   if (PT_isAttributesAttrs(arg)) {
-    return (PT_Attrs)arg;
+    return (PT_Attrs)ATgetArgument((ATermAppl)arg, 0);
   }
 
   ATabort("Attributes has no Attrs: %t\n", arg);
@@ -1233,7 +1249,7 @@ PT_Attrs PT_getAttributesAttrs(PT_Attributes arg)
 PT_Attributes PT_setAttributesAttrs(PT_Attributes arg, PT_Attrs attrs)
 {
   if (PT_isAttributesAttrs(arg)) {
-    return (PT_Attributes)attrs;
+    return (PT_Attributes)ATsetArgument((ATermAppl)arg, (ATerm)attrs, 0);
   }
 
   ATabort("Attributes has no Attrs: %t\n", arg);
@@ -1372,6 +1388,12 @@ ATbool PT_isValidAttr(PT_Attr arg)
   else if (PT_isAttrBracket(arg)) {
     return ATtrue;
   }
+  else if (PT_isAttrMemo(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isAttrTraverse(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -1389,6 +1411,22 @@ ATbool PT_isAttrCons(PT_Attr arg)
 ATbool PT_isAttrBracket(PT_Attr arg)
 {
   return ATmatchTerm((ATerm)arg, PT_patternAttrBracket);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isAttrMemo(PT_Attr arg) */
+
+ATbool PT_isAttrMemo(PT_Attr arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternAttrMemo);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isAttrTraverse(PT_Attr arg) */
+
+ATbool PT_isAttrTraverse(PT_Attr arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternAttrTraverse);
 }
 
 /*}}}  */
@@ -2474,6 +2512,12 @@ PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *))
   }
   if (PT_isAttrBracket(arg)) {
     return PT_makeAttrBracket();
+  }
+  if (PT_isAttrMemo(arg)) {
+    return PT_makeAttrMemo();
+  }
+  if (PT_isAttrTraverse(arg)) {
+    return PT_makeAttrTraverse();
   }
   ATabort("not a Attr: %t\n", arg);
   return (PT_Attr)NULL;

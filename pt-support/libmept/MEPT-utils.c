@@ -151,7 +151,7 @@ ATbool PT_prodHasLexAsLhsAndCfAsRhs(PT_Production prod)
     return ATfalse;
   }
 
-  ATerror("PT_prodHasVarSymAsLhs: not a production: %t\n", prod);
+  ATerror("PT_prodHasLexAsLhsAndCfAsRhs: not a production: %t\n", prod);
   return ATfalse;
 }
 
@@ -210,6 +210,21 @@ ATbool PT_prodHasIterAsRhs(PT_Production prod)
   }
 
   ATerror("PT_prodHasListSepAsRhs: not a production: %t\n", prod);
+  return ATfalse;
+}
+
+ATbool PT_isProductionList(PT_Production prod)
+{                                       
+  return PT_prodHasIterAsRhs(prod) ||
+         PT_prodHasIterSepAsRhs(prod);
+}
+
+ATbool PT_isTreeApplList(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    return  PT_isProductionList(prod);
+  }
   return ATfalse;
 }
 
@@ -321,20 +336,6 @@ PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols, PT_SymbolVisitor visito
   }
 
   return newSymbols;
-}
-
-/*}}}  */
-/*{{{  PT_Tree PT_removeTreeAnnotations(PT_Tree arg) */
-
-PT_Tree PT_removeTreeAnnotations(PT_Tree arg)
-{
-  ATerm atArg = PT_makeTermFromTree(arg);
-
-  if (AT_getAnnotations(atArg) != NULL) {
-    atArg = AT_removeAnnotations(atArg);
-  }
-
-  return PT_makeTreeFromTerm(atArg);
 }
 
 /*}}}  */
@@ -578,3 +579,189 @@ ATbool PT_isTreeLexical(PT_Tree tree)
   return ATfalse;
 }
 /*}}}  */ 
+/*{{{  PT_Tree PT_removeTreeAnnotations(PT_Tree arg) */
+
+PT_Tree PT_removeTreeAnnotations(PT_Tree arg)
+{
+  ATerm atArg = PT_makeTermFromTree(arg);
+
+  if (AT_getAnnotations(atArg) != NULL) {
+    atArg = AT_removeAnnotations(atArg);
+  }
+
+  return PT_makeTreeFromTerm(atArg);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isTreeVar(PT_Tree tree) */
+
+ATbool PT_isTreeVar(PT_Tree tree) 
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    return PT_prodHasVarSymAsRhs(prod);
+  }
+  return ATfalse;
+}
+
+ATbool PT_isTreeVarList(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    if (PT_isVarDefault(prod)) {
+      PT_Symbol rhssym = PT_getProductionRhs(prod);
+      if (PT_isSymbolCf(rhssym)) {
+        PT_Symbol cfsym = PT_getSymbolSymbol(rhssym);
+        return PT_isSymbolIterPlus(cfsym) 
+               || PT_isSymbolIterStar(cfsym)
+               || PT_isSymbolIterPlusSep(cfsym) 
+               || PT_isSymbolIterStarSep(cfsym);
+      }
+    }
+  }
+  return ATfalse;
+}
+
+ATbool PT_isTreeVarListStar(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    if (PT_isVarDefault(prod)) {
+      PT_Symbol rhssym = PT_getProductionRhs(prod);
+      if (PT_isSymbolCf(rhssym)) {
+        PT_Symbol cfsym = PT_getSymbolSymbol(rhssym);
+        return PT_isSymbolIterStar(cfsym)
+               || PT_isSymbolIterStarSep(cfsym);
+      }
+    }
+  }
+  return ATfalse;
+}              
+
+ATbool PT_isTreeVarListPlus(PT_Tree tree)
+{
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    if (PT_isVarDefault(prod)) {
+      PT_Symbol rhssym = PT_getProductionRhs(prod);
+      if (PT_isSymbolCf(rhssym)) {
+        PT_Symbol cfsym = PT_getSymbolSymbol(rhssym);
+        return PT_isSymbolIterPlus(cfsym) 
+               || PT_isSymbolIterPlusSep(cfsym);
+      }
+    }
+  }
+  return ATfalse;
+}
+
+
+/*{{{  PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor, */
+
+PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
+                               PT_AttrVisitorData data)
+{
+  ATermList store;
+  PT_Attrs newAttrs;
+
+  /* apply func to each element */
+  store = ATempty;
+  while (PT_hasAttrsHead(attrs)) {
+    store = ATinsert(store,
+                     PT_makeTermFromAttr(
+                     visitor(PT_getAttrsHead(attrs), data)));
+    if (PT_hasAttrsTail(attrs)) {
+      attrs = PT_getAttrsTail(attrs);
+    }
+    else {
+      break;
+    }
+  }        
+
+  if (ATisEmpty(store)) {
+    ATabort("PT_foreachAttrInAttrs: plus list contains no elements");
+    return (PT_Attrs) NULL;
+  }
+
+  newAttrs = PT_makeAttrsSingle(PT_makeAttrFromTerm(ATgetFirst(store)));
+  store = ATgetNext(store);
+
+  /* create new list */
+  for (; !ATisEmpty(store); store = ATgetNext(store)) {
+    PT_Attr newAttr = PT_makeAttrFromTerm(ATgetFirst(store));
+    newAttrs = PT_makeAttrsMany(newAttr,newAttrs);
+  }
+
+  return newAttrs;
+}
+
+/*}}}  */   
+
+/*{{{  static PT_Attr PT_matchAttr(PT_Attr attr, PT_AttrVisitorData data) */
+
+/*{{{  typedef struct PT_BoolAttrTuple_Tag */
+
+typedef struct PT_BoolAttrTuple_Tag {
+  ATbool bool;
+  PT_Attr attr;
+} PT_BoolAttrTuple;
+
+
+/*}}}  */
+
+static PT_Attr PT_matchAttr(PT_Attr attr, PT_AttrVisitorData data)
+{
+  if (PT_isEqualAttr(((PT_BoolAttrTuple*)data)->attr,attr)) {
+    ((PT_BoolAttrTuple*)data)->bool = ATtrue;
+  }
+
+  return attr;
+}           
+
+/*}}}  */
+/*{{{  ATbool PT_hasProductionCertainAttr(PT_Production prod, PT_Attr attr) */
+
+ATbool PT_hasProductionCertainAttr(PT_Production prod, PT_Attr attr)
+{
+  PT_Attributes attributes = PT_getProductionAttributes(prod);
+  PT_Attrs attrs;
+  PT_BoolAttrTuple data;
+
+  if (PT_isAttributesNoAttrs(attributes)) {
+    return ATfalse;
+  }
+
+  attrs = PT_getAttributesAttrs(attributes);
+
+  data.bool = ATfalse;
+  data.attr = attr;
+
+  PT_foreachAttrInAttrs(attrs, PT_matchAttr, (PT_AttrVisitorData)&data);    
+
+  return data.bool;
+}
+
+/*}}}  */
+/*{{{  ATbool PT_hasProductionBracketAttr(PT_Production prod) */
+
+ATbool PT_hasProductionBracketAttr(PT_Production prod)
+{
+  return PT_hasProductionCertainAttr(prod, PT_makeAttrBracket());
+}
+
+/*}}}  */
+/*{{{  ATbool PT_hasProductionMemoAttr(PT_Production prod) */
+
+ATbool PT_hasProductionMemoAttr(PT_Production prod)
+{
+  return PT_hasProductionCertainAttr(prod, PT_makeAttrMemo());
+}
+
+/*}}}  */   
+/*{{{  ATbool PT_hasProductionTraverseAttr(PT_Production prod) */
+
+ATbool PT_hasProductionTraverseAttr(PT_Production prod)
+{
+  return PT_hasProductionCertainAttr(prod, PT_makeAttrTraverse());
+}
+
+/*}}}  */       

@@ -39,6 +39,8 @@ ATbool PT_isVarDefault(PT_Production arg);
 ATbool PT_prodHasLexAsLhsAndCfAsRhs(PT_Production prod);
 ATbool PT_prodHasIterSepAsRhs(PT_Production prod);
 ATbool PT_prodHasIterAsRhs(PT_Production prod);
+ATbool PT_isProductionList(PT_Production prod);
+ATbool PT_isTreeApplList(PT_Tree tree);
 ATbool PT_isIterSepSymbol(PT_Symbol sym);
 ATbool PT_isIterSymbol(PT_Symbol sym);
 ATbool PT_prodHasSTARTAsRhs(PT_Production prod);
@@ -85,5 +87,22 @@ ATbool PT_isTreeLexical(PT_Tree tree);
 PT_Tree PT_makeTreeLayoutEmpty();
 ATbool  PT_isTreeLayout(PT_Tree tree);
 PT_Tree PT_makeTreeLayoutNonEmpty(PT_Args args);
+
+PT_Tree PT_removeTreeAnnotations(PT_Tree arg);  
+
+ATbool PT_isTreeVar(PT_Tree tree);
+ATbool PT_isTreeVarList(PT_Tree tree);
+ATbool PT_isTreeVarListStar(PT_Tree tree);
+ATbool PT_isTreeVarListPlus(PT_Tree tree);
+
+typedef void* PT_AttrVisitorData;
+typedef PT_Attr (*PT_AttrVisitor)(PT_Attr attr, PT_AttrVisitorData data);
+PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
+                               PT_AttrVisitorData data);
+                                                          
+ATbool PT_hasProductionCertainAttr(PT_Production prod, PT_Attr attr);
+ATbool PT_hasProductionBracketAttr(PT_Production prod);
+ATbool PT_hasProductionMemoAttr(PT_Production prod);
+ATbool PT_hasProductionTraverseAttr(PT_Production prod); 
 
 #endif /* _ME_PT_H */ 

@@ -21,7 +21,18 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
   int start_col  = current->col;
   int len;
 
-   if (PT_isTreeList(tree) || PT_isTreeAppl(tree)) {
+  if (PT_isTreeChar(tree)) {
+    if (PT_getTreeCharacter(tree) == '\n') {
+      current->col = 0;
+      current->line++;
+    }
+    else {
+      current->col++;
+    }
+    return tree;
+  }
+
+  if (PT_isTreeList(tree) || PT_isTreeAppl(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
     args = PT_foreachTreeInArgs(args, (PT_TreeVisitor) PT_addTreePosInfo, (PT_TreeVisitorData) current);
     tree = PT_setTreeArgs(tree, args);

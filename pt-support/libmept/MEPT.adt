@@ -31,13 +31,15 @@
   ],
 
   [Attributes, no-attrs, no-attrs],
-  [Attributes, attrs, <attrs(Attrs)>],
+  [Attributes, attrs, attrs(<attrs(Attrs)>)],
 
   [Attrs, many, [<head(Attr)>,<[tail(Attrs)]>]],
   [Attrs, single, [<head(Attr)>]], 
 
   [Attr, cons, cons(<string(str)>)],
-  [Attr, bracket, bracket],
+  [Attr, bracket, atr("bracket")],
+  [Attr, memo, atr("memo")],
+  [Attr, traverse, atr("traverse")],
 
   [Args, list, [<head(Tree)>,<[tail(Args)]>]],
   [Args, empty, []],
