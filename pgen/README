@@ -21,3 +21,50 @@ $Id$
 SDF2 parser generator
 
 
+Installation Instructions
+=========================
+
+1) Required packages.
+
+  The parser generator requires the following packages:
+
+  -GNU make, available from:
+      www.gnu.org
+
+  -The ASF+SDF compiler runtime library, available from:
+      www.cwi.nl/projects/MetaEnv/progsoft
+
+  -The ATerm library, available from:
+      www.cwi.nl/projects/MetaEnv/progsoft
+
+  -The Scannerless Generalized LR Parser (sglr), available from:
+      www.cwi.nl/projects/MetaEnv/progsoft
+
+  -The ToolBus, available from:
+      www.cwi.nl/projects/MetaEnv/progsoft
+
+  Before building the parser generator, you should first install these
+  packages.
+
+2) Configuring the parser generator.
+
+  Assuming that the aterm library, sglr, and the toolbus are installed in
+  <aterm>, <sglr>, and <toolbus> respectively and that the parser generator
+  should be installed in <pgen> then the following command will configure
+  pgen accordingly:
+
+  ./configre --with-aterm=<aterm> --with-sglr=<sglr> --with-toolbus=<toolbus>
+
+  Note. The location of sglr needs only to be specified when sglr is not
+  included in your path during the compilation of the parser generator. 
+  After installation the parse generator uses your PATH variable to locate
+  sglr.
+
+3) Building the parser generator
+
+   Assuming that GNU make is called "gmake" on your system then the
+   following commands will build and install the parser generator:
+
+   > gmake
+   > gmake install
+
