@@ -8,21 +8,13 @@ buttons([
           apply("check-rscript", "List", 1),
           push-modulename("RscriptChecker"),
           reduce,
-          execute-action("unparsePT"),
+          unparse,
+          push-active-module,
           show-list
          ]),
-  button("*",
-         ["message-list"],
-         ["ShowSource"],
-         [show-area("Rscript")]),
-  button("*",
-         ["message-list"],
-         ["ShowSource"],
-         [show-area("Sdf")]),
-
   button("Sdf",
          ["term"],
-         ["Sdf", "All"],
+         ["Sdf", "Calculate"],
          [push-filename("all.rscript"),
           parse("Rscript", "RSCRIPT"),
 
@@ -33,9 +25,26 @@ buttons([
           read-tree,
           check-sort("RSTORE"),
 
-          apply("display-query", "List", 3),
+          apply("evaluate-query", "RVALUE", 3),
           rewrite("DisplayQuery"),
-          execute-action("unparsePT"),
+          dup,
+          push-filename("query-result.rvalue"),
+          save-tree,
+          message("Derived query-results saved.")
+        ]),
+
+  button("Sdf",
+         ["term"],
+         ["Sdf", "Show"],
+         [push-filename("query-result.rvalue"),
+          read-tree,
+          check-sort("RVALUE"),
+
+          apply("display-result", "List", 1),
+          rewrite("DisplayQuery"),
+
+          unparse,
+          push-active-module,
           show-list
         ]),
 
@@ -59,7 +68,7 @@ buttons([
           get-focus,
           push-filename("focus.tree"),
           save-tree,
-          execute-action("baf2trm -i focus.tree -o focus.text"),
+          activate("baf2trm -i focus.tree -o focus.text"),
           push-filename("focus.text"),
           parse("asfix/syntax/Parsetree", "ParseTree"),
           apply("getTopProduction", "Production", 1),
@@ -70,6 +79,6 @@ buttons([
           reduce,
           push-filename("focus.str"),
           push-modulename("ParsetreeOperations"),
-           activate-editor
+          activate-editor
          ])
 ])

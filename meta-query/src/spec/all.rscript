@@ -1,8 +1,12 @@
 rel[node,str] PRODUCTIONS
 rel[node,str] PREFIXPRODUCTIONS
 
-rel[str,<node,str>] ORDINARY_PRODUCTIONS = {<"Production ",<N,V>> | <N,V> : PRODUCTIONS}
-rel[str,<node,str>] PREFIX_PRODUCTIONS = {<"Prefix Production ",<N,V>> | <N,V> : PREFIXPRODUCTIONS}
+rel[str,<node,str>] ORDINARY_PRODUCTIONS = {<"Production ",<N,V>> : <N,V> in PRODUCTIONS}
+rel[str,<node,str>] PREFIX_PRODUCTIONS = {<"Prefix Production ",<N,V>> : <N,V> in PREFIXPRODUCTIONS}
 
 rel[str,<node,str>] ALL_PRODUCTIONS = ORDINARY_PRODUCTIONS union PREFIX_PRODUCTIONS
+
+bag[str] NEEDLE
+
+rel[str,<node,str>] RESULT_PRODUCTIONS = {<"Found ",<N,V>> : V in NEEDLE, <N,V> in PRODUCTIONS}
 

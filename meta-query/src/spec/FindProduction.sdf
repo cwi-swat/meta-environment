@@ -1,0 +1,11 @@
+module FindProduction
+
+imports RscriptCalculator
+imports ParsetreeOperations
+imports Bags[String]
+
+exports
+  context-free syntax
+    create-bag(Production) -> Bag[[String]]
+    add-relation(Bag[[String]], RSTORE) -> RSTORE  
+  
