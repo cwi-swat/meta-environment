@@ -1,5 +1,9 @@
 $Id$
 
+Thu Jul  1 15:26:09 CEST 2004 <markvdb@cwi.nl>
+ * Different translation of (kernel/lexical/context-free) start-symbols
+   into production rules of the form X -> <START>
+
 Mon May 17 11:34:26 CEST 2004 <markvdb, jurgenv@cwi.nl>
  * Increased version number in parsetable.
  * Added the arg-gtr-prio in order to be more selective
