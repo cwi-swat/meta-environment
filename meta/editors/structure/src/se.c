@@ -439,22 +439,6 @@ ATerm check_tree_sort(int cid, char *nonterminal, ATerm t)
 }
 
 /*}}}  */
-/*{{{  ATerm calc_error_location(int cid, ATerm focus, ATerm error) */
-
-ATerm calc_error_location(int cid, ATerm error)
-{
-  ERR_Summary summary = ERR_SummaryFromTerm(error);
-  ERR_FeedbackList feedbacks = ERR_getSummaryList(summary);
-  ERR_Feedback feedback = ERR_getFeedbackListHead(feedbacks);
-  ERR_SubjectList subjects = ERR_getFeedbackList(feedback);
-  ERR_Subject subject = ERR_getSubjectListHead(subjects);
-  ERR_Location location = ERR_getSubjectLocation(subject);
-
-  return ATmake("snd-value(error-location(<term>))", 
-                ERR_LocationToTerm(location));
-}
-
-/*}}}  */
 /*{{{  ATerm is_editor_modified(int cid, ATerm editorId) */
 
 ATerm is_editor_modified(int cid, ATerm editorId)
