@@ -94,10 +94,10 @@ in
     rec-msg(save-all) .
     snd-msg(ts-get-snapshot) .
     rec-msg(ts-snapshot(Snapshot?)) .
-    snd-msg(io-write-packed-term-file("Meta.snapshot", Snapshot)) .
+    snd-msg(io-write-packed-term-file("meta.termstore", Snapshot)) .
     (
       rec-msg(io-file-written) .
-      snd-note(ui-status(errorf("Term-stored saved as Meta.snapshot", [])))
+      snd-note(ui-status(error("Term-stored saved as meta.termstore")))
     +
       rec-msg(io-file-not-written(ErrorMessage?)) .
       snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
