@@ -19,7 +19,7 @@ public class AsFix {
   @see toolbus.aterm.AFun#init to find out which named elements are
   defined.  */
 
-  public static ATerm acc(ATermAppl t, AFun af2) throws ParseError {
+  public static ATerm acc(ATermAppl t, AFun af2) {
     AFun af1 = new AFun(ATerm.the_world, t.getFun());
     ATermAppl at = af1.init();
     return namedElem(af2,new ATermList(ATerm.the_world, at.getArgs()),
@@ -33,7 +33,7 @@ public class AsFix {
   @see toolbus.aterm.AFun#init to find out which
   named elements are defined.*/
 
-  public static ATermAppl repl(ATermAppl t1, AFun af, ATerm t2) throws ParseError {
+  public static ATermAppl repl(ATermAppl t1, AFun af, ATerm t2) {
     AFun af1 = new AFun(ATerm.the_world, t1.getFun());
     ATermAppl at = af1.init();
     t1.setArgs(replace(new ATermList(ATerm.the_world, t1.getArgs()), 
@@ -69,8 +69,12 @@ public class AsFix {
   
   /** namedElem is the same as in the AsFix specification. It looks up
    at which location <tt>af</tt> exists in <tt>l1</tt> and returns the
-   term at taht location in list <tt>l2</tt> */
+   term at that location in list <tt>l2</tt> */
   private static ATerm namedElem(AFun af, ATermList l1, ATermList l2) {
+      //      System.err.println("In namedElem");
+      //      af.println(System.err);
+      //      l1.println(System.err);
+      //      l2.println(System.err);
     if (af.equals(l1.getATerms().getFirst())) {
       return l2.getATerms().getFirst();
     } else {
