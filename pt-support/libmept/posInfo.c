@@ -244,14 +244,17 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
 /*}}}  */
 /*{{{  PT_ParseTree PT_addParseTreePosInfoToDepth(path, parsetree, maxDepth)  */
 
-PT_ParseTree PT_addParseTreePosInfoToDepth(const char* path, PT_ParseTree parsetree,
+PT_ParseTree PT_addParseTreePosInfoToDepth(const char* path,
+					   PT_ParseTree parseTree,
 					   int maxDepth) 
 {
-  PT_Tree tree = PT_getParseTreeTop(parsetree);
+  PT_Tree tree;
   PT_Position current;
 
-
   assert(maxDepth >= 0 || maxDepth == UNLIMITED_DEPTH);
+  assert(PT_isValidParseTree(parseTree));
+
+  tree = PT_getParseTreeTop(parseTree);
 
   current.path = path;
   current.line = 1;
@@ -260,10 +263,10 @@ PT_ParseTree PT_addParseTreePosInfoToDepth(const char* path, PT_ParseTree parset
   current.maxDepth = maxDepth;
   current.curDepth = 0;
 
-  parsetree = PT_setParseTreeTop(parsetree, PT_addTreePosInfo(tree, &current));
+  parseTree = PT_setParseTreeTop(parseTree, PT_addTreePosInfo(tree, &current));
 
 
-  return parsetree;
+  return parseTree;
 }
 
 /*}}}  */
@@ -316,7 +319,8 @@ PT_ParseTree PT_addParseTreePosInfo(const char* path, PT_ParseTree parsetree)
 /*}}}  */
 /*{{{  PT_ParseTree PT_addParseTreePosInfoSome(char *path, PT_ParseTree parsetree, */
 
-PT_ParseTree PT_addParseTreePosInfoSome(const char *path, PT_ParseTree parsetree,
+PT_ParseTree PT_addParseTreePosInfoSome(const char *path,
+					PT_ParseTree parsetree,
 					int depth, 
 					ATbool layout, 
 					ATbool literals)
