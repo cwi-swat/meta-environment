@@ -16,6 +16,7 @@ BUILTIN_NAMES_ARITY=\
 
 BUILTIN_SOURCEFILES=\
 	builtin-common.c \
+	builtin-common.h \
 	builtin-annos.c \
 	builtin-fileio.c \
 	builtin-shell.c \
@@ -34,23 +35,20 @@ include_HEADERS = \
 	asc-traversals.h \
 	asc-builtins.h
 
-noinst_HEADERS = \
-	asc-muasf2pt.h \
-	asc-prod2str.h 
-	builtin-common.h \
-	Library.h \
-	Library_dict.h
-
 libasc_support_me_a_SOURCES = \
 	asc-main.c\
 	asc-support.c \
 	asc-nametable.c \
 	asc-traversals.c \
 	asc-prod2str.c  \
+	asc-prod2str.h  \
 	asc-muasf2pt.c \
+	asc-muasf2pt.h \
 	builtin-forward.c\
 	Library.c\
+	Library.h\
 	Library_dict.c\
+	Library_dict.h\
 	Library_bottom.c\
 	${BUILTIN_SOURCEFILES} 
 
@@ -64,7 +62,7 @@ TESTS=builtin-link-test
 
 #Below here should not be changed when adding a builtin:
 
-EXTRA_DIST = Library.def
+EXTRA_DIST = Library.def 
 
 # To check whether we implemented all the builtins mentioned we
 # generate a program that calls all builtins and try to compile and link 
@@ -86,15 +84,13 @@ GENLNKTST=${UTILS}/gen-link-test.sh
 
 CLEANFILES+=builtin-forward.c asc-builtins.h builtin-link-test.c
 
-BUILT_SOURCES=builtin-forward.c asc-builtins.h builtin-link-test.c
-
 builtin-forward.c: asc-builtins.h ${BUILTIN_SOURCEFILES} Makefile
 	${GENFWD} "${BUILTIN_NAMES_ARITY}" > $@
 
 asc-builtins.h: ${BUILTIN_SOURCES} Makefile
 	${GENPRTS} "${BUILTIN_NAMES_ARITY}" > $@
 
-builtin-link-test.c: asc-builtins.h ${BUILTIN_SOURCEFILES} Makefile ${GENLNKTEST}
+builtin-link-test.c: asc-builtins.h ${BUILTIN_SOURCEFILES} Makefile 
 	${GENLNKTST} "${BUILTIN_NAMES_ARITY}" > $@
 
 # Developers only:
@@ -104,9 +100,10 @@ api: Library.def
 api-clean:
 	rm -f Library.[ch] Library_dict.* Library.adt Library_bottom.c
 
-LIBRARY=$(foreach i,${LIBRARY_MODULES},${top_srcdir}/../asf-library/library/$i.sdf)
+LIBRARYLIST=\
+$(foreach i,${LIBRARY_MODULES},${top_srcdir}/../asf-library/library/$i.sdf)
 
 Library.def:
 	@(echo "definition" ; \
-          cat ${LIBRARY}) > \
+          cat ${LIBRARYLIST}) > \
 	  $@
