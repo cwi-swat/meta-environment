@@ -298,7 +298,7 @@ ATerm get_focus_sort(int cid, char *nonterminal, ATerm f)
 
   sort = SE_getFocusSort(focus);
 
-  if (strcmp(sort, SORT_INVALID) != 0) {
+  if (strcmp(sort, SORT_UNPARSED) != 0) {
     return ATmake("snd-value(<str>)", sort);
   }
 

@@ -149,6 +149,7 @@ SE_Path pathRight(SE_Path path)
 static SE_Steps getStepsInTree(PT_Tree tree, int location, int length)
 {
   SE_Steps steps = SE_makeStepsEmpty();
+
   if (PT_hasTreeArgs(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
     int nr_args = PT_getArgsLength(args);
@@ -158,7 +159,7 @@ static SE_Steps getStepsInTree(PT_Tree tree, int location, int length)
       int arg_len = PT_getTreeLengthAnno(arg);
 
       if (location <= arg_len) {
-	if (location > arg_len
+	if (location + length > arg_len
             ||
             PT_isTreeFlatLexical(arg)
             ||
@@ -185,10 +186,8 @@ SE_Path getPathInParseTree(PT_ParseTree parse_tree, int location, int length)
   char *leftLayout;
   int treeLength, leftLayoutLength;
 
-  if (length < 0) {
-    length = -length;
-    location -= length;
-  }
+  assert(length >= 0);
+
 
   leftLayout = PT_yieldTree(PT_getParseTreeLayoutBeforeTree(parse_tree));
   leftLayoutLength = strlen(leftLayout);
@@ -201,7 +200,7 @@ SE_Path getPathInParseTree(PT_ParseTree parse_tree, int location, int length)
     tree = PT_getParseTreeTree(parse_tree);
     treeLength = PT_getTreeLengthAnno(tree);
 
-    if (location > treeLength) {
+    if (location + length > treeLength) {
       path = SE_makePathRoot();
     }
     else {

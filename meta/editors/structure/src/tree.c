@@ -69,8 +69,11 @@ getTreeSort(PT_Tree tree)
                                   PT_makeCharRangeCharacter(ch),
                                   PT_makeCharRangesEmpty()));
   }
+  else if (PT_isTreeFlatLayout(tree)) {
+    return PT_makeSymbolSort(SORT_UNPARSED);
+  }
   else {
-    return PT_makeSymbolSort(SORT_INVALID);
+    return PT_makeSymbolSort(SORT_UNKNOWN);
   }
 }
 

@@ -89,7 +89,6 @@ SE_Focus expandFocusToStartSymbol(SE_Editor editor, SE_Focus focus)
   }
 
   startSymbols = SE_getEditorStartSymbols(editor);
-
   steps = SE_getPathSteps(path);
   tree  = PT_getParseTreeTree(parse_tree);
 
@@ -146,7 +145,6 @@ SE_Focus updateFocus(SE_Focus focus, int location, int length)
   area = SE_setAreaLength(area, SE_getAreaLength(area) + length);
 
   newFocus = SE_setFocusArea(focus, area);
-
   return newFocus;
 }
 

@@ -194,16 +194,17 @@ static SE_Editor updateEditor(SE_Editor editor, int location, int delta_chars)
   SE_Focus new_focus;
   SE_FocusList dirty_foci = SE_getEditorUnparsedFoci(editor);
   SE_FocusList new_foci = SE_makeFocusListEmpty();
-  SE_Path path = getPathInParseTree(parse_tree, location, delta_chars);
+  SE_Path path = SE_getFocusPath(focus);
+
+  new_tree = flattenParseTreeTreeAt(parse_tree,path);
+  new_tree = updateParseTreeLengthInfo(new_tree, path, delta_chars);
+  editor  = SE_setEditorParseTree(editor, new_tree);
 
   dirty_foci = removeFocus(dirty_foci, focus);
 
   new_focus = updateFocus(focus, location, delta_chars);
   new_focus = SE_setFocusUnparsed(new_focus, FOCUS_UNPARSED);
-
-  new_tree = updateParseTreeLengthInfo(parse_tree, path, delta_chars);
-
-  editor = SE_setEditorParseTree(editor, new_tree);
+  new_focus = SE_setFocusSort(new_focus, SORT_UNPARSED);
 
   /* Move foci that are to the right of the insertion point */
   while (!SE_isFocusListEmpty(dirty_foci)) {
@@ -224,9 +225,6 @@ static SE_Editor updateEditor(SE_Editor editor, int location, int delta_chars)
 
   editor = SE_setEditorModified(editor, EDITOR_MODIFIED);
 
-  editor = SE_setEditorParseTree(editor,
-               flattenParseTreeTreeAt(new_tree,SE_getFocusPath(new_focus)));
-
   return editor;
 }
 
@@ -236,8 +234,15 @@ static SE_Editor updateEditor(SE_Editor editor, int location, int delta_chars)
 static SE_Editor moveFocusToStartSymbol(SE_Editor editor, int location, int length)
 {
   PT_ParseTree parse_tree = SE_getEditorParseTree(editor);
-  SE_Path path = getPathInParseTree(parse_tree, location, length);
+  SE_Path path;
   SE_Focus focus;
+
+  if (length < 0) {
+    path = getPathInParseTree(parse_tree, location + length, -length);
+  } 
+  else {
+    path = getPathInParseTree(parse_tree, location, 0);
+  }
 
   if (!SE_isPathTerm(path)) {
     path = SE_makePathRoot();
@@ -270,7 +275,6 @@ SE_Editor insertChars(SE_Editor editor, int location, int nr_chars)
 SE_Editor deleteChars(SE_Editor editor, int location, int nr_chars)
 {
   assert(location > 0);
-  location--;
 
   return insertChars(editor, location, -nr_chars);
 }
@@ -345,14 +349,14 @@ SE_Editor newEditorGivenTree(PT_ParseTree parse_tree,
 SE_Editor newEditorGivenText(char *text)
 {
   PT_Tree tree = PT_makeTreeLit(text);
-  PT_Symbol sort = PT_makeSymbolCf(PT_makeSymbolSort(SORT_INVALID));
+  PT_Symbol sort = PT_makeSymbolCf(PT_makeSymbolSort(SORT_UNPARSED));
   PT_Symbols symbols = PT_makeSymbolsList(sort, PT_makeSymbolsEmpty());
   PT_ParseTree parse_tree = PT_makeParseTreeTree(symbols, 
                               PT_makeTreeLayoutEmpty(),
                               tree,
                               PT_makeTreeLayoutEmpty(), 0);
 
-  return newEditorGivenTree(parse_tree, SORT_INVALID, FOCUS_UNPARSED);
+  return newEditorGivenTree(parse_tree, SORT_UNPARSED, FOCUS_UNPARSED);
 }
 
 /*}}}  */
