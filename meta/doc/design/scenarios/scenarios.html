@@ -73,7 +73,7 @@ a parse tree the editor switches to 'structure editing mode'.
 
 <H2><A NAME="ParserGenerator">Scenario for Generating Parse Tables</A></H2>
 
-Case: the module database requests a new parse table.
+Case: the parser requests a new parse table.
 
 <OL>
 <LI> The <EM>parser</EM> generates a
@@ -81,7 +81,7 @@ request to generate a new parse-table.
 This request contains the name of the module for
 which the parse-table has to be build, the complete syntax
 of the module and its submodules, and a list of tuples
-consisting of module ids and version numbers.
+consisting of module names and version numbers.
 <LI> The <EM>parser generator</EM> intercepts this request
 and generates a new parse table based on the syntax.
 <LI> The resulting parse table, together with the list of
@@ -186,10 +186,12 @@ should also be able to change the syntax of modules.
      part of the module. This means that the version number of the
      equation part can never be lower than the version number of the
      syntax part.
-<LI> The <EM>module database</EM> flags the syntax part of any modules 
+<LI> The <EM>module database</EM> flags the equation part of any modules 
      that depend on the changed module as 'invalid'.
 <LI> The <EM>module database</EM> stores the new syntax in its internal
      database.
+<LI> The module database broadcasts a note contain the module name and version
+number of the module that is changed.
 </OL>
 
 
@@ -200,6 +202,8 @@ Some components in the system can change the equations of a module.
 The most prominent one is the <EM>hybrid editor</EM>, that can be used
 to edit equations. But in the future other components should also be able 
 to change the equations of a module.
+
+<P>VERDER UITWERKEN!!!
 
 <OL>
 <LI> The <EM>Module database</EM> intercepts the request to change
