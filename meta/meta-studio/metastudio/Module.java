@@ -65,7 +65,15 @@ public class Module implements Comparable {
 		_child = new LinkedList();
 		childListModel.setList(_child);
 	}
+    
+    public List getChildren() {
+        return _child;
+    }
 
+    public List getParents() {
+        return _parent;
+    }
+    
 	public Iterator fetchChildIterator() {
 		return _child.iterator();
 	}

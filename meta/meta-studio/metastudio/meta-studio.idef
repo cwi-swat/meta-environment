@@ -14,7 +14,6 @@ let
   Extension : str,
   On      : term,
   Graph   : term,
-  Info	  : list,
   LayoutedGraph : term,
   ModuleName : str,
   EnvironmentName : str,
@@ -76,12 +75,6 @@ in
     ( 
       rec-msg(display-graph(GraphId?, Graph?)) .
       snd-do(UI, display-graph(GraphId, Graph))
-    +
-      rec-event(UI, get-module-info(ModuleName?)).
-      snd-msg(get-module-info(ModuleName)) .           
-      rec-msg(module-info(ModuleName, Info?)) .
-      snd-do(UI, module-info(ModuleName,Info)) .
-      snd-ack-event(UI, get-module-info(ModuleName))
     +
       rec-event(UI, clear-all).
       snd-msg(clear-all).

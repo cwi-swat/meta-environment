@@ -23,12 +23,12 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -69,7 +69,6 @@ public class MetaStudio
     implements UserInterfaceTif, Runnable, ModuleSelectionListener {
     // TODO: move preference constants to Preferences class
     private static final double RIGHTPANEL_DIVIDER_LOCATION = 0.8;
-    private static final double LEFTPANEL_DIVIDER_LOCATION = 0.65;
 
     private static ATerm ACTION_MENUBAR;
     private static ATerm ACTION_TOOLBAR;
@@ -230,18 +229,18 @@ public class MetaStudio
         return container;
     }
 
-    private JSplitPane createRightPane() {
+    private JSplitPane createMainPane() {
         mainTabs = createGraphTabs();
         JPanel panel = createMessageStatusPanel();
 
-        JSplitPane rightPanel =
+        JSplitPane mainPanel =
             new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainTabs, panel);
-        rightPanel.setResizeWeight(RIGHTPANEL_DIVIDER_LOCATION);
-        rightPanel.setDividerLocation(RIGHTPANEL_DIVIDER_LOCATION);
-        return rightPanel;
+        mainPanel.setResizeWeight(RIGHTPANEL_DIVIDER_LOCATION);
+        mainPanel.setDividerLocation(RIGHTPANEL_DIVIDER_LOCATION);
+        return mainPanel;
     }
 
-    private JSplitPane createLeftPane() {
+    private JPanel createLeftPane() {
         JScrollPane moduleTreePane = createModuleTreePane();
         JPanel treePanel = new JPanel();
         treePanel.setLayout(new BorderLayout());
@@ -249,10 +248,10 @@ public class MetaStudio
 
         createModuleStatusPanel();
 
-        JSplitPane leftPanel =
-            new JSplitPane(JSplitPane.VERTICAL_SPLIT, treePanel, moduleStatus);
-        leftPanel.setResizeWeight(RIGHTPANEL_DIVIDER_LOCATION);
-        leftPanel.setDividerLocation(LEFTPANEL_DIVIDER_LOCATION);
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        leftPanel.add(treePanel);
+        leftPanel.add(moduleStatus);
         return leftPanel;
     }
 
@@ -282,7 +281,7 @@ public class MetaStudio
         toolBar = createToolBar();
         content.add(toolBar, BorderLayout.NORTH);
 
-        content.add(createRightPane(), BorderLayout.CENTER);
+        content.add(createMainPane(), BorderLayout.CENTER);
     }
 
     private JTabbedPane createMessageTabs() {
@@ -310,19 +309,19 @@ public class MetaStudio
     }
 
     private void createModuleStatusPanel() {
-        Color color;
-        moduleStatus = new ModuleStatusPanel(moduleManager);
-        color = Preferences.getColor(Preferences.PREF_STATUSPANE_BACKGROUND);
-        moduleStatus.setBackground(color);
+        moduleStatus = new ModuleStatusPanel(factory, bridge, moduleManager);
     }
 
     private JSplitPane createModuleBrowser() {
-        JSplitPane left = createLeftPane();
+        JPanel left = createLeftPane();
         
         createModuleGraph();
         addGraphPanel(importGraphPanel, "import");
         
-        return new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, importGraphPanel);
+        JSplitPane moduleBrowser = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, importGraphPanel);
+        moduleBrowser.setDividerLocation(0.2);
+        moduleBrowser.setResizeWeight(0.2);
+        return moduleBrowser;
     }
     
     private void createModuleGraph() {
@@ -436,35 +435,6 @@ public class MetaStudio
 
     public void run() {
         layoutGraph(importGraphPanel, graph);
-    }
-
-    public void moduleInfo(String module, ATerm info) {
-        ATermList pairs = (ATermList) info;
-        List entries = new LinkedList();
-
-        while (!pairs.isEmpty()) {
-            ATermList pair = (ATermList) pairs.getFirst();
-
-            String name = pair.getFirst().toString();
-
-            // The rest of the information is ignored for the moment.
-            if (name.equals("path")) {
-
-                String value;
-                ATerm valueTerm = pair.getNext().getFirst();
-                if (valueTerm.getType() == ATerm.APPL) {
-                    value = ((ATermAppl) valueTerm).getName();
-                } else {
-                    value = valueTerm.toString();
-                }
-                String[] entry = { name, value };
-                entries.add(entry);
-            }
-
-            pairs = pairs.getNext();
-        }
-
-        moduleStatus.setModuleInfo(module, entries);
     }
 
     public void initializeUi(String name) {
@@ -585,11 +555,6 @@ public class MetaStudio
 
             moduleTree.setSelectionPath(path);
             moduleTree.scrollPathToVisible(path);
-
-            if (module.getState() == Module.STATE_NORMAL) {
-                bridge.postEvent(
-                    factory.make("get-module-info(<str>)", module.getName()));
-            }
         }
     }
 
