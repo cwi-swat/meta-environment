@@ -139,7 +139,8 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
         JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
 
-        container.add(new MessageTabs(factory, args), BorderLayout.CENTER);
+        messageTabs = createMessageTabs(args);
+        container.add(messageTabs, BorderLayout.CENTER);
 
         StatusBar bar = new StatusBar(factory, args);
         spawn(bar, "status-bar");
@@ -208,8 +209,8 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
     	return tabs;
     }
     
-    private void createMessageTabs(String[] args) {
-    	messageTabs = new JTabbedPane();
+    private JTabbedPane createMessageTabs(String[] args) {
+    	JTabbedPane messageTabs = new JTabbedPane();
 
     	StatusHistory historyPanel = new StatusHistory(factory, args);
     	spawn(historyPanel, "history-list");
@@ -223,6 +224,8 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
     	messageTabs.insertTab("Errors", null, errorList, "Errors and warnings", 0);
     	messageTabs.insertTab("Info",null, systemInfo,"System information", 1);
     	messageTabs.insertTab("Log", null, historyPanel, "Status log", 2);
+    	
+    	return messageTabs;
     }
     
     private void addTab(JTabbedPane tabs, String title, JComponent tool) {
