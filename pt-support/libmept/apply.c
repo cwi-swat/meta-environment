@@ -89,7 +89,7 @@ PT_Tree PT_applyFunctionToArgs(char *function, char* sort, PT_Args args)
 }
 
 PT_Tree
-PT_applyFunctionToTree(char *function, char* module, char* sort, int nArgs, ...)
+PT_applyFunctionToTree(char *function, char* sort, int nArgs, ...)
 {
   PT_Args ptArgs = PT_makeArgsEmpty();
   va_list args;
