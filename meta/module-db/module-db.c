@@ -63,7 +63,7 @@ Manipulation of modules in database:
 
 #include "module-db.h"
 
-static char myversion[] = "1.2";
+static char myversion[] = "1.3";
 
 ATermTable new_modules_db;
 ATermTable import_db;
@@ -346,7 +346,7 @@ ATerm add_empty_module(int cid, char *moduleName)
   char  fileName[1024] = {'\0'};
 
   atModuleName = ATmake("<str>",  moduleName);
-  sprintf(fileName,"%s%s", moduleName, ".sdf2");
+  sprintf(fileName,"%s%s", moduleName, ".sdf");
   entry = (ATerm)ATmakeList(LOC_CNT,
                             ATmake("<str>", fileName),   /* Path Sdf */
                             ATparse("unavailable"),      /* Sdf Tree */

@@ -661,7 +661,7 @@ proc NewModule { file } {
     set opening 1
 
 # Get the module name...
-    set mod [GetBasename $file ".sdf2"]
+    set mod [GetBasename $file ".sdf"]
 # ... and open it.
     GBevent [format "new-module(%s)" [ToId $mod]]
 }
@@ -776,13 +776,13 @@ proc ViewAll {} {
 proc OpenModuleWidget {} {
 
   set types {
-      {{SDF2}   {.sdf2}        }
+      {{SDF}   {.sdf}        }
       {{AsFix}  {.asfix}       }
       {{Any}    *              }
   }
   set mod [tk_getOpenFile -filetypes $types \
                                        -title "Open SDF Module..."]
-  set mod [GetBasename $mod ".sdf2"]
+  set mod [GetBasename $mod ".sdf"]
   set mod [GetBasename $mod ".asfix"]
   if [ expr [ string length $mod ] > 0 ] {
     OpenModule $mod
@@ -810,7 +810,7 @@ proc GetBasename {fnam ext} {
 proc NewModuleWidget {} {
 
   set types {
-      {{SDF2}   {.sdf2}        }
+      {{SDF}   {.sdf}        }
       {{Any}    *              }
   }
   set file [tk_getSaveFile -filetypes $types -title "New SDF Module..."]
