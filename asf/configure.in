@@ -144,7 +144,6 @@ AC_CONFIG_FILES([Makefile
    syntax/addeqssyntax/Makefile
    syntax/addeqssyntax/src/Makefile
    syntax/removevarsyntax/Makefile
-   syntax/removevarsyntax/spec/Makefile
    syntax/removevarsyntax/src/Makefile
    syntax/asfsdf-checker/Makefile
    syntax/asfsdf-checker/src/Makefile

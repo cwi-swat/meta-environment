@@ -1,7 +1,10 @@
 
 
+Wed Jan 26 13:35:13 CET 2005 <jurgenv@cwi.nl>
+ * Reimplemented and regenerated remove-var-syntax
+ * Moved specification of removevarsyntax to asf-library
+
 Tue Jan 25 11:58:24 CET 2005 <jurgenv@cwi.nl>
- * TODO: regenerate remove-var-syntax!
  * TODO: reimplement and regenerate ASF-apigen
  * Removed implementation for "=" conditions. 
 	* asf-upgrade tool is now dead
