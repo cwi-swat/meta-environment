@@ -1,28 +1,25 @@
 /* $Id$ */
 
 tool se is {
-/*  command = "java-adapter -class nl.cwi.gipe.stred.SeTool"*/
-    command = "aap"
+  command = "java-adapter -TB_HOST localhost -class nl.cwi.gipe.stred.SeTool -program 'java -ms32m -mx64m'"
 }
 
-process Structure-editor(TE: text-edit, Fid: str, Text: str) is
+process Structure-editor(TE: text-edit, Fid: str, Text: str, Language: str) is
 let
 Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
-L: str, I: int, T: term, T1: term, Ch: int, Li: int, Co: int,
-Char: term, G: str
+I: int, T: term, T1: term, Ch: int, Li: int, Co: int,
+Char: term, G: str, ErrList: list
 in
   Id := process-id.
-/* Only one language can currently be edited. It is: */
-  L := "Pico".
 /* We're not selective about start symbols yet */
   G := "" .
-/* And here we'll tell the parser to open it */
-  snd-msg(open-language(L,"/ufs/markvdb/Research/new-meta/sglr/tables/Risla.tbl")).
+  snd-note(ui-status(stat(Id,"Starting structure editor..."))).
   execute(se, SE?).
   snd-eval(SE, newEditor(Fid, Text)).
   rec-value(SE,Fl?).
   Foc := first(Fl).
-  snd-msg(TE,set-focus(Fid,Foc)). ( ( 
+  snd-msg(TE,set-focus(Fid,Foc)).
+  snd-note(ui-status(endstat(Id))). ( ( 
       rec-event(TE,insert(Fid, Loc?, Str?)).
       snd-eval(SE,insertChars(Fid, Loc, Str)).
       snd-ack-event(TE,insert(Fid, Loc, Str))
@@ -36,36 +33,27 @@ in
     snd-msg(TE,set-focus(Fid, Foc))
     +
     rec-event(TE,parse(Fid)).
+    snd-note(ui-status(stat(Id,"Parsing..."))).
     FF := []. (
       if not-equal(Fl,[]) then
         Foc:= first(Fl).
         snd-msg(TE,get-focus-text(Foc)).
         rec-msg(TE,focus-text(Str?)).
-        snd-msg(Id,parse-string(L, G, Str)).(( 
-            rec-msg(Id,parse-result(parsetree(T?,I?))).
-            if equal(I,0) then
-              snd-msg(Id,a2toa1(T)).
-              rec-msg(Id,converted(T1?)).
-/*              printf("Replacement term: %t\n",T1).*/
-              snd-eval(SE,replaceFocus(Fid, T1)).
-              rec-value(SE,Fl?)
-            else
-              printf("Parse of %s returned %d ambiguities",Str,I).
-              printf("Term is: %t\n",T).
-              FF :=join(FF,Foc)
-            fi
-          ) 
-          + ( 
-            rec-msg(Id, parse-result(eof-error)).
-            printf("EOF unexpected while parsing %s\n",Str).
-            FF := join(FF,Foc)
-          )
-          + ( 
-            rec-msg(Id, parse-result(parse-error([character(Ch?),line(Li?),col(Co?),char(Char?)]))).
-            printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co).
-            FF := join(FF,Foc)
-          )
-        ).
+        snd-msg(Id,parse-string-as-asfix1(Language, G, Str)).(
+          rec-msg(parse-result-asfix1(Id,parse-tree(T?))).
+/*        printf("Replacement term: %t\n",T).*/
+          snd-eval(SE,replaceFocus(Fid, T)).
+          rec-value(SE,Fl?)
+        + rec-msg(parse-result-asfix1(Id,ambiguities(I?))).
+          printf("Parse of %s returned %d ambiguities",Str,I).
+          printf("Term is: %t\n",T).
+          FF :=join(FF,Foc)
+        + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?))).
+          printf("Error while parsing %s\n",Str).
+          printf("Error: %l\n", ErrList).
+          FF := join(FF,Foc)
+        )
+        .
         snd-eval(SE,nextFocus(Fid)).
         rec-value(SE,Fl?)
       fi
@@ -83,6 +71,7 @@ in
       fi
     fi.
     /* Finished parsing operations */
+    snd-note(ui-status(endstat(Id))).
     snd-ack-event(TE,parse(Fid))
     +
     rec-event(TE,get-focus(Fid,I?)).
