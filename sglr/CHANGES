@@ -1,0 +1,7 @@
+$Id$
+
+* Sun Aug 15 23:56:17 BST 1999 (EV)
+
+  - Extra metrics: calls to SG_Amb, allocated ATerm memory, page faults,
+    ambiguities, number of lines, characters per second
+  - Characters per second is the main metric we want to improve
