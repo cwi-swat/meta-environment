@@ -1,3 +1,6 @@
+2001/11/13 (jong@cwi.nl)
+ * released version 0.6
+
 2001/11/05 ({jurgenv,markvdb}@cwi.nl)
  * Removed module identifiers from productions:
    - regenerated the library.
