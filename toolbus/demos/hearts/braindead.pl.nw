@@ -1,7 +1,7 @@
 
 {\tt braindead} is a robot player written in SWI-Prolog.
 Although this robot is written in a 'logical language', he
-is not smarter than {\tt rand}, the robot player written in C.
+is not smarter than {\tt randi}, the robot player written in C.
 {\tt braindead} chooses the first legal card, when asked to
 play a card.
 

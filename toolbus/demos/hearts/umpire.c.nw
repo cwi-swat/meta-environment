@@ -181,7 +181,6 @@ void deal(match *g)
   if(cards_to_deal % 52 != 0)
     decks++;
   total_cards = decks*52;
-  TBmsg("decks = %d\n", decks);
 
   <<init decks>>
   <<shuffle>>
@@ -690,7 +689,6 @@ Distribute the cards among the players, and start playing.
 <<abort_game>>=
 void abort_game(int cid, int mid, int by)
 {
-  TBmsg("game %d aborted by: %d\n", mid, by);
   remove_match(mid);
 }
 @

@@ -856,7 +856,7 @@ in
 @
 A player can also abort a game himself:
 <<match done>>=
-  rec-event(P, abort-game(Pid, Mid)) .
+  rec-event(P, abort-game(Pid, Mid?)) .
   snd-msg(abort-game(Pid, Mid)) .
   snd-ack-event(P, abort-game(Pid, Mid))
 endlet

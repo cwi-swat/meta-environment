@@ -193,13 +193,12 @@ void play_card(int pid, int gid,
   int index, len, card;
 
   len = list_length(legal);
-  index = rand() % len;
+  index = (rand() % len) + 1;
   t = list_index(legal, index);
   assert(t);
 
   TBmatch(t, "%d", &card);
 
-  TBmsg("robot (%d) is playing card: %d\n", pid, card);
   TBsend(TBmake("snd-event(play-card(%d,%d,%d,%d))", pid, gid, round, card));
 }
 @
