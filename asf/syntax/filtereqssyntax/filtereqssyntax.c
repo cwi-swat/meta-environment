@@ -44,16 +44,13 @@ static int countTreeInjections(PT_Tree tree)
 
 static int getInjectionDepth(PT_Tree eqOrCond)
 {
-  PT_Tree lhs, rhs;
-  int lhs_injections, rhs_injections;
+  PT_Tree lhs;
 
   if (ASF_isValidEquation((ASF_Equation) eqOrCond)) { 
     lhs = (PT_Tree) ASF_getEquationLhs((ASF_Equation) eqOrCond);
-    rhs = (PT_Tree) ASF_getEquationRhs((ASF_Equation) eqOrCond);
   }
   else if (ASF_isValidCondition((ASF_Condition) eqOrCond)) { 
     lhs = (PT_Tree) ASF_getConditionLhs((ASF_Condition) eqOrCond);
-    rhs = (PT_Tree) ASF_getConditionRhs((ASF_Condition) eqOrCond);
   }
   else {
     ATerror("getInjectionDepth: expected condition or equation, got: %t\n",
@@ -61,14 +58,7 @@ static int getInjectionDepth(PT_Tree eqOrCond)
     return DEPTH_UNDEFINED;
   }
 
-  lhs_injections = countTreeInjections(lhs);
-  rhs_injections = countTreeInjections(rhs);
-
-  if (lhs_injections == rhs_injections) {
-    return lhs_injections;
-  }
-
-  return DEPTH_UNDEFINED;
+  return countTreeInjections(lhs);
 }
 
 /*}}}  */
@@ -107,11 +97,11 @@ static PT_Tree filterEquationOrCondition(PT_Tree eqOrCond)
       if (depth[i] != DEPTH_UNDEFINED) {
 	for (j = i + 1; j < count; j++) {
 	  if (buffer[j] != NULL && depth[j] != DEPTH_UNDEFINED) {
-	    if (depth[i] < depth[j]) {
+	    if (depth[i] > depth[j]) {
 	      buffer[i] = NULL;
 	      break;
 	    } 
-	    else if (depth[i] > depth[j]) {
+	    else if (depth[i] < depth[j]) {
 	      buffer[j] = NULL;
 	    }
 	  }
@@ -208,6 +198,8 @@ static ASF_CondEquation filterCondEquation(ASF_CondEquation condeq)
   CHECK_AMB(condeq);
 
   eq = ASF_getCondEquationEquation(condeq);
+  assert(eq);
+
   eq = (ASF_Equation) filterEquationOrCondition((PT_Tree) eq);
   condeq = ASF_setCondEquationEquation(condeq, eq);
 

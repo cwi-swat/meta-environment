@@ -47,11 +47,11 @@ void usage(void)
 static PT_ParseTree filter(PT_ParseTree parsetree)
 {
   PT_Tree tree = PT_getParseTreeTree(parsetree);
-  ATerm ambiguities = PT_reportTreeAmbiguities(tree);
+  ATerm ambiguities;
   int count;
 
   if (run_verbose) {
-    ATwarning("BEFORE FILTERING:\n%t\n", ambiguities);
+    ATwarning("BEFORE FILTERING:\n%t\n", PT_reportTreeAmbiguities(tree));
   }
 
   tree = (PT_Tree) filterEquationSyntax((ASF_Equations) tree);
@@ -84,7 +84,11 @@ int main (int argc, char **argv)
   PT_ParseTree parsetree;
   char   *input_file_name  = "-";
   char   *output_file_name = "-";
- 
+
+  ATinit(argc, argv, &bottomOfStack);    /* Initialize Aterm library */
+  PT_initMEPTApi();
+  ASF_initASFMEApi();
+
   run_verbose = ATfalse;
 
   while ((c = getopt(argc, argv, myarguments)) != EOF)
@@ -92,7 +96,7 @@ int main (int argc, char **argv)
       case 'h':  usage();                      exit(0);
       case 'i':  input_file_name  = optarg;    break;
       case 'o':  output_file_name = optarg;    break;
-      case 'v':  run_verbose = ATtrue;
+      case 'v':  run_verbose = ATtrue;         break;
       case 'V':  fprintf(stdout, "%s %s\n", myname, myversion);
                                                exit(0);
       default :  usage();                      exit(1);
