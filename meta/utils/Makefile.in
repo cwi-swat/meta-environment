@@ -62,7 +62,7 @@ BINFILES	= genmakefile.sh gen-table \
 		  parse-file parse-sdf2 ps-dot \
                   sdf2table meta-paths normalize-sdf imports
 LIBFILES	= 
-DATAFILES	= Sdf2.baf genmakefile.proto lang.types
+DATAFILES	= genmakefile.proto lang.types
 INCLUDEFILES	=
 
 OBJ_CC          = $(patsubst %.c,%-cc.o,$(CSRC))
