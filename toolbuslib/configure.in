@@ -44,12 +44,11 @@ AC_CHECK_HEADER([netinet/in.h],[:],[AC_MSG_ERROR("*** no netinet/in.h")])
 dnl Due to  bug in IRIX6.5 you can't merely include netinet/tcp.h, but
 dnl you need to include standards.h aswell.
 AC_MSG_CHECKING("for netinet/tcp.h")
-AC_TRY_CPP(
-[#ifdef sgi
+AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#ifdef sgi
 #include <standards.h>
 #endif
 #include <netinet/tcp.h>
-],AC_MSG_RESULT("yes"), AC_MSG_ERROR("*** no netinet/tcp.h"))
+]])],[AC_MSG_RESULT("yes")],[AC_MSG_ERROR("*** no netinet/tcp.h")])
 
 AC_CHECK_HEADER([stdarg.h],[:],[AC_MSG_ERROR("*** no stdarg.h")])
 AC_CHECK_HEADER([stdio.h],[:],[AC_MSG_ERROR("*** no stdio.h")])

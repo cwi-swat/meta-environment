@@ -1,4 +1,6 @@
-SUBDIRS    = libtb aterm
+SUBDIRS = libtb aterm
+
+ACLOCAL_FLAGS = -I .
 
 EXTRA_DIST = program-check.m4 reconf \
              toolbuslib-config.sh.src \
