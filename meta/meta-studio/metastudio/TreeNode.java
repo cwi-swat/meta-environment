@@ -30,23 +30,17 @@ public class TreeNode {
 		TreeNode childNode = null;
 		int i = 0;
 
-		for (; i < children.size(); i++) {
-			TreeNode curNode = (TreeNode) getChild(i);
-
-			if (curNode.getName().equals(childName)) {
-				childNode = curNode;
-			}
-			if (curNode.getName().compareTo(childName) > 0) {
-				break;
-			}
-		}
-
 		if (tokens.hasMoreTokens()) {
-			if (childNode == null || childNode.isLeaf()) {
-				childNode = new TreeNode(childName, p, !tokens.hasMoreTokens());
-				children.add(i, childNode);
-			}
-			return childNode.addChild(p + childName + "/", tokens);
+		    int childIndex = getNodeChild(childName);
+
+		    if (childIndex != -1) {
+			childNode = getChild(childIndex);
+		    }
+		    if (childNode == null) {
+			childNode = new TreeNode(childName, p, !tokens.hasMoreTokens());
+			children.add(i, childNode);
+		    }
+		    return childNode.addChild(p + childName + "/", tokens);
 		} else {
 		    //			if (childNode == null) {
 				childNode = new TreeNode(childName, p, !tokens.hasMoreTokens());
@@ -102,6 +96,18 @@ public class TreeNode {
 			TreeNode curNode = (TreeNode) children.get(i);
 
 			if (curNode.getName().equals(n) && curNode.isLeaf()) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
+	public int getNodeChild(String n) {
+		for (int i = 0; i < children.size(); i++) {
+			TreeNode curNode = (TreeNode) children.get(i);
+
+			if (curNode.getName().equals(n) && !curNode.isLeaf()) {
 				return i;
 			}
 		}
