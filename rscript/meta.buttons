@@ -31,10 +31,10 @@ button("Rscript",
 		     unpack-tree,
 		     execute-action("RscriptCalculator -t"),
                      push-filename("RscriptCalculator.results"),
-                     push-modulename("RscriptCalculator"),
+                     push-modulename("Rstore"),
                      close-editor,
                      push-filename("RscriptCalculator.results"),
-                     push-modulename("RscriptCalculator"),
+                     push-modulename("Rstore"),
                      activate-editor],
 
                     [message("Rscript contains type error(s)"),
@@ -77,10 +77,10 @@ button("Rscript",
 					execute-action("RscriptCalculator -t"),
 					message("Execution of Rscript completed"),
 					push-filename("RscriptCalculator.results"),
-					push-modulename("RscriptCalculator"),
+					push-modulename("Rstore"),
 					close-editor,
 					push-filename("RscriptCalculator.results"),
-					push-modulename("RscriptCalculator"),
+					push-modulename("Rstore"),
 					activate-editor
 
 				],
@@ -118,7 +118,28 @@ button("Rscript",
            push-filename("RscriptCalculator.results"),
            push-active-module,
            activate-editor
-           ])
+           ]),
+
+ button("Rstore",
+  	  [description(term-editor, menu(["Rstore", "Dummy"]))],
+	  [
+	  message("Dummy button")
+	  ]),
+
+  button("Rstore",
+  	  [description(term-editor, menu(["Rstore", "View"]))],
+          [push-active-module,
+           get-focus,
+	   check-sort("Elem"),
+	   apply("export-graph", "Graph", 1),
+	   push-modulename("ExportGraph"),
+	   reduce,
+	   unparse,
+	   push-filename("Graph.graph"),
+	   save-tree
+	   ])
+
+
 
 
 ])

@@ -1,0 +1,81 @@
+module ExportGraph
+   imports Graph RscriptElem
+
+exports
+   context-free syntax
+	export-graph(Elem)				-> Graph
+
+hiddens
+   imports asf/syntax/Comments
+
+   imports containers/Table[Elem Integer]
+
+   sorts Instr Integer # Integer # Instr
+         Integer # Integer # Instr # Bag[[Elem]]
+
+   context-free syntax
+	null						-> Instr
+	Node						-> Instr
+	Edge						-> Instr
+	Attribute					-> Instr
+
+	Instr "++" Instr				-> Instr {left}
+
+	mkGraph(Instr)					-> Graph
+	mkNodeId(Integer)				-> NodeId
+	mkNodeId(String)				-> NodeId
+
+	mkBoolNode(BoolCon, Integer)			-> Integer # Integer # Instr
+	mkIntegerNode(Integer, Integer)			-> Integer # Integer # Instr
+	mkStringNode(String, Integer)			-> Integer # Integer # Instr
+	mkAreaNode(Area, Integer)			-> Integer # Integer # Instr
+
+	gen(Elem, Integer)				-> Integer # Integer # Instr
+	gen-bag(Bag[[Elem]], Integer)			-> Integer # Integer # Instr
+	gen-bag1(Elem, Integer, Integer)		-> Integer # Integer # Instr
+	
+	gen-rel(Elem, Integer)				-> Integer # Integer # Instr
+	gen-rel1(Elem, Integer, Bag[[Elem]])		-> Integer # Integer # Instr #  Bag[[Elem]]
+
+	gen-tuple(Tuple, Integer, Bag[[Elem]])		-> Integer # Integer # Instr #  Bag[[Elem]]
+
+
+	gen-elem(Elem, Integer, Bag[[Elem]])		-> Integer # Integer # Instr #  Bag[[Elem]]
+
+	mkGraph(Instr)					-> Graph
+	
+
+   variables
+	"$Bag" [0-9\']*			-> Bag[[Elem]]
+	"$Table" [0-9\']*		-> Bag[[Elem]]
+
+	"$Char*" [0-9\']*		-> CHAR*
+       	"$Elem"   [0-9\']*             	-> Elem
+        "$Elem*"  [0-9\']*             	-> {Elem ","}*
+        "$Elem+"  [0-9\']*             	-> {Elem ","}+
+
+       	"$Tuple"   [0-9\']*             -> Tuple
+       	"$Tuple*"   [0-9\']*            -> {Tuple ","}*
+
+
+	"$N"  [0-9\']*             	-> Integer
+	"$Integer"  [0-9\']*         	-> Integer
+	"$NatCon"  [0-9\']*             -> NatCon
+        "$String" [0-9\']*             	-> String
+        "$BoolCon" [0-9\']*            	-> BoolCon
+        "$Area" [0-9\']*            	-> Area
+        "$ATerm" [0-9\']*            	-> ATerm
+
+
+        "$Instr" [0-9\']*            	-> Instr
+
+        "$Node" [0-9\']*            	-> Node
+        "$Node*" [0-9\']*            	-> {Node ","}*
+
+        "$Edge" [0-9\']*            	-> Edge
+        "$Edge*" [0-9\']*            	-> {Edge ","}*
+
+        "$Attribute" [0-9\']*         	-> Attribute	
+       	"$Attribute*" [0-9\']*        	-> {Attribute	 ","}*
+
+	

@@ -1,0 +1,124 @@
+equations
+
+[mkNodeId1]
+	mkNodeId(natcon($Char*)) = strcon(""" "N" $Char* """)
+
+[mkNodeId2]
+	mkNodeId($String) = $String
+
+[mkGraph1]
+	mkGraph(null) = graph([],[],[])
+
+[mkGraph1]
+	mkGraph($Node) = graph([$Node],[],[])
+
+[mkGraph1]
+	mkGraph($Edge) = graph([],[$Edge],[])
+
+[mkGraph1]
+	mkGraph($Instr1) = graph([$Node*1],[$Edge*1],[$Attribute*1]),
+	mkGraph($Instr2) = graph([$Node*2],[$Edge*2],[$Attribute*2])
+	========================================================	
+	mkGraph($Instr1 ++ $Instr2) = 
+	graph([$Node*1, $Node*2],[$Edge*1, $Edge*2],[$Attribute*1, $Attribute*2])
+
+[export-graph1]
+	gen($Elem, 0) = <$N, $N', $Instr>
+	=====================================================
+	export-graph($Elem) = mkGraph($Instr)
+
+[mkBN1]	$String = "true"
+	=====================================================
+	mkBoolNode(true, $N) = <$N, $N+1, node(mkNodeId($N), [label($String),shape(triangle)])>
+
+[mkBN2]	$String = "false"
+	=====================================================	
+	mkBoolNode(false, $N) = <$N, $N+1, node(mkNodeId($N), [label($String),shape(triangle)])>
+
+[mkSN]	$String = strcon(""" "\" """ $Char* "\" """ """)
+	=====================================================
+	mkStringNode(strcon(""" $Char* """), $N) = <$N, $N+1, node(mkNodeId($N), [label($String),shape(box)])>
+
+[mkIN]	$String = strcon(""" $Char* """)
+	=====================================================
+	mkIntegerNode(natcon($Char*), $N) = <$N, $N+1, node(mkNodeId($N), [label($String),shape(circle)])>
+
+[mkArea] mkAreaNode($Area, $N) =
+	 	<$N, $N+1, node(mkNodeId($N), [label("area"),shape(parallelogram)])>
+
+[gen-bool]
+	gen($BoolCon, $N)	= mkBoolNode($BoolCon, $N)
+
+[gen-int]	
+	gen($NatCon, $N)	= mkIntegerNode($NatCon, $N)
+
+[gen-string]
+	gen($String, $N) 	= mkStringNode($String, $N)
+
+[gen-area]
+	gen($Area, $N) 		= mkAreaNode($Area, $N)
+
+%%[xx]	gen($Tuple, $N) = <$N1, $N1', $Instr>,
+%%	gen({$Elem*}, $N1') = <$N2, $N2', $Instr'>
+%%	===========================================
+%%	gen({$Tuple, $Elem*}, $N) = <-1, $N2', $Instr ++ $Instr'>
+
+[xx]	gen({$Tuple, $Elem*}, $N) = gen-rel({$Tuple, $Elem*}, $N)
+
+[xx]	gen({$Elem, $Elem*}, $N) = gen-bag({$Elem, $Elem*}, $N)
+
+[xx] 	gen({}, $N) = <$N, $N, null>
+
+[gen-bag-1]
+	gen-bag1($Bag, $N, $N+1) = <$N1, $N1', $Instr>
+	==============================================
+	gen-bag($Bag, $N) = <$N, $N1', $Instr ++  node(mkNodeId($N), [label("Bag"),shape(octagon)])>
+
+[gen-bag1-1]
+	gen($Elem, $N') = <$N1, $N1', $Instr1>,
+	gen-bag1({$Elem*}, $N, $N1') = <$N2, $N2', $Instr2>
+	============================================
+	gen-bag1({$Elem, $Elem*}, $N, $N') = 
+	<$N, $N2', $Instr1 ++ $Instr2 ++ edge(mkNodeId($N), mkNodeId($N1),[direction(none)])>
+[gen-bag1-2]
+	gen-bag1({}, $N, $N') = <$N, $N', null>
+
+
+
+
+
+[gen-rel-1]
+	gen-rel1($Bag, $N, {}) = <$N1, $N1', $Instr, $Table>
+	==============================================
+	gen-rel($Bag, $N) = <$N, $N1', $Instr>
+
+[gen-rel1-1]
+	gen-tuple($Tuple, $N, $Table) = <$N1, $N1', $Instr1, $Table'>,
+	gen-rel1({$Elem*}, $N1', $Table') = <$N2, $N2', $Instr2, $Table''>
+	==============================================
+	gen-rel1({$Tuple, $Elem*}, $N, $Table) = 
+	<0, $N2', $Instr1 ++ $Instr2, $Table''>
+
+[gen-rel1-3]
+	gen-rel1({}, $N, $Table) = <$N, $N, null, $Table>
+
+[gen-tuple-1]
+	gen-elem($Elem1, $N, $Table) = <$N1, $N1', $Instr1, $Table'>,
+	gen-elem($Elem2, $N1', $Table') = <$N2, $N2',$Instr2, $Table''>
+	==============================================
+	gen-tuple(<$Elem1, $Elem2>, $N, $Table) =
+	<0, $N2', $Instr1 ++ $Instr2 ++ edge(mkNodeId($N1), mkNodeId($N2),[direction(back)]), $Table''>
+
+
+[gen-elem-1]
+	rimage($Elem, $Table) = {},
+	$Table = {$Elem*1},
+	$Table' = {<$Elem, $N>, $Elem*1},
+	gen($Elem, $N) = <$N1, $N1', $Instr>
+	=============================================
+	gen-elem($Elem, $N, $Table) = <$N1, $N1', $Instr, $Table'>
+
+[gen-elem-1]
+	rimage($Elem, $Table) = {$N1}
+	=============================================
+	gen-elem($Elem, $N, $Table) = <$N1, $N, null, $Table>
