@@ -19,6 +19,8 @@
 # $Id$
 #
 
+CFLAGS=-Wall -g -O2
+
 POD2MAN=pod2man
 POD2TXT=pod2text
 POD2HTML=pod2html
