@@ -56,7 +56,7 @@ AC_SUBST(TOOLBUSLIB)
 
 dnl Optional package ToolBus
 AC_PACKAGE_OPTIONAL(toolbus, tifstoc,
-   [  --with-toolbus=DIR      ToolBusLib is in DIR],
+   [  --with-toolbus=DIR      ToolBus is in DIR],
    [  AC_MSG_WARN([ToolBus package not found. It is required when building from CVS.])])
 AC_SUBST(TOOLBUS)
 
