@@ -1,5 +1,5 @@
 /*
- * Generated at Wed May  2 13:18:46 2001
+ * Generated at Thu May 10 17:05:38 2001
  */
 
 #ifndef __ASFME_dict_H
@@ -7,6 +7,42 @@
 
 #include <aterm2.h>
 
+extern AFun ASF_afun0;
+extern AFun ASF_afun1;
+extern AFun ASF_afun2;
+extern AFun ASF_afun3;
+extern AFun ASF_afun4;
+extern AFun ASF_afun5;
+extern AFun ASF_afun6;
+extern AFun ASF_afun7;
+extern AFun ASF_afun8;
+extern AFun ASF_afun9;
+extern AFun ASF_afun10;
+extern AFun ASF_afun11;
+extern AFun ASF_afun12;
+extern AFun ASF_afun13;
+extern AFun ASF_afun14;
+extern AFun ASF_afun15;
+extern AFun ASF_afun16;
+extern AFun ASF_afun17;
+extern AFun ASF_afun18;
+extern AFun ASF_afun19;
+extern AFun ASF_afun20;
+extern AFun ASF_afun21;
+extern AFun ASF_afun22;
+extern AFun ASF_afun23;
+extern AFun ASF_afun24;
+extern AFun ASF_afun25;
+extern AFun ASF_afun26;
+extern AFun ASF_afun27;
+extern AFun ASF_afun28;
+extern AFun ASF_afun29;
+extern AFun ASF_afun30;
+extern AFun ASF_afun31;
+extern AFun ASF_afun32;
+extern AFun ASF_afun33;
+extern AFun ASF_afun34;
+extern AFun ASF_afun35;
 
 extern ATerm ASF_patternCHARLexToCf;
 extern ATerm ASF_patternConditionNegative;

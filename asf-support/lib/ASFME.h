@@ -118,7 +118,7 @@ ATbool ASF_isEqualCHAR(ASF_CHAR arg0, ASF_CHAR arg1);
 /*{{{  ASF_Production accessors */
 
 ATbool ASF_isValidProduction(ASF_Production arg);
-ATbool ASF_isProductionLexicalConstructor(ASF_Production arg);
+inline ATbool ASF_isProductionLexicalConstructor(ASF_Production arg);
 ATbool ASF_hasProductionFormalName(ASF_Production arg);
 char * ASF_getProductionFormalName(ASF_Production arg);
 ASF_Production ASF_setProductionFormalName(ASF_Production arg, char * formalName);
@@ -130,7 +130,7 @@ ASF_Production ASF_setProductionSymbol(ASF_Production arg, ASF_Symbol symbol);
 /*{{{  ASF_Implies accessors */
 
 ATbool ASF_isValidImplies(ASF_Implies arg);
-ATbool ASF_isImpliesLexToCf(ASF_Implies arg);
+inline ATbool ASF_isImpliesLexToCf(ASF_Implies arg);
 ATbool ASF_hasImpliesLex(ASF_Implies arg);
 ASF_Lexical ASF_getImpliesLex(ASF_Implies arg);
 ASF_Implies ASF_setImpliesLex(ASF_Implies arg, ASF_Lexical lex);
@@ -139,7 +139,7 @@ ASF_Implies ASF_setImpliesLex(ASF_Implies arg, ASF_Lexical lex);
 /*{{{  ASF_TagId accessors */
 
 ATbool ASF_isValidTagId(ASF_TagId arg);
-ATbool ASF_isTagIdLexToCf(ASF_TagId arg);
+inline ATbool ASF_isTagIdLexToCf(ASF_TagId arg);
 ATbool ASF_hasTagIdLex(ASF_TagId arg);
 ASF_Lexical ASF_getTagIdLex(ASF_TagId arg);
 ASF_TagId ASF_setTagIdLex(ASF_TagId arg, ASF_Lexical lex);
@@ -148,7 +148,7 @@ ASF_TagId ASF_setTagIdLex(ASF_TagId arg, ASF_Lexical lex);
 /*{{{  ASF_Conditions accessors */
 
 ATbool ASF_isValidConditions(ASF_Conditions arg);
-ATbool ASF_isConditionsDefault(ASF_Conditions arg);
+inline ATbool ASF_isConditionsDefault(ASF_Conditions arg);
 ATbool ASF_hasConditionsList(ASF_Conditions arg);
 ASF_ConditionList ASF_getConditionsList(ASF_Conditions arg);
 ASF_Conditions ASF_setConditionsList(ASF_Conditions arg, ASF_ConditionList list);
@@ -157,8 +157,8 @@ ASF_Conditions ASF_setConditionsList(ASF_Conditions arg, ASF_ConditionList list)
 /*{{{  ASF_ConditionList accessors */
 
 ATbool ASF_isValidConditionList(ASF_ConditionList arg);
-ATbool ASF_isConditionListSingle(ASF_ConditionList arg);
-ATbool ASF_isConditionListMany(ASF_ConditionList arg);
+inline ATbool ASF_isConditionListSingle(ASF_ConditionList arg);
+inline ATbool ASF_isConditionListMany(ASF_ConditionList arg);
 ATbool ASF_hasConditionListHead(ASF_ConditionList arg);
 ASF_Condition ASF_getConditionListHead(ASF_ConditionList arg);
 ASF_ConditionList ASF_setConditionListHead(ASF_ConditionList arg, ASF_Condition head);
@@ -179,8 +179,8 @@ ASF_ConditionList ASF_setConditionListTail(ASF_ConditionList arg, ASF_ConditionL
 /*{{{  ASF_Equations accessors */
 
 ATbool ASF_isValidEquations(ASF_Equations arg);
-ATbool ASF_isEquationsAbsent(ASF_Equations arg);
-ATbool ASF_isEquationsPresent(ASF_Equations arg);
+inline ATbool ASF_isEquationsAbsent(ASF_Equations arg);
+inline ATbool ASF_isEquationsPresent(ASF_Equations arg);
 ATbool ASF_hasEquationsWsAfterEquations(ASF_Equations arg);
 ASF_Layout ASF_getEquationsWsAfterEquations(ASF_Equations arg);
 ASF_Equations ASF_setEquationsWsAfterEquations(ASF_Equations arg, ASF_Layout wsAfterEquations);
@@ -192,9 +192,9 @@ ASF_Equations ASF_setEquationsList(ASF_Equations arg, ASF_CondEquationList list)
 /*{{{  ASF_CondEquationList accessors */
 
 ATbool ASF_isValidCondEquationList(ASF_CondEquationList arg);
-ATbool ASF_isCondEquationListEmpty(ASF_CondEquationList arg);
-ATbool ASF_isCondEquationListSingle(ASF_CondEquationList arg);
-ATbool ASF_isCondEquationListMany(ASF_CondEquationList arg);
+inline ATbool ASF_isCondEquationListEmpty(ASF_CondEquationList arg);
+inline ATbool ASF_isCondEquationListSingle(ASF_CondEquationList arg);
+inline ATbool ASF_isCondEquationListMany(ASF_CondEquationList arg);
 ATbool ASF_hasCondEquationListHead(ASF_CondEquationList arg);
 ASF_CondEquation ASF_getCondEquationListHead(ASF_CondEquationList arg);
 ASF_CondEquationList ASF_setCondEquationListHead(ASF_CondEquationList arg, ASF_CondEquation head);
@@ -209,9 +209,9 @@ ASF_CondEquationList ASF_setCondEquationListTail(ASF_CondEquationList arg, ASF_C
 /*{{{  ASF_CondEquation accessors */
 
 ATbool ASF_isValidCondEquation(ASF_CondEquation arg);
-ATbool ASF_isCondEquationSimple(ASF_CondEquation arg);
-ATbool ASF_isCondEquationImplies(ASF_CondEquation arg);
-ATbool ASF_isCondEquationWhen(ASF_CondEquation arg);
+inline ATbool ASF_isCondEquationSimple(ASF_CondEquation arg);
+inline ATbool ASF_isCondEquationImplies(ASF_CondEquation arg);
+inline ATbool ASF_isCondEquationWhen(ASF_CondEquation arg);
 ATbool ASF_hasCondEquationTag(ASF_CondEquation arg);
 ASF_Tag ASF_getCondEquationTag(ASF_CondEquation arg);
 ASF_CondEquation ASF_setCondEquationTag(ASF_CondEquation arg, ASF_Tag Tag);
@@ -244,8 +244,8 @@ ASF_CondEquation ASF_setCondEquationWsAfterWhen(ASF_CondEquation arg, ASF_Layout
 /*{{{  ASF_Tag accessors */
 
 ATbool ASF_isValidTag(ASF_Tag arg);
-ATbool ASF_isTagEmpty(ASF_Tag arg);
-ATbool ASF_isTagNotEmpty(ASF_Tag arg);
+inline ATbool ASF_isTagEmpty(ASF_Tag arg);
+inline ATbool ASF_isTagNotEmpty(ASF_Tag arg);
 ATbool ASF_hasTagWsAfterBracketOpen(ASF_Tag arg);
 ASF_Layout ASF_getTagWsAfterBracketOpen(ASF_Tag arg);
 ASF_Tag ASF_setTagWsAfterBracketOpen(ASF_Tag arg, ASF_Layout wsAfterBracketOpen);
@@ -260,7 +260,7 @@ ASF_Tag ASF_setTagWsAfterTagId(ASF_Tag arg, ASF_Layout wsAfterTagId);
 /*{{{  ASF_Tree accessors */
 
 ATbool ASF_isValidTree(ASF_Tree arg);
-ATbool ASF_isTreeLexicalConstructor(ASF_Tree arg);
+inline ATbool ASF_isTreeLexicalConstructor(ASF_Tree arg);
 ATbool ASF_hasTreeFormalName(ASF_Tree arg);
 char * ASF_getTreeFormalName(ASF_Tree arg);
 ASF_Tree ASF_setTreeFormalName(ASF_Tree arg, char * formalName);
@@ -287,9 +287,9 @@ ASF_Tree ASF_setTreeWsAfterList(ASF_Tree arg, ASF_Layout wsAfterList);
 /*{{{  ASF_CHARList accessors */
 
 ATbool ASF_isValidCHARList(ASF_CHARList arg);
-ATbool ASF_isCHARListEmpty(ASF_CHARList arg);
-ATbool ASF_isCHARListSingle(ASF_CHARList arg);
-ATbool ASF_isCHARListMany(ASF_CHARList arg);
+inline ATbool ASF_isCHARListEmpty(ASF_CHARList arg);
+inline ATbool ASF_isCHARListSingle(ASF_CHARList arg);
+inline ATbool ASF_isCHARListMany(ASF_CHARList arg);
 ATbool ASF_hasCHARListHead(ASF_CHARList arg);
 ASF_CHAR ASF_getCHARListHead(ASF_CHARList arg);
 ASF_CHARList ASF_setCHARListHead(ASF_CHARList arg, ASF_CHAR head);
@@ -304,7 +304,7 @@ ASF_CHARList ASF_setCHARListTail(ASF_CHARList arg, ASF_CHARList tail);
 /*{{{  ASF_Equation accessors */
 
 ATbool ASF_isValidEquation(ASF_Equation arg);
-ATbool ASF_isEquationDefault(ASF_Equation arg);
+inline ATbool ASF_isEquationDefault(ASF_Equation arg);
 ATbool ASF_hasEquationLhsSymbol(ASF_Equation arg);
 ASF_Symbol ASF_getEquationLhsSymbol(ASF_Equation arg);
 ASF_Equation ASF_setEquationLhsSymbol(ASF_Equation arg, ASF_Symbol lhsSymbol);
@@ -328,8 +328,8 @@ ASF_Equation ASF_setEquationRhs(ASF_Equation arg, ASF_Tree rhs);
 /*{{{  ASF_Condition accessors */
 
 ATbool ASF_isValidCondition(ASF_Condition arg);
-ATbool ASF_isConditionPositive(ASF_Condition arg);
-ATbool ASF_isConditionNegative(ASF_Condition arg);
+inline ATbool ASF_isConditionPositive(ASF_Condition arg);
+inline ATbool ASF_isConditionNegative(ASF_Condition arg);
 ATbool ASF_hasConditionLhsSymbol(ASF_Condition arg);
 ASF_Symbol ASF_getConditionLhsSymbol(ASF_Condition arg);
 ASF_Condition ASF_setConditionLhsSymbol(ASF_Condition arg, ASF_Symbol lhsSymbol);
@@ -356,7 +356,7 @@ ASF_Condition ASF_setConditionWsAfterUnequal(ASF_Condition arg, ASF_Layout wsAft
 /*{{{  ASF_CHAR accessors */
 
 ATbool ASF_isValidCHAR(ASF_CHAR arg);
-ATbool ASF_isCHARLexToCf(ASF_CHAR arg);
+inline ATbool ASF_isCHARLexToCf(ASF_CHAR arg);
 ATbool ASF_hasCHARLex(ASF_CHAR arg);
 ASF_Lexical ASF_getCHARLex(ASF_CHAR arg);
 ASF_CHAR ASF_setCHARLex(ASF_CHAR arg, ASF_Lexical lex);
