@@ -49,7 +49,7 @@ check: ${TEST_MODULES:=.test} ${TEST_MODULES_ASFE_ONLY:=.asfe.test}
 	@set -e; for i in ${IN}/$*.*.pt; do \
 	  ${ASFE} -l -e ${EQS}/$*.eqs -i $$i | \
           ${ATRMANNOS} -a -o `basename $$i`.asfe.out; \
-          atdiff `basename $$i`.asfe.out ${OUT}/`basename $$i` ; \
+          ${ATDIFF} `basename $$i`.asfe.out ${OUT}/`basename $$i` ; \
           printf "."; \
 	done;
 	@printf "\n"
@@ -60,7 +60,7 @@ check: ${TEST_MODULES:=.test} ${TEST_MODULES_ASFE_ONLY:=.asfe.test}
 	@diff $*.c ${CODE}/$*.c 
 	@set -e; for i in ${IN}/$*.*.pt; do \
 	  $* -i $$i -o `basename $$i`.asfc.out; \
-          atdiff `basename $$i`.asfc.out ${OUT}/`basename $$i` ; \
+          ${ATDIFF} `basename $$i`.asfc.out ${OUT}/`basename $$i` ; \
           printf "."; \
         done;
 	@printf "\n"
