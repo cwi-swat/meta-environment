@@ -38,7 +38,6 @@
 #include "sdf2-language.tb"
 #include "parse-focuses.tb"
 #include "button-actions.tb"
-#include "notification.tb"
 #include "dump-equations.tb"
 #include "dump-sdf-definition.tb"
 #include "pretty-print.tb"
