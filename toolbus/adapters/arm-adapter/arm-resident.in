@@ -1,0 +1,3 @@
+#!/bin/sh
+prefix=@prefix@
+toolbus $@ @exec_prefix@/lib/arm.tb &
