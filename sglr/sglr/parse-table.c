@@ -272,7 +272,7 @@ void SG_AddPTStates(ATermList states, parse_table *pt)
       SG_AddPTGotos(gotos, pt, s);
       SG_AddPTActions(actions, pt, s);
     } else
-      ATerror("SG_AddPTStates: cannot parse curstate: %t\n", curstate);
+      ATerror("SG_AddPTStates: cannot parse %t\n", curstate);
   }
   if (SG_DEBUG || SG_SHOWSTAT)
     ATfprintf(SGlog(), "No. of states: %d\n", nr_of_states);
@@ -287,13 +287,13 @@ production SG_LookupProduction(parse_table *pt, int token)
   return(ATtableGet(pt->productions, (ATerm) ATmakeInt(token)));
 }
 
-void AddProduction(ATermTable tbl, int pr_num, production prod)
+void SG_AddProduction(ATermTable tbl, int pr_num, production prod)
 {
   ATerm key, prev;
 
   key = (ATerm) ATmakeInt(pr_num);
   if((prev = ATtableGet(tbl, key))) {
-    ATerror("AddProduction: production %d (%t) already present, previous: %t\n",
+    ATerror("SG_AddProduction: production %d (%t) already present, previous: %t\n",
             pr_num, prod, prev);
   } else {
     ATtablePut(tbl, (ATerm) ATmakeInt(pr_num), prod);
@@ -324,13 +324,13 @@ void SG_AddPTGrammar(ATermList grammar, parse_table *pt)
     prod = ATgetFirst(grammar);
     if (!ATmatch(prod, "label(<term>,<int>)", &prod, &pr_num))
       ATerror("SG_AddPTGrammar: cannot parse production %t\n", prod);
-    AddProduction(pt->productions, pr_num, prod);
+    SG_AddProduction(pt->productions, pr_num, prod);
     nr_of_prods = SG_Max(pr_num, nr_of_prods);
   }
   if (SG_DEBUG || SG_SHOWSTAT)
     ATfprintf(SGlog(), "No. of productions: %d\n", nr_of_prods + 256);
   for (c = 0; c <= 255; c++) {
-    AddProduction(pt->productions, c, (production) ATmakeInt(c));
+    SG_AddProduction(pt->productions, c, (production) ATmakeInt(c));
   }
 }
 
