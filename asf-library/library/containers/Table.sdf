@@ -22,7 +22,7 @@ context-free syntax
 
 
 hiddens
-  imports asf/syntax/Comments
+  imports basic/Comments
   
 variables
 
