@@ -563,6 +563,7 @@ in
     rec-msg(push-active-module, Stack?, EditorId?)
     . subscribe(delete-editor(EditorId))
     . snd-msg(em-get-modulename(EditorId))
+    . printf("Buttonactions: get-module-name\n")
     . rec-msg(em-modulename(EditorId, Modulename?))
     . StackPushString(Stack, Stack?, Modulename)
     . ReturnSuccess(EditorId, Stack)
@@ -1433,8 +1434,13 @@ let
   Pid: int
 in
   Pid := process-id
-  . rec-msg(get-module-contents(Pid, ModuleId?))
-  . snd-msg(module-contents(Pid, ["module ", ModuleId, "\n"]))
+  .
+  (
+    rec-msg(get-module-contents(Pid, ModuleId?))
+    . snd-msg(module-contents(Pid, ["module ", ModuleId, "\n"]))
+  +
+    rec-msg(cancel-content-handler(Pid))
+  )
 endlet
     
 process MoveCursor(Sid: term, Direction: term) is

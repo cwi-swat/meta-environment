@@ -169,7 +169,7 @@ in
     .
     (
       rec-msg(exists-in-module-db(ModuleId))
-      . snd-note(ui-status(errorf("Module %s already exists", [ModuleId])))
+      . CancelCreateModule(Pid, "Module %s already exists", [ModuleId])
     +
       rec-msg(not-exists-in-module-db(ModuleId))
       . snd-msg(file-extension-hook(Type))
@@ -179,10 +179,12 @@ in
       .
       (
 	rec-msg(io-file-exists)
-	. snd-note(ui-status(errorf("File %s already exists", [Path])))
+        . CancelCreateModule(Pid, "File %s already exists", [Path])
       +
 	rec-msg(io-file-not-exists)
-	. snd-msg(get-module-contents(Pid, ModuleId))
+
+. snd-msg(get-module-contents(Pid, ModuleId))
+	
 	. rec-msg(module-contents(Pid, Contents?))
 	. snd-msg(io-write-text-file(Path, Contents))
 	.
@@ -197,10 +199,13 @@ in
     )
   +
     rec-msg(sm-new-module-name-inconsistent)
-    . snd-note(ui-status(errorf(
-      "Module %s in %s is inconsistent with module paths", [ModuleId, Path])))
+    . CancelCreateModule(Pid, "Module %s in %s is inconsistent with module paths", [ModuleId, Path])
   )
 endlet
+
+process CancelCreateModule(Pid: int, Error: str, Args: list) is
+  snd-note(ui-status(errorf(Error, Args)))
+  . snd-msg(cancel-content-handler(Pid))
 
 process CopySdfModule(SrcModuleId: str, Directory: str, Filename: str) is
 let
@@ -258,14 +263,19 @@ let
   Syntax: term
 in
   Pid := process-id
-  . rec-msg(get-module-contents(Pid, DestModuleId?))
-  . snd-msg(ts-get-term-value("sdf-tree", SrcModuleId))
-  . rec-msg(ts-value(Syntax?))
-  . snd-msg(sm-rename-modulename-in-module(Syntax, DestModuleId))
-  . rec-msg(sm-modulename-renamed-in-module(Syntax?))
-  . snd-msg(unparse(Syntax))
-  . rec-msg(unparsed-text(Contents?))
-  . snd-msg(module-contents(Pid, [Contents]))
+  .
+  (
+    rec-msg(get-module-contents(Pid, DestModuleId?))
+    . snd-msg(ts-get-term-value("sdf-tree", SrcModuleId))
+    . rec-msg(ts-value(Syntax?))
+    . snd-msg(sm-rename-modulename-in-module(Syntax, DestModuleId))
+    . rec-msg(sm-modulename-renamed-in-module(Syntax?))
+    . snd-msg(unparse(Syntax))
+    . rec-msg(unparsed-text(Contents?))
+    . snd-msg(module-contents(Pid, [Contents]))
+  +
+    rec-msg(cancel-content-handler(Pid))
+  )
 endlet
 
 process AddImport(ModuleId: str, Import: str)  is
