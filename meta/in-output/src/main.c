@@ -244,7 +244,7 @@ void remove_file(int cid, const char *directory, const char *name, const char *e
 
   sprintf(fileName, "%s%c%s%s", directory, SEP, name, extension);
 
-  remove(fileName);
+  unlink(fileName);
 }
 
 /*}}}  */
