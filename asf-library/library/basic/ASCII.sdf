@@ -1,4 +1,4 @@
-module ASCII
+module basic/ASCII
 
 imports basic/Strings
 	basic/Integers
