@@ -176,6 +176,9 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
 	t = ATreadFromNamedFile("-");
 	pt = PT_makeParseTreeFromTerm(t);
       }
+      else if (nInputs == 1) {
+	pt = PT_makeParseTreeFromTerm(inputs[0]);
+      }
       else if (nInputs != 1) {
 	ATerror("Can only process one argument if no -f and -r option "
 		"are supplied.\n");
