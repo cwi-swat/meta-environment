@@ -249,16 +249,32 @@ void write_asfix_file(int cid,ATerm modname)
   ATerm amod = GetValue(compile_db,modname);
 
   if(ATmatchTerm(modname,pattern_asfix_id,&text)) {
+    /* Check whether the C file exists. */
+    len = strlen(output_path) + 1 + strlen(text) + strlen(".c");
+    fname = malloc(len + 1);
+    if(!fname) 
+      ATerror("Not enough memory\n");
+    sprintf(fname, "%s/%s.c", output_path, text);
+    input = fopen(fname,"r");
+    if(!input)
+      write = ATtrue;
+    else
+      write = ATfalse;
+    fclose(input);
+    free(fname);
+
     len = strlen(output_path) + 1 + strlen(text) + strlen(".asfix");
     fname = malloc(len + 1);
     if(!fname) 
       ATerror("Not enough memory\n");
     sprintf(fname, "%s/%s.asfix", output_path, text);
-    /* Check whether it is necessary to generate new C code. */
+    /* Check whether it is necessary to generate new C code
+     * because of a modified AsFix file. */
     input = fopen(fname,"r");
     if(input) {
       oldmod = ATreadFromTextFile(input);
-      write = !ATisEqual(oldmod,amod);
+      if(!write)
+        write = !ATisEqual(oldmod,amod);
       fclose(input);
     }
     else
