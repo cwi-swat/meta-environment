@@ -18,6 +18,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.apache.xalan.processor.StopParseException;
+
 import tide.tool.ToolManager;
 import tide.tool.prefeditor.PreferencesEditorFactory;
 import tide.tool.proclist.ProcessList;
@@ -38,7 +40,7 @@ public class TideControl
 	public static ATermFactory factory;
 
 	private TideControlBridge bridge;
-	private DebugTool tool;
+	private DebugTool debugTool;
 
 	private JDesktopPane desktop;
 	private ProcessList processList;
@@ -59,7 +61,7 @@ public class TideControl
 		setBackground(Color.white);
 
 		bridge = new TideControlBridge(factory, this);
-		tool = new DebugTool(factory);
+		debugTool = new DebugTool(factory);
 
 		desktop = new JDesktopPane();
 		desktop.setPreferredSize(new Dimension(1000, 700));
@@ -76,7 +78,11 @@ public class TideControl
 		connectTideControl(args);
 		connectDebugTool(args);
 
-		debugToolThread = new Thread(tool);
+		startChildThreads();
+	}
+
+	private void startChildThreads() {
+		debugToolThread = new Thread(debugTool);
 		debugToolThread.setName("DebugTool");
 		debugToolThread.start();
 
@@ -87,7 +93,7 @@ public class TideControl
 
 	private void createProcessList() {
 		processList = new ProcessList(manager);
-		tool.addDebugToolListener(processList);
+		debugTool.addDebugToolListener(processList);
 	}
 
 	private Properties loadProperties() throws IOException {
@@ -113,9 +119,9 @@ public class TideControl
 	
 
 	protected void connectDebugTool(String[] args) throws UnknownHostException, IOException {
-		tool.init(args);
-		tool.setLockObject(this);
-		tool.connect("debug-tool", null, -1);
+		debugTool.init(args);
+		debugTool.setLockObject(this);
+		debugTool.connect("debug-tool", null, -1);
 	}
 
 	protected void connectTideControl(String[] args) throws UnknownHostException, IOException {
@@ -125,13 +131,30 @@ public class TideControl
 	}
 
 	public void recTerminate(ATerm arg) {
-		// use deprecated methods, because new methods not widely available yet
-		debugToolThread.stop();
-		tideControlThread.stop();
+		stopChildThreads();
+		
 		System.exit(0);
 	}
 
-
+	protected void stopChildThreads() {
+		debugTool.stopRunning();
+		debugToolThread.interrupt();
+		
+		bridge.stopRunning();
+		tideControlThread.interrupt();
+		
+		try {
+			debugToolThread.join();
+		} catch (InterruptedException e) {
+			System.err.println("Ignoring interrupt during shutdown: debugToolThread");
+		}
+		
+		try {
+			tideControlThread.join();
+		} catch (InterruptedException e1) {
+			System.err.println("Ignoring interrupt during shutdown: tideControlThread");
+		}
+	}
 
 	public void loadPreferences() {
 		JFileChooser chooser = new JFileChooser();
@@ -192,6 +215,6 @@ public class TideControl
 	}
 	
 	public void addDebugToolListener(DebugToolListener l) {
-		tool.addDebugToolListener(l);
+		debugTool.addDebugToolListener(l);
 	}
 }
