@@ -1,5 +1,9 @@
 $Id$
 
+2003/06/17 (markvdb@cwi.nl)
+ * Again fixed a non-termination bug in the transitive closuer calculation
+   of imports.
+
 2003/06/12 ({markvdb,iversen}@cwi.nl)
  * Fixed a non-termination bug in the transitive closure calculation of
    imports.
