@@ -1,5 +1,6 @@
-#! @SHELL@
+#! /bin/sh
 # $Id$
+Revision='$Revision$'
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
@@ -8,59 +9,137 @@ libdir=@libdir@
 
 PATH="$PATH:$bindir"
 
-PARSER="${bindir}/parse-sdf2 -1 -v"
+RM=rm
+PARSER="${bindir}/parse-sdf2 -1"
 GENERATOR="${bindir}/gen-table"
 
-VERBOSE=1;
-ERROR=0;
+verbose=0;
+error=0;
+
+###
+#  Handle the command line, &c.
+###
+
+myname=`basename $0`
+myversion=`echo $Revision| cut -d' ' -f2`
+
+# The argument vector: list of option letters, colons denote option
+# arguments.  See Usage function, immediately below, for option
+# explanation.
+myarguments="fhsvV"
+
+if [ $myarguments ] ; then
+   arg2explanation='s/\(.:\)/ -\1 /g; s/ \([^-:]\)/ -\1/g; s/:/ file/g';
+   myargsexplained=" -`echo $myarguments|sed -e \"$arg2explanation\"`"
+fi
+
+# Usage: displays helpful usage information
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $myname$myargsexplained . . .
+Options:
+    -f              use handcrafted normalizer (`fast')
+    -h              display help information (usage)
+    -s              use compiled specification (`slow')
+    -v              verbose mode
+    -V              reveal program version (i.e. $myversion)
+E_O_USAGE
+}
+
+Version() {
+    echo "$myname v$myversion" >&2
+}
+
+# getopt handles command line...
+args=`getopt $myarguments $* 2> /dev/null`
+if test $? != 0
+then
+        Usage
+        exit 2
+fi
+set -- $args
+
+# Argument interpretation...
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in
+        -f)
+            PGOPTS="$PGOPTS $1" ;;
+        -h)
+            Usage; shift;;
+        -s)
+            PGOPTS="$PGOPTS $1" ;;
+        -v)
+            verbose=1; shift;;
+        -V)
+            Version; shift;;
+        --)
+            shift; break;;
+    # Add additional command line options here...
+    *)
+            Usage; shift ;;
+    esac
+done
+
+
+###
+#  Get to the real work now...
+###
+
+
+Warn () {
+	echo $*                                   	>&2
+}
+
+Error () {
+	Warn $*
+	error=1
+}
+
+Abort () {
+	Error $*
+	exit 2
+}
 
 Notify () {
-        if [ $VERBOSE -gt 0 ]
-        then
-                echo $*                                   >&2
-        fi
+	if [ $verbose -gt 0 ] ; then
+		Warn $*
+	fi
 }
 
 
-while [ $# -gt 0 ]	# Handle command line options
-do
-	case $1
-	in
-		-v*)
-			VERBOSE=0
-			OPTS="$OPTS $1" ;;
-		-f*)
-			PGOPTS="$PGOPTS $1" ;;
-		-s*)
-			PGOPTS="$PGOPTS $1" ;;
-		-*)
-			echo Unknown option ignored: $1 ;;
-		*)
-			Files="$Files $1" ;;
-	esac
-	shift
-done
+#
+## Main bit...
+#
 
-for f in $Files
+if [ $verbose -gt 0 ] ; then
+	VERBOSE="-v"
+else
+	VERBOSE=""
+fi
+
+
+for f in $@
 do
 	base=`dirname $f`/`basename $f .sdf2`
 	af1name=$base.asfix1
 	tblname=$base.tbl
 	Notify "Parsing $f..."
-	if $PARSER $OPTS $f -o $af1name
+	if $PARSER $VERBOSE $f -o $af1name
 	then
 	        Notify "Generating parse table ..."
-	        if $GENERATOR $PGOPTS $OPTS $af1name
+	        if $GENERATOR $VERBOSE $PGOPTS $af1name
 		then
-			rm -f $af1name
+			${RM} -f $af1name
 		else
-			echo "Error rewriting $f"	>&2
-			ERROR=1
+			Warn "Error rewriting $f"
+			error=1
 		fi
 	else
-		echo "Error parsing $f"			>&2
-		ERROR=1
+		Warn "Error parsing $f"
+		error=1
 	fi
 done
 
-exit $ERROR;
+exit $error;
