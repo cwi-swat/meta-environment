@@ -1,5 +1,8 @@
-
 equations
+
+[] get-location(X) = location(strcon(Char*), area(LineS, ColS, LineE, ColE, 0, 0))
+     when area(Path,LineS,ColS,LineE,ColE) := get-posinfo(X),
+          qliteral(Char*) := Path
 
 [] get-posinfo(X) = get-term-anno(X,"pos-info")
 

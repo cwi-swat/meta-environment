@@ -1,10 +1,13 @@
 module utilities/PosInfo[X]
 
+imports basic/Locations
 imports utilities/ATermAnnotations[X]
 
 exports
 
 context-free syntax
+
+get-location(X)     -> Location
 
 get-posinfo(X)      -> ATerm
 get-start-column(X) -> IntCon
@@ -19,6 +22,7 @@ variables
 
 "X"        -> X
 "ATerm" -> ATerm
-"Col"[SE]  -> IntCon
-"Line"[SE] -> IntCon
+"Col"[SE]  -> NatCon
+"Line"[SE] -> NatCon
 "Path"     -> Literal
+"Char*" -> CHAR*
