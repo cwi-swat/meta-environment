@@ -10,6 +10,7 @@ Syntax    : term,
 NewSyntax : term,
 Eqs       : term,
 Name      : term,
+Time      : int,
 Mdb       : module-db,
 Modules   : list,
 Equations : list,
@@ -69,7 +70,7 @@ snd-do(Mdb, create-module-db).
   )
 +
 /* Add a module to the database */
-  rec-msg(add-module-to-db(Module?)).
+  rec-msg(add-module-to-db(Module?,timestamp(Time?))).
   snd-eval(Mdb,add-module(Module)).
   rec-value(Mdb,imports(Name?,need-modules(Modules?))).
   snd-msg(need-modules(Modules)).
@@ -85,8 +86,8 @@ snd-do(Mdb, create-module-db).
 +
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
-  rec-msg(add-sdf2-module-to-db(Path?,Module?,Status?)).
-  snd-eval(Mdb,add-sdf2-module(Path,Module,Status)).
+  rec-msg(add-sdf2-module-to-db(Path?,Module?,timestamp(Time?),Status?)).
+  snd-eval(Mdb,add-sdf2-module(Path,Module,Time,Status)).
   rec-value(Mdb,imports(Name?,need-modules(Modules?))).
   snd-msg(need-modules(Modules)).
 /* If a new module is added, we tell the world the new import relations */
@@ -117,14 +118,14 @@ snd-do(Mdb, create-module-db).
   snd-msg(eqs-for-modules(Modules))
 +
 /* Add the equations to the database for the given module name */
-  rec-msg(add-eqs-to-db(Module?,Path?,Eqs?,Status?)).
-  snd-eval(Mdb,add-eqs-module(Module,Path,Eqs,Status)).
+  rec-msg(add-eqs-to-db(Module?,Path?,Eqs?,timestamp(Time?),Status?)).
+  snd-eval(Mdb,add-eqs-module(Module,Path,Eqs,Time,Status)).
   rec-value(Mdb,done).
   snd-msg(done)
 +
 /* Add parse table to the database for the given module name */
-  rec-msg(add-table-to-db(Module?,Table?)).
-  snd-eval(Mdb,add-parse-table(Module,Table)).
+  rec-msg(add-table-to-db(Module?,Table?,timestamp(Time?))).
+  snd-eval(Mdb,add-parse-table(Module,Table,Time)).
   rec-value(Mdb,done).
   snd-msg(done)
 +

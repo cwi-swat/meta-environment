@@ -28,9 +28,6 @@ ATbool reshuffling = ATfalse;
 ATerm top_module;
 ATermTable compile_db;
 
-static ATerm Mtrue;
-static ATerm Mfalse;
-
 void rec_terminate(int cid, ATerm t)
 {
   exit(0);
@@ -135,7 +132,8 @@ ATerm add_module(int cid, ATerm asfix)
 }
 
 /* The Sdf2 variant */
-ATerm add_sdf2_module(int cid, char* path, ATerm asfix, char* changed)
+ATerm add_sdf2_module(int cid, char* path, ATerm asfix, 
+                      int timestamp, char* changed)
 {
   ATerm t[8];
   ATerm modname, appl, entry;
@@ -144,7 +142,6 @@ ATerm add_sdf2_module(int cid, char* path, ATerm asfix, char* changed)
   char  newpath[1024] = {'\0'};
 
   if(!strcmp(changed,"changed")) {
-    /*sprintf(newpath,"%s%s", path, ".baf");*/
     sprintf(newpath,"%s", path);
     status = Mtrue;
   }
@@ -157,13 +154,19 @@ ATerm add_sdf2_module(int cid, char* path, ATerm asfix, char* changed)
                  &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
                  &appl, &t[6], &t[7])) {
     modname = get_module_name(appl);
-    entry = (ATerm) ATmakeList(7,ATmake("<str>",newpath),
-                                 asfix,
-                                 status,
-                                 ATparse("unavailable"),
-                                 ATparse("unavailable"),
-                                 Mtrue,
-                                 ATparse("unavailable"));
+/*ATwarning("Creation time %t.sdf2 is %t\n", modname, ATmakeInt(timestamp));*/
+    entry = (ATerm)ATmakeList(10,
+                              ATmake("<str>",newpath), /* Path Sdf */
+                              asfix,                   /* AsFix Sdf */
+                              ATmakeInt(timestamp),    /* Time Sdf */
+                              status,                  /* Status Sdf */
+                              ATparse("unavailable"),  /* Path Eqs */
+                              ATparse("unavailable"),  /* AsFix Eqs */
+                              ATmakeInt(0),            /* Time Eqs */
+                              Mtrue,                   /* Status Eqs: true */
+                              ATparse("unavailable"),  /* Path PT */
+                              ATmakeInt(0)
+                             );
     PutValue(new_modules_db, modname, entry);
     imports = get_import_section_sdf2(appl);
     unknowns = add_imports(modname,imports);
@@ -210,22 +213,28 @@ ATerm update_sdf2_module(int cid, ATerm asfix)
                  &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
                  &appl, &t[6], &t[7])) {
     modname = get_module_name(appl);
+ATwarning("Update database with %t\n", modname);
     entry = GetValue(new_modules_db, modname);
     place = ATelementAt((ATermList)entry, path_syn_loc);
 
     oldasfix = ATelementAt((ATermList)entry, syn_loc);
     if(!ATisEqual(asfix,oldasfix)) {
       if(ATmatch(place,"<str>",&path)) {
-        entry = (ATerm) ATmakeList(7,ATmake("<str>",path),
-                                     asfix,
-                                     Mtrue,
-                                     ATparse("unavailable"),
-                                     ATparse("unavailable"),
-                                     Mtrue,
-                                     ATparse("unavailable"));
+        entry = (ATerm)ATmakeList(10,
+                                  ATmake("<str>",path),
+                                  asfix,
+                                  ATmakeInt((int)time(NULL)),
+                                  Mtrue,
+                                  ATparse("unavailable"),
+                                  ATparse("unavailable"),
+                                  ATmakeInt(0),
+                                  Mtrue,
+                                  ATparse("unavailable"),
+                                  ATmakeInt(0)
+                                 );
         PutValue(new_modules_db, modname, entry);
         chg_mods = modules_depend_on(modname,ATempty);
-ATfprintf(stderr,"Changed modules are %t\n", chg_mods);
+ATwarning("Changed modules are %t\n", chg_mods);
         update_syntax_status_of_modules(chg_mods); 
         imports = get_import_section_sdf2(appl);
 ATfprintf(stderr,"Imported modules %t\n", imports);
@@ -257,19 +266,24 @@ ATerm add_empty_module(int cid, ATerm modname)
   if(ATmatchTerm(modname,pattern_asfix_id,&text)) {
     sprintf(newpath,"%s%s", text, ".sdf2");
   }
-  entry = (ATerm) ATmakeList(7,ATmake("<str>",newpath),
-                               ATparse("unavailable"),
-                               Mtrue,
-                               ATparse("unavailable"),
-                               ATparse("unavailable"),
-                               Mtrue,
-                               ATparse("unavailable"));
+  entry = (ATerm)ATmakeList(10,
+                            ATmake("<str>",newpath),
+                            ATparse("unavailable"),
+                            ATmakeInt(0),
+                            Mtrue,
+                            ATparse("unavailable"),
+                            ATparse("unavailable"),
+                            ATmakeInt(0),
+                            Mtrue,
+                            ATparse("unavailable"),
+                            ATmakeInt(0)
+                           );
   PutValue(new_modules_db, modname, entry);
   return ATmake("snd-value(done)");
 }
 
-ATerm add_eqs_module(int cid, ATerm modname, char* path,
-                              ATerm eqs, char* changed)
+ATerm add_eqs_module(int cid, ATerm modname, char* path, ATerm eqs, 
+                              int timestamp, char* changed)
 {
   ATerm entry;
   ATerm status;
@@ -302,18 +316,26 @@ ATerm add_eqs_module(int cid, ATerm modname, char* path,
                            status,
                            eqs_updated_loc);
   entry = (ATerm)ATreplace((ATermList)entry, eqs, eqs_loc);
+  entry = (ATerm)ATreplace((ATermList)entry, 
+                           (ATerm)ATmakeInt(timestamp),
+                           eqs_time_loc);
   PutValue(new_modules_db, modname, entry);
   return ATmake("snd-value(done)");
 }
 
-ATerm add_parse_table(int cid, ATerm modname, char *table)
+ATerm add_parse_table(int cid, ATerm modname, char *table,
+                               int timestamp)
 {
   ATerm entry;
 
+/*ATwarning("Creation time %t.tbl is %d\n", modname, timestamp);*/
   entry = GetValue(new_modules_db, modname);
   entry = (ATerm)ATreplace((ATermList)entry,
                            ATmake("table(<str>)",table),
-                           table_loc);
+                           table_loc); 
+  entry = (ATerm)ATreplace((ATermList)entry,
+                           (ATerm)ATmakeInt(timestamp),
+                           table_time_loc);
   PutValue(new_modules_db, modname, entry);
   return ATmake("snd-value(done)");
 }
@@ -426,7 +448,7 @@ ATerm get_eqs_asfix(int cid, ATerm modname)
   }
 }
 
-ATbool valid_parse_tables(ATermList visited, ATerm module);
+ATbool valid_parse_tables(ATermList visited, ATerm module, int time);
 
 ATerm get_parse_table(int cid, ATerm modname)
 {
@@ -447,28 +469,35 @@ ATerm get_parse_table(int cid, ATerm modname)
    to check whether the parse tables are still valid.*/
 void mdb_validate_parse_tables(ATermList visited, ATerm modname)
 {
-  ATermList entry, imports;
+  int time;
+  ATermList imports;
   ATerm import;
+  ATermList entry = (ATermList)GetValue(new_modules_db, modname);
 
-  if(ATindexOf(visited, modname, 0) < 0) {
-    if(!valid_parse_tables(ATempty,modname))
-      if((entry = (ATermList)GetValue(new_modules_db, modname)))
+  if(entry) {
+    time = ATgetInt((ATermInt)ATelementAt((ATermList)entry, table_time_loc));
+/*ATwarning("Creation time of parse table %t is %d\n", modname, time);*/
+    if(ATindexOf(visited, modname, 0) < 0) {
+      if(!valid_parse_tables(ATempty, modname, time)) {
         entry = ATreplace(entry,ATparse("unavailable"),table_loc);
-    visited = ATinsert(visited, modname);
-    imports = (ATermList)GetValue(import_db, modname);
-    while(!ATisEmpty(imports)) {
-      import = ATgetFirst(imports);
-      mdb_validate_parse_tables(visited, import);
-      imports = ATgetNext(imports);
+        PutValue(new_modules_db, modname, (ATerm)entry);
+/*ATfprintf(stderr,"Parse table of %t invalidated\n", modname);*/
+      }
+      visited = ATinsert(visited, modname);
+      imports = (ATermList)GetValue(import_db, modname);
+      while(!ATisEmpty(imports)) {
+        import = ATgetFirst(imports);
+        mdb_validate_parse_tables(visited, import);
+        imports = ATgetNext(imports);
+      }
     }
   }
 }
 
 ATerm validate_parse_tables(int cid, ATerm modname)
 {
-  if(GetValue(new_modules_db,modname))
-    mdb_validate_parse_tables(ATempty,modname);
-
+ATfprintf(stderr, "validation entered\n");
+  mdb_validate_parse_tables(ATempty,modname);
   return ATmake("snd-value(validation-done)");
 }
 
@@ -598,37 +627,33 @@ ATbool complete_sdf2_specification(ATermList visited, ATerm module)
     return ATtrue;
 }
 
-ATbool valid_parse_tables(ATermList visited, ATerm module)
+ATbool valid_parse_tables(ATermList visited, ATerm module, int timetable)
 {
   ATbool result;
   ATermList imports;
-  ATerm first, entry, status;
+  ATerm first, entry;
+  int time;
 
-  if(ATindexOf(visited, module, 0) < 0) {
+  entry = GetValue(new_modules_db, module);
+  time = (int)ATelementAt((ATermList)entry, syn_time_loc);
+  time = ATgetInt((ATermInt)ATelementAt((ATermList)entry, syn_time_loc));
+/*ATfprintf(stderr,"Creation time of %t.sdf2 is %d\n", module, time);*/
+  if(time > timetable) 
+    result = ATfalse;
+  else
     result = ATtrue;
-    imports = (ATermList) GetValue(import_db,module);
-
+  if(ATindexOf(visited, module, 0) < 0) {
+    imports = (ATermList)GetValue(import_db,module);
     visited = ATinsert(visited, module);
     while(!ATisEmpty(imports)) {
       first = ATgetFirst(imports);
-      entry = GetValue(new_modules_db, first);
-      status = ATelementAt((ATermList)entry, syn_updated_loc);
-      if(ATisEqual(status, Mtrue)) {
-        entry = (ATerm)ATreplace((ATermList)entry,
-                                 ATparse("unavailable"),
-                                 table_loc);
-        PutValue(new_modules_db, first, entry);
-        result = ATfalse;
-      }
-      else {
-        result = result && valid_parse_tables(visited, first);
-      };
+      result = result && valid_parse_tables(visited, first, timetable);
       imports = ATgetNext(imports);
     };
     return result;
   }
   else
-    return ATfalse;
+    return result;
 }
 
 ATbool complete_asf_specification(ATermList visited, ATerm module)
@@ -1266,11 +1291,6 @@ int main(int argc, char **argv)
   ATBinit(argc, argv,&bottomOfStack);
   AFinit(argc, argv, &bottomOfStack);
   cid = ATBconnect(NULL, NULL, -1, module_db_handler);
-
-  Mtrue = ATparse("true");
-  ATprotect(&Mtrue);
-  Mfalse = ATparse("false");
-  ATprotect(&Mfalse);
 
   ATprotect((ATerm *)&modules_to_process);
 

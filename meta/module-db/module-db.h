@@ -6,6 +6,7 @@
 #include "deprecated.h"
 #include <stdlib.h>
 #include <limits.h>
+#include <time.h>
 
 #include "module-db.tif.h"
 
@@ -16,12 +17,17 @@
 
 #define path_syn_loc 0    /* Location to store the path to the syntax file. */
 #define syn_loc 1         /* Baf file of the syntax file. */
-#define syn_updated_loc 2 /* Is the syntax changed? */
-#define path_eqs_loc 3    /* Location to store the path to the equations. */
-#define eqs_loc 4         /* Baf file of the equations. */
-#define eqs_updated_loc 5 /* Are the equations changed? */
-#define table_loc 6       /* Location to store the path to the parse-table. */
+#define syn_time_loc 2    /* Timestamp of the syntax file. */
+#define syn_updated_loc 3 /* Is the syntax changed? */
+#define path_eqs_loc 4    /* Location to store the path to the equations. */
+#define eqs_loc 5         /* Baf file of the equations. */
+#define eqs_time_loc 6    /* Timestamp of equations file. */
+#define eqs_updated_loc 7 /* Are the equations changed? */
+#define table_loc 8       /* Location to store the path to the parse-table. */
+#define table_time_loc 9  /* Location to store the timestamp of the parse-table. */
 
+#define Mtrue (ATerm)ATmakeInt(1)
+#define Mfalse (ATerm)ATmakeInt(0)
 void AFinitAsFixPatterns();
 
 extern ATerm pattern_asfix_module;
