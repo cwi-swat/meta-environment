@@ -1,0 +1,17 @@
+module functions/Zip[A B]
+
+imports containers/List[A]
+imports containers/List[B]
+imports containers/List[A#B]
+
+exports
+
+context-free syntax
+
+zip -> (List[[A]] List[[B]] => List[[A#B]])
+
+hiddens
+
+sorts List[[A#B]]
+
+imports basic/Whitespace
