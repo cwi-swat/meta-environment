@@ -1,3 +1,6 @@
+2001/06/15 (markvdb@cwi.nl)
+  * adapted apply-function in order to be AsFix2ME compatible.
+
 2001/05/31 (jurgenv@cwi.nl)
   * changed extension .eqs to .asf in compiler specification
 

@@ -1,25 +1,4 @@
 /*
-
-    SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
-                         The Netherlands.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/*
  * $Id$
  */
 
@@ -30,10 +9,10 @@
 #include <unistd.h>
 #include <string.h>
 
-#include <asc-apply.h>
+#include <MEPT-utils.h>
 
 static char myname[]    = "apply-function";
-static char myversion[] = "1.1";
+static char myversion[] = "1.2";
 static char myarguments[] = "f:s:m:hi:o:V";
 
 
@@ -62,6 +41,97 @@ usage(void)
 
 #define MAX_ARGS 256
 
+static PT_Tree
+applyFunctionToArgs(char *function, char* module, char* sort, PT_Args args)
+{
+  PT_Tree   layoutTree   = PT_makeTreeLayoutEmpty();
+  PT_Symbol layoutSymbol = PT_makeOptLayoutSymbol();
+  PT_Tree   commaTree   = PT_makeTreeLit(",");
+  PT_Symbol commaSymbol = PT_makeSymbolLit(",");
+  PT_Tree   boTree   = PT_makeTreeLit("(");
+  PT_Symbol boSymbol = PT_makeSymbolLit("(");
+  PT_Tree   bcTree   = PT_makeTreeLit(")");
+  PT_Symbol bcSymbol = PT_makeSymbolLit(")");
+  PT_Tree   functionTree   = PT_makeTreeLit(function);
+  PT_Symbol functionSymbol = PT_makeSymbolLit(function);
+  PT_Symbol rhs = PT_makeSymbolCf(PT_makeSymbolSort(sort));
+  PT_Production prod;
+  PT_Attributes attributes = PT_makeAttributesAttrs(
+                               PT_makeAttrsSingle(
+                                 PT_makeAttrId(module)));   
+
+  /* initialize with empty symbols and trees */
+  PT_Args argList = PT_makeArgsEmpty();
+  PT_Symbols symbolList = PT_makeSymbolsEmpty();
+
+  /* make symbols and trees for args, inserting layout nodes */
+  while(PT_hasArgsHead(args)) {
+    PT_Tree arg = PT_getArgsHead(args);
+    PT_Symbol symbol = PT_getProductionRhs(PT_getTreeProd(arg));
+
+    /* add layout sep layout if needed */
+    if (!PT_isArgsEmpty(argList)) {
+      argList = PT_appendArgs(argList, layoutTree);
+      symbolList = PT_appendSymbols(symbolList, layoutSymbol);
+      argList = PT_appendArgs(argList, commaTree);
+      symbolList = PT_appendSymbols(symbolList, commaSymbol);
+      argList = PT_appendArgs(argList, layoutTree);
+      symbolList = PT_appendSymbols(symbolList, layoutSymbol);
+    }
+
+    argList = PT_appendArgs(argList, arg);
+    symbolList = PT_appendSymbols(symbolList, symbol);
+
+    args = PT_getArgsTail(args);
+  }
+
+  /* append closing bracket to symbols and trees */
+  argList = PT_appendArgs(argList, layoutTree);
+  symbolList = PT_appendSymbols(symbolList, layoutSymbol);
+  argList = PT_appendArgs(argList, bcTree);
+  symbolList = PT_appendSymbols(symbolList, bcSymbol);
+
+  /* insert opening bracket before symbols and trees */
+  argList = PT_makeArgsList(layoutTree, argList);
+  symbolList = PT_makeSymbolsList(layoutSymbol, symbolList);
+
+  argList = PT_makeArgsList(boTree, argList);
+  symbolList = PT_makeSymbolsList(boSymbol, symbolList);
+
+  argList = PT_makeArgsList(layoutTree, argList);
+  symbolList = PT_makeSymbolsList(layoutSymbol, symbolList); 
+
+  /* insert function literal before symbols and trees */
+  argList = PT_makeArgsList(functionTree, argList);
+  symbolList = PT_makeSymbolsList(functionSymbol, symbolList);
+
+  prod = PT_makeProductionDefault(symbolList, rhs, attributes);
+
+  return PT_makeTreeAppl(prod, argList);
+
+
+}
+
+static PT_Symbols
+makeNewLhs(char *sort, PT_Symbols lhs)
+{
+  PT_Symbol symbol;
+  PT_Symbol sortSymbol = PT_makeSymbolCf(PT_makeSymbolSort(sort));
+  PT_Symbols newLhs = PT_makeSymbolsEmpty();
+
+  while (PT_hasSymbolsHead(lhs)) {
+    symbol = PT_getSymbolsHead(lhs);
+    if (PT_isOptLayoutSymbol(symbol)) {
+      newLhs = PT_appendSymbols(newLhs, symbol);
+    }
+    else {
+      newLhs = PT_appendSymbols(newLhs, sortSymbol);
+    }
+    lhs = PT_getSymbolsTail(lhs);
+  }
+  return newLhs;
+}
+
 int 
 main (int argc, char **argv)
 {
@@ -76,6 +146,7 @@ main (int argc, char **argv)
   char *sort = "";
   char *module = "";
   PT_Args args;
+  PT_Symbols lhs, newLhs;
  
   if(argc == 1) { /* no arguments */
     usage();
@@ -119,7 +190,7 @@ main (int argc, char **argv)
   }
 
   ATinit(argc, argv, &bottomOfStack); 
-  PT_initPTApi();
+  PT_initMEPTApi();
 
   args = PT_makeArgsEmpty(); 
   for (--nInputs; nInputs >= 0; nInputs--) {
@@ -132,8 +203,11 @@ main (int argc, char **argv)
     args = PT_makeArgsList(PT_getParseTreeTree(parseTree), args);
   }
  
-  newTree = ASC_applyFunctionToArgs(function, module, sort, args);
+  lhs = PT_getParseTreeLhs(parseTree);
+  newLhs = makeNewLhs(sort, lhs);
+  newTree = applyFunctionToArgs(function, module, sort, args);
   newParseTree = PT_setParseTreeTree(parseTree, newTree);
+  newParseTree = PT_setParseTreeLhs(newParseTree, newLhs);
 
   ATwriteToNamedBinaryFile(PT_makeTermFromParseTree(newParseTree), output);
  

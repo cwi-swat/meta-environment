@@ -31,7 +31,7 @@ bin_SCRIPTS	  = genmakefile genamakefile
 data_DATA         = genmakefile.proto
 EXTRA_DIST	  = genamakefile.sh.src genmakefile.proto
 
-GENERIC_LDADD = -L$(PT_SUPPORT)/lib -lPT \
+GENERIC_LDADD = -L$(PT_SUPPORT)/lib -lmept \
          	-L$(ATERM)/lib -lATerm
 
 apply_function_SOURCES	= apply-function.c
