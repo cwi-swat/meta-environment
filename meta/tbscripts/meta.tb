@@ -60,8 +60,9 @@
 #include "removevarsyntax.idef"
 #include "dump-equations.tb"
 #include "compile-module.tb"
+#include "configmanager.idef"
 
-toolbus(Parser, Unparser, Io, Ui, EditorCreator, ModuleDB, 
+toolbus(Parser, Unparser, Io, ConfigManager, Ui, EditorCreator, ModuleDB, 
 	ProcessEqs, Save-modules, RevertModule, File-creator, SE,
 	Set-parsetable, Open-Sdf2-Language, Evaluator, 
 	Notify-about-changed-modules, Rewrite-Errors, Traversals,
