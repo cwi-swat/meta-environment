@@ -49,5 +49,4 @@ hiddens
     "restr+"[0-9\']*    -> Restriction+ 
     "las"[0-9\']*       -> Lookaheads
     "al*"[0-9\']*       -> Alias* 
-
 %%}

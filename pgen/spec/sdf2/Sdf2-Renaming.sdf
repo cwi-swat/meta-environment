@@ -13,5 +13,6 @@ imports Sdf2-Syntax
 hiddens
   variables
     "pr""*"[0-9\']*   -> {Priority ","}* 
+    "restr*"[0-9\']*    -> Restriction* 
     "'r"[0-9\']*   -> Renamings 
 

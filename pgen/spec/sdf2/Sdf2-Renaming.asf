@@ -3,7 +3,11 @@
 equations
 
   [0] (context-free priorities pr*) 'r = context-free priorities (pr*) 'r
-  [0] (lexical priorities pr*) 'r      = lexical priorities (pr*) 'r
+  [0] (lexical priorities pr*) 'r      = lexical priorities (pr*) 'r 
+
+  [0] (context-free restrictions restr*) 'r = context-free restrictions (restr*)'r
+  [0] (lexical restrictions restr*) 'r = lexical restrictions (restr*)'r
+
 
   [0] [ <Start> ] 'r = <Start>
   [0] [ <START> ] 'r = <START>

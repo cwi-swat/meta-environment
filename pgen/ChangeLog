@@ -1,5 +1,9 @@
 $Id$
 
+2002/01/28 (vandenbr@cwi.ni)
+ * Very serious bug fixed in relation with parameterization and
+   context-free/lexical restrictions.
+
 2001/12/13 (jurgenv@cwi.nl)
  * Bumped version of parsetablegen to 4.2
  * Added asf-support library linkage (needed for normalizer spec).
