@@ -1,0 +1,32 @@
+#! /bin/sh
+
+#set -x
+
+usage () { 
+	echo "Usage: $1 <program-under-test>"
+	exit 1
+}
+	
+if [ $# != 1 ]; then
+  usage $0
+fi
+
+if [ $1 = "-h" -o $1 = "--help" ]; then 
+  usage $0
+fi
+
+output=`$1 -V 2>&1`
+result=$?
+
+if [ $result != 0 -a $result != 1 ]; then
+	echo "$1 -V returned $result result"
+	exit 1
+fi
+
+if echo $output 2>&1 | egrep -q '[0-9]+[.][0-9]+'; then
+	exit 0
+else
+  echo "$1 -V does not appear to return a version number.";
+  exit 1
+fi
+
