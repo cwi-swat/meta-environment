@@ -111,23 +111,16 @@ in
   +
     %% Name represents the module-name (without extension)
     rec-msg(open-file(Name?)).
-    snd-eval(IO, open-old-asfix-file(Name)).
+    snd-eval(IO,open-asdf2-file(Name, sdf2)).
     (
-      rec-value(IO,opened-file(asfix,Name?,T?,Path?,TimeStamp?)).
-      snd-msg(opened-file(asfix,Name,T,Path,TimeStamp))
+      rec-value(IO,opened-file(Name?,Contents?,Path?,TimeStamp?)).
+      snd-msg(opened-file(Name,Contents,Path,TimeStamp))
+    + 
+      rec-value(IO,opened-file(Name?,Contents?,Path?,TimeStamp?)).
+      snd-msg(opened-file(Name,Contents,Path,TimeStamp))
     +
       rec-value(IO,error-opening(Name?)).
-      snd-eval(IO,open-asdf2-file(Name, sdf2)).
-      (
-        rec-value(IO,opened-file(Name?,Contents?,Path?,TimeStamp?)).
-        snd-msg(opened-file(Name,Contents,Path,TimeStamp))
-        + 
-        rec-value(IO,opened-file(Name?,Contents?,Path?,TimeStamp?)).
-        snd-msg(opened-file(Name,Contents,Path,TimeStamp))
-        +
-        rec-value(IO,error-opening(Name?)).
-        snd-msg(error-opening(Name))
-      )
+      snd-msg(error-opening(Name))
     )
   +
     rec-msg(open-eqs-file(Name?)).

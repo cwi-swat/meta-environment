@@ -55,7 +55,7 @@
 
 ATbool run_verbose = ATfalse;
 
-static char myversion[] = "0.1";
+static char myversion[] = "1.1";
 
 /*
     The argument vector: list of option letters, colons denote option
@@ -155,7 +155,6 @@ ATbool path_length_exceeded(int l, char *p, char *f)
 
 int  nr_paths = 0;
 char paths[MAX_PATHS][PATH_LEN];
-int  asfix_status = 0;
 
 char *find_newest_in_path(char *name)
 {
@@ -188,7 +187,7 @@ ATerm open_error(char *n)
   return ATmake("snd-value(error-opening(<str>))", n);
 }
 
-ATerm read_term_from_named_file(char *fn, char *n, ATbool oldstyle)
+ATerm read_term_from_named_file(char *fn, char *n)
 {
   ATerm       t;
   static char pn[PATH_LEN];
@@ -199,17 +198,11 @@ ATerm read_term_from_named_file(char *fn, char *n, ATbool oldstyle)
     }
     return open_error(n);
   }
-  if (oldstyle)
-    return ATmake("snd-value(opened-file(asfix,<str>,<term>,<str>,"
-                  "timestamp(<int>)))",
-                  n, t, fn, filetime(fn));
-  else {
-    strncpy(pn,fn,strlen(fn)-4);
-    pn[strlen(fn)-4] = '\0';
-    return ATmake("snd-value(opened-file(<str>,tree(<term>),<str>,"
-                  "timestamp(<int>)))",
-                  n, t, pn, filetime(fn));
-  }
+  strncpy(pn,fn,strlen(fn)-4);
+  pn[strlen(fn)-4] = '\0';
+  return ATmake("snd-value(opened-file(<str>,tree(<term>),<str>,"
+                "timestamp(<int>)))",
+                n, t, pn, filetime(fn));
 }
 
 ATerm write_term_to_named_file(ATerm t, char *fn, char *n)
@@ -255,27 +248,8 @@ ATerm get_timestamp(int cid, char *name, char *ext) {
     char file[PATH_LEN];
   
     sprintf(file, "%s%s", name, ext);
-    return ATmake("snd-value(timestamp(<int>))", filetime(find_newest_in_path(file)));
-}
-
-ATerm open_old_asfix_file(int cid, char *name)
-{
-  ATerm  t;
-  char  *fullname, namext[PATH_LEN];
-
-  if (asfix_status == 2) {
-    return open_error(name);
-  }
-
-  sprintf(namext, "%s%s", name, ".asfix");
-  if(!(fullname = find_newest_in_path(namext))) {
-    t = open_error(name);
-  } else {
-    t = read_term_from_named_file(fullname, name, ATtrue);
-    if(ATmatch(t, "snd-value(opened-file(<list>))", NULL))
-      asfix_status = 1;
-  }
-  return t;
+    return ATmake("snd-value(timestamp(<int>))", 
+                  filetime(find_newest_in_path(file)));
 }
 
 /*
@@ -376,11 +350,6 @@ ATerm open_asdf2_file(int cid, char *name, ATerm type)
   ATerm  t;
 
   if(ATmatch(type, "sdf2")) {
-    if(asfix_status == 1) {
-      ATwarning("cannot mix asfix modes\n");
-      return open_error(name);
-    }
-
     sprintf(newestraw, "%s%s", name, SDF2_TXT_EXT);
     sprintf(newestbaf, "%s%s", name, SDF2_BAF_EXT);
   } else {
@@ -399,15 +368,9 @@ ATerm open_asdf2_file(int cid, char *name, ATerm type)
     return open_error(name);
   }
   if(newest_is_binary) {
-    t = read_term_from_named_file(newestbaf, name, ATfalse);
+    t = read_term_from_named_file(newestbaf, name);
   } else {
     t = read_raw_from_named_file(newestraw, name);
-  }
-
-  if(ATmatch(type, "sdf2")) {
-    if(ATmatch(t, "snd-value(opened-file(<list>))", NULL)) {
-      asfix_status = 2;
-    }
   }
 
   return t;
