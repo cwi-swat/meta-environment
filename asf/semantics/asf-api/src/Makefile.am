@@ -14,8 +14,8 @@ ASFSDFApigen_LDADD =\
 	-L${ASF_SUPPORT}/lib -lASFME \
 	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
 	-L${ERROR_SUPPORT}/lib -lErrorAPI \
-	-L${ATERM}/lib -lATerm \
-	-L${TOOLBUSLIB}/lib -lATB
+	-L${TOOLBUSLIB}/lib -lATB \
+	-L${ATERM}/lib -lATerm 
 
 INCLUDES = \
 	-DASF_MAIN\
@@ -25,8 +25,8 @@ INCLUDES = \
 	-I${ASF_SUPPORT}/include \
 	-I${PT_SUPPORT}/include \
 	-I${ERROR_SUPPORT}/include \
-	-I${ATERM}/include \
-	-I${TOOLBUSLIB}/include 
+	-I${TOOLBUSLIB}/include  \
+	-I${ATERM}/include 
 
 asfc: ${top_builddir}/semantics/asf-api/spec/ASFSDFApigen.eqs
 	asfc -i $< -o ASFSDFApigen.c -t -v 
