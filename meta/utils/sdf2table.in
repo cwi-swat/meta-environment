@@ -12,6 +12,7 @@ PARSER="parse-sdf2 -1 -v"
 GENERATOR="gen-table"
 
 VERBOSE=1;
+ERROR=0;
 
 Notify () {
         if [ $VERBOSE -gt 0 ]
@@ -45,9 +46,17 @@ do
 	if $PARSER $OPTS $f -o $af2name
 	then
 	        Notify "Generating parse table ..."
-	        $GENERATOR $OPTS $af2name
+	        if $GENERATOR $OPTS $af2name
+		then
+			:
+		else
+			echo "Error rewriting $f"	>&2	
+			ERROR=1
+		fi
 	else
-		echo "Error parsing $f"		>&2
+		echo "Error parsing $f"			>&2
+		ERROR=1
 	fi
 done
 
+exit $ERROR;

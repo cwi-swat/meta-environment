@@ -100,22 +100,4 @@ do
 	fi
 	Notify "Parse table (trm format):"
 	Notify `ls -l $out`
-	continue	# Skip next bit
-	Notify "Backgrounding -- generating BAF format"
-	(
-	# Running in a backgrounding subshell now
-		in=$dir/$file-tbl.trm
-		out=$dir/$file-tbl.baf
-		err=$dir/$file.baffle.err
-		if baffle -rt -wb -i $in -o $out  2> $err
-		then
-			rm -f $err
-		else
-			if [ -f $out -a ! -s $out ]; then rm -f $out; fi
-			echo "baffle: error (see $err)"
-			exit 3
-		fi
-		Notify "Parse table (baf format):"
-		Notify `ls -l $out`
-	) &
 done
