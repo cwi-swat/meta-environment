@@ -6,6 +6,7 @@
 #include <strings.h>
 
 #include <AsFix.h>
+#include <aterm2.h>
 #include <deprecated.h>
 #include "preparation.h"
 
@@ -134,6 +135,14 @@ void enter_equation(equation_table *table, ATerm equation)
     entry->hnext = table->table[hnr];
     table->table[hnr] = entry;
   }
+
+	{
+		ATerm anno = ATgetAnnotation(equation, ATparse("pos-info"));
+		if(anno)
+			ATfprintf(stderr, "annotations: %t\n", anno);
+		else
+			ATfprintf(stderr, "no annotations: %t\n", AT_getAnnotations(equation));
+	}
 }
 
 /*}}}  */
@@ -216,116 +225,6 @@ void enter_equations(ATerm module, ATermList eqs)
 
 /*{{{  Preparation */
 
-/*{{{  void update_geometry_whitespace(ATerm ws, int *line, int *col) */
-
-void update_geometry_whitespace(ATerm ws, int *line, int *col)
-{
-  int i;
-  char *w;
-
-	if(!ATmatchTerm(ws, pattern_whitespace, &w))
-		ATerror("not whitespace: %t\n", ws);
-
-  for(i=0; w[i]; i++) {
-    if(w[i] == '\n') {
-      (*line)++;
-      (*col) = 0;
-    } else
-      (*col)++;
-  }
-}
-
-/*}}}  */
-/*{{{  void update_geometry_literal(ATerm lit, int *line, int *col) */
-
-void update_geometry_literal(ATerm lit, int *line, int *col)
-{
-  int i;
-  char *l;
-
- if(!ATmatchTerm(lit, pattern_literal, &l))
-	 ATerror("not a literal: %t\n", lit);
-
-  for(i=0; l[i]; i++) {
-    if(l[i] == '\n') {
-      (*line)++;
-      *col = 0;
-    } else
-      (*col)++;
-  }
-}
-
-/*}}}  */
-/*{{{  void update_geometry_variable(ATerm var, int *line, int *col) */
-
-void update_geometry_variable(ATerm var, int *line, int *col)
-{
-  int i;
-  char *name;
-  ATerm sort;
-
- if(!ATmatchTerm(var, pattern_var, &name, &sort))
-	 ATerror("not a variable: %t\n", var);
-
-  for(i=0; name[i]; i++) {
-    if(name[i] == '\n') {
-      (*line)++;
-      *col = 0;
-    } else
-      (*col)++;
-  }
-}
-
-/*}}}  */
-/*{{{  void update_geometry_term(ATerm trm, int *line, int *col) */
-
-void update_geometry_list(ATermList l, int *line, int *col);
-void update_geometry_term(ATerm trm, int *line, int *col)
-{
-  ATerm prod, w, sym;
-  ATermList args, elems;
-
-  if(ATmatchTerm(trm, pattern_appl, &prod, &w, &args)) {
-    update_geometry_whitespace(w, line, col);
-    update_geometry_list(args, line, col);
-  } else if(ATmatchTerm(trm, pattern_list, &sym, &w, &elems)) {
-    update_geometry_whitespace(w, line, col);
-    update_geometry_list(elems, line, col);
-  } else if(asfix_is_whitespace(trm)) {
-    update_geometry_whitespace(trm, line, col);
-  } else if(asfix_is_literal(trm)) {
-    update_geometry_literal(trm, line, col);
-  } else if(asfix_is_var(trm)) {
-    update_geometry_variable(trm, line, col);
-  } else {
-    ATfprintf(stderr, "unknown construction in term: %t\n", trm);
-  }
-}
-
-/*}}}  */
-/*{{{  void update_geometry_list(ATermList l, int *line, int *col)*/
-
-void update_geometry_list(ATermList l, int *line, int *col)
-{
-  while(!ATisEmpty(l)) {
-    update_geometry_term(ATgetFirst(l), line, col);
-    l = ATgetNext(l);
-  }
-}
-
-
-/*}}}  */
-/*{{{  void update_geometry_list_sep(ATerm ws, int *line, int *col)*/
-
-void update_geometry_list_sep(ATerm sep, int *line, int *col)
-{
-  ATfprintf(stderr, "update_geometry_list_sep: %t\n", sep);
-  
-}
-
-
-/*}}}  */
-
 /*{{{  ATermList *prepare_list(ATermList *l, ATbool lexcons)*/
 
 /*
@@ -360,7 +259,7 @@ Remove all layout from a list of conditions.
 ATermList prepare_conds(ATermList conds)
 {
   ATerm cond, lhs, w[2], lit, rhs;
-  ATerm newlhs, newrhs, newcond;
+  ATerm newlhs, newrhs, newcond, annos;
   ATermList newconds = ATempty;
 
   while(!ATisEmpty(conds)) {
@@ -369,11 +268,14 @@ ATermList prepare_conds(ATermList conds)
       conds = ATgetNext(conds);
     } while(asfix_is_whitespace(cond) || asfix_is_list_sep(cond));
     if(ATmatch(cond, "condition(<term>,<term>,<term>,<term>,<term>)",
-			&lhs, &w[0], &lit, &w[1], &rhs)) {
+							 &lhs, &w[0], &lit, &w[1], &rhs)) {
+			annos = AT_getAnnotations(cond);
       newlhs = prepare_term(lhs, ATfalse);
       newrhs = prepare_term(rhs, ATfalse);
       newcond = ATmake("condition(<term>,<term>,<term>,<term>,<term>)",
-			newlhs, w[0], lit, w[1], newrhs);
+											 newlhs, w[0], lit, w[1], newrhs);
+			if(annos)
+				newcond = AT_setAnnotations(newcond, annos);
       newconds = ATappend(newconds, newcond);
     }
   }
@@ -381,70 +283,60 @@ ATermList prepare_conds(ATermList conds)
 }
 
 /*}}}  */
-/*{{{  ATerm prepare_equ(ATerm equ, int *line, int *col)*/
+/*{{{  ATerm prepare_equ(ATerm equ) */
 
 /*
 Prepare an equation for rewriting. This includes removing the layout,
 and translating lexicals into lists.
 */
 
-ATerm prepare_equ(ATerm equ, int *line, int *col)
+ATerm prepare_equ(ATerm equ)
 {
   ATerm w[6], l[2], modname, tag, lhs, rhs;
-  ATerm newlhs, newrhs;
+  ATerm newlhs, newrhs, annos;
   ATermList conds, newconds;
 
+	annos = AT_getAnnotations(equ);
+	ATfprintf(stderr, "2.annos = %t\n", annos);
   if(ATmatch(equ, "ceq-equ(<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>)",    
-	&modname, &w[0], &tag, &w[1], &lhs, &w[2], &l[0], &w[3], &rhs)) {
+						 &modname, &w[0], &tag, &w[1], &lhs, &w[2], &l[0], &w[3], &rhs)) {
     newlhs = prepare_term(lhs, ATfalse);
     newrhs = prepare_term(rhs, ATfalse); 
+    equ = ATmake("ceq-equ(<term>,<term>,<term>,<term>,<term>,"
+								 "<term>,<term>,<term>,<term>)",
+								 modname, w[0], tag, w[1], newlhs, w[2], l[0], 
+								 w[3], newrhs);
+  } else if(ATmatch(equ, "ceq-impl(<term>,<term>,<term>,<term>,<term>,<term>,<term>,"\
+										"<term>,<term>,<term>,<term>,<term>,<term>)",
+										&modname, &w[0], &tag, &w[1], &conds, &w[2], &l[0], &w[3], 
+										&lhs, &w[4], &l[1], &w[5], &rhs)) {
+    newlhs = prepare_term(lhs, ATfalse);
+    newrhs = prepare_term(rhs, ATfalse);
+    newconds = prepare_conds(conds);
+    equ = ATmake("ceq-impl(<term>,<term>,<term>,<term>,<term>,<term>," \
+								 "<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
+								 modname, w[0], tag, w[1], newconds, w[2], l[0], w[3], 
+								 newlhs, w[4], l[1], w[5], newrhs);
+  } else if(ATmatch(equ, "ceq-when(<term>,<term>,<term>,<term>,<term>,<term>,<term>,"\
+										"<term>,<term>,<term>,<term>,<term>,<term>)",
+										&modname, &w[0], &tag, &w[1], &lhs, &w[2], &l[0], &w[3],
+										&rhs, &w[4], &l[1], &w[5], &conds)) {
+    newlhs = prepare_term(lhs, ATfalse);
+    newrhs = prepare_term(rhs, ATfalse);
+    newconds = prepare_conds(conds);
+    equ = ATmake("ceq-when(<term>,<term>,<term>,<term>,<term>,<term>," \
+								 "<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
+								 modname, w[0], tag, w[1], newlhs, w[2], l[0], w[3],
+								 newrhs, w[4], l[1], w[5], newconds);
+  } else {
+		ATfprintf(stderr, "equation: %t not supported..\n", equ);
+		assert(0);
+	}
 
-/*
-    ATfprintf(stderr, "equation: %t starts at %d,%d, ", tag, *line, *col);
-    update_geometry_whitespace(w[0], line, col);
-    update_geometry_literal(tag, line, col);
-    update_geometry_whitespace(w[1], line, col);
-    update_geometry_term(lhs, line, col);
-    update_geometry_whitespace(w[2], line, col);
-    update_geometry_literal(l[0], line, col);
-    update_geometry_whitespace(w[3], line, col);
-    update_geometry_term(rhs, line, col);
-    ATfprintf(stderr, "and ends at: %d,%d\n", *line, *col);
-*/
-    return ATmake("ceq-equ(<term>,<term>,<term>,<term>,<term>,"
-									"<term>,<term>,<term>,<term>)",
-									modname, w[0], tag, w[1], newlhs, w[2], l[0], 
-									w[3], newrhs);
-  }
-	
-  if(ATmatch(equ, "ceq-impl(<term>,<term>,<term>,<term>,<term>,<term>,<term>,"\
-						 "<term>,<term>,<term>,<term>,<term>,<term>)",
-						 &modname, &w[0], &tag, &w[1], &conds, &w[2], &l[0], &w[3], 
-						 &lhs, &w[4], &l[1], &w[5], &rhs)) {
-    newlhs = prepare_term(lhs, ATfalse);
-    newrhs = prepare_term(rhs, ATfalse);
-    newconds = prepare_conds(conds);
-    return ATmake("ceq-impl(<term>,<term>,<term>,<term>,<term>,<term>," \
-									"<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
-									modname, w[0], tag, w[1], newconds, w[2], l[0], w[3], 
-									newlhs, w[4], l[1], w[5], newrhs);
-  }
-	
-  if(ATmatch(equ, "ceq-when(<term>,<term>,<term>,<term>,<term>,<term>,<term>,"\
-						 "<term>,<term>,<term>,<term>,<term>,<term>)",
-						 &modname, &w[0], &tag, &w[1], &lhs, &w[2], &l[0], &w[3],
-						 &rhs, &w[4], &l[1], &w[5], &conds)) {
-    newlhs = prepare_term(lhs, ATfalse);
-    newrhs = prepare_term(rhs, ATfalse);
-    newconds = prepare_conds(conds);
-    return ATmake("ceq-when(<term>,<term>,<term>,<term>,<term>,<term>," \
-									"<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
-									modname, w[0], tag, w[1], newlhs, w[2], l[0], w[3],
-									newrhs, w[4], l[1], w[5], newconds);
-  }
-  ATfprintf(stderr, "equation: %t not supported..\n", equ);
-  assert(0);
-  return NULL;	/* Silence the compiler */
+	if(annos)
+		equ = AT_setAnnotations(equ, annos);
+
+	return equ;
 }
 
 /*}}}  */
@@ -498,9 +390,10 @@ Remove the layout of a term.
 
 ATerm prepare_term(ATerm t, ATbool lexcons)
 {
-	ATerm result;
+	ATerm result, annos;
   ATermList args, elems, newargs;
 
+	annos = AT_getAnnotations(t);
   if(asfix_is_appl(t)) {
     args = asfix_get_appl_args(t);
     if(asfix_is_lex_constructor(t))
@@ -516,6 +409,9 @@ ATerm prepare_term(ATerm t, ATbool lexcons)
   else 
 		result = t;
 
+	if(annos)
+		result = AT_setAnnotations(result, annos);
+
   return result;
 }
 
@@ -530,6 +426,7 @@ ATerm RWprepareTerm(ATerm t)
 
 
 /*}}}  */
+
 /*{{{  ATermList RWprepareEqs(ATermList eqs)*/
 
 /*
@@ -540,18 +437,13 @@ ATermList RWprepareEqs(ATermList eqs)
 {
   ATerm el;
   ATermList result = ATempty;
-  int line = 0, col = 0;
 
   while(!ATisEmpty(eqs)) {
     do {
       el = ATgetFirst(eqs);
       eqs = ATgetNext(eqs);
-      if(asfix_is_whitespace(el))
-	update_geometry_whitespace(el, &line, &col);
-      if(asfix_is_list_sep(el))
-        update_geometry_list_sep(el, &line, &col);
     } while(asfix_is_whitespace(el) || asfix_is_list_sep(el)); 
-    result = ATappend(result, prepare_equ(el, &line, &col)); 
+    result = ATappend(result, prepare_equ(el)); 
   } 
   return result;
 }

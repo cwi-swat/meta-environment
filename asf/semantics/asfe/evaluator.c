@@ -283,7 +283,7 @@ ATerm add_equations(int cid, ATerm name, ATerm equs)
   ATermList newequs;
   int l;
   
-  ATfprintf(stderr, "preparing equations...\n");
+  ATfprintf(stderr, "preparing equations...: %t\n", equs);
   newequs = RWprepareEqs((ATermList) equs);
   enter_equations(name, newequs);
   l = ATgetLength(newequs);
@@ -624,10 +624,8 @@ ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
                         ATermList conds, 
                         ATermList args1, ATermList args2)
 {
-  ATerm elem2;
   ATerm subenv, newenv;
   ATermList last;
-	ATermList subelems = ATempty;
  
   if(asfix_is_star_var(elem)) {
     newenv = v_put_list(env, elem, ATempty, ATempty);
@@ -655,7 +653,6 @@ ATerm list_matching(ATerm sym,
                     ATermList conds, ATermList args1, ATermList args2)
 {
   ATerm elem1, elem2;
-  ATerm rlist;
   ATerm newenv;
   ATerm newarg1, newarg2;
   ATermList newargs1, newargs2; 
@@ -727,7 +724,6 @@ ATerm list_matching(ATerm sym,
     }
   return newenv;
 }
-
 
 /*}}}  */
 /*{{{  ATermList conds_satisfied(ATermList conds, ATermList env) */
