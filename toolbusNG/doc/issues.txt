@@ -1,0 +1,5 @@
+Issues for improving toolbusNG prototype
+----------------------------------------
+
+- Base indentation style on some combination of settings of 'format' tool so we all use the same indentation
+- AtomSet: why implemented using a Vector and not a HashSet? (HashSet is commented out?)

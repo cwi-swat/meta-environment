@@ -43,7 +43,7 @@ public class Main {
 		ATermList al = aterms.makeList(aterms.make("a"));
 		ATermList bl = aterms.makeList(aterms.make("b"));
 		ATermList cl = aterms.makeList(aterms.make("c"));
-		ATermList dl = aterms.makeList(aterms.make("d"));
+		//ATermList dl = aterms.makeList(aterms.make("d"));
 		ATermList el = aterms.makeList(aterms.make("e"));
 
 		try {
@@ -93,15 +93,15 @@ public class Main {
 	static void CallTest(){
 
 		ATerm int3 = aterms.make("3");
-		ATerm int7 = aterms.make("7");
+		//ATerm int7 = aterms.make("7");
 		ATerm int8 = aterms.make("8");
 		ATerm int11 = aterms.make("11");
 		ATerm int12 = aterms.make("12");	
 		ATerm int21 = aterms.make("21");
 		ATerm varx = aterms.make("var(-1,int,x)");
 		ATerm vary = aterms.make("var(-1,int,y)");
-		ATerm varxx = aterms.make("var(-1,int,xx)");
-		ATerm varyy = aterms.make("var(-1,int,yy)");
+		//ATerm varxx = aterms.make("var(-1,int,xx)");
+		//ATerm varyy = aterms.make("var(-1,int,yy)");
 	
 		ProcessDefinition PD1 = 
 			new ProcessDefinition("P1", (ATermList) aterms.make("[var(-1,int,x), rvar(-1,int,y)]"),
@@ -138,9 +138,9 @@ public class Main {
 
 	static void IfTest(){
 
-		ATerm atrue = aterms.make("true");
-		ATerm afalse= aterms.make("false");
-		ATerm int0 = aterms.make("0");
+		//ATerm atrue = aterms.make("true");
+		//ATerm afalse= aterms.make("false");
+		//ATerm int0 = aterms.make("0");
 		ATerm int5 = aterms.make("5");
 		ATerm varx = aterms.make("var(-1,int,x)");
 		
@@ -233,6 +233,7 @@ public class Main {
 			) // let
 		); //procdef
 		
+    /*
 		ProcessDefinition  Q = 
 		new ProcessDefinition("Q", (ATermList) aterms.make("[]"),
 			new Iteration(
@@ -243,6 +244,7 @@ public class Main {
 				new Print((ATermList) aterms.make("[c]"))
 			)
 		);
+    */
 		
 		try { 
 			ToolBus T = new ToolBus();
@@ -341,9 +343,9 @@ public class Main {
 // ------
 
 static void producerTest(){
-	ATerm int0 = aterms.make("0");
-	ATerm int2 = aterms.make("2");
-	ATerm int3 = aterms.make("3");
+	//ATerm int0 = aterms.make("0");
+	//ATerm int2 = aterms.make("2");
+	//ATerm int3 = aterms.make("3");
 	
 	
 	ATerm varN = aterms.make("var(-1,int,N)");
@@ -372,10 +374,10 @@ static void producerTest(){
 			)
 		)
 	);
-	ATerm varP = aterms.make("var(-1,int,P)");
+	//ATerm varP = aterms.make("var(-1,int,P)");
 	ATerm Zres = aterms.make("rvar(-1,int,Z)");
 	ATerm varZ = aterms.make("var(-1,int,Z)");
-	ATerm Nres = aterms.make("rvar(-1,int,N)");
+	//ATerm Nres = aterms.make("rvar(-1,int,N)");
 	
 	
 	ProcessDefinition CONSUMER =

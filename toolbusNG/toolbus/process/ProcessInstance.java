@@ -1,8 +1,6 @@
 package toolbus.process;
 
 import java.util.Vector;
-import java.util.Iterator;
-import aterm.*;
 
 import toolbus.*;
 import toolbus.atom.*;

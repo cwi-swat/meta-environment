@@ -2,9 +2,9 @@
  * @author paulk
  */
 package toolbus.atom;
-import aterm.*;
-import toolbus.process.*;
 import toolbus.*;
+
+import aterm.ATermList;
 
 public class Print extends Atom {
 

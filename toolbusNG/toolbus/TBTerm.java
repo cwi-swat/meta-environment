@@ -3,11 +3,9 @@
  */
 
 package toolbus;
-import java.util.*;
+import java.util.Hashtable;
 
 import aterm.*;
-import aterm.pure.*;
-import toolbus.*;
 
 class FunctionDescriptor {
 	private String name;
@@ -401,10 +399,8 @@ public class TBTerm {
 		if(fd == null)
 			throw new ToolBusInternalError("apply: unknown function: " + fun);
 		
-		boolean ok;
-		
 		try {
-			ok = fd.checkRunTime(args);					// redundant after typecheck!
+			fd.checkRunTime(args);					// redundant after typecheck!
 		}
 		catch (ToolBusException e) { }
 		

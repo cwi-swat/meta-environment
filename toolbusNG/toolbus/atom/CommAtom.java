@@ -5,10 +5,10 @@
 package toolbus.atom;
 import java.util.Vector;
 
-import aterm.*;
-import toolbus.process.*;
 import toolbus.*;
-import toolbus.TBTerm;
+import toolbus.process.ProcessInstance;
+
+import aterm.ATermList;
 
 class CommAtom extends Atom {
 	private AtomSet partners;	// communication partners in other processes

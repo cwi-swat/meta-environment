@@ -1,13 +1,11 @@
 package toolbus.tool;
 
-import toolbus.ToolBusException;
+import java.lang.reflect.*;
+import java.util.*;
+
+import toolbus.*;
 
 import aterm.*;
-import aterm.pure.*;
-import toolbus.*;
-import java.lang.reflect.*;
-import java.util.Hashtable;
-import java.util.LinkedList;
 
 class ToolShield extends Thread {
 	private Object toolinstance;

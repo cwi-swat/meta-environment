@@ -2,8 +2,7 @@ package toolbus.atom;
 /**
  * @author paulk, Jul 24, 2002
  */
-import toolbus.process.*;
-import toolbus.*;
+
 
 public class Delta extends Atom {
 	

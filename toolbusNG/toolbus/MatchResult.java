@@ -2,7 +2,7 @@
  * @author paulk, Jul 20, 2002
  */
 package toolbus;
-import aterm.*;
+
 
 public class MatchResult {
 	private boolean matches;

@@ -3,9 +3,9 @@
  */
 
 package toolbus.atom;
-import aterm.*;
-import toolbus.process.*;
-import toolbus.*;
+import toolbus.TBTerm;
+
+import aterm.ATermList;
 
 public class SndMsg extends CommAtom {
 	

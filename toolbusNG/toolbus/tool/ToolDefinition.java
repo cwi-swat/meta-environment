@@ -1,8 +1,9 @@
 package toolbus.tool;
 import java.util.Vector;
-import aterm.*;
+
 import toolbus.*;
-import toolbus.atom.*;
+
+import aterm.*;
 
 /**
  * @author paulk
