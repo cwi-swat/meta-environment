@@ -1,5 +1,25 @@
 # $Id$
 
+Tue Mar 16 16:00:20 CET 2004 <{jong,kooiker}@cwi.nl>
+ * standard.meta.buttons:
+   - split tree-panel and message-list implementation
+   - add descriptive message to both of them for the text editor
+ * editors/text/editor-hive.c:
+   - set_focus_at_location replaced by set_focus_at_area
+     (using Location API, not Error API)
+ * editors/text/gvim/connector.c:
+   - cleanup of the various escapeXYZ() functions
+   - remove arcane invocation of  in "gvim --remote-send" 
+ * meta-studio/metastudio/MultiBridge.java
+   - removeFeedbackSummary more closely resembles its dual
+     showFeedbackSummary (which should be addFeedbackSummary?)
+     parameterwise: both take an ATerm (the Summary).
+ * tbscripts/{feedback,parse-utils}.tb:
+   - Summary instead of deprecated Feedback notation
+   - Disect a Summary locally instead of complex shortcut implementation
+     in error-support library.
+   - revamped PrepareParseErrorForEditor in various smaller pieces
+
 Thu Mar 11 10:46:32 CET 2004 <{jong,kooiker}@cwi.nl>
  * tbscripts/editors.tb: changed "Internal error" message
  * tbscripts/feedback.tb: remove handling of no-location-filename
