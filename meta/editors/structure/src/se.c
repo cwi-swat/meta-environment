@@ -431,10 +431,10 @@ ATerm check_tree_sort(int cid, const char *nonterminal, ATerm t)
   sort = PT_yieldSymbol(symbol);
 
   if (strcmp(sort, nonterminal) != 0) {
-    return ATmake("snd-value(msg(wrong-sort(<str>)))", sort);
+    return ATmake("snd-value(wrong-sort(<str>))", sort);
   }
   else {
-    return ATmake("snd-value(msg(sort-ok))");
+    return ATmake("snd-value(sort-ok)");
   }
 }
 

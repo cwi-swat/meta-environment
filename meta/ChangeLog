@@ -1,5 +1,8 @@
 # $Id$
 
+Thu Feb 12 13:38:55 CET 2004 <{jong,jurgenv}@cwi.nl>
+ * prefixed all in/outgoing structure editor messages with "se-"
+
 Tue Feb 10 17:49:38 CET 2004 <jurgenv@cwi.nl>
  * in-output and term-store tools run a garbage collect after 
    every event using -TB_COLLECT_LOOP 1 in their tool definition.

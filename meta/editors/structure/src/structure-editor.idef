@@ -29,65 +29,72 @@ let
 in 
   execute(structure-editor, SE?) .
   (
-    rec-msg(initialize-structure-editor(EditorId?, Text?, Tree?)) .
+    rec-msg(se-initialize-structure-editor(EditorId?, Text?, Tree?)) .
     if equal(Tree, none) then
       snd-do(SE, new-editor-given-text(EditorId, Text)) 
     else 
       snd-do(SE, new-editor-given-tree(EditorId, Tree)) 
     fi
   +
-    rec-msg(replace-focus(EditorId?, Focus?, Tree?)) .
+    rec-msg(se-replace-focus(EditorId?, Focus?, Tree?)) .
     snd-do(SE, replace-focus(EditorId, Focus, Tree))
   +
-    rec-msg(move-focus-to-root(EditorId?)) .
+    rec-msg(se-move-focus-to-root(EditorId?)) .
     snd-eval(SE, move-focus-to-root(EditorId)) .
     rec-value(SE, focus(Focus?)) .
-    snd-msg(focus-moved(EditorId, Focus))
+    snd-msg(se-focus-moved(EditorId, Focus))
   +
-    rec-msg(move-focus(EditorId?, Move?)) .
+    rec-msg(se-move-focus(EditorId?, Move?)) .
     snd-eval(SE, move-focus(EditorId, Move)) .
     rec-value(SE, focus(Focus?)) .
     snd-msg(set-focus(EditorId, Focus))
   +
-    rec-msg(invalidate-tree(EditorId?)) .
+    rec-msg(se-invalidate-tree(EditorId?)) .
     snd-eval(SE, invalidate-tree(EditorId)) .
     rec-value(SE, focus(Focus?)) .
-    snd-msg(invalidation-done(EditorId, Focus))
+    snd-msg(se-invalidation-done(EditorId, Focus))
   +
-    rec-msg(set-location(EditorId?, Location?)) .
+    rec-msg(se-set-location(EditorId?, Location?)) .
     snd-eval(SE, set-focus(EditorId, Location)) .
     rec-value(SE, focus(Focus?)) .  
+    /* TODO: remove reference to Text Editor internals */
     snd-msg(set-focus(EditorId, Focus)) 
   +
-    rec-msg(get-tree(EditorId?)) .
+    rec-msg(se-get-tree(EditorId?)) .
     snd-eval(SE, get-parse-tree(EditorId)) .
     (
       rec-value(SE, parse-tree(Tree?)) .
-      snd-msg(tree(Tree))
+      snd-msg(se-tree(Tree))
     +
       rec-value(SE, no-such-editor) .
-      snd-msg(no-tree)
+      snd-msg(se-no-tree)
     )
   +
-    rec-msg(get-focussed-tree(EditorId?)) .
+    rec-msg(se-get-focussed-tree(EditorId?)) .
     snd-eval(SE, get-focussed-tree(EditorId)) .
     ( 
       rec-value(SE, parse-tree(Tree?)) .
-      snd-msg(tree(Tree))
+      snd-msg(se-tree(Tree))
     +
       rec-value(SE, no-parse-tree) .
-      snd-msg(no-tree)
+      snd-msg(se-no-tree)
     )
   +
-    rec-msg(replace-focussed-tree(EditorId?, Tree?)) .
+    rec-msg(se-replace-focussed-tree(EditorId?, Tree?)) .
     snd-eval(SE, replace-focussed-tree(EditorId, Tree)) .
     rec-value(SE, focus(Focus?)) .
-    snd-msg(focus(Focus))
+    snd-msg(se-focus(Focus))
   +
-    rec-msg(check-tree-sort(Nonterminal?, Tree?)) .
+    rec-msg(se-check-tree-sort(Nonterminal?, Tree?)) .
     snd-eval(SE, check-tree-sort(Nonterminal, Tree)) .
-    rec-value(SE, msg(Msg?)) .
-    snd-msg(Msg)
+    (
+      rec-value(SE, sort-ok) .
+      snd-msg(se-sort-ok)
+    +
+      rec-value(SE, wrong-sort(Nonterminal?)) .
+      snd-msg(se-wrong-sort(Nonterminal))
+    )
+#if 0 /* TODO: remove if indeed unused */
   +
     rec-msg(get-focus-sort(EditorId?)) .
     snd-eval(SE, get-focus-sort(EditorId)) .
@@ -98,13 +105,14 @@ in
       rec-value(SE, no-focus) .
       snd-msg(no-focus)
     )
+#endif
   +
-    rec-msg(get-focus-location(EditorId?)) .
+    rec-msg(se-get-focus-location(EditorId?)) .
     snd-eval(SE, get-focus-location(EditorId)) .
     rec-value(SE, focus-location(PosInfo?)) .
-    snd-msg(focus-location(EditorId, PosInfo))
+    snd-msg(se-focus-location(EditorId, PosInfo))
   +
-    rec-msg(get-dirty-focuses(EditorId?)) .
+    rec-msg(se-get-dirty-focuses(EditorId?)) .
     snd-eval(SE, get-dirty-focuses(EditorId)) .
     (
       rec-value(SE, foci(FocusList?))
@@ -112,18 +120,19 @@ in
       rec-value(SE, no-such-editor) .
       FocusList := []
     ) .
-    snd-msg(dirty-focuses(FocusList))
+    snd-msg(se-dirty-focuses(FocusList))
   +
-    rec-msg(delete-structure-editor(EditorId?)).
+    rec-msg(se-delete-structure-editor(EditorId?)).
     snd-do(SE, remove-tree(EditorId)) 
   +
+    /* TODO: remove reference to Text Editor internals */
     rec-msg(editor-contents-changed(EditorId?)) .
     snd-do(SE, modify(EditorId))
   +
-    rec-msg(is-editor-modified(EditorId?)) .
+    rec-msg(se-is-editor-modified(EditorId?)) .
     snd-eval(SE, is-editor-modified(EditorId)) .
     rec-value(SE, editor-modified(Modified?)) .
-    snd-msg(editor-modified(EditorId, Modified))
+    snd-msg(se-editor-modified(EditorId, Modified))
   ) *
   delta
 endlet
