@@ -1,5 +1,5 @@
 tool sdf-import-graph is {
-  command = "java-adapter -class sdf.ImportGraph"
+  command = "sdf-import-graph"
 }
 
 process SdfImportGraph is
