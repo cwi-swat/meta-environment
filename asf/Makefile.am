@@ -11,5 +11,5 @@ EXTRA_DIST = reconf make_rules package
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
 ${PACKAGE}-${VERSION}.pkg: package Makefile
-	cp $ < $@
+	cp $< $@
 
