@@ -26,7 +26,6 @@ static ATbool containsVisibles(PT_Tree tree)
     int ch;
 
     assert(PT_isTreeChar(head) && "expected list of chars");
-ATwarning("tree: %t\n", head);
     ch = PT_getTreeCharacter(head);
 
     if (!isspace(ch)) {
@@ -77,7 +76,6 @@ static void storeTree(PT_Tree tree, const char *category)
     LOC_Area area = LOC_getLocationArea(location);
 
     slice = S_makeAreasMany((S_Area) area, slice);
-ATwarning("storing: %t at %t\n", area, key);
     ATtablePut(slices, key, S_AreasToTerm(slice));
   }
 }
@@ -153,7 +151,6 @@ S_Slices TreeToSyntaxSlices(PT_Tree tree)
 
   keys = ATtableKeys(slices);
 
-  ATwarning("keys: %t\n", keys);
 
   for ( ; !ATisEmpty(keys); keys = ATgetNext(keys)) {
     ATerm key = ATgetFirst(keys);
