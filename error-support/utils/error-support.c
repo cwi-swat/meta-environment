@@ -6,7 +6,7 @@
 #include <string.h>
 
 #include <aterm2.h>
-#include <ErrorAPI-utils.h>
+#include "ErrorAPI-utils.h"
 
 #ifndef WITHOUT_TOOLBUS
 #include "error-support.tif.h"
@@ -58,11 +58,56 @@ void rec_terminate(int cid, ATerm t)
 
 /*}}}  */
 
+/*{{{  ATerm convert_feedback(int cid, ATerm t) */
+
 ATerm convert_feedback(int cid, ATerm t)
 {
-  ERR_Feedback feedback = PERR_lowerFeedback(PERR_FeedbackFromTerm(t));
-  return ATmake("snd-value(new-feedback(<term>))", ERR_FeedbackToTerm(feedback));
+  PERR_Start startSummary = PERR_StartFromTerm(t);
+
+  if (PERR_isStartSummary(startSummary)) {
+    PERR_Summary pSummary = PERR_getStartTopSummary(startSummary);
+
+    return ATmake("snd-value(new-feedback(<term>))", 
+		  ERR_SummaryToTerm(PERR_lowerSummary(pSummary)));
+  }
+  else {
+    return ATmake("snd-value(new-feedback(<term>))", t);
+  }
 }
+
+/*}}}  */
+
+/*{{{  ATerm get_feedback_producer(int cid, ATerm t) */
+
+ATerm get_feedback_producer(int cid, ATerm t)
+{
+  ERR_Summary summary = ERR_SummaryFromTerm(t);
+
+  return ATmake("snd-value(producer(<str>))", ERR_getSummaryProducer(summary));
+}
+
+/*}}}  */
+/*{{{  ATerm get_feedback_identification(int cid, ATerm t) */
+
+ATerm get_feedback_identification(int cid, ATerm t)
+{
+  ERR_Summary summary = ERR_SummaryFromTerm(t);
+
+  return ATmake("snd-value(identification(<str>))", ERR_getSummaryId(summary));
+}
+
+/*}}}  */
+/*{{{  ATerm get_feedback_subjects(int cid, ATerm t) */
+
+ATerm get_feedback_subjects(int cid, ATerm t)
+{
+  ERR_Summary summary = ERR_SummaryFromTerm(t);
+
+  return ATmake("snd-value(subjects(<term>))", ERR_FeedbackListToTerm(
+						ERR_getSummaryList(summary)));
+}
+
+/*}}}  */
 
 /*{{{  int main(int argc, char *argv[]) */
 

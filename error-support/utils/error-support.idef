@@ -1,22 +1,39 @@
 /* $Id$ */
 
-tool errorsupport is {
+tool error-support is {
   command = "error-support"
 }
 
 process ErrorSupport is
 let
-  ES : errorsupport,
+  ES : error-support,
   Feedback : term,
-  NewFeedback : term
+  NewFeedback : term,
+  Producer : str,
+  Identification : str,
+  Subjects : list
 in
+  execute(error-support, ES?) .
   (
     rec-msg(convert-feedback(Feedback?)) .
-    execute(errorsupport, ES?) .
     snd-eval(ES, convert-feedback(Feedback)) .
     rec-value(ES, new-feedback(NewFeedback?)) .
-    snd-terminate(ES, "done") .
     snd-msg(converted-feedback(NewFeedback))
+  +
+    rec-msg(get-feedback-producer(Feedback?)) .
+    snd-eval(ES, get-feedback-producer(Feedback)) .
+    rec-value(ES, producer(Producer?)) .
+    snd-msg(producer(Producer))
+  +
+    rec-msg(get-feedback-identification(Feedback?)) .
+    snd-eval(ES, get-feedback-identification(Feedback)) .
+    rec-value(ES, identification(Identification?)) .
+    snd-msg(identification(Identification))
+  +
+    rec-msg(get-feedback-subjects(Feedback?)) .
+    snd-eval(ES, get-feedback-subjects(Feedback)) .
+    rec-value(ES, subjects(Subjects?)) .
+    snd-msg(subjects(Subjects))
   ) * delta
 endlet
 
