@@ -632,6 +632,7 @@ void mdb_invalidate_parse_tables(ATermList visited, char *modulename)
     if(ATindexOf(visited, modname, 0) < 0) {
       if(!is_valid_parse_table(ATempty, modname, 
                                timeOfEqsTable, timeOfTrmTable)) {
+				ATwarning("Making parsetables unavailable\n");
         entry = ATreplace(entry,ATparse("unavailable"), EQS_TABLE_LOC);
         entry = ATreplace(entry,ATparse("unavailable"), TRM_TABLE_LOC);
         entry = ATreplace(entry,ATparse("unavailable"), EQS_TREE_LOC);
@@ -791,15 +792,27 @@ ATbool is_valid_parse_table(ATermList visited, ATerm module,
     imports = (ATermList)GetValue(import_db,module);
     visited = ATinsert(visited, module);
     while(imports && !ATisEmpty(imports)) {
+			ATermList
+ entry;
       first = ATgetFirst(imports);
-      result = result && is_valid_parse_table(visited, first, 
-                                              timeOfEqsTable, timeOfTrmTable);
-      imports = ATgetNext(imports);
-    };
-    return result;
-  }
-  else
-    return result;
+
+			entry = (ATermList)GetValue(new_modules_db, first);
+			if(entry) {
+				timeOfEqsTable = ATgetInt((ATermInt)ATelementAt((ATermList)entry, 
+																												EQS_TABLE_TIME_LOC));
+				timeOfTrmTable = ATgetInt((ATermInt)ATelementAt((ATermList)entry, 
+																												TRM_TABLE_TIME_LOC));
+
+				result = result && is_valid_parse_table(visited, first, 
+																								timeOfEqsTable, timeOfTrmTable);
+				imports = ATgetNext(imports);
+			} else {
+				return ATfalse;
+			}
+		}
+	}
+  
+	return result;
 } 
 
 ATbool complete_asf_specification(ATermList visited, ATerm module)
