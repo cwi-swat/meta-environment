@@ -1,6 +1,7 @@
 module utilities/PosInfo[X]
 
-imports basic/Locations
+imports basic/AreaOperations
+imports basic/LocationOperations
 imports utilities/ATermAnnotations[X]
 imports basic/AreaOperations
 imports basic/LocationOperations
@@ -26,6 +27,10 @@ context-free syntax
   get-filename(X) -> StrCon
   
 hiddens
+
+context-free start-symbols
+   Location NatCon StrCon
+
 variables
   "ATerm" -> ATerm
   "Char*" -> CHAR*

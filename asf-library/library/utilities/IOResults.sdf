@@ -2,7 +2,7 @@ module utilities/IOResults[Sort]
 
 imports basic/Bytes
 imports basic/Integers
-imports basic/Feedback
+imports basic/Errors
 
 exports 
 
@@ -15,16 +15,16 @@ context-free syntax
                    amb-cnt:NatCon
                ")"                   -> ParseResult {cons("success")}
 
-  "parse-error" "(" Feedback ")"     -> ParseResult {cons("failure")}
+  "parse-error" "(" Error ")"        -> ParseResult {cons("failure")}
  
 sorts BytesResult
 context-free syntax
 
   "bytes" "(" value:Bytes ")" -> BytesResult {cons("success")}
-  "bytes-error" "(" Feedback ")" -> BytesResult {cons("failure")}
+  "bytes-error" "(" Error ")" -> BytesResult {cons("failure")}
 
 sorts WriteResult
 context-free syntax
 
   "written" -> WriteResult {cons("success")}
-  "write-error" "(" Feedback ")" -> WriteResult {cons("failure")}
+  "write-error" "(" Error ")" -> WriteResult {cons("failure")}

@@ -15,8 +15,6 @@ imports languages/sdf2/syntax/Kernel
         languages/sdf2/syntax/Aliases
 
 exports
-  context-free start-symbols SDF
-
   sorts SDF
 
   context-free syntax

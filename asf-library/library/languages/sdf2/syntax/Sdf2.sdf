@@ -75,3 +75,8 @@ exports
     <LAYOUT?-CF>        -/- [\ \t\n\%]
     <NumChar -CF>       -/- [0-9]
     <ModuleName -CF>    -/- [A-Za-z0-9\_\-]
+
+
+hiddens
+  context-free start-symbols
+    SDF Module

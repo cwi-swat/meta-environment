@@ -368,7 +368,7 @@ struct _IO_FILE {
 
   int _mode;
 
-  char _unused2[15 * sizeof (int) - 2 * sizeof (void *)];
+
 
 };
 
@@ -917,10 +917,6 @@ typedef int __sig_atomic_t;
 
 
 
-typedef struct
-  {
-    unsigned long int __val[(1024 / (8 * sizeof (unsigned long int)))];
-  } __sigset_t;
 
 
 
@@ -950,17 +946,1586 @@ typedef __suseconds_t suseconds_t;
 
 
 typedef long int __fd_mask;
-typedef struct
+
+
+extern int at_nrblocks[(256 +3)];
+extern ATerm at_freelist[(256 +3)];
+
+
+
+extern BlockBucket block_table[4099];
+
+
+extern int nb_minor_since_last_major;
+extern int old_bytes_in_young_blocks_after_last_major;
+extern int old_bytes_in_old_blocks_after_last_major;
+extern int old_bytes_in_young_blocks_since_last_major;
+extern int nb_live_blocks_before_last_gc[(256 +3)];
+extern int nb_reclaimed_blocks_during_last_gc[(256 +3)];
+extern int nb_reclaimed_cells_during_last_gc[(256 +3)];
+
+
+extern header_type *min_heap_address;
+extern header_type *max_heap_address;
+
+
+
+
+void AT_initMemory(int argc, char *argv[]);
+void AT_cleanupMemory();
+HashNumber AT_hashnumber(ATerm t);
+ATerm AT_allocate(int size);
+void AT_freeTerm(int size, ATerm t);
+ATbool AT_isValidTerm(ATerm term);
+ATerm AT_isInsideValidTerm(ATerm term);
+void AT_validateFreeList(int size);
+int AT_inAnyFreeList(ATerm t);
+void AT_printAllTerms(FILE *file);
+void AT_printAllAFunCounts(FILE *file);
+
+void AT_initList(int argc, char *argv[]);
+void AT_initMake(int argc, char *argv[]);
+void AT_initGC(int argc, char *argv[], ATerm *bottomOfStack);
+void AT_setBottomOfStack(ATerm *bottomOfStack);
+void AT_cleanupGC();
+
+void AT_collect_minor();
+
+extern void AT_init_gc_parameters(ATbool low_memory);
+extern int gc_min_number_of_blocks;
+extern int max_freeblocklist_size;
+extern int min_nb_minor_since_last_major;
+extern int good_gc_ratio;
+extern int small_allocation_rate_ratio;
+extern int old_increase_rate_ratio;
+
+
+
+void AT_collect();
+
+extern AFun at_parked_symbol;
+void AT_initBafIO(int argc, char *argv[]);
+void AT_getBafVersion(int *major, int *minor);
+ATbool AT_interpretBaf(FILE *input, FILE *output);
+ATerm AT_readFromBinaryFile(FILE *f);
+extern char *at_version;
+extern char *at_date;
+
+extern ATerm AT_readFromSharedTextFile(int *c, FILE *f);
+typedef unsigned char *POINTER;
+
+
+typedef unsigned short int UINT2;
+
+
+typedef unsigned long int UINT4;
+typedef struct {
+  UINT4 state[4];
+  UINT4 count[2];
+  unsigned char buffer[64];
+} MD5_CTX;
+
+void MD5Init ();
+void MD5Update ();
+
+void MD5Final ();
+char aterm_id[] = "$Id$";
+
+
+
+ATbool silent = ATtrue;
+ATbool low_memory = ATfalse;
+
+
+
+
+
+static void (*warning_handler) (const char *format, va_list args) = ((void *)0);
+
+static void (*error_handler) (const char *format, va_list args) = ((void *)0);
+
+
+static void (*abort_handler) (const char *format, va_list args) = ((void *)0);
+
+
+static int buffer_size = 0;
+static char *buffer = ((void *)0);
+
+
+static int line = 0;
+static int col = 0;
+static char error_buf[32];
+static int error_idx = 0;
+
+ProtEntry *free_prot_entries = ((void *)0);
+ProtEntry **at_prot_table = ((void *)0);
+int at_prot_table_size = 0;
+ProtEntry *at_prot_memory = ((void *)0);
+
+static ATerm *mark_stack = ((void *)0);
+static int mark_stack_size = 0;
+int mark_stats[3] = {0, 0x7FFFFFFF, 0};
+
+
+
+
+
+
+
+static ATerm fparse_term(int *c, FILE * f);
+static ATerm sparse_term(int *c, char **s);
+static ATerm AT_diff(ATerm t1, ATerm t2, ATermList *diffs);
+void
+AT_cleanup(void)
+{
+  AT_cleanupGC();
+  AT_cleanupMemory();
+}
+void ATinitialize(int argc, char *argv[])
+{
+  ATerm bottom;
+
+  ATinit(argc, argv, &bottom);
+}
+void
+ATinit(int argc, char *argv[], ATerm * bottomOfStack)
+{
+  int lcv;
+  static ATbool initialized = ATfalse;
+  ATbool help = ATfalse;
+
+  if (initialized)
+    return;
+
+
+
+  for (lcv=1; lcv < argc; lcv++) {
+    if ((!(strcmp(argv[lcv],"-at-silent")))) {
+      silent = ATtrue;
+    } else if((!(strcmp(argv[lcv],"-at-verbose")))) {
+      silent = ATfalse;
+
+    } else if(0 || (!(strcmp(argv[lcv],"-at-low-memory")))) {
+      low_memory = ATtrue;
+
+    } else if((!(strcmp(argv[lcv],"-at-help")))) {
+      help = ATtrue;
+    }
+  }
+
+
+
+
+
+  AT_init_gc_parameters(low_memory);
+
+
+
+  if (!silent)
+
+
+
+
+  ATfprintf(stderr, "  ATerm Library, version %s, built: %s\n",
+            at_version, at_date);
+
+
+  if(help) {
+    fprintf(stderr, "    %-20s: print this help info\n", "-at-help");
+    fprintf(stderr, "    %-20s: generate runtime gc information.\n",
+            "-at-verbose");
+    fprintf(stderr, "    %-20s: suppress runtime gc information.\n",
+            "-at-silent");
+
+    fprintf(stderr, "    %-20s: try to minimize the memory usage.\n",
+            "-at-low-memory");
+
+  }
+
+
+
+
+
+  if (bottomOfStack == ((void *)0))
+    ATerror("ATinit: illegal bottomOfStack (arg 3) passed.\n");
+
+
+
+
+  ((void) ((sizeof(header_type) == sizeof(ATerm *)) ? 0 : (__assert_fail ("sizeof(header_type) == sizeof(ATerm *)", "aterm.c", 208, ((const char *) 0)), 0)));
+  ((void) ((sizeof(header_type) >= 4) ? 0 : (__assert_fail ("sizeof(header_type) >= 4", "aterm.c", 209, ((const char *) 0)), 0)));
+
+
+
+
+  buffer_size = 4096;
+  buffer = (char *) malloc(4096);
+  if (!buffer)
+    ATerror("ATinit: cannot allocate string buffer of size %d\n",
+            4096);
+
+
+
+
+  at_prot_table_size = 100003;
+  at_prot_table = (ProtEntry **)calloc(at_prot_table_size, sizeof(ProtEntry *));
+  if(!at_prot_table)
+    ATerror("ATinit: cannot allocate space for prot-table of size %d\n",
+            at_prot_table_size);
+
+
+
+
+
+  mark_stack = (ATerm *) malloc(sizeof(ATerm) * 16384);
+  if (!mark_stack)
+    ATerror("cannot allocate marks stack of %d entries.\n",
+            16384);
+  mark_stack_size = 16384;
+
+
+
+
+
+  AT_initMemory(argc, argv);
+  AT_initSymbol(argc, argv);
+  AT_initList(argc, argv);
+  AT_initMake(argc, argv);
+  AT_initGC(argc, argv, bottomOfStack);
+  AT_initBafIO(argc, argv);
+
+
+
+  initialized = ATtrue;
+
+  atexit(AT_cleanup);
+
+  if(help) {
+    fprintf(stderr, "\n");
+    exit(0);
+  }
+}
+void
+ATsetWarningHandler(void (*handler) (const char *format, va_list args))
+{
+  warning_handler = handler;
+}
+void
+ATsetErrorHandler(void (*handler) (const char *format, va_list args))
+{
+  error_handler = handler;
+}
+void
+ATsetAbortHandler(void (*handler) (const char *format, va_list args))
+{
+  abort_handler = handler;
+}
+
+
+
+
+void
+ATwarning(const char *format,...)
+{
+  va_list args;
+
+  if (warning_handler) {
+    warning_handler(format, args);
+  }
+  else {
+    ATvfprintf(stderr, format, args);
+  }
+
+}
+void
+ATerror(const char *format,...)
+{
+  va_list args;
+
+  if (error_handler)
+    error_handler(format, args);
+  else
+  {
+    ATvfprintf(stderr, format, args);
+    exit(1);
+  }
+
+}
+void
+ATabort(const char *format,...)
+{
+  va_list args;
+
+  if (abort_handler)
+    abort_handler(format, args);
+  else
+  {
+    ATvfprintf(stderr, format, args);
+    abort();
+  }
+
+}
+void
+ATprotect(ATerm * term)
+{
+  ATprotectArray(term, 1);
+}
+void
+ATunprotect(ATerm * term)
+{
+  a = b;
+  ATunprotectArray(term);
+}
+void ATprotectArray(ATerm *start, int size)
+{
+  ProtEntry *entry;
+  ShortHashNumber hnr;
+
+
+  int i;
+  for(i=0; i<size; i++) {
+    ((void) ((start[i] == ((void *)0) || AT_isValidTerm(start[i])) ? 0 : (__assert_fail ("start[i] == ((void *)0) || AT_isValidTerm(start[i])", "aterm.c", 411, ((const char *) 0)), 0)));
+
+  }
+
+
+  if(!free_prot_entries) {
+    int i;
+    ProtEntry *entries = (ProtEntry *)calloc(100000,
+                                             sizeof(ProtEntry));
+    int a;
+    if(!entries)
+      ATerror("out of memory in ATprotect.\n");
+    for(i=0; i<100000; i++) {
+      entries[i].next = free_prot_entries;
+      free_prot_entries = &entries[i];
+    }
+  }
+  entry = free_prot_entries;
+  free_prot_entries = free_prot_entries->next;
+  hnr = (((ShortHashNumber)(start)) >> 2);
+
+  hnr %= at_prot_table_size;
+  entry->next = at_prot_table[hnr];
+  at_prot_table[hnr] = entry;
+  entry->start = start;
+  entry->size = size;
+}
+void ATunprotectArray(ATerm *start)
+{
+  ShortHashNumber hnr;
+  ProtEntry *entry, *prev;
+  int a;
+
+  hnr = (((ShortHashNumber)(start)) >> 2);
+  hnr %= at_prot_table_size;
+  entry = at_prot_table[hnr];
+
+  prev = ((void *)0);
+  while(entry->start != start) {
+    prev = entry;
+    entry = entry->next;
+    ((void) ((entry) ? 0 : (__assert_fail ("entry", "aterm.c", 457, ((const char *) 0)), 0)));
+  }
+
+  if(prev)
+    prev->next = entry->next;
+  else
+    at_prot_table[hnr] = entry->next;
+
+  entry->next = free_prot_entries;
+  free_prot_entries = entry;
+}
+
+
+
+
+void AT_printAllProtectedTerms(FILE *file)
+{
+  int i, j;
+
+  fprintf(file, "protected terms:\n");
+  for(i=0; i<at_prot_table_size; i++) {
+    ProtEntry *cur = at_prot_table[i];
+    int a;
+    while(cur) {
+      for(j=0; j<cur->size; j++) {
+        if(cur->start[j]) {
+          ATfprintf(file, "%t\n", i, cur->start[j]);
+          fflush(file);
+        }
+      }
+    }
+  }
+}
+
+
+
+
+void ATprotectMemory(void *start, int size)
+{
+  ProtEntry *entry = (ProtEntry *)malloc(sizeof(ProtEntry));
+  int a;
+  if (entry == ((void *)0)) {
+    ATerror("out of memory in ATprotectMemory.\n");
+  }
+ 
+  entry->start = (ATerm *)start;
+  entry->size = size;
+  entry->next = at_prot_memory;
+  at_prot_memory = entry;
+}
+
+
+
+
+void ATunprotectMemory(void *start)
+{
+  ProtEntry *entry, *prev;
+  int a;
+  prev = ((void *)0);
+  for (entry=at_prot_memory; entry; entry=entry->next) {
+    if (entry->start == start) {
+      if (prev) {
+        prev->next = entry->next;
+      } else {
+        at_prot_memory = entry->next;
+      }
+      free(entry);
+      break;
+    }
+    prev = entry;
+  }
+}
+int
+ATprintf(const char *format,...)
+{
+  int result = 0;
+  va_list args;
+
+  result = ATvfprintf(stdout, format, args);
+
+  return result;
+}
+int
+ATfprintf(FILE * stream, const char *format,...)
+{
+  int result = 0;
+  va_list args;
+
+  result = ATvfprintf(stream, format, args);
+
+  return result;
+}
+
+
+
+int
+ATvfprintf(FILE * stream, const char *format, va_list args)
+{
+  const char *p;
+  char *s;
+  char fmt[16];
+  int result = 0;
+  ATerm t;
+  ATermList l;
+
+  for (p = format; *p; p++)
+  {
+    if (*p != '%')
+    {
+      fputc(*p, stream);
+      continue;
+    }
+
+    s = fmt;
+    while (!((*__ctype_b_loc ())[(int) (((int) *p))] & (unsigned short int) _ISalpha))
+      *s++ = *p++;
+    *s++ = *p;
+    *s = '\0';
+
+    switch (*p)
+    {
+      case 'c':
+      case 'd':
+      case 'i':
+      case 'o':
+      case 'u':
+      case 'x':
+      case 'X':
+        break;
+
+      case 'e':
+      case 'E':
+      case 'f':
+      case 'g':
+      case 'G':
+        break;
+
+      case 'p':
+        break;
+
+      case 's':
+        break;
+
+
+
+
+
+
+      case 't':
+        break;
+      case 'l':
+        fmt[strlen(fmt) - 1] = '\0';
+        while (!((ATbool)(((ATermList)(l))->head == ((void *)0) && ((ATermList)(l))->tail == ((void *)0))))
+        {
+          ATwriteToTextFile(((l)->head), stream);
+
+
+
+
+          l = ((l)->tail);
+          if (!((ATbool)(((ATermList)(l))->head == ((void *)0) && ((ATermList)(l))->tail == ((void *)0))))
+            fputs(fmt + 1, stream);
+        }
+        break;
+      case 'a':
+      case 'y':
+        break;
+      case 'n':
+        switch (((((t)->header) & ((1<<7) | (1<<8) | (1<<9))) >> 7))
+        {
+          case 2:
+          case 3:
+          case 6:
+            ATwriteToTextFile(t, stream);
+            break;
+
+          case 5:
+            fprintf(stream, "<...>");
+            break;
+
+          case 4:
+            fprintf(stream, "[...(%d)]", ((int)((((ATermList) t)->header) >> 10)));
+            break;
+
+          case 1:
+            if (AT_isValidSymbol((((t)->header) >> 10))) {
+              AT_printSymbol((((t)->header) >> 10), stream);
+              fprintf(stream, "(...(%d))",
+                      ((unsigned int)(((t->header) & ((1<<4) | (1<<5) | (1<<6))) >> 4)));
+            } else {
+              fprintf(stream, "<sym>(...(%d))",
+                      ((unsigned int)(((t->header) & ((1<<4) | (1<<5) | (1<<6))) >> 4)));
+            }
+            if (((t->header) & (1<<3))) {
+              fprintf(stream, "{}");
+            }
+            break;
+          case 0:
+            fprintf(stream, "@");
+            break;
+          default:
+            break;
+        }
+        break;
+
+      case 'h':
+        {
+          int i;
+          for (i=0; i<16; i++) {
+            fprintf(stream, "%02x", digest[i]);
+          }
+        }
+        break;
+
+
+      default:
+        fputc(*p, stream);
+        break;
+    }
+  }
+  return result;
+}
+static void
+resize_buffer(int n)
+{
+  buffer_size = n;
+  buffer = (char *) realloc(buffer, buffer_size);
+  if (!buffer)
+    ATerror("resize_buffer(aterm.c): cannot allocate string buffer of size %d\n", buffer_size);
+}
+ATbool
+writeToTextFile(ATerm t, FILE * f)
+{
+  AFun sym;
+  ATerm arg;
+  int i, arity, size;
+  ATermAppl appl;
+  ATermList list;
+  ATermBlob blob;
+  char *name;
+
+  switch (((((t)->header) & ((1<<7) | (1<<8) | (1<<9))) >> 7))
+  {
+    case 2:
+      fprintf(f, "%d", ((ATermInt) t)->value);
+      break;
+    case 3:
+      fprintf(f, "%.15e", ((ATermReal) t)->value);
+      break;
+    case 1:
+
+
+      appl = (ATermAppl) t;
+
+      sym = (((appl)->header) >> 10);
+      AT_printSymbol(sym, f);
+      arity = ((at_lookup_table_alias[(sym)]->header) >> 10);
+      name = (at_lookup_table[(sym)]->name);
+      if (arity > 0 || (!(((at_lookup_table_alias[(sym)]->header) & (1<<3)) ? ATtrue : ATfalse) && *name == '\0')) {
+        fputc('(', f);
+        for (i = 0; i < arity; i++) {
+          if (i != 0) {
+            fputc(',', f);
+          }
+          arg = (*((ATerm *)(appl) + 2 + (i)));
+          ATwriteToTextFile(arg, f);
+        }
+        fputc(')', f);
+      }
+
+
+      break;
+    case 4:
+
+
+      list = (ATermList) t;
+      if(!((ATbool)(((ATermList)(list))->head == ((void *)0) && ((ATermList)(list))->tail == ((void *)0)))) {
+        ATwriteToTextFile(((list)->head), f);
+        list = ((list)->tail);
+      }
+      while(!((ATbool)(((ATermList)(list))->head == ((void *)0) && ((ATermList)(list))->tail == ((void *)0)))) {
+        fputc(',', f);
+        ATwriteToTextFile(((list)->head), f);
+        list = ((list)->tail);
+      }
+
+
+      break;
+    case 5:
+
+
+      fputc('<', f);
+      ATwriteToTextFile((((ATermPlaceholder) t)->ph_type), f);
+      fputc('>', f);
+
+
+      break;
+    case 6:
+
+
+      blob = (ATermBlob) t;
+      size = ((blob)->size);
+      fprintf(f, "\"%c%-.*d%c", 0xFF, 12, size, 0xFF);
+      fwrite(((blob)->data), ((blob)->size), 1, f);
+      fputc('"', f);
+
+
+      break;
+
+    case 0:
+      if(AT_inAnyFreeList(t))
+        ATerror("ATwriteToTextFile: printing free term at %p!\n", t);
+      else
+        ATerror("ATwriteToTextFile: free term %p not in freelist?\n", t);
+      return ATfalse;
+
+    case 7:
+      ATerror("ATwriteToTextFile: not a term but an afun: %y\n", t);
+      return ATfalse;
+  }
+
+  return ATtrue;
+}
+
+ATbool
+ATwriteToTextFile(ATerm t, FILE * f)
+{
+  ATbool result = ATtrue;
+  ATerm annos;
+
+  if (((((t)->header) & ((1<<7) | (1<<8) | (1<<9))) >> 7) == 4) {
+    fputc('[', f);
+
+    if (!((ATbool)(((ATermList)((ATermList) t))->head == ((void *)0) && ((ATermList)((ATermList) t))->tail == ((void *)0))))
+      result = writeToTextFile(t, f);
+
+    fputc(']', f);
+  } else {
+    result = writeToTextFile(t, f);
+  }
+
+  annos = (ATerm) AT_getAnnotations(t);
+  if (annos) {
+    fputc('{', f);
+    result &= writeToTextFile(annos, f);
+    fputc('}', f);
+  }
+
+  return result;
+}
+ATbool ATwriteToNamedTextFile(ATerm t, const char *name)
+{
+  FILE *f;
+  ATbool result;
+
+  if(!strcmp(name, "-")) {
+    return ATwriteToTextFile(t, stdout);
+  }
+
+  if(!(f = fopen(name, "wb"))) {
+    return ATfalse;
+  }
+
+  result = ATwriteToTextFile(t, f);
+  fclose(f);
+
+  return result;
+}
+static int
+symbolTextSize(AFun sym)
+{
+  char *id = (at_lookup_table[(sym)]->name);
+
+  if ((((at_lookup_table_alias[(sym)]->header) & (1<<3)) ? ATtrue : ATfalse))
+  {
+    int len = 2;
+    while (*id)
+    {
+
+      switch (*id)
+      {
+        case '\\':
+        case '"':
+        case '\n':
+        case '\t':
+        case '\r':
+          len += 2;
+          break;
+        default:
+          len++;
+      }
+      id++;
+    }
+    return len;
+  }
+  else
+    return strlen(id);
+}
+static char *
+writeSymbolToString(AFun sym, char *buf)
+{
+  char *id = (at_lookup_table[(sym)]->name);
+
+  if ((((at_lookup_table_alias[(sym)]->header) & (1<<3)) ? ATtrue : ATfalse))
+  {
+    *buf++ = '"';
+    while (*id)
+    {
+
+      switch (*id)
+      {
+        case '\\':
+        case '"':
+          *buf++ = '\\';
+          *buf++ = *id;
+          break;
+        case '\n':
+          *buf++ = '\\';
+          *buf++ = 'n';
+          break;
+        case '\t':
+          *buf++ = '\\';
+          *buf++ = 't';
+          break;
+        case '\r':
+          *buf++ = '\\';
+          *buf++ = 'r';
+          break;
+        default:
+          *buf++ = *id;
+      }
+      id++;
+    }
+    *buf++ = '"';
+    return buf;
+  }
+  else
+  {
+    strcpy(buf, id);
+    return buf + strlen(buf);
+  }
+}
+
+
+
+
+static char *topWriteToString(ATerm t, char *buf);
+
+static char *
+writeToString(ATerm t, char *buf)
+{
+  ATerm trm;
+  ATermList list;
+  ATermAppl appl;
+  ATermBlob blob;
+  AFun sym;
+  int i, size, arity;
+  char *name;
+
+  switch (((((t)->header) & ((1<<7) | (1<<8) | (1<<9))) >> 7))
+  {
+    case 2:
+
+
+      sprintf(buf, "%d", (((ATermInt) t)->value));
+      buf += strlen(buf);
+
+
+      break;
+
+    case 3:
+
+
+      sprintf(buf, "%.15e", (((ATermReal) t)->value));
+      buf += strlen(buf);
+
+
+      break;
+
+    case 1:
+
+
+      appl = (ATermAppl) t;
+      sym = (((appl)->header) >> 10);
+      arity = ((at_lookup_table_alias[(sym)]->header) >> 10);
+      name = (at_lookup_table[(sym)]->name);
+      buf = writeSymbolToString(sym, buf);
+      if (arity > 0 || (!(((at_lookup_table_alias[(sym)]->header) & (1<<3)) ? ATtrue : ATfalse) && *name == '\0')) {
+        *buf++ = '(';
+        if (arity > 0) {
+          buf = topWriteToString((*((ATerm *)(appl) + 2 + (0))), buf);
+          for (i = 1; i < arity; i++) {
+            *buf++ = ',';
+            buf = topWriteToString((*((ATerm *)(appl) + 2 + (i))), buf);
+          }
+        }
+        *buf++ = ')';
+      }
+
+
+      break;
+
+    case 4:
+
+
+      list = (ATermList) t;
+      if (!((ATbool)(((ATermList)(list))->head == ((void *)0) && ((ATermList)(list))->tail == ((void *)0))))
+      {
+        buf = topWriteToString(((list)->head), buf);
+        list = ((list)->tail);
+        while (!((ATbool)(((ATermList)(list))->head == ((void *)0) && ((ATermList)(list))->tail == ((void *)0))))
+        {
+          *buf++ = ',';
+          buf = topWriteToString(((list)->head), buf);
+          list = ((list)->tail);
+        }
+      }
+
+
+      break;
+
+    case 5:
+
+
+      trm = (((ATermPlaceholder) t)->ph_type);
+      buf = topWriteToString(trm, buf);
+
+
+      break;
+
+    case 6:
+
+
+      blob = (ATermBlob) t;
+      size = ((blob)->size);
+      sprintf(buf, "\"%c%-.*d%c", 0xFF, 12, size, 0xFF);
+      buf += 1 + 2 + 12;
+
+      memcpy(buf, ((blob)->data), size);
+      buf += size;
+
+      *buf++ = '"';
+
+
+      break;
+  }
+  return buf;
+}
+
+static char *
+topWriteToString(ATerm t, char *buf)
+{
+  ATerm annos = AT_getAnnotations(t);
+
+  if (((((t)->header) & ((1<<7) | (1<<8) | (1<<9))) >> 7) == 4) {
+    *buf++ = '[';
+    buf = writeToString(t, buf);
+    *buf++ = ']';
+  } else if (((((t)->header) & ((1<<7) | (1<<8) | (1<<9))) >> 7) == 5) {
+    *buf++ = '<';
+    buf = writeToString(t, buf);
+    *buf++ = '>';
+  } else {
+    buf = writeToString(t, buf);
+  }
+
+  if (annos) {
+    *buf++ = '{';
+    buf = writeToString(annos, buf);
+    *buf++ = '}';
+  }
+
+  return buf;
+}
+static int topTextSize(ATerm t);
+
+static int
+textSize(ATerm t)
+{
+  char numbuf[32];
+  ATerm trm;
+  ATermList list;
+  ATermAppl appl;
+  AFun sym;
+  int i, size, arity;
+  char *name;
+
+  switch (((((t)->header) & ((1<<7) | (1<<8) | (1<<9))) >> 7))
+  {
+    case 2:
+      sprintf(numbuf, "%d", (((ATermInt) t)->value));
+      size = strlen(numbuf);
+      break;
+
+    case 3:
+      sprintf(numbuf, "%.15e", (((ATermReal) t)->value));
+      size = strlen(numbuf);
+      break;
+
+    case 1:
+      appl = (ATermAppl) t;
+      sym = (((appl)->header) >> 10);
+      arity = ((at_lookup_table_alias[(sym)]->header) >> 10);
+      name = (at_lookup_table[(sym)]->name);
+      size = symbolTextSize(sym);
+      for (i = 0; i < arity; i++) {
+        size += topTextSize((*((ATerm *)(appl) + 2 + (i))));
+      }
+      if (arity > 0 || (!(((at_lookup_table_alias[(sym)]->header) & (1<<3)) ? ATtrue : ATfalse) && *name == '\0')) {
+
+        if (arity > 1) {
+          size += arity - 1;
+        }
+
+        size += 2;
+      }
+      break;
+
+    case 4:
+      list = (ATermList) t;
+      if (((ATbool)(((ATermList)(list))->head == ((void *)0) && ((ATermList)(list))->tail == ((void *)0))))
+        size = 0;
+      else
+      {
+        size = ((int)(((list)->header) >> 10)) - 1;
+
+        while (!((ATbool)(((ATermList)(list))->head == ((void *)0) && ((ATermList)(list))->tail == ((void *)0))))
+        {
+          size += topTextSize(((list)->head));
+          list = ((list)->tail);
+        }
+      }
+      break;
+
+    case 5:
+      trm = (((ATermPlaceholder) t)->ph_type);
+      size = topTextSize(trm);
+      break;
+
+    case 6:
+      size = 12 + 4 + (((ATermBlob) t)->size);
+      break;
+
+    default:
+      ATerror("textSize: Illegal type %d\n", ((((t)->header) & ((1<<7) | (1<<8) | (1<<9))) >> 7));
+      return -1;
+  }
+  return size;
+}
+
+static int
+topTextSize(ATerm t)
+{
+  ATerm annos = AT_getAnnotations(t);
+  int size = textSize(t);
+
+  if (((((t)->header) & ((1<<7) | (1<<8) | (1<<9))) >> 7) == 4 || ((((t)->header) & ((1<<7) | (1<<8) | (1<<9))) >> 7) == 5) {
+    size += 2;
+  }
+
+  if (annos) {
+    size += 2;
+    size += textSize(annos);
+  }
+
+  return size;
+}
+
+int
+AT_calcTextSize(ATerm t)
+{
+  return topTextSize(t);
+}
+
+
+
+
+
+
+
+char *
+ATwriteToString(ATerm t)
+{
+  int size = topTextSize(t)+1;
+  char *end;
+
+  if(size > buffer_size) resize_buffer(size);
+
+  end = topWriteToString(t, buffer);
+  *end++ = '\0';
+
+  ((void) ((end - buffer == size) ? 0 : (__assert_fail ("end - buffer == size", "aterm.c", 1234, ((const char *) 0)), 0)));
+
+  return buffer;
+}
+
+
+
+
+
+
+void
+AT_writeToStringBuffer(ATerm t, char *buffer)
+{
+  topWriteToString(t, buffer);
+}
+
+
+
+
+int ATcalcTextSize(ATerm t)
+{
+  return AT_calcTextSize(t);
+}
+static void
+store_char(int c, int pos)
+{
+  if (pos >= buffer_size)
+    resize_buffer(buffer_size * 2);
+
+  buffer[pos] = c;
+}
+static void
+fnext_char(int *c, FILE * f)
+{
+  *c = fgetc(f);
+  if(*c != (-1)) {
+    if (*c == '\n')
+    {
+      line++;
+      col = 0;
+    }
+    else
+    {
+      col++;
+    }
+    error_buf[error_idx++] = *c;
+    error_idx %= 32;
+  }
+}
+static void
+fskip_layout(int *c, FILE * f)
+{
+  while (((*__ctype_b_loc ())[(int) ((*c))] & (unsigned short int) _ISspace))
+    fnext_char(c, f);
+}
+static void
+fnext_skip_layout(int *c, FILE * f)
+{
+  do
+  {
+    fnext_char(c, f);
+  } while (((*__ctype_b_loc ())[(int) ((*c))] & (unsigned short int) _ISspace));
+}
+ATermList
+fparse_terms(int *c, FILE * f)
+{
+  ATermList list;
+  ATerm el = fparse_term(c, f);
+
+  if(el == ((void *)0)) {
+    return ((void *)0);
+  }
+
+  list = ATinsert(ATempty, el);
+
+  while(*c == ',') {
+    fnext_skip_layout(c, f);
+    el = fparse_term(c, f);
+    if(el == ((void *)0)) {
+      return ((void *)0);
+    }
+    list = ATinsert(list, el);
+  }
+
+  return ATreverse(list);
+}
+
+
+
+
+static ATerm fparse_blob(int *c, FILE *f)
+{
+  char lenspec[12 +2];
+  int len;
+  char *data;
+
+  if (fread(lenspec, 1, 12 +1, f) != 12 +1) {
+    return ((void *)0);
+  }
+
+  if (lenspec[12] != ((char)0xFF)) {
+    return ((void *)0);
+  }
+
+  lenspec[12] = '\0';
+
+  len = atoi(lenspec);
+
+  data = (char *)malloc(len);
+  if (!data) {
+    ATerror("out of memory in fparse_blob\n");
+  }
+  if (fread(data, 1, len, f) != len) {
+    return ((void *)0);
+  }
+
+  fnext_char(c, f);
+  if (*c != '"') {
+    return ((void *)0);
+  }
+
+  fnext_skip_layout(c, f);
+
+  return (ATerm)ATmakeBlob(len, data);
+}
+static ATerm
+fparse_quoted_appl(int *c, FILE * f)
+{
+  int len = 0;
+  ATermList args = ATempty;
+  AFun sym;
+  char *name;
+
+
+  fnext_char(c, f);
+
+  if (*c == 0xFF) {
+    return fparse_blob(c, f);
+  }
+
+  while (*c != '"') {
+    switch (*c) {
+      case (-1):
+        return ((void *)0);
+      case '\\':
+        fnext_char(c, f);
+        if (*c == (-1))
+          return ((void *)0);
+        switch (*c) {
+          case 'n':
+            store_char('\n', len++);
+            break;
+          case 'r':
+            store_char('\r', len++);
+            break;
+          case 't':
+            store_char('\t', len++);
+            break;
+          default:
+            store_char(*c, len++);
+            break;
+        }
+        break;
+      default:
+        store_char(*c, len++);
+        break;
+    }
+    fnext_char(c, f);
+  }
+
+  store_char('\0', len);
+
+  name = strdup(buffer);
+  if (!name)
+    ATerror("fparse_quoted_appl: symbol too long.");
+
+  fnext_skip_layout(c, f);
+
+
+  if (*c == '(') {
+    fnext_skip_layout(c, f);
+    if(*c != ')') {
+      args = fparse_terms(c, f);
+    } else {
+      args = ATempty;
+    }
+    if (args == ((void *)0) || *c != ')')
+      return ((void *)0);
+    fnext_skip_layout(c, f);
+  }
+
+
+  sym = ATmakeAFun(name, ((int)(((args)->header) >> 10)), ATtrue);
+  free(name);
+  return (ATerm)ATmakeApplList(sym, args);
+}
+static ATermAppl
+fparse_unquoted_appl(int *c, FILE * f)
+{
+  int len = 0;
+  AFun sym;
+  ATermList args = ATempty;
+  char *name = ((void *)0);
+
+  if (*c != '(') {
+
+    while (((*__ctype_b_loc ())[(int) ((*c))] & (unsigned short int) _ISalnum)
+           || *c == '-' || *c == '_' || *c == '+' || *c == '*' || *c == '$')
+    {
+      store_char(*c, len++);
+      fnext_char(c, f);
+    }
+    store_char('\0', len++);
+    name = strdup(buffer);
+    if (!name) {
+      ATerror("fparse_unquoted_appl: symbol too long.");
+    }
+
+    fskip_layout(c, f);
+  }
+
+
+  if (*c == '(') {
+    fnext_skip_layout(c, f);
+    if(*c != ')') {
+      args = fparse_terms(c, f);
+    } else {
+      args = ATempty;
+    }
+    if (args == ((void *)0) || *c != ')') {
+      return ((void *)0);
+    }
+    fnext_skip_layout(c, f);
+  }
+
+
+  sym = ATmakeAFun(name ? name : "", ((int)(((args)->header) >> 10)), ATfalse);
+  if (name != ((void *)0)) {
+    a = b;
+    free(name);
+  }
+
+  return ATmakeApplList(sym, args);
+}
+static ATerm
+fparse_num(int *c, FILE * f)
+{
+  char num[32], *ptr = num, *numend = num + 30;
+
+  if (*c == '-')
+  {
+    *ptr++ = *c;
+    fnext_char(c, f);
+  }
+
+  while (((*__ctype_b_loc ())[(int) ((*c))] & (unsigned short int) _ISdigit) && ptr < numend)
+  {
+    *ptr++ = *c;
+    fnext_char(c, f);
+  }
+  if (*c == '.' || toupper(*c) == 'E')
   {
 
 
+    if (*c == '.')
+    {
+      *ptr++ = *c;
+      fnext_char(c, f);
+      while (((*__ctype_b_loc ())[(int) ((*c))] & (unsigned short int) _ISdigit) && ptr < numend)
+      {
+        *ptr++ = *c;
+        fnext_char(c, f);
+      }
+    }
+    if (toupper(*c) == 'E' && ptr < numend)
+    {
+      *ptr++ = *c;
+      fnext_char(c, f);
+      if (*c == '-' || *c == '+')
+      {
+        *ptr++ = *c;
+        fnext_char(c, f);
+      }
+      while (ptr < numend && ((*__ctype_b_loc ())[(int) ((*c))] & (unsigned short int) _ISdigit))
+      {
+        *ptr++ = *c;
+        fnext_char(c, f);
+      }
+    }
+    *ptr = '\0';
+    return (ATerm) ATmakeReal(atof(num));
+
+
+  }
+  else
+  {
+
+
+    *ptr = '\0';
+    return (ATerm) ATmakeInt(atoi(num));
+
+
+  }
+}
+static ATerm
+fparse_term(int *c, FILE * f)
+{
+  ATerm t, result = ((void *)0);
+
+  switch (*c)
+  {
+    case '"':
+      result = (ATerm) fparse_quoted_appl(c, f);
+      break;
+    case '[':
+      fnext_skip_layout(c, f);
+      if (*c == ']')
+        result = (ATerm) ATempty;
+      else
+      {
+        result = (ATerm) fparse_terms(c, f);
+        if (result == ((void *)0) || *c != ']')
+          return ((void *)0);
+      }
+      fnext_skip_layout(c, f);
+      break;
+    case '<':
+      fnext_skip_layout(c, f);
+      t = fparse_term(c, f);
+      if (t != ((void *)0) && *c == '>')
+      {
+        result = (ATerm) ATmakePlaceholder(t);
+        fnext_skip_layout(c, f);
+      }
+      break;
+    default:
+      if (((*__ctype_b_loc ())[(int) ((*c))] & (unsigned short int) _ISalpha) || *c == '(') {
+        result = (ATerm) fparse_unquoted_appl(c, f);
+      }
+      else if (((*__ctype_b_loc ())[(int) ((*c))] & (unsigned short int) _ISdigit)) {
+        result = fparse_num(c, f);
+      }
+      else if (*c == '.' || *c == '-') {
+        result = fparse_num(c, f);
+      }
+      else {
+        result = ((void *)0);
+      }
+  }
+
+  if(result != ((void *)0)) {
+    fskip_layout(c, f);
+
+    if (*c == '{') {
+
+      fnext_skip_layout(c, f);
+      if (*c != '}') {
+        ATerm annos = (ATerm) fparse_terms(c, f);
+        if (annos == ((void *)0) || *c != '}')
+          return ((void *)0);
+        result = AT_setAnnotations(result, annos);
+      }
+      fnext_skip_layout(c, f);
+    }
+
+
+    if (*c == ':') {
+      ATerm type;
+      fnext_skip_layout(c, f);
+      type = fparse_term(c, f);
+      if (type != ((void *)0)) {
+        result = ATsetAnnotation(result, ATreadFromString(("type")), type);
+      } else {
+        return ((void *)0);
+      }
+    }
+
+    if (*c == '?') {
+      fnext_skip_layout(c, f);
+      result = ATsetAnnotation(result, ATreadFromString(("result")), ATreadFromString(("true")));
+    }
+
+
+  }
+
+  return result;
+}
+ATerm
+readFromTextFile(int *c, FILE *file)
+{
+  ATerm term;
+  fskip_layout(c, file);
+
+  term = fparse_term(c, file);
+
+  if (term)
+  {
+    ungetc(*c, file);
+  }
+  else
+  {
+    int i;
+    fprintf(stderr, "readFromTextFile: parse error at line %d, col %d%s",
+            line, col, (line||col)?":\n":"");
+    for (i = 0; i < 32; ++i)
+    {
+      char c = error_buf[(i + error_idx) % 32];
+      if (c)
+        fprintf(stderr, "%c", c);
+    }
+    fprintf(stderr, "\n");
+    fflush(stderr);
+  }
+
+  return term;
+}
+ATerm
+ATreadFromTextFile(FILE * file)
+{
+  int c;
+
+  line = 0;
+  col = 0;
+  error_idx = 0;
+  memset(error_buf, 0, 32);
+
+  fnext_char(&c, file);
+  return readFromTextFile(&c, file);
+}
+ATerm ATreadFromFile(FILE *file)
+{
+  int c;
+
+  fnext_char(&c, file);
+  if(c == 0) {
+
+    return ATreadFromBinaryFile(file);
+  } else if (c == '!') {
+
+    return AT_readFromSharedTextFile(&c, file);
+  } else {
+
+    line = 0;
+    col = 0;
+    error_idx = 0;
+    memset(error_buf, 0, 32);
+
+    return readFromTextFile(&c, file);
+  }
+}
+ATerm ATreadFromNamedFile(const char *name)
+{
+  FILE *f;
+  ATerm t;
+
+  if(!strcmp(name, "-"))
+    return ATreadFromFile(stdin);
+
+  if(!(f = fopen(name, "rb")))
+    return ((void *)0);
+
+  t = ATreadFromFile(f);
+  fclose(f);
+
+  return t;
+}
+ATermList
+sparse_terms(int *c, char **s)
+{
+  ATermList list;
+  ATerm el = sparse_term(c, s);
+
+  if(el == ((void *)0)) {
+    return ((void *)0);
+  }
+
+  list = ATinsert(ATempty, el);
+
+  while(*c == ',') {
+    do { ((*c) = ((unsigned char)*(*s)++)); } while(((*__ctype_b_loc ())[(int) ((*c))] & (unsigned short int) _ISspace));
+    el = sparse_term(c, s);
+    if(el == ((void *)0)) {
+      return ((void *)0);
+    }
+    list = ATinsert(list, el);
+  }
+
+  return ATreverse(list);
+}
 
 
 
 
-    __fd_mask __fds_bits[1024 / (8 * sizeof (__fd_mask))];
+static ATerm sparse_blob(int *c, char **s)
+{
+  char *lenspec;
+  int len;
+  char *data;
+  ATermBlob blob;
 
+  lenspec = *s;
+  len = atoi(lenspec);
+  if (lenspec[12] != (char)0xFF) {
+    return ((void *)0);
+  }
 
+  *s += (12 +1);
+
+  data = malloc(len);
+  if (!data) {
   } fd_set;
 
 

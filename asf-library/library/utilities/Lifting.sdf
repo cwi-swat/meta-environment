@@ -11,3 +11,8 @@ context-free syntax
   lower-from-tree(Tree) -> Sort {built-in("lower-from-tree")}
 
   lift-to-term(Sort) -> ATerm {built-in("lift-to-term")}
+
+hiddens
+
+context-free start-symbols
+  Tree Sort ATerm

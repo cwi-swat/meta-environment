@@ -1,4 +1,4 @@
-module Implode[Sort]
+module utilities/Implode[Sort]
 
 imports languages/aterm/syntax/ATerms
 

@@ -5,8 +5,11 @@ imports languages/pico/syntax/Pico-Types
 imports basic/Integers 
 imports basic/Strings 
 
+hiddens
+  context-free start-symbols 
+    PROGRAM
+
 exports
-  context-free start-symbols PROGRAM
 
   sorts PROGRAM DECLS ID-TYPE STATEMENT EXP
 

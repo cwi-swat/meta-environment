@@ -2,3 +2,7 @@ module languages/box/syntax/Box
 
 imports languages/box/syntax/Fonts
 imports languages/box/syntax/Comments
+
+hiddens
+  context-free start-symbols
+    Box

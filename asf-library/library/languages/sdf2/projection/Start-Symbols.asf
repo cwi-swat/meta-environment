@@ -5,7 +5,7 @@ equations
 %% \noindent
 %% The declared symbols of a grammar.
 
-  [S0] S(sorts 'a) = 'a
+%%  [S0] S(sorts 'a) = 'a
   [S1] S(start-symbols 'a) = 'a
   [S2] S(lexical start-symbols 'a) = 'a
   [S3] S(context-free start-symbols 'a) = 'a
