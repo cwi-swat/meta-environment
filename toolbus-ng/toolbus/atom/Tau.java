@@ -4,7 +4,6 @@ package toolbus.atom;
  */
 
 import toolbus.ToolBusException;
-import toolbus.process.*;
 
 public class Tau extends Atom {
 	

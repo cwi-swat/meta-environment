@@ -3,14 +3,12 @@
  */
 
 package toolbus;
-import java.util.Vector;
-import java.util.Hashtable;
-import java.util.ListIterator;
-import aterm.*;
+import java.util.*;
 
-import toolbus.atom.*;
 import toolbus.process.*;
 import toolbus.tool.*;
+
+import aterm.*;
 
 public class ToolBus {
 	private ATermFactory factory;
@@ -21,7 +19,6 @@ public class ToolBus {
 	
 	public ToolBus(){
 		this.factory = TBTerm.factory;
-		AtomSet empty = new AtomSet();
 		processes = new Vector();
 		procdefs = new Vector();
 		tooldefs = new Vector();

@@ -4,8 +4,8 @@
 
 package toolbus;
 import java.util.Vector;
+
 import aterm.*;
-import aterm.pure.*;
 
 
 public class Environment{
