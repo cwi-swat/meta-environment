@@ -18,4 +18,4 @@ ${NAME}.c: ${NAME}.adt
 
 clean:
 	${RM} ${CLEANFILES} *.o ${NAME}.[ch] ${NAME}_dict.[ch] \
-              ${NAME}.dict ${NAME}.adt
+              ${NAME}.dict
