@@ -1,5 +1,14 @@
+2002/06/05 (jurgenv@cwi.nl)
+ * Made concat-asf robust against empty input files
+
 2002/06/05 (vandenbr@loria.fr)
  * Bug fix wrt. more than one list pattern in a list pattern.
+
+2002/06/03 (jurgenv@cwi.nl)
+ * Two new traversal directives added (interpreter only): 
+   break and continue. A traversal function either breaks of traversal on
+   the current branch after a successful application of a rewrite rule, 
+   or continues traversing.
 
 2002/05/31 (jurgenv@cwi.nl)
  * Added the notion of failure to the rewriting process in asfe. 
