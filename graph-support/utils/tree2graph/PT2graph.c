@@ -79,7 +79,9 @@ static Graph printNode(Graph graph,
   graph = setGraphNodes(graph, nodes);
 
   if (parentNr != 0) {
-    edge = makeEdgeDefault(parentId, nodeId, makeAttributeListEmpty());
+    Attribute dir = makeAttributeDirection(makeDirectionNone());
+    AttributeList l = makeAttributeListMulti(dir, makeAttributeListEmpty());
+    edge = makeEdgeDefault(parentId, nodeId, l);
 
     edges = getGraphEdges(graph);
     edges = makeEdgeListMulti(edge, edges);
@@ -126,7 +128,9 @@ static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
   graph = setGraphNodes(graph, nodes);
 
   if (parentNr != 0) {
-    edge = makeEdgeDefault(parentId, nodeId, makeAttributeListEmpty());
+    Attribute dir = makeAttributeDirection(makeDirectionNone());
+    AttributeList l = makeAttributeListMulti(dir, makeAttributeListEmpty());
+    edge = makeEdgeDefault(parentId, nodeId, l);
 
     edges = getGraphEdges(graph);
     edges = makeEdgeListMulti(edge, edges);

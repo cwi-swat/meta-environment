@@ -49,8 +49,10 @@ static void printAttribute(Attribute attr, FILE *file)
     ATfprintf(file, "height=\"%f\"", pixelToInch(getAttributeHeight(attr)));
   } else if (isAttributeCurvePoints(attr)) {
     printPolygon(getAttributePoints(attr), file);
+  } else if (isAttributeDirection(attr)) {
+    ATfprintf(file, "dir=%t", DirectionToTerm(getAttributeDirection(attr)));   
   } else {
-    ATabort("unknown attribute type: %t\n", attr);
+    ATwarning("unknown attribute type: %t\n", attr);
   }
 }
 
@@ -93,9 +95,9 @@ static void printNodes(NodeList nodes, FILE *file)
 static void printEdge(Edge edge, FILE *file)
 {
   // Edges are reversed to get the graph in the Meta-Environt to look 'right'
-  ATfprintf(file, "%t -> %t ", getEdgeTo(edge), getEdgeFrom(edge));
+  ATfprintf(file, "%t -> %t [", getEdgeTo(edge), getEdgeFrom(edge));
   printAttributes(getEdgeAttributes(edge), file);
-  ATfprintf(file, "\n");
+  ATfprintf(file, "]\n");
 }
 
 /*}}}  */

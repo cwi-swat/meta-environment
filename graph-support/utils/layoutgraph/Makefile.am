@@ -20,9 +20,9 @@ layoutgraph_SOURCES = layoutgraph.c layoutgraph.tif.c layoutgraph.tif.h \
 
 layoutgraph_LDADD = \
 	lex.yy.o y.tab.o \
-	-L${top_builddir}/lib -lGraph \
 	-L${TOOLBUSLIB}/lib -lATB \
 	-L$(ATERM)/lib -lATerm \
+	-L${top_builddir}/lib -lGraph \
         ${SOCKLIBS}
 
 graph2dot_SOURCES = graph2dot.c graph2dot-main.c

@@ -256,6 +256,10 @@ static AttributeList buildAttributeList(ATermList dotAttributes)
 				list = makeAttributeListMulti(makeAttributeLocation(x, y), list);
 			}
 		}
+    else if (ATisEqual(key, ATparse("\"dir\""))) {
+      Direction dir = DirectionFromTerm(ATparse(sval));
+      list = makeAttributeListMulti(makeAttributeDirection(dir), list);
+    }
 
 		dotAttributes = ATgetNext(dotAttributes);
 	}
