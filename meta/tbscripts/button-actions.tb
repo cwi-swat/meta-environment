@@ -536,7 +536,6 @@ let
   Focus  : term
 in
   InvalidateEditor(EditorId).
-  printf("EditorId: %t, ModuleName: %s\n", EditorId, ModuleName) .
   snd-msg(parse-focusses(EditorId, trm(ModuleName))) .
   (
     rec-msg(parse-ok(trm(ModuleName))) .
@@ -649,7 +648,6 @@ in
       rec-msg(no-tree)
     )
   else
-    printf("GetTree: EditorId = %t, ModuleName : %s\n", EditorId, ModuleName) .
     ParseTerm(EditorId, ModuleName) .
     snd-msg(get-dirty-focuses(EditorId)) .
     rec-msg(dirty-focuses(DirtyFoci?)) . 
