@@ -1952,12 +1952,12 @@ aterm *make_term(arena *ar,char *name,aterm *mod)
 
   esp = term_ws;
   aname  = Tmake(ar,"l(<str>)",name);
-  idname = TmakeSimple(ar,"id(\"AsFix2C\")");
-  fname = TmakeSimple(ar,"l(\"asfix2c\")");
 /*
   idname = TmakeSimple(ar,"id(\"AsFix2muASF-C\")");
   fname = TmakeSimple(ar,"l(\"asfix2muasf\")");
 */
+  idname = TmakeSimple(ar,"id(\"AsFix2C\")");
+  fname = TmakeSimple(ar,"l(\"asfix2c\")");
   osym = term_open;
   csym = term_close;
   cprod = AFmakeProd(ar,idname,

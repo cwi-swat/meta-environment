@@ -420,8 +420,10 @@ aterm_list *conds_satisfied(arena *ar, aterm_list *conds, aterm_list *env)
     if(asfix_is_equality_cond(cond)) {
       if(no_new_vars(lhs,newenv)) {
         lhstrm = rewrite(ar,lhs,newenv);
+Tprintf(stderr,"lhs = %t\n",lhstrm);
         if(no_new_vars(rhs,newenv)) {
           rhstrm = rewrite(ar,rhs,newenv);
+Tprintf(stderr,"rhs = %t\n",rhstrm);
           /*newenv = arg_matching(ar,newenv,lhstrm,rhstrm,conds,t_empty(NULL),t_empty(NULL));*/
           if(t_equal(lhstrm,rhstrm)) 
             newenv = conds_satisfied(ar,conds,newenv);
@@ -435,6 +437,7 @@ aterm_list *conds_satisfied(arena *ar, aterm_list *conds, aterm_list *env)
       else {
         if(no_new_vars(rhs,newenv)) {
           rhstrm = rewrite(ar,rhs,newenv);
+Tprintf(stderr,"rhs = %t\n",rhstrm);
           newenv = arg_matching(ar,newenv,lhs,rhstrm,conds,t_empty(NULL),t_empty(NULL));
         }
         else {
@@ -451,7 +454,9 @@ aterm_list *conds_satisfied(arena *ar, aterm_list *conds, aterm_list *env)
       }
       else {
         lhstrm = rewrite(ar,lhs,newenv);
+Tprintf(stderr,"lhs = %t\n",lhstrm);
         rhstrm = rewrite(ar,rhs,newenv);
+Tprintf(stderr,"rhs = %t\n",rhstrm);
         if(t_equal(lhstrm,rhstrm)) 
           newenv = fail_env;
         else
@@ -461,7 +466,7 @@ aterm_list *conds_satisfied(arena *ar, aterm_list *conds, aterm_list *env)
   }
   return newenv;
 }
-#line 796 "evaluator.c.nw"
+#line 801 "evaluator.c.nw"
 aterm *apply_rule(arena *ar, aterm *trm)
 {
   aterm *equ, *top_ofs, *first_ofs;
@@ -484,6 +489,7 @@ aterm *apply_rule(arena *ar, aterm *trm)
       conds = asfix_get_equ_conds(equ);
       equargs = asfix_get_appl_args(asfix_get_equ_lhs(equ));
       env = args_matching(ar, t_empty(NULL), conds, equargs, termargs);
+Tprintf(stderr,"Tag: %t\n",asfix_get_equ_tag(equ));
       if(!is_fail_env(env)) {
         rewrite_steps++;
         return make_cenv(ar, asfix_get_equ_rhs(equ), env);
@@ -496,15 +502,16 @@ aterm *apply_rule(arena *ar, aterm *trm)
     conds = asfix_get_equ_conds(equ);
     equargs = asfix_get_appl_args(asfix_get_equ_lhs(equ));
     env = args_matching(ar, t_empty(NULL), conds, equargs, termargs);
+Tprintf(stderr,"Tag: %t \n",asfix_get_equ_tag(equ));
     if(!is_fail_env(env)) {
       rewrite_steps++;
       return make_cenv(ar, asfix_get_equ_rhs(equ), env);
     }
   }
-  
+ 
   return make_cenv(ar, trm, fail_env);
 }
-#line 848 "evaluator.c.nw"
+#line 855 "evaluator.c.nw"
 aterm *select_and_rewrite(arena *ar, aterm *trm)
 {
   aterm *ofs,*newtrm, *complexenv;
@@ -519,7 +526,7 @@ aterm *select_and_rewrite(arena *ar, aterm *trm)
   }
   return trm;
 }
-#line 870 "evaluator.c.nw"
+#line 877 "evaluator.c.nw"
 aterm_list *rewrite_args(arena *ar, aterm_list *args,aterm_list *env)
 {
   aterm *arg,*newarg;
@@ -561,7 +568,7 @@ aterm_list *rewrite_args(arena *ar, aterm_list *args,aterm_list *env)
   }
   return newargs;
 }
-#line 919 "evaluator.c.nw"
+#line 926 "evaluator.c.nw"
 aterm_list *rewrite_elems(arena *ar, aterm *sym,aterm_list *elems,aterm_list *env)
 {
   aterm *elem,*newelem;
@@ -607,7 +614,7 @@ aterm_list *rewrite_elems(arena *ar, aterm *sym,aterm_list *elems,aterm_list *en
   }
   return newelems;
 }
-#line 978 "evaluator.c.nw"
+#line 985 "evaluator.c.nw"
 aterm *rewrite(arena *ar, aterm *trm,aterm_list *env)
 {
   aterm *newtrm,*sym,*rewtrm;
@@ -654,7 +661,7 @@ aterm *rewrite(arena *ar, aterm *trm,aterm_list *env)
   return rewtrm;
 }
 
-#line 1030 "evaluator.c.nw"
+#line 1037 "evaluator.c.nw"
 int main(int argc, char **argv)
 {
   int cid;

@@ -688,7 +688,7 @@ void compile_module(int cid,arena *ar,aterm_list *newmods)
 /*
   char *path = "/home/markvdb/AsFix2C/muASF/asfixfiles/";
   char *path = "/home/markvdb/AsFix2C/muASF/asfixfiles3/";
-  char *path = "/home/markvdb/AsFix2C/muASF/asfixfiles4/";
+  char *path = "/home/markvdb/NEW-META/new-meta/pgen/cfiles/";
 */
   char *path = "/home/markvdb/AsFix2C/muASF/asfixfiles5/";
 
@@ -775,6 +775,8 @@ Tprintf(stderr,"ToC_code finished.\n");
           fclose(output);
         }
         Tprintf(stderr,"Writing: %s.c\n", text);
+        Tprintf(stderr,"Number of block allocated in rewrite world: %d\n", w->block_count);
+        Tprintf(stderr,"Number of block allocated in other world: %d\n", the_world->block_count);
 
       }
       else
@@ -788,8 +790,10 @@ Tprintf(stderr,"ToC_code finished.\n");
   else {
     TdestroyArena(&local);
     TBsend(cid,Tmake(TBgetArena(cid),"snd-event(done)"));
+/*
     TpruneDeathRow();
     TprintAllTerms(stdout);
+*/
   }
 }
 
@@ -892,7 +896,7 @@ int main(int argc, char **argv)
 
   TBinit(argc, argv);
   AFinit(NULL);
-  w = TcreateWorld(4096, 1024, 4194301, 0);
+  w = TcreateWorld(4096, 1024, 1048573, 0);
 
   cid = TBnewConnection(NULL, NULL, NULL, -1, 
 			 compiler_handler, compiler_check_in_sign);
