@@ -15,6 +15,7 @@ cat  << END_OF_FILE
 #include <string.h>
 #include <assert.h>
 #include <MEPT-utils.h>
+#include <PTMEPT.h>
 #include <aterm2.h>
 #include "asf-builtins.h"
 #include "Library.h"
