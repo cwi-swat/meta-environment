@@ -29,7 +29,7 @@ for ext in $extensions
 do
 	files=`ls $first/*.$ext $terms/*.$ext 2>/dev/null`
 	errfiles=`ls $errterms/*.$ext 2>/dev/null`
-	lang=`egrep "^$ext" $languages | cut -f2`
+	lang=`egrep "^$ext( |	)" $languages | cut -f2`
 	ptbl=$tables/$lang.tbl
 
         for file in $files
