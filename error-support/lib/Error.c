@@ -464,9 +464,9 @@ ERR_Error ERR_makeErrorFatal(const char* description, ERR_SubjectList list)
 }
 
 /*}}}  */
-/*{{{  ERR_SubjectList ERR_makeSubjectListEmpty() */
+/*{{{  ERR_SubjectList ERR_makeSubjectListEmpty(void) */
 
-ERR_SubjectList ERR_makeSubjectListEmpty()
+ERR_SubjectList ERR_makeSubjectListEmpty(void)
 {
   return (ERR_SubjectList)(ATerm)ATempty;
 }
@@ -496,9 +496,9 @@ ERR_Summary ERR_makeSummarySummary(const char* producer, const char* id, ERR_Err
 }
 
 /*}}}  */
-/*{{{  ERR_ErrorList ERR_makeErrorListEmpty() */
+/*{{{  ERR_ErrorList ERR_makeErrorListEmpty(void) */
 
-ERR_ErrorList ERR_makeErrorListEmpty()
+ERR_ErrorList ERR_makeErrorListEmpty(void)
 {
   return (ERR_ErrorList)(ATerm)ATempty;
 }

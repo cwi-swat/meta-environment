@@ -1,6 +1,9 @@
 $Id$
 
-Tue Mar 16 15:59:04 CET 2004 <{jong,kooiker}@cwi.nl>
+Tue Mar 30 13:00:04 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * Regenerated after change in Locations.sdf
+
+Tue Mar 16 15:59:04 CET 2004 
  * Fully implement rest of error API at the ToolBus level
 
 Mon Mar 15 10:55:32 CET 2004 <{jong,kooiker}@cwi.nl>

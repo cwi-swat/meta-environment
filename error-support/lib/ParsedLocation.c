@@ -358,9 +358,9 @@ PLOC_Start PLOC_makeStartStrCon(PLOC_OptLayout wsBefore, PLOC_StrCon topStrCon, 
 }
 
 /*}}}  */
-/*{{{  PLOC_OptLayout PLOC_makeOptLayoutAbsent() */
+/*{{{  PLOC_OptLayout PLOC_makeOptLayoutAbsent(void) */
 
-PLOC_OptLayout PLOC_makeOptLayoutAbsent()
+PLOC_OptLayout PLOC_makeOptLayoutAbsent(void)
 {
   return (PLOC_OptLayout)(ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATempty, (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17))), (ATerm)ATmakeAppl0(PLOC_afun6)), (ATerm)ATempty);
 }

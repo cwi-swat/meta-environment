@@ -610,9 +610,9 @@ PERR_Error PERR_makeErrorFatal(PERR_OptLayout wsAfterFatal, PERR_OptLayout wsAft
 }
 
 /*}}}  */
-/*{{{  PERR_SubjectList PERR_makeSubjectListEmpty() */
+/*{{{  PERR_SubjectList PERR_makeSubjectListEmpty(void) */
 
-PERR_SubjectList PERR_makeSubjectListEmpty()
+PERR_SubjectList PERR_makeSubjectListEmpty(void)
 {
   return (PERR_SubjectList)(ATerm)ATempty;
 }
@@ -645,9 +645,9 @@ PERR_Summary PERR_makeSummarySummary(PERR_OptLayout wsAfterSummary, PERR_OptLayo
 }
 
 /*}}}  */
-/*{{{  PERR_ErrorList PERR_makeErrorListEmpty() */
+/*{{{  PERR_ErrorList PERR_makeErrorListEmpty(void) */
 
-PERR_ErrorList PERR_makeErrorListEmpty()
+PERR_ErrorList PERR_makeErrorListEmpty(void)
 {
   return (PERR_ErrorList)(ATerm)ATempty;
 }
@@ -768,9 +768,9 @@ PERR_Start PERR_makeStartStrCon(PERR_OptLayout wsBefore, PERR_StrCon topStrCon, 
 }
 
 /*}}}  */
-/*{{{  PERR_OptLayout PERR_makeOptLayoutAbsent() */
+/*{{{  PERR_OptLayout PERR_makeOptLayoutAbsent(void) */
 
-PERR_OptLayout PERR_makeOptLayoutAbsent()
+PERR_OptLayout PERR_makeOptLayoutAbsent(void)
 {
   return (PERR_OptLayout)(ATerm)ATmakeAppl2(PERR_afun0, (ATerm)ATmakeAppl3(PERR_afun1, (ATerm)ATempty, (ATerm)ATmakeAppl1(PERR_afun5, (ATerm)ATmakeAppl1(PERR_afun16, (ATerm)ATmakeAppl0(PERR_afun17))), (ATerm)ATmakeAppl0(PERR_afun6)), (ATerm)ATempty);
 }
