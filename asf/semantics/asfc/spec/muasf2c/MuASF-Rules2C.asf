@@ -38,7 +38,36 @@ equations
                (Funcdef*2,Decl* ++ Decl)
 
   [ar2cf-3'1] get-funid(Rule) = funid(Char*),
+              is-list-funid(funid(Char*)) = false,
               is-memo(funid(Char*),Namepair*) = false,
+              get-funargs(Rule) = Term+,
+              funargs2cargs(Term+,0) = (FormalArgs,ActualArgs,Aint0),
+              select-on-defaults(Rule;Rule*1) = (Rule*2,Rule*3),
+              %% None default rules:
+              asfrules2cstats(Rule*3,Namepair*) = (Stat*1,Aint1),
+              %% Default rules:
+              asfrules2cstats(Rule*2,Namepair*) = (Stat*2,Aint2),
+              %% Normal form construction
+              funargs2cstats(funid(Char*),ActualArgs,Term+,Namepair*,Aint0) = 
+                 (Stat*3,Aint3),
+              gtr(Aint1,Aint2) = Aint4,
+              gtr(Aint3,Aint4) = Aint5,
+              make-tmp-array(Aint5) = Decl*,
+              Stat*1 ++ Stat*2 = Stat*4,
+              Stat*4 ++r Stat*3 = Stat*5,
+              identifier(Char* "s""y""m") ++ ActualArgs = ActualArgs2,
+              remove-tail-rec(Stat*5,identifier(Char*),Aint0) = Stat*7,
+              FUNC_ENTRY(identifier(Char* "s""y""m"),
+                         ATmakeAppl(ActualArgs2)); ++ Stat*7 = Stat*8,
+              Decl* ++d Stat*8 = Stat*9
+              =========================
+              asfrules2cfunc(Rule;Rule*1,Namepair*) =
+                ATerm identifier(Char*)(FormalArgs)
+                { Stat*9 }
+
+ [ar2cf-3'list] 
+             get-funid(Rule) = funid(""""{" Char* "}""""),
+              is-memo(funid(""""{"Char*"}""""),Namepair*) = false,
               get-funargs(Rule) = Term+,
               funargs2cargs(Term+,0) = (FormalArgs,ActualArgs,Aint0),
               select-on-defaults(Rule;Rule*1) = (Rule*2,Rule*3),
@@ -127,11 +156,23 @@ equations
                 (ATerm identifier("a""r""g" Char*) ++ FormalArgs,
                  identifier("a""r""g" Char*) ++ ActualArgs,succ(Aint2))
 
-  [ar2cs-1'1] make-c-rules(Rule+) = C-rule*,
+  [ar2cs-1'1] Rule+ = Rule; Rule*,
+              get-funid(Rule) = Funid,
+              is-list-funid(Funid) = false,
+              make-c-rules(Rule+) = C-rule*,
               select-on-ofs-first-arg(C-rule*) = (C-rule*1,C-rule*2)
               ======================================================
               asfrules2cstats(Rule+,Namepair*) =
                 asfrules2cstats(C-rule*1,C-rule*2,Namepair*,0,make-select-stat)
+
+[ar2cs-1'1]  Rule+ = Rule; Rule*,
+              get-funid(Rule) = Funid,
+              is-list-funid(Funid) = true,
+              make-c-rules(Rule+) = C-rule+
+             
+              ======================================================
+              asfrules2cstats(Rule+,Namepair*) =
+                list2cstats(C-rule+,Namepair*,0)
 
   [ar2cs-1'2] asfrules2cstats(,Namepair*) = (,0)
 
