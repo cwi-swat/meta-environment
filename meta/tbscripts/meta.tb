@@ -89,7 +89,7 @@ in
   . create(DumpParseTable, Pid?)
   . create(DumpSdfDefinition, Pid?)
   . create(EditorCreator, Pid?)
-  . create(ParseEditorCreator, Pid?)
+  . create(ParseEditor, Pid?)
   . create(File-creator, Pid?)
   . create(GetEquations, Pid?)
   . create(GetSpecification, Pid?)

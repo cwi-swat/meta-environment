@@ -155,6 +155,7 @@ let
   NrOfArgs : int,
   OutStr : str,
   Path : str,
+  Pid: int,
   PosInfo : term,
   Query : str,
   RTree : term,
@@ -269,11 +270,7 @@ in
       rec-msg(move-cursor, Stack?, EditorId?) .
       StackPopTerm(Stack, Stack?, Direction?) .
       snd-msg(se-move-cursor(EditorId, Direction)) .
-      snd-msg(se-get-focus-at-cursor(EditorId)) .
-      rec-msg(se-focus-at-cursor(EditorId, Focus?)) .
-      snd-msg(se-get-sort-at-cursor(EditorId)) .
-      rec-msg(se-sort-at-cursor(EditorId, SortName?)) .
-      snd-msg(te-set-focus(EditorId, Focus, SortName)) .
+      SynchronizeFocus(EditorId) .
       ReturnSuccess(EditorId, Stack)
     +
     rec-msg(convert-feedback, Stack?, EditorId?) .
@@ -453,12 +450,12 @@ in
           if or(equal(FunSym, "file"), equal(FunSym, "path")) then
             FilePath := first(args(STree)) .
             GetTextFromFile(FilePath, String?) .
-            ParseText(String, FilePath, ModuleName, SortName, RTree?, Error?) .
+            /*ParseText(String, FilePath, ModuleName, SortName, RTree?, Error?) .*/
             printf("button-actions.tb:parse error ignored: %t\n", Error)
           else 
             if equal(FunSym, "str") then
               String := first(args(STree)) .
-              ParseText(String, "Unknown", ModuleName, SortName, RTree?, Error?) .
+              /*ParseText(String, "Unknown", ModuleName, SortName, RTree?, Error?) .*/
 	      printf("button-actions.tb:parse error ignored: %t\n", Error)
             else
               RTree := error-tree
@@ -562,20 +559,9 @@ in
         rec-msg(show-area, Stack?, EditorId?)
         . StackPopString(Stack, Stack?, Message?)
         . StackPopTerm(Stack, Stack?, Location?)
-	. snd-msg(get-location-filename(Location))
-	. rec-msg(location-filename(Filename?))
-	. GetEditorType(Filename, EditorType?)
-	. StartEditor(Filename, EditorType)
-	. snd-msg(em-get-session-by-filename(Filename))
-	.
-	(
-	  rec-msg(em-session(Filename, Sid?))
-	  . ShowLocation(Sid, Location, Message)
-	  . ReturnSuccess(EditorId, Stack)
-	+
-	  rec-msg(em-no-such-session(Filename))
-	  . ReturnAbort(EditorId, Stack)
-	)
+	. create(ShowAreaHandler(Location, Message), Pid?)
+	. EditLocation(Pid, Location)
+	. ReturnSuccess(EditorId, Stack)
       +
         rec-msg(show-feedback-location, Stack?, EditorId?)
 	. StackPopTerm(Stack, Stack?, Error?)
@@ -584,20 +570,9 @@ in
 	. Subject := first(Subjects)
 	. snd-msg(get-subject-location(Subject))
 	. rec-msg(subject-location(Location?))
-	. snd-msg(get-location-filename(Location))
-	. rec-msg(location-filename(Filename?))
-	. GetEditorType(Filename, EditorType?)
-	. StartEditor(Filename, EditorType)
-	. snd-msg(em-get-session-by-filename(Filename))
-	.
-	(
-	  rec-msg(em-session(Filename, Sid?))
-	  . ShowError(Sid, Error)
-	  . ReturnSuccess(EditorId, Stack)
-	+
-	  rec-msg(em-no-such-session(Filename))
-	  . ReturnAbort(EditorId, Stack)
-	)
+	. create(ShowErrorHandler(Error), Pid?)
+	. EditLocation(Pid, Location)
+	. ReturnSuccess(EditorId, Stack)
       +
         rec-msg(show-list, Stack?, EditorId?) .
         StackPopString(Stack, Stack?, ModuleName?) .
@@ -1021,8 +996,9 @@ in
   . snd-msg(parse-editor(Sid, Table, Nonterminal))
   .
   (
-    rec-msg(parse-ok(Sid)) .
-    snd-msg(te-clear-focus(Sid))
+    rec-msg(parse-ok(Sid))
+    . snd-msg(te-clear-focus(Sid))
+    . snd-msg(te-display-message(Sid, "Mies"))
   +
     rec-msg(parse-failed(Sid))
   )
@@ -1042,6 +1018,7 @@ in
   )
 endlet
 
+#if 0
 process ParseText(Text: str, Path: str, ModuleName: str, Nonterminal: str, 
                   Tree: term?, ParseError: term?) is
 let
@@ -1056,6 +1033,7 @@ in
   printf("ParseText: fixme\n")
   /*ParseString(ModuleName, Path, trm, true, Nonterminal, Text, Tree?, ParseError?)*/
 endlet
+#endif
  
 process ParseSyntax(Sid: term, Type: term) is
 let
@@ -1070,9 +1048,9 @@ let
   ModuleId: str /* module to be parsed over */
 in
   Id := process-id
-  . snd-note(ui-status(statf(Id, "Parsing syntax of %s", [Modulename])))
   . snd-msg(em-get-modulename(Sid))
   . rec-msg(em-modulename(Sid, Modulename?))
+  . snd-note(ui-status(statf(Id, "Parsing syntax of %s", [Modulename])))
   . snd-msg(notify-about-changed-modules([Modulename], Type))
   . rec-msg(notify-about-changed-modules-done)
   . snd-msg(get-module-id-hook(Type))
@@ -1090,8 +1068,9 @@ in
     rec-msg(unparsed-text(Text?)) .
     snd-msg(update-module-text-in-db(Modulename, Text, Tree, Type)) .
     (
-      rec-msg(no-updating-needed) .
-      snd-note(te-clear-focus(Sid))
+      rec-msg(no-updating-needed)
+      . snd-msg(te-clear-focus(Sid))
+      . snd-msg(te-display-message(Sid, "Parse successful"))
     +
       rec-msg(updating-succeeded(DependingModules?)).
       snd-msg(update-module-in-db(Modulename, Tree, Type)) .
@@ -1101,7 +1080,8 @@ in
 	rec-msg(notify-about-changed-modules-done) .
 	snd-msg(open-modules(NewModules, Type)).
 	rec-msg(finished-opening-modules) .
-	snd-msg(te-clear-focus(Sid))
+	snd-msg(te-clear-focus(Sid)) .
+	snd-msg(te-display-message(Sid, "Parse successful"))
       +
 	rec-msg(error-opening(Modulename, name-inconsistent)).
 	snd-msg(invalidate-sdf-in-db(Modulename)).
@@ -1148,6 +1128,7 @@ in
     . snd-msg(update-eqs-tree-in-db(ModuleName, tree(Tree)))
     . rec-msg(eqs-updated)
     . snd-msg(te-clear-focus(Sid))
+    . snd-msg(te-display-message(Sid, "Parse successful"))
   +
     rec-msg(parse-failed(Sid))
   )
@@ -1214,6 +1195,8 @@ let
   Filename : str,
   ErrorMessage : str
 in
+  printf("button-actions.tb:ReplaceFocus is stuk!\n")
+#if 0
   snd-msg(se-replace-focussed-tree(Sid, Tree)) .
   rec-msg(se-focus(Focus?)) .
   snd-msg(se-get-parse-tree(Sid)) .
@@ -1232,6 +1215,7 @@ in
     rec-msg(io-file-not-written(ErrorMessage?)) .
     snd-note(ui-status(errorf("%s: %s",[Filename, ErrorMessage])))
   )
+#endif
 endlet
 
 process CheckTreeSort(Tree: term, Sort: str, RTree: term?) is
@@ -1344,3 +1328,54 @@ in
     rec-msg(cancel-list-choice(ModuleName)) 
   )
 endlet  
+
+process ShowAreaHandler(Location: term, Message: str) is
+let
+  Pid: int,
+  Sid: term
+in
+  Pid := process-id
+  .
+  (
+    rec-msg(session(Pid, Sid?))
+    . ShowLocation(Sid, Location, Message)
+  +
+    rec-msg(no-such-session(Pid))
+  )
+endlet
+
+process ShowErrorHandler(Error: term) is
+let
+  Pid: int,
+  Sid: term
+in
+  Pid := process-id
+  .
+  (
+    rec-msg(session(Pid, Sid?))
+    . ShowError(Sid, Error)
+  +
+    rec-msg(no-such-session(Pid))
+  )
+endlet
+
+process EditLocation(Pid: int, Location: term) is
+let
+  EditorType: term,
+  Filename: str,
+  Sid: term
+in
+  snd-msg(get-location-filename(Location))
+  . rec-msg(location-filename(Filename?))
+  . GetEditorType(Filename, EditorType?)
+  . StartEditor(Filename, EditorType)
+  . snd-msg(em-get-session-by-filename(Filename))
+  .
+  (
+    rec-msg(em-session(Filename, Sid?))
+    . snd-msg(session(Pid, Sid))
+  +
+    rec-msg(em-no-such-session(Filename))
+    . snd-msg(no-such-session(Pid))
+  )
+endlet

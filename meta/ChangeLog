@@ -1,5 +1,14 @@
 # $Id$
 
+Wed Apr  7 15:49:26 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * editors/*
+   - fold set-focus-at-area into set-focus: only 1 set-focus remains :-)
+   - escape display-message so it correctly handles: [\000-\255]*
+ * tbscripts/*
+   - make open-modules and editing scenarios use the same "ParseText"
+   - clicking on a node in the tree-panel works again
+   - starting meta with a parse error in a syntax file works again
+
 Tue Apr  6 16:08:30 CEST 2004 <{jong,kooiker}@cwi.nl>
  * removed "add-module-to-db" as it is now (almost) properly
    implemented in open-modules

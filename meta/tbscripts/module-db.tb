@@ -21,12 +21,21 @@ in
 endlet
 
 /*}}}  */
+
+/*{{{  process GetModuleImports(ModuleId: str, Imports: list?) */
+
+process GetModuleImports(ModuleId: str, Imports: list?) is
+  snd-msg(ts-get-term-value("import-relations", ModuleId))
+  . rec-msg(ts-value(Imports?))
+
+  /*}}}  */
 /*{{{ process SetModuleImports(ModuleId: str, Imports: list) */
 
 process SetModuleImports(ModuleId: str, Imports: list) is
   snd-msg(ts-put-term-value("import-relations", ModuleId, Imports))
 
 /*}}}  */
+
 /*{{{ process SetModuleSyntaxText(ModuleId: str, Text: str) */
 
 process SetModuleSyntaxText(ModuleId: str, Text: str) is

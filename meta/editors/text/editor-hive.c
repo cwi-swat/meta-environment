@@ -211,14 +211,14 @@ void clear_focus(int c, ATerm editorId)
 }
 
 /*}}}  */
-/*{{{  void set_focus(int c, ATerm editorId, ATerm focus) */
+/*{{{  void set_focus(int c, ATerm editorId, ATerm focus, const char *sort) */
 
-void set_focus(int c, ATerm editorId, ATerm focus, const char *sort)
+void set_focus(int c, ATerm editorId, ATerm focus)
 {
   TE_Process process = getEditorProcess(editorId);
 
   if (process != NULL) {
-    sendToEditor(process, TE_makeActionSetFocus(focus, sort));
+    sendToEditor(process, TE_makeActionSetFocus(focus));
   }
 }
 
@@ -243,18 +243,6 @@ void set_cursor_at_offset(int c, ATerm editorId, int offset)
 
   if (process != NULL) {
     sendToEditor(process, TE_makeActionSetCursorAtOffset(offset));
-  }
-}
-
-/*}}}  */
-/*{{{  void set_focus_at_area(int c, ATerm editorId, ATerm area) */
-
-void set_focus_at_area(int c, ATerm editorId, ATerm area)
-{
-  TE_Process process = getEditorProcess(editorId);
-
-  if (process != NULL) {
-    sendToEditor(process, TE_makeActionSetFocusAtArea(area));
   }
 }
 

@@ -250,11 +250,11 @@ TE_Action TE_makeActionSetCursorAtOffset(int offset)
 }
 
 /*}}}  */
-/*{{{  TE_Action TE_makeActionSetFocusAtArea(ATerm area) */
+/*{{{  TE_Action TE_makeActionSetFocus(ATerm focus) */
 
-TE_Action TE_makeActionSetFocusAtArea(ATerm area)
+TE_Action TE_makeActionSetFocus(ATerm focus)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun7, (ATerm) area));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun7, (ATerm) focus));
 }
 
 /*}}}  */
@@ -266,19 +266,11 @@ TE_Action TE_makeActionClearFocus(void)
 }
 
 /*}}}  */
-/*{{{  TE_Action TE_makeActionSetFocus(ATerm focus, const char* sort) */
-
-TE_Action TE_makeActionSetFocus(ATerm focus, const char* sort)
-{
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl2(TE_afun9, (ATerm) focus, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sort, 0, ATtrue))));
-}
-
-/*}}}  */
 /*{{{  TE_Action TE_makeActionSetActions(TE_ActionList actions) */
 
 TE_Action TE_makeActionSetActions(TE_ActionList actions)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun10, (ATerm) actions));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun9, (ATerm) actions));
 }
 
 /*}}}  */
@@ -302,7 +294,7 @@ TE_ActionList TE_makeActionListMulti(TE_Menu head, TE_ActionList tail)
 
 TE_Menu TE_makeMenuDefault(const char* main, const char* sub)
 {
-  return (TE_Menu)(ATerm)ATmakeAppl1(TE_afun11, (ATerm)ATinsert(ATmakeList1((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sub, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(main, 0, ATtrue))));
+  return (TE_Menu)(ATerm)ATmakeAppl1(TE_afun10, (ATerm)ATinsert(ATmakeList1((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sub, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(main, 0, ATtrue))));
 }
 
 /*}}}  */
@@ -310,7 +302,7 @@ TE_Menu TE_makeMenuDefault(const char* main, const char* sub)
 
 TE_Menu TE_makeMenuShortcut(const char* main, const char* sub, const char* shortcut)
 {
-  return (TE_Menu)(ATerm)ATmakeAppl2(TE_afun12, (ATerm)ATinsert(ATmakeList1((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sub, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(main, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
+  return (TE_Menu)(ATerm)ATmakeAppl2(TE_afun11, (ATerm)ATinsert(ATmakeList1((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sub, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(main, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -318,7 +310,7 @@ TE_Menu TE_makeMenuShortcut(const char* main, const char* sub, const char* short
 
 TE_Event TE_makeEventMenu(TE_Menu menu)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun13, (ATerm) menu);
+  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun12, (ATerm) menu);
 }
 
 /*}}}  */
@@ -326,7 +318,7 @@ TE_Event TE_makeEventMenu(TE_Menu menu)
 
 TE_Event TE_makeEventMouse(int location)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun14, (ATerm) (ATerm) ATmakeInt(location));
+  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun13, (ATerm) (ATerm) ATmakeInt(location));
 }
 
 /*}}}  */
@@ -334,7 +326,7 @@ TE_Event TE_makeEventMouse(int location)
 
 TE_Event TE_makeEventContents(const char* text)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun15, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(text, 0, ATtrue)));
+  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun14, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(text, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -342,7 +334,7 @@ TE_Event TE_makeEventContents(const char* text)
 
 TE_Event TE_makeEventModified(void)
 {
-  return (TE_Event)(ATerm)ATmakeAppl0(TE_afun16);
+  return (TE_Event)(ATerm)ATmakeAppl0(TE_afun15);
 }
 
 /*}}}  */
@@ -350,7 +342,7 @@ TE_Event TE_makeEventModified(void)
 
 TE_Process TE_makeProcessDefault(TE_Pipe toChild, TE_Pipe fromChild)
 {
-  return (TE_Process)(ATerm)ATmakeAppl2(TE_afun17, (ATerm) toChild, (ATerm) fromChild);
+  return (TE_Process)(ATerm)ATmakeAppl2(TE_afun16, (ATerm) toChild, (ATerm) fromChild);
 }
 
 /*}}}  */
@@ -358,7 +350,7 @@ TE_Process TE_makeProcessDefault(TE_Pipe toChild, TE_Pipe fromChild)
 
 TE_Pipe TE_makePipeDefault(int read, int write)
 {
-  return (TE_Pipe)(ATerm)ATmakeAppl2(TE_afun18, (ATerm) (ATerm) ATmakeInt(read), (ATerm) (ATerm) ATmakeInt(write));
+  return (TE_Pipe)(ATerm)ATmakeAppl2(TE_afun17, (ATerm) (ATerm) ATmakeInt(read), (ATerm) (ATerm) ATmakeInt(write));
 }
 
 /*}}}  */
@@ -421,13 +413,10 @@ ATbool TE_isValidAction(TE_Action arg)
   else if (TE_isActionSetCursorAtOffset(arg)) {
     return ATtrue;
   }
-  else if (TE_isActionSetFocusAtArea(arg)) {
+  else if (TE_isActionSetFocus(arg)) {
     return ATtrue;
   }
   else if (TE_isActionClearFocus(arg)) {
-    return ATtrue;
-  }
-  else if (TE_isActionSetFocus(arg)) {
     return ATtrue;
   }
   else if (TE_isActionSetActions(arg)) {
@@ -569,9 +558,9 @@ inline ATbool TE_isActionSetCursorAtOffset(TE_Action arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool TE_isActionSetFocusAtArea(TE_Action arg) */
+/*{{{  inline ATbool TE_isActionSetFocus(TE_Action arg) */
 
-inline ATbool TE_isActionSetFocusAtArea(TE_Action arg)
+inline ATbool TE_isActionSetFocus(TE_Action arg)
 {
   {
     static ATerm last_arg = NULL;
@@ -582,7 +571,7 @@ inline ATbool TE_isActionSetFocusAtArea(TE_Action arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, TE_patternActionSetFocusAtArea, NULL);
+      last_result = ATmatchTerm((ATerm)arg, TE_patternActionSetFocus, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -605,28 +594,6 @@ inline ATbool TE_isActionClearFocus(TE_Action arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, TE_patternActionClearFocus);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  inline ATbool TE_isActionSetFocus(TE_Action arg) */
-
-inline ATbool TE_isActionSetFocus(TE_Action arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, TE_patternActionSetFocus, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -723,39 +690,6 @@ TE_Action TE_setActionOffset(TE_Action arg, int offset)
 }
 
 /*}}}  */
-/*{{{  ATbool TE_hasActionArea(TE_Action arg) */
-
-ATbool TE_hasActionArea(TE_Action arg)
-{
-  if (TE_isActionSetFocusAtArea(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATerm TE_getActionArea(TE_Action arg) */
-
-ATerm TE_getActionArea(TE_Action arg)
-{
-  
-    return (ATerm)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0);
-}
-
-/*}}}  */
-/*{{{  TE_Action TE_setActionArea(TE_Action arg, ATerm area) */
-
-TE_Action TE_setActionArea(TE_Action arg, ATerm area)
-{
-  if (TE_isActionSetFocusAtArea(arg)) {
-    return (TE_Action)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) area), 0), 0);
-  }
-
-  ATabort("Action has no Area: %t\n", arg);
-  return (TE_Action)NULL;
-}
-
-/*}}}  */
 /*{{{  ATbool TE_hasActionFocus(TE_Action arg) */
 
 ATbool TE_hasActionFocus(TE_Action arg)
@@ -785,39 +719,6 @@ TE_Action TE_setActionFocus(TE_Action arg, ATerm focus)
   }
 
   ATabort("Action has no Focus: %t\n", arg);
-  return (TE_Action)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool TE_hasActionSort(TE_Action arg) */
-
-ATbool TE_hasActionSort(TE_Action arg)
-{
-  if (TE_isActionSetFocus(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* TE_getActionSort(TE_Action arg) */
-
-char* TE_getActionSort(TE_Action arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 1)));
-}
-
-/*}}}  */
-/*{{{  TE_Action TE_setActionSort(TE_Action arg, const char* sort) */
-
-TE_Action TE_setActionSort(TE_Action arg, const char* sort)
-{
-  if (TE_isActionSetFocus(arg)) {
-    return (TE_Action)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sort, 0, ATtrue))), 1), 0);
-  }
-
-  ATabort("Action has no Sort: %t\n", arg);
   return (TE_Action)NULL;
 }
 
@@ -1549,9 +1450,9 @@ TE_Pipe TE_setPipeWrite(TE_Pipe arg, int write)
 /*}}}  */
 /*{{{  sort visitors */
 
-/*{{{  TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptArea)(ATerm), ATerm (*acceptFocus)(ATerm), char* (*acceptSort)(char*), TE_ActionList (*acceptActions)(TE_ActionList)) */
+/*{{{  TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList)) */
 
-TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptArea)(ATerm), ATerm (*acceptFocus)(ATerm), char* (*acceptSort)(char*), TE_ActionList (*acceptActions)(TE_ActionList))
+TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList))
 {
   if (TE_isActionToFront(arg)) {
     return TE_makeActionToFront();
@@ -1573,17 +1474,12 @@ TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acc
     return TE_makeActionSetCursorAtOffset(
         acceptOffset ? acceptOffset(TE_getActionOffset(arg)) : TE_getActionOffset(arg));
   }
-  if (TE_isActionSetFocusAtArea(arg)) {
-    return TE_makeActionSetFocusAtArea(
-        acceptArea ? acceptArea(TE_getActionArea(arg)) : TE_getActionArea(arg));
+  if (TE_isActionSetFocus(arg)) {
+    return TE_makeActionSetFocus(
+        acceptFocus ? acceptFocus(TE_getActionFocus(arg)) : TE_getActionFocus(arg));
   }
   if (TE_isActionClearFocus(arg)) {
     return TE_makeActionClearFocus();
-  }
-  if (TE_isActionSetFocus(arg)) {
-    return TE_makeActionSetFocus(
-        acceptFocus ? acceptFocus(TE_getActionFocus(arg)) : TE_getActionFocus(arg),
-        acceptSort ? acceptSort(TE_getActionSort(arg)) : TE_getActionSort(arg));
   }
   if (TE_isActionSetActions(arg)) {
     return TE_makeActionSetActions(

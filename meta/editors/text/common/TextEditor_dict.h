@@ -19,7 +19,6 @@ extern AFun TE_afun2;
 extern AFun TE_afun7;
 extern AFun TE_afun12;
 extern AFun TE_afun15;
-extern AFun TE_afun18;
 extern AFun TE_afun6;
 extern AFun TE_afun1;
 
@@ -34,9 +33,8 @@ extern ATerm TE_patternMenuDefault;
 extern ATerm TE_patternActionListMulti;
 extern ATerm TE_patternActionListEmpty;
 extern ATerm TE_patternActionSetActions;
-extern ATerm TE_patternActionSetFocus;
 extern ATerm TE_patternActionClearFocus;
-extern ATerm TE_patternActionSetFocusAtArea;
+extern ATerm TE_patternActionSetFocus;
 extern ATerm TE_patternActionSetCursorAtOffset;
 extern ATerm TE_patternActionDisplayMessage;
 extern ATerm TE_patternActionGetContents;

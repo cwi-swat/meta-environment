@@ -5,19 +5,18 @@
 
 #include "editor-hive.tif.h"
 
-#define NR_SIG_ENTRIES	14
+#define NR_SIG_ENTRIES	13
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-do(<editor-hive>,edit-file(<term>,<str>,<str>))",
   "rec-do(<editor-hive>,set-actions(<term>,<list>))",
   "rec-do(<editor-hive>,reread-contents(<term>))",
-  "rec-do(<editor-hive>,set-focus(<term>,<term>,<str>))",
+  "rec-do(<editor-hive>,set-focus(<term>,<term>))",
+  "rec-do(<editor-hive>,set-cursor-at-offset(<term>,<int>))",
   "rec-do(<editor-hive>,write-contents(<term>))",
   "rec-do(<editor-hive>,get-contents(<term>))",
   "rec-do(<editor-hive>,clear-focus(<term>))",
   "rec-do(<editor-hive>,display-message(<term>,<str>))",
-  "rec-do(<editor-hive>,set-cursor-at-offset(<term>,<int>))",
-  "rec-do(<editor-hive>,set-focus-at-area(<term>,<term>))",
   "rec-do(<editor-hive>,editor-to-front(<term>))",
   "rec-do(<editor-hive>,kill-editor(<term>))",
   "rec-ack-event(<editor-hive>,<term>)",
@@ -33,36 +32,32 @@ ATerm editor_hive_handler(int conn, ATerm term)
   char *s0, *s1;
   ATerm t0, t1;
 
-  if(ATmatch(term, "rec-do(get-contents(<term>))", &t0)) {
-    get_contents(conn, t0);
-    return NULL;
-  }
-  if(ATmatch(term, "rec-do(clear-focus(<term>))", &t0)) {
-    clear_focus(conn, t0);
-    return NULL;
-  }
   if(ATmatch(term, "rec-do(write-contents(<term>))", &t0)) {
     write_contents(conn, t0);
-    return NULL;
-  }
-  if(ATmatch(term, "rec-do(display-message(<term>,<str>))", &t0, &s0)) {
-    display_message(conn, t0, s0);
-    return NULL;
-  }
-  if(ATmatch(term, "rec-do(set-focus(<term>,<term>,<str>))", &t0, &t1, &s0)) {
-    set_focus(conn, t0, t1, s0);
     return NULL;
   }
   if(ATmatch(term, "rec-do(set-cursor-at-offset(<term>,<int>))", &t0, &i0)) {
     set_cursor_at_offset(conn, t0, i0);
     return NULL;
   }
+  if(ATmatch(term, "rec-do(get-contents(<term>))", &t0)) {
+    get_contents(conn, t0);
+    return NULL;
+  }
+  if(ATmatch(term, "rec-do(set-focus(<term>,<term>))", &t0, &t1)) {
+    set_focus(conn, t0, t1);
+    return NULL;
+  }
+  if(ATmatch(term, "rec-do(clear-focus(<term>))", &t0)) {
+    clear_focus(conn, t0);
+    return NULL;
+  }
   if(ATmatch(term, "rec-do(reread-contents(<term>))", &t0)) {
     reread_contents(conn, t0);
     return NULL;
   }
-  if(ATmatch(term, "rec-do(set-focus-at-area(<term>,<term>))", &t0, &t1)) {
-    set_focus_at_area(conn, t0, t1);
+  if(ATmatch(term, "rec-do(display-message(<term>,<str>))", &t0, &s0)) {
+    display_message(conn, t0, s0);
     return NULL;
   }
   if(ATmatch(term, "rec-do(set-actions(<term>,<term>))", &t0, &t1)) {

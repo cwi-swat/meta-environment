@@ -19,7 +19,8 @@ in
     snd-msg(is-module-in-db(Module)).
     (
       rec-msg(not-exists-in-module-db(Module)) .
-      Open-Module(Path, Module, Type, Imports?).
+      OpenModule(Path, Module, Type) .
+      GetModuleImports(Module, Imports?) .
       snd-msg(open-modules(Imports, Type)).
       rec-msg(finished-opening-modules)
     +
@@ -83,8 +84,7 @@ in
     +
       rec-msg(io-files-differ) .
       snd-note(ui-status(messagef(
-      "Multiple occurrences of %s. Continuing with %s",
-                                [Name, Chosen]))) 
+      "Multiple occurrences of %s. Continuing with %s", [Name, Chosen]))) 
     )
   fi
   *
@@ -122,8 +122,9 @@ in
 	rec-msg(file-extension-hook-result(Extension?)) .
         LocateFile(Module, Extension, Path?) .
 	if not-equal(Path, "") then
-          Open-Module(Path, Module, Type, Imports?).
-          Modules := join(Imports, Modules)
+          OpenModule(Path, Module, Type)
+	  . GetModuleImports(Module, Imports?)
+          . Modules := join(Imports, Modules)
         else 
           Error("Opening module %s failed: file not found!", [Module])
         fi
@@ -142,21 +143,18 @@ in
   delta
 endlet
 
-process Open-Module(Path : str, Module : str, Type : term, Imports : list?) 
+process OpenModule(Path: str, ModuleId: str, Type: term)
 is
 let
-  Id : int,
-  Error : term,
-  RealPath : str,
-  RealModule : str
+  Pid: int,
+  Error: term,
+  RealPath: str,
+  RealModule: str
 in
-  Id := process-id.
-  snd-note(ui-status(statf(Id,"Opening %s",[Module]))).
-  Imports := [].
-  (
-    Open-Syntax(Path, Module, Type, Imports?)
-  ).
-  snd-note(ui-status(endstat(Id)))
+  Pid := process-id
+  . snd-note(ui-status(statf(Pid, "Opening %s", [ModuleId])))
+  . OpenSyntax(Path, ModuleId, Type)
+  . snd-note(ui-status(endstat(Pid)))
 endlet
 
 process Error(Message : str, MessageArgs : list) is
@@ -202,27 +200,17 @@ in
 endlet
 
 /*}}}  */
-/*{{{ process GetImportedModuleNames(Tree: term, Imports: list?) */
 
-process GetImportedModuleNames(Tree: term, Imports: list?) is
-  snd-msg(sm-get-imported-module-names(Tree))
-  . rec-msg(sm-imported-module-names(Imports?))
-
-/*}}}  */
-
-process Open-Syntax(Directory: str, ModuleId: str, Type: term, Imports: list?) is
+process OpenSyntax(Directory: str, ModuleId: str, Type: term) is
 let
-  AnnotatedTree: term,
   Error: term,
   Extension: str,
   Message: str,
-  ParseResult: term,
   ParseTable: term,
   Path: str,
+  Pid: int,
   Sort: term,
-  Summary: term,
-  Text: str,
-  Valid: bool
+  Text: str
 in
   snd-msg(sm-is-valid-modulename(ModuleId))
   .
@@ -243,33 +231,9 @@ in
 	rec-msg(parse-table(Type, ParseTable?))
 	. snd-msg(syntax-top-sort-hook(Type))
 	. rec-msg(syntax-top-sort-hook-result(sort(Sort?)))
-	. snd-msg(sglr-parse(Text, ParseTable, Sort))
-	.
-	(
-	  (
-	    rec-msg(sglr-parse-tree(ParseResult?))
-	  +
-	    rec-msg(sglr-parse-ambiguous(ParseResult?, Error?))
-	    . ParseErrorToSummary(Error, Path, Summary?)
-	    . ShowSummaryInGUI(Summary)
-	  )
-	  . VerifyModuleId(ParseResult, ModuleId, Valid?)
-	  .
-	  if equal(Valid, true)
-	  then
-	    AnnotateTree(ParseResult, Path, AnnotatedTree?)
-	    . SetModuleSyntaxTree(ModuleId, AnnotatedTree)
-	    . GetImportedModuleNames(ParseResult, Imports?)
-	  else
-	    Imports := []
-	  fi
-	+
-	  rec-msg(sglr-parse-error(Error?))
-	  . ParseErrorToSummary(Error, Path, Summary?)
-	  . ShowSummaryInGUI(Summary)
-	  . Imports := []
-	)
-	. SetModuleImports(ModuleId, Imports)
+	. create(OpenSyntaxParseHandler(ModuleId, Path), Pid?)
+	. ParseText(Pid, Text, ParseTable, Sort)
+	. rec-msg(open-syntax-parse-handler-done(Pid))
       +
 	rec-msg(no-parse-table(Type, Error?))
 	. printf("Parse-Syntax: no parse table: %t\n", Error)
@@ -281,6 +245,47 @@ in
   +
     rec-msg(sm-modulename-is-invalid)
   )
+endlet
+
+process OpenSyntaxParseHandler(ModuleId: str, Path: str) is
+let
+  AnnotatedTree: term,
+  Error: term,
+  Imports: list,
+  ParseResult: term,
+  Pid: int,
+  Summary: term,
+  Valid: bool
+in
+  Pid := process-id
+  .
+  (
+    (
+      rec-msg(parse-tree(Pid, ParseResult?))
+    +
+      rec-msg(parse-forest(Pid, ParseResult?, Error?))
+      . ParseErrorToSummary(Error, Path, Summary?)
+      . ShowSummaryInGUI(Summary)
+    )
+    . VerifyModuleId(ParseResult, ModuleId, Valid?)
+    .
+    if equal(Valid, true)
+    then
+      AnnotateTree(ParseResult, Path, AnnotatedTree?)
+      . SetModuleSyntaxTree(ModuleId, AnnotatedTree)
+      . snd-msg(sm-get-imported-module-names(ParseResult))
+      . rec-msg(sm-imported-module-names(Imports?))
+    else
+      Imports := []
+    fi
+  +
+    rec-msg(parse-error(Pid, Error?))
+    . ParseErrorToSummary(Error, Path, Summary?)
+    . ShowSummaryInGUI(Summary)
+    . Imports := []
+  )
+  . SetModuleImports(ModuleId, Imports)
+  . snd-msg(open-syntax-parse-handler-done(Pid))
 endlet
 
 process Open-Equations(ModuleId: str)  is

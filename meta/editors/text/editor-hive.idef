@@ -36,8 +36,11 @@ in
     rec-msg(te-reread-contents(EditorId?))
     . snd-do(Hive, reread-contents(EditorId))
   +
-    rec-msg(te-set-focus(EditorId?, Focus?, SortName?))
-    . snd-do(Hive, set-focus(EditorId, Focus, SortName))
+    rec-msg(te-set-focus(EditorId?, Area?))
+    . snd-do(Hive, set-focus(EditorId, Area))
+  +
+    rec-msg(te-set-cursor-at-offset(EditorId?, Offset?))
+    . snd-do(Hive, set-cursor-at-offset(EditorId, Offset))
   +
     rec-msg(te-get-contents(EditorId?))
     /* TODO: separate writing and retrieval of contents */
@@ -49,12 +52,6 @@ in
   +
     rec-msg(te-display-message(EditorId?, Message?))
     . snd-do(Hive, display-message(EditorId, Message))
-  +
-    rec-msg(te-set-cursor-at-offset(EditorId?, Offset?))
-    . snd-do(Hive, set-cursor-at-offset(EditorId, Offset))
-  +
-    rec-msg(te-set-focus-at-area(EditorId?, Area?))
-    . snd-do(Hive, set-focus-at-area(EditorId, Area))
   +
     rec-msg(te-editor-to-front(EditorId?))
     . snd-do(Hive, editor-to-front(EditorId))

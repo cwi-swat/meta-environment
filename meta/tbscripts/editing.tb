@@ -133,6 +133,23 @@ endlet
 
 /*}}}  */
 
+/*{{{ process SynchronizeFocus(Sid: term) */
+
+process SynchronizeFocus(Sid: term) is
+let
+  Focus: term,
+  Sortname: str
+in
+  snd-msg(se-get-sort-at-cursor(Sid))
+  . rec-msg(se-sort-at-cursor(Sid, Sortname?))
+  . snd-msg(te-display-message(Sid, Sortname))
+  . snd-msg(se-get-focus-at-cursor(Sid))
+  . rec-msg(se-focus-at-cursor(Sid, Focus?))
+  . snd-msg(te-set-focus(Sid, Focus))
+endlet
+
+/*}}}  */
+
 /*{{{  process MenuSelected(Sid: term, EditorType: term) */
 
 process MenuSelected(Sid: term, EditorType: term) is
@@ -164,10 +181,8 @@ endlet
 
 process MouseClicked(Sid: term) is
 let
-  Focus: term,
   Offset: int,
   Registered: bool,
-  Sortname: str,
   Tid: term
 in
   rec-msg(te-mouse-click-at-offset(Sid, Offset?))
@@ -182,11 +197,7 @@ in
     if equal(Registered, true)
     then
       snd-msg(se-set-cursor-at-offset(Sid, Offset))
-      . snd-msg(se-get-focus-at-cursor(Sid))
-      . rec-msg(se-focus-at-cursor(Sid, Focus?))
-      . snd-msg(se-get-sort-at-cursor(Sid))
-      . rec-msg(se-sort-at-cursor(Sid, Sortname?))
-      . snd-msg(te-set-focus(Sid, Focus, Sortname))
+      . SynchronizeFocus(Sid)
     else
       tau
     fi

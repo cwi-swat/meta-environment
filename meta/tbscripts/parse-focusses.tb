@@ -15,20 +15,6 @@ process AnnotateTree(Tree: term, Filename: str, AnnotatedTree: term?) is
 
 /*}}}  */
 
-process ParseEditorCreator is
-let
-  Nonterminal: term,
-  Pid: int,
-  Sid: term,
-  Table: term
-in
-  (
-    rec-msg(parse-editor(Sid?, Table?, Nonterminal?))
-    . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
-  )
-  * delta
-endlet
-
 process ParseErrorToSummary(Error: term, Filename: str, Summary: term?) is
 let
   Result: term
@@ -39,46 +25,83 @@ in
   . rec-msg(es-summary(Summary?))
 endlet
 
-process ParseEditor(Sid: term, Table: term, Nonterminal: term) is
+process ParseEditor is
+let
+  Filename: str,
+  Pid: int,
+  Nonterminal: term,
+  Registered: bool,
+  Sid: term,
+  Table: term,
+  Text: str
+in 
+  (
+    rec-msg(parse-editor(Sid?, Table?, Nonterminal?))
+    . IsStructureEditorRegistered(Sid, Registered?)
+    .
+    if equal(Registered, true)
+    then
+      snd-msg(parse-ok(Sid))
+    else
+      GetFilename(Sid, Filename?)
+      . ClearSummaryInGUI("sglr", Filename)
+      . GetText(Sid, Text?)
+      . create(EditorParseHandler(Sid), Pid?)
+      . ParseText(Pid, Text, Table, Nonterminal)
+    fi
+  )
+  * delta
+endlet
+
+process EditorParseHandler(Sid: term) is
 let
   AnnotatedTree: term,
   Error: term,
   Filename: str,
+  Pid: int,
   ParseResult: term,
-  Registered: bool,
-  Text: str,
   Summary: term
-in 
-  IsStructureEditorRegistered(Sid, Registered?)
+in
+  Pid := process-id
+  . GetFilename(Sid, Filename?)
   .
-  if equal(Registered, true)
-  then
-    snd-msg(parse-ok(Sid))
-  else
-    GetFilename(Sid, Filename?)
-    . GetText(Sid, Text?)
-    . ClearSummaryInGUI("sglr", Filename)
-    . snd-msg(sglr-parse(Text, Table, Nonterminal))
-    .
-    (
-      rec-msg(sglr-parse-tree(ParseResult?))
-      . AnnotateTree(ParseResult, Filename, AnnotatedTree?)
-      . EditStructure(Sid, AnnotatedTree)
-      . snd-msg(parse-ok(Sid))
-    +
-      rec-msg(sglr-parse-forest(ParseResult?, Error?))
-      . AnnotateTree(ParseResult, Filename, AnnotatedTree?)
-      . EditStructure(Sid, AnnotatedTree)
-      . ParseErrorToSummary(Error, Filename, Summary?)
-      . ShowSummary(Sid, Summary)
-      . ShowSummaryInGUI(Summary)
-      . snd-msg(parse-failed(Sid))
-    +
-      rec-msg(sglr-parse-error(Error?))
-      . ParseErrorToSummary(Error, Filename, Summary?)
-      . ShowSummary(Sid, Summary)
-      . ShowSummaryInGUI(Summary)
-      . snd-msg(parse-failed(Sid))
-    )
-  fi
+  (
+    rec-msg(parse-tree(Pid, ParseResult?))
+    . AnnotateTree(ParseResult, Filename, AnnotatedTree?)
+    . EditStructure(Sid, AnnotatedTree)
+    . snd-msg(parse-ok(Sid))
+  +
+    rec-msg(parse-forest(Pid, ParseResult?, Error?))
+    . AnnotateTree(ParseResult, Filename, AnnotatedTree?)
+    . EditStructure(Sid, AnnotatedTree)
+    . ParseErrorToSummary(Error, Filename, Summary?)
+    . ShowSummary(Sid, Summary)
+    . ShowSummaryInGUI(Summary)
+    . snd-msg(parse-failed(Sid))
+  +
+    rec-msg(parse-error(Pid, Error?))
+    . ParseErrorToSummary(Error, Filename, Summary?)
+    . ShowSummary(Sid, Summary)
+    . ShowSummaryInGUI(Summary)
+    . snd-msg(parse-failed(Sid))
+  )
+endlet
+
+process ParseText(Pid: int, Text: str, Table: term, Nonterminal: term) is
+let
+  Error: term,
+  ParseResult: term
+in 
+  snd-msg(sglr-parse(Text, Table, Nonterminal))
+  .
+  (
+   rec-msg(sglr-parse-tree(ParseResult?))
+   . snd-msg(parse-tree(Pid, ParseResult))
+   +
+   rec-msg(sglr-parse-forest(ParseResult?, Error?))
+   . snd-msg(parse-forest(Pid, ParseResult, Error))
+   +
+   rec-msg(sglr-parse-error(Error?))
+   . snd-msg(parse-error(Pid, Error))
+  )
 endlet

@@ -254,28 +254,7 @@ static void setFocus(int write_to_editor_fd, TE_Action edAction)
 {
   ATerm focusTerm = TE_getActionFocus(edAction);
   LOC_Area area = LOC_AreaFromTerm(focusTerm);
-  int start = LOC_getAreaOffset(area)+1;
-  int length = LOC_getAreaLength(area);
-  char *s = TE_getActionSort(edAction);
-  char buf[BUFSIZ];
-
-  sprintf(buf, "(set-focus %d %d)", start, start+length);
-  sendToEmacs(write_to_editor_fd, buf);
-
-  sprintf(buf,
-	  "  (display-message-or-buffer (concat \"Focus symbol: \" \"%s\"))",
-	  escapeQuotes(s));
-  sendToEmacs(write_to_editor_fd, buf);
-}
-
-/*}}}  */
-/*{{{  static void setFocusAtLocation(int write_to_editor_fd, TE_Action edAction) */
-
-static void setFocusAtLocation(int write_to_editor_fd, TE_Action edAction)
-{
-  ATerm areaTerm = TE_getActionArea(edAction);
-  LOC_Area area = LOC_AreaFromTerm(areaTerm);
-  int start = LOC_getAreaOffset(area);
+  int start = LOC_getAreaOffset(area) + 1;
   int length = LOC_getAreaLength(area);
   char buf[BUFSIZ];
 
@@ -385,8 +364,7 @@ int main(int argc, char *argv[])
 			       displayMessage,
 			       setActions,
 			       setFocus,
-			       setCursorAtOffset,
-			       setFocusAtLocation);
+			       setCursorAtOffset);
 
   hiveToEditor = TE_makePipeDefault(read_from_hive_fd, fileno(stdout));
   editorToHive = TE_makePipeDefault(fileno(stdin), write_to_hive_fd);

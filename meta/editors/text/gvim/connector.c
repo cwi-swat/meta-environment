@@ -100,7 +100,6 @@ static void sendToVimVerbatim(const char *cmd)
 {
   char buf[BUFSIZ];
   sprintf(buf, "gvim --servername %s --remote-send \"%s\"", id, cmd);
-/*fprintf(stderr, "buf: [%s]\n", buf);*/
   system(buf);
 }
 
@@ -213,27 +212,13 @@ static void setFocus(int write_to_editor_fd, TE_Action edAction)
 {
   ATerm focusTerm = TE_getActionFocus(edAction);
   LOC_Area area = LOC_AreaFromTerm(focusTerm);
-  int start = LOC_getAreaOffset(area)+1;
+  int start = LOC_getAreaOffset(area) + 1;
   int length = LOC_getAreaLength(area);
-  char *s = TE_getActionSort(edAction);
   char buf[BUFSIZ];
-  char sort[BUFSIZ];
-  char *p;
-  int i;
 
-  for (i=0, p=s; p && *p; p++) {
-    if (*p == '"' || *p == '\\') {
-      sort[i++] = '\\';
-    }
-    sort[i++] = *p;
-  }
-  sort[i++] = EOS;
-
-  sprintf(buf, ":goto %d", start);
-  sendToVim(buf);
-
-  sprintf(buf, ":echo \"Focus symbol: %s\"", sort);
-  sendToVim(buf);
+  /* go to start location */
+  sprintf(buf, "%dgo", start);
+  sendToVimVerbatim(buf);
 
   /* activate visual selection mode */
   sendToVimVerbatim("v");
@@ -246,35 +231,18 @@ static void setFocus(int write_to_editor_fd, TE_Action edAction)
 }
 
 /*}}}  */
-/*{{{  static void setFocusAtLocation(int write_to_editor_fd, TE_Action edAction) */
-
-static void setFocusAtLocation(int write_to_editor_fd, TE_Action edAction)
-{
-  ATerm areaTerm = TE_getActionFocus(edAction);
-  LOC_Area area = LOC_AreaFromTerm(areaTerm);
-  int start = LOC_getAreaOffset(area);
-  int length = LOC_getAreaLength(area);
-  char buf[BUFSIZ];
-
-  sprintf(buf, ":goto %d", start);
-  sendToVim(buf);
-
-  sendToVimVerbatim("v");
-
-  if (length > 1) {
-    sprintf(buf, "%d ", length-1);
-    sendToVimVerbatim(buf);
-  }
-}
-
-/*}}}  */
 /*{{{  static void displayMessage(int write_to_editor_fd, TE_Action edAction) */
 
 static void displayMessage(int write_to_editor_fd, TE_Action edAction)
 {
+  char *escaped;
   char buf[BUFSIZ];
 
-  sprintf(buf, ":echo \"%s\"", TE_getActionMessage(edAction));
+  sprintf(buf, TE_getActionMessage(edAction));
+
+  escaped = escape(buf, ESCAPE_CHAR);
+  sprintf(buf, ":echo \"%s\"", escaped);
+
   sendToVim(buf);
 }
 
@@ -339,8 +307,7 @@ int main(int argc, char *argv[])
 			      displayMessage,
 			      setActions,
 			      setFocus,
-			      setCursorAtOffset,
-			      setFocusAtLocation);
+			      setCursorAtOffset);
 
   pwent = getpwuid(getuid());
 
