@@ -35,9 +35,6 @@ in
     snd-eval(Travs, generate-traversals(Name, Syntax)).
     rec-value(Travs, changed-syntax(NewSyntax?)). 
     snd-msg(changed-syntax(NewSyntax))
-    +
-    rec-msg(no-syntax).
-    snd-msg(no-changed-syntax)   
   )*
   delta
 endlet
