@@ -509,31 +509,31 @@ ATbool SDF_isEqualRealCon(SDF_RealCon arg0, SDF_RealCon arg1);
 /*{{{  SDF_Symbol accessors */
 
 ATbool SDF_isValidSymbol(SDF_Symbol arg);
-ATbool SDF_isSymbolStart(SDF_Symbol arg);
-ATbool SDF_isSymbolFileStart(SDF_Symbol arg);
-ATbool SDF_isSymbolCf(SDF_Symbol arg);
-ATbool SDF_isSymbolLex(SDF_Symbol arg);
-ATbool SDF_isSymbolVarsym(SDF_Symbol arg);
-ATbool SDF_isSymbolLayout(SDF_Symbol arg);
-ATbool SDF_isSymbolEmpty(SDF_Symbol arg);
-ATbool SDF_isSymbolSeq(SDF_Symbol arg);
-ATbool SDF_isSymbolOpt(SDF_Symbol arg);
-ATbool SDF_isSymbolIter(SDF_Symbol arg);
-ATbool SDF_isSymbolIterStar(SDF_Symbol arg);
-ATbool SDF_isSymbolIterSep(SDF_Symbol arg);
-ATbool SDF_isSymbolIterStarSep(SDF_Symbol arg);
-ATbool SDF_isSymbolIterN(SDF_Symbol arg);
-ATbool SDF_isSymbolIterSepN(SDF_Symbol arg);
-ATbool SDF_isSymbolSet(SDF_Symbol arg);
-ATbool SDF_isSymbolPair(SDF_Symbol arg);
-ATbool SDF_isSymbolFunc(SDF_Symbol arg);
-ATbool SDF_isSymbolAlt(SDF_Symbol arg);
-ATbool SDF_isSymbolPerm(SDF_Symbol arg);
-ATbool SDF_isSymbolCharClass(SDF_Symbol arg);
-ATbool SDF_isSymbolSort(SDF_Symbol arg);
-ATbool SDF_isSymbolLit(SDF_Symbol arg);
-ATbool SDF_isSymbolLabel(SDF_Symbol arg);
-ATbool SDF_isSymbolBracket(SDF_Symbol arg);
+inline ATbool SDF_isSymbolStart(SDF_Symbol arg);
+inline ATbool SDF_isSymbolFileStart(SDF_Symbol arg);
+inline ATbool SDF_isSymbolCf(SDF_Symbol arg);
+inline ATbool SDF_isSymbolLex(SDF_Symbol arg);
+inline ATbool SDF_isSymbolVarsym(SDF_Symbol arg);
+inline ATbool SDF_isSymbolLayout(SDF_Symbol arg);
+inline ATbool SDF_isSymbolEmpty(SDF_Symbol arg);
+inline ATbool SDF_isSymbolSeq(SDF_Symbol arg);
+inline ATbool SDF_isSymbolOpt(SDF_Symbol arg);
+inline ATbool SDF_isSymbolIter(SDF_Symbol arg);
+inline ATbool SDF_isSymbolIterStar(SDF_Symbol arg);
+inline ATbool SDF_isSymbolIterSep(SDF_Symbol arg);
+inline ATbool SDF_isSymbolIterStarSep(SDF_Symbol arg);
+inline ATbool SDF_isSymbolIterN(SDF_Symbol arg);
+inline ATbool SDF_isSymbolIterSepN(SDF_Symbol arg);
+inline ATbool SDF_isSymbolSet(SDF_Symbol arg);
+inline ATbool SDF_isSymbolPair(SDF_Symbol arg);
+inline ATbool SDF_isSymbolFunc(SDF_Symbol arg);
+inline ATbool SDF_isSymbolAlt(SDF_Symbol arg);
+inline ATbool SDF_isSymbolPerm(SDF_Symbol arg);
+inline ATbool SDF_isSymbolCharClass(SDF_Symbol arg);
+inline ATbool SDF_isSymbolSort(SDF_Symbol arg);
+inline ATbool SDF_isSymbolLit(SDF_Symbol arg);
+inline ATbool SDF_isSymbolLabel(SDF_Symbol arg);
+inline ATbool SDF_isSymbolBracket(SDF_Symbol arg);
 ATbool SDF_hasSymbolWsAfterLessThan(SDF_Symbol arg);
 SDF_Layout SDF_getSymbolWsAfterLessThan(SDF_Symbol arg);
 SDF_Symbol SDF_setSymbolWsAfterLessThan(SDF_Symbol arg, SDF_Layout wsAfterLessThan);
@@ -653,23 +653,23 @@ SDF_Symbol SDF_setSymbolWsAfterColon(SDF_Symbol arg, SDF_Layout wsAfterColon);
 /*{{{  SDF_Grammar accessors */
 
 ATbool SDF_isValidGrammar(SDF_Grammar arg);
-ATbool SDF_isGrammarLexicalPriorities(SDF_Grammar arg);
-ATbool SDF_isGrammarContextFreePriorities(SDF_Grammar arg);
-ATbool SDF_isGrammarLexicalRestrictions(SDF_Grammar arg);
-ATbool SDF_isGrammarContextFreeRestrictions(SDF_Grammar arg);
-ATbool SDF_isGrammarSyntax(SDF_Grammar arg);
-ATbool SDF_isGrammarLexicalSyntax(SDF_Grammar arg);
-ATbool SDF_isGrammarContextFreeSyntax(SDF_Grammar arg);
-ATbool SDF_isGrammarVariables(SDF_Grammar arg);
-ATbool SDF_isGrammarLexicalVariables(SDF_Grammar arg);
-ATbool SDF_isGrammarImpSection(SDF_Grammar arg);
-ATbool SDF_isGrammarPriorities(SDF_Grammar arg);
-ATbool SDF_isGrammarSorts(SDF_Grammar arg);
-ATbool SDF_isGrammarRestrictions(SDF_Grammar arg);
-ATbool SDF_isGrammarAliases(SDF_Grammar arg);
-ATbool SDF_isGrammarEmptyGrammar(SDF_Grammar arg);
-ATbool SDF_isGrammarConcGrammars(SDF_Grammar arg);
-ATbool SDF_isGrammarBracket(SDF_Grammar arg);
+inline ATbool SDF_isGrammarLexicalPriorities(SDF_Grammar arg);
+inline ATbool SDF_isGrammarContextFreePriorities(SDF_Grammar arg);
+inline ATbool SDF_isGrammarLexicalRestrictions(SDF_Grammar arg);
+inline ATbool SDF_isGrammarContextFreeRestrictions(SDF_Grammar arg);
+inline ATbool SDF_isGrammarSyntax(SDF_Grammar arg);
+inline ATbool SDF_isGrammarLexicalSyntax(SDF_Grammar arg);
+inline ATbool SDF_isGrammarContextFreeSyntax(SDF_Grammar arg);
+inline ATbool SDF_isGrammarVariables(SDF_Grammar arg);
+inline ATbool SDF_isGrammarLexicalVariables(SDF_Grammar arg);
+inline ATbool SDF_isGrammarImpSection(SDF_Grammar arg);
+inline ATbool SDF_isGrammarPriorities(SDF_Grammar arg);
+inline ATbool SDF_isGrammarSorts(SDF_Grammar arg);
+inline ATbool SDF_isGrammarRestrictions(SDF_Grammar arg);
+inline ATbool SDF_isGrammarAliases(SDF_Grammar arg);
+inline ATbool SDF_isGrammarEmptyGrammar(SDF_Grammar arg);
+inline ATbool SDF_isGrammarConcGrammars(SDF_Grammar arg);
+inline ATbool SDF_isGrammarBracket(SDF_Grammar arg);
 ATbool SDF_hasGrammarWsAfterLexical(SDF_Grammar arg);
 SDF_Layout SDF_getGrammarWsAfterLexical(SDF_Grammar arg);
 SDF_Grammar SDF_setGrammarWsAfterLexical(SDF_Grammar arg, SDF_Layout wsAfterLexical);
@@ -735,7 +735,7 @@ SDF_Grammar SDF_setGrammarWsAfterGrammar(SDF_Grammar arg, SDF_Layout wsAfterGram
 /*{{{  SDF_SDF accessors */
 
 ATbool SDF_isValidSDF(SDF_SDF arg);
-ATbool SDF_isSDFDefinition(SDF_SDF arg);
+inline ATbool SDF_isSDFDefinition(SDF_SDF arg);
 ATbool SDF_hasSDFWsAfterDefinition(SDF_SDF arg);
 SDF_Layout SDF_getSDFWsAfterDefinition(SDF_SDF arg);
 SDF_SDF SDF_setSDFWsAfterDefinition(SDF_SDF arg, SDF_Layout wsAfterDefinition);
@@ -747,8 +747,8 @@ SDF_SDF SDF_setSDFDefinition(SDF_SDF arg, SDF_Definition Definition);
 /*{{{  SDF_Attributes accessors */
 
 ATbool SDF_isValidAttributes(SDF_Attributes arg);
-ATbool SDF_isAttributesAttrs(SDF_Attributes arg);
-ATbool SDF_isAttributesNoAttrs(SDF_Attributes arg);
+inline ATbool SDF_isAttributesAttrs(SDF_Attributes arg);
+inline ATbool SDF_isAttributesNoAttrs(SDF_Attributes arg);
 ATbool SDF_hasAttributesWsAfterBraceOpen(SDF_Attributes arg);
 SDF_Layout SDF_getAttributesWsAfterBraceOpen(SDF_Attributes arg);
 SDF_Attributes SDF_setAttributesWsAfterBraceOpen(SDF_Attributes arg, SDF_Layout wsAfterBraceOpen);
@@ -763,9 +763,9 @@ SDF_Attributes SDF_setAttributesWsAfterList(SDF_Attributes arg, SDF_Layout wsAft
 /*{{{  SDF_AttributeList accessors */
 
 ATbool SDF_isValidAttributeList(SDF_AttributeList arg);
-ATbool SDF_isAttributeListEmpty(SDF_AttributeList arg);
-ATbool SDF_isAttributeListSingle(SDF_AttributeList arg);
-ATbool SDF_isAttributeListMany(SDF_AttributeList arg);
+inline ATbool SDF_isAttributeListEmpty(SDF_AttributeList arg);
+inline ATbool SDF_isAttributeListSingle(SDF_AttributeList arg);
+inline ATbool SDF_isAttributeListMany(SDF_AttributeList arg);
 ATbool SDF_hasAttributeListHead(SDF_AttributeList arg);
 SDF_Attribute SDF_getAttributeListHead(SDF_AttributeList arg);
 SDF_AttributeList SDF_setAttributeListHead(SDF_AttributeList arg, SDF_Attribute head);
@@ -786,8 +786,8 @@ SDF_AttributeList SDF_setAttributeListTail(SDF_AttributeList arg, SDF_AttributeL
 /*{{{  SDF_Production accessors */
 
 ATbool SDF_isValidProduction(SDF_Production arg);
-ATbool SDF_isProductionProd(SDF_Production arg);
-ATbool SDF_isProductionProdFun(SDF_Production arg);
+inline ATbool SDF_isProductionProd(SDF_Production arg);
+inline ATbool SDF_isProductionProdFun(SDF_Production arg);
 ATbool SDF_hasProductionSymbols(SDF_Production arg);
 SDF_Symbols SDF_getProductionSymbols(SDF_Production arg);
 SDF_Production SDF_setProductionSymbols(SDF_Production arg, SDF_Symbols Symbols);
@@ -829,7 +829,7 @@ SDF_Production SDF_setProductionWsAfterParenClose(SDF_Production arg, SDF_Layout
 /*{{{  SDF_Productions accessors */
 
 ATbool SDF_isValidProductions(SDF_Productions arg);
-ATbool SDF_isProductionsDefault(SDF_Productions arg);
+inline ATbool SDF_isProductionsDefault(SDF_Productions arg);
 ATbool SDF_hasProductionsList(SDF_Productions arg);
 SDF_ProductionList SDF_getProductionsList(SDF_Productions arg);
 SDF_Productions SDF_setProductionsList(SDF_Productions arg, SDF_ProductionList list);
@@ -838,9 +838,9 @@ SDF_Productions SDF_setProductionsList(SDF_Productions arg, SDF_ProductionList l
 /*{{{  SDF_ProductionList accessors */
 
 ATbool SDF_isValidProductionList(SDF_ProductionList arg);
-ATbool SDF_isProductionListEmpty(SDF_ProductionList arg);
-ATbool SDF_isProductionListSingle(SDF_ProductionList arg);
-ATbool SDF_isProductionListMany(SDF_ProductionList arg);
+inline ATbool SDF_isProductionListEmpty(SDF_ProductionList arg);
+inline ATbool SDF_isProductionListSingle(SDF_ProductionList arg);
+inline ATbool SDF_isProductionListMany(SDF_ProductionList arg);
 ATbool SDF_hasProductionListHead(SDF_ProductionList arg);
 SDF_Production SDF_getProductionListHead(SDF_ProductionList arg);
 SDF_ProductionList SDF_setProductionListHead(SDF_ProductionList arg, SDF_Production head);
@@ -855,7 +855,7 @@ SDF_ProductionList SDF_setProductionListTail(SDF_ProductionList arg, SDF_Product
 /*{{{  SDF_ModuleWord accessors */
 
 ATbool SDF_isValidModuleWord(SDF_ModuleWord arg);
-ATbool SDF_isModuleWordLexToCf(SDF_ModuleWord arg);
+inline ATbool SDF_isModuleWordLexToCf(SDF_ModuleWord arg);
 ATbool SDF_hasModuleWordLex(SDF_ModuleWord arg);
 SDF_Lexical SDF_getModuleWordLex(SDF_ModuleWord arg);
 SDF_ModuleWord SDF_setModuleWordLex(SDF_ModuleWord arg, SDF_Lexical lex);
@@ -864,7 +864,7 @@ SDF_ModuleWord SDF_setModuleWordLex(SDF_ModuleWord arg, SDF_Lexical lex);
 /*{{{  SDF_ModuleId accessors */
 
 ATbool SDF_isValidModuleId(SDF_ModuleId arg);
-ATbool SDF_isModuleIdLexToCf(SDF_ModuleId arg);
+inline ATbool SDF_isModuleIdLexToCf(SDF_ModuleId arg);
 ATbool SDF_hasModuleIdLex(SDF_ModuleId arg);
 SDF_Lexical SDF_getModuleIdLex(SDF_ModuleId arg);
 SDF_ModuleId SDF_setModuleIdLex(SDF_ModuleId arg, SDF_Lexical lex);
@@ -873,7 +873,7 @@ SDF_ModuleId SDF_setModuleIdLex(SDF_ModuleId arg, SDF_Lexical lex);
 /*{{{  SDF_Definition accessors */
 
 ATbool SDF_isValidDefinition(SDF_Definition arg);
-ATbool SDF_isDefinitionDefault(SDF_Definition arg);
+inline ATbool SDF_isDefinitionDefault(SDF_Definition arg);
 ATbool SDF_hasDefinitionList(SDF_Definition arg);
 SDF_ModuleList SDF_getDefinitionList(SDF_Definition arg);
 SDF_Definition SDF_setDefinitionList(SDF_Definition arg, SDF_ModuleList list);
@@ -882,9 +882,9 @@ SDF_Definition SDF_setDefinitionList(SDF_Definition arg, SDF_ModuleList list);
 /*{{{  SDF_ModuleList accessors */
 
 ATbool SDF_isValidModuleList(SDF_ModuleList arg);
-ATbool SDF_isModuleListEmpty(SDF_ModuleList arg);
-ATbool SDF_isModuleListSingle(SDF_ModuleList arg);
-ATbool SDF_isModuleListMany(SDF_ModuleList arg);
+inline ATbool SDF_isModuleListEmpty(SDF_ModuleList arg);
+inline ATbool SDF_isModuleListSingle(SDF_ModuleList arg);
+inline ATbool SDF_isModuleListMany(SDF_ModuleList arg);
 ATbool SDF_hasModuleListHead(SDF_ModuleList arg);
 SDF_Module SDF_getModuleListHead(SDF_ModuleList arg);
 SDF_ModuleList SDF_setModuleListHead(SDF_ModuleList arg, SDF_Module head);
@@ -899,7 +899,7 @@ SDF_ModuleList SDF_setModuleListTail(SDF_ModuleList arg, SDF_ModuleList tail);
 /*{{{  SDF_Module accessors */
 
 ATbool SDF_isValidModule(SDF_Module arg);
-ATbool SDF_isModuleModule(SDF_Module arg);
+inline ATbool SDF_isModuleModule(SDF_Module arg);
 ATbool SDF_hasModuleWsAfterModule(SDF_Module arg);
 SDF_Layout SDF_getModuleWsAfterModule(SDF_Module arg);
 SDF_Module SDF_setModuleWsAfterModule(SDF_Module arg, SDF_Layout wsAfterModule);
@@ -923,9 +923,9 @@ SDF_Module SDF_setModuleSections(SDF_Module arg, SDF_Sections Sections);
 /*{{{  SDF_ImpSectionList accessors */
 
 ATbool SDF_isValidImpSectionList(SDF_ImpSectionList arg);
-ATbool SDF_isImpSectionListEmpty(SDF_ImpSectionList arg);
-ATbool SDF_isImpSectionListSingle(SDF_ImpSectionList arg);
-ATbool SDF_isImpSectionListMany(SDF_ImpSectionList arg);
+inline ATbool SDF_isImpSectionListEmpty(SDF_ImpSectionList arg);
+inline ATbool SDF_isImpSectionListSingle(SDF_ImpSectionList arg);
+inline ATbool SDF_isImpSectionListMany(SDF_ImpSectionList arg);
 ATbool SDF_hasImpSectionListHead(SDF_ImpSectionList arg);
 SDF_ImpSection SDF_getImpSectionListHead(SDF_ImpSectionList arg);
 SDF_ImpSectionList SDF_setImpSectionListHead(SDF_ImpSectionList arg, SDF_ImpSection head);
@@ -940,8 +940,8 @@ SDF_ImpSectionList SDF_setImpSectionListTail(SDF_ImpSectionList arg, SDF_ImpSect
 /*{{{  SDF_Section accessors */
 
 ATbool SDF_isValidSection(SDF_Section arg);
-ATbool SDF_isSectionExports(SDF_Section arg);
-ATbool SDF_isSectionHiddens(SDF_Section arg);
+inline ATbool SDF_isSectionExports(SDF_Section arg);
+inline ATbool SDF_isSectionHiddens(SDF_Section arg);
 ATbool SDF_hasSectionWsAfterExports(SDF_Section arg);
 SDF_Layout SDF_getSectionWsAfterExports(SDF_Section arg);
 SDF_Section SDF_setSectionWsAfterExports(SDF_Section arg, SDF_Layout wsAfterExports);
@@ -956,7 +956,7 @@ SDF_Section SDF_setSectionWsAfterHiddens(SDF_Section arg, SDF_Layout wsAfterHidd
 /*{{{  SDF_Sections accessors */
 
 ATbool SDF_isValidSections(SDF_Sections arg);
-ATbool SDF_isSectionsDefault(SDF_Sections arg);
+inline ATbool SDF_isSectionsDefault(SDF_Sections arg);
 ATbool SDF_hasSectionsList(SDF_Sections arg);
 SDF_SectionList SDF_getSectionsList(SDF_Sections arg);
 SDF_Sections SDF_setSectionsList(SDF_Sections arg, SDF_SectionList list);
@@ -965,9 +965,9 @@ SDF_Sections SDF_setSectionsList(SDF_Sections arg, SDF_SectionList list);
 /*{{{  SDF_SectionList accessors */
 
 ATbool SDF_isValidSectionList(SDF_SectionList arg);
-ATbool SDF_isSectionListEmpty(SDF_SectionList arg);
-ATbool SDF_isSectionListSingle(SDF_SectionList arg);
-ATbool SDF_isSectionListMany(SDF_SectionList arg);
+inline ATbool SDF_isSectionListEmpty(SDF_SectionList arg);
+inline ATbool SDF_isSectionListSingle(SDF_SectionList arg);
+inline ATbool SDF_isSectionListMany(SDF_SectionList arg);
 ATbool SDF_hasSectionListHead(SDF_SectionList arg);
 SDF_Section SDF_getSectionListHead(SDF_SectionList arg);
 SDF_SectionList SDF_setSectionListHead(SDF_SectionList arg, SDF_Section head);
@@ -982,8 +982,8 @@ SDF_SectionList SDF_setSectionListTail(SDF_SectionList arg, SDF_SectionList tail
 /*{{{  SDF_ModuleName accessors */
 
 ATbool SDF_isValidModuleName(SDF_ModuleName arg);
-ATbool SDF_isModuleNameUnparameterized(SDF_ModuleName arg);
-ATbool SDF_isModuleNameParameterized(SDF_ModuleName arg);
+inline ATbool SDF_isModuleNameUnparameterized(SDF_ModuleName arg);
+inline ATbool SDF_isModuleNameParameterized(SDF_ModuleName arg);
 ATbool SDF_hasModuleNameModuleId(SDF_ModuleName arg);
 SDF_ModuleId SDF_getModuleNameModuleId(SDF_ModuleName arg);
 SDF_ModuleName SDF_setModuleNameModuleId(SDF_ModuleName arg, SDF_ModuleId ModuleId);
@@ -1004,16 +1004,16 @@ SDF_ModuleName SDF_setModuleNameWsAfterParams(SDF_ModuleName arg, SDF_Layout wsA
 /*{{{  SDF_Attribute accessors */
 
 ATbool SDF_isValidAttribute(SDF_Attribute arg);
-ATbool SDF_isAttributeId(SDF_Attribute arg);
-ATbool SDF_isAttributeBracket(SDF_Attribute arg);
-ATbool SDF_isAttributeAtr(SDF_Attribute arg);
-ATbool SDF_isAttributeCons(SDF_Attribute arg);
-ATbool SDF_isAttributeConstructor(SDF_Attribute arg);
-ATbool SDF_isAttributeMemo(SDF_Attribute arg);
-ATbool SDF_isAttributeTraverse(SDF_Attribute arg);
-ATbool SDF_isAttributeReject(SDF_Attribute arg);
-ATbool SDF_isAttributePrefer(SDF_Attribute arg);
-ATbool SDF_isAttributeAvoid(SDF_Attribute arg);
+inline ATbool SDF_isAttributeId(SDF_Attribute arg);
+inline ATbool SDF_isAttributeBracket(SDF_Attribute arg);
+inline ATbool SDF_isAttributeAtr(SDF_Attribute arg);
+inline ATbool SDF_isAttributeCons(SDF_Attribute arg);
+inline ATbool SDF_isAttributeConstructor(SDF_Attribute arg);
+inline ATbool SDF_isAttributeMemo(SDF_Attribute arg);
+inline ATbool SDF_isAttributeTraverse(SDF_Attribute arg);
+inline ATbool SDF_isAttributeReject(SDF_Attribute arg);
+inline ATbool SDF_isAttributePrefer(SDF_Attribute arg);
+inline ATbool SDF_isAttributeAvoid(SDF_Attribute arg);
 ATbool SDF_hasAttributeWsAfterId(SDF_Attribute arg);
 SDF_Layout SDF_getAttributeWsAfterId(SDF_Attribute arg);
 SDF_Attribute SDF_setAttributeWsAfterId(SDF_Attribute arg, SDF_Layout wsAfterId);
@@ -1043,7 +1043,7 @@ SDF_Attribute SDF_setAttributeWsAfterTerm(SDF_Attribute arg, SDF_Layout wsAfterT
 /*{{{  SDF_ImpSection accessors */
 
 ATbool SDF_isValidImpSection(SDF_ImpSection arg);
-ATbool SDF_isImpSectionImports(SDF_ImpSection arg);
+inline ATbool SDF_isImpSectionImports(SDF_ImpSection arg);
 ATbool SDF_hasImpSectionWsAfterImports(SDF_ImpSection arg);
 SDF_Layout SDF_getImpSectionWsAfterImports(SDF_ImpSection arg);
 SDF_ImpSection SDF_setImpSectionWsAfterImports(SDF_ImpSection arg, SDF_Layout wsAfterImports);
@@ -1055,7 +1055,7 @@ SDF_ImpSection SDF_setImpSectionList(SDF_ImpSection arg, SDF_Imports list);
 /*{{{  SDF_Imports accessors */
 
 ATbool SDF_isValidImports(SDF_Imports arg);
-ATbool SDF_isImportsDefault(SDF_Imports arg);
+inline ATbool SDF_isImportsDefault(SDF_Imports arg);
 ATbool SDF_hasImportsList(SDF_Imports arg);
 SDF_ImportList SDF_getImportsList(SDF_Imports arg);
 SDF_Imports SDF_setImportsList(SDF_Imports arg, SDF_ImportList list);
@@ -1064,9 +1064,9 @@ SDF_Imports SDF_setImportsList(SDF_Imports arg, SDF_ImportList list);
 /*{{{  SDF_ImportList accessors */
 
 ATbool SDF_isValidImportList(SDF_ImportList arg);
-ATbool SDF_isImportListEmpty(SDF_ImportList arg);
-ATbool SDF_isImportListSingle(SDF_ImportList arg);
-ATbool SDF_isImportListMany(SDF_ImportList arg);
+inline ATbool SDF_isImportListEmpty(SDF_ImportList arg);
+inline ATbool SDF_isImportListSingle(SDF_ImportList arg);
+inline ATbool SDF_isImportListMany(SDF_ImportList arg);
 ATbool SDF_hasImportListHead(SDF_ImportList arg);
 SDF_Import SDF_getImportListHead(SDF_ImportList arg);
 SDF_ImportList SDF_setImportListHead(SDF_ImportList arg, SDF_Import head);
@@ -1081,9 +1081,9 @@ SDF_ImportList SDF_setImportListTail(SDF_ImportList arg, SDF_ImportList tail);
 /*{{{  SDF_Import accessors */
 
 ATbool SDF_isValidImport(SDF_Import arg);
-ATbool SDF_isImportModule(SDF_Import arg);
-ATbool SDF_isImportRenamedModule(SDF_Import arg);
-ATbool SDF_isImportBracket(SDF_Import arg);
+inline ATbool SDF_isImportModule(SDF_Import arg);
+inline ATbool SDF_isImportRenamedModule(SDF_Import arg);
+inline ATbool SDF_isImportBracket(SDF_Import arg);
 ATbool SDF_hasImportModuleName(SDF_Import arg);
 SDF_ModuleName SDF_getImportModuleName(SDF_Import arg);
 SDF_Import SDF_setImportModuleName(SDF_Import arg, SDF_ModuleName ModuleName);
@@ -1107,8 +1107,8 @@ SDF_Import SDF_setImportWsAfterImport(SDF_Import arg, SDF_Layout wsAfterImport);
 /*{{{  SDF_SymbolTail accessors */
 
 ATbool SDF_isValidSymbolTail(SDF_SymbolTail arg);
-ATbool SDF_isSymbolTailSingle(SDF_SymbolTail arg);
-ATbool SDF_isSymbolTailMany(SDF_SymbolTail arg);
+inline ATbool SDF_isSymbolTailSingle(SDF_SymbolTail arg);
+inline ATbool SDF_isSymbolTailMany(SDF_SymbolTail arg);
 ATbool SDF_hasSymbolTailHead(SDF_SymbolTail arg);
 SDF_Symbol SDF_getSymbolTailHead(SDF_SymbolTail arg);
 SDF_SymbolTail SDF_setSymbolTailHead(SDF_SymbolTail arg, SDF_Symbol head);
@@ -1123,18 +1123,18 @@ SDF_SymbolTail SDF_setSymbolTailTail(SDF_SymbolTail arg, SDF_SymbolTail tail);
 /*{{{  SDF_Associativity accessors */
 
 ATbool SDF_isValidAssociativity(SDF_Associativity arg);
-ATbool SDF_isAssociativityLeft(SDF_Associativity arg);
-ATbool SDF_isAssociativityRight(SDF_Associativity arg);
-ATbool SDF_isAssociativityNonAssoc(SDF_Associativity arg);
-ATbool SDF_isAssociativityAssoc(SDF_Associativity arg);
+inline ATbool SDF_isAssociativityLeft(SDF_Associativity arg);
+inline ATbool SDF_isAssociativityRight(SDF_Associativity arg);
+inline ATbool SDF_isAssociativityNonAssoc(SDF_Associativity arg);
+inline ATbool SDF_isAssociativityAssoc(SDF_Associativity arg);
 
 /*}}}  */
 /*{{{  SDF_Group accessors */
 
 ATbool SDF_isValidGroup(SDF_Group arg);
-ATbool SDF_isGroupSimpleGroup(SDF_Group arg);
-ATbool SDF_isGroupProdsGroup(SDF_Group arg);
-ATbool SDF_isGroupAssocGroup(SDF_Group arg);
+inline ATbool SDF_isGroupSimpleGroup(SDF_Group arg);
+inline ATbool SDF_isGroupProdsGroup(SDF_Group arg);
+inline ATbool SDF_isGroupAssocGroup(SDF_Group arg);
 ATbool SDF_hasGroupProduction(SDF_Group arg);
 SDF_Production SDF_getGroupProduction(SDF_Group arg);
 SDF_Group SDF_setGroupProduction(SDF_Group arg, SDF_Production Production);
@@ -1161,8 +1161,8 @@ SDF_Group SDF_setGroupWsAfterColon(SDF_Group arg, SDF_Layout wsAfterColon);
 /*{{{  SDF_Priority accessors */
 
 ATbool SDF_isValidPriority(SDF_Priority arg);
-ATbool SDF_isPriorityChain(SDF_Priority arg);
-ATbool SDF_isPriorityAssoc(SDF_Priority arg);
+inline ATbool SDF_isPriorityChain(SDF_Priority arg);
+inline ATbool SDF_isPriorityAssoc(SDF_Priority arg);
 ATbool SDF_hasPriorityList(SDF_Priority arg);
 SDF_GroupList SDF_getPriorityList(SDF_Priority arg);
 SDF_Priority SDF_setPriorityList(SDF_Priority arg, SDF_GroupList list);
@@ -1186,8 +1186,8 @@ SDF_Priority SDF_setPriorityRight(SDF_Priority arg, SDF_Group right);
 /*{{{  SDF_GroupList accessors */
 
 ATbool SDF_isValidGroupList(SDF_GroupList arg);
-ATbool SDF_isGroupListSingle(SDF_GroupList arg);
-ATbool SDF_isGroupListMany(SDF_GroupList arg);
+inline ATbool SDF_isGroupListSingle(SDF_GroupList arg);
+inline ATbool SDF_isGroupListMany(SDF_GroupList arg);
 ATbool SDF_hasGroupListHead(SDF_GroupList arg);
 SDF_Group SDF_getGroupListHead(SDF_GroupList arg);
 SDF_GroupList SDF_setGroupListHead(SDF_GroupList arg, SDF_Group head);
@@ -1208,7 +1208,7 @@ SDF_GroupList SDF_setGroupListTail(SDF_GroupList arg, SDF_GroupList tail);
 /*{{{  SDF_Priorities accessors */
 
 ATbool SDF_isValidPriorities(SDF_Priorities arg);
-ATbool SDF_isPrioritiesDefault(SDF_Priorities arg);
+inline ATbool SDF_isPrioritiesDefault(SDF_Priorities arg);
 ATbool SDF_hasPrioritiesList(SDF_Priorities arg);
 SDF_PriorityList SDF_getPrioritiesList(SDF_Priorities arg);
 SDF_Priorities SDF_setPrioritiesList(SDF_Priorities arg, SDF_PriorityList list);
@@ -1217,9 +1217,9 @@ SDF_Priorities SDF_setPrioritiesList(SDF_Priorities arg, SDF_PriorityList list);
 /*{{{  SDF_PriorityList accessors */
 
 ATbool SDF_isValidPriorityList(SDF_PriorityList arg);
-ATbool SDF_isPriorityListEmpty(SDF_PriorityList arg);
-ATbool SDF_isPriorityListSingle(SDF_PriorityList arg);
-ATbool SDF_isPriorityListMany(SDF_PriorityList arg);
+inline ATbool SDF_isPriorityListEmpty(SDF_PriorityList arg);
+inline ATbool SDF_isPriorityListSingle(SDF_PriorityList arg);
+inline ATbool SDF_isPriorityListMany(SDF_PriorityList arg);
 ATbool SDF_hasPriorityListHead(SDF_PriorityList arg);
 SDF_Priority SDF_getPriorityListHead(SDF_PriorityList arg);
 SDF_PriorityList SDF_setPriorityListHead(SDF_PriorityList arg, SDF_Priority head);
@@ -1240,7 +1240,7 @@ SDF_PriorityList SDF_setPriorityListTail(SDF_PriorityList arg, SDF_PriorityList 
 /*{{{  SDF_Sort accessors */
 
 ATbool SDF_isValidSort(SDF_Sort arg);
-ATbool SDF_isSortLexToCf(SDF_Sort arg);
+inline ATbool SDF_isSortLexToCf(SDF_Sort arg);
 ATbool SDF_hasSortLex(SDF_Sort arg);
 SDF_Lexical SDF_getSortLex(SDF_Sort arg);
 SDF_Sort SDF_setSortLex(SDF_Sort arg, SDF_Lexical lex);
@@ -1249,7 +1249,7 @@ SDF_Sort SDF_setSortLex(SDF_Sort arg, SDF_Lexical lex);
 /*{{{  SDF_UQLiteral accessors */
 
 ATbool SDF_isValidUQLiteral(SDF_UQLiteral arg);
-ATbool SDF_isUQLiteralLexToCf(SDF_UQLiteral arg);
+inline ATbool SDF_isUQLiteralLexToCf(SDF_UQLiteral arg);
 ATbool SDF_hasUQLiteralLex(SDF_UQLiteral arg);
 SDF_Lexical SDF_getUQLiteralLex(SDF_UQLiteral arg);
 SDF_UQLiteral SDF_setUQLiteralLex(SDF_UQLiteral arg, SDF_Lexical lex);
@@ -1258,8 +1258,8 @@ SDF_UQLiteral SDF_setUQLiteralLex(SDF_UQLiteral arg, SDF_Lexical lex);
 /*{{{  SDF_Literal accessors */
 
 ATbool SDF_isValidLiteral(SDF_Literal arg);
-ATbool SDF_isLiteralUqlit(SDF_Literal arg);
-ATbool SDF_isLiteralLexToCf(SDF_Literal arg);
+inline ATbool SDF_isLiteralUqlit(SDF_Literal arg);
+inline ATbool SDF_isLiteralLexToCf(SDF_Literal arg);
 ATbool SDF_hasLiteralUQLiteral(SDF_Literal arg);
 SDF_UQLiteral SDF_getLiteralUQLiteral(SDF_Literal arg);
 SDF_Literal SDF_setLiteralUQLiteral(SDF_Literal arg, SDF_UQLiteral UQLiteral);
@@ -1271,9 +1271,9 @@ SDF_Literal SDF_setLiteralLex(SDF_Literal arg, SDF_Lexical lex);
 /*{{{  SDF_SymbolArguments accessors */
 
 ATbool SDF_isValidSymbolArguments(SDF_SymbolArguments arg);
-ATbool SDF_isSymbolArgumentsEmpty(SDF_SymbolArguments arg);
-ATbool SDF_isSymbolArgumentsSingle(SDF_SymbolArguments arg);
-ATbool SDF_isSymbolArgumentsMany(SDF_SymbolArguments arg);
+inline ATbool SDF_isSymbolArgumentsEmpty(SDF_SymbolArguments arg);
+inline ATbool SDF_isSymbolArgumentsSingle(SDF_SymbolArguments arg);
+inline ATbool SDF_isSymbolArgumentsMany(SDF_SymbolArguments arg);
 ATbool SDF_hasSymbolArgumentsHead(SDF_SymbolArguments arg);
 SDF_Symbol SDF_getSymbolArgumentsHead(SDF_SymbolArguments arg);
 SDF_SymbolArguments SDF_setSymbolArgumentsHead(SDF_SymbolArguments arg, SDF_Symbol head);
@@ -1294,8 +1294,8 @@ SDF_SymbolArguments SDF_setSymbolArgumentsTail(SDF_SymbolArguments arg, SDF_Symb
 /*{{{  SDF_Lookahead accessors */
 
 ATbool SDF_isValidLookahead(SDF_Lookahead arg);
-ATbool SDF_isLookaheadCharClass(SDF_Lookahead arg);
-ATbool SDF_isLookaheadSeq(SDF_Lookahead arg);
+inline ATbool SDF_isLookaheadCharClass(SDF_Lookahead arg);
+inline ATbool SDF_isLookaheadSeq(SDF_Lookahead arg);
 ATbool SDF_hasLookaheadCharClass(SDF_Lookahead arg);
 SDF_CharClass SDF_getLookaheadCharClass(SDF_Lookahead arg);
 SDF_Lookahead SDF_setLookaheadCharClass(SDF_Lookahead arg, SDF_CharClass CharClass);
@@ -1316,10 +1316,10 @@ SDF_Lookahead SDF_setLookaheadTail(SDF_Lookahead arg, SDF_Lookaheads tail);
 /*{{{  SDF_Lookaheads accessors */
 
 ATbool SDF_isValidLookaheads(SDF_Lookaheads arg);
-ATbool SDF_isLookaheadsSingle(SDF_Lookaheads arg);
-ATbool SDF_isLookaheadsAlt(SDF_Lookaheads arg);
-ATbool SDF_isLookaheadsBracket(SDF_Lookaheads arg);
-ATbool SDF_isLookaheadsList(SDF_Lookaheads arg);
+inline ATbool SDF_isLookaheadsSingle(SDF_Lookaheads arg);
+inline ATbool SDF_isLookaheadsAlt(SDF_Lookaheads arg);
+inline ATbool SDF_isLookaheadsBracket(SDF_Lookaheads arg);
+inline ATbool SDF_isLookaheadsList(SDF_Lookaheads arg);
 ATbool SDF_hasLookaheadsLookahead(SDF_Lookaheads arg);
 SDF_Lookahead SDF_getLookaheadsLookahead(SDF_Lookaheads arg);
 SDF_Lookaheads SDF_setLookaheadsLookahead(SDF_Lookaheads arg, SDF_Lookahead Lookahead);
@@ -1358,9 +1358,9 @@ SDF_Lookaheads SDF_setLookaheadsWsAfterList(SDF_Lookaheads arg, SDF_Layout wsAft
 /*{{{  SDF_LookaheadList accessors */
 
 ATbool SDF_isValidLookaheadList(SDF_LookaheadList arg);
-ATbool SDF_isLookaheadListEmpty(SDF_LookaheadList arg);
-ATbool SDF_isLookaheadListSingle(SDF_LookaheadList arg);
-ATbool SDF_isLookaheadListMany(SDF_LookaheadList arg);
+inline ATbool SDF_isLookaheadListEmpty(SDF_LookaheadList arg);
+inline ATbool SDF_isLookaheadListSingle(SDF_LookaheadList arg);
+inline ATbool SDF_isLookaheadListMany(SDF_LookaheadList arg);
 ATbool SDF_hasLookaheadListHead(SDF_LookaheadList arg);
 SDF_Lookahead SDF_getLookaheadListHead(SDF_LookaheadList arg);
 SDF_LookaheadList SDF_setLookaheadListHead(SDF_LookaheadList arg, SDF_Lookahead head);
@@ -1381,7 +1381,7 @@ SDF_LookaheadList SDF_setLookaheadListTail(SDF_LookaheadList arg, SDF_LookaheadL
 /*{{{  SDF_Restriction accessors */
 
 ATbool SDF_isValidRestriction(SDF_Restriction arg);
-ATbool SDF_isRestrictionFollow(SDF_Restriction arg);
+inline ATbool SDF_isRestrictionFollow(SDF_Restriction arg);
 ATbool SDF_hasRestrictionSymbols(SDF_Restriction arg);
 SDF_Symbols SDF_getRestrictionSymbols(SDF_Restriction arg);
 SDF_Restriction SDF_setRestrictionSymbols(SDF_Restriction arg, SDF_Symbols Symbols);
@@ -1399,7 +1399,7 @@ SDF_Restriction SDF_setRestrictionLookaheads(SDF_Restriction arg, SDF_Lookaheads
 /*{{{  SDF_Restrictions accessors */
 
 ATbool SDF_isValidRestrictions(SDF_Restrictions arg);
-ATbool SDF_isRestrictionsDefault(SDF_Restrictions arg);
+inline ATbool SDF_isRestrictionsDefault(SDF_Restrictions arg);
 ATbool SDF_hasRestrictionsList(SDF_Restrictions arg);
 SDF_RestrictionList SDF_getRestrictionsList(SDF_Restrictions arg);
 SDF_Restrictions SDF_setRestrictionsList(SDF_Restrictions arg, SDF_RestrictionList list);
@@ -1408,9 +1408,9 @@ SDF_Restrictions SDF_setRestrictionsList(SDF_Restrictions arg, SDF_RestrictionLi
 /*{{{  SDF_RestrictionList accessors */
 
 ATbool SDF_isValidRestrictionList(SDF_RestrictionList arg);
-ATbool SDF_isRestrictionListEmpty(SDF_RestrictionList arg);
-ATbool SDF_isRestrictionListSingle(SDF_RestrictionList arg);
-ATbool SDF_isRestrictionListMany(SDF_RestrictionList arg);
+inline ATbool SDF_isRestrictionListEmpty(SDF_RestrictionList arg);
+inline ATbool SDF_isRestrictionListSingle(SDF_RestrictionList arg);
+inline ATbool SDF_isRestrictionListMany(SDF_RestrictionList arg);
 ATbool SDF_hasRestrictionListHead(SDF_RestrictionList arg);
 SDF_Restriction SDF_getRestrictionListHead(SDF_RestrictionList arg);
 SDF_RestrictionList SDF_setRestrictionListHead(SDF_RestrictionList arg, SDF_Restriction head);
@@ -1425,7 +1425,7 @@ SDF_RestrictionList SDF_setRestrictionListTail(SDF_RestrictionList arg, SDF_Rest
 /*{{{  SDF_Alias accessors */
 
 ATbool SDF_isValidAlias(SDF_Alias arg);
-ATbool SDF_isAliasAlias(SDF_Alias arg);
+inline ATbool SDF_isAliasAlias(SDF_Alias arg);
 ATbool SDF_hasAliasSymbol(SDF_Alias arg);
 SDF_Symbol SDF_getAliasSymbol(SDF_Alias arg);
 SDF_Alias SDF_setAliasSymbol(SDF_Alias arg, SDF_Symbol Symbol);
@@ -1443,7 +1443,7 @@ SDF_Alias SDF_setAliasAlias(SDF_Alias arg, SDF_Symbol alias);
 /*{{{  SDF_Aliases accessors */
 
 ATbool SDF_isValidAliases(SDF_Aliases arg);
-ATbool SDF_isAliasesDefault(SDF_Aliases arg);
+inline ATbool SDF_isAliasesDefault(SDF_Aliases arg);
 ATbool SDF_hasAliasesList(SDF_Aliases arg);
 SDF_AliasList SDF_getAliasesList(SDF_Aliases arg);
 SDF_Aliases SDF_setAliasesList(SDF_Aliases arg, SDF_AliasList list);
@@ -1452,9 +1452,9 @@ SDF_Aliases SDF_setAliasesList(SDF_Aliases arg, SDF_AliasList list);
 /*{{{  SDF_AliasList accessors */
 
 ATbool SDF_isValidAliasList(SDF_AliasList arg);
-ATbool SDF_isAliasListEmpty(SDF_AliasList arg);
-ATbool SDF_isAliasListSingle(SDF_AliasList arg);
-ATbool SDF_isAliasListMany(SDF_AliasList arg);
+inline ATbool SDF_isAliasListEmpty(SDF_AliasList arg);
+inline ATbool SDF_isAliasListSingle(SDF_AliasList arg);
+inline ATbool SDF_isAliasListMany(SDF_AliasList arg);
 ATbool SDF_hasAliasListHead(SDF_AliasList arg);
 SDF_Alias SDF_getAliasListHead(SDF_AliasList arg);
 SDF_AliasList SDF_setAliasListHead(SDF_AliasList arg, SDF_Alias head);
@@ -1469,7 +1469,7 @@ SDF_AliasList SDF_setAliasListTail(SDF_AliasList arg, SDF_AliasList tail);
 /*{{{  SDF_Symbols accessors */
 
 ATbool SDF_isValidSymbols(SDF_Symbols arg);
-ATbool SDF_isSymbolsDefault(SDF_Symbols arg);
+inline ATbool SDF_isSymbolsDefault(SDF_Symbols arg);
 ATbool SDF_hasSymbolsList(SDF_Symbols arg);
 SDF_SymbolList SDF_getSymbolsList(SDF_Symbols arg);
 SDF_Symbols SDF_setSymbolsList(SDF_Symbols arg, SDF_SymbolList list);
@@ -1478,9 +1478,9 @@ SDF_Symbols SDF_setSymbolsList(SDF_Symbols arg, SDF_SymbolList list);
 /*{{{  SDF_SymbolList accessors */
 
 ATbool SDF_isValidSymbolList(SDF_SymbolList arg);
-ATbool SDF_isSymbolListEmpty(SDF_SymbolList arg);
-ATbool SDF_isSymbolListSingle(SDF_SymbolList arg);
-ATbool SDF_isSymbolListMany(SDF_SymbolList arg);
+inline ATbool SDF_isSymbolListEmpty(SDF_SymbolList arg);
+inline ATbool SDF_isSymbolListSingle(SDF_SymbolList arg);
+inline ATbool SDF_isSymbolListMany(SDF_SymbolList arg);
 ATbool SDF_hasSymbolListHead(SDF_SymbolList arg);
 SDF_Symbol SDF_getSymbolListHead(SDF_SymbolList arg);
 SDF_SymbolList SDF_setSymbolListHead(SDF_SymbolList arg, SDF_Symbol head);
@@ -1495,7 +1495,7 @@ SDF_SymbolList SDF_setSymbolListTail(SDF_SymbolList arg, SDF_SymbolList tail);
 /*{{{  SDF_Renamings accessors */
 
 ATbool SDF_isValidRenamings(SDF_Renamings arg);
-ATbool SDF_isRenamingsRenamings(SDF_Renamings arg);
+inline ATbool SDF_isRenamingsRenamings(SDF_Renamings arg);
 ATbool SDF_hasRenamingsWsAfterBracketOpen(SDF_Renamings arg);
 SDF_Layout SDF_getRenamingsWsAfterBracketOpen(SDF_Renamings arg);
 SDF_Renamings SDF_setRenamingsWsAfterBracketOpen(SDF_Renamings arg, SDF_Layout wsAfterBracketOpen);
@@ -1510,9 +1510,9 @@ SDF_Renamings SDF_setRenamingsWsAfterList(SDF_Renamings arg, SDF_Layout wsAfterL
 /*{{{  SDF_RenamingList accessors */
 
 ATbool SDF_isValidRenamingList(SDF_RenamingList arg);
-ATbool SDF_isRenamingListEmpty(SDF_RenamingList arg);
-ATbool SDF_isRenamingListSingle(SDF_RenamingList arg);
-ATbool SDF_isRenamingListMany(SDF_RenamingList arg);
+inline ATbool SDF_isRenamingListEmpty(SDF_RenamingList arg);
+inline ATbool SDF_isRenamingListSingle(SDF_RenamingList arg);
+inline ATbool SDF_isRenamingListMany(SDF_RenamingList arg);
 ATbool SDF_hasRenamingListHead(SDF_RenamingList arg);
 SDF_Renaming SDF_getRenamingListHead(SDF_RenamingList arg);
 SDF_RenamingList SDF_setRenamingListHead(SDF_RenamingList arg, SDF_Renaming head);
@@ -1527,8 +1527,8 @@ SDF_RenamingList SDF_setRenamingListTail(SDF_RenamingList arg, SDF_RenamingList 
 /*{{{  SDF_Renaming accessors */
 
 ATbool SDF_isValidRenaming(SDF_Renaming arg);
-ATbool SDF_isRenamingSymbol(SDF_Renaming arg);
-ATbool SDF_isRenamingProduction(SDF_Renaming arg);
+inline ATbool SDF_isRenamingSymbol(SDF_Renaming arg);
+inline ATbool SDF_isRenamingProduction(SDF_Renaming arg);
 ATbool SDF_hasRenamingFrom(SDF_Renaming arg);
 SDF_Symbol SDF_getRenamingFrom(SDF_Renaming arg);
 SDF_Renaming SDF_setRenamingFrom(SDF_Renaming arg, SDF_Symbol from);
@@ -1546,7 +1546,7 @@ SDF_Renaming SDF_setRenamingTo(SDF_Renaming arg, SDF_Symbol to);
 /*{{{  SDF_NatCon accessors */
 
 ATbool SDF_isValidNatCon(SDF_NatCon arg);
-ATbool SDF_isNatConLexToCf(SDF_NatCon arg);
+inline ATbool SDF_isNatConLexToCf(SDF_NatCon arg);
 ATbool SDF_hasNatConLex(SDF_NatCon arg);
 SDF_Lexical SDF_getNatConLex(SDF_NatCon arg);
 SDF_NatCon SDF_setNatConLex(SDF_NatCon arg, SDF_Lexical lex);
@@ -1555,9 +1555,9 @@ SDF_NatCon SDF_setNatConLex(SDF_NatCon arg, SDF_Lexical lex);
 /*{{{  SDF_IntCon accessors */
 
 ATbool SDF_isValidIntCon(SDF_IntCon arg);
-ATbool SDF_isIntConNatural(SDF_IntCon arg);
-ATbool SDF_isIntConPositive(SDF_IntCon arg);
-ATbool SDF_isIntConNegative(SDF_IntCon arg);
+inline ATbool SDF_isIntConNatural(SDF_IntCon arg);
+inline ATbool SDF_isIntConPositive(SDF_IntCon arg);
+inline ATbool SDF_isIntConNegative(SDF_IntCon arg);
 ATbool SDF_hasIntConNatCon(SDF_IntCon arg);
 SDF_NatCon SDF_getIntConNatCon(SDF_IntCon arg);
 SDF_IntCon SDF_setIntConNatCon(SDF_IntCon arg, SDF_NatCon NatCon);
@@ -1572,8 +1572,8 @@ SDF_IntCon SDF_setIntConWsAfterNeg(SDF_IntCon arg, SDF_Layout wsAfterNeg);
 /*{{{  SDF_CharRange accessors */
 
 ATbool SDF_isValidCharRange(SDF_CharRange arg);
-ATbool SDF_isCharRangeDefault(SDF_CharRange arg);
-ATbool SDF_isCharRangeRange(SDF_CharRange arg);
+inline ATbool SDF_isCharRangeDefault(SDF_CharRange arg);
+inline ATbool SDF_isCharRangeRange(SDF_CharRange arg);
 ATbool SDF_hasCharRangeCharacter(SDF_CharRange arg);
 SDF_Character SDF_getCharRangeCharacter(SDF_CharRange arg);
 SDF_CharRange SDF_setCharRangeCharacter(SDF_CharRange arg, SDF_Character Character);
@@ -1594,9 +1594,9 @@ SDF_CharRange SDF_setCharRangeEnd(SDF_CharRange arg, SDF_Character end);
 /*{{{  SDF_CharRanges accessors */
 
 ATbool SDF_isValidCharRanges(SDF_CharRanges arg);
-ATbool SDF_isCharRangesDefault(SDF_CharRanges arg);
-ATbool SDF_isCharRangesConc(SDF_CharRanges arg);
-ATbool SDF_isCharRangesBracket(SDF_CharRanges arg);
+inline ATbool SDF_isCharRangesDefault(SDF_CharRanges arg);
+inline ATbool SDF_isCharRangesConc(SDF_CharRanges arg);
+inline ATbool SDF_isCharRangesBracket(SDF_CharRanges arg);
 ATbool SDF_hasCharRangesCharRange(SDF_CharRanges arg);
 SDF_CharRange SDF_getCharRangesCharRange(SDF_CharRanges arg);
 SDF_CharRanges SDF_setCharRangesCharRange(SDF_CharRanges arg, SDF_CharRange CharRange);
@@ -1623,8 +1623,8 @@ SDF_CharRanges SDF_setCharRangesWsAfterCharRanges(SDF_CharRanges arg, SDF_Layout
 /*{{{  SDF_OptCharRanges accessors */
 
 ATbool SDF_isValidOptCharRanges(SDF_OptCharRanges arg);
-ATbool SDF_isOptCharRangesAbsent(SDF_OptCharRanges arg);
-ATbool SDF_isOptCharRangesPresent(SDF_OptCharRanges arg);
+inline ATbool SDF_isOptCharRangesAbsent(SDF_OptCharRanges arg);
+inline ATbool SDF_isOptCharRangesPresent(SDF_OptCharRanges arg);
 ATbool SDF_hasOptCharRangesCharRanges(SDF_OptCharRanges arg);
 SDF_CharRanges SDF_getOptCharRangesCharRanges(SDF_OptCharRanges arg);
 SDF_OptCharRanges SDF_setOptCharRangesCharRanges(SDF_OptCharRanges arg, SDF_CharRanges CharRanges);
@@ -1633,12 +1633,12 @@ SDF_OptCharRanges SDF_setOptCharRangesCharRanges(SDF_OptCharRanges arg, SDF_Char
 /*{{{  SDF_CharClass accessors */
 
 ATbool SDF_isValidCharClass(SDF_CharClass arg);
-ATbool SDF_isCharClassSimpleCharclass(SDF_CharClass arg);
-ATbool SDF_isCharClassComp(SDF_CharClass arg);
-ATbool SDF_isCharClassDiff(SDF_CharClass arg);
-ATbool SDF_isCharClassIsect(SDF_CharClass arg);
-ATbool SDF_isCharClassUnion(SDF_CharClass arg);
-ATbool SDF_isCharClassBracket(SDF_CharClass arg);
+inline ATbool SDF_isCharClassSimpleCharclass(SDF_CharClass arg);
+inline ATbool SDF_isCharClassComp(SDF_CharClass arg);
+inline ATbool SDF_isCharClassDiff(SDF_CharClass arg);
+inline ATbool SDF_isCharClassIsect(SDF_CharClass arg);
+inline ATbool SDF_isCharClassUnion(SDF_CharClass arg);
+inline ATbool SDF_isCharClassBracket(SDF_CharClass arg);
 ATbool SDF_hasCharClassWsAfterBracketOpen(SDF_CharClass arg);
 SDF_Layout SDF_getCharClassWsAfterBracketOpen(SDF_CharClass arg);
 SDF_CharClass SDF_setCharClassWsAfterBracketOpen(SDF_CharClass arg, SDF_Layout wsAfterBracketOpen);
@@ -1683,7 +1683,7 @@ SDF_CharClass SDF_setCharClassWsAfterCharClass(SDF_CharClass arg, SDF_Layout wsA
 /*{{{  SDF_AlphaNumericalEscChar accessors */
 
 ATbool SDF_isValidAlphaNumericalEscChar(SDF_AlphaNumericalEscChar arg);
-ATbool SDF_isAlphaNumericalEscCharLexToCf(SDF_AlphaNumericalEscChar arg);
+inline ATbool SDF_isAlphaNumericalEscCharLexToCf(SDF_AlphaNumericalEscChar arg);
 ATbool SDF_hasAlphaNumericalEscCharLex(SDF_AlphaNumericalEscChar arg);
 SDF_Lexical SDF_getAlphaNumericalEscCharLex(SDF_AlphaNumericalEscChar arg);
 SDF_AlphaNumericalEscChar SDF_setAlphaNumericalEscCharLex(SDF_AlphaNumericalEscChar arg, SDF_Lexical lex);
@@ -1692,7 +1692,7 @@ SDF_AlphaNumericalEscChar SDF_setAlphaNumericalEscCharLex(SDF_AlphaNumericalEscC
 /*{{{  SDF_DecimalEscChar accessors */
 
 ATbool SDF_isValidDecimalEscChar(SDF_DecimalEscChar arg);
-ATbool SDF_isDecimalEscCharLexToCf(SDF_DecimalEscChar arg);
+inline ATbool SDF_isDecimalEscCharLexToCf(SDF_DecimalEscChar arg);
 ATbool SDF_hasDecimalEscCharLex(SDF_DecimalEscChar arg);
 SDF_Lexical SDF_getDecimalEscCharLex(SDF_DecimalEscChar arg);
 SDF_DecimalEscChar SDF_setDecimalEscCharLex(SDF_DecimalEscChar arg, SDF_Lexical lex);
@@ -1701,7 +1701,7 @@ SDF_DecimalEscChar SDF_setDecimalEscCharLex(SDF_DecimalEscChar arg, SDF_Lexical 
 /*{{{  SDF_EscChar accessors */
 
 ATbool SDF_isValidEscChar(SDF_EscChar arg);
-ATbool SDF_isEscCharLexToCf(SDF_EscChar arg);
+inline ATbool SDF_isEscCharLexToCf(SDF_EscChar arg);
 ATbool SDF_hasEscCharLex(SDF_EscChar arg);
 SDF_Lexical SDF_getEscCharLex(SDF_EscChar arg);
 SDF_EscChar SDF_setEscCharLex(SDF_EscChar arg, SDF_Lexical lex);
@@ -1710,7 +1710,7 @@ SDF_EscChar SDF_setEscCharLex(SDF_EscChar arg, SDF_Lexical lex);
 /*{{{  SDF_LChar accessors */
 
 ATbool SDF_isValidLChar(SDF_LChar arg);
-ATbool SDF_isLCharLexToCf(SDF_LChar arg);
+inline ATbool SDF_isLCharLexToCf(SDF_LChar arg);
 ATbool SDF_hasLCharLex(SDF_LChar arg);
 SDF_Lexical SDF_getLCharLex(SDF_LChar arg);
 SDF_LChar SDF_setLCharLex(SDF_LChar arg, SDF_Lexical lex);
@@ -1719,8 +1719,8 @@ SDF_LChar SDF_setLCharLex(SDF_LChar arg, SDF_Lexical lex);
 /*{{{  SDF_ATerms accessors */
 
 ATbool SDF_isValidATerms(SDF_ATerms arg);
-ATbool SDF_isATermsAterm(SDF_ATerms arg);
-ATbool SDF_isATermsCons(SDF_ATerms arg);
+inline ATbool SDF_isATermsAterm(SDF_ATerms arg);
+inline ATbool SDF_isATermsCons(SDF_ATerms arg);
 ATbool SDF_hasATermsTerm(SDF_ATerms arg);
 SDF_ATerm SDF_getATermsTerm(SDF_ATerms arg);
 SDF_ATerms SDF_setATermsTerm(SDF_ATerms arg, SDF_ATerm term);
@@ -1741,8 +1741,8 @@ SDF_ATerms SDF_setATermsTail(SDF_ATerms arg, SDF_ATerms tail);
 /*{{{  SDF_ATermList accessors */
 
 ATbool SDF_isValidATermList(SDF_ATermList arg);
-ATbool SDF_isATermListEmpty(SDF_ATermList arg);
-ATbool SDF_isATermListNotEmpty(SDF_ATermList arg);
+inline ATbool SDF_isATermListEmpty(SDF_ATermList arg);
+inline ATbool SDF_isATermListNotEmpty(SDF_ATermList arg);
 ATbool SDF_hasATermListWsAfterBracketOpen(SDF_ATermList arg);
 SDF_Layout SDF_getATermListWsAfterBracketOpen(SDF_ATermList arg);
 SDF_ATermList SDF_setATermListWsAfterBracketOpen(SDF_ATermList arg, SDF_Layout wsAfterBracketOpen);
@@ -1757,8 +1757,8 @@ SDF_ATermList SDF_setATermListWsAfterATerms(SDF_ATermList arg, SDF_Layout wsAfte
 /*{{{  SDF_ACon accessors */
 
 ATbool SDF_isValidACon(SDF_ACon arg);
-ATbool SDF_isAConInt(SDF_ACon arg);
-ATbool SDF_isAConReal(SDF_ACon arg);
+inline ATbool SDF_isAConInt(SDF_ACon arg);
+inline ATbool SDF_isAConReal(SDF_ACon arg);
 ATbool SDF_hasAConIntCon(SDF_ACon arg);
 SDF_IntCon SDF_getAConIntCon(SDF_ACon arg);
 SDF_ACon SDF_setAConIntCon(SDF_ACon arg, SDF_IntCon IntCon);
@@ -1770,7 +1770,7 @@ SDF_ACon SDF_setAConRealCon(SDF_ACon arg, SDF_RealCon RealCon);
 /*{{{  SDF_AFun accessors */
 
 ATbool SDF_isValidAFun(SDF_AFun arg);
-ATbool SDF_isAFunDefault(SDF_AFun arg);
+inline ATbool SDF_isAFunDefault(SDF_AFun arg);
 ATbool SDF_hasAFunLiteral(SDF_AFun arg);
 SDF_Literal SDF_getAFunLiteral(SDF_AFun arg);
 SDF_AFun SDF_setAFunLiteral(SDF_AFun arg, SDF_Literal Literal);
@@ -1779,14 +1779,14 @@ SDF_AFun SDF_setAFunLiteral(SDF_AFun arg, SDF_Literal Literal);
 /*{{{  SDF_ATerm accessors */
 
 ATbool SDF_isValidATerm(SDF_ATerm arg);
-ATbool SDF_isATermConstant(SDF_ATerm arg);
-ATbool SDF_isATermList(SDF_ATerm arg);
-ATbool SDF_isATermFun(SDF_ATerm arg);
-ATbool SDF_isATermAppl(SDF_ATerm arg);
-ATbool SDF_isATermAnnotatedConstant(SDF_ATerm arg);
-ATbool SDF_isATermAnnotatedList(SDF_ATerm arg);
-ATbool SDF_isATermAnnotatedFun(SDF_ATerm arg);
-ATbool SDF_isATermAnnotatedAppl(SDF_ATerm arg);
+inline ATbool SDF_isATermConstant(SDF_ATerm arg);
+inline ATbool SDF_isATermList(SDF_ATerm arg);
+inline ATbool SDF_isATermFun(SDF_ATerm arg);
+inline ATbool SDF_isATermAppl(SDF_ATerm arg);
+inline ATbool SDF_isATermAnnotatedConstant(SDF_ATerm arg);
+inline ATbool SDF_isATermAnnotatedList(SDF_ATerm arg);
+inline ATbool SDF_isATermAnnotatedFun(SDF_ATerm arg);
+inline ATbool SDF_isATermAnnotatedAppl(SDF_ATerm arg);
 ATbool SDF_hasATermACon(SDF_ATerm arg);
 SDF_ACon SDF_getATermACon(SDF_ATerm arg);
 SDF_ATerm SDF_setATermACon(SDF_ATerm arg, SDF_ACon ACon);
@@ -1825,7 +1825,7 @@ SDF_ATerm SDF_setATermWsAfterParenClose(SDF_ATerm arg, SDF_Layout wsAfterParenCl
 /*{{{  SDF_Ann accessors */
 
 ATbool SDF_isValidAnn(SDF_Ann arg);
-ATbool SDF_isAnnAnnotation(SDF_Ann arg);
+inline ATbool SDF_isAnnAnnotation(SDF_Ann arg);
 ATbool SDF_hasAnnWsAfterBraceOpen(SDF_Ann arg);
 SDF_Layout SDF_getAnnWsAfterBraceOpen(SDF_Ann arg);
 SDF_Ann SDF_setAnnWsAfterBraceOpen(SDF_Ann arg, SDF_Layout wsAfterBraceOpen);
@@ -1840,8 +1840,8 @@ SDF_Ann SDF_setAnnWsAfterATerms(SDF_Ann arg, SDF_Layout wsAfterATerms);
 /*{{{  SDF_TagId accessors */
 
 ATbool SDF_isValidTagId(SDF_TagId arg);
-ATbool SDF_isTagIdLexToCf(SDF_TagId arg);
-ATbool SDF_isTagIdEmpty(SDF_TagId arg);
+inline ATbool SDF_isTagIdLexToCf(SDF_TagId arg);
+inline ATbool SDF_isTagIdEmpty(SDF_TagId arg);
 ATbool SDF_hasTagIdLex(SDF_TagId arg);
 SDF_Lexical SDF_getTagIdLex(SDF_TagId arg);
 SDF_TagId SDF_setTagIdLex(SDF_TagId arg, SDF_Lexical lex);
@@ -1850,7 +1850,7 @@ SDF_TagId SDF_setTagIdLex(SDF_TagId arg, SDF_Lexical lex);
 /*{{{  SDF_NumChar accessors */
 
 ATbool SDF_isValidNumChar(SDF_NumChar arg);
-ATbool SDF_isNumCharLexToCf(SDF_NumChar arg);
+inline ATbool SDF_isNumCharLexToCf(SDF_NumChar arg);
 ATbool SDF_hasNumCharLex(SDF_NumChar arg);
 SDF_Lexical SDF_getNumCharLex(SDF_NumChar arg);
 SDF_NumChar SDF_setNumCharLex(SDF_NumChar arg, SDF_Lexical lex);
@@ -1859,7 +1859,7 @@ SDF_NumChar SDF_setNumCharLex(SDF_NumChar arg, SDF_Lexical lex);
 /*{{{  SDF_ShortChar accessors */
 
 ATbool SDF_isValidShortChar(SDF_ShortChar arg);
-ATbool SDF_isShortCharLexToCf(SDF_ShortChar arg);
+inline ATbool SDF_isShortCharLexToCf(SDF_ShortChar arg);
 ATbool SDF_hasShortCharLex(SDF_ShortChar arg);
 SDF_Lexical SDF_getShortCharLex(SDF_ShortChar arg);
 SDF_ShortChar SDF_setShortCharLex(SDF_ShortChar arg, SDF_Lexical lex);
@@ -1868,10 +1868,10 @@ SDF_ShortChar SDF_setShortCharLex(SDF_ShortChar arg, SDF_Lexical lex);
 /*{{{  SDF_Character accessors */
 
 ATbool SDF_isValidCharacter(SDF_Character arg);
-ATbool SDF_isCharacterNumeric(SDF_Character arg);
-ATbool SDF_isCharacterShort(SDF_Character arg);
-ATbool SDF_isCharacterTop(SDF_Character arg);
-ATbool SDF_isCharacterEof(SDF_Character arg);
+inline ATbool SDF_isCharacterNumeric(SDF_Character arg);
+inline ATbool SDF_isCharacterShort(SDF_Character arg);
+inline ATbool SDF_isCharacterTop(SDF_Character arg);
+inline ATbool SDF_isCharacterEof(SDF_Character arg);
 ATbool SDF_hasCharacterNumChar(SDF_Character arg);
 SDF_NumChar SDF_getCharacterNumChar(SDF_Character arg);
 SDF_Character SDF_setCharacterNumChar(SDF_Character arg, SDF_NumChar NumChar);
@@ -1883,8 +1883,8 @@ SDF_Character SDF_setCharacterShortChar(SDF_Character arg, SDF_ShortChar ShortCh
 /*{{{  SDF_OptExp accessors */
 
 ATbool SDF_isValidOptExp(SDF_OptExp arg);
-ATbool SDF_isOptExpPresent(SDF_OptExp arg);
-ATbool SDF_isOptExpAbsent(SDF_OptExp arg);
+inline ATbool SDF_isOptExpPresent(SDF_OptExp arg);
+inline ATbool SDF_isOptExpAbsent(SDF_OptExp arg);
 ATbool SDF_hasOptExpWsAfterE(SDF_OptExp arg);
 SDF_Layout SDF_getOptExpWsAfterE(SDF_OptExp arg);
 SDF_OptExp SDF_setOptExpWsAfterE(SDF_OptExp arg, SDF_Layout wsAfterE);
@@ -1896,7 +1896,7 @@ SDF_OptExp SDF_setOptExpIntCon(SDF_OptExp arg, SDF_IntCon IntCon);
 /*{{{  SDF_RealCon accessors */
 
 ATbool SDF_isValidRealCon(SDF_RealCon arg);
-ATbool SDF_isRealConRealCon(SDF_RealCon arg);
+inline ATbool SDF_isRealConRealCon(SDF_RealCon arg);
 ATbool SDF_hasRealConIntCon(SDF_RealCon arg);
 SDF_IntCon SDF_getRealConIntCon(SDF_RealCon arg);
 SDF_RealCon SDF_setRealConIntCon(SDF_RealCon arg, SDF_IntCon IntCon);
