@@ -8,6 +8,10 @@ import java.net.*;
 public class ProcessViewerTool extends ProcessViewerTif
 {
   private ProcessViewer viewer;
+  private ATermPattern patternProcessName;
+  private ATermPattern patternExecState;
+  private ATermPattern patternSingleProcess;
+  private ATermPattern patternString;
 
   //{ public static void main(String[] args)
 
@@ -35,7 +39,15 @@ public class ProcessViewerTool extends ProcessViewerTif
     throws UnknownHostException
   {
     super(args);
-    viewer = new ProcessViewer();
+    viewer = new ProcessViewer(this);
+    try {
+      patternProcessName = new ATermPattern("process-name");
+      patternExecState = new ATermPattern("exec-state");
+      patternSingleProcess = new ATermPattern("[<int>]");
+      patternString = new ATermPattern("<str>");
+    } catch (ParseError e) {
+      throw new IllegalArgumentException("internal parse error");
+    }
   }
 
   //}
@@ -61,6 +73,38 @@ public class ProcessViewerTool extends ProcessViewerTif
   void watchpoint(ATermApplRef dap, ATermRef proc, int rid, ATermRef exprs)
   {
     System.out.println("watchpoint, proc=" + proc + ", exprs=" + exprs.toString());
+    int dapid = DebugAdapterInfo.debugAdapterId(dap);
+    ATermsRef exprlist = ((ATermListRef)exprs).getATerms();
+    while(exprlist != null) {
+      ATermsRef pair = ((ATermListRef)exprlist.getFirst()).getATerms();
+      watchpoint(dapid, proc, pair.getFirst(), pair.getNext().getFirst());
+      exprlist = exprlist.getNext();
+    }
+  }
+
+  /**
+    * Handle an individual watchpoint expression.
+    */
+
+  private void watchpoint(int dapid, ATermRef proc, ATermRef expr, ATermRef val)
+  {
+    if(patternProcessName.match(expr)) {
+      // This must be a new process announcement!
+      if(!patternSingleProcess.match(proc))
+	throw new IllegalArgumentException("illegal process spec: " + proc.toString());
+      if(!patternString.match(val))
+	throw new IllegalArgumentException("illegal process name: " + val.toString());
+      int pid = ((Integer)patternSingleProcess.elementAt(0)).intValue();
+      String name = (String)patternString.elementAt(0);
+      viewer.addProcess(dapid, pid, name);
+    } else if(patternExecState.match(expr)) {
+      // This must be an exec-state change announcement!
+      if(!patternSingleProcess.match(proc))
+	throw new IllegalArgumentException("illegal process spec: " + proc.toString());
+      int pid = ((Integer)patternSingleProcess.elementAt(0)).intValue();
+      int es = DebugProcess.execStateTerm2Int(val);
+      viewer.changeExecState(dapid, pid, es);
+    }
   }
 
   //}
@@ -115,7 +159,42 @@ public class ProcessViewerTool extends ProcessViewerTif
   }
 
   //}
+  //{ void newTool(String name, ATermRef tool, ATermRef event)
 
+  /**
+    * A new tool has registered. we need to add it to the Tool menu.
+    */
+
+  void newTool(String name, ATermRef tool, ATermRef event, ATermListRef args)
+  {
+    int argFlags = 0;
+
+    ATermsRef arglist = args.getATerms();
+    while(arglist != null) {
+      if(((ATermApplRef)arglist.getFirst()).getFun().equals("adapter"))
+	argFlags |= ProcessViewer.TOOL;
+      if(((ATermApplRef)arglist.getFirst()).getFun().equals("process"))
+	argFlags |= ProcessViewer.PROCESS;
+      if(((ATermApplRef)arglist.getFirst()).getFun().equals("processes"))
+	argFlags |= ProcessViewer.PROCESSES;
+      arglist = arglist.getNext();
+    }
+    viewer.addTool(name, tool, event, argFlags);
+  }
+
+  //}
+
+  //{ void recAckEvent(ATermRef event)
+
+  /**
+    * Handle event acknowledgements.
+    */
+
+  void recAckEvent(ATermRef event)
+  {
+  }
+
+  //}
   //{ void recTerminate(ATermRef arg)
 
   /**

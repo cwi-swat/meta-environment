@@ -12,12 +12,13 @@ class DebugProcess
 {
   //{ exec state constants
 
-  static public int ES_NONE             = 0;
-  static public int ES_STOP             = 0x0001;
-  static public int ES_RUN		= 0x0002;
-  static public int ES_SINGLE_STEP	= 0x0004;
-  static public int ES_STEP_OVER	= 0x0008;
-  static public int ES_ALL		= 0x000F;
+  static public final int ES_NONE             = 0;
+  static public final int ES_STOP             = 0x0001;
+  static public final int ES_RUN	      = 0x0002;
+  static public final int ES_SINGLE_STEP      = 0x0004;
+  static public final int ES_STEP_OVER	      = 0x0008;
+  static public final int ES_RUN_UNTIL_PARENT = 0x0010;
+  static public final int ES_ALL	      = 0x001F;
 
   //}
 
@@ -136,6 +137,40 @@ class DebugProcess
   int getExecState()
   {
     return exec_state;
+  }
+
+  //}
+  //{ public String getExecStateString()
+
+  /**
+    * Retrieve a string representing the current state of execution.
+    */
+
+  public String getExecStateString()
+  {
+    switch(exec_state) {
+      case ES_NONE:             return "none";
+      case ES_STOP:             return "stopped";
+      case ES_RUN:              return "running";
+      case ES_SINGLE_STEP:      return "single-step";
+      case ES_STEP_OVER:        return "step-over";
+      case ES_RUN_UNTIL_PARENT: return "run-until-parent";
+    }
+    throw new IllegalArgumentException("illegal exec state");
+  }
+
+  //}
+  //{ public boolean isRunning()
+
+  /**
+    * Check if this process is currently doing anything.
+    */
+
+  public boolean isRunning()
+  {
+    if(exec_state == ES_STOP || exec_state == ES_NONE)
+      return false;
+    return true;
   }
 
   //}

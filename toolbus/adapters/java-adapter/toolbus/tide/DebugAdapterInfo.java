@@ -5,7 +5,7 @@ import java.util.*;
 
 /**
  * The class DebugAdapterInfo keeps track of the current state
- * of a remote debug adapter.
+ * of a debug adapter.
  */
 
 public class DebugAdapterInfo
@@ -93,14 +93,14 @@ public class DebugAdapterInfo
 
   //}
 
-  //{ int getId()
+  //{ public int getId()
 
   /**
    * Retrieve the id of this adapter. The id is an integer that uniquely
    * identifies a debug adapter.
    */
 
-  int getId()
+  public int getId()
   {
     return id;
   }
@@ -151,13 +151,13 @@ public class DebugAdapterInfo
 
   //}
 
-  //{ ATermRef getInfo(String category)
+  //{ public ATermRef getInfo(String category)
 
   /**
    * Retrieve information about a specific category.
    */
 
-  ATermRef getInfo(String category)
+  public ATermRef getInfo(String category)
   {
     return (ATermRef)info.get(category);
   }

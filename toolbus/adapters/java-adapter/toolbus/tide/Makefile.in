@@ -29,6 +29,7 @@ COMPONENT	= toolbus/tide
 SOURCE		= DebugPort.java LocationPort.java ExecStatePort.java \
 		ExceptionPort.java DebugRule.java \
 		DebugAdapterInfo.java SourceArea.java DebugProcess.java \
+		RemoteDebugAdapterInfo.java \
 		$(TOOLSOURCE)
 TOOLSOURCE	= ProcessViewerTif.java ProcessViewerTool.java \
 		ProcessViewer.java \
@@ -37,10 +38,13 @@ TOOLSOURCE	= ProcessViewerTif.java ProcessViewerTool.java \
 CLASSES		= DebugPort.class LocationPort.class ExecStatePort.class \
 		ExceptionPort.class DebugRule.class \
 		DebugAdapterInfo.class SourceArea.class DebugProcess.class \
+		RemoteDebugAdapterInfo.class \
 		$(TOOLCLASSES)
 TOOLCLASSES	= ProcessViewerTif.class ProcessViewerTool.class \
 		ProcessViewer.class ProcessCanvas.class DapPicture.class \
-		ProcessPicture.class \
+		ProcessPicture.class FancyPanel.class ProcessPanel.class \
+		AdapterPanel.class SelectionPanel.class \
+		ProcessViewerMenuBar.class ToolMenuItem.class \
 		DebugAdapterTif.class DebugAdapterTool.class \
 		JavaDebugger.class
 PROGRAMS	=
