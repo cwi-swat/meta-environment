@@ -37,7 +37,7 @@ ATbool SDF_containsImportListImport(SDF_ImportList list,
                                     SDF_Import  import)
 {
   return (ATindexOf((ATermList) SDF_ImportListToTerm(list), 
-                    SDF_ImportToTerm(import), 0) < 0);
+                    SDF_ImportToTerm(import), 0) != -1);
 }
 
 SDF_ProductionList SDF_concatProductionList(SDF_ProductionList l1,
