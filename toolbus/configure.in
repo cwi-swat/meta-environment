@@ -218,6 +218,7 @@ dnl add outputfiles as argument below
 AC_OUTPUT(Makefile
           libtb/Makefile
           toolbus/Makefile
+          aterm/Makefile
           adapters/Makefile
           adapters/wish-adapter/Makefile
           adapters/tcltk-adapter/Makefile
