@@ -193,6 +193,78 @@ ATerm getPosInfoEquals(ASF_Equation equ)
 
 /*}}}  */
 
+/*{{{  static int moreSpecificArg(PT_Tree tree1, PT_Tree tree2) */
+
+static int compareSpecificityArgs(PT_Args lhs1args, PT_Args lhs2args);
+
+/* The specificity is expressed in an integer value:
+ * -1: tree1 is less specific than tree2
+ *  0: tree1 is or as specific as tree2, e.g. tree1 == tree2
+ *  1: tree1 is more specific than tree2
+ */
+static int compareSpecificityArg(PT_Tree tree1, PT_Tree tree2)
+{
+  if (PT_isEqualTree(tree1, tree2) ||
+      (PT_isTreeVar(tree1) && PT_isTreeVar(tree2))) {
+    return 0;
+  }
+  else if (PT_isTreeVar(tree1) && !PT_isTreeVar(tree2)) {
+    return -1;
+  }
+  else if (!PT_isTreeVar(tree1) && PT_isTreeVar(tree2)) {
+    return 1;
+  }
+  else if (PT_isTreeAppl(tree1) && PT_isTreeAppl(tree2)) {
+    PT_Production prod1 = PT_getTreeProd(tree1);
+    PT_Production prod2 = PT_getTreeProd(tree2);
+    if (PT_isEqualProduction(prod1, prod2)) {
+      return compareSpecificityArgs(PT_getTreeArgs(tree1),
+                                    PT_getTreeArgs(tree2));
+    }
+    else {
+      return 0;
+    }
+  }
+  else {
+    return 0;
+  }
+}
+
+/*}}}  */
+/*{{{  static int compareSpecificityArgs(PT_Args lhs1args, ...) */
+
+static int compareSpecificityArgs(PT_Args lhs1args, PT_Args lhs2args)
+{
+  int specificity;
+
+  if (PT_hasArgsHead(lhs1args) && PT_hasArgsHead(lhs2args)) {
+    PT_Tree head1 = PT_getArgsHead(lhs1args);
+    PT_Tree head2 = PT_getArgsHead(lhs2args);
+
+    specificity = compareSpecificityArg(head1, head2);
+  
+    if (specificity != 0) {
+      return specificity;
+    }
+    else {
+      return compareSpecificityArgs(PT_getArgsTail(lhs1args),
+                                    PT_getArgsTail(lhs2args));
+    }
+  }
+  return 0;
+}
+
+/*}}}  */
+/*{{{  static int compareSpecificityLhs(PT_Tree lhs1, PT_Tree lhs2) */
+
+static int compareSpecificityLhs(PT_Tree lhs1, PT_Tree lhs2)
+{
+  PT_Args lhs1args = PT_getTreeArgs(lhs1);
+  PT_Args lhs2args = PT_getTreeArgs(lhs2);
+  return compareSpecificityArgs(lhs1args, lhs2args);
+}
+
+/*}}}  */
 /*{{{  void enter_equation(equation_table * table, ASF_CondEquation equation) */
 
 /* Enter an equation in an equation table.
@@ -210,6 +282,7 @@ void enter_equation(equation_table * table, ASF_CondEquation equation)
   ASF_ConditionList conds; 
   ASF_Conditions conditions;
   unsigned hnr;
+  equation_entry *cur;
 
   if (useTide) {
     equation = add_equ_pos_info(equation);
@@ -293,21 +366,63 @@ void enter_equation(equation_table * table, ASF_CondEquation equation)
   entry->conds = conds;
   ATprotect((ATerm *) (&entry->conds));
 
-  if (ASF_isTagDefault(tag)) {
-    equation_entry *cur = table->table[hnr];
-    entry->hnext = NULL;
-    if (cur) {
-      while (cur->hnext) {
-	cur = cur->hnext;
-      }
-      cur->hnext = entry;
-    }
-    else {
+  cur = table->table[hnr];
+  if (cur) {
+    if (compareSpecificityLhs(entry->lhs, cur->lhs) >= 0 &&
+        (!ASF_isTagDefault(tag) ||
+         (ASF_isTagDefault(tag) && 
+          ASF_isTagDefault(cur->tag)))) {
+      entry->hnext = cur;
       table->table[hnr] = entry;
+    } 
+    else {
+      if (ASF_isTagDefault(tag)) {
+        ATbool entered = ATfalse;
+
+        /* Skip the non-default rules */
+        while (cur->hnext && 
+               !ASF_isTagDefault(cur->tag)) {
+          cur = cur->hnext;
+        }
+
+        while (cur->hnext) {
+          if (compareSpecificityLhs(entry->lhs, 
+                                    cur->hnext->lhs) >= 0) {
+            entry->hnext = cur->hnext;
+            cur->hnext = entry;
+            entered = ATtrue;
+            break;
+          }
+          cur = cur->hnext;
+        }
+
+        if (!entered) {
+          entry->hnext = cur->hnext;
+          cur->hnext = entry;
+        }
+      }
+      else {
+        ATbool entered = ATfalse;
+
+        while (cur->hnext && !ASF_isTagDefault(cur->tag)) {
+          if (compareSpecificityLhs(entry->lhs, 
+                                    cur->hnext->lhs) >= 0) {
+            entry->hnext = cur->hnext;
+            cur->hnext = entry;
+            entered = ATtrue;
+            break;
+          }
+          cur = cur->hnext;
+        }
+        if (!entered) {
+          entry->hnext = cur->hnext;
+          cur->hnext = entry;
+        }
+      }
     }
   }
   else {
-    entry->hnext = table->table[hnr];
+    entry->hnext = NULL;
     table->table[hnr] = entry;
   }
 

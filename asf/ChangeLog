@@ -1,3 +1,9 @@
+2003/03/31 (markvdb@cwi.nl)
+ * Specificity ordering on equations introduced in
+   asfe.
+ * Added a test to check that asfe and asfc have the
+   same behaviour.
+
 2003/03/24 ({markvdb,iversen}@cwi.nl)
  * Annotations are propagated over injections.
 

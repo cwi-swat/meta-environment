@@ -13,7 +13,7 @@ sglr -p <TopModuleName>.trm.tbl -i <input> -o ../../input/<TopModuleName>.1.pt
 9. make check
    This generates a few scripts <TopModuleName>.{asfe,asfc,diff}.sh and 
    an error message.
-10. mv <TopModuleName>.1.asfe.test.out output/<TopModuleName>.1.pt
+10. mv <TopModuleName>.1.pt.asfe.test.out output/<TopModuleName>.1.pt
    To fix the normal form as the correct one.
 11. run <TopModuleName>.asfe.sh to check
     run <TopModuleName>.asfc.sh to check

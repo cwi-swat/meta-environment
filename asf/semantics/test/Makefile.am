@@ -16,6 +16,7 @@ TEST_MODULES=Bracket \
              Pico-set \
              ReturnsList \
              SetAndElem \
+             Specificity \
              Traversal-Typecheck \
              Tuple \
              Combination-Typecheck \

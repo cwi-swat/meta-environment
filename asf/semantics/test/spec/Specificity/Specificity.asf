@@ -1,0 +1,5 @@
+equations
+
+    [a] f(aap,a)  = aap
+    [b] f(a,noot) = noot
+    [c] f(a,b)    = mies

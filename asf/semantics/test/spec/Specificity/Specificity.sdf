@@ -1,0 +1,19 @@
+module Specificity
+
+imports
+   basic/Whitespace
+
+exports
+    sorts A
+
+    context-free syntax
+
+    "aap"  -> A
+    "noot" -> A
+    "mies" -> A
+
+    "f" "(" A "," A ")" -> A
+
+hiddens
+    variables
+    [a-z]   -> A
