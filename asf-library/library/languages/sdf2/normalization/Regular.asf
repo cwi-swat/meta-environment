@@ -151,16 +151,29 @@ equations
 %% A tuple is written as $\langle{}T_1,\ldots,T_n\rangle$,
 %% where the $T_i$ are expresions of type $\Sym{A}_i$.
 
-  [0]
-        "<" ++ tup(_A # _B) ++ ">" = 'a, p = 'a -> _A # _B
-        ==================================================
-        r[[ _A # _B ]] =  syntax p r[[ 'a ]]
+    [0]
+         "<" ++ tup(_A # _B) ++ ">" = 'a, p = 'a -> _A # _B
+          ==================================================
+          r[[ _A # _B ]] =  syntax p r[[ 'a ]]
 
-%% The auxiliary function $\mfun{tup}\sem{\_}$ derives the syntax
+  %% The auxiliary function $\mfun{tup}\sem{\_}$ derives the syntax
+  %% of the body of the tuple by separating the symbols by commas.
+
+    [0]         tup(_A # _B) = tup(_A) ++ "," ++ tup(_B)
+    [default-0] tup(_A) = _A
+
+
+  [0]
+        "<" ++ tups(_A) ++ "," ++ tups('a,+) ++ ">" = 'a, 
+        p = 'a ->  <_A , 'a,+>
+        ==================================================
+        r[[ <_A , 'a,+> ]] =  syntax p r[[ 'a ]]
+
+%% The auxiliary function $\mfun{tups}\sem{\_}$ derives the syntax
 %% of the body of the tuple by separating the symbols by commas.
 
-  [0]         tup(_A # _B) = tup(_A) ++ "," ++ tup(_B)
-  [default-0] tup(_A) = _A
+  [0]         tups('a,+ , 'b,+) = tups('a,+) ++ "," ++ tups('b,+)
+  [default-0] tups(_A) = _A
 
 %% \paragraph{Functions}
 %%

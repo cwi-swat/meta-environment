@@ -26,6 +26,11 @@ equations
   [0] ('a+ 'b+)*'r = ('a+)* 'r ++ ('b+)*'r
   [0] (_A)*'r      = (_A)'r
 
+%% Renaming lists of comma separated symbols.
+
+  [] ('a,+ , 'b,+)+ 'r = ('a,+)+ 'r , ('b,+)+ 'r
+  [] (_A)+ 'r = (_A) 'r
+
 %% Renaming lists of productions.
 
   [0] (p)*'r        = (p)'r

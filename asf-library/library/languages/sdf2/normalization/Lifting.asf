@@ -27,5 +27,11 @@ equations
 
    [0] sym2syntax(_A | _B) = ( sym2syntax(_A) "|" sym2syntax(_B) )
    [0] sym2syntax(_A # _B) = ( sym2syntax(_A) "#" sym2syntax(_B) )
+   [0] sym2syntax(<_A , 'a,+>) = 
+         ( "<" sym2syntax(_A) "," symbols2syntax('a,+) ">" )
    [0] sym2syntax(literal("""c*""")) = literal(""" "\" """ c* "\" """ """)
-   [0] sym2syntax(sort(c*)) = literal("""c*""")   
+   [0] sym2syntax(sort(c*)) = literal("""c*""")
+
+   [s2s] symbols2syntax('a,+ , 'b,+) = 
+           symbols2syntax('a,+) "," symbols2syntax('b,+)
+   [default-s2s] symbols2syntax(_A) = sym2syntax(_A)

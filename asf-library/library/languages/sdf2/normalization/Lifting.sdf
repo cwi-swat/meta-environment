@@ -18,7 +18,8 @@ hiddens
 context-free syntax
     lift(Grammar)   -> Grammar {traversal(trafo, top-down, break)}
     lift(Symbol)    -> Symbol {traversal(trafo, top-down, break)}
-    sym2syntax(Symbol) -> Symbol 
+    sym2syntax(Symbol)            -> Symbol 
+    symbols2syntax({Symbol ","}+) -> Symbol* 
 
 hiddens
   variables 
@@ -26,6 +27,7 @@ hiddens
     "_"[ABC][0-9\']*    -> Symbol
     "'"[abc][0-9\']*    -> Symbol*
     "'"[abc]"+"[0-9\']* -> Symbol+
+    "'"[abc]",+"[0-9]*  -> {Symbol ","}+
     [p][0-9\']*         -> Production 
     [n][0-9\']*         -> NatCon 
     "c*"[0-9\']*        -> CHAR*

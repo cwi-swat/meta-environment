@@ -1,3 +1,7 @@
+2003/10/07 (markvdb@cwi.nl)
+  * Added new syntax rule for tuples <A,B>, the old syntax is
+    still supported for some time.
+
 2003/10/07 (jurgenv@cwi.nl)
   * Added Casl directories to configure.in
 

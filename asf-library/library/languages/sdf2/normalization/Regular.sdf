@@ -9,12 +9,14 @@ exports
     "r[[" Symbols "]]"             -> Grammar
     alt(Symbol, Symbol)            -> Grammar
     tup(Symbol)                    -> Symbols
+    tups({Symbol ","}+)            -> Symbols
 
 hiddens
   variables 
     "_G"[0-9\']*        -> Grammar  
     "_"[ABC][0-9\']*    -> Symbol
     "'"[abc][0-9\']*    -> Symbol*
-    "'"[abc]"+"[0-9\']* -> Symbol+
+    "'"[abc]"+"[0-9\']* -> Symbol+ 
+    "'"[abc]",+"[0-9]*  -> {Symbol ","}+
     [p][0-9\']*         -> Production 
     [n][0-9\']*         -> NatCon 
