@@ -1,5 +1,8 @@
 $Id$
 
+2003/05/26 (jurgenv@cwi.nl)
+ * idefs spawn there own processes now
+
 2003/05/16 (jurgenv@cwi.nl)
  * yieldSymbol prints <S-VAR> and <S-LEX> for variable and lexical
    sorts now. Context-free sorts are still printed without the < -CF>.
