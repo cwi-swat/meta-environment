@@ -2,8 +2,8 @@
 <classpath>
     <classpathentry kind="src" path=""/>
     <classpathentry kind="var" path="JRE_LIB" sourcepath="JRE_SRC"/>
-    <classpathentry exported="true" kind="src" path="/shared-objects"/>
-    <classpathentry kind="src" path="/aterm-java"/>
-    <classpathentry kind="lib" path="lib/toolbus.jar"/>
+    <classpathentry kind="lib" path="lib/shared-objects-1.1.jar"/>
+    <classpathentry kind="lib" path="lib/aterm-1.1.jar"/>
+    <classpathentry kind="lib" path="lib/java-adapter-1.0.jar"/>
     <classpathentry kind="output" path=""/>
 </classpath>
