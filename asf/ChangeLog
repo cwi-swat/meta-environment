@@ -5,6 +5,7 @@
  * Moved tests of asfc and asfe to shared test directory. Results for
    interpreted and compiled specifications are now checked to be equal.
  * Added a number of tests for traversal functions and sdf2 symbols.
+ * Moved apply-function tool to pt-support package
 
 2001/11/07 (jurgenv@cwi.nl)
  * Fixed a bug in the compiler. More than one rewrite rules DIRECTLY over a 

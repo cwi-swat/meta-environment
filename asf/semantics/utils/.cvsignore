@@ -3,5 +3,4 @@ Makefile.in
 .deps
 genmakefile
 genamakefile
-apply-function
 concat-asf
