@@ -426,7 +426,7 @@ public class GraphPanel extends JComponent implements Scrollable {
         }
 
         g2d.draw(gp);
-        arrowHead(from, to, g2d);
+        // arrowHead(from, to, g2d);
     }
 
     private void arrowHead(Point from, Point to, Graphics2D g) {
