@@ -359,7 +359,7 @@ prodToAsFix1(PT_Production prod)
   }
   lhsArgs = PT_getProductionLhs(prod);
   rhs = PT_getProductionRhs(prod);
-  prodAttrs = PT_getProductionAttrs(prod);
+  prodAttrs = PT_getProductionAttributes(prod);
 
   /*
      We can  only have  one `atr'  attribute (left,  right, assoc, ...) in 
@@ -446,114 +446,6 @@ prodToAsFix1(PT_Production prod)
 
   return result;
 }
-
-/*
-static int
-lengthOfLexicals(PT_Args lexicals)
-{
-  PT_Args args;
-  int length = 0;
-
-  if (PT_isArgsEmpty(lexicals)) {
-    return 0;
-  }
-
-  while (PT_hasArgsHead(lexicals)) {
-    PT_Tree lex = PT_getArgsHead(lexicals);
-    lexicals = PT_getArgsTail(lexicals);
-
-    if (PT_isTreeChar(lex)) {
-      length++;
-    }
-    else if (PT_isTreeList(lex)) {
-      args = PT_getTreeList(lex);
-      length = length + lengthOfLexicals(args);
-    }
-    else if (PT_isTreeAppl(lex)) {
-      args = PT_getTreeArgs(lex);
-      length = length + lengthOfLexicals(args);
-    }
-    else if (PT_isTreeLit(lex)) {
-      char *lit = PT_getTreeString(lex);
-      length = length + strlen(lit);
-    }
-    else {
-      ATerror("lengthOfLexicals: unknown term %t\n", lex);
-      return 0;
-    }
-  }
-  return length;
-}
-
-static int
-lexicalsToStringRecursive(PT_Args lexicals, int idx, char *buf, int bufSize)
-{
-  PT_Args args;
-  char *lit;
-
-  while (PT_hasArgsHead(lexicals)) {
-    PT_Tree lex = PT_getArgsHead(lexicals);
-    lexicals = PT_getArgsTail(lexicals);
-
-    assert(idx <= bufSize);
-
-    if (PT_isTreeChar(lex)) {
-      buf[idx++] = PT_getTreeCharacter(lex);
-    }
-    else if (PT_isTreeList(lex)) {
-      args = PT_getTreeList(lex);
-      idx = lexicalsToStringRecursive(args, idx, buf, bufSize);
-    }
-    else if (PT_isTreeAppl(lex)) {
-      args = PT_getTreeArgs(lex);
-      idx = lexicalsToStringRecursive(args, idx, buf, bufSize);
-    }
-    else if (PT_isTreeLit(lex)) {
-      int i, len;
-      lit = PT_getTreeString(lex);
-      len = strlen(lit);
-
-      for (i = 0; i < len; i++) {
-	buf[idx++] = lit[i];
-      }
-    }
-    else {
-      ATerror("lexicalsToStringRecursive: unknown term %t\n", lex);
-    }
-  }
-  return idx;
-}
-
-static ATerm
-lexicalsToString(PT_Args lexicals)
-{
-  char *buf = NULL;
-  int len = 0;
-
-  ATerm strTerm;
-  int idx = 0;
-
-  if (PT_isArgsEmpty(lexicals)) {
-    return ATparse("\"\"");
-  }
-
-  len = lengthOfLexicals(lexicals);
-
-  buf = (char *) calloc(len + 1, sizeof(char));
-
-  idx = lexicalsToStringRecursive(lexicals, 0, buf, len);
-
-  assert(idx == len);
-
-  buf[idx++] = '\0';
-
-  strTerm = ATmake("<str>", buf);
-
-  free(buf);
-
-  return strTerm;
-}
-*/
 
 static ATerm
 treeToString(PT_Tree tree)
@@ -751,9 +643,42 @@ termToAsFix1(PT_Tree t)
   return applicationToAsFix1(t);
 }
 
+static ATerm
+treeToAsFix1(PT_Tree tree)
+{
+  PT_Tree layoutBeforeTree, applTree, layoutAfterTree;
+  PT_Args args;
+
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    if (PT_prodHasSTARTAsRhs(prod)) {
+      args = PT_getTreeArgs(tree);
+
+      layoutBeforeTree = PT_getArgsHead(args);
+      args = PT_getArgsTail(args);
+      applTree = PT_getArgsHead(args);
+      args = PT_getArgsTail(args);
+      layoutAfterTree = PT_getArgsHead(args);
+
+      return ATmake("term(l(\"term\"),w(\" \"),l(\"X\"),w(\" \"),id(\"X\"),"
+                    "<term>,<term>,<term>,no-abbreviations)",
+                    layoutToAsFix1(layoutBeforeTree),
+                    termToAsFix1(applTree), layoutToAsFix1(layoutAfterTree));
+    }
+  }
+  return termToAsFix1(tree);
+}
+
 ATerm
 a2metoa1(PT_ParseTree t)
 {
   init_patterns();
   return parseTreeToAsFix1(t);
+}
+
+ATerm
+tree2a1(PT_Tree t)
+{
+  init_patterns();
+  return treeToAsFix1(t);
 }

@@ -1,14 +1,22 @@
-2000/02/07 (markvdb@cwi.nl)
+2001/02/21 (markvdb@cwi.nl)
+ * Functionality added to obtain the yield of a production rule.
+ * Fixed a bug in the conversion from AsFix2ME to AsFix1.
+ * Changed label of attributes from attrs to attributes in adt.
+ * Removed dead code.
+ * Added PT_isOptLayoutSymbol function.
+ * Removed: [Symbol, start, "<START>"]
+
+2001/02/07 (markvdb@cwi.nl)
  * added directories for asfix2 mept and conversion
  * added initial version for documentation
  * added migration strategy to README
 
-2000/02/06 (jong@cwi.nl)
+2001/02/06 (jong@cwi.nl)
  * added missing include_HEADERS in libasfix-old/libasfix
  * removed some configuration files from the bowels of libasfix-old
  * added toplevel make_rules
  * make_rules added to EXTRA_DIST
  * changed packagename in configure.in to pt-support
 
-2000/02/05 (jong@cwi.nl)
+2001/02/05 (jong@cwi.nl)
  * Initial version of pt-support.

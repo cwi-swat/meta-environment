@@ -31,6 +31,9 @@
 static int
 lengthOfSymbol(PT_Symbol symbol)
 {
+  if (PT_isOptLayoutSymbol(symbol)) {
+    return 0;
+  }
   if (PT_isSymbolLit(symbol)) {
     char *str = PT_getSymbolString(symbol);
     return strlen(str) + 2;
@@ -67,7 +70,7 @@ lengthOfSymbol(PT_Symbol symbol)
     PT_Symbol separator = PT_getSymbolSeparator(symbol);
     return lengthOfSymbol(newSymbol) + lengthOfSymbol(separator) + 4;
   }
-ATwarning("lengthOfSymbol: unknown symbol: %t\n", symbol);
+  ATwarning("lengthOfSymbol: unknown symbol: %t\n", symbol);
   return 0;
 }
 
@@ -96,7 +99,7 @@ lengthOfProd(PT_Production prod)
 {
   PT_Symbols lhs = PT_getProductionLhs(prod);
   PT_Symbol rhs = PT_getProductionRhs(prod);
-  PT_Attributes attrs = PT_getProductionAttrs(prod);
+  PT_Attributes attrs = PT_getProductionAttributes(prod);
 
   return lengthOfSymbols(lhs) + 4 +
          lengthOfSymbol(rhs) +
@@ -110,6 +113,9 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
 
   assert(idx <= bufSize); 
 
+  if (PT_isOptLayoutSymbol(symbol)) {
+    return idx;
+  }
   if (PT_isSymbolLit(symbol)) {
     char *str = PT_getSymbolString(symbol);
     int len = strlen(str);
@@ -196,7 +202,7 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
 
     return idx;
   }
-ATwarning("lengthOfSymbol: unknown symbol: %t\n", symbol);
+  ATwarning("yieldSymbol: unknown symbol: %t\n", symbol);
   return idx;
 }
 
@@ -223,7 +229,7 @@ yieldProd(PT_Production prod, int idx, char *buf, int bufSize)
 {
   PT_Symbols lhs = PT_getProductionLhs(prod);
   PT_Symbol rhs = PT_getProductionRhs(prod);
-  PT_Attributes attrs = PT_getProductionAttrs(prod);
+  PT_Attributes attrs = PT_getProductionAttributes(prod);
 
   idx = yieldSymbols(lhs, idx, buf, bufSize);
   buf[idx++] = '-';
@@ -244,7 +250,6 @@ char *PT_yieldProduction(PT_Production prod)
 
   len = lengthOfProd(prod)+1;
 
-ATwarning("len = %d\n", len);
   if (len > bufferSize) {
     buffer = (char *)realloc(buffer, len*sizeof(char));
     bufferSize = len;
@@ -253,7 +258,28 @@ ATwarning("len = %d\n", len);
   idx = yieldProd(prod, 0, buffer, len);
 
   buffer[idx++] = '\0';
-/*  assert(idx == len);*/
 
   return buffer;
 }
+
+char *PT_yieldSymbol(PT_Symbol symbol)
+{
+  static char *buffer = NULL;
+  static int   bufferSize = 0;
+  int          idx = 0;
+  int          len;
+
+  len = lengthOfSymbol(symbol)+1;
+
+  if (len > bufferSize) {
+    buffer = (char *)realloc(buffer, len*sizeof(char));
+    bufferSize = len;
+  }
+
+  idx = yieldSymbol(symbol, 0, buffer, len);
+
+  assert(idx <= len); 
+  buffer[idx++] = '\0';
+
+  return buffer;
+}                                

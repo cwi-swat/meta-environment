@@ -40,6 +40,7 @@ ATbool PT_prodHasLexAsLhsAndCfAsRhs(PT_Production prod);
 ATbool PT_prodHasIterSepAsRhs(PT_Production prod);
 ATbool PT_prodHasIterAsRhs(PT_Production prod);
 ATbool PT_prodHasSTARTAsRhs(PT_Production prod);
+ATbool PT_isOptLayoutSymbol(PT_Symbol arg);
 
 PT_Args PT_concatArgs(PT_Args args1, PT_Args args2);
 PT_Args PT_appendArgs(PT_Args args, PT_Tree arg);
@@ -48,6 +49,7 @@ PT_Args PT_reverseArgs(PT_Args args);
 char *PT_yieldParseTree(PT_ParseTree tree);
 char *PT_yieldTree(PT_Tree tree);
 char *PT_yieldProduction(PT_Production prod);
+char *PT_yieldSymbol(PT_Symbol symbol);
 
 PT_ParseTree implodeParseTree(PT_ParseTree tree);
 

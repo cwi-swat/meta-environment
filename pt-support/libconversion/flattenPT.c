@@ -482,3 +482,8 @@ PT_ParseTree flattenPT(PT_ParseTree tree)
   ATerror("flattenParseTree: not a parsetree: %t\n", tree);
   return NULL;
 }
+
+PT_Tree flattenTree(PT_Tree tree)
+{
+  return flattenTerm(tree);
+}

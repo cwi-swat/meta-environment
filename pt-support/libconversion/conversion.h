@@ -30,7 +30,9 @@
 #include <MEPT-utils.h>
 
 ATerm a2metoa1(PT_ParseTree tree);
+ATerm tree2a1(PT_Tree tree);
 PT_ParseTree flattenPT(PT_ParseTree tree);
+PT_Tree flattenTree(PT_Tree tree);
 ATerm inflatePT(ATerm tree);
 
 #endif /* _CONVERSION_H */

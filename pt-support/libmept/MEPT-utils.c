@@ -96,17 +96,10 @@ ATbool PT_isOptLayoutProd(PT_Production  prod)
   /* This implements: "prod([<list>],cf(opt(layout)),<term>)" */
   if (PT_isProductionDefault(prod)) {
     PT_Symbol rhs = PT_getProductionRhs(prod);
-    if (PT_isSymbolCf(rhs)) {
-      PT_Symbol cfsym = PT_getSymbolSymbol(rhs);
-      if (PT_isSymbolOpt(cfsym)) {
-        PT_Symbol optsym = PT_getSymbolSymbol(cfsym);
-        return PT_isSymbolLayout(optsym);
-      }
-    }
-    return ATfalse;
+    return PT_isOptLayoutSymbol(rhs);
   }
 
-  ATerror("PT_prodHasCfLayoutAsRhs: not a production: %t\n", prod);
+  ATerror("PT_isOptLayoutProd: not a production: %t\n", prod);
   return ATfalse;
 }
 
@@ -174,7 +167,7 @@ ATbool PT_prodHasIterSepAsRhs(PT_Production prod)
     }
   }
 
-  ATerror("PT_prodHasIterSepAsRhs: not a production: %t\n", prod);
+  ATabort("PT_prodHasIterSepAsRhs: not a production: %t\n", prod);
   return ATfalse;
 }
 
@@ -199,17 +192,31 @@ ATbool PT_prodHasIterAsRhs(PT_Production prod)
 ATbool PT_prodHasSTARTAsRhs(PT_Production prod)
 {
   /* This implements: 
-   * "prod([<list>],cf(\"<START>\"),no-attrs)"
+   * "prod([<list>],sort(\"<START>\"),no-attrs)"
    */
   if (PT_isProductionDefault(prod)) {
     PT_Symbol rhs = PT_getProductionRhs(prod);
     if (PT_isSymbolSort(rhs)) {
-      PT_Symbol startsym = PT_getSymbolSymbol(rhs);
-      return PT_isSymbolStart(startsym);
+      char *startsym = PT_getSymbolString(rhs);
+      return strcmp(startsym,"<START>") == 0;
     }
   }
 
   ATerror("PT_prodHasSTARTAsRhs: not a production: %t\n", prod);
+  return ATfalse;
+}
+
+ATbool PT_isOptLayoutSymbol(PT_Symbol symbol)
+{
+  /* This implements: "cf(opt(layout))" */
+  if (PT_isSymbolCf(symbol)) {
+    PT_Symbol cfsym = PT_getSymbolSymbol(symbol);
+    if (PT_isSymbolOpt(cfsym)) {
+      PT_Symbol optsym = PT_getSymbolSymbol(cfsym);
+      return PT_isSymbolLayout(optsym);
+    }
+    return ATfalse;
+  }
   return ATfalse;
 }
 

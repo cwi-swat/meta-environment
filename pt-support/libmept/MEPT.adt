@@ -21,7 +21,7 @@
 
   [Production, Default, prod(<lhs(Symbols)>,
                              <rhs(Symbol)>,
-                             <attrs(Attributes)>
+                             <attributes(Attributes)>
                             )
   ],
 
@@ -61,8 +61,6 @@
 
   [Symbol, layout, layout],
 
-  [Symbol, start, "<START>"],
- 
   [Symbols, list, [<head(Symbol)>,<[tail(Symbols)]>]],
   [Symbols, empty, []]
 

@@ -56,7 +56,7 @@ PT_Tree PT_makeTreeLit(char * string);
 PT_Tree PT_makeTreeFlatLayout(char * string);
 PT_Tree PT_makeTreeFlatLexical(char * string);
 PT_Tree PT_makeTreeAmb(PT_Args args);
-PT_Production PT_makeProductionDefault(PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attrs);
+PT_Production PT_makeProductionDefault(PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attributes);
 PT_Attributes PT_makeAttributesNoAttrs();
 PT_Attributes PT_makeAttributesAttrs(PT_Attrs attrs);
 PT_Attrs PT_makeAttrsMany(PT_Attr head, PT_Attrs tail);
@@ -77,7 +77,6 @@ PT_Symbol PT_makeSymbolIterPlusSep(PT_Symbol symbol, PT_Symbol separator);
 PT_Symbol PT_makeSymbolIterStarSep(PT_Symbol symbol, PT_Symbol separator);
 PT_Symbol PT_makeSymbolVarSym(PT_Symbol symbol);
 PT_Symbol PT_makeSymbolLayout();
-PT_Symbol PT_makeSymbolStart();
 PT_Symbols PT_makeSymbolsList(PT_Symbol head, PT_Symbols tail);
 PT_Symbols PT_makeSymbolsEmpty();
 
@@ -141,9 +140,9 @@ PT_Production PT_setProductionLhs(PT_Production arg, PT_Symbols lhs);
 ATbool PT_hasProductionRhs(PT_Production arg);
 PT_Symbol PT_getProductionRhs(PT_Production arg);
 PT_Production PT_setProductionRhs(PT_Production arg, PT_Symbol rhs);
-ATbool PT_hasProductionAttrs(PT_Production arg);
-PT_Attributes PT_getProductionAttrs(PT_Production arg);
-PT_Production PT_setProductionAttrs(PT_Production arg, PT_Attributes attrs);
+ATbool PT_hasProductionAttributes(PT_Production arg);
+PT_Attributes PT_getProductionAttributes(PT_Production arg);
+PT_Production PT_setProductionAttributes(PT_Production arg, PT_Attributes attributes);
 
 /*}}}  */
 /*{{{  PT_Attributes accessors */
@@ -207,7 +206,6 @@ ATbool PT_isSymbolIterPlusSep(PT_Symbol arg);
 ATbool PT_isSymbolIterStarSep(PT_Symbol arg);
 ATbool PT_isSymbolVarSym(PT_Symbol arg);
 ATbool PT_isSymbolLayout(PT_Symbol arg);
-ATbool PT_isSymbolStart(PT_Symbol arg);
 ATbool PT_hasSymbolString(PT_Symbol arg);
 char * PT_getSymbolString(PT_Symbol arg);
 PT_Symbol PT_setSymbolString(PT_Symbol arg, char * string);
@@ -242,7 +240,7 @@ PT_Symbols PT_setSymbolsTail(PT_Symbols arg, PT_Symbols tail);
 
 PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Tree (*acceptTree)(PT_Tree), int (*acceptAmbCnt)(int));
 PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT_Args (*acceptArgs)(PT_Args), int (*acceptCharacter)(int), char * (*acceptString)(char *));
-PT_Production PT_visitProduction(PT_Production arg, PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttrs)(PT_Attributes));
+PT_Production PT_visitProduction(PT_Production arg, PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes));
 PT_Attributes PT_visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_Attrs));
 PT_Attrs PT_visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr));
 PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *));
