@@ -84,9 +84,9 @@ BOX_Box treeToBox(PT_Tree tree)
     PT_Args args = PT_getTreeArgs(tree);
     BOX_BoxList boxlist = BOX_makeBoxListEmpty();
 
-    ATprintf("+- Appl\n"); 
     BOX_OptLayout optLayout = BOX_makeOptLayoutAbsent();
     BOX_SOptions soptions = BOX_makeSOptionsDefault(BOX_makeSOptionListEmpty()); 
+    ATprintf("+- Appl\n"); 
 
     /* if Tree has one argument */
     if (PT_isProductionInjection(PT_getTreeProd(tree))) {
