@@ -227,6 +227,7 @@ void SG_TermIsCyclic(ATerm t, int depth)
 {
   ATermList ambs;
   ATermInt  idx;
+  AFun      fun;
 
   if(CycleStart)
     return;
@@ -246,6 +247,16 @@ if(SG_DEBUG) fprintf(stderr, "%*.*s> %d\n", depth, depth, "", (int) t);
 
 if(SG_DEBUG) fprintf(stderr, "%*s %s-%d: %d", depth, "", SG_IS_MARKED(t)?"M":"U", (int) t,
         ATgetInt(SG_GetApplProdLabel((ATermAppl) t)));
+
+      fun  = ATgetAFun(t);
+
+      if(fun == SG_AmbAFun()) {
+        SG_TermIsCyclic(ATgetArgument((ATermAppl) t, 0), depth+1);
+        break;
+      }
+      if(fun == SG_AprodAFun()) {
+        break;
+      }
 
       idx  = (ATermInt) ATgetAnnotation((ATerm) t, SG_ApplLabel());
       /*  Ambiguity cluster?  */

@@ -403,11 +403,6 @@ ATerm SG_Result(char *sort)
 
     forest = SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack)));
 
-   if(!ATisEmpty(cycle = SG_CyclicTerm(forest)))
-     return ATmake("parse-error([character(<int>), line(<int>),"
-                   "col(<int>), char(<int>)],cycle(<term>))",
-                   current_token, line, col, sg_tokens_read, cycle);
-
 
 // ATfprintf(stderr, "Unexpanded Forest: %t\n", forest);
 
@@ -424,6 +419,12 @@ ATerm SG_Result(char *sort)
                       current_token, line, col, sg_tokens_read);
 
     SGsort(SG_SET, forest);
+
+    /*  Now detect, and report, cycles for the (pruned?) forest  */
+    if(!ATisEmpty(cycle = SG_CyclicTerm(forest)))
+      return ATmake("parse-error([character(<int>), line(<int>),"
+                    "col(<int>), char(<int>)],cycle(<term>))",
+                    current_token, line, col, sg_tokens_read, cycle);
 
     if(!SG_OUTPUT)  /*  Ambiguity count > 0 is an upper limit in this case  */
       forest = ATmake("parsetree(suppressed,<int>)", SG_MaxNrAmb(SG_NRAMB_ASK));
