@@ -35,8 +35,10 @@ static Symbol ef22sym ;
 static funcptr ef22 ;
 static Symbol ef24sym ;
 static funcptr ef24 ;
-static Symbol ef33sym ;
-static funcptr ef33 ;
+static Symbol ef31sym ;
+static funcptr ef31 ;
+static Symbol ef32sym ;
+static funcptr ef32 ;
 static Symbol ef25sym ;
 static funcptr ef25 ;
 static Symbol ef26sym ;
@@ -51,18 +53,16 @@ static Symbol lf5sym ;
 static ATerm lf5 ( ATerm arg1 ) ;
 static Symbol ef29sym ;
 static funcptr ef29 ;
-static Symbol ef30sym ;
-static funcptr ef30 ;
-static Symbol ef32sym ;
-static funcptr ef32 ;
-static Symbol ef34sym ;
-static funcptr ef34 ;
+static Symbol ef36sym ;
+static funcptr ef36 ;
+static Symbol ef33sym ;
+static funcptr ef33 ;
 static Symbol lf6sym ;
 static ATerm lf6 ( ATerm arg1 ) ;
-static Symbol ef35sym ;
-static funcptr ef35 ;
-static Symbol ef31sym ;
-static funcptr ef31 ;
+static Symbol ef34sym ;
+static funcptr ef34 ;
+static Symbol ef30sym ;
+static funcptr ef30 ;
 static Symbol ef37sym ;
 static funcptr ef37 ;
 static Symbol ef38sym ;
@@ -87,8 +87,8 @@ static Symbol ef49sym ;
 static funcptr ef49 ;
 static Symbol ef46sym ;
 static funcptr ef46 ;
-static Symbol ef36sym ;
-static funcptr ef36 ;
+static Symbol ef35sym ;
+static funcptr ef35 ;
 static Symbol ef50sym ;
 static funcptr ef50 ;
 static Symbol ef18sym ;
@@ -200,22 +200,22 @@ ef27 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"
 ef27sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Priority\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Priorities\"),w(\"\"),no-attrs)" ) ) ;
 ef28 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Group\"),w(\"\"),ql(\">\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Priority\"),w(\"\"),no-attrs)" ) ) ;
 ef28sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Group\"),w(\"\"),ql(\">\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Priority\"),w(\"\"),no-attrs)" ) ) ;
-ef29 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[sort(\"Production\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Group\"),w(\"\"),no-attrs)" ) ) ;
-ef29sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[sort(\"Production\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Group\"),w(\"\"),no-attrs)" ) ) ;
-ef30 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Associativity\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Group\"),w(\"\"),no-attrs)" ) ) ;
-ef30sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Associativity\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Group\"),w(\"\"),no-attrs)" ) ) ;
-ef31 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"left\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
-ef31sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"left\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
-ef32 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Group\"),w(\"\"),no-attrs)" ) ) ;
-ef32sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Group\"),w(\"\"),no-attrs)" ) ) ;
-ef33 = lookup_func ( ATreadFromString ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[sort(\"Symbol\"),w(\"\"),ql(\"+\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
-ef33sym = lookup_sym ( ATreadFromString ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[sort(\"Symbol\"),w(\"\"),ql(\"+\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
-ef34 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Attribute\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attributes\"),w(\"\"),no-attrs)" ) ) ;
-ef34sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Attribute\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attributes\"),w(\"\"),no-attrs)" ) ) ;
-ef35 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[sort(\"Associativity\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
-ef35sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[sort(\"Associativity\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
-ef36 = lookup_func ( ATreadFromString ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbol\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"}\"),w(\"\"),ql(\"*\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
-ef36sym = lookup_sym ( ATreadFromString ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbol\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"}\"),w(\"\"),ql(\"*\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
+ef29 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Associativity\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Group\"),w(\"\"),no-attrs)" ) ) ;
+ef29sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Associativity\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Group\"),w(\"\"),no-attrs)" ) ) ;
+ef30 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"left\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
+ef30sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"left\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Associativity\"),w(\"\"),no-attrs)" ) ) ;
+ef31 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Group\"),w(\"\"),no-attrs)" ) ) ;
+ef31sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Group\"),w(\"\"),no-attrs)" ) ) ;
+ef32 = lookup_func ( ATreadFromString ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[sort(\"Symbol\"),w(\"\"),ql(\"+\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
+ef32sym = lookup_sym ( ATreadFromString ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[sort(\"Symbol\"),w(\"\"),ql(\"+\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
+ef33 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Attribute\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attributes\"),w(\"\"),no-attrs)" ) ) ;
+ef33sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Attribute\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attributes\"),w(\"\"),no-attrs)" ) ) ;
+ef34 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[sort(\"Associativity\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
+ef34sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[sort(\"Associativity\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
+ef35 = lookup_func ( ATreadFromString ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbol\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"}\"),w(\"\"),ql(\"*\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
+ef35sym = lookup_sym ( ATreadFromString ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbol\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"}\"),w(\"\"),ql(\"*\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
+ef36 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[sort(\"Production\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Group\"),w(\"\"),no-attrs)" ) ) ;
+ef36sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[sort(\"Production\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Group\"),w(\"\"),no-attrs)" ) ) ;
 ef37 = lookup_func ( ATreadFromString ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbol\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"}\"),w(\"\"),ql(\"+\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
 ef37sym = lookup_sym ( ATreadFromString ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbol\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"}\"),w(\"\"),ql(\"+\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
 ef38 = lookup_func ( ATreadFromString ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbol\"),w(\"\"),ql(\"}\"),w(\"\"),sort(\"NatCon\"),w(\"\"),ql(\"+\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
@@ -304,36 +304,36 @@ FUNC_EXIT ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp 
 }
 if ( check_sym ( tmp [ 0 ] , ef25sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-tmp [ 2 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef33 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
-tmp [ 3 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef33 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef33 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef33 ) ( tmp [ 1 ] ) , ( * ef34 ) ( lf6 ( make_list ( ( * ef35 ) ( ( * ef31 ) ( ) ) ) ) ) ) ;
-tmp [ 4 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef33 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef33 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
-tmp [ 5 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef33 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef33 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
-tmp [ 6 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef25 ) ( tmp [ 1 ] ) , ( * ef34 ) ( lf6 ( make_list ( ( * ef35 ) ( ( * ef31 ) ( ) ) ) ) ) ) ;
+tmp [ 2 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef32 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
+tmp [ 3 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef32 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef32 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef32 ) ( tmp [ 1 ] ) , ( * ef33 ) ( lf6 ( make_list ( ( * ef34 ) ( ( * ef30 ) ( ) ) ) ) ) ) ;
+tmp [ 4 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef32 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef32 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
+tmp [ 5 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef32 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef32 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
+tmp [ 6 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef25 ) ( tmp [ 1 ] ) , ( * ef33 ) ( lf6 ( make_list ( ( * ef34 ) ( ( * ef30 ) ( ) ) ) ) ) ) ;
 tmp [ 7 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) , ( * ef25 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
-tmp [ 8 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef33 ) ( tmp [ 1 ] ) ) ) ) , ( * ef25 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
-FUNC_EXIT ( ( * ef15 ) ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 2 ] ) , cons ( make_list ( tmp [ 3 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 5 ] ) , cons ( make_list ( tmp [ 6 ] ) , cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ) ) ) ) ) ) , ( * ef26 ) ( ( * ef27 ) ( lf4 ( make_list ( ( * ef28 ) ( lf5 ( cons ( make_list ( ( * ef29 ) ( tmp [ 2 ] ) ) , cons ( make_list ( ( * ef29 ) ( tmp [ 3 ] ) ) , cons ( make_list ( ( * ef30 ) ( ( * ef31 ) ( ) , ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 6 ] ) ) ) ) ) ) ) , make_list ( ( * ef32 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
+tmp [ 8 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef32 ) ( tmp [ 1 ] ) ) ) ) , ( * ef25 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
+FUNC_EXIT ( ( * ef15 ) ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 2 ] ) , cons ( make_list ( tmp [ 3 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 5 ] ) , cons ( make_list ( tmp [ 6 ] ) , cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ) ) ) ) ) ) , ( * ef26 ) ( ( * ef27 ) ( lf4 ( make_list ( ( * ef28 ) ( lf5 ( cons ( make_list ( ( * ef29 ) ( ( * ef30 ) ( ) , ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 3 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 6 ] ) ) ) ) ) ) ) ) , make_list ( ( * ef31 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) , lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
 }
-if ( check_sym ( tmp [ 0 ] , ef33sym ) ) {
+if ( check_sym ( tmp [ 0 ] , ef32sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 arg0 = ( * ef1 ) ( lf2 ( make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) ) ) ;
 goto lbl_lf_AUX_Regular_Sdf_Normalization3_1 ;
 }
-if ( check_sym ( tmp [ 0 ] , ef36sym ) ) {
+if ( check_sym ( tmp [ 0 ] , ef35sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
 tmp [ 3 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
-tmp [ 4 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef34 ) ( lf6 ( make_list ( ( * ef35 ) ( ( * ef31 ) ( ) ) ) ) ) ) ;
-tmp [ 5 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
-tmp [ 6 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
-tmp [ 7 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef34 ) ( lf6 ( make_list ( ( * ef35 ) ( ( * ef31 ) ( ) ) ) ) ) ) ;
-tmp [ 8 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) , ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
-tmp [ 9 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) , ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
-FUNC_EXIT ( ( * ef15 ) ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 3 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 5 ] ) , cons ( make_list ( tmp [ 6 ] ) , cons ( make_list ( tmp [ 7 ] ) , cons ( make_list ( tmp [ 8 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ) , ( * ef26 ) ( ( * ef27 ) ( lf4 ( make_list ( ( * ef28 ) ( lf5 ( cons ( make_list ( ( * ef29 ) ( tmp [ 3 ] ) ) , cons ( make_list ( ( * ef29 ) ( tmp [ 4 ] ) ) , cons ( make_list ( ( * ef30 ) ( ( * ef31 ) ( ) , ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 5 ] ) , cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 7 ] ) ) ) ) ) ) ) , make_list ( ( * ef32 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 8 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 1 ] ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ;
+tmp [ 4 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef33 ) ( lf6 ( make_list ( ( * ef34 ) ( ( * ef30 ) ( ) ) ) ) ) ) ;
+tmp [ 5 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef35 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
+tmp [ 6 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef35 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
+tmp [ 7 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef35 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef35 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef35 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef33 ) ( lf6 ( make_list ( ( * ef34 ) ( ( * ef30 ) ( ) ) ) ) ) ) ;
+tmp [ 8 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) , ( * ef35 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
+tmp [ 9 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) , ( * ef35 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
+FUNC_EXIT ( ( * ef15 ) ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 3 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 5 ] ) , cons ( make_list ( tmp [ 6 ] ) , cons ( make_list ( tmp [ 7 ] ) , cons ( make_list ( tmp [ 8 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ) , ( * ef26 ) ( ( * ef27 ) ( lf4 ( make_list ( ( * ef28 ) ( lf5 ( cons ( make_list ( ( * ef29 ) ( ( * ef30 ) ( ) , ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 5 ] ) , cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 7 ] ) ) ) ) ) ) ) ) , make_list ( ( * ef36 ) ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ) , lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 1 ] ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ;
 }
 if ( check_sym ( tmp [ 0 ] , ef37sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
-arg0 = ( * ef1 ) ( lf2 ( make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( make_list ( ( * ef35 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ;
 goto lbl_lf_AUX_Regular_Sdf_Normalization3_1 ;
 }
 if ( check_sym ( tmp [ 0 ] , ef38sym ) ) {
@@ -382,7 +382,7 @@ FUNC_EXIT ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( make_list ( tmp [ 6 ] )
 }
 if ( check_sym ( tmp [ 0 ] , ef50sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-tmp [ 2 ] = ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 123 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) , cons ( make_list ( ( * ef36 ) ( tmp [ 1 ] , ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 44 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) , make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 125 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ;
+tmp [ 2 ] = ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 123 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) , cons ( make_list ( ( * ef35 ) ( tmp [ 1 ] , ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 44 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) , make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 125 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef1sym ) ) {
 tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
 if ( check_sym ( tmp [ 3 ] , lf2sym ) ) {
