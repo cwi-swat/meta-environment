@@ -187,7 +187,7 @@ AC_CONFIG_SUBDIRS(asc-support sglr pgen)
 dnl Which files need updating?
 AC_OUTPUT(
 	Makefile Makefile.skel meta \
-	asource/Makefile \
+	asource/Makefile asource/test/Makefile \
 	compiler/Makefile compiler/c-source/Makefile \
 	editor/Makefile editor/editor \
 	evaluator/Makefile evaluator/test/Makefile evaluator/test/reduce-test \
