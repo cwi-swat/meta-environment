@@ -193,7 +193,13 @@ in
     rec-msg(invalidate-other-tables-hook(Module?, sdf)) .
     snd-msg(other-tables-invalidated-hook)
   +
-    rec-msg(pre-get-all-sdf2-hook(ModuleNames?)) .
+    rec-msg(pre-get-all-sdf2-hook(ModuleNames?, trm)) .
+    snd-msg(pre-get-all-sdf2-hook-result(success)) 
+  +
+    rec-msg(pre-get-all-sdf2-hook(ModuleNames?, eqs)) .
+    snd-msg(pre-get-all-sdf2-hook-result(success)) 
+  +
+    rec-msg(pre-get-all-sdf2-hook(ModuleNames?, sdf)) .
     snd-msg(pre-get-all-sdf2-hook-result(success)) 
   ) * delta
 endlet
