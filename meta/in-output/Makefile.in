@@ -63,7 +63,7 @@ BINFILES	= in-output
 # All files in LIBFILES are installed in $(libdir)
 LIBFILES	=
 # All files in INCLUDEFILES are installed in $(includedir)
-INCLUDEFILES	= in-output.tif.h
+INCLUDEFILES	=
 # All files in DOCFILES are copied to $(docdir)
 DOCFILES	=
 
