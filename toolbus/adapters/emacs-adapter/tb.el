@@ -1,8 +1,9 @@
 ; $Id$
 
-(send-string-to-terminal "tb.el invoked\n" nil nil)
+; This is the elisp file that defines the communication between emacs
+; and the emacs adapter.
 
-; This implements a number of functions for use with the ToolBus emacs-adapter
+; The global variables
 
 (defvar lenspec nil
   "The length of the header of a term send back to the ToolBus, in characters"
@@ -10,27 +11,30 @@
 (defvar min-msg-size nil
   "The minimal length of a term to be sent back to the ToolBus, in characters"
   )
-
-(defun TBinit (args)
-  "Called when starting emacs. ARGS are the arguments that are passed along to any ToolBus tool. "
-;;  (setq process-connection-type nil)
-  (setq adapter-process 
-	(let ((process-connection-type nil)) ; Use a pipe
-	  (start-process "adapter" "*adapter*" "emacs-adapter" args)
-	  )
-	)
-  (set-process-filter adapter-process 'handle-term-from-toolbus)
-  )
-
 (defvar current-partial-msg ""
   "The variable that holds partial messages from the ToolBus, while waiting
 for the rest of the msg"
-)
+  )
+(defvar debug ()
+  "If set to t (debug-out string) produces debug output. If set to () not"
+  )
 
-(defun debug-out (str)
-  "Send string to stdout"
-  (send-string-to-terminal (concat str "\n"))
-)
+; The functions
+(defun TBinit (args)
+  "Called when starting emacs. ARGS are the arguments that are passed along to any ToolBus tool. "
+  (setq adapter-process                      ; The handle to the adapter
+	(let ((process-connection-type nil)) ; Use a pipe
+	  (start-process "adapter" "*adapter*" "emacs-adapter" args)
+	  ;; Start a proces named "adapter" which uses "*adapter*" as
+	  ;; its buffer. The executable "emacs-adapter" is executed
+	  ;; with args as arguments
+	  )
+	)
+  (set-process-filter adapter-process 'handle-term-from-toolbus)
+  ;; Set handle-term-from-toolbus as the process-filter for the
+  ;; adapter process. This function is passed all output from the
+  ;; adapter
+  )
 
 (defun handle-term-from-toolbus (proc string)
   "This is the filter function that processes input from the toolbus. PROC 
@@ -38,52 +42,46 @@ is the adapter process, STRING is the string to be processed"
   (debug-out "In handle-term")
   (debug-out string)
   (setq new-string (concat current-partial-msg string))
+  ;; In case there was a string left from the previous call to
+  ;; handle-term-from-toolbus, paste it before the new string
   (debug-out (concat "String conc with old string: " new-string))
   (let ((eval-list (split-string new-string "\n"))
+	;; Split the incoming string on newlines, there is one lisp
+	;; expression per line coming in.
 	(last-char (substring new-string -1)))
+    ;; Save the last character of the incoming string. If it is not a
+    ;; "\n" then more will come.
     (debug-out (concat "eval-list: " (prin1-to-string eval-list)))
     (debug-out (concat "last-char: " last-char))
     (while (< 2 (list-length eval-list))
+      ;; eval-list always has an empty "" as its last element, hence
+      ;; the bigger than 2. If it is bigger than 2 we know we are
+      ;; dealing with complete lisp expressions. Only the last one can
+      ;; be partial.
       (debug-out (concat "car of eval-list: " (car eval-list)))
-      (let ((eval-elems (split-string (car eval-list) "[ ]"))
-	    (eval-fun (car (split-string (car eval-list) "[ ]")))
-	    (eval-args (cdr (split-string (car eval-list) "[ ]"))))
-;;	(debug-out (concat "eval-elems: " (prin1-to-string eval-elems)))
-	(debug-out (concat "eval-fun: " (prin1-to-string eval-fun)))
-	(debug-out (concat "eval-args: " (prin1-to-string eval-args)))
-	(eval (car (read-from-string (car eval-list))))
-;;	(apply eval-fun eval-args)
-	(set 'eval-list (cdr eval-list))
-	)
+      (eval (car (read-from-string (car eval-list))))
+      ;; Take the head of the list (the first lisp expression), parse
+      ;; it (that's what read-from-string does) and evaluate it.
+      (set 'eval-list (cdr eval-list))
+      ;; Remove the head of the eval-list and loop the loop.
       )
+    ;; While loop finished. Now we only have one (possibly partial)
+    ;; lisp expression left.
     (if (not (string= last-char "\n"))
+	;; Then it's a partial message. Save it and wait for next call
+	;; to handle-term-from-toolbus, when the rest will arrive
 	(setq current-partial-msg (car eval-list))
-      (let ((eval-elems (split-string (car eval-list) " ")))
-	(eval (car (read-from-string (car eval-list))))
-;;	(apply eval-fun eval-args)
-;;	(set 'eval-list (cdr eval-list))
-	(setq current-partial-msg "")
-	)
+      ;; else: do the same as above
+      (progn (eval (car (read-from-string (car eval-list))))
+	     (setq current-partial-msg "")
+	     ;; There is no partial message left, so we set it to ""
+	     )
       )
     )
   )
-      
-;;(setq chunk 5120)
 
-; Define lenspec and min-msg-size. These should be called upon initialization.
-; lenspec is from ../../src/terms.h
-(defun set-lenspec (len)
-  "Sets the length of the term header for ToolBus terms"
-  (setq lenspec len)
-)
-; min-msg-size is from ../../src/utils.c
-(defun set-minmsgsize (len)
-  "Sets the minimal length of a term to be sent to the ToolBus"
-  (setq min-msg-size len)
-)
-
-;TBevent send an event to the ToolBus
 (defun TBevent (event)
+  "Send EVENT to the ToolBus as a snd-event(EVENT)"
   (TBsend (concat "snd-event(" event ")"))
 )
 
@@ -95,54 +93,90 @@ is the adapter process, STRING is the string to be processed"
 (defun TBsend (term)
   "TBsend send an arbitrary term to the ToolBus"
   (send-string-to-terminal "In TBsend\n")
-;;  (gnuserv-kill-all-clients)
-   (let ((fullmsg (set-min-msg-size 
-		   (concat (num-to-lenspec 
-			    (+ lenspec
-			       (length term))) 
-			   ":"
-			   term))
- 			
-		  )
+  (let ((fullmsg (set-min-msg-size 
+		  (concat (num-to-lenspec 
+			   (+ lenspec
+			      (length term))) 
+			  ":"
+			  term))
+		 ;; First we make the lenspec header: the length of
+		 ;; the term to be sent including the header. The
+		 ;; header should be lenspec characters long, so if
+		 ;; the actual number is less characters we pad it
+		 ;; with 0's. Then there is the ":" between header and
+		 ;; body, and then the actual term.
+		 )
 	 )
-;;   (send-string-to-terminal "Made fullmsg\n")
-;;   (send-string-to-terminal (concat "fullmsg is " 
-;;				    (number-to-string (length fullmsg))
-;;				    "bytes\n")
-;;			    )
-;;    (send-string-to-terminal fullmsg)
-   (process-send-string adapter-process fullmsg)
-;;   (process-send-string adapter-process "\n") ;; !!!!!!!!!!!!!!!!!!!!!!!!
-   ()
-   )
-   )
+    (process-send-string adapter-process fullmsg)
+    ;; And send the full message to the adapter process
+    ()
+    ;; return nil
+    )
+  )
 
 (defun TBstring (str)
   "Escape strings following ToolBus conventions"
-  (interactive "s")
   (concat "\"" (replace-in-string (replace-in-string (replace-in-string str "\n" "\\\\n") "\t" "\\\\t") "\"" "\\\\\"") "\"")
+  ;; We escape \n \t " and \
 )
-;Aux functions
+  
+
+; Aux functions
+
+(defun set-lenspec (len)
+  "Sets the length of the term header for ToolBus terms. This should be called upon initialization. lenspec is from ../../src/terms.h"
+  (setq lenspec len)
+)
+
+(defun set-minmsgsize (len)
+  "Sets the minimal length of a term to be sent to the ToolBus. minmsgsize is from ../../src/utils.c"
+  (setq min-msg-size len)
+)
+
 (defun num-to-lenspec (num)
   "Returns NUM with 0's prefixed, to make num as wide as `lenspec'"
   (truncate-string-to-width 
    (store-substring 
     (make-string (- lenspec 1) 
 		 (string-to-char "0"))
+    ;;Make a string that is lenspec - 1 zeroes
     (- (- lenspec 1)
        (length (number-to-string num)))
+    ;; Calculate the length of num as a decimal string, and subtract
+    ;; it from lenspec - 1
     (number-to-string num))
-   (- lenspec 1)))
+   ;; And insert num as decimal string in the string of zeroes
+   (- lenspec 1)
+   ;; And truncate anything that sticks out after lenspec - 1
+   )
+  )
      
 (defun set-min-msg-size (msg)
   "Pads MSG with whitespace characters to make it exactly `min-msg-size' long"
   (if (< min-msg-size 
 	 (length msg)
 	 )
+      ;; If msg is longer than min-msg-size, return it unchanged
       msg
+    ;; else, make a string of " " that is min-msg-size long, and
+    ;; insert msg at position 0
     (store-substring (make-string min-msg-size 
 				  (string-to-char " "))
 		     0 msg) 
+    )
+  )
+
+(defun debugp ()
+  "Is debugging on or off?"
+  debug
+  )
+
+(defun debug-out (str)
+  "Send string to stdout, for debugging"
+  (if (debugp)
+      ;; if debugging is on
+      (send-string-to-terminal (concat str "\n"))
+    ;; else nothing
     )
   )
 
