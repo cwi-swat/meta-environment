@@ -38,22 +38,22 @@ let
   Tests : term,
   ModuleName : str,
   Id : int,
+  Pid : int,
   Total : int,
   Failed : int,
   Tags : list,
-  Errors : list
+  Errors : list,
+  Summary: term
 in
   Id := process-id .
   (
     rec-msg(run-asf-tests(ModuleName?)) .
     snd-note(ui-status(stat(Id, "Retrieving equations and tests"))) .
-    snd-msg(get-specification(ModuleName)) .
+    create(GetSpecification(ModuleName), Pid?) .
     (
       rec-msg(specification(Specification?)) .
-      snd-msg(extract-equations(Specification)) .
-      rec-msg(extract-equations-result(Equations?)) .
-      snd-msg(extract-tests(Specification)) .
-      rec-msg(extract-tests-result(Tests?))  .
+      GetSpecificationEquations(Specification, Equations?) .
+      GetSpecificationTests(Specification, Tests?) .
       snd-note(ui-status(endstat(Id))) .
       snd-note(ui-status(stat(Id, "Running tests"))) .
       snd-msg(run-tests(ModuleName, Equations, Tests)) .
@@ -67,7 +67,8 @@ in
       ) .
       snd-note(ui-status(endstat(Id))) 
     +  
-      rec-msg(specification-incomplete) .
+      rec-msg(specification-incomplete(Summary?)) .
+      ShowSummaryInGUI(Summary) .
       snd-note(ui-status(endstat(Id))) .
       snd-note(ui-status(errorf("Equations incomplete for %s", [ModuleName])))
     )
