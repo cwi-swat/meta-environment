@@ -84,7 +84,7 @@ all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
 # Unit test target
 test:	all
-	@echo "Unit test not yet implemented for: ${BINFILES}"; false
+	${top_srcdir}/utils/test-help ./in-output
 
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'

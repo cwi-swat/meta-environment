@@ -382,14 +382,27 @@ void read_conf(char *cfg)
   fclose(fd);
 }
 
+void usage(char *prg)
+{
+  fprintf(stderr, "usage: %s [aterm-options] [toolbus-options]\n", prg);
+  fprintf(stderr, "use '%s -at-help' to get more options.\n", prg);
+  fprintf(stderr, "This program can only be used as a ToolBus tool!\n");
+  exit(1);
+}
+
 int main(int argc, char **argv)
 {
   int   cid, i=0;
   ATerm bottomOfStack;
 
+  if(strcmp(argv[1], "-h") == 0) {
+    usage(argv[0]);
+  }
+
   read_conf("meta.conf");
-  for(i=0; i<nr_paths; i++)
+  for(i=0; i<nr_paths; i++) {
     ATfprintf(stderr, "path[%d] = %s\n", i, paths[i]);
+  }
 
   ATBinit(argc, argv, &bottomOfStack);
   cid = ATBconnect(NULL, NULL, -1, in_output_handler);
@@ -397,3 +410,4 @@ int main(int argc, char **argv)
 
   return 0;
 }
+
