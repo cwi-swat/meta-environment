@@ -1,0 +1,5 @@
+$Id$
+
+2000-0303 <mdejonge@cwi.nl>
+   * Asf+Sdf compiler support library is now a self-cotained
+     component built and configured using automake/autoconf
