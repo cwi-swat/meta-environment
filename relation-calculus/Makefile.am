@@ -1,5 +1,5 @@
 #SUBDIRS		= spec util doc demo rscripts vis
-SUBDIRS		= util
+SUBDIRS		= util spec
 
 EXTRA_DIST=$(wildcard *.pkg)
 

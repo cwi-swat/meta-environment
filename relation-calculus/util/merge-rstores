@@ -1,9 +1,9 @@
 #! /bin/sh
 
 set -e
-PREFIX=/home/paulk/research/relation-calculus
-TABLE=$PREFIX/Rstore.trm.tbl
-RSTORE=$PREFIX/Rstore
+prefix=/ufs/paulk/research/relation-calculus/tmp
+TABLE=${prefix}/Rstore.trm.tbl
+RSTORE=${prefix}/Rstore
 RESULT=result.rstore
 
 echo -n "creating empty ${RESULT} .."
