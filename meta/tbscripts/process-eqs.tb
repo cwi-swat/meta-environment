@@ -32,12 +32,10 @@ printf("ProcessEqs started\n").
          +
            rec-msg(no-table).
            snd-note(ui-status(endstat(Id))).
-           snd-note(ui-status(stat(Id,"Generating Parse Table ..."))).
            snd-msg(generate-parsetable(id(Mname))).
            rec-msg(parsetable(Table?)).
            snd-msg(add-table-to-db(id(Mname),Table)).
-           rec-msg(done).
-           snd-note(ui-status(endstat(Id)))
+           rec-msg(done)
          ).
          snd-note(ui-status(stat(Id,"Parsing Equations ..."))).
          snd-msg(open-language(Mname,Table)).
