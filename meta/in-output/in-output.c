@@ -14,6 +14,7 @@
 
 #include "in-output.tif.h"
 char *expand_path(const char *relative_path);
+static char* normalize_filename(const char *path);
 
 /*}}}  */
 /*{{{  defines */
@@ -422,7 +423,7 @@ ATerm exists_syntax_module(int cid, char *moduleName)
 char* create_compound_module_name(const char* path, const char *moduleName)
 {
   char *tmp = (char*) malloc(PATH_LEN * sizeof(char));
-  char *pathcpy = strdup(path);
+  char *pathcpy = normalize_filename(path);
   int p = nr_paths;
   char *longest = "";
   int len;
@@ -579,7 +580,7 @@ ATerm create_empty_rules_section(int cid, char *name, char *syntaxPath)
 
 /*}}}  */
 
-char* normalize_filename(const char *path)
+static char* normalize_filename(const char *path)
 {
   int i;
   int len = strlen(path);
