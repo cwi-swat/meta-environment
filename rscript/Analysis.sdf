@@ -1,9 +1,20 @@
 module Analysis
 
 imports Pico-syntax
+imports basic/Integers
+imports Relation[Integer]
 
 exports
   context-free syntax
 
-     extract(STATEMENT, RELS) -> RELS {traversal(accu)}
-     extract(EXP, RELS)       -> RELS {traversal(accu)}
+      NatCon ":" PICO-ID       -> PICO-ID
+
+     label(PROGRAM, Integer) -> PROGRAM # Integer {traversal(accu,trafo,top-down)}
+
+     label(PICO-ID, Integer)  -> PICO-ID # Integer {traversal(accu,trafo,top-down)}
+ 
+%%    extract(STATEMENT, RELS) -> RELS {traversal(accu)}
+%%     extract(EXP, RELS)       -> RELS {traversal(accu)}
+
+  variables
+      "Int" [0-9\']*  -> Integer
