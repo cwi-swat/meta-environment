@@ -19,31 +19,31 @@ int equal_term(ATerm term1,ATerm term2)
 
   if(ATmatchTerm(term1,pattern_asfix_sort,&text1) &&
      ATmatchTerm(term2,pattern_asfix_sort,&text2))
-    return ATisEqual(term1,term2);
+      return ATisEqual(term1,term2);
   else if(ATmatchTerm(term1,pattern_asfix_l,&text1) &&
           ATmatchTerm(term2,pattern_asfix_l,&text2))
-    return ATisEqual(term1,term2);
+      return ATisEqual(term1,term2);
   else if(ATmatchTerm(term1,pattern_asfix_ql,&text1) &&
           ATmatchTerm(term2,pattern_asfix_ql,&text2))
-    return ATisEqual(term1,term2);
+      return ATisEqual(term1,term2);
   else if(ATmatchTerm(term1,pattern_asfix_sep,&text1) &&
           ATmatchTerm(term2,pattern_asfix_sep,&text2))
-    return ATisEqual(term1,term2);
+      return ATisEqual(term1,term2);
   else if(ATmatchTerm(term1,pattern_asfix_iter,
-                     &t1[0],&t1[1],&t1[2]) &&
+		      &t1[0],&t1[1],&t1[2]) &&
           ATmatchTerm(term2,pattern_asfix_iter,
-                     &t2[0],&t2[1],&t2[2]))
-    return equal_term(t1[0],t2[0]) &&
-           equal_term(t1[2],t2[2]);
+		      &t2[0],&t2[1],&t2[2]))
+      return equal_term(t1[0],t2[0]) &&
+	  equal_term(t1[2],t2[2]);
   else if(ATmatchTerm(term1,pattern_asfix_itersep,
-                     &t1[0],&t1[1],&t1[2],&t1[3],&t1[4],
-                     &t1[5],&t1[6],&t1[7],&t1[8]) &&
+		      &t1[0],&t1[1],&t1[2],&t1[3],&t1[4],
+		      &t1[5],&t1[6],&t1[7],&t1[8]) &&
           ATmatchTerm(term2,pattern_asfix_itersep,
-                     &t2[0],&t2[1],&t2[2],&t2[3],&t2[4],
-                     &t2[5],&t2[6],&t2[7],&t2[8]))
-    return equal_term(t1[2],t2[2]) &&
-           equal_term(t1[4],t2[4]) &&
-           equal_term(t1[8],t2[8]);
+		      &t2[0],&t2[1],&t2[2],&t2[3],&t2[4],
+		      &t2[5],&t2[6],&t2[7],&t2[8]))
+      return equal_term(t1[2],t2[2]) &&
+	  equal_term(t1[4],t2[4]) &&
+	  equal_term(t1[8],t2[8]);
   else return ATfalse;
 }
 
@@ -260,7 +260,7 @@ void AFwriteAsfixFile(int cid,ATerm modname)
       }
       /* write full path name instead of only module name */
       ATfprintf(stderr,"Writing: %s\n", fname);
-      element = ATmake("snd-event(generate-code(<term>,<term>))",
+      element = ATmake("snd-event(generate-code(<str>,<term>))",
                        modname,amod);
       if(!compiling) {
         compiling = ATtrue;
