@@ -164,8 +164,6 @@ PT_ParseTree PT_setParseTreeTop(PT_ParseTree parseTree, PT_Tree top);
 ATbool PT_isTreeBracket(PT_Tree tree);
 PT_Tree PT_getTreeBracketTree(PT_Tree tree);
 
-PT_Attrs PT_reverseAttrs(PT_Attrs attrs);
-
 PT_Tree PT_renameInTree(PT_Tree tree, PT_Symbol formalParam,
 			PT_Symbol actualParam);
 PT_ParseTree PT_renameInParseTree(PT_ParseTree parsetree,
