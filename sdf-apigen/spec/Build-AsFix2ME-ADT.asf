@@ -43,9 +43,17 @@ equations
   build-asfix-prod-args(lex, $Symbol $Symbol+) = 
     $AFArg,$AFArgs
 
-[equ-build-asfix-prod-arg-strip-label]
+[default-equ-build-asfix-prod-arg-strip-label]
   build-asfix-prod-arg($SymbolType, $Label : $Symbol) = 
     build-asfix-prod-arg($SymbolType, $Symbol)
+
+[default-equ-build-asfix-prod-arg-strip-param]
+  afun($c*) := sdflit-to-afun($Label),
+  $FieldId := afun($c* "-" "s""o""r""t")
+  ===>
+  build-asfix-prod-arg($SymbolType, $Label : <$Symbol-PARAM>) = 
+  cf(<$FieldId(str)>)
+    
 
 [equ-build-asfix-prod-arg-sort]
   build-asfix-prod-arg($SymbolType, $Sort) = 
@@ -138,6 +146,11 @@ equations
   $FieldWs := <$FieldId(OptLayout)>
   ===>
   build-asfix-appl-args($Literal $Symbol+) = $AFArg, $FieldWs, $AFArgs
+
+[equ-build-asfix-appl-arg-parameterized]
+  $FieldId := sdflit-to-afun($Label)
+  ===>
+  build-asfix-appl-arg($Label:<$Symbol-PARAM>) = <$FieldId(term)>
 
 [equ-build-asfix-appl-arg-labeled-literal]
   build-asfix-appl-arg($Label:$Literal) = lit(sdflit-to-lit($Literal))

@@ -1,6 +1,6 @@
 module Build-General-AsFix2ME-ADT
 
-imports ATerm-Utils Sdf2 Cons-Options
+imports ATerm-Utils Sdf2 Cons-Options Parameterized-Symbols
 
 exports
   context-free syntax

@@ -1,6 +1,7 @@
 module Sdf2-to-AsFix2ME-ADT
 
 imports Build-AsFix2ME-ADT Character-Class-Normalization
+imports Parameterized-Symbols
 
 exports
   context-free syntax
@@ -82,11 +83,12 @@ hiddens
     "$ModName"		-> ModuleName
     "$Module"		-> Module
     "$Module*"		-> Module*
+    "$ModId"[0-9]*      -> ModuleId
     "$Production"	-> Production
     "$Production*"	-> Production*
     "$SDF"		-> SDF
     "$Section"		-> Section
-    "$Section*"		-> Section*
+    "$Section*"[0-9]* 	-> Section*
     "$Sep"		-> Literal
     "$Sort"		-> Sort
     "$Symbol"		-> Symbol

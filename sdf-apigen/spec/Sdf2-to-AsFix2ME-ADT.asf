@@ -33,16 +33,25 @@ equations
     sdf-module-to-asfix2me-adt($Module, $ConsOption)
 
 [equ-sdf-module-to-adt-empty]
-  sdf-module-to-asfix2me-adt(module $ModName $ImpSection*, $ConsOption) = [ ]
+  sdf-module-to-asfix2me-adt(module $ModId $ImpSection*, $ConsOption) = [ ]
 
 [equ-sdf-module-to-adt-divide]
-  $Entries1 := section-to-adt($ModName, $Section, $ConsOption),
-  [ $Entries2 ] := sdf-module-to-asfix2me-adt(module $ModName $ImpSection* $Section*, 
-                             $ConsOption)
+  $Entries1 := section-to-adt($ModId, $Section, $ConsOption),
+  [ $Entries2 ] := sdf-module-to-asfix2me-adt(module $ModId $ImpSection* $Section*, $ConsOption)
   ===>
-  sdf-module-to-asfix2me-adt(module $ModName $ImpSection* $Section $Section*, 
+  sdf-module-to-asfix2me-adt(module $ModId $ImpSection* $Section $Section*, 
                              $ConsOption) = 
 	[ $Entries1, $Entries2 ]
+
+
+[equ-sdf-module-to-adt-parametrized]
+$Section*2 := mark-parameterized-symbols($Section*, $Symbol*),
+[ $Entries ] := sdf-module-to-asfix2me-adt(module $ModId $ImpSection* $Section*2, 
+                           $ConsOption)
+===>
+sdf-module-to-asfix2me-adt(module $ModId [ $Symbol* ] $ImpSection* $Section*,
+                           $ConsOption) = [ $Entries ]
+
 
 [equ-section-to-adt-exports]
   section-to-adt($ModName, exports $Grammar, $ConsOption) =

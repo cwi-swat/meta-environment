@@ -82,4 +82,5 @@ hiddens
     "$TypeId"		-> AFun
     "$UQLit"		-> UQLiteral
     "$QLit"		-> Literal
+    "$c*" -> CHAR*
 

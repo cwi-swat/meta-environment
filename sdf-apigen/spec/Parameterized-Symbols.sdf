@@ -1,0 +1,42 @@
+module Parameterized-Symbols
+
+imports Sdf2
+
+exports
+
+context-free syntax
+
+
+mark-parameterized-symbols(Section*, Symbols) -> Section* {traversal(trafo,top-down, break)}
+mark-parameterized-symbols(Symbol, Symbols) -> Symbol {traversal(trafo,top-down, break)}
+
+"<" Symbol "-PARAM>" -> Symbol
+
+hiddens
+
+variables
+
+variables
+    "$Grammar"[0-9]*	-> Grammar
+    "$ImpSection*"	-> ImpSection*
+    "$Label"		-> Literal
+    "$ListType"		-> AFun
+    "$Literal"		-> Literal
+    "$ModName"		-> ModuleName
+    "$Module"		-> Module
+    "$Module*"		-> Module*
+    "$ModId"[0-9]*      -> ModuleId
+    "$Production"	-> Production
+    "$Production*"	-> Production*
+    "$SDF"		-> SDF
+    "$Section"		-> Section
+    "$Section*"[0-9]* 	-> Section*
+    "$Sep"		-> Literal
+    "$Sort"		-> Sort
+    "$Symbol"		-> Symbol
+    "$Symbol*"[0-9]*    -> Symbol*
+    "$Symbol+"		-> Symbol+
+    "$TypeId"		-> AFun
+    "$UQLit"		-> UQLiteral
+    "$QLit"		-> Literal
+  
