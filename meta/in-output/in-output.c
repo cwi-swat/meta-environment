@@ -333,7 +333,7 @@ void read_conf(char *cfg)
   FILE *fd;
 
   if(!(fd = fopen(cfg, "r"))) {
-    ATfprintf(stderr, "warning: cannot no %s, using default config\n", cfg);
+    ATfprintf(stderr, "warning: no %s, using default config\n", cfg);
     paths[nr_paths][0]   = '.';
     paths[nr_paths++][1] = '\0';
     return;
