@@ -1,8 +1,12 @@
 # $Id$
 
 2002/01/15 (jurgenv@cwi.nl)
+ * Added generation of getters, setters, predicates and constructors to
+   term syntax too.
+
+2002/01/15 (jurgenv@cwi.nl)
  * Added generation of syntax for prefix functions and getters and setters 
-   when cons attributes or labels are used.
+   when cons attributes or labels are used (in eqs syntax only).
 
 2002/01/15 (vandenbr@loria.fr)
  * Finalized the Sdf-Checker, thanks to Paul.
