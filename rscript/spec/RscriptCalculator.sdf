@@ -4,7 +4,7 @@ imports Rstore ExtendedIntegers ExtendedStrings
 
 exports
 
-   start-symbols StrCon	%% For the benefit of parsing in meta.buttons
+   context-free start-symbols StrCon	%% For the benefit of parsing in meta.buttons
 
    context-free syntax
 
