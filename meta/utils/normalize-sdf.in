@@ -3,15 +3,15 @@
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
-bindir=${exec_prefix}/bin
-libdir=${exec_prefix}/lib
+bindir=@bindir@
+libdir=@libdir@
 
 PATH="$PATH:$bindir"
 
 TMP=/tmp/`basename $0`.$$	# Junk files
 trap "rm -f $TMP*" 0 1 2 15	# Clean up afterwards
 
-PGEN="${bindir}/pgen -silent"
+PGEN="${bindir}/ParseTable-Generator -silent"
 A2TOA1="${bindir}/a2toa1 -silent"
 ASOURCE="${bindir}/asource -silent"
 ADDFUNC="${bindir}/add-norm-func -silent"
@@ -75,7 +75,7 @@ do
 	do
 		file=`basename $file $ext`
 	done
-	Notify "Running add-norm-func|pgen on $f..."
+	Notify "Adding Normalize function and normalizing $f..."
 	out=$TMP.asrc
 	err=$dir/$file.norm.err
 	if $ADDFUNC < $f | $PGEN > $out 2> $err
@@ -83,7 +83,7 @@ do
 		rm -f $err
 	else
 		if [ -f $out -a ! -s $out ]; then rm -f $out; fi
-		echo "pgen: error (see $err)"
+		echo "PT-Gen: error (see $err)"
 		exit 2
 	fi
 	in=$out
