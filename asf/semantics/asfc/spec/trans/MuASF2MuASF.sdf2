@@ -1,0 +1,7 @@
+module  MuASF2MuASF
+
+imports Remove-Lists-C Make-Left-Linear Make-Assign-Conds-C
+
+exports
+  context-free syntax
+    muasf2muasf(Module) -> Module

@@ -1,0 +1,8 @@
+equations
+
+  [m2m-1'1] make-matching-conds(Module1) = Module2,
+            make-left-linear(Module2) = Module3,
+            remove-list-matching(Module3) = Module4,
+            normalize-conditions(Module4) = Module5
+            =======================================
+            muasf2muasf(Module1) =  Module5
