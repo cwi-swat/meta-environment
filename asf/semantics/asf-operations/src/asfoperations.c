@@ -53,7 +53,7 @@ ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm eqsPTree)
 
   if (ASF_isEquationsPresent(asfEqs)) {
     asfEqsList = ASF_getEquationsList(asfEqs);
-    asfEqsList = renameSymbolsInEquations(asfEqsList, renamings);
+    asfEqsList = doRenamingsInEquations(asfEqsList, renamings);
   }
  
   return ATmake("snd-value(equations(<term>))",

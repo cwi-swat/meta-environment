@@ -5,10 +5,10 @@
 
 #include "renaming-symbols.h"
 
-/*{{{  ASF_CondEquationList replaceParameterInEquations(ASF_CondEquationList eqsList, */
+/*{{{  ASF_CondEquationList doRenamingInEquations(ASF_CondEquationList eqsList, */
 
 static
-ASF_CondEquationList replaceParameterInEquations(ASF_CondEquationList eqsList,
+ASF_CondEquationList doRenamingInEquations(ASF_CondEquationList eqsList,
                                                  PT_Symbol formalParam,
                                                  PT_Symbol actualParam)
 {
@@ -25,9 +25,9 @@ ASF_CondEquationList replaceParameterInEquations(ASF_CondEquationList eqsList,
   }
   if (ASF_hasCondEquationListTail(eqsList)) {
     ASF_CondEquationList tail = ASF_getCondEquationListTail(eqsList);
-    ASF_CondEquationList newTail = replaceParameterInEquations(tail,
-                                                               formalParam,
-                                                               actualParam);
+    ASF_CondEquationList newTail = doRenamingInEquations(tail,
+							 formalParam,
+							 actualParam);
 
     eqsList = ASF_setCondEquationListTail(eqsList, newTail);
   }
@@ -35,10 +35,10 @@ ASF_CondEquationList replaceParameterInEquations(ASF_CondEquationList eqsList,
 }
 
 /*}}}  */
-/*{{{  ASF_CondEquationList renameSymbolsInEquations(ASF_CondEquationList asfTree,  */
+/*{{{  ASF_CondEquationList doRenamingsInEquations(ASF_CondEquationList asfTree,  */
 
-ASF_CondEquationList renameSymbolsInEquations(ASF_CondEquationList asfTree, 
-                                              SDF_Renamings renamings)
+ASF_CondEquationList doRenamingsInEquations(ASF_CondEquationList asfTree, 
+					    SDF_Renamings renamings)
 {
   /*SDF_RenamingList prodRenamingList = SDF_getRenamingsList(renamings);*/
   SDF_RenamingList symbolRenamingList = SDF_getRenamingsList(renamings);
@@ -51,7 +51,7 @@ ASF_CondEquationList renameSymbolsInEquations(ASF_CondEquationList asfTree,
       fromSymbol = SDF_getRenamingFrom(renaming);
       toSymbol = SDF_getRenamingTo(renaming);
 
-      asfTree = replaceParameterInEquations(asfTree, 
+      asfTree = doRenamingInEquations(asfTree, 
                   SDFSymbolToPtSymbol(fromSymbol),
                   SDFSymbolToPtSymbol(toSymbol));
     }
