@@ -1,5 +1,9 @@
 # $Id$
 
+Fri May 23 09:40:00 CEST 2003 <jong@cwi.nl>
+ * tbscripts/meta.tb: add #ifdef around #include of query-tool.idef
+ * src/generic-meta.sh.src: add -I<path> to meta-query tool
+
 Thu May 22 14:42:02 CEST 2003 <jong@cwi.nl>
  * query-tool/**: move to a separate package "meta-query"
  * tbscripts/button-actions.tb: add support for queries
