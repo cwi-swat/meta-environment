@@ -8,7 +8,7 @@ TESTS=$(foreach f, ${DEFS}, $f.sh)
 	@(echo "set -e" ; \
 	echo "${META}/bin/pt-dump -m $* -o $*.trm.tbl" ;\
 	echo "${SGLR}/bin/sglr -p $*.trm.tbl -i $*.trm | \
-              ../src/offside.test -o $*.tst" ;\
+              ../src/offside.test | atrmannos -a -o $*.tst" ;\
         echo "${ATERM}/bin/atdiff $*.tst $*.out" ) > $@ && chmod +x $@
 
 CLEANFILES += $(TESTS) $(foreach f, ${DEFS}, $f.trm.tbl)
