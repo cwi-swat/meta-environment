@@ -1,5 +1,9 @@
 $Id$
 
+2003-03-20 <jurgenv@cwi.nl>
+ * removed dependency on shared-objects and jjtraveler. This is taken care
+   of by aterm-java-config from now on.
+
 2003-03-18 <jurgenv@cwi.nl>
  * Use shared-objects-config and aterm-java-config to obtain last versions
    of their jar files in configure.in
