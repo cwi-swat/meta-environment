@@ -195,16 +195,11 @@ PT_ParseTree implodeParseTree(PT_ParseTree tree)
   if (PT_isParseTreeTree(tree)) {
     PT_Tree newTree = PT_getParseTreeTree(tree);
 
-    if (PT_isTreeAppl(newTree)) {
-      PT_Production prod = PT_getTreeProd(newTree);
-      if (PT_prodHasSTARTAsRhs(prod)) {
-        PT_Args args = PT_getTreeArgs(newTree);
-        PT_Args newArgs = implodeArgs(args);
+    PT_Args args = PT_getTreeArgs(newTree);
+    PT_Args newArgs = implodeArgs(args);
         
-        newTree = PT_setTreeArgs(newTree, newArgs);
-        return PT_setParseTreeTree(tree, newTree);
-      }
-    }
+    newTree = PT_setTreeArgs(newTree, newArgs);
+    return PT_setParseTreeTree(tree, newTree);
   }
 
   ATerror("implodeParseTree: not a parsetree: %t\n", tree);
