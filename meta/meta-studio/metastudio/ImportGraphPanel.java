@@ -10,7 +10,7 @@ public class ImportGraphPanel
 {
   private ModuleManager moduleManager;
 
-  //{{{ public ModuleGraphPanel(ModuleManager moduleManager)
+  //{{{ public ImportGraphPanel(final ModuleManager moduleManager)
 
   public ImportGraphPanel(final ModuleManager moduleManager)
   {
