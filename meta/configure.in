@@ -139,9 +139,12 @@ AC_SUBST(UI_PACKAGE)
 dnl Handle --with-tide=... argument to configure
 AC_ARG_WITH(tide,
    [  --with-tide             TIDE is in DIR],
-   TIDEDEF=-Dtide.enabled=true,
+   TIDEDEF=-Dtide.enabled=true
+   USE_TIDE=1,
+   USE_TIDE=0
 )
 AC_SUBST(TIDEDEF)
+AC_SUBST(USE_TIDE)
 
 dnl Determine which libraries to use for programs using sockets
 NOSOCKLIBS=$LIBS
