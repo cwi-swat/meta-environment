@@ -1,3 +1,9 @@
+2003/07/29 ({jurgenv,markvdb}@cwi.nl)
+ * made RWsetError type-safe (it called PT_yieldTree on an ATerm, now
+   it is always a PT_Tree)
+ * Fixed a serious of by 10 error (wrote an error message into a buffer that
+   was too small) 
+
 2003/07/24 (markvdb@cwi.nl)
  * Added lexical restrictions on ModuleWord and ModuleId.
  * Added a warning when literals are detected in the right hand side
