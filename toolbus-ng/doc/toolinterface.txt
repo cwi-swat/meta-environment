@@ -20,7 +20,7 @@ In the case of the JavaTool the following applies (in the current, reflection-ba
 		
 			|
 		
-		ExampleTool (constructor has argument of type ToolBridge, used to pass calls upwards)
+		ExampleTool (constructor has argument of type ToolBridge, used to pass calls from tool to ToolBus)
 
 The tool descriptor
 -------------------
@@ -32,7 +32,7 @@ public class ToolDefinition {
   private ATermList functionSignatures;
 }
 
-Oher information is placed in a property file:
+Other information is placed in a property file:
 	String hostName;
 	String launcher;
 	int restartFrequency;
@@ -50,7 +50,7 @@ The meaning of these fields is as follows.
 
 - restartFrequency: 
 	(a) restartFrequncecy = 0 means execute tool only once and then execute requests until termination
-	(b) restartFrequency > 0 means execute tool and increment a counter (starting at 0) for each request, 
+	(b) restartFrequency > 0 means execute tool and increment a counter (starting at 0) for each request(transaction??), 
 	    is reached then restart the tool and reset the counter.
     (c) restartFrequency < 0: error
 
@@ -63,10 +63,12 @@ The interface between ToolBus and tool is defined as follows:
 public interface ToolInstance {
 
   public void sndEvalToTool(ATerm id, ATermAppl call);
+  // HDJ: there is no "throws ToolBusException" here? (compare sndAckToTool)
 
   public boolean getValueFromTool(ATerm id, ATerm trm, Environment env) throws ToolBusException;
 
   public void sndDoToTool(ATerm id, ATermAppl call);
+  // HDJ: there is no "throws ToolBusException" here? (compare sndAckToTool)
 
   public boolean getEventFromTool(ATerm id, ATerm trm, Environment environment) throws ToolBusException;
 
@@ -102,7 +104,7 @@ Notes:
 Discussion
 ----------
 
-- May be JavaTool will be split in two versions;
+- Maybe JavaTool will be split in two versions;
   a version based on reflection (JavaTool) and a version based on tif generation (JavaTifTool)
 
 - How do we represent functionSignatures?
@@ -118,7 +120,7 @@ Discussion
     do(store(str, int))
     event(showTime(),time)
     
-    Note: perhaps is "function" better than "eval"
+    Note: perhaps "function" is better than "eval"
   ]
 
 - In the current tool interface we also support viewing/monitoring. 
