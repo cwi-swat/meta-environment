@@ -1,5 +1,9 @@
 # $Id$
 
+2002/10/11 (vinju@loria.fr)
+ * Added functionality for non-existing modules in MetaStudio. If you click
+   on them you can create them by choosing the option from the menu.
+
 2002/10/10 (vinju@loria.fr)
  * Changed functionality concerning ambiguities in the editor. If you click 
    inside a cluster, the focus is set around the entire cluster 
