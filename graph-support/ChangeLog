@@ -1,5 +1,9 @@
 $Id$
 
+Thu Oct  2 13:19:41 CEST 2003 <jong@cwi.nl>
+ * utils/layoutgraph/dot.y:
+     #define YYERROR_VERBOSE to get better error message
+
 Thu Sep 11 12:47:17 CEST 2003 <jong.cwi.nl>
  * graph-support:
    - mv layoutgraph.idef -> layout-graph.idef
