@@ -34,9 +34,6 @@
 #include "evaluator.h"
 #include "traversals.h"
 
-extern ATerm pattern_asfix_noattrs;
-extern ATerm pattern_asfix_attrs;
-extern ATerm pattern_asfix_prod;
 extern ATbool run_verbose;
 
 /* select_traversed_arg
