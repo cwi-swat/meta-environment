@@ -9,8 +9,7 @@ exports sorts ProcessCreation
 exports context-free syntax
     Atom -> ProcessExpr {cons("atomProcExpr")}
     Atom TimeExpr -> ProcessExpr {cons("atomTimeExpr")}
-    "create""("ProcessName"("{Term"," }*")""," GenVar")" -> ProcessCreation {cons("createProcArgs")}
-    "create""("ProcessName"," GenVar")" -> ProcessCreation {cons("createProc")}
+    "create""("ProcessInvocation"," GenVar")" -> ProcessCreation {cons("createProcArgs")}
     ProcessName -> ProcessInvocation {cons("procNameInvoc")}
     ProcessName"("{Term"," }*")" -> ProcessInvocation {cons("procInvoc")}
     ProcessInvocation -> ProcessExpr {cons("procInvoExpr")}
@@ -38,8 +37,8 @@ exports context-free syntax
 "("
   ProcessExpr
 ")"
--> ProcessExpr {bracket}
-
+-> ProcessExpr %% {bracket} removed for prettyprinting purposes
+ 
 exports context-free syntax
 "if"
   Term
