@@ -143,7 +143,7 @@ static ATermList calc_trans(SDF_ImportList todo)
     SDF_ModuleName moduleName = SDF_getImportModuleName(import);
     ATerm          name       = SDF_getModuleNamePlain(moduleName);
     ATerm          sdfTerm;
-    PT_Tree        sdfTree;
+    SDF_Module     sdfModule;
 
     if (ATindexOf(result, atImport, 0) < 0) {
       MDB_Entry entry = MDB_EntryFromTerm(GetValue(modules_db, name));
@@ -153,10 +153,10 @@ static ATermList calc_trans(SDF_ImportList todo)
 
         if (SDF_isModuleNameParameterized(moduleName)) {
           sdfTerm = MDB_getEntrySdfTree(entry);
-          sdfTree = PT_getParseTreeTree(PT_makeParseTreeFromTerm(sdfTerm));
+	  sdfModule = SDF_getStartTopModule(SDF_StartFromTerm(sdfTerm));
 
           fullImports = renameParametersInImportList(moduleName, 
-                                                     sdfTree, 
+                                                     sdfModule, 
                                                      fullImports);
         }
         result = ATappend(result, atImport);
@@ -324,19 +324,10 @@ ATerm add_sdf_module(int cid, char *moduleName, char *path, ATerm sdfTree,
   MDB_Entry      entry; 
   ATerm          import_graph;
   ATermList      imports, unknowns;
-  PT_Tree        tree;
-  PT_ParseTree   parseTree;
   SDF_Module     sdfModule;
   SDF_ImportList fullImports;
 
-  parseTree = PT_makeParseTreeFromTerm(sdfTree);
-
-  if (!PT_isValidParseTree(parseTree)) {
-    return ATmake("snd-value(illegal-module-error(<str>))", moduleName);
-  }
-
-  tree      = PT_getParseTreeTree(parseTree);
-  sdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(tree));
+  sdfModule = SDF_getStartTopModule(SDF_StartFromTerm(sdfTree));
 
   if (!checkModuleNameWithPath(SDFgetModuleName(sdfModule), path)) {
     return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
@@ -397,22 +388,14 @@ ATerm update_sdf2_module(int cid, char *moduleName, ATerm newSdfTree)
   ATerm          curSdfTree, import_graph;
   MDB_Entry      entry;
   ATermList      imports, unknowns, chg_mods;
-  PT_ParseTree   parseTree;
-  PT_Tree        tree;
   SDF_Module     sdfModule;
   ATerm          modName;
   SDF_ImportList fullImports;
   char *newModuleName = NULL;
 
-  newSdfTree = ATremoveAllAnnotations(newSdfTree);
-  parseTree = PT_makeParseTreeFromTerm(newSdfTree);
-  if (!PT_isValidParseTree(parseTree)) {
-    ATerror("not an asfix module: %t\n", newSdfTree);
-    return NULL;
-  }
-
-  tree      = PT_getParseTreeTree(parseTree);
-  sdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(tree));
+  sdfModule = SDF_getStartTopModule(SDF_StartFromTerm(
+	      ATremoveAllAnnotations(newSdfTree)));
+						     
   newModuleName = SDFgetModuleName(sdfModule);
 
   if (strcmp(moduleName, newModuleName)) {
@@ -912,8 +895,6 @@ static ATermList delete_modulename_from_modules(ATermList mods,
 {
   ATerm oldSdfTree, newSdfTree;
   MDB_Entry entry;
-  PT_ParseTree oldParseTree, newParseTree;
-  PT_Tree oldTree, newTree;
   SDF_Module oldSdfModule, newSdfModule;
   ATerm modName;
   ATermList unknowns, imports, changedMods = ATempty;
@@ -926,17 +907,15 @@ static ATermList delete_modulename_from_modules(ATermList mods,
     entry = MDB_EntryFromTerm(GetValue(modules_db, modName));
 
     oldSdfTree   = MDB_getEntrySdfTree(entry);
-    oldParseTree = PT_makeParseTreeFromTerm(oldSdfTree);
-    oldTree      = PT_getParseTreeTree(oldParseTree);
-    oldSdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(oldTree));
+    oldSdfModule = SDF_getStartTopModule(SDF_StartFromTerm(oldSdfTree));
     newSdfModule = delete_modulename_from_module(oldSdfModule, oldName);
     
     if (!SDF_isEqualModule(oldSdfModule, newSdfModule)) {
       changedMods = ATinsert(changedMods, modName);
     }
-    newTree      = PT_makeTreeFromTerm(SDF_makeTermFromModule(newSdfModule));
-    newParseTree = PT_setParseTreeTree(oldParseTree, newTree);
-    newSdfTree   = PT_makeTermFromParseTree(newParseTree);
+
+    newSdfTree   = SDF_StartToTerm(SDF_setStartTopModule(
+		     SDF_StartFromTerm(oldSdfTree), newSdfModule));
     entry = MDB_setEntrySdfTree(entry, newSdfTree);
 
     PutValue(modules_db, modName, MDB_EntryToTerm(entry));
@@ -998,8 +977,6 @@ rename_modulename_in_modules(ATermList mods,
 {
   ATerm oldSdfTree, newSdfTree;
   MDB_Entry entry;
-  PT_ParseTree oldParseTree, newParseTree;
-  PT_Tree oldTree, newTree;
   SDF_Module oldSdfModule, newSdfModule;
   ATerm modName;
   ATermList unknowns, imports, changedMods = ATempty;
@@ -1013,16 +990,13 @@ rename_modulename_in_modules(ATermList mods,
     entry = MDB_EntryFromTerm(GetValue(modules_db, modName));
 
     oldSdfTree   = MDB_getEntrySdfTree(entry);
-    oldParseTree = PT_makeParseTreeFromTerm(oldSdfTree);
-    oldTree      = PT_getParseTreeTree(oldParseTree);
-    oldSdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(oldTree));
+    oldSdfModule = SDF_getStartTopModule(SDF_StartFromTerm(oldSdfTree));
     newSdfModule = rename_modulename_in_module(oldSdfModule, oldName, newName);
     if (!SDF_isEqualModule(oldSdfModule, newSdfModule)) {
       changedMods = ATinsert(changedMods, modName);
     }
-    newTree      = PT_makeTreeFromTerm(SDF_makeTermFromModule(newSdfModule));
-    newParseTree = PT_setParseTreeTree(oldParseTree, newTree);
-    newSdfTree   = PT_makeTermFromParseTree(newParseTree);
+    newSdfTree = SDF_StartToTerm(SDF_setStartTopModule(
+		  SDF_StartFromTerm(oldSdfTree), newSdfModule));
     entry = MDB_setEntrySdfTree(entry, newSdfTree);
 
     PutValue(modules_db, modName, MDB_EntryToTerm(entry));
@@ -1111,8 +1085,6 @@ ATerm rename_module(int cid, char *oldModuleName, char *newModuleName,
   ATerm newName;
   ATermList changedMods;
   MDB_Entry entry;
-  PT_ParseTree oldParseTree, newParseTree;
-  PT_Tree oldTree, newTree;
   SDF_Module oldSdfModule, newSdfModule;
   ATermList unknowns, imports;
   SDF_ImportList fullImports;
@@ -1131,13 +1103,10 @@ ATerm rename_module(int cid, char *oldModuleName, char *newModuleName,
   entry = MDB_EntryFromTerm(GetValue(modules_db, oldName));
   if (entry) {
     oldSdfTree   = MDB_getEntrySdfTree(entry);
-    oldParseTree = PT_makeParseTreeFromTerm(oldSdfTree);
-    oldTree      = PT_getParseTreeTree(oldParseTree);
-    oldSdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(oldTree));
+    oldSdfModule = SDF_getStartTopModule(SDF_StartFromTerm(oldSdfTree));
     newSdfModule = SDFsetModuleName(oldSdfModule, newModuleName);
-    newTree      = PT_makeTreeFromTerm(SDF_makeTermFromModule(newSdfModule));
-    newParseTree = PT_setParseTreeTree(oldParseTree, newTree);
-    newSdfTree   = PT_makeTermFromParseTree(newParseTree);
+    newSdfTree   = SDF_StartToTerm(SDF_setStartTopModule(
+                     SDF_StartFromTerm(oldSdfTree), newSdfModule));
 
     entry = MDB_setEntrySdfTree(entry, newSdfTree);
 
@@ -1177,8 +1146,6 @@ ATerm copy_module(int cid, char *oldModuleName, char *newModuleName,
   ATerm newName;
   ATermList changedMods;
   MDB_Entry entry;
-  PT_ParseTree oldParseTree, newParseTree;
-  PT_Tree oldTree, newTree;
   SDF_Module oldSdfModule, newSdfModule;
   ATermList unknowns, imports;
   SDF_ImportList fullImports;
@@ -1194,13 +1161,10 @@ ATerm copy_module(int cid, char *oldModuleName, char *newModuleName,
   entry = MDB_EntryFromTerm(GetValue(modules_db, oldName));
   if (entry) {
     oldSdfTree   = MDB_getEntrySdfTree(entry);
-    oldParseTree = PT_makeParseTreeFromTerm(oldSdfTree);
-    oldTree      = PT_getParseTreeTree(oldParseTree);
-    oldSdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(oldTree));
+    oldSdfModule = SDF_getStartTopModule(SDF_StartFromTerm(oldSdfTree));
     newSdfModule = SDFsetModuleName(oldSdfModule, newModuleName);
-    newTree      = PT_makeTreeFromTerm(SDF_makeTermFromModule(newSdfModule));
-    newParseTree = PT_setParseTreeTree(oldParseTree, newTree);
-    newSdfTree   = PT_makeTermFromParseTree(newParseTree);
+    newSdfTree   = SDF_StartToTerm(SDF_setStartTopModule(
+                     SDF_StartFromTerm(oldSdfTree), newSdfModule));
 
     entry = MDB_setEntrySdfTree(entry, newSdfTree);
 
@@ -1238,8 +1202,6 @@ ATerm add_import(int cid, char *modName, char *importedModName,
   SDF_Import sdfImport;
   ATermList changedMods;
   MDB_Entry entry;
-  PT_ParseTree oldParseTree, newParseTree;
-  PT_Tree oldTree, newTree;
   SDF_Module oldSdfModule, newSdfModule;
   ATermList unknowns, imports;
   SDF_ImportList fullImports;
@@ -1256,13 +1218,12 @@ ATerm add_import(int cid, char *modName, char *importedModName,
   entry = MDB_EntryFromTerm(GetValue(modules_db, moduleName));
   if (entry) {
     oldSdfTree   = MDB_getEntrySdfTree(entry);
-    oldParseTree = PT_makeParseTreeFromTerm(oldSdfTree);
-    oldTree      = PT_getParseTreeTree(oldParseTree);
-    oldSdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(oldTree));
+
+    oldSdfModule = SDF_getStartTopModule(SDF_StartFromTerm(oldSdfTree));
     newSdfModule = SDF_addModuleImport(oldSdfModule, sdfImport);
-    newTree      = PT_makeTreeFromTerm(SDF_makeTermFromModule(newSdfModule));
-    newParseTree = PT_setParseTreeTree(oldParseTree, newTree);
-    newSdfTree   = PT_makeTermFromParseTree(newParseTree);
+    ATwarning("%t\n%t\n",SDF_patternStartModule, oldSdfTree);
+    newSdfTree   = SDF_StartToTerm(SDF_setStartTopModule(
+                     SDF_StartFromTerm(oldSdfTree), newSdfModule));
 
     entry = MDB_setEntrySdfTree(entry, newSdfTree);
     entry = MDB_setEntryAsfTable(entry, MDB_NONE);
@@ -1298,8 +1259,6 @@ ATerm remove_import(int cid, char *modName, char *importedModName, char *path)
   SDF_ModuleId sdfImport;
   ATermList changedMods;
   MDB_Entry entry;
-  PT_ParseTree oldParseTree, newParseTree;
-  PT_Tree oldTree, newTree;
   SDF_Module oldSdfModule, newSdfModule;
   ATermList unknowns, imports;
   SDF_ImportList fullImports;
@@ -1312,13 +1271,10 @@ ATerm remove_import(int cid, char *modName, char *importedModName, char *path)
   entry = MDB_EntryFromTerm(GetValue(modules_db, moduleName));
   if (entry) {
     oldSdfTree   = MDB_getEntrySdfTree(entry);
-    oldParseTree = PT_makeParseTreeFromTerm(oldSdfTree);
-    oldTree      = PT_getParseTreeTree(oldParseTree);
-    oldSdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(oldTree));
+    oldSdfModule = SDF_getStartTopModule(SDF_StartFromTerm(oldSdfTree));
     newSdfModule = delete_modulename_from_module(oldSdfModule, sdfImport);
-    newTree      = PT_makeTreeFromTerm(SDF_makeTermFromModule(newSdfModule));
-    newParseTree = PT_setParseTreeTree(oldParseTree, newTree);
-    newSdfTree   = PT_makeTermFromParseTree(newParseTree);
+    newSdfTree   = SDF_StartToTerm(SDF_setStartTopModule(
+                     SDF_StartFromTerm(oldSdfTree), newSdfModule));
 
     entry = MDB_setEntrySdfTree(entry, newSdfTree);
     entry = MDB_setEntryAsfTable(entry, MDB_NONE);
@@ -1687,9 +1643,9 @@ getSyntax(ATermList modules)
                        SDF_makeImportFromTerm(ATgetFirst(modules)))); 
       MDB_Entry entry = MDB_EntryFromTerm(GetValue(modules_db, head));
       ATerm module = MDB_getEntrySdfTree(entry);
-      PT_ParseTree parseTree = PT_makeParseTreeFromTerm(module);
-      PT_Tree tree = PT_getParseTreeTree(parseTree);
-      SDF_Module sdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(tree));
+      SDF_Module sdfModule;
+      
+      sdfModule = SDF_getStartTopModule(SDF_StartFromTerm(module));
 
       if (sdfModules == NULL) {
 	sdfModules = SDF_makeModuleListSingle(sdfModule);
@@ -1715,11 +1671,7 @@ ATerm get_all_sdf2_definitions(int cid, char *moduleName)
   SDF_SDF definition;
   ATerm name;
   ATermList imports;
-  PT_ParseTree parseTree;
-  PT_Tree sdfTree;
   ATerm result;
-  PT_Symbol sort;
-  PT_Symbols symbols;
   ATerm missing;
 
   name = ATmake("<str>", moduleName);
@@ -1727,14 +1679,9 @@ ATerm get_all_sdf2_definitions(int cid, char *moduleName)
   if (missing == NULL) {
     imports = get_imported_modulenames(moduleName);
     definition = getSyntax(imports);
-    sdfTree = PT_makeTreeFromTerm(SDF_makeTermFromSDF(definition));
-    sort = PT_makeSymbolCf(PT_makeSymbolSort("SDF"));
-    symbols = PT_makeSymbolsList(sort, PT_makeSymbolsEmpty());
-    parseTree = PT_makeParseTreeTree(symbols, 
-                                     PT_makeTreeLayoutEmpty(),
-                                     sdfTree,
-                                     PT_makeTreeLayoutEmpty(), 0);
-    result = PT_makeTermFromParseTree(parseTree);
+    result = SDF_StartToTerm(SDF_makeStartSDF(SDF_makeOptLayoutAbsent(),
+			      definition,
+			      SDF_makeOptLayoutAbsent(),0));
     return ATmake("snd-value(syntax(<term>))", ATBpack(result));
   }
   else {

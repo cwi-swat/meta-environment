@@ -520,14 +520,12 @@ SDF_ImportList replaceParametersInImportList(SDF_ImportList importList,
 /*{{{  SDF_ImportList renameParametersInImportList(SDF_ModuleName moduleName,  */
  
 SDF_ImportList renameParametersInImportList(SDF_ModuleName moduleName,
-                                            PT_Tree sdfTree,
+                                            SDF_Module sdfModule,
                                             SDF_ImportList importList)
 {
   SDF_Symbols actualParams = SDF_getModuleNameParams(moduleName);
   SDF_Symbols formalParams = SDF_getModuleNameParams(
-                               SDF_getModuleModuleName(
-                                 SDF_makeModuleFromTerm(
-                                   PT_makeTermFromTree(sdfTree))));
+                               SDF_getModuleModuleName(sdfModule));
  
   return replaceParametersInImportList(importList, formalParams, actualParams);
 }

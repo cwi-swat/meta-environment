@@ -1,5 +1,9 @@
 # $Id$
 
+2002/11/20 (vinju@loria.fr)
+ * Set versions of shared-objects and aterm-java jarfiles to 1.0
+ * Refactored module-db to use Start symbols instead of pt-support API.
+
 2002/11/20 (vandenbr@loria.fr)
  * Fixed a bug in opening a non-existing module.
 
