@@ -1,67 +1,66 @@
-#include "support.h"
-static Symbol lf_AUX_MuASF_Basics24_1sym;
-static ATerm lf_AUX_MuASF_Basics24_1( ATerm arg1);
-static Symbol ef1sym;
-static funcptr ef1;
-static Symbol lf2sym;
-static ATerm lf2( ATerm arg1);
-static Symbol ef2sym;
-static funcptr ef2;
-static Symbol ef3sym;
-static funcptr ef3;
-void register_AUX_MuASF_Basics24( ) {
-lf_AUX_MuASF_Basics24_1sym= ATmakeSymbol( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"is-quoted-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
- , 1 , ATtrue);
-ATprotectSymbol( lf_AUX_MuASF_Basics24_1sym);
-lf2sym= ATmakeSymbol( "listtype(sort(\"CHAR\"))" , 1 , ATtrue);
-ATprotectSymbol( lf2sym);
-register_prod( ATparse( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"is-quoted-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_Basics24_1 , lf_AUX_MuASF_Basics24_1sym);
-register_prod( ATparse( "listtype(sort(\"CHAR\"))") , lf2 , lf2sym);
+#include  "support.h"
+static Symbol lf_AUX_MuASF_Basics24_2sym ;
+static ATerm lf_AUX_MuASF_Basics24_2 ( ATerm arg1 ) ;
+static Symbol ef1sym ;
+static funcptr ef1 ;
+static Symbol lf3sym ;
+static ATerm lf3 ( ATerm arg1 ) ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
+static Symbol lf_AUX_MuASF_Basics24_1sym ;
+static ATerm lf_AUX_MuASF_Basics24_1 ( ATerm arg1 ) ;
+void register_AUX_MuASF_Basics24 ( ) {
+lf_AUX_MuASF_Basics24_2sym = ATmakeSymbol ( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"make-list-args\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)"
+ , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_AUX_MuASF_Basics24_2sym ) ;
+lf3sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf3sym ) ;
+lf_AUX_MuASF_Basics24_1sym = ATmakeSymbol ( "listtype(sort(\"Term\"),ql(\",\"))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_AUX_MuASF_Basics24_1sym ) ;
+register_prod ( ATparse ( "listtype(sort(\"Term\"),ql(\",\"))" ) , lf_AUX_MuASF_Basics24_1 , lf_AUX_MuASF_Basics24_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"make-list-args\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) , lf_AUX_MuASF_Basics24_2 , lf_AUX_MuASF_Basics24_2sym ) ;
+register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf3 , lf3sym ) ;
 }
-void resolve_AUX_MuASF_Basics24( ) {
-ef1= lookup_func( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
-ef1sym= lookup_sym( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
-ef2= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef2sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef3= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef3sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+void resolve_AUX_MuASF_Basics24 ( ) {
+ef1 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) ) ;
+ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0= NULL;
-static ATerm constant1= NULL;
-void init_AUX_MuASF_Basics24( ) {
-ATprotect( & constant0);
-ATprotect( & constant1);
+static ATerm constant0 = NULL ;
+void init_AUX_MuASF_Basics24 ( ) {
+ATprotect ( & constant0 ) ;
 }
-ATerm lf_AUX_MuASF_Basics24_1( ATerm arg0) {
+ATerm lf_AUX_MuASF_Basics24_2 ( ATerm arg0 ) {
 {
-ATerm tmp[2];
-PROF( prof_lf_AUX_MuASF_Basics24_1);
-if( check_sym( arg0 , ef1sym)) {
+ATerm tmp [ 3 ] ;
+PROF ( prof_lf_AUX_MuASF_Basics24_2 ) ;
+if ( check_sym ( arg0 , lf_AUX_MuASF_Basics24_1sym ) ) {
 {
-ATerm atmp00= arg_0( arg0);
-if( check_sym( atmp00 , lf2sym)) {
-{
-ATerm atmp000= arg_0( atmp00);
-if( not_empty_list( atmp000)) {
-if( term_equal( list_head( atmp000) , make_char( 34))) {
-tmp[ 0]= list_tail( atmp000);
-if( not_empty_list( tmp[ 0])) {
-tmp[ 1]= list_prefix( tmp[ 0]);
-if( term_equal( list_last( tmp[ 0]) , make_char( 34))) {
-return ( constant0? constant0: ( constant0= ( * ef2)( )));
+ATerm atmp00 = arg_0 ( arg0 ) ;
+if ( is_single_element ( atmp00 ) ) {
+tmp [ 0 ] = list_head ( atmp00 ) ;
+return tmp [ 0 ] ;
+}
+if ( not_empty_list ( atmp00 ) ) {
+tmp [ 0 ] = list_head ( atmp00 ) ;
+tmp [ 1 ] = list_tail ( atmp00 ) ;
+if ( not_empty_list ( tmp [ 1 ] ) ) {
+tmp [ 2 ] = lf_AUX_MuASF_Basics24_2 ( lf_AUX_MuASF_Basics24_1 ( make_list ( tmp [ 1 ] ) ) ) ;
+return ( * ef1 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( lf3 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) ) ) , lf_AUX_MuASF_Basics24_1 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 2 ] ) ) ) ) ;
 }
 }
 }
 }
+return make_nf1 ( lf_AUX_MuASF_Basics24_2sym , arg0 ) ;
 }
 }
+ATerm lf_AUX_MuASF_Basics24_1 ( ATerm arg0 ) {
+PROF ( prof_lf_AUX_MuASF_Basics24_1 ) ;
+return make_nf1 ( lf_AUX_MuASF_Basics24_1sym , arg0 ) ;
 }
-}
-return ( constant1? constant1: ( constant1= ( * ef3)( )));
-}
-}
-ATerm lf2( ATerm arg0) {
-PROF( prof_lf2);
-return make_nf1( lf2sym , arg0);
+ATerm lf3 ( ATerm arg0 ) {
+PROF ( prof_lf3 ) ;
+return make_nf1 ( lf3sym , arg0 ) ;
 }
 
