@@ -103,20 +103,23 @@ static ATerm implodeProd(PT_Production prod, ATermList args)
     }
   }
 
+
+
+  if (remove_layout) {
+    prod = removeLayoutFromProd(prod);
+  }
+
+  if (remove_literals) {
+    prod = removeLiteralsFromProd(prod);
+  }
+
   if (PT_isProductionInjection(prod) && remove_injections) {
     assert(ATgetLength(args) == 1);
     return ATgetFirst(args);
   }
-  else {
-    if (remove_layout) {
-      prod = removeLayoutFromProd(prod);
-    }
-    if (remove_literals) {
-      prod = removeLiteralsFromProd(prod);
-    }
-    return ATmake("appl(<term>,[<list>])", 
-                  PT_makeTermFromProduction(prod), args);
-  }
+
+  return ATmake("appl(<term>,[<list>])", 
+		PT_makeTermFromProduction(prod), args);
 }
 
 static ATerm implodeLayout(PT_Tree tree)
