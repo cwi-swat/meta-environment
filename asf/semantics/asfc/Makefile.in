@@ -1,4 +1,3 @@
-# @configure_input@
 # Directory: compiler
 
 # Configure variable substitutions
@@ -18,9 +17,9 @@ includedir	= $(prefix)/include
 docdir		= $(top_srcdir)/docs
 
 SHELL		= @SHELL@
-CC		= @CC@
+CC		= cc
 MAKE		= gmake
-CFLAGS		= @CFLAGS@ ${XCFLAGS}
+CFLAGS		= -O ${XCFLAGS}
 CPP		= @CPP@
 CPPFLAGS	= @CPP@ ${XCPPFLAGS}
 DEFS		= @DEFS@ ${XDEFS}
@@ -52,15 +51,16 @@ include ${top_srcdir}/implicit-rules
 XCFLAGS		=
 XCPPFLAGS	=
 XINCLUDES	= -I$(ATERM)/include
-XLIBS		= -L$(ATERM)/lib -ltoolbus -lasfix -laterm-dbg \
-		$(SOCKLIBS) $(GELLIBS)
+XLIBS		=  -Lsupport -lsupport-cc -Lc-source -lasfix2c \
+		-L$(ATERM)/lib -lATerm-cc -lAsFix-cc -lATB-cc \
+		$(SOCKLIBS)
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
-CSRC		= compiler.c expander.c asfixprinter.c asfix-trans.c init-patterns.c
+CSRC		= compiler.c compile-one-module.c
 CHDR		= compiler.tif.c compiler.tif.h
 # All files in BINFILES are installed in $(bindir)
-BINFILES	= compiler genmakefile.sh
+BINFILES	= compiler compile-one-module genmakefile.sh
 # All files in LIBFILES are installed in $(libdir)
 LIBFILES	=
 # All files in INCLUDEFILES are installed in $(includedir)
@@ -69,31 +69,34 @@ INCLUDEFILES	=
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= compiler compiler.tif.c compiler.tif.h
+CLEANFILES	= compiler compile-one-module compiler.tif.c compiler.tif.h
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	=
 
-COMPMODS = c-source/libasfix2c.a support/support.o
-
-SUBDIRS=support
+SUBDIRS=support c-source
 
 # The all target must be defined:
-all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
+all: subdirs $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
+
+subdirs:
+	@for dir in $(SUBDIRS); \
+	do \
+		echo "make all in $$dir"; \
+		cd $$dir; ${MAKE} all; \
+		cd ..; \
+	done
 
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
 
 compiler.tif.h: $(top_srcdir)/toolbus/meta.tifs
-	$(TOOLBUS)/bin/ctif -split -newstyle -tool compiler -tifs $(top_srcdir)/toolbus/meta.tifs
+	$(ATERM)/bin/tifstoc -tool compiler $(top_srcdir)/toolbus/meta.tifs
 
-compiler.tif.c: compiler.tif.h
+compiler: compiler.o compiler.tif.o 
+	$(CC) -o compiler compiler.o compiler.tif.o $(LIBS)
 
-compiler: compiler.o compiler.tif.o asfixprinter.o expander.o asfix-trans.o init-patterns.o \
-	support/support.o
-	cd support; $(MAKE)
-	cd c-source; $(MAKE) libasfix2c.a
-	$(CC) -o compiler compiler.o compiler.tif.o asfixprinter.o init-patterns.o \
-	 expander.o asfix-trans.o $(COMPMODS) $(LIBS)
+compile-one-module: compile-one-module.o
+	$(CC) -o compile-one-module compile-one-module.o $(LIBS)
 
 ##########################################################
 ### Everything below this line should remain unchanged ###
@@ -104,13 +107,13 @@ install: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
-	@for DIR in $(SUBDIRS); \
-	do \
-	   echo Make $@ in $$DIR; \
-	   cd $$DIR; \
-	   $(MAKE) $@; \
-	   cd ..; \
-	done
+#	@for DIR in $(SUBDIRS); \
+#	do \
+#	   echo Make $@ in $$DIR; \
+#	   cd $$DIR; \
+#	   $(MAKE) $@; \
+#	   cd ..; \
+#	done
 
 
 # uninstall target (remove all files installed by 'install' target)
