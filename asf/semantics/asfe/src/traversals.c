@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <aterm2.h>
 #include <assert.h>
 #include <deprecated.h>
@@ -112,78 +113,6 @@ PT_Tree selectTree(PT_Args args, int pos)
 
 /*}}}  */
 
-/*{{{  static PT_Attr isAttrTraversal(PT_Attr attr, PT_AttrVisitorData data) */
-
-static PT_Attr isAttrTraversal(PT_Attr attr, PT_AttrVisitorData data)
-{
-  ATbool* bool;
-
-  bool = (ATbool*) data;
-
-  if (PT_isAttrTerm(attr)) {
-    ATerm term = PT_getAttrTerm(attr);
-
-    if (ATgetType(term) == AT_APPL) {
-      char *fun = ATgetName(ATgetSymbol(term));
-
-      if (!strcmp(fun,"traverse") ||
-	  !strcmp(fun,"traversal")) {
-	*bool = ATtrue;
-      }
-    }
-  }
-
-  return attr;
-}
-
-/*}}}  */
-/*{{{  static PT_Attr getTraversalAttr(PT_Attr attr, PT_AttrVisitorData data) */
-
-static PT_Attr getTraversalAttr(PT_Attr attr, PT_AttrVisitorData data)
-{
-  ATbool bool = ATfalse;
-  PT_Attr* thisattr;
-
-  thisattr = (PT_Attr*) data;
-
-  isAttrTraversal(attr, (PT_AttrVisitorData)  &bool);
-
-  if (bool) {
-    *thisattr = attr;
-  }
-
-  return attr;
-}
-
-/*}}}  */
-
-/*{{{  ATbool isTreeTraversal(PT_Tree trm) */
-
-ATbool isTreeTraversal(PT_Tree trm)
-{
-  if (PT_hasTreeProd(trm)) {
-    PT_Production prod = PT_getTreeProd(trm);
-    
-    if (PT_hasProductionAttributes(prod)) {
-      PT_Attributes attributes = PT_getProductionAttributes(prod);
-
-      if (PT_hasAttributesAttrs(attributes)) {
-	PT_Attrs attrs = PT_getAttributesAttrs(attributes);
-        ATbool data = ATfalse;
-
-	PT_foreachAttrInAttrs(attrs, isAttrTraversal, 
-			      (PT_AttrVisitorData*) &data);
-
-        return data;
-      }
-    } 
-  }
-
-  return ATfalse;
-}
-
-/*}}}  */
-
 /*{{{  static Traversal computeTraversalType(Traversal trav) */
 
 static Traversal computeTraversalType(Traversal trav)
@@ -289,9 +218,53 @@ static ATbool checkTraversalType(Traversal trav)
 }
 
 /*}}}  */
+/*{{{  static PT_Attr isAttrTraversal(PT_Attr attr, PT_AttrVisitorData data) */
+
+static PT_Attr isAttrTraversal(PT_Attr attr, PT_AttrVisitorData data)
+{
+  ATbool* bool;
+
+  bool = (ATbool*) data;
+  
+  if (PT_isAttrTerm(attr)) {
+    ATerm term = PT_getAttrTerm(attr);
+
+    if (ATgetType(term) == AT_APPL) {
+      char *fun = ATgetName(ATgetSymbol(term));
+      
+      if (!strcmp(fun,"traverse") ||
+          !strcmp(fun,"traversal")) {
+        *bool = ATtrue;
+      } 
+    }
+  }     
+                              
+  return attr;
+}       
+
+/*}}}  */
+/*{{{  static PT_Attr getTraversalAttr(PT_Attr attr, PT_AttrVisitorData data) */
+
+static PT_Attr getTraversalAttr(PT_Attr attr, PT_AttrVisitorData data)
+{ 
+  ATbool bool = ATfalse;
+  PT_Attr* thisattr;
+  
+  thisattr = (PT_Attr*) data;
+  
+  isAttrTraversal(attr, (PT_AttrVisitorData)  &bool);
+  
+  if (bool) { 
+    *thisattr = attr;
+  }
+  
+  return attr;
+}
+
+/*}}}  */
+
 
 /*{{{  static Traversal setTraversalTypeAndStrategy(PT_Production prod) */
-
 static Traversal setTraversalTypeAndStrategy(Traversal trav)
 {
   PT_Attributes attributes = PT_getProductionAttributes(trav.prod);

@@ -17,6 +17,7 @@
 #include <deprecated.h>
 
 #include <MEPT-utils.h>
+#include <ASFME-utils.h>
 
 #include "preparation.h"
 #include "asfe.tif.h"
@@ -1597,7 +1598,7 @@ static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra)
   else if (PT_isTreeBracket(trm)) {
     reduct = rewriteBracketAppl(trm, env, depth, extra);
   }
-  else if (extra == NULL && isTreeTraversal(trm)) { 
+  else if (extra == NULL && ASF_isTreeTraversalFunction((ASF_Tree) trm)) { 
     /* only do this if we are not in a traversal already */
     reduct = rewriteTraversalAppl(trm, env, depth, extra);
   }
