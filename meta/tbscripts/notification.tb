@@ -5,31 +5,28 @@
 process Notify-about-changed-modules is
 let
   ChangedMods : list, 
-  Type : str,
+  Type : term,
   ChangedMod : str
 in
   (
-    rec-msg(notify-about-changed-modules(ChangedMods?,Type?)).
-    (
-      /* For each changed module a message is sent to the
-       * sglr in order to remove the associated parse table, if available.
-       */
-      if not-equal(ChangedMods,[]) then
-        ChangedMod := first(ChangedMods).
-        ChangedMods := next(ChangedMods).
-        if equal(Type, "sdf") then
-          snd-note(syntax-changed(ChangedMod)).
-          snd-msg(close-language(ChangedMod))
-        else
-          tau
-        fi
+    rec-msg(notify-about-changed-modules(ChangedMods?,sdf)).
+      (
+        /* For each changed module a message is sent to the
+         * sglr in order to remove the associated parse table, if available.
+         */
+
+         if not-equal(ChangedMods,[]) then
+           ChangedMod := first(ChangedMods).
+           ChangedMods := next(ChangedMods).
+           snd-note(syntax-changed(ChangedMod)).
+           snd-msg(close-language(ChangedMod))
+         fi
+      )*
+      if equal(ChangedMods,[]) then
+        /* If a new module is added, 
+         * we tell the world the current import relations 
+         */
+        snd-msg(notify-about-changed-modules-done)
       fi
-    )*
-    if equal(ChangedMods,[]) then
-      /* If a new module is added, 
-       * we tell the world the current import relations 
-       */
-      snd-msg(notify-about-changed-modules-done)
-    fi
   )* delta
 endlet

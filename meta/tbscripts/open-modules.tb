@@ -31,6 +31,7 @@ let
 in
   snd-msg(get-import-relations) .
   rec-msg(import-relations(ImportRelations?)) .
+printf("ImportRelations: %t\n", ImportRelations) .
   snd-note(display-import-graph(ImportRelations)) .
   ImportRelations := []
 endlet

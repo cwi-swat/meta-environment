@@ -151,7 +151,7 @@ in
     rec-msg(changed-modules(Changed?)) .
     CloseModuleInUI(ModuleName).
     SaveSdfModules(Changed).
-    snd-msg(notify-about-changed-modules(Changed, "sdf")) .
+    snd-msg(notify-about-changed-modules(Changed, sdf)) .
     rec-msg(notify-about-changed-modules-done)
 endlet
 
@@ -206,9 +206,10 @@ in
     rec-msg(exists-in-module-db(Import)) .
     DeleteEditors(Mod). 
     AddImportInDB(Mod, Import).
-    SaveAsfSdfModule(Mod)
+    SaveAsfSdfModule(Mod) 
   +
     rec-msg(not-exists-in-module-db(Import)) .
+printf("9\n") .
     snd-note(ui-status(
       errorf("Error during adding import %s to %s: module not open", 
              [Import, Mod])))
@@ -294,7 +295,7 @@ in
   DeleteEditors(ModuleName).
   snd-msg(close-module-in-db(ModuleName)).
   rec-msg(changed-modules(Changed?)).
-  snd-msg(notify-about-changed-modules(Changed, "sdf")) .
+  snd-msg(notify-about-changed-modules(Changed, sdf)) .
   rec-msg(notify-about-changed-modules-done)
 endlet
 
@@ -347,14 +348,22 @@ let
   Mod : str
 in
   snd-msg(delete-editors-for-module(Module)).
+printf("1\n") .
   snd-msg(get-all-depending-modules(Module)) .
+printf("2\n") .
   rec-msg(all-depending-modules(Depending?)).
+printf("3\n") .
   if not-equal(Depending, []) then
+printf("4\n") .
     Mod := first(Depending) .
+printf("5\n") .
     snd-msg(delete-editors-for-module(Mod)) .
+printf("6\n") .
     Depending := next(Depending)
   fi * 
+printf("7\n") .
   if equal(Depending, []) then
+printf("8\n") .
     tau
   fi 
 endlet

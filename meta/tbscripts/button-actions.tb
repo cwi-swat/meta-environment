@@ -232,7 +232,7 @@ in
     +
     rec-msg(parse-syntax-action, Stack?, EditorId?).
     StackPopString(Stack,Stack?,NewModName?) .
-    ParseSyntax(EditorId,NewModName).
+    ParseSyntax(EditorId,NewModName,sdf).
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(parse-equations-action, Stack?, EditorId?).
@@ -761,18 +761,21 @@ in
   ParseString(ModuleId, Nonterminal, Text, Tree?, ParseError?)
 endlet
  
-process ParseSyntax(EditorId : term, ModuleName : str) is
+process ParseSyntax(EditorId : term, ModuleName : str, Type : term) is
 let
   Tree             : term,
   Text             : str,
   Focus            : term,
   NewModules       : list,
-  DependingModules : list
+  DependingModules : list,
+  ModuleId	   : str
 in
   InvalidateEditor(EditorId).
-  snd-msg(parse-focusses(EditorId, trm("Sdf2"))) .
+  snd-msg(get-module-id-hook(Type)) .
+  rec-msg(get-module-id-hook-result(ModuleId?)) .
+  snd-msg(parse-focusses(EditorId, trm(ModuleId))) .
   (
-    rec-msg(parse-ok(trm("Sdf2"))) .
+    rec-msg(parse-ok(trm(ModuleId))) .
     snd-msg(get-tree(EditorId)) .
     (
       rec-msg(tree(Tree?)) .
@@ -781,9 +784,9 @@ in
       snd-msg(update-module-in-db(ModuleName, Text, Tree)) .
       (
         rec-msg(updating-succeeded(DependingModules?, NewModules?)).
-	snd-msg(notify-about-changed-modules(DependingModules, "sdf")) .
+	snd-msg(notify-about-changed-modules(DependingModules, Type)) .
 	rec-msg(notify-about-changed-modules-done) .
-        snd-msg(open-modules(NewModules, sdf)).
+        snd-msg(open-modules(NewModules, Type)).
         rec-msg(finished-opening-modules) .
         snd-note(clear-focus(EditorId))
       +
@@ -797,7 +800,7 @@ in
       rec-msg(no-tree) /* editor dissappeared */
     )
   +
-    rec-msg(parse-failed(trm("Sdf2"), Focus?)) .
+    rec-msg(parse-failed(trm(ModuleId), Focus?)) .
     snd-msg(invalidate-sdf-in-db(ModuleName))
   ) 
 endlet
