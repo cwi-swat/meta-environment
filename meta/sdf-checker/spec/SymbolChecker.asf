@@ -1,0 +1,64 @@
+equations
+
+  [cs-1'1] check-symbols(Definition) = check-symbols(Definition, {})
+
+  [cs-1'2] get-module-name(Module) = ModuleName
+           ====================================
+           check-symbols(Module, Msgs) = 
+             check-symbols(Module, Msgs, ModuleName)
+
+  [cs-2'1] is-literal-symbol($Symbol2) = false
+           ===================================
+           check-symbols({$Symbol1 $Symbol2}+, Msgs, ModuleName) =
+              Msgs + not-supported-symbol(ModuleName, {$Symbol1 $Symbol2}+)
+
+  [cs-2'2] is-literal-symbol($Symbol2) = false
+           ===================================
+           check-symbols({$Symbol1 $Symbol2}*, Msgs, ModuleName) =
+              Msgs + not-supported-symbol(ModuleName, {$Symbol1 $Symbol2}*)
+
+  [cs-2'3] is-literal-symbol($Symbol2) = false
+           ===================================
+           check-symbols({$Symbol1 $Symbol2}NatCon+, Msgs, ModuleName) =
+              Msgs + not-supported-symbol(ModuleName, {$Symbol1 $Symbol2}NatCon+)
+
+  [cs-2'4] is-list-symbol($Symbol) = true
+           ==============================
+           check-symbols($Symbol+, Msgs, ModuleName) =
+              Msgs + not-supported-symbol(ModuleName, $Symbol+)
+
+  [cs-2'5] is-list-symbol($Symbol) = true
+           ==============================
+           check-symbols($Symbol*, Msgs, ModuleName) =
+              Msgs + not-supported-symbol(ModuleName, $Symbol*)
+
+  [cs-2'6] is-list-symbol($Symbol1) = true
+           ===============================
+           check-symbols({$Symbol1 $Symbol2}+, Msgs, ModuleName) =
+              Msgs + not-supported-symbol(ModuleName, {$Symbol1 $Symbol2}+)
+
+  [cs-2'7] is-list-symbol($Symbol1) = true
+           ===============================
+           check-symbols({$Symbol1 $Symbol2}*, Msgs, ModuleName) =
+              Msgs + not-supported-symbol(ModuleName, {$Symbol1 $Symbol2}*)
+
+  [cs-2'8] is-list-symbol($Symbol1) = true
+           ===============================
+           check-symbols({$Symbol1 $Symbol2}NatCon+, Msgs, ModuleName) =
+              Msgs + not-supported-symbol(ModuleName, {$Symbol1 $Symbol2}NatCon+)
+
+  [ils-1'1] is-literal-symbol($Literal) = true
+
+  [default-ils-1'2] is-literal-symbol($Symbol) = false
+
+  [ils-2'1] is-list-symbol({$Symbol1 $Symbol2}+) = true
+
+  [ils-2'2] is-list-symbol({$Symbol1 $Symbol2}*) = true
+
+  [ils-2'3] is-list-symbol($Symbol*) = true
+
+  [ils-2'4] is-list-symbol($Symbol+) = true
+
+  [ils-2'5] is-list-symbol({$Symbol1 $Symbol2}NatCon+) = true
+
+  [default-ils-2'6] is-list-symbol($Symbol) = false

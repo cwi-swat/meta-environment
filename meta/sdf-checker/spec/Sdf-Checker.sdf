@@ -1,9 +1,17 @@
 module  Sdf-Checker
 
-imports SortChecker AttributeChecker
+imports AttributeChecker SortChecker SymbolChecker ProductionChecker
+        KernelSyntaxChecker
 exports
   context-free syntax
     check-definition(Definition) -> Messages
+
+hiddens
+  context-free syntax
+    check-sorts-and-prods(Definition)                     -> Messages
+    check-module(Module, Definition, Info-Msg-Tuple)	  -> Info-Msg-Tuple
+    check-modules(Definition, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
+    check-imports(ImportsSet, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
 
 hiddens
   variables
@@ -12,3 +20,12 @@ hiddens
     "Msg"[0-9]*        -> Message
     "Msg*"[0-9]*       -> Message*
     "Msgs"[0-9]*       -> Messages
+
+    "Module"[0-9]*     -> Module
+    "Module*"[0-9]*    -> Module*
+    "ModuleName"[0-9]* -> ModuleName
+    
+    "InfoMsgTuple"[0-9]*    -> Info-Msg-Tuple
+
+    "Import*"[0-9]*         -> Import*
+    "ImportsSet"[0-9]*      -> ImportsSet

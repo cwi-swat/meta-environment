@@ -1,0 +1,23 @@
+module KernelSyntaxChecker
+
+imports Messages ModuleOperations
+
+exports
+  context-free syntax
+    check-for-kernel-syntax(Definition) -> Messages
+
+hiddens
+  context-free syntax
+    check-syntax(Definition, Messages)          -> Messages {traversal(accu, top-down)}
+    check-syntax(Module, Messages)              -> Messages {traversal(accu, top-down)}
+    check-syntax(Module, Messages, ModuleName)  -> Messages {traversal(accu, top-down)}
+    check-syntax(Grammar, Messages, ModuleName) -> Messages {traversal(accu, top-down)}
+
+hiddens
+  variables
+    "Definition"[0-9]* -> Definition
+    "Module"[0-9]*     -> Module
+    "ModuleName"[0-9]* -> ModuleName
+    "Msgs"[0-9]*       -> Messages
+    "Prod*"[0-9]*      -> Production*
+    "Prios"[0-9]*      -> Priorities

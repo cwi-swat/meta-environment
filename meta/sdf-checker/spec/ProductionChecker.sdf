@@ -1,0 +1,60 @@
+module ProductionChecker
+
+imports Sdf-Type-Environment
+exports
+  context-free syntax
+    check-module-prods(Module, Info-Msg-Tuple) -> Info-Msg-Tuple
+
+hiddens
+  context-free syntax
+    get-exported-cf-prods(Module, ProductionsSet)  -> ProductionsSet {traversal(accu, top-down)}
+    get-exported-cf-prods(Section, ProductionsSet) -> ProductionsSet {traversal(accu, top-down)}
+    get-hidden-cf-prods(Module, ProductionsSet)    -> ProductionsSet {traversal(accu, top-down)}
+    get-hidden-cf-prods(Section, ProductionsSet)   -> ProductionsSet {traversal(accu, top-down)}
+    get-cf-prods(Grammar, ProductionsSet)          -> ProductionsSet {traversal(accu, top-down)}
+    get-prods-in-prios(Module, ProductionsSet)     -> ProductionsSet {traversal(accu, top-down)}
+    get-prods-in-prios(Grammar, ProductionsSet)    -> ProductionsSet {traversal(accu, top-down)}
+    get-prods-in-prios(Priorities, ProductionsSet) -> ProductionsSet {traversal(accu, top-down)}
+    get-prods-in-prios(Production, ProductionsSet) -> ProductionsSet {traversal(accu, top-down)}
+
+hiddens
+  context-free syntax
+    check-priorities(Module, Messages, ModuleName)               -> Messages {traversal(accu, top-down)}
+    check-priorities(Priority, Messages, ModuleName)             -> Messages {traversal(accu, top-down)}
+    check-priorities(Group, Messages, ModuleName, Symbol)        -> Messages {traversal(accu, top-down)}
+    check-priorities({Group ">"}+, Messages, ModuleName, Symbol) -> Messages {traversal(accu, top-down)}
+    check-priorities(Production, Messages, ModuleName, Symbol)   -> Messages {traversal(accu, top-down)}
+    get-rhs-production(Group, SymbolsSet)                        -> SymbolsSet {traversal(accu, top-down)}
+    get-rhs-production(Production, SymbolsSet)                   -> SymbolsSet {traversal(accu, top-down)}
+
+
+hiddens
+  variables
+    "Grammar"[0-9]*         -> Grammar
+    "Prod"[0-9]*            -> Production
+    "Prod*"[0-9]*           -> Production*
+    "ProductionsSet"[0-9]*  -> ProductionsSet
+
+    "Priorities"[0-9]*      -> Priorities
+
+    "Module"[0-9]*          -> Module
+    "Module*"[0-9]*         -> Module*
+    "ModuleName"[0-9]*      -> ModuleName
+
+    "Msg"[0-9]*             -> Message
+    "Msg*"[0-9]*            -> Message*
+    "Msgs"[0-9]*            -> Messages
+
+    "ImportsSet"[0-9]*      -> ImportsSet
+    
+    "InfoMsgTuple"[0-9]*    -> Info-Msg-Tuple
+    "ModuleInfoTable"[0-9]* -> Module-Info-Table
+
+    "Attrs"[0-9]*           -> Attributes
+    "Assoc"[0-9]*           -> Associativity
+    "$Literal"[0-9]*        -> Literal
+    "Symbol"[0-9]*          -> Symbol
+    "Symbol*"[0-9]*         -> Symbol*
+    "Symbol,*"[0-9]*        -> {Symbol ","}*
+    "Group"[0-9]*           -> Group
+    "Group+"[0-9]*          -> {Group ">"}+

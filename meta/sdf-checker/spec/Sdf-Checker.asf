@@ -1,10 +1,47 @@
 equations
 
+  [cd1] check-sorts-and-prods(Definition) = Msgs1,
+        check-attributes(Definition) = Msgs2,
+        check-symbols(Definition) = Msgs3,
+        check-for-kernel-syntax(Definition) = Msgs4
+        ===========================================
+        check-definition(Definition) = Msgs1 ++ Msgs2 ++ Msgs3 ++ Msgs4
+ 
+  [cms1] check-module(Module, Definition, InfoMsgTuple1) = InfoMsgTuple2
+         ===============================================================
+         check-modules(Module Module*, Definition,  InfoMsgTuple1) =
+           check-modules(Module*, Definition, InfoMsgTuple2)
 
+  [cms2] check-modules(, Definition, InfoMsgTuple) = InfoMsgTuple
+ 
+  [cms1] get-module(ModuleName, Definition) = Module,
+         check-module(Module, Definition, InfoMsgTuple1) = InfoMsgTuple2
+         ===============================================================
+         check-imports(imports(ModuleName Import*), Definition,  InfoMsgTuple1) =
+           check-imports(imports(Import*), Definition, InfoMsgTuple2)
+
+  [cms2] check-imports(imports(), Definition, InfoMsgTuple) = InfoMsgTuple
+
+
+  [cs-1'1] check-modules(Definition, Definition, 
+                         create-info-msg-tuple()) = InfoMsgTuple
+           =====================================================
+           check-sorts-and-prods(Definition) = get-messages(InfoMsgTuple)
 	
+  [cm1] get-module-name(Module) = ModuleName,
+        module-is-checked(ModuleName, 
+                          get-module-info(InfoMsgTuple)) = true
+        =======================================================
+        check-module(Module, Definition, InfoMsgTuple) = InfoMsgTuple
+	
+  [cm1] get-module-name(Module) = ModuleName,
+        module-is-checked(ModuleName, 
+                          get-module-info(InfoMsgTuple1)) = false,
+       
+        get-all-imports(Module) = ImportsSet,
+        check-imports(ImportsSet, Definition, InfoMsgTuple1) = InfoMsgTuple2,
 
-
- [cd1] check-sorts(Definition) = Msgs1,
-       check-attributes(Definition) = Msgs2
-       ====================================
-       check-definition(Definition) = Msgs1 ++ Msgs2
+        check-module-sorts(Module, InfoMsgTuple2) = InfoMsgTuple3,
+        check-module-prods(Module, InfoMsgTuple3) = InfoMsgTuple4
+        =========================================================
+        check-module(Module, Definition, InfoMsgTuple1) = InfoMsgTuple4

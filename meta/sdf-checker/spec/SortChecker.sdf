@@ -4,7 +4,8 @@ module SortChecker
 imports Sdf-Type-Environment
 exports
   context-free syntax
-    check-sorts(Definition) -> Messages
+    check-module-sorts(Module, Info-Msg-Tuple) -> Info-Msg-Tuple
+
 hiddens
   context-free syntax
     get-exported-declared-symbols(Module, SymbolsSet)  -> SymbolsSet {traversal(accu, top-down)}
@@ -17,10 +18,6 @@ hiddens
     get-used-symbols(Symbol, SymbolsSet)	-> SymbolsSet {traversal(accu, top-down)}
     get-defined-symbols(Module, SymbolsSet)  	-> SymbolsSet {traversal(accu, top-down)}
     get-defined-symbols(Production, SymbolsSet) -> SymbolsSet {traversal(accu, top-down)}
-
-    check-module(Module, Definition, Info-Msg-Tuple)	  -> Info-Msg-Tuple
-    check-modules(Definition, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
-    check-imports(ImportsSet, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
 
 hiddens
   variables

@@ -15,7 +15,7 @@ equations
 
   [mic-1'1] module-is-checked(ModuleName,
                               {ModuleInfoEntry*1
-                               [ModuleName, Bool, SymbolInfo]
+                               [ModuleName, Bool, ModuleInfo]
                                ModuleInfoEntry*2}) = Bool
 
   [default-mic-1'2] module-is-checked(ModuleName,
@@ -23,15 +23,24 @@ equations
 
   [psi-1'1] put-symbol-info(ModuleName, 
                             SymbolsSet1,
-                            SymbolsSet2,
-                            {ModuleInfoEntry*}) =
-              {[ModuleName, true, [SymbolsSet1, SymbolsSet2]] 
-               ModuleInfoEntry*}
+                            {ModuleInfoEntry*1 
+                             [ModuleName, Bool, 
+                              [SymbolsSet2, ProductionsSet]]
+                             ModuleInfoEntry*2}) =
+              {ModuleInfoEntry*1
+               [ModuleName, true, [SymbolsSet1, ProductionsSet]] 
+               ModuleInfoEntry*2}
+
+  [default-psi-1'1] put-symbol-info(ModuleName, 
+                                    SymbolsSet,
+                                    {ModuleInfoEntry*}) =
+                      {[ModuleName, true, [SymbolsSet, productions()]] 
+                        ModuleInfoEntry*}
 
   [gds-1'1] get-declared-symbols(ModuleName,
                               {ModuleInfoEntry*1
-                               [ModuleName, Bool, [SymbolsSet1, SymbolsSet2]]
-                               ModuleInfoEntry*2}) = SymbolsSet1
+                               [ModuleName, Bool, [SymbolsSet, ProductionsSet]]
+                               ModuleInfoEntry*2}) = SymbolsSet
 
   [gds-1'1] get-declared-symbols(imports(), ModuleInfoTable) = symbols()
 
@@ -42,3 +51,35 @@ equations
             =========================================================
             get-declared-symbols(imports(ModuleName Import*), 
                                  ModuleInfoTable) = symbols(Symbol*1 Symbol*2)
+
+  [ppi-1'1] put-production-info(ModuleName, 
+                                ProductionsSet1,
+                                {ModuleInfoEntry*1 
+                                 [ModuleName, Bool, 
+                                  [SymbolsSet, ProductionsSet2]]
+                                 ModuleInfoEntry*2}) =
+              {ModuleInfoEntry*1
+               [ModuleName, true, [SymbolsSet, ProductionsSet1]] 
+               ModuleInfoEntry*2}
+
+  [default-ppi-1'1] put-production-info(ModuleName, 
+                                        ProductionsSet,
+                                        {ModuleInfoEntry*}) =
+                      {[ModuleName, true, [symbols(), ProductionsSet]] 
+                        ModuleInfoEntry*}
+
+  [gdp-1'1] get-defined-productions(ModuleName,
+                                    {ModuleInfoEntry*1
+                                     [ModuleName, Bool, 
+                                      [SymbolsSet, ProductionsSet]]
+                                     ModuleInfoEntry*2}) = ProductionsSet
+
+  [gdp-1'1] get-defined-productions(imports(), ModuleInfoTable) = productions()
+
+  [gdp-1'2] get-defined-productions(ModuleName, ModuleInfoTable) = 
+               productions(Production*1),
+            get-defined-productions(imports(Import*), ModuleInfoTable) =
+               productions(Production*2)
+            ============================================================
+            get-defined-productions(imports(ModuleName Import*), 
+                                 ModuleInfoTable) = productions(Production*1 Production*2)

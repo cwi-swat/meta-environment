@@ -1,0 +1,15 @@
+equations
+
+  [cs-1'1] check-for-kernel-syntax(Definition) = 
+             check-syntax(Definition, {})
+
+  [cs-1'2] get-module-name(Module) = ModuleName
+           ====================================
+           check-syntax(Module, Msgs) = 
+             check-syntax(Module, Msgs, ModuleName)
+
+  [cs-1'3] check-syntax(syntax Prod*, Msgs, ModuleName) =
+             Msgs + kernel-syntax-construction(ModuleName, "syntax")
+
+  [cs-1'3] check-syntax(priorities Prios, Msgs, ModuleName) =
+             Msgs + kernel-syntax-construction(ModuleName, "priorities")

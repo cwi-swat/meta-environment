@@ -28,6 +28,7 @@ hiddens
   variables
     "Module"[0-9]*     -> Module
     "Aterm*"[0-9]*     -> {ATerm ","}*
+    "Aterm+"[0-9]*     -> {ATerm ","}+
     "ModuleName"[0-9]* -> ModuleName
     "Attributes"[0-9]* -> Attributes
     "Attr*"[0-9]*      -> {Attribute ","}*

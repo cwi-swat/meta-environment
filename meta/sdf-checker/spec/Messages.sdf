@@ -1,19 +1,26 @@
 module Messages
 
-imports SymbolSetOperations
+imports SymbolSetOperations ProductionSetOperations
 
 exports 
   sorts Message Messages
 
   context-free syntax
-    "none"					   -> Message
-    undeclared(ModuleName, SymbolsSet)		   -> Message
-    not-implemented(ModuleName, SymbolsSet)	   -> Message
-    declared-but-undefined(ModuleName, SymbolsSet) -> Message
-    illegal-attribute(ModuleName, Production)      -> Message
-    "{" Message* "}"                               -> Messages
-    Messages "+" Message			   -> Messages
-    Messages "++" Messages			   -> Messages {left}
+    "none"					           -> Message
+    undeclared(ModuleName, SymbolsSet)		           -> Message
+    not-implemented(ModuleName, SymbolsSet)	           -> Message
+    declared-but-undefined(ModuleName, SymbolsSet)         -> Message
+    illegal-attribute(ModuleName, Production)              -> Message
+    illegal-traversal-attribute(ModuleName, Attribute)     -> Message
+    not-supported-symbol(ModuleName, Symbol)               -> Message
+    used-but-undefined(ModuleName, ProductionsSet)         -> Message
+    kernel-syntax-construction(ModuleName, Literal)        -> Message
+    inconsistent-rhs-in-priorities(ModuleName, Symbol, Production) -> Message
+
+  context-free syntax
+    "{" Message* "}"       -> Messages
+    Messages "+" Message   -> Messages
+    Messages "++" Messages -> Messages {left}
 
 hiddens
   variables

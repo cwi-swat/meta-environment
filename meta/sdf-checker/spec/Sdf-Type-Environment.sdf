@@ -4,7 +4,7 @@ imports Messages Booleans ImportOperations
 
 exports
   sorts Info-Msg-Tuple Module-Info-Entry Module-Info-Table
-        Symbol-Info
+        Module-Info
 
   context-free syntax
     "[" Module-Info-Table "," Messages "]" -> Info-Msg-Tuple
@@ -17,19 +17,28 @@ exports
     put-messages(Messages, Info-Msg-Tuple)             -> Info-Msg-Tuple
 
   context-free syntax
-    "[" SymbolsSet "," SymbolsSet "]" -> Symbol-Info
+    "[" SymbolsSet "," ProductionsSet "]" -> Module-Info
 
   context-free syntax
-    "[" ModuleName "," Bool "," Symbol-Info "]" -> Module-Info-Entry
+    "[" ModuleName "," Bool "," Module-Info "]" -> Module-Info-Entry
     "{" Module-Info-Entry* "}"                  -> Module-Info-Table
 
   context-free syntax
     module-is-checked(ModuleName, Module-Info-Table)    -> Bool
+
+  context-free syntax
     get-declared-symbols(ModuleName, Module-Info-Table) -> SymbolsSet
     put-symbol-info(ModuleName,
-                    SymbolsSet, SymbolsSet, 
+                    SymbolsSet, 
                     Module-Info-Table)                  -> Module-Info-Table
     get-declared-symbols(ImportsSet, Module-Info-Table) -> SymbolsSet
+
+  context-free syntax
+    get-defined-productions(ModuleName, Module-Info-Table) -> ProductionsSet
+    put-production-info(ModuleName,
+                        ProductionsSet, 
+                        Module-Info-Table)                 -> Module-Info-Table
+    get-defined-productions(ImportsSet, Module-Info-Table) -> ProductionsSet
 
 hiddens
   variables
@@ -39,7 +48,9 @@ hiddens
     "ModuleInfoEntry"[0-9]*  -> Module-Info-Entry
     "ModuleInfoEntry*"[0-9]* -> Module-Info-Entry*
     "ModuleInfoTable"[0-9]*  -> Module-Info-Table
-    "SymbolInfo"[0-9]*       -> Symbol-Info
+    "ModuleInfo"[0-9]*       -> Module-Info
     "Symbol*"[0-9]*          -> Symbol*
     "SymbolsSet"[0-9]*       -> SymbolsSet
     "Import*"[0-9]*          -> Import*
+    "Production*"[0-9]*      -> Production*
+    "ProductionsSet"[0-9]*   -> ProductionsSet
