@@ -7,3 +7,7 @@ context-free syntax
 
     "true"  -> BoolCon {cons("true")}
     "false" -> BoolCon {cons("false")}
+
+hiddens
+context-free start-symbols
+  BoolCon

@@ -3,6 +3,10 @@ module basic/Errors
 imports basic/Locations
 imports basic/StrCon
 
+hiddens
+  context-free start-symbols
+    Summary Error
+
 exports
 
 sorts Subject
@@ -32,3 +36,4 @@ sorts Summary
 context-free syntax
   "summary" "(" producer:StrCon "," id:StrCon "," "[" {Error ","}* "]" ")"
     -> Summary {cons("summary")}
+

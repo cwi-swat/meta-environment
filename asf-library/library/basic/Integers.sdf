@@ -4,9 +4,11 @@ imports basic/NatCon
 imports
   basic/Booleans
 
-exports
-  context-free start-symbols Natural Integer
+hiddens
+   context-free start-symbols 
+     Natural Integer
 
+exports
   sorts Natural Integer
 
   context-free syntax

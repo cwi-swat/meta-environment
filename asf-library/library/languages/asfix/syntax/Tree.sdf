@@ -19,3 +19,8 @@ amb(args:Args)                  -> Tree {cons("amb")}
 
 "prod" "(" lhs:Symbols comma1:"," rhs:Symbol comma2:"," attributes:Attributes ")" -> Production {cons("default")}
 list(rhs:Symbol)                                   -> Production {cons("list")}
+
+hiddens
+
+context-free start-symbols
+  Tree

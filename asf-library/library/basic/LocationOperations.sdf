@@ -9,6 +9,10 @@ context-free syntax
 
 hiddens
   imports basic/Whitespace
+ 
+  context-free start-symbols
+    Area StrCon
+
   variables
     "Filename" -> StrCon
     "Area" -> Area

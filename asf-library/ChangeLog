@@ -1,5 +1,17 @@
 $Id$
 
+Mon May  3 13:11:18 CEST 2004 <jurgenv@cwi.nl>
+ * Added hidden context-free start-symbols in all library modules
+   where appropriate. Removed some context-free start-symbols that
+   were not appropriate.
+
+Tue Apr 27 15:15:03 CEST 2004 <markvdb@cwi.nl>
+ * Fixed some inconsistencies wrt location and area-in-file.
+
+Fri Apr 23 17:11:13 CEST 2004 <markvdb@cwi.nl>
+ * Declared symbols in the sorts section are no longer
+   promoted to start symbols.
+
 Fri Apr 16 19:33:49 CEST 2004 <jurgenv@cwi.nl>
  * added max(Int, Int) to basic/Integers
 

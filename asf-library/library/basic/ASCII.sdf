@@ -16,6 +16,9 @@ hiddens
 
 imports basic/Comments
 
+context-free start-symbols
+  Integer
+
 variables
 "string" -> String
 "char+"[0-9\']* -> CHAR+

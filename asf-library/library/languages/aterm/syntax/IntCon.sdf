@@ -2,8 +2,12 @@ module languages/aterm/syntax/IntCon
 
 imports basic/Whitespace
 
+hiddens
+  context-free start-symbols 
+    IntCon
+
 exports
-  context-free start-symbols IntCon
+
   sorts NatCon IntCon
   lexical syntax   
     [0-9]+ -> NatCon  {cons("digits")}

@@ -8,3 +8,8 @@ exports
 context-free syntax
 
 Tree Ann -> Tree {cons("annotated")} 
+
+hiddens
+
+context-free start-symbols
+  Tree

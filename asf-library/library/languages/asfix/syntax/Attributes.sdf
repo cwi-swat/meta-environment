@@ -36,3 +36,7 @@ exports
     "non-assoc" -> ATerm {reject}
     id(QLiteral) -> ATerm {reject}
 
+
+hiddens
+  context-free start-symbols
+    Attributes Attr

@@ -37,3 +37,7 @@ parametrized-sort(sort:QLiteral,parameters:Symbols)       -> Symbol  {cons("para
 
 integer: NatCon                 -> CharRange  {cons("character")}
 range(start:NatCon,end:NatCon) -> CharRange {cons("range")}
+
+hiddens
+  context-free start-symbols
+    Symbol

@@ -15,6 +15,10 @@ context-free syntax
 
 hiddens
   imports basic/Whitespace
+
+  context-free start-symbols
+    NatCon
+
   variables
     "BeginLine" -> NatCon
     "BeginColumn" -> NatCon

@@ -4,9 +4,13 @@ imports languages/aterm/syntax/Literals
         languages/aterm/syntax/IntCon 
         languages/aterm/syntax/RealCon
 
+hiddens
+  context-free start-symbols 
+    ATerm
+
 exports
-  context-free start-symbols ATerm
   sorts ATermList ACon AFun ATerm Ann
+
   context-free syntax
     "[" elems:{ ATerm ","}* "]"             -> ATermList {cons("not-empty")}
     IntCon                                  -> ACon      {cons("int")}

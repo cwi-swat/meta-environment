@@ -1,7 +1,7 @@
 module basic/Strings
 
-%% This module defines strings with continuations and escaped newlines, tabs and 
-%% backslashes
+%% This module defines strings with continuations and escaped newlines, 
+%% tabs and backslashes
 
 
 imports basic/StrCon
@@ -11,12 +11,12 @@ imports	basic/Bytes
 hiddens 
   sorts Escaped Normal
 
+  context-free start-symbols 
+    String
+  
 exports
-  context-free start-symbols String
-
   sorts String
 
-exports
   context-free syntax
     StrCon             -> String {constructor}
     String "||" String -> String {left}

@@ -11,4 +11,5 @@ lexical syntax
     "\\n" | "\\t" |  "\\\"" | "\\\\" -> Escaped {cons("special-character")}
     "\\" [0-7][0-7][0-7]             -> Escaped {cons("octal")}
 
-    "\"" (Normal | Escaped)* ("\\\n" (Normal | Escaped)*)* "\"" -> StrCon {cons("default")}
+    "\"" (Normal | Escaped)* ("\\\n" (Normal | Escaped)*)* "\"" 
+       -> StrCon {cons("default")}
