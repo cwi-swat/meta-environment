@@ -13,6 +13,7 @@ let
   Text         : str,
   ErrorMessage : str,
   FileName     : str,
+  TermStoreName : str,
   Extension    : str
 in
   Id := process-id. 
@@ -92,9 +93,11 @@ in
   +
     rec-msg(save-termstore) .
     snd-note(ui-status(statf(Id,"Saving term-store",[]))) .
+    snd-msg(get-termstore-name) .
+    rec-msg(termstore-name(TermStoreName?)) .
     snd-msg(ts-get-snapshot) .
     rec-msg(ts-snapshot(Snapshot?)) .
-    snd-msg(io-write-packed-term-file("meta.termstore", Snapshot)) .
+    snd-msg(io-write-packed-term-file(TermStoreName, Snapshot)) .
     (
       rec-msg(io-file-written) .
       snd-msg(saved)

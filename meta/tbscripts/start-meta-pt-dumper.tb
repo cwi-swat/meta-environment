@@ -10,11 +10,7 @@ in
   create(StatusDisplay, Pid?) .
   create(MetaCreator, Pid?) .
   rec-msg(creation-finished) .
-  if not-equal(TERMSTORENAME, "") then
-    TermStoreActivation(TERMSTORENAME)
-  else
-    tau
-  fi .
+  InitializeTermStore(TERMSTORENAME) .
   snd-msg(open-modules([MODULENAME], sdf)) .
   rec-msg(finished-opening-modules) .
   snd-msg(dump-parse-table-given-file(MODULENAME, OUTFILENAME, trm)) .

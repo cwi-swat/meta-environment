@@ -12,11 +12,7 @@ in
   create(StatusDisplay, Pid?) .
   create(MetaCreator, Pid?) .
   rec-msg(creation-finished) .
-  if not-equal(TERMSTORENAME, "") then
-    TermStoreActivation(TERMSTORENAME)
-  else
-    tau
-  fi .
+  InitializeTermStore(TERMSTORENAME) .
   subscribe(delete-editor(<term>)) .
   snd-msg(open-modules([MODULENAME], sdf)) .
   rec-msg(finished-opening-modules) .

@@ -708,7 +708,7 @@ in
       +
         rec-msg(read-termstore, Stack?, EditorId?) .
 	CloseAll .
-	TermStoreActivation("meta.termstore") .
+	TermStoreActivation .
 	ReturnSuccess(EditorId, Stack)		
       +
         rec-msg(save-termstore, Stack?, EditorId?) .

@@ -82,6 +82,7 @@ in
   create(META, Pid?)
   . create(ButtonActionExecutor, Pid?)
   . create(ButtonActionReceiver, Pid?)
+  . create(TermStoreName, Pid?)
   . create(Compile-module, Pid?)
   . create(DumpEquations, Pid?)
   . create(DumpParseTable, Pid?)

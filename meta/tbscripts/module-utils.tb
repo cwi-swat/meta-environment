@@ -527,15 +527,27 @@ in
   CheckEquationConsistency(ModuleName, Path)
 endlet
 
-process TermStoreActivation(Name : str) is
+process InitializeTermStore(Name : str) is
+  if not-equal(Name, "") then
+    snd-msg(register-termstore-name(Name)) .
+    rec-msg(termstore-name-registered) .
+    TermStoreActivation
+  else
+    tau
+  fi
+
+process TermStoreActivation is
 let
   TermStoreContents : term,
   ErrorMessage : str,
   ModuleNames : list,
   ModuleName : str,
+  Name : str,
   Id : int
 in
   Id := process-id.
+  snd-msg(get-termstore-name) .
+  rec-msg(termstore-name(Name?)) .
   snd-msg(io-exists-file(Name)) .
   (
     rec-msg(io-file-exists) .
@@ -565,4 +577,18 @@ in
   +
     rec-msg(io-file-not-exists)
   )
+endlet
+
+process TermStoreName is
+let
+  TermStoreName : str
+in
+  TermStoreName := "meta.termstore" .
+  (
+    rec-msg(register-termstore-name(TermStoreName?)) .
+    snd-msg(termstore-name-registered)
+  +
+    rec-msg(get-termstore-name) .
+    snd-msg(termstore-name(TermStoreName)) 
+  )*delta
 endlet
