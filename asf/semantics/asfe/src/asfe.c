@@ -94,9 +94,6 @@ static MemoTable memo_table = NULL;
 static char error_buf[BUFSIZ];
 static ATbool aborted = ATfalse;
 
-
-static ATbool noNewVars(PT_Tree trm, ATerm env);
-
 /* innermost strategy */
 static PT_Tree rewrite(PT_Tree trm, ATerm env, int depth);
 static ATerm argsMatching(ATerm env, ASF_ConditionList conds,
@@ -383,7 +380,6 @@ void
 add_equations(int cid, char *modname, ATerm equs)
 {
   ASF_CondEquationList newequs;
-  int l;
 
   if (runVerbose) {
     ATwarning("preparing equations...\n");

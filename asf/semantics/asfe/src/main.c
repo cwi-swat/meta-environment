@@ -203,7 +203,7 @@ main(int argc, char *argv[])
 
     if (RWgetError() != NULL) {
       ATerm message, tag, subject;
-      char *messageText, *tagText, *subjectText;
+      char *tagText, *subjectText;
       ATermList error;
 
       /* The errors are tuples containing a message and a subject */

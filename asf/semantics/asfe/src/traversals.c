@@ -118,12 +118,11 @@ createTraversalPattern(PT_Tree term)
 {
   PT_Production prod;
   PT_Args args;
-  PT_Symbols symbols, symbolList;
+  PT_Symbols symbols;
   PT_Symbol symbol;
   PT_Symbol traversed;
   PositionSymbolTuple symbolVisitorData;
   Traversal traversal;
-  int pos;
 
   prod = PT_getTreeProd(term);
   args = PT_getTreeArgs(term);
@@ -165,7 +164,6 @@ makeTraversalAppl(PT_Tree appl, Traversal traversal)
   PT_Symbols symbols;
   PositionSymbolTuple symbolVisitorData;
   PositionTreeTuple treeVisitorData;
-  int pos;
 
   symbol = PT_getProductionRhs(PT_getTreeProd(appl));
 

@@ -425,7 +425,7 @@ static PT_Tree lexicalToList(PT_Tree lextrm)
   ASF_Tree newTree;
   char emptyLayout[] = "";
   char cbuf[4] = "\" \"", *lexstr, *sortstr;
-  ASF_CHARList newCharList;
+  ASF_CHARList newCharList = NULL;
   int i, l;
 
   sort = PT_getTreeSymbol(lextrm);
@@ -453,6 +453,8 @@ static PT_Tree lexicalToList(PT_Tree lextrm)
     }
   }
 
+  assert(newCharList != NULL);
+
   newname = PTtoASF(PT_makeTreeUnquotedLiteral(sortstr));
   qnewname = (ASF_Symbol)PT_makeTermFromSymbol(
                            PT_makeSymbolQuotedLiteral(sortstr));
@@ -473,6 +475,7 @@ static PT_Tree lexicalToList(PT_Tree lextrm)
 
 /* Strip all annotations except "pos-info" */
 
+#if 0 /* Avoid 'defined but not used' warning */
 static ATerm prepare_annos(ATermList annos)
 {
   extern ATerm posinfo;
@@ -491,11 +494,12 @@ static ATerm prepare_annos(ATermList annos)
   }
   return NULL;
 }
+#endif
 
 static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
 {
   PT_Tree result;
-  PT_Args args, elems, newargs;
+  PT_Args args, newargs;
 
 /*
   ATerm annos = AT_getAnnotations((ATerm)tree);
@@ -563,9 +567,8 @@ RWflushEquations()
 
 PT_Tree listToLexical(PT_Tree lexappl)
 {
-  char *lexstr, *newlexstr;
+  char *newlexstr;
   int charListLength, i;
-  PT_Tree newLexical;
   ASF_Tree tree = PTtoASF(lexappl);
   ASF_CHARList charList;
   PT_Symbol symbol;
@@ -607,8 +610,6 @@ PT_Tree listToLexical(PT_Tree lexappl)
 static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data)
 {
   PT_Args args;
-  PT_Tree result;
-  PT_Symbol iter;
 
   if (PT_isTreeAppl(tree) || PT_isTreeList(tree)) {
     if (ASF_isTreeLexicalConstructor(PTtoASF(tree))) {
