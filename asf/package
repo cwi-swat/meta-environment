@@ -23,11 +23,11 @@ sglr 3.12
 
 asf-support 1.3
 
-sdf-support PARSE_ERROR_IN_PACKAGE_DEF
+sdf-support 2.0
 
 pt-support 1.3
 
-aterm PARSE_ERROR_IN_PACKAGE_DEF
+aterm 2.4
 
 toolbus 1.3
 
