@@ -245,8 +245,8 @@ in
   Runner := Modules.
   if not-equal(Runner, []) then
     Module := first(Runner) .
-    snd-msg(save-sdf-module(Module)) .
-    rec-msg(saved-sdf-module(Module)) .
+    snd-msg(save-module(Module, sdf)) .
+    rec-msg(saved-module(Module)) .
     Runner := next(Runner)
   fi * 
   if equal(Runner, []) then
@@ -255,8 +255,8 @@ in
 endlet
 
 process SaveAsfSdfModule(Module : str) is
-   snd-msg(save-asfsdf-module(Module)) .
-   rec-msg(saved-asfsdf-module(Module))
+   snd-msg(save-module(Module, asfsdf)) .
+   rec-msg(saved-module(Module))
 
 process RemoveModuleFromDisk(Path : str, Module : str) is
 let

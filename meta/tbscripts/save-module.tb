@@ -14,11 +14,12 @@ let
   ErrorMessage : str,
   FileName     : str,
   TermStoreName : str,
-  Extension    : str
+  Extension    : str,
+  ModuleType   : term
 in
   Id := process-id. 
   (
-    rec-msg(save-sdf-module(Module?)).
+    rec-msg(save-module(Module?, ModuleType?)).
     snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
     snd-msg(get-path-from-db(Module)).
     (
@@ -39,57 +40,33 @@ in
           rec-msg(io-file-not-written(ErrorMessage?)) .
 	  snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
         )
-      )
-    +
-      rec-msg(no-path)
-    ) .
-    snd-note(ui-status(endstat(Id))) .
-    snd-msg(saved-sdf-module(Module))
-  +
-    rec-msg(save-asfsdf-module(Module?)).
-    snd-note(ui-status(statf(Id, "Saving %s",[Module]))) .
-    snd-msg(get-path-from-db(Module)).
-    (
-      rec-msg(path(Path?)).
-      snd-msg(file-extension-hook(sdf)) .
-      rec-msg(file-extension-hook-result(Extension?)) .
-      snd-msg(io-get-filename(Path, Module, Extension)) .
-      rec-msg(io-filename(FileName?)) .
-      snd-msg(get-syntax-tree(Module)).
-      (
-        rec-msg(syntax(Syntax?)) .
-        snd-msg(unparse(Syntax)) .
-        rec-msg(unparsed-text(Text?)) .
-        snd-msg(io-write-text-file(FileName, [Text])) .
-        (
-          rec-msg(io-file-written) 
-        +
-          rec-msg(io-file-not-written(ErrorMessage?)) .
-	  snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
-        )
       ) .
-      snd-msg(get-eqs-text(Module)).
-      (
-        rec-msg(eqs-text(Module, Text?)) .
-        snd-msg(file-extension-hook(asf)) .
-        rec-msg(file-extension-hook-result(Extension?)) .
-        snd-msg(io-get-filename(Path, Module, Extension)) .
-        rec-msg(io-filename(FileName?)) .
-        snd-msg(io-write-text-file(FileName, [Text])) .
+      if equal(ModuleType, quote(asfsdf)) then
+        snd-msg(get-eqs-text(Module)).
         (
-          rec-msg(io-file-written) 
+          rec-msg(eqs-text(Module, Text?)) .
+          snd-msg(file-extension-hook(asf)) .
+          rec-msg(file-extension-hook-result(Extension?)) .
+          snd-msg(io-get-filename(Path, Module, Extension)) .
+          rec-msg(io-filename(FileName?)) .
+          snd-msg(io-write-text-file(FileName, [Text])) .
+          (
+            rec-msg(io-file-written) 
+          +
+            rec-msg(io-file-not-written(ErrorMessage?)) .
+            snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
+          )
         +
-          rec-msg(io-file-not-written(ErrorMessage?)) .
-          snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage])))
+          rec-msg(no-eqs-text(Module))
         )
-      +
-        rec-msg(no-eqs-text(Module))
-      )
+      else
+        tau
+      fi
     +
       rec-msg(no-path)
     ) .
     snd-note(ui-status(endstat(Id))) .
-    snd-msg(saved-asfsdf-module(Module))
+    snd-msg(saved-module(Module))
   +
     rec-msg(save-termstore) .
     snd-note(ui-status(statf(Id,"Saving term-store",[]))) .
