@@ -247,6 +247,7 @@ PT_ParseTree PT_addParseTreePosInfoToDepth(char* path, PT_ParseTree parsetree,
   current.path = path;
   current.line = 1;
   current.col  = 0;
+  current.offset  = 0;
   current.maxDepth = maxDepth;
   current.curDepth = 0;
 
@@ -269,6 +270,7 @@ PT_Tree PT_addTreePosInfoToDepth(char* path, PT_Tree tree,
   current.path = path;
   current.line = start_line;
   current.col  = start_col;
+  current.offset  = 0;
   current.maxDepth = maxDepth;
   current.curDepth = 0;
 
