@@ -128,6 +128,12 @@ void interrupt_handler(int sig){
   exit(-1);
 }
 
+void usage(char *prg, int is_err)
+{
+  fprintf(stderr, "usage: %s -name <name>\n", prg);
+  exit(is_err);
+}
+
 int main(int argc, char *argv[])
 {
   int i = 0;
@@ -137,6 +143,8 @@ int main(int argc, char *argv[])
     if(streq(argv[i], "-name")){
       name = argv[i+1];
       break;
+    } else if(streq(argv[i], "-h")) {
+      usage(argv[0], 0);
     }
     i++;
   }
