@@ -1,12 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <MEPT-utils.h>
-#include <aterm2.h>
+#include "common.h"
+
+/*{{{  PT_Tree shell(ATerm builtin, PT_Tree input) */
 
 PT_Tree shell(ATerm builtin, PT_Tree input)
 {
-  PT_Tree cmd_arg = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
+  PT_Tree cmd_arg = CO_getFunctionArgument(input,0);
   char *cmdline = PT_yieldTree(cmd_arg);
  
   cmdline[strlen(cmdline) - 1] = '\0';
@@ -16,4 +14,4 @@ PT_Tree shell(ATerm builtin, PT_Tree input)
   return input;
 }
 
-
+/*}}}  */

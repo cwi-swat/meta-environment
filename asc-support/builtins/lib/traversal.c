@@ -1,10 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <assert.h>
-#include <MEPT-utils.h>
-#include <aterm2.h>
-
-extern PT_Tree rewrite(PT_Tree trm); 
+#include "common.h"
 
 /*{{{  ATerm patterns (should be apified!) */
 
@@ -38,11 +32,10 @@ PT_Tree strategy_all(ATerm builtin, PT_Tree input)
 {
   PT_Tree strategy;
   PT_Tree term;
-  PT_Args args = PT_getTreeArgs(input);
 
   initPatterns();
-  strategy = PT_getArgsArgumentAt(args ,4);
-  term = PT_getArgsArgumentAt(args, 8);
+  strategy = CO_getFunctionArgument(input, 0);
+  term = CO_getFunctionArgument(input, 1);
 
   if (PT_isTreeLexical(term)) {
     return term;
@@ -97,12 +90,11 @@ PT_Tree strategy_some(ATerm builtin, PT_Tree input)
 {
   PT_Tree strategy;
   PT_Tree term;
-  PT_Args args = PT_getTreeArgs(input);
 
   initPatterns();
 
-  strategy = PT_getArgsArgumentAt(args,4);
-  term = PT_getArgsArgumentAt(args,8);
+  strategy = CO_getFunctionArgument(input, 0);
+  term = CO_getFunctionArgument(input, 1);
 
   if (PT_isTreeLexical(term)) {
     return term;
@@ -111,7 +103,6 @@ PT_Tree strategy_some(ATerm builtin, PT_Tree input)
     PT_Args kids = PT_getTreeArgs(term);
     PT_Args newkids;
     PT_Production func = PT_getTreeProd(term);
-    PT_Symbol type = PT_getProductionRhs(func);
 
     for(newkids = PT_makeArgsEmpty(); !PT_isArgsEmpty(kids); 
 	kids = PT_getArgsTail(kids)) {
@@ -157,12 +148,11 @@ PT_Tree strategy_one(ATerm builtin, PT_Tree input)
 {
   PT_Tree strategy;
   PT_Tree term;
-  PT_Args args = PT_getTreeArgs(input);
 
   initPatterns();
 
-  strategy = PT_getArgsArgumentAt(args,4);
-  term = PT_getArgsArgumentAt(args,8);
+  strategy = CO_getFunctionArgument(input, 0);
+  term = CO_getFunctionArgument(input, 1);
 
   if (PT_isTreeLexical(term)) {
     return term;
