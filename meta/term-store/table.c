@@ -69,3 +69,22 @@ ATermList T_getAllValues(Table table)
 }
 
 /*}}}  */
+/*{{{  ATermList T_getAllKeyValuePairs(Table table) */
+
+ATermList T_getAllKeyValuePairs(Table table)
+{
+  ATermList keys = T_getAllKeys(table);
+  ATermList pairs;
+
+  for (pairs = ATempty; !ATisEmpty(keys); keys = ATgetNext(keys)) {
+    ATerm key = ATgetFirst(keys);
+    ATerm value = T_getValue(table, key);
+    ATermList pair = ATmakeList2(key, value);
+
+    pairs = ATinsert(pairs, (ATerm) pair);
+  }
+
+  return pairs;
+}
+
+/*}}}  */

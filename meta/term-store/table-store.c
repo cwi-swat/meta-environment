@@ -235,7 +235,20 @@ ATermList TS_getAllValues(char* name)
 }
 
 /*}}}  */
+/*{{{  ATermList TS_getAllKeyValuePairs(char *table) */
 
+ATermList TS_getAllKeyValuePairs(char *table)
+{
+  Table t = TS_getTable(table);
+
+  if (table != NULL) {
+    return T_getAllKeyValuePairs(t);
+  }
+
+  return ATempty;
+}
+
+/*}}}  */
 /*{{{  ATermList TS_filterKeys(char *name, ATermList keysList) */
 
 ATermList TS_filterKeys(char *table, ATermList keysList)

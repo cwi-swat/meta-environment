@@ -13,7 +13,8 @@ let
  ContainsKey : bool,
  Keys : list,
  Values : list,
- ValueType : str
+ ValueType : str,
+ Pairs : list
 in
   execute(term-store, TS?).
   (
@@ -70,11 +71,16 @@ in
     )
   +
     rec-msg(ts-get-all-keys(TableName?)).
-    snd-eval(TS,get-all-keys(TableName)).
+    snd-eval(TS, get-all-keys(TableName)).
     rec-value(TS,result(Keys?)).
     snd-msg(ts-all-keys(Keys)) .
     Keys := []
-  +  
+  +
+    rec-msg(ts-get-key-value-pairs(TableName?)) .
+    snd-eval(TS, get-key-value-pairs(TableName)) .
+    rec-value(TS, result(Pairs?)) .
+    Pairs := []
+  +
     rec-msg(ts-filter-keys(TableName?, Keys?)) .
     snd-eval(TS, filter-keys(TableName, Keys)) .
     rec-value(TS,result(Keys?)).
