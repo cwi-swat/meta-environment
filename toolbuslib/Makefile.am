@@ -1,6 +1,6 @@
 SUBDIRS    = libtb aterm
 
-EXTRA_DIST = program-check.m4 reconf DEVELOPERS-INFO \
+EXTRA_DIST = program-check.m4 reconf \
              toolbuslib-config.sh.src
 
 bin_SCRIPTS = toolbuslib-config
