@@ -11,6 +11,7 @@ context-free syntax
    "empty-bag"					-> Bag[[Elem]]
 
    Bag[[Elem]]					-> BagIterator[[Elem]]
+   mk-iterator(Bag[[Elem]])			-> BagIterator[[Elem]]
    is-empty-iter(BagIterator[[Elem]])		-> Boolean
    head(BagIterator[[Elem]])			-> Elem
    tail(BagIterator[[Elem]])			-> BagIterator[[Elem]]
