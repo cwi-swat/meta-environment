@@ -2,6 +2,11 @@
   * Added grammar for the C Preprocessor to the Sandbox.
   * Added tentative ASCII module to basic/.
   * Removed Hashtable, added Bounded Balanced Trees.
+  * Added module for byte sequences to library: basic/Bytes.
+    You can now convert strings with escape sequences to actual
+    byte streams and back.
+  * Fixed deprecated syntax in basic/Strings
+  * Added str-len and str-cmp function to basic/Strings.
 
 2003/09/17 (jurgenv@cwi.nl)
   * Removed remaining unnecessary chmod calls in install and uninstall 
