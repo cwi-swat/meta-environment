@@ -112,7 +112,7 @@ in
       rec-value(TS, no-result)
       . snd-msg(ts-no-values)
     )
-    . Values := help-the-garbage-collector
+    . Values := [help-the-garbage-collector]
   +
     rec-msg(ts-remove-value-from-all-tables(Key?))
     . snd-eval(TS, remove-value-from-all-tables(Key))

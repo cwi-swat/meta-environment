@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Nov 10 10:57:58 CET 2004 <kooiker@cwi.nl>
+ * term-store/term-store.idef:
+   - fix assignment of Values to be a list 
+
 Mon Nov  8 14:22:08 CET 2004 <{jong,kooiker}@cwi.nl>
  * term-store:
    - remove knowledge about import-relations table from term-store.idef 
