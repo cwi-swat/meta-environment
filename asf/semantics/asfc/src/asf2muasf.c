@@ -58,23 +58,20 @@ static MA_Annotations attributesToAnnotations(PT_Attributes attributes);
 static MA_FunId prodToFunId(PT_Production prod);
 static MA_SigArgElems makeSigArgElems(int arity);
 static MA_FuncDef prodToFuncDef(PT_Production prod);
-static MA_TermArgs argsToTermArgs(PT_Args args, MA_FuncDefElems *funcdefs);
-static MA_Term treeToTerm(PT_Tree tree, MA_FuncDefElems *funcdefs, 
+static MA_TermArgs argsToTermArgs(PT_Args args, ATermIndexedSet funcdefs);
+static MA_Term treeToTerm(PT_Tree tree, ATermIndexedSet funcdefs, 
 			  LayoutOption layout);
 static MA_Cond conditionToCond(ASF_Condition condition, 
-			       MA_FuncDefElems *funcdefs);
+			       ATermIndexedSet funcdefs);
 static MA_CondList conditionsToCondList(ASF_Conditions conditions, 
-					MA_FuncDefElems *funcdefs);
+					ATermIndexedSet funcdefs);
 
 static MA_Rule condEquationToRule(ASF_CondEquation condEquation, 
-				  MA_FuncDefElems *funcdefs);
+				  ATermIndexedSet funcdefs);
 static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
-					       MA_FuncDefElems *funcdefs);
+					       ATermIndexedSet funcdefs);
 static MA_ModId makeModId(const char *str);
 static ATbool checkListProductionCompatibility(PT_Production ptProd);
-
-static void addFuncDefToFuncDefs(MA_FuncDef funcdef, MA_FuncDefElems* funcdefs);
-
 
 /*}}}  */
 
@@ -427,9 +424,9 @@ static MA_FuncDef prodToFuncDef(PT_Production ptProd)
 }
 
 /*}}}  */
-/*{{{  static MA_TermArgs argsToTermArgs(PT_Args args, MA_FuncDefElems *funcdefs) */
+/*{{{  static MA_TermArgs argsToTermArgs(PT_Args args, ATindexedSet funcdefs) */
 
-static MA_TermArgs argsToTermArgs(PT_Args args, MA_FuncDefElems *funcdefs)
+static MA_TermArgs argsToTermArgs(PT_Args args, ATermIndexedSet funcdefs)
 {
   MA_TermArgs termArgs = NULL;
   PT_Tree arg = NULL;
@@ -466,19 +463,6 @@ static MA_TermArgs argsToTermArgs(PT_Args args, MA_FuncDefElems *funcdefs)
 }
 
 /*}}}  */
-/*{{{  static void addFuncDefToFuncDefs(MA_FuncDef funcdef, MA_FuncDefElems* funcdefs) */
-
-static void addFuncDefToFuncDefs(MA_FuncDef funcdef, MA_FuncDefElems* funcdefs)
-{
-  if (MA_isFuncDefElemsEmpty(*funcdefs)) {
-    *funcdefs = MA_makeFuncDefElemsSingle(funcdef);
-  }
-  else {
-    *funcdefs = MA_makeFuncDefElemsMany(funcdef,em,";",nl, *funcdefs);
-  }
-}
-
-/*}}}  */
 /*{{{  static MA_Term variableToTerm(PT_Tree var) */
 
 static MA_Term variableToTerm(PT_Tree var)
@@ -505,9 +489,9 @@ static MA_Term variableToTerm(PT_Tree var)
 }
 
 /*}}}  */
-/*{{{  static MA_Term treeToTerm(PT_Tree tree, MA_FuncDefElems *funcdefs,  */
+/*{{{  static MA_Term treeToTerm(PT_Tree tree, ATindexedSet funcdefs,  */
 
-static MA_Term treeToTerm(PT_Tree tree, MA_FuncDefElems *funcdefs, 
+static MA_Term treeToTerm(PT_Tree tree, ATermIndexedSet funcdefs, 
 			  LayoutOption layout)
 {
   MA_Term result = NULL;
@@ -522,12 +506,13 @@ static MA_Term treeToTerm(PT_Tree tree, MA_FuncDefElems *funcdefs,
     result = variableToTerm(tree);
   }
   else if (PT_isTreeAppl(tree)) {
+    ATbool new;
     PT_Production prod = PT_getTreeProd(tree);
     MA_FuncDef funcdef = prodToFuncDef(prod);
     PT_Args args = PT_getTreeArgs(tree);
     MA_FunId funid = prodToFunId(prod);
     MA_TermArgs terms = argsToTermArgs(args, funcdefs);
-    addFuncDefToFuncDefs(funcdef, funcdefs);
+    ATindexedSetPut(funcdefs, (ATerm) funcdef, &new);
 
     if (terms != NULL) {
       result = MA_makeTermFunc(funid,em,em,terms,em);
@@ -558,7 +543,7 @@ static MA_Term treeToTerm(PT_Tree tree, MA_FuncDefElems *funcdefs,
 /*{{{  static MA_Cond conditionToCond(ASF_Condition condition, */
 
 static MA_Cond conditionToCond(ASF_Condition condition,
-			       MA_FuncDefElems *funcdefs)
+			       ATermIndexedSet funcdefs)
 {
   ASF_Tree asfLhs = ASF_getConditionLhs(condition);
   ASF_Tree asfRhs = ASF_getConditionRhs(condition);
@@ -587,7 +572,7 @@ static MA_Cond conditionToCond(ASF_Condition condition,
 /*{{{  static MA_CondList conditionsToCondList(ASF_Conditions conditions, */
 
 static MA_CondList conditionsToCondList(ASF_Conditions conditions,
-					MA_FuncDefElems *funcdefs)
+					ATermIndexedSet funcdefs)
 {
   ASF_ConditionList list = ASF_getConditionsList(conditions);
   MA_CondElems elems = MA_makeCondElemsEmpty();
@@ -611,7 +596,7 @@ static MA_CondList conditionsToCondList(ASF_Conditions conditions,
 /*{{{  static MA_Rule condEquationToRule(ASF_CondEquation condEquation, */
 
 static MA_Rule condEquationToRule(ASF_CondEquation condEquation,
-				  MA_FuncDefElems *funcdefs)
+				  ATermIndexedSet funcdefs)
 {
   ASF_Equation asfEq = ASF_getCondEquationEquation(condEquation);
   ASF_Tree asfLhs = ASF_getEquationLhs(asfEq);
@@ -653,7 +638,7 @@ static MA_Rule condEquationToRule(ASF_CondEquation condEquation,
 /*{{{  static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list, */
 
 static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
-					       MA_FuncDefElems *funcdefs)
+					       ATermIndexedSet funcdefs)
 {
   MA_RuleElems rules = MA_makeRuleElemsEmpty();
 
@@ -690,21 +675,46 @@ static MA_ModId makeModId(const char *str)
 
 /*}}}  */
 
+/*{{{  MA_SignatureOpt indexedSetToSignatureOpt(ATermIndexedSet funcdefs) */
+
+MA_SignatureOpt indexedSetToSignatureOpt(ATermIndexedSet funcdefs)
+{
+  ATermList list = ATindexedSetElements(funcdefs);
+  MA_FuncDefElems elems = NULL;
+
+  for(;!ATisEmpty(list); list = ATgetNext(list)) {
+    MA_FuncDef def = MA_FuncDefFromTerm(ATgetFirst(list));
+
+    if (elems == NULL) {
+      elems = MA_makeFuncDefElemsSingle(def);
+    }
+    else {
+      elems = MA_makeFuncDefElemsMany(def, em,";",nl,elems);
+    }
+  }
+
+  return MA_makeSignatureOptPresent(nl,
+           MA_makeFuncDefListDefault(elems));
+}
+
+/*}}}  */
+
 /*{{{  MA_Module asfToMuASF(char *name, ASF_CondEquationList equations) */
 
 MA_Module asfToMuASF(char *name, ASF_CondEquationList equations)
 {
   MA_SignatureOpt maSignature;
-  MA_FuncDefElems funcdefs = MA_makeFuncDefElemsEmpty();
+  ATermIndexedSet funcdefs = ATindexedSetCreate(1024, 70);
   MA_RulesOpt maRules;
   MA_ModId maName;
 
   initLayoutAbbreviations();
 
-  maRules = condEquationListToRulesOpt(equations, &funcdefs); 
-  maSignature = MA_makeSignatureOptPresent(nl,
-		  MA_makeFuncDefListDefault(funcdefs));
+  maRules = condEquationListToRulesOpt(equations, funcdefs); 
+  maSignature = indexedSetToSignatureOpt(funcdefs);
   maName = makeModId(name);
+
+  ATindexedSetDestroy(funcdefs);
 
   return MA_makeModuleModule(sp,maName,nl,maSignature,nl,maRules);
 }
