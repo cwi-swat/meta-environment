@@ -18,6 +18,34 @@
 
 $Id$
 
+2000/6/27 (js@cwi.nl)
+   *  Bumped version to 2.35
+   *  Implemented ambiguity collection code: when asked to return AsFix1,
+      a parse error is now generated that includes a list of pairs
+      in which for each ambiguity, its position in the input
+      term as well as the relevant productions are included.  An example
+      (prettyprinted for your convenience):
+
+         module Amber
+         exports
+           sorts A B
+           lexical syntax
+            [a]+ -> A
+            [a]+ -> B
+
+      js:p5@dek[275]> print -n "a" | sglr -p Amber.tbl -t1
+      parse-error([character(256),line(1),col(1),char(2)],
+                  ambiguities(1,[ambiguity(position(0),
+                                 productions(prod([cf(opt(layout)),
+                                                   cf(sort("A")),
+                                                   cf(opt(layout))],
+                                                  sort("<START>"),no-attrs),
+                                             prod([cf(opt(layout)),
+                                                   cf(sort("B")),
+                                                   cf(opt(layout))],
+                                                  sort("<START>"),no-attrs)))]))
+      sglr: error in -, line 1, col 1: cannot represent 1 ambiguity
+
 2000/6/23 (js@cwi.nl)
    *  Fixed a tiny bug in sglr's handling of follow restrictions
       of levels deeper than 1

@@ -64,12 +64,15 @@ int        SG_MaxNrAmb(int Mode);
 void       SG_Amb(parse_table *, tree, tree);
 
 enum       SG_CYCLEMODE { SG_CYCLE_ENCOUNTERED, SG_CYCLE_RESET };
+enum       SG_AMBTRACKERMODE { SG_AMBTRACKER_ADD, SG_AMBTRACKER_ASK,
+                               SG_AMBTRACKER_RESET };
 ATbool     SG_CycleEncountered(int Mode);
 ATermList  SG_CyclicTerm(forest t);
+ATermList  SG_AmbiguityTracker(int Mode, ATerm entry);
 
 forest     SG_ExpandApplNode(parse_table * pt, forest t, ATbool recurse,
-                             ATbool doambs);
-forest     SG_YieldPT(parse_table *pt, forest t);
+                             ATbool doambs, size_t *currpos);
+forest     SG_YieldPT(parse_table *pt, forest t, size_t *currpos);
 tree       SG_Apply(parse_table *, label, ATermList, int attr, ATerm pi);
 ATerm      SG_TreeType(ATerm);
 label      SG_GetProdLabel(tree aprod);

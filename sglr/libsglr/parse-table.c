@@ -102,7 +102,7 @@ void SG_InitPTGlobals(void)
   SG_AFUN_INIT(SG_EOF_Error_AFun,   ATmakeAFun(SG_EOF_AFUN,         0, ATfalse));
   SG_AFUN_INIT(SG_Plain_Error_AFun, ATmakeAFun(SG_PLAIN_AFUN,       0, ATfalse));
   SG_AFUN_INIT(SG_Cycle_Error_AFun, ATmakeAFun(SG_CYCLE_AFUN,       1, ATfalse));
-  SG_AFUN_INIT(SG_Amb_Error_AFun,   ATmakeAFun(SG_AMBIGUITIES_AFUN, 1, ATfalse));
+  SG_AFUN_INIT(SG_Amb_Error_AFun,   ATmakeAFun(SG_AMBIGUITIES_AFUN, 2, ATfalse));
 
   SG_AFUN_INIT(SG_SndValue_AFun,    ATmakeAFun(SG_SNDVALUE_AFUN,    1, ATfalse));
 

@@ -871,10 +871,13 @@ forest SG_Prune(forest a_forest, char *desiredsort)
   ATermList trees, bonsai = ATempty;
   tree      t;
   char      *sort;
-  ATbool    AmbStart;
+  ATbool    AmbStart = ATfalse;
 
-  /*  Is the top node ambiguous?  If so, all trees in it must be done.  */
-  if(!(AmbStart = ATmatch((ATerm) a_forest, "amb([<list>])", &trees))) {
+  /*  Is the top node ambiguous?  If so, all trees in it must be done  */
+  if(ATisEqual(ATgetAFun((ATermAppl) a_forest), SG_Amb_AFun)) {
+    AmbStart = ATtrue;
+    trees = (ATermList) ATgetFirst(ATgetArguments(a_forest));
+  } else {
     trees = ATmakeList1((ATerm) a_forest);
   }
 
@@ -947,7 +950,8 @@ forest SG_ParseError(ATermList cycle, int excess_ambs)
   if(!ATisEmpty(cycle))
     errcode = ATmakeAppl1(SG_Cycle_Error_AFun, (ATerm) cycle);
   else if(excess_ambs)
-    errcode = ATmakeAppl1(SG_Amb_Error_AFun, (ATerm)SG_GetATint(excess_ambs, 0));
+    errcode = ATmakeAppl2(SG_Amb_Error_AFun, (ATerm) ATmakeInt(excess_ambs),
+                          (ATerm) SG_AmbiguityTracker(SG_AMBTRACKER_ASK, NULL));
   else if(current_token == SG_GETTOKEN(SG_EOF_Token))
     errcode = ATmakeAppl0(SG_EOF_Error_AFun);
   else
@@ -959,18 +963,22 @@ forest SG_ParseError(ATermList cycle, int excess_ambs)
 
 forest SG_ParseResult(char *sort)
 {
+
   if(!accepting_stack)
     return SG_ParseError(ATempty, 0);
 
   {
     ATermList cycle;
     forest    woods;
+    size_t    currpos = 0;
+
+    /*  Start with a clean slate  */
+    SG_AmbiguityTracker(SG_AMBTRACKER_RESET, NULL);
 
     /*  Expand at least the top node to get the top sort  */
-
     woods = SG_ExpandApplNode(table,
                               (forest) SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack))),
-                              ATfalse, ATtrue);
+                              ATfalse, ATtrue, &currpos);
 
     /*  Select only the desired start symbols when so requested  */
     if(sort) {
@@ -999,7 +1007,8 @@ forest SG_ParseResult(char *sort)
     /*  A full yield provides the output term and an exact ambiguity count  */
     if(SG_NEED_OUTPUT) {
       IF_STATISTICS(SG_Timer());
-      woods = SG_YieldPT(table, woods);
+      currpos = 0;
+      woods = SG_YieldPT(table, woods, &currpos);
       IF_STATISTICS(fprintf(SG_log(),
                             "Aprod expansion took %.4fs\n", SG_Timer()));
     }

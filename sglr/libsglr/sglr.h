@@ -84,7 +84,7 @@ typedef ATermAppl forest;
  */
 
 void  SGinitParser(ATbool toolbus_mode);
-void  SGshowMode(void); 
+void  SGshowMode(void);
 
 ATerm SGopenLanguageFromTerm(char *prgname, char *L, ATerm tbl);
 ATerm SGopenLanguage(char *prgname, char *L, char *FN);

@@ -266,8 +266,20 @@ ATerm SGparseString(char *L, char *G, char *S)
 
 ATerm SGparseStringAsAsFix2(char *L, char *G, char *S)
 {
+  ATerm t;
+
   SG_ASFIX1_OFF();
-  return SG_TermToToolbus(SGparseString(L, G, S));
+  t = SGparseString(L, G, S);
+
+#ifdef WEWANTAMBIGUITYLISTSINSTEADOFAMBIGUOUSASFIX2
+  if(!ATisEmpty(SG_AmbiguityTracker(SG_AMBTRACKER_ASK, NULL))) {
+    t = (ATerm) ATmakeAppl2(SG_Amb_Error_AFun,
+                           (ATerm) ATmakeInt(SGnrAmb(SG_NR_ASK)),
+                           (ATerm) SG_AmbiguityTracker(SG_AMBTRACKER_ASK, NULL));
+  }
+#endif
+
+  return SG_TermToToolbus(ATBpack(t));
 }
 
 ATerm SGparseStringAsAsFix1(char *L, char *G, char *S)
@@ -276,8 +288,11 @@ ATerm SGparseStringAsAsFix1(char *L, char *G, char *S)
 
   SG_ASFIX1_ON();
 
-  if(!SGisParseError(t = SGparseString(L, G, S)))
+  t = SGparseString(L, G, S);
+
+  if(!SGisParseError(t)) {
     t = (ATerm) ATmakeAppl1(SG_ParseTreeAF1_AFun, ATBpack(t));
+  }
 
   return SG_TermToToolbus(t);
 }
