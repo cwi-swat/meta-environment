@@ -1,204 +1,204 @@
 equations
 
-%% Begin of functions cloned from Bags
+%%%% Begin of functions cloned from Bags
+%%
+%%%% --- add($Tuple, $Rel)
+%%
+%%[a1]	add($Tuple, {$Tuple*}) = {$Tuple, $Tuple*}
+%%
+%%%% --- del($Tuple, $Rel)
+%%
+%%[r1]	del($Tuple, {$Tuple*1, $Tuple, $Tuple*2}) = {$Tuple*1, $Tuple*2}
+%%[default-r2]
+%%	del($Tuple, $Rel) = $Rel
+%%
+%%%% --- equal(Rel1, Rel2)
+%%
+%%[eq-1]       equal({$Tuple, $Tuple*}, {$Tuple*1, $Tuple, $Tuple*2}) = equal({$Tuple*}, {$Tuple*1, $Tuple*2})
+%%
+%%[eq-2]       equal({$Tuple+}, {})               = false
+%%[eq-3]       equal({}, {$Tuple+})               = false
+%%[eq-4]       equal({}, {})                 = true
+%%[default-eq] 
+%%             equal({$Tuple+1}, {$Tuple+2})           = false
+%%
+%%%% --- subset(Rel1, Rel22)
+%%
+%%[sub-1]      subset({$Tuple, $Tuple*}, {$Tuple*1, $Tuple, $Tuple*2})  = subset({$Tuple*}, {$Tuple*1, $Tuple*2})
+%%[sub-2]      subset({$Tuple+}, {})                = false
+%%[sub-3]      subset({}, {$Tuple+})                = true
+%%[sub-4]      subset({}, {})                  = true
+%%[default-sub]
+%%             subset({$Tuple+1},{$Tuple+2})             = false
+%%
+%%%% --- ssubset(Rel1, Rel2)
+%%
+%%[ssub-1] strict-subset($Rel1, $Rel2) = subset($Rel1, $Rel2) & not(equal($Rel1, $Rel2))
+%%
+%%%% --- superset(Rel1, Rel2)
+%%
+%%[sup-1] superset($Rel1, $Rel2) = subset($Rel2, $Rel1)
+%%
+%%%% --- strict-superset(Rel1, Rel2)
+%%
+%%[ssup-1] strict-superset($Rel1, $Rel2) = strict-subset($Rel2, $Rel1)
+%%
+%%%% --- union1($Tuple, Rel)
+%%
+%%[un1-1]	in($Tuple, {$Tuple*}) = true			%% Note does not work with
+%%	=============================		%% {$Tuple*} replaced by var $Rel??
+%%	union1($Tuple, {$Tuple*}) = {$Tuple*}
+%%
+%%[default-un1-2]
+%%	union1($Tuple, {$Tuple*}) = {$Tuple, $Tuple*}
+%%
+%%%% --- union2($Rel, $Tuple)
+%%
+%%[un2-1]	in($Tuple, {$Tuple*}) = true
+%%	=============================
+%%	union2({$Tuple*}, $Tuple) = {$Tuple*}
+%%
+%%[default-un2-2]
+%%	union2({$Tuple*}, $Tuple) = {$Tuple*, $Tuple}
+%%
+%%%% --- union($Rel1, $Rel2)
+%%
+%%[un-1] union({}, {$Tuple*}) = {$Tuple*}
+%%[un-2] union({$Tuple*}, {}) = {$Tuple*}
+%%
+%%[un-3] {$Tuple*4} = union({$Tuple*1}, {$Tuple*2, $Tuple*3})
+%%       ==============================
+%%       union({$Tuple, $Tuple*1}, {$Tuple*2, $Tuple, $Tuple*3}) = {$Tuple, $Tuple*4}
+%%
+%%[default-un]
+%%       {$Tuple*3} = union({$Tuple*1}, {$Tuple*2})
+%%       ==============================
+%%       union({$Tuple, $Tuple*1}, {$Tuple*2}) = {$Tuple, $Tuple*3}
+%%
+%%%% --- diff($Rel1, $Rel2)
+%%
+%%[df-1] diff({$Tuple*1, $Tuple, $Tuple*2}, {$Tuple*3, $Tuple, $Tuple*4}) = diff({$Tuple*1, $Tuple*2}, {$Tuple*3, $Tuple*4})
+%%
+%%[default-df-2] diff({$Tuple*1}, {$Tuple*2}) = {$Tuple*1}
+%%
+%%%% --- $Rel1 inter $Rel2
+%%
+%%[in-1] inter({$Tuple*1, $Tuple*2}, {$Tuple*3, $Tuple*4}) = {$Tuple*'}
+%%       ==================================
+%%       inter({$Tuple*1, $Tuple, $Tuple*2}, {$Tuple*3, $Tuple, $Tuple*4}) = {$Tuple, $Tuple*'}
+%%
+%%[default-in2] 
+%%       inter({$Tuple*1}, {$Tuple*2}) = {}
+%%
+%%%% --- size($Rel)
+%%
+%%[sz-1] size({}) = 0
+%%[sz-2] size({$Tuple, $Tuple*}) = 1 + size({$Tuple*})
+%%
+%%%% --- in($Tuple, $Rel)
+%%
+%%[in-1]  in($Tuple, {$Tuple*1, $Tuple, $Tuple*2}) = true
+%%
+%%[default-in-2]
+%%	in($Tuple, {$Tuple*}) = false
+%%
+%%%% if
+%%
+%%[if-1] if true then $Rel1 else $Rel2 fi = $Rel1
+%%[if-2] if false then $Rel1 else $Rel2 fi = $Rel2
+%%
+%%%% end of cloned functions
 
-%% --- add($Tuple, $Rel)
 
-[a1]	add($Tuple, {$Tuple*}) = {$Tuple, $Tuple*}
+[comp-1] compose({<$Elem, $Elem'>, $Elem*1}, {$Elem*2}) = 
+         union(product($Elem, $Elem' . {$Elem*2}), compose({$Elem*1}, {$Elem*2}))
+[comp-2] compose({}, {$Elem*}) = {}
 
-%% --- del($Tuple, $Rel)
+[x-1]    product($Elem, {$Elem', $Elem*}) = union( {<$Elem, $Elem'>}, product($Elem, {$Elem*}))
+[x-2]    product($Elem, {}) = {}
 
-[r1]	del($Tuple, {$Tuple*1, $Tuple, $Tuple*2}) = {$Tuple*1, $Tuple*2}
-[default-r2]
-	del($Tuple, $Rel) = $Rel
+[bx-1]   product({$Elem, $Elem*1}, {$Elem*2}) = union(product($Elem, {$Elem*2}), product({$Elem*1}, {$Elem*2}))
+[bx-2]   product({}, {$Elem*2}) = {}
 
-%% --- equal(Rel1, Rel2)
+[dom-1]  domain({<$Elem,$Elem'>, $Elem*}) = union({$Elem}, domain({$Elem*}))
+[dom-2]  domain({}) = {}
 
-[eq-1]       equal({$Tuple, $Tuple*}, {$Tuple*1, $Tuple, $Tuple*2}) = equal({$Tuple*}, {$Tuple*1, $Tuple*2})
+[ran-1]  range({<$Elem,$Elem'>, $Elem*}) = union({$Elem'}, range({$Elem*}))
+[ran-2]  range({}) = {}
 
-[eq-2]       equal({$Tuple+}, {})               = false
-[eq-3]       equal({}, {$Tuple+})               = false
-[eq-4]       equal({}, {})                 = true
-[default-eq] 
-             equal({$Tuple+1}, {$Tuple+2})           = false
+[car-1]  carrier({<$Elem,$Elem'>, $Elem*}) = union(union({$Elem},{$Elem'}), carrier({$Elem*}))
+[car-2]  carrier({}) = {}
 
-%% --- subset(Rel1, Rel22)
-
-[sub-1]      subset({$Tuple, $Tuple*}, {$Tuple*1, $Tuple, $Tuple*2})  = subset({$Tuple*}, {$Tuple*1, $Tuple*2})
-[sub-2]      subset({$Tuple+}, {})                = false
-[sub-3]      subset({}, {$Tuple+})                = true
-[sub-4]      subset({}, {})                  = true
-[default-sub]
-             subset({$Tuple+1},{$Tuple+2})             = false
-
-%% --- ssubset(Rel1, Rel2)
-
-[ssub-1] strict-subset($Rel1, $Rel2) = subset($Rel1, $Rel2) & not(equal($Rel1, $Rel2))
-
-%% --- superset(Rel1, Rel2)
-
-[sup-1] superset($Rel1, $Rel2) = subset($Rel2, $Rel1)
-
-%% --- strict-superset(Rel1, Rel2)
-
-[ssup-1] strict-superset($Rel1, $Rel2) = strict-subset($Rel2, $Rel1)
-
-%% --- union1($Tuple, Rel)
-
-[un1-1]	in($Tuple, {$Tuple*}) = true			%% Note does not work with
-	=============================		%% {$Tuple*} replaced by var $Rel??
-	union1($Tuple, {$Tuple*}) = {$Tuple*}
-
-[default-un1-2]
-	union1($Tuple, {$Tuple*}) = {$Tuple, $Tuple*}
-
-%% --- union2($Rel, $Tuple)
-
-[un2-1]	in($Tuple, {$Tuple*}) = true
-	=============================
-	union2({$Tuple*}, $Tuple) = {$Tuple*}
-
-[default-un2-2]
-	union2({$Tuple*}, $Tuple) = {$Tuple*, $Tuple}
-
-%% --- union($Rel1, $Rel2)
-
-[un-1] union({}, {$Tuple*}) = {$Tuple*}
-[un-2] union({$Tuple*}, {}) = {$Tuple*}
-
-[un-3] {$Tuple*4} = union({$Tuple*1}, {$Tuple*2, $Tuple*3})
-       ==============================
-       union({$Tuple, $Tuple*1}, {$Tuple*2, $Tuple, $Tuple*3}) = {$Tuple, $Tuple*4}
-
-[default-un]
-       {$Tuple*3} = union({$Tuple*1}, {$Tuple*2})
-       ==============================
-       union({$Tuple, $Tuple*1}, {$Tuple*2}) = {$Tuple, $Tuple*3}
-
-%% --- diff($Rel1, $Rel2)
-
-[df-1] diff({$Tuple*1, $Tuple, $Tuple*2}, {$Tuple*3, $Tuple, $Tuple*4}) = diff({$Tuple*1, $Tuple*2}, {$Tuple*3, $Tuple*4})
-
-[default-df-2] diff({$Tuple*1}, {$Tuple*2}) = {$Tuple*1}
-
-%% --- $Rel1 inter $Rel2
-
-[in-1] inter({$Tuple*1, $Tuple*2}, {$Tuple*3, $Tuple*4}) = {$Tuple*'}
-       ==================================
-       inter({$Tuple*1, $Tuple, $Tuple*2}, {$Tuple*3, $Tuple, $Tuple*4}) = {$Tuple, $Tuple*'}
-
-[default-in2] 
-       inter({$Tuple*1}, {$Tuple*2}) = {}
-
-%% --- size($Rel)
-
-[sz-1] size({}) = 0
-[sz-2] size({$Tuple, $Tuple*}) = 1 + size({$Tuple*})
-
-%% --- in($Tuple, $Rel)
-
-[in-1]  in($Tuple, {$Tuple*1, $Tuple, $Tuple*2}) = true
-
-[default-in-2]
-	in($Tuple, {$Tuple*}) = false
-
-%% if
-
-[if-1] if true then $Rel1 else $Rel2 fi = $Rel1
-[if-2] if false then $Rel1 else $Rel2 fi = $Rel2
-
-%% end of cloned functions
-
-
-[comp-1] compose({<$Elem, $Elem'>, $Tuple*1}, {$Tuple*2}) = 
-         union(product($Elem, $Elem' . {$Tuple*2}), compose({$Tuple*1}, {$Tuple*2}))
-[comp-2] compose({}, {$Tuple*}) = {}
-
-[x-1]    product($Elem, [$Elem', $Elem*]) = union( {<$Elem, $Elem'>}, product($Elem, [$Elem*]))
-[x-2]    product($Elem, []) = {}
-
-[bx-1]   product([$Elem, $Elem*1], [$Elem*2]) = union(product($Elem, [$Elem*2]), product([$Elem*1], [$Elem*2]))
-[bx-2]   product([], [$Elem*2]) = {}
-
-[dom-1]  domain({<$Elem,$Elem'>, $Tuple*}) = union([$Elem], domain({$Tuple*}))
-[dom-2]  domain({}) = []
-
-[ran-1]  range({<$Elem,$Elem'>, $Tuple*}) = union([$Elem'], range({$Tuple*}))
-[ran-2]  range({}) = []
-
-[car-1]  carrier({<$Elem,$Elem'>, $Tuple*}) = union(union([$Elem],[$Elem']), carrier({$Tuple*}))
-[car-2]  carrier({}) = []
-
-[domR-1] in($Elem, [$Elem*]) = false
+[domR-1] in($Elem, {$Elem*}) = false
          ==================================================
-         domR({$Tuple*1, <$Elem, $Elem'>, $Tuple*2}, [$Elem*]) = domR({$Tuple*1, $Tuple*2}, [$Elem*])
+         domR({$Elem*1, <$Elem, $Elem'>, $Elem*2}, {$Elem*}) = domR({$Elem*1, $Elem*2}, {$Elem*})
 
 [default-domR]
-	 domR({$Tuple*}, [$Elem*]) = {$Tuple*}
+	 domR({$Elem*1}, {$Elem*2}) = {$Elem*1}
 
-[domX-1] in($Elem, [$Elem*]) = true
+[domX-1] in($Elem, {$Elem*}) = true
          ==================================================
-         domX({$Tuple*1, <$Elem, $Elem'>, $Tuple*2}, [$Elem*]) = domX({$Tuple*1, $Tuple*2}, [$Elem*])
+         domX({$Elem*1, <$Elem, $Elem'>, $Elem*2}, {$Elem*}) = domX({$Elem*1, $Elem*2}, {$Elem*})
 
 [default-domX]
-	 domX({$Tuple*}, [$Elem*]) = {$Tuple*}
+	 domX({$Elem*1}, {$Elem*2}) = {$Elem*1}
 
-[ranR-1] in($Elem', [$Elem*]) = false
+[ranR-1] in($Elem', {$Elem*}) = false
          ==================================================
-         ranR({$Tuple*1, <$Elem, $Elem'>, $Tuple*2}, [$Elem*]) = ranR({$Tuple*1, $Tuple*2}, [$Elem*])
+         ranR({$Elem*1, <$Elem, $Elem'>, $Elem*2}, {$Elem*}) = ranR({$Elem*1, $Elem*2}, {$Elem*})
 
 [default-ranR]
-	 ranR({$Tuple*}, [$Elem*]) = {$Tuple*}
+	 ranR({$Elem*1}, {$Elem*2}) = {$Elem*1}
 
-[ranX-1] in($Elem', [$Elem*]) = true
+[ranX-1] in($Elem', {$Elem*}) = true
          ==================================================
-         ranX({$Tuple*1, <$Elem, $Elem'>, $Tuple*2}, [$Elem*]) = ranX({$Tuple*1, $Tuple*2}, [$Elem*])
+         ranX({$Elem*1, <$Elem, $Elem'>, $Elem*2}, {$Elem*}) = ranX({$Elem*1, $Elem*2}, {$Elem*})
 
 [default-ranX]
-	 ranX({$Tuple*}, [$Elem*]) = {$Tuple*}
+	 ranX({$Elem*1}, {$Elem*2}) = {$Elem*1}
 
 
-[carR-1] in($Elem, [$Elem*]) & in($Elem', [$Elem*]) = false
+[carR-1] in($Elem, {$Elem*}) & in($Elem', {$Elem*}) = false
          ==================================================
-         carR({$Tuple*1, <$Elem, $Elem'>, $Tuple*2}, [$Elem*]) = carR({$Tuple*1, $Tuple*2}, [$Elem*])
+         carR({$Elem*1, <$Elem, $Elem'>, $Elem*2}, {$Elem*}) = carR({$Elem*1, $Elem*2}, {$Elem*})
 
 [default-carR]
-	 carR({$Tuple*}, [$Elem*]) = {$Tuple*}
+	 carR({$Elem*1}, {$Elem*2}) = {$Elem*1}
 
-[carX-1] in($Elem, [$Elem*]) |  in($Elem', [$Elem*]) = true
+[carX-1] in($Elem, {$Elem*}) |  in($Elem', {$Elem*}) = true
          ==================================================
-         carX({$Tuple*1, <$Elem, $Elem'>, $Tuple*2}, [$Elem*]) = carX({$Tuple*1, $Tuple*2}, [$Elem*])
+         carX({$Elem*1, <$Elem, $Elem'>, $Elem*2}, {$Elem*}) = carX({$Elem*1, $Elem*2}, {$Elem*})
 
 [default-carX]
-	 carX({$Tuple*}, [$Elem*]) = {$Tuple*}
+	 carX({$Elem*1}, {$Elem*2}) = {$Elem*1}
 
 
 [top-1]  top($Rel) = diff(domain($Rel), range($Rel))
 
 [bot-1]  bottom($Rel) = diff(range($Rel), domain($Rel))
 
-[rim-1]  $Elem . {$Tuple*1, $Tuple*2} = [$Elem*]
+[rim-1]  $Elem . {$Elem*1, $Elem*2} = {$Elem*}
          =====================================
-         $Elem . {$Tuple*1, <$Elem, $Elem'>, $Tuple*2} = [$Elem', $Elem*]
+         $Elem . {$Elem*1, <$Elem, $Elem'>, $Elem*2} = {$Elem', $Elem*}
 
 [default-rim-2]
-         $Elem . {$Tuple*} = []
+         $Elem . {$Elem*} = {}
 
-[brim-1] [$Elem, $Elem*] . $Rel  = union($Elem . $Rel,  [$Elem*] . $Rel)
-[brim-2] [] . $Rel = []
+[brim-1] {$Elem, $Elem*} . $Rel  = union($Elem . $Rel,  {$Elem*} . $Rel)
+[brim-2] {} . $Rel = {}
 
 
-[lim-1]  {$Tuple*1, $Tuple*2} . $Elem'  = [$Elem*]
+[lim-1]  {$Elem*1, $Elem*2} . $Elem'  = {$Elem*}
          =====================================
-         {$Tuple*1, <$Elem, $Elem'>, $Tuple*2} . $Elem' = [$Elem, $Elem*]
+         {$Elem*1, <$Elem, $Elem'>, $Elem*2} . $Elem' = {$Elem, $Elem*}
 
 [default-lim-2]
-         {$Tuple*} . $Elem' = []
+         {$Elem*} . $Elem' = {}
  
-[slim-1] $Rel . [$Elem, $Elem*] = union($Rel . $Elem, $Rel . [$Elem*])
-[slim-2] $Rel . [] = []
+[slim-1] $Rel . {$Elem, $Elem*} = union($Rel . $Elem, $Rel . {$Elem*})
+[slim-2] $Rel . {} = {}
 
-[inv-1]  inv({<$Elem,$Elem'>, $Tuple*}) = union({<$Elem',$Elem>}, inv({$Tuple*}))
+[inv-1]  inv({<$Elem,$Elem'>, $Elem*}) = union({<$Elem',$Elem>}, inv({$Elem*}))
 [inv-2]  inv({}) = {}
 
 [cmp-1]  $Bag = carrier($Rel)
@@ -206,8 +206,8 @@ equations
          compl($Rel) = diff(product($Bag, $Bag), $Rel)
 
 
-[id-1]   id([$Elem, $Elem*]) = union({<$Elem, $Elem>}, id([$Elem*]))
-[id-2]   id([]) ={}
+[id-1]   id({$Elem, $Elem*}) = union({<$Elem, $Elem>}, id({$Elem*}))
+[id-2]   id({}) ={}
 
 [cl-1] 	closure($Rel, $Rel1, $Rel1) = $Rel1
 

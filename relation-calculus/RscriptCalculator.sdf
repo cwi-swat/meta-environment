@@ -11,7 +11,7 @@ exports
 
 
         Elem                          		-> RVALUE
-	Tuple					-> RVALUE
+%%	Tuple					-> RVALUE
         "*empty*"                     		-> RVALUE
         RVAR # REXP                    		-> RVALUE
         RVAR # RVAR # REXP              	-> RVALUE
@@ -24,8 +24,8 @@ exports
         "if" Boolean "then" RVALUE "else" RVALUE "fi"       
                                       -> RVALUE
 
-	"EmptyBag"				-> RVALUE
-	"EmptyRel"				-> RVALUE
+%%	"EmptyBag"				-> RVALUE
+%%	"EmptyRel"				-> RVALUE
 	is-tuple(RVALUE)			-> Boolean
 
 %% The RSTORE itself, maps RVARs to RVALUEs
@@ -43,7 +43,7 @@ exports
 
 	add-tuple(RVAR, Elem # Elem, RSTORE)  -> RSTORE
 
-	extend-rel(RVAR, Rel[[Elem]], RSTORE) -> RSTORE
+	extend-rel(RVAR, Bag[[Elem]], RSTORE) -> RSTORE
 
 %% Main evaluation functions for Rscripts
 
@@ -71,7 +71,7 @@ exports
    sorts INFIXOP PREFIXOP POSTFIXOP
 
    context-free syntax
-	 "[" {FROM ","}+ "::" REXP "]"		-> REXP
+%%	 "[" {FROM ","}+ "::" REXP "]"		-> REXP
 	 "{" {FROM ","}+ "::" REXP  "}"		-> REXP
 	FROM "::" REXP				-> REXP
  
@@ -79,7 +79,7 @@ exports
         evale(REXP, RSTORE)            		-> Elem
         evalt(REXP, RSTORE)            		-> Tuple
         evalb(REXP, RSTORE)            		-> Bag[[Elem]]
-        evalr(REXP, RSTORE)            		-> Rel[[Elem]]
+        evalr(REXP, RSTORE)            		-> Bag[[Elem]]
 
         evalx(REXP, RSTORE)            		-> RVALUE
         apply(RVALUE, INFIXOP, RVALUE)    	-> RVALUE
@@ -127,9 +127,9 @@ exports
 
 	append(RVALUE, RVALUE)						-> RVALUE
 	existsb(RVAR, Bag[[Elem]], REXP, RSTORE)			-> Boolean
-	existsr(RVAR, RVAR, Rel[[Elem]], REXP, RSTORE)			-> Boolean
+	existsr(RVAR, RVAR, Bag[[Elem]], REXP, RSTORE)			-> Boolean
 	forallb(RVAR, Bag[[Elem]], REXP, RSTORE)			-> Boolean
-	forallr(RVAR, Rel[[Elem]], REXP, RSTORE)			-> Boolean
+	forallr(RVAR, Bag[[Elem]], REXP, RSTORE)			-> Boolean
 
 	solve1(Integer, RVAR, REXP, RSTORE)				-> RSTORE
 	solve2(Integer, RVAR, REXP, RVAR, REXP, RSTORE)			-> RSTORE
@@ -148,7 +148,7 @@ hiddens
         "$Exp*"  [0-9\']*              -> { REXP ","}*
         "$Exp+"  [0-9\']*              -> { REXP ","}+
 
-        "$Rel" [0-9\']*                -> Rel[[Elem]] 
+        "$Rel" [0-9\']*                -> Bag[[Elem]] 
         "$Bag" [0-9\']*                -> Bag[[Elem]]
 
         "$Elem"   [0-9\']*             -> Elem

@@ -125,7 +125,7 @@ rel[str,int] USE	= {<"i", 5>, <"n", 5>, <"sum", 6>, <"i", 6>,
 			   <"product", 7>, <"i", 7>, <"i", 8>, <"sum", 9>, 
 			   <"product", 10>}
 
-bag[int] CONTROL-STATEMENT = [ 5 ]
+bag[int] CONTROL-STATEMENT = { 5 }
 
 bag[<str,int>] Example1 = 
 	BackwardSlice(ROOT, CONTROL-STATEMENT, PRED, USE, DEF, <"sum",9>)

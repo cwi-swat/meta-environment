@@ -154,36 +154,36 @@ $Error]>
       check-const($Area, $Tenv) = <type-of($Area), $Tenv>
 
 [check-const-bag1]
-      check-const($Bag, $Tenv) = check-const-bag($Bag, $Tenv)
+      check-const($Bag, $Tenv) = check-const-bag-or-rel($Bag, $Tenv)
 
-[check-const-rel1]
-       check-const($Rel, $Tenv) = check-const-rel($Rel, $Tenv) 	
+%%[check-const-rel1]
+%%       check-const($Rel, $Tenv) = check-const-rel($Rel, $Tenv) 	
 
 [check-const-bag1] 
        check-const($Elem, $Tenv) = <$Etype, $Tenv'>,
        $Etype' = bag[$Etype],
-       check-const-bag([ $Elem+ ], $Tenv') = <$Etype', $Tenv''>
+       check-const-bag-or-rel({ $Elem+ }, $Tenv') = <$Etype', $Tenv''>
        ==========================================
-       check-const-bag([ $Elem, $Elem+ ], $Tenv) = <$Etype', $Tenv''>
+       check-const-bag-or-rel({ $Elem, $Elem+ }, $Tenv) = <$Etype', $Tenv''>
 
 [check-const-bag2] 
        check-const($Elem, $Tenv) = <$Etype, $Tenv'>,
        $Etype' =  bag[$Etype]
        ==========================================
-       check-const-bag([ $Elem ], $Tenv) = <$Etype', $Tenv'>
+       check-const-bag-or-rel({ $Elem }, $Tenv) = <$Etype', $Tenv'>
 
 [check-const-rel1]   
-	check-const-tuple($Tuple, $Tenv) = <<$Etype1, $Etype2>, $Tenv'>, 
+	check-const-tuple($Elem, $Tenv) = <<$Etype1, $Etype2>, $Tenv'>, 
 	$Etype = rel[$Etype1,$Etype2],
-      	check-const-rel({ $Tuple+ }, $Tenv') = <$Etype, $Tenv''>
+      	check-const-bag-or-rel({ $Elem+ }, $Tenv') = <$Etype, $Tenv''>
       	==========================================
-      	check-const-rel({ $Tuple, $Tuple+ }, $Tenv) = <$Etype, $Tenv''>
+      	check-const-bag-or-rel({ $Elem, $Elem+ }, $Tenv) = <$Etype, $Tenv''>
 
 [check-const-rel2] 
-	check-const-tuple($Tuple, $Tenv) = <<$Etype1, $Etype2>, $Tenv'>, 
+	check-const-tuple($Elem, $Tenv) = <<$Etype1, $Etype2>, $Tenv'>, 
 	$Etype = rel[$Etype1,$Etype2]
        ==========================================
-       check-const-rel({ $Tuple }, $Tenv) = <$Etype, $Tenv'>
+       check-const-bag-or-rel({ $Elem }, $Tenv) = <$Etype, $Tenv'>
 
 %%-----------------------------------------------------------------------------------
 
@@ -206,28 +206,7 @@ $Error]>
       	============================================
       	check(<$Exp1, $Exp2>, $Tenv) = <<$Etype1, $Etype2>, $Tenv''>
 
-%% --- Check bag expressions
-
-[check-bag-exp1] 
-       check($Exp, $Tenv) = <$Etype, $Tenv'>,
-       $Etype' =  container-type($Etype),
-       check([ $Exp+ ], $Tenv') = <$Etype', $Tenv''>
-       ==========================================
-       check([ $Exp, $Exp+ ], $Tenv) = <$Etype', $Tenv''>
-
-[check-bag-exp2] 
-       check($Exp, $Tenv) = <$Etype, $Tenv'>,
-       $Etype' =  container-type($Etype)
-       ==========================================
-       check([ $Exp ], $Tenv) = <$Etype', $Tenv'>
-
-[check-bag-exp3]
-	check( [], $Tenv) =  <undefined, $Tenv + [] cannot be typed>
-
-[default-check-bag]
-	check([$Exp*], $Tenv) = <undefined, $Tenv + [$Exp*] cannot be typed>
-
-%% --- Check relation  expressions
+%% --- Check bag/relation  expressions
 
 [check-rel-exp1] 
        check($Exp, $Tenv) = <$Etype, $Tenv'>,
@@ -520,17 +499,7 @@ $Error]>
       ==========================================
       require-rel-type($Exp, $Var1, $Var2, $Etype, $Tenv) = $Tenv'' + $Exp should be of type rel
 
-[rit-1]
-      require-itertype($Exp, bag, bag[$Etype], $Tenv) = $Tenv
-
-[rit-2]
-      require-itertype($Exp, rel, rel[$Etype1,$Etype2], $Tenv) = $Tenv
-
-[default-rit3]
-      require-itertype($Exp, bag, $Etype, $Tenv) = $Tenv + $Exp should be of type bag
-
-[default-rit4]
-      require-itertype($Exp, rel, $Etype, $Tenv) = $Tenv + $Exp should be of type rel
+%% Check from clauses and add introduced variables to type environment
 
 [af1] check($Exp, $Tenv) = <$Etype, $Tenv'>,
       require-bag-type($Exp, $Var, $Etype, $Tenv') = $Tenv''
@@ -561,6 +530,8 @@ $Error]>
 
 [default-af]
       	add-from($From, $From*, $Tenv) = $Tenv + $From cannot be typed
+
+%% Delete the variables introduced in from clauses from the type environment
 
 [df1] 	delete($Tenv, $Var) = $Tenv'
       	==========================================
@@ -593,19 +564,10 @@ $Error]>
       	add-from($From+, $Tenv) = $Tenv',
       	check($Exp, $Tenv') = <$Etype, $Tenv''>,
       	container-type($Etype) = $Etype',
-      	del-from($From+, $Tenv'') = $Tenv''',
-	require-itertype($Exp, bag, $Etype', $Tenv''') = $Tenv''''
+      	del-from($From+, $Tenv'') = $Tenv'''
+%%	require-itertype($Exp, rel, $Etype', $Tenv''') = $Tenv''''  %%<---
       	======================================
-      	check([ $Exp | $From+ ], $Tenv) = <$Etype', $Tenv''''>
-
-[check-valueformer3] 
-      	add-from($From+, $Tenv) = $Tenv',
-      	check($Exp, $Tenv') = <$Etype, $Tenv''>,
-      	container-type($Etype) = $Etype',
-      	del-from($From+, $Tenv'') = $Tenv''',
-	require-itertype($Exp, rel, $Etype', $Tenv''') = $Tenv''''
-      	======================================
-      	check({ $Exp | $From+ }, $Tenv) = <$Etype', $Tenv''''>
+      	check({ $Exp | $From+ }, $Tenv) = <$Etype', $Tenv'''>
 
 %% --- Check Exists
 
@@ -678,7 +640,7 @@ $Error]>
       check-stat($Etype $Var = $Exp, $Tenv) =  check-stat($Etype $Var() = $Exp, $Tenv)
 
 [check-vardef3]
-      check-stat(bag[$Etype] $Var = [], $Tenv) = store($Tenv, $Var, bag[$Etype])
+      check-stat(bag[$Etype] $Var = {}, $Tenv) = store($Tenv, $Var, bag[$Etype])
 [check-vardef4]
       check-stat(rel[$Etype1,$Etype2] $Var = {}, $Tenv) = store($Tenv, $Var, rel[$Etype1,$Etype2])
 

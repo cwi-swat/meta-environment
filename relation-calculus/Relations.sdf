@@ -4,86 +4,89 @@ imports Bags[Elem]
 
 exports
 
-  sorts Tuple Rel[[Elem]]
+  sorts Tuple 
+
+ %%aliases
+%%	Rel[[Elem]]					-> Bag[[Elem]]
 
   context-free syntax
 	Elem # Elem					-> Tuple
-   	"{" {Tuple ","}* "}"                   		-> Rel[[Elem]] {constructor}
+	Tuple						-> Elem
+%%   	"{" {Tuple ","}* "}"                   		-> Rel[[Elem]] {constructor}
 
 %% --- functions cloned from Bag
 
-   	add(Tuple, Rel[[Elem]])                    	-> Rel[[Elem]]
-   	del(Tuple, Rel[[Elem]])                    	-> Rel[[Elem]]
+%%   	add(Tuple, Rel[[Elem]])                    	-> Rel[[Elem]]
+%%   	del(Tuple, Rel[[Elem]])                    	-> Rel[[Elem]]
+%%
+%%   	equal(Rel[[Elem]], Rel[[Elem]])           	-> Boolean
+%%   	subset(Rel[[Elem]], Rel[[Elem]])          	-> Boolean
+%%   	strict-subset(Rel[[Elem]], Rel[[Elem]])   	-> Boolean
+%%   	superset(Rel[[Elem]], Rel[[Elem]])        	-> Boolean
+%%   	strict-superset(Rel[[Elem]], Rel[[Elem]])	-> Boolean
 
-   	equal(Rel[[Elem]], Rel[[Elem]])           	-> Boolean
-   	subset(Rel[[Elem]], Rel[[Elem]])          	-> Boolean
-   	strict-subset(Rel[[Elem]], Rel[[Elem]])   	-> Boolean
-   	superset(Rel[[Elem]], Rel[[Elem]])        	-> Boolean
-   	strict-superset(Rel[[Elem]], Rel[[Elem]])	-> Boolean
+%%   	union1(Tuple, Rel[[Elem]])			-> Rel[[Elem]]
+%%   	union2(Rel[[Elem]], Tuple)			-> Rel[[Elem]]
+%%   	union(Rel[[Elem]], Rel[[Elem]])           	-> Rel[[Elem]]
+%%   	inter(Rel[[Elem]], Rel[[Elem]])          	-> Rel[[Elem]]
+%%   	diff(Rel[[Elem]], Rel[[Elem]])            	-> Rel[[Elem]]
 
-   	union1(Tuple, Rel[[Elem]])			-> Rel[[Elem]]
-   	union2(Rel[[Elem]], Tuple)			-> Rel[[Elem]]
-   	union(Rel[[Elem]], Rel[[Elem]])           	-> Rel[[Elem]]
-   	inter(Rel[[Elem]], Rel[[Elem]])          	-> Rel[[Elem]]
-   	diff(Rel[[Elem]], Rel[[Elem]])            	-> Rel[[Elem]]
-
-   	size(Rel[[Elem]])                         	-> Integer
-   	in(Tuple, Rel[[Elem]])                   	-> Boolean
-
-   	"if" Boolean "then" Rel[[Elem]] "else" Rel[[Elem]] "fi" 
+ %%  	size(Rel[[Elem]])                         	-> Integer
+%%   	in(Tuple, Rel[[Elem]])                   	-> Boolean
+%%
+%%   	"if" Boolean "then" Rel[[Elem]] "else" Rel[[Elem]] "fi" 
                                            		-> Rel[[Elem]]
 
 %% --- end of cloned functions
 
 
-     compose(Rel[[Elem]], Rel[[Elem]])       		-> Rel[[Elem]]
+     compose(Bag[[Elem]], Bag[[Elem]])       		-> Bag[[Elem]]	%%RRR
     
-     product(Elem, Bag[[Elem]])                		-> Rel[[Elem]]
-
-     product(Bag[[Elem]], Bag[[Elem]])         		-> Rel[[Elem]]
+     product(Elem, Bag[[Elem]])                		-> Bag[[Elem]]	%%EBR
+     product(Bag[[Elem]], Bag[[Elem]])         		-> Bag[[Elem]]	%%BBR
      
-     domain(Rel[[Elem]])                       		-> Bag[[Elem]]
-     range(Rel[[Elem]])                        		-> Bag[[Elem]]
-     carrier(Rel[[Elem]])                     		-> Bag[[Elem]]
+     domain(Bag[[Elem]])                       		-> Bag[[Elem]]	%%RB
+     range(Bag[[Elem]])                        		-> Bag[[Elem]]	%%RB
+     carrier(Bag[[Elem]])                     		-> Bag[[Elem]]	%%RB
 
-     domR(Rel[[Elem]], Bag[[Elem]])   			-> Rel[[Elem]]
-     ranR(Rel[[Elem]], Bag[[Elem]])  			-> Rel[[Elem]]
-     carR(Rel[[Elem]], Bag[[Elem]])   			-> Rel[[Elem]]
+     domR(Bag[[Elem]], Bag[[Elem]])   			-> Bag[[Elem]]	%%RBR
+     ranR(Bag[[Elem]], Bag[[Elem]])  			-> Bag[[Elem]]	%%RBR
+     carR(Bag[[Elem]], Bag[[Elem]])   			-> Bag[[Elem]]	%%RBR
 
-     domX(Rel[[Elem]], Bag[[Elem]])   			-> Rel[[Elem]]
-     ranX(Rel[[Elem]], Bag[[Elem]])   			-> Rel[[Elem]]
-     carX(Rel[[Elem]], Bag[[Elem]])   			-> Rel[[Elem]]
+     domX(Bag[[Elem]], Bag[[Elem]])   			-> Bag[[Elem]]	%%RBR
+     ranX(Bag[[Elem]], Bag[[Elem]])   			-> Bag[[Elem]]	%%RBR
+     carX(Bag[[Elem]], Bag[[Elem]])   			-> Bag[[Elem]]	%%RBR
 
-     top(Rel[[Elem]])                 			-> Bag[[Elem]]
-     bottom(Rel[[Elem]])                  		-> Bag[[Elem]]
+     top(Bag[[Elem]])                 			-> Bag[[Elem]]	%%RB
+     bottom(Bag[[Elem]])                  		-> Bag[[Elem]]	%%RB
 
-     inv(Rel[[Elem]])                  			-> Rel[[Elem]]
-     compl(Rel[[Elem]])                			-> Rel[[Elem]]
+     inv(Bag[[Elem]])                  			-> Bag[[Elem]]	%%RR
+     compl(Bag[[Elem]])                			-> Bag[[Elem]]	%%RR
 
-     id(Bag[[Elem]])                   			-> Rel[[Elem]]
+     id(Bag[[Elem]])                   			-> Bag[[Elem]]	%%BR
 
-     Rel[[Elem]] "." Elem             			-> Bag[[Elem]]
-     Rel[[Elem]] "." Bag[[Elem]]      			-> Bag[[Elem]]
+     Bag[[Elem]] "." Elem             			-> Bag[[Elem]]	%%REB
+     Bag[[Elem]] "." Bag[[Elem]]      			-> Bag[[Elem]]	%%RBB
 
-     Elem "." Rel[[Elem]]             			-> Bag[[Elem]]
-     Bag[[Elem]] "." Rel[[Elem]]      			-> Bag[[Elem]]
-     reachX(Bag[[Elem]], Bag[[Elem]], Rel[[Elem]])	-> Rel[[Elem]]
-     reachR(Bag[[Elem]], Bag[[Elem]], Rel[[Elem]])	-> Rel[[Elem]]
-     trans-closure(Rel[[Elem]])                		-> Rel[[Elem]]
-     rtrans-closure(Rel[[Elem]])             		-> Rel[[Elem]]
+     Elem "." Bag[[Elem]]             			-> Bag[[Elem]]	%%ERB
+     Bag[[Elem]] "." Bag[[Elem]]      			-> Bag[[Elem]]	%%BRB
+     reachX(Bag[[Elem]], Bag[[Elem]], Bag[[Elem]])	-> Bag[[Elem]]	%%BBRR
+     reachR(Bag[[Elem]], Bag[[Elem]], Bag[[Elem]])	-> Bag[[Elem]]	%%BBRR
+     trans-closure(Bag[[Elem]])                		-> Bag[[Elem]]	%%RR
+     rtrans-closure(Bag[[Elem]])             		-> Bag[[Elem]]	%%RR
 
-     "(" Rel[[Elem]] ")"              			-> Rel[[Elem]] {bracket}
+     "(" Bag[[Elem]] ")"              			-> Bag[[Elem]] {bracket}
 
 
 hiddens
   imports asf/syntax/Comments
 
   context-free syntax
-     closure(Rel[[Elem]],Rel[[Elem]], Rel[[Elem]])	-> Rel[[Elem]]
+     closure(Bag[[Elem]],Bag[[Elem]], Bag[[Elem]])	-> Bag[[Elem]]
 
   variables
      "$Bag" [0-9\']*             -> Bag[[Elem]]
-     "$Rel" [0-9\']*             -> Rel[[Elem]]
+     "$Rel" [0-9\']*             -> Bag[[Elem]]
 
      "$Elem" [0-9\']*            -> Elem
      "$Elem*" [0-9\']*           -> {Elem ","}*

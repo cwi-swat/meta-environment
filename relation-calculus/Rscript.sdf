@@ -28,14 +28,14 @@ exports
 %% Extend Elem to allow nested bags and relations
 
      Bag[[Elem]]                   	    	-> Elem  
-     Rel[[Elem]]                           	-> Elem  
+%%     Rel[[Elem]]                           	-> Elem  
      Tuple					-> Elem
 
      Elem                                    	-> REXP
      RVAR                                    	-> REXP
      REXP # REXP			     	-> REXP {avoid}
      "{" {REXP ","}* "}"                     	-> REXP {avoid}
-     "["  {REXP ","}* "]"                     	-> REXP {avoid}
+%%     "["  {REXP ","}* "]"                     	-> REXP {avoid}
 
 %% Binary Operators
      REXP "and" REXP                         	-> REXP {left}
@@ -80,7 +80,7 @@ exports
 %% Bag and relation formers
 
      "{" REXP "|" {FROM ","}+ "}"		-> REXP
-     "[" REXP "|" {FROM ","}+ "]"		-> REXP
+%%     "[" REXP "|" {FROM ","}+ "]"		-> REXP
 
 	RVAR 					-> TARGET
 	"<" RVAR "," RVAR ">"			-> TARGET
