@@ -1,5 +1,10 @@
 # $Id$
 
+Mon May 13 09:38:50 CEST 2002 <jong@cwi.nl>
+ * add program-check.m4 to EXTRA_DIST
+ * add AC_SET_MAKE and AC_PROG_RANLIB.
+   Closes Jeroen Scheerder's bugreport (2002-05-09)
+
 Apr 19 10:19:27 CEST 2002 <jurgenv@cwi.nl>
  * moved source code to src directory
 

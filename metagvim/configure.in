@@ -1,12 +1,20 @@
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(metagvim, 0.2)
+AM_INIT_AUTOMAKE(metagvim, 0.2.1)
 
 dnl Let aclocal use macros in ./config directory
 ACLOCAL="${ACLOCAL} -I ."
 
+dnl "info autoconf": Some old versions of `make' do not set the MAKE variable.
+dnl The following macro allows you to use it even with those versions.
+AC_PROG_MAKE_SET
+
+dnl Find a suitable C compiler
 AC_REQUIRE([AC_PROG_CC])
 AC_PROG_CC
+
+dnl Set RANLIB if needed
+AC_PROG_RANLIB
 
 dnl Handle cflags option
 AC_ARG_WITH(cflags,
@@ -28,6 +36,7 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR      ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
+dnl Setup LIBTOOL
 AM_PROG_LIBTOOL
 AC_SUBST(LIBTOOL)
 
