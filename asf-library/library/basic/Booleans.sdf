@@ -1,19 +1,19 @@
 module basic/Booleans
 
 exports
-  context-free start-symbols BoolCon
   sorts BoolCon
   context-free syntax
     "true"  -> BoolCon {constructor, cons("true")}
     "false" -> BoolCon {constructor, cons("false")}
 
   context-free start-symbols Boolean
-  sorts Boolean
-  context-free syntax
-    BoolCon -> Boolean {cons("constant")}
 
-    lhs:Boolean "|" rhs:Boolean 	-> Boolean {left, cons("or")}
-    lhs:Boolean "&" rhs:Boolean 	-> Boolean {left, cons("and")}
+  sorts Boolean
+
+  context-free syntax
+    BoolCon                     -> Boolean {cons("constant")}
+    lhs:Boolean "|" rhs:Boolean -> Boolean {left, cons("or")}
+    lhs:Boolean "&" rhs:Boolean -> Boolean {left, cons("and")}
     "not" "(" Boolean ")" 	-> Boolean {cons("not")}
     "(" Boolean ")"       	-> Boolean {bracket, cons("bracket")}
 

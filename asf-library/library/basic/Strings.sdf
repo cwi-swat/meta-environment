@@ -11,11 +11,15 @@ hiddens
   sorts Escaped Normal
 
 exports
+  context-free start-symbols String
+
   sorts StrCon String
+
   lexical syntax
-    ~[\0-\31\"\\\n]                         -> Normal
-    "\\n" | "\\t" |  "\\\"" | "\\\\"        -> Escaped
-    "\\" [0-7][0-7][0-7]		    -> Escaped
+    ~[\0-\31\"\\\n] -> Normal
+
+    "\\n" | "\\t" |  "\\\"" | "\\\\" -> Escaped
+    "\\" [0-7][0-7][0-7]             -> Escaped
 
     "\"" (Normal | Escaped)* ("\\\n" (Normal | Escaped)*)* "\"" -> StrCon
 
@@ -24,8 +28,11 @@ exports
     StrCon             -> String {constructor}
     String "||" String -> String {left}
     "(" String ")"     -> String {bracket}
+
+  context-free syntax
     remove-continuations(String) -> String
-    str-len(String) -> Integer
+
+    str-len(String)         -> Integer
     str-cmp(String,String) -> Integer
 
 hiddens

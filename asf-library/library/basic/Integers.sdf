@@ -4,10 +4,13 @@ imports
   basic/Booleans
 
 exports
-  context-free start-symbols NatCon Natural Integer
+  context-free start-symbols Natural Integer
+
   sorts NatCon Natural Integer
+
   lexical syntax
     [0-9]+ -> NatCon
+
   context-free syntax
      NatCon           		-> Natural
      Natural "-/" Natural	-> Natural {left}
