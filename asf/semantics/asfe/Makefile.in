@@ -77,7 +77,7 @@ MODULES	= evaluator.o preparation.o
 
 # Explicit rules
 evaluator.tif.c: $(top_srcdir)/toolbus/meta.tifs
-	$(TOOLBUS)/bin/tifstoc -tool evaluator $(top_srcdir)/toolbus/meta.tifs
+	$(ATERM)/bin/tifstoc -tool evaluator $(top_srcdir)/toolbus/meta.tifs
 
 evaluator: $(MODULES)
 	$(CC) -o evaluator $(MODULES) $(LIBS)
