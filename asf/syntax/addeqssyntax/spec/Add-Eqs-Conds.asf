@@ -50,7 +50,7 @@ equations
                  Symbol "!=" Symbol -> ASF-Condition {cons("negative")}
                  Symbol "==" Symbol -> ASF-Condition {cons("equality")}
                  Symbol ":=" Symbol -> ASF-Condition {cons("match")}
-                 Symbol ":#" Symbol -> ASF-Condition {cons("no-match")}
+                 Symbol "!:=" Symbol -> ASF-Condition {cons("no-match")}
                  "amb" "(" {Symbol ","}* ")" -> Symbol {cons("ambiguity-constructor")}
                  Prod*)
 
