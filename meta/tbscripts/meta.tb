@@ -40,7 +40,7 @@
 #include "unparsePT.idef"
 #include "addPosInfo.idef"
 #include "in-output.idef"
-#include "module-db.idef"
+#include "module-db.tb"
 #include "restorebrackets.idef"
 #include "parsetablegen.idef"
 #include "text-editor.idef"
@@ -122,7 +122,6 @@ toolbus(
     ParseFocusses,
     Parser,
     PrintModule,
-    ProcessEqs,
 #ifdef QUERY
     Query,
     QueryTool,

@@ -119,8 +119,8 @@ in
     /*
   +
     rec-msg(save-all) .
-    snd-msg(get-all-modules).
-    rec-msg(all-modules(Modules?)).
+    snd-msg(get-all-module-names).
+    rec-msg(all-module-names(Modules?)).
     ( if not-equal(Modules, []) then
        Module := first(Modules).
        Modules := next(Modules).

@@ -1,6 +1,4 @@
-/*
-  $Id$
- */
+/* $Id$ */
 
 process ProcessEqsTree(Module : str, Tree : term) is
 let
@@ -16,9 +14,8 @@ in
   fi
 endlet
 
-process ProcessEqs is
+process ParseAllEquations(ModName : str) is
 let
-  ModName     : str,
   ModuleName  : str,
   Module      : str,
   Modules     : list,
@@ -29,87 +26,42 @@ let
   Errors      : term,
   ModuleId    : term
 in
+  snd-msg(get-rules-top-sort) .
+  rec-msg(set-rules-top-sort(sort(Nonterminal?))) .
+  snd-msg(eqs-not-available-for-modules(ModName)) .
+  rec-msg(eqs-needed-for-modules(Modules?)).
   (
-    rec-msg(process-eqs(ModName?)).
-    snd-msg(get-rules-top-sort) .
-    rec-msg(set-rules-top-sort(sort(Nonterminal?))) .
-    snd-msg(eqs-not-available-for-modules(ModName)) .
-    rec-msg(eqs-needed-for-modules(Modules?)).
-    (
-     if not-equal(Modules, []) then
-       Module  := first(Modules).
-       Modules := next(Modules).
-       /* Get the text representation of the unparsed equations section. 
-        */
-       snd-msg(get-eqs-text(Module)).
-       (
-        rec-msg(eqs-text(Module, EqsText?)).
-	ModuleId := quote(eqs(Module)) .
-	ParseString(ModuleId, 
-		    Nonterminal, EqsText, ParseTree?, Errors?) .
-	ProcessParseError(Module, Errors, "asf") .
-	ProcessEqsTree(Module, ParseTree)
-      +
-        rec-msg(no-eqs-text(Module))
-      )
-      fi
-    )*
-    if equal(Modules,[]) then 
-      snd-msg(eqs-processed(ModName))
-    fi 
-  )* delta
-endlet
-
-process ProcessRenamedImports(ImportTupleList : list, 
-                              Equations : term?) is
-let
-  ImportTuple  : term,
-  ImportTuples : list,
-  TupleArgs    : list,
-  Import       : term,
-  Imports      : list,
-  Renamings    : term,
-  NewRenamings : term,
-  NewImports   : list,
-  NewEquations : term
-in
-  Equations := [] .
-  ImportTuples := ImportTupleList .
-  (
-    if not-equal(ImportTuples, []) then
-      ImportTuple  := first(ImportTuples) .
-      ImportTuples := next(ImportTuples) .
-      TupleArgs := args(ImportTuple) .
-      Renamings := first(TupleArgs) .
-      Imports := first(next(TupleArgs)) .
-      (
-        if not-equal(Imports, []) then
-          Import  := first(Imports) .
-/*printf("Renamings is %t\n", Renamings).
-printf("Import is %t\n", Import).*/
-          Imports := next(Imports) .
-          snd-msg(get-equations-for-renamed-import(Import, Renamings)) .
-          (
-            rec-msg(renamed-equations(NewRenamings?, NewImports?, NewEquations?)) .
-	    snd-msg(rename-semantics-hook(NewRenamings, NewEquations)) .
-	    rec-msg(rename-semantics-hook-result(NewEquations?)) .
-	    Equations := join(NewEquations, Equations) .
-            ImportTuple := quote(tuple(NewRenamings, NewImports)) .
-            ImportTuples := join(ImportTuples, ImportTuple)
-          +
-            rec-msg(no-equations)
-          )
-        fi
-      )*
-      if equal(Imports, []) then 
-        tau
-      fi 
+   if not-equal(Modules, []) then
+     Module  := first(Modules).
+     Modules := next(Modules).
+     snd-msg(get-eqs-text(Module)).
+     (
+      rec-msg(eqs-text(Module, EqsText?)).
+      ModuleId := quote(eqs(Module)) .
+      ParseString(ModuleId, Nonterminal, EqsText, ParseTree?, Errors?) .
+      ProcessParseError(Module, Errors, "asf") .
+      ProcessEqsTree(Module, ParseTree)
+    +
+      rec-msg(no-eqs-text(Module)) 
+    )
     fi
   )*
-  if equal(ImportTuples, []) then 
+  if equal(Modules,[]) then 
     tau
   fi 
 endlet
+
+process GetImportsForRenaming(ModuleName : str, Imports : term?) is
+let 
+  Modules : list
+in
+  printf("DEBUG:all sdf-modules not needed!(%f,%d)\n", __FILE__, __LINE__) .
+  snd-msg(get-all-modules) .
+  rec-msg(all-modules(Modules?)) .
+  snd-msg(sm-get-all-needed-imports(Modules, ModuleName)) .
+  rec-msg(sm-all-needed-imports(Imports?))  
+endlet
+
 
 process GetEquations is
 let
@@ -118,48 +70,48 @@ let
   AllEquations : term,
   Modules      : list,
   NewEquations : list,
-  Imports      : list,
-  Module       : term,
+  Imports      : term,
+  Module       : str,
   Renamings    : term,
   FormalName   : term,
   Parameters   : term,
-  ImportTuple  : term
+  ImportTuple  : term,
+  ModuleNames : list,
+  RenamedEquations : list,
+  ImportedModuleName : str
 in
   (
     rec-msg(get-all-equations(ModuleName?)) .
-    snd-msg(process-eqs(ModuleName)) .
-    rec-msg(eqs-processed(ModuleName)) .
+    ParseAllEquations(ModuleName) .
     snd-msg(all-equations-available(ModuleName)) .
     (
       rec-msg(equations-available) .
       NewEquations   := [] .
-      snd-msg(get-all-imported-modules(ModuleName)) .
-      rec-msg(all-modules(Modules?)) .
-      (
-        if not-equal(Modules, []) then
-          Module  := first(Modules) .
-          Modules := next(Modules) .
-          snd-msg(get-equations-for-module(Module)) .
-          (
-	    rec-msg(plain-equations(Equations?)) .
-	    NewEquations := join(Equations, NewEquations)
-          +
-            rec-msg(renaming-equations(Renamings?, Imports?, Equations?)) .
-	    snd-msg(rename-semantics-hook(Renamings, Equations)).
-	    rec-msg(rename-semantics-hook-result(Equations?)).
-	    NewEquations := join(Equations, NewEquations) .
-            ImportTuple := quote(tuple(Renamings, Imports)) .
-	    ProcessRenamedImports([ImportTuple], Equations?) .
-	    NewEquations := join(Equations, NewEquations)
-          +
-	    rec-msg(no-equations)
-          )
-        fi
-      )*
-      if equal(Modules,[]) then  
+      snd-msg(get-all-imported-module-names(ModuleName)) .
+      rec-msg(all-imported-module-names(ModuleNames?)) .
+      GetImportsForRenaming(ModuleName, Imports?) .
+      if not-equal(ModuleNames, []) then
+        Module  := first(ModuleNames) .
+        ModuleNames := next(ModuleNames) .
+	printf("doing %s\n", Module) .
+	printf("to go: %t\n", ModuleNames) .
+        snd-msg(get-equations-for-module(Module)) .
+        (
+           rec-msg(equations(Equations?)) .
+	   snd-msg(sr-rename-module(Imports, Module, Equations)) .
+	   rec-msg(sr-renamed-module(RenamedEquations?)) .
+	   NewEquations := join(NewEquations, RenamedEquations)
+        +
+	   rec-msg(no-equations)
+        )
+      fi
+      *
+      if equal(ModuleNames,[]) then  
+        printf("done with: ModuleName := %s\n", ModuleName) .
         snd-msg(postprocess-collected-semantics-hook(ModuleName, NewEquations)).
 	rec-msg(postprocess-collected-semantics-hook-result(ModuleName, AllEquations?)).
-	snd-msg(all-equations(AllEquations))
+	snd-msg(all-equations(AllEquations)) .
+	printf("all equations send!!\n")
       fi 
     +
       rec-msg(equations-incomplete) .
