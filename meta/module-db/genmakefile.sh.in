@@ -95,6 +95,7 @@ cat <<HDR					> Makefile
 #
 HDR
 cat ${PROTO} |
+	$PERL -pe "s|\@TARGET\@|$1|g"		|
 	$PERL -pe '
 		$srcdir   = q{@srcdir@};
 		$topsrc   = q{@top_srcdir@};
@@ -114,20 +115,20 @@ cat ${PROTO} |
 		$UNINSTALL= q{@UNINSTALL@};
 		$ATERM    = q{@ATERM@};
 
-		s|%!%srcdir%!%|$srcdir|g;
-		s|%!%top_srcdir%!%|$topsrc|g;
-		s|%!%CC%!%|$CC|g;
-		s|%!%prefix%!%|$prefix|g;
-		s|%!%exec_prefix%!%|$eprefix|g;
-		s|%!%bindir%!%|$bindir|g;
-		s|%!%libdir%!%|$libdir|g;
-		s|%!%includedir%!%|$incdir|g;
-		s|%!%DEFS%!%|$DEFS|g;
-		s|%!%INCLUDES%!%|$INCLUDES|g;
-		s|%!%LIBS%!%|$LIBS|g;
-		s|%!%SOCKLIBS%!%|$SOCKLIBS|g;
-		s|%!%INSTALL%!%|$INSTALL|g;
-		s|%!%INSTALL_DATA%!%|$INSTDATA|g;
-		s|%!%INSTALL_PROG%!%|$INSTPROG|g;
-		s|%!%UNINSTALL%!%|$UNINSTALL|g;
-		s|%!%ATERM%!%|$ATERM|g;'	>> Makefile
+		s|\@srcdir\@|$srcdir|g;
+		s|\@top_srcdir\@|$topsrc|g;
+		s|\@CC\@|$CC|g;
+		s|\@prefix\@|$prefix|g;
+		s|\@exec_prefix\@|$eprefix|g;
+		s|\@bindir\@|$bindir|g;
+		s|\@libdir\@|$libdir|g;
+		s|\@includedir\@|$incdir|g;
+		s|\@DEFS\@|$DEFS|g;
+		s|\@INCLUDES\@|$INCLUDES|g;
+		s|\@LIBS\@|$LIBS|g;
+		s|\@SOCKLIBS\@|$SOCKLIBS|g;
+		s|\@INSTALL\@|$INSTALL|g;
+		s|\@INSTALL_DATA\@|$INSTDATA|g;
+		s|\@INSTALL_PROG\@|$INSTPROG|g;
+		s|\@UNINSTALL\@|$UNINSTALL|g;
+		s|\@ATERM\@|$ATERM|g;'	>> Makefile

@@ -27,11 +27,11 @@ PROFILE_LD_FLAGS=-pg
 
 LOCALLIBS=-lsupport -lATB -lAsFix -lATerm
 
-srcdir          = %!%srcdir%!%
-top_srcdir      = %!%top_srcdir%!%
+srcdir          = @srcdir@
+top_srcdir      = @top_srcdir@
 
 # Default compiler to use
-CC=%!%CC%!%
+CC=@CC@
 
 # DEBUG-LIBS:     libraries containing debugging information
 DEBUG-LIBS     = -L$(ATERM)/lib $(LOCALLIBS:=-dbg) $(LIBS)
@@ -58,23 +58,23 @@ FLAGS-gcc     = ${FLAGS_gcc}
 
 # There should be no need to change anything below
 
-prefix          = %!%prefix%!%
-exec_prefix     = %!%exec_prefix%!%
-bindir          = %!%bindir%!%
-libdir          = %!%libdir%!%
-includedir      = %!%includedir%!%
+prefix          = @prefix@
+exec_prefix     = @exec_prefix@
+bindir          = @bindir@
+libdir          = @libdir@
+includedir      = @includedir@
 
-DEFS            = %!%DEFS%!% $(XDEFS)
-INCLUDES        = %!%INCLUDES%!% $(XINCLUDES)
-LIBS            = %!%LIBS%!% $(XLIBS)
-SOCKLIBS        = %!%SOCKLIBS%!%
+DEFS            = @DEFS@ $(XDEFS)
+INCLUDES        = @INCLUDES@ $(XINCLUDES)
+LIBS            = @LIBS@ $(XLIBS)
+SOCKLIBS        = @SOCKLIBS@
 
-INSTALL		= %!%INSTALL%!%
-INSTALL_DATA	= %!%INSTALL_DATA%!%
-INSTALL_PROG	= %!%INSTALL_PROG%!%
-UNINSTALL	= %!%UNINSTALL%!%
+INSTALL		= @INSTALL@
+INSTALL_DATA	= @INSTALL_DATA@
+INSTALL_PROG	= @INSTALL_PROG@
+UNINSTALL	= @UNINSTALL@
 
-ATERM           = %!%ATERM%!%
+ATERM           = @ATERM@
 
 XINCLUDES       = -I$(ATERM)/include -I$(includedir)
 XLIBS           = -L$(prefix)/lib $(SOCKLIBS)
@@ -91,9 +91,6 @@ LIBFILES    =
 INCLUDEFILES=
 
 # Make rules
-
-print:
-	@echo SPEC_SRCS are $(SPEC_SRCS)
 
 all:	${BINFILES}
 
