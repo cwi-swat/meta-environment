@@ -1,5 +1,10 @@
 $Id$
 
+Tue Feb 10 17:09:13 CET 2004 <{jurgenv,jong}@cwi.nl>
+ * added new ATBinit commandline option: -TB_COLLECT_LOOP <N>
+   - if N == 0, then ATBeventloop does not do an AT_collect();
+   - if N > 0, then ATBeventloop does an AT_collect after every Nth event. 
+
 Tue Feb 10 15:20:55 CET 2004 <m336@cwi.nl>
  * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
 

@@ -24,6 +24,7 @@
 #define TB_HOST			 "-TB_HOST"
 #define TB_PORT			 "-TB_PORT"
 #define TB_TOOL_ID		 "-TB_TOOL_ID"
+#define TB_COLLECT_LOOP          "-TB_COLLECT_LOOP"
 #define TB_TOOL_NAME	 "-TB_TOOL_NAME"
 #define TB_HANDSHAKE_LEN 512
 
@@ -67,11 +68,11 @@ char atb_tool_id[] = "$Id$";
 
 static char  this_host[MAXHOSTNAMELEN + 1] = "";
 static char *default_host = this_host;
-
 static char *default_toolname = NULL;
 
 static int default_port = 8999;
 static int default_tid  = -1;
+static int default_collect_loop = 0;
 
 static Connection *connections[FD_SETSIZE] = { NULL };
 
@@ -124,6 +125,7 @@ ATBinit(int argc, char *argv[], ATerm *stack_bottom)
       fprintf(stderr, "    %-20s: specify toolbus host\n", TB_HOST);
       fprintf(stderr, "    %-20s: specify toolbus port\n", TB_PORT);
       fprintf(stderr, "    %-20s: specify toolbus tool id\n", TB_TOOL_ID);
+      fprintf(stderr, "    %-20s: specify garbage collect frequency (0 is never,, N>0 is after every N events\n", TB_COLLECT_LOOP);
     }
   }
 
@@ -132,14 +134,22 @@ ATBinit(int argc, char *argv[], ATerm *stack_bottom)
   /* Parse commandline arguments, set up default values */
   for (lcv = 1; lcv < argc; lcv++)
   {
-    if (streq(argv[lcv], TB_TOOL_NAME))
+    if (streq(argv[lcv], TB_TOOL_NAME)) {
       default_toolname = argv[++lcv];
-    else if (streq(argv[lcv], TB_HOST))
+    }
+    else if (streq(argv[lcv], TB_HOST)) {
       default_host = argv[++lcv];
-    else if (streq(argv[lcv], TB_PORT))
+    }
+    else if (streq(argv[lcv], TB_PORT)) {
       default_port = atoi(argv[++lcv]);
-    else if (streq(argv[lcv], TB_TOOL_ID))
+    }
+    else if (streq(argv[lcv], TB_TOOL_ID)) {
       default_tid = atoi(argv[++lcv]);
+    }
+    else if (streq(argv[lcv], TB_COLLECT_LOOP)) {
+      default_collect_loop = atoi(argv[++lcv]);
+    }
+
   }
 
   /* Build some constants */
@@ -344,6 +354,22 @@ const char *connect_get_name(int fd)
 
 /*}}}  */
 
+/*{{{  static void ATBcollect(void)  */
+
+static void ATBcollect(void) 
+{
+  static int count = 0;
+  extern void AT_collect(void);
+
+  if(default_collect_loop > 0) {
+    if (++count >= default_collect_loop) {
+      count = 0;
+      AT_collect();
+    }
+  }
+}
+
+/*}}}  */
 /*{{{  int ATBeventloop(void) */
 
 /**
@@ -360,6 +386,7 @@ int ATBeventloop(void)
       fprintf(stderr, "warning: connection with ToolBus was lost.\n");
       return -1;
     }
+    ATBcollect();
   }
 }
 
