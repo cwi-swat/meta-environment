@@ -12,19 +12,20 @@ reference=$mydir/tables
 dirs="first grammars"
 
 Notify () {
-	if [ $VERBOSE -gt 0 ]
-	then
+	if [ $VERBOSE -gt 0 ] ; then
 		echo $*                                   	>&2
 	fi
 }
 
-GenTable() {
-	if sdf2table $1
-	then
-	        ptbl=`basename $1 .sdf2`.tbl
+RegressGenTable() {
+	ptbl=`basename $1 .sdf2`.tbl
+	if [ ! -f $reference/$ptbl ] ; then
+		Notify "No reference table for $ptbl"
+		continue
+	fi
+	if sdf2table $1 ; then
 		diffs=1
-		if [ `wc -c < $ptbl` -eq `wc -c < $reference/$ptbl` ]
-		then
+		if [ `wc -c < $ptbl` -eq `wc -c < $reference/$ptbl` ] ; then
 	        	Notify Comparing $ptbl...
 	                if $COMPARE $ptbl $reference/$ptbl	>/dev/null 2>&1
 	                then
@@ -33,8 +34,7 @@ GenTable() {
 			        diffs=0
 	                fi
 		fi
-		if [ $diffs -ne 0 ]
-		then
+		if [ $diffs -ne 0 ] ; then
 		        Notify "Regress test for $1 failed"
 	        fi
 	else
@@ -47,9 +47,8 @@ GenTable() {
 for dir in $dirs
 do
 	cd $dir
-        for stx in *.sdf2
-        do
-	        GenTable $stx
+        for stx in *.sdf2 ; do
+	        RegressGenTable $stx
         done
 	rm -f *.asfix*
 	cd ..

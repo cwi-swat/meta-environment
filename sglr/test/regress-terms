@@ -37,7 +37,10 @@ do
 		base=`basename $file`
 		dir=`dirname $file`
 		out=$dir/`basename $base .$ext`.asfix2
-		if [ ! -f $out.org ] ; then continue; fi
+		if [ ! -f $out.org ] ; then
+			Notify "No reference term for $base"
+			continue
+		fi
 		if $SGLR -p $ptbl -i $file -o $out
 		then
 			diffs=1
