@@ -2,3 +2,5 @@ Makefile
 Makefile.in
 meta
 meta-interface.tb
+pt-dump
+eqs-dump
