@@ -20,6 +20,11 @@
 # $Id$
 #
 
+2000-11-08 <jurgenv@cwi.nl>
+   * Increased version number from 0.2.1 to 0.2.2
+   * New functionality for handling productions added
+   * Small maintenance on configure scripts and Makefiles
+
 2000-07-27 <mdejonge@cwi.nl>
    * Increased version number  to 0.2
 
