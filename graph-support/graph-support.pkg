@@ -2,7 +2,7 @@ package
 identification
    name=__PACKAGE__
    version=__VERSION__
-   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   location=http://www.cwi.nl/projects/MetaEnv/graph-support
    info=http://www.cwi.nl/projects/MetaEnv/graph-support
    description='The Graph support library for the Meta-Environment, contains
                 visualization tools and graph manipulation tools'
