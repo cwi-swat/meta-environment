@@ -1,5 +1,6 @@
-2002/02/13 (jurgenv@cwi.nl)
+2002/02/13 ({jurgenv,markvdb}@cwi.nl)
  * Released 1.3
+ * Fixed memory leak in restore-brackets
 
 2002/02/12 (jurgenv@cwi.nl)
  * Fixed a serious bug in the asf compiler. It couldn't handle lists
