@@ -1,0 +1,1 @@
+term(l("term"),w(""),l("X"),w(""),id("X"),w(""),appl(prod(id("Pico-Booleans"),w(""),[ql("true")],w(""),l("->"),w(""),sort("PICO-BOOL"),w(""),no-attrs),w(""),[l("true")]),w("\n\n"),no-abbreviations)
