@@ -307,11 +307,12 @@ TA_Expr eval_less(int pid, AFun fun, TA_ExprList args)
 }
 
 /*}}}  */
-/*{{{  void TA_connect() */
+/*{{{  int TA_connect(int port) */
 
 int TA_connect(int port)
 {
   int proc_cid = ATBconnect("debug-adapter", NULL, port, debug_adapter_handler);
+  int pid;
   
   if (proc_cid < 0) {
     ATerror("could not connect to tide.\n");
@@ -320,8 +321,6 @@ int TA_connect(int port)
   if (connected) {	// already a process in existence, so skip remaining inits
     return proc_cid;
   }
-
-  int pid;
 
   TA_initTAApi();
 
@@ -605,7 +604,6 @@ void TA_atCPE(int pid, TA_Location cpe, int stack_level)
   ASSERT_VALID_PID(pid);
   processes[pid].cpe = cpe;
   processes[pid].stack_level = stack_level;
-//  ATwarning("[%s] cpe updated : %t\n", findProcess(pid)->name, TA_LocationToTerm(cpe));
 }
 
 /*}}}  */
@@ -616,16 +614,9 @@ static void triggerRule(int pid, TA_Rule *rule)
 {
   int cid = findProcess(pid)->cid;
 
-  ATwarning("[%s] Triggering rule: pid %d, cid %d, tag %t, id %d, action: %t ...\n",processes[pid].name,pid,cid,rule->tag,rule->id,rule->action);
   TA_Expr value = TA_evaluate(pid, rule->action);
 
-/*  ATwarning("actions of rule %d (%t) evaluate to %t\n",
-	   rule->id, rule->action, value);
-*/
-/*
-    ATwarning("[%s] ATBpostEvent(%d, ATmake(\"event(%d,%d,%t)\"))\n", processes[pid].name, cid, pid, rule->id, value);
-    ATBpostEvent(cid, ATmake("event(<int>,<int>,<term>)", pid, rule->id, value));
-*/
+  ATBpostEvent(cid, ATmake("event(<int>,<int>,<term>)", pid, rule->id, value)); 
 }
 
 /*}}}  */
@@ -634,11 +625,6 @@ static void triggerRule(int pid, TA_Rule *rule)
 static void activateRule(int pid, TA_Rule *rule)
 {
   TA_Expr value = TA_evaluate(pid, rule->condition);
-
-/*
-  ATwarning("[%s] ... rule (%t,%t,%t) evaluates to %t\n", findProcess(pid)->name,
-	    rule->port, rule->condition, rule->action, value);
-*/
 
   if (ATisEqual(value, ATparse("true"))) {
     triggerRule(pid, rule);
@@ -653,7 +639,6 @@ void TA_activateRules(int pid, TA_Port port)
   TA_Rule *rules;
   int port_type;
 
-//  ATwarning("[%s] activating rules ...\n", findProcess(pid)->name);
   ASSERT_VALID_PID(pid);
 
   port_type = TA_getPortType(port);
