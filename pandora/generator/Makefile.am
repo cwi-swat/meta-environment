@@ -33,6 +33,7 @@ pandora_SOURCES = \
 pandora_LDADD = \
 	-L$(ASC_SUPPORT)/lib -lasc-support-me \
 	-L$(SGLR)/lib -lsglr \
+	-L$(TIDE)/lib -ltide-adapter \
 	-L$(ASF_SUPPORT)/lib -lASFME \
 	-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI \

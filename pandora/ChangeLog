@@ -1,6 +1,17 @@
 # $Id$
 
-Mon Sep 20 14:54:17 CEST 2004 <kooiker@cwi.nl>
+Wed Oct 13 11:23:07 CEST 2004 <kooiker@cwi.nl>
+ * formatter/text/Text-Operators.{asf,sdf}:
+   - Introduced Text concat operator 
+
+Mon Oct 11 17:47:49 CEST 2004 <jurgenv@cwi.nl>
+ * Temporarily added dependency on Tide, until the Tide package
+   is split up such that it can become a dependency on the
+   tide-c-adapter.
+ * Added -t option to pandora for exporting its result in textual
+   ATerm format.
+
+Mon Sep 20 15:10:13 CEST 2004 <kooiker@cwi.nl>
  * formatter/text:
    - Added Alignments-to-Text 
  * generator/Box-to-Text.c:
@@ -20,6 +31,9 @@ Fri Aug 20 10:56:04 CEST 2004 <kooiker@cwi.nl>
 
 Wed May 12 13:32:34 CEST 2004 <{jong,kooiker}@cwi.nl>
  * generator/main.c: default in/out to - (stdin)
+
+Fri Jul  2 10:17:32 CEST 2004 <jurgenv@cwi.nl>
+ * Bumped to 1.1
 
 Mon May 10 13:35:12 CEST 2004 <kooiker@cwi.nl>
  * generator/pandora.c:

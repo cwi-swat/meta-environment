@@ -24,6 +24,10 @@ AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
+AC_PACKAGE_REQUIRE(tide, tide,
+   [  --with-aterm=DIR        Tide is in DIR])
+AC_SUBST(TIDE)
+
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
