@@ -137,6 +137,7 @@ ATbool PT_getTreePosInfo(PT_Tree tree, char **path,  int *start_line, int *start
 
 
 ATerm   PT_getTreeAnnotations(PT_Tree tree);
+PT_Tree PT_setTreeAnnotations(PT_Tree tree, ATerm annos);
 ATerm   PT_getParseTreeAnnotations(PT_ParseTree tree);
 ATerm   PT_getTreeAnnotation(PT_Tree tree, ATerm key);
 PT_Tree PT_setTreeAnnotation(PT_Tree tree, ATerm key, ATerm value);

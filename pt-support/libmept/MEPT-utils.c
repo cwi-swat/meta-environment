@@ -795,11 +795,19 @@ ATbool PT_isTreeLexical(PT_Tree tree)
 /*}}}  */ 
 
 /* ATerm annotations */
-/*{{{  ATermList PT_getTreeAnnotations(PT_Tree tree) */
+/*{{{  ATerm PT_getTreeAnnotations(PT_Tree tree) */
 
 ATerm PT_getTreeAnnotations(PT_Tree tree)
 {
   return AT_getAnnotations((ATerm) tree);
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_setTreeAnnotations(PT_Tree tree, ATerm annos) */
+
+PT_Tree PT_setTreeAnnotations(PT_Tree tree, ATerm annos)
+{
+  return (PT_Tree)AT_setAnnotations((ATerm) tree, annos);
 }
 
 /*}}}  */
