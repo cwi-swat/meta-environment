@@ -59,9 +59,9 @@ in
         snd-msg(display-rewrite-errors(Errors))
       +
         rec-msg(rewrite-errors(Errors?)).
-        snd-note(ui-status(endstat(Id))) .
         snd-msg(display-rewrite-errors(Errors))
-      )
+      ) .
+      snd-note(ui-status(endstat(Id))) 
     +  
       rec-msg(equations-incomplete) .
       snd-note(ui-status(endstat(Id))) .
