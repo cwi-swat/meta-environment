@@ -30,6 +30,12 @@
 set toolname "Graph Browser"
 set metaname "Meta-Environment"
 
+if {[info exists env(COMPILER_OUTPUT)]} {
+    set outputdir $env(COMPILER_OUTPUT)
+} else {
+    set outputdir "."
+}
+
 set help_meta "$metaname
 
 A Meta-environment for ASF+SDF
@@ -590,9 +596,41 @@ proc DeleteModules { modlist } {
 # generates the toolbus event to request compilation of modules ML
 #--
 proc CompileModules { modlist } {
+    global outputdir
     foreach mod $modlist {
-	GBpost [format "compile-module(%s)" [ToId $mod]]
+	set posting \
+	[format "compile-module(%s,%s)" [ToId $mod] [ToId $outputdir]]
+	GBpost $posting
     }
+}
+
+proc CompileModuleWidget { mods } {
+    global g
+
+    set nrModules [llength $mods]
+
+    # Bail out if no modules were selected
+    if { $nrModules != 1 } {
+	Warning "Please select a single module to compile"
+	return
+    }
+
+    set w .compilemodule
+    catch {destroy $w}
+    toplevel $w
+    wm title $w "Compile Module"
+    wm iconname $w "Compile Module"
+    label $w.message -text "Output directory:"
+    entry $w.compilerOutput -textvariable outputdir
+    bind $w.compilerOutput <Return> "CompileModules $mods ; destroy $w"
+    frame $w.buttons
+    button $w.buttons.confirm \
+	-text OK \
+	-command "CompileModules $mods ; destroy $w"
+    button $w.buttons.cancel -text Cancel -command "destroy $w"
+    pack $w.buttons.confirm $w.buttons.cancel -side left -expand 1
+    pack $w.message $w.compilerOutput -side top -anchor w
+    pack $w.buttons -side bottom -expand y -fill x -pady 2m
 }
 
 
@@ -1056,7 +1094,7 @@ proc define-modules-frame {} {
     button .modules.buttons.deletemod -text "Delete" \
 	-command {DeleteModules [SelectedModules]}
     button .modules.buttons.compile -text "Compile..." \
-	-command {CompileModules [SelectedModules]}
+	-command {CompileModuleWidget [SelectedModules]}
     button .modules.buttons.modinfo -text "Info" \
 	-command {GetModuleInfo [SelectedModules]}
 
@@ -1149,7 +1187,7 @@ proc define-module-popup {} {
         -command {DeleteModules [GetObjectName $c]}
     $m add separator
     $m add command -label "Compile module..." \
-        -command {CompileModules [GetObjectName $c]}
+        -command {CompileModuleWidget [GetObjectName $c]}
     $m add separator
     $m add command -label "Module info" \
         -command {GetModuleInfo [GetObjectName $c]}
