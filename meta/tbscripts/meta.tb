@@ -14,7 +14,7 @@
 #include "statusbar.idef"
 #include "errorlist.idef"
 #include "infolist.idef"
-#include "filedialog.idef"
+#include "dialogtool.idef"
 #include "kernel-configuration.tb"
 #include "user-configuration.tb"
 

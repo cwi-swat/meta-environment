@@ -15,6 +15,10 @@ in
     +
       rec-msg(ui-remove-feedback-summary(Producer?, SummaryId?))
       . snd-do(T, remove-feedback-summary(Producer, SummaryId))
+    +
+      rec-event(T, error-selected(Error?))
+      . snd-msg(ui-error-selected(Error))
+      . snd-ack-event(T, error-selected(Error))
     )
     *
     rec-disconnect(T)

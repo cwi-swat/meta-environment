@@ -83,10 +83,7 @@ in
       rec-event(UI, node-selected(GraphId?, Node?))
       . snd-msg(ui-node-selected(GraphId, Node))
       . snd-ack-event(UI, node-selected(GraphId, Node))
-    +
-      rec-event(UI, error-selected(Error?))
-      . snd-msg(ui-error-selected(Error))
-      . snd-ack-event(UI, error-selected(Error))
+   
     )
     *
     (

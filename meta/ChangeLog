@@ -3,6 +3,7 @@
 Thu Nov 25 10:45:32 CET 2004 <jurgenv@cwi.nl>
  * As an example, factored out StatusBar as a separate ToolBus tool
    from meta-studio.
+ * Also created DialogTool, ErrorList and InfoList as separate tools
 
 Fri Nov 19 17:44:53 CET 2004 <jurgenv@cwi.nl>
  * Made tide working in 1.6 branch
