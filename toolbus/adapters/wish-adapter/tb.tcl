@@ -55,18 +55,21 @@ proc TBevent {txt} {
 proc TBpost {event} {
   global TBack 
 
-  regexp {([a-zA-Z\-_0-9]+)\(} $event event func
-  if { ![info exists TBack($func)] || !TBack($func) } {
+  regexp {([-a-zA-Z_0-9]+)\(} $event ev func
+  if { ![info exists TBack($func)] || !$TBack($func) } {
     TBevent $event
     set TBack($func) 1 
     set TBack($func,q) {}
   } else {
-    lapppend TBack($func,q) $event
+    lappend TBack($func,q) $event
   }
 }
 
 proc TBack {event} {
-  if { [info exists TBack($func)] && TBack($func) } {
+  global TBack
+
+  regexp {([-a-zA-Z_0-9]+)\(} $event ev func
+  if { [info exists TBack($func)] && $TBack($func) } {
     if { $TBack($func,q) == {} } {
       set TBack($func) 0
     } else {
