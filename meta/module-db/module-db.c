@@ -80,7 +80,7 @@ ATerm get_all_equations(int cid, char *modulename)
   while(!ATisEmpty(mods)) {
     mod = ATgetFirst(mods);
     entry = GetValue(new_modules_db,mod);
-    eqsterm = ATelementAt((ATermList)entry, eqs_loc);
+    eqsterm = ATelementAt((ATermList)entry, EQS_LOC);
     eqs = AFTgetEqs(eqsterm);
     equations = ATconcat(equations, eqs); 
     mods = ATgetNext(mods);
@@ -230,10 +230,10 @@ void update_syntax_status_of_modules(ATermList mods)
   while (!ATisEmpty(mods)) {
     modname = ATgetFirst(mods);
     entry = (ATermList)GetValue(new_modules_db, modname);
-    entry = ATreplace(entry,ATparse("unavailable"),path_eqs_loc);
-    entry = ATreplace(entry,ATparse("unavailable"),eqs_loc);
-    entry = ATreplace(entry,Mtrue,eqs_updated_loc);
-    entry = ATreplace(entry,ATparse("unavailable"),table_loc);
+    entry = ATreplace(entry,ATparse("unavailable"),PATH_EQS_LOC);
+    entry = ATreplace(entry,ATparse("unavailable"),EQS_LOC);
+    entry = ATreplace(entry,Mtrue,EQS_UPDATED_LOC);
+    entry = ATreplace(entry,ATparse("unavailable"),TABLE_LOC);
     PutValue(new_modules_db, modname, (ATerm)entry);
     mods = ATgetNext(mods);
   }
@@ -257,9 +257,9 @@ ATerm update_sdf2_module(int cid, ATerm asfix)
     module_string = get_module_name(appl);
     modname = ATmake("<str>", module_string);
     entry = GetValue(new_modules_db, modname);
-    place = ATelementAt((ATermList)entry, path_syn_loc);
+    place = ATelementAt((ATermList)entry, PATH_SYN_LOC);
 
-    oldasfix = ATelementAt((ATermList)entry, syn_loc);
+    oldasfix = ATelementAt((ATermList)entry, SYN_LOC);
     if(!ATisEqual(asfix,oldasfix)) {
       if(ATmatch(place,"<str>",&path)) {
         entry = (ATerm)ATmakeList(10,
@@ -350,14 +350,14 @@ ATerm add_eqs_module(int cid, char *modulename, char* path, ATerm eqs,
   }
   entry = (ATerm)ATreplace((ATermList)entry,
                            ATmake("<str>",newpath),
-                           path_eqs_loc);
+                           PATH_EQS_LOC);
   entry = (ATerm)ATreplace((ATermList)entry,
                            status,
-                           eqs_updated_loc);
-  entry = (ATerm)ATreplace((ATermList)entry, eqs, eqs_loc);
+                           EQS_UPDATED_LOC);
+  entry = (ATerm)ATreplace((ATermList)entry, eqs, EQS_LOC);
   entry = (ATerm)ATreplace((ATermList)entry, 
                            (ATerm)ATmakeInt(timestamp),
-                           eqs_time_loc);
+                           EQS_TIME_LOC);
   PutValue(new_modules_db, modname, entry);
   return ATmake("snd-value(done)");
 }
@@ -371,10 +371,10 @@ ATerm add_parse_table(int cid, char *module, char *table, int timestamp)
   entry = GetValue(new_modules_db, modname);
   entry = (ATerm)ATreplace((ATermList)entry,
                            ATmake("table(<str>)",table),
-                           table_loc); 
+                           TABLE_LOC); 
   entry = (ATerm)ATreplace((ATermList)entry,
                            (ATerm)ATmakeInt(timestamp),
-                           table_time_loc);
+                           TABLE_TIME_LOC);
   PutValue(new_modules_db, modname, entry);
   return ATmake("snd-value(done)");
 }
@@ -392,9 +392,9 @@ ATerm get_path(int cid, char *modulename, ATerm type)
   int location = 0; /* to keep compiler happy */
 
   if (ATmatch(type,"eqs")) {
-      location = path_eqs_loc;
+      location = PATH_EQS_LOC;
   } else if (ATmatch(type,"sdf2")) {
-      location = path_syn_loc;
+      location = PATH_SYN_LOC;
   } else {
       ATerror("Unsupported database type: %t", type);
   }
@@ -403,7 +403,7 @@ ATerm get_path(int cid, char *modulename, ATerm type)
   place = ATelementAt((ATermList)entry, location);
   if(ATmatch(place,"<str>",&path)) {
       return ATmake("snd-value(path(<str>))",path);
-  } else if (location == path_eqs_loc) {
+  } else if (location == PATH_EQS_LOC) {
       /* found an empty equation section. Return empty path */
       return ATmake("snd-value(path(<str>))","");
   } else {
@@ -419,7 +419,7 @@ ATerm get_eqs_path(int cid, ATerm modname)
 
   if(ATmatch(modname,"id(<str>)",&mod)) {
     entry = GetValue(new_modules_db, modname);
-    place = ATelementAt((ATermList)entry, path_eqs_loc);
+    place = ATelementAt((ATermList)entry, PATH_EQS_LOC);
     if(ATmatch(place,"<str>",&path)) {
       return ATmake("snd-value(path(<str>))",path);
     }
@@ -445,12 +445,12 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
   int location = 0, updated_location = 0; /* To keep compiler happy*/
 
   if (ATmatch(type,"sdf2")) {
-      updated_location = syn_updated_loc;
-      location = syn_loc;
+      updated_location = SYN_UPDATED_LOC;
+      location = SYN_LOC;
       module_type = sdf2;
   } else if (ATmatch(type, "eqs")) {
-      updated_location = eqs_updated_loc;
-      location = eqs_loc;
+      updated_location = EQS_UPDATED_LOC;
+      location = EQS_LOC;
       module_type = eqs;
   } else {
       ATerror("Type not supported by database: %t", type);
@@ -506,7 +506,7 @@ ATerm get_parse_table(int cid, char *modulename)
 
   modname = ATmake("<str>",modulename);
   if((entry = (ATermList) GetValue(new_modules_db, modname))) {
-    table = ATelementAt((ATermList)entry, table_loc);
+    table = ATelementAt((ATermList)entry, TABLE_LOC);
     if(ATmatch(table,"table(<str>)",&place))
       return ATmake("snd-value(table(<str>))",place);
   }
@@ -527,11 +527,11 @@ void mdb_validate_parse_tables(ATermList visited, char *modulename)
   modname = ATmake("<str>",modulename);
   entry = (ATermList)GetValue(new_modules_db, modname);
   if(entry) {
-    time = ATgetInt((ATermInt)ATelementAt((ATermList)entry, table_time_loc));
+    time = ATgetInt((ATermInt)ATelementAt((ATermList)entry, TABLE_TIME_LOC));
 /*ATwarning("Creation time of parse table %t is %d\n", modname, time);*/
     if(ATindexOf(visited, modname, 0) < 0) {
       if(!valid_parse_tables(ATempty, modname, time)) {
-        entry = ATreplace(entry,ATparse("unavailable"),table_loc);
+        entry = ATreplace(entry,ATparse("unavailable"),TABLE_LOC);
         PutValue(new_modules_db, modname, (ATerm)entry);
 /*ATfprintf(stderr,"Parse table of %t invalidated\n", modname);*/
       }
@@ -668,7 +668,7 @@ ATbool complete_sdf2_specification(ATermList visited, ATerm module)
 
   if(ATindexOf(visited, module, 0) < 0) {
     entry = GetValue(new_modules_db, module);
-    asfix = ATelementAt((ATermList)entry, syn_loc);
+    asfix = ATelementAt((ATermList)entry, SYN_LOC);
     if(!ATisEqual(asfix,ATparse("unavailable"))) {
       ATerm first;
       ATbool result = ATtrue;
@@ -699,8 +699,8 @@ ATbool valid_parse_tables(ATermList visited, ATerm module, int timetable)
   int time;
 
   entry = GetValue(new_modules_db, module);
-  time = (int)ATelementAt((ATermList)entry, syn_time_loc);
-  time = ATgetInt((ATermInt)ATelementAt((ATermList)entry, syn_time_loc));
+  time = (int)ATelementAt((ATermList)entry, SYN_TIME_LOC);
+  time = ATgetInt((ATermInt)ATelementAt((ATermList)entry, SYN_TIME_LOC));
 /*ATfprintf(stderr,"Creation time of %t.sdf2 is %d\n", module, time);*/
   if(time > timetable) 
     result = ATfalse;
@@ -735,7 +735,7 @@ ATbool complete_asf_specification(ATermList visited, ATerm module)
     while(!ATisEmpty(imports) && result) {
       first = ATgetFirst(imports);
       entry = GetValue(new_modules_db, first);
-      asfix = ATelementAt((ATermList)entry, eqs_loc);
+      asfix = ATelementAt((ATermList)entry, EQS_LOC);
       if(ATisEqual(asfix,ATparse("unavailable")) ||
          ATisEqual(asfix,ATparse("error")))
         result = ATfalse;
@@ -804,7 +804,7 @@ ATerm update_eqs_for_modules(int cid, char *modulename)
     while (!ATisEmpty(modules)) {
       module = ATgetFirst(modules);
       entry = GetValue(new_modules_db, module);
-      eqs = ATelementAt((ATermList)entry, eqs_loc);
+      eqs = ATelementAt((ATermList)entry, EQS_LOC);
       if(ATisEqual(eqs,ATparse("unavailable")))
         result = ATinsert(result,module);
       modules = ATgetNext(modules);
@@ -1057,7 +1057,7 @@ ATerm get_syntax_and_add_rewrite_function(ATerm name, ATermList modules)
   while(!ATisEmpty(modules)) {
     elem = ATgetFirst(modules); 
     entry = GetValue(new_modules_db,elem);
-    module = ATelementAt((ATermList)entry, syn_loc);
+    module = ATelementAt((ATermList)entry, SYN_LOC);
     if(ATmatchTerm(module,pattern_asfix_term,
                    &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
                    &appl, &t[6], &t[7])) { 

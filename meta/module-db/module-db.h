@@ -15,16 +15,16 @@
 #define RemoveKey(db,k) (ATtableRemove(db,k))
 #define CreateValueStore(i1,i2) (ATtableCreate(i1,i2))
 
-#define path_syn_loc 0    /* Location to store the path to the syntax file. */
-#define syn_loc 1         /* Baf file of the syntax file. */
-#define syn_time_loc 2    /* Timestamp of the syntax file. */
-#define syn_updated_loc 3 /* Is the syntax changed? */
-#define path_eqs_loc 4    /* Location to store the path to the equations. */
-#define eqs_loc 5         /* Baf file of the equations. */
-#define eqs_time_loc 6    /* Timestamp of equations file. */
-#define eqs_updated_loc 7 /* Are the equations changed? */
-#define table_loc 8       /* Location to store the path to the parse-table. */
-#define table_time_loc 9  /* Location to store the timestamp of the parse-table. */
+#define PATH_SYN_LOC 0    /* Location to store the path to the syntax file. */
+#define SYN_LOC 1         /* Baf file of the syntax file. */
+#define SYN_TIME_LOC 2    /* Timestamp of the syntax file. */
+#define SYN_UPDATED_LOC 3 /* Is the syntax changed? */
+#define PATH_EQS_LOC 4    /* Location to store the path to the equations. */
+#define EQS_LOC 5         /* Baf file of the equations. */
+#define EQS_TIME_LOC 6    /* Timestamp of equations file. */
+#define EQS_UPDATED_LOC 7 /* Are the equations changed? */
+#define TABLE_LOC 8       /* Location to store the path to the parse-table. */
+#define TABLE_TIME_LOC 9  /* Location to store the timestamp of the parse-table. */
 
 #define Mtrue (ATerm)ATmakeInt(1)
 #define Mfalse (ATerm)ATmakeInt(0)

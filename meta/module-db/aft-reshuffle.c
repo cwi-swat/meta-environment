@@ -36,7 +36,7 @@ ATermList AFTgetLexFuncsSort(ATerm sort, ATermList mods)
   while(!ATisEmpty(mods)) {
     lmod = ATgetFirst(mods);
     entry = GetValue(new_modules_db,lmod);
-    amod = ATelementAt((ATermList)entry, syn_loc);
+    amod = ATelementAt((ATermList)entry, SYN_LOC);
     lexfuncs = AFTgetLexFunctions(amod);
     lexfuncs = asfix_filter_layout(lexfuncs);
     while(!ATisEmpty(lexfuncs)) {
@@ -68,7 +68,7 @@ ATermList AFTgetEquationsFunc(ATerm func,ATermList mods)
   while(!ATisEmpty(mods)) {
     mod = ATgetFirst(mods);
     entry = GetValue(new_modules_db,mod);
-    amod = ATelementAt((ATermList)entry, eqs_loc); 
+    amod = ATelementAt((ATermList)entry, EQS_LOC); 
     eqs = (ATermList)AFTgetEqs(amod);
     eqs = asfix_filter_layout(eqs);
     while(!ATisEmpty(eqs)) {
@@ -212,7 +212,7 @@ void AFTreshuffleLexicalConstructorFunctions(int cid,
   ATermList sorts, funcs, eqs;
 
   entry = GetValue(new_modules_db,modname);
-  amod = ATelementAt((ATermList)entry, syn_loc);
+  amod = ATelementAt((ATermList)entry, SYN_LOC);
   sorts = AFTgetSorts(amod); 
   sorts = asfix_filter_layout(sorts);
   while(!ATisEmpty(sorts)) {
@@ -263,7 +263,7 @@ void AFTreshuffleModules(int cid, ATermList mods)
     newmod = AFTcreateNewModule(mod);
     AFTreshuffleLexicalConstructorFunctions(cid,mod,newmod,orgmods);
     entry = GetValue(new_modules_db,mod);
-    oldamod = ATelementAt((ATermList)entry, syn_loc);
+    oldamod = ATelementAt((ATermList)entry, SYN_LOC);
     cffuncs = AFTgetCFFunctions(oldamod);
     cffuncs = asfix_filter_layout(cffuncs);
     while(!ATisEmpty(cffuncs)) {
