@@ -46,12 +46,12 @@ printf("ProcessEqs started\n").
 /*            if equal(I,0) then
              snd-msg(Id,a2toa1(T1)).
              rec-msg(Id,converted(T2?)).*/
-             snd-msg(add-eqs-to-db(id(Mname),T1)).
+             snd-msg(add-eqs-to-db(id(Mname),T1,"changed")).
              rec-msg(done) 
            + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,ambiguities(I?)))).
              printf("Parse of %s returned %d ambiguities",Mname,I).
 /*             printf("Term is: %t\n",T1).*/
-             snd-msg(add-eqs-to-db(id(Mname),error)).
+             snd-msg(add-eqs-to-db(id(Mname),error,"unchanged")).
              rec-msg(done) 
 /*           fi*/
           )
@@ -61,18 +61,18 @@ printf("ProcessEqs started\n").
           +
           ( rec-msg(parse-result-asfix1(Id,parse-error([ErrList?]))). 
             printf("EOF unexpected while parsing %s\n",Mname).
-            snd-msg(add-eqs-to-db(id(Mname),error)).
+            snd-msg(add-eqs-to-db(id(Mname),error,"unchanged")).
             rec-msg(done) 
           )
           +
           ( rec-msg(Id, parse-result(parse-error([character(Ch?),line(Li?),col(Co?),char(Char?)]))).
             printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co).
-            snd-msg(add-eqs-to-db(id(Mname),error)).
+            snd-msg(add-eqs-to-db(id(Mname),error,"unchanged")).
             rec-msg(done) 
          )) 
        +
        rec-msg(Id, error-opening(Mod?)).
-       snd-msg(add-eqs-to-db(Module,no-equations)).
+       snd-msg(add-eqs-to-db(Module,no-equations,"unchanged")).
        rec-msg(done)
       )
       fi
