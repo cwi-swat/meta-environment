@@ -49,7 +49,7 @@ dnl {{{  Which files need updating?
 AC_OUTPUT(
   Makefile
 dnl  doc/Makefile
-dnl  spec/Makefile
+  spec/Makefile
   util/Makefile
 dnl  vis/Makefile
 dnl  demo/Makfile

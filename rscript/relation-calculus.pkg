@@ -12,4 +12,15 @@ identification
 configuration interface
 
 requires
-  meta	1.7.2
+   aterm        2.0.6
+   aterm-java   1.5
+   shared-objects 1.4
+   sglr         3.11
+   pgen         2.0
+   asf          1.8
+   pt-support   1.1
+   error-support   0.1
+   sdf-support  2.0
+   asf-support  1.2
+   asc-support  1.8
+
