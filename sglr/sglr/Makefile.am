@@ -20,7 +20,7 @@
 
 include ../make_rules
 
-bin_PROGRAMS      = sglr sglr_prof
+bin_PROGRAMS      = sglr #sglr_prof
 data_DATA         = sglr.idef
 
 EXTRA_DIST        = sglr.idef sglr.tif.c sglr.tif.h
@@ -34,13 +34,13 @@ sglr_LDADD        = -L$(top_builddir)/libsglr -lsglr \
                     -L$(ASFIXLIB) -lAsFix \
                     -L$(ATERMLIB) -lATerm -lATB $(SOCKLIBS)
 
-sglr_prof_SOURCES = $(HDRS)
-sglr_prof_LDFLAGS = -pg
-sglr_prof_LDADD   = $(SRCS:.c=-prof.o) \
-                    -L$(top_builddir)/libsglr -lsglr-prof \
-                    -L$(top_builddir)/libtree2dot -ltree2dot \
-                    -L$(ASFIXLIB) -lAsFix \
-                    -L$(ATERMLIB) -lATerm-prof -lATB-prof $(SOCKLIBS)
+#sglr_prof_SOURCES = $(HDRS)
+#sglr_prof_LDFLAGS = -pg
+#sglr_prof_LDADD   = $(SRCS:.c=-prof.o) \
+#                    -L$(top_builddir)/libsglr -lsglr-prof \
+#                    -L$(top_builddir)/libtree2dot -ltree2dot \
+#                    -L$(ASFIXLIB) -lAsFix \
+#                    -L$(ATERMLIB) -lATerm-prof -lATB-prof $(SOCKLIBS)
 
 
 # remove built files during "make clean"

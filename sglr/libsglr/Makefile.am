@@ -20,12 +20,12 @@
 
 include ../make_rules
 
-lib_LIBRARIES          = libsglr.a libsglr-prof.a 
+lib_LIBRARIES          = libsglr.a #libsglr-prof.a 
 include_HEADERS        = sglr.h
 
 # noinst_LIBRARIES       = libsglr-prof.a
 
-EXTRA_LIBRARIES        = libsglr-gc.a #libsglr-prof.a
+EXTRA_LIBRARIES        = libsglr-gc.a libsglr-prof.a
 
 HDRS                   = forest.h mem-alloc.h parse-table.h parser.h \
                          rsrc-usage.h sglr-strings.h sglr.h stack.h \
