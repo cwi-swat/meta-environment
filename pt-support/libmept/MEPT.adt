@@ -62,6 +62,8 @@
 
   [Symbol, alt, alt(<lhs(Symbol)>,<rhs(Symbol)>)], 
 
+  [Symbol, pair, pair(<lhs(Symbol)>,<rhs(Symbol)>)], 
+
   [Symbol, sort, sort(<string(str)>)], 
 
   [Symbol, iter-plus, iter(<symbol(Symbol)>)],

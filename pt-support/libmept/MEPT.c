@@ -490,6 +490,14 @@ PT_Symbol PT_makeSymbolAlt(PT_Symbol lhs, PT_Symbol rhs)
 }
 
 /*}}}  */
+/*{{{  PT_Symbol PT_makeSymbolPair(PT_Symbol lhs, PT_Symbol rhs) */
+
+PT_Symbol PT_makeSymbolPair(PT_Symbol lhs, PT_Symbol rhs)
+{
+  return (PT_Symbol)ATmakeTerm(PT_patternSymbolPair, lhs, rhs);
+}
+
+/*}}}  */
 /*{{{  PT_Symbol PT_makeSymbolSort(char * string) */
 
 PT_Symbol PT_makeSymbolSort(char * string)
@@ -1868,6 +1876,9 @@ ATbool PT_isValidSymbol(PT_Symbol arg)
   else if (PT_isSymbolAlt(arg)) {
     return ATtrue;
   }
+  else if (PT_isSymbolPair(arg)) {
+    return ATtrue;
+  }
   else if (PT_isSymbolSort(arg)) {
     return ATtrue;
   }
@@ -1933,6 +1944,14 @@ ATbool PT_isSymbolOpt(PT_Symbol arg)
 ATbool PT_isSymbolAlt(PT_Symbol arg)
 {
   return ATmatchTerm((ATerm)arg, PT_patternSymbolAlt, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isSymbolPair(PT_Symbol arg) */
+
+ATbool PT_isSymbolPair(PT_Symbol arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternSymbolPair, NULL, NULL);
 }
 
 /*}}}  */
@@ -2153,6 +2172,9 @@ ATbool PT_hasSymbolLhs(PT_Symbol arg)
   if (PT_isSymbolAlt(arg)) {
     return ATtrue;
   }
+  else if (PT_isSymbolPair(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -2162,6 +2184,9 @@ ATbool PT_hasSymbolLhs(PT_Symbol arg)
 PT_Symbol PT_getSymbolLhs(PT_Symbol arg)
 {
   if (PT_isSymbolAlt(arg)) {
+    return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
+  }
+  else if (PT_isSymbolPair(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 0);
   }
 
@@ -2177,6 +2202,9 @@ PT_Symbol PT_setSymbolLhs(PT_Symbol arg, PT_Symbol lhs)
   if (PT_isSymbolAlt(arg)) {
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)lhs, 0);
   }
+  else if (PT_isSymbolPair(arg)) {
+    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)lhs, 0);
+  }
 
   ATabort("Symbol has no Lhs: %t\n", arg);
   return (PT_Symbol)NULL;
@@ -2190,6 +2218,9 @@ ATbool PT_hasSymbolRhs(PT_Symbol arg)
   if (PT_isSymbolAlt(arg)) {
     return ATtrue;
   }
+  else if (PT_isSymbolPair(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -2199,6 +2230,9 @@ ATbool PT_hasSymbolRhs(PT_Symbol arg)
 PT_Symbol PT_getSymbolRhs(PT_Symbol arg)
 {
   if (PT_isSymbolAlt(arg)) {
+    return (PT_Symbol)ATgetArgument((ATermAppl)arg, 1);
+  }
+  else if (PT_isSymbolPair(arg)) {
     return (PT_Symbol)ATgetArgument((ATermAppl)arg, 1);
   }
 
@@ -2212,6 +2246,9 @@ PT_Symbol PT_getSymbolRhs(PT_Symbol arg)
 PT_Symbol PT_setSymbolRhs(PT_Symbol arg, PT_Symbol rhs)
 {
   if (PT_isSymbolAlt(arg)) {
+    return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)rhs, 1);
+  }
+  else if (PT_isSymbolPair(arg)) {
     return (PT_Symbol)ATsetArgument((ATermAppl)arg, (ATerm)rhs, 1);
   }
 
@@ -2870,6 +2907,11 @@ PT_Symbol PT_visitSymbol(PT_Symbol arg, char * (*acceptString)(char *), PT_CharR
   }
   if (PT_isSymbolAlt(arg)) {
     return PT_makeSymbolAlt(
+        PT_visitSymbol(PT_getSymbolLhs(arg), acceptString, acceptRanges),
+        PT_visitSymbol(PT_getSymbolRhs(arg), acceptString, acceptRanges));
+  }
+  if (PT_isSymbolPair(arg)) {
+    return PT_makeSymbolPair(
         PT_visitSymbol(PT_getSymbolLhs(arg), acceptString, acceptRanges),
         PT_visitSymbol(PT_getSymbolRhs(arg), acceptString, acceptRanges));
   }
