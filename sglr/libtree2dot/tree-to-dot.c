@@ -40,6 +40,7 @@
 
 ATerm prev_char_parent;
 char  prev_char;
+ATbool print_prods = ATtrue;
 
 char *SG_EscapeChar(int c)
 {
@@ -240,8 +241,53 @@ void SG_PrintSymbol(FILE *dot, ATerm t)
   SG_WriteGrowBuf(dot, SG_PrintSymbolToGrowBuf(gb, t, ATtrue));
 }
 
+void SG_PrintAttrs(FILE *dot,  ATerm attrs)
+{
+	ATermList list;
+	char *str;
+	
+	if(ATmatch(attrs, "no-attrs")) {
+		return;
+	} else {
+		if(ATmatch(attrs, "attrs([<list>])", &list)) {
 
-void SG_ApplNode(FILE *dot, ATerm t, ATerm fun, int n)
+			if(!ATisEmpty(list)) {
+							
+				for(; !ATisEmpty(list); list = ATgetNext(list)) {
+					ATerm first = ATgetFirst(list);
+					
+					
+					if(ATmatch(first, "cons(<str>)", &str)) {
+						ATfprintf(dot,"cons(");
+						ATfprintf(dot, str);
+						ATfprintf(dot,")");
+					} else if(ATmatch(first, "aterm(cons(<str>))", &str)) {
+						ATfprintf(dot,"aterm(cons(");
+						ATfprintf(dot, str);
+						ATfprintf(dot,"))");
+					} else if(ATmatch(first,"atr(<str>)", &str)) {
+						ATfprintf(dot, str);
+					} else if(ATmatch(first,"id(<str>)", &str)) {
+						/* We don't print id's because they are not
+						 * inserted by the user 
+						 *
+						 * ATfprintf(dot,"id(");
+						 * ATfprintf(dot, str);
+						 * ATfprintf(dot,")");
+						 */
+					} else if(ATmatch(first, "traverse")) {
+						ATfprintf(dot, "traverse");
+					}
+					
+					ATfprintf(dot," ");
+				}
+			}
+		}
+	}
+	return;
+}
+
+void SG_ApplNode(FILE *dot, ATerm t, ATerm fun, int n, ATbool print_prods)
 {
   ATerm args, res, attrs;
 
@@ -250,15 +296,32 @@ void SG_ApplNode(FILE *dot, ATerm t, ATerm fun, int n)
 
   SG_MARK(t);
 
-  if (ATmatch(fun, "prod([<list>], <term>, <term>)", &args, &res, &attrs)) {
-    ATfprintf(dot, "\tN%d [label=\"", (int)t);
-    SG_PrintSymbol(dot, res);
-    if(ATmatch(attrs,"attrs([atr(\"reject\"),<list>])", &attrs))
-      ATfprintf(dot, " (reject)");
-    ATfprintf(dot, "\"]\n");
-  } else {
-    ATerror("SG_ApplNode: not a production %t\n", fun);
-  }
+	if(!print_prods) {
+		if (ATmatch(fun, "prod([<list>], <term>, <term>)", &args, &res, &attrs)) {
+			ATfprintf(dot, "\tN%d [label=\"", (int)t);
+			SG_PrintSymbol(dot, res);
+			if(ATmatch(attrs,"attrs([atr(\"reject\"),<list>])", &attrs))
+				ATfprintf(dot, " (reject)");
+			ATfprintf(dot, "\"]\n");
+		} else {
+			ATerror("SG_ApplNode: not a production %t\n", fun);
+		}
+	} else { /* printing prods instead of result sorts */
+		ATermList arglist;
+
+		if (ATmatch(fun, "prod([<list>], <term>, <term>)", &arglist, &res, &attrs)) {
+			ATfprintf(dot, "\tN%d [shape=box label=\" ", (int)t);
+			for(;!ATisEmpty(arglist); arglist = ATgetNext(arglist)) {
+				SG_PrintSymbol(dot, ATgetFirst(arglist));
+				ATfprintf(dot," ");
+			}
+			ATfprintf(dot, " -> ");
+			SG_PrintSymbol(dot, res);
+			ATfprintf(dot, " ");
+			SG_PrintAttrs(dot, attrs);
+			ATfprintf(dot, " \"]\n");
+		}
+	}
 }
 
 void SG_AmbNode(FILE *dot, ATerm t, ATerm arg)
@@ -323,13 +386,13 @@ ATerm SG_TreeType(ATerm t)
 
 
 void SG_TreeToDot(FILE *dot, ATerm t, int child, ATerm parent,
-                  ATbool suppress_lexicals)
+                  ATbool suppress_lexicals, ATbool print_prods)
 {
   ATerm     fun, arg;
   ATermList args;
   int       c, n=0;
 
-  if (ATmatch(t, "<int>", &c)) {
+	if (ATmatch(t, "<int>", &c)) {
     ATfprintf(dot, "\tN%d%d%d [label=\"", (int) parent, child, c);
     SG_PrintChar(dot, c);
     ATfprintf(dot, "\"]\n");
@@ -348,10 +411,10 @@ void SG_TreeToDot(FILE *dot, ATerm t, int child, ATerm parent,
         n++;
         if (ATgetType(arg) != AT_INT)
           ATfprintf(dot, "\tN%d -> N%d\n", (int)t, (int)arg);
-        SG_TreeToDot(dot, arg, n, t, suppress_lexicals);
+        SG_TreeToDot(dot, arg, n, t, suppress_lexicals, print_prods);
       }
     }
-    SG_ApplNode(dot, t, fun, n);
+    SG_ApplNode(dot, t, fun, n, print_prods);
   } else if (ATmatch(t, "amb([<list>])", &args)) {
     if(!ATisEmpty(args)) SG_AmbNode(dot, t, ATgetFirst(args));
     while (!ATisEmpty(args)) {
@@ -359,13 +422,13 @@ void SG_TreeToDot(FILE *dot, ATerm t, int child, ATerm parent,
       args = ATgetNext(args);
       n++;
       ATfprintf(dot, "\tN%d -> N%d\n", (int)t, (int)arg);
-      SG_TreeToDot(dot, arg, n, t, suppress_lexicals);
+      SG_TreeToDot(dot, arg, n, t, suppress_lexicals, print_prods);
     }
   } else if (ATmatch(t, "parsetree(<term>, <int>)", &arg, &c))
-    SG_TreeToDot(dot, arg, 1, t, suppress_lexicals);
+    SG_TreeToDot(dot, arg, 1, t, suppress_lexicals, print_prods);
 }
 
-void SGtreeToDotFile(char *prg, char *file, ATerm t, ATbool suppress)
+void SGtreeToDotFile(char *prg, char *file, ATerm t, ATbool suppress, ATbool print_prods)
 {
   FILE *dot = NULL;
 
@@ -385,7 +448,7 @@ void SGtreeToDotFile(char *prg, char *file, ATerm t, ATbool suppress)
   ATfprintf(dot, "digraph ParseTree {\n"
             "\tordering=out\n"
             "\tedge[dir=none]\n\n");
-  SG_TreeToDot(dot, t, 0, NULL, suppress);
+  SG_TreeToDot(dot, t, 0, NULL, suppress, print_prods);
   ATfprintf(dot, "}\n");
   if(dot != stdout)
     fclose(dot);

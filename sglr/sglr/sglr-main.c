@@ -62,6 +62,7 @@ int     verboseflag       = ATfalse;
 int     debugflag         = ATfalse;
 int     statisticsflag    = ATfalse;
 int     supplexflag       = ATfalse;
+int     printprodsflag    = ATfalse;
 #ifndef NO_A2TOA1
 int   asfix1flag        = ATfalse;
 #endif
@@ -174,7 +175,8 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-t       : use PlainText AsFix output format    [%s]\n"
               "\t-v       : toggle verbose mode                  [%s]\n"
               "\t-V       : reveal program version (i.e. %s)\n"
-              "\t-x       : toggle inclusion of lexicals in dot  [%s]\n",
+              "\t-x       : toggle inclusion of lexicals in dot  [%s]\n"
+              "\t-y       : toggle printing of productions in dot[%s]\n",
 #if !defined(NO_A2TOA1)
               DEFAULTMODE(asfix1flag), DEFAULTMODE(!asfix1flag),
 #endif
@@ -190,7 +192,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
               DEFAULTMODE(posinfoflag),
               start_symbol?start_symbol:"<any>", stackoutput?stackoutput:"<off>",
               DEFAULTMODE(!binaryflag), DEFAULTMODE(verboseflag),
-              VERSION, DEFAULTMODE(!supplexflag)
+              VERSION, DEFAULTMODE(!supplexflag),DEFAULTMODE(printprodsflag)
     );
   }
 }
@@ -232,6 +234,7 @@ struct option longopts[] =
   {"verbose",       no_argument,       &verboseflag,       ATtrue},
   {"version",       no_argument,       NULL,               'V'},
   {"suppress",      no_argument,       &supplexflag,       'x'},
+  {"printprods",    no_argument,       &printprodsflag,    'y'},
   {0, 0, 0, 0}
 };
 
@@ -256,7 +259,7 @@ void handle_options (int argc, char **argv)
 #if !defined(HAVE_BOEHMGC)
                           "g"
 #endif
-                          "hi:lno:p:Ps:S:tvVx",
+                          "hi:lno:p:Ps:S:tvVxy",
                           longopts, NULL))
          != EOF) {
     switch (c) {
@@ -288,6 +291,7 @@ void handle_options (int argc, char **argv)
       case 'v':   verboseflag      = !verboseflag;        break;
       case 'V':   show_version     = ATtrue;              break;
       case 'x':   supplexflag      = ATtrue;              break;
+   		case 'y':   printprodsflag   = ATtrue;              break;                   
       default:    SG_Usage(stderr, ATfalse);              exit(1);
     }
   }
@@ -317,6 +321,7 @@ ATbool set_global_options(void)
   if(binaryflag)     SG_BINARY_ON();
   if(dotoutput)      SG_DOTOUT_ON();
   if(supplexflag)    SG_NOLEX_ON();
+	if(printprodsflag) SG_PRINTPRODS_ON();
 #if !defined(HAVE_BOEHMGC)
   if(gcflag)         SG_GC_ON();
 #endif
@@ -420,7 +425,7 @@ int SG_Batch (int argc, char **argv)
       ATwarning("%s: cannot create dot output from AsFix1 parse tree\n",
                 program_name);
     } else {
-      SGtreeToDotFile(program_name, dotoutput, parse_tree, SG_NOLEX);
+      SGtreeToDotFile(program_name, dotoutput, parse_tree, SG_NOLEX, SG_PRINTPRODS);
     }
   }
 

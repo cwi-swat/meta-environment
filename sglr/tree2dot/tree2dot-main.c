@@ -48,7 +48,7 @@ static char myversion[] = "1.0";
     explanation.
  */
 
-static char myarguments[] = "bD:hi:o:tvVx";
+static char myarguments[] = "bD:hi:o:tvVxy";
 
 
 /*
@@ -96,7 +96,8 @@ void usage(void)
         "\t-t              ignored\n"
         "\t-v              ignored\n"
         "\t-V              reveal program version (i.e. %s)\n"
-        "\t-x              suppress lexicals               (default: off)\n",
+        "\t-x              suppress lexicals               (default: off)\n"
+				"\t-y              print productions as nodes      (default: off)\n",
         myname, myargumentsexplained, myversion);
 }
 
@@ -110,14 +111,16 @@ int main (int argc, char **argv)
   char   *input_file_name  = "-";
   char   *output_file_name = "-";
   ATbool suppress_lex = ATfalse;
+	ATbool print_prods = ATfalse;
 
-  while ((c = getopt(argc, argv, "hi:o:D:xV")) != EOF)
+  while ((c = getopt(argc, argv, myarguments)) != EOF)
     switch (c) {
       case 'h':  usage();                      exit(0);
       case 'i':  input_file_name  = optarg;    break;
       case 'o':
       case 'D':  output_file_name = optarg;    break;
       case 'x':  suppress_lex = !suppress_lex; break;
+  		case 'y':  print_prods = !print_prods;   break;
 
       case 'b':
       case 't':
@@ -133,7 +136,7 @@ int main (int argc, char **argv)
     ATerror("%s: could not read term from input file %s\n", myname, input_file_name);
   }
 
-  SGtreeToDotFile(myname, output_file_name, t, suppress_lex);
+  SGtreeToDotFile(myname, output_file_name, t, suppress_lex, print_prods);
 
   return 0;
 }

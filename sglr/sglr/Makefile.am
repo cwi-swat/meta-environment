@@ -48,4 +48,5 @@ sglr_LDADD        = -L$(top_builddir)/libsglr -lsglr \
 CLEANFILES = sglr.tifs
 
 # extra dependency for sglr-main.c to generate sglr.tif.[ch]
-sglr-main.o : sglr.tif.c sglr.tif.h $(top_builddir)/libsglr/libsglr.a
+sglr-main.o : sglr.tif.c sglr.tif.h $(top_builddir)/libsglr/libsglr.a \
+              $(top_builddir)/libtree2dot/libtree2dot.a

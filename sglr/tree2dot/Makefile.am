@@ -31,3 +31,5 @@ LDADD            =  -L${top_builddir}/libtree2dot -ltree2dot \
                     -L${top_builddir}/libsglr -lsglr \
                     -L$(ASFIXLIB) -lAsFix \
                     -L$(ATERMLIB) -lATerm -lATB $(SOCKLIBS)
+
+tree2dot-main.o: $(top_builddir)/libtree2dot/libtree2dot.a

@@ -25,7 +25,8 @@
 
 #include <stack.h>
 
-void SGtreeToDotFile(char *prg, char *fnam, ATerm t, ATbool suppress);
+void SGtreeToDotFile(char *prg, char *fnam, ATerm t, ATbool suppress, 
+										 ATbool print_prods);
 void SG_StacksToDotFile(stacks *, int);
 void SG_LinksToDot(FILE *, stack *);
 
