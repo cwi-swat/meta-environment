@@ -94,10 +94,16 @@ ATerm AFTflattenSdf2Prod(ATerm modname, ATerm prod);
                                         af_prod_alt_symbol))
 #define AFTisRegularTupleSymbol(grammar) (AFTcheckAppl(grammar, \
                                           af_prod_tuple_symbol))
+#define AFTisRegularFuncSymbol(grammar) (AFTcheckAppl(grammar, \
+                                         af_prod_func_symbol))
+#define AFTisRegularPermSymbol(grammar) (AFTcheckAppl(grammar, \
+                                         af_prod_perm_symbol))
 #define AFTisRegularSetSymbol(grammar) (AFTcheckAppl(grammar, \
                                         af_prod_set_symbol))
 #define AFTisRegularNonEmptySeqSymbol(grammar) (AFTcheckAppl(grammar, \
                                         af_prod_nonemptyseq_symbol))
+#define AFTisRegularEmptySeqSymbol(grammar) (AFTcheckAppl(grammar, \
+                                             af_prod_empty_seq_symbol))
 #define AFTisBasicLAYOUTSymbol(grammar) (AFTcheckAppl(grammar, \
                                          af_prod_LAYOUT_symbol))
 #define AFTisSTARTSymbol(grammar) (AFTcheckAppl(grammar, \
@@ -383,6 +389,22 @@ extern ATerm AFTgetEquLhs(ATerm equ);
 #define AFTgetRegularTupleWS1(p)     (AFTarg((p), 3))
 #define AFTgetRegularTupleSymbol1(p) (AFTarg((p), 4))
 
+#define AFTgetRegularFuncLit0(p)    (AFTarg((p), 0))
+#define AFTgetRegularFuncWS0(p)     (AFTarg((p), 1))
+#define AFTgetRegularFuncSymbols(p) (AFTarg((p), 2))
+#define AFTgetRegularFuncWS1(p)     (AFTarg((p), 3))
+#define AFTgetRegularFuncLit1(p)    (AFTarg((p), 4))
+#define AFTgetRegularFuncWS2(p)     (AFTarg((p), 5))
+#define AFTgetRegularFuncSymbol(p)  (AFTarg((p), 6))
+#define AFTgetRegularFuncWS3(p)     (AFTarg((p), 7))
+#define AFTgetRegularFuncLit3(p)    (AFTarg((p), 8))
+
+#define AFTgetRegularPermLit0(p)    (AFTarg((p), 0))
+#define AFTgetRegularPermWS0(p)     (AFTarg((p), 1))
+#define AFTgetRegularPermSymbols(p) (AFTarg((p), 2))
+#define AFTgetRegularPermWS1(p)     (AFTarg((p), 3))
+#define AFTgetRegularPermLit1(p)    (AFTarg((p), 4))
+
 #define AFTgetRegularSetLit0(p)   (AFTarg((p), 0))
 #define AFTgetRegularSetWS0(p)    (AFTarg((p), 1))
 #define AFTgetRegularSetLit1(p)   (AFTarg((p), 2))
@@ -533,8 +555,11 @@ extern ATerm af_prod_var_symbol;
 extern ATerm af_prod_opt_symbol;
 extern ATerm af_prod_alt_symbol;
 extern ATerm af_prod_tuple_symbol;
+extern ATerm af_prod_func_symbol;
+extern ATerm af_prod_perm_symbol;
 extern ATerm af_prod_set_symbol;
 extern ATerm af_prod_nonemptyseq_symbol;
+extern ATerm af_prod_empty_seq_symbol;
 extern ATerm af_prod_LAYOUT_symbol;
 extern ATerm af_prod_START_symbol;
 extern ATerm af_prod_Start_symbol;
