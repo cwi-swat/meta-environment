@@ -1,4 +1,5 @@
 2003/07/24 (markvdb@cwi.nl)
+ * Added lexical restrictions on ModuleWord and ModuleId.
  * Added a warning when literals are detected in the right hand side
    of productions rules.
 
