@@ -3,7 +3,7 @@ configuration([
    extension("Pico-typecheck", ".ptc"),
    extension("Pico-eval", ".pev"),
    extension("Pico-compile", ".ptr"),
-   extension("Booleans", ".trm"),
+   extension("Booleans", ".bool"),
 
    button("languages/pico/syntax/Pico-Syntax",
           [description(term-editor, menu(["Pico","PrettyPrint"]))],
