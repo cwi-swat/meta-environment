@@ -149,9 +149,9 @@ int TCP_transition(tool_inst *ti, term *event, TBbool update)
                              return_phase(PHASE2);
     case a_snd_event:
       pending = ti_pending(ti);
-      assert(length_list(fun_args(event)) >= 2);
+      assert(list_length(fun_args(event)) >= 2);
       t = first(next(fun_args(event)));
-	if(elem(t, pending))
+	if(list_elem(t, pending))
 	  return -1;
 	else {
 	  if(update)
@@ -161,9 +161,9 @@ int TCP_transition(tool_inst *ti, term *event, TBbool update)
     case a_rec_ack_event:
       pending = ti_pending(ti);
       t = first(fun_args(event));
-      if(elem(t, pending)){
+      if(list_elem(t, pending)){
 	if(update)
-	  ti_pending(ti) = del_term(t, pending);
+	  ti_pending(ti) = list_delete(pending, t);
 	  return_phase(PHASE2);
 	} else
 	  return -1;
@@ -189,9 +189,9 @@ int TCP_transition(tool_inst *ti, term *event, TBbool update)
 
     case a_snd_event:
       pending = ti_pending(ti);
-      assert(length_list(fun_args(event)) >= 2);
+      assert(list_length(fun_args(event)) >= 2);
       t = first(next(fun_args(event)));
-	if(elem(t, pending))
+	if(list_elem(t, pending))
 	  return -1;
 	else {
 	  if(update)
@@ -201,9 +201,9 @@ int TCP_transition(tool_inst *ti, term *event, TBbool update)
     case a_rec_ack_event:
       pending = ti_pending(ti);
       t = first(fun_args(event));
-      if(elem(t, pending)){
+      if(list_elem(t, pending)){
 	if(update)
-	  ti_pending(ti) = del_term(t, pending);
+	  ti_pending(ti) = list_delete(pending, t);
 	  return_phase(PHASE3);
       } else
 	  return -1;
@@ -237,7 +237,7 @@ TBbool write_to_tool(sym_idx af, term_list *args)
   
   if(verbose) TBmsg("write_to_tool(%s,%t)\n", get_txt(af), args);
   
-  if(!(is_appl(first(args)) && (length_list(fun_args(first(args))) == 1) &&
+  if(!(is_appl(first(args)) && (list_length(fun_args(first(args))) == 1) &&
 	 is_int(first(fun_args(first(args)))))){
     err_warn("illegal tool identifier in: %f(%l)", get_txt(af), args);
     return TBfalse;
@@ -267,7 +267,7 @@ TBbool write_to_tool(sym_idx af, term_list *args)
 	TBwrite(out,e);
 	if(af == a_snd_terminate){
 	  destroy_ports_for_tool(ti);
-	  Tools = del_term(ti, Tools);
+	  Tools = list_delete(Tools, ti);
 	}
 	return TBtrue;
       } else
@@ -504,8 +504,8 @@ tool_id *create_tool(term *creator, term_list *args)
   if(verbose)
     TBmsg("create_tool(%t), td = %t\n", creator, td);
 
-  if(length_list(td_formals(td)) != length_list(fun_args(creator)))
-    err_fatal("%t: %d actual(s) required", creator, length_list(fun_args(creator)));
+  if(list_length(td_formals(td)) != list_length(fun_args(creator)))
+    err_fatal("%t: %d actual(s) required", creator, list_length(fun_args(creator)));
 
   p = td_host(td);
   if(!(host_tool = copy_and_subs(&cbuf, cbufmax, &p, td_formals(td), creator, TBfalse)))

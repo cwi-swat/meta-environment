@@ -1,6 +1,7 @@
 #include "toolbus.h"
 #include <string.h>
 #include "terms.h"
+#include "symbol.h"
 #include "procs.h"
 
 #define TERMDB(x)
@@ -19,13 +20,13 @@ static void mark_terms(void);
 #define NSEGMENT 200                /* Max. # of segments */
 static term *segments[NSEGMENT];    /* pointers to the segments */
 static int nsegment = 0;            /* number of segments in use */
-int nterm;                          /* total number of terms */
+static int nterm;                   /* total number of terms */
 
                                     /* size of each segment */
 #define segment_size(n) ((n < 50) ? 2000 : 5000)
 
 static term_list *free_list;        /* linked list of free terms */
-int nfree;                          /* number of free terms */
+static int nfree;                   /* number of free terms */
 
 /* Marking of the memory starts in a number of ``roots'' maintained
    as an array of pointers to the actual term pointers.
@@ -150,17 +151,16 @@ void TBunprotect(term **pt)
    - visit the complete memory and for each term
      . remove its mark bit, or
      . add it to the free_list
-
-   Note that a macro mark_and_collect has been defined that
-   calls do_mark_and_collect below when a highwater mark is
-   reached.
 */
 
-void do_mark_and_collect()
+void TBcollect()
 {
   register term *t;
   register int i, nf;
   register term_list *fl;
+
+  if(nfree >= nterm/20)
+    return;
 
   mark_sp = &mark_stack[0];
   
@@ -199,7 +199,7 @@ void do_mark_and_collect()
     add_segment();
 /*
   {  extern char *tool_name;
-     fprintf(stderr, "%s: mark_and_collect. completed (%d total, %d free)\n", 
+     fprintf(stderr, "%s: TBcollect. completed (%d total, %d free)\n", 
 	  tool_name, nterm, nfree);
    }
 */
@@ -208,7 +208,7 @@ void do_mark_and_collect()
 void add_free_list(term *tl)
 { term *t, *nextt;
 
-  /* TBmsg("add_free_list(%d)\n", length_list(tl)); */
+  /* TBmsg("add_free_list(%d)\n", list_length(tl)); */
 
   for(; tl; tl = nextt){
 
@@ -771,7 +771,7 @@ TBbool comp_type(type *tp1, type *tp2)
 {
   /* TBmsg("comp_type(%t,%t)\n", tp1, tp2); */
 
-  if(equal_term(tp1, tp2))
+  if(term_equal(tp1, tp2))
     return TBtrue;  /* desired type is equal to given type */
 
   if(is_appl(tp1) && is_appl(tp2) && (fun_sym(tp1) == fun_sym(tp2)) &&
@@ -787,7 +787,7 @@ TBbool comp_type(type *tp1, type *tp2)
   if(is_appl(tp1) && fun_sym(tp1) == TBlookup("list")){
     if(is_appl(tp2) && fun_sym(tp2) == TBlookup("list")){
       if(fun_args(tp1) && fun_args(tp2))
-	return equal_term(first(fun_args(tp1)), first(fun_args(tp2)));
+	return term_equal(first(fun_args(tp1)), first(fun_args(tp2)));
       else
 	return TBtrue;
     }
@@ -893,7 +893,7 @@ TBbool require_type(register type *tp, register term *T)
       return targs ? TBfalse : TBtrue;
     }
   } else
-    return equal_term(tp, T);
+    return term_equal(tp, T);
 }
 
 /*--------------------- term utilities ------------------------*/
@@ -920,14 +920,14 @@ term *convert_to_sign(term *t)
     case t_list:
       { term_list *nw_list = NULL;
 	for( ; t; t = next(t)){
-	  nw_list = append_list(nw_list, convert_to_sign(first(t)));
+	  nw_list = list_concat_term(nw_list, convert_to_sign(first(t)));
 	}
 	return nw_list;
       }
     case t_appl:
       { term_list * nw_args = NULL, *args;
 	for(args=fun_args(t); args; args = next(args)){
-	  nw_args = append_list(nw_args, convert_to_sign(first(args)));
+	  nw_args = list_concat_term(nw_args, convert_to_sign(first(args)));
 	}
 	return mk_appl(fun_sym(t), nw_args);
       }
@@ -935,7 +935,7 @@ term *convert_to_sign(term *t)
     }
 }
 
-int length_list(term *tl)
+int list_length(term *tl)
 {
   register int n = 0;
   register term *head;
@@ -948,9 +948,9 @@ int length_list(term *tl)
   return n;
 }
 
-TBbool equal_term(register term *t1, register term *t2)
+TBbool term_equal(register term *t1, register term *t2)
 {
-  /* TBmsg("equal_term(%t,%t)\n", t1, t2); */
+  /* TBmsg("term_equal(%t,%t)\n", t1, t2); */
   if(t1 == t2)
     return TBtrue;
   if(tkind(t1) != tkind(t2))
@@ -971,28 +971,28 @@ TBbool equal_term(register term *t1, register term *t2)
     return var_sym(t1) == var_sym(t2);
   case t_appl:
     if(fun_sym(t1) == fun_sym(t2))
-       return equal_list(fun_args(t1), fun_args(t2));
+       return list_equal(fun_args(t1), fun_args(t2));
     else
       return TBfalse;
   case t_list:
-    return equal_list(t1, t2);
+    return list_equal(t1, t2);
   case t_placeholder:
-    return equal_term(placeholder_type(t1),placeholder_type(t2));
+    return term_equal(placeholder_type(t1),placeholder_type(t2));
   case t_env:
     return TBfalse;
   default:
-    err_fatal("equal_term(%t,%t)", t1, t2);
+    err_fatal("term_equal(%t,%t)", t1, t2);
   }
   return TBfalse; /* dummy */
 }
 
-TBbool equal_list(register term *t1, register term *t2)
+TBbool list_equal(register term *t1, register term *t2)
 {    
   while(t1){
     if(!t2)
       return TBfalse;
     assert(is_list(t1)); assert(is_list(t2));
-    if(!equal_term(first(t1), first(t2)))
+    if(!term_equal(first(t1), first(t2)))
       return TBfalse;
     t1 = next(t1);
     t2 = next(t2);
@@ -1002,12 +1002,12 @@ TBbool equal_list(register term *t1, register term *t2)
 
 /* copy toplevel of list; elements are shared */
 
-term_list *copy_list(term_list *tl)
+term_list *list_copy(term_list *tl)
 {
   term head, *prev;
   assert(is_list(tl));
 
-  /* TBmsg("copy_list(%t) ... ", tl); */
+  /* TBmsg("list_copy(%t) ... ", tl); */
   prev = &head;
   for(next(&head) = tl; tl; tl = next(tl)){
     next(prev) = mk_list(first(tl), next(tl));
@@ -1018,9 +1018,9 @@ term_list *copy_list(term_list *tl)
   return next(&head);
 }
 
-/* append tl2 at the end of list tl; tl is changed */
+/* concatenate tl2 at the end of list tl; tl is changed */
      
-term *append_list_list(term_list *tl, term_list *tl2)
+term *list_concat(term_list *tl, term_list *tl2)
 { term head, *prev = &head;
 
   assert(is_list(tl) && is_list(tl2));
@@ -1033,16 +1033,16 @@ term *append_list_list(term_list *tl, term_list *tl2)
   return next(&head);
 }
 
-/* append t at the end of list tl; tl is changed */
+/* concatenate t at the end of list tl; tl is changed */
 
-term* append_list(term_list *tl, term *t)
+term* list_concat_term(term_list *tl, term *t)
 {
-  return append_list_list(tl, mk_list(t, NULL));
+  return list_concat(tl, mk_list(t, NULL));
 }
 
 /* append tl2 at the end of list tl; tl is copied */
      
-term *copy_append_list_list(term_list *tl, term_list *tl2)
+term *list_append(term_list *tl, term_list *tl2)
 { term head, *prev;
 
   prev = &head;
@@ -1056,7 +1056,7 @@ term *copy_append_list_list(term_list *tl, term_list *tl2)
 
 /* get n-element of list */
 
-term *index_term_list(term_list *tl, int n)
+term *list_index(term_list *tl, int n)
 {
   term_list *tl1 = tl;
   int i = n;
@@ -1075,7 +1075,7 @@ term *index_term_list(term_list *tl, int n)
 
 /* replace n-element of list */
 
-term_list *replace_term_list(term_list *tl, int n, term *v)
+term_list *list_replace(term_list *tl, int n, term *v)
 { 
   
   term_list head, *prev, *tl1 = tl;
@@ -1102,11 +1102,11 @@ term_list *replace_term_list(term_list *tl, int n, term *v)
 
 /* is t element of list tl? */
 
-TBbool elem(term *t, term_list *tl)
+TBbool list_elem(term *t, term_list *tl)
 {
   assert(is_list(tl));
   for( ; tl; tl = next(tl)){
-    if(equal_term(t, first(tl)))
+    if(term_equal(t, first(tl)))
       return TBtrue;
   }
   return TBfalse;
@@ -1114,48 +1114,48 @@ TBbool elem(term *t, term_list *tl)
 
 /* delete t from ts; modifies ts */
 
-term_list *del_term(term *t, term_list *ts)
+term_list *list_delete(term_list *ts, term *t)
 {
   term head, *prev;
 
   assert(is_list(ts));
-  /* TBmsg("del_term(%t,%t)\n", t, ts); */
+  /* TBmsg("list_delete(%t,%t)\n", ts, t); */
 
   prev = &head;
   for(next(&head) = ts; ts; ts = next(ts)){
-    if(equal_term(t, first(ts))){
+    if(term_equal(t, first(ts))){
       next(prev) = next(ts);
-      /* TBmsg("del_term returns: %t\n", next(&head));*/
+      /* TBmsg("list_delete returns: %t\n", next(&head));*/
       return next(&head);
     }
     prev = ts;
   }
-  /* TBmsg("del_term returns: %t\n", next(&head)); */
+  /* TBmsg("list_delete returns: %t\n", next(&head)); */
   return next(&head);
 }
 
 /* is sub a subset of sup? */
 
-TBbool subset(term_list *sub, term_list *sup)
+TBbool list_subset(term_list *sub, term_list *sup)
 {
   term_list *sup1;
 
   assert(is_list(sub)); 
   assert(is_list(sup));
 
-  sup1 = copy_list(sup);
+  sup1 = list_copy(sup);
   for( ; sub; sub = next(sub))
-    if(!elem(first(sub), sup1))
+    if(!list_elem(first(sub), sup1))
       return TBfalse;
     else
-      sup1 = del_term(first(sub), sup1);
+      sup1 = list_delete(sup1, first(sub));
     
   return TBtrue;
 }
 
 /* Create the set difference sup - sub as a new list */
 
-term_list *diff(term_list *sup, term_list *sub)
+term_list *list_diff(term_list *sup, term_list *sub)
 {
   term_list *sup1;
 
@@ -1165,9 +1165,9 @@ term_list *diff(term_list *sup, term_list *sub)
   /* TBmsg("diff(%t,%t)\n", sup, sub); */
 
   if(sub){
-    sup1 = copy_list(sup);
+    sup1 = list_copy(sup);
     for( ; sub; sub = next(sub))
-      sup1 = del_term(first(sub), sup1);
+      sup1 = list_delete(sup1, first(sub));
     
     return sup1;
   } else
@@ -1176,7 +1176,7 @@ term_list *diff(term_list *sup, term_list *sub)
 
 /* Reverse a list L, modifies L */
 
-term_list *reverse(term_list *L)
+term_list *list_reverse(term_list *L)
 {
   term_list *prev = NULL, *cur, *nxt;
 
@@ -1192,32 +1192,43 @@ term_list *reverse(term_list *L)
 
 /* Create the intersection of L and M as a new list */
 
-term_list *inter(term_list *L, term_list *M)
+term_list *list_inter(term_list *L, term_list *M)
 {
   assert(is_list(L)); 
   assert(is_list(M));
 
   if(L && M){
-    term_list *res = NULL, *M1 = copy_list(M);
+    term_list *res = NULL, *M1 = list_copy(M);
 
     for( ; L; L = next(L)){
-      if(elem(first(L), M1)){
-	M1 = del_term(first(L), M1);
+      if(list_elem(first(L), M1)){
+	M1 = list_delete(M1, first(L));
 	res = mk_list(first(L), res);
       }
     }    
-    return reverse(res);
+    return list_reverse(res);
   } else
     return NULL;    
 }
 
-term_list *join(term *L, term *M)
+/* Union of list tl1 and tl2; modifies tl1 */
+
+term *list_union(term_list *tl1, term_list *tl2)
+{
+
+  for( ; tl2; tl2 = next(tl2))
+    if(!list_elem(first(tl2), tl1))
+      tl1 = list_concat_term(tl1, first(tl2));
+  return tl1;	
+}
+
+term_list *list_join(term *L, term *M)
 {
   if(is_list(L)){
     if(is_list(M))
-      return copy_append_list_list(L, M);
+      return list_append(L, M);
     else
-      return copy_append_list_list(L, mk_list(M, NULL));
+      return list_append(L, mk_list(M, NULL));
   } else {
     if(is_list(M))
       return mk_list(L, M);
@@ -1229,14 +1240,14 @@ term_list *join(term *L, term *M)
 /* return term v if list tl contains an immdediate sublist [key,v] */
 /* return [] otherwise */
 
-term *get_list(term_list *tl, term *key)
+term *list_get(term_list *tl, term *key)
 { term_list *pair;
 
   for( ; tl; tl = next(tl)){
     assert(is_list(tl));
     pair = first(tl);
     if(pair && is_list(pair)){
-      if(equal_term(first(pair), key))
+      if(term_equal(first(pair), key))
 	return first(next(pair));
     }
   }
@@ -1248,7 +1259,7 @@ term *get_list(term_list *tl, term *key)
 /* If not, add the pair [key, val] to tl              */
 /* tl is partially copied                             */
 
-term_list *put_list(term_list *tl, term *key, term *val)
+term_list *list_put(term_list *tl, term *key, term *val)
 {
   term_list head, *prev = &head, *pair;
  
@@ -1257,7 +1268,7 @@ term_list *put_list(term_list *tl, term *key, term *val)
     assert(is_list(tl));
     pair = first(tl);
     if(pair && is_list(pair)){
-      if(equal_term(first(pair), key)){
+      if(term_equal(first(pair), key)){
 	tl = next(tl);
 	goto add_pair;
       } else {
@@ -1290,7 +1301,7 @@ term *get_list_as_env(register var *var, term_list *e)
 
   for(e1 = e; e1; e1 = next(e1)){
     entry = first(e1);
-    assert(is_list(entry) && (length_list(entry) == 2));
+    assert(is_list(entry) && (list_length(entry) == 2));
     entry_var = elm1(entry);
     if(sym == var_sym(entry_var)){
       register term *val = elm2(entry);
@@ -1303,6 +1314,77 @@ term *get_list_as_env(register var *var, term_list *e)
     }
   }
   return var;
+}
+
+/*------------------------------------------------------------*/
+
+/* find the first subterm in t with fsym as function symbol. */
+
+static term *first_function_sym(sym_idx fsym, term *t)
+{
+  term *t1;
+  term_list *elems;
+
+  if(!t)
+    return NULL;
+
+  switch(tkind(t)){
+  case t_appl:
+    if(fun_sym(t) == fsym)
+      return t;
+    elems=fun_args(t);
+  case_args:
+    for( ; elems; elems = next(elems)){
+      t1 = first_function_sym(fsym, first(elems));
+      if(t1)
+	return t1;
+    }
+    return NULL;
+  case t_list:
+    elems = t;
+    goto case_args;
+  default:
+    return NULL;
+  }
+}
+
+term *first_function(char *fname, term *t){
+  return first_function_sym(TBlookup(fname), t);
+}
+
+/* find all subterms in t with function symbol fname. */
+/* return a list */
+
+static term *all_functions_sym(sym_idx fsym, term *t)
+{
+  term *t1;
+  term_list *elems, *res = NULL;
+
+  if(!t)
+    return NULL;
+
+  switch(tkind(t)){
+  case t_appl:
+    if(fun_sym(t) == fsym)
+      return mk_list1(t);
+    elems = fun_args(t);
+  case_args:
+    for( ; elems; elems = next(elems)){
+      t1 = all_functions_sym(fsym, first(elems));
+      if(t1)
+	res = list_concat_term(res, t1);
+    }
+    return res;
+  case t_list:
+    elems = t;
+    goto case_args;
+  default:
+    return NULL;
+  }
+}
+
+term *all_functions(char *fname, term *t){
+  return all_functions_sym(TBlookup(fname), t);
 }
 
 /*------------------------------------------------------------*/

@@ -151,49 +151,49 @@ void      pr_env(const env *);
 void      pr_term_unquoted(const term *);
 
 void       pr_term_list(const term_list *);
-term_list *append_list(term_list *, term *);
-term_list *append_list_list(term_list *, term_list *);
-int        length_list(term_list *);
-term_list *join(term *, term *);
-
-term_list *copy_list(term_list *);
 
 TBbool    streq(const char *, const char *);
 TBbool    streq_unres(char *, char *);
 TBbool    bstreq(bstr *, bstr *);
 char *    strdup(const char *);
 
-term      *index_term_list(term_list *, int);
-term_list *replace_term_list(term_list *, int, term *);
+#define   list_first(tl) first(tl)
+#define   list_next(tl)  next(tl)
 
-TBbool     elem(term *, term_list *);
-term       *del_term(term *, term_list *);
-TBbool     subset(term_list *, term_list *);
-term_list  *diff(term_list *, term_list *);
-term_list  *inter(term_list *, term_list *);
-term       *get_list(term_list *, term*);
-term       *get_list_as_env(term_list *, term *);
-term_list  *put_list(term_list *, term *, term *);
-TBbool     equal_term(term *, term *);
-TBbool     equal_list(term_list *, term_list *);
-term_list *reverse(term_list *);
+term_list *list_concat_term(term_list *tl, term * t);
+term_list *list_concat(term_list *tl1, term_list *tl2);
+term_list *list_append(term_list *tl1, term_list *tl2);
+int        list_length(term_list *tl);
+term_list *list_join(term *t1, term *t2);
+term_list *list_copy(term_list *tl);
+term      *list_index(term_list *tl, int n);
+term_list *list_replace(term_list *, int, term *);
+TBbool     list_elem(term *, term_list *);
+term      *list_delete(term_list *, term *);
+TBbool     list_subset(term_list *, term_list *);
+term_list *list_diff(term_list *, term_list *);
+term_list *list_inter(term_list *, term_list *);
+term_list *list_union(term_list *, term_list *);
+term      *list_get(term_list *, term*);
+term_list *list_put(term_list *, term *, term *);
+TBbool     list_equal(term_list *, term_list *);
+term_list *list_reverse(term_list *);
+
+term      *get_list_as_env(term_list *, term *);
+
+TBbool     term_equal(term *, term *);
+term      *first_function(char *fname, term *t);
+term      *all_functions(char *fname, term *t);
 
 extern void printn(const char *, int);
 
 void TBprotect(term **);
 void TBunprotect(term **);
 void add_free_list(term_list *);
-
-extern int nterm;
-extern int nfree;
-
-#define mark_and_collect()   if(nfree < nterm/20) do_mark_and_collect();
-
-void do_mark_and_collect(void);
+void TBcollect();
 
 extern term *True;
 extern term *False;
-
 extern term *Bool;
 extern term *Int;
 extern term *Real;

@@ -356,7 +356,7 @@ void TBreceive(void)
 
       if((e = tool_read_term()))
 	TBsend(e);
-      mark_and_collect();
+      TBcollect();
 }
 
 /*--- TBpeek -----------------------------------*/
@@ -420,6 +420,6 @@ void TBmultiloop(void)
 {
   while(TBtrue) {
     tool_read_term();
-    mark_and_collect();
+    TBcollect();
   }
 }

@@ -37,7 +37,7 @@ void bus_shutdown(term *arg)
       TBwrite(out, e);
     }
     destroy_ports_for_tool(ti);
-    Tools = del_term(ti, Tools);
+    Tools = list_delete(Tools, ti);
   }
   fflush(stderr);
   /* kill(0, SIGKILL); */

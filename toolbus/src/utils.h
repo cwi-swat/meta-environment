@@ -6,7 +6,7 @@
 #define TB_MAX_OVERFLOW 5000
 */
 
-#define TB_BUF_INCR    10000  /* increment for buffer extensions */
+#define TB_BUF_INCR    100000  /* increment for buffer extensions */
 
 #define TB_MAX_HANDSHAKE 512 /* size of handshake
                                 buffer          */

@@ -80,7 +80,7 @@ void tc_printf(atom *Atom)
 
 TBbool req_nargs(atom *a, int nargs)
 {
-  if(length_list(at_args(a)) != nargs){  
+  if(list_length(at_args(a)) != nargs){  
     pr_coords(at_coords(a));
     TBprintf(stderr, "%s: %d arguments required\n", get_txt(at_fun(a)), nargs);
     nerror++;
@@ -94,7 +94,7 @@ TBbool req_arg1_tool_id(atom *a, TBbool var_only)
   term *tool_id, *tool_type;
   coords *c = at_coords(a);
 
-  if(length_list(at_args(a)) < 1){  
+  if(list_length(at_args(a)) < 1){  
     pr_coords(c);
     TBprintf(stderr, "%s: too few arguments\n", get_txt(at_fun(a)));
     nerror++;
@@ -111,7 +111,7 @@ TBbool req_arg1_tool_id(atom *a, TBbool var_only)
       return TBfalse;
     }
   } else {
-    if(is_appl(tool_id) &&  (length_list(fun_args(tool_id)) == 0))
+    if(is_appl(tool_id) &&  (list_length(fun_args(tool_id)) == 0))
       tool_type = tool_id;
     else {
       pr_coords(c);
@@ -134,7 +134,7 @@ TBbool req_arg1_tool_id(atom *a, TBbool var_only)
 TBbool req_arg2_appl(atom *a)
 { coords *c = at_coords(a);
   
-  if(length_list(at_args(a)) != 2){	  
+  if(list_length(at_args(a)) != 2){	  
     pr_coords(c);
     TBprintf(stderr, "%s: 2 arguments required\n", get_txt(at_fun(a)));
     nerror++;
@@ -298,7 +298,7 @@ type *tc_expr(term *T, coords *c)
        return Term;
    }
     es = get_expr_sign(fun_sym(T));
-    if(length_list(fun_args(T)) != es->nargs){
+    if(list_length(fun_args(T)) != es->nargs){
       TBprintf(stderr, "%t, line %d: function `%s': %d argument(s) required\n",
 	       elm1(c), int_val(elm2(c)), get_txt(fun_sym(T)), es->nargs);	       
       nerror++;
@@ -310,7 +310,7 @@ type *tc_expr(term *T, coords *c)
       for(i = 0; i < es->nargs; i++){
 	TK[i] = tc_expr(first(args), c);
 	args = next(args);
-	if(!equal_term(es->argtype[i], Term) && !comp_type(es->argtype[i], TK[i])){
+	if(!term_equal(es->argtype[i], Term) && !comp_type(es->argtype[i], TK[i])){
 	  TBprintf(stderr, "%t, line %d: function `%s': wrong type for argument %d\n", 
 		   elm1(c), int_val(elm2(c)),   
 		   get_txt(fun_sym(T)), i + 1);	 
@@ -331,7 +331,7 @@ void tc_cond(term *t, coords *c)
 {
   type *tp = tc_expr(t, c);
 
-  if(equal_term(Bool, tp))
+  if(term_equal(Bool, tp))
     return;
   else {	
     TBprintf(stderr, "%t, line %d: type of condition should be bool\n", 
@@ -345,10 +345,10 @@ TBbool assign_compatible(type *vtp, type *atp)
   TCDB(TBmsg("assign_compatible(%t,%t)\n", vtp, atp);)
   if(require_type(vtp, atp)    /* rhs is of required type of lhs */
      || comp_type(vtp, atp)
-     || equal_term(vtp, Term)  /* var at lhs is of type term */
-     || equal_term(atp, Term)  /* var type != term, expr type = term or list
+     || term_equal(vtp, Term)  /* var at lhs is of type term */
+     || term_equal(atp, Term)  /* var type != term, expr type = term or list
 				delay typecheck till run-time */
-     || equal_term(atp, List))
+     || term_equal(atp, List))
     return TBtrue;
   else return TBfalse;
 }
@@ -473,11 +473,11 @@ TBbool check_let_vars(term_list *formals, term_list *outer_vars, term_list *loca
   int sv_nerror = nerror;
 
   for(ls = locals; ls; ls = next(ls)){
-    if(elem(first(ls), next(ls)))
+    if(list_elem(first(ls), next(ls)))
       tc_double_decl("let variable", get_txt(var_sym(first(ls))), script_name, lino);
-    if(elem(first(ls), outer_vars))
+    if(list_elem(first(ls), outer_vars))
        tc_warn_redef("let variable", get_txt(var_sym(first(ls))), script_name, lino);
-    if(elem(first(ls), formals))
+    if(list_elem(first(ls), formals))
        tc_warn_redef("formal", get_txt(var_sym(first(ls))), script_name, lino);
   }
   return sv_nerror == nerror;
@@ -491,11 +491,11 @@ TBbool check_formals_vars(term_list *formals, term_list *vars, term *script_name
   /* TBprintf(stderr, "check_formals_vars(%t,%t)\n", formals, vars); */
 
   for(fs = formals; fs; fs = next(fs)){
-    if(elem(first(fs), next(fs)))
+    if(list_elem(first(fs), next(fs)))
       tc_double_decl("formal", get_txt(var_sym(first(fs))), script_name, lino);
   }
   for(vs = vars; vs; vs = next(vs)){
-    if(elem(first(vs), next(vs)))     
+    if(list_elem(first(vs), next(vs)))     
       tc_double_decl("variable", get_txt(var_sym(first(vs))), script_name, lino);
     
     for(fs = formals; fs; fs = next(fs)){
@@ -613,7 +613,7 @@ int typecheck(char *script, TBbool gen_tifs)
     }
   }
 
-  calls = reverse(calls);
+  calls = list_reverse(calls);
   for(calls1 = calls; calls1; calls1 = next(calls1)){
     triple = first(calls1);
     call = elm2(triple);
@@ -623,7 +623,7 @@ int typecheck(char *script, TBbool gen_tifs)
   }
   closure();
 
-  for(ats = reverse(tc_atoms); ats; ats = next(ats)){
+  for(ats = list_reverse(tc_atoms); ats; ats = next(ats)){
     at = first(ats);
     switch(at_fun(at))
       { case a_create:

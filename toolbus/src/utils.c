@@ -257,7 +257,7 @@ static term *parse_term0(void)
       if(lastc == '%') {
 	if(get_char() == 'l'){
 	  next(&args) = 
-	    append_list_list(next(&args),
+	    list_concat(next(&args),
 			     va_arg(mk_term_args, term_list *));
 	  get_char(); skip_layout();
 	  goto list_args_seen;
@@ -267,7 +267,7 @@ static term *parse_term0(void)
       }
       arg = parse_term0();
 
-      next(&args) = append_list(next(&args), arg);
+      next(&args) = list_concat_term(next(&args), arg);
       skip_layout();
       if(lastc == ','){
 	get_char(); skip_layout(); continue;
@@ -369,6 +369,8 @@ term *parse_term(void)
   */
 }
 
+static void extend_buffer();
+
 term *TBmake(char * fmt, ...)
 {
   term * res;
@@ -380,8 +382,7 @@ term *TBmake(char * fmt, ...)
 
   if(n >= buf_size)
     extend_buffer(0, n);
-  /* err_fatal("format size exceeds buffer size"); */
-  /* buf_ptr = fmt; */
+
   memcpy(buffer, fmt, n+1);
   buf_ptr = buffer;
 
@@ -501,7 +502,7 @@ term *parse_buffer(void)
 static void extend_buffer(int fill, int needed)
 {   char *newbuffer;
 
-    fprintf(stderr, "extend_buffer: %d, %d, %d\n", fill, buf_size, needed);
+    /* fprintf(stderr, "extend_buffer: %d, %d, %d\n", fill, buf_size, needed); */
 
     assert((fill <= buf_size) && (needed > 0) && (needed > buf_size));
 
@@ -513,7 +514,7 @@ static void extend_buffer(int fill, int needed)
     memcpy(newbuffer, buffer, fill); 
     free(buffer);
     buffer = newbuffer;
-    fprintf(stderr, "extend_buffer: done\n");
+    /* fprintf(stderr, "extend_buffer: done\n"); */
 }
 
 int multi_read(int fd) 
@@ -1096,7 +1097,7 @@ TBbool TBmatch1(term *t)
 	}
 	skip_layout();
 	if(lastc != ':'){
-	  return equal_term(var_type(t), Term) ? TBtrue : TBfalse;
+	  return term_equal(var_type(t), Term) ? TBtrue : TBfalse;
 	} else {
 	  char type_name[20], *tn = type_name;
 	  type *rt;
@@ -1124,7 +1125,7 @@ TBbool TBmatch1(term *t)
 	    err_warn("TBmatch: wrong type definition following variable");
 	    return TBfalse;
 	  }
-	  return equal_term(var_type(t), rt) ? TBtrue : TBfalse;
+	  return term_equal(var_type(t), rt) ? TBtrue : TBfalse;
 	}
       }
     } else if(isalpha(lastc)){

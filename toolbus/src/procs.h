@@ -112,7 +112,7 @@ typedef term_list coords;
 #define co_elino(c)    elm4(c)
 #define co_epos(c)     elm5(c)
 
-#define is_coords(c)   (!c || (is_list(c) && (length_list(c) == 5)))
+#define is_coords(c)   (!c || (is_list(c) && (list_length(c) == 5)))
 
 /* ------------------ atoms ------------------------------------ */
 
@@ -167,7 +167,7 @@ proc      *mk_proc_call(char *, term *);
                                       (is_delta(p2) ? p1 : \
 				           mk_appl2(p_plus,p1,p2)))
 #define mk_star(p1,p2)   mk_appl2(p_star,p1,p2)
-#define mk_fmerge(p1,p2) (equal_term(p1, p2) ? p1 : mk_appl2(p_fmerge,p1,p2))
+#define mk_fmerge(p1,p2) (term_equal(p1, p2) ? p1 : mk_appl2(p_fmerge,p1,p2))
 #define mk_lmerge(p1,p2)  mk_appl2(p_lmerge,p1,p2)
 
 #define mk_if(tst,th,el) mk_appl3(p_if, tst, th, el)

@@ -87,8 +87,8 @@ proc_id *create_process(sym_idx pname, term_list *args,
   body = replace_formals(body, Env2);
   ProcInst = mk_proc_inst((ap_form *)NULL,
 		    Env1, 
-		    copy_list(parent_subs), 
-		    copy_list(parent_notes), 
+		    list_copy(parent_subs), 
+		    list_copy(parent_notes), 
 		    mk_str(get_txt(pname)), 
 		    pid,
 
@@ -185,7 +185,7 @@ time_t mk_abs_time(term_list *tl)
   int h, m, s, n, k;
   time_t tm;
 
-  n = length_list(tl);
+  n = list_length(tl);
   if((n > 6) || (n < 3)){
     err_warn("absolute time wrong number of arguments in: %t", tl);
     return 0;
@@ -309,7 +309,7 @@ proc *sum(proc *p1, proc *p2)
     if(is_delta(p2))                 /* sum(AP, delta) = AP */
       return p1;
     if(is_list(p1) && is_list(p2))   /* sum(<OAPs1>, <OAPs2>) = <OAPs1 + OAPs2> */
-	return append_list_list(p1, p2);
+	return list_concat(p1, p2);
     if(is_atom(p1) && is_list(p2)){  /* sum(Atom, <OAPs>) = <Atom + OAPs> */
       return mk_list(p1, p2);
     }
@@ -588,7 +588,7 @@ ap_form *expand(proc *P, env *Env)
 	   res = expand(mk_fmerge(left(P1), mk_fmerge(right(P1), P2)), Env);
       
        } else {                      /* exp(P1 || P2) = sum(exp(P1 ||_ P2), exp(P2 ||_ P1)) */
-	 if(equal_term(P1, P2))
+	 if(term_equal(P1, P2))
 	   res = expand(P1, Env);
 	 else  {   
 	   res = sum(expand(mk_lmerge(P1, P2), Env), 
@@ -648,7 +648,7 @@ ap_form *expand(proc *P, env *Env)
 	term *creator; var *v; coords *c;
 	atom *Atom, *Atom2;
 
-	assert(length_list(args) == 3);
+	assert(list_length(args) == 3);
 	creator = substitute(elm1(args), Env);  assert(is_appl(creator));
 	v = elm2(args);        assert(is_result_var(v));
 	c = elm3(args);        assert(is_coords(c));
@@ -781,7 +781,7 @@ void distr_note(term *Note)
   for(Processes = AllProcesses; Processes; Processes = next(Processes)){
     ProcInst = first(Processes);
     if(matching_subscription(Note, pi_subs(ProcInst))){
-      pi_notes(ProcInst) = append_list(pi_notes(ProcInst), Note);
+      pi_notes(ProcInst) = list_concat_term(pi_notes(ProcInst), Note);
     }
   }
 }
@@ -839,7 +839,7 @@ term *itp1(register term *T)
        return T;
    }
     es = get_expr_sign(fun_sym(T));
-    if(length_list(fun_args(T)) != es->nargs){
+    if(list_length(fun_args(T)) != es->nargs){
       err_warn("%t: %d argument(s) required\n", T, es->nargs);\
 	return NULL;
     }
@@ -900,9 +900,9 @@ term *itp1(register term *T)
     case e_or: 
       return (bool_val(V[0]) || bool_val(V[1])) ? True : False;
     case e_equal: 
-      return equal_term(V[0], V[1]) ? True : False;
+      return term_equal(V[0], V[1]) ? True : False;
     case e_not_equal: 
-      return equal_term(V[0], V[1]) ? False : True;
+      return term_equal(V[0], V[1]) ? False : True;
 
     case e_add: 
       return mk_int(int_val(V[0]) + int_val(V[1]));
@@ -962,15 +962,15 @@ term *itp1(register term *T)
       return mk_real(fabs(real_val(V[0])));
 
     case e_size:
-      return mk_int(length_list(V[0]));
+      return mk_int(list_length(V[0]));
     case e_index:
-      return index_term_list(V[0], int_val(V[1]));
+      return list_index(V[0], int_val(V[1]));
     case e_replace:
-      return replace_term_list(V[0], int_val(V[1]), V[2]);
+      return list_replace(V[0], int_val(V[1]), V[2]);
     case e_get:
-      return get_list(V[0], V[1]);
+      return list_get(V[0], V[1]);
     case e_put:
-      return put_list(V[0], V[1], V[2]);
+      return list_put(V[0], V[1], V[2]);
 
     case e_first:
       return (V[0]) ? first(V[0]) : NULL;
@@ -979,16 +979,16 @@ term *itp1(register term *T)
       return (V[0]) ? next(V[0]) : NULL;
  
     case e_member:
-      return elem(V[0], V[1]) ? True : False;
+      return list_elem(V[0], V[1]) ? True : False;
     case e_subset:
-      return subset(V[0], V[1]) ? True : False;
+      return list_subset(V[0], V[1]) ? True : False;
       
     case e_diff: 
-      return diff(V[0], V[1]);
+      return list_diff(V[0], V[1]);
     case e_inter: 
-      return inter(V[0], V[1]);
+      return list_inter(V[0], V[1]);
     case e_join:
-      return join(V[0], V[1]);
+      return list_join(V[0], V[1]);
     /* <PO> this is done in the system module now.
     case e_functions:
       return mk_functions();
@@ -1076,7 +1076,7 @@ TBbool simple_atomic_step(atom *Atom)
 	term *pat, *inp;
 	int cnt;
 
-	assert(length_list(args) == 2);
+	assert(list_length(args) == 2);
 	prompt = elm1(args);
 	pat = elm2(args);
 	for(cnt = 0; cnt < 10; cnt++){
@@ -1111,7 +1111,7 @@ TBbool simple_atomic_step(atom *Atom)
 	term *pcall;
 	var *v; proc_id *pid;
 
-	assert(length_list(args) == 2);
+	assert(list_length(args) == 2);
 	pcall = substitute(first(args), pi_env(current_ProcInst));
 	assert(is_appl(pcall));
 
@@ -1131,7 +1131,7 @@ TBbool simple_atomic_step(atom *Atom)
       { term_list *args = substitute_list(at_args(Atom), pi_env(current_ProcInst));
 	term *arg;
 	TBbool create_tool(term *);
-	assert(length_list(args) == 1);
+	assert(list_length(args) == 1);
 	assert(is_appl(first(args)));
 	arg = first(args);
 	/* add_free_list(args); */
@@ -1155,7 +1155,7 @@ TBbool simple_atomic_step(atom *Atom)
       {
 	term *args = at_args(Atom); var *v; term *val;
 
-	assert(length_list(args) == 2);
+	assert(list_length(args) == 2);
 	v = first(args);
 	val = itp(first(next(args)), current_ProcInst);
 	if(require_type(var_type(v), val)){
@@ -1172,7 +1172,7 @@ TBbool simple_atomic_step(atom *Atom)
 	term *args = substitute_list(at_args(Atom), pi_env(current_ProcInst));
 	extern void bus_shutdown(term *);
 
-	assert(length_list(args) == 1);
+	assert(list_length(args) == 1);
 	bus_shutdown(first(args));
 	return TBtrue; /* never executed */
       }
@@ -1257,7 +1257,7 @@ void atomic_steps(void)
 
     Previous = NULL;
     for(Processes = AllProcesses; Processes; Previous = Processes, Processes = next(Processes)){
-      mark_and_collect();
+      TBcollect();
       current_ProcInst = first(Processes);
 
       /* TBmsg("Process: %t\n", current_ProcInst); */
@@ -1272,7 +1272,7 @@ void atomic_steps(void)
 	 /* TBmsg("\nalt: %t\n", alt); */
 
 	if(is_delta(alt)){
-	  if(length_list(all_alts) == 1){
+	  if(list_length(all_alts) == 1){
 	    /* Remove current  process if it can only do a delta */
 	    if(Previous){
 	      next(Previous) = next(Processes);
@@ -1330,9 +1330,9 @@ void atomic_steps(void)
 	      AP = expand(P, pi_env(current_ProcInst));
 	      if(is_list(AP)){
 		if(alts == all_alts)
-		  pi_alts(current_ProcInst) = all_alts = alts = append_list_list(AP, next(alts));
+		  pi_alts(current_ProcInst) = all_alts = alts = list_concat(AP, next(alts));
 		else
-		  alts = append_list_list(AP, next(alts));
+		  alts = list_concat(AP, next(alts));
 	      } else
 		  first(alts) = AP;
 	      goto retry;
@@ -1432,7 +1432,7 @@ TBbool find_comm(atom *Atom1, atom **Atom2, proc **P2, proc_inst **comm_ProcInst
 TBbool in_selection(proc_inst *ProcInst, term *sel)
 {
   if(is_list(sel))
-    return elem(pi_name(ProcInst), sel) || elem(pi_pid(ProcInst), sel);
+    return list_elem(pi_name(ProcInst), sel) || list_elem(pi_pid(ProcInst), sel);
   else
     return TBfalse;
   /* option permit "all" to select all processes */
@@ -1460,7 +1460,7 @@ TBbool rec_from_tool_step1(tool_inst *ti, term *Inp, int next_phase)
     switch(fun_sym(Inp))
       {
       case a_snd_attach_monitor:
-	assert(length_list(fun_args(Inp)) == 2);
+	assert(list_length(fun_args(Inp)) == 2);
 	mkind = fun_sym(elm1(fun_args(Inp)));
 	sel = elm2(fun_args(Inp));
 	assert(is_list(sel));
@@ -1480,7 +1480,7 @@ TBbool rec_from_tool_step1(tool_inst *ti, term *Inp, int next_phase)
 	return TBtrue;
 
       case a_snd_detach_monitor:
-	assert(length_list(fun_args(Inp)) == 1);
+	assert(list_length(fun_args(Inp)) == 1);
 	sel = elm1(fun_args(Inp));
 	assert(is_list(sel));
 
@@ -1529,7 +1529,7 @@ TBbool rec_from_tool_step1(tool_inst *ti, term *Inp, int next_phase)
 		extern tool_inst_list *Tools;
 
 		destroy_ports_for_tool(ti);
-		Tools = del_term(ti, Tools);
+		Tools = list_delete(Tools, ti);
 	      } else if(fun_sym(Inp) == a_snd_connect){
 		tool_def *td = find_tool_def(fun_sym(first(fun_args(Inp))));
 
@@ -1620,10 +1620,10 @@ void rec_from_tool_step(tool_inst *ti, term *Inp)
 
 	ti_phase(ti) = next_phase;
 	destroy_ports_for_tool(ti);
-	Tools = del_term(ti, Tools);
+	Tools = list_delete(Tools, ti);
       } 
       if(verbose)TBmsg("QUEUED EVENT: %t FROM TOOL %t\n", Inp, ti);
-      Pending = append_list(Pending, mk_list2(ti, Inp));
+      Pending = list_append(Pending, mk_list2(ti, Inp));
     } else 
       TBmsg("UNEXPECTED INPUT %t FROM TOOL %t IGNORED\n", Inp, ti);
   } else {

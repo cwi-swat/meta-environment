@@ -209,7 +209,7 @@ void new_scope(term_list *locals)
   if(n_scope == MAX_SCOPE)
     err_fatal("More than %d nested scopes", MAX_SCOPE);
   n_scope++;
-  current_vars = append_list_list(copy_list(locals), current_vars);
+  current_vars = list_concat(list_copy(locals), current_vars);
 }
 
 void old_scope(void)
