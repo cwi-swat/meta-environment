@@ -51,24 +51,24 @@ include ${top_srcdir}/implicit-rules
 XCFLAGS		=
 XCPPFLAGS	=
 XINCLUDES	= -I$(ATERM)/include
-XLIBS		= -L$(ATERM)/lib -ltoolbus -lasfix -laterm-dbg \
-		$(SOCKLIBS) $(GELLIBS)
+XLIBS		= -L$(ATERM)/lib -lATerm-dbg -lAsFix-dbg -lATB-dbg $(SOCKLIBS)
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
-CSRC		= in-output.c
-CHDR		= in-output.tif.c
+CSRC		= in-output.c in-output.tif.c
+CHDR		= in-output.tif.h
+OBJ             = $(subst .c,.o,$(CSRC))
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= in-output
 # All files in LIBFILES are installed in $(libdir)
 LIBFILES	=
 # All files in INCLUDEFILES are installed in $(includedir)
-INCLUDEFILES	=
+INCLUDEFILES	= in-output.tif.h
 # All files in DOCFILES are copied to $(docdir)
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= in-output in-output.tif.c
+CLEANFILES	= in-output in-output.tif.c in-output.tif.h
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	=
 
@@ -78,11 +78,16 @@ all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
 
-in-output.tif.c: $(top_srcdir)/toolbus/meta.tifs
-	$(TOOLBUS)/bin/ctif -newstyle -tool in-output -tifs $(top_srcdir)/toolbus/meta.tifs
+in-output.tif.h: $(top_srcdir)/toolbus/meta.tifs
+	$(ATERM)/bin/tifstoc -tool in-output $(top_srcdir)/toolbus/meta.tifs
 
-in-output: in-output.o
-	$(CC) -o in-output in-output.o $(LIBS)
+in-output.tif.c: in-output.tif.h
+
+in-output: $(OBJ)
+	$(CC) -o $@ $(OBJ) $(LIBS) $(LIBS)
+
+%.o:	%.c	$(INCLUDEFILES)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $<
 
 ##########################################################
 ### Everything below this line should remain unchanged ###

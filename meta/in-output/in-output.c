@@ -1,7 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <limits.h>
-#include <tb-tool.h>
-#include "in-output.tif.c"
+#include <aterm2.h>
+#include <atb-tool.h>
+
+#include "in-output.tif.h"
 
 #define PATH_LEN _POSIX_PATH_MAX
 #define MAX_PATHS 256
@@ -59,23 +62,19 @@ char *SlurpFile(char *fnam, size_t *size)
         return(buf);
 }
 
-arena *ar;
-
 int nr_paths = 0;
 char paths[MAX_PATHS][PATH_LEN];
 
-FATAL_ERROR
-
-aterm *open_file(int cid, char *name)
+ATerm open_file(int cid, char *name)
 {
   int i;
   char full[PATH_LEN];
   FILE *f;
-  aterm *t;
+  ATerm t;
   char *buf;
   size_t size;
 
-  fprintf(stderr, "pre-parsed file %s.asfix", name);
+  ATfprintf(stderr, "pre-parsed file %s.asfix", name);
   for(i=0; i<nr_paths; i++) {
     strcpy(full, paths[i]);
     if(strlen(full) + strlen(name) + 8 > PATH_LEN) {
@@ -87,14 +86,15 @@ aterm *open_file(int cid, char *name)
     strcat(full, ".asfix");
     f = fopen(full, "r");
     if(f) {
-      if(TreadTermFile(f, ar, &t) < 0) {
-        fprintf(stderr, " could not be read\n");
+      t = ATreadFromTextFile(f);
+      if(!t) {
+        ATfprintf(stderr, " could not be read\n");
         fclose(f);
       }else {
-        /*fprintf(stderr, "ok!\n");*/
-        fprintf(stderr, " was found in: %s\n",paths[i]);
+        ATfprintf(stderr, " was found in: %s\n",paths[i]);
         fclose(f);
-        return Tmake(ar, "snd-value(opened-file(<str>,<str>,<term>,<str>))", "asfix",name, t,full);
+        return ATmake("snd-value(opened-file(<str>,<str>,<term>,<str>))",
+                      "asfix",name, t,full);
       }
     }
   }
@@ -110,24 +110,26 @@ aterm *open_file(int cid, char *name)
     fprintf(stderr, "trying file %s\n", full);
     buf = SlurpFile(full, &size);
     if (buf != NULL) {
-	t = Tmake(ar,"<str>", buf);
+	t = ATmake("<str>", buf);
  	free(buf);
 	fprintf(stderr, "ok!\n");
-	return Tmake(ar, "snd-value(opened-file(<str>,<str>,<term>,<str>))", "raw",name, t,full);
+	return ATmake("snd-value(opened-file(<str>,<str>,<term>,<str>))",
+                      "raw",name, t,full);
     }
   }
-  fprintf(stderr,"File could not be found\n");
-  return Tmake(ar, "snd-value(error-opening(<str>))", name);
+  ATfprintf(stderr,"File could not be found\n");
+  return ATmake("snd-value(error-opening(<str>))", name);
 }
 
-void rec_terminate(int cid, aterm *arg)
+void rec_terminate(int cid, ATerm arg)
 {
-  exit(1);
+  exit(0);
 }
 
 int main(int argc, char **argv)
 {
   int cid, i=0;
+  ATerm bottomOfStack;
 
   FILE *f = fopen(".msm-paths", "r");
   if(f) {
@@ -141,14 +143,11 @@ int main(int argc, char **argv)
     fprintf(stderr, "warning: cannot open .msm-paths file");
   }
   for(i=0; i<nr_paths; i++)
-    fprintf(stderr, "path %d = %s\n", i, paths[i]);
+    ATfprintf(stderr, "path %d = %s\n", i, paths[i]);
 
-  TBinit(argc, argv);
-  cid = TBnewConnection(NULL, NULL, NULL, -1, 
-			 in_output_handler, in_output_check_in_sign);
-  ar = TBgetArena(cid);
-  TBconnect(cid);
-  TBeventloop();
+  ATBinit(argc, argv, &bottomOfStack);
+  cid = ATBconnect(NULL, NULL, -1, in_output_handler); 
+  ATBeventloop();
 
   return 0;
 }
