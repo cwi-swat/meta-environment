@@ -17,11 +17,12 @@ process GenAdapt is
 let
   GENADAPT : genadapt,
   Action   : str,
+  EditorId : term,
   Stack    : list
 in
   execute(genadapt, GENADAPT?) .
   (
-    rec-msg(activate-gen(Action?), Stack?) .
+    rec-msg(activate-gen(Action?), Stack?, EditorId?) .
     ADAPTER(GENADAPT, Action, "") .
     printf("") .
     snd-msg(stack(Stack))

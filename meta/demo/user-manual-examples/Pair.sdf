@@ -5,10 +5,10 @@ imports Booleans
 hiddens
   sorts X Y
 exports
-  sorts Pair[[X,Y]]
+  sorts Pair
  
   context-free syntax
-    "[" X "," Y "]"      -> Pair[[X,Y]]
+    "[" fst:Bool "," snd:Y "]"      -> Pair[[X,Y]] {cons("mpair")}
  
     make-pair(X, Y)      -> Pair[[X,Y]]
     first(Pair[[X,Y]])   -> X

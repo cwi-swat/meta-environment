@@ -1,0 +1,24 @@
+module ApplyTrans
+
+imports Bool-Trans
+
+hiddens
+  sorts BoolEntry BoolEnv ErrorMsg ErrorMsgs
+exports
+  sorts ErrorBool
+  context-free syntax
+    rule TransRule could not be applied -> ErrorMsg
+    ErrorMsg*                           -> ErrorMsgs
+    BOOL # ErrorMsgs                    -> ErrorBool
+  context-free syntax
+    "(" BOOL "," BOOL ")"    -> BoolEntry
+    "[" {BoolEntry ","}* "]" -> BoolEnv
+  context-free syntax
+    apply(BOOL, TransRule)     -> ErrorBool
+    match(BOOL, BOOL, BoolEnv) -> BoolEnv
+    replace(BOOL, BoolEnv)     -> BOOL
+
+hiddens
+  variables
+    "BEnv"[0-9]*    -> BoolEnv
+    "BEntry*"[0-9]* -> {BoolEntry ","}*

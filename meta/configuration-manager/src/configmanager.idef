@@ -54,7 +54,7 @@ in
     rec-value(CMNG, button-names(ButtonNames?)) .
     snd-msg(button-list(ModuleName, ButtonNames))
   +
-    rec-msg(extra-button-action(ButtonName?, ModuleName?)) .
+    rec-msg(extra-button-action(ButtonName?, ModuleName?, EditorId?)) .
     snd-eval(CMNG, get-button-actions(ButtonName, ModuleName)) .
     rec-value(CMNG, button-actions(ButtonActions?)) .
     Stack := [] .
@@ -62,7 +62,7 @@ in
       if not-equal(ButtonActions, []) then
         ButtonAction := first(ButtonActions) .
         ButtonActions := next(ButtonActions) .
-        snd-msg(ButtonAction, Stack) .
+        snd-msg(ButtonAction, Stack, EditorId) .
         (
           rec-msg(stack(Stack?))
         +

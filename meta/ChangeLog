@@ -1,9 +1,16 @@
 # $Id$
 
+2002/05/13 (vandenbr@loria.fr)
+ * Improved the button functionality:
+   - obtain information from another active editor.
+   - distribute a compound rewrite result over different sources.
+   - EditorId is added as an argument to the messages in order
+     to address the correct editor process.
+     
 2002/05/13 (jurgenv@cwi.nl)
-* Refactored implementation of module renaming.
-* Changed renaming widget to file browser in graphbrowser and metastudio.
-* Made renaming work with compound module names too.
+ * Refactored implementation of module renaming.
+ * Changed renaming widget to file browser in graphbrowser and metastudio.
+ * Made renaming work with compound module names too.
 
 2002/05/09 (jurgenv@cwi.nl)
  * Enhanced support for compound module names. New compound module names
