@@ -1,0 +1,22 @@
+module NoMatch
+
+imports basic/Whitespace
+
+exports
+
+sorts Id Tree
+
+lexical syntax
+
+[a-z] -> Id
+
+context-free syntax
+
+Id                     -> Tree
+Id "(" {Tree ","}* ")" -> Tree
+
+variables
+
+"Id"[0-9]* -> Id
+"Tree"[0-9]* -> Tree
+

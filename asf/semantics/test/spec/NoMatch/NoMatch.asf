@@ -1,0 +1,6 @@
+equations
+
+[] f(f(Id)) !:= Tree
+   =================
+   g(Tree) = f(Tree)
+
