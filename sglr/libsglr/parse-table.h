@@ -75,7 +75,7 @@ typedef struct _parse_table  {
   productiontable  productions;
   injectiontable   injections;
   prioritytable    gtr_priorities;
-  prioritytable    lft_priorities;
+  prioritytable    associativities;
   ATbool           has_priorities;
   ATbool           has_rejects;
 #ifndef NO_EAGERNESS
@@ -108,8 +108,9 @@ actions       SG_LookupAction(parse_table *pt, state s, token c);
 production    SG_LookupProduction(parse_table *pt, label c);
 ATbool        SG_ProdIsInjection(parse_table *pt, label l);
 ATermList     SG_LookupGtrPriority(parse_table *pt, label l);
-ATermList     SG_LookupLeftPriority(parse_table *pt, label l);
 ATermInt      SG_GetATint(int l, size_t numprods);
+ATbool SG_IsLeftAssociative(parse_table *pt, label l);
+ATbool SG_IsRightAssociative(parse_table *pt, label l);
 
 #ifdef HAVE_REJECTABILITY_DETERMINATION
 ATbool SG_Rejectable(state s);
@@ -147,10 +148,8 @@ parse_table  *SG_LookupParseTable(language L);
 /*  Constants in parse tables  */
 #define       SG_PT_REGULAR         0
 #define       SG_PT_REJECT          1    /*  Reject reduce in action table  */
-#ifndef NO_EAGERNESS
 #define       SG_PT_EAGER           2    /*  Preferred reduce  */
 #define       SG_PT_UNEAGER         4    /*  Emergency-only reduction  */
-#endif
 
 #define       SG_PT_INITIAL(pt)         ((pt)->initial)
 #define       SG_PT_NUMSTATES(pt)       ((pt)->numstates)
@@ -160,7 +159,7 @@ parse_table  *SG_LookupParseTable(language L);
 #define       SG_PT_PRODUCTIONS(pt)     ((pt)->productions)
 #define       SG_PT_INJECTIONS(pt)      ((pt)->injections)
 #define       SG_PT_GTR_PRIORITIES(pt)  ((pt)->gtr_priorities)
-#define       SG_PT_LFT_PRIORITIES(pt)  ((pt)->lft_priorities)
+#define       SG_PT_ASSOCIATIVITIES(pt) ((pt)->associativities)
 #define       SG_PT_HAS_PRIORITIES(pt)  ((pt)->has_priorities)
 #define       SG_PT_HAS_REJECTS(pt)     ((pt)->has_rejects)
 

@@ -391,7 +391,7 @@ void SG_PrintTree(tree t, ATbool inAmbs)
       elt = (tree) ATgetFirst(args);
       SG_PrintTree(elt, ATfalse);
       if (!ATisEmpty(ATgetNext(args))) {
-  ATfprintf(SG_log(), ",");
+				ATfprintf(SG_log(), ",");
       }
     }
     ATfprintf(SG_log(), "]");
@@ -406,8 +406,8 @@ void SG_PrintTree(tree t, ATbool inAmbs)
       ambs = (ATermList) SG_AmbTable(SG_AMBTBL_GET, (ATerm) t, NULL);
       assert(ambs);
       if (!ATisEmpty(ambs)) {
-  SG_PrintAmbs(ambs);
-  return;
+				SG_PrintAmbs(ambs);
+				return;
       }
     }
 
@@ -1349,9 +1349,12 @@ static tree SG_InjectionCount_Filter(parse_table *pt, tree t0, tree t1)
 	size_t in0   = SG_CountInjectionsInTree(pt, t0);
 	size_t in1   = SG_CountInjectionsInTree(pt, t1);
 	
-	IF_STATISTICS(if (in0 != in1) {
-		SG_InjectionFilterSucceeded(SG_NR_INC);
-	});
+	IF_STATISTICS(
+		SG_InjectionCountCalls(SG_NR_INC);
+		if (in0 != in1) {
+			SG_InjectionFilterSucceeded(SG_NR_INC);
+		}
+		);
 
 	if (in0 > in1) {
 		IF_DEBUG(ATfprintf(SG_log(), "Injection Priority: %t < %t (%d > %d)\n",
@@ -1449,16 +1452,8 @@ ATermList SG_FilterList(parse_table *pt, ATermList old, tree t)
   if(m) {  
     /*  Filter term against existing terms in ambiguity cluster  */
 
-    IF_DEBUG(fprintf(SG_log(), "original tree:"));
-    IF_DEBUG(SG_PrintTree(t, ATfalse));
-    IF_DEBUG(fprintf(SG_log(), "\n"));
-
     for (;!ATisEmpty(old); old = ATgetNext(old)) {
       prev = (tree) ATgetFirst(old);
-      
-      IF_DEBUG(fprintf(SG_log(), "previous tree:"));
-      IF_DEBUG(SG_PrintTree(prev, ATfalse));
-      IF_DEBUG(fprintf(SG_log(), "\n"));
 
       /* Add prev to new, unless t has a higher priority  */
       max = SG_Filter(pt, t, prev, m, k);
@@ -1466,11 +1461,6 @@ ATermList SG_FilterList(parse_table *pt, ATermList old, tree t)
         new = ATinsert(new, (ATerm) prev);
       }
       if (max) {
-        if (SG_GetApplProdLabel(prev) == SG_GetApplProdLabel(t)) {
-          IF_DEBUG(fprintf(SG_log(), "\nmax:"));
-          IF_DEBUG(SG_PrintTree(max, ATfalse));
-          IF_DEBUG(fprintf(SG_log(), "\n"));
-        }
         IF_DEBUG(fprintf(SG_log(), "Priority: %d %c %d (old amb)\n",
                          SG_GetApplProdLabel(prev),
                          ATisEqual(max, prev)?'>':'<',
@@ -1530,9 +1520,6 @@ void SG_Amb(parse_table *pt, tree existing, tree new) {
       /*  new and existing are in a priority relation, max is top  */
       newambs = ATmakeList1((ATerm) max);
       if (max) {
-        IF_DEBUG(fprintf(SG_log(), "max:"));
-        IF_DEBUG(SG_PrintTree(max, ATfalse));
-        IF_DEBUG(fprintf(SG_log(), "\n"));
         IF_DEBUG(fprintf(SG_log(), "Priority: %d %c %d (new amb)\n",
                          SG_GetApplProdLabel(existing),
                          ATisEqual(max, existing)?'>':'<',

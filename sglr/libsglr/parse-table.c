@@ -41,9 +41,7 @@ token SG_Zero_Token;
 AFun  SG_GtrPrio_AFun, SG_LeftPrio_AFun, SG_RightPrio_AFun,
       SG_Shift_AFun, SG_Reduce_AFun, SG_ReduceLA_AFun, SG_Accept_AFun,
       SG_Appl_AFun, SG_Regular_AFun, SG_Reject_AFun,
-#ifndef NO_EAGERNESS
       SG_Eager_AFun, SG_Uneager_AFun,
-#endif
       SG_Aprod_AFun, SG_Amb_AFun, SG_Range_AFun, SG_CharClass_AFun,
       SG_Action_AFun, SG_Goto_AFun, SG_PT3_AFun, SG_PT4_AFun,
       SG_StateRec_AFun, SG_Label_AFun, SG_ParseTree_AFun, SG_Term_AFun,
@@ -52,6 +50,8 @@ AFun  SG_GtrPrio_AFun, SG_LeftPrio_AFun, SG_RightPrio_AFun,
       SG_Position_AFun, SG_Productions_AFun, SG_Amb_Error_AFun,
       SG_SndValue_AFun, SG_Character_AFun, SG_Line_AFun, SG_Col_AFun,
       SG_Offset_AFun;
+
+ATerm SG_LeftPrio_Symbol, SG_RightPrio_Symbol;
 
 /*  A few convenient macros to simplify initialization  */
 
@@ -78,9 +78,9 @@ void SG_InitPTGlobals(void)
   SG_AFUN_INIT(SG_Amb_AFun,         ATmakeAFun(SG_AMB_AFUN,         1, ATfalse));
 
   SG_AFUN_INIT(SG_GtrPrio_AFun,     ATmakeAFun(SG_GTRPRIO_AFUN,     2, ATfalse));
-  SG_AFUN_INIT(SG_LeftPrio_AFun,    ATmakeAFun(SG_LEFTPRIO_AFUN,    2, ATfalse));
-  SG_AFUN_INIT(SG_RightPrio_AFun,   ATmakeAFun(SG_RIGHTPRIO_AFUN,   2, ATfalse));
-
+	SG_AFUN_INIT(SG_LeftPrio_AFun,    ATmakeAFun(SG_LEFTPRIO_AFUN,    2, ATfalse));
+	SG_AFUN_INIT(SG_RightPrio_AFun,    ATmakeAFun(SG_RIGHTPRIO_AFUN,    2, ATfalse));
+	
   SG_AFUN_INIT(SG_Shift_AFun,       ATmakeAFun(SG_SHIFT_AFUN,       1, ATfalse));
   SG_AFUN_INIT(SG_Reduce_AFun,      ATmakeAFun(SG_REDUCE_AFUN,      3, ATfalse));
   SG_AFUN_INIT(SG_ReduceLA_AFun,    ATmakeAFun(SG_REDUCE_AFUN,      4, ATfalse));
@@ -115,6 +115,9 @@ void SG_InitPTGlobals(void)
   SG_AFUN_INIT(SG_Line_AFun,        ATmakeAFun(SG_LINE_AFUN,        1, ATfalse));
   SG_AFUN_INIT(SG_Col_AFun,         ATmakeAFun(SG_COL_AFUN,         1, ATfalse));
   SG_AFUN_INIT(SG_Offset_AFun,      ATmakeAFun(SG_OFFSET_AFUN,      1, ATfalse));
+
+  SG_ATRM_INIT(SG_LeftPrio_Symbol,    ATparse(SG_LEFTPRIO_SYMBOL));
+  SG_ATRM_INIT(SG_RightPrio_Symbol,   ATparse(SG_RIGHTPRIO_SYMBOL));
 
   inited = ATtrue;
 }
@@ -315,11 +318,20 @@ ATermList SG_LookupGtrPriority(parse_table *pt, label l)
   return (ATermList) ATtableGet(SG_PT_GTR_PRIORITIES(pt), (ATerm)SG_GetATint(l, 0));
 }
 
-ATermList SG_LookupLeftPriority(parse_table *pt, label l)
+
+ATbool SG_IsLeftAssociative(parse_table *pt, label l)
 {
-  return (ATermList) ATtableGet(SG_PT_LFT_PRIORITIES(pt), (ATerm)SG_GetATint(l, 0));
+	ATerm assoc = ATtableGet(SG_PT_ASSOCIATIVITIES(pt), (ATerm) SG_GetATint(l, 0));
+
+	return ATisEqual(assoc, SG_LeftPrio_Symbol);
 }
 
+ATbool SG_IsRightAssociative(parse_table *pt, label l)
+{
+	ATerm assoc = ATtableGet(SG_PT_ASSOCIATIVITIES(pt), (ATerm) SG_GetATint(l, 0));
+
+	return ATisEqual(assoc, SG_RightPrio_Symbol);
+		}
 
 #ifdef HAVE_REJECTABILITY_DETERMINATION
 ATbool SG_Rejectable(state s)
@@ -423,7 +435,7 @@ void SG_AddClassesToActionTable(parse_table *pt, state s, ATermList classes,
       }
     }
   }
-#ifndef NO_EAGERNESS
+
   /*  Check if there is preference information in this parse table  */
  if(!pt->has_prefers || !pt->has_avoids) {
     for(; !ATisEmpty(acts); acts = ATgetNext(acts)) {
@@ -437,7 +449,7 @@ void SG_AddClassesToActionTable(parse_table *pt, state s, ATermList classes,
       }
     }
   }
-#endif
+
 }
 
 size_t SG_CountClassesInActionTable(ATermList classes)
@@ -765,13 +777,17 @@ void SG_AddPTPriorities(parse_table *pt, register ATermList prios)
           }
           break;
         case P_LEFT:
-          if(!(prev = (ATermList) ATtableGet(SG_PT_LFT_PRIORITIES(pt),
-                                             (ATerm) pr_num1))) {
-            ATtablePut(SG_PT_LFT_PRIORITIES(pt), (ATerm) pr_num1,
-                       (ATerm) ATmakeList1((ATerm) pr_num2));
-          } else {
-            ATtablePut(SG_PT_LFT_PRIORITIES(pt), (ATerm) pr_num1,
-                       (ATerm) ATinsert(prev, (ATerm) pr_num2));
+					/* register left associative productions */
+          if(ATisEqual(pr_num1, pr_num2)) {
+            ATtablePut(SG_PT_ASSOCIATIVITIES(pt), (ATerm) pr_num1, 
+											 SG_LeftPrio_Symbol);
+          }
+          break;
+			case P_RIGHT:
+					/* register right associative productions */
+          if(ATisEqual(pr_num1, pr_num2)) {
+            ATtablePut(SG_PT_ASSOCIATIVITIES(pt), (ATerm) pr_num1, 
+											 SG_RightPrio_Symbol);
           }
           break;
         default:
@@ -835,12 +851,10 @@ parse_table *SG_NewParseTable(state initial, size_t numstates, size_t numprods,
     ATerror("could not allocate %d booleans\n", numprods);
   }
   pt->gtr_priorities   = ATtableCreate(numprods, 75);
-  pt->lft_priorities   = ATtableCreate(numprods, 75);
+  pt->associativities   = ATtableCreate(numprods, 75);
 
   pt->has_priorities = pt->has_rejects  = ATfalse;
-#ifndef NO_EAGERNESS
   pt->has_prefers = pt->has_avoids = ATfalse;
-#endif
 
 
   /*  Prefetch a sensible number in the ATerm<->integer conversion cache  */
@@ -902,7 +916,7 @@ void SG_DiscardInjections(parse_table *pt)
 void SG_DiscardPriorities(parse_table *pt)
 {
   ATtableDestroy(pt->gtr_priorities);
-  ATtableDestroy(pt->lft_priorities);
+  ATtableDestroy(pt->associativities);
 }
 
 void SG_DiscardParseTable(parse_table *pt)

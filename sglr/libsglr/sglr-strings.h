@@ -31,8 +31,6 @@
 #define SG_APROD_AFUN        "aprod"
 #define SG_AMB_AFUN          "amb"
 #define SG_GTRPRIO_AFUN      "gtr-prio"
-#define SG_LEFTPRIO_AFUN     "left-prio"
-#define SG_RIGHTPRIO_AFUN    "right-prio"
 #define SG_SHIFT_AFUN        "shift"
 #define SG_REDUCE_AFUN       "reduce"
 #define SG_ACCEPT_AFUN       "accept"
@@ -59,7 +57,12 @@
 #define SG_LINE_AFUN         "line"
 #define SG_COL_AFUN          "col"
 #define SG_OFFSET_AFUN       "char"
+#define SG_LEFTPRIO_AFUN     "left-prio"
+#define SG_RIGHTPRIO_AFUN    "right-prio"
 
+/* Symbols */
+#define SG_LEFTPRIO_SYMBOL     "left-prio"
+#define SG_RIGHTPRIO_SYMBOL    "right-prio"
 
 /*  Attributes  */
 
