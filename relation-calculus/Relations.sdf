@@ -8,9 +8,12 @@ imports Bags[Elem]
 
   sorts Rel[[Elem]]
 
+  aliases
+         Bag[[Elem # Elem]]	-> Rel[[Elem]]
+
   context-free syntax
 
-     Bag[[Elem # Elem]]                        ->  Rel[[Elem]]
+%%     Bag[[Elem # Elem]]                        ->  Rel[[Elem]]
 
      "EmptyRel"                                -> Rel[[Elem]]
 

@@ -1,0 +1,90 @@
+equations
+
+[ga-1] get-area(Stat) = area(get-path(Stat), 
+			     get-start-line(Stat), 
+			     get-start-column(Stat), 
+			     get-end-line(Stat), 
+			     get-end-column(Stat))
+
+%% --- Add successors
+
+[as-1] add-succ(Rel, Rstore) = add(SUCC, Rel, Rstore)
+
+%% -- Construct the control flow graph
+
+[cf1] Stat =  while Exp do Stat* od,
+      NodeId = get-area(Stat),
+      Rstore' = add-succ({<NodeId, get-first(Stat*)>}, Rstore),
+      Rstore''= add-last(Stat*, NodeId, Rstore'),
+      ========================================================
+      controlflow(Stat, Rstore) = Rstore''
+
+[cf2] Stat = if Exp then Stat*1 else Stat*2 fi,
+      NodeId = get-area(Stat),
+      Rstore' = add-succ({ <NodeId, get-first(Stat*1)>,
+                           <NodeId, get-first(Stat*2)> }, Rstore)
+      ========================================================
+      controlflow(Stat, Rstore) = Rstore'
+
+[cf3] controlflow(Stat+, Rstore) = Rstore'
+      ========================================================
+      controlflow(Stat ; Stat+, Rstore) = 
+      add-succ(product(get-last(Stat), {get-first(Stat+)}), Rstore')
+
+%% --- Get first statement of a series
+
+[gf-1] get-first(Stat; Stat*) = get-area(Stat)
+
+%% --- Get last statement(s) of a series
+
+[gl-2] get-last(Stat*; if Exp then Stat*1 else Stat*2 fi) = 
+       union(get-last(Stat*1), get-last(Stat*2))
+
+[default-gl-3] 
+       get-last(Stat*; Stat) = {get-area(Stat)}
+
+%% --- Add a successor to all last statements of a series
+
+[al-1] get-last(Stat*) = Bag
+       ========================================================
+       add-last(Stat*, NodeId, Rstore) = add-succ(product(Bag, {NodeId}), Rstore)
+
+%% --- Collect defines and uses
+
+[ud-1] Stat = Id := Exp,
+       NodeId' = get-area(Stat),
+       Rstore' = use-defs(Exp, Rstore, NodeId')
+       ==========================================================
+       use-defs(Stat, Rstore, NodeId) = add(DEFS, <Id, NodeId'>, Rstore')
+
+[default-ud-2] 
+       use-defs(Stat, Rstore, NodeId) = use-defs(Stat, Rstore, get-area(Stat))
+
+[ud-3] use-defs(Id, Rstore, NodeId) = add(USES, <Id, NodeId> , Rstore)
+
+[rt-1] root = area("",0,0,0,0)
+
+%% --- Analyze a program
+ 
+[an-1]
+       controlflow(Program, []) = Rstore,
+       use-defs(Program, Rstore, root) = Rstore',
+       undefined-query(Rstore') = Rstore''
+       =========================================================
+       analyze(Program) = rel-value(UN, Rstore'')
+
+[uq-1] undefined-query(Rstore) =
+       eval-rscript(
+      	def PRED   = inv(SUCC)
+        fun reaches_root(R) = elem('area("",0,0,0,0), range(R))
+        def UN = { <V, N> in USES | reaches_root(dominators({<V,N>}, DEFS, PRED)) },
+        Rstore
+       )
+
+
+         
+
+
+
+
+

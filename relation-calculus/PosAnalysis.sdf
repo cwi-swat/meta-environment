@@ -1,0 +1,50 @@
+module PosAnalysis
+
+imports Pico-syntax
+imports basic/Integers
+
+exports
+  sorts Area NodeId Item
+
+  context-free syntax
+     Area		-> NodeId
+     PICO-ID | NodeId   -> Item
+
+imports RelationCalculator[Item]
+imports asf/tools/PosInfo[STATEMENT]
+
+exports
+  context-free syntax
+
+     area(Literal, IntCon, IntCon, IntCon, IntCon) -> Area
+     root					  -> Area
+     get-area(STATEMENT)			  -> Area
+
+      get-first({STATEMENT ";"}*)                 -> NodeId
+      get-last({STATEMENT ";"}*)                  -> Bag[[Item]]
+
+      add-succ(Rel[[Item]], RSTORE)               -> RSTORE
+      add-last({STATEMENT ";"}*, NodeId, RSTORE) -> RSTORE
+
+      controlflow(PROGRAM, RSTORE)                -> RSTORE {traversal(accu, bottom-up, continue)}
+      controlflow(STATEMENT, RSTORE)              -> RSTORE {traversal(accu, bottom-up, continue)}
+      controlflow({ STATEMENT ";"}*, RSTORE)      -> RSTORE {traversal(accu, bottom-up, continue)}
+
+      use-defs(PROGRAM, RSTORE, NodeId)           -> RSTORE  {traversal(accu,top-down,break)}
+      use-defs(STATEMENT, RSTORE, NodeId)         -> RSTORE  {traversal(accu,top-down,break)}
+      use-defs(EXP, RSTORE, NodeId)               -> RSTORE  {traversal(accu,top-down,break)}
+
+      analyze(PROGRAM)                            -> Rel[[Item]]
+      undefined-query(RSTORE)	                  -> RSTORE
+
+
+  imports asf/syntax/Comments
+
+  variables
+      "Int" [0-9\']*     -> Integer
+      "Rstore" [0-9\']*  -> RSTORE
+      "Prg"              -> PROGRAM
+      
+      "Rel" [0-9\']*     -> Rel[[Item]]
+      "Bag" [0-9\']*     -> Bag[[Item]]
+      "NodeId" [0-9\']*	 -> NodeId
