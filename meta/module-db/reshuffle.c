@@ -8,6 +8,7 @@ extern ATerm modules_db;
 ATerm compile_db = NULL;
 ATermList modules_to_process;
 ATbool compiling = ATfalse;
+ATbool reshuffling = ATfalse;
 
 ATerm top_module;
 char *output_path = ".";
@@ -379,6 +380,7 @@ void reshuffle_modules(int cid,ATermList mods)
 
   change_compile_db(CreateValueStore());
   orgmods = mods;
+  reshuffling = ATtrue;
   while(!ATisEmpty(mods)) {
     mod = ATgetFirst(mods);
     newmod = create_new_module(mod);
@@ -411,9 +413,11 @@ void reshuffle_modules(int cid,ATermList mods)
       ATBhandleOne(cid);
     mods = ATgetNext(mods);
   }
+  reshuffling = ATfalse;
   if(!compiling && ATisEmpty(modules_to_process))
   {
-    gen_makefile( top_module );
+    gen_makefile(top_module);
+    ATfprintf(stderr,"Compilation completed\n");
     ATBwriteTerm(cid,ATmake("snd-event(done)"));
   }
 }
@@ -435,8 +439,12 @@ ATfprintf(stderr,"process_next_module entered\n");
     ATBwriteTerm(cid,event);
   }
   else {
-    gen_makefile(top_module);
-    ATBwriteTerm(cid,ATmake("snd-event(done)"));
+    compiling = ATfalse;
+    if(!reshuffling) {
+      gen_makefile(top_module);
+      ATfprintf(stderr,"Compilation completed\n");
+      ATBwriteTerm(cid,ATmake("snd-event(done)"));
+    }
   }
 }
 
@@ -445,12 +453,10 @@ void rec_ack_event(int cid, ATerm term)
   ATerm name, mod;
 
   if(ATmatch(term,"generate-code(<term>,<term>)",&name,&mod)) {
-    compiling = ATfalse;
     process_next_module(cid);
   }
   else if(ATmatch(term,"done")) {
     compiling = ATfalse;
-    ATfprintf(stderr,"Compilation completed\n");
   }
   else
     exit(1);
