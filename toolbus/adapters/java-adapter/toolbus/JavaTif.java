@@ -235,7 +235,7 @@ public class JavaTif
       }
       out.println();
       out.println("import aterm.*;");
-      out.println("import toolbus.*;");
+      //out.println("import toolbus.*;");
       out.println();
       out.println("public interface " + tool_interface);
       out.println("{");
@@ -300,7 +300,7 @@ public class JavaTif
       out.println();
       out.println("import aterm.*;");
       out.println("import toolbus.*;");
-      out.println("import java.net.*;");
+      //out.println("import java.net.*;");
       out.println("import java.util.*;");
       out.println();
       out.println("abstract public class " + tool_class);
@@ -572,7 +572,7 @@ public class JavaTif
       }
       out.println();
       out.println("import aterm.*;");
-      out.println("import toolbus.*;");
+      //out.println("import toolbus.*;");
       out.println();
       out.println("public class " + tool_bridge);
       out.println("  extends " + tool_class);
