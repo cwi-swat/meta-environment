@@ -818,3 +818,10 @@ PT_Tree PT_makeTreeFlatLexical(PT_Args charList)
 }
 
 /*}}}  */
+
+PT_Tree PT_getParseTreeTop(PT_ParseTree parseTree)
+{
+  ATerm ATparseTree = PT_makeTermFromParseTree(parseTree);
+  
+  return PT_makeTreeFromTerm(ATgetArgument(ATparseTree,0));
+}

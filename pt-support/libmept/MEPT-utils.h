@@ -111,4 +111,6 @@ PT_Symbol makeSymbolAllChars();
 PT_Tree PT_makeTreeFlatLexical(PT_Args charList);
 PT_Symbol PT_getIterSepSeparator(PT_Symbol symbol);
 
+PT_Tree PT_getParseTreeTop(PT_ParseTree parseTree);
+
 #endif /* _ME_PT_H */ 

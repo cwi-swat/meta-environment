@@ -138,7 +138,7 @@ char *PT_yieldTree(PT_Tree tree)
 char *PT_yieldParseTree(PT_ParseTree tree)
 {
   if (PT_isParseTreeTree(tree)) {
-    return PT_yieldTree(PT_getParseTreeTree(tree));
+    return PT_yieldTree(PT_getParseTreeTop(tree));
   }
 
   ATerror("PT_yieldParseTree: not a parsetree: %t\n", tree);
