@@ -81,19 +81,16 @@ DISTCLEANFILES	=
 .SILENT:	depend
 
 # The all target must be defined:
-all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
+all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
 
-rewriter.tif.c: rewriter.tifs
-	$(ATERMBIN)/tifstoc -tool rewriter rewriter.tifs
+%.tif.c %.tif.h: %.tifs
+	$(ATERMBIN)/tifstoc -tool $* $<
 
-rewriter.tif.h: rewriter.tifs
-	$(ATERMBIN)/tifstoc -tool rewriter rewriter.tifs
-
-rewriter.tifs: rewriter.tb
-	$(TOOLBUSBIN)/toolbus -gentifs rewriter.tb
+%.tifs: %.tb
+	$(TOOLBUSBIN)/toolbus -gentifs $<
 
 %-cc.o: %.c
 	cc -O $(INCLUDES) -c -o $@ $<
@@ -121,10 +118,10 @@ libsupport-prof.a: $(OBJ_PROF)
 
 depend: ${CSRC}
 	${MAKEDEPEND} $(INCLUDES) $(CSRC)	> .gendep
-	cat .gendep | sed "s/.o:/-cc.o:/"	>  .depend
-	cat .gendep | sed "s/.o:/-gcc.o:/"	>> .depend
-	cat .gendep | sed "s/.o:/-dbg.o:/"	>> .depend
-	cat .gendep | sed "s/.o:/-prof.o:/"	>> .depend
+	cat .gendep | sed "s/.o:/-cc.o:/"	>  depend
+	cat .gendep | sed "s/.o:/-gcc.o:/"	>> depend
+	cat .gendep | sed "s/.o:/-dbg.o:/"	>> depend
+	cat .gendep | sed "s/.o:/-prof.o:/"	>> depend
 	rm -f .gendep
 
 ##########################################################
@@ -159,6 +156,4 @@ distclean: clean
 # distclean target
 
 # Included dependencies
-include .depend
-
-.depend: depend
+-include depend
