@@ -1162,7 +1162,6 @@ static ATerm negativeCondSatisfied(PT_Tree lhs, PT_Tree rhs,
   lhstrm = rewriteInnermost(lhs, env, depth + 1 , NO_TRAVERSAL);
 
   if (!lhstrm) {
-    ATwarning("*** fail_env on line %d\n", __LINE__);
     return fail_env;
   }
 
@@ -1170,7 +1169,6 @@ static ATerm negativeCondSatisfied(PT_Tree lhs, PT_Tree rhs,
   rhstrm = rewriteInnermost(rhs, env, depth + 1, NO_TRAVERSAL);
 
   if (!rhstrm) {
-    ATwarning("*** fail_env on line %d\n", __LINE__);
     return fail_env;
   }
 
@@ -1783,7 +1781,7 @@ static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra
   PT_Symbol rhs = PT_getProductionRhs(prod);
   PT_Tree value = getVariableValue(env, var, rhs);
 
-  assert(value != NULL && "uninitialized variable);
+  assert(value != NULL && "uninitialized variable");
 
   return value;
 }
