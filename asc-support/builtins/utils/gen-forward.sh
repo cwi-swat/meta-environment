@@ -5,6 +5,10 @@
 
 BUILTIN_NAMES=$1
 
+getName() {
+  echo $1 | sed 's/\([a-z\-]*\)_\([0-9]*\)/\1/'
+}
+
 cat  << END_OF_FILE 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,8 +48,9 @@ PT_Tree forwardBuiltin(ATerm builtin, PT_Tree input)
 
 `
 for b in \${BUILTIN_NAMES}; do
-  echo "  if (!strcmp(name, \\"${b}\\")) {" 
-  echo "    result = ASFE_${b}(input);" | sed 's@-@_@g'
+  name=\`getName ${b}\`
+  echo "  if (!strcmp(name, \\"${name}\\")) {" 
+  echo "    result = ASFE_${name}(input);" | sed 's@-@_@g'
   echo "  }"
 done
 `

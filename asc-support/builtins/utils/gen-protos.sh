@@ -6,6 +6,27 @@
 
 BUILTIN_NAMES=$1
 
+getName() {
+  echo $1 | sed 's/\([a-z\-]*\)_\([0-9]*\)/\1/'
+}
+
+getArity() {
+  echo $1 | sed 's/\([a-z\-]*\)_\([0-9]*\)/\2/'
+}
+
+formals() {
+  arity=$1
+  type=$2
+
+  for (( 0 ; ${arity} > 1 ; arity=`expr ${arity} - 1` )); do 
+    printf "${type} arg${arity}, "
+  done
+
+  if [ $arity = 1 ]; then
+    printf "${type} arg${arity}"
+  fi
+}
+
 cat  << END_OF_FILE 
 #ifndef BUILTINS_H
 #define BUILTINS_H
@@ -18,7 +39,12 @@ PT_Tree forwardBuiltin(ATerm builtin, PT_Tree input);
 
 `
 for b in \${BUILTIN_NAMES}; do 
-  echo "PT_Tree ASFE_${b}(PT_Tree input);" | sed 's@-@_@g'
+  name=\`getName ${b}\`
+  arity=\`getArity ${b}\`
+  formals=\`formals ${arity} ATerm\`
+  echo "PT_Tree ASFE_${name}(PT_Tree input);" | sed 's@-@_@g'
+  echo "PT_Tree ASC_${name}(${formals});" | sed 's@-@_@g'
+  echo
 done
 `
 
