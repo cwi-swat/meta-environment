@@ -30,7 +30,7 @@ AC_SUBST(UNINSTALL)
 
 dnl Is ranlib needed on this system?
 AC_PROG_RANLIB
-AC_PATH_PROG(AR,ar,ar)
+AC_PATH_PROG(AR,ar,/usr/bin/ar)
 
 dnl Which compiler to use?
 AC_PROG_CC
@@ -40,8 +40,8 @@ dnl Where to locate a bourne-compatible shell?
 SHELL=""
 AC_PATH_PROG(SHELL,sh,/bin/sh)
 
-dnl where is perl?
-AC_PATH_PROG(PERL,perl,/opt/bin/perl)
+dnl where is perl5?
+AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
 
 dnl Check for noweb components.
 dnl Use 'true' if 'noweb', 'noweave', or 'notangle' do not exist.
@@ -54,7 +54,7 @@ AC_SET_MAKE
 
 dnl Which CFLAGS to use?
 if test ${CC} = gcc ; then
-	CFLAGS="-g -pedantic -Wall"
+	CFLAGS="-g -Wall"
 fi
 AC_SUBST(CFLAGS)
 AC_SUBST(DEFS)
@@ -89,7 +89,7 @@ AC_SUBST(TCLDOT)
 dnl Of course, the latest version of wish is not always called "wish". :-(
 dnl If we can't find something called wish8.0, we'll assume that "wish"
 dnl is at version 8 or higher (as it is in a _normal_ setup)
-AC_CHECK_PROG(WISH, wish8.0, wish8.0, wish)
+AC_PATH_PROGS(WISH, wish8.1 wish8.0 wish, /usr/bin/wish)
 
 dnl Determine which libraries to use for programs using sockets
 NOSOCKLIBS=$LIBS
@@ -116,7 +116,6 @@ AC_CHECK_LIB(dl, dlopen)
 
 dnl Checks for header files.
 AC_CHECK_HEADER(getopt.h)
-
 
 AC_SUBST(SOCKLIBS)
 
