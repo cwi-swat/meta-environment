@@ -375,9 +375,6 @@ exports
     [\ \t\n]           -> LAYOUT
     "%%" ~[\n]* [\n]   -> LAYOUT
     "%" ~[\n\%]+ "%"   -> LAYOUT
-    "default-"         -> TagId {cons("default")}
-  context-free syntax
-                       -> TagId {cons("empty")} 
 
 module Character-Syntax
 imports Layout
