@@ -859,6 +859,33 @@ is used to describe the external functionality of these components.
 This inherently means that it can only describe the signature of the
 methods, but nothing about the way method calls should interact.
 
+The Java/RMI interface of our running example, the Address Book Service,
+is defined as follows:
+
+\begin{footnotesize}
+\begin{verbatim}
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+public interface IAddressBookService extends Remote {
+  public int createEntry() throws RemoteException;
+  public void deleteEntry(int id) throws RemoteException;
+  public void setName(int id, String name) throws RemoteException;
+  public void setAddress(int id, String address) throws RemoteException;
+  public int findByName(String name) throws RemoteException;
+}
+\end{verbatim}
+\end{footnotesize}
+
+The interface extends \texttt{java.rmi.Remote}: a marking interface
+that identifies which methods are remotely available. Each method in
+this interface is now a \emph{remote method} which means that it is
+capable of throwing a \texttt{RemoteException}. An object implementing
+the \texttt{Remote} interface is said to be a \emph{remote object}.
+
+Note that this interface is written by the programmer. In the ToolBus
+setting, the interface is derived from the inter-component communication
+described by ToolBus processes.
 
 \section{Concluding Remarks}
 
