@@ -39,7 +39,6 @@ process UI is
             )
         )
     endlet 
-%% \end{itemize}
 
 process CALC-BUTTON(Tid : ui) is
     let N : int, E : str, V : term
