@@ -2,9 +2,12 @@
 
 include $(top_srcdir)/make_rules
 
-TOOL = findSortDefinition
+QUERIES = findSortDefinition.c
+
+TOOL = query-tool
 
 SOURCE = \
+	$(QUERIES) \
 	$(TOOL).c \
 	$(TOOL).tif.c \
 	$(TOOL).tif.h
@@ -22,8 +25,8 @@ INCLUDES = \
 	-I$(ATERM)/include
 
 
-findSortDefinition_SOURCES = $(SOURCE)
-findSortDefinition_LDADD = \
+query_tool_SOURCES = $(SOURCE)
+query_tool_LDADD = \
 	-L$(SDF_SUPPORT)/lib -lPT2SDF -lSDFME \
 	-L$(ASF_SUPPORT)/lib -lASFME \
 	-L$(PT_SUPPORT)/lib -lmept \

@@ -1,0 +1,19 @@
+process QueryTool is
+let
+  QT : query-tool,
+  Term : term,
+  Tree : term,
+  Module : term
+in
+  (
+    rec-msg(query("FindSortDefinition", Module?, Tree?)) .
+    execute(query-tool, QT?) .
+    snd-eval(QT, query(Module, Tree)) .
+    rec-value(QT, result(Term?)) .
+    snd-terminate(QT,"done") .
+    snd-msg(result("FindSortDefinition", Term))
+  ) *
+  delta
+endlet
+
+tool query-tool is { command = "query-tool" }

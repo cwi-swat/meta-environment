@@ -5,15 +5,14 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include "findSortDefinition.tif.h"
+#include <MEPT-utils.h>
+#include <SDFME-utils.h>
+
+#include "query-tool.tif.h"
 
 /*}}}  */
 
-/*{{{  version */
-
-static char version[] = "$revision$";
-
-/*}}}  */
+static char myversion[] = "1.0";
 
 /*{{{  void rec_terminate(int cid, ATerm t) */
 
@@ -39,11 +38,12 @@ static void usage(char *prg, ATbool is_err)
 
 static void version(const char *msg)
 {
-  ATwarning("%s v%s\n", msg, version);
+  ATwarning("%s v%s\n", msg, myversion);
   exit(1);
 }
 
 /*}}}  */
+
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
   PT_initMEPTApi();
   SDF_initSDFMEApi();
 
-  cid = ATBconnect(NULL, NULL, -1, findSortDefinition_handler);
+  cid = ATBconnect(NULL, NULL, -1, query_tool_handler);
 
   ATBeventloop();
 
