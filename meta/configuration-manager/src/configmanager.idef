@@ -39,7 +39,7 @@ in
     snd-eval(CMNG, process-config-file(CONFIG_FILE, "."))
   ) .
   rec-value(CMNG, search-paths(Paths?)) .
-  Paths := join(ASF_LIBRARY_PATH, Paths) .
+  Paths := join(Paths, ASF_LIBRARY_PATH) .
   snd-msg(process-search-paths(CONFIG_FILE, Paths)) .
   rec-msg(search-paths-processed(CONFIG_FILE)) .
   snd-msg(get-button-file(BUTTON_FILE)) .
