@@ -172,11 +172,20 @@ process Error(Message : str, MessageArgs : list) is
   snd-note(ui-status(errorf(Message, MessageArgs)))
   
 process Handle-Open-Module-Errors(Module : str, Error : term) is
+let
+  FunSym       : str
+in
+  FunSym := fun(Error) .
   if not-equal(Error, no-errors) then
-    Error("Opening module %s failed: %s", [Module, Error])
+    if not-equal(FunSym, "feedback") then
+      Error("Opening module %s failed: %s", [Module, Error])
+    else
+      snd-note(display-feedback-summary(Error))
+    fi
   else
     tau
   fi
+endlet
 
 process Open-Syntax(Path : str, Module : str, Type : term, Error : term?,
                     RealPath : str?, RealModule : str?, Imports : list?) is
