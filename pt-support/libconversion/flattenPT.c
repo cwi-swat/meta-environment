@@ -474,9 +474,8 @@ PT_ParseTree flattenPT(PT_ParseTree tree)
 {
   if (PT_isParseTreeTree(tree)) {
     PT_Tree newTree = PT_getParseTreeTree(tree);
-    int ambCnt = PT_getParseTreeAmbCnt(tree);
 
-    return PT_makeParseTreeTree(flattenTerm(newTree), ambCnt);
+    return PT_setParseTreeTree(tree, flattenTerm(newTree));
   }
 
   ATerror("flattenParseTree: not a parsetree: %t\n", tree);
