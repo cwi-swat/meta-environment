@@ -30,7 +30,7 @@ public class GraphPanel
 
   private String id;
   
-  private Graph graph;
+  private GraphWrapper graph;
 
   private int max_x;
   private int max_y;
@@ -75,7 +75,7 @@ public class GraphPanel
 	  if ((node == null && hoveredNode != null)
 	      || (node != null
 		  && (hoveredNode == null
-		      || !hoveredNode.getName().equals(node.getName())))) {
+		      || !hoveredNode.getId().equals(node.getId())))) {
 	    hoveredNode = node;
 	    repaint();
 	  }
@@ -130,9 +130,9 @@ public class GraphPanel
 
   //}}}
 
-  //{{{ public void setGraph(Graph graph)
+  //{{{ public void setGraph(GraphWrapper graph)
 
-  public void setGraph(Graph graph)
+  public void setGraph(GraphWrapper graph)
   {
     this.graph = graph;
     updateGeometry();
@@ -302,12 +302,12 @@ public class GraphPanel
     Color node_bg, node_fg, node_border;
 
     if (selectedNode != null
-	&& selectedNode.getName().equals(node.getName())) {
+	&& selectedNode.getId().equals(node.getId())) {
       node_bg = nodeBGSelected;
       node_fg = nodeFGSelected;
       node_border = nodeBorderSelected;
     } else if (hoveredNode != null
-	&& hoveredNode.getName().equals(node.getName())) {
+	&& hoveredNode.getId().equals(node.getId())) {
       node_bg = nodeBGHovered;
       node_fg = nodeFGHovered;
       node_border = nodeBorderHovered;
@@ -322,7 +322,7 @@ public class GraphPanel
     g.setColor(node_border);
     g.drawRect(x, y, w, h);
 
-    String name = node.getName();
+    String name = node.getLabel();
     int tw = metrics.stringWidth(name);
     int th = metrics.getAscent();
 
@@ -362,8 +362,8 @@ public class GraphPanel
     Point from = poly.getHead();
     poly = poly.getTail();
 
-    float fromx = (float)from.getX();
-    float fromy = (float)from.getY();
+    float fromx = (float)from.getX().intValue();
+    float fromy = (float)from.getY().intValue();
 
     GeneralPath gp = new GeneralPath(GeneralPath.WIND_NON_ZERO);
     gp.moveTo(fromx, fromy);
@@ -376,15 +376,15 @@ public class GraphPanel
       Point cur = poly.getHead();
       poly = poly.getTail();
 
-      gp.curveTo((float)cp1.getX(), (float)cp1.getY(),
-		 (float)cp2.getX(), (float)cp2.getY(),
-		 (float)cur.getX(), (float)cur.getY());
+      gp.curveTo((float)cp1.getX().intValue(), (float)cp1.getY().intValue(),
+		 (float)cp2.getX().intValue(), (float)cp2.getY().intValue(),
+		 (float)cur.getX().intValue(), (float)cur.getY().intValue());
     }
     Point to = poly.getHead();
     poly = poly.getTail();
     //assert poly.isEmpty();
 
-    gp.lineTo((float)to.getX(), (float)to.getY());
+    gp.lineTo((float)to.getX().intValue(), (float)to.getY().intValue());
 
     Graphics2D g2d = (Graphics2D)g;
     if (edge.connectedTo(hoveredNode)) {

@@ -1,79 +1,132 @@
 package metastudio.graph;
 
-import aterm.*;
-
-import java.util.List;
-
-public class Node
+abstract public class Node
+extends NodeImpl
 {
-  private static final String PATTERN_POSITIONED =
-    "node(<str>,<fun>,<int>,<int>,<int>,<int>)";
-  private static final String PATTERN_UNPOSITIONED =
-    "node(<str>,<fun>,<int>,<int>)";
-  private static final String PATTERN_UNSIZED =
-    "node(<str>,<fun>)";
-  private ATerm term;
+  //{{{ private Attribute_Location getLocationAttribute()
 
-  String name;
-  String shape;
-  int x;
-  int y;
-  int width;
-  int height;
-
-  //{{{ public Node(ATerm term)
-
-  public Node(ATerm term)
+  private Attribute_Location getLocationAttribute()
   {
-    this.term = term;
-    init();
+    AttributeList attrs = getAttributes();
+    while (!attrs.isEmpty()) {
+      Attribute attr = attrs.getHead();
+      if (attr.isLocation()) {
+	return (Attribute_Location)attr;
+      }
+      attrs = attrs.getTail();
+    }
+
+    return null;
   }
 
   //}}}
-  private void init()
+  //{{{ private Attribute_Label getLabelAttribute()
+
+  private Attribute_Label getLabelAttribute()
   {
-    List result;
-
-    result = term.match(PATTERN_POSITIONED);
-    if (result != null) {
-      name = (String)result.get(0);
-      shape = (String)result.get(1);
-      x = ((Integer)result.get(2)).intValue();
-      y = ((Integer)result.get(3)).intValue();
-      width = ((Integer)result.get(4)).intValue();
-      height = ((Integer)result.get(5)).intValue();
-      return;
+    AttributeList attrs = getAttributes();
+    while (!attrs.isEmpty()) {
+      Attribute attr = attrs.getHead();
+      if (attr.isLabel()) {
+	return (Attribute_Label)attr;
+      }
+      attrs = attrs.getTail();
     }
 
-    result = term.match(PATTERN_UNPOSITIONED);
-    if (result != null) {
-      name = (String)result.get(0);
-      shape = (String)result.get(1);
-      width = ((Integer)result.get(2)).intValue();
-      height = ((Integer)result.get(3)).intValue();
-      return;
-    }
-
-    result = term.match(PATTERN_UNSIZED);
-    if (result != null) {
-      name = (String)result.get(0);
-      shape = (String)result.get(1);
-      return;
-    }
-
-    throw new RuntimeException("not a node: " + term);
+    return null;
   }
-  //{{{ public static Node createUnsized(ATerm name)
 
-  public static Node createUnsized(ATerm name)
+  //}}}
+  //{{{ private Attribute_Size getSizeAttribute()
+
+  private Attribute_Size getSizeAttribute()
   {
-    ATermFactory factory = name.getFactory();
+    AttributeList attrs = getAttributes();
+    while (!attrs.isEmpty()) {
+      Attribute attr = attrs.getHead();
+      if (attr.isSize()) {
+	return (Attribute_Size)attr;
+      }
+      attrs = attrs.getTail();
+    }
 
-    ATerm shape_term = factory.makeAppl(factory.makeAFun("box", 0, false));
+    return null;
+  }
 
-    AFun fun = factory.makeAFun("node", 2, false);
+  //}}}
+  //{{{ private void setSizeAttribute(Attribute_Size attr)
 
-    return new Node(factory.makeAppl(fun, name, shape_term));
+  private Node setSizeAttribute(Attribute_Size sizeAttr)
+  {
+    MetaGraphFactory factory = (MetaGraphFactory)getFactory();
+    AttributeList result = factory.makeAttributeList_Empty();
+    AttributeList attrs = getAttributes();
+    while (!attrs.isEmpty()) {
+      Attribute attr = attrs.getHead();
+      if (!attr.isSize()) {
+	result = factory.makeAttributeList_Multi(attr, result);
+      }
+      attrs = attrs.getTail();
+    }
+
+    result = factory.makeAttributeList_Multi(sizeAttr, result);
+    return setAttributes(result);
+  }
+
+  //}}}
+
+  //{{{ public int getX()
+
+  public int getX()
+  {
+    Attribute_Location location = getLocationAttribute();
+    return location.getX().intValue();
+  }
+
+  //}}}
+  //{{{ public int getY()
+
+  public int getY()
+  {
+    Attribute_Location location = getLocationAttribute();
+    return location.getY().intValue();
+  }
+
+  //}}}
+  //{{{ public int getWidth()
+
+  public int getWidth()
+  {
+    Attribute_Size size = getSizeAttribute();
+    return size.getWidth().intValue();
+  }
+
+  //}}}
+  //{{{ public int getHeight()
+
+  public int getHeight()
+  {
+    Attribute_Size size = getSizeAttribute();
+    return size.getHeight().intValue();
+  }
+
+  //}}}
+  //{{{ public String getLabel()
+
+  public String getLabel()
+  {
+    return getId().getId();
+  }
+
+  //}}}
+
+  //{{{ public void setSize(int width, int height)
+
+  public Node setSize(int width, int height)
+  {
+    MetaGraphFactory f = (MetaGraphFactory)getFactory();
+    // Ugly cast can be removed when java-apigen is improved
+    return setSizeAttribute((Attribute_Size)f.makeAttribute_Size(new Integer(width), new Integer(height)));
   }
 
   //}}}
@@ -82,111 +135,9 @@ public class Node
 
   public boolean isPositioned()
   {
-    return term.match(PATTERN_POSITIONED) != null;
-  }
-
-  //}}}
-  //{{{ public boolean isUnpositioned()
-
-  public boolean isUnpositioned()
-  {
-    return term.match(PATTERN_UNPOSITIONED) != null;
-  }
-
-  //}}}
-  //{{{ public boolean isUnsized()
-
-  public boolean isUnsized()
-  {
-    return term.match(PATTERN_UNSIZED) != null;
+      return getLocationAttribute() != null;
   }
 
   //}}}
 
-  //{{{ public String getName()
-
-  public String getName()
-  {
-    return name;
-  }
-
-  //}}}
-  //{{{ public String getShape()
-
-  public String getShape()
-  {
-    return shape;
-  }
-
-  //}}}
-  //{{{ public int getWidth()
-
-  public int getWidth()
-  {
-    return width;
-  }
-
-  //}}}
-  //{{{ public int getHeight()
-
-  public int getHeight()
-  {
-    return height;
-  }
-
-  //}}}
-  //{{{ public int getX()
-
-  public int getX()
-  {
-    return x;
-  }
-
-  //}}}
-  //{{{ public int getY()
-
-  public int getY()
-  {
-    return y;
-  }
-
-  //}}}
-
-  //{{{ public Node setSize(int width, int height)
-
-  public Node setSize(int width, int height)
-  {
-    ATermFactory factory = term.getFactory();
-
-    return new Node(factory.make(PATTERN_UNPOSITIONED, getName(), 
-				 getShape(),
-				 new Integer(width), new Integer(height)));
-  }
-
-  //}}}
-  //{{{ public Node setShape(String shape)
-
-  public Node setShape(String shape)
-  {
-    ATermFactory factory = term.getFactory();
-
-    if (isUnsized()) {
-      return new Node(factory.make(PATTERN_UNSIZED, getName(), shape));
-    } else {
-      return new Node(factory.make(PATTERN_UNPOSITIONED, getName(), shape,
-				   new Integer(getWidth()),
-				   new Integer(getHeight())));
-    }
-  }
-
-  //}}}
-
-  //{{{ public ATerm toTerm()
-
-  public ATerm toTerm()
-  {
-    return term;
-  }
-
-  //}}}
 }

@@ -60,7 +60,8 @@ let
   SemanticsExt : str,
   TermExt : str,
   EnvironmentName : str,
-  Recursive : term
+  Recursive : term,
+  GraphId : str
 in
   Id := process-id.
   subscribe(import-graph(<term>,<term>)).
@@ -233,11 +234,12 @@ in
      snd-do(UI,new-graph(Mods,Pairs))
    )
    +
-   ( rec-event(UI, layout-graph(Graph?)) .
+   ( rec-event(UI, layout-graph(GraphId?, Graph?)) .
+     printf("Graph: %t\n", Graph) .
      snd-msg(layout-graph(Graph)) .
      rec-msg(graph-layouted(LayoutedGraph?)) .
-     snd-do(UI, graph-layouted(LayoutedGraph)) .
-     snd-ack-event(UI, layout-graph(Graph))
+     snd-do(UI, graph-layouted(GraphId, LayoutedGraph)) .
+     snd-ack-event(UI, layout-graph(GraphId, Graph))
    )
   ) *
   ( rec-event(UI,quit)

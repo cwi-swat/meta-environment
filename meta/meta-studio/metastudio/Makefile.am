@@ -7,6 +7,7 @@ java_JAVA	= \
 	ExtensionFilter.java \
 	ListListModel.java \
 	MetaStudio.java \
+	ImportGraphPanel.java \
 	ModuleManager.java \
 	ModuleSelectionListener.java \
 	ModuleStatusPanel.java \

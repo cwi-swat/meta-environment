@@ -46,7 +46,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   //}}}
 
-  public static ATermFactory factory;
+  public static MetaGraphFactory factory;
 
   private int prefix = 0;
 
@@ -84,7 +84,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   private JTabbedPane graphPane;
 
-  private Graph graph;
+  private GraphWrapper graph;
   private ImportGraphPanel importGraphPanel;
   private ParseTreePanel parseTreePanel;
   
@@ -135,7 +135,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     
     graphPanels = new HashMap();
     
-    factory = new aterm.pure.PureFactory();
+    factory = new MetaGraphFactory();
     moduleManager = new ModuleManager();
     statusMessages = new LinkedList();
 
@@ -560,7 +560,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     
     //{{{ Create module graph
 
-    resetGraph();
+    graph = GraphWrapper.emptyGraph(factory);
 
     importGraphPanel = new ImportGraphPanel(moduleManager);
     addGraphPanel(importGraphPanel);
@@ -689,14 +689,24 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   //}}}
   
-  private void addGraphPanel(GraphPanel panel) {
+  //{{{ private void addGraphPanel(GraphPanel panel)
+
+  private void addGraphPanel(GraphPanel panel)
+  {
     graphPanels.put(panel.getId(), panel);
     graphPane.addTab(panel.getId(), new JScrollPane(panel));
   }
+
+  //}}}
   
-  private GraphPanel getGraphPanel(String id) {
+  //{{{ private GraphPanel getGraphPanel(String id)
+
+  private GraphPanel getGraphPanel(String id)
+  {
     return (GraphPanel)graphPanels.get(id);
   }
+
+  //}}}
   
   //{{{ private void initStyles()
 
@@ -733,7 +743,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   //{{{ private void resetGraph()
 
   private void resetGraph() {
-    graph = new Graph(factory.parse("graph([],[])"));
+    graph.reset();
   }
 
   //}}}
@@ -996,7 +1006,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     setModules((ATermList) moduleList);
     setImports((ATermList) importRelations);
 
-    graph = Graph.fromImportList((ATermList) moduleList, (ATermList) importRelations);
+    graph = GraphWrapper.fromImportList(factory, (ATermList) moduleList, (ATermList) importRelations);
     layoutGraph(importGraphPanel);
   }
 
@@ -1008,7 +1018,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
     NodeSizer sizer = new NodeSizer() {
       public int getWidth(Node node) {
-        return metrics.stringWidth(node.getName()) + NODE_BORDER_WIDTH * 2;
+        return metrics.stringWidth(node.getLabel()) + NODE_BORDER_WIDTH * 2;
       }
       public int getHeight(Node node) {
         return metrics.getHeight() + NODE_BORDER_HEIGHT * 2;
@@ -1024,9 +1034,8 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   //{{{ public void graphLayouted(String id, ATerm graphTerm)
 
-  public void graphLayouted(String id, ATerm graphTerm)
-  {
-    graph = new Graph(graphTerm);
+  public void graphLayouted(String id, ATerm graphTerm) {
+    graph = GraphWrapper.fromTerm(graphTerm);
     GraphPanel graphPanel = getGraphPanel(id);
     graphPanel.setGraph(graph);
     graphPanel.repaint();
@@ -1087,7 +1096,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
         Node node = importGraphPanel.getNodeAt(x, y);
 
         if (node != null) {
-          currentModule = node.getName();
+          currentModule = node.getLabel();
         } else {
           currentModule = null;
         }

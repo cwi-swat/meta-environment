@@ -1,32 +1,23 @@
 package metastudio.graph;
 
-import aterm.*;
-
-public class Edge
+abstract public class Edge
+extends EdgeImpl
 {
-  private static final String PATTERN_POSITIONED =
-    "edge(<str>,<str>,<term>)";
-  private static final String PATTERN_UNPOSITIONED =
-    "edge(<str>,<str>)";
-  private ATerm term;
 
-  //{{{ public Edge(ATerm term)
+  //{{{ private Attribute_CurvePoints getCurvePointsAttribute()
 
-  public Edge(ATerm term)
+  private Attribute_CurvePoints getCurvePointsAttribute()
   {
-    this.term = term;
-  }
+    AttributeList attrs = getAttributes();
+    while (!attrs.isEmpty()) {
+      Attribute attr = attrs.getHead();
+      if (attr.isCurvePoints()) {
+	return (Attribute_CurvePoints)attr;
+      }
+      attrs = attrs.getTail();
+    }
 
-  //}}}
-
-  //{{{ public static Edge createUnpositionedEdge(ATerm fromTerm, ATerm toTerm)
-
-  public static Edge createUnpositionedEdge(ATerm fromTerm, ATerm toTerm)
-  {
-    ATermFactory factory = fromTerm.getFactory();
-
-    AFun fun = factory.makeAFun("edge", 2, false);
-    return new Edge(factory.makeAppl(fun, fromTerm, toTerm));
+    return null;
   }
 
   //}}}
@@ -35,32 +26,7 @@ public class Edge
 
   public boolean isPositioned()
   {
-    return term.match(PATTERN_POSITIONED) != null;
-  }
-
-  //}}}
-  //{{{ public boolean isUnpositioned()
-
-  public boolean isUnpositioned()
-  {
-    return term.match(PATTERN_UNPOSITIONED) != null;
-  }
-
-  //}}}
-
-  //{{{ public String getFrom()
-
-  public String getFrom()
-  {
-    return ((ATermAppl)((ATermAppl)term).getArgument(0)).getName();
-  }
-
-  //}}}
-  //{{{ public String getTo()
-
-  public String getTo()
-  {
-    return ((ATermAppl)((ATermAppl)term).getArgument(1)).getName();
+    return getCurvePointsAttribute() != null;
   }
 
   //}}}
@@ -68,7 +34,7 @@ public class Edge
 
   public Polygon getPolygon()
   {
-    return new Polygon(((ATermAppl)term).getArgument(2));
+    return getCurvePointsAttribute().getPoints();
   }
 
   //}}}
@@ -77,18 +43,11 @@ public class Edge
 
   public boolean connectedTo(Node node)
   {
-    return (node != null
-	    && (getFrom().equals(node.getName())
-		|| getTo().equals(node.getName())));
-  }
+    if (node == null) {
+      return false;
+    }
 
-  //}}}
-
-  //{{{ public ATerm toTerm()
-
-  public ATerm toTerm()
-  {
-    return term;
+    return getFrom().equals(node.getId()) || getTo().equals(node.getId());
   }
 
   //}}}
