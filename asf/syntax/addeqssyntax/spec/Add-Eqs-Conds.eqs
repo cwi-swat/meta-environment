@@ -47,18 +47,18 @@ equations
               ============================================
               eqs-and-conds-for-grammar(Grammar1 Grammar2) = Prod*1 Prod*2
 
-  [eacfg-1'2] eqs-and-conds-for-symbols(*Symbol) = Prod*
+  [eacfg-1'2] eqs-and-conds-for-symbols(Symbol*) = Prod*
               ==========================================
-              eqs-and-conds-for-grammar(sorts *Symbol) = Prod*
+              eqs-and-conds-for-grammar(sorts Symbol*) = Prod*
 
   [default-eacfg-1'3] eqs-and-conds-for-grammar(Grammar) =
 
   [eacfg-1'1] eqs-and-conds-for-symbols() =
 
-  [eacfg-1'2] eqs-and-conds-for-symbols(*Symbol) = Prod*
+  [eacfg-1'2] eqs-and-conds-for-symbols(Symbol*) = Prod*
               ==========================================
-              eqs-and-conds-for-symbols($Sort *Symbol) =
-                $Sort "=" $Sort  -> Equation
-                $Sort "=" $Sort  -> Condition
-                $Sort "!=" $Sort -> Condition
+              eqs-and-conds-for-symbols(Sort Symbol*) =
+                Sort "=" Sort  -> Equation
+                Sort "=" Sort  -> Condition
+                Sort "!=" Sort -> Condition
                 Prod*

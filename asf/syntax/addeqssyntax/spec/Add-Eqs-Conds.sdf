@@ -44,6 +44,6 @@ hiddens
     "Prod*"[0-9]*        -> Production*
     "Section"[0-9]*      -> Section
     "Section*"[0-9]*     -> Section*
-    "$Symbol"[0-9]*      -> Symbol
-    "*Symbol"[0-9]*      -> Symbol*
-    "$Sort"[0-9]*        -> Sort
+    "Symbol"[0-9]*       -> Symbol
+    "Symbol*"[0-9]*      -> Symbol*
+    "Sort"[0-9]*         -> Sort
