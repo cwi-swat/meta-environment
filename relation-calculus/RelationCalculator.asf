@@ -2,47 +2,44 @@
 
 %%---- Store
 
+%% Get value of a variable
+
 [VL1]   value(Var, [<Var, Val>, VPair*]) = Val
 [VL2]   Var != Var' ===> value(Var, [<Var', Val>, VPair*]) = value(Var, [VPair*])
 
-[RV1]   Rel = value(Var, Store)
-        =======================================
-        rel-value(Var, Store) = Rel
+%% Get value of type Elem/Bag/Rel of variable
+
+[EV1]   E   = value(Var, Store) ===>  elm-value(Var, Store) = E
+[BV1]   Bag = value(Var, Store) ===>  bag-value(Var, Store) = Bag
+[RV1]   Rel = value(Var, Store) ===>  rel-value(Var, Store) = Rel
+
+%% Assign value to variable
 
 [ASG1]  assign(Var, Val, [VPair*]) = [<Var, Val>, VPair*]
 
-[add1a]  add(Var, E, [<Var, Val>, VPair*]) = [<Var, apply({E} union Val)>, VPair*]
+%% Add tuple to a relation
 
-[add1b]  Var != Var',
-         [VPair*'] = add(Var, E, [VPair*])
-         ===============================================================
-         add(Var, E, [<Var', Val>, VPair*]) = [<Var', Val>, VPair*']
+[AT1]  add-tuple(Var, <E1, E2>, [<Var, Val>, VPair*]) = [<Var, apply({<E1, E2>} union Val)>, VPair*]
 
-[add1c]  add(Var, E, []) = [<Var, {E}>]
+[AT2]  Var != Var', 
+       [VPair*'] = add-tuple(Var, <E1, E2>, [VPair*])
+       ===============================================================
+       add-tuple(Var, <E1, E2>, [<Var', Val>, VPair*]) = [<Var', Val>, VPair*']
 
-[add2a]  add(Var, <E1, E2>, [<Var, Val>, VPair*]) = [<Var, apply({<E1, E2>} union Val)>, VPair*]
+[AT3]  add-tuple(Var, <E1, E2>, []) = [< Var, {<E1, E2>} >]
 
-[add2b]  Var != Var', 
-	 [VPair*'] =add(Var, <E1, E2>, [VPair*])
-         ===============================================================
-         add(Var, <E1, E2>, [<Var', Val>, VPair*]) = [<Var', Val>, VPair*']
+%% Extend a relation
 
-[add2c]  add(Var, <E1, E2>, []) = [< Var, {<E1, E2>} >]
+[ER1]  extend-rel(Var, Rel, [<Var, Val>, VPair*]) = [<Var, apply(Rel union Val)>, VPair*]
 
+[ER2]  Var != Var', 
+       [VPair*'] = extend-rel(Var, Rel, [VPair*])
+       ===============================================================
+       extend-rel(Var, Rel, [<Var', Val>, VPair*]) = [<Var', Val>, VPair*']
 
-[add3a]  add(Var, Rel, [<Var, Val>, VPair*]) = [<Var, apply(Rel union Val)>, VPair*]
+[ER3]  extend-rel(Var, Rel, []) = [< Var, Rel >]
 
-[add3b]  Var != Var', 
-	 [VPair*'] =add(Var, Rel, [VPair*])
-         ===============================================================
-         add(Var, Rel, [<Var', Val>, VPair*]) = [<Var', Val>, VPair*']
-
-[add3c]  add(Var, Rel, []) = [< Var, Rel >]
-
-
-
-
-%%---- if
+%%---- if on VALUEs
 
 [if1]  if true then Val1 else Val2 fi  = Val1
 [if2]  if false then Val1 else Val2 fi = Val2
@@ -53,33 +50,21 @@
 [default-e2] 
        equal(E, E') = false
 
-%%---- 
+%%---- Specialized versions of evalx that return value of required type
 
-[EVP]  Bool = evalx(Exp, Store)
-       ==================================================
-       evalp(Exp, Store) = Bool
+[EVP]  Bool = evalx(Exp, Store)    ===> evalp(Exp, Store) = Bool
 
-[EVE]  E = evalx(Exp, Store)
-       ==================================================
-       evale(Exp, Store) = E
+[EVE]  E = evalx(Exp, Store)       ===> evale(Exp, Store) = E
 
-[EVB1] Bag = evalx(Exp, Store)
-       ==================================================
-       evalb(Exp, Store) = Bag
+[EVB1] Bag = evalx(Exp, Store)     ===> evalb(Exp, Store) = Bag
 
-[EVB2] *empty* = evalx(Exp, Store)
-       ==================================================
-       evalb(Exp, Store) = {}
+[EVB2] *empty* = evalx(Exp, Store) ===> evalb(Exp, Store) = {}
 
-[EVR1] Rel = evalx(Exp, Store)
-       ==================================================
-       evalr(Exp, Store) = Rel
+[EVR1] Rel = evalx(Exp, Store)     ===> evalr(Exp, Store) = Rel
 
-[EVR1] *empty* = evalx(Exp, Store)
-       ==================================================
-       evalr(Exp, Store) = {}
+[EVR1] *empty* = evalx(Exp, Store) ===> evalr(Exp, Store) = {}
 
-%% ---- Eval script
+%% ---- Eval complete script
 
 [ES1]  eval-rscript(Stat*) = eval-rscript(Stat*, [])
 
@@ -90,11 +75,14 @@
 
 [S1]  eval-rscript(def Var = Exp, Store) = assign(Var, evalx(Exp, Store), Store)
 
-[S3]   eval-rscript(fun Var1(Var2) = Exp, Store) = assign(Var1, <Var2, Exp>, Store)
+[S2]  eval-rscript(fun Var1(Var2) = Exp, Store) = assign(Var1, <Var2, Exp>, Store)
 
-[S7]   eval-rscript(fun Var1(Var2, Var3) = Exp, Store) = assign(Var1, <Var2, Var3, Exp>, Store)
+[S3]  eval-rscript(fun Var1(Var2, Var3) = Exp, Store) = assign(Var1, <Var2, Var3, Exp>, Store)
 
-[S8]   eval-rscript(fun Var1(Var2, Var3, Var4) = Exp, Store) = assign(Var1, <Var2, Var3, Var4, Exp>, Store)
+[S4]  eval-rscript(fun Var1(Var2, Var3, Var4) = Exp, Store) = assign(Var1, <Var2, Var3, Var4, Exp>, Store)
+
+
+%% ---- The main evaluation function evalx
 
 %% ---- Eval elementary predicates
 
@@ -414,8 +402,6 @@
         ==================================================== 
         evalx(closure(Exp1, Exp2), Store) =  closure(Bag, Rel)
 
-
-
 %% ---- FUN ( EXP , EXP , EXP)  -> EXP
 
 [default-fun3]
@@ -434,7 +420,7 @@
         Rel2 = evalr(Exp2, Store),
         Rel3 = evalr(Exp3, Store)
         ================================================= 
-        evalx(dominators(Exp1, Exp2, Exp3), Store) = 
+        evalx(dominators(Exp1, Exp2, Exp3), Store) =
         dominators(Rel1, Rel2, Rel3)
 
 
