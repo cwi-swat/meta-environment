@@ -231,10 +231,13 @@ static int handshake(int socket)
   char buf[512];
   int nr_read;
   
+  ATwarning("Handshaking...\n");
   nr_read = read(socket, buf, 512);
   strcpy(buf, "swing-editor 6874");
+  ATwarning("Sending [%s]\n", buf);
   write(socket, buf, 512);
   ATBwriteTerm(socket, ATparse("rec-do(signature([],[]))"));
+  ATwarning("Received signature\n");
   return 0;
 }
 
@@ -252,7 +255,6 @@ int main(int argc, char *argv[])
   int read_from_hive_fd = -1;
   int write_to_hive_fd = -1;
   int port;
-  const char *filename = NULL;
   char command[BUFSIZ];
   TextEditor swingEditor;
   TE_Pipe hiveToEditor;
@@ -270,13 +272,13 @@ int main(int argc, char *argv[])
       write_to_hive_fd = atoi(argv[++i]);
     }
     else if (strcmp(cur, "--filename") == 0) {
-      filename = argv[++i];
+      setFileName(argv[++i]);
     }
   }
 
   assert(read_from_hive_fd >= 0);
   assert(write_to_hive_fd >= 0);
-  assert(filename != NULL);
+  assert(getFileName() != NULL);
 
   server_socket = allocate_inet_socket(&port);
   if (server_socket == -1) {
@@ -290,7 +292,7 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
-  sprintf(command, COMMANDLINE, port, filename);
+  sprintf(command, COMMANDLINE, port, getFileName());
 
   ATwarning("command: [%s]\n", command);
   retval = system(command);
@@ -299,11 +301,15 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
+  ATwarning("Pre accept...\n");
+
   editor_socket = accept(server_socket, NULL, NULL);
   if (editor_socket == -1) {
     perror("accept");
     exit(1);
   }
+  
+  ATwarning("Post accept...\n");
 
   retval = close(server_socket);
   if (retval == -1) {
@@ -311,6 +317,7 @@ int main(int argc, char *argv[])
     exit(1);
   }
 
+  ATwarning("Pre handshake...\n");
   retval = handshake(editor_socket);
   if (retval == -1) {
     fprintf(stderr, "%s: handshake failed.\n", __FILE__);
