@@ -1,0 +1,354 @@
+/*
+    $Id$
+*/
+process ModuleDB is
+let
+  Id        : term,
+  Path      : str,
+  Table     : term,
+  ModuleId  : term,
+  Syntax    : term,
+  EqsTree   : term,
+  EqsText   : str,
+  Name      : str,
+  OldName   : str,
+  NewName   : str,
+  ErrorName : str,
+  Time      : int,
+  Mdb       : module-db,
+  Modules   : list,
+  ChngMods  : list,
+  Import    : term,
+  Imports   : list,
+  NewImports   : list,
+  Equations : term,
+  Renamings : term,
+  NewRenamings : term,
+  ModName   : term,
+  Params    : term,
+  Pairs     : list,
+  ActualMods: list,
+  Language  : str,
+  ErrorMsg  : str,
+  OutputDir : str, 
+  TableType : term,
+  RealName  : str,
+  EqsList1  : term,
+  EqsList2  : term,
+  EqsList3  : term,
+  SyntaxExt : str,
+  RulesExt  : str,
+  TermExt   : str
+in
+
+/* First, execute the module db */
+execute(module-db, Mdb?).
+/* And initialize it */
+snd-do(Mdb, create-module-db) .
+snd-msg(get-file-extensions) .
+rec-msg(set-file-extensions(syntax(SyntaxExt?), rules(RulesExt?), term(TermExt?))) .
+snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
+(
+
+/* If we get the request to empty the db, we'll do it. */
+  rec-msg(clear-module-db).
+  snd-do(Mdb, clear-module-db)
++
+/* Delete one module from the db */
+  rec-msg(delete-module-from-db(Name?)).
+  snd-eval(Mdb, delete-module(Name)).
+  rec-value(Mdb, changed-modules(ChngMods?)).
+  snd-msg(changed-modules(ChngMods))
++
+/* Delete one module from the db */
+  rec-msg(close-module-in-db(Name?)).
+  snd-eval(Mdb, close-module(Name)).
+  rec-value(Mdb, changed-modules(ChngMods?)).
+  snd-msg(changed-modules(ChngMods))
++
+/* See if a module is in the db */
+  rec-msg(is-module-in-db(Name?)).
+  snd-eval(Mdb, exists(Name)).
+  ( rec-value(Mdb, result(exists(Name?))).
+    snd-msg(exists-in-module-db(Name))
+  +
+    rec-value(Mdb, result(notexists(Name?))).
+    snd-msg(not-exists-in-module-db(Name))
+  )
++
+  rec-msg(add-empty-module-to-db(Name?)).
+  snd-eval(Mdb,add-empty-module(Name)).
+  rec-value(Mdb,empty-module-added(import-graph(ActualMods?, Pairs?))) .
+  snd-note(import-graph(ActualMods, Pairs)).
+  snd-msg(empty-module-added)
++
+/* Add a term-asfix module to the database */
+/* Path is the directory in which the file containing Module lives.
+   Module is the parsed SDF2 representation in Asfix1 */
+  rec-msg(add-sdf-module-to-db(Name?, Path?, Syntax?, timestamp(Time?))) .
+  snd-eval(Mdb, add-sdf-module(Name, Path, Syntax, Time)) .
+  ( 
+    rec-value(Mdb,module(RealName?,imports(need-modules(Modules?),
+                  import-graph(ActualMods?, Pairs?)))).
+/* If a new module is added, we tell the world the current import relations */
+    snd-msg(real-module-name(Name, RealName)).
+    snd-note(import-graph(ActualMods, Pairs)).
+    snd-msg(need-modules(Modules))
+  +
+    rec-value(Mdb, name-consistency-error(ErrorName?)) .
+    snd-msg(error-opening(Name, name-inconsistent))
+  +
+    rec-value(Mdb, illegal-module-error(ErrorName?)) .
+    snd-msg(error-opening(Name, erroneous-module))
+  )
++
+  rec-msg(invalidate-sdf-in-db(Name?)).
+  snd-do(Mdb, invalidate-sdf(Name))
++
+/* Path is the directory in which the file containing Module lives.
+   Module is the parsed SDF2 representation in Asfix1 */
+  rec-msg(update-module-in-db(Name?, Syntax?,Language?)).
+  if equal(Language,"Sdf2") then
+    snd-eval(Mdb,update-sdf2-module(Name, Syntax)) .
+    (
+      rec-value(Mdb,imports(changed-modules(ChngMods?),need-modules(Modules?),
+                            import-graph(ActualMods?, Pairs?))).
+      snd-msg(notify-about-changed-modules(ChngMods,"sdf")).
+      rec-msg(notify-about-changed-modules-done).
+      snd-note(import-graph(ActualMods, Pairs)).
+      snd-msg(extra-modules(Modules))
+    +
+      rec-value(Mdb, name-consistency-error(ErrorName?)) .
+      snd-msg(error-opening(ErrorName, name-inconsistent))
+    )
+  else
+    snd-msg(extra-modules([]))
+  fi
++
+  rec-msg(rename-module-in-db(OldName?, NewName?, Path?)) .
+  snd-eval(Mdb, rename-module(OldName, NewName, Path)) .
+  (
+    rec-value(Mdb, imports(changed-modules(Modules?),
+                           import-graph(ActualMods?, Pairs?))) .
+    snd-note(import-graph(ActualMods, Pairs)) .
+    snd-msg(renaming-done(OldName, Modules))
+  +
+    rec-value(Mdb, illegal-module-name(NewName)) .
+    snd-note(ui-status(errorf("illegal module name %s", [NewName]))) .
+    snd-msg(renaming-not-done(OldName))
+  )
++
+  rec-msg(add-import-in-db(OldName?, NewName?, Path?)) .
+  snd-eval(Mdb, add-import(OldName, NewName, Path)) .
+  (
+    rec-value(Mdb, imports(changed-modules(Modules?),
+                           import-graph(ActualMods?, Pairs?))) .
+    snd-note(import-graph(ActualMods, Pairs)) .
+    snd-msg(add-import-done(OldName, Modules))
+  +
+    rec-value(Mdb, illegal-module-name(NewName?)) .
+    snd-note(ui-status(errorf("illegal module name %s", [NewName]))) .
+    snd-msg(add-import-not-done(OldName))
+  )
++
+  rec-msg(remove-import-in-db(OldName?, NewName?, Path?)).
+  snd-eval(Mdb, remove-import(OldName, NewName, Path)).
+  (
+    rec-value(Mdb, imports(changed-modules(Modules?),
+                           import-graph(ActualMods?, Pairs?))) .
+    snd-note(import-graph(ActualMods, Pairs)) .
+    snd-msg(remove-import-done(OldName, Modules))
+  )
++
+  rec-msg(copy-module-in-db(OldName?, NewName?, Path?)) .
+  snd-eval(Mdb, copy-module(OldName, NewName, Path)) .
+  (
+    rec-value(Mdb, imports(changed-modules(Modules?),
+                           import-graph(ActualMods?, Pairs?))) .
+    snd-note(import-graph(ActualMods, Pairs)) .
+    snd-msg(copy-done(OldName, Modules))
+  +
+    rec-value(Mdb, illegal-module-name(NewName)) .
+    snd-note(ui-status(errorf("illegal module name %s", [NewName]))) .
+    snd-msg(copy-not-done(OldName))
+  )
++
+  /* Get the list of modules for which the equations are not yet
+     available in the database */
+  rec-msg(eqs-not-available-for-modules(Name?)).
+  snd-eval(Mdb,eqs-not-available-for-modules(Name)).
+  rec-value(Mdb,modules(Modules?)).
+  snd-msg(eqs-needed-for-modules(Modules))
++
+  /* Get the text of an unparsed equations section.
+  */
+  rec-msg(get-eqs-text(Name?)).
+  snd-eval(Mdb, get-eqs-text(Name)).
+  (
+    rec-value(Mdb, eqs-text(Name, EqsText?)).
+    snd-msg(eqs-text(Name, EqsText))
+  +
+    rec-value(Mdb, no-eqs-text(Name)).
+    snd-msg(no-eqs-text(Name))
+  )
++
+  /* Add the equations as tree to the database for the given module name */
+  rec-msg(add-eqs-to-db(Name?, Path?, tree(EqsTree?), text(EqsText?), 
+                        timestamp(Time?))) .
+  snd-do(Mdb,add-tree-eqs-section(Name, Path, EqsTree, EqsText, Time)) .
+  snd-msg(eqs-added)
++
+  /* Add the equations as tree to the database for the given module name */
+  rec-msg(add-empty-eqs-to-db(Name?, Path?)) .
+  snd-do(Mdb,add-empty-eqs-section(Name, Path)) .
+  snd-msg(empty-eqs-added)
++
+  /* Add the equations as text to the database for the given module name */
+  rec-msg(add-eqs-to-db(Name?, Path?, text(EqsText?), timestamp(Time?))) .
+  snd-do(Mdb,add-text-eqs-section(Name, Path, EqsText, Time)) .
+  snd-msg(eqs-added)
++
+  /* Update the equations as tree in the database.
+   */
+  rec-msg(update-eqs-tree-in-db(Language?, tree(EqsTree?))) .
+  snd-eval(Mdb, update-eqs-tree(Language, EqsTree)) .
+  rec-value(Mdb, changed-modules(ChngMods?)) .
+  snd-msg(notify-about-changed-modules(ChngMods, "eqs")) .
+  rec-msg(notify-about-changed-modules-done) .
+  snd-msg(eqs-updated)
++
+  rec-msg(update-eqs-text-in-db(Language?, text(EqsText?))).
+  snd-eval(Mdb, update-eqs-text(Language, EqsText)) .
+  rec-value(Mdb, eqs-text-updated(Language)) .
+  snd-msg(eqs-text-updated(Language))
++
+/* Add parse table to the database for the given module name */
+  rec-msg(add-parse-table-to-db(ModuleId?, Table?, timestamp(Time?))) .
+  snd-eval(Mdb, add-parse-table(ModuleId, Table, Time)) .
+  rec-value(Mdb, parse-table-added) .
+  snd-msg(parse-table-added)
++
+  rec-msg(get-sdf2-path-from-db(Name?)).
+  snd-eval(Mdb,get-path(Name, sdf2)).
+  rec-value(Mdb,path(Path?)).
+  snd-msg(path(Path))
++
+  rec-msg(get-eqs-path-from-db(Name?)) .
+  snd-eval(Mdb, get-path(Name, eqs)) .
+  rec-value(Mdb, path(Path?)) .
+  snd-msg(path(Path))
++
+/* Add parse table to the database for the given module name */
+  rec-msg(get-table-from-db(ModuleId?)) .
+  snd-eval(Mdb, get-parse-table(ModuleId)) .
+  ( rec-value(Mdb, table(Table?, Path?)) .
+    snd-msg(table(Table, Path))
+  +
+    rec-value(Mdb, no-table) .
+    snd-msg(no-table)
+  )
++
+/* Return a list of all modules which import this one*/
+  rec-msg(get-all-depending-modules(Name?)).
+  snd-eval(Mdb, get-all-depending-modules(Name)).
+  rec-value(Mdb, all-depending-modules(Modules?)).
+  snd-msg(all-depending-modules(Modules))
++
+/* Get all SDF_ModuleNames that are (recursively) imported by this one */
+  rec-msg(get-all-imported-modules(Name?)).
+  snd-eval(Mdb, get-all-imported-modules(Name)).
+  rec-value(Mdb, all-modules(Modules?)).
+  snd-msg(all-modules(Modules))
++
+/* Get a list of modules that this module imports */
+  rec-msg(get-imported-modules(Name?)).
+  snd-eval(Mdb, get-imported-modules(Name)).
+  rec-value(Mdb, imported-modules(Modules?)).
+  snd-msg(imported-modules(Modules))
++
+/* Return a list of all modules */
+  rec-msg(get-all-modules).
+  snd-eval(Mdb, get-all-modules).
+  rec-value(Mdb, all-modules(Modules?)).
+  snd-msg(all-modules(Modules))
++ 
+/* See if all equations are available given the top module */
+  rec-msg(all-equations-available(Name?)).
+  snd-eval(Mdb, all-equations-available(Name)).
+  (
+    rec-value(Mdb, equations-available).
+    snd-msg(equations-available)
+  +
+    rec-value(Mdb, equations-incomplete) .
+    snd-msg(equations-incomplete)
+  )
++
+
+/* Get the syntax for a list of modules */
+  (
+    rec-msg(get-all-sdf2-definitions(eqs(Name?)))
+  +
+    rec-msg(get-all-sdf2-definitions(trm(Name?)))
+  ) .
+  snd-eval(Mdb, get-all-sdf2-definitions(Name)) .
+  (
+    rec-value(Mdb, syntax(Syntax?)).
+    snd-msg(syntax(Syntax))
+  +
+    rec-value(Mdb, sdf2-definition-error(ErrorMsg?)).
+    snd-msg(no-syntax(ErrorMsg))
+  )
++
+  rec-msg(get-sdf2-asfix(Name?)).
+  snd-eval(Mdb, get-sdf-tree(Name)).
+  (
+    rec-value(Mdb, asfix(syntax(Syntax?))).
+    snd-msg(syntax(Syntax))
+  +
+    rec-value(Mdb, asfix(unavailable)) .
+    snd-msg(unavailable)
+  )
++
+  rec-msg(get-eqs-tree(Name?)).
+  snd-eval(Mdb, get-asf-tree(Name)).
+  rec-value(Mdb, asfix(EqsTree?)).
+  snd-msg(EqsTree)
++
+  rec-msg(get-equations-for-module(ModuleId?)).
+  snd-eval(Mdb, get-equations-for-module(ModuleId)).
+  (
+    rec-value(Mdb, plain-equations(Equations?)) .
+    snd-msg(plain-equations(Equations))
+  +
+    rec-value(Mdb, renaming-equations(Renamings?, Imports?, Equations?)) .
+    snd-msg(renaming-equations(Renamings, Imports, Equations))
+  +
+    rec-value(Mdb, no-equations) .
+    snd-msg(no-equations)
+  )
++
+  rec-msg(get-equations-for-renamed-import(Import?, Renamings?)) .
+  snd-eval(Mdb, get-equations-for-renamed-import(Import, Renamings)) .
+  (
+    rec-value(Mdb, renamed-equations(NewRenamings?, NewImports?, Equations?)) .
+    snd-msg(renamed-equations(NewRenamings, NewImports, Equations))
+  +
+    rec-value(Mdb, no-equations) .
+    snd-msg(no-equations)
+  )
++
+/* Validate the parse table */
+  rec-msg(invalidate-parse-tables(Name?)).
+  snd-do(Mdb, invalidate-parse-tables(Name))
++
+  rec-msg(get-module-info(Name?)) .
+  snd-eval(Mdb, get-module-info(Name)) .
+  rec-value(Mdb, module-info(Name, Pairs?)) .
+  snd-msg(module-info(Name, Pairs))
+) *
+delta
+endlet
+
+
+tool module-db is { command = "module-db" }
+
