@@ -73,6 +73,7 @@ in
         snd-msg(get-focus-sort(Nonterminal, Focus)) .
         rec-msg(focus-sort(Nonterminal?)) .
         snd-msg(Id, parse-string-as-asfix1(ModuleId, Nonterminal, Text)).
+        snd-note(ui-status(statf(Id,"Parsing"))).
         (
           rec-msg(parse-result-asfix1(Id, parse-tree(Tree?))) .
           snd-msg(replace-focus(EditorId, Focus, Tree))
@@ -103,7 +104,8 @@ in
           snd-msg(display-error(EditorId, Pos)).
           snd-note(ui-status(errorf("Cycle detected:\n%s\n", Cycle))). 
           ErrorFoci := join(ErrorFoci, Focus)
-        )
+        ).
+        snd-note(ui-status(endstat(Id)))
       else
         tau
       fi
@@ -114,7 +116,7 @@ in
       else
         snd-msg(parse-failed(ModuleId, ErrorFoci))
       fi
-    fi
+    fi 
   )
   *
   delta
