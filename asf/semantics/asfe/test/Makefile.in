@@ -34,7 +34,7 @@ LIBS       = -L$(ATERMLIB) -lAsFix -lATerm -lATB
 TESTCASES	= reduce-test prepare-restore-test equalModuloWhitespace-test \
 		  whitespace-test
 BINS            = prepare-restore equalModuloWhitespace whitespace
-OBJS            = preparation.o evaluator.o evaluator.tif.o
+OBJS            = preparation.o evaluator.o evaluator.tif.o asfix_utils.o
 
 # CLEANFILES are removed by 'make clean'
 CLEANFILES	=  ${BINS} *.o

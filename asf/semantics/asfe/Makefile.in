@@ -75,7 +75,7 @@ XLIBS		= -L$(ATERMLIB) -lATB -lAsFix -lATerm $(SOCKLIBS)
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
-CSRC		= evaluator.c preparation.c evaluator.tif.c
+CSRC		= evaluator.c preparation.c evaluator.tif.c asfix_utils.c
 CHDR		= preparation.h evaluator.tif.h
 OBJ		= $(subst .c,.o,$(CSRC))
 # All files in BINFILES are installed in $(bindir)

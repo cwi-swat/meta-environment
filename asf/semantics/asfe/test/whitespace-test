@@ -22,5 +22,11 @@ exec_prefix=@exec_prefix@
 toolbus=@bindir@/toolbus
 datadir=@datadir@
 
+./whitespace terms/Set.eqs.asfix1 terms/Set2.trm.asfix1 
+printf "." 
+./whitespace terms/Type-environment.eqs.asfix1 terms/Type-environment.trm.asfix1
+printf "."
 ./whitespace terms/Set.eqs.asfix1 terms/Set.trm.asfix1
+printf "."
+./whitespace terms/Set.eqs.asfix1 terms/Set3.trm.asfix1
 printf ".\n"

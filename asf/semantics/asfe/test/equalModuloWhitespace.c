@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../preparation.h"
+#include "../asfix_utils.h"
 #include <AsFix.h>
 
 int main(int argc, char *argv[])

@@ -10,9 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../preparation.h"
+#include "../asfix_utils.h"
 #include <AsFix.h>
-
-extern ATbool keep_whitespace;
 
 int main(int argc, char *argv[])
 {
