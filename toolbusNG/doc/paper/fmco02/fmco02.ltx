@@ -409,6 +409,7 @@ endlet
 \end{footnotesize}
 
 \subsection{The \texttt{SEARCH} process}
+\label{tb:search}
 
 In our example, the \texttt{SEARCH} process implements but a single query:
 finding an addressbook entry by name. It shows how different results from
@@ -886,6 +887,52 @@ the \texttt{Remote} interface is said to be a \emph{remote object}.
 Note that this interface is written by the programmer. In the ToolBus
 setting, the interface is derived from the inter-component communication
 described by ToolBus processes.
+
+Take a loot at the implementation of \texttt{findByName}. First the
+ToolBus version:
+
+\begin{footnotesize}
+\begin{verbatim}
+  public ATerm findByName(String name) {
+    Integer id = (Integer) addressByName.get(name);
+    if (id == null) {
+      return factory.make("snd-value(not-found)");
+    } else {
+      return factory.make("snd-value(found(<int>))", id);
+    }
+  }
+\end{verbatim}
+\end{footnotesize}
+
+Here you see how the ATerm library is used to encode the result
+of the \texttt{findByName} request. When the requested address is
+present in the database, the term \texttt{snd-value(found(<int>))}
+is created, where \texttt{<int>} is a placeholder that is substituted
+by the \texttt{id} parameter. If the requested address is not present,
+the term \texttt{not-found} is created. The ToolBus then sends this
+result term to a corresponding \texttt{rec-value(found(Aid?))} or
+\texttt{rec-value(not-found)}, respectively as shown in the explanation
+of the SEARCH process in~\ref{tb:search}.
+
+The RMI version of \texttt{findByName} is similar to the ToolBus version:
+
+\begin{footnotesize}
+\begin{verbatim}
+  public int findByName(String name) {
+    Integer id = (Integer) addressByName.get(name);
+    if (id == null) {
+      return -1;
+    } else {
+      return id.intValue();
+    }
+  }
+\end{verbatim}
+\end{footnotesize}
+
+The difference lies mainly in the fact that because the method yields
+an \texttt{int} (the unique id of the addressbook entry), we have to
+pick a number outside the range of valid identities (here we chose $-1$)
+to represent the case that the address is not in the database.
 
 \section{Concluding Remarks}
 

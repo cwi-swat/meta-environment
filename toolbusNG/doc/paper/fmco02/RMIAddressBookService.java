@@ -29,12 +29,12 @@ public class RMIAddressBookService
     return id;
   }
 
-  public void deleteEntry(int id) throws RemoteException {
+  public void deleteEntry(int id) {
     System.out.println("delete: " + getEntry(id));
     addressById.remove(new Integer(id));
   }
 
-  public void setName(int id, String name) throws RemoteException {
+  public void setName(int id, String name) {
     IAddressBookEntry entry = getEntry(id);
     addressByName.remove(name);
     addressByName.put(name, new Integer(id));
@@ -42,7 +42,7 @@ public class RMIAddressBookService
     System.out.println("setName -> entry: " + entry);
   }
 
-  public void setAddress(int id, String address) throws RemoteException {
+  public void setAddress(int id, String address) {
     IAddressBookEntry entry = getEntry(id);
     entry.setAddress(address);
     System.out.println("setAddress -> entry: " + entry);
@@ -50,7 +50,11 @@ public class RMIAddressBookService
 
   public int findByName(String name) {
     Integer id = (Integer) addressByName.get(name);
-    return id == null ? -1 : id.intValue();
+    if (id == null) {
+      return -1;
+    } else {
+      return id.intValue();
+    }
   }
 
   public static final void main(String args[]) {
