@@ -20,7 +20,6 @@
 
 */
 
-#include <PT-utils.h>
 #include <SDF-utils.h>
 #include <ASF-utils.h>
 #include <asc-apply.h>
@@ -31,7 +30,6 @@
 
 #define INITIAL_TABLE_SIZE 8191  
 
-extern ATerm pattern_asfix_term;
 extern int nr_of_states;
 extern int nr_of_actions;
 extern int max_nr_actions;
@@ -63,12 +61,6 @@ extern void register_all();
 extern void resolve_all();
 extern void init_all();
  
-void init_patterns();
-void c_rehash(int newsize);  
-ATerm generate_parse_table(ATerm g);
-void init_table_gen();
-void destroy_table_gen();
-
 /*}}}  */
 /*{{{  ATerm *get_name(int cid) */
 
@@ -85,23 +77,6 @@ void rec_terminate(int cid, ATerm t) {
 }
 
 /*}}}  */
-
-ATerm make_name_term(ATerm name)
-{
-  ATerm result = NULL;
-  char *text;
-
-  if(ATmatch(name,"<str>",&text)) {
-    result = ATmakeTerm(pattern_asfix_lex,
-                        text,
-                        ATparse("sort(\"ModuleId\")"));
-    result = ATmakeTerm(pattern_asfix_appl,
-                        ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[sort(\"ModuleId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),no-attrs)"),
-                        ATparse("w(\"\")"),
-                        ATmakeList1(result));
-  }
-  return result;
-} 
 
 static PT_Tree addNormalizeFunction(char *str, PT_ParseTree parseTree)
 {
@@ -140,7 +115,7 @@ static PT_ParseTree normalize(char *topModule, PT_ParseTree parseTree)
   return toasfix(reduct);
 }
 
-ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
+static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
 {
   ATerm pt = NULL;
   PT_ParseTree ksdf;
@@ -162,7 +137,7 @@ ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
   max_nr_items = 0;
 
   if (ksdf)  {
-    pt = generate_parse_table(PT_makeTermFromParseTree(ksdf));
+    pt = generate_parse_table(ksdf);
   }
   destroy_table_gen();       
 
@@ -191,7 +166,7 @@ ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
  *     Usage: displays helpful usage information
  */
 
-void usage(void)
+static void usage(void)
 {
     ATwarning(
         "Usage: %s [options]\n"
@@ -211,7 +186,7 @@ void usage(void)
 /*}}}  */
 /*{{{  void version(void) */
 
-void version(void)
+static void version(void)
 {
     ATwarning("%s v%s\n", myname, myversion);
 }

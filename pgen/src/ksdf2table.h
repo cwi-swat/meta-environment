@@ -27,7 +27,9 @@
 #include <AsFix-access.h>
 #include <AsFix-expand.h>
 #include <AsFix-init-patterns.h> 
-#include <deprecated.h>
+#include <PT-utils.h>
+#include <SDF-utils.h>
+
 #include "atsets.h"
 #include "statistics.h"
 
@@ -96,3 +98,6 @@ extern ATerm all_chars;
 extern ATermSOS *state_sos;
 
 /*}}}  */
+ATerm generate_parse_table(PT_ParseTree g);
+void init_table_gen();
+void destroy_table_gen();
