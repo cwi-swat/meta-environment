@@ -26,7 +26,6 @@ static char * SDF_convertCharsToString(ATermList list)
   }
 
   tmp[i] = '\0';
-
   return tmp;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Nov  4 17:11:08 2002
+ * Generated at Tue Nov  5 12:20:17 2002
  */
 
 #ifndef __SDFME_dict_H
@@ -149,10 +149,6 @@ extern AFun SDF_afun138;
 extern AFun SDF_afun139;
 extern AFun SDF_afun140;
 extern AFun SDF_afun141;
-extern AFun SDF_afun142;
-extern AFun SDF_afun143;
-extern AFun SDF_afun144;
-extern AFun SDF_afun145;
 
 extern ATerm SDF_patternStartSDF;
 extern ATerm SDF_patternStartModule;
