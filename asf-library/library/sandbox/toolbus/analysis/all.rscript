@@ -6,6 +6,8 @@ rel[node,str] USES
 rel[node,str] DEFS
 rel[node,str] SENDMESSAGES
 rel[node,str] RECEIVEMESSAGES
+rel[node,<str,str>] MSGTYPES
+rel[<node,<str,str>>,node] MSGTYPES_OCCURS
 rel[node,str] PROCESSNAMES
 rel[node,str] PROCESSCREATES
 rel[node,str] PROCESSINVOCATIONS
@@ -25,6 +27,15 @@ rel[str,<node,str>] UNMATCHED_RECEIVES
  = {<"Unmatced receive ",<N,V>> : <N,V> in RECEIVEMESSAGES | V notin range(SENDMESSAGES)}
 
 rel[str,<node,str>] UNMATCHED_MESSAGES = UNMATCHED_SENDS union UNMATCHED_RECEIVES
+
+rel[node,str] MATCHED_SENDS
+  = {<N,V> : <N,V> in SENDMESSAGES | V in range(RECEIVEMESSAGES)}
+
+rel[str,<str,str>] MATCHED_PARAM
+  = {<"Debug ",<fst(N2),sec(N2)>> : <N1,N2> in MSGTYPES | N1 in domain(MATCHED_SENDS)}
+
+rel[node,str] MATCHED_RECEIVES
+  = {<N,V> : <N,V> in RECEIVEMESSAGES | V in range(SENDMESSAGES)}
 
 rel[str,<node,str>] ALL_MESSAGES 
  = UNUSED_PROCESSES union UNMATCHED_MESSAGES union UNUSED_VARS

@@ -5,7 +5,6 @@ let
   Editor : term,
   Pid : int
 in
-  snd-msg(close(Editor,Pid?)) .
   snd-msg(open(Editor,Pid?)) .
   create(EditorManager,Pid?) .
   create(EditorCreator,Pid?) .

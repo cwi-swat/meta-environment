@@ -67,11 +67,13 @@ hiddens
                  {FormalParam ","}*, {VarDecl ","}*) -> 
       RSTORE {traversal(accu, top-down, break)}
 
-hiddens
+exports
   sorts Path
   context-free syntax
     "[" {Integer ","}+ "]" -> Path 
     path2str(Path) -> String
+
+hiddens
   context-free syntax
     extractSignatureFromTerms({Term ","}+, Area, Path, {FormalParam ","}*, {VarDecl ","}*, RSTORE) -> RSTORE
     extractSignatureFromTerm(Term, Area, Path, {FormalParam ","}*, {VarDecl ","}*, RSTORE) -> RSTORE

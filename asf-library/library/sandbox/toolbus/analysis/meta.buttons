@@ -75,11 +75,11 @@ buttons([
         ]),
   button("Tscript",
          ["term"],
-         ["ToolBus", "All"],
+         ["ToolBus", "Test"],
          [push-filename("all.rscript"),
           parse("Rscript", "RSCRIPT"),
 
-          push-string("\"ALL_MESSAGES\""),
+          push-string("\"MATCHED_PARAM\""),
           parse("basic/Strings", "String"),
 
           push-filename("extracted-relations.trm"),
@@ -88,8 +88,9 @@ buttons([
 
           apply("display-query", "List", 3),
           rewrite("DisplayQuery"),
-          execute-action("unparsePT"),
-          show-list
+	  push-filename("query.out"),
+          push-modulename("DisplayQuery"),
+          activate-editor
         ]),
   button("Tscript",
          ["term"],
