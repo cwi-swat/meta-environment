@@ -2,7 +2,7 @@ module  Sdf-Checker
 
 imports Sdf-AttributeChecker LabelChecker SortChecker 
         ProductionChecker ConstructorChecker
-        RemoveLabels
+        RemoveLabels DepricatedSymbols
 
 exports
   context-free syntax
