@@ -2,6 +2,7 @@
 
 
 2002/07/24 (jurgenv@cwi.nl)
+ * Fixed generation of graphbrowser TCL script bug
  * Release 0.10
 
 2002/07/04 (jurgenv@cwi.nl)

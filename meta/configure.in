@@ -191,7 +191,6 @@ AC_OUTPUT(
    meta-studio/metastudio/Makefile
    meta-studio/metastudio/graph/Makefile
    graph-browser/Makefile
-   graph-browser/graph-browser.tcl
    showdot/Makefile
    in-output/Makefile
    module-db/Makefile
