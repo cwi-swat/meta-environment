@@ -1,0 +1,46 @@
+module basic/Bytes
+
+imports basic/Strings
+	basic/Integers	
+
+exports
+
+context-free syntax
+	string-to-bytes(String) -> Bytes
+	bytes-to-string(Bytes) -> String
+	num-of-bytes(Bytes) -> Integer
+	ascii-compare(Bytes,Bytes) -> Integer
+
+
+
+hiddens
+
+imports basic/Whitespace
+
+sorts Bytes Byte
+
+lexical syntax
+	~[] -> Byte
+	Byte* -> Bytes
+
+lexical restrictions
+	Bytes -/- ~[]
+
+context-free syntax
+	chars-to-bytes(String) -> Bytes
+	bytes-to-chars(Bytes) -> String
+
+	octal-to-byte(Integer) -> Byte
+	byte-to-octal(Byte) -> Integer
+
+	octal-to-string(Integer) -> String
+
+
+variables
+	"string"[0-9\']* -> String
+	"bytes"[0-9\']* -> Bytes
+	"char*"[0-9\']* -> CHAR*
+	"char+"[0-9\']* -> CHAR+
+	"char"[0-9\']* -> CHAR
+	"n"[0-9\']* -> Integer
+	

@@ -1,0 +1,623 @@
+equations
+
+[stb]	string-to-bytes(strcon("""char*""")) = 
+		chars-to-bytes(strcon(char*))
+
+[ctb1]	chars-to-bytes(strcon()) = bytes()
+
+
+[ctb2]	bytes(char*') = chars-to-bytes(strcon(char*))
+	===
+	chars-to-bytes(strcon("\" "n" char*)) = bytes("
+" char*')
+
+[ctb3]	bytes(char*') = chars-to-bytes(strcon(char*))
+	===
+	chars-to-bytes(strcon("\" "t" char*)) = bytes("	" char*')
+
+
+[ctb4]	bytes(char*') = chars-to-bytes(strcon(char*))
+	===
+	chars-to-bytes(strcon("\" """ char*)) = bytes(""" char*')
+
+[ctb5]	bytes(char*') = chars-to-bytes(strcon(char*))
+	===
+	chars-to-bytes(strcon("\" "\" char*)) = bytes("\" char*')
+
+[default-ctb]
+	n = natcon(char1 char2 char3),
+	byte(char) = octal-to-byte(n),
+	bytes(char*') = chars-to-bytes(strcon(char*))
+	===
+	chars-to-bytes(strcon("\" char1 char2 char3 char*)) =	
+		bytes(char char*')
+
+[default-ctb]
+	strcon(char) != strcon("\"),
+	bytes(char*') = chars-to-bytes(strcon(char*))
+	===
+	chars-to-bytes(strcon(char char*)) = bytes(char char*')
+
+[bts]	strcon(char*) = bytes-to-chars(bytes)
+	===
+	bytes-to-string(bytes) = strcon("""char*""")
+
+[btc1]	bytes-to-chars(bytes()) = strcon()
+
+[btc2]	strcon(char*') = bytes-to-chars(bytes(char*))
+	===
+	bytes-to-chars(bytes("
+" char*)) = strcon("\" "n" char*')
+
+[btc3]	strcon(char*') = bytes-to-chars(bytes(char*))
+	===
+	bytes-to-chars(bytes("	"char*)) = strcon("\" "t" char*')
+
+[btc4]	strcon(char*') = bytes-to-chars(bytes(char*))
+	===
+	bytes-to-chars(bytes("\" char*)) = strcon("\" "\" char*')
+
+[btc5]	strcon(char*') = bytes-to-chars(bytes(char*))
+	===
+	bytes-to-chars(bytes(""" char*)) = strcon("\" """ char*')
+
+[default-btc]
+	n = byte-to-octal(byte(char)),
+	n >= 40 & n <= 176 = false,
+	strcon(char1 char2 char3) = octal-to-string(n),
+	strcon(char*') = bytes-to-chars(bytes(char*))
+	===
+	bytes-to-chars(bytes(char char*)) = 
+		strcon("\" char1 char2 char3 char*')
+
+[default-btc]
+	n = byte-to-octal(byte(char)),
+	n >= 40 & n <= 176 = true,
+	strcon(char*') = bytes-to-chars(bytes(char*))
+	===
+	bytes-to-chars(bytes(char char*)) = strcon(char char*')
+
+[nob1]	num-of-bytes(bytes()) = 0
+
+[nob2]	num-of-bytes(bytes(char char*)) = 1 + num-of-bytes(bytes(char*))
+
+[acmp1]	ascii-compare(bytes, bytes) = 0
+
+[acmp2]	ascii-compare(bytes(char char*1),bytes(char char*2)) =
+		ascii-compare(bytes(char*1),bytes(char*2))
+
+[acmp3]	byte(char1) != byte(char2),
+	byte-to-octal(byte(char1)) < byte-to-octal(byte(char2)) = true
+	===
+	ascii-compare(bytes(char1 char*1),bytes(char2 char*2)) = -1
+
+[acmp3]	byte(char1) != byte(char2),
+	byte-to-octal(byte(char1)) > byte-to-octal(byte(char2)) = true
+	===
+	ascii-compare(bytes(char1 char*1),bytes(char2 char*2)) = 1
+
+[default-acmp4]	
+	ascii-compare(bytes(), bytes(char+)) = -1
+
+[default-acmp5]	
+	ascii-compare(bytes(char+), bytes()) = 1
+
+
+
+
+[otc1]	octal-to-string(natcon(char1)) = strcon("0" "0" char1)
+
+[otc2]	octal-to-string(natcon(char1 char2)) = strcon("0" char1 char2)
+
+[otc3]	octal-to-string(natcon(char1 char2 char3)) = strcon(char1 char2 char3)
+
+[001]	octal-to-byte(1) = byte("")
+[002]	octal-to-byte(2) = byte("")
+[003]	octal-to-byte(3) = byte("")
+[004]	octal-to-byte(4) = byte("")
+[005]	octal-to-byte(5) = byte("")
+[006]	octal-to-byte(6) = byte("")
+[007]	octal-to-byte(7) = byte("")
+[008]	octal-to-byte(10) = byte("")
+[009]	octal-to-byte(11) = byte("	")
+[010]	octal-to-byte(12) = byte("
+")
+[011]	octal-to-byte(13) = byte("")
+[012]	octal-to-byte(14) = byte("")
+[013]	octal-to-byte(15) = byte("")
+[014]	octal-to-byte(16) = byte("")
+[015]	octal-to-byte(17) = byte("")
+[016]	octal-to-byte(20) = byte("")
+[017]	octal-to-byte(21) = byte("")
+[018]	octal-to-byte(22) = byte("")
+[019]	octal-to-byte(23) = byte("")
+[020]	octal-to-byte(24) = byte("")
+[021]	octal-to-byte(25) = byte("")
+[022]	octal-to-byte(26) = byte("")
+[023]	octal-to-byte(27) = byte("")
+[024]	octal-to-byte(30) = byte("")
+[025]	octal-to-byte(31) = byte("")
+[026]	octal-to-byte(32) = byte("")
+[027]	octal-to-byte(33) = byte("")
+[028]	octal-to-byte(34) = byte("")
+[029]	octal-to-byte(35) = byte("")
+[030]	octal-to-byte(36) = byte("")
+[031]	octal-to-byte(37) = byte("")
+[032]	octal-to-byte(40) = byte(" ")
+[033]	octal-to-byte(41) = byte("!")
+[034]	octal-to-byte(42) = byte(""")
+[035]	octal-to-byte(43) = byte("#")
+[036]	octal-to-byte(44) = byte("$")
+[037]	octal-to-byte(45) = byte("%")
+[038]	octal-to-byte(46) = byte("&")
+[039]	octal-to-byte(47) = byte("'")
+[040]	octal-to-byte(50) = byte("(")
+[041]	octal-to-byte(51) = byte(")")
+[042]	octal-to-byte(52) = byte("*")
+[043]	octal-to-byte(53) = byte("+")
+[044]	octal-to-byte(54) = byte(",")
+[045]	octal-to-byte(55) = byte("-")
+[046]	octal-to-byte(56) = byte(".")
+[047]	octal-to-byte(57) = byte("/")
+[048]	octal-to-byte(60) = byte("0")
+[049]	octal-to-byte(61) = byte("1")
+[050]	octal-to-byte(62) = byte("2")
+[051]	octal-to-byte(63) = byte("3")
+[052]	octal-to-byte(64) = byte("4")
+[053]	octal-to-byte(65) = byte("5")
+[054]	octal-to-byte(66) = byte("6")
+[055]	octal-to-byte(67) = byte("7")
+[056]	octal-to-byte(70) = byte("8")
+[057]	octal-to-byte(71) = byte("9")
+[058]	octal-to-byte(72) = byte(":")
+[059]	octal-to-byte(73) = byte(";")
+[060]	octal-to-byte(74) = byte("<")
+[061]	octal-to-byte(75) = byte("=")
+[062]	octal-to-byte(76) = byte(">")
+[063]	octal-to-byte(77) = byte("?")
+[064]	octal-to-byte(100) = byte("@")
+[065]	octal-to-byte(101) = byte("A")
+[066]	octal-to-byte(102) = byte("B")
+[067]	octal-to-byte(103) = byte("C")
+[068]	octal-to-byte(104) = byte("D")
+[069]	octal-to-byte(105) = byte("E")
+[070]	octal-to-byte(106) = byte("F")
+[071]	octal-to-byte(107) = byte("G")
+[072]	octal-to-byte(110) = byte("H")
+[073]	octal-to-byte(111) = byte("I")
+[074]	octal-to-byte(112) = byte("J")
+[075]	octal-to-byte(113) = byte("K")
+[076]	octal-to-byte(114) = byte("L")
+[077]	octal-to-byte(115) = byte("M")
+[078]	octal-to-byte(116) = byte("N")
+[079]	octal-to-byte(117) = byte("O")
+[080]	octal-to-byte(120) = byte("P")
+[081]	octal-to-byte(121) = byte("Q")
+[082]	octal-to-byte(122) = byte("R")
+[083]	octal-to-byte(123) = byte("S")
+[084]	octal-to-byte(124) = byte("T")
+[085]	octal-to-byte(125) = byte("U")
+[086]	octal-to-byte(126) = byte("V")
+[087]	octal-to-byte(127) = byte("W")
+[088]	octal-to-byte(130) = byte("X")
+[089]	octal-to-byte(131) = byte("Y")
+[090]	octal-to-byte(132) = byte("Z")
+[091]	octal-to-byte(133) = byte("[")
+[092]	octal-to-byte(134) = byte("\")
+[093]	octal-to-byte(135) = byte("]")
+[094]	octal-to-byte(136) = byte("^")
+[095]	octal-to-byte(137) = byte("_")
+[096]	octal-to-byte(140) = byte("`")
+[097]	octal-to-byte(141) = byte("a")
+[098]	octal-to-byte(142) = byte("b")
+[099]	octal-to-byte(143) = byte("c")
+[100]	octal-to-byte(144) = byte("d")
+[101]	octal-to-byte(145) = byte("e")
+[102]	octal-to-byte(146) = byte("f")
+[103]	octal-to-byte(147) = byte("g")
+[104]	octal-to-byte(150) = byte("h")
+[105]	octal-to-byte(151) = byte("i")
+[106]	octal-to-byte(152) = byte("j")
+[107]	octal-to-byte(153) = byte("k")
+[108]	octal-to-byte(154) = byte("l")
+[109]	octal-to-byte(155) = byte("m")
+[110]	octal-to-byte(156) = byte("n")
+[111]	octal-to-byte(157) = byte("o")
+[112]	octal-to-byte(160) = byte("p")
+[113]	octal-to-byte(161) = byte("q")
+[114]	octal-to-byte(162) = byte("r")
+[115]	octal-to-byte(163) = byte("s")
+[116]	octal-to-byte(164) = byte("t")
+[117]	octal-to-byte(165) = byte("u")
+[118]	octal-to-byte(166) = byte("v")
+[119]	octal-to-byte(167) = byte("w")
+[120]	octal-to-byte(170) = byte("x")
+[121]	octal-to-byte(171) = byte("y")
+[122]	octal-to-byte(172) = byte("z")
+[123]	octal-to-byte(173) = byte("{")
+[124]	octal-to-byte(174) = byte("|")
+[125]	octal-to-byte(175) = byte("}")
+[126]	octal-to-byte(176) = byte("~")
+[127]	octal-to-byte(177) = byte("")
+[128]	octal-to-byte(200) = byte("Ä")
+[129]	octal-to-byte(201) = byte("Å")
+[130]	octal-to-byte(202) = byte("Ç")
+[131]	octal-to-byte(203) = byte("É")
+[132]	octal-to-byte(204) = byte("Ñ")
+[133]	octal-to-byte(205) = byte("Ö")
+[134]	octal-to-byte(206) = byte("Ü")
+[135]	octal-to-byte(207) = byte("á")
+[136]	octal-to-byte(210) = byte("à")
+[137]	octal-to-byte(211) = byte("â")
+[138]	octal-to-byte(212) = byte("ä")
+[139]	octal-to-byte(213) = byte("ã")
+[140]	octal-to-byte(214) = byte("å")
+[141]	octal-to-byte(215) = byte("ç")
+[142]	octal-to-byte(216) = byte("é")
+[143]	octal-to-byte(217) = byte("è")
+[144]	octal-to-byte(220) = byte("ê")
+[145]	octal-to-byte(221) = byte("ë")
+[146]	octal-to-byte(222) = byte("í")
+[147]	octal-to-byte(223) = byte("ì")
+[148]	octal-to-byte(224) = byte("î")
+[149]	octal-to-byte(225) = byte("ï")
+[150]	octal-to-byte(226) = byte("ñ")
+[151]	octal-to-byte(227) = byte("ó")
+[152]	octal-to-byte(230) = byte("ò")
+[153]	octal-to-byte(231) = byte("ô")
+[154]	octal-to-byte(232) = byte("ö")
+[155]	octal-to-byte(233) = byte("õ")
+[156]	octal-to-byte(234) = byte("ú")
+[157]	octal-to-byte(235) = byte("ù")
+[158]	octal-to-byte(236) = byte("û")
+[159]	octal-to-byte(237) = byte("ü")
+[160]	octal-to-byte(240) = byte("†")
+[161]	octal-to-byte(241) = byte("°")
+[162]	octal-to-byte(242) = byte("¢")
+[163]	octal-to-byte(243) = byte("£")
+[164]	octal-to-byte(244) = byte("§")
+[165]	octal-to-byte(245) = byte("•")
+[166]	octal-to-byte(246) = byte("¶")
+[167]	octal-to-byte(247) = byte("ß")
+[168]	octal-to-byte(250) = byte("®")
+[169]	octal-to-byte(251) = byte("©")
+[170]	octal-to-byte(252) = byte("™")
+[171]	octal-to-byte(253) = byte("´")
+[172]	octal-to-byte(254) = byte("¨")
+[173]	octal-to-byte(255) = byte("≠")
+[174]	octal-to-byte(256) = byte("Æ")
+[175]	octal-to-byte(257) = byte("Ø")
+[176]	octal-to-byte(260) = byte("∞")
+[177]	octal-to-byte(261) = byte("±")
+[178]	octal-to-byte(262) = byte("≤")
+[179]	octal-to-byte(263) = byte("≥")
+[180]	octal-to-byte(264) = byte("¥")
+[181]	octal-to-byte(265) = byte("µ")
+[182]	octal-to-byte(266) = byte("∂")
+[183]	octal-to-byte(267) = byte("∑")
+[184]	octal-to-byte(270) = byte("∏")
+[185]	octal-to-byte(271) = byte("π")
+[186]	octal-to-byte(272) = byte("∫")
+[187]	octal-to-byte(273) = byte("ª")
+[188]	octal-to-byte(274) = byte("º")
+[189]	octal-to-byte(275) = byte("Ω")
+[190]	octal-to-byte(276) = byte("æ")
+[191]	octal-to-byte(277) = byte("ø")
+[192]	octal-to-byte(300) = byte("¿")
+[193]	octal-to-byte(301) = byte("¡")
+[194]	octal-to-byte(302) = byte("¬")
+[195]	octal-to-byte(303) = byte("√")
+[196]	octal-to-byte(304) = byte("ƒ")
+[197]	octal-to-byte(305) = byte("≈")
+[198]	octal-to-byte(306) = byte("∆")
+[199]	octal-to-byte(307) = byte("«")
+[200]	octal-to-byte(310) = byte("»")
+[201]	octal-to-byte(311) = byte("…")
+[202]	octal-to-byte(312) = byte(" ")
+[203]	octal-to-byte(313) = byte("À")
+[204]	octal-to-byte(314) = byte("Ã")
+[205]	octal-to-byte(315) = byte("Õ")
+[206]	octal-to-byte(316) = byte("Œ")
+[207]	octal-to-byte(317) = byte("œ")
+[208]	octal-to-byte(320) = byte("–")
+[209]	octal-to-byte(321) = byte("—")
+[210]	octal-to-byte(322) = byte("“")
+[211]	octal-to-byte(323) = byte("”")
+[212]	octal-to-byte(324) = byte("‘")
+[213]	octal-to-byte(325) = byte("’")
+[214]	octal-to-byte(326) = byte("÷")
+[215]	octal-to-byte(327) = byte("◊")
+[216]	octal-to-byte(330) = byte("ÿ")
+[217]	octal-to-byte(331) = byte("Ÿ")
+[218]	octal-to-byte(332) = byte("⁄")
+[219]	octal-to-byte(333) = byte("€")
+[220]	octal-to-byte(334) = byte("‹")
+[221]	octal-to-byte(335) = byte("›")
+[222]	octal-to-byte(336) = byte("ﬁ")
+[223]	octal-to-byte(337) = byte("ﬂ")
+[224]	octal-to-byte(340) = byte("‡")
+[225]	octal-to-byte(341) = byte("·")
+[226]	octal-to-byte(342) = byte("‚")
+[227]	octal-to-byte(343) = byte("„")
+[228]	octal-to-byte(344) = byte("‰")
+[229]	octal-to-byte(345) = byte("Â")
+[230]	octal-to-byte(346) = byte("Ê")
+[231]	octal-to-byte(347) = byte("Á")
+[232]	octal-to-byte(350) = byte("Ë")
+[233]	octal-to-byte(351) = byte("È")
+[234]	octal-to-byte(352) = byte("Í")
+[235]	octal-to-byte(353) = byte("Î")
+[236]	octal-to-byte(354) = byte("Ï")
+[237]	octal-to-byte(355) = byte("Ì")
+[238]	octal-to-byte(356) = byte("Ó")
+[239]	octal-to-byte(357) = byte("Ô")
+[240]	octal-to-byte(360) = byte("")
+[241]	octal-to-byte(361) = byte("Ò")
+[242]	octal-to-byte(362) = byte("Ú")
+[243]	octal-to-byte(363) = byte("Û")
+[244]	octal-to-byte(364) = byte("Ù")
+[245]	octal-to-byte(365) = byte("ı")
+[246]	octal-to-byte(366) = byte("ˆ")
+[247]	octal-to-byte(367) = byte("˜")
+[248]	octal-to-byte(370) = byte("¯")
+[249]	octal-to-byte(371) = byte("˘")
+[250]	octal-to-byte(372) = byte("˙")
+[251]	octal-to-byte(373) = byte("˚")
+[252]	octal-to-byte(374) = byte("¸")
+[253]	octal-to-byte(375) = byte("˝")
+[254]	octal-to-byte(376) = byte("˛")
+[001]	byte-to-octal(byte("")) = 1
+[002]	byte-to-octal(byte("")) = 2
+[003]	byte-to-octal(byte("")) = 3
+[004]	byte-to-octal(byte("")) = 4
+[005]	byte-to-octal(byte("")) = 5
+[006]	byte-to-octal(byte("")) = 6
+[007]	byte-to-octal(byte("")) = 7
+[008]	byte-to-octal(byte("")) = 10
+[009]	byte-to-octal(byte("	")) = 11
+[010]	byte-to-octal(byte("
+")) = 12
+[011]	byte-to-octal(byte("")) = 13
+[012]	byte-to-octal(byte("")) = 14
+[013]	byte-to-octal(byte("")) = 15
+[014]	byte-to-octal(byte("")) = 16
+[015]	byte-to-octal(byte("")) = 17
+[016]	byte-to-octal(byte("")) = 20
+[017]	byte-to-octal(byte("")) = 21
+[018]	byte-to-octal(byte("")) = 22
+[019]	byte-to-octal(byte("")) = 23
+[020]	byte-to-octal(byte("")) = 24
+[021]	byte-to-octal(byte("")) = 25
+[022]	byte-to-octal(byte("")) = 26
+[023]	byte-to-octal(byte("")) = 27
+[024]	byte-to-octal(byte("")) = 30
+[025]	byte-to-octal(byte("")) = 31
+[026]	byte-to-octal(byte("")) = 32
+[027]	byte-to-octal(byte("")) = 33
+[028]	byte-to-octal(byte("")) = 34
+[029]	byte-to-octal(byte("")) = 35
+[030]	byte-to-octal(byte("")) = 36
+[031]	byte-to-octal(byte("")) = 37
+[032]	byte-to-octal(byte(" ")) = 40
+[033]	byte-to-octal(byte("!")) = 41
+[034]	byte-to-octal(byte(""")) = 42
+[035]	byte-to-octal(byte("#")) = 43
+[036]	byte-to-octal(byte("$")) = 44
+[037]	byte-to-octal(byte("%")) = 45
+[038]	byte-to-octal(byte("&")) = 46
+[039]	byte-to-octal(byte("'")) = 47
+[040]	byte-to-octal(byte("(")) = 50
+[041]	byte-to-octal(byte(")")) = 51
+[042]	byte-to-octal(byte("*")) = 52
+[043]	byte-to-octal(byte("+")) = 53
+[044]	byte-to-octal(byte(",")) = 54
+[045]	byte-to-octal(byte("-")) = 55
+[046]	byte-to-octal(byte(".")) = 56
+[047]	byte-to-octal(byte("/")) = 57
+[048]	byte-to-octal(byte("0")) = 60
+[049]	byte-to-octal(byte("1")) = 61
+[050]	byte-to-octal(byte("2")) = 62
+[051]	byte-to-octal(byte("3")) = 63
+[052]	byte-to-octal(byte("4")) = 64
+[053]	byte-to-octal(byte("5")) = 65
+[054]	byte-to-octal(byte("6")) = 66
+[055]	byte-to-octal(byte("7")) = 67
+[056]	byte-to-octal(byte("8")) = 70
+[057]	byte-to-octal(byte("9")) = 71
+[058]	byte-to-octal(byte(":")) = 72
+[059]	byte-to-octal(byte(";")) = 73
+[060]	byte-to-octal(byte("<")) = 74
+[061]	byte-to-octal(byte("=")) = 75
+[062]	byte-to-octal(byte(">")) = 76
+[063]	byte-to-octal(byte("?")) = 77
+[064]	byte-to-octal(byte("@")) = 100
+[065]	byte-to-octal(byte("A")) = 101
+[066]	byte-to-octal(byte("B")) = 102
+[067]	byte-to-octal(byte("C")) = 103
+[068]	byte-to-octal(byte("D")) = 104
+[069]	byte-to-octal(byte("E")) = 105
+[070]	byte-to-octal(byte("F")) = 106
+[071]	byte-to-octal(byte("G")) = 107
+[072]	byte-to-octal(byte("H")) = 110
+[073]	byte-to-octal(byte("I")) = 111
+[074]	byte-to-octal(byte("J")) = 112
+[075]	byte-to-octal(byte("K")) = 113
+[076]	byte-to-octal(byte("L")) = 114
+[077]	byte-to-octal(byte("M")) = 115
+[078]	byte-to-octal(byte("N")) = 116
+[079]	byte-to-octal(byte("O")) = 117
+[080]	byte-to-octal(byte("P")) = 120
+[081]	byte-to-octal(byte("Q")) = 121
+[082]	byte-to-octal(byte("R")) = 122
+[083]	byte-to-octal(byte("S")) = 123
+[084]	byte-to-octal(byte("T")) = 124
+[085]	byte-to-octal(byte("U")) = 125
+[086]	byte-to-octal(byte("V")) = 126
+[087]	byte-to-octal(byte("W")) = 127
+[088]	byte-to-octal(byte("X")) = 130
+[089]	byte-to-octal(byte("Y")) = 131
+[090]	byte-to-octal(byte("Z")) = 132
+[091]	byte-to-octal(byte("[")) = 133
+[092]	byte-to-octal(byte("\")) = 134
+[093]	byte-to-octal(byte("]")) = 135
+[094]	byte-to-octal(byte("^")) = 136
+[095]	byte-to-octal(byte("_")) = 137
+[096]	byte-to-octal(byte("`")) = 140
+[097]	byte-to-octal(byte("a")) = 141
+[098]	byte-to-octal(byte("b")) = 142
+[099]	byte-to-octal(byte("c")) = 143
+[100]	byte-to-octal(byte("d")) = 144
+[101]	byte-to-octal(byte("e")) = 145
+[102]	byte-to-octal(byte("f")) = 146
+[103]	byte-to-octal(byte("g")) = 147
+[104]	byte-to-octal(byte("h")) = 150
+[105]	byte-to-octal(byte("i")) = 151
+[106]	byte-to-octal(byte("j")) = 152
+[107]	byte-to-octal(byte("k")) = 153
+[108]	byte-to-octal(byte("l")) = 154
+[109]	byte-to-octal(byte("m")) = 155
+[110]	byte-to-octal(byte("n")) = 156
+[111]	byte-to-octal(byte("o")) = 157
+[112]	byte-to-octal(byte("p")) = 160
+[113]	byte-to-octal(byte("q")) = 161
+[114]	byte-to-octal(byte("r")) = 162
+[115]	byte-to-octal(byte("s")) = 163
+[116]	byte-to-octal(byte("t")) = 164
+[117]	byte-to-octal(byte("u")) = 165
+[118]	byte-to-octal(byte("v")) = 166
+[119]	byte-to-octal(byte("w")) = 167
+[120]	byte-to-octal(byte("x")) = 170
+[121]	byte-to-octal(byte("y")) = 171
+[122]	byte-to-octal(byte("z")) = 172
+[123]	byte-to-octal(byte("{")) = 173
+[124]	byte-to-octal(byte("|")) = 174
+[125]	byte-to-octal(byte("}")) = 175
+[126]	byte-to-octal(byte("~")) = 176
+[127]	byte-to-octal(byte("")) = 177
+[128]	byte-to-octal(byte("Ä")) = 200
+[129]	byte-to-octal(byte("Å")) = 201
+[130]	byte-to-octal(byte("Ç")) = 202
+[131]	byte-to-octal(byte("É")) = 203
+[132]	byte-to-octal(byte("Ñ")) = 204
+[133]	byte-to-octal(byte("Ö")) = 205
+[134]	byte-to-octal(byte("Ü")) = 206
+[135]	byte-to-octal(byte("á")) = 207
+[136]	byte-to-octal(byte("à")) = 210
+[137]	byte-to-octal(byte("â")) = 211
+[138]	byte-to-octal(byte("ä")) = 212
+[139]	byte-to-octal(byte("ã")) = 213
+[140]	byte-to-octal(byte("å")) = 214
+[141]	byte-to-octal(byte("ç")) = 215
+[142]	byte-to-octal(byte("é")) = 216
+[143]	byte-to-octal(byte("è")) = 217
+[144]	byte-to-octal(byte("ê")) = 220
+[145]	byte-to-octal(byte("ë")) = 221
+[146]	byte-to-octal(byte("í")) = 222
+[147]	byte-to-octal(byte("ì")) = 223
+[148]	byte-to-octal(byte("î")) = 224
+[149]	byte-to-octal(byte("ï")) = 225
+[150]	byte-to-octal(byte("ñ")) = 226
+[151]	byte-to-octal(byte("ó")) = 227
+[152]	byte-to-octal(byte("ò")) = 230
+[153]	byte-to-octal(byte("ô")) = 231
+[154]	byte-to-octal(byte("ö")) = 232
+[155]	byte-to-octal(byte("õ")) = 233
+[156]	byte-to-octal(byte("ú")) = 234
+[157]	byte-to-octal(byte("ù")) = 235
+[158]	byte-to-octal(byte("û")) = 236
+[159]	byte-to-octal(byte("ü")) = 237
+[160]	byte-to-octal(byte("†")) = 240
+[161]	byte-to-octal(byte("°")) = 241
+[162]	byte-to-octal(byte("¢")) = 242
+[163]	byte-to-octal(byte("£")) = 243
+[164]	byte-to-octal(byte("§")) = 244
+[165]	byte-to-octal(byte("•")) = 245
+[166]	byte-to-octal(byte("¶")) = 246
+[167]	byte-to-octal(byte("ß")) = 247
+[168]	byte-to-octal(byte("®")) = 250
+[169]	byte-to-octal(byte("©")) = 251
+[170]	byte-to-octal(byte("™")) = 252
+[171]	byte-to-octal(byte("´")) = 253
+[172]	byte-to-octal(byte("¨")) = 254
+[173]	byte-to-octal(byte("≠")) = 255
+[174]	byte-to-octal(byte("Æ")) = 256
+[175]	byte-to-octal(byte("Ø")) = 257
+[176]	byte-to-octal(byte("∞")) = 260
+[177]	byte-to-octal(byte("±")) = 261
+[178]	byte-to-octal(byte("≤")) = 262
+[179]	byte-to-octal(byte("≥")) = 263
+[180]	byte-to-octal(byte("¥")) = 264
+[181]	byte-to-octal(byte("µ")) = 265
+[182]	byte-to-octal(byte("∂")) = 266
+[183]	byte-to-octal(byte("∑")) = 267
+[184]	byte-to-octal(byte("∏")) = 270
+[185]	byte-to-octal(byte("π")) = 271
+[186]	byte-to-octal(byte("∫")) = 272
+[187]	byte-to-octal(byte("ª")) = 273
+[188]	byte-to-octal(byte("º")) = 274
+[189]	byte-to-octal(byte("Ω")) = 275
+[190]	byte-to-octal(byte("æ")) = 276
+[191]	byte-to-octal(byte("ø")) = 277
+[192]	byte-to-octal(byte("¿")) = 300
+[193]	byte-to-octal(byte("¡")) = 301
+[194]	byte-to-octal(byte("¬")) = 302
+[195]	byte-to-octal(byte("√")) = 303
+[196]	byte-to-octal(byte("ƒ")) = 304
+[197]	byte-to-octal(byte("≈")) = 305
+[198]	byte-to-octal(byte("∆")) = 306
+[199]	byte-to-octal(byte("«")) = 307
+[200]	byte-to-octal(byte("»")) = 310
+[201]	byte-to-octal(byte("…")) = 311
+[202]	byte-to-octal(byte(" ")) = 312
+[203]	byte-to-octal(byte("À")) = 313
+[204]	byte-to-octal(byte("Ã")) = 314
+[205]	byte-to-octal(byte("Õ")) = 315
+[206]	byte-to-octal(byte("Œ")) = 316
+[207]	byte-to-octal(byte("œ")) = 317
+[208]	byte-to-octal(byte("–")) = 320
+[209]	byte-to-octal(byte("—")) = 321
+[210]	byte-to-octal(byte("“")) = 322
+[211]	byte-to-octal(byte("”")) = 323
+[212]	byte-to-octal(byte("‘")) = 324
+[213]	byte-to-octal(byte("’")) = 325
+[214]	byte-to-octal(byte("÷")) = 326
+[215]	byte-to-octal(byte("◊")) = 327
+[216]	byte-to-octal(byte("ÿ")) = 330
+[217]	byte-to-octal(byte("Ÿ")) = 331
+[218]	byte-to-octal(byte("⁄")) = 332
+[219]	byte-to-octal(byte("€")) = 333
+[220]	byte-to-octal(byte("‹")) = 334
+[221]	byte-to-octal(byte("›")) = 335
+[222]	byte-to-octal(byte("ﬁ")) = 336
+[223]	byte-to-octal(byte("ﬂ")) = 337
+[224]	byte-to-octal(byte("‡")) = 340
+[225]	byte-to-octal(byte("·")) = 341
+[226]	byte-to-octal(byte("‚")) = 342
+[227]	byte-to-octal(byte("„")) = 343
+[228]	byte-to-octal(byte("‰")) = 344
+[229]	byte-to-octal(byte("Â")) = 345
+[230]	byte-to-octal(byte("Ê")) = 346
+[231]	byte-to-octal(byte("Á")) = 347
+[232]	byte-to-octal(byte("Ë")) = 350
+[233]	byte-to-octal(byte("È")) = 351
+[234]	byte-to-octal(byte("Í")) = 352
+[235]	byte-to-octal(byte("Î")) = 353
+[236]	byte-to-octal(byte("Ï")) = 354
+[237]	byte-to-octal(byte("Ì")) = 355
+[238]	byte-to-octal(byte("Ó")) = 356
+[239]	byte-to-octal(byte("Ô")) = 357
+[240]	byte-to-octal(byte("")) = 360
+[241]	byte-to-octal(byte("Ò")) = 361
+[242]	byte-to-octal(byte("Ú")) = 362
+[243]	byte-to-octal(byte("Û")) = 363
+[244]	byte-to-octal(byte("Ù")) = 364
+[245]	byte-to-octal(byte("ı")) = 365
+[246]	byte-to-octal(byte("ˆ")) = 366
+[247]	byte-to-octal(byte("˜")) = 367
+[248]	byte-to-octal(byte("¯")) = 370
+[249]	byte-to-octal(byte("˘")) = 371
+[250]	byte-to-octal(byte("˙")) = 372
+[251]	byte-to-octal(byte("˚")) = 373
+[252]	byte-to-octal(byte("¸")) = 374
+[253]	byte-to-octal(byte("˝")) = 375
+[254]	byte-to-octal(byte("˛")) = 376
