@@ -36,21 +36,10 @@ INCLUDES        = -I$(top_srcdir)/libtb -I.
 
 CLEANFILES      = clock.tif.c log.tif.c calc.tif.c batch.tif.c calc.tifs
 
-$(srcdir)/clock.c: clock.tif.c
-clock.tif.c: calc.tifs
-	$(top_builddir)/toolbus/ctif -tool clock -tifs $<
+${srcdir}/%.c: %.tif.c
 
-$(srcdir)/log.c :log.tif.c
-log.tif.c: calc.tifs
-	$(top_builddir)/toolbus/ctif -tool log -tifs $<
-
-$(srcdir)/calc.c: calc.tif.c
-calc.tif.c: calc.tifs
-	$(top_builddir)/toolbus/ctif -tool calc -tifs $<
-
-$(srcdir)/batch.c:batch.tif.c
-batch.tif.c: calc.tifs
-	$(top_builddir)/toolbus/ctif -tool batch -tifs $<
+%.tif.c: calc.tifs
+	$(top_builddir)/toolbus/ctif -tool $* -tifs $<
 
 %.tifs: %.tb
 	$(top_builddir)/toolbus/toolbus -gentifs $<

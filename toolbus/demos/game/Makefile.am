@@ -28,10 +28,10 @@ INCLUDES        = -I$(top_srcdir)/libtb -I.
 
 CLEANFILES      = board.tif.c game.tifs
 
-$(srcdir)/board.c : board.tif.c
+$(srcdir)/%.c : %.tif.c
 
-board.tif.c : game.tifs
-	$(top_builddir)/toolbus/ctif -tool board -tifs $<
+%.tif.c : game.tifs
+	$(top_builddir)/toolbus/ctif -tool $@ -tifs $<
 
 %.tifs: %.tb
 	$(top_builddir)/toolbus/toolbus -gentifs $<
