@@ -324,7 +324,8 @@ ATerm rewrite_traversal(ATerm trm, ATerm env, int depth, ATerm *traversal)
 				/* if no match, traverse down to the children */
 				args = (ATermList) asfix_get_appl_args(trm);
 				newargs = rewrite_args_traversal(args,env,depth,traversal);
-				rewtrm = (ATerm) asfix_put_appl_args(trm,newargs);
+        /* on the way back, we check for new redices */
+				rewtrm =  rewrite((ATerm) asfix_put_appl_args(trm,newargs), env, depth);
 
 			}  else { /* reduction occurred, we need postprocessing */
 				if(is_analyzer(*traversal)) {
