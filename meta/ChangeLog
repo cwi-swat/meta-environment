@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Feb 10 17:49:38 CET 2004 <jurgenv@cwi.nl>
+ * in-output and term-store tools run a garbage collect after 
+   every event using -TB_COLLECT_LOOP 1 in their tool definition.
+
 Tue Feb 10 14:55:38 CET 2004 <m336@cwi.nl>
  * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
 
