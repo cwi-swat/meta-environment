@@ -1,5 +1,5 @@
 /*
- * Generated at Fri Oct  3 17:25:39 2003
+ * Generated at Tue Oct  7 15:16:27 2003
  */
 
 #ifndef __SDFME_dict_H
@@ -232,6 +232,7 @@ extern AFun SDF_afun221;
 extern AFun SDF_afun222;
 extern AFun SDF_afun223;
 extern AFun SDF_afun224;
+extern AFun SDF_afun225;
 
 extern ATerm SDF_patternStartAlias;
 extern ATerm SDF_patternStartAliases;
@@ -363,6 +364,8 @@ extern ATerm SDF_patternRenamingListMany;
 extern ATerm SDF_patternRenamingListSingle;
 extern ATerm SDF_patternRenamingListEmpty;
 extern ATerm SDF_patternRenamingsRenamings;
+extern ATerm SDF_patternSymbolRestMany;
+extern ATerm SDF_patternSymbolRestSingle;
 extern ATerm SDF_patternSymbolTailMany;
 extern ATerm SDF_patternSymbolTailSingle;
 extern ATerm SDF_patternPriorityListMany;
@@ -425,6 +428,7 @@ extern ATerm SDF_patternSymbolCf;
 extern ATerm SDF_patternSymbolAlt;
 extern ATerm SDF_patternSymbolFunc;
 extern ATerm SDF_patternSymbolPair;
+extern ATerm SDF_patternSymbolTuple;
 extern ATerm SDF_patternSymbolIterSepN;
 extern ATerm SDF_patternSymbolIterN;
 extern ATerm SDF_patternSymbolIterStarSep;

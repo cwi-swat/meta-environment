@@ -115,6 +115,26 @@ static PT_Symbols SDFSymbolParametersToPtSymbols(SDF_SymbolParameters sdfSymbols
   return ptSymbols;
 }
 
+static PT_Symbols SDFSymbolRestToPtSymbols(SDF_SymbolRest sdfSymbols)
+{
+  PT_Symbols ptSymbols = PT_makeSymbolsEmpty();
+
+  while (SDF_hasSymbolRestHead(sdfSymbols)) {
+    SDF_Symbol sdfSymbol = SDF_getSymbolRestHead(sdfSymbols);
+    PT_Symbol ptSymbol = SDFSymbolToPtSymbol(sdfSymbol);
+
+    ptSymbols = PT_appendSymbols(ptSymbols, ptSymbol);
+
+
+    if (SDF_isSymbolRestSingle(sdfSymbols)) {
+      break;
+    }
+    sdfSymbols = SDF_getSymbolRestTail(sdfSymbols);
+  }
+
+  return ptSymbols;
+}
+
 PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
 {
   PT_Symbol result = NULL;
@@ -214,7 +234,14 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     SDF_Symbol sdfRight = SDF_getSymbolRight(sdfSymbol);
     PT_Symbol ptLeft = SDFSymbolToPtSymbol(sdfLeft);
     PT_Symbol ptRight = SDFSymbolToPtSymbol(sdfRight);
-    result = PT_makeSymbolPair(ptLeft, ptRight);
+    result = PT_makeSymbolTuple(ptLeft, PT_makeSymbolsList(ptRight,PT_makeSymbolsEmpty()));
+  }
+  else if (SDF_isSymbolTuple(sdfSymbol)) {
+    SDF_Symbol sdfHead = SDF_getSymbolHead(sdfSymbol);
+    SDF_SymbolRest sdfRest = SDF_getSymbolRest(sdfSymbol);
+    PT_Symbol ptHead = SDFSymbolToPtSymbol(sdfHead);
+    PT_Symbols ptRest = SDFSymbolRestToPtSymbols(sdfRest);
+    result = PT_makeSymbolTuple(ptHead, ptRest);
   }
   else if (SDF_isSymbolFunc(sdfSymbol)) {
     SDF_Symbols sdfArguments = SDF_getSymbolArguments(sdfSymbol);

@@ -1,6 +1,7 @@
-definition 
+ definition 
 
 module Main
+
 imports languages/sdf2/syntax/Sdf2
 
 module languages/sdf2/syntax/Aliases
@@ -163,6 +164,7 @@ exports
     "{" Symbol sep:Symbol "}" "*"    -> Symbol                  {cons("iter-star-sep")}
     Symbol  n:NatCon "+"             -> Symbol                  {cons("iter-n")}
     "{" Symbol sep:Symbol "}" n:NatCon "+" -> Symbol            {cons("iter-sep-n")}
+    "<" head:Symbol "," rest:{Symbol ","}+ ">" -> Symbol        {cons("tuple")}
     "left":Symbol "#" "right":Symbol -> Symbol                  {right,cons("pair")}
     "(" arguments:Symbols "=>" results:Symbol ")"  -> Symbol    {cons("func")}
     "left":Symbol "|" "right":Symbol -> Symbol                  {right,cons("alt")}

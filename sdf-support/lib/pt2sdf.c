@@ -15,6 +15,7 @@
 /*}}}  */
 
 static SDF_SymbolList PTSymbolsToSDFSymbolList(PT_Symbols ptSymbols);
+static SDF_SymbolRest PTSymbolsToSDFSymbolRest(PT_Symbols ptSymbols);
 
 /*{{{  static SDF_Attribute PTAttrToSDFAttribute(PT_Attr ptAttr) */
 
@@ -233,14 +234,16 @@ SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
                                SDF_makeLayoutEmpty(),
                                sdfRhs);
   }
-  else if (PT_isSymbolPair(ptSymbol)) {
-    SDF_Symbol sdfLhs = PTSymbolToSDFSymbol(PT_getSymbolLhs(ptSymbol));
-    SDF_Symbol sdfRhs = PTSymbolToSDFSymbol(PT_getSymbolRhs(ptSymbol));
+  else if (PT_isSymbolTuple(ptSymbol)) {
+    SDF_Symbol sdfHead = PTSymbolToSDFSymbol(PT_getSymbolHead(ptSymbol));
+    SDF_SymbolRest sdfRest = PTSymbolsToSDFSymbolRest(PT_getSymbolRest(ptSymbol));
 
-    result = SDF_makeSymbolPair(sdfLhs, 
-                                SDF_makeLayoutEmpty(), 
-                                SDF_makeLayoutEmpty(),
-                                sdfRhs);
+    result = SDF_makeSymbolTuple(SDF_makeLayoutEmpty(),
+                                 sdfHead, 
+                                 SDF_makeLayoutEmpty(), 
+                                 SDF_makeLayoutEmpty(),
+                                 sdfRest,
+                                 SDF_makeLayoutEmpty());
   }
   else if (PT_isSymbolSort(ptSymbol)) {
     char *str = PT_getSymbolSort(ptSymbol);
@@ -323,6 +326,41 @@ SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
 
     result = NULL;
   }
+  return result;
+}
+
+/*}}}  */
+/*{{{  static SDF_SymbolRest PTSymbolsToSDFSymbolRest(PT_Symbols ptSymbols) */
+
+static SDF_SymbolRest PTSymbolsToSDFSymbolRest(PT_Symbols ptSymbols)
+{
+  PT_Symbol ptHead;
+  SDF_Symbol sdfHead;
+  PT_Symbols ptTail;
+  SDF_SymbolRest sdfTail;
+  SDF_SymbolRest result;
+
+  switch (PT_getSymbolsLength(ptSymbols)) {
+    case 1:
+      ptHead = PT_getSymbolsHead(ptSymbols);
+      sdfHead = PTSymbolToSDFSymbol(ptHead);
+
+      result = SDF_makeSymbolRestSingle(sdfHead);
+      break;
+
+    default:
+      ptHead = PT_getSymbolsHead(ptSymbols);
+
+      ptTail = PT_getSymbolsTail(ptSymbols);
+
+      ptTail = PT_getSymbolsTail(ptTail);
+      sdfHead = PTSymbolToSDFSymbol(ptHead);
+      sdfTail = PTSymbolsToSDFSymbolRest(ptTail);
+
+      result = SDF_makeSymbolRestMany(sdfHead, SDF_makeLayoutEmpty(), ",", SDF_makeLayoutEmpty(), sdfTail);
+      break;
+  }
+
   return result;
 }
 
