@@ -29,6 +29,7 @@ public class GraphPanel
   //}}}
 
   private String id;
+  private int index;
   
   private GraphWrapper graph;
 
@@ -220,8 +221,8 @@ public class GraphPanel
       //Stroke stroke = g2d.getStroke();
       //g2d.setStroke(new BasicStroke((float)1.5));
       setupColors();
-      paintNodes(g2d);
       paintEdges(g2d);
+      paintNodes(g2d);
     }
   }
 
@@ -569,6 +570,14 @@ public class GraphPanel
   //}}}
   public String getId() {
     return id;
+  }
+
+  public int getIndex() {
+    return index;
+  }
+
+  public void setIndex(int index) {
+    this.index = index;
   }
 
 }

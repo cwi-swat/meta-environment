@@ -575,7 +575,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     graph = GraphWrapper.emptyGraph(factory);
 
     importGraphPanel = new ImportGraphPanel(moduleManager);
-    addGraphPanel(importGraphPanel);
+    addGraphPanel(importGraphPanel, "Import graph");
 
     importGraphPanel.addMouseListener(new MouseAdapter() {
       public void mousePressed(MouseEvent e) {
@@ -594,7 +594,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     //}}}
     
     parseTreePanel = new ParseTreePanel();
-    addGraphPanel(parseTreePanel);
+    addGraphPanel(parseTreePanel, "Parsetree graph");
     
     //{{{ Create message history
 
@@ -701,16 +701,14 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   //}}}
   
-  //{{{ private void addGraphPanel(GraphPanel panel)
-
-  private void addGraphPanel(GraphPanel panel)
+  private void addGraphPanel(GraphPanel panel, String toolTip)
   {
+    int index = graphPanels.size();
+    panel.setIndex(index);
     graphPanels.put(panel.getId(), panel);
-    graphPane.addTab(panel.getId(), new JScrollPane(panel));
+    graphPane.insertTab(panel.getId(), null, new JScrollPane(panel), toolTip, index);
   }
 
-  //}}}
-  
   //{{{ private GraphPanel getGraphPanel(String id)
 
   private GraphPanel getGraphPanel(String id)
@@ -1058,10 +1056,14 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   //{{{ public void graphLayouted(String id, ATerm graphTerm)
 
   public void graphLayouted(String id, ATerm graphTerm) {
-    graph = GraphWrapper.fromTerm(graphTerm);
+    GraphWrapper graph = GraphWrapper.fromTerm(graphTerm);
+    if (id.equals(importGraphPanel.getId())) {
+       this.graph = graph;
+    }
     GraphPanel graphPanel = getGraphPanel(id);
     graphPanel.setGraph(graph);
     graphPanel.repaint();
+    graphPane.setSelectedIndex(graphPanel.getIndex());
   }
 
   //}}}

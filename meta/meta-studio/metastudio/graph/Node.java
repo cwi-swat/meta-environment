@@ -115,7 +115,12 @@ extends NodeImpl
 
   public String getLabel()
   {
-    return getId().getId();
+    Attribute_Label label = getLabelAttribute();
+    if (label == null) {
+      return getId().getId();
+    }
+    
+    return label.getLabel();
   }
 
   //}}}
