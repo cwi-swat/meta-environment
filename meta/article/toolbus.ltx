@@ -23,10 +23,10 @@ this components is specified and in which language it is implemented.
 \begin{tabular}{|l|l|l|} \hline
 Activity            & Specification & Implementation  \\
                     & Language      & Language        \\ \hline \hline
-\aterms             & \asdf         & C, JAVA         \\
-\asfix              & \asdf         & C, JAVA         \\
+\aterms             & \asdf         & C, Java         \\
+\asfix              & \asdf         & C               \\
 \TB                 & \asdf         & C               \\
-Structure editor    & \asdf         & JAVA            \\
+Structure editor    & \asdf         & Java            \\
 Text editor         &               & \tcltk{}        \\
 Interpreter         & \asdf         & C               \\
 Tree repository     & \asdf         & C               \\
@@ -42,8 +42,9 @@ Import manager      & \asdf         & C               \\
 
 %{{{ Intro
 
-The \TB \cite{TB-AMAST96,BK96a}
-is a software application architecture that 
+Our whole design is based on the
+\TB software application architecture\cite{TB-AMAST96,BK96a}
+which is a software application architecture that 
 utilizes a scripting language based on process 
 algebra\cite{BW90} to
 describe the communication between software tools. A \TB\ \emph{script}
@@ -123,15 +124,16 @@ makes it possible to declare variables.
 Debugging in the context of the new \metaenv\ has three dimensions:
 \begin{enumerate}
 \item Debugging the new \metaenv\ itself.
-\item Debugging \asdf\ specifications.
-\item Debugging programs developed using generated programming environments.
+\item Debugging \asdf\ specifications and generated programming environments.
+\item Debugging programs developed using the generated 
+      programming environments.
 \end{enumerate}
 
 Our recent work on generic debugging techniques for distributed,
 heterogeneous environments\cite{COORD97.tide}
 cover both dimension {\tt 1} and {\tt 2}. 
-More research is needed to also use this technology to cover dimension {\tt 3}.
-
+More research is needed to also use this technology to cover dimension {\tt 3},
+which is closely related to techniques like {\em origin tracking}\cite{DHK96}.
 \subsection{Discussion}
 
 There is a huge bulk of future work to be done.  First of all, the
@@ -146,4 +148,5 @@ as well.  Finally, the new \metaenv\ should provide sophisticated help
 facilities and demonstration modes based on internet facilities.
 
 Origin tracking added.
+
 
