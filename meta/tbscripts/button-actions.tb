@@ -549,6 +549,11 @@ in
         snd-msg(create-new-module(Path, ModuleName)) .           
 	ReturnSuccess(EditorId, Stack)	
       +
+	rec-msg(create-module, Stack?, EditorId?) .
+       	StackPopString(Stack, Stack?, ModuleName?) .
+        snd-msg(create-new-module(Path, ModuleName)) .           
+	ReturnSuccess(EditorId, Stack)	
+      +
 	rec-msg(prompt-for-file(String?, Path?, Ext?), Stack?, EditorId?) .
 	snd-msg(ask-for-file(String, Path, Ext)) .
 	rec-msg(ask-for-file-result(FileName?)) .

@@ -152,7 +152,7 @@ buttons([
    button("*",
 	  ["new-module-popup"],
 	  ["Create this module"],
-	  [message("New module not implemented yet")]),
+	  [create-module]),
    button("*",
 	  ["new-module-popup"],
 	  ["Delete this module"],
