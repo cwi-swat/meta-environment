@@ -22,7 +22,7 @@
 
 include ${top_srcdir}/make_rules
 
-bin_PROGRAMS       = meta-paths imports remove-annotation
+bin_PROGRAMS       = meta-paths imports remove-annotation apply-function
 bin_SCRIPTS        = genmakefile parse-file parse-sdf2 ps-dot insert-license \
                      insert-header genamakefile change-sdf2-ext
 
@@ -55,6 +55,9 @@ imports_LDADD      = libutils.a \
 
 remove_annotation_SOURCES = remove-annotation.c
 remove_annotation_LDADD = -L$(ATERMLIB) -lATerm
+
+apply_function_SOURCES = apply-function.c
+apply_function_LDADD = -L$(ATERMLIB) -lATerm -L$(ASFIXLIB) -lAsFix
 
 libutils_a_SOURCES = meta-utils.c meta-utils.h module-utils.c module-utils.h
 
