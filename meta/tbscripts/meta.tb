@@ -28,5 +28,7 @@
 #include "process-eqs.tb"
 #include "save-module.tb" 
 #include "help.tb" 
+#include "anno.tb"
+#include "se.tb"
 
-toolbus(Parser,Parsetrees,Prettyprinter,Io,Ui,Edit-master,ModuleDB,ProcessEqs,Save-modules,Revert-module) 
+toolbus(Parser,Parsetrees,Prettyprinter,Io,Ui,Edit-master,ModuleDB,ProcessEqs,Save-modules,Revert-module,SE,Anno) 
