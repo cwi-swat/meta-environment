@@ -256,9 +256,76 @@ public class ATerms extends ATerm
 
   //}
 
+    public static ATerms dictCreate() {
+	return new ATerms(ATerm.the_world);
+    }
+
+    public ATerms dictPut(ATerm key, ATerm value) {
+	ATerms tmp = this, result = null;
+	ATermList pair, newpair;
+	ATerms done = new ATerms(world);
+	boolean put_in = false;
+	newpair = new ATermList(world, new ATerms(world, key, new ATerms(world, value)));
+	// Look for key
+	while (! (tmp.isEmpty() || put_in)) {
+	    pair = (ATermList)tmp.getFirst();
+	    tmp = tmp.getNext();
+	    if (pair.getATerms().getFirst().equals(key)) {
+		result = done.append(newpair).concat(tmp);
+		put_in = true;
+	    } else {
+		done = done.append(pair);
+	    }
+	}
+	if (! put_in) {
+	    result = done.append(newpair);
+	}
+	return result;
+    }
+
+    public ATerm dictGet(ATerm key) {
+	ATerms tmp = this;
+	ATerm result = null;
+	ATermList pair;
+	ATerms done = new ATerms(world);
+	boolean found = false;
+	// Look for key
+	while (!(tmp.isEmpty() || found)) {
+	    pair = (ATermList)tmp.getFirst();
+	    tmp = tmp.getNext();
+	    if (pair.getATerms().getFirst().equals(key)) {
+		result = pair.getATerms().getNext().getFirst();
+		found = true;
+	    }
+	}
+	return result;
+    }
+    
+    public ATerms dictRemove(ATerm key) {
+	ATerms tmp = this, result = null;
+	ATermList pair;
+	ATerms done = new ATerms(world);
+	boolean removed = false;
+	// Look for key
+	while (! (tmp.isEmpty() || removed)) {
+	    pair = (ATermList)tmp.getFirst();
+	    tmp = tmp.getNext();
+	    if (pair.getATerms().getFirst().equals(key)) {
+		result = done.concat(tmp);
+		removed = true;
+	    } else {
+		done = done.append(pair);
+	    }
+	}
+	return result;
+    }
+
+
+
+
 /* ToDo:
    insert, remove, delete, deleteOnce, replace, index, slice, reverse,
-   pairGetKey, pairGetValue, dictGet, dictPut, dictRemove
+   pairGetKey, pairGetValue
 */
 
 }
