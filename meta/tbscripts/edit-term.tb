@@ -102,6 +102,7 @@ in
        if equal(DirtyFoci, []) then
          ReduceTerm(EditorId, ModuleName)
        else
+         snd-msg(invalidate-tree(EditorId)) .
          ParseTerm(EditorId, ModuleName) .
 	 snd-msg(get-dirty-focuses(EditorId)) .
 	 rec-msg(dirty-focuses(DirtyFoci?)) . 
