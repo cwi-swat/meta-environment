@@ -4,10 +4,10 @@ imports Rscript
 imports containers/Table[RVAR REXPTYPE]
 
 imports ListItems
-imports MyPosInfo[RSTAT]
-imports MyPosInfo[REXP]
-imports MyPosInfo[GENERATOR]
-imports MyPosInfo[Bag[[Elem]]]
+imports utilities/PosInfo[RSTAT]
+imports utilities/PosInfo[REXP]
+imports utilities/PosInfo[GENERATOR]
+imports utilities/PosInfo[Bag[[Elem]]]
 
 imports Rstore
 
@@ -178,7 +178,7 @@ hiddens
      "$Boolean" [0-9\']*    	-> Boolean
      "$NatCon" [0-9\']*    	-> NatCon
      "$Integer" [0-9\']*    	-> Integer
-     "$Area" [0-9\']*    	-> Area
+     "$Loc" [0-9\']*    	-> Location
      "$String" [0-9\']*    	-> String
 
      "$Var" [0-9\']*       	-> RVAR
@@ -220,3 +220,4 @@ hiddens
 
       "$ListOfTypes" [0-9\']*	     -> List[[REXPTYPE]]
 	
+      "Char*" [0-9\']* -> CHAR*

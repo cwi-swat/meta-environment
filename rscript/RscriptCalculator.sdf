@@ -28,7 +28,7 @@ exports
         evalb(REXP, RSTORE)            				-> Bag[[Elem]]
         evalr(REXP, RSTORE)            				-> Bag[[Elem]]
         evalx(REXP, RSTORE)            				-> Elem
-	evala(REXP, RSTORE)					-> Area
+	evall(REXP, RSTORE)					-> Location
 
 	evalc(REXP, RSTORE)					-> RVALUE
 	evalc-test(Boolean, REXP, RSTORE)			-> RVALUE
@@ -136,6 +136,7 @@ hiddens
 	"$DclRvar*" [0-9\']*		-> { DCLRVAR ","}*
 	"$DclRvar+" [0-9\']*		-> { DCLRVAR ","}+
 	"$Area" [0-9\']* 		-> Area
+	"$Loc" [0-9\']* 		-> Location
 
 	"$InitVar" [0-9\']*		-> INITVAR
 	"$InitVar*" [0-9\']*		-> INITVAR*
