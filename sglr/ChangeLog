@@ -1,5 +1,8 @@
 $Id$
 
+2001/10/11 (mdejonge@cwi.nl)
+ * Changed order of EXTRA_DIST files
+
 2001/09/27 (jurgenv@cwi.nl)
  * Due to some changes in the pt-support package, sglr now emits different
    parsetrees in both AsFix2 and AsFix2me. The changes are about the
