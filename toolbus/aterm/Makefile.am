@@ -7,7 +7,6 @@ TOOLBUS			= ${top_builddir}/toolbus/toolbus
 INCLUDES		= -I$(ATERM)/include
 LDFLAGS			= -L$(ATERM)/lib
 
-# deliverables
 lib_LIBRARIES		= libATB.a
 bin_PROGRAMS		= tifstoc tblog
 include_HEADERS		= atb-tool.h
@@ -34,6 +33,3 @@ logger.tif.c logger.tif.h: tblog-interface.tifs
 
 tblog-interface.tifs: tblog-interface.tb
 	$(TOOLBUS) -gentifs $<
-	@if [ "a${VPATH}" != "a" ]; then \
-	  mv ${srcdir}/tblog-interface.tifs $@ ;\
-	fi
