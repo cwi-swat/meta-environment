@@ -1,0 +1,9 @@
+equations
+
+[extractCompilationUnit-start]
+  &Area = get-area(&CompilationUnit),
+  &FileName = get-filename(&Area),
+  &Tuple = <&Area, &FileName>,
+  &Rstore = add-tuple(FILES, &Tuple, rstore())
+  ===>
+  extractCompilationUnit(&CompilationUnit) = &Rstore
