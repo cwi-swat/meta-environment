@@ -1,4 +1,7 @@
 2002/02/05 (jurgenv@cwi.nl)
+ * Bumped to version 1.3
+
+2002/02/05 (jurgenv@cwi.nl)
  * Improved usage message of concat-asf
  * Pos-info is no longer needed for asfe if debugging with Tide is 
    not activated.
