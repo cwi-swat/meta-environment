@@ -32,6 +32,8 @@ static Symbol ef5sym ;
 static funcptr ef5 ;
 static Symbol ef6sym ;
 static funcptr ef6 ;
+static Symbol ef7sym ;
+static funcptr ef7 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol lf2sym ;
@@ -60,6 +62,8 @@ ef5 = lookup_func ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(
 ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"find-list-arg\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"RuleList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),no-attrs)" ) ) ;
 ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"check-emb-lhs-rules\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"RuleList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"check-emb-lhs-rules\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"RuleList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"check-emb-rhs-rules\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"RuleList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"check-emb-rhs-rules\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"RuleList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
@@ -81,7 +85,9 @@ if ( not_empty_list ( atmp000 ) ) {
 if ( term_equal ( ( * ef3 ) ( make_nf1 ( ef1sym , lf2 ( make_list ( atmp000 ) ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ) ) {
 ( tmp [ 0 ] = ( * ef5 ) ( make_nf1 ( ef1sym , lf2 ( make_list ( atmp000 ) ) ) , arg1 ) ) ;
 if ( term_equal ( ( * ef6 ) ( make_nf1 ( ef1sym , lf2 ( make_list ( atmp000 ) ) ) , tmp [ 0 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef7 ) ( make_nf1 ( ef1sym , lf2 ( make_list ( atmp000 ) ) ) , tmp [ 0 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ) ) {
 FUNC_EXIT ( tmp [ 0 ] ) ;
+}
 }
 }
 }

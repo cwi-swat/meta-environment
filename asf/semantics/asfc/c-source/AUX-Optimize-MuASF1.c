@@ -40,10 +40,6 @@ static Symbol lf_AUX_Optimize_MuASF1_8sym ;
 static ATerm lf_AUX_Optimize_MuASF1_8 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_AUX_Optimize_MuASF1_9sym ;
 static ATerm lf_AUX_Optimize_MuASF1_9 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_AUX_Optimize_MuASF1_10sym ;
-static ATerm lf_AUX_Optimize_MuASF1_10 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol lf_AUX_Optimize_MuASF1_11sym ;
-static ATerm lf_AUX_Optimize_MuASF1_11 ( ATerm arg1 , ATerm arg2 ) ;
 void register_AUX_Optimize_MuASF1 ( ) {
 lf_AUX_Optimize_MuASF1_1sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"remove-dummy-list-ids\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Module\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Module\"),w(\"\"),no-attrs)"
  , 1 , ATtrue ) ;
@@ -64,10 +60,6 @@ lf_AUX_Optimize_MuASF1_8sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"
 ATprotectSymbol ( lf_AUX_Optimize_MuASF1_8sym ) ;
 lf_AUX_Optimize_MuASF1_9sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"is-list-injection\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Optimize_MuASF1_9sym ) ;
-lf_AUX_Optimize_MuASF1_10sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"check-emb-rhs-rule\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_AUX_Optimize_MuASF1_10sym ) ;
-lf_AUX_Optimize_MuASF1_11sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"check-emb-rhs-rules\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"RuleList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
-ATprotectSymbol ( lf_AUX_Optimize_MuASF1_11sym ) ;
 register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"remove-dummy-list-ids\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Module\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Module\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_1 , lf_AUX_Optimize_MuASF1_1sym ) ;
 register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"unavailable\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"EmbeddingAt\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_2 , lf_AUX_Optimize_MuASF1_2sym ) ;
 register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"unavailable\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_3 , lf_AUX_Optimize_MuASF1_3sym ) ;
@@ -77,20 +69,10 @@ register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[sort(\"Embedding
 register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"has\"),w(\"\"),sort(\"EmbeddingAt\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_7 , lf_AUX_Optimize_MuASF1_7sym ) ;
 register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"remove-emb-side\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_8 , lf_AUX_Optimize_MuASF1_8sym ) ;
 register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"is-list-injection\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_9 , lf_AUX_Optimize_MuASF1_9sym ) ;
-register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"check-emb-rhs-rule\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_10 , lf_AUX_Optimize_MuASF1_10sym ) ;
-register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"check-emb-rhs-rules\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"RuleList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_11 , lf_AUX_Optimize_MuASF1_11sym ) ;
 }
 void resolve_AUX_Optimize_MuASF1 ( ) {
 }
 void init_AUX_Optimize_MuASF1 ( ) {
-}
-ATerm lf_AUX_Optimize_MuASF1_11 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_AUX_Optimize_MuASF1_11sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_11sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_AUX_Optimize_MuASF1_11sym , arg0 , arg1 ) ) ;
-}
-ATerm lf_AUX_Optimize_MuASF1_10 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_AUX_Optimize_MuASF1_10sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_10sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_AUX_Optimize_MuASF1_10sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_Optimize_MuASF1_9 ( ATerm arg0 , ATerm arg1 ) {
 CONS_ENTRY ( lf_AUX_Optimize_MuASF1_9sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_9sym , arg0 , arg1 ) ) ;

@@ -235,7 +235,9 @@ SPEC_SRCS7=\
    AUX-Locate-Constants3.c AUX-Locate-Constants2.c AUX-Locate-Constants1.c\
    AUX-TermAsFix2muASF8.c AUX-TermAsFix2muASF7.c AUX-TermAsFix2muASF6.c\
    AUX-TermAsFix2muASF5.c AUX-TermAsFix2muASF4.c AUX-TermAsFix2muASF3.c\
-   AUX-TermAsFix2muASF2.c AUX-TermAsFix2muASF1.c AUX-Optimize-MuASF34.c\
+   AUX-TermAsFix2muASF2.c AUX-TermAsFix2muASF1.c AUX-Optimize-MuASF40.c\
+   AUX-Optimize-MuASF39.c AUX-Optimize-MuASF38.c AUX-Optimize-MuASF37.c\
+   AUX-Optimize-MuASF36.c AUX-Optimize-MuASF35.c AUX-Optimize-MuASF34.c\
    AUX-Optimize-MuASF33.c AUX-Optimize-MuASF32.c AUX-Optimize-MuASF31.c\
    AUX-Optimize-MuASF30.c AUX-Optimize-MuASF29.c AUX-Optimize-MuASF28.c\
    AUX-Optimize-MuASF27.c AUX-Optimize-MuASF26.c AUX-Optimize-MuASF25.c\
@@ -259,11 +261,11 @@ SPEC_SRCS7=\
    AUX-Make-Left-Linear8.c AUX-Make-Left-Linear7.c AUX-Make-Left-Linear6.c\
    AUX-Make-Left-Linear5.c AUX-Make-Left-Linear4.c AUX-Make-Left-Linear3.c\
    AUX-Make-Left-Linear2.c AUX-Make-Left-Linear1.c AUX-Make-Assign-Conds9.c\
-   AUX-Make-Assign-Conds8.c AUX-Make-Assign-Conds7.c AUX-Make-Assign-Conds6.c\
-   AUX-Make-Assign-Conds5.c AUX-Make-Assign-Conds4.c AUX-Make-Assign-Conds3.c\
-   AUX-Make-Assign-Conds2.c AUX-Make-Assign-Conds1.c AUX-MuASF-Sign2C12.c
+   AUX-Make-Assign-Conds8.c AUX-Make-Assign-Conds7.c AUX-Make-Assign-Conds6.c
 
 SPEC_SRCS8=\
+   AUX-Make-Assign-Conds5.c AUX-Make-Assign-Conds4.c AUX-Make-Assign-Conds3.c\
+   AUX-Make-Assign-Conds2.c AUX-Make-Assign-Conds1.c AUX-MuASF-Sign2C12.c\
    AUX-MuASF-Sign2C11.c AUX-MuASF-Sign2C10.c AUX-MuASF-Sign2C9.c\
    AUX-MuASF-Sign2C8.c AUX-MuASF-Sign2C7.c AUX-MuASF-Sign2C6.c\
    AUX-MuASF-Sign2C5.c AUX-MuASF-Sign2C4.c AUX-MuASF-Sign2C3.c\
