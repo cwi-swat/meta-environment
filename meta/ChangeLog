@@ -1,5 +1,8 @@
 # $Id$
 
+2003/06/18 (markvdb@cs.vu.nl)
+ * Fixed the invalidation bug of editors.
+
 2003/06/16 (iversen@cwi.nl)
  * Made module opening and creation more generic 
    to reduce the code duplication for ActionSdf. 

@@ -773,6 +773,8 @@ in
   InvalidateEditor(EditorId).
   snd-msg(get-module-id-hook(Type)) .
   rec-msg(get-module-id-hook-result(ModuleId?)) .
+  snd-msg(notify-about-changed-modules([ModuleName], Type)) .
+  rec-msg(notify-about-changed-modules-done) .
   snd-msg(parse-focusses(EditorId, trm(ModuleId))) .
   (
     rec-msg(parse-ok(trm(ModuleId))) .

@@ -49,6 +49,7 @@ in
   +
     rec-msg(close-module-in-db(Name?)) .
     MDB-GetAllDependingModules(Name, DependingModules?) .
+    MDB-InvalidateModule(Name) .
     MDB-InvalidateModules(DependingModules) .
     snd-msg(ts-remove-value-from-all-tables(Name)) .
     snd-msg(changed-modules(DependingModules))
@@ -106,6 +107,7 @@ in
       snd-msg(ts-filter-keys("active-modules", Modules)) .
       rec-msg(ts-keys(Modules?)) .
       MDB-GetAllDependingModules(Name, DependingModules?) .
+      MDB-InvalidateModule(Name) .
       MDB-InvalidateModules(DependingModules) .
       snd-msg(updating-succeeded(DependingModules, Modules))
     else
@@ -276,8 +278,8 @@ in
     )
   +
     rec-msg(invalidate-parse-tables(Name?)).
-    MDB-InvalidateModule(Name) .
     MDB-GetAllDependingModules(Name, DependingModules?) .
+    MDB-InvalidateModule(Name) .
     MDB-InvalidateModules(DependingModules)
   +
     rec-msg(get-module-info(Name?)) .
@@ -384,8 +386,8 @@ in
   snd-msg(sm-get-imported-module-names(Syntax)) .
   rec-msg(sm-imported-module-names(Modules?)) .
   snd-msg(ts-put-term-value("import-relations", Name, Modules)) .
-  MDB-InvalidateModule(Name) .
   MDB-GetAllDependingModules(Name, Modules?) .
+  MDB-InvalidateModule(Name) .
   MDB-InvalidateModules(Modules)
 endlet
 
