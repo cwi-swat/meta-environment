@@ -25,15 +25,18 @@ AR_FLAGS        = cr
 
 CC		= @CC@
 CFLAGS		= @CFLAGS@ ${XCFLAGS}
+CFLAGSPROF	= -pg ${CFLAGS}
 CPP		= @CPP@
 CPPFLAGS	= @CPP@ ${XCPPFLAGS}
+LDFLAGS         = -g
+LDFLAGSPROF     = ${LDFLAGS} -pg
 
 MAKE		= gmake
 
 DEFS		= @DEFS@ ${XDEFS}
 INCLUDES	= @INCLUDES@ ${XINCLUDES}
-LIBS		= @LIBS@ ${XLIBS}
-LIBSPROF	= @LIBS@ ${XLIBSPROF}
+LIBS		= @LIBS@ ${SOCKLIBS} ${XLIBS}
+LIBSPROF	= @LIBS@ ${SOCKLIBS} ${XLIBSPROF}
 SOCKLIBS	= @SOCKLIBS@
 
 INSTALL		= @INSTALL@
@@ -48,9 +51,9 @@ TOOLBUS         = @TOOLBUS@
 XCFLAGS		= # -DDONT_USE_BOEHMGC
 XCPPFLAGS	=
 XINCLUDES	= -I$(ATERM)/include
-XLIBS		= -L${libdir} -L. -lsglr -la2toa1 -lgc         \
+XLIBS		= -L${libdir} -L. -lsglr -la2toa1 -lgc		\
                   -lATerm-${CC} -lAsFix-${CC} -lATB-${CC}
-XLIBSPROF	= -L${libdir} -L. -lsglr-prof -la2toa1 -lgc         \
+XLIBSPROF	= -L${libdir} -L. -lsglr-prof -la2toa1 -lgc	\
                   -lATerm-prof -lAsFix-prof -lATB-prof
 
 SGLRLIB         = libsglr.a
@@ -69,7 +72,7 @@ OBJ             = $(patsubst %.c,%.o,$(CSRC))
 
 all:	${SGLRLIBS} ${PROGS}
 
-iinstall:	incinstall libinstall bininstall
+install:	incinstall libinstall bininstall
 
 incinstall:	${SGLRINC}
 	@for INC in $(SGLRINC);	\
@@ -90,10 +93,11 @@ bininstall:	${PROGS}
 	done
 
 distclean realclean:	clean
-	rm -f ${SGLRLIBS} ${PROGS} Makefile.in
+	rm -f	${SGLRLIBS} ${PROGS} Makefile
 
 clean:
-	rm -f core sglr.tifs sglr.tif.[ch] ${OBJ} ${GETOPTOBJ} ${LIBOBJ}
+	rm -f	core sglr.tifs sglr.tif.[ch] ${OBJ} ${GETOPTOBJ} \
+		${LIBOBJ} ${LIBOBJPROF}
 
 # Generic rules
 
@@ -118,7 +122,7 @@ libsglr-prof.a:  ${LIBOBJPROF}
 	$(AR) $(AR_FLAGS) $@ $(LIBOBJPROF)
 
 sglr-prof: ${GETOPTOBJ} ${OBJ} ${SGLRLIBPROF}
-	${CC} ${LDFLAGS} ${OBJ} ${GETOPTOBJ} $(LIBSPROF) -o $@
+	${CC} ${LDFLAGSPROF} ${OBJ} ${GETOPTOBJ} $(LIBSPROF) -o $@
 
 libsglr.a:  ${LIBOBJ}
 	$(AR) $(AR_FLAGS) $@ $(LIBOBJ)
