@@ -1,6 +1,8 @@
 # $Id$
 
 Wed Oct 20 15:12:01 CEST 2004 <kooiker@cwi.nl>
+ * editors/text/swing:
+   - removed generated swing-editor
  * editors/text/swing/metaedit:
    - Merged Said's editor
  * configuration-manager/src:

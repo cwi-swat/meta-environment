@@ -48,13 +48,15 @@ METACONFIG_JAR = $(shell ${top_builddir}/configuration-manager/src/metaconfig-co
 
 JARCLASSES = `find . -name '*.class'`
 JARIMAGES = \
-	$(wildcard ${srcdir}/metaedit/images/*gif) \
-	$(wildcard ${srcdir}/metaedit/images/*png)
+	$(wildcard ${srcdir}/metaedit/images/*.gif) \
+	$(wildcard ${srcdir}/metaedit/images/*.png)
 
 JARFILES = \
 	${JARIMAGES} \
 	${JARCLASSES}
 
-.PHONY: swing-editor.jar
-	FILES = "${JARFILES}"; \
+swing-editor.jar: always
+	FILES="${JARFILES}"; \
 	jar cf $@ $$FILES
+
+always:
