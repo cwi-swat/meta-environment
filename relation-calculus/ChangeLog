@@ -1,6 +1,14 @@
 # $Id$
 
+2004-10-13  Paul Klint  <paulk@heelal.lan>
 
+ * Undone change to diff operator
+ * Added a built-in "unique" that transforms a bag to a set
+ * Redefined "top" and "bottom" using the unique function
+ * Updated the documentation
+ * Added test cases
+ * Most examples are running again.
+	
 Tue Oct 12 11:00:41 CEST 2004 <{kooiker,storm}@cwi.nl>
  * Difference operator on bags now removes all righthand 
    side elements (and not just one).
