@@ -2,6 +2,8 @@ module Sdf2-pretty
 
 imports languages/sdf2/syntax/Sdf2
 imports languages/box/syntax/Box
+imports languages/box/utilities/PPSeparatedList["Group" Group ">"]
+imports languages/box/utilities/PPList["Symbol" Symbol]
 
 exports
   context-free syntax
@@ -10,15 +12,12 @@ exports
     attributes2box(Attributes) -> Box {to-box}
     attributeslist2box({Attribute ","}*) -> Box {to-box}
     grammar2box(Grammar) -> Box {to-box}
-    group2box(Group) -> Box {to-box}
-    groups2box({Group ">"}*) -> Box {to-box}
     impsections2box(ImpSection*) -> Box {to-box}
     literal2box(Literal) -> Box {to-box}
     modulename2box(ModuleName) -> Box {to-box}
     productions2box(Productions) -> Box {to-box}
     sections2box(Sections) -> Box {to-box}
     symbol2box(Symbol) -> Box {to-box}
-    symbols2box(Symbols) -> Box {to-box}
 
     box2aterm(Box) -> ATerm {from-box}
     box2attributes(Box) -> Attributes {from-box}
@@ -51,4 +50,3 @@ hiddens
     "Sections" -> Sections
     "Symbol" -> Symbol
     "Symbol+" -> Symbol+
-    "Symbols" -> Symbols

@@ -18,8 +18,8 @@ equations
                                          ])
 
 [grammar2box-sorts]
-  sorts Symbols = box2grammar(H hs=1 ["sorts" 
-                                      symbols2box(Symbols)
+  sorts Symbol+ = box2grammar(H hs=1 ["sorts" 
+                                      HVlist2box(Symbol+)
                                      ])
 
 [grammar2box-lexical-syntax]
@@ -57,21 +57,6 @@ equations
                                           grammar2box(Grammar2)
                                          ])
 
-[groups2box-0]
-  groups2box() = V vs=1 []
-
-[groups2box-1]
-  groups2box(Group) = V vs=1 [group2box(Group)]
-
-[groups2box-2]
-  Box := groups2box(Group+),
-  V vs=1 [Box*] := Box
-  ===>
-  groups2box(Group ">" Group+) = V vs=1 [group2box(Group) 
-                                         ">"
-                                         Box*
-                                        ]   
-
 [module2box-0]
   module ModuleName ImpSection* Sections =
     box2module(V vs=2 [H hs=1 ["module" 
@@ -82,33 +67,20 @@ equations
                       ])
 
 [priority2box-0]
-  Group+ = box2priority(groups2box(Group+))
+  Group+ = box2priority(Vlist2box(Group+))
 
 [production2box-0]
-  Symbols -> Symbol Attributes =
-    box2production(HV hs=1 vs=1 [H hs=1 [symbols2box(Symbols) 
-                                         "->" 
+  Symbol+ -> Symbol Attributes =
+    box2production(HOV hs=1 [HOVlist2box(Symbol+) 
+                             I [HV hs=1 ["->" 
                                          symbol2box(Symbol)
+                                         attributes2box(Attributes)
                                         ]
-                                 I [attributes2box(Attributes)]
-                                ])
+                               ]
+                            ])
 
 [symbol2box-label]
   Literal : Symbol = box2symbol(H hs=0 [literal2box(Literal)
                                         ":"
                                         symbol2box(Symbol)
                                        ])
-
-[symbols2box-0]
-  symbols2box() = HV hs=1 []
-
-[symbols2box-1]
-  symbols2box(Symbol) = HV hs=1 [symbol2box(Symbol)]
-
-[symbols2box-2]
-  Box := symbols2box(Symbol+),
-  HV hs=1 [Box*] := Box
-  ===>
-  symbols2box(Symbol Symbol+) = HV hs=1 [symbol2box(Symbol) 
-                                         Box*
-                                        ]   
