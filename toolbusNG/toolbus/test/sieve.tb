@@ -1,25 +1,23 @@
 process SIEVE(Max : int) is
-  let ThisSieve: term, N : int, Filter2 : term
+  let N : int, Pid : int
   in
-     ThisSieve := processId .
-     create(FILTER(ThisSieve, 2), Filter2?) .
+     create(FILTER(2), Pid?) .
      N := 3 .
-     if less(N, Max) then snd-msg N to Filter2 . N := add(N, 1) fi *
+     if less(N, Max) then snd-msg com(2, N) . N := add(N, 1) fi *
      if equal(N, Max) then shutdown "done" fi
   endlet
 
-process FILTER(NumberSource: process, P : int) is
-  let Z : int, N : int, ThisFilter : term, NextPrimeFilter : term
+process FILTER(P : int) is
+  let Z : int, N : int, Pid : int
   in
      print P .
-     ( rec-msg Z? from NumberSource .
+     ( rec-msg com(P, Z?) .
        if equal(mod(Z, P), 0) then tau
        else
-	  ThisFilter := processId .
-          create(FILTER(ThisFilter, Z), NextPrimeFilter?) .
-          ( rec-msg N? .
+          create(FILTER(Z), Pid?) .
+          ( rec-msg com(P, N?) .
             if equal(mod(N, P), 0) then tau
-            else snd-msg N to NextPrimeFilter fi
+            else snd-msg com(Z, N) fi
           ) * delta
        fi
      ) * delta
