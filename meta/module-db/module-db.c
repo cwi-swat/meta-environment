@@ -712,23 +712,23 @@ ATerm get_equations_for_module(int cid, ATerm atImport)
         return ATmake("snd-value(renaming-equations(<term>,<term>))", 
                       SDF_makeTermFromRenamings(renamings),
                       ATBpack(eqsTerm));
-      }
-
-      if (SDF_isModuleNameParameterized(moduleName)) {
-        SDF_Symbols actualParams = SDF_getModuleNameParams(moduleName);
-      
+      } 
+      else if (SDF_isModuleNameParameterized(moduleName)) {
         ATerm sdfTerm = MDB_getEntrySdfTree(entry);
-        SDF_ModuleName formalModuleName = SDF_getModuleModuleName( 
-                                            SDF_makeModuleFromTerm(
-                                              PT_makeTermFromTree(
-                                                PT_getParseTreeTree(
-                                                  PT_makeParseTreeFromTerm(sdfTerm)))));
+        SDF_ModuleName formalModuleName;
+	SDF_Renamings renamings;
 
-        return ATmake("snd-value(parameterized-equations(<term>,<term>,<term>))", 
-                      SDF_makeTermFromModuleName(formalModuleName),
-                      SDF_makeTermFromSymbols(actualParams),
+        formalModuleName = SDF_getModuleModuleName(SDF_getStartTopModule(
+	   		     SDF_StartFromTerm(sdfTerm)));
+
+	renamings = SDF_makeRenamingsFromModuleNames(formalModuleName,
+						     moduleName);
+
+        return ATmake("snd-value(renaming-equations(<term>,<term>))", 
+                      SDF_makeTermFromRenamings(renamings),
                       ATBpack(eqsTerm));
       }
+
       return ATmake("snd-value(plain-equations(<term>))", ATBpack(eqsTerm));
     }
   }
