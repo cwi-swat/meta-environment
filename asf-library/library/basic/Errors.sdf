@@ -1,0 +1,31 @@
+module basic/Errors
+
+imports basic/Strings
+imports basic/Locations
+
+exports
+
+sorts Error ErrorProducer ErrorDescription 
+
+context-free syntax
+
+"no-error" -> Error {cons("no-error")}
+
+error(id:String, 
+      producer:ErrorProducer,  
+      severity:ErrorSeverity,
+      description:ErrorDescription,
+      subjects:ErrorSubjects) -> Error {cons("error")}
+
+"info"       -> ErrorSeverity {cons("info")}
+"warning"    -> ErrorSeverity {cons("warning")}
+"non-fatal"  -> ErrorSeverity {cons("non-fatal")}
+"fatal"      -> ErrorSeverity {cons("fatal")}
+
+producer(id:String,type:String) -> ErrorProducer {cons("producer")}
+description(format:String)      -> ErrorDescription {cons("description")}
+
+"[" ErrorSubjects "]" -> ErrorSubjects {cons("list")}
+
+subject(id:String, location:Location) -> ErrorSubject {cons("subject")}
+

@@ -1,0 +1,16 @@
+module basic/Locations
+
+imports basic/Strings
+imports basic/Integers
+
+exports
+
+sorts Location Area
+ 
+context-free syntax
+
+location(file:String, area:Area) -> Location {cons("location")}
+
+area(start-line:NatCon, start-column:NatCon,
+     end-line:NatCon, end-column:NatCon,
+     start-offset:NatCon, end-offset:NatCon) -> Area {cons("area")}
