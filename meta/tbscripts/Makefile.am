@@ -31,7 +31,8 @@ TBSCRIPTS = \
   start-meta-studio.tb \
   dummy-display-graph.tb \
   status.tb \
-  button-actions.tb
+  button-actions.tb \
+  pretty-print.tb
   
 # Alphabetical list of Generated ToolBus scripts
 GENERATED_TBSCRIPTS = \

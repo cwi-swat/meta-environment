@@ -66,6 +66,11 @@ AC_PACKAGE_REQUIRE(sglr, sglr,
    [  --with-sglr=DIR         sglr is in DIR])
 AC_SUBST(SGLR)
 
+dnl Require ptpretty package
+AC_PACKAGE_REQUIRE(ptpretty, ptpretty,
+   [  --with-ptpretty=DIR         ptpretty is in DIR])
+AC_SUBST(PTPRETTY)
+
 dnl Require pgen package
 AC_PACKAGE_REQUIRE(pgen, sdf2table,
    [  --with-pgen=DIR         pgen is in DIR])

@@ -1,5 +1,8 @@
 # $Id$
 
+2003/09/18 <jurgenv@cwi.nl>
+ * Added dependency on and loading of ptpretty package
+
 2003/09/17 <jurgenv@cwi.nl>
  * Added dump sdf definition action to the action language (alias button lang)
 

@@ -298,6 +298,17 @@ in
           ReturnAbort(EditorId,Stack)
         fi
       +
+        rec-msg(pretty-print, Stack?, EditorId?) .
+        StackPopString(Stack,Stack?,ModuleName?) .
+        StackPopTerm(Stack,Stack?,STree?) .
+	PrettyPrintTerm(ModuleName, STree, RTree?) .
+        if not-equal(RTree, error-tree) then
+          StackPushTerm(Stack,Stack?,RTree) .
+          ReturnSuccess(EditorId,Stack)
+        else
+          ReturnAbort(EditorId,Stack)
+        fi
+      +
         rec-msg(get-other-focus(ModuleName?), Stack?, EditorId?) .
         StackPopTerm(Stack,Stack?,STree?).
         FunSym := fun(STree) .

@@ -20,6 +20,7 @@ requires
    toolbus	0.3.1 with java=on 
    toolbuslib	0.5.1
    sglr		3.10.2
+   ptpretty	1.0
    pgen		1.7.1
    pt-support   0.12.1
    graph-support   0.1.1

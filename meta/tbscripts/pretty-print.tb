@@ -1,0 +1,24 @@
+#include <ptpretty.idef>
+
+process PrettyPrintTerm(ModuleName : str, Tree : term, Result : term?) is
+let
+  Syntax : term,
+  ErrorMessage : str
+in
+  Result := Tree .
+  printf("doing it") .
+  snd-msg(get-all-sdf2-definitions(ModuleName, trm)) .
+  (
+    rec-msg(syntax(Syntax?)) .
+    snd-msg(ptpretty(Syntax, Tree)) .
+    (
+      rec-msg(ptpretty-result(Result?))
+    +
+      rec-msg(ptpretty-error(ErrorMessage?)) .
+      snd-note(ui-status(errorf("Pretty printing failed: %s", [ErrorMessage])))
+    )
+  +
+    rec-msg(no-syntax(ErrorMessage?)) .
+    snd-note(ui-status(errorf("Pretty printing failed: %s", [ErrorMessage])))
+  )
+endlet

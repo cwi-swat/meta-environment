@@ -41,6 +41,7 @@
 #include "notification.tb"
 #include "dump-equations.tb"
 #include "dump-sdf-definition.tb"
+#include "pretty-print.tb"
 #include "meta-interface.tb"
 
 /* Experimental */

@@ -9,6 +9,7 @@ pt_support=__PT_SUPPORT__
 sdf_support=__SDF_SUPPORT__
 graph_support=__GRAPH_SUPPORT__
 sglr=__SGLR__
+ptpretty=__PTPRETTY__
 pgen=__PGEN__
 toolbus=__TOOLBUS__
 prefix=__PREFIX__
@@ -16,7 +17,8 @@ editor=__DEFAULT_EDITOR__
 myversion=__VERSION__
 
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
-${graph_support}/bin:${toolbus}/bin:${xemacs}/bin:${sdf_support}/bin:${PATH}"; 
+${graph_support}/bin:${toolbus}/bin:${xemacs}/bin:${sdf_support}/bin:\
+${ptpretty}/bin:${PATH}"; 
 export PATH
 
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${prefix}/lib
@@ -191,6 +193,7 @@ toolbus $xargs ${toolbusdefs} \
    -I${sdf_support}/share/sdf-support \
    -I${graph_support}/share/graph-support \
    -I${sglr}/share/sglr \
+   -I${ptpretty}/share/ptpretty \
    -I${pgen}/share/pgen \
    ${extra_scripts} \
    ${meta_script}
