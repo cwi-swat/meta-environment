@@ -36,7 +36,7 @@ UTILSRCS = \
 
 # Developers only:
 api: Sdf.label.def
-	/home/markvdb/sdf-apigen/bin/sdf2-to-c -i $< --compat-term -P SDF_ -o SDFME
+	sdf2-to-c -i $< --compat-term -P SDF_ -o SDFME
 
 api-clean:
 	rm -f SDFME.[ch] SDFME_dict.* SDFME.adt SDFME_bottom.c
