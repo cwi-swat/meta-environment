@@ -1,0 +1,127 @@
+%% Experiment:
+%% - tools worden beschreven door process expressies waarin @snd-msg
+%%   en @rec-msg gebruikt worden (de @'s verdwijnen waarschijnlijk
+     later weer maar staat er nu voor de duidelijkheid)
+%% - @snd-msg { } @rec-msg = event . snd-msg { ..} rec-msg . snd-ack-event
+%% - @rec-msg { } @snd-msg = rec-msg . snd-eval { .. } value . snd-msg
+%% - we voeren een renaming in waardoor het mogelijk wordt om berichten te onderscheppen.
+
+tool user-interface is
+
+   process Main is
+     ( ( CALC-BUTTON() + LOG-BUTTON() ) * delta
+     ||
+       TIME-BUTTON() * delta
+     ||
+       QUIT-BUTTON()
+     ) * delta
+
+   process CALC-BUTTON is
+   let  E : expr, V : int
+   in
+     	@snd-msg compute(E) { } @rec-msg V?    %% event: int compute(expr)
+   endlet
+
+   process LOG-BUTTON is
+   let  L : log
+   in
+      	@snd-msg showLog  { } @rec-msg L?      %% event: log showLog() 
+   endlet
+
+   process TIME-BUTTON is
+   let T : time
+   in
+      	@snd-msg showTime { } @rec-msg T? .    %% event: time showTime()
+   endlet
+
+   process QUIT-BUTTON is
+        @snd-msg quit                          %% event: void quit()
+
+   kind = external/tcl
+   command="wish-adapter -script ui-calc.tcl"
+
+end
+
+%% -------------------------------------------------------------------------------
+
+tool clock is
+  process Main is
+  let T : time
+  in
+     @rec-msg showTime { } @snd-msg T         %% function: time showTime()
+     * delta
+  endlet
+
+  kind = external/c
+  command = "./clock"
+end
+
+%% -------------------------------------------------------------------------------
+
+tool calc is
+
+  process Main is
+  let E : expr, V : int, P : process
+  in
+     @rec-msg compute(E?) { } @snd-msg  V     %% function: int compute(expr)		          
+     * delta
+  endlet
+
+  kind = external/c
+  command = "./calc"
+end
+
+%% -------------------------------------------------------------------------------
+
+tool batch is
+  process Main is
+  let E : expr, V : int
+  in
+     ( 
+       @snd-msg compute(E) { } @rec-msg V?    %% event: int compute(expr)
+     ) * delta
+  endlet
+
+  kind = external/c
+  command = "./batch"
+end
+
+%% -------------------------------------------------------------------------------
+
+tool log is
+  process  Main is
+  let  E : str, V : int, L : log
+  in
+     ( @rec-msg log-computation(E?, V?)       %% function: void log-computation(expr,int)
+     + 
+       @rec-msg showLog { } @snd-msg L        %% function: log showLog()
+     ) * delta
+  endlet
+
+  kind = external/c
+  command = "./log"
+end
+  
+%% -----------------------------------------------------------------------------
+
+process Supervisor is
+  ( rec-msg logged-computed(E?) {
+	  snd-msg compute(E) { } rec-msg V? .
+	  snd-msg log-computation(E, V)
+    } snd-msg V
+  )* 
+ rec-msg quit . shutdown "End of calc demo"
+
+%% -------------------------------------------------------------------------------
+
+toolbus(
+	user-interface rename-msg compute -> logged-compute 
+	calc 
+  	log
+        clock
+        batch  rename-msg compute -> logged-compute
+	Supervisor
+)
+
+%% -------------------------------------------------------------------------------
+

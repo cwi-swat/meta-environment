@@ -14,7 +14,6 @@ import aterm.*;
  */
 public class ProcessInstance {
   static int processCount = 0;
-  private static int ninstances = 0;
   static State empty = new State();
   private ProcessDefinition definition;
   private ProcessExpression call;
@@ -97,10 +96,7 @@ public class ProcessInstance {
     if (toolName == null)
       return null;
     else {
-      AFun afun = TBTerm.factory.makeAFun(processName, 1, false);
-      ATermAppl tid = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(ninstances));
-      ninstances++;
-      return new JavaTool(toolName, tid, makeSig());
+      return new JavaTool(toolName, makeSig());
     }
   }
 
