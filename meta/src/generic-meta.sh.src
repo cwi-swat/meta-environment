@@ -33,7 +33,7 @@ xargs=""
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="C:I:deghi:m:o:p:qsS:t:T:vV"
+myarguments="C:I:deghi:m:o:p:qr:sS:t:T:vV"
 
 # Usage: displays helpful usage information
 Usage() {
@@ -51,6 +51,7 @@ Options:
     -o <file>       output file works only when dumping parse table or equations
     -p <path>       add <path> to PATH of Meta-Environment
     -q		    enable Meta-Environment query support
+    -r <file>       uses given file as term-store
     -s              save intermediate files to disk (only works with -P and -E)
     -S              execute the given tb-script
     -t <int>        MetaEnvironment will abort after <int> seconds
@@ -96,6 +97,7 @@ query_def=""
 saving="false"
 outputfilename=""
 inputfilename=""
+termstorename=""
 
 while [ $#  -gt 0 ]
 do
@@ -141,6 +143,10 @@ do
 	-q)
 		query_def="-DQUERY -I`meta-query-config`/share/meta-query"
 		;;
+	-r)     
+		shift
+	        termstorename=$1
+		;;
 	-s)     
 		saving="true"
 		;;
@@ -175,7 +181,7 @@ done
 #  Get to the real work now...
 ###
 
-toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DSAVING=\\\"${saving}\\\" -DINFILENAME=\\\"${inputfilename}\\\" -DOUTFILENAME=\\\"${outputfilename}\\\" -DMODULENAME=\\\"${modulename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${time_out_def} ${query_def}"
+toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DSAVING=\\\"${saving}\\\" -DINFILENAME=\\\"${inputfilename}\\\" -DOUTFILENAME=\\\"${outputfilename}\\\" -DMODULENAME=\\\"${modulename}\\\" -DTERMSTORENAME=\\\"${termstorename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${time_out_def} ${query_def}"
 
 if [ $verbose -gt 0 ] ; then
    set -x
