@@ -144,7 +144,7 @@ public class Equality
     body.addLine("return code;");
 
     String typeName = generator.typeName(typeContext.getName());
-    method.setDescription("calculate the hashcode based on the hashcodes "
+    method.setDescription("calculate the hashcode based on the hashcodes"
 			  + " of the attributes.");
 
     generator.getCompilationUnit().addMethod(method);
