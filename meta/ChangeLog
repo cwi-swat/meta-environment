@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Apr 16 10:02:50 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * editors/text/editor-hive.c:removeEditorProcess()
+   invoke waitpid() to cleanup child process resources. (closes #204)
+
 Thu Apr 15 13:54:18 CEST 2004 <jurgenv@cwi.nl>
  * Message-lists have been removed completely: 
     * show-list button action is gone
