@@ -22,3 +22,5 @@ all clean distclean install uninstall:
 		${MAKE} $@; \
 		cd ..; \
 	done
+dist:
+
