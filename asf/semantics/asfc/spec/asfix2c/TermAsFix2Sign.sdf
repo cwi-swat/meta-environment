@@ -19,7 +19,7 @@
 %%  TermAsFix2Sign
 module TermAsFix2Sign
 
-imports TermAsFixAccess VarEnv
+imports TermAsFixAccess
 
 exports
   sorts FNT-tuple

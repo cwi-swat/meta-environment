@@ -19,7 +19,7 @@
 %%  MuASF-Rules2C
 module MuASF-Rules2C
 
-imports RenameVars Improve-C-code Transform-Constructors Locate-Constants Remove-Lists-Aux
+imports RenameVars Improve-C-code Transform-Constructors Locate-Constants
 
 exports
   context-free syntax
