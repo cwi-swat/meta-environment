@@ -1,1 +1,35 @@
-To be filled.
+sdf-apigen
+----------
+
+This package provides a mapping from SDF2 to ADT. ADT is a signature definition
+format as provided by the apigen package.
+
+In combination with the apigen package sdf-apigen provides programming 
+interfaces for C and Java for the parse trees and abstract syntax trees 
+that come out of sglr.
+
+The C/Java code that is generated completely hides all details about parse tree representation (like AsFix).
+
+To use this package, annotate your SDF definition with constructor names and 
+labels. Then run sdf2-to-adt, then take the apigen package and run adt-to-c
+or adt-to-java.
+
+An example SDF definition with labels and constructor names:
+
+definition
+
+module Bool
+exports
+
+context-free syntax
+  "true"         -> Bool         {cons("true")}
+  "false"        -> Bool         {cons("false")}
+  lhs:Bool "&&" rhs:Bool -> Bool {cons("and")}
+  lhs:Bool "|| rhs:Bool  -> Bool {cons("or")}
+
+Benefits:
+  - combine SDF2 parsing technology with mainstream programming languages
+  - hide details of parse trees (AsFix) behind an opaque data type in C/Java
+  - concrete (readable) or abstract (ATerm) representation of data always 
+    available.
+  - See also apigen package.
