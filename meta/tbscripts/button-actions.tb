@@ -641,9 +641,9 @@ in
   +
     rec-msg(edit-equations, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
-    . LocateFile(Modulename, sdf, Path?)
+    . LocateFile(Modulename, sdf, SdfPath?)
     .
-    if equal(Path, "") then
+    if equal(SdfPath, "") then
       ReturnAbort(EditorId, Stack)
     else
       snd-msg(file-extension-hook(asf))
