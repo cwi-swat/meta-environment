@@ -50,45 +50,45 @@ AC_SUBST(CFLAGS)
 AC_SUBST(DEFS)
 AC_SUBST(INCLUDES)
 
-dnl Handle --with-aterm=... argument to configure
+ddnl Handle --with-aterm=... argument to configure
 AC_ARG_WITH(aterm,
-[  --with-aterm            which aterm-library to use],
+[  --with-aterm=DIR        ATerm-library is in DIR],
 ATERM=${withval},)
 AC_SUBST(ATERM)
 AC_ARG_WITH(aterm-bin,
-[  --with-aterm-bin        path to ATerm executables],
+[  --with-aterm-bin=DIR    ATerm executables are in DIR],
 ATERMBIN=${withval},ATERMBIN=${ATERM}/bin)
 AC_SUBST(ATERMBIN)
 AC_ARG_WITH(aterm-lib,
-[  --with-aterm-lib        path to ATerm libraries],
+[  --with-aterm-lib=DIR    ATerm libraries are in DIR],
 ATERMLIB=${withval},ATERMLIB=${ATERM}/lib)
 AC_SUBST(ATERMLIB)
 AC_ARG_WITH(aterm-inc,
-[  --with-aterm-inc        path to ATerm header files],
+[  --with-aterm-inc=DIR    ATerm header files are in DIR],
 ATERMINC=${withval},ATERMINC=${ATERM}/include)
 AC_SUBST(ATERMINC)
 
 dnl Handle --with-toolbus[-...]=... arguments to configure
 AC_ARG_WITH(toolbus,
-[  --with-toolbus          which ToolBus distribution to use],
+[  --with-toolbus=DIR      ToolBus distribution is in DIR],
 TOOLBUS=${withval},)
 AC_SUBST(TOOLBUS)
 AC_ARG_WITH(toolbus-bin,
-[  --with-toolbus-bin      path to ToolBus executables],
+[  --with-toolbus-bin=DIR  ToolBus executables are in DIR],
 TOOLBUSBIN=${withval},TOOLBUSBIN=${TOOLBUS}/bin)
 AC_SUBST(TOOLBUSBIN)
 AC_ARG_WITH(toolbus-lib,
-[  --with-toolbus-lib      path to ToolBus libraries],
+[  --with-toolbus-lib=DIR  ToolBus libraries are in DIR],
 TOOLBUSLIB=${withval},TOOLBUSLIB=${TOOLBUS}/lib)
 AC_SUBST(TOOLBUSLIB)
 AC_ARG_WITH(toolbus-inc,
-[  --with-toolbus-inc      path to ToolBus header files],
+[  --with-toolbus-inc=DIR  ToolBus header files are in DIR],
 TOOLBUSINC=${withval},TOOLBUSINC=${TOOLBUS}/include)
 AC_SUBST(TOOLBUSINC)
 
 dnl Handle --with-tcldot=... argument to configure
 AC_ARG_WITH(tcldot,
-[  --with-tcldot           location of tcldot library to use],
+[  --with-tcldot=DIR       TclDot library is in DIR],
 TCLDOT=${withval},
 AC_MSG_ERROR(\nPlease specify location of tcldot using --with-tcldot=/path/to/tcldot.so\nIf you are at CWI/UvA a good guess would be ~gipe/petr/lib/Tcldot)
 )
