@@ -1,3 +1,6 @@
+2001/10/30 (jurgenv@cwi.nl)
+ * Added ASF_isTreeTraversalFunction to the library.
+
 2001/10/10 (jurgenv@cwi.nl)
  * Bumped to version 0.6beta
 
