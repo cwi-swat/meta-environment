@@ -146,6 +146,8 @@ ATerm v_lookup_plain(ATerm env, ATerm var)
 {
 	ATermList list = (ATermList)env;
 
+	if(AT_getAnnotations(var) != NULL)
+	  var = AT_removeAnnotations(var);
 	while(!ATisEmpty(list)) {
 		ATermAppl tuple = (ATermAppl)ATgetFirst(list);
 		if(ATisEqual(ATgetArgument(tuple, 0), var)) {
@@ -318,13 +320,12 @@ ATerm add_equations(int cid, ATerm name, ATerm equs)
 ATerm interpret(int cid,ATerm modname, ATerm trm)
 {
   ATerm newtrm, newatrm, result;
-  ATerm atrm, exptrm, realtrm;
+  ATerm atrm, realtrm;
 
   struct tms start, rewriting;
   clock_t user, system; 
-
-  exptrm = AFexpandTerm(trm);
-  atrm = asfix_get_term(exptrm);
+  
+  atrm = asfix_get_term(trm);
   realtrm = RWprepareTerm(atrm);
 
   rewrite_steps = 0;
@@ -336,7 +337,7 @@ ATerm interpret(int cid,ATerm modname, ATerm trm)
   times(&rewriting);
 
   newatrm = RWrestoreTerm(newtrm);
-  result = asfix_put_term(exptrm,newatrm);
+  result = asfix_put_term(trm,newatrm);
 ATfprintf(stderr,"result = %t\n", result);
 
 #ifdef PROFILING
@@ -805,12 +806,12 @@ ATerm conds_satisfied(ATermList conds, ATerm env)
 
 ATerm apply_rule(ATerm trm)
 {
-  ATerm equ, top_ofs, first_ofs;
+  ATerm top_ofs, first_ofs;
   ATermList termargs, equargs, tmpargs;
   ATerm env; 
   ATermList conds;
   equation_entry *entry = NULL;
-
+ 
   top_ofs = asfix_get_appl_ofs(trm);
   termargs = (ATermList) asfix_get_appl_args(trm);
 
@@ -825,28 +826,39 @@ ATerm apply_rule(ATerm trm)
 			 specification, containing an entry for each first_ofs.
 			 Each entry consists of all the equations for this combination.
 		*/
-    while((entry = find_equation(entry, top_ofs, first_ofs))) {
-      equ = entry->equation;
-      conds = (ATermList) asfix_get_equ_conds(equ);
-      equargs = (ATermList) asfix_get_appl_args(asfix_get_equ_lhs(equ));
-      env = args_matching((ATerm) ATempty, conds, equargs, termargs);
-ATfprintf(stderr,"Tag: %t\n",asfix_get_equ_tag(equ));
+    while((entry = find_equation(entry, top_ofs, first_ofs))) { 
+
+ATfprintf(stderr,"Trying equation: %t\n",entry->tag);
+      conds = entry->conds;
+      equargs = (ATermList) asfix_get_appl_args(entry->lhs);
+
+      env = args_matching((ATerm) ATempty, conds, equargs, termargs); 
       if(!is_fail_env(env)) {
+ATfprintf(stderr,"Equation: %t was successful\n",entry->tag);
         rewrite_steps++;
-        return (ATerm) make_cenv(asfix_get_equ_rhs(equ), env);
+        return (ATerm) make_cenv(entry->rhs, env);
+      }
+      else {
+        ATfprintf(stderr,"Equation: %t failed\n",entry->tag);
       }
     }
   }
   
-  while((entry = find_equation(entry, top_ofs, (ATerm) ATempty))) {
-    equ = entry->equation;
-    conds = (ATermList) asfix_get_equ_conds(equ);
-    equargs = (ATermList) asfix_get_appl_args(asfix_get_equ_lhs(equ));
-    env = args_matching((ATerm) ATempty, conds, equargs, termargs);
-ATfprintf(stderr,"Tag: %t \n",asfix_get_equ_tag(equ));
+  while((entry = find_equation(entry, top_ofs, (ATerm) ATempty))) { 
+
+ATfprintf(stderr,"Trying equation: %t\n",entry->tag);
+
+    conds = entry->conds;
+    equargs = (ATermList) asfix_get_appl_args(entry->lhs);
+
+    env = args_matching((ATerm) ATempty, conds, equargs, termargs); 
     if(!is_fail_env(env)) {
+ATfprintf(stderr,"Equation: %t was successful\n",entry->tag);
       rewrite_steps++;
-      return (ATerm) make_cenv(asfix_get_equ_rhs(equ), env);
+      return (ATerm) make_cenv(entry->rhs, env);
+    }
+    else {
+ATfprintf(stderr,"Equation: %t failed\n",entry->tag);
     }
   }
  
@@ -990,8 +1002,7 @@ ATerm rewrite(ATerm trm, ATerm env)
   ATerm newtrm, sym, rewtrm;
   ATermList args, newargs;
   ATermList elems, newelems; 
-
-	/*ATfprintf(stderr, "rewriting: %t\n", trm);*/
+ 
   if(asfix_is_appl(trm)) {
     args = (ATermList) asfix_get_appl_args(trm);
     /*if(!args)
@@ -1006,17 +1017,18 @@ ATerm rewrite(ATerm trm, ATerm env)
       rewtrm = select_and_rewrite(newtrm); 
     }
   } else if(asfix_is_var(trm)) {
-		rewtrm = v_lookup_plain(env, trm);
-		if(!rewtrm)
-			rewtrm = trm;
+      rewtrm = v_lookup_plain(env, trm); 
+      if(!rewtrm)
+	rewtrm = trm;
   } else if(asfix_is_list(trm)) {
     elems = (ATermList) asfix_get_list_elems(trm);
     sym = asfix_get_list_sym(trm);
     newelems = rewrite_elems(sym, elems, env);
     rewtrm = (ATerm) asfix_put_list_elems(trm, (ATerm) newelems);
   }
-  else
+  else { 
     rewtrm = trm; 
+  }
   return rewtrm;
 }
 

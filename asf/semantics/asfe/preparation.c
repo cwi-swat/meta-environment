@@ -7,6 +7,7 @@
 
 #include <AsFix.h>
 #include <aterm2.h>
+#include "AsFix-access.h"
 #include <deprecated.h>
 #include "preparation.h"
 
@@ -89,14 +90,44 @@ Enter an equation in an equation table.
 */
 
 void enter_equation(equation_table *table, ATerm equation)
-{
-  ATerm lhs = asfix_get_equ_lhs(equation);
-  ATermList lhsargs = (ATermList)asfix_get_appl_args(lhs);
-  ATerm top_ofs = asfix_get_appl_ofs(lhs);
-  ATerm first_ofs;
-  equation_entry *entry = (equation_entry *)malloc(sizeof(equation_entry));
+{ 
+  equation_entry *entry;
+
+  ATerm equ, lhs, top_ofs,first_ofs, tag, rhs;
+  ATermList lhsargs, conds;
   unsigned hnr;
 
+  if(AFTisSimpleCondEqu(equation)) {
+    tag = AFTgetSimpleCondEquTag(equation); 
+    equ = AFTgetSimpleCondEquEqu(equation); 
+ 
+    lhs = AFTgetSimpleEquLHS(equ); 
+    rhs = AFTgetSimpleEquRHS(equ); 
+    conds = ATempty;
+  }
+  else if(AFTisImpliesCondEqu(equation)) {
+    tag = AFTgetImpliesCondEquTag(equation); 
+    equ = AFTgetImpliesCondEquEqu(equation);  
+    conds = AFTgetListElements(AFTgetImpliesCondEquConds(equation)); 
+ 
+    lhs = AFTgetSimpleEquLHS(equ); 
+    rhs = AFTgetSimpleEquRHS(equ);
+  }
+  else if(AFTisWhenCondEqu(equation)) {
+    tag = AFTgetWhenCondEquTag(equation); 
+    equ = AFTgetWhenCondEquEqu(equation);  
+    conds = AFTgetListElements(AFTgetWhenCondEquConds(equation)); 
+ 
+    lhs = AFTgetSimpleEquLHS(equ); 
+    rhs = AFTgetSimpleEquRHS(equ);
+  }
+  else
+    ATerror("Strange equation %t\n",equation); 
+
+  lhsargs = (ATermList)asfix_get_appl_args(lhs); 
+  top_ofs = asfix_get_appl_ofs(lhs);  
+
+  entry = (equation_entry *)malloc(sizeof(equation_entry)); 
   if(!entry)
     ATerror("out of memory in enter_equation");
 
@@ -111,17 +142,22 @@ void enter_equation(equation_table *table, ATerm equation)
   else
     first_ofs = asfix_get_appl_ofs(ATgetFirst(lhsargs));
 
-  hnr = hash_function(table, top_ofs, first_ofs);
-/*  ATfprintf(stderr, "entering equation with top-ofs = %t, first-ofs = %t\n", top_ofs,first_ofs);
-  ATfprintf(stderr, "\t hash-nr=%d\n", hnr); 
-*/
+  hnr = hash_function(table, top_ofs, first_ofs); 
 
   entry->hashnr = hnr;
   entry->top_ofs = top_ofs;
   entry->first_ofs = first_ofs;
   entry->equation = equation;
-  ATprotect(&entry->equation);  
-  if(asfix_is_default_equ(equation)) {
+  ATprotect(&entry->equation); 
+  entry->tag = tag;
+  ATprotect(&entry->tag);    
+  entry->lhs = lhs;
+  ATprotect(&entry->lhs);     
+  entry->rhs = rhs;
+  ATprotect(&entry->rhs);       
+  entry->conds = conds;
+  ATprotect((ATerm*)&entry->conds);   
+  if(AFisDefaultTag(tag)) {
     equation_entry *cur = table->table[hnr];
     entry->hnext = NULL;
     if(cur) {
@@ -255,31 +291,55 @@ ATermList prepare_list(ATermList l, ATbool lexcons)
 /*
 Remove all layout from a list of conditions.
 */
-
-ATermList prepare_conds(ATermList conds)
+ATerm prepare_cond(ATerm cond)
 {
-  ATerm cond, lhs, w[2], lit, rhs;
-  ATerm newlhs, newrhs, newcond, annos;
-  ATermList newconds = ATempty;
+  ATerm prod, lhs, w[2], lit, rhs, newlhs, newrhs, annos, newcond;
 
-  while(!ATisEmpty(conds)) {
-    do {
-      cond = ATgetFirst(conds);
-      conds = ATgetNext(conds);
-    } while(asfix_is_whitespace(cond) || asfix_is_list_sep(cond));
-    if(ATmatch(cond, "condition(<term>,<term>,<term>,<term>,<term>)",
-							 &lhs, &w[0], &lit, &w[1], &rhs)) {
-			annos = AT_getAnnotations(cond);
-      newlhs = prepare_term(lhs, ATfalse);
-      newrhs = prepare_term(rhs, ATfalse);
-      newcond = ATmake("condition(<term>,<term>,<term>,<term>,<term>)",
-											 newlhs, w[0], lit, w[1], newrhs);
-			if(annos)
-				newcond = AT_setAnnotations(newcond, annos);
-      newconds = ATappend(newconds, newcond);
-    }
+  annos = AT_getAnnotations(cond);  
+  if(AFTisCond(cond)) {
+    prod = AFTgetCondProd(cond);
+    lhs  = AFTgetCondLHS(cond);
+    newlhs = prepare_term(lhs, ATfalse);
+    w[0] = AFTgetCondWS0(cond);
+    lit  = AFTgetCondLit(cond);
+    w[1] = AFTgetCondWS1(cond);
+    rhs  = AFTgetCondRHS(cond);
+    newrhs = prepare_term(rhs, ATfalse);
+
+    newcond = AFTbuildCond(prod, newlhs, w[0], lit, w[1], newrhs);
+    
+    if(annos)
+      newcond = AT_setAnnotations(newcond, annos);
+
+    return newcond;
   }
-  return newconds;
+
+  ATerror("expected condition, got: %t\n", cond);
+  return NULL;
+}
+
+ATerm prepare_conds(ATerm conds)
+{
+  ATerm cond, iter, wl;
+  ATerm newcond;
+  ATermList newconds = ATempty, list;
+
+  if(!AFTisList(conds))
+    ATerror("expected condition list, got: %t\n", conds);
+
+  iter = AFTgetListIter(conds);
+  wl   = AFTgetListWS(conds);
+  list = AFTgetListElements(conds);
+
+  while(!ATisEmpty(list)) {
+    do {
+      cond = ATgetFirst(list);
+      list = ATgetNext(list);
+    } while(asfix_is_whitespace(cond) || asfix_is_list_sep(cond));
+    newcond = prepare_cond(cond);
+    newconds = ATappend(newconds, newcond);
+  }
+  return AFTbuildList(iter, wl, newconds);
 }
 
 /*}}}  */
@@ -290,53 +350,76 @@ Prepare an equation for rewriting. This includes removing the layout,
 and translating lexicals into lists.
 */
 
+ATerm prepare_simple_equ(ATerm equ)
+{
+  ATerm prod, w[2], l, lhs, rhs, newlhs, newrhs;
+
+  if(AFTisSimpleEqu(equ)) {
+    prod = AFTgetSimpleEquProd(equ);
+    lhs  = AFTgetSimpleEquLHS(equ); 
+    newlhs = prepare_term(lhs, ATfalse);
+    w[0] = AFTgetSimpleEquWS0(equ);
+    l = AFTgetSimpleEquLit(equ);
+    w[1] = AFTgetSimpleEquWS1(equ);
+    rhs  = AFTgetSimpleEquRHS(equ);
+    newrhs = prepare_term(rhs, ATfalse);
+    return AFTbuildSimpleEqu(prod, newlhs, w[0], l, w[1], newrhs);
+  }
+  else {
+    ATerror("expected simple equ, got %t\n", equ);
+    return NULL;
+  }  
+}
+
 ATerm prepare_equ(ATerm equ)
 {
-  ATerm w[6], l[2], modname, tag, lhs, rhs;
-  ATerm newlhs, newrhs, annos;
-  ATermList conds, newconds;
+  ATerm w[6], tag, simplequ, newequ, lit;
+  ATerm annos;
+  ATerm conds, newconds;
 
-	annos = AT_getAnnotations(equ);
-	ATfprintf(stderr, "2.annos = %t\n", annos);
-  if(ATmatch(equ, "ceq-equ(<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>,<term>)",    
-						 &modname, &w[0], &tag, &w[1], &lhs, &w[2], &l[0], &w[3], &rhs)) {
-    newlhs = prepare_term(lhs, ATfalse);
-    newrhs = prepare_term(rhs, ATfalse); 
-    equ = ATmake("ceq-equ(<term>,<term>,<term>,<term>,<term>,"
-								 "<term>,<term>,<term>,<term>)",
-								 modname, w[0], tag, w[1], newlhs, w[2], l[0], 
-								 w[3], newrhs);
-  } else if(ATmatch(equ, "ceq-impl(<term>,<term>,<term>,<term>,<term>,<term>,<term>,"\
-										"<term>,<term>,<term>,<term>,<term>,<term>)",
-										&modname, &w[0], &tag, &w[1], &conds, &w[2], &l[0], &w[3], 
-										&lhs, &w[4], &l[1], &w[5], &rhs)) {
-    newlhs = prepare_term(lhs, ATfalse);
-    newrhs = prepare_term(rhs, ATfalse);
+  annos = AT_getAnnotations(equ); 
+
+  if(AFTisSimpleCondEqu(equ)) {
+    tag  = AFTgetSimpleCondEquTag(equ);
+    w[0] = AFTgetSimpleCondEquWS(equ);
+    simplequ = AFTgetSimpleCondEquEqu(equ);
+    newequ = prepare_simple_equ(simplequ);
+
+    equ = AFTbuildSimpleCondEqu(tag, w[0], newequ);
+  }
+  else if(AFTisImpliesCondEqu(equ)) {
+    tag  = AFTgetImpliesCondEquTag(equ);
+    w[0] = AFTgetImpliesCondEquWS0(equ);
+    conds = AFTgetImpliesCondEquConds(equ);
     newconds = prepare_conds(conds);
-    equ = ATmake("ceq-impl(<term>,<term>,<term>,<term>,<term>,<term>," \
-								 "<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
-								 modname, w[0], tag, w[1], newconds, w[2], l[0], w[3], 
-								 newlhs, w[4], l[1], w[5], newrhs);
-  } else if(ATmatch(equ, "ceq-when(<term>,<term>,<term>,<term>,<term>,<term>,<term>,"\
-										"<term>,<term>,<term>,<term>,<term>,<term>)",
-										&modname, &w[0], &tag, &w[1], &lhs, &w[2], &l[0], &w[3],
-										&rhs, &w[4], &l[1], &w[5], &conds)) {
-    newlhs = prepare_term(lhs, ATfalse);
-    newrhs = prepare_term(rhs, ATfalse);
-    newconds = prepare_conds(conds);
-    equ = ATmake("ceq-when(<term>,<term>,<term>,<term>,<term>,<term>," \
-								 "<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
-								 modname, w[0], tag, w[1], newlhs, w[2], l[0], w[3],
-								 newrhs, w[4], l[1], w[5], newconds);
+    w[1] = AFTgetImpliesCondEquWS1(equ);
+    lit  = AFTgetImpliesCondEquLit(equ);
+    w[2] = AFTgetImpliesCondEquWS2(equ);
+    simplequ = AFTgetImpliesCondEquEqu(equ);
+    newequ = prepare_simple_equ(simplequ);
+    equ = AFTbuildImpliesCondEqu(tag, w[0], newconds, w[1], 
+                                     lit, w[2], newequ);
+  }
+  else if(AFTisWhenCondEqu(equ)) {
+    tag  = AFTgetWhenCondEquTag(equ);
+    w[0] = AFTgetWhenCondEquWS0(equ);
+    simplequ = AFTgetWhenCondEquEqu(equ);
+    newequ = prepare_simple_equ(simplequ);
+    w[1] = AFTgetWhenCondEquWS1(equ);
+    lit  = AFTgetWhenCondEquLit(equ);
+    w[2] = AFTgetWhenCondEquWS2(equ); 
+    conds = AFTgetWhenCondEquConds(equ);
+    newconds = prepare_conds(conds); 
+    equ = AFTbuildWhenCondEqu(tag, w[0], newequ, w[1], 
+                                     lit, w[2], newconds);
   } else {
-		ATfprintf(stderr, "equation: %t not supported..\n", equ);
-		assert(0);
-	}
+    ATfprintf(stderr, "equation: %t not supported..\n", equ);
+    assert(0);
+  }
 
-	if(annos)
-		equ = AT_setAnnotations(equ, annos);
-
-	return equ;
+  if(annos)
+    equ = AT_setAnnotations(equ, annos);
+  return equ;
 }
 
 /*}}}  */

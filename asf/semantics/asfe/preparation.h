@@ -11,6 +11,10 @@ typedef struct equation_entry
   ATerm top_ofs;
   ATerm first_ofs;
   ATerm equation;
+  ATerm tag;
+  ATerm lhs;
+  ATerm rhs;
+  ATermList conds;
 } equation_entry;
 
 typedef struct equation_table
