@@ -4,6 +4,7 @@
 #include <aterm2.h>
 #include <MEPT-utils.h>
 #include <SDFME-utils.h>
+#include <SDF2PT.h>
 
 #include "atsets.h"
 #include "statistics.h"
