@@ -14,7 +14,7 @@ testGrammars(void)
   contents = ATreadFromNamedFile(TEST_GRAMMAR_FILE);
   assert(contents != NULL);
 
-  module = SDF_getStartTop((SDF_Start) contents);
+  module = SDF_getStartTopModule((SDF_Start) contents);
 
   lexProds = SDF_getModuleLexicalProductions(module);
 
