@@ -1,5 +1,8 @@
 $Id$
 
+2001/07/17 (jong@cwi.nl)
+ * version 1.0 released, bumped to 1.1
+
 2001/07/12 (jong@cwi.nl)
  * patched Makefile.am's to comply with new location of -lATB
 
