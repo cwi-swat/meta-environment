@@ -996,14 +996,19 @@ complete_asf_specification(ATermList visited, ATerm module)
     while(!ATisEmpty(imports) && result) {
       first = ATgetFirst(imports);
       entry = GetValue(modules_db, first);
-      EqsTree = ATelementAt((ATermList)entry, EQS_TREE_LOC);
-      EqsText = ATelementAt((ATermList)entry, EQS_TEXT_LOC);
-      if (ATisEqual(EqsTree, ATparse("unavailable")) &&
-          !ATisEqual(EqsText, ATparse("unavailable"))) {
+      if (entry) {
+        EqsTree = ATelementAt((ATermList)entry, EQS_TREE_LOC);
+        EqsText = ATelementAt((ATermList)entry, EQS_TEXT_LOC);
+        if (ATisEqual(EqsTree, ATparse("unavailable")) &&
+            !ATisEqual(EqsText, ATparse("unavailable"))) {
+          result = ATfalse;
+        } else {
+          result = complete_asf_specification(visited,first);
+          imports = ATgetNext(imports);
+        }
+      }
+      else {
         result = ATfalse;
-      } else {
-        result = complete_asf_specification(visited,first);
-        imports = ATgetNext(imports);
       }
     }
     return result;
@@ -1029,15 +1034,18 @@ ATbool complete_asf_sdf2_specification(ATerm module)
 static ATermList 
 calc_trans(ATermList todo)
 {
-  ATerm name;
+  ATerm name, entry;
   ATermList imports, result = ATempty;
 
   while(!ATisEmpty(todo)) {
     name = ATgetFirst(todo);
-    if(ATindexOf(result, name, 0) < 0) {
-      imports = (ATermList) GetValue(import_db,name);
-      result = ATappend(result, name);
-      todo = ATconcat(todo, imports);
+    if (ATindexOf(result, name, 0) < 0) {
+      entry = GetValue(modules_db, name);
+      if (entry) {
+        imports = (ATermList) GetValue(import_db,name);
+        result = ATappend(result, name);
+        todo = ATconcat(todo, imports);
+      }
     };
     todo = ATgetNext(todo);
   }
