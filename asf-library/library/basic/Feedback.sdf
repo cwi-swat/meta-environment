@@ -9,11 +9,11 @@ sorts Feedback Subject
 
 context-free syntax
 
-"information" "(" id:String "," 
-                  producer-id:String "," 
-                  producer-type:String "," 
-                  description:String "," 
-                  "[" {Subject ","}* "]" ")" -> Feedback {cons("information")}
+"info" "(" id:String "," 
+           producer-id:String "," 
+           producer-type:String "," 
+           description:String "," 
+           "[" {Subject ","}* "]" ")" -> Feedback {cons("info")}
 
 "warning" "(" id:String "," 
               producer-id:String "," 
