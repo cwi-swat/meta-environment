@@ -27,9 +27,7 @@ SUBDIRS = muasf
 bin_PROGRAMS     = asfc
 data_DATA        = asfc.idef
 
-EXTRA_DIST       = asfc.idef asfc.tif.h asfc.tif.c 
-
-CLEANFILES       = asfc.tif.h asfc.tif.c asfc.tifs
+EXTRA_DIST       = asfc.idef
 
 asfc_SOURCES = asfc.c \
                chars.c \
