@@ -50,7 +50,7 @@ ABS_ERROR_MODULES = \
 MetaErrors.def: Makefile
 	@(echo "definition"; cat ${ABS_ERROR_MODULES}) > $@
 
-error-api: parsed-error-api imploded-error-api errorapi-${VERSION}.jar
+error-api: parsed-error-api imploded-error-api java-error-api
 
 parsed-error-api: MetaErrors.def Makefile  
 	sdf2-to-c --input $< --prefix PERR_ --output ParsedErrorAPI
@@ -60,7 +60,7 @@ imploded-error-api: MetaErrors.def Makefile
 	sdf2-to-c --imploded --input $< --prefix ERR_ --output ErrorAPI
 	indent ErrorAPI.h
 
-errorapi-${VERSION}.jar: MetaErrors.def Makefile
+java-error-api: MetaErrors.def Makefile
 	sdf2-to-java \
 		--imploded \
 		--input $< \
@@ -76,7 +76,7 @@ ABS_LOCATION_MODULES = \
 Location.def: Makefile
 	@(echo "definition"; cat ${ABS_LOCATION_MODULES}) > $@
 
-location-api: parsed-location-api imploded-location-api locationapi-${VERSION}.jar
+location-api: parsed-location-api imploded-location-api java-location-api
 
 parsed-location-api: Location.def Makefile
 	sdf2-to-c --input $< --prefix PLOC_ --output ParsedLocationAPI
@@ -86,7 +86,7 @@ imploded-location-api: Location.def Makefile
 	sdf2-to-c --imploded --input $< --prefix LOC_ --output LocationAPI
 	indent LocationAPI.h
 
-locationapi-${VERSION}.jar: Location.def Makefile
+java-location-api: Location.def Makefile
 	sdf2-to-java \
 		--imploded \
 		--input $< \
