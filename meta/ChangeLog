@@ -1,5 +1,14 @@
 # $Id$
 
+Mon Feb 16 15:07:46 CET 2004 <{jong,jurgenv}@cwi.nl>
+ * editors/text/*:
+   - remove double functionality to go to a specific offset in
+     a file, "goto-cursor-at-offset" is the only one left.
+ * editors: text vs. structure
+   - fix bug where text- and structure editor were out of sync,
+     causing (a.o.) the "annoying emacs *beep* bug".
+ * editors/text/xemacs: removed
+
 2004/02/16 (markvdb@cwi.nl)
  * The asfsdfchecker is now only called in case a parsetable
    has to be generated for parsing terms and equations in 
