@@ -1,4 +1,13 @@
-2001/08/19 (jurgenv@cwi.nl)
+2001/07/20 (jurgenv@cwi.nl)
+ * Added rewriting of ambiguity clusters; addeqssyntax generates
+   "amb({Symbol ","}+) -> Symbol" and asfe lifts ambiguity clusters
+   to this syntax before rewriting and flattens them back when finished.
+ * Fixed asfc such that modules with no equation compile to a binary
+   that does nothing but building a normal form.
+ * Set version of asfe to 0.3.
+ * Set version of addeqssyntax to 2.1
+
+2001/07/19 (jurgenv@cwi.nl)
  * Generalized the optimization for recursive list functions to
    any recursive function.
  * addeqssyntax adds syntax for each declared symbol too.
