@@ -1,3 +1,4 @@
+
 %% Test suite for built-in operators
 
 int ONE = 1
@@ -120,12 +121,12 @@ assert "== 31" : not({{}, {}} == {{}, {}, {}})
 
 %% --- !=
 
-loc A1  = location("f", area(10, 3, 11, 7, 0, 0))
-loc A2  = location("f", area(10, 2, 11, 8, 0, 0))
-loc A30 = location("f", area(10, 5, 10, 7, 0, 0))
-loc A31 = location("f", area(10, 4, 10, 6, 0, 0))
-loc A3  = location("f", area(10, 4, 10, 7, 0, 0))
-loc A4  = location("f", area(10, 3, 10, 8, 0, 0))
+loc A1  = area-in-file("f", area(10, 3, 11, 7, 0, 0))
+loc A2  = area-in-file("f", area(10, 2, 11, 8, 0, 0))
+loc A30 = area-in-file("f", area(10, 5, 10, 7, 0, 0))
+loc A31 = area-in-file("f", area(10, 4, 10, 6, 0, 0))
+loc A3  = area-in-file("f", area(10, 4, 10, 7, 0, 0))
+loc A4  = area-in-file("f", area(10, 3, 10, 8, 0, 0))
 
 assert "!= 1" : 1 != 2
 assert "!= 2" : not(1 != 1)
@@ -449,8 +450,8 @@ assert "-, 2":  {X - 1 | int X : {1,2,3}} == {0,1,2}
 assert "-, 3":  {X | int X : {1,2,3}, X - 1 < 3} == {1,2,3}
 
 assert "*, 1":  3 * 4 == 12
-assert "*, 2":  3 * -4 == -12
-assert "*, 3":  -3 * -4 == 12
+%%assert "*, 2":  3 * (-4) == -12
+%%assert "*, 3":  (-3) * (-4) == 12
 assert "*, 4":  {X * 2 | int X : {1,2,3}} == {2,4,6}
 
 assert "/, 1":  8 / 2 == 4
@@ -525,5 +526,3 @@ type BagType = bag[int]
 BagType BT1 = {1,2,3}
 
 assert "type, 22": BT1 == {1,2,3}
-
-

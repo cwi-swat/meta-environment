@@ -38,10 +38,10 @@ equations
 
 %% ---- Evaluate assert
 
-[S10]	evalp($Exp,$Rstore) == true
+[S10]	evale($Exp,$Rstore) == true
 	===================================================
 	eval-rstat(assert $String : $Exp, $Rstore)= increment(NPASSED, $Rstore)
 
-[S11]	evalp($Exp,$Rstore) == false, $Rstore' := add-elem(FAILED, $String, $Rstore)
+[S11]	evale($Exp,$Rstore) == false, $Rstore' := add-elem(FAILED, $String, $Rstore)
 	===================================================
 	eval-rstat(assert $String : $Exp, $Rstore)= increment(NFAILED, $Rstore')

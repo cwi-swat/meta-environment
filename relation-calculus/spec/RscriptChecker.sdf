@@ -13,7 +13,9 @@ imports utilities/PosInfo[Bag[[Elem]]]
 imports Rstore
 
 exports
-    sorts ERROR ERRORS TENV DCLRVARS  <REXPTYPE, TENV>
+    sorts ERROR ERRORS TENV DCLRVARS  
+
+    start-symbols Summary
 
     context-free syntax
 
