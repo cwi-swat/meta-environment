@@ -56,6 +56,7 @@ A first version of an INTERPRETER in ToolBus C.
 
 /*{{{  includes */
 
+#include <unistd.h>
 #include <aterm2.h>
 #include <AsFix.h>
 #include <atb-tool.h>
