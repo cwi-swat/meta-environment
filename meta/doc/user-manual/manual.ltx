@@ -316,8 +316,9 @@ result, the \ASmetaenv\ main window pops up. This is shown in
 Figure~\ref{FIG:meta-start}.
 
 
-The {\tt meta} command has the following options, which may come in
-handy later on.
+The {\tt meta} command has the following options, which may come in handy
+later on. As a novice user, you may want to skip the remainder of this section
+and continue with Section~\ref{MainWindow}.
 
 \begin{itemize}
 
@@ -396,25 +397,30 @@ The main window of the consists of the following parts:
     The {\tt Help} menu is described in Section~\ref{HelpMenu}.
 
   \end{itemize}
-
+  
 \item The \emph{import pane}: A graphical canvas (empty in
-Figure~\ref{FIG:meta-start}) at the left hand side of the window that
-shows the import graph of the specification you are editing.  The
-import pane is described in Section~\ref{ImportPane}.
-
+  Figure~\ref{FIG:meta-start}, but containing rectangles and arrows in
+  Figure~\ref{FIG:meta-pico}) at the left hand side of the window that shows
+  the import graph of the specification you are editing.  The import pane is
+  described in Section~\ref{ImportPane}.
+  
 \item The \emph{module pane}: a vertical list (empty in
-Figure~\ref{FIG:meta-start}) at the right/middle part of the window
-that shows the names of all modules in the current specification.  The
-module pane is described in Section~\ref{ModulePane}.
-
-\item The \emph{button pane}: vertical row of buttons at the right
-hand side of the window: they are used for common operations on the
-current specification like editing, saving or deleting a module, or
-compiling the complete specification. The button pane is described
-in Section~\ref{ButtonPane}.
-
-\item A status bar at the bottom of the window that shows the current
-activity of the system.
+  Figure~\ref{FIG:meta-start}, but containing names like {\tt Layout}, {\tt
+    Pico-Booleans}, ...  in Figure~\ref{FIG:meta-pico}) at the right/middle
+  part of the window that shows the names of all modules in the current
+  specification.  The module pane is described in Section~\ref{ModulePane}.
+  
+\item The \emph{button pane}: vertical row of buttons at the right hand side
+  of the window containing buttons like {\tt Edit Syntax} and {\tt Edit
+    Equations}: they are used for common operations on the
+  current specification like editing, saving or deleting a module, or
+  compiling the complete specification. The button pane is described in
+  Section~\ref{ButtonPane}.
+  
+\item A \emph{status bar} at the bottom of the window that shows the current
+  activity of the system. Examples are: {\tt idle} (the system is doing
+  nothing), {\tt parsing} (the system is performing a syntactic analysis of
+  some module or term), and {\tt rewriting} (the system is rewriting a term).
 
 \end{itemize}
 
@@ -540,7 +546,7 @@ to enter a bug report. This offers the users of the \ASmetaenv\ an online
 facility to report bugs to the developers.
 
 Both {\tt Online Help} and {\tt JitterBug Activated} assume that there
-is a {\tt Netscape}, other browsers are not yet supported.
+is a {\tt Netscape} running, other browsers are not yet supported.
 
 \section{The Panes of the Main Window}
 
@@ -594,11 +600,6 @@ menu (see Section~\ref{FileMenu}).
   \centerline{\epsfig{file=new-open.ps,width=2cm}}
   \caption{\label{FIG:new-open}Pop up menu for adding a module (import pane)}
 \end{figure}
-
-The import pane may contain square nodes and oval nodes. The first one
-represent modules of which the syntax definitions are syntactically
-correct, the second one represent modules with a syntactically erroneous
-syntax definition or this module could not be found within the search space.
 
 \subsection{The Module Pane} \label{ModulePane}
 
@@ -1427,24 +1428,24 @@ expressions results in a value.
 
 \section{An Introduction to \asfsdf} \label{ASF+SDF}
 
-\asfsdf\ is the result of the marriage of two formalisms \asf\
-(Algebraic Specification Formalism) and \sdf\ (Syntax Definition
-Formalism).  \asf\ is based on the notion of a module consisting of a
-signature defining the abstract syntax of functions and a set of
-conditional equations defining their semantics. Modules can be
-imported in other modules. \sdf\ allows the simultaneous definition of
-concrete (i.e., lexical and context-free) and abstract syntax and
-implicitly defines a translation from text strings to abstract syntax
-trees\footnote{In fact we will describe here \sdf2\ instead of \sdf. \sdf2 is
-more powerful and offers some special features to write more concise
-context-free grammar definitions. On the other hand some built-in
-features of \sdf, like lexical disambiguation, have disappeared, and a
-specification writer has to take care of this explicitly.
-
-\sdf2 offers a number of language features which are not
-yet supported by the various components of the \ASmetaenv. In fact the 
-current version of the \ASmetaenv\ supports only the so-called 
-\sdf1 features of \sdf2.}.
+\asfsdf\ is the result of the marriage of two formalisms \asf\ (Algebraic
+Specification Formalism) and \sdf\ (Syntax Definition Formalism).  \asf\ is
+based on the notion of a module consisting of a signature defining the
+abstract syntax of functions and a set of conditional equations defining their
+semantics. Modules can be imported in other modules. \sdf\footnote{To be more
+  precise, we will describe here \sdf2, a new version of \sdf. \sdf2 is more
+  expressive and offers some special features to write more powerfull lexical
+  grammar definitions as well as more concise context-free grammar
+  definitions. However, some built-in features of \sdf, like lexical
+  disambiguation, have disappeared, and a specification writer has to be aware
+  of this.
+  
+  Currently, the \ASmetaenv\ only supports a subset of \sdf2\ that is mostly
+  compatible with \sdf. In due time, full \sdf2\ will be supported. In this
+  manual, we only describe features that are supported by the current version
+  of the Meta-Environment.} allows the simultaneous definition of concrete
+(i.e., lexical and context-free) and abstract syntax and implicitly defines a
+translation from text strings to abstract syntax trees.
 
 The main idea of \asfsdf\ is to identify the abstract syntax defined by the
 signature in \asf\ specifications with the abstract syntax defined 
@@ -1472,19 +1473,17 @@ The overall structure of a module is:
 \begin{verbatim}
 module <ModuleName>
 
-  <ImpSection>*
+  <ImportSection>*
  
-  <Section>*
+  <ExportOrHiddenSection>*
 
 equations
-  <Conditional-equation>*
+  <ConditionalEquation>*
 \end{verbatim}
 
-A module consists of a module header, followed by a list of zero or
-more import sections, followed by a list of zero or more syntax sections
-(that define sorts, lexical syntax, context-free syntax, priority
-relations, and variables) and an optional equations section that
-defines conditional equations. 
+A module consists of a module header, followed by a list of zero or more
+import sections, followed by zero or more hidden or exported
+sections and an optional equations section that defines conditional equations.
 
 Conceptually, a module is a single unit but for technical reasons the
 syntax sections and the equations section are stored in physically
@@ -1492,85 +1491,86 @@ separate files.  For each module $M$ in a specification two files
 exist: `{\tt $M$.sdf2}' contains the syntax sections of $M$ and `{\tt
 $M$.eqs}' contains the equations section of $M$.
 
-Each {\tt <Section>} starts with one of the keywords {\tt exports} or
-  {\tt hiddens}: {\tt exports} makes all entities in the section
-  visible to other modules, {\tt hiddens} makes all entities in the
-  section local to the module. A Section has the form:
+A {\tt <Section>} is either an \emph{export section} or a \emph{hidden
+  section}. The former starts with the keyword {\tt exports} and makes all entities
+in the section visible to other modules.  The latter starts with the keyword
+{\tt hiddens} and makes all entities in the section local to the module.
+
+A {\tt <Section>} has the form:
 
 \begin{verbatim}
 exports-or-hiddens
   <Grammar>+
 \end{verbatim}
   
-\noindent A \emph{Grammar} can either be a(n) 
+\noindent A {\tt <Grammar>} 
+can be a definition of one of the following: 
 \begin{itemize}
-\item import section;
-\item sorts section;
-\item lexical syntax section;
-\item context-free syntax section;
-%\item lexical variables section;
-%\item lexical priorities section;
-\item context-free priorities section;
-%\item priorities section;
-\item lexical restrictions section;
-\item context-free restrictions section;
-\item variables section.
-%\item restriction section;
-%\item aliases section;
+\item imports (Section~\ref{Imports});
+\item sorts (Section~\ref{Sorts});
+\item lexical syntax (Section~\ref{LexicalSyntax});
+\item context-free syntax (Section~\ref{ContexFreeSyntax});
+%\item lexical variables;
+%\item lexical priorities;
+\item context-free priorities (Section~\ref{ContextFreePriorities});
+%\item priorities;
+\item lexical restrictions (Section~\ref{Restrictions});
+\item context-free restrictions (Section~\ref{Restrictions});
+\item variables (Section~\ref{Variables}).
+%\item restrictions;
+%\item aliases;
 \end{itemize}
 
-In the following subsections each of these entities will be described
-and illustrated by some examples.
+\noindent Each of these entities will be now be described and illustrated by examples.
 
-\subsection{Imports}
+\subsection{Imports} \label{Imports}
 
-Each \emph{ImpSection} starts with the keyword {\tt imports} followed
-by a possible empty list of module names.
+Each {\tt <ImportSection>} starts with the keyword {\tt imports} followed
+by a possibly empty\footnote{Klopt {\tt <ModuleName>*}?} list of module names.
 %module name should be imports where, an import is either a module name
 %or a module name followed by renamings.
-An ImpSection has the form:
+An {\tt <ImportSection>} has the form:
 
 \begin{verbatim}
 imports
   <ModuleName>*
 \end{verbatim}
 
-Modules can be combined by importing one module in another. In the
-ordinary setting of importing modules or when the import section
-is guarded by an exports keyword, all exported entities of the 
-imported module (and of all modules that are imported indirectly by it) 
-become available in the importing module. However, if the import
-section is guarded by a hiddens keyword, the exported entities are only
-visible in the importing module by are not exported to modules
-importing this module.
+\begin{sloppypar}
+\noindent Modules can be combined by importing one module in another. 
+Imports can occur as {\tt <ImportSection>} at the topmost level of a module
+or they can occur within an exports or hiddens section.
+\end{sloppypar}
 
-\subsection{Sorts}
+When importing modules at the topmost level of a module or when the import
+section occurs within the scope of an exports keyword, all exported entities
+of the imported module (and of all modules that are imported indirectly by it)
+become available in the importing module. In addition, they are also exported
+by the importing module.  However, if the import section occurs within the
+scope of a hiddens keyword, the exported entities are only visible in the
+importing module but they are not exported by the importing module.
 
-A sort is declared by listing its name in a sorts section of a module.
+\subsection{Sorts} \label{Sorts}
+
+Sorts are declared by listing their name in a sorts section of a
+module.\footnote{Klopt {\tt <SortName>*}?}
 
 \begin{verbatim}
 sorts
-  <Sort>*
+  <SortName>*
 \end{verbatim}
 
-A sort name should start with a capital letter and may be followed by 
-letters and/or digits. Hyphens (`{\tt -}') may be embedded in
-sort names. There is one predefined sort which may not be redeclared:
-{\tt LAYOUT}.
+\noindent A sort name should start with a capital letter and may be followed by 
+letters and/or digits. Hyphens (`{\tt -}') may be embedded in sort names.
+There is one predefined sort name ({\tt LAYOUT}). We will describe it in
+Section~\ref{LexicalSyntax}.
 
-{\tt LAYOUT} defines which parts of the text are layout symbols between
-lexical tokens and are to be skipped during lexical analysis. It may only be
-used as result sort of lexical functions. When a string is matched by both a
-LAYOUT function and by other non-LAYOUT functions, then the interpretation
-as layout symbol is ignored. Typically used for defining layout and comment
-conventions.
-
-\subsection{Lexical Syntax}
+\subsection{Lexical Syntax} \label{LexicalSyntax}
 \label{lexical-syntax}
 
 The lexical syntax describes the low level structure of text by means of
 \emph{lexical tokens}. A lexical token consists of a sort name (used to
-distinguish classes of tokens like identifiers and numbers), and actual text
+distinguish classes of tokens like identifiers and numbers), and the actual text
 of the token. The lexical syntax also defines which substrings of the text are
 layout symbols or comments and are to be skipped.
 
@@ -1578,35 +1578,49 @@ A lexical syntax contains a set of declarations for \emph{lexical functions},
 each consisting of a regular expression and a result sort. All functions with
 the same result sort together define the lexical syntax of tokens of that
 sort. Regular expressions may contain strings, sort names, character classes,
-optional operators, alternative operators, and repetition operators.
-These notions will be explained in the next subsections. 
-Spaces are only significant inside strings and character classes.
+optional operators, alternative operators, and repetition operators.  These
+notions will be explained in the next subsections.  Spaces are only
+significant inside strings and character classes.
 
-In fact the distinction between lexical syntax and context-free syntax
-in \sdf2 is artifical. In fact both can be seen as a kind of
-abbreviation mechanism. Between the members in the left-hand sides of 
-lexical functions no layout can be recognized, whereas in the
-left-hand side of context-free syntax non-terminals to recognize
-layout are implicitly inserted. \sdf2 offers a third mechanism
+The sort name {\tt LAYOUT} is predefined and may not be redeclared.  {\tt
+  LAYOUT} defines which parts of the text are \emph{layout symbols} (also
+known as \emph{white space}) between lexical tokens and are to be skipped
+during lexical analysis. It may only be used as result sort of lexical
+functions (Section~\ref{LexicalFunctions}). When a string is matched by both a
+LAYOUT function and by other non-LAYOUT functions, then the interpretation as
+layout symbol is ignored. {\tt LAYPOUT} is typically used for defining layout
+and comment conventions.
+
+Traditionally, lexical syntax and context-free syntax are treated differently.
+They are defined by different notations and implemented by means of different
+techniques. \sdf\ provides a much more uniform treatment.
+
+In \sdf, the only significant difference between the two is that no layout will be
+accepted while recognizing the members of the left-hand side of a lexical
+function, whereas layout \emph{will} be accepted between the members of the
+left-hand side of a context-free function. At the implementation level,
+both are implemented using a single parsing technique.
+
+{\bf UITLEG
+\sdf2 offers a third mechanism
 to define syntax rules via a so-called {\tt syntax} section.
 The specification writer has to take care of the recognition of layout
 explicitly. This mechanism is beyond the scope of this manual
-and will not be discussed here, for more details see \cite{Vis9?.thesis}.
+and will not be discussed here, for more details see \cite{Vis9?.thesis}.}
 
-\subsubsection{Lexical Functions}
+\subsubsection{Lexical Functions} \label{LexicalFunctions}
 
 In their simplest form, declarations of lexical functions consist of a
 sequence of zero or more strings or sort names followed by `{\tt ->}' and the
-name of a result sort, say $L$, followed by a possible empty list of
-attributes. The regular expression associated with $L$
-consists of the \emph{or} of all left-hand sides of lexical functions with
-result sort $L$. All sort names appearing in left-hand sides of declarations
-are replaced by the regular expression associated with them. Circular
-dependencies between declarations in the lexical syntax are forbidden.
-See Figure \ref{CODE:simplelex} for an example of a simple lexical function
-definition.
+name of a result sort, say $L$.  A lexical function may be followed by a list
+of attributes. The regular expression associated with $L$ consists of the
+\emph{or} of all left-hand sides of lexical functions with result sort $L$.
+All sort names appearing in left-hand sides of declarations are replaced by
+the regular expression associated with them. Circular dependencies between
+declarations in the lexical syntax are forbidden.  See Figure
+\ref{CODE:simplelex} for an example of a simple lexical function definition.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module LeesPlank
@@ -1622,16 +1636,16 @@ exports
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Simple lexical functions}\label{CODE:simplelex}
-\end{figure}         
+\end{figure}   
+      
 
-\paragraph{Lexical constructor functions}
+\paragraph{Lexical constructor functions}%
+\hspace{-0.3cm}\footnote{Lexical contructor functions will disappear when full \sdf2\ becomes available in the \ASmetaenv.}
 For each sort that appears as result sort in the lexical syntax a lexical
-constructor function of the form {\tt l "(" CHAR+ ")" -> L} is 
-automatically added to the context-free syntax of the specification. 
-Here, `{\tt l}' is the name of sort `{\tt L}' written in lower case letters. 
-In this way, you can get access to the text of lexical tokens.
-The lexical contructor functions will disappear when full \sdf2\ becomes
-available in the \ASmetaenv.
+constructor function of the form {\tt l "(" CHAR+ ")" -> L} is automatically
+added to the context-free syntax of the specification.  Here, `{\tt l}' is the
+name of sort `{\tt L}' written in lower case letters.  In this way, you can
+get access to the text of lexical tokens.
 
 \subsubsection{Character Classes}
 
@@ -1655,8 +1669,6 @@ restrictions should apply:
 character code of $c_1$ is larger than that of $c_2$.
 \end{itemize}
 
-By prefixing a character class with `{\tt \~{}}', it is complemented. Such a
-complemented character class accepts all characters not in the original class.
 
 \paragraph{Escape Conventions}
 
@@ -1666,7 +1678,6 @@ needed as ordinary characters in the lexical syntax. The backslash character
 the quoting of special characters. You
 should use `{\tt \verb+\+$c$}' whenever you need special 
 character $c$ as ordinary character in a definition.
-
 All individual characters, except digits and letters,
 are {\em always} escaped with a backslash.
 
@@ -1692,21 +1703,23 @@ You may use the following abbreviations in literals and in character classes:
 
 \end{itemize}
 
-\paragraph{Character Class Operations}
+\paragraph{Character Class Operators}
 
-Besides the complementation operator for character classes there are
-also operators for:
+The following operators are available for character classes
 \begin{itemize}
-\item Difference between two character classes `{\tt /}'.
-\item Intersection of two character classes `{\tt  /\verb+\+}'.
-\item Union of two character classes `{\tt  \verb+\+/}'.
+\item {\tt \~{}}: complement of character class. Accepts all characters not in the original class.
+\item {\tt /}: difference of two character classes. Accepts all characters in
+  the first class unless they are in the second class.
+\item {\tt  /\verb+\+}: intersection of two character classes. Accepts all
+  characters that are accepted by both character classes.
+\item {\tt  \verb+\+/}: union of two character classes. Accepts all characters
+  that are accpted by either character class.
 \end{itemize}
-These three binary operators are left-associative.
+The three binary operators are left-associative.
+See Figure \ref{CODE:charclasses} of lexical definitions
+using character classes. (** UITLEG **)
 
-See Figure \ref{CODE:charclasses} of some lexical definitions
-using character classes.
-
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Characters
@@ -1728,7 +1741,7 @@ exports
     EscChar                  -> L-Char
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Lexical functions with character classes}\label{CODE:charclasses}
+\caption{Example of character classes}\label{CODE:charclasses}
 \end{figure}   
 
 \subsubsection{Repetition Operators}
@@ -1747,9 +1760,9 @@ purpose:
 
 \end{itemize}
 
-Figure \ref{CODE:repetition} shows the use of these repetition operators.
+\noindent Figure \ref{CODE:repetition} shows the use of these repetition operators.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Idetntifiers-repetition
@@ -1764,10 +1777,10 @@ exports
     Let NumLet* -> Id
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Lexical functions with repetition operator}\label{CODE:repetition}
+\caption{Example of repetition operator {\tt *} }\label{CODE:repetition}
 \end{figure}   
 
-\subsubsection{Optional Operators}
+\subsubsection{The Optional Operator}
 
 If zero or exactly one occurence of a lexical token is desired the
 postfix operator {\tt ?} is available. It indicates that there
@@ -1776,7 +1789,7 @@ character class preceding the {\tt ?}.
 
 Figure \ref{CODE:optional} shows the use of this optional operator.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Identifiers-optional
@@ -1791,26 +1804,45 @@ exports
     Let Num? -> Id
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Lexical functions with optional operator}\label{CODE:optional}
+\caption{Example of optional operator {\tt ?} }\label{CODE:optional}
 \end{figure}   
 
-\subsubsection{Alternative Operators}
+\subsubsection{The Alternative Operator}
 
 Functions with the same result sort together define the lexical syntax of
-tokens of that sort. Within the left-hand side of a lexical function
-definition alternative tokens can be defined. (* Beter formuleren *)
-By means of the binary operator {\tt |} the alternatives
-of a token can be defined. 
+tokens of that sort. The left-hand sides of these function definitions form
+the alternatives for this function. Sometimes, it is more convenient to list
+these alternatives explicitly in a single left-hand side or to list
+alternative parts inside a left-hand side.  This is precisely the role of the
+binary alternative operator (`{\tt |}'). It is right-associative and binds
+stronger than ordinary juxtapostion of the elements in a definition (the
+invisible operator for the concatenation of tokens).
 
-See Figure \ref{CODE:alternative1} for
-an example of this operator.
-This lexical definition describes identifiers starting
-with a capital letter followed by zero or more either small
-letters, capital letters, or digits, like: {\tt Aap}, {\tt NOOT},
-{\tt B49}, etc., however, MiES, 007, etc. are no legal identifiers
-given this definition.
+The example  in Figure \ref{CODE:alternative1} shows how this operator can be used.
+It describes identifiers starting
+with a capital letter followed by one of the following:
+\begin{itemize}
+\item  zero or more small letters, 
 
-\begin{figure}[!h]
+\item zero or more capital letters, or
+
+\item zero or more digits.
+\end{itemize}
+
+\noindent According to this definition, 
+{\tt Aap}, {\tt NOOT}, and {\tt B49} are acceptable, but {\tt MiES}, {\tt
+  B49a} and {\tt 007} are not.
+
+Note that the relation between juxtapostion and alternative operator is best
+understood by looking at the line defining {\tt Id}. A parenthesized
+version of this same line would read as follows:
+\begin{quote}
+\begin{verbatim}
+  UcLet (ScLets | UcLet* | Digs) -> Id
+\end{verbatim}
+\end{quote}
+
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Identifiers-alternative1
@@ -1826,19 +1858,14 @@ exports
   UcLet ScLets | UcLet* | Digs -> Id
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Lexical functions with alternative operator}\label{CODE:alternative1}
+\caption{Example of alternative operator {\tt |} }\label{CODE:alternative1}
 \end{figure}   
 
-This mechanism can also be used as a short
-hand to define the alternatives of a sort. However some care has to take
-when using the alternative operator for this purpose. Given the example
-of Figure \ref{CODE:alternative1} it can be conclude that the alternative
-operator binds stronger than the invisible operator for the concatenation
-of tokens. So, in order to overrule this brackets should be used.
-See Figure \ref{CODE:alternative2} for an alternative definition
-of the identifier.
+\noindent An equivalent, and more readable, definition is
+given in Figure \ref{CODE:alternative2}. We recommend to use parentheses to
+make the scope of alternatives explicit.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Identifiers-alternative2
@@ -1854,17 +1881,18 @@ exports
     (UcLet ScLets) | (UcLet UcLet*) | (UcLet Digs) -> Id
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Lexical functions with alternative operator}\label{CODE:alternative2}
+\caption{Example of alternative operator {\tt |} }\label{CODE:alternative2}
 \end{figure}   
 
 \subsubsection{Lexical Ambiguities}
 \label{lex-ambiguity}
 
-\sdf\ offers {\em no} automatic lexical disambiguation, it has a number of
-mechanism to disambiguate on the lexical level. The specification writer
-has to specify the disambiguation rules explicitly. We will discuss
-the various lexical disambiguation mechanism and illustrate them by means
-of examples.
+\sdf\ offers {\em no automatic} lexical disambiguation, but it has a number of
+mechanisms to disambiguate at the lexical level. The specification writer has
+to specify the disambiguation rules explicitly. We will discuss various
+approaches to lexical disambiguation\footnote{This behaviour is specific for
+  \sdf2. In the original \sdf, most of these disambiguations were built-in.}
+and illustrate them by means of examples.
 
 \paragraph{Prefer Longest Match per Sort} Reject all interpretations of 
 the input text that are included in a longer interpretation of the same 
@@ -1878,7 +1906,7 @@ section (see Section \ref{cf-restrict}).
 Figure \ref{CODE:restrict-id} shows how to enforce the longest match
 for the sort {\tt Id}.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Identifiers-restrict
@@ -1893,26 +1921,34 @@ exports
     Id -/- [a-zA-Z0-9]  
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Longest match for identifiers}\label{CODE:restrict-id}
+\caption{Using context-free restrictions to define a longest match for identifiers}\label{CODE:restrict-id}
 \end{figure}   
 
-\paragraph{Prefer Literals} Give preference to interpretation as a literal, 
-i.e., as keyword or operator introduced in the context-free syntax, over 
-interpretation as a more general symbol (such as identifier). The definition
-of the context-free syntax will be discussed in Section \ref{cf-syntax}.
+\paragraph{Prefer Literals} 
+
 In the left-hand side of a context-free syntax rule literals (keywords and/or
-operators) may be used. If these literals overlap with lexical tokens
-this causes ambiguities, e.g., {\tt begin} may be recognized as an
+operators) may be used. 
+If these literals overlap with  more general lexical tokens (such as identifier)
+this causes ambiguities.
+
+The strategy \emph{Prefer Literals} give preference to interpretation as a literal, over
+interpretation as a more general lexical token.
+For instance, the keyword {\tt begin} may be recognized as an
 identifier given the lexical definition of Figure \ref{CODE:restrict-id}.
-There are two alternatives to tackle this problem.
+There are two approaches to implement Prefer Literals.
 
-The first alternative is to define context-free grammar rules for
-all literals with the lexical sort in the right-hand side and using
-the attribute {\tt reject}, see Figure \ref{CODE:reject-id} for
-sort {\tt Id}. The {\tt reject} attribute indicates that the recognizition
-of a keyword as a keyword of the given sort should be rejected.
+In the first approach, we can explicitly forbid the recognition of literals as
+tokens of a specific sort. As a matter of fact, \sdf supports a very general
+reject mechanism (see Section~\ref{XXX}) that can be used for this purpose.
+The idea is to define context-free grammar rules for all literals with the
+undesired lexical sort (e.g., {\tt Id} )in the right-hand side followed by the
+attribute {\tt reject}.  Figure \ref{CODE:reject-id} illustrates this.  The
+{\tt reject} attribute indicates that the recognizition of a keyword as a
+literal of the given sort should be rejected. This approach has the major
+disadvantage that the addition of a literal in any context-free rule also
+requires the addition of a new reject rule for that literal.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Identifiers-reject
@@ -1930,16 +1966,17 @@ exports
     "begin" -> Id {reject}
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Reject rules for identifiers}\label{CODE:reject-id}
+\caption{Using {\tt reject} to implement Prefer Literals}\label{CODE:reject-id}
 \end{figure}   
 
+The second approach is more attractive. The lexical definition of the
+general notion that interferes with our literals is written in such a way that
+it is only used as a last resort. In other words, it is avoided as much as
+possible and is only used when no alternative exists.  The attribute {\tt
+  avoid} defines precisely this behaviour.  Figure \ref{CODE:avoid-id} shows
+how the lexical definition of {\tt Id} is attribued with {\tt avoid}.
 
-The second alternative is more compact. The lexical definition is
-extended with the attribute {\tt avoid}. This attribute indicates
-that when there is an alternative way of recognizing exists, this alternative
-will be prefered see Figure \ref{CODE:avoid-id} for sort {\tt Id}.
-
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Identifiers-avoid
@@ -1954,7 +1991,7 @@ exports
     Id -/- [a-zA-Z0-9]  
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Using avoid for identifiers}\label{CODE:avoid-id}
+\caption{Using {\tt avoid} to implement Prefer Literals}\label{CODE:avoid-id}
 \end{figure}   
 
 \paragraph{Prefer Non-Layout} Eliminate all interpretations of the text 
@@ -1963,7 +2000,7 @@ context-free syntax rule optional layout may be recognized. However,
 if a such a member recognizes the empty string, this gives rise to
 a lexical ambiguity. So, the safe way of defining {\tt LAYOUT} is
 presented in Figure \ref{CODE:safe-layout}.
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Layout
@@ -1981,7 +2018,7 @@ exports
 
 \paragraph{Prefer Variables} Give preference to interpretation as a 
 variable (as defined in a variables section) over interpretation as a 
-lexical token. This rule will be discussed in Section \ref{variables}
+lexical token. This strategy will be discussed in Section \ref{Variables}
 in more detail.
 
 \subsubsection{Examples of Lexical Syntax Definitions}
@@ -1995,7 +2032,7 @@ in order to get some ideas what can be specified using
 Definition of integers and real numbers can be found in 
 Figure \ref{CODE:numbers}.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Numbers
@@ -2024,7 +2061,7 @@ exports
 Figure \ref{CODE:string} contains the lexical definition of
 strings which may contain escaped quotes in the actual string.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Strings
@@ -2049,7 +2086,7 @@ It is impossible to give {\em one} lexical definition of
 comments. In Figure \ref{CODE:c-comment} we give an example in which 
 comments may be nested like in C.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Comment
@@ -2069,8 +2106,7 @@ exports
 \caption{Lexical definition of C comments}\label{CODE:c-comment}
 \end{figure}
 
-\subsection{Context-free Syntax}
-\label{cf-syntax}
+\subsection{Context-free Syntax} \label{ContexFreeSyntax}
 
 The context-free syntax describes the concrete and abstract syntactic
 structure of sentences in a language. A context-free syntax contains a set of
@@ -2105,7 +2141,7 @@ function declaration are implicitly added to the lexical syntax. Consider the
 language of coordinates and drawing commands presented in 
 Figure \ref{CODE:simple-cf}.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module DrawingCommands
@@ -2132,7 +2168,7 @@ An equivalent conventional BNF grammar (and not considering lexical syntax)
 of the grammar of Figure \ref{CODE:simple-cf} is presented in Figure
 \ref{CODE:simple-bnf}.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 <COORD> ::= "(" <NAT> "," <NAT> ")" 
@@ -2193,7 +2229,7 @@ Figure \ref{CODE:pascal-ids} shows how lists can be used to define
 the syntax of a list of identifiers (occurring in a declaration
 in a Pascal-like language).
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Decls
@@ -2268,7 +2304,7 @@ functions are declared for the argument and result sorts of
 
 \end{itemize}
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module BracketExpr
@@ -2296,8 +2332,7 @@ exports
 
 %\subsection{Tupling Operator}
 
-\subsection{Priorities}
-\label{priorities}
+\subsection{Priorities} \label{ContextFreePriorities}
 
 The context-free syntax defined in an \asfsdf\ specification may be 
 ambiguous: there are sentences which have more than one associated tree. 
@@ -2364,7 +2399,7 @@ Figure \ref{CODE:simple-prio} gives an example of a definition of
 simple arithmetic expressions with usual priorities and
 associativities.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Expr1
@@ -2409,7 +2444,7 @@ where F and G are functions appearing in the list.
 See Figure \ref{CODE:complex-prio} for an example of the use of grouped
 associativity.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Expr2
@@ -2526,7 +2561,7 @@ superscript in a special way. Therefore, the special case `{\tt E sub E sup E
 functions `{\tt E sub E -> E}' and `{\tt E sup E -> E}'.
 See, Figure \ref{CODE:eqn-exprs} for the \sdf\ definition.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Eqn
@@ -2552,7 +2587,7 @@ exports
 \caption{Syntax definition of EQN expressions}\label{CODE:eqn-exprs}
 \end{figure}
 
-\subsection{Restrictions}
+\subsection{Restrictions} \label{Restrictions}
 
 The use of restrictions have already been demonstrated in Section 
 \ref{lexical-syntax} where this mechanism is used to specified
@@ -2566,8 +2601,7 @@ Restrictions come in two flavours:
 
 (*** Verder uitwerken ***)
 
-\subsection{Variables}
-\label{variables}
+\subsection{Variables} \label{Variables}
 
 Variables are declared in the `variables' section of a module. It consists of
 a list of variables together with their sort. Each declaration defines a
@@ -2580,7 +2614,7 @@ variables `{\tt Id}', `{\tt Type3}', and `{\tt Id-list}'
 are examples of variables declared by
 the following specification presented in Figure \ref{CODE:variables}.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module VarDecls
@@ -2680,7 +2714,7 @@ mechanism to describe complex functionality in a compact way.
 See Figure \ref{CODE:sets} for a compact specification to remove
 double elements from a set.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Sets
@@ -2728,7 +2762,7 @@ variables which are either of the sort {\tt CHAR}, {\tt CHAR*}, or
 In Figure \ref{CODE:lcfs} a lexical constructor function is used
 to remove the leading zeros for a number.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Nats
@@ -2774,7 +2808,7 @@ to obtain this behaviour. If the $TagId$ of a equation starts with
 will only applied if none of the other rules match.
 Figure \ref{CODE:types} shows an example of the use of a default equation.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Types
@@ -2840,7 +2874,7 @@ Finally, some rules for simplifying expressions are given. As the above
 example shows, further simplification rules could have been added to collect
 multiple occurrences of a variable (giving {\tt 2*X + Y + Z}) or to 
 compute constant expressions.
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Diff 
@@ -2904,7 +2938,7 @@ In the following specification, the list variables {\tt Cs1} and {\tt Cs2}
 permit a succinct formulation of the search for adjacent colours that are in
 the wrong order.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Flag
@@ -2992,7 +3026,7 @@ Given these basic notions the expressions and statements of our little
 source language are defined, see Figure \ref{CODE:expressions} and
 \ref{CODE:statements}, respectively.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module BasicNotions 
@@ -3010,7 +3044,7 @@ variables
 \caption{\asfsdf\ specification for BasicNotions}\label{CODE:basicnotions}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Expressions 
@@ -3037,7 +3071,7 @@ exports
 \caption{\asfsdf\ specification for Expressions}\label{CODE:expressions}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module Statements 
@@ -3069,7 +3103,7 @@ The scheme of appending the character `{\tt x}' to the previous label is, of
 course, naive and will in real life be replaced by a more sophisticated one,
 see Figure \ref{CODE:nextlabel} for the actual definition.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module AssemblyLanguage
@@ -3102,7 +3136,7 @@ exports
 \caption{\asfsdf\ specification for AssemblyLanguage}\label{CODE:assemblylanguage}
 \end{figure}
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module NextLabel
@@ -3140,7 +3174,7 @@ translation function.
 
 This completes the specification of our code generator.
 
-\begin{figure}[!h]
+\begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
 module CodeGenerator
