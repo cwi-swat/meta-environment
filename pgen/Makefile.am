@@ -8,11 +8,11 @@ CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 
 SUBDIRS = src grammar sdf-checker test sdf-upgrade
 
-EXTRA_DIST = reconf program-check.m4 make_rules $(wildcard *.pkg)
+EXTRA_DIST = reconf program-check.m4 make_rules package
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
-${PACKAGE}-${VERSION}.pkg: ${PACKAGE}.pkg Makefile
-	sed 's#__VERSION__#${VERSION}#g;\
-             s#__PACKAGE__#${PACKAGE}#g' < $< > $@
+${PACKAGE}-${VERSION}.pkg: package Makefile
+	cp $ < $@
+
 
