@@ -10,15 +10,11 @@
 #include <stdio.h>
 #include <assert.h>
 #include <ctype.h>
+#include <malloc.h>
 
-/*#include <atb-tool.h>*/
-#include <AsFix.h>
-#include <AsFix2src.h>
 #include <aterm2.h>
 
 #include "support.h"
-#include "deprecated.h"
-#include "aterm-macs.h"
 
 /*}}}  */
 /*{{{  types */
@@ -425,3 +421,11 @@ ATerm slice(ATerm l1, ATerm l2)
 }
 
 /*}}}  */
+
+void initialize_all()
+{
+  c_rehash(INITIAL_TABLE_SIZE);
+  register_all();
+  resolve_all();
+  init_all();
+}

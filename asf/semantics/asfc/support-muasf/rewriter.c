@@ -25,6 +25,7 @@ static char *name;
 ATerm innermost(ATerm t);
 void init_patterns();
 void c_rehash(int newsize);
+void initialize_all();
 
 /*}}}  */
 /*{{{  ATerm *get_name(int cid) */
@@ -87,10 +88,7 @@ ATfprintf(stderr,"use_toolbus is %d\n",use_toolbus);
   init_patterns();
   AFinitAsFixPatterns();
 
-  c_rehash(INITIAL_TABLE_SIZE);
-  register_all();
-  resolve_all();
-  init_all();
+  initialize_all();
 
 ATfprintf(stderr,"Registering and resolving finished\n");
   if(use_toolbus) {
