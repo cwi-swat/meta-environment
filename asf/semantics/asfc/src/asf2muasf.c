@@ -113,7 +113,7 @@ MA_StrCon MA_makeStrCon(const char* str)
         ch = MA_makeLexStrCharBackslash();
         break;
       default:
-        if (isprint(str[i])) {
+        if (isprint((int) str[i])) {
           ch = MA_makeLexStrCharNormal(str[i]);
         }
         else {
