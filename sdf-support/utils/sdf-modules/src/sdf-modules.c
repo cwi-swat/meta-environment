@@ -68,9 +68,9 @@ static ATermList importsToModuleList(SDF_ImportList imports)
 
 /*}}}  */
 
-/*{{{  ATerm get_all_needed_modules(int cid, ATerm atModules, char* name)  */
+/*{{{  ATerm get_all_needed_module_names(int cid, ATerm atModules, char* name)  */
 
-ATerm get_all_needed_modules(int cid, ATerm atModules, char* name) 
+ATerm get_all_needed_module_names(int cid, ATerm atModules, char* name) 
 {
   ATermList list = (ATermList) atModules;
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
@@ -78,7 +78,7 @@ ATerm get_all_needed_modules(int cid, ATerm atModules, char* name)
  
   imports = SDF_getTransitiveImports(list, id);
 
-  return ATmake("snd-value(all-needed-modules(<term>))", 
+  return ATmake("snd-value(all-needed-module-names(<term>))", 
 		importsToModuleList(imports));
 }
 
@@ -97,27 +97,27 @@ ATerm get_all_needed_imports(int cid, ATerm atModules, char* name)
 }
 
 /*}}}  */
-/*{{{  ATerm get_imports(int cid, ATerm atModule) */
+/*{{{  ATerm get_imported_module_names(int cid, ATerm atModule) */
 
-ATerm get_imported_modules(int cid, ATerm atModule)
+ATerm get_imported_module_names(int cid, ATerm atModule)
 {
   SDF_Start start = SDF_StartFromTerm(atModule);
   SDF_Module module = SDF_getStartTopModule(start);
   ATermList imports = SDF_getImports(module);
  
-  return ATmake("snd-value(imported-modules(<term>))", imports);
+  return ATmake("snd-value(imported-module-names(<term>))", imports);
 }
 
 /*}}}  */
 
 /*{{{  ATerm get_all_depending_modules(int cid, ATerm atModules, char* name) */
 
-ATerm get_all_depending_modules(int cid, ATerm atModules, char* name)
+ATerm get_all_depending_module_names(int cid, ATerm atModules, char* name)
 {
   ATermList list = (ATermList) atModules;
   SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
 
-  return ATmake("snd-value(all-depending-modules(<term>))",
+  return ATmake("snd-value(all-depending-module-names(<term>))",
 		(ATerm) SDF_getDependingModuleIds(list, id));
 }
 

@@ -6,17 +6,17 @@ let
  SM : sdf-modules,
  Modules : list,
  ModuleId : str,
- Imports : list,
+ Imports : term,
  Import : term,
  Renamings : term,
  Module : term,
- Depending : list,
  Definition : term,
  Nodes : list,
  Edges : list,
  Path : str,
  From : str,
- To   : str
+ To   : str,
+ ModuleNames : list
 in
   execute(sdf-modules, SM?) .
   (
@@ -25,35 +25,30 @@ in
     rec-value(SM, module-id(ModuleId?)) .
     snd-msg(module-id(ModuleId))
   +
-    rec-msg(sm-get-all-needed-modules(Modules?, ModuleId?)) .
-    snd-eval(SM, get-all-needed-modules(Modules, ModuleId)) .
-    rec-value(SM, all-needed-modules(Imports?)) .
-    snd-msg(sm-all-needed-modules(Imports))
+    rec-msg(sm-get-all-needed-module-names(Modules?, ModuleId?)) .
+    snd-eval(SM, get-all-needed-module-names(Modules, ModuleId)) .
+    rec-value(SM, all-needed-module-names(ModuleNames?)) .
+    snd-msg(sm-all-needed-module-names(ModuleNames))
   +
-    rec-msg(sm-get-all-depending-modules(Modules?, ModuleId?)) .
-    snd-eval(SM, get-all-depending-modules(Modules, ModuleId)) .
-    rec-value(SM, depending-modules(Depending?)) .
-    snd-msg(sm-all-depending-modules(Depending))
+    rec-msg(sm-get-all-depending-module-names(Modules?, ModuleId?)) .
+    snd-eval(SM, get-all-depending-module-names(Modules, ModuleId)) .
+    rec-value(SM, depending-module-names(ModuleNames?)) .
+    snd-msg(sm-all-depending-module-names(ModuleNames))
   +
     rec-msg(sm-get-all-needed-imports(Modules?, ModuleId?)) .
     snd-eval(SM, get-all-needed-imports(Modules, ModuleId)) .
     rec-value(SM, all-needed-imports(Imports?)) .
     snd-msg(sm-needed-imports(Imports))
   +
-    rec-msg(sm-get-imported-modules(Module)) .
-    snd-eval(SM, get-imported-modules(Module)) .
-    rec-value(SM, imported-modules(Imports?)) .
-    snd-msg(sm-imported-modules(Imports))
+    rec-msg(sm-get-imported-module-names(Module)) .
+    snd-eval(SM, get-imported-module-names(Module)) .
+    rec-value(SM, imported-module-names(ModuleNames?)) .
+    snd-msg(sm-imported-module-names(ModuleNames))
   +
     rec-msg(sm-get-renamings(Module)) .
     printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
     snd-msg(sm-renamings([]))
   +  
-    rec-msg(sm-get-all-depending-modules(Modules?, ModuleId?)) .
-    snd-eval(SM, get-all-depending-modules(Modules, ModuleId)) .
-    rec-value(SM, depending-modules(Depending?)) .
-    snd-msg(sm-all-depending-modules(Depending))
-  +
     rec-msg(sm-make-sdf-definition(Modules?)) .
     snd-eval(SM, make-sdf-definition(Modules)) .
     rec-value(SM, sdf-definition(Definition?)) .
