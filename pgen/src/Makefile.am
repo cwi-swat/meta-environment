@@ -1,6 +1,7 @@
 # $Id$
 
 INCLUDES	= -I${ATERM}/include \
+		-I${TOOLBUS}/include \
 		-I${PT_SUPPORT}/include \
 		-I${SDF_SUPPORT}/include \
 		-I${ASF_SUPPORT}/include \
@@ -28,7 +29,8 @@ parsetablegen_LDADD   = parsetablegen.tif.o \
                         -L$(ASC_SUPPORT)/lib -lasc-support-me \
                         -L$(SDF_SUPPORT)/lib -lSDFME \
                         -L$(PT_SUPPORT)/lib -lmept \
-                        -L$(ATERM)/lib -lATB -lATerm \
+                        -L$(TOOLBUS)/lib -lATB \
+                        -L$(ATERM)/lib -lATerm \
                         $(SOCKLIBS)
 
 # remove built files during "make clean"
