@@ -536,8 +536,8 @@ SDF_ImportList renameParametersInImportList(SDF_ModuleName moduleName,
 
 /*{{{  SDF_Module delete_modulename_from_module(SDF_Module module, */
 
-SDF_Module delete_modulename_from_module(SDF_Module module,
-                                       SDF_ModuleId oldModuleName)
+SDF_Module SO_deleteModuleNameFromModule(SDF_Module module,
+                                         SDF_ModuleId oldModuleName)
 {
   SDF_Sections sections = SDF_getModuleSections(module);
   SDF_ImpSectionList impSections = SDF_getModuleList(module);

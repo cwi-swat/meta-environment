@@ -12,6 +12,7 @@
 #include "module-db.h"
 #include "module-store.h"
 #include "extension-store.h"
+#include "table-store.h"
 #include "term-conversion.h"
 #include "module-operations.h"
 #include "module-db.tif.h"
@@ -79,8 +80,7 @@ ATerm add_sdf_module(int cid, char *moduleName, char *path,
 
   if (!SO_checkModuleNameWithPath(SDFgetModuleName(sdfModule), 
                                   path)) {
-    return ATmake("snd-value(name-consistency-error(<str>))", 
-                  moduleName);
+    return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
   }
   
   atModuleName = makeString(SDFgetModuleName(sdfModule)); 
@@ -103,10 +103,55 @@ ATerm add_sdf_module(int cid, char *moduleName, char *path,
                 atModuleName, unknowns, importGraph);;
 }
 
-ATerm update_sdf2_module(int cid, char *moduleName, ATerm newSdfTree)
+ATerm update_sdf2_module(int cid, char *moduleName, ATerm sdfTree)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  ATerm atModuleName, importGraph;
+  ATermList dependingModules;
+  ATerm oldSdfTree;
+  ATermList unknowns;
+
+  SDF_Module sdfModule = SDF_getStartTopModule(
+                           SDF_StartFromTerm(sdfTree));
+  char *newModuleName = SDFgetModuleName(sdfModule);
+
+  if (strcmp(moduleName, newModuleName)) {
+    return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
+  }
+  
+  atModuleName = makeString(newModuleName);
+  
+  if (!MS_existsModule(atModuleName)) {
+    return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
+  }
+
+  oldSdfTree = MS_getSdfTree(atModuleName);
+
+  if (oldSdfTree) {
+    if (!ATisEqual(oldSdfTree, sdfTree)) {
+      MS_putSdfTree(atModuleName, sdfTree);
+      MS_removeAsfTree(atModuleName);
+      MS_removeAsfParseTable(atModuleName);
+      MS_removeTermParseTable(atModuleName);
+
+      dependingModules = MDB_getDependingModules(atModuleName);
+      MDB_invalidateModules(dependingModules);
+     
+      unknowns = MDB_unavailableImportedModules(atModuleName);
+      importGraph = MDB_retrieveImportGraph();
+
+      return ATmake("snd-value(imports(changed-modules([<term>,<list>]),"
+		    "need-modules([<list>]),<term>))",
+		    atModuleName, dependingModules, unknowns, importGraph);
+    }
+    else {
+      importGraph = MDB_retrieveImportGraph();
+
+      return ATmake("snd-value(imports(changed-modules([<term>,<list>]),"
+		    "need-modules([<list>]),<term>))",
+		    ATempty, ATempty, importGraph);
+    }
+  }
+  return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
 }
 
 ATerm get_sdf_tree(int cid, char *moduleName)
@@ -124,26 +169,33 @@ ATerm get_sdf_tree(int cid, char *moduleName)
 
 void invalidate_sdf(int cid, char *moduleName)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
+  MS_removeSdfTree(makeString(moduleName));
 }
 
 ATerm add_empty_module(int cid, char *moduleName)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  MS_putModuleName(makeString(moduleName));
+  return ATmake("snd-value(empty-module-added(<term>))", 
+		MDB_retrieveImportGraph());
 }
 
 ATerm all_equations_available(int cid, char *moduleName)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  ATermList missing = MDB_getModulesWithoutEqs(makeString(moduleName));
+
+  if (ATisEmpty(missing)) {
+    return ATmake("snd-value(equations-available)");
+  }
+  else {
+    return ATmake("snd-value(equations-incomplete)");
+  }
 }
 
 void add_tree_eqs_section(int cid, char *moduleName, char* path,
-                          ATerm eqsTree, char *eqsText, int timestamp)
+                          ATerm tree, char *eqsText, int timestamp)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  
+  MS_putAsfText(makeString(moduleName), eqsText, path, timestamp);
+  MDB_updateEqsTree(makeString(moduleName), tree);
 }
 
 void add_text_eqs_section(int cid, char *moduleName, char* path, 
@@ -152,53 +204,149 @@ void add_text_eqs_section(int cid, char *moduleName, char* path,
   MS_putAsfText(makeString(moduleName), eqsText, path, timestamp);
 }
 
-ATerm update_eqs_text(int cid, char *moduleName, char *eqsText)
+void update_eqs_text(int cid, char *moduleName, char *eqsText)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  ATerm atModuleName = makeString(moduleName);
+  char *path = MS_getAsfTextPath(atModuleName);
+
+  MS_putAsfText(atModuleName, eqsText, path, 0);
+  MS_removeAsfTree(atModuleName);
 }
 
 
 void add_empty_eqs_section(int cid, char *moduleName, char* path)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
+  MS_putAsfText(makeString(moduleName), "", path, 0);
 }
 
-ATerm update_eqs_tree(int cid, char *moduleName, ATerm newEqsTree)
+void update_eqs_tree(int cid, char *moduleName, ATerm tree)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+ATwarning("update_eqs_tree entered with %s\n", moduleName);
+  MDB_updateEqsTree(makeString(moduleName), tree);
 }
 
 
-ATerm get_asf_tree(int cid, char *modulename)
+ATerm get_asf_tree(int cid, char *moduleName)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  ATerm asfTree = MDB_getEqsTree(makeString(moduleName));
+
+  if (asfTree) {
+    return ATmake("snd-value(asfix(tree(<term>)))", ATBpack(asfTree));
+  }
+  else {
+    return ATmake("snd-value(asfix(unavailable))");
+  }
 }
 
 ATerm get_equations_for_module(int cid, ATerm atImport)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  SDF_Import import = SDF_makeImportFromTerm(atImport);
+  SDF_ModuleName moduleName = SDF_getImportModuleName(import);
+  ATerm plainName = SDF_getModuleNamePlain(moduleName);
+
+  ATerm eqsTree = MDB_getEqsTree(plainName);
+
+  if (eqsTree) {
+    ATerm sdfTree = MS_getSdfTree(plainName);
+
+    if (sdfTree) {
+      SDF_Module module = SDF_getStartTopModule(SDF_StartFromTerm(sdfTree));
+      SDF_Renamings renamings = SO_getModuleRenamings(import, module);
+      SDF_ImportList fullImports;
+
+      /* In case of parameters we need the imports in order
+       * to rename the parameters in the imports correctly.
+       * This is not needed in case of plain renamings.
+       */
+      if (renamings) {
+        if (SDF_isImportRenamedModule(import)) {
+	  fullImports = SDF_makeImportListEmpty();
+        }
+	else {
+	  fullImports = SDF_getModuleImportsList(module);
+	}
+	return ATmake("snd-value(renaming-equations(<term>,<term>,<term>))",
+		      SDF_makeTermFromRenamings(renamings),
+		      SDF_makeTermFromImportList(fullImports),
+		      ATBpack(eqsTree));
+      }
+      else {
+        return ATmake("snd-value(plain-equations(<term>))", 
+		      ATBpack(eqsTree));
+      }
+    }
+  }
+  
+  return ATmake("snd-value(no-equations)");
 }
 
 ATerm get_equations_for_renamed_import(int cid, ATerm atImport, ATerm atRenamings)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  SDF_Import import;
+  SDF_ModuleName moduleName;
+  ATerm plainName;
+  SDF_Renamings renamings;
+  ATerm eqsTree;
+
+  import = SDF_makeImportFromTerm(atImport);
+
+  if (SDF_isValidImport(import)) {
+    moduleName = SDF_getImportModuleName(import);
+    plainName = SDF_getModuleNamePlain(moduleName);
+    renamings = SDF_makeRenamingsFromTerm(atRenamings);
+
+    eqsTree = MDB_getEqsTree(plainName);
+
+    if (eqsTree) {
+      ATerm sdfTree = MS_getSdfTree(plainName);
+
+      if (sdfTree) {
+        SDF_ImportList fullImports;
+        SDF_Module module = SDF_getStartTopModule(SDF_StartFromTerm(sdfTree));
+        SDF_Renamings newRenamings = SO_getModuleRenamings(import, module);
+
+        /* In case of parameters we need the imports in order
+         * to rename the parameters in the imports correctly.
+         * This is not needed in case of plain renamings.
+         */
+        if (newRenamings) {
+          newRenamings = SDF_renameRenamings(renamings, newRenamings);
+
+          if (SDF_isImportRenamedModule(import)) {
+	    fullImports = SDF_makeImportListEmpty();
+          }
+	  else {
+	    fullImports = SDF_getModuleImportsList(module);
+	  }
+	  return ATmake("snd-value(renamed-equations(<term>,<term>,<term>))",
+		        SDF_makeTermFromRenamings(newRenamings),
+		        SDF_makeTermFromImportList(fullImports),
+		        ATBpack(eqsTree));
+        }
+      }
+    }
+  }
+
+  return ATmake("snd-value(no-equations)");
 }
 
 ATerm eqs_not_available_for_modules(int cid, char *moduleName)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  ATermList missingEqs = MDB_getModulesWithoutEqs(makeString(moduleName));
+
+  return ATmake("snd-value(modules([<list>]))", missingEqs);
 }
 
 ATerm get_eqs_text(int cid, char *moduleName)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  char *eqsText = MS_getAsfTextText(makeString(moduleName));
+
+  if (eqsText) {
+    return ATmake("snd-value(eqs-text(<str>,<str>))", moduleName, eqsText);
+  }
+  else {
+    return ATmake("snd-value(no-eqs-text(<str>))", moduleName);
+  }
 }
 
 
@@ -284,7 +432,12 @@ ATerm get_path(int cid, char *moduleName, ATerm type)
     else {
       path = MS_getSdfTextPath(atModuleName);
     }
-    return ATmake("snd-value(path(<str>))", path);
+    if (path) {
+      return ATmake("snd-value(path(<str>))", path);
+    }
+    else {
+      return ATmake("snd-value(no-path)");
+    }
   }
   else {
     ATwarning("Module %t not in database!\n", atModuleName);
@@ -299,21 +452,54 @@ void invalidate_parse_tables(int cid, char *modulename)
 
 ATerm close_module(int cid, char *moduleName)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  ATerm atModuleName = makeString(moduleName);
+  ATermList dependingModules = MDB_getDependingModules(atModuleName);
+
+  dependingModules = ATremoveAll(dependingModules, atModuleName);
+
+  MDB_invalidateModules(dependingModules);
+  TS_removeValueFromAllTables(atModuleName);
+
+  return ATmake("snd-value(changed-modules([<list>]))", dependingModules);
 }
 
 ATerm delete_module(int cid, char *moduleName)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  ATerm atModuleName = makeString(moduleName);
+  ATermList dependingModules = MDB_getDependingModules(atModuleName);
+
+  MDB_deleteModuleFromImportsInModules(dependingModules, atModuleName);
+
+  dependingModules = ATremoveAll(dependingModules, atModuleName);
+
+  MDB_invalidateModules(dependingModules);
+  TS_removeValueFromAllTables(atModuleName);
+
+  /* JV: Why is there no import graph calculated here? */
+
+  return ATmake("snd-value(changed-modules([<list>]))", dependingModules);
 }
 
 ATerm rename_module(int cid, char *oldModuleName, char *newModuleName, 
 		    char *newPath)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  ATerm atOldModuleName = makeString(oldModuleName);
+  ATerm atNewModuleName = makeString(newModuleName);
+  ATermList dependingModules;
+
+  if (!SO_checkModuleNameWithPath(newModuleName, newPath)) {
+    return ATmake("snd-value(illegal-module-name(<str>))", newModuleName);
+  }
+  
+  dependingModules = MDB_getDependingModules(atOldModuleName);
+  MDB_renameModuleInImportsInModules(dependingModules, 
+				     atOldModuleName,
+				     atNewModuleName);
+  MDB_invalidateModules(dependingModules);
+  MDB_renameModule(atOldModuleName, atNewModuleName, newPath);
+
+  return ATmake("snd-value(imports(changed-modules([<list>]),<term>))",
+		dependingModules, MDB_retrieveImportGraph);
 }
 
 ATerm copy_module(int cid, char *oldModuleName, char *newModuleName,
@@ -337,20 +523,26 @@ ATerm remove_import(int cid, char *modName, char *importedModName, char *path)
 
 ATerm get_all_modules(int cid)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  return ATmake("snd-value(all-modules([<list>]))", MS_getActiveModules());
 }
 
 ATerm get_all_depending_modules(int cid, char *moduleName)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  return ATmake("snd-value(all-depending-modules([<list>]))", 
+		MDB_getDependingModules(makeString(moduleName)));
 }
 
 ATerm get_all_sdf2_definitions(int cid, char *moduleName)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  ATerm definition = MDB_getSdfDefinition(makeString(moduleName));
+
+  if (definition) {
+    return ATmake("snd-value(syntax(<term>))", ATBpack(definition));
+  }
+  else {
+    return ATmake("snd-value(sdf2-definition-error(\"Incomplete specification\")
+    )");
+  }
 }
 
 ATerm get_module_info(int cid, char *moduleName)

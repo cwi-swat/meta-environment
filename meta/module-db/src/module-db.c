@@ -5,10 +5,15 @@
 #include <aterm2.h>
 
 #include <SDFME-utils.h>
+#include <MEPT-utils.h>
 
 #include "module-store.h"
 #include "extension-store.h"
+#include "term-conversion.h"
 #include "module-operations.h"
+#include "module-refactorings.h"
+
+#define DEPTH_OF_EQUATIONS   4
 
 SDF_ImportList MDB_getImports(ATerm moduleName)
 {
@@ -30,7 +35,6 @@ ATermList MDB_getImportIds(ATerm moduleName)
 {
   SDF_ImportList imports = MDB_getImports(moduleName);
   return SO_transformImportsToImportIds(imports);
-  
 }
 
 SDF_Symbols MDB_getFormalParams(ATerm moduleName)
@@ -158,13 +162,155 @@ static SDF_SDF getSyntaxDefinition(ATermList modules)
                                sdfDefinition);
 }
 
-MDB_getSdfDefinition(ATerm moduleName)
+ATerm MDB_getSdfDefinition(ATerm moduleName)
 {
-  ATermList imports;
-
   if (MDB_completeSdfSpecification(moduleName, ATempty)) {
     ATermList imports = SO_getTransitiveImports(
                           SDF_makeImportListSingle(
-                           SDFmakeImport(moduleName)));
+                           SDFmakeImport(getString(moduleName))));
+    SDF_SDF definition = getSyntaxDefinition(imports);
+    return SDF_StartToTerm(SDF_makeStartSDF(SDF_makeOptLayoutAbsent(),
+			   definition,
+			   SDF_makeOptLayoutAbsent(),0));
+  }
+  else {
+    return NULL;
   }
 }
+
+ATermList MDB_getModulesWithoutEqs(ATerm moduleName)
+{
+  ATermList missingModules = ATempty;
+
+  if (MS_existsModule(moduleName)) {
+    ATermList imports = SO_getTransitiveImports(
+                          SDF_makeImportListSingle(
+                            SDFmakeImport(getString(moduleName))));
+    
+    while (!ATisEmpty(imports)) {
+      ATerm module = SDF_getModuleNamePlain(
+		       SDF_getImportModuleName(
+			 SDF_makeImportFromTerm(ATgetFirst(imports))));
+      ATerm eqsText = MS_getAsfTextValue(module);
+      ATerm eqsTree = MS_getAsfTree(module);
+
+      /* If the text of equations are stored and the parse tree
+       * is not available, the module is registered in order
+       * to parse the equations.
+       */
+      if (eqsText != NULL && eqsTree == NULL)  {
+	missingModules = ATinsert(missingModules, module);
+      }
+      imports = ATgetNext(imports);
+    }
+  }
+  return missingModules;
+}
+
+void MDB_updateEqsTree(ATerm moduleName, ATerm eqsTree)
+{
+  char *path = MS_getAsfTextPath(moduleName);
+
+  if (path) {
+    eqsTree = PT_makeTermFromParseTree(
+		PT_addParseTreePosInfoToDepth(
+		  path,
+		  PT_makeParseTreeFromTerm(eqsTree),
+		  DEPTH_OF_EQUATIONS));
+  }
+  else {
+    ATwarning("Could not add pos info to equation tree for %t\n", moduleName);
+  }
+
+  MS_putAsfTree(moduleName, eqsTree);
+}
+
+ATerm MDB_getEqsTree(ATerm moduleName)
+{
+  if (MS_existsModule(moduleName)) {
+    return MS_getAsfTree(moduleName);
+  }
+  else {
+    return NULL;
+  }
+}
+
+void MDB_invalidateModule(ATerm moduleName)
+{
+  MS_removeAsfTree(moduleName);
+  MS_removeAsfParseTable(moduleName);
+  MS_removeTermParseTable(moduleName);
+}
+
+void MDB_invalidateModules(ATermList modules)
+{
+  while (!ATisEmpty(modules)) {
+    MDB_invalidateModule(ATgetFirst(modules));
+    modules = ATgetNext(modules);
+  }
+}
+
+ATermList MDB_getDependingModules(ATerm moduleName)
+{
+  ATerm module;
+  ATermList imports;
+  ATermList dependingModules = ATempty;
+  ATermList modules = MS_getActiveModules();
+
+  while (!ATisEmpty(modules)) {
+    module = ATgetFirst(modules);
+
+    imports = SO_getTransitiveImports(
+		SDF_makeImportListSingle(
+	          SDFmakeImport(getString(module))));
+
+    if (ATindexOf(imports, moduleName, 0) >= 0) {
+      dependingModules = ATinsert(dependingModules, module);
+    }
+
+    modules = ATgetNext(modules);
+  }
+
+  return dependingModules;
+}
+
+static void MDB_deleteModuleFromImportsInModule(ATerm moduleName, 
+						ATerm importName)
+{
+  ATerm oldSdfTree = MS_getSdfTree(moduleName);
+  SDF_Module oldSdfModule = SDF_getStartTopModule(
+			      SDF_StartFromTerm(oldSdfTree));
+  SDF_Module newSdfModule = SO_deleteModuleNameFromModule(
+			      oldSdfModule, 
+                              SDFmakeModuleId(getString(importName)));
+  ATerm newSdfTree = SDF_StartToTerm(SDF_setStartTopModule(
+		       SDF_StartFromTerm(oldSdfTree), newSdfModule));
+
+  MS_putSdfTree(moduleName, newSdfTree);
+}
+
+void MDB_deleteModuleFromImportsInModules(ATermList modules, ATerm moduleName)
+{
+  ATerm module;
+
+  while (!ATisEmpty(modules)) {
+    module = ATgetFirst(modules);
+
+    MDB_deleteModuleFromImportsInModule(module, moduleName);
+
+    modules = ATgetNext(modules);
+  }
+}
+void MDB_renameModuleInImportsInModules(ATermList modules,
+					ATerm old, ATerm new)
+{
+   ATwarning("MDB: Not implemented at line %d\n", __LINE__);
+
+}
+
+
+void MDB_renameModule(ATerm old, ATerm new, char *path)
+{
+   ATwarning("MDB: Not implemented at line %d\n", __LINE__);
+}
+

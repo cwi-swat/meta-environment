@@ -114,3 +114,24 @@ ATbool SO_checkModuleNameWithPath(const char *moduleName,
  
   return ATtrue;
 }
+
+SDF_Renamings SO_getModuleRenamings(SDF_Import import, SDF_Module module) 
+{
+  if (SDF_isImportRenamedModule(import)) {
+    return SDF_getImportRenamings(import);
+  }
+  else {
+    SDF_ModuleName actualModuleName = SDF_getImportModuleName(import);
+
+    if (SDF_isModuleNameParameterized(actualModuleName)) {
+      SDF_ModuleName formalModuleName = SDF_getModuleModuleName(module);
+
+      return SDF_makeRenamingsFromModuleNames(formalModuleName, 
+					      actualModuleName);
+    }
+    else {
+      return (SDF_Renamings)NULL;
+    }
+  }
+}
+

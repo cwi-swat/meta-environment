@@ -106,7 +106,7 @@ void TS_clearTable(char *name)
   TS_addTable(name);
 }
 
-void TS_removeFromAllTables(ATerm key)
+void TS_removeValueFromAllTables(ATerm key)
 {
   int i;
 
