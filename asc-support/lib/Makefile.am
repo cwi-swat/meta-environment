@@ -36,6 +36,7 @@ include_HEADERS = \
 	asc-builtins.h
 
 libasc_support_me_a_SOURCES = \
+	asc-builtins.h \
 	asc-main.c\
 	asc-support.c \
 	asc-nametable.c \
