@@ -40,12 +40,20 @@ static void version(const char *msg)
 /*}}}  */
 
 #define RESULT_TERM(t) (ATmake("snd-value(result(<term>))",t))
+#define NO_RESULT (ATmake("snd-value(no-result)"))
 
 /*{{{  ATerm get_value(int conn, char *table, ATerm key) */
 
 ATerm get_value(int conn, char *table, ATerm key)
 {
-  return RESULT_TERM(TS_getValue(table, key));
+  ATermList value = TS_getValue(table, key);
+
+  if (value != NULL) {
+    return RESULT_TERM(TS_getValue(table, key));
+  }
+  else {
+    return NO_RESULT;
+  }
 }
 
 /*}}}  */
@@ -70,8 +78,8 @@ void put_value(int conn, char *table, ATerm key, ATerm value)
 ATerm contains_key(int conn, char *table, ATerm key)
 {
   return TS_containsKey(table,key) ?
-    ATparse("true") :
-    ATparse("false");
+    ATparse("yes") :
+    ATparse("no");
 }
 
 /*}}}  */

@@ -27,16 +27,26 @@ in
   +
     rec-msg(ts-get-value(TableName?,Key?)).
     snd-eval(TS,get-value(TableName,Key)) .
-    rec-value(TS,result(Value?)).
-    snd-msg(ts-get-value(TableName,Key,Value))
+    (
+      rec-value(TS,result(Value?)).
+      snd-msg(ts-value(Value))
+    +
+      rec-value(TS,no-result) .
+      snd-msg(ts-no-value)
+    )
   +
     rec-msg(ts-remove-value(TableName?,Key?)).
     snd-do(TS,remove-value(TableName,Key))
   +
     rec-msg(ts-contains-key(TableName?,Key?)).
     snd-eval(TS,contains-key(TableName,Key)).
-    rec-value(TS,result(ContainsKey?)).
-    snd-msg(ts-contains-key(TableName,Key,ContainsKey))
+    (
+      rec-value(TS,result(yes)).
+      snd-msg(ts-contains-key)
+    +
+      rec-value(TS,result(no)).
+      snd-msg(ts-not-contains-key)
+    )
   +
     rec-msg(ts-get-all-keys(TableName?)).
     snd-eval(TS,get-all-keys(TableName)).
