@@ -76,7 +76,7 @@ int main( int argc, char*argv[])
    p = metaPathsLocate( &mp, file );
    if( p == NULL )
    {
-      fprintf( stderr, "%s not found.\n", file );
+      FAIL1( "metaPathsLocate",  file );
       metaPathsClose( &mp );
       return 1;
    }

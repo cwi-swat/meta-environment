@@ -79,7 +79,7 @@ ATermList _getImports( char* path )
 
    if( module == NULL )
    {
-      FAIL( "readFromFile" );
+      FAIL1( "readFromFile", path );
       exit( 1 );
    }
    fclose( f );
@@ -195,7 +195,7 @@ ATermList getImports( char* metaPathsFile, char* topModule, ModuleOptions option
    path = metaPathsLocate( &mp, module );
    if( path == NULL )
    {
-      FAIL( "getImports" );
+      FAIL1( "getImports", module );
       exit( 1 );
    }
 
