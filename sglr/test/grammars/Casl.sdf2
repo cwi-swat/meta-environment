@@ -94,15 +94,6 @@ Simple-Id      -> Unit-Name
 module ZCasl-Arch-disamb
 imports
   ZCasl-Arch ZCasl-Struct-disamb
-exports
-  context-free syntax
-    "arch"   -> Word {reject}
-    "result" -> Word {reject} 
-    "lambda" -> Word {reject}
-  restrictions
-    "result"  
-    "lambda" 
-    "arch" -/- [A-Za-z0-9\']
 
 module ZCasl-Struct
 
@@ -222,36 +213,10 @@ imports
   ZCasl-Struct ZCasl-BasicItems-disamb
 exports
   context-free syntax
-    "spec"   -> Word {reject}
-    "and"    -> Word {reject}
-    "given"  -> Word {reject} 
-    "closed" -> Word {reject}  
-    "within" -> Word {reject}   
-    "local"  -> Word {reject}    
-    "fit"    -> Word {reject}    
-    "then"   -> Word {reject}   
-    "hide"   -> Word {reject}   
-    "reveal" -> Word {reject}   
-    "view"   -> Word {reject}    
-    "end"    -> Word {reject} 
     "["      -> Signs {reject}
     "]"      -> Signs {reject}
     "|->"    -> Signs {reject}
 
-  restrictions
-    "spec" 
-    "and"
-    "given" 
-    "closed"
-    "within"
-    "local"
-    "fit" 
-    "then" 
-    "with" 
-    "hide" 
-    "reveal"
-    "view" 
-    "end"  -/- [A-Za-z0-9\']
 
 module ZCasl-BasicItems
 
@@ -496,7 +461,7 @@ exports
     COMMENT          -> LAYOUT
 
     [\.] Word                                          -> Token
-    [A-Za-z0-9\']+                                     -> Word
+    [A-Za-z0-9\']+                                     -> Word {uneager}
     [\+\-\*\&\^\#\$\47\~\>\=\<\@\?\!\|\\\:\.\{\}\[\]]+ -> Signs
 
  context-free syntax
@@ -533,37 +498,6 @@ imports
   ZCasl-BasicItems
 exports
   context-free syntax
-    "generated" -> Word {reject}
-    "free"      -> Word {reject}
-    "assoc"     -> Word {reject}
-    "comm"      -> Word {reject}
-    "idem"      -> Word {reject}
-    "unit"      -> Word {reject}
-    "units"     -> Word {reject}
-    "if"        -> Word {reject}
-    "not"       -> Word {reject}
-    "true"      -> Word {reject}
-    "false"     -> Word {reject}
-    "def"       -> Word {reject}
-    "in"        -> Word {reject}
-    "forall"    -> Word {reject}
-    "exists"    -> Word {reject}
-    "pred"      -> Word {reject}
-    "preds"     -> Word {reject}
-    "var"       -> Word {reject}
-    "vars"      -> Word {reject}
-    "axiom"     -> Word {reject}
-    "axioms"    -> Word {reject}
-    "op"        -> Word {reject}
-    "ops"       -> Word {reject}
-    "when"      -> Word {reject}
-    "else"      -> Word {reject}
-    "sort"      -> Word {reject}
-    "sorts"     -> Word {reject}
-    "type"      -> Word {reject}
-    "types"     -> Word {reject}
-    "import"    -> Word {reject}
-    "imports"   -> Word {reject}
 %% These are the official ones.
     ":"         -> Signs {reject}
     ":?"        -> Signs {reject}
