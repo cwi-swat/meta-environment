@@ -497,6 +497,13 @@ The main window consists of the following parts:
 \subsection{The File menu}
 \label{FileMenu}
 
+
+
+The \link{{\tt File} menu}[]{FIG:file-menu} 
+is used for creating, opening, saving and printing
+specifications as well as for quitting the \ASmetaenv.  
+\T It is shown in Figure \ref{FIG:file-menu}.
+
 \begin{figure}
 \begin{Label}{FIG:file-menu}
 \begin{center}
@@ -507,32 +514,22 @@ The main window consists of the following parts:
 \end{Label}
 \end{figure}
 
+{\tt New} and {\tt Open} are used for creating
+a new module and opening an existing one, respectively.
+In both cases a dialog window appears as shown 
+\link{dialog window}[ (Figure~\ref)]{FIG:open-file} appears.
+
 \begin{figure}
-\begin{Label}{FIG:printer-setup}
+\begin{Label}{FIG:open-file}
 \begin{center}
-\T \epsfig{file=printer-setup.ps,width=3cm}
-\W \htmlimage{printer-setup.gif}
-\caption{Dialog for printer setup}
+\T \epsfig{file=open-file.ps,width=8cm}
+\W \htmlimage{open-file.gif}
+\caption{Dialog for opening a module ({\tt File} menu)}
 \end{center}
 \end{Label}
 \end{figure}
 
-The \link{{\tt File} menu}[]{FIG:file-menu} 
-is used for creating, opening, saving and printing
-specifications as well as for quitting the \ASmetaenv.  
-\begin{iftex}
-It is shown in Figure \ref{FIG:file-menu}.
-\end{iftex}
-
-\link{{\tt New} and {\tt Open}}[]{FIG:open-file}
-are used for creating
-a new module and opening an existing one, respectively.
-\begin{iftex}
-In all these cases a dialog window appears as shown in
-Figure~\ref{FIG:open-file}.
-\end{iftex}
-
-{\tt Save All} save all modules that have been opened so far.
+{\tt Save All} saves all modules that have been opened so far.
 {\tt Clear All} removes all modules that have been opened so far from the
 Meta-Environment. If modules have been modified, you are explicitly
 asked to save them. The same effect can be achieved by exiting the
@@ -549,20 +546,28 @@ Figure~\ref{FIG:printer-setup}.
 \end{iftex}
 {\tt Print} prints the current import pane.
 
-{\tt Quit} ends the execution of the \ASmetaenv.
-
 \begin{figure}
-\begin{Label}{FIG:open-file}
+\begin{Label}{FIG:printer-setup}
 \begin{center}
-\T \epsfig{file=open-file.ps,width=8cm}
-\W \htmlimage{open-file.gif}
-\caption{Dialog for opening a module ({\tt File} menu)}
+\T \epsfig{file=printer-setup.ps,width=3cm}
+\W \htmlimage{printer-setup.gif}
+\caption{Dialog for printer setup}
 \end{center}
 \end{Label}
 \end{figure}
 
+{\tt Quit} ends the execution of the \ASmetaenv.
+
 \subsection{The Edit menu}
 \label{EditMenu}
+
+
+
+
+
+The \link{{\tt Edit} menu}[(Figure~\ref)]{FIG:edit-menu} is used for setting the preferences of a user.
+At this moment this functionality is not yet implemented and
+this menu is disabled.
 
 \begin{figure}
 \begin{Label}{FIG:edit-menu}
@@ -574,6 +579,13 @@ Figure~\ref{FIG:printer-setup}.
 \end{Label}
 \end{figure}
 
+\subsection{The Graph Menu}
+\label{GraphMenu}
+
+The \link{{\tt Graph} menu}[ (Figure~\ref)]{FIG:graph-menu} is used for 
+setting options for the display of the graph in the import pane.  
+
+
 \begin{figure}
 \begin{Label}{FIG:graph-menu}
 \begin{center}
@@ -583,20 +595,6 @@ Figure~\ref{FIG:printer-setup}.
 \end{center}
 \end{Label}
 \end{figure}
-
-The {\tt Edit} menu is used for setting the preferences of a user.
-At this moment this functionality is not yet implemented and
-this menu is disabled.
-
-\subsection{The Graph Menu}
-\label{GraphMenu}
-
-The \link{{\tt Graph} menu}[]{FIG:graph-menu} is used for 
-setting options for the display of the graph in the import pane.  
-\begin{iftex}
-It is shown in Figure \ref{FIG:graph-menu}.
-\end{iftex}
-
 
 {\tt View All} enlarges the import pane to enable the display of the whole
 import graph.
@@ -617,6 +615,11 @@ will only be shown when the loading of the specification is complete.
 \subsection{The Debug Menu}
 \label{DebugMenu}
 
+The \link{{\tt Debug} menu}[ is shown in Figure~\ref} and ]{FIG:debug-menu} 
+contains the
+single check box {\tt Diagnostic messages}.  When enabled, diagnostic
+messages will be displayed.  Otherwise the systems runs silently.
+
 \begin{figure}
 \begin{Label}{FIG:debug-menu}
 \begin{center}
@@ -627,14 +630,12 @@ will only be shown when the loading of the specification is complete.
 \end{Label}
 \end{figure}
 
-The \link{{\tt Debug} menu}[ is shown in
-Figure~\ref{FIG:debug-menu}]{FIG:debug-menu} 
-and contains the
-single check box {\tt Diagnostic messages}.  When enabled, diagnostic
-messages will be displayed.  Otherwise the systems runs silently.
-
 \subsection{The Help Menu}
 \label{HelpMenu}
+
+The \link{{\tt Help} menu}[ is shown in
+Figure~\ref{FIG:help-menu} and]{FIG:help-menu}
+provides various (still experimental) help features.
 
 \begin{figure}
 \begin{Label}{FIG:help-menu}
@@ -645,10 +646,6 @@ messages will be displayed.  Otherwise the systems runs silently.
 \end{center}
 \end{Label}
 \end{figure}
-
-The \link{{\tt Help} menu}[ is shown in
-Figure~\ref{FIG:help-menu}]{FIG:help-menu}.
-the features discussed in this section are all a very experimental.
 
 {\tt About Meta-Environment} and {\tt About Graph Browser}
 give background on the  \ASmetaenv\ and on the graph browser
@@ -671,10 +668,11 @@ is a {\tt Netscape} running, other browsers are not yet supported.
 \section{The Panes of the Main Window}
 
 The two left-most panes of the main window give two, alternative,
-views on the same information: the \asfsdf\ specification that has
-been loaded into the Meta-Environment.  Using one of these views, the
-same set of operations is available either via a pop up menu or via the
-buttons in the pane at the right-hand side of the main window.
+views on the \asfsdf\ specification that has been loaded into the
+Meta-Environment.  On the left you see the import graph, on the right
+you see a list of modules.  Using one of these views, the same set of
+operations is available either via a pop up menu or via the buttons in
+the pane at the right-hand side of the main window.
 
 \subsection{The Import Pane}
 \label{ImportPane}
@@ -690,26 +688,6 @@ modules. Modules with a special status (e.g., imported by some other
 module but never defined, or containing syntax errors) are represented
 by a circle.
 
-\begin{figure}
-\begin{Label}{FIG:module-menu}
-\begin{center}
-\T \epsfig{file=module-menu.ps,width=3cm}
-\W \htmlimage{module-menu.gif}
-\caption{Pop up menu for module operations (import pane)}
-\end{center}
-\end{Label}
-\end{figure}
-
-\begin{figure}
-\begin{Label}{FIG:new-open}
-\begin{center}
-\T \epsfig{file=new-open.ps,width=2cm}
-\W \htmlimage{new-open.gif}
-\caption{Pop up menu for adding a module (import pane)}
-\end{center}
-\end{Label}
-\end{figure}
-
 The import pane has the following interaction facilities:
 
 \begin{itemize}
@@ -722,20 +700,37 @@ The import pane has the following interaction facilities:
 module, the import graph can be dragged across the import pane.
 
 \item Clicking \emph{on} a module yields 
-a \link{pop up menu}[ as shown in Figure~\ref{FIG:module-menu}]{FIG:module-menu}. 
+a \link{pop up menu}[ as shown in Figure~\ref]{FIG:module-menu}. 
 It contains the same entries as the
 \link{button pane of the main window}[ (see 
 Section \ref{ButtonPane})]{ButtonPane}.
 
-\item Clicking \emph{outside} any module yields a \link{pop-up menu}[ as shown
+\begin{figure}
+\begin{Label}{FIG:module-menu}
+\begin{center}
+\T \epsfig{file=module-menu.ps,width=3cm}
+\W \htmlimage{module-menu.gif}
+\caption{Pop up menu for module operations (import pane)}
+\end{center}
+\end{Label}
+\end{figure}
+
+\item Clicking \emph{outside} any module yields a \link{another pop-up menu}[ as shown
 in Figure~\ref{FIG:new-open}]{FIG:new-open}.  It contains the entries {\tt New} and
 {\tt Open} for creating a new and opening an existing module, respectively. 
 These two operations are also available from the 
 \link{{\tt File} menu}[ (see Section~\ref{FileMenu})]{FileMenu}.
 
+\begin{figure}
+\begin{Label}{FIG:new-open}
+\begin{center}
+\T \epsfig{file=new-open.ps,width=2cm}
+\W \htmlimage{new-open.gif}
+\caption{Pop up menu for adding a module (import pane)}
+\end{center}
+\end{Label}
+\end{figure}
 \end{itemize}
-
-
 
 \subsection{The Module Pane}
 \label{ModulePane}
@@ -764,14 +759,13 @@ the syntax of all the selected modules.
 \subsection{The Button Pane of the Main Window}
 \label{ButtonPane}
 
-The entries in the 
-\link{button pane (at the right-hand side of the main window}
-[, see Figure~\ref{FIG:meta-start}]{FIG:meta-start}) 
-and in the 
-\link{module pop-up menu}[ (see Figure~\ref{FIG:module-menu} and
-Section~\ref{ImportPane})]{FIG:module-menu}
-are mostly identical in function, except that the latter may operate on
-more than one module while the former operate on a single module only.
+The entries in the button pane at the right-hand side of the main
+window (see \link{Main Window }[ in Figure~\ref]{FIG:meta-start}) and
+in the module pop-up menu (see \link{screenshot}[ in
+Figure~\ref]{FIG:module-menu} and the description of the \link{Import
+Pane}[ in Section\ref]{ImportPane}) are mostly identical in function,
+except that the latter may operate on more than one module while the
+former operate on a single module only.
 
 We describe them here together. The names of the entries in the
 pop-up menu are given in parentheses when they differ from the 
@@ -798,13 +792,8 @@ the effect is that modifications made to these modules are discarded.
 the file system}.
 
 {\tt Compile} ({\tt Compile Module...}) invokes the \asfsdf-compiler to generate C code.  
-Section 
-\begin{iftex}
-\ref{compiling-specs}
-\end{iftex}
-\begin{ifhtml}
-\link{Compiling Specifications}[]{compiling-specs} 
-\end{ifhtml} 
+\T Section \ref{compiling-specs}
+\W \link{Compiling Specifications}[]{compiling-specs} 
 gives more details on the compilation of \asfsdf\ specifications.
 
 {\tt Dump Equations...} dumps the equation of the selected
@@ -826,7 +815,6 @@ together in one file.
 
 {\tt Info} ({\tt Module Info}) gives detailed information for the selected modules (not yet implemented).
 
-
 \section{Editing Specifications}
 
 The editors used to create and modify specifications and terms are
@@ -834,26 +822,47 @@ based on \xemacs, so some familiarity with this editor is assumed.
 See \xlink{xemacs.org}{http://www.xemacs.org/Documentation/index.html}
 for documentation on \xemacs.
 
-There are two additions to the standard user-interface of \xemacs:
+The two pull-down menus {\tt Meta-Environment} and {\tt Move}have been
+added to the standard user-interface of \xemacs:
 
 \begin{itemize}
-\item The {\tt Meta-Environment} 
-\link{pull-down menu}[
-(Figure~\ref{FIG:meta-env-menu1})]{FIG:meta-env-menu1}
-for applying the \asfsdf\ parser to
-the complete text buffer ({\tt Parse}).
-For term editors this \link{menu}[
-(Figure~\ref{FIG:meta-env-menu2})]{FIG:meta-env-menu2}
-also contains a
-({\tt Reduce}) entry, that applies the evaluator to the text in
-the editor.
+\item While editing syntax or equations, the {\tt Meta-Environment}
+menu contains a \link{single button}[
+(Figure~\ref)]{FIG:meta-env-menu1} {\tt Parse} for applying the
+\asfsdf\ parser to the complete text buffer..
 
-\item The \link{{\tt Move} pull-down menu}[
-(Figure~\ref{FIG:move-menu})]{FIG:move-menu}
+\begin{figure}
+\begin{Label}{FIG:meta-env-menu1}
+\begin{center}
+\T \epsfig{file=meta-env-menu1.ps,width=1.2cm}
+\W \htmlimage{meta-env-menu1.gif}
+\caption{{\tt Meta-Environment} menu (editor)}
+\end{center}
+\end{Label}
+\end{figure}
+
+For term editors the {\tt Meta-Environment} menu contains \link{two
+buttons}[ (Figure~\ref{FIG:meta-env-menu2})]{FIG:meta-env-menu2}: {\tt
+Parse} and {\tt Reduce}. {\tt Parse} parses the term in the editor and
+{\tt Reduce} that applies the evaluator to the text in the editor.
+
+\begin{figure}
+\begin{Label}{FIG:meta-env-menu2}
+\begin{center}
+\T \epsfig{file=meta-env-menu2.ps,width=1.6cm}
+\W \htmlimage{meta-env-menu2.gif}
+\caption{{\tt Meta-Environment} menu (term editor)}
+\end{center}
+\end{Label}
+\end{figure}
+
+\item The {\tt Move} pull-down menu
+contains \link{four buttons}[ (Figure~\ref)]{FIG:move-menu}
 for structured traversal of the syntax tree of the text in the editor.
 Using the entries {\tt Left}, {\tt Righ}t, {\tt Up}, {\tt Down} the
 user can navigate in the tree.
 \end{itemize}
+
 
 \begin{figure}
 \begin{Label}{FIG:move-menu}
@@ -865,16 +874,18 @@ user can navigate in the tree.
 \end{Label}
 \end{figure}
 
+Editing is now described in more detail.
+
 \subsection{Editing the Syntax Part of a Module}
 
 An editor for editing the syntax part of a module can be activated by
-pressing the {\tt Edit Syntax} button. 
-\begin{iftex}
-An example is shown in Figure~\ref{FIG:Bool-example.sdf}.  
-\end{iftex}
-\begin{ifhtml}
-Click \link{here}[]{FIG:Bool-example.sdf} for an example.  
-\end{ifhtml}
+pressing the {\tt Edit Syntax} button
+\link{Button Pane}[ (Section~\ref) ]{ButtonPane} of the main window
+or the pop-menu in the \link{Import Pane}[ (Section~\ref) ]{ImportPane}.
+An example is shown 
+\T in Figure~\ref{FIG:Bool-example.sdf}.  
+\W \link{here}[]{FIG:Bool-example.sdf}.
+
 Initially the entire text is
 highlighted and the message ``{\tt Focus symbol: term}'' appears
 in the status line at the bottom of the main window.
@@ -893,39 +904,19 @@ in the \xemacs\ window displays the message
 Clicking on an arbitrary location in a correctly parsed term sets the focus
 and changes the bottom line message.
 
-\begin{figure}
-\begin{Label}{FIG:meta-env-menu1}
-\begin{center}
-\T \epsfig{file=meta-env-menu1.ps,width=1.2cm}
-\W \htmlimage{meta-env-menu1.gif}
-\caption{{\tt Meta-Environment} menu (editor)}
-\end{center}
-\end{Label}
-\end{figure}
-
-\begin{figure}
-\begin{Label}{FIG:meta-env-menu2}
-\begin{center}
-\T \epsfig{file=meta-env-menu2.ps,width=1.6cm}
-\W \htmlimage{meta-env-menu2.gif}
-\caption{{\tt Meta-Environment} menu (term editor)}
-\end{center}
-\end{Label}
-\end{figure}
 
 \subsection{Editing the Equations Section of a Module}
 
 An editor for editing the equations section of a module is activated
-via the button {\tt Edit Equations}.  
-\begin{iftex}
-An example is shown in Figure \ref{FIG:Bool-example.asf}.  
-\end{iftex}
-\begin{ifhtml}
-Click \link{here}[]{FIG:Bool-example.asf} for an example.  
-\end{ifhtml}
+via the button {\tt Edit Equations}
+in the \link{Button Pane}[ (Section~\ref) ]{ButtonPane} of the main window
+or the pop-menu in the \link{Import Pane}[ (Section~\ref) ]{ImportPane}.
+An example is shown 
+\T in Figure \ref{FIG:Bool-example.asf}.  
+\W \link{here}[]{FIG:Bool-example.asf}.
 
 The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor 
-activate the parser for the
+activates the parser for the
 equations. It is possible that in order to parse the equations, a
 parse table must be generated. This is visible through the status
 message {\tt Generating Parse Table}.
@@ -934,13 +925,12 @@ message {\tt Generating Parse Table}.
 \label{EditingTerms}
 
 An editor for editing a term over a module is activated via the button
-{\tt Edit Term}.  
-\begin{iftex}
-An example is shown in Figure \ref{FIG:Bool-example.trm}.
-\end{iftex}
-\begin{ifhtml}
-Click \link{here}[]{FIG:Bool-example.trm} for an example.  
-\end{ifhtml}
+{\tt Edit Term}
+in the \link{Button Pane}[ (Section~\ref) ]{ButtonPane} of the main window
+or the pop-menu in the \link{Import Pane}[ (Section~\ref) ]{ImportPane}.
+An example is shown 
+\T in Figure \ref{FIG:Bool-example.trm}.
+\W \link{here}[]{FIG:Bool-example.trm}.
 
 The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor 
 activate the parser for this
