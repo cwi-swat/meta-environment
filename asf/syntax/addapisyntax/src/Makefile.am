@@ -11,7 +11,7 @@ INCLUDES         = -I$(ASC_SUPPORT)/include \
 
 bin_PROGRAMS = addapisyntax
 
-data_DATA    = addapisyntax.idef
+pkgdata_DATA    = addapisyntax.idef
 EXTRA_DIST   = addapisyntax.idef addapisyntax.tif.c 
 
 include_HEADERS = addapisyntax.tif.h
