@@ -1,5 +1,5 @@
 /*
- * Generated at Tue Oct  7 15:16:27 2003
+ * Generated at Thu Oct  9 11:30:56 2003
  */
 
 #ifndef __SDFME_dict_H
@@ -233,6 +233,9 @@ extern AFun SDF_afun222;
 extern AFun SDF_afun223;
 extern AFun SDF_afun224;
 extern AFun SDF_afun225;
+extern AFun SDF_afun226;
+extern AFun SDF_afun227;
+extern AFun SDF_afun228;
 
 extern ATerm SDF_patternStartAlias;
 extern ATerm SDF_patternStartAliases;
@@ -240,7 +243,6 @@ extern ATerm SDF_patternStartLookahead;
 extern ATerm SDF_patternStartLookaheads;
 extern ATerm SDF_patternStartRestriction;
 extern ATerm SDF_patternStartRestrictions;
-extern ATerm SDF_patternStartUQLiteral;
 extern ATerm SDF_patternStartSort;
 extern ATerm SDF_patternStartCharacter;
 extern ATerm SDF_patternStartNumChar;
@@ -269,6 +271,8 @@ extern ATerm SDF_patternStartRealCon;
 extern ATerm SDF_patternStartNatCon;
 extern ATerm SDF_patternStartIntCon;
 extern ATerm SDF_patternStartLiteral;
+extern ATerm SDF_patternStartUQLiteral;
+extern ATerm SDF_patternStartQLiteral;
 extern ATerm SDF_patternStartATermList;
 extern ATerm SDF_patternStartACon;
 extern ATerm SDF_patternStartAFun;
@@ -311,6 +315,11 @@ extern ATerm SDF_patternATermElemsMany;
 extern ATerm SDF_patternATermElemsSingle;
 extern ATerm SDF_patternATermElemsEmpty;
 extern ATerm SDF_patternATermListNotEmpty;
+extern ATerm SDF_patternLiteralUqlit;
+extern ATerm SDF_patternLiteralQlit;
+extern ATerm SDF_patternUQLiteralMoreChars;
+extern ATerm SDF_patternUQLiteralOneChar;
+extern ATerm SDF_patternQLiteralQuoted;
 extern ATerm SDF_patternLCharEscaped;
 extern ATerm SDF_patternLCharNormal;
 extern ATerm SDF_patternEscCharDecimal;
@@ -414,10 +423,6 @@ extern ATerm SDF_patternSymbolArgumentsSingle;
 extern ATerm SDF_patternSymbolArgumentsEmpty;
 extern ATerm SDF_patternProductionProd;
 extern ATerm SDF_patternProductionProdFun;
-extern ATerm SDF_patternLiteralQuoted;
-extern ATerm SDF_patternLiteralUqlit;
-extern ATerm SDF_patternUQLiteralMoreChars;
-extern ATerm SDF_patternUQLiteralOneChar;
 extern ATerm SDF_patternSymbolFileStart;
 extern ATerm SDF_patternSymbolStart;
 extern ATerm SDF_patternSymbolBracket;
@@ -425,6 +430,7 @@ extern ATerm SDF_patternSymbolLayout;
 extern ATerm SDF_patternSymbolVarsym;
 extern ATerm SDF_patternSymbolLex;
 extern ATerm SDF_patternSymbolCf;
+extern ATerm SDF_patternSymbolStrategy;
 extern ATerm SDF_patternSymbolAlt;
 extern ATerm SDF_patternSymbolFunc;
 extern ATerm SDF_patternSymbolPair;

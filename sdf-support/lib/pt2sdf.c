@@ -184,7 +184,7 @@ SDF_Symbol PTSymbolToSDFSymbol(PT_Symbol ptSymbol)
   if (PT_isSymbolLit(ptSymbol)) {
     char *str = PT_getSymbolString(ptSymbol);
     char *qstr = escape(str, "\"\\", QUOTED);
-    SDF_Literal lit = SDF_makeLiteralQuoted(SDF_makeCHARLISTString(qstr));
+    SDF_Literal lit = SDF_makeLiteralQlit(SDF_makeQLiteralQuoted(SDF_makeCHARLISTString(qstr)));
     free(qstr);
 
     result = SDF_makeSymbolLit(lit);
