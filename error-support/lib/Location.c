@@ -242,11 +242,19 @@ LOC_Location LOC_makeLocationFile(const char* filename)
 }
 
 /*}}}  */
+/*{{{  LOC_Location LOC_makeLocationArea(LOC_Area Area) */
+
+LOC_Location LOC_makeLocationArea(LOC_Area Area)
+{
+  return (LOC_Location)(ATerm)ATmakeAppl1(LOC_afun1, (ATerm) Area);
+}
+
+/*}}}  */
 /*{{{  LOC_Location LOC_makeLocationAreaInFile(const char* filename, LOC_Area Area) */
 
 LOC_Location LOC_makeLocationAreaInFile(const char* filename, LOC_Area Area)
 {
-  return (LOC_Location)(ATerm)ATmakeAppl2(LOC_afun1, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(filename, 0, ATtrue)), (ATerm) Area);
+  return (LOC_Location)(ATerm)ATmakeAppl2(LOC_afun2, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(filename, 0, ATtrue)), (ATerm) Area);
 }
 
 /*}}}  */
@@ -254,7 +262,7 @@ LOC_Location LOC_makeLocationAreaInFile(const char* filename, LOC_Area Area)
 
 LOC_Area LOC_makeAreaArea(int beginLine, int beginColumn, int endLine, int endColumn, int offset, int length)
 {
-  return (LOC_Area)(ATerm)ATmakeAppl6(LOC_afun2, (ATerm) (ATerm) ATmakeInt(beginLine), (ATerm) (ATerm) ATmakeInt(beginColumn), (ATerm) (ATerm) ATmakeInt(endLine), (ATerm) (ATerm) ATmakeInt(endColumn), (ATerm) (ATerm) ATmakeInt(offset), (ATerm) (ATerm) ATmakeInt(length));
+  return (LOC_Area)(ATerm)ATmakeAppl6(LOC_afun3, (ATerm) (ATerm) ATmakeInt(beginLine), (ATerm) (ATerm) ATmakeInt(beginColumn), (ATerm) (ATerm) ATmakeInt(endLine), (ATerm) (ATerm) ATmakeInt(endColumn), (ATerm) (ATerm) ATmakeInt(offset), (ATerm) (ATerm) ATmakeInt(length));
 }
 
 /*}}}  */
@@ -542,6 +550,9 @@ ATbool LOC_isValidLocation(LOC_Location arg)
   if (LOC_isLocationFile(arg)) {
     return ATtrue;
   }
+  else if (LOC_isLocationArea(arg)) {
+    return ATtrue;
+  }
   else if (LOC_isLocationAreaInFile(arg)) {
     return ATtrue;
   }
@@ -563,6 +574,28 @@ inline ATbool LOC_isLocationFile(LOC_Location arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, LOC_patternLocationFile, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool LOC_isLocationArea(LOC_Location arg) */
+
+inline ATbool LOC_isLocationArea(LOC_Location arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, LOC_patternLocationArea, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -639,7 +672,10 @@ LOC_Location LOC_setLocationFilename(LOC_Location arg, const char* filename)
 
 ATbool LOC_hasLocationArea(LOC_Location arg)
 {
-  if (LOC_isLocationAreaInFile(arg)) {
+  if (LOC_isLocationArea(arg)) {
+    return ATtrue;
+  }
+  else if (LOC_isLocationAreaInFile(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -650,7 +686,10 @@ ATbool LOC_hasLocationArea(LOC_Location arg)
 
 LOC_Area LOC_getLocationArea(LOC_Location arg)
 {
-  
+  if (LOC_isLocationArea(arg)) {
+    return (LOC_Area)ATgetArgument((ATermAppl)arg, 0);
+  }
+  else 
     return (LOC_Area)ATgetArgument((ATermAppl)arg, 1);
 }
 
@@ -659,7 +698,10 @@ LOC_Area LOC_getLocationArea(LOC_Location arg)
 
 LOC_Location LOC_setLocationArea(LOC_Location arg, LOC_Area Area)
 {
-  if (LOC_isLocationAreaInFile(arg)) {
+  if (LOC_isLocationArea(arg)) {
+    return (LOC_Location)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) Area), 0);
+  }
+  else if (LOC_isLocationAreaInFile(arg)) {
     return (LOC_Location)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) Area), 1);
   }
 
@@ -956,6 +998,10 @@ LOC_Location LOC_visitLocation(LOC_Location arg, char* (*acceptFilename)(char*),
   if (LOC_isLocationFile(arg)) {
     return LOC_makeLocationFile(
         acceptFilename ? acceptFilename(LOC_getLocationFilename(arg)) : LOC_getLocationFilename(arg));
+  }
+  if (LOC_isLocationArea(arg)) {
+    return LOC_makeLocationArea(
+        acceptArea ? acceptArea(LOC_getLocationArea(arg)) : LOC_getLocationArea(arg));
   }
   if (LOC_isLocationAreaInFile(arg)) {
     return LOC_makeLocationAreaInFile(

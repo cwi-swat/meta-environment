@@ -60,6 +60,7 @@ LOC_Escaped LOC_makeEscapedEscaped(const char *string);
 LOC_StrCon LOC_makeStrConStrCon(const char *string);
 LOC_NatCon LOC_makeNatConNatCon(const char *string);
 LOC_Location LOC_makeLocationFile(const char *filename);
+LOC_Location LOC_makeLocationArea(LOC_Area Area);
 LOC_Location LOC_makeLocationAreaInFile(const char *filename, LOC_Area Area);
 LOC_Area LOC_makeAreaArea(int beginLine, int beginColumn, int endLine,
 			  int endColumn, int offset, int length);
@@ -115,6 +116,7 @@ LOC_NatCon LOC_setNatConString(LOC_NatCon arg, const char *string);
 
 ATbool LOC_isValidLocation(LOC_Location arg);
 inline ATbool LOC_isLocationFile(LOC_Location arg);
+inline ATbool LOC_isLocationArea(LOC_Location arg);
 inline ATbool LOC_isLocationAreaInFile(LOC_Location arg);
 ATbool LOC_hasLocationFilename(LOC_Location arg);
 char *LOC_getLocationFilename(LOC_Location arg);

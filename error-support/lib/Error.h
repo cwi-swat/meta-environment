@@ -135,6 +135,7 @@ ERR_ErrorList ERR_makeErrorListEmpty(void);
 ERR_ErrorList ERR_makeErrorListSingle(ERR_Error head);
 ERR_ErrorList ERR_makeErrorListMany(ERR_Error head, ERR_ErrorList tail);
 ERR_Location ERR_makeLocationFile(const char *filename);
+ERR_Location ERR_makeLocationArea(ERR_Area Area);
 ERR_Location ERR_makeLocationAreaInFile(const char *filename, ERR_Area Area);
 ERR_Area ERR_makeAreaArea(int beginLine, int beginColumn, int endLine,
 			  int endColumn, int offset, int length);
@@ -268,6 +269,7 @@ ERR_ErrorList ERR_setErrorListTail(ERR_ErrorList arg, ERR_ErrorList tail);
 
 ATbool ERR_isValidLocation(ERR_Location arg);
 inline ATbool ERR_isLocationFile(ERR_Location arg);
+inline ATbool ERR_isLocationArea(ERR_Location arg);
 inline ATbool ERR_isLocationAreaInFile(ERR_Location arg);
 ATbool ERR_hasLocationFilename(ERR_Location arg);
 char *ERR_getLocationFilename(ERR_Location arg);

@@ -294,11 +294,19 @@ PLOC_Location PLOC_makeLocationFile(PLOC_OptLayout wsAfterFile, PLOC_OptLayout w
 }
 
 /*}}}  */
+/*{{{  PLOC_Location PLOC_makeLocationArea(PLOC_OptLayout wsAfterArea, PLOC_OptLayout wsAfterParenOpen, PLOC_Area Area, PLOC_OptLayout wsAfterArea) */
+
+PLOC_Location PLOC_makeLocationArea(PLOC_OptLayout wsAfterArea, PLOC_OptLayout wsAfterParenOpen, PLOC_Area Area, PLOC_OptLayout wsAfterArea)
+{
+  return (PLOC_Location)(ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun15))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun24)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun18))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun20))), (ATerm)ATmakeAppl1(PLOC_afun21, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun22, (ATerm)ATmakeAppl1(PLOC_afun23, (ATerm)ATmakeAppl0(PLOC_afun25)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun15))), (ATerm) wsAfterArea), (ATerm) Area), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun18))), (ATerm) wsAfterArea), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))));
+}
+
+/*}}}  */
 /*{{{  PLOC_Location PLOC_makeLocationAreaInFile(PLOC_OptLayout wsAfterAreaInFile, PLOC_OptLayout wsAfterParenOpen, PLOC_StrCon filename, PLOC_OptLayout wsAfterFilename, PLOC_OptLayout wsAfterComma, PLOC_Area Area, PLOC_OptLayout wsAfterArea) */
 
 PLOC_Location PLOC_makeLocationAreaInFile(PLOC_OptLayout wsAfterAreaInFile, PLOC_OptLayout wsAfterParenOpen, PLOC_StrCon filename, PLOC_OptLayout wsAfterFilename, PLOC_OptLayout wsAfterComma, PLOC_Area Area, PLOC_OptLayout wsAfterArea)
 {
-  return (PLOC_Location)(ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun15))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun24)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun12)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun18))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun20))), (ATerm)ATmakeAppl1(PLOC_afun21, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun22, (ATerm)ATmakeAppl1(PLOC_afun23, (ATerm)ATmakeAppl0(PLOC_afun26)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun15))), (ATerm) wsAfterArea), (ATerm) Area), (ATerm) wsAfterComma), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))), (ATerm) wsAfterFilename), (ATerm) filename), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun18))), (ATerm) wsAfterAreaInFile), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))));
+  return (PLOC_Location)(ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun15))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun24)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun12)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun18))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun27))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun20))), (ATerm)ATmakeAppl1(PLOC_afun21, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun22, (ATerm)ATmakeAppl1(PLOC_afun23, (ATerm)ATmakeAppl0(PLOC_afun27)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun15))), (ATerm) wsAfterArea), (ATerm) Area), (ATerm) wsAfterComma), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm) wsAfterFilename), (ATerm) filename), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun18))), (ATerm) wsAfterAreaInFile), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun27))));
 }
 
 /*}}}  */
@@ -306,7 +314,7 @@ PLOC_Location PLOC_makeLocationAreaInFile(PLOC_OptLayout wsAfterAreaInFile, PLOC
 
 PLOC_Area PLOC_makeAreaArea(PLOC_OptLayout wsAfterArea, PLOC_OptLayout wsAfterParenOpen, PLOC_NatCon beginLine, PLOC_OptLayout wsAfterBeginLine, PLOC_OptLayout wsAfterComma, PLOC_NatCon beginColumn, PLOC_OptLayout wsAfterBeginColumn, PLOC_OptLayout wsAfterComma1, PLOC_NatCon endLine, PLOC_OptLayout wsAfterEndLine, PLOC_OptLayout wsAfterComma2, PLOC_NatCon endColumn, PLOC_OptLayout wsAfterEndColumn, PLOC_OptLayout wsAfterComma3, PLOC_NatCon offset, PLOC_OptLayout wsAfterOffset, PLOC_OptLayout wsAfterComma4, PLOC_NatCon length, PLOC_OptLayout wsAfterLength)
 {
-  return (PLOC_Area)(ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun15))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun13)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun13)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun13)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun13)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun13)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun13)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun18))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun27))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun24))), (ATerm)ATmakeAppl1(PLOC_afun21, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun22, (ATerm)ATmakeAppl1(PLOC_afun23, (ATerm)ATmakeAppl0(PLOC_afun27)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun15))), (ATerm) wsAfterLength), (ATerm) length), (ATerm) wsAfterComma4), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))), (ATerm) wsAfterOffset), (ATerm) offset), (ATerm) wsAfterComma3), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))), (ATerm) wsAfterEndColumn), (ATerm) endColumn), (ATerm) wsAfterComma2), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))), (ATerm) wsAfterEndLine), (ATerm) endLine), (ATerm) wsAfterComma1), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))), (ATerm) wsAfterBeginColumn), (ATerm) beginColumn), (ATerm) wsAfterComma), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))), (ATerm) wsAfterBeginLine), (ATerm) beginLine), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun18))), (ATerm) wsAfterArea), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun27))));
+  return (PLOC_Area)(ATerm)ATmakeAppl2(PLOC_afun0, (ATerm)ATmakeAppl3(PLOC_afun1, (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun15))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun13)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun13)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun13)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun13)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun13)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun13)))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun18))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun16, (ATerm)ATmakeAppl0(PLOC_afun17)))), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))), (ATerm)ATmakeAppl1(PLOC_afun5, (ATerm)ATmakeAppl1(PLOC_afun3, (ATerm)ATmakeAppl0(PLOC_afun24))), (ATerm)ATmakeAppl1(PLOC_afun21, (ATerm)ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun22, (ATerm)ATmakeAppl1(PLOC_afun23, (ATerm)ATmakeAppl0(PLOC_afun25)))))), (ATerm)ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATinsert(ATmakeList1((ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun15))), (ATerm) wsAfterLength), (ATerm) length), (ATerm) wsAfterComma4), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm) wsAfterOffset), (ATerm) offset), (ATerm) wsAfterComma3), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm) wsAfterEndColumn), (ATerm) endColumn), (ATerm) wsAfterComma2), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm) wsAfterEndLine), (ATerm) endLine), (ATerm) wsAfterComma1), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm) wsAfterBeginColumn), (ATerm) beginColumn), (ATerm) wsAfterComma), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun26))), (ATerm) wsAfterBeginLine), (ATerm) beginLine), (ATerm) wsAfterParenOpen), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun18))), (ATerm) wsAfterArea), (ATerm)ATmakeAppl1(PLOC_afun14, (ATerm)ATmakeAppl0(PLOC_afun25))));
 }
 
 /*}}}  */
@@ -712,6 +720,9 @@ ATbool PLOC_isValidLocation(PLOC_Location arg)
   if (PLOC_isLocationFile(arg)) {
     return ATtrue;
   }
+  else if (PLOC_isLocationArea(arg)) {
+    return ATtrue;
+  }
   else if (PLOC_isLocationAreaInFile(arg)) {
     return ATtrue;
   }
@@ -733,6 +744,28 @@ inline ATbool PLOC_isLocationFile(PLOC_Location arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, PLOC_patternLocationFile, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool PLOC_isLocationArea(PLOC_Location arg) */
+
+inline ATbool PLOC_isLocationArea(PLOC_Location arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PLOC_patternLocationArea, NULL, NULL, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -803,6 +836,9 @@ ATbool PLOC_hasLocationWsAfterParenOpen(PLOC_Location arg)
   if (PLOC_isLocationFile(arg)) {
     return ATtrue;
   }
+  else if (PLOC_isLocationArea(arg)) {
+    return ATtrue;
+  }
   else if (PLOC_isLocationAreaInFile(arg)) {
     return ATtrue;
   }
@@ -817,6 +853,9 @@ PLOC_OptLayout PLOC_getLocationWsAfterParenOpen(PLOC_Location arg)
   if (PLOC_isLocationFile(arg)) {
     return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
   }
+  else if (PLOC_isLocationArea(arg)) {
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
+  }
   else 
     return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 3);
 }
@@ -827,6 +866,9 @@ PLOC_OptLayout PLOC_getLocationWsAfterParenOpen(PLOC_Location arg)
 PLOC_Location PLOC_setLocationWsAfterParenOpen(PLOC_Location arg, PLOC_OptLayout wsAfterParenOpen)
 {
   if (PLOC_isLocationFile(arg)) {
+    return (PLOC_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterParenOpen), 3), 1);
+  }
+  else if (PLOC_isLocationArea(arg)) {
     return (PLOC_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterParenOpen), 3), 1);
   }
   else if (PLOC_isLocationAreaInFile(arg)) {
@@ -922,6 +964,123 @@ PLOC_Location PLOC_setLocationWsAfterFilename(PLOC_Location arg, PLOC_OptLayout 
 }
 
 /*}}}  */
+/*{{{  ATbool PLOC_hasLocationWsAfterArea(PLOC_Location arg) */
+
+ATbool PLOC_hasLocationWsAfterArea(PLOC_Location arg)
+{
+  if (PLOC_isLocationArea(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getLocationWsAfterArea(PLOC_Location arg) */
+
+PLOC_OptLayout PLOC_getLocationWsAfterArea(PLOC_Location arg)
+{
+  
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 1);
+}
+
+/*}}}  */
+/*{{{  PLOC_Location PLOC_setLocationWsAfterArea(PLOC_Location arg, PLOC_OptLayout wsAfterArea) */
+
+PLOC_Location PLOC_setLocationWsAfterArea(PLOC_Location arg, PLOC_OptLayout wsAfterArea)
+{
+  if (PLOC_isLocationArea(arg)) {
+    return (PLOC_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterArea), 1), 1);
+  }
+
+  ATabort("Location has no WsAfterArea: %t\n", arg);
+  return (PLOC_Location)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasLocationArea(PLOC_Location arg) */
+
+ATbool PLOC_hasLocationArea(PLOC_Location arg)
+{
+  if (PLOC_isLocationArea(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isLocationAreaInFile(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PLOC_Area PLOC_getLocationArea(PLOC_Location arg) */
+
+PLOC_Area PLOC_getLocationArea(PLOC_Location arg)
+{
+  if (PLOC_isLocationArea(arg)) {
+    return (PLOC_Area)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 4);
+  }
+  else 
+    return (PLOC_Area)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
+}
+
+/*}}}  */
+/*{{{  PLOC_Location PLOC_setLocationArea(PLOC_Location arg, PLOC_Area Area) */
+
+PLOC_Location PLOC_setLocationArea(PLOC_Location arg, PLOC_Area Area)
+{
+  if (PLOC_isLocationArea(arg)) {
+    return (PLOC_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) Area), 4), 1);
+  }
+  else if (PLOC_isLocationAreaInFile(arg)) {
+    return (PLOC_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) Area), 8), 1);
+  }
+
+  ATabort("Location has no Area: %t\n", arg);
+  return (PLOC_Location)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PLOC_hasLocationWsAfterArea(PLOC_Location arg) */
+
+ATbool PLOC_hasLocationWsAfterArea(PLOC_Location arg)
+{
+  if (PLOC_isLocationArea(arg)) {
+    return ATtrue;
+  }
+  else if (PLOC_isLocationAreaInFile(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PLOC_OptLayout PLOC_getLocationWsAfterArea(PLOC_Location arg) */
+
+PLOC_OptLayout PLOC_getLocationWsAfterArea(PLOC_Location arg)
+{
+  if (PLOC_isLocationArea(arg)) {
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 5);
+  }
+  else 
+    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 9);
+}
+
+/*}}}  */
+/*{{{  PLOC_Location PLOC_setLocationWsAfterArea(PLOC_Location arg, PLOC_OptLayout wsAfterArea) */
+
+PLOC_Location PLOC_setLocationWsAfterArea(PLOC_Location arg, PLOC_OptLayout wsAfterArea)
+{
+  if (PLOC_isLocationArea(arg)) {
+    return (PLOC_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterArea), 5), 1);
+  }
+  else if (PLOC_isLocationAreaInFile(arg)) {
+    return (PLOC_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterArea), 9), 1);
+  }
+
+  ATabort("Location has no WsAfterArea: %t\n", arg);
+  return (PLOC_Location)NULL;
+}
+
+/*}}}  */
 /*{{{  ATbool PLOC_hasLocationWsAfterAreaInFile(PLOC_Location arg) */
 
 ATbool PLOC_hasLocationWsAfterAreaInFile(PLOC_Location arg)
@@ -984,72 +1143,6 @@ PLOC_Location PLOC_setLocationWsAfterComma(PLOC_Location arg, PLOC_OptLayout wsA
   }
 
   ATabort("Location has no WsAfterComma: %t\n", arg);
-  return (PLOC_Location)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasLocationArea(PLOC_Location arg) */
-
-ATbool PLOC_hasLocationArea(PLOC_Location arg)
-{
-  if (PLOC_isLocationAreaInFile(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_Area PLOC_getLocationArea(PLOC_Location arg) */
-
-PLOC_Area PLOC_getLocationArea(PLOC_Location arg)
-{
-  
-    return (PLOC_Area)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 8);
-}
-
-/*}}}  */
-/*{{{  PLOC_Location PLOC_setLocationArea(PLOC_Location arg, PLOC_Area Area) */
-
-PLOC_Location PLOC_setLocationArea(PLOC_Location arg, PLOC_Area Area)
-{
-  if (PLOC_isLocationAreaInFile(arg)) {
-    return (PLOC_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) Area), 8), 1);
-  }
-
-  ATabort("Location has no Area: %t\n", arg);
-  return (PLOC_Location)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PLOC_hasLocationWsAfterArea(PLOC_Location arg) */
-
-ATbool PLOC_hasLocationWsAfterArea(PLOC_Location arg)
-{
-  if (PLOC_isLocationAreaInFile(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PLOC_OptLayout PLOC_getLocationWsAfterArea(PLOC_Location arg) */
-
-PLOC_OptLayout PLOC_getLocationWsAfterArea(PLOC_Location arg)
-{
-  
-    return (PLOC_OptLayout)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 1), 9);
-}
-
-/*}}}  */
-/*{{{  PLOC_Location PLOC_setLocationWsAfterArea(PLOC_Location arg, PLOC_OptLayout wsAfterArea) */
-
-PLOC_Location PLOC_setLocationWsAfterArea(PLOC_Location arg, PLOC_OptLayout wsAfterArea)
-{
-  if (PLOC_isLocationAreaInFile(arg)) {
-    return (PLOC_Location)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 1), (ATerm)((ATerm) wsAfterArea), 9), 1);
-  }
-
-  ATabort("Location has no WsAfterArea: %t\n", arg);
   return (PLOC_Location)NULL;
 }
 
@@ -2457,9 +2550,9 @@ PLOC_NatCon PLOC_visitNatCon(PLOC_NatCon arg, char* (*acceptString)(char*))
 }
 
 /*}}}  */
-/*{{{  PLOC_Location PLOC_visitLocation(PLOC_Location arg, PLOC_OptLayout (*acceptWsAfterFile)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterParenOpen)(PLOC_OptLayout), PLOC_StrCon (*acceptFilename)(PLOC_StrCon), PLOC_OptLayout (*acceptWsAfterFilename)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterAreaInFile)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterComma)(PLOC_OptLayout), PLOC_Area (*acceptArea)(PLOC_Area), PLOC_OptLayout (*acceptWsAfterArea)(PLOC_OptLayout)) */
+/*{{{  PLOC_Location PLOC_visitLocation(PLOC_Location arg, PLOC_OptLayout (*acceptWsAfterFile)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterParenOpen)(PLOC_OptLayout), PLOC_StrCon (*acceptFilename)(PLOC_StrCon), PLOC_OptLayout (*acceptWsAfterFilename)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterArea)(PLOC_OptLayout), PLOC_Area (*acceptArea)(PLOC_Area), PLOC_OptLayout (*acceptWsAfterArea)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterAreaInFile)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterComma)(PLOC_OptLayout)) */
 
-PLOC_Location PLOC_visitLocation(PLOC_Location arg, PLOC_OptLayout (*acceptWsAfterFile)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterParenOpen)(PLOC_OptLayout), PLOC_StrCon (*acceptFilename)(PLOC_StrCon), PLOC_OptLayout (*acceptWsAfterFilename)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterAreaInFile)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterComma)(PLOC_OptLayout), PLOC_Area (*acceptArea)(PLOC_Area), PLOC_OptLayout (*acceptWsAfterArea)(PLOC_OptLayout))
+PLOC_Location PLOC_visitLocation(PLOC_Location arg, PLOC_OptLayout (*acceptWsAfterFile)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterParenOpen)(PLOC_OptLayout), PLOC_StrCon (*acceptFilename)(PLOC_StrCon), PLOC_OptLayout (*acceptWsAfterFilename)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterArea)(PLOC_OptLayout), PLOC_Area (*acceptArea)(PLOC_Area), PLOC_OptLayout (*acceptWsAfterArea)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterAreaInFile)(PLOC_OptLayout), PLOC_OptLayout (*acceptWsAfterComma)(PLOC_OptLayout))
 {
   if (PLOC_isLocationFile(arg)) {
     return PLOC_makeLocationFile(
@@ -2467,6 +2560,13 @@ PLOC_Location PLOC_visitLocation(PLOC_Location arg, PLOC_OptLayout (*acceptWsAft
         acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PLOC_getLocationWsAfterParenOpen(arg)) : PLOC_getLocationWsAfterParenOpen(arg),
         acceptFilename ? acceptFilename(PLOC_getLocationFilename(arg)) : PLOC_getLocationFilename(arg),
         acceptWsAfterFilename ? acceptWsAfterFilename(PLOC_getLocationWsAfterFilename(arg)) : PLOC_getLocationWsAfterFilename(arg));
+  }
+  if (PLOC_isLocationArea(arg)) {
+    return PLOC_makeLocationArea(
+        acceptWsAfterArea ? acceptWsAfterArea(PLOC_getLocationWsAfterArea(arg)) : PLOC_getLocationWsAfterArea(arg),
+        acceptWsAfterParenOpen ? acceptWsAfterParenOpen(PLOC_getLocationWsAfterParenOpen(arg)) : PLOC_getLocationWsAfterParenOpen(arg),
+        acceptArea ? acceptArea(PLOC_getLocationArea(arg)) : PLOC_getLocationArea(arg),
+        acceptWsAfterArea ? acceptWsAfterArea(PLOC_getLocationWsAfterArea(arg)) : PLOC_getLocationWsAfterArea(arg));
   }
   if (PLOC_isLocationAreaInFile(arg)) {
     return PLOC_makeLocationAreaInFile(

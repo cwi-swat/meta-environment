@@ -528,11 +528,19 @@ ERR_Location ERR_makeLocationFile(const char* filename)
 }
 
 /*}}}  */
+/*{{{  ERR_Location ERR_makeLocationArea(ERR_Area Area) */
+
+ERR_Location ERR_makeLocationArea(ERR_Area Area)
+{
+  return (ERR_Location)(ATerm)ATmakeAppl1(ERR_afun8, (ATerm) Area);
+}
+
+/*}}}  */
 /*{{{  ERR_Location ERR_makeLocationAreaInFile(const char* filename, ERR_Area Area) */
 
 ERR_Location ERR_makeLocationAreaInFile(const char* filename, ERR_Area Area)
 {
-  return (ERR_Location)(ATerm)ATmakeAppl2(ERR_afun8, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(filename, 0, ATtrue)), (ATerm) Area);
+  return (ERR_Location)(ATerm)ATmakeAppl2(ERR_afun9, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(filename, 0, ATtrue)), (ATerm) Area);
 }
 
 /*}}}  */
@@ -540,7 +548,7 @@ ERR_Location ERR_makeLocationAreaInFile(const char* filename, ERR_Area Area)
 
 ERR_Area ERR_makeAreaArea(int beginLine, int beginColumn, int endLine, int endColumn, int offset, int length)
 {
-  return (ERR_Area)(ATerm)ATmakeAppl6(ERR_afun9, (ATerm) (ATerm) ATmakeInt(beginLine), (ATerm) (ATerm) ATmakeInt(beginColumn), (ATerm) (ATerm) ATmakeInt(endLine), (ATerm) (ATerm) ATmakeInt(endColumn), (ATerm) (ATerm) ATmakeInt(offset), (ATerm) (ATerm) ATmakeInt(length));
+  return (ERR_Area)(ATerm)ATmakeAppl6(ERR_afun10, (ATerm) (ATerm) ATmakeInt(beginLine), (ATerm) (ATerm) ATmakeInt(beginColumn), (ATerm) (ATerm) ATmakeInt(endLine), (ATerm) (ATerm) ATmakeInt(endColumn), (ATerm) (ATerm) ATmakeInt(offset), (ATerm) (ATerm) ATmakeInt(length));
 }
 
 /*}}}  */
@@ -1670,6 +1678,9 @@ ATbool ERR_isValidLocation(ERR_Location arg)
   if (ERR_isLocationFile(arg)) {
     return ATtrue;
   }
+  else if (ERR_isLocationArea(arg)) {
+    return ATtrue;
+  }
   else if (ERR_isLocationAreaInFile(arg)) {
     return ATtrue;
   }
@@ -1691,6 +1702,28 @@ inline ATbool ERR_isLocationFile(ERR_Location arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, ERR_patternLocationFile, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isLocationArea(ERR_Location arg) */
+
+inline ATbool ERR_isLocationArea(ERR_Location arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternLocationArea, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -1767,7 +1800,10 @@ ERR_Location ERR_setLocationFilename(ERR_Location arg, const char* filename)
 
 ATbool ERR_hasLocationArea(ERR_Location arg)
 {
-  if (ERR_isLocationAreaInFile(arg)) {
+  if (ERR_isLocationArea(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isLocationAreaInFile(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -1778,7 +1814,10 @@ ATbool ERR_hasLocationArea(ERR_Location arg)
 
 ERR_Area ERR_getLocationArea(ERR_Location arg)
 {
-  
+  if (ERR_isLocationArea(arg)) {
+    return (ERR_Area)ATgetArgument((ATermAppl)arg, 0);
+  }
+  else 
     return (ERR_Area)ATgetArgument((ATermAppl)arg, 1);
 }
 
@@ -1787,7 +1826,10 @@ ERR_Area ERR_getLocationArea(ERR_Location arg)
 
 ERR_Location ERR_setLocationArea(ERR_Location arg, ERR_Area Area)
 {
-  if (ERR_isLocationAreaInFile(arg)) {
+  if (ERR_isLocationArea(arg)) {
+    return (ERR_Location)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) Area), 0);
+  }
+  else if (ERR_isLocationAreaInFile(arg)) {
     return (ERR_Location)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) Area), 1);
   }
 
@@ -2188,6 +2230,10 @@ ERR_Location ERR_visitLocation(ERR_Location arg, char* (*acceptFilename)(char*),
   if (ERR_isLocationFile(arg)) {
     return ERR_makeLocationFile(
         acceptFilename ? acceptFilename(ERR_getLocationFilename(arg)) : ERR_getLocationFilename(arg));
+  }
+  if (ERR_isLocationArea(arg)) {
+    return ERR_makeLocationArea(
+        acceptArea ? acceptArea(ERR_getLocationArea(arg)) : ERR_getLocationArea(arg));
   }
   if (ERR_isLocationAreaInFile(arg)) {
     return ERR_makeLocationAreaInFile(

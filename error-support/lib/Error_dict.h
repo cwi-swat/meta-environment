@@ -11,11 +11,13 @@ extern AFun ERR_afun7;
 extern AFun ERR_afun5;
 extern AFun ERR_afun3;
 extern AFun ERR_afun9;
+extern AFun ERR_afun10;
 extern AFun ERR_afun1;
 extern AFun ERR_afun6;
 
 extern ATerm ERR_patternAreaArea;
 extern ATerm ERR_patternLocationAreaInFile;
+extern ATerm ERR_patternLocationArea;
 extern ATerm ERR_patternLocationFile;
 extern ATerm ERR_patternErrorListMany;
 extern ATerm ERR_patternErrorListSingle;

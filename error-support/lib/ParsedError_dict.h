@@ -60,6 +60,7 @@ extern ATerm PERR_patternStartLocation;
 extern ATerm PERR_patternStartArea;
 extern ATerm PERR_patternAreaArea;
 extern ATerm PERR_patternLocationAreaInFile;
+extern ATerm PERR_patternLocationArea;
 extern ATerm PERR_patternLocationFile;
 extern ATerm PERR_patternErrorListMany;
 extern ATerm PERR_patternErrorListSingle;

@@ -44,6 +44,7 @@ extern ATerm PLOC_patternStartLocation;
 extern ATerm PLOC_patternStartArea;
 extern ATerm PLOC_patternAreaArea;
 extern ATerm PLOC_patternLocationAreaInFile;
+extern ATerm PLOC_patternLocationArea;
 extern ATerm PLOC_patternLocationFile;
 extern ATerm PLOC_patternNatConDefault;
 extern ATerm PLOC_patternStrConDefault;
