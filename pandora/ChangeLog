@@ -1,5 +1,8 @@
 # $Id$
 
+Fri Nov 12 13:11:15 CET 2004 <kooiker@cwi.nl>
+ * add initial TeX backend 
+
 Wed Oct 13 11:23:07 CEST 2004 <kooiker@cwi.nl>
  * formatter/text/Text-Operators.{asf,sdf}:
    - Introduced Text concat operator 

@@ -1,0 +1,28 @@
+equations
+
+%% \paragraph{Empty boxes}
+%%
+%% According to equation (\ref{Mod:Box-to-Text-C}.\ref{Eq:C'B2T'empty})
+%% an empty box of any kind yields no text. Therefore, we can remove it
+%% from any list of boxes.
+
+   [C'O'empty]  B* Ho*[]   C* = B* C*
+   [C'O'empty]  B* Vo*[]   C* = B* C*
+   [C'O'empty]  B* HVo*[]  C* = B* C*
+   [C'O'empty]  B* HOVo*[] C* = B* C*
+
+   [C'O'empty]  B* Io*1[Ho*2[]]   C* = B* C*
+   [C'O'empty]  B* Io*1[Vo*2[]]   C* = B* C*
+   [C'O'empty]  B* Io*1[HVo*2[]]  C* = B* C*
+   [C'O'empty]  B* Io*1[HOVo*2[]] C* = B* C*
+
+   [C'O'empty]  B* WD[Ho*[]]   C* = B* C*
+   [C'O'empty]  B* WD[Vo*[]]   C* = B* C*
+   [C'O'empty]  B* WD[HVo*[]]  C* = B* C*
+   [C'O'empty]  B* WD[HOVo*[]] C* = B* C*
+
+   [C'O'empty]  B* WD[Io*1[Ho*2[]]]   C* = B* C*
+   [C'O'empty]  B* WD[Io*1[Vo*2[]]]   C* = B* C*
+   [C'O'empty]  B* WD[Io*1[HVo*2[]]]  C* = B* C*
+   [C'O'empty]  B* WD[Io*1[HOVo*2[]]] C* = B* C*
+

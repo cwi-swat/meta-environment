@@ -1,0 +1,10 @@
+clean(tex(
+H hs = 0 [ "["
+      A(l,l,l) [
+        R["x" ":" "int"]
+        R["xy" ":" "int"]
+        R["x" ":" "boolean"]
+        R["xyzkl" ":" "int"]  ]
+    "]"
+]
+))

@@ -1,0 +1,116 @@
+%%%%
+%%%% $Id$
+%%%%
+%%%% This file is part of the specification
+%%%%    "Box: Language, Laws and Formatters"
+%%%%
+%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
+%%%%
+%%%% Programming Research Group, University of Amsterdam
+%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
+%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
+%%%%
+
+equations
+
+%% \paragraph{Documentation}
+
+   [DOC] documentation = (\requirepackage{rmq("box-macros")}rmq("[1995/06/26 v1.1]"))
+
+%% \paragraph{Lists of Boxes}
+%%
+%% We define three functions to translate a list of boxes. The first one
+%% simply concatenates the translations of the boxes in a list.  The
+%% second one separates code for boxes by a piece of code.  The third one
+%% prefixes each box with a piece of code \var{t} and puts braces around
+%% the code for the box. Here \var{t} is intended to be a macro that
+%% takes a piece of code as argument.
+
+   [TeX'0] texs1()                      = ()
+   [TeX'n] texs1(B B*)                  = (tex(B) texs1(B*))
+
+   [TeX'0] texs2(t,)                    = ()
+   [TeX'n] texs2(t, B)                  = tex(B)
+   [TeX'n] texs2(t, B B+)               = (tex(B) t texs2(t, B+))
+
+   [TeX'0] texs3(t,)                    = ()
+   [TeX'n] texs3(t, B B*)               = (t{tex(B)} texs3(t, B*))
+
+%% \paragraph{Strings}
+%%
+%% Strings are translated by removing their doublequotes.
+
+   [TeX'str]          tex("")  = (\S{})
+   [default-TeX'str]  tex(a)   = (\S{rmq(["~" / " "] specials(deslash(a)))})
+
+%% [This is not very decent because it implies that the resulting
+%% code does not conform to the syntax of \TeX\ as we defined
+%% it above. Since we do not plan to analyse the generated code
+%% this solution is better than trying to remove the quotes in
+%% \TeX.]
+
+%%{\def\HSPACE{}
+%% \paragraph{Boxes}
+%%
+%% We translate boxes to code. Each box operator is mapped to a corresponding
+%% macro. For instance, {\sf H} is mapped to \verb+\H+ and {\sf V} to
+%% \verb+\V+. The pieces of code that correspond to the subboxes of a box
+%% are separated by skips that take care of spacing. The skips are parameterized
+%% by the relevant space option values.
+
+   [TeX'H]    tex(Ho*[B*])    = (\H   {texs2((\HSKIP{H(o*)}), B*)})
+   [TeX'V]    tex(Vo*[B*])    = (\V   {texs2((\VSKIP{V(o*)}), B*)})
+   [TeX'I]    tex(Io*[B])     = (\I   {I(o*)}{ tex(B) })
+   [TeX'WD]   tex(WD[B])      = (\WD  {tex(B)})
+   [TeX'HOV]  tex(HOVo*[B*])  = (\HOV {texs2((\HOVSKIP{H(o*)}{V(o*)}), B*)})
+   [TeX'HV]   tex(HVo*[B B*]) = (\HV  {tex(B) texs3((\HVSKIP{H(o*)}{I(o*)}{V(o*)}), B*)})
+
+%% Note that \verb+\HVSKIP+s take the next box as argument. As we will see below
+%% in the macro definitions it handles the placing of its argument by comparing
+%% its width with the amount of space left on the current line.
+%%
+%% We can reduce the size of the generated code by removing irrelevant
+%% skips. A zero \verb+\HSKIP+, \verb+\ISKIP+, \verb+\VSKIP+ or \verb+\HOVSKIP+
+%% has no effect.
+
+   [HSKIP] (t*1 \HSKIP{ 0 }        t*2) = (t*1 t*2)
+   [HSKIP] (t*1 \VSKIP{ 0 }        t*2) = (t*1 t*2)
+   [ISKIP] (t*1 \ISKIP{ 0 }{ 0 }   t*2) = (t*1 t*2)
+   [ISKIP] (t*1 \HOVSKIP{ 0 }{ 0 } t*2) = (t*1 t*2)
+
+%%}
+
+    [0] specials("") = ""
+    [0] specials(box-str-con(""" "#" chr* """))
+        = "\#" * specials(box-str-con(""" chr* """))
+    [0] specials(box-str-con(""" "_" chr* """))
+        = "\_" * specials(box-str-con(""" chr* """))
+    [0] specials(box-str-con(""" "\" chr* """))
+        = "$\backslash{}$" * specials(box-str-con(""" chr* """))
+    [0] specials(box-str-con(""" "<" chr* """))
+        = "$<$" * specials(box-str-con(""" chr* """))
+    [0] specials(box-str-con(""" ">" chr* """))
+        = "$>$" * specials(box-str-con(""" chr* """))
+    [0] specials(box-str-con(""" "|" chr* """))
+        = "$|$" * specials(box-str-con(""" chr* """))
+    [0] specials(box-str-con(""" "*" chr* """))
+        = "$*$" * specials(box-str-con(""" chr* """))
+    [0] specials(box-str-con(""" "{" chr* """))
+        = "$\{$" * specials(box-str-con(""" chr* """))
+    [0] specials(box-str-con(""" "}" chr* """))
+        = "$\}$" * specials(box-str-con(""" chr* """))
+    [0] specials(box-str-con(""" "~" chr* """))
+        = "$\sim$" * specials(box-str-con(""" chr* """))
+    [0] specials(box-str-con(""" "%" chr* """))
+        = "\%" * specials(box-str-con(""" chr* """))
+    [0] specials(box-str-con(""" "&" chr* """))
+        = "\&" * specials(box-str-con(""" chr* """))
+
+    [0] specials(box-str-con(""" """ chr* """))
+        = "{\tt{}" * box-str-con(""" """ """) * "}" * specials(box-str-con(""" chr* """))
+
+    [default-0] specials(box-str-con(""" chr chr* """))
+        = box-str-con(""" chr """) * specials(box-str-con(""" chr* """))
+
+%%%

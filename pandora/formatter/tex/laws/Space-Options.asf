@@ -1,0 +1,12 @@
+equations
+
+   [S'H'0] H()           = 1
+   [S'H'1] H(hs = h o*)  = h
+   [S'H'n] H(ss = h o*)  = H(o*) when ss != hs
+
+   [S'V'0] V()          = 0
+   [S'V'1] V(vs = v o*) = v
+   [S'V'n] V(ss = v o*) = V(o*)   when ss != vs
+   [S'I'0] I()          = 2
+   [S'I'1] I(is = i o*) = i
+   [S'I'n] I(ss = h o*) = I(o*)   when ss != is

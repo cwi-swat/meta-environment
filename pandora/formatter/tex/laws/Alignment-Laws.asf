@@ -1,0 +1,72 @@
+%%%%
+%%%% $Id$
+%%%%
+%%%% This file is part of the specification
+%%%%    "Box: Language, Laws and Formatters"
+%%%%
+%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
+%%%%
+%%%% Programming Research Group, University of Amsterdam
+%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
+%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
+%%%%
+
+equations
+
+%% \paragraph{RWD}
+
+  [0] RWD[]     =
+  [0] RWD[B B*] = "" ++ RWD[B*]
+
+%% \paragraph{One Row}
+
+  [0]         A(ao*) so* [ R[B B*] ] = H so*[ V[B] B* ]
+  [default-0] A(ao*) so* [ B       ] = V[B]
+
+  [0] H* so*[B*, , D*]     =
+  [0] H* so*[B*, C C*, D*] = H so*[B* C D*] ++ H* so*[B*, C*, D*]
+
+  [0] V so*1 [ B* R[C*] D* ]    =  V so*1 [ B* H[C*] D* ]
+  [0] V so*1 [ A(ao*)so*2[B*] ] = A(ao*)so*2[B*]
+
+  [0] HV so*1 [ B* R[C*] D* ]    =  HV so*1 [ B* H[C*] D* ]
+  [0] HOV so*1 [ B* R[C*] D* ]   =  HOV so*1 [ B* H[C*] D* ]
+
+%% \paragraph{V-lifting}
+
+  [0]
+        B* E* !=
+        ===========================
+        A(ao*)so*[B* R[C*1 Vso*[D] C*2] E*] =
+        A(ao*)so*[B* R[C*1 D       C*2] E*]
+  [0]
+        B* E* !=
+        ===========================
+        A(ao*)so*[B* R[C*1 Vso*[D+1 D+2] C*2] E*] =
+        A(ao*)so*[B* R[C*1 Vso*[D+1]] R[RWD[C*1] ++ Vso*[D+2] C*2] E*]
+
+  [0] Hso*[B* A(ao*)so*2[C1 C* C2] D*] = A(ao*)so*2[Hso*[B* C1] ++ H* so*[WD[Hso*[B*]], C* Hso*[C2 D*], ]]
+
+%% An aligment with more than one line acts as a vertical box
+
+  [0] HOVso*1[B* A(ao*) so*2 [C C+] D*]  = Vso*1[B* A(ao*) so*2 [C C+] D*]
+  [0] HOVso*1[B* I so*2 [ A(ao*) so*3 [C C+] ] D*]  = Vso*1[B* I so*2 [ A(ao*) so*3 [C C+] ] D*]
+
+
+%% \paragraph{H}
+
+  [0] H so*1 [ B* A(ao*) so*2 [ C1 C* C2 ] D+ ] = A(ao*) so*2 [ H so*1 [ B* C1] ++ H* so*1[WD[Hso*1[B*]], C* H so*1[ C2 D+ ], ] ]
+
+  [0] H so*1 [ B* R[ C1 C* C2 ] D* ]        = R[ H so*1 [ B* C1] C* H so*1 [ C2 D* ] ]
+
+  [0] R[ B* R[ C* ] D* ] = R[ B* C* D* ]
+
+%% \paragraph{Indentation}
+
+  [0] A(ao*) so*2 [ C*1 I so* [ R[ B B* ] ] C*2] = A(ao*) so*2 [ C*1 R[ I so*[ B ] B* ] C*2]
+  [0] V so*2 [ C*1 I so* [ R[ B* ] ] C*2] = V so*2 [ C*1 I so* [ H so* [ B*] ]  C*2]
+
+%%%  [0] I so*1 [A(ao*) so*2 [ B* ] ] = A(ao*) so*2 [ I* so*1 [ B* ] ]
+
+%%%

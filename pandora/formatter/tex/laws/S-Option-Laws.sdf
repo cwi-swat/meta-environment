@@ -1,0 +1,18 @@
+module laws/S-Option-Laws
+
+imports languages/box/syntax/Box 
+imports laws/Space-Options
+
+hiddens
+  variables
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+    [hij][0-9\']* -> NatCon
+    "o*"[0-9]* -> SpaceOption*
+    "ss" -> SpaceSymbol
+
+hiddens
+  context-free syntax
+    -> SpaceOption*
+

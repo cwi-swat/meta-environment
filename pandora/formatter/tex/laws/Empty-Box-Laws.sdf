@@ -1,0 +1,14 @@
+module laws/Empty-Box-Laws
+
+imports languages/box/syntax/Box
+
+hiddens
+  variables
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+    "o*"[0-9]* -> SpaceOption*
+
+hiddens
+  context-free syntax
+    -> Box*

@@ -1,0 +1,18 @@
+module laws/Basic-Box-Laws
+
+imports languages/box/syntax/Box 
+imports laws/Empty-Box-Laws 
+imports laws/S-Option-Laws
+imports basic/Strings
+
+hiddens
+  variables
+    [abc][0-9]*     -> StrCon
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+    "o*"[0-9]* -> SpaceOption*
+
+hiddens
+  context-free syntax
+    -> Box* 

@@ -1,0 +1,42 @@
+tex(
+V [
+  H [ "imports" "PipeliningFrames," ] H [ WD["imports"] "Tables" ]
+    H [ WD["imports"] "{" ]
+    H [ WD["imports"] H hs = 2 [ "" HV [ "Keys" "bound" ] ] ]
+    H [ WD["imports"] H hs = 2 [ WD[""] H [ "by" "[" ] ] ]
+    H [
+      WD["imports"]
+        H hs = 2 [
+          WD[""]
+            H [
+              WD["by"] H hs = 2 [ "" HV [ "KEY" "->" "NATURAL" * "," ] ]
+              ] ] ]
+    H [
+      WD["imports"]
+        H hs = 2 [
+          WD[""]
+            H [ WD["by"] H hs = 2 [ WD[""] HV [ "eq" "->" "eq" ] ] ] ] ]
+    H [
+      WD["imports"]
+        H hs = 2 [ WD[""] HV [ H [ WD["by"] "]" ] "to" "Naturals" ] ]
+      ]
+    H [ WD["imports"] H hs = 2 [ WD[""] HV [ "Items" "bound" ] ] ]
+    H [ WD["imports"] H hs = 2 [ WD[""] H [ "by" "[" ] ] ]
+    H [
+      WD["imports"]
+        H hs = 2 [
+          WD[""]
+            H [ WD["by"] H hs = 2 [ "" HV [ "ITEM" "->" "DATA" * "," ] ]
+              ] ] ]
+    H [
+      WD["imports"]
+        H hs = 2 [
+          WD[""]
+            H [
+              WD["by"] H hs = 2 [ WD[""] HV [ "table-nil" "->" "d1" ] ] ]
+          ] ]
+    H [
+      WD["imports"]
+        H hs = 2 [ WD[""] HV [ H [ WD["by"] "]" ] "to" "Data" ] ] ]
+    H [ WD["imports"] "}" ] ]
+)

@@ -1,0 +1,218 @@
+equations
+
+%% \paragraph{I in H and V}
+%%
+%% According to equation (\ref{Mod:Box-to-Text-C}.\ref{Eq:C'B2T'I'H})
+%% an {\sf I} box in a {\sf H} context is treated in the same way as a
+%% {\sf H} box. Therefore, we can replace an {\sf I} box in a {\sf H}
+%% box by a {\sf H} box.
+
+   [C'IinH] Ho*1[B* Io*2[C] D*]   = Ho*1[B* C D*]
+
+%% An {\sf I} box in a {\sf V} box is a true indentation. This can
+%% be expressed using a {\sf H} box.
+
+%%%   [C'IinV] Vo*1[B* Io*2[C] D*] = Vo*1[B* H hs = I(o*2) ["" C] D*]
+
+%% Note that the {\sf H} that replaces the {\sf I} inherits
+%% its space options. That is the reason that we can not
+%% remove a \fun{hs} option of an {\sf I} box, but only
+%% its \fun{vs} option [equation (\ref{Eq:C'SinI'vs})].
+
+%% \paragraph{Strings in H}
+%%
+%% Strings can be concatenated in a {\sf H} box when its horizontal space is zero.
+
+   [C'H'str]  
+      H(o*) = 0,
+      c = a || b
+      ===>
+      Ho*[B* a b C*] = Ho*[B* c C*]
+
+%% \paragraph{V lifting}
+%%
+%% The following
+%% transformations are used to move the {\sf V} operator out of the box
+%% expression, The result of these transformations is a box
+%% expression consisting of a list of {\sf H} boxes which do not contain
+%% {\sf V} operators any more.
+
+   [C'VinH]
+                                   C1 != , C2 !=
+        ===================================================================================
+        Ho*1[B* Vo*2[C1 C* C2] D*]
+                    = Vo*2[Ho*1[B* Vo*2[C1]] Ho*1[WD[Ho*1[B*]] Vo*2[C* Ho*1[Vo*2[C2] D*]]]]
+
+%% The following reduction sequence shows how this equation---in combination
+%% with a couple of equations that we discuss below---works on our $(a+b)$
+%% example.
+%%% $$\input{V-lifting-example1.box-trace.trmtex}$$
+%%%
+%% If we draw the first and last box in this sequence as a picture we
+%% see how flattening of boxes takes place.
+%%%
+%%% \input{V-lifting-picture1.ltx}
+%%%
+%%\noindent
+%% Note that the bracket in the left picture is actually in the outer horizontal
+%% box.
+%% We see that the maximal nesting is reduced from 4 in the original box to 3 in
+%% resulting box.
+%%
+%% After applying this equation there are still {\sf V} boxes inside
+%% {\sf H} boxes, but they are always singleton {\sf V} boxes. They
+%% are left around the boxes $\var{B}_1$ and $\var{B}_2$ to protect
+%% {\sf I} boxes in them from the surrounding {\sf H} box. Below
+%% we will show how these singleton {\sf V} boxes can be lifted as well.
+%%
+%% Lifting {\sf V} boxes from {\sf I} boxes is tricky, since
+%% we must ensure the {\sf I} does not occur in a {\sf H} box.
+%% We ensure this by the condition $\var{O} \neq {\sf H}$, that
+%% restricts the context to non-{\sf H} boxes.
+
+   [C'VinI'r]
+        Vo*0[B* Io*1[Vo*2[C+]] D*] = Vo*0[B* Vo*2[I* o*1[C+]] D*]
+
+
+%% Only the last box of a {\sf V} box inside a  {\sf WD} box is relevant,
+%% because the function \fun{wd} yields a blank line with the same
+%% width as the last line of its argument text
+%% [see equations (\ref{Mod:Text}.\ref{Eq:Txt'wd'n}) and (\ref{Mod:Box-to-Text-C}.\ref{Eq:C'B2T'WD})].
+
+   [C'VinWD]    WD[Vo*2[B* C]]         = WD[C]
+
+%% \paragraph{Nested boxes of the same kind}
+%%
+%% Nesting {\sf H}, {\sf V} and {\sf WD} boxes makes only sense if
+%% different space options are attached to the outer
+%% and inner box. Otherwise, if the options are the
+%% same, the inner list can be lifted into the outer list.
+
+   [C'VinV]     Vo*[B* Vo*[C*] D*]      = Vo*[B* C* D*]
+   [C'HinH]     Ho*[B* Ho*[C*] D*]      = Ho*[B* C* D*]
+
+%% Furthermore, for {\sf H} boxes we can move the trailing
+%% part of the outer horizontal list into the inner horizontal
+%% list.
+
+  [C'HinH]     Ho*1[B* Ho*2[C+ C] D+]    = Ho*1[B* Ho*2[C+ Ho*1[C D+]]]
+
+%%%[C'HinH]     Ho1[A+ Ho2[B1 B+]]     = Ho2[Ho1[A+ B1] B+]          when o1(H) (<) o2(H) = true
+
+%% An {\sf I} box inside an {\sf I} box is {\em not} meaningless, but
+%% indicates `double' indentation. For the case of a singleton
+%% indented {\sf I} box we can derive the following equation independent
+%% of the context.
+
+   [C'IinI]     Io*1[Io*2[B]]             = I is = I(o*1) + I(o*2) [B]
+
+%% \paragraph{Singleton Boxes}
+%%
+%% It would seem that for any operator \var{O},
+%% $\var{O}_{\var{o}}[\var{A}] = \var{A}$.
+%% However, in the first place this does not hold for $\var{O} = {\sf I}$
+%% and in the second place, since $\var{A}$ itself can be an {\sf I} box,
+%% this equation might change the context of that {\sf I}.
+%% Therefore, we have to consider carefully for each \var{O} and
+%% for each context $\var{O}'$ whether
+%% $
+%%      \var{O}'_{\var{o}'}[\var{O}_{\var{o}}[\var{A}]] =
+%%      \var{O}'_{\var{o}'}[\var{A}]
+%% $.
+%% We must ensure that the context of a box is only changed if that is
+%% safe; in particular we have to ensure that an {\sf I} box
+%% in a {\sf V} box is protected from a possible {\sf H} context of
+%% the {\sf V} box.
+%%
+%% A singleton string in a {\sf H} or {\sf V} box is just that string.
+
+   [C'SinH]        Ho*[a]                = a
+   [C'SinV]        Vo*[a]                = a
+
+%% Singleton {\sf H} boxes:
+
+   [C'HinH'single] Ho*1[B* Ho*2[C] D*]   = Ho*1[B* C D*]
+   [C'HinH]        Ho*1[Ho*2[B*]]        = Ho*2[B*]
+
+%% Singleton {\sf V} boxes:
+
+   [C'HinH]        Vo*1[Vo*2[B*]]             = Vo*2[B*]
+   [C'HinV]        Vo*1[Ho*2[B*]]             = Ho*2[B*]
+
+   [C'VinV'single] Vo*1[B* Vo*2[C] D*]        = Vo*1[B* C D*]
+   [C'HinVinH]     Ho*1[B* Vo*2[Ho*3[C*]] D*] = Ho*1[B* Ho*3[C*] D*]
+   [C'SinV]        Vo*1[Ho*2[Vo*3[B]]]        = Vo*1[B]
+
+%% {\sf WD}
+
+   [C'HinWD]    WD[Ho*[B]]             = WD[B]
+   [C'WDinWD]   WD[WD[B]]              = WD[B]
+
+%% Since {\sf I}s are protected in {\sf I}s we can flatten
+%% a singleton {\sf H} or {\sf V} box in a {\sf I} box.
+
+
+%% \paragraph{HOV}
+
+%% The trailing part of a horizontal composition after a {\sf HOV} will always
+%% be placed horizontally after the last element of the {\sf HOV}.
+
+  [D'HOVinH] Ho*1[B* HOVo*2[C+1 Ho*3[C*2]] D+]
+                = Ho*1[B* HOVo*2[C+1 Ho*1[Ho*3[C*2] D+]]]
+
+  [D'HOVinH] Ho*1[B* HOVo*2[C+1 Io*3[C2]] D+]
+                = Ho*1[B* HOVo*2[C+1 Io*3[Ho*1[C2 D+]]]]
+
+  [D'HOVinH] Ho*1[B* HOVo*2[C+1 HVo*3[C*2]] D+]
+                = Ho*1[B* HOVo*2[C+1 Ho*1[HVo*3[C*2] D+]]]
+
+  [D'HOVinH] Ho*1[B* HOVo*2[C+1 HOVo*3[C*2]] D+]
+                = Ho*1[B* HOVo*2[C+1 Ho*1[HOVo*3[C*2] D+]]]
+
+%% The strange construction in the right hand side is needed to protect
+%% a possible {\sf I} in box \var{B}, but keeping the possibility open for
+%% eliminating the {\sf I} if the {\sf HOV} is set horizontally.
+%%
+%% A singleton {\sf V} box containg a {\sf HOV} is that {\sf HOV}.
+
+  [D'HOVinV]    Vo*2[HOVo*3[B*]] = HOVo*3[B*]
+
+%% According to equation (\ref{Mod:Box-to-Text-D}.\ref{Eq:D'B2T'ifHOV'3})
+%% a {\sf HOV} box containing a {\sf V} box with more than one
+%% box is always formatted vertically.
+
+
+  [C'VinH'r]    HOVo*0[B* Io*1[Vo*2[C C+]] D*] = Vo*0[B* Io*1[Vo*2[C C+]] D*]
+
+%% \paragraph{HV}
+
+%% {\sf I} in {\sf HV}
+
+  [E'IinHV]     HVo*1[B* Io*2[C] D*]     = HVo*1[B* C D*]
+
+%% {\sf HV} in {\sf H}
+
+  [E'HVinH]     Ho*1[B* HVo*2[C+ C] D+]   = Ho*1[B* HVo*2[C+ Ho*1[C D+]]]      when C !=
+
+%% Singleton boxes
+
+  [E'HV'single] HVo*[B]                 = Ho*[B]
+  [E'HVinH]     Ho*1[HVo*2[B*]]         = HVo*2[B*]
+  [E'VinH]      Vo*1[HVo*2[B+]]         = HVo*2[B+]
+
+%% {\sf V} lifting in case of {\sf HV} is almost identical to the {\sf V}
+%% lifting of {\sf H}.
+%% The result is a V box with only {\sf HV} argument boxes which do not contain
+%% {\sf V} operators.
+
+  [E'VinHV]     HVo*1[B* Vo*2[C+ C] D*]   = Vo*2[HVo*1[B*] C+ C HVo*1[D*]]
+
+%%% BEWARE INDENTATION OF THE V BOX
+
+%%%  [0] IWD[B][V so* [C]]       = IWD[B][C]
+%%%  [0] IWD[B][V so* [C+1 C+2]] = V so*[ IWD[B][V so*[C+1]] IWD[B][V so*[C+2]] ]
+
+%%%  [0] IWD[B][Hso*[C*]] = H hs = 0 [WD[B] Hso*[C*]]
+
+
+%%%

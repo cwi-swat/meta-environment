@@ -1,0 +1,34 @@
+%%%%
+%%%% $Id$
+%%%%
+%%%% This file is part of the specification
+%%%%    "Box: Language, Laws and Formatters"
+%%%%
+%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
+%%%%
+%%%% Programming Research Group, University of Amsterdam
+%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
+%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
+%%%%
+
+%%  \module{Comments to \TeX}
+module Comments-to-TeX
+
+imports Basic-to-TeX 
+%%imports Comments 
+%%imports CBox-Laws
+%%imports Fonts-to-TeX 
+imports Escapes
+
+hiddens
+  context-free syntax
+    texs4(TEX,Box*)  -> TEX
+    pbox(Box)            -> TEX
+  variables
+    [ab][0-9]*     -> String
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+
+%%%

@@ -1,0 +1,58 @@
+equations
+    [Out5'1]  string of Int layoutchars = string of Int " " chars
+
+    [Out6'1]  Int <= 0 == true
+              ===============
+              string of Int strcon(""" Ch """) chars = ""
+    [Out6'2]  string of 1 strcon(""" Ch """) chars = strcon(""" Ch """)
+    [Out6'3]  string of 2 strcon(""" Ch """) chars = strcon(""" Ch Ch """)
+    [Out6'4]  string of 3 strcon(""" Ch """) chars = strcon(""" Ch Ch Ch """)
+    [Out6'5]  string of 4 strcon(""" Ch """) chars = strcon(""" Ch Ch Ch Ch """)
+    [Out6'6]  string of 5 strcon(""" Ch """) chars = strcon(""" Ch Ch Ch Ch Ch """)
+    [Out6'7]  string of 6 strcon(""" Ch """) chars = strcon(""" Ch Ch Ch Ch Ch Ch """)
+    [Out6'8]  string of 7 strcon(""" Ch """) chars = strcon(""" Ch Ch Ch Ch Ch Ch Ch """)
+    [Out6'9]  Int > 7 == true
+              ==============
+              string of Int strcon(""" Ch """) chars =
+                strcon(""" Ch Ch Ch Ch Ch Ch Ch """) || string of Int-7 strcon(""" Ch """) chars
+
+%%    [Sop7'1]  deslash(strcon(""" """)) =
+%%                strcon(""" """)
+%%
+%%    [Sop7'2]  strcon(""" Char*4 """) := deslash(strcon(""" Char*2 """))
+%%              ========================================================
+%%              deslash(strcon(""" "\"""" Char*2 """)) =
+%%                strcon(""" """ Char*4 """)
+%%
+%%    [Sop7'3]  strcon(""" Char*4 """) := deslash(strcon(""" Char*2 """))
+%%              ==================================================================
+%%              deslash(strcon(""" "\""\" Char*2 """)) =
+%%                strcon(""" "\" Char*4 """)
+%%
+%%    [default-Sop7'4] strcon(""" Char*4 """) := deslash(strcon(""" Char*2 """))
+%%                     ==================================================================
+%%                     deslash(strcon(""" Char Char*2 """)) =
+%%                       strcon(""" Char Char*4 """)
+
+[deslash-0]
+  anychar(Char*2) := deslash-chars(anychar(Char*1))
+  ===>
+  deslash(strcon(""" Char*1 """)) = strcon(""" Char*2 """)
+
+[deslash-chars-0]
+  deslash-chars() =
+
+[deslash-chars-1]
+  anychar(Char*2) := deslash-chars(anychar(Char*1))
+  ===>
+  deslash-chars(anychar("\" """ Char*1)) = anychar(""" Char*2)
+
+[deslash-chars-2]
+  anychar(Char*2) := deslash-chars(anychar(Char*1))
+  ===>
+  deslash-chars(anychar("\" "\" Char*1)) = anychar("\" Char*2)
+
+[default-deslash-chars]
+  anychar(Char*2) := deslash-chars(anychar(Char*1))
+  ===>
+  deslash-chars(anychar(Char Char*1)) = anychar(Char Char*2)

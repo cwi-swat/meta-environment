@@ -1,0 +1,31 @@
+module Basic-to-TeX
+
+imports laws/Box-Laws 
+imports languages/tex/syntax/TeX
+imports Outstrings
+
+exports
+  context-free start-symbols
+    TEX
+
+exports
+  context-free syntax
+    tex(Box) -> TEX 
+    texs1(Box*) -> TEX 
+    texs2(TEX,Box*) -> TEX 
+    texs3(TEX,Box*) -> TEX 
+
+hiddens
+  variables
+    [hiv]          -> Integer
+    "chr"          -> CHAR
+    "chr*"         -> CHAR*
+    "chr+"         -> CHAR+
+    [ab][0-9]*     -> String
+    [B-E][0-9]*    -> Box
+    [B-E]"+"[0-9]* -> Box+
+    [B-E]"*"[0-9]* -> Box*
+
+exports
+  context-free syntax
+    specials(String) -> String 

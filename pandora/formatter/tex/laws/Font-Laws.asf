@@ -1,0 +1,48 @@
+%%%%
+%%%% $Id$
+%%%%
+%%%% This file is part of the specification
+%%%%    "Box: Language, Laws and Formatters"
+%%%%
+%%%% Copyright (c) Mark van den Brand & Eelco Visser, 1995
+%%%%
+%%%% Programming Research Group, University of Amsterdam
+%%%% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%% mail:markvdb@fwi.uva.nl http://adam.fwi.uva.nl/~markvdb/
+%%%% mail:visser@fwi.uva.nl  http://adam.fwi.uva.nl/~visser/
+%%%%
+
+equations
+
+  [0] f()     =
+  [0] f(B B*) = f[B] ++ f(B*)
+
+  [0] f[Ho*[B*]]   = Ho*[f(B*)]
+  [0] f[Vo*[B*]]   = Ho*[f(B*)]
+  [0] f[Io*[B]]    = Io*[f[B]]
+  [0] f[HOVo*[B*]] = HOVo*[f(B*)]
+  [0] f[HVo*[B*]]  = HVo*[f(B*)]
+  [0] f[WD[B]]     = WD[f[B]]
+
+  [0] V  [ f[a] ] = f[a]
+  [0] H  [ f[a] ] = f[a]
+  [0] HV [ f[a] ] = f[a]
+  [0] HOV[ f[a] ] = f[a]
+
+  [0] F fo*1  [ F fo*2 [ B ] ] = F fo*2 fo*1 [ B ]
+
+  [0] fo*1 fp = Id fo*2 fp = Id' fo*3   =   fo*1 fp = Id fo*2 fo*3
+  [0] fo*1 fp = Id fo*2 fp = i   fo*3   =   fo*1 fp = Id fo*2 fo*3
+  [0] fo*1 fp = i  fo*2 fp = Id' fo*3   =   fo*1 fp = i fo*2 fo*3
+  [0] fo*1 fp = i  fo*2 fp = j   fo*3   =   fo*1 fp = i fo*2 fo*3
+
+  [ABR'KW]      KW        = F fn = KWf
+  [ABR'VAR]     VAR       = F fn = VARf
+  [ABR'NUM]     NUM       = F fn = NUMf
+  [ABR'NUM]     COMM      = F fn = COMMf
+  [ABR'NUM]     STRING    = F fn = STRINGf
+
+  [0] ESC[ f[ B ] ] = f   [ B ]
+  [0] f[ ESC[ B ] ] = ESC [ B ]
+
+%%%
