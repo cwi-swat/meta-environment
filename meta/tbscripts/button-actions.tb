@@ -48,7 +48,10 @@ in
           rec-msg(stack(Stack?), EditorId)
         +
           rec-msg(error-stack, EditorId) .
-          ButtonActions := []
+          ButtonActions := [].
+          snd-note(ui-status(
+            errorf("An error occurred while processing the action: %t",
+                   [ButtonAction])))
         )
       fi
     fi
@@ -57,6 +60,39 @@ in
     tau
   fi
 endlet
+
+process StackPopTerm(Stack : list, NewStack : list?, Top : term?) is
+  Top := first(Stack).
+  NewStack := next(Stack)
+
+process StackPopString(Stack : list, NewStack : list?, Top : str?) is
+let
+  TopTerm : term
+in
+  StackPopTerm(Stack,NewStack?,TopTerm?).
+  Top := first(args(TopTerm))
+endlet
+
+process StackPushTerm(Stack : list, NewStack : list?, Top : term) is
+  NewStack := join(Top, Stack)
+
+process StackPushString(Stack : list, NewStack : list?, Top : str) is
+  StackPushTerm(Stack,NewStack?,quote(str(Top)))
+ 
+process StackPushInt(Stack : list, NewStack : list?, Top : int) is
+  StackPushTerm(Stack,NewStack?, quote(int(Top)))
+
+process StackPushFile(Stack : list, NewStack : list?, Top : str) is
+  StackPushTerm(Stack,NewStack?, quote(file(Top)))
+ 
+process StackPushPath(Stack : list, NewStack : list?, Top : str) is
+  StackPushTerm(Stack,NewStack?, quote(path(Top)))
+
+process ReturnSuccess(EditorId : term, Stack : list) is
+  snd-msg(stack(Stack), EditorId)
+
+process ReturnFailed(EditorId : term, Stack : list) is
+  snd-msg(error-stack, EditorId)
 
 process ButtonActionExecutor is
 let
@@ -95,8 +131,7 @@ in
       ArgList := [] .
       (
         if greater(NrOfArgs, 0) then
-          STree := first(Stack) .
-          Stack := next(Stack) .
+          StackPopTerm(Stack,Stack?,STree?).
           NrOfArgs := sub(NrOfArgs, 1) .
           ArgList := join(ArgList, STree)
         fi 
@@ -107,129 +142,113 @@ in
       snd-msg(apply-function(FuncName, SortName, ArgList)) .
       rec-msg(tree(RTree?)) .
       if not-equal(RTree, error-tree) then
-        Stack := join(RTree, Stack) .
-        snd-msg(stack(Stack), EditorId)
+        StackPushTerm(Stack,Stack?,RTree).
+        ReturnSuccess(EditorId,Stack)
       else
-        snd-msg(error-stack, EditorId)
+        ReturnFailed(EditorId, Stack)
       fi
       +
       rec-msg(activate(Action?), Stack?, EditorId?) .
       snd-msg(gen-adapter-activate(EditorId, Action)).
       rec-msg(gen-adapter-result(EditorId, OutStr?)).
       if not-equal(OutStr, "") then
-        RTree := quote(str(OutStr)) .
-        Stack := join(RTree, Stack) .
-        snd-msg(stack(Stack), EditorId)
+        StackPushString(Stack,Stack?,OutStr)
       else
-        snd-msg(stack(Stack), EditorId)
-      fi
+        tau
+      fi.
+      ReturnSuccess(EditorId,Stack)
     +
       rec-msg(activate-given-tree(Action?), Stack?, EditorId?) .
-      STree := first(Stack) .
-      Stack := next(Stack) .
+      StackPopTerm(Stack,Stack?,STree?).
       FunSym := fun(STree) .
       if not-equal(FunSym, "str") then
         snd-msg(gen-adapter-term-to-string-evaluate(EditorId,Action,STree)).
-        rec-msg(gen-adapter-term-to-string-result(EditorId,OutStr?)).
-        if not-equal(OutStr, "") then
-            RTree := quote(str(OutStr)) .
-            Stack := join(RTree, Stack) .
-            snd-msg(stack(Stack), EditorId)
-        else
-            snd-msg(stack(Stack), EditorId)
-        fi
+        rec-msg(gen-adapter-term-to-string-result(EditorId,OutStr?))
       else
         InStr := first(args(STree)) .
         snd-msg(gen-adapter-string-to-string-evaluate(EditorId,Action,InStr)).
-        rec-msg(gen-adapter-string-to-string-result(EditorId,OutStr?)).
-        if not-equal(OutStr, "") then
-            RTree := quote(str(OutStr)) .
-            Stack := join(RTree, Stack) .
-            snd-msg(stack(Stack), EditorId)
-        else
-            snd-msg(stack(Stack), EditorId)
-        fi
-      fi
+        rec-msg(gen-adapter-string-to-string-result(EditorId,OutStr?))
+      fi.
+      if not-equal(OutStr, "") then
+          StackPushString(Stack,Stack?,OutStr)
+      else
+          tau
+      fi.
+      ReturnSuccess(EditorId,Stack)
     +
       rec-msg(execute-action(Action?), Stack?, EditorId?) .
-      STree := first(Stack) .
-      Stack := next(Stack) .
+      StackPopTerm(Stack,Stack?,STree?).
       snd-msg(gen-adapter-term-evaluate(EditorId,Action, STree)).
       rec-msg(gen-adapter-term-out(EditorId,RTree?)).
       if not-equal(RTree, error-tree) then
-        Stack := join(RTree, Stack) .
-        snd-msg(stack(Stack), EditorId)
+        StackPushTerm(Stack,Stack?,RTree).
+        ReturnSuccess(EditorId,Stack)
       else
-        snd-msg(error-stack, EditorId)
+        ReturnFailed(EditorId,Stack)
       fi
     +
     rec-msg(parse-action(NewModName?), Stack?, EditorId?) .
     ParseTerm(EditorId, NewModName) .
-    snd-msg(stack(Stack), EditorId)
+    ReturnSuccess(EditorId,Stack)
     +
     rec-msg(parse-syntax-action(NewModName?), Stack?, EditorId?).
     ParseSyntax(EditorId,NewModName).
-    snd-msg(stack(Stack), EditorId)
+    ReturnSuccess(EditorId,Stack)
     +
     rec-msg(parse-equations-action(NewModName?), Stack?, EditorId?).
     ParseEquations(EditorId,NewModName).
-    snd-msg(stack(Stack), EditorId)
+    ReturnSuccess(EditorId,Stack)
     +
     rec-msg(get-root, Stack?, EditorId?) .
     GetTree(EditorId, ModuleName, RTree?) .
     if not-equal(RTree, error-tree) then
-      Stack := join(RTree, Stack) .
-      snd-msg(stack(Stack), EditorId)
+      StackPushTerm(Stack,Stack?,RTree).
+      ReturnSuccess(EditorId,Stack)
     else
-      snd-msg(error-stack, EditorId)
+      ReturnFailed(EditorId,Stack)
     fi
       +
         rec-msg(set-root, Stack?, EditorId?) .
-        STree := first(Stack) .
-        Stack := next(Stack) .
+        StackPopTerm(Stack,Stack?,STree?) .
         ReplaceRoot(EditorId, STree) .
-        snd-msg(stack(Stack), EditorId)
+        ReturnSuccess(EditorId,Stack)
       +
         rec-msg(get-focus, Stack?, EditorId?) .
         GetFocus(EditorId, RTree?) .
         if not-equal(RTree, error-tree) then
-          Stack := join(RTree, Stack) .
-          snd-msg(stack(Stack), EditorId)
+          StackPushTerm(Stack,Stack?,RTree) .
+          ReturnSuccess(EditorId,Stack)
         else
-          snd-msg(error-stack, EditorId)
+          ReturnFailed(EditorId,Stack)
         fi
       +
         rec-msg(set-focus, Stack?, EditorId?) .
-        STree := first(Stack) .
-        Stack := next(Stack) .
+        StackPopTerm(Stack,Stack?,STree?).
         ReplaceFocus(EditorId, STree) .
-        snd-msg(stack(Stack), EditorId)
+        ReturnSuccess(EditorId,Stack)
       +
         rec-msg(check-sort(SortName?), Stack?, EditorId?) .
-        STree := first(Stack) .
-        Stack := next(Stack) .
+        StackPopTerm(Stack,Stack?,STree?).
         CheckTreeSort(STree, SortName, RTree?) .
         if not-equal(RTree, error-tree) then
-          Stack := join(RTree, Stack) .
-          snd-msg(stack(Stack), EditorId)
+          StackPushTerm(Stack,Stack?,RTree) .
+          ReturnSuccess(EditorId,Stack)
         else
-          snd-msg(error-stack, EditorId)
+          ReturnFailed(EditorId,Stack)
         fi
       +
         rec-msg(reduce(NewModName?), Stack?, EditorId?) .
-        STree := first(Stack) .
-        Stack := next(Stack) .
+        StackPopTerm(Stack,Stack?,STree?).
         ReduceTerm(STree, NewModName, RTree?) .
         if not-equal(RTree, error-tree) then
-          Stack := join(RTree, Stack) .
-          snd-msg(stack(Stack), EditorId)
+          StackPushTerm(Stack,Stack?,RTree) .
+          ReturnSuccess(EditorId,Stack)
         else
-          snd-msg(error-stack, EditorId)
+          ReturnFailed(EditorId,Stack)
         fi
       +
         rec-msg(get-other-focus(NewModName?), Stack?, EditorId?) .
-        STree := first(Stack) .
-        Stack := next(Stack) .
+        StackPopTerm(Stack,Stack?,STree?).
         FunSym := fun(STree) .
         if equal(FunSym, "path") then
           FilePath := first(args(STree)) .
@@ -238,34 +257,30 @@ in
             rec-msg(existing-editor(FilePath?, EditorId2?)).
             GetFocus(EditorId2, RTree?) .
             if not-equal(RTree, error-tree) then
-              Stack := join(RTree, Stack) .
-              snd-msg(stack(Stack), EditorId)
+              StackPushTerm(Stack,Stack?,RTree) .
+              ReturnSuccess(EditorId,Stack)
             else
-              snd-msg(error-stack, EditorId)
+              ReturnFailed(EditorId,Stack)
             fi
           +
             rec-msg(non-existing-editor(FilePath?)).
             snd-note(ui-status(errorf("editor for %s not active", 
                                       [FilePath]))) .
-            snd-msg(error-stack, EditorId)
+            ReturnFailed(EditorId,Stack)
           )
         else
-          snd-msg(error-stack, EditorId)
+          ReturnFailed(EditorId,Stack)
         fi
       +
         rec-msg(push-editor-name, Stack?, EditorId?) .
         snd-msg(get-editor-name(EditorId)) .
         rec-msg(editor-name(FileName?)) .
-        RTree := quote(str(FileName)) .
-        Stack := join(RTree, Stack) .
-        snd-msg(stack(Stack), EditorId)
+        StackPushString(Stack,Stack?,FileName) .
+        ReturnSuccess(EditorId,Stack)
       +
         rec-msg(edit-given-filename(NewModName?), Stack?, EditorId?) .
-        STree := first(Stack) .
-        Stack := next(Stack) .
-        FileName := first(args(STree)) .
-        STree := first(Stack) .
-        Stack := next(Stack) .
+        StackPopString(Stack,Stack?,FileName?) .
+        StackPopTerm(Stack,Stack?,STree?) .
         FunSym := fun(STree) .
         if equal(FunSym, "str") then
           String := first(args(STree)) .
@@ -273,27 +288,25 @@ in
         else
           ActivateEditorWithTree(STree, NewModName, FileName) 
         fi .    
-        snd-msg(stack(Stack), EditorId)
+        ReturnSuccess(EditorId,Stack)
       + 
         rec-msg(send, Stack?, EditorId?) .
-        STree := first(Stack) .
-        Stack := next(Stack) .
+        StackPopTerm(Stack,Stack?,STree?) .
         snd-msg(tree-send(STree)) .
         snd-msg(stack(Stack), EditorId?)
       +
         rec-msg(recieve, Stack?, EditorId?) .
         rec-msg(tree-send(RTree?)) .
-        Stack := join(RTree, Stack) .
-        snd-msg(stack(Stack), EditorId)
+        StackPushTerm(Stack,Stack?,RTree) .
+        ReturnSuccess(EditorId,Stack)
       +
         rec-msg(parse(NewModName?, SortName?), Stack?, EditorId?) .
-        STree := first(Stack) .
-        Stack := next(Stack) .
+        StackPopTerm(Stack,Stack?,STree?) .
           FunSym := fun(STree) .
           if or(equal(FunSym, "file"), equal(FunSym, "path")) then
             FilePath := first(args(STree)) .
             GetTextFromFile(FilePath, String?) .
-                  ParseText(String, NewModName, SortName, RTree?, Error?) .
+            ParseText(String, NewModName, SortName, RTree?, Error?) .
             ProcessParseError(NewModName, Error, "trm")
           else 
             if equal(FunSym, "str") then
@@ -305,107 +318,100 @@ in
             fi
           fi .
         if not-equal(RTree, error-tree) then
-          Stack := join(RTree, Stack) .
-          snd-msg(stack(Stack), EditorId)
+          StackPushTerm(Stack,Stack?,RTree) .
+          ReturnSuccess(EditorId,Stack)
         else
-          snd-msg(error-stack, EditorId)
+          ReturnFailed(EditorId,Stack)
         fi
       +
         rec-msg(get-argument(NrOfArgs?), Stack?, EditorId?) .
-        STree := first(Stack) .
+        StackPopTerm(Stack,Stack?,STree?) .
+        StackPushTerm(Stack,Stack?,STree) .
         snd-msg(get-argument-given-number(STree, NrOfArgs)) .
         rec-msg(tree(RTree?)) .
         if not-equal(RTree, error-tree) then
-          Stack := join(RTree, Stack) .
-          snd-msg(stack(Stack), EditorId)
+          StackPushTerm(Stack,Stack?,RTree) .
+          ReturnSuccess(EditorId,Stack)
         else
-          snd-msg(error-stack, EditorId)
+          ReturnFailed(EditorId,Stack)
         fi
       +
         rec-msg(exists(FileName?), Stack?, EditorId?) .
         snd-msg(exists-file(FileName)) .
         (
           rec-msg(file-exists(FileName)) .
-          snd-msg(stack(Stack), EditorId)
+          ReturnSuccess(EditorId,Stack)
         +
           rec-msg(file-not-exists(FileName)) .
           snd-note(ui-status(errorf("%s does not exist", 
                                     [FileName]))) .
-          snd-msg(error-stack, EditorId)
+          ReturnFailed(EditorId,Stack)
         )
       +
         rec-msg(locate(FileName?), Stack?, EditorId?) .
         snd-msg(locate-file(FileName)) .
         (
           rec-msg(file-location(FileName, FilePath?)) .
-          RTree := quote(path(FilePath)) .
-          Stack := join(RTree, Stack) .
-          snd-msg(stack(Stack), EditorId)
+          StackPushPath(Stack,Stack?,FilePath) .
+          ReturnSuccess(EditorId,Stack)
         +
           rec-msg(file-not-exists(FileName)) .
           snd-note(ui-status(errorf("%s does not exist", 
                                     [FileName]))) .
-          snd-msg(error-stack, EditorId)
+          ReturnFailed(EditorId,Stack)
         )
       +
         rec-msg(push-filename(FileName?), Stack?, EditorId?) .
-        RTree := quote(file(FileName)) .
-        Stack := join(RTree, Stack) .
-        snd-msg(stack(Stack), EditorId)
+        StackPushFile(Stack,Stack?,FileName) .
+        ReturnSuccess(EditorId,Stack)
       +
         rec-msg(push-string(String?), Stack?, EditorId?) .
-        RTree := quote(str(String)) .
-        Stack := join(RTree, Stack) .
-        snd-msg(stack(Stack), EditorId)
+        StackPushString(Stack,Stack?,String) .
+        ReturnSuccess(EditorId,Stack)
       +
         rec-msg(push-integer(Integer?), Stack?, EditorId?) .
-        RTree := quote(int(Integer)) .
-        Stack := join(RTree, Stack) .
-        snd-msg(stack(Stack), EditorId)
+        StackPushInt(Stack,Stack?,Integer) .
+        ReturnSuccess(EditorId,Stack)
       +
         rec-msg(message(String?), Stack?, EditorId?) .
         snd-note(ui-status(errorf("%s", [String]))) .
-        snd-msg(stack(Stack), EditorId)
+        ReturnSuccess(EditorId,Stack)
       +
         rec-msg(show-tree, Stack?, EditorId?) .
-        STree := first(Stack) .
-        Stack := next(Stack) .
+        StackPopTerm(Stack,Stack?,STree?).
         ShowTree(STree) .
-        snd-msg(stack(Stack), EditorId)
+        ReturnSuccess(EditorId,Stack)
       +
         rec-msg(show-area(NewModName), Stack?, EditorId?) .
-        STree := first(Stack) .
-        Stack := next(Stack) .
-        FileName := first(args(STree)) .
+        StackPopString(Stack,Stack?,FileName?).
         snd-msg(edit-term-file(NewModName, FileName)) .
         rec-msg(edit-term-file(NewModName?, EditorId2?)).
         ParseTerm(EditorId2, NewModName) .
         snd-msg(set-focus-at-posinfo(EditorId2, STree)) .    
-        snd-msg(stack(Stack), EditorId)        
+        ReturnSuccess(EditorId,Stack)        
       +
         rec-msg(save-tree(Name?, Path?), Stack?, EditorId?) .
-        Tree := first(Stack) .
-        Stack := next(Stack) .
+        StackPopTerm(Stack,Stack?,Tree?) .
         FunSym := fun(Tree) .
         if not-equal(FunSym, "str") then
-          snd-msg(save-tree(Name,Path,Tree)).
+          snd-msg(save-tree(Name,Path,Tree)) .
           rec-msg(save-done(Name))
         else
           Text := first(args(Tree)) .
           snd-msg(save-text-file(Path,Text)).
           rec-msg(save-done(Path))
         fi .
-        snd-msg(stack(Stack), EditorId)
+        ReturnSuccess(EditorId,Stack)
       +
         rec-msg(read-tree(Path?), Stack?, EditorId?) . 
         snd-msg(open-file(Path)).
         (
           rec-msg(opened-file(Name?,tree(Tree?),Path?,TimeStamp?)).
-          Stack := join(Tree, Stack) .
-          snd-msg(stack(Stack), EditorId)
+          StackPushTerm(Stack,Stack?,Tree) .
+          ReturnSuccess(EditorId,Stack)
         +
           rec-msg(error-opening(Path?)).
-          snd-msg(error-stack, EditorId)
+          ReturnFailed(EditorId,Stack)
         )
   ) * delta
 endlet
@@ -439,6 +445,10 @@ in
   RStack := IStack
 endlet
 
+/****************************************************/
+/* below here are implementations of button actions */
+/****************************************************/
+
 process ShowTree(Tree: term) is
 let
   Graph : term
@@ -452,8 +462,7 @@ process ParseTerm(EditorId: term, ModuleName: str) is
 let
   Focus  : term
 in
-  snd-msg(invalidate-tree(EditorId)) .
-  rec-msg(invalidation-done(EditorId)) .
+  InvalidateEditor(EditorId).
   snd-msg(parse-focusses(EditorId, trm(ModuleName))) .
   (
     rec-msg(parse-ok(trm(ModuleName))) .
@@ -461,6 +470,15 @@ in
   +
     rec-msg(parse-failed(trm(ModuleName), Focus?))
   )
+endlet
+
+process InvalidateEditor(EditorId : term) is
+let
+  Focus : term
+in
+  snd-msg(invalidate-tree(EditorId)).
+  rec-msg(invalidation-done(EditorId,Focus?)).
+  snd-msg(set-focus(EditorId, Focus))
 endlet
 
 process GetTextFromFile(FileName: str, Text: str?) is
@@ -499,8 +517,7 @@ let
   Focus : term,
   Modules : list
 in
-      snd-msg(invalidate-tree(EditorId)). 
-      rec-msg(invalidation-done(EditorId)).
+      InvalidateEditor(EditorId).
       snd-msg(parse-focusses(EditorId, trm("Sdf2"))) .
       (
         rec-msg(parse-ok(trm("Sdf2"))) .
@@ -515,8 +532,7 @@ in
         +
           rec-msg(error-opening(ModuleName, name-inconsistent)).
           snd-msg(invalidate-sdf-in-db(ModuleName)).
-          snd-msg(invalidate-tree(EditorId)).
-          rec-msg(invalidation-done(EditorId)).
+          InvalidateEditor(EditorId).
           snd-note(ui-status(
             errorf("Changing the name of %s is not permitted.",[ModuleName])))
         )
@@ -531,8 +547,7 @@ let
   Tree : term,
   Focus : term
 in
-  snd-msg(invalidate-tree(EditorId)).
-  rec-msg(invalidation-done(EditorId)).
+  InvalidateEditor(EditorId).
   snd-msg(parse-focusses(EditorId, eqs(ModuleName))) .
   (
     rec-msg(parse-ok(eqs(ModuleName))) .
