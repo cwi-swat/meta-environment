@@ -1,5 +1,8 @@
 $Id$
 
+2003/12/18 (markvdb@cwi.nl)
+ * Removed sdf2stats and improved the Sdf-Checker.
+
 2003/12/17 (markvdb@cwi.nl)
  * Adapted the Sdf-Checker to the new Sdf syntax.
 

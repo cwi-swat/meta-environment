@@ -101,7 +101,6 @@ AC_OUTPUT(
    Makefile
    src/Makefile 
    grammar/Makefile 
-   sdf2stats/Makefile 
    sdf-checker/Makefile
    sdf-checker/spec/Makefile
    sdf-checker/src/Makefile
