@@ -5,6 +5,9 @@
  * Added the sort name to parse action.
  * Added a "conditional" construct to button actions.
  * New pico version based on asf-library.
+ * Added a button to old user interface to refresh buttons.
+ * Introduced "push-string" and "push-filename".
+ * Restructured parse action.
 
 2002/05/15 (vandenbr@loria.fr)
  * Adapted the gen-adapter script in order to deal with trees as input.

@@ -255,13 +255,8 @@ snd-do(Mdb, create-module-db).
 +
   rec-msg(get-module-info(Name?)) .
   snd-eval(Mdb, get-module-info(Name)) .
-  ( 
-    rec-value(Mdb, module-info(Name, Pairs?)) .
-    snd-msg(module-info(Name, Pairs))
-  +
-    rec-value(Mdb, no-module-info(Name)) .
-    snd-msg(no-module-info(Name))
-  )
+  rec-value(Mdb, module-info(Name, Pairs?)) .
+  snd-msg(module-info(Name, Pairs))
 ) *
 delta
 endlet

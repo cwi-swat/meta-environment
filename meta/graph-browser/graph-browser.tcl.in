@@ -728,6 +728,16 @@ proc SaveAll {} {
 }
 
 
+#--
+# RefreshButtons
+#-
+# generates the toolbus event to request refreshing of buttons
+#--
+proc RefreshButtons {} {
+    GBevent "refresh-buttons"
+}
+
+
 
 #--
 # GetModuleInfo(ML)
@@ -1043,6 +1053,8 @@ proc define-menu-bar {} {
     $m add separator
     $m add command -label "Save All" -underline 0 -command {SaveAll}
     $m add command -label "Clear All" -underline 0 -command {ClearAll $c $g}
+    $m add separator
+    $m add command -label "Refresh Buttons" -underline 0 -command {RefreshButtons}
     $m add separator
     $m add cascade -label "Export" -underline 1 -menu $m.export
 

@@ -149,7 +149,12 @@ in
       snd-msg(clear-all).
       rec-msg(cleared-all).
       snd-ack-event(UI,clear-all)
-   ) +
+    ) +
+    ( rec-event(UI, refresh-buttons) .
+      snd-msg(refresh-buttons) .
+      rec-msg(buttons-refreshed) .
+      snd-ack-event(UI, refresh-buttons)
+    ) +
    ( rec-event(UI, compile-module(Str?)).
      snd-msg(compile-module(Str)).
      rec-msg(compilation-ready(Str)).

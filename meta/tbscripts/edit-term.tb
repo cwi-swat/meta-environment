@@ -24,22 +24,32 @@ in
   )  
 endlet
 
-process ProcessParseErrors(Errors: term) is
+process GetTextFromFile(FileName: str, Text: str?) is
 let
-  ErrArgs   : list
+  Name      : str,
+  TimeStamp : term, 
+  Path      : str
 in
-  if not-equal(Errors, no-errors) then
-    ErrArgs := args(Errors)
-  fi
+  snd-msg(open-file(FileName)).
+  (
+    rec-msg(opened-file(Name?, text(Text?), Path?, TimeStamp?))
+  +
+    rec-msg(error-opening(Name?)) .
+    Text := error-text
+  )
 endlet
 
-process ParseText(Text: str, ModuleName: str, Tree: term?, Errors: term?) is
+process ParseText(Text: str, ModuleName: str, Nonterminal: str, Tree: term?) is
 let
   Id        : term,
-  Name      : str,
-  ErrList   : list,
-  ErrorType : term, 
-  Path      : str
+  Co        : int,
+  Li        : int,
+  I         : int,
+  Ch        : int,
+  Char      : term, 
+  Ambs      : list,
+  Cycle     : term,
+  ErrList   : list
 in
   Id := process-id . 
   snd-msg(open-modules([ModuleName])) .
@@ -49,89 +59,42 @@ in
     rec-msg(parsetable-not-set(trm(ModuleName))) .
     snd-note(ui-status(errorf(
       "Unable to open parse table for %s", [ModuleName]))) .
-    Tree := error-tree .
-    Errors := no-errors
+    Tree := error-tree
   +
     rec-msg(parsetable-set(trm(ModuleName))) .
-    snd-msg(Id, parse-string-as-asfix2me(trm(ModuleName), "", Text)) . 
+    snd-msg(Id, parse-string-as-asfix2me(trm(ModuleName), Nonterminal, Text)) . 
     snd-note(ui-status(statf(Id,"Parsing %s",[ModuleName]))).
     (
-      rec-msg(parse-result-asfix2me(Id, parse-tree(Tree?))) .
-      Errors := no-errors
+      rec-msg(parse-result-asfix2me(Id, parse-tree(Tree?)))
     +
-      rec-msg(parse-result-asfix2me(Id, parse-error(ErrList?, ErrorType?))) .
-      Errors := quote(parse-error(ErrList, ErrorType)) .
+      rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,
+                                                    ambiguities(I?, Ambs?)))).
+      snd-note(ui-status(errorf("Parse of %s returned %d ambiguities",
+                                [ModuleName,I]))) .
+      Tree := error-tree
+    +
+      rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,
+                                                    cycle(Cycle?)))).
+      snd-note(ui-status(errorf("Parse returned a cycle: %t\n",
+                                [Cycle]))) . 
+      Tree := error-tree 
+    +
+      rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,eof))).
+      snd-note(ui-status(errorf("EOF unexpected while parsing %s\n",
+                                [ModuleName]))) . 
+      Tree := error-tree
+    + 
+      rec-msg(parse-result-asfix2me(Id?,
+                                    parse-error([character(Ch?),
+                                                 line(Li?),
+                                                 col(Co?),
+                                                 char(Char?)],plain))).
+      snd-note(ui-status(errorf(
+               "Character %d unexpected in %s, line %d, column %d\n",
+               [Ch, ModuleName, Li, Co]))) . 
       Tree := error-tree
     ) .
     snd-note(ui-status(endstat(Id)))
-  )  
-endlet
-
-process ParseFile(FileName: str, ModuleName: str, Nonterminal: str, Tree: term?) is
-let
-  Id        : term,
-  Name      : str,
-  Text      : str,
-  Co        : int,
-  Li        : int,
-  I         : int,
-  Ch        : int,
-  Char      : term, 
-  Ambs      : list,
-  Cycle     : term,
-  ErrList   : list,
-  TimeStamp : term, 
-  Path      : str
-in
-  Id := process-id . 
-  snd-msg(open-modules([ModuleName])) .
-  rec-msg(finished-opening-modules) .
-  snd-msg(set-parsetable(trm(ModuleName))) .
-  (
-    rec-msg(parsetable-not-set(trm(ModuleName))) .
-    snd-note(ui-status(errorf(
-      "Unable to open parse table for %s", [ModuleName])))
-  +
-    rec-msg(parsetable-set(trm(ModuleName))) .
-    snd-msg(open-file(FileName)).
-    (
-      rec-msg(opened-file(Name?, text(Text?), Path?, TimeStamp?)).
-      snd-msg(Id, parse-string-as-asfix2me(trm(ModuleName), Nonterminal, Text)) . 
-      snd-note(ui-status(statf(Id,"Parsing %s",[ModuleName]))).
-      (
-        rec-msg(parse-result-asfix2me(Id, parse-tree(Tree?)))
-      +
-        rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,
-                                                      ambiguities(I?, Ambs?)))).        snd-note(ui-status(errorf("Parse of %s returned %d ambiguities",
-                                  [ModuleName,I]))) .
-        Tree := error-tree
-      +
-        rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,
-                                                      cycle(Cycle?)))).
-        snd-note(ui-status(errorf("Parse returned a cycle: %t\n",
-                                  [Cycle]))) . 
-        Tree := error-tree 
-      +
-        rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,eof))).
-        snd-note(ui-status(errorf("EOF unexpected while parsing %s\n",
-                                  [ModuleName]))) . 
-        Tree := error-tree
-      + 
-        rec-msg(parse-result-asfix2me(Id?,
-                                      parse-error([character(Ch?),
-                                                   line(Li?),
-                                                   col(Co?),
-                                                   char(Char?)],plain))).
-        snd-note(ui-status(errorf(
-                 "Character %d unexpected in %s, line %d, column %d\n",
-                 [Ch, ModuleName, Li, Co]))) . 
-        Tree := error-tree
-      ) .
-      snd-note(ui-status(endstat(Id)))
-    +
-      rec-msg(error-opening(Name?)) .
-      Tree := error-tree
-    )
   )  
 endlet
 
@@ -311,6 +274,7 @@ let
   FunSym      : str,
   Nonterminal : str,
   Message     : str,
+  String      : str,
   NrOfArgs    : int
 in
   subscribe(syntax-changed(ModuleName)) . 
@@ -443,8 +407,23 @@ in
         ActivateEditor(STree, NewModName, EditorName) .
         snd-msg(stack(Stack))
       +
-        rec-msg(parse(FilePath?, NewModName?, Nonterminal?), Stack?, EditorId) .
-        ParseFile(FilePath, NewModName, Nonterminal, RTree?) .
+        rec-msg(parse(NewModName?, Nonterminal?), Stack?, EditorId) .
+        STree := first(Stack) .
+        Stack := next(Stack) .
+	FunSym := fun(STree) .
+	if equal(FunSym, "file") then
+	  FilePath := first(args(STree)) .
+	  GetTextFromFile(FilePath, String?) .
+	  tau.
+          ParseText(String, NewModName, Nonterminal, RTree?)
+	else 
+	  if equal(FunSym, "str") then
+	    String := first(args(STree)) .
+	    ParseText(String,  NewModName, Nonterminal, RTree?)
+	  else
+	    RTree := error-tree
+	  fi
+	fi .
         if not-equal(RTree, error-tree) then
           Stack := join(RTree, Stack) .
           snd-msg(stack(Stack))
@@ -488,6 +467,16 @@ in
                                     [FileName]))) .
           snd-msg(error-stack)
 	)
+      +
+        rec-msg(push-filename(FileName?), Stack?, EditorId) .
+	RTree := quote(file(FileName)) .
+        Stack := join(RTree, Stack) .
+        snd-msg(stack(Stack))
+      +
+        rec-msg(push-string(String?), Stack?, EditorId) .
+	RTree := quote(str(String)) .
+        Stack := join(RTree, Stack) .
+        snd-msg(stack(Stack))
       +
         rec-msg(message(Message?), Stack?, EditorId) .
 	snd-note(ui-status(errorf("%s", [Message]))) .
