@@ -1,4 +1,4 @@
-#!/bin/sh
+#! /bin/sh
 #
 #    Meta-Environment - An environment for language prototyping.
 #    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
@@ -17,13 +17,20 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-prefix=@prefix@
-exec_prefix=@exec_prefix@
-toolbus=@bindir@/toolbus
-datadir=@datadir@
+# $Id$
 
+toolbus=__TOOLBUS__
+datadir=__DATADIR__
 
-./equalModuloWhitespace terms/fac.trm.asfix1 terms/fac_no_comments.trm.asfix1
+./whitespace terms/Set.eqs.asfix1 terms/Set2.trm.asfix1 
+printf "." 
+./whitespace terms/Type-environment.eqs.asfix1 terms/Type-environment.trm.asfix1
 printf "."
-./equalModuloWhitespace terms/bool_no_comments.trm.asfix1 terms/bool.trm.asfix1
+./whitespace terms/Set.eqs.asfix1 terms/Set.trm.asfix1
+printf "."
+./whitespace terms/Set.eqs.asfix1 terms/Set3.trm.asfix1
+printf "."
+./whitespace terms/Pico-typecheck.eqs.asfix1 terms/fac.trm.asfix1
+printf "."
+./whitespace terms/Pico-Integers.eqs.asfix1 terms/Pico-Integers.trm.asfix1
 printf ".\n"

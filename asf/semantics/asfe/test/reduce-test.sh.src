@@ -1,4 +1,4 @@
-#!/bin/sh
+#! /bin/sh
 #
 #    Meta-Environment - An environment for language prototyping.
 #    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
@@ -17,20 +17,41 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-prefix=@prefix@
-exec_prefix=@exec_prefix@
-toolbus=@bindir@/toolbus
-datadir=@datadir@
+#    $Id$
 
-./whitespace terms/Set.eqs.asfix1 terms/Set2.trm.asfix1 
-printf "." 
-./whitespace terms/Type-environment.eqs.asfix1 terms/Type-environment.trm.asfix1
-printf "."
-./whitespace terms/Set.eqs.asfix1 terms/Set.trm.asfix1
-printf "."
-./whitespace terms/Set.eqs.asfix1 terms/Set3.trm.asfix1
-printf "."
-./whitespace terms/Pico-typecheck.eqs.asfix1 terms/fac.trm.asfix1
-printf "."
-./whitespace terms/Pico-Integers.eqs.asfix1 terms/Pico-Integers.trm.asfix1
-printf ".\n"
+toolbus=__TOOLBUS__
+datadir=__DATADIR__
+
+tests=0
+failed=0
+
+call_toolbus () {
+  script=$1
+  tests=`expr $tests + 1`
+  result=`${toolbus} -I../src -I${datadir} ${script} 2>&1`
+  toolbus_exit=$?
+  if [ $toolbus_exit != 0 ]; then
+    echo "Failed: " $script ": " ${result}
+    failed=`expr $failed + 1`
+  elif echo $result | grep -i failed >/dev/null ; then
+    echo "Failed: " $script ": " ${result}
+    failed=`expr $failed + 1`
+  else
+    printf .
+  fi
+}
+
+# Test whether equations are available that *should* be available.
+call_toolbus reduce-test-1.tb
+
+# Test whether equations are available that *should not* be available.
+call_toolbus reduce-test-2.tb
+
+echo ""
+
+if [ $failed != 0 ]; then
+        echo "FAILED:" $failed "out of" $tests "tests"
+        exit 1
+else
+  echo "All" $tests "tests succeeded"
+fi
