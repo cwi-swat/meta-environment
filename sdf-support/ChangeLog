@@ -1,5 +1,8 @@
 $Id$
 
+2003/05/30 (jurgenv@cwi.nl)
+ * Introduced src directories for sdf-modules and sdf-renaming
+
 2003/05/28 ({jong,jurgenv,markvdb}@cwi.nl)
  * utils/sdf-modules/sdf-modules.c: ATBpack added to make_sdf_definition
  * Added an ATBpack in renaming of equations.
