@@ -14,7 +14,8 @@ bin_PROGRAMS = \
 	addPosInfo \
 	ambtracker \
 	apply-function \
-	liftPT
+	liftPT\
+	comparePT
 
 INCLUDES = \
 	-I${top_srcdir}/libmept \
@@ -78,6 +79,13 @@ unparsePT_LDADD = \
 	-L${TOOLBUSLIB}/lib -lATB \
 	-L${ATERM}/lib -lATerm \
 	${SOCKLIBS}
+
+comparePT_SOURCES = \
+	comparePT-main.c
+
+comparePT_LDADD = \
+	-L../libmept -lmept \
+	-L${ATERM}/lib -lATerm 
 
 unparseProd_SOURCES = unparseProd-main.c
 
