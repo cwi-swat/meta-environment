@@ -27,6 +27,8 @@
 \usepackage{verbatim}
 \usepackage{makeidx}
 \usepackage{epsfig}
+\usepackage{alltt}
+\usepackage{moreverb}  
 \usepackage{url}
 
 \makeindex
@@ -116,6 +118,18 @@
 
     \noindent{\bf Description:} #1
 }
+
+\newcommand{\fignegspacebefore}{\vspace*{-0.25cm}}
+\newcommand{\fignegspacebetween}{\vspace*{-0.25cm}}
+\newcommand{\fignegspaceafter}{\vspace*{-0.5cm}}        
+
+\newenvironment{Code}
+        {\vspace*{-0.15cm}\begin{small}\begin{center}}
+        {\end{center}\end{small}\vspace*{-0.2cm}}
+
+\newenvironment{IncCode}
+        {\begin{Code}\begin{small}}
+        {\end{small}\end{Code}}      
 
 \def\aterms{\mbox{ATerms}}
 \def\aterm{\mbox{ATerm}}
@@ -660,7 +674,6 @@ Parse}) or evaluator ({\tt Reduce}) on the text in the editor.
 structured traversal of the syntax tree of the text in the editor.
 Using the entries {\tt Left}, {\tt Righ}t, {\tt Up}, {\tt Down} the
 user can navigate in the tree.
-
 \end{itemize}
 
 \begin{figure}[t]
@@ -1411,11 +1424,6 @@ other hand some built-in features of \sdf, like lexical disambiguation,
 have disappeared, and a specification writer has to take care of
 this explicitly.
 
-\paragraph{Note:} \sdf2 offers a number of language features which are not
-yet supported by the various components of the \ASmetaenv. In fact the 
-current version of the \ASmetaenv\ supports only the so-called 
-\sdf1 features of \sdf2.
-
 The main idea of \asfsdf\ is to identify the abstract syntax defined by the
 signature in \asf\ specifications with the abstract syntax defined 
 implicitly by an \sdf\ specification, thus yielding a standard mapping 
@@ -1425,6 +1433,11 @@ introduce user-defined notation in specifications.
 
 \asfsdf\ is therefore a modular specification formalism for the integrated
 definition of syntax and semantics.
+
+\paragraph{Note:} \sdf2 offers a number of language features which are not
+yet supported by the various components of the \ASmetaenv. In fact the 
+current version of the \ASmetaenv\ supports only the so-called 
+\sdf1 features of \sdf2.
 
 \subsection{Modules and Modular Structure}
 
@@ -1456,57 +1469,79 @@ priority relations, and variables) and conditional
 equations. These conditional equations are optional. In fact these
 conditional equations are physically stored in a separate file, see Section ??.
 
-Each \emph{Section} starts with one of the keywords {\tt exports} or {\tt
-  hiddens}: {\tt exports} makes all entities in the section visible to other
-  modules,{\tt  hiddens} makes all entities in the section local to the module. A Section has the form:
+Each \emph{Section} starts with one of the keywords {\tt exports} or 
+{\tt hiddens} followed by a non-empty list of grammars: 
+{\tt exports} makes all entities in the section visible
+to other modules, {\tt hiddens} makes all entities in the section 
+local to the module. A Section has the form:
 
 \begin{verbatim}
 exports-or-hiddens
-
-  sorts
-    Names-of-sorts 
-  lexical syntax
-    Rules-of-the-lexical-syntax 
-  context-free-syntax
-    Rules-of-the-context-free-syntax 
-  variables
-    Names-of-variables
-
+  <Grammar>+
 \end{verbatim}
   
-  where each of the subsections for sorts, lexical syntax, context-free syntax
-  and variables is optional.
-  
-  Modules can be combined by importing one module in another. As a result all
-  exported entities of the imported module (and of all modules that are
-  imported indirectly by it) become available in the importing module.
+\noindent A \emph{Grammar} can either be 
+\begin{itemize}
+\item import section;
+\item sorts section;
+\item lexical syntax section;
+\item context-free syntax section;
+\item variables section;
+%\item lexical variables section;
+%\item lexical priorities section;
+\item context-free priorities section;
+%\item priorities section;
+\item lexical restrictions section;
+\item context-free restriction section.
+%\item restriction section;
+%\item aliases section;
+\end{itemize}
+
+In the following subsections each of these entities will be described
+and illustrated by some examples.
+
+\subsection{Imports}
+
+Each \emph{ImpSection} starts with the keyword {\tt imports} followed
+by a possible empty list of module names.
+%module name should be imports where, an import is either a module name
+%or a module name followed by renamings.
+An ImpSection has the form:
+
+\begin{verbatim}
+imports
+  <ModuleName>*
+\end{verbatim}
+
+Modules can be combined by importing one module in another. In the
+ordinary setting of importing modules or when the import section
+is guarded by an exports keyword, all exported entities of the 
+imported module (and of all modules that are imported indirectly by it) 
+become available in the importing module. However, if the import
+section is guarded by a hiddens keyword, the exported entities are only
+visible in the importing module by are not exported to modules
+importing this module.
 
 \subsection{Sorts}
 
-A sort is declared by listing its name in a sorts section of a module. A sort
-name should start with a capital letter and may be followed by letters and/or
-digits. Hyphens (`{\tt -}') and underscores (`{\tt \_}') may be embedded in
-sort names. There are four predefined sorts which may not be redeclared:
+A sort is declared by listing its name in a sorts section of a module.
 
-\begin{itemize}
-  
-\item {\tt LAYOUT} defines which parts of the text are layout symbols between
-  lexical tokens and are to be skipped during lexical analysis. It may only be
-  used as result sort of lexical functions. When a string is matched by both a
-  LAYOUT function and by other non-LAYOUT functions, then the interpretation
-  as layout symbol is ignored. Typically used for defining layout and comment
-  conventions.
+\begin{verbatim}
+sorts
+  <Sort>*
+\end{verbatim}
 
-\item {\tt IGNORE} defines which parts of the text are layout symbols inside lexical tokens and are to be
-ignored, i.e. ignored symbols do not contribute to the text of a lexical token. Typically used for defining languages where layout or comment symbols may occur inside lexical tokens.
+A sort name should start with a capital letter and may be followed by 
+letters and/or digits. Hyphens (`{\tt -}') may be embedded in
+sort names. There is one predefined sort which may not be redeclared:
 
-\item {\tt REJEC}T defines sequences of consecutive lexical tokens that are to be rejected. Typically used to
-forbid certain sequences of lexical tokens, like a number immediately followed by an identifier.
-
-\item {\tt CHAR} gives access to the character representation of lexical tokens and may only be used in
-declarations of variables.
-
-\end{itemize}
+\paragraph{LAYOUT}
+The {\tt LAYOUT} defines which parts of the text are layout symbols between
+lexical tokens and are to be skipped during lexical analysis. It may only be
+used as result sort of lexical functions. When a string is matched by both a
+LAYOUT function and by other non-LAYOUT functions, then the interpretation
+as layout symbol is ignored. Typically used for defining layout and comment
+conventions.
 
 \subsection{Lexical Syntax}
 
@@ -1520,8 +1555,9 @@ A lexical syntax contains a set of declarations for \emph{lexical functions},
 each consisting of a regular expression and a result sort. All functions with
 the same result sort together define the lexical syntax of tokens of that
 sort. Regular expressions may contain strings, sort names, character classes,
-or repetition operators. Spaces are only significant inside strings and
-character classes.
+optional operators, alternative operators, and repetition operators.
+These notions will be explained in the next subsections. 
+Spaces are only significant inside strings and character classes.
 
 \subsubsection{Lexical Functions}
 
@@ -1532,21 +1568,41 @@ consists of the \emph{or} of all left-hand sides of lexical functions with
 result sort $L$. All sort names appearing in left-hand sides of declarations
 are replaced by the regular expression associated with them. Circular
 dependencies between declarations in the lexical syntax are forbidden.
+See Figure \ref{CODE:simplelex} for an example of a simple lexical function
+definition.
 
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+lexical syntax
+  "aap"         -> Aap
+  "noot"        -> Noot
+  "mies"        -> Mies
+  Aap Noot Mies -> LeesPlank
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Simple lexical functions}\label{CODE:simplelex}
+\end{figure}         
+
+\paragraph{Lexical constructor functions}
 For each sort that appears as result sort in the lexical syntax a lexical
-constructor function of the form {\tt l "(" CHAR+ ")" -> L} is automatically added
-to the context-free syntax of the specification. Here, `{\tt l}' is the name of sort
-`{\tt L}' written in lower case letters. In this way, you can get access to the text
-of lexical tokens.
+constructor function of the form {\tt l "(" CHAR+ ")" -> L} is 
+automatically added to the context-free syntax of the specification. 
+Here, `{\tt l}' is the name of sort `{\tt L}' written in lower case letters. 
+In this way, you can get access to the text of lexical tokens.
+The lexical contructor functions will disappear when full \sdf2\ becomes
+available in the \ASmetaenv.
 
-5.3.2 Character Classes
+\subsubsection{Character Classes}
 
 Enumerations of characters occur frequently in lexical definitions. They can
-be abbreviated by using character classes enclosed by `{\tt [}' and `{\tt
-  ]}'. A character class contains a list of zero or more characters (which
+be abbreviated by using character classes enclosed by `{\tt [}' and 
+`{\tt ]}'. 
+A character class contains a list of zero or more characters (which
 stand for themselves) or character ranges such as, for instance, {\tt [0-9]}
 as an abbreviation for the characters {\tt 0}, {\tt 1}, ..., {\tt 9}. 
-In a character range of the form {\tt $c_1$-$c_2$} one of the following restrictions should apply:
+In a character range of the form {\tt $c_1$-$c_2$} one of the following 
+restrictions should apply:
 
 \begin{itemize}
 \item $c_1$ and $c_2$ are both lower case letters and $c_2$ follows $c_1$ in
@@ -1555,18 +1611,46 @@ In a character range of the form {\tt $c_1$-$c_2$} one of the following restrict
   the alphabet, or 
 \item $c_1$ and $c_2$ are both digits and the numeric value of $c_2$ is
   greater than that of $c_1$, or 
-\item $c_1$ and $c_2$ are both escaped non-printable characters and the character code of $c_1$ is larger
-than that of $c_2$.
+\item $c_1$ and $c_2$ are both escaped non-printable characters and the 
+character code of $c_1$ is larger than that of $c_2$.
 \end{itemize}
 
-By prefixing a character class with `{\tt ~}', it is complemented. Such a
+By prefixing a character class with `{\tt \~{}}', it is complemented. Such a
 complemented character class accepts all characters not in the original class.
 
+All individual characters, except digits and letters,
+are {\em always} escaped with a backslash.
+See Figure \ref{CODE:charclasses} of some lexical definitions
+using character classes.
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+lexical syntax
+    "\\" ~ []              -> AlphaNumericalEscChar
+
+    "\\" [01] [0-9] [0-9]  -> DecimalEscChar
+    "\\" "2" [0-4] [0-9]   -> DecimalEscChar
+    "\\" "2" "5" [0-5]     -> DecimalEscChar
+
+    AlphaNumericalEscChar  -> EscChar
+    DecimalEscChar         -> EscChar
+
+    ~ [\0-\31\"\\]         -> L-Char
+    [\t\n]                 -> L-Char
+    EscChar                -> L-Char
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Lexical functions with character classes}\label{CODE:simplelex}
+\end{figure}         
+
+ 
 \subsubsection{Escape Conventions}
 
 Characters with a special meaning in \asfsdf\ may cause problems when they are
 needed as ordinary characters in the lexical syntax. The backslash character
-(`{\tt \\}') is used as escape character for the quoting of special characters. You
+(`{\tt \\}') is used as escape character for the quoting of specialr
+characters. You
 should use `{\tt \\$c$}' whenever you need special character $c$ as ordinary character in
 the definition.
 
