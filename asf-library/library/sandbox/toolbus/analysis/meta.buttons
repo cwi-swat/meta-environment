@@ -22,9 +22,11 @@ buttons([
   button("Tscript",
          ["term"],
          ["ToolBus", "Show Query Results"],
-	 [push-filename("query-result.jil"),
+	 [push-filename("query-result.rvalue"),
 	  read-tree,
-	  check-sort("List"),
+	  check-sort("RVALUE"),
+	  apply("display-result", "List", 1),
+	  rewrite("DisplayQuery"),
 	  unparse,
 	  show-list
 	]),
@@ -41,9 +43,9 @@ buttons([
           read-tree,
           check-sort("RSTORE"),
 
-          apply("display-query", "List", 3),
+          apply("evaluate-query", "RVALUE", 3),
           rewrite("DisplayQuery"),
-	  push-filename("query-result.jil"),
+	  push-filename("query-result.rvalue"),
 	  save-tree,
 	  message("Derived query-results saved.")
         ]),
