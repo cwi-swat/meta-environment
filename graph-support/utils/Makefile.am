@@ -1,1 +1,1 @@
-SUBDIRS = tree2graph tree2dot
+SUBDIRS = tree2graph tree2dot layoutgraph
