@@ -16,6 +16,6 @@ int calcTreeStart(PT_Tree tree, SE_Steps steps);
 ATbool isBasicLeafNode(PT_Tree tree);
 PT_Tree updateTreeTerm(PT_Tree tree, SE_Steps steps, PT_Tree sub_tree);
 PT_ParseTree updateParseTree(PT_ParseTree tree, SE_Path path, PT_Tree sub_tree,
-			     char *left_layout, char *right_layout);
+			     PT_Args left_layout, PT_Args right_layout);
 
 #endif /* TREE_H */

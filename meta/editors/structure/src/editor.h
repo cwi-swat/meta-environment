@@ -35,7 +35,7 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-#include <PT.h>
+#include <MEPT.h>
 
 #include "Editor.h"
 
@@ -45,8 +45,9 @@
 SE_Editor insertChars(SE_Editor editor, int location, int nr_chars);
 SE_Editor deleteChars(SE_Editor editor, int location, int nr_chars);
 
-SE_Editor replaceEditorTreeAtFocus(SE_Editor editor, SE_Focus focus, PT_Tree tree,
-				   char *left_layout, char *right_layout);
+SE_Editor replaceEditorTreeAtFocus(SE_Editor editor, SE_Focus focus, 
+                                   PT_Tree tree,
+				   PT_Args left_layout, PT_Args right_layout);
 SE_Editor moveFocus(SE_Editor editor, SE_Move move);
 SE_Editor moveFocusToTop(SE_Editor editor);
 SE_Focus getFocusAt(PT_ParseTree parse_tree, int location);

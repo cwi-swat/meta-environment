@@ -5,7 +5,7 @@
 #include <assert.h>
 
 #include <atb-tool.h>
-#include <PT-utils.h>
+#include <MEPT-utils.h>
 
 #include "se.tif.h"
 #include "Editor.h"
@@ -137,7 +137,7 @@ ATerm delete_chars(int cid, ATerm editorId, int location, int count)
 
 void replace_focus(int cid, ATerm editorId, ATerm f, ATerm t)
 {
-  char *left_layout, *right_layout;
+  PT_Args left_layout, right_layout;
   SE_Editor editor;
   SE_Focus focus;
   PT_Tree tree;
@@ -150,13 +150,13 @@ void replace_focus(int cid, ATerm editorId, ATerm f, ATerm t)
   assert(SE_isValidFocus(focus));
 
   tree         = PT_getParseTreeTree(parse_tree);
-  left_layout  = PT_getParseTreeLayoutBeforeTree(parse_tree);
-  right_layout = PT_getParseTreeLayoutAfterTree(parse_tree);
+  left_layout  = PT_getTreeArgs(PT_getParseTreeLayoutBeforeTree(parse_tree));
+  right_layout = PT_getTreeArgs(PT_getParseTreeLayoutAfterTree(parse_tree));
 
   editor = getEditor(editorId);
   if (editor) {
-    editor = replaceEditorTreeAtFocus(editor, focus, tree, left_layout, right_layout);
-
+    editor = replaceEditorTreeAtFocus(editor, focus, tree, 
+                                      left_layout, right_layout);
     putEditor(editorId, editor);
   }
 }
@@ -419,7 +419,7 @@ main(int argc, char *argv[])
 
   ATsetChecking(ATtrue);
 
-  PT_initPTApi();
+  PT_initMEPTApi();
   SE_initEditorApi();
 
 

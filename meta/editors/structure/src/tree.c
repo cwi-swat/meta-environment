@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include <PT.h>
-#include <PT-utils.h>
+#include <MEPT.h>
+#include <MEPT-utils.h>
 
 #include "path.h"
 #include "sort.h"
@@ -29,16 +29,20 @@ PT_Symbol getParseTreeSort(PT_ParseTree parse_tree)
 PT_Symbol
 getTreeSort(PT_Tree tree)
 {
+/*
   if (PT_hasTreeSymbol(tree)) {
     return PT_getTreeSymbol(tree);
-  }
-  else if (PT_isTreeAppl(tree)) {
+  } else
+*/
+  if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
     return PT_getProductionRhs(prod);
   }
+/*
   else if (PT_isTreeList(tree)) {
     return PT_getTreeIter(tree);
   }
+*/
   else {
     return PT_makeSymbolSort("invalid");
   }
@@ -110,48 +114,25 @@ PT_Tree getParseTreeTreeAt(PT_ParseTree parse_tree, SE_Path path)
 
 /*}}}  */
 
-/*{{{  static char *concatStrings(const char *s, const char *t) */
+/*{{{  PT_Args concatLeftLayout(PT_Args l1, PT_Args l2) */
 
-static char *concatStrings(const char *s, const char *t)
+PT_Args concatLeftLayout(PT_Args l1, PT_Args l2)
 {
-  static char *buf = NULL;
-  static int   buf_len = 0;
-
-  int len_needed = strlen(s) + strlen(t) + 1;
-
-  if (len_needed > buf_len) {
-    buf = realloc(buf, len_needed);
-    if (buf == NULL) {
-      ATerror("out of memory in concatStrings (%d)\n", len_needed);
-    }
-    buf_len = len_needed;
-  }
-
-  sprintf(buf, "%s%s", s, t);
-
-  return buf;
+  return PT_concatArgs(l1, l2);
 }
 
 /*}}}  */
-/*{{{  char *concatLeftLayout(char *l1, char *l2) */
+/*{{{  PT_Args concatRightLayout(PT_Args l1, PT_Args l2) */
 
-char *concatLeftLayout(char *l1, char *l2)
+PT_Args concatRightLayout(PT_Args l1, PT_Args l2)
 {
-  return concatStrings(l1, l2);
-}
-
-/*}}}  */
-/*{{{  char *concatRightLayout(char *l1, char *l2) */
-
-char *concatRightLayout(char *l1, char *l2)
-{
-  return concatStrings(l2, l1);
+  return PT_concatArgs(l2, l1);
 }
 
 /*}}}  */
 
-static char *leftLayout = NULL;
-static char *rightLayout = NULL;
+static PT_Args leftLayout = NULL;
+static PT_Args rightLayout = NULL;
 
 /*{{{  PT_Tree updateTreeTermSteps(PT_Tree tree, SE_Steps steps, PT_Tree sub_tree) */
 
@@ -181,23 +162,23 @@ PT_Tree updateTreeTermSteps(PT_Tree tree, SE_Steps steps, PT_Tree sub_tree)
   newArgs = PT_setArgsArgumentAt(oldArgs, newArg, step);
 
   if (leftLayout != NULL && step > 0) {
-    char *layoutString;
+    PT_Args layoutString;
     PT_Tree layout = PT_getArgsArgumentAt(oldArgs, step-1);
     assert(PT_isTreeLayout(layout));
-    layoutString = PT_getTreeString(layout);
+    layoutString = PT_getTreeArgs(layout);
     layoutString = concatLeftLayout(layoutString, leftLayout);
-    layout = PT_makeTreeLayout(layoutString);
+    layout = PT_setTreeArgs(layout, layoutString);
     newArgs = PT_setArgsArgumentAt(newArgs, layout, step-1);
     leftLayout = NULL;
   }
 
   if (rightLayout != NULL && step < (PT_getArgsLength(oldArgs)-1)) {
-    char *layoutString;
+    PT_Args layoutString;
     PT_Tree layout = PT_getArgsArgumentAt(oldArgs, step-1);
     assert(PT_isTreeLayout(layout));
-    layoutString = PT_getTreeString(layout);
+    layoutString = PT_getTreeArgs(layout);
     layoutString = concatRightLayout(layoutString, rightLayout);
-    layout = PT_makeTreeLayout(layoutString);
+    layout = PT_setTreeArgs(layout, layoutString);
     newArgs = PT_setArgsArgumentAt(newArgs, layout, step-1);
     rightLayout = NULL;
   } 
@@ -210,33 +191,41 @@ PT_Tree updateTreeTermSteps(PT_Tree tree, SE_Steps steps, PT_Tree sub_tree)
 /*{{{  PT_ParseTree updateParseTree(parse_tree, path, tree,left_layout,right_layout) */
 
 PT_ParseTree updateParseTree(PT_ParseTree parse_tree, SE_Path path,
-			     PT_Tree tree, char *left_layout, char *right_layout)
+			     PT_Tree tree, PT_Args leftLayoutArgs, 
+                             PT_Args rightLayoutArgs)
 {
   SE_Steps steps;
   PT_Tree new_tree;
 
   if (SE_isPathRoot(path)) {
-    return PT_makeParseTreeTree(left_layout, tree, right_layout);
+    parse_tree = PT_setParseTreeLayoutBeforeTree(parse_tree, 
+                   PT_makeTreeLayoutNonEmpty(leftLayoutArgs));
+    parse_tree = PT_setParseTreeTree(parse_tree, tree);
+    parse_tree = PT_setParseTreeLayoutAfterTree(parse_tree, 
+                   PT_makeTreeLayoutNonEmpty(rightLayoutArgs));
+    return parse_tree;
   }
   
   assert(SE_isPathTerm(path));
 
   steps = SE_getPathSteps(path);
 
-  leftLayout = left_layout;
-  rightLayout = right_layout;
+  leftLayout = leftLayoutArgs;
+  rightLayout = rightLayoutArgs;
 
   new_tree = updateTreeTermSteps(PT_getParseTreeTree(parse_tree), steps, tree);
 
   if (leftLayout != NULL) {
-    char *localLeftLayout = PT_getParseTreeLayoutBeforeTree(parse_tree);
-    char *newLeftLayout = concatLeftLayout(localLeftLayout, leftLayout);
+    PT_Args localLeftLayout = PT_getTreeArgs(
+                                PT_getParseTreeLayoutBeforeTree(parse_tree));
+    PT_Tree newLeftLayout = PT_makeTreeLayoutNonEmpty(
+                              concatLeftLayout(localLeftLayout, leftLayout));
     parse_tree = PT_setParseTreeLayoutBeforeTree(parse_tree, newLeftLayout);
   }
 
   if (rightLayout != NULL) {
-    char *localRightLayout = PT_getParseTreeLayoutBeforeTree(parse_tree);
-    char *newRightLayout = concatRightLayout(localRightLayout, rightLayout);
+    PT_Args localRightLayout = PT_getTreeArgs(                                                                   PT_getParseTreeLayoutBeforeTree(parse_tree));
+    PT_Tree newRightLayout = PT_makeTreeLayoutNonEmpty(                                                        concatRightLayout(localRightLayout, rightLayout));
     parse_tree = PT_setParseTreeLayoutBeforeTree(parse_tree, newRightLayout);
   }
 
@@ -259,8 +248,10 @@ PT_Tree updateTreeTerm(PT_Tree tree, SE_Steps steps, PT_Tree sub_tree)
 
 ATbool isBasicLeafNode(PT_Tree tree)
 {
-  return !PT_isTreeAppl(tree) && !PT_isTreeList(tree)
+  return !PT_isTreeAppl(tree) && !PT_isTreeList(tree);
+/*
     && !PT_isTreeVar(tree) && !PT_isTreeLexical(tree);
+*/
 }
 
 /*}}}  */
@@ -305,14 +296,15 @@ int calcParseTreeStart(PT_ParseTree parse_tree, SE_Path path)
     return 0;
   }
 
-  start = strlen(PT_getParseTreeLayoutBeforeTree(parse_tree));
+  start = strlen(PT_yieldTree(PT_getParseTreeLayoutBeforeTree(parse_tree)));
 
   tree = PT_getParseTreeTree(parse_tree);
 
   if (SE_isPathRightLayout(path)) {
     start += PT_getTreeLengthAnno(tree);
     assert(start == (PT_getParseTreeLengthAnno(parse_tree)
-		     - strlen(PT_getParseTreeLayoutAfterTree(parse_tree))));
+		     - strlen(PT_yieldTree(
+                                PT_getParseTreeLayoutAfterTree(parse_tree)))));
   } else {
     start += calcTreeStart(tree, SE_getPathSteps(path));
   }

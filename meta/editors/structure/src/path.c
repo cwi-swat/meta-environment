@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include <PT-utils.h>
+#include <MEPT-utils.h>
 
 #include "path.h"
 #include "length.h"
@@ -149,7 +149,6 @@ SE_Path pathRight(SE_Path path)
 static SE_Steps getStepsInTree(PT_Tree tree, int location, int length)
 {
   SE_Steps steps = SE_makeStepsEmpty();
-
   if (PT_hasTreeArgs(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
     int nr_args = PT_getArgsLength(args);
@@ -158,7 +157,11 @@ static SE_Steps getStepsInTree(PT_Tree tree, int location, int length)
       PT_Tree arg = PT_getArgsArgumentAt(args, step);
       int arg_len = PT_getTreeLengthAnno(arg);
       if (location <= arg_len) {
-	if (location+length > arg_len) {
+	if (location+length > arg_len
+            ||
+            PT_isTreeLexical(arg)
+            ||
+            PT_isTreeLayout(arg)) {
 	  return steps;
 	}
 	steps = SE_makeStepsMulti(step, getStepsInTree(arg, location, length));
@@ -186,7 +189,7 @@ SE_Path getPathInParseTree(PT_ParseTree parse_tree, int location, int length)
     location -= length;
   }
 
-  leftLayout = PT_getParseTreeLayoutBeforeTree(parse_tree);
+  leftLayout = PT_yieldTree(PT_getParseTreeLayoutBeforeTree(parse_tree));
   leftLayoutLength = strlen(leftLayout);
 
   if (location <= leftLayoutLength) {

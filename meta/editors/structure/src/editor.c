@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include <PT-utils.h>
+#include <MEPT-utils.h>
 
 #include "editor.h"
 #include "path.h"
@@ -65,10 +65,14 @@ static SE_Editor moveFocusRight(SE_Editor editor)
 
   focus = createFocus(parse_tree, path, FOCUS_PARSED);
   editor = SE_setEditorFocus(editor, focus);
+/*
   if (PT_isTreeAppl(tree)
       || PT_isTreeList(tree)
       || PT_isTreeLexical(tree)
       || PT_isTreeVar(tree)) {
+*/
+  if (PT_isTreeAppl(tree)
+      || PT_isTreeList(tree)) {
     return editor;
   }
 
@@ -103,10 +107,14 @@ static SE_Editor moveFocusDown(SE_Editor editor)
       assert(SE_getFocusUnparsed(focus) == FOCUS_PARSED);
       focus = createFocus(parse_tree, new_path, FOCUS_PARSED);
       editor = SE_setEditorFocus(editor, focus);
+/*
       if (PT_isTreeAppl(tree)
 	  || PT_isTreeList(tree)
 	  || PT_isTreeLexical(tree)
 	  || PT_isTreeVar(tree)) {
+*/
+      if (PT_isTreeAppl(tree)
+	  || PT_isTreeList(tree)) {
 	return editor;
       }
       return moveFocusRight(editor);
@@ -134,10 +142,14 @@ static SE_Editor moveFocusLeft(SE_Editor editor)
       assert(SE_getFocusUnparsed(focus) == FOCUS_PARSED);
       focus = createFocus(parse_tree, new_path, FOCUS_PARSED);
       editor = SE_setEditorFocus(editor, focus);
+/*
       if (PT_isTreeAppl(tree)
 	  || PT_isTreeList(tree)
 	  || PT_isTreeLexical(tree)
 	  || PT_isTreeVar(tree)) {
+*/
+      if (PT_isTreeAppl(tree)
+	  || PT_isTreeList(tree)) {
 	return editor;
       }
       return moveFocusLeft(editor);
@@ -332,8 +344,17 @@ SE_Editor newEditorGivenTree(PT_ParseTree parse_tree,
 
 SE_Editor newEditorGivenText(char *text)
 {
+/*
   PT_Tree tree = PT_makeTreeLayout(text);
   PT_ParseTree parse_tree = PT_makeParseTreeTree("", tree, "");
+*/
+  PT_Tree tree = PT_makeTreeFlatLayout(text);
+  PT_Symbol sort = PT_makeSymbolCf(PT_makeSymbolSort("invalid"));
+  PT_Symbols symbols = PT_makeSymbolsList(sort, PT_makeSymbolsEmpty());
+  PT_ParseTree parse_tree = PT_makeParseTreeTree(symbols, 
+                              PT_makeTreeLayoutEmpty(),
+                              tree,
+                              PT_makeTreeLayoutEmpty(), 0);
 
   return newEditorGivenTree(parse_tree, SORT_INVALID, FOCUS_UNPARSED);
 }
@@ -384,8 +405,9 @@ SE_Focus getFocusAt(PT_ParseTree parse_tree, int location)
 /*}}}  */
 /*{{{  ATerm replaceEditorTreeAtFocus(editor, focus, tree, left_layout,right_layout)*/
 
-SE_Editor replaceEditorTreeAtFocus(SE_Editor editor, SE_Focus focus, PT_Tree tree,
-				   char *left_layout, char *right_layout)
+SE_Editor replaceEditorTreeAtFocus(SE_Editor editor, SE_Focus focus, 
+                                   PT_Tree tree,
+				   PT_Args left_layout, PT_Args right_layout)
 {
   PT_ParseTree parse_tree = SE_getEditorParseTree(editor);
   PT_ParseTree new_tree;
