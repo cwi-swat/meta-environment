@@ -35,8 +35,11 @@ exports
 %% Main evaluation functions for Rscripts
 
         eval-rscript(SCRIPT)                 -> RSTORE
+        eval-rscript(SCRIPT, VAR, RSTORE)    -> VALUE
         eval-rscript(STAT, RSTORE)           -> RSTORE
         eval-rscript(STAT*, RSTORE)          -> RSTORE
+
+        eval-rexp(REXP, RSTORE)		     -> VALUE
 
 %% should be hidden
 
