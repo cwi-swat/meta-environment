@@ -162,6 +162,27 @@ in
   fi
 endlet
 
+process ReplaceRoot(EditorId: term, Tree: term) is
+let
+  Id          : int,
+  TotalTree   : term,
+  Text        : str,
+  Focus       : term
+in
+  Id := process-id .
+  snd-msg(move-focus-to-root(EditorId)) .
+  rec-msg(focus(Focus?)) .
+  snd-msg(replace-focussed-tree(EditorId, Tree)) .
+  rec-msg(focus(Focus?)) .
+  snd-msg(get-tree(EditorId)) .
+  rec-msg(tree(TotalTree?)) .
+  snd-msg(unparse(TotalTree)) .
+  rec-msg(unparsed-text(Text?)) .
+  snd-msg(replace-text(EditorId, Text)) .
+  snd-msg(set-focus(EditorId, Focus))
+endlet
+
+
 process GetFocus(EditorId: term, Tree: term?) is
 let
   Id          : int
@@ -284,8 +305,10 @@ let
   SortName   : str,
   FilePath   : str,
   NewModName : str,
+  FileName   : str,
   EditorName : str,
   FuncName   : str,
+  FunSym     : str,
   NrOfArgs   : int
 in
   subscribe(syntax-changed(ModuleName)) . 
@@ -343,6 +366,12 @@ in
           snd-msg(error-stack)
         fi
       +
+        rec-msg(set-root, Stack?, EditorId) .
+        STree := first(Stack) .
+        Stack := next(Stack) .
+        ReplaceRoot(EditorId, STree) .
+        snd-msg(stack(Stack))
+      +
         rec-msg(get-focus, Stack?, EditorId) .
         GetFocus(EditorId, RTree?) .
         if not-equal(RTree, error-tree) then
@@ -380,23 +409,31 @@ in
           snd-msg(error-stack)
         fi
       +
-        rec-msg(get-other-focus(NewModName?, FilePath?), Stack?, EditorId) .
-        snd-msg(get-editor-id(FilePath, NewModName)) .
-        (
-          rec-msg(existing-editor(FilePath?, EditorId2?)).
-          GetFocus(EditorId2, RTree?) .
-          if not-equal(RTree, error-tree) then
-            Stack := join(RTree, Stack) .
-            snd-msg(stack(Stack))
-          else
+        rec-msg(get-other-focus(NewModName?), Stack?, EditorId) .
+        STree := first(Stack) .
+        Stack := next(Stack) .
+	FunSym := fun(STree) .
+	if equal(FunSym, "path") then
+	  FilePath := first(args(STree)) .
+          snd-msg(check-editor-id(FilePath, NewModName)) .
+          (
+            rec-msg(existing-editor(FilePath?, EditorId2?)).
+            GetFocus(EditorId2, RTree?) .
+            if not-equal(RTree, error-tree) then
+              Stack := join(RTree, Stack) .
+              snd-msg(stack(Stack))
+            else
+              snd-msg(error-stack)
+            fi
+          +
+            rec-msg(non-existing-editor(FilePath?)).
+            snd-note(ui-status(errorf("editor for %s not active", 
+                                      [FilePath]))) .
             snd-msg(error-stack)
-          fi
-        +
-          rec-msg(new-editor(FilePath?, EditorId2?)).
-          snd-note(ui-status(errorf("editor for %s not active", 
-                              [FilePath]))) .
-          snd-msg(error-stack)
-        )
+          )
+	else
+	  snd-msg(error-stack)
+	fi
       +
         rec-msg(edit(NewModName?, EditorName?), Stack?, EditorId) .
         STree := first(Stack) .
@@ -423,6 +460,32 @@ in
         else
           snd-msg(error-stack)
         fi
+      +
+        rec-msg(exists(FileName?), Stack?, EditorId) .
+        snd-msg(exists-file(FileName)) .
+	(
+	  rec-msg(file-exists(FileName)) .
+          snd-msg(stack(Stack))
+	+
+	  rec-msg(file-not-exists(FileName)) .
+          snd-note(ui-status(errorf("%s does not exist", 
+                                    [FileName]))) .
+          snd-msg(error-stack)
+	)
+      +
+        rec-msg(locate(FileName?), Stack?, EditorId) .
+        snd-msg(locate-file(FileName)) .
+	(
+	  rec-msg(file-location(FileName, FilePath?)) .
+	  RTree := quote(path(FilePath)) .
+          Stack := join(RTree, Stack) .
+          snd-msg(stack(Stack))
+	+
+	  rec-msg(file-not-exists(FileName)) .
+          snd-note(ui-status(errorf("%s does not exist", 
+                                    [FileName]))) .
+          snd-msg(error-stack)
+	)
       ) *
       if equal(Killed, true) then
         tau
