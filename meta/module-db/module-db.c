@@ -754,6 +754,57 @@ ATerm get_equations_for_module(int cid, ATerm atImport)
 }
 
 /*}}}  */
+/*{{{  ATerm get_equations_for_renamed_import(int cid, ATerm atImport, ATerm atRenamings) */
+
+ATerm get_equations_for_renamed_import(int cid, ATerm atImport, ATerm atRenamings)
+{
+  SDF_Import import = SDF_makeImportFromTerm(atImport);
+  SDF_Renamings renamings = SDF_makeRenamingsFromTerm(atRenamings);
+
+  if (SDF_isValidImport(import)) {
+    SDF_ModuleName moduleName = SDF_getImportModuleName(import);
+
+    ATerm plainName = SDF_getModuleNamePlain(moduleName);
+
+    MDB_Entry entry = MDB_EntryFromTerm(GetValue(modules_db, plainName));
+
+    if (entry) { 
+      ATerm eqsTerm = MDB_getEntryAsfTree(entry);
+
+      if (!ATisEqual(eqsTerm, MDB_NONE)) {
+        SDF_Renamings newRenamings;
+        SDF_ImportList fullImports;
+
+        if (SDF_isImportRenamedModule(import)) {
+          fullImports = SDF_makeImportListEmpty();
+          newRenamings = SDF_getImportRenamings(import);
+          newRenamings = SDF_renameRenamings(renamings, newRenamings);
+        } 
+        else if (SDF_isModuleNameParameterized(moduleName)) {
+          ATerm sdfTerm = MDB_getEntrySdfTree(entry);
+	  SDF_Module module = SDF_getStartTopModule(SDF_StartFromTerm(sdfTerm));
+          SDF_ModuleName formalModuleName = SDF_getModuleModuleName(module);
+
+          fullImports = SDF_getModuleImportsList(module);
+	  newRenamings = SDF_makeRenamingsFromModuleNames(formalModuleName,
+	  					       moduleName);
+          newRenamings = SDF_renameRenamings(renamings, newRenamings);
+        }
+        else {
+	  return ATmake("snd-value(no-equations))");
+        }
+        return ATmake("snd-value(renamed-equations(<term>,<term>,<term>))", 
+		     SDF_makeTermFromRenamings(newRenamings),
+		     SDF_makeTermFromImportList(fullImports),
+		     ATBpack(eqsTerm));
+      }
+    }
+  }
+
+  return ATmake("snd-value(no-equations)");
+}
+
+/*}}}  */
 /*{{{  ATerm get_sdf_tree(int cid, char *modulename) */
 
 ATerm get_sdf_tree(int cid, char *modulename)

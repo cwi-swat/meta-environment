@@ -18,7 +18,6 @@ endlet
 
 process ProcessEqs is
 let
-  Id          : term,
   ModName     : str,
   ModuleName  : str,
   Module      : str,
@@ -30,7 +29,6 @@ let
   Errors      : term,
   ModuleId    : term
 in
-  Id := process-id.
   (
     rec-msg(process-eqs(ModName?)).
     snd-msg(get-rules-top-sort) .
@@ -62,51 +60,75 @@ in
   )* delta
 endlet
 
-process ProcessRenamedImports(Renamings : term, 
-			      ImportsList : list, 
+process ProcessRenamedImports(ImportTupleList : list, 
                               Equations : term?) is
 let
-  Id      : term,
-  Import  : term,
-  Imports : list
+  ImportTuple  : term,
+  ImportTuples : list,
+  TupleArgs    : list,
+  Import       : term,
+  Imports      : list,
+  Renamings    : term,
+  NewRenamings : term,
+  NewImports   : list,
+  NewEquations : term
 in
-  Id := process-id .
-  Imports := ImportsList .
   Equations := [] .
+  ImportTuples := ImportTupleList .
   (
-    if not-equal(Imports, []) then
-      Import  := first(Imports) .
-      Imports := next(Imports) /*.
-      printf("import = %t\n", Import)
-      */
+    if not-equal(ImportTuples, []) then
+      ImportTuple  := first(ImportTuples) .
+      ImportTuples := next(ImportTuples) .
+      TupleArgs := args(ImportTuple) .
+      Renamings := first(TupleArgs) .
+      Imports := first(next(TupleArgs)) .
+      (
+        if not-equal(Imports, []) then
+          Import  := first(Imports) .
+          Imports := next(Imports) .
+          snd-msg(get-equations-for-renamed-import(Import, Renamings)) .
+          (
+            rec-msg(renamed-equations(NewRenamings?, NewImports?, NewEquations?)) .
+	    snd-msg(rename-semantics-hook(NewRenamings, NewEquations)) .
+	    rec-msg(rename-semantics-hook-result(NewEquations?)) .
+	    Equations := join(NewEquations, Equations) .
+            ImportTuple := quote(tuple(NewRenamings, NewImports)) .
+            ImportTuples := join(ImportTuples, ImportTuple)
+          +
+            rec-msg(no-equations)
+          )
+        fi
+      )*
+      if equal(Imports, []) then 
+        tau
+      fi 
     fi
   )*
-  if equal(Imports,[]) then 
+  if equal(ImportTuples, []) then 
     tau
   fi 
 endlet
 
 process GetEquations is
 let
-  Id           : term,
   ModuleName   : str,
   Equations    : term,
   AllEquations : term,
   Modules      : list,
-  NewModules   : list,
+  NewEquations : list,
   Imports      : list,
   Module       : term,
   Renamings    : term,
   FormalName   : term,
-  Parameters   : term
+  Parameters   : term,
+  ImportTuple  : term
 in
-  Id := process-id .
   (
     rec-msg(get-all-equations(ModuleName?)) .
     snd-msg(all-equations-available(ModuleName)) .
     (
       rec-msg(equations-available) .
-      NewModules   := [] .
+      NewEquations   := [] .
       snd-msg(get-all-imported-modules(ModuleName)) .
       rec-msg(all-modules(Modules?)) .
       (
@@ -116,21 +138,22 @@ in
           snd-msg(get-equations-for-module(Module)) .
           (
 	    rec-msg(plain-equations(Equations?)) .
-	    NewModules := join(Equations, NewModules)
+	    NewEquations := join(Equations, NewEquations)
           +
             rec-msg(renaming-equations(Renamings?, Imports?, Equations?)) .
 	    snd-msg(rename-semantics-hook(Renamings, Equations)).
 	    rec-msg(rename-semantics-hook-result(Equations?)).
-	    NewModules := join(Equations, NewModules) .
-	    ProcessRenamedImports(Renamings, Imports, Equations?) .
-	    NewModules := join(Equations, NewModules)
+	    NewEquations := join(Equations, NewEquations) .
+            ImportTuple := quote(tuple(Renamings, Imports)) .
+	    ProcessRenamedImports([ImportTuple], Equations?) .
+	    NewEquations := join(Equations, NewEquations)
           +
 	    rec-msg(no-equations)
           )
         fi
       )*
       if equal(Modules,[]) then  
-        snd-msg(postprocess-collected-semantics-hook(NewModules)).
+        snd-msg(postprocess-collected-semantics-hook(NewEquations)).
 	rec-msg(postprocess-collected-semantics-hook-result(AllEquations?)).
 	snd-msg(all-equations(AllEquations))
       fi 
