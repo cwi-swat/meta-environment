@@ -30,6 +30,7 @@ noinst_SCRIPTS = sdf2-to-adt.test sdf2-to-java.test sdf2-to-c.test
 	     s@__SGLR__@${SGLR}@g;\
 	     s@__ASF__@${ASF}@g;\
 	     s@__PKGDATA__@${pkgdatadir}@g;\
+	     s@__BINDIR__@${bindir}@g;\
 	     s@__PREFIX__@${prefix}@g' < $< > $@ && chmod +x $@
 
 %.test : %.sh.src Makefile
@@ -39,4 +40,5 @@ noinst_SCRIPTS = sdf2-to-adt.test sdf2-to-java.test sdf2-to-c.test
 	     s@__SGLR__@${SGLR}@g;\
 	     s@__ASF__@${ASF}@g;\
 	     s@__PKGDATA__@${top_builddir}/utils@g;\
+	     s@__BINDIR__@${top_builddir}/utils@g;\
 	     s@__PREFIX__@${top_builddir}/utils@g' < $< > $@ && chmod +x $@

@@ -3,7 +3,7 @@
 # {{{ variables
 
      prefix=__PREFIX__
-     bindir=${prefix}/bin
+     bindir=__BINDIR__
     PKGDATA=__PKGDATA__
         PRG=`basename $0`
      APIGEN=__APIGEN__

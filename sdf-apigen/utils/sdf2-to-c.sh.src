@@ -1,9 +1,9 @@
 #! /bin/sh
-
+set -x
 # {{{ variables
 
      prefix=__PREFIX__
-     bindir=${prefix}/bin
+     bindir=__BINDIR__
     PKGDATA=__PKGDATA__
         PRG=`basename $0`
      APIGEN=__APIGEN__
@@ -142,6 +142,13 @@ if [ ${ONLYBOTTOM} -eq 0 ]; then
   else
     require ${INPUT}
   fi
+
+fi
+
+if [ "a${OUTPUT}" = "a" ]; then
+  BASE=`basename ${INPUT} .sdf`
+  BASE=`basename ${BASE} .def`
+  OUTPUT=${BASE}
 fi
 
 # }}}
@@ -154,7 +161,7 @@ err() {
 
 # }}}
 # {{{  generate C from SDF
-
+set -x
 if [ ${ONLYBOTTOM} -eq 0 ]; then
   info " generating ${OUTPUT}.adt "
   ${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
