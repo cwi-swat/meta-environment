@@ -81,7 +81,7 @@ in
     snd-do(TE, tb-set-msg("Parse error near cursor"))
   +
     rec-msg(move-editor-to-front(EditorId)) .
-    snd-do(TE, move-editor-to-front(Fid)).
+    snd-do(TE, move-editor-to-front(Fid))
   +
     rec-event(TE, set-current-location(Fid, Location?)) .
     snd-msg(set-current-location(EditorId, Location)) .
