@@ -1,12 +1,12 @@
-#ifndef _PARSEDERRORS_H
-#define _PARSEDERRORS_H
+#ifndef _PARSEDERRORAPI_H
+#define _PARSEDERRORAPI_H
 
 /*{{{  includes */
 
 #include <stdlib.h>
 #include <string.h>
 #include <aterm1.h>
-#include "ParsedErrors_dict.h"
+#include "ParsedErrorAPI_dict.h"
 
 /*}}}  */
 
@@ -29,7 +29,7 @@ typedef struct _PME_Start *PME_Start;
 
 /*}}}  */
 
-void PME_initParsedErrorsApi(void);
+void PME_initParsedErrorAPIApi(void);
 
 /*{{{  term conversion functions */
 
@@ -652,4 +652,4 @@ PME_Start PME_visitStart(PME_Start arg,
 
 /*}}}  */
 
-#endif /* _PARSEDERRORS_H */
+#endif /* _PARSEDERRORAPI_H */

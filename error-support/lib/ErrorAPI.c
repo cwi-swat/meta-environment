@@ -2,7 +2,7 @@
 
 #include <aterm2.h>
 #include <deprecated.h>
-#include "Errors.h"
+#include "ErrorAPI.h"
 
 /*{{{  conversion functions */
 
@@ -52,11 +52,11 @@ typedef struct ATerm _ME_Area;
 
 /*}}}  */
 
-/*{{{  void ME_initErrorsApi(void) */
+/*{{{  void ME_initErrorAPIApi(void) */
 
-void ME_initErrorsApi(void)
+void ME_initErrorAPIApi(void)
 {
-  init_Errors_dict();
+  init_ErrorAPI_dict();
 }
 
 /*}}}  */

@@ -1,5 +1,5 @@
-#ifndef __Errors_dict_H
-#define __Errors_dict_H
+#ifndef __ErrorAPI_dict_H
+#define __ErrorAPI_dict_H
 
 #include <aterm2.h>
 
@@ -26,6 +26,6 @@ extern ATerm ME_patternFeedbackError;
 extern ATerm ME_patternFeedbackWarning;
 extern ATerm ME_patternFeedbackInfo;
 
-extern void init_Errors_dict();
+extern void init_ErrorAPI_dict();
 
-#endif /* __Errors_dict_H */
+#endif /* __ErrorAPI_dict_H */

@@ -4,6 +4,8 @@
 #include <Errors.h>
 #include <ParsedErrors.h>
 
+void ME_initFullErrorsApi();
+
 PME_Area ME_liftArea(ME_Area area);
 PME_Location ME_liftLocation(ME_Location location);
 PME_Subject ME_liftSubject(ME_Subject subject);

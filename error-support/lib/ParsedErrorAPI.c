@@ -2,7 +2,7 @@
 
 #include <aterm2.h>
 #include <deprecated.h>
-#include "ParsedErrors.h"
+#include "ParsedErrorAPI.h"
 
 /*{{{  conversion functions */
 
@@ -56,11 +56,11 @@ typedef struct ATerm _PME_Start;
 
 /*}}}  */
 
-/*{{{  void PME_initParsedErrorsApi(void) */
+/*{{{  void PME_initParsedErrorAPIApi(void) */
 
-void PME_initParsedErrorsApi(void)
+void PME_initParsedErrorAPIApi(void)
 {
-  init_ParsedErrors_dict();
+  init_ParsedErrorAPI_dict();
 }
 
 /*}}}  */

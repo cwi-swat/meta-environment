@@ -1,12 +1,12 @@
-#ifndef _ERRORS_H
-#define _ERRORS_H
+#ifndef _ERRORAPI_H
+#define _ERRORAPI_H
 
 /*{{{  includes */
 
 #include <stdlib.h>
 #include <string.h>
 #include <aterm1.h>
-#include "Errors_dict.h"
+#include "ErrorAPI_dict.h"
 
 /*}}}  */
 
@@ -25,7 +25,7 @@ typedef struct _ME_Area *ME_Area;
 
 /*}}}  */
 
-void ME_initErrorsApi(void);
+void ME_initErrorAPIApi(void);
 
 /*{{{  term conversion functions */
 
@@ -208,4 +208,4 @@ ME_Area ME_visitArea(ME_Area arg, int (*acceptStartLine) (int),
 
 /*}}}  */
 
-#endif /* _ERRORS_H */
+#endif /* _ERRORAPI_H */

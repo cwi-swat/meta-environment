@@ -3,17 +3,17 @@
 lib_LIBRARIES=libErrorAPI.a
 
 include_HEADERS=\
-	Errors.h\
-	Errors_dict.h\
-	ParsedErrors.h\
-	ParsedErrors_dict.h\
-	Errors-utils.h
+	ErrorAPI.h\
+	ErrorAPI_dict.h\
+	ParsedErrorAPI.h\
+	ParsedErrorAPI_dict.h\
+	ErrorAPI-utils.h
 
 libErrorAPI_a_SOURCES = \
-	Errors.c \
-	Errors_dict.c\
-	ParsedErrors.c \
-	ParsedErrors_dict.c \
+	ErrorAPI.c \
+	ErrorAPI_dict.c\
+	ParsedErrorAPI.c \
+	ParsedErrorAPI_dict.c \
 	lift.c
 
 CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
@@ -34,12 +34,12 @@ MetaErrors.impl.def: Makefile
 api: parsed-api imploded-api 
 
 parsed-api: MetaErrors.def Makefile  
-	sdf2-to-c --input $< --prefix PME_ --output ParsedErrors
-	indent ParsedErrors.h
+	sdf2-to-c --input $< --prefix PME_ --output ParsedErrorAPI
+	indent ParsedErrorAPI.h
 
 imploded-api: MetaErrors.impl.def Makefile 
-	sdf2-to-c --imploded --input $< --prefix ME_ --output Errors
-	indent Errors.h
+	sdf2-to-c --imploded --input $< --prefix ME_ --output ErrorAPI
+	indent ErrorAPI.h
 
 api-clean:
 	${RM} MEPT.[ch] MEPT_dict.[ch] MEPT.dict

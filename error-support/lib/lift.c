@@ -1,5 +1,5 @@
-#include "Errors.h"
-#include "ParsedErrors.h"
+#include "ErrorAPI.h"
+#include "ParsedErrorAPI.h"
 
 /*{{{  static PME_String ME_liftString(const char *str) */
 

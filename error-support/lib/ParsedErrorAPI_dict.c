@@ -1,4 +1,4 @@
-#include "ParsedErrors_dict.h"
+#include "ParsedErrorAPI_dict.h"
 
 AFun PME_afun39;
 AFun PME_afun17;
@@ -127,11 +127,11 @@ ATerm PME_patternFeedbackInfo = NULL;
  *
  */
 
-static ATerm _ParsedErrors_dict = NULL;
+static ATerm _ParsedErrorAPI_dict = NULL;
 
-#define _ParsedErrors_dict_LEN 1294
+#define _ParsedErrorAPI_dict_LEN 1294
 
-static char _ParsedErrors_dict_baf[_ParsedErrors_dict_LEN] = {
+static char _ParsedErrorAPI_dict_baf[_ParsedErrorAPI_dict_LEN] = {
 0x00,0x8B,0xAF,0x83,0x00,0x30,0x81,0x84,0x05,0x3C,0x69,0x6E,0x74,0x3E,0x00,0x00,
 0x02,0x03,0x3C,0x5F,0x3E,0x01,0x00,0x03,0x03,0x05,0x04,0x06,0x05,0x5B,0x5F,0x2C,
 0x5F,0x5D,0x02,0x00,0x80,0xE9,0x2B,0x02,0x03,0x01,0x07,0x09,0x0A,0x0B,0x0C,0x0D,
@@ -215,15 +215,15 @@ static char _ParsedErrors_dict_baf[_ParsedErrors_dict_LEN] = {
 0xB3,0x2C,0x07,0x51,0x09,0x22,0xC2,0x92,0x42,0x49,0x66,0x58,0x27,0x40
 };
 
-void init_ParsedErrors_dict()
+void init_ParsedErrorAPI_dict()
 {
   ATermList afuns, terms;
 
-  _ParsedErrors_dict = ATreadFromBinaryString(_ParsedErrors_dict_baf, _ParsedErrors_dict_LEN);
+  _ParsedErrorAPI_dict = ATreadFromBinaryString(_ParsedErrorAPI_dict_baf, _ParsedErrorAPI_dict_LEN);
 
-  ATprotect(&_ParsedErrors_dict);
+  ATprotect(&_ParsedErrorAPI_dict);
 
-  afuns = (ATermList)ATelementAt((ATermList)_ParsedErrors_dict, 0);
+  afuns = (ATermList)ATelementAt((ATermList)_ParsedErrorAPI_dict, 0);
 
   PME_afun39 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
@@ -306,7 +306,7 @@ void init_ParsedErrors_dict()
   PME_afun6 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
 
-  terms = (ATermList)ATelementAt((ATermList)_ParsedErrors_dict, 1);
+  terms = (ATermList)ATelementAt((ATermList)_ParsedErrorAPI_dict, 1);
 
   PME_patternStartFeedback = ATgetFirst(terms);
   terms = ATgetNext(terms);

@@ -1,5 +1,5 @@
-#ifndef __ParsedErrors_dict_H
-#define __ParsedErrors_dict_H
+#ifndef __ParsedErrorAPI_dict_H
+#define __ParsedErrorAPI_dict_H
 
 #include <aterm2.h>
 
@@ -65,6 +65,6 @@ extern ATerm PME_patternFeedbackError;
 extern ATerm PME_patternFeedbackWarning;
 extern ATerm PME_patternFeedbackInfo;
 
-extern void init_ParsedErrors_dict();
+extern void init_ParsedErrorAPI_dict();
 
-#endif /* __ParsedErrors_dict_H */
+#endif /* __ParsedErrorAPI_dict_H */

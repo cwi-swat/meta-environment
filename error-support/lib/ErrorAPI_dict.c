@@ -1,4 +1,4 @@
-#include "Errors_dict.h"
+#include "ErrorAPI_dict.h"
 
 AFun ME_afun8;
 AFun ME_afun4;
@@ -49,11 +49,11 @@ ATerm ME_patternFeedbackInfo = NULL;
  *
  */
 
-static ATerm _Errors_dict = NULL;
+static ATerm _ErrorAPI_dict = NULL;
 
-#define _Errors_dict_LEN 350
+#define _ErrorAPI_dict_LEN 350
 
-static char _Errors_dict_baf[_Errors_dict_LEN] = {
+static char _ErrorAPI_dict_baf[_ErrorAPI_dict_LEN] = {
 0x00,0x8B,0xAF,0x83,0x00,0x11,0x35,0x03,0x3C,0x5F,0x3E,0x01,0x00,0x04,0x04,0x05,
 0x06,0x04,0x03,0x05,0x5B,0x5F,0x2C,0x5F,0x5D,0x02,0x00,0x1A,0x0C,0x01,0x02,0x00,
 0x07,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F,0x10,0x02,0x01,0x02,0x02,0x5B,0x5D,0x00,
@@ -78,15 +78,15 @@ static char _Errors_dict_baf[_Errors_dict_LEN] = {
 0x68,0x84,0x21,0x04,0x59,0x62,0x10,0x84,0x10,0x6A,0x88,0x42,0x10,0x54
 };
 
-void init_Errors_dict()
+void init_ErrorAPI_dict()
 {
   ATermList afuns, terms;
 
-  _Errors_dict = ATreadFromBinaryString(_Errors_dict_baf, _Errors_dict_LEN);
+  _ErrorAPI_dict = ATreadFromBinaryString(_ErrorAPI_dict_baf, _ErrorAPI_dict_LEN);
 
-  ATprotect(&_Errors_dict);
+  ATprotect(&_ErrorAPI_dict);
 
-  afuns = (ATermList)ATelementAt((ATermList)_Errors_dict, 0);
+  afuns = (ATermList)ATelementAt((ATermList)_ErrorAPI_dict, 0);
 
   ME_afun8 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
@@ -107,7 +107,7 @@ void init_Errors_dict()
   ME_afun6 = ATgetAFun((ATermAppl)ATgetFirst(afuns));
   afuns = ATgetNext(afuns);
 
-  terms = (ATermList)ATelementAt((ATermList)_Errors_dict, 1);
+  terms = (ATermList)ATelementAt((ATermList)_ErrorAPI_dict, 1);
 
   ME_patternAreaNoArea = ATgetFirst(terms);
   terms = ATgetNext(terms);
