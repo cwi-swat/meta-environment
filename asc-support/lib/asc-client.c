@@ -21,7 +21,7 @@ ATerm apply_rewrite(int cid, char* function, char* sort,ATermList args)
 {
   PT_Args ptargs = PT_makeArgsEmpty();
   for(;!ATisEmpty(args);args = ATgetNext(args)) {
-    ATerm head = ATgetFirst(args);
+    ATerm head = ATBunpack(ATgetFirst(args));
     PT_Tree arg;
 
     if (ATisQuoted(ATgetAFun((ATermAppl) head))) {
