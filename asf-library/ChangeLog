@@ -1,4 +1,5 @@
-2002/06/14 (markvdb@cs.vu.nl)
+2002/06/14 (jong@cwi.nl,markvdb@cs.vu.nl)
+  * Added ATermOperations (in OO style).
   * Added ATerm placeholder.
   * Fixed ChangeLog dates.
 
