@@ -1,1 +1,1 @@
-SUBDIRS= meta-scripts src demo
+SUBDIRS= meta-scripts src demo test
