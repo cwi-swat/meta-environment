@@ -1372,6 +1372,11 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
 	 * explicit preference, then it throws one of them away.
 	 */
 	
+/* The next ifdef maybe removed when it is clear that
+ * this code has no effect. (03-10-2000) 
+ * Mark
+ */
+#ifdef MAYBE_OBSOLETE
   /*  Don't even bother unless there are preferred actions  */
   if (SG_PT_HAS_PREFERENCES(pt)) {
     /* search for prefers */
@@ -1402,6 +1407,7 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
       return t0;
     }
   }
+#endif
 
   /*  Don't filter START symbols when start symbol subselection is on  */
   if (SG_STARTSYMBOL && SG_StartInjection(pt, ATgetInt(l0))) {
