@@ -11,17 +11,23 @@ let
 TE  : text-edit,
 Tid : int,
 L   : str,
-Fid: str
+Fid: str,
+Id : int
 in
 /* Changed concept. No longer one editor executable per window. This was 
    never a good idea. Now, for each window an Editor process is created.
    The editor binary is executed from the Edit-master process, which knows
    about its tool id. 
 */
+  Id := process-id.
+  snd-note(ui-status(stat(Id,"Starting text editor"))).
   snd-msg(get-editor-tool-id).
   rec-msg(editor-tool-id(TE?)).
   snd-eval(TE,tb-init(Filename)).
   rec-value(TE,file-id(Fid?)).
+  snd-do(TE,tb-add-menu-item("Meta-Environment", "Parse")).
+  snd-do(TE,tb-add-menu-item("Meta-Environment", "Reduce")).
+  snd-note(ui-status(endstat(Id))).
   create(Structure-editor(TE, Fid, Text, Module), Tid?).
   create(Focus(TE, Fid), Tid?). (
     rec-note(language-available(L?)).
