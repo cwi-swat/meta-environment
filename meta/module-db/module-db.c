@@ -16,7 +16,7 @@
 /*}}}  */
 /*{{{  variables */
 
-static char myversion[] = "2.0";
+static char myversion[] = "3.0";
 
 ATermTable modules_db;
 ATermTable import_db;
