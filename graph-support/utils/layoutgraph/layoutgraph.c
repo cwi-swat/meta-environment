@@ -306,9 +306,10 @@ ATerm layout_graph(int conn, ATerm g)
 
 static void usage(char *prg, ATbool is_err)
 {
-  ATwarning("usage: %s [aterm-options] [toolbus-options]\n", prg);
-  ATwarning("use '%s -at-help' to get more options.\n", prg);
-  ATwarning("This program can only be used as a ToolBus tool!\n");
+  ATwarning("Computes a nice graph layout using dot from AT&T graphviz.\n"
+	    "This program can only be used as a ToolBus tool.\n\n"
+	    "input: a graph term,\n"
+	    "output: a graph term with positional information.\n");
   exit(is_err ? 1 : 0);
 }
 
