@@ -48,6 +48,7 @@ NOTANGLE	= @NOTANGLE@
 include ${top_srcdir}/implicit-rules
 
 # The eXtra parts of some variables
+XDEFS		=
 XCFLAGS		=
 XCPPFLAGS	=
 XINCLUDES	=
