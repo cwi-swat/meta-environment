@@ -943,22 +943,8 @@ static PT_Tree term_to_asfix(ATerm tree, PT_Symbol sort)
     }
 
     ptProd = PT_makeProductionFromTerm(prod);
-    if (PT_isValidProduction(ptProd)) {
-      if (isLexicalConstructorProd(ptProd)) {
-        lexsort = PT_getProductionRhs(ptProd);
-        return term_to_asfix(ATgetArgument((ATermAppl) tree, 0), lexsort);
-      } 
-      else {
-      /* An ordinary production rule is processed. 
-       */
-	formalargs = PT_getProductionLhs(ptProd);
-	sort = PT_getProductionRhs(ptProd);
-	actualargs = terms_to_asfix(formalargs, (ATermAppl)tree, sort);
-
-	result = PT_makeTreeAppl(ptProd,actualargs);
-      }
-    }
-    else if(ATmatchTerm(prod, pattern_listtype, &listsort)) {
+    
+    if(ATmatchTerm(prod, pattern_listtype, &listsort)) {
       if(streq(listsort, "CHAR")) {
         result = make_asfix_lex((ATermList)ATgetArgument((ATermAppl) tree,0),
                                 sort);
@@ -974,6 +960,21 @@ static PT_Tree term_to_asfix(ATerm tree, PT_Symbol sort)
       result = make_asfix_list_sep((ATermList) 
                                      ATgetArgument((ATermAppl) tree,0),
                                    listsort, sep);
+    }
+    else if (PT_isValidProduction(ptProd)) {
+      if (isLexicalConstructorProd(ptProd)) {
+        lexsort = PT_getProductionRhs(ptProd);
+        return term_to_asfix(ATgetArgument((ATermAppl) tree, 0), lexsort);
+      } 
+      else {
+      /* An ordinary production rule is processed. 
+       */
+	formalargs = PT_getProductionLhs(ptProd);
+	sort = PT_getProductionRhs(ptProd);
+	actualargs = terms_to_asfix(formalargs, (ATermAppl)tree, sort);
+
+	result = PT_makeTreeAppl(ptProd,actualargs);
+      }
     }
     else {
       ATabort("cannot handle production: %t\n", prod);
