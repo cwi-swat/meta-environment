@@ -50,6 +50,14 @@ int ASF_getCHARListLength(ASF_CHARList list)
 }
 
 /*}}}  */
+/*{{{  int ASF_getConditionListLength(ASF_ConditionList list) */
+
+int ASF_getConditionListLength(ASF_ConditionList list)
+{
+  return (ATgetLength((ATermList) ASF_makeTermFromConditionList(list)) / 2) + 1;
+}
+
+/*}}}  */
 /*{{{  ASF_CondEquationList ASF_concatCondEquationList(ASF_CondEquationList l1, l2) */
 
 ASF_CondEquationList ASF_concatCondEquationList(ASF_CondEquationList l1,
