@@ -7,7 +7,7 @@
 #include <atb-tool.h>
 
 #include <SDFME-utils.h>
-#include "sdf-tool.tif.h"
+#include "sdf-imports.tif.h"
 
 static char myversion[] = "1.0";
 
@@ -23,7 +23,7 @@ void rec_terminate(int cid, ATerm t)
 
 static void usage(char *prg, ATbool is_err)
 {
-    ATwarning("sdf-tool: an interface to the sdf-support library.\n"
+    ATwarning("sdf-imports: an interface to the sdf-support library.\n"
 	      "This tool can only be executed on the ToolBus platform.\n");
     exit(is_err ? 1 : 0);
 }
@@ -39,7 +39,54 @@ static void version(const char *msg)
 
 /*}}}  */
 
-#define RESULT_TERM(t) (ATmake("snd-value(result(<term>))",t))
+/*{{{  ATerm get_all_imports(int cid, ATerm atModules, char* name)  */
+
+ATerm get_all_imports(int cid, ATerm atModules, char* name) 
+{
+  ATermList list = (ATermList) atModules;
+  SDF_ModuleList modules = SDF_makeModuleListEmpty();
+  SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
+  SDF_OptLayout space = SDF_makeLayoutSpace();
+  SDF_ImportList imports = NULL;
+  SDF_Definition def;
+
+  for(;!ATisEmpty(list); list = ATgetNext(list)) {
+    SDF_Module module = SDF_ModuleFromTerm(ATgetFirst(list));
+
+    if (SDF_isModuleListEmpty(modules)) {
+      modules = SDF_makeModuleListSingle(module);
+    }
+    else {
+      modules = SDF_makeModuleListMany(module, space, modules);
+    }
+  }
+
+  def = SDF_makeDefinitionDefault(modules);
+
+  imports = SDF_getTransitiveImports(def, id);
+
+  return ATmake("snd-result(all-imports(<term>))", imports);
+}
+
+/*}}}  */
+/*{{{  ATerm get_import_renamings(int cid, ATerm atImport) */
+
+ATerm get_import_renamings(int cid, ATerm atImport)
+{
+  SDF_Import import = SDF_ImportFromTerm(atImport);
+  SDF_Renamings renamings = SDF_makeRenamingsRenamings(SDF_makeLayoutSpace(),
+			       SDF_makeRenamingListEmpty(),
+			       SDF_makeLayoutSpace());
+
+  if (SDF_hasImportRenamings(import)) {
+    renamings = SDF_getImportRenamings(import);
+  }
+    
+
+  return ATmake("snd-result(renamings(<term>))", renamings);
+}
+
+/*}}}  */
 
 /*{{{  int main(int argc, char *argv[]) */
 
@@ -60,7 +107,7 @@ int main(int argc, char *argv[])
   SDF_initSDFMEApi();
 
 
-  cid = ATBconnect(NULL, NULL, -1, sdf_tool_handler);
+  cid = ATBconnect(NULL, NULL, -1, sdf_imports_handler);
 
   ATBeventloop();
 

@@ -1,13 +1,26 @@
 
-tool sdf-tool is { command = "sdf-tool" }
+tool sdf-imports is { command = "sdf-imports" }
 
-process SdfTool is
+process SdfImports is
 let
- ST : sdf-tool
+ SI : sdf-imports,
+ Modules : list,
+ ModuleId : str,
+ Imports : list,
+ Import : term,
+ Renamings : term
 in
-  execute(sdf-tool, ST?) .
+  execute(sdf-imports, SI?) .
   (
-    rec-msg(sdft-some-message)
+    rec-msg(si-get-all-imports(Modules, ModuleId)) .
+    snd-eval(SI, get-all-imports(Modules, ModuleId)) .
+    rec-value(SI, all-imports(Imports?)) .
+    snd-msg(si-all-imports(Imports))
+  +
+    rec-msg(si-get-import-renamings(Import)) .
+    snd-eval(SI, get-import-renamings(Import)) .
+    rec-value(SI, renamings(Renamings?)) .
+    snd-msg(si-renamings(Renamings))
   )
   *delta
 endlet

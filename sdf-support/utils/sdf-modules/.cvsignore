@@ -1,5 +1,5 @@
 Makefile
 Makefile.in
 .deps
-sdf-tool
+sdf-imports
 *.tifs
