@@ -157,9 +157,9 @@ PT_Tree ASC_transformTraversalFunction(PT_Tree tree)
     PT_Symbol rhs = PT_getSymbolSymbol(PT_getProductionRhs(prod));
     PT_Symbol accu = PT_getSymbolRhs(rhs);
     prod = PT_setProductionRhs(prod, PT_makeSymbolCf(
-                                     PT_makeSymbolPair(
+                                     PT_makeSymbolTuple(
                                      PT_makeSymbolSort(GEN_TRAVERSED_SORT),
-                                     accu)));
+                                     PT_makeSymbolsList(accu,PT_makeSymbolsEmpty()))));
 
   }
   return PT_setTreeProd(tree, prod);

@@ -1,5 +1,8 @@
 $Id$
 
+2003/10/07 (markvdb@cwi.nl)
+ * Introduced the new tuple concept.
+
 2003/10/06 (jurgenv@cwi.nl)
  * Removed attempt of retaining annotations because rewriting failed on 
    some specificiations

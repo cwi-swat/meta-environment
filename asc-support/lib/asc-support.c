@@ -910,10 +910,10 @@ ATerm correct_tuple(ATerm arg, ATerm rhs)
 
   rhsSymbol = PT_getSymbolSymbol(rhsSymbol);
 
-  assert(PT_isSymbolPair(rhsSymbol) && "expect pair symbol in accu,trafo");
+  assert(PT_isSymbolTuple(rhsSymbol) && "expect tuple symbol in accu,trafo");
 
   left = PT_getSymbolLhs(rhsSymbol);
-  right = PT_getSymbolRhs(rhsSymbol);
+  right = PT_getSymbolsHead(PT_getSymbolRest(rhsSymbol));
 
   lhs = PT_makeSymbolsList(PT_makeSymbolLit("<"),
         PT_makeSymbolsList(l,
