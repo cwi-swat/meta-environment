@@ -4,14 +4,20 @@
 #   Date: 3/19/1998
 # Author: Merijn de Jonge, Jeroen Scheerder
 #
-# This script generates both a Makefile.in for use with autconf as well
-# as a Makefile suitable for compiling the C code corresponding to a 
-# compiled specification.
+# This script generates a Makefile.in for use with autoconf, aa Makefile
+# suitable for compiling the C code corresponding to a compiled
+# specification, or both.
 #
 # usage:
-#    genmakefile.sh <target>
-#
-# where <target> is the name of the desired stand-alone executable program.
+#    genmakefile.sh  [-h] [-i] [-m] <target>
+# where
+#    <target> is the name of the desired stand-alone executable program.
+#     -h      shows usage information
+#     -i      specifies that a Makefile.in should be generated on standard
+#             output
+#     -m      specifies that a Makefile should be generated on standard
+#             output
+# By default both a Makefile and Makefile.in are generated
 #
 # The generated Makefile understands the following targets:
 #
@@ -36,23 +42,42 @@ bindir=@bindir@
 libdir=@libdir@
 PROTO=${libdir}/genmakefile.proto
 
+# By default we generate a Makefile and a Makefile.in. To generate
+# only a Makefile or Makefile.in on standard output use one of the command
+# line options.
+MAKETARGET="both"
+
 # display usage message
 usage()
 {
    cat<<ENDCAT
-$0
+`basename $0`
    generates on standard output a Makefile for the compilation of the
    C code corresponding to a compiled specification.
 
 usage:
-$0 [-h] <target>
-   where <target> is the name of the desired stand-alone executable program.
-
+`basename $0` [-h] [-i] [-m] <target>
+   where 
+      <target> is the name of the desired stand-alone executable program.
+      -h       shows usage information
+      -i       specifies that a Makefile.in should be generated on standard 
+               output
+      -m       specifies that a Makefile should be generated on standard 
+               output
 ENDCAT
 }
 
-
 # parse command line
+if [ "a$1" != "a" ]
+then
+   case $1 in
+      -h | -help ) usage ; exit 0 ;;
+      -i         ) MAKETARGET="Makefile.in" ; shift ;;
+      -m         ) MAKETARGET="Makefile" ; shift ;;
+      -*         ) usage; exit 1
+   esac
+fi
+
 if [ $# -ne 1 ]
 then
    usage
@@ -72,26 +97,44 @@ then
 fi
 
 #
-# Create the configure-ready Makefile.in template
+# Create the configure-ready Makefile.in template in case  the '-m' command
+# line options was not specified.
 #
-
-cat <<HDR					> Makefile.in
+if [ "a$MAKETARGET" = "aMakefile.in" -o "a$MAKETARGET" = "aboth" ]
+then
+( cat <<HDR					
 #
-# Makefile.in for target "$1 generated automagically on `date`
+# Makefile.in for target "$1" 
+# generated automagically on `date`
 #
 HDR
 cat ${PROTO} |
 	$PERL -pe "s|\@TARGET\@|$1|g"		|
-	$PERL -pe 's|%!%([^@]+)%!%|\@$1\@|g'	>> Makefile.in
-
-# Create the instantiated Makefile, by substituting configure's
-# variables `manually'.  Beware: to prevent perl from interfering (by
-# interpolating configure variable values) the configure items must be
-# quoted sans interpolation explicitly before substitution.
+	$PERL -pe 's|%!%([^@]+)%!%|\@$1\@|g'	
+) |\
+# When the '-i' command line option was specified we write the generated
+# Makefile.in to standard output, otherwise we write to Makefile
+if [  "a$MAKETARGET" = "aMakefile.in" ]
+then
+   cat
+else
+   cat > Makefile.in
+fi
+fi
+ 
+# Create the instantiated Makefile unless the '-i' command line option was
+# specified, by substituting configure's variables `manually'.
 #
-cat <<HDR					> Makefile
+# Beware: to prevent perl from interfering (by interpolating configure
+# variable values) the configure items must be quoted sans interpolation
+# explicitly before substitution.
 #
-# Makefile.in for target "$1 generated automagically on `date`
+if [ "a$MAKETARGET" = "aMakefile" -o "a$MAKETARGET" = "aboth" ]
+then
+( cat <<HDR
+#
+# Makefile for target "$1" 
+# generated automagically on `date`
 #
 HDR
 cat ${PROTO} |
@@ -131,4 +174,15 @@ cat ${PROTO} |
 		s|\@INSTALL_DATA\@|$INSTDATA|g;
 		s|\@INSTALL_PROG\@|$INSTPROG|g;
 		s|\@UNINSTALL\@|$UNINSTALL|g;
-		s|\@ATERM\@|$ATERM|g;'	>> Makefile
+		s|\@ATERM\@|$ATERM|g;'
+) |\
+# When the '-m' command line option was specified we write the generated
+# Makefile.in to standard output, otherwise we write to Makefile
+if [ "a$MAKETARGET" = "aMakefile" ]
+then
+   cat
+else
+   cat > Makefile
+fi
+fi
+
