@@ -18,7 +18,7 @@ in
     rec-msg(path(Path?)) .
     snd-msg(get-sdf2-asfix(ModuleName)) .
     rec-msg(syntax(SdfTree?)) .
-    snd-msg(unparse(SdfTree)) .
+    snd-msg(unparse-to-html(SdfTree)) .
     rec-msg(unparsed-text(SdfText?)) .
     snd-msg(get-eqs-text(ModuleName)) .
     (

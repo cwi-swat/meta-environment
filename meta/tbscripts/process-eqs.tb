@@ -17,7 +17,8 @@ let
   Cycle       : list,
   EqsText     : str,
   EqsTree     : term,
-  Nonterminal : str
+  Nonterminal : str,
+  Msgs        : list
 in
   Id := process-id.
   (
@@ -42,6 +43,9 @@ in
            snd-msg(Id,parse-string-as-asfix2me(eqs(Module), Nonterminal, EqsText)).
            (
              rec-msg(parse-result-asfix2me(Id?, parse-tree(EqsTree?))).
+             snd-msg(check-asf(EqsTree)) .
+             rec-msg(messages(Msgs?)) . 
+             snd-msg(display-asf-errors(Msgs)) .
              snd-msg(update-eqs-tree-in-db(Module, tree(EqsTree))) .
              rec-msg(eqs-updated)
            + 

@@ -11,7 +11,8 @@ let
   Text           : str,
   DirtyFoci      : list,
   ModifiedStatus : term,
-  Killed         : term
+  Killed         : term,
+  Msgs           : list
 in
   Text := "" .
   subscribe(syntax-changed(ModuleName)) . 
@@ -69,10 +70,13 @@ in
 	  (
 	    rec-msg(parse-ok(eqs(ModuleName))) .
 	    snd-msg(get-tree(EditorId)) .
-		  rec-msg(tree(Tree?)) .
-		  snd-msg(update-eqs-tree-in-db(ModuleName, tree(Tree))) .
-		  rec-msg(eqs-updated) .
-		  snd-msg(clear-focus(EditorId))
+            rec-msg(tree(Tree?)) .
+            snd-msg(check-asf(Tree)) .
+            rec-msg(messages(Msgs?)) .
+            snd-msg(display-asf-errors(Msgs)) .
+            snd-msg(update-eqs-tree-in-db(ModuleName, tree(Tree))) .
+            rec-msg(eqs-updated) .
+            snd-msg(clear-focus(EditorId))
 	  +
 	    rec-msg(parse-failed(eqs(ModuleName), ErrorFoci?)) .
 	    snd-msg(set-focus(EditorId, ErrorFoci))
