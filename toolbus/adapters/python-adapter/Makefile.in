@@ -39,9 +39,10 @@ DISTFILES	= Makefile.in python-adapter.in \
 # these variables, and add some rules to actually build your programs:
 ADAPTER-NAME    = python-adapter
 PROGRAMS        = python-adapter
-SOURCE          = TBterm.py kjParseBuild.py kjParsing.tex test.tb pabc.py
-LIBFILES        = TB.py TBstart.py kjParser.py kjSet.py TBterm.mar
-DOC             = 
+SOURCE          = kjParsing.tex test.tb pabc.py
+LIBFILES        = TB.py TBstart.py kjParser.py kjSet.py TBterm.mar TBterm.py \
+		kjParseBuild.py
+DOC             = python-adapter.guide.tex
 SRCDOC          =
 GENSRC          =
 
@@ -78,9 +79,9 @@ install: $(PROGRAMS) $(LIBFILES) $(SRCDOC) $(DOC)
 #	for file in $(SRCDOC); do\
 #	  $(INSTALL) $$file $(docdir)/src; \
 #	done
-#	for file in $(DOC); do\
-#	  $(INSTALL) $$file $(docdir)/adapters; \
-#	done
+	for file in $(DOC); do\
+	  $(INSTALL) $$file $(docdir)/adapters; \
+	done
 	for file in $(LIBFILES); do\
 	  $(INSTALL) $$file $(libdir); \
 	done

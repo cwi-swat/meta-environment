@@ -15,7 +15,6 @@
 # msg:		print a message on sys.stderr.
 # event:	wrap a message as an event and send to the ToolBus.
 # error:	wrap a message as an error message and send to TB.
-# require:	check if given function exists in given module.
 # eventloop:	standard eventloop (non-Tk)
 # tkeventloop:	Tk based eventloop
 #------------------------------------------------------------------------
@@ -216,7 +215,7 @@ def init(argvec):
 	# print "TOOL_ID		= ", TOOL_ID
 	# print "HOST		= ", HOST
 	# print "LOCAL_HOST	= ", LOCAL_HOST
-	print "INPORT		= ", INPORT
-	print "OUTPORT		= ", OUTPORT
-	#print "argv		= ", argv
+	# print "INPORT		= ", INPORT
+	# print "OUTPORT		= ", OUTPORT
+	# print "argv		= ", argv
 

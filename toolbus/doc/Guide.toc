@@ -47,31 +47,29 @@
 \contentsline {subsection}{\numberline {5.2}Predefined Perl functions}{23}
 \contentsline {subsection}{\numberline {5.3}The hello example in Perl: {\tt hello.perl}}{23}
 \contentsline {section}{\numberline {6}Writing tools in Python}{23}
-\contentsline {subsection}{\numberline {6.1}\texttt {python-adapter}}{23}
-\contentsline {subsubsection}{\numberline {6.1.1}Synopsis:}{23}
-\contentsline {subsubsection}{\numberline {6.1.2}Example:}{23}
-\contentsline {subsubsection}{\numberline {6.1.3}Specific arguments:}{24}
-\contentsline {subsubsection}{\numberline {6.1.4}Communication:\footnote {Communication is described from the point of view of the {\sc ToolBus}, i.e., \texttt {snd-} and \texttt {rec-} mean, respectively, send by {\sc ToolBus}\ and receive by {\sc ToolBus}.}}{24}
-\contentsline {subsubsection}{\numberline {6.1.5}Incoming term conversion:}{25}
+\contentsline {subsection}{\numberline {6.1}{\tt python-adapter}}{23}
+\contentsline {paragraph}{Synopsis.}{23}
+\contentsline {paragraph}{Example.}{23}
+\contentsline {paragraph}{Specific arguments.}{24}
+\contentsline {paragraph}{Communication.}{24}
 \contentsline {subsection}{\numberline {6.2}Predefined Python functions}{25}
-\contentsline {paragraph}{Note.}{25}
-\contentsline {subsection}{\numberline {6.3} The hello example in Python: \texttt {hello.py}}{25}
-\contentsline {section}{\numberline {7}Writing tools in Tcl/Tk, second alternative}{26}
+\contentsline {subsection}{\numberline {6.3}The hello example in Python/Tk: {\tt hello.py}}{25}
+\contentsline {section}{\numberline {7}Writing tools in Tcl/Tk, second alternative}{25}
 \contentsline {subsection}{\numberline {7.1}{\tt wish-adapter}}{26}
 \contentsline {paragraph}{Synopsis.}{26}
 \contentsline {paragraph}{Example.}{26}
 \contentsline {paragraph}{Specific arguments.}{26}
-\contentsline {paragraph}{Communication.}{27}
-\contentsline {subsection}{\numberline {7.2}Predefined Tcl functions}{28}
-\contentsline {paragraph}{Note.}{28}
+\contentsline {paragraph}{Communication.}{26}
+\contentsline {subsection}{\numberline {7.2}Predefined Tcl functions}{27}
+\contentsline {paragraph}{Note.}{27}
 \contentsline {subsection}{\numberline {7.3}The hello example in tcl: {\tt hello.tcl}}{28}
 \contentsline {section}{\numberline {8}Writing tools in Tcl/Tk}{28}
-\contentsline {subsection}{\numberline {8.1}{\tt wish-adapter}}{29}
-\contentsline {paragraph}{Synopsis.}{29}
-\contentsline {paragraph}{Example.}{29}
-\contentsline {paragraph}{Specific arguments.}{29}
-\contentsline {paragraph}{Communication.}{29}
-\contentsline {subsection}{\numberline {8.2}Predefined Tcl functions}{30}
+\contentsline {subsection}{\numberline {8.1}{\tt wish-adapter}}{28}
+\contentsline {paragraph}{Synopsis.}{28}
+\contentsline {paragraph}{Example.}{28}
+\contentsline {paragraph}{Specific arguments.}{28}
+\contentsline {paragraph}{Communication.}{28}
+\contentsline {subsection}{\numberline {8.2}Predefined Tcl functions}{29}
 \contentsline {paragraph}{Note.}{30}
 \contentsline {subsection}{\numberline {8.3}The hello example in tcl: {\tt hello.tcl}}{30}
 \contentsline {section}{\numberline {A}Differences with previous {\sc ToolBus}\ versions}{31}
