@@ -24,6 +24,26 @@ in
   )  
 endlet
 
+process ParseTerm2(EditorId: term, ModuleName: str) is
+let
+  ErrorFoci : term,
+  Text      : str,
+  Focus     : term,
+  SortName  : str,
+  Tree      : term,
+  Error     : term
+in
+  snd-msg(move-focus-to-root(EditorId)) .
+  rec-msg(focus(Focus?)) .
+  snd-msg(get-focus-text(EditorId, Focus)) .
+  rec-msg(focus-text(EditorId, Text?)) .
+  snd-msg(get-focus-sort(SortName, Focus)) .
+  rec-msg(focus-sort(SortName?)) .
+  ParseText(Text, ModuleName, SortName, Tree?, Error?) .
+  tau .
+  ProcessParseError(ModuleName, Error)
+endlet
+
 process GetTextFromFile(FileName: str, Text: str?) is
 let
   Name      : str,
@@ -39,17 +59,12 @@ in
   )
 endlet
 
-process ParseText(Text: str, ModuleName: str, Nonterminal: str, Tree: term?) is
+process ParseText(Text: str, ModuleName: str, Nonterminal: str, 
+                  Tree: term?, ParseError: term?) is
 let
-  Id        : term,
-  Co        : int,
-  Li        : int,
-  I         : int,
-  Ch        : int,
-  Char      : term, 
-  Ambs      : list,
-  Cycle     : term,
-  ErrList   : list
+  Id         : term,
+  ErrList    : list,
+  ErrContent : term
 in
   Id := process-id . 
   snd-msg(open-modules([ModuleName])) .
@@ -59,43 +74,73 @@ in
     rec-msg(parsetable-not-set(trm(ModuleName))) .
     snd-note(ui-status(errorf(
       "Unable to open parse table for %s", [ModuleName]))) .
-    Tree := error-tree
+    Tree := error-tree .
+    ParseError := no-errors
   +
     rec-msg(parsetable-set(trm(ModuleName))) .
     snd-msg(Id, parse-string-as-asfix2me(trm(ModuleName), Nonterminal, Text)) . 
     snd-note(ui-status(statf(Id,"Parsing %s",[ModuleName]))).
     (
-      rec-msg(parse-result-asfix2me(Id, parse-tree(Tree?)))
+      rec-msg(parse-result-asfix2me(Id, parse-tree(Tree?))) .
+      ParseError := no-errors
     +
-      rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,
-                                                    ambiguities(I?, Ambs?)))).
-      snd-note(ui-status(errorf("Parse of %s returned %d ambiguities",
-                                [ModuleName,I]))) .
-      Tree := error-tree
-    +
-      rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,
-                                                    cycle(Cycle?)))).
-      snd-note(ui-status(errorf("Parse returned a cycle: %t\n",
-                                [Cycle]))) . 
-      Tree := error-tree 
-    +
-      rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,eof))).
-      snd-note(ui-status(errorf("EOF unexpected while parsing %s\n",
-                                [ModuleName]))) . 
-      Tree := error-tree
-    + 
-      rec-msg(parse-result-asfix2me(Id?,
-                                    parse-error([character(Ch?),
-                                                 line(Li?),
-                                                 col(Co?),
-                                                 char(Char?)],plain))).
-      snd-note(ui-status(errorf(
-               "Character %d unexpected in %s, line %d, column %d\n",
-               [Ch, ModuleName, Li, Co]))) . 
-      Tree := error-tree
+      rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?, ErrContent?))) .
+      Tree := error-tree .
+      ParseError := quote(parse-error(ErrList, ErrContent))
     ) .
     snd-note(ui-status(endstat(Id)))
   )  
+endlet
+
+process ProcessParseError(ModuleName : str, ParseError: term) is
+let
+  Co           : int,
+  Li           : int,
+  I            : int,
+  Ch           : int,
+  Cycle        : term,
+  ErrorList    : list,
+  ErrorContent : term,
+  FunSym       : str
+in
+  FunSym := fun(ParseError) .
+  if not-equal(FunSym, "no-errors") then
+    ErrorList := first(args(ParseError)) .
+    ErrorContent := first(next(args(ParseError))) .
+    FunSym := fun(ErrorContent) .
+    if equal(FunSym, "ambiguities") then
+      I := first(args(ErrorContent)) .
+      snd-note(ui-status(errorf("Parse of %s returned %d ambiguities",
+                                [ModuleName,I])))
+    else
+      tau
+    fi .
+    if equal(FunSym, "cycle") then
+      Cycle := first(args(ErrorContent)) .
+      snd-note(ui-status(errorf("Parse returned a cycle: %t\n",
+                                [Cycle])))
+    else
+      tau
+    fi .
+    if equal(FunSym, "eof") then
+      snd-note(ui-status(errorf("EOF unexpected while parsing %s\n",
+                                    [ModuleName]))) 
+    else
+      tau
+    fi .
+    if equal(FunSym, "plain") then
+      Ch := first(args(first(ErrorList))) .
+      Li := first(args(first(next(ErrorList)))) .
+      Co := first(args(first(next(next(ErrorList))))) .
+      snd-note(ui-status(errorf(
+               "Character %d unexpected in %s, line %d, column %d\n",
+               [Ch, ModuleName, Li, Co])))
+    else
+      tau
+    fi
+  else
+    tau
+  fi
 endlet
 
 process GetTree(EditorId: term, ModuleName: str, Tree: term?) is
@@ -199,10 +244,10 @@ in
     snd-note(ui-status(endstat(Id))).
  
     snd-note(ui-status(stat(Id, "Rewriting"))) .
-    snd-msg(rewrite(ModuleName, Equations, Tree)).
+    snd-msg(rewrite(ModuleName, Equations, Tree)) .
     (
-      rec-msg(rewrite-result(NormalForm?)).
-      RestoreBracketsInTree(NormalForm,ModuleName,NormalForm?)
+      rec-msg(rewrite-result(NormalForm?)) .
+      RestoreBracketsInTree(NormalForm, ModuleName, NormalForm?)
     +
       rec-msg(rewrite-errors(ErrList?)) .
       NormalForm := error-tree .
@@ -235,15 +280,11 @@ endlet
 
 process ActivateEditor(Tree: term, ModuleName: str, FileName: str) is
 let
-  Text        : str,
-  Path        : str,
-  Name        : str,
-  TimeStamp   : term
+  Text        : str
 in
   if not-equal(Tree, error-tree) then
     snd-msg(unparse(Tree)) . 
     rec-msg(unparsed-text(Text?)) .
- 
     snd-msg(save-text-file(FileName, Text)) .
     rec-msg(save-done(FileName)) .
     snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree))
@@ -252,30 +293,25 @@ endlet
 
 process EditTerm(EditorId: term, ModuleName: str, Text: str, Tree : term) is
 let
-  NormalForm  : term,
-  Focus       : term,
-  DirtyFoci   : term,
-  ErrList     : list,
-  ArgList     : list,
-  Stack       : list,
-  Killed      : term,
-  ActionTree  : term,
-  EditorId2   : term,
-  STree       : term,
-  RTree       : term,
-  Trees       : list,
-  ButtonName  : str,
-  SortName    : str,
-  FilePath    : str,
-  NewModName  : str,
-  FileName    : str,
-  EditorName  : str,
-  FuncName    : str,
-  FunSym      : str,
-  Nonterminal : str,
-  Message     : str,
-  String      : str,
-  NrOfArgs    : int
+  Focus      : term,
+  ArgList    : list,
+  Stack      : list,
+  Killed     : term,
+  EditorId2  : term,
+  STree      : term,
+  RTree      : term,
+  Error      : term,
+  Trees      : list,
+  ButtonName : str,
+  SortName   : str,
+  FilePath   : str,
+  NewModName : str,
+  FileName   : str,
+  EditorName : str,
+  FuncName   : str,
+  FunSym     : str,
+  String     : str,
+  NrOfArgs   : int
 in
   subscribe(syntax-changed(ModuleName)) . 
   if equal(quote(Tree), none) then 
@@ -407,19 +443,23 @@ in
         ActivateEditor(STree, NewModName, EditorName) .
         snd-msg(stack(Stack))
       +
-        rec-msg(parse(NewModName?, Nonterminal?), Stack?, EditorId) .
+        rec-msg(parse(NewModName?, SortName?), Stack?, EditorId) .
         STree := first(Stack) .
         Stack := next(Stack) .
 	FunSym := fun(STree) .
 	if equal(FunSym, "file") then
 	  FilePath := first(args(STree)) .
 	  GetTextFromFile(FilePath, String?) .
-	  tau.
-          ParseText(String, NewModName, Nonterminal, RTree?)
+	  tau .
+          ParseText(String, NewModName, SortName, RTree?, Error?) .
+	  tau .
+	  ProcessParseError(NewModName, Error)
 	else 
 	  if equal(FunSym, "str") then
 	    String := first(args(STree)) .
-	    ParseText(String,  NewModName, Nonterminal, RTree?)
+	    ParseText(String, NewModName, SortName, RTree?, Error?) .
+	    tau .
+	    ProcessParseError(NewModName, Error)
 	  else
 	    RTree := error-tree
 	  fi
@@ -478,8 +518,8 @@ in
         Stack := join(RTree, Stack) .
         snd-msg(stack(Stack))
       +
-        rec-msg(message(Message?), Stack?, EditorId) .
-	snd-note(ui-status(errorf("%s", [Message]))) .
+        rec-msg(message(String?), Stack?, EditorId) .
+	snd-note(ui-status(errorf("%s", [String]))) .
         snd-msg(stack(Stack))
       ) *
       if equal(Killed, true) then
