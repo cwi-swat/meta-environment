@@ -44,7 +44,7 @@ public class TBTerm {
 
   public static ATerm TransactionIdVar;
   public static ATerm TransactionIdResVar;
-  
+
   private static int nTransactions = 0;
 
   public static void init() {
@@ -144,8 +144,8 @@ public class TBTerm {
     AFun afun = t.getFactory().makeAFun("var", args.getLength(), false);
     return TBTerm.factory.makeAppl(afun, args);
   }
-  
-  public static ATerm newTransactionId(){
+
+  public static ATerm newTransactionId() {
     AFun afun = factory.makeAFun("transaction", 1, false);
     ATerm arg = factory.makeInt(nTransactions++);
     return factory.makeAppl(afun, arg);
@@ -416,15 +416,18 @@ public class TBTerm {
       }
 
     if (TBTerm.isResVar(ta)) {
+      if (TBTerm.isResVar(tb)) {
+        return false;
+      }
       if (fullMatch) {
-        mr.assignLeft(ta, tb);
+        mr.assignLeft(ta, tb); // check var type!
       }
       return true;
     }
 
     if (TBTerm.isResVar(tb)) {
       if (fullMatch) {
-        mr.assignRight(tb, ta);
+        mr.assignRight(tb, ta); // check var type!
       }
       return true;
     }
