@@ -10,4 +10,6 @@ GraphPanel.java \
 ImportGraphPanel.java \
 ParseTreePanel.java \
 ZoomableGraphPanel.java\
-NodeSizer.java
+NodeSizer.java\
+HierarchyBox.java\
+NodePanel.java

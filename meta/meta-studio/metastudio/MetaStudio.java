@@ -30,6 +30,7 @@ import metastudio.components.StatusBar;
 import metastudio.components.ToolBar;
 import metastudio.components.ToolComponent;
 import metastudio.components.graphs.ParseTreePanel;
+import metastudio.components.graphs.HierarchyBox;
 import metastudio.utils.Preferences;
 import aterm.pure.PureFactory;
 
@@ -145,13 +146,15 @@ public class MetaStudio extends JFrame  {
     private JTabbedPane createMainTabs() {
         JTabbedPane tabs = new JTabbedPane();
 
-        ToolComponent moduleBrowser = new ModuleBrowser(factory, getBridge());
-        tabs.insertTab("Modules", null, moduleBrowser, null, tabs.getTabCount());
-
-        ToolComponent parseTreePanel = new ParseTreePanel(factory, getBridge());
-        tabs.insertTab("Parse tree", null, parseTreePanel, null, tabs.getTabCount());
-
+        addTab(tabs, "Modules", new ModuleBrowser(factory, getBridge()));
+        addTab(tabs, "Parse tree", new ParseTreePanel(factory, getBridge()));
+        addTab(tabs, "Boxed parse tree", new HierarchyBox(factory, getBridge()));
+        
         return tabs;
+    }
+    
+    private void addTab(JTabbedPane tabs, String title, ToolComponent tool) {
+        tabs.insertTab(title, null, tool, null, tabs.getTabCount());
     }
 
   

@@ -68,7 +68,8 @@ extends GraphImpl
 	  return null;
   }
 
-  private NodeList deleteNodeFromNodes(String id, NodeList nodes) {
+  public static NodeList deleteNodeFromNodes(String id, NodeList nodes) {
+      MetaGraphFactory factory = nodes.getMetaGraphFactory();
 	  Vector nodeVector = new Vector();
 	  while (!nodes.isEmpty()) {
 		  Node node = nodes.getHead();
@@ -112,39 +113,8 @@ extends GraphImpl
 	  return newGraph;
   }
 
-  /**
-	* This function makes sure the top nodes (those nodes which are
-	* not imported by any other nodes) are listed first.
-	**/
-
-  public Graph orderNodes() {
-          Graph newGraph;
-	  NodeList nodes = getNodes();
-	  NodeList topNodes = factory.makeNodeList_Empty();
-
-	  while (!nodes.isEmpty()) {
-		  Node node = nodes.getHead();
-		  if (isTopNode(node)) {
-			  topNodes = factory.makeNodeList_Multi(node, topNodes);
-		  }
-
-		  nodes = nodes.getTail();
-	  }
-
-	  nodes = getNodes();
-	  while (!topNodes.isEmpty()) {
-		  Node node = topNodes.getHead();
-		  nodes = deleteNodeFromNodes(node.getId().getId(), nodes);
-		  nodes = factory.makeNodeList_Multi(node, nodes);
-		  topNodes = topNodes.getTail();
-	  }
-
-	  newGraph = setNodes(nodes);
-	  return newGraph;
-  }
-
-  private boolean isTopNode(Node node) {
-	  EdgeList edges = getEdges();
+  public static boolean isTopNode(Graph graph, Node node) {
+	  EdgeList edges = graph.getEdges();
 	  while (!edges.isEmpty()) {
 		  Edge edge = edges.getHead();
 		  if (edge.getFrom().isEqual(node.getId())) {
@@ -217,5 +187,67 @@ extends GraphImpl
 	  }
 
 	  return null;
+  }
+  
+  static public Node getRootNode(Graph graph) {
+      NodeList nodes = graph.getNodes();
+      
+      for ( ; !nodes.isEmpty(); nodes = nodes.getTail()) {
+          Node node = nodes.getHead();
+          List children = getParents(graph, node);
+          if (children.size() == 0) {
+              return node;
+          }
+      }
+      
+      return null;
+  }
+  
+  static public Node findNode(Graph graph, String name) {
+      NodeList nodes = graph.getNodes();
+      for ( ; !nodes.isEmpty(); nodes = nodes.getTail()) {
+          Node node = nodes.getHead();
+          String nodeId = node.getId().getId();
+          if (nodeId.equals(name)) {
+              return node;
+              
+          }
+      }
+      
+      return null;
+  }
+  
+  static  public List getChildren(Graph graph, Node node) {
+      String id = node.getId().getId();
+      List children = new LinkedList();
+      EdgeList edges = graph.getEdges();
+
+      for ( ; !edges.isEmpty(); edges = edges.getTail()) {
+          Edge edge = edges.getHead();
+          String toId = edge.getTo().getId();
+          String fromId = edge.getFrom().getId();
+          if (fromId.equals(id)) {
+              children.add(0, findNode(graph, toId));
+          }
+      }
+      
+      return children;
+  }
+  
+  static public List getParents(Graph graph, Node node) {
+      String id = node.getId().getId();
+      List parents = new LinkedList();
+      EdgeList edges = graph.getEdges();
+      
+      for ( ; !edges.isEmpty(); edges = edges.getTail()) {
+          Edge edge = edges.getHead();
+          String toId = edge.getTo().getId();
+          String fromId = edge.getFrom().getId();
+          if (toId.equals(id)) {
+              parents.add(findNode(graph, fromId));
+          }
+      }
+      
+      return parents;
   }
 }

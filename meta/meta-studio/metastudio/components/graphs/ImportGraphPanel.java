@@ -15,6 +15,7 @@ import metastudio.data.ModuleTreeModel;
 import metastudio.data.graph.Graph;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.data.graph.Node;
+import metastudio.data.graph.NodeList;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
@@ -151,4 +152,34 @@ public class ImportGraphPanel
             }
         }
     }
+    
+    protected Graph orderNodes(Graph graph) {
+        MetaGraphFactory factory = getGraphFactory();
+        NodeList nodes = graph.getNodes();
+        NodeList topNodes = factory.makeNodeList_Empty();
+
+        while (!nodes.isEmpty()) {
+            Node node = nodes.getHead();
+            if (Graph.isTopNode(graph, node)) {
+                topNodes = factory.makeNodeList_Multi(node, topNodes);
+            }
+
+            nodes = nodes.getTail();
+        }
+
+        nodes = graph.getNodes();
+        while (!topNodes.isEmpty()) {
+            Node node = topNodes.getHead();
+            nodes = Graph.deleteNodeFromNodes(node.getId().getId(), nodes);
+            nodes = factory.makeNodeList_Multi(node, nodes);
+            topNodes = topNodes.getTail();
+        }
+
+        return graph.setNodes(nodes);
+    }
+    
+    protected Graph sizeNodes(Graph graph, NodeSizer sizer) {
+        return graph.sizeNodes(sizer);
+    }
+    
 }

@@ -104,13 +104,21 @@ public class ZoomableGraphPanel extends ToolComponent {
             }
         };
 
-        graph = graph.orderNodes();
-        graph = graph.sizeNodes(sizer);
+        graph = orderNodes(graph);
+        graph = sizeNodes(graph, sizer);
 
         postEvent(
             getFactory().make("layout-graph(<str>,<term>)", getId(), graph.toTerm()));
     }
-
+    
+    protected Graph orderNodes(Graph graph) {
+        return graph;
+    }
+    
+    protected Graph sizeNodes(Graph graph, NodeSizer sizer) {
+        return graph.sizeNodes(sizer);
+    }
+    
     public void graphLayouted(String id, ATerm graphTerm) {
         if (id.equals(getId())) {
             Graph graph = factory.GraphFromTerm(graphTerm);
