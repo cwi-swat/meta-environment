@@ -22,7 +22,6 @@
 #include "in-output.idef"
 #include "open-modules.tb"
 #include "file-creator.tb"
-#include "close-module.tb"
 #include "revert-module.tb"
 #include "module-utils.tb"
 #include "print-module.tb"
@@ -97,7 +96,7 @@ toolbus(META, META-START, Parser, Unparser, Io, ConfigManager, Ui,
 	Notify-about-changed-modules, Compile-module,
 	Meta-Interface,  Open-initial-module,
         Open-modules,  PGen, ApplyFunc,
-	Help, GenAdapt, ClearAll, CloseModule, ParseFocusses, DumpEquations,
+	Help, GenAdapt, ClearAll, ParseFocusses, DumpEquations,
         DumpParseTable, RenameModule,
 	RestoreTermBrackets, RestoreBrackets
 #ifdef METASTUDIO

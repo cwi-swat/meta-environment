@@ -17,8 +17,25 @@ in
   +
     rec-msg(import-module(OldModuleName?, NewModuleName?, NewPath?)).
     DoImportModule(OldModuleName, NewModuleName, NewPath)
+  +
+    rec-msg(close-module(OldModuleName?)) .
+    DoDeleteModule(OldModuleName)
   ) *
   delta
+endlet
+
+process DoDeleteModule(ModuleName : str) is
+let
+  Changed : list
+in
+    RemoveModule(ModuleName).
+    DeleteEditors(ModuleName).
+    snd-msg(delete-module-from-db(ModuleName)) .
+    rec-msg(changed-modules(Changed?)) .
+    SaveSdfModules(Changed).
+    snd-msg(notify-about-changed-modules(Changed, "sdf")) .
+    rec-msg(notify-about-changed-modules-done) .
+    snd-msg(module-closed(ModuleName))
 endlet
 
 process DoRenameModule(Old : str, New : str, Path : str) is
