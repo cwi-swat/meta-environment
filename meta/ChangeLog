@@ -20,6 +20,11 @@
 #
 # $Id$
 
+2000/6/27 (js@cwi.nl)
+   * Modified a few ToolBus scripts to reflect sglr v2.35's
+     strengthened ambiguity report, that includes a set of
+     (position, related-productions) tuples
+
 2000/6/20 (jong@cwi.nl)
    * In-output warns when it encounters unresolvable entries in searchpath.
    * In-output warns when more than one match for a given module is found.
