@@ -5,12 +5,15 @@ AC_INIT(configure.in)
 AM_INIT_AUTOMAKE(asf, 1.1beta)
 
 ACLOCAL="${ACLOCAL} -I ."
+AC_SET_MAKE
 
-dnl Which compiler to use?
+dnl {{{  Which compiler to use?
 AC_REQUIRE([AC_PROG_CC])
 AC_PROG_CC
 
-dnl Handle --with-cflags option
+dnl }}}
+dnl {{{  Handle --with-cflags option
+
 AC_ARG_WITH(cflags,
    [  --with-cflags=CFLAGS    standard options of c compiler],
    CFLAGS=${withval},
@@ -20,51 +23,18 @@ AC_ARG_WITH(cflags,
 )
 AC_SUBST(CFLAGS)
 
-dnl Handle --with-traversals
+dnl }}}
+dnl {{{  Handle --with-traversals
+
 AC_ARG_WITH(traversals,
    [  --with-traversals       evaluator implements traveral functions],
    TRAVERSALSDEF=-DTRAVERSALS
 )
 AC_SUBST(TRAVERSALSDEF)
 
-dnl Check for required packages and perform version check when needed.
+dnl }}}
+dnl {{{  Handle --with-tide
 
-dnl Require ATerm library
-AC_PACKAGE_REQUIRE(aterm, baffle,
-   [  --with-aterm=DIR        ATerm-library is in DIR])
-AC_SUBST(ATERM)
-
-dnl Require ToolBus
-AC_PACKAGE_REQUIRE(toolbus, toolbus,
-   [  --with-toolbus=DIR      ToolBus is in DIR])
-AC_SUBST(TOOLBUS)
-
-dnl Require pt-support package
-AC_PACKAGE_REQUIRE(pt-support, unparsePT,
-   [  --with-pt-support=DIR   pt-support is in DIR])
-AC_SUBST(PT_SUPPORT)
-
-dnl Require sdf-support package
-AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config,
-   [  --with-sdf-support=DIR  sdf-support is in DIR])
-AC_SUBST(SDF_SUPPORT)
-
-dnl Require asf-support package
-AC_PACKAGE_REQUIRE(asf-support, asf-support-config,
-   [  --with-asf-support=DIR  asf-support is in DIR])
-AC_SUBST(ASF_SUPPORT)
-
-dnl Require asc-support package
-AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
-   [  --with-asc-support=DIR  asc-support is in DIR])
-AC_SUBST(ASC_SUPPORT)
-
-ASCINC=${ASC_SUPPORT}/include
-ASCLIB=${ASC_SUPPORT}/lib
-AC_SUBST(ASCINC)
-AC_SUBST(ASCLIB)
-
-dnl Handle --with-tide=... argument to configure
 AC_ARG_WITH(tide,
    [  --with-tide             TIDE is in DIR],
    TIDE=${withval}
@@ -77,33 +47,72 @@ AC_SUBST(TIDEDEF)
 AC_SUBST(TIDEINC)
 AC_SUBST(TIDELIB)
 
-dnl Where is perl5?
+dnl }}}
+dnl {{{  Require ATerm library
+
+AC_PACKAGE_REQUIRE(aterm, baffle,
+   [  --with-aterm=DIR        ATerm-library is in DIR])
+AC_SUBST(ATERM)
+
+dnl }}}
+dnl {{{  Require ToolBus
+
+AC_PACKAGE_REQUIRE(toolbus, toolbus,
+   [  --with-toolbus=DIR      ToolBus is in DIR])
+AC_SUBST(TOOLBUS)
+
+dnl }}}
+dnl {{{  Require pt-support package
+
+AC_PACKAGE_REQUIRE(pt-support, unparsePT,
+   [  --with-pt-support=DIR   pt-support is in DIR])
+AC_SUBST(PT_SUPPORT)
+
+dnl }}}
+dnl {{{  Require sdf-support package
+
+AC_PACKAGE_REQUIRE(sdf-support, sdf-support-config,
+   [  --with-sdf-support=DIR  sdf-support is in DIR])
+AC_SUBST(SDF_SUPPORT)
+
+dnl }}}
+dnl {{{  Require asf-support package
+
+AC_PACKAGE_REQUIRE(asf-support, asf-support-config,
+   [  --with-asf-support=DIR  asf-support is in DIR])
+AC_SUBST(ASF_SUPPORT)
+
+dnl }}}
+dnl {{{  Require asc-support package
+
+AC_PACKAGE_REQUIRE(asc-support, asc-support-config,
+   [  --with-asc-support=DIR  asc-support is in DIR])
+AC_SUBST(ASC_SUPPORT)
+
+ASCINC=${ASC_SUPPORT}/include
+AC_SUBST(ASCINC)
+ASCLIB=${ASC_SUPPORT}/lib
+AC_SUBST(ASCLIB)
+
+dnl }}}
+dnl {{{  Where is perl5?
+
 AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
 
-dnl Our own version of libdir whose value is set dynamically
-AC_SUBST(INSTLIBDIR)
-INSTLIBDIR="$libdir"
-
-dnl Is ranlib needed on this system?
+dnl }}}
+dnl {{{  Is ranlib needed on this system?
 AC_PROG_RANLIB
 AC_PATH_PROG(AR,ar,/usr/bin/ar)
 
+dnl }}}
+dnl {{{  Determine which libraries are needed for socket() and gethostname()
 
-
-dnl What commands are needed to set the variable MAKE in Makefiles?
-AC_SET_MAKE
-
-dnl Determine which libraries to use for programs using sockets
 NOSOCKLIBS=$LIBS
-dnl first, the socket functions
 SOCKET_FOUND=no
 SOCKLIBS=
 AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
 if test ${SOCKET_FOUND} = no; then
   AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
-  if test ${SOCKET_FOUND} = no; then
-    AC_CHECK_LIB(bsd,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lbsd";DEFS="$DEFS -D_BSD=43"])
-  fi
 fi
 
 dnl then gethostname
@@ -117,12 +126,15 @@ AC_SUBST(SOCKLIBS)
 
 LIBS=$NOSOCKLIBS
 
-AC_CHECK_LIB(dl, dlopen)
+dnl }}}
+dnl {{{  Check for getopt
 
-dnl Checks for header files.
 AC_CHECK_HEADER(getopt.h)
 
-dnl Which files need updating?
+dnl }}}
+
+dnl {{{  List output files
+
 AC_OUTPUT(
    Makefile
    filtereqssyntax/Makefile
@@ -146,3 +158,5 @@ AC_OUTPUT(
    asfe/test/terms/Makefile
    utils/Makefile
 )
+
+dnl }}}

@@ -1,3 +1,8 @@
+2001/08/14 (jong@cwi.nl)
+ * Folded configure.in and weeded out some unused libs/dlopen/INSTDIR stuff
+ * filtereqssyntaxtool now linked against $(SOCKLIBS)
+ * filtereqssyntaxtool.idef added to EXTRA_DIST
+
 2001/08/13 (jong@cwi.nl)
  * Added include directives for ToolBus in filtereqssyntax
 
