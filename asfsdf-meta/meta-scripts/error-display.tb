@@ -37,27 +37,7 @@ in
     fi
   +
     rec-msg(display-asf-errors(Errors?)).
-    if not-equal(Errors,[]) then
-      Error := first(Errors).
-      Errors := next(Errors).
-      Message := first(Error).
-      Error := next(Error).
-      if not-equal(Error,[]) then
-        Tag := first(Error).
-        snd-msg(unparse(Tag)).
-        rec-msg(unparsed-text(TagText?)).
-        Error := next(Error).
-        Subject := first(Error).
-        snd-msg(unparse(Subject)).
-        rec-msg(unparsed-text(SubjectText?)).
-        snd-note(ui-status(errorf("Equation %s %s: %s)",[TagText, Message, SubjectText])))
-      else
-	snd-note(ui-status(errorf("%s",[Message])))
-      fi
-    fi *
-    if equal(Errors,[]) then
-      tau
-    fi
+    snd-note(display-feedback-summary(feedback(Errors)))
   +
     rec-msg(display-sdf-errors(Errors?)).
     if not-equal(Errors,[]) then
