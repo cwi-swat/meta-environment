@@ -30,7 +30,8 @@ let
   Time      : term,
   Modules   : term,
   ErrorFoci : term,
-  Text      : str
+  Text      : str,
+  DirtyFoci : list
 in
   Text := "" .
   snd-msg(get-sdf2-asfix(ModuleName)).
@@ -84,5 +85,18 @@ in
     )
   )
   *
-  rec-msg(kill-editor(EditorId))
+  rec-msg(kill-editor(EditorId)).
+  snd-msg(get-dirty-focuses(EditorId)) .
+  rec-msg(dirty-focuses(DirtyFoci?)) .
+  snd-msg(kill-editor-done(EditorId)).
+  if equal(DirtyFoci, []) then
+    tau    
+  else
+		snd-note(ui-status(errorf("Syntax of %s is dirty. Please reopen the module.",
+      [ModuleName]))).
+    snd-msg(close-module(ModuleName)).
+    rec-msg(module-closed(ModuleName)).
+    snd-msg(delete-module(ModuleName))
+  fi
+  
 endlet

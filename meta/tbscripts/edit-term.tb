@@ -115,5 +115,7 @@ in
     fi
   )
   *
-  rec-msg(kill-editor(EditorId))
+  rec-msg(kill-editor(EditorId)).
+  snd-msg(kill-editor-done)
+
 endlet

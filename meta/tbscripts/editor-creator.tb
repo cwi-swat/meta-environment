@@ -110,9 +110,10 @@ in
     )
   +
     rec-msg(text-editor-disconnected(EditorId?)) .
+	  snd-msg(kill-editor(EditorId)) .
+    rec-msg(kill-editor-done(EditorId)).
     snd-msg(delete-structure-editor(EditorId)) .
-    snd-msg(delete-editor(EditorId)) .
-    snd-msg(kill-editor(EditorId))
+    snd-msg(delete-editor(EditorId))
   +
     rec-msg(delete-editors-for-module(ModuleName?)) .
     DeleteEditorsForModule(ModuleName)
