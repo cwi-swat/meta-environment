@@ -18,4 +18,7 @@ a2metoa1_LDADD		= -L../libconversion -lconversion \
 			  -L${ATERM}/lib -lATerm
 
 CFLAGS			= -g -Wall -O2
-INCLUDES		= -I${ATERM}/include -I../libconversion
+INCLUDES		= -I${ATERM}/include \
+                          -I${top_srcdir}/libmept \
+                          -I${top_srcdir}/libasfix2 \
+                          -I${top_srcdir}/libconversion
