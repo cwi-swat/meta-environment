@@ -20,6 +20,11 @@ ATermTable trans_db;
 extern ATermTable compile_db;
 extern ATerm modules_to_process;
 
+#define path_loc 0
+#define syn_loc 1
+#define eqs_loc 2
+#define table_loc 3
+
 void rec_terminate(int cid, ATerm t) 
 {
   exit(0);
@@ -40,7 +45,7 @@ ATerm get_module(int cid, ATerm name)
   return ATmake("snd-value(getmod(<term>))",asfix);
 }
 
-ATerm get_equations(int cid,ATerm mods)
+ATerm get_equations(int cid, ATerm mods)
 {
   ATerm mod, amod;
   ATermList eqs;
@@ -50,6 +55,23 @@ ATerm get_equations(int cid,ATerm mods)
   while(!ATisEmpty((ATermList) mods)) {
     mod = ATgetFirst((ATermList) mods);
     amod = GetValue(modules_db,mod);
+    eqs = (ATermList)AFgetModuleEqs(amod);
+    equations = ATconcat(equations, eqs);
+    mods = (ATerm) ATgetNext((ATermList) mods);
+  };
+  return ATmake("snd-value(equations([<list>]))",equations);
+}
+
+ATerm get_new_equations(int cid, ATerm mods)
+{
+  ATerm mod, amod;
+  ATermList eqs;
+  ATermList equations = ATempty;
+
+  equations = ATempty;
+  while(!ATisEmpty((ATermList) mods)) {
+    mod = ATgetFirst((ATermList) mods);
+    amod = GetValue(new_modules_db,mod);
     eqs = (ATermList)AFgetModuleEqs(amod);
     equations = ATconcat(equations, eqs);
     mods = (ATerm) ATgetNext((ATermList) mods);
@@ -106,7 +128,7 @@ ATerm add_module(int cid, ATerm asfix)
 }
 
 /* The Sdf2 variant */
-ATerm add_sdf2_module(int cid, ATerm asfix)
+ATerm add_sdf2_module(int cid, char* path, ATerm asfix)
 {
   ATerm t[8]; 
   ATerm modname, appl, entry;
@@ -116,7 +138,8 @@ ATerm add_sdf2_module(int cid, ATerm asfix)
                  &t[0], &t[1], &t[2], &t[3], &t[4], &t[5], 
                  &appl, &t[6], &t[7])) {
     modname = get_module_name(appl);
-    entry = (ATerm) ATmakeList3(asfix,
+    entry = (ATerm) ATmakeList4(ATmake("<str>",path),
+                                asfix,
                                 ATparse("unavailable"),
                                 ATparse("unavailable"));
     PutValue(new_modules_db, modname, entry); 
@@ -136,9 +159,74 @@ ATerm add_eqs_module(int cid, ATerm modname, ATerm eqs)
   ATerm entry;
 
   entry = GetValue(new_modules_db, modname);
-  entry = (ATerm)ATreplace((ATermList)entry, eqs, 1);
+  entry = (ATerm)ATreplace((ATermList)entry, eqs, eqs_loc);
   PutValue(new_modules_db, modname, entry); 
   return ATmake("snd-value(done)");
+}
+
+ATerm add_parse_table(int cid, ATerm modname, char *table)
+{
+  ATerm entry;
+
+  entry = GetValue(new_modules_db, modname);
+  entry = (ATerm)ATreplace((ATermList)entry, 
+                           ATmake("table(<str>)",table), 
+                           table_loc);
+  PutValue(new_modules_db, modname, entry); 
+  return ATmake("snd-value(done)");
+}
+
+ATerm get_path(int cid, ATerm modname)
+{
+  ATerm entry, place;
+  char *path;
+
+  entry = GetValue(new_modules_db, modname);
+  place = ATelementAt((ATermList)entry, path_loc);
+  if(ATmatch(place,"<str>",&path))
+    return ATmake("snd-value(path(<str>))",path);
+  else {
+    ATerror("Module not in database!!!");
+    return NULL;
+  }
+}
+
+ATerm get_sdf2_asfix(int cid, ATerm modname)
+{
+  ATerm entry, asfix;
+
+  entry = GetValue(new_modules_db, modname);
+  asfix = ATelementAt((ATermList)entry, syn_loc);
+  return ATmake("snd-value(syntax(<term>))", asfix);
+}
+
+ATerm get_eqs_asfix(int cid, ATerm modname)
+{
+  ATerm entry, asfix;
+
+  entry = GetValue(new_modules_db, modname);
+  asfix = ATelementAt((ATermList)entry, eqs_loc);
+  if(ATisEqual(asfix,ATparse("unavailable")))
+    return ATmake("snd-value(no-eqs)");
+  else if(ATisEqual(asfix,ATparse("error")))
+    return ATmake("snd-value(no-eqs)");
+  else if(ATisEqual(asfix,ATparse("no-equations")))
+    return ATmake("snd-value(no-eqs)");
+  else
+    return ATmake("snd-value(eqs(<term>))", asfix);
+}
+
+ATerm get_parse_table(int cid, ATerm modname)
+{
+  ATerm entry, table;
+  char *place;
+
+  entry = GetValue(new_modules_db, modname);
+  table = ATelementAt((ATermList)entry, table_loc);
+  if(ATmatch(table,"table(<str>)",&place))
+    return ATmake("snd-value(table(<str>))",place);
+  else
+    return ATmake("no-table");
 }
 
 ATermList get_import_section(ATermList sections)
@@ -168,6 +256,16 @@ ATfprintf(stderr, "Deleting: %t\n", name);
   RemoveKey(new_modules_db,name);
   RemoveKey(import_db,name);
   trans_db = CreateValueStore(100,75);
+}
+
+void save_module(int cid, ATerm name)
+{
+  ATerm entry;
+
+ATfprintf(stderr, "Saving: %t\n", name);
+  
+  entry = GetValue(new_modules_db, name);
+  
 }
 
 ATermList select_unknowns(ATermList mods)
@@ -289,7 +387,7 @@ ATfprintf(stderr,"update_eqs_for_modules entered with %t\n",name);
   while (!ATisEmpty(modules)) {
     module = ATgetFirst(modules);
     entry = GetValue(new_modules_db, module);
-    eqs = ATelementAt((ATermList)entry, 1);
+    eqs = ATelementAt((ATermList)entry, eqs_loc);
     if(ATisEqual(eqs,ATparse("unavailable")))
       result = ATinsert(result,module);
     modules = ATgetNext(modules);
@@ -541,13 +639,13 @@ ATerm get_syntax(ATerm name, ATermList modules)
   ATermList syntaxes = ATempty;
   ATerm t[8], nameterm, appl, elem, module, result, term, entry;
 
-  ATfprintf(stderr, "get_syntax entered\n");
+  ATfprintf(stderr, "get_syntax entered for %t\n", modules);
 
   nameterm = make_name_term(name);
   while(!ATisEmpty(modules)) {
     elem = ATgetFirst(modules); 
     entry = GetValue(new_modules_db,elem);
-    module = ATgetFirst((ATermList)entry);
+    module = ATelementAt((ATermList)entry, syn_loc);
     if(ATmatchTerm(module,pattern_asfix_term,
                    &t[0], &t[1], &t[2], &t[3], &t[4], &t[5], 
                    &appl, &t[6], &t[7])) {

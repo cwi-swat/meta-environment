@@ -107,8 +107,33 @@ ATerm open_sdf2_file(int cid, char *name)
   ATerm t;
   char *buf;
   size_t size;
+  FILE *f;
 
-  
+    ATfprintf(stderr, "pre-parsed file %s.sdf2.baf\n", name);
+  for(i=0; i<nr_paths; i++) {
+    strcpy(full, paths[i]);
+    if(strlen(full) + strlen(name) + 12 > PATH_LEN) {
+      fprintf(stderr, "warning: path to long, ignored: %s+%s\n", full, name);
+      continue;
+    }
+    strcat(full, "/");
+    strcat(full, name);
+    strcat(full, ".sdf2.baf");
+    f = fopen(full, "r");
+    if(f) {
+      t = ATreadFromBinaryFile(f);
+      if(!t) {
+        ATfprintf(stderr, "could not be read\n");
+        fclose(f);
+      }else {
+        ATfprintf(stderr, "was found in: %s\n",paths[i]);
+        fclose(f);
+        return ATmake("snd-value(opened-asfix-file(<str>,<term>,<str>))",
+                      name,t,paths[i]);
+      }
+    } 
+  }
+
   /* JS  Try raw format if no pre-parsed version was found */
   for(i=0; i<nr_paths; i++) {
     strcpy(full, paths[i]);
@@ -152,6 +177,38 @@ ATerm open_eqs2_file(int cid, char *name)
     strcat(full, "/");
     strcat(full, name);
     strcat(full, ".eqs2");
+    fprintf(stderr, "trying file %s\n", full);
+    buf = SlurpFile(full, &size);
+    if (buf != NULL) {
+	t = ATmake("<str>", buf);
+ 	free(buf);
+        ATfprintf(stderr, "was found in: %s\n",paths[i]);
+	return ATmake("snd-value(opened-file(<str>,<term>,<str>))",
+                      name, t, paths[i]);
+    }
+  }
+  ATfprintf(stderr,"File could not be found\n");
+  return ATmake("snd-value(error-opening(<str>))", name);
+}
+
+ATerm open_trm_file(int cid, char *name)
+{
+  int i;
+  char full[PATH_LEN];
+  ATerm t;
+  char *buf;
+  size_t size;
+
+  
+  /* JS  Try raw format if no pre-parsed version was found */
+  for(i=0; i<nr_paths; i++) {
+    strcpy(full, paths[i]);
+    if(strlen(full) + strlen(name) + 8 > PATH_LEN) {
+      fprintf(stderr, "warning: path to long, ignored: %s+%s\n", full, name);
+      continue;
+    }
+    strcat(full, "/");
+    strcat(full, name);
     fprintf(stderr, "trying file %s\n", full);
     buf = SlurpFile(full, &size);
     if (buf != NULL) {
@@ -221,6 +278,46 @@ ATerm open_file(int cid, char *name)
   }
   ATfprintf(stderr,"File could not be found\n");
   return ATmake("snd-value(error-opening(<str>))", name);
+}
+
+ATerm save_sdf2_asfix(int cid, char *name, char *path, ATerm syntax)
+{
+  char full[PATH_LEN];
+  FILE *output;
+
+  strcpy(full, path);
+  strcat(full, "/");
+  strcat(full, name);
+  strcat(full, ".sdf2.baf");
+  ATfprintf(stderr, "writing file %s\n", full);
+  output = fopen(full,"w");
+  if(!output)
+    ATfprintf(stderr,"Cannot open file %s\n",full);
+  else {
+    ATwriteToBinaryFile(syntax,output);
+    fclose(output);
+  }
+  return ATmake("snd-value(save-done(<str>))", name);
+}
+
+ATerm save_eqs_asfix(int cid, char *name, char *path, ATerm eqs)
+{
+  char full[PATH_LEN];
+  FILE *output;
+
+  strcpy(full, path);
+  strcat(full, "/");
+  strcat(full, name);
+  strcat(full, ".eqs.baf");
+  ATfprintf(stderr, "writing file %s\n", full);
+  output = fopen(full,"w");
+  if(!output)
+    ATfprintf(stderr,"Cannot open file %s\n",full);
+  else {
+    ATwriteToBinaryFile(eqs,output);
+    fclose(output);
+  }
+  return ATmake("snd-value(save-done(<str>))", name);
 }
 
 void rec_terminate(int cid, ATerm arg)
