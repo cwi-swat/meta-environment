@@ -1,7 +1,9 @@
 module Frame
 
-  imports Box-Operations
+imports languages/box/syntax/Box
+
 imports Points
+
   exports
     context-free start-symbols Frame Defs
   sorts Frame Defs

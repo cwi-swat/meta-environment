@@ -8,8 +8,8 @@ exports
   sorts BoxPoint
   context-free syntax
     Box Point                                 -> Box
-    BoxList "##" Point                        -> BoxPoint
-    "length" "of" BoxList "with" Frame "and" Context  -> BoxPoint
+    Box* "##" Point                        -> BoxPoint
+    "length" "of" Box* "with" Frame "and" Context  -> BoxPoint
 
 hiddens
   variables
@@ -19,11 +19,11 @@ hiddens
 %% `hidden' functions.
 hiddens
   context-free syntax
-    "hlength" "of" BoxList "h" Integer "with" Frame   -> BoxPoint
-    "vlength" "of" BoxList "with" Frame             -> BoxPoint
-    "hvlength" "of" BoxList "h" Integer "with" Frame  -> BoxPoint
-    "hovlength" "of" BoxList "h" Integer "with" Frame -> BoxPoint
-    "dlength" "of" BoxList "with" Frame             -> BoxPoint
+    "hlength" "of" Box* "h" Integer "with" Frame   -> BoxPoint
+    "vlength" "of" Box* "with" Frame             -> BoxPoint
+    "hvlength" "of" Box* "h" Integer "with" Frame  -> BoxPoint
+    "hovlength" "of" Box* "h" Integer "with" Frame -> BoxPoint
+    "dlength" "of" Box* "with" Frame             -> BoxPoint
     "h" BoxPoint "and" BoxPoint "h" Integer         -> BoxPoint
     "v" BoxPoint "and" BoxPoint                   -> BoxPoint
     "hv" BoxPoint "and" BoxPoint "h" Integer        -> BoxPoint
