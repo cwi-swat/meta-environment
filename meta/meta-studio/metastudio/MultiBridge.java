@@ -7,224 +7,230 @@ import aterm.ATerm;
 import aterm.ATermFactory;
 
 public class MultiBridge extends UserInterfaceTool {
-    private ATermFactory factory;
-    private LinkedList toolComponents;
-    
-    protected MultiBridge(ATermFactory factory) {
-        super(factory);
-        this.factory = factory;
-        toolComponents = new LinkedList();
-    }
-    
-    private LinkedList getToolComponents() {
-        return toolComponents;
-    }
+	private ATermFactory factory;
+	private LinkedList toolComponents;
 
-    public void addToolComponent(UserInterfaceTif tool) {
-        getToolComponents().add(new UserInterfaceBridge(factory, tool));
-    }
-    
-    public void displayGraph(String id, ATerm graphTerm) {
-        Iterator iter = getToolComponents().iterator();
+	protected MultiBridge(ATermFactory factory) {
+		super(factory);
+		this.factory = factory;
+		toolComponents = new LinkedList();
+	}
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.displayGraph(id, graphTerm);
-        }
-    }
+	private LinkedList getToolComponents() {
+		return toolComponents;
+	}
 
-    public void renderGraph(String id, ATerm graphTerm) {
-        Iterator iter = getToolComponents().iterator();
+	public void addToolComponent(UserInterfaceTif tool) {
+		getToolComponents().add(new UserInterfaceBridge(factory, tool));
+	}
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.renderGraph(id, graphTerm);
-        }
-    }
-    
-    public void addEvents(ATerm type, ATerm events) {
-        Iterator iter = getToolComponents().iterator();
+	public void displayGraph(String id, ATerm graphTerm) {
+		Iterator iter = getToolComponents().iterator();
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.addEvents(type, events);
-        }
-    }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.displayGraph(id, graphTerm);
+		}
+	}
 
-    public void addEvents(ATerm type, String moduleId, ATerm events) {
-        Iterator iter = getToolComponents().iterator();
+	public void renderGraph(String id, ATerm graphTerm) {
+		Iterator iter = getToolComponents().iterator();
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.addEvents(type, moduleId, events);
-        }
-    }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.renderGraph(id, graphTerm);
+		}
+	}
 
-    
-    public void addStatus(ATerm id, String message) {
-        Iterator iter = getToolComponents().iterator();
+	public void addEvents(ATerm type, ATerm events) {
+		Iterator iter = getToolComponents().iterator();
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.addStatus(id, message);
-        }
-    }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.addEvents(type, events);
+		}
+	}
 
-    public void addStatusf(ATerm id, String format, ATerm args) {
-        Iterator iter = getToolComponents().iterator();
+	public void addEvents(ATerm type, String moduleId, ATerm events) {
+		Iterator iter = getToolComponents().iterator();
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.addStatusf(id, format, args);
-        }
-    }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.addEvents(type, moduleId, events);
+		}
+	}
 
-    public void endStatus(ATerm id) {
-        Iterator iter = getToolComponents().iterator();
+	public void addStatus(ATerm id, String message) {
+		Iterator iter = getToolComponents().iterator();
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.endStatus(id);
-        }
-    }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.addStatus(id, message);
+		}
+	}
 
-    public void errorf(String format, ATerm args) {
-        Iterator iter = getToolComponents().iterator();
+	public void addStatusf(ATerm id, String format, ATerm args) {
+		Iterator iter = getToolComponents().iterator();
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.errorf(format, args);
-        }
-    }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.addStatusf(id, format, args);
+		}
+	}
 
-    public void error(String message) {
-        Iterator iter = getToolComponents().iterator();
+	public void endStatus(ATerm id) {
+		Iterator iter = getToolComponents().iterator();
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.error(message);
-        }
-    }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.endStatus(id);
+		}
+	}
 
-    public void messagef(String format, ATerm args) {
-        Iterator iter = getToolComponents().iterator();
+	public void errorf(String format, ATerm args) {
+		Iterator iter = getToolComponents().iterator();
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.messagef(format, args);
-        }
-    }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.errorf(format, args);
+		}
+	}
 
-    public void message(String message) {
-        Iterator iter = getToolComponents().iterator();
+	public void error(String message) {
+		Iterator iter = getToolComponents().iterator();
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.message(message);
-        }
-    }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.error(message);
+		}
+	}
 
-    public void warningf(String format, ATerm args) {
-        Iterator iter = getToolComponents().iterator();
+	public void messagef(String format, ATerm args) {
+		Iterator iter = getToolComponents().iterator();
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.warningf(format, args);
-        }
-    }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.messagef(format, args);
+		}
+	}
 
-    public void warning(String message) {
-        Iterator iter = getToolComponents().iterator();
+	public void message(String message) {
+		Iterator iter = getToolComponents().iterator();
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.warning(message);
-        }
-    }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.message(message);
+		}
+	}
 
-    public void clearHistory() {
-        Iterator iter = getToolComponents().iterator();
+	public void warningf(String format, ATerm args) {
+		Iterator iter = getToolComponents().iterator();
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.clearHistory();
-        }
-    }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.warningf(format, args);
+		}
+	}
 
-    public void initializeUi(String s0) {
-        Iterator iter = getToolComponents().iterator();
+	public void warning(String message) {
+		Iterator iter = getToolComponents().iterator();
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.initializeUi(s0);
-        }
-    }
-    
-    public ATerm showQuestionDialog(String question) {
-        ATerm result = null;
-        Iterator iter = getToolComponents().iterator();
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.warning(message);
+		}
+	}
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            result = tif.showQuestionDialog(question);
+	public void clearHistory() {
+		Iterator iter = getToolComponents().iterator();
 
-            if (result != null) {
-                return factory.make("snd-value(<term>)", result);
-            }
-        }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.clearHistory();
+		}
+	}
 
-        throw new UnsupportedOperationException("not implemented");
-    }
+	public void initializeUi(String s0) {
+		Iterator iter = getToolComponents().iterator();
 
-    public ATerm showFileDialog(String label, String loc, String extension) {
-        ATerm result = null;
-        Iterator iter = getToolComponents().iterator();
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.initializeUi(s0);
+		}
+	}
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            result = tif.showFileDialog(label, loc, extension);
+	public ATerm showQuestionDialog(String question) {
+		ATerm result = null;
+		Iterator iter = getToolComponents().iterator();
 
-            if (result != null) {
-                return factory.make("snd-value(<term>)", result);
-            }
-        }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			result = tif.showQuestionDialog(question);
 
-        throw new UnsupportedOperationException("not implemented");
-    }
-    
-    public void showListChoice(String s0, String s1, ATerm t1) {
-        Iterator iter = getToolComponents().iterator();
+			if (result != null) {
+				return factory.make("snd-value(<term>)", result);
+			}
+		}
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.showListChoice(s0, s1, t1);
-        }
-    }
-    
+		throw new UnsupportedOperationException("not implemented");
+	}
 
-    public void showFeedbackSummary(ATerm t0) {
-        Iterator iter = getToolComponents().iterator();
+	public ATerm showFileDialog(String label, String loc, String extension) {
+		ATerm result = null;
+		Iterator iter = getToolComponents().iterator();
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.showFeedbackSummary(t0);
-        }
-    }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			result = tif.showFileDialog(label, loc, extension);
 
-    public void removeFeedbackSummary(String producer, String summaryId) {
-        Iterator iter = getToolComponents().iterator();
+			if (result != null) {
+				return factory.make("snd-value(<term>)", result);
+			}
+		}
 
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.removeFeedbackSummary(producer, summaryId);
-        }
-    }
+		throw new UnsupportedOperationException("not implemented");
+	}
 
-    
-    public void recAckEvent(ATerm event) {
-    }
+	public void showListChoice(String s0, String s1, ATerm t1) {
+		Iterator iter = getToolComponents().iterator();
 
-    public void recTerminate(ATerm t0) {
-        System.exit(0);
-    }
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.showListChoice(s0, s1, t1);
+		}
+	}
+
+	public void showFeedbackSummary(ATerm t0) {
+		Iterator iter = getToolComponents().iterator();
+
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.showFeedbackSummary(t0);
+		}
+	}
+
+	public void removeFeedbackSummary(String producer, String summaryId) {
+		Iterator iter = getToolComponents().iterator();
+
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.removeFeedbackSummary(producer, summaryId);
+		}
+	}
+
+	public void displayTreelist(String id, ATerm treeList) {
+		Iterator iter = getToolComponents().iterator();
+
+		while (iter.hasNext()) {
+			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+			tif.displayTreelist(id, treeList);
+		}
+	}
+
+	public void recAckEvent(ATerm event) {
+	}
+
+	public void recTerminate(ATerm t0) {
+		System.exit(0);
+	}
 }

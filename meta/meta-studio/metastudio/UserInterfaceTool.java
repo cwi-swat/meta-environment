@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: May 25, 2004 1:10:40 PM
+// generation time: May 28, 2004 1:16:01 PM
 
 package metastudio;
 
@@ -17,24 +17,25 @@ abstract public class UserInterfaceTool
 
   //{{{  Patterns that are used to match against incoming terms
 
-  private ATerm PaddStatus0;
-  private ATerm PshowListChoice0;
   private ATerm PrenderGraph0;
-  private ATerm PaddStatusf0;
-  private ATerm PshowFeedbackSummary0;
-  private ATerm Perrorf0;
+  private ATerm PshowListChoice0;
+  private ATerm Pmessagef0;
   private ATerm PinitializeUi0;
   private ATerm PaddEvents0;
   private ATerm PaddEvents1;
-  private ATerm PclearHistory0;
+  private ATerm Pwarningf0;
+  private ATerm Pmessage0;
   private ATerm PdisplayGraph0;
+  private ATerm PclearHistory0;
+  private ATerm Perrorf0;
+  private ATerm Pwarning0;
   private ATerm Perror0;
   private ATerm PremoveFeedbackSummary0;
-  private ATerm Pwarning0;
-  private ATerm Pmessagef0;
+  private ATerm PdisplayTreelist0;
+  private ATerm PshowFeedbackSummary0;
+  private ATerm PaddStatusf0;
   private ATerm PendStatus0;
-  private ATerm Pmessage0;
-  private ATerm Pwarningf0;
+  private ATerm PaddStatus0;
   private ATerm PshowQuestionDialog0;
   private ATerm PshowFileDialog0;
   private ATerm PrecAckEvent0;
@@ -72,6 +73,7 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-do(<user-interface>,show-feedback-summary(<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,remove-feedback-summary(<str>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,display-graph(<str>,<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<user-interface>,display-treelist(<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,render-graph(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,add-events(<term>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,add-events(<term>,<str>,<list>))"), new Boolean(true));
@@ -89,24 +91,25 @@ abstract public class UserInterfaceTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
-    PaddStatus0 = factory.parse("rec-do(add-status(<term>,<str>))");
-    PshowListChoice0 = factory.parse("rec-do(show-list-choice(<str>,<str>,<term>))");
     PrenderGraph0 = factory.parse("rec-do(render-graph(<str>,<term>))");
-    PaddStatusf0 = factory.parse("rec-do(add-statusf(<term>,<str>,<term>))");
-    PshowFeedbackSummary0 = factory.parse("rec-do(show-feedback-summary(<term>))");
-    Perrorf0 = factory.parse("rec-do(errorf(<str>,<term>))");
+    PshowListChoice0 = factory.parse("rec-do(show-list-choice(<str>,<str>,<term>))");
+    Pmessagef0 = factory.parse("rec-do(messagef(<str>,<term>))");
     PinitializeUi0 = factory.parse("rec-do(initialize-ui(<str>))");
     PaddEvents0 = factory.parse("rec-do(add-events(<term>,<str>,<term>))");
     PaddEvents1 = factory.parse("rec-do(add-events(<term>,<term>))");
-    PclearHistory0 = factory.parse("rec-do(clear-history)");
+    Pwarningf0 = factory.parse("rec-do(warningf(<str>,<term>))");
+    Pmessage0 = factory.parse("rec-do(message(<str>))");
     PdisplayGraph0 = factory.parse("rec-do(display-graph(<str>,<term>))");
+    PclearHistory0 = factory.parse("rec-do(clear-history)");
+    Perrorf0 = factory.parse("rec-do(errorf(<str>,<term>))");
+    Pwarning0 = factory.parse("rec-do(warning(<str>))");
     Perror0 = factory.parse("rec-do(error(<str>))");
     PremoveFeedbackSummary0 = factory.parse("rec-do(remove-feedback-summary(<str>,<str>))");
-    Pwarning0 = factory.parse("rec-do(warning(<str>))");
-    Pmessagef0 = factory.parse("rec-do(messagef(<str>,<term>))");
+    PdisplayTreelist0 = factory.parse("rec-do(display-treelist(<str>,<term>))");
+    PshowFeedbackSummary0 = factory.parse("rec-do(show-feedback-summary(<term>))");
+    PaddStatusf0 = factory.parse("rec-do(add-statusf(<term>,<str>,<term>))");
     PendStatus0 = factory.parse("rec-do(end-status(<term>))");
-    Pmessage0 = factory.parse("rec-do(message(<str>))");
-    Pwarningf0 = factory.parse("rec-do(warningf(<str>,<term>))");
+    PaddStatus0 = factory.parse("rec-do(add-status(<term>,<str>))");
     PshowQuestionDialog0 = factory.parse("rec-eval(show-question-dialog(<str>))");
     PshowFileDialog0 = factory.parse("rec-eval(show-file-dialog(<str>,<str>,<str>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
@@ -122,9 +125,9 @@ abstract public class UserInterfaceTool
   {
     List result;
 
-    result = term.match(PaddStatus0);
+    result = term.match(PrenderGraph0);
     if (result != null) {
-      addStatus((ATerm)result.get(0), (String)result.get(1));
+      renderGraph((String)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PshowListChoice0);
@@ -132,24 +135,9 @@ abstract public class UserInterfaceTool
       showListChoice((String)result.get(0), (String)result.get(1), (ATerm)result.get(2));
       return null;
     }
-    result = term.match(PrenderGraph0);
+    result = term.match(Pmessagef0);
     if (result != null) {
-      renderGraph((String)result.get(0), (ATerm)result.get(1));
-      return null;
-    }
-    result = term.match(PaddStatusf0);
-    if (result != null) {
-      addStatusf((ATerm)result.get(0), (String)result.get(1), (ATerm)result.get(2));
-      return null;
-    }
-    result = term.match(PshowFeedbackSummary0);
-    if (result != null) {
-      showFeedbackSummary((ATerm)result.get(0));
-      return null;
-    }
-    result = term.match(Perrorf0);
-    if (result != null) {
-      errorf((String)result.get(0), (ATerm)result.get(1));
+      messagef((String)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PinitializeUi0);
@@ -167,14 +155,34 @@ abstract public class UserInterfaceTool
       addEvents((ATerm)result.get(0), (ATerm)result.get(1));
       return null;
     }
-    result = term.match(PclearHistory0);
+    result = term.match(Pwarningf0);
     if (result != null) {
-      clearHistory();
+      warningf((String)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
+    result = term.match(Pmessage0);
+    if (result != null) {
+      message((String)result.get(0));
       return null;
     }
     result = term.match(PdisplayGraph0);
     if (result != null) {
       displayGraph((String)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
+    result = term.match(PclearHistory0);
+    if (result != null) {
+      clearHistory();
+      return null;
+    }
+    result = term.match(Perrorf0);
+    if (result != null) {
+      errorf((String)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
+    result = term.match(Pwarning0);
+    if (result != null) {
+      warning((String)result.get(0));
       return null;
     }
     result = term.match(Perror0);
@@ -187,14 +195,19 @@ abstract public class UserInterfaceTool
       removeFeedbackSummary((String)result.get(0), (String)result.get(1));
       return null;
     }
-    result = term.match(Pwarning0);
+    result = term.match(PdisplayTreelist0);
     if (result != null) {
-      warning((String)result.get(0));
+      displayTreelist((String)result.get(0), (ATerm)result.get(1));
       return null;
     }
-    result = term.match(Pmessagef0);
+    result = term.match(PshowFeedbackSummary0);
     if (result != null) {
-      messagef((String)result.get(0), (ATerm)result.get(1));
+      showFeedbackSummary((ATerm)result.get(0));
+      return null;
+    }
+    result = term.match(PaddStatusf0);
+    if (result != null) {
+      addStatusf((ATerm)result.get(0), (String)result.get(1), (ATerm)result.get(2));
       return null;
     }
     result = term.match(PendStatus0);
@@ -202,14 +215,9 @@ abstract public class UserInterfaceTool
       endStatus((ATerm)result.get(0));
       return null;
     }
-    result = term.match(Pmessage0);
+    result = term.match(PaddStatus0);
     if (result != null) {
-      message((String)result.get(0));
-      return null;
-    }
-    result = term.match(Pwarningf0);
-    if (result != null) {
-      warningf((String)result.get(0), (ATerm)result.get(1));
+      addStatus((ATerm)result.get(0), (String)result.get(1));
       return null;
     }
     result = term.match(PshowQuestionDialog0);

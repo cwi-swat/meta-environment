@@ -17,6 +17,7 @@ import metastudio.data.graph.Graph;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.data.graph.Node;
 import metastudio.data.graph.NodeList;
+import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
 
@@ -160,6 +161,12 @@ public class ImportGraphPanel extends ZoomableGraphPanel
 
 	protected Graph sizeNodes(Graph graph, NodeSizer sizer) {
 		return graph.sizeNodes(sizer);
+	}
+
+	public void displayTreelist(String id, ATerm termList) {
+		ATermList modules = (ATermList) termList;
+		setModules(modules);
+		setImports(modules);
 	}
 
 }

@@ -2,7 +2,8 @@ process ShowImportGraph(ImportRelations: list) is
 let
   ImportGraph: term
 in
-  snd-msg(sig-import-relation-to-graph(ImportRelations))
+  snd-msg(ui-display-treelist("import-relations", ImportRelations))
+  . snd-msg(sig-import-relation-to-graph(ImportRelations))
   . rec-msg(sig-graph(ImportRelations, ImportGraph?))
   . snd-msg(ui-render-graph("import-graph", ImportGraph))
   . rec-msg(ui-rendered-graph("import-graph", ImportGraph?))

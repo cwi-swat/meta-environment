@@ -19,6 +19,7 @@ let
   GraphId: str,
   Id: term,
   LayoutedGraph: term,
+  List: list,
   Mods: list,
   ModuleList: term,
   ModuleId: str,
@@ -83,6 +84,9 @@ in
     (
       rec-msg(ui-display-graph(GraphId?, Graph?))
       . snd-do(UI, display-graph(GraphId, Graph))
+    +
+      rec-msg(ui-display-treelist(Str?, List?))
+      . snd-do(UI, display-treelist(Str, List))
     +
       rec-event(UI,clear-all)
       . snd-msg(clear-all)
