@@ -3,6 +3,42 @@
 #include <term-list.h>
 #include <abbrevs.h>
 
+#define TABLE_SIZE 2048
+
+typedef struct prodbucket
+{
+  struct prodbucket *next;
+  aterm *prod;
+  aterm *result;
+} prodbucket;
+
+static prodbucket *table[TABLE_SIZE] = { NULL };
+
+static prodbucket *find_bucket(aterm *prod)
+{
+  int idx = prod->hnr % TABLE_SIZE;
+  
+  prodbucket *cur = table[idx];
+  while(cur && !t_equal(cur->prod, prod))
+    cur = cur->next;
+
+  return cur;
+}
+
+static void enter_prod(aterm *prod, aterm *result)
+{
+  int idx = prod->hnr % TABLE_SIZE;
+  prodbucket *b = malloc(sizeof(prodbucket));
+  if(!b)
+    fatal_error("out of memory in enter_prod");
+  b->next = table[idx];
+  table[idx] = b;
+  b->prod = prod;
+  b->result = result;
+  Tprotect(prod);
+  Tprotect(result);
+}
+
 int is_sep(aterm *sep)
 {
   char *text;
@@ -1391,7 +1427,11 @@ aterm *expand_asfix_sortlist(arena *ar, aterm *sortlist)
 aterm *expand_asfix_prod(arena *ar, aterm *prod)
 {
   aterm *w[4],*id,*prodargs,*lit,*term,*attrs;
-  aterm *args;
+  aterm *args, *result;
+
+  prodbucket *b = find_bucket(prod);
+  if(b)
+    return b->result;
 
   assertp(Tmatch(prod,
                  "prod(<term>,<term>,<term>,<term>,<term>," \
@@ -1415,9 +1455,12 @@ aterm *expand_asfix_prod(arena *ar, aterm *prod)
                          expand_asfix_ws(ar,w[3]),
                            make_aterm_to_aterms_appl(ar,
                              expand_asfix_attributes(ar,attrs))))))))));
-  return make_afun_aterms_to_aterm_appl(ar,
+  result = make_afun_aterms_to_aterm_appl(ar,
                                         make_prod_appl(ar),
                                         args);
+
+  enter_prod(prod, result);
+  return result;
 }
 
 aterm *expand_asfix_prods(arena *ar, aterm *prods)
