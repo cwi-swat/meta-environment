@@ -18,6 +18,8 @@
 #define m_not_empty_list(l) (!t_is_empty(l))
 #define m_is_single_element(l) (t_is_list(l) && (!t_is_empty(l) && \
                                                  t_is_empty(t_list_next(l))))
+#define m_list_head(l) (t_sharing(t_list_first(l))++,t_list_first(l))
+#define m_list_tail(l) (t_sharing(t_list_next(l))++,t_list_next(l))
 
 #define tail_1(l) (t_list_next(l))
 #define tail_2(l) (t_list_next(tail_1(l)))

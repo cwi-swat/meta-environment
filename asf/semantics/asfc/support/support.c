@@ -829,7 +829,11 @@ aterm_list *cons(aterm_list *l1, aterm_list *l2)
 int slice_length(aterm_list *l1, aterm_list *l2)
 {
   int size = 0;
+  aterm *old = l1;
   while(l1 != l2) {
+    /*assert(l1);
+    if(t_is_empty(l1))
+      Tprintf(stderr, "sorry, %t not in %t\n", l2, old);*/
     size++;
     l1 = t_list_next(l1);
   }
