@@ -1,0 +1,24 @@
+SUFFIXES = .pic .ltx .dvi .bbl .ind .idx .xwd .ps .ltx .fig
+
+%.bbl: %.ltx
+	bibtex $*
+
+%.dvi: %.ltx
+	latex $< ;\
+	fgrep -s 'LaTeX Warning: Citation' $*.log && bibtex $* && latex $< ;\
+	while fgrep -s 'Rerun to get cross-references right' $*.log ;\
+	do \
+		latex $< ;\
+	done
+
+%.eps: %.fig
+	fig2dev -Leps $< $@
+
+%.ps: %.dvi
+	dvips -o $@ $<
+
+%.ps: %.fig
+	fig2dev -Lps $< $@
+
+%.pdf: %.ps
+	ps2pdf $<
