@@ -8,3 +8,4 @@ config.log
 config.cache
 config.status
 autom4te-2.53.cache
+asf-library-*.tar.gz
