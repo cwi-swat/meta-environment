@@ -19,9 +19,9 @@
 
    $Id$
 */
-#include "../../in-output/in-output.idef"
-#include "../../module-db/module-db.idef"
-#include "../file-creator.tb"
+#include <in-output.idef>
+#include <module-db.idef>
+#include <file-creator.tb>
 
 process Test is
   snd-msg(create-new-module("NonExistingModule")) .

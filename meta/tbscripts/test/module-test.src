@@ -21,53 +21,54 @@
 
 # $Id$
 
-toolbus=__TOOLBUS__
 datadir=__DATADIR__
 sglr=__SGLR__
 
-PATH=${toolbus}/bin:$PATH; export PATH
+toolbus="__TOOLBUS__/bin/toolbus \
+           -I${sglr}/share \
+           -I__TOP_SRCDIR__/module-db \
+           -I__TOP_SRCDIR__/tbscripts"
 
 
 tests=0
-failed=0
+failed=0    
 
 call_toolbus () {
   script=$1
-  tests=`expr $tests + 1`
-  result=`toolbus -I${datadir} -I${sglr}/share ${script} 2>&1`
+  tests=`expr $tests + 1`   
+  result=`${toolbus} ${script} 2>&1`
   toolbus_exit=$?
   if [ $toolbus_exit != 0 ]; then
     echo "Failed: " $script ": " ${result}
     failed=`expr $failed + 1`
-  elif echo $result | grep -i failed > /dev/null; then
+  elif echo $result | grep -i failed >/dev/null ; then
     echo "Failed: " $script ": " ${result}
     failed=`expr $failed + 1`
   else
     printf .
-  fi
+  fi             
 }
 
-touch Empty.sdf.baf Pico-Booleans.sdf.baf
+# Test 1. Attempt to create a non-existing module.
+rm -f NonExistingModule.sdf
+call_toolbus new-module-test-1.tb
+rm -f NonExistingModule.sdf
 
-# Try to create a new equations section.
-rm -f Empty.asf
-call_toolbus new-eqs-test.tb
-rm -f Empty.asf
+# Test 2. Attempt to create a module that would overwrite an existing file.
+rm -f ./ExistingModule.sdf
+echo "module ExistingModule" > ./ExistingModule.sdf
+call_toolbus new-module-test-2.tb
+rm -f ./ExistingModule.sdf
 
-## Test whether ambiguities for asfix1 are corrected
-call_toolbus ambi-test.tb
-
-# Test for updating of unchanged modules
-call_toolbus update-test-module.tb
-
-
+# Test 3. Attempt to create a module that already exists in the module-db.
+call_toolbus new-module-test-3.tb
 
 echo ""
 
 
 if [ $failed != 0 ]; then
-	echo "FAILED:" $failed "out of" $tests "tests"
-	exit 1
+        echo "FAILED:" $failed "out of" $tests "tests"
+        exit 1
 else
   echo "All" $tests "tests succeeded"
-fi
+fi          

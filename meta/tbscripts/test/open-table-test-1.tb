@@ -19,7 +19,7 @@
 
    $Id$
 */
-#include "sglr.idef"
+#include <sglr.idef>
 
 process Test is
   /* This assumes there is *NO* table "NonExistingLang.tbl" in the

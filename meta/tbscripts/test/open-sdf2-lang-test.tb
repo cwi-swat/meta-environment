@@ -19,9 +19,9 @@
 
    $Id$
 */
-#include "sglr.idef"
 
-#include "../sdf2-language.tb"
+#include <sglr.idef>
+#include <sdf2-language.tb>
 
 process Test is
   snd-msg(open-sdf2-language).

@@ -22,22 +22,21 @@
 
 TESTS       = toolbus-test module-test parser-test
 
-noinst_DATA = ambi-test.tb
-noinst_SCRIPTS = toolbus-test
+noinst_SCRIPTS = ambi-test.tb
 
 EXTRA_DIST  = toolbus-test.sh.src module-test.sh.src parser-test.sh.src \
               new-eqs-test.tb new-module-test-1.tb new-module-test-2.tb \
               new-module-test-3.tb open-sdf2-lang-test.tb \
               open-table-test-1.tb open-table-test-2.tb update-test-module.tb \
-              Empty.sdf Empty.sdf.baf AmbiLanguage.baf ambi-test.tb.src \
+              Empty.sdf Empty.sdf.baf AmbiLanguage.baf ambi-test.tb \
               Pico-Booleans.sdf Pico-Booleans.sdf.baf
 
 CLEANFILES  = $(TESTS)
 
-% : %.sh.src Makefile
+% : %.src Makefile
 	sed 's@__TOOLBUS__@$(TOOLBUS)@g;\
+             s@__TOP_SRCDIR__@$(top_srcdir)@g; \
+             s@__SRCDIR__@$(srcdir)@g; \
+             s@__SGLR__@$(SGLR)@g; \
 	     s@__DATADIR__@$(datadir)@g' < $< > $@ && \
 	chmod +x $@
-
-%.tb : %.tb.src Makefile
-	sed 's@__DATADIR__@$(datadir)@g;' < $< > $@

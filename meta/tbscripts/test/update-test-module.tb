@@ -1,5 +1,5 @@
-#include "../../module-db/module-db.idef"
-#include "../../in-output/in-output.idef"
+#include <module-db.idef>
+#include <in-output.idef>
 
 process Test is
 let 
