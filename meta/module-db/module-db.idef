@@ -20,27 +20,27 @@
 */
 process ModuleDB is
 let
-Id        : term,
-T1        : term,
-Path      : str,
-Table     : str,
-T2        : term,
-AsFixModule: term,
-Syntax    : term,
-NewSyntax : term,
-EqsTree   : term,
-EqsText   : str,
-Name      : str,
-Time      : int,
-Mdb       : module-db,
-Modules   : list,
-ChngMods  : list,
-Equations : list,
-Pairs     : list,
-ActualMods: list,
-Status    : str,
-Language  : str,
-ErrorMsg  : str
+  Id        : term,
+  T1        : term,
+  Path      : str,
+  Table     : str,
+  T2        : term,
+  AsFixModule: term,
+  Syntax    : term,
+  NewSyntax : term,
+  EqsTree   : term,
+  EqsText   : str,
+  Name      : str,
+  Time      : int,
+  Mdb       : module-db,
+  Modules   : list,
+  ChngMods  : list,
+  Equations : list,
+  Pairs     : list,
+  ActualMods: list,
+  Status    : str,
+  Language  : str,
+  ErrorMsg  : str
 in
 
 /* First, execute the module db */
@@ -48,23 +48,29 @@ execute(module-db, Mdb?).
 /* And initialize it */
 snd-do(Mdb, create-module-db).
 (
-/* When compiling modules, they need to be reshuffled such that a new
-   module is generated for each context-free function in the spec
-*/
+  /* When compiling modules, they need to be reshuffled such that a new
+   * module is generated for each context-free function in the spec
+   *
+   * reshuffle ::=
+   *   1. Gather all context-free functions for module "Name".
+   *   2. For each cff, gather all equations that have this cff
+   *      as outermost function symbol.
+   *   3. Use the results of steps 1 and 2 to create several new
+   *      modules, called "AUX-<Name>-<i>". (i is generated)
+   */
   rec-msg(reshuffle-module(Name?)).
   snd-do(Mdb, reshuffle-modules-from(Name)).
-/* Everytime a new module is finished it is returned, so that it can
-   already be compiled. This way, we don't have to wait for the whole
-   reshuffleing to finish.
-*/
-  ( rec-event(Mdb, generate-code(Name?,AsFixModule?)).
-    snd-msg(generate-code(Name,AsFixModule)).
-    snd-ack-event(Mdb, generate-code(Name, AsFixModule))
+  (
+    /* Everytime a new AUX-module is created, we receive an event
+     * so we can propagate it to the code-generator.
+     */
+    rec-event(Mdb, new-aux-module(Name?, AsFixModule?)).
+    snd-msg(new-aux-module(Name, AsFixModule)).
+    snd-ack-event(Mdb, new-aux-module(Name, AsFixModule))
   ) *
-/* When we're done, we're done */
-  rec-event(Mdb,done).
+  rec-event(Mdb, done).
   snd-msg(reshuffle-done).
-  snd-ack-event(Mdb,done)
+  snd-ack-event(Mdb, done)
 +
 /* If we get the request to empty the db, we'll do it. */
   rec-msg(clear-module-db).

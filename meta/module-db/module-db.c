@@ -1279,7 +1279,7 @@ void rec_ack_event(int cid, ATerm term)
   char *name;
   ATerm mod;
 
-  if(ATmatch(term,"generate-code(<str>,<term>)",&name,&mod)) {
+  if(ATmatch(term,"new-aux-module(<str>,<term>)",&name,&mod)) {
     process_next_module(cid);
   }
   else if(ATmatch(term,"done")) {

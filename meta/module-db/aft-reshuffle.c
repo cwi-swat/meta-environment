@@ -198,16 +198,15 @@ void AFTwriteAsfixFile(int cid,ATerm modname)
     if(write) {
       output = fopen(fname,"w");
       if(!output)
-        ATfprintf(stderr,"Cannot open file %s\n",fname);
+        ATwarning("Cannot open file %s\n",fname);
       else {
         ATfprintf(output,"%t",amod);
         ATfprintf(output, "\n");
         fclose(output);
       }
       /* write full path name instead of only module name */
-      ATfprintf(stderr,"Writing: %s\n", fname);
-      element = ATmake("snd-event(generate-code(<str>,<term>))",
-                       text,amod);
+      ATwarning("Writing: %s\n", fname);
+      element = ATmake("snd-event(new-aux-module(<str>,<term>))", text, amod);
       if(!compiling) {
         compiling = ATtrue;
         ATBwriteTerm(cid,element);
