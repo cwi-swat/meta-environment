@@ -1,8 +1,0 @@
-definition
-module Main
-exports
-  sorts   A
-  context-free syntax
-                -> A
-          A  A  -> A
-          "a"   -> A

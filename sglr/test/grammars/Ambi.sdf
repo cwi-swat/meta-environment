@@ -1,7 +1,0 @@
-definition
-module Main
-exports
-  sorts   A B
-  lexical syntax
-    ~[]* -> A
-    ~[]* -> B
