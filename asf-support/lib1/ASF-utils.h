@@ -11,12 +11,6 @@ typedef ASF_CondEquation (*ASF_CondEquationVisitor)(ASF_CondEquation cond);
 ATbool ASF_isTagDefault(ASF_Tag tag);
 int    ASF_isgetCondEquationListLength(ASF_CondEquationList eqs);
 
-ASF_ConditionList ASF_foreachConditionInList(ASF_ConditionList list, 
-                                         ASF_ConditionVisitor visitor);
-
-ASF_CondEquationList ASF_foreachCondEquationInList(ASF_CondEquationList list,
-                                               ASF_CondEquationVisitor visitor);
-
 int ASF_getCHARListLength(ASF_CHARList list);
 
 #endif
