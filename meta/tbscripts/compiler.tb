@@ -1,7 +1,8 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
+    The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,46 +17,38 @@
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
 */
+
+
 /*
-  $Id$
+ * $Id$
  */
 process Compiler is
 let
-  COM  : compiler,
-  Id   : term,
-  T    : term,
-  T1   : term,
-  Name : str,
-  M    : term,
-  Mod  : term,
-  Mods : list
+  COM           : compiler,
+  ModuleName    : str,
+  AuxModuleName : str,
+  AuxModuleTree : term
 in
-/* The compiler gets its first compile request*/
-  rec-msg(compile-module(Name?)).
-  snd-msg(process-eqs(Name)).
-  rec-msg(eqs-processed(Mod?)).
-
-/* Before proceeding, it starts the actual compiler */
-  execute(compiler,COM?).
-
-/* then it handles the compile request */
-  ( snd-msg(reshuffle-module(Name)).
-    ( rec-msg(generate-code(Name?,Mod?)).
-      snd-eval(COM,generate-code(Name,Mod)).
-      rec-value(COM,c-code-ready)
-    )*
-
-/* When the reshuffling is done, compiling is done */
-    rec-msg(reshuffle-done).
-    snd-msg(compile-done).
-
-/* And it waits for a new compile request. (This is the same state as at
-   the beginning of the process, only now the compiler is running
-*/
-    rec-msg(compile-module(Name?))
-  )*
+  /* Start the compiler */
+  execute(compiler, COM?) .
+  (
+    /* Handle a request to compile a module */
+    rec-msg(compile-module(ModuleName?)) .
+    snd-msg(process-eqs(ModuleName)) .
+    rec-msg(eqs-processed(ModuleName)) .
+    snd-msg(reshuffle-module(ModuleName)) .
+    (
+      /* During reshuffling, new sub-modules are created.
+       * Each time such a module is created, we get a message
+       * so we can start the compilation of that sub-module.
+       */
+      rec-msg(new-aux-module(AuxModuleName?, AuxModuleTree?)) .
+      snd-eval(COM, generate-code(AuxModuleName, AuxModuleTree)) .
+      rec-value(COM, c-code-ready)
+    ) *
+    rec-msg(reshuffle-done) .
+    snd-msg(compile-done)
+  ) *
   delta
 endlet
-

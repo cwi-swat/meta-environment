@@ -131,12 +131,12 @@ in
       rec-msg(cleared-all).
       snd-ack-event(UI,clear-all)
    ) +
-   ( rec-event(UI,compile-module(Str?)).
-     snd-note(ui-status(stat(Id,"Compiling ..."))).
+   ( rec-event(UI, compile-module(Str?)).
+     snd-note(ui-status(stat(Id, "Compiling ..."))).
      snd-msg(compile-module(Str)).
      rec-msg(compile-done).
      snd-note(ui-status(endstat(Id))).
-     snd-ack-event(UI,compile-module(Str))
+     snd-ack-event(UI, compile-module(Str))
    ) +
    ( rec-event(UI,parse-equations(Str?)).
      snd-msg(process-eqs(Str)).
