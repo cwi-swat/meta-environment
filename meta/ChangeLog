@@ -1,5 +1,7 @@
 # $Id$
 
+ * Intermediate version of new module-db.
+
 Tue May 13 13:16:20 CEST 2003 <jong@cwi.nl>
  * fix tbscripts/editors.tb and editors/text/text-editor.idef: 
    process TextEditor no longer has any parameters, making it abide
