@@ -20,6 +20,8 @@ import metastudio.data.Module;
 import metastudio.data.ModuleTreeModel;
 import aterm.ATermFactory;
 
+
+// TODO: white color, and only last name in border
 public class ModuleStatusPanel extends ToolComponent implements ModuleSelectionListener {
     private static final String NOT_IMPORTED = "not imported";
     private static final String NO_IMPORTS = "no imports";

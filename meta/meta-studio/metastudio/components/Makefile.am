@@ -17,5 +17,6 @@ ModuleSelectionListener.java \
 ModuleStatusPanel.java \
 StatusBar.java\
 QuestionDialog.java\
-FileDialog.java
+FileDialog.java\
+ToolBar.java
 

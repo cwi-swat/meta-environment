@@ -12,8 +12,6 @@ import aterm.ATermFactory;
 public class FileDialog extends ToolComponent {
     public FileDialog(ATermFactory factory, UserInterfaceBridge bridge) {
         super(factory, bridge);
-
-
     }
 
     public ATerm showFileDialog(String label, String loc, String extension) {

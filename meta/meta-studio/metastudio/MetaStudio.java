@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -28,9 +27,6 @@ import java.util.Properties;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -40,7 +36,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JToolBar;
 import javax.swing.JTree;
 import javax.swing.KeyStroke;
 import javax.swing.event.PopupMenuEvent;
@@ -57,6 +52,8 @@ import metastudio.components.ModuleSelectionListener;
 import metastudio.components.ModuleStatusPanel;
 import metastudio.components.QuestionDialog;
 import metastudio.components.StatusBar;
+import metastudio.components.ToolBar;
+import metastudio.components.ToolComponent;
 import metastudio.components.graphs.GraphPanel;
 import metastudio.components.graphs.ImportGraphPanel;
 import metastudio.components.graphs.NodeSizer;
@@ -95,7 +92,7 @@ public class MetaStudio
     private UserInterfaceBridge bridge;
 
     private JMenuBar menuBar;
-    private JToolBar toolBar;
+    private ToolComponent toolBar;
     private Map menuMap;
     private JTree moduleTree;
     //	private JPopupMenu popupMenu;
@@ -155,12 +152,10 @@ public class MetaStudio
         return popup;
     }
 
-    private JToolBar createToolBar() {
-        JToolBar bar = new JToolBar();
-
-        bridge.postEvent(factory.make("get-buttons(<term>,<str>)", ACTION_TOOLBAR, "*"));
-
-        return bar;
+    private ToolComponent createToolBar() {
+        ToolComponent toolBar = new ToolBar(factory, bridge);
+        addToolComponent(toolBar);
+        return toolBar;
     }
 
     public MetaStudio(String[] args) throws IOException {
@@ -615,49 +610,20 @@ public class MetaStudio
 
     }
 
-    private void addToolBarAction(final ATermAppl action) {
-        /* APIGEN */
-        String label = ((ATermAppl) action.getArgument(0)).getName();
-        // TODO: apification
-        String name = ((ATermAppl) action.getArgument(1)).getName(); // TODO:
-        // apification
-        String path = "/images/" + name; // TODO: externalize string?
-        URL url = path.getClass().getResource(path);
-        if (url == null) {
-            error("Unable to get icon: " + path);
-        } else {
-            Icon icon = new ImageIcon(url);
-            Action it = new AbstractAction(label, icon) {
-                public void actionPerformed(ActionEvent actionEvent) {
-                    ATerm event =
-                        factory.make(
-                            "button-selected(<term>,<term>)",
-                            ACTION_TOOLBAR,
-                            action);
-                    bridge.postEvent(event);
-                }
-            };
-            JButton button = toolBar.add(it);
-            button.setToolTipText(label);
-        }
-    }
+    
 
-    private void addToolBarActions(ATermList buttons) {
-        while (!buttons.isEmpty()) {
-            ATerm button = buttons.getFirst();
-            addToolBarAction((ATermAppl) button);
-            buttons = buttons.getNext();
-        }
-
-//        toolBar.add(Box.createHorizontalGlue());
-//        toolBar.add(createScaleBox());
-    }
+    
 
     public void buttonsFound(ATerm buttonType, String moduleName, ATerm buttons) {
         if (buttonType.equals(ACTION_MENUBAR)) {
             addMenu(buttonType, moduleName, (ATermList) buttons);
         } else if (buttonType.equals(ACTION_TOOLBAR)) {
-            addToolBarActions((ATermList) buttons);
+            Iterator iter = getToolComponents().iterator();
+
+            while (iter.hasNext()) {
+                UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+                tif.buttonsFound(buttonType, moduleName, buttons);
+            }
         } else {
             JPopupMenu popupMenu = createPopupMenu();
             addPopupMenuItems(
@@ -743,7 +709,7 @@ public class MetaStudio
             String menuName = ((ATermAppl) menuItem).getName();
             JMenu menu = getMenuItem(getMenu(menuName), menuItems.getNext());
             menu.add(
-                new ButtonAction(
+                new TreeSelectionButtonAction(
                     getMenuName(menuItems),
                     type,
                     action,
@@ -778,7 +744,7 @@ public class MetaStudio
 
             if (buttonList.getLength() == 1) {
                 menu.add(
-                    new ButtonAction(
+                    new TreeSelectionButtonAction(
                         buttonNamePrefix.getName(),
                         buttonType,
                         action,
@@ -839,7 +805,7 @@ public class MetaStudio
                 ATerm apifyMe =
                     factory.make("menu(<term>)", prefixButtonName.concat(buttonList));
                 menu.add(
-                    new ButtonAction(
+                    new TreeSelectionButtonAction(
                         buttonNamePrefix.getName(),
                         buttonType,
                         apifyMe,
