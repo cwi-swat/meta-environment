@@ -132,6 +132,15 @@ AC_ARG_WITH(traversals,
 )
 AC_SUBST(TRAVERSALSDEF)
 
+dnl Handle --with-debug-c-code to activate c debug info 
+dnl and shut off optimizations
+CFLAGS="-Wall -O2 -DNDEBUG"
+AC_ARG_WITH(debug-c-code,
+   [ --with-debug-c-code      C flags set to -Wall -g],
+   CFLAGS="-Wall -g"
+)
+AC_SUBST(CFLAGS)
+
 dnl Of course, the latest version of wish is not always called "wish". :-(
 dnl If we can't find something called wish8.1 or wish8.0.1, we'll assume
 dnl that "wish" is at version 8.0.1 or higher. This procedure really needs
