@@ -579,7 +579,7 @@ void add_text_eqs_section(int cid, char *moduleName, char* path,
 
 /*{{{  void update_eqs_text(int cid, char *moduleName, char *eqsText) */
 
-void update_eqs_text(int cid, char *moduleName, char *eqsText)
+ATerm update_eqs_text(int cid, char *moduleName, char *eqsText)
 {
   MDB_Entry entry;
   ATerm atModuleName;
@@ -594,6 +594,8 @@ void update_eqs_text(int cid, char *moduleName, char *eqsText)
   PutValue(modules_db, atModuleName, MDB_EntryToTerm(entry));
 
   reset_eqs_db();
+
+  return ATmake("snd-value(eqs-text-updated(<str>))", moduleName);
 }
 
 /*}}}  */

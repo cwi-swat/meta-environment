@@ -99,7 +99,8 @@ endlet
 
 process UpdateTextInModuleDb(Type : str, ModuleName : str, Text : str) is
   if equal(Type, "eqs") then
-    snd-msg(update-eqs-text-in-db(ModuleName, text(Text)))
+    snd-msg(update-eqs-text-in-db(ModuleName, text(Text))) .
+    rec-msg(eqs-text-updated(ModuleName))
   else
     tau
   fi

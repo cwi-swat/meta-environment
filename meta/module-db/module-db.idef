@@ -167,7 +167,9 @@ snd-do(Mdb, create-module-db).
   snd-msg(eqs-updated)
 +
   rec-msg(update-eqs-text-in-db(Language?, text(EqsText?))).
-  snd-do(Mdb, update-eqs-text(Language, EqsText))
+  snd-eval(Mdb, update-eqs-text(Language, EqsText)) .
+  rec-value(Mdb, eqs-text-updated(Language)) .
+  snd-msg(eqs-text-updated(Language))
 +
 /* Add parse table to the database for the given module name */
   rec-msg(add-parse-table-to-db(ModuleId?, Table?, timestamp(Time?))) .
