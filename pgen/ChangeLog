@@ -1,5 +1,12 @@
 $Id$
 
+2002/03/05 (jurgenv@cwi.nl)
+ * Fixed a bug in the normalizer. Two equations:
+   [0] <cc -VAR> = cc
+   [0] <L  -VAR> = L
+   ruined the syntax generated for lexical variables,
+   I removed them.
+
 2002/03/04 (vandenbr@loria.fr)
  * Introduced parameterized sorts.
  * Bumped into version 1.4beta.
