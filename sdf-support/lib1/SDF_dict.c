@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Jan 22 14:05:18 2001
+ * Generated at Mon Jan 22 16:17:52 2001
  */
 
 #include "SDF_dict.h"
@@ -142,9 +142,9 @@ ATerm SDF_patternImpSectionListMany = NULL;
 ATerm SDF_patternImpSectionListSingle = NULL;
 ATerm SDF_patternImpSectionListEmpty = NULL;
 ATerm SDF_patternModuleModule = NULL;
-ATerm SDF_patternModuleModulesMany = NULL;
-ATerm SDF_patternModuleModulesSingle = NULL;
-ATerm SDF_patternModuleModulesEmpty = NULL;
+ATerm SDF_patternModuleListMany = NULL;
+ATerm SDF_patternModuleListSingle = NULL;
+ATerm SDF_patternModuleListEmpty = NULL;
 ATerm SDF_patternDefinitionDefault = NULL;
 ATerm SDF_patternModuleIdWordSlashWord = NULL;
 ATerm SDF_patternModuleIdSlashWord = NULL;
@@ -344,9 +344,9 @@ ATerm SDF_patternSymbolStart = NULL;
  * SDF_patternImpSectionListSingle = [<term>]
  * SDF_patternImpSectionListEmpty = []
  * SDF_patternModuleModule = appl(prod(id("Modular-Sdf-Syntax"),w(""),[ql("module"),w(""),sort("ModuleName"),w(""),iter(sort("ImpSection"),w(""),l("*")),w(""),sort("Sections")],w(""),l("->"),w(""),sort("Module"),w(""),no-attrs),w(""),[l("module"),w(<term>),<term>,w(<term>),list(iter(sort("ImpSection"),w(""),l("*")),w(""),<term>),w(<term>),<term>])
- * SDF_patternModuleModulesMany = [<term>,w(<term>),<list>]
- * SDF_patternModuleModulesSingle = [<term>]
- * SDF_patternModuleModulesEmpty = []
+ * SDF_patternModuleListMany = [<term>,w(<term>),<list>]
+ * SDF_patternModuleListSingle = [<term>]
+ * SDF_patternModuleListEmpty = []
  * SDF_patternDefinitionDefault = appl(prod(id("Modular-Sdf-Syntax"),w(""),[iter(sort("Module"),w(""),l("*"))],w(""),l("->"),w(""),sort("Definition"),w(""),no-attrs),w(""),[list(iter(sort("Module"),w(""),l("*")),w(""),<term>)])
  * SDF_patternModuleIdWordSlashWord = lex(<term>,sort("ModuleId"))
  * SDF_patternModuleIdSlashWord = lex(<term>,sort("ModuleId"))
@@ -1032,11 +1032,11 @@ void init_SDF_dict()
   terms = ATgetNext(terms);
   SDF_patternModuleModule = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  SDF_patternModuleModulesMany = ATgetFirst(terms);
+  SDF_patternModuleListMany = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  SDF_patternModuleModulesSingle = ATgetFirst(terms);
+  SDF_patternModuleListSingle = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  SDF_patternModuleModulesEmpty = ATgetFirst(terms);
+  SDF_patternModuleListEmpty = ATgetFirst(terms);
   terms = ATgetNext(terms);
   SDF_patternDefinitionDefault = ATgetFirst(terms);
   terms = ATgetNext(terms);

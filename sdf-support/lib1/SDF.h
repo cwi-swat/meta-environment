@@ -28,7 +28,7 @@ typedef struct _SDF_ProductionProductions *SDF_ProductionProductions;
 typedef struct _SDF_ModuleWord *SDF_ModuleWord;
 typedef struct _SDF_ModuleId *SDF_ModuleId;
 typedef struct _SDF_Definition *SDF_Definition;
-typedef struct _SDF_ModuleModules *SDF_ModuleModules;
+typedef struct _SDF_ModuleList *SDF_ModuleList;
 typedef struct _SDF_Module *SDF_Module;
 typedef struct _SDF_ImpSectionList *SDF_ImpSectionList;
 typedef struct _SDF_Section *SDF_Section;
@@ -114,8 +114,8 @@ SDF_ModuleId SDF_makeModuleIdFromTerm(ATerm t);
 ATerm SDF_makeTermFromModuleId(SDF_ModuleId arg);
 SDF_Definition SDF_makeDefinitionFromTerm(ATerm t);
 ATerm SDF_makeTermFromDefinition(SDF_Definition arg);
-SDF_ModuleModules SDF_makeModuleModulesFromTerm(ATerm t);
-ATerm SDF_makeTermFromModuleModules(SDF_ModuleModules arg);
+SDF_ModuleList SDF_makeModuleListFromTerm(ATerm t);
+ATerm SDF_makeTermFromModuleList(SDF_ModuleList arg);
 SDF_Module SDF_makeModuleFromTerm(ATerm t);
 ATerm SDF_makeTermFromModule(SDF_Module arg);
 SDF_ImpSectionList SDF_makeImpSectionListFromTerm(ATerm t);
@@ -291,10 +291,10 @@ SDF_ModuleWord SDF_makeModuleWordWord(SDF_Lexical lex);
 SDF_ModuleId SDF_makeModuleIdWord(SDF_Lexical lex);
 SDF_ModuleId SDF_makeModuleIdSlashWord(SDF_Lexical lex);
 SDF_ModuleId SDF_makeModuleIdWordSlashWord(SDF_Lexical lex);
-SDF_Definition SDF_makeDefinitionDefault(SDF_ModuleModules modules);
-SDF_ModuleModules SDF_makeModuleModulesEmpty();
-SDF_ModuleModules SDF_makeModuleModulesSingle(SDF_Module head);
-SDF_ModuleModules SDF_makeModuleModulesMany(SDF_Module head, SDF_Layout wsAfterFirst, SDF_ModuleModules tail);
+SDF_Definition SDF_makeDefinitionDefault(SDF_ModuleList list);
+SDF_ModuleList SDF_makeModuleListEmpty();
+SDF_ModuleList SDF_makeModuleListSingle(SDF_Module head);
+SDF_ModuleList SDF_makeModuleListMany(SDF_Module head, SDF_Layout wsAfterFirst, SDF_ModuleList tail);
 SDF_Module SDF_makeModuleModule(SDF_Layout wsAfterModule, SDF_ModuleName moduleName, SDF_Layout wsAfterModuleName, SDF_ImpSectionList list, SDF_Layout wsAfterList, SDF_Sections sections);
 SDF_ImpSectionList SDF_makeImpSectionListEmpty();
 SDF_ImpSectionList SDF_makeImpSectionListSingle(SDF_ImpSection head);
@@ -803,26 +803,26 @@ SDF_ModuleId SDF_setModuleIdLex(SDF_ModuleId arg, SDF_Lexical lex);
 
 ATbool SDF_isValidDefinition(SDF_Definition arg);
 ATbool SDF_isDefinitionDefault(SDF_Definition arg);
-ATbool SDF_hasDefinitionModules(SDF_Definition arg);
-SDF_ModuleModules SDF_getDefinitionModules(SDF_Definition arg);
-SDF_Definition SDF_setDefinitionModules(SDF_Definition arg, SDF_ModuleModules modules);
+ATbool SDF_hasDefinitionList(SDF_Definition arg);
+SDF_ModuleList SDF_getDefinitionList(SDF_Definition arg);
+SDF_Definition SDF_setDefinitionList(SDF_Definition arg, SDF_ModuleList list);
 
 /*}}}  */
-/*{{{  SDF_ModuleModules accessor prototypes */
+/*{{{  SDF_ModuleList accessor prototypes */
 
-ATbool SDF_isValidModuleModules(SDF_ModuleModules arg);
-ATbool SDF_isModuleModulesEmpty(SDF_ModuleModules arg);
-ATbool SDF_isModuleModulesSingle(SDF_ModuleModules arg);
-ATbool SDF_isModuleModulesMany(SDF_ModuleModules arg);
-ATbool SDF_hasModuleModulesWsAfterFirst(SDF_ModuleModules arg);
-SDF_Layout SDF_getModuleModulesWsAfterFirst(SDF_ModuleModules arg);
-SDF_ModuleModules SDF_setModuleModulesWsAfterFirst(SDF_ModuleModules arg, SDF_Layout wsAfterFirst);
-ATbool SDF_hasModuleModulesTail(SDF_ModuleModules arg);
-SDF_ModuleModules SDF_getModuleModulesTail(SDF_ModuleModules arg);
-SDF_ModuleModules SDF_setModuleModulesTail(SDF_ModuleModules arg, SDF_ModuleModules tail);
-ATbool SDF_hasModuleModulesHead(SDF_ModuleModules arg);
-SDF_Module SDF_getModuleModulesHead(SDF_ModuleModules arg);
-SDF_ModuleModules SDF_setModuleModulesHead(SDF_ModuleModules arg, SDF_Module head);
+ATbool SDF_isValidModuleList(SDF_ModuleList arg);
+ATbool SDF_isModuleListEmpty(SDF_ModuleList arg);
+ATbool SDF_isModuleListSingle(SDF_ModuleList arg);
+ATbool SDF_isModuleListMany(SDF_ModuleList arg);
+ATbool SDF_hasModuleListWsAfterFirst(SDF_ModuleList arg);
+SDF_Layout SDF_getModuleListWsAfterFirst(SDF_ModuleList arg);
+SDF_ModuleList SDF_setModuleListWsAfterFirst(SDF_ModuleList arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasModuleListTail(SDF_ModuleList arg);
+SDF_ModuleList SDF_getModuleListTail(SDF_ModuleList arg);
+SDF_ModuleList SDF_setModuleListTail(SDF_ModuleList arg, SDF_ModuleList tail);
+ATbool SDF_hasModuleListHead(SDF_ModuleList arg);
+SDF_Module SDF_getModuleListHead(SDF_ModuleList arg);
+SDF_ModuleList SDF_setModuleListHead(SDF_ModuleList arg, SDF_Module head);
 
 /*}}}  */
 /*{{{  SDF_Module accessor prototypes */

@@ -3,6 +3,7 @@
 
 #include "SDF.h"
 
-ATermList SDFgetImports(SDF_Module module);
+ATermList  SDFgetImports    (SDF_Module module);
+char      *SDFgetModuleName (SDF_Module sdfModule);
 
 #endif /* _SDF_UTILS_H */

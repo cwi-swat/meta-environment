@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Jan 22 14:05:18 2001
+ * Generated at Mon Jan 22 16:17:52 2001
  */
 
 #ifndef __SDF_dict_H
@@ -145,9 +145,9 @@ extern ATerm SDF_patternImpSectionListMany;
 extern ATerm SDF_patternImpSectionListSingle;
 extern ATerm SDF_patternImpSectionListEmpty;
 extern ATerm SDF_patternModuleModule;
-extern ATerm SDF_patternModuleModulesMany;
-extern ATerm SDF_patternModuleModulesSingle;
-extern ATerm SDF_patternModuleModulesEmpty;
+extern ATerm SDF_patternModuleListMany;
+extern ATerm SDF_patternModuleListSingle;
+extern ATerm SDF_patternModuleListEmpty;
 extern ATerm SDF_patternDefinitionDefault;
 extern ATerm SDF_patternModuleIdWordSlashWord;
 extern ATerm SDF_patternModuleIdSlashWord;

@@ -45,7 +45,7 @@ SDFgetImports(SDF_Module module)
 {
   SDF_ImpSectionList imps;
   SDF_SectionList    sectlist;
-  ATermList         modules = ATempty;
+  ATermList          modules = ATempty;
 
   imps = SDF_getModuleList(module);
   while (!SDF_isImpSectionListEmpty(imps)) {

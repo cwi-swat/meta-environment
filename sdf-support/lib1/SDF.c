@@ -15,7 +15,7 @@ typedef struct ATerm _SDF_ProductionProductions;
 typedef struct ATerm _SDF_ModuleWord;
 typedef struct ATerm _SDF_ModuleId;
 typedef struct ATerm _SDF_Definition;
-typedef struct ATerm _SDF_ModuleModules;
+typedef struct ATerm _SDF_ModuleList;
 typedef struct ATerm _SDF_Module;
 typedef struct ATerm _SDF_ImpSectionList;
 typedef struct ATerm _SDF_Section;
@@ -262,17 +262,17 @@ ATerm SDF_makeTermFromDefinition(SDF_Definition arg)
 }
 
 /*}}}  */
-/*{{{  SDF_ModuleModules SDF_makeModuleModulesFromTerm(ATerm t) */
+/*{{{  SDF_ModuleList SDF_makeModuleListFromTerm(ATerm t) */
 
-SDF_ModuleModules SDF_makeModuleModulesFromTerm(ATerm t)
+SDF_ModuleList SDF_makeModuleListFromTerm(ATerm t)
 {
-  return (SDF_ModuleModules)t;
+  return (SDF_ModuleList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromModuleModules(SDF_ModuleModules arg) */
+/*{{{  ATerm SDF_makeTermFromModuleList(SDF_ModuleList arg) */
 
-ATerm SDF_makeTermFromModuleModules(SDF_ModuleModules arg)
+ATerm SDF_makeTermFromModuleList(SDF_ModuleList arg)
 {
   return (ATerm)arg;
 }
@@ -1671,35 +1671,35 @@ SDF_ModuleId SDF_makeModuleIdWordSlashWord(SDF_Lexical lex)
 }
 
 /*}}}  */
-/*{{{  SDF_Definition SDF_makeDefinitionDefault(SDF_ModuleModules modules) */
+/*{{{  SDF_Definition SDF_makeDefinitionDefault(SDF_ModuleList list) */
 
-SDF_Definition SDF_makeDefinitionDefault(SDF_ModuleModules modules)
+SDF_Definition SDF_makeDefinitionDefault(SDF_ModuleList list)
 {
-  return (SDF_Definition)ATmakeTerm(SDF_patternDefinitionDefault, modules);
+  return (SDF_Definition)ATmakeTerm(SDF_patternDefinitionDefault, list);
 }
 
 /*}}}  */
-/*{{{  SDF_ModuleModules SDF_makeModuleModulesEmpty() */
+/*{{{  SDF_ModuleList SDF_makeModuleListEmpty() */
 
-SDF_ModuleModules SDF_makeModuleModulesEmpty()
+SDF_ModuleList SDF_makeModuleListEmpty()
 {
-  return (SDF_ModuleModules)ATmakeTerm(SDF_patternModuleModulesEmpty);
+  return (SDF_ModuleList)ATmakeTerm(SDF_patternModuleListEmpty);
 }
 
 /*}}}  */
-/*{{{  SDF_ModuleModules SDF_makeModuleModulesSingle(SDF_Module head) */
+/*{{{  SDF_ModuleList SDF_makeModuleListSingle(SDF_Module head) */
 
-SDF_ModuleModules SDF_makeModuleModulesSingle(SDF_Module head)
+SDF_ModuleList SDF_makeModuleListSingle(SDF_Module head)
 {
-  return (SDF_ModuleModules)ATmakeTerm(SDF_patternModuleModulesSingle, head);
+  return (SDF_ModuleList)ATmakeTerm(SDF_patternModuleListSingle, head);
 }
 
 /*}}}  */
-/*{{{  SDF_ModuleModules SDF_makeModuleModulesMany(SDF_Module head, SDF_Layout wsAfterFirst, SDF_ModuleModules tail) */
+/*{{{  SDF_ModuleList SDF_makeModuleListMany(SDF_Module head, SDF_Layout wsAfterFirst, SDF_ModuleList tail) */
 
-SDF_ModuleModules SDF_makeModuleModulesMany(SDF_Module head, SDF_Layout wsAfterFirst, SDF_ModuleModules tail)
+SDF_ModuleList SDF_makeModuleListMany(SDF_Module head, SDF_Layout wsAfterFirst, SDF_ModuleList tail)
 {
-  return (SDF_ModuleModules)ATmakeTerm(SDF_patternModuleModulesMany, head, wsAfterFirst, tail);
+  return (SDF_ModuleList)ATmakeTerm(SDF_patternModuleListMany, head, wsAfterFirst, tail);
 }
 
 /*}}}  */
@@ -7382,9 +7382,9 @@ ATbool SDF_isDefinitionDefault(SDF_Definition arg)
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasDefinitionModules(SDF_Definition arg) */
+/*{{{  ATbool SDF_hasDefinitionList(SDF_Definition arg) */
 
-ATbool SDF_hasDefinitionModules(SDF_Definition arg)
+ATbool SDF_hasDefinitionList(SDF_Definition arg)
 {
   if (SDF_isDefinitionDefault(arg)) {
     return ATtrue;
@@ -7393,193 +7393,193 @@ ATbool SDF_hasDefinitionModules(SDF_Definition arg)
 }
 
 /*}}}  */
-/*{{{  SDF_ModuleModules SDF_getDefinitionModules(SDF_Definition arg) */
+/*{{{  SDF_ModuleList SDF_getDefinitionList(SDF_Definition arg) */
 
-SDF_ModuleModules SDF_getDefinitionModules(SDF_Definition arg)
+SDF_ModuleList SDF_getDefinitionList(SDF_Definition arg)
 {
   if (SDF_isDefinitionDefault(arg)) {
-    return (SDF_ModuleModules)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), 2);
+    return (SDF_ModuleList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), 2);
   }
 
-  ATabort("Definition has no Modules: %t\n", arg);
+  ATabort("Definition has no List: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_Definition SDF_setDefinitionModules(SDF_Definition arg, SDF_ModuleModules modules) */
+/*{{{  SDF_Definition SDF_setDefinitionList(SDF_Definition arg, SDF_ModuleList list) */
 
-SDF_Definition SDF_setDefinitionModules(SDF_Definition arg, SDF_ModuleModules modules)
+SDF_Definition SDF_setDefinitionList(SDF_Definition arg, SDF_ModuleList list)
 {
   if (SDF_isDefinitionDefault(arg)) {
-    return (SDF_Definition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), (ATerm)modules, 2), 0), 2);
+    return (SDF_Definition)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), (ATerm)list, 2), 0), 2);
   }
 
-  ATabort("Definition has no Modules: %t\n", arg);
+  ATabort("Definition has no List: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
 
 /*}}}  */
-/*{{{  SDF_ModuleModules accessor implementations */
+/*{{{  SDF_ModuleList accessor implementations */
 
-/*{{{  ATbool SDF_isValidModuleModules(SDF_ModuleModules arg) */
+/*{{{  ATbool SDF_isValidModuleList(SDF_ModuleList arg) */
 
-ATbool SDF_isValidModuleModules(SDF_ModuleModules arg)
+ATbool SDF_isValidModuleList(SDF_ModuleList arg)
 {
-  if (SDF_isModuleModulesEmpty(arg)) {
+  if (SDF_isModuleListEmpty(arg)) {
     return ATtrue;
   }
-  else if (SDF_isModuleModulesSingle(arg)) {
+  else if (SDF_isModuleListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isModuleModulesMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isModuleModulesEmpty(SDF_ModuleModules arg) */
-
-ATbool SDF_isModuleModulesEmpty(SDF_ModuleModules arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternModuleModulesEmpty);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isModuleModulesSingle(SDF_ModuleModules arg) */
-
-ATbool SDF_isModuleModulesSingle(SDF_ModuleModules arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternModuleModulesSingle, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isModuleModulesMany(SDF_ModuleModules arg) */
-
-ATbool SDF_isModuleModulesMany(SDF_ModuleModules arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternModuleModulesMany, NULL, NULL, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_hasModuleModulesWsAfterFirst(SDF_ModuleModules arg) */
-
-ATbool SDF_hasModuleModulesWsAfterFirst(SDF_ModuleModules arg)
-{
-  if (SDF_isModuleModulesMany(arg)) {
+  else if (SDF_isModuleListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Layout SDF_getModuleModulesWsAfterFirst(SDF_ModuleModules arg) */
+/*{{{  ATbool SDF_isModuleListEmpty(SDF_ModuleList arg) */
 
-SDF_Layout SDF_getModuleModulesWsAfterFirst(SDF_ModuleModules arg)
+ATbool SDF_isModuleListEmpty(SDF_ModuleList arg)
 {
-  if (SDF_isModuleModulesMany(arg)) {
+  return ATmatchTerm((ATerm)arg, SDF_patternModuleListEmpty);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isModuleListSingle(SDF_ModuleList arg) */
+
+ATbool SDF_isModuleListSingle(SDF_ModuleList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternModuleListSingle, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isModuleListMany(SDF_ModuleList arg) */
+
+ATbool SDF_isModuleListMany(SDF_ModuleList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternModuleListMany, NULL, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_hasModuleListWsAfterFirst(SDF_ModuleList arg) */
+
+ATbool SDF_hasModuleListWsAfterFirst(SDF_ModuleList arg)
+{
+  if (SDF_isModuleListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  SDF_Layout SDF_getModuleListWsAfterFirst(SDF_ModuleList arg) */
+
+SDF_Layout SDF_getModuleListWsAfterFirst(SDF_ModuleList arg)
+{
+  if (SDF_isModuleListMany(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), 0);
   }
 
-  ATabort("ModuleModules has no WsAfterFirst: %t\n", arg);
+  ATabort("ModuleList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_ModuleModules SDF_setModuleModulesWsAfterFirst(SDF_ModuleModules arg, SDF_Layout wsAfterFirst) */
+/*{{{  SDF_ModuleList SDF_setModuleListWsAfterFirst(SDF_ModuleList arg, SDF_Layout wsAfterFirst) */
 
-SDF_ModuleModules SDF_setModuleModulesWsAfterFirst(SDF_ModuleModules arg, SDF_Layout wsAfterFirst)
+SDF_ModuleList SDF_setModuleListWsAfterFirst(SDF_ModuleList arg, SDF_Layout wsAfterFirst)
 {
-  if (SDF_isModuleModulesMany(arg)) {
-    return (SDF_ModuleModules)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
+  if (SDF_isModuleListMany(arg)) {
+    return (SDF_ModuleList)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
   }
 
-  ATabort("ModuleModules has no WsAfterFirst: %t\n", arg);
+  ATabort("ModuleList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasModuleModulesTail(SDF_ModuleModules arg) */
+/*{{{  ATbool SDF_hasModuleListTail(SDF_ModuleList arg) */
 
-ATbool SDF_hasModuleModulesTail(SDF_ModuleModules arg)
+ATbool SDF_hasModuleListTail(SDF_ModuleList arg)
 {
-  if (SDF_isModuleModulesMany(arg)) {
+  if (SDF_isModuleListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_ModuleModules SDF_getModuleModulesTail(SDF_ModuleModules arg) */
+/*{{{  SDF_ModuleList SDF_getModuleListTail(SDF_ModuleList arg) */
 
-SDF_ModuleModules SDF_getModuleModulesTail(SDF_ModuleModules arg)
+SDF_ModuleList SDF_getModuleListTail(SDF_ModuleList arg)
 {
-  if (SDF_isModuleModulesMany(arg)) {
-    return (SDF_ModuleModules)ATgetTail((ATermList)arg, 2);
+  if (SDF_isModuleListMany(arg)) {
+    return (SDF_ModuleList)ATgetTail((ATermList)arg, 2);
   }
 
-  ATabort("ModuleModules has no Tail: %t\n", arg);
+  ATabort("ModuleList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_ModuleModules SDF_setModuleModulesTail(SDF_ModuleModules arg, SDF_ModuleModules tail) */
+/*{{{  SDF_ModuleList SDF_setModuleListTail(SDF_ModuleList arg, SDF_ModuleList tail) */
 
-SDF_ModuleModules SDF_setModuleModulesTail(SDF_ModuleModules arg, SDF_ModuleModules tail)
+SDF_ModuleList SDF_setModuleListTail(SDF_ModuleList arg, SDF_ModuleList tail)
 {
-  if (SDF_isModuleModulesMany(arg)) {
-    return (SDF_ModuleModules)ATreplaceTail((ATermList)arg, (ATermList)tail, 2);
+  if (SDF_isModuleListMany(arg)) {
+    return (SDF_ModuleList)ATreplaceTail((ATermList)arg, (ATermList)tail, 2);
   }
 
-  ATabort("ModuleModules has no Tail: %t\n", arg);
+  ATabort("ModuleList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasModuleModulesHead(SDF_ModuleModules arg) */
+/*{{{  ATbool SDF_hasModuleListHead(SDF_ModuleList arg) */
 
-ATbool SDF_hasModuleModulesHead(SDF_ModuleModules arg)
+ATbool SDF_hasModuleListHead(SDF_ModuleList arg)
 {
-  if (SDF_isModuleModulesSingle(arg)) {
+  if (SDF_isModuleListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isModuleModulesMany(arg)) {
+  else if (SDF_isModuleListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Module SDF_getModuleModulesHead(SDF_ModuleModules arg) */
+/*{{{  SDF_Module SDF_getModuleListHead(SDF_ModuleList arg) */
 
-SDF_Module SDF_getModuleModulesHead(SDF_ModuleModules arg)
+SDF_Module SDF_getModuleListHead(SDF_ModuleList arg)
 {
-  if (SDF_isModuleModulesSingle(arg)) {
+  if (SDF_isModuleListSingle(arg)) {
     return (SDF_Module)ATelementAt((ATermList)arg, 0);
   }
-  else if (SDF_isModuleModulesMany(arg)) {
+  else if (SDF_isModuleListMany(arg)) {
     return (SDF_Module)ATelementAt((ATermList)arg, 0);
   }
 
-  ATabort("ModuleModules has no Head: %t\n", arg);
+  ATabort("ModuleList has no Head: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_ModuleModules SDF_setModuleModulesHead(SDF_ModuleModules arg, SDF_Module head) */
+/*{{{  SDF_ModuleList SDF_setModuleListHead(SDF_ModuleList arg, SDF_Module head) */
 
-SDF_ModuleModules SDF_setModuleModulesHead(SDF_ModuleModules arg, SDF_Module head)
+SDF_ModuleList SDF_setModuleListHead(SDF_ModuleList arg, SDF_Module head)
 {
-  if (SDF_isModuleModulesSingle(arg)) {
-    return (SDF_ModuleModules)ATreplace((ATermList)arg, (ATerm)head, 0);
+  if (SDF_isModuleListSingle(arg)) {
+    return (SDF_ModuleList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
-  else if (SDF_isModuleModulesMany(arg)) {
-    return (SDF_ModuleModules)ATreplace((ATermList)arg, (ATerm)head, 0);
+  else if (SDF_isModuleListMany(arg)) {
+    return (SDF_ModuleList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
 
-  ATabort("ModuleModules has no Head: %t\n", arg);
+  ATabort("ModuleList has no Head: %t\n", arg);
   return NULL;
 }
 
