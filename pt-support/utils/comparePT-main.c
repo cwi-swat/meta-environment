@@ -60,8 +60,8 @@ int main(int argc, char *argv[])
     }
   }
   
-  result = PT_compareTree(PT_getParseTreeTop(PT_TreeFromTerm(t1)), 
-			  PT_getParseTreeTop(PT_TreeFromTerm(t2)));
+  result = PT_compareTree(PT_getParseTreeTop(PT_ParseTreeFromTerm(t1)), 
+			  PT_getParseTreeTop(PT_ParseTreeFromTerm(t2)));
 
   if (result < 0) {
     return -1;
