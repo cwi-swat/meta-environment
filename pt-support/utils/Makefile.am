@@ -2,7 +2,8 @@
 
 SUBDIRS = implodePT
 
-EXTRA_DIST		= unparsePT.idef apply-function.idef
+EXTRA_DIST		= unparsePT.idef addPosInfo.idef \
+                          apply-function.idef
 
 bin_PROGRAMS		= flattenPT unparsePT unparseProd \
                           addPosInfo ambtracker tree2dot apply-function
@@ -13,7 +14,7 @@ INCLUDES		= -I${top_srcdir}/libmept \
 			-I${ATERM}/include \
 			-I${TOOLBUSLIB}/include
 
-data_DATA		= unparsePT.idef apply-function.idef
+data_DATA		= unparsePT.idef addPosInfo.idef apply-function.idef
 
 CLEANFILES		= unparsePT.tifs unparsePT.tif.[ch] \
                           apply-function.tifs apply-function.tif.[ch]
@@ -26,9 +27,11 @@ apply_function_LDADD    = -L../libmept -lmept \
 			-L${ATERM}/lib -lATerm \
 			${SOCKLIBS}
 
-addPosInfo_SOURCES      = addPosInfo.c
+addPosInfo_SOURCES      = addPosInfo.tif.c addPosInfo.c
 addPosInfo_LDADD        = -L../libmept -lmept \
-                        -L${ATERM}/lib -lATerm
+			-L${TOOLBUSLIB}/lib -lATB \
+                        -L${ATERM}/lib -lATerm \
+                        ${SOCKLIBS}
 
 flattenPT_SOURCES	= flattenPT-main.c
 flattenPT_LDADD		= -L../libconversion -lconversion \

@@ -1,0 +1,21 @@
+/*
+  $Id $
+ */
+
+process AddPosInfo is
+let
+  API  : addPosInfo,
+  Tree : term,
+  Path : str
+in
+  ( rec-msg(addPosInfo(Path?, Tree?)).
+    execute(addPosInfo, API?).
+    snd-eval(API, addPosInfo(Path, Tree)).
+    rec-value(API, tree-with-pos-info(Tree?)).
+    snd-msg(tree-with-pos-info(Tree)).
+    snd-terminate(API,"")
+  ) *
+  delta
+endlet
+
+tool addPosInfo is { command = "addPosInfo" }  
