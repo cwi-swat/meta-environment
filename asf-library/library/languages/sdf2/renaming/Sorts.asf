@@ -10,6 +10,13 @@ equations
          _A+2 := rename(_A+1, 'r)
          =======================
          [_S1[[_A+1]]] 'r = _S2[[_A+2]]
+
+%%  [0] (sorts ) 'r = sorts
+%%  [0] _S2 := (_S1) 'r,
+%%      sorts 'a2 := (sorts 'a1) 'r
+%%      ===========================
+%%      (sorts _S1 'a1) 'r = sorts _S2 'a2
+
   [0] (sorts 'a) 'r = sorts ('a)*'r
 
 %% hidden functions

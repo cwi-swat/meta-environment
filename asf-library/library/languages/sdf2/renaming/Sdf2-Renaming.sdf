@@ -6,6 +6,7 @@ imports languages/sdf2/syntax/Sdf2-Syntax
         languages/sdf2/renaming/Literals
         languages/sdf2/renaming/CC
         languages/sdf2/renaming/Sorts
+        languages/sdf2/renaming/Start-Symbols
         languages/sdf2/renaming/Restrictions
         languages/sdf2/renaming/Modular
         languages/sdf2/renaming/Aliases

@@ -5,5 +5,6 @@ imports
 
 hiddens
   variables
-    [p]"*"[0-9\']*      -> Production*
-    "'"[abc][0-9\']*    -> Symbol*
+    [p]"*"[0-9\']*    -> Production*
+    "'"[s][0-9\']*    -> Sort*
+    "'"[a][0-9\']*    -> Symbol*

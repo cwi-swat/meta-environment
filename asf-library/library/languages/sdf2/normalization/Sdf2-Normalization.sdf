@@ -36,8 +36,9 @@ hiddens
     "_G"[0-9\']*        -> Grammar 
     "_"[ABC][0-9\']*    -> Symbol
     "'"[abc][0-9\']*    -> Symbol*
-    "'"[abc]"+"[0-9\']* -> Symbol+ 
+    "'"[abc]"+"[0-9\']* -> Symbol+
     "_S"[0-9\']*        -> Sort
+    "'"[s][0-9\']*      -> Sort* 
     "d"[0-9\']*         -> Definition
     "M"[0-9\']*         -> ModuleName
     "cc"[0-9\']*        -> CharClass

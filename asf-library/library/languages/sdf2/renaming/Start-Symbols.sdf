@@ -1,0 +1,9 @@
+module languages/sdf2/renaming/Start-Symbols
+imports languages/sdf2/syntax/Start-Symbols languages/sdf2/renaming/Kernel
+
+
+
+hiddens
+  variables
+    "'"[abc][0-9\']* -> Symbol*
+    "'r"[0-9\']*     -> Renamings  

@@ -6,5 +6,5 @@ exports
 
 hiddens
   variables
-    "'"[abc][0-9\']*    -> Symbol*
-    "_G"[0-9\']*        -> Grammar
+    "'"[s][0-9\']*    -> Sort*
+    "_G"[0-9\']*      -> Grammar

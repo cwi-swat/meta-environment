@@ -5,11 +5,13 @@ hiddens
   context-free syntax
     rename-symbol(Symbol, Renamings) -> Symbol
     rename({Symbol ","}+, Renamings) -> {Symbol ","}+
+    lift(Sort*)                      -> Symbol*
 
 hiddens
   variables
     "_S"[0-9\']*     -> Sort
     "_"[A][0-9\']*   -> Symbol
     "_A+"[0-9\']*    -> {Symbol ","}+
-    "'"[abc][0-9\']* -> Symbol*
+    "'"[s][0-9\']*   -> Sort*
+    "'"[a][0-9\']*   -> Symbol*
     "'r"[0-9\']*     -> Renamings  

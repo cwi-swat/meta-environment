@@ -7,10 +7,12 @@ imports languages/sdf2/syntax/Kernel
         languages/sdf2/syntax/Priority
         languages/sdf2/syntax/CC
         languages/sdf2/syntax/Sorts
+        languages/sdf2/syntax/Start-Symbols
         languages/sdf2/syntax/Literals
         languages/sdf2/syntax/Labels
         languages/sdf2/syntax/Restrictions
         languages/sdf2/syntax/Aliases
+
 exports
   sorts SDF
   context-free syntax

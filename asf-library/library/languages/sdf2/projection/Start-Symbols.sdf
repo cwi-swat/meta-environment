@@ -1,0 +1,13 @@
+module languages/sdf2/projection/Start-Symbols
+imports languages/sdf2/projection/Kernel 
+        languages/sdf2/syntax/Start-Symbols
+        languages/sdf2/syntax/Sorts
+
+exports
+  context-free syntax
+    "S" ( Grammar ) -> Symbols
+
+hiddens
+  variables
+    "'"[abc][0-9\']*    -> Symbol*
+    "_G"[0-9\']*        -> Grammar
