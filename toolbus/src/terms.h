@@ -34,6 +34,7 @@ typedef struct term
     } var;
     struct term *type;          /* a type */
     struct appl {               /* an application */
+      TBbool   str_sym;         /* function symbol is arbitrary string */
       sym_idx  sym;             /* its function symbol */
       struct term *args;        /* list of arguments */
     } appl;
@@ -81,6 +82,7 @@ typedef term env;
 #define next(t)         (t)->u.list.lst_next
 #define fun_sym(t)      (t)->u.appl.sym
 #define fun_args(t)     (t)->u.appl.args
+#define fun_str_sym(t)  (t)->u.appl.str_sym
 #define anno_val(t)     (t)->u.anno.an_val
 #define anno_term(t)    (t)->u.anno.an_term
 #define env_sym(t)      (t)->u.env.sym
@@ -193,6 +195,7 @@ term      *get_list_as_env(term_list *, term *);
 TBbool     term_equal(term *, term *);
 term      *first_function(char *fname, term *t);
 term      *all_functions(char *fname, term *t);
+term      *all_functions_do(char *fname, term *t, term *(*R)(term *));
 
 extern void printn(const char *, int);
 

@@ -617,7 +617,7 @@ int typecheck(char *script, TBbool gen_tifs)
   for(calls1 = calls; calls1; calls1 = next(calls1)){
     triple = first(calls1);
     call = elm2(triple);
-    name_idx = fun_sym(first(fun_args(call)));
+    name_idx = var_sym(first(fun_args(call)));
     args = next(fun_args(call));
     check_proc_use(name_idx, args, elm3(triple));
   }

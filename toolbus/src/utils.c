@@ -40,6 +40,7 @@
 static char *buffer;                /* i/o buffer       */
 static char *buf_ptr;               /* read and write ptr in buffer    */
                                     /* AND in format string, see above */
+static char *start_buf_ptr;         /* start value of buf_ptr, for error messages */
 int buf_size = TB_INIT_BUFFER;      /* also used in sockets.c */
 
 #define BEGIN_OF_DATA               &buffer[LENSPEC]
@@ -78,24 +79,55 @@ static void skip_layout(void)
 
 static void parse_error(char *s)
 {
+#define ERR_W 25     /* "window" surrounding the error location */
   if(!parse_error_msg) {
-    char msg[50];
-    int i;
+    char msg[6+2*ERR_W+2], *msgp = msg;
+    int i, imin;
+    int epos = buf_ptr - start_buf_ptr - 1;
+
+    imin = (epos < ERR_W) ? 0 : epos - ERR_W;
+
     buf_ptr--;
-    for(i = 0; i < 49 && *buf_ptr; i++)
-      msg[i] = *buf_ptr++;
-    msg[i] = '\0';
+    if(imin > 0){
+      msg[0] = msg[1] = msg[2] = '.';
+      msgp = &msg[3];
+    }
+    for(i = imin; i < epos + ERR_W && start_buf_ptr[i]; i++){
+      if(i == epos)
+	*msgp++ = '!';
+      *msgp++ = start_buf_ptr[i];
+    }      
+    if(i == epos)
+      *msgp++ = '!';
+    if(start_buf_ptr[i]){
+      msgp[0] = msgp[1] = msgp[2] = '.';
+      msgp += 3;
+    }
+    *msgp++ = '\0';
     parse_error_msg = s;
-    if(i > 0)
-      err_warn("%s in term, near `%s'", s, msg);
-    else
-      err_warn("%s in term", s);    
+    err_warn("%s in `%s' near ! marker", s, msg);   
   }
 }
 
 va_list mk_term_args = NULL;
 
 static term *parse_term0(void);
+
+static TBbool is_std_fsym(char *s)
+{
+  int c;
+
+  c = *s++;
+  if(!isalpha(c))
+    return TBfalse;
+  for( ; *s; c = *s++){
+    if(isalnum(c) || (c == '-') || (c == '_'))
+      continue;
+    else
+      return TBfalse;
+  }
+  return TBtrue;
+}
 
 static type *parse_type(void)
 {
@@ -115,6 +147,7 @@ static term *parse_term0(void)
   int close_char;
   sym_idx id_sym;
   type *tp;
+  TBbool is_str_sym = TBfalse;
 
   skip_layout();
   begin = buf_ptr - 1;
@@ -250,10 +283,18 @@ static term *parse_term0(void)
       }
       *pbuf++ = '\0';
       get_char();
-      return mk_str(str_buf);
+      skip_layout();
+      if(lastc != '(')
+	return mk_str(str_buf);          /* string constant */
+      else {                             /* string as function symbol: */
+	close_char = ')';
+	id_sym = TBlookup(str_buf);
+	is_str_sym = TBtrue;
+	goto make_list;
+      }
     }
   } else
-  if(lastc == '['){              /* list */
+  if(lastc == '['){                      /* list */
     term_list args;
     term *arg;
 
@@ -292,8 +333,11 @@ static term *parse_term0(void)
       get_char(); skip_layout();
     if(close_char == ']')
       return next(&args);
-    else
-      return mk_appl(id_sym, next(&args));
+    else {
+      term *t = mk_appl(id_sym, next(&args));
+      fun_str_sym(t) = is_str_sym;
+      return t;
+    }
   } else
   if(islower(lastc)){            /* application */
 
@@ -307,8 +351,11 @@ static term *parse_term0(void)
     if(lastc == '('){
       close_char = ')';
       goto make_list;
-    } else
-      return mk_appl(id_sym, NULL);
+    } else {
+      term *t = mk_appl(id_sym, NULL);
+      fun_str_sym(t) = is_str_sym;
+      return t;
+    }
   } else
   if(lastc == '%'){   /* insert term from
                          TBmake's arguments */
@@ -331,7 +378,9 @@ static term *parse_term0(void)
     case 't':
       return va_arg(mk_term_args, term *);
     case 'f':
-      id_sym = TBlookup(va_arg(mk_term_args, char *));
+      str = va_arg(mk_term_args, char *);
+      id_sym = TBlookup(str);
+      is_str_sym = !is_std_fsym(str);
       goto make_args;
     case 'l':
       return va_arg(mk_term_args, term_list *);	
@@ -408,7 +457,7 @@ term *TBmake(char * fmt, ...)
     extend_buffer(0, n);
 
   memcpy(buffer, fmt, n+1);
-  buf_ptr = buffer;
+  start_buf_ptr = buf_ptr = buffer;
 
   /* fprintf(stderr, "TBmake %s\n", fmt); */
   parse_error_msg = NULL;
@@ -448,13 +497,14 @@ term *TBreadTerm(FILE *f)
 
   ptr = &buffer[LENSPEC];
   while ((c = fgetc(f)) != EOF){
-    if(ptr + 1 > &buffer[buf_size]){
+    if(ptr + 2 > &buffer[buf_size]){
       int fill = ptr - buffer;
       extend_buffer(fill, fill + TB_BUF_INCR);
       ptr = &buffer[fill];
     }
     *ptr++ = c;
   }
+  *ptr++ = '\0';  /* ptr + 2, above, ensures there is room for this \0 */
   if(ptr - &buffer[LENSPEC] > 0){
     trm = parse_buffer();
     if(trm)
@@ -507,7 +557,7 @@ term *parse_buffer(void)
 {
   term * trm;
 
-  buf_ptr = BEGIN_OF_DATA;
+  start_buf_ptr = buf_ptr = BEGIN_OF_DATA;
 
   skip_layout();
 
@@ -711,6 +761,7 @@ void gen_printf(const char *fmt, va_list args)
 	printn("[]", 2);
       else
 	pr_term_unquoted(trm);
+	/* pr_term(trm); */
       break;
     case 'l':
       tl = va_arg(args, term_list *);
@@ -853,7 +904,7 @@ void TBvprintf(FILE *f, char *fmt, va_list args)
 
 char *TBvsprintf(char *fmt, va_list args)
 {
-  buf_ptr = BEGIN_OF_DATA;
+  start_buf_ptr = buf_ptr = BEGIN_OF_DATA;
   toBuffer = TBtrue;
   gen_printf(fmt, args);
   *buf_ptr++ = '\0';
@@ -864,7 +915,7 @@ char *TBsprintf(char *fmt, ...)
 {
   va_list args;
 
-  buf_ptr = BEGIN_OF_DATA;
+  start_buf_ptr = buf_ptr = BEGIN_OF_DATA;
   toBuffer = TBtrue;
   va_start(args, fmt);
   gen_printf(fmt, args);
@@ -900,7 +951,7 @@ TBbool TBmatch(term *t, char *fmt, ...)
   TBbool res;
 
   va_start(match_args, fmt);
-  buf_ptr = fmt;
+  start_buf_ptr = buf_ptr = fmt;
   get_char();
   res = TBmatch1(t);
   skip_layout();
@@ -1006,6 +1057,9 @@ TBbool TBmatch1(term *t)
       } else if(is_bstr(t)){
 	sval = bstr_val(t);
 	n = bstr_len(t);
+      } else if(is_appl(t)){
+	sval = get_txt(fun_sym(t));
+	n = strlen(sval);
       } else
 	return(TBfalse);
       for(i = 0; i < n; i++){
@@ -1034,9 +1088,18 @@ TBbool TBmatch1(term *t)
       }
       get_char();
       if(lastc == '"'){
-	 get_char(); return TBtrue;
-       } else
-	 return TBfalse;
+	get_char();
+	skip_layout();
+	if(is_appl(t)){
+	  if(lastc != '(')
+	    return fun_args(t) ? TBfalse : TBtrue;
+	  close_char = ')';
+	  tl = fun_args(t);
+	  goto match_list;
+	} else
+	  return TBtrue;
+      } else
+	return TBfalse;
     }
   case '0': case '1': case '2': case '3':
   case '4': case '5': case '6': case '7':
@@ -1200,7 +1263,6 @@ TBbool TBmatch1(term *t)
 
 #ifndef HAVE_STRERROR
 
-
 char *strerror(int n)
 {
   extern char *sys_errlist[];
@@ -1209,10 +1271,9 @@ char *strerror(int n)
 }
 #endif
 
-
 static void err_doit(int, const char *, va_list);
 
-/* Nonfatal error related to a system call.
+/* Non-fatal error related to a system call.
  * Print a message and return.
  */
 
@@ -1241,7 +1302,7 @@ void err_sys_fatal(const char *fmt, ...)
   TBexit(1);
 }
 
-/* Nonfatal error unrelated to a system call.
+/* Non-fatal error unrelated to a system call.
  * Print a message and return.
  */
 
@@ -1324,6 +1385,6 @@ void init_utils()
 {
   buffer = (char *) malloc(buf_size);
   if(!buffer)
-    err_sys_fatal("unit_utils -- can't malloc");
+    err_sys_fatal("init_utils -- can't malloc");
 }
 

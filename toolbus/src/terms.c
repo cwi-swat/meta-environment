@@ -458,7 +458,7 @@ term *mk_appl(sym_idx sym, term *args)
 
   assert(is_list(args));
   t->trm_kind = t_appl;
-  mark(t) = has_conds(t) = TBfalse;
+  mark(t) = has_conds(t) = fun_str_sym(t) = TBfalse;
   fun_sym(t) = sym;
   fun_args(t) = args;
   return t;
@@ -558,19 +558,31 @@ void print_bstr(const char *s, int len)
   printn("\"", 1);
 }
 
+void esc_char(char c)
+{
+
+}
+
 void print_str(const char *s)
 {
   printn("\"", 1);
   while(*s){
-    switch(*s)
-      {
-      case '\\': printn("\\\\", 2); break;
-      case '"': printn("\\\"", 2); break;
-      default: printn(s, 1);
-      }
+    switch(*s){ 
+    case '\\': printn("\\\\", 2); break;
+    case '"': printn("\\\"", 2); break;
+    default: printn(s, 1);
+    }
     s++;
   }
   printn("\"", 1);
+}
+
+void print_fsym(TBbool is_str_sym, const char *s)
+{  
+  if(is_str_sym)         
+    print_str(s);         /* function symbol is arbitrary string */
+  else
+    printn(s, strlen(s)); /* it is an identifier */
 }
 
 void pr_type(type *tp)
@@ -604,18 +616,22 @@ void pr_term(const term *t)
     pr_type(var_type(t));
     if(var_result(t))
       printn("?",1);
-/*
-    if(var_formal(t))
-      printn("@",1);
-*/
     break;  
   case t_placeholder:
     printn("<", 1); pr_term(placeholder_type(t)); printn(">",1);
     break;
   case t_appl:
     ftxt = get_txt(fun_sym(t));
-    printn(ftxt, strlen(ftxt));
-    if(fun_args(t) != NULL || isupper(ftxt[0])){
+    print_fsym(fun_str_sym(t), ftxt);
+    if(fun_args(t) != NULL || (!fun_str_sym(t) && isupper(ftxt[0]))){
+      /* Note: something fishy is going on here:
+	 (a) Currently, Process names are also permitted as funcion symbol 
+	     (although there start with an uppercase letter.
+	 (b) We want to avoid that applications of the form
+	     - a string function symbol
+	     - no arguments
+	     are printed as "@@@"() instead of "@@@"
+      */
       printn("(",1);
       pr_term_list(fun_args(t));
       printn(")", 1);
@@ -1426,6 +1442,41 @@ static term *all_functions_sym(sym_idx fsym, term *t)
 
 term *all_functions(char *fname, term *t){
   return all_functions_sym(TBlookup(fname), t);
+}
+
+
+/* Perform an innermost traversal of t and replace all subterms s in t with
+ * function symbol fsym by R(s).
+ * Returns (a possibly modified) term t.
+ */
+
+static term *all_functions_do_sym(sym_idx fsym, term *t, term *(*R)(term *))
+{
+  term_list *elems;
+
+  if(!t)
+    return NULL;
+
+  switch(tkind(t)){
+  case t_appl:
+    for(elems = fun_args(t); elems; elems = next(elems))
+      first(elems) = all_functions_do_sym(fsym, first(elems), R);
+      
+      return (fun_sym(t) == fsym) ? (*R)(t) : t;
+  case t_list:
+    for(elems = t; elems; elems = next(elems))
+      first(elems) = all_functions_do_sym(fsym, first(elems), R);
+    return t;
+  case t_anno:
+    anno_term(t) = all_functions_do_sym(fsym, anno_term(t), R);
+    return t;
+  default:
+    return t;
+  }
+}
+
+term *all_functions_do(char *fname, term *t, term *(*R)(term *)){
+  return all_functions_do_sym(TBlookup(fname), t, R);
 }
 
 /*------------------------------------------------------------*/
