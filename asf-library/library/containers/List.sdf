@@ -29,7 +29,7 @@ imports
 hiddens
   imports
     basic/Integers
-    asf/syntax/Comments
+    basic/Comments
     basic/Whitespace
   variables
     "X"[0-9\']*		-> X
