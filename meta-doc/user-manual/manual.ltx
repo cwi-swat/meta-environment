@@ -739,14 +739,6 @@ term it may be necessary to parse the equations of various modules and
 to initialize the evaluator with this set of equations.  Section
 \ref{eval-term} gives more details on evaluating terms.
 
-\section{Executing Specifications}
-
-\subsection{Evaluating Terms}
-\label{eval-term}
-
-\subsection{Compiling a Specification}
-\label{compiling-specs}
-
 
 \section{Guided Tour} \label{GuidedTour}
 
@@ -1981,7 +1973,7 @@ exports
     UnsignedInt "." UnsignedInt ([eE] SignedInt)? -> UnsignedReal 
     UnsignedInt [eE] SignedInt                    -> UnsignedReal
 
-    UnsignedInt | UnsignedReal                    -> Number 
+    UnsignedInt | UnsignedReal                    -> Number
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Lexical definition of Numbers}\label{CODE:numbers}
@@ -2051,6 +2043,20 @@ affect the abstract syntax, by attributes that define the associativity of a
 rule, or by attributes which influence the rewriting process. 
 All functions with the same result sort together define the alternatives
 for that sort.
+
+Members in the left-hand side of a context-free function
+are separated by an invisible non-terminal {\tt LAYOUT?} 
+(optional {\tt LAYOUT}).
+So, that between these members layout may be recognized. 
+This optional layout non-terminal is automatically inserted by the
+parser generator\footnote{\sdf2 offers the possibility to write
+down syntax rules in which the optional layout non-terminal
+is {\em not} automatically inserted. These rules should
+be written in the {\tt syntax}-section.}.
+The automatic insertion of this optional layout non-terminal
+gives rise to the ``safe'' layout definition presented
+in Figure \ref{safe-layout}. A member may recognize the empty string
+and thus causing ambiguity.
 
 \subsubsection{Context-free Functions}
 
@@ -2322,24 +2328,37 @@ related occurrences of the same function, $F$:
 Currently, there is no syntactic or semantic difference between `{\tt left}'
 and `{\tt assoc}', but we may change that in the future.
 
-As an example, simple arithmetic expressions with usual priorities and
-associativities are defined below:
+Figure \ref{CODE:simple-prio} gives an example of a definition of
+simple arithmetic expressions with usual priorities and
+associativities.
 
-\begin{verbatim}
-sorts E 
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Expr1
 
-lexical syntax
-   [0-9]+ -> E 
-   [\ \n] -> LAYOUT 
+exports
+  sorts E 
 
-context-free syntax
-   E "+" E   -> E {left}
-   E "*" E   -> E {left}
-   "(" E ")" -> E {bracket}
+  lexical syntax
+    [0-9]+ -> E 
+    [\ \n] -> LAYOUT 
 
-context-free priorities
-   E "*" E   -> E > E "+" E   -> E {left}
-\end{verbatim}
+  context-free restrictions
+    LAYOUT? -/- [\ \n]
+
+  context-free syntax
+    E "+" E   -> E {left}
+    E "*" E   -> E {left}
+    "(" E ")" -> E {bracket}
+
+  context-free priorities
+    E "*" E -> E > 
+    E "+" E -> E
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Simple context-free priority definition}\label{CODE:simple-prio}
+\end{figure}   
 
 \subsubsection{Groups of Associative Functions}
 
@@ -2357,6 +2376,43 @@ declaration with one of the following attributes:
 \end{itemize}
 
 where F and G are functions appearing in the list.
+See Figure \ref{CODE:complex-prio} for an example of the use of grouped
+associativity.
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Expr2
+
+exports
+  sorts E 
+
+  lexical syntax
+    [0-9]+ -> E
+    [\ \n] -> LAYOUT 
+
+  context-free restrictions
+    LAYOUT? -/- [\ \n]
+
+  context-free syntax
+    E "+" E   -> E {left}
+    E "-" E   -> E {non-assoc}
+    E "*" E   -> E {left}
+    E "/" E   -> E {non-assoc}
+    E "^" E   -> E {right}
+    "(" E ")" -> E {bracket}
+
+  context-free priorities
+    E "^" E -> E > 
+    {non-assoc: E "*" E -> E
+                E "/" E -> E} >
+    {left: E "+" E -> E
+           E "-" E -> E}
+\end{boxedverbatim}
+\end{IncCode}
+\caption{More complex associativity and priority definitions}\label{CODE:complex-prio}
+\end{figure}   
+
 
 \subsubsection{Removing Trees using Priorities}
 
@@ -2365,11 +2421,13 @@ phases:
 
 \begin{itemize}
 
-\item First, trees containing internal conflicts (regarding priority or associativity) are eliminated.
+\item First, trees containing internal conflicts (regarding priority or 
+associativity) are eliminated.
 
-\item Next, the remaining trees are compared pair-wise and trees are eliminated that are dominated
-by another one. The ordering used is obtained by extending the priority
-ordering on contextfree functions to an ordering on trees.
+\item Next, the remaining trees are compared pair-wise and trees 
+are eliminated that are dominated by another one. The ordering used 
+is obtained by extending the priority
+ordering on context-free functions to an ordering on trees.
 
 \end{itemize}
 
@@ -2381,34 +2439,12 @@ elimination of trees that contain conflicts:
 \begin{itemize}
 \item a parent node has a child with a lower priority than the parent itself; 
 \item a parent has a first or last child that is in conflict with
-  associativity of parent and child.
+associativity relation between this parent and child.
 \end{itemize}
 
-A larger example illustrates this:
-
-\begin{verbatim}
-sorts E 
-
-lexical syntax
-   [0-9]+ -> E
-   [\ \n] -> LAYOUT 
-
-context-free syntax
-   E "+" E   -> E {left}
-   E "-" E   -> E {non-assoc}
-   E "*" E   -> E {left}
-   E "/" E   -> E {non-assoc}
-   E "^" E   -> E {right}
-   "(" E ")" -> E {bracket}
-
-context-free  priorities
-   "^" > {non-assoc: "*", "/"} > {left: "+", "-"}
-
-\end{verbatim}
-
-The definition of associativities is here only choosen to illustrate various
-possibilities and combinations. Some examples show the effect of these
-declarations:
+Given the example of Figure \ref{CODE:complex-prio} we will give a
+number of example sentences and the interpretation given the
+language definition in this example.
 
 \begin{center}
 \begin{tabular}{ll}
@@ -2426,21 +2462,31 @@ declarations:
 \end{center}
 
 After removing all trees containing conflicts, more than one tree may remain.
-To further reduce this set of remaining trees, the priority ordering `>' on
-context-free functions is extended to a priority ordering `>>' on trees. A
-tree in the set is then rejected if there is another tree in the set with
-higher priority. The relation $P_1$ >> $P_2$ holds between two trees $P_1$ and
-$P_2$ if
+To further reduce this set of remaining trees, the priority ordering `{\tt >}'
+on context-free functions is extended to a priority ordering `{\tt >>}' 
+on trees. 
+A tree in the set is then rejected if there is another tree in the set with
+higher priority. The relation $T_1$ {\tt >>} $T_2$ holds between two 
+trees $T_1$ and $T_2$ if
 
 \begin{itemize}
 
-\item $P_1$ is not equal to $P_2$, and 
-\item if, for any F, $P_1$ contains more nodes corresponding to F than $P_2$, then $P_2$ contains more
-nodes corresponding to some function G witch G ! F in $P_1$. (This also covers
-the case that there are no nodes corresponding to F in $P_2$ or no nodes
-corresponding to G in $P_1$)
+\item $T_1$ is not equal to $T_2$;
+ 
+\item if, for any function {\tt F}, $T_1$ contains more nodes 
+corresponding to function {\tt F} than $T_2$, 
+then $T_2$ contains more nodes corresponding to some function {\tt G} 
+with {\tt G > F} in $T_1$. 
+(This also covers the case that there are no nodes corresponding to 
+{\tt F} in $T_2$ or no nodes corresponding to {\tt G} in $T_1$);
+
+\item injections counting. (*** uitwerken ***)
 
 \end{itemize}
+This definition of resolving the priority conflicts is based
+on {\em multi-set ordening}.
+(*** Paul deze definitie wijkt af van zowel definitie in Eelco's
+proefschrift als wat in SGLR is geimplementeerd. ***)
 
 The following example shows how the interaction (and resulting ambiguities)
 between general context-free functions and special case functions can be
@@ -2449,21 +2495,34 @@ and superscripts in the typesetting language EQN. The crucial point is that,
 for typesetting reasons, we want to treat a subscript followed by a
 superscript in a special way. Therefore, the special case `{\tt E sub E sup E
   -> E}' is introduced, which has priority over a combination of the two
-functions `{\tt E sub E -> E}' and `{\tt E sup E -? E}'.
+functions `{\tt E sub E -> E}' and `{\tt E sup E -> E}'.
+See, Figure \ref{CODE:eqn-exprs} for the \sdf\ definition.
 
-\begin{verbatim}
-sorts E 
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Eqn
 
-context-free syntax
-   E sub E       -> E {left}
-   E sup E       -> E {left}
-   E sub E sup E -> E 
-   "{" E "}"     -> E {bracket}
-   a             -> E 
+imports Layout
 
-context-free priorities
-   sub sup > { left: sub , sup}
-\end{verbatim}
+exports
+  sorts E 
+
+  context-free syntax
+    E "sub" E         -> E {left}
+    E "sup" E         -> E {left}
+    E "sub" E "sup" E -> E 
+    "{" E "}"         -> E {bracket}
+    "a"               -> E 
+
+  context-free priorities
+    E "sub" E "sup" E -> E > 
+    {left: E "sub" E -> E 
+           E :sup" E -> E}
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Syntax definition of EQN expressions}\label{CODE:eqn-exprs}
+\end{figure}
 
 \subsection{Restrictions}
 
@@ -2536,6 +2595,15 @@ side of a condition or conclusion (but see Section ***[Lists]). This restriction
 
 Equations establish equalities between terms. How they are executed is
 discussed in Chapter **[Executing].
+
+
+\section{Executing Specifications}
+
+\subsection{Evaluating Terms}
+\label{eval-term}
+
+\subsection{Compiling a Specification}
+\label{compiling-specs}
 
 \section{Examples of ASF+SDF Specifications}
 
