@@ -22,4 +22,4 @@ in
   delta
 endlet
 
-tool asfoperations is {command = "asfoperations"}
+tool asfoperations is {command = "asfoperations -TB_COLLECT_LOOP 1"}
