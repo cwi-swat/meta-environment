@@ -21,6 +21,17 @@ equations
 
 [extractField-0]
   &VariableDeclarator = &VariableDeclaratorId,
+  &Rstore2 = extractField-to-store(&VariableDeclaratorId, &Rstore1, &Area, &Type)
+  ===>
+  extractField(&VariableDeclarator, &Rstore1, &Area, &Type) = &Rstore2
+
+[extractField-1]
+  &VariableDeclarator = &VariableDeclaratorId = &VariableInitializer,
+  &Rstore2 = extractField-to-store(&VariableDeclaratorId, &Rstore1, &Area, &Type)
+  ===>
+  extractField(&VariableDeclarator, &Rstore1, &Area, &Type) = &Rstore2
+
+[extractField-to-store-0]
   &VariableDeclaratorId = &Identifier,
   &VariableDeclaratorIdId = get-area(&VariableDeclaratorId),
   &Tuple1 = <&VariableDeclaratorIdId, id2str(&Identifier)>,
@@ -31,4 +42,17 @@ equations
   &Tuple3 = <&VariableDeclaratorIdId, name2str(&Name)>,
   &Rstore4 = add-tuple(FIELD_DECL_TYPE, &Tuple3, &Rstore3)
   ===>
-  extractField(&VariableDeclarator, &Rstore1, &Area, &Type) = &Rstore4
+  extractField-to-store(&VariableDeclaratorId, &Rstore1, &Area, &Type) = &Rstore4 
+
+[extractField-to-store-1]
+  &VariableDeclaratorId = &Identifier,
+  &VariableDeclaratorIdId = get-area(&VariableDeclaratorId),
+  &Tuple1 = <&VariableDeclaratorIdId, id2str(&Identifier)>,
+  &Rstore2 = add-tuple(FIELD_DECL, &Tuple1, &Rstore1),
+  &Tuple2 = <&VariableDeclaratorIdId, &Area>,
+  &Rstore3 = add-tuple(FIELD_DECL_OCCURS, &Tuple2, &Rstore2),
+  &Type = &Name [ ],
+  &Tuple3 = <&VariableDeclaratorIdId, name2str(&Name)>,
+  &Rstore4 = add-tuple(FIELD_DECL_TYPE, &Tuple3, &Rstore3)
+  ===>
+  extractField-to-store(&VariableDeclaratorId, &Rstore1, &Area, &Type) = &Rstore4 

@@ -31,6 +31,10 @@ hiddens
       -> RSTORE {traversal(accu, top-down, break)}
 
 hiddens
+  context-free syntax
+    extractField-to-store(VariableDeclaratorId, RSTORE, Area, Type) -> RSTORE
+
+hiddens
   variables
     "&Area" -> Area
     "&ClassBody" -> ClassBody
@@ -50,3 +54,4 @@ hiddens
     "&VariableDeclarators" -> {VariableDeclarator ","}+
     "&VariableDeclaratorId" -> VariableDeclaratorId
     "&VariableDeclaratorIdId" -> Area
+    "&VariableInitializer" -> VariableInitializer
