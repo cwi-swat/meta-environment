@@ -166,7 +166,7 @@ static void initLayoutAbbreviations(void)
 static char* prodToEscapedString(PT_Production prod)
 {
   char *strProd = ATwriteToString((ATerm) prod);
-  return escape(strProd,"\"", QUOTED);
+  return escape(strProd,"\"\\", QUOTED);
 }
 
 /*}}}  */
