@@ -4,9 +4,8 @@
 #include <assert.h>
 
 static PTPT_OptLayout e = NULL;
-/*
-ATermTable store = NULL;
-*/
+
+/*{{{  static void initEmptyLayout()  */
 
 static void initEmptyLayout() 
 {
@@ -15,6 +14,8 @@ static void initEmptyLayout()
     ATprotect((ATerm*) &e);
   }
 }
+
+/*}}}  */
 
 /*{{{  static PTPT_NatCon   PTPT_explodeNatCon(int val) */
 
@@ -106,7 +107,7 @@ static PTPT_ATerm PTPT_explodeATermAppl(ATermAppl appl)
   int arity = ATgetArity(fun);
   ATermList args = ATgetArguments(appl);
   PTPT_ATerm result = NULL;
-  PTPT_AFun pfun = PTPT_makeAFunLit(PTPT_explodeLiteral(name, ATfalse));
+  PTPT_AFun pfun = PTPT_makeAFunLit(PTPT_explodeLiteral(name, ATisQuoted(fun)));
   PTPT_Ann ann = NULL;
 
   if (annos != NULL) {
