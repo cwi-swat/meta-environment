@@ -1,0 +1,11 @@
+module Perm
+
+imports Layout Pico-Integers Pico-Identifiers
+
+exports
+  sorts Pico-Perm
+  context-free syntax
+    <<PICO-BOOL PICO-INT PICO-ID>> -> Pico-Perm
+
+    "swap" "(" Pico-Perm ")" -> Pico-Perm
+

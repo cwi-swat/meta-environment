@@ -1,0 +1,26 @@
+module IterN
+
+imports Layout
+
+exports
+  sorts LeesPlank LP4
+  
+  context-free syntax
+    "aap" -> LeesPlank
+    "noot" -> LeesPlank
+    "mies" -> LeesPlank
+    "huis" -> LeesPlank
+    "beer" -> LeesPlank
+    "fiets" -> LeesPlank
+
+  context-free syntax
+    "insert" "(" LeesPlank "," LP4 ")" -> LP4
+    "concat" "(" LP4 "," LP4 ")"       -> LP4
+
+  aliases 
+    {LeesPlank ";"}4+ -> LP4
+
+  variables
+    "lp"[0-9]* -> LeesPlank
+    "lp4+"[0-9]* -> LP4
+    "lp*"[0-9]* -> {LeesPlank ";"}*

@@ -1,0 +1,15 @@
+module Tuple
+
+imports Pico-Identifiers Pico-Integers
+
+exports
+  sorts TUPLE
+  context-free syntax
+    compose(PICO-ID, PICO-INT, PICO-BOOL) -> TUPLE
+    get-id(TUPLE) -> PICO-ID
+    get-int(TUPLE) -> PICO-INT
+    get-bool(TUPLE) -> PICO-BOOL
+
+  aliases
+    TUPLE             -> TUPLE3
+    PICO-ID # PICO-INT # PICO-BOOL -> TUPLE
