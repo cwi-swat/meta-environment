@@ -1,3 +1,8 @@
+2003/06/01 (jurgenv@cwi.nl)
+  * Simplified IO.sdf, renamed ParseResults.sdf to IOResults.sdf.
+    All IO builtins now return all errors that might occur using the
+    syntax of the ErrorAPI.
+
 2003/12/10 (markvdb@cwi.nl)
   * Introduced the {lexical, context-free} start-symbols in the Sdf2 grammar. 
   * Adapted the Sdf2-Normalization accordingly.
