@@ -56,12 +56,12 @@ static void usage(void)
   ATwarning(
             "Usage: %s [options]\n"
             "Options:\n"
-	    "\t-c              toggle compilation to a binary (default: %s)   \n"
+	    "\t-c              toggle compilation to a binary(default: %s)   \n"
             "\t-h              display this message                           \n"
-            "\t-i filename     input equations from file      (default stdin) \n"
-	    "\t-m              output muasf code              (default %s)    \n"
-            "\t-n name         name of the tool               (obligatory)    \n"
-            "\t-o filename     output c code to file          (default stdout)\n"
+            "\t-i filename     input equations from file     (default stdin) \n"
+	    "\t-m              output muasf code             (default %s)    \n"
+            "\t-n name         name of the tool              (obligatory)    \n"
+            "\t-o filename     output c code to file         (default <name>.c)\n"
             "\t-v              verbose mode                                   \n"
             "\t-V              reveal program version         (i.e. %s)       \n",
             myname, 
@@ -86,13 +86,26 @@ static void version(void)
 
 static PT_ParseTree compile(char *name, ASF_CondEquationList equations)
 {
-  MA_Module muasf = asfToMuASF(name, equations);
+  MA_Module muasf;
+  PT_ParseTree c_code;
+
+  if (run_verbose) {
+    ATwarning("transforming asf to muasf\n");
+  }
+
+  muasf = asfToMuASF(name, equations);
 
   if (output_muasf) {
    return (PT_ParseTree) muasf;
   }
 
-  return muasfToC(muasf); 
+  if (run_verbose) {
+    ATwarning("transforming muasf to c\n");
+  }
+
+  c_code = muasfToC(muasf); 
+
+  return c_code;
 }
 
 /*}}}  */
@@ -138,10 +151,17 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations,
       ATerror("Error: unable to open %s for writing\n", output);
     }
 
+    if (run_verbose) {
+      ATwarning("pretty printing c code\n");
+    }
+
     ToC_code(moduleName, result, fp , myversion);
     fclose(fp);
 
     if (use_c_compiler) {
+      if (run_verbose) {
+	ATwarning("calling c compiler\n");
+      }
       call_c_compiler(moduleName, output);
     }
   }
@@ -206,6 +226,15 @@ int main(int argc, char *argv[])
     if (strlen(name) == 0) {
       usage();
       exit(1);
+    }
+
+    if (use_c_compiler && !output_muasf && strcmp(output, "-") == 0) {
+      char tmp[1024];
+      sprintf(tmp,"%s.c",name);
+      output = strdup(tmp);
+      if (!output) {
+	ATerror("Unable to allocate memory for string %s\n", tmp);
+      }
     }
 
     eqs = ATreadFromNamedFile(equations);

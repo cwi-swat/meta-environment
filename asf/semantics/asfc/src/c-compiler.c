@@ -32,7 +32,7 @@ void call_c_compiler(const char* name, const char* source)
 	 );
 
   if (run_verbose) {
-    ATwarning("calling " COMPILER ":\n%s\n",commandline);
+    ATwarning("%s\n",commandline);
   }
   
   system(commandline);
