@@ -168,4 +168,9 @@ PT_Attrs PT_reverseAttrs(PT_Attrs attrs);
 
 PT_CharRanges PT_concatCharRanges(PT_CharRanges ranges1, PT_CharRanges ranges2);
 
+PT_Tree PT_renameInTree(PT_Tree tree, PT_Symbol formalParam, 
+                        PT_Symbol actualParam);
+PT_ParseTree PT_renameInParseTree(PT_ParseTree parsetree, PT_Symbol formalParam,
+                                  PT_Symbol actualParam);
+
 #endif /* _ME_PT_H */ 
