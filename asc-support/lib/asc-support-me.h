@@ -4,11 +4,15 @@
 #include <aterm2.h> 
 #include <atb-tool.h>
 #include <sglr.h>
+#include <MEPT-utils.h>
+#include <asc-muasf2pt.h>
 
 #include "asc-builtins.h"
 
 #define INITIAL_TABLE_SIZE 8191
 #define MAX_LOAD 75
+
+#define debug_term(t) (PT_yieldTree(muASFToTree(t)))
 
 #define remove_list(t) (make_list(ATgetArgument((ATermAppl) t,0)))
 

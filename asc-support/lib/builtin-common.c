@@ -26,7 +26,7 @@ CO_StrCon CO_makeStrCon(const char* str)
 	ch = CO_makeLexStrCharBackslash();
 	break;
       default:
-	if ((int) isprint(str[i])) {
+	if ((int) isprint((int) str[i])) {
 	  ch = CO_makeLexStrCharNormal(str[i]);
 	}
 	else {
