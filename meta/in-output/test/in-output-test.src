@@ -4,6 +4,7 @@
 
 toolbus="__TOOLBUS__/bin/toolbus -I__TOP_SRCDIR__/in-output"
 datadir=__DATADIR__
+builddir=__TOP_BUILDDIR__/in-output/test
 
 PATH=${PATH}:__TOP_BUILDDIR__/in-output
 
@@ -36,27 +37,27 @@ call_toolbus in-output-test-2.tb
 call_toolbus in-output-test-3.tb
 
 # Test 4. Attempt to create an empty sdf module.
-rm -f EmptySdf2Module.sdf
+rm -f ${builddir}/EmptySdf2Module.sdf
 call_toolbus in-output-test-4.tb
-rm -f EmptySdf2Module.sdf
+rm -f ${builddir}/EmptySdf2Module.sdf
 
 # Test 5. Attempt to create an empty equations section.
-rm -f EmptyEqsSection.asf
+rm -f ${builddir}/EmptyEqsSection.asf
 call_toolbus in-output-test-5.tb
-rm -f EmptyEqsSection.asf
+rm -f ${builddir}/EmptyEqsSection.asf
 
 # Test 6. Attempt to open an existing equations section.
-echo "" > TestEqs.asf
+echo "" > ${builddir}/TestEqs.asf
 call_toolbus in-output-test-6.tb
-rm -f TestEqs.asf
+rm -f ${builddir}/TestEqs.asf
 
 # Test 7. Attempt to open a non-existing equations section.
 call_toolbus in-output-test-7.tb
 
 # Test 8. Attempt to open an existing sdf definition.
-echo "module TestSdf" > TestSdf.sdf
+echo "module TestSdf" > ${builddir}/TestSdf.sdf
 call_toolbus in-output-test-8.tb
-rm -f TestSdf.sdf
+rm -f ${builddir}/TestSdf.sdf
 
 # Test 9. Attempt to open a non-existing sdf section.
 call_toolbus in-output-test-9.tb
