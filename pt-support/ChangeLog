@@ -1,5 +1,8 @@
 $Id$
 
+2003/02/18 (markvdb@cwi.nl)
+ * Activated the translation from tree2graph.
+
 Mon Feb 10 08:53:50 CET 2003 <>
  * Add PT2graph.h to includes
 
