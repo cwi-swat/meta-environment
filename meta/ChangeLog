@@ -1,5 +1,8 @@
 # $Id$
 
+2001/07/11 (markvdb@cwi.nl)
+ * Fixed bug in set and get-parsetable scripts.
+
 2001/07/09 (markvdb@cwi.nl)
  * Added functionality to dump the parse table of a module to parse terms
    over this module.

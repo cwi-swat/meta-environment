@@ -21,7 +21,7 @@ Id := process-id.
   snd-msg(get-table-from-db(ModuleId)) .
   (
     rec-msg(table(Table?, Path?)).
-    snd-msg(table(Table, Path))
+    snd-msg(parse-table(Table, Path))
   +
     rec-msg(no-table) .
     snd-note(ui-status(statf(Id, "Generating parsetable %s",[ModuleId]))).
@@ -41,12 +41,12 @@ Id := process-id.
       snd-msg(get-table-from-db(ModuleId)) .
       rec-msg(table(Table?, Path?)) .
       snd-note(ui-status(endstat(Id))) .
-      snd-msg(table(Table, Path))
+      snd-msg(parse-table(Table, Path))
     +
       rec-msg(no-syntax(ErrorMsg?)) .
       snd-note(ui-status(endstat(Id))) .
       snd-note(ui-status(errorf("%s",[ErrorMsg]))).
-      snd-msg(no-table)
+      snd-msg(no-parse-table)
     )
   )
 ) *

@@ -18,11 +18,11 @@ in
     snd-note(ui-status(statf(Id, "Dumping parse table for %s",[ModuleName]))) .
     snd-msg(get-parsetable(trm(ModuleName))) .
     (
-      rec-msg(table(Table?, Path?)) .
+      rec-msg(parse-table(Table?, Path?)) .
       snd-msg(save-table(ModuleName, Path, Table)) .
       rec-msg(save-done)
     +
-      rec-msg(no-table)
+      rec-msg(no-parse-table)
     ) .
     snd-note(ui-status(endstat(Id)))
 
