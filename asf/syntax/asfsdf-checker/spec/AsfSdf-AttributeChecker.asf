@@ -26,7 +26,7 @@ equations
 
   [ca-2'3] has-traversal-attribute(Production) == true,
            is-prefix-function(Production) == true,
-           consistent-defined(Production, Production*, $ModuleId) == consistent,
+           consistent-defined(Production, Production*, $ModuleId) == <consistent,>,
            Msgs2 := check-form-production(Production, Msgs1, $ModuleId)
            ===========================================================
            check-attributes-in-module(Production,
@@ -34,7 +34,7 @@ equations
 
   [ca-2'4] has-traversal-attribute(Production) == true,
            is-prefix-function(Production) == true,
-           consistent-defined(Production, Production*, $ModuleId) == not-found,
+           consistent-defined(Production, Production*, $ModuleId) == <not-found,>,
            Msgs2 := check-form-production(Production, Msgs1, $ModuleId),
            Msgs3 := check-attributes-in-production(Production, Msgs2, $ModuleId)
            ====================================================================
@@ -43,7 +43,7 @@ equations
 
   [ca-2'5] has-traversal-attribute(Production) == true,
            is-prefix-function(Production) == true,
-           Msg := consistent-defined(Production, Production*, $ModuleId),
+           <inconsistent, Msg> := consistent-defined(Production, Production*, $ModuleId),
            Msg != consistent,
            Msg != not-found 
            ================
@@ -199,36 +199,37 @@ equations
 
   [default-hta-1'1] has-traversal-attribute(Attributes) = false
 
-  [cd-1'1] consistent-defined(Production, , $ModuleId) = not-found
+  [cd-1'1] consistent-defined(Production, , $ModuleId) = <consistent, >
 
   [cd-1'2] consistent-defined($Literal ( $Symbol1 , $Symbol,* ) -> $Symbol2 Attributes,
-                              $Literal ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes
-                              Production*, 
-                              $ModuleId) = consistent
+                              $Literal ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes, 
+                              $ModuleId) = <consistent, >
 
   [cd-1'3] equal-arguments($Symbol,*1;$Symbol,*2) == false,
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str($Literal ( $Symbol1 , $Symbol,*1 ) -> $Symbol2 Attributes1),
            $String3 := production2str($Literal ( $Symbol3 , $Symbol,*2 ) -> $Symbol4 Attributes2),
            $String4 := "inconsistent-arguments-of-traversal-productions in " || $String1,
-           $String5 := $String2 || " vs. " || $String3
+           $String5 := $String2 || " vs. " || $String3,
+           Msg := make-warning($String4, $String5)
            ====>
            consistent-defined($Literal ( $Symbol1 , $Symbol,*1 ) -> $Symbol2 Attributes1,
                               $Literal ( $Symbol3 , $Symbol,*2 ) -> $Symbol4 Attributes2
                               Production*, 
-                              $ModuleId) = make-warning($String4, $String5)
+                              $ModuleId) = <inconsistent, Msg>
 
   [cd-1'3] Attributes1 != Attributes2,
            $String1 := moduleid2str($ModuleId),
            $String2 := production2str($Literal ( $Symbol1 , $Symbol,* ) -> $Symbol2 Attributes1),
            $String3 := production2str($Literal ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes2),
            $String4 := "inconsistent-traversal-attributes in " || $String1,
-           $String5 := $String2 || " vs. " || $String3
+           $String5 := $String2 || " vs. " || $String3,
+           Msg := make-warning($String4, $String5)
            ====>
            consistent-defined($Literal ( $Symbol1 , $Symbol,* ) -> $Symbol2 Attributes1,
                               $Literal ( $Symbol3 , $Symbol,* ) -> $Symbol4 Attributes2
                               Production*, 
-                              $ModuleId) =  make-warning($String4, $String5)
+                              $ModuleId) =  <inconsistent, Msg>
 
   [default-cd-1'4] consistent-defined(Production1, Production2 Production*, $ModuleId) =
                       consistent-defined(Production1, Production*, $ModuleId)

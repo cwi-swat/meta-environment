@@ -18,10 +18,13 @@ hiddens
                                <{Feedback ","}*, Production*>, 
                                ModuleId)                -> <{Feedback ","}*, Production*> {traversal(accu, break, top-down)}
 
+  sorts Fb-Msg
   context-free syntax
-    "consistent"                                          -> Feedback
-    "not-found"                                           -> Feedback     
-    consistent-defined(Production, Production*, ModuleId) -> Feedback
+    "consistent"   -> Fb-Msg
+    "not-found"    -> Fb-Msg
+    "inconsistent" -> Fb-Msg
+   
+    consistent-defined(Production, Production*, ModuleId) -> <Fb-Msg, Feedback?>
 
   context-free syntax
     check-form-production(Production, {Feedback ","}*, ModuleId)          -> {Feedback ","}*
