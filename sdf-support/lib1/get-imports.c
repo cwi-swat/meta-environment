@@ -42,7 +42,7 @@ collect_imports(SDF_Grammar grammar, ATermList *imports)
 /*{{{  SDFgetImports(SDF_Module module) */
 
 ATermList
-SDFgetImports(SDF_Module module)
+SDF_getImports(SDF_Module module)
 {
   SDF_ImpSectionList imps;
   SDF_Sections       sections;

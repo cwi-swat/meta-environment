@@ -18,7 +18,7 @@ void       SDFforeachGrammarInModule   (SDF_Module      module,
 					void           *user_data);
 
 
-ATermList  SDFgetImports    (SDF_Module module);
+ATermList  SDF_getImports    (SDF_Module module);
 
 SDF_SymbolList  SDF_getModuleSorts(SDF_Module module);
 
