@@ -1,10 +1,16 @@
 
+Tue Oct 14 13:55:12 CEST 2003	<jurgenv@cwi.nl>
+  * Added package definition
+  * Renamed package from mod_toolbus to mod-toolbus 
 
 Mon Oct 13 09:18:52 CEST 2003	<jurgenv@cwi.nl>
-  * Received first implementation of mod-toolbus from Erik Post
   * Created a repository for mod-toolbus at cvs-sop.inria.fr:/CVS/aircube
   * Added automatic detection of dependencies on apache and toolbuslib
   * Added dependency on ATerm library
   * Added configuration macros for portability of socket programming
   * Changed Makefile.am's to use new configuration parameters
   * Added a script "reconf" that should be called before ./configure
+
+Oct 2003 <epost@science.uva.nl>
+  * Prototype implementation of mod_toolbus, an Apache module that
+    acts as a ToolBus client.
