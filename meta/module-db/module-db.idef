@@ -77,13 +77,10 @@ snd-do(Mdb, create-module-db).
     snd-msg(need-modules(Modules))
   +
     rec-value(Mdb, name-consistency-error(ErrorName?)) .
-    snd-note(ui-status(errorf("Module name %s inconsistent with file name %s",
-                              [ErrorName, Name]))) .
-    snd-msg(error-opening(Name))
+    snd-msg(error-opening(Name, name-inconsistent))
   +
     rec-value(Mdb, illegal-module-error(ErrorName?)) .
-    snd-note(ui-status(errorf("Illegal module: %s", [ErrorName]))) .
-    snd-msg(error-opening(Name))
+    snd-msg(error-opening(Name, erroneous-module))
   )
 +
   rec-msg(invalidate-sdf-in-db(Name?)).
@@ -103,9 +100,7 @@ snd-do(Mdb, create-module-db).
       snd-msg(extra-modules(Modules))
     +
       rec-value(Mdb, name-consistency-error(ErrorName?)) .
-      snd-note(ui-status(errorf("Module name %s inconsistent with file name",
-                                [ErrorName]))) .
-      snd-msg(error-opening(ErrorName))
+      snd-msg(error-opening(ErrorName, name-inconsistent))
     )
   else
     snd-msg(extra-modules([]))
