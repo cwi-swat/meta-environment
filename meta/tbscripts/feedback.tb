@@ -49,7 +49,6 @@ let
   End : int, 
   Length : int
 in
-  printf("opening file over unknown language: %s\n", Filename) .
   snd-msg(edit-general("unknown language", Filename)) .
   rec-msg(editor-opened("unknown language", EditorId?)) .
   if not(equal(Area, no-area)) then
