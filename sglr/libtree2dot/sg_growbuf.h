@@ -23,6 +23,10 @@
  */
 
 
+#ifndef _SG_GROWBUF_H_
+#define _SG_GROWBUF_H_ 1
+
+
 #include <ctype.h>
 
 typedef struct _growbuf {
@@ -43,3 +47,6 @@ sg_growbuf *SG_AddStringToGrowBuf(sg_growbuf *buf, char *str);
 void *SG_GetGrowBufContent(sg_growbuf *buf);
 size_t SG_GetGrowBufUsed(sg_growbuf *buf);
 void SG_WriteGrowBuf(FILE *fd, sg_growbuf *buf);
+
+
+#endif  /* _SG_GROWBUF_H_ */
