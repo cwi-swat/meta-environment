@@ -12,7 +12,7 @@ libpackagedir=${pkgdatadir}/library$(subst library,,$(subdir))
 
 INSTALL_READONLY = ${INSTALL} -m 0444
 
-install-data-hook: make-dir install-modules install-prepared make-read-only
+install-data-hook: make-dir install-modules install-prepared 
 
 make-dir:
 	@if test -d $(DESTDIR)$(libpackagedir); then \
@@ -44,5 +44,3 @@ install-prepared:
         done;
 
 
-make-read-only:
-	chmod 555 $(DESTDIR)$(libpackagedir) 
