@@ -538,7 +538,8 @@ ATerm make_list(ATerm t)
 
 /*{{{  static ATermList trafo_kids_list(funcptr trav, ATermList args) */
 
-static ATermList trafo_kids_list(funcptr trav, ATermList args)
+static ATermList trafo_kids_list(funcptr trav, ATermList args, 
+				 ATermList extra_args)
 {
   ATermList result = ATempty;
   int length = ATgetLength(args);
@@ -546,7 +547,7 @@ static ATermList trafo_kids_list(funcptr trav, ATermList args)
 
   if(length < 16) {
     while(!ATisEmpty(args)) {
-      el = trav(ATgetFirst(args));
+      el = call_using_list(trav,ATinsert(extra_args,ATgetFirst(args)));
       if(el)
         result = ATinsert(result, el);
       args = ATgetNext(args);
@@ -578,10 +579,9 @@ static ATermList trafo_kids_list(funcptr trav, ATermList args)
   }
 }
 
-/*}}}  */
 /*{{{  ATerm trafo_kids(funcptr trav, ATerm arg0) */
 
-ATerm trafo_kids(funcptr trav, ATerm arg0)
+ATerm trafo_kids(funcptr trav, ATerm arg0, ATermList extra_args)
 {
   int type = ATgetType(arg0);
 
@@ -597,7 +597,7 @@ ATerm trafo_kids(funcptr trav, ATerm arg0)
     assert(ATgetLength(args) < 33);
 
     for(idx = 0, list = args;!ATisEmpty(list); list = ATgetNext(list)) {
-      arg[idx++] = trav(ATgetFirst(list));
+      arg[idx++] = call_using_list(trav, ATinsert(extra_args,ATgetFirst(list)));
     }
 
     sym = get_sym(arg0);
@@ -611,7 +611,7 @@ ATerm trafo_kids(funcptr trav, ATerm arg0)
     }
   }
   else if (type == AT_LIST) {
-    arg0 = (ATerm) trafo_kids_list(trav, (ATermList) arg0);
+    arg0 = (ATerm) trafo_kids_list(trav, (ATermList) arg0, extra_args);
   }
 
 
