@@ -22,4 +22,4 @@ include ${top_srcdir}/make_rules
 
 noinst_LIBRARIES    = libnative.a
 
-libnative_a_SOURCES = AUX-Basic-Integers5.c Basic-Integers.c
+libnative_a_SOURCES = AUX-Basic-Integers4.c Basic-Integers.c
