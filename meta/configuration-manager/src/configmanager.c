@@ -118,12 +118,12 @@ ATerm get_button_actions(int cid, char *buttonName, char *moduleName)
     }
     if (strcmp(buttonName, "Reduce") == 0) {
       buttonActions = ATinsert(buttonActions, 
-                               ATmake("activate-editor(<str>,\"reduct.out\")",
+                               ATmake("edit(<str>,\"reduct.out\")",
                                       moduleName));
       buttonActions = ATinsert(buttonActions, 
-                               ATmake("reduce-action(<str>)", moduleName));
+                               ATmake("reduce(<str>)", moduleName));
       buttonActions = ATinsert(buttonActions, 
-                               ATmake("get-tree-action(<str>)", moduleName));
+                               ATmake("get-root(<str>)", moduleName));
     }
   }
   return ATmake("snd-value(button-actions(<term>))", buttonActions);
