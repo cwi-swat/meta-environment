@@ -74,11 +74,19 @@ in
       tau. /* needed to activate the next process (bug in ToolBus) */
       Open-Equations(RealModule, RealPath)
     else
-      tau
+      Handle-Open-Module-Errors(Module, Status)
     fi
   ).
   snd-note(ui-status(endstat(Id)))
 endlet
+
+process Handle-Open-Module-Errors(Module : str, Status : term) is
+  if equal(Status, parse-error) then
+    snd-msg(add-empty-module-to-db(Module)).
+    rec-msg(empty-module-added)
+  else
+    tau
+  fi
 
 process Open-Syntax (Module : str, Path : str, Status : term?, 
                      RealModule : str?, RealPath : str?, Imports : list?) 
