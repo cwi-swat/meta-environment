@@ -1550,8 +1550,6 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
 		in0 = SG_CountInjectionsInTree(pt, t0, 0);
 		in1 = SG_CountInjectionsInTree(pt, t1, 0);
 		
-		ATwarning("in0: %d\nin1: %d\n",in0, in1);
-
     IF_STATISTICS(
       if (in0 != in1) {
         SG_InjectionFilterSucceeded(SG_NR_INC);
