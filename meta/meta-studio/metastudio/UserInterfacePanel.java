@@ -96,15 +96,6 @@ public abstract class UserInterfacePanel extends JPanel
 		// intentionally left empty
 	}
 
-	public ATerm showQuestionDialog(String s0) {
-		// intentionally left empty
-		return null;
-	}
-
-	public void showListChoice(String s0, String s1, ATerm t2) {
-		// intentionally left empty
-	}
-
 	public void recAckEvent(ATerm t0) {
 		// intentionally left empty
 	}

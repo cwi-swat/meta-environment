@@ -1,6 +1,6 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 12:03:25 PM
+// generation time: Nov 25, 2004 1:32:06 PM
 
 package metastudio;
 
@@ -30,19 +30,6 @@ public class UserInterfaceBridge
     }
     else {
       throw new UnsupportedOperationException("method `displayGraph' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void showListChoice(String s0, String s1, ATerm t2)
-
-  public void showListChoice(String s0, String s1, ATerm t2)
-  {
-    if (tool != null) {
-      tool.showListChoice(s0, s1, t2);
-    }
-    else {
-      throw new UnsupportedOperationException("method `showListChoice' not supported.");
     }
   }
 
@@ -121,19 +108,6 @@ public class UserInterfaceBridge
     }
     else {
       throw new UnsupportedOperationException("method `displayTreelist' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public ATerm showQuestionDialog(String s0)
-
-  public ATerm showQuestionDialog(String s0)
-  {
-    if (tool != null) {
-      return tool.showQuestionDialog(s0);
-    }
-    else {
-      throw new UnsupportedOperationException("method `showQuestionDialog' not supported.");
     }
   }
 

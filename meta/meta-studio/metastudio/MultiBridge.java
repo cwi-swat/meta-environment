@@ -78,31 +78,6 @@ public class MultiBridge extends UserInterfaceTool {
 		}
 	}
 
-	public ATerm showQuestionDialog(String question) {
-		ATerm result = null;
-		Iterator iter = getToolComponents().iterator();
-
-		while (iter.hasNext()) {
-			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-			result = tif.showQuestionDialog(question);
-
-			if (result != null) {
-				return factory.make("snd-value(<term>)", result);
-			}
-		}
-
-		throw new UnsupportedOperationException("not implemented");
-	}
-
-	public void showListChoice(String s0, String s1, ATerm t1) {
-		Iterator iter = getToolComponents().iterator();
-
-		while (iter.hasNext()) {
-			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-			tif.showListChoice(s0, s1, t1);
-		}
-	}
-
 	public void displayTreelist(String id, ATerm treeList) {
 		Iterator iter = getToolComponents().iterator();
 

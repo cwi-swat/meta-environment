@@ -22,7 +22,7 @@ import metastudio.components.MenuBar;
 import metastudio.components.MessageTabs;
 import metastudio.components.ModulePopupMenu;
 import metastudio.components.ToolBar;
-import metastudio.components.filedialog.FileDialog;
+import metastudio.components.dialogtool.DialogTool;
 import metastudio.components.statusbar.StatusBar;
 import metastudio.utils.Preferences;
 import aterm.pure.PureFactory;
@@ -73,7 +73,7 @@ public class MetaStudio extends JFrame {
     }
     
     private void createPopupHandlers(String []args) {
-        FileDialog fileDialog = new FileDialog(this.getRootPane(), factory, args);
+        DialogTool fileDialog = new DialogTool(this.getRootPane(), factory, args);
         Thread fdThread = new Thread(fileDialog);
         fdThread.setName("file-dialog");
         fdThread.start();
