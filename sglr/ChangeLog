@@ -1,5 +1,6 @@
 $Id$
 
+2001/11/01 ({jurgenv,markvdb}@cwi.nl)
 2001/10/31 ({jurgenv,markvdb}@cwi.nl)
   * Fixed a bug with respect to storing filtered ambiguity clusters.
    

@@ -53,7 +53,7 @@ static void SG_InputAmbiMapSet(int index)
   InputAmbiMap = BitmapSet(InputAmbiMap, index);
 }
 
-static ATerm SG_CreateAmbiKey(ATerm key, size_t pos)
+ATerm SG_CreateAmbiKey(ATerm key, size_t pos)
 {
   return (ATerm) ATmakeList2(key, (ATerm) ATmakeInt(pos));
 }  

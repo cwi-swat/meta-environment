@@ -20,9 +20,8 @@
 
 extern long sg_nr_rejects;
 
-/*
 ATermTable resolvedtable = NULL;
-*/
+ATermTable postable = NULL;
 
 int SG_InjectionFilterSucceeded(int mode)
 {
@@ -1328,11 +1327,13 @@ static tree SG_FilterAmbs(parse_table *pt, ATermList ambs, size_t *pos)
   ATermList localAmbs = ambs;
   size_t saved_pos = *pos;
 
-  if (SG_FILTER_REJECT && SG_PT_HAS_REJECTS(pt)) {
-    for (;!ATisEmpty(localAmbs); localAmbs = ATgetNext(localAmbs)) {
-      amb = (tree) ATgetFirst(localAmbs);
-      if (SG_HasRejectProd(amb)) {
-        return NULL;
+  if (SG_FILTER) {
+    if (SG_FILTER_REJECT && SG_PT_HAS_REJECTS(pt)) {
+      for (;!ATisEmpty(localAmbs); localAmbs = ATgetNext(localAmbs)) {
+        amb = (tree) ATgetFirst(localAmbs);
+        if (SG_HasRejectProd(amb)) {
+          return NULL;
+        }
       }
     }
   }
@@ -1393,6 +1394,7 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
   ATermList args, ambs;
   ATermList newargs, tail, newtail;
   tree arg, newt, newarg;
+  ATerm key;
 
   switch(type) {
   case AT_APPL:
@@ -1409,33 +1411,30 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
                           SG_ClustersVisited(SG_NR_INC), SGnrAmb(SG_NR_ASK));
       )
 
-/* This code has become obsolete, but when processing ambiguity
- * clusters in a different way (Hayco/Pieters approach) this
- * may be reactivated.
-      newt = (tree)ATtableGet(resolvedtable, (ATerm)t);
+      key = SG_CreateAmbiKey((ATerm) ambs, *pos);
+
+      newt = (tree)ATtableGet(resolvedtable, key);
       if (!newt) {
         newt = SG_FilterAmbs(pt, ambs, pos);
         if (newt) {
-          ATtablePut(resolvedtable, (ATerm)t, (ATerm) newt);
+          ATtablePut(resolvedtable, key, (ATerm) newt);
+          ATtablePut(postable, key, (ATerm)ATmakeInt(*pos));
         }
         else {
           return NULL;
         }
       }
-      t = newt;
- */
-      newt = SG_FilterAmbs(pt, ambs, pos);
-      if (newt) {
-        t = newt;
-      }
       else {
-        return NULL;
+        *pos = ATgetInt((ATermInt)ATtableGet(postable, key));
       }
+      t = newt;
     }
     else {
-      if (SG_FILTER_REJECT && SG_PT_HAS_REJECTS(pt)) {
-        if (SG_HasRejectProd(t)) {
-          return NULL;
+      if (SG_FILTER) {
+        if (SG_FILTER_REJECT && SG_PT_HAS_REJECTS(pt)) {
+          if (SG_HasRejectProd(t)) {
+            return NULL;
+          }
         }
       }
 
@@ -1488,7 +1487,12 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
   break;
   }
 
-  return SG_Associativity_Priority_Filter(pt, t);
+  if (SG_FILTER) {
+    return SG_Associativity_Priority_Filter(pt, t);
+  }
+  else {
+    return t;
+  }
 }
 
 
@@ -1503,9 +1507,9 @@ tree SG_FilterTree(parse_table *pt, tree t)
     * #(ambiguity nodes) elements.
     */
 
-/*
    resolvedtable = ATtableCreate(2048, 75);
-*/
+   postable = ATtableCreate(2048, 75);
+
    nrAmbs = SGnrAmb(SG_NR_ASK);
    IF_VERBOSE(SG_ClustersVisited(SG_NR_ZERO));
 
@@ -1518,9 +1522,9 @@ tree SG_FilterTree(parse_table *pt, tree t)
       SG_PrintDotAndNewLine();
       )
 
-/*
    ATtableDestroy(resolvedtable);
-*/
+   ATtableDestroy(postable);
+
    return newT; 
 }
 

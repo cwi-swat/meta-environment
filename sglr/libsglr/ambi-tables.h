@@ -7,6 +7,7 @@
 #include "sglr.h"
 #include "bitmap.h"
 
+ATerm     SG_CreateAmbiKey(ATerm key, size_t pos);
 void      SG_AmbiTablesDestroy();
 ATermList SG_AmbiTablesGetCluster(ATerm key, size_t pos);
 ATermList SG_AmbiTablesGetClusterOnIndex(ATermInt idx);
