@@ -26,7 +26,7 @@ SUBDIRS     = config editors graph-browser \
               in-output module-db utils tbscripts demo doc  \
               configuration-manager
 
-EXTRA_DIST  = make_rules meta.sh.src meta.pod
+EXTRA_DIST  = make_rules meta.sh.src meta.pod reconf
 
 bin_SCRIPTS = meta
 
