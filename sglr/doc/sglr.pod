@@ -1,0 +1,168 @@
+=head1 NAME
+
+B<SGLR> - the B<S>cannerless B<G>eneralized B<LR> parser
+
+=head1 SYNOPSIS
+
+B<sglr> B<-p> file [-B<12?bcdfghlnPstvVx>] [-B<i> I<file>] [-B<o> I<file>] [-B<D> I<file>] [-B<s> I<sort>] [-B<S> I<file>]
+
+=head1 DESCRIPTION
+
+The B<sglr> parser uses a specified I<parse table> to parse an I<input file>.
+After a successful parse, the resulting parse forest is written to an
+I<output file>.
+
+A number of options can be supplied; these are as follows:
+
+=over 4
+
+=item -B<1>, -B<2>
+
+Choose between AsFix1 (B<1>) and AsFix2 (B<2>) output formats.  Note
+that AsFix1 can contain parse forests consisting of a single parse tree
+only.  The default is to write AsFix2.
+
+=item -B<b>, -B<t>
+
+Choose between binary (B<b>) and plaintext (B<t>) output formats.  Default
+is binary output.
+
+=item -B<c>
+
+Toggles cycle detection (on by default).
+
+=item -B<d>
+
+Toggles debug mode.  In debug mode, a full trace for the entire parse
+is maintained in the F<.sglr-log>.  Be alert: such files tend to become
+rather big.
+
+=item -B<D> I<file>
+
+Write a representation of the resulting parse forest as a dot file to
+F<file>.
+
+=item -B<f>
+
+Toggles filtering mode (on by default).  The affected filters are
+multiset and injection count filtering.
+
+=item -B<g>
+
+Toggles garbage collection, which is on by default.  Present as an aid
+for development of the built-in garbage collector only; no other
+relevance whatsoever.
+
+=item -B<i> I<file>
+
+Read input from F<file>; by default, input is read from stdin.
+
+=item -B<?>, -B<h>
+
+Prints concise usage information (reflecting current setup).
+
+=item -B<l>
+
+Toggles statistics mode (off by default).  Produces some run-time
+statistics in F<sglr-stats.txt>, including time and - on platforms
+on which these can be obtained - memory usage data.
+
+=item -B<n>
+
+Toggle output mode.  By default, output is generated.
+
+=item -B<o> I<file>
+
+Write output to F<file>; by default, output is written to stdout.
+Note that strange things are bound to happen when writing binary
+output to a tty.
+
+=item -B<P>
+
+Parse forests are annotated with position information.  This can
+be quite expensive in terms of time- ane memory usage.
+
+=item -B<s> I<sort>
+
+Only parse trees that have I<sort> at their root are accepted.
+
+=item -B<S> I<file>
+
+Trace the parser's progress (i.e. the history of parse stack creation)
+in a series of dot files.
+
+=item -B<v>
+
+Toggles chatty (verbose) operation.
+
+=item -B<V>
+
+Displays the program's version number.
+
+=item -B<x>
+
+Toggles suppression of lexical subtrees for dotfiles.  By default,
+the full, unabbreviated parse forest is entirely dumped as a dot graph
+when writing dot output; pruning out the lexical detail can substantially
+reduce the size of the resulting graph.
+
+=back
+
+=head1 USAGE
+
+To parse, the B<sglr> parser requires a parse table.  Instantiated with
+that parse table, it has become a parser for the language defined by
+the grammar corresponding to the specified parse table.
+
+=head1 EXAMPLES
+
+    $ sglr -h
+    Usage:
+            sglr    -p file [-12?bcdfghlnPtvVx] [-i file] [-o file] \
+                    [-D file] [-s sort] [-S file]
+    [. . .]
+    $ sglr -vp Test.tbl -i MyCode.cod -o Output.File -l
+    sglr: logging to sglr-stats.txt
+    sglr: opening parse table Test.tbl
+    sglr: parsing file MyCode.cod (1 tokens)
+    sglr: writing parse result to Output.File
+    sglr: Test.tbl parsed MyCode.cod as sort S, exactly 0 ambiguities
+
+=head1 EXIT STATUS
+
+Returns an error on unsuccesful parses.
+
+=head1 SEE ALSO
+
+L<tree2dot>, L<dot>, L<ParseTable-Generator>
+
+=head1 REFERENCES
+
+=for docbook
+	GraphViz: <http://www.research.att.com/sw/tools/graphviz/>
+
+=for html
+	<A HREF="http://www.research.att.com/sw/tools/graphviz/">GraphViz</A>
+
+=for mf
+	GraphViz: <http://www.research.att.com/sw/tools/graphviz/>
+
+=for man
+	GraphViz: <http://www.research.att.com/sw/tools/graphviz/>
+
+=for text
+	GraphViz: <http://www.research.att.com/sw/tools/graphviz/>
+
+=head1 KNOWN BUGS
+
+None.
+
+=head1 NOTES
+
+In a different context altogether, B<sglr> runs as a C<ToolBus> client;
+its C<ToolBus> API is described in F<whatwouldbrianboitanodo.qm>.
+
+
+=head1 AUTHOR
+
+Jeroen Scheerder <S<js@cwi.nl>>
