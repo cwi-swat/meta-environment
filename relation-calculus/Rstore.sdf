@@ -67,7 +67,8 @@ hiddens
         "$Val" [0-9\']*                -> RVALUE
         "$VPair*" [0-9\']*             -> { <RVAR, REXPTYPE, RVALUE> ","}*
         "$String" [0-9\']*             -> String
-        "$Area" [0-9\']*	       -> Area
+        "$Area" [0-9\']*	       	-> Area
+        "$Loc" [0-9\']*	       		-> Location
         "$Tuple" [0-9\']*	       -> Tuple
         "$Tuple*" [0-9\']*	       -> {Tuple ","}*
 

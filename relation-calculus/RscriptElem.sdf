@@ -13,7 +13,7 @@ exports
      BoolCon                                	-> Elem  
      Integer                               	-> Elem  
      String				    	-> Elem  
-     Area				    	-> Elem 
+     Location				    	-> Elem 
 
 %%     "*undefined*"				-> Elem 
 

@@ -7,4 +7,4 @@ exports
 
   context-free syntax
     "[" { ListItem "," }* "]"          -> List
-    "listitem" "(" String "," Area ")" -> ListItem
+    "listitem" "(" String "," Location ")" -> ListItem

@@ -47,7 +47,7 @@
 [S1]	eval-rstat(bool $Var, $Rstore) 		= assign-when-undef($Var, bool, true, $Rstore)
 [S2]	eval-rstat(int $Var, $Rstore)  		= assign-when-undef($Var, int, 0, $Rstore)
 [S3]	eval-rstat(str $Var, $Rstore)  		= assign-when-undef($Var, str, "", $Rstore)
-[S4]	eval-rstat(area $Var, $Rstore)		= assign-when-undef($Var, area, area("",0,0,0,0), $Rstore)
+[S4]	eval-rstat(area $Var, $Rstore)		= assign-when-undef($Var, area, location("",area(0,0,0,0,0,0)), $Rstore)
 [S5]	eval-rstat(bag[$Etype] $Var, $Rstore)  	= assign-when-undef($Var, bag[$Etype], empty-bag, $Rstore)
 	
 [S6]	eval-rstat(rel[$Etype1, $Etype2] $Var, $Rstore) 
@@ -150,7 +150,7 @@
 [EVE2]	$Tuple := evalx($Exp, $Rstore)	===> evalt($Exp, $Rstore) = $Tuple
 [EVB1]	$Bag := evalx($Exp, $Rstore)     ===> evalb($Exp, $Rstore) = $Bag
 [EVR1]	$Rel := evalx($Exp, $Rstore)     ===> evalr($Exp, $Rstore) = $Rel
-[EVA1]	$Area := evalx($Exp, $Rstore)    ===> evala($Exp, $Rstore) = $Area
+[EVA1]	$Loc := evalx($Exp, $Rstore)    ===> evall($Exp, $Rstore) = $Loc
 
 %% ---- The main evaluation function evalx
 
@@ -164,7 +164,7 @@
 
 [st1r]	evalx($String, $Rstore) = $String
 
-[area1]	evalx($Area, $Rstore) = $Area
+[area1]	evalx($Loc, $Rstore) = $Loc
 
 [tup1]	evalx($Tuple, $Rstore) = $Tuple
 
@@ -660,17 +660,17 @@
 [all-paths-top]
 	all-paths-from($Bag1, $Bag2) = chain-each(all-nodes-from($Bag1, $Bag2))
 
-%% ---- Access functions for areas
+%% ---- Access functions for locations
 
-[fn]	evalx(filename($Exp), $Rstore)	=  get-filename(evala($Exp, $Rstore))
+[fn]	evalx(filename($Exp), $Rstore)	=  get-filename(evall($Exp, $Rstore))
 
-[bl]	evalx(beginline($Exp), $Rstore) = get-beginline(evala($Exp, $Rstore))
+[bl]	evalx(beginline($Exp), $Rstore) = get-begin-line(evall($Exp, $Rstore))
 
-[bc]	evalx(begincol($Exp), $Rstore) 	= get-begincol(evala($Exp, $Rstore))
+[bc]	evalx(begincol($Exp), $Rstore) 	= get-begin-column(evall($Exp, $Rstore))
 
-[el]	evalx(endline($Exp), $Rstore) 	= get-endline(evala($Exp, $Rstore))
+[el]	evalx(endline($Exp), $Rstore) 	= get-end-line(evall($Exp, $Rstore))
 
-[ec]	evalx(endcol($Exp), $Rstore) 	= get-endcol(evala($Exp, $Rstore))
+[ec]	evalx(endcol($Exp), $Rstore) 	= get-end-column(evall($Exp, $Rstore))
 
 %% ---- sum
 

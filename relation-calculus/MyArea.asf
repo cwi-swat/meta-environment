@@ -19,6 +19,21 @@ equations
 
 [alt]	less($Area1, $Area2) =  less-equal($Area1, $Area2) & not(equal($Area1, $Area2))
 
+[llt]	get-filename($Loc1) = get-filename($Loc2)
+	============================================================
+	less($Loc1, $Loc2) = less(get-area($Loc1), get-area($Loc2))
+
+[default-llt]
+	less($Loc1, $Loc2) = false
+
+[lleq]	get-filename($Loc1) = get-filename($Loc2)
+	============================================================
+	less-equal($Loc1, $Loc2) = less-equal(get-area($Loc1), get-area($Loc2))
+
+[default-lleq]
+	less-equal($Loc1, $Loc2) = false
+
+
 [ageq]	greater-equal(area($BeginLine, $BeginColumn, $EndLine, $EndColumn, $Offset, $Length),
                 area($BeginLine', $BeginColumn', $EndLine', $EndColumn', $Offset', $Length')) =
 	        (($BeginLine < $BeginLine') | (($BeginLine == $BeginLine') & ($BeginColumn <= $BeginColumn'))) &
@@ -29,3 +44,13 @@ equations
 	greater-equal($Area1, $Area2) = false
 
 [age]	greater($Area1, $Area2) = greater-equal($Area1, $Area2) & not(equal($Area1, $Area2))
+
+
+[gbl] get-begin-line($Loc) = get-begin-line(get-area($Loc))
+[gbc] get-begin-column($Loc) = get-begin-column(get-area($Loc))
+[gel] get-end-line($Loc) = get-end-line(get-area($Loc))
+[gec] get-end-column($Loc) = get-end-column(get-area($Loc))
+
+[go]  get-offset($Loc) = get-offset(get-area($Loc))
+[gl]  get-length($Loc) = get-length(get-area($Loc))
+

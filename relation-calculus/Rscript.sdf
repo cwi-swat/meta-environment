@@ -15,7 +15,7 @@ exports
      "and" | "or" | "implies" | "in" | "notin" |
      "union" | "inter" | "o" | "x" | "exists" |
       "forall" | "bool" | "int" | "str" | 
-      "area" | "bag" | "rel" | "init" | "yield" | 
+      "loc" | "bag" | "rel" | "init" | "yield" | 
       "equations" | "limit" | "initial" | 
       "satisfy" | "end"				-> RVAR {reject}
 
@@ -102,7 +102,7 @@ exports
 
 %% Types
 
-     "bool" | "int" | "str" | "area"	     	-> ElemType
+     "bool" | "int" | "str" | "loc"	     	-> ElemType
      ElemType                                	-> REXPTYPE
      "<" {REXPTYPE ","}+">"			-> REXPTYPE
      "bag" "[" REXPTYPE "]"       	     	-> REXPTYPE
