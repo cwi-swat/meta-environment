@@ -1,4 +1,6 @@
-module functions/Tuple[A B C D E F G H]
+module functions/Tuple[A B C]
+
+imports basic/Integers
 
 exports
 
@@ -6,25 +8,22 @@ context-free syntax
 
 tuple -> (A B => A#B)
 tuple -> (A B C => A#B#C)
-tuple -> (A B C D => A#B#C#D)
-tuple -> (A B C D E => A#B#C#D#E)
-tuple -> (A B C D E F => A#B#C#D#E#F)
-tuple -> (A B C D E F G=> A#B#C#D#E#F#G)
-tuple -> (A B C D E F G H => A#B#C#D#E#F#G#H)
+
+"fst" -> (A#B => A)
+"snd" -> (A#B => B)
+"fst" -> (A#B#C => A)
+"snd" -> (A#B#C => B)
+"thd" -> (A#B#C => C)
 
 hiddens
 
 imports basic/Whitespace
 
-sorts A#B A#B#C A#B#C#D  A#B#C#D#E A#B#C#D#E#F A#B#C#D#E#F#G  A#B#C#D#E#F#G#H 
+sorts A B C A#B A#B#C
 variables
 
 "A" -> A
 "B" -> B
 "C" -> C
-"D" -> D
-"E" -> E
-"F" -> F
-"G" -> G
-"H" -> H
+
 
