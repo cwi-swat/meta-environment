@@ -36,20 +36,24 @@ process ParseFocusses is
     Tree: term,
     Errors: term,
     Status: term,
-    FileName: str
+    FileName: str,
+    Checking : term
   in 
     Id := process-id .
     (
       rec-msg(parse-focusses(EditorId?, ModuleName?, Type?)) .
       subscribe(delete-editor(EditorId)) .
       if equal(Type, eqs) then
+        Checking := true .
         snd-msg(get-rules-top-sort) .
         rec-msg(set-rules-top-sort(sort(Nonterminal?)))
       else
         if equal(Type, sdf) then
+          Checking := true .
           snd-msg(syntax-top-sort-hook(sdf)) .
           rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?)))
         else
+          Checking := false .
           snd-msg(other-top-sort-hook(Type)) .
           rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
         fi
@@ -59,7 +63,7 @@ process ParseFocusses is
         UpdateTextInModuleDb(Type, ModuleName, Text) .
         snd-msg(get-editor-filename(EditorId)) .
         rec-msg(editor-filename(FileName?)) .
-        ParseString(ModuleName, FileName, Type, true, Nonterminal, Text, 
+        ParseString(ModuleName, FileName, Type, Checking, Nonterminal, Text, 
                     Tree?, Errors?) .
         HandleParseErrors(ModuleName, EditorId, Focus, Errors) .
         ProcessTree(ModuleName, EditorId, Focus, Tree, Errors) .
