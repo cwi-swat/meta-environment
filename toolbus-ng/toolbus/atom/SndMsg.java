@@ -8,16 +8,16 @@ import toolbus.TBTerm;
 import aterm.ATermList;
 
 public class SndMsg extends CommAtom {
-	
-	public SndMsg(ATermList args){
-		super(args);
-	}
-	
-	public SndMsg(){
-		super();
-	}
-	
-	public boolean canCommunicate(Atom a){
-		return a instanceof  RecMsg && TBTerm.mightMatch(getArgs(), a.getArgs());
-	}
+
+  public SndMsg(ATermList args) {
+    super(args);
+  }
+
+  public SndMsg() {
+    super();
+  }
+
+  public boolean canCommunicate(Atom a) {
+    return a instanceof RecMsg && TBTerm.mightMatch(getArgs(), a.getArgs());
+  }
 }

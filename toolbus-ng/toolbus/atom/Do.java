@@ -11,28 +11,25 @@ import aterm.ATerm;
  */
 public class Do extends ToolAtom {
 
-	public Do(ATerm toolarg) {
-		super(toolarg);
-	}
-	
-	public Do() {
-		super();
-	}
+  public Do(ATerm toolarg) {
+    super(toolarg);
+  }
 
-	public void compile(ProcessInstance P, AtomSet follow)
-	throws ToolBusException
-	{
-		super.compile(P, follow);
-	}
-	
-	public boolean execute() throws ToolBusException
-	{
-		if(!isEnabled())
-			return false;
-		
-		ToolInstance ti = getToolInstance();
-		ti.sndDoToTool(getSubstitutedArg());
-		return true;
-	}
+  public Do() {
+    super();
+  }
+
+  public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
+    super.compile(P, follow);
+  }
+
+  public boolean execute() throws ToolBusException {
+    if (!isEnabled())
+      return false;
+
+    ToolInstance ti = getToolInstance();
+    ti.sndDoToTool(getSubstitutedArg());
+    return true;
+  }
 
 }

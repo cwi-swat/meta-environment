@@ -3,31 +3,30 @@
  */
 package toolbus;
 
-
 public class MatchResult {
-	private boolean matches;
-	private MatchEnvironment left;
-	private MatchEnvironment right;
-	
-	public MatchResult(boolean matches, MatchEnvironment left, MatchEnvironment right){
-		this.matches = matches;
-		this.left = left;
-		this.right = right;
-	}
+  private boolean matches;
+  private MatchEnvironment left;
+  private MatchEnvironment right;
 
-	public MatchEnvironment getLeft( ){
-		return left;
-	}
+  public MatchResult(boolean matches, MatchEnvironment left, MatchEnvironment right) {
+    this.matches = matches;
+    this.left = left;
+    this.right = right;
+  }
 
-	public boolean matches() {
-		return matches;
-	}
+  public MatchEnvironment getLeft() {
+    return left;
+  }
 
-	public MatchEnvironment getRight() {
-		return right;
-	}
-	
-	public String toString(){
-		return "MatchResult(" + matches + ", " + left + ", " + right + ")";
-	}
+  public boolean matches() {
+    return matches;
+  }
+
+  public MatchEnvironment getRight() {
+    return right;
+  }
+
+  public String toString() {
+    return "MatchResult(" + matches + ", " + left + ", " + right + ")";
+  }
 }
