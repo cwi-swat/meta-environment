@@ -1,5 +1,8 @@
 # $Id$
 
+2003/07/11 (j.iversen@daimi.au.dk)
+ * Added Type parameter to pre-get-all-sdf2-hook and get-all-sdf2-definitions
+
 2003/07/11 (jurgenv@cwi.nl)
  * A lot of method extraction refactorings in MetaStudio.java
  * Set-focus in Xemacs now also jumps to the focus if its is not in visual 
