@@ -170,14 +170,6 @@ ${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
              -i ${INPUT} -o ${BASE}.adt || err
 fi
 
-info " generating CHARLIST.java"
-if [ ${GENBOTTOMSORT} -gt 0 ]; then
-  info " generating API for bottom sorts"
-  sed "s@__PACKAGE__@${PACKAGE}@g" < ${PKGDATA}/CHARLIST.java.template > \
-    ${OUTPUT}/${PACKAGE}/CHARLIST.java
-  sed "s@__PACKAGE__@${PACKAGE}@g" < ${PKGDATA}/CHARLIST_String.java.template > \
-     ${OUTPUT}/${PACKAGE}/CHARLIST_String.java
-fi
 
 if [ ${ONLYBOTTOM} -eq 0 ]; then
 info " generating java from ADT "
@@ -185,11 +177,11 @@ ${ADTTOJAVA} ${FOLDINGOPT} ${JTOMOPT} ${VERBOSEOPT} ${VISITABLEOPT} \
              -i ${BASE}.adt -o ${OUTPUT} -p ${PACKAGE} 
 fi
 
+info " overwriting CHARLIST_String.java"
 if [ ${GENBOTTOMSORT} -gt 0 ]; then
-  if [ ${JTOM} -gt 0 ]; then
-    info "adding CHARLIST to Tom signature file"
-    cat ${PKGDATA}/CHARLIST.t.template >> ${OUTPUT}/${PACKAGE}/${BASE}.t
-  fi
+  info " generating API for bottom sorts"
+  sed "s@__PACKAGE__@${PACKAGE}@g" < ${PKGDATA}/CHARLIST_String.java.template \
+     > ${OUTPUT}/${PACKAGE}/CHARLIST_String.java
 fi
 
 # }}}
