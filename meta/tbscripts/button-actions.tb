@@ -1013,7 +1013,7 @@ in
   Id := process-id . 
   snd-msg(open-modules([ModuleName], sdf)) .
   rec-msg(finished-opening-modules) .
-  ParseString(ModuleName, Path, trm, Nonterminal, Text, Tree?, ParseError?)
+  ParseString(ModuleName, Path, trm, true, Nonterminal, Text, Tree?, ParseError?)
 endlet
  
 process ParseSyntax(EditorId : term, ModuleName : str, Type : term) is

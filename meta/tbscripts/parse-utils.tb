@@ -1,6 +1,7 @@
 /* $Id$ */       
 
-process ObtainParseTable(ModuleName : str, Type : term, Table : term?) is
+process ObtainParseTable(ModuleName : str, Type : term, Checking : term, 
+                         Table : term?) is
 let
   TermType : term
 in
@@ -13,7 +14,7 @@ in
       Table := no-table
     )
   else
-    snd-msg(get-parsetable(ModuleName, Type)) .
+    snd-msg(get-parsetable(ModuleName, Type, Checking)) .
     (
       rec-msg(parse-table(Table?))
     +
@@ -24,7 +25,7 @@ in
 endlet
 
 process ParseString(ModuleName : str, Path : str, Type : term, 
-                    Nonterminal : str, Text : str,
+                    Checking : term, Nonterminal : str, Text : str,
 		    Tree : term?, ParseError : term?) is
 let
   Id         : term,
@@ -32,7 +33,7 @@ let
   Table      : term
 in
   Id := process-id .     
-  ObtainParseTable(ModuleName, Type, Table?) .
+  ObtainParseTable(ModuleName, Type, Checking, Table?) .
   if equal(Type, eqs) then
     ModuleId := quote(eqs(ModuleName))
   else

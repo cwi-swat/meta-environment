@@ -14,7 +14,7 @@ in
   (
     rec-msg(dump-sdf-definition(ModuleName?, FileName?)) .
     snd-note(ui-status(statf(Id, "Dumping SDF for %s", [ModuleName]))) .
-    snd-msg(get-all-sdf2-definitions(ModuleName, trm)) .
+    snd-msg(get-all-syntax-definitions(ModuleName, trm)) .
     (
       rec-msg(syntax(Syntax?)) .
       snd-msg(get-path-from-db(ModuleName)) .

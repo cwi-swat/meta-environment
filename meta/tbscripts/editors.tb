@@ -76,7 +76,7 @@ in
     rec-msg(file-extension-hook-result(Extension?)) .
     snd-msg(io-get-filename(Path, ModuleName, Extension)) .
     rec-msg(io-filename(FileName?)) .
-    snd-msg(get-sdf2-asfix(ModuleName)).
+    snd-msg(get-syntax-tree(ModuleName)).
     (
       rec-msg(syntax(Tree?))
     +

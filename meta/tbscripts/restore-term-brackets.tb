@@ -7,7 +7,7 @@ let
 in
   (
     rec-msg(restore-term-brackets(ModuleName?, Tree?)).
-    snd-msg(get-parsetable(ModuleName, trm)).
+    snd-msg(get-parsetable(ModuleName, trm, false)).
     (
       rec-msg(parse-table(Table?)) .
       snd-msg(restore-brackets(Tree, Table)) .

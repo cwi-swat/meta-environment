@@ -10,6 +10,7 @@ let
   ModuleName : str, 
   Type       : term, 
   TableType  : term,
+  Checking   : term,
   Table      : term,
   Syntax     : term,
   ErrorMsg   : str,
@@ -17,7 +18,7 @@ let
 in
 Id := process-id.
 ( 
-  rec-msg(get-parsetable(ModuleName?, Type?)) .
+  rec-msg(get-parsetable(ModuleName?, Type?, Checking?)) .
   snd-msg(get-table-from-db(ModuleName, Type)) .
   (
     rec-msg(table(Table?)).
@@ -25,10 +26,10 @@ Id := process-id.
   +
     rec-msg(no-table) .
     snd-note(ui-status(statf(Id, "Generating parsetable %s",[ModuleName]))).
-    snd-msg(get-all-sdf2-definitions(ModuleName, Type)).
+    snd-msg(get-all-syntax-definitions(ModuleName, Type)).
     (
       rec-msg(syntax(Syntax?)).
-      snd-msg(preprocess-syntax-hook(ModuleName, Type, Syntax)).
+      snd-msg(preprocess-syntax-hook(ModuleName, Type, Checking, Syntax)).
       rec-msg(preprocess-syntax-hook-result(ModuleName, Syntax?)).
       snd-msg(generate-parsetable(Syntax, ModuleName)).
       Syntax := no-tree .

@@ -29,7 +29,6 @@ process ParseFocusses is
     Id: term,
     Focus: term,
     Text: str,
-    FunType: str,
     Type: term,
     ModuleName: str,
     EditorId: term,
@@ -59,7 +58,8 @@ process ParseFocusses is
         UpdateTextInModuleDb(Type, ModuleName, Text) .
         snd-msg(get-editor-filename(EditorId)) .
         rec-msg(editor-filename(FileName?)) .
-        ParseString(ModuleName, FileName, Type, Nonterminal, Text, Tree?, Errors?) .
+        ParseString(ModuleName, FileName, Type, true, Nonterminal, Text, 
+                    Tree?, Errors?) .
         PrepareParseErrorForEditor(ModuleName, EditorId, Focus, Errors) .
         ProcessTree(ModuleName, EditorId, Focus, Tree, Errors) .
         Tree := no-tree

@@ -50,7 +50,8 @@ in
       rec-msg(file-extension-hook-result(Extension?)) .
       snd-msg(io-get-filename(Path, Module, Extension)) .
       rec-msg(io-filename(FileName?)) .
-      ParseString(Module, FileName, eqs, Nonterminal, EqsText, ParseTree?, Errors?) .
+      ParseString(Module, FileName, eqs, false, Nonterminal, EqsText, 
+                  ParseTree?, Errors?) .
       ProcessParseError(FileName, Errors) .
       ProcessEqsTree(Module, ParseTree) .
       ParseTree := no-tree

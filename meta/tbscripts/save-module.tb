@@ -27,7 +27,7 @@ in
       rec-msg(file-extension-hook-result(Extension?)) .
       snd-msg(io-get-filename(Path, Module, Extension)) .
       rec-msg(io-filename(FileName?)) .
-      snd-msg(get-sdf2-asfix(Module)).
+      snd-msg(get-syntax-tree(Module)).
       (
         rec-msg(syntax(Syntax?)) .
         snd-msg(unparse(Syntax)) .
@@ -55,7 +55,7 @@ in
       rec-msg(file-extension-hook-result(Extension?)) .
       snd-msg(io-get-filename(Path, Module, Extension)) .
       rec-msg(io-filename(FileName?)) .
-      snd-msg(get-sdf2-asfix(Module)).
+      snd-msg(get-syntax-tree(Module)).
       (
         rec-msg(syntax(Syntax?)) .
         snd-msg(unparse(Syntax)) .

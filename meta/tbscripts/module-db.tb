@@ -316,11 +316,11 @@ in
       snd-msg(no-modules)
     )
   +
-    rec-msg(get-all-sdf2-definitions(Name?, Type?)) .
+    rec-msg(get-all-syntax-definitions(Name?, Type?)) .
     MDB-GetAllImportedModuleNames(Name, ModuleNames?) .
-    snd-msg(pre-get-all-sdf2-hook(ModuleNames, Type)) .
+    snd-msg(pre-get-all-syntax-hook(ModuleNames, Type)) .
     (
-       rec-msg(pre-get-all-sdf2-hook-result(success)) .
+       rec-msg(pre-get-all-syntax-hook-result(success)) .
        snd-msg(ts-get-values("sdf-tree", ModuleNames)) .
        (
          rec-msg(ts-values(Modules?)) .
@@ -339,11 +339,11 @@ in
          snd-msg(no-syntax("syntax incomplete"))
        )
      +
-       rec-msg(pre-get-all-sdf2-hook-result(failure(ErrorMsg?))) .
+       rec-msg(pre-get-all-syntax-hook-result(failure(ErrorMsg?))) .
        snd-msg(no-syntax(ErrorMsg)) 
     )
   +
-    rec-msg(get-sdf2-asfix(Name?)) .
+    rec-msg(get-syntax-tree(Name?)) .
     snd-msg(ts-get-term-value("sdf-tree", Name)) .
     (
       rec-msg(ts-value(Syntax?)) .

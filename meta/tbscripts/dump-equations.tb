@@ -5,6 +5,7 @@ let
   Id : int,
   ModuleName   : str,
   Equations    : term,
+  Syntax    : term,
   Path         : str,
   FileName : str,
   ErrorMessage : str
@@ -18,6 +19,8 @@ in
       rec-msg(dump-equations-given-file(ModuleName?, FileName?))
     ) .
     snd-note(ui-status(statf(Id, "Dumping equations for %s", [ModuleName]))) .
+    snd-msg(pre-preprocess-syntax-hook(ModuleName)) .
+    rec-msg(pre-preprocess-syntax-hook-result(ModuleName)) .
     snd-msg(get-all-equations(ModuleName)) .
     (
       rec-msg(all-equations(Equations?)) .
