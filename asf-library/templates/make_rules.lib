@@ -18,6 +18,8 @@ PACKAGE_BUILTINS=$(shell grep "built-in" *.sdf | \
 MODULES=$(wildcard *.asf *.sdf) 
 PREPARED=$(wildcard *.tbl)
 EXTRA_DIST = $(MODULES) $(PREPARED) 
+CLEANFILES+=$(BUILT_SOURCES)
+BUILT_SOURCES=link-test.c
 
 # Build a stub to test if every built-in has an implementation
 noinst_PROGRAMS=link-test
@@ -31,8 +33,6 @@ REGISTER=${top_srcdir}/utils/register.sh -r
 GENLINKTEST=${top_srcdir}/utils/gen-link-test.sh
 BUILTINS_REGISTRY=${top_srcdir}/src/builtins.lst
 OBJECTS_REGISTRY=${top_srcdir}/src/objects.lst
-
-BUILT_SOURCES=link-test.c
 
 # create the stub 
 link-test.c: $(MODULES)
