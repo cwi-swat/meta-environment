@@ -44,6 +44,8 @@ char *ERR_charsToString(ATerm arg)
 
 /*{{{  typedefs */
 
+typedef struct ATerm _ERR_Summary;
+typedef struct ATerm _ERR_FeedbackList;
 typedef struct ATerm _ERR_Feedback;
 typedef struct ATerm _ERR_SubjectList;
 typedef struct ATerm _ERR_Subject;
@@ -63,6 +65,38 @@ void ERR_initErrorAPIApi(void)
 
 /*{{{  term conversion functions */
 
+/*{{{  ERR_Summary ERR_SummaryFromTerm(ATerm t) */
+
+ERR_Summary ERR_SummaryFromTerm(ATerm t)
+{
+  return (ERR_Summary)t;
+}
+
+/*}}}  */
+/*{{{  ATerm ERR_SummaryToTerm(ERR_Summary arg) */
+
+ATerm ERR_SummaryToTerm(ERR_Summary arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  ERR_FeedbackList ERR_FeedbackListFromTerm(ATerm t) */
+
+ERR_FeedbackList ERR_FeedbackListFromTerm(ATerm t)
+{
+  return (ERR_FeedbackList)t;
+}
+
+/*}}}  */
+/*{{{  ATerm ERR_FeedbackListToTerm(ERR_FeedbackList arg) */
+
+ATerm ERR_FeedbackListToTerm(ERR_FeedbackList arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
 /*{{{  ERR_Feedback ERR_FeedbackFromTerm(ATerm t) */
 
 ERR_Feedback ERR_FeedbackFromTerm(ATerm t)
@@ -147,6 +181,42 @@ ATerm ERR_AreaToTerm(ERR_Area arg)
 /*}}}  */
 /*{{{  list functions */
 
+int ERR_getFeedbackListLength (ERR_FeedbackList arg) {
+  return ATgetLength((ATermList) arg);
+}
+ERR_FeedbackList ERR_reverseFeedbackList(ERR_FeedbackList arg) {
+  return (ERR_FeedbackList) ATreverse((ATermList) arg);
+}
+ERR_FeedbackList ERR_appendFeedbackList(ERR_FeedbackList arg, ERR_Feedback elem) {
+  return (ERR_FeedbackList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
+}
+ERR_FeedbackList ERR_concatFeedbackList(ERR_FeedbackList arg0, ERR_FeedbackList arg1) {
+  return (ERR_FeedbackList) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+ERR_FeedbackList ERR_sliceFeedbackList(ERR_FeedbackList arg, int start, int end) {
+  return (ERR_FeedbackList) ATgetSlice((ATermList) arg, start, end);
+}
+ERR_Feedback ERR_getFeedbackListFeedbackAt(ERR_FeedbackList arg, int index) {
+ return (ERR_Feedback)ATelementAt((ATermList) arg,index);
+}
+ERR_FeedbackList ERR_replaceFeedbackListFeedbackAt(ERR_FeedbackList arg, ERR_Feedback elem, int index) {
+ return (ERR_FeedbackList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
+}
+ERR_FeedbackList ERR_makeFeedbackList2(ERR_Feedback elem1, ERR_Feedback elem2) {
+  return (ERR_FeedbackList) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+}
+ERR_FeedbackList ERR_makeFeedbackList3(ERR_Feedback elem1, ERR_Feedback elem2, ERR_Feedback elem3) {
+  return (ERR_FeedbackList) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+}
+ERR_FeedbackList ERR_makeFeedbackList4(ERR_Feedback elem1, ERR_Feedback elem2, ERR_Feedback elem3, ERR_Feedback elem4) {
+  return (ERR_FeedbackList) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+}
+ERR_FeedbackList ERR_makeFeedbackList5(ERR_Feedback elem1, ERR_Feedback elem2, ERR_Feedback elem3, ERR_Feedback elem4, ERR_Feedback elem5) {
+  return (ERR_FeedbackList) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+}
+ERR_FeedbackList ERR_makeFeedbackList6(ERR_Feedback elem1, ERR_Feedback elem2, ERR_Feedback elem3, ERR_Feedback elem4, ERR_Feedback elem5, ERR_Feedback elem6) {
+  return (ERR_FeedbackList) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+}
 int ERR_getSubjectListLength (ERR_SubjectList arg) {
   return ATgetLength((ATermList) arg);
 }
@@ -187,11 +257,43 @@ ERR_SubjectList ERR_makeSubjectList6(ERR_Subject elem1, ERR_Subject elem2, ERR_S
 /*}}}  */
 /*{{{  constructors */
 
+/*{{{  ERR_Summary ERR_makeSummaryFeedback(ERR_FeedbackList list) */
+
+ERR_Summary ERR_makeSummaryFeedback(ERR_FeedbackList list)
+{
+  return (ERR_Summary)(ATerm)ATmakeAppl1(ERR_afun0, (ATerm) list);
+}
+
+/*}}}  */
+/*{{{  ERR_FeedbackList ERR_makeFeedbackListEmpty() */
+
+ERR_FeedbackList ERR_makeFeedbackListEmpty()
+{
+  return (ERR_FeedbackList)(ATerm)ATempty;
+}
+
+/*}}}  */
+/*{{{  ERR_FeedbackList ERR_makeFeedbackListSingle(ERR_Feedback head) */
+
+ERR_FeedbackList ERR_makeFeedbackListSingle(ERR_Feedback head)
+{
+  return (ERR_FeedbackList)(ATerm)ATmakeList1((ATerm) head);
+}
+
+/*}}}  */
+/*{{{  ERR_FeedbackList ERR_makeFeedbackListMany(ERR_Feedback head, ERR_FeedbackList tail) */
+
+ERR_FeedbackList ERR_makeFeedbackListMany(ERR_Feedback head, ERR_FeedbackList tail)
+{
+  return (ERR_FeedbackList)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
+}
+
+/*}}}  */
 /*{{{  ERR_Feedback ERR_makeFeedbackInfo(char* id, char* producerId, char* producerType, char* description, ERR_SubjectList list) */
 
 ERR_Feedback ERR_makeFeedbackInfo(char* id, char* producerId, char* producerType, char* description, ERR_SubjectList list)
 {
-  return (ERR_Feedback)(ATerm)ATmakeAppl5(ERR_afun0, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
+  return (ERR_Feedback)(ATerm)ATmakeAppl5(ERR_afun1, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
 }
 
 /*}}}  */
@@ -199,7 +301,7 @@ ERR_Feedback ERR_makeFeedbackInfo(char* id, char* producerId, char* producerType
 
 ERR_Feedback ERR_makeFeedbackWarning(char* id, char* producerId, char* producerType, char* description, ERR_SubjectList list)
 {
-  return (ERR_Feedback)(ATerm)ATmakeAppl5(ERR_afun1, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
+  return (ERR_Feedback)(ATerm)ATmakeAppl5(ERR_afun2, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
 }
 
 /*}}}  */
@@ -207,7 +309,7 @@ ERR_Feedback ERR_makeFeedbackWarning(char* id, char* producerId, char* producerT
 
 ERR_Feedback ERR_makeFeedbackError(char* id, char* producerId, char* producerType, char* description, ERR_SubjectList list)
 {
-  return (ERR_Feedback)(ATerm)ATmakeAppl5(ERR_afun2, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
+  return (ERR_Feedback)(ATerm)ATmakeAppl5(ERR_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
 }
 
 /*}}}  */
@@ -215,7 +317,7 @@ ERR_Feedback ERR_makeFeedbackError(char* id, char* producerId, char* producerTyp
 
 ERR_Feedback ERR_makeFeedbackFatalError(char* id, char* producerId, char* producerType, char* description, ERR_SubjectList list)
 {
-  return (ERR_Feedback)(ATerm)ATmakeAppl5(ERR_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
+  return (ERR_Feedback)(ATerm)ATmakeAppl5(ERR_afun4, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerId, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producerType, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
 }
 
 /*}}}  */
@@ -247,7 +349,7 @@ ERR_SubjectList ERR_makeSubjectListMany(ERR_Subject head, ERR_SubjectList tail)
 
 ERR_Subject ERR_makeSubjectSubject(char* id, ERR_Location Location)
 {
-  return (ERR_Subject)(ATerm)ATmakeAppl2(ERR_afun4, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) Location);
+  return (ERR_Subject)(ATerm)ATmakeAppl2(ERR_afun5, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) Location);
 }
 
 /*}}}  */
@@ -255,7 +357,7 @@ ERR_Subject ERR_makeSubjectSubject(char* id, ERR_Location Location)
 
 ERR_Location ERR_makeLocationLocation(char* filename, ERR_Area Area)
 {
-  return (ERR_Location)(ATerm)ATmakeAppl2(ERR_afun5, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(filename, 0, ATtrue)), (ATerm) Area);
+  return (ERR_Location)(ATerm)ATmakeAppl2(ERR_afun6, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(filename, 0, ATtrue)), (ATerm) Area);
 }
 
 /*}}}  */
@@ -263,7 +365,7 @@ ERR_Location ERR_makeLocationLocation(char* filename, ERR_Area Area)
 
 ERR_Location ERR_makeLocationNoLocation()
 {
-  return (ERR_Location)(ATerm)ATmakeAppl0(ERR_afun6);
+  return (ERR_Location)(ATerm)ATmakeAppl0(ERR_afun7);
 }
 
 /*}}}  */
@@ -271,7 +373,7 @@ ERR_Location ERR_makeLocationNoLocation()
 
 ERR_Area ERR_makeAreaArea(int beginLine, int beginColumn, int endLine, int endColumn, int beginOffset, int endOffset)
 {
-  return (ERR_Area)(ATerm)ATmakeAppl6(ERR_afun7, (ATerm) (ATerm) ATmakeInt(beginLine), (ATerm) (ATerm) ATmakeInt(beginColumn), (ATerm) (ATerm) ATmakeInt(endLine), (ATerm) (ATerm) ATmakeInt(endColumn), (ATerm) (ATerm) ATmakeInt(beginOffset), (ATerm) (ATerm) ATmakeInt(endOffset));
+  return (ERR_Area)(ATerm)ATmakeAppl6(ERR_afun8, (ATerm) (ATerm) ATmakeInt(beginLine), (ATerm) (ATerm) ATmakeInt(beginColumn), (ATerm) (ATerm) ATmakeInt(endLine), (ATerm) (ATerm) ATmakeInt(endColumn), (ATerm) (ATerm) ATmakeInt(beginOffset), (ATerm) (ATerm) ATmakeInt(endOffset));
 }
 
 /*}}}  */
@@ -279,13 +381,23 @@ ERR_Area ERR_makeAreaArea(int beginLine, int beginColumn, int endLine, int endCo
 
 ERR_Area ERR_makeAreaNoArea()
 {
-  return (ERR_Area)(ATerm)ATmakeAppl0(ERR_afun8);
+  return (ERR_Area)(ATerm)ATmakeAppl0(ERR_afun9);
 }
 
 /*}}}  */
 
 /*}}}  */
 /*{{{  equality functions */
+
+ATbool ERR_isEqualSummary(ERR_Summary arg0, ERR_Summary arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool ERR_isEqualFeedbackList(ERR_FeedbackList arg0, ERR_FeedbackList arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
 
 ATbool ERR_isEqualFeedback(ERR_Feedback arg0, ERR_Feedback arg1)
 {
@@ -311,6 +423,227 @@ ATbool ERR_isEqualArea(ERR_Area arg0, ERR_Area arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
+
+/*}}}  */
+/*{{{  ERR_Summary accessors */
+
+/*{{{  ATbool ERR_isValidSummary(ERR_Summary arg) */
+
+ATbool ERR_isValidSummary(ERR_Summary arg)
+{
+  if (ERR_isSummaryFeedback(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isSummaryFeedback(ERR_Summary arg) */
+
+inline ATbool ERR_isSummaryFeedback(ERR_Summary arg)
+{
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ERR_patternSummaryFeedback, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasSummaryList(ERR_Summary arg) */
+
+ATbool ERR_hasSummaryList(ERR_Summary arg)
+{
+  if (ERR_isSummaryFeedback(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ERR_FeedbackList ERR_getSummaryList(ERR_Summary arg) */
+
+ERR_FeedbackList ERR_getSummaryList(ERR_Summary arg)
+{
+  
+    return (ERR_FeedbackList)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  ERR_Summary ERR_setSummaryList(ERR_Summary arg, ERR_FeedbackList list) */
+
+ERR_Summary ERR_setSummaryList(ERR_Summary arg, ERR_FeedbackList list)
+{
+  if (ERR_isSummaryFeedback(arg)) {
+    return (ERR_Summary)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 0);
+  }
+
+  ATabort("Summary has no List: %t\n", arg);
+  return (ERR_Summary)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  ERR_FeedbackList accessors */
+
+/*{{{  ATbool ERR_isValidFeedbackList(ERR_FeedbackList arg) */
+
+ATbool ERR_isValidFeedbackList(ERR_FeedbackList arg)
+{
+  if (ERR_isFeedbackListEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isFeedbackListSingle(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isFeedbackListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isFeedbackListEmpty(ERR_FeedbackList arg) */
+
+inline ATbool ERR_isFeedbackListEmpty(ERR_FeedbackList arg)
+{
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ERR_patternFeedbackListEmpty));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isFeedbackListSingle(ERR_FeedbackList arg) */
+
+inline ATbool ERR_isFeedbackListSingle(ERR_FeedbackList arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackListSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isFeedbackListMany(ERR_FeedbackList arg) */
+
+inline ATbool ERR_isFeedbackListMany(ERR_FeedbackList arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackListMany, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasFeedbackListHead(ERR_FeedbackList arg) */
+
+ATbool ERR_hasFeedbackListHead(ERR_FeedbackList arg)
+{
+  if (ERR_isFeedbackListSingle(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isFeedbackListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ERR_Feedback ERR_getFeedbackListHead(ERR_FeedbackList arg) */
+
+ERR_Feedback ERR_getFeedbackListHead(ERR_FeedbackList arg)
+{
+  if (ERR_isFeedbackListSingle(arg)) {
+    return (ERR_Feedback)ATgetFirst((ATermList)arg);
+  }
+  else 
+    return (ERR_Feedback)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  ERR_FeedbackList ERR_setFeedbackListHead(ERR_FeedbackList arg, ERR_Feedback head) */
+
+ERR_FeedbackList ERR_setFeedbackListHead(ERR_FeedbackList arg, ERR_Feedback head)
+{
+  if (ERR_isFeedbackListSingle(arg)) {
+    return (ERR_FeedbackList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+  else if (ERR_isFeedbackListMany(arg)) {
+    return (ERR_FeedbackList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+
+  ATabort("FeedbackList has no Head: %t\n", arg);
+  return (ERR_FeedbackList)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasFeedbackListTail(ERR_FeedbackList arg) */
+
+ATbool ERR_hasFeedbackListTail(ERR_FeedbackList arg)
+{
+  if (ERR_isFeedbackListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ERR_FeedbackList ERR_getFeedbackListTail(ERR_FeedbackList arg) */
+
+ERR_FeedbackList ERR_getFeedbackListTail(ERR_FeedbackList arg)
+{
+  
+    return (ERR_FeedbackList)ATgetNext((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  ERR_FeedbackList ERR_setFeedbackListTail(ERR_FeedbackList arg, ERR_FeedbackList tail) */
+
+ERR_FeedbackList ERR_setFeedbackListTail(ERR_FeedbackList arg, ERR_FeedbackList tail)
+{
+  if (ERR_isFeedbackListMany(arg)) {
+    return (ERR_FeedbackList)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
+  }
+
+  ATabort("FeedbackList has no Tail: %t\n", arg);
+  return (ERR_FeedbackList)NULL;
+}
+
+/*}}}  */
 
 /*}}}  */
 /*{{{  ERR_Feedback accessors */
@@ -1369,6 +1702,40 @@ ERR_Area ERR_setAreaEndOffset(ERR_Area arg, int endOffset)
 /*}}}  */
 /*{{{  sort visitors */
 
+/*{{{  ERR_Summary ERR_visitSummary(ERR_Summary arg, ERR_FeedbackList (*acceptList)(ERR_FeedbackList)) */
+
+ERR_Summary ERR_visitSummary(ERR_Summary arg, ERR_FeedbackList (*acceptList)(ERR_FeedbackList))
+{
+  if (ERR_isSummaryFeedback(arg)) {
+    return ERR_makeSummaryFeedback(
+        acceptList ? acceptList(ERR_getSummaryList(arg)) : ERR_getSummaryList(arg));
+  }
+  ATabort("not a Summary: %t\n", arg);
+  return (ERR_Summary)NULL;
+}
+
+/*}}}  */
+/*{{{  ERR_FeedbackList ERR_visitFeedbackList(ERR_FeedbackList arg, ERR_Feedback (*acceptHead)(ERR_Feedback)) */
+
+ERR_FeedbackList ERR_visitFeedbackList(ERR_FeedbackList arg, ERR_Feedback (*acceptHead)(ERR_Feedback))
+{
+  if (ERR_isFeedbackListEmpty(arg)) {
+    return ERR_makeFeedbackListEmpty();
+  }
+  if (ERR_isFeedbackListSingle(arg)) {
+    return ERR_makeFeedbackListSingle(
+        acceptHead ? acceptHead(ERR_getFeedbackListHead(arg)) : ERR_getFeedbackListHead(arg));
+  }
+  if (ERR_isFeedbackListMany(arg)) {
+    return ERR_makeFeedbackListMany(
+        acceptHead ? acceptHead(ERR_getFeedbackListHead(arg)) : ERR_getFeedbackListHead(arg),
+        ERR_visitFeedbackList(ERR_getFeedbackListTail(arg), acceptHead));
+  }
+  ATabort("not a FeedbackList: %t\n", arg);
+  return (ERR_FeedbackList)NULL;
+}
+
+/*}}}  */
 /*{{{  ERR_Feedback ERR_visitFeedback(ERR_Feedback arg, char* (*acceptId)(char*), char* (*acceptProducerId)(char*), char* (*acceptProducerType)(char*), char* (*acceptDescription)(char*), ERR_SubjectList (*acceptList)(ERR_SubjectList)) */
 
 ERR_Feedback ERR_visitFeedback(ERR_Feedback arg, char* (*acceptId)(char*), char* (*acceptProducerId)(char*), char* (*acceptProducerType)(char*), char* (*acceptDescription)(char*), ERR_SubjectList (*acceptList)(ERR_SubjectList))

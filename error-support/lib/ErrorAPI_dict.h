@@ -10,6 +10,7 @@ extern AFun ERR_afun2;
 extern AFun ERR_afun7;
 extern AFun ERR_afun5;
 extern AFun ERR_afun3;
+extern AFun ERR_afun9;
 extern AFun ERR_afun1;
 extern AFun ERR_afun6;
 
@@ -25,6 +26,10 @@ extern ATerm ERR_patternFeedbackFatalError;
 extern ATerm ERR_patternFeedbackError;
 extern ATerm ERR_patternFeedbackWarning;
 extern ATerm ERR_patternFeedbackInfo;
+extern ATerm ERR_patternFeedbackListMany;
+extern ATerm ERR_patternFeedbackListSingle;
+extern ATerm ERR_patternFeedbackListEmpty;
+extern ATerm ERR_patternSummaryFeedback;
 
 extern void init_ErrorAPI_dict();
 

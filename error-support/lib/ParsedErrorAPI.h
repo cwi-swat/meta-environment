@@ -12,6 +12,8 @@
 
 /*{{{  typedefs */
 
+typedef struct _PERR_Summary *PERR_Summary;
+typedef struct _PERR_FeedbackList *PERR_FeedbackList;
 typedef struct _PERR_Feedback *PERR_Feedback;
 typedef struct _PERR_SubjectList *PERR_SubjectList;
 typedef struct _PERR_Subject *PERR_Subject;
@@ -33,6 +35,10 @@ void PERR_initParsedErrorAPIApi(void);
 
 /*{{{  term conversion functions */
 
+PERR_Summary PERR_SummaryFromTerm(ATerm t);
+ATerm PERR_SummaryToTerm(PERR_Summary arg);
+PERR_FeedbackList PERR_FeedbackListFromTerm(ATerm t);
+ATerm PERR_FeedbackListToTerm(PERR_FeedbackList arg);
 PERR_Feedback PERR_FeedbackFromTerm(ATerm t);
 ATerm PERR_FeedbackToTerm(PERR_Feedback arg);
 PERR_SubjectList PERR_SubjectListFromTerm(ATerm t);
@@ -55,6 +61,53 @@ ATerm PERR_StartToTerm(PERR_Start arg);
 /*}}}  */
 /*{{{  list functions */
 
+int PERR_getFeedbackListLength(PERR_FeedbackList arg);
+PERR_FeedbackList reverseFeedbackList(PERR_FeedbackList arg);
+PERR_FeedbackList PERR_appendFeedbackList(PERR_FeedbackList arg0,
+					  PERR_OptLayout wsAfterHead,
+					  PERR_OptLayout wsAfterSep,
+					  PERR_Feedback arg1);
+PERR_FeedbackList PERR_concatFeedbackList(PERR_FeedbackList arg0,
+					  PERR_OptLayout wsAfterHead,
+					  PERR_OptLayout wsAfterSep,
+					  PERR_FeedbackList arg1);
+PERR_FeedbackList PERR_sliceFeedbackList(PERR_FeedbackList arg, int start,
+					 int end);
+PERR_Feedback PERR_getFeedbackListFeedbackAt(PERR_FeedbackList arg,
+					     int index);
+PERR_FeedbackList PERR_replaceFeedbackListFeedbackAt(PERR_FeedbackList arg,
+						     PERR_Feedback elem,
+						     int index);
+PERR_FeedbackList PERR_makeFeedbackList2(PERR_OptLayout wsAfterHead,
+					 PERR_OptLayout wsAfterSep,
+					 PERR_Feedback elem1,
+					 PERR_Feedback elem2);
+PERR_FeedbackList PERR_makeFeedbackList3(PERR_OptLayout wsAfterHead,
+					 PERR_OptLayout wsAfterSep,
+					 PERR_Feedback elem1,
+					 PERR_Feedback elem2,
+					 PERR_Feedback elem3);
+PERR_FeedbackList PERR_makeFeedbackList4(PERR_OptLayout wsAfterHead,
+					 PERR_OptLayout wsAfterSep,
+					 PERR_Feedback elem1,
+					 PERR_Feedback elem2,
+					 PERR_Feedback elem3,
+					 PERR_Feedback elem4);
+PERR_FeedbackList PERR_makeFeedbackList5(PERR_OptLayout wsAfterHead,
+					 PERR_OptLayout wsAfterSep,
+					 PERR_Feedback elem1,
+					 PERR_Feedback elem2,
+					 PERR_Feedback elem3,
+					 PERR_Feedback elem4,
+					 PERR_Feedback elem5);
+PERR_FeedbackList PERR_makeFeedbackList6(PERR_OptLayout wsAfterHead,
+					 PERR_OptLayout wsAfterSep,
+					 PERR_Feedback elem1,
+					 PERR_Feedback elem2,
+					 PERR_Feedback elem3,
+					 PERR_Feedback elem4,
+					 PERR_Feedback elem5,
+					 PERR_Feedback elem6);
 int PERR_getSubjectListLength(PERR_SubjectList arg);
 PERR_SubjectList reverseSubjectList(PERR_SubjectList arg);
 PERR_SubjectList PERR_appendSubjectList(PERR_SubjectList arg0,
@@ -99,6 +152,18 @@ PERR_SubjectList PERR_makeSubjectList6(PERR_OptLayout wsAfterHead,
 /*}}}  */
 /*{{{  constructors */
 
+PERR_Summary PERR_makeSummaryFeedback(PERR_OptLayout wsAfterFeedback,
+				      PERR_OptLayout wsAfterParenOpen,
+				      PERR_OptLayout wsAfterBracketOpen,
+				      PERR_FeedbackList list,
+				      PERR_OptLayout wsAfterList,
+				      PERR_OptLayout wsAfterBracketClose);
+PERR_FeedbackList PERR_makeFeedbackListEmpty();
+PERR_FeedbackList PERR_makeFeedbackListSingle(PERR_Feedback head);
+PERR_FeedbackList PERR_makeFeedbackListMany(PERR_Feedback head,
+					    PERR_OptLayout wsAfterHead,
+					    PERR_OptLayout wsAfterSep,
+					    PERR_FeedbackList tail);
 PERR_Feedback PERR_makeFeedbackInfo(PERR_OptLayout wsAfterInfo,
 				    PERR_OptLayout wsAfterParenOpen,
 				    PERR_StrCon id, PERR_OptLayout wsAfterId,
@@ -223,10 +288,16 @@ PERR_Start PERR_makeStartSubject(PERR_OptLayout wsBefore,
 PERR_Start PERR_makeStartFeedback(PERR_OptLayout wsBefore,
 				  PERR_Feedback topFeedback,
 				  PERR_OptLayout wsAfter, int ambCnt);
+PERR_Start PERR_makeStartSummary(PERR_OptLayout wsBefore,
+				 PERR_Summary topSummary,
+				 PERR_OptLayout wsAfter, int ambCnt);
 
 /*}}}  */
 /*{{{  equality functions */
 
+ATbool PERR_isEqualSummary(PERR_Summary arg0, PERR_Summary arg1);
+ATbool PERR_isEqualFeedbackList(PERR_FeedbackList arg0,
+				PERR_FeedbackList arg1);
 ATbool PERR_isEqualFeedback(PERR_Feedback arg0, PERR_Feedback arg1);
 ATbool PERR_isEqualSubjectList(PERR_SubjectList arg0, PERR_SubjectList arg1);
 ATbool PERR_isEqualSubject(PERR_Subject arg0, PERR_Subject arg1);
@@ -236,6 +307,61 @@ ATbool PERR_isEqualNatCon(PERR_NatCon arg0, PERR_NatCon arg1);
 ATbool PERR_isEqualStrCon(PERR_StrCon arg0, PERR_StrCon arg1);
 ATbool PERR_isEqualOptLayout(PERR_OptLayout arg0, PERR_OptLayout arg1);
 ATbool PERR_isEqualStart(PERR_Start arg0, PERR_Start arg1);
+
+/*}}}  */
+/*{{{  PERR_Summary accessors */
+
+ATbool PERR_isValidSummary(PERR_Summary arg);
+inline ATbool PERR_isSummaryFeedback(PERR_Summary arg);
+ATbool PERR_hasSummaryWsAfterFeedback(PERR_Summary arg);
+PERR_OptLayout PERR_getSummaryWsAfterFeedback(PERR_Summary arg);
+PERR_Summary PERR_setSummaryWsAfterFeedback(PERR_Summary arg,
+					    PERR_OptLayout wsAfterFeedback);
+ATbool PERR_hasSummaryWsAfterParenOpen(PERR_Summary arg);
+PERR_OptLayout PERR_getSummaryWsAfterParenOpen(PERR_Summary arg);
+PERR_Summary PERR_setSummaryWsAfterParenOpen(PERR_Summary arg,
+					     PERR_OptLayout wsAfterParenOpen);
+ATbool PERR_hasSummaryWsAfterBracketOpen(PERR_Summary arg);
+PERR_OptLayout PERR_getSummaryWsAfterBracketOpen(PERR_Summary arg);
+PERR_Summary PERR_setSummaryWsAfterBracketOpen(PERR_Summary arg,
+					       PERR_OptLayout
+					       wsAfterBracketOpen);
+ATbool PERR_hasSummaryList(PERR_Summary arg);
+PERR_FeedbackList PERR_getSummaryList(PERR_Summary arg);
+PERR_Summary PERR_setSummaryList(PERR_Summary arg, PERR_FeedbackList list);
+ATbool PERR_hasSummaryWsAfterList(PERR_Summary arg);
+PERR_OptLayout PERR_getSummaryWsAfterList(PERR_Summary arg);
+PERR_Summary PERR_setSummaryWsAfterList(PERR_Summary arg,
+					PERR_OptLayout wsAfterList);
+ATbool PERR_hasSummaryWsAfterBracketClose(PERR_Summary arg);
+PERR_OptLayout PERR_getSummaryWsAfterBracketClose(PERR_Summary arg);
+PERR_Summary PERR_setSummaryWsAfterBracketClose(PERR_Summary arg,
+						PERR_OptLayout
+						wsAfterBracketClose);
+
+/*}}}  */
+/*{{{  PERR_FeedbackList accessors */
+
+ATbool PERR_isValidFeedbackList(PERR_FeedbackList arg);
+inline ATbool PERR_isFeedbackListEmpty(PERR_FeedbackList arg);
+inline ATbool PERR_isFeedbackListSingle(PERR_FeedbackList arg);
+inline ATbool PERR_isFeedbackListMany(PERR_FeedbackList arg);
+ATbool PERR_hasFeedbackListHead(PERR_FeedbackList arg);
+PERR_Feedback PERR_getFeedbackListHead(PERR_FeedbackList arg);
+PERR_FeedbackList PERR_setFeedbackListHead(PERR_FeedbackList arg,
+					   PERR_Feedback head);
+ATbool PERR_hasFeedbackListWsAfterHead(PERR_FeedbackList arg);
+PERR_OptLayout PERR_getFeedbackListWsAfterHead(PERR_FeedbackList arg);
+PERR_FeedbackList PERR_setFeedbackListWsAfterHead(PERR_FeedbackList arg,
+						  PERR_OptLayout wsAfterHead);
+ATbool PERR_hasFeedbackListWsAfterSep(PERR_FeedbackList arg);
+PERR_OptLayout PERR_getFeedbackListWsAfterSep(PERR_FeedbackList arg);
+PERR_FeedbackList PERR_setFeedbackListWsAfterSep(PERR_FeedbackList arg,
+						 PERR_OptLayout wsAfterSep);
+ATbool PERR_hasFeedbackListTail(PERR_FeedbackList arg);
+PERR_FeedbackList PERR_getFeedbackListTail(PERR_FeedbackList arg);
+PERR_FeedbackList PERR_setFeedbackListTail(PERR_FeedbackList arg,
+					   PERR_FeedbackList tail);
 
 /*}}}  */
 /*{{{  PERR_Feedback accessors */
@@ -539,6 +665,7 @@ inline ATbool PERR_isStartArea(PERR_Start arg);
 inline ATbool PERR_isStartLocation(PERR_Start arg);
 inline ATbool PERR_isStartSubject(PERR_Start arg);
 inline ATbool PERR_isStartFeedback(PERR_Start arg);
+inline ATbool PERR_isStartSummary(PERR_Start arg);
 ATbool PERR_hasStartWsBefore(PERR_Start arg);
 PERR_OptLayout PERR_getStartWsBefore(PERR_Start arg);
 PERR_Start PERR_setStartWsBefore(PERR_Start arg, PERR_OptLayout wsBefore);
@@ -562,10 +689,33 @@ ATbool PERR_hasStartTopFeedback(PERR_Start arg);
 PERR_Feedback PERR_getStartTopFeedback(PERR_Start arg);
 PERR_Start PERR_setStartTopFeedback(PERR_Start arg,
 				    PERR_Feedback topFeedback);
+ATbool PERR_hasStartTopSummary(PERR_Start arg);
+PERR_Summary PERR_getStartTopSummary(PERR_Start arg);
+PERR_Start PERR_setStartTopSummary(PERR_Start arg, PERR_Summary topSummary);
 
 /*}}}  */
 /*{{{  sort visitors */
 
+PERR_Summary PERR_visitSummary(PERR_Summary arg,
+			       PERR_OptLayout(*acceptWsAfterFeedback)
+			       (PERR_OptLayout),
+			       PERR_OptLayout(*acceptWsAfterParenOpen)
+			       (PERR_OptLayout),
+			       PERR_OptLayout(*acceptWsAfterBracketOpen)
+			       (PERR_OptLayout),
+			       PERR_FeedbackList(*acceptList)
+			       (PERR_FeedbackList),
+			       PERR_OptLayout(*acceptWsAfterList)
+			       (PERR_OptLayout),
+			       PERR_OptLayout(*acceptWsAfterBracketClose)
+			       (PERR_OptLayout));
+PERR_FeedbackList PERR_visitFeedbackList(PERR_FeedbackList arg,
+					 PERR_Feedback(*acceptHead)
+					 (PERR_Feedback),
+					 PERR_OptLayout(*acceptWsAfterHead)
+					 (PERR_OptLayout),
+					 PERR_OptLayout(*acceptWsAfterSep)
+					 (PERR_OptLayout));
 PERR_Feedback PERR_visitFeedback(PERR_Feedback arg,
 				 PERR_OptLayout(*acceptWsAfterInfo)
 				 (PERR_OptLayout),
@@ -682,7 +832,8 @@ PERR_Start PERR_visitStart(PERR_Start arg,
 			   int (*acceptAmbCnt) (int),
 			   PERR_Location(*acceptTopLocation) (PERR_Location),
 			   PERR_Subject(*acceptTopSubject) (PERR_Subject),
-			   PERR_Feedback(*acceptTopFeedback) (PERR_Feedback));
+			   PERR_Feedback(*acceptTopFeedback) (PERR_Feedback),
+			   PERR_Summary(*acceptTopSummary) (PERR_Summary));
 
 /*}}}  */
 

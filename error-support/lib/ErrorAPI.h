@@ -12,6 +12,8 @@
 
 /*{{{  typedefs */
 
+typedef struct _ERR_Summary *ERR_Summary;
+typedef struct _ERR_FeedbackList *ERR_FeedbackList;
 typedef struct _ERR_Feedback *ERR_Feedback;
 typedef struct _ERR_SubjectList *ERR_SubjectList;
 typedef struct _ERR_Subject *ERR_Subject;
@@ -29,6 +31,10 @@ void ERR_initErrorAPIApi(void);
 
 /*{{{  term conversion functions */
 
+ERR_Summary ERR_SummaryFromTerm(ATerm t);
+ATerm ERR_SummaryToTerm(ERR_Summary arg);
+ERR_FeedbackList ERR_FeedbackListFromTerm(ATerm t);
+ATerm ERR_FeedbackListToTerm(ERR_FeedbackList arg);
 ERR_Feedback ERR_FeedbackFromTerm(ATerm t);
 ATerm ERR_FeedbackToTerm(ERR_Feedback arg);
 ERR_SubjectList ERR_SubjectListFromTerm(ATerm t);
@@ -43,6 +49,32 @@ ATerm ERR_AreaToTerm(ERR_Area arg);
 /*}}}  */
 /*{{{  list functions */
 
+int ERR_getFeedbackListLength(ERR_FeedbackList arg);
+ERR_FeedbackList ERR_reverseFeedbackList(ERR_FeedbackList arg);
+ERR_FeedbackList ERR_appendFeedbackList(ERR_FeedbackList arg,
+					ERR_Feedback elem);
+ERR_FeedbackList ERR_concatFeedbackList(ERR_FeedbackList arg0,
+					ERR_FeedbackList arg1);
+ERR_FeedbackList ERR_sliceFeedbackList(ERR_FeedbackList arg, int start,
+				       int end);
+ERR_Feedback ERR_getFeedbackListFeedbackAt(ERR_FeedbackList arg, int index);
+ERR_FeedbackList ERR_replaceFeedbackListFeedbackAt(ERR_FeedbackList arg,
+						   ERR_Feedback elem,
+						   int index);
+ERR_FeedbackList ERR_makeFeedbackList2(ERR_Feedback elem1,
+				       ERR_Feedback elem2);
+ERR_FeedbackList ERR_makeFeedbackList3(ERR_Feedback elem1, ERR_Feedback elem2,
+				       ERR_Feedback elem3);
+ERR_FeedbackList ERR_makeFeedbackList4(ERR_Feedback elem1, ERR_Feedback elem2,
+				       ERR_Feedback elem3,
+				       ERR_Feedback elem4);
+ERR_FeedbackList ERR_makeFeedbackList5(ERR_Feedback elem1, ERR_Feedback elem2,
+				       ERR_Feedback elem3, ERR_Feedback elem4,
+				       ERR_Feedback elem5);
+ERR_FeedbackList ERR_makeFeedbackList6(ERR_Feedback elem1, ERR_Feedback elem2,
+				       ERR_Feedback elem3, ERR_Feedback elem4,
+				       ERR_Feedback elem5,
+				       ERR_Feedback elem6);
 int ERR_getSubjectListLength(ERR_SubjectList arg);
 ERR_SubjectList ERR_reverseSubjectList(ERR_SubjectList arg);
 ERR_SubjectList ERR_appendSubjectList(ERR_SubjectList arg, ERR_Subject elem);
@@ -67,6 +99,11 @@ ERR_SubjectList ERR_makeSubjectList6(ERR_Subject elem1, ERR_Subject elem2,
 /*}}}  */
 /*{{{  constructors */
 
+ERR_Summary ERR_makeSummaryFeedback(ERR_FeedbackList list);
+ERR_FeedbackList ERR_makeFeedbackListEmpty();
+ERR_FeedbackList ERR_makeFeedbackListSingle(ERR_Feedback head);
+ERR_FeedbackList ERR_makeFeedbackListMany(ERR_Feedback head,
+					  ERR_FeedbackList tail);
 ERR_Feedback ERR_makeFeedbackInfo(char *id, char *producerId,
 				  char *producerType, char *description,
 				  ERR_SubjectList list);
@@ -93,11 +130,38 @@ ERR_Area ERR_makeAreaNoArea();
 /*}}}  */
 /*{{{  equality functions */
 
+ATbool ERR_isEqualSummary(ERR_Summary arg0, ERR_Summary arg1);
+ATbool ERR_isEqualFeedbackList(ERR_FeedbackList arg0, ERR_FeedbackList arg1);
 ATbool ERR_isEqualFeedback(ERR_Feedback arg0, ERR_Feedback arg1);
 ATbool ERR_isEqualSubjectList(ERR_SubjectList arg0, ERR_SubjectList arg1);
 ATbool ERR_isEqualSubject(ERR_Subject arg0, ERR_Subject arg1);
 ATbool ERR_isEqualLocation(ERR_Location arg0, ERR_Location arg1);
 ATbool ERR_isEqualArea(ERR_Area arg0, ERR_Area arg1);
+
+/*}}}  */
+/*{{{  ERR_Summary accessors */
+
+ATbool ERR_isValidSummary(ERR_Summary arg);
+inline ATbool ERR_isSummaryFeedback(ERR_Summary arg);
+ATbool ERR_hasSummaryList(ERR_Summary arg);
+ERR_FeedbackList ERR_getSummaryList(ERR_Summary arg);
+ERR_Summary ERR_setSummaryList(ERR_Summary arg, ERR_FeedbackList list);
+
+/*}}}  */
+/*{{{  ERR_FeedbackList accessors */
+
+ATbool ERR_isValidFeedbackList(ERR_FeedbackList arg);
+inline ATbool ERR_isFeedbackListEmpty(ERR_FeedbackList arg);
+inline ATbool ERR_isFeedbackListSingle(ERR_FeedbackList arg);
+inline ATbool ERR_isFeedbackListMany(ERR_FeedbackList arg);
+ATbool ERR_hasFeedbackListHead(ERR_FeedbackList arg);
+ERR_Feedback ERR_getFeedbackListHead(ERR_FeedbackList arg);
+ERR_FeedbackList ERR_setFeedbackListHead(ERR_FeedbackList arg,
+					 ERR_Feedback head);
+ATbool ERR_hasFeedbackListTail(ERR_FeedbackList arg);
+ERR_FeedbackList ERR_getFeedbackListTail(ERR_FeedbackList arg);
+ERR_FeedbackList ERR_setFeedbackListTail(ERR_FeedbackList arg,
+					 ERR_FeedbackList tail);
 
 /*}}}  */
 /*{{{  ERR_Feedback accessors */
@@ -192,6 +256,12 @@ ERR_Area ERR_setAreaEndOffset(ERR_Area arg, int endOffset);
 /*}}}  */
 /*{{{  sort visitors */
 
+ERR_Summary ERR_visitSummary(ERR_Summary arg,
+			     ERR_FeedbackList(*acceptList)
+			     (ERR_FeedbackList));
+ERR_FeedbackList ERR_visitFeedbackList(ERR_FeedbackList arg,
+				       ERR_Feedback(*acceptHead)
+				       (ERR_Feedback));
 ERR_Feedback ERR_visitFeedback(ERR_Feedback arg, char *(*acceptId) (char *),
 			       char *(*acceptProducerId) (char *),
 			       char *(*acceptProducerType) (char *),

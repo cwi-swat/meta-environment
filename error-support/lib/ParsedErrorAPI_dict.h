@@ -3,6 +3,7 @@
 
 #include <aterm2.h>
 
+extern AFun PERR_afun39;
 extern AFun PERR_afun17;
 extern AFun PERR_afun22;
 extern AFun PERR_afun3;
@@ -33,6 +34,7 @@ extern AFun PERR_afun10;
 extern AFun PERR_afun13;
 extern AFun PERR_afun4;
 extern AFun PERR_afun14;
+extern AFun PERR_afun40;
 extern AFun PERR_afun23;
 extern AFun PERR_afun30;
 extern AFun PERR_afun7;
@@ -43,6 +45,7 @@ extern AFun PERR_afun29;
 extern AFun PERR_afun1;
 extern AFun PERR_afun6;
 
+extern ATerm PERR_patternStartSummary;
 extern ATerm PERR_patternStartFeedback;
 extern ATerm PERR_patternStartSubject;
 extern ATerm PERR_patternStartLocation;
@@ -63,6 +66,10 @@ extern ATerm PERR_patternFeedbackFatalError;
 extern ATerm PERR_patternFeedbackError;
 extern ATerm PERR_patternFeedbackWarning;
 extern ATerm PERR_patternFeedbackInfo;
+extern ATerm PERR_patternFeedbackListMany;
+extern ATerm PERR_patternFeedbackListSingle;
+extern ATerm PERR_patternFeedbackListEmpty;
+extern ATerm PERR_patternSummaryFeedback;
 
 extern void init_ParsedErrorAPI_dict();
 
