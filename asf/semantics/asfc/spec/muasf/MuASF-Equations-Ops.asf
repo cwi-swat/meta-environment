@@ -147,6 +147,10 @@ equations
   [riff-1'3] remove-ignored-from-funid(funid(Char+ "-""i""g""n""o""r""e""d" )) = 
                 funid(Char+)
 
+  [riff-1'4] remove-ignored-from-funid(funid(""" "{" Char+ "-""i""g""n""o""r""e""d" "}" 
+                                                  "-""t""r""a""n""s" """)) =
+                funid(""" "{" Char+ "}"  "-""t""r""a""n""s" """)
+
   [irli-1'1] is-ignored-funid(funid(""" Char+ "-""i""g""n""o""r""e""d" """)) =
                true
 
@@ -155,6 +159,9 @@ equations
 
   [irli-1'3] is-ignored-funid(funid(Char+ "-""i""g""n""o""r""e""d")) =
                true
+
+  [irli-1'4] is-ignored-funid(funid(""" "{" Char+ "-""i""g""n""o""r""e""d" "}" 
+                                                  "-""t""r""a""n""s" """)) = true
 
   [default-irli] is-ignored-funid(Funid) = false
 

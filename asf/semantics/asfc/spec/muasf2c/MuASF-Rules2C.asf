@@ -191,7 +191,7 @@ equations
 
   [ar2cs-2'6] get-first-vf-path(C-rule+) = (Funid,Aint+),
               is-list-funid(Funid) = false,
-              is-ignored-funid(Funid) = false, %% JURGEN
+              is-ignored-funid(Funid) = false, 
               make-c-expression((Funid,Aint+),Namepair*) = Ltest,
               make-select-stat(Aint+) = Decl*,
               asfrules2cstats1(C-rule+,Namepair*,Aint1) = (Stat*1,Aint2),
@@ -202,7 +202,7 @@ equations
 
 [ar2cs-2'6'2] get-first-vf-path(C-rule+) = (Funid,Aint+),
               is-list-funid(Funid) = false,
-              is-ignored-funid(Funid) = true, %% JURGEN
+              is-ignored-funid(Funid) = true,
               asfrules2cstats1(C-rule+,Namepair*,Aint1) = (Stat*1,Aint2)
               ================================
               asfrules2cstats(C-rule+,,Namepair*,Aint1) =
@@ -210,6 +210,7 @@ equations
 
   [ar2cs-2'7] get-first-vf-path(C-rule+1) = (Funid,Aint+),
               is-list-funid(Funid) = true,
+              is-ignored-funid(Funid) = false,
               make-select-stat(Aint+) = Decl*,
               list2cstats(C-rule+1,Namepair*,Aint1) = (Stat*1,Aint2),
               select-on-ofs-first-arg(C-rule+2) = (C-rule*1,C-rule*2),
@@ -266,7 +267,6 @@ equations
                              Namepair*,Aint)
 
   [ar2cs-4'3] is-var-term(Term1) = true,
-              %%%is-protected(Funid,Namepair*) = Bool,
               make-select-stat(Aint+) = Decl*,
               remove-ofs-first-arg(C-rule*1) = C-rule*2,
               conds2cstats([|Cond*|Term2|Cenv1|Cenv2|Funid];C-rule*2,
@@ -296,7 +296,8 @@ equations
                 (Stat*2,0)
 
 %% Here we put previously ignored symbols around the normal form.  This is part
-%% of the optimization improves efficiency of recursive functions over lists.
+%% of the optimization improves efficiency of recursive functions over lists. Ignored
+%% function symbols occur in generated '<function>_recursive' functions.
 
   [rifin-1] restore-ignored-funids-in-arg(Expression, Term, Namepair*) = Expression2,
             restore-ignored-funids-in-nf(Expression+, Term+, Namepair*) = Expression+2
@@ -321,15 +322,32 @@ equations
   [default-rifia] restore-ignored-funids-in-arg(Expression, Term, Namepair*) = 
                     Expression
 
-  [lif-0] remove-ignored-from-funid(Funid) = Funid2,
+  [lif-0] is-trans-list-funid(Funid) = true,
+          remove-trans-from-list-id(Funid) = Funid2,
+          remove-ignored-from-funid(Funid2) = Funid3,
+          pn-lookup(Funid3, Namepair*) = funid(""" Char+ """)
+          =====
+          lookup-ignored-funid(Funid, Namepair*) = funid(Char+)
+
+ [lif-0]  is-trans-list-funid(Funid) = false,
+          remove-ignored-from-funid(Funid) = Funid2,
           pn-lookup(Funid2, Namepair*) = funid(""" Char+ """)
           =====
           lookup-ignored-funid(Funid, Namepair*) = funid(Char+)
 
-  [default-lif] remove-ignored-from-funid(Funid) = Funid2,
-                pn-lookup(Funid2, Namepair*) = Funid3
-                ====
-                lookup-ignored-funid(Funid, Namepair*) = Funid3
+ [default-lif] is-trans-list-funid(Funid) = false,
+               remove-ignored-from-funid(Funid) = Funid2,
+               pn-lookup(Funid2, Namepair*) = Funid3
+               ====
+               lookup-ignored-funid(Funid, Namepair*) = Funid3
+
+ [default-lif] is-trans-list-funid(Funid) = true,
+               remove-trans-from-list-id(Funid) = Funid2,              
+               remove-ignored-from-funid(Funid2) = Funid3,
+               pn-lookup(Funid3, Namepair*) = Funid4
+               ====
+               lookup-ignored-funid(Funid, Namepair*) = Funid4
+
 
   [sa2cs-1'1] sigargs2cbuild(Sigarg+,0) =
                 (ActualArgs,Stat*1,natcon(Char*2)),

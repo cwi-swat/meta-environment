@@ -70,11 +70,6 @@ equations
               make-l-l-rule(default:Term1 = Term2,SpecVarenv) =
                 make-conditional-rule(Cond*,default:Term3 = Term2)
 
-%%% If a default rule can not be made left linear because this
-%%% would introduce conditions.
-%%%  [mrule-1'1] make-l-l-rule(default:Term1 = Term2,SpecVarenv) =
-%%%                (,default:Term1 = Term2)
-
 %% If a rule has conditions, all right-hand sides of the condition
 %% should be checked and changed, as well.
   [mrule-1'3] make-l-l-lhs(Term1,SpecVarenv,[1,]) =
