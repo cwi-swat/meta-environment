@@ -7,6 +7,7 @@ process SdfModules is
 let
  SM : sdf-modules,
  Modules : list,
+ Pairs : list,
  ModuleId : str,
  Imports : term,
  Import : term,
@@ -72,14 +73,6 @@ in
     rec-value(SM, sdf-definition(Definition?)) .
     snd-msg(sm-sdf-definition(Definition)) .
     Definition := no-tree
-  +
-    rec-msg(sm-get-import-graph(Modules?)) .
-    snd-eval(SM, get-import-graph(Modules)) .
-    Modules := [] .
-    rec-value(SM, import-graph(Nodes?,Edges?)) .
-    snd-msg(sm-import-graph(Nodes, Edges)) .
-    Nodes := [] .
-    Edges := []
   +
     rec-msg(sm-is-valid-modulename-in-path(Path?, ModuleId?)) .
     snd-eval(SM, is-valid-modulename-in-path(Path, ModuleId)) .
