@@ -1,5 +1,10 @@
 # $Id$
 
+2003/04/28 (markvdb@cs.vu.nl)
+  * Clean up the new button language a bit.
+  * Tested it on the boolean transformations.
+  * Given some button actions more appropriate names.
+
 2003/04/25 (jurgenv@cwi.nl)
   * Deadlock problems caused by dissappearing text editors partially solved by 
     changing the idef of text-editor to use only notes.
