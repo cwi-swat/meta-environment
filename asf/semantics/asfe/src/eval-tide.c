@@ -268,7 +268,7 @@ static ATerm eval_expr(ATerm expr)
   if(ATmatch(expr, "higher-equal(<term>,<term>)", &t1, &t2)) {
     t1 = eval_expr(t1);
     t2 = eval_expr(t2);
-    ATfprintf(stderr, "higher-equal: %t,%t\n", t1, t2);
+    /*ATfprintf(stderr, "higher-equal: %t,%t\n", t1, t2);*/
     if(ATgetType(t1) == AT_INT && ATgetType(t2) == AT_INT) {
       n1 = ATgetInt((ATermInt)t1);
       n2 = ATgetInt((ATermInt)t2);
