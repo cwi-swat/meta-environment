@@ -45,7 +45,7 @@
 #include "dump-equations.tb"
 #include "configmanager.idef"
 #include "query.tb"
-#include "FindSortDefinition.idef"
+#include "findSortDefinition.idef"
 
 #include "meta-interface.tb"
 

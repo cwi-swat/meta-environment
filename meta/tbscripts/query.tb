@@ -1,48 +1,33 @@
 process Query is
 let
   EditorId : term,
-  NonTerminal : str,
-  Module : str,
-  Modules : list(<str>),
-  Occurrence : term,
-  Tree : term,
+  ModuleName : str,
+  ModuleNames : list(<str>),
+  Focus : term,
+  Module : term,
   Term : term,
-  ParseTableOpened : term,
-  Sdf : term,
-  ParsedNonTerminal : term,
-  Errors : term,
-  Contains : str
+  Errors : term
 in
   (
     rec-msg(find-focus-source(EditorId?)) .
-    snd-msg(get-focus-sort(EditorId)) .
+    snd-msg(get-focussed-tree(EditorId)) .
     (
-      rec-msg(focus-sort(NonTerminal?)) .
-      Sdf := quote(trm("Sdf2")) .
-      SetParseTable(Sdf, ParseTableOpened?) .
-      if equal(ParseTableOpened, true) then
-        ParseString(Sdf, "Sort", NonTerminal, ParsedNonTerminal?, Errors?) .
-	ProcessParseError("Sdf2", Errors, "SortName")
-      else
-        printf("This should not happen :-)\n")
-      fi .
+      rec-msg(tree(Focus?)) .
       snd-msg(get-all-modules) .
-      rec-msg(all-modules(Modules?)) .
+      rec-msg(all-modules(ModuleNames?)) .
       (
-        if not-equal(Modules, []) then
-        Module := first(Modules) .
-	snd-msg(get-sdf2-asfix(Module)) .
+        if not-equal(ModuleNames, []) then
+        ModuleName := first(ModuleNames) .
+	snd-msg(get-sdf2-asfix(ModuleName)) .
 	(
-	  rec-msg(syntax(Tree?)) .
-	  snd-msg(apply-rewrite("FindSortDefinition",
-	    "find-sort-definition", "Boolean", [Tree, ParsedNonTerminal])).
-	  rec-msg(normalform("FindSortDefinition", Term?)) .
-	  snd-msg(unparse(Term)) .
-	  rec-msg(unparsed-text(Contains?)) .
-	  if equal(Contains, "true") then
-	    printf("Spawning editor for module %s\n", Module) .
-	    snd-msg(edit-syntax(Module)) .
-	    Modules := [] /* stop searching after 1st hit, for now */
+	  rec-msg(syntax(Module?)) .
+	  snd-msg(query("FindSortDefinition", Module, Focus)) .
+	  rec-msg(result("FindSortDefinition", Term?)) .
+	  printf("term = %t\n", Term) .
+	  if equal(Term, found) then
+	    printf("Spawning editor for module %s\n", ModuleName) .
+	    snd-msg(edit-syntax(ModuleName)) .
+	    ModuleNames := [] /* stop searching after 1st hit, for now */
 	  else
 	    tau
 	  fi
@@ -50,16 +35,15 @@ in
 	  rec-msg(unavailable) .
 	  printf("Unable to get parse tree for focus!\n")
 	) .
-        Modules := next(Modules)
+        ModuleNames := next(ModuleNames)
         fi
       ) *
-      if equal(Modules, []) then
+      if equal(ModuleNames, []) then
         tau
       fi
     +
-      rec-msg(no-focus) .
-      printf("No focus!\n")
+      rec-msg(no-tree) .
+      printf("No tree!\n")
     )
   ) * delta
-
 endlet
