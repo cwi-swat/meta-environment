@@ -1,6 +1,6 @@
 
 %%tool testing is { command="./java-adapter -class toolbus.TestTool" }
-tool testing is { command="./java-adapter -TB_VERBOSE -class toolbus.Testing" }
+tool testing is { command="../java-adapter -TB_VERBOSE -class toolbus.Testing" }
 
 process TEST is
 let
@@ -15,11 +15,12 @@ in
    snd-do(T, testit("abc")) .
    snd-do(T, testit("a", 3)) .
    snd-do(T, testit("a", f([3]))) .
+   snd-do(T, testlist([["a","b"]])) .
    snd-eval(T, question(square)) .
    rec-value(T, answer(X?)) .
    printf("X = %t\n", X) .
    snd-do(T, listtest(Z)) .
-   snd-terminate(T, "bye bye!") .
+   snd-terminate(T, "bye bye!") delay(sec(3)) .
    printf("tool disconnected")
   ) . shutdown("test done\n")
   ||

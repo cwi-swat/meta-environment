@@ -26,6 +26,11 @@ public class Testing
     bridge.run();
   }
 
+  public void testlist(ATerm l0)
+  {
+    System.out.println("testlist: " + l0);
+  }
+
   public void listtest(ATerm l0)
   {
     System.out.println("listtest: " + l0);

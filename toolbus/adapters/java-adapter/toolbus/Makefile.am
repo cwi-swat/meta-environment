@@ -22,7 +22,7 @@ noinst_SCRIPTS	= ${TESTCLASSES} ${EXAMPLECLASSES}
 
 bin_SCRIPTS	= tifstojava
 
-CLASSPATH_ENV	= CLASSPATH=${top_srcdir}/adapters/java-adapter:${ATERM}/classes
+CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${ATERM}/classes
 
 ${EXAMPLECLASSES}: example.tifs JavaTif.class
 	$(CLASSPATH_ENV) \

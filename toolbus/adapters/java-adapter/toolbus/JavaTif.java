@@ -602,6 +602,9 @@ public class JavaTif
 	    }
 	    //newargs[i] = arg;
 	    break;
+	  case ATerm.LIST:
+	    type = "<term>";
+	    break;
 	}
 	if (newargs[i] == null) {
 	  newargs[i] = factory.parse(type);
