@@ -445,7 +445,7 @@ SE_Editor replaceEditorTreeAtFocus(SE_Editor editor, SE_Focus focus,
   new_tree = PT_annotateParseTreeWithLength(new_tree);
 
   if (SE_isEqualFocus(SE_getEditorFocus(editor), focus)) {
-    focus = SE_setFocusUnparsed(focus, 0);
+    focus = SE_setFocusUnparsed(focus, FOCUS_PARSED);
     editor = SE_setEditorFocus(editor, focus);
   }
 
