@@ -1,0 +1,22 @@
+/* $Id$ */
+
+/* This process executes an editor, and tells everyone who wants to 
+   know about its tool-id
+*/
+
+tool text-edit is {
+  command = "emacs-adapter"
+}
+
+process Edit-master is
+let
+TE: text-edit
+in
+  rec-msg(get-editor-tool-id).
+  execute(text-edit, TE?) . 
+  snd-do(TE,load-file("/ufs/kuipers/petr/new-meta/editor/editor.el")). 
+  snd-msg(editor-tool-id(TE)). (
+    rec-msg(get-editor-tool-id).
+    snd-msg(editor-tool-id(TE))
+  ) * delta
+endlet
