@@ -5,6 +5,7 @@ INCLUDES	= -I${ATERM}/include \
 		-I${TOOLBUSLIB}/include \
 		-I${PT_SUPPORT}/include \
 		-I${SDF_SUPPORT}/include \
+		-I${ASF_SUPPORT}/include \
 		-I${ASC_SUPPORT}/include
 
 check_PROGRAMS	= test-chars
