@@ -113,12 +113,6 @@ static PT_Symbols SDFSymbolParametersToPtSymbols(SDF_SymbolParameters sdfSymbols
   return ptSymbols;
 }
 
-static PT_Symbol     SDFSortToPtSymbol(SDF_Sort sdfSort)
-{
-  char *str = PT_yieldTree((PT_Tree) sdfSort);
-  return PT_makeSymbolSort(str); 
-}
-
 PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
 {
   PT_Symbol result = NULL;
@@ -236,8 +230,8 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     SDF_Sort sdfSort = SDF_getSymbolSort(sdfSymbol);
     SDF_SymbolParameters sdfParameters = SDF_getSymbolParameters(sdfSymbol);
     PT_Symbols ptParameters = SDFSymbolParametersToPtSymbols(sdfParameters);
-    PT_Symbol ptSort = SDFSortToPtSymbol(sdfSort);
-    result = PT_makeSymbolParameter(ptSort, ptParameters);
+    char *ptSort = PT_yieldTree((PT_Tree) sdfSort);
+    result = PT_makeSymbolParameterizedSort(ptSort, ptParameters);
   }
   else if (SDF_isSymbolAlt(sdfSymbol)) {
     SDF_Symbol sdfLeft = SDF_getSymbolLeft(sdfSymbol);

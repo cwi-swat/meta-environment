@@ -213,9 +213,9 @@ exports
     [A-Z]                          -> Sort			{cons("one-char")}
     [A-Z][A-Za-z0-9\-]*[A-Za-z0-9] -> Sort			{cons("more-chars")}
   context-free syntax
-    Sort                                  -> Symbol		{cons("sort")}
+    Sort                                    -> Symbol		{cons("sort")}
     Sort "[[" parameters:{Symbol ","}+ "]]" -> Symbol		{cons("parameterized-sort")}
-    "sorts" Symbols                       -> Grammar		{cons("sorts")}
+    "sorts" Symbols                         -> Grammar		{cons("sorts")}
 
 module Literals-Sdf-Syntax
 imports Kernel-Sdf-Syntax Literals
