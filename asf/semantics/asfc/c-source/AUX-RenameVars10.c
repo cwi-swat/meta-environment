@@ -1,4 +1,4 @@
-#include  "support.h"
+#include  "asc-support.h"
 static Symbol lf_AUX_RenameVars10_3sym ;
 static ATerm lf_AUX_RenameVars10_3 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
 static Symbol ef2sym ;

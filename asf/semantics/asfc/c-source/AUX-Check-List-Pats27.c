@@ -1,4 +1,4 @@
-#include  "support.h"
+#include  "asc-support.h"
 static Symbol lf_AUX_Check_List_Pats27_2sym ;
 static ATerm lf_AUX_Check_List_Pats27_2 ( ATerm arg1 ) ;
 static Symbol ef2sym ;

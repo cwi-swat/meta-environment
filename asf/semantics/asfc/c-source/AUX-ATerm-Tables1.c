@@ -1,4 +1,4 @@
-#include  "support.h"
+#include  "asc-support.h"
 static Symbol lf_AUX_ATerm_Tables1_1sym ;
 static ATerm lf_AUX_ATerm_Tables1_1 ( ) ;
 static Symbol lf_AUX_ATerm_Tables1_2sym ;

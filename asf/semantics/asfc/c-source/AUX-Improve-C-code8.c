@@ -1,4 +1,4 @@
-#include  "support.h"
+#include  "asc-support.h"
 static Symbol lf_AUX_Improve_C_code8_1sym ;
 static ATerm lf_AUX_Improve_C_code8_1 ( ATerm arg1 ) ;
 static Symbol ef3sym ;

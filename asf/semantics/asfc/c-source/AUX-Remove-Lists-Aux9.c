@@ -1,4 +1,4 @@
-#include  "support.h"
+#include  "asc-support.h"
 static Symbol lf_AUX_Remove_Lists_Aux9_1sym ;
 static ATerm lf_AUX_Remove_Lists_Aux9_1 ( ATerm arg1 ) ;
 static Symbol ef1sym ;

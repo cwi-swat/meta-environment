@@ -79,4 +79,7 @@ init.c:
 clean: 
 	rm -f *.o *~ $(CLEANFILES)
 
+distclean realclean spotless:	clean
+	rm -f ${DISTCLEANFILES}
+
 install: all

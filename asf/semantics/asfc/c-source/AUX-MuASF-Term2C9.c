@@ -1,4 +1,4 @@
-#include  "support.h"
+#include  "asc-support.h"
 static Symbol lf_AUX_MuASF_Term2C9_3sym ;
 static ATerm lf_AUX_MuASF_Term2C9_3 ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) ;
 static Symbol ef14sym ;
