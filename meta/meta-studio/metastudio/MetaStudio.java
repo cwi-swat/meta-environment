@@ -147,13 +147,18 @@ public class MetaStudio extends JFrame  {
         JTabbedPane tabs = new JTabbedPane();
 
         addTab(tabs, "Modules", new ModuleBrowser(factory, getBridge()));
-        addTab(tabs, "Parse tree", new ParseTreePanel(factory, getBridge()));
-        addTab(tabs, "Boxed parse tree", new HierarchyBox(factory, getBridge()));
+        addTab(tabs, "Parse tree", createParseTreeTab());
         
         return tabs;
     }
     
-    private void addTab(JTabbedPane tabs, String title, ToolComponent tool) {
+    private JComponent createParseTreeTab() {
+        return new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
+                new ParseTreePanel(factory, getBridge()),
+                new HierarchyBox(factory, getBridge()));
+    }
+    
+    private void addTab(JTabbedPane tabs, String title, JComponent tool) {
         tabs.insertTab(title, null, tool, null, tabs.getTabCount());
     }
 
