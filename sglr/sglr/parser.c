@@ -388,8 +388,8 @@ ATerm SG_Result(char *sort)
       if(SG_ASFIX1) {
         if(SGnrAmb(SG_NRAMB_ASK) > 0) {
           ATfprintf(stderr, "error: cannot represent parse forest "
-                            "(%d ambiguities) in AsFix1\n",
-                    SGnrAmb(SG_NRAMB_ASK));
+                            "(%d ambiguit%s) in AsFix1\n",
+                    SGnrAmb(SG_NRAMB_ASK), SGnrAmb(SG_NRAMB_ASK)==1?"y":"ies");
           return ATmake("parse-error([character(<int>), line(<int>),"
                         "col(<int>), char(<int>)])",
                         current_token, line, col, sg_tokens_read);

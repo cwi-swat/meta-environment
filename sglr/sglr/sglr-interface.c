@@ -93,8 +93,11 @@ size_t SG_FileSize(char *prg, char *FN)
     return -1;	/*  We can't tell how many tokens to read  */
 
   if(stat(FN, &statbuf) < 0) {
-    ATfprintf(stderr, "%s: cannot stat %s\n", prg, FN);
-    exit(1);
+/*
+    ATfprintf(stderr, "%s: cannot stat() %s\n", prg, FN);
+ */
+    return -1;  /*  We can't tell how many tokens to read  */
+                /*  We probably will not be able to open it either.. */
   }
   return statbuf.st_size;
 }
