@@ -1,6 +1,6 @@
 include ${top_srcdir}/make_rules
 
-SUBDIRS		= images metastudio scripts . META-INF
+SUBDIRS		= META-INF images metastudio scripts . 
 
 
 EXTRA_DIST	=
