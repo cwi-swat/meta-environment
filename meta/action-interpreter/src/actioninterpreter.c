@@ -189,12 +189,10 @@ static ATbool actionGeneric(int cid, AC_Action action)
         stack = AC_popFromStack(stack);
       }
     }
-ATwarning("messageArgs = %t\n", messageArgs);
     fun = ATgetAFun((ATermAppl)name);
     message = (ATerm)ATmakeApplList(ATmakeAFun(ATgetName(fun), 
                                     ATgetLength(messageArgs), 
                                     ATfalse), messageArgs);
-ATwarning("message = %t\n", message);
     send_action(cid, AC_MessageFromTerm(message));
     return ATtrue;
   }

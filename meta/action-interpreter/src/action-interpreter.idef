@@ -25,10 +25,8 @@ in
     (
       rec-event(AI, action(Action?)) 
       . snd-ack-event(AI, action(Action))
-. printf("A = %t\n", Action)
       . snd-msg(Sid, Action)
       . rec-msg(Sid, Result?)
-. printf("R = %t\n", Result)
       . snd-do(AI, process-result(Result))
     ) 
     *
