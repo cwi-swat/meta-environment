@@ -1,0 +1,25 @@
+process P is
+let N : int, M : int, X : int
+in
+    N := 0 .
+    print before .
+    ( if less(N, 5)
+      then
+         print N . N := add(N, 1) .
+         M := 10 .
+         ( if less(M,13)
+           then
+	     X := add(M, N) .
+             print X .
+             M := add(M, 1)
+           else tau
+           fi
+         ) * if equal(M, 13) then tau fi
+      else
+         tau
+      fi
+    ) * delta
+endlet
+
+toolbus(P)
+

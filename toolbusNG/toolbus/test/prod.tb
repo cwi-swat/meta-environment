@@ -6,7 +6,7 @@ process PRODUCER(Start : int, Max : int) is
        then snd-msg p(N) .
             N := add(N, 1)
        fi
-     ) * if equal(N, Max) then shutdown "done" fi
+     ) * if equal(N, Max) then shutdown done fi
   endlet
 
 process CONSUMER is
@@ -29,15 +29,12 @@ process TRAFO is
   endlet
 
 toolbus(
-
 CONSUMER(),
-PRODUCER(100,999),
-PRODUCER(1000,1999),
-PRODUCER(2000,2999),
-TRAFO(),
-TRAFO(),
+PRODUCER(100,200),
+%%PRODUCER(1000,1999),
+%%PRODUCER(2000,2999),
+%%TRAFO(),
+%%TRAFO(),
 TRAFO()
-
 )
-
 

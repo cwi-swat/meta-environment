@@ -2,6 +2,8 @@ package toolbus;
 
 /**
  * @author paulk, Jul 29, 2002
+ * 
+ * ToolBusException: thrown when a user-related error-condition occurs.
  */
 public class ToolBusException extends Exception {
 
