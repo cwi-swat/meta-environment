@@ -1,6 +1,6 @@
 module Rstore
 
-imports Rscript
+imports Rscript RSF
 
 exports 
   sorts RVALUE RSTORE
@@ -30,6 +30,12 @@ exports
 	filter(RSTORE, Bag[[Elem]])			-> RSTORE
 	rvar2str(RVAR)					-> String
 
+%% Import a Rigi RSF file
+	import(RSFFILE)					-> RSTORE
+	import1(RSFFILE, RSTORE)			-> RSTORE
+	rsfname2rvar(RSFNAME)				-> RVAR
+	rsfname2str(RSFNAME)				-> String
+
 hiddens
 
   context-free syntax
@@ -52,3 +58,9 @@ hiddens
 	"$Rel" [0-9\']*			-> Bag[[Elem]]
 
 	"$Char*" [0-9\']*		-> CHAR*
+	
+	"$RsfName" [0-9\']*		-> RSFNAME
+
+	"$RsfTuple" [0-9\']*		-> RSFTUPLE
+	"$RsfTuple*" [0-9\']*		-> RSFTUPLE*
+	
