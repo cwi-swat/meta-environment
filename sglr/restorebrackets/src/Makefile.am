@@ -3,7 +3,6 @@
 include ${top_srcdir}/make_rules
 
 EXTRA_DIST		= restorebrackets.idef
-CLEANFILES		= restorebrackets.tifs restorebrackets.tif.[ch]
 
 INCLUDES		= -I$(top_srcdir)/libsglr \
 			-I$(PT_SUPPORT)/include \
