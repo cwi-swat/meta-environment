@@ -233,6 +233,7 @@ int main(int argc, char *argv[])
 
   ATBinit(argc, argv, &bottomOfStack);
   TS_initTableStore();
+  SS_initSnapshotApi();
 
   cid = ATBconnect(NULL, NULL, -1, term_store_handler);
 
