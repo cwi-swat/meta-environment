@@ -1,9 +1,11 @@
 equations
 
-  [m2m-1'1] optimize-muasf(Module1,Nametable) = (Module2, Nametable2),
-            make-matching-conds(Module2) = Module3,
-            make-left-linear(Module3) = Module4,
-            remove-list-matching(Module4) = Module5,
-            normalize-conditions(Module5) = Module6
-            =======================================
-            muasf2muasf(Module1, Nametable) =  (Module6, Nametable2)
+[m2m-1'1]
+add-list-cons(Module1) = Module2,
+optimize-muasf(Module2,Nametable) = (Module3, Nametable2),
+make-matching-conds(Module3) = Module4,
+make-left-linear(Module4) = Module5,
+remove-list-matching(Module5) = Module6,
+normalize-conditions(Module6) = Module7
+===>
+muasf2muasf(Module1, Nametable) =  (Module7, Nametable2)
