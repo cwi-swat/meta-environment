@@ -34,31 +34,32 @@ equations
 	appl(prod([lex(Symbol)],cf(Symbol),no-attrs),[Tree]) Ann
 
  %% The following is a parse tree of the character notation. There are
- %% two notations, NumChar and ShortChar. All ShortChars have been normalized
- %% to NumChars at this point (using the table in the Characters module).
- %% NumChars look like this for example: \34  for a quote. 
+ %% two notations, NumChar and ShortChar. With numchar, we decode the number
+ %% to an ASCII value. With ShortChar, we have regular characters and
+ %% escaped characters, and the actual ASCII is buried somewhere in the
+ %% parse tree. An exception is made for \n, \r and \t because there
+ %% literal value should encode a different ASCII value.  
  %%
  %% The goal of this equation is to translate the parse tree of \34 to the
  %% parse tree '34', an actual AsFix representation of the quote. This works
- %% for all 256 ASCII values.
+ %% for all 256 ASCII values. Or the parse tree of \" to an actual 34.
  
- [deconstruct-character-escapes-to-real-chars]
-	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[_Symbol])),_Attributes),[appl(prod([cf(sort("ASF-NumChar"))],cf(sort("CHAR")),attrs([term(cons("numeric"))])),[appl(prod([lex(sort("ASF-NumChar"))],cf(sort("ASF-NumChar")),no-attrs),[appl(prod([char-class([92]),lex(iter(char-class([range(48,57)])))],lex(sort("ASF-NumChar")),attrs([term(cons("digits"))])),[92,appl(list(lex(iter(char-class([range(48,57)])))),Digits) _Ann0]) _Ann1]) _Ann2]) _Ann3]) _Ann4)
+ [deconstruct-numchars-to-real-chars]
+	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[_Symbol])),_Attributes),[appl(prod([cf(sort("ASF-NumChar"))],cf(sort("CHAR")),attrs([term(cons("numeric"))])),[appl(prod([lex(sort("ASF-NumChar"))],cf(sort("ASF-NumChar")),no-attrs),[appl(prod([char-class([92]),lex(iter(char-class([range(48,57)])))],lex(sort("ASF-NumChar")),attrs([term(cons("digits"))])),[92,appl(list(lex(iter(char-class([range(48,57)])))),Digits)_Ann5])_Ann4])_Ann3])_Ann2])_Ann1)
 = 
 	digits(Digits)
 
-%% If the NumChar was reduced from another notation, it will not contain
-%% annotations, but the outermost injections  will:
+ [deconstruct-regular-shortchars-to-real-chars]
+	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[char-class([range(48,57)])])),no-attrs),[appl(prod([cf(sort("ASF-ShortChar"))],cf(sort("CHAR")),attrs([term(cons("short"))])),[appl(prod([lex(sort("ASF-ShortChar"))],cf(sort("ASF-ShortChar")),no-attrs),[appl(prod([char-class([range(48,57),range(65,90),range(97,122)])],lex(sort("ASF-ShortChar")),attrs([term(cons("regular"))])),[Tree])_Ann4])_Ann3])_Ann2])_Ann1) = Tree
 
-[deconstruct-character-escapes-to-real-chars-without-annos]
-	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[_Symbol])),_Attributes),[appl(prod([cf(sort("ASF-NumChar"))],cf(sort("CHAR")),attrs([term(cons("numeric"))])),[appl(prod([lex(sort("ASF-NumChar"))],cf(sort("ASF-NumChar")),no-attrs),[appl(prod([char-class([92]),lex(iter(char-class([range(48,57)])))],lex(sort("ASF-NumChar")),attrs([term(cons("digits"))])),[92,appl(list(lex(iter(char-class([range(48,57)])))),Digits)])])]) _Ann3 ]) _Ann4)
-= 
-	digits(Digits)
+ [deconstruct-escaped-char-to-real-char]
+	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[char-class([range(48,57)])])),no-attrs),[appl(prod([cf(sort("ASF-ShortChar"))],cf(sort("CHAR")),attrs([term(cons("short"))])),[appl(prod([lex(sort("ASF-ShortChar"))],cf(sort("ASF-ShortChar")),no-attrs),[appl(prod([char-class([92]),char-class([range(32,47),range(58,64),range(91,96),110,114,116,range(123,255)])],lex(sort("ASF-ShortChar")),attrs([term(cons("escaped"))])),[92,Tree])_Ann4])_Ann3])_Ann2])_Ann1) = 
+	reserved-chars(Tree)
 
 [deconstruct-CHAR-variable-to-lexical-variable]
-	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[Symbol])),no-attrs),[appl(prod([varsym(cf(sort("CHAR")))],cf(sort("CHAR")),no-attrs),[appl(prod(Symbols,varsym(cf(sort("CHAR"))),Attributes),Args) Ann1]) Ann2]) _Ann3)
+	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[Symbol])),no-attrs),[appl(prod([varsym(cf(sort("CHAR")))],cf(sort("CHAR")),no-attrs),[appl(prod(Symbols,varsym(cf(sort("CHAR"))),Attributes),Args)_Ann3])_Ann2]) Ann1)
 =
-	appl(prod([varsym(lex(Symbol))],lex(Symbol),no-attrs),[appl(prod(Symbols,varsym(lex(Symbol)),Attributes),Args) Ann1]) Ann2
+	appl(prod([varsym(lex(Symbol))],lex(Symbol),no-attrs),[appl(prod(Symbols,varsym(lex(Symbol)),Attributes),Args)]) Ann1
 
 equations
 
@@ -66,7 +67,7 @@ equations
        Symbol2 := unwrap(Symbol),
        Args2 := remove-layout(Args)
        ===>
-       reconstruct(appl(list(Symbol),Args) Ann) = appl(list(Symbol2),Args2) Ann
+       reconstruct(appl(list(Symbol),Args)) = appl(list(Symbol2),Args2)
 
 [prod-reconstruction]
        Symbols2 := remove-layout(Symbols),
@@ -74,8 +75,8 @@ equations
        Symbol2 := unwrap(Symbol),
        Args2 := remove-layout(Args)
        ===>
-       reconstruct(appl(prod(Symbols,Symbol,Attributes),Args) Ann) =
-       appl(prod(Symbols3,Symbol2,Attributes), Args2) Ann
+       reconstruct(appl(prod(Symbols,Symbol,Attributes),Args)) =
+       appl(prod(Symbols3,Symbol2,Attributes), Args2)
 
 equations
 
@@ -139,6 +140,20 @@ equations
 	NatCon4 := 10*NatCon2 + NatCon3
 	===>
 	digits([Tree*, NatCon]) = NatCon4
+
+equations
+
+[newline]
+	reserved-chars(110) = 10
+
+[tab]
+	reserved-chars(116) = 9
+
+[return]
+	reserved-chars(114) = 13
+
+[default-otherwise]
+	reserved-chars(Tree) = Tree
 
 equations
 

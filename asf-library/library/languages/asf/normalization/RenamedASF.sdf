@@ -1,6 +1,6 @@
 module languages/asf/normalization/RenamedASF[Tree]
 
-imports languages/asf/syntax/Asf[Tree][
+imports languages/asf/syntax/Asf[P-Tree][
 	ASF-Equation => Equation
 	ASF-Condition => Condition
 	ASF-Tag	=> Tag
@@ -16,6 +16,8 @@ imports languages/asf/syntax/Asf[Tree][
 	ASF-ShortChar => ShortChar
 	CHAR => Character
 ]
+
+imports basic/Comments
 
 exports sorts
 	Equation

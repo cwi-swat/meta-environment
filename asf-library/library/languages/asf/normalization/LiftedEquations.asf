@@ -35,3 +35,84 @@ set-rhs(equation(Eq Ann), Rhs) = equation(Eq' Ann)
 [rhs]
 set-rhs(equation(appl(Prod,[Lhs,Ws1,Lit,Ws2,_Rhs])),Rhs) =
 	equation(appl(Prod,[Lhs,Ws1,Lit,Ws2,Rhs]))
+
+
+equations
+
+[lhs-ann]
+get-lhs(condition(Eq _Ann)) = get-lhs(condition(Eq))
+
+[lhs]
+get-lhs(condition(appl(_Prod,[Lhs,_Ws1,_Lit,_Ws2,_Rhs]))) = Lhs
+
+equations
+
+[rhs-ann]
+get-rhs(condition(Eq _Ann)) = get-rhs(condition(Eq))
+
+[rhs]
+get-rhs(condition(appl(_Prod,[_Lhs,_Ws1,_Lit,_Ws2,Rhs]))) = Rhs
+
+equations
+
+[lhs-ann]
+condition(Eq') := set-lhs(condition(Eq), Lhs)
+===>
+set-lhs(condition(Eq Ann), Lhs) = condition(Eq' Ann)
+
+[lhs]
+set-lhs(condition(appl(Prod,[_Lhs,Ws1,Lit,Ws2,Rhs])),Lhs) =
+	condition(appl(Prod,[Lhs,Ws1,Lit,Ws2,Rhs]))
+
+equations
+
+[rhs-ann]
+condition(Eq') := set-rhs(condition(Eq), Rhs)
+===>
+set-rhs(condition(Eq Ann), Rhs) = condition(Eq' Ann)
+
+[rhs]
+set-rhs(condition(appl(Prod,[Lhs,Ws1,Lit,Ws2,_Rhs])),Rhs) =
+	condition(appl(Prod,[Lhs,Ws1,Lit,Ws2,Rhs]))
+
+equations
+
+[assign]
+	is-assignment(condition(
+	appl(prod([_Symbol*1,lit(":="),_Symbol*2],_Symbol,_Attrs),_Args)))
+	= true
+
+[default-assign]
+	is-assignment(condition(_Tree)) = false
+
+equations
+
+[non-assign]
+	is-non-assignment(condition(
+	appl(prod([_Symbol*1,lit("!:="),_Symbol*2],_Symbol,_Attrs),_Args)))
+	= true
+
+[default-non-assign]
+	is-non-assignment(condition(_Tree)) = false
+
+equations
+
+[equality]
+	is-equality(condition(
+	appl(prod([_Symbol*1,lit("=="),_Symbol*2],_Symbol,_Attrs),_Args)))
+	= true
+
+[default-equality]
+	is-equality(condition(_Tree)) = false
+
+
+equations
+
+[inequality]
+	is-inequality(condition(
+	appl(prod([_Symbol*1,lit("!="),_Symbol*2],_Symbol,_Attrs),_Args)))
+	= true
+
+[default-inequality]
+	is-inequality(condition(_Tree)) = false
+

@@ -2,6 +2,7 @@ module languages/asf/normalization/LiftedEquations
 
 imports languages/asf/normalization/RenamedTree
 imports languages/asf/normalization/RenamedASF[P-Tree]
+imports basic/Booleans
 
 exports
 
@@ -10,10 +11,26 @@ context-free syntax
 equation(P-Tree) -> Equation
 condition(P-Tree) -> Condition
 
+context-free syntax
+
 get-lhs(Equation) -> P-Tree
 get-rhs(Equation) -> P-Tree
 set-lhs(Equation,P-Tree) -> Equation
 set-rhs(Equation,P-Tree) -> Equation
+
+context-free syntax
+
+get-lhs(Condition) -> P-Tree
+get-rhs(Condition) -> P-Tree
+set-lhs(Condition,P-Tree) -> Condition
+set-rhs(Condition,P-Tree) -> Condition
+
+context-free syntax
+
+is-assignment(Condition) -> Boolean
+is-non-assignment(Condition) -> Boolean
+is-equality(Condition) -> Boolean
+is-inequality(Condition) -> Boolean
 
 hiddens
 
@@ -30,9 +47,14 @@ variables
 
 variables
 
+"_Symbol"[0-9]* -> P-Symbol {wild}
+"_Symbol*"[0-9]* -> {P-Symbol ","}* {wild}
 "_Ann"[0-9]* -> P-Annotation {wild}
 "_Ws"[0-9]* -> P-Tree {wild}
 "_Prod"[\']* -> P-Production {wild}
 "_Lhs"[\']* -> P-Tree {wild}
 "_Rhs"[\']* -> P-Tree {wild}
 "_Lit"[\']* -> P-Tree {wild}
+"_Attrs"[0-9]* -> P-Attributes {wild}
+"_Args"[0-9]* -> P-Args {wild}
+"_Tree"[0-9]* -> P-Tree {wild}

@@ -2,11 +2,7 @@ module languages/asf/normalization/Constructors
 
 imports basic/Integers
 imports languages/asf/normalization/RenamedTree
-imports languages/sdf2/normalization/Character [
-       Character => CHAR
-       NumChar => ASF-NumChar
-       ShortChar => ASF-ShortChar
-]
+imports languages/asf/normalization/RenamedASF
 
 exports
 
@@ -49,6 +45,9 @@ context-free syntax
 	remove-layout(P-Symbols) -> P-Symbols
 
 	remove-tag(P-Attributes) -> P-Attributes
+
+context-free syntax
+	reserved-chars(P-Tree) -> P-Tree
 
 variables
 	"Symbol"[0-9]* -> P-Symbol {strict}

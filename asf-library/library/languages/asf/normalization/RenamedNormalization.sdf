@@ -2,8 +2,9 @@ module languages/asf/normalization/RenamedNormalization
 
 imports languages/asf/normalization/Brackets
 imports languages/asf/normalization/Constructors
-imports languages/asf/normalization/Lifting
 imports languages/asf/normalization/ListResults
+imports languages/asf/normalization/Layout
+
 
 exports
 

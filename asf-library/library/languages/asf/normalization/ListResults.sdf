@@ -2,7 +2,6 @@ module languages/asf/normalization/ListResults
 
 imports languages/asf/normalization/RenamedTree
 imports languages/asf/normalization/RenamedASF
-imports languages/asf/normalization/LiftedEquations
 
 exports
 
