@@ -29,7 +29,7 @@
 
 \institute{Centrum voor Wiskunde en Informatica, The Netherlands
 \and
-Informatics Institute,	University of Amsterdam, The Netherlands}
+Informatics Institute, University of Amsterdam, The Netherlands}
 
 \begin{document}
 \maketitle
@@ -164,8 +164,10 @@ and what are the implications for the \TB\ design and implementation.
 \section{Coordination, Representation and Computation}
 
 \begin{figure}[tb]
-\epsfig{figure=figs/component-architecture.eps,width=\textwidth}
-\vspace*{-10cm}
+\begin{center}
+\epsfig{figure=figs/component-architecture.eps,height=12cm}
+\end{center}
+\vspace*{-7cm}
 \caption{\label{Fig:component-architecture}Separating coordination
   from computation}
 \end{figure}
@@ -188,13 +190,10 @@ architecture of a software system can be improved by separating
 
 Our assumption is now that \emph{a rigorous separation of coordination
 from computation leads to flexible and reusable systems.} The approach
-is illustrated in Figure~ref{Fig:component-architecture}.
+is illustrated in Figure~\ref{Fig:component-architecture}.
 
-
-
-
-  In the case
-of the \asdf\ Meta-Environment, empirical evidence shows that
+In the case of the \asdf\ Meta-Environment, empirical evidence shows
+that
 \begin{itemize}
 \item The \TB-based version of the \asdf\ Meta-Environment is more
 flexible as illustrated by the fact that clones of the
@@ -208,15 +207,23 @@ reused in other projects~\cite{XXX}.
 
 \section{The \TB\ Architecture}
 
-\begin{verbatim}
-Goals: integrate tools written in different languages running on different machines
-A programmable software bus
-Scripts describe the cooperation of tools
-Scripts are based on Process Algebra
-Science of Computer Programming 1998
-\end{verbatim}
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/toolbus.eps,height=14cm}
+\end{center}
+\vspace*{-9cm}
+\caption{\label{Fig:toolbus-architecture}The \TB\ architecture}
+\end{figure}
 
-\begin{figure}
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/toolbus-scenario.eps,height=14cm}
+\end{center}
+\vspace*{-8cm}
+\caption{\label{toolbus-scenario}A typical cooperation scenario}
+\end{figure}
+
+\begin{table}
 \begin{center}
 \begin{tabular}{|l|l|}
 \hline Primitive		& Description	\\ \hline \hline
@@ -258,40 +265,63 @@ Science of Computer Programming 1998
 \spec{attach-monitor}		& attach a monitoring tool to a process\\
 \spec{detach-monitor}		& detach a monitoring tool from a process \\ \hline
 \end{tabular}
-\caption{Overview of \TB\ primitives.}
-\label{fig:Features}
 \end{center}
-\end{figure}
+\caption{\label{Tab:Tscript-features}Overview of \TB\ primitives}
 
-\begin{figure}
-\epsfig{figure=figs/toolbus.eps,width=\textwidth}
-\vspace*{-10cm}
-\caption{XXX}
-\end{figure}
+\end{table}
 
-\begin{figure}
-\epsfig{figure=figs/toolbus-scenario.eps,width=\textwidth}
-\vspace*{-10cm}
-\caption{XXX}
-\end{figure}
+The goals of the\TB\ is to integrate tools written in different
+languages running on different machines.  This is achieved by means of
+a programmable software bus as illustrated in
+Figure~\ref{Fig:toolbus-architecture}.  The \TB\ coordinates the
+cooperation of a number of tools.  This cooperation is described by a
+T-script that runs inside the \TB. The result is a set of concurrent
+processes inside the \TB\ that can communicate with each other and
+with the tools. Tools can be written in any language and can run on
+different machines. They exchange data by way of ATerms.
+
+A typical cooperation scenario is illustrated in
+Figure~\ref{toolbus-scenario}.  A user-interface (UI) and a database
+(DB) are combined in an application. Pushing a button in the
+user-interface leads to a database action and the result is displayed
+in the user-interface. In a traditional approach, the database action
+is directly connected to the user-interface button by means of a
+call-back function. This implies that the user-interface needs some
+knowledge about the database tool and vice versa.  In the \TB\
+approach the two components are completely decoupled: pushing the
+button only leads to an event that is handled by some process in the
+\TB. This process routes the event to the database tool (likely via
+some intermediary process) and gets the answer back via the inverse
+route. This implies that the configuration knowldege is now
+completekly localized in the the Tscript and that UI and DB do not
+even know about each others existence.
+
+The primitives that can be used in Tscripts are listed in
+Table~\ref{Tab:Tscript-features}. 
 
 \section{Application to the \asdf\ Meta-Environment}
 
 \begin{figure}
 \epsfig{figure=figs/meta-env.eps,width=\textwidth}
-\vspace*{-10cm}
-\caption{XXX}
+\vspace*{-12cm}
+\caption{\label{Fig:meta-env}Architecture of the \asdf\ Meta-Environment.}
 \end{figure}
 
+As already sketches above, the \TB\ has been used to restructure the
+\asdf\ Meta-Environment. It consists of a cooperation of 27 tools
+ranging from a user-interface, graph browser, various editors,
+compiler and interpreter, to a parser generator and a repository for
+parse trees.  A simplified view is shown in Figure~\ref{Fig:meta-env}.
+
+\begin{table}[tb]
+\begin{center}
 \begin{tabular}{|l|r|r|r|} \hline
-
 Language        & KLOC$^\dagger$ & Generated KLOC & Total KLOC\\ \hline \hline
-
 ASF+SDF         & 12	 & 170 (C) & \\
 C 	        & 80$^{\dagger\dagger}$  & & \\
 Java, Tcl/Tk    &  5  & &\\
 Makefiles, etc	&  5  & &\\
-ToolBus scripts	&  5  & &\\ \hline
+Tscrips   	&  5  & &\\ \hline
 Total LOC:	& 107 & 170 & 277 \\\hline
 
 ToolBus script &  4.6\% &  & 1.8\%\\ \hline
@@ -302,7 +332,13 @@ such as emacs, dot, and the like.
 
 $^{\dagger\dagger}$ This includes 10000 LOC (C code) for the \TB\
 implementation itself.
+\end{center}
 
+\caption{\label{Tab:language-stats}Facts concerning implementation languages}
+\end{table}
+
+\begin{table}[tb]
+\begin{center}
 \begin{tabular}{|l|r|}\hline
 Primitive                            & Number of occurrences \\ \hline \hline
 
@@ -321,6 +357,48 @@ tool definitions                     & 27\\
 \texttt{rec-event}                   & 56\\
 \texttt{create}                      & 58 \\ \hline
 \end{tabular}
+\end{center}
+\caption{\label{Tab:Tscript-stats}Facts concerning Tscript primitives}
+\end{table}
+
+
+Our insight can be further increased by considering some
+statistics. In Table~\ref{Tab:language-stats} the relative sizes of
+the various implementation languages used in the Meta-Environment.  In
+the column \emph{language} the various language are listed.  In column
+\emph{KLOC} the size (in Kilo Lines Of Code) is given for each
+language. The result is 107 KLOC for the whole system of which 4.6\%
+are Tscripts.  If we consider the fact that \asdf\ specification are
+compiled to C code, another view is possible as well: 12 KLOC of \asdf
+generates 170 KLOC of C code (!). Taking this generated code into
+account, the total size of the whole system amounts to 277 KLOC of
+which 1.8\% are Tscripts. This is compatible with the expectation that
+Tscripts are relatively small and form high-level ``glue'' to connect
+musvh larger components.
+
+\textbf{Part of the C code is generated by ApiGen; it might be
+  interesting to measure ApiGen in put and its output.}
+
+Another conclusion from these facts is that low-level information for
+building the software (makefiles and configuration scripts) are of the
+same size as the high level Tscripts. This points into the direction
+that the level of these build scripts should be raised. This
+conclusion will, however, not be further explored in this paper.
+
+
+Another view is given in Table~\ref{Tab:Tscript-stats} where the
+frequency of occurrence of Tscript primitives is shown.  Clearly,
+sequential composition (\spec{.}) is the dominant operator and
+sending/receiving (\spec{snd-msg}, \spec{rec-msg}) messages is the
+dominant communication mechanism, followed by communication with tools
+(\spec{snd-do},\spec{snd-eval}).  It may be surprising that parallel
+composition (\spec{||}) is used so infrequently. However, one used be
+aware that at the top level all process run concurrently and that
+\spec{||} is only used for explicit concurrency inside a process. The
+level of concurrence is therefore circa 100.
+
+
+
 
 \section{Issues in a Next-Generation \TB}
 
