@@ -1,8 +1,8 @@
 #include "common.h"
 
-/*{{{  PT_Tree read_term_from_file(ATerm builtin, PT_Tree input) */
+/*{{{  PT_Tree read_term_from_file(PT_Tree input) */
 
-PT_Tree read_term_from_file(ATerm builtin, PT_Tree input)
+PT_Tree read_term_from_file(PT_Tree input)
 {
   PT_Tree file_arg = CO_getFunctionArgument(input, 0);
   char *filestr = NULL;
@@ -43,9 +43,9 @@ PT_Tree read_term_from_file(ATerm builtin, PT_Tree input)
 }
 
 /*}}}  */
-/*{{{  PT_Tree write_term_to_file(ATerm builtin, PT_Tree input) */
+/*{{{  PT_Tree write_term_to_file(PT_Tree input) */
 
-PT_Tree write_term_to_file(ATerm builtin, PT_Tree input)
+PT_Tree write_term_to_file(PT_Tree input)
 {
   PT_Tree file_arg = CO_getFunctionArgument(input, 0);
   PT_Tree tree_arg = CO_getFunctionArgument(input, 1);

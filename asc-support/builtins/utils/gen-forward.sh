@@ -43,7 +43,7 @@ PT_Tree forwardBuiltin(ATerm builtin, PT_Tree input)
 `
 for b in \${BUILTIN_NAMES}; do
   echo "  if (!strcmp(name, \\"${b}\\")) {" 
-  echo "    result = ${b}(builtin, input);" | sed 's@-@_@g'
+  echo "    result = ${b}(input);" | sed 's@-@_@g'
   echo "  }"
 done
 `

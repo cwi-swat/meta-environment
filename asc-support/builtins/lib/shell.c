@@ -1,8 +1,8 @@
 #include "common.h"
 
-/*{{{  PT_Tree shell(ATerm builtin, PT_Tree input) */
+/*{{{  PT_Tree shell(PT_Tree input) */
 
-PT_Tree shell(ATerm builtin, PT_Tree input)
+PT_Tree shell(PT_Tree input)
 {
   PT_Tree cmd_arg = CO_getFunctionArgument(input,0);
   char *cmdline = PT_yieldTree(cmd_arg);

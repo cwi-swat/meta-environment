@@ -40,9 +40,9 @@ static ATerm receive_ack(void)
 
 /*}}}  */
 
-/*{{{  PT_Tree toolbus_event(ATerm builtin, PT_Tree input) */
+/*{{{  PT_Tree toolbus_event(PT_Tree input) */
 
-PT_Tree toolbus_event(ATerm builtin, PT_Tree input)
+PT_Tree toolbus_event(PT_Tree input)
 {
   PT_Tree name = CO_getFunctionArgument(input,0);
   PT_Tree event = CO_getFunctionArgument(input,1);
@@ -61,9 +61,9 @@ PT_Tree toolbus_event(ATerm builtin, PT_Tree input)
 }
 
 /*}}}  */
-/*{{{  PT_Tree toolbus_term_event(ATerm builtin, PT_Tree input) */
+/*{{{  PT_Tree toolbus_term_event(PT_Tree input) */
 
-PT_Tree toolbus_term_event(ATerm builtin, PT_Tree input)
+PT_Tree toolbus_term_event(PT_Tree input)
 {
   PT_Tree name = CO_getFunctionArgument(input,0);
   PT_Tree event = CO_getFunctionArgument(input,1);
