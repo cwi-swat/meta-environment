@@ -20,6 +20,9 @@
 #
 # $Id$
 
+2000/12/13 (mdejonge@cwi.nl)
+   * Removed invalid definition of TOOLBUSDEF from top-level Makefile.am
+
 2000/12/12 (mdejonge@cwi.nl)
    * Changed build and configuration process because evaluator is now a
      stand-alone package.
