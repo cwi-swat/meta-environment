@@ -1,0 +1,8 @@
+module NewLine
+
+imports basic/Whitespace
+imports basic/Strings
+
+exports
+  context-free syntax
+    "newlinechar" -> Bytes

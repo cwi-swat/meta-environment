@@ -6,9 +6,15 @@ module Text
 
 imports basic/Comments
         basic/Strings
+        NewLine
+
 exports
   sorts Text
   context-free syntax
-    String -> Text {constructor} 
+      Bytes            -> Text
+      Bytes "||" Bytes -> Bytes {left}
+      "(" Bytes ")"    -> Bytes {bracket}
 
-%%%
+hiddens
+    variables
+      "Char*"[0-9]*  -> CHAR*

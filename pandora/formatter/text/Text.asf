@@ -1,0 +1,4 @@
+equations
+
+    [bc-1'1] bytes(Char*1) || bytes(Char*2) =
+                bytes(Char*1 Char*2)

@@ -1,0 +1,3 @@
+equations
+
+  [nlc] newlinechar = string-to-bytes("\n")
