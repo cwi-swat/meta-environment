@@ -305,11 +305,8 @@ ATerm add_eqs_module(int cid, char *modulename, char* path, ATerm eqs,
   entry = GetValue(new_modules_db, modname);
   if(!ATisEqual(eqs,ATparse("error")) &
      !ATisEqual(eqs,ATparse("no-equations"))) {
-    char *basename;
-    if(!ATmatch(modname, "id(<str>)", &basename))
-      ATerror("not an id(<str>): %t\n", modname);
 
-    eqs = AFaddPosInfoToModule(path, basename, eqs);
+    eqs = AFaddPosInfoToModule(path, modulename, eqs);
 
   }
   entry = (ATerm)ATreplace((ATermList)entry,
