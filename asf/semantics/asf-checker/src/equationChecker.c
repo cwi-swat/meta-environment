@@ -149,25 +149,28 @@ static ATermList checkNegativeCondition(ASF_Tag tag,
   }
 }
 
-static ATermList checkMatchingSide(ASF_Tag tag,
-				   ASF_Condition condition,
-				   ASF_Tree matchingSide,
-				   PT_Args *variables)
+static ATermList checkPositiveCondition(ASF_Tag tag, 
+					ASF_Condition condition,
+                                        ASF_Tree lhsCond,
+					ASF_Tree rhsCond,
+                                        PT_Args *variables) 
 {
   ATermList messages = ATempty;
 
-  if (!instantiatedVariables((PT_Tree)matchingSide, *variables)) {
-    *variables = collectVariables((PT_Tree)matchingSide, *variables);
+  if (noNewVariables((PT_Tree) lhsCond, *variables)) {
+    *variables = collectVariables((PT_Tree)rhsCond, *variables);
+    return messages;
+  }
+  else if (noNewVariables((PT_Tree) rhsCond, *variables)) {
+    *variables = collectVariables((PT_Tree)lhsCond, *variables);
     return messages;
   }
   else {
-    *variables = collectVariables((PT_Tree)matchingSide, *variables);
     return ATmakeList1(
 	       makeMessage(
-		      "instantiated and uninstantiated variables in "
-		      "one side of condition", 
-		      tag,
-		      ASF_makeTermFromCondition(condition)));
+		   "uninstantiated variables in both sides of condition",
+		   tag,
+		   ASF_makeTermFromCondition(condition)));
   }
 }
 
@@ -175,8 +178,6 @@ static ATermList checkCondition(ASF_Tag tag,
                                 ASF_Condition condition,
                                 PT_Args *variables) 
 {
-  ATermList messages = ATempty;
-
   ASF_Tree lhsCond = ASF_getConditionLhs(condition);
   ASF_Tree rhsCond = ASF_getConditionRhs(condition);
   
@@ -184,27 +185,31 @@ static ATermList checkCondition(ASF_Tag tag,
     return checkNegativeCondition(tag, condition, lhsCond, rhsCond, variables);
   }
   else {
-    if (noNewVariables((PT_Tree)lhsCond, *variables)) {
-      if (noNewVariables((PT_Tree)rhsCond, *variables)) {
-        return messages;
-      }
-      else {
-	return checkMatchingSide(tag, condition, rhsCond, variables);
-      }
-    }
-    else {
-      if (noNewVariables((PT_Tree)rhsCond, *variables)) {
-	return checkMatchingSide(tag, condition, lhsCond, variables);
-      }
-      else {
-        return ATmakeList1(
-                 makeMessage(
-                        "uninstantiated variables in both sides of condition",
-                        tag,
-                        ASF_makeTermFromCondition(condition)));
-      }
-    }
+    return checkPositiveCondition(tag, condition, lhsCond, rhsCond, variables);
   }
+}
+
+static ATermList checkConditions(ASF_Tag tag,
+				 ASF_Conditions conditions,
+				 PT_Args *variables) 
+{
+  ATermList messages = ATempty;
+  ASF_ConditionList conditionList = ASF_getConditionsList(conditions);
+
+  while (ASF_hasConditionListHead(conditionList)) {
+    ASF_Condition condition =
+      ASF_getConditionListHead(conditionList);
+
+    messages = ATconcat(messages,
+			checkCondition(tag, condition, variables));
+
+    if (!ASF_hasConditionListTail(conditionList)) {
+      break;
+    }
+    conditionList = ASF_getConditionListTail(conditionList);
+  }
+
+  return messages;
 }
 
 static ATermList checkEquation(ASF_CondEquation condEquation) 
@@ -213,40 +218,23 @@ static ATermList checkEquation(ASF_CondEquation condEquation)
 
   ASF_Tag tag = ASF_getCondEquationTag(condEquation);
 
-  if (ASF_isCondEquationSimple(condEquation)) {
-    ASF_Equation equation = ASF_getCondEquationEquation(condEquation);
-    ASF_Tree lhsEq = ASF_getEquationLhs(equation);
-    ASF_Tree rhsEq = ASF_getEquationRhs(equation);
-    PT_Args variables = collectVariables((PT_Tree)lhsEq, 
-                                          PT_makeArgsEmpty());
-    messages = checkTreeGivenVariables(tag, (PT_Tree)rhsEq, variables);
-  }
-  else {
-    ASF_Equation equation = ASF_getCondEquationEquation(condEquation);
-    ASF_ConditionList conditionList = 
-       ASF_getConditionsList(
-         ASF_getCondEquationConditions(condEquation));
-    ASF_Tree lhsEq = ASF_getEquationLhs(equation);
-    ASF_Tree rhsEq = ASF_getEquationRhs(equation);
-    PT_Args variables = collectVariables((PT_Tree)lhsEq, 
-                                          PT_makeArgsEmpty());
-    while (ASF_hasConditionListHead(conditionList)) {
-      ASF_Condition condition =
-        ASF_getConditionListHead(conditionList);
+  ASF_Equation equation = ASF_getCondEquationEquation(condEquation);
+  ASF_Tree lhsEq = ASF_getEquationLhs(equation);
+  ASF_Tree rhsEq = ASF_getEquationRhs(equation);
+  PT_Args variables = collectVariables((PT_Tree)lhsEq, 
+				       PT_makeArgsEmpty());
 
-      messages = ATconcat(messages,
-                          checkCondition(tag, condition, &variables));
-
-      if (!ASF_hasConditionListTail(conditionList)) {
-        break;
-      }
-      conditionList = ASF_getConditionListTail(conditionList);
-    }
-    messages =  ATconcat(messages,
-                         checkTreeGivenVariables(tag, 
-                                                 (PT_Tree)rhsEq, 
-                                                 variables));
+  if (ASF_hasCondEquationConditions(condEquation)) {
+    messages = ATconcat(messages,
+			checkConditions(tag,
+				ASF_getCondEquationConditions(condEquation),
+				&variables));
   }
+
+  messages =  ATconcat(messages,
+		       checkTreeGivenVariables(tag, 
+					       (PT_Tree)rhsEq, 
+					       variables));
   return messages;
 }
 
