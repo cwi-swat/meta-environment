@@ -6,7 +6,6 @@ let
   ErrorMessage : str
 in
   Result := Tree .
-  printf("doing it") .
   snd-msg(get-all-sdf2-definitions(ModuleName, trm)) .
   (
     rec-msg(syntax(Syntax?)) .
