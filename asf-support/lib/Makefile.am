@@ -1,8 +1,7 @@
 # $Id$
 
 lib_LIBRARIES		= libASFME.a
-noinst_HEADERS          = ASFME_dict.h
-include_HEADERS		= ASFME.h ASFME-utils.h
+include_HEADERS		= ASFME.h ASFME-utils.h ASFME_dict.h
 libASFME_a_SOURCES	= ASFME.c ASFME_dict.c ASFME-utils.c lex-cons.c
 
 INCLUDES		= -I${ATERM}/include -I${PT_SUPPORT}/include
