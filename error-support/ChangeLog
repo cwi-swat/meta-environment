@@ -4,6 +4,7 @@ $Id$
  * Renamed library to libErrorAPI
  * Completed lifting of abstract errors to parsed errors.
  * Added commandline tool for lifting errors (mainly for testing purposes)
+ * Added generated jar file with the Java version of the abstract error API
 
 2003/12/15 (jurgenv@cwi.nl)
  * Regenerated both APIs using new apigen. 
