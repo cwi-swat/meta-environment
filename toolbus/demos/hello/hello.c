@@ -36,8 +36,10 @@ term *hello_handler(term *inp)      /* Handle input from ToolBus */
   }
 }
 
-void main(int argc, char *argv[])   /* main program of hello tool */
+int main(int argc, char *argv[])   /* main program of hello tool */
 {
   TBinit("hello", argc, argv, hello_handler, NULL);
   TBeventloop();
+
+  return 0;
 }
