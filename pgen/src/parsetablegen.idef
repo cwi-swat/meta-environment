@@ -12,19 +12,12 @@ let
   GENTABLE  : parsetablegen,
   Syntax    : term,
   Name      : str,
-  Extension : str,
   Table     : term
 in
   (
-    (
-      rec-msg(generate-parsetable(Syntax?, Name?, eqs)) .
-      Extension := "eqs.tbl"
-    +
-      rec-msg(generate-parsetable(Syntax?, Name?, trm)) .
-      Extension := "trm.tbl"
-    ) .
+    rec-msg(generate-parsetable(Syntax?, Name?)) .
     execute(parsetablegen,GENTABLE?) .
-    snd-eval(GENTABLE, generate-table(Syntax, Name, Extension)) .
+    snd-eval(GENTABLE, generate-table(Syntax, Name)) .
     (
       rec-value(GENTABLE, generation-finished(Table?)) .
       snd-msg(parsetable(Table))

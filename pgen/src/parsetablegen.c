@@ -160,7 +160,7 @@ static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
 
 /*{{{  ATerm generate_table(int cid, ATerm sdf, char *name, char *ext) */
 
-ATerm generate_table(int cid, ATerm sdf, char *name, char *ext)
+ATerm generate_table(int cid, ATerm sdf, char *name)
 {
   ATerm pt, packed;
   ATerm unpackSdf;
