@@ -81,16 +81,6 @@ AC_SUBST(UI_PACKAGE)
 METASTUDIO_DEF=-DMETASTUDIO
 AC_SUBST(METASTUDIO_DEF)
 
-dnl Enable these and comment the meta-studio defs to enable graph-browser
-dnl WISH=wish
-dnl AC_SUBST(WISH)
-dnl 
-dnl GRAPHVIZ=/path/to/graphviz
-dnl AC_SUBST(GRAPHVIZ)
-dnl 
-dnl UI_PACKAGE=graph-browser
-dnl AC_SUBST(UI_PACKAGE)
-
 dnl Handle --with-tide=... argument to configure
 AC_ARG_WITH(tide,
    [  --with-tide             TIDE is in DIR],

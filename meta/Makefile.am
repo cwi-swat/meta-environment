@@ -7,7 +7,7 @@ SUBDIRS		= config editors ${UI_PACKAGE} src \
 		configuration-manager 
 #		query-tool 
 
-DIST_SUBDIRS	= config editors graph-browser meta-studio src \
+DIST_SUBDIRS	= config editors meta-studio src \
 		in-output module-db utils tbscripts \
 		configuration-manager showdot query-tool
 
