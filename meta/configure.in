@@ -38,8 +38,8 @@ AC_SUBST(WISH)
 dnl Check for graphviz package
 AC_PACKAGE_REQUIRE(graphviz, dot,
                    [  --with-graphviz=DIR     graphviz package is in DIR])
-dnl META_GRAPHVIZ_VERSION_CHECK($GRAPHVIZ)
-dnl META_TCLDOT_CHECK($GRAPHVIZ)
+META_GRAPHVIZ_VERSION_CHECK($GRAPHVIZ)
+META_TCLDOT_CHECK($GRAPHVIZ)
 AC_SUBST(GRAPHVIZ)
 
 dnl Try to find xemacs
@@ -83,7 +83,7 @@ AC_ARG_WITH(sdf-support,
    [  --with-sdf-support=DIR  sdf-support is in DIR],
    SDF_SUPPORT=${withval},)
 
-AC_SUBST(ASC_SUPPORT)
+AC_SUBST(SDF_SUPPORT)
 
 ASC_SUPPORT='${prefix}'
 dnl Handle --with-asc-support=... argument to configure
