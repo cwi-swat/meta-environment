@@ -28,37 +28,49 @@ exports
     Statement Statement-list Statement-list-opt
 
   context-free syntax
-    Expression ";"                                  -> Statement
+    Expression";"                                  -> Statement
     Identifier ":" Statement                        -> Statement
 
-    "{" Declaration-list-opt Statement-list-opt "}" -> Statement
+"{" 
+  Declaration-list-opt 
+  Statement-list-opt 
+"}" -> Statement
 
-    if "(" Expression ")" Statement                 -> Statement
-    if "(" Expression ")" Statement else Statement  -> Statement
+if "("Expression")" 
+Statement                 -> Statement
 
-    while "(" Expression ")" Statement              -> Statement
+if "("Expression")" 
+Statement 
+else 
+Statement  -> Statement
+
+while "("Expression")" 
+Statement              -> Statement
 
     return Expression ";"                           -> Statement
     goto Identifier ";"                             -> Statement
 
   context-free syntax
-    Statement+                -> Statement-list
+    Statement
++                -> Statement-list
 
                              -> Statement-list-opt
     Statement-list           -> Statement-list-opt
 
   context-free syntax
-    Declaration-specifiers Declarator Statement          -> Declaration
-    Declaration-specifiers Declarator ";"                -> Declaration
-    Declaration-specifiers Declarator "=" Expression ";" -> Declaration
+    Declaration-specifiers Declarator
+  Statement          -> Declaration
+    Declaration-specifiers Declarator";"                -> Declaration
+    Declaration-specifiers Declarator "=" Expression";" -> Declaration
 
-    Declaration+                  -> Declaration-list
+    Declaration
++                  -> Declaration-list
 
                      -> Declaration-list-opt
     Declaration-list -> Declaration-list-opt
 
   context-free syntax
-    Type-specifier+ -> Declaration-specifiers
+    Type-specifier + -> Declaration-specifiers
 
     static     -> Type-specifier
     void       -> Type-specifier
@@ -66,10 +78,10 @@ exports
 
     "*" Declarator                      -> Declarator
     Identifier                          -> Declarator
-    Identifier "[" Integer-constant "]" -> Declarator
-    Identifier "(" Parameter-list ")"   -> Declarator
+    Identifier"["Integer-constant "]" -> Declarator
+    Identifier"("Parameter-list")"   -> Declarator
 
-    {Parameter-declaration ","}* -> Parameter-list
+    {Parameter-declaration"," }* -> Parameter-list
 
     Declaration-specifiers Declarator -> Parameter-declaration
 
@@ -84,19 +96,19 @@ exports
     "!" -> Unary-operator
 
   context-free syntax
-    "(" Identifier ")" Primary-expression -> Cast-expression
+    "("Identifier")" Primary-expression -> Cast-expression
     Primary-expression                    -> Cast-expression
 
   context-free syntax
-    Primary-expression "[" Expression "]"               -> Primary-expression
-    Primary-expression "(" Argument-expression-list ")" -> Primary-expression
+    Primary-expression"["Expression"]"               -> Primary-expression
+    Primary-expression"("Argument-expression-list")" -> Primary-expression
 
     Identifier         -> Primary-expression
     Integer-constant   -> Primary-expression
     String             -> Primary-expression
-    "(" Expression ")" -> Primary-expression
+    "("Expression")" -> Primary-expression
 
-    {Expression ","}* -> Argument-expression-list
+    {Expression"," }* -> Argument-expression-list
 
 exports
   sorts CDir CDirs CFilename CProgram INCLUDE INCLUDES
