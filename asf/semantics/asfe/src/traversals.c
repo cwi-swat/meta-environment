@@ -109,7 +109,9 @@ ATerm create_traversal_pattern(ATerm term)
 	ATermList args;
 	int traversed_pos = keep_layout ? 4 : 2;
 	
-	if(run_verbose) ATwarning("Creating traversal pattern: ");
+	if(run_verbose) {
+		ATwarning("Creating traversal pattern: ");
+	}
 
 	prod = asfix_get_appl_prod(term);
 	args = asfix_get_appl_args(term);
@@ -121,17 +123,19 @@ ATerm create_traversal_pattern(ATerm term)
 							 &name,NULL,NULL,&traversed,&tail)) {
 
 			if(symbol == traversed) { /* then it is a sort preserving traversal */
-				if(run_verbose) ATwarning("transform pattern.\n");
+				if(run_verbose) {
+					ATwarning("transform pattern.\n");
+				}
 				symbols = ATreplace(symbols,placeholder,4);
 				prod = ATmakeTerm(pattern_asfix_prod,id,ws,symbols,ws,arrow,ws,
 															placeholder,ws,attrs);
-				args = ATreplace(args,placeholder,traversed_pos);
 				term = ATmake("traversal(<term>)",AFmakeAppl(prod,args));
 
 			} else { /* otherwise we have an analyzer */
-				if(run_verbose) ATwarning("analyze pattern.\n");
+				if(run_verbose) {
+					ATwarning("analyze pattern.\n");
+				}
 				symbols = ATreplace(symbols,placeholder,4);
-				args = ATreplace(args,placeholder,traversed_pos); /* traversed argument */
 				prod = ATmakeTerm(pattern_asfix_prod,id,ws,symbols,ws,arrow,ws,
 															symbol,ws,attrs);
 				term = ATmake("analyzer(<term>)",AFmakeAppl(prod,args));
@@ -176,7 +180,7 @@ ATerm make_traversal_appl(ATerm appl, ATerm traversal)
 	prod = ATmakeTerm(prod, sort, sort);
 	
 	args = asfix_get_appl_args(travprod);
-	args = (ATermList) ATmakeTerm((ATerm) args, appl);
+	args = ATreplace(args, appl, keep_layout ? 4 : 2);
 	
 	newappl = AFmakeAppl(prod,args);
 	ATtablePut(SaveAppls, appltrav, newappl);
