@@ -790,7 +790,7 @@ ATerm apply_rule(ATerm trm)
     while((entry = find_equation(entry, top_ofs, first_ofs))) { 
 
 
-ATfprintf(stderr,"Trying equation: %t\n",entry->tag);
+/*ATfprintf(stderr,"Trying equation: %t\n",entry->tag);*/
 
       conds = entry->conds;
       equargs = (ATermList) asfix_get_appl_args(entry->lhs);
@@ -798,7 +798,7 @@ ATfprintf(stderr,"Trying equation: %t\n",entry->tag);
       env = args_matching((ATerm) ATempty, conds, equargs, termargs); 
       if(!is_fail_env(env)) {
 
-ATfprintf(stderr,"Equation: %t was successful\n",entry->tag);
+/*ATfprintf(stderr,"Equation: %t was successful\n",entry->tag);*/
 
         rewrite_steps++;
         return (ATerm) make_cenv(entry->rhs, env);
@@ -814,7 +814,7 @@ ATfprintf(stderr,"Equation: %t was successful\n",entry->tag);
   while((entry = find_equation(entry, top_ofs, (ATerm) ATempty))) { 
 
 
-ATfprintf(stderr,"Trying equation: %t\n",entry->tag);
+/*ATfprintf(stderr,"Trying equation: %t\n",entry->tag);*/
 
     conds = entry->conds;
     equargs = (ATermList) asfix_get_appl_args(entry->lhs);
@@ -822,7 +822,7 @@ ATfprintf(stderr,"Trying equation: %t\n",entry->tag);
     env = args_matching((ATerm) ATempty, conds, equargs, termargs); 
     if(!is_fail_env(env)) {
 
-ATfprintf(stderr,"Equation: %t was successful\n",entry->tag);
+/*ATfprintf(stderr,"Equation: %t was successful\n",entry->tag);*/
 
       rewrite_steps++;
       return (ATerm) make_cenv(entry->rhs, env);

@@ -142,7 +142,7 @@ void enter_equation(equation_table *table, ATerm equation)
   }
 
   if(ATisEmpty(lhsargs) || asfix_is_var(ATgetFirst(lhsargs))
-		 || AFisDefaultTag(tag))
+		 || AFTisDefaultTag(tag))
     first_ofs = (ATerm)ATempty; /* <PO> ? */
   else
     first_ofs = asfix_get_appl_ofs(ATgetFirst(lhsargs));
@@ -162,7 +162,7 @@ void enter_equation(equation_table *table, ATerm equation)
   ATprotect(&entry->rhs);       
   entry->conds = conds;
   ATprotect((ATerm*)&entry->conds);   
-  if(AFisDefaultTag(tag)) {
+  if(AFTisDefaultTag(tag)) {
     equation_entry *cur = table->table[hnr];
     entry->hnext = NULL;
     if(cur) {
@@ -180,7 +180,7 @@ void enter_equation(equation_table *table, ATerm equation)
 	{
 		ATerm anno = ATgetAnnotation(equation, ATparse("pos-info"));
 		if(anno)
-			ATfprintf(stderr, "annotations: %t\n", anno);
+			ATfprintf(stderr, "annotations of %t: %t\n", entry->tag, anno);
 		else
 			ATfprintf(stderr, "no annotations.\n");
 	}
@@ -193,6 +193,7 @@ void enter_equation(equation_table *table, ATerm equation)
 equation_entry *find_equation(equation_entry *from, ATerm top_ofs,
                               ATerm first_ofs)
 {
+	/*ATfprintf(stderr, "looking for equation with ofs: %t\n", top_ofs);*/
   if(!equations)
     return NULL;
   if(from) {
@@ -206,14 +207,22 @@ equation_entry *find_equation(equation_entry *from, ATerm top_ofs,
   }
   while(from && (!ATisEqual(from->top_ofs,top_ofs) || 
 		 !ATisEqual(from->first_ofs,first_ofs))) {
-ATfprintf(stderr,"Looking at equation: %t\n",from->tag);
     from = from->hnext;
   }
-/*  if(from)
-    ATfprintf(stderr, "found: %t\n", from->equation);
-  else
+/*	if(from) {
+		equation_entry *result;
+    ATfprintf(stderr, "found: %t\n", from->tag);
+		result = from;
+		from = from->hnext;
+		while(from) {
+			ATfprintf(stderr, "todo: %t\n", from->tag);
+			from = from->hnext;
+		}
+		return result;
+  } else
     ATfprintf(stderr, "no luck!\n");
-*/
+		*/
+
   return from;
 }
 
