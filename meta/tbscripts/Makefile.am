@@ -22,7 +22,7 @@
 
 SUBDIRS       = test
 
-TBSCRIPTS     = addeqsyn.tb anno.tb clear-all.tb close-modules.tb \
+TBSCRIPTS     = addeqsyn.tb clear-all.tb close-modules.tb \
                 edit-equations.tb edit-master.tb edit-module.tb edit-term.tb \
                 editor.tb file-creator.tb focus.tb meta.tb notification.tb \
                 open-modules.tb parsetrees.tb process-eqs.tb removevarsyn.tb \

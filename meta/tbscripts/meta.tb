@@ -50,7 +50,7 @@
 #include "process-eqs.tb"
 #include "save-module.tb" 
 #include "help.tb" 
-#include "anno.tb"
+#include "anno.idef"
 #include "se.tb"
 #include "set-parsetable.tb"
 #include "sdf2-language.tb"
