@@ -7,8 +7,6 @@
 #include <assert.h>
 
 #include <MEPT-utils.h>
-#include <asfix2.h>
-#include "conversion.h"
 
 ATbool char_to_string = ATfalse;
  
