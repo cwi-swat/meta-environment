@@ -20,25 +20,30 @@ equations
         wrap-extra-kids(accu,ActualArg1,ActualArg2,ActualArg*,Int)=
           ATmakeList(Int,ActualArg*)
 
-[mts-0] get-traversal-strategy(Funid) = bottom-up,
-        make-traversal-expression(Funid,ActualArg*,Aint) = Expression,
-        traversal-result-argument(Funid) = Expression2,
+[mts-0] remove-returns-list(Funid) = Funid2,
+        get-traversal-strategy(Funid2) = bottom-up,
+        make-traversal-expression(Funid2,ActualArg*,Aint) = Expression,
+        traversal-result-argument(Funid2) = Expression2,
         Stat = (Expression2 = Expression);
         ===>
         make-traversal-stats(Funid,ActualArg*,Aint) = Stat
 
 [default-mts] make-traversal-stats(Funid,ActualArg*,Aint) =
 
-[mte-0] get-traversal-type(funid(Char*)) = trafo,
+[mte-0] remove-returns-list(Funid) = Funid2,
+        get-traversal-type(Funid2) = trafo,
+        Funid2 = funid(Char*),
         wrap-extra-kids(trafo, ActualArg*,Aint) = Expression
         ====>
-        make-traversal-expression(funid(Char*),ActualArg*,Aint) =
+        make-traversal-expression(Funid,ActualArg*,Aint) =
          call_kids_trafo(identifier(Char*),arg0,Expression)
 
-[mte-1] get-traversal-type(funid(Char*)) = accu,
+[mte-1] remove-returns-list(Funid) = Funid2,
+        get-traversal-type(Funid2) = accu,
+        Funid2 = funid(Char*),
         wrap-extra-kids(accu, ActualArg*,Aint) = Expression
         ====>
-        make-traversal-expression(funid(Char*),ActualArg*,Aint) =
+        make-traversal-expression(Funid,ActualArg*,Aint) =
          call_kids_accu(identifier(Char*),arg0,arg1,Expression)
 
 [gra] get-traversal-type(Funid) = trafo
