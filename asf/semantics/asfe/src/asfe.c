@@ -213,6 +213,10 @@ getListVariableValue(ATerm env, PT_Tree var)
   ATermList list = (ATermList) env;
   ATerm atVar = PT_makeTermFromTree(var);
 
+  if (AT_getAnnotations(atVar) != NULL) {
+    atVar = AT_removeAnnotations(atVar);
+  }
+
   while (!ATisEmpty(list)) {
     ATermAppl tuple = (ATermAppl) ATgetFirst(list);
     if (ATisEqual(ATgetArgument(tuple, 0), atVar)) {
