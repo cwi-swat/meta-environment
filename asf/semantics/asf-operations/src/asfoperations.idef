@@ -4,7 +4,7 @@
 process AsfOperations is
 let
   Equations  : term,
-  Renamings  : term,
+  Tests  : term,
   AO         : asfoperations
 in
   execute(asfoperations, AO?) .
@@ -13,6 +13,11 @@ in
     snd-eval(AO, extract-equations(Equations)).
     rec-value(AO, extract-equations-result(Equations?)).
     snd-msg(extract-equations-result(Equations))
+  +
+    rec-msg(extract-tests(Equations?)) .
+    snd-eval(AO, extract-tests(Equations)) .
+    rec-value(AO, extract-tests-result(Tests?)) .
+    snd-msg(extract-tests-result(Tests))
   )*
   delta
 endlet
