@@ -80,9 +80,9 @@ int main(int argc, char *argv[])
 
     tree = PT_ParseTreeFromTerm(at_tree);
     
-    printf("Opening Box of Pandora!!!\n");
+    /*printf("Opening Box of Pandora!!!\n");*/
     box = pandora(tree);
-    printf("Box of Pandora opened!!!\n");
+    /*printf("Box of Pandora opened!!!\n");*/
 
     ATwriteToNamedBinaryFile(BOX_StartToTerm(box), output);
 
