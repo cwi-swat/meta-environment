@@ -60,7 +60,7 @@ let
   Error     : term
 in
   snd-msg(move-focus-to-root(EditorId)) .
-  rec-msg(focus(Focus?)) .
+  rec-msg(set-focus(EditorId, Focus?)) .
   snd-msg(get-focus-text(EditorId, Focus)) .
   rec-msg(focus-text(EditorId, Text?)) .
   snd-msg(get-focus-sort(SortName, Focus)) .
@@ -199,7 +199,7 @@ let
   Focus       : term
 in
   snd-msg(move-focus-to-root(EditorId)) .
-  rec-msg(focus(Focus?)) .
+  rec-msg(set-focus(EditorId, Focus?)) .
   snd-msg(replace-focussed-tree(EditorId, Tree)) .
   rec-msg(focus(Focus?)) .
   snd-msg(get-tree(EditorId)) .
@@ -207,6 +207,8 @@ in
   snd-msg(unparse(TotalTree)) .
   rec-msg(unparsed-text(Text?)) .
   snd-msg(replace-text(EditorId, Text)) .
+  snd-msg(move-focus-to-root(EditorId)) .
+  rec-msg(set-focus(EditorId, Focus?)) .
   snd-msg(set-focus(EditorId, Focus))
 endlet
 
@@ -233,6 +235,8 @@ in
   snd-msg(unparse(TotalTree)) .
   rec-msg(unparsed-text(Text?)) .
   snd-msg(replace-text(EditorId, Text)) .
+  snd-msg(move-focus-to-root(EditorId)) .
+  rec-msg(set-focus(EditorId, Focus?)) .
   snd-msg(set-focus(EditorId, Focus))
 endlet
 
@@ -473,7 +477,7 @@ in
         STree := first(Stack) .
         Stack := next(Stack) .
 	FunSym := fun(STree) .
-	if equal(FunSym, "file") then
+	if or(equal(FunSym, "file"), equal(FunSym, "path")) then
 	  FilePath := first(args(STree)) .
 	  GetTextFromFile(FilePath, String?) .
 	  tau .
