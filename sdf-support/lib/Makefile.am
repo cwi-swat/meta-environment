@@ -1,8 +1,4 @@
-#
-# vim:ts=8:sw=8:sts=0
-#
 # $Id$
-#
 
 lib_LIBRARIES		= libSDFME.a
 include_HEADERS		= SDFME.h SDFME_dict.h SDFME-utils.h

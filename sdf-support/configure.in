@@ -43,35 +43,6 @@ AC_PATH_PROG(AR,ar,/usr/bin/ar)
 dnl What commands are needed to set the variable MAKE in Makefiles?
 AC_SET_MAKE
 
-dnl Determine which libraries to use for programs using sockets
-NOSOCKLIBS=$LIBS
-dnl first, the socket functions
-SOCKET_FOUND=no
-SOCKLIBS=
-AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
-if test ${SOCKET_FOUND} = no; then
-  AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
-  if test ${SOCKET_FOUND} = no; then
-    AC_CHECK_LIB(bsd,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lbsd";DEFS="$DEFS -D_BSD=43"])
-  fi
-fi
-
-dnl then gethostname
-GHN_FOUND=no
-AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
-if test ${GHN_FOUND} = no; then
-  AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
-fi
-
-AC_SUBST(SOCKLIBS)
-
-LIBS=$NOSOCKLIBS
-
-AC_CHECK_LIB(dl, dlopen)
-
-dnl Checks for header files.
-AC_CHECK_HEADER(getopt.h)
-
 dnl Which files need updating?
 AC_OUTPUT(
   Makefile
