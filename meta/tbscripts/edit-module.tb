@@ -1,4 +1,4 @@
-process Edit-module(Mod: term) is
+process Edit-module(Module: str) is
 let
 Id    : term,
 T     : term,
@@ -9,9 +9,9 @@ Src: str
 in
   Id := process-id.
   snd-note(ui-status(stat(Id,"Opening module editor"))).
-  snd-msg(Id, open-file(Mod)).
-  rec-msg(Id, opened-file(asfix,Mod,T?,Fn?)).
-  create(Editor(Mod,"\"\"",Fn,Id), Tid?).
+  snd-msg(Id, open-file(id(Module))).
+  rec-msg(Id, opened-file(asfix,id(Module),T?,Fn?)).
+  create(Editor(id(Module),"\"\"",Fn,Module), Tid?).
   snd-msg(pp-module(T)).
   rec-msg(module-source(Src?)).
   rec-msg(Id, editortool(TE?)).
