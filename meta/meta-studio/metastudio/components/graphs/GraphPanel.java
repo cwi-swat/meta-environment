@@ -35,6 +35,7 @@ import metastudio.utils.Preferences;
 public class GraphPanel extends JComponent implements Scrollable {
     private static final int ARROWHEAD_LENGTH = 15;
     private static final int ARROWHEAD_SHARPNESS = 15;
+    private static final int DEFAULT_ZOOM_FACTOR = 100;
     public static final String PREF_NODE_FONT = "graph.node.font";
     public static final String PREF_NODE_BG = "graph.node.background";
     public static final String PREF_NODE_FG = "graph.node.foreground";
@@ -535,7 +536,7 @@ public class GraphPanel extends JComponent implements Scrollable {
     }
 
     public void setScale(int scale) {
-        float rscale = ((float) scale) / 100;
+        float rscale = ((float) scale) / DEFAULT_ZOOM_FACTOR;
 
         transform = new AffineTransform();
         transform.scale(rscale, rscale);
@@ -606,7 +607,7 @@ public class GraphPanel extends JComponent implements Scrollable {
 
     public int getZoomToFitFactor(Rectangle bounds) {
         if (graph == null) {
-	  return 0;
+	  return DEFAULT_ZOOM_FACTOR;
 	}
 
         Attribute bb = graph.getBoundingBox();
@@ -621,7 +622,7 @@ public class GraphPanel extends JComponent implements Scrollable {
         
         double factor = Math.min(widthFactor, heightFactor);
         
-        return (int) (factor * 100);
+        return (int) (factor * DEFAULT_ZOOM_FACTOR);
     }
 
 }

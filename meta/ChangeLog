@@ -3,6 +3,7 @@
 Tue Feb 17 15:21:17 CET 2004 <kooiker@cwi.nl>
  * meta-studio/metastudio/components/graph/GraphPanel.java:
    - getZoomToFitFactor checks graph on null 
+   - add DEFAULT_ZOOM_FACTOR = 100 to scale to 100% by default
 
 Tue Feb 17 11:01:31 CET 2004 <jong@cwi.nl>
  * editors/text/gvim/{connector.c,meta.vim.src}:
