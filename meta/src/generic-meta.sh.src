@@ -16,7 +16,7 @@ metastudio_def=__METASTUDIO_DEF__
 wish=__WISH__
 
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
-      ${toolbus}/bin:${xemacs}/bin:${PATH}"; 
+${toolbus}/bin:${xemacs}/bin:${PATH}"; 
 export PATH
 
 TCLLIBPATH=${graphviz}/lib; export TCLLIBPATH
