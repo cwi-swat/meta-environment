@@ -1,5 +1,10 @@
 # $Id$
 
+2003/12/04 (jurgenv@cwi.nl)
+ * Sdf2-To-Imploded-ADT adapted such that fields of the type "NatCon"
+   and "String" (from asf-library/basic) are translated to holes of
+   type <int> and <str> respectively.
+
 2003/12/02 (jurgenv@cwi.nl)
  * Brought up-to-date with commandline options of version 1.8 of apigen
  * Changed CHARLIST_String to charlist.Chars in Java and in C

@@ -186,9 +186,21 @@ equations
 
 [equ-build-imploded-arg-sort]
   $FieldId := sdflit-to-afun($Label),
-  $FieldType := sort-to-afun($Sort)
+  $FieldType := sort-to-afun($Sort),
+  $Sort != NatCon,
+  $Sort != String
   ===>
   build-imploded-arg($Label:$Sort) = <$FieldId($FieldType)>
+
+[equ-build-imploded-arg-NatCon]
+  $FieldId := sdflit-to-afun($Label)
+  ===>
+  build-imploded-arg($Label:NatCon) = <$FieldId(int)>
+
+[equ-build-imploded-arg-NatCon]
+  $FieldId := sdflit-to-afun($Label)
+  ===>
+  build-imploded-arg($Label:String) = <$FieldId(str)>
 
 [equ-build-imploded-arg-iter-star]
   $FieldId := sdflit-to-afun($Label),
