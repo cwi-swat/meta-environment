@@ -93,7 +93,7 @@ int metaPathsOpen( meta_paths* mp, char* path )
    /* "." and ".." entries are resolved using basename path */
    dn = dirname( path );
 
-   f = fopen( path, "r");
+   f = fopen( path, "rb");
    if( f == NULL )
    {
       return -1;
