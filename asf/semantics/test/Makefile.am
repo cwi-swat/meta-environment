@@ -3,26 +3,26 @@ EXTRA_DIST=README
 
 TEST_MODULES=Bracket \
              Collect \
+             Combination-Typecheck \
              Func \
              IterN \
              LexConcat \
              List \
+             Lookup \
              Memo-Pico-typecheck \
              NumberTree \
              OutermostList \
              Perm \
-             Pico-typecheck \
              Pico-eval \
              Pico-set \
+             Pico-typecheck \
+             Pico-Xml \
+             RelationsTest
              ReturnsList \
              SetAndElem \
              Specificity \
              Traversal-Typecheck \
              Tuple \
-             Combination-Typecheck \
-             Pico-Xml \
-             Lookup \
-             RelationsTest
 
 TEST_MODULES_ASFE_ONLY=BoolAPI BoolPos Tree
 
