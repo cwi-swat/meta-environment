@@ -47,6 +47,7 @@ public class ATermApplRef extends ATermRef
   }
 
   //}
+ 
   //{ public ATermApplRef(String fun, ATermsRef args)
 
   public ATermApplRef(String fun, ATermsRef args)
@@ -148,7 +149,7 @@ public class ATermApplRef extends ATermRef
 
   public void setArgs(ATermsRef args)
   {
-    update(new ATermAppl(appl.getFun(), args == null ? null : args.getATerms(), appl.isQuoted()));
+    update(new ATermAppl(appl.getFun(), args == null ? null : args.getATerms(), appl.isQuoted(),this.getAnno() == null ? null : this.getAnno().getATerm()));
   }
 
 //}
