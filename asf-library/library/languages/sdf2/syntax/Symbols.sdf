@@ -7,4 +7,5 @@ exports
   sorts Symbol Symbols
   context-free syntax
     "(" Symbol ")"       -> Symbol {bracket}
-    Symbol*              -> Symbols 
+    list:Symbol*         -> Symbols
+

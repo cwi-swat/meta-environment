@@ -1,18 +1,21 @@
 %%% $Id$
                      
 module languages/sdf2/syntax/Character
+
 imports basic/Comments
+
 exports
   sorts Character NumChar ShortChar
   lexical syntax
-    [\\] [0-9]+                    -> NumChar
-    [a-zA-Z0-9]                    -> ShortChar
-    [\\] ~[\0-\31A-Za-mo-qsu-z0-9]  -> ShortChar
+    [\\] [0-9]+                     -> NumChar   {cons("digits")}
+    [a-zA-Z0-9]                     -> ShortChar {cons("regular")}
+    [\\] ~[\0-\31A-Za-mo-qsu-z0-9]  -> ShortChar {cons("escaped")}
   context-free syntax
-    NumChar         -> Character
-    ShortChar       -> Character
-    "\\TOP"         -> Character
-    "\\EOF"         -> Character 
-    "\\BOT"         -> Character
-    "\\LABEL_START" -> Character
+    NumChar   -> Character {cons("numeric")}
+    ShortChar -> Character {cons("short")}
+    "\\TOP"   -> Character {cons("top")}
+    "\\EOF"   -> Character {cons("eof")}
+    "\\BOT"   -> Character {cons("bot")}
+    "\\LABEL_START" -> Character {cons("label_start")}
+
    

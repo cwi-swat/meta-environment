@@ -4,13 +4,14 @@ module languages/sdf2/syntax/Basic
 imports languages/sdf2/syntax/Kernel
 exports
   context-free syntax
-    "lexical" "syntax"      Productions -> Grammar
-    "context-free" "syntax" Productions -> Grammar
-    "variables"             Productions -> Grammar
-    "lexical" "variables"   Productions -> Grammar
+    "lexical" "syntax"      Productions -> Grammar              {cons("lexical-syntax")}
+    "context-free" "syntax" Productions -> Grammar              {cons("context-free-syntax")}
+    "variables"             Productions -> Grammar              {cons("variables")}
+    "lexical" "variables"   Productions -> Grammar              {cons("lexical-variables")}
 
-    "<" Symbol "-CF"  ">"               -> Symbol
-    "<" Symbol "-LEX" ">"               -> Symbol
-    "<" Symbol "-VAR" ">"               -> Symbol
+    "<" Symbol "-CF"  ">"               -> Symbol               {cons("cf")}
+    "<" Symbol "-LEX" ">"               -> Symbol               {cons("lex")}
+    "<" Symbol "-VAR" ">"               -> Symbol               {cons("varsym")}
 
-    "LAYOUT"                            -> Symbol 
+    "LAYOUT"                            -> Symbol               {cons("layout")}
+

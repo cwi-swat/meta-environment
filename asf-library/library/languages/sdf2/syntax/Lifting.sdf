@@ -6,4 +6,4 @@ exports
 
 context-free syntax
 
-"\`" Symbol "\`"                 -> Symbol
+left-quote:"`" Symbol right-quote:"`" -> Symbol {cons("lifting")}

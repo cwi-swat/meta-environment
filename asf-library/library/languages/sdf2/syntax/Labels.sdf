@@ -1,8 +1,11 @@
 %%% $Id$
                                
 module languages/sdf2/syntax/Labels
-imports languages/sdf2/syntax/Kernel languages/sdf2/syntax/Literals 
-imports languages/aterm/syntax/ATerms
+
+imports languages/sdf2/syntax/Kernel 
+        languages/sdf2/syntax/Literals 
+         languages/aterm/syntax/ATerms
+
 exports
   context-free syntax
-    Literal ":" Symbol   -> Symbol
+    label:Literal ":" Symbol   -> Symbol        {cons("label")}

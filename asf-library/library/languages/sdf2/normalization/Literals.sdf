@@ -12,8 +12,8 @@ exports
 
 hiddens
   context-free syntax
-    quotes(Grammar) -> Grammar {traversal(trafo)}
-    quotes(Symbol)  -> Symbol  {traversal(trafo)}
+    quotes(Grammar) -> Grammar {traversal(trafo,top-down,break)}
+    quotes(Symbol)  -> Symbol  {traversal(trafo,top-down,break)}
 
 hiddens
   variables

@@ -1,26 +1,29 @@
 %%% $Id$
            
 module languages/sdf2/syntax/Character-Class
+
 imports languages/sdf2/syntax/Character
+
 hiddens
   sorts CharRange CharRanges OptCharRanges 
 exports
   sorts CharClass
-  context-free syntax
-    Character                 -> CharRange
-    Character "-" Character   -> CharRange
+  context-free syntax 
+    Character                           -> CharRange
+    start:Character "-" end:Character   -> CharRange            {cons("range")}
 
-    CharRange                 -> CharRanges
-    CharRanges CharRanges     -> CharRanges {right,memo}
-    "(" CharRanges ")"        -> CharRanges {bracket}
-                              -> OptCharRanges
-    CharRanges                -> OptCharRanges
-    "[" OptCharRanges "]"     -> CharClass
-    "~" CharClass             -> CharClass
-    CharClass "/" CharClass   -> CharClass {left,memo}
-    CharClass "/\\" CharClass -> CharClass {left,memo}
-    CharClass "\\/" CharClass -> CharClass {left}
-   "(" CharClass ")"          -> CharClass {bracket}  
+    CharRange                                   -> CharRanges
+    "left":CharRanges "right":CharRanges        -> CharRanges   {cons("conc"),right,memo}
+    "(" CharRanges ")"                          -> CharRanges   {bracket}
+                              -> OptCharRanges                  {cons("absent")}
+    CharRanges                -> OptCharRanges                  {cons("present")}
+    "[" OptCharRanges "]"     -> CharClass                      {cons("simple-charclass")}
+    "~" CharClass             -> CharClass                      {cons("comp")}
+    "left":CharClass "/" "right":CharClass   -> CharClass       {cons("diff"),left,memo}
+    "left":CharClass "/\\" "right":CharClass -> CharClass       {cons("isect"),left,memo}
+    "left":CharClass "\\/" "right":CharClass -> CharClass       {cons("union"),left}
+    "(" CharClass ")"          -> CharClass {bracket}
+
   context-free priorities
     "~" CharClass             -> CharClass >
     CharClass "/" CharClass   -> CharClass >

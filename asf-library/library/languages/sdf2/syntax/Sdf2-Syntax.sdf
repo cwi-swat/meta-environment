@@ -14,13 +14,13 @@ imports languages/sdf2/syntax/Kernel
 exports
   sorts SDF
   context-free syntax
-    "<START>"                                   -> Symbol
-    "<Start>"                                   -> Symbol
-    "lexical"      "priorities" Priorities      -> Grammar
-    "context-free" "priorities" Priorities      -> Grammar
-    "lexical"      "restrictions" Restrictions  -> Grammar
-    "context-free" "restrictions" Restrictions  -> Grammar
-    "definition" Definition                     -> SDF  
+    "<START>"                                   -> Symbol {cons("start")}
+    "<Start>"                                   -> Symbol {cons("file-start")}
+    "lexical"      "priorities" Priorities      -> Grammar {cons("lexical-priorities")}
+    "context-free" "priorities" Priorities      -> Grammar {cons("context-free-priorities")}
+    "lexical"      "restrictions" Restrictions  -> Grammar {cons("lexical-restrictions")}
+    "context-free" "restrictions" Restrictions  -> Grammar {cons("context-free-restrictions")}
+    "definition" Definition                     -> SDF {cons("definition")}
   context-free priorities
     Symbol "|" Symbol  -> Symbol >
     Literal ":" Symbol -> Symbol                  

@@ -5,6 +5,7 @@ imports languages/aterm/syntax/IntCon
 exports
   sorts OptExp RealCon
   context-free syntax
-    "e" IntCon                -> OptExp
-                              -> OptExp
-    IntCon "." NatCon OptExp  -> RealCon   
+    "e" IntCon                -> OptExp {cons("present")}
+                              -> OptExp {cons("absent")}
+    IntCon "." NatCon OptExp  -> RealCon {cons("real-con")}
+
