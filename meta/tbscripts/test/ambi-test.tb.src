@@ -24,13 +24,15 @@
 process Test is
 let
   Err: list,
-  NoOfAmbs: int
+  Amount: int,
+  Ambs: list
 in
   snd-msg(open-language("Ambi","../../sglr/regress-test/tables/Ambi.tbl")).
   rec-msg(language-opened("Ambi")).
   snd-msg("aap", parse-string-as-asfix1("Ambi","","a")).
  (
-  rec-msg(parse-result-asfix1("aap",parse-error(Err?,ambiguities(NoOfAmbs?))))
+  rec-msg(parse-result-asfix1("aap",
+    parse-error(Err?, ambiguities(Amount?, Ambs?))))
  +
  shutdown("ambi-test FAILED! (timeout)\n")  delay(sec(2))
  ).
