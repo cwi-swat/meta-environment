@@ -1,0 +1,33 @@
+process QueryTool is
+let
+  QT : query-tool,
+  Term : term,
+  Tree : term,
+  Module : term
+in
+  (
+    rec-msg(query("FindSortDefinition", Module?, Tree?)) .
+    execute(query-tool, QT?) .
+    snd-eval(QT, query("symbol", Module, Tree)) .
+    rec-value(QT, result(Term?)) .
+    snd-terminate(QT,"done") .
+    snd-msg(result("FindSortDefinition", Term))
+  +
+    rec-msg(query("FindProduction", Module?, Tree?)) .
+    execute(query-tool, QT?) .
+    snd-eval(QT, query("production", Module, Tree)) .
+    rec-value(QT, result(Term?)) .
+    snd-terminate(QT,"done") .
+    snd-msg(result("FindProduction", Term))
+  +
+    rec-msg(query("FindProdUse", Module?, Tree?)) .
+    execute(query-tool, QT?) .
+    snd-eval(QT, query("produse", Module, Tree)) .
+    rec-value(QT, result(Term?)) .
+    snd-terminate(QT,"done") .
+    snd-msg(result("FindProdUse", Term))
+  ) *
+  delta
+endlet
+
+tool query-tool is { command = "query-tool" }
