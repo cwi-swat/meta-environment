@@ -1009,38 +1009,22 @@ static ATerm call(Symbol sym, ATermList args)
 
 /*{{{  static ATerm innermost( ATerm t) */
 
-static ATermList innermost_list(ATermList l);
-
 ATerm innermost(ATerm t)
 {
-  ATerm result = NULL;
-  ATermList args;
+	int i;
 
   if(ATgetType(t) == AT_APPL) {
     ATermAppl appl = (ATermAppl)t;
     Symbol sym = ATgetSymbol(appl);
-    args = (ATermList)ATgetArguments(appl);
-    result = call(sym, innermost_list(args));
+		ATermList list = ATempty;
+		for(i=ATgetArity(sym); i>=0; --i)
+			list = ATinsert(list, innermost(ATgetArgument(appl, i)));
+
+    return call(sym, list);
   }
-  return result;
+	return NULL;
 }
 
-/*}}}  */
-/*{{{  static ATerm innermost_list(ATermList l) */
-
-static ATermList innermost_list(ATermList l)
-{
-  ATerm el;
-  ATermList result = ATempty;
- 
-  while(!ATisEmpty(l)) {
-    el = innermost(ATgetFirst(l));
-    if(el)  
-      result = ATappend(result, el); 
-    l = ATgetNext(l);
-  }
-  return result;
-}
 /*}}}  */
 
 /*{{{  void init_patterns() */
@@ -1098,9 +1082,10 @@ ATerm slice(ATerm l1, ATerm l2)
   result = ATempty;
 
   while(l1 != l2) {
-    result = ATappend(result, ATgetFirst((ATermList)l1));
+    result = ATinsert(result, ATgetFirst((ATermList)l1));
     l1 = (ATerm)ATgetNext((ATermList)l1); 
   }
+	result = ATreverse(result);
 
   for(i=len-1; i>=0; i--) {
     result = ATinsert(result, term_store[i]);
