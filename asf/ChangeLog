@@ -1,3 +1,7 @@
+2001/12/06 (jurgenv@cwi.nl)
+ * Fixed a bug in accumulating transformers. Results of such traversal
+   functions had incorrect types and could not be used in conditions.
+
 2001/11/29 (jurgenv@cwi.nl)
  * Adapted all components to cope with new production attributes (no 
    automatic quoting anymore).
