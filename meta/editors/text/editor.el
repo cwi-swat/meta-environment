@@ -43,6 +43,17 @@
   ()
 )
 
+(defun move-editor-to-front (filename)
+	"Raise the frame in which filename is displayed to the front"
+	(let ((buf (get-file-buffer filename)))
+    (if (bufferp buf) ; if the buffer exists
+		  (raise-frame (window-frame (get-buffer-window buf t)))
+      () ; else do nothing
+    )
+  )
+  () ; return nil
+)
+
 (defun edit-text (filename contents) 
   "Open a buffer, initialize with contents. If buffer exists contents are replaced."
   (interactive "F")
