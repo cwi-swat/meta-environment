@@ -44,6 +44,10 @@ the ToolBus.
 
 \section{First steps}
 
+To use the \TB, you first have to find it. There are two important
+locations to locate: the location of the \TB\ executable, and the
+location of the \TB\ distribution, wich contains the demos.
+
 By the time you are reading this document, you have probably already
 found the ToolBus distribution, because this document is part of it.
 
@@ -69,10 +73,10 @@ olivierp@gene 185> locate toolbus | grep bin
 
 When you have found the {\tt toolbus} executable, and it is not yet
 in your search path, you might want to add it. If you do not know how
-to do this, please consult somebody with a basic understanding of the
+to do this, consult somebody with a basic understanding of the
 unix shell, like your system administrator.
 
-Now please start the \TB\ with the {\tt -v} option, to test your setup,
+Now start the \TB\ with the {\tt -v} option, to test your setup,
 and to see which version of the \TB\ you are using:
 
 \begin{verbatim}
@@ -99,6 +103,8 @@ toolbus calc.tb
 \label{calc-ui}
 \end{figure}
 
+If anything goes wrong, please refer to the appendix 
+\ref{trouble} (Trouble shooting).
 The calculator user interface comes up as shown in Figure \ref{calc-ui}.
 Pressing the {\tt Calc} button pops up a new window to ask you to enter
 an expression like {\tt plus(3,times(2,5))}.
@@ -131,7 +137,7 @@ The calculator demo consists of four tools:
 \item The {\tt batch} tool generates expressions at random time intervals.
 \end{itemize}
 
-The communication between these four tools os controlled by five processes:
+The communication between these four tools is controlled by five processes:
 \begin{itemize}
 \item The {\tt CLOCK} process catches requests for the current time,
       relays them to the {\tt clock} tool, and sends the answer back.
@@ -155,7 +161,7 @@ The communication between these four tools os controlled by five processes:
 \section{The auction demo}
 
 Now we come to the {\tt auction} demo. {\tt cd} to the directory
-{\tt demos/auction} in the \TB\ distribution. Now start the calculator
+{\tt demos/auction} in the \TB\ distribution. Start the calculator
 demo by issuing the following command:
 
 \begin{verbatim}
@@ -173,7 +179,14 @@ You can start different bidders (Figure \ref{auction-bidder})
 like this:
 
 \begin{verbatim}
-bidder -name Pieter
+bidder Pieter
+\end{verbatim}
+
+If you want a bidder to connect to an auction on a different machine,
+and possibly a different port, you type something like:
+
+\begin{verbatim}
+bidder Pieter adam 8999
 \end{verbatim}
 
 \begin{figure}[htb]
@@ -185,7 +198,7 @@ bidder -name Pieter
 The auction begins when the auction master presses the {\tt New}
 button after entering an item for sale and the starting `highest
 bid'. The bidders can now freely bid, until nobody has makes a new
-bid for ten seconds. At everybody is notified that the bidding is
+bid for ten seconds. At this time, everybody is notified that the bidding is
 about to end. If nobody reopens the bidding in another ten seconds,
 the item is sold to the highest bidder.
 
@@ -193,7 +206,7 @@ the item is sold to the highest bidder.
 
 
 Figure \ref{auction-impl} shows the auction demo \TB\ configuration.
-The consists of demo consists of two different tools:
+The demo consists of two different tools:
 
 \begin{itemize}
 \item The {\tt master} tool represents the auction master. Only one
@@ -210,7 +223,7 @@ The consists of demo consists of two different tools:
 \end{figure}
 
 
-The communication between these four tools os controlled by two processes:
+The communication between these four tools is controlled by two processes:
 \begin{itemize}
 \item The {\tt Auction} process regulates the auction demo. 
       It connects new bidders,
@@ -223,5 +236,63 @@ The communication between these four tools os controlled by two processes:
 
 \subsection{The auction \TB\ script}
 \input{../demos/auction/auction.tb.tex}
+
+\appendix
+\section{Trouble shooting}
+\label{trouble}
+
+\noindent
+{\bf Q: I am trying to start the \TB\, but get the following error message:}
+\begin{verbatim}
+ToolBus: cannot connect, giving up (Address already in use)
+\end{verbatim}
+A: This message can be caused by two things:
+\begin{enumerate}
+\item Some (unix) processes of an earlier \TB\ session is still running.
+Use the {\tt ps} command to locate the offending processes, and kill them
+using the {\tt 'kill $pid$'} command.
+\item Somebody else is running a \TB\ session on the same machine, and on
+the same port. Choose another port using the {\tt -TB\_PORT} option:
+\begin{verbatim}
+mel:~/ToolBus/demos/calc> toolbus -TB_PORT calc.tb
+\end{verbatim}
+\end{enumerate}
+
+\noindent{\bf Q: When I start the \emph{...} demo,
+the system crashes immediately with approximately the following output:}
+\begin{verbatim}
+mel:~/ToolBus/demos/calc> tb calc.tb
+     ToolBus -- UNEXPECTED INPUT snd-disconnect(ui(0)) FROM TOOL tool-inst(ui,0
+,6,6,"mel",2,[]) IGNORED
+cnt = -1
+ToolBus: multi_read, cannot read (Interrupted system call)
+ToolBus: tool-inst(ui,0,6,6,"mel",2,[]): read failed (Interrupted system call)
+cnt = -1
+ToolBus: multi_read, cannot read (Interrupted system call)
+ToolBus: tool-inst(ui,0,6,6,"mel",2,[]): read failed (Interrupted system call)
+cnt = -1
+ToolBus: multi_read, cannot read (Interrupted system call)
+ToolBus: tool-inst(ui,0,6,6,"mel",2,[]): read failed (Interrupted system call)
+ToolBus: read_term: cannot find ready input channel
+cnt = -1
+clock: multi_read, cannot read (Option not supported by protocol)
+cnt = -1
+calc: multi_read, cannot read (Option not supported by protocol)
+mel:~/ToolBus/demos/calc> cnt = -1
+batch: multi_read, cannot read (Interrupted system call)
+
+mel:~/ToolBus/demos/calc>
+\end{verbatim}
+A: One of your tools crashed. This can happen for a number of reasons:
+\begin{itemize}
+\item You are using the wish-adapter, but there are not enough colors
+      for wish to allocate. For instance, because you are running netscape
+      at the same time. In this case shutting down netscape is an excellent
+      solution. If you cannot live without netscape, start it using the
+      {\tt -install} option, so it uses a private color map.
+\item The tool executed an invalid instruction, and caused a segmentation
+      fault.
+\item etc.
+\end{itemize}
 
 \end{document}

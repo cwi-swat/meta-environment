@@ -36,6 +36,8 @@ DISTFILES	= Makefile.in Guide.tex Intro.tex \
 		  Adapter.pic Adapter.tex \
 		  Syntax-T-scripts.tex \
 		  psfig.tex \
+		  calc.fig calc-ui.eps auction.fig auction-bidder.eps \
+		  auction-master.eps \
 		  Guide.ps.gz
 
 all:    ${DOCUMENTS}

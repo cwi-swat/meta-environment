@@ -1,619 +1,1222 @@
+
+%{{{ wish-adapter.c
+
+This new wish-adapter, implemented by Merijn de Jonge, seems good
+enough to replace the old one. The old one was part of the ToolBus
+distribution from the start, and its long evolution left its mark
+on the clearness and conciseness of the code.
+
 \nwfilename{wish-adapter.c.nw}\nwbegincode{1}\sublabel{NWwisH-wisF-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-wisF-1}}}\moddef{wish-adapter.c*~{\nwtagstyle{}\subpageref{NWwisH-wisF-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwenddeflinemarkup
-/* -*-C-*-
- * wish-adapter -- Generic adapter for ToolBus <-> wish connection
- *
+\LA{}notice~{\nwtagstyle{}\subpageref{NWwisH-not6-1}}\RA{}
+\LA{}includes~{\nwtagstyle{}\subpageref{NWwisH-inc8-1}}\RA{}
+\LA{}defines~{\nwtagstyle{}\subpageref{NWwisH-def7-1}}\RA{}
+\LA{}global variables~{\nwtagstyle{}\subpageref{NWwisH-gloG-1}}\RA{}
+\LA{}function declarations~{\nwtagstyle{}\subpageref{NWwisH-funL-1}}\RA{}
+
+\LA{}error~{\nwtagstyle{}\subpageref{NWwisH-err5-1}}\RA{}
+\LA{}wputc~{\nwtagstyle{}\subpageref{NWwisH-wpu5-1}}\RA{}
+\LA{}wprintf~{\nwtagstyle{}\subpageref{NWwisH-wpr7-1}}\RA{}
+\LA{}print_string~{\nwtagstyle{}\subpageref{NWwisH-priC-1}}\RA{}
+\LA{}print_var~{\nwtagstyle{}\subpageref{NWwisH-pri9-1}}\RA{}
+\LA{}print_env~{\nwtagstyle{}\subpageref{NWwisH-pri9.2-1}}\RA{}
+\LA{}print_term~{\nwtagstyle{}\subpageref{NWwisH-priA-1}}\RA{}
+\LA{}print_list~{\nwtagstyle{}\subpageref{NWwisH-priA.2-1}}\RA{}
+\LA{}print_args~{\nwtagstyle{}\subpageref{NWwisH-priA.3-1}}\RA{}
+\LA{}is_to_tool_comm~{\nwtagstyle{}\subpageref{NWwisH-is*F-1}}\RA{}
+\LA{}is_from_tool_comm~{\nwtagstyle{}\subpageref{NWwisH-is*H-1}}\RA{}
+\LA{}bytes_in_term~{\nwtagstyle{}\subpageref{NWwisH-bytD-1}}\RA{}
+\LA{}rec_monitor~{\nwtagstyle{}\subpageref{NWwisH-recB-1}}\RA{}
+\LA{}rec_do~{\nwtagstyle{}\subpageref{NWwisH-rec6-1}}\RA{}
+\LA{}rec_eval~{\nwtagstyle{}\subpageref{NWwisH-rec8-1}}\RA{}
+\LA{}rec_ack_event~{\nwtagstyle{}\subpageref{NWwisH-recD-1}}\RA{}
+\LA{}rec_terminate~{\nwtagstyle{}\subpageref{NWwisH-recD.2-1}}\RA{}
+\LA{}handle_input_from_toolbus~{\nwtagstyle{}\subpageref{NWwisH-hanP-1}}\RA{}
+\LA{}handle_input_from_wish~{\nwtagstyle{}\subpageref{NWwisH-hanM-1}}\RA{}
+\LA{}dummy_check_in_sign~{\nwtagstyle{}\subpageref{NWwisH-dumJ-1}}\RA{}
+\LA{}require_fun~{\nwtagstyle{}\subpageref{NWwisH-reqB-1}}\RA{}
+\LA{}check_in_sign~{\nwtagstyle{}\subpageref{NWwisH-cheD-1}}\RA{}
+\LA{}wish_create~{\nwtagstyle{}\subpageref{NWwisH-wisB-1}}\RA{}
+\LA{}wish_start~{\nwtagstyle{}\subpageref{NWwisH-wisA-1}}\RA{}
+\LA{}signal_handler~{\nwtagstyle{}\subpageref{NWwisH-sigE-1}}\RA{}
+\LA{}disconnect~{\nwtagstyle{}\subpageref{NWwisH-disA-1}}\RA{}
+\LA{}shutdown~{\nwtagstyle{}\subpageref{NWwisH-shu8-1}}\RA{}
+\LA{}signals_set~{\nwtagstyle{}\subpageref{NWwisH-sigB-1}}\RA{}
+\LA{}help~{\nwtagstyle{}\subpageref{NWwisH-hel4-1}}\RA{}
+\LA{}cmd_options~{\nwtagstyle{}\subpageref{NWwisH-cmdB-1}}\RA{}
+\LA{}main~{\nwtagstyle{}\subpageref{NWwisH-mai4-1}}\RA{}
+
+/*
+ * EOF ./serie3/src/wa.c
+ */
+\nwnotused{wish-adapter.c*}\nwendcode{}\nwbegindocs{2}\nwdocspar
+
+%}}}
+
+%{{{ notice
+
+This new wish-adapter, implemented by Merijn de Jonge, seems good
+enough to replace the old one. The old one was part of the ToolBus
+distribution from the start, and its long evolution left its mark
+on the clearness and conciceness of the code.
+
+\nwenddocs{}\nwbegincode{3}\sublabel{NWwisH-not6-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-not6-1}}}\moddef{notice~{\nwtagstyle{}\subpageref{NWwisH-not6-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+/*
+ * Praktikum: Programmeer Omgevingen II
+ * File:      ./serie3/src/wa.c
+ * Opgave:    Eindopdracht
+ * Datum:     Thu Aug 22 1996
+ * Auteur(s): Merijn de Jonge   mdejonge   9577483
+*/
+
+/*
+ * Modified, nowebbed, and documented by Pieter Olivier.
+ * Date:     Wed Aug 28 10:09:23 MET DST 1996
+ * 
+ */
+
+/*
  * Synopsis: wish-adapter [options] -script Script [-script-args A1..An]
  * options:
  *      -help                 print help message
  *      -wish Wish            use Wish as wish executable
  *      -lazy-exec            postpone execution of wish until needed
- *
+ * 
  * where N is the toolname
  * and   S is a name of Tcl script to be executed
  * and   ... are arguments to be passed on to wish
- *
- * Author: Paul Klint, March, 1994 & Februari 1995
-
- * May 24, Pieter Olivier
- * - added -lazy-exec option
- * - added -wish option
- * March 1994, Pieter Olivier
- * - added support for binary strings and lists
- * April 5, Paul Klint
- * - clean up of terminate/disconnect code
- * - monitor code surrounded by a catch construct
- *
- * Purpose: pass term coming from ToolBus to wish, e.g.,
- *
- *    do(mk-button(3))  ==> mk-button 3
- *
- *
- * Architecture:
- *
- *         ================== ToolBus
- *           |           ^
- *           v           |    (sockets)
- *         +---------------+
- *         | wish-adapter  |
- *         +---------------+
- *           |           ^
- *           |           |
- *           |  +------+ |
- *           +->| wish |-+    (standard input/output)
- *              +------+
- *
+ * 
  */
 
-#include "TB.h"
+/*
+ * notes:
+ *    -not very well tested yet
+ *
+ */
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{4}\nwdocspar
+
+%}}}
+%{{{ includes
+
+The wish-adapter is not a big program, and we only need a 
+modest number of includes.
+
+\nwenddocs{}\nwbegincode{5}\sublabel{NWwisH-inc8-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-inc8-1}}}\moddef{includes~{\nwtagstyle{}\subpageref{NWwisH-inc8-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+#include <string.h>
 #include <unistd.h>
+#include <sys/wait.h>
 #include <signal.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <TB.h>
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{6}\nwdocspar
 
-FILE *to_wish;  /* file descriptor connected to std input of wish */
+%}}}
+%{{{ defines
 
-/* Some utility functions */
-void pr_type_wish(type *tp);
-void pr_term_list_wish(const term_list *tl, char sep);
-void pr_env_wish(const env *e);
-void pr_string_wish(char *s, int len);
-term *handle_input_from_wish(term *e);
-void connect_to_wish(char *script, char *name, TBcallbackTerm handler);
+We define some constants, which make it easy to change some defaults.
 
-/* arguments passed to script */
+\nwenddocs{}\nwbegincode{7}\sublabel{NWwisH-def7-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-def7-1}}}\moddef{defines~{\nwtagstyle{}\subpageref{NWwisH-def7-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+#ifndef WISH
+#define WISH    "wish"
+#endif
 
-char *def_args[] = \{NULL\};
-char **script_args = def_args;
+#ifndef TBTCL
+#define TBTCL   "/usr/local/lib/tb.tcl"
+#endif
 
-/* Variables needed for lazy execution */
-TBbool lazy_exec = TBfalse;
-char *name = "wish-adapter";
-char *script = NULL;
-char *wish_exec = "wish";
+#define MAX_ARG 50
+/*#define DEBUG_ON*/
 
-TBbool is_to_tool_comm(char *s)
+#define USAGE_MSG \\
+   "\\n" \\
+   "Synopsis: wa [options]\\n" \\
+   "\\n" \\
+   "Options are:\\n" \\
+   "-help                 print this message\\n" \\
+   "-wish Wish            use Wish as wish executable\\n" \\
+   "-lazy-exec            postpone execution of wish until needed\\n" \\
+   "-script Name          use Name as Tcl script for wish\\n" \\
+   "-script-args A1 ...   use A1 ... as arguments for the wish execution\\n"
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{8}\nwdocspar
+
+%}}}
+%{{{ global variables
+
+Now we define some global variables, and declare two external variables.
+
+\nwenddocs{}\nwbegincode{9}\sublabel{NWwisH-gloG-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-gloG-1}}}\moddef{global variables~{\nwtagstyle{}\subpageref{NWwisH-gloG-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static char*  progname             = WISH;
+static char*  script               = NULL;
+static char*  script_args[MAX_ARG];
+static int    script_nr_args       = 0;
+static pid_t  pgid                 = -1;
+static FILE*  to_wish              = NULL;
+static FILE*  from_wish            = NULL;
+static TBbool connected            = TBfalse;
+static TBbool lazy_exec            = TBfalse;
+static char*  name                 = NULL;
+static char   backslashes[16]      = "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\";
+
+extern term_list* tool_in_sign; /* for check_in_sign */
+extern char*      tool_name;    /* idem */
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{10}\nwdocspar
+
+%}}}
+%{{{ function declarations
+
+\nwenddocs{}\nwbegincode{11}\sublabel{NWwisH-funL-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-funL-1}}}\moddef{function declarations~{\nwtagstyle{}\subpageref{NWwisH-funL-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void error(const char* msg);
+static void wputc(int c);
+static void wprintf(char* fmt, ...);
+static void print_string(char* s, int n);
+static void print_var(term* e);
+static void print_env(env* e);
+static void print_term(term* t);
+static void print_list(term_list* l, char* left, char* sep, char* right);
+static TBbool is_to_tool_comm(const char* s );
+static TBbool is_from_tool_comm(char* s );
+static int bytes_in_term(term* t);
+static TBbool rec_monitor(term* e, term** out);
+static TBbool rec_do(term* e, term** out);
+static TBbool rec_eval(term* e, term** out);
+static TBbool rec_ack_event(term* e, term** out);
+static TBbool rec_terminate(term* e, term** out);
+
+static term*  handle_input_from_toolbus(term* e);
+static term*  handle_input_from_wish(term* e);
+static term*  dummy_check_in_sign(term* t);
+
+static void require_fun(char* fname, term_list* fargs);
+static void check_in_sign();
+static void wish_create();
+static void wish_start();
+static void signal_handler( int sig );
+static void disconnect();
+static void shutdown( int ret );
+static void signals_set();
+static void help();
+static void cmd_options( int argc, char* argv[] );
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{12}\nwdocspar
+
+%}}}
+
+%{{{ static void error(const char* msg)
+
+The {\tt error} function prints errors to standard out.
+
+\nwenddocs{}\nwbegincode{13}\sublabel{NWwisH-err5-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-err5-1}}}\moddef{error~{\nwtagstyle{}\subpageref{NWwisH-err5-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void error( const char* msg )
 \{
-  return streq(s, "snd-eval") || streq(s, "snd-cancel") || 
-    streq(s, "snd-do") || streq(s, "snd-ack-event") ||
-    streq(s, "snd-terminate");
+   disconnect();
+   fprintf(stderr, "%s: %s : %s\\n", progname, msg, strerror(errno));
+   shutdown(1);
 \}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{14}\nwdocspar
 
-TBbool is_from_tool_comm(char *s)
+%}}}
+%{{{ static void wputc(int c)
+
+Print a character to wish. Duplicate it on
+the stderr stream when {\tt DEBUG_ON} is defined.
+
+\nwenddocs{}\nwbegincode{15}\sublabel{NWwisH-wpu5-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-wpu5-1}}}\moddef{wputc~{\nwtagstyle{}\subpageref{NWwisH-wpu5-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void wputc( int c )
 \{
-  return streq(s, "rec-value") ||  streq(s, "rec-event") || streq(s, "rec-disconnect");
+   fputc( c, to_wish );
+   #ifdef DEBUG_ON
+      fputc( c, stderr );
+   #endif
 \}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{16}\nwdocspar
 
-term *dummy_check_in_sign(term *t)
+%}}}
+%{{{ static void wprintf(char *fmt, ...)
+
+Print a formatted string to wish. Duplicate it to stderr
+when {\tt DEBUG_ON} is defined.
+
+\nwenddocs{}\nwbegincode{17}\sublabel{NWwisH-wpr7-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-wpr7-1}}}\moddef{wprintf~{\nwtagstyle{}\subpageref{NWwisH-wpr7-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void wprintf(char* fmt, ...)
 \{
-  return NULL;
+  va_list ap;
+  va_start(ap, fmt);
+  vfprintf(to_wish, fmt, ap);
+  #ifdef DEBUG_ON
+    vfprintf(stderr, fmt, ap);
+  #endif
+  va_end(ap);
 \}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{18}\nwdocspar
 
-require_fun(char *fname, term_list *fargs)
+%}}}
+%{{{ static void print_string(char* s, int n)
+
+{\tt print_string} writes a string to the {\tt to\_wish} channel. 
+at most $n$ characters are written.
+when non-printable characters are found in the string,
+their octal values are written.
+
+\nwenddocs{}\nwbegincode{19}\sublabel{NWwisH-priC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-priC-1}}}\moddef{print_string~{\nwtagstyle{}\subpageref{NWwisH-priC-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void print_string(char* s, int n)
 \{
-  TBprintf(to_wish, "TBrequire %s %s %d\\n", tool_name, fname, length_list(fargs));
-\}
-
-check_in_sign()
-\{ char *atf, *tn;
-  term *tid;
-  term_list *arg;
-  extern term_list *tool_in_sign;
-  term_list *reqs = tool_in_sign;
-  char pat[128];
-
-  /* construct match pattern, e.g. ``%f(<calc>,%l)'' */
-  sprintf(pat, "%%f(<%s>, %%l)", tool_name); 
-
-  for(; reqs; reqs = next(reqs))\{
-    if(TBmatch(first(reqs), pat, &atf, &arg))\{
-        if(streq(atf, "rec-do") || streq(atf, "rec-eval"))
-          require_fun(get_txt(fun_sym(first(arg))), fun_args(first(arg)));
-        else if(streq(atf, "rec-ack-event"))
-          require_fun("rec-ack-event", arg);
-        else if(streq(atf, "rec-terminate"))
-          require_fun("rec-terminate", arg);
-        else
-          TBmsg("check_in_sign: skipped %t\\n", first(reqs));
-  \} else
-        TBmsg("check_in_sign: skipped %t\\n", first(reqs));      
-  \}
-\}
-
-int bytes_in_term(term *t)
-\{
-  return 8 /* LENSPEC */ + strlen(TBsprintf("%t", t));
-\}
-
-char *wish_type_string(tkind kind)
-\{
-  static char *types[] =
-    \{ "term", "bool", "int", "real", "str", "bstr", "var",
-      "placeholder", "appl", "env", "list"
-    \};
-
-  if(kind >= t_term && kind <= t_list)
-    return types[kind];
-
-  return "unknown";
-\}
-
-void print_escaped_char(char c)
-\{
-  /* In a string, we just escape the character. */
-  char Buf[6];
-  int i;
-  
-  sprintf(Buf, "\\\\%o", ((unsigned int)c) & 0xFF);
-  for(i=0; i<strlen(Buf); i++)
-    fputc(Buf[i], to_wish);
-\}
-
-void printn_wish(const char *s, int n)
-\{
-  static TBbool instring = TBfalse;
-  static TBbool prev_escaped = TBfalse;
-
-  while(n)\{
-    if(*s == '"') \{
-      putc('\\\\', to_wish);
-      if(instring)
-        \{
-          instring = TBfalse;
-          prev_escaped = TBfalse;
-        \}
-      else
-        instring = TBtrue;
+  wputc('"');
+  while(n--)
+  \{
+    if(isprint(*s)) \{
+      switch (*s) \{
+        case '\\\\':
+        case '"':
+        case '\{':
+        case '\}':
+        case '[':
+        case ']':
+/*      case ' ':*/
+        case ';':
+        case '$':       wputc('\\\\');
+        default:        wputc(*s);
+      \}
+    \} else \{
+      wprintf("\\\\%03o", (unsigned int)*s);
     \}
-
-    if(instring)
-      \{
-        if(*s == '\\\\' || *s == '[' || *s == ']')
-          fputc('\\\\', to_wish);
-        prev_escaped = TBfalse;
-      \}
-
-    if(isprint(*s))
-      \{
-        /* We don't want an octal digit after an escaped number! */
-        if(prev_escaped && *s >= '0' && *s <= '7')
-          print_escaped_char(*s++);
-        else
-          fputc(*s++, to_wish);
-        prev_escaped = TBfalse;
-      \}
-    else
-      \{
-        /* We have a non-printable character */
-        print_escaped_char(*s++);
-        prev_escaped = TBtrue;
-      \}
-
-    n--;
+    s++;
   \}
+  wputc('"');
 \}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{20}\nwdocspar
 
-void pr_term_wish(term *t)
+%}}}
+%{{{ static void print_var(term* e)
+
+{\tt print_var} prints variables to the {\tt to\_wish} channel.
+
+\nwenddocs{}\nwbegincode{21}\sublabel{NWwisH-pri9-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-pri9-1}}}\moddef{print_var~{\nwtagstyle{}\subpageref{NWwisH-pri9-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void print_var(term* e)
 \{
-  char cbuf[100], *ftxt;
-
-  /* TBprintf(stderr, "Term: %t\\n", t);*/
-  if(!t)\{
-    printn_wish("\{\}",2);
-    return;
-  \}
-  switch(tkind(t))
-    \{
-    case t_str:
-      pr_string_wish(str_val(t), strlen(str_val(t)));
-      break;
-
-    case t_bstr:
-      pr_string_wish(bstr_val(t), bstr_len(t));
-      break;
-
-    case t_bool:
-      if(bool_val(t)) 
-        printn_wish("true", 4);
-      else
-        printn_wish("false", 4);
-      break;
-
-    case t_int:
-      sprintf(cbuf, "%d", int_val(t));
-      printn_wish(cbuf, strlen(cbuf));
-      break;
-
-    case t_real:
-      sprintf(cbuf, "%f", real_val(t));
-      printn_wish(cbuf, strlen(cbuf));
-      break;
-
-    case t_var: /* Can't occur ??? */
-      ftxt = get_txt(var_sym(t));
-      printn_wish(ftxt, strlen(ftxt));
-      pr_type_wish(var_type(t));
-      if(var_result(t))
-        printn_wish("?",1);
-      break;
-
-    case t_placeholder:
-      printn_wish("<",1);
-      pr_term_wish(placeholder_type(t));
-      printn_wish(">",1);
-      break;
-
-    case t_appl:
-      ftxt = get_txt(fun_sym(t));
-      printn_wish(ftxt, strlen(ftxt));
-      if(fun_args(t) != NULL || isupper(ftxt[0]))\{
-        printn_wish("(", 1);
-        pr_term_list_wish(fun_args(t), ',');
-        printn_wish(")", 1);
-      \}
-      break;
-
-    case t_list:
-      printn_wish("\{", 1); 
-      pr_term_list_wish(t, ' ');
-      printn_wish("\}", 1);
-      break;
-
-    case t_env:
-      pr_env(t);
-      break;
-    \}
+   char* txt;
+   txt = get_txt(var_sym(e));
+   print_string(txt, strlen(txt));
+   wputc(':');
+   print_term(var_type(e));
+   if(var_result(e))
+     wputc('?');
 \}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{22}\nwdocspar
 
-void pr_string_wish(char *s, int len)
+%}}}
+%{{{ static void print_env(env* e)
+
+{\tt print_env} prints environment terms to the {\tt to\_wish} channel.
+
+\nwenddocs{}\nwbegincode{23}\sublabel{NWwisH-pri9.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-pri9.2-1}}}\moddef{print_env~{\nwtagstyle{}\subpageref{NWwisH-pri9.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void print_env(env* e)
 \{
-  fputc('\\"', to_wish);
-/*  printn_wish("\\"", 1);*/
-  printn_wish(s, len);
-  fputc('\\"', to_wish);
-/*  printn_wish("\\"", 1);*/
-\}
-
-void pr_type_wish(type *tp)
-\{
-  printn_wish(":", 1); 
-  pr_term_wish(tp);
-\}
-
-void pr_term_list_wish(const term_list *tl, char sep)
-\{
-  TBbool first = TBtrue;
-
-  for( ; tl; tl = next(tl))\{
-    assert(is_list(tl));    
-    if(first)
-      first = TBfalse;
-    else
-      printn_wish(&sep, 1);
-    pr_term_wish(first(tl));
-  \}
-\}
-
-void pr_env_wish(const env *e)
-\{
-  TBbool first = TBtrue;
-  char *ftxt;
-
-  printn_wish("\{", 1);
-  for( ; e; e = env_next(e))\{
-    assert(is_env(e));    
-    if(first)
-      first = TBfalse;
-    else
-      printn_wish(" ", 1);
-    printn_wish("\{", 1);
-    ftxt = get_txt(env_sym(e));
-    printn_wish(ftxt, strlen(ftxt));
-    printn_wish(" ", 1);
-    pr_term_wish(env_val(e));
-    printn_wish("\}",1);
-  \}
-  printn_wish("\}", 1);
-\}
-
-
-print_escaped(term *t)
-\{
-  char *s = TBsprintf("%t", t);
-  int c;
-  TBbool instring = TBfalse;
-
-  fputc('\{', to_wish);
-  while(*s)\{
-    c = *s++;
-    switch(c)\{
-    case '\{': case '\}':
-      if(!instring)
-        fputc('\\\\', to_wish);
-      break;
-    case '"':      
-      if(instring)
-        instring = TBfalse;
-      else
-        instring = TBtrue;
-      break;
-    case '\\\\':
-      fputc('\\\\', to_wish);
-      if(*s)
-        fputc(*s++, to_wish);
-      continue;
-    default:;
-    \}
-    fputc(c, to_wish);
-  \}
-  fputc('\}', to_wish);
-  fputc(' ', to_wish);
-\}
-
-
-term *handle_input_from_toolbus(term *e)
-\{
-  term *trm;  
-
-  int pid1, pid2;
-  term *Env, *Subs, *Notes, *AtArgs, *Coords;
-  char *AtFun;
-  char *fname;
-  term_list *fargs;
-  term *farg;
-  term *pe;
-  char *mon_point;
-  
-  /*TBmsg("received %t from toolbus\\n", e);*/
-  if(TBmatch(e, "rec-monitor(%f(%d,%f,%t,%t,%t,%t,%t,%d,%t))",
-                    &mon_point,
-             &pid1, &AtFun, &AtArgs, &Coords,
-             &Env, &Subs, &Notes, &pid2, &pe))
-    \{
-
-      term_list *ts = Env, *pair, *args;
-      term *var;
-      char *name, *tname;
-      char *filename;
-      int blino, bpos, elino, epos;
-
-      /* all monitor commands are generated inside a big catch construct */
-      TBprintf(to_wish, "if [catch \{ ");
-
-      if(!Coords)\{
-        filename = "INIT"; blino=elino=bpos=epos=0;
-      \} else if(!TBmatch(Coords, "[%s,%d,%d,%d,%d]", 
-                         &filename, &blino, &bpos, &elino, &epos))
-        TBmsg("**** coords do not match\\n");
-
-      if(streq(AtFun, "create"))\{                   /* create process */
-/* TBmsg("create\\n"); */
-        if(!TBmatch(AtArgs, "[%f(%l), %t]", &name, &args, &var))
-          TBmsg("**** args of create do not match\\n");
-
-        TBprintf(to_wish, "create_proc %t %s\\n", get_list(Env, var), name);
-      \} else if(streq(AtFun, "rec-connect"))\{         /* create tool */  
-        int tid;
-/* TBmsg("rec-connect\\n");       */  
-        if(!TBmatch(AtArgs, "[%t]", &var))
-          TBmsg("**** args of rec-connect do not match: %t\\n", AtArgs);
-        if(!TBmatch(get_list_as_env(var, Env), "%f(%d)", &name, &tid))\{
-          TBmsg("**** rec-connect: value of var does not match: var=%t, env=%t", var, Env);
-          TBmsg("**** value_list(var, Env) = %t\\n", get_list_as_env(var, Env));
-        \}
-
-        TBprintf(to_wish, "create_tool %d %s\\n", tid, name);
-      \} else if(is_to_tool_comm(AtFun))\{            /* any comm to a tool */
-        int tid;
-/* TBmsg("to_tool\\n"); */
-        if(!TBmatch(AtArgs, "[%t, %l]", &var, &args))
-          TBmsg("**** args of tool comm do not match:%t\\n", AtArgs);
-        if(!TBmatch(get_list_as_env(var, Env), "%f(%d)", &name, &tid))
-          TBmsg("**** to_tool: value of var does not match: var=%t, env=%t", var, Env);
-
-        TBprintf(to_wish, "proc_tool_comm %d %d %d\\n", pid1, tid, bytes_in_term(args)); 
-      \} else if(is_from_tool_comm(AtFun))\{            /* any comm from a tool */
-        int tid;
-/* TBmsg("from_tool\\n");*/
-        if(!TBmatch(AtArgs, "[%t, %l]", &var, &args))
-          TBmsg("**** args of tool comm do not match:%t\\n", AtArgs);
-        if(!TBmatch(get_list_as_env(var, Env), "%f(%d)", &name, &tid))
-          TBmsg("**** from_tool: value of var does not match: var=%t, env=%t", var, Env);
- 
-        TBprintf(to_wish, "tool_proc_comm %d %d %d\\n", pid1, tid, bytes_in_term(args)); 
-      \}
-            
-      if(pid1 > 0)\{
-        for(ts = Env; ts; ts = next(ts))\{
-          pair = first(ts);
-        if(get_txt(var_sym(first(pair)))[0] != '_')             
-          TBprintf(to_wish, "update_var %d \{%t\} \{%t\}\\n", 
-                   pid1, first(pair), first(next(pair)));
-        \}
-        for(ts = Subs;ts; ts=next(ts))\{
-          TBprintf(to_wish, "update_subs %d \{%t\}\\n", pid1, first(ts));  
-        \}
-        for(ts = Notes; ts; ts=next(ts))\{
-          TBprintf(to_wish, "update_notes %d \{%t\}\\n", pid1, first(ts));  
-        \}
-      \}
+   TBbool first = TBtrue;
+   char* txt;
    
-      if(pid2 > 0)\{
-        int dir = streq(AtFun, "snd-msg") ? 1 : -1;
-        TBprintf(to_wish, "proc_proc_comm %d %d %d\\n", pid1, pid2, dir);
+   wputc('"');
+   while(e != NULL)
+   \{
+      assert(is_env(e));
+      if(first)
+        first = TBfalse;
+      else
+        wputc(' ');
+      txt = get_txt(env_sym(e));
+      print_string(txt, strlen(txt));
+      wputc(' ');
+      print_term(env_val(e));
+      e = env_next(e);
+   \}
+   wputc('"');
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{24}\nwdocspar
+
+%}}}
+
+%{{{ static void print_term(term* t)
+
+Print a term to the {\tt to\_wish} channel.
+
+\nwenddocs{}\nwbegincode{25}\sublabel{NWwisH-priA-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-priA-1}}}\moddef{print_term~{\nwtagstyle{}\subpageref{NWwisH-priA-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void print_term(term* t)
+\{
+   switch(tkind(t))
+   \{
+      case t_str:
+         print_string(str_val(t), strlen(str_val(t)));
+         break;
+      case t_bstr:
+         print_string(bstr_val(t), bstr_len(t));
+         break;
+      case t_bool:
+         if(bool_val(t) == TBtrue) \{
+            wprintf("true");
+         \} else \{
+            wprintf("false");
+         \}
+         break;
+      case t_int:
+         wprintf("%d", int_val(t));
+         break;
+      case t_real:
+         wprintf("%f", real_val(t));
+         break;
+      case t_var:
+         print_var(t);
+         break;
+      case t_placeholder:
+         wputc('<');
+         print_term(placeholder_type(t));
+         wputc('>');
+         break;
+      case t_appl:
+         wprintf("%s", get_txt(fun_sym(t)));
+         if(fun_args(t) != NULL)
+            print_list(fun_args(t), "(", ",", ")");
+         break;
+      case t_list:
+         print_list(t, "\{", " ", "\}");
+         break;
+      case t_env:
+         print_env(t);
+         break;
+   \}
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{26}\nwdocspar
+
+%}}}
+%{{{ static void print_list(term_list* l, char* left, char* sep,char* right,int depth)
+
+Print a list to the {\tt to\_wish} channel. A custom separator is used.
+
+\nwenddocs{}\nwbegincode{27}\sublabel{NWwisH-priA.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-priA.2-1}}}\moddef{print_list~{\nwtagstyle{}\subpageref{NWwisH-priA.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void print_list(term_list* l, char* left, char* sep, char* right)
+\{
+   int i;
+   wprintf(left);
+   for(i=1; i<=list_length(l); i++) \{
+      if(i>1) \{
+         wprintf(sep);
       \}
-
-      if(streq(AtFun, "endlet"))\{
-        if(!TBmatch(AtArgs, "[%l]", &args))
-          TBmsg("**** args of end_let do not match\\n");
-        for( ; args; args = next(args))\{
-          TBprintf(to_wish, "delete_var %d \{%t\}\\n", pid1, first(args));
-        \}
-        /* complete the surrounding catch construct */
-        TBprintf(to_wish, "\} msg] \{ TBerror $msg \}\\n");
-        return TBmake("snd-continue(%d)", pid1);
-      \} else    
-        TBprintf(to_wish, "monitor_atom %d %s %s %d %d %d %d\\n", 
-                 pid1, AtFun, filename, blino, bpos, elino, epos);
-
-    /* complete the surrounding catch construct */
-    TBprintf(to_wish, "\} msg] \{ TBerror $msg \}\\n");
-/* TBmsg("wish-adapter returns\\n"); */
-      return NULL;   
-    \} else if(TBmatch(e, "rec-do(%f(%l))", &fname, &fargs) ||
-              TBmatch(e, "rec-eval(%f(%l))", &fname, &fargs))\{
-      TBprintf(to_wish, "if [catch \{%s ", fname);
-      for( ; fargs ; fargs = next(fargs))
-        \{
-          pr_term_wish(first(fargs));
-          printn_wish(" ", 1);
-        \}
-      TBprintf(to_wish, "\} msg] \{ TBerror $msg \}\\n");
-      return NULL;
-    \} else if(TBmatch(e, "rec-ack-event(%t)", &farg))\{
-      TBprintf(to_wish, "if [catch \{rec-ack-event \{");
-      pr_term_wish(farg);
-      TBprintf(to_wish, "\}\} msg] \{ TBerror $msg \}\\n");
-
-/*      TBprintf(to_wish, "if [catch \{rec-ack-event \{%t\}\} msg] \{ TBerror $msg \}\\n", farg);*/
-      return NULL;
-    \} else if(TBmatch(e, "rec-terminate(%t)", &farg))\{
-      TBprintf(to_wish, "if [catch \{rec-terminate \{%t\}\} msg] \{ TBerror $msg \};exit\\n", farg);
-      exit(0);
-    \}
-    TBmsg("Ignored: %t\\n", e);
-    return NULL;
+      print_term(list_index(l, i));
+   \}
+   wprintf(right);
 \}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{28}\nwdocspar
 
-/* NOTE: in the above code the arguments of ack-event and terminate should be escaped! */
- 
-term *handle_input_from_wish(term *e)
+%}}}
+%{{{ static void print_args(term_list *args)
+
+Print a list of arguments.
+
+\nwenddocs{}\nwbegincode{29}\sublabel{NWwisH-priA.3-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-priA.3-1}}}\moddef{print_args~{\nwtagstyle{}\subpageref{NWwisH-priA.3-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void print_args(term_list *args)
 \{
-  char *msg;     
-           
-  /*TBmsg("handle_input_from_wish(%t)\\n", e);*/
-  if(TBmatch(e, "wish-error(%s)", &msg))\{
-    TBmsg("wish-error: %s\\n", msg);
-    return NULL;
-  \} else if(TBmatch(e,"snd-disconnect"))\{
-    TBsend(e);
-    kill(0, SIGKILL);   /* the wish child */
-    sleep(1);  /* make sure any incoming data will be consumed */
-    exit(0);
+  while(args) \{
+    if(!is_list(list_first(args)))
+      wprintf("\{");
+    print_term(list_first(args));
+    if(!is_list(list_first(args)))
+      wprintf("\}");
+    wputc(' ');
+    args = list_next(args);
   \}
-  return e;
 \}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{30}\nwdocspar
 
-void connect_to_wish(char *script, char *name, TBcallbackTerm handler)
+%}}}
+%{{{ static TBbool is_to_tool_comm(const char* s)
+
+Check if a function name indicates toolbus-to-tool communication.
+
+\nwenddocs{}\nwbegincode{31}\sublabel{NWwisH-is*F-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-is*F-1}}}\moddef{is_to_tool_comm~{\nwtagstyle{}\subpageref{NWwisH-is*F-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static TBbool is_to_tool_comm( const char* s )
 \{
-  int ui2wish[2];
-  int wish2ui[2];
-  int pid;
-  int old_stdin, old_stdout, from_wish;
-  int n_script_args;
-  char **p;
+   return streq( s, "snd-eval" )      || 
+          streq( s, "snd-cancel" )    ||
+          streq( s, "snd-do" )        || 
+          streq( s, "snd-ack-event" ) ||
+          streq( s, "snd-terminate" );
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{32}\nwdocspar
 
-  if(pipe(ui2wish) < 0 || pipe(wish2ui) < 0)\{
-    TBmsg("Can't create pipes"); exit(1);
-  \}
-  old_stdin = dup(0);
-  old_stdout = dup(1);
+%}}}
+%{{{ static TBbool is_from_tool_comm( char* s )
 
-  to_wish = fdopen(ui2wish[1], "w");
-  from_wish = wish2ui[0];
+Check if a function name indicates tool-to-toolbus communication.
 
-  close(0); close(1);
+\nwenddocs{}\nwbegincode{33}\sublabel{NWwisH-is*H-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-is*H-1}}}\moddef{is_from_tool_comm~{\nwtagstyle{}\subpageref{NWwisH-is*H-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static TBbool is_from_tool_comm( char* s )
+\{
+   return streq( s, "rec-value" ) ||  
+          streq( s, "rec-event" ) ||
+          streq( s, "rec-disconnect" );
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{34}\nwdocspar
 
-  if(dup(ui2wish[0]) < 0 || dup(wish2ui[1]) < 0)\{
-    TBmsg("Can't dup (1)\\n"); exit(1);
-  \}
-  if((pid = fork()))\{
-    /* ui: the parent */
-    if(pid < 0)\{
-      TBmsg("Can't fork\\n"); exit(1);
-    \}
-    close(0); close(1);
-    dup(old_stdin);
-    dup(old_stdout);
-    close(old_stdin);
-    close(old_stdout);
-    TBprintf(to_wish, "source %s\\n", TBTCL);
-    TBprintf(to_wish, "set argv \{");
-    n_script_args = 0;
-    for(p = script_args; *p; p++)\{
-      n_script_args++;   
-      TBprintf(to_wish, "%s ", *p);
-    \}  
-    TBprintf(to_wish, "\}\\nset argc %d\\n", n_script_args);
-    TBprintf(to_wish, "source %s\\n", script);
-    check_in_sign();
-    TBaddTermPort(from_wish, handler);
+%}}}
+%{{{ static int bytes_in_term(term *t)
+
+Calculates the number of bytes occumpied by a term when it is send
+to the ToolBus.
+
+\nwenddocs{}\nwbegincode{35}\sublabel{NWwisH-bytD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-bytD-1}}}\moddef{bytes_in_term~{\nwtagstyle{}\subpageref{NWwisH-bytD-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static int bytes_in_term( term* t )
+\{ 
+   int length;
+   
+   length = 8; /* LENSPEC */
+   length += strlen( TBsprintf( "%t", t ) );
+   return length;
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{36}\nwdocspar
+
+%}}}
+%{{{ static TBbool rec_monitor(term* e, term** out)
+
+{\tt rec\_monitor} handles monitor events.
+
+\nwenddocs{}\nwbegincode{37}\sublabel{NWwisH-recB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-recB-1}}}\moddef{rec_monitor~{\nwtagstyle{}\subpageref{NWwisH-recB-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static TBbool rec_monitor( term* e, term** out )
+\{
+  \LA{}rec_monitor variables~{\nwtagstyle{}\subpageref{NWwisH-recL-1}}\RA{}
+
+  *out = NULL;
+
+  \LA{}dissect rec-monitor term~{\nwtagstyle{}\subpageref{NWwisH-disO-1}}\RA{}
+
+  wprintf("if [catch \{ ");
+
+  \LA{}dissect coordinates~{\nwtagstyle{}\subpageref{NWwisH-disJ-1}}\RA{}
+   
+   if(streq(AtFun, "create")) \{
+     \LA{}handle create~{\nwtagstyle{}\subpageref{NWwisH-hanD-1}}\RA{}
+   \} else  if(streq(AtFun, "rec-connect")) \{
+     \LA{}handle rec-connect~{\nwtagstyle{}\subpageref{NWwisH-hanI-1}}\RA{}
+   \}
+   else if(is_to_tool_comm(AtFun)) \{
+     \LA{}handle toolbus-to-tool communication~{\nwtagstyle{}\subpageref{NWwisH-hana-1}}\RA{}
+   \}
+   else if(is_from_tool_comm(AtFun)) \{
+     \LA{}handle tool-to-toolbus communication~{\nwtagstyle{}\subpageref{NWwisH-hana.2-1}}\RA{}
+   \}
+
+   if(pid1 > 0) \{
+     \LA{}update variables~{\nwtagstyle{}\subpageref{NWwisH-updG-1}}\RA{}
+     \LA{}update subscriptions~{\nwtagstyle{}\subpageref{NWwisH-updK-1}}\RA{}
+     \LA{}update notes~{\nwtagstyle{}\subpageref{NWwisH-updC-1}}\RA{}
+   \}
+   
+   if( pid2 > 0 ) \{
+     \LA{}handle proc-to-proc communication~{\nwtagstyle{}\subpageref{NWwisH-hanX-1}}\RA{}
+   \}
+   
+   if(streq(AtFun, "endlet")) \{
+     \LA{}handle endlet~{\nwtagstyle{}\subpageref{NWwisH-hanD.2-1}}\RA{}
+   \} else \{
+     wprintf("monitor_atom %d %s %s %d %d %d %d\\n",
+                        pid1, AtFun, filename, blino, bpos, elino, epos);
+   \}
+
+   wprintf("\} msg] \{ TBerror $msg \}\\n");
+   fflush(to_wish);
+
+   return TBtrue;
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{38}\nwdocspar
+
+%{{{ rec_monitor variables
+
+The {\tt rec\_monitor} function needs an awfull lot of variables.
+We might want to split up this function in the future.
+
+\nwenddocs{}\nwbegincode{39}\sublabel{NWwisH-recL-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-recL-1}}}\moddef{rec_monitor variables~{\nwtagstyle{}\subpageref{NWwisH-recL-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-recB-1}}\nwenddeflinemarkup
+  int        pid1;
+  int        pid2;
+  int        blino;
+  int        bpos;
+  int        elino;
+  int        epos;
+  int        tid;
+  int        dir;
+  term*      Env;
+  term*      Subs;
+  term*      Notes;
+  term*      AtArgs;
+  term*      Coords;
+  char*      AtFun;
+  term_list* ts;
+  term_list* pair;
+  term_list* args;
+  term*      var;
+  term*      pe;
+  char*      mon_point;
+  char*      name;
+  char*      filename;
+\nwused{\\{NWwisH-recB-1}}\nwendcode{}\nwbegindocs{40}\nwdocspar
+
+%}}}
+%{{{ dissect rec-monitor term
+
+Now we analyze the rec-monitor term, and check if it has the right format.
+
+\nwenddocs{}\nwbegincode{41}\sublabel{NWwisH-disO-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-disO-1}}}\moddef{dissect rec-monitor term~{\nwtagstyle{}\subpageref{NWwisH-disO-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-recB-1}}\nwenddeflinemarkup
+  if( TBmatch( e, "rec-monitor(%f(%d,%f,%t,%t,%t,%t,%t,%d,%t))",
+        &mon_point,
+        &pid1,
+        &AtFun,
+        &AtArgs,
+        &Coords,
+        &Env,
+        &Subs,
+        &Notes,
+        &pid2,
+        &pe ) == TBfalse )
+    return TBfalse;
+\nwused{\\{NWwisH-recB-1}}\nwendcode{}\nwbegindocs{42}\nwdocspar
+
+%}}}
+%{{{ dissect coordinates
+
+Analyze the coordinats in {\tt Coords}. If {\tt Coords} is {\tt NULL},
+then we are in the {\tt INIT} process, of which we do not have the
+source code.
+
+\nwenddocs{}\nwbegincode{43}\sublabel{NWwisH-disJ-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-disJ-1}}}\moddef{dissect coordinates~{\nwtagstyle{}\subpageref{NWwisH-disJ-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-recB-1}}\nwenddeflinemarkup
+  if(Coords == NULL) \{
+      filename = "INIT";
+      blino = elino = bpos = epos = 0;
   \} else \{
-    /* wish: the child */
-    if(execlp(wish_exec, name, NULL) < 0)\{
-      TBmsg("Can't execute wish\\n");
+    if(TBmatch(Coords, "[%s,%d,%d,%d,%d]", 
+                &filename, &blino, &bpos, &elino, &epos) == TBfalse )
+         TBmsg( "**** coords do not match\\n" );
+  \}
+\nwused{\\{NWwisH-recB-1}}\nwendcode{}\nwbegindocs{44}\nwdocspar
+
+%}}}
+%{{{ handle create
+
+Handle the {\tt create} primitive. This amounts to calling {\tt create\_proc}
+with the right arguments.
+
+\nwenddocs{}\nwbegincode{45}\sublabel{NWwisH-hanD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-hanD-1}}}\moddef{handle create~{\nwtagstyle{}\subpageref{NWwisH-hanD-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-recB-1}}\nwenddeflinemarkup
+  if(TBmatch(AtArgs, "[%f(%l), %t]", &name, &args, &var) == TBfalse)
+    TBmsg( "**** args of create do not match\\n" );
+  TBprintf(to_wish, "create_proc %t %s\\n", list_get(Env, var), name);
+\nwused{\\{NWwisH-recB-1}}\nwendcode{}\nwbegindocs{46}\nwdocspar
+
+%}}}
+%{{{ handle rec-connect
+
+Handle the {\tt rec-connect} primitive. Just like the {\tt create} primitive,
+we call {\tt create\_tool}.
+
+\nwenddocs{}\nwbegincode{47}\sublabel{NWwisH-hanI-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-hanI-1}}}\moddef{handle rec-connect~{\nwtagstyle{}\subpageref{NWwisH-hanI-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-recB-1}}\nwenddeflinemarkup
+  if(TBmatch(AtArgs, "[%t]", &var ) == TBfalse)
+    TBmsg( "**** args of rec-connect do not match: %t\\n", AtArgs );
+  if(TBmatch(get_list_as_env(var, Env), "%f(%d)", &name,&tid) == TBfalse) \{
+    TBmsg( "**** rec-connect: value of var does not match: var=%t, env=%t", 
+                                                                    var, Env);
+    TBmsg( "**** value_list(var, Env) = %t\\n", get_list_as_env(var, Env));
+  \}
+  TBprintf( to_wish, "create_tool %d %s\\n", tid, name );
+\nwused{\\{NWwisH-recB-1}}\nwendcode{}\nwbegindocs{48}\nwdocspar
+
+%}}}
+%{{{ handle toolbus-to-tool communication
+
+Handle one of the toolbus-to-tool communication primitives
+by calling {\tt proc\_tool\_comm} with the right arguments.
+
+\nwenddocs{}\nwbegincode{49}\sublabel{NWwisH-hana-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-hana-1}}}\moddef{handle toolbus-to-tool communication~{\nwtagstyle{}\subpageref{NWwisH-hana-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-recB-1}}\nwenddeflinemarkup
+  if(TBmatch(AtArgs, "[%t, %l]", &var, &args) == TBfalse)
+    TBmsg( "**** args of tool comm do not match:%t\\n", AtArgs );
+  if(TBmatch(get_list_as_env(var, Env ), "%f(%d)", &name, &tid) == TBfalse)
+    TBmsg("**** to_tool: value of var does not match: var=%t, env=%t",var,Env);
+  TBprintf(to_wish, "proc_tool_comm %d %d %d\\n", pid1,tid,bytes_in_term(args));
+\nwused{\\{NWwisH-recB-1}}\nwendcode{}\nwbegindocs{50}\nwdocspar
+
+%}}}
+%{{{ handle tool-to-toolbus communication
+
+Handle one of the tool-to-toolbus communication primitives
+by calling {\tt tool\_proc\_comm} with the right arguments.
+
+\nwenddocs{}\nwbegincode{51}\sublabel{NWwisH-hana.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-hana.2-1}}}\moddef{handle tool-to-toolbus communication~{\nwtagstyle{}\subpageref{NWwisH-hana.2-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-recB-1}}\nwenddeflinemarkup
+  if(TBmatch( AtArgs, "[%t, %l]", &var, &args) == TBfalse)
+    TBmsg("**** args of tool comm do not match:%t\\n", AtArgs);
+  if(TBmatch(get_list_as_env(var, Env), "%f(%d)", &name, &tid) == TBfalse)
+    TBmsg("**** from_tool: val of var doesn't match: var=%t, env=%t", var,Env);
+  TBprintf(to_wish, "tool_proc_comm %d %d %d\\n", pid1,tid,bytes_in_term(args));
+\nwused{\\{NWwisH-recB-1}}\nwendcode{}\nwbegindocs{52}\nwdocspar
+
+%}}}
+%{{{ update variables
+
+Give the viewer a chance to update its shadow variables.
+
+\nwenddocs{}\nwbegincode{53}\sublabel{NWwisH-updG-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-updG-1}}}\moddef{update variables~{\nwtagstyle{}\subpageref{NWwisH-updG-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-recB-1}}\nwenddeflinemarkup
+  for(ts = Env; ts != NULL ; ts = next(ts)) \{
+    pair = first(ts);
+    if(get_txt(var_sym(first(pair)))[0] != '_')
+    TBprintf(to_wish, "update_var %d \{%t\} \{%t\}\\n", 
+                                pid1, first(pair), first(next(pair)));
+  \}
+\nwused{\\{NWwisH-recB-1}}\nwendcode{}\nwbegindocs{54}\nwdocspar
+
+%}}}
+%{{{ update subscriptions/notes
+
+Let the viewer update its subscriptions/notes.
+
+\nwenddocs{}\nwbegincode{55}\sublabel{NWwisH-updK-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-updK-1}}}\moddef{update subscriptions~{\nwtagstyle{}\subpageref{NWwisH-updK-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-recB-1}}\nwenddeflinemarkup
+  for(ts = Subs; ts != NULL; ts = next(ts))
+    TBprintf(to_wish, "update_subs %d \{%t\}\\n", pid1, first(ts));
+\nwused{\\{NWwisH-recB-1}}\nwendcode{}\nwbegindocs{56}\nwdocspar
+
+\nwenddocs{}\nwbegincode{57}\sublabel{NWwisH-updC-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-updC-1}}}\moddef{update notes~{\nwtagstyle{}\subpageref{NWwisH-updC-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-recB-1}}\nwenddeflinemarkup
+  for(ts = Notes; ts != NULL; ts = next(ts))
+    TBprintf(to_wish, "update_notes %d \{%t\}\\n", pid1, first(ts));
+\nwused{\\{NWwisH-recB-1}}\nwendcode{}\nwbegindocs{58}\nwdocspar
+
+%}}}
+%{{{ handle proc-to-proc communication
+
+Two processes are communicating, let the viewer know by calling
+the procedure {\tt proc\_proc\_comm}.
+
+\nwenddocs{}\nwbegincode{59}\sublabel{NWwisH-hanX-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-hanX-1}}}\moddef{handle proc-to-proc communication~{\nwtagstyle{}\subpageref{NWwisH-hanX-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-recB-1}}\nwenddeflinemarkup
+  dir = streq(AtFun, "snd-msg") ? 1 : -1;
+  TBprintf(to_wish, "proc_proc_comm %d %d %d\\n", pid1, pid2, dir);
+\nwused{\\{NWwisH-recB-1}}\nwendcode{}\nwbegindocs{60}\nwdocspar
+
+%}}}
+%{{{ handle endlet
+
+On encountering an {\tt endlet}, we need to remove a number of
+variables that are no longer valid.
+
+\nwenddocs{}\nwbegincode{61}\sublabel{NWwisH-hanD.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-hanD.2-1}}}\moddef{handle endlet~{\nwtagstyle{}\subpageref{NWwisH-hanD.2-1}}}\endmoddef\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-recB-1}}\nwenddeflinemarkup
+  if(TBmatch(AtArgs, "[%l]", &args) == TBfalse)
+    TBmsg("**** args of end_let do not match\\n");
+  for( ; args != NULL; args = next(args))
+    TBprintf(to_wish, "delete_var %d \{%t\}\\n", pid1, first(args));
+  TBprintf(to_wish, "\} msg] \{ TBerror $msg \}\\n");
+  *out = TBmake( "snd-continue(%d)", pid1);
+  return TBtrue;
+\nwused{\\{NWwisH-recB-1}}\nwendcode{}\nwbegindocs{62}\nwdocspar
+
+%}}}
+
+%}}}
+%{{{ static TBbool rec_do( term* e, term** out )
+
+Build the arguments and call the Tcl procedure.
+
+\nwenddocs{}\nwbegincode{63}\sublabel{NWwisH-rec6-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-rec6-1}}}\moddef{rec_do~{\nwtagstyle{}\subpageref{NWwisH-rec6-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static TBbool rec_do(term* e, term** out)
+\{
+   char* fname;
+   term_list* fargs;
+   
+   *out = NULL;
+   
+   /* rec-do */
+   if(TBmatch( e, "rec-do(%f(%l))", &fname, &fargs) == TBfalse)
+      return TBfalse;
+   wprintf("if [catch \{%s ", fname);
+   /* Only print list when list isn't empty */
+   if(fargs)
+     print_args(fargs);
+   wprintf(" \} msg] \{TBerror $msg\}\\n");
+   fflush(to_wish);
+   return TBtrue;
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{64}\nwdocspar
+
+%}}}
+%{{{ static TBbool rec_eval( term* e, term** out )
+
+Build the arguments and call the Tcl procedure.
+
+\nwenddocs{}\nwbegincode{65}\sublabel{NWwisH-rec8-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-rec8-1}}}\moddef{rec_eval~{\nwtagstyle{}\subpageref{NWwisH-rec8-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static TBbool rec_eval( term* e, term** out )
+\{
+   char* fname;
+   term_list* fargs;
+   
+   *out = NULL;
+   
+   /* rec-eval */
+   if(TBmatch(e, "rec-eval(%f(%l))", &fname, &fargs) == TBfalse)
+     return TBfalse;
+   wprintf("if [catch \{%s ", fname);
+   /* Only print list when list isn't empty */
+   if(fargs)
+     print_args(fargs);
+   wprintf("\} msg] \{TBerror $msg\}\\n");
+   fflush(to_wish);
+   return TBtrue;
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{66}\nwdocspar
+
+%}}}
+%{{{ static TBbool rec_ack_event( term* e, term** out )
+
+Build the arguments and call the Tcl procedure {\tt rec-ack-event}.
+
+\nwenddocs{}\nwbegincode{67}\sublabel{NWwisH-recD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-recD-1}}}\moddef{rec_ack_event~{\nwtagstyle{}\subpageref{NWwisH-recD-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static TBbool rec_ack_event(term* e, term** out)
+\{
+   term* farg;
+   
+   *out = NULL;
+   
+   /* rec-ack-event */
+   if(TBmatch(e, "rec-ack-event(%t)", &farg) == TBfalse)
+      return TBfalse;
+   wprintf("if [catch \{rec-ack-event ");
+   print_term(farg);
+   wprintf("\} msg] \{TBerror $msg\}\\n" );
+   fflush(to_wish);
+   return TBtrue;
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{68}\nwdocspar
+
+%}}}
+%{{{ static TBbool rec_terminate( term* e, term** out )
+
+On receiving a {\tt rec-terminate} request, we first
+call the Tcl procedure {\tt rec-terminate}, and then
+quit.
+
+\nwenddocs{}\nwbegincode{69}\sublabel{NWwisH-recD.2-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-recD.2-1}}}\moddef{rec_terminate~{\nwtagstyle{}\subpageref{NWwisH-recD.2-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static TBbool rec_terminate( term* e, term** out )
+\{
+   term* farg;
+   
+   *out = NULL;
+   
+   /* rec-terminate */
+   if(TBmatch(e, "rec-terminate(%t)", &farg) == TBfalse)
+      return TBfalse;
+   wprintf("if [catch \{rec-terminate ");
+   print_term(farg);
+   wprintf("\} msg] \{TBerror $msg\}; exit\\n" );
+   fflush(to_wish);
+   connected = TBfalse;
+   shutdown(0);
+   
+   /* not reached */
+   return TBtrue;
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{70}\nwdocspar
+
+%}}}
+
+%{{{ term *handle_input_from_toolbus(term *e)
+
+Handle input from the ToolBus.
+
+\nwenddocs{}\nwbegincode{71}\sublabel{NWwisH-hanP-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-hanP-1}}}\moddef{handle_input_from_toolbus~{\nwtagstyle{}\subpageref{NWwisH-hanP-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+term* handle_input_from_toolbus( term* e )
+\{
+   term* result;
+   
+   if( rec_ack_event( e, &result ) ||
+       rec_terminate( e, &result ) ||
+         rec_monitor( e, &result ) ||
+            rec_eval( e, &result ) ||
+              rec_do( e, &result ) )
+      return result;
+
+   /* error ! */
+   TBmsg("Ignored: %t\\n", e);
+   return NULL;
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{72}\nwdocspar
+
+%}}}
+%{{{ term* handle_input_from_wish(term *e) 
+
+Handle input from wish.
+
+\nwenddocs{}\nwbegincode{73}\sublabel{NWwisH-hanM-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-hanM-1}}}\moddef{handle_input_from_wish~{\nwtagstyle{}\subpageref{NWwisH-hanM-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+term* handle_input_from_wish( term* e ) 
+\{
+   char* msg;
+
+   /* wish-error */
+   if(TBmatch(e, "wish-error( %s )", &msg)) \{
+      TBmsg("wish-error: %s\\n", msg);
+      return NULL;
+   \}
+
+   /* snd-disconnect */
+   if(TBmatch(e, "snd-disconnect")) \{
+      disconnect();
+      shutdown( 0 );
+   \}
+      
+   return e;
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{74}\nwdocspar
+
+%}}}
+
+%{{{ term *dummy_check_in_sign(term *t)
+
+\nwenddocs{}\nwbegincode{75}\sublabel{NWwisH-dumJ-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-dumJ-1}}}\moddef{dummy_check_in_sign~{\nwtagstyle{}\subpageref{NWwisH-dumJ-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+term *dummy_check_in_sign( term* t )
+\{
+   return NULL;
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{76}\nwdocspar
+
+%}}}
+%{{{ static void require_fun( char* fname, term_list* fargs )
+
+Call the Tcl procedure {\tt TBrequire}, to check if a certain
+function is present.
+
+\nwenddocs{}\nwbegincode{77}\sublabel{NWwisH-reqB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-reqB-1}}}\moddef{require_fun~{\nwtagstyle{}\subpageref{NWwisH-reqB-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void require_fun( char* fname, term_list* fargs )
+\{
+   wprintf("TBrequire %s %s %d\\n", tool_name, fname, list_length(fargs));
+   fflush(to_wish);
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{78}\nwdocspar
+
+%}}}
+%{{{ static void check_in_sign()
+
+Check the input signature of a tool.
+
+\nwenddocs{}\nwbegincode{79}\sublabel{NWwisH-cheD-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-cheD-1}}}\moddef{check_in_sign~{\nwtagstyle{}\subpageref{NWwisH-cheD-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void check_in_sign()
+\{
+   char*      atf;
+   char       pat[128];
+   term_list* arg;
+   term_list* reqs;
+
+   reqs = tool_in_sign;
+   
+   /* construct match pattern, e.g. ``%f( <calc>,%l )'' */
+   sprintf( pat, "%%f( <%s>, %%l )", tool_name );
+
+   for( ; reqs != NULL; reqs = next( reqs ) )
+   \{
+      if( TBmatch( first( reqs ), pat, &atf, &arg ) )
+      \{
+         if( streq( atf, "rec-do") || streq( atf, "rec-eval" ) )
+            require_fun( get_txt( fun_sym( first( arg ) ) ), 
+                         fun_args( first( arg ) ) );
+         else
+         if( streq( atf, "rec-ack-event" ) )
+            require_fun( "rec-ack-event", arg );
+         else
+         if( streq( atf, "rec-terminate" ) )
+            require_fun( "rec-terminate", arg );
+         else
+            TBmsg( "check_in_sign: skipped %t\\n", first( reqs ) );
+      \}
+      else
+         TBmsg( "check_in_sign: skipped %t\\n", first( reqs ) );
+   \}
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{80}\nwdocspar
+
+%}}}
+
+%{{{ static void wish_create()
+
+Create the wish child.
+
+\nwenddocs{}\nwbegincode{81}\sublabel{NWwisH-wisB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-wisB-1}}}\moddef{wish_create~{\nwtagstyle{}\subpageref{NWwisH-wisB-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void wish_create()
+\{
+   pid_t pid;
+   int   pipe_tw[2]; /* toolbus 2 wish */
+   int   pipe_wt[2]; /* wish 2 toolbus */
+   
+   if( pipe( pipe_tw ) < 0 )
+      error( "pipe" );
+   if( pipe( pipe_wt ) < 0 )
+      error( "pipe" );
+
+   pid = fork();
+   switch( pid )
+   \{
+      case 0:
+         if(setpgid(0, 0) == -1)
+            error( "sepgid");
+         dup2(pipe_tw[0], 0);
+         dup2(pipe_wt[1], 1);
+         
+         close(pipe_tw[1]);
+         close(pipe_wt[0]);
+         
+         execlp(progname, progname, "-name", name, NULL);
+         fprintf(stderr, "%s: execlp: %s\\n", progname, strerror(errno));
+         exit(1);
+      case -1:
+         error("fork");
+      default:
+         if(pgid == -1)
+            pgid = pid;
+         to_wish = fdopen(pipe_tw[1], "w");
+         from_wish = fdopen(pipe_wt[0], "r");
+         close(pipe_tw[0]);
+         close(pipe_wt[1]);
+         TBaddTermPort( pipe_wt[0], handle_input_from_wish );
+         return;
+   \}
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{82}\nwdocspar
+
+%}}}
+%{{{ static void wish_start()
+
+Get the tool going by sourcing the library file and the tool script.
+
+\nwenddocs{}\nwbegincode{83}\sublabel{NWwisH-wisA-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-wisA-1}}}\moddef{wish_start~{\nwtagstyle{}\subpageref{NWwisH-wisA-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void wish_start()
+\{
+   int i;
+
+   wprintf("if ![file exists %s] "
+                      "\{puts stderr \\"%s not found\\"; exit 1\}\\n", TBTCL, TBTCL );
+   wprintf("if ![file exists %s] \{puts stderr \\"%s not found\\"; exit 1\}\\n",
+                                                        script, script);
+   
+   wprintf("source %s\\n", TBTCL);
+   wprintf("set argv \{") ;
+   for(i=0; i<script_nr_args; i++) \{
+     wprintf("%s ", script_args[i]);
+   \}
+   wprintf("\}\\n");
+   wprintf("set argc %d\\n", script_nr_args);
+   wprintf("source %s\\n", script);
+   check_in_sign();
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{84}\nwdocspar
+
+%}}}
+%{{{ static void signal_handler( int sig )
+
+The function {\tt signal\_handler} is called when a signal is
+received.
+
+\nwenddocs{}\nwbegincode{85}\sublabel{NWwisH-sigE-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-sigE-1}}}\moddef{signal_handler~{\nwtagstyle{}\subpageref{NWwisH-sigE-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void signal_handler( int sig )
+\{
+   int status;
+   int child_exit = -1;
+
+   switch( sig )
+   \{
+      case SIGCHLD:
+         if( waitpid( -pgid, &status, WNOHANG ) == -1 )
+            error( "waitpid" );
+         /* only save child's exit when it was not killed */
+         if( WIFEXITED(status) )
+            child_exit = WEXITSTATUS( status );
+         disconnect();
+         exit( child_exit );
+         break;
+      default:
+         disconnect();
+         shutdown( 1 );
+   \}
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{86}\nwdocspar
+
+%}}}
+%{{{ static void disconnect()
+
+Disconnect from the ToolBus, by sending a {\tt snd-disconnect}.
+
+\nwenddocs{}\nwbegincode{87}\sublabel{NWwisH-disA-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-disA-1}}}\moddef{disconnect~{\nwtagstyle{}\subpageref{NWwisH-disA-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void disconnect()
+\{
+   if(connected)
+      TBsend(TBmake("snd-disconnect"));
+   connected = TBfalse;
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{88}\nwdocspar
+
+%}}}
+%{{{ static void shutdown(int ret)
+
+Kill the wish child and exit.
+
+\nwenddocs{}\nwbegincode{89}\sublabel{NWwisH-shu8-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-shu8-1}}}\moddef{shutdown~{\nwtagstyle{}\subpageref{NWwisH-shu8-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void shutdown( int ret )
+\{
+   sleep(1);
+   
+   if(pgid != -1)
+      kill(-pgid, SIGKILL);
+   
+   exit(ret);
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{90}\nwdocspar
+
+%}}}
+%{{{ static void signals_set()
+
+Catch the most important signals, and redirect them to {\tt signal\_handler}.
+
+\nwenddocs{}\nwbegincode{91}\sublabel{NWwisH-sigB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-sigB-1}}}\moddef{signals_set~{\nwtagstyle{}\subpageref{NWwisH-sigB-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void signals_set()
+\{
+   struct sigaction act;
+   
+   act.sa_handler = signal_handler;
+   act.sa_flags   = SA_RESTART;
+
+   sigemptyset( &act.sa_mask );
+   
+   sigaction( SIGINT,  &act, NULL );
+   sigaction( SIGTERM, &act, NULL );
+   sigaction( SIGHUP,  &act, NULL );
+   sigaction( SIGQUIT, &act, NULL );
+   sigaction( SIGCHLD, &act, NULL );  
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{92}\nwdocspar
+
+%}}}
+%{{{ static void help()
+
+Print a help (usage) message.
+
+\nwenddocs{}\nwbegincode{93}\sublabel{NWwisH-hel4-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-hel4-1}}}\moddef{help~{\nwtagstyle{}\subpageref{NWwisH-hel4-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void help()
+\{
+   fprintf( stderr, USAGE_MSG );
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{94}\nwdocspar
+
+%}}}
+%{{{ static void cmd_options( int argc, char* argv[] )
+
+Analyze the command line arguments.
+
+\nwenddocs{}\nwbegincode{95}\sublabel{NWwisH-cmdB-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-cmdB-1}}}\moddef{cmd_options~{\nwtagstyle{}\subpageref{NWwisH-cmdB-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+static void cmd_options( int argc, char* argv[] )
+\{
+   int i;
+
+   i = 0;
+
+   while( i < argc )
+   \{
+      if( streq( argv[i], "-help" ) )
+         help();
+      if( streq( argv[i], "-TB_TOOL_NAME" ) )
+         name = argv[++i];
+      if( streq( argv[i], "-script" ) )
+         script = argv[++i];
+      if( streq( argv[i], "-lazy-exec" ) )
+         lazy_exec = TBtrue;
+      if( streq( argv[i], "-wish" ) )
+         progname = argv[++i];
+      if( streq( argv[i], "-script-args" ) )
+      \{
+         i++;
+         for( ; i < argc; i++ )
+            script_args[script_nr_args++] = argv[i];
+      \}
+      i++;
+   \}
+\}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}\nwbegindocs{96}\nwdocspar
+
+%}}}
+%{{{ void main(int argc, char* argv[])
+
+Get things going. After analyzing the arguments and setting the signals,
+we make contact with the ToolBus and start the wish child.
+After this, the ToolBus eventloop takes care of the rest.
+
+\nwenddocs{}\nwbegincode{97}\sublabel{NWwisH-mai4-1}\nwmargintag{{\nwtagstyle{}\subpageref{NWwisH-mai4-1}}}\moddef{main~{\nwtagstyle{}\subpageref{NWwisH-mai4-1}}}\endmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwusesondefline{\\{NWwisH-wisF-1}}\nwenddeflinemarkup
+void main( int argc, char* argv[] )
+\{
+   cmd_options(argc, argv);
+   signals_set();
+   
+   TBinit(name, argc, argv, handle_input_from_toolbus, dummy_check_in_sign);
+   connected = TBtrue;
+
+   if(script == NULL) \{
+      error("Missing -script argument\\n");
       exit(1);
-    \}
-  \}
+   \}
+
+   while(lazy_exec && !TBpeek())
+      sleep(1);
+
+   wish_create();
+   wish_start();
+   signals_set();
+   
+   TBeventloop();
 \}
+\nwused{\\{NWwisH-wisF-1}}\nwendcode{}
 
-void help(void)
-\{
-  char * str =
-"\\n\\
-Synopsis: wish-adapter [options]\\n\\
-\\n\\
-Options are:\\n\\
--help                 print this message\\n\\
--wish Wish            use Wish as wish executable\\n\\
--lazy-exec            postpone execution of wish until needed\\n\\
--script Name          use Name as Tcl script for wish\\n\\
--script-args A1 ...   use A1 ... as arguments for the wish execution\\n";
-  fprintf(stderr, str);
-\}
-
-void main(int argc, char *argv[])
-\{
-  int i = 1;
-  FILE *f;
-
-  while(i < argc)\{
-    if(streq(argv[i], "-help"))\{
-      help();
-    \} else if(streq(argv[i], "-TB_TOOL_NAME"))\{
-      name = argv[i+1]; i += 1;
-    \} else if(streq(argv[i], "-script"))\{
-      script = argv[i+1]; i += 1;
-    \} else if(streq(argv[i], "-lazy-exec"))\{
-      lazy_exec = TBtrue;
-    \} else if(streq(argv[i], "-wish"))\{
-      wish_exec = argv[++i];
-    \} else if(streq(argv[i], "-script-args"))\{
-      script_args = &argv[i+1];
-      break;
-    \}
-    i++;
-  \}
-  TBinit(name, argc, argv, handle_input_from_toolbus, dummy_check_in_sign);
-
-  if(!script)
-    err_fatal("Missing -script argument");
-
-  if((f = fopen(TBTCL, "r")))
-    fclose(f);
-  else
-    err_sys_fatal("Can't open tcl script: %s", TBTCL);
-  if((f = fopen(script, "r")))
-    fclose(f);
-  else
-    err_sys_fatal("Can't open tcl script: %s\\n", script);
-    
-  while(lazy_exec && !TBpeek())
-    sleep(1);
-
-  connect_to_wish(script, name, handle_input_from_wish);
-
-  TBeventloop();
-\}
-\nwnotused{wish-adapter.c*}\nwendcode{}
-
+\nwixlogsorted{c}{{bytes_in_term}{NWwisH-bytD-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-bytD-1}}}%
+\nwixlogsorted{c}{{check_in_sign}{NWwisH-cheD-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-cheD-1}}}%
+\nwixlogsorted{c}{{cmd_options}{NWwisH-cmdB-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-cmdB-1}}}%
+\nwixlogsorted{c}{{defines}{NWwisH-def7-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-def7-1}}}%
+\nwixlogsorted{c}{{disconnect}{NWwisH-disA-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-disA-1}}}%
+\nwixlogsorted{c}{{dissect coordinates}{NWwisH-disJ-1}{\nwixu{NWwisH-recB-1}\nwixd{NWwisH-disJ-1}}}%
+\nwixlogsorted{c}{{dissect rec-monitor term}{NWwisH-disO-1}{\nwixu{NWwisH-recB-1}\nwixd{NWwisH-disO-1}}}%
+\nwixlogsorted{c}{{dummy_check_in_sign}{NWwisH-dumJ-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-dumJ-1}}}%
+\nwixlogsorted{c}{{error}{NWwisH-err5-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-err5-1}}}%
+\nwixlogsorted{c}{{function declarations}{NWwisH-funL-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-funL-1}}}%
+\nwixlogsorted{c}{{global variables}{NWwisH-gloG-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-gloG-1}}}%
+\nwixlogsorted{c}{{handle create}{NWwisH-hanD-1}{\nwixu{NWwisH-recB-1}\nwixd{NWwisH-hanD-1}}}%
+\nwixlogsorted{c}{{handle endlet}{NWwisH-hanD.2-1}{\nwixu{NWwisH-recB-1}\nwixd{NWwisH-hanD.2-1}}}%
+\nwixlogsorted{c}{{handle proc-to-proc communication}{NWwisH-hanX-1}{\nwixu{NWwisH-recB-1}\nwixd{NWwisH-hanX-1}}}%
+\nwixlogsorted{c}{{handle rec-connect}{NWwisH-hanI-1}{\nwixu{NWwisH-recB-1}\nwixd{NWwisH-hanI-1}}}%
+\nwixlogsorted{c}{{handle toolbus-to-tool communication}{NWwisH-hana-1}{\nwixu{NWwisH-recB-1}\nwixd{NWwisH-hana-1}}}%
+\nwixlogsorted{c}{{handle tool-to-toolbus communication}{NWwisH-hana.2-1}{\nwixu{NWwisH-recB-1}\nwixd{NWwisH-hana.2-1}}}%
+\nwixlogsorted{c}{{handle_input_from_toolbus}{NWwisH-hanP-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-hanP-1}}}%
+\nwixlogsorted{c}{{handle_input_from_wish}{NWwisH-hanM-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-hanM-1}}}%
+\nwixlogsorted{c}{{help}{NWwisH-hel4-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-hel4-1}}}%
+\nwixlogsorted{c}{{includes}{NWwisH-inc8-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-inc8-1}}}%
+\nwixlogsorted{c}{{is_from_tool_comm}{NWwisH-is*H-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-is*H-1}}}%
+\nwixlogsorted{c}{{is_to_tool_comm}{NWwisH-is*F-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-is*F-1}}}%
+\nwixlogsorted{c}{{main}{NWwisH-mai4-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-mai4-1}}}%
+\nwixlogsorted{c}{{notice}{NWwisH-not6-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-not6-1}}}%
+\nwixlogsorted{c}{{print_args}{NWwisH-priA.3-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-priA.3-1}}}%
+\nwixlogsorted{c}{{print_env}{NWwisH-pri9.2-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-pri9.2-1}}}%
+\nwixlogsorted{c}{{print_list}{NWwisH-priA.2-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-priA.2-1}}}%
+\nwixlogsorted{c}{{print_string}{NWwisH-priC-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-priC-1}}}%
+\nwixlogsorted{c}{{print_term}{NWwisH-priA-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-priA-1}}}%
+\nwixlogsorted{c}{{print_var}{NWwisH-pri9-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-pri9-1}}}%
+\nwixlogsorted{c}{{rec_ack_event}{NWwisH-recD-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-recD-1}}}%
+\nwixlogsorted{c}{{rec_do}{NWwisH-rec6-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-rec6-1}}}%
+\nwixlogsorted{c}{{rec_eval}{NWwisH-rec8-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-rec8-1}}}%
+\nwixlogsorted{c}{{rec_monitor}{NWwisH-recB-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-recB-1}}}%
+\nwixlogsorted{c}{{rec_monitor variables}{NWwisH-recL-1}{\nwixu{NWwisH-recB-1}\nwixd{NWwisH-recL-1}}}%
+\nwixlogsorted{c}{{rec_terminate}{NWwisH-recD.2-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-recD.2-1}}}%
+\nwixlogsorted{c}{{require_fun}{NWwisH-reqB-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-reqB-1}}}%
+\nwixlogsorted{c}{{shutdown}{NWwisH-shu8-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-shu8-1}}}%
+\nwixlogsorted{c}{{signal_handler}{NWwisH-sigE-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-sigE-1}}}%
+\nwixlogsorted{c}{{signals_set}{NWwisH-sigB-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-sigB-1}}}%
+\nwixlogsorted{c}{{update notes}{NWwisH-updC-1}{\nwixu{NWwisH-recB-1}\nwixd{NWwisH-updC-1}}}%
+\nwixlogsorted{c}{{update subscriptions}{NWwisH-updK-1}{\nwixu{NWwisH-recB-1}\nwixd{NWwisH-updK-1}}}%
+\nwixlogsorted{c}{{update variables}{NWwisH-updG-1}{\nwixu{NWwisH-recB-1}\nwixd{NWwisH-updG-1}}}%
 \nwixlogsorted{c}{{wish-adapter.c*}{NWwisH-wisF-1}{\nwixd{NWwisH-wisF-1}}}%
-\nwbegindocs{2}\nwdocspar
+\nwixlogsorted{c}{{wish_create}{NWwisH-wisB-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-wisB-1}}}%
+\nwixlogsorted{c}{{wish_start}{NWwisH-wisA-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-wisA-1}}}%
+\nwixlogsorted{c}{{wprintf}{NWwisH-wpr7-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-wpr7-1}}}%
+\nwixlogsorted{c}{{wputc}{NWwisH-wpu5-1}{\nwixu{NWwisH-wisF-1}\nwixd{NWwisH-wpu5-1}}}%
+\nwbegindocs{98}\nwdocspar
+
+%}}}
+   
+
 \nwenddocs{}
