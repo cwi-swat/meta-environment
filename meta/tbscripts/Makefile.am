@@ -1,28 +1,45 @@
 # $Id$
 
-TBSCRIPTS     = clear-all.tb editor-creator.tb \
-                edit-equations.tb edit-syntax.tb edit-term.tb \
-                file-creator.tb meta.tb notification.tb \
-                open-modules.tb process-eqs.tb parse-focusses.tb \
-                save-module.tb \
-                set-parsetable.tb get-parsetable.tb \
-                ui.tb dump-equations.tb \
-		dump-parsetable.tb \
-                module-utils.tb print-module.tb compile-module.tb \
-                pt-dumper.tb standalone-pt-dumper.tb \
-                eqs-dumper.tb standalone-eqs-dumper.tb \
-                standalone-status-display.tb gen.tb \
-		restore-term-brackets.tb abort.tb \
-		parse-utils.tb query.tb
+TBSCRIPTS = \
+  abort.tb \
+  clear-all.tb \
+  compile-module.tb \
+  dump-equations.tb \
+  dump-parsetable.tb \
+  edit-equations.tb \
+  edit-syntax.tb \
+  edit-term.tb \
+  editor-creator.tb \
+  eqs-dumper.tb \
+  file-creator.tb \
+  gen.tb \
+  get-parsetable.tb \
+  meta.tb \
+  module-utils.tb \
+  notification.tb \
+  open-modules.tb \
+  parse-focusses.tb \
+  parse-utils.tb \
+  print-module.tb \
+  process-eqs.tb \
+  pt-dumper.tb \
+  query.tb \
+  restore-term-brackets.tb \
+  save-module.tb \
+  set-parsetable.tb \
+  standalone-eqs-dumper.tb \
+  standalone-pt-dumper.tb \
+  standalone-status-display.tb \
+  ui.tb
+  
+GENERATED_TBSCRIPTS = sdf2-language.tb help.tb
 
-GEN_TBSCRIPTS = sdf2-language.tb help.tb
+EXTRA_DIST = $(TBSCRIPTS) $(GENERATED_TBSCRIPTS:.tb=.tb.src)
 
-EXTRA_DIST    = $(TBSCRIPTS) $(GEN_TBSCRIPTS:.tb=.tb.src)
+CLEANFILES = $(GENERATED_TBSCRIPTS)
 
-CLEANFILES    = sdf2-language.tb help.tb
+pkgdata_DATA = $(TBSCRIPTS) $(GENERATED_TBSCRIPTS)
 
-pkgdata_DATA     = $(TBSCRIPTS) $(GEN_TBSCRIPTS)
-
-%.tb : %.tb.src Makefile
+%.tb: %.tb.src Makefile
 	sed 's@__SDF2TABLE__@$(PGEN)/share/pgen/Sdf2.baf@g;\
 	     s@__PKGDATA__@$(pkgdatadir)@g' < $< > $@ 
