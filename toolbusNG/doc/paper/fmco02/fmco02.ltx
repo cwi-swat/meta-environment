@@ -744,25 +744,44 @@ constraint can be checked statically.
 
 \subsection{Exception Handling} \label{Sec:exceptions}
 
-\begin{verbatim}
-Java-style execption handling does not work
-always associated with one specific call
-We use a LOTOS-style disrupt operator
-P >> E
-Adds the exception E as alternative to each atom in the process expression P
-Solves local error handling
-Error propagation: open issue
-\end{verbatim}
+Exception handling is notorious for its complexity and impact on the
+structure of code. The main stream exception handling approach as used
+in, for instance, Java associates one or more exception handlers with
+a specific method call. If the call completes successfully, the
+handlers are ignored. If the call raises an exception, it is checked
+whether this exception can be handled locally by one of the given
+handlers.  If not, the exception is propagated to the caller of the
+current code. This model does, however, not work well in a setting
+where multiple processes are active and the occurence of an exception
+may require recovery in several processes.
+
+\subsubsection{Local Exception Handling}
+
+We start with the simpler case of local error handling and introduce
+the \emph{disrupt operator} (\spec{>>}) proposed in LOTOS~\cite{XXX}.
+It has the form \spec{P >> E}, where \spec{P} describes the normal
+processing and \spec{E} the exceptional processing. It adds the
+execption \spec{E} as alternative to each atomic action in \spec{P}.
+If the action prefix form of \spec{P} is  $a_1 . P_1 + ... + a_n . P_n$, then
+
+\begin{quote}
+\spec{P >> E} $\equiv (a_1 + E) . (P_1 >> E) + ... + (a_n + E) . (P_n >> E)$.
+\end{quote}
+
+\subsubsection{Global Exception Handling}
 
 
-\subsection{Call-by-value versus Call-by-reference} \label{Sec:value-ref}
+\subsection{Call-by-value versus Call-by-reference}
+\label{Sec:value-ref}
+
+\subsubsection{Background}
 
 \begin{figure}[tb]
 \begin{center}
 \epsfig{figure=figs/refs.eps,height=12cm}
 \end{center}
 \vspace*{-10.5cm}
-\caption{XXX}
+\caption{\label{Fig:reference}Call-by-reference in a distributed application}
 \end{figure}
 
 \begin{figure}[tb]
@@ -770,66 +789,106 @@ Error propagation: open issue
 \epsfig{figure=figs/values.eps,height=12cm}
 \end{center}
 \vspace*{-11cm}
-\caption{XXX}
+\caption{\label{Fig:value}Call-by-value in a (Java-based) distributed application}
 \end{figure}
 
-\begin{verbatim}
-Call by ref:
-Efficient for infrequent access/update
- Uncontrolled modifications
- New versions of CORBA have call-by-value
+The concepts of call-by-reference and call-by-value are well-known in
+programming languages. They describe how an actual parameter value is
+transmitted from a procedure call to the body of the called
+procedure. In the case of call-by-reference, a \emph{pointer} to the
+parameter is transmitted to the body. Call-by-reference is efficient
+(only a pointer has to be transmitted) and the parameter value can be
+changed during execution of the procedure body (via the pointer).
+In the case of call-by-value, a \emph{physical copy} of the parameter
+is transmitted to the proecdure body. Call-by value is less efficient
+for large values and does not allow changes to the parameter value.
 
-Call by value:
-Inefficient
- Sharing between calls is lost (recall big parse trees)
- Only works between Java components
- Via IIOP connection with non-Java components
-\end{verbatim}
+These considerations also apply to value transmissions in a
+distributed setting, with the added complication that values can be
+accessed or modified by more than one party.  Call by reference
+(Figure~\ref{Fig:reference}) is efficient for infrequent access or
+update.  It is the prevalent mechanism in, for instance, CORBA~\cite{XXX}.
+However, uncontrolled modifications by different parties can
+lead to disaster.
 
-\begin{verbatim}
-ToolBus now:
-Transparent model
- Shared access can be           expressed in the script
- No distributed garbage        collection
- ToolBus is bottleneck for     large values
-
-ToolBus NG:
-Ad hoc data channel
- Transparent model
- Garbage collection of                   channels
- No central bottleneck
-\end{verbatim}
+Call-by-value (Figure~\ref{Fig:value}) is inefficient for large values
+and any sharing between calls is lost.\footnote{This is of particular
+interest for us, since we want to preserve sharing in huge parse
+trees.} In th case of Java/RMI~\cite{XXX}, value transmission is
+achieved via serialization and works only for communication with other
+Java components. Using IIOP~\cite{XXX} communication with non-Java
+components is possible.
 
 
-\begin{figure}
+\subsubsection{Current \TB\ approach}
+
+\begin{figure}[tb]
 \begin{center}
 \epsfig{figure=figs/toolbus-values.eps,height=12cm}
 \end{center}
 \vspace*{-8cm}
-\caption{XXX}
+\caption{\label{Fig:toolbus-values}Current value-based transmission in
+  the \TB}
 \end{figure}
 
+Currently, the \TB\ provides a transport mechanism based on
+call-by-value as shown in Figure~{Fig:toolbus-values}. It is
+transparent since the transmitted values are ATerms that can be
+exchanged with components written in any language. Since pure values
+are exchanged, there is no need for distributed garbage collection.
 
-\begin{figure}
+Note that the call-by-reference model can easily be mimicked in the
+\TB. For instance, one tool can maintain a shared database and can
+communicate with other tools using record keys and field names.  In
+this way, only the values of record fields have to be exchanged.  In
+this way, the access control to the shared database can be spelled out
+in detail and concurrency conflicts can be avoided.  This solves one
+of the major disadvantages of the pure call-by-referenece model in a
+distributed environment.
+
+The downside is, however, that the \TB\ becomes a data bottleneck when
+huge values really have to be transmitted between tools. Currently, two
+workarounds are used.  A first workaround, is to get temporary relief
+by sending compressed values rather than the values themselves.  A
+second workaround, is to store the large value in the filesystem and
+to send a file name rather than the file itself. This approach does
+scale but creates an additional inter-tool dependency and assumes that
+both tools have access to the same shared file system.
+
+\subsubsection{Envisaged \TB\ Approach}
+
+\begin{figure}[tb]
 \begin{center}
 \epsfig{figure=figs/toolbus-refs.eps,height=12cm}
 \end{center}
 \vspace*{-8cm}
-\caption{XXX}
+\caption{\label{Fig:toolbus-values}Channel-based transmission in the \TB}
 \end{figure}
+
+To overcome the problems of value-based transmission, we envisage the
+introduction of channels as sketched in
+Figure~\ref{Fig:toolbus-values}. This model is inspired by the second
+workaround mentioned above and is completely transparent for the user.
+
+The idea is to stick to the strict call-by-value transmission model,
+but to implement the actual value transmission by data communication
+between sending tool and receiving tool thus offloading the \TB\
+itself. Via the \TB, only an identification of the data value is
+transmitted between sender and receiver. The downside of this model is
+that it introduces the need for distributed garbage collection, since
+a value may be distributed to more than one receiving tool and the
+sender does not known when all receivers have retrieved their copy.
+Adding expiration times to values or reference counting at the \TB\
+level may solve this problem.
+
 
 \section{Current Status} \label{Sec-status}
 
 \begin{verbatim}
-Current ToolBus
-implemented in C
-target: ASF+SDF Meta-Environment
-Next generation ToolBus
-implemented in Java
-Tools on same machine run in a separate thread
-Easy connection with RMI/CORBA, database access, ...
-target: gamesquare.nl
-multi-user game site, thousands of users.
+Current ToolBus implemented in C target: ASF+SDF Meta-Environment Next
+generation ToolBus implemented in Java Tools on same machine run in a
+separate thread Easy connection with RMI/CORBA, database access, ...
+target: gamesquare.nl multi-user game site, thousands of users.
 \end{verbatim}
 
 \section{Case study: ToolBus vs. Java RMI}
