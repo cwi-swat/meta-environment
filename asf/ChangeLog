@@ -1,3 +1,6 @@
+2001/08/30 (markvdb@cwi.nl)
+ * Improved the efficiency of the Integer addition in the compiler spec.
+
 2001/08/28 (jong@cwi.nl)
  * Code improvements to satisfy gcc-3.0.1
  * version 1.2beta started
