@@ -42,39 +42,31 @@ and the buttons to perform actions on modules.
  
 \subsection{Implementation}
 
-The user interface is implemented in \tcltk~\cite{Tcl/Tk}, extended
-with \tcldot~\cite{Ellson:1996:TR}. \tcldot{} is part of the
-\emph{graphvis} package~\cite{North:1994:AGV,Ellson:1996:GPR}: a set
-of graph drawing tools for Unix or MS-Windows by AT\&T/Lucent
-Technologies.  It is a dynamically loaded extension for
-\texttt{tcl7.6} that incorporates the directed graph facilities of
-\dot~\cite{Gansner:1993:TDD,Koutsofios:1993:DGT} into \tcl{} and
-provides a set of commands to control those facilities.
+The user interface is implemented in \tcltk~\cite{Tcl/Tk} and \tcldot:
+an extension for \tcl\ that incorporates the directed graph facilities
+of \dot~\cite{Gansner:1993:TDD,Koutsofios:1993:DGT} into \tcl{} and
+provides a set of commands to control those facilities. Basically,
+\tcldot\ contains commands to: define a graph, add nodes and edges to
+this graph, and compute the placement of nodes and edges of this
+graph. The layout is computed in a way which tries to expose the
+logical structure of the graph, avoid crossings of edges, keep the
+edges short and emphasize symmetry and balance.  \tcldot\ is part of
+the \emph{graphviz} package~\cite{North:1994:AGV,Ellson:1996:GPR}: a
+set of graph drawing tools for Unix or MS-Windows by AT\&T/Lucent
+Technologies.
 
-\tcldot{} initially adds two commands to \tcl{}, namely
-\texttt{dotnew} to create an empty \dot{} graph and \texttt{dotread}
-to read a \dot{} graph description from file.  These commands return a
-handle for the graph that has just been created and that handle can
-then be used as a command for further actions on the graph.
+As seen from a \TB\ perspective, the \ui\ primarily consists of two
+methods that accept a message: one to denote addition of a module to
+the repository and one to denote the import relation between modules.
+These methods use \tcldot\ to define the graph and compute its layout.
+Other methods exist to set the status message and to display
+additional information on modules.
 
-All other "commands" are of the form: \mbox{\emph{handle} $<$method$>$
-  \emph{parameters}}. \linebreak Many of them return further handles
-of graphs, nodes of edges, which are themselves registered as
-commands.  To give an impression of the functionality provided by
-\tcldot{}, we list the methods that are available:
-\begin{description}
-\item[Graph methods:] addedge, addnode, addsubgraph, countedges,
-  countnodes, layout, listattributes, listedgeattributes,
-  listnodeattributes, listnodes, listsubgraphs, render, rendergd,
-  queryattributes, queryedgeattributes, querynodeattributes,
-  setattributes, setedgeattributes, setnodeattributes, showname,
-  write.
-\item[Node methods:] addedge, listattributes, listedges, listinedges,
-  listoutedges, queryattributes, setattributes, showname.
-\item[Edge methods:] delete, listattributes, listnodes,
-  queryattributes, setattributes, showname.
-\end{description}
-  
+The \ui\ sends events to the \TB\ to add, delete, revert, or edit a
+module, to edit a term over a module, to display extra information on
+a module or to quit the \metaenv. These events are handled by the
+\T-script which may distribute them to other tools.
+
 \subsection{Discussion}
 
 Future work on the user interface includes a search mechanism on
