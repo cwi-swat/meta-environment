@@ -4,7 +4,7 @@ SUFFIXES       = .asf .sdf .eqs .rscript .rstore .pt .tbl .sh .src .conf .button
 
 # ---- Generate term parse table from SDF module
 
-.sdf.tbl:
+%.trm.tbl : %.sdf
 	pt-dump -m $(*F) -o $@
 
 # ---- Convert from .asf to .eqs
