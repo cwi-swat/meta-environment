@@ -7,6 +7,7 @@ import aterm.*;
 
 public interface DelegateTif {
 	public void postMaskeradeEvent(ATerm t0);	
+	public void postMaskeradeValue(ATerm t0);
 	public void recAckEvent(ATerm t0);
 	public void recTerminate(ATerm t0);
 }

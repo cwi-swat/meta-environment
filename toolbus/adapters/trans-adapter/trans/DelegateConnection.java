@@ -52,30 +52,33 @@ public class DelegateConnection implements DelegateTif {
 		
 		fun = factory.parse("rec-eval(<term>)");
 		result = term.match(fun);
-		
-		if (result == null) {
-			fun = factory.parse("rec-do(<term>)");
-			result = term.match(fun);
-		}
-		
 		if (result != null) {
-			// TODO: encapsulate message
 			bridge.postEvent((ATerm)result.get(0));
-		} else {
-			throw new RuntimeException("term not in input signature: " + term);
+			return;
 		}
-	}
-	
-	public void postMaskeradeEvent(ATerm term) {
-		ATerm fun;
-		List result;
 		
 		fun = factory.parse("rec-do(<term>)");
 		result = term.match(fun);
-		
 		if (result != null) {
-			maskeradeConnection.sendTerm(factory.make("snd-value(" + (ATerm)result.get(0) + ")"));
+			bridge.postEvent((ATerm)result.get(0));
+			return;
+		} 
+		
+		fun = factory.parse("rec-ack-event(<term>)");
+		result = term.match(fun);
+		if (result != null) {
+			return;
 		}
+
+		throw new RuntimeException("term not in input signature: " + term);
+	}
+	
+	public void postMaskeradeEvent(ATerm term) {
+			maskeradeConnection.sendTerm(factory.make("snd-event(" + term + ")"));
+	}
+
+	public void postMaskeradeValue(ATerm term) {
+			maskeradeConnection.sendTerm(factory.make("snd-value(" + term + ")"));
 	}
 
 	public void recAckEvent(ATerm t0) {
