@@ -67,9 +67,16 @@ ASFIXINC=${PT_SUPPORT}/include
 ASFIXLIB=${PT_SUPPORT}/include
 AC_SUBST(ASFIXINC)
 AC_SUBST(ASFIXLIB)
-ASC_SUPPORT='${prefix}'
+
+dnl Handle --with-asf-support
+ASF_SUPPORT='${prefix}'
+AC_ARG_WITH(asf-support,
+   [  --with-asf-support=DIR  asf-support is in DIR],
+   ASF_SUPPORT=${withval},)
+AC_SUBST(ASF_SUPPORT)
 
 dnl Handle --with-asc-support=... argument to configure
+ASC_SUPPORT='${prefix}'
 AC_ARG_WITH(asc-support,
    [  --with-asc-support=DIR  asc-support is in DIR],
    ASC_SUPPORT=${withval},)

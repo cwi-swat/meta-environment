@@ -1,0 +1,13 @@
+
+2000/02/20 (jurgenv@cwi.nl)
+  * asfe now based on ASF and PT support libraries
+  * asfe can now only rewrite WITH layout
+
+2000/02/6 (jurgenv@cwi.nl)
+  * evaluator is renamed to asfe
+  * compiler is renamed to asfc
+
+2000/02/5 (jurgenv@cwi.nl)
+  * asf contains the following components, which are inherited from
+    the deprecated new-meta package: compiler, evaluator, addeqssyntax
+    removevarsyntax, genmakefile, genamakefile

@@ -36,13 +36,14 @@ prepare_restore_SOURCES = \
 
 prepare_restore_LDADD = \
                   -L../src -leval \
-                  -L$(PT_SUPPORT)/lib -lPT -lASF \
-                  -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
+                  -L$(PT_SUPPORT)/lib -lPT \
+                  -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS) \
+		  -L$(ASF_SUPPORT)/lib -lASF
 
 prepare-restore.o: ../src/libeval.a
 
 INCLUDES       = -I$(srcdir)/../src -I$(ASC)/include -I$(PT_SUPPORT)/include \
-                 -I$(ATERM)/include
+                 -I$(ATERM)/include -I$(ASF_SUPPORT)/include
 
 % : %.sh.src Makefile
 	sed 's@__TOOLBUS__@$(TOOLBUS)/bin/toolbus@g;\
