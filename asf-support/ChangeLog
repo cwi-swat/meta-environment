@@ -1,25 +1,28 @@
+2001/07/16 (jong@cwi.nl)
+ * documented change to version 0.4
+
 2001/07/06 (markvdb@cwi.nl)
-  * Removed AsFix1 depending functionality.
+ * Removed AsFix1 depending functionality.
 
 2001/07/03 (markvdb@cwi.nl)
-  * Added a union function for CondEquationLists based on indexed sets.
+ * Added a union function for CondEquationLists based on indexed sets.
 
 2001/06/21 (jurgenv@cwi.nl)
-  * added a function that checks if a tree is a lexical constructor function:
-    ASF_isTreeLexicalConstructorFunction. Do not use the generated function
-    ASF_isTreeLexicalConstructor, because it will always return true when
-    DISABLE_DYNAMIC_CHECKING is defined.
+ * added a function that checks if a tree is a lexical constructor function:
+   ASF_isTreeLexicalConstructorFunction. Do not use the generated function
+   ASF_isTreeLexicalConstructor, because it will always return true when
+   DISABLE_DYNAMIC_CHECKING is defined.
 
 2001/04/23 (markvdb@cwi.nl)
-  * Released version 0.2, and bumped into 0.3. 
-  * Bumped into version 0.2 in order to make distribution.      
+ * Released version 0.2, and bumped into 0.3. 
+ * Bumped into version 0.2 in order to make distribution.      
 
 2001/04/23 (markvdb@cwi.nl)
-  * Added ASF support based on AsFix2ME.
+ * Added ASF support based on AsFix2ME.
 
 2001/02/08 (jong@cwi.nl)
-  * inserted several brainstorm-results for asf-apigen-library into lib/
-  * added subst-eqs.c (aka "asf-hack-prod" ;-)
+ * inserted several brainstorm-results for asf-apigen-library into lib/
+ * added subst-eqs.c (aka "asf-hack-prod" ;-)
 
 2001/02/07 (jurgenv@cwi.nl)
-  * initial version of asf-support
+ * initial version of asf-support
