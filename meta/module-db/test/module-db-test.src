@@ -5,6 +5,7 @@
 datadir=__DATADIR__
 asfix=__PT_SUPPORT__
 builddir=__TOP_BUILDDIR__/module-db/test
+srcdir=__SRCDIR__
 
 toolbus="__TOOLBUS__/bin/toolbus \
            -I__TOP_SRCDIR__/in-output \
@@ -39,7 +40,7 @@ touch Pico-Booleans.sdf.baf Pico-Booleans.asf.baf Test.sdf.baf
 
 # Test 1. Add an equations section as text to the db.
 echo "" > ${builddir}/Test.asf
-rm -f ${builddir}/Test.sdf2
+touch ${srcdir}/Test.sdf.baf
 call_toolbus module-db-test-1.tb
 
 # Test 2. Add a non-empty equations section as text and try to retrieve
@@ -48,6 +49,8 @@ echo "equations" > ${builddir}/Test.asf
 call_toolbus module-db-test-2.tb
 
 # Test 3. Add a non-empty equations section as tree.
+cp -f ${srcdir}/Pico-Booleans.* ${builddir}
+touch ${builddir}/Pico-Booleans.*.baf
 call_toolbus module-db-test-3.tb
 
 # Test 4. Update equations section in module-db.
