@@ -379,7 +379,7 @@ ATerm unquote(ATerm t)
     }
   }
   if (ATmatch(t,"quote(<int>,<term>,<term>)",&s,&a0,&a1)) {
-    if (s == concsym || s == conssym)
+    if (s == concsym)
       return (ATerm)ATconcat((ATermList)unquote(a0),(ATermList)unquote(a1));
     else {
       funcptr func = lookup_func_given_sym(s);
@@ -536,8 +536,6 @@ void ASC_initRunTime(int tableSize)
   ATprotectSymbol(sym_quote7);
   make_listsym = ATmakeSymbol("make_list", 1, ATfalse);
   ATprotectSymbol(make_listsym);
-  conssym = ATmakeSymbol("cons", 2, ATfalse);
-  ATprotectSymbol(conssym);
 
 #ifdef MEMO_PROFILING
   prof_table = ATtableCreate(2048, 80);
@@ -553,3 +551,20 @@ void ASC_initRunTime(int tableSize)
 }
 
 /*}}}  */
+/*{{{  PT_ParseTree toasfix(ATerm term) */
+
+PT_ParseTree toasfix(ATerm term)
+{
+  PT_Tree tree = termToTree(term);  
+  PT_Symbol symbol = PT_getProductionRhs(PT_getTreeProd(tree));
+  PT_Symbols symbols = PT_makeSymbolsList(symbol, PT_makeSymbolsEmpty());
+  
+  return PT_makeParseTreeTree(symbols, 
+			      PT_makeTreeLayoutEmpty(),
+			      tree,
+			      PT_makeTreeLayoutEmpty(), 0);
+
+}
+
+/*}}}  */
+

@@ -1,6 +1,6 @@
 #include "asc-support2-me.h"
 
-PT_Tree
+static PT_Tree
 applyFunctionToArgs(char *function, char* module, char* sort, PT_Args args)
 {
   PT_Tree   layoutTree   = PT_makeTreeLayoutEmpty();
@@ -84,7 +84,7 @@ ASC_applyFunction(char *function, char* module, char* sort, int nArgs, ...)
 
   va_end(args);
 
-  return ASC_applyFunctionToArgs(function, module, sort, ptArgs);
+  return applyFunctionToArgs(function, module, sort, ptArgs);
 }
 
 
