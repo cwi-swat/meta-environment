@@ -1,7 +1,7 @@
 package 
 identification
-   name=meta
-   version=0.12beta
+   name=__PACKAGE__
+   version=__VERSION__
    location=http://www.cwi.nl/projects/MetaEnv/daily-dist
    info=http://www.cwi.nl/projects/MetaEnv/meta
    description='The ASF+SDF Meta-Environment is an interactive tool suite
