@@ -102,10 +102,10 @@ ATerm add_addeqssyntax_function_standalone(ATerm term)
     result = ATmakeTerm(pattern_asfix_appl,
                       ATparse("prod(id(\"Add-Eqs-Syntax\"),w(\"\"),[ql(\"add-equation-module\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"SDF\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SDF\"),w(\"\"),no-attrs)"),
                       term_ws,
-                      ATmakeList(11,t_name, term_ws,
-                                    term_open, term_ws,
-                                    appl, term_ws,
-                                    term_close)); 
+                      ATmakeList(7,t_name, term_ws,
+                                   term_open, term_ws,
+                                   appl, term_ws,
+                                   term_close)); 
     term = ATmakeTerm(pattern_asfix_term,
                       ATparse("l(\"term\")"),
                       term_ws,
