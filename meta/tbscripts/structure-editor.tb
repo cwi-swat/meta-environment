@@ -1,7 +1,7 @@
 /* $Id$ */
 
 tool se is {
-  command = "java-adapter -TB_HOST localhost -class nl.cwi.gipe.stred.SeTool -program 'java -ms32m -mx64m'"
+  command = "java-adapter -TB_HOST localhost -class nl.cwi.gipe.stred.SeTool"
 }
 
 process Structure-editor(TE: text-edit, Fid: str, Text: str, Language: str) is
