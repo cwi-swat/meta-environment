@@ -181,7 +181,7 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
       }
       else if (nInputs != 1) {
 	ATerror("Can only process one argument if no -f and -r option "
-		"are supplied.\n");
+		"are supplied.\nDid a -s argument eat up your -f or -r option?\n");
 	return 1;
       }
     }
