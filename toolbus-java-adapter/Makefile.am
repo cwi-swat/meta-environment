@@ -14,7 +14,8 @@ CLEANFILES = ${PACKAGE}-config ${PACKAGE}-${VERSION}.pkg ${JARFILE}
 
 JARFILE = ${PACKAGE}-${VERSION}.jar
 
-${JARFILE}: Makefile
+.PHONY: ${JARFILE}
+${JARFILE}:
 	jar cf ${JARFILE} \
 	  `cd ${top_builddir} && find . -name '*.class'`
 

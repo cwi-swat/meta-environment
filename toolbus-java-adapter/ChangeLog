@@ -1,5 +1,11 @@
 $Id$
 
+Fri Nov 12 09:53:58 CET 2004 <{jong,kooiker}@cwi.nl>
+ * toolbus/AbstractTool.java:
+   fix outputStream not flushed during handshake with ToolBus
+ * Makefile.am:
+   fix jar file not rebuilt even though .java files changed
+
 Mon Oct 18 19:31:02 CEST 2004 <jurgenv@cwi.nl>
  * Fixed CLASSPATH for running tifstojava
 

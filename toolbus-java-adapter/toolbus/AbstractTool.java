@@ -145,6 +145,7 @@ abstract public class AbstractTool implements Tool, Runnable {
 			handshake[i] = hs[i];
 		}
 		outputStream.write(handshake);
+		outputStream.flush();
 
 		int tid = readInt();
 		if (tid < 0) {
