@@ -34,4 +34,5 @@ AC_OUTPUT(
    library/languages/c/syntax/Makefile
    library/languages/casl/Makefile
    library/languages/casl/syntax/Makefile
+   library/languages/casl/tocasfix/Makefile
 )
