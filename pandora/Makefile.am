@@ -1,5 +1,7 @@
 SUBDIRS = generator
 
+ACLOCAL_FLAGS = -I .
+
 CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 
 EXTRA_DIST = reconf $(wildcard *.pkg)
