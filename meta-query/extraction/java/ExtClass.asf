@@ -16,3 +16,25 @@ equations
   &Rstore4 = extractClass(&ClassBody, &Rstore3, &ClassId)
   ===>
   extractClass(&ClassDeclaration, &Rstore1, &Area) = &Rstore4
+
+[extractClass-1]
+  &ClassInstanceCreationExpression = new &ClassType ( &Expressions ) &ClassBody,
+  &ClassId = get-area(&ClassType),
+  &Name = &ClassType,
+  &Tuple1 = <&ClassId, "anonymous " || name2str(&Name)>,
+  &Rstore2 = add-tuple(CLASS_DECL, &Tuple1, &Rstore1),
+  &Tuple2 = <&Area, &ClassId>,
+  &Rstore3 = add-tuple(CLASS_OCCURS, &Tuple2, &Rstore2),
+  &Rstore4 = extractClass(&ClassBody, &Rstore3, &ClassId)
+  ===>
+  extractClass(&ClassInstanceCreationExpression, &Rstore1, &Area) = &Rstore4
+
+[extractClass-2]
+  &ClassInstanceCreationExpression = new &ClassType ( &Expressions ),
+  &ClassId = get-area(&ClassType),
+  &Tuple1 = <&ClassId, "*anonymous*">,
+  &Rstore2 = add-tuple(CLASS_DECL, &Tuple1, &Rstore1),
+  &Tuple2 = <&Area, &ClassId>,
+  &Rstore3 = add-tuple(CLASS_OCCURS, &Tuple2, &Rstore2)
+  ===>
+  extractClass(&ClassInstanceCreationExpression, &Rstore1, &Area) = &Rstore3
