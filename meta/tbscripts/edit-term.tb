@@ -46,7 +46,6 @@ let
   ErrorFoci : term,
   Text      : str,
   Focus     : term,
-  SortName  : str,
   Tree      : term,
   Error     : term
 in
@@ -54,9 +53,7 @@ in
   rec-msg(set-focus(EditorId, Focus?)) .
   snd-msg(get-focus-text(EditorId, Focus)) .
   rec-msg(focus-text(EditorId, Text?)) .
-  snd-msg(get-focus-sort(SortName, Focus)) .
-  rec-msg(focus-sort(SortName?)) .
-  ParseText(Text, ModuleName, SortName, Tree?, Error?) .
+  ParseText(Text, ModuleName, "", Tree?, Error?) .
   ProcessParseError(ModuleName, Error, "trm")
 endlet
 
