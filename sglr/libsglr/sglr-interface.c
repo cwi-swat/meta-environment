@@ -542,10 +542,6 @@ void SG_Validate(char *caller)
       SG_OpenLog(caller, ".sglr-log");
     }
   );
-  if(SG_SHOWSTACK && !SG_StackDotOut(NULL)) {
-    ATwarning("Warning: implicitly choosing naming scheme for stack dotfiles\n");
-    SG_StackDotOut("stk-");
-  }
 }
 
 

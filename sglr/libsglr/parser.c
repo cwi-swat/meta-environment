@@ -471,11 +471,6 @@ void SG_PostParseResult(void)
     fprintf(SG_log(), "[mem] extra ATerm memory allocated while parsing: %ld\n",
             allocated);
   );
-
-  if(SG_SHOWSTACK) {
-    SG_StacksToDotFile(SG_NewStacks(accepting_stack), sg_tokens_read);
-    SG_StacksToDotFileFinalize(SG_StackDot());
-  }
 }
 
 void  SG_ParserCleanup(void)
@@ -541,10 +536,6 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void),
   SG_ParserPreparation();
 
   do {
-    if(SG_SHOWSTACK) {
-      SG_StacksToDotFile(active_stacks, sg_tokens_read);
-    }
-
     IF_DEBUG(
              fprintf(SG_log(), "Current token (#%ld): ", (long) sg_tokens_read);
              SG_PrintToken(SG_log(), current_token);
@@ -562,10 +553,6 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void),
 
 
     SG_Shifter();
-
-    if(SG_SHOWSTACK) {
-      SG_StacksToDotFileFinalize(SG_StackDot());
-    }
 
   } while (current_token != SG_EOF_Token && active_stacks);
 
@@ -610,9 +597,6 @@ void SG_ParseToken(void)
     }
     if(!SG_Rejected(st))
       SG_Actor(st);
-
-    if(SG_SHOWSTACK)
-       SG_LinksToDot(SG_StackDot(), st); 
 
     if(!actives && !for_actor) {
       for_actor         = for_actor_delayed;
@@ -964,9 +948,6 @@ void SG_Shifter(void)
       }
       l = SG_AddLink(st1, st0, (tree) t);
 
-      if(SG_SHOWSTACK) 
-      	 SG_LinksToDot(SG_StackDot(), st1); 
-
     } else IF_DEBUG(
       fprintf(SG_log(), "Shifter: skipping rejected stack with state %d\n",
               SG_GETSTATE(SG_ST_STATE(st0)))
@@ -1276,106 +1257,4 @@ void SG_PrintStatusBar(char *subject, long part, long whole)
   return;
 }
 
-#ifdef DEBUG
-/*  A few diagnostic routines (for debugging purposes)  */
 
-void SG_ShowLinks(st_links *lks, int depth)
-{
-  for (; lks; lks = SG_TAIL(lks)) {
-    fprintf(stderr, "%*.*s--%x-->\n", 2*depth, 2*depth, "", (int)SG_HEAD(lks));
-    SG_ShowStack(SG_LK_STACK(SG_HEAD(lks)), depth+1);
-  }
-}
-
-void SG_ShowStack(stack *st, int depth)
-{
-  if (!st)
-    return;
-
-  fprintf(stderr, "%*.*s%x %d\n", 2*depth, 2*depth, "", (int)st,
-          SG_GETSTATE(SG_ST_STATE(st)));
-
-  SG_ShowLinks(SG_ST_LINKS(st), depth+1);
-}
-
-void SG_ShowStacks(stacks *sts)
-{
-  if (!sts)
-    return;
-
-  while(sts) {
-    SG_ShowStack(SG_HEAD(sts),0);
-    sts = SG_TAIL(sts);
-  }
-}
-
-void SG_ShowStackAncestors(stack *st)
-{
-  while(st && st->parent) {
-    ATwarning("\t%d%s induced %d%s\n",
-              SG_GETSTATE(SG_ST_STATE(st->parent)),
-              SG_Rejected(st->parent)?"R":"",
-              SG_GETSTATE(SG_ST_STATE(st)),
-              SG_Rejected(st)?"R":"");
-    st = st->parent;
-  }
-}
-
-void SG_ShowActiveStackStates(signed int c)
-{
-  stacks *astks = active_stacks;
-  stack  *stk;
-  static int level = 0;
-
-  level = (level>1)?(level+c):0;
-  fprintf(stderr, "%*.*s%cActive states: ", level, level, "", c>0?'+':'-');
-  while(astks) {
-    stk   =  SG_HEAD(astks);
-    astks =  SG_TAIL(astks);
-    ATwarning("%d%s ", SG_GETSTATE(SG_ST_STATE(stk)),
-              SG_Rejected(stk)?"r":"");
-  }
-  ATwarning("\n");
-}
-
-void SG_ShowStackRejects(stack *st, int depth)
-{
-  st_links *ls = SG_ST_LINKS(st);
-  st_link *l;
-
-  if(depth > 666) return;
-
-  for (; ls; ls = SG_TAIL(ls)) {
-    l = SG_HEAD(ls);
-
-    ATwarning("%*.*s%s%x: state %d --> state %d\n", 2*depth, 2*depth,
-              "", SG_LK_REJECTED(l)?"~":" ", (int) l,
-              SG_GETSTATE(SG_ST_STATE(st)),
-              SG_GETSTATE(SG_ST_STATE(SG_LK_STACK(l))));
-    SG_ShowStackRejects(SG_LK_STACK(l), depth+1);
-  }
-}
-
-
-void SG_ShowActiveStackLinks(stacks *astks)
-{
-  stack  *stk;
-
-  while(astks) {
-    stk   =  SG_HEAD(astks);
-    astks =  SG_TAIL(astks);
-    SG_ShowStackRejects(stk,2);
-  }
-}
-
-void SG_ShowShiftPairs()
-{
-  int i;
-
-  ATwarning("Shifters:\n");
-  for(i = 0; i < sg_sp_idx; i++) {
-    ATwarning("%d: ", SG_SP_STATE(sg_shift_pairs[i]));
-    SG_ShowStackAncestors(SG_SP_STACK(sg_shift_pairs[i]));
-  }
-}
-#endif  /* DEBUG */

@@ -144,7 +144,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
   "g"
 #endif
   "hlnPtvV] [-i file] [-o file] \\"
-  "\n\t\t[-s sort] [-S file]\n";
+  "\n\t\t[-s sort]\n";
 
   ATfprintf(stream, usage, program_name);
   if(long_message) {
