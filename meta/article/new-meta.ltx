@@ -71,7 +71,7 @@
 
 %% define separator macro for proofreading 
 %% (puts each part on separate page)
-%% \def\separator{}
+%%\def\separator{}
 \def\separator{\cleardoublepage}
 
 \begin{document}
@@ -83,7 +83,7 @@ The \metaenv\ has become a legacy system over the last few years.
 This paper describes the first steps towards a new implementation
 of this system. This implementation is based on the latest techniques
 concerning the coupling of software components, construction
-of \ui s and modern programming languages such as \java. Special
+of \ui s and modern programming languages. Special
 care has been taken to ensure the flexibility and extensibility of
 the system, both now and in the future.
 
@@ -126,8 +126,11 @@ re-implementation of the \metaenv\ was feasible, and therefore a
 number of people started working on the design and implementation of a
 new \ui{} and the replacement of the text editing facilities of
 \gse~\cite{Koo94.thesis} by Emacs and Epoch in 1992~\cite{KB93}.
-However, it turned out that the resulting implementation was not
-deadlock free.  This initiated the development of the \TB, a software
+%%However, it turned out that the resulting implementation was not
+%%deadlock free. 
+However, it proved that is was impossible to manage the interaction
+between the different tools.
+This initiated the development of the \TB, a software
 interconnection architecture~\cite{BK96a,TB-AMAST96} which takes care
 of the communication of software components.
 This \TB\ will be the backbone of the implementation of the new \metaenv.
@@ -164,12 +167,13 @@ This \TB\ will be the backbone of the implementation of the new \metaenv.
 \caption{\label{short} Drawbacks of the current version of the \metaenv.}
 \end{table}
 
-Based on the experiences gained with the Epoch-\gse-UI coupling it was
-decided to design and implement the new \metaenv\ from scratch.  The
+Based on the experiences gained with the Epoch-\gse-UI coupling the
+decision was made
+to design and implement the new \metaenv\ from scratch.  The
 fact that the version of \lelisp\ on which the \metaenv\ is based
 may become obsolete in the near future makes a ``from scratch'' approach even
 more urgent.  In this paper we discuss the first prototype of the
-new \metaenv\ based on the \TB.  This prototype has a very restricted
+new \metaenv\ based on the \TB.  This prototype has very restricted
 functionality but offers an extendible infrastructure to experiment
 with various designs.
 
@@ -210,21 +214,21 @@ This version of the prototype should be considered as a test case
 to see whether for instance the \TB\ is suited as backbone for
 the new \metaenv.
 One of the lessons we learned from the implementation of the
-old \metaenv\ is that it is essentail to have a flexible and
-extendable implementation.
+old \metaenv\ is that it is essential to have a flexible and
+extendible implementation.
 The \metaenv\ is first of all a research tool, which means that
-it should be able to test all kind of new ideas.
+it should facilitate the testing all kind of new ideas.
 
-Although all sections conclude with a short discussion in which 
-also the future work is described there is some general future
-work left. The \metaenv\ should
+Although all sections conclude with a short discussion in which
+some the future work is described.
+We left out some general remarks about future work. The \metaenv\ should
 provide facilities to compile specifications in order to generate
 stand-alone environments.  Finally, the new \metaenv\ should provide
 sophisticated help facilities and demonstration modes with WWW support.
 
-\begin{small}
+%%\begin{small}
 \bibliographystyle{alpha}
 \bibliography{metabib}
-\end{small}
+%%\end{small}
 
 \end{document}

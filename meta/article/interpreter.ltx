@@ -27,18 +27,18 @@ is sent to the interpreter.
 This is all coded in the \TB-script.
 
 When the interpreter receives a set of equations it performs some
-simple transformations on it, for instance, unnecessary layout is removed,
-layout and lexicals are transformed into lists of characters.  The
+simple transformations on it, for instance, layout is removed,
+lexicals are transformed into lists of characters.  The
 interpreter stores the equations in a hash table to have fast access to them
 during rewriting.
 
-The term to be rewritten is also slightly modified.  Unnecessary
-layout is removed and the lexicals are transformed.
+The term to be rewritten is also slightly modified.
+Layout is removed and the lexicals are transformed to lists of characters.
 After rewriting, the result term is again modified: layout is inserted
 and the lists of characters are translated into lexicals.  This term
 is sent to the \TB\ to be displayed in an editor.
 
-The interpreter does not throw away the equations after rewriting.  These
+The interpreter does not throw away the equations after rewriting.  The
 equations are only thrown away when one of the modules in the
 specification is modified.
 
@@ -48,25 +48,25 @@ Before discussing the implementation of the interpreter we recall some
 of the characteristics of the \asdf-formalism, and more specific of
 \asf\ itself.  The \asf-formalism has the following characteristics:
 \begin{itemize}
-\item Many-sorted.
-\item Non left-linear.
-\item List matching.
-\item Positive and negative conditions.
-\item Default equations.
-\item Innermost rewriting.
+\item The functions are many-sorted.
+\item The equations may be non left-linear.
+\item It is possible to use list matching.
+\item The conditions in the equations may be both positive and negative.
+\item It is possible to use default equations.
+\item The evaluation strategy of the equations is based on innermost rewriting.
 \end{itemize}
 %%So, the interpreter should support the innermost rewriting of
 %%many-sorted, non left-linear, conditional rewrite rules with both
 %%default rules and list matching.
 
 The main functionality of the interpreter consists of a rewriting
-machinery and a local repository to store equations.  This repository
+machine and a local repository to store equations.  This repository
 is organised as a table, the keys in this table are module names and
 the values are sets of equations corresponding to the transitive
 closure of the import graph of the corresponding module.  
 The C implementation of the shared term library takes care of
 unnecessary duplication of of the rewrite rules. In the C
-implementation of the interpreter the set of equations are stored in a
+implementation of the interpreter the set of equations is stored in a
 hash-table and the hash key is calculated using the outermost function
 symbol of the left hand side of an equation and the outermost function
 symbol (if any) of the first argument of the left hand side of the
@@ -75,15 +75,15 @@ enormously, but it influences the semantics as well. In fact this
 implements a form of syntactic specificity, because when the
 interpreter is looking for an equation that matches with a term, it
 first looks for an equation that has the same outermost function
-symbol (ofs), {\em and} has the same ofs at the first argument
+symbol ({\sc ofs}), {\em and} has the same ofs at the first argument
 position.  If no match can be found, the search is continued for an
-equation that has the same ofs as the term, but with a variable at the
+equation that has the same {\sc ofs} as the term, but with a variable at the
 first argument position. This strategy means that equations with a
 variable at the first argument position are only applied when no other
 equation is applicable.  Finally, when this search also fails the
 interpreter looks for a default equation that matches with the term.
 
-The rewrite machine itself consists a collection of recursive
+The rewrite machine itself consists of a collection of recursive
 functions which have as arguments a set of equations, the term to be
 rewritten, and an environment in which the instantiated variables are
 stored.
@@ -96,8 +96,8 @@ one of the conditions can not be satisfied, another sublist should be
 tried.  This process is repeated until either a successful match is
 found, or all sublists are tried.
 
-\asdf\ allows the use of conditional equations.  The conditions maybe
-positive as well as negative.  This current implementation does not
+\asdf\ allows the use of conditional equations.  The conditions may be
+positive as well as negative.  The current prototype does not
 allow the introduction of new variables in a negative condition.
 Furthermore, it is not allowed to introduce new variables on both
 sides of a positive condition. If new variables are introduced on one
