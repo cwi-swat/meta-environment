@@ -35,7 +35,6 @@
 #include "idef.h"
 
 /*}}}  */
-
 /*{{{  global variables */
 
 ATbool run_verbose;
@@ -69,7 +68,6 @@ static void VERBOSE(const char* msg)
 }
 
 /*}}}  */
-
 /*{{{  static void usage(void) */
 
 static void usage(void)
@@ -97,7 +95,6 @@ static void usage(void)
 }
 
 /*}}}  */
-
 /*{{{  static void version(void) */
 
 static void version(void)
@@ -108,6 +105,29 @@ static void version(void)
 
 /*}}}  */
 
+/*{{{  static char *basename(const char *source, const char *suffix) */
+
+static char *basename(const char *source)
+{
+  char *duplicate = strdup(source);
+  char *basename = NULL;
+  char *p;
+  p = strrchr(duplicate, '.');
+  if (p != NULL) {
+    *p = '\0';
+  }
+  p = strrchr(duplicate, '/'); /* OS dependent :-( */
+  if (p != NULL) {
+    basename = strdup(p+1);
+  }
+  else {
+    basename = strdup(duplicate);
+  }
+  free(duplicate);
+  return basename;
+}
+
+/*}}}  */
 /*{{{  static PT_ParseTree compile(char *name, ATerm equations, char *output) */
 
 static PT_ParseTree compile(char *name, ATerm eqs, char *output)
@@ -200,7 +220,6 @@ void rec_terminate(int cid, ATerm t)
 }
 
 /*}}}  */
-
 /*{{{  void rec_ack_event(int cid, ATerm t) */
 
 void rec_ack_event(int cid, ATerm t)
@@ -209,7 +228,6 @@ void rec_ack_event(int cid, ATerm t)
 }
 
 /*}}}  */
-
 /*{{{  ATerm compile_module(int cid, char *moduleName, ATerm equations, char *output) */
 
 ATerm compile_module(int cid, char *moduleName, ATerm equations)
@@ -227,17 +245,6 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations)
 }                              
 
 /*}}}  */
-
-static char *basename(const char *source, char separator)
-{
-  char *duplicate = strdup(source);
-  char *p;
-  p = strrchr(duplicate, separator);
-  if (p != NULL) {
-    *p = '\0';
-  }
-  return duplicate;
-}
 
 /*{{{  int main(int argc, char *argv[]) */
 
@@ -304,13 +311,13 @@ int main(int argc, char *argv[])
 	exit(1);
       }
       else {
-	name = basename(equations, '.');
+	name = basename(equations);
       }
     }
 
     if (use_c_compiler && !output_muasf && strcmp(output, "-") == 0) {
       char tmp[_POSIX_PATH_MAX];
-      sprintf(tmp,"%s.c",name);
+      sprintf(tmp, "%s.c", name);
       output = strdup(tmp);
       if (!output) {
 	ATerror("Unable to allocate memory for string %s\n", tmp);
@@ -330,4 +337,3 @@ int main(int argc, char *argv[])
 }
 
 /*}}}  */
-

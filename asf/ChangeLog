@@ -7,6 +7,7 @@ Tue Sep  2 11:22:39 CEST 2003 <{jong,kooiker}@cwi.nl>
      was used to find the extension, but this fails horribly if instead
      of 'equations.eqs" you feed it "../../path/to/equations.eqs".
      Introduced function 'basename' to properly derive basename.
+   - patch basename function to also strip directory-prefix, if present.
 
 2003/08/31 ({jong,jurgenv}@cwi.nl)
  * Set version to 1.7.1
