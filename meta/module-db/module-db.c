@@ -776,11 +776,11 @@ ATerm get_parse_table(int cid, ATerm moduleId)
 
   if (ATmatch(moduleId, "eqs(<str>)", &moduleName)) {
     strcpy(pathExt, rules_ext);
-    strcpy(pathExt, TBL_EXT);
+    strcpy(pathExt+strlen(rules_ext), TBL_EXT);
   } 
   else if (ATmatch(moduleId, "trm(<str>)", &moduleName))  {
     strcpy(pathExt, term_ext);
-    strcpy(pathExt, TBL_EXT);
+    strcpy(pathExt+strlen(term_ext), TBL_EXT);
   }
   else {
     ATwarning("Illegal moduleId: %t\n", moduleId);
