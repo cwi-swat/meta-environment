@@ -31,10 +31,10 @@ static char myarguments[] = "hV";
  
 ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm eqsPTree)
 {
+  ASF_Start start = ASF_StartFromTerm(eqsPTree);
   ASF_CondEquationList asfEqsList = ASF_makeCondEquationListEmpty();
   SDF_Renamings renamings = SDF_makeRenamingsFromTerm(atRenamings);
-  PT_Tree eqsTree = PT_getParseTreeTree(PT_makeParseTreeFromTerm(eqsPTree));
-  ASF_Equations asfEqs = ASF_makeEquationsFromTerm(PT_makeTermFromTree(eqsTree));
+  ASF_Equations asfEqs = ASF_getStartTopEquations(start);
 
   if (ASF_isEquationsPresent(asfEqs)) {
     asfEqsList = ASF_getEquationsList(asfEqs);
@@ -44,7 +44,8 @@ ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm eqsPTree)
   asfEqs = ASF_setEquationsList(asfEqs, asfEqsList);
  
   return ATmake("snd-value(equations(<term>))",
-                ATBpack(ASF_makeTermFromEquations(asfEqs)));
+                ATBpack(ASF_StartToTerm(ASF_setStartTopEquations(start,
+								 asfEqs))));
 }
  
 /*}}}  */ 
