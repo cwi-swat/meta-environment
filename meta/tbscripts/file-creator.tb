@@ -9,11 +9,13 @@ let
   RealModule : str,
   ErrMsg     : str,
   Path       : str,
-  Text       : str
+  Text       : str,
+  Type	     : term,
+  Extension  : str
 in
   (
     %% Handle request to create a new module.
-    rec-msg(create-new-module(Path?, ModuleName?)) .
+    rec-msg(create-new-module(Path?, ModuleName?, Type?)) .
     snd-msg(is-module-in-db(ModuleName)) .
     (
       rec-msg(exists-in-module-db(ModuleName)) .
@@ -21,7 +23,9 @@ in
                                 [ModuleName])))
     +
       rec-msg(not-exists-in-module-db(ModuleName)) .
-      snd-msg(io-get-filename(Path, ModuleName, ".sdf")) .
+      snd-msg(file-extension-hook(Type)) . 
+      rec-msg(file-extension-hook-result(Extension?)) .
+      snd-msg(io-get-filename(Path, ModuleName, Extension)) .
       rec-msg(io-filename(FileName?)) .
       snd-msg(io-exists-file(FileName)) .
       (
@@ -33,7 +37,7 @@ in
         snd-msg(io-write-text-file(FileName, ["module ", ModuleName, "\n"])) .
         (
           rec-msg(io-file-written) .
-	  snd-msg(open-initial-module(Path, ModuleName, ".sdf"))
+	  snd-msg(open-initial-module(Path, ModuleName, Extension))
         +
           rec-msg(io-file-not-written(ErrMsg?)) .
 	  snd-note(ui-status(errorf("%s: %s", [FileName, ErrMsg])))

@@ -546,12 +546,12 @@ in
        	StackPopString(Stack, Stack?, Ext?) .
        	StackPopString(Stack, Stack?, Path?) .
        	StackPopString(Stack, Stack?, ModuleName?) .
-        snd-msg(create-new-module(Path, ModuleName)) .           
+        snd-msg(create-new-module(Path, ModuleName, sdf)) .           
 	ReturnSuccess(EditorId, Stack)	
       +
 	rec-msg(create-module, Stack?, EditorId?) .
        	StackPopString(Stack, Stack?, ModuleName?) .
-        snd-msg(create-new-module(Path, ModuleName)) .           
+        snd-msg(create-new-module(Path, ModuleName, sdf)) .           
 	ReturnSuccess(EditorId, Stack)	
       +
 	rec-msg(prompt-for-file(String?, Path?, Ext?), Stack?, EditorId?) .

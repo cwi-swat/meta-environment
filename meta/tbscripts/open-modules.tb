@@ -7,16 +7,19 @@ let
   Extension : str,
   RealModule : str,
   Imports : list,
-  Status : term
+  Status : term,
+  Type : term
 in
   (
-    rec-msg(open-initial-module(Path?, Module?, ".sdf")) .
+    rec-msg(open-initial-module(Path?, Module?, Extension?)) .
+    snd-msg(extension-to-type-hook(Extension)) .
+    rec-msg(extension-to-type-hook-result(Type?)) .
     snd-msg(is-module-in-db(Module)).
     (
       rec-msg(not-exists-in-module-db(Module)) .
       Status := success.
-      Open-Module(Path, Module, sdf, Status?, RealModule?, Imports?).
-      snd-msg(open-modules(Imports, sdf)).
+      Open-Module(Path, Module, Type, Status?, RealModule?, Imports?).
+      snd-msg(open-modules(Imports, Type)).
       rec-msg(finished-opening-modules)
     +
       rec-msg(exists-in-module-db(Module))
