@@ -1,0 +1,101 @@
+=head1 NAME
+
+PARSE-SDF2 - parse sdf2 definitions
+
+=head1 SYNOPSIS
+
+B<parse-sdf2> [-B<12bdDh>] [-B<i> I<file>] [-B<ln>] [-B<o> I<file>] [-B<tvVx>] 
+
+=head1 DESCRIPTION
+
+Parse SDF2 syntax, generating various output formats.
+
+A number of options can be supplied; these are as follows:
+
+=over 4
+
+=item B<-1>
+
+Generate AsFix1 output term.
+
+=item B<-2>
+
+Generate AsFix2 output term.  This is the default.
+
+=item B<-b>
+
+Write term output in BAF (Binary AsFix) format. This is the default.
+
+=item B<-d>
+
+Run in debug mode.
+
+=item B<-D>
+
+Generate a dot representation of the parse tree.
+
+=item -B<h>
+
+Displays concise usage information.
+
+=item -B<i> I<file>
+
+Read input from F<file>; by default, input is read from stdin.
+
+=item B<-l>
+
+Collect some run-time statistics.
+
+=item B<-n>
+
+Do not generate output (check syntactic validity).
+
+=item -B<o> I<file>
+
+Write output to F<file>.  By default, output is written to the infile,
+with its extension (if present) replaced by `
+
+=item B<-t>
+
+Write term output in plain text format.
+
+=item B<-v>
+
+Operate in verbose mode.
+
+=item B<-V>
+
+Show program version.
+
+=item B<-x>
+
+Exclude lexical information from dot output.
+
+=back
+
+=head1 USAGE
+
+=head1 EXAMPLES
+
+    $ parse-sdf2 test.sdf
+    $ parse-sdf2 -1 test.sdf -o test.asfix1
+
+=head1 EXIT STATUS
+
+A failure is returned on error.
+
+=head1 SEE ALSO
+
+L<sglr>, L<a2toa1>, L<tree2dot>
+
+=head1 KNOWN BUGS
+
+=head1 NOTES
+
+Note that not every parse result (i.e. parse forest) can be represented
+in AsFix1.  In principle, SDF2 is free of ambiguity; however, fragmented
+SDF2 may still give rise to ambiguity.
+
+=head1 AUTHOR
+
+Jeroen Scheerder <S<js@cwi.nl>>
