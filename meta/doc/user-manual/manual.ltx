@@ -421,12 +421,13 @@ The {\tt File} menu is used for creating, opening, saving and printing
 specifications as well as for leaving the \ASmetaenv.  It is shown in
 Figure \ref{FIG:file-menu}.
 
-{\tt New}, {\tt Open} and {\tt Save} are used for creating
-a new module, opening an existing one, respectively, saving a module.
+{\tt New} and {\tt Open} are used for creating
+a new module and opening an existing one, respectively.
 In all three cases a dialog window appears as shown in
 Figure~\ref{FIG:open-file}.
 
-{\tt Clear} removes all modules that have been opened so far from the
+{\tt Save All} save all modules that have been opened so far.
+{\tt Clear All} removes all modules that have been opened so far from the
 Meta-Environment. If modules have been modified, you are explicitly
 asked to save them. The same effect can be achieved by leaving the
 Meta-Environment (using {\tt Quit}, see below) and starting a new
@@ -624,8 +625,10 @@ and {\tt Edit Term} activate (structure) editors for
 editing syntax, equations, or terms, respectively, for the selected module(s).
 {\tt New Term} allows the creation of a new term (pop-up menu only).
 
-{\tt Save} ({\tt Save Module}) saves the tree representation of the syntax definition
-and the equations section of the selected module(s).
+{\tt Save} ({\tt Save Module}) saves the tree representation of the 
+syntax definition and the equations section of the selected module(s).
+{\tt Save All} saves the tree representation of the 
+syntax definition and the equations section of all modules.
 {\tt Revert} {\tt Revert Module}) removes modules and re-opens the removed modules, 
 the effect is that modifications made to these modules are discarded.
 {\tt Delete} ({\tt Delete Module}) removes modules.

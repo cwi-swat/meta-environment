@@ -1,5 +1,13 @@
 # $Id$
 
+2001/06/28 (markvdb@cwi.nl)
+ * Print button added, a new file FN.txt is generated which
+   contains both the Sdf and Asf text.
+ * Rename button added (does not yet work correctly!)
+ * "Save" button renamed to "Save All" button and added.
+ * "Clear" button renamed to "Clear All" button.
+ * Module database caches the equations.
+
 2001/05/28 (jong@cwi.nl)
  * Released version 0.3.3
  * Updated NEWS file
