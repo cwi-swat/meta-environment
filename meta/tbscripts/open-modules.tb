@@ -94,20 +94,28 @@ in
                 (
                   rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
                                                   ambiguities(I?)))).
-                  printf("Parse of ts returned %d ambiguities", Name2, I) 
+                  snd-note(ui-status(errorf(
+                           "Parse of ts returned %d ambiguities", 
+                           [Name2, I]))) 
                 +
                   rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
                                                 cycle(Cycle?)))).
-                  printf("Parse returned a cycle\nCycle is: %t\n",Cycle)
+                  snd-note(ui-status(errorf(
+                           "Parse returned a cycle is: %t\n",
+                           [Cycle])))
                 +
                   rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,eof))). 
-                  printf("EOF unexpected while parsing %s\n", Name2)
+                  snd-note(ui-status(errorf(
+                           "EOF unexpected while parsing %s\n", 
+                           [Name2])))
                 +
                   rec-msg(parse-result-asfix1(Id?,
-                 	  parse-error([character(Ch?), line(Li?), col(Co?), char(Char?)],
+                 	  parse-error([character(Ch?), line(Li?), 
+                                       col(Co?), char(Char?)],
                                       plain))) .
-                  printf("Character %d unexpected in %s, line %d, column %d\n",
-                         Ch, Name2, Li, Co)
+                  snd-note(ui-status(errorf(
+                        "Character %d unexpected in %s, line %d, column %d\n",
+                        [Ch, Name2, Li, Co])))
                 ).
                 snd-msg(add-empty-module-to-db(Name2)).
                 rec-msg(done)
@@ -132,8 +140,7 @@ in
           snd-msg(is-module-in-db(Name)).
           (
             rec-msg(exists-in-module-db(Name2?)).
-            snd-msg(validate-parse-tables(Name)).
-            rec-msg(validation-done)
+            snd-msg(invalidate-parse-tables(Name))
           +
             rec-msg(not-exists-in-module-db(Name2?))
           )

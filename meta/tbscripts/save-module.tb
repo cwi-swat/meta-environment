@@ -23,8 +23,8 @@ in
     +
       rec-msg(syntax-unchanged(Syntax?))
     ).
-    snd-msg(get-eqs-asfix(Module)).
-    ( rec-msg(eqs(Eqs?)).
+    snd-msg(get-eqs-tree(Module)).
+    ( rec-msg(tree(Eqs?)).
       snd-msg(get-eqs-path-from-db(Module)).
       rec-msg(path(Path?)).
       snd-msg(save-eqs-asfix(Module,Path,Eqs)).
@@ -54,8 +54,8 @@ in
        +
          rec-msg(syntax-unchanged(Syntax?))
        ).
-       snd-msg(get-eqs-asfix(Module)).
-       ( rec-msg(eqs(Eqs?)).
+       snd-msg(get-eqs-tree(Module)).
+       ( rec-msg(tree(Eqs?)).
          snd-msg(get-eqs-path-from-db(Module)).
          rec-msg(path(Path?)).
          snd-msg(save-eqs-asfix(Module,Path,Eqs)).

@@ -8,7 +8,11 @@ process Structure-editor(TE: text-edit, Fid: str, Text: str,
                          Language: str, IsTerm: str) is
 let
   Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
-  I: int, T: term, T1: term, T2: term, Ch: int, Li: int, Co: int,
+  I: int, T: term, Ch: int, Li: int, Co: int,
+  SdfTree : term,
+  EqsTree : term,
+  TrmTree : term,
+  NormalFormTree : term,
   Char: term, 
   Nonterminal: str, 
   ErrList: list, Cycle: list, Src:str,
@@ -83,7 +87,8 @@ in
 	    if equal(dirty,T) then
 	      snd-msg(TE,get-focus-text(Fid, Foc)).
 	      rec-msg(TE,focus-text(Fid, Str?)).
-	      snd-msg(Id,parse-string-as-asfix1(Language, Nonterminal, Str)).(
+	      snd-msg(Id,parse-string-as-asfix1(Language, Nonterminal, Str)).
+              (
 		rec-msg(parse-result-asfix1(Id,parse-tree(T?))).
 		snd-eval(SE,replaceFocus(Fid, T)).
 		rec-value(SE,Fl?)
@@ -112,16 +117,24 @@ in
 	  if equal(FF,[]) then
 	    /* All parses succeeded */
 	    if equal(IsTerm,"sdf") then
-	      snd-eval(SE,getTree(Fid)).
-	      rec-value(SE,T1?).
-	      snd-msg(update-module-in-db(T1,Language)).
+	      snd-eval(SE, getTree(Fid)).
+	      rec-value(SE, SdfTree?).
+	      snd-msg(update-module-in-db(SdfTree, Language)).
 	      rec-msg(extra-modules(Modules?)).
 	      snd-msg(open-modules(Modules)).
-	      rec-msg(finished-opening-modules).
-	      snd-msg(TE,clear-focus(Fid))
+	      rec-msg(finished-opening-modules)
 	    else
-	      snd-msg(TE,clear-focus(Fid))
-	    fi
+              if equal(IsTerm, "eqs") then
+	        snd-eval(SE, getTree(Fid)).
+	        rec-value(SE, EqsTree?).
+	        snd-msg(update-eqs-tree-in-db(Language, tree(EqsTree))) .
+		rec-msg(eqs-updated)
+              else
+	        /* Module-db needs no update in case of term. */
+	        tau
+              fi
+	    fi .
+	    snd-msg(TE,clear-focus(Fid))
 	  else
 	    /* Some parses were ambiguous */
 	    snd-eval(SE,setFocus(Fid, FF)).
@@ -142,17 +155,17 @@ in
     rec-event(TE,menu-event("Meta-Environment","Reduce",Fid)).
     if equal(FF,[]) then
       snd-note(ui-status(stat(Id,"Rewriting..."))).
-      snd-eval(SE,getTree(Fid)).
-      rec-value(SE,T1?).
-      snd-msg(rewrite(Language,T1)).
-      rec-msg(result(T2?)).
-      snd-msg(unparse(T2)).
+      snd-eval(SE, getTree(Fid)).
+      rec-value(SE, TrmTree?).
+      snd-msg(rewrite(Language, TrmTree)).
+      rec-msg(result(NormalFormTree?)).
+      snd-msg(unparse(NormalFormTree)).
       rec-msg(unparsed-text(Src?)).
-      printf("\nNormal form is:\n%s\n", Src).
-      snd-note(ui-status(endstat(Id)))
+      printf("\nNormal form is:\n%s\n", Src)
     else
       snd-note(ui-status(error("Please parse term before reducing")))
     fi.
+    snd-note(ui-status(endstat(Id))) .
     snd-ack-event(TE,menu-event("Meta-Environment","Reduce",Fid))
     +
     rec-event(TE,get-focus(Fid,I?)).

@@ -47,29 +47,26 @@ in
            + 
              rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
                                                          ambiguities(I?)))).
-             printf("Parse of %s returned %d ambiguities",Module,I). 
-             snd-msg(add-eqs-to-db(Module,Path,error,Time1,"unchanged")).
-             rec-msg(done)  
+             snd-note(ui-status(errorf("Parse of %s returned %d ambiguities",
+                                       [Module,I])))
            + 
              rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
                                                          cycle(Cycle?)))).
-             printf("Parse returned a cycle\n").
-             printf("Cycle is: %t\n",Cycle).
-             rec-msg(done)  
+             snd-note(ui-status(errorf("Parse returned a cycle: %t\n",
+                                       [Cycle])))
            +
              rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,eof))). 
-             printf("EOF unexpected while parsing %s\n",Module).
-             snd-msg(add-eqs-to-db(Module,Path,error,Time1,"unchanged")).
-             rec-msg(done) 
+             snd-note(ui-status(errorf("EOF unexpected while parsing %s\n",
+                                       [Module])))
            +
              rec-msg(parse-result-asfix1(Id?,
                                          parse-error([character(Ch?),
                                                       line(Li?),
                                                       col(Co?),
                                                       char(Char?)],plain))).
-             printf("Character %d unexpected in %s, line %d, column %d\n",Ch,Module,Li,Co).
-             snd-msg(add-eqs-to-db(Module,Path,error,Time1,"unchanged")).
-             rec-msg(done) 
+             snd-note(ui-status(errorf(
+                      "Character %d unexpected in %s, line %d, column %d\n",
+                      [Ch, Module, Li, Co])))
            ).
            snd-note(ui-status(endstat(Id)))
          +
@@ -77,10 +74,8 @@ in
 	   snd-note(ui-status(errorf("Unable to open parse table for \"%s\"",
 				     [Module])))
          )
-       +
-       rec-msg(error-opening(Module)).
-       snd-msg(add-eqs-to-db(Module,"",no-equations,timestamp(0),"unchanged")).
-       rec-msg(done)
+      +
+        rec-msg(no-eqs-text(Module))
       )
       fi
     )*

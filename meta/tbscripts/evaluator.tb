@@ -20,6 +20,7 @@ in
   create(Rewrite(Eval), Tid?).
 
   subscribe(language-unavailable(<str>)) .
+  subscribe(equations-changed(<str>)) .
   (
     rec-msg(interpret(Mod?,Term?)).
     snd-eval(Eval,interpret(Mod,Term)).
@@ -36,7 +37,9 @@ in
     )
   +
     rec-note(language-unavailable(Mod?)) .
-    printf("Evaluator received language-unavailable(%s)\n", Mod) .
+    snd-do(Eval, remove-equations(Mod))
+  +
+    rec-note(equations-changed(Mod?)) .
     snd-do(Eval, remove-equations(Mod))
   ) *
   delta

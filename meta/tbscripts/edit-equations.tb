@@ -9,37 +9,29 @@ let
   Eqs         : term,
   Time        : term,
   ErrMsg      : str,
-  Src         : str,
+  EqsText     : str,
   StartEditor : term
 in
-  Src := "" .
+  EqsText := "" .
   StartEditor := true .
   Id := process-id .
   snd-note(ui-status(stat(Id,"Opening equations editor..."))) .
   snd-msg(get-eqs-path-from-db(Module)) .
   rec-msg(path(Path?)) .
-  snd-msg(get-eqs-asfix(Module)) .
+  snd-msg(get-eqs-tree(Module)) .
   (
-    rec-msg(eqs(Eqs?)) .
+    rec-msg(tree(Eqs?)) .
     snd-msg(unparse(Eqs)) .
-    rec-msg(unparsed-text(Src?))
-  +
-    rec-msg(eqs-unchanged(Eqs?)) .
-    snd-msg(unparse(Eqs)) .
-    rec-msg(unparsed-text(Src?))
+    rec-msg(unparsed-text(EqsText?))
   +
     %% If there are no equations in the module-db, assume we
     %% want to create a new equations section.
+    rec-msg(unavailable) .
+    snd-msg(get-eqs-text(Module)) .
     (
-      rec-msg(no-eqs)
+      rec-msg(eqs-text(Module, EqsText?))
     +
-      rec-msg(unavailable)
-    ) .
-    snd-msg(open-eqs-text-file(Module)) .
-    (
-      rec-msg(opened-file(Module, Src?, Path?, Time?))
-    +
-      rec-msg(error-opening(Module)) .
+      rec-msg(no-eqs-text(Module)) .
       snd-msg(create-new-equations(Module)) .
       (
         rec-msg(new-equations-created(Module, Path?))
@@ -52,7 +44,7 @@ in
     )
   ).
   if equal(StartEditor, true) then
-    create(Editor(Module, Src, Path, Module, "eqs"), Tid?)
+    create(Editor(Module, EqsText, Path, Module, "eqs"), Tid?)
   fi .
   snd-note(ui-status(endstat(Id)))
 endlet

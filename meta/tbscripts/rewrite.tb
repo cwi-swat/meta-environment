@@ -11,10 +11,15 @@ in
   ( 
     rec-msg(rewrite(ModName?, Term?)). 
     snd-msg(retrieve-eqs(ModName)).
-    rec-msg(finished-retrieval). 
-    snd-eval(Eval, interpret(ModName, Term)).
-    rec-value(Eval,result(NormalForm?)).
-    snd-msg(result(NormalForm))
+    (
+      rec-msg(retrieval-successful(ModName)) .
+      snd-eval(Eval, interpret(ModName, Term)) .
+      rec-value(Eval, result(NormalForm?)) .
+      snd-msg(result(NormalForm))
+    +
+      rec-msg(retrieval-aborted(ModName)) .
+      snd-msg(result(Term))
+    )
   ) * 
   delta
 endlet 

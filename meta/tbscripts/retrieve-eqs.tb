@@ -18,14 +18,21 @@ in
       snd-msg(process-eqs(ModName)).
       rec-msg(eqs-processed(ModName)).
       snd-msg(get-all-equations(ModName)).
-      rec-msg(all-equations(Eqs?)).
-      snd-eval(Eval,add-equations(ModName, Eqs)).
-      rec-value(Eval,equ-added(ModName?)). 
-      snd-note(ui-status(endstat(Id))).
-      snd-msg(finished-retrieval)
+      ( 
+        rec-msg(all-equations(Eqs?)).
+        snd-eval(Eval,add-equations(ModName, Eqs)).
+        rec-value(Eval,equ-added(ModName?)) .
+	snd-note(ui-status(endstat(Id))) .
+	snd-msg(retrieval-successful(ModName))
+      +
+        rec-msg(equations-incomplete) .
+        snd-note(ui-status(errorf("Equations incomplete for %s", [ModName]))) .
+	snd-note(ui-status(endstat(Id))) .
+        snd-msg(retrieval-aborted(ModName))
+      )
     +
-      rec-msg(eqs-available).
-      snd-msg(finished-retrieval)
+      rec-msg(eqs-available) .
+      snd-msg(retrieval-successful(ModName))
     )
   ) *
   delta
