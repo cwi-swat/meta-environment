@@ -34,7 +34,8 @@ exports
 
 	is-tuple(Elem)						-> Boolean
 
-	REXPTYPE "==" REXPTYPE					-> Boolean
+	equal-type(REXPTYPE, REXPTYPE, TENV)			-> Boolean
+	get-tuple-type(REXPTYPE)				-> REXPTYPE
 
 	RSTAT cannot be typed 					-> ERROR
 	REXP cannot be typed 					-> ERROR

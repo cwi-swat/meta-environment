@@ -435,4 +435,14 @@ assert "/, 8":  {X * 2 | int X : {1,2,3}} == {2,4,6}
 
 type pair = <int theInt, str theStr>
 
-%%pair P = pair<1, "a">
+pair P = <1, "a">
+
+type double-pair = <pair pair1, pair pair2>
+
+double-pair DP = <<1, "a">, <2, "b">>
+
+assert "type, 1": P@theInt == 1
+assert "type, 2": P@theStr == "a"
+assert "type, 3": DP@pair1 == P
+assert "type, 4": DP@pair2 == <2,"b">
+

@@ -291,15 +291,22 @@
 
 [FLd1]	evalx($Exp @ $Var, $Rstore)		= select-field(evalt($Exp, $Rstore), evali($Var, $Rstore))
 
-
 %% ---- aux function for field selection
 
-[sel1]	select-field(<$Elem1, $Elem2>, 1) = $Elem1
+[hd]	head(<$Elem1, $Elem2>) = $Elem1
 
-[sel2]	select-field($Elem, 1) = $Elem when is-tuple($Elem) = false
+[tl]	tail(<$Elem1, $Elem2>) = $Elem2
 
-[default-sel]
-	select-field(<$Elem1, $Elem2>, $Integer) = select-field($Elem2, $Integer - 1)
+[sel]	select-field($Elem, 1) = head($Elem)
+
+[sel3]	$Integer > 1 = true
+	===================================================
+	select-field($Elem, $Integer) = select-field(tail($Elem), $Integer - 1)
+
+[default-sel]	select-field(<$Elem1, $Elem2>, 1) = $Elem1
+
+[default-sel]	select-field(<$Elem1, $Elem2>, 2) = $Elem2 
+
 
 
 %% ---- aux functions for evaluating image operator .

@@ -60,14 +60,35 @@ equations
 
 %% --- Equality on types: ==
 
-[eqt1]	$Etype == $Etype = true
+[eqt1]	equal-type($Etype, $Etype, $Tenv) = true
 
-[eqt2]	rel[$Etype1,$Etype2] == bag[<$Etype1, $Etype2>] = true
+[eqt2]	equal-type(rel[$Etype1,$Etype2], bag[<$Etype1, $Etype2>], $Tenv) = true
 
-[eqt3]	bag[<$Etype1,$Etype2>] == rel[$Etype1, $Etype2] = true
+[eqt3]	equal-type(bag[<$Etype1,$Etype2>], rel[$Etype1, $Etype2], $Tenv) = true
 
+[eqt4]	equal-type($Var, $Etype, $Tenv) = equal-type(lookup($Tenv, $Var), $Etype, $Tenv)
+
+[eqt5]	equal-type($Etype, $Var, $Tenv) = equal-type($Etype, lookup($Tenv, $Var), $Tenv)
+
+[eqt6]	equal-type(<$DclVar+>, $Etype, $Tenv) = equal-type(get-tuple-type(<$DclVar+>), $Etype, $Tenv)
+
+[eqt7]	equal-type($Etype, <$DclVar+>, $Tenv) = equal-type($Etype, get-tuple-type(<$DclVar+>), $Tenv)
+
+[eqt8]	equal-type(<$Etype1, $Etype2>, <$Etype1', $Etype2'>, $Tenv) =
+	equal-type($Etype1, $Etype1', $Tenv) & equal-type($Etype2, $Etype2', $Tenv)
+
+[eqt9]	equal-type(<$Etype1, $Etype2, $Etype+>, <$Etype1', $Etype2', $Etype+'>, $Tenv) =
+	equal-type($Etype1, $Etype1', $Tenv) & equal-type(<$Etype2, $Etype+>, <$Etype2', $Etype+'>, $Tenv)
 [default-eqt]
-	$Etype1 == $Etype2 = false
+	equal-type($Etype1, $Etype2, $Tenv) = false
+
+%% ---- get-tuple-type
+
+[gtt1]	get-tuple-type(<$Etype1 $Var1, $Etype2 $Var2>) = <$Etype1, $Etype2>
+
+[gtt2]	get-tuple-type(<$Etype2 $Var2, $DclVar+>) = <$Etype2, $Etype+>
+	=========================================================
+	get-tuple-type(<$Etype1 $Var1, $Etype2 $Var2, $DclVar+>) = <$Etype1, $Etype2, $Etype+>
 
 %% --- Is tuple
 
@@ -291,7 +312,8 @@ $Error]>
 [check-var] 
       lookup($Tenv, $Var) = $Etype
       ============================================
-      check($Var, $Tenv) = if $Etype == not-in-table then <undefined, $Tenv + Undeclared $Var> else <$Etype, $Tenv> fi
+      check($Var, $Tenv) = 
+      if equal-type($Etype, not-in-table, $Tenv) then <undefined, $Tenv + Undeclared $Var> else <$Etype, $Tenv> fi
 
 [check-tuple-const]
  	check($Tuple, $Tenv) = check-const-tuple($Tuple, $Tenv)	
@@ -621,7 +643,7 @@ $Error]>
 [rt1] 	check($Exp, $Tenv) = <$Etype', $Tenv'>
       	=========================================
       	require-type($Exp, $Etype, $Tenv) = 
-      	if $Etype == $Etype' then $Tenv' else $Tenv' + $Exp should have type $Etype fi
+      	if equal-type($Etype, $Etype', $Tenv') then $Tenv' else $Tenv' + $Exp should have type $Etype fi
 	
 %% ---- Check from clauses and add introduced variables to type environment
 
@@ -656,20 +678,20 @@ $Error]>
 
 %% ---- Match a list of targets
 
-[mt1]	$Etype1 == first($Etype2) = true,
+[mt1]	equal-type($Etype1, first($Etype2), $Tenv) = true,
 	store($Tenv, $Var, $Etype1) = $Tenv'
 	=====================================================
 	match-targets($Etype1 $Var, $Target*, $Etype2, $Tenv) =
 	match-targets($Target*, second($Etype2), $Tenv')
 
-[mt2]	$Etype1 == first($Etype2) = false,
+[mt2]	equal-type($Etype1, first($Etype2), $Tenv) = false,
 	first($Etype2) != undefined	
 	=====================================================
 	match-targets($Etype1 $Var, $Target*, $Etype2, $Tenv) =
 	match-targets($Target*, second($Etype2), $Tenv + $Var should have type
 	first($Etype2))
 
-[mt2]	$Etype1 == first($Etype2) = false,
+[mt2]	equal-type($Etype1, first($Etype2), $Tenv) = false,
 	first($Etype2) = undefined	
 	=====================================================
 	match-targets($Etype1 $Var, $Target*, $Etype2, $Tenv) =
@@ -761,7 +783,7 @@ $Error]>
 %% --- Check that variable is not yet defined
 
 [cnd] check-not-defined($Var, $Tenv) = 
-      if lookup($Tenv, $Var) == not-in-table then $Tenv else  $Tenv + $Var redeclared fi
+      if equal-type(lookup($Tenv, $Var), not-in-table, $Tenv) then $Tenv else  $Tenv + $Var redeclared fi
 
 %% add-formals
 
@@ -938,7 +960,8 @@ $Error]>
 
 [sb1]  $Etype = lookup($Table, $Var)
        ======================================================
-       substitute($Var, $Table, $Tenv) = if $Etype == not-in-table then <undefined, $Tenv + Undeclared $Var>
+       substitute($Var, $Table, $Tenv) = 
+       if equal-type($Etype, not-in-table, $Tenv) then <undefined, $Tenv + Undeclared $Var>
                                        else <$Etype, $Tenv> fi
 
 [sb2]  substitute($Etype, $Table, $Tenv) = <$Etype', $Tenv'>
