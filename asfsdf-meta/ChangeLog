@@ -1,3 +1,6 @@
+2003/06/26 (iversen@cwi.nl)
+ * Introduced pre-get-all-sdf2-hook.
+
 2003/06/16 (iversen@cwi.nl)
  * Introduced file extension to type hook.
 
