@@ -300,13 +300,13 @@ void SG_PostParse(void)
 
     fprintf(SG_log(), "Parse time: %.2fs\n", ptm);
     fprintf(SG_log(), "Characters/second: %.0f\n", 
-       ptm == 0.0 ? 0 : sg_tokens_read/ptm);
+       ptm < 1.0e-04 ? 0 : sg_tokens_read/ptm);
 
     fprintf(SG_log(), "Number of rejects: %ld\n", (long) sg_nr_rejects);
 
     fprintf(SG_log(), "Number of reductions: %ld\n", (long) num_reductions);
     fprintf(SG_log(), "Number of reductions/sec: %.0f\n",
-       ptm == 0.0 ? 0 : (double) num_reductions/ptm);
+       ptm < 1.0e-04 ? 0 : (double) num_reductions/ptm);
     fprintf(SG_log(), "Number of reductions/token: %f\n",
             (double) num_reductions/(double)sg_tokens_read);
     fprintf(SG_log(), "Number of ambiguities: %d\n",
