@@ -22,14 +22,14 @@ static char *name;
 
 void usage(char *prg)
 {
-  fprintf(stderr, "Usage: %s -h -i <file> -o <file> -n <name> -sv",prg);
+  fprintf(stderr, "Usage: %s -h -i <file> -o <file> -n <name> -sv\n",prg);
   fprintf(stderr, "Options:\n");
   fprintf(stderr, "\t-h              display help information (usage)\n");
   fprintf(stderr, "\t-i filename     input tree from file (default stdin)\n");
   fprintf(stderr, "\t-o filename     output tree from file (default stdout)\n");
   fprintf(stderr, "\t-s              print statistics\n");
   fprintf(stderr, "\t-n name         set name of specification\n");
-  fprintf(stderr, "use %s -at-help to get more aterm/toolbus options.\n", prg);
+  fprintf(stderr, "\nuse %s -at-help to get more aterm/toolbus options.\n", prg);
   exit(1);
 }
 /*}}}  */
