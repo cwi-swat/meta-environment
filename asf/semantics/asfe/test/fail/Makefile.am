@@ -20,4 +20,4 @@
 #
 # $Id$
 
-EXTRA_DIST = Pico-Booleans.eqs.asfix1
+EXTRA_DIST = Pico-Booleans.eqs.afme
