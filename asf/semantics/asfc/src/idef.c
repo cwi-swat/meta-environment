@@ -23,12 +23,10 @@ void make_idef_script(char *name)
 	    "%sTool : tool%s,\n"
 	    "Term       : term,\n"
 	    "Args       : list,\n"
-	    "Id         : term,\n"
 	    " Function   : str,\n"
 	    " Sort       : str\n"
 
 	    "in\n"
-	    "  Id := process-id .\n"
 	    "  (\n"
 	    "    (\n"
 	    "      rec-msg(rewrite(\"%s\", Term?)) .\n"
