@@ -60,7 +60,6 @@ typedef struct link {
   tree          tree;
   struct stack  *stack;
   ATbool        rejected;
-  ATbool        freed;
 } st_link;
 
 typedef struct links {
@@ -75,7 +74,7 @@ typedef struct stack {
   st_links      *links;
   ATbool        rejected;
   ATbool        protected;
-  ATbool        freed;
+  st_link       *unprotector;
 } stack;
 
 typedef struct stacks {
@@ -104,9 +103,9 @@ st_links *SG_AddLinks(st_link *l, st_links *ls);
 
 stacks *SG_PurgeOldStacks(stacks *old, stacks *new, stack *accept);
 void    SG_UnprotectUnusedStacks(stacks *old, stacks *new, stack *accept);
-void    SG_UnprotectUnusedStack(stack *st, stacks *new, stack *accept);
+void    SG_UnprotectUnusedStack(stack *st, st_link *guerilla, stacks *new, stack *accept);
 void    SG_DisposeUnusedStacks(stacks *sts);
-void    SG_DisposeUnusedStack(stack *st);
+void    SG_DisposeUnusedStack(stack *st, st_link *guerilla);
 
 /*
 stacks   *SG_DeleteOldStacks(stacks *old, stacks *new);
