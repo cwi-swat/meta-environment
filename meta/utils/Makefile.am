@@ -24,7 +24,8 @@ include ${top_srcdir}/make_rules
 
 bin_PROGRAMS       = meta-paths imports
 bin_SCRIPTS        = parse-file parse-sdf2 ps-dot insert-license \
-                     insert-header change-sdf2-ext sdf2stats
+                     insert-header change-sdf2-ext sdf2stats \
+                     change-eqs-ext
 
 man_MANS           = parse-sdf2.1
 
