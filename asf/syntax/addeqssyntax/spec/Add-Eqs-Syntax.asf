@@ -30,6 +30,7 @@ equations
                       ASF-Equations
                 lexical syntax
                   "===" [\=]* [\>]?   -> ASF-Implies {cons("default")}
+                  "=" -> ASF-Condition {reject}
                   [shortchar("A")-shortchar("Z")
                    shortchar("a")-shortchar("z")
                    shortchar("0")-shortchar("9")
@@ -53,7 +54,10 @@ equations
                 context-free syntax
                   {ASF-Condition ","}+          -> ASF-Conditions
                                                 -> ASF-Equations {cons("absent")}
-                  "equations" ASF-ConditionalEquation* -> ASF-Equations {cons("present")}
+                  "equations" list:ASF-ConditionalEquation* -> ASF-Equations {cons("present")}
+                  "equations" list:ASF-ConditionalEquation* "tests" test-list:ASF-TestEquation* -> ASF-Equations {cons("present-with-tests")}
+
+                  ASF-Tag ASF-Condition -> ASF-TestEquation {cons("default")}
 
                   ASF-Tag ASF-Equation                    -> ASF-ConditionalEquation {cons("simple")}
                   ASF-Tag ASF-Conditions ASF-Implies ASF-Equation -> ASF-ConditionalEquation {cons("implies")}
