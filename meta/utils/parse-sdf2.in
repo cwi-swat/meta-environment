@@ -11,7 +11,7 @@ PATH="$PATH:$bindir"
 A2TOA1="${bindir}/a2toa1 -silent"
 CONVERT=0
 TABLE="${libdir}/Sdf2.baf"
-PARSE="sglr -p $TABLE"
+PARSE="${bindir}/sglr -p $TABLE"
 OPTS="-v"
 
 case $#
