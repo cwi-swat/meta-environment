@@ -1,7 +1,4 @@
 /*GENERATED AUTOMATICALLY, DO NOT MODIFY */
-extern void register_Basic_Integers();
-extern void resolve_Basic_Integers();
-extern void init_Basic_Integers();
 extern void register_AUX_Modular_Sdf_ATerms3();
 extern void resolve_AUX_Modular_Sdf_ATerms3();
 extern void init_AUX_Modular_Sdf_ATerms3();
@@ -578,6 +575,9 @@ extern void init_AUX_Basic_Sdf_Normalization8();
 extern void register_AUX_Character_Class_Syntax5();
 extern void resolve_AUX_Character_Class_Syntax5();
 extern void init_AUX_Character_Class_Syntax5();
+extern void register_AUX_Character_Class_Syntax6();
+extern void resolve_AUX_Character_Class_Syntax6();
+extern void init_AUX_Character_Class_Syntax6();
 extern void register_AUX_Basic_Sdf_Normalization13();
 extern void resolve_AUX_Basic_Sdf_Normalization13();
 extern void init_AUX_Basic_Sdf_Normalization13();
@@ -614,9 +614,6 @@ extern void init_AUX_Character_Class_Syntax2();
 extern void register_AUX_Character_Class_Membership4();
 extern void resolve_AUX_Character_Class_Membership4();
 extern void init_AUX_Character_Class_Membership4();
-extern void register_AUX_Character_Class_Syntax6();
-extern void resolve_AUX_Character_Class_Syntax6();
-extern void init_AUX_Character_Class_Syntax6();
 extern void register_AUX_Vertices2();
 extern void resolve_AUX_Vertices2();
 extern void init_AUX_Vertices2();
@@ -959,6 +956,9 @@ extern void init_AUX_Sorts_Sdf_Projection1();
 extern void register_AUX_Character_Syntax5();
 extern void resolve_AUX_Character_Syntax5();
 extern void init_AUX_Character_Syntax5();
+extern void register_AUX_Character_Syntax6();
+extern void resolve_AUX_Character_Syntax6();
+extern void init_AUX_Character_Syntax6();
 extern void register_AUX_Earley_Items3();
 extern void resolve_AUX_Earley_Items3();
 extern void init_AUX_Earley_Items3();
@@ -1605,7 +1605,6 @@ extern void register_AUX_CC_Sdf_ATerms1();
 extern void resolve_AUX_CC_Sdf_ATerms1();
 extern void init_AUX_CC_Sdf_ATerms1();
 void register_all() {
-  register_Basic_Integers();
   register_AUX_Modular_Sdf_ATerms3();
   register_AUX_Table_to_Dot5();
   register_AUX_Regular_Sdf_Normalization2();
@@ -1798,6 +1797,7 @@ void register_all() {
   register_AUX_Character_Class_Syntax7();
   register_AUX_Basic_Sdf_Normalization8();
   register_AUX_Character_Class_Syntax5();
+  register_AUX_Character_Class_Syntax6();
   register_AUX_Basic_Sdf_Normalization13();
   register_AUX_Priority_Sdf_Normalization8();
   register_AUX_Basic_Sdf_Normalization11();
@@ -1810,7 +1810,6 @@ void register_all() {
   register_AUX_Character_Class_Syntax4();
   register_AUX_Character_Class_Syntax2();
   register_AUX_Character_Class_Membership4();
-  register_AUX_Character_Class_Syntax6();
   register_AUX_Vertices2();
   register_AUX_Vertices5();
   register_AUX_Vertices3();
@@ -1925,6 +1924,7 @@ void register_all() {
   register_AUX_Character_Syntax3();
   register_AUX_Sorts_Sdf_Projection1();
   register_AUX_Character_Syntax5();
+  register_AUX_Character_Syntax6();
   register_AUX_Earley_Items3();
   register_AUX_Labels6();
   register_AUX_Kernel_Sdf_Tree_Constructors1();
@@ -2142,7 +2142,6 @@ void register_all() {
   register_AUX_CC_Sdf_ATerms1();
 }
 void resolve_all() {
-  resolve_Basic_Integers();
   resolve_AUX_Modular_Sdf_ATerms3();
   resolve_AUX_Table_to_Dot5();
   resolve_AUX_Regular_Sdf_Normalization2();
@@ -2335,6 +2334,7 @@ void resolve_all() {
   resolve_AUX_Character_Class_Syntax7();
   resolve_AUX_Basic_Sdf_Normalization8();
   resolve_AUX_Character_Class_Syntax5();
+  resolve_AUX_Character_Class_Syntax6();
   resolve_AUX_Basic_Sdf_Normalization13();
   resolve_AUX_Priority_Sdf_Normalization8();
   resolve_AUX_Basic_Sdf_Normalization11();
@@ -2347,7 +2347,6 @@ void resolve_all() {
   resolve_AUX_Character_Class_Syntax4();
   resolve_AUX_Character_Class_Syntax2();
   resolve_AUX_Character_Class_Membership4();
-  resolve_AUX_Character_Class_Syntax6();
   resolve_AUX_Vertices2();
   resolve_AUX_Vertices5();
   resolve_AUX_Vertices3();
@@ -2462,6 +2461,7 @@ void resolve_all() {
   resolve_AUX_Character_Syntax3();
   resolve_AUX_Sorts_Sdf_Projection1();
   resolve_AUX_Character_Syntax5();
+  resolve_AUX_Character_Syntax6();
   resolve_AUX_Earley_Items3();
   resolve_AUX_Labels6();
   resolve_AUX_Kernel_Sdf_Tree_Constructors1();
@@ -2679,7 +2679,6 @@ void resolve_all() {
   resolve_AUX_CC_Sdf_ATerms1();
 }
 void init_all() {
-  init_Basic_Integers();
   init_AUX_Modular_Sdf_ATerms3();
   init_AUX_Table_to_Dot5();
   init_AUX_Regular_Sdf_Normalization2();
@@ -2872,6 +2871,7 @@ void init_all() {
   init_AUX_Character_Class_Syntax7();
   init_AUX_Basic_Sdf_Normalization8();
   init_AUX_Character_Class_Syntax5();
+  init_AUX_Character_Class_Syntax6();
   init_AUX_Basic_Sdf_Normalization13();
   init_AUX_Priority_Sdf_Normalization8();
   init_AUX_Basic_Sdf_Normalization11();
@@ -2884,7 +2884,6 @@ void init_all() {
   init_AUX_Character_Class_Syntax4();
   init_AUX_Character_Class_Syntax2();
   init_AUX_Character_Class_Membership4();
-  init_AUX_Character_Class_Syntax6();
   init_AUX_Vertices2();
   init_AUX_Vertices5();
   init_AUX_Vertices3();
@@ -2999,6 +2998,7 @@ void init_all() {
   init_AUX_Character_Syntax3();
   init_AUX_Sorts_Sdf_Projection1();
   init_AUX_Character_Syntax5();
+  init_AUX_Character_Syntax6();
   init_AUX_Earley_Items3();
   init_AUX_Labels6();
   init_AUX_Kernel_Sdf_Tree_Constructors1();

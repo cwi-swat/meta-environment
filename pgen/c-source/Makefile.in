@@ -252,6 +252,7 @@ SPEC_SRCS=\
           AUX-Character-Class-Syntax7.c\
           AUX-Basic-Sdf-Normalization8.c\
           AUX-Character-Class-Syntax5.c\
+          AUX-Character-Class-Syntax6.c\
           AUX-Basic-Sdf-Normalization13.c\
           AUX-Priority-Sdf-Normalization8.c\
           AUX-Basic-Sdf-Normalization11.c\
@@ -264,7 +265,6 @@ SPEC_SRCS=\
           AUX-Character-Class-Syntax4.c\
           AUX-Character-Class-Syntax2.c\
           AUX-Character-Class-Membership4.c\
-          AUX-Character-Class-Syntax6.c\
           AUX-Vertices2.c\
           AUX-Vertices5.c\
           AUX-Vertices3.c\
@@ -379,6 +379,7 @@ SPEC_SRCS=\
           AUX-Character-Syntax3.c\
           AUX-Sorts-Sdf-Projection1.c\
           AUX-Character-Syntax5.c\
+          AUX-Character-Syntax6.c\
           AUX-Earley-Items3.c\
           AUX-Labels6.c\
           AUX-Kernel-Sdf-Tree-Constructors1.c\

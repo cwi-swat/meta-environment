@@ -8,12 +8,12 @@ static ATerm lf2 ( ATerm arg1 ) ;
 static Symbol ef2sym ;
 static funcptr ef2 ;
 void register_AUX_Character_Syntax4 ( ) {
-lf_AUX_Character_Syntax4_1sym = ATmakeSymbol ( "prod(id(\"Character-Syntax\"),w(\"\"),[ql(\"\\\\\\\\TOP\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Character\"),w(\"\"),no-attrs)"
+lf_AUX_Character_Syntax4_1sym = ATmakeSymbol ( "prod(id(\"Character-Syntax\"),w(\"\"),[ql(\"\\\\\\\\BOT\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Character\"),w(\"\"),no-attrs)"
  , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Character_Syntax4_1sym ) ;
 lf2sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf2sym ) ;
-register_prod ( ATparse ( "prod(id(\"Character-Syntax\"),w(\"\"),[ql(\"\\\\\\\\TOP\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Character\"),w(\"\"),no-attrs)" ) , lf_AUX_Character_Syntax4_1 , lf_AUX_Character_Syntax4_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"Character-Syntax\"),w(\"\"),[ql(\"\\\\\\\\BOT\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Character\"),w(\"\"),no-attrs)" ) , lf_AUX_Character_Syntax4_1 , lf_AUX_Character_Syntax4_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf2 , lf2sym ) ;
 }
 void resolve_AUX_Character_Syntax4 ( ) {
@@ -30,7 +30,7 @@ ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Character_Syntax4_1 ( ) {
 FUNC_ENTRY ( lf_AUX_Character_Syntax4_1sym , ATmakeAppl0 ( lf_AUX_Character_Syntax4_1sym ) ) ;
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ( * ef2 ) ( lf2 ( ( ATerm ) ATmakeList ( 4 , char_table [ 92 ] , char_table [ 50 ] , char_table [ 53 ] , char_table [ 53 ] ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ( * ef2 ) ( lf2 ( ( ATerm ) ATmakeList ( 2 , char_table [ 92 ] , char_table [ 48 ] ) ) ) ) ) ;
 FUNC_EXIT_CONST ( constant1 , make_nf0 ( lf_AUX_Character_Syntax4_1sym ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
