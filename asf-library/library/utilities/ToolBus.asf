@@ -1,4 +1,0 @@
-equations
-
-[] tb-snd-note(ATerm) = done when toolbus-term-event("tb-snd-note", ATerm) = ATerm
-[] tb-snd-msg(ATerm)  = done when toolbus-term-event("tb-snd-msg", ATerm)  = ATerm

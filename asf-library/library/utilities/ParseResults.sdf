@@ -1,0 +1,14 @@
+module utilities/ParseResults[Sort]
+
+exports 
+
+sorts ParseResult Tree ATerm
+
+context-free syntax
+
+  "parse-tree" "(" left-layout:Tree c1:"," 
+                   tree:Sort c2:"," 
+                   right-layout:Tree
+               ")"                   -> ParseResult {cons("parse-tree")}
+
+  "parse-error" "(" error:ATerm ")"   -> ParseResult {cons("parse-error")}

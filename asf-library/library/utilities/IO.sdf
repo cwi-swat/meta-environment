@@ -1,0 +1,30 @@
+module utilities/IO[Sort]
+
+imports basic/Bytes
+imports utilities/ParseResults[Sort]
+
+exports
+
+context-free syntax
+
+  parse-file(file:Bytes)  -> ParseResult {built-in("parse-file")}
+  parse-bytes(Bytes)      -> ParseResult {built-in("parse-bytes")}
+
+  unparse(Sort)           -> Bytes {built-in("unparse")}
+
+context-free syntax
+
+  read-term-from-file(file:Bytes)     -> ParseResult 
+  {built-in("read-term-from-file")}
+
+  write-term-to-file(file:Bytes,Sort) -> Sort 
+  {built-in("write-term-to-file")}
+
+context-free syntax
+
+  read-bytes-from-file(file:Bytes)      -> Bytes 
+  {built-in("read-bytes-from-file")}
+
+  write-bytes-to-file(file:Bytes,Bytes) -> Bytes 
+  {built-in("read-bytes-from-file")}
+  
