@@ -23,4 +23,4 @@ EXTRA_DIST = Path.asfix2.org Path.casl Point.asfix2.org Point.casl \
              all-chars.flt big.asfix2.org big.pico exp.asfix2.org \
              exp.simcob zilvervl.asfix2.org zilvervl.rmo \
              nested.isle nested.asfix2.org program.asfix2.org \
-             program.jcb evalstat.jcb
+             program.jcb evalstat.jcb evalstat.jcb.org
