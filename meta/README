@@ -57,7 +57,7 @@ Installation instructions:
      -- Sun Solaris/Sparc >= 2.5, Sun Solaris/iX86 >= 2.6
      -- SGI IRIX/Mips >= 6.2
      -- NetBSD/PowerPC, NetBSD/iX86 >= 1.4
-     -- Mac OS X Server/PowerPC >= 1.0
+     -- Mac OS X Server/PowerPC >= 1.0, Mac OS X/PPC >= DP2
      -- LinuxPPC/PowerPC >= 2.0, MkLinux/PowerPC 3.0, Linux/iX86 >= 2.0
 
      The new-meta environment has been tried without success on
