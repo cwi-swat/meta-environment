@@ -1,5 +1,8 @@
 
 
+Mon May 24 10:42:55 CEST 2004 <{jurgenv,sgmcorne}@cwi.nl>
+ * Bumped version to 1.0
+
 Sat May 22 11:52:04 CEST 2004 <jurgenv@cwi.nl>
  * Brought tide up-to-date with format of locations and areas in 
    asf-sdf-meta 1.5

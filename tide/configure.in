@@ -1,7 +1,7 @@
 
 AC_INIT
 AC_CONFIG_SRCDIR([configure.in])
-AM_INIT_AUTOMAKE(tide, 0.5beta)
+AM_INIT_AUTOMAKE(tide, 1.0)
 AC_PREREQ(2.59)
 
 ACLOCAL="${ACLOCAL} -I ."
