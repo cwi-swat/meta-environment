@@ -44,11 +44,7 @@ equations
 
 equations
 
-  [gv-4'1] gen-var(natcon(digit)) = $ idcon(V digit)
-
-  [gv-4'2] gen-var(natcon(digit+2 digit+1)) = $ idcon(V tail1 tail2)
-   	   when $ idcon(V tail1) := gen-var(natcon(digit+1)),
-                $ idcon(V tail2) := gen-var(natcon(digit+2))
+  [gv-4'1] gen-var(Aint) = $ int2id(V, Aint)
 
 equations
 
