@@ -7,7 +7,7 @@ tool se is {
 }
 
 tool anno is { 
-  command = "java-adapter -class nl.cwi.gipe.stred.AnnoTool"
+  command = "java-adapter -TB_HOST localhost -class nl.cwi.gipe.stred.AnnoTool"
 }
 
 
