@@ -10,1840 +10,1840 @@
 
 /*{{{  prologue */
 
-typedef ATerm SDFLayout;
-typedef ATerm SDFSeparator;
-typedef ATerm SDFLexical;
+typedef ATerm SDF_Layout;
+typedef ATerm SDF_Separator;
+typedef ATerm SDF_Lexical;
 
 /*}}}  */
 /*{{{  typedefs */
 
-typedef struct _SDFSymbol *SDFSymbol;
-typedef struct _SDFGrammar *SDFGrammar;
-typedef struct _SDFSDF *SDFSDF;
-typedef struct _SDFAttributes *SDFAttributes;
-typedef struct _SDFAttributeAttributes *SDFAttributeAttributes;
-typedef struct _SDFProduction *SDFProduction;
-typedef struct _SDFProductions *SDFProductions;
-typedef struct _SDFProductionProductions *SDFProductionProductions;
-typedef struct _SDFModuleWord *SDFModuleWord;
-typedef struct _SDFModuleId *SDFModuleId;
-typedef struct _SDFDefinition *SDFDefinition;
-typedef struct _SDFModuleModules *SDFModuleModules;
-typedef struct _SDFModule *SDFModule;
-typedef struct _SDFImpSectionList *SDFImpSectionList;
-typedef struct _SDFSection *SDFSection;
-typedef struct _SDFSections *SDFSections;
-typedef struct _SDFSectionList *SDFSectionList;
-typedef struct _SDFModuleName *SDFModuleName;
-typedef struct _SDFAttribute *SDFAttribute;
-typedef struct _SDFImpSection *SDFImpSection;
-typedef struct _SDFImports *SDFImports;
-typedef struct _SDFImportList *SDFImportList;
-typedef struct _SDFImport *SDFImport;
-typedef struct _SDFSymbolTail *SDFSymbolTail;
-typedef struct _SDFAssociativity *SDFAssociativity;
-typedef struct _SDFGroup *SDFGroup;
-typedef struct _SDFPriority *SDFPriority;
-typedef struct _SDFGroupGroupp *SDFGroupGroupp;
-typedef struct _SDFPriorities *SDFPriorities;
-typedef struct _SDFPriorityPrioritys *SDFPriorityPrioritys;
-typedef struct _SDFSort *SDFSort;
-typedef struct _SDFUQLiteral *SDFUQLiteral;
-typedef struct _SDFLiteral *SDFLiteral;
-typedef struct _SDFSymbolArguments *SDFSymbolArguments;
-typedef struct _SDFLookahead *SDFLookahead;
-typedef struct _SDFLookaheads *SDFLookaheads;
-typedef struct _SDFLookaheadLookaheads *SDFLookaheadLookaheads;
-typedef struct _SDFRestriction *SDFRestriction;
-typedef struct _SDFRestrictions *SDFRestrictions;
-typedef struct _SDFRestrictionRestrictions *SDFRestrictionRestrictions;
-typedef struct _SDFAlias *SDFAlias;
-typedef struct _SDFAliases *SDFAliases;
-typedef struct _SDFAliasAliass *SDFAliasAliass;
-typedef struct _SDFSymbols *SDFSymbols;
-typedef struct _SDFSymbolSymbols *SDFSymbolSymbols;
-typedef struct _SDFRenamings *SDFRenamings;
-typedef struct _SDFRenamingRenamings *SDFRenamingRenamings;
-typedef struct _SDFRenaming *SDFRenaming;
-typedef struct _SDFNatCon *SDFNatCon;
-typedef struct _SDFIntCon *SDFIntCon;
-typedef struct _SDFCharRange *SDFCharRange;
-typedef struct _SDFCharRanges *SDFCharRanges;
-typedef struct _SDFOptCharRanges *SDFOptCharRanges;
-typedef struct _SDFCharClass *SDFCharClass;
-typedef struct _SDFAlphaNumericalEscChar *SDFAlphaNumericalEscChar;
-typedef struct _SDFDecimalEscChar *SDFDecimalEscChar;
-typedef struct _SDFEscChar *SDFEscChar;
-typedef struct _SDFLChar *SDFLChar;
-typedef struct _SDFATerms *SDFATerms;
-typedef struct _SDFATermList *SDFATermList;
-typedef struct _SDFACon *SDFACon;
-typedef struct _SDFAFun *SDFAFun;
-typedef struct _SDFATerm *SDFATerm;
-typedef struct _SDFAnn *SDFAnn;
-typedef struct _SDFTagId *SDFTagId;
-typedef struct _SDFNumChar *SDFNumChar;
-typedef struct _SDFShortChar *SDFShortChar;
-typedef struct _SDFCharacter *SDFCharacter;
-typedef struct _SDFOptExp *SDFOptExp;
-typedef struct _SDFRealCon *SDFRealCon;
-
-/*}}}  */
-
-void SDFinitSDFApi(void);
-
-SDFSymbol SDFmakeSymbolFromTerm(ATerm t);
-ATerm SDFmakeTermFromSymbol(SDFSymbol arg);
-SDFGrammar SDFmakeGrammarFromTerm(ATerm t);
-ATerm SDFmakeTermFromGrammar(SDFGrammar arg);
-SDFSDF SDFmakeSDFFromTerm(ATerm t);
-ATerm SDFmakeTermFromSDF(SDFSDF arg);
-SDFAttributes SDFmakeAttributesFromTerm(ATerm t);
-ATerm SDFmakeTermFromAttributes(SDFAttributes arg);
-SDFAttributeAttributes SDFmakeAttributeAttributesFromTerm(ATerm t);
-ATerm SDFmakeTermFromAttributeAttributes(SDFAttributeAttributes arg);
-SDFProduction SDFmakeProductionFromTerm(ATerm t);
-ATerm SDFmakeTermFromProduction(SDFProduction arg);
-SDFProductions SDFmakeProductionsFromTerm(ATerm t);
-ATerm SDFmakeTermFromProductions(SDFProductions arg);
-SDFProductionProductions SDFmakeProductionProductionsFromTerm(ATerm t);
-ATerm SDFmakeTermFromProductionProductions(SDFProductionProductions arg);
-SDFModuleWord SDFmakeModuleWordFromTerm(ATerm t);
-ATerm SDFmakeTermFromModuleWord(SDFModuleWord arg);
-SDFModuleId SDFmakeModuleIdFromTerm(ATerm t);
-ATerm SDFmakeTermFromModuleId(SDFModuleId arg);
-SDFDefinition SDFmakeDefinitionFromTerm(ATerm t);
-ATerm SDFmakeTermFromDefinition(SDFDefinition arg);
-SDFModuleModules SDFmakeModuleModulesFromTerm(ATerm t);
-ATerm SDFmakeTermFromModuleModules(SDFModuleModules arg);
-SDFModule SDFmakeModuleFromTerm(ATerm t);
-ATerm SDFmakeTermFromModule(SDFModule arg);
-SDFImpSectionList SDFmakeImpSectionListFromTerm(ATerm t);
-ATerm SDFmakeTermFromImpSectionList(SDFImpSectionList arg);
-SDFSection SDFmakeSectionFromTerm(ATerm t);
-ATerm SDFmakeTermFromSection(SDFSection arg);
-SDFSections SDFmakeSectionsFromTerm(ATerm t);
-ATerm SDFmakeTermFromSections(SDFSections arg);
-SDFSectionList SDFmakeSectionListFromTerm(ATerm t);
-ATerm SDFmakeTermFromSectionList(SDFSectionList arg);
-SDFModuleName SDFmakeModuleNameFromTerm(ATerm t);
-ATerm SDFmakeTermFromModuleName(SDFModuleName arg);
-SDFAttribute SDFmakeAttributeFromTerm(ATerm t);
-ATerm SDFmakeTermFromAttribute(SDFAttribute arg);
-SDFImpSection SDFmakeImpSectionFromTerm(ATerm t);
-ATerm SDFmakeTermFromImpSection(SDFImpSection arg);
-SDFImports SDFmakeImportsFromTerm(ATerm t);
-ATerm SDFmakeTermFromImports(SDFImports arg);
-SDFImportList SDFmakeImportListFromTerm(ATerm t);
-ATerm SDFmakeTermFromImportList(SDFImportList arg);
-SDFImport SDFmakeImportFromTerm(ATerm t);
-ATerm SDFmakeTermFromImport(SDFImport arg);
-SDFSymbolTail SDFmakeSymbolTailFromTerm(ATerm t);
-ATerm SDFmakeTermFromSymbolTail(SDFSymbolTail arg);
-SDFAssociativity SDFmakeAssociativityFromTerm(ATerm t);
-ATerm SDFmakeTermFromAssociativity(SDFAssociativity arg);
-SDFGroup SDFmakeGroupFromTerm(ATerm t);
-ATerm SDFmakeTermFromGroup(SDFGroup arg);
-SDFPriority SDFmakePriorityFromTerm(ATerm t);
-ATerm SDFmakeTermFromPriority(SDFPriority arg);
-SDFGroupGroupp SDFmakeGroupGrouppFromTerm(ATerm t);
-ATerm SDFmakeTermFromGroupGroupp(SDFGroupGroupp arg);
-SDFPriorities SDFmakePrioritiesFromTerm(ATerm t);
-ATerm SDFmakeTermFromPriorities(SDFPriorities arg);
-SDFPriorityPrioritys SDFmakePriorityPrioritysFromTerm(ATerm t);
-ATerm SDFmakeTermFromPriorityPrioritys(SDFPriorityPrioritys arg);
-SDFSort SDFmakeSortFromTerm(ATerm t);
-ATerm SDFmakeTermFromSort(SDFSort arg);
-SDFUQLiteral SDFmakeUQLiteralFromTerm(ATerm t);
-ATerm SDFmakeTermFromUQLiteral(SDFUQLiteral arg);
-SDFLiteral SDFmakeLiteralFromTerm(ATerm t);
-ATerm SDFmakeTermFromLiteral(SDFLiteral arg);
-SDFSymbolArguments SDFmakeSymbolArgumentsFromTerm(ATerm t);
-ATerm SDFmakeTermFromSymbolArguments(SDFSymbolArguments arg);
-SDFLookahead SDFmakeLookaheadFromTerm(ATerm t);
-ATerm SDFmakeTermFromLookahead(SDFLookahead arg);
-SDFLookaheads SDFmakeLookaheadsFromTerm(ATerm t);
-ATerm SDFmakeTermFromLookaheads(SDFLookaheads arg);
-SDFLookaheadLookaheads SDFmakeLookaheadLookaheadsFromTerm(ATerm t);
-ATerm SDFmakeTermFromLookaheadLookaheads(SDFLookaheadLookaheads arg);
-SDFRestriction SDFmakeRestrictionFromTerm(ATerm t);
-ATerm SDFmakeTermFromRestriction(SDFRestriction arg);
-SDFRestrictions SDFmakeRestrictionsFromTerm(ATerm t);
-ATerm SDFmakeTermFromRestrictions(SDFRestrictions arg);
-SDFRestrictionRestrictions SDFmakeRestrictionRestrictionsFromTerm(ATerm t);
-ATerm SDFmakeTermFromRestrictionRestrictions(SDFRestrictionRestrictions arg);
-SDFAlias SDFmakeAliasFromTerm(ATerm t);
-ATerm SDFmakeTermFromAlias(SDFAlias arg);
-SDFAliases SDFmakeAliasesFromTerm(ATerm t);
-ATerm SDFmakeTermFromAliases(SDFAliases arg);
-SDFAliasAliass SDFmakeAliasAliassFromTerm(ATerm t);
-ATerm SDFmakeTermFromAliasAliass(SDFAliasAliass arg);
-SDFSymbols SDFmakeSymbolsFromTerm(ATerm t);
-ATerm SDFmakeTermFromSymbols(SDFSymbols arg);
-SDFSymbolSymbols SDFmakeSymbolSymbolsFromTerm(ATerm t);
-ATerm SDFmakeTermFromSymbolSymbols(SDFSymbolSymbols arg);
-SDFRenamings SDFmakeRenamingsFromTerm(ATerm t);
-ATerm SDFmakeTermFromRenamings(SDFRenamings arg);
-SDFRenamingRenamings SDFmakeRenamingRenamingsFromTerm(ATerm t);
-ATerm SDFmakeTermFromRenamingRenamings(SDFRenamingRenamings arg);
-SDFRenaming SDFmakeRenamingFromTerm(ATerm t);
-ATerm SDFmakeTermFromRenaming(SDFRenaming arg);
-SDFNatCon SDFmakeNatConFromTerm(ATerm t);
-ATerm SDFmakeTermFromNatCon(SDFNatCon arg);
-SDFIntCon SDFmakeIntConFromTerm(ATerm t);
-ATerm SDFmakeTermFromIntCon(SDFIntCon arg);
-SDFCharRange SDFmakeCharRangeFromTerm(ATerm t);
-ATerm SDFmakeTermFromCharRange(SDFCharRange arg);
-SDFCharRanges SDFmakeCharRangesFromTerm(ATerm t);
-ATerm SDFmakeTermFromCharRanges(SDFCharRanges arg);
-SDFOptCharRanges SDFmakeOptCharRangesFromTerm(ATerm t);
-ATerm SDFmakeTermFromOptCharRanges(SDFOptCharRanges arg);
-SDFCharClass SDFmakeCharClassFromTerm(ATerm t);
-ATerm SDFmakeTermFromCharClass(SDFCharClass arg);
-SDFAlphaNumericalEscChar SDFmakeAlphaNumericalEscCharFromTerm(ATerm t);
-ATerm SDFmakeTermFromAlphaNumericalEscChar(SDFAlphaNumericalEscChar arg);
-SDFDecimalEscChar SDFmakeDecimalEscCharFromTerm(ATerm t);
-ATerm SDFmakeTermFromDecimalEscChar(SDFDecimalEscChar arg);
-SDFEscChar SDFmakeEscCharFromTerm(ATerm t);
-ATerm SDFmakeTermFromEscChar(SDFEscChar arg);
-SDFLChar SDFmakeLCharFromTerm(ATerm t);
-ATerm SDFmakeTermFromLChar(SDFLChar arg);
-SDFATerms SDFmakeATermsFromTerm(ATerm t);
-ATerm SDFmakeTermFromATerms(SDFATerms arg);
-SDFATermList SDFmakeATermListFromTerm(ATerm t);
-ATerm SDFmakeTermFromATermList(SDFATermList arg);
-SDFACon SDFmakeAConFromTerm(ATerm t);
-ATerm SDFmakeTermFromACon(SDFACon arg);
-SDFAFun SDFmakeAFunFromTerm(ATerm t);
-ATerm SDFmakeTermFromAFun(SDFAFun arg);
-SDFATerm SDFmakeATermFromTerm(ATerm t);
-ATerm SDFmakeTermFromATerm(SDFATerm arg);
-SDFAnn SDFmakeAnnFromTerm(ATerm t);
-ATerm SDFmakeTermFromAnn(SDFAnn arg);
-SDFTagId SDFmakeTagIdFromTerm(ATerm t);
-ATerm SDFmakeTermFromTagId(SDFTagId arg);
-SDFNumChar SDFmakeNumCharFromTerm(ATerm t);
-ATerm SDFmakeTermFromNumChar(SDFNumChar arg);
-SDFShortChar SDFmakeShortCharFromTerm(ATerm t);
-ATerm SDFmakeTermFromShortChar(SDFShortChar arg);
-SDFCharacter SDFmakeCharacterFromTerm(ATerm t);
-ATerm SDFmakeTermFromCharacter(SDFCharacter arg);
-SDFOptExp SDFmakeOptExpFromTerm(ATerm t);
-ATerm SDFmakeTermFromOptExp(SDFOptExp arg);
-SDFRealCon SDFmakeRealConFromTerm(ATerm t);
-ATerm SDFmakeTermFromRealCon(SDFRealCon arg);
-
-SDFSymbol SDFmakeSymbolStart();
-SDFSymbol SDFmakeSymbolFileStart();
-SDFSymbol SDFmakeSymbolCf(SDFLayout wsAfterLessThan, SDFSymbol symbol, SDFLayout wsAfterSymbol, SDFLayout wsAfterCF);
-SDFSymbol SDFmakeSymbolLex(SDFLayout wsAfterLessThan, SDFSymbol symbol, SDFLayout wsAfterSymbol, SDFLayout wsAfterLEX);
-SDFSymbol SDFmakeSymbolVarsym(SDFLayout wsAfterLessThan, SDFSymbol symbol, SDFLayout wsAfterSymbol, SDFLayout wsAfterVAR);
-SDFSymbol SDFmakeSymbolLayout();
-SDFSymbol SDFmakeSymbolEmpty(SDFLayout wsAfterParenOpen);
-SDFSymbol SDFmakeSymbolSeq(SDFLayout wsAfterParenOpen, SDFSymbol head, SDFLayout wsAfterHead, SDFSymbolTail tail, SDFLayout wsAfterTail);
-SDFSymbol SDFmakeSymbolOpt(SDFSymbol symbol, SDFLayout wsAfterSymbol);
-SDFSymbol SDFmakeSymbolIter(SDFSymbol symbol, SDFLayout wsAfterSymbol);
-SDFSymbol SDFmakeSymbolIterStar(SDFSymbol symbol, SDFLayout wsAfterSymbol);
-SDFSymbol SDFmakeSymbolIterSep(SDFLayout wsAfterBraceOpen, SDFSymbol symbol, SDFLayout wsAfterSymbol, SDFSymbol sep, SDFLayout wsAfterSep, SDFLayout wsAfterBraceClose);
-SDFSymbol SDFmakeSymbolIterStarSep(SDFLayout wsAfterBraceOpen, SDFSymbol symbol, SDFLayout wsAfterSymbol, SDFSymbol sep, SDFLayout wsAfterSep, SDFLayout wsAfterBraceClose);
-SDFSymbol SDFmakeSymbolIterN(SDFSymbol symbol, SDFLayout wsAfterSymbol, SDFNatCon n, SDFLayout wsAfterN);
-SDFSymbol SDFmakeSymbolIterSepN(SDFLayout wsAfterBraceOpen, SDFSymbol symbol, SDFLayout wsAfterSymbol, SDFSymbol sep, SDFLayout wsAfterSep, SDFLayout wsAfterBraceClose, SDFNatCon n, SDFLayout wsAfterN);
-SDFSymbol SDFmakeSymbolSet(SDFLayout wsAfterSet, SDFLayout wsAfterBracketOpen, SDFSymbol symbol, SDFLayout wsAfterSymbol);
-SDFSymbol SDFmakeSymbolPair(SDFSymbol left, SDFLayout wsAfterLeft, SDFLayout wsAfterHash, SDFSymbol right);
-SDFSymbol SDFmakeSymbolFunc(SDFLayout wsAfterParenOpen, SDFSymbols arguments, SDFLayout wsAfterArguments, SDFLayout wsAfterEqualsGreaterThan, SDFSymbol results, SDFLayout wsAfterResults);
-SDFSymbol SDFmakeSymbolAlt(SDFSymbol left, SDFLayout wsAfterLeft, SDFLayout wsAfterBar, SDFSymbol right);
-SDFSymbol SDFmakeSymbolPerm(SDFLayout wsAfterLessThanLessThan, SDFSymbols symbols, SDFLayout wsAfterSymbols);
-SDFSymbol SDFmakeSymbolCharClass(SDFCharClass charClass);
-SDFSymbol SDFmakeSymbolSort(SDFSort sort);
-SDFSymbol SDFmakeSymbolLit(SDFLiteral literal);
-SDFSymbol SDFmakeSymbolLabel(SDFLiteral label, SDFLayout wsAfterLabel, SDFLayout wsAfterColon, SDFSymbol symbol);
-SDFSymbol SDFmakeSymbolBracket(SDFLayout wsAfterParenOpen, SDFSymbol symbol, SDFLayout wsAfterSymbol);
-SDFGrammar SDFmakeGrammarLexicalPriorities(SDFLayout wsAfterLexical, SDFLayout wsAfterPriorities, SDFPriorities priorities);
-SDFGrammar SDFmakeGrammarContextFreePriorities(SDFLayout wsAfterContextFree, SDFLayout wsAfterPriorities, SDFPriorities priorities);
-SDFGrammar SDFmakeGrammarLexicalRestrictions(SDFLayout wsAfterLexical, SDFLayout wsAfterRestrictions, SDFRestrictions restrictions);
-SDFGrammar SDFmakeGrammarContextFreeRestrictions(SDFLayout wsAfterContextFree, SDFLayout wsAfterRestrictions, SDFRestrictions restrictions);
-SDFGrammar SDFmakeGrammarSyntax(SDFLayout wsAfterSyntax, SDFProductions productions);
-SDFGrammar SDFmakeGrammarLexicalSyntax(SDFLayout wsAfterLexical, SDFLayout wsAfterSyntax, SDFProductions productions);
-SDFGrammar SDFmakeGrammarContextFreeSyntax(SDFLayout wsAfterContextFree, SDFLayout wsAfterSyntax, SDFProductions productions);
-SDFGrammar SDFmakeGrammarVariables(SDFLayout wsAfterVariables, SDFProductions productions);
-SDFGrammar SDFmakeGrammarLexicalVariables(SDFLayout wsAfterLexical, SDFLayout wsAfterVariables, SDFProductions productions);
-SDFGrammar SDFmakeGrammarImpSection(SDFImpSection impSection);
-SDFGrammar SDFmakeGrammarPriorities(SDFLayout wsAfterPriorities, SDFPriorities priorities);
-SDFGrammar SDFmakeGrammarSorts(SDFLayout wsAfterSorts, SDFSymbols symbols);
-SDFGrammar SDFmakeGrammarRestrictions(SDFLayout wsAfterRestrictions, SDFRestrictions restrictions);
-SDFGrammar SDFmakeGrammarAliases(SDFLayout wsAfterAliases, SDFAliases aliases);
-SDFGrammar SDFmakeGrammarEmptyGrammar();
-SDFGrammar SDFmakeGrammarConcGrammars(SDFGrammar left, SDFLayout wsAfterLeft, SDFGrammar right);
-SDFGrammar SDFmakeGrammarBracket(SDFLayout wsAfterParenOpen, SDFGrammar grammar, SDFLayout wsAfterGrammar);
-SDFSDF SDFmakeSDFDefinition(SDFLayout wsAfterDefinition, SDFDefinition definition);
-SDFAttributes SDFmakeAttributesAttrs(SDFLayout wsAfterBraceOpen, SDFAttributeAttributes attributes, SDFLayout wsAfterAttributes);
-SDFAttributes SDFmakeAttributesNoAttrs();
-SDFAttributeAttributes SDFmakeAttributeAttributesEmpty();
-SDFAttributeAttributes SDFmakeAttributeAttributesSingle(SDFAttribute head);
-SDFAttributeAttributes SDFmakeAttributeAttributesMany(SDFAttribute head, SDFLayout wsAfterFirst, SDFSeparator sep, SDFLayout wsAfterSep, SDFAttributeAttributes tail);
-SDFProduction SDFmakeProductionProd(SDFSymbols symbols, SDFLayout wsAfterSymbols, SDFLayout wsAfterGreaterThan, SDFSymbol result, SDFLayout wsAfterResult, SDFAttributes attributes);
-SDFProduction SDFmakeProductionProdFun(SDFLiteral functionSymbol, SDFLayout wsAfterFunctionSymbol, SDFLayout wsAfterParenOpen, SDFSymbolArguments arguments, SDFLayout wsAfterArguments, SDFLayout wsAfterParenClose, SDFLayout wsAfterGreaterThan, SDFSymbol result, SDFLayout wsAfterResult, SDFAttributes attributes);
-SDFProductions SDFmakeProductionsDefault(SDFProductionProductions productions);
-SDFProductionProductions SDFmakeProductionProductionsEmpty();
-SDFProductionProductions SDFmakeProductionProductionsSingle(SDFProduction head);
-SDFProductionProductions SDFmakeProductionProductionsMany(SDFProduction head, SDFLayout wsAfterFirst, SDFProductionProductions tail);
-SDFModuleWord SDFmakeModuleWordWord(SDFLexical lex);
-SDFModuleId SDFmakeModuleIdWord(SDFLexical lex);
-SDFModuleId SDFmakeModuleIdSlashWord(SDFLexical lex);
-SDFModuleId SDFmakeModuleIdWordSlashWord(SDFLexical lex);
-SDFDefinition SDFmakeDefinitionDefault(SDFModuleModules modules);
-SDFModuleModules SDFmakeModuleModulesEmpty();
-SDFModuleModules SDFmakeModuleModulesSingle(SDFModule head);
-SDFModuleModules SDFmakeModuleModulesMany(SDFModule head, SDFLayout wsAfterFirst, SDFModuleModules tail);
-SDFModule SDFmakeModuleModule(SDFLayout wsAfterModule, SDFModuleName moduleName, SDFLayout wsAfterModuleName, SDFImpSectionList list, SDFLayout wsAfterList, SDFSections sections);
-SDFImpSectionList SDFmakeImpSectionListEmpty();
-SDFImpSectionList SDFmakeImpSectionListSingle(SDFImpSection head);
-SDFImpSectionList SDFmakeImpSectionListMany(SDFImpSection head, SDFLayout wsAfterFirst, SDFImpSectionList tail);
-SDFSection SDFmakeSectionExports(SDFLayout wsAfterExports, SDFGrammar grammar);
-SDFSection SDFmakeSectionHiddens(SDFLayout wsAfterHiddens, SDFGrammar grammar);
-SDFSections SDFmakeSectionsDefault(SDFSectionList list);
-SDFSectionList SDFmakeSectionListEmpty();
-SDFSectionList SDFmakeSectionListSingle(SDFSection head);
-SDFSectionList SDFmakeSectionListMany(SDFSection head, SDFLayout wsAfterFirst, SDFSectionList tail);
-SDFModuleName SDFmakeModuleNameUnparameterized(SDFModuleId moduleId);
-SDFModuleName SDFmakeModuleNameParameterized(SDFModuleId moduleId, SDFLayout wsAfterModuleId, SDFLayout wsAfterBracketOpen, SDFSymbols params, SDFLayout wsAfterParams);
-SDFAttribute SDFmakeAttributeId(SDFLayout wsAfterId, SDFLayout wsAfterParenOpen, SDFModuleName moduleName, SDFLayout wsAfterModuleName);
-SDFAttribute SDFmakeAttributeBracket();
-SDFAttribute SDFmakeAttributeAtr(SDFAssociativity associativity);
-SDFAttribute SDFmakeAttributeCons(SDFLayout wsAfterCons, SDFLayout wsAfterParenOpen, SDFATerm aTerm, SDFLayout wsAfterATerm);
-SDFAttribute SDFmakeAttributeConstructor();
-SDFAttribute SDFmakeAttributeMemo();
-SDFAttribute SDFmakeAttributeReject();
-SDFAttribute SDFmakeAttributePrefer();
-SDFAttribute SDFmakeAttributeAvoid();
-SDFImpSection SDFmakeImpSectionImports(SDFLayout wsAfterImports, SDFImports list);
-SDFImports SDFmakeImportsDefault(SDFImportList list);
-SDFImportList SDFmakeImportListEmpty();
-SDFImportList SDFmakeImportListSingle(SDFImport head);
-SDFImportList SDFmakeImportListMany(SDFImport head, SDFLayout wsAfterFirst, SDFImportList tail);
-SDFImport SDFmakeImportModule(SDFModuleName moduleName);
-SDFImport SDFmakeImportRenamedModule(SDFModuleName moduleName, SDFLayout wsAfterModuleName, SDFRenamings renamings);
-SDFImport SDFmakeImportBracket(SDFLayout wsAfterParenOpen, SDFImport import, SDFLayout wsAfterImport);
-SDFSymbolTail SDFmakeSymbolTailSingle(SDFSymbol head);
-SDFSymbolTail SDFmakeSymbolTailMany(SDFSymbol head, SDFLayout wsAfterFirst, SDFSymbolTail tail);
-SDFAssociativity SDFmakeAssociativityLeft();
-SDFAssociativity SDFmakeAssociativityRight();
-SDFAssociativity SDFmakeAssociativityNonAssoc();
-SDFAssociativity SDFmakeAssociativityAssoc();
-SDFGroup SDFmakeGroupSimpleGroup(SDFProduction production);
-SDFGroup SDFmakeGroupProdsGroup(SDFLayout wsAfterBraceOpen, SDFProductions productions, SDFLayout wsAfterProductions);
-SDFGroup SDFmakeGroupAssocGroup(SDFLayout wsAfterBraceOpen, SDFAssociativity associativity, SDFLayout wsAfterAssociativity, SDFLayout wsAfterColon, SDFProductions productions, SDFLayout wsAfterProductions);
-SDFPriority SDFmakePriorityPriorityChain(SDFGroupGroupp groupp);
-SDFPriority SDFmakePriorityPriorityAssoc(SDFGroup left, SDFLayout wsAfterLeft, SDFAssociativity associativity, SDFLayout wsAfterAssociativity, SDFGroup right);
-SDFGroupGroupp SDFmakeGroupGrouppSingle(SDFGroup head);
-SDFGroupGroupp SDFmakeGroupGrouppMany(SDFGroup head, SDFLayout wsAfterFirst, SDFSeparator sep, SDFLayout wsAfterSep, SDFGroupGroupp tail);
-SDFPriorities SDFmakePrioritiesDefault(SDFPriorityPrioritys prioritys);
-SDFPriorityPrioritys SDFmakePriorityPrioritysEmpty();
-SDFPriorityPrioritys SDFmakePriorityPrioritysSingle(SDFPriority head);
-SDFPriorityPrioritys SDFmakePriorityPrioritysMany(SDFPriority head, SDFLayout wsAfterFirst, SDFSeparator sep, SDFLayout wsAfterSep, SDFPriorityPrioritys tail);
-SDFSort SDFmakeSortOneChar(SDFLexical lex);
-SDFSort SDFmakeSortMoreChars(SDFLexical lex);
-SDFUQLiteral SDFmakeUQLiteralOneChar(SDFLexical lex);
-SDFUQLiteral SDFmakeUQLiteralMoreChars(SDFLexical lex);
-SDFLiteral SDFmakeLiteralUqlit(SDFUQLiteral uQLiteral);
-SDFLiteral SDFmakeLiteralQuoted(SDFLexical lex);
-SDFSymbolArguments SDFmakeSymbolArgumentsEmpty();
-SDFSymbolArguments SDFmakeSymbolArgumentsSingle(SDFSymbol head);
-SDFSymbolArguments SDFmakeSymbolArgumentsMany(SDFSymbol head, SDFLayout wsAfterFirst, SDFSeparator sep, SDFLayout wsAfterSep, SDFSymbolArguments tail);
-SDFLookahead SDFmakeLookaheadCharClass(SDFCharClass charClass);
-SDFLookahead SDFmakeLookaheadSeq(SDFCharClass head, SDFLayout wsAfterHead, SDFLayout wsAfterPeriod, SDFLookaheads tail);
-SDFLookaheads SDFmakeLookaheadsSingle(SDFLookahead lookahead);
-SDFLookaheads SDFmakeLookaheadsAlt(SDFLookaheads left, SDFLayout wsAfterLeft, SDFLayout wsAfterBar, SDFLookaheads right);
-SDFLookaheads SDFmakeLookaheadsBracket(SDFLayout wsAfterParenOpen, SDFLookaheads lookaheads, SDFLayout wsAfterLookaheads);
-SDFLookaheads SDFmakeLookaheadsList(SDFLayout wsAfterBracketOpenBracketOpen, SDFLookaheads lookaheads, SDFLayout wsAfterLookaheads);
-SDFLookaheadLookaheads SDFmakeLookaheadLookaheadsEmpty();
-SDFLookaheadLookaheads SDFmakeLookaheadLookaheadsSingle(SDFLookahead head);
-SDFLookaheadLookaheads SDFmakeLookaheadLookaheadsMany(SDFLookahead head, SDFLayout wsAfterFirst, SDFSeparator sep, SDFLayout wsAfterSep, SDFLookaheadLookaheads tail);
-SDFRestriction SDFmakeRestrictionFollow(SDFSymbols symbols, SDFLayout wsAfterSymbols, SDFLayout wsAfterSlash, SDFLookaheads lookaheads);
-SDFRestrictions SDFmakeRestrictionsDefault(SDFRestrictionRestrictions restrictions);
-SDFRestrictionRestrictions SDFmakeRestrictionRestrictionsEmpty();
-SDFRestrictionRestrictions SDFmakeRestrictionRestrictionsSingle(SDFRestriction head);
-SDFRestrictionRestrictions SDFmakeRestrictionRestrictionsMany(SDFRestriction head, SDFLayout wsAfterFirst, SDFRestrictionRestrictions tail);
-SDFAlias SDFmakeAliasAlias(SDFSymbol symbol, SDFLayout wsAfterSymbol, SDFLayout wsAfterArrow, SDFSymbol alias);
-SDFAliases SDFmakeAliasesDefault(SDFAliasAliass aliass);
-SDFAliasAliass SDFmakeAliasAliassEmpty();
-SDFAliasAliass SDFmakeAliasAliassSingle(SDFAlias head);
-SDFAliasAliass SDFmakeAliasAliassMany(SDFAlias head, SDFLayout wsAfterFirst, SDFAliasAliass tail);
-SDFSymbols SDFmakeSymbolsDefault(SDFSymbolSymbols symbols);
-SDFSymbolSymbols SDFmakeSymbolSymbolsEmpty();
-SDFSymbolSymbols SDFmakeSymbolSymbolsSingle(SDFSymbol head);
-SDFSymbolSymbols SDFmakeSymbolSymbolsMany(SDFSymbol head, SDFLayout wsAfterFirst, SDFSymbolSymbols tail);
-SDFRenamings SDFmakeRenamingsRenamings(SDFLayout wsAfterBracketOpen, SDFRenamingRenamings renamings, SDFLayout wsAfterRenamings);
-SDFRenamingRenamings SDFmakeRenamingRenamingsEmpty();
-SDFRenamingRenamings SDFmakeRenamingRenamingsSingle(SDFRenaming head);
-SDFRenamingRenamings SDFmakeRenamingRenamingsMany(SDFRenaming head, SDFLayout wsAfterFirst, SDFRenamingRenamings tail);
-SDFRenaming SDFmakeRenamingSymbol(SDFSymbol from, SDFLayout wsAfterFrom, SDFLayout wsAfterEqualsGreaterThan, SDFSymbol to);
-SDFRenaming SDFmakeRenamingProduction(SDFSymbol from, SDFLayout wsAfterFrom, SDFLayout wsAfterEqualsGreaterThan, SDFSymbol to);
-SDFNatCon SDFmakeNatConDigits(SDFLexical lex);
-SDFIntCon SDFmakeIntConNatural(SDFNatCon natCon);
-SDFIntCon SDFmakeIntConPositive(SDFLayout wsAfterPos, SDFNatCon natCon);
-SDFIntCon SDFmakeIntConNegative(SDFLayout wsAfterNeg, SDFNatCon natCon);
-SDFCharRange SDFmakeCharRangeDefault(SDFCharacter character);
-SDFCharRange SDFmakeCharRangeRange(SDFCharacter start, SDFLayout wsAfterStart, SDFLayout wsAfter, SDFCharacter end);
-SDFCharRanges SDFmakeCharRangesDefault(SDFCharRange charRange);
-SDFCharRanges SDFmakeCharRangesConc(SDFCharRanges left, SDFLayout wsAfterLeft, SDFCharRanges right);
-SDFCharRanges SDFmakeCharRangesBracket(SDFLayout wsAfterParenOpen, SDFCharRanges charRanges, SDFLayout wsAfterCharRanges);
-SDFOptCharRanges SDFmakeOptCharRangesAbsent();
-SDFOptCharRanges SDFmakeOptCharRangesPresent(SDFCharRanges charRanges);
-SDFCharClass SDFmakeCharClassSimpleCharclass(SDFLayout wsAfterBracketOpen, SDFOptCharRanges optCharRanges, SDFLayout wsAfterOptCharRanges);
-SDFCharClass SDFmakeCharClassComp(SDFLayout wsAfterTilde, SDFCharClass charClass);
-SDFCharClass SDFmakeCharClassDiff(SDFCharClass left, SDFLayout wsAfterLeft, SDFLayout wsAfterSlash, SDFCharClass right);
-SDFCharClass SDFmakeCharClassIsect(SDFCharClass left, SDFLayout wsAfterLeft, SDFLayout wsAfterSlashBackslash, SDFCharClass right);
-SDFCharClass SDFmakeCharClassUnion(SDFCharClass left, SDFLayout wsAfterLeft, SDFLayout wsAfterBackslashSlash, SDFCharClass right);
-SDFCharClass SDFmakeCharClassBracket(SDFLayout wsAfterParenOpen, SDFCharClass charClass, SDFLayout wsAfterCharClass);
-SDFAlphaNumericalEscChar SDFmakeAlphaNumericalEscCharDefault(SDFLexical lex);
-SDFDecimalEscChar SDFmakeDecimalEscCharDec0_199(SDFLexical lex);
-SDFDecimalEscChar SDFmakeDecimalEscCharDec200_249(SDFLexical lex);
-SDFDecimalEscChar SDFmakeDecimalEscCharDec250_255(SDFLexical lex);
-SDFEscChar SDFmakeEscCharAlphaNumeric(SDFLexical lex);
-SDFEscChar SDFmakeEscCharDecimal(SDFLexical lex);
-SDFLChar SDFmakeLCharNormal(SDFLexical lex);
-SDFLChar SDFmakeLCharEscaped(SDFLexical lex);
-SDFATerms SDFmakeATermsAterm(SDFATerm aTerm);
-SDFATerms SDFmakeATermsCons(SDFATerm head, SDFLayout wsAfterHead, SDFLayout wsAfterComma, SDFATerms tail);
-SDFATermList SDFmakeATermListEmpty(SDFLayout wsAfterBracketOpen);
-SDFATermList SDFmakeATermListNotEmpty(SDFLayout wsAfterBracketOpen, SDFATerms aTerms, SDFLayout wsAfterATerms);
-SDFACon SDFmakeAConInt(SDFIntCon intCon);
-SDFACon SDFmakeAConReal(SDFRealCon realCon);
-SDFAFun SDFmakeAFunDefault(SDFLiteral literal);
-SDFATerm SDFmakeATermConstant(SDFACon aCon);
-SDFATerm SDFmakeATermList(SDFATermList aTermList);
-SDFATerm SDFmakeATermFun(SDFAFun aFun);
-SDFATerm SDFmakeATermAppl(SDFAFun aFun, SDFLayout wsAfterAFun, SDFLayout wsAfterParenOpen, SDFATerms args, SDFLayout wsAfterArgs);
-SDFATerm SDFmakeATermAnnotatedConstant(SDFACon aCon, SDFLayout wsAfterACon, SDFAnn ann);
-SDFATerm SDFmakeATermAnnotatedList(SDFATermList aTermList, SDFLayout wsAfterATermList, SDFAnn ann);
-SDFATerm SDFmakeATermAnnotatedFun(SDFAFun aFun, SDFLayout wsAfterAFun, SDFAnn ann);
-SDFATerm SDFmakeATermAnnotatedAppl(SDFAFun aFun, SDFLayout wsAfterAFun, SDFLayout wsAfterParenOpen, SDFATerms args, SDFLayout wsAfterArgs, SDFLayout wsAfterParenClose, SDFAnn ann);
-SDFAnn SDFmakeAnnAnnotation(SDFLayout wsAfterBraceOpen, SDFATerms aTerms, SDFLayout wsAfterATerms);
-SDFTagId SDFmakeTagIdDefault(SDFLexical lex);
-SDFTagId SDFmakeTagIdEmpty();
-SDFNumChar SDFmakeNumCharDigits(SDFLexical lex);
-SDFShortChar SDFmakeShortCharRegular(SDFLexical lex);
-SDFShortChar SDFmakeShortCharEscaped(SDFLexical lex);
-SDFCharacter SDFmakeCharacterNumeric(SDFNumChar numChar);
-SDFCharacter SDFmakeCharacterShort(SDFShortChar shortChar);
-SDFCharacter SDFmakeCharacterTop();
-SDFCharacter SDFmakeCharacterEof();
-SDFOptExp SDFmakeOptExpPresent(SDFLayout wsAfterE, SDFIntCon intCon);
-SDFOptExp SDFmakeOptExpAbsent();
-SDFRealCon SDFmakeRealConRealCon(SDFIntCon intCon, SDFLayout wsAfterIntCon, SDFLayout wsAfterPeriod, SDFNatCon natCon, SDFLayout wsAfterNatCon, SDFOptExp optExp);
-
-/*{{{  SDFSymbol accessor prototypes */
-
-ATbool SDFisValidSymbol(SDFSymbol arg);
-ATbool SDFisSymbolStart(SDFSymbol arg);
-ATbool SDFisSymbolFileStart(SDFSymbol arg);
-ATbool SDFisSymbolCf(SDFSymbol arg);
-ATbool SDFisSymbolLex(SDFSymbol arg);
-ATbool SDFisSymbolVarsym(SDFSymbol arg);
-ATbool SDFisSymbolLayout(SDFSymbol arg);
-ATbool SDFisSymbolEmpty(SDFSymbol arg);
-ATbool SDFisSymbolSeq(SDFSymbol arg);
-ATbool SDFisSymbolOpt(SDFSymbol arg);
-ATbool SDFisSymbolIter(SDFSymbol arg);
-ATbool SDFisSymbolIterStar(SDFSymbol arg);
-ATbool SDFisSymbolIterSep(SDFSymbol arg);
-ATbool SDFisSymbolIterStarSep(SDFSymbol arg);
-ATbool SDFisSymbolIterN(SDFSymbol arg);
-ATbool SDFisSymbolIterSepN(SDFSymbol arg);
-ATbool SDFisSymbolSet(SDFSymbol arg);
-ATbool SDFisSymbolPair(SDFSymbol arg);
-ATbool SDFisSymbolFunc(SDFSymbol arg);
-ATbool SDFisSymbolAlt(SDFSymbol arg);
-ATbool SDFisSymbolPerm(SDFSymbol arg);
-ATbool SDFisSymbolCharClass(SDFSymbol arg);
-ATbool SDFisSymbolSort(SDFSymbol arg);
-ATbool SDFisSymbolLit(SDFSymbol arg);
-ATbool SDFisSymbolLabel(SDFSymbol arg);
-ATbool SDFisSymbolBracket(SDFSymbol arg);
-ATbool SDFhasSymbolWsAfterLessThanLessThan(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterLessThanLessThan(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterLessThanLessThan(SDFSymbol arg, SDFLayout wsAfterLessThanLessThan);
-ATbool SDFhasSymbolRight(SDFSymbol arg);
-SDFSymbol SDFgetSymbolRight(SDFSymbol arg);
-SDFSymbol SDFsetSymbolRight(SDFSymbol arg, SDFSymbol right);
-ATbool SDFhasSymbolWsAfterLeft(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterLeft(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterLeft(SDFSymbol arg, SDFLayout wsAfterLeft);
-ATbool SDFhasSymbolWsAfterParenOpen(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterParenOpen(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterParenOpen(SDFSymbol arg, SDFLayout wsAfterParenOpen);
-ATbool SDFhasSymbolWsAfterArguments(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterArguments(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterArguments(SDFSymbol arg, SDFLayout wsAfterArguments);
-ATbool SDFhasSymbolWsAfterResults(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterResults(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterResults(SDFSymbol arg, SDFLayout wsAfterResults);
-ATbool SDFhasSymbolWsAfterHash(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterHash(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterHash(SDFSymbol arg, SDFLayout wsAfterHash);
-ATbool SDFhasSymbolWsAfterCF(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterCF(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterCF(SDFSymbol arg, SDFLayout wsAfterCF);
-ATbool SDFhasSymbolSort(SDFSymbol arg);
-SDFSort SDFgetSymbolSort(SDFSymbol arg);
-SDFSymbol SDFsetSymbolSort(SDFSymbol arg, SDFSort sort);
-ATbool SDFhasSymbolWsAfterBraceClose(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterBraceClose(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterBraceClose(SDFSymbol arg, SDFLayout wsAfterBraceClose);
-ATbool SDFhasSymbolWsAfterBar(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterBar(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterBar(SDFSymbol arg, SDFLayout wsAfterBar);
-ATbool SDFhasSymbolWsAfterBraceOpen(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterBraceOpen(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterBraceOpen(SDFSymbol arg, SDFLayout wsAfterBraceOpen);
-ATbool SDFhasSymbolArguments(SDFSymbol arg);
-SDFSymbols SDFgetSymbolArguments(SDFSymbol arg);
-SDFSymbol SDFsetSymbolArguments(SDFSymbol arg, SDFSymbols arguments);
-ATbool SDFhasSymbolWsAfterSymbols(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterSymbols(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterSymbols(SDFSymbol arg, SDFLayout wsAfterSymbols);
-ATbool SDFhasSymbolWsAfterSep(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterSep(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterSep(SDFSymbol arg, SDFLayout wsAfterSep);
-ATbool SDFhasSymbolTail(SDFSymbol arg);
-SDFSymbolTail SDFgetSymbolTail(SDFSymbol arg);
-SDFSymbol SDFsetSymbolTail(SDFSymbol arg, SDFSymbolTail tail);
-ATbool SDFhasSymbolHead(SDFSymbol arg);
-SDFSymbol SDFgetSymbolHead(SDFSymbol arg);
-SDFSymbol SDFsetSymbolHead(SDFSymbol arg, SDFSymbol head);
-ATbool SDFhasSymbolWsAfterSymbol(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterSymbol(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterSymbol(SDFSymbol arg, SDFLayout wsAfterSymbol);
-ATbool SDFhasSymbolWsAfterN(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterN(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterN(SDFSymbol arg, SDFLayout wsAfterN);
-ATbool SDFhasSymbolSymbol(SDFSymbol arg);
-SDFSymbol SDFgetSymbolSymbol(SDFSymbol arg);
-SDFSymbol SDFsetSymbolSymbol(SDFSymbol arg, SDFSymbol symbol);
-ATbool SDFhasSymbolLiteral(SDFSymbol arg);
-SDFLiteral SDFgetSymbolLiteral(SDFSymbol arg);
-SDFSymbol SDFsetSymbolLiteral(SDFSymbol arg, SDFLiteral literal);
-ATbool SDFhasSymbolResults(SDFSymbol arg);
-SDFSymbol SDFgetSymbolResults(SDFSymbol arg);
-SDFSymbol SDFsetSymbolResults(SDFSymbol arg, SDFSymbol results);
-ATbool SDFhasSymbolCharClass(SDFSymbol arg);
-SDFCharClass SDFgetSymbolCharClass(SDFSymbol arg);
-SDFSymbol SDFsetSymbolCharClass(SDFSymbol arg, SDFCharClass charClass);
-ATbool SDFhasSymbolWsAfterBracketOpen(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterBracketOpen(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterBracketOpen(SDFSymbol arg, SDFLayout wsAfterBracketOpen);
-ATbool SDFhasSymbolWsAfterTail(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterTail(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterTail(SDFSymbol arg, SDFLayout wsAfterTail);
-ATbool SDFhasSymbolWsAfterHead(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterHead(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterHead(SDFSymbol arg, SDFLayout wsAfterHead);
-ATbool SDFhasSymbolWsAfterEqualsGreaterThan(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterEqualsGreaterThan(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterEqualsGreaterThan(SDFSymbol arg, SDFLayout wsAfterEqualsGreaterThan);
-ATbool SDFhasSymbolSep(SDFSymbol arg);
-SDFSymbol SDFgetSymbolSep(SDFSymbol arg);
-SDFSymbol SDFsetSymbolSep(SDFSymbol arg, SDFSymbol sep);
-ATbool SDFhasSymbolSymbols(SDFSymbol arg);
-SDFSymbols SDFgetSymbolSymbols(SDFSymbol arg);
-SDFSymbol SDFsetSymbolSymbols(SDFSymbol arg, SDFSymbols symbols);
-ATbool SDFhasSymbolWsAfterSet(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterSet(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterSet(SDFSymbol arg, SDFLayout wsAfterSet);
-ATbool SDFhasSymbolLeft(SDFSymbol arg);
-SDFSymbol SDFgetSymbolLeft(SDFSymbol arg);
-SDFSymbol SDFsetSymbolLeft(SDFSymbol arg, SDFSymbol left);
-ATbool SDFhasSymbolWsAfterLEX(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterLEX(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterLEX(SDFSymbol arg, SDFLayout wsAfterLEX);
-ATbool SDFhasSymbolLabel(SDFSymbol arg);
-SDFLiteral SDFgetSymbolLabel(SDFSymbol arg);
-SDFSymbol SDFsetSymbolLabel(SDFSymbol arg, SDFLiteral label);
-ATbool SDFhasSymbolN(SDFSymbol arg);
-SDFNatCon SDFgetSymbolN(SDFSymbol arg);
-SDFSymbol SDFsetSymbolN(SDFSymbol arg, SDFNatCon n);
-ATbool SDFhasSymbolWsAfterLessThan(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterLessThan(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterLessThan(SDFSymbol arg, SDFLayout wsAfterLessThan);
-ATbool SDFhasSymbolWsAfterColon(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterColon(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterColon(SDFSymbol arg, SDFLayout wsAfterColon);
-ATbool SDFhasSymbolWsAfterLabel(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterLabel(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterLabel(SDFSymbol arg, SDFLayout wsAfterLabel);
-ATbool SDFhasSymbolWsAfterVAR(SDFSymbol arg);
-SDFLayout SDFgetSymbolWsAfterVAR(SDFSymbol arg);
-SDFSymbol SDFsetSymbolWsAfterVAR(SDFSymbol arg, SDFLayout wsAfterVAR);
-
-/*}}}  */
-/*{{{  SDFGrammar accessor prototypes */
-
-ATbool SDFisValidGrammar(SDFGrammar arg);
-ATbool SDFisGrammarLexicalPriorities(SDFGrammar arg);
-ATbool SDFisGrammarContextFreePriorities(SDFGrammar arg);
-ATbool SDFisGrammarLexicalRestrictions(SDFGrammar arg);
-ATbool SDFisGrammarContextFreeRestrictions(SDFGrammar arg);
-ATbool SDFisGrammarSyntax(SDFGrammar arg);
-ATbool SDFisGrammarLexicalSyntax(SDFGrammar arg);
-ATbool SDFisGrammarContextFreeSyntax(SDFGrammar arg);
-ATbool SDFisGrammarVariables(SDFGrammar arg);
-ATbool SDFisGrammarLexicalVariables(SDFGrammar arg);
-ATbool SDFisGrammarImpSection(SDFGrammar arg);
-ATbool SDFisGrammarPriorities(SDFGrammar arg);
-ATbool SDFisGrammarSorts(SDFGrammar arg);
-ATbool SDFisGrammarRestrictions(SDFGrammar arg);
-ATbool SDFisGrammarAliases(SDFGrammar arg);
-ATbool SDFisGrammarEmptyGrammar(SDFGrammar arg);
-ATbool SDFisGrammarConcGrammars(SDFGrammar arg);
-ATbool SDFisGrammarBracket(SDFGrammar arg);
-ATbool SDFhasGrammarRight(SDFGrammar arg);
-SDFGrammar SDFgetGrammarRight(SDFGrammar arg);
-SDFGrammar SDFsetGrammarRight(SDFGrammar arg, SDFGrammar right);
-ATbool SDFhasGrammarWsAfterLeft(SDFGrammar arg);
-SDFLayout SDFgetGrammarWsAfterLeft(SDFGrammar arg);
-SDFGrammar SDFsetGrammarWsAfterLeft(SDFGrammar arg, SDFLayout wsAfterLeft);
-ATbool SDFhasGrammarWsAfterParenOpen(SDFGrammar arg);
-SDFLayout SDFgetGrammarWsAfterParenOpen(SDFGrammar arg);
-SDFGrammar SDFsetGrammarWsAfterParenOpen(SDFGrammar arg, SDFLayout wsAfterParenOpen);
-ATbool SDFhasGrammarWsAfterSorts(SDFGrammar arg);
-SDFLayout SDFgetGrammarWsAfterSorts(SDFGrammar arg);
-SDFGrammar SDFsetGrammarWsAfterSorts(SDFGrammar arg, SDFLayout wsAfterSorts);
-ATbool SDFhasGrammarWsAfterPriorities(SDFGrammar arg);
-SDFLayout SDFgetGrammarWsAfterPriorities(SDFGrammar arg);
-SDFGrammar SDFsetGrammarWsAfterPriorities(SDFGrammar arg, SDFLayout wsAfterPriorities);
-ATbool SDFhasGrammarWsAfterGrammar(SDFGrammar arg);
-SDFLayout SDFgetGrammarWsAfterGrammar(SDFGrammar arg);
-SDFGrammar SDFsetGrammarWsAfterGrammar(SDFGrammar arg, SDFLayout wsAfterGrammar);
-ATbool SDFhasGrammarAliases(SDFGrammar arg);
-SDFAliases SDFgetGrammarAliases(SDFGrammar arg);
-SDFGrammar SDFsetGrammarAliases(SDFGrammar arg, SDFAliases aliases);
-ATbool SDFhasGrammarWsAfterSyntax(SDFGrammar arg);
-SDFLayout SDFgetGrammarWsAfterSyntax(SDFGrammar arg);
-SDFGrammar SDFsetGrammarWsAfterSyntax(SDFGrammar arg, SDFLayout wsAfterSyntax);
-ATbool SDFhasGrammarPriorities(SDFGrammar arg);
-SDFPriorities SDFgetGrammarPriorities(SDFGrammar arg);
-SDFGrammar SDFsetGrammarPriorities(SDFGrammar arg, SDFPriorities priorities);
-ATbool SDFhasGrammarRestrictions(SDFGrammar arg);
-SDFRestrictions SDFgetGrammarRestrictions(SDFGrammar arg);
-SDFGrammar SDFsetGrammarRestrictions(SDFGrammar arg, SDFRestrictions restrictions);
-ATbool SDFhasGrammarWsAfterRestrictions(SDFGrammar arg);
-SDFLayout SDFgetGrammarWsAfterRestrictions(SDFGrammar arg);
-SDFGrammar SDFsetGrammarWsAfterRestrictions(SDFGrammar arg, SDFLayout wsAfterRestrictions);
-ATbool SDFhasGrammarImpSection(SDFGrammar arg);
-SDFImpSection SDFgetGrammarImpSection(SDFGrammar arg);
-SDFGrammar SDFsetGrammarImpSection(SDFGrammar arg, SDFImpSection impSection);
-ATbool SDFhasGrammarWsAfterLexical(SDFGrammar arg);
-SDFLayout SDFgetGrammarWsAfterLexical(SDFGrammar arg);
-SDFGrammar SDFsetGrammarWsAfterLexical(SDFGrammar arg, SDFLayout wsAfterLexical);
-ATbool SDFhasGrammarGrammar(SDFGrammar arg);
-SDFGrammar SDFgetGrammarGrammar(SDFGrammar arg);
-SDFGrammar SDFsetGrammarGrammar(SDFGrammar arg, SDFGrammar grammar);
-ATbool SDFhasGrammarSymbols(SDFGrammar arg);
-SDFSymbols SDFgetGrammarSymbols(SDFGrammar arg);
-SDFGrammar SDFsetGrammarSymbols(SDFGrammar arg, SDFSymbols symbols);
-ATbool SDFhasGrammarWsAfterVariables(SDFGrammar arg);
-SDFLayout SDFgetGrammarWsAfterVariables(SDFGrammar arg);
-SDFGrammar SDFsetGrammarWsAfterVariables(SDFGrammar arg, SDFLayout wsAfterVariables);
-ATbool SDFhasGrammarLeft(SDFGrammar arg);
-SDFGrammar SDFgetGrammarLeft(SDFGrammar arg);
-SDFGrammar SDFsetGrammarLeft(SDFGrammar arg, SDFGrammar left);
-ATbool SDFhasGrammarWsAfterAliases(SDFGrammar arg);
-SDFLayout SDFgetGrammarWsAfterAliases(SDFGrammar arg);
-SDFGrammar SDFsetGrammarWsAfterAliases(SDFGrammar arg, SDFLayout wsAfterAliases);
-ATbool SDFhasGrammarProductions(SDFGrammar arg);
-SDFProductions SDFgetGrammarProductions(SDFGrammar arg);
-SDFGrammar SDFsetGrammarProductions(SDFGrammar arg, SDFProductions productions);
-ATbool SDFhasGrammarWsAfterContextFree(SDFGrammar arg);
-SDFLayout SDFgetGrammarWsAfterContextFree(SDFGrammar arg);
-SDFGrammar SDFsetGrammarWsAfterContextFree(SDFGrammar arg, SDFLayout wsAfterContextFree);
-
-/*}}}  */
-/*{{{  SDFSDF accessor prototypes */
-
-ATbool SDFisValidSDF(SDFSDF arg);
-ATbool SDFisSDFDefinition(SDFSDF arg);
-ATbool SDFhasSDFDefinition(SDFSDF arg);
-SDFDefinition SDFgetSDFDefinition(SDFSDF arg);
-SDFSDF SDFsetSDFDefinition(SDFSDF arg, SDFDefinition definition);
-ATbool SDFhasSDFWsAfterDefinition(SDFSDF arg);
-SDFLayout SDFgetSDFWsAfterDefinition(SDFSDF arg);
-SDFSDF SDFsetSDFWsAfterDefinition(SDFSDF arg, SDFLayout wsAfterDefinition);
-
-/*}}}  */
-/*{{{  SDFAttributes accessor prototypes */
-
-ATbool SDFisValidAttributes(SDFAttributes arg);
-ATbool SDFisAttributesAttrs(SDFAttributes arg);
-ATbool SDFisAttributesNoAttrs(SDFAttributes arg);
-ATbool SDFhasAttributesWsAfterBraceOpen(SDFAttributes arg);
-SDFLayout SDFgetAttributesWsAfterBraceOpen(SDFAttributes arg);
-SDFAttributes SDFsetAttributesWsAfterBraceOpen(SDFAttributes arg, SDFLayout wsAfterBraceOpen);
-ATbool SDFhasAttributesAttributes(SDFAttributes arg);
-SDFAttributeAttributes SDFgetAttributesAttributes(SDFAttributes arg);
-SDFAttributes SDFsetAttributesAttributes(SDFAttributes arg, SDFAttributeAttributes attributes);
-ATbool SDFhasAttributesWsAfterAttributes(SDFAttributes arg);
-SDFLayout SDFgetAttributesWsAfterAttributes(SDFAttributes arg);
-SDFAttributes SDFsetAttributesWsAfterAttributes(SDFAttributes arg, SDFLayout wsAfterAttributes);
-
-/*}}}  */
-/*{{{  SDFAttributeAttributes accessor prototypes */
-
-ATbool SDFisValidAttributeAttributes(SDFAttributeAttributes arg);
-ATbool SDFisAttributeAttributesEmpty(SDFAttributeAttributes arg);
-ATbool SDFisAttributeAttributesSingle(SDFAttributeAttributes arg);
-ATbool SDFisAttributeAttributesMany(SDFAttributeAttributes arg);
-ATbool SDFhasAttributeAttributesWsAfterFirst(SDFAttributeAttributes arg);
-SDFLayout SDFgetAttributeAttributesWsAfterFirst(SDFAttributeAttributes arg);
-SDFAttributeAttributes SDFsetAttributeAttributesWsAfterFirst(SDFAttributeAttributes arg, SDFLayout wsAfterFirst);
-ATbool SDFhasAttributeAttributesWsAfterSep(SDFAttributeAttributes arg);
-SDFLayout SDFgetAttributeAttributesWsAfterSep(SDFAttributeAttributes arg);
-SDFAttributeAttributes SDFsetAttributeAttributesWsAfterSep(SDFAttributeAttributes arg, SDFLayout wsAfterSep);
-ATbool SDFhasAttributeAttributesTail(SDFAttributeAttributes arg);
-SDFAttributeAttributes SDFgetAttributeAttributesTail(SDFAttributeAttributes arg);
-SDFAttributeAttributes SDFsetAttributeAttributesTail(SDFAttributeAttributes arg, SDFAttributeAttributes tail);
-ATbool SDFhasAttributeAttributesHead(SDFAttributeAttributes arg);
-SDFAttribute SDFgetAttributeAttributesHead(SDFAttributeAttributes arg);
-SDFAttributeAttributes SDFsetAttributeAttributesHead(SDFAttributeAttributes arg, SDFAttribute head);
-ATbool SDFhasAttributeAttributesSep(SDFAttributeAttributes arg);
-SDFSeparator SDFgetAttributeAttributesSep(SDFAttributeAttributes arg);
-SDFAttributeAttributes SDFsetAttributeAttributesSep(SDFAttributeAttributes arg, SDFSeparator sep);
-
-/*}}}  */
-/*{{{  SDFProduction accessor prototypes */
-
-ATbool SDFisValidProduction(SDFProduction arg);
-ATbool SDFisProductionProd(SDFProduction arg);
-ATbool SDFisProductionProdFun(SDFProduction arg);
-ATbool SDFhasProductionWsAfterResult(SDFProduction arg);
-SDFLayout SDFgetProductionWsAfterResult(SDFProduction arg);
-SDFProduction SDFsetProductionWsAfterResult(SDFProduction arg, SDFLayout wsAfterResult);
-ATbool SDFhasProductionWsAfterParenClose(SDFProduction arg);
-SDFLayout SDFgetProductionWsAfterParenClose(SDFProduction arg);
-SDFProduction SDFsetProductionWsAfterParenClose(SDFProduction arg, SDFLayout wsAfterParenClose);
-ATbool SDFhasProductionWsAfterParenOpen(SDFProduction arg);
-SDFLayout SDFgetProductionWsAfterParenOpen(SDFProduction arg);
-SDFProduction SDFsetProductionWsAfterParenOpen(SDFProduction arg, SDFLayout wsAfterParenOpen);
-ATbool SDFhasProductionWsAfterArguments(SDFProduction arg);
-SDFLayout SDFgetProductionWsAfterArguments(SDFProduction arg);
-SDFProduction SDFsetProductionWsAfterArguments(SDFProduction arg, SDFLayout wsAfterArguments);
-ATbool SDFhasProductionResult(SDFProduction arg);
-SDFSymbol SDFgetProductionResult(SDFProduction arg);
-SDFProduction SDFsetProductionResult(SDFProduction arg, SDFSymbol result);
-ATbool SDFhasProductionArguments(SDFProduction arg);
-SDFSymbolArguments SDFgetProductionArguments(SDFProduction arg);
-SDFProduction SDFsetProductionArguments(SDFProduction arg, SDFSymbolArguments arguments);
-ATbool SDFhasProductionWsAfterSymbols(SDFProduction arg);
-SDFLayout SDFgetProductionWsAfterSymbols(SDFProduction arg);
-SDFProduction SDFsetProductionWsAfterSymbols(SDFProduction arg, SDFLayout wsAfterSymbols);
-ATbool SDFhasProductionFunctionSymbol(SDFProduction arg);
-SDFLiteral SDFgetProductionFunctionSymbol(SDFProduction arg);
-SDFProduction SDFsetProductionFunctionSymbol(SDFProduction arg, SDFLiteral functionSymbol);
-ATbool SDFhasProductionAttributes(SDFProduction arg);
-SDFAttributes SDFgetProductionAttributes(SDFProduction arg);
-SDFProduction SDFsetProductionAttributes(SDFProduction arg, SDFAttributes attributes);
-ATbool SDFhasProductionWsAfterGreaterThan(SDFProduction arg);
-SDFLayout SDFgetProductionWsAfterGreaterThan(SDFProduction arg);
-SDFProduction SDFsetProductionWsAfterGreaterThan(SDFProduction arg, SDFLayout wsAfterGreaterThan);
-ATbool SDFhasProductionSymbols(SDFProduction arg);
-SDFSymbols SDFgetProductionSymbols(SDFProduction arg);
-SDFProduction SDFsetProductionSymbols(SDFProduction arg, SDFSymbols symbols);
-ATbool SDFhasProductionWsAfterFunctionSymbol(SDFProduction arg);
-SDFLayout SDFgetProductionWsAfterFunctionSymbol(SDFProduction arg);
-SDFProduction SDFsetProductionWsAfterFunctionSymbol(SDFProduction arg, SDFLayout wsAfterFunctionSymbol);
-
-/*}}}  */
-/*{{{  SDFProductions accessor prototypes */
-
-ATbool SDFisValidProductions(SDFProductions arg);
-ATbool SDFisProductionsDefault(SDFProductions arg);
-ATbool SDFhasProductionsProductions(SDFProductions arg);
-SDFProductionProductions SDFgetProductionsProductions(SDFProductions arg);
-SDFProductions SDFsetProductionsProductions(SDFProductions arg, SDFProductionProductions productions);
-
-/*}}}  */
-/*{{{  SDFProductionProductions accessor prototypes */
-
-ATbool SDFisValidProductionProductions(SDFProductionProductions arg);
-ATbool SDFisProductionProductionsEmpty(SDFProductionProductions arg);
-ATbool SDFisProductionProductionsSingle(SDFProductionProductions arg);
-ATbool SDFisProductionProductionsMany(SDFProductionProductions arg);
-ATbool SDFhasProductionProductionsWsAfterFirst(SDFProductionProductions arg);
-SDFLayout SDFgetProductionProductionsWsAfterFirst(SDFProductionProductions arg);
-SDFProductionProductions SDFsetProductionProductionsWsAfterFirst(SDFProductionProductions arg, SDFLayout wsAfterFirst);
-ATbool SDFhasProductionProductionsTail(SDFProductionProductions arg);
-SDFProductionProductions SDFgetProductionProductionsTail(SDFProductionProductions arg);
-SDFProductionProductions SDFsetProductionProductionsTail(SDFProductionProductions arg, SDFProductionProductions tail);
-ATbool SDFhasProductionProductionsHead(SDFProductionProductions arg);
-SDFProduction SDFgetProductionProductionsHead(SDFProductionProductions arg);
-SDFProductionProductions SDFsetProductionProductionsHead(SDFProductionProductions arg, SDFProduction head);
-
-/*}}}  */
-/*{{{  SDFModuleWord accessor prototypes */
-
-ATbool SDFisValidModuleWord(SDFModuleWord arg);
-ATbool SDFisModuleWordWord(SDFModuleWord arg);
-ATbool SDFhasModuleWordLex(SDFModuleWord arg);
-SDFLexical SDFgetModuleWordLex(SDFModuleWord arg);
-SDFModuleWord SDFsetModuleWordLex(SDFModuleWord arg, SDFLexical lex);
-
-/*}}}  */
-/*{{{  SDFModuleId accessor prototypes */
-
-ATbool SDFisValidModuleId(SDFModuleId arg);
-ATbool SDFisModuleIdWord(SDFModuleId arg);
-ATbool SDFisModuleIdSlashWord(SDFModuleId arg);
-ATbool SDFisModuleIdWordSlashWord(SDFModuleId arg);
-ATbool SDFhasModuleIdLex(SDFModuleId arg);
-SDFLexical SDFgetModuleIdLex(SDFModuleId arg);
-SDFModuleId SDFsetModuleIdLex(SDFModuleId arg, SDFLexical lex);
-
-/*}}}  */
-/*{{{  SDFDefinition accessor prototypes */
-
-ATbool SDFisValidDefinition(SDFDefinition arg);
-ATbool SDFisDefinitionDefault(SDFDefinition arg);
-ATbool SDFhasDefinitionModules(SDFDefinition arg);
-SDFModuleModules SDFgetDefinitionModules(SDFDefinition arg);
-SDFDefinition SDFsetDefinitionModules(SDFDefinition arg, SDFModuleModules modules);
-
-/*}}}  */
-/*{{{  SDFModuleModules accessor prototypes */
-
-ATbool SDFisValidModuleModules(SDFModuleModules arg);
-ATbool SDFisModuleModulesEmpty(SDFModuleModules arg);
-ATbool SDFisModuleModulesSingle(SDFModuleModules arg);
-ATbool SDFisModuleModulesMany(SDFModuleModules arg);
-ATbool SDFhasModuleModulesWsAfterFirst(SDFModuleModules arg);
-SDFLayout SDFgetModuleModulesWsAfterFirst(SDFModuleModules arg);
-SDFModuleModules SDFsetModuleModulesWsAfterFirst(SDFModuleModules arg, SDFLayout wsAfterFirst);
-ATbool SDFhasModuleModulesTail(SDFModuleModules arg);
-SDFModuleModules SDFgetModuleModulesTail(SDFModuleModules arg);
-SDFModuleModules SDFsetModuleModulesTail(SDFModuleModules arg, SDFModuleModules tail);
-ATbool SDFhasModuleModulesHead(SDFModuleModules arg);
-SDFModule SDFgetModuleModulesHead(SDFModuleModules arg);
-SDFModuleModules SDFsetModuleModulesHead(SDFModuleModules arg, SDFModule head);
-
-/*}}}  */
-/*{{{  SDFModule accessor prototypes */
-
-ATbool SDFisValidModule(SDFModule arg);
-ATbool SDFisModuleModule(SDFModule arg);
-ATbool SDFhasModuleWsAfterList(SDFModule arg);
-SDFLayout SDFgetModuleWsAfterList(SDFModule arg);
-SDFModule SDFsetModuleWsAfterList(SDFModule arg, SDFLayout wsAfterList);
-ATbool SDFhasModuleModuleName(SDFModule arg);
-SDFModuleName SDFgetModuleModuleName(SDFModule arg);
-SDFModule SDFsetModuleModuleName(SDFModule arg, SDFModuleName moduleName);
-ATbool SDFhasModuleWsAfterModule(SDFModule arg);
-SDFLayout SDFgetModuleWsAfterModule(SDFModule arg);
-SDFModule SDFsetModuleWsAfterModule(SDFModule arg, SDFLayout wsAfterModule);
-ATbool SDFhasModuleList(SDFModule arg);
-SDFImpSectionList SDFgetModuleList(SDFModule arg);
-SDFModule SDFsetModuleList(SDFModule arg, SDFImpSectionList list);
-ATbool SDFhasModuleWsAfterModuleName(SDFModule arg);
-SDFLayout SDFgetModuleWsAfterModuleName(SDFModule arg);
-SDFModule SDFsetModuleWsAfterModuleName(SDFModule arg, SDFLayout wsAfterModuleName);
-ATbool SDFhasModuleSections(SDFModule arg);
-SDFSections SDFgetModuleSections(SDFModule arg);
-SDFModule SDFsetModuleSections(SDFModule arg, SDFSections sections);
-
-/*}}}  */
-/*{{{  SDFImpSectionList accessor prototypes */
-
-ATbool SDFisValidImpSectionList(SDFImpSectionList arg);
-ATbool SDFisImpSectionListEmpty(SDFImpSectionList arg);
-ATbool SDFisImpSectionListSingle(SDFImpSectionList arg);
-ATbool SDFisImpSectionListMany(SDFImpSectionList arg);
-ATbool SDFhasImpSectionListWsAfterFirst(SDFImpSectionList arg);
-SDFLayout SDFgetImpSectionListWsAfterFirst(SDFImpSectionList arg);
-SDFImpSectionList SDFsetImpSectionListWsAfterFirst(SDFImpSectionList arg, SDFLayout wsAfterFirst);
-ATbool SDFhasImpSectionListTail(SDFImpSectionList arg);
-SDFImpSectionList SDFgetImpSectionListTail(SDFImpSectionList arg);
-SDFImpSectionList SDFsetImpSectionListTail(SDFImpSectionList arg, SDFImpSectionList tail);
-ATbool SDFhasImpSectionListHead(SDFImpSectionList arg);
-SDFImpSection SDFgetImpSectionListHead(SDFImpSectionList arg);
-SDFImpSectionList SDFsetImpSectionListHead(SDFImpSectionList arg, SDFImpSection head);
-
-/*}}}  */
-/*{{{  SDFSection accessor prototypes */
-
-ATbool SDFisValidSection(SDFSection arg);
-ATbool SDFisSectionExports(SDFSection arg);
-ATbool SDFisSectionHiddens(SDFSection arg);
-ATbool SDFhasSectionWsAfterExports(SDFSection arg);
-SDFLayout SDFgetSectionWsAfterExports(SDFSection arg);
-SDFSection SDFsetSectionWsAfterExports(SDFSection arg, SDFLayout wsAfterExports);
-ATbool SDFhasSectionGrammar(SDFSection arg);
-SDFGrammar SDFgetSectionGrammar(SDFSection arg);
-SDFSection SDFsetSectionGrammar(SDFSection arg, SDFGrammar grammar);
-ATbool SDFhasSectionWsAfterHiddens(SDFSection arg);
-SDFLayout SDFgetSectionWsAfterHiddens(SDFSection arg);
-SDFSection SDFsetSectionWsAfterHiddens(SDFSection arg, SDFLayout wsAfterHiddens);
-
-/*}}}  */
-/*{{{  SDFSections accessor prototypes */
-
-ATbool SDFisValidSections(SDFSections arg);
-ATbool SDFisSectionsDefault(SDFSections arg);
-ATbool SDFhasSectionsList(SDFSections arg);
-SDFSectionList SDFgetSectionsList(SDFSections arg);
-SDFSections SDFsetSectionsList(SDFSections arg, SDFSectionList list);
-
-/*}}}  */
-/*{{{  SDFSectionList accessor prototypes */
-
-ATbool SDFisValidSectionList(SDFSectionList arg);
-ATbool SDFisSectionListEmpty(SDFSectionList arg);
-ATbool SDFisSectionListSingle(SDFSectionList arg);
-ATbool SDFisSectionListMany(SDFSectionList arg);
-ATbool SDFhasSectionListWsAfterFirst(SDFSectionList arg);
-SDFLayout SDFgetSectionListWsAfterFirst(SDFSectionList arg);
-SDFSectionList SDFsetSectionListWsAfterFirst(SDFSectionList arg, SDFLayout wsAfterFirst);
-ATbool SDFhasSectionListTail(SDFSectionList arg);
-SDFSectionList SDFgetSectionListTail(SDFSectionList arg);
-SDFSectionList SDFsetSectionListTail(SDFSectionList arg, SDFSectionList tail);
-ATbool SDFhasSectionListHead(SDFSectionList arg);
-SDFSection SDFgetSectionListHead(SDFSectionList arg);
-SDFSectionList SDFsetSectionListHead(SDFSectionList arg, SDFSection head);
-
-/*}}}  */
-/*{{{  SDFModuleName accessor prototypes */
-
-ATbool SDFisValidModuleName(SDFModuleName arg);
-ATbool SDFisModuleNameUnparameterized(SDFModuleName arg);
-ATbool SDFisModuleNameParameterized(SDFModuleName arg);
-ATbool SDFhasModuleNameParams(SDFModuleName arg);
-SDFSymbols SDFgetModuleNameParams(SDFModuleName arg);
-SDFModuleName SDFsetModuleNameParams(SDFModuleName arg, SDFSymbols params);
-ATbool SDFhasModuleNameWsAfterModuleId(SDFModuleName arg);
-SDFLayout SDFgetModuleNameWsAfterModuleId(SDFModuleName arg);
-SDFModuleName SDFsetModuleNameWsAfterModuleId(SDFModuleName arg, SDFLayout wsAfterModuleId);
-ATbool SDFhasModuleNameModuleId(SDFModuleName arg);
-SDFModuleId SDFgetModuleNameModuleId(SDFModuleName arg);
-SDFModuleName SDFsetModuleNameModuleId(SDFModuleName arg, SDFModuleId moduleId);
-ATbool SDFhasModuleNameWsAfterBracketOpen(SDFModuleName arg);
-SDFLayout SDFgetModuleNameWsAfterBracketOpen(SDFModuleName arg);
-SDFModuleName SDFsetModuleNameWsAfterBracketOpen(SDFModuleName arg, SDFLayout wsAfterBracketOpen);
-ATbool SDFhasModuleNameWsAfterParams(SDFModuleName arg);
-SDFLayout SDFgetModuleNameWsAfterParams(SDFModuleName arg);
-SDFModuleName SDFsetModuleNameWsAfterParams(SDFModuleName arg, SDFLayout wsAfterParams);
-
-/*}}}  */
-/*{{{  SDFAttribute accessor prototypes */
-
-ATbool SDFisValidAttribute(SDFAttribute arg);
-ATbool SDFisAttributeId(SDFAttribute arg);
-ATbool SDFisAttributeBracket(SDFAttribute arg);
-ATbool SDFisAttributeAtr(SDFAttribute arg);
-ATbool SDFisAttributeCons(SDFAttribute arg);
-ATbool SDFisAttributeConstructor(SDFAttribute arg);
-ATbool SDFisAttributeMemo(SDFAttribute arg);
-ATbool SDFisAttributeReject(SDFAttribute arg);
-ATbool SDFisAttributePrefer(SDFAttribute arg);
-ATbool SDFisAttributeAvoid(SDFAttribute arg);
-ATbool SDFhasAttributeModuleName(SDFAttribute arg);
-SDFModuleName SDFgetAttributeModuleName(SDFAttribute arg);
-SDFAttribute SDFsetAttributeModuleName(SDFAttribute arg, SDFModuleName moduleName);
-ATbool SDFhasAttributeWsAfterParenOpen(SDFAttribute arg);
-SDFLayout SDFgetAttributeWsAfterParenOpen(SDFAttribute arg);
-SDFAttribute SDFsetAttributeWsAfterParenOpen(SDFAttribute arg, SDFLayout wsAfterParenOpen);
-ATbool SDFhasAttributeWsAfterCons(SDFAttribute arg);
-SDFLayout SDFgetAttributeWsAfterCons(SDFAttribute arg);
-SDFAttribute SDFsetAttributeWsAfterCons(SDFAttribute arg, SDFLayout wsAfterCons);
-ATbool SDFhasAttributeATerm(SDFAttribute arg);
-SDFATerm SDFgetAttributeATerm(SDFAttribute arg);
-SDFAttribute SDFsetAttributeATerm(SDFAttribute arg, SDFATerm aTerm);
-ATbool SDFhasAttributeWsAfterATerm(SDFAttribute arg);
-SDFLayout SDFgetAttributeWsAfterATerm(SDFAttribute arg);
-SDFAttribute SDFsetAttributeWsAfterATerm(SDFAttribute arg, SDFLayout wsAfterATerm);
-ATbool SDFhasAttributeAssociativity(SDFAttribute arg);
-SDFAssociativity SDFgetAttributeAssociativity(SDFAttribute arg);
-SDFAttribute SDFsetAttributeAssociativity(SDFAttribute arg, SDFAssociativity associativity);
-ATbool SDFhasAttributeWsAfterId(SDFAttribute arg);
-SDFLayout SDFgetAttributeWsAfterId(SDFAttribute arg);
-SDFAttribute SDFsetAttributeWsAfterId(SDFAttribute arg, SDFLayout wsAfterId);
-ATbool SDFhasAttributeWsAfterModuleName(SDFAttribute arg);
-SDFLayout SDFgetAttributeWsAfterModuleName(SDFAttribute arg);
-SDFAttribute SDFsetAttributeWsAfterModuleName(SDFAttribute arg, SDFLayout wsAfterModuleName);
-
-/*}}}  */
-/*{{{  SDFImpSection accessor prototypes */
-
-ATbool SDFisValidImpSection(SDFImpSection arg);
-ATbool SDFisImpSectionImports(SDFImpSection arg);
-ATbool SDFhasImpSectionWsAfterImports(SDFImpSection arg);
-SDFLayout SDFgetImpSectionWsAfterImports(SDFImpSection arg);
-SDFImpSection SDFsetImpSectionWsAfterImports(SDFImpSection arg, SDFLayout wsAfterImports);
-ATbool SDFhasImpSectionList(SDFImpSection arg);
-SDFImports SDFgetImpSectionList(SDFImpSection arg);
-SDFImpSection SDFsetImpSectionList(SDFImpSection arg, SDFImports list);
-
-/*}}}  */
-/*{{{  SDFImports accessor prototypes */
-
-ATbool SDFisValidImports(SDFImports arg);
-ATbool SDFisImportsDefault(SDFImports arg);
-ATbool SDFhasImportsList(SDFImports arg);
-SDFImportList SDFgetImportsList(SDFImports arg);
-SDFImports SDFsetImportsList(SDFImports arg, SDFImportList list);
-
-/*}}}  */
-/*{{{  SDFImportList accessor prototypes */
-
-ATbool SDFisValidImportList(SDFImportList arg);
-ATbool SDFisImportListEmpty(SDFImportList arg);
-ATbool SDFisImportListSingle(SDFImportList arg);
-ATbool SDFisImportListMany(SDFImportList arg);
-ATbool SDFhasImportListWsAfterFirst(SDFImportList arg);
-SDFLayout SDFgetImportListWsAfterFirst(SDFImportList arg);
-SDFImportList SDFsetImportListWsAfterFirst(SDFImportList arg, SDFLayout wsAfterFirst);
-ATbool SDFhasImportListTail(SDFImportList arg);
-SDFImportList SDFgetImportListTail(SDFImportList arg);
-SDFImportList SDFsetImportListTail(SDFImportList arg, SDFImportList tail);
-ATbool SDFhasImportListHead(SDFImportList arg);
-SDFImport SDFgetImportListHead(SDFImportList arg);
-SDFImportList SDFsetImportListHead(SDFImportList arg, SDFImport head);
-
-/*}}}  */
-/*{{{  SDFImport accessor prototypes */
-
-ATbool SDFisValidImport(SDFImport arg);
-ATbool SDFisImportModule(SDFImport arg);
-ATbool SDFisImportRenamedModule(SDFImport arg);
-ATbool SDFisImportBracket(SDFImport arg);
-ATbool SDFhasImportModuleName(SDFImport arg);
-SDFModuleName SDFgetImportModuleName(SDFImport arg);
-SDFImport SDFsetImportModuleName(SDFImport arg, SDFModuleName moduleName);
-ATbool SDFhasImportWsAfterParenOpen(SDFImport arg);
-SDFLayout SDFgetImportWsAfterParenOpen(SDFImport arg);
-SDFImport SDFsetImportWsAfterParenOpen(SDFImport arg, SDFLayout wsAfterParenOpen);
-ATbool SDFhasImportRenamings(SDFImport arg);
-SDFRenamings SDFgetImportRenamings(SDFImport arg);
-SDFImport SDFsetImportRenamings(SDFImport arg, SDFRenamings renamings);
-ATbool SDFhasImportWsAfterImport(SDFImport arg);
-SDFLayout SDFgetImportWsAfterImport(SDFImport arg);
-SDFImport SDFsetImportWsAfterImport(SDFImport arg, SDFLayout wsAfterImport);
-ATbool SDFhasImportImport(SDFImport arg);
-SDFImport SDFgetImportImport(SDFImport arg);
-SDFImport SDFsetImportImport(SDFImport arg, SDFImport import);
-ATbool SDFhasImportWsAfterModuleName(SDFImport arg);
-SDFLayout SDFgetImportWsAfterModuleName(SDFImport arg);
-SDFImport SDFsetImportWsAfterModuleName(SDFImport arg, SDFLayout wsAfterModuleName);
-
-/*}}}  */
-/*{{{  SDFSymbolTail accessor prototypes */
-
-ATbool SDFisValidSymbolTail(SDFSymbolTail arg);
-ATbool SDFisSymbolTailSingle(SDFSymbolTail arg);
-ATbool SDFisSymbolTailMany(SDFSymbolTail arg);
-ATbool SDFhasSymbolTailWsAfterFirst(SDFSymbolTail arg);
-SDFLayout SDFgetSymbolTailWsAfterFirst(SDFSymbolTail arg);
-SDFSymbolTail SDFsetSymbolTailWsAfterFirst(SDFSymbolTail arg, SDFLayout wsAfterFirst);
-ATbool SDFhasSymbolTailTail(SDFSymbolTail arg);
-SDFSymbolTail SDFgetSymbolTailTail(SDFSymbolTail arg);
-SDFSymbolTail SDFsetSymbolTailTail(SDFSymbolTail arg, SDFSymbolTail tail);
-ATbool SDFhasSymbolTailHead(SDFSymbolTail arg);
-SDFSymbol SDFgetSymbolTailHead(SDFSymbolTail arg);
-SDFSymbolTail SDFsetSymbolTailHead(SDFSymbolTail arg, SDFSymbol head);
-
-/*}}}  */
-/*{{{  SDFAssociativity accessor prototypes */
-
-ATbool SDFisValidAssociativity(SDFAssociativity arg);
-ATbool SDFisAssociativityLeft(SDFAssociativity arg);
-ATbool SDFisAssociativityRight(SDFAssociativity arg);
-ATbool SDFisAssociativityNonAssoc(SDFAssociativity arg);
-ATbool SDFisAssociativityAssoc(SDFAssociativity arg);
-
-/*}}}  */
-/*{{{  SDFGroup accessor prototypes */
-
-ATbool SDFisValidGroup(SDFGroup arg);
-ATbool SDFisGroupSimpleGroup(SDFGroup arg);
-ATbool SDFisGroupProdsGroup(SDFGroup arg);
-ATbool SDFisGroupAssocGroup(SDFGroup arg);
-ATbool SDFhasGroupWsAfterAssociativity(SDFGroup arg);
-SDFLayout SDFgetGroupWsAfterAssociativity(SDFGroup arg);
-SDFGroup SDFsetGroupWsAfterAssociativity(SDFGroup arg, SDFLayout wsAfterAssociativity);
-ATbool SDFhasGroupWsAfterBraceOpen(SDFGroup arg);
-SDFLayout SDFgetGroupWsAfterBraceOpen(SDFGroup arg);
-SDFGroup SDFsetGroupWsAfterBraceOpen(SDFGroup arg, SDFLayout wsAfterBraceOpen);
-ATbool SDFhasGroupProduction(SDFGroup arg);
-SDFProduction SDFgetGroupProduction(SDFGroup arg);
-SDFGroup SDFsetGroupProduction(SDFGroup arg, SDFProduction production);
-ATbool SDFhasGroupAssociativity(SDFGroup arg);
-SDFAssociativity SDFgetGroupAssociativity(SDFGroup arg);
-SDFGroup SDFsetGroupAssociativity(SDFGroup arg, SDFAssociativity associativity);
-ATbool SDFhasGroupProductions(SDFGroup arg);
-SDFProductions SDFgetGroupProductions(SDFGroup arg);
-SDFGroup SDFsetGroupProductions(SDFGroup arg, SDFProductions productions);
-ATbool SDFhasGroupWsAfterProductions(SDFGroup arg);
-SDFLayout SDFgetGroupWsAfterProductions(SDFGroup arg);
-SDFGroup SDFsetGroupWsAfterProductions(SDFGroup arg, SDFLayout wsAfterProductions);
-ATbool SDFhasGroupWsAfterColon(SDFGroup arg);
-SDFLayout SDFgetGroupWsAfterColon(SDFGroup arg);
-SDFGroup SDFsetGroupWsAfterColon(SDFGroup arg, SDFLayout wsAfterColon);
-
-/*}}}  */
-/*{{{  SDFPriority accessor prototypes */
-
-ATbool SDFisValidPriority(SDFPriority arg);
-ATbool SDFisPriorityPriorityChain(SDFPriority arg);
-ATbool SDFisPriorityPriorityAssoc(SDFPriority arg);
-ATbool SDFhasPriorityRight(SDFPriority arg);
-SDFGroup SDFgetPriorityRight(SDFPriority arg);
-SDFPriority SDFsetPriorityRight(SDFPriority arg, SDFGroup right);
-ATbool SDFhasPriorityWsAfterAssociativity(SDFPriority arg);
-SDFLayout SDFgetPriorityWsAfterAssociativity(SDFPriority arg);
-SDFPriority SDFsetPriorityWsAfterAssociativity(SDFPriority arg, SDFLayout wsAfterAssociativity);
-ATbool SDFhasPriorityWsAfterLeft(SDFPriority arg);
-SDFLayout SDFgetPriorityWsAfterLeft(SDFPriority arg);
-SDFPriority SDFsetPriorityWsAfterLeft(SDFPriority arg, SDFLayout wsAfterLeft);
-ATbool SDFhasPriorityGroupp(SDFPriority arg);
-SDFGroupGroupp SDFgetPriorityGroupp(SDFPriority arg);
-SDFPriority SDFsetPriorityGroupp(SDFPriority arg, SDFGroupGroupp groupp);
-ATbool SDFhasPriorityAssociativity(SDFPriority arg);
-SDFAssociativity SDFgetPriorityAssociativity(SDFPriority arg);
-SDFPriority SDFsetPriorityAssociativity(SDFPriority arg, SDFAssociativity associativity);
-ATbool SDFhasPriorityLeft(SDFPriority arg);
-SDFGroup SDFgetPriorityLeft(SDFPriority arg);
-SDFPriority SDFsetPriorityLeft(SDFPriority arg, SDFGroup left);
-
-/*}}}  */
-/*{{{  SDFGroupGroupp accessor prototypes */
-
-ATbool SDFisValidGroupGroupp(SDFGroupGroupp arg);
-ATbool SDFisGroupGrouppSingle(SDFGroupGroupp arg);
-ATbool SDFisGroupGrouppMany(SDFGroupGroupp arg);
-ATbool SDFhasGroupGrouppWsAfterFirst(SDFGroupGroupp arg);
-SDFLayout SDFgetGroupGrouppWsAfterFirst(SDFGroupGroupp arg);
-SDFGroupGroupp SDFsetGroupGrouppWsAfterFirst(SDFGroupGroupp arg, SDFLayout wsAfterFirst);
-ATbool SDFhasGroupGrouppWsAfterSep(SDFGroupGroupp arg);
-SDFLayout SDFgetGroupGrouppWsAfterSep(SDFGroupGroupp arg);
-SDFGroupGroupp SDFsetGroupGrouppWsAfterSep(SDFGroupGroupp arg, SDFLayout wsAfterSep);
-ATbool SDFhasGroupGrouppTail(SDFGroupGroupp arg);
-SDFGroupGroupp SDFgetGroupGrouppTail(SDFGroupGroupp arg);
-SDFGroupGroupp SDFsetGroupGrouppTail(SDFGroupGroupp arg, SDFGroupGroupp tail);
-ATbool SDFhasGroupGrouppHead(SDFGroupGroupp arg);
-SDFGroup SDFgetGroupGrouppHead(SDFGroupGroupp arg);
-SDFGroupGroupp SDFsetGroupGrouppHead(SDFGroupGroupp arg, SDFGroup head);
-ATbool SDFhasGroupGrouppSep(SDFGroupGroupp arg);
-SDFSeparator SDFgetGroupGrouppSep(SDFGroupGroupp arg);
-SDFGroupGroupp SDFsetGroupGrouppSep(SDFGroupGroupp arg, SDFSeparator sep);
-
-/*}}}  */
-/*{{{  SDFPriorities accessor prototypes */
-
-ATbool SDFisValidPriorities(SDFPriorities arg);
-ATbool SDFisPrioritiesDefault(SDFPriorities arg);
-ATbool SDFhasPrioritiesPrioritys(SDFPriorities arg);
-SDFPriorityPrioritys SDFgetPrioritiesPrioritys(SDFPriorities arg);
-SDFPriorities SDFsetPrioritiesPrioritys(SDFPriorities arg, SDFPriorityPrioritys prioritys);
-
-/*}}}  */
-/*{{{  SDFPriorityPrioritys accessor prototypes */
-
-ATbool SDFisValidPriorityPrioritys(SDFPriorityPrioritys arg);
-ATbool SDFisPriorityPrioritysEmpty(SDFPriorityPrioritys arg);
-ATbool SDFisPriorityPrioritysSingle(SDFPriorityPrioritys arg);
-ATbool SDFisPriorityPrioritysMany(SDFPriorityPrioritys arg);
-ATbool SDFhasPriorityPrioritysWsAfterFirst(SDFPriorityPrioritys arg);
-SDFLayout SDFgetPriorityPrioritysWsAfterFirst(SDFPriorityPrioritys arg);
-SDFPriorityPrioritys SDFsetPriorityPrioritysWsAfterFirst(SDFPriorityPrioritys arg, SDFLayout wsAfterFirst);
-ATbool SDFhasPriorityPrioritysWsAfterSep(SDFPriorityPrioritys arg);
-SDFLayout SDFgetPriorityPrioritysWsAfterSep(SDFPriorityPrioritys arg);
-SDFPriorityPrioritys SDFsetPriorityPrioritysWsAfterSep(SDFPriorityPrioritys arg, SDFLayout wsAfterSep);
-ATbool SDFhasPriorityPrioritysTail(SDFPriorityPrioritys arg);
-SDFPriorityPrioritys SDFgetPriorityPrioritysTail(SDFPriorityPrioritys arg);
-SDFPriorityPrioritys SDFsetPriorityPrioritysTail(SDFPriorityPrioritys arg, SDFPriorityPrioritys tail);
-ATbool SDFhasPriorityPrioritysHead(SDFPriorityPrioritys arg);
-SDFPriority SDFgetPriorityPrioritysHead(SDFPriorityPrioritys arg);
-SDFPriorityPrioritys SDFsetPriorityPrioritysHead(SDFPriorityPrioritys arg, SDFPriority head);
-ATbool SDFhasPriorityPrioritysSep(SDFPriorityPrioritys arg);
-SDFSeparator SDFgetPriorityPrioritysSep(SDFPriorityPrioritys arg);
-SDFPriorityPrioritys SDFsetPriorityPrioritysSep(SDFPriorityPrioritys arg, SDFSeparator sep);
-
-/*}}}  */
-/*{{{  SDFSort accessor prototypes */
-
-ATbool SDFisValidSort(SDFSort arg);
-ATbool SDFisSortOneChar(SDFSort arg);
-ATbool SDFisSortMoreChars(SDFSort arg);
-ATbool SDFhasSortLex(SDFSort arg);
-SDFLexical SDFgetSortLex(SDFSort arg);
-SDFSort SDFsetSortLex(SDFSort arg, SDFLexical lex);
-
-/*}}}  */
-/*{{{  SDFUQLiteral accessor prototypes */
-
-ATbool SDFisValidUQLiteral(SDFUQLiteral arg);
-ATbool SDFisUQLiteralOneChar(SDFUQLiteral arg);
-ATbool SDFisUQLiteralMoreChars(SDFUQLiteral arg);
-ATbool SDFhasUQLiteralLex(SDFUQLiteral arg);
-SDFLexical SDFgetUQLiteralLex(SDFUQLiteral arg);
-SDFUQLiteral SDFsetUQLiteralLex(SDFUQLiteral arg, SDFLexical lex);
-
-/*}}}  */
-/*{{{  SDFLiteral accessor prototypes */
-
-ATbool SDFisValidLiteral(SDFLiteral arg);
-ATbool SDFisLiteralUqlit(SDFLiteral arg);
-ATbool SDFisLiteralQuoted(SDFLiteral arg);
-ATbool SDFhasLiteralLex(SDFLiteral arg);
-SDFLexical SDFgetLiteralLex(SDFLiteral arg);
-SDFLiteral SDFsetLiteralLex(SDFLiteral arg, SDFLexical lex);
-ATbool SDFhasLiteralUQLiteral(SDFLiteral arg);
-SDFUQLiteral SDFgetLiteralUQLiteral(SDFLiteral arg);
-SDFLiteral SDFsetLiteralUQLiteral(SDFLiteral arg, SDFUQLiteral uQLiteral);
-
-/*}}}  */
-/*{{{  SDFSymbolArguments accessor prototypes */
-
-ATbool SDFisValidSymbolArguments(SDFSymbolArguments arg);
-ATbool SDFisSymbolArgumentsEmpty(SDFSymbolArguments arg);
-ATbool SDFisSymbolArgumentsSingle(SDFSymbolArguments arg);
-ATbool SDFisSymbolArgumentsMany(SDFSymbolArguments arg);
-ATbool SDFhasSymbolArgumentsWsAfterFirst(SDFSymbolArguments arg);
-SDFLayout SDFgetSymbolArgumentsWsAfterFirst(SDFSymbolArguments arg);
-SDFSymbolArguments SDFsetSymbolArgumentsWsAfterFirst(SDFSymbolArguments arg, SDFLayout wsAfterFirst);
-ATbool SDFhasSymbolArgumentsWsAfterSep(SDFSymbolArguments arg);
-SDFLayout SDFgetSymbolArgumentsWsAfterSep(SDFSymbolArguments arg);
-SDFSymbolArguments SDFsetSymbolArgumentsWsAfterSep(SDFSymbolArguments arg, SDFLayout wsAfterSep);
-ATbool SDFhasSymbolArgumentsTail(SDFSymbolArguments arg);
-SDFSymbolArguments SDFgetSymbolArgumentsTail(SDFSymbolArguments arg);
-SDFSymbolArguments SDFsetSymbolArgumentsTail(SDFSymbolArguments arg, SDFSymbolArguments tail);
-ATbool SDFhasSymbolArgumentsHead(SDFSymbolArguments arg);
-SDFSymbol SDFgetSymbolArgumentsHead(SDFSymbolArguments arg);
-SDFSymbolArguments SDFsetSymbolArgumentsHead(SDFSymbolArguments arg, SDFSymbol head);
-ATbool SDFhasSymbolArgumentsSep(SDFSymbolArguments arg);
-SDFSeparator SDFgetSymbolArgumentsSep(SDFSymbolArguments arg);
-SDFSymbolArguments SDFsetSymbolArgumentsSep(SDFSymbolArguments arg, SDFSeparator sep);
-
-/*}}}  */
-/*{{{  SDFLookahead accessor prototypes */
-
-ATbool SDFisValidLookahead(SDFLookahead arg);
-ATbool SDFisLookaheadCharClass(SDFLookahead arg);
-ATbool SDFisLookaheadSeq(SDFLookahead arg);
-ATbool SDFhasLookaheadWsAfterPeriod(SDFLookahead arg);
-SDFLayout SDFgetLookaheadWsAfterPeriod(SDFLookahead arg);
-SDFLookahead SDFsetLookaheadWsAfterPeriod(SDFLookahead arg, SDFLayout wsAfterPeriod);
-ATbool SDFhasLookaheadTail(SDFLookahead arg);
-SDFLookaheads SDFgetLookaheadTail(SDFLookahead arg);
-SDFLookahead SDFsetLookaheadTail(SDFLookahead arg, SDFLookaheads tail);
-ATbool SDFhasLookaheadHead(SDFLookahead arg);
-SDFCharClass SDFgetLookaheadHead(SDFLookahead arg);
-SDFLookahead SDFsetLookaheadHead(SDFLookahead arg, SDFCharClass head);
-ATbool SDFhasLookaheadCharClass(SDFLookahead arg);
-SDFCharClass SDFgetLookaheadCharClass(SDFLookahead arg);
-SDFLookahead SDFsetLookaheadCharClass(SDFLookahead arg, SDFCharClass charClass);
-ATbool SDFhasLookaheadWsAfterHead(SDFLookahead arg);
-SDFLayout SDFgetLookaheadWsAfterHead(SDFLookahead arg);
-SDFLookahead SDFsetLookaheadWsAfterHead(SDFLookahead arg, SDFLayout wsAfterHead);
-
-/*}}}  */
-/*{{{  SDFLookaheads accessor prototypes */
-
-ATbool SDFisValidLookaheads(SDFLookaheads arg);
-ATbool SDFisLookaheadsSingle(SDFLookaheads arg);
-ATbool SDFisLookaheadsAlt(SDFLookaheads arg);
-ATbool SDFisLookaheadsBracket(SDFLookaheads arg);
-ATbool SDFisLookaheadsList(SDFLookaheads arg);
-ATbool SDFhasLookaheadsRight(SDFLookaheads arg);
-SDFLookaheads SDFgetLookaheadsRight(SDFLookaheads arg);
-SDFLookaheads SDFsetLookaheadsRight(SDFLookaheads arg, SDFLookaheads right);
-ATbool SDFhasLookaheadsLookaheads(SDFLookaheads arg);
-SDFLookaheads SDFgetLookaheadsLookaheads(SDFLookaheads arg);
-SDFLookaheads SDFsetLookaheadsLookaheads(SDFLookaheads arg, SDFLookaheads lookaheads);
-ATbool SDFhasLookaheadsWsAfterLeft(SDFLookaheads arg);
-SDFLayout SDFgetLookaheadsWsAfterLeft(SDFLookaheads arg);
-SDFLookaheads SDFsetLookaheadsWsAfterLeft(SDFLookaheads arg, SDFLayout wsAfterLeft);
-ATbool SDFhasLookaheadsWsAfterParenOpen(SDFLookaheads arg);
-SDFLayout SDFgetLookaheadsWsAfterParenOpen(SDFLookaheads arg);
-SDFLookaheads SDFsetLookaheadsWsAfterParenOpen(SDFLookaheads arg, SDFLayout wsAfterParenOpen);
-ATbool SDFhasLookaheadsWsAfterBracketOpenBracketOpen(SDFLookaheads arg);
-SDFLayout SDFgetLookaheadsWsAfterBracketOpenBracketOpen(SDFLookaheads arg);
-SDFLookaheads SDFsetLookaheadsWsAfterBracketOpenBracketOpen(SDFLookaheads arg, SDFLayout wsAfterBracketOpenBracketOpen);
-ATbool SDFhasLookaheadsLookahead(SDFLookaheads arg);
-SDFLookahead SDFgetLookaheadsLookahead(SDFLookaheads arg);
-SDFLookaheads SDFsetLookaheadsLookahead(SDFLookaheads arg, SDFLookahead lookahead);
-ATbool SDFhasLookaheadsWsAfterBar(SDFLookaheads arg);
-SDFLayout SDFgetLookaheadsWsAfterBar(SDFLookaheads arg);
-SDFLookaheads SDFsetLookaheadsWsAfterBar(SDFLookaheads arg, SDFLayout wsAfterBar);
-ATbool SDFhasLookaheadsLeft(SDFLookaheads arg);
-SDFLookaheads SDFgetLookaheadsLeft(SDFLookaheads arg);
-SDFLookaheads SDFsetLookaheadsLeft(SDFLookaheads arg, SDFLookaheads left);
-ATbool SDFhasLookaheadsWsAfterLookaheads(SDFLookaheads arg);
-SDFLayout SDFgetLookaheadsWsAfterLookaheads(SDFLookaheads arg);
-SDFLookaheads SDFsetLookaheadsWsAfterLookaheads(SDFLookaheads arg, SDFLayout wsAfterLookaheads);
-
-/*}}}  */
-/*{{{  SDFLookaheadLookaheads accessor prototypes */
-
-ATbool SDFisValidLookaheadLookaheads(SDFLookaheadLookaheads arg);
-ATbool SDFisLookaheadLookaheadsEmpty(SDFLookaheadLookaheads arg);
-ATbool SDFisLookaheadLookaheadsSingle(SDFLookaheadLookaheads arg);
-ATbool SDFisLookaheadLookaheadsMany(SDFLookaheadLookaheads arg);
-ATbool SDFhasLookaheadLookaheadsWsAfterFirst(SDFLookaheadLookaheads arg);
-SDFLayout SDFgetLookaheadLookaheadsWsAfterFirst(SDFLookaheadLookaheads arg);
-SDFLookaheadLookaheads SDFsetLookaheadLookaheadsWsAfterFirst(SDFLookaheadLookaheads arg, SDFLayout wsAfterFirst);
-ATbool SDFhasLookaheadLookaheadsWsAfterSep(SDFLookaheadLookaheads arg);
-SDFLayout SDFgetLookaheadLookaheadsWsAfterSep(SDFLookaheadLookaheads arg);
-SDFLookaheadLookaheads SDFsetLookaheadLookaheadsWsAfterSep(SDFLookaheadLookaheads arg, SDFLayout wsAfterSep);
-ATbool SDFhasLookaheadLookaheadsTail(SDFLookaheadLookaheads arg);
-SDFLookaheadLookaheads SDFgetLookaheadLookaheadsTail(SDFLookaheadLookaheads arg);
-SDFLookaheadLookaheads SDFsetLookaheadLookaheadsTail(SDFLookaheadLookaheads arg, SDFLookaheadLookaheads tail);
-ATbool SDFhasLookaheadLookaheadsHead(SDFLookaheadLookaheads arg);
-SDFLookahead SDFgetLookaheadLookaheadsHead(SDFLookaheadLookaheads arg);
-SDFLookaheadLookaheads SDFsetLookaheadLookaheadsHead(SDFLookaheadLookaheads arg, SDFLookahead head);
-ATbool SDFhasLookaheadLookaheadsSep(SDFLookaheadLookaheads arg);
-SDFSeparator SDFgetLookaheadLookaheadsSep(SDFLookaheadLookaheads arg);
-SDFLookaheadLookaheads SDFsetLookaheadLookaheadsSep(SDFLookaheadLookaheads arg, SDFSeparator sep);
-
-/*}}}  */
-/*{{{  SDFRestriction accessor prototypes */
-
-ATbool SDFisValidRestriction(SDFRestriction arg);
-ATbool SDFisRestrictionFollow(SDFRestriction arg);
-ATbool SDFhasRestrictionLookaheads(SDFRestriction arg);
-SDFLookaheads SDFgetRestrictionLookaheads(SDFRestriction arg);
-SDFRestriction SDFsetRestrictionLookaheads(SDFRestriction arg, SDFLookaheads lookaheads);
-ATbool SDFhasRestrictionWsAfterSymbols(SDFRestriction arg);
-SDFLayout SDFgetRestrictionWsAfterSymbols(SDFRestriction arg);
-SDFRestriction SDFsetRestrictionWsAfterSymbols(SDFRestriction arg, SDFLayout wsAfterSymbols);
-ATbool SDFhasRestrictionWsAfterSlash(SDFRestriction arg);
-SDFLayout SDFgetRestrictionWsAfterSlash(SDFRestriction arg);
-SDFRestriction SDFsetRestrictionWsAfterSlash(SDFRestriction arg, SDFLayout wsAfterSlash);
-ATbool SDFhasRestrictionSymbols(SDFRestriction arg);
-SDFSymbols SDFgetRestrictionSymbols(SDFRestriction arg);
-SDFRestriction SDFsetRestrictionSymbols(SDFRestriction arg, SDFSymbols symbols);
-
-/*}}}  */
-/*{{{  SDFRestrictions accessor prototypes */
-
-ATbool SDFisValidRestrictions(SDFRestrictions arg);
-ATbool SDFisRestrictionsDefault(SDFRestrictions arg);
-ATbool SDFhasRestrictionsRestrictions(SDFRestrictions arg);
-SDFRestrictionRestrictions SDFgetRestrictionsRestrictions(SDFRestrictions arg);
-SDFRestrictions SDFsetRestrictionsRestrictions(SDFRestrictions arg, SDFRestrictionRestrictions restrictions);
-
-/*}}}  */
-/*{{{  SDFRestrictionRestrictions accessor prototypes */
-
-ATbool SDFisValidRestrictionRestrictions(SDFRestrictionRestrictions arg);
-ATbool SDFisRestrictionRestrictionsEmpty(SDFRestrictionRestrictions arg);
-ATbool SDFisRestrictionRestrictionsSingle(SDFRestrictionRestrictions arg);
-ATbool SDFisRestrictionRestrictionsMany(SDFRestrictionRestrictions arg);
-ATbool SDFhasRestrictionRestrictionsWsAfterFirst(SDFRestrictionRestrictions arg);
-SDFLayout SDFgetRestrictionRestrictionsWsAfterFirst(SDFRestrictionRestrictions arg);
-SDFRestrictionRestrictions SDFsetRestrictionRestrictionsWsAfterFirst(SDFRestrictionRestrictions arg, SDFLayout wsAfterFirst);
-ATbool SDFhasRestrictionRestrictionsTail(SDFRestrictionRestrictions arg);
-SDFRestrictionRestrictions SDFgetRestrictionRestrictionsTail(SDFRestrictionRestrictions arg);
-SDFRestrictionRestrictions SDFsetRestrictionRestrictionsTail(SDFRestrictionRestrictions arg, SDFRestrictionRestrictions tail);
-ATbool SDFhasRestrictionRestrictionsHead(SDFRestrictionRestrictions arg);
-SDFRestriction SDFgetRestrictionRestrictionsHead(SDFRestrictionRestrictions arg);
-SDFRestrictionRestrictions SDFsetRestrictionRestrictionsHead(SDFRestrictionRestrictions arg, SDFRestriction head);
-
-/*}}}  */
-/*{{{  SDFAlias accessor prototypes */
-
-ATbool SDFisValidAlias(SDFAlias arg);
-ATbool SDFisAliasAlias(SDFAlias arg);
-ATbool SDFhasAliasWsAfterSymbol(SDFAlias arg);
-SDFLayout SDFgetAliasWsAfterSymbol(SDFAlias arg);
-SDFAlias SDFsetAliasWsAfterSymbol(SDFAlias arg, SDFLayout wsAfterSymbol);
-ATbool SDFhasAliasAlias(SDFAlias arg);
-SDFSymbol SDFgetAliasAlias(SDFAlias arg);
-SDFAlias SDFsetAliasAlias(SDFAlias arg, SDFSymbol alias);
-ATbool SDFhasAliasSymbol(SDFAlias arg);
-SDFSymbol SDFgetAliasSymbol(SDFAlias arg);
-SDFAlias SDFsetAliasSymbol(SDFAlias arg, SDFSymbol symbol);
-ATbool SDFhasAliasWsAfterArrow(SDFAlias arg);
-SDFLayout SDFgetAliasWsAfterArrow(SDFAlias arg);
-SDFAlias SDFsetAliasWsAfterArrow(SDFAlias arg, SDFLayout wsAfterArrow);
-
-/*}}}  */
-/*{{{  SDFAliases accessor prototypes */
-
-ATbool SDFisValidAliases(SDFAliases arg);
-ATbool SDFisAliasesDefault(SDFAliases arg);
-ATbool SDFhasAliasesAliass(SDFAliases arg);
-SDFAliasAliass SDFgetAliasesAliass(SDFAliases arg);
-SDFAliases SDFsetAliasesAliass(SDFAliases arg, SDFAliasAliass aliass);
-
-/*}}}  */
-/*{{{  SDFAliasAliass accessor prototypes */
-
-ATbool SDFisValidAliasAliass(SDFAliasAliass arg);
-ATbool SDFisAliasAliassEmpty(SDFAliasAliass arg);
-ATbool SDFisAliasAliassSingle(SDFAliasAliass arg);
-ATbool SDFisAliasAliassMany(SDFAliasAliass arg);
-ATbool SDFhasAliasAliassWsAfterFirst(SDFAliasAliass arg);
-SDFLayout SDFgetAliasAliassWsAfterFirst(SDFAliasAliass arg);
-SDFAliasAliass SDFsetAliasAliassWsAfterFirst(SDFAliasAliass arg, SDFLayout wsAfterFirst);
-ATbool SDFhasAliasAliassTail(SDFAliasAliass arg);
-SDFAliasAliass SDFgetAliasAliassTail(SDFAliasAliass arg);
-SDFAliasAliass SDFsetAliasAliassTail(SDFAliasAliass arg, SDFAliasAliass tail);
-ATbool SDFhasAliasAliassHead(SDFAliasAliass arg);
-SDFAlias SDFgetAliasAliassHead(SDFAliasAliass arg);
-SDFAliasAliass SDFsetAliasAliassHead(SDFAliasAliass arg, SDFAlias head);
-
-/*}}}  */
-/*{{{  SDFSymbols accessor prototypes */
-
-ATbool SDFisValidSymbols(SDFSymbols arg);
-ATbool SDFisSymbolsDefault(SDFSymbols arg);
-ATbool SDFhasSymbolsSymbols(SDFSymbols arg);
-SDFSymbolSymbols SDFgetSymbolsSymbols(SDFSymbols arg);
-SDFSymbols SDFsetSymbolsSymbols(SDFSymbols arg, SDFSymbolSymbols symbols);
-
-/*}}}  */
-/*{{{  SDFSymbolSymbols accessor prototypes */
-
-ATbool SDFisValidSymbolSymbols(SDFSymbolSymbols arg);
-ATbool SDFisSymbolSymbolsEmpty(SDFSymbolSymbols arg);
-ATbool SDFisSymbolSymbolsSingle(SDFSymbolSymbols arg);
-ATbool SDFisSymbolSymbolsMany(SDFSymbolSymbols arg);
-ATbool SDFhasSymbolSymbolsWsAfterFirst(SDFSymbolSymbols arg);
-SDFLayout SDFgetSymbolSymbolsWsAfterFirst(SDFSymbolSymbols arg);
-SDFSymbolSymbols SDFsetSymbolSymbolsWsAfterFirst(SDFSymbolSymbols arg, SDFLayout wsAfterFirst);
-ATbool SDFhasSymbolSymbolsTail(SDFSymbolSymbols arg);
-SDFSymbolSymbols SDFgetSymbolSymbolsTail(SDFSymbolSymbols arg);
-SDFSymbolSymbols SDFsetSymbolSymbolsTail(SDFSymbolSymbols arg, SDFSymbolSymbols tail);
-ATbool SDFhasSymbolSymbolsHead(SDFSymbolSymbols arg);
-SDFSymbol SDFgetSymbolSymbolsHead(SDFSymbolSymbols arg);
-SDFSymbolSymbols SDFsetSymbolSymbolsHead(SDFSymbolSymbols arg, SDFSymbol head);
-
-/*}}}  */
-/*{{{  SDFRenamings accessor prototypes */
-
-ATbool SDFisValidRenamings(SDFRenamings arg);
-ATbool SDFisRenamingsRenamings(SDFRenamings arg);
-ATbool SDFhasRenamingsRenamings(SDFRenamings arg);
-SDFRenamingRenamings SDFgetRenamingsRenamings(SDFRenamings arg);
-SDFRenamings SDFsetRenamingsRenamings(SDFRenamings arg, SDFRenamingRenamings renamings);
-ATbool SDFhasRenamingsWsAfterRenamings(SDFRenamings arg);
-SDFLayout SDFgetRenamingsWsAfterRenamings(SDFRenamings arg);
-SDFRenamings SDFsetRenamingsWsAfterRenamings(SDFRenamings arg, SDFLayout wsAfterRenamings);
-ATbool SDFhasRenamingsWsAfterBracketOpen(SDFRenamings arg);
-SDFLayout SDFgetRenamingsWsAfterBracketOpen(SDFRenamings arg);
-SDFRenamings SDFsetRenamingsWsAfterBracketOpen(SDFRenamings arg, SDFLayout wsAfterBracketOpen);
-
-/*}}}  */
-/*{{{  SDFRenamingRenamings accessor prototypes */
-
-ATbool SDFisValidRenamingRenamings(SDFRenamingRenamings arg);
-ATbool SDFisRenamingRenamingsEmpty(SDFRenamingRenamings arg);
-ATbool SDFisRenamingRenamingsSingle(SDFRenamingRenamings arg);
-ATbool SDFisRenamingRenamingsMany(SDFRenamingRenamings arg);
-ATbool SDFhasRenamingRenamingsWsAfterFirst(SDFRenamingRenamings arg);
-SDFLayout SDFgetRenamingRenamingsWsAfterFirst(SDFRenamingRenamings arg);
-SDFRenamingRenamings SDFsetRenamingRenamingsWsAfterFirst(SDFRenamingRenamings arg, SDFLayout wsAfterFirst);
-ATbool SDFhasRenamingRenamingsTail(SDFRenamingRenamings arg);
-SDFRenamingRenamings SDFgetRenamingRenamingsTail(SDFRenamingRenamings arg);
-SDFRenamingRenamings SDFsetRenamingRenamingsTail(SDFRenamingRenamings arg, SDFRenamingRenamings tail);
-ATbool SDFhasRenamingRenamingsHead(SDFRenamingRenamings arg);
-SDFRenaming SDFgetRenamingRenamingsHead(SDFRenamingRenamings arg);
-SDFRenamingRenamings SDFsetRenamingRenamingsHead(SDFRenamingRenamings arg, SDFRenaming head);
-
-/*}}}  */
-/*{{{  SDFRenaming accessor prototypes */
-
-ATbool SDFisValidRenaming(SDFRenaming arg);
-ATbool SDFisRenamingSymbol(SDFRenaming arg);
-ATbool SDFisRenamingProduction(SDFRenaming arg);
-ATbool SDFhasRenamingFrom(SDFRenaming arg);
-SDFSymbol SDFgetRenamingFrom(SDFRenaming arg);
-SDFRenaming SDFsetRenamingFrom(SDFRenaming arg, SDFSymbol from);
-ATbool SDFhasRenamingTo(SDFRenaming arg);
-SDFSymbol SDFgetRenamingTo(SDFRenaming arg);
-SDFRenaming SDFsetRenamingTo(SDFRenaming arg, SDFSymbol to);
-ATbool SDFhasRenamingWsAfterFrom(SDFRenaming arg);
-SDFLayout SDFgetRenamingWsAfterFrom(SDFRenaming arg);
-SDFRenaming SDFsetRenamingWsAfterFrom(SDFRenaming arg, SDFLayout wsAfterFrom);
-ATbool SDFhasRenamingWsAfterEqualsGreaterThan(SDFRenaming arg);
-SDFLayout SDFgetRenamingWsAfterEqualsGreaterThan(SDFRenaming arg);
-SDFRenaming SDFsetRenamingWsAfterEqualsGreaterThan(SDFRenaming arg, SDFLayout wsAfterEqualsGreaterThan);
-
-/*}}}  */
-/*{{{  SDFNatCon accessor prototypes */
-
-ATbool SDFisValidNatCon(SDFNatCon arg);
-ATbool SDFisNatConDigits(SDFNatCon arg);
-ATbool SDFhasNatConLex(SDFNatCon arg);
-SDFLexical SDFgetNatConLex(SDFNatCon arg);
-SDFNatCon SDFsetNatConLex(SDFNatCon arg, SDFLexical lex);
-
-/*}}}  */
-/*{{{  SDFIntCon accessor prototypes */
-
-ATbool SDFisValidIntCon(SDFIntCon arg);
-ATbool SDFisIntConNatural(SDFIntCon arg);
-ATbool SDFisIntConPositive(SDFIntCon arg);
-ATbool SDFisIntConNegative(SDFIntCon arg);
-ATbool SDFhasIntConWsAfterNeg(SDFIntCon arg);
-SDFLayout SDFgetIntConWsAfterNeg(SDFIntCon arg);
-SDFIntCon SDFsetIntConWsAfterNeg(SDFIntCon arg, SDFLayout wsAfterNeg);
-ATbool SDFhasIntConWsAfterPos(SDFIntCon arg);
-SDFLayout SDFgetIntConWsAfterPos(SDFIntCon arg);
-SDFIntCon SDFsetIntConWsAfterPos(SDFIntCon arg, SDFLayout wsAfterPos);
-ATbool SDFhasIntConNatCon(SDFIntCon arg);
-SDFNatCon SDFgetIntConNatCon(SDFIntCon arg);
-SDFIntCon SDFsetIntConNatCon(SDFIntCon arg, SDFNatCon natCon);
-
-/*}}}  */
-/*{{{  SDFCharRange accessor prototypes */
-
-ATbool SDFisValidCharRange(SDFCharRange arg);
-ATbool SDFisCharRangeDefault(SDFCharRange arg);
-ATbool SDFisCharRangeRange(SDFCharRange arg);
-ATbool SDFhasCharRangeWsAfter(SDFCharRange arg);
-SDFLayout SDFgetCharRangeWsAfter(SDFCharRange arg);
-SDFCharRange SDFsetCharRangeWsAfter(SDFCharRange arg, SDFLayout wsAfter);
-ATbool SDFhasCharRangeEnd(SDFCharRange arg);
-SDFCharacter SDFgetCharRangeEnd(SDFCharRange arg);
-SDFCharRange SDFsetCharRangeEnd(SDFCharRange arg, SDFCharacter end);
-ATbool SDFhasCharRangeCharacter(SDFCharRange arg);
-SDFCharacter SDFgetCharRangeCharacter(SDFCharRange arg);
-SDFCharRange SDFsetCharRangeCharacter(SDFCharRange arg, SDFCharacter character);
-ATbool SDFhasCharRangeStart(SDFCharRange arg);
-SDFCharacter SDFgetCharRangeStart(SDFCharRange arg);
-SDFCharRange SDFsetCharRangeStart(SDFCharRange arg, SDFCharacter start);
-ATbool SDFhasCharRangeWsAfterStart(SDFCharRange arg);
-SDFLayout SDFgetCharRangeWsAfterStart(SDFCharRange arg);
-SDFCharRange SDFsetCharRangeWsAfterStart(SDFCharRange arg, SDFLayout wsAfterStart);
-
-/*}}}  */
-/*{{{  SDFCharRanges accessor prototypes */
-
-ATbool SDFisValidCharRanges(SDFCharRanges arg);
-ATbool SDFisCharRangesDefault(SDFCharRanges arg);
-ATbool SDFisCharRangesConc(SDFCharRanges arg);
-ATbool SDFisCharRangesBracket(SDFCharRanges arg);
-ATbool SDFhasCharRangesRight(SDFCharRanges arg);
-SDFCharRanges SDFgetCharRangesRight(SDFCharRanges arg);
-SDFCharRanges SDFsetCharRangesRight(SDFCharRanges arg, SDFCharRanges right);
-ATbool SDFhasCharRangesWsAfterLeft(SDFCharRanges arg);
-SDFLayout SDFgetCharRangesWsAfterLeft(SDFCharRanges arg);
-SDFCharRanges SDFsetCharRangesWsAfterLeft(SDFCharRanges arg, SDFLayout wsAfterLeft);
-ATbool SDFhasCharRangesWsAfterParenOpen(SDFCharRanges arg);
-SDFLayout SDFgetCharRangesWsAfterParenOpen(SDFCharRanges arg);
-SDFCharRanges SDFsetCharRangesWsAfterParenOpen(SDFCharRanges arg, SDFLayout wsAfterParenOpen);
-ATbool SDFhasCharRangesWsAfterCharRanges(SDFCharRanges arg);
-SDFLayout SDFgetCharRangesWsAfterCharRanges(SDFCharRanges arg);
-SDFCharRanges SDFsetCharRangesWsAfterCharRanges(SDFCharRanges arg, SDFLayout wsAfterCharRanges);
-ATbool SDFhasCharRangesCharRanges(SDFCharRanges arg);
-SDFCharRanges SDFgetCharRangesCharRanges(SDFCharRanges arg);
-SDFCharRanges SDFsetCharRangesCharRanges(SDFCharRanges arg, SDFCharRanges charRanges);
-ATbool SDFhasCharRangesCharRange(SDFCharRanges arg);
-SDFCharRange SDFgetCharRangesCharRange(SDFCharRanges arg);
-SDFCharRanges SDFsetCharRangesCharRange(SDFCharRanges arg, SDFCharRange charRange);
-ATbool SDFhasCharRangesLeft(SDFCharRanges arg);
-SDFCharRanges SDFgetCharRangesLeft(SDFCharRanges arg);
-SDFCharRanges SDFsetCharRangesLeft(SDFCharRanges arg, SDFCharRanges left);
-
-/*}}}  */
-/*{{{  SDFOptCharRanges accessor prototypes */
-
-ATbool SDFisValidOptCharRanges(SDFOptCharRanges arg);
-ATbool SDFisOptCharRangesAbsent(SDFOptCharRanges arg);
-ATbool SDFisOptCharRangesPresent(SDFOptCharRanges arg);
-ATbool SDFhasOptCharRangesCharRanges(SDFOptCharRanges arg);
-SDFCharRanges SDFgetOptCharRangesCharRanges(SDFOptCharRanges arg);
-SDFOptCharRanges SDFsetOptCharRangesCharRanges(SDFOptCharRanges arg, SDFCharRanges charRanges);
-
-/*}}}  */
-/*{{{  SDFCharClass accessor prototypes */
-
-ATbool SDFisValidCharClass(SDFCharClass arg);
-ATbool SDFisCharClassSimpleCharclass(SDFCharClass arg);
-ATbool SDFisCharClassComp(SDFCharClass arg);
-ATbool SDFisCharClassDiff(SDFCharClass arg);
-ATbool SDFisCharClassIsect(SDFCharClass arg);
-ATbool SDFisCharClassUnion(SDFCharClass arg);
-ATbool SDFisCharClassBracket(SDFCharClass arg);
-ATbool SDFhasCharClassRight(SDFCharClass arg);
-SDFCharClass SDFgetCharClassRight(SDFCharClass arg);
-SDFCharClass SDFsetCharClassRight(SDFCharClass arg, SDFCharClass right);
-ATbool SDFhasCharClassWsAfterSlash(SDFCharClass arg);
-SDFLayout SDFgetCharClassWsAfterSlash(SDFCharClass arg);
-SDFCharClass SDFsetCharClassWsAfterSlash(SDFCharClass arg, SDFLayout wsAfterSlash);
-ATbool SDFhasCharClassOptCharRanges(SDFCharClass arg);
-SDFOptCharRanges SDFgetCharClassOptCharRanges(SDFCharClass arg);
-SDFCharClass SDFsetCharClassOptCharRanges(SDFCharClass arg, SDFOptCharRanges optCharRanges);
-ATbool SDFhasCharClassWsAfterLeft(SDFCharClass arg);
-SDFLayout SDFgetCharClassWsAfterLeft(SDFCharClass arg);
-SDFCharClass SDFsetCharClassWsAfterLeft(SDFCharClass arg, SDFLayout wsAfterLeft);
-ATbool SDFhasCharClassWsAfterParenOpen(SDFCharClass arg);
-SDFLayout SDFgetCharClassWsAfterParenOpen(SDFCharClass arg);
-SDFCharClass SDFsetCharClassWsAfterParenOpen(SDFCharClass arg, SDFLayout wsAfterParenOpen);
-ATbool SDFhasCharClassWsAfterTilde(SDFCharClass arg);
-SDFLayout SDFgetCharClassWsAfterTilde(SDFCharClass arg);
-SDFCharClass SDFsetCharClassWsAfterTilde(SDFCharClass arg, SDFLayout wsAfterTilde);
-ATbool SDFhasCharClassWsAfterBackslashSlash(SDFCharClass arg);
-SDFLayout SDFgetCharClassWsAfterBackslashSlash(SDFCharClass arg);
-SDFCharClass SDFsetCharClassWsAfterBackslashSlash(SDFCharClass arg, SDFLayout wsAfterBackslashSlash);
-ATbool SDFhasCharClassWsAfterOptCharRanges(SDFCharClass arg);
-SDFLayout SDFgetCharClassWsAfterOptCharRanges(SDFCharClass arg);
-SDFCharClass SDFsetCharClassWsAfterOptCharRanges(SDFCharClass arg, SDFLayout wsAfterOptCharRanges);
-ATbool SDFhasCharClassCharClass(SDFCharClass arg);
-SDFCharClass SDFgetCharClassCharClass(SDFCharClass arg);
-SDFCharClass SDFsetCharClassCharClass(SDFCharClass arg, SDFCharClass charClass);
-ATbool SDFhasCharClassWsAfterBracketOpen(SDFCharClass arg);
-SDFLayout SDFgetCharClassWsAfterBracketOpen(SDFCharClass arg);
-SDFCharClass SDFsetCharClassWsAfterBracketOpen(SDFCharClass arg, SDFLayout wsAfterBracketOpen);
-ATbool SDFhasCharClassWsAfterSlashBackslash(SDFCharClass arg);
-SDFLayout SDFgetCharClassWsAfterSlashBackslash(SDFCharClass arg);
-SDFCharClass SDFsetCharClassWsAfterSlashBackslash(SDFCharClass arg, SDFLayout wsAfterSlashBackslash);
-ATbool SDFhasCharClassWsAfterCharClass(SDFCharClass arg);
-SDFLayout SDFgetCharClassWsAfterCharClass(SDFCharClass arg);
-SDFCharClass SDFsetCharClassWsAfterCharClass(SDFCharClass arg, SDFLayout wsAfterCharClass);
-ATbool SDFhasCharClassLeft(SDFCharClass arg);
-SDFCharClass SDFgetCharClassLeft(SDFCharClass arg);
-SDFCharClass SDFsetCharClassLeft(SDFCharClass arg, SDFCharClass left);
-
-/*}}}  */
-/*{{{  SDFAlphaNumericalEscChar accessor prototypes */
-
-ATbool SDFisValidAlphaNumericalEscChar(SDFAlphaNumericalEscChar arg);
-ATbool SDFisAlphaNumericalEscCharDefault(SDFAlphaNumericalEscChar arg);
-ATbool SDFhasAlphaNumericalEscCharLex(SDFAlphaNumericalEscChar arg);
-SDFLexical SDFgetAlphaNumericalEscCharLex(SDFAlphaNumericalEscChar arg);
-SDFAlphaNumericalEscChar SDFsetAlphaNumericalEscCharLex(SDFAlphaNumericalEscChar arg, SDFLexical lex);
-
-/*}}}  */
-/*{{{  SDFDecimalEscChar accessor prototypes */
-
-ATbool SDFisValidDecimalEscChar(SDFDecimalEscChar arg);
-ATbool SDFisDecimalEscCharDec0_199(SDFDecimalEscChar arg);
-ATbool SDFisDecimalEscCharDec200_249(SDFDecimalEscChar arg);
-ATbool SDFisDecimalEscCharDec250_255(SDFDecimalEscChar arg);
-ATbool SDFhasDecimalEscCharLex(SDFDecimalEscChar arg);
-SDFLexical SDFgetDecimalEscCharLex(SDFDecimalEscChar arg);
-SDFDecimalEscChar SDFsetDecimalEscCharLex(SDFDecimalEscChar arg, SDFLexical lex);
-
-/*}}}  */
-/*{{{  SDFEscChar accessor prototypes */
-
-ATbool SDFisValidEscChar(SDFEscChar arg);
-ATbool SDFisEscCharAlphaNumeric(SDFEscChar arg);
-ATbool SDFisEscCharDecimal(SDFEscChar arg);
-ATbool SDFhasEscCharLex(SDFEscChar arg);
-SDFLexical SDFgetEscCharLex(SDFEscChar arg);
-SDFEscChar SDFsetEscCharLex(SDFEscChar arg, SDFLexical lex);
-
-/*}}}  */
-/*{{{  SDFLChar accessor prototypes */
-
-ATbool SDFisValidLChar(SDFLChar arg);
-ATbool SDFisLCharNormal(SDFLChar arg);
-ATbool SDFisLCharEscaped(SDFLChar arg);
-ATbool SDFhasLCharLex(SDFLChar arg);
-SDFLexical SDFgetLCharLex(SDFLChar arg);
-SDFLChar SDFsetLCharLex(SDFLChar arg, SDFLexical lex);
-
-/*}}}  */
-/*{{{  SDFATerms accessor prototypes */
-
-ATbool SDFisValidATerms(SDFATerms arg);
-ATbool SDFisATermsAterm(SDFATerms arg);
-ATbool SDFisATermsCons(SDFATerms arg);
-ATbool SDFhasATermsWsAfterComma(SDFATerms arg);
-SDFLayout SDFgetATermsWsAfterComma(SDFATerms arg);
-SDFATerms SDFsetATermsWsAfterComma(SDFATerms arg, SDFLayout wsAfterComma);
-ATbool SDFhasATermsATerm(SDFATerms arg);
-SDFATerm SDFgetATermsATerm(SDFATerms arg);
-SDFATerms SDFsetATermsATerm(SDFATerms arg, SDFATerm aTerm);
-ATbool SDFhasATermsTail(SDFATerms arg);
-SDFATerms SDFgetATermsTail(SDFATerms arg);
-SDFATerms SDFsetATermsTail(SDFATerms arg, SDFATerms tail);
-ATbool SDFhasATermsHead(SDFATerms arg);
-SDFATerm SDFgetATermsHead(SDFATerms arg);
-SDFATerms SDFsetATermsHead(SDFATerms arg, SDFATerm head);
-ATbool SDFhasATermsWsAfterHead(SDFATerms arg);
-SDFLayout SDFgetATermsWsAfterHead(SDFATerms arg);
-SDFATerms SDFsetATermsWsAfterHead(SDFATerms arg, SDFLayout wsAfterHead);
-
-/*}}}  */
-/*{{{  SDFATermList accessor prototypes */
-
-ATbool SDFisValidATermList(SDFATermList arg);
-ATbool SDFisATermListEmpty(SDFATermList arg);
-ATbool SDFisATermListNotEmpty(SDFATermList arg);
-ATbool SDFhasATermListWsAfterBracketOpen(SDFATermList arg);
-SDFLayout SDFgetATermListWsAfterBracketOpen(SDFATermList arg);
-SDFATermList SDFsetATermListWsAfterBracketOpen(SDFATermList arg, SDFLayout wsAfterBracketOpen);
-ATbool SDFhasATermListWsAfterATerms(SDFATermList arg);
-SDFLayout SDFgetATermListWsAfterATerms(SDFATermList arg);
-SDFATermList SDFsetATermListWsAfterATerms(SDFATermList arg, SDFLayout wsAfterATerms);
-ATbool SDFhasATermListATerms(SDFATermList arg);
-SDFATerms SDFgetATermListATerms(SDFATermList arg);
-SDFATermList SDFsetATermListATerms(SDFATermList arg, SDFATerms aTerms);
-
-/*}}}  */
-/*{{{  SDFACon accessor prototypes */
-
-ATbool SDFisValidACon(SDFACon arg);
-ATbool SDFisAConInt(SDFACon arg);
-ATbool SDFisAConReal(SDFACon arg);
-ATbool SDFhasAConIntCon(SDFACon arg);
-SDFIntCon SDFgetAConIntCon(SDFACon arg);
-SDFACon SDFsetAConIntCon(SDFACon arg, SDFIntCon intCon);
-ATbool SDFhasAConRealCon(SDFACon arg);
-SDFRealCon SDFgetAConRealCon(SDFACon arg);
-SDFACon SDFsetAConRealCon(SDFACon arg, SDFRealCon realCon);
-
-/*}}}  */
-/*{{{  SDFAFun accessor prototypes */
-
-ATbool SDFisValidAFun(SDFAFun arg);
-ATbool SDFisAFunDefault(SDFAFun arg);
-ATbool SDFhasAFunLiteral(SDFAFun arg);
-SDFLiteral SDFgetAFunLiteral(SDFAFun arg);
-SDFAFun SDFsetAFunLiteral(SDFAFun arg, SDFLiteral literal);
-
-/*}}}  */
-/*{{{  SDFATerm accessor prototypes */
-
-ATbool SDFisValidATerm(SDFATerm arg);
-ATbool SDFisATermConstant(SDFATerm arg);
-ATbool SDFisATermList(SDFATerm arg);
-ATbool SDFisATermFun(SDFATerm arg);
-ATbool SDFisATermAppl(SDFATerm arg);
-ATbool SDFisATermAnnotatedConstant(SDFATerm arg);
-ATbool SDFisATermAnnotatedList(SDFATerm arg);
-ATbool SDFisATermAnnotatedFun(SDFATerm arg);
-ATbool SDFisATermAnnotatedAppl(SDFATerm arg);
-ATbool SDFhasATermWsAfterAFun(SDFATerm arg);
-SDFLayout SDFgetATermWsAfterAFun(SDFATerm arg);
-SDFATerm SDFsetATermWsAfterAFun(SDFATerm arg, SDFLayout wsAfterAFun);
-ATbool SDFhasATermWsAfterParenClose(SDFATerm arg);
-SDFLayout SDFgetATermWsAfterParenClose(SDFATerm arg);
-SDFATerm SDFsetATermWsAfterParenClose(SDFATerm arg, SDFLayout wsAfterParenClose);
-ATbool SDFhasATermWsAfterParenOpen(SDFATerm arg);
-SDFLayout SDFgetATermWsAfterParenOpen(SDFATerm arg);
-SDFATerm SDFsetATermWsAfterParenOpen(SDFATerm arg, SDFLayout wsAfterParenOpen);
-ATbool SDFhasATermACon(SDFATerm arg);
-SDFACon SDFgetATermACon(SDFATerm arg);
-SDFATerm SDFsetATermACon(SDFATerm arg, SDFACon aCon);
-ATbool SDFhasATermAnn(SDFATerm arg);
-SDFAnn SDFgetATermAnn(SDFATerm arg);
-SDFATerm SDFsetATermAnn(SDFATerm arg, SDFAnn ann);
-ATbool SDFhasATermArgs(SDFATerm arg);
-SDFATerms SDFgetATermArgs(SDFATerm arg);
-SDFATerm SDFsetATermArgs(SDFATerm arg, SDFATerms args);
-ATbool SDFhasATermWsAfterACon(SDFATerm arg);
-SDFLayout SDFgetATermWsAfterACon(SDFATerm arg);
-SDFATerm SDFsetATermWsAfterACon(SDFATerm arg, SDFLayout wsAfterACon);
-ATbool SDFhasATermWsAfterArgs(SDFATerm arg);
-SDFLayout SDFgetATermWsAfterArgs(SDFATerm arg);
-SDFATerm SDFsetATermWsAfterArgs(SDFATerm arg, SDFLayout wsAfterArgs);
-ATbool SDFhasATermATermList(SDFATerm arg);
-SDFATermList SDFgetATermATermList(SDFATerm arg);
-SDFATerm SDFsetATermATermList(SDFATerm arg, SDFATermList aTermList);
-ATbool SDFhasATermAFun(SDFATerm arg);
-SDFAFun SDFgetATermAFun(SDFATerm arg);
-SDFATerm SDFsetATermAFun(SDFATerm arg, SDFAFun aFun);
-ATbool SDFhasATermWsAfterATermList(SDFATerm arg);
-SDFLayout SDFgetATermWsAfterATermList(SDFATerm arg);
-SDFATerm SDFsetATermWsAfterATermList(SDFATerm arg, SDFLayout wsAfterATermList);
-
-/*}}}  */
-/*{{{  SDFAnn accessor prototypes */
-
-ATbool SDFisValidAnn(SDFAnn arg);
-ATbool SDFisAnnAnnotation(SDFAnn arg);
-ATbool SDFhasAnnWsAfterBraceOpen(SDFAnn arg);
-SDFLayout SDFgetAnnWsAfterBraceOpen(SDFAnn arg);
-SDFAnn SDFsetAnnWsAfterBraceOpen(SDFAnn arg, SDFLayout wsAfterBraceOpen);
-ATbool SDFhasAnnWsAfterATerms(SDFAnn arg);
-SDFLayout SDFgetAnnWsAfterATerms(SDFAnn arg);
-SDFAnn SDFsetAnnWsAfterATerms(SDFAnn arg, SDFLayout wsAfterATerms);
-ATbool SDFhasAnnATerms(SDFAnn arg);
-SDFATerms SDFgetAnnATerms(SDFAnn arg);
-SDFAnn SDFsetAnnATerms(SDFAnn arg, SDFATerms aTerms);
-
-/*}}}  */
-/*{{{  SDFTagId accessor prototypes */
-
-ATbool SDFisValidTagId(SDFTagId arg);
-ATbool SDFisTagIdDefault(SDFTagId arg);
-ATbool SDFisTagIdEmpty(SDFTagId arg);
-ATbool SDFhasTagIdLex(SDFTagId arg);
-SDFLexical SDFgetTagIdLex(SDFTagId arg);
-SDFTagId SDFsetTagIdLex(SDFTagId arg, SDFLexical lex);
-
-/*}}}  */
-/*{{{  SDFNumChar accessor prototypes */
-
-ATbool SDFisValidNumChar(SDFNumChar arg);
-ATbool SDFisNumCharDigits(SDFNumChar arg);
-ATbool SDFhasNumCharLex(SDFNumChar arg);
-SDFLexical SDFgetNumCharLex(SDFNumChar arg);
-SDFNumChar SDFsetNumCharLex(SDFNumChar arg, SDFLexical lex);
-
-/*}}}  */
-/*{{{  SDFShortChar accessor prototypes */
-
-ATbool SDFisValidShortChar(SDFShortChar arg);
-ATbool SDFisShortCharRegular(SDFShortChar arg);
-ATbool SDFisShortCharEscaped(SDFShortChar arg);
-ATbool SDFhasShortCharLex(SDFShortChar arg);
-SDFLexical SDFgetShortCharLex(SDFShortChar arg);
-SDFShortChar SDFsetShortCharLex(SDFShortChar arg, SDFLexical lex);
-
-/*}}}  */
-/*{{{  SDFCharacter accessor prototypes */
-
-ATbool SDFisValidCharacter(SDFCharacter arg);
-ATbool SDFisCharacterNumeric(SDFCharacter arg);
-ATbool SDFisCharacterShort(SDFCharacter arg);
-ATbool SDFisCharacterTop(SDFCharacter arg);
-ATbool SDFisCharacterEof(SDFCharacter arg);
-ATbool SDFhasCharacterShortChar(SDFCharacter arg);
-SDFShortChar SDFgetCharacterShortChar(SDFCharacter arg);
-SDFCharacter SDFsetCharacterShortChar(SDFCharacter arg, SDFShortChar shortChar);
-ATbool SDFhasCharacterNumChar(SDFCharacter arg);
-SDFNumChar SDFgetCharacterNumChar(SDFCharacter arg);
-SDFCharacter SDFsetCharacterNumChar(SDFCharacter arg, SDFNumChar numChar);
-
-/*}}}  */
-/*{{{  SDFOptExp accessor prototypes */
-
-ATbool SDFisValidOptExp(SDFOptExp arg);
-ATbool SDFisOptExpPresent(SDFOptExp arg);
-ATbool SDFisOptExpAbsent(SDFOptExp arg);
-ATbool SDFhasOptExpWsAfterE(SDFOptExp arg);
-SDFLayout SDFgetOptExpWsAfterE(SDFOptExp arg);
-SDFOptExp SDFsetOptExpWsAfterE(SDFOptExp arg, SDFLayout wsAfterE);
-ATbool SDFhasOptExpIntCon(SDFOptExp arg);
-SDFIntCon SDFgetOptExpIntCon(SDFOptExp arg);
-SDFOptExp SDFsetOptExpIntCon(SDFOptExp arg, SDFIntCon intCon);
-
-/*}}}  */
-/*{{{  SDFRealCon accessor prototypes */
-
-ATbool SDFisValidRealCon(SDFRealCon arg);
-ATbool SDFisRealConRealCon(SDFRealCon arg);
-ATbool SDFhasRealConWsAfterPeriod(SDFRealCon arg);
-SDFLayout SDFgetRealConWsAfterPeriod(SDFRealCon arg);
-SDFRealCon SDFsetRealConWsAfterPeriod(SDFRealCon arg, SDFLayout wsAfterPeriod);
-ATbool SDFhasRealConWsAfterIntCon(SDFRealCon arg);
-SDFLayout SDFgetRealConWsAfterIntCon(SDFRealCon arg);
-SDFRealCon SDFsetRealConWsAfterIntCon(SDFRealCon arg, SDFLayout wsAfterIntCon);
-ATbool SDFhasRealConOptExp(SDFRealCon arg);
-SDFOptExp SDFgetRealConOptExp(SDFRealCon arg);
-SDFRealCon SDFsetRealConOptExp(SDFRealCon arg, SDFOptExp optExp);
-ATbool SDFhasRealConIntCon(SDFRealCon arg);
-SDFIntCon SDFgetRealConIntCon(SDFRealCon arg);
-SDFRealCon SDFsetRealConIntCon(SDFRealCon arg, SDFIntCon intCon);
-ATbool SDFhasRealConWsAfterNatCon(SDFRealCon arg);
-SDFLayout SDFgetRealConWsAfterNatCon(SDFRealCon arg);
-SDFRealCon SDFsetRealConWsAfterNatCon(SDFRealCon arg, SDFLayout wsAfterNatCon);
-ATbool SDFhasRealConNatCon(SDFRealCon arg);
-SDFNatCon SDFgetRealConNatCon(SDFRealCon arg);
-SDFRealCon SDFsetRealConNatCon(SDFRealCon arg, SDFNatCon natCon);
+typedef struct _SDF_Symbol *SDF_Symbol;
+typedef struct _SDF_Grammar *SDF_Grammar;
+typedef struct _SDF_SDF *SDF_SDF;
+typedef struct _SDF_Attributes *SDF_Attributes;
+typedef struct _SDF_AttributeAttributes *SDF_AttributeAttributes;
+typedef struct _SDF_Production *SDF_Production;
+typedef struct _SDF_Productions *SDF_Productions;
+typedef struct _SDF_ProductionProductions *SDF_ProductionProductions;
+typedef struct _SDF_ModuleWord *SDF_ModuleWord;
+typedef struct _SDF_ModuleId *SDF_ModuleId;
+typedef struct _SDF_Definition *SDF_Definition;
+typedef struct _SDF_ModuleModules *SDF_ModuleModules;
+typedef struct _SDF_Module *SDF_Module;
+typedef struct _SDF_ImpSectionList *SDF_ImpSectionList;
+typedef struct _SDF_Section *SDF_Section;
+typedef struct _SDF_Sections *SDF_Sections;
+typedef struct _SDF_SectionList *SDF_SectionList;
+typedef struct _SDF_ModuleName *SDF_ModuleName;
+typedef struct _SDF_Attribute *SDF_Attribute;
+typedef struct _SDF_ImpSection *SDF_ImpSection;
+typedef struct _SDF_Imports *SDF_Imports;
+typedef struct _SDF_ImportList *SDF_ImportList;
+typedef struct _SDF_Import *SDF_Import;
+typedef struct _SDF_SymbolTail *SDF_SymbolTail;
+typedef struct _SDF_Associativity *SDF_Associativity;
+typedef struct _SDF_Group *SDF_Group;
+typedef struct _SDF_Priority *SDF_Priority;
+typedef struct _SDF_GroupGroupp *SDF_GroupGroupp;
+typedef struct _SDF_Priorities *SDF_Priorities;
+typedef struct _SDF_PriorityPrioritys *SDF_PriorityPrioritys;
+typedef struct _SDF_Sort *SDF_Sort;
+typedef struct _SDF_UQLiteral *SDF_UQLiteral;
+typedef struct _SDF_Literal *SDF_Literal;
+typedef struct _SDF_SymbolArguments *SDF_SymbolArguments;
+typedef struct _SDF_Lookahead *SDF_Lookahead;
+typedef struct _SDF_Lookaheads *SDF_Lookaheads;
+typedef struct _SDF_LookaheadLookaheads *SDF_LookaheadLookaheads;
+typedef struct _SDF_Restriction *SDF_Restriction;
+typedef struct _SDF_Restrictions *SDF_Restrictions;
+typedef struct _SDF_RestrictionRestrictions *SDF_RestrictionRestrictions;
+typedef struct _SDF_Alias *SDF_Alias;
+typedef struct _SDF_Aliases *SDF_Aliases;
+typedef struct _SDF_AliasAliass *SDF_AliasAliass;
+typedef struct _SDF_Symbols *SDF_Symbols;
+typedef struct _SDF_SymbolSymbols *SDF_SymbolSymbols;
+typedef struct _SDF_Renamings *SDF_Renamings;
+typedef struct _SDF_RenamingRenamings *SDF_RenamingRenamings;
+typedef struct _SDF_Renaming *SDF_Renaming;
+typedef struct _SDF_NatCon *SDF_NatCon;
+typedef struct _SDF_IntCon *SDF_IntCon;
+typedef struct _SDF_CharRange *SDF_CharRange;
+typedef struct _SDF_CharRanges *SDF_CharRanges;
+typedef struct _SDF_OptCharRanges *SDF_OptCharRanges;
+typedef struct _SDF_CharClass *SDF_CharClass;
+typedef struct _SDF_AlphaNumericalEscChar *SDF_AlphaNumericalEscChar;
+typedef struct _SDF_DecimalEscChar *SDF_DecimalEscChar;
+typedef struct _SDF_EscChar *SDF_EscChar;
+typedef struct _SDF_LChar *SDF_LChar;
+typedef struct _SDF_ATerms *SDF_ATerms;
+typedef struct _SDF_ATermList *SDF_ATermList;
+typedef struct _SDF_ACon *SDF_ACon;
+typedef struct _SDF_AFun *SDF_AFun;
+typedef struct _SDF_ATerm *SDF_ATerm;
+typedef struct _SDF_Ann *SDF_Ann;
+typedef struct _SDF_TagId *SDF_TagId;
+typedef struct _SDF_NumChar *SDF_NumChar;
+typedef struct _SDF_ShortChar *SDF_ShortChar;
+typedef struct _SDF_Character *SDF_Character;
+typedef struct _SDF_OptExp *SDF_OptExp;
+typedef struct _SDF_RealCon *SDF_RealCon;
+
+/*}}}  */
+
+void SDF_initSDFApi(void);
+
+SDF_Symbol SDF_makeSymbolFromTerm(ATerm t);
+ATerm SDF_makeTermFromSymbol(SDF_Symbol arg);
+SDF_Grammar SDF_makeGrammarFromTerm(ATerm t);
+ATerm SDF_makeTermFromGrammar(SDF_Grammar arg);
+SDF_SDF SDF_makeSDFFromTerm(ATerm t);
+ATerm SDF_makeTermFromSDF(SDF_SDF arg);
+SDF_Attributes SDF_makeAttributesFromTerm(ATerm t);
+ATerm SDF_makeTermFromAttributes(SDF_Attributes arg);
+SDF_AttributeAttributes SDF_makeAttributeAttributesFromTerm(ATerm t);
+ATerm SDF_makeTermFromAttributeAttributes(SDF_AttributeAttributes arg);
+SDF_Production SDF_makeProductionFromTerm(ATerm t);
+ATerm SDF_makeTermFromProduction(SDF_Production arg);
+SDF_Productions SDF_makeProductionsFromTerm(ATerm t);
+ATerm SDF_makeTermFromProductions(SDF_Productions arg);
+SDF_ProductionProductions SDF_makeProductionProductionsFromTerm(ATerm t);
+ATerm SDF_makeTermFromProductionProductions(SDF_ProductionProductions arg);
+SDF_ModuleWord SDF_makeModuleWordFromTerm(ATerm t);
+ATerm SDF_makeTermFromModuleWord(SDF_ModuleWord arg);
+SDF_ModuleId SDF_makeModuleIdFromTerm(ATerm t);
+ATerm SDF_makeTermFromModuleId(SDF_ModuleId arg);
+SDF_Definition SDF_makeDefinitionFromTerm(ATerm t);
+ATerm SDF_makeTermFromDefinition(SDF_Definition arg);
+SDF_ModuleModules SDF_makeModuleModulesFromTerm(ATerm t);
+ATerm SDF_makeTermFromModuleModules(SDF_ModuleModules arg);
+SDF_Module SDF_makeModuleFromTerm(ATerm t);
+ATerm SDF_makeTermFromModule(SDF_Module arg);
+SDF_ImpSectionList SDF_makeImpSectionListFromTerm(ATerm t);
+ATerm SDF_makeTermFromImpSectionList(SDF_ImpSectionList arg);
+SDF_Section SDF_makeSectionFromTerm(ATerm t);
+ATerm SDF_makeTermFromSection(SDF_Section arg);
+SDF_Sections SDF_makeSectionsFromTerm(ATerm t);
+ATerm SDF_makeTermFromSections(SDF_Sections arg);
+SDF_SectionList SDF_makeSectionListFromTerm(ATerm t);
+ATerm SDF_makeTermFromSectionList(SDF_SectionList arg);
+SDF_ModuleName SDF_makeModuleNameFromTerm(ATerm t);
+ATerm SDF_makeTermFromModuleName(SDF_ModuleName arg);
+SDF_Attribute SDF_makeAttributeFromTerm(ATerm t);
+ATerm SDF_makeTermFromAttribute(SDF_Attribute arg);
+SDF_ImpSection SDF_makeImpSectionFromTerm(ATerm t);
+ATerm SDF_makeTermFromImpSection(SDF_ImpSection arg);
+SDF_Imports SDF_makeImportsFromTerm(ATerm t);
+ATerm SDF_makeTermFromImports(SDF_Imports arg);
+SDF_ImportList SDF_makeImportListFromTerm(ATerm t);
+ATerm SDF_makeTermFromImportList(SDF_ImportList arg);
+SDF_Import SDF_makeImportFromTerm(ATerm t);
+ATerm SDF_makeTermFromImport(SDF_Import arg);
+SDF_SymbolTail SDF_makeSymbolTailFromTerm(ATerm t);
+ATerm SDF_makeTermFromSymbolTail(SDF_SymbolTail arg);
+SDF_Associativity SDF_makeAssociativityFromTerm(ATerm t);
+ATerm SDF_makeTermFromAssociativity(SDF_Associativity arg);
+SDF_Group SDF_makeGroupFromTerm(ATerm t);
+ATerm SDF_makeTermFromGroup(SDF_Group arg);
+SDF_Priority SDF_makePriorityFromTerm(ATerm t);
+ATerm SDF_makeTermFromPriority(SDF_Priority arg);
+SDF_GroupGroupp SDF_makeGroupGrouppFromTerm(ATerm t);
+ATerm SDF_makeTermFromGroupGroupp(SDF_GroupGroupp arg);
+SDF_Priorities SDF_makePrioritiesFromTerm(ATerm t);
+ATerm SDF_makeTermFromPriorities(SDF_Priorities arg);
+SDF_PriorityPrioritys SDF_makePriorityPrioritysFromTerm(ATerm t);
+ATerm SDF_makeTermFromPriorityPrioritys(SDF_PriorityPrioritys arg);
+SDF_Sort SDF_makeSortFromTerm(ATerm t);
+ATerm SDF_makeTermFromSort(SDF_Sort arg);
+SDF_UQLiteral SDF_makeUQLiteralFromTerm(ATerm t);
+ATerm SDF_makeTermFromUQLiteral(SDF_UQLiteral arg);
+SDF_Literal SDF_makeLiteralFromTerm(ATerm t);
+ATerm SDF_makeTermFromLiteral(SDF_Literal arg);
+SDF_SymbolArguments SDF_makeSymbolArgumentsFromTerm(ATerm t);
+ATerm SDF_makeTermFromSymbolArguments(SDF_SymbolArguments arg);
+SDF_Lookahead SDF_makeLookaheadFromTerm(ATerm t);
+ATerm SDF_makeTermFromLookahead(SDF_Lookahead arg);
+SDF_Lookaheads SDF_makeLookaheadsFromTerm(ATerm t);
+ATerm SDF_makeTermFromLookaheads(SDF_Lookaheads arg);
+SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsFromTerm(ATerm t);
+ATerm SDF_makeTermFromLookaheadLookaheads(SDF_LookaheadLookaheads arg);
+SDF_Restriction SDF_makeRestrictionFromTerm(ATerm t);
+ATerm SDF_makeTermFromRestriction(SDF_Restriction arg);
+SDF_Restrictions SDF_makeRestrictionsFromTerm(ATerm t);
+ATerm SDF_makeTermFromRestrictions(SDF_Restrictions arg);
+SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsFromTerm(ATerm t);
+ATerm SDF_makeTermFromRestrictionRestrictions(SDF_RestrictionRestrictions arg);
+SDF_Alias SDF_makeAliasFromTerm(ATerm t);
+ATerm SDF_makeTermFromAlias(SDF_Alias arg);
+SDF_Aliases SDF_makeAliasesFromTerm(ATerm t);
+ATerm SDF_makeTermFromAliases(SDF_Aliases arg);
+SDF_AliasAliass SDF_makeAliasAliassFromTerm(ATerm t);
+ATerm SDF_makeTermFromAliasAliass(SDF_AliasAliass arg);
+SDF_Symbols SDF_makeSymbolsFromTerm(ATerm t);
+ATerm SDF_makeTermFromSymbols(SDF_Symbols arg);
+SDF_SymbolSymbols SDF_makeSymbolSymbolsFromTerm(ATerm t);
+ATerm SDF_makeTermFromSymbolSymbols(SDF_SymbolSymbols arg);
+SDF_Renamings SDF_makeRenamingsFromTerm(ATerm t);
+ATerm SDF_makeTermFromRenamings(SDF_Renamings arg);
+SDF_RenamingRenamings SDF_makeRenamingRenamingsFromTerm(ATerm t);
+ATerm SDF_makeTermFromRenamingRenamings(SDF_RenamingRenamings arg);
+SDF_Renaming SDF_makeRenamingFromTerm(ATerm t);
+ATerm SDF_makeTermFromRenaming(SDF_Renaming arg);
+SDF_NatCon SDF_makeNatConFromTerm(ATerm t);
+ATerm SDF_makeTermFromNatCon(SDF_NatCon arg);
+SDF_IntCon SDF_makeIntConFromTerm(ATerm t);
+ATerm SDF_makeTermFromIntCon(SDF_IntCon arg);
+SDF_CharRange SDF_makeCharRangeFromTerm(ATerm t);
+ATerm SDF_makeTermFromCharRange(SDF_CharRange arg);
+SDF_CharRanges SDF_makeCharRangesFromTerm(ATerm t);
+ATerm SDF_makeTermFromCharRanges(SDF_CharRanges arg);
+SDF_OptCharRanges SDF_makeOptCharRangesFromTerm(ATerm t);
+ATerm SDF_makeTermFromOptCharRanges(SDF_OptCharRanges arg);
+SDF_CharClass SDF_makeCharClassFromTerm(ATerm t);
+ATerm SDF_makeTermFromCharClass(SDF_CharClass arg);
+SDF_AlphaNumericalEscChar SDF_makeAlphaNumericalEscCharFromTerm(ATerm t);
+ATerm SDF_makeTermFromAlphaNumericalEscChar(SDF_AlphaNumericalEscChar arg);
+SDF_DecimalEscChar SDF_makeDecimalEscCharFromTerm(ATerm t);
+ATerm SDF_makeTermFromDecimalEscChar(SDF_DecimalEscChar arg);
+SDF_EscChar SDF_makeEscCharFromTerm(ATerm t);
+ATerm SDF_makeTermFromEscChar(SDF_EscChar arg);
+SDF_LChar SDF_makeLCharFromTerm(ATerm t);
+ATerm SDF_makeTermFromLChar(SDF_LChar arg);
+SDF_ATerms SDF_makeATermsFromTerm(ATerm t);
+ATerm SDF_makeTermFromATerms(SDF_ATerms arg);
+SDF_ATermList SDF_makeATermListFromTerm(ATerm t);
+ATerm SDF_makeTermFromATermList(SDF_ATermList arg);
+SDF_ACon SDF_makeAConFromTerm(ATerm t);
+ATerm SDF_makeTermFromACon(SDF_ACon arg);
+SDF_AFun SDF_makeAFunFromTerm(ATerm t);
+ATerm SDF_makeTermFromAFun(SDF_AFun arg);
+SDF_ATerm SDF_makeATermFromTerm(ATerm t);
+ATerm SDF_makeTermFromATerm(SDF_ATerm arg);
+SDF_Ann SDF_makeAnnFromTerm(ATerm t);
+ATerm SDF_makeTermFromAnn(SDF_Ann arg);
+SDF_TagId SDF_makeTagIdFromTerm(ATerm t);
+ATerm SDF_makeTermFromTagId(SDF_TagId arg);
+SDF_NumChar SDF_makeNumCharFromTerm(ATerm t);
+ATerm SDF_makeTermFromNumChar(SDF_NumChar arg);
+SDF_ShortChar SDF_makeShortCharFromTerm(ATerm t);
+ATerm SDF_makeTermFromShortChar(SDF_ShortChar arg);
+SDF_Character SDF_makeCharacterFromTerm(ATerm t);
+ATerm SDF_makeTermFromCharacter(SDF_Character arg);
+SDF_OptExp SDF_makeOptExpFromTerm(ATerm t);
+ATerm SDF_makeTermFromOptExp(SDF_OptExp arg);
+SDF_RealCon SDF_makeRealConFromTerm(ATerm t);
+ATerm SDF_makeTermFromRealCon(SDF_RealCon arg);
+
+SDF_Symbol SDF_makeSymbolStart();
+SDF_Symbol SDF_makeSymbolFileStart();
+SDF_Symbol SDF_makeSymbolCf(SDF_Layout wsAfterLessThan, SDF_Symbol symbol, SDF_Layout wsAfterSymbol, SDF_Layout wsAfterCF);
+SDF_Symbol SDF_makeSymbolLex(SDF_Layout wsAfterLessThan, SDF_Symbol symbol, SDF_Layout wsAfterSymbol, SDF_Layout wsAfterLEX);
+SDF_Symbol SDF_makeSymbolVarsym(SDF_Layout wsAfterLessThan, SDF_Symbol symbol, SDF_Layout wsAfterSymbol, SDF_Layout wsAfterVAR);
+SDF_Symbol SDF_makeSymbolLayout();
+SDF_Symbol SDF_makeSymbolEmpty(SDF_Layout wsAfterParenOpen);
+SDF_Symbol SDF_makeSymbolSeq(SDF_Layout wsAfterParenOpen, SDF_Symbol head, SDF_Layout wsAfterHead, SDF_SymbolTail tail, SDF_Layout wsAfterTail);
+SDF_Symbol SDF_makeSymbolOpt(SDF_Symbol symbol, SDF_Layout wsAfterSymbol);
+SDF_Symbol SDF_makeSymbolIter(SDF_Symbol symbol, SDF_Layout wsAfterSymbol);
+SDF_Symbol SDF_makeSymbolIterStar(SDF_Symbol symbol, SDF_Layout wsAfterSymbol);
+SDF_Symbol SDF_makeSymbolIterSep(SDF_Layout wsAfterBraceOpen, SDF_Symbol symbol, SDF_Layout wsAfterSymbol, SDF_Symbol sep, SDF_Layout wsAfterSep, SDF_Layout wsAfterBraceClose);
+SDF_Symbol SDF_makeSymbolIterStarSep(SDF_Layout wsAfterBraceOpen, SDF_Symbol symbol, SDF_Layout wsAfterSymbol, SDF_Symbol sep, SDF_Layout wsAfterSep, SDF_Layout wsAfterBraceClose);
+SDF_Symbol SDF_makeSymbolIterN(SDF_Symbol symbol, SDF_Layout wsAfterSymbol, SDF_NatCon n, SDF_Layout wsAfterN);
+SDF_Symbol SDF_makeSymbolIterSepN(SDF_Layout wsAfterBraceOpen, SDF_Symbol symbol, SDF_Layout wsAfterSymbol, SDF_Symbol sep, SDF_Layout wsAfterSep, SDF_Layout wsAfterBraceClose, SDF_NatCon n, SDF_Layout wsAfterN);
+SDF_Symbol SDF_makeSymbolSet(SDF_Layout wsAfterSet, SDF_Layout wsAfterBracketOpen, SDF_Symbol symbol, SDF_Layout wsAfterSymbol);
+SDF_Symbol SDF_makeSymbolPair(SDF_Symbol left, SDF_Layout wsAfterLeft, SDF_Layout wsAfterHash, SDF_Symbol right);
+SDF_Symbol SDF_makeSymbolFunc(SDF_Layout wsAfterParenOpen, SDF_Symbols arguments, SDF_Layout wsAfterArguments, SDF_Layout wsAfterEqualsGreaterThan, SDF_Symbol results, SDF_Layout wsAfterResults);
+SDF_Symbol SDF_makeSymbolAlt(SDF_Symbol left, SDF_Layout wsAfterLeft, SDF_Layout wsAfterBar, SDF_Symbol right);
+SDF_Symbol SDF_makeSymbolPerm(SDF_Layout wsAfterLessThanLessThan, SDF_Symbols symbols, SDF_Layout wsAfterSymbols);
+SDF_Symbol SDF_makeSymbolCharClass(SDF_CharClass charClass);
+SDF_Symbol SDF_makeSymbolSort(SDF_Sort sort);
+SDF_Symbol SDF_makeSymbolLit(SDF_Literal literal);
+SDF_Symbol SDF_makeSymbolLabel(SDF_Literal label, SDF_Layout wsAfterLabel, SDF_Layout wsAfterColon, SDF_Symbol symbol);
+SDF_Symbol SDF_makeSymbolBracket(SDF_Layout wsAfterParenOpen, SDF_Symbol symbol, SDF_Layout wsAfterSymbol);
+SDF_Grammar SDF_makeGrammarLexicalPriorities(SDF_Layout wsAfterLexical, SDF_Layout wsAfterPriorities, SDF_Priorities priorities);
+SDF_Grammar SDF_makeGrammarContextFreePriorities(SDF_Layout wsAfterContextFree, SDF_Layout wsAfterPriorities, SDF_Priorities priorities);
+SDF_Grammar SDF_makeGrammarLexicalRestrictions(SDF_Layout wsAfterLexical, SDF_Layout wsAfterRestrictions, SDF_Restrictions restrictions);
+SDF_Grammar SDF_makeGrammarContextFreeRestrictions(SDF_Layout wsAfterContextFree, SDF_Layout wsAfterRestrictions, SDF_Restrictions restrictions);
+SDF_Grammar SDF_makeGrammarSyntax(SDF_Layout wsAfterSyntax, SDF_Productions productions);
+SDF_Grammar SDF_makeGrammarLexicalSyntax(SDF_Layout wsAfterLexical, SDF_Layout wsAfterSyntax, SDF_Productions productions);
+SDF_Grammar SDF_makeGrammarContextFreeSyntax(SDF_Layout wsAfterContextFree, SDF_Layout wsAfterSyntax, SDF_Productions productions);
+SDF_Grammar SDF_makeGrammarVariables(SDF_Layout wsAfterVariables, SDF_Productions productions);
+SDF_Grammar SDF_makeGrammarLexicalVariables(SDF_Layout wsAfterLexical, SDF_Layout wsAfterVariables, SDF_Productions productions);
+SDF_Grammar SDF_makeGrammarImpSection(SDF_ImpSection impSection);
+SDF_Grammar SDF_makeGrammarPriorities(SDF_Layout wsAfterPriorities, SDF_Priorities priorities);
+SDF_Grammar SDF_makeGrammarSorts(SDF_Layout wsAfterSorts, SDF_Symbols symbols);
+SDF_Grammar SDF_makeGrammarRestrictions(SDF_Layout wsAfterRestrictions, SDF_Restrictions restrictions);
+SDF_Grammar SDF_makeGrammarAliases(SDF_Layout wsAfterAliases, SDF_Aliases aliases);
+SDF_Grammar SDF_makeGrammarEmptyGrammar();
+SDF_Grammar SDF_makeGrammarConcGrammars(SDF_Grammar left, SDF_Layout wsAfterLeft, SDF_Grammar right);
+SDF_Grammar SDF_makeGrammarBracket(SDF_Layout wsAfterParenOpen, SDF_Grammar grammar, SDF_Layout wsAfterGrammar);
+SDF_SDF SDF_makeSDFDefinition(SDF_Layout wsAfterDefinition, SDF_Definition definition);
+SDF_Attributes SDF_makeAttributesAttrs(SDF_Layout wsAfterBraceOpen, SDF_AttributeAttributes attributes, SDF_Layout wsAfterAttributes);
+SDF_Attributes SDF_makeAttributesNoAttrs();
+SDF_AttributeAttributes SDF_makeAttributeAttributesEmpty();
+SDF_AttributeAttributes SDF_makeAttributeAttributesSingle(SDF_Attribute head);
+SDF_AttributeAttributes SDF_makeAttributeAttributesMany(SDF_Attribute head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_AttributeAttributes tail);
+SDF_Production SDF_makeProductionProd(SDF_Symbols symbols, SDF_Layout wsAfterSymbols, SDF_Layout wsAfterGreaterThan, SDF_Symbol result, SDF_Layout wsAfterResult, SDF_Attributes attributes);
+SDF_Production SDF_makeProductionProdFun(SDF_Literal functionSymbol, SDF_Layout wsAfterFunctionSymbol, SDF_Layout wsAfterParenOpen, SDF_SymbolArguments arguments, SDF_Layout wsAfterArguments, SDF_Layout wsAfterParenClose, SDF_Layout wsAfterGreaterThan, SDF_Symbol result, SDF_Layout wsAfterResult, SDF_Attributes attributes);
+SDF_Productions SDF_makeProductionsDefault(SDF_ProductionProductions productions);
+SDF_ProductionProductions SDF_makeProductionProductionsEmpty();
+SDF_ProductionProductions SDF_makeProductionProductionsSingle(SDF_Production head);
+SDF_ProductionProductions SDF_makeProductionProductionsMany(SDF_Production head, SDF_Layout wsAfterFirst, SDF_ProductionProductions tail);
+SDF_ModuleWord SDF_makeModuleWordWord(SDF_Lexical lex);
+SDF_ModuleId SDF_makeModuleIdWord(SDF_Lexical lex);
+SDF_ModuleId SDF_makeModuleIdSlashWord(SDF_Lexical lex);
+SDF_ModuleId SDF_makeModuleIdWordSlashWord(SDF_Lexical lex);
+SDF_Definition SDF_makeDefinitionDefault(SDF_ModuleModules modules);
+SDF_ModuleModules SDF_makeModuleModulesEmpty();
+SDF_ModuleModules SDF_makeModuleModulesSingle(SDF_Module head);
+SDF_ModuleModules SDF_makeModuleModulesMany(SDF_Module head, SDF_Layout wsAfterFirst, SDF_ModuleModules tail);
+SDF_Module SDF_makeModuleModule(SDF_Layout wsAfterModule, SDF_ModuleName moduleName, SDF_Layout wsAfterModuleName, SDF_ImpSectionList list, SDF_Layout wsAfterList, SDF_Sections sections);
+SDF_ImpSectionList SDF_makeImpSectionListEmpty();
+SDF_ImpSectionList SDF_makeImpSectionListSingle(SDF_ImpSection head);
+SDF_ImpSectionList SDF_makeImpSectionListMany(SDF_ImpSection head, SDF_Layout wsAfterFirst, SDF_ImpSectionList tail);
+SDF_Section SDF_makeSectionExports(SDF_Layout wsAfterExports, SDF_Grammar grammar);
+SDF_Section SDF_makeSectionHiddens(SDF_Layout wsAfterHiddens, SDF_Grammar grammar);
+SDF_Sections SDF_makeSectionsDefault(SDF_SectionList list);
+SDF_SectionList SDF_makeSectionListEmpty();
+SDF_SectionList SDF_makeSectionListSingle(SDF_Section head);
+SDF_SectionList SDF_makeSectionListMany(SDF_Section head, SDF_Layout wsAfterFirst, SDF_SectionList tail);
+SDF_ModuleName SDF_makeModuleNameUnparameterized(SDF_ModuleId moduleId);
+SDF_ModuleName SDF_makeModuleNameParameterized(SDF_ModuleId moduleId, SDF_Layout wsAfterModuleId, SDF_Layout wsAfterBracketOpen, SDF_Symbols params, SDF_Layout wsAfterParams);
+SDF_Attribute SDF_makeAttributeId(SDF_Layout wsAfterId, SDF_Layout wsAfterParenOpen, SDF_ModuleName moduleName, SDF_Layout wsAfterModuleName);
+SDF_Attribute SDF_makeAttributeBracket();
+SDF_Attribute SDF_makeAttributeAtr(SDF_Associativity associativity);
+SDF_Attribute SDF_makeAttributeCons(SDF_Layout wsAfterCons, SDF_Layout wsAfterParenOpen, SDF_ATerm aTerm, SDF_Layout wsAfterATerm);
+SDF_Attribute SDF_makeAttributeConstructor();
+SDF_Attribute SDF_makeAttributeMemo();
+SDF_Attribute SDF_makeAttributeReject();
+SDF_Attribute SDF_makeAttributePrefer();
+SDF_Attribute SDF_makeAttributeAvoid();
+SDF_ImpSection SDF_makeImpSectionImports(SDF_Layout wsAfterImports, SDF_Imports list);
+SDF_Imports SDF_makeImportsDefault(SDF_ImportList list);
+SDF_ImportList SDF_makeImportListEmpty();
+SDF_ImportList SDF_makeImportListSingle(SDF_Import head);
+SDF_ImportList SDF_makeImportListMany(SDF_Import head, SDF_Layout wsAfterFirst, SDF_ImportList tail);
+SDF_Import SDF_makeImportModule(SDF_ModuleName moduleName);
+SDF_Import SDF_makeImportRenamedModule(SDF_ModuleName moduleName, SDF_Layout wsAfterModuleName, SDF_Renamings renamings);
+SDF_Import SDF_makeImportBracket(SDF_Layout wsAfterParenOpen, SDF_Import import, SDF_Layout wsAfterImport);
+SDF_SymbolTail SDF_makeSymbolTailSingle(SDF_Symbol head);
+SDF_SymbolTail SDF_makeSymbolTailMany(SDF_Symbol head, SDF_Layout wsAfterFirst, SDF_SymbolTail tail);
+SDF_Associativity SDF_makeAssociativityLeft();
+SDF_Associativity SDF_makeAssociativityRight();
+SDF_Associativity SDF_makeAssociativityNonAssoc();
+SDF_Associativity SDF_makeAssociativityAssoc();
+SDF_Group SDF_makeGroupSimpleGroup(SDF_Production production);
+SDF_Group SDF_makeGroupProdsGroup(SDF_Layout wsAfterBraceOpen, SDF_Productions productions, SDF_Layout wsAfterProductions);
+SDF_Group SDF_makeGroupAssocGroup(SDF_Layout wsAfterBraceOpen, SDF_Associativity associativity, SDF_Layout wsAfterAssociativity, SDF_Layout wsAfterColon, SDF_Productions productions, SDF_Layout wsAfterProductions);
+SDF_Priority SDF_makePriorityPriorityChain(SDF_GroupGroupp groupp);
+SDF_Priority SDF_makePriorityPriorityAssoc(SDF_Group left, SDF_Layout wsAfterLeft, SDF_Associativity associativity, SDF_Layout wsAfterAssociativity, SDF_Group right);
+SDF_GroupGroupp SDF_makeGroupGrouppSingle(SDF_Group head);
+SDF_GroupGroupp SDF_makeGroupGrouppMany(SDF_Group head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_GroupGroupp tail);
+SDF_Priorities SDF_makePrioritiesDefault(SDF_PriorityPrioritys prioritys);
+SDF_PriorityPrioritys SDF_makePriorityPrioritysEmpty();
+SDF_PriorityPrioritys SDF_makePriorityPrioritysSingle(SDF_Priority head);
+SDF_PriorityPrioritys SDF_makePriorityPrioritysMany(SDF_Priority head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_PriorityPrioritys tail);
+SDF_Sort SDF_makeSortOneChar(SDF_Lexical lex);
+SDF_Sort SDF_makeSortMoreChars(SDF_Lexical lex);
+SDF_UQLiteral SDF_makeUQLiteralOneChar(SDF_Lexical lex);
+SDF_UQLiteral SDF_makeUQLiteralMoreChars(SDF_Lexical lex);
+SDF_Literal SDF_makeLiteralUqlit(SDF_UQLiteral uQLiteral);
+SDF_Literal SDF_makeLiteralQuoted(SDF_Lexical lex);
+SDF_SymbolArguments SDF_makeSymbolArgumentsEmpty();
+SDF_SymbolArguments SDF_makeSymbolArgumentsSingle(SDF_Symbol head);
+SDF_SymbolArguments SDF_makeSymbolArgumentsMany(SDF_Symbol head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_SymbolArguments tail);
+SDF_Lookahead SDF_makeLookaheadCharClass(SDF_CharClass charClass);
+SDF_Lookahead SDF_makeLookaheadSeq(SDF_CharClass head, SDF_Layout wsAfterHead, SDF_Layout wsAfterPeriod, SDF_Lookaheads tail);
+SDF_Lookaheads SDF_makeLookaheadsSingle(SDF_Lookahead lookahead);
+SDF_Lookaheads SDF_makeLookaheadsAlt(SDF_Lookaheads left, SDF_Layout wsAfterLeft, SDF_Layout wsAfterBar, SDF_Lookaheads right);
+SDF_Lookaheads SDF_makeLookaheadsBracket(SDF_Layout wsAfterParenOpen, SDF_Lookaheads lookaheads, SDF_Layout wsAfterLookaheads);
+SDF_Lookaheads SDF_makeLookaheadsList(SDF_Layout wsAfterBracketOpenBracketOpen, SDF_Lookaheads lookaheads, SDF_Layout wsAfterLookaheads);
+SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsEmpty();
+SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsSingle(SDF_Lookahead head);
+SDF_LookaheadLookaheads SDF_makeLookaheadLookaheadsMany(SDF_Lookahead head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_LookaheadLookaheads tail);
+SDF_Restriction SDF_makeRestrictionFollow(SDF_Symbols symbols, SDF_Layout wsAfterSymbols, SDF_Layout wsAfterSlash, SDF_Lookaheads lookaheads);
+SDF_Restrictions SDF_makeRestrictionsDefault(SDF_RestrictionRestrictions restrictions);
+SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsEmpty();
+SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsSingle(SDF_Restriction head);
+SDF_RestrictionRestrictions SDF_makeRestrictionRestrictionsMany(SDF_Restriction head, SDF_Layout wsAfterFirst, SDF_RestrictionRestrictions tail);
+SDF_Alias SDF_makeAliasAlias(SDF_Symbol symbol, SDF_Layout wsAfterSymbol, SDF_Layout wsAfterArrow, SDF_Symbol alias);
+SDF_Aliases SDF_makeAliasesDefault(SDF_AliasAliass aliass);
+SDF_AliasAliass SDF_makeAliasAliassEmpty();
+SDF_AliasAliass SDF_makeAliasAliassSingle(SDF_Alias head);
+SDF_AliasAliass SDF_makeAliasAliassMany(SDF_Alias head, SDF_Layout wsAfterFirst, SDF_AliasAliass tail);
+SDF_Symbols SDF_makeSymbolsDefault(SDF_SymbolSymbols symbols);
+SDF_SymbolSymbols SDF_makeSymbolSymbolsEmpty();
+SDF_SymbolSymbols SDF_makeSymbolSymbolsSingle(SDF_Symbol head);
+SDF_SymbolSymbols SDF_makeSymbolSymbolsMany(SDF_Symbol head, SDF_Layout wsAfterFirst, SDF_SymbolSymbols tail);
+SDF_Renamings SDF_makeRenamingsRenamings(SDF_Layout wsAfterBracketOpen, SDF_RenamingRenamings renamings, SDF_Layout wsAfterRenamings);
+SDF_RenamingRenamings SDF_makeRenamingRenamingsEmpty();
+SDF_RenamingRenamings SDF_makeRenamingRenamingsSingle(SDF_Renaming head);
+SDF_RenamingRenamings SDF_makeRenamingRenamingsMany(SDF_Renaming head, SDF_Layout wsAfterFirst, SDF_RenamingRenamings tail);
+SDF_Renaming SDF_makeRenamingSymbol(SDF_Symbol from, SDF_Layout wsAfterFrom, SDF_Layout wsAfterEqualsGreaterThan, SDF_Symbol to);
+SDF_Renaming SDF_makeRenamingProduction(SDF_Symbol from, SDF_Layout wsAfterFrom, SDF_Layout wsAfterEqualsGreaterThan, SDF_Symbol to);
+SDF_NatCon SDF_makeNatConDigits(SDF_Lexical lex);
+SDF_IntCon SDF_makeIntConNatural(SDF_NatCon natCon);
+SDF_IntCon SDF_makeIntConPositive(SDF_Layout wsAfterPos, SDF_NatCon natCon);
+SDF_IntCon SDF_makeIntConNegative(SDF_Layout wsAfterNeg, SDF_NatCon natCon);
+SDF_CharRange SDF_makeCharRangeDefault(SDF_Character character);
+SDF_CharRange SDF_makeCharRangeRange(SDF_Character start, SDF_Layout wsAfterStart, SDF_Layout wsAfter, SDF_Character end);
+SDF_CharRanges SDF_makeCharRangesDefault(SDF_CharRange charRange);
+SDF_CharRanges SDF_makeCharRangesConc(SDF_CharRanges left, SDF_Layout wsAfterLeft, SDF_CharRanges right);
+SDF_CharRanges SDF_makeCharRangesBracket(SDF_Layout wsAfterParenOpen, SDF_CharRanges charRanges, SDF_Layout wsAfterCharRanges);
+SDF_OptCharRanges SDF_makeOptCharRangesAbsent();
+SDF_OptCharRanges SDF_makeOptCharRangesPresent(SDF_CharRanges charRanges);
+SDF_CharClass SDF_makeCharClassSimpleCharclass(SDF_Layout wsAfterBracketOpen, SDF_OptCharRanges optCharRanges, SDF_Layout wsAfterOptCharRanges);
+SDF_CharClass SDF_makeCharClassComp(SDF_Layout wsAfterTilde, SDF_CharClass charClass);
+SDF_CharClass SDF_makeCharClassDiff(SDF_CharClass left, SDF_Layout wsAfterLeft, SDF_Layout wsAfterSlash, SDF_CharClass right);
+SDF_CharClass SDF_makeCharClassIsect(SDF_CharClass left, SDF_Layout wsAfterLeft, SDF_Layout wsAfterSlashBackslash, SDF_CharClass right);
+SDF_CharClass SDF_makeCharClassUnion(SDF_CharClass left, SDF_Layout wsAfterLeft, SDF_Layout wsAfterBackslashSlash, SDF_CharClass right);
+SDF_CharClass SDF_makeCharClassBracket(SDF_Layout wsAfterParenOpen, SDF_CharClass charClass, SDF_Layout wsAfterCharClass);
+SDF_AlphaNumericalEscChar SDF_makeAlphaNumericalEscCharDefault(SDF_Lexical lex);
+SDF_DecimalEscChar SDF_makeDecimalEscCharDec0_199(SDF_Lexical lex);
+SDF_DecimalEscChar SDF_makeDecimalEscCharDec200_249(SDF_Lexical lex);
+SDF_DecimalEscChar SDF_makeDecimalEscCharDec250_255(SDF_Lexical lex);
+SDF_EscChar SDF_makeEscCharAlphaNumeric(SDF_Lexical lex);
+SDF_EscChar SDF_makeEscCharDecimal(SDF_Lexical lex);
+SDF_LChar SDF_makeLCharNormal(SDF_Lexical lex);
+SDF_LChar SDF_makeLCharEscaped(SDF_Lexical lex);
+SDF_ATerms SDF_makeATermsAterm(SDF_ATerm aTerm);
+SDF_ATerms SDF_makeATermsCons(SDF_ATerm head, SDF_Layout wsAfterHead, SDF_Layout wsAfterComma, SDF_ATerms tail);
+SDF_ATermList SDF_makeATermListEmpty(SDF_Layout wsAfterBracketOpen);
+SDF_ATermList SDF_makeATermListNotEmpty(SDF_Layout wsAfterBracketOpen, SDF_ATerms aTerms, SDF_Layout wsAfterATerms);
+SDF_ACon SDF_makeAConInt(SDF_IntCon intCon);
+SDF_ACon SDF_makeAConReal(SDF_RealCon realCon);
+SDF_AFun SDF_makeAFunDefault(SDF_Literal literal);
+SDF_ATerm SDF_makeATermConstant(SDF_ACon aCon);
+SDF_ATerm SDF_makeATermList(SDF_ATermList aTermList);
+SDF_ATerm SDF_makeATermFun(SDF_AFun aFun);
+SDF_ATerm SDF_makeATermAppl(SDF_AFun aFun, SDF_Layout wsAfterAFun, SDF_Layout wsAfterParenOpen, SDF_ATerms args, SDF_Layout wsAfterArgs);
+SDF_ATerm SDF_makeATermAnnotatedConstant(SDF_ACon aCon, SDF_Layout wsAfterACon, SDF_Ann ann);
+SDF_ATerm SDF_makeATermAnnotatedList(SDF_ATermList aTermList, SDF_Layout wsAfterATermList, SDF_Ann ann);
+SDF_ATerm SDF_makeATermAnnotatedFun(SDF_AFun aFun, SDF_Layout wsAfterAFun, SDF_Ann ann);
+SDF_ATerm SDF_makeATermAnnotatedAppl(SDF_AFun aFun, SDF_Layout wsAfterAFun, SDF_Layout wsAfterParenOpen, SDF_ATerms args, SDF_Layout wsAfterArgs, SDF_Layout wsAfterParenClose, SDF_Ann ann);
+SDF_Ann SDF_makeAnnAnnotation(SDF_Layout wsAfterBraceOpen, SDF_ATerms aTerms, SDF_Layout wsAfterATerms);
+SDF_TagId SDF_makeTagIdDefault(SDF_Lexical lex);
+SDF_TagId SDF_makeTagIdEmpty();
+SDF_NumChar SDF_makeNumCharDigits(SDF_Lexical lex);
+SDF_ShortChar SDF_makeShortCharRegular(SDF_Lexical lex);
+SDF_ShortChar SDF_makeShortCharEscaped(SDF_Lexical lex);
+SDF_Character SDF_makeCharacterNumeric(SDF_NumChar numChar);
+SDF_Character SDF_makeCharacterShort(SDF_ShortChar shortChar);
+SDF_Character SDF_makeCharacterTop();
+SDF_Character SDF_makeCharacterEof();
+SDF_OptExp SDF_makeOptExpPresent(SDF_Layout wsAfterE, SDF_IntCon intCon);
+SDF_OptExp SDF_makeOptExpAbsent();
+SDF_RealCon SDF_makeRealConRealCon(SDF_IntCon intCon, SDF_Layout wsAfterIntCon, SDF_Layout wsAfterPeriod, SDF_NatCon natCon, SDF_Layout wsAfterNatCon, SDF_OptExp optExp);
+
+/*{{{  SDF_Symbol accessor prototypes */
+
+ATbool SDF_isValidSymbol(SDF_Symbol arg);
+ATbool SDF_isSymbolStart(SDF_Symbol arg);
+ATbool SDF_isSymbolFileStart(SDF_Symbol arg);
+ATbool SDF_isSymbolCf(SDF_Symbol arg);
+ATbool SDF_isSymbolLex(SDF_Symbol arg);
+ATbool SDF_isSymbolVarsym(SDF_Symbol arg);
+ATbool SDF_isSymbolLayout(SDF_Symbol arg);
+ATbool SDF_isSymbolEmpty(SDF_Symbol arg);
+ATbool SDF_isSymbolSeq(SDF_Symbol arg);
+ATbool SDF_isSymbolOpt(SDF_Symbol arg);
+ATbool SDF_isSymbolIter(SDF_Symbol arg);
+ATbool SDF_isSymbolIterStar(SDF_Symbol arg);
+ATbool SDF_isSymbolIterSep(SDF_Symbol arg);
+ATbool SDF_isSymbolIterStarSep(SDF_Symbol arg);
+ATbool SDF_isSymbolIterN(SDF_Symbol arg);
+ATbool SDF_isSymbolIterSepN(SDF_Symbol arg);
+ATbool SDF_isSymbolSet(SDF_Symbol arg);
+ATbool SDF_isSymbolPair(SDF_Symbol arg);
+ATbool SDF_isSymbolFunc(SDF_Symbol arg);
+ATbool SDF_isSymbolAlt(SDF_Symbol arg);
+ATbool SDF_isSymbolPerm(SDF_Symbol arg);
+ATbool SDF_isSymbolCharClass(SDF_Symbol arg);
+ATbool SDF_isSymbolSort(SDF_Symbol arg);
+ATbool SDF_isSymbolLit(SDF_Symbol arg);
+ATbool SDF_isSymbolLabel(SDF_Symbol arg);
+ATbool SDF_isSymbolBracket(SDF_Symbol arg);
+ATbool SDF_hasSymbolWsAfterLessThanLessThan(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterLessThanLessThan(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterLessThanLessThan(SDF_Symbol arg, SDF_Layout wsAfterLessThanLessThan);
+ATbool SDF_hasSymbolRight(SDF_Symbol arg);
+SDF_Symbol SDF_getSymbolRight(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolRight(SDF_Symbol arg, SDF_Symbol right);
+ATbool SDF_hasSymbolWsAfterLeft(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterLeft(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterLeft(SDF_Symbol arg, SDF_Layout wsAfterLeft);
+ATbool SDF_hasSymbolWsAfterParenOpen(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterParenOpen(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterParenOpen(SDF_Symbol arg, SDF_Layout wsAfterParenOpen);
+ATbool SDF_hasSymbolWsAfterArguments(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterArguments(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterArguments(SDF_Symbol arg, SDF_Layout wsAfterArguments);
+ATbool SDF_hasSymbolWsAfterResults(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterResults(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterResults(SDF_Symbol arg, SDF_Layout wsAfterResults);
+ATbool SDF_hasSymbolWsAfterHash(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterHash(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterHash(SDF_Symbol arg, SDF_Layout wsAfterHash);
+ATbool SDF_hasSymbolWsAfterCF(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterCF(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterCF(SDF_Symbol arg, SDF_Layout wsAfterCF);
+ATbool SDF_hasSymbolSort(SDF_Symbol arg);
+SDF_Sort SDF_getSymbolSort(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolSort(SDF_Symbol arg, SDF_Sort sort);
+ATbool SDF_hasSymbolWsAfterBraceClose(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterBraceClose(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterBraceClose(SDF_Symbol arg, SDF_Layout wsAfterBraceClose);
+ATbool SDF_hasSymbolWsAfterBar(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterBar(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterBar(SDF_Symbol arg, SDF_Layout wsAfterBar);
+ATbool SDF_hasSymbolWsAfterBraceOpen(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterBraceOpen(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterBraceOpen(SDF_Symbol arg, SDF_Layout wsAfterBraceOpen);
+ATbool SDF_hasSymbolArguments(SDF_Symbol arg);
+SDF_Symbols SDF_getSymbolArguments(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolArguments(SDF_Symbol arg, SDF_Symbols arguments);
+ATbool SDF_hasSymbolWsAfterSymbols(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterSymbols(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterSymbols(SDF_Symbol arg, SDF_Layout wsAfterSymbols);
+ATbool SDF_hasSymbolWsAfterSep(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterSep(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterSep(SDF_Symbol arg, SDF_Layout wsAfterSep);
+ATbool SDF_hasSymbolTail(SDF_Symbol arg);
+SDF_SymbolTail SDF_getSymbolTail(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolTail(SDF_Symbol arg, SDF_SymbolTail tail);
+ATbool SDF_hasSymbolHead(SDF_Symbol arg);
+SDF_Symbol SDF_getSymbolHead(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolHead(SDF_Symbol arg, SDF_Symbol head);
+ATbool SDF_hasSymbolWsAfterSymbol(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterSymbol(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterSymbol(SDF_Symbol arg, SDF_Layout wsAfterSymbol);
+ATbool SDF_hasSymbolWsAfterN(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterN(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterN(SDF_Symbol arg, SDF_Layout wsAfterN);
+ATbool SDF_hasSymbolSymbol(SDF_Symbol arg);
+SDF_Symbol SDF_getSymbolSymbol(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolSymbol(SDF_Symbol arg, SDF_Symbol symbol);
+ATbool SDF_hasSymbolLiteral(SDF_Symbol arg);
+SDF_Literal SDF_getSymbolLiteral(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolLiteral(SDF_Symbol arg, SDF_Literal literal);
+ATbool SDF_hasSymbolResults(SDF_Symbol arg);
+SDF_Symbol SDF_getSymbolResults(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolResults(SDF_Symbol arg, SDF_Symbol results);
+ATbool SDF_hasSymbolCharClass(SDF_Symbol arg);
+SDF_CharClass SDF_getSymbolCharClass(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolCharClass(SDF_Symbol arg, SDF_CharClass charClass);
+ATbool SDF_hasSymbolWsAfterBracketOpen(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterBracketOpen(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterBracketOpen(SDF_Symbol arg, SDF_Layout wsAfterBracketOpen);
+ATbool SDF_hasSymbolWsAfterTail(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterTail(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterTail(SDF_Symbol arg, SDF_Layout wsAfterTail);
+ATbool SDF_hasSymbolWsAfterHead(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterHead(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterHead(SDF_Symbol arg, SDF_Layout wsAfterHead);
+ATbool SDF_hasSymbolWsAfterEqualsGreaterThan(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterEqualsGreaterThan(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterEqualsGreaterThan(SDF_Symbol arg, SDF_Layout wsAfterEqualsGreaterThan);
+ATbool SDF_hasSymbolSep(SDF_Symbol arg);
+SDF_Symbol SDF_getSymbolSep(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolSep(SDF_Symbol arg, SDF_Symbol sep);
+ATbool SDF_hasSymbolSymbols(SDF_Symbol arg);
+SDF_Symbols SDF_getSymbolSymbols(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolSymbols(SDF_Symbol arg, SDF_Symbols symbols);
+ATbool SDF_hasSymbolWsAfterSet(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterSet(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterSet(SDF_Symbol arg, SDF_Layout wsAfterSet);
+ATbool SDF_hasSymbolLeft(SDF_Symbol arg);
+SDF_Symbol SDF_getSymbolLeft(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolLeft(SDF_Symbol arg, SDF_Symbol left);
+ATbool SDF_hasSymbolWsAfterLEX(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterLEX(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterLEX(SDF_Symbol arg, SDF_Layout wsAfterLEX);
+ATbool SDF_hasSymbolLabel(SDF_Symbol arg);
+SDF_Literal SDF_getSymbolLabel(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolLabel(SDF_Symbol arg, SDF_Literal label);
+ATbool SDF_hasSymbolN(SDF_Symbol arg);
+SDF_NatCon SDF_getSymbolN(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolN(SDF_Symbol arg, SDF_NatCon n);
+ATbool SDF_hasSymbolWsAfterLessThan(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterLessThan(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterLessThan(SDF_Symbol arg, SDF_Layout wsAfterLessThan);
+ATbool SDF_hasSymbolWsAfterColon(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterColon(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterColon(SDF_Symbol arg, SDF_Layout wsAfterColon);
+ATbool SDF_hasSymbolWsAfterLabel(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterLabel(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterLabel(SDF_Symbol arg, SDF_Layout wsAfterLabel);
+ATbool SDF_hasSymbolWsAfterVAR(SDF_Symbol arg);
+SDF_Layout SDF_getSymbolWsAfterVAR(SDF_Symbol arg);
+SDF_Symbol SDF_setSymbolWsAfterVAR(SDF_Symbol arg, SDF_Layout wsAfterVAR);
+
+/*}}}  */
+/*{{{  SDF_Grammar accessor prototypes */
+
+ATbool SDF_isValidGrammar(SDF_Grammar arg);
+ATbool SDF_isGrammarLexicalPriorities(SDF_Grammar arg);
+ATbool SDF_isGrammarContextFreePriorities(SDF_Grammar arg);
+ATbool SDF_isGrammarLexicalRestrictions(SDF_Grammar arg);
+ATbool SDF_isGrammarContextFreeRestrictions(SDF_Grammar arg);
+ATbool SDF_isGrammarSyntax(SDF_Grammar arg);
+ATbool SDF_isGrammarLexicalSyntax(SDF_Grammar arg);
+ATbool SDF_isGrammarContextFreeSyntax(SDF_Grammar arg);
+ATbool SDF_isGrammarVariables(SDF_Grammar arg);
+ATbool SDF_isGrammarLexicalVariables(SDF_Grammar arg);
+ATbool SDF_isGrammarImpSection(SDF_Grammar arg);
+ATbool SDF_isGrammarPriorities(SDF_Grammar arg);
+ATbool SDF_isGrammarSorts(SDF_Grammar arg);
+ATbool SDF_isGrammarRestrictions(SDF_Grammar arg);
+ATbool SDF_isGrammarAliases(SDF_Grammar arg);
+ATbool SDF_isGrammarEmptyGrammar(SDF_Grammar arg);
+ATbool SDF_isGrammarConcGrammars(SDF_Grammar arg);
+ATbool SDF_isGrammarBracket(SDF_Grammar arg);
+ATbool SDF_hasGrammarRight(SDF_Grammar arg);
+SDF_Grammar SDF_getGrammarRight(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarRight(SDF_Grammar arg, SDF_Grammar right);
+ATbool SDF_hasGrammarWsAfterLeft(SDF_Grammar arg);
+SDF_Layout SDF_getGrammarWsAfterLeft(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarWsAfterLeft(SDF_Grammar arg, SDF_Layout wsAfterLeft);
+ATbool SDF_hasGrammarWsAfterParenOpen(SDF_Grammar arg);
+SDF_Layout SDF_getGrammarWsAfterParenOpen(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarWsAfterParenOpen(SDF_Grammar arg, SDF_Layout wsAfterParenOpen);
+ATbool SDF_hasGrammarWsAfterSorts(SDF_Grammar arg);
+SDF_Layout SDF_getGrammarWsAfterSorts(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarWsAfterSorts(SDF_Grammar arg, SDF_Layout wsAfterSorts);
+ATbool SDF_hasGrammarWsAfterPriorities(SDF_Grammar arg);
+SDF_Layout SDF_getGrammarWsAfterPriorities(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarWsAfterPriorities(SDF_Grammar arg, SDF_Layout wsAfterPriorities);
+ATbool SDF_hasGrammarWsAfterGrammar(SDF_Grammar arg);
+SDF_Layout SDF_getGrammarWsAfterGrammar(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarWsAfterGrammar(SDF_Grammar arg, SDF_Layout wsAfterGrammar);
+ATbool SDF_hasGrammarAliases(SDF_Grammar arg);
+SDF_Aliases SDF_getGrammarAliases(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarAliases(SDF_Grammar arg, SDF_Aliases aliases);
+ATbool SDF_hasGrammarWsAfterSyntax(SDF_Grammar arg);
+SDF_Layout SDF_getGrammarWsAfterSyntax(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarWsAfterSyntax(SDF_Grammar arg, SDF_Layout wsAfterSyntax);
+ATbool SDF_hasGrammarPriorities(SDF_Grammar arg);
+SDF_Priorities SDF_getGrammarPriorities(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarPriorities(SDF_Grammar arg, SDF_Priorities priorities);
+ATbool SDF_hasGrammarRestrictions(SDF_Grammar arg);
+SDF_Restrictions SDF_getGrammarRestrictions(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarRestrictions(SDF_Grammar arg, SDF_Restrictions restrictions);
+ATbool SDF_hasGrammarWsAfterRestrictions(SDF_Grammar arg);
+SDF_Layout SDF_getGrammarWsAfterRestrictions(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarWsAfterRestrictions(SDF_Grammar arg, SDF_Layout wsAfterRestrictions);
+ATbool SDF_hasGrammarImpSection(SDF_Grammar arg);
+SDF_ImpSection SDF_getGrammarImpSection(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarImpSection(SDF_Grammar arg, SDF_ImpSection impSection);
+ATbool SDF_hasGrammarWsAfterLexical(SDF_Grammar arg);
+SDF_Layout SDF_getGrammarWsAfterLexical(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarWsAfterLexical(SDF_Grammar arg, SDF_Layout wsAfterLexical);
+ATbool SDF_hasGrammarGrammar(SDF_Grammar arg);
+SDF_Grammar SDF_getGrammarGrammar(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarGrammar(SDF_Grammar arg, SDF_Grammar grammar);
+ATbool SDF_hasGrammarSymbols(SDF_Grammar arg);
+SDF_Symbols SDF_getGrammarSymbols(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarSymbols(SDF_Grammar arg, SDF_Symbols symbols);
+ATbool SDF_hasGrammarWsAfterVariables(SDF_Grammar arg);
+SDF_Layout SDF_getGrammarWsAfterVariables(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarWsAfterVariables(SDF_Grammar arg, SDF_Layout wsAfterVariables);
+ATbool SDF_hasGrammarLeft(SDF_Grammar arg);
+SDF_Grammar SDF_getGrammarLeft(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarLeft(SDF_Grammar arg, SDF_Grammar left);
+ATbool SDF_hasGrammarWsAfterAliases(SDF_Grammar arg);
+SDF_Layout SDF_getGrammarWsAfterAliases(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarWsAfterAliases(SDF_Grammar arg, SDF_Layout wsAfterAliases);
+ATbool SDF_hasGrammarProductions(SDF_Grammar arg);
+SDF_Productions SDF_getGrammarProductions(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarProductions(SDF_Grammar arg, SDF_Productions productions);
+ATbool SDF_hasGrammarWsAfterContextFree(SDF_Grammar arg);
+SDF_Layout SDF_getGrammarWsAfterContextFree(SDF_Grammar arg);
+SDF_Grammar SDF_setGrammarWsAfterContextFree(SDF_Grammar arg, SDF_Layout wsAfterContextFree);
+
+/*}}}  */
+/*{{{  SDF_SDF accessor prototypes */
+
+ATbool SDF_isValidSDF(SDF_SDF arg);
+ATbool SDF_isSDFDefinition(SDF_SDF arg);
+ATbool SDF_hasSDFDefinition(SDF_SDF arg);
+SDF_Definition SDF_getSDFDefinition(SDF_SDF arg);
+SDF_SDF SDF_setSDFDefinition(SDF_SDF arg, SDF_Definition definition);
+ATbool SDF_hasSDFWsAfterDefinition(SDF_SDF arg);
+SDF_Layout SDF_getSDFWsAfterDefinition(SDF_SDF arg);
+SDF_SDF SDF_setSDFWsAfterDefinition(SDF_SDF arg, SDF_Layout wsAfterDefinition);
+
+/*}}}  */
+/*{{{  SDF_Attributes accessor prototypes */
+
+ATbool SDF_isValidAttributes(SDF_Attributes arg);
+ATbool SDF_isAttributesAttrs(SDF_Attributes arg);
+ATbool SDF_isAttributesNoAttrs(SDF_Attributes arg);
+ATbool SDF_hasAttributesWsAfterBraceOpen(SDF_Attributes arg);
+SDF_Layout SDF_getAttributesWsAfterBraceOpen(SDF_Attributes arg);
+SDF_Attributes SDF_setAttributesWsAfterBraceOpen(SDF_Attributes arg, SDF_Layout wsAfterBraceOpen);
+ATbool SDF_hasAttributesAttributes(SDF_Attributes arg);
+SDF_AttributeAttributes SDF_getAttributesAttributes(SDF_Attributes arg);
+SDF_Attributes SDF_setAttributesAttributes(SDF_Attributes arg, SDF_AttributeAttributes attributes);
+ATbool SDF_hasAttributesWsAfterAttributes(SDF_Attributes arg);
+SDF_Layout SDF_getAttributesWsAfterAttributes(SDF_Attributes arg);
+SDF_Attributes SDF_setAttributesWsAfterAttributes(SDF_Attributes arg, SDF_Layout wsAfterAttributes);
+
+/*}}}  */
+/*{{{  SDF_AttributeAttributes accessor prototypes */
+
+ATbool SDF_isValidAttributeAttributes(SDF_AttributeAttributes arg);
+ATbool SDF_isAttributeAttributesEmpty(SDF_AttributeAttributes arg);
+ATbool SDF_isAttributeAttributesSingle(SDF_AttributeAttributes arg);
+ATbool SDF_isAttributeAttributesMany(SDF_AttributeAttributes arg);
+ATbool SDF_hasAttributeAttributesWsAfterFirst(SDF_AttributeAttributes arg);
+SDF_Layout SDF_getAttributeAttributesWsAfterFirst(SDF_AttributeAttributes arg);
+SDF_AttributeAttributes SDF_setAttributeAttributesWsAfterFirst(SDF_AttributeAttributes arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasAttributeAttributesWsAfterSep(SDF_AttributeAttributes arg);
+SDF_Layout SDF_getAttributeAttributesWsAfterSep(SDF_AttributeAttributes arg);
+SDF_AttributeAttributes SDF_setAttributeAttributesWsAfterSep(SDF_AttributeAttributes arg, SDF_Layout wsAfterSep);
+ATbool SDF_hasAttributeAttributesTail(SDF_AttributeAttributes arg);
+SDF_AttributeAttributes SDF_getAttributeAttributesTail(SDF_AttributeAttributes arg);
+SDF_AttributeAttributes SDF_setAttributeAttributesTail(SDF_AttributeAttributes arg, SDF_AttributeAttributes tail);
+ATbool SDF_hasAttributeAttributesHead(SDF_AttributeAttributes arg);
+SDF_Attribute SDF_getAttributeAttributesHead(SDF_AttributeAttributes arg);
+SDF_AttributeAttributes SDF_setAttributeAttributesHead(SDF_AttributeAttributes arg, SDF_Attribute head);
+ATbool SDF_hasAttributeAttributesSep(SDF_AttributeAttributes arg);
+SDF_Separator SDF_getAttributeAttributesSep(SDF_AttributeAttributes arg);
+SDF_AttributeAttributes SDF_setAttributeAttributesSep(SDF_AttributeAttributes arg, SDF_Separator sep);
+
+/*}}}  */
+/*{{{  SDF_Production accessor prototypes */
+
+ATbool SDF_isValidProduction(SDF_Production arg);
+ATbool SDF_isProductionProd(SDF_Production arg);
+ATbool SDF_isProductionProdFun(SDF_Production arg);
+ATbool SDF_hasProductionWsAfterResult(SDF_Production arg);
+SDF_Layout SDF_getProductionWsAfterResult(SDF_Production arg);
+SDF_Production SDF_setProductionWsAfterResult(SDF_Production arg, SDF_Layout wsAfterResult);
+ATbool SDF_hasProductionWsAfterParenClose(SDF_Production arg);
+SDF_Layout SDF_getProductionWsAfterParenClose(SDF_Production arg);
+SDF_Production SDF_setProductionWsAfterParenClose(SDF_Production arg, SDF_Layout wsAfterParenClose);
+ATbool SDF_hasProductionWsAfterParenOpen(SDF_Production arg);
+SDF_Layout SDF_getProductionWsAfterParenOpen(SDF_Production arg);
+SDF_Production SDF_setProductionWsAfterParenOpen(SDF_Production arg, SDF_Layout wsAfterParenOpen);
+ATbool SDF_hasProductionWsAfterArguments(SDF_Production arg);
+SDF_Layout SDF_getProductionWsAfterArguments(SDF_Production arg);
+SDF_Production SDF_setProductionWsAfterArguments(SDF_Production arg, SDF_Layout wsAfterArguments);
+ATbool SDF_hasProductionResult(SDF_Production arg);
+SDF_Symbol SDF_getProductionResult(SDF_Production arg);
+SDF_Production SDF_setProductionResult(SDF_Production arg, SDF_Symbol result);
+ATbool SDF_hasProductionArguments(SDF_Production arg);
+SDF_SymbolArguments SDF_getProductionArguments(SDF_Production arg);
+SDF_Production SDF_setProductionArguments(SDF_Production arg, SDF_SymbolArguments arguments);
+ATbool SDF_hasProductionWsAfterSymbols(SDF_Production arg);
+SDF_Layout SDF_getProductionWsAfterSymbols(SDF_Production arg);
+SDF_Production SDF_setProductionWsAfterSymbols(SDF_Production arg, SDF_Layout wsAfterSymbols);
+ATbool SDF_hasProductionFunctionSymbol(SDF_Production arg);
+SDF_Literal SDF_getProductionFunctionSymbol(SDF_Production arg);
+SDF_Production SDF_setProductionFunctionSymbol(SDF_Production arg, SDF_Literal functionSymbol);
+ATbool SDF_hasProductionAttributes(SDF_Production arg);
+SDF_Attributes SDF_getProductionAttributes(SDF_Production arg);
+SDF_Production SDF_setProductionAttributes(SDF_Production arg, SDF_Attributes attributes);
+ATbool SDF_hasProductionWsAfterGreaterThan(SDF_Production arg);
+SDF_Layout SDF_getProductionWsAfterGreaterThan(SDF_Production arg);
+SDF_Production SDF_setProductionWsAfterGreaterThan(SDF_Production arg, SDF_Layout wsAfterGreaterThan);
+ATbool SDF_hasProductionSymbols(SDF_Production arg);
+SDF_Symbols SDF_getProductionSymbols(SDF_Production arg);
+SDF_Production SDF_setProductionSymbols(SDF_Production arg, SDF_Symbols symbols);
+ATbool SDF_hasProductionWsAfterFunctionSymbol(SDF_Production arg);
+SDF_Layout SDF_getProductionWsAfterFunctionSymbol(SDF_Production arg);
+SDF_Production SDF_setProductionWsAfterFunctionSymbol(SDF_Production arg, SDF_Layout wsAfterFunctionSymbol);
+
+/*}}}  */
+/*{{{  SDF_Productions accessor prototypes */
+
+ATbool SDF_isValidProductions(SDF_Productions arg);
+ATbool SDF_isProductionsDefault(SDF_Productions arg);
+ATbool SDF_hasProductionsProductions(SDF_Productions arg);
+SDF_ProductionProductions SDF_getProductionsProductions(SDF_Productions arg);
+SDF_Productions SDF_setProductionsProductions(SDF_Productions arg, SDF_ProductionProductions productions);
+
+/*}}}  */
+/*{{{  SDF_ProductionProductions accessor prototypes */
+
+ATbool SDF_isValidProductionProductions(SDF_ProductionProductions arg);
+ATbool SDF_isProductionProductionsEmpty(SDF_ProductionProductions arg);
+ATbool SDF_isProductionProductionsSingle(SDF_ProductionProductions arg);
+ATbool SDF_isProductionProductionsMany(SDF_ProductionProductions arg);
+ATbool SDF_hasProductionProductionsWsAfterFirst(SDF_ProductionProductions arg);
+SDF_Layout SDF_getProductionProductionsWsAfterFirst(SDF_ProductionProductions arg);
+SDF_ProductionProductions SDF_setProductionProductionsWsAfterFirst(SDF_ProductionProductions arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasProductionProductionsTail(SDF_ProductionProductions arg);
+SDF_ProductionProductions SDF_getProductionProductionsTail(SDF_ProductionProductions arg);
+SDF_ProductionProductions SDF_setProductionProductionsTail(SDF_ProductionProductions arg, SDF_ProductionProductions tail);
+ATbool SDF_hasProductionProductionsHead(SDF_ProductionProductions arg);
+SDF_Production SDF_getProductionProductionsHead(SDF_ProductionProductions arg);
+SDF_ProductionProductions SDF_setProductionProductionsHead(SDF_ProductionProductions arg, SDF_Production head);
+
+/*}}}  */
+/*{{{  SDF_ModuleWord accessor prototypes */
+
+ATbool SDF_isValidModuleWord(SDF_ModuleWord arg);
+ATbool SDF_isModuleWordWord(SDF_ModuleWord arg);
+ATbool SDF_hasModuleWordLex(SDF_ModuleWord arg);
+SDF_Lexical SDF_getModuleWordLex(SDF_ModuleWord arg);
+SDF_ModuleWord SDF_setModuleWordLex(SDF_ModuleWord arg, SDF_Lexical lex);
+
+/*}}}  */
+/*{{{  SDF_ModuleId accessor prototypes */
+
+ATbool SDF_isValidModuleId(SDF_ModuleId arg);
+ATbool SDF_isModuleIdWord(SDF_ModuleId arg);
+ATbool SDF_isModuleIdSlashWord(SDF_ModuleId arg);
+ATbool SDF_isModuleIdWordSlashWord(SDF_ModuleId arg);
+ATbool SDF_hasModuleIdLex(SDF_ModuleId arg);
+SDF_Lexical SDF_getModuleIdLex(SDF_ModuleId arg);
+SDF_ModuleId SDF_setModuleIdLex(SDF_ModuleId arg, SDF_Lexical lex);
+
+/*}}}  */
+/*{{{  SDF_Definition accessor prototypes */
+
+ATbool SDF_isValidDefinition(SDF_Definition arg);
+ATbool SDF_isDefinitionDefault(SDF_Definition arg);
+ATbool SDF_hasDefinitionModules(SDF_Definition arg);
+SDF_ModuleModules SDF_getDefinitionModules(SDF_Definition arg);
+SDF_Definition SDF_setDefinitionModules(SDF_Definition arg, SDF_ModuleModules modules);
+
+/*}}}  */
+/*{{{  SDF_ModuleModules accessor prototypes */
+
+ATbool SDF_isValidModuleModules(SDF_ModuleModules arg);
+ATbool SDF_isModuleModulesEmpty(SDF_ModuleModules arg);
+ATbool SDF_isModuleModulesSingle(SDF_ModuleModules arg);
+ATbool SDF_isModuleModulesMany(SDF_ModuleModules arg);
+ATbool SDF_hasModuleModulesWsAfterFirst(SDF_ModuleModules arg);
+SDF_Layout SDF_getModuleModulesWsAfterFirst(SDF_ModuleModules arg);
+SDF_ModuleModules SDF_setModuleModulesWsAfterFirst(SDF_ModuleModules arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasModuleModulesTail(SDF_ModuleModules arg);
+SDF_ModuleModules SDF_getModuleModulesTail(SDF_ModuleModules arg);
+SDF_ModuleModules SDF_setModuleModulesTail(SDF_ModuleModules arg, SDF_ModuleModules tail);
+ATbool SDF_hasModuleModulesHead(SDF_ModuleModules arg);
+SDF_Module SDF_getModuleModulesHead(SDF_ModuleModules arg);
+SDF_ModuleModules SDF_setModuleModulesHead(SDF_ModuleModules arg, SDF_Module head);
+
+/*}}}  */
+/*{{{  SDF_Module accessor prototypes */
+
+ATbool SDF_isValidModule(SDF_Module arg);
+ATbool SDF_isModuleModule(SDF_Module arg);
+ATbool SDF_hasModuleWsAfterList(SDF_Module arg);
+SDF_Layout SDF_getModuleWsAfterList(SDF_Module arg);
+SDF_Module SDF_setModuleWsAfterList(SDF_Module arg, SDF_Layout wsAfterList);
+ATbool SDF_hasModuleModuleName(SDF_Module arg);
+SDF_ModuleName SDF_getModuleModuleName(SDF_Module arg);
+SDF_Module SDF_setModuleModuleName(SDF_Module arg, SDF_ModuleName moduleName);
+ATbool SDF_hasModuleWsAfterModule(SDF_Module arg);
+SDF_Layout SDF_getModuleWsAfterModule(SDF_Module arg);
+SDF_Module SDF_setModuleWsAfterModule(SDF_Module arg, SDF_Layout wsAfterModule);
+ATbool SDF_hasModuleList(SDF_Module arg);
+SDF_ImpSectionList SDF_getModuleList(SDF_Module arg);
+SDF_Module SDF_setModuleList(SDF_Module arg, SDF_ImpSectionList list);
+ATbool SDF_hasModuleWsAfterModuleName(SDF_Module arg);
+SDF_Layout SDF_getModuleWsAfterModuleName(SDF_Module arg);
+SDF_Module SDF_setModuleWsAfterModuleName(SDF_Module arg, SDF_Layout wsAfterModuleName);
+ATbool SDF_hasModuleSections(SDF_Module arg);
+SDF_Sections SDF_getModuleSections(SDF_Module arg);
+SDF_Module SDF_setModuleSections(SDF_Module arg, SDF_Sections sections);
+
+/*}}}  */
+/*{{{  SDF_ImpSectionList accessor prototypes */
+
+ATbool SDF_isValidImpSectionList(SDF_ImpSectionList arg);
+ATbool SDF_isImpSectionListEmpty(SDF_ImpSectionList arg);
+ATbool SDF_isImpSectionListSingle(SDF_ImpSectionList arg);
+ATbool SDF_isImpSectionListMany(SDF_ImpSectionList arg);
+ATbool SDF_hasImpSectionListWsAfterFirst(SDF_ImpSectionList arg);
+SDF_Layout SDF_getImpSectionListWsAfterFirst(SDF_ImpSectionList arg);
+SDF_ImpSectionList SDF_setImpSectionListWsAfterFirst(SDF_ImpSectionList arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasImpSectionListTail(SDF_ImpSectionList arg);
+SDF_ImpSectionList SDF_getImpSectionListTail(SDF_ImpSectionList arg);
+SDF_ImpSectionList SDF_setImpSectionListTail(SDF_ImpSectionList arg, SDF_ImpSectionList tail);
+ATbool SDF_hasImpSectionListHead(SDF_ImpSectionList arg);
+SDF_ImpSection SDF_getImpSectionListHead(SDF_ImpSectionList arg);
+SDF_ImpSectionList SDF_setImpSectionListHead(SDF_ImpSectionList arg, SDF_ImpSection head);
+
+/*}}}  */
+/*{{{  SDF_Section accessor prototypes */
+
+ATbool SDF_isValidSection(SDF_Section arg);
+ATbool SDF_isSectionExports(SDF_Section arg);
+ATbool SDF_isSectionHiddens(SDF_Section arg);
+ATbool SDF_hasSectionWsAfterExports(SDF_Section arg);
+SDF_Layout SDF_getSectionWsAfterExports(SDF_Section arg);
+SDF_Section SDF_setSectionWsAfterExports(SDF_Section arg, SDF_Layout wsAfterExports);
+ATbool SDF_hasSectionGrammar(SDF_Section arg);
+SDF_Grammar SDF_getSectionGrammar(SDF_Section arg);
+SDF_Section SDF_setSectionGrammar(SDF_Section arg, SDF_Grammar grammar);
+ATbool SDF_hasSectionWsAfterHiddens(SDF_Section arg);
+SDF_Layout SDF_getSectionWsAfterHiddens(SDF_Section arg);
+SDF_Section SDF_setSectionWsAfterHiddens(SDF_Section arg, SDF_Layout wsAfterHiddens);
+
+/*}}}  */
+/*{{{  SDF_Sections accessor prototypes */
+
+ATbool SDF_isValidSections(SDF_Sections arg);
+ATbool SDF_isSectionsDefault(SDF_Sections arg);
+ATbool SDF_hasSectionsList(SDF_Sections arg);
+SDF_SectionList SDF_getSectionsList(SDF_Sections arg);
+SDF_Sections SDF_setSectionsList(SDF_Sections arg, SDF_SectionList list);
+
+/*}}}  */
+/*{{{  SDF_SectionList accessor prototypes */
+
+ATbool SDF_isValidSectionList(SDF_SectionList arg);
+ATbool SDF_isSectionListEmpty(SDF_SectionList arg);
+ATbool SDF_isSectionListSingle(SDF_SectionList arg);
+ATbool SDF_isSectionListMany(SDF_SectionList arg);
+ATbool SDF_hasSectionListWsAfterFirst(SDF_SectionList arg);
+SDF_Layout SDF_getSectionListWsAfterFirst(SDF_SectionList arg);
+SDF_SectionList SDF_setSectionListWsAfterFirst(SDF_SectionList arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasSectionListTail(SDF_SectionList arg);
+SDF_SectionList SDF_getSectionListTail(SDF_SectionList arg);
+SDF_SectionList SDF_setSectionListTail(SDF_SectionList arg, SDF_SectionList tail);
+ATbool SDF_hasSectionListHead(SDF_SectionList arg);
+SDF_Section SDF_getSectionListHead(SDF_SectionList arg);
+SDF_SectionList SDF_setSectionListHead(SDF_SectionList arg, SDF_Section head);
+
+/*}}}  */
+/*{{{  SDF_ModuleName accessor prototypes */
+
+ATbool SDF_isValidModuleName(SDF_ModuleName arg);
+ATbool SDF_isModuleNameUnparameterized(SDF_ModuleName arg);
+ATbool SDF_isModuleNameParameterized(SDF_ModuleName arg);
+ATbool SDF_hasModuleNameParams(SDF_ModuleName arg);
+SDF_Symbols SDF_getModuleNameParams(SDF_ModuleName arg);
+SDF_ModuleName SDF_setModuleNameParams(SDF_ModuleName arg, SDF_Symbols params);
+ATbool SDF_hasModuleNameWsAfterModuleId(SDF_ModuleName arg);
+SDF_Layout SDF_getModuleNameWsAfterModuleId(SDF_ModuleName arg);
+SDF_ModuleName SDF_setModuleNameWsAfterModuleId(SDF_ModuleName arg, SDF_Layout wsAfterModuleId);
+ATbool SDF_hasModuleNameModuleId(SDF_ModuleName arg);
+SDF_ModuleId SDF_getModuleNameModuleId(SDF_ModuleName arg);
+SDF_ModuleName SDF_setModuleNameModuleId(SDF_ModuleName arg, SDF_ModuleId moduleId);
+ATbool SDF_hasModuleNameWsAfterBracketOpen(SDF_ModuleName arg);
+SDF_Layout SDF_getModuleNameWsAfterBracketOpen(SDF_ModuleName arg);
+SDF_ModuleName SDF_setModuleNameWsAfterBracketOpen(SDF_ModuleName arg, SDF_Layout wsAfterBracketOpen);
+ATbool SDF_hasModuleNameWsAfterParams(SDF_ModuleName arg);
+SDF_Layout SDF_getModuleNameWsAfterParams(SDF_ModuleName arg);
+SDF_ModuleName SDF_setModuleNameWsAfterParams(SDF_ModuleName arg, SDF_Layout wsAfterParams);
+
+/*}}}  */
+/*{{{  SDF_Attribute accessor prototypes */
+
+ATbool SDF_isValidAttribute(SDF_Attribute arg);
+ATbool SDF_isAttributeId(SDF_Attribute arg);
+ATbool SDF_isAttributeBracket(SDF_Attribute arg);
+ATbool SDF_isAttributeAtr(SDF_Attribute arg);
+ATbool SDF_isAttributeCons(SDF_Attribute arg);
+ATbool SDF_isAttributeConstructor(SDF_Attribute arg);
+ATbool SDF_isAttributeMemo(SDF_Attribute arg);
+ATbool SDF_isAttributeReject(SDF_Attribute arg);
+ATbool SDF_isAttributePrefer(SDF_Attribute arg);
+ATbool SDF_isAttributeAvoid(SDF_Attribute arg);
+ATbool SDF_hasAttributeModuleName(SDF_Attribute arg);
+SDF_ModuleName SDF_getAttributeModuleName(SDF_Attribute arg);
+SDF_Attribute SDF_setAttributeModuleName(SDF_Attribute arg, SDF_ModuleName moduleName);
+ATbool SDF_hasAttributeWsAfterParenOpen(SDF_Attribute arg);
+SDF_Layout SDF_getAttributeWsAfterParenOpen(SDF_Attribute arg);
+SDF_Attribute SDF_setAttributeWsAfterParenOpen(SDF_Attribute arg, SDF_Layout wsAfterParenOpen);
+ATbool SDF_hasAttributeWsAfterCons(SDF_Attribute arg);
+SDF_Layout SDF_getAttributeWsAfterCons(SDF_Attribute arg);
+SDF_Attribute SDF_setAttributeWsAfterCons(SDF_Attribute arg, SDF_Layout wsAfterCons);
+ATbool SDF_hasAttributeATerm(SDF_Attribute arg);
+SDF_ATerm SDF_getAttributeATerm(SDF_Attribute arg);
+SDF_Attribute SDF_setAttributeATerm(SDF_Attribute arg, SDF_ATerm aTerm);
+ATbool SDF_hasAttributeWsAfterATerm(SDF_Attribute arg);
+SDF_Layout SDF_getAttributeWsAfterATerm(SDF_Attribute arg);
+SDF_Attribute SDF_setAttributeWsAfterATerm(SDF_Attribute arg, SDF_Layout wsAfterATerm);
+ATbool SDF_hasAttributeAssociativity(SDF_Attribute arg);
+SDF_Associativity SDF_getAttributeAssociativity(SDF_Attribute arg);
+SDF_Attribute SDF_setAttributeAssociativity(SDF_Attribute arg, SDF_Associativity associativity);
+ATbool SDF_hasAttributeWsAfterId(SDF_Attribute arg);
+SDF_Layout SDF_getAttributeWsAfterId(SDF_Attribute arg);
+SDF_Attribute SDF_setAttributeWsAfterId(SDF_Attribute arg, SDF_Layout wsAfterId);
+ATbool SDF_hasAttributeWsAfterModuleName(SDF_Attribute arg);
+SDF_Layout SDF_getAttributeWsAfterModuleName(SDF_Attribute arg);
+SDF_Attribute SDF_setAttributeWsAfterModuleName(SDF_Attribute arg, SDF_Layout wsAfterModuleName);
+
+/*}}}  */
+/*{{{  SDF_ImpSection accessor prototypes */
+
+ATbool SDF_isValidImpSection(SDF_ImpSection arg);
+ATbool SDF_isImpSectionImports(SDF_ImpSection arg);
+ATbool SDF_hasImpSectionWsAfterImports(SDF_ImpSection arg);
+SDF_Layout SDF_getImpSectionWsAfterImports(SDF_ImpSection arg);
+SDF_ImpSection SDF_setImpSectionWsAfterImports(SDF_ImpSection arg, SDF_Layout wsAfterImports);
+ATbool SDF_hasImpSectionList(SDF_ImpSection arg);
+SDF_Imports SDF_getImpSectionList(SDF_ImpSection arg);
+SDF_ImpSection SDF_setImpSectionList(SDF_ImpSection arg, SDF_Imports list);
+
+/*}}}  */
+/*{{{  SDF_Imports accessor prototypes */
+
+ATbool SDF_isValidImports(SDF_Imports arg);
+ATbool SDF_isImportsDefault(SDF_Imports arg);
+ATbool SDF_hasImportsList(SDF_Imports arg);
+SDF_ImportList SDF_getImportsList(SDF_Imports arg);
+SDF_Imports SDF_setImportsList(SDF_Imports arg, SDF_ImportList list);
+
+/*}}}  */
+/*{{{  SDF_ImportList accessor prototypes */
+
+ATbool SDF_isValidImportList(SDF_ImportList arg);
+ATbool SDF_isImportListEmpty(SDF_ImportList arg);
+ATbool SDF_isImportListSingle(SDF_ImportList arg);
+ATbool SDF_isImportListMany(SDF_ImportList arg);
+ATbool SDF_hasImportListWsAfterFirst(SDF_ImportList arg);
+SDF_Layout SDF_getImportListWsAfterFirst(SDF_ImportList arg);
+SDF_ImportList SDF_setImportListWsAfterFirst(SDF_ImportList arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasImportListTail(SDF_ImportList arg);
+SDF_ImportList SDF_getImportListTail(SDF_ImportList arg);
+SDF_ImportList SDF_setImportListTail(SDF_ImportList arg, SDF_ImportList tail);
+ATbool SDF_hasImportListHead(SDF_ImportList arg);
+SDF_Import SDF_getImportListHead(SDF_ImportList arg);
+SDF_ImportList SDF_setImportListHead(SDF_ImportList arg, SDF_Import head);
+
+/*}}}  */
+/*{{{  SDF_Import accessor prototypes */
+
+ATbool SDF_isValidImport(SDF_Import arg);
+ATbool SDF_isImportModule(SDF_Import arg);
+ATbool SDF_isImportRenamedModule(SDF_Import arg);
+ATbool SDF_isImportBracket(SDF_Import arg);
+ATbool SDF_hasImportModuleName(SDF_Import arg);
+SDF_ModuleName SDF_getImportModuleName(SDF_Import arg);
+SDF_Import SDF_setImportModuleName(SDF_Import arg, SDF_ModuleName moduleName);
+ATbool SDF_hasImportWsAfterParenOpen(SDF_Import arg);
+SDF_Layout SDF_getImportWsAfterParenOpen(SDF_Import arg);
+SDF_Import SDF_setImportWsAfterParenOpen(SDF_Import arg, SDF_Layout wsAfterParenOpen);
+ATbool SDF_hasImportRenamings(SDF_Import arg);
+SDF_Renamings SDF_getImportRenamings(SDF_Import arg);
+SDF_Import SDF_setImportRenamings(SDF_Import arg, SDF_Renamings renamings);
+ATbool SDF_hasImportWsAfterImport(SDF_Import arg);
+SDF_Layout SDF_getImportWsAfterImport(SDF_Import arg);
+SDF_Import SDF_setImportWsAfterImport(SDF_Import arg, SDF_Layout wsAfterImport);
+ATbool SDF_hasImportImport(SDF_Import arg);
+SDF_Import SDF_getImportImport(SDF_Import arg);
+SDF_Import SDF_setImportImport(SDF_Import arg, SDF_Import import);
+ATbool SDF_hasImportWsAfterModuleName(SDF_Import arg);
+SDF_Layout SDF_getImportWsAfterModuleName(SDF_Import arg);
+SDF_Import SDF_setImportWsAfterModuleName(SDF_Import arg, SDF_Layout wsAfterModuleName);
+
+/*}}}  */
+/*{{{  SDF_SymbolTail accessor prototypes */
+
+ATbool SDF_isValidSymbolTail(SDF_SymbolTail arg);
+ATbool SDF_isSymbolTailSingle(SDF_SymbolTail arg);
+ATbool SDF_isSymbolTailMany(SDF_SymbolTail arg);
+ATbool SDF_hasSymbolTailWsAfterFirst(SDF_SymbolTail arg);
+SDF_Layout SDF_getSymbolTailWsAfterFirst(SDF_SymbolTail arg);
+SDF_SymbolTail SDF_setSymbolTailWsAfterFirst(SDF_SymbolTail arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasSymbolTailTail(SDF_SymbolTail arg);
+SDF_SymbolTail SDF_getSymbolTailTail(SDF_SymbolTail arg);
+SDF_SymbolTail SDF_setSymbolTailTail(SDF_SymbolTail arg, SDF_SymbolTail tail);
+ATbool SDF_hasSymbolTailHead(SDF_SymbolTail arg);
+SDF_Symbol SDF_getSymbolTailHead(SDF_SymbolTail arg);
+SDF_SymbolTail SDF_setSymbolTailHead(SDF_SymbolTail arg, SDF_Symbol head);
+
+/*}}}  */
+/*{{{  SDF_Associativity accessor prototypes */
+
+ATbool SDF_isValidAssociativity(SDF_Associativity arg);
+ATbool SDF_isAssociativityLeft(SDF_Associativity arg);
+ATbool SDF_isAssociativityRight(SDF_Associativity arg);
+ATbool SDF_isAssociativityNonAssoc(SDF_Associativity arg);
+ATbool SDF_isAssociativityAssoc(SDF_Associativity arg);
+
+/*}}}  */
+/*{{{  SDF_Group accessor prototypes */
+
+ATbool SDF_isValidGroup(SDF_Group arg);
+ATbool SDF_isGroupSimpleGroup(SDF_Group arg);
+ATbool SDF_isGroupProdsGroup(SDF_Group arg);
+ATbool SDF_isGroupAssocGroup(SDF_Group arg);
+ATbool SDF_hasGroupWsAfterAssociativity(SDF_Group arg);
+SDF_Layout SDF_getGroupWsAfterAssociativity(SDF_Group arg);
+SDF_Group SDF_setGroupWsAfterAssociativity(SDF_Group arg, SDF_Layout wsAfterAssociativity);
+ATbool SDF_hasGroupWsAfterBraceOpen(SDF_Group arg);
+SDF_Layout SDF_getGroupWsAfterBraceOpen(SDF_Group arg);
+SDF_Group SDF_setGroupWsAfterBraceOpen(SDF_Group arg, SDF_Layout wsAfterBraceOpen);
+ATbool SDF_hasGroupProduction(SDF_Group arg);
+SDF_Production SDF_getGroupProduction(SDF_Group arg);
+SDF_Group SDF_setGroupProduction(SDF_Group arg, SDF_Production production);
+ATbool SDF_hasGroupAssociativity(SDF_Group arg);
+SDF_Associativity SDF_getGroupAssociativity(SDF_Group arg);
+SDF_Group SDF_setGroupAssociativity(SDF_Group arg, SDF_Associativity associativity);
+ATbool SDF_hasGroupProductions(SDF_Group arg);
+SDF_Productions SDF_getGroupProductions(SDF_Group arg);
+SDF_Group SDF_setGroupProductions(SDF_Group arg, SDF_Productions productions);
+ATbool SDF_hasGroupWsAfterProductions(SDF_Group arg);
+SDF_Layout SDF_getGroupWsAfterProductions(SDF_Group arg);
+SDF_Group SDF_setGroupWsAfterProductions(SDF_Group arg, SDF_Layout wsAfterProductions);
+ATbool SDF_hasGroupWsAfterColon(SDF_Group arg);
+SDF_Layout SDF_getGroupWsAfterColon(SDF_Group arg);
+SDF_Group SDF_setGroupWsAfterColon(SDF_Group arg, SDF_Layout wsAfterColon);
+
+/*}}}  */
+/*{{{  SDF_Priority accessor prototypes */
+
+ATbool SDF_isValidPriority(SDF_Priority arg);
+ATbool SDF_isPriorityPriorityChain(SDF_Priority arg);
+ATbool SDF_isPriorityPriorityAssoc(SDF_Priority arg);
+ATbool SDF_hasPriorityRight(SDF_Priority arg);
+SDF_Group SDF_getPriorityRight(SDF_Priority arg);
+SDF_Priority SDF_setPriorityRight(SDF_Priority arg, SDF_Group right);
+ATbool SDF_hasPriorityWsAfterAssociativity(SDF_Priority arg);
+SDF_Layout SDF_getPriorityWsAfterAssociativity(SDF_Priority arg);
+SDF_Priority SDF_setPriorityWsAfterAssociativity(SDF_Priority arg, SDF_Layout wsAfterAssociativity);
+ATbool SDF_hasPriorityWsAfterLeft(SDF_Priority arg);
+SDF_Layout SDF_getPriorityWsAfterLeft(SDF_Priority arg);
+SDF_Priority SDF_setPriorityWsAfterLeft(SDF_Priority arg, SDF_Layout wsAfterLeft);
+ATbool SDF_hasPriorityGroupp(SDF_Priority arg);
+SDF_GroupGroupp SDF_getPriorityGroupp(SDF_Priority arg);
+SDF_Priority SDF_setPriorityGroupp(SDF_Priority arg, SDF_GroupGroupp groupp);
+ATbool SDF_hasPriorityAssociativity(SDF_Priority arg);
+SDF_Associativity SDF_getPriorityAssociativity(SDF_Priority arg);
+SDF_Priority SDF_setPriorityAssociativity(SDF_Priority arg, SDF_Associativity associativity);
+ATbool SDF_hasPriorityLeft(SDF_Priority arg);
+SDF_Group SDF_getPriorityLeft(SDF_Priority arg);
+SDF_Priority SDF_setPriorityLeft(SDF_Priority arg, SDF_Group left);
+
+/*}}}  */
+/*{{{  SDF_GroupGroupp accessor prototypes */
+
+ATbool SDF_isValidGroupGroupp(SDF_GroupGroupp arg);
+ATbool SDF_isGroupGrouppSingle(SDF_GroupGroupp arg);
+ATbool SDF_isGroupGrouppMany(SDF_GroupGroupp arg);
+ATbool SDF_hasGroupGrouppWsAfterFirst(SDF_GroupGroupp arg);
+SDF_Layout SDF_getGroupGrouppWsAfterFirst(SDF_GroupGroupp arg);
+SDF_GroupGroupp SDF_setGroupGrouppWsAfterFirst(SDF_GroupGroupp arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasGroupGrouppWsAfterSep(SDF_GroupGroupp arg);
+SDF_Layout SDF_getGroupGrouppWsAfterSep(SDF_GroupGroupp arg);
+SDF_GroupGroupp SDF_setGroupGrouppWsAfterSep(SDF_GroupGroupp arg, SDF_Layout wsAfterSep);
+ATbool SDF_hasGroupGrouppTail(SDF_GroupGroupp arg);
+SDF_GroupGroupp SDF_getGroupGrouppTail(SDF_GroupGroupp arg);
+SDF_GroupGroupp SDF_setGroupGrouppTail(SDF_GroupGroupp arg, SDF_GroupGroupp tail);
+ATbool SDF_hasGroupGrouppHead(SDF_GroupGroupp arg);
+SDF_Group SDF_getGroupGrouppHead(SDF_GroupGroupp arg);
+SDF_GroupGroupp SDF_setGroupGrouppHead(SDF_GroupGroupp arg, SDF_Group head);
+ATbool SDF_hasGroupGrouppSep(SDF_GroupGroupp arg);
+SDF_Separator SDF_getGroupGrouppSep(SDF_GroupGroupp arg);
+SDF_GroupGroupp SDF_setGroupGrouppSep(SDF_GroupGroupp arg, SDF_Separator sep);
+
+/*}}}  */
+/*{{{  SDF_Priorities accessor prototypes */
+
+ATbool SDF_isValidPriorities(SDF_Priorities arg);
+ATbool SDF_isPrioritiesDefault(SDF_Priorities arg);
+ATbool SDF_hasPrioritiesPrioritys(SDF_Priorities arg);
+SDF_PriorityPrioritys SDF_getPrioritiesPrioritys(SDF_Priorities arg);
+SDF_Priorities SDF_setPrioritiesPrioritys(SDF_Priorities arg, SDF_PriorityPrioritys prioritys);
+
+/*}}}  */
+/*{{{  SDF_PriorityPrioritys accessor prototypes */
+
+ATbool SDF_isValidPriorityPrioritys(SDF_PriorityPrioritys arg);
+ATbool SDF_isPriorityPrioritysEmpty(SDF_PriorityPrioritys arg);
+ATbool SDF_isPriorityPrioritysSingle(SDF_PriorityPrioritys arg);
+ATbool SDF_isPriorityPrioritysMany(SDF_PriorityPrioritys arg);
+ATbool SDF_hasPriorityPrioritysWsAfterFirst(SDF_PriorityPrioritys arg);
+SDF_Layout SDF_getPriorityPrioritysWsAfterFirst(SDF_PriorityPrioritys arg);
+SDF_PriorityPrioritys SDF_setPriorityPrioritysWsAfterFirst(SDF_PriorityPrioritys arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasPriorityPrioritysWsAfterSep(SDF_PriorityPrioritys arg);
+SDF_Layout SDF_getPriorityPrioritysWsAfterSep(SDF_PriorityPrioritys arg);
+SDF_PriorityPrioritys SDF_setPriorityPrioritysWsAfterSep(SDF_PriorityPrioritys arg, SDF_Layout wsAfterSep);
+ATbool SDF_hasPriorityPrioritysTail(SDF_PriorityPrioritys arg);
+SDF_PriorityPrioritys SDF_getPriorityPrioritysTail(SDF_PriorityPrioritys arg);
+SDF_PriorityPrioritys SDF_setPriorityPrioritysTail(SDF_PriorityPrioritys arg, SDF_PriorityPrioritys tail);
+ATbool SDF_hasPriorityPrioritysHead(SDF_PriorityPrioritys arg);
+SDF_Priority SDF_getPriorityPrioritysHead(SDF_PriorityPrioritys arg);
+SDF_PriorityPrioritys SDF_setPriorityPrioritysHead(SDF_PriorityPrioritys arg, SDF_Priority head);
+ATbool SDF_hasPriorityPrioritysSep(SDF_PriorityPrioritys arg);
+SDF_Separator SDF_getPriorityPrioritysSep(SDF_PriorityPrioritys arg);
+SDF_PriorityPrioritys SDF_setPriorityPrioritysSep(SDF_PriorityPrioritys arg, SDF_Separator sep);
+
+/*}}}  */
+/*{{{  SDF_Sort accessor prototypes */
+
+ATbool SDF_isValidSort(SDF_Sort arg);
+ATbool SDF_isSortOneChar(SDF_Sort arg);
+ATbool SDF_isSortMoreChars(SDF_Sort arg);
+ATbool SDF_hasSortLex(SDF_Sort arg);
+SDF_Lexical SDF_getSortLex(SDF_Sort arg);
+SDF_Sort SDF_setSortLex(SDF_Sort arg, SDF_Lexical lex);
+
+/*}}}  */
+/*{{{  SDF_UQLiteral accessor prototypes */
+
+ATbool SDF_isValidUQLiteral(SDF_UQLiteral arg);
+ATbool SDF_isUQLiteralOneChar(SDF_UQLiteral arg);
+ATbool SDF_isUQLiteralMoreChars(SDF_UQLiteral arg);
+ATbool SDF_hasUQLiteralLex(SDF_UQLiteral arg);
+SDF_Lexical SDF_getUQLiteralLex(SDF_UQLiteral arg);
+SDF_UQLiteral SDF_setUQLiteralLex(SDF_UQLiteral arg, SDF_Lexical lex);
+
+/*}}}  */
+/*{{{  SDF_Literal accessor prototypes */
+
+ATbool SDF_isValidLiteral(SDF_Literal arg);
+ATbool SDF_isLiteralUqlit(SDF_Literal arg);
+ATbool SDF_isLiteralQuoted(SDF_Literal arg);
+ATbool SDF_hasLiteralLex(SDF_Literal arg);
+SDF_Lexical SDF_getLiteralLex(SDF_Literal arg);
+SDF_Literal SDF_setLiteralLex(SDF_Literal arg, SDF_Lexical lex);
+ATbool SDF_hasLiteralUQLiteral(SDF_Literal arg);
+SDF_UQLiteral SDF_getLiteralUQLiteral(SDF_Literal arg);
+SDF_Literal SDF_setLiteralUQLiteral(SDF_Literal arg, SDF_UQLiteral uQLiteral);
+
+/*}}}  */
+/*{{{  SDF_SymbolArguments accessor prototypes */
+
+ATbool SDF_isValidSymbolArguments(SDF_SymbolArguments arg);
+ATbool SDF_isSymbolArgumentsEmpty(SDF_SymbolArguments arg);
+ATbool SDF_isSymbolArgumentsSingle(SDF_SymbolArguments arg);
+ATbool SDF_isSymbolArgumentsMany(SDF_SymbolArguments arg);
+ATbool SDF_hasSymbolArgumentsWsAfterFirst(SDF_SymbolArguments arg);
+SDF_Layout SDF_getSymbolArgumentsWsAfterFirst(SDF_SymbolArguments arg);
+SDF_SymbolArguments SDF_setSymbolArgumentsWsAfterFirst(SDF_SymbolArguments arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasSymbolArgumentsWsAfterSep(SDF_SymbolArguments arg);
+SDF_Layout SDF_getSymbolArgumentsWsAfterSep(SDF_SymbolArguments arg);
+SDF_SymbolArguments SDF_setSymbolArgumentsWsAfterSep(SDF_SymbolArguments arg, SDF_Layout wsAfterSep);
+ATbool SDF_hasSymbolArgumentsTail(SDF_SymbolArguments arg);
+SDF_SymbolArguments SDF_getSymbolArgumentsTail(SDF_SymbolArguments arg);
+SDF_SymbolArguments SDF_setSymbolArgumentsTail(SDF_SymbolArguments arg, SDF_SymbolArguments tail);
+ATbool SDF_hasSymbolArgumentsHead(SDF_SymbolArguments arg);
+SDF_Symbol SDF_getSymbolArgumentsHead(SDF_SymbolArguments arg);
+SDF_SymbolArguments SDF_setSymbolArgumentsHead(SDF_SymbolArguments arg, SDF_Symbol head);
+ATbool SDF_hasSymbolArgumentsSep(SDF_SymbolArguments arg);
+SDF_Separator SDF_getSymbolArgumentsSep(SDF_SymbolArguments arg);
+SDF_SymbolArguments SDF_setSymbolArgumentsSep(SDF_SymbolArguments arg, SDF_Separator sep);
+
+/*}}}  */
+/*{{{  SDF_Lookahead accessor prototypes */
+
+ATbool SDF_isValidLookahead(SDF_Lookahead arg);
+ATbool SDF_isLookaheadCharClass(SDF_Lookahead arg);
+ATbool SDF_isLookaheadSeq(SDF_Lookahead arg);
+ATbool SDF_hasLookaheadWsAfterPeriod(SDF_Lookahead arg);
+SDF_Layout SDF_getLookaheadWsAfterPeriod(SDF_Lookahead arg);
+SDF_Lookahead SDF_setLookaheadWsAfterPeriod(SDF_Lookahead arg, SDF_Layout wsAfterPeriod);
+ATbool SDF_hasLookaheadTail(SDF_Lookahead arg);
+SDF_Lookaheads SDF_getLookaheadTail(SDF_Lookahead arg);
+SDF_Lookahead SDF_setLookaheadTail(SDF_Lookahead arg, SDF_Lookaheads tail);
+ATbool SDF_hasLookaheadHead(SDF_Lookahead arg);
+SDF_CharClass SDF_getLookaheadHead(SDF_Lookahead arg);
+SDF_Lookahead SDF_setLookaheadHead(SDF_Lookahead arg, SDF_CharClass head);
+ATbool SDF_hasLookaheadCharClass(SDF_Lookahead arg);
+SDF_CharClass SDF_getLookaheadCharClass(SDF_Lookahead arg);
+SDF_Lookahead SDF_setLookaheadCharClass(SDF_Lookahead arg, SDF_CharClass charClass);
+ATbool SDF_hasLookaheadWsAfterHead(SDF_Lookahead arg);
+SDF_Layout SDF_getLookaheadWsAfterHead(SDF_Lookahead arg);
+SDF_Lookahead SDF_setLookaheadWsAfterHead(SDF_Lookahead arg, SDF_Layout wsAfterHead);
+
+/*}}}  */
+/*{{{  SDF_Lookaheads accessor prototypes */
+
+ATbool SDF_isValidLookaheads(SDF_Lookaheads arg);
+ATbool SDF_isLookaheadsSingle(SDF_Lookaheads arg);
+ATbool SDF_isLookaheadsAlt(SDF_Lookaheads arg);
+ATbool SDF_isLookaheadsBracket(SDF_Lookaheads arg);
+ATbool SDF_isLookaheadsList(SDF_Lookaheads arg);
+ATbool SDF_hasLookaheadsRight(SDF_Lookaheads arg);
+SDF_Lookaheads SDF_getLookaheadsRight(SDF_Lookaheads arg);
+SDF_Lookaheads SDF_setLookaheadsRight(SDF_Lookaheads arg, SDF_Lookaheads right);
+ATbool SDF_hasLookaheadsLookaheads(SDF_Lookaheads arg);
+SDF_Lookaheads SDF_getLookaheadsLookaheads(SDF_Lookaheads arg);
+SDF_Lookaheads SDF_setLookaheadsLookaheads(SDF_Lookaheads arg, SDF_Lookaheads lookaheads);
+ATbool SDF_hasLookaheadsWsAfterLeft(SDF_Lookaheads arg);
+SDF_Layout SDF_getLookaheadsWsAfterLeft(SDF_Lookaheads arg);
+SDF_Lookaheads SDF_setLookaheadsWsAfterLeft(SDF_Lookaheads arg, SDF_Layout wsAfterLeft);
+ATbool SDF_hasLookaheadsWsAfterParenOpen(SDF_Lookaheads arg);
+SDF_Layout SDF_getLookaheadsWsAfterParenOpen(SDF_Lookaheads arg);
+SDF_Lookaheads SDF_setLookaheadsWsAfterParenOpen(SDF_Lookaheads arg, SDF_Layout wsAfterParenOpen);
+ATbool SDF_hasLookaheadsWsAfterBracketOpenBracketOpen(SDF_Lookaheads arg);
+SDF_Layout SDF_getLookaheadsWsAfterBracketOpenBracketOpen(SDF_Lookaheads arg);
+SDF_Lookaheads SDF_setLookaheadsWsAfterBracketOpenBracketOpen(SDF_Lookaheads arg, SDF_Layout wsAfterBracketOpenBracketOpen);
+ATbool SDF_hasLookaheadsLookahead(SDF_Lookaheads arg);
+SDF_Lookahead SDF_getLookaheadsLookahead(SDF_Lookaheads arg);
+SDF_Lookaheads SDF_setLookaheadsLookahead(SDF_Lookaheads arg, SDF_Lookahead lookahead);
+ATbool SDF_hasLookaheadsWsAfterBar(SDF_Lookaheads arg);
+SDF_Layout SDF_getLookaheadsWsAfterBar(SDF_Lookaheads arg);
+SDF_Lookaheads SDF_setLookaheadsWsAfterBar(SDF_Lookaheads arg, SDF_Layout wsAfterBar);
+ATbool SDF_hasLookaheadsLeft(SDF_Lookaheads arg);
+SDF_Lookaheads SDF_getLookaheadsLeft(SDF_Lookaheads arg);
+SDF_Lookaheads SDF_setLookaheadsLeft(SDF_Lookaheads arg, SDF_Lookaheads left);
+ATbool SDF_hasLookaheadsWsAfterLookaheads(SDF_Lookaheads arg);
+SDF_Layout SDF_getLookaheadsWsAfterLookaheads(SDF_Lookaheads arg);
+SDF_Lookaheads SDF_setLookaheadsWsAfterLookaheads(SDF_Lookaheads arg, SDF_Layout wsAfterLookaheads);
+
+/*}}}  */
+/*{{{  SDF_LookaheadLookaheads accessor prototypes */
+
+ATbool SDF_isValidLookaheadLookaheads(SDF_LookaheadLookaheads arg);
+ATbool SDF_isLookaheadLookaheadsEmpty(SDF_LookaheadLookaheads arg);
+ATbool SDF_isLookaheadLookaheadsSingle(SDF_LookaheadLookaheads arg);
+ATbool SDF_isLookaheadLookaheadsMany(SDF_LookaheadLookaheads arg);
+ATbool SDF_hasLookaheadLookaheadsWsAfterFirst(SDF_LookaheadLookaheads arg);
+SDF_Layout SDF_getLookaheadLookaheadsWsAfterFirst(SDF_LookaheadLookaheads arg);
+SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsWsAfterFirst(SDF_LookaheadLookaheads arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasLookaheadLookaheadsWsAfterSep(SDF_LookaheadLookaheads arg);
+SDF_Layout SDF_getLookaheadLookaheadsWsAfterSep(SDF_LookaheadLookaheads arg);
+SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsWsAfterSep(SDF_LookaheadLookaheads arg, SDF_Layout wsAfterSep);
+ATbool SDF_hasLookaheadLookaheadsTail(SDF_LookaheadLookaheads arg);
+SDF_LookaheadLookaheads SDF_getLookaheadLookaheadsTail(SDF_LookaheadLookaheads arg);
+SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsTail(SDF_LookaheadLookaheads arg, SDF_LookaheadLookaheads tail);
+ATbool SDF_hasLookaheadLookaheadsHead(SDF_LookaheadLookaheads arg);
+SDF_Lookahead SDF_getLookaheadLookaheadsHead(SDF_LookaheadLookaheads arg);
+SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsHead(SDF_LookaheadLookaheads arg, SDF_Lookahead head);
+ATbool SDF_hasLookaheadLookaheadsSep(SDF_LookaheadLookaheads arg);
+SDF_Separator SDF_getLookaheadLookaheadsSep(SDF_LookaheadLookaheads arg);
+SDF_LookaheadLookaheads SDF_setLookaheadLookaheadsSep(SDF_LookaheadLookaheads arg, SDF_Separator sep);
+
+/*}}}  */
+/*{{{  SDF_Restriction accessor prototypes */
+
+ATbool SDF_isValidRestriction(SDF_Restriction arg);
+ATbool SDF_isRestrictionFollow(SDF_Restriction arg);
+ATbool SDF_hasRestrictionLookaheads(SDF_Restriction arg);
+SDF_Lookaheads SDF_getRestrictionLookaheads(SDF_Restriction arg);
+SDF_Restriction SDF_setRestrictionLookaheads(SDF_Restriction arg, SDF_Lookaheads lookaheads);
+ATbool SDF_hasRestrictionWsAfterSymbols(SDF_Restriction arg);
+SDF_Layout SDF_getRestrictionWsAfterSymbols(SDF_Restriction arg);
+SDF_Restriction SDF_setRestrictionWsAfterSymbols(SDF_Restriction arg, SDF_Layout wsAfterSymbols);
+ATbool SDF_hasRestrictionWsAfterSlash(SDF_Restriction arg);
+SDF_Layout SDF_getRestrictionWsAfterSlash(SDF_Restriction arg);
+SDF_Restriction SDF_setRestrictionWsAfterSlash(SDF_Restriction arg, SDF_Layout wsAfterSlash);
+ATbool SDF_hasRestrictionSymbols(SDF_Restriction arg);
+SDF_Symbols SDF_getRestrictionSymbols(SDF_Restriction arg);
+SDF_Restriction SDF_setRestrictionSymbols(SDF_Restriction arg, SDF_Symbols symbols);
+
+/*}}}  */
+/*{{{  SDF_Restrictions accessor prototypes */
+
+ATbool SDF_isValidRestrictions(SDF_Restrictions arg);
+ATbool SDF_isRestrictionsDefault(SDF_Restrictions arg);
+ATbool SDF_hasRestrictionsRestrictions(SDF_Restrictions arg);
+SDF_RestrictionRestrictions SDF_getRestrictionsRestrictions(SDF_Restrictions arg);
+SDF_Restrictions SDF_setRestrictionsRestrictions(SDF_Restrictions arg, SDF_RestrictionRestrictions restrictions);
+
+/*}}}  */
+/*{{{  SDF_RestrictionRestrictions accessor prototypes */
+
+ATbool SDF_isValidRestrictionRestrictions(SDF_RestrictionRestrictions arg);
+ATbool SDF_isRestrictionRestrictionsEmpty(SDF_RestrictionRestrictions arg);
+ATbool SDF_isRestrictionRestrictionsSingle(SDF_RestrictionRestrictions arg);
+ATbool SDF_isRestrictionRestrictionsMany(SDF_RestrictionRestrictions arg);
+ATbool SDF_hasRestrictionRestrictionsWsAfterFirst(SDF_RestrictionRestrictions arg);
+SDF_Layout SDF_getRestrictionRestrictionsWsAfterFirst(SDF_RestrictionRestrictions arg);
+SDF_RestrictionRestrictions SDF_setRestrictionRestrictionsWsAfterFirst(SDF_RestrictionRestrictions arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasRestrictionRestrictionsTail(SDF_RestrictionRestrictions arg);
+SDF_RestrictionRestrictions SDF_getRestrictionRestrictionsTail(SDF_RestrictionRestrictions arg);
+SDF_RestrictionRestrictions SDF_setRestrictionRestrictionsTail(SDF_RestrictionRestrictions arg, SDF_RestrictionRestrictions tail);
+ATbool SDF_hasRestrictionRestrictionsHead(SDF_RestrictionRestrictions arg);
+SDF_Restriction SDF_getRestrictionRestrictionsHead(SDF_RestrictionRestrictions arg);
+SDF_RestrictionRestrictions SDF_setRestrictionRestrictionsHead(SDF_RestrictionRestrictions arg, SDF_Restriction head);
+
+/*}}}  */
+/*{{{  SDF_Alias accessor prototypes */
+
+ATbool SDF_isValidAlias(SDF_Alias arg);
+ATbool SDF_isAliasAlias(SDF_Alias arg);
+ATbool SDF_hasAliasWsAfterSymbol(SDF_Alias arg);
+SDF_Layout SDF_getAliasWsAfterSymbol(SDF_Alias arg);
+SDF_Alias SDF_setAliasWsAfterSymbol(SDF_Alias arg, SDF_Layout wsAfterSymbol);
+ATbool SDF_hasAliasAlias(SDF_Alias arg);
+SDF_Symbol SDF_getAliasAlias(SDF_Alias arg);
+SDF_Alias SDF_setAliasAlias(SDF_Alias arg, SDF_Symbol alias);
+ATbool SDF_hasAliasSymbol(SDF_Alias arg);
+SDF_Symbol SDF_getAliasSymbol(SDF_Alias arg);
+SDF_Alias SDF_setAliasSymbol(SDF_Alias arg, SDF_Symbol symbol);
+ATbool SDF_hasAliasWsAfterArrow(SDF_Alias arg);
+SDF_Layout SDF_getAliasWsAfterArrow(SDF_Alias arg);
+SDF_Alias SDF_setAliasWsAfterArrow(SDF_Alias arg, SDF_Layout wsAfterArrow);
+
+/*}}}  */
+/*{{{  SDF_Aliases accessor prototypes */
+
+ATbool SDF_isValidAliases(SDF_Aliases arg);
+ATbool SDF_isAliasesDefault(SDF_Aliases arg);
+ATbool SDF_hasAliasesAliass(SDF_Aliases arg);
+SDF_AliasAliass SDF_getAliasesAliass(SDF_Aliases arg);
+SDF_Aliases SDF_setAliasesAliass(SDF_Aliases arg, SDF_AliasAliass aliass);
+
+/*}}}  */
+/*{{{  SDF_AliasAliass accessor prototypes */
+
+ATbool SDF_isValidAliasAliass(SDF_AliasAliass arg);
+ATbool SDF_isAliasAliassEmpty(SDF_AliasAliass arg);
+ATbool SDF_isAliasAliassSingle(SDF_AliasAliass arg);
+ATbool SDF_isAliasAliassMany(SDF_AliasAliass arg);
+ATbool SDF_hasAliasAliassWsAfterFirst(SDF_AliasAliass arg);
+SDF_Layout SDF_getAliasAliassWsAfterFirst(SDF_AliasAliass arg);
+SDF_AliasAliass SDF_setAliasAliassWsAfterFirst(SDF_AliasAliass arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasAliasAliassTail(SDF_AliasAliass arg);
+SDF_AliasAliass SDF_getAliasAliassTail(SDF_AliasAliass arg);
+SDF_AliasAliass SDF_setAliasAliassTail(SDF_AliasAliass arg, SDF_AliasAliass tail);
+ATbool SDF_hasAliasAliassHead(SDF_AliasAliass arg);
+SDF_Alias SDF_getAliasAliassHead(SDF_AliasAliass arg);
+SDF_AliasAliass SDF_setAliasAliassHead(SDF_AliasAliass arg, SDF_Alias head);
+
+/*}}}  */
+/*{{{  SDF_Symbols accessor prototypes */
+
+ATbool SDF_isValidSymbols(SDF_Symbols arg);
+ATbool SDF_isSymbolsDefault(SDF_Symbols arg);
+ATbool SDF_hasSymbolsSymbols(SDF_Symbols arg);
+SDF_SymbolSymbols SDF_getSymbolsSymbols(SDF_Symbols arg);
+SDF_Symbols SDF_setSymbolsSymbols(SDF_Symbols arg, SDF_SymbolSymbols symbols);
+
+/*}}}  */
+/*{{{  SDF_SymbolSymbols accessor prototypes */
+
+ATbool SDF_isValidSymbolSymbols(SDF_SymbolSymbols arg);
+ATbool SDF_isSymbolSymbolsEmpty(SDF_SymbolSymbols arg);
+ATbool SDF_isSymbolSymbolsSingle(SDF_SymbolSymbols arg);
+ATbool SDF_isSymbolSymbolsMany(SDF_SymbolSymbols arg);
+ATbool SDF_hasSymbolSymbolsWsAfterFirst(SDF_SymbolSymbols arg);
+SDF_Layout SDF_getSymbolSymbolsWsAfterFirst(SDF_SymbolSymbols arg);
+SDF_SymbolSymbols SDF_setSymbolSymbolsWsAfterFirst(SDF_SymbolSymbols arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasSymbolSymbolsTail(SDF_SymbolSymbols arg);
+SDF_SymbolSymbols SDF_getSymbolSymbolsTail(SDF_SymbolSymbols arg);
+SDF_SymbolSymbols SDF_setSymbolSymbolsTail(SDF_SymbolSymbols arg, SDF_SymbolSymbols tail);
+ATbool SDF_hasSymbolSymbolsHead(SDF_SymbolSymbols arg);
+SDF_Symbol SDF_getSymbolSymbolsHead(SDF_SymbolSymbols arg);
+SDF_SymbolSymbols SDF_setSymbolSymbolsHead(SDF_SymbolSymbols arg, SDF_Symbol head);
+
+/*}}}  */
+/*{{{  SDF_Renamings accessor prototypes */
+
+ATbool SDF_isValidRenamings(SDF_Renamings arg);
+ATbool SDF_isRenamingsRenamings(SDF_Renamings arg);
+ATbool SDF_hasRenamingsRenamings(SDF_Renamings arg);
+SDF_RenamingRenamings SDF_getRenamingsRenamings(SDF_Renamings arg);
+SDF_Renamings SDF_setRenamingsRenamings(SDF_Renamings arg, SDF_RenamingRenamings renamings);
+ATbool SDF_hasRenamingsWsAfterRenamings(SDF_Renamings arg);
+SDF_Layout SDF_getRenamingsWsAfterRenamings(SDF_Renamings arg);
+SDF_Renamings SDF_setRenamingsWsAfterRenamings(SDF_Renamings arg, SDF_Layout wsAfterRenamings);
+ATbool SDF_hasRenamingsWsAfterBracketOpen(SDF_Renamings arg);
+SDF_Layout SDF_getRenamingsWsAfterBracketOpen(SDF_Renamings arg);
+SDF_Renamings SDF_setRenamingsWsAfterBracketOpen(SDF_Renamings arg, SDF_Layout wsAfterBracketOpen);
+
+/*}}}  */
+/*{{{  SDF_RenamingRenamings accessor prototypes */
+
+ATbool SDF_isValidRenamingRenamings(SDF_RenamingRenamings arg);
+ATbool SDF_isRenamingRenamingsEmpty(SDF_RenamingRenamings arg);
+ATbool SDF_isRenamingRenamingsSingle(SDF_RenamingRenamings arg);
+ATbool SDF_isRenamingRenamingsMany(SDF_RenamingRenamings arg);
+ATbool SDF_hasRenamingRenamingsWsAfterFirst(SDF_RenamingRenamings arg);
+SDF_Layout SDF_getRenamingRenamingsWsAfterFirst(SDF_RenamingRenamings arg);
+SDF_RenamingRenamings SDF_setRenamingRenamingsWsAfterFirst(SDF_RenamingRenamings arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasRenamingRenamingsTail(SDF_RenamingRenamings arg);
+SDF_RenamingRenamings SDF_getRenamingRenamingsTail(SDF_RenamingRenamings arg);
+SDF_RenamingRenamings SDF_setRenamingRenamingsTail(SDF_RenamingRenamings arg, SDF_RenamingRenamings tail);
+ATbool SDF_hasRenamingRenamingsHead(SDF_RenamingRenamings arg);
+SDF_Renaming SDF_getRenamingRenamingsHead(SDF_RenamingRenamings arg);
+SDF_RenamingRenamings SDF_setRenamingRenamingsHead(SDF_RenamingRenamings arg, SDF_Renaming head);
+
+/*}}}  */
+/*{{{  SDF_Renaming accessor prototypes */
+
+ATbool SDF_isValidRenaming(SDF_Renaming arg);
+ATbool SDF_isRenamingSymbol(SDF_Renaming arg);
+ATbool SDF_isRenamingProduction(SDF_Renaming arg);
+ATbool SDF_hasRenamingFrom(SDF_Renaming arg);
+SDF_Symbol SDF_getRenamingFrom(SDF_Renaming arg);
+SDF_Renaming SDF_setRenamingFrom(SDF_Renaming arg, SDF_Symbol from);
+ATbool SDF_hasRenamingTo(SDF_Renaming arg);
+SDF_Symbol SDF_getRenamingTo(SDF_Renaming arg);
+SDF_Renaming SDF_setRenamingTo(SDF_Renaming arg, SDF_Symbol to);
+ATbool SDF_hasRenamingWsAfterFrom(SDF_Renaming arg);
+SDF_Layout SDF_getRenamingWsAfterFrom(SDF_Renaming arg);
+SDF_Renaming SDF_setRenamingWsAfterFrom(SDF_Renaming arg, SDF_Layout wsAfterFrom);
+ATbool SDF_hasRenamingWsAfterEqualsGreaterThan(SDF_Renaming arg);
+SDF_Layout SDF_getRenamingWsAfterEqualsGreaterThan(SDF_Renaming arg);
+SDF_Renaming SDF_setRenamingWsAfterEqualsGreaterThan(SDF_Renaming arg, SDF_Layout wsAfterEqualsGreaterThan);
+
+/*}}}  */
+/*{{{  SDF_NatCon accessor prototypes */
+
+ATbool SDF_isValidNatCon(SDF_NatCon arg);
+ATbool SDF_isNatConDigits(SDF_NatCon arg);
+ATbool SDF_hasNatConLex(SDF_NatCon arg);
+SDF_Lexical SDF_getNatConLex(SDF_NatCon arg);
+SDF_NatCon SDF_setNatConLex(SDF_NatCon arg, SDF_Lexical lex);
+
+/*}}}  */
+/*{{{  SDF_IntCon accessor prototypes */
+
+ATbool SDF_isValidIntCon(SDF_IntCon arg);
+ATbool SDF_isIntConNatural(SDF_IntCon arg);
+ATbool SDF_isIntConPositive(SDF_IntCon arg);
+ATbool SDF_isIntConNegative(SDF_IntCon arg);
+ATbool SDF_hasIntConWsAfterNeg(SDF_IntCon arg);
+SDF_Layout SDF_getIntConWsAfterNeg(SDF_IntCon arg);
+SDF_IntCon SDF_setIntConWsAfterNeg(SDF_IntCon arg, SDF_Layout wsAfterNeg);
+ATbool SDF_hasIntConWsAfterPos(SDF_IntCon arg);
+SDF_Layout SDF_getIntConWsAfterPos(SDF_IntCon arg);
+SDF_IntCon SDF_setIntConWsAfterPos(SDF_IntCon arg, SDF_Layout wsAfterPos);
+ATbool SDF_hasIntConNatCon(SDF_IntCon arg);
+SDF_NatCon SDF_getIntConNatCon(SDF_IntCon arg);
+SDF_IntCon SDF_setIntConNatCon(SDF_IntCon arg, SDF_NatCon natCon);
+
+/*}}}  */
+/*{{{  SDF_CharRange accessor prototypes */
+
+ATbool SDF_isValidCharRange(SDF_CharRange arg);
+ATbool SDF_isCharRangeDefault(SDF_CharRange arg);
+ATbool SDF_isCharRangeRange(SDF_CharRange arg);
+ATbool SDF_hasCharRangeWsAfter(SDF_CharRange arg);
+SDF_Layout SDF_getCharRangeWsAfter(SDF_CharRange arg);
+SDF_CharRange SDF_setCharRangeWsAfter(SDF_CharRange arg, SDF_Layout wsAfter);
+ATbool SDF_hasCharRangeEnd(SDF_CharRange arg);
+SDF_Character SDF_getCharRangeEnd(SDF_CharRange arg);
+SDF_CharRange SDF_setCharRangeEnd(SDF_CharRange arg, SDF_Character end);
+ATbool SDF_hasCharRangeCharacter(SDF_CharRange arg);
+SDF_Character SDF_getCharRangeCharacter(SDF_CharRange arg);
+SDF_CharRange SDF_setCharRangeCharacter(SDF_CharRange arg, SDF_Character character);
+ATbool SDF_hasCharRangeStart(SDF_CharRange arg);
+SDF_Character SDF_getCharRangeStart(SDF_CharRange arg);
+SDF_CharRange SDF_setCharRangeStart(SDF_CharRange arg, SDF_Character start);
+ATbool SDF_hasCharRangeWsAfterStart(SDF_CharRange arg);
+SDF_Layout SDF_getCharRangeWsAfterStart(SDF_CharRange arg);
+SDF_CharRange SDF_setCharRangeWsAfterStart(SDF_CharRange arg, SDF_Layout wsAfterStart);
+
+/*}}}  */
+/*{{{  SDF_CharRanges accessor prototypes */
+
+ATbool SDF_isValidCharRanges(SDF_CharRanges arg);
+ATbool SDF_isCharRangesDefault(SDF_CharRanges arg);
+ATbool SDF_isCharRangesConc(SDF_CharRanges arg);
+ATbool SDF_isCharRangesBracket(SDF_CharRanges arg);
+ATbool SDF_hasCharRangesRight(SDF_CharRanges arg);
+SDF_CharRanges SDF_getCharRangesRight(SDF_CharRanges arg);
+SDF_CharRanges SDF_setCharRangesRight(SDF_CharRanges arg, SDF_CharRanges right);
+ATbool SDF_hasCharRangesWsAfterLeft(SDF_CharRanges arg);
+SDF_Layout SDF_getCharRangesWsAfterLeft(SDF_CharRanges arg);
+SDF_CharRanges SDF_setCharRangesWsAfterLeft(SDF_CharRanges arg, SDF_Layout wsAfterLeft);
+ATbool SDF_hasCharRangesWsAfterParenOpen(SDF_CharRanges arg);
+SDF_Layout SDF_getCharRangesWsAfterParenOpen(SDF_CharRanges arg);
+SDF_CharRanges SDF_setCharRangesWsAfterParenOpen(SDF_CharRanges arg, SDF_Layout wsAfterParenOpen);
+ATbool SDF_hasCharRangesWsAfterCharRanges(SDF_CharRanges arg);
+SDF_Layout SDF_getCharRangesWsAfterCharRanges(SDF_CharRanges arg);
+SDF_CharRanges SDF_setCharRangesWsAfterCharRanges(SDF_CharRanges arg, SDF_Layout wsAfterCharRanges);
+ATbool SDF_hasCharRangesCharRanges(SDF_CharRanges arg);
+SDF_CharRanges SDF_getCharRangesCharRanges(SDF_CharRanges arg);
+SDF_CharRanges SDF_setCharRangesCharRanges(SDF_CharRanges arg, SDF_CharRanges charRanges);
+ATbool SDF_hasCharRangesCharRange(SDF_CharRanges arg);
+SDF_CharRange SDF_getCharRangesCharRange(SDF_CharRanges arg);
+SDF_CharRanges SDF_setCharRangesCharRange(SDF_CharRanges arg, SDF_CharRange charRange);
+ATbool SDF_hasCharRangesLeft(SDF_CharRanges arg);
+SDF_CharRanges SDF_getCharRangesLeft(SDF_CharRanges arg);
+SDF_CharRanges SDF_setCharRangesLeft(SDF_CharRanges arg, SDF_CharRanges left);
+
+/*}}}  */
+/*{{{  SDF_OptCharRanges accessor prototypes */
+
+ATbool SDF_isValidOptCharRanges(SDF_OptCharRanges arg);
+ATbool SDF_isOptCharRangesAbsent(SDF_OptCharRanges arg);
+ATbool SDF_isOptCharRangesPresent(SDF_OptCharRanges arg);
+ATbool SDF_hasOptCharRangesCharRanges(SDF_OptCharRanges arg);
+SDF_CharRanges SDF_getOptCharRangesCharRanges(SDF_OptCharRanges arg);
+SDF_OptCharRanges SDF_setOptCharRangesCharRanges(SDF_OptCharRanges arg, SDF_CharRanges charRanges);
+
+/*}}}  */
+/*{{{  SDF_CharClass accessor prototypes */
+
+ATbool SDF_isValidCharClass(SDF_CharClass arg);
+ATbool SDF_isCharClassSimpleCharclass(SDF_CharClass arg);
+ATbool SDF_isCharClassComp(SDF_CharClass arg);
+ATbool SDF_isCharClassDiff(SDF_CharClass arg);
+ATbool SDF_isCharClassIsect(SDF_CharClass arg);
+ATbool SDF_isCharClassUnion(SDF_CharClass arg);
+ATbool SDF_isCharClassBracket(SDF_CharClass arg);
+ATbool SDF_hasCharClassRight(SDF_CharClass arg);
+SDF_CharClass SDF_getCharClassRight(SDF_CharClass arg);
+SDF_CharClass SDF_setCharClassRight(SDF_CharClass arg, SDF_CharClass right);
+ATbool SDF_hasCharClassWsAfterSlash(SDF_CharClass arg);
+SDF_Layout SDF_getCharClassWsAfterSlash(SDF_CharClass arg);
+SDF_CharClass SDF_setCharClassWsAfterSlash(SDF_CharClass arg, SDF_Layout wsAfterSlash);
+ATbool SDF_hasCharClassOptCharRanges(SDF_CharClass arg);
+SDF_OptCharRanges SDF_getCharClassOptCharRanges(SDF_CharClass arg);
+SDF_CharClass SDF_setCharClassOptCharRanges(SDF_CharClass arg, SDF_OptCharRanges optCharRanges);
+ATbool SDF_hasCharClassWsAfterLeft(SDF_CharClass arg);
+SDF_Layout SDF_getCharClassWsAfterLeft(SDF_CharClass arg);
+SDF_CharClass SDF_setCharClassWsAfterLeft(SDF_CharClass arg, SDF_Layout wsAfterLeft);
+ATbool SDF_hasCharClassWsAfterParenOpen(SDF_CharClass arg);
+SDF_Layout SDF_getCharClassWsAfterParenOpen(SDF_CharClass arg);
+SDF_CharClass SDF_setCharClassWsAfterParenOpen(SDF_CharClass arg, SDF_Layout wsAfterParenOpen);
+ATbool SDF_hasCharClassWsAfterTilde(SDF_CharClass arg);
+SDF_Layout SDF_getCharClassWsAfterTilde(SDF_CharClass arg);
+SDF_CharClass SDF_setCharClassWsAfterTilde(SDF_CharClass arg, SDF_Layout wsAfterTilde);
+ATbool SDF_hasCharClassWsAfterBackslashSlash(SDF_CharClass arg);
+SDF_Layout SDF_getCharClassWsAfterBackslashSlash(SDF_CharClass arg);
+SDF_CharClass SDF_setCharClassWsAfterBackslashSlash(SDF_CharClass arg, SDF_Layout wsAfterBackslashSlash);
+ATbool SDF_hasCharClassWsAfterOptCharRanges(SDF_CharClass arg);
+SDF_Layout SDF_getCharClassWsAfterOptCharRanges(SDF_CharClass arg);
+SDF_CharClass SDF_setCharClassWsAfterOptCharRanges(SDF_CharClass arg, SDF_Layout wsAfterOptCharRanges);
+ATbool SDF_hasCharClassCharClass(SDF_CharClass arg);
+SDF_CharClass SDF_getCharClassCharClass(SDF_CharClass arg);
+SDF_CharClass SDF_setCharClassCharClass(SDF_CharClass arg, SDF_CharClass charClass);
+ATbool SDF_hasCharClassWsAfterBracketOpen(SDF_CharClass arg);
+SDF_Layout SDF_getCharClassWsAfterBracketOpen(SDF_CharClass arg);
+SDF_CharClass SDF_setCharClassWsAfterBracketOpen(SDF_CharClass arg, SDF_Layout wsAfterBracketOpen);
+ATbool SDF_hasCharClassWsAfterSlashBackslash(SDF_CharClass arg);
+SDF_Layout SDF_getCharClassWsAfterSlashBackslash(SDF_CharClass arg);
+SDF_CharClass SDF_setCharClassWsAfterSlashBackslash(SDF_CharClass arg, SDF_Layout wsAfterSlashBackslash);
+ATbool SDF_hasCharClassWsAfterCharClass(SDF_CharClass arg);
+SDF_Layout SDF_getCharClassWsAfterCharClass(SDF_CharClass arg);
+SDF_CharClass SDF_setCharClassWsAfterCharClass(SDF_CharClass arg, SDF_Layout wsAfterCharClass);
+ATbool SDF_hasCharClassLeft(SDF_CharClass arg);
+SDF_CharClass SDF_getCharClassLeft(SDF_CharClass arg);
+SDF_CharClass SDF_setCharClassLeft(SDF_CharClass arg, SDF_CharClass left);
+
+/*}}}  */
+/*{{{  SDF_AlphaNumericalEscChar accessor prototypes */
+
+ATbool SDF_isValidAlphaNumericalEscChar(SDF_AlphaNumericalEscChar arg);
+ATbool SDF_isAlphaNumericalEscCharDefault(SDF_AlphaNumericalEscChar arg);
+ATbool SDF_hasAlphaNumericalEscCharLex(SDF_AlphaNumericalEscChar arg);
+SDF_Lexical SDF_getAlphaNumericalEscCharLex(SDF_AlphaNumericalEscChar arg);
+SDF_AlphaNumericalEscChar SDF_setAlphaNumericalEscCharLex(SDF_AlphaNumericalEscChar arg, SDF_Lexical lex);
+
+/*}}}  */
+/*{{{  SDF_DecimalEscChar accessor prototypes */
+
+ATbool SDF_isValidDecimalEscChar(SDF_DecimalEscChar arg);
+ATbool SDF_isDecimalEscCharDec0_199(SDF_DecimalEscChar arg);
+ATbool SDF_isDecimalEscCharDec200_249(SDF_DecimalEscChar arg);
+ATbool SDF_isDecimalEscCharDec250_255(SDF_DecimalEscChar arg);
+ATbool SDF_hasDecimalEscCharLex(SDF_DecimalEscChar arg);
+SDF_Lexical SDF_getDecimalEscCharLex(SDF_DecimalEscChar arg);
+SDF_DecimalEscChar SDF_setDecimalEscCharLex(SDF_DecimalEscChar arg, SDF_Lexical lex);
+
+/*}}}  */
+/*{{{  SDF_EscChar accessor prototypes */
+
+ATbool SDF_isValidEscChar(SDF_EscChar arg);
+ATbool SDF_isEscCharAlphaNumeric(SDF_EscChar arg);
+ATbool SDF_isEscCharDecimal(SDF_EscChar arg);
+ATbool SDF_hasEscCharLex(SDF_EscChar arg);
+SDF_Lexical SDF_getEscCharLex(SDF_EscChar arg);
+SDF_EscChar SDF_setEscCharLex(SDF_EscChar arg, SDF_Lexical lex);
+
+/*}}}  */
+/*{{{  SDF_LChar accessor prototypes */
+
+ATbool SDF_isValidLChar(SDF_LChar arg);
+ATbool SDF_isLCharNormal(SDF_LChar arg);
+ATbool SDF_isLCharEscaped(SDF_LChar arg);
+ATbool SDF_hasLCharLex(SDF_LChar arg);
+SDF_Lexical SDF_getLCharLex(SDF_LChar arg);
+SDF_LChar SDF_setLCharLex(SDF_LChar arg, SDF_Lexical lex);
+
+/*}}}  */
+/*{{{  SDF_ATerms accessor prototypes */
+
+ATbool SDF_isValidATerms(SDF_ATerms arg);
+ATbool SDF_isATermsAterm(SDF_ATerms arg);
+ATbool SDF_isATermsCons(SDF_ATerms arg);
+ATbool SDF_hasATermsWsAfterComma(SDF_ATerms arg);
+SDF_Layout SDF_getATermsWsAfterComma(SDF_ATerms arg);
+SDF_ATerms SDF_setATermsWsAfterComma(SDF_ATerms arg, SDF_Layout wsAfterComma);
+ATbool SDF_hasATermsATerm(SDF_ATerms arg);
+SDF_ATerm SDF_getATermsATerm(SDF_ATerms arg);
+SDF_ATerms SDF_setATermsATerm(SDF_ATerms arg, SDF_ATerm aTerm);
+ATbool SDF_hasATermsTail(SDF_ATerms arg);
+SDF_ATerms SDF_getATermsTail(SDF_ATerms arg);
+SDF_ATerms SDF_setATermsTail(SDF_ATerms arg, SDF_ATerms tail);
+ATbool SDF_hasATermsHead(SDF_ATerms arg);
+SDF_ATerm SDF_getATermsHead(SDF_ATerms arg);
+SDF_ATerms SDF_setATermsHead(SDF_ATerms arg, SDF_ATerm head);
+ATbool SDF_hasATermsWsAfterHead(SDF_ATerms arg);
+SDF_Layout SDF_getATermsWsAfterHead(SDF_ATerms arg);
+SDF_ATerms SDF_setATermsWsAfterHead(SDF_ATerms arg, SDF_Layout wsAfterHead);
+
+/*}}}  */
+/*{{{  SDF_ATermList accessor prototypes */
+
+ATbool SDF_isValidATermList(SDF_ATermList arg);
+ATbool SDF_isATermListEmpty(SDF_ATermList arg);
+ATbool SDF_isATermListNotEmpty(SDF_ATermList arg);
+ATbool SDF_hasATermListWsAfterBracketOpen(SDF_ATermList arg);
+SDF_Layout SDF_getATermListWsAfterBracketOpen(SDF_ATermList arg);
+SDF_ATermList SDF_setATermListWsAfterBracketOpen(SDF_ATermList arg, SDF_Layout wsAfterBracketOpen);
+ATbool SDF_hasATermListWsAfterATerms(SDF_ATermList arg);
+SDF_Layout SDF_getATermListWsAfterATerms(SDF_ATermList arg);
+SDF_ATermList SDF_setATermListWsAfterATerms(SDF_ATermList arg, SDF_Layout wsAfterATerms);
+ATbool SDF_hasATermListATerms(SDF_ATermList arg);
+SDF_ATerms SDF_getATermListATerms(SDF_ATermList arg);
+SDF_ATermList SDF_setATermListATerms(SDF_ATermList arg, SDF_ATerms aTerms);
+
+/*}}}  */
+/*{{{  SDF_ACon accessor prototypes */
+
+ATbool SDF_isValidACon(SDF_ACon arg);
+ATbool SDF_isAConInt(SDF_ACon arg);
+ATbool SDF_isAConReal(SDF_ACon arg);
+ATbool SDF_hasAConIntCon(SDF_ACon arg);
+SDF_IntCon SDF_getAConIntCon(SDF_ACon arg);
+SDF_ACon SDF_setAConIntCon(SDF_ACon arg, SDF_IntCon intCon);
+ATbool SDF_hasAConRealCon(SDF_ACon arg);
+SDF_RealCon SDF_getAConRealCon(SDF_ACon arg);
+SDF_ACon SDF_setAConRealCon(SDF_ACon arg, SDF_RealCon realCon);
+
+/*}}}  */
+/*{{{  SDF_AFun accessor prototypes */
+
+ATbool SDF_isValidAFun(SDF_AFun arg);
+ATbool SDF_isAFunDefault(SDF_AFun arg);
+ATbool SDF_hasAFunLiteral(SDF_AFun arg);
+SDF_Literal SDF_getAFunLiteral(SDF_AFun arg);
+SDF_AFun SDF_setAFunLiteral(SDF_AFun arg, SDF_Literal literal);
+
+/*}}}  */
+/*{{{  SDF_ATerm accessor prototypes */
+
+ATbool SDF_isValidATerm(SDF_ATerm arg);
+ATbool SDF_isATermConstant(SDF_ATerm arg);
+ATbool SDF_isATermList(SDF_ATerm arg);
+ATbool SDF_isATermFun(SDF_ATerm arg);
+ATbool SDF_isATermAppl(SDF_ATerm arg);
+ATbool SDF_isATermAnnotatedConstant(SDF_ATerm arg);
+ATbool SDF_isATermAnnotatedList(SDF_ATerm arg);
+ATbool SDF_isATermAnnotatedFun(SDF_ATerm arg);
+ATbool SDF_isATermAnnotatedAppl(SDF_ATerm arg);
+ATbool SDF_hasATermWsAfterAFun(SDF_ATerm arg);
+SDF_Layout SDF_getATermWsAfterAFun(SDF_ATerm arg);
+SDF_ATerm SDF_setATermWsAfterAFun(SDF_ATerm arg, SDF_Layout wsAfterAFun);
+ATbool SDF_hasATermWsAfterParenClose(SDF_ATerm arg);
+SDF_Layout SDF_getATermWsAfterParenClose(SDF_ATerm arg);
+SDF_ATerm SDF_setATermWsAfterParenClose(SDF_ATerm arg, SDF_Layout wsAfterParenClose);
+ATbool SDF_hasATermWsAfterParenOpen(SDF_ATerm arg);
+SDF_Layout SDF_getATermWsAfterParenOpen(SDF_ATerm arg);
+SDF_ATerm SDF_setATermWsAfterParenOpen(SDF_ATerm arg, SDF_Layout wsAfterParenOpen);
+ATbool SDF_hasATermACon(SDF_ATerm arg);
+SDF_ACon SDF_getATermACon(SDF_ATerm arg);
+SDF_ATerm SDF_setATermACon(SDF_ATerm arg, SDF_ACon aCon);
+ATbool SDF_hasATermAnn(SDF_ATerm arg);
+SDF_Ann SDF_getATermAnn(SDF_ATerm arg);
+SDF_ATerm SDF_setATermAnn(SDF_ATerm arg, SDF_Ann ann);
+ATbool SDF_hasATermArgs(SDF_ATerm arg);
+SDF_ATerms SDF_getATermArgs(SDF_ATerm arg);
+SDF_ATerm SDF_setATermArgs(SDF_ATerm arg, SDF_ATerms args);
+ATbool SDF_hasATermWsAfterACon(SDF_ATerm arg);
+SDF_Layout SDF_getATermWsAfterACon(SDF_ATerm arg);
+SDF_ATerm SDF_setATermWsAfterACon(SDF_ATerm arg, SDF_Layout wsAfterACon);
+ATbool SDF_hasATermWsAfterArgs(SDF_ATerm arg);
+SDF_Layout SDF_getATermWsAfterArgs(SDF_ATerm arg);
+SDF_ATerm SDF_setATermWsAfterArgs(SDF_ATerm arg, SDF_Layout wsAfterArgs);
+ATbool SDF_hasATermATermList(SDF_ATerm arg);
+SDF_ATermList SDF_getATermATermList(SDF_ATerm arg);
+SDF_ATerm SDF_setATermATermList(SDF_ATerm arg, SDF_ATermList aTermList);
+ATbool SDF_hasATermAFun(SDF_ATerm arg);
+SDF_AFun SDF_getATermAFun(SDF_ATerm arg);
+SDF_ATerm SDF_setATermAFun(SDF_ATerm arg, SDF_AFun aFun);
+ATbool SDF_hasATermWsAfterATermList(SDF_ATerm arg);
+SDF_Layout SDF_getATermWsAfterATermList(SDF_ATerm arg);
+SDF_ATerm SDF_setATermWsAfterATermList(SDF_ATerm arg, SDF_Layout wsAfterATermList);
+
+/*}}}  */
+/*{{{  SDF_Ann accessor prototypes */
+
+ATbool SDF_isValidAnn(SDF_Ann arg);
+ATbool SDF_isAnnAnnotation(SDF_Ann arg);
+ATbool SDF_hasAnnWsAfterBraceOpen(SDF_Ann arg);
+SDF_Layout SDF_getAnnWsAfterBraceOpen(SDF_Ann arg);
+SDF_Ann SDF_setAnnWsAfterBraceOpen(SDF_Ann arg, SDF_Layout wsAfterBraceOpen);
+ATbool SDF_hasAnnWsAfterATerms(SDF_Ann arg);
+SDF_Layout SDF_getAnnWsAfterATerms(SDF_Ann arg);
+SDF_Ann SDF_setAnnWsAfterATerms(SDF_Ann arg, SDF_Layout wsAfterATerms);
+ATbool SDF_hasAnnATerms(SDF_Ann arg);
+SDF_ATerms SDF_getAnnATerms(SDF_Ann arg);
+SDF_Ann SDF_setAnnATerms(SDF_Ann arg, SDF_ATerms aTerms);
+
+/*}}}  */
+/*{{{  SDF_TagId accessor prototypes */
+
+ATbool SDF_isValidTagId(SDF_TagId arg);
+ATbool SDF_isTagIdDefault(SDF_TagId arg);
+ATbool SDF_isTagIdEmpty(SDF_TagId arg);
+ATbool SDF_hasTagIdLex(SDF_TagId arg);
+SDF_Lexical SDF_getTagIdLex(SDF_TagId arg);
+SDF_TagId SDF_setTagIdLex(SDF_TagId arg, SDF_Lexical lex);
+
+/*}}}  */
+/*{{{  SDF_NumChar accessor prototypes */
+
+ATbool SDF_isValidNumChar(SDF_NumChar arg);
+ATbool SDF_isNumCharDigits(SDF_NumChar arg);
+ATbool SDF_hasNumCharLex(SDF_NumChar arg);
+SDF_Lexical SDF_getNumCharLex(SDF_NumChar arg);
+SDF_NumChar SDF_setNumCharLex(SDF_NumChar arg, SDF_Lexical lex);
+
+/*}}}  */
+/*{{{  SDF_ShortChar accessor prototypes */
+
+ATbool SDF_isValidShortChar(SDF_ShortChar arg);
+ATbool SDF_isShortCharRegular(SDF_ShortChar arg);
+ATbool SDF_isShortCharEscaped(SDF_ShortChar arg);
+ATbool SDF_hasShortCharLex(SDF_ShortChar arg);
+SDF_Lexical SDF_getShortCharLex(SDF_ShortChar arg);
+SDF_ShortChar SDF_setShortCharLex(SDF_ShortChar arg, SDF_Lexical lex);
+
+/*}}}  */
+/*{{{  SDF_Character accessor prototypes */
+
+ATbool SDF_isValidCharacter(SDF_Character arg);
+ATbool SDF_isCharacterNumeric(SDF_Character arg);
+ATbool SDF_isCharacterShort(SDF_Character arg);
+ATbool SDF_isCharacterTop(SDF_Character arg);
+ATbool SDF_isCharacterEof(SDF_Character arg);
+ATbool SDF_hasCharacterShortChar(SDF_Character arg);
+SDF_ShortChar SDF_getCharacterShortChar(SDF_Character arg);
+SDF_Character SDF_setCharacterShortChar(SDF_Character arg, SDF_ShortChar shortChar);
+ATbool SDF_hasCharacterNumChar(SDF_Character arg);
+SDF_NumChar SDF_getCharacterNumChar(SDF_Character arg);
+SDF_Character SDF_setCharacterNumChar(SDF_Character arg, SDF_NumChar numChar);
+
+/*}}}  */
+/*{{{  SDF_OptExp accessor prototypes */
+
+ATbool SDF_isValidOptExp(SDF_OptExp arg);
+ATbool SDF_isOptExpPresent(SDF_OptExp arg);
+ATbool SDF_isOptExpAbsent(SDF_OptExp arg);
+ATbool SDF_hasOptExpWsAfterE(SDF_OptExp arg);
+SDF_Layout SDF_getOptExpWsAfterE(SDF_OptExp arg);
+SDF_OptExp SDF_setOptExpWsAfterE(SDF_OptExp arg, SDF_Layout wsAfterE);
+ATbool SDF_hasOptExpIntCon(SDF_OptExp arg);
+SDF_IntCon SDF_getOptExpIntCon(SDF_OptExp arg);
+SDF_OptExp SDF_setOptExpIntCon(SDF_OptExp arg, SDF_IntCon intCon);
+
+/*}}}  */
+/*{{{  SDF_RealCon accessor prototypes */
+
+ATbool SDF_isValidRealCon(SDF_RealCon arg);
+ATbool SDF_isRealConRealCon(SDF_RealCon arg);
+ATbool SDF_hasRealConWsAfterPeriod(SDF_RealCon arg);
+SDF_Layout SDF_getRealConWsAfterPeriod(SDF_RealCon arg);
+SDF_RealCon SDF_setRealConWsAfterPeriod(SDF_RealCon arg, SDF_Layout wsAfterPeriod);
+ATbool SDF_hasRealConWsAfterIntCon(SDF_RealCon arg);
+SDF_Layout SDF_getRealConWsAfterIntCon(SDF_RealCon arg);
+SDF_RealCon SDF_setRealConWsAfterIntCon(SDF_RealCon arg, SDF_Layout wsAfterIntCon);
+ATbool SDF_hasRealConOptExp(SDF_RealCon arg);
+SDF_OptExp SDF_getRealConOptExp(SDF_RealCon arg);
+SDF_RealCon SDF_setRealConOptExp(SDF_RealCon arg, SDF_OptExp optExp);
+ATbool SDF_hasRealConIntCon(SDF_RealCon arg);
+SDF_IntCon SDF_getRealConIntCon(SDF_RealCon arg);
+SDF_RealCon SDF_setRealConIntCon(SDF_RealCon arg, SDF_IntCon intCon);
+ATbool SDF_hasRealConWsAfterNatCon(SDF_RealCon arg);
+SDF_Layout SDF_getRealConWsAfterNatCon(SDF_RealCon arg);
+SDF_RealCon SDF_setRealConWsAfterNatCon(SDF_RealCon arg, SDF_Layout wsAfterNatCon);
+ATbool SDF_hasRealConNatCon(SDF_RealCon arg);
+SDF_NatCon SDF_getRealConNatCon(SDF_RealCon arg);
+SDF_RealCon SDF_setRealConNatCon(SDF_RealCon arg, SDF_NatCon natCon);
 
 /*}}}  */
 

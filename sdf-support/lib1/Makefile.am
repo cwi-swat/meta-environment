@@ -5,8 +5,10 @@
 #
 
 lib_LIBRARIES		= libSDF.a
-include_HEADERS		= SDF.h SDF_dict.h
-libSDF_a_SOURCES	= SDF.c SDF_dict.c
+include_HEADERS		= SDF.h SDF_dict.h SDF-utils.h
+libSDF_a_SOURCES	= SDF.c SDF_dict.c ${UTILSRCS}
+
+UTILSRCS		= get-imports.c
 
 EXTRA_DIST		= SDF.adt
 
