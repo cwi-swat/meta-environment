@@ -5,7 +5,6 @@ let
   Path : str,
   Module : str,
   Extension : str,
-  RealModule : str,
   Imports : list,
   Type : term
 in
@@ -20,7 +19,7 @@ in
     snd-msg(is-module-in-db(Module)).
     (
       rec-msg(not-exists-in-module-db(Module)) .
-      Open-Module(Path, Module, Type, RealModule?, Imports?).
+      Open-Module(Path, Module, Type, Imports?).
       snd-msg(open-modules(Imports, Type)).
       rec-msg(finished-opening-modules)
     +
@@ -99,8 +98,6 @@ let
   Id : int,
   Modules : list,
   Module : str,
-  RealModules : list,
-  RealModule : str,
   Imports : list,
   Path : str,
   FileName : str,
@@ -113,7 +110,6 @@ in
     rec-msg(open-modules(Modules?, Type?)).
     Changed := true .
     snd-note(ui-status(stat(Id,"Opening Modules"))). 
-    RealModules := [].
     if not-equal(Modules, []) then
       Module := first(Modules).
       Modules := next(Modules).
@@ -126,9 +122,8 @@ in
 	rec-msg(file-extension-hook-result(Extension?)) .
         LocateFile(Module, Extension, Path?) .
 	if not-equal(Path, "") then
-          Open-Module(Path, Module, Type, RealModule?, Imports?).
-          Modules := join(Imports, Modules).
-          RealModules := join(RealModules, RealModule)
+          Open-Module(Path, Module, Type, Imports?).
+          Modules := join(Imports, Modules)
         else 
           Error("Opening module %s failed: file not found!", [Module])
         fi
@@ -147,29 +142,28 @@ in
   delta
 endlet
 
-process Open-Module(Path : str, Module : str, Type : term,
-                    RealModule : str?, Imports : list?) 
+process Open-Module(Path : str, Module : str, Type : term, Imports : list?) 
 is
 let
   Id : int,
+  Status : term,
   RealPath : str,
-  Status : term
+  RealModule : str
 in
   Id := process-id.
   snd-note(ui-status(statf(Id,"Opening %s",[Module]))).
   Imports := [].
   Status := success .
   (
-    Open-Syntax(Path, Module, Type, Status?, RealModule?, RealPath?, Imports?).
+    Open-Syntax(Path, Module, Type, Status?, RealPath?, RealModule?, Imports?).
     if equal(Status, success) then
       if equal(Type, sdf) then 
-        Open-Equations(RealModule, RealPath)
+        Open-Equations(RealPath, RealModule)
       else
         tau
       fi
     else
-      RealModule := Module.
-      Handle-Open-Module-Errors(RealModule, Status)
+      Handle-Open-Module-Errors(Module, Status)
     fi
   ).
   snd-note(ui-status(endstat(Id)))
@@ -185,8 +179,8 @@ process Handle-Open-Module-Errors(Module : str, Status : term) is
     tau
   fi
 
-process Open-Syntax(Path : str, Module : str, Type : term, Status : term?, 
-                    RealModule : str?, RealPath : str?, Imports : list?) is
+process Open-Syntax(Path : str, Module : str, Type : term, Status : term?,
+                    RealPath : str?, RealModule : str?, Imports : list?) is
 let
   Tree : term,
   Text : str,
@@ -213,7 +207,7 @@ in
       Imports := [].
       snd-msg(add-module-to-db(Module, Path, Type, Text, Tree)).
       (
-        rec-msg(adding-succeeded(Module, RealModule?, RealPath?, Imports?))
+        rec-msg(adding-succeeded(Module, RealPath?, RealModule?, Imports?))
       +
         rec-msg(error-opening(Module, Status?))
       )
@@ -255,7 +249,7 @@ in
   )
 endlet
 
-process Open-Equations (Module : str, Path : str)  is
+process Open-Equations (Path : str, Module : str)  is
 let
   Tree : term,
   Text : str,

@@ -95,7 +95,7 @@ in
         SyntaxText := "" .
         snd-msg(ts-filter-keys("active-modules", Modules)) .
         rec-msg(ts-keys(Modules?)) .
-        snd-msg(adding-succeeded(Name, ModuleId, NewPath, Modules))
+        snd-msg(adding-succeeded(Name, NewPath, ModuleId, Modules))
       else
         ModuleId := Name .
         snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
@@ -118,7 +118,7 @@ in
       SyntaxText := "" .
       snd-msg(ts-filter-keys("active-modules", Modules)) .
       rec-msg(ts-keys(Modules?)) .
-      snd-msg(adding-succeeded(Name, ModuleId, Path, Modules))
+      snd-msg(adding-succeeded(Name, Path, ModuleId, Modules))
     fi 
   +
     rec-msg(invalidate-sdf-in-db(Name?)) .
