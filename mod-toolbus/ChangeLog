@@ -1,3 +1,5 @@
+Tue Oct 14 21:24:14 CEST 2003 <epost@science.uva.nl>
+  * extended function utf8_to_ascii() to decode entire charset
 
 Tue Oct 14 13:55:12 CEST 2003	<jurgenv@cwi.nl>
   * Added package definition
