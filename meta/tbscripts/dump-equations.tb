@@ -6,7 +6,7 @@ process WriteEquations(Path : str, Extension : str, Equations : term) is
 let
   Message : str
 in
-  snd-msg(write-term-file(Path, ".eqs", Equations)) .
+  snd-msg(write-term-file(Path, Extension, Equations)) .
   (
     rec-msg(file-written)
   +

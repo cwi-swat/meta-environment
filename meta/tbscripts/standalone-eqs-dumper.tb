@@ -5,6 +5,7 @@
 process StandaloneEqsDumper is
 let
   ModuleName : str,
+  Path       : str,
   Equations  : term
 in
   snd-msg(open-modules([MODULENAME])) .
@@ -12,7 +13,12 @@ in
   snd-msg(get-all-equations(MODULENAME)) .
   (
     rec-msg(all-equations(Equations?)) .
-    WriteEquations(OUTFILENAME, "", Equations) 
+    if equal(OUTFILENAME, "") then
+      LocateFile(MODULENAME, ".sdf", Path?) .
+      WriteEquations(Path, ".eqs", Equations) 
+    else 
+      WriteEquations(OUTFILENAME, "", Equations) 
+    fi
   +
     rec-msg(equations-incomplete) .
     printf("Specification incomplete for %s\n", MODULENAME)

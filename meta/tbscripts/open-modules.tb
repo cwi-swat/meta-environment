@@ -32,7 +32,7 @@ let
 in
   snd-msg(get-import-graph) .
   rec-msg(import-graph(Nodes?, Vertices?)) .
-  snd-msg(display-import-graph(Nodes,Vertices))
+  snd-note(display-import-graph(Nodes,Vertices))
 endlet
 
 process LocateFile(Name : str, Extension : str, Path : str?) is

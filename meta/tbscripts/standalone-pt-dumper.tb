@@ -10,12 +10,6 @@ in
   rec-msg(finished-opening-modules) .
   snd-msg(dump-parse-table-given-file(MODULENAME, OUTFILENAME)) .
   rec-msg(parse-table-dumped) .
-  if equal(SAVING,"true") then
-      snd-msg(save-all) .
-    rec-msg(saved)
-  else
-    tau
-  fi .
   shutdown("")
 
 endlet   
