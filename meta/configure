@@ -15,11 +15,11 @@ ac_default_prefix=`echo $PWD`/..
 ac_help="$ac_help
   --with-gel              use GeL for interfacing with ASF+SDF system"
 ac_help="$ac_help
-  --with-epic=DIR         use epic distribution installed in DIR [..]"
+  --with-epic		which epic distribution to use"
 ac_help="$ac_help
-  --with-aterm=DIR        use aterm-library installed in DIR [..]"
+  --with-aterm		which aterm-library to use"
 ac_help="$ac_help
-  --with-toolbus=DIR      use ToolBus distribution installed in DIR [..]"
+  --with-toolbus	which ToolBus distribution to use"
 
 # Initialize some variables set by options.
 # The variables have the same names as the options, with
@@ -530,10 +530,10 @@ VERSION=0.02
 
 
 
-EPIC=`echo $PWD`/..
-GEL=`echo $PWD`/..
-TOOLBUS=`echo $PWD`/..
-ATERM=`echo $PWD`/..
+EPIC='$(prefix)'
+GEL='$(prefix)'
+TOOLBUS='$(prefix)'
+ATERM='$(prefix)'
 
 INSTALL='$(top_srcdir)/install-sh'
 INSTALL_PROG='$(top_srcdir)/install-prog-sh'
@@ -1148,6 +1148,50 @@ fi
 fi
 
 LIBS=$NOSOCKLIBS
+echo $ac_n "checking for -ldl""... $ac_c" 1>&6
+ac_lib_var=`echo dl'_'dlopen | tr './+\055' '__p_'`
+if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  ac_save_LIBS="$LIBS"
+LIBS="-ldl  $LIBS"
+cat > conftest.$ac_ext <<EOF
+#line 1160 "configure"
+#include "confdefs.h"
+/* Override any gcc2 internal prototype to avoid an error.  */
+/* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+char dlopen();
+
+int main() { return 0; }
+int t() {
+dlopen()
+; return 0; }
+EOF
+if { (eval echo configure:1172: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; }; then
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=yes"
+else
+  rm -rf conftest*
+  eval "ac_cv_lib_$ac_lib_var=no"
+fi
+rm -f conftest*
+LIBS="$ac_save_LIBS"
+
+fi
+if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
+  echo "$ac_t""yes" 1>&6
+    ac_tr_lib=HAVE_LIB`echo dl | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`
+  cat >> confdefs.h <<EOF
+#define $ac_tr_lib 1
+EOF
+
+  LIBS="-ldl $LIBS"
+
+else
+  echo "$ac_t""no" 1>&6
+fi
+
 
 
  
@@ -1259,6 +1303,8 @@ trap 'rm -fr `echo "Makefile meta install-prog-sh install-data-sh \
 	graph-browser/Makefile graph-browser/graph-browser \
 	editor/Makefile editor/editor \
 	compiler/Makefile \
+	compiler/genmakefile.sh \
+	compiler/c-source/Makefile \
 	compiler/support/Makefile \
 	stred/nl/cwi/gipe/stred/Makefile \
 	asource/Makefile \
@@ -1330,6 +1376,8 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile meta install-prog-sh install-data-sh \
 	graph-browser/Makefile graph-browser/graph-browser \
 	editor/Makefile editor/editor \
 	compiler/Makefile \
+	compiler/genmakefile.sh \
+	compiler/c-source/Makefile \
 	compiler/support/Makefile \
 	stred/nl/cwi/gipe/stred/Makefile \
 	asource/Makefile \
