@@ -28,12 +28,15 @@ let
   AES       : addeqssyntax,
   ModuleName : str
 in  
-  execute(addeqssyntax,AES?).
   (
     rec-msg(add-eqs-syntax(ModuleName?, Syntax?)).
+    execute(addeqssyntax,AES?).
     snd-eval(AES,add-eqs-syntax(ModuleName, Syntax)).
     rec-value(AES,extended-syntax(NewSyntax?)). 
-    snd-msg(extended-syntax(NewSyntax))
+    snd-msg(extended-syntax(NewSyntax)).
+    snd-terminate(AES,"done").
+    Syntax := none.
+    NewSyntax := none
   )*
   delta
 endlet

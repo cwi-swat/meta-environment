@@ -62,9 +62,9 @@ SPEC_SRCS1=\
    AUX-Label-Sdf-Syntax1.c AUX-Literals-Sdf-Syntax1.c AUX-Sorts-Sdf-Syntax1.c\
    AUX-CC-Sdf-Syntax1.c AUX-Priority-Sdf-Syntax1.c AUX-Regular-Sdf-Syntax1.c\
    AUX-Modular-Sdf-Syntax1.c AUX-Basic-Sdf-Syntax1.c AUX-Kernel-Sdf-Syntax1.c\
-   AUX-ATerms1.c AUX-Literals1.c AUX-Character-Class-Syntax1.c AUX-IntCon2.c\
-   AUX-IntCon1.c AUX-Renaming-Sdf-Syntax1.c AUX-Grammar-Syntax1.c\
-   AUX-Symbols1.c AUX-RealCon1.c AUX-Character-Syntax1.c
+   AUX-ATerms1.c AUX-Literals1.c AUX-Character-Class-Syntax1.c AUX-IntCon1.c\
+   AUX-Renaming-Sdf-Syntax1.c AUX-Grammar-Syntax1.c AUX-Symbols1.c\
+   AUX-RealCon1.c AUX-Character-Syntax1.c
 
 SPEC_SRCS = $(SPEC_SRCS1)
 

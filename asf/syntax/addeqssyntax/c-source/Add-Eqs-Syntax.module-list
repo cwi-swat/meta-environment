@@ -64,7 +64,6 @@ AUX-Kernel-Sdf-Syntax1.c
 AUX-ATerms1.c
 AUX-Literals1.c
 AUX-Character-Class-Syntax1.c
-AUX-IntCon2.c
 AUX-IntCon1.c
 AUX-Renaming-Sdf-Syntax1.c
 AUX-Grammar-Syntax1.c
