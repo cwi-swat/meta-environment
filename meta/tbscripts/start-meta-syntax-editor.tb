@@ -11,11 +11,9 @@ in
   . create(MetaCreator, Pid?)
   . rec-msg(creation-finished)
   . InitializeTermStore(TERMSTORENAME)
-  . subscribe(delete-editor(<term>))
   . OpenModules([MODULENAME], sdf)
   . create(EditSyntax(MODULENAME), Pid?)
   . rec-msg(syntax-editor-started(MODULENAME, Sid?))
-  . rec-note(delete-editor(Sid))
   . shutdown("")
 endlet   
 

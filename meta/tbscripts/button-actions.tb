@@ -561,7 +561,6 @@ in
     )
   +
     rec-msg(push-active-module, Stack?, EditorId?)
-    . subscribe(delete-editor(EditorId))
     . snd-msg(em-get-modulename(EditorId))
     . rec-msg(em-modulename(EditorId, Modulename?))
     . StackPushString(Stack, Stack?, Modulename)

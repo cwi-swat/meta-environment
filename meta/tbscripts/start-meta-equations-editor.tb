@@ -11,11 +11,9 @@ in
   . create(MetaCreator, Pid?)
   . rec-msg(creation-finished)
   . InitializeTermStore(TERMSTORENAME)
-  . subscribe(delete-editor(<term>))
   . OpenModules([MODULENAME], sdf)
   . create(EditEquations(ModuleName), Pid?)
   . rec-msg(equations-editor-started(ModuleName, Sid?))
-  . rec-note(delete-editor(Sid))
   . shutdown("")
 endlet   
 
