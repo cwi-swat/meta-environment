@@ -1,0 +1,41 @@
+module ExtractVariableUses
+
+imports Rstore
+imports Tscript
+imports ToolBusOperations
+imports MyPosInfo[ProcessName]
+imports MyPosInfo[Var]
+
+exports
+  context-free syntax
+    extractVariableUses(Tscript, RSTORE)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractVariableUses(ProcessDef, RSTORE)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    extractVariableUsesInScope(ProcessBody, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractVariableUsesInScope(GenVar, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    addVariableUse(Var, Area, RSTORE) -> RSTORE
+
+hiddens
+  variables
+    "$FormalParams" -> {FormalParam ","}*
+    "$GenVar" -> GenVar
+    "$ProcessBody" -> ProcessBody
+    "$ProcessDef" -> ProcessDef
+    "$ProcessName" -> ProcessName
+    "$ProcessNameId" -> Area
+    "$ProcessSignature" -> ProcessSignature
+    "$Rstore"[0-9]* -> RSTORE
+    "$Tuple"[0-9]* -> Elem # Elem
+    "$Var" -> Var
+    "$VarId" -> Area
