@@ -16,6 +16,6 @@ configuration interface
 
 requires
    meta 1.3
-   asf 1.8
-   pgen 2.0
+   asf 1.9
+   pgen 2.1
    asf-library 1.0

@@ -2,7 +2,7 @@ dnl $Id$
 
 AC_INIT
 AC_CONFIG_SRCDIR([configure.in])
-AM_INIT_AUTOMAKE(asfsdf-meta,1.5)
+AM_INIT_AUTOMAKE(asfsdf-meta,1.5.1)
 AC_PREREQ(2.59)
 
 dnl What commands are needed to set the variable MAKE in Makefiles?

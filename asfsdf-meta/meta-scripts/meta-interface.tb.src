@@ -61,6 +61,7 @@ in
         rec-msg(test-results(Errors?)) .
         snd-note(remove-feedback-summary("asf-tests",ModuleName)) .
         snd-note(show-feedback-summary(feedback("asf-tests",ModuleName,Errors)))
+/* TODO:        snd-note(refresh-feedback-summary(summary("asf-tests",ModuleName,Errors))) */
       +
         rec-msg(rewrite-errors(Errors?)).
         snd-msg(display-rewrite-errors(ModuleName, Errors))
@@ -80,8 +81,13 @@ process CheckSyntaxSpecification(ModuleName : str) is
 let
   Syntax    : term,
   ErrorMessage : str,
-  Feedback  : term
+  Feedback  : term,
+  Id : int
 in
+  Id := process-id .
+  snd-note(ui-status(statf(Id, 
+                           "Checking syntax definition: %s",
+                           [ModuleName]))) .
   snd-msg(get-all-syntax-definitions(ModuleName, eqs)) .
   (
     rec-msg(syntax(Syntax?)) .
@@ -91,7 +97,8 @@ in
     Syntax := no-tree
   +
     rec-msg(no-syntax(ErrorMessage?))
-  )
+  ) .
+  snd-note(ui-status(endstat(Id)))
 endlet
 
 process Preprocess-syntax is
@@ -166,13 +173,17 @@ process Postprocess-semantics is
 let
   Semantics : term,
   Msgs      : list,
-  Name : str
+  Name : str,
+  Id : int
 in
+  Id := process-id .
   (
     rec-msg(postprocess-semantics-hook(Name?, Semantics?)).
+    snd-note(ui-status(statf(Id, "Checking equations: %s", [Name]))) .
     snd-msg(check-asf(Semantics)).
     rec-msg(messages(Msgs?)).
     snd-msg(display-asf-errors(Name, Msgs)).
+    snd-note(ui-status(endstat(Id))) .
     snd-msg(postprocess-semantics-hook-result(Name, Semantics))
   )*delta
 endlet

@@ -7,6 +7,10 @@ Mon May 17 10:41:02 CEST 2004 <kooiker@cwi.nl>
  * meta-scripts/standard.asfsdf.buttons.src:
  - Changed menus to 1.5 style 
 
+Tue May 11 17:34:05 CEST 2004 <jurgenv@cwi.nl>
+ * Changed dependency on asf from 1.8 to 1.9
+ * After release and first change: bumped to 1.5.1
+
 Tue May  4 12:44:58 CEST 2004 <{jong,kooiker}@cwi.nl>
  * fix Upgrade Sdf scenario: now invoke parse-action first to make
    sure syntax is parsed
