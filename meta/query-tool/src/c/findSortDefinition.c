@@ -3,8 +3,6 @@
 #include <stdio.h>
 #include <assert.h>
 
-#include <MEPT-utils.h>
-#include <SDFME-utils.h>
 #include <PT2SDF.h>
 
 #include "findSortDefinition.h"
@@ -38,21 +36,17 @@ static ATbool symbolInModule(SDF_Module sdfModule, SDF_Symbol sdfSymbol)
 }
 
 /*}}}  */
-/*{{{  ATerm query(int cid, ATerm atModule, ATerm atTree) */
+/*{{{  ATbool querySortInModule(SDF_Module sdfModule, PT_ParseTree parseTree) */
 
-ATerm query(int cid, ATerm atModule, ATerm atTree)
+ATbool querySortInModule(SDF_Module sdfModule, PT_ParseTree parseTree)
 {
   PT_Tree tree;
-  SDF_Module sdfModule;
-  PT_ParseTree parseTree;
   PT_Production prod;
   PT_Symbol rhs;
   SDF_Symbol sdfSymbol;
 
-  sdfModule = SDF_getStartTopModule(SDF_StartFromTerm(atModule));
+  /* Useless when SDFME/PT are compiled with -DDISABLE_DYNAMIC_CHECKING */
   assert(SDF_isValidModule(sdfModule));
-
-  parseTree = PT_ParseTreeFromTerm(atTree);
   assert(PT_isValidParseTree(parseTree));
 
   tree = PT_getParseTreeTree(parseTree);
@@ -62,12 +56,7 @@ ATerm query(int cid, ATerm atModule, ATerm atTree)
   sdfSymbol = PTSymbolToSDFSymbol(rhs);
   assert(SDF_isValidSymbol(sdfSymbol));
   
-  if ( symbolInModule(sdfModule, sdfSymbol)) {
-    return ATmake("snd-value(result(found))");
-  }
-  else {
-    return ATmake("snd-value(result(not-found))");
-  }
+  return symbolInModule(sdfModule, sdfSymbol);
 }
 
 /*}}}  */

@@ -2,7 +2,9 @@
 
 include $(top_srcdir)/make_rules
 
-QUERIES = findSortDefinition.c
+QUERIES = \
+	findSortDefinition.c \
+	findProduction.c
 
 TOOL = query-tool
 

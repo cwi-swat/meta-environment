@@ -3,10 +3,12 @@
 /*{{{  includes */
 
 #include <stdio.h>
-#include <assert.h>
 
 #include <MEPT-utils.h>
 #include <SDFME-utils.h>
+
+#include "findSortDefinition.h"
+#include "findProduction.h"
 
 #include "query-tool.tif.h"
 
@@ -40,6 +42,32 @@ static void version(const char *msg)
 {
   ATwarning("%s v%s\n", msg, myversion);
   exit(1);
+}
+
+/*}}}  */
+
+/*{{{  ATerm findSortDefinition(ATerm atModule, ATerm atTree) */
+
+ATerm findSortDefinition(ATerm atModule, ATerm atTree)
+{
+  SDF_Module sdfModule = SDF_getStartTopModule(SDF_StartFromTerm(atModule));
+  PT_ParseTree parseTree = PT_ParseTreeFromTerm(atTree);
+
+  if (querySortInModule(sdfModule, parseTree)) {
+    return ATmake("snd-value(result(found))");
+  }
+  else {
+    return ATmake("snd-value(result(not-found))");
+  }
+}
+
+/*}}}  */
+
+/*{{{  ATerm query(int cid, ATerm atModule, ATerm atTree) */
+
+ATerm query(int cid, ATerm atModule, ATerm atTree)
+{
+  return findSortDefinition(atModule, atTree);
 }
 
 /*}}}  */
