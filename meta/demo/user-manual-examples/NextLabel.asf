@@ -1,3 +1,0 @@
-equations
-
- [1] nextlabel(label(Char*)) = label(Char* "x")

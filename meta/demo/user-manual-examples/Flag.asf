@@ -1,7 +1,0 @@
-equations
-
-  [1] {Cs1 white red Cs2}  = {Cs1 red white Cs2} 
-
-  [2] {Cs1 blue white Cs2} = {Cs1 white blue Cs2} 
-
-  [3] {Cs1 blue red Cs2}   = {Cs1 red blue Cs2}

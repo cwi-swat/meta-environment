@@ -1,5 +1,0 @@
-module TestPair
-
-imports Booleans Pair[Bool Bool]
-        Nats Pair[NAT-CON NAT-CON]
-        Pair[Pair[[Bool,Bool]] Pair[[NAT-CON,NAT-CON]]]
