@@ -1,5 +1,8 @@
 $Id$
 
+2004/01/27 (markvdb@cwi.nl)
+ * Added the mapping from parsed errors to abstract errors.
+
 2003/12/18 (jurgenv@cwi.nl)
  * Renamed package to error-support
 

@@ -59,6 +59,7 @@ AC_OUTPUT(
   doc/Makefile
   utils/Makefile
   utils/lift-error/Makefile
+  utils/lower-error/Makefile
 )
 
 dnl }}}

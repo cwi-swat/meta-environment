@@ -1,4 +1,4 @@
-SUBDIRS=lift-error
+SUBDIRS=lift-error lower-error
 
 bin_SCRIPTS = ${PACKAGE}-config
 
