@@ -28,6 +28,8 @@ getActuals() {
 }
 
 cat  << END_OF_FILE 
+/*{{{  includes */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,7 +39,9 @@ cat  << END_OF_FILE
 #include <aterm2.h>
 #include "asc-builtins.h"
 #include "Library.h"
-#include "ErrorAPI-utils.h"
+#include "Error-utils.h"
+
+/*}}} */
 
 /* DO NOT EDIT: This file is generated */
 
@@ -48,7 +52,7 @@ void initBuiltins(void)
   CO_initLibraryApi();
   PTPT_initPTMEPTApi();
   PT_initAsFix2Api(); 
-  ERR_initErrorApi();
+  initErrorApi();
   initialized = ATtrue;
 
   return;

@@ -260,7 +260,7 @@ static PT_Tree termToTree(ATerm tree)
 		ATgetName(ATgetSymbol((ATermAppl) tree)));
       }
 
-      ptProd = PT_makeProductionFromTerm(prod);
+      ptProd = PT_ProductionFromTerm(prod);
      
       if (PT_isProductionDefault(ptProd)) { 
 	formalargs = PT_getProductionLhs(ptProd);

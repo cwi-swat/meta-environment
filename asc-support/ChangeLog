@@ -1,5 +1,8 @@
 $Id$
 
+Wed Mar 10 09:58:21 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Use new Error API
+
 Tue Feb 17 11:53:32 CET 2004 <jurgenv@cwi.nl>
  * Added support for choosing the default layout that is inserted
    in a normal form in the toasfix phase. Two convenience functions:

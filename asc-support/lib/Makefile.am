@@ -29,7 +29,7 @@ BUILTIN_SOURCEFILES=\
 	builtin-implode.c \
 	builtin-io.c
 
-#The names of the modules that need to be included in a generated lib
+# The names of the modules that need to be included in a generated lib
 LIBRARY_MODULES=\
 	basic/Booleans \
 	basic/StrCon \
@@ -85,8 +85,8 @@ EXTRA_DIST = Library.def
 # it:
 check_PROGRAMS=builtin-link-test
 builtin_link_test_SOURCES=builtin-link-test.c
-builtin_link_test_LDADD=\
-	-L. -lasc-support-me\
+builtin_link_test_LDADD = \
+	-L. -lasc-support-me \
 	-L${SGLR}/lib -lsglr \
 	-L${ASF_SUPPORT}/lib -lASFME \
 	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
@@ -120,7 +120,7 @@ api: Library.def
 api-clean:
 	rm -f Library.[ch] Library_dict.* Library.adt 
 
-LIBRARYLIST=\
+LIBRARYLIST = \
 $(foreach i,${LIBRARY_MODULES},${top_srcdir}/../asf-library/library/$i.sdf)
 
 Library.def:

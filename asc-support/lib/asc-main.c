@@ -174,10 +174,10 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
     else {
       if (nInputs == 0) {
 	t = ATreadFromNamedFile("-");
-	pt = PT_makeParseTreeFromTerm(t);
+	pt = PT_ParseTreeFromTerm(t);
       }
       else if (nInputs == 1) {
-	pt = PT_makeParseTreeFromTerm(inputs[0]);
+	pt = PT_ParseTreeFromTerm(inputs[0]);
       }
       else if (nInputs != 1) {
 	ATerror("Can only process one argument if no -f and -r option "
@@ -232,10 +232,10 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
       if (produce_output) {
 	asfix = toasfix(reduct);
 	if (bafmode) {
-	  ATwriteToNamedBinaryFile(PT_makeTermFromParseTree(asfix),output);
+	  ATwriteToNamedBinaryFile(PT_ParseTreeToTerm(asfix),output);
 	}
 	else {
-	  ATwriteToNamedTextFile(PT_makeTermFromParseTree(asfix),output);
+	  ATwriteToNamedTextFile(PT_ParseTreeToTerm(asfix),output);
 	}
 
       }
@@ -246,4 +246,3 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
 }
 
 /*}}}  */
-

@@ -1,7 +1,4 @@
-/* Mark van den Brand, Pieter Olivier, Jurgen Vinju 
- * $Id$
- */
-
+/* $Id$ */
 
 /*{{{  standard includes */
 
@@ -222,13 +219,13 @@ static ATermList innermost_list(PT_Args args)
     }
 
     while(PT_hasArgsHead(args)) {
-      elems[idx++] = PT_makeTermFromTree(PT_getArgsHead(args));
+      elems[idx++] = PT_TreeToTerm(PT_getArgsHead(args));
       args = PT_getArgsTail(args);
     }
     assert(idx == length);
 
     for(--idx; idx>=0; idx--) {
-      el = innermost(PT_makeTreeFromTerm(elems[idx]));
+      el = innermost(PT_TreeFromTerm(elems[idx]));
       if(el) {
 	result = ATinsert(result, el);
       }
@@ -427,7 +424,7 @@ static ATerm call_using_list(funcptr func, ATermList args)
 
 static ATerm call(PT_Production prod, ATermList args)
 {
-  funcptr func = basic_lookup_func(PT_makeTermFromProduction(prod));
+  funcptr func = basic_lookup_func(PT_ProductionToTerm(prod));
  
   if (func == NULL) {
     return call_unknown(prod, args); 

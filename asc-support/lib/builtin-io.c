@@ -5,7 +5,7 @@
 #include <Library.h>
 #include <sys/stat.h>
 #include <aterm2.h>
-#include <ErrorAPI-utils.h>
+#include <Error-utils.h>
 #include <errno.h>
 
 static PT_Tree write_bytes_to_file(PT_Tree input, PT_Tree bytes);
@@ -34,32 +34,30 @@ static char* getFilename(PT_Tree str)
 
 static CO_Feedback makeGeneralError(char *producer, char *msg)
 {
-  ERR_Feedback feedback = ERR_makeFeedbackError(msg,
-						ERR_makeSubjectListEmpty());
+  ERR_Error error = ERR_makeErrorError(msg, ERR_makeSubjectListEmpty());
 
-  return (CO_Feedback) ERR_liftFeedback(feedback);
+  return (CO_Feedback) ERR_liftError(error);
 }
 
 /*}}}  */
 /*{{{  static CO_Feedback makeParseErrorFeedback(char *producer, char *file,  */
 
-static CO_Feedback makeParseError(char *producer, char *file, ATerm error)
+static CO_Feedback makeParseError(char *producer, char *file, ATerm t)
 {
-  int line = getErrorInfo(error, LINE);
-  int col = getErrorInfo(error, COLUMN);
-  int offset = getErrorInfo(error, OFFSET);
+  int line = getErrorInfo(t, LINE);
+  int col = getErrorInfo(t, COLUMN);
+  int offset = getErrorInfo(t, OFFSET);
   ERR_Subject subject;
   ERR_Area area;
   ERR_Location location;
-  ERR_Feedback feedback;
+  ERR_Error error;
   
   area = ERR_makeAreaArea(line, col, line, col, offset, 1);
-  location = ERR_makeLocationLocation(file, area);
-  subject = ERR_makeSubjectSubject("cursor", location);
-  feedback = ERR_makeFeedbackError("parse-error",
-				   ERR_makeSubjectListSingle(subject));
+  location = ERR_makeLocationAreaInFile(file, area);
+  subject = ERR_makeSubjectLocalized("cursor", location);
+  error = ERR_makeErrorError("parse-error", ERR_makeSubjectListSingle(subject));
 
-  return (CO_Feedback) ERR_liftFeedback(feedback);
+  return (CO_Feedback) ERR_liftError(error);
 }
 
 /*}}}  */
