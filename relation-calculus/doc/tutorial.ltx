@@ -2384,18 +2384,13 @@ definitions of variables are still valid at each statement?
 \begin{figure}[tb]
 {\small
 \begin{verbatim}
-rel[stat,stat] dominators(rel[stat,stat] PRED) = 
+rel[stat,stat] dominators(rel[stat,stat] PRED, int ROOT) = 
    DOMINATES
 where
-    set[stat] STATEMENT = carrier(PRED)
+    set[int] VERTICES = carrier(PRED)
 
-    set[stat] ROOT = top(PRED)
-
-    rel[stat,stat] DOMINATES =
-    { <S, S1> | stat S : STATEMENT , 
-                stat S1 : STATEMENT \ (ROOT union {S}) \ 
-                                      range(reachX(ROOT, {S}, PRED)) 
-    }
+    rel[int,set[int]] DOMINATES =
+    { <V,  VERTICES \ {V, ROOT} \ reachX({ROOT}, {V}, PRED)> |  int V : VERTICES }
 endwhere
 \end{verbatim} 
 \hrulefill}
@@ -2416,13 +2411,13 @@ A node $d$ of a flow graph \emph{dominates} a node $n$, if every path from the
 initial node of the flow graph to $n$ goes through $d$~\cite[Section
 10.4]{ASU86}. Dominators play a role in the analysis of conditional statements
 and loops. In Figure~\ref{FIG:dominators-function}, we show the function {\tt
-dominators} that computes the dominators for a given flow graph {\tt PRED}.
-First, the auxiliary sets {\tt STATEMENT} (all the statements) and {\tt ROOT}
-(the initial nodes) of the flow graph are computed. The relation {\tt
-  DOMINATES} consists of all pairs {\tt <S, S1>} such that
+dominators} that computes the dominators for a given flow graph {\tt PRED} and
+an entry node {\tt ROOT}.
+First, the auxiliary set {\tt VERTICES} (all the statements) is computed. The relation {\tt
+  DOMINATES} consists of all pairs {\tt <S, \verb-S-$_1$,...,S$_n$\verb-}->} such that
 \begin{itemize}
-\item {\tt S1} is not an initial node or equal to {\tt S}.
-\item {\tt S1} can be reached from the initial node without going through {\tt S}.
+\item {\tt S$_i$} is not an initial node or equal to {\tt S}.
+\item {\tt S$_i$} cannot be reached from the initial node without going through {\tt S}.
 \end{itemize}
 
 \noindent Consider the flow graph
@@ -2451,10 +2446,12 @@ and the result of applying {\tt dominators} to it:
 <2, {}>, 
 <3, {4, 5, 6, 7, 8, 9, 10}>, 
 <4, {5, 6, 7, 8, 9, 10}>, 
-<5, {}>, <6, {}>, 
+<5, {}>, 
+<6, {}>, 
 <7, {8, 9, 10}>, 
 <8, {9, 10}>, 
-<9, {}>, <10, {}>}
+<9, {}>, 
+<10, {}>}
 \end{verbatim}
 \end{exam}
 
@@ -2510,8 +2507,8 @@ format using this new type:
 \begin{verbatim}
 type def  = <stat theStat, var theVar>
 
-rel[stat, def] DEF = {<S, <S, V>> | <S, V> : DEFS}
-rel[stat, def] USE = {<S, <S, V>> | <S, V> : USES}
+rel[stat, def] DEF = {<S, <S, V>> | <stat S, var V> : DEFS}
+rel[stat, def] USE = {<S, <S, V>> | <stat S, var V> : USES}
 \end{verbatim}
 \end{exam}
 The new {\tt DEF} relation gets as value:
@@ -2875,7 +2872,7 @@ endwhere
   USE-USE} that contains dependencies of uses on uses.
 
 \item The backward slice for a given slicing criterion (a use) is now simply
-  the projection of USE-USE for the slicing criterion.
+  the projection of {\tt USE-USE} for the slicing criterion.
 \end{enumerate}
 
 This informal description of backward slicing is described precisely in
@@ -2914,14 +2911,88 @@ will then be
 Take the domain of this result and we get exactly the statements
 in Figure~\ref{FIG:slicing}(b).
 
+\chapter{Extracting Facts from Source Code}
 
-\subsection{Others}
-\note{Some ideas:
+\begin{figure}[tb]
+%%\hrulefill
+\begin{center}
+%% \vspace*{-1cm}
+\epsfig{figure=figs/extract-workflow.eps,width=10cm}
+\vspace*{-2.5cm}
+\end{center}
+\hrulefill
+\caption{\label{FIG:extract-workflow}Workflow for fact extraction}
+\end{figure}
+
+In this tutorial we have, so far, concentrated on querying and enriching facts
+that have been extracted from source code. As we have seen from the examples,
+once these facts are available, a concise \rscript suffices to do the required
+processing. But how is fact extraction achieved and how difficult is it?
+
+Figure~\ref{FIG:extract-workflow} shows a typical workflow for fact extraction
+for a \emph{System Under Investigation} (SUI). It assumes that the SUI uses
+only \emph{one} programming language and that you need only one grammar. In
+realistic cases, however, several such grammars may be needed. The workflow consists of
+three main phases:
 \begin{itemize}
-\item Type system
-\item Constraint-like puzzle
+\item Grammar: Obtain and improve the grammar for the source language of the SUI.
+\item Facts: Obtain and improve facts extracted from the SUI.
+\item Queries: Write and improve queries that give the desired answers.
 \end{itemize}
-}
+
+Of course, it may happen that you have a lucky day and that extracted facts
+are readily available or that you can reuse a good quality fact extractor that
+you can apply to the SUI. On ordinary days you have the above workflow as
+fallback.
+
+It may come as a surprise that there is such a strong emphasis on validation
+in this workflow. The reason is that the SUI is usually a huge system that
+defeats manual inspection. Therefore we must be very carefull that we validate
+the outcome of each phase.
+
+\paragraph{Grammar}
+In many cases there is no canned grammar available that can be used to parse
+  the programming language dialect used in the SUI. Usually an existing
+  grammar can be adjusted to that dialect, but then it is then mandatory to
+  validate that the adjusted grammar can be used to parse the sources of the
+  SUI.
+
+\paragraph{Facts}
+  It may happen that the facts extracted from the source code are
+  \emph{wrong}. Typical error classes are:
+  \begin{itemize}
+  \item Extracted facts are \emph{wrong\/}: the extracted facts incorrectly state that procedure {\tt P} calls
+  procedure {\tt Q} but this is contradicted by a source code inspection.
+  \item Extracted facts are \emph{incomplete\/}: the inheritance between certain classes
+  in Java code is missing.
+  \end{itemize}
+  The strategy to validate extracted facts differ per case but here are three
+  strategies:
+  \begin{itemize}
+  \item Postprocess the extracted facts (using \rscript, of course) to obtain
+  trivial facts about the source code such as total lines of source code and
+  number of procedures, classes, interfaces and the like. Next validate these
+  trivial facts with tools
+  like {\tt wc} (word and line count), {\tt grep} (regular expression
+  matching) and others.
+
+  \item Do a manual fact extraction on a small subset of the code and compare
+  this with the automatically extracted facts.
+
+  \item Use another tool on the same source and compare results whenever
+  possible. A typical example is a comparison of a call relation extracted
+  witj different tools.
+
+  \end{itemize}
+
+\paragraph{Queries} For the validation of the answers to the queries essentially the same
+  approach can be used as for validating the facts. Manual checking of answers
+  on random samples of the SUI may be mandatory. It also happens frequently
+  that answers inspire new queries that lead to new answers, and so on.
+
+
+
+
 
 \chapter{Installing and Running \rscript} \label{SEC:running-rscript}
 \begin{figure}[h]
@@ -2935,9 +3006,9 @@ in Figure~\ref{FIG:slicing}(b).
 
 \section{Installing \rscript}
 \rscript is available from \url{www.cwi.nl/projects/MetaEnv/...}
-as \texttt{relation-calculus-0.4.tar.gz}.
+as \texttt{relation-calculus-0.4.tar.gz} (or a newer version).
 
-It requires a recent version (e.g. 1.5) of the ASF+SDF
+It requires a recent version (e.g. at least 1.5.3) of the ASF+SDF
 Meta-Environment to run.
 
 A typical installation session on a typical Unix/Linux system
@@ -2990,7 +3061,7 @@ given variable from the resulting rstore.
 
 \begin{itemize}
 
-\item \texttt{-c} or \texttt{check-only}:
+\item \texttt{-c} or \texttt{--check-only}:
 Only check the rscript for syntactic errors or typechecking errors
 but do not execute it.
 
@@ -3029,16 +3100,16 @@ The following examples illustrate the use of the \texttt{rscript} command:
 and prints the resulting rstore on standard output.
 
 \item \texttt{rscript -i query.rscript -s previous.rstore -o result.rstore.pt}:
-executes the same script, but uses \texttt{previous.rstore} as initial rstore.
+executes the same script, but uses \texttt{previous.rstore} as initial rstore
+and writes the resulting store to \texttt{result.rstore.pt}>
 
 \item \texttt{rscript -y nCalls calls.rscript}:
 executes the script \texttt{calls.rscript} and prints the value of the variable \texttt{nCalls}
 in the resulting rstore.
 
 \item \texttt{rscript -t tests1.rscript}:
-excutes \texttt{tests2.rscript} as test suite.
-
-
+excutes \texttt{tests2.rscript} as test suite and reports which assert
+statements failed (if any).
 \end{itemize}
 
 
@@ -3091,11 +3162,12 @@ Example:
    \texttt{rstore2rviz -i query.rstore -o query.rviz}
 
 \subsection{\texttt{rviz}: visualize an rstore}
+\note{To be written}
 
 
 \section{Running \rscript Interactively} \label{SEC:running-interactive}
 \begin{itemize}
-\item Change to your checked out copy of the directory {\tt relation-calculus}.
+\item Change directory to your checked out copy of the directory {\tt relation-calculus/spec}.
 \item Start the ASF+SDF Meta-Environment with the command {\tt meta}.
 \item Open the module {\tt Rscript.sdf}.
 \item Open your own term, using the Rscript module.
@@ -3131,8 +3203,8 @@ operators and functions.
 The subdirectory {\tt demo} contains larger demos.
 
 \section*{Acknowledgments}
-Murat Ahat, Jan van Eijck, Taeke Kooiker, Tijs van der Storm, Ivan Vankov,
-Jurgen Vinju.
+Thanks to Murat Ahat, Jan van Eijck, Taeke Kooiker, Tijs van der Storm, Ivan Vankov,
+and Jurgen Vinju for comments on this tutorial.
 
 \appendix
 
