@@ -1,5 +1,56 @@
-type C-CompilationUnit :: CompilationUnit
+type CompilationUnit
 {
   path : string
-  include : list<string>
+  include : list<Include>
+  struct : list<Struct>
+  macro : list<Macro>
+  function : list<Function>
 }
+
+type Include
+{
+  file : string
+  system : boolean
+  public : boolean
+}
+
+type Struct
+{
+  field : list<Field>
+}
+
+type Field
+{
+  name : string
+  type : string
+  static : boolean
+}
+
+type Macro
+{
+  name : string
+  argument : list<string>
+  body : string
+  public : boolean
+}
+
+type Function
+{
+  name : string
+  return-value : string
+  formal : list<Formal>
+  body : FunctionBody
+  public : boolean
+}
+
+type Formal
+{
+  name : string
+  type : string
+}
+
+type FunctionBody
+{
+  line : list<String>
+}
+

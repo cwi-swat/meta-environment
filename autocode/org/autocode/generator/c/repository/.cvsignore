@@ -2,8 +2,11 @@ Makefile.in
 Makefile
 classjava.stamp
 *.class
-AttributeAccess.java
-CCompilationUnit.java
-MethodAccess.java
-CAttribute.java
-CMethod.java
+CompilationUnit.java
+Field.java
+Formal.java
+FunctionBody.java
+Function.java
+Include.java
+Macro.java
+Struct.java

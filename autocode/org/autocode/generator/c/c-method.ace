@@ -1,5 +1,0 @@
-enum MethodAccess { elements := { static, extern, inline, macro } }
-
-type C-Method :: Method {
-  access : MethodAccess
-}
