@@ -22,6 +22,9 @@
 toolbus=__TOOLBUS__
 datadir=__DATADIR__
 
+# This test reduces for all specs in ./eqs the terms in ./terms once
+# with and once without layout. The results are compared for equality.
+
 set -e
 
 for e in eqs/*.eqs.asfix1; do
