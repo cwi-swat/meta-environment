@@ -1,0 +1,78 @@
+#!__WISH__
+
+set MAXWINSIZE {1078 666}
+set MINWINSIZE {356 220}
+
+package require Tcldot
+
+#--
+# ViewAll
+#-
+# enlarges the window to contain the full graph (clipped MAX/MIN WINSIZE)
+#--
+proc ViewAll {} {
+    global c MAXWINSIZE MINWINSIZE
+    set bbox [$c bbox all]
+    if {$bbox == {}} { set bbox {0 0 0 0} }
+ 
+    set w [expr [lindex $bbox 2] - [lindex $bbox 0]]
+    set h [expr [lindex $bbox 3] - [lindex $bbox 1]]
+ 
+    if [expr $w > [lindex $MAXWINSIZE 0]] {set w [lindex $MAXWINSIZE 0]}
+    if [expr $h > [lindex $MAXWINSIZE 1]] {set h [lindex $MAXWINSIZE 1]}
+    if [expr $w < [lindex $MINWINSIZE 0]] {set w [lindex $MINWINSIZE 0]}
+    if [expr $h < [lindex $MINWINSIZE 1]] {set h [lindex $MINWINSIZE 1]}
+ 
+    $c configure -scrollregion $bbox -width $w -height $h
+}
+
+proc MakeScreen {} {
+  global c
+
+  frame .graph -borderwidth 2 -relief groove
+  grid .graph   -row 1 -column 0 -rowspan 1 -columnspan 1 -sticky news
+
+  set c [canvas .graph.canvas -cursor crosshair \
+         -xscrollcommand {.graph.xscroll set} \
+         -yscrollcommand {.graph.yscroll set} \
+         -background white \
+         -borderwidth 0]
+
+
+  $c xview scroll 10 unit
+  $c yview scroll 10 unit
+
+  scrollbar .graph.xscroll -width 8 -orient horizontal -command "$c xview"
+  scrollbar .graph.yscroll -width 8 -orient vertical -command "$c yview"
+  button    .graph.layout  -width 8 -height 8 -bitmap gray50
+
+  grid .graph.canvas  -row 0 -column 0 -rowspan 1 \
+        -columnspan 1 -sticky news
+  grid .graph.yscroll -row 0 -column 1 -rowspan 1 \
+        -columnspan 1 -sticky news
+  grid .graph.xscroll -row 1 -column 0 -rowspan 1 \
+        -columnspan 1 -sticky news
+  grid .graph.layout -row 1 -column 1 -rowspan 1 \
+        -columnspan 1 -sticky news
+
+
+  bind $c <ButtonPress-1> "$c scan mark -%x -%y"
+  bind $c <B1-Motion> "$c scan dragto -%x -%y"
+}
+
+proc ReadGraph {} {
+  global graph file
+
+  set graph [dotread stdin]
+}
+
+proc ShowGraph {} {
+  global graph c
+
+  eval [$graph render $c]
+  ViewAll
+}
+
+MakeScreen
+ReadGraph
+ShowGraph

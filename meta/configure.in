@@ -166,6 +166,7 @@ AC_OUTPUT(
    config/Makefile
    graph-browser/Makefile
    graph-browser/graph-browser.tcl
+   showdot/Makefile
    in-output/Makefile
    module-db/Makefile
    editors/Makefile

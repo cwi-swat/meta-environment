@@ -1,5 +1,8 @@
 # $Id$
 
+2002/02/15 (jurgenv@cwi.nl)
+ * Added showdot, a command-line tool that visualizes a dot graph using tcl/tk.
+
 2002/02/12 ({markvdb,jurgenv}@cwi.nl)
  * Release 0.8
  * unparsePT, configmanager and restore-brackets are killed immediately
