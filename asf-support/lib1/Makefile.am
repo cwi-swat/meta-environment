@@ -24,30 +24,8 @@ lib_LIBRARIES    = libASF.a
 include_HEADERS  = ASF.h ASF_dict.h ASF-utils.h
 libASF_a_SOURCES = ASF.c ASF_dict.c ASF-utils.c
 
-bin_PROGRAMS = subst-eqs
-
 INCLUDES = -I${ATERM}/include
 LDFLAGS  = -L${ATERM}/lib
 LDADD    = -lATerm
 
-EXTRA_DIST = ASF.adt
-
-# Developers only, put location of ADT-support here:
-ADT      = ${ATERM}
-
-subst_eqs_SOURCES = subst-eqs.c
-subst_eqs_LDADD   = -L${ATERM}/lib -lATerm -L${ADT}/lib -lADT
-
-api: ASF.raw
-
-ASF.raw: Asf.label.def 
-	sdf2-to-adt -r -i $< -o ASF.raw
-
-ASF.adt: ASF.raw subst-eqs
-	subst-eqs ASF.raw > ASF.adt
-
-ASF.c: ASF.adt
-	adt-to-c -i ASF.adt --prologue ASF.pro --prefix ASF_ -o ASF
-
-
-%INTERMEDIATE: ASF.raw
+EXTRA_DIST = Developers.make
