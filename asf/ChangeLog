@@ -1,3 +1,6 @@
+2003/02/12 (markvdb@cs.vu.nl)
+ * Improved the asfchecker with respect to ambiguities.
+ 
 2003/02/07 (jurgenv@cwi.nl)
  * Added new builtin get-term-anno to be able to retrieve posinfo information
    using asfe
