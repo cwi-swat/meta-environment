@@ -64,7 +64,7 @@ int main (int argc, char **argv)
       pt_name = argv[1];
       break;
   }
-  if(ATmatch(SGopenLanguage("dump", 0, pt_name, pt_name),
+  if(ATmatch(SGopenLanguage("dump", pt_name, pt_name),
              "snd-value(open-language-failed(<str>,<str>))", &err, NULL)) {
     ATfprintf(stderr, "could not open %s as a parse table\n", err);
     return 1;
