@@ -3,7 +3,7 @@ package toolbus.aterm;
 import java.util.*;
 import java.io.*;
 
-public class World
+public class World implements Serializable
 {
   private int table_size;
   private Hashtable table;
@@ -284,10 +284,10 @@ public class World
   public ATerm makeSimple(String s)
     throws ParseError
   {
-    byte[] array = new byte[s.length()]; // jdk 1.02
-    s.getBytes(0, s.length(), array, 0);
+      //    byte[] array = new byte[s.length()]; // jdk 1.02
+      //    s.getBytes(0, s.length(), array, 0);
 
-    // byte[] array = s.getBytes(); // jdk 1.1
+      byte[] array = s.getBytes(); // jdk 1.1
 
     ByteArrayInputStream stream = new ByteArrayInputStream(array);
     try {
@@ -548,6 +548,7 @@ public class World
   }
 
   //}
+
 }
 
 //{ class InputChannel
