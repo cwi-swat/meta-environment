@@ -21,6 +21,7 @@
 #include "asfe.tif.h"
 #include "evaluator.h"
 #include "errors.h"
+#include "test-runner.h"
 
 #ifdef USE_TIDE
 #include "debug.h"
@@ -142,6 +143,31 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
 
   if (RWgetError() == NULL) {
     return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
+  }
+  else {
+    return ATmake("snd-value(rewrite-errors([<term>]))", RWgetError());
+  }
+}
+
+/*}}}  */
+/*{{{  ATerm run_tests(int cid, char *modname, ATerm eqs, ATerm tests) */
+
+ATerm run_tests(int cid, char *modname, ATerm eqs, ATerm tests)
+{
+  ASF_ASFConditionalEquationList eqsList;
+  ASF_ASFTestEquationTestList testList;
+  ATerm result;
+
+  eqs = ATBunpack(eqs);
+  eqsList = ASF_makeASFConditionalEquationListFromTerm(eqs);
+
+  tests = ATBunpack(eqs);
+  testList = ASF_makeASFTestEquationTestListFromTerm(eqs);
+
+  result = (ATerm) runTests(eqsList, testList);
+
+  if (RWgetError() == NULL) {
+    return ATmake("snd-value(test-result(<term>))", result);
   }
   else {
     return ATmake("snd-value(rewrite-errors([<term>]))", RWgetError());

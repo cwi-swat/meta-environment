@@ -10,10 +10,8 @@ let
   ErrorList  : list,
   Id         : term,
   Tide       : term,
-  EventName    : term,
-  EventTree    : term,
-  EventResult  : term,
-  EventString: str
+  TestResults : term,
+  Tests : term
 in
   Id := process-id .
   Tide := off .
@@ -34,6 +32,16 @@ in
     %% Equations and terms can be big, so we clear the variables here
     Equations := none.
     Term      := none 
+  +
+    rec-msg(run-tests(ModuleName?, Equations?, Tests?)) .
+    execute(asfe, Eval?) .
+    snd-eval(Eval, run-tests(ModuleName, Equations, Tests)) .
+    (
+      rec-value(Eval, test-results(TestResults?)) .
+      printf ("test results: %t\n", TestResults)
+    ) .
+    Equations := none .
+    Tests := none
   ) *
   delta
 endlet
