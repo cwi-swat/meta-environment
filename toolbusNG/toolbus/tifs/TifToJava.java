@@ -37,7 +37,8 @@ public class TifToJava {
     File outputDir = new File(outputDirName);
     outputDir.mkdirs();
     
-    String fileName = process.getName() + ".java";
+    String interfaceName = capitalize(tif.getToolName()) + process.getName();
+    String fileName = interfaceName + ".java";
     PrintStream out;
     try {
       File outputFile = new File(outputDir, fileName);
@@ -53,7 +54,7 @@ public class TifToJava {
     out.println("package " + packageName + ";");
     out.println();
     
-    out.println("public interface " + process.getName());
+    out.println("public interface " + interfaceName);
     out.println('{');
     Iterator iter = process.fetchCommunicationIterator();
     while (iter.hasNext()) {
@@ -129,6 +130,7 @@ public class TifToJava {
       System.err.println("Error reading " + fileName + ": " + e);
     }
     Tif tif = new Tif(tifsTerm);
+//    System.out.println(tif.toString());
     TifToJava generator = new TifToJava(tif, outputBaseDir);
     generator.generate();
   }

@@ -4,7 +4,13 @@ tifs(
   tool("clock"),
   [
     process(
-      name("Clock"),
+      name("Main"),
+      [
+        do(terminate(String))
+      ]
+    ),
+    process(
+      name("Daytime"),
       [
         eval(get-time-of-day, Time)
       ]

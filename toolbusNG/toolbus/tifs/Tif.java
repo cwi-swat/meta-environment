@@ -16,7 +16,7 @@ public class Tif {
   private void setRepresentation(ATerm t) {
     representation = (ATermAppl) t;
   }
-
+  
   public int getVersion() {
     ATermAppl versionTerm = (ATermAppl) representation.getArgument(0);
     return ((ATermInt) versionTerm.getArgument(0)).getInt();
@@ -40,12 +40,13 @@ public class Tif {
       iter = iter.getNext();
     }
   }
-
+  
   public Iterator fetchProcessIterator() {
     return processList.iterator();
   }
 
   public String toString() {
+    Iterator iter;
     StringBuffer buf = new StringBuffer();
     buf.append("tifs");
     buf.append('(');
@@ -69,7 +70,7 @@ public class Tif {
     buf.append(')');
     buf.append(',');
     buf.append('[');
-    Iterator iter = fetchProcessIterator();
+    iter = fetchProcessIterator();
     while (iter.hasNext()) {
       Process process = (Process) iter.next();
       buf.append(process);
