@@ -336,7 +336,7 @@ aterm_list *prepare_equ(arena *ar, aterm *equ)
     newlhs = prepare_term(ar, lhs, Tfalse);
     newrhs = prepare_term(ar, rhs, Tfalse);
     newconds = prepare_conds(ar, conds);
-    return Tmake(ar, "ceq-when(<term>,<term>,<term>,<term>,<term>,<term>" \
+    return Tmake(ar, "ceq-when(<term>,<term>,<term>,<term>,<term>,<term>," \
 			"<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
 	modname, w[0], tag, w[1], newlhs, w[2], l[0], w[3],
 	newrhs, w[4], l[1], w[5], newconds);

@@ -304,7 +304,7 @@ aterm_list *prepare_equ(arena *ar, aterm *equ)
     newlhs = prepare_term(ar, lhs, Tfalse);
     newrhs = prepare_term(ar, rhs, Tfalse);
     newconds = prepare_conds(ar, conds);
-    return Tmake(ar, "ceq-when(<term>,<term>,<term>,<term>,<term>,<term>" \
+    return Tmake(ar, "ceq-when(<term>,<term>,<term>,<term>,<term>,<term>," \
                         "<term>,<term>,<term>,<term>,<term>,<term>,<term>)",
         modname, w[0], tag, w[1], newlhs, w[2], l[0], w[3],
         newrhs, w[4], l[1], w[5], newconds);
@@ -354,13 +354,15 @@ aterm_list *RWprepareEqs(arena *ar, aterm_list *eqs)
 {
   aterm *el;
   aterm_list *result = t_empty(t_world(*ar));
-
+  
   while(!t_is_empty(eqs)) {
     do {
       el = t_list_first(eqs);
       eqs = t_list_next(eqs);
     } while(asfix_is_whitespace(el) || asfix_is_list_sep(el));
+    Tprintf(stderr,"Starting prepare_equ\n");
     result = TlistAppend(ar, result, prepare_equ(ar, el)); 
+    Tprintf(stderr,"Finished prepare_equ\n");
   }
   return result;
 }
