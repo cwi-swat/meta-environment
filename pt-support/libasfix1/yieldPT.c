@@ -114,7 +114,7 @@ yieldArgsRecursive(PT_Args args, int idx, char *buf, int bufSize)
   return idx;
 }
 
-char *yieldTree(PT_Tree tree)
+char *PT_yieldTree(PT_Tree tree)
 {
   static char *buffer = NULL;
   static int   bufferSize = 0;
@@ -136,12 +136,12 @@ char *yieldTree(PT_Tree tree)
   return buffer;
 }
 
-char *yieldParseTree(PT_ParseTree tree)
+char *PT_yieldParseTree(PT_ParseTree tree)
 {
   if (PT_isParseTreeTree(tree)) {
-    return yieldTree(PT_getParseTreeTree(tree));
+    return PT_yieldTree(PT_getParseTreeTree(tree));
   }
 
-  ATerror("yieldParseTree: not a parsetree: %t\n", tree);
+  ATerror("PT_yieldParseTree: not a parsetree: %t\n", tree);
   return NULL;
 }

@@ -38,4 +38,7 @@ ATbool PT_hasProductionTraverseAttr(PT_Production prod);
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg);
 ATerm   PT_getTreeAnnotation(PT_Tree arg, ATerm label);
 
+char *PT_yieldParseTree(PT_ParseTree tree);
+char *PT_yieldTree(PT_Tree tree);
+
 #endif
