@@ -3,7 +3,7 @@
 # $Id$
 #
 
-CTASDF="ctasdf 200"
+CTASDF="ctasdf 100"
 
 TESTDIR="/tmp/tbgraph-$$"
 
