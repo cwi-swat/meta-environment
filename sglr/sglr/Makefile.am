@@ -20,7 +20,7 @@
 
 include $(top_srcdir)/make_rules
 
-INCLUDES += -I$(top_srcdir)/sglr/libsglr -I$(top_srcdir)/sglr/libtree2dot
+INCLUDES += -I$(SGLR)/libsglr -I$(SGLR)/libtree2dot
 
 bin_PROGRAMS      = sglr #sglr_prof
 data_DATA         = sglr.idef
@@ -31,24 +31,14 @@ SRCS              = sglr-main.c  getopt.c getopt1.c
 HDRS              = getopt.h
 
 sglr_SOURCES      = $(SRCS) $(HDRS)
-sglr_LDADD        = -L$(top_builddir)/sglr/libsglr -lsglr \
-                    -L$(top_builddir)/sglr/libtree2dot -ltree2dot \
-                    -L$(ASFIX)/lib -lAsFix \
+sglr_LDADD        = -L$(SGLR)/libsglr -lsglr \
+                    -L$(SGLR)/libtree2dot -ltree2dot \
+                    -L$(TREE)/libasfix-old/libasfix -lAsFix \
                     -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
-
-#sglr_prof_SOURCES = $(HDRS)
-#sglr_prof_LDFLAGS = -pg
-#sglr_prof_LDADD   = $(SRCS:.c=-prof.o) \
-#                    -L$(top_builddir)/sglr/libsglr -lsglr-prof \
-#                    -L$(top_builddir)/sglr/libtree2dot -ltree2dot \
-#                    -L$(ASFIX)/lib -lAsFix \
-#                    -L$(ATERM)/lib -lATerm-prof -lATB-prof $(SOCKLIBS)
-#CFLAGS		= -Wall
-
 
 # remove built files during "make clean"
 CLEANFILES = sglr.tifs
 
 # extra dependency for sglr-main.c to generate sglr.tif.[ch]
-sglr-main.o : sglr.tif.c sglr.tif.h $(top_srcdir)/sglr/libsglr/libsglr.a \
-              $(top_srcdir)/sglr/libtree2dot/libtree2dot.a
+sglr-main.o : sglr.tif.c sglr.tif.h $(SGLR)/libsglr/libsglr.a \
+              $(SGLR)/libtree2dot/libtree2dot.a

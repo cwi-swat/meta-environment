@@ -27,11 +27,11 @@ HDRS             =
 
 tree2dot_SOURCES = $(SRCS) $(HDRS)
 
-LDADD            =  -L${top_builddir}/libtree2dot -ltree2dot \
-                    -L${top_builddir}/libsglr -lsglr \
-                    -L$(ASFIX)/lib -lAsFix \
+LDADD            =  -L${SGLR}/libtree2dot -ltree2dot \
+                    -L${SGLR}/libsglr -lsglr \
+                    -L$(TREE)/libasfix-old/libasfix -lAsFix \
                     -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
-INCLUDES+=-I${top_builddir}/sglr/libsglr
+INCLUDES+=-I${SGLR}/libsglr
 
-tree2dot-main.o: $(top_builddir)/sglr/libtree2dot/libtree2dot.a
+tree2dot-main.o: $(SGLR)/libtree2dot/libtree2dot.a

@@ -21,11 +21,6 @@
 
 SUBDIRS    = erroneous first tables terms
 
-EXTRA_DIST = lang-types regress-terms trmdiff trmdiff.in
+EXTRA_DIST = lang-types regress-terms
 
 TESTS      = regress-terms
-
-regress-terms: dummy
-	@chmod +x $@
-
-dummy:

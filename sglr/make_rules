@@ -19,7 +19,11 @@
 # $Id$
 #
 
-INCLUDES = -I ${ATERM}/include -I ${ASFIX}/include
+SGLR=$(top_srcdir)/sglr
+PGEN=$(top_srcdir)/pgen
+TREE=$(top_srcdir)/tree
+
+INCLUDES = -I$(ATERM)/include -I$(TREE)/libasfix-old/libasfix
 
 POD2MAN=pod2man
 POD2TXT=pod2text

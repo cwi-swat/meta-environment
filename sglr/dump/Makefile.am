@@ -20,7 +20,7 @@
 
 include $(top_srcdir)/make_rules
 
-INCLUDES += -I $(top_srcdir)/sglr/libsglr
+INCLUDES += -I $(SGLR)/libsglr
 
 bin_PROGRAMS             = dump-actions dump-gotos dump-priorities \
                            dump-productions
@@ -34,13 +34,8 @@ dump_priorities_SOURCES  = dump-priorities.c dump-skel.c dump-skel.h
 dump_productions_SOURCES = dump-productions.c dump-skel.c dump-skel.h
 
 
-LDADD     = -L$(top_builddir)/libsglr -lsglr \
-            -L$(top_builddir)/libtree2dot -ltree2dot \
-            -L$(ASFIX)/lib -lAsFix\
+LDADD     = -L$(SGLR)/libsglr -lsglr \
+            -L$(SGLR)/libtree2dot -ltree2dot \
+            -L$(TREE)/libasfix-old/libasfix -lAsFix\
             -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
-test: all
-	@for prg in $(bin_PROGRAMS); \
-	do \
-		$(top_srcdir)/test-help ./$$prg; \
-	done

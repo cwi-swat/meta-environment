@@ -30,7 +30,7 @@ HDRS             = tree-to-dot.h sg_growbuf.h
 
 libtree2dot_a_SOURCES      = $(SRCS) $(HDRS) 
 
-INCLUDES += -I$(top_srcdir)/sglr/libsglr
+INCLUDES += -I$(SGLR)/libsglr
 
 # libtree2dot_prof_a_SOURCES = $(HDRS)
 # libtree2dot_prof_a_LIBADD  = $(SRCS:.c=-prof.o)
