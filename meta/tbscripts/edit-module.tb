@@ -5,17 +5,20 @@ T     : term,
 Tid   : int,
 Fn    : str,
 TE    : text-edit,
-Src: str
+  Path    : str,
+  Syntax  : term,
+  Src     : str
 in
   Id := process-id.
-  snd-note(ui-status(stat(Id,"Opening module editor"))).
-  snd-msg(Id, open-file(id(Module))).
-  rec-msg(Id, opened-file(asfix,id(Module),T?,Fn?)).
-  create(Editor(id(Module),"\"\"",Fn,Module), Tid?).
-  snd-msg(pp-module(T)).
+  snd-note(ui-status(stat(Id,"Opening module editor"))). 
+  snd-msg(get-sdf2-path-from-db(id(Module))).
+  rec-msg(path(Path?)).
+  snd-msg(get-sdf2-asfix(id(Module))).
+  rec-msg(syntax(Syntax?)).
+  snd-msg(pp-module(Syntax)).
   rec-msg(module-source(Src?)).
-  rec-msg(Id, editortool(TE?)).
-/* send module specific stuff to text-editor */
-  snd-do(TE,inserttext(Src)).
+  create(Editor(id("Sdf2"),Src,Path,"Sdf2"), Tid?). 
+  snd-msg(open-language("Sdf2",
+                        "/home/markvdb/NEW-META/lib/Sdf2.baf")).
   snd-note(ui-status(endstat(Id)))
 endlet
