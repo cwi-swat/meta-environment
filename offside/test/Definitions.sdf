@@ -1,0 +1,30 @@
+module Definitions
+
+exports
+
+sorts Program
+
+hiddens
+sorts Id Exp Definition
+
+exports
+lexical syntax
+
+[A-Za-z0-9]+ -> Id
+"definition" -> Id {reject}
+
+[\ \t\n] -> LAYOUT
+
+lexical restrictions
+  Id -/- [A-Za-z0-9]
+
+context-free restrictions
+ LAYOUT? -/- [\ \t\n]
+
+context-free syntax
+
+"program"  Definition+ -> Program
+"definition" Exp+      -> Definition {offside}
+
+Definition -> Exp 
+Id         -> Exp
