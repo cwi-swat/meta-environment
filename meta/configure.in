@@ -144,8 +144,7 @@ AC_OUTPUT(Makefile meta install-prog-sh install-data-sh \
 	Makefile.skel \
 	evaluator/Makefile \
 	toolbus/Makefile \
-	import-db/Makefile \
-	tree-db/Makefile \
+	module-db/Makefile \
 	in-output/Makefile \
 	graph-browser/Makefile graph-browser/graph-browser \
 	editor/Makefile editor/editor \

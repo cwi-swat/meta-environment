@@ -1,35 +1,18 @@
-process Compiler(COM: compiler, Idb: import-db) is
+process Compiler(COM: compiler, Tdb: module-db) is
 let
 Id   : term,
 T    : term,
 T1   : term,
 Name : term,
 M    : term,
-AsFixmod : term,
+Mod : term,
 Mods : list
 in
   Id := process-id.(
-    ( rec-msg(com,add-module(Name?,M?)).
-      snd-eval(COM,add-module(M)).
-      rec-value(COM,ok(Name?)).
-      snd-msg(com,done)
-    )
-    +
-    ( rec-msg(prep,delete(Name?)).
-      snd-eval(COM,delete-module(Name)).
-      rec-value(COM,deleted(Name?)).
-      snd-msg(prep,done)
-    )
-/* Clearing the module database. */
-    +
-    ( rec-msg(prep,clear-all).
-      snd-do(COM,clear-module-db).
-      snd-msg(prep,done)
-    )
-    +
+/*
     ( rec-msg(com,compile-all).
-      snd-eval(Idb,get-all-modules).
-      rec-value(Idb,all-modules(Mods?)).
+      snd-eval(Tdb,get-all-modules).
+      rec-value(Tdb,all-modules(Mods?)).
       snd-do(COM,compile-modules(Mods)).
       snd-msg(com,done).
       ( rec-event(COM,compile(Name?,Mods?)).
@@ -38,15 +21,16 @@ in
       snd-ack-event(COM,done)
     )
     +
+*/
     ( rec-msg(com,compile-module(Name?)).
-      snd-eval(Idb,get-all-imported-modules(Name)).
-      rec-value(Idb,all-imports(Mods?)).
-      snd-do(COM,compile-modules(Mods)).
-      snd-msg(com,done).
-      ( rec-event(COM,compile(Name?,Mods?)).
-        snd-ack-event(COM,compile(Name,Mods))
-      )*rec-event(COM,done).
-      snd-ack-event(COM,done)
+      snd-do(Tdb,compile-module(Name)).
+      ( rec-event(Tdb,generate-code(Name?,Mod?)).
+        snd-eval(COM,generate-code(Name,Mod)).
+        rec-value(COM,c-code-ready).
+        snd-ack-event(Tdb,generate-code(Name, Mod))
+      )*rec-event(Tdb,done).
+      snd-ack-event(Tdb,done).
+      snd-msg(com,done)
     )
   ) *
   delta

@@ -1,7 +1,7 @@
 /* $Id$
  */
 
-process Open-modules(Eval: evaluator, Idb: import-db, Tdb: tree-db) is
+process Open-modules(Eval: evaluator, Tdb: module-db) is
 let
   Id   : term,
   Name : term,
@@ -31,24 +31,16 @@ in
               rec-msg(Id, opened-file(asfix,Name,T?,Fn?)).
              /* Tell mdb we add module Name containing term T */
               snd-eval(Tdb,add-module(T)).
-             /* mdb returns the imports section of Name as M1s */
-              rec-value(Tdb,imports(Name,M1s?)).
-/* update compiler db with module Name containing term T */
-              snd-msg(com,add-module(Name,T)).
-              rec-msg(com,done). 
-             /* update import db with this information (Name imports M1s). */
-              snd-eval(Idb,add-imports(Name,M1s)).
-             /* im tells which modules still need to be opened 
-              * (= imports - already_imported) 
-              */
-              rec-value(Idb,need-modules(M2s?)).
+             /* mdb returns the imports section of Name as well as the
+              * list of modules which have to be still opened M1s */
+              rec-value(Tdb,imports(Name,need-modules(M1s?))).
              /* Add those modules to the list */
-              Ms := join(Ms,M2s).
+              Ms := join(Ms,M1s).
              /* This is UI stuff and should move somewhere else 
-              * Idb should trigger an event for the UI process to catch
+              * Tdb should trigger an event for the UI process to catch
               */
-              snd-eval(Idb,calc-import-rels(Name)).
-              rec-value(Idb,irels(Pairs?)).
+              snd-eval(Tdb,calc-import-rels(Name)).
+              rec-value(Tdb,irels(Pairs?)).
               snd-msg(ui,irels(Pairs)) 
               +
              /* File would not open (unreadable, not exist, wrong path...) */

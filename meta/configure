@@ -1237,7 +1237,6 @@ else
 fi
 
 
-
  
 trap '' 1 2 15
 cat > confcache <<\EOF

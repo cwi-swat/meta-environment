@@ -1,7 +1,7 @@
 /* $Id$
  */
 
-process Clear-all(Eval: evaluator, Idb: import-db, Tdb: tree-db) is
+process Clear-all(Eval: evaluator, Idb: import-db, Tdb: module-db) is
 let
 Id: term
 in
