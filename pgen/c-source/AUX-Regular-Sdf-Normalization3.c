@@ -35,6 +35,8 @@ static Symbol ef22sym ;
 static funcptr ef22 ;
 static Symbol ef24sym ;
 static funcptr ef24 ;
+static Symbol ef29sym ;
+static funcptr ef29 ;
 static Symbol ef33sym ;
 static funcptr ef33 ;
 static Symbol ef25sym ;
@@ -49,8 +51,6 @@ static Symbol ef28sym ;
 static funcptr ef28 ;
 static Symbol lf5sym ;
 static ATerm lf5 ( ATerm arg1 ) ;
-static Symbol ef29sym ;
-static funcptr ef29 ;
 static Symbol ef30sym ;
 static funcptr ef30 ;
 static Symbol ef32sym ;
@@ -369,7 +369,7 @@ tmp [ 6 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef36 ) ( tmp [
 tmp [ 7 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( constant2 ? constant2 : ( constant2 = ( * ef34 ) ( lf6 ( make_list ( ( * ef35 ) ( ( * ef31 ) ( ) ) ) ) ) ) ) ) ;
 tmp [ 8 ] = ( * ef19 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ) , ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
 tmp [ 9 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) , ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
-FUNC_EXIT ( ( * ef15 ) ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 3 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 5 ] ) , cons ( make_list ( tmp [ 6 ] ) , cons ( make_list ( tmp [ 7 ] ) , cons ( make_list ( tmp [ 8 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ) , ( * ef26 ) ( ( * ef27 ) ( lf4 ( make_list ( ( * ef28 ) ( lf5 ( cons ( make_list ( ( * ef29 ) ( tmp [ 3 ] ) ) , cons ( make_list ( ( * ef30 ) ( ( * ef31 ) ( ) , ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 5 ] ) , cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 7 ] ) ) ) ) ) ) ) ) , make_list ( ( * ef32 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 8 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 1 ] ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef15 ) ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 3 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 5 ] ) , cons ( make_list ( tmp [ 6 ] ) , cons ( make_list ( tmp [ 7 ] ) , cons ( make_list ( tmp [ 8 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ) , ( * ef26 ) ( ( * ef27 ) ( lf4 ( make_list ( ( * ef28 ) ( lf5 ( cons ( make_list ( ( * ef30 ) ( ( * ef31 ) ( ) , ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 5 ] ) , cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 7 ] ) ) ) ) ) ) ) ) , make_list ( ( * ef32 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 8 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) , lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 1 ] ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ;
 }
 if ( check_sym ( tmp [ 0 ] , ef37sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;

@@ -3,6 +3,7 @@ AUX-Kernel-Sdf-Syntax3.c
 AUX-Actions2.c
 AUX-Booleans6.c
 AUX-Goto-Earley6.c
+AUX-Modular-Sdf-Normalization9.c
 AUX-Vertices7.c
 AUX-Action-Earley3.c
 AUX-Character-Class-Syntax5.c
@@ -107,13 +108,13 @@ AUX-ATerm-Lists1.c
 AUX-ATerm-Operations5.c
 AUX-ATerm-Lists9.c
 AUX-ATerm-Lists7.c
+AUX-Modular-Sdf-Normalization7.c
 AUX-ATerm-Operations7.c
 AUX-ATerm-Operations10.c
-AUX-Modular-Sdf-Normalization7.c
 AUX-ATerm-Lists4.c
 AUX-ATerm-Lists6.c
 AUX-ATerm-Operations23.c
-AUX-Modular-Sdf-Normalization9.c
+AUX-Modular-Sdf-Normalization8.c
 AUX-Modular-Sdf-Normalization4.c
 AUX-Modular-Sdf-Normalization1.c
 AUX-Modular-Sdf-Normalization5.c
@@ -550,6 +551,5 @@ AUX-Parse-Table21.c
 AUX-Parse-Table31.c
 AUX-Vertices8.c
 AUX-Literals1.c
-AUX-Modular-Sdf-Normalization8.c
 AUX-Modular-Sdf-Syntax1.c
 Basic-Integers.c
