@@ -49,6 +49,8 @@ exports
      trans-closure(Bag[[Elem]])                		-> Bag[[Elem]]	%%RR
      rtrans-closure(Bag[[Elem]])             		-> Bag[[Elem]]	%%RR
 
+     is-rel(Bag[[Elem]])				-> Boolean
+
      "(" Bag[[Elem]] ")"              			-> Bag[[Elem]] {bracket}
 
 

@@ -12,10 +12,10 @@
 
 %% ---- Equality on elements
 
-[ee1]	equal-elem($Elem, $Elem)		= true
-[ee2]	equal-elem($Bag1, $Bag2)		= equal($Bag1, $Bag2)
-[default-ee] 
-	equal-elem($Elem, $Elem') 		= false
+%%[ee1]	equal-elem($Elem, $Elem)		= true
+%%[ee2]	equal-elem($Bag1, $Bag2)		= equal($Bag1, $Bag2)
+%%[default-ee] 
+%%	equal-elem($Elem, $Elem') 		= false
 
 %% ---- Equality on RVALUEs
 
@@ -24,15 +24,6 @@
 [er3]	equal-rval($Val, $Val)  = true
 [default-er] 
 	equal-rval($Val1, $Val2) = false
-
-%% ---- Tests on RVALUEs
-
-[ir1]	is-empty-iter($BagIter) = false,
-	<$Elem1, $Elem2> = head($BagIter)
-	===============================================
-	is-rel($BagIter) = true				%%XXX!
-[default-ir]
-	is-rel($BagIter) = false
 
 %% ---- Extract a list of variables from a declaration list
 
@@ -218,11 +209,11 @@
 	====================================================
 	evalx($Exp1 notin $Exp2, $Rstore) = $BoolCon
 
-[EQ1]	$BoolCon = equal-elem(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
+[EQ1]	$BoolCon = elem-equal(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
 	====================================================
 	evalx($Exp1 == $Exp2, $Rstore) 	= $BoolCon
 
-[NE1]	$BoolCon = not(equal-elem(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore)))
+[NE1]	$BoolCon = not(elem-equal(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore)))
 	====================================================
 	evalx($Exp1 != $Exp2, $Rstore) 	=  $BoolCon
 
@@ -243,7 +234,7 @@
 	$Integer3' = get-endline($Area2),
 	$Integer4 = get-endcol($Area1),
 	$Integer4' = get-endcol($Area2),
-	$BoolCon = equal-elem(get-filename($Area1), get-filename($Area2)) &
+	$BoolCon = elem-equal(get-filename($Area1), get-filename($Area2)) &
 		    (($Integer1 > $Integer1') | (($Integer1 == $Integer1') & ($Integer2 >= $Integer2'))) &
 		    (($Integer3 < $Integer3') | (($Integer3 == $Integer3') & ($Integer4 <= $Integer4')))
 	====================================================
@@ -261,7 +252,7 @@
 	$Integer3' = get-endline($Area2),
 	$Integer4 = get-endcol($Area1),
 	$Integer4' = get-endcol($Area2),
-	$BoolCon = equal-elem(get-filename($Area1), get-filename($Area2)) &
+	$BoolCon = elem-equal(get-filename($Area1), get-filename($Area2)) &
 		    (($Integer1 > $Integer1') | (($Integer1 == $Integer1') & ($Integer2 > $Integer2'))) &
 		    (($Integer3 < $Integer3') | (($Integer3 == $Integer3') & ($Integer4 < $Integer4')))
 	====================================================
@@ -387,7 +378,7 @@
 	$Elem = head($BagIter),
 	$Rstore' = store-rvars($Var+, $Elem, $Rstore),
 	$Val' = evalx($Exp, $Rstore'),
-	eval-itern($Var+, tail($BagIter), append($Val, $Val'), $Exp, $Rstore') = $Elem'	%%XXX
+	eval-itern($Var+, tail($BagIter), append-rval($Val, $Val'), $Exp, $Rstore') = $Elem'	%%XXX
 	======================================================
 	eval-itern($Var+, $BagIter, $Val, $Exp, $Rstore) = $Elem'
 
@@ -408,11 +399,15 @@
 	=====================================================
 	store-rvars($Var, $Elem, $Rstore) = $Rstore'
 
-%% --- Append
+%% --- Append-rval
 
-[AP0]	append($Elem, *undefined*) = $Elem
-[AP1]	append($Bag, $Elem) = union2($Bag, $Elem)
-[AP2]	append($Bag1, $Bag2) = union($Bag1, $Bag2)
+[AP0]	append-rval($Elem, *undefined*) = $Elem
+
+[AP1]	is-bag($Elem2) = false
+	====================================================
+	append-rval($Bag1, $Elem2) = union2($Bag1, $Elem2)
+[default-AP2]	
+	append-rval($Bag1, $Bag2) = union($Bag1, $Bag2)
 
 %% ---- Exists
 
@@ -529,12 +524,12 @@
 [Fpower0]	
 	$Bag  = evalb($Exp, $Rstore)
 	====================================================
-	evalx(power0($Exp), $Rstore) = power0($Bag)
+	evalx(power0($Exp), $Rstore) = power0(mk-iterator($Bag))
 
 [Fpower1]	
 	$Bag  = evalb($Exp, $Rstore)
 	====================================================
-	evalx(power1($Exp), $Rstore) = power1($Bag)
+	evalx(power1($Exp), $Rstore) = power1(mk-iterator($Bag))
 	
 [RdomR]	$Rel = evalr($Exp1, $Rstore), $Bag = evalb($Exp2, $Rstore)
 	===================================================
@@ -576,12 +571,6 @@
 
 %% ---- Auxiliary functions for powerset
 
-%%[ae1]	add-element($Elem, {{$Elem*1}, $Elem*2}) =			%%XXX
-%%	union({{$Elem, $Elem*1}}, add-element($Elem, {$Elem*2}))
-
-%%[ae2]	add-element($Elem, empty-bag) = empty-bag
-%%XXX
-
 [ae1]	is-empty-iter($BagIter) = false,
 	$Bag = head($BagIter),
 	$Bag' = insert($Elem, $Bag)
@@ -591,11 +580,6 @@
 [ae2]	is-empty-iter($BagIter) = true
 	===================================================
 	add-element($Elem, $BagIter) = empty-bag
-
-%%[pw01]	power0({$Elem*}) = $Bag1,					%%XXX
-%%	add-element($Elem, $Bag1) = $Bag2
-%%	====================================================
-%%	power0({$Elem, $Elem*}) = union($Bag1, $Bag2)
 
 [pw01]	is-empty-iter($BagIter) = false,
 	$Elem = head($BagIter),
@@ -608,7 +592,7 @@
 	====================================================
 	power0($BagIter) = insert(empty-bag, empty-bag)						%%XXX
 
-[pw11]	power1($Bag) = diff(power0($Bag), insert(empty-bag, empty-bag))				%%XXX
+[pw11]	power1($BagIter) = diff(power0($BagIter), insert(empty-bag, empty-bag))				%%XXX
 
 [fn]	evalx(filename($Exp), $Rstore)	=  get-filename(evala($Exp, $Rstore))
 
@@ -636,12 +620,12 @@
 
 [sum1]	$Bag = evalx($Exp, $Rstore)
 	========================================
-	evalx(sum($Exp), $Rstore) = sumx($Bag, 0)
+	evalx(sum($Exp), $Rstore) = sumx(mk-iterator($Bag), 0)
 
 %%% --- average
 
 [avg1]	$Bag = evalx($Exp, $Rstore),
-	$Integer1 = sumx($Bag, 0),
+	$Integer1 = sumx(mk-iterator($Bag), 0),
 	$Integer2 = size($Bag),
 	$Integer2 > 0 = true
 	========================================
@@ -680,7 +664,7 @@
 
 [max-1]	$Bag = evalx($Exp, $Rstore)
 	========================================
-	evalx(max($Exp), $Rstore) = max1($Bag)
+	evalx(max($Exp), $Rstore) = max1(mk-iterator($Bag))
 
 %% ---- min
 
@@ -712,7 +696,7 @@
 
 [min-1]	$Bag = evalx($Exp, $Rstore)
 	========================================
-	evalx(min($Exp), $Rstore) = min1($Bag)
+	evalx(min($Exp), $Rstore) = min1(mk-iterator($Bag))
 
 
 

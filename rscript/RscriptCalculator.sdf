@@ -43,25 +43,16 @@ exports
 	extract-rvars( {DCLRVAR ","}+ )				-> {RVAR  ","}+
 	bind-formals({RVAR ","}+, {REXP ","}+, RSTORE)		-> RSTORE
 
-        equal-elem(Elem, Elem)              			-> Boolean
 	equal-rval(RVALUE, RVALUE)				-> Boolean
 
 	eval-itern({RVAR ","}+,  BagIterator[[Elem]], RVALUE, REXP, RSTORE)	-> Elem
 	store-rvars({RVAR ","}+, RVALUE, RSTORE)		-> RSTORE
 
-	append(RVALUE, RVALUE)					-> Elem
+	append-rval(RVALUE, RVALUE)				-> Elem
 	exists({RVAR ","}+, Bag[[Elem]], REXP, RSTORE)		-> Boolean
 
 	solve1(Integer, RVAR, REXP, RSTORE)			-> RSTORE
 	solve2(Integer, RVAR, REXP, RVAR, REXP, RSTORE)		-> RSTORE
-
-	is-rel(BagIterator[[Elem]])				-> Boolean
-
-%%	"get-filename"						-> RVAR {reject}
-%%	"get-beginline"						-> RVAR {reject}
-%%	"get-begincol"						-> RVAR {reject}
-%%	"get-endline"						-> RVAR {reject}
-%%	"get-endcol"						-> RVAR {reject}
 
 	sumx(BagIterator[[Elem]], Integer)			-> Integer
 	max1(BagIterator[[Elem]])				-> Integer

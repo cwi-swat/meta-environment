@@ -8,18 +8,19 @@ imports utilities/TermCompare[Elem]
   sorts Bag[[Elem]] Color BagIterator[[Elem]]
 
 context-free syntax
+	elem-equal(Elem, Elem)					-> Boolean
+	elem-less(Elem, Elem)					-> Boolean
+	elem-less-equal(Elem, Elem)				-> Boolean
+	elem-greater(Elem, Elem)				-> Boolean
+
+context-free syntax
 	"red"							-> Color
 	"black"							-> Color
 
 %%   	"{" {Elem ","}* "}"                   			-> Bag[[Elem]] {constructor}
 
    	"empty-bag"						-> Bag[[Elem]] {prefer}
-   	bag(Color, 
-   Bag[[Elem]], 
-   Elem, 
-   Bag[[Elem]])							-> Bag[[Elem]]
-
-%%	Bag[[Elem]]						-> BagIterator[[Elem]]
+   	bag(Color, Bag[[Elem]], Elem, Bag[[Elem]])		-> Bag[[Elem]]
 
 	iterator(Elem, Bag[[Elem]])				-> BagIterator[[Elem]]
 	empty-iterator						-> BagIterator[[Elem]]

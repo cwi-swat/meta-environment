@@ -5,6 +5,8 @@ exports
   imports MyArea
   imports Relations[Elem]
 
+  imports utilities/TermCompare[Elem]
+
   context-free syntax 
 
 %% Elementary values
@@ -17,3 +19,20 @@ exports
 
      Bag[[Elem]]                   	    	-> Elem  
      Tuple					-> Elem
+
+     is-bag(Elem)				-> Boolean
+
+     elem-compare(Elem, Elem)			-> Measure
+     elem-less(Elem, Elem)			-> Boolean
+     elem-less-equal(Elem, Elem)		-> Boolean
+
+     elem-greater(Elem, Elem)			-> Boolean
+
+     elem-equal(Elem, Elem)			-> Boolean
+
+hiddens
+imports basic/Whitespace
+
+  variables
+%%  "$Elem"[0-9]* -> Elem
+%%  "$Bag"[0-9]* -> Bag[[Elem]]

@@ -35,22 +35,22 @@ equations
 
 [ins1]	ins($Elem, empty-bag) = bag(red, empty-bag, $Elem, empty-bag)
 
-[ins3a]	less-equal($Elem1, $Elem2) = true
+[ins3a]	elem-less-equal($Elem1, $Elem2) = true
 	================================================
 	ins($Elem1, bag(black, $Bag1, $Elem2, $Bag2)) =
 	balance(ins($Elem1, $Bag1), $Elem2, $Bag2)
 
-[ins3b]	less-equal($Elem1, $Elem2) = true
+[ins3b]	elem-less-equal($Elem1, $Elem2) = true
 	================================================
 	ins($Elem1, bag(red, $Bag1, $Elem2, $Bag2)) =
 	bag(red,ins($Elem1, $Bag1), $Elem2, $Bag2)
 
-[ins4a]	greater($Elem1, $Elem2) = true
+[ins4a]	elem-greater($Elem1, $Elem2) = true
 	================================================
 	ins($Elem1, bag(black, $Bag1, $Elem2, $Bag2)) =
 	balance($Bag1, $Elem2, ins($Elem1, $Bag2))
 
-[ins4b]	greater($Elem1, $Elem2) = true
+[ins4b]	elem-greater($Elem1, $Elem2) = true
 	================================================
 	ins($Elem1, bag(red, $Bag1, $Elem2, $Bag2)) =
 	bag(red, $Bag1, $Elem2, ins($Elem1, $Bag2))
@@ -92,15 +92,15 @@ equations
 
 [del1]	del($Elem, empty-bag) = empty-bag
 
-[del3]	$Elem1 = $Elem2
+[del3]	elem-equal($Elem1, $Elem2) = true
 	===============================================
 	del($Elem1, bag($C, $Bag1, $Elem2, $Bag2)) = append($Bag1, $Bag2)
 
-[del4]	less($Elem1, $Elem2) = true
+[del4]	elem-less($Elem1, $Elem2) = true
 	================================================
 	del($Elem1, bag($C, $Bag1, $Elem2, $Bag2)) = delFromLeft($Elem1, $Bag1, $Elem2, $Bag2)
 
-[del5]	greater($Elem1, $Elem2) = true
+[del5]	elem-greater($Elem1, $Elem2) = true
 	================================================
 	del($Elem1, bag($C, $Bag1, $Elem2, $Bag2)) = delFromRight($Elem1, $Bag1, $Elem2, $Bag2)
 
@@ -185,13 +185,15 @@ equations
 
 [l1]	lookup($Elem, empty-bag) = false
 
-[l2]	lookup($Elem, bag($C, $Bag1, $Elem, $Bag2)) = true
+[l2]	elem-equal($Elem1, $Elem2) = true
+	===============================================
+	lookup($Elem1, bag($C, $Bag1, $Elem2, $Bag2)) = true
 
-[l3]	less($Elem1, $Elem2) = true
+[l3]	elem-less($Elem1, $Elem2) = true
 	================================================
 	lookup($Elem1, bag($C, $Bag1, $Elem2, $Bag2)) = lookup($Elem1, $Bag1)
 
-[l4]	greater($Elem1, $Elem2) = true
+[l4]	elem-greater($Elem1, $Elem2) = true
 	================================================
 	lookup($Elem1, bag($C, $Bag1, $Elem2, $Bag2)) = lookup($Elem1, $Bag2)
 
@@ -252,7 +254,7 @@ equations
 	is-empty-iter($BagIter2) = false,	
 	$Elem1 = head($BagIter1),
 	$Elem2 = head($BagIter2),
-	$Elem1 = $Elem2					%% equal??
+	elem-equal($Elem1, $Elem2) = true
 	=========================================
 	subset($BagIter1, $BagIter2) = subset(tail($BagIter1), tail($BagIter2))
 
@@ -260,7 +262,7 @@ equations
 	is-empty-iter($BagIter2) = false,	
 	$Elem1 = head($BagIter1),
 	$Elem2 = head($BagIter2),
-	greater($Elem1, $Elem2) = true
+	elem-greater($Elem1, $Elem2) = true
 	=========================================
 	subset($BagIter1, $BagIter2) = subset($BagIter1, tail($BagIter2))
 
@@ -268,7 +270,7 @@ equations
 	is-empty-iter($BagIter2) = false,	
 	$Elem1 = head($BagIter1),
 	$Elem2 = head($BagIter2),
-	less($Elem1, $Elem2) = true
+	elem-less($Elem1, $Elem2) = true
 	=========================================
 	subset($BagIter1, $BagIter2) = false
 
@@ -318,7 +320,7 @@ empty-bag)
 	is-empty-iter($BagIter2) = false,	
 	$Elem1 = head($BagIter1),
 	$Elem2 = head($BagIter2),
-	$Elem1 = $Elem2					%% equal??
+	elem-equal($Elem1, $Elem2) = true
 	=========================================
 	union($BagIter1, $BagIter2, $Bag) = 
 	union(tail($BagIter1), tail($BagIter2), insert($Elem1,$Bag))
@@ -327,7 +329,7 @@ empty-bag)
 	is-empty-iter($BagIter2) = false,	
 	$Elem1 = head($BagIter1),
 	$Elem2 = head($BagIter2),
-	less($Elem1, $Elem2) = true
+	elem-less($Elem1, $Elem2) = true
 	=========================================
 	union($BagIter1, $BagIter2, $Bag) = 
 	union(tail($BagIter1), $BagIter2, insert($Elem1,$Bag))
@@ -336,12 +338,10 @@ empty-bag)
 	is-empty-iter($BagIter2) = false,	
 	$Elem1 = head($BagIter1),
 	$Elem2 = head($BagIter2),
-	greater($Elem1, $Elem2) = true
+	elem-greater($Elem1, $Elem2) = true
 	=========================================
 	union($BagIter1, $BagIter2, $Bag) = 
 	union($BagIter1, tail($BagIter2), insert($Elem2,$Bag))
-
-
 
 [un-3]	is-empty-iter($BagIter1) = true,
 	is-empty-iter($BagIter2) = false	
@@ -375,7 +375,7 @@ empty-bag)
 	is-empty-iter($BagIter2) = false,	
 	$Elem1 = head($BagIter1),
 	$Elem2 = head($BagIter2),
-	$Elem1 = $Elem2					%% equal??
+	elem-equal($Elem1, $Elem2) = true
 	=========================================
 	diff($BagIter1, $BagIter2, $Bag) = 
 	diff(tail($BagIter1), tail($BagIter2), $Bag)
@@ -384,9 +384,17 @@ empty-bag)
 	is-empty-iter($BagIter2) = false,	
 	$Elem1 = head($BagIter1),
 	$Elem2 = head($BagIter2),
-	greater($Elem1, $Elem2) = true
+	elem-greater($Elem1, $Elem2) = true
 	=========================================
 	diff($BagIter1, $BagIter2, $Bag) = diff($BagIter1, tail($BagIter2), $Bag)
+
+[df-2]	is-empty-iter($BagIter1) = false,
+	is-empty-iter($BagIter2) = false,	
+	$Elem1 = head($BagIter1),
+	$Elem2 = head($BagIter2),
+	elem-less($Elem1, $Elem2) = true
+	=========================================
+	diff($BagIter1, $BagIter2, $Bag) = diff(tail($BagIter1), $BagIter2, insert($Elem1, $Bag))
 
 [df-3]	is-empty-iter($BagIter1) = true,
 	is-empty-iter($BagIter2) = false	
@@ -408,7 +416,7 @@ empty-bag)
 	is-empty-iter($BagIter2) = false,	
 	$Elem1 = head($BagIter1),
 	$Elem2 = head($BagIter2),
-	$Elem1 = $Elem2					%% equal??
+	elem-equal($Elem1, $Elem2) = true
 	=========================================
 	inter($BagIter1, $BagIter2, $Bag) = 
 	inter(tail($BagIter1), tail($BagIter2), insert($Elem1,$Bag))
@@ -417,7 +425,7 @@ empty-bag)
 	is-empty-iter($BagIter2) = false,	
 	$Elem1 = head($BagIter1),
 	$Elem2 = head($BagIter2),
-	less($Elem1, $Elem2) = true
+	elem-less($Elem1, $Elem2) = true
 	=========================================
 	inter($BagIter1, $BagIter2, $Bag) = inter(tail($BagIter1), $BagIter2, $Bag)
 
@@ -425,7 +433,7 @@ empty-bag)
 	is-empty-iter($BagIter2) = false,	
 	$Elem1 = head($BagIter1),
 	$Elem2 = head($BagIter2),
-	greater($Elem1, $Elem2) = true
+	elem-greater($Elem1, $Elem2) = true
 	=========================================
 	inter($BagIter1, $BagIter2, $Bag) = inter($BagIter1, tail($BagIter2), $Bag)
 

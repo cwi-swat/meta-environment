@@ -39,7 +39,6 @@ assert "rel 8": {ONE-TWO} == {<1,2>}
 assert "rel 9": {ONE-TWO, <3,4>} == {<1,2>,<3,4>}
 assert "rel 10": {<0,1>, ONE-TWO, <3,4>} == {<0,1>, <1,2>,<3,4>}
 
-
 %% --- Boolean operators
 
 assert "true 1"  : true == true
@@ -258,32 +257,32 @@ rel[int,int] tst ={<1,10>, <2,20>, <3,15>} o {<10,100>, <20,200>}
 bool b =  {<1,10>,<2,20>} o {<10,100>, <20,200>} == {<1,100>, <2,200>}
 
 %% --- x
-%%
-%%assert "product 1": EMPTYBAG x Bag1 == EMPTYREL
-%%assert "product 2": Bag1 x EMPTYBAG == EMPTYREL
-%%assert "product 3": {9} x Bag1 == {<9, 1>, <9, 2>, <9, 3>}
-%%assert "product 4": Bag1 x {9} == {<1, 9>, <2, 9>, <3, 9>}
-%%assert "product 5": Bag1 x Bag2  == {<1, 3>, <1, 4>, <1, 5>, <2, 3>, <2, 4>, <2, 5>, <3, 3>, <3, 4>, <3, 5>}
-%%
-%%%% --- .
-%%
-%%rel[int,int] Rel3 = {<1,10>, <2,20>, <1,11>, <3,30>, <2,21>}
-%%
-%%assert  "image 1": EMPTYBAG . Rel3 == EMPTYBAG
-%%assert  "image 2": Rel3 . EMPTYBAG == EMPTYBAG
-%%assert  "image 3": 1 . Rel3 == {10, 11}
-%%assert  "image 4": {1} . Rel3 == {10, 11}
-%%assert  "image 5": {1, 2} . Rel3  == {10, 11, 20, 21}
-%%assert  "image 6": Rel3 . 10 == {1}
-%%assert  "image 7": Rel3 . {10} == {1}
-%%assert  "image 8": Rel3 . {10, 20} == {1, 2}
-%%
-%%%% --- [ ]
-%%
-%%assert "image 9": Rel3[1] == {10, 11}
-%%
-%%%% --- +/*
-%%
+
+assert "product 1": EMPTYBAG x Bag1 == EMPTYREL
+assert "product 2": Bag1 x EMPTYBAG == EMPTYREL
+assert "product 3": {9} x Bag1 == {<9, 1>, <9, 2>, <9, 3>}
+assert "product 4": Bag1 x {9} == {<1, 9>, <2, 9>, <3, 9>}
+assert "product 5": Bag1 x Bag2  == {<1, 3>, <1, 4>, <1, 5>, <2, 3>, <2, 4>, <2, 5>, <3, 3>, <3, 4>, <3, 5>}
+
+%% --- .
+
+rel[int,int] Rel3 = {<1,10>, <2,20>, <1,11>, <3,30>, <2,21>}
+
+assert  "image 1": EMPTYBAG . Rel3 == EMPTYBAG
+assert  "image 2": Rel3 . EMPTYBAG == EMPTYBAG
+assert  "image 3": 1 . Rel3 == {10, 11}
+assert  "image 4": {1} . Rel3 == {10, 11}
+assert  "image 5": {1, 2} . Rel3  == {10, 11, 20, 21}
+assert  "image 6": Rel3 . 10 == {1}
+assert  "image 7": Rel3 . {10} == {1}
+assert  "image 8": Rel3 . {10, 20} == {1, 2}
+
+%% --- [ ]
+
+assert "image 9": Rel3[1] == {10, 11}
+
+%% --- +/*
+
 %%assert "trans 1": 	{<1,2>, <2,3>, <3,4>} + == 
 %%			{<1,2>, <2,3>, <3,4>, <1, 3>, <2, 4>, <1, 4>}
 %%
@@ -299,98 +298,98 @@ bool b =  {<1,10>,<2,20>} o {<10,100>, <20,200>} == {<1,100>, <2,200>}
 %%			{<1,2>, <2,3>, <3,4>, <4,2>, <4,5>, <1, 3>, <2, 4>, <3, 2>, <3, 5>, <4, 3>, 
 %%			<1, 4>, <2, 2>, <2, 5>, <3, 3>, <4, 4>, <1, 5>, <1, 1>, <5, 5>}
 %%
-%%%% --- #
-%%
-%%assert "size 1": (# EMPTYBAG) == 0
-%%assert "size 2": (# EMPTYREL) == 0
-%%assert "size 3": (# Bag1) == 3
-%%assert "size 4": (# Rel1) == 3
-%%
-%%%% --- Bag former
-%%
-%%assert "Bag former 1": { X | X : EMPTYBAG }		== EMPTYBAG
-%%assert "Bag former 2": { X | X : {1}} 			== {1}
-%%assert "Bag former 3": { X | X : {1, 2}} 		== {1,2}
-%%assert "Bag former 4": { X | X : {1, 1, 1}} 		== {1}
-%%
-%%assert "Bag former 5": {  1 | X : {1,2,3}} 		== {1}
-%%assert "Bag former 6": {  1 | X : {1,2,3}, true } 	== {1}
-%%assert "Bag former 7": {  1 | X : {1,2,3}, false} 	== EMPTYBAG
-%%
-%%assert "Bag former 8": {  X | X : {1,2,3}} 		== {1,2,3}
-%%assert "Bag former 9": {  X | X : {1,2,3}, true} 	== {1,2,3}
-%%assert "Bag former 10": {  X | X : {1,2,3}, false} 	== EMPTYBAG
-%%assert "Bag former 10a": {  X | X : {1,2,3}, X >= 2, X < 3} 	== {2}
-%%
-%%assert "Bag former 11": {  EMPTYBAG | X : {1,2,3}} 	== EMPTYBAG
-%%assert "Bag former 12": {  EMPTYBAG | X : {1,2,3}, true} == EMPTYBAG
-%%assert "Bag former 13": {  EMPTYBAG | X : {1,2,3}, false} == EMPTYBAG
-%%
-%%assert "Bag former 14": {  Bag1 | X : {1,2,3}} 	== {1,2,3}
-%%assert "Bag former 15": {  Bag1 | X : {1,2,3}, true} 	== {1,2,3}
-%%assert "Bag former 16": {  Bag1 | X : {1,2,3}, true, true} 	== {1,2,3}
-%%assert "Bag former 17": {  Bag1 | X : {1,2,3}, false}	== EMPTYBAG 
-%%
-%%assert "Bag former 18": { X | X : {{1,2,3},{10,20,30},{100,200,300}} } ==
-%%	{ 1,2,3,10,20,30,100,200,300}
-%%
-%%
-%%%% --- Relation former
-%%
-%%assert "Rel former 1":  { EMPTYREL | X : {1,2,3}} == EMPTYREL
-%%assert "Rel former 2a":  { <X,Y> | <X,Y> : EMPTYREL} == EMPTYREL
-%%assert "Rel former 2b":  { <X,Y> | X : EMPTYBAG, Y : EMPTYBAG} == EMPTYREL
-%%
-%%assert "Rel former 3":  { Rel1 | X : {1,2,3}} == Rel1
-%%
-%%assert "Rel former 4": 	{<X,Y> | X : {1,1,1}, Y : {2,2,2}} == {<1,2>}
-%%
-%%assert "Rel former 5": 	{<1,2> | X : {1,2,3}} == 
-%%			{<1,2>}
-%%assert "Rel former 6": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}} == 
-%%			{<1, 2>, <1, 3>, <1, 4>, <2, 2>, <2, 3>, <2, 4>, <3, 2>, <3, 3>, <3, 4>}
-%%assert "Rel former 7": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}, true} ==
-%%			{<1, 2>, <1, 3>, <1, 4>, <2, 2>, <2, 3>, <2, 4>, <3, 2>, <3, 3>, <3, 4>}
-%%assert "Rel former 8": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}, false} ==
-%%			EMPTYREL
-%%assert "Rel former 9": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}, X >= Y} ==
-%%			{<2, 2>, <3, 2>, <3, 3>}
-%%
-%%%% --- n-ary tuples
-%%
-%%rel[int,int,int] R3 = {<1,2,3>, <10,20,30>}
-%%
-%%bag[int] RR = {{X, Y, Z} | <X,Y,Z> : R3 }
-%%
-%%assert "Advanced value former 1":
-%%	{<X, Z> | <X, Y, Z> : R3} == {<1,3>, <10,30>}
-%%
-%%assert "Advanced value former 2":
-%%	{<S,Q,P> | <P, Q, R, S> : {<1,2,3,4>, <10,20,30,40>}} == {<4,2,1>, <40,20,10>}
-%%
-%%assert "Advanced value former 3":
-%%	{<X,S> | X : {10,20}, <P, Q, R, S> <- <1,2,3,4>} == {<10,4>, <20,4>}
-%% 
-%%%% ---- Arithmetic expressions
-%%
-%%assert "+, 1":  1 + 1 == 2
-%%assert "+, 2":  {X + 1 | X : {1,2,3}} == {2,3,4}
-%%assert "+, 3":  {X | X : {1,2,3}, X + 1 < 3} == {1}
-%%
-%%assert "-, 1":  2 - 3 == -1
-%%assert "-, 2":  {X - 1 | X : {1,2,3}} == {0,1,2}
-%%assert "-, 3":  {X | X : {1,2,3}, X - 1 < 3} == {1,2,3}
-%%
-%%assert "*, 1":  3 * 4 == 12
-%%assert "*, 2":  3 * -4 == -12
-%%assert "*, 3":  -3 * -4 == 12
-%%assert "*, 4":  {X * 2 | X : {1,2,3}} == {2,4,6}
-%%
-%%assert "/, 1":  8 / 2 == 4
-%%assert "/, 2":  7 / 2 == 3
-%%assert "/, 3":  0 / 5 == 0
-%%assert "/, 4":  7 / 5 == 1
-%%assert "/, 5":  -8 / 2 == -4
-%%assert "/, 6":  -8 / -2 == 4
-%%assert "/, 7":  4 / 5 == 0
-%%assert "/, 8":  {X * 2 | X : {1,2,3}} == {2,4,6}
+%% --- #
+
+assert "size 1": (# EMPTYBAG) == 0
+assert "size 2": (# EMPTYREL) == 0
+assert "size 3": (# Bag1) == 3
+assert "size 4": (# Rel1) == 3
+
+%% --- Bag former
+
+assert "Bag former 1": { X | X : EMPTYBAG }		== EMPTYBAG
+assert "Bag former 2": { X | X : {1}} 			== {1}
+assert "Bag former 3": { X | X : {1, 2}} 		== {1,2}
+assert "Bag former 4": { X | X : {1, 1, 1}} 		== {1}
+
+assert "Bag former 5": {  1 | X : {1,2,3}} 		== {1}
+assert "Bag former 6": {  1 | X : {1,2,3}, true } 	== {1}
+assert "Bag former 7": {  1 | X : {1,2,3}, false} 	== EMPTYBAG
+
+assert "Bag former 8": {  X | X : {1,2,3}} 		== {1,2,3}
+assert "Bag former 9": {  X | X : {1,2,3}, true} 	== {1,2,3}
+assert "Bag former 10": {  X | X : {1,2,3}, false} 	== EMPTYBAG
+assert "Bag former 10a": {  X | X : {1,2,3}, X >= 2, X < 3} 	== {2}
+
+assert "Bag former 11": {  EMPTYBAG | X : {1,2,3}} 	== EMPTYBAG
+assert "Bag former 12": {  EMPTYBAG | X : {1,2,3}, true} == EMPTYBAG
+assert "Bag former 13": {  EMPTYBAG | X : {1,2,3}, false} == EMPTYBAG
+
+assert "Bag former 14": {  Bag1 | X : {1,2,3}} 	== {1,2,3}
+assert "Bag former 15": {  Bag1 | X : {1,2,3}, true} 	== {1,2,3}
+assert "Bag former 16": {  Bag1 | X : {1,2,3}, true, true} 	== {1,2,3}
+assert "Bag former 17": {  Bag1 | X : {1,2,3}, false}	== EMPTYBAG 
+
+assert "Bag former 18": { X | X : {{1,2,3},{10,20,30},{100,200,300}} } ==
+	{ 1,2,3,10,20,30,100,200,300}
+
+
+%% --- Relation former
+
+assert "Rel former 1":  { EMPTYREL | X : {1,2,3}} == EMPTYREL
+assert "Rel former 2a":  { <X,Y> | <X,Y> : EMPTYREL} == EMPTYREL
+assert "Rel former 2b":  { <X,Y> | X : EMPTYBAG, Y : EMPTYBAG} == EMPTYREL
+
+assert "Rel former 3":  { Rel1 | X : {1,2,3}} == Rel1
+
+assert "Rel former 4": 	{<X,Y> | X : {1,1,1}, Y : {2,2,2}} == {<1,2>}
+
+assert "Rel former 5": 	{<1,2> | X : {1,2,3}} == 
+			{<1,2>}
+assert "Rel former 6": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}} == 
+			{<1, 2>, <1, 3>, <1, 4>, <2, 2>, <2, 3>, <2, 4>, <3, 2>, <3, 3>, <3, 4>}
+assert "Rel former 7": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}, true} ==
+			{<1, 2>, <1, 3>, <1, 4>, <2, 2>, <2, 3>, <2, 4>, <3, 2>, <3, 3>, <3, 4>}
+assert "Rel former 8": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}, false} ==
+			EMPTYREL
+assert "Rel former 9": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}, X >= Y} ==
+			{<2, 2>, <3, 2>, <3, 3>}
+
+%% --- n-ary tuples
+
+rel[int,int,int] R3 = {<1,2,3>, <10,20,30>}
+
+bag[int] RR = {{X, Y, Z} | <X,Y,Z> : R3 }
+
+assert "Advanced value former 1":
+	{<X, Z> | <X, Y, Z> : R3} == {<1,3>, <10,30>}
+
+assert "Advanced value former 2":
+	{<S,Q,P> | <P, Q, R, S> : {<1,2,3,4>, <10,20,30,40>}} == {<4,2,1>, <40,20,10>}
+
+assert "Advanced value former 3":
+	{<X,S> | X : {10,20}, <P, Q, R, S> <- <1,2,3,4>} == {<10,4>, <20,4>}
+ 
+%% ---- Arithmetic expressions
+
+assert "+, 1":  1 + 1 == 2
+assert "+, 2":  {X + 1 | X : {1,2,3}} == {2,3,4}
+assert "+, 3":  {X | X : {1,2,3}, X + 1 < 3} == {1}
+
+assert "-, 1":  2 - 3 == -1
+assert "-, 2":  {X - 1 | X : {1,2,3}} == {0,1,2}
+assert "-, 3":  {X | X : {1,2,3}, X - 1 < 3} == {1,2,3}
+
+assert "*, 1":  3 * 4 == 12
+assert "*, 2":  3 * -4 == -12
+assert "*, 3":  -3 * -4 == 12
+assert "*, 4":  {X * 2 | X : {1,2,3}} == {2,4,6}
+
+assert "/, 1":  8 / 2 == 4
+assert "/, 2":  7 / 2 == 3
+assert "/, 3":  0 / 5 == 0
+assert "/, 4":  7 / 5 == 1
+assert "/, 5":  -8 / 2 == -4
+assert "/, 6":  -8 / -2 == 4
+assert "/, 7":  4 / 5 == 0
+assert "/, 8":  {X * 2 | X : {1,2,3}} == {2,4,6}
