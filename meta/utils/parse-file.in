@@ -1,5 +1,6 @@
 #! @SHELL@
 # $Id$
+Revision='$Revision$'
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
@@ -15,62 +16,155 @@ TABLES="${datadir}"
 LANGTYPEDIR="${datadir}"
 LANGTYPEFILE="lang.types"
 PROG=`basename $0`
+
 CONVERT=0
 XOPTS=""
+DOTOUT=0
 
-Notify () {
-	echo $* >&2
+verbose=0
+bafmode=1
+dotout=""
+
+
+###
+#  Handle the command line, &c.
+###
+
+myname=`basename $0`
+myversion=`echo $Revision| cut -d' ' -f2`
+
+# The argument vector: list of option letters, colons denote option
+# arguments.  See Usage function, immediately below, for option
+# explanation.
+myarguments="12bdDi:hlno:tvVx"
+
+if [ $myarguments ] ; then
+   arg2explanation='s/\(.:\)/ -\1 /g; s/ \([^-:]\)/ -\1/g; s/:/ file/g';
+   myargsexplained=" -`echo $myarguments|sed -e \"$arg2explanation\"`"
+fi
+
+# Usage: displays helpful usage information
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $myname$myargsexplained . . .
+Options:
+        -1       : use AsFix1 output format             [off]
+        -2       : use AsFix2 output format             [on]
+        -b       : use Binary AsFix (BAF) output format [on]
+        -d       : run in debugging mode                [off]
+        -D       : generate dot output for parse tree   [<off>]
+        -h       : display usage information
+        -i file  : input from |file|                    [-]
+        -l       : log statistics to file               [off]
+        -n       : don't write tree output              [off]
+        -o file  : output to |file|                     [-]
+        -t       : use PlainText AsFix output format    [off]
+        -v       : run in verbose mode                  [off]
+        -V       : reveal program version (i.e. $myversion)
+        -x       : suppress lexicals in dot output      [off]
+E_O_USAGE
 }
 
-Warning () {
-	Notify "Warning: $*"
+Version() {
+    echo "$myname v$myversion" >&2
+}
+
+# getopt handles command line...
+args=`getopt $myarguments $* 2> /dev/null`
+if test $? != 0
+then
+        Usage
+        exit 2
+fi
+set -- $args
+
+# Argument interpretation...
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in
+        -1)
+            CONVERT=1 ;;
+        -2)
+            CONVERT=0 ;;
+	-b)
+	    bafmode=1 ;;
+        -d|-l)
+            XOPTS="$XOPTS $1" ;;
+        -D)
+            DOTOUT=1 ;;
+        -i)
+	    Files="$2 $Files"; shift ;;
+        -h)
+            Usage ;;
+        -n)
+	    XOPTS="$XOPTS $1" ;;
+        -o)
+            if [ -d $2 ] ; then
+		OUTPUTDIR=$2
+            else
+		OUTPUTFILE=$2
+            fi
+	    shift ;;
+	-t)
+	    bafmode=0 ;;
+        -v*)
+            verbose=1
+	    XOPTS="$XOPTS $1" ;;
+        -V)
+            Version ;;
+        -x)
+            XOPTS="$XOPTS $1" ;;
+        --)
+            ;;
+	*)
+            Files="$Files $1" ;;
+    esac
+    shift
+done
+
+if [ $bafmode -eq 0 ] ; then
+	XOPTS="-t $XOPTS"
+fi
+
+
+###
+#  Get to the real work now...
+###
+
+
+Warn () {
+	echo $*                                   	>&2
 }
 
 Error () {
-	Notify "Error: $*"
-	exit 1
+	Warn $*
+	error=1
 }
 
-Usage () {
-	Notify "Usage: $PROG [-1|-2|-o file|-d|-l|-v] file1 ..."
+Abort () {
+	Error $*
+	exit 2
+}
+
+Notify () {
+	if [ $verbose -gt 0 ] ; then
+		Warn $*
+	fi
 }
 
 
-case $#
-in
-	0)
-		Usage
-		exit ;;
-	*)
-		while [ $# -gt 0 ]	# Handle command line options
-		do
-			case $1
-			in
-				-1)
-					CONVERT=1 ;;
-				-2)
-					CONVERT=0 ;;
-				-o)
-					if [ -d $2 ] ; then
-						OUTPUTDIR=$2
-					else
-						OUTPUTFILE=$2
-					fi
-					shift ;;
-				-d*|-l*|-v*|-n*)
-					XOPTS="$XOPTS $1" ;;
-				-*)
-					echo Unknown option ignored: $1 ;;
-				*)
-					Files="$Files $1" ;;
-			esac
-			shift
-		done ;;
-esac
+###
+#  Main code
+###
 
 if [ ! -s $HOME/.$LANGTYPEFILE -a ! -s $LANGTYPEDIR/$LANGTYPEFILE ] ; then
 	Error "$LANGTYPES missing or empty"
 	exit 1;
+fi
+
+if [ -z "$Files" ] ; then
+	Warn "nothing to parse"
 fi
 
 for f in $Files
@@ -89,6 +183,11 @@ do
 		continue
 	fi
 	base=`basename $base .$ext`
+	if [ $DOTOUT -gt 0 ] ; then
+		dotout="-D $dir/$base.dot"
+	else
+		dotout="-D $dir/$base.dot"
+	fi
 	lang=""
 	if [ -s $HOME/.$LANGTYPEFILE ] ; then
 		lang=`egrep "^$ext( |	)" $HOME/.$LANGTYPEFILE | cut -f2`
@@ -110,7 +209,7 @@ do
 	fi
 
 	out2=${OUTPUTFILE:-"$dir/$base.asfix2"}
-	if $PARSE $XOPTS -p $table -i $f -o $out2
+	if $PARSE $XOPTS $dotout -p $table -i $f -o $out2
 	then
 		if [ $CONVERT -eq 1 -a -s $out2 ]
 		then

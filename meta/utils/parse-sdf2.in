@@ -11,10 +11,11 @@ datadir=@datadir@
 PATH="$PATH:$bindir"
 
 A2TOA1="${bindir}/a2toa1 -silent"
-CONVERT=0
 TABLE="${datadir}/Sdf2.baf"
 PARSE="${bindir}/sglr -p $TABLE"
-OPTS=""
+
+CONVERT=0
+XOPTS=""
 DOTOUT=0
 
 verbose=0
@@ -31,7 +32,7 @@ myversion=`echo $Revision| cut -d' ' -f2`
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="12bdDi:hlo:tvVx"
+myarguments="12bdDi:hlno:tvVx"
 
 if [ $myarguments ] ; then
    arg2explanation='s/\(.:\)/ -\1 /g; s/ \([^-:]\)/ -\1/g; s/:/ file/g';
@@ -48,8 +49,10 @@ Options:
         -b       : use Binary AsFix (BAF) output format [on]
         -d       : run in debugging mode                [off]
         -D       : generate dot output for parse tree   [<off>]
+        -h       : display usage information
         -i file  : input from |file|                    [-]
         -l       : log statistics to file               [off]
+        -n       : don't write tree output              [off]
         -o file  : output to |file|                     [-]
         -t       : use PlainText AsFix output format    [off]
         -v       : run in verbose mode                  [off]
@@ -83,25 +86,27 @@ do
 	-b)
 	    bafmode=1 ;;
         -d|-l)
-            OPTS="$OPTS $1" ;;
+            XOPTS="$XOPTS $1" ;;
         -D)
             DOTOUT=1; dotout="-Dstdin.dot" ;;
         -i)
 	    Files="$2 $Files"; shift ;;
         -h)
             Usage ;;
+        -n)
+	    XOPTS="$XOPTS $1" ;;
         -o)
 	    NAMEDOUTPUT=$2; shift
-	    OPTS="$OPTS $1 $NAMEDOUTPUT" ;;
+	    XOPTS="$XOPTS $1 $NAMEDOUTPUT" ;;
 	-t)
 	    bafmode=0 ;;
         -v*)
             verbose=1
-	    OPTS="$OPTS $1" ;;
+	    XOPTS="$XOPTS $1" ;;
         -V)
             Version ;;
         -x)
-            OPTS="$OPTS $1" ;;
+            XOPTS="$XOPTS $1" ;;
         --)
             ;;
 	*)
@@ -111,7 +116,7 @@ do
 done
 
 if [ $bafmode -eq 0 ] ; then
-	OPTS="-t $OPTS"
+	XOPTS="-t $XOPTS"
 fi
 
 
@@ -146,7 +151,7 @@ Notify () {
 #
 
 if [ -z "$Files" ] ; then
-	$PARSE $OPTS "$dotout" -
+	$PARSE $XOPTS "$dotout" -
 	exit $?
 fi
 
@@ -162,7 +167,7 @@ do
 		dotout=""
 	fi
 	out2=${NAMEDOUTPUT:-"$dir/$base.asfix2"}
-	if $PARSE -i $f -o $out2 $OPTS $dotout
+	if $PARSE -i $f -o $out2 $XOPTS $dotout
 	then
 		if [ $CONVERT -eq 1 ]
 		then
