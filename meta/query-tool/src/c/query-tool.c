@@ -62,6 +62,22 @@ ATerm findSortDefinition(ATerm atModule, ATerm atTree)
 }
 
 /*}}}  */
+/*{{{  ATerm findSortDefinition(ATerm atModule, ATerm atTree) */
+
+ATerm findProduction(ATerm atModule, ATerm atTree)
+{
+  SDF_Module sdfModule = SDF_getStartTopModule(SDF_StartFromTerm(atModule));
+  PT_ParseTree parseTree = PT_ParseTreeFromTerm(atTree);
+
+  if (queryProductionInModule(sdfModule, parseTree)) {
+    return ATmake("snd-value(result(found))");
+  }
+  else {
+    return ATmake("snd-value(result(not-found))");
+  }
+}
+
+/*}}}  */
 
 /*{{{  ATerm query(int cid, ATerm atModule, ATerm atTree) */
 
