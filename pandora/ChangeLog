@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Tue Mar 22 11:46:43 CET 2005 <kooiker@cwi.nl>
+ * generator/Makefile.am:
+   - Fix dependency on ATerm-dbg
+
 Thu Mar 10 11:03:54 CET 2005 <{jong,kooiker}@cwi.nl>
  * generator/main.c:
    - fix compilation error
