@@ -44,16 +44,3 @@ in
   create(Clear-all(Eval), Tid?).
   create(Close-modules(Eval), Tid?)
 endlet
-/*
-    rec-msg(Id?, rewrite-over(Mod?)).
-    create(Open-module(Mod), Tid?). (
-      rec-msg(opened-module(Mod)).
-      snd-msg(Id, go-ahead-rewrite(Eval))
-      +
-      rec-msg(failed-opening-module(Mod)).
-      snd-msg(Id, cancel-rewrite)
-    )
-  ) *
-  delta
-endlet
-*/
