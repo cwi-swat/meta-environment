@@ -99,6 +99,22 @@ extern void print_memo_table_sizes();
 
 /*}}}  */
 
+/*{{{  nametable interface */
+
+typedef ATerm (*funcptr)();
+
+void c_rehash(int newsize);
+unsigned int calc_hash(ATerm t);
+void register_prod(ATerm prod, funcptr func, Symbol sym);
+
+funcptr lookup_func_given_sym(Symbol sym);
+funcptr basic_lookup_func(ATerm prod);
+funcptr lookup_func(ATerm prod);
+Symbol lookup_sym(ATerm prod);
+ATerm lookup_prod(Symbol sym);
+
+/*}}}  */
+
 /*{{{  tail_n */
 
 #define tail_1(l) (t_list_next(l))
@@ -245,13 +261,7 @@ extern Symbol make_listsym;
 extern Symbol concsym;
 extern Symbol conssym;
 
-typedef ATerm (*funcptr)();
 
-extern void c_rehash(int size);
-extern void register_prod(ATerm prod, funcptr func, Symbol sym);
-extern funcptr lookup_func(ATerm prod);
-extern Symbol lookup_sym(ATerm prod);
-extern ATerm lookup_prod(Symbol sym);
 extern ATerm list_equal(ATerm t1, ATerm t2);
 extern ATerm slice(ATerm l1, ATerm l2);
 extern ATerm make_list(ATerm t);
