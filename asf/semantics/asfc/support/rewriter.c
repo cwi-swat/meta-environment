@@ -47,7 +47,7 @@ ATerm reduce(int cid, ATerm t)
   t = AFexpandTerm(t);
   if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
                 &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
-    ATfprintf(stderr,"Reducing ... \n",trm);
+    ATfprintf(stderr,"Reducing ... \n");
     reduct = innermost(trm);
 /*
     ATfprintf(stderr, "%t\n", reduct);
@@ -104,11 +104,6 @@ ATfprintf(stderr,"use_toolbus is %d\n",use_toolbus);
   resolve_all();
   init_all();
 
-/*
-  oksym = ATmakeSymbol("ok", 1, ATfalse);
-  nullsym = ATmakeSymbol("null", 0, ATfalse);
-*/
-
 ATfprintf(stderr,"Registering and resolving finished\n");
   if(use_toolbus) {
     ATBeventloop();
@@ -117,21 +112,23 @@ ATfprintf(stderr,"Registering and resolving finished\n");
     t = ATreadFromTextFile(stdin);
 ATfprintf(stderr,"Term read\n");
     t = AFexpandTerm(t);
+
 /*
-ATfprintf(stderr, "%t\n", t);
+ATfprintf(stdout, "%t\n", t);
 */
+
     if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
                   &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
-ATfprintf(stderr,"Reducing ...\n",trm);
+ATfprintf(stderr,"Reducing ...\n");
       reduct = innermost(trm);
 /*
 ATfprintf(stderr, "%t\n", reduct);
 */
 ATfprintf(stderr,"Reducing finished.\n");
       asfix = toasfix(reduct, file, modname);
+/*
       ATwriteToTextFile(asfix,stdout);
-      /* if(printstats)
-      TprintHashStats(stderr, w); */
+*/
     }
     else
       ATfprintf(stderr, "not an asfix term: %t\n", t);
