@@ -185,4 +185,9 @@ public class ATermAppl extends ATerm
   }
 
   //}
+    /** Is the function symbol of this application quoted?
+     */
+    public boolean isQuoted() {
+	return appl.isQuoted();
+    }
 }
