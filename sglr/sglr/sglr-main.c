@@ -401,8 +401,10 @@ int SG_Batch (int argc, char **argv)
       ATwarning("%s: error in %s, line %d, col %d: cycle detected, productions: %t\n",
                 program_name, input_file_name, line, col, ATgetArgument(errcode, 0));
     } else if(err == SG_Amb_Error_AFun) {
-      ATwarning("%s: error in %s, line %d, col %d: cannot represent %t ambiguit(y|ies)\n",
-                program_name, input_file_name, line, col, ATgetArgument(errcode, 0));
+			int ambiescount = ATgetInt((ATermInt) ATgetArgument(errcode,0));
+      ATwarning("%s: error in %s, line %d, col %d: cannot represent %d ambiguit%s\n",
+                program_name, input_file_name, line, col, ambiescount,
+								(ambiescount > 1) ? "ies" : "y" );
     } else {
       ATwarning("%s: error in %s, line %d, col %d: unknown error",
                 program_name, input_file_name, line, col);
