@@ -1,5 +1,5 @@
 /*
- * Generated at Fri Mar  9 15:16:26 2001
+ * Generated at Wed Mar 14 17:11:46 2001
  */
 
 #ifndef __MEPT_dict_H
@@ -8,8 +8,13 @@
 #include <aterm2.h>
 
 
+extern ATerm PT_patternCharRangesEmpty;
+extern ATerm PT_patternCharRangesList;
+extern ATerm PT_patternCharRangeRange;
+extern ATerm PT_patternCharRangeCharacter;
 extern ATerm PT_patternSymbolsEmpty;
 extern ATerm PT_patternSymbolsList;
+extern ATerm PT_patternSymbolCharClass;
 extern ATerm PT_patternSymbolLayout;
 extern ATerm PT_patternSymbolVarSym;
 extern ATerm PT_patternSymbolIterStarSep;

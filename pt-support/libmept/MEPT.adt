@@ -65,8 +65,15 @@
   [Symbol, var-sym, varsym(<symbol(Symbol)>)],
 
   [Symbol, layout, layout],
+ 
+  [Symbol, char-class, char-class(<ranges(CharRanges)>)],
 
   [Symbols, list, [<head(Symbol)>,<[tail(Symbols)]>]],
-  [Symbols, empty, []]
+  [Symbols, empty, []],
 
+  [CharRange, character, <integer(int)>],
+  [CharRange, range, range(<start(int)>,<end(int)>)],
+
+  [CharRanges, list, [<head(CharRange)>,<[tail(CharRanges)]>]],
+  [CharRanges, empty, []]
 ]

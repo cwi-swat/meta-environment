@@ -19,6 +19,8 @@ typedef struct _PT_Attr *PT_Attr;
 typedef struct _PT_Args *PT_Args;
 typedef struct _PT_Symbol *PT_Symbol;
 typedef struct _PT_Symbols *PT_Symbols;
+typedef struct _PT_CharRange *PT_CharRange;
+typedef struct _PT_CharRanges *PT_CharRanges;
 
 /*}}}  */
 
@@ -44,6 +46,10 @@ PT_Symbol PT_makeSymbolFromTerm(ATerm t);
 ATerm PT_makeTermFromSymbol(PT_Symbol arg);
 PT_Symbols PT_makeSymbolsFromTerm(ATerm t);
 ATerm PT_makeTermFromSymbols(PT_Symbols arg);
+PT_CharRange PT_makeCharRangeFromTerm(ATerm t);
+ATerm PT_makeTermFromCharRange(PT_CharRange arg);
+PT_CharRanges PT_makeCharRangesFromTerm(ATerm t);
+ATerm PT_makeTermFromCharRanges(PT_CharRanges arg);
 
 /*}}}  */
 /*{{{  constructors */
@@ -77,8 +83,13 @@ PT_Symbol PT_makeSymbolIterPlusSep(PT_Symbol symbol, PT_Symbol separator);
 PT_Symbol PT_makeSymbolIterStarSep(PT_Symbol symbol, PT_Symbol separator);
 PT_Symbol PT_makeSymbolVarSym(PT_Symbol symbol);
 PT_Symbol PT_makeSymbolLayout();
+PT_Symbol PT_makeSymbolCharClass(PT_CharRanges ranges);
 PT_Symbols PT_makeSymbolsList(PT_Symbol head, PT_Symbols tail);
 PT_Symbols PT_makeSymbolsEmpty();
+PT_CharRange PT_makeCharRangeCharacter(int integer);
+PT_CharRange PT_makeCharRangeRange(int start, int end);
+PT_CharRanges PT_makeCharRangesList(PT_CharRange head, PT_CharRanges tail);
+PT_CharRanges PT_makeCharRangesEmpty();
 
 /*}}}  */
 /*{{{  equality functions */
@@ -92,6 +103,8 @@ ATbool PT_isEqualAttr(PT_Attr arg0, PT_Attr arg1);
 ATbool PT_isEqualArgs(PT_Args arg0, PT_Args arg1);
 ATbool PT_isEqualSymbol(PT_Symbol arg0, PT_Symbol arg1);
 ATbool PT_isEqualSymbols(PT_Symbols arg0, PT_Symbols arg1);
+ATbool PT_isEqualCharRange(PT_CharRange arg0, PT_CharRange arg1);
+ATbool PT_isEqualCharRanges(PT_CharRanges arg0, PT_CharRanges arg1);
 
 /*}}}  */
 /*{{{  PT_ParseTree accessors */
@@ -215,6 +228,7 @@ ATbool PT_isSymbolIterPlusSep(PT_Symbol arg);
 ATbool PT_isSymbolIterStarSep(PT_Symbol arg);
 ATbool PT_isSymbolVarSym(PT_Symbol arg);
 ATbool PT_isSymbolLayout(PT_Symbol arg);
+ATbool PT_isSymbolCharClass(PT_Symbol arg);
 ATbool PT_hasSymbolString(PT_Symbol arg);
 char * PT_getSymbolString(PT_Symbol arg);
 PT_Symbol PT_setSymbolString(PT_Symbol arg, char * string);
@@ -230,6 +244,9 @@ PT_Symbol PT_setSymbolRight(PT_Symbol arg, PT_Symbol right);
 ATbool PT_hasSymbolSeparator(PT_Symbol arg);
 PT_Symbol PT_getSymbolSeparator(PT_Symbol arg);
 PT_Symbol PT_setSymbolSeparator(PT_Symbol arg, PT_Symbol separator);
+ATbool PT_hasSymbolRanges(PT_Symbol arg);
+PT_CharRanges PT_getSymbolRanges(PT_Symbol arg);
+PT_Symbol PT_setSymbolRanges(PT_Symbol arg, PT_CharRanges ranges);
 
 /*}}}  */
 /*{{{  PT_Symbols accessors */
@@ -245,6 +262,35 @@ PT_Symbols PT_getSymbolsTail(PT_Symbols arg);
 PT_Symbols PT_setSymbolsTail(PT_Symbols arg, PT_Symbols tail);
 
 /*}}}  */
+/*{{{  PT_CharRange accessors */
+
+ATbool PT_isValidCharRange(PT_CharRange arg);
+ATbool PT_isCharRangeCharacter(PT_CharRange arg);
+ATbool PT_isCharRangeRange(PT_CharRange arg);
+ATbool PT_hasCharRangeInteger(PT_CharRange arg);
+int PT_getCharRangeInteger(PT_CharRange arg);
+PT_CharRange PT_setCharRangeInteger(PT_CharRange arg, int integer);
+ATbool PT_hasCharRangeStart(PT_CharRange arg);
+int PT_getCharRangeStart(PT_CharRange arg);
+PT_CharRange PT_setCharRangeStart(PT_CharRange arg, int start);
+ATbool PT_hasCharRangeEnd(PT_CharRange arg);
+int PT_getCharRangeEnd(PT_CharRange arg);
+PT_CharRange PT_setCharRangeEnd(PT_CharRange arg, int end);
+
+/*}}}  */
+/*{{{  PT_CharRanges accessors */
+
+ATbool PT_isValidCharRanges(PT_CharRanges arg);
+ATbool PT_isCharRangesList(PT_CharRanges arg);
+ATbool PT_isCharRangesEmpty(PT_CharRanges arg);
+ATbool PT_hasCharRangesHead(PT_CharRanges arg);
+PT_CharRange PT_getCharRangesHead(PT_CharRanges arg);
+PT_CharRanges PT_setCharRangesHead(PT_CharRanges arg, PT_CharRange head);
+ATbool PT_hasCharRangesTail(PT_CharRanges arg);
+PT_CharRanges PT_getCharRangesTail(PT_CharRanges arg);
+PT_CharRanges PT_setCharRangesTail(PT_CharRanges arg, PT_CharRanges tail);
+
+/*}}}  */
 /*{{{  sort visitors */
 
 PT_ParseTree PT_visitParseTree(PT_ParseTree arg, PT_Symbols (*acceptLhs)(PT_Symbols), PT_Tree (*acceptLayoutBeforeTree)(PT_Tree), PT_Tree (*acceptTree)(PT_Tree), PT_Tree (*acceptLayoutAfterTree)(PT_Tree), int (*acceptAmbCnt)(int));
@@ -254,8 +300,10 @@ PT_Attributes PT_visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_A
 PT_Attrs PT_visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr));
 PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *));
 PT_Args PT_visitArgs(PT_Args arg, PT_Tree (*acceptHead)(PT_Tree));
-PT_Symbol PT_visitSymbol(PT_Symbol arg, char * (*acceptString)(char *));
+PT_Symbol PT_visitSymbol(PT_Symbol arg, char * (*acceptString)(char *), PT_CharRanges (*acceptRanges)(PT_CharRanges));
 PT_Symbols PT_visitSymbols(PT_Symbols arg, PT_Symbol (*acceptHead)(PT_Symbol));
+PT_CharRange PT_visitCharRange(PT_CharRange arg, int (*acceptInteger)(int), int (*acceptStart)(int), int (*acceptEnd)(int));
+PT_CharRanges PT_visitCharRanges(PT_CharRanges arg, PT_CharRange (*acceptHead)(PT_CharRange));
 
 /*}}}  */
 
