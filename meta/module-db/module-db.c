@@ -265,13 +265,13 @@ ATerm update_sdf2_module(int cid, ATerm newSdfTree)
 
     curSdfTree = ATelementAt((ATermList)entry, SYN_LOC);
     if(!ATisEqual(curSdfTree, newSdfTree)) {
-      entry = (ATerm)ATreplace((ATermList)entry,
-                               newSdfTree,
+      entry = (ATerm)ATreplace((ATermList)entry, newSdfTree,
                                SYN_LOC);
-      entry = (ATerm)ATreplace((ATermList)entry,
-                               Mtrue,
+      entry = (ATerm)ATreplace((ATermList)entry, Mtrue,
                                SYN_UPDATED_LOC);
 
+      entry = (ATerm)ATreplace((ATermList)entry,
+                    ATparse("unavailable"),TABLE_LOC);
       PutValue(new_modules_db, atModuleName, entry);
 
       chg_mods = modules_depend_on(atModuleName,ATempty);
@@ -290,8 +290,7 @@ ATerm update_sdf2_module(int cid, ATerm newSdfTree)
                     "need-modules([<list>]),<term>))",
                     ATempty, ATempty, import_graph);
     }
-  }
-  else {
+  } else {
     ATerror("not an asfix module: %t\n", newSdfTree);
     return NULL; 
   }
