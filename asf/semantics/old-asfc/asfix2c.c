@@ -1,7 +1,8 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -45,12 +46,10 @@
 
 #include <asc-support.h>
 
-#include "compiler.tif.h"
-
 ATbool run_verbose;
 
-static char myname[] = "compiler";
-static char myversion[] = "0.1";
+static char myname[] = "asfix2c";
+static char myversion[] = "1.0";
 
 static char *outputDirName = NULL;
 
@@ -60,7 +59,7 @@ static char *outputDirName = NULL;
     explanation.
  */
 
-static char myarguments[] = "hi:o:vV";
+static char myarguments[] = "hi:c:vV";
 
 extern ATerm pattern_asfix_id;
 extern ATerm pattern_asfix_term;
@@ -68,52 +67,44 @@ extern ATerm pattern_asfix_term;
 extern void resolve_all();
 extern void register_all();
 extern void init_all();
+extern ATerm open_asfix_file(char *name);
+extern ATermList add_module(ATerm module);
+extern void create_module_db();
+extern void reshuffle_modules_from(char *moduleName);
+extern void read_conf(char *cfg);
 
 void AFinitExpansionTerms();
 void AFinitAsFixPatterns();
 ATerm AFexpandAsFixModule(ATerm mod);
+int AFsource(ATerm asfix, char *buf);
 
 ATerm innermost(ATerm t);
 ATerm toasfix(ATerm t, ATerm f, ATerm n);
 void init_patterns();
 
-void rec_terminate(int cid, ATerm t) 
-{
-  clock_t cputime;
-  float cpusecs;
-
- /* read the cpu time up till now*/
-  cputime = clock();
-  cpusecs = (float) ((float) cputime / (float) CLOCKS_PER_SEC);
-  ATfprintf(stderr, "Compiler used %f seconds cpu time\n", cpusecs);
-  exit(0);
-}
-
-void set_output_dir(int cid, char *dirName)
+void set_output_dir(char *dirName)
 {
   int len = strlen(dirName) + 1;
 
   outputDirName = (char *) realloc(outputDirName, len);
 
   if (outputDirName == NULL) {
-    ATerror("compiler: unable to allocate %d bytes\n", len);
+    ATerror("asfix2c: unable to allocate %d bytes\n", len);
   } else {
     strcpy(outputDirName, dirName);
   }
 }
 
-char *
-get_output_dir(void)
+char *get_output_dir(void)
 {
-		if (outputDirName != NULL) {
-				return outputDirName;
-		} else if (getenv("COMPILER_OUTPUT") != NULL) {
-				return getenv("COMPILER_OUTPUT");
-		} else {
-				return ".";
-		}
+  if (outputDirName != NULL) {
+    return outputDirName;
+  } else if (getenv("COMPILER_OUTPUT") != NULL) {
+    return getenv("COMPILER_OUTPUT");
+  } else {
+    return ".";
+  }
 }
-
 
 /*{{{  Converting back to readable C-code */
 void ToC_code(ATerm asfix, FILE *file)
@@ -250,34 +241,34 @@ static ATerm expand_to_asfix(ATerm mod, char *name)
 }
 
 /*}}}  */
-/*{{{  ATerm generate_code(int cid, char *modname, ATerm module) */
+/*{{{  ATerm generate_code(char *modname, ATerm module) */
 
-ATerm generate_code(int cid, char *modname, ATerm module)
+ATerm generate_code(char *modname, ATerm module)
 {
-  char *text, *fname;
+  char *fname;
   ATerm expmod, reduct, cmod;
   ATerm aname, idname, file, mname, trm;
   int len;
   FILE *output;
   char *path;
 	
-	if (run_verbose) {
-			ATwarning("generating code for %s\n", modname);
-	}
+  if (run_verbose) {
+    ATwarning("generating code for %s\n", modname);
+  }
   
-	path = get_output_dir();
+  path = get_output_dir();
   len = strlen(path) + 1 + strlen(modname) + strlen(".asfix");
   fname = malloc(len + 1);
   if (!fname) {
     ATerror("Not enough memory\n");
-	}
+  }
   sprintf(fname, "%s/%s.asfix", path, modname);
 
   expmod = expand_to_asfix(module, fname);
   if (!ATmatchTerm(expmod, pattern_asfix_term, NULL, NULL,
-									 &file, NULL, &mname, NULL, &trm, NULL, NULL)) {
-		ATabort("Unable to extract module from asfix representation.\n");
-	}
+                   &file, NULL, &mname, NULL, &trm, NULL, NULL)) {
+    ATabort("Unable to extract module from asfix representation.\n");
+  }
        
   reduct = innermost(trm);
 
@@ -290,19 +281,19 @@ ATerm generate_code(int cid, char *modname, ATerm module)
   fname = malloc(len + 1);
   if (!fname) {
     ATerror("Not enough memory\n");
-	}
+  }
   sprintf(fname, "%s/%s.c", path, modname );
 
   output = fopen(fname,"w");
   if (!output)  {
     ATwarning("Cannot open file %s\n", fname);
-	} else {
+  } else {
     ToC_code(cmod,output);
     ATfprintf(output, "\n");
     fclose(output);
   }
 
-	ATwarning("Writing: %s\n", fname);
+  ATwarning("Writing: %s\n", fname);
 
   free(fname);
 
@@ -316,24 +307,23 @@ ATerm generate_code(int cid, char *modname, ATerm module)
  * Usage: displays helpful usage information
  */
 
-void usage(void)
+static void usage(void)
 {
-  ATwarning(
-						"Usage: %s [options]\n"
-						"Options:\n"
-						"\t-h              display help information (usage)\n"
-						"\t-i filename     input from file (default stdin)\n"
-						"\t-o filename     output to file (default stdout)\n"
-						"\t-v              verbose mode\n"
-						"\t-V              reveal program version (i.e. %s)\n",
-						myname, myversion);
-	exit(0);
+  ATwarning("Usage: %s [options]\n"
+            "Options:\n"
+            "\t-h              display help information (usage)\n"
+            "\t-i filename     input from file (default stdin)\n"
+            "\t-c dirname      directory for C code (default .)\n"
+            "\t-v              verbose mode\n"
+            "\t-V              reveal program version (i.e. %s)\n",
+            myname, myversion);
+  exit(0);
 }
 
 /*}}}  */
 /*{{{  void version(void) */
 
-void version(void)
+static void version(void)
 {
   ATwarning("%s v%s\n", myname, myversion);
   exit(0);
@@ -344,18 +334,16 @@ void version(void)
 
 int main(int argc, char *argv[])
 {
-  FILE *iofile;
-
-  int cid;
-  int c, toolbus_mode = 0;
+  int c;
   char *input = "-";
-  char *output = "-";
+  char *directory = NULL;
 
   extern char *optarg;
   extern int   optind;
 
-  ATerm bottomOfStack, module, expandedmodule, term;
-  ATerm aname, c_code, iname, mname, file, reduct;
+  char *moduleString;
+  ATerm bottomOfStack, topModule, newModule, module;
+  ATermList importedModules = ATempty, newModules;
 
   clock_t cputime;
 
@@ -363,10 +351,6 @@ int main(int argc, char *argv[])
  
   /* See how much CPU time we use */
   /* Set the clock to zero */
-
-  /*  Check whether we're a ToolBus process  */
-  for(c=1; !toolbus_mode && c<argc; c++)
-    toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
 
   cputime = clock();
 
@@ -380,68 +364,48 @@ int main(int argc, char *argv[])
   resolve_all();
   init_all();
 
-  if (toolbus_mode) {
-    #ifndef WIN32 /* Code with Toolbus calls, non Windows */
-      ATBinit(argc, argv, &bottomOfStack);  
-      cid = ATBconnect(NULL, NULL, -1, compiler_handler);
-      ATBeventloop();
-    #else
-      ATwarning("compiler: Toolbus cannot be used in Windows.\n");
-    #endif
-  } else {
-    while ((c = getopt(argc, argv, myarguments)) != -1) {
-      switch (c) {
-        case 'v':  run_verbose = ATtrue; break;
-        case 'i':  input=optarg;         break;
-        case 'o':  output=optarg;        break;
-        case 'V':  version();            break;
+  while ((c = getopt(argc, argv, myarguments)) != -1) {
+    switch (c) {
+      case 'v':  run_verbose = ATtrue; break;
+      case 'i':  input=optarg;         break;
+      case 'c':  directory=optarg;     break;
+      case 'V':  version();            break;
 
-        case 'h':  /* drop intended */
-        default:   usage();              break;
-			}
-		}
-    argc -= optind;
-    argv += optind;
-
-    if (!strcmp(input, "") || !strcmp(input, "-")) {
-      iofile = stdin;
-		} else if (!(iofile = fopen(input, "r"))) {
-      ATerror("%s: cannot open %s\n", myname, input);
-		}
-
-    module = ATreadFromFile(iofile);
-
-    expandedmodule = expand_to_asfix(module, input);
-    assert(ATmatchTerm(expandedmodule, pattern_asfix_term, NULL, NULL,
-                         &file, NULL, &mname, NULL, &term, NULL, NULL));
-       
-    if (run_verbose) {
-				ATwarning("Reducing ...\n");
-		}
-
-    reduct = innermost(term);
-
-    if (run_verbose) {
-			 	ATwarning("Reducing finished.\n");
-		}
-
-    aname  = ATmake("l(<str>)", input);
-    iname = ATreadFromString("id(\"AsFix2C\")");
-    c_code = toasfix(reduct, aname, iname);
-
-    if (!strcmp(output, "") || !strcmp(output, "-")) {
-			iofile = stdout;
-		} else if (!(iofile = fopen(output, "w"))) {
-			ATerror("%s: cannot open %s\n", myname, output);
-		}
-
-    ToC_code(c_code, iofile);
-    ATfprintf(iofile, "\n");
-    fclose(iofile);
-    if (run_verbose) {
-				ATwarning("Writing: %s\n", output);
-		}
+      case 'h':  /* drop intended */
+      default:   usage();              break;
+    }
   }
+  argc -= optind;
+  argv += optind;
+
+  read_conf("meta.conf");
+  if(directory) {
+    set_output_dir(directory);
+  }
+
+  create_module_db();
+
+
+  if (!strcmp(input, "") || !strcmp(input, "-")) {
+    ATerror("Module name is needed\n");
+  }
+
+  topModule = open_asfix_file(input);
+
+  importedModules = add_module(topModule);
+
+  while(!ATisEmpty(importedModules)) {
+    module = ATgetFirst(importedModules);
+    importedModules = ATgetNext(importedModules);
+
+    if(ATmatch(module, "<str>", &moduleString)) {
+      newModule = open_asfix_file(moduleString);
+      newModules = add_module(newModule);
+      importedModules = ATconcat(importedModules, newModules);
+    }
+  }
+
+  reshuffle_modules_from(input);
 
   return 0;
 }
