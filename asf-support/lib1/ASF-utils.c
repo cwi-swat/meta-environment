@@ -58,6 +58,7 @@ ASF_foreachConditionInList(ASF_ConditionList list, ASF_ConditionVisitor visitor)
 
   newList = ASF_makeConditionListSingle(
             ASF_makeConditionFromTerm(ATgetFirst(store)));
+  store = ATgetNext(store);
  
   for (; !ATisEmpty(store); store = ATgetNext(store)) {
     ASF_Condition newCond = ASF_makeConditionFromTerm(ATgetFirst(store));
