@@ -1,11 +1,13 @@
+#include <assert.h>
+
+#include <aterm2.h>
+
 #include "ksdf2table.h"
 #include "characters.h"
 #include "item.h"
 #include "itemset.h"
 #include "goto.h"
 #include "priorities.h"
-
-#include <aterm2.h>
 
 /*{{{  static ATermList pred(Item item, ATermList items) */
 
@@ -71,7 +73,9 @@ void outgoing(ItemSet itemset, ATermList *predprods, CC_Set *predchars)
     item = ITS_next(&iter);
  
     if (IT_getDotPosition(item) == 0) {
-      *predprods = ATaddElement(*predprods, (ATerm)ATmakeInt(IT_getProdNr(item)));
+      ATerm prod = (ATerm)ATmakeInt(IT_getProdNr(item));
+      /*assert(ATindexOf(*predprods, prod, 0) == -1);*/
+      *predprods = ATinsert(*predprods, prod);
     }
 
     symbol = IT_getDotSymbol(item);

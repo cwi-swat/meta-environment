@@ -21,18 +21,18 @@ ATermList ATunion(ATermList l1, ATermList l2)
   ATermList result1, list;
   ATerm elem;
 
-  if(ATisEqual(l1,l2)) 
+  if (ATisEqual(l1,l2)) 
     return l1;
 
-  if(ATisEmpty(l1))
+  if (ATisEmpty(l1))
     return l2;
 
-  if(ATisEmpty(l2))
+  if (ATisEmpty(l2))
     return l1;
 
   len1 = ATgetLength(l1);
   len2 = ATgetLength(l2);
-  if(len1 > len2) {
+  if (len1 > len2) {
     result1 = l2;
     l2 = l1;
     l1 = result1;
@@ -42,7 +42,7 @@ ATermList ATunion(ATermList l1, ATermList l2)
   }
 
   list = l2;
-  while(!ATisEmpty(list)) {
+  while (!ATisEmpty(list)) {
     elem = ATgetFirst(list);
     list = ATgetNext(list);
     SET_MARK(elem->header);
@@ -50,7 +50,7 @@ ATermList ATunion(ATermList l1, ATermList l2)
 
   count = len1;
 
-  if(count > max) {
+  if (count > max) {
     max = count;
     elems = realloc(elems, sizeof(ATerm)*max);
     if(!elems)
@@ -59,7 +59,7 @@ ATermList ATunion(ATermList l1, ATermList l2)
 
   count = 0;
   list = l1;
-  while(!ATisEmpty(list)) {
+  while (!ATisEmpty(list)) {
     elem = ATgetFirst(list);
     list = ATgetNext(list);
     if(!IS_MARKED(elem->header))
@@ -67,15 +67,16 @@ ATermList ATunion(ATermList l1, ATermList l2)
   }
 
   list = l2;
-  while(!ATisEmpty(list)) {
+  while (!ATisEmpty(list)) {
     elem = ATgetFirst(list);
     list = ATgetNext(list);
     CLR_MARK(elem->header);
   }
 
   result1 = l2;
-  for(idx=0; idx<count; idx++)
+  for (idx=0; idx<count; idx++) {
     result1 = ATinsert(result1, elems[idx]);
+  }
 
   return result1;
 }
@@ -305,3 +306,500 @@ void ATsosDestroy(ATermSOS *sos)
 
 /*}}}  */
 
+/*{{{  ATermList ATunion1(ATermList l1, ATermList l2) */
+
+ATermList ATunion1(ATermList l1, ATermList l2)
+{
+  static int max = 0;
+  static ATerm *elems = NULL;
+
+  int count, len1, len2, idx;
+  ATermList result1, list;
+  ATerm elem;
+
+  if(ATisEqual(l1,l2)) 
+    return l1;
+
+  if(ATisEmpty(l1))
+    return l2;
+
+  if(ATisEmpty(l2))
+    return l1;
+
+  len1 = ATgetLength(l1);
+  len2 = ATgetLength(l2);
+  if(len1 > len2) {
+    result1 = l2;
+    l2 = l1;
+    l1 = result1;
+    count = len2;
+    len2 = len1;
+    len1 = count;
+  }
+
+  list = l2;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    SET_MARK(elem->header);
+  }
+
+  count = len1;
+
+  if(count > max) {
+    max = count;
+    elems = realloc(elems, sizeof(ATerm)*max);
+    if(!elems)
+      ATerror("out of memory!\n");
+  }
+
+  count = 0;
+  list = l1;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    if(!IS_MARKED(elem->header))
+      elems[count++] = elem;
+  }
+
+  list = l2;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    CLR_MARK(elem->header);
+  }
+
+  result1 = l2;
+  for(idx=0; idx<count; idx++)
+    result1 = ATinsert(result1, elems[idx]);
+
+  return result1;
+}
+
+/*}}}  */
+/*{{{  ATermList ATunion2(ATermList l1, ATermList l2) */
+
+ATermList ATunion2(ATermList l1, ATermList l2)
+{
+  static int max = 0;
+  static ATerm *elems = NULL;
+
+  int count, len1, len2, idx;
+  ATermList result1, list;
+  ATerm elem;
+
+  if(ATisEqual(l1,l2)) 
+    return l1;
+
+  if(ATisEmpty(l1))
+    return l2;
+
+  if(ATisEmpty(l2))
+    return l1;
+
+  len1 = ATgetLength(l1);
+  len2 = ATgetLength(l2);
+  if(len1 > len2) {
+    result1 = l2;
+    l2 = l1;
+    l1 = result1;
+    count = len2;
+    len2 = len1;
+    len1 = count;
+  }
+
+  list = l2;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    SET_MARK(elem->header);
+  }
+
+  count = len1;
+
+  if(count > max) {
+    max = count;
+    elems = realloc(elems, sizeof(ATerm)*max);
+    if(!elems)
+      ATerror("out of memory!\n");
+  }
+
+  count = 0;
+  list = l1;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    if(!IS_MARKED(elem->header))
+      elems[count++] = elem;
+  }
+
+  list = l2;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    CLR_MARK(elem->header);
+  }
+
+  result1 = l2;
+  for(idx=0; idx<count; idx++)
+    result1 = ATinsert(result1, elems[idx]);
+
+  return result1;
+}
+
+/*}}}  */
+/*{{{  ATermList ATunion3(ATermList l1, ATermList l2) */
+
+ATermList ATunion3(ATermList l1, ATermList l2)
+{
+  static int max = 0;
+  static ATerm *elems = NULL;
+
+  int count, len1, len2, idx;
+  ATermList result1, list;
+  ATerm elem;
+
+  if(ATisEqual(l1,l2)) 
+    return l1;
+
+  if(ATisEmpty(l1))
+    return l2;
+
+  if(ATisEmpty(l2))
+    return l1;
+
+  len1 = ATgetLength(l1);
+  len2 = ATgetLength(l2);
+  if(len1 > len2) {
+    result1 = l2;
+    l2 = l1;
+    l1 = result1;
+    count = len2;
+    len2 = len1;
+    len1 = count;
+  }
+
+  list = l2;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    SET_MARK(elem->header);
+  }
+
+  count = len1;
+
+  if(count > max) {
+    max = count;
+    elems = realloc(elems, sizeof(ATerm)*max);
+    if(!elems)
+      ATerror("out of memory!\n");
+  }
+
+  count = 0;
+  list = l1;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    if(!IS_MARKED(elem->header))
+      elems[count++] = elem;
+  }
+
+  list = l2;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    CLR_MARK(elem->header);
+  }
+
+  result1 = l2;
+  for(idx=0; idx<count; idx++)
+    result1 = ATinsert(result1, elems[idx]);
+
+  return result1;
+}
+
+/*}}}  */
+/*{{{  ATermList ATunion4(ATermList l1, ATermList l2) */
+
+ATermList ATunion4(ATermList l1, ATermList l2)
+{
+  static int max = 0;
+  static ATerm *elems = NULL;
+
+  int count, len1, len2, idx;
+  ATermList result1, list;
+  ATerm elem;
+
+  if(ATisEqual(l1,l2)) 
+    return l1;
+
+  if(ATisEmpty(l1))
+    return l2;
+
+  if(ATisEmpty(l2))
+    return l1;
+
+  len1 = ATgetLength(l1);
+  len2 = ATgetLength(l2);
+  if(len1 > len2) {
+    result1 = l2;
+    l2 = l1;
+    l1 = result1;
+    count = len2;
+    len2 = len1;
+    len1 = count;
+  }
+
+  list = l2;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    SET_MARK(elem->header);
+  }
+
+  count = len1;
+
+  if(count > max) {
+    max = count;
+    elems = realloc(elems, sizeof(ATerm)*max);
+    if(!elems)
+      ATerror("out of memory!\n");
+  }
+
+  count = 0;
+  list = l1;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    if(!IS_MARKED(elem->header))
+      elems[count++] = elem;
+  }
+
+  list = l2;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    CLR_MARK(elem->header);
+  }
+
+  result1 = l2;
+  for(idx=0; idx<count; idx++)
+    result1 = ATinsert(result1, elems[idx]);
+
+  return result1;
+}
+
+/*}}}  */
+/*{{{  ATermList ATunion5(ATermList l1, ATermList l2) */
+
+ATermList ATunion5(ATermList l1, ATermList l2)
+{
+  static int max = 0;
+  static ATerm *elems = NULL;
+
+  int count, len1, len2, idx;
+  ATermList result1, list;
+  ATerm elem;
+
+  if(ATisEqual(l1,l2)) 
+    return l1;
+
+  if(ATisEmpty(l1))
+    return l2;
+
+  if(ATisEmpty(l2))
+    return l1;
+
+  len1 = ATgetLength(l1);
+  len2 = ATgetLength(l2);
+  if(len1 > len2) {
+    result1 = l2;
+    l2 = l1;
+    l1 = result1;
+    count = len2;
+    len2 = len1;
+    len1 = count;
+  }
+
+  list = l2;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    SET_MARK(elem->header);
+  }
+
+  count = len1;
+
+  if(count > max) {
+    max = count;
+    elems = realloc(elems, sizeof(ATerm)*max);
+    if(!elems)
+      ATerror("out of memory!\n");
+  }
+
+  count = 0;
+  list = l1;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    if(!IS_MARKED(elem->header))
+      elems[count++] = elem;
+  }
+
+  list = l2;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    CLR_MARK(elem->header);
+  }
+
+  result1 = l2;
+  for(idx=0; idx<count; idx++)
+    result1 = ATinsert(result1, elems[idx]);
+
+  return result1;
+}
+
+/*}}}  */
+/*{{{  ATermList ATunion6(ATermList l1, ATermList l2) */
+
+ATermList ATunion6(ATermList l1, ATermList l2)
+{
+  static int max = 0;
+  static ATerm *elems = NULL;
+
+  int count, len1, len2, idx;
+  ATermList result1, list;
+  ATerm elem;
+
+  if(ATisEqual(l1,l2)) 
+    return l1;
+
+  if(ATisEmpty(l1))
+    return l2;
+
+  if(ATisEmpty(l2))
+    return l1;
+
+  len1 = ATgetLength(l1);
+  len2 = ATgetLength(l2);
+  if(len1 > len2) {
+    result1 = l2;
+    l2 = l1;
+    l1 = result1;
+    count = len2;
+    len2 = len1;
+    len1 = count;
+  }
+
+  list = l2;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    SET_MARK(elem->header);
+  }
+
+  count = len1;
+
+  if(count > max) {
+    max = count;
+    elems = realloc(elems, sizeof(ATerm)*max);
+    if(!elems)
+      ATerror("out of memory!\n");
+  }
+
+  count = 0;
+  list = l1;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    if(!IS_MARKED(elem->header))
+      elems[count++] = elem;
+  }
+
+  list = l2;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    CLR_MARK(elem->header);
+  }
+
+  result1 = l2;
+  for(idx=0; idx<count; idx++)
+    result1 = ATinsert(result1, elems[idx]);
+
+  return result1;
+}
+
+/*}}}  */
+/*{{{  ATermList ATunion7(ATermList l1, ATermList l2) */
+
+ATermList ATunion7(ATermList l1, ATermList l2)
+{
+  static int max = 0;
+  static ATerm *elems = NULL;
+
+  int count, len1, len2, idx;
+  ATermList result1, list;
+  ATerm elem;
+
+  if(ATisEqual(l1,l2)) 
+    return l1;
+
+  if(ATisEmpty(l1))
+    return l2;
+
+  if(ATisEmpty(l2))
+    return l1;
+
+  len1 = ATgetLength(l1);
+  len2 = ATgetLength(l2);
+  if(len1 > len2) {
+    result1 = l2;
+    l2 = l1;
+    l1 = result1;
+    count = len2;
+    len2 = len1;
+    len1 = count;
+  }
+
+  list = l2;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    SET_MARK(elem->header);
+  }
+
+  count = len1;
+
+  if(count > max) {
+    max = count;
+    elems = realloc(elems, sizeof(ATerm)*max);
+    if(!elems)
+      ATerror("out of memory!\n");
+  }
+
+  count = 0;
+  list = l1;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    if(!IS_MARKED(elem->header))
+      elems[count++] = elem;
+  }
+
+  list = l2;
+  while(!ATisEmpty(list)) {
+    elem = ATgetFirst(list);
+    list = ATgetNext(list);
+    CLR_MARK(elem->header);
+  }
+
+  result1 = l2;
+  for(idx=0; idx<count; idx++)
+    result1 = ATinsert(result1, elems[idx]);
+
+  return result1;
+}
+
+/*}}}  */

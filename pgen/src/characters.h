@@ -61,4 +61,6 @@ void      CC_writeSetToFile(FILE *f, CC_Set *set);
 void      CC_SetIntersection(CC_Set *set, CC_Class *cc, CC_Set *result);
 void      CC_SetDifference(CC_Set *set, CC_Class *cc, CC_Set *result);
 
+CC_Class *CC_getCharClass(ATerm symbol);
+
 #endif

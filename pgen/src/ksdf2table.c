@@ -768,7 +768,7 @@ ATerm generate_parse_table(PT_ParseTree g)
       }
 
       /*ATwarning("actions before compression (vnr=%t) = %t\n", vnr, actions);*/
-      gotos   = compress_gotos(gotos);
+      /*gotos   = compress_gotos(gotos);*/
 
       state = (ATerm)ATmakeAppl3(afun_state_rec, vnr, (ATerm)gotos, (ATerm)actions);
 

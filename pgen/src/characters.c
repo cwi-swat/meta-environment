@@ -30,6 +30,11 @@ static AFun afun_range	    = -1;
 static AFun afun_char_class = -1;
 static unsigned long last_mask = 0;
 
+static CC_Class **char_classes     = NULL;
+static int        nr_char_classes  = 0;
+static int        max_char_classes = 0;
+static ATermIndexedSet symbol_set  = NULL;
+
 /*}}}  */
 
 /*{{{  void CC_init() */
@@ -45,6 +50,31 @@ void CC_init()
 
   last_bits = CC_BITS-((CC_LONGS-1)*BITS_PER_LONG);
   last_mask = (1<<last_bits) - 1;
+
+  symbol_set = ATindexedSetCreate(512, 75);
+  max_char_classes = 512;
+  char_classes = (CC_Class **)malloc(max_char_classes*sizeof(CC_Class *));
+  if (!char_classes) {
+    ATerror("out of memory in init_goto %d\n", max_char_classes);
+  }
+}
+
+/*}}}  */
+/*{{{  void CC_cleanup() */
+
+void CC_cleanup()
+{
+  int i;
+
+  ATindexedSetDestroy(symbol_set);
+  symbol_set = NULL;
+
+  for (i=0; i<nr_char_classes; i++) {
+    CC_free(char_classes[i]);
+  }
+  free(char_classes);
+  char_classes = NULL;
+  nr_char_classes = 0;
 }
 
 /*}}}  */
@@ -726,4 +756,28 @@ void CC_writeSetToFile(FILE *f, CC_Set *set)
 
 /*}}}  */
 
+/*{{{  CC_Class *CC_getCharClass(ATerm symbol) */
+
+CC_Class *CC_getCharClass(ATerm symbol)
+{
+  ATbool isnew;
+  long index;
+
+  index = ATindexedSetPut(symbol_set, symbol, &isnew);
+  if (isnew) {
+    nr_char_classes = index;
+    if (index >= max_char_classes) {
+      max_char_classes *= 2;
+      char_classes = (CC_Class **)realloc(char_classes,
+					  max_char_classes*sizeof(CC_Class *));
+      if (!char_classes) {
+	ATerror("out of memory in get_charclass %d\n", max_char_classes);
+      }
+    }
+    char_classes[index] = CC_ClassFromTerm(symbol);
+  }
+  return char_classes[index];
+}
+
+/*}}}  */
 

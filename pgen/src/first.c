@@ -46,11 +46,11 @@ ATermList first(ATermList symbols, ATermList firstset)
 
       set = (ATermList)ATtableGet(first_table,symbol);
       if(contains_epsilon(set))
-        newset = ATunion(newset,remove_epsilon(set));
+        newset = ATunion3(newset,remove_epsilon(set));
       else
-        return ATunion(newset,set);
+        return ATunion4(newset,set);
     }
-    return ATunion(newset,firstset);
+    return ATunion5(newset,firstset);
   }
 }
 
@@ -80,7 +80,7 @@ void calc_first_table()
         tmpset = (ATermList)ATtableGet(first_table,symbol);
         if(tmpset) {
           firstset = first(symbols,ATmakeList1(empty_set));
-          firstset = ATunion(tmpset,firstset);
+          firstset = ATunion6(tmpset, firstset);
           if (!ATsetEqual(tmpset,firstset)) {
             ATtablePut(first_table,symbol,(ATerm)firstset);
             changed = ATtrue;

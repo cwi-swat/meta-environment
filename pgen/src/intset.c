@@ -38,9 +38,17 @@ void IS_destroy(IS_IntSet set)
 }
 
 /*}}}  */
+/*{{{  void IS_flush(IS_IntSet set, int max_int) */
+
+void IS_flush(IS_IntSet set, int max_int)
+{
+  memset(set, 0, NR_LONGS(max_int)*sizeof(unsigned long));
+}
+
+/*}}}  */
 /*{{{  void IS_add(IS_IntSet set, int i) */
 
-void IS_add(IS_IntSet set, int i)
+int IS_add(IS_IntSet set, int i)
 {
   int index;
   unsigned long mask;
@@ -48,7 +56,12 @@ void IS_add(IS_IntSet set, int i)
   index = i/BITS_PER_LONG;
   mask  = 1 << (i % BITS_PER_LONG);
 
+  if (set[index] & mask) {
+    return 0;
+  }
+
   set[index] |= mask;
+  return 1;
 }
 
 /*}}}  */

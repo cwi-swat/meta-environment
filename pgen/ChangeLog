@@ -1,5 +1,8 @@
 $Id$
 
+2001/08/01 ({jong,markvdb,olivierp}@cwi.nl)
+ * Improved efficiency some more.
+
 2001/07/27 ({markvdb,jong}@cwi.nl)
  * Fixed three memory leaks
  * Fixed a free/unprotect bug.

@@ -1,4 +1,6 @@
 
+/*{{{  includes */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -7,18 +9,29 @@
 
 #include "itemset.h"
 
+/*}}}  */
+/*{{{  defines */
+
+
 #define INITIAL_TABLE_SIZE 16
 #define MAGIC_K		   17
 #define MAGIC_JUMP	   5
 #define HASH(item)	   (((int)item)*MAGIC_K)
 #define THRESHOLD_PCT	   70
 
-typedef struct _ItemBucket
+
+/*}}}  */
+/*{{{  typedef struct ItemBucket */
+
+typedef struct
 {
   ATerm symbol;
   int   size;
   Item *items;
 } ItemBucket;
+
+/*}}}  */
+/*{{{  struct _ItemSet */
 
 struct _ItemSet
 {
@@ -28,6 +41,8 @@ struct _ItemSet
   Item *list;
   ItemBucket **items_per_dotsym;
 };
+
+/*}}}  */
 
 /*{{{  static void ITS_init(ItemSet set, int size) */
 
