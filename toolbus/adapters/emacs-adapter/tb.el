@@ -2,11 +2,17 @@
 
 ; This implements a number of functions for use with the ToolBus emacs-adapter
 
-; Define lenspec and min-msg-size
+; Define lenspec and min-msg-size. These should be called upon initialization.
 ; lenspec is from ../../src/terms.h
-(setq lenspec 8)
+(defun set-lenspec (len)
+  "Sets the length of the term header for ToolBus terms"
+  (setq lenspec len)
+)
 ; min-msg-size is from ../../src/utils.c
-(setq min-msg-size 128)
+(defun set_minmsgsize (len)
+  "Sets the minimal length of a term to be sent to the ToolBus"
+  (setq min-msg-size len)
+)
 
 ;TBevent send an event to the ToolBus
 (defun TBevent (event)

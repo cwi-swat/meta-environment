@@ -19,6 +19,10 @@ char *tmp_in  ="tmp_in";    /* temp file name for cmd input */
 char *tmp_out = "tmp_out";  /* temp file name for cmd output */
 static pid_t  pgid                 = -1;
 
+#ifndef TBEL
+#define TBEL "tb.el"        /* The location of the TB lisp file. Should
+			       be overridden in Makefile */
+#endif
 #define MAXARG 20           /* # of args per command */
 #define MAXCMD 1024         /* max length of command */
 #define MAXOUTPUT 10000     /* max size of output of executed cmd */
@@ -159,73 +163,43 @@ term *handle_input_from_toolbus(term *e) {
        rec-terminate appears to work well. 
     */
     if(TBmatch(e, "rec-terminate(%t)", &arg)){
-	unlink(tmp_in);
-	unlink(tmp_out);
-	/*	printf("Matched rec-terminate\nCurrently disabled for debugging purposes\n"); */
-	cmd_buf[0] = '\0';
-	strcat(cmd_buf,"save-buffers-kill-emacs");
-	exec_cmd();
-	exit(0);
-  } else if(TBmatch(e, "rec-ack-event(%t)", &fname)){
-    /*    fprintf(stderr,"Acknowledge\n");*/
-    /* Do we need to do something here?
-     */
-  } else if(TBmatch(e, "rec-do(%f(%l))", &fname, &fargs)){  
-    /* empty commandbuffer */
-    cmd_buf[0] = '\0';
-    /*    printf("Matched rec-do\n");*/
-    strcat(cmd_buf,fname);
-    strcat(cmd_buf," ");
-    print_args(fargs);
-    /*      realloc(fname, sizeof(char)*(strlen(fname) + strlen(fargs) + 1));
-	    strcat(fname,argstr);
-    */
-    exec_cmd();
-    /*    while ((r = wait(&status)) != cmd_pid && r != -1)
-      fprintf(stderr, "wait = %d\n", r);  
-    */
-    /*    fprintf(stderr,"Just waited a little while\n");*/
-  } else if(TBmatch(e, "rec-eval(%f(%l))", &fname, &fargs)){  
-    /* empty commandbuffer */
-    cmd_buf[0] = '\0';
-    /*    printf("Matched rec-eval\n");*/
-    strcat(cmd_buf,fname);
-    strcat(cmd_buf," ");
-    print_args(fargs);
-    /*      realloc(fname, sizeof(char)*(strlen(fname) + strlen(fargs) + 1));
-	    strcat(fname,argstr);
-    */
-    exec_cmd();
-    /*    fprintf(stderr,"Just waited a little while\n");*/
-    
-    if((from_cmd = fopen(tmp_out, "r")) == NULL)
-      err_sys_fatal("Can't open tmp output file");
-    
-    /*    fprintf(stderr,"Opened tmp out file\n");*/
-    while((n=fread(outp, 1, 512, from_cmd)) > 0){
-      if(outp + n > &output[MAXOUTPUT]) 
-	err_fatal("Executed command produces too long output");
-      outp += n;
-    }
-    /*    fprintf(stderr,"Read tmp out file\n");*/
-    /*    if(*(outp-1) == '\n' && !keepnewline) {
-      if(obinary)
-	outp--;
-      else
-	*(outp-1) = '\0';
-    } else {
-      if(!obinary)
-    */
-    *outp++ = '\0';
-    /*}*/
-    /*    fprintf(stderr,"Did some fiddling with output\n");*/
-    fclose(from_cmd);
-    /*    fprintf(stderr,"Closed output file\n");*/
-    /*    if(obinary)
-      return TBmake("snd-value(output(%b))", output, outp-output);
-    else
-    */
-    return TBmake("snd-value(output(%s))", output);
+      unlink(tmp_in);
+      unlink(tmp_out);
+      /*	printf("Matched rec-terminate\nCurrently disabled for debugging purposes\n"); */
+      cmd_buf[0] = '\0';
+      strcat(cmd_buf,"save-buffers-kill-emacs");
+      exec_cmd();
+      exit(0);
+    } else if(TBmatch(e, "rec-ack-event(%t)", &fname)){
+      result = NULL;
+    } else if(TBmatch(e, "rec-do(%f(%l))", &fname, &fargs)){  
+      /* empty commandbuffer */
+      cmd_buf[0] = '\0';
+      /*    printf("Matched rec-do\n");*/
+      strcat(cmd_buf,fname);
+      strcat(cmd_buf," ");
+      print_args(fargs);
+      exec_cmd();
+      result = NULL;
+    } else if(TBmatch(e, "rec-eval(%f(%l))", &fname, &fargs)){  
+      /* empty commandbuffer */
+      cmd_buf[0] = '\0';
+      /*    printf("Matched rec-eval\n");*/
+      strcat(cmd_buf,fname);
+      strcat(cmd_buf," ");
+      print_args(fargs);
+      exec_cmd();
+      if((from_cmd = fopen(tmp_out, "r")) == NULL)
+	err_sys_fatal("Can't open tmp output file");
+      /*    fprintf(stderr,"Opened tmp out file\n");*/
+      while((n=fread(outp, 1, 512, from_cmd)) > 0){
+	if(outp + n > &output[MAXOUTPUT]) 
+	  err_fatal("Executed command produces too long output");
+	outp += n;
+      }
+      *outp++ = '\0';
+      fclose(from_cmd);
+      result = TBmake("snd-value(output(%s))", output);
   }
   return result;
 }
@@ -348,8 +322,10 @@ void emacs_create(char *emacsapp) {
     execlp(emacsapp, "Help! I'm trapped inside emacs!", NULL);
     fprintf(stderr, "%s: execlp: %s\n", emacsapp, strerror(errno));
     exit(1);
+    break; /* Just to keep lint happy */
   case -1:
     err_sys_fatal("Couldn't fork");
+    break; /* Again, to keep lint happy */
   default:
     if(pgid == -1)
       pgid = pid;
@@ -358,16 +334,16 @@ void emacs_create(char *emacsapp) {
        able to run gnuclient, i.e. emacs must have run gnuserv-start
     */
     sleep(30);
+    /* Make sure emacs loads tb.el */
     sprintf(cmd_buf,"load-file ");
     strcat(cmd_buf,TBEL); /* TBEL is location of tb.el file from Makefile*/
     exec_cmd();
-    /*    cmd_buf[0] = '\0';*/
-    /*    sprintf(cmd_buf,"send-pid %ld",(long) getpid());*/
-    /*strcat(cmd_buf,sendpid);*/
-    /*    exec_cmd();*/
-    /*to_wish = fdopen(pipe_tw[1], "w");*/
+    /* Tell emacs about LENSPEC and MIN_MSG_SIZE */
+    sprintf(cmd_buf,"set-lenspec %d", LENSPEC);
+    exec_cmd();
+    sprintf(cmd_buf,"set-minmsgsize %d", MIN_MSG_SIZE);
+    exec_cmd();
     from_emacs = fdopen(pipe_et[0], "r");
-    /*    close(pipe_tw[0]);*/
     close(pipe_et[1]);
     TBaddTermPort(pipe_et[0], handle_input_from_emacs);
     return;
