@@ -302,37 +302,37 @@ You can download the \ASmetaenv\ from the following location:
 
 \subsection{Further Reading}
 
-There are many publications about the \ASmetaenv\ itself,
-about the implementation techniques used, and about applications.
-We give here a brief selection.
+There are many publications about the \ASmetaenv\ itself, about the
+implementation techniques used, and about applications.  See
+Section~\ref{SEC:TechnologyandArchitecture} for an overview of
+architecture and implementation techniques.  We give here a brief
+overview of selected publications:
 
 \begin{description}
 
-\item{Books:} \cite{BHK89}, \cite{DHK96}.
+\item{Overviews:} \cite{HKKL85}, \cite{Kli93}, \cite{B*97}, \cite{B*01}.
 
-\item{Overviews:}  \cite{HKKL85}, \cite{Kli93}, \cite{B*01}.
+\item {General ideas:} \cite{HK85b}, \cite{HK00}, \cite{H00}.
 
-\item{Parser generation and parsing}: \cite{Rek87b}, \cite{HKR90}, \cite{RK91}, \cite{R92}, \cite{Vis97}.
+\item{ASF:} \cite{BHK89}.
 
 \item{SDF:} \cite{HHKR89}, \cite{Vis97}.
 
+\item{ASF+SDF:} \cite{BHK89}, \cite{DHK96}.
+
+\item{Parser generation and parsing}: \cite{Rek87b}, \cite{HKR90}, \cite{RK91}, \cite{R92}, \cite{Vis97}.
+
+\item{Pretty printing:} \cite{BV96}, \cite{Jon00}.
+
+\item{Rewriting and Compilation:} \cite{BKO99}, \cite{vdBHK00}, \cite{vdBV00}.
+
 \item{ToolBus}: ~\cite{BK98}.
-
-\item{Implementation:} \cite{B*97}.
-
-\item{Compilation:} \cite{BKO99}, \cite{vdBHK00}.
-
-\item{Rewriting with layout:} \cite{vdBV00}.
 
 \item{ATerms:} \cite{BJKO00}.
 
 \item{Applications:} \cite{BDKKM96},\cite{BS00}, \cite{BR00}.
 
-\item{Pretty printing:} \cite{BV96}, \cite{Jon00}.
-
 \item{Generic debugging}: 
-
-\item {General ideas:} \cite{HK85b}, \cite{HK00}, \cite{H00}.
 
 \item{User manuals:} \cite{ATmanual}, \cite{TBmanual},
 \cite{MEmanual}.
@@ -4538,6 +4538,76 @@ steps are as follows:
 
 \end{itemize}
 
+
+\newpage
+\section{Future Developments}
+The \ASmetaenv\ is a system that is continuously evolving.  In this
+section, we give a brief sketch of the developments that we expect in
+the near future. Don't hesitate to give us feedback on these plans!
+
+\subsection{Near future (within 6 month)}
+
+\begin{itemize}
+
+\item Conversion of all tools to work with the new internal format AsFixMe.
+      This will simplify several components since only support for a single
+      format is needed.
+
+\item Face lift of the toplevel user-interface. The current interface is written
+      in Tcl/Tk. The new interface will be written in Java/Swing.
+      Probably, we will detach the import graph viewer from the toplevel interface,
+      but add it as an optional, separate view on the specification.
+
+\item Integration of the TIDE debugging framework.  This will provide
+      very sophisticated support for the debugging of, amongst others,
+      \asfsdf\ specifications.
+
+\item Integration of the pretty printer generator.
+
+\item Overall optimizations.
+
+\end{itemize}
+
+\subsection{Medium term (within 1.5 year)}
+
+\begin{itemize}
+
+\item Support for traversal functions in the compiler.
+
+\item Support for origin tracking in evaluator and compiler.
+
+\item New lexical primitives in \asfsdf\ that allow the detailed
+      control of the output of transformations.
+
+\item User-interface tailoring: make it possible to add button definitions to editors
+      that can activate either specified functions or external tools.
+
+\item Generation of stand-alone environments.
+
+\item Introduction of generic services like error messaging and online help.
+
+\end{itemize}
+
+\subsection{Long term (more than 1.5 year)}
+
+The long term ambition is to build a very flexible tool kit that can
+be used to build many kinds of interactive systems for program
+analysis and program transformation.  We currently target
+domain-specific languages and software renovation as our main
+application areas. Emphasis will be on:
+
+\begin{itemize}
+
+\item Enhancing the functionality, efficiency and reuasability of components.
+
+\item Gradually defining a framework in which all these applications can be fit.
+     
+\item Carrying out case studies with as many different languages as possible
+      to get feedback on the emerging framework.
+
+\end{itemize}
+
+\newpage
 \bibliographystyle{plain}
 \bibliography{manual} 
 
