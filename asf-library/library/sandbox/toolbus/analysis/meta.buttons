@@ -47,7 +47,7 @@ buttons([
                                          "Show Results as List"]))],
 	 [push-filename("query-result.trm"),
 	  read-tree,
-	  check-sort("Elem"),
+	  check-sort("RSTORE"),
 	  apply("display-result", "List", 1),
 	  rewrite("DisplayQuery"),
 	  unparse,
@@ -64,7 +64,7 @@ buttons([
           read-tree,
           check-sort("RSTORE"),
 
-          apply("evaluate-query", "Elem", 3),
+          apply("evaluate-query", "RSTORE", 2),
           rewrite("DisplayQuery"),
 	  push-filename("query-result.trm"),
 	  save-tree,

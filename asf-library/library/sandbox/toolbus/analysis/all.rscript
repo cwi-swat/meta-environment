@@ -61,3 +61,5 @@ rel[str,<area,str>] TOOL_DEFINITIONS
 
 rel[str,<area,str>] ALL_MESSAGES 
  = UNUSED_VARS union UNUSED_PROCESSES union UNMATCHED_SENDS
+
+yield UNMATCHED_SENDS
