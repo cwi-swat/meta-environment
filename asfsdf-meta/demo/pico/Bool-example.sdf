@@ -1,21 +1,22 @@
 module Bool-example
-  exports
-    sorts BOOL 
-    lexical syntax
-      [\ \t\n]           -> LAYOUT
 
-    context-free syntax
-      "true"             -> BOOL
-      "false"            -> BOOL 
-      BOOL "|" BOOL      -> BOOL {left}
-      BOOL "&" BOOL      -> BOOL {left}
-      "not" "(" BOOL ")" -> BOOL
-      "(" BOOL ")"       -> BOOL {bracket}
+imports basic/Whitespace
 
-    variables
-      "Bool"[0-9\']* -> BOOL
+exports
+  sorts BOOL 
 
-    context-free priorities
-      BOOL "&" BOOL -> BOOL >
-      BOOL "|" BOOL -> BOOL
+  context-free syntax
+    "true"             -> BOOL
+    "false"            -> BOOL 
+    BOOL "|" BOOL      -> BOOL {left}
+    BOOL "&" BOOL      -> BOOL {left}
+    "not" "(" BOOL ")" -> BOOL
+    "(" BOOL ")"       -> BOOL {bracket}
 
+  context-free priorities
+    BOOL "&" BOOL -> BOOL >
+    BOOL "|" BOOL -> BOOL
+
+hiddens
+  variables
+    "Bool"[0-9\']* -> BOOL
