@@ -1,5 +1,7 @@
 #include <SDFME-utils.h>
 
+/*{{{  SDF_Renamings SDF_makeRenamingsFromParameters(SDF_Symbols formals, */
+
 SDF_Renamings SDF_makeRenamingsFromParameters(SDF_Symbols formals,
 					      SDF_Symbols actuals)
 {
@@ -40,6 +42,9 @@ SDF_Renamings SDF_makeRenamingsFromParameters(SDF_Symbols formals,
   return SDF_makeRenamingsRenamings(layout,renamingList,layout);
 }
 
+/*}}}  */
+/*{{{  SDF_Renamings SDF_makeRenamingsFromModuleNames(SDF_ModuleName formal, */
+
 SDF_Renamings SDF_makeRenamingsFromModuleNames(SDF_ModuleName formal,
 					       SDF_ModuleName actual)
 {
@@ -48,6 +53,10 @@ SDF_Renamings SDF_makeRenamingsFromModuleNames(SDF_ModuleName formal,
   
   return SDF_makeRenamingsFromParameters(formalParams, actualParams);
 }
+
+/*}}}  */
+
+/*{{{  static SDF_Symbol SDF_renameSymbol(SDF_Symbol symbol, SDF_Symbol formalParam, SDF_Symbol actualParam) */
 
 static SDF_Symbol SDF_renameSymbol(SDF_Symbol symbol, SDF_Symbol formalParam, SDF_Symbol actualParam)
 {
@@ -77,6 +86,9 @@ static SDF_Symbol SDF_renameSymbol(SDF_Symbol symbol, SDF_Symbol formalParam, SD
   return symbol;
 }
 
+/*}}}  */
+/*{{{  static SDF_RenamingList SDF_renameInRenamingList(SDF_RenamingList targets,  */
+
 static SDF_RenamingList SDF_renameInRenamingList(SDF_RenamingList targets, 
                                                  SDF_Symbol formalParam, 
                                                  SDF_Symbol actualParam)
@@ -101,6 +113,10 @@ static SDF_RenamingList SDF_renameInRenamingList(SDF_RenamingList targets,
   }
   return targets;
 }
+
+/*}}}  */
+
+/*{{{  SDF_Renamings SDF_renameRenamings(SDF_Renamings sources, SDF_Renamings targets) */
 
 SDF_Renamings SDF_renameRenamings(SDF_Renamings sources, SDF_Renamings targets)
 {
@@ -127,3 +143,169 @@ SDF_Renamings SDF_renameRenamings(SDF_Renamings sources, SDF_Renamings targets)
 
   return SDF_setRenamingsList(targets, listTargets);
 }
+
+/*}}}  */
+
+/*{{{  static SDF_Module rename_modulename_in_module(SDF_Module module, */
+
+static SDF_Module rename_modulename_in_module(SDF_Module module,
+                                       SDF_ModuleId oldModuleName,
+                                       SDF_ModuleId newModuleName)
+{
+  SDF_Sections sections = SDF_getModuleSections(module);
+  SDF_ImpSectionList impSections = SDF_getModuleList(module);
+  SDF_ImpSectionList newImpSections =
+    rename_modulename_in_impsections(impSections, oldModuleName, newModuleName);
+
+  module = SDF_setModuleList(module, newImpSections);
+
+  if (SDF_hasSectionsList(sections)) {
+    SDF_SectionList sectionList = SDF_getSectionsList(sections);
+    SDF_SectionList newSectionList =
+      rename_modulename_in_sectionlist(sectionList, 
+                                       oldModuleName, 
+                                       newModuleName);
+    SDF_Sections newSections = SDF_setSectionsList(sections, newSectionList);
+    module = SDF_setModuleSections(module, newSections);
+  }
+
+  return module;
+}
+
+/*}}}  */
+/*{{{  static SDF_Symbol replaceParametersInParameter(SDF_Symbol localParam, */
+
+static SDF_Symbol replaceParametersInParameter(SDF_Symbol localParam,
+                                        SDF_Symbols formalParams,
+                                        SDF_Symbols actualParams)
+{
+  SDF_Symbol formalParam, actualParam;
+  SDF_SymbolList formalParamList = SDF_getSymbolsList(formalParams);
+  SDF_SymbolList actualParamList = SDF_getSymbolsList(actualParams);
+ 
+  while (SDF_hasSymbolListHead(formalParamList)) {
+    formalParam = SDF_getSymbolListHead(formalParamList);
+    if (SDF_hasSymbolListHead(actualParamList)) {
+      actualParam = SDF_getSymbolListHead(actualParamList);
+    }
+    else {
+      break;
+    }
+ 
+    if (SDF_isEqualSymbol(localParam, formalParam)) {
+      return actualParam;
+    }
+ 
+    if (SDF_hasSymbolListTail(formalParamList)) {
+      formalParamList = SDF_getSymbolListTail(formalParamList);
+      if (SDF_hasSymbolListTail(actualParamList)) {
+        actualParamList = SDF_getSymbolListTail(actualParamList);
+      }
+      else {
+        break;
+      }
+    }
+    else {
+      break;
+    }
+  }
+  return localParam;
+}
+
+/*}}}  */
+/*{{{  static SDF_SymbolList replaceParametersInParameters(SDF_SymbolList localParamList, */
+
+static SDF_SymbolList replaceParametersInParameters(SDF_SymbolList localParamList,
+                                             SDF_Symbols formalParams,
+                                             SDF_Symbols actualParams)
+{
+  SDF_Symbol localParam;
+  SDF_SymbolList paramListTail;
+ 
+  if (!SDF_isSymbolListEmpty(localParamList)) {
+    localParam = SDF_getSymbolListHead(localParamList);
+    localParam = replaceParametersInParameter(localParam,
+                                              formalParams,
+                                              actualParams);
+    localParamList = SDF_setSymbolListHead(localParamList, localParam);
+ 
+    if (SDF_hasSymbolListTail(localParamList)) {
+      paramListTail = SDF_getSymbolListTail(localParamList);
+      paramListTail = replaceParametersInParameters(paramListTail,
+                                                    formalParams,
+                                                    actualParams);
+      localParamList = SDF_setSymbolListTail(localParamList, paramListTail);
+    }
+  }
+  return localParamList;
+}
+
+/*}}}  */
+/*{{{  static SDF_Import replaceParametersInImport(SDF_Import import, */
+
+static SDF_Import replaceParametersInImport(SDF_Import import,
+                                     SDF_Symbols formalParams,
+                                     SDF_Symbols actualParams)
+{
+  SDF_ModuleName moduleName = SDF_getImportModuleName(import);
+ 
+  if (SDF_isModuleNameParameterized(moduleName)) {
+    SDF_Symbols localParams = SDF_getModuleNameParams(moduleName);
+ 
+    if (SDF_isEqualSymbols(localParams, formalParams)) {
+      moduleName = SDF_setModuleNameParams(moduleName, actualParams);
+    }
+    else {
+      SDF_SymbolList localParamList = SDF_getSymbolsList(localParams);
+      localParamList = replaceParametersInParameters(localParamList,
+                                                     formalParams,
+                                                     actualParams);
+      localParams = SDF_setSymbolsList(localParams, localParamList);
+      moduleName = SDF_setModuleNameParams(moduleName, localParams);
+    }
+    import = SDF_setImportModuleName(import, moduleName);
+  }
+  return import;
+}
+
+/*}}}  */
+/*{{{  SDF_ImportList SDF_replaceParametersInImportList(SDF_ImportList importList, */
+
+SDF_ImportList SDF_replaceParametersInImportList(SDF_ImportList importList,
+                                             SDF_Symbols formalParams,
+                                             SDF_Symbols actualParams)
+{
+  SDF_Import head, newHead;
+  SDF_ImportList tail, newTail;
+ 
+  if (SDF_hasImportListHead(importList)) {
+    head = SDF_getImportListHead(importList);
+ 
+    newHead = replaceParametersInImport(head, formalParams, actualParams);
+    importList = SDF_setImportListHead(importList, newHead);
+ 
+    if (SDF_hasImportListTail(importList)) {
+      tail = SDF_getImportListTail(importList);
+ 
+      newTail = replaceParametersInImportList(tail, formalParams, actualParams);
+      importList = SDF_setImportListTail(importList, newTail);
+    }
+  }
+  return importList;
+}
+
+/*}}}  */
+/*{{{  SDF_ImportList SDF_renameParametersInImportList(SDF_ModuleName moduleName, */
+
+SDF_ImportList SDF_renameParametersInImportList(SDF_ModuleName moduleName,
+                                            SDF_Module sdfModule,
+                                            SDF_ImportList importList)
+{
+  SDF_Symbols actualParams = SDF_getModuleNameParams(moduleName);
+  SDF_Symbols formalParams = SDF_getModuleNameParams(
+                               SDF_getModuleModuleName(sdfModule));
+ 
+  return SDF_replaceParametersInImportList(importList, formalParams, actualParams);
+}
+
+/*}}}  */

@@ -58,6 +58,7 @@ ATbool SDF_hasAvoidAttribute(SDF_Production prod);
 
 SDF_OptLayout SDF_makeLayoutEmpty();
 SDF_OptLayout SDF_makeLayoutSpace();
+SDF_OptLayout SDF_makeLayoutNewline();
 
 SDF_Import SDFmakeImport(char *moduleName);
 SDF_Module SDFaddModuleImport(SDF_Module module, SDF_Import import);
@@ -68,6 +69,12 @@ SDF_Renamings SDF_makeRenamingsFromParameters(SDF_Symbols formals,
 SDF_Renamings SDF_makeRenamingsFromModuleNames(SDF_ModuleName formal,
 					       SDF_ModuleName actual);
 SDF_Renamings SDF_renameRenamings(SDF_Renamings source, SDF_Renamings target);
+SDF_ImportList SDF_renameParametersInImportList(SDF_ModuleName moduleName,
+                                            SDF_Module sdfModule,
+                                            SDF_ImportList importList);
+SDF_ImportList SDF_replaceParametersInImportList(SDF_ImportList importList,
+                                             SDF_Symbols formalParams,
+                                             SDF_Symbols actualParams);
 
 SDF_Symbol SDF_removeSymbolAnnotations(SDF_Symbol s);
 

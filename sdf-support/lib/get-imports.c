@@ -1,7 +1,8 @@
 #include "SDFME-utils.h"
 #include "module-table.h"
+#include <assert.h>
 
-static ModuleTable definition = NULL;
+static ModuleTable moduleTable = NULL;
 
 /*{{{  ATerm SDF_getImportModuleNamePlain(SDF_Import import) */
 
@@ -134,30 +135,32 @@ SDF_getModuleImportsList(SDF_Module module)
 
 static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
 {
-  SDF_ImportList result;
+  SDF_ImportList result = SDF_makeImportListEmpty();
 
   /* The todo list contains imports with actual module parameters.
    * The result of this function will be a list of imports with the
    * actual parameters (not the formals!)
    */
 
-  assert(definition != NULL && "module table not initialized");
+  assert(moduleTable != NULL && "module table not initialized");
 
   while (SDF_hasImportListHead(todo)) {
     SDF_Import     import = SDF_getImportListHead(todo);
     SDF_ModuleName name = SDF_getImportModuleName(import);
     SDF_ModuleId   id   = SDF_getModuleNameModuleId(name);
-    SDF_Module     module = MT_getModule(definition, id);
+    SDF_Module     module = MT_getModule(moduleTable, id);
 
-    if (!SDF_containsImportListImport(result, import)) {
-      SDF_ImportList imports = SDF_getModuleImportList(module);
+    if (module != NULL &&
+	!SDF_containsImportListImport(result, import)) {
+      SDF_ImportList imports = SDF_getModuleImportsList(module);
 
       /* apply a renaming to the arguments of the import */
       if (SDF_hasModuleNameParams(name)) {
-	SDF_Symbols formals = MDB_getFormalParams(moduleId);
+	SDF_ModuleName formalName = SDF_getModuleModuleName(module);
+	SDF_Symbols formals = SDF_getModuleNameParams(formalName);
 	SDF_Symbols actuals = SDF_getModuleNameParams(name);
 
-	imports = replaceParametersInImportList(imports, formals, actuals);
+	imports = SDF_replaceParametersInImportList(imports, formals, actuals);
       }
 
       todo = SDF_concatImportList(todo, imports);
@@ -179,6 +182,8 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
       break;
     }
   }
+
+  return result;
 }
 
 /*}}}  */
@@ -186,25 +191,37 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
 /*{{{  SDF_ImportList SDF_getTransitiveImports(SDF_Definition definition,  */
 
 SDF_ImportList SDF_getTransitiveImports(SDF_Definition definition, 
-					SDF_ModuleName moduleName)
+					SDF_ModuleId moduleId)
 {
   SDF_ModuleList modules = SDF_getDefinitionList(definition);
-  SDF_Import imports=SDF_makeImportListSingle(SDF_makeImportModule(moduleName));
+  SDF_ImportList imports= SDF_makeImportListSingle(SDF_makeImportModule(
+			     SDF_makeModuleNameUnparameterized(moduleId))); 
+  SDF_ImportList result;
 
-  definition = MT_createModuleTable();
+  moduleTable = MT_createModuleTable();
 
   /* initialize the hash table with all modules */
-  for (;!SDF_isModuleListEmpty(); modules = SDF_getModuleListTail(modules)) {
+  for (;!SDF_isModuleListEmpty(modules); 
+       modules = SDF_getModuleListTail(modules)) {
     SDF_Module module = SDF_getModuleListHead(modules);
-    SDF_ModuleId id = SDF_getModuleNameModule(
+    SDF_ModuleId id = SDF_getModuleNameModuleId(
 	     	        SDF_getModuleModuleName(module));
-    MT_putModule(definition, id, module);
+    MT_putModule(moduleTable, id, module);
+
+    if (SDF_hasModuleListTail(modules)) {
+      modules = SDF_getModuleListTail(modules);
+    }
+    else {
+      break;
+    }
   }
 
-  get_transitive_imports(imports);
+  result = get_transitive_imports(imports);
 
+  MT_destroyModuleTable(moduleTable);
+  moduleTable = NULL;
 
-  MT_destroyModuleTable(definition);
+  return result;
 }
 
 /*}}}  */

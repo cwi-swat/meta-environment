@@ -7,6 +7,8 @@ EXTRA_DIST = Sdf.label.def
 
 lib_LIBRARIES = libSDFME.a libSDF2PT.a libPT2SDF.a
 
+noinst_HEADERS = module-table.h
+
 include_HEADERS = \
 	PT2SDF.h \
 	SDF2PT.h \
@@ -33,7 +35,8 @@ UTILSRCS = \
 	prod.c \
 	renamings.c \
 	restrict.c \
-	sort.c
+	sort.c \
+        module-table.c
 
 # Developers only:
 api: Sdf.label.def
