@@ -143,14 +143,18 @@ public class TreeNode {
 		}
 
 		String childName = tokens.nextToken();
-		int childIndex = getChild(childName);
-		TreeNode childNode = getChild(childIndex);
-
+		TreeNode childNode;
+		if (tokens.hasMoreTokens()) {
+		    childNode = getChild(getNodeChild(childName));
+		}
+		else {
+    		    childNode = getChild(getLeafChild(childName));
+		}
 		if (childNode != null) {
 			if (tokens.hasMoreTokens()) {
 				return childNode.makePath(tokens, result);
 			} else {
-				result.add(getChild(getLeafChild(childName)));
+				result.add(childNode);
 			}
 		}
 
