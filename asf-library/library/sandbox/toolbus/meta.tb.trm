@@ -1,7 +1,4 @@
 
-
-
-
 process AbortMetaEnvironment is
 let
   TimeOut : int
@@ -5138,14 +5135,8 @@ in
   . create(Save-modules, Pid?)
   . create(Set-parsetable, Pid?)
   . create(Tree2Graph, Pid?)
-
-
-
-
-
-
-
 endlet
+
 tool user-interface is {
   command = "meta-studio"
 }

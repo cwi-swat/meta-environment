@@ -11,7 +11,7 @@ exports
   lexical syntax
     [a-z] [A-Za-z0-9\-]*    -> Id
     "\\" ~[]                -> EscChar {avoid}
-    ~[\0-\31\"\\] \/ [\t\n] -> L-Char
+    ~[\000-\031\"\\] \/ [\t\n\013] -> L-Char
     EscChar                 -> L-Char
     "\"" L-Char* "\""       -> String
     [A-Z] [a-zA-Z0-9]*      -> Vname
