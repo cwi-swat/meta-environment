@@ -1,3 +1,6 @@
+2002/10/07 (jurgenv@cwi.nl)
+ * Regenerated library to get improved start constructors
+
 2002/10/04 (jurgenv@cwi.nl)
  * Include MEPT-utils.h in grammars.c because a function has been moved
 
