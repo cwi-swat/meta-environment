@@ -1,5 +1,10 @@
 $Id$
 
+Wed Jul 23 10:31:02 CEST 2003 <{jong,kooiker}@cwi.nl>
+ * graph-support/utils/layoutgraph/layoutgraph.c:
+   function layoutGraph() rewritten from scratch, without using fork/exec.
+   Since we were using /tmp/XYZ files anyway just use system() to invoke dot.
+
 2003/07/14 ({jurgenv,markvdb}@cwi.nl)
  * Added graph attributes to the graph format
  * Added reading of bounding box information from dot format
