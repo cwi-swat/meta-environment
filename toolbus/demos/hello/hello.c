@@ -8,7 +8,7 @@ ATerm hello_handler(int conn, ATerm inp)  /* Handle input from ToolBus */
 { ATerm arg, isig, osig;
 
   if(ATmatch(inp, "rec-eval(get-text)"))
-    return ATmake("snd-value(\"Hello World, my first ToolBus tool in C!\n\")");
+    return ATmake("snd-value(text(\"Hello World, my first ToolBus tool in C!\n\"))");
   if(ATmatch(inp, "rec-terminate(<term>)", &arg))
     exit(0);
   if(ATmatch(inp, "rec-do(signature(<term>,<term>))", &isig, &osig)){

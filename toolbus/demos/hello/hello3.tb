@@ -6,7 +6,7 @@ process HELLO is
   in
       rec-connect(H?) .        %% Connect to a hello tool, H gets a tool id as value
       snd-eval(H, get-text) .  %% Request a text from the hello tool
-      rec-value(H, S?) .       %% Receive it, S gets the text as value
+      rec-value(H, text(S?)) . %% Receive it, S gets the text as value
       printf(S)                %% Print it    
   endlet
 

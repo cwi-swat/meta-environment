@@ -4,7 +4,7 @@
 
 ATerm get_text(int conn)                 /* Generate a hello text */
 {
-  return ATmake("snd-value(\"Hello World, my first ToolBus tool in C!\n\")");
+  return ATmake("snd-value(text(\"Hello World, my first ToolBus tool in C!\n\"))");
 }
 
 void rec_terminate(int conn, ATerm msg)  /* Mandatory function to terminate tool */

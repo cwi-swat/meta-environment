@@ -40,7 +40,7 @@ class HelloTool extends Hello
     ATermRef result = null;
 
     try {
-      pattern = new ATermPattern("snd-value(<str>)");
+      pattern = new ATermPattern("snd-value(text(<str>))");
       result = pattern.make("Hello world in Java!\n"); 
     } catch (Exception e) {
       System.err.println("exception: " + e.toString());
