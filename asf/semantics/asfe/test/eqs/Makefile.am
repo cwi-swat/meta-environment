@@ -21,7 +21,7 @@
 # $Id$
 
 EXTRA_DIST = Pico-Integers.eqs.asfix1 \
-Pico-typecheck.eqs.asfix1 \
-Set.eqs.asfix1 \
-Traversal-Typecheck.eqs.asfix1 \
-Type-environment.eqs.asfix1
+             Pico-typecheck.eqs.asfix1 \
+             Set.eqs.asfix1 \
+             Traversal-Typecheck.eqs.asfix1 \
+             Type-environment.eqs.asfix1
