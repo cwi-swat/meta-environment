@@ -13,7 +13,7 @@ INCLUDES		= -I$(ATERM)/include \
                           -I${top_srcdir}/lib \
                           -DSRC_DIR=\"${srcdir}\"
 
-LDLIBS			= -L../lib -lSDFME \
+LDLIBS			= -L../libME -lSDFME \
                           -L$(PT_SUPPORT)/lib -lmept \
                           -L$(ATERM)/lib -lATerm
 
