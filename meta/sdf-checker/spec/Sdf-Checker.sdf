@@ -4,7 +4,7 @@ imports AttributeChecker SortChecker SymbolChecker ProductionChecker
         KernelSyntaxChecker
 exports
   context-free syntax
-    check-definition(Definition) -> Messages
+    check-sdf(SDF) -> Messages
 
 hiddens
   context-free syntax

@@ -5,7 +5,8 @@ equations
         check-symbols(Definition) = Msgs3,
         check-for-kernel-syntax(Definition) = Msgs4
         ===========================================
-        check-definition(Definition) = Msgs1 ++ Msgs2 ++ Msgs3 ++ Msgs4
+        check-sdf(definition Definition) =
+          Msgs1 ++ Msgs2 ++ Msgs3 ++ Msgs4
  
   [cms1] check-module(Module, Definition, InfoMsgTuple1) = InfoMsgTuple2
          ===============================================================
