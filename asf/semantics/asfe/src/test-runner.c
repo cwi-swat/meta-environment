@@ -127,6 +127,7 @@ ATerm runTests(ASF_ASFConditionalEquationList eqs,
 
    ATprotect((ATerm*)&tagCurrentRule);
    useTide = ATfalse;
+
    eqs = RWprepareEquations(eqs, ATfalse);
    enter_equations(eqs);
 

@@ -94,7 +94,9 @@ void abort_handler(int signal)
 void rec_terminate(int cid, ATerm t)
 {
 #ifdef USE_TIDE
-  Tide_disconnect();
+  if (useTide) {
+    Tide_disconnect();
+  }
 #endif
   exit(0);
 }
@@ -157,8 +159,6 @@ ATerm run_tests(int cid, char *modname, ATerm eqs, ATerm tests)
   ASF_ASFConditionalEquationList eqsList;
   ASF_ASFTestEquationTestList testList;
   ATerm result;
-
-  useTide = ATfalse;
 
   eqs = ATBunpack(eqs);
   eqsList = ASF_makeASFConditionalEquationListFromTerm(eqs);
