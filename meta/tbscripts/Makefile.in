@@ -63,20 +63,26 @@ BINFILES	=
 # All files in LIBFILES are installed in $(libdir)
 LIBFILES	= 
 DATAFILES	= meta.tb editor.tb clear-all.tb \
-                  close-modules.tb edit-module.tb edit-term.tb focus.tb \
-                  new-module.tb open-modules.tb parsetrees.tb prettyprinter.tb \
+                  close-modules.tb edit-term.tb focus.tb \
+                  parsetrees.tb prettyprinter.tb new-module.tb \
                   retrieve-eqs.tb rewrite.tb status-display.tb \
                   structure-editor.tb ui.tb compiler.tb pgen.tb \
 		  addeqsyn.tb edit-master.tb process-eqs.tb save-module.tb \
-	          evaluator.tb revert-module.tb help.tb \
-	          anno.tb se.tb set-parsetable.tb
+	          evaluator.tb \
+	          anno.tb se.tb set-parsetable.tb ${DATAGEN}
+
+DATASRC		= help.tb.in revert-module.tb.in edit-module.tb.in \
+		open-modules.tb.in
+
+DATAGEN		= ${DATASRC:.in=}
+
 # All files in INCLUDEFILES are installed in $(includedir)
 INCLUDEFILES	=
 # All files in DOCFILES are copied to $(docdir)
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= meta.tifs
+CLEANFILES	= meta.tifs ${DATAGEN}
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	=
 
