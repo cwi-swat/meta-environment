@@ -49,7 +49,7 @@ CLEANFILES		= ${noinst_PROGRAMS} ${noinst_LIBRARIES} \
 			Booleans_dict.[ch] Booleans.trm.tbl Booleans.adt \
 			booltest.pt ${PeanoTestAPI}
 
-EXTRA_DIST		= Booleans.sdf Booleans.pro booltest.trm
+EXTRA_DIST		= Booleans.sdf Booleans.pro booltest.trm Peano.sdf
 
 Booleans.c Booleans.h: Booleans.adt
 	${ADT_TO_C} \
@@ -72,13 +72,13 @@ booltest.pt: Booleans.trm.tbl booltest.trm
 %.trm.tbl: %.sdf
 	${SDF2TABLE} -m `basename $< .sdf` -i $< -o $@
 
-${PeanoTestAPI}: 
+${PeanoTestAPI}: Peano.adt
 	${ADTJAVA} --input ${top_srcdir}/test/Peano.adt \
                    --output ${top_builddir}/test \
                    --package test \
                    --name peano
 	${SDF2JAVA} --name Peano -b --package test \
-	            --input ${top_srcdir}/test/Peano.adt
+	            --input ${top_srcdir}/test/Peano.sdf
 
 %.java.test: %.java Makefile
 	@(echo "#! /bin/sh";\
