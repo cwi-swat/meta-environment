@@ -14,7 +14,8 @@ prefix		= @prefix@
 exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 libdir		= @libdir@
-includedir	= $(prefix)/include
+includedir	= @includedir@
+datadir		= @datadir@
 docdir		= $(top_srcdir)/docs
 
 SHELL		= @SHELL@
@@ -60,7 +61,8 @@ CHDR		=
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= graph-browser
 # All files in LIBFILES are installed in $(libdir)
-LIBFILES	= graph-browser.tcl
+LIBFILES	= 
+DATAFILES	= graph-browser.tcl
 # All files in INCLUDEFILES are installed in $(includedir)
 INCLUDEFILES	=
 # All files in DOCFILES are copied to $(docdir)
@@ -83,10 +85,11 @@ all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 
 # install target (install binaries, include files, and libraries)
 install: all
-	mkdir -p $(bindir) $(libdir) $(includedir)
+	mkdir -p $(bindir) $(libdir) $(includedir) $(datadir)
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(datadir) $(DATAFILES)
 
 # uninstall target (remove all files installed by 'install' target)
 uninstall:

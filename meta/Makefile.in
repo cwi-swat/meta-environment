@@ -14,7 +14,8 @@ prefix		= @prefix@
 exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 libdir		= @libdir@
-includedir	= ${prefix}/include
+includedir	= @includedir@
+datadir		= @datadir@
 classdir        = ${prefix}/classes/nl/cwi/gipe/stred
 
 SHELL		= @SHELL@
@@ -29,7 +30,7 @@ SUBDIRS		= toolbus editor evaluator graph-browser \
 		  in-output module-db asc-support compiler stred asource \
 		  sglr pgen utils
 
-.SILENT:
+# .SILENT:
 
 all doc clean:	configure
 	@for DIR in $(SUBDIRS);	\
@@ -55,7 +56,7 @@ uninstall:
 	done
 
 install:
-	mkdir -p $(bindir) $(libdir) $(includedir) $(classdir)
+	mkdir -p $(bindir) $(libdir) $(includedir) $(datadir) $(classdir)
 	$(INSTALL_PROG) $(INSTALL) $(bindir) meta
 	@for DIR in $(SUBDIRS);	\
 	do \

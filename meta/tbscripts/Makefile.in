@@ -14,7 +14,8 @@ prefix		= @prefix@
 exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 libdir		= @libdir@
-includedir	= $(prefix)/include
+includedir	= @includedir@
+datadir		= @datadir@
 docdir		= $(top_srcdir)/docs
 
 SHELL		= @SHELL@
@@ -60,7 +61,8 @@ CHDR		=
 # All files in BINFILES are installed in $(bindir)
 BINFILES	=
 # All files in LIBFILES are installed in $(libdir)
-LIBFILES	= meta.tb editor.tb clear-all.tb \
+LIBFILES	= 
+DATAFILES	= meta.tb editor.tb clear-all.tb \
                   close-modules.tb edit-module.tb edit-term.tb focus.tb \
                   open-modules.tb parsetrees.tb prettyprinter.tb \
                   retrieve-eqs.tb rewrite.tb status-display.tb \
@@ -93,10 +95,11 @@ meta.tifs: $(LIBFILES)
 
 # install target (install binaries, include files, and libraries)
 install: all
-	mkdir -p $(bindir) $(libdir) $(includedir)
+	mkdir -p $(bindir) $(libdir) $(includedir) $(datadir)
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(datadir) $(DATAFILES)
 
 # uninstall target (remove all files installed by 'install' target)
 uninstall:
