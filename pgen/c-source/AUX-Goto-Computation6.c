@@ -1,6 +1,8 @@
 #include  "support.h"
 static Symbol lf_AUX_Goto_Computation6_1sym ;
 static ATerm lf_AUX_Goto_Computation6_1 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
+static Symbol ef5sym ;
+static funcptr ef5 ;
 static Symbol ef4sym ;
 static funcptr ef4 ;
 static Symbol ef3sym ;
@@ -29,12 +31,14 @@ ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Goto-Earley\"),w(\"\"),[l(\"sh
 ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Goto-Earley\"),w(\"\"),[l(\"shift\"),w(\"\"),ql(\"[[\"),w(\"\"),sort(\"Grammar\"),w(\"\"),ql(\"]]\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Item\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Label\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ItemSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"parameter\")],w(\"\"),l(\"}\")))" ) ) ;
 ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Vertices\"),w(\"\"),[sort(\"Vertex\"),w(\"\"),ql(\"||\"),w(\"\"),sort(\"Vertex\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Vertex\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Vertices\"),w(\"\"),[sort(\"Vertex\"),w(\"\"),ql(\"||\"),w(\"\"),sort(\"Vertex\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Vertex\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
+ef5 = lookup_func ( ATreadFromString ( "prod(id(\"Earley-Items\"),w(\"\"),[sort(\"ItemSet\"),w(\"\"),ql(\"||\"),w(\"\"),sort(\"ItemSet\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ItemSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
+ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Earley-Items\"),w(\"\"),[sort(\"ItemSet\"),w(\"\"),ql(\"||\"),w(\"\"),sort(\"ItemSet\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ItemSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
 }
 void init_AUX_Goto_Computation6 ( ) {
 }
 ATerm lf_AUX_Goto_Computation6_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
-ATerm tmp [ 2 ] ;
+ATerm tmp [ 3 ] ;
 FUNC_ENTRY ( lf_AUX_Goto_Computation6_1sym , ATmakeAppl ( lf_AUX_Goto_Computation6_1sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
@@ -45,6 +49,7 @@ ATerm atmp100 = arg_0 ( atmp10 ) ;
 if ( check_sym ( atmp100 , lf2sym ) ) {
 {
 ATerm atmp1000 = arg_0 ( atmp100 ) ;
+/* 
 if ( is_single_element ( atmp1000 ) ) {
 tmp [ 0 ] = list_head ( atmp1000 ) ;
 FUNC_EXIT ( ( * ef1 ) ( ( * ef3 ) ( arg0 , tmp [ 0 ] , arg2 ) ) ) ;
@@ -55,6 +60,22 @@ tmp [ 1 ] = list_tail ( atmp1000 ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
 FUNC_EXIT ( ( * ef4 ) ( ( * ef1 ) ( ( * ef3 ) ( arg0 , tmp [ 0 ] , arg2 ) ) , lf_AUX_Goto_Computation6_1 ( arg0 , ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) , arg2 ) ) ) ;
 }
+}
+*/
+if ( ATgetLength((ATermList) atmp1000 ) == 1) {
+  tmp [ 0 ] = list_head ( atmp1000 ) ; 
+  FUNC_EXIT ( ( * ef1 ) ( ( * ef3 ) ( arg0 , tmp [ 0 ] , arg2 ) ) );
+}
+else {
+  tmp [ 2 ] = ( * ef2 ) ( lf2 ( null() ) );
+  atmp1000 = (ATerm) ATreverse((ATermList) atmp1000 );
+  while ( not_empty_list ( atmp1000 ) ) {
+    tmp [ 0 ] = list_head ( atmp1000 ) ;
+    tmp [ 1 ] = ( ( * ef3 ) ( arg0 , tmp [ 0 ] , arg2 ) ) ;
+    tmp [ 2 ] = (*ef5)(tmp[1], tmp [ 2 ]);
+    atmp1000 = list_tail ( atmp1000 ) ;
+  }
+  FUNC_EXIT ( ( * ef1 ) ( tmp [ 2 ] ) );
 }
 }
 }
