@@ -34,9 +34,8 @@ tools needed to get the Meta-Environment running:
 	  An editor instance of the hybrid editor can be used to edit the
 	  syntax of a module, the equations of a module, or a term over
           a specific module.
-     <LI> A <A HREF="../meta/components.html#parser">parser</A>, w
-          hich can parse terms given a parse table
-          and an input string.
+     <LI> A <A HREF="../metA/components.html#parser">parser</A>,
+          which can parse terms given a parse table and an input string.
      <LI> A <A HREF="../meta/components.html#parser-generator">parser 
           generator</A>,
 	  which can generate parse tables
@@ -67,22 +66,22 @@ tools needed to get the Meta-Environment running:
 An important design decision is to separate the term database from the
 module database. Three issues play a role here:
 <UL>
-<LI> In standalone environments, the module database is not needed.
+<LI> In stand alone environments, the module database is not needed.
      The cleanest way to implement this is by providing both tools
      in the Meta-Environment, and providing just the term database
-     in a standalone environment.
+     in a stand alone environment.
 <LI> Although the functionality offered by these tools will
      overlap significantly (both must have extensive knowledge of
      the AsFix format), this can easily be covered by reusing code
      between these tools.
-<LI> Although they both tools are used to store and retrieve AsFix
+<LI> Although both tools are used to store and retrieve AsFix
      terms, they are conceptually different entities because changes
      in modules have a much wider impact on the system than changes
      in terms.
 </UL>
 
 <H2>Syntax Changes</H2>
-A number of important design decision revolve around when and how far
+A number of important design decisions revolve around when and how far
 to propagate changes in the syntax of a module. When the syntax of
 a module changes, terms and equations over modules higher in the
 module hierarchy need to be reparsed, and it is more than likely that
@@ -100,8 +99,8 @@ system.
 
 
 <H3>The First Stage in Propagating Syntax Changes</H3>
-There are basically four alternative moments at which the first stage 
-of syntax change propagation can occur:
+There are basically four disctinct moments at which the first stage 
+of syntax change propagation could occur:
 <OL>
 <LI> When the user performs a <EM>text editing operation</EM> on
      the syntax of a module. An advantage could be that changes
