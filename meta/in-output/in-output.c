@@ -130,7 +130,7 @@ int newerfile(const char *s1, const char *s2)
  * The resulting output is a properly terminated C string.
  */
 
-char *slurpfile(char *fnam, size_t *size)
+char *readFileContents(char *fnam, size_t *size)
 {
     char *buf;
     FILE *fd;
@@ -290,7 +290,7 @@ ATerm read_raw_from_named_file(char *fn, char *n)
     char   *buf;
     size_t size;
 
-    if (!(buf = slurpfile(fn, &size))) {
+    if (!(buf = readFileContents(fn, &size))) {
 	if (run_verbose) {
 	    ATwarning("error reading %s\n", fn);
 	}
@@ -305,6 +305,28 @@ ATerm read_raw_from_named_file(char *fn, char *n)
 	free(buf);
     }
     return t;
+}
+
+ATerm read_file(int cid, char *name) 
+{
+  ATerm t;
+  char   *buf;
+  size_t size;
+
+  if (!(buf = readFileContents(name, &size))) {
+    if (run_verbose) {
+      ATwarning("error reading %s\n", name);
+    }
+    t = open_error(name);
+  }
+  else {
+    if (run_verbose) {
+      ATwarning("reading %s (ascii)\n", name);
+    }
+    t = ATmake("snd-value(file-contents(<str>,<str>))", name, buf);
+    free(buf);
+  }
+  return t; 
 }
 
 ATerm get_timestamp(int cid, char *name, char *ext) {
@@ -612,79 +634,40 @@ char *expand_path(const char *relative_path)
     return absolute_path;
 }
 
-void read_conf(const char *config_filename)
+ATerm process_search_paths(int cid, char *config_filename, ATerm paths)
 {
-    FILE *fd;
-    char *absolute_path;
-    char contents[BUFSIZ];
-    int line_number = 0;
-    int len;
+  int line_number = 0;
+  ATerm path = NULL;
+  char *contents;
+  char *absolute_path;
 
-    /* Try to read the config file */
-    fd = fopen(config_filename, "r");
+  while (!ATisEmpty((ATermList) paths)) {
+    line_number++;
+   
+    path = ATgetFirst((ATermList) paths);
+    paths = (ATerm) ATgetNext((ATermList) paths);
 
-    /* Couldn't read, might be non-existent or unreadable */
-    if (fd == NULL) {
-	if (run_verbose || fileexists(config_filename)) {
-	    ATwarning("warning: cannot read \"%s\": %s\n",
-		      config_filename, strerror(errno));
-	}
-
-	/* Let's try the current directory as default searchpath */
-        absolute_path = expand_path(CURRENT_DIR);
-
-	/* Even default searchpath failed */
-        if (absolute_path == NULL) {
-	    ATerror("panic: unable to construct default searchpath!\n");
-	    return;
-	}
-
-	/* Add default path */
+    if (ATmatch(path, "<str>", &contents)) {
+      absolute_path = expand_path(contents);
+      if (absolute_path != NULL) {
         add_path(absolute_path);
-	if (run_verbose) {
-     	    ATwarning("searchpath defaults to: \"%s\"\n", absolute_path);
-	}
-
-	return;
+      }
+      else {
+        ATwarning("%s, line %d: \"%s\": %s\n", config_filename,
+                  line_number, contents, strerror(errno));
+      }
     }
+  }
 
-    /* Read config file line by line */
-    while (fgets(contents, BUFSIZ, fd) != NULL) {
-	line_number++;
 
-	/* Skip empty lines and comment lines */
-	if (!*contents || *contents == '#') {
-	    continue;
-	}
-
-	/* Remove trailing whitespace */
-	len = strlen(contents);
-	while (len > 0 && isspace((int)contents[len-1])) {
-	    contents[--len] = '\0';
-	}
-
-	/* If sensible path remains, expand to absolute pathname and add */
-	if (len > 0) {
-	    absolute_path = expand_path(contents);
-	    if (absolute_path != NULL) {
-		add_path(absolute_path);
-	    }
-	    else {
-		ATwarning("%s, line %d: \"%s\": %s\n", config_filename,
-			  line_number, contents, strerror(errno));
-	    }
-	}
-    }
-
-    /* Done with config file */
-    fclose(fd);
-
-    /* Assert sanity, we really should have a decent searchpath by now */
-    if (nr_paths <= 0) {
-	ATerror("panic: empty searchpath after parsing \"%s\"!\n",
-		config_filename);
-    }
+  /* Assert sanity, we really should have a decent searchpath by now */
+  if (nr_paths <= 0) {
+    ATerror("panic: empty searchpath after parsing \"%s\"!\n",
+            config_filename);
+  }
+  return ATmake("snd-value(search-paths-processed(<str>))", config_filename);
 }
+
 
 void version(char *prg)
 {
@@ -721,9 +704,6 @@ int main(int argc, char *argv[])
 	}
     }
 
-    /* Now let's read the config file */
-    read_conf(DEFAULT_CONFIG_FILE);
-    
     if (toolbus_mode) {
 	ATBinit(argc, argv, &bottomOfStack);
 	cid = ATBconnect(NULL, NULL, -1, in_output_handler);

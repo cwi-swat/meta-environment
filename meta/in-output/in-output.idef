@@ -38,10 +38,26 @@ let
   Contents  : term,
   TimeStamp : term,
   TableType : term,
-  Table     : term
+  Table     : term,
+  Paths     : list
 in
   execute(in-output,IO?).
   (
+    rec-msg(get-config-file(Name?)) .
+    snd-eval(IO, read-file(Name)) .
+    (
+      rec-value(IO, file-contents(Name, Text?)) .
+      snd-msg(config-file(Name, Text))
+      +
+      rec-value(IO, error-opening(Name)).
+      snd-msg(no-config-file(Name))
+    ) 
+    +
+    rec-msg(process-search-paths(Name?, Paths?)) .
+    snd-eval(IO, process-search-paths(Name, Paths)) .
+    rec-value(IO, search-paths-processed(Name)) .
+    snd-msg(search-paths-processed(Name))
+    +
     (
       rec-msg(get-table-timestamp(eqs(Name?))).
       snd-eval(IO,get-timestamp(Name,".eqs.tbl"))
