@@ -15,7 +15,7 @@ context-free syntax
 
 hiddens
 
-imports basic/Whitespace
+imports asf/syntax/Comments
 
 sorts Bytes Byte
 
