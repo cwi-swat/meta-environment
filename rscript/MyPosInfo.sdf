@@ -5,10 +5,12 @@ imports basic/Integers basic/Strings
 
 exports
   sorts Area
+
+  aliases Area -> ATerm
+
   context-free syntax
 
-    area(StrCon, IntCon, IntCon, IntCon, IntCon) -> Area
-    get-area(X)			         -> Area
+    get-area(X)			                 -> Area
 
    imports asf/tools/PosInfo[X]
 
