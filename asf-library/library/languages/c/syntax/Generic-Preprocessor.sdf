@@ -19,7 +19,7 @@ lexical syntax
 
 context-free restrictions
 
-LAYOUT -/- [\\].[\n]
+LAYOUT? -/- [\\].[\n]
 
 context-free syntax
 

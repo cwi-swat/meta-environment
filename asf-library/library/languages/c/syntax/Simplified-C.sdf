@@ -272,6 +272,9 @@ Expression -> Initializer >
 Expression "," Expression -> Expression,
 
 Expression -> {Expression ","}+ >
+Expression "," Expression -> Expression,
+
+Identifier "=" Expression -> Enumerator >
 Expression "," Expression -> Expression
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -313,6 +316,7 @@ context-free syntax
 "enum" Identifier                                -> Specifier
 
 lexical restrictions
+	"return" -/- [0-9a-zA-Z\_]
 	"enum" -/- [0-9a-zA-Z\_]
 	"struct" | "union" -/- [0-9a-zA-Z\_]
 
