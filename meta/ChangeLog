@@ -9,6 +9,8 @@ Thu Sep 11 09:17:30 CEST 2003 <jong@cwi.nl>
  * tbscripts:
    - move "gen.tb" to ToolBus pkg, adapters/gen-adapter/generic-adapter.idef
      it is the interface definition of the generic-adapter.
+ * io-tool and configuration-manager idefs now start the managing process
+   themselves
 
 Mon Sep  8 14:04:42 CEST 2003 <jong@cwi.nl>
  * editors/text/common/connector.c:

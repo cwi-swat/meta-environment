@@ -1,8 +1,10 @@
-/*
- * $Id$
- */
+/* $Id$ */
 
-process Io is
+tool in-output is {
+  command = "in-output"
+}
+
+process IO is
 let
   IO : in-output,
   Name : str,
@@ -146,4 +148,4 @@ in
   delta
 endlet
 
-tool in-output is { command = "in-output" }
+toolbus(IO)
