@@ -18,6 +18,9 @@
 
 $Id$
 
+2000-0329 <mdejonge@cwi.nl>
+   * Added default value for ASC in configure.in
+
 2000-0328 <mdejonge@cwi.nl>
    * No longer distribute DEVELOPERS-INFO and reconf
 
