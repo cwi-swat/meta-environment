@@ -6,9 +6,7 @@
 # and uses the right syntax for comments.
 #
 
-USAGE=
-
-if [ $# != 2 ] 
+if [ $# -lt 3 ] 
 then
     cat <<EOF 
 Usage:  insert-license <directory-with-headers> <package> <files-to-add-to>
@@ -26,26 +24,34 @@ fi
 PATH=__BINDIR__:$PATH
 
 findext () {
-  case $1 in
-  *.c|*.tb|*.c.in|*.tb.in|*.h|*.h.in)		ext=c-style;
+  case `basename $1` in
+  *.c|*.tb|*.c.in|*.tb.in|*.h|*.h.in|*.java|*.idef)
+						ext=c-style;
  						break;;
-  *.sdf|*.sdf2|*.syn|*.eqs|*.tex|*.ltx|*.sty|*.ps|*.eps)
+  *.el)
+						ext=lisp-style;
+ 						break;;
+  *.sdf|*.sdf2|*.syn|*.eqs|*.pico|*.tex|*.bib|*.ltx|*.sty|*.mtx|*.ps|*.eps)
 						ext=tex-style;
 						break;;
   *.html)					ext=html
 						break;;
   configure.in)					ext=autoconf
 						break;;
-  *.pod|*.sh|*.pl|*.pl.src|*.sh.src|Makefile.in|Makefile.am)
+  *.sh|*.pl|*.pl.src|*.tcl|*.sh.src|Makefile.in|Makefile.am|*.proto|*.in)
 						ext=sh-style;
 						break;;
-  [A-Z][A-Z]*)					ext=base;
+  [A-Z][A-Z][A-Z]*|ChangeLog)			ext=base;
 						break;;	
-  *)						ext=sh-style;
+  *.*)                                          ext=ignore;
+						break;;	
+  *)	        				ext=sh-style;
+						break;;
   esac
 
   case "`file $1`" in
-  *"shell script"*|"perl commands text")	script="-s";
+  *"shell script"*|"perl commands text"|"commands text for @SHELL@")
+						script="-s";
 						break;;
   *)						script="";
 						break;;
@@ -61,5 +67,12 @@ shift
 for f in $*
 do
   findext $f
-  insert-header $script -i $headerdir/$pkgname-header.$ext $f
+  if [ "to$ext" = "toignore" ]
+  then 
+    echo "$f ignored"
+  else
+    insert-header $script -i $headerdir/$pkgname-header.$ext $f
+  fi
 done
+
+#
