@@ -364,11 +364,10 @@ private void paintDiamond(Graphics2D g, int x, int y, int w, int h, Color node_b
 	g.setColor(node_bg);
 	int[] xs = new int[] {x, x + w / 2, x + w, x + w / 2};
 	int[] ys = new int[] {y + h / 2, y, y + h /2, y + h};
-	/* debug: no filling to see where arrows go 
-    g.fillPolygon(xs,ys,4); */
+	
+    g.fillPolygon(xs,ys,4); 
 	g.setColor(node_border);
 	g.drawPolygon(xs,ys,4);
-    g.drawRect(x,y,w,h);
 }
 
 private void paintEllipse(Graphics2D g, int x, int y, int w, int h, Color node_bg, Color node_border) {
@@ -376,7 +375,6 @@ private void paintEllipse(Graphics2D g, int x, int y, int w, int h, Color node_b
 	g.fillOval(x,y,w,h);
 	g.setColor(node_border);
 	g.drawOval(x,y,w,h);
-    g.drawRect(x,y,w,h);
 }
 
 private void paintBox(Graphics2D g, int x, int y, int w, int h, Color node_bg, Color node_border) {
