@@ -166,10 +166,10 @@ int main (int argc, char **argv)
       for(i = 1;!ATisEmpty(ambs); ambs = ATgetNext(ambs), i++) {
         ATerm amb = ATgetFirst(ambs);
         ATermList productions;
-        ATerm position, line, col;
+        ATerm ch, line, col, offset;
 
-        if(ATmatch(amb,"ambiguity(position(line(<term>), col(<term>), character(<term>)),productions([<list>]))",
-                   &line, &col, &position, &productions)) {
+        if(ATmatch(amb,"ambiguity(position(character(<term>),line(<term>), col(<term>), char(<term>)),productions([<list>]))",
+                   &ch, &line, &col, &offset, &productions)) {
           
           ATfprintf(fp,"number: %d, line: %t, col: %t productions:\n", i, line, col);
           
@@ -179,11 +179,11 @@ int main (int argc, char **argv)
 
           ATfprintf(fp,"\n");
         } else {
-          ATerror("Unexpected term\n");
+          ATerror("%s: Unexpected term\n",myname);
         }
       }
     } else {
-      ATerror("Unexpected term\n");
+      ATerror("%s: Unexpected term\n", myname);
       return 1;
     }
   } else if(txtout) {

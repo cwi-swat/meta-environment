@@ -949,23 +949,50 @@ ATermList SG_CurrentPosInfo(void)
 
 }
 
+ATermList SG_GetFirstAmbiguityPosInfo(ATerm ambtrack)
+{
+   ATermList ambiguities;
+   ATerm first;
+   ATerm position;
+
+   assert(ATgetType(ambtrack) == AT_APPL);
+   
+   ambiguities = (ATermList) ATgetArgument((ATermAppl) ambtrack, 1);
+  
+   assert(ATgetType(ambiguities) == AT_LIST);
+
+   first = ATgetFirst(ambiguities);
+   position = ATgetArgument((ATermAppl) first, 0);
+   
+   assert(ATgetType(position) == AT_APPL);
+
+   return ATgetArguments((ATermAppl) position); 
+}
+
 forest SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak)
 {
   ATermAppl  errcode;
+  ATerm posinfo;
 
   SG_ERROR_ON();
 
-  if(!ATisEmpty(cycle))
+  if(!ATisEmpty(cycle)) {
     errcode = ATmakeAppl1(SG_Cycle_Error_AFun, (ATerm) cycle);
-  else if(excess_ambs)
-    errcode = (ATermAppl) ambtrak;
-  else if(current_token == SG_GETTOKEN(SG_EOF_Token))
+  }
+  else if(excess_ambs) {
+    errcode = (ATermAppl) ambtrak; 
+  }
+  else if(current_token == SG_GETTOKEN(SG_EOF_Token)) {
     errcode = ATmakeAppl0(SG_EOF_Error_AFun);
-  else
-    errcode = ATmakeAppl0(SG_Plain_Error_AFun);
+  }
+  else {
+    errcode = ATmakeAppl0(SG_Plain_Error_AFun); 
+  }
 
-  return (forest) ATmakeAppl2(SG_ParseError_AFun, (ATerm) SG_CurrentPosInfo(),
-                              (ATerm) errcode);
+  posinfo = excess_ambs ? (ATerm) SG_GetFirstAmbiguityPosInfo(ambtrak) : 
+                          (ATerm) SG_CurrentPosInfo();
+
+  return (forest) ATmakeAppl2(SG_ParseError_AFun, posinfo, (ATerm) errcode);
 }
 
 tree SG_ConvertA2ToA1(tree t)

@@ -52,6 +52,7 @@ typedef struct linecolpos_tag {
   size_t line;
   size_t col;
   size_t pos;
+  int    ch;
 } linecolpos;
 
 int SG_InjectionFilterSucceeded(int mode)
@@ -488,6 +489,7 @@ ATermList  SG_AmbTrackerRecursive(tree t, linecolpos *currpos)
   int       treetype;
   ATerm     amb_with_pos;
   ATermList prods;
+  int c;
 
   treetype = ATgetType(t);
   allambs = ATempty;
@@ -495,11 +497,14 @@ ATermList  SG_AmbTrackerRecursive(tree t, linecolpos *currpos)
   switch(treetype) 
   {
   case AT_INT:
-    switch(ATgetInt((ATermInt) t)) {
+    c = ATgetInt((ATermInt) t);
+
+    switch(c) {
       case '\n':
 	(currpos->line)++;
 	(currpos->col) = 0;
-      default:
+      default: /* fall through */
+        (currpos->ch) = c;
 	(currpos->col)++;
         (currpos->pos)++;
     }
@@ -539,12 +544,14 @@ ATermList  SG_AmbTrackerRecursive(tree t, linecolpos *currpos)
       /* construct the error message for this cluster */ 
       amb_with_pos = 
         (ATerm) ATmakeAppl2(SG_Amb_Node_AFun,
-                            (ATerm) ATmakeAppl3(SG_Position_AFun,
+                            (ATerm) ATmakeAppl4(SG_Position_AFun,
+                            (ATerm) ATmakeAppl1(SG_Character_AFun,
+                                                (ATerm) ATmakeInt(ambpos.ch)),
 			    (ATerm) ATmakeAppl1(SG_Line_AFun, 
 						(ATerm) ATmakeInt(ambpos.line)),
 			    (ATerm) ATmakeAppl1(SG_Col_AFun,
 						(ATerm) ATmakeInt(ambpos.col)),
-			    (ATerm) ATmakeAppl1(SG_Character_AFun,
+			    (ATerm) ATmakeAppl1(SG_Offset_AFun,
                                                 (ATerm) ATmakeInt(ambpos.pos))),
                             (ATerm) ATmakeAppl1(SG_Productions_AFun,
                                                 (ATerm) ATreverse(prods)));  
