@@ -149,7 +149,7 @@ static int PT_compareTreeRec(PT_Tree tree1, PT_Tree tree2)
 
    }
 
-   ATabort("strange error");
+   ATabort("strange error in PT_compareTree on: %t", tree1);
    return 0;
 }
 
