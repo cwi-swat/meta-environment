@@ -1,0 +1,52 @@
+equations
+
+[cf1]  $Rel := cflow(Stat*)
+       =========================================================
+       cflow(while Exp do Stat* od) = 
+       $Rel + bot($Rel) x {pos(Exp)} + {pos(Exp)} x top($Rel)
+
+[cf2]  $Rel1 := cflow(Stat*1), $Rel2 := cflow(Stat*2)
+       ==========================================================
+       cflow(if Exp then Stat*1 else Stat*2 fi) = 
+       $Rel1 + $Rel2 + {pos(Exp)} x top($Rel1) + {pos(Exp)} x top($Rel2)
+
+[cf3]  $Rel1 := cflow(Stat), $Rel2 := cflow(Stat+)
+       ==========================================================
+       cflow(Stat ; Stat+) = 
+       $Rel1 + $Rel2 + bot($Rel1) x top($Rel2)
+
+[default-cf]
+       cflow(Stat) = id({pos(Stat)})
+
+[df1]  Id := Exp := Stat
+       ========================================================== 
+       def(Stat, $Rel) = $Rel + {<id2str(Id), pos(Stat)>}
+
+[us1]  Id := Exp
+       ========================================================== 
+       use(Exp, $Rel) = $Rel +  {<id2str(Id), pos(Stat)>
+
+
+[er-1] $Loc :=  area-in-file("", area(0,0,0,0,0,0))
+       ==========================================================
+       extractRelations(begin Decls Stat+ end) = 
+       rstore()[ loc ROOT = $Loc
+		 rel[loc,loc] PRED = cflow(Stat+)
+		 rel[loc,str] USES = uses(Program, {})
+		 rel[str,loc] OCCURS = xxx
+		 rel[str,loc]
+       ]
+
+%% ----- utilities
+
+[i2s] id2str(pico-id($Char*)) = strcon(""" $Char* """)
+
+[cvt-1] convert2error(<$StrCon, $Loc>) = error("Uninitialized variable", [localized($StrCon, $Loc)])
+
+[cvt-2] convert2errorlist({<$String, $Loc>, $Elem*}) = 
+	convert2error(<$String, $Loc>),  convert2errorlist({$Elem*})
+
+[cvt-3] convert2errorlist({}) = 
+
+[cvt-4]	convert2summary($Elem) = summary("PicoQuery", "PicoQuery", [convert2errorlist($Elem)])
+

@@ -1,0 +1,47 @@
+module NewPicoExtraction
+
+imports Pico-syntax
+imports basic/Integers
+imports utilities/PosInfo[STATEMENT]
+imports utilities/PosInfo[PICO-ID]
+
+imports basic/Errors
+
+exports
+   imports Rstore
+
+ context-free syntax
+
+      extractRelations(PROGRAM)         -> RSTORE
+      convert2summary(Elem)	        -> Summary
+
+hiddens
+  context-free syntax
+      cflow({ STATEMENT ";"}*)	        -> Rel[[Elem]]
+      use(PROGRAM, Rel[[Elem]])	        -> Rel[[Elem]] {traversal(accu,top-down,continue)}
+      use(PROGRAM, Rel[[Elem]])	        -> Rel[[Elem]] {traversal(accu,top-down,continue)}
+ 
+      def(PROGRAM, Rel[[Elem]])	        -> Rel[[Elem]] {traversal(accu,top-down,break)}
+      def(EXP, Rel[[Elem]])	        -> Rel[[Elem]] {traversal(accu,top-down,break)}
+
+
+      convert2errorlist(Elem)		-> {Error ","}*
+      convert2error(<String, Location>) -> Error
+      id2str(PICO-ID)		 	-> String
+
+ hiddens
+%%  imports asf/syntax/Comments
+
+  variables
+      "$Rstore" [0-9\']*  	-> RSTORE
+      
+      "$Rel" [0-9\']*     	-> Bag[[Elem]]
+      "$Bag" [0-9\']*     	-> Bag[[Elem]]
+      "$Loc" [0-9\']*	 	-> Location
+      "$Elem" [0-9\']*   	-> Elem
+      "$Elem*" [0-9\']*  	-> {Elem ","}*
+
+      "$Error*" [0-9\']*	-> {Error ","}*
+      "$Char*" [0-9]*   	-> CHAR*
+      "$String" [0-9\']*	-> String
+      "$StrCon" [0-9\']*	-> StrCon
