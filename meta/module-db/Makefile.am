@@ -38,6 +38,6 @@ module_db_LDADD		= module-db.tif.o \
 			-L$(PT_SUPPORT)/lib -lmept -lconversion \
 			-L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES		= -I$(PT_SUPPORT)/include -I$(ATERM)/include
+module_db_INCLUDES	= -I$(PT_SUPPORT)/include -I$(ATERM)/include
 
 module-db.o : module-db.tif.h
