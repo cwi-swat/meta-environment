@@ -1,6 +1,9 @@
 $Id$
 
-2003/15/11 (markvdb@cwi.nl)
+2003/12/17 (markvdb@cwi.nl)
+ * Adapted the Sdf-Checker to the new Sdf syntax.
+
+2003/12/15 (markvdb@cwi.nl)
  * Added a first version of an Sdf upgrade tool.
 
 2003/12/11 (markvdb@cwi.nl)
