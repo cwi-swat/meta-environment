@@ -21,6 +21,7 @@ asym(Symbol)                  -> ATerm
 aattributes(Attributes)       -> ATermList
 aattrs({Attribute ","}+)      -> {ATerm ","}+
 aattr(Attribute)              -> ATerm {prefer}
+aseqlist(Symbol+)             -> {ATerm ","}+
 
 hiddens
 

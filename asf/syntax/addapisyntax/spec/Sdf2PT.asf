@@ -40,6 +40,7 @@ equations
 [11] asym(literal(""" c* """)) = lit(literal(""" c* """))
 [12] asym(uqliteral(c*))       = lit(literal(""" c* """))
 [14] asym($Literal : Symbol)   = asym(Symbol)
+[15] asym(($Symbol $Symbol+))  = seq(aseqlist($Symbol $Symbol+))
 
 [13] aattributes()             = no-attrs
 [14] aattributes({})           = no-attrs
@@ -62,3 +63,5 @@ equations
 [25] aattr(id($Literal)) = id($Literal)
 [26] aattr(ATerm) = term(ATerm)
 
+[27] aseqlist(Symbol) = asym(Symbol)
+[28] aseqlist(Symbol Symbol+) = asym(Symbol), aseqlist(Symbol+)
