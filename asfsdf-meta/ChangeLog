@@ -1,5 +1,8 @@
 /* $Id$ */
 
+2003/07/21 (markvdb@cwi.nl)
+ * Added new terms and add a button to "compile" Pico programs.
+
 2003/07/15 (markvdb@cwi.nl)
  * Button/action registration changed.
  * Number of buttons/actions moved to ASF+SDF package.
