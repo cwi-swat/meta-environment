@@ -323,83 +323,104 @@ assert "size 4": (# Rel1) == 3
 
 %% --- Bag former
 
-assert "Bag former 1": { X | X : EMPTYBAG }		== EMPTYBAG
-assert "Bag former 2": { X | X : {1}} 			== {1}
-assert "Bag former 3": { X | X : {1, 2}} 		== {1,2}
-assert "Bag former 4": { X | X : {1, 1, 1}} 		== {1}
+assert "Bag former 1": { X | int X : EMPTYBAG }		== EMPTYBAG
+assert "Bag former 2": { X | int X : {1}} 		== {1}
+assert "Bag former 3": { X | int X : {1, 2}} 		== {1,2}
+assert "Bag former 4": { X | int X : {1, 1, 1}} 		== {1}
 
-assert "Bag former 5": {  1 | X : {1,2,3}} 		== {1}
-assert "Bag former 6": {  1 | X : {1,2,3}, true } 	== {1}
-assert "Bag former 7": {  1 | X : {1,2,3}, false} 	== EMPTYBAG
+assert "Bag former 5": {  1 | int X : {1,2,3}} 		== {1}
+assert "Bag former 6": {  1 | int X : {1,2,3}, true } 	== {1}
+assert "Bag former 7": {  1 | int X : {1,2,3}, false} 	== EMPTYBAG
 
-assert "Bag former 8": {  X | X : {1,2,3}} 		== {1,2,3}
-assert "Bag former 9": {  X | X : {1,2,3}, true} 	== {1,2,3}
-assert "Bag former 10": {  X | X : {1,2,3}, false} 	== EMPTYBAG
-assert "Bag former 10a": {  X | X : {1,2,3}, X >= 2, X < 3} 	== {2}
+assert "Bag former 8": {  X | int X : {1,2,3}} 		== {1,2,3}
+assert "Bag former 9": {  X | int X : {1,2,3}, true} 	== {1,2,3}
+assert "Bag former 10": {  X | int X : {1,2,3}, false} 	== EMPTYBAG
+assert "Bag former 10a": {  X | int X : {1,2,3}, X >= 2, X < 3} 	== {2}
 
-assert "Bag former 11": {  EMPTYBAG | X : {1,2,3}} 	== {EMPTYBAG}
-assert "Bag former 12": {  EMPTYBAG | X : {1,2,3}, true} == {EMPTYBAG}
-assert "Bag former 13": {  EMPTYBAG | X : {1,2,3}, false} == EMPTYBAGBAG
+assert "Bag former 11": {  EMPTYBAG | int X : {1,2,3}} 	== {EMPTYBAG}
+assert "Bag former 12": {  EMPTYBAG | int X : {1,2,3}, true} == {EMPTYBAG}
+assert "Bag former 13": {  EMPTYBAG | int X : {1,2,3}, false} == EMPTYBAGBAG
 
-assert "Bag former 14": {  1,2,3 | X : {1,2,3}} 	== {1,2,3}
-assert "Bag former 15": {  1,2,3 | X : {1,2,3}, true} 	== {1,2,3}
-assert "Bag former 16": {  1,2,3 | X : {1,2,3}, true, true} 	== {1,2,3}
-assert "Bag former 17": {  1,2,3 | X : {1,2,3}, false}	== EMPTYBAG 
+assert "Bag former 14": {  1,2,3 | int X : {1,2,3}} 	== {1,2,3}
+assert "Bag former 15": {  1,2,3 | int X : {1,2,3}, true} 	== {1,2,3}
+assert "Bag former 16": {  1,2,3 | int X : {1,2,3}, true, true} 	== {1,2,3}
+assert "Bag former 17": {  1,2,3 | int X : {1,2,3}, false}	== EMPTYBAG 
 
-assert "Bag former 18": { X | X : {{1,2,3},{10,20,30},{100,200,300}} } ==
+assert "Bag former 18": { X | bag[int] X : {{1,2,3},{10,20,30},{100,200,300}} } ==
 	{ {1,2,3},{10,20,30},{100,200,300}}
 
 
 %% --- Relation former
 
-assert "Rel former 1":  { EMPTYREL | X : {1,2,3}} == {EMPTYREL}
-assert "Rel former 2a":  { <X,Y> | <X,Y> : EMPTYREL} == EMPTYREL
-assert "Rel former 2b":  { <X,Y> | X : EMPTYBAG, Y : EMPTYBAG} == EMPTYREL
+assert "Rel former 1":  { EMPTYREL | int X : {1,2,3}} == {EMPTYREL}
+assert "Rel former 2a":  { <X,Y> | <int X, int Y> : EMPTYREL} == EMPTYREL
+assert "Rel former 2b":  { <X,Y> | int X : EMPTYBAG, int Y : EMPTYBAG} == EMPTYREL
 
-assert "Rel former 3":  { Rel1 | X : {1,2,3}} == {Rel1}
+assert "Rel former 3":  { Rel1 | int X : {1,2,3}} == {Rel1}
 
-assert "Rel former 4": 	{<X,Y> | X : {1,1,1}, Y : {2,2,2}} == {<1,2>}
+assert "Rel former 4": 	{<X,Y> | int X : {1,1,1}, int Y : {2,2,2}} == {<1,2>}
 
-assert "Rel former 5": 	{<1,2> | X : {1,2,3}} == 
+assert "Rel former 5": 	{<1,2> | int X : {1,2,3}} == 
 			{<1,2>}
-assert "Rel former 6": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}} == 
+assert "Rel former 6": 	{<X,Y> | int X : {1,2,3}, int Y : {2,3,4}} == 
 			{<1, 2>, <1, 3>, <1, 4>, <2, 2>, <2, 3>, <2, 4>, <3, 2>, <3, 3>, <3, 4>}
-assert "Rel former 7": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}, true} ==
+assert "Rel former 7": 	{<X,Y> | int X : {1,2,3}, int Y : {2,3,4}, true} ==
 			{<1, 2>, <1, 3>, <1, 4>, <2, 2>, <2, 3>, <2, 4>, <3, 2>, <3, 3>, <3, 4>}
-assert "Rel former 8": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}, false} ==
+assert "Rel former 8": 	{<X,Y> | int X : {1,2,3}, int Y : {2,3,4}, false} ==
 			EMPTYREL
-assert "Rel former 9": 	{<X,Y> | X : {1,2,3}, Y : {2,3,4}, X >= Y} ==
+assert "Rel former 9": 	{<X,Y> | int X : {1,2,3}, int Y : {2,3,4}, X >= Y} ==
 			{<2, 2>, <3, 2>, <3, 3>}
+
+assert "Rel former 10": {<X,Y> | int X : {1,2,3}, <X, int Y> : {<1,10>, <7,70>, <3,30>,<5,50>}} ==
+			{<1, 10>, <3, 30>}
+
+assert "Rel former 10": {<X,Y> | int X : {1,2,3}, <X, str Y> : {<1,"a">, <7,"b">, <3,"c">,<5,"d">}} ==
+			{<1, "a">, <3, "c">}
 
 %% --- n-ary tuples
 
 rel[int,int,int] R3 = {<1,2,3>, <10,20,30>}
 
-bag[int] RR = {X, Y, Z | <X,Y,Z> : R3 }
+bag[int] RR = {X, Y, Z | <int X, int Y, int Z> : R3 }
 
 assert "Advanced value former 1":
-	{<X, Z> | <X, Y, Z> : R3} == {<1,3>, <10,30>}
+	{<X, Z> | <int X, int Y, int Z> : R3} == {<1,3>, <10,30>}
 
 assert "Advanced value former 2":
-	{<S,Q,P> | <P, Q, R, S> : {<1,2,3,4>, <10,20,30,40>}} == {<4,2,1>, <40,20,10>}
+	{<S,Q,P> | <int P, int Q, int R, int S> : {<1,2,3,4>, <10,20,30,40>}} == {<4,2,1>, <40,20,10>}
 
 assert "Advanced value former 3":
-	{<X,S> | X : {10,20}, <P, Q, R, S> <- <1,2,3,4>} == {<10,4>, <20,4>}
+	{<X,S> | int X : {10,20}, <int P, int Q, int R, int S> <- <1,2,3,4>}
+	== {<10,4>, <20,4>}
+
+%% ---- Exists
+
+assert "exists, 1": exists(int X : {1,2,3} | X > 2) == true
+assert "exists, 2": exists(int X : {1,2,3} | X > 10) == false
+assert "exists, 3": exists(<int X, int Y> : {<1,10>,<30,3>,<2,20>} | X > Y) == true
+assert "exists, 4": exists(<int X, int Y> : {<1,10>,<30,3>,<2,20>} | X > 100*Y) == false
+
+%% ---- Forall
+
+assert "forall, 1": forall(int X : {1,2,3} | X >= 1) == true
+assert "forall, 2": forall(int X : {1,2,3} | X >= 2) == false
+assert "forall, 3": forall(<int X, int Y> : {<1,10>,<3,30>,<2,20>} | X < Y) == true
+assert "forall, 4": forall(<int X, int Y> : {<1,10>,<30,3>,<2,20>} | X < Y) == false
  
 %% ---- Arithmetic expressions
 
 assert "+, 1":  1 + 1 == 2
-assert "+, 2":  {X + 1 | X : {1,2,3}} == {2,3,4}
-assert "+, 3":  {X | X : {1,2,3}, X + 1 < 3} == {1}
+assert "+, 2":  {X + 1 | int X : {1,2,3}} == {2,3,4}
+assert "+, 3":  {X | int X : {1,2,3}, X + 1 < 3} == {1}
 
 assert "-, 1":  2 - 3 == -1
-assert "-, 2":  {X - 1 | X : {1,2,3}} == {0,1,2}
-assert "-, 3":  {X | X : {1,2,3}, X - 1 < 3} == {1,2,3}
+assert "-, 2":  {X - 1 | int X : {1,2,3}} == {0,1,2}
+assert "-, 3":  {X | int X : {1,2,3}, X - 1 < 3} == {1,2,3}
 
 assert "*, 1":  3 * 4 == 12
 assert "*, 2":  3 * -4 == -12
 assert "*, 3":  -3 * -4 == 12
-assert "*, 4":  {X * 2 | X : {1,2,3}} == {2,4,6}
+assert "*, 4":  {X * 2 | int X : {1,2,3}} == {2,4,6}
 
 assert "/, 1":  8 / 2 == 4
 assert "/, 2":  7 / 2 == 3
@@ -408,4 +429,10 @@ assert "/, 4":  7 / 5 == 1
 assert "/, 5":  -8 / 2 == -4
 assert "/, 6":  -8 / -2 == 4
 assert "/, 7":  4 / 5 == 0
-assert "/, 8":  {X * 2 | X : {1,2,3}} == {2,4,6}
+assert "/, 8":  {X * 2 | int X : {1,2,3}} == {2,4,6}
+
+%% ---- Types
+
+type pair = <int theInt, str theStr>
+
+%%pair P = pair<1, "a">

@@ -19,18 +19,26 @@ exports
     context-free syntax
 
 	type-of(Elem)                  				-> ElemType
+	element-type(REXPTYPE)					-> REXPTYPE
 
         undefined                       			-> REXPTYPE
+	field(Integer)						-> REXPTYPE
+	"<" { DCLRVAR ","}* ">"					-> REXPTYPE
         "fun" {REXPTYPE ","}* to REXPTYPE			-> REXPTYPE
         "[" {REXPTYPE ","}* "]"                 		-> REXPTYPE
 
         is-var(REXPTYPE)                        		-> Boolean
+
+	first(REXPTYPE)						-> REXPTYPE
+	second(REXPTYPE)					-> REXPTYPE
+
 	is-tuple(Elem)						-> Boolean
 
 	REXPTYPE "==" REXPTYPE					-> Boolean
 
 	RSTAT cannot be typed 					-> ERROR
 	REXP cannot be typed 					-> ERROR
+
 	GENERATOR cannot be typed				-> ERROR
 	Bag[[Elem]] cannot be typed 				-> ERROR
  	"Undeclared" RVAR					-> ERROR
@@ -44,6 +52,8 @@ exports
         REXP should be of type bag         			-> ERROR
         REXP should be of type rel         			-> ERROR
         "No" "definition" for RVAR with argument REXPTYPE       -> ERROR
+	"No" "definition" for field RVAR			-> ERROR
+	RVAR exceeds number of targets of generator		-> ERROR
 
         "errors" "[" {ERROR ";"} * "]"                		-> ERRORS {prefer}
 
@@ -65,8 +75,8 @@ exports
 	store(TENV, RVAR, REXPTYPE)				-> TENV
 	delete(TENV, RVAR)					-> TENV
 
-	store-nvar({RVAR ","}*, REXPTYPE, TENV)			-> TENV
-	delete-nvar({RVAR ","}*, TENV)				-> TENV
+	match-targets({TARGET ","}*, REXPTYPE, TENV)		-> TENV
+	delete-targets({TARGET ","}*, TENV)			-> TENV
 
 	built-ins						-> Table[[RVAR,REXPTYPE]]
 
@@ -88,10 +98,12 @@ exports
 
 	check-eqs(INITVAR*, EQU*, TENV)				-> TENV
 
+	check-duplicate-fields({DCLRVAR ","}*, TENV)		-> TENV
+	get-field-type(REXPTYPE, RVAR, TENV)			-> REXPTYPE # TENV
 	
-	require-and-store-bag-type(REXP, RVAR, REXPTYPE, TENV) 	-> TENV
-	require-and-store-rel-type(REXP, RVAR, RVAR, REXPTYPE, TENV) 	-> TENV
-	require-and-store-nrel-type(REXP, {RVAR ","}+, REXPTYPE, TENV) 	-> TENV
+%%	require-and-store-bag-type(REXP, RVAR, REXPTYPE, TENV) 	-> TENV
+%%	require-and-store-rel-type(REXP, TARGET, TARGET, REXPTYPE, TENV) 	-> TENV
+%%	require-and-store-nrel-type(REXP, {TARGET ","}*, REXPTYPE, TENV) 	-> TENV
 
 	compat-cmp(REXP, REXPTYPE, REXPTYPE, TENV)		-> TENV
 	check-cmp(REXP, REXP, REXP, TENV)			-> REXPTYPE # TENV
@@ -107,10 +119,8 @@ exports
 	compat-trans(REXP, REXPTYPE, TENV)			-> REXPTYPE # TENV
 	compat-size(REXP, REXPTYPE, TENV)			-> REXPTYPE # TENV
 
-
-
         container-type(REXPTYPE)				-> REXPTYPE
-        container-iter-type(REXPTYPE)				-> REXPTYPE
+%%        container-iter-type(REXPTYPE)				-> REXPTYPE
         
         "[" { DCLRVAR ","}* "]"					-> DCLRVARS
 
@@ -174,10 +184,14 @@ hiddens
      "$Var*" [0-9\']*       	-> {RVAR ","}*
      "$Var+" [0-9\']*       	-> {RVAR ","}+
 
-      "$DclVar" [0-9\']*	-> DCLRVAR
-
+     "$DclVar" [0-9\']*		-> DCLRVAR
      "$DclVar*" [0-9\']*	-> {DCLRVAR ","}*
      "$DclVar+" [0-9\']*	-> {DCLRVAR ","}+
+
+
+     "$Target" [0-9\']*		-> TARGET
+     "$Target*" [0-9\']*	-> {TARGET ","}*
+     "$Target+" [0-9\']*	-> {TARGET ","}+
 
      "$Rscript" [0-9\']*        -> RSCRIPT
 

@@ -17,6 +17,13 @@ equations
 [default-ir]
 	is-rel($Bag) = false
 
+%% ---- is-tuple
+
+[it1]	is-tuple(<$Elem1, $Elem2>) = true
+
+[default-it]
+	is-tuple($Elem) = false
+
 %% ----	compose
 
 [comp-0] compose($Bag1, $Bag2) = compose(mk-iterator($Bag1), $Bag2)

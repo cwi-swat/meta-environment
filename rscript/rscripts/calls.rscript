@@ -1,4 +1,3 @@
-
 rel[str, str] calls = {<"a", "b">, <"b", "c">, <"b", "d">, <"d", "c">, <"d",
 "e">, <"f", "e">, <"f", "g">, <"g", "e">}
 
@@ -37,10 +36,9 @@ assert "a6": commonProcs == {"e"}
 
 bag[str] Parts = {"Appl", "DB", "Lib"}
 
-rel[str, str] partOf = {<"main", "Appl">, <"a", "Appl">, <"b", "DB">, <"c",
-"Lib">, <"d", "Lib">}
+rel[str, str] partOf = {<"main", "Appl">, <"a", "Appl">, <"b", "DB">, <"c", "Lib">, <"d", "Lib">}
 
-rel[str,str] lift(rel[str,str] calls, rel[str,str] partOf, bag[str] Parts) =
-	     { <X, Y> | <A, B> : calls, <X, Y> : partOf[A] x partOf[B]}
+rel[str,str] lift(rel[str,str] theCalls, rel[str,str] thePartOf, bag[str] theParts) =
+	     { <X, Y> | <str A, str B> : theCalls, <str X, str Y> : thePartOf[A] x thePartOf[B]}
 
 rel[str,str] callsLift = lift(calls, partOf, Parts)

@@ -19,7 +19,7 @@ rel[int,int] PRED = {
 bag[int] VERTICES = carrier(PRED)
 
 rel[int,bag[int]] DOMINATES =
- { <V,  VERTICES \ {V, ROOT} \ range(reachX({ROOT}, {V}, PRED))> |  V : VERTICES }
+ { <V,  VERTICES \ {V, ROOT} \ range(reachX({ROOT}, {V}, PRED))> |  int V : VERTICES }
 
 bag[int] Empty = {}
 

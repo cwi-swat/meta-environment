@@ -50,7 +50,7 @@ exports
      rtrans-closure(Bag[[Elem]])             		-> Bag[[Elem]]	%%RR
 
      is-rel(Bag[[Elem]])				-> Boolean
-
+     is-tuple(Elem)					-> Boolean
      "(" Bag[[Elem]] ")"              			-> Bag[[Elem]] {bracket}
 
 
