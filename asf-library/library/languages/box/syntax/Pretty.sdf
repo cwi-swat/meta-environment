@@ -1,0 +1,8 @@
+module languages/box/syntax/Pretty[X]
+
+imports languages/box/syntax/Box
+
+exports
+  context-free syntax
+    sort2box(X)   -> Box {to-box}
+    box2sort(Box) -> X {from-box}

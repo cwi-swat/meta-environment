@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar  5 13:55:46 CET 2004 <kooiker@cwi.nl>
+ * library/languages/box/syntax/Pretty.sdf:
+   - added generic prettyprint module 
+
 Fri Feb 27 15:37:00 CET 2004 <{jong,kooiker}@cwi.nl>
  * library/basic:
    refactor LocationOperations out of Locations.sdf
