@@ -1,6 +1,7 @@
 #
 #    SGLR - the Scannerless Generalized LR parser.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
+#     Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+#                         The Netherlands.
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -18,4 +19,5 @@
 #
 # $Id$
 
-EXTRA_DIST=Sdf2.tbl 
+EXTRA_DIST=Ambi.tbl Casl.tbl Cyclops.tbl Flat.tbl Isle.tbl Pico.tbl Risla.tbl \
+           Sdf2.tbl SimpleCobol.tbl Jacob.tbl Prefer.tbl
