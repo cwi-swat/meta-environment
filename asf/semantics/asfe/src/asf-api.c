@@ -291,7 +291,7 @@ PT_Tree interpretSetterCall(PT_Tree in, AA_Calls calls)
 
 /*}}}  */
 
-/*{{{  PT_Tree interpretPredicateCall(PT_Tree in, AA_Call call) */
+/*{{{  PT_Tree interpretBuiltinCall(PT_Tree in, AA_Calls calls) */
 
 PT_Tree interpretBuiltinCall(PT_Tree in, AA_Calls calls)
 {
