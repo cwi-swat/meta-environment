@@ -1,21 +1,8 @@
 module Type-environments
 
-imports Check-types Pico-Identifiers 
+imports Check-types Pico-Identifiers containers/Table[PICO-ID TYPE]
 
-exports
-  sorts TENV PAIR
-  context-free syntax
-    "(" PICO-ID ":" TYPE ")" -> PAIR
-    "[" {PAIR ","}* "]"      -> TENV
-
-    PAIR "+" TENV                               -> TENV
-    "lookup" "(" PICO-ID "," TENV ")"           -> TYPE
-    "add-to" "(" PICO-ID "," TYPE "," TENV ")"  -> TENV
-
-hiddens
-  variables
-    "Id"[0-9\']*    -> PICO-ID
-    "Type"[0-9\']*  -> TYPE
-    "Pair"[0-9\']*  -> PAIR
-    "Pair*"[0-9\']* -> {PAIR ","}*
-    "Tenv"[0-9\']*  -> TENV
+exports 
+  sorts TENV
+  aliases
+    Table[[PICO-ID,TYPE]] -> TENV

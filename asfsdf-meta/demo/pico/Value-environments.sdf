@@ -1,20 +1,8 @@
 module Value-environments
 
-imports Pico-Identifiers Values
+imports Pico-Identifiers Pico-Values containers/Table[PICO-ID VALUE]
     
 exports
-  sorts VENV VPAIR
-  context-free syntax
-    "(" PICO-ID ":" VALUE ")"                   -> VPAIR
-    "[" {VPAIR "," }* "]"                       -> VENV
-    VPAIR "+" VENV                              -> VENV
-    "lookup" "(" PICO-ID "," VENV ")"           -> VALUE
-    "update" "(" PICO-ID "," VALUE "," VENV ")" -> VENV
-
-hiddens
-  variables
-    "Id"[0-9\']*     -> PICO-ID
-    "Value"[0-9\']*  -> VALUE
-    "VPair"[0-9]*    -> VPAIR
-    "VPair*"[0-9\']* -> {VPAIR ","}*
-    "Venv"[0-9\']*   -> VENV
+  sorts VENV 
+  aliases
+    Table[[PICO-ID, VALUE]] -> VENV

@@ -1,5 +1,5 @@
 module Pico-syntax
-imports Pico-Identifiers basic/Integers basic/Strings Types
+imports Pico-Identifiers basic/Integers basic/Strings Pico-Types
 exports
   sorts PROGRAM DECLS ID-TYPE STATEMENT EXP
   context-free syntax

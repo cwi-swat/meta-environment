@@ -1,7 +1,6 @@
 module Check-types
 
-imports Types
-imports basic/Booleans asf/syntax/Comments
+imports Pico-Types basic/Booleans asf/syntax/Comments
 
 exports
   context-free syntax

@@ -3,9 +3,9 @@ equations
 
 [Ev2]  evd(declare Id-type*;) = evits(Id-type*)
 
-[Ev3a] evits(Id:natural, Id-type*) = (Id:0) + evits(Id-type*)
+[Ev3a] evits(Id:natural, Id-type*) = store(evits(Id-type*), Id, 0)
 
-[Ev3b]  evits(Id:string, Id-type*) = (Id:"") + evits(Id-type*)
+[Ev3b]  evits(Id:string, Id-type*) = store(evits(Id-type*), Id, "")
 
 [Ev3c]  evits() = []
 
@@ -15,7 +15,7 @@ equations
 
 [Ev4b]  evs( , Venv) = Venv
 
-[Ev5a]  evst(Id := Exp, Venv) = update(Id, eve(Exp, Venv), Venv)
+[Ev5a]  evst(Id := Exp, Venv) = store(Venv, Id, eve(Exp, Venv))
 
 [Ev5b]             eve(Exp, Venv) != 0
         ====================================================
@@ -34,24 +34,23 @@ equations
         evst(while Exp do Series od, Venv) =
                            evst(while Exp do Series od, Venv')
 
+[Ev6a]  eve(Id, Venv) = lookup(Venv, Id)
+[Ev6b]  eve(Nat-con, Venv) = Nat-con
+[Ev6c]  eve(Str-con, Venv) = Str-con
 
-[Ev6a]  eve(Exp1, Venv) = Nat1,
+[Ev6d]  eve(Exp1, Venv) = Nat1,
         eve(Exp2, Venv) = Nat2
         ======================
         eve(Exp1 + Exp2, Venv) = Nat1 + Nat2
 
-[Ev6b]  eve(Exp1, Venv) = Nat1,
+[Ev6e]  eve(Exp1, Venv) = Nat1,
         eve(Exp2, Venv) = Nat2
         ======================
         eve(Exp1 - Exp2, Venv) =  Nat1 -/ Nat2
 
-[Ev6c]  eve(Exp1, Venv) = Str1,
+[Ev6f]  eve(Exp1, Venv) = Str1,
         eve(Exp2, Venv) = Str2
         ======================
         eve(Exp1 || Exp2, Venv) = Str1 || Str2
-
-[Ev6d]  eve(Nat-con, Venv) = Nat-con
-[Ev6e]  eve(Str-con, Venv) = Str-con
-[Ev6f]  eve(Id, Venv) = lookup(Id,Venv)
 
 [default-Ev6]  eve(Exp,Venv) = nil-value

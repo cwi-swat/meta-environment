@@ -2,18 +2,18 @@ equations
 
 [Tc1]  tcp(begin Decls Series end) = tcs(Series, tcd(Decls))
 
-[Tc2]  tcd(declare Id-type*;) = tcits(Id-type*,[])
+[Tc2]  tcd(declare Id-type*;) = tcits(Id-type*,new-table)
 
 [Tc3a] tcits(Id:Type, Id-type*, Tenv) = tcits(Id-type*, tcit(Id:Type, Tenv))
 
 [Tc3b] tcits(,Tenv) = Tenv
 
-[Tc4a] lookup(Id,Tenv) = nil-type
-       =========================
-       tcit(Id:Type, Tenv) = (Id:Type) + Tenv
+[Tc4a] lookup(Tenv, Id) = not-in-table
+       ===============================
+       tcit(Id:Type, Tenv) = store(Tenv, Id, Type)
 
-[Tc4b] lookup(Id,Tenv) != nil-type
-       =========================
+[Tc4b] lookup(Tenv, Id) != not-in-table
+       ================================
        tcit(Id:Type, Tenv) = Tenv
 
 [Tc5a] tcs(Stat ; Stat*, Tenv) =
@@ -34,7 +34,7 @@ equations
 
 [default-Tc6] tcst(Stat, Tenv) = false
 
-[Tc7a]  tce(Id, Tenv) = lookup(Id, Tenv)
+[Tc7a]  tce(Id, Tenv) = lookup(Tenv, Id)
 [Tc7b]  tce(Nat-con, Tenv) = natural
 [Tc7c]  tce(Str-con, Tenv) = string
 
