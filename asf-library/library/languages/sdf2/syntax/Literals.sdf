@@ -7,12 +7,7 @@ exports
   lexical syntax
     [a-z]                          -> UQLiteral
     [a-z][A-Za-z0-9\-]*[A-Za-z0-9] -> UQLiteral
-
-  sorts Literal
   context-free syntax
-    QuotedLiteral -> Literal
-    UQLiteral     -> Literal
-    Literal       -> Symbol
-
-  context-free syntax
+    UQLiteral                                            -> Literal
+    Literal                                              -> Symbol
     Literal "(" {Symbol ","}* ")" "->" Symbol Attributes -> Production {avoid}
