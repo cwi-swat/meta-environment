@@ -111,38 +111,34 @@ ATermList add_imports(ATerm name, ATermList mods);
 char *get_module_name(ATerm module);
 ATermList get_import_section_sdf2(ATerm module);
 
-ATermList calc_import_relations(ATerm name)
+ATerm calc_import_graph(void)
 {
-  ATerm module, pair;
+  ATerm module1, module2, pair;
   ATermList result = ATempty;
-  ATermList modules = ATtableKeys(import_db);
+  ATermList allmodules = ATtableKeys(import_db), importedmodules = ATempty;
+  ATermList actualmodules = allmodules;
 
-  while (!ATisEmpty(modules)) {
-    module = ATgetFirst(modules);
-    if(ATindexOf((ATermList) GetValue(import_db,module), name, 0) >= 0) {
-      pair = ATmake("[<term>,<term>]", module, name);
+  while (!ATisEmpty(allmodules)) {
+    module1 = ATgetFirst(allmodules);
+    importedmodules = (ATermList) GetValue(import_db,module1);
+    while (!ATisEmpty(importedmodules)) {
+      module2 = ATgetFirst(importedmodules);
+      pair = ATmake("[<term>,<term>]", module1, module2);
       if(ATindexOf(result, pair, 0) < 0)
         result = ATappend(result, pair);
-    };
-    modules = ATgetNext(modules);
+      importedmodules = ATgetNext(importedmodules);
+    }
+    allmodules = ATgetNext(allmodules);
   }
-  modules = (ATermList) GetValue(import_db,name);
-  while (!ATisEmpty(modules)) {
-    module = ATgetFirst(modules);
-    pair = ATmake("[<term>,<term>]", name, module);
-    if(ATindexOf(result, pair, 0) < 0)
-      result = ATappend(result, pair);
-    modules = ATgetNext(modules);
-  }
-  return result;
+  return ATmake("import-graph([<list>],[<list>])", actualmodules, result);
 }
 
 /*The Asf+Sdf variant */
 ATerm add_module(int cid, ATerm asfix)
 {
   ATerm t[8];
-  ATerm modname, modname_term;
-  ATermList sections, imports, unknowns, irels;
+  ATerm modname, modname_term, import_graph;
+  ATermList sections, imports, unknowns;
   ATerm newasfix;
   char *modname_str;
 
@@ -157,9 +153,9 @@ ATerm add_module(int cid, ATerm asfix)
       };
       imports = get_import_section(sections);
       unknowns = add_imports(modname_term,imports);
-      irels = calc_import_relations(modname_term);
-      return ATmake("snd-value(imports(<str>,need-modules([<list>]),irels([<list>])))",
-                    modname_str,unknowns,irels);
+      import_graph = calc_import_graph();
+      return ATmake("snd-value(imports(need-modules([<list>]),<term>))",
+                    unknowns,import_graph);
     }
     else {
       ATerror("not an identifier: %t\n", modname);
@@ -177,8 +173,8 @@ ATerm add_sdf2_module(int cid, char* path, ATerm asfix,
 {
   ATerm t[8];
   char *modname;
-  ATerm modname_term,appl, entry;
-  ATermList imports, unknowns, irels;
+  ATerm modname_term,appl, entry, import_graph;
+  ATermList imports, unknowns;
   ATerm status;
   char  newpath[1024] = {'\0'};
 
@@ -211,9 +207,9 @@ ATerm add_sdf2_module(int cid, char* path, ATerm asfix,
     PutValue(new_modules_db, modname_term, entry);
     imports = get_import_section_sdf2(asfix);
     unknowns = add_imports(modname_term,imports);
-    irels = calc_import_relations(modname_term);
-    return ATmake("snd-value(imports(<str>,need-modules([<list>]),irels([<list>])))",
-                  modname,unknowns,irels);
+    import_graph = calc_import_graph();
+    return ATmake("snd-value(imports(need-modules([<list>]),<term>))",
+                  unknowns,import_graph);
   } else {
     ATerror("not an asfix module: %t\n", asfix);
     return NULL;
@@ -247,8 +243,8 @@ ATerm update_sdf2_module(int cid, ATerm asfix)
 {
   ATerm t[8];
   char *module_string;
-  ATerm oldasfix, modname, appl, entry;
-  ATermList imports, unknowns, chg_mods, irels;
+  ATerm oldasfix, modname, appl, entry, import_graph;
+  ATermList imports, unknowns, chg_mods;
   ATerm place;
   char  *path;
 
@@ -280,18 +276,18 @@ ATerm update_sdf2_module(int cid, ATerm asfix)
         update_syntax_status_of_modules(chg_mods); 
         imports = get_import_section_sdf2(asfix);
         unknowns = replace_imports(modname,imports);
-        irels = calc_import_relations(modname);
-        return ATmake("snd-value(imports(<str>,changed-modules([<term>,<list>]),need-modules([<list>]),irels([<list>])))",
-                      module_string,modname,chg_mods,unknowns,irels);
+        import_graph = calc_import_graph();
+        return ATmake("snd-value(imports(changed-modules([<term>,<list>]),need-modules([<list>]),<term>))",
+                      modname,chg_mods,unknowns,import_graph);
       } else {
          ATerror("no path available for %t\n", asfix);
          return NULL; /* Silence the compiler */
       }
     } 
     else {
-      irels = calc_import_relations(modname);
-      return ATmake("snd-value(imports(<str>,need-modules([<list>]),irels([<list>])))",
-                    module_string,ATempty,irels);
+      import_graph = calc_import_graph();
+      return ATmake("snd-value(imports(need-modules([<list>]),<term>))",
+                    ATempty,import_graph);
       }
   }
   else {

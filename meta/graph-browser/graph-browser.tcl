@@ -100,81 +100,6 @@ set statuslist {}
 # INGOING  (note some proc's are also used internally)
 
 #---
-# snd-do(new-graph(graph(nodes([M1,..,Mn]),edges([Mi,Mj],..,[Mm,Mn]))))
-#-
-# Adds the named modules (nodes) and their import relations
-# (directed edges).
-# Modules and edges are added only once.
-# The proc update-graph is performed afterwards.
-#---
-proc new-graph { graph } {
-    global g
-
-    GBin "new-graph($graph)"
-
-    foreach graphnode [$g listnodes] {
-	$graphnode delete
-    }
-
-    # change ``graph(nodes('' in ``{''
-    regsub {[ \t\n\]*graph[ \t\n\]*\([ \t\n\]*nodes[ \t\n\]*\([ \t\n\]*} \
-	    $graph "{" tmp
-    # change ``),edges('' in `` ''
-    regsub {[ \t\n\]*\)[ \t\n\]*,[ \t\n\]*edges[ \t\n\]*\([ \t\n\]*} \
-	    $tmp " " tmp2
-    # change ``))'' in ``}''
-    regsub {[ \t\n\]*\)[ \t\n\]*\)[ \t\n\]*$} $tmp2 "}" tmp
-
-    eval "set graph $tmp"
-
-    # now we have a list of two elements:
-    # (1) a list of nodes
-    # (2) a list of edges
-    # each edge is in turn a list of two nodes
-    # all nodes are `wrapped' in id("...") function appl's
-
-    foreach node [lindex $graph 0] {
-	$g addnode [StripId $node]
-    }
-
-    foreach edge [lindex $graph 1] {
-	AddUniqueEdge $g [$g addnode [StripId [lindex $edge 0]]] \
-	       [$g addnode [StripId [lindex $edge 1]]]
-    }
-    update-graph
-}
-
-
-#---
-# snd-do(open-module(Mod))
-#-
-# Adds the named module.
-# Modules are added only once.
-# The proc update-graph is performed afterwards.
-#---
-proc open-module { mod } {
-    global g MODULESTYLE
-    GBin "open-module($mod)"
-    $g addnode [StripId $mod] shape $MODULESTYLE
-    update-graph
-}
-
-#---
-# snd-do(open-empty-module(Mod))
-#-
-# Adds the named module, but it is being added as an oval
-# instead of a box.
-# Modules are added only once.
-# The proc update-graph is performed afterwards.
-#---
-proc open-empty-module { mod } {
-    global g MODULESTYLE
-    GBin "open-empty-module($mod)"
-    $g addnode [StripId $mod]
-    update-graph
-}
-
-#---
 # snd-do(delete-module(Mod))
 #-
 # "Deletes" the named module i.e. turns it into shadowstyle
@@ -193,65 +118,37 @@ proc delete-module { mod } {
     update-graph
 }
 
+#---
+# snd-do(new-graph([Mod1, Mod2,...[[Mod, Mod1], [Mod2, Mod3], ... , [Modn, Modm]]))
+#-
+# Creates a new import graph based on a list of modules (nodes) and
+# their import relations (directed edges). The modules are those that
+# occur in the module database. The import relation is given as a list
+# of pairs where an element [A,B] denotes A imports B. Modules and
+# edges are added only once.
 
 #---
-# snd-do(imports(Mod, [Mod1, ..., Modn]))
-#-
-# Adds the named modules (nodes) and their import relations
-# (directed edges) using a module and a list of modules it imports.
-# Modules and edges are added only once.
-# The proc update-graph is performed afterwards.
-#---
-proc imports { mod modlist } {
-    global g SHADOWSTYLE
-    GBin "imports($mod,$modlist)"
-    set i [$g addnode [StripId $mod]]
-    foreach j $modlist {
-	AddUniqueEdge $g $i [$g addnode [StripId $j]]
+proc new-graph { modlist implist } {
+    global g MODULESTYLE
+    GBin "new-graph($modlist, $implist)"
+
+
+    foreach graphnode [$g listnodes] {
+	$graphnode delete
     }
-    update-graph
-}
 
+    foreach mod $modlist {
+	$g addnode [StripId $mod] shape $MODULESTYLE
+    }
 
-#---
-# snd-do(add-imports([[Mod, Mod1], [Mod2, Mod3], ... , [Modn, Modm]]))
-#-
-# Adds the named modules (nodes) and their import relations (directed
-# edges) using a list of pairs. In this list, the element [A,B]
-# denotes A imports B
-# Modules and edges are added only once.
-#---
-proc add-imports { implist } {
-    global g SHADOWSTYLE
-    GBin "add-imports($implist)"
     foreach rel $implist {
-	AddUniqueEdge $g [$g addnode [StripId [lindex $rel 0]]]	\
-		[$g addnode [StripId [lindex $rel 1]]]
+	AddUniqueEdge $g [$g addnode [StripId [lindex $rel 0]]] \
+	    [$g addnode [StripId [lindex $rel 1]]]
     }
+
     update-graph
 }
 
-#---
-# snd-do(update-imports(Mod0, [[Mod, Mod1], [Mod2, Mod3], ... , [Modn, Modm]]))
-#-
-# Adds the named modules (nodes) and their import relations (directed
-# edges) using a list of pairs. In this list, the element [A,B]
-# denotes A imports B
-# Modules and edges are added only once.
-#---
-proc update-imports { mod implist } {
-    global g SHADOWSTYLE
-    GBin "update-imports($mod, $implist)"
-    set node [$g findnode [StripId $mod]]
-    foreach edge [$node listoutedges] {
-      $edge delete
-    }
-    foreach rel $implist {
-	AddUniqueEdge $g [$g addnode [StripId [lindex $rel 0]]]	\
-		[$g addnode [StripId [lindex $rel 1]]]
-    }
-    update-graph
-}
 
 #---
 # snd-do(finished-opening-modules(Mod))
@@ -462,7 +359,9 @@ proc mouse_anyenter {c} {
     global saveFill
     set obj [string range [lindex [$c gettags current] 0] 1 end]
     set type [string range $obj 0 3]
+
     if {$type == "node"} {
+        GBmsg "$type $obj"
 	set saveFill [list $obj [lindex [$c itemconfigure 1$obj -fill] 4]]
 	$c itemconfigure 1$obj -fill black -stipple gray12
     }

@@ -17,9 +17,9 @@ let
   Name    : term,
   Str     : term,
   Str1    : term,
-  Graph   : term,
   Mod     : term,
   Pairs   : list,
+  Mods    : list,
   ModName : str,
   T       : str,
   FT      : str,
@@ -27,7 +27,7 @@ let
   ErrMsg  : str
 in
   Id := process-id.
-  subscribe(import-relations(<term>)).
+  subscribe(import-graph(<term>,<term>)).
   execute(user-interface,UI?).
   create(Status-display(UI),SD?).
   ( 
@@ -41,14 +41,9 @@ in
       +
         rec-msg(module-created).
 	snd-msg(open-modules([Str])). 
-	( rec-msg(ui,open-module(Str1?)).
-          snd-do(UI,open-module(Str1))
-        + rec-msg(ui,imports(Name?,Str1?)).
-          snd-do(UI,imports(Name,Str1))
-        + rec-note(import-relations(irels(Name?, Pairs?))).
-          snd-do(UI,add-imports(Pairs))
+	( rec-note(import-graph(Mods?,Pairs?)).
+          snd-do(UI,new-graph(Mods,Pairs))
         + rec-msg(cannot-open-module(ModName?)).
-          snd-do(UI,open-empty-module(ModName)).
 	  snd-note(ui-status(errorf("cannot open module \"%s\"",[ModName])))
         )*
         rec-msg(finished-opening-modules).
@@ -61,25 +56,16 @@ in
     ( rec-event(UI, open-module(Str?)).
       snd-note(online-help(open-module)).
       snd-msg(open-modules([Str])).
-      ( rec-msg(ui,open-module(Str1?)).
-        snd-do(UI,open-module(Str1))
-      + rec-msg(ui,imports(Name?,Str1?)).
-        snd-do(UI,imports(Name,Str1))
-      + rec-note(import-relations(irels(Name?, Pairs?))).
-        snd-do(UI,add-imports(Pairs))
+      ( rec-note(import-graph(Mods?,Pairs?)).
+        snd-do(UI,new-graph(Mods,Pairs))
       + rec-msg(cannot-open-module(ModName?)).
-        snd-do(UI,open-empty-module(ModName)).
 	snd-note(ui-status(errorf("cannot open module \"%s\"",[ModName])))
       )*
       rec-msg(finished-opening-modules).
       snd-do(UI,finished-opening-modules(Str)).
       snd-ack-event(UI, open-module(Str))
     ) +
-    ( rec-msg(ui, open-module(Str1?)).
-      snd-do(UI,open-module(Str1))
-    ) + 
     ( rec-msg(cannot-open-module(ModName?)).
-      snd-do(UI,open-empty-module(ModName)).
       snd-note(ui-status(errorf("cannot open module \"%s\"",[ModName])))
     ) +
     ( rec-event(UI,delete-module(Str?)).
@@ -151,8 +137,8 @@ in
      rec-msg(done).
      snd-ack-event(UI,no-online-help)
    ) +
-   ( rec-note(import-relations(irels(Name?, Pairs?))).
-     snd-do(UI,update-imports(Name, Pairs))
+   ( rec-note(import-graph(Mods?,Pairs?)).
+     snd-do(UI,new-graph(Mods,Pairs))
    )
   ) *
   ( rec-event(UI,button(quit))

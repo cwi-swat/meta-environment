@@ -16,6 +16,7 @@ Modules   : list,
 ChngMods  : list,
 Equations : list,
 Pairs     : list,
+ActualMods: list,
 Status    : str,
 Language  : str
 in
@@ -69,12 +70,12 @@ snd-do(Mdb, create-module-db).
     snd-msg(not-exists-in-module-db(Name))
   )
 +
-/* Add a module to the database */
+/* Add a module-asfix module to the database */
   rec-msg(add-module-to-db(AsFixModule?,timestamp(Time?))).
   snd-eval(Mdb,add-module(AsFixModule)).
-  rec-value(Mdb,imports(Name?,need-modules(Modules?),irels(Pairs?))).
-/* If a new module is added, we tell the world the new import relations */
-  snd-note(import-relations(irels(Name,Pairs))).
+  rec-value(Mdb,imports(need-modules(Modules?),import-graph(ActualMods?, Pairs?))).
+/* If a new module is added, we tell the world the current import relations */
+  snd-note(import-graph(ActualMods, Pairs)).
   snd-msg(need-modules(Modules))
 +
   rec-msg(add-empty-module-to-db(Name?)).
@@ -82,13 +83,14 @@ snd-do(Mdb, create-module-db).
   rec-value(Mdb,done).
   snd-msg(done)
 +
+/* Add a term-asfix module to the database */
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
   rec-msg(add-sdf2-module-to-db(Path?,AsFixModule?,timestamp(Time?),Status?)).
   snd-eval(Mdb,add-sdf2-module(Path,AsFixModule,Time,Status)).
-  rec-value(Mdb,imports(Name?,need-modules(Modules?),irels(Pairs?))).
-/* If a new module is added, we tell the world the new import relations */
-  snd-note(import-relations(irels(Name,Pairs))).
+  rec-value(Mdb,imports(need-modules(Modules?),import-graph(ActualMods?, Pairs?))).
+/* If a new module is added, we tell the world the current import relations */
+  snd-note(import-graph(ActualMods, Pairs)).
   snd-msg(need-modules(Modules))
 +
 /* Path is the directory in which the file containing Module lives.
@@ -96,7 +98,8 @@ snd-do(Mdb, create-module-db).
   rec-msg(update-module-in-db(AsFixModule?,Language?)).
   if equal(Language,"Sdf2") then
     snd-eval(Mdb,update-sdf2-module(AsFixModule)).
-    rec-value(Mdb,imports(Name?,changed-modules(ChngMods?),need-modules(Modules?),irels(Pairs?))).
+    rec-value(Mdb,imports(changed-modules(ChngMods?),need-modules(Modules?),
+                          import-graph(ActualMods?, Pairs?))).
     (
       /* For each changed module a message is sent to the
        * sglr in order to remove the associated parse table, if available.
@@ -111,9 +114,9 @@ snd-do(Mdb, create-module-db).
     )*
     if equal(ChngMods,[]) then
       /* If a new module is added, 
-       * we tell the world the new import relations 
+       * we tell the world the current import relations 
        */
-      snd-note(import-relations(irels(Name,Pairs))).
+      snd-note(import-graph(ActualMods, Pairs)).
       snd-msg(extra-modules(Modules))
     fi
   else
