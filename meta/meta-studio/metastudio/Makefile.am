@@ -17,7 +17,7 @@ java_JAVA	= \
 GENSOURCES	= UserInterfaceTif.java UserInterfaceTool.java \
 		UserInterfaceBridge.java
 
-data_DATA	= meta-studio.idef
+pkgdata_DATA	= meta-studio.idef
 EXTRA_DIST	= meta-studio.idef
 
 CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${ATERM}/classes:${TOOLBUS}/classes

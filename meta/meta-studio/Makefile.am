@@ -5,7 +5,7 @@ SUBDIRS		= META-INF images metastudio scripts .
 
 EXTRA_DIST	=
 
-data_DATA	= meta-studio.jar
+pkgdata_DATA	= meta-studio.jar
 
 CLEANFILES	= meta-studio.jar
 

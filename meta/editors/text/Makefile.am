@@ -1,6 +1,6 @@
 # $Id$
 
-data_DATA = text-editor.idef meta.el
+pkgdata_DATA = text-editor.idef meta.el
 
 bin_SCRIPTS = emacs-editor
 

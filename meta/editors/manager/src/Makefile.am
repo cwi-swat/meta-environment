@@ -9,7 +9,7 @@ INCLUDES		= -I$(ATERM)/include \
 			-DBINDIR=\"$(bindir)\"
 
 bin_PROGRAMS		= editor-manager
-data_DATA		= editor-manager.idef
+pkgdata_DATA		= editor-manager.idef
 
 CLEANFILES		= editor-manager.tifs editor-manager.tif.[ch]
 

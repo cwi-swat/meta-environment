@@ -3,7 +3,7 @@
 include $(top_srcdir)/make_rules
 
 bin_PROGRAMS		= module-db
-data_DATA		= module-db.idef
+pkgdata_DATA		= module-db.idef
 
 EXTRA_DIST		= module-db.idef
 

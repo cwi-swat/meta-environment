@@ -26,7 +26,7 @@ EXTRA_DIST  = graph-browser.sh.src graph-browser.tcl \
               graph-browser.pod graph-browser.1
 
 bin_SCRIPTS = graph-browser
-data_DATA   = graph-browser.tcl
+pkgdata_DATA   = graph-browser.tcl
 man_MANS    = graph-browser.1
 
 
@@ -41,5 +41,5 @@ CLEANFILES  = graph-browser graph-browser.1
 	 fi
 	sed 's@__WISH__@$(WISH)@g;\
 	     s@__GRAPHVIZ__@$(GRAPHVIZ)@g;\
-	     s@__DATADIR__@$(datadir)@g' < $< > $@ && \
+	     s@__DATADIR__@$(pkgdatadir)@g' < $< > $@ && \
 	chmod +x $@

@@ -5,7 +5,7 @@ include $(top_srcdir)/make_rules
 EXTRA_DIST		= se.idef
 
 bin_PROGRAMS		= se
-data_DATA		= se.idef
+pkgdata_DATA		= se.idef
 
 noinst_HEADERS		= area.h editor.h focus.h path.h sort.h tree.h \
 			EditorData.h EditorData_dict.h length.h

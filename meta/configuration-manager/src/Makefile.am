@@ -5,7 +5,7 @@ include $(top_srcdir)/make_rules
 
 bin_PROGRAMS      = configmanager
 
-data_DATA         = configmanager.idef
+pkgdata_DATA         = configmanager.idef
 
 EXTRA_DIST        = configmanager.idef
 

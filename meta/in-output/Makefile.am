@@ -3,7 +3,7 @@
 include $(top_srcdir)/make_rules
 
 bin_PROGRAMS		= in-output
-data_DATA		= in-output.idef
+pkgdata_DATA		= in-output.idef
 
 EXTRA_DIST		= in-output.idef
 
