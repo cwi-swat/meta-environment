@@ -767,7 +767,7 @@ aterm_list *cons(aterm_list *l1, aterm_list *l2)
 
   result = l2;  
   len = MIN(MAX_STORE, TlistSize(l1));
-  for(int i=0; i<len; i++) {
+  for(i=0; i<len; i++) {
     term_store[i] = t_list_first(l1);
     l1 = t_list_next(l1);
   }
@@ -1224,7 +1224,9 @@ aterm *ok(aterm *t)
 
 aterm *make_nf0(asymbol *s)
 {
-  return TbuildAppl(w, s, t_empty(w));
+  aterm *result = TbuildAppl(w, s, t_empty(w));
+  t_unprotect(t_empty(w));
+  return result;
 }
 
 /*}}}  */
@@ -1234,6 +1236,7 @@ aterm *make_nf1(asymbol *s, aterm *t0)
 {
   aterm *result;
   aterm_list *args = TbuildList(w, t0, t_empty(w));
+  t_unprotect(t_empty(w));
   t_unprotect(t0);
   result = TbuildAppl(w, s, args);
   t_unprotect(args);
@@ -1245,13 +1248,15 @@ aterm *make_nf1(asymbol *s, aterm *t0)
 
 aterm *make_nf2(asymbol *s, aterm *t0, aterm *t1)
 {
-  aterm *result;
+  aterm *result, *args2;
   aterm_list *args = TbuildList(w, t1, t_empty(w));
+  t_unprotect(t_empty(w));
   t_unprotect(t1);
-  args = TbuildList(w, t0, args);
-  t_unprotect(t0);
-  result = TbuildAppl(w, s, args);
+  args2 = TbuildList(w, t0, args);
   t_unprotect(args);
+  t_unprotect(t0);
+  result = TbuildAppl(w, s, args2);
+  t_unprotect(args2);
   return result;
 }
 
@@ -1260,12 +1265,15 @@ aterm *make_nf2(asymbol *s, aterm *t0, aterm *t1)
 
 aterm *make_nf3(asymbol *s, aterm *t0, aterm *t1, aterm *t2)
 {
-  aterm *result;
+  aterm *result, *args2;
   aterm_list *args = TbuildList(w, t2, t_empty(w));
+  t_unprotect(t_empty(w));
   t_unprotect(t2);
-  args = TbuildList(w, t1, args);
+  args2 = TbuildList(w, t1, args);
+  t_unprotect(args);
   t_unprotect(t1);
-  args = TbuildList(w, t0, args);
+  args = TbuildList(w, t0, args2);
+  t_unprotect(args2);
   t_unprotect(t0);
   result = TbuildAppl(w, s, args);
   t_unprotect(args);
@@ -1278,17 +1286,21 @@ aterm *make_nf3(asymbol *s, aterm *t0, aterm *t1, aterm *t2)
 
 aterm *make_nf4(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3)
 {
-  aterm *result;
+  aterm *result, *args2;
   aterm_list *args = TbuildList(w, t3, t_empty(w));
+  t_unprotect(t_empty(w));
   t_unprotect(t3);
-  args = TbuildList(w, t2, args);
-  t_unprotect(t2);
-  args = TbuildList(w, t1, args);
-  t_unprotect(t1);
-  args = TbuildList(w, t0, args);
-  t_unprotect(t0);
-  result = TbuildAppl(w, s, args);
+  args2 = TbuildList(w, t2, args);
   t_unprotect(args);
+  t_unprotect(t2);
+  args = TbuildList(w, t1, args2);
+  t_unprotect(args2);
+  t_unprotect(t1);
+  args2 = TbuildList(w, t0, args);
+  t_unprotect(args);
+  t_unprotect(t0);
+  result = TbuildAppl(w, s, args2);
+  t_unprotect(args2);
   return result;
 }
 
@@ -1298,16 +1310,21 @@ aterm *make_nf4(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3)
 aterm *make_nf5(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 		aterm *t4)
 {
-  aterm *result;
+  aterm *result, *args2;
   aterm_list *args = TbuildList(w, t4, t_empty(w));
+  t_unprotect(t_empty(w));
   t_unprotect(t4);
-  args = TbuildList(w, t3, args);
+  args2 = TbuildList(w, t3, args);
+  t_unprotect(args);
   t_unprotect(t3);
-  args = TbuildList(w, t2, args);
+  args = TbuildList(w, t2, args2);
+  t_unprotect(args2);
   t_unprotect(t2);
-  args = TbuildList(w, t1, args);
+  args2 = TbuildList(w, t1, args);
+  t_unprotect(args);
   t_unprotect(t1);
-  args = TbuildList(w, t0, args);
+  args = TbuildList(w, t0, args2);
+  t_unprotect(args2);
   t_unprotect(t0);
   result = TbuildAppl(w, s, args);
   t_unprotect(args);
@@ -1320,21 +1337,27 @@ aterm *make_nf5(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 aterm *make_nf6(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 		aterm *t4, aterm *t5)
 {
-  aterm *result;
+  aterm *result, *args2;
   aterm_list *args = TbuildList(w, t5, t_empty(w));
+  t_unprotect(t_empty(w));
   t_unprotect(t5);
-  args = TbuildList(w, t4, args);
-  t_unprotect(t4);
-  args = TbuildList(w, t3, args);
-  t_unprotect(t3);
-  args = TbuildList(w, t2, args);
-  t_unprotect(t2);
-  args = TbuildList(w, t1, args);
-  t_unprotect(t1);
-  args = TbuildList(w, t0, args);
-  t_unprotect(t0);
-  result = TbuildAppl(w, s, args);
+  args2 = TbuildList(w, t4, args);
   t_unprotect(args);
+  t_unprotect(t4);
+  args = TbuildList(w, t3, args2);
+  t_unprotect(args2);
+  t_unprotect(t3);
+  args2 = TbuildList(w, t2, args);
+  t_unprotect(args);
+  t_unprotect(t2);
+  args = TbuildList(w, t1, args2);
+  t_unprotect(args2);
+  t_unprotect(t1);
+  args2 = TbuildList(w, t0, args);
+  t_unprotect(args);
+  t_unprotect(t0);
+  result = TbuildAppl(w, s, args2);
+  t_unprotect(args2);
   return result;
 }
 
@@ -1344,20 +1367,27 @@ aterm *make_nf6(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 aterm *make_nf7(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 		aterm *t4, aterm *t5, aterm *t6)
 {
-  aterm *result;
+  aterm *result, *args2;
   aterm_list *args = TbuildList(w, t6, t_empty(w));
+  t_unprotect(t_empty(w));
   t_unprotect(t6);
-  args = TbuildList(w, t5, args);
+  args2 = TbuildList(w, t5, args);
+  t_unprotect(args);
   t_unprotect(t5);
-  args = TbuildList(w, t4, args);
+  args = TbuildList(w, t4, args2);
+  t_unprotect(args2);
   t_unprotect(t4);
-  args = TbuildList(w, t3, args);
+  args2 = TbuildList(w, t3, args);
+  t_unprotect(args);
   t_unprotect(t3);
-  args = TbuildList(w, t2, args);
+  args = TbuildList(w, t2, args2);
+  t_unprotect(args2);
   t_unprotect(t2);
-  args = TbuildList(w, t1, args);
+  args2 = TbuildList(w, t1, args);
+  t_unprotect(args);
   t_unprotect(t1);
-  args = TbuildList(w, t0, args);
+  args = TbuildList(w, t0, args2);
+  t_unprotect(args2);
   t_unprotect(t0);
   result = TbuildAppl(w, s, args);
   t_unprotect(args);
@@ -1370,26 +1400,34 @@ aterm *make_nf7(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 aterm *make_nf8(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 		aterm *t4, aterm *t5, aterm *t6, aterm *t7)
 {
-  aterm *result;
+  aterm *result, *args2;
   aterm_list *
   args = TbuildList(w, t7, t_empty(w));
+  t_unprotect(t_empty(w));
   t_unprotect(t7);
-  args = TbuildList(w, t6, args);
-  t_unprotect(t6);
-  args = TbuildList(w, t5, args);
-  t_unprotect(t5);
-  args = TbuildList(w, t4, args);
-  t_unprotect(t4);
-  args = TbuildList(w, t3, args);
-  t_unprotect(t3);
-  args = TbuildList(w, t2, args);
-  t_unprotect(t2);
-  args = TbuildList(w, t1, args);
-  t_unprotect(t1);
-  args = TbuildList(w, t0, args);
-  t_unprotect(t0);
-  result = TbuildAppl(w, s, args);
+  args2 = TbuildList(w, t6, args);
   t_unprotect(args);
+  t_unprotect(t6);
+  args = TbuildList(w, t5, args2);
+  t_unprotect(args2);
+  t_unprotect(t5);
+  args2 = TbuildList(w, t4, args);
+  t_unprotect(args);
+  t_unprotect(t4);
+  args = TbuildList(w, t3, args2);
+  t_unprotect(args2);
+  t_unprotect(t3);
+  args2 = TbuildList(w, t2, args);
+  t_unprotect(args);
+  t_unprotect(t2);
+  args = TbuildList(w, t1, args2);
+  t_unprotect(args2);
+  t_unprotect(t1);
+  args2 = TbuildList(w, t0, args);
+  t_unprotect(args);
+  t_unprotect(t0);
+  result = TbuildAppl(w, s, args2);
+  t_unprotect(args2);
   return result;
 }
 
@@ -1399,25 +1437,34 @@ aterm *make_nf8(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 aterm *make_nf9(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 		aterm *t4, aterm *t5, aterm *t6, aterm *t7, aterm *t8)
 {
-  aterm *result;
+  aterm *result, *args2;
   aterm_list *
   args = TbuildList(w, t8, t_empty(w));
+  t_unprotect(t_empty(w));
   t_unprotect(t8);
-  args = TbuildList(w, t7, t_empty(w));
+  args2 = TbuildList(w, t7, args);
+  t_unprotect(args);
   t_unprotect(t7);
-  args = TbuildList(w, t6, args);
+  args = TbuildList(w, t6, args2);
+  t_unprotect(args2);
   t_unprotect(t6);
-  args = TbuildList(w, t5, args);
+  args2 = TbuildList(w, t5, args);
+  t_unprotect(args);
   t_unprotect(t5);
-  args = TbuildList(w, t4, args);
+  args = TbuildList(w, t4, args2);
+  t_unprotect(args2);
   t_unprotect(t4);
-  args = TbuildList(w, t3, args);
+  args2 = TbuildList(w, t3, args);
+  t_unprotect(args);
   t_unprotect(t3);
-  args = TbuildList(w, t2, args);
+  args = TbuildList(w, t2, args2);
+  t_unprotect(args2);
   t_unprotect(t2);
-  args = TbuildList(w, t1, args);
+  args2 = TbuildList(w, t1, args);
+  t_unprotect(args);
   t_unprotect(t1);
-  args = TbuildList(w, t0, args);
+  args = TbuildList(w, t0, args2);
+  t_unprotect(args2);
   t_unprotect(t0);
   result = TbuildAppl(w, s, args);
   t_unprotect(args);
@@ -1431,30 +1478,40 @@ aterm *make_nf10(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 		aterm *t4, aterm *t5, aterm *t6, aterm *t7, aterm *t8,
 		 aterm *t9)
 {
-  aterm *result;
+  aterm *result, *args2;
   aterm_list *
   args = TbuildList(w, t9, t_empty(w));
+  t_unprotect(t_empty(w));
   t_unprotect(t9);
-  args = TbuildList(w, t8, t_empty(w));
-  t_unprotect(t8);
-  args = TbuildList(w, t7, t_empty(w));
-  t_unprotect(t7);
-  args = TbuildList(w, t6, args);
-  t_unprotect(t6);
-  args = TbuildList(w, t5, args);
-  t_unprotect(t5);
-  args = TbuildList(w, t4, args);
-  t_unprotect(t4);
-  args = TbuildList(w, t3, args);
-  t_unprotect(t3);
-  args = TbuildList(w, t2, args);
-  t_unprotect(t2);
-  args = TbuildList(w, t1, args);
-  t_unprotect(t1);
-  args = TbuildList(w, t0, args);
-  t_unprotect(t0);
-  result = TbuildAppl(w, s, args);
+  args2 = TbuildList(w, t8, args);
   t_unprotect(args);
+  t_unprotect(t8);
+  args = TbuildList(w, t7, args2);
+  t_unprotect(args2);
+  t_unprotect(t7);
+  args2 = TbuildList(w, t6, args);
+  t_unprotect(args);
+  t_unprotect(t6);
+  args = TbuildList(w, t5, args2);
+  t_unprotect(args2);
+  t_unprotect(t5);
+  args2 = TbuildList(w, t4, args);
+  t_unprotect(args);
+  t_unprotect(t4);
+  args = TbuildList(w, t3, args2);
+  t_unprotect(args2);
+  t_unprotect(t3);
+  args2 = TbuildList(w, t2, args);
+  t_unprotect(args);
+  t_unprotect(t2);
+  args = TbuildList(w, t1, args2);
+  t_unprotect(args2);
+  t_unprotect(t1);
+  args2 = TbuildList(w, t0, args);
+  t_unprotect(args);
+  t_unprotect(t0);
+  result = TbuildAppl(w, s, args2);
+  t_unprotect(args2);
   return result;
 }
 
@@ -1465,29 +1522,40 @@ aterm *make_nf11(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 		aterm *t4, aterm *t5, aterm *t6, aterm *t7, aterm *t8,
 		 aterm *t9, aterm *t10)
 {
-  aterm *result;
+  aterm *result, *args2;
   aterm_list *
   args = TbuildList(w, t10, t_empty(w));
+  t_unprotect(t_empty(w));
   t_unprotect(t10);
-  args = TbuildList(w, t9, t_empty(w));
+  args2 = TbuildList(w, t9, args);
+  t_unprotect(args);
   t_unprotect(t9);
-  args = TbuildList(w, t8, t_empty(w));
+  args = TbuildList(w, t8, args2);
+  t_unprotect(args2);
   t_unprotect(t8);
-  args = TbuildList(w, t7, t_empty(w));
+  args2 = TbuildList(w, t7, args);
+  t_unprotect(args2);
   t_unprotect(t7);
-  args = TbuildList(w, t6, args);
+  args = TbuildList(w, t6, args2);
+  t_unprotect(args2);
   t_unprotect(t6);
-  args = TbuildList(w, t5, args);
+  args2 = TbuildList(w, t5, args);
+  t_unprotect(args);
   t_unprotect(t5);
-  args = TbuildList(w, t4, args);
+  args = TbuildList(w, t4, args2);
+  t_unprotect(args2);
   t_unprotect(t4);
-  args = TbuildList(w, t3, args);
+  args2 = TbuildList(w, t3, args);
+  t_unprotect(args);
   t_unprotect(t3);
-  args = TbuildList(w, t2, args);
+  args = TbuildList(w, t2, args2);
+  t_unprotect(args2);
   t_unprotect(t2);
-  args = TbuildList(w, t1, args);
+  args2 = TbuildList(w, t1, args);
+  t_unprotect(args);
   t_unprotect(t1);
-  args = TbuildList(w, t0, args);
+  args = TbuildList(w, t0, args2);
+  t_unprotect(args2);
   t_unprotect(t0);
   result = TbuildAppl(w, s, args);
   t_unprotect(args);
@@ -1501,34 +1569,46 @@ aterm *make_nf12(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 		aterm *t4, aterm *t5, aterm *t6, aterm *t7, aterm *t8,
 		 aterm *t9, aterm *t10, aterm *t11)
 {
-  aterm *result;
+  aterm *result, *args2;
   aterm_list *
   args = TbuildList(w, t11, t_empty(w));
+  t_unprotect(t_empty(w));
   t_unprotect(t11);
-  args = TbuildList(w, t10, t_empty(w));
-  t_unprotect(t10);
-  args = TbuildList(w, t9, t_empty(w));
-  t_unprotect(t9);
-  args = TbuildList(w, t8, t_empty(w));
-  t_unprotect(t8);
-  args = TbuildList(w, t7, t_empty(w));
-  t_unprotect(t7);
-  args = TbuildList(w, t6, args);
-  t_unprotect(t6);
-  args = TbuildList(w, t5, args);
-  t_unprotect(t5);
-  args = TbuildList(w, t4, args);
-  t_unprotect(t4);
-  args = TbuildList(w, t3, args);
-  t_unprotect(t3);
-  args = TbuildList(w, t2, args);
-  t_unprotect(t2);
-  args = TbuildList(w, t1, args);
-  t_unprotect(t1);
-  args = TbuildList(w, t0, args);
-  t_unprotect(t0);
-  result = TbuildAppl(w, s, args);
+  args2 = TbuildList(w, t10, args);
   t_unprotect(args);
+  t_unprotect(t10);
+  args = TbuildList(w, t9, args2);
+  t_unprotect(args2);
+  t_unprotect(t9);
+  args2 = TbuildList(w, t8, args);
+  t_unprotect(args);
+  t_unprotect(t8);
+  args = TbuildList(w, t7, args2);
+  t_unprotect(args2);
+  t_unprotect(t7);
+  args2 = TbuildList(w, t6, args);
+  t_unprotect(args);
+  t_unprotect(t6);
+  args = TbuildList(w, t5, args2);
+  t_unprotect(args2);
+  t_unprotect(t5);
+  args2 = TbuildList(w, t4, args);
+  t_unprotect(args);
+  t_unprotect(t4);
+  args = TbuildList(w, t3, args2);
+  t_unprotect(args2);
+  t_unprotect(t3);
+  args2 = TbuildList(w, t2, args);
+  t_unprotect(args);
+  t_unprotect(t2);
+  args = TbuildList(w, t1, args2);
+  t_unprotect(args2);
+  t_unprotect(t1);
+  args2 = TbuildList(w, t0, args);
+  t_unprotect(args);
+  t_unprotect(t0);
+  result = TbuildAppl(w, s, args2);
+  t_unprotect(args2);
   return result;
 }
 
@@ -1539,33 +1619,46 @@ aterm *make_nf13(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 		aterm *t4, aterm *t5, aterm *t6, aterm *t7, aterm *t8,
 		 aterm *t9, aterm *t10, aterm *t11, aterm *t12)
 {
-  aterm *result;
+  aterm *result, *args2;
   aterm_list *
   args = TbuildList(w, t12, t_empty(w));
+  t_unprotect(t_empty(w));
   t_unprotect(t12);
-  args = TbuildList(w, t11, t_empty(w));
+  args2 = TbuildList(w, t11, args);
+  t_unprotect(args);
   t_unprotect(t11);
-  args = TbuildList(w, t10, t_empty(w));
+  args = TbuildList(w, t10, args2);
+  t_unprotect(args2);
   t_unprotect(t10);
-  args = TbuildList(w, t9, t_empty(w));
+  args2 = TbuildList(w, t9, args);
+  t_unprotect(args);
   t_unprotect(t9);
-  args = TbuildList(w, t8, t_empty(w));
+  args = TbuildList(w, t8, args2);
+  t_unprotect(args2);
   t_unprotect(t8);
-  args = TbuildList(w, t7, t_empty(w));
+  args2 = TbuildList(w, t7, args);
+  t_unprotect(args);
   t_unprotect(t7);
-  args = TbuildList(w, t6, args);
+  args = TbuildList(w, t6, args2);
+  t_unprotect(args2);
   t_unprotect(t6);
-  args = TbuildList(w, t5, args);
+  args2 = TbuildList(w, t5, args);
+  t_unprotect(args);
   t_unprotect(t5);
-  args = TbuildList(w, t4, args);
+  args = TbuildList(w, t4, args2);
+  t_unprotect(args2);
   t_unprotect(t4);
-  args = TbuildList(w, t3, args);
+  args2 = TbuildList(w, t3, args);
+  t_unprotect(args);
   t_unprotect(t3);
-  args = TbuildList(w, t2, args);
+  args = TbuildList(w, t2, args2);
+  t_unprotect(args2);
   t_unprotect(t2);
-  args = TbuildList(w, t1, args);
+  args2 = TbuildList(w, t1, args);
+  t_unprotect(args);
   t_unprotect(t1);
-  args = TbuildList(w, t0, args);
+  args = TbuildList(w, t0, args2);
+  t_unprotect(args2);
   t_unprotect(t0);
   result = TbuildAppl(w, s, args);
   t_unprotect(args);
@@ -1579,38 +1672,52 @@ aterm *make_nf14(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 		aterm *t4, aterm *t5, aterm *t6, aterm *t7, aterm *t8,
 		 aterm *t9, aterm *t10, aterm *t11, aterm *t12, aterm *t13)
 {
-  aterm *result;
+  aterm *result, *args2;
   aterm_list *
   args = TbuildList(w, t13, t_empty(w));
+  t_unprotect(t_empty(w));
   t_unprotect(t13);
-  args = TbuildList(w, t12, t_empty(w));
-  t_unprotect(t12);
-  args = TbuildList(w, t11, t_empty(w));
-  t_unprotect(t11);
-  args = TbuildList(w, t10, t_empty(w));
-  t_unprotect(t10);
-  args = TbuildList(w, t9, t_empty(w));
-  t_unprotect(t9);
-  args = TbuildList(w, t8, t_empty(w));
-  t_unprotect(t8);
-  args = TbuildList(w, t7, t_empty(w));
-  t_unprotect(t7);
-  args = TbuildList(w, t6, args);
-  t_unprotect(t6);
-  args = TbuildList(w, t5, args);
-  t_unprotect(t5);
-  args = TbuildList(w, t4, args);
-  t_unprotect(t4);
-  args = TbuildList(w, t3, args);
-  t_unprotect(t3);
-  args = TbuildList(w, t2, args);
-  t_unprotect(t2);
-  args = TbuildList(w, t1, args);
-  t_unprotect(t1);
-  args = TbuildList(w, t0, args);
-  t_unprotect(t0);
-  result = TbuildAppl(w, s, args);
+  args2 = TbuildList(w, t12, args);
   t_unprotect(args);
+  t_unprotect(t12);
+  args = TbuildList(w, t11, args2);
+  t_unprotect(args2);
+  t_unprotect(t11);
+  args2 = TbuildList(w, t10, args);
+  t_unprotect(args);
+  t_unprotect(t10);
+  args = TbuildList(w, t9, args2);
+  t_unprotect(args2);
+  t_unprotect(t9);
+  args2 = TbuildList(w, t8, args);
+  t_unprotect(args);
+  t_unprotect(t8);
+  args = TbuildList(w, t7, args2);
+  t_unprotect(args2);
+  t_unprotect(t7);
+  args2 = TbuildList(w, t6, args);
+  t_unprotect(args);
+  t_unprotect(t6);
+  args = TbuildList(w, t5, args2);
+  t_unprotect(args2);
+  t_unprotect(t5);
+  args2 = TbuildList(w, t4, args);
+  t_unprotect(args);
+  t_unprotect(t4);
+  args = TbuildList(w, t3, args2);
+  t_unprotect(args2);
+  t_unprotect(t3);
+  args2 = TbuildList(w, t2, args);
+  t_unprotect(args);
+  t_unprotect(t2);
+  args = TbuildList(w, t1, args2);
+  t_unprotect(args2);
+  t_unprotect(t1);
+  args2 = TbuildList(w, t0, args);
+  t_unprotect(args);
+  t_unprotect(t0);
+  result = TbuildAppl(w, s, args2);
+  t_unprotect(args2);
   return result;
 }
 
@@ -1622,37 +1729,52 @@ aterm *make_nf15(asymbol *s, aterm *t0, aterm *t1, aterm *t2, aterm *t3,
 		 aterm *t9, aterm *t10, aterm *t11, aterm *t12, aterm *t13,
 		 aterm *t14)
 {
-  aterm *result;
+  aterm *result, *args2;
   aterm_list *
   args = TbuildList(w, t14, t_empty(w));
+  t_unprotect(t_empty(w));
   t_unprotect(t14);
-  args = TbuildList(w, t13, t_empty(w));
+  args2 = TbuildList(w, t13, args);
+  t_unprotect(args);
   t_unprotect(t13);
-  args = TbuildList(w, t12, t_empty(w));
+  args = TbuildList(w, t12, args2); 
+  t_unprotect(args2);
   t_unprotect(t12);
-  args = TbuildList(w, t11, t_empty(w));
+  args2 = TbuildList(w, t11, args);
+  t_unprotect(args);
   t_unprotect(t11);
-  args = TbuildList(w, t10, t_empty(w));
+  args = TbuildList(w, t10, args2);
+  t_unprotect(args2);
   t_unprotect(t10);
-  args = TbuildList(w, t9, t_empty(w));
+  args2 = TbuildList(w, t9, args);
+  t_unprotect(args);
   t_unprotect(t9);
-  args = TbuildList(w, t8, t_empty(w));
+  args = TbuildList(w, t8, args2);
+  t_unprotect(args2);
   t_unprotect(t8);
-  args = TbuildList(w, t7, t_empty(w));
+  args2 = TbuildList(w, t7, args);
+  t_unprotect(args);
   t_unprotect(t7);
-  args = TbuildList(w, t6, args);
+  args = TbuildList(w, t6, args2);
+  t_unprotect(args2);
   t_unprotect(t6);
-  args = TbuildList(w, t5, args);
+  args2 = TbuildList(w, t5, args);
+  t_unprotect(args);
   t_unprotect(t5);
-  args = TbuildList(w, t4, args);
+  args = TbuildList(w, t4, args2);
+  t_unprotect(args2);
   t_unprotect(t4);
-  args = TbuildList(w, t3, args);
+  args2 = TbuildList(w, t3, args);
+  t_unprotect(args);
   t_unprotect(t3);
-  args = TbuildList(w, t2, args);
+  args = TbuildList(w, t2, args2);
+  t_unprotect(args2);
   t_unprotect(t2);
-  args = TbuildList(w, t1, args);
+  args2 = TbuildList(w, t1, args);
+  t_unprotect(args);
   t_unprotect(t1);
-  args = TbuildList(w, t0, args);
+  args = TbuildList(w, t0, args2);
+  t_unprotect(args2);
   t_unprotect(t0);
   result = TbuildAppl(w, s, args);
   t_unprotect(args);
