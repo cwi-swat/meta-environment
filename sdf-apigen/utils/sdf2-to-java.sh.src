@@ -193,12 +193,12 @@ ${ADTTOJAVA} ${FOLDINGOPT} ${JTOMOPT} ${VERBOSEOPT} ${VISITABLEOPT} \
 fi
 
 if [ ${GENBOTTOMSORT} -gt 0 ]; then
-  info "Overwriting CHARLIST_StringImpl.java"
+  info "Overwriting CHARLIST_String.java"
   sed "s@__PACKAGE__@${PACKAGE}@g;\
        s@__NAME__@${NAME}@g;\
        s@__PACKAGEDECL__@${PACKAGEDECL}@g" \
-       < ${PKGDATA}/CHARLIST_StringImpl.java.template \
-       > ${OUTPUT}/CHARLIST_StringImpl.java
+       < ${PKGDATA}/CHARLIST_String.java.template \
+       > ${OUTPUT}/CHARLIST_String.java
 fi
 
 # }}}

@@ -9,12 +9,12 @@ include $(top_srcdir)/make_rules
 EXTRA_DIST = sdf2-to-adt.sh.src \
 	     sdf2-to-java.sh.src \
 	     sdf2-to-c.sh.src \
-	     CHARLIST_StringImpl.java.template \
+	     CHARLIST_String.java.template \
 	     CHARLIST.h.template \
 	     CHARLIST.c.template \
 	     string.adt
 
-pkgdata_DATA= CHARLIST_StringImpl.java.template \
+pkgdata_DATA= CHARLIST_String.java.template \
 	      CHARLIST.c.template \
 	      CHARLIST.h.template \
 	      string.adt

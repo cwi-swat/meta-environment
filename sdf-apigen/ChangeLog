@@ -1,5 +1,8 @@
 # $Id$
 
+2003/11/09 (jurgenv@cwi.nl)
+ * Made CHARLIST_String.java compatible with newest apigen code
+
 2003/11/07 (jurgenv@cwi.nl)
  * Made generation of ADT file compatible with apigen-1.7 (ADT format 2.0)
  * NOTE: imploded format is not yet adapted to the ADT-2.0 format!

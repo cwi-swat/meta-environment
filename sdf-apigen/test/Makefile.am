@@ -34,7 +34,8 @@ CLEANFILES		= ${noinst_PROGRAMS} ${noinst_LIBRARIES} \
 			booltest.pt ${PeanoAPI} libBooleans.a Booleans_bottom.c\
  			Peano.adt
 
-EXTRA_DIST		= Booleans.sdf Booleans.pro booltest.trm Peano.sdf
+EXTRA_DIST		= Booleans.sdf Booleans.pro booltest.trm Peano.sdf \
+			  PeanoMakeRules.am
 
 Booleans.c Booleans.h: Booleans.sdf 
 	${SDF2C} \
