@@ -18,6 +18,11 @@ equations
 
 [] <S1+S2> T = <S1<+S2> T
 
+[] <f> T = <fail> T when f ( T ) = fail
+
+[default] <f> T = f ( T )
+[default] f ( T ) = fail
+
 [] <some(S)> T = some(S,T)
 
 [] <all(S)> T  = all(S,T)

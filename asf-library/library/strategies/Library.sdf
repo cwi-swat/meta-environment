@@ -1,6 +1,6 @@
-module strategies/Library
+module strategies/Library[X]
 
-imports strategies/Operators
+imports strategies/Operators[X]
 
 exports
 

@@ -1,14 +1,16 @@
-module strategies/Operators
+module strategies/Operators[X]
 
 imports basic/Whitespace
 
-exports sorts Strategy Term
+exports sorts Strategy Term[[X]]
 
 lexical syntax
 
 [a-z] -> StrategyVar
 
 context-free syntax
+    (X=>X)                         -> Strategy {cons("rule")}
+    "fail"                         -> X{cons("fail")}
     "fail"                         -> Strategy {cons("fail")}
     "id"                           -> Strategy {cons("id")}
     "(" Strategy ")"               -> Strategy {bracket}
@@ -20,9 +22,8 @@ context-free syntax
     "some" "(" Strategy ")"        -> Strategy {cons("some")}
     "one" "(" Strategy ")"         -> Strategy {cons("one")}
     "all" "(" Strategy ")"         -> Strategy {cons("all")}
-    "thread" "(" Strategy ")"      -> Strategy {cons("thread")}
 
-    "<" Strategy ">" Term          -> Term     {cons("apply")}
+    "<" Strategy ">" X     -> X   {cons("apply")}
 
 context-free priorities
     Strategy ";" Strategy          -> Strategy {cons("seq"), right} >
@@ -32,15 +33,16 @@ context-free priorities
 hiddens
 
 context-free syntax
-   some(Strategy,Term)   -> Term {built-in("strategy-some")}
-   all(Strategy,Term)    -> Term {built-in("strategy-all")}
-   one(Strategy,Term)    -> Term {built-in("strategy-one")}
+   some(Strategy,X)   -> X {built-in("strategy-some")}
+   all(Strategy,X)    -> X {built-in("strategy-all")}
+   one(Strategy,X)    -> X {built-in("strategy-one")}
 
 context-free syntax
    subst(Strategy,StrategyVar,Strategy) -> Strategy {traversal(trafo,bottom-up)}
  
 variables
 
+"f"[0-9\']* -> (X=>X)
 "S"[0-9\']* -> Strategy
-"T"[0-9\']* -> Term
+"T"[0-9\']* -> X
 "x"[0-9\']* -> StrategyVar
