@@ -12,7 +12,8 @@ sorts Filename IfPart ElifPart ElsePart
 
 lexical syntax
 
-[\"\<] ~[\'\"\<\>]+ [\"\>] -> Filename
+[\<] ~[\<\>]+ [\>] -> Filename
+[\"] ~[\"]+ [\"] -> Filename
 
 lexical syntax
 [\\][\n] -> LAYOUT
