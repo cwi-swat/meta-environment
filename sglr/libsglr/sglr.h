@@ -32,7 +32,9 @@
 void SG_Dump_ATtable(ATermTable t, char *s);
 #endif
 
-#include  <aterm1.h>
+
+#include <AsFix.h>
+#include <aterm1.h>
 
 
 /*  Data structures: states, actions, character ranges and parse tables  */
@@ -81,23 +83,25 @@ typedef ATermAppl forest;
  Function prototypes
  */
 
-ATerm SGparseFileUsingTable(char *prg, char *tbl, char *sort,
-                            char *in, char *out);
+void  SGinitParser(ATbool toolbus_mode);
+
 ATerm SGopenLanguageFromTerm(char *prgname, char *L, ATerm tbl);
 ATerm SGopenLanguage(char *prgname, char *L, char *FN);
-ATerm SGcloseLanguage(char *prgname, char *L);
 ATerm SGreOpenLanguage(char *prgname, char *L, char *FN);
+ATerm SGcloseLanguage(char *prgname, char *L);
 
-FILE *SG_OpenFile(char *prgname, char *std_error, char *FN);
-void  SG_CloseFile(FILE *fd);
-
-ATerm SGparseFile(char *prgname, char *L, char *G, char *FN);
 ATerm SGparseString(char *L, char *G, char *S);
 ATerm SGparseStringAsAsFix2(char *L, char *G, char *S);
 ATerm SGparseStringAsAsFix1(char *L, char *G, char *S);
 
+ATerm SGparseFile(char *prgname, char *L, char *G, char *FN);
+ATerm SGtermToFile(char *prgname, ATerm t, char *FN);
+ATerm SGparseFileUsingTable(char *prg, char *tbl, char *sort,
+                            char *in, char *out);
+
 ATbool SGisParseTree(ATerm t);
 ATbool SGisParseError(ATerm t);
+
 
 enum  SG_NrMode {SG_NR_ASK, SG_NR_ZERO, SG_NR_INC, SG_NR_DEC};
 int   SGnrAmb(int Mode);
@@ -105,7 +109,8 @@ int   SGnrAmb(int Mode);
 enum  SG_SORTOPS { SG_SET, SG_UNSET, SG_GET };
 char *SGsort(int Mode, forest t);
 
-ATerm SGtermToFile(char *prgname, ATerm t, char *FN);
+FILE *SG_OpenFile(char *prgname, char *std_error, char *FN);
+void  SG_CloseFile(FILE *fd);
 
 void SG_PrintToken(FILE *out, token c);
 FILE *SG_OpenLog(char *program, char *fnam);
@@ -124,18 +129,20 @@ char *SG_StackDotOut(char *);
  This is done by using access macro's on a global variable.
  */
 
-void  SGinitParser(void);
 extern int  _SG_Mode;
 
 enum SGmodeFlags {
-  SG_ERRORFLAG, SG_VERBOSEFLAG, SG_DEBUGFLAG, SG_SHOWSTATFLAG,
-  SG_OUTPUTFLAG, SG_ASFIX1FLAG, SG_BINARYFLAG, SG_DOTOUTFLAG,
-  SG_NOLEXFLAG, SG_SHOWSTACKFLAG, SG_FILTERFLAG, SG_STARTSYMBOLFLAG,
-  SG_GCFLAG, SG_CYCLEFLAG, SG_POSINFOFLAG
+  SG_TOOLBUSFLAG, SG_ERRORFLAG, SG_VERBOSEFLAG, SG_DEBUGFLAG,
+  SG_SHOWSTATFLAG, SG_OUTPUTFLAG, SG_ASFIX1FLAG, SG_BINARYFLAG,
+  SG_DOTOUTFLAG, SG_NOLEXFLAG, SG_SHOWSTACKFLAG, SG_FILTERFLAG,
+  SG_STARTSYMBOLFLAG, SG_GCFLAG, SG_CYCLEFLAG, SG_POSINFOFLAG
 };
 
 #define SG_BIT(i)            (1 << i)
 
+#define SG_TOOLBUS           (_SG_Mode  &  SG_BIT(SG_TOOLBUSFLAG))
+#define SG_TOOLBUS_ON()      (_SG_Mode |=  SG_BIT(SG_TOOLBUSFLAG))
+#define SG_TOOLBUS_OFF()     (_SG_Mode &= ~SG_BIT(SG_TOOLBUSFLAG))
 #define SG_ERROR             (_SG_Mode  &  SG_BIT(SG_ERRORFLAG))
 #define SG_ERROR_ON()        (_SG_Mode |=  SG_BIT(SG_ERRORFLAG))
 #define SG_ERROR_OFF()       (_SG_Mode &= ~SG_BIT(SG_ERRORFLAG))

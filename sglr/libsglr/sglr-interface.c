@@ -69,8 +69,11 @@ static char *the_in_buf_end;
     sensible default
  */
 
-void  SGinitParser(void)
+void  SGinitParser(ATbool toolbus_mode)
 {
+  if(toolbus_mode) {
+    SG_TOOLBUS_ON();
+  }
   SG_OUTPUT_ON();
   SG_FILTER_ON();
   SG_BINARY_ON();
@@ -105,9 +108,12 @@ ATerm SGopenLanguageFromTerm(char *prgname, char *L, ATerm tbl)
       SG_SaveParseTable(L, pt);
   }
 
-  return SG_TermToToolbus(ATmake(pt ?  "language-opened(<str>,<str>)"
-                                    :  "language-not-opened(<str>,<str>)",
-                                 L, L));
+
+  return SG_TOOLBUS
+    ? SG_TermToToolbus(ATmake(pt ?  "language-opened(<str>,<str>)"
+                                 :  "language-not-opened(<str>,<str>)",
+                               L, L))
+    : (ATerm) (pt ? ATempty : NULL);
 }
 
 
@@ -118,23 +124,27 @@ ATerm SGopenLanguageFromTerm(char *prgname, char *L, ATerm tbl)
 
 ATerm SGopenLanguage(char *prgname, char *L, char *FN)
 {
-  parse_table *table;
+  parse_table *pt;
 
   if(!L || !FN) {
-    return SG_TermToToolbus(ATmake("language-not-opened(<str>,<str>)", "", ""));
+    return SG_TOOLBUS
+      ? SG_TermToToolbus(ATmake("language-not-opened(<str>,<str>)", "", ""))
+      : (ATerm) NULL;
   }
 
   SG_Validate("SGopenLanguage");
   IF_VERBOSE(
     if(FN) ATwarning("%s: opening parse table %s\n", prgname, SG_SAFE_STRING(FN))
   );
-  if(!(table = SG_LookupParseTable(L))) {
-    table = SG_AddParseTable(prgname, L, FN);
+  if(!(pt = SG_LookupParseTable(L))) {
+    pt = SG_AddParseTable(prgname, L, FN);
   }
 
-  return SG_TermToToolbus(ATmake(table ?  "language-opened(<str>,<str>)"
-                                       :  "language-not-opened(<str>,<str>)",
-                                 L, FN));
+  return SG_TOOLBUS
+    ? SG_TermToToolbus(ATmake(pt ?  "language-opened(<str>,<str>)"
+                                 :  "language-not-opened(<str>,<str>)",
+                               L, FN))
+    : (ATerm) (pt ? ATempty : NULL);
 }
 
 /*
@@ -344,7 +354,9 @@ int SG_GetCharFromString(void)
 
 ATerm SG_TermToToolbus(ATerm t)
 {
-  return (ATerm) ATmakeAppl1(SG_SndValue_AFun, t);
+  return SG_TOOLBUS
+    ? (ATerm) ATmakeAppl1(SG_SndValue_AFun, t)
+    : t;
 }
 
 
