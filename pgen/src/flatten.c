@@ -19,12 +19,13 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
+#include "flatten.h"
 #include "ksdf2table.h"
 
 
 /*{{{  char *unquote_str2(char *s) */
 
-char *unquote_str2(char *s)
+static char *unquote_str2(char *s)
 {
   int len = strlen(s), i, j;
   static char *rs = NULL;
@@ -61,9 +62,7 @@ char *unquote_str2(char *s)
 /*{{{  ATerm SDFflattenNumber(ATerm af) */
 
 
-int make_integer(char *s);
-
-ATerm SDFflattenNumber(ATerm af) 
+static ATerm SDFflattenNumber(ATerm af) 
 {
   char *str;
 
@@ -78,7 +77,7 @@ ATerm SDFflattenNumber(ATerm af)
 /*}}}  */                
 /*{{{  ATerm SDFflattenAFun(ATerm af) */
 
-ATerm SDFflattenAFun(ATerm af)
+static ATerm SDFflattenAFun(ATerm af)
 {
   char *str;
   ATerm lit;
@@ -97,7 +96,7 @@ ATerm SDFflattenAFun(ATerm af)
 /*}}}  */
 /*{{{  ATerm SDFflattenATerm(ATerm at) */
 
-ATerm SDFflattenATerm(ATerm at)
+static ATerm SDFflattenATerm(ATerm at)
 {
   ATerm afun;
 
@@ -116,7 +115,7 @@ ATerm SDFflattenATerm(ATerm at)
  * Converts an identifier.
  **/
 
-ATerm SDFflattenId(ATerm id)
+static ATerm SDFflattenId(ATerm id)
 {
   char *str;
   ATerm newid = NULL;
@@ -127,9 +126,9 @@ ATerm SDFflattenId(ATerm id)
   return newid;
 }
 
-ATermList SDFflattenSymbols(ATerm symbols);
+static ATermList SDFflattenSymbols(ATerm symbols);
 
-ATerm SDFflattenComplexId(ATerm id, ATerm symbols)
+static ATerm SDFflattenComplexId(ATerm id, ATerm symbols)
 {
   char *str;
   ATerm newid = NULL; 
@@ -147,7 +146,7 @@ ATerm SDFflattenComplexId(ATerm id, ATerm symbols)
 /**
  * Convert one attribute.
  **/
-ATerm SDFflattenAttr(ATerm attr)
+static ATerm SDFflattenAttr(ATerm attr)
 {
   char *str;
   ATerm symbols, assocattr, attrlit, modid, name, newattr = NULL;
@@ -207,7 +206,7 @@ ATerm SDFflattenAttr(ATerm attr)
 /**
  * Converts the attributes.
  **/
-ATerm SDFflattenAttrs(ATerm attrs)
+static ATerm SDFflattenAttrs(ATerm attrs)
 {
   ATerm attrlist, attr, newattr, resultattr;
   ATermList attrelems, newattrlist = ATempty;
@@ -244,7 +243,7 @@ ATerm SDFflattenAttrs(ATerm attrs)
 /**
  * Converts a sort.
  **/
-ATerm SDFflattenSort(ATerm sort)
+static ATerm SDFflattenSort(ATerm sort)
 {
   char *str;
   ATerm newsort = NULL;
@@ -256,23 +255,8 @@ ATerm SDFflattenSort(ATerm sort)
 }
 
 /*}}}  */
-/*{{{  ATerm SDFflattenCharacter(ATerm chr) */
 
-static char *make_char(char *s)
-{
-  int len = strlen(s);
-  char *rs = (char *)malloc(len);
-
-  if(s[0] == '\\') {
-    if(!strncpy(rs,++s,len-1))
-      ATerror("Run out of memory!\n");
-    rs[len-1] = '\0';
-    return rs;
-  }
-  return s;
-}
-
-int make_integer(char *s)
+static int make_integer(char *s)
 {
   int i,ic = 0, len = strlen(s);
 
@@ -295,7 +279,7 @@ int make_integer(char *s)
   return ic;
 }
 
-ATerm SDFflattenCharacter(ATerm chr)
+static ATerm SDFflattenCharacter(ATerm chr)
 {
   char *str;
   ATerm nchr, sort;
@@ -312,7 +296,7 @@ ATerm SDFflattenCharacter(ATerm chr)
 /*}}}  */
 /*{{{  ATerm SDFflattenCharRange(ATerm cr) */
 
-ATerm SDFflattenCharRange(ATerm cr)
+static ATerm SDFflattenCharRange(ATerm cr)
 {
   ATerm chr, chr1, chr2;
 
@@ -333,7 +317,7 @@ ATerm SDFflattenCharRange(ATerm cr)
 /*}}}  */
 /*{{{  ATermList SDFflattenCharRanges(ATerm crs) */
 
-ATermList SDFflattenCharRanges(ATerm crs)
+static ATermList SDFflattenCharRanges(ATerm crs)
 {
   ATerm cr, lcrs, rcrs;
   ATermList newlcrs = ATempty, newrcrs = ATempty,
@@ -362,7 +346,7 @@ ATermList SDFflattenCharRanges(ATerm crs)
 /**
  * Converts a charclass.
  **/
-ATerm SDFflattenCharClass(ATerm cc)
+static ATerm SDFflattenCharClass(ATerm cc)
 {
   ATerm crs, ocrs, newcc = NULL;
   ATermList newcrs = ATempty;
@@ -387,7 +371,7 @@ ATerm SDFflattenCharClass(ATerm cc)
  * Converts a literal.
  **/
 
-ATerm SDFflattenLiteral(ATerm literal)
+static ATerm SDFflattenLiteral(ATerm literal)
 {
   char *str;
   ATerm uqliteral, sort;
@@ -416,7 +400,7 @@ ATerm SDFflattenLiteral(ATerm literal)
 /*}}}  */
 /*{{{  ATerm SDFflattenSymbol(ATerm symbol) */
 
-ATermList SDFflattenSymbols(ATerm symbols);
+static ATermList SDFflattenSymbols(ATerm symbols);
 /**
  * Converts a list of symbols.
  **/
@@ -581,7 +565,7 @@ ATerm SDFflattenSymbol(ATerm symbol)
 /**
  * Converts a list of symbols.
  **/
-ATermList SDFflattenSymbols(ATerm symbols)
+static ATermList SDFflattenSymbols(ATerm symbols)
 {
   ATerm symbollist, symbol, newsymbol;
   ATermList symbolelems, newsymbollist = ATempty;

@@ -20,6 +20,7 @@
 
 */
 #include <unistd.h>
+#include "flatten.h"
 #include "ksdf2table.h"
 #include "statistics.h"
 
@@ -44,9 +45,6 @@ extern ATbool statisticsMode;
 /*}}}  */
 /*{{{  external functions */
 
-extern ATerm SDFflattenProd(ATerm prod);
-extern ATerm SDFflattenSymbol(ATerm symbol);
-extern ATerm SDFflattenLookAhead(ATerm prod, ATbool nested);
 extern ATbool pgen_cnf(ATermInt prodnr1, int iptr, int len, ATermInt prodnr2);
 extern int count_members_in_lhs(ATerm prod);
  
