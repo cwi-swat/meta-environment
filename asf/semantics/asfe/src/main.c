@@ -55,7 +55,7 @@
 /*}}}  */
 /*{{{  variables */
 
-static char myarguments[] = "bde:hi:lo:w:tvV";
+static char myarguments[] = "abde:hi:lo:w:tvV";
 static char myname[] = "asfe";
 static char myversion[] = "0.4";
 
@@ -71,6 +71,7 @@ void usage(char *prg, ATbool is_err)
 {
   ATwarning("Usage: %s [options]\n"
 	    "Options:\n"
+	    "\t-a              allow ambiguous trees as input (default off)\n"
 	    "\t-b              output terms in BAF format (default)\n"
 #ifdef USE_TIDE
 	    "\t-d              connect to the tide debugger\n"
@@ -126,6 +127,7 @@ int main(int argc, char *argv[])
   int bafmode = 1;
   ATbool use_tide = ATfalse;
   ATbool remove_layout = ATfalse;
+  ATbool allow_ambs = ATfalse;
   char *name = "Standalone";
   int returncode = 0;
   ATerm eqs, term, result;
@@ -174,6 +176,7 @@ int main(int argc, char *argv[])
   else {
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
+	case 'a': allow_ambs = ATtrue;             break;
 	case 'b': bafmode = 1;                     break;
 	case 't': bafmode = 0;                     break;
 	case 'v': runVerbose = ATtrue;             break;
@@ -221,7 +224,7 @@ int main(int argc, char *argv[])
     /* Rewrite the term */
     result = evaluator(name, parseTree, eqsList,
 		       use_tide ? ATparse("on") : ATparse("off"), 
-		       remove_layout);
+		       remove_layout, allow_ambs);
 
     /* If we have collected errors, pretty print them now */
     returncode = (RWgetError() == NULL) ? 0 : 1;

@@ -161,7 +161,7 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
   eqsList = ASF_makeCondEquationListFromTerm(eqs);
   parseTree = PT_makeParseTreeFromTerm(trm);
 
-  result = evaluator(modname, parseTree, eqsList, tide, ATfalse);
+  result = evaluator(modname, parseTree, eqsList, tide, ATfalse, ATfalse);
 
   if (RWgetError() == NULL) {
     return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
@@ -217,7 +217,7 @@ ATerm RWgetError()
 /*{{{  ATerm evaluator(char *name, ATerm term) */
 
 ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
-                ATerm debug, ATbool remove_layout)
+                ATerm debug, ATbool remove_layout, ATbool allow_ambs)
 {
   PT_Tree result;
   PT_Tree tree;
@@ -227,15 +227,14 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
   select_equations(name);
 
   debugging(debug);
-
-  tree = PT_getParseTreeTree(parseTree);
-  tree = RWprepareTerm(tree);
-
-  rewrite_steps = 0;
-  RWclearError();
   tagCurrentRule = (ASF_Tag) PT_makeTreeLit("*undefined*");
+  rewrite_steps = 0;
   memo_table = MemoTableCreate();
   aborted = ATfalse;
+
+  tree = PT_getParseTreeTree(parseTree);
+  tree = RWprepareTerm(tree, allow_ambs);
+
 
   select_equations(name);
 

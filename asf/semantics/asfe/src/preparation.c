@@ -520,10 +520,10 @@ ASF_Condition prepare_cond(ASF_Condition cond)
   PT_Tree lhs, rhs;
   
   lhs = ASFtoPT(ASF_getConditionLhs(cond));
-  cond = ASF_setConditionLhs(cond, PTtoASF(RWprepareTerm(lhs)));
+  cond = ASF_setConditionLhs(cond, PTtoASF(RWprepareTerm(lhs, ATfalse)));
     
   rhs = ASFtoPT(ASF_getConditionRhs(cond));
-  cond = ASF_setConditionRhs(cond, PTtoASF(RWprepareTerm(rhs)));
+  cond = ASF_setConditionRhs(cond, PTtoASF(RWprepareTerm(rhs, ATfalse)));
 
   return cond;
 }
@@ -562,10 +562,12 @@ ASF_CondEquation prepareEquation(ASF_CondEquation equ)
   equation = ASF_getCondEquationEquation(equ);
 
   equation = ASF_setEquationLhs(equation, 
-          PTtoASF(RWprepareTerm(ASFtoPT(ASF_getEquationLhs(equation)))));
+          PTtoASF(RWprepareTerm(ASFtoPT(ASF_getEquationLhs(equation)),
+				ATfalse)));
 
   equation = ASF_setEquationRhs(equation,
-          PTtoASF(RWprepareTerm(ASFtoPT(ASF_getEquationRhs(equation)))));
+          PTtoASF(RWprepareTerm(ASFtoPT(ASF_getEquationRhs(equation)),
+				ATfalse)));
 
   return ASF_setCondEquationEquation(equ, equation); 
 }
@@ -640,7 +642,13 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
     result = PT_setTreeArgs(tree, newargs);
   }
   else if (PT_isTreeAmb(tree)) {
-    result = ambToAmbConstructor(tree,data);
+    if (*((ATbool*) data) == ATtrue) {
+      result = ambToAmbConstructor(tree,data);
+    }
+    else {
+      RWsetError("Illegal ambiguity", PT_makeTreeLit(""));
+      result = tree;
+    }
   }
   else {
     result = tree;
@@ -658,9 +666,9 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
 
 /*{{{  PT_Tree RWprepareTerm(PT_Tree tree) */
 
-PT_Tree RWprepareTerm(PT_Tree tree)
+PT_Tree RWprepareTerm(PT_Tree tree, ATbool allow_ambs)
 {
-  return  prepareTerm(tree, NULL);
+  return  prepareTerm(tree, &allow_ambs);
 }
 
 /*}}}  */
