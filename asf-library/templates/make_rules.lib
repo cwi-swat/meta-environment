@@ -1,3 +1,17 @@
-EXTRA_DIST = $(wildcard *.sdf) $(wildcard *.asf)
+libpackagedir = ${pkgdatadir}$(subst src/LIB,,$(subdir))
 
-pkg_share = $(EXTRA_DIST)
+MODULES=$(wildcard *.asf *.sdf) 
+
+EXTRA_DIST = $(MODULES)
+
+install-data-hook:
+	$(mkinstalldirs) $(DESTDIR)$(libpackagedir)
+	@list='$(MODULES)'; for p in $$list; do \
+          if test -f $(srcdir)/$$p; then \
+            echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p"; \
+            $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(libpackagedir)/$$p; \
+          else if test -f $$p; then \
+            echo " $(INSTALL_DATA) $$p $(DESTDIR)$(libpackagedir)/$$p"; \
+            $(INSTALL_DATA) $$p $(DESTDIR)$(libpackagedir)/$$p; \
+          fi; fi; \
+        done
