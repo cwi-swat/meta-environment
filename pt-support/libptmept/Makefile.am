@@ -11,6 +11,8 @@ EXTRA_DIST		= AsFix.def
 INCLUDES		= -I${ATERM}/include \
                           -I${PT_SUPPORT}/include
 
+CFLAGS                  += -DDISABLE_DYNAMIC_CHECKING
+
 # Developers only:
 api: AsFix.def
 	sdf2-to-c -i $< -r -P PTPT_ -o PTMEPT

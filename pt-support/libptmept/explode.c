@@ -1,8 +1,9 @@
 #include "PTMEPT-utils.h"
 #include "PTMEPT.h"
 #include <MEPT-utils.h>
+#include <assert.h>
 
-static PTPT_OptLayout e;
+static PTPT_OptLayout e = NULL;
 
 /*{{{  static PTPT_TreeList PTPT_reverseTreeList(PTPT_TreeList args) */
 
@@ -78,8 +79,14 @@ static PTPT_IntCon   PTPT_explodeRealCon(double val)
 /*}}}  */
 /*{{{  static PTPT_Literal PTPT_explodeLiteral(char *string) */
 
-static PTPT_Literal PTPT_explodeLiteral(char *string)
+static PTPT_Literal PTPT_explodeLiteral(char *string, ATbool quoted)
 {
+  if (quoted) {
+    char quoted[1024];
+    sprintf(quoted, "\"%s\"", string);
+    string = quoted;
+  }
+
   return PTPT_makeLiteralUnquoted(PTPT_makeCHARLISTString(string));
 }
 
@@ -94,6 +101,7 @@ static PTPT_ATermList PTPT_explodeATermList(ATermList elems)
   for(;!ATisEmpty(elems); elems = ATgetNext(elems)) 
   {
     PTPT_ATerm head = PTPT_explodeATerm(ATgetFirst(elems));
+
     if (!PTPT_isATermElemsEmpty(list)) {
       list = PTPT_makeATermElemsMany(head,e,",",e,list);
     }
@@ -102,7 +110,7 @@ static PTPT_ATermList PTPT_explodeATermList(ATermList elems)
     }
   }
 
-  return PTPT_makeATermListList(e,PTPT_reverseATermElems(list),e);
+  return  PTPT_makeATermListList(e,PTPT_reverseATermElems(list),e);
 }
 
 /*}}}  */
@@ -115,14 +123,15 @@ static PTPT_ATerm PTPT_explodeATermAppl(ATermAppl appl)
   int arity = ATgetArity(fun);
   ATermList args = ATgetArguments(appl);
   PTPT_ATerm result = NULL;
-  PTPT_AFun pfun = PTPT_makeAFunLit(PTPT_explodeLiteral(name));
+  PTPT_AFun pfun = PTPT_makeAFunLit(PTPT_explodeLiteral(name, ATfalse));
 
   if (arity == 0) {
     result = PTPT_makeATermConstant(pfun);
   }
   else {
-    /* hack alert, PTPT_Args is the same as an ATermList by coincidence */
-    PTPT_ATermArgs pargs  = (PTPT_ATermArgs) PTPT_explodeATermList(args);
+    /* hack alert, PTPT_ATermArgs is the same as an ATermList by coincidence */
+    PTPT_ATermArgs pargs  = 
+      (PTPT_ATermArgs) PTPT_getATermListElems(PTPT_explodeATermList(args));
     result = PTPT_makeATermAppl(pfun,e,e,pargs,e);
   }
 
@@ -136,6 +145,9 @@ static PTPT_ATerm PTPT_explodeATermAppl(ATermAppl appl)
 PTPT_ATerm PTPT_explodeATerm(ATerm term)
 {
   PTPT_ATerm result = NULL;
+
+  e = PTPT_makeOptLayoutAbsent();
+  ATprotect((ATerm*) &e);
 
   if (ATgetType(term) == AT_LIST) {
     PTPT_ATermList list = PTPT_explodeATermList((ATermList) term);
@@ -243,7 +255,7 @@ static PTPT_Symbol PTPT_explodeSymbol(PT_Symbol symbol)
   PTPT_Symbol result = NULL;
 
   if (PT_isSymbolLit(symbol)) {
-    PTPT_Literal lit = PTPT_explodeLiteral(PT_getSymbolString(symbol));
+    PTPT_Literal lit = PTPT_explodeLiteral(PT_getSymbolString(symbol), ATtrue);
     result = PTPT_makeSymbolLit(e,e,lit,e);
   }
   else if (PT_isSymbolCf(symbol)) {
@@ -277,7 +289,7 @@ static PTPT_Symbol PTPT_explodeSymbol(PT_Symbol symbol)
     result = PTPT_makeSymbolPair(e,e,lhs,e,e,rhs,e);
   }
   else if (PT_isSymbolSort(symbol)) {
-    PTPT_Literal lit = PTPT_explodeLiteral(PT_getSymbolString(symbol));
+    PTPT_Literal lit = PTPT_explodeLiteral(PT_getSymbolString(symbol), ATtrue);
     result = PTPT_makeSymbolSort(e,e,lit,e);
   }
   else if (PT_isSymbolIterPlus(symbol)) {
@@ -323,7 +335,7 @@ static PTPT_Symbol PTPT_explodeSymbol(PT_Symbol symbol)
     result = PTPT_makeSymbolFunc(e,e,syms,e,e,sym,e);
   }
   else if (PT_isSymbolParameterizedSort(symbol)) {
-    PTPT_Literal lit = PTPT_explodeLiteral(PT_getSymbolSort(symbol));
+    PTPT_Literal lit = PTPT_explodeLiteral(PT_getSymbolSort(symbol), ATtrue);
     PTPT_Symbols syms = PTPT_explodeSymbols(PT_getSymbolParameters(symbol));
     result = PTPT_makeSymbolParametrizedSort(e,e,lit,e,e,syms,e);
   }
@@ -415,7 +427,7 @@ static PTPT_Attr PTPT_explodeAttr(PT_Attr attr)
     result = PTPT_makeAttrTerm(e,e,term,e);
   }
   else if (PT_isAttrId(attr)) {
-    PTPT_Literal id = PTPT_explodeLiteral(PT_getAttrModuleName(attr));
+    PTPT_Literal id = PTPT_explodeLiteral(PT_getAttrModuleName(attr), ATtrue);
     result = PTPT_makeAttrId(e,e,id,e);
   }
   else if (PT_isAttrBracket(attr)) {
@@ -516,6 +528,7 @@ PTPT_Tree PTPT_explodeTree(PT_Tree pt)
   PTPT_Tree result = NULL;
 
   e = PTPT_makeOptLayoutAbsent();
+  ATprotect((ATerm*) &e);
 
   if (PT_isTreeAmb(pt)) {
     PT_Args args = PT_getTreeArgs(pt);
@@ -530,7 +543,7 @@ PTPT_Tree PTPT_explodeTree(PT_Tree pt)
 			       PTPT_explodeArgs(args),e);
   }
   else if (PT_isTreeLit(pt)) {
-    PTPT_Literal lit = PTPT_explodeLiteral(PT_getTreeString(pt));
+    PTPT_Literal lit = PTPT_explodeLiteral(PT_getTreeString(pt), ATtrue);
     result = PTPT_makeTreeLit(e,e,lit,e);
   }
   else if (PT_isTreeChar(pt)) {
@@ -554,6 +567,7 @@ PTPT_ParseTree PTPT_explodeParseTree(PT_ParseTree pt)
 
 
   e = PTPT_makeOptLayoutAbsent();
+  ATprotect((ATerm*) &e);
 
   return PTPT_makeParseTreeTop(e,e,
 			       (PTPT_Tree) PTPT_explodeTree(tree),

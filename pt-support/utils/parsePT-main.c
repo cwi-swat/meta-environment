@@ -69,7 +69,6 @@ int main (int argc, char **argv)
   PT_initMEPTApi();
   PTPT_initPTMEPTApi();
 
-  ATsetChecking(ATtrue);
   input = ATreadFromNamedFile(input_file_name);
 
   if(input == NULL) {
@@ -84,11 +83,15 @@ int main (int argc, char **argv)
   else if (!aterms && ATmatch(input, "appl(<term>,<term>)", NULL, NULL)) {
     output = (ATerm) PTPT_explodeTree((PT_Tree) input);
   }
+  else if (!aterms && ATmatch(input, "amb(<term>)", NULL)) {
+    output = (ATerm) PTPT_explodeTree((PT_Tree) input);
+  }
   else {
     output = (ATerm) PTPT_explodeATerm(input);
   }
 
   if(output != NULL) {
+    output = (ATerm) PT_makeValidParseTreeFromTree((PT_Tree) output);
     ATwriteToNamedTextFile(output, output_file_name);
   }
   else {
