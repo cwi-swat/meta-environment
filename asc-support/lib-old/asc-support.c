@@ -904,6 +904,9 @@ ATbool cnf(ATerm prod1, int iptr, int len, ATerm prod2)
 /*}}}  */
 /*{{{  static ATermList conflict_on_args(ATerm prod, ATermList args) */
 
+/** This is commented out because it doesn't work and apparently is 
+    never used -- Tobias
+
 ATerm add_brackets(ATerm appl);
 
 ATermList conflict_on_args(ATerm prod, ATermList args)
@@ -926,6 +929,7 @@ ATermList conflict_on_args(ATerm prod, ATermList args)
 
   return result;
 }
+*/
 
 /*}}}  */
 /*{{{  static ATerm term_to_asfix( ATerm t) */
