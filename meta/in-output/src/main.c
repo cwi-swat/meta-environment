@@ -488,6 +488,41 @@ ATerm write_text_file(int cid, char *path,
 
 /*}}}  */
 
+/*{{{  ATerm write_term_file(int cid, char *path, char *extension, ATerm content) */
+
+ATerm write_term_file(int cid, char *path, char *extension, 
+		      ATerm packedContent)
+{
+  char *fileName = makeFileName(path, extension);
+  ATerm message;
+
+  ATerm content = ATBunpack(packedContent);
+
+  if (fileName != NULL) {
+    FILE *file = NULL;
+
+    if (!(file = fopen(fileName, "w"))) {
+      message = createErrorMessage("could not open file");
+    }
+    else {
+      if (ATwriteToBinaryFile(content, file)) {
+        message = createSuccessMessage();
+      }
+      else {
+	message = createErrorMessage("disk full");
+      }
+      fclose(file);
+    }
+  }
+  else{
+    message = createErrorMessage("out of memory");
+  }
+
+  return message;
+}
+
+/*}}}  */
+
 /*{{{  ATerm exists_named_file(int cid, char *fileName) */
 
 ATerm exists_named_file(int cid, char *fileName)

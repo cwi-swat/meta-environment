@@ -70,17 +70,6 @@ in
       snd-msg(file-found(Path))
     )
   +
-  /*
-    rec-msg(open-trm-file(Name?)).
-    snd-eval(IO,open-trm-file(Name)).
-    ( rec-value(IO,opened-file(Name,Contents?,Path?)).
-      snd-msg(opened-file(Name,Contents,Path))
-      +
-      rec-value(IO,error-opening(Name?)).
-      snd-msg(error-opening(Name))
-    )
-  +
-  */
     rec-msg(exists-file(Path?, Extension?)) .
     snd-eval(IO, exists-file(Path, Extension)) .
     (
@@ -94,6 +83,16 @@ in
     rec-msg(write-text-file(Path?, Extension?, ContentList?)) .
     snd-eval(IO, write-text-file(Path, Extension, ContentList)) .
     (
+      rec-value(IO, success) .
+      snd-msg(file-written)
+    +
+      rec-value(IO, failure(Text?)) .
+      snd-msg(file-not-written(Text))
+    )
+  +
+    rec-msg(write-term-file(Path?, Extension?, Term?)) .
+    snd-eval(IO, write-term-file(Path, Extension, Term)) .
+    ( 
       rec-value(IO, success) .
       snd-msg(file-written)
     +
@@ -166,11 +165,6 @@ in
     snd-eval(IO, print-module-text(Name, Path, SyntaxText, "")) .
     rec-value(IO, module-text-printed(Name)) .
     snd-msg(module-text-printed(Name))
-  +
-    rec-msg(save-table(Name?, Path?, Table?)) .
-    snd-eval(IO, save-parsetable(Name, Path, Table)) .
-    rec-value(IO, save-done(Name)).
-    snd-msg(save-done)
   +
     rec-msg(create-equations-dump-file(Name?, Path?, Tree?)) .
     snd-eval(IO, create-equations-dump-file(Name, Path, Tree)) .
