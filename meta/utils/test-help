@@ -1,6 +1,6 @@
 #! /bin/sh
 
-function usage { 
+usage () { 
 	echo "Usage: $1 <program-under-test>"
 	exit 1
 }
