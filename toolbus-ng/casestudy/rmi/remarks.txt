@@ -6,14 +6,14 @@ four steps:
    - each method in the interface must declare that it throws RemoteException:
    
    public interface AddressBook extends java.rmi.Remote {
-     public void setAddress(String name, String address) throws java.rmi.RemoteException;
-     public String getAddress(String name) throws java.rmi.RemoteException;
+     public void setAddress(String name, Address address) throws java.rmi.RemoteException;
+     public Address getAddress(String name) throws java.rmi.RemoteException;
    }
    
 2. Write a class implementing the interface in one of two ways:
    a) extend UnicastRemoteObject. Override constructor and super() will take
-      care of registering the service with the rmi-registry. A constructor
-      must be written that must throw RemoteException
+      care of registering the instance with the rmi-registry. A constructor
+      must be written that throws RemoteException
    b) extend <whatever>. No automagic registration of instances is done, but
       instead must be manually exported to the rmi-registry at some opportune
       time by invoking UnicastRemoteObject.exportObject( ... );
@@ -91,6 +91,7 @@ DATA TRANSFER
   
   Remote references can thus be obtained in two ways:
   1. by explicit lookups in the rmi-registry: Naming.lookup("rmi://localhost/AddressBookService");
+     This requires corresponding Naming.bind()'ings on the server of course.
   2. by parameter passing/return value: public Address getAddress(String name); will return a reference
      to a remote instance of the implementation of the Address interface.
      
