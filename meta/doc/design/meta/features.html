@@ -235,11 +235,23 @@ and version numbers.
 and version numbers and construction of new modules.
 </UL>
 
+The term database contains only terms constructed by the user or derived
+by the evaluator. These terms correspond to syntax modules available in
+the module database, if any. In a standalone environment there will
+be terms of the so-called top module, e.g., Pico or COBOL, and reduction
+results, e.g., booleans values in case of type check results, transformed
+programs, or value environments. 
 The term database should provide the following functionality:
 <UL>
 <LI>Storage, retrieval, replacement, and deletion of term with (based on)
-version numbers.
+version numbers and module names.
 </UL>
+
+<H3>Extensibility</H3>
+Both the module and term database could provide functionality to pose queries
+on the contents of the database. These queries can be used to implement 
+search facilities, global search and replace facilities, derivation of
+relations between various trees in the database, etc.
 
 <H2>Unparser</H2>
 The unparser must deal with the pretty printing of normalized terms to be shown
