@@ -1,3 +1,7 @@
+2003/05/07 (markvdb@cwi.nl)
+ * Improved the AsfSdfChecker wrt error messages in combination with
+   traversal functions.
+
 2003/04/29 (markvdb@cwi.nl)
  * Fixed the annoying bug wrt unnecessary warnings in case of parameters.
  
