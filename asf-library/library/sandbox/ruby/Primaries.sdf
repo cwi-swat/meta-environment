@@ -1,0 +1,50 @@
+module Primaries
+
+imports Args
+
+exports
+
+sorts Primary
+
+context-free syntax
+
+"(" CompStmt ")" -> Primary
+Literal -> Primary
+Variable -> Primary
+
+Primary "::" Identifier -> Primary 
+"::" Identifier -> Primary
+
+Primary "[" Args? "]"-> Primary
+"[" Args "," "]" -> Primary
+"[" Args? "]" -> Primary
+
+"{" (Args | Assocs) "," "}" -> Primary
+"{" (Args | Assocs)? "}" -> Primary
+
+"return" "(" Call-Args? ")" -> Primary
+"return"  -> Primary
+
+"yield"  "(" Call-Args? ")" -> Primary
+"yield"  -> Primary
+
+"defined?" "(" Arg ")" -> Primary
+
+Function -> Primary
+Function "{" ("|" Block-Var? "|")? CompStmt "}"-> Primary
+
+"if" Expr Then CompStmt ("elsif" Expr Then CompStmt)* ("else" CompStmt)? "end" -> Primary
+"unless" Expr Then CompStmt ("else" CompStmt)? "end" -> Primary
+
+"while" Expr Do CompStmt "end" -> Primary
+"until" Expr Do CompStmt "end" -> Primary
+"case" CompStmt ("when" When-Args Then CompStmt)+ ("else" CompStmt)? "end" -> Primary
+"for" Block-Var "in" Expr Do CompStmt "end" -> Primary
+
+%%????? yacc says: [rescue [ARGS] DO COMPSTMT]+ instead of *
+"begin" CompStmt ("rescue" Args? Do CompStmt)* ("else" CompStmt)? ("ensure" CompStmt)? "end" -> Primary
+
+"class" Identifier ("<" Identifier)? CompStmt "end" -> Primary
+"module" Identifier CompStmt "end" -> Primary
+"def" FName ArgDecl CompStmt "end" -> Primary
+"def" Singleton ("." | "::") FName ArgDecl CompStmt "end" -> Primary

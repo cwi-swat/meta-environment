@@ -1,0 +1,20 @@
+module Expressions
+
+imports Functions
+
+exports
+
+sorts Expr
+
+context-free syntax
+
+
+MLHS "=" MRHS -> Expr
+"return" Call-Args -> Expr
+"yield" Call-Args -> Expr
+Expr "and" Expr -> Expr {left}
+Expr "or" Expr -> Expr {left}
+"not" Expr -> Expr
+Command -> Expr
+"!" Command -> Expr
+Arg -> Expr

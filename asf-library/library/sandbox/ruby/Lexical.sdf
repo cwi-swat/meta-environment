@@ -1,0 +1,120 @@
+module Lexical
+
+exports
+
+lexical syntax
+
+[\n] -> LAYOUT {avoid}
+[\ \t] -> LAYOUT
+"#" ~[\n]* [\n] -> LAYOUT
+"=begin" Any-Char* "=end" -> LAYOUT
+
+";" -> Term
+"\n" -> Term
+
+
+%% From primaries
+Term -> Then
+"then" -> Then
+Term "then" -> Then
+
+Term -> Do
+"do" -> Do
+Term "do" -> Do
+
+
+
+[a-zA-Z\_][a-zA-Z0-9\_]* -> Identifier
+
+~[] -> Any-Char
+Any-Char* -> Any-Chars
+
+"$" Identifier -> Global 
+"$" Any-Char -> Global
+"$-" Any-Char -> Global
+
+"\"" Any-Char* "\"" -> String
+"'" Any-Char* "'" -> String
+"`" Any-Char* "`" -> String
+
+%% First and last must be equal
+"%" [Qqx] Any-Char Any-Chars Any-Char -> String2 
+
+"/" Any-Chars "/" [iop] -> RegExp
+"%" "r" Any-Char Any-Chars Any-Char -> RegExp
+
+Global -> VarName
+"@" Identifier -> Varname
+Identifier -> VarName
+
+
+VarName -> Variable
+"nil" -> Variable
+"self" -> Variable
+
+%% This contains more (real, hex etc.)
+[1-9][0-9]* -> Numeric
+
+context-free restrictions
+	LAYOUT? -/- [\ \t]
+
+context-free syntax
+"<<" (Identifier|String) Any-Chars Identifier -> Here-Doc
+
+
+Numeric -> Literal
+Symbol -> Literal
+String -> Literal
+String2 -> Literal
+Here-Doc -> Literal
+RegExp -> Literal
+
+
+"+=" -> Op-Asgn
+"-=" -> Op-Asgn
+"*=" -> Op-Asgn
+"/=" -> Op-Asgn
+"%=" -> Op-Asgn
+"**=" -> Op-Asgn
+"&=" -> Op-Asgn
+"|=" -> Op-Asgn
+"^=" -> Op-Asgn
+"<<=" -> Op-Asgn
+">>=" -> Op-Asgn
+"&&=" -> Op-Asgn
+"||=" -> Op-Asgn
+
+":" FName -> Symbol
+":" VarName -> Symbol
+
+Identifier -> FName
+".." -> FName
+"|" -> FName
+"^" -> FName
+"&" -> FName
+"<=>" -> FName
+"==" -> FName
+"===" -> FName
+"=~" -> FName
+">" -> FName
+">=" -> FName
+"<" -> FName
+"<=" -> FName
+"+" -> FName
+"-" -> FName
+"*" -> FName
+"/" -> FName
+"%" -> FName
+"**" -> FName
+"<<" -> FName
+">>" -> FName
+"~" -> FName
+"+@" -> FName
+"-@" -> FName
+"[]" -> FName
+"[]=" -> FName
+
+Identifier -> Operation
+Identifier "!" -> Operation
+Identifier "?" -> Operation
+
