@@ -1,7 +1,7 @@
 /* $Id$ */
 
 tool se is {
-  command = "java-adapter -class SeTool"
+  command = "java-adapter -class nl.cwi.gipe.stred.SeTool"
 }
 
 process Structure-editor(TE: text-edit, Text: str) is

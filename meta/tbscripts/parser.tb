@@ -1,0 +1,36 @@
+/* $Id$ */
+tool sglr is {
+  command = "sglr"
+}
+
+process Parser is
+  let
+    P  : sglr,
+    L  : str,
+    S  : str,
+    Id : term,
+    FN : str,
+    T  : term
+  in
+    execute(sglr, P?) .
+    ( rec-msg(Id?, parse-string(L?, S?)) .
+      snd-eval(P, parse-string(L, S)) .
+      rec-value(P, T?) .
+      snd-msg(Id,parse-result(T))
+    +
+      rec-msg(parse-file(L?, FN?, Id?)) .
+      snd-eval(P, parse-file(L, FN)) .
+      rec-value(P, T?) .
+      snd-msg(parse-result(Id, T))
+    +
+      rec-msg(open-language(L?, FN?)) .
+      snd-eval(P, open-language(L, FN)) .
+      (
+	rec-value(P, language-opened(L?, FN)) .
+	snd-note(language-available(L))
+      +
+	rec-value(P, open-language-failed(L, FN)) 
+      )
+    ) 
+    * rec-disconnect(P)
+  endlet

@@ -61,7 +61,7 @@ BINFILES	=
 # All files in LIBFILES are installed in $(libdir)
 LIBFILES	= meta.tb editor.tb asfix2toasfix1.tb clear-all.tb \
                   close-modules.tb edit-module.tb edit-term.tb focus.tb io.tb \
-                  open-modules.tb parsetrees.tb prettyprinter.tb \
+                  open-modules.tb parser.tb parsetrees.tb prettyprinter.tb \
                   retrieve-eqs.tb rewrite.tb status-display.tb \
                   structure-editor.tb ui.tb
 # All files in INCLUDEFILES are installed in $(includedir)
@@ -80,7 +80,7 @@ all: meta.tifs $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
 
-meta.tifs: meta.tb
+meta.tifs: $(LIBFILES)
 	$(TOOLBUS)/bin/toolbus -gentifs meta.tb
 
 ##########################################################
