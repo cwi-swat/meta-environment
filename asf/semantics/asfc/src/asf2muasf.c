@@ -422,6 +422,34 @@ static ATbool checkListProductionCompatibility(PT_Production ptProd)
 
 /*}}}  */
 
+/*{{{  static MA_Term treeToType(PT_Tree tree) */
+
+static MA_Term treeToType(PT_Tree tree)
+{
+  MA_Term result = NULL;
+
+  if (PT_hasTreeProd(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    PT_Symbol sym = PT_getProductionRhs(prod);
+    char *str = strdup(ATwriteToString((ATerm) sym));
+    char *escaped =  escape(str,"\"\\", QUOTED);
+
+    MA_FunId funid = stringToFunId(escaped);
+ 
+    if (str == NULL) {
+      ATerror("Unable to allocate memory for string.\n");
+      return NULL; 
+    }
+
+    result = MA_makeTermConstant(funid);
+    free(str);
+    free(escaped);
+  }
+
+  return result;
+}
+
+/*}}}  */
 /*{{{  static MA_FuncDef prodToFuncDef(PT_Production ptProd)  */
 
 static MA_FuncDef prodToFuncDef(PT_Production ptProd) 
@@ -522,6 +550,8 @@ static MA_Term variableToTerm(PT_Tree var)
   char *str = strdup(PT_yieldTree(var));
   MA_VarId varid = stringToVarId(str);
   MA_Var maVar = NULL;
+  MA_Term type = NULL;
+  MA_Term result = NULL;
 
   assert(PT_isTreeVar(var));
 
@@ -536,8 +566,15 @@ static MA_Term variableToTerm(PT_Tree var)
   }
 
   free(str);
+  result = MA_makeTermVar(maVar);
 
-  return MA_makeTermVar(maVar);
+  type = treeToType(var);
+
+  if (type) {
+    result = MA_makeTermTyped(result,em,em,type);
+  }
+
+  return result;
 }
 
 /*}}}  */
