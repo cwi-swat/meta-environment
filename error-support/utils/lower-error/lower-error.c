@@ -6,9 +6,9 @@
 
 #include <stdio.h>
 #include <unistd.h>
-#include <ErrorAPI-utils.h>
-
 #include <aterm2.h>
+
+#include "ErrorAPI-utils.h"
 
 /*}}}  */
 /*{{{  globals */

@@ -9,8 +9,8 @@ lower_error_SOURCES=\
 	lower-error.c
 
 lower_error_LDADD=\
-	-L${ATERM}/lib -lATerm\
-	-L${top_builddir}/lib -lErrorAPI
+	-L${top_builddir}/lib -lErrorAPI \
+	-L${ATERM}/lib -lATerm
 
 ERRORS=example
 EXTRA_DIST=$(wildcard *.ref) $(wildcard *.trm)
