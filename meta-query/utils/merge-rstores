@@ -11,7 +11,7 @@ echo " done."
 
 for f in $*; do
   echo -n "merging $f into ${RESULT} .."
-  MergeRstores -f merge -i ${RESULT} -i $f -o ${RESULT}
+  MergeRstores -f merge -r RSTORE -i $f -i ${RESULT} -o ${RESULT}
   echo " done."
 done
 
