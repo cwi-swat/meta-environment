@@ -1,0 +1,50 @@
+[
+  [ParseTable, parse-table, 
+               parse-table(<version(term)>,
+                           <initial-state(term)>,
+                            <labels(Labels)>,
+                            states(<states(States)>),
+                            priorities(<priorities(Priorities)>))],
+
+  [Labels, empty, []],
+  [Labels, list, [<head(Label)>,<[tail(Labels)]>]],
+
+  [Label, Default, label(<production(Production)>,<number(int)>)],
+
+  [States, empty, []],
+  [States, list,  [<head(State)>,<[tail(States)]>]],
+
+  [State, Default, state-rec(<number(int)>,<gotos(Gotos)>,<actions(Actions)>)],
+
+  [Gotos, empty, []],
+  [Gotos, list,  [<head(Goto)>,<[tail(Gotos)]>]],
+
+  [Goto, Default, goto(<ranges(CharRanges)>,<state-number(int)>)],
+
+  [Actions, empty, []],
+  [Actions, list,  [<head(Action)>,<[tail(Actions)]>]],
+
+  [Action, Default, action(<ranges(CharRanges)>,<alternatives(Alternatives)>)],
+
+  [Alternatives, empty, []],
+  [Alternatives, list,  [<head(Alternative)>,<[tail(Alternatives)]>]],
+  
+  [Alternative, reduce, reduce(<length(int)>,<label(int)>,
+                               <special-attr(SpecialAttr)>)],
+
+  [Alternative, shift, shift(<state-numner(int)>)],
+  [Alternative, accept, accept],
+   
+  [SpecialAttr, none  , 0],
+  [SpecialAttr, reject, 1],
+  [SpecialAttr, prefer, 2],
+  [SpecialAttr, avoid , 4],
+
+  
+  [Priorities, empty, []],
+  [Priorities, list,  [<head(Priority)>,<[tail(Priorities)]>]],
+
+  [Priority, left, left-prio(<label1(int)>,<label2(int)>)],
+  [Priority, right, right-prio(<label1(int)>,<label2(int)>)],
+  [Priority, greater, gtr-prio(<label1(int)>,<label2(int)>)]
+]
