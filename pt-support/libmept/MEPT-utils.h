@@ -122,6 +122,7 @@ PT_Tree PT_addTreePosInfoSome(char *path, PT_Tree tree,
 PT_Tree PT_setTreePosInfo(PT_Tree tree, const char *path,
 			  int from_line, int from_col, int to_line, int to_col);
 void PT_calcTreePosInfo(PT_Tree tree, int *lines, int *cols);
+ATerm PT_getTreePosInfoArea(PT_Tree tree);
 ATbool PT_getTreePosInfo(PT_Tree tree, char **path,  int *start_line, int *start_col,
 		       int *end_line, int *end_col);
 

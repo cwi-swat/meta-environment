@@ -34,12 +34,17 @@ typedef struct PT_Position_Tag {
 
 /*}}}  */
 
+ATerm PT_getTreePosInfoArea(PT_Tree tree)
+{
+  return ATgetAnnotation(PT_TreeToTerm(tree), ATparse("pos-info"));
+}
+
 /*{{{  ATbool PT_getTreePosInfo(tree,path,start_line,start_col,end_line,end_col) */
 
 ATbool PT_getTreePosInfo(PT_Tree tree, char **path,  int *start_line, int *start_col,
 		       int *end_line, int *end_col)
 {
-  ATerm t = ATgetAnnotation(PT_TreeToTerm(tree), ATparse("pos-info"));
+  ATerm t = PT_getTreePosInfoArea(tree);
 
   if (!t) {
     return ATfalse;

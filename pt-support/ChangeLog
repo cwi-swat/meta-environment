@@ -1,5 +1,8 @@
 $Id$
 
+2003/06/29 (markvdb@cwi.nl)
+ * Access function for position information added.
+
 2003/06/26 (jurgenv@cwi.nl)
  * Added package definition file
 
