@@ -35,7 +35,6 @@ let
 in
   snd-msg(get-import-relations) .
   rec-msg(import-relations(ImportRelations?)) .
-  printf("ImportRelations: %t\n", ImportRelations) .
   snd-note(display-import-graph(ImportRelations)) .
   ImportRelations := []
 endlet
@@ -258,15 +257,12 @@ in
 	  .
 	  if equal(Valid, true)
 	  then
-	    printf("valid\n") .
 	    AnnotateTree(ParseResult, Path, AnnotatedTree?)
 	    . SetModuleSyntaxTree(ModuleId, AnnotatedTree)
 	    . GetImportedModuleNames(ParseResult, Imports?)
 	  else
-	    printf("invalid\n") .
 	    Imports := []
 	  fi
-	  . printf("Setting imports: %t -> %t\n", ModuleId, Imports)
 	+
 	  rec-msg(sglr-parse-error(Error?))
 	  . ParseErrorToSummary(Error, Path, Summary?)
