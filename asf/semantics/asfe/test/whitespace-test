@@ -31,4 +31,6 @@ printf "."
 ./whitespace terms/Set.eqs.asfix1 terms/Set3.trm.asfix1
 printf "."
 ./whitespace terms/Pico-typecheck.eqs.asfix1 terms/fac.trm.asfix1
+printf "."
+./whitespace terms/Pico-Integers.eqs.asfix1 terms/Pico-Integers.trm.asfix1
 printf ".\n"

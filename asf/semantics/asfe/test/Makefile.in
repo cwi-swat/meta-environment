@@ -46,18 +46,18 @@ test: ${TESTCASES} ${BINS}
 	done 
 
 prepare-restore: prepare-restore.c $(OBJS)
-	$(CC) -o prepare-restore $(INCLUDES) $< $(OBJS) $(LIBS)
+	$(CC) -g -o prepare-restore $(INCLUDES) $< $(OBJS) $(LIBS)
 
 equalModuloWhitespace: equalModuloWhitespace.c $(OBJS)
-	$(CC) -o equalModuloWhitespace $(INCLUDES) $< $(OBJS) $(LIBS)
+	$(CC) -g -o equalModuloWhitespace $(INCLUDES) $< $(OBJS) $(LIBS)
 
 whitespace: whitespace.c $(OBJS)
-	$(CC) -o whitespace $(INCLUDES) $< $(OBJS) $(LIBS)
+	$(CC) -g -o whitespace $(INCLUDES) $< $(OBJS) $(LIBS)
 
 # Notice that we use a commandline macro to remove the main function
 # from evaluator.c
 %.o: ../%.c
-	$(CC) -c $< $(INCLUDES) -Dmain=move_main_away
+	$(CC) -g -c $< $(INCLUDES) -Dmain=move_main_away
 
 clean:
 	@rm -f *.o *~ $(CLEANFILES)

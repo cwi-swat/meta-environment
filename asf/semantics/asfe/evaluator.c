@@ -580,10 +580,12 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
   } else { /* terms are not any of the above, and not equal */
 		if(keep_whitespace) {
 			/* we didn't test for equality if rewriting with ws, so do it now */
-			if(isAsFixEqual(arg1,arg2)) {
+			 if(isEqualModuloWhitespace(arg1,arg2)) {
 				return args_matching(newenv,conds,orgargs1,orgargs2);
-			}
-		} else {
+			 } else {
+				 newenv = fail_env;
+			 }
+		} else { 
 			newenv = fail_env;
 		}
   }
@@ -743,9 +745,6 @@ ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
 /*}}}  */
 /*{{{  ATermList list_matching(ar,sym,env,elems1,elems2,conds,args1,args2) */
 
-static ATerm match_list_tail(ATerm sym, ATerm env,ATermList elems1, ATermList elems2,
-											ATermList conds, ATermList args1, ATermList args2);
-
 ATerm list_matching(ATerm sym,
                     ATerm env,ATermList elems1, ATermList elems2,
                     ATermList conds, ATermList args1, ATermList args2)
@@ -847,56 +846,6 @@ ATerm list_matching(ATerm sym,
 }
 
 /*}}}  */
-
-/* match_list_tail
- *
- * this function is used when we rewrite with whitespace. It is called when
- * the last variable of a list pattern is a star variable and the term to be matched
- * is empty. In this case we need to check if there are some ws's and sep's in the 
- * way of the matching algorithm.
- */
-static ATerm match_list_tail(ATerm sym, ATerm env,ATermList elems1, ATermList elems2,
-											ATermList conds, ATermList args1, ATermList args2)
-{
-	ATerm sep, ws1, ws2, var;
-
-	/* We either have [ws,sep,ws,var], or [sep,ws,var].
-	 * if the pattern is one of those, then continue matching
-	 * without the ws's and the sep.
-	 */
-	if(ATgetLength(elems1) == 4) { /* [ws,sep,ws,var] */
-		ws1 = ATgetFirst(elems1);
-		elems1 = ATgetNext(elems1);
-		sep = ATgetFirst(elems1);
-		elems1 = ATgetNext(elems1);
-		ws2 = ATgetFirst(elems1);
-		elems1 = ATgetNext(elems1);
-		var = ATgetFirst(elems1);
-		
-		if(asfix_is_whitespace(ws1) &&
-			 asfix_is_list_sep(sep) && 
-			 asfix_is_whitespace(ws2) && 
-			 asfix_is_list_var(var)) {
-			/* continue matching after skipping ws and sep */
-			return list_matching(sym,env,elems1,elems2,conds,args1, args2);
-		}
-	} else if(ATgetLength(elems1) == 3) { /* [sep,ws,var] */
-		sep = ATgetFirst(elems1);
-		elems1 = ATgetNext(elems1);
-		ws1 = ATgetFirst(elems1);
-		elems1 = ATgetNext(elems1);
-		var = ATgetFirst(elems1);
-		
-		if(asfix_is_list_sep(sep) && 
-			 asfix_is_whitespace(ws1) && 
-			 asfix_is_list_var(var)) {
-			/* continue matching after skipping ws and sep */
-			return list_matching(sym,env,elems1,elems2,conds,args1, args2);
-		}
-	}
-	
-	return fail_env;
-}
 
 /*{{{  ATermList conds_satisfied(ATermList conds, ATermList env) */
 
@@ -1098,10 +1047,11 @@ ATermList rewrite_args(ATermList args, ATerm env)
     while(!ATisEmpty(args)) {
       arg = ATgetFirst(args);
       if(asfix_is_appl(arg) || asfix_is_var(arg) ||
-         asfix_is_list(arg) || asfix_is_lex(arg))
-        newarg_table[i] = rewrite(arg, env);
-      else
+         asfix_is_list(arg) || asfix_is_lex(arg)) {
+				newarg_table[i] = rewrite(arg, env);
+			} else {
         newarg_table[i] = arg;
+			}
       args = ATgetNext(args);
       ++i;
     }
