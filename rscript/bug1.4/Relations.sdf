@@ -1,0 +1,28 @@
+module Relations[Elem]
+
+exports
+
+%%imports Bags[Elem # Elem] [    Bag[[Elem # Elem]]  =>  Rel[[Elem]]  ]
+imports Bags[Elem # Elem]
+imports Bags[Elem]
+
+  sorts Rel[[Elem]]
+
+  context-free syntax
+
+     Bag[[Elem # Elem]]                        ->  Rel[[Elem]]
+
+     equal(Rel[[Elem]], Rel[[Elem]])           -> Boolean
+
+
+hiddens
+  imports asf/syntax/Comments
+
+  variables
+     "BagEE" [0-9\']*            -> Bag[[Elem # Elem]]
+     "Rel" [0-9\']*              -> Rel[[Elem]]
+
+
+
+
+
