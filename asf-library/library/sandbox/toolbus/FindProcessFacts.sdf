@@ -19,12 +19,18 @@ hiddens
     find-process-facts( ProcessDef, ProcessFactsSet )  -> ProcessFactsSet {traversal(accu,top-down,break)}
 
   context-free syntax
-    find-facts-in-process(ProcessExpr, ProcessFacts)         -> ProcessFacts {traversal(accu,top-down,continue)}
-    find-facts-in-process( ProcessInvocation, ProcessFacts ) -> ProcessFacts {traversal(accu,top-down,continue)}
-    find-facts-in-process( Term, ProcessFacts )              -> ProcessFacts {traversal(accu,top-down,continue)}
+    find-facts-in-process(ProcessBody, ProcessFacts, 
+                          {FormalParam ","}*, {VarDecl ","}*)         -> ProcessFacts {traversal(accu,top-down,continue)}
+    find-facts-in-process( ProcessInvocation, ProcessFacts,  
+                          {FormalParam ","}*, {VarDecl ","}* ) -> ProcessFacts {traversal(accu,top-down,continue)}
+    find-facts-in-process( Atom, ProcessFacts,  
+                          {FormalParam ","}*, {VarDecl ","}* )              -> ProcessFacts {traversal(accu,top-down,continue)}
+
+  context-free syntax
+    make-signature(Atom, {FormalParam ","}*, {VarDecl ","}* ) -> Fact
 
   variables
-    "TscriptDefs"                                 -> TscriptDef*
+    "TscriptDefs"                               -> TscriptDef*
     "ProcessInvocations"                          -> {ProcessInvocation ","}+
     "ProcessCreations"                          -> {ProcessCreation ","}+
     "ProcessFacts"[0-9\']*                      -> ProcessFacts
@@ -34,8 +40,11 @@ hiddens
     "ProcessSignature"                                 -> ProcessSignature
     "ProcessName"                                 -> ProcessName
     "ProcessNames"                                -> ProcessName*
+    "FormalParam"                                     -> FormalParam
+    "FormalParams"[0-9]*                              -> {FormalParam ","}*
     "VarDecl"                                     -> VarDecl
     "VarDecls"[0-9]*                              -> {VarDecl ","}*
+    "ProcessBody"                                 -> ProcessBody
     "ProcessExpr"                                 -> ProcessExpr
     "GenVar"                                      -> GenVar
     "Id"                                          -> Id
@@ -44,3 +53,4 @@ hiddens
     "TermList"                                    -> TermList
     "Table"[0-9\']*                               -> Table[[Var # Term]]
     "Var"                                         -> Var
+    "SendFact"                                    -> SendFact

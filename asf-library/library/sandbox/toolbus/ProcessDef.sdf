@@ -1,16 +1,20 @@
 module ProcessDef
 
-imports ProcessExpr
+imports ProcessExpr VarDecls FormalParameters
 
 exports
-  sorts ProcessDef ProcessDefs ProcessSignature
+  sorts ProcessDef ProcessDefs ProcessSignature ProcessBody
 
   context-free syntax
-    ProcessName                        -> ProcessSignature
-    ProcessName "(" {VarDecl ","}* ")" -> ProcessSignature
+    ProcessName                            -> ProcessSignature
+    ProcessName "(" {FormalParam ","}* ")" -> ProcessSignature
 
   context-free syntax
-    "process" ProcessSignature "is" ProcessExpr -> ProcessDef {cons("procDef")}
+    ProcessExpr                                    -> ProcessBody {cons("plainBody")}
+    "let" {VarDecl ","}* "in" ProcessExpr "endlet" -> ProcessBody {cons("letBody")}
+
+  context-free syntax
+    "process" ProcessSignature "is" ProcessBody -> ProcessDef {cons("procDef")}
 
   context-free syntax
     ProcessDef*  -> ProcessDefs {cons("procDefStar")}

@@ -1,0 +1,10 @@
+module FormalParameters
+imports Terms
+
+exports
+  sorts FormalParam FormalParams
+
+  context-free syntax
+    Var ":" Term     -> FormalParam {cons("formal-param")}
+    Var ":" Term "?" -> FormalParam {cons("assign-formal-param")}
+    {FormalParam ","}*   -> FormalParams {cons("formal-params")}

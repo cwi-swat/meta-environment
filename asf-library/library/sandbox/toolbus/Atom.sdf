@@ -2,7 +2,7 @@ module Atom
 imports Terms
 
 exports
-  sorts Atom ProcessName
+  sorts Atom AtomArgs ProcessName
 
   lexical restrictions
     ProcessName -/- [a-zA-Z\-0-9]
@@ -11,6 +11,15 @@ exports
     [A-Z] [a-zA-Z\-0-9]* -> ProcessName
 
   context-free syntax
-    Term                 -> Atom {cons("termAtom")}
-    Var ":=" Term        -> Atom {cons("assignment")}
+    {Term ","}+ -> AtomArgs
+
+  context-free syntax
+    "snd-msg" "(" AtomArgs ")"   -> Atom {cons("snd-msg")}
+    "rec-msg" "(" AtomArgs ")"   -> Atom {cons("rec-msg")}
+    "subscribe" "(" AtomArgs ")" -> Atom {cons("subscribe")}
+    "snd-note" "(" AtomArgs ")"  -> Atom {cons("snd-note")}
+    "rec-note" "(" AtomArgs ")"  -> Atom {cons("rec-note")}
+    "delta"                      -> Atom {cons("delta")}
+    "tau"                        -> Atom {cons("tau")}
+    Var ":=" Term                -> Atom {cons("assignment")}
 

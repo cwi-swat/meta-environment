@@ -1,6 +1,6 @@
 module ProcessExpr
 
-imports Atom VarDecls TimeExpr
+imports Atom TimeExpr
 
 exports
   sorts ProcessExpr ProcessInvocation ProcessCreation
@@ -19,7 +19,6 @@ exports
     ProcessExpr "*" ProcessExpr                                 -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr1")}
     ProcessExpr "||" ProcessExpr                                -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr2")}
     "(" ProcessExpr ")"                                         -> ProcessExpr {bracket}
-    "let" VarDecls "in" ProcessExpr "endlet"                    -> ProcessExpr {cons("letCons")}
     "if" Term "then" ProcessExpr "fi"                           -> ProcessExpr {cons("ifthen")}
     "if" Term "then" ProcessExpr "else" ProcessExpr "fi"        -> ProcessExpr {cons("ifthenelse")}
 

@@ -5,9 +5,13 @@ imports
 
 exports
   context-free syntax
-    get-process-name(ProcessSignature) -> ProcessName
+    get-process-name(ProcessSignature)      -> ProcessName
+    get-formal-parameters(ProcessSignature) -> {FormalParam ","}*
+    get-local-variables(ProcessBody)        -> {VarDecl ","}*
 
 hiddens
   variables
-    "ProcessName"[0-9]* -> ProcessName
+    "ProcessName"[0-9]*  -> ProcessName
+    "FormalParams"[0-9]* -> {FormalParam ","}*
     "VarDecls"[0-9]*     -> {VarDecl ","}*
+    "ProcessExpr"[0-9]*  -> ProcessExpr

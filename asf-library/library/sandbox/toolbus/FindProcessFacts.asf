@@ -6,40 +6,53 @@ equations
 
 [ff-basic]
   get-process-name(ProcessSignature) = ProcessName,
-  find-facts-in-process(ProcessExpr, 
-                     make-process-facts(process-declaration ProcessName,{},{},{},{})) = ProcessFacts
+  get-formal-parameters(ProcessSignature) = FormalParams,
+  get-local-variables(ProcessBody) = VarDecls,
+  find-facts-in-process(ProcessBody, 
+                        make-process-facts(process-declaration ProcessName,{},{},{},{}),
+                        FormalParams,VarDecls) = ProcessFacts
   ===>
-  find-process-facts(process ProcessSignature is ProcessExpr, ProcessFactsSet) =
+  find-process-facts(process ProcessSignature is ProcessBody, ProcessFactsSet) =
     ProcessFactsSet + { ProcessFacts }
 
 [ff-create-basic]
-  find-facts-in-process(create(ProcessName, GenVar), CollectedFacts) =
+  find-facts-in-process(create(ProcessName, GenVar), CollectedFacts,
+                        FormalParams, VarDecls) =
     add-process-creation(CollectedFacts, process-creation ProcessName)
 
 [ff-create-param]
-  find-facts-in-process(create(ProcessName(Terms), GenVar), CollectedFacts) =
+  find-facts-in-process(create(ProcessName(Terms), GenVar), CollectedFacts,
+                        FormalParams, VarDecls) =
     add-process-creation(CollectedFacts, process-creation ProcessName)
 
 [ff-invocation-basic]
-  find-facts-in-process(ProcessName, CollectedFacts) =
+  find-facts-in-process(ProcessName, CollectedFacts,
+                        FormalParams, VarDecls) =
     add-process-invocation(CollectedFacts, process-invocation ProcessName)
 
 [ff-invocation-param]
-  find-facts-in-process(ProcessName(Terms), CollectedFacts) =
+  find-facts-in-process(ProcessName(Terms), CollectedFacts,
+                        FormalParams, VarDecls) =
   add-process-invocation(CollectedFacts, process-invocation ProcessName)
 
 [ff-send-basic]
-  find-facts-in-process( snd-msg(Id), CollectedFacts) =
+  find-facts-in-process( snd-msg(Id), CollectedFacts,
+                        FormalParams,VarDecls) =
   add-send-message(CollectedFacts, send-atom Id)
 
 [ff-send-complex]
-  find-facts-in-process( snd-msg(Id(TermList)), CollectedFacts) = 
-  add-send-message(CollectedFacts, send-atom Id)
+  make-signature(snd-msg(Id(TermList)), FormalParams, VarDecls) = SendFact
+  ===>
+  find-facts-in-process( snd-msg(Id(TermList)), CollectedFacts,
+                        FormalParams,VarDecls) = 
+  add-send-message(CollectedFacts, SendFact)
 
 [ff-recv-basic]
-  find-facts-in-process( rec-msg(Id), CollectedFacts) = 
+  find-facts-in-process( rec-msg(Id), CollectedFacts,
+                        FormalParams,VarDecls) = 
     add-receive-message(CollectedFacts, recv-atom Id)
 
 [ff-recv-complex]
-  find-facts-in-process( rec-msg(Id(TermList)), CollectedFacts) =     
+  find-facts-in-process( rec-msg(Id(TermList)), CollectedFacts,
+                        FormalParams,VarDecls) =     
      add-receive-message(CollectedFacts, recv-atom Id)

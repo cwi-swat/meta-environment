@@ -2,4 +2,16 @@ equations
 
   [get-process-name-1] get-process-name(ProcessName) = ProcessName
 
-  [get-process-name-2] get-process-name(ProcessName(VarDecls)) = ProcessName
+  [get-process-name-2] get-process-name(ProcessName(FormalParams)) = ProcessName
+
+  [get-formal-parameters-1] 
+    get-formal-parameters(ProcessName) = 
+
+  [get-formal-parameters-2] 
+    get-formal-parameters(ProcessName(FormalParams)) = FormalParams
+
+  [get-local-variables-1] 
+    get-local-variables(ProcessExpr) = 
+
+  [get-local-variables-2] 
+    get-local-variables(let VarDecls in ProcessExpr endlet) = VarDecls

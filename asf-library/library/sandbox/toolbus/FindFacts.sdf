@@ -14,7 +14,7 @@ exports
 
 hiddens
   variables
-    "Tscript" -> Tscript
-    "StartupFacts" -> StartupFacts
+    "Tscript"        -> Tscript
+    "StartupFacts"    -> StartupFacts
     "ProcessFactsSet" -> ProcessFactsSet
     
