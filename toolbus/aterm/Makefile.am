@@ -47,7 +47,7 @@ logger.tif.c logger.tif.h: tblog-interface.tifs
 	$(ATBIN)/dicttoc -dict $<
 
 tblog-interface.tifs: tblog-interface.tb
-	$(TBDIR)/toolbus -gentifs $<
+	$(TBDIR)/toolbus -gentifs $< -output $@
 	@if [ "a${VPATH}" != "a" ]; then \
 		mv ${srcdir}/tblog-interface.tifs $@ ;\
 	fi
