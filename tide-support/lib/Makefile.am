@@ -34,5 +34,7 @@ regen:
 
 CLEANFILES	= *.tifs
 
-EXTRA_DIST	= TA.adt TA.h TA.c TA_dict.h TA_dict.c
+EXTRA_DIST = \
+	TA.adt \
+	adapter.idef
 

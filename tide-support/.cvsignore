@@ -10,3 +10,4 @@ config.log
 config.status
 configure
 *-config
+tide-support-*.tar.gz
