@@ -146,7 +146,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
         return mainPanel;
     }
     
-
     private void postQuitEvent() {
         bridge.sendEvent(factory.parse("quit"));
     }
@@ -165,6 +164,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif {
     }
 
 	public void recTerminate(ATerm t0) {
-		
+		System.exit(0);
 	}
 }
