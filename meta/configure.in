@@ -234,6 +234,7 @@ asf-syntax/traversals/Makefile
 asf-syntax/traversals/src/Makefile
 asf-syntax/traversals/c-source/Makefile
 asf-syntax/traversals/spec/Makefile
+asf-syntax/traversals/test/Makefile
 , chmod +x utils/genmakefile
 )
 
