@@ -368,8 +368,8 @@ ATermList SG_CyclicTerm(parse_table *pt, forest t)
 /* Yield converts aprods to AsFix */
 tree SG_YieldTree(parse_table *pt, tree t)
 {
-  tree      arg, res;
-  ATermList args, newargs, ambs;
+  tree      arg, res, newarg;
+  ATermList args, newargs, ambs, tail;
   AFun      fun;
   ATerm     pos_info;
   ATerm     prod;
@@ -380,16 +380,25 @@ tree SG_YieldTree(parse_table *pt, tree t)
 
   switch(ATgetType(t)) {
   case AT_LIST:
-    args = (ATermList) t; 
-    newargs = ATempty;
+    args = (ATermList) t;
 
-    for(; !ATisEmpty(args); args = ATgetNext(args)) {
+    if (!ATisEmpty(args)) {
       arg = (tree) ATgetFirst(args);
-      arg = SG_YieldTree(pt, arg);
-      newargs = ATinsert(newargs, (ATerm) arg);
+      tail = ATgetNext(args);
+
+      if (ATisEmpty(tail)) {
+        newargs = ATempty;
+      } else {
+        newargs = (ATermList)SG_YieldTree(pt, (tree) tail);
+      }
+    
+      newarg = (tree) SG_YieldTree(pt, arg);
+      newargs = ATinsert(newargs, (ATerm)newarg); 
     }
-    return (tree) ATreverse(newargs);
-  
+    else {
+      newargs = ATempty;
+    }
+    return (tree)newargs;
   case AT_APPL:
     fun  = ATgetAFun(t);
 
@@ -840,6 +849,9 @@ ATwarning("\n");
             if (SG_GtrPriority(pt, ly, lx) ||
                 SG_EagerPriority(pt, ly, lx)) {
               result = (Mx < Nx);
+/*
+ATwarning("ly = %t lx = %t yields %d\n", ly,lx, result);
+*/
               foundone = ATtrue;
             }
           }
@@ -1003,24 +1015,20 @@ ATwarning("t1 = %t\n", l1);
     if (SG_MultiSetGtr(pt, ms0, ms1)) {
       IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t > %t\n", l0, l1))
       max = t0;
-    } else {
+    } 
 
-      /* if a < b && b > a, something strange is going on */
-      /*assert(SG_MultiSetGtr(pt, ms1, ms0));*/
-      if (SG_MultiSetGtr(pt, ms1, ms0)) {
-        if (max) {     /*  shouldn't happen, really  */
-          IF_DEBUG(fprintf(SG_log(),
-                           "Symmetric multiset priority relation ignored\n"))
-          ATwarning("Ignoring symmetric multiset priority relation\n");
-          max = NULL;
-        }
-        else { 
-          IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t < %t\n", l0, l1))
-          max = t1;
-        }
+    if (SG_MultiSetGtr(pt, ms1, ms0)) {
+      if (max) {
+        IF_DEBUG(fprintf(SG_log(),
+                         "Symmetric multiset priority relation ignored\n"))
+        max = NULL;
+      }
+      else { 
+        IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t < %t\n", l0, l1))
+        max = t1;
       }
     }
-  }           
+  }       
 
   if (max) {
     IF_STATISTICS(SG_MultiSetFilterSucceeded(SG_NR_INC));
@@ -1255,8 +1263,8 @@ tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
 {
   int type = ATgetType(t);
   ATermList args, ambs;
-  ATermList newargs;
-  tree arg, newt;
+  ATermList newargs, tail, newtail;
+  tree arg, newt, newarg;
 
   switch(type) {
   case AT_APPL:
@@ -1278,16 +1286,23 @@ tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
   break;
   case AT_LIST:
     args = (ATermList) t;
-    newargs = ATempty;
 
-    for(; !ATisEmpty(args); args = ATgetNext(args)) {
-       arg = (tree) ATgetFirst(args);
-       newargs  = ATinsert(newargs, 
-                          (ATerm) SG_FilterTreeRecursive(pt, mst, 
-                                                         arg, ATfalse));
-    }  
+    if (!ATisEmpty(args)) {
+      arg = (tree) ATgetFirst(args);
+      tail = ATgetNext(args);
 
-    t = (tree) ATreverse(newargs); 
+      if (ATisEmpty(tail)) {
+        newtail = ATempty;
+      } else {
+        newtail = (ATermList)SG_FilterTreeRecursive(pt, mst, 
+                                                    (tree)tail, ATfalse);
+      }
+    
+      newarg = (tree) SG_FilterTreeRecursive(pt, mst, arg, ATfalse);
+      if (!ATisEqual((ATerm)newarg, (ATerm)arg) || !ATisEqual(newtail, tail)) {
+         t = (tree)ATinsert(newtail, (ATerm)newarg); 
+      }
+    }
   break;
   default:
   break;
