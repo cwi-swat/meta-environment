@@ -14,8 +14,12 @@ process Parser is
   in
     execute(sglr, P?) .
     (
-      rec-msg(Id?, parse-string(L?, G?, S?)) .
-      snd-eval(P, parse-string(L, G, S)) .
+      (rec-msg(Id?, parse-string(L?, G?, S?)) .
+       snd-eval(P, parse-string(L, G, S))
+      +
+       rec-msg(parse-file(L?, G?, FN?, Id?)) .
+       snd-eval(P, parse-file(L, G, FN))
+      ).
       (
         rec-value(P, parsetree(T?, Amb?)) .
         snd-msg(parse-result(Id, parsetree(T, Amb)))
@@ -26,8 +30,8 @@ process Parser is
         rec-value(P, parse-error(Err?,eof)) .
         snd-msg(parse-result(Id, parse-error(Err,eof)))
       +
-        rec-value(P, parse-error(Err?,ambiguities(T?))) .
-        snd-msg(parse-result(Id, parse-error(Err,ambiguities(T?))))
+        rec-value(P, parse-error(Err?,ambiguities(Amb?))) .
+        snd-msg(parse-result(Id, parse-error(Err,ambiguities(Amb))))
       +
         rec-value(P, parse-error(Err?,cycle(T?))) .
         snd-msg(parse-result(Id, parse-error(Err,cycle(T?))))
@@ -45,30 +49,11 @@ process Parser is
         rec-value(P, parse-error(Err?,eof)) .
         snd-msg(parse-result-asfix1(Id, parse-error(Err,eof)))
       +
-        rec-value(P, parse-error(Err?,ambiguities(T?))) .
-        snd-msg(parse-result-asfix1(Id, parse-error(Err,ambiguities(T?))))
+        rec-value(P, parse-error(Err?,ambiguities(Amb?))) .
+        snd-msg(parse-result-asfix1(Id, parse-error(Err,ambiguities(Amb))))
       +
         rec-value(P, parse-error(Err?,cycle(T?))) .
         snd-msg(parse-result-asfix1(Id, parse-error(Err,cycle(T?))))
-      )
-    +
-      rec-msg(parse-file(L?, G?, FN?, Id?)) .
-      snd-eval(P, parse-file(L, G, FN)) .
-      (
-        rec-value(P, parsetree(T?, Amb?)) .
-        snd-msg(parse-result(Id, parsetree(T, Amb)))
-      +
-        rec-value(P, parse-error(Err?,plain)) .
-        snd-msg(parse-result(Id, parse-error(Err,plain)))
-      +
-        rec-value(P, parse-error(Err?,eof)) .
-        snd-msg(parse-result(Id, parse-error(Err,eof)))
-      +
-        rec-value(P, parse-error(Err?,ambiguities(T?))) .
-        snd-msg(parse-result(Id, parse-error(Err,ambiguities(T?))))
-      +
-        rec-value(P, parse-error(Err?,cycle(T?))) .
-        snd-msg(parse-result(Id, parse-error(Err,cycle(T?))))
       )
     +
       (
