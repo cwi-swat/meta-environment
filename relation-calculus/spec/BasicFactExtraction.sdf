@@ -14,7 +14,7 @@ hiddens
 context-free syntax
 
 extract-facts(Tree, RSTORE) -> RSTORE {traversal(accu, bottom-up, continue)}
-add-constructor(Location, {ATerm ","}*, RSTORE) -> RSTORE
+add-constructor(Location, Attributes, RSTORE) -> RSTORE
 add-children(Location, {Tree ","}*, RSTORE) -> RSTORE
 posinfo-to-location(ATerm)  -> Location
 
@@ -39,3 +39,4 @@ variables
 "ATerm*"[0-9\']* -> {ATerm ","}*
 "StrCon"[0-9\']* -> StrCon
 "N"[0-9\']* -> NatCon
+"Attr*"[0-9\']* -> {Attr ","}*
