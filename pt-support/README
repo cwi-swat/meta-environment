@@ -4,12 +4,12 @@ This pt-support directory contains 4 different "AsFix" sublibraries:
 - asfix-old
 - asfix1
 - asfix2
-- mept
+- mept   (Meta Environment Parse Tree)
 
 The library asfix-old contains all old AsFix functionality.
 
 The library asfix1 contains all AsFix functionality based on "api-gen"
-for AsFix1.
+for AsFix1. This is what is currently known as "Dé AsFix Bibliotheek"
 
 The library asfix2 contains all AsFix functionality partly based on
 "api-gen" for plain AsFix2 and partly hand-coded. By plain AsFix2
