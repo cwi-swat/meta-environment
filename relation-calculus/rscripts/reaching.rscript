@@ -33,9 +33,7 @@ equations
 	rel[stat,def] OUT init DEF
   satisfy
 	IN  =  {<S, D> | stat S : STATEMENTS, stat P : predecessor(S), def D : OUT[P]}
-	OUT =  {<S, D> | stat S : STATEMENTS, def D : DEF[S] union  (IN[S] \ (KILL[S]))}
-
-%% priorities!
+	OUT =  {<S, D> | stat S : STATEMENTS, def D : DEF[S] union  (IN[S] \ KILL[S])}
 
 end equations
 
