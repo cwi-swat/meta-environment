@@ -50,7 +50,7 @@ include ${top_srcdir}/implicit-rules
 XCFLAGS		= -DBINDIR=\"$(bindir)\"
 XCPPFLAGS	=
 XINCLUDES	= -I$(ATERMINC)
-XLIBS		= -L$(ATERMLIB) -lATerm-dbg -lAsFix-dbg -lATB-dbg $(SOCKLIBS)
+XLIBS		= -L$(ATERMLIB) -lATerm-${CC} -lAsFix-${CC} -lATB-${CC} $(SOCKLIBS)
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.

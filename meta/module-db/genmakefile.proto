@@ -76,7 +76,7 @@ ATERM		:= @ATERM@
 NEW_META	:= @NEW_META@
 
 XINCLUDES	:= -I$(ATERM)/include -I$(NEW_META)/include -I$(includedir)
-XLIBS		:= -L$(ATERM)/lib -L$(NEW_META)/lib $(SOCKLIBS)
+XLIBS		:= -L$(ATERM)/lib -L$(NEW_META)/lib -L$(libdir) $(SOCKLIBS)
 
 SPEC_SRCS	:= $(shell grep -v '^\#' $(srcdir)/@TARGET@.module-list)
 SRCS		:= =$(SPEC_SRCS) init.c
