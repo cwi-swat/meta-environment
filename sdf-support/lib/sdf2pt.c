@@ -285,9 +285,6 @@ static PT_Attr SDFAttributeToPtAttr(SDF_Attribute sdfAttribute)
   if (SDF_isAttributeBracket(sdfAttribute)) {
     ptAttr = PT_makeAttrBracket();         
   }
-  else if (SDF_isAttributeMemo(sdfAttribute)) {
-    ptAttr = PT_makeAttrMemo();         
-  }
   else if (SDF_isAttributeReject(sdfAttribute)) {
     ptAttr = PT_makeAttrReject();         
   }
@@ -297,47 +294,42 @@ static PT_Attr SDFAttributeToPtAttr(SDF_Attribute sdfAttribute)
   else if (SDF_isAttributeAvoid(sdfAttribute)) {
     ptAttr = PT_makeAttrAvoid();         
   }
-  else if (SDF_isAttributeConstructor(sdfAttribute)) {
-    ptAttr = PT_makeAttrConstructor();         
-  }
   else if (SDF_isAttributeId(sdfAttribute)) {
     SDF_ModuleName sdfModuleName = SDF_getAttributeModuleName(sdfAttribute);
     SDF_ModuleId  sdfModuleId = SDF_getModuleNameModuleId(sdfModuleName);
     char *str = unquote_str(PT_yieldTree((PT_Tree) sdfModuleId));
     ptAttr = PT_makeAttrId(str);         
   }
-  else if (SDF_isAttributeCons(sdfAttribute)) {
-    SDF_ATerm sdfATerm = SDF_getAttributeTerm(sdfAttribute);
-    if (SDF_isATermFun(sdfATerm)) {
-      SDF_AFun fun = SDF_getATermFun(sdfATerm);
-      char *str = unquote_str(PT_yieldTree((PT_Tree) SDF_getAFunLiteral(fun)));
-      ptAttr = PT_makeAttrCons(str);         
+  else if (SDF_isAttributeAssoc(sdfAttribute)) {
+    SDF_Associativity sdfAssoc = SDF_getAttributeAssociativity(sdfAttribute);
+    PT_Associativity ptAssoc = NULL;
+
+    if (SDF_isAssociativityLeft(sdfAssoc)) {
+      ptAssoc = PT_makeAssociativityLeft();
     }
-    else {
-      ATerror("SDFAttributeToPtAttr: unable to flatten %s\n", 
+    else if (SDF_isAssociativityRight(sdfAssoc)) {
+      ptAssoc = PT_makeAssociativityRight();
+    }
+    else if (SDF_isAssociativityNonAssoc(sdfAssoc)) {
+      ptAssoc = PT_makeAssociativityNonAssoc();
+    }
+    else if (SDF_isAssociativityAssoc(sdfAssoc)) { 
+      ptAssoc = PT_makeAssociativityAssoc();
+    }
+
+    ptAttr = PT_makeAttrAssoc(ptAssoc);
+  }
+  else if (SDF_isAttributeTerm(sdfAttribute)) {
+    ATerm term = ATmake(PT_yieldTree((PT_Tree) sdfAttribute));
+    if (term == NULL) {
+      ATerror("SDFAttributeToPtAttr: unable to flatten %s\n",
 	      PT_yieldTree((PT_Tree) sdfAttribute));
       ptAttr = NULL;
     }
-  }
-  else if (SDF_isAttributeAtr(sdfAttribute)) {
-    SDF_Associativity sdfAssoc = SDF_getAttributeAssociativity(sdfAttribute);
-    
-    if (SDF_isAssociativityLeft(sdfAssoc)) {
-      ptAttr = PT_makeAttrLeft();
-    }
-    else if (SDF_isAssociativityRight(sdfAssoc)) {
-      ptAttr = PT_makeAttrRight();
-    }
-    else if (SDF_isAssociativityNonAssoc(sdfAssoc)) {
-      ptAttr = PT_makeAttrNonAssoc();
-    }
-    else if (SDF_isAssociativityAssoc(sdfAssoc)) { 
-      ptAttr = PT_makeAttrAssoc();
+    else {
+      ptAttr = PT_makeAttrTerm(term);
     }
   }
-  else if (SDF_isAttributeTraverse(sdfAttribute)) {
-    ptAttr = PT_makeAttrTraverse();
-  } 
   else {
      ATerror("SDFAttributeToPtAttr: unable to flatten %s\n", 
 	     PT_yieldTree((PT_Tree) sdfAttribute));
@@ -417,6 +409,8 @@ static PT_CharRanges SDFCharRangesToPtCharRanges(SDF_CharRanges sdfCharRanges)
     return PT_concatCharRanges(ptLeft, ptRight);
   }
   else {
+    ATwarning("SDFCharRangesToPtCharRanges: unable to flatten %t\n",
+	     sdfCharRanges);
     ATerror("SDFCharRangesToPtCharRanges: unable to flatten %s\n",
 	    PT_yieldTree((PT_Tree) sdfCharRanges));
     result = NULL;

@@ -1,5 +1,5 @@
 /*
- * Generated at Thu Aug  2 12:51:44 2001
+ * Generated at Mon Oct  1 13:17:26 2001
  */
 
 #ifndef __SDFME_dict_H
@@ -165,6 +165,8 @@ extern AFun SDF_afun153;
 extern ATerm SDF_patternRealConRealCon;
 extern ATerm SDF_patternOptExpAbsent;
 extern ATerm SDF_patternOptExpPresent;
+extern ATerm SDF_patternCharacterLabelUnderscoreStart;
+extern ATerm SDF_patternCharacterBot;
 extern ATerm SDF_patternCharacterEof;
 extern ATerm SDF_patternCharacterTop;
 extern ATerm SDF_patternCharacterShort;
@@ -173,7 +175,11 @@ extern ATerm SDF_patternShortCharLexToCf;
 extern ATerm SDF_patternNumCharLexToCf;
 extern ATerm SDF_patternTagIdEmpty;
 extern ATerm SDF_patternTagIdLexToCf;
+extern ATerm SDF_patternATermAnnosMany;
+extern ATerm SDF_patternATermAnnosSingle;
 extern ATerm SDF_patternAnnAnnotation;
+extern ATerm SDF_patternATermArgsMany;
+extern ATerm SDF_patternATermArgsSingle;
 extern ATerm SDF_patternATermAnnotatedAppl;
 extern ATerm SDF_patternATermAnnotatedFun;
 extern ATerm SDF_patternATermAnnotatedList;
@@ -185,10 +191,10 @@ extern ATerm SDF_patternATermConstant;
 extern ATerm SDF_patternAFunDefault;
 extern ATerm SDF_patternAConReal;
 extern ATerm SDF_patternAConInt;
+extern ATerm SDF_patternATermElemsMany;
+extern ATerm SDF_patternATermElemsSingle;
+extern ATerm SDF_patternATermElemsEmpty;
 extern ATerm SDF_patternATermListNotEmpty;
-extern ATerm SDF_patternATermListEmpty;
-extern ATerm SDF_patternATermsCons;
-extern ATerm SDF_patternATermsAterm;
 extern ATerm SDF_patternLCharLexToCf;
 extern ATerm SDF_patternEscCharLexToCf;
 extern ATerm SDF_patternDecimalEscCharLexToCf;
@@ -271,16 +277,6 @@ extern ATerm SDF_patternImportListSingle;
 extern ATerm SDF_patternImportListEmpty;
 extern ATerm SDF_patternImportsDefault;
 extern ATerm SDF_patternImpSectionImports;
-extern ATerm SDF_patternAttributeAvoid;
-extern ATerm SDF_patternAttributePrefer;
-extern ATerm SDF_patternAttributeReject;
-extern ATerm SDF_patternAttributeTraverse;
-extern ATerm SDF_patternAttributeMemo;
-extern ATerm SDF_patternAttributeConstructor;
-extern ATerm SDF_patternAttributeCons;
-extern ATerm SDF_patternAttributeAtr;
-extern ATerm SDF_patternAttributeBracket;
-extern ATerm SDF_patternAttributeId;
 extern ATerm SDF_patternModuleNameParameterized;
 extern ATerm SDF_patternModuleNameUnparameterized;
 extern ATerm SDF_patternSectionListMany;
@@ -310,6 +306,13 @@ extern ATerm SDF_patternAttributeListSingle;
 extern ATerm SDF_patternAttributeListEmpty;
 extern ATerm SDF_patternAttributesNoAttrs;
 extern ATerm SDF_patternAttributesAttrs;
+extern ATerm SDF_patternAttributeAvoid;
+extern ATerm SDF_patternAttributePrefer;
+extern ATerm SDF_patternAttributeReject;
+extern ATerm SDF_patternAttributeAssoc;
+extern ATerm SDF_patternAttributeBracket;
+extern ATerm SDF_patternAttributeId;
+extern ATerm SDF_patternAttributeTerm;
 extern ATerm SDF_patternSDFDefinition;
 extern ATerm SDF_patternGrammarBracket;
 extern ATerm SDF_patternGrammarConcGrammars;

@@ -27,9 +27,6 @@ exports
     "bracket"           -> UQLiteral {reject}
     "sorts"             -> UQLiteral {reject}
     "restrictions"      -> UQLiteral {reject}
-    "constructor"       -> UQLiteral {reject}
-    "memo"              -> UQLiteral {reject}
-    "traverse"          -> UQLiteral {reject}
 
     "aliases"           -> ModuleName {reject}
     "lexical"           -> ModuleName {reject}
@@ -51,9 +48,7 @@ exports
     "bracket"           -> ModuleName {reject}
     "sorts"             -> ModuleName {reject}
     "restrictions"      -> ModuleName {reject}
-    "constructor"       -> ModuleName {reject}
-    "memo"              -> ModuleName {reject}
-    "traverse"          -> ModuleName {reject}
+    
     Literal "(" {Symbol ","}* ")" -> Symbols {reject}
   restrictions
     <Sort -CF>
@@ -111,6 +106,7 @@ imports Symbols Grammar-Syntax
 exports
   sorts Attribute Attributes Production Productions
   context-free syntax
+    aterm:ATerm                           -> Attribute      {cons("term"),avoid}
     "{" list:{Attribute ","}* "}"         -> Attributes     {cons("attrs")}
                                           -> Attributes     {cons("no-attrs")}
     Symbols "->" result:Symbol Attributes -> Production     {cons("prod")}
@@ -194,7 +190,7 @@ exports
     "non-assoc"                               -> Associativity  {cons("non-assoc")}
     "assoc"                                   -> Associativity  {cons("assoc")}
     "bracket"                                 -> Attribute      {cons("bracket")}
-    Associativity                             -> Attribute      {cons("atr")}
+    Associativity                             -> Attribute      {cons("assoc")}
     Production                                -> Group          {cons("simple-group")}
     "{" Productions "}"                       -> Group          {cons("prods-group")}
     "{" Associativity ":" Productions "}"     -> Group          {cons("assoc-group")}
@@ -238,10 +234,6 @@ imports Kernel-Sdf-Syntax Literals-Sdf-Syntax ATerms
 exports
   context-free syntax
     label:Literal ":" Symbol   -> Symbol	{cons("label")}
-    "cons" "(" term:ATerm ")"  -> Attribute	{cons("cons")}
-    "constructor"              -> Attribute	{cons("constructor")}
-    "memo"                     -> Attribute	{cons("memo")}
-    "traverse"                 -> Attribute	{cons("traverse")}
 
 module Restrictions-Sdf-Syntax
 imports CC-Sdf-Syntax
@@ -331,7 +323,7 @@ exports
     "[" OptCharRanges "]"     -> CharClass			{cons("simple-charclass")}          
     "~" CharClass             -> CharClass          		{cons("comp")}
     "left":CharClass "/" "right":CharClass   -> CharClass	{cons("diff"),left,memo}
-    "left":CharClass "/\\" "right":CharClass -> CharClass	{cons("isect"),left,memo}   
+    "left":CharClass "/\\" "right":CharClass -> CharClass	{cons("isect"),left,memo}
     "left":CharClass "\\/" "right":CharClass -> CharClass	{cons("union"),left}   
     "(" CharClass ")"          -> CharClass {bracket}
   context-free priorities
@@ -362,22 +354,19 @@ imports Literals IntCon RealCon
 exports
   sorts ATerms ATermList ACon AFun ATerm Ann
   context-free syntax
-    term:ATerm                        -> ATerms    {cons("aterm")}
-    head:ATerm "," tail:ATerms        -> ATerms    {cons("cons")}
-    "[" "]"                           -> ATermList {cons("empty")}
-    "[" ATerms "]"                    -> ATermList {cons("not-empty")}
+    "[" elems:{ ATerm ","}* "]"       -> ATermList {cons("not-empty")}
     IntCon                            -> ACon      {cons("int")}
     RealCon                           -> ACon      {cons("real")}
     Literal                           -> AFun			
     ACon                              -> ATerm     {cons("constant")}
     list:ATermList                    -> ATerm     {cons("list")}
     fun:AFun                          -> ATerm     {cons("fun")}
-    fun:AFun "(" args:ATerms ")"      -> ATerm     {cons("appl")}
-    "{" ATerms "}"                    -> Ann       {cons("annotation")}
+    fun:AFun "(" args:{ ATerm ","}+ ")"      -> ATerm     {cons("appl")}
+    "{" annos:{ ATerm ","}+ "}"                    -> Ann       {cons("annotation")}
     ACon Ann                          -> ATerm     {cons("annotated-constant")}
     list:ATermList Ann                -> ATerm     {cons("annotated-list")}
     fun:AFun Ann                      -> ATerm     {cons("annotated-fun")}
-    fun:AFun "(" args:ATerms ")" Ann  -> ATerm     {cons("annotated-appl")}
+    fun:AFun "(" args:{ ATerm ","}+ ")" Ann  -> ATerm     {cons("annotated-appl")}
 
 module Layout
 exports

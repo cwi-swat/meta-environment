@@ -1,3 +1,17 @@
+2001/09/27 (jurgenv@cwi.nl)
+ * Made some important changes in the Sdf grammar:
+     - added:   ATerm                      -> Attribute {cons("term")}
+     - changed: Associativity              -> Attribute {cons("atr")} to
+                Associativity              -> Attribute {cons("assoc")} 
+     - removed: "cons" "(" term:ATerm ")"  -> Attribute {cons("cons")}
+                "constructor"              -> Attribute {cons("constructor")}
+                "memo"                     -> Attribute {cons("memo")}
+                "traverse"                 -> Attribute {cons("traverse")
+     - refactored the ATerm grammar a bit.
+ * NOTE: These changes affect any tool using SDF or AsFix[2,me].
+ * Adapted sdf2pt library functionality to cope with new attribute format. 
+   See ChangeLog of pt-support for details.
+
 2001/08/28 (jong@cwi.nl)
  * Added #include directives to satisfy gcc-3.0.1
 
