@@ -18,6 +18,9 @@
 
 $Id$
 
+2000/4/06 (mdejonge @cwi.nl)
+   * Fixed include file search path problem by reoredering the search paths
+
 2000/4/05 (mdejonge @cwi.nl)
    * Version is now 0.3
    * Adapted for use with separate asfix distribution (i.e., libasfix is no
