@@ -629,7 +629,8 @@ static void producerTest(){
     
     ToolBus T = new ToolBus();
     try {
-      T.parse("toolbus/parser/sieve.aterm");
+      T.build(aterms.make("Alternative(Tau(),Tau())"));
+      
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}
     
   }
