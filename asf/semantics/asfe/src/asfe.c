@@ -559,7 +559,7 @@ static ATbool no_new_vars(PT_Tree trm, ATerm env)
 
 /*}}}  */
 
-/* Matching functionality (and condition checking) */
+/* Matching functionality */
 /*{{{  static ATerm argMatching(env, arg1, arg2, conds, org1, org2, posinfo, depth) */
 
 /* Function which tries to match two arguments.
@@ -1146,6 +1146,7 @@ listMatching(ATerm env, PT_Production listProd,
 
 /*}}}  */
 
+/* condition checking */
 /*{{{  static ATerm negativeCondSatisfied(PT_Tree lhs, PT_Tree rhs,  */
 
 static ATerm negativeCondSatisfied(PT_Tree lhs, PT_Tree rhs, 
