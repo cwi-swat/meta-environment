@@ -32,8 +32,7 @@ ASF_getCondEquationListLength(ASF_CondEquationList eqs)
 }
 
 ASF_ConditionList 
-foreachConditionInList(ASF_ConditionList list, ASF_ConditionVisitor visitor, 
-                       ASF_ConditionVisitorData user_data) 
+foreachConditionInList(ASF_ConditionList list, ASF_ConditionVisitor visitor) 
 {
   ATermList store;
   ASF_ConditionList newList;
@@ -46,14 +45,15 @@ foreachConditionInList(ASF_ConditionList list, ASF_ConditionVisitor visitor,
       list = ASF_getConditionListTail(list)) {
     store = ATinsert(store, 
                      ASF_makeTermFromCondition(
-                     visitor(ASF_getConditionListHead(list), user_data)));
+                     visitor(ASF_getConditionListHead(list))));
   } 
 
-  /* rebuild the plus list */
-  if (!ATisEmpty(store)) {
-    newList = ASF_makeConditionListSingle(
-              ASF_makeConditionFromTerm(ATgetFirst(store)));
+  if(ATisEmpty(store)) {
+    ATerror("foreachConditionInList: plus list contains no elements");
   }
+
+  newList = ASF_makeConditionListSingle(
+            ASF_makeConditionFromTerm(ATgetFirst(store)));
  
   for (; !ATisEmpty(store); store = ATgetNext(store)) {
     ASF_Condition newCond = ASF_makeConditionFromTerm(ATgetFirst(store));
