@@ -1,3 +1,4 @@
+#!/bin/sh
 #
 # $Id$
 #   Date: 3/19/1998
@@ -51,7 +52,6 @@ usage()
 $0 
    generates on standard output a Makefile for the compilation of the
    C code corresponding to a compiled specification.
-
 
 usage:
 $0 [-h] <target>
