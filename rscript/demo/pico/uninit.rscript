@@ -8,7 +8,7 @@
 
         rel[str,area] occurrences(<area,str> S) = {second(S)} x USE_OCCURS[S]
 
-        rel[str,area] UNDEF = 
+        rel[str,area] UNINIT = 
         { occurrences(<N,V>) | <N, V> : USES, <ROOT, N> in reachX({ROOT}, DEFS . V, PRED)
         }
 

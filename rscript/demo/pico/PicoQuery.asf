@@ -1,6 +1,6 @@
 equations
 
 [pq1] pico-query($Program, $Script, $String, $Rstore) =
-      convertl(rval2rel(eval-rscript($Script, str2rvar($String), $Rstore)))
+      convertl(eval-rscript($Script, str2rvar($String), $Rstore))
 
 [sv1] str2rvar(strcon("""  Char* """)) = rvar(Char*)

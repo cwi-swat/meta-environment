@@ -68,10 +68,10 @@ button("Pico-syntax",
 	  get-root,
            check-sort("PROGRAM"),
 
-	   push-filename("rscripts/uninit.rscript"),
+	   push-filename("uninit.rscript"),
            parse("Rscript", "RSCRIPT"),
 
-	   push-string("\"UNDEF\""),
+	   push-string("\"UNINIT\""),
            parse("basic/Strings", "String"),
 
 	   push-filename("extracted-relations.trm"),
@@ -80,7 +80,8 @@ button("Pico-syntax",
            apply("pico-query", "List", 4),
            push-modulename("PicoQuery"),
            reduce,
-	   execute-action("unparsePT"),
+	   unparse,
+	   push-active-module,
            show-list
            ]),
 
