@@ -505,6 +505,9 @@ static MA_Term treeToTerm(PT_Tree tree, ATermIndexedSet funcdefs,
   else if (PT_isTreeVar(tree)) {
     result = variableToTerm(tree);
   }
+  else if (PT_isTreeBracket(tree)) {
+    result = treeToTerm(PT_getTreeBracketTree(tree), funcdefs, layout);
+  } 
   else if (PT_isTreeAppl(tree)) {
     ATbool new;
     PT_Production prod = PT_getTreeProd(tree);
