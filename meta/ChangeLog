@@ -16,7 +16,7 @@
    was changed were not made unavailable.
 
 2001/05/16 (jong@cwi.nl)
- * version 0.3.2
+ * version 0.2.3
  * in-output-tool now ignores duplicate entries in search-path.
  * in-output-tool also requires inodes to be different before complaining
    about duplicate entries. This reduces overzealous complaints involving
