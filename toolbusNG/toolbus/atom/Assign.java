@@ -46,7 +46,7 @@ public class Assign extends Atom {
 
     ATerm newval = TBTerm.eval(exp.value, p);
     
-    //System.out.println(exp.value + "   " + newval);
+    //System.err.println(exp.value + "   " + newval);
     e.putVar(var.value, newval);
     return nextState();
   }

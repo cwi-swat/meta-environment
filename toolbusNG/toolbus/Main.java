@@ -626,11 +626,11 @@ static void producerTest(){
   }
   
   static void ParseTest(){
-    
+ 
     ToolBus T = new ToolBus();
 
     try {
-      T.parse("toolbus/parser/S.aterm");
+      T.parse("toolbus/parser/S.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}

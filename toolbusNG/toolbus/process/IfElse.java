@@ -41,8 +41,8 @@ public class IfElse extends AbstractProcessExpression {
     right.getFirst().setTest(notTest);
 
     setFollow(left.getFollow().union(right.getFollow()));
-    //System.out.println("first = " + first);
-    //System.out.println("follow = "+ follow);
+    //System.err.println("first = " + first);
+    //System.err.println("follow = "+ follow);
   }
 
   public State getAtoms() {

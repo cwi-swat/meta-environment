@@ -44,7 +44,7 @@ class ToolShield extends Thread implements ToolBridge {
     try {
       res = m.invoke(toolinstance, actuals);
     } catch (Exception e) {
-      System.out.println("ToolShield.handleRequest: " + e);
+      System.err.println("ToolShield.handleRequest: " + e);
       e.printStackTrace();
     }
     if (operation == JavaTool.EVAL) {
@@ -65,7 +65,7 @@ class ToolShield extends Thread implements ToolBridge {
   }
 
   public void run() {
-    System.out.println("run of ToolShield called");
+    System.err.println("run of ToolShield called");
     while (true) {
       while (!requests.isEmpty())
         handleRequest();
@@ -74,7 +74,7 @@ class ToolShield extends Thread implements ToolBridge {
   }
 
   public void terminate(String msg) {
-    System.out.println("ToolShield.terminate(" + msg + ")");
+    System.err.println("ToolShield.terminate(" + msg + ")");
     try {
       join(0);
     } catch (InterruptedException e) {
@@ -105,7 +105,7 @@ public class JavaTool implements ToolInstance {
   private static final String terminate = "terminate";
 
   public JavaTool(String className, ATerm toolId, ATermList sigs) throws ToolBusException {
-    System.out.println("JavaTool");
+    System.err.println("JavaTool");
     this.className = className;
     this.toolId = toolId;
     try {
@@ -139,7 +139,7 @@ public class JavaTool implements ToolInstance {
     if (t.getType() == ATerm.PLACEHOLDER)
       t = ((ATermAppl) ((ATermPlaceholder) t).getPlaceholder());
 
-    System.out.println("equalType(" + t + ", " + c + ")");
+    System.err.println("equalType(" + t + ", " + c + ")");
 
     String ctype = c.getName();
 
@@ -156,7 +156,7 @@ public class JavaTool implements ToolInstance {
   }
 
   private Method findMethod(String name, ATermList args, boolean returnsVoid) throws ToolBusException {
-    System.out.println("findMethod(" + name + ", " + args + ")");
+    System.err.println("findMethod(" + name + ", " + args + ")");
     Method methods[] = toolclass.getDeclaredMethods();
     searchMethods : for (int i = 0; i < methods.length; i++) {
       Class returntype = methods[i].getReturnType();
@@ -181,15 +181,15 @@ public class JavaTool implements ToolInstance {
   private void printMethod(Method m) {
     Class returntype = m.getReturnType();
     Class parameters[] = m.getParameterTypes();
-    System.out.print(Modifier.toString(m.getModifiers()) + " " + returntype.getName() + " " + m.getName() + "(");
+    System.err.print(Modifier.toString(m.getModifiers()) + " " + returntype.getName() + " " + m.getName() + "(");
     for (int i = 0; i < parameters.length; i++) {
-      System.out.print(parameters[i].getName() + " ");
+      System.err.print(parameters[i].getName() + " ");
     }
     System.out.println(")");
   }
 
   private void checkInputSignature(ATermList sigs) throws ToolBusException {
-    System.out.println("checkInputSignature(" + sigs + ")");
+    System.err.println("checkInputSignature(" + sigs + ")");
 
     while (!sigs.isEmpty()) {
       ATermAppl sig = (ATermAppl) sigs.getFirst();
@@ -255,12 +255,12 @@ public class JavaTool implements ToolInstance {
 
   synchronized void addValue(Object obj) {
     valuesFromTool.addLast(obj);
-    System.out.println("JavaTool.addValue: queued " + obj);
+    System.err.println("JavaTool.addValue: queued " + obj);
   }
 
   synchronized void addEvent(Object obj) {
     eventsFromTool.addLast(obj);
-    System.out.println("JavaTool.addEvent: queued " + obj);
+    System.err.println("JavaTool.addEvent: queued " + obj);
   }
 
   synchronized public ATerm getToolId() {
@@ -268,19 +268,19 @@ public class JavaTool implements ToolInstance {
   }
 
   private MatchResult getFromTool(ATerm trm, Environment env, LinkedList fromTool) {
-    System.out.println("getFromTool(" + trm + "), length fromTool = " + fromTool.size());
+    System.err.println("getFromTool(" + trm + "), length fromTool = " + fromTool.size());
     if (!fromTool.isEmpty()) {
       try {
-        System.out.println("first = " + fromTool.getFirst());
+        System.err.println("first = " + fromTool.getFirst());
         MatchResult mr = TBTerm.match(trm, env, (ATerm) fromTool.getFirst(), new Environment());
         fromTool.removeFirst();
-        System.out.println("getFromTool returns: " + mr);
+        System.err.println("getFromTool returns: " + mr);
         return mr;
       } catch (ToolBusException e) {
-        System.out.println("getFromTool: cannot happen :-)");
+        System.err.println("getFromTool: cannot happen :-)");
       }
     }
-    System.out.println("getFromTool returns false");
+    System.err.println("getFromTool returns false");
     return new MatchResult(false, null, null);
   }
 

@@ -22,7 +22,6 @@ public class RecVal extends ToolAtom {
   public boolean execute() throws ToolBusException {
     if (!isEnabled())
       return false;
-    // ToolInstance ti = getTB().getTool(getEnv().getVar(getToolvar()));
     ToolInstance ti = getToolInstance();
     MatchResult mr = ti.getValueFromTool(getToolarg(), getEnv());
     if (mr.matches()) {

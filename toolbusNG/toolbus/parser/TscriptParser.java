@@ -10,11 +10,13 @@ import toolbus.ToolBusException;
 import toolbus.atom.*;
 import toolbus.process.*;
 
-public class Parser {
+public class TscriptParser {
 
   private static ATermFactory factory = TBTerm.factory;
+  private ExternalParser externalparser;
 
-  public Parser() {
+  public TscriptParser(ExternalParser ep){
+    externalparser  = ep;
     factory = TBTerm.factory;
     initParser();
   }
@@ -151,7 +153,7 @@ public class Parser {
 
   public Object buildAppl(ATermAppl t) throws ToolBusException {
 
-    //System.out.println(t);
+    //System.err.println(t);
     String name = t.getName();
     ATerm args[] = t.getArgumentArray();
     Object obj = Funs.get(name);
@@ -169,7 +171,7 @@ public class Parser {
     if (shouldBuildArgs(index)) {
       for (int i = 0; i < args.length; i++) {
         oargs[i] = build(args[i]);
-        //System.out.println("oargs[" + i + "] = " + oargs[i]);
+        //System.err.println("oargs[" + i + "] = " + oargs[i]);
       }
     }
 
@@ -295,9 +297,14 @@ public class Parser {
 
       case ShutDown :
         return new ShutDown((ATerm) oargs[0]);
+
       case SndMsg :
 
-        return new SndMsg((ATerm) oargs[0]);
+        if (oargs.length == 1) {
+          return new SndMsg((ATerm) oargs[0]);
+        } else {
+          return new SndMsg((ATerm) oargs[0], (ATerm) oargs[1]);
+        }
 
       case Tau :
         return new Tau();
@@ -310,7 +317,7 @@ public class Parser {
   public void parse(ToolBus toolbus, String filename) throws ToolBusException {
     ATerm interm;
     try {
-      interm = factory.readFromFile(filename);
+      interm = externalparser.parse(filename);
     } catch (IOException e) {
       throw new ToolBusException(e.getMessage());
     }
@@ -325,14 +332,14 @@ public class Parser {
 
     for (int i = 0; i < decls.getLength(); i++) {
       ProcessDefinition def = (ProcessDefinition) build(decls.elementAt(i));
-      //System.out.println(def);
+      //System.err.println(def);
       toolbus.addProcessDefinition(def);
     }
     ATermList calls = (ATermList) interm.getChildAt(1);
 
     for (int i = 0; i < calls.getLength(); i++) {
       ProcessCall call = (ProcessCall) build(calls.elementAt(i));
-      //System.out.println(call);
+      //System.err.println(call);
       toolbus.addProcess(call);
     }
 

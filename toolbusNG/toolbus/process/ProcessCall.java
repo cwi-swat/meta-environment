@@ -26,19 +26,19 @@ public class ProcessCall implements ProcessExpression, StateElement {
     this.actuals = actuals;
     startState = new State();
     startState.add(this);
-    //System.out.println("ProcessCall(\"" + name + "\", " + actuals + ")");
+    //System.err.println("ProcessCall(\"" + name + "\", " + actuals + ")");
   }
   public ProcessCall(ATerm call) {
     this(((ATermAppl) call).getName(), ((ATermAppl) call).getArguments());
   }
 
   public ProcessExpression copy() {
-    //System.out.println("ProcessCall.copy: " + name);
+    //System.err.println("ProcessCall.copy: " + name);
     return new ProcessCall(name, actuals);
   }
 
   public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
-    //System.out.println("ProcessCall.expand(" + name + ", " + P + "," + calls + ")");
+    //System.err.println("ProcessCall.expand(" + name + ", " + P + "," + calls + ")");
     if (calls.contains(name)) {
       throw new ToolBusException("recursive call of " + name);
     }
@@ -51,16 +51,16 @@ public class ProcessCall implements ProcessExpression, StateElement {
   }
 
   public void compile(ProcessInstance P, State follows) throws ToolBusException {
-    //System.out.println("ProcessCall.compile(" + name + ", " + P + "," + follows + ")");
+    //System.err.println("ProcessCall.compile(" + name + ", " + P + "," + follows + ")");
     Environment env = P.getEnv();
     actuals = (ATermList) TBTerm.compileVars(actuals, env);
-    //System.out.println("actuals = " + actuals);
-    //System.out.println("definiton = " + definition);
+    //System.err.println("actuals = " + actuals);
+    //System.err.println("definiton = " + definition);
     definition.enterScope(env, actuals);
     formals = definition.getCompiledFormals(env);
     PE.compile(P, follows);
     definition.leaveScope(env);
-    //System.out.println("ProcessCall.compile:PE = " + PE);
+    //System.err.println("ProcessCall.compile:PE = " + PE);
   }
 
   public State getFirst() {
@@ -101,7 +101,7 @@ public class ProcessCall implements ProcessExpression, StateElement {
   }
 
   public boolean contains(StateElement b) {
-    //System.out.println(this +" contains " + b);
+    //System.err.println(this +" contains " + b);
     return startState.contains(b);
   }
 
@@ -112,7 +112,7 @@ public class ProcessCall implements ProcessExpression, StateElement {
   }
 
   public boolean execute() throws ToolBusException {
-    //System.out.println("ProcessCall.execute(" + name + ") formals = " + formals + "; actuals = " + actuals);
+    //System.err.println("ProcessCall.execute(" + name + ") formals = " + formals + "; actuals = " + actuals);
     Environment env = processInstance.getEnv();
     ATermList formals1 = formals;
     ATermList actuals1 = actuals;
@@ -123,7 +123,7 @@ public class ProcessCall implements ProcessExpression, StateElement {
       actuals1 = actuals1.getNext();
       if (!TBTerm.isResVar(formal)) {
         env.putVar(formal, TBTerm.substitute(actual, env));
-        //System.out.println(formal + " gets value " + env.getVar(formal));
+        //System.err.println(formal + " gets value " + env.getVar(formal));
       }
     }
     startState = PE.getStartState();

@@ -77,7 +77,7 @@ abstract class MsgAtom extends Atom {
         factory.makeList(getMsg(), factory.makeList(processInstance.getProcessId(), factory.makeList(getQual())));
     }
     
-    System.out.println(matchPattern);
+    System.err.println(matchPattern);
   }
 
   public boolean execute() throws ToolBusException {
@@ -85,7 +85,6 @@ abstract class MsgAtom extends Atom {
       return false;
     Vector partnervec = partners.getElementsAsVector();
     int psize = partnervec.size();
-    //System.out.println("psize = " + psize);
 
     if (psize > 0) {
       ProcessInstance pa = getProcess();
@@ -96,7 +95,7 @@ abstract class MsgAtom extends Atom {
           MatchResult r = matchPartner(b);
           if (r.matches()) {
             if (ToolBus.isVerbose()) {
-              System.out.println(
+              System.err.println(
                 "--- " + pa.getProcessId() + "/" + pb.getProcessId() + ": " + this +" communicates with " + b);
             }
             r.getLeft().update(pa.getEnv());

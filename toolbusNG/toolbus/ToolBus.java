@@ -3,9 +3,12 @@
  */
 
 package toolbus;
+import java.io.*;
+import java.io.PrintWriter;
 import java.util.*;
 
-import toolbus.parser.Parser;
+import toolbus.parser.*;
+import toolbus.parser.TscriptParser;
 import toolbus.process.*;
 
 import aterm.*;
@@ -16,15 +19,24 @@ public class ToolBus {
   private ATermFactory factory;
   private Vector processes;
   private Vector procdefs;
-  private Parser parser;
+  private TscriptParser parser;
+  private PrintStream out;
   
   private static boolean verbose = false;
 
-  public ToolBus() {
+  public ToolBus(PrintStream out) {
+    this.out = out;
     this.factory = TBTerm.factory;
     processes = new Vector();
     procdefs = new Vector();
-    parser = new Parser();
+ 
+    parser = new TscriptParser(new ExternalParser(
+      "/home/paulk/bin/sglr -p  /home/paulk/eclipse/workspace/toolbusNG/toolbus/parser/Tscript.trm.tbl",
+       "/home/paulk/bin/implodePT"));
+  }
+  
+  public ToolBus(){
+    this(System.out);
   }
 
   public ATermFactory getFactory() {
@@ -41,6 +53,10 @@ public class ToolBus {
   
   public static boolean isVerbose(){
     return verbose;
+  }
+  
+  public PrintStream getPrintStream(){
+    return out;
   }
 
   public static int nextInt(int n) {
@@ -108,7 +124,6 @@ public class ToolBus {
         work = n > 0;
         for (int i = 0; i < processes.size(); i++) {
           ProcessInstance P = (ProcessInstance) processes.elementAt(i);
-          //System.out.println("ToolBus -- " + P);
           P.step();
           //if (P.isTerminated()) {
           //	processes.remove(P);
@@ -116,8 +131,8 @@ public class ToolBus {
         }
       }
     } catch (ToolBusException e) {
-      System.out.println(e.getMessage());
+      System.err.println(e.getMessage());
     }
-    System.out.println("ToolBus halted");
+    System.err.println("ToolBus halted");
   }
 }
