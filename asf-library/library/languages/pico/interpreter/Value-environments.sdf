@@ -1,0 +1,10 @@
+module demo/pico/interpreter/Value-environments
+
+imports demo/pico/syntax/Pico-Identifiers 
+imports demo/pico/interpreter/Pico-Values 
+imports containers/Table[PICO-ID VALUE]
+    
+exports
+  sorts VENV 
+  aliases
+    Table[[PICO-ID, VALUE]] -> VENV

@@ -1,0 +1,10 @@
+module demo/pico/syntax/Pico-Values
+
+imports basic/Integers basic/Strings
+
+exports
+  sorts VALUE
+  context-free syntax
+    Integer     -> VALUE
+    String      -> VALUE
+    "nil-value" -> VALUE

@@ -1,0 +1,11 @@
+module demo/pico/compiler/NextLabel
+
+imports demo/pico/compiler/AssemblyLanguage
+  
+exports
+  context-free syntax
+    "nextlabel" "(" Label ")" -> Label 
+
+hiddens
+  variables
+    "Char*"[0-9]* -> CHAR*
