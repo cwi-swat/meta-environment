@@ -43,17 +43,8 @@ AC_DEFUN(META_GRAPHVIZ_VERSION_CHECK,
    esac
 ])
 
-dnl Check for graphviz package and test for corrrect verion >= 1.5
-dnl AC_DEFUN(META_CHECK_GRAPHVIZ,
-dnl [
-dnl    AC_PACKAGE_REQUIRE(graphviz, 
-dnl                      dot, 
-dnl                      [  --with-graphviz=DIR     graphviz package is in DIR],
-dnl                      GRAPHVIZ=`dirname \`dirname ${GRAPHVIZ}\`` )
-
-dnl   META_GRAPHVIZ_VERSION
-
-
+dnl Check for availaability of Tcldot library in graphviz installation
+dnl directory.
 AC_DEFUN(META_TCLDOT_CHECK,
 [   dnl Try to find tcldot library
    f=`echo $1/lib/Tcldot/Tcldot.so.*`

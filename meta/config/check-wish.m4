@@ -34,12 +34,3 @@ AC_DEFUN(META_WISH_VERSION_CHECK,
          AC_ERROR( [ Wish version >= 8.X required (found $wish_version) ] ) ;;
    esac
 ])
-
-dnl Check for wish and test for corrrect verion >= 8.0
-AC_DEFUN(META_CHECK_WISH,
-[
-   AC_PACKAGE_REQUIRE(wish, 
-                      wish8.1 wish8.0 wish, 
-                      [  --with-wish=DIR         wish program is in DIR],)
-   META_WISH_VERSION
-])
