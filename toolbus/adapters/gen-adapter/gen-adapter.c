@@ -94,7 +94,7 @@
 
 #define MAXARG 20           /* # of args per command */
 #define MAXCMD 1024         /* max length of command */
-#define MAXOUTPUT 10000     /* max size of output of executed cmd */
+#define MAXOUTPUT 100000     /* max size of output of executed cmd */
 
 /*}}}  */
 
