@@ -15,8 +15,8 @@
 #set toolname "Meta-Environment"
 set toolname "Graph Browser"
 set metaname "Meta-Environment"
-set use_tide "@USE_TIDE@" 
-set library_dir "@ASF_LIBRARY@/share/asf-library"
+set use_tide "__USE_TIDE__" 
+set library_dir "__ASF_LIBRARY__/share/asf-library"
 
 set help_meta "$metaname
 

@@ -22,7 +22,7 @@
 
 include ${top_srcdir}/make_rules
 
-EXTRA_DIST  = graph-browser.sh.src graph-browser.tcl \
+EXTRA_DIST  = graph-browser.sh.src graphbrowser.tcl.src \
               graph-browser.pod graph-browser.1
 
 bin_SCRIPTS = graph-browser
@@ -30,7 +30,7 @@ pkgdata_DATA   = graph-browser.tcl
 man_MANS    = graph-browser.1
 
 
-CLEANFILES  = graph-browser graph-browser.1
+CLEANFILES  = graph-browser graph-browser.tcl graph-browser.1
 
 % : %.sh.src Makefile
 	@@if [ -z "$(GRAPHVIZ)" -o  ! -d $(GRAPHVIZ)/lib ]; then \
@@ -41,5 +41,11 @@ CLEANFILES  = graph-browser graph-browser.1
 	 fi
 	sed 's@__WISH__@$(WISH)@g;\
 	     s@__GRAPHVIZ__@$(GRAPHVIZ)@g;\
+	     s@__ASF_LIBRARY__@$(ASF_LIBRARY)@g;\
 	     s@__DATADIR__@$(pkgdatadir)@g' < $< > $@ && \
 	chmod +x $@
+
+%.tcl: %.tcl.src Makefile
+	sed 's@__USE_TIDE__@$(USE_TIDE)@g;\
+             s@__ASF_LIBRARY__@$(ASF_LIBRARY)@g;' < $< > $@ 
+
