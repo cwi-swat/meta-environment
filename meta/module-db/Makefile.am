@@ -33,7 +33,6 @@ CLEANFILES        = module-db.tifs module-db.tif.c module-db.tif.h
 
 module_db_SOURCES = module-db.c module-db.h aft-reshuffle.c
 module_db_LDADD   = module-db.tif.o \
-                    -L$(ASCLIB) -lasc-support \
                     -L$(ASFIXLIB) -lAsFix \
                     -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
 
