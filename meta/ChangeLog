@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Jan 27 16:17:47 CET 2004 <jong@cwi.nl>
+ * text/editor-hive.c, text/{common,emacs,gvim}/...
+   add support for autosave: we can now ask gvim+emacs to "write-contents"
+
 2004/01/26 (jurgenv@cwi.nl)
  * fixed recursive closing of modules. Circular imports can be closed now
    using "Recursive closing". A more complex analysis was needed to detect
@@ -14,10 +18,6 @@
 2004/01/26 (markvdb@cw.nl)
  * Fixed a hairy bug wrt generation of parse tables for modules with
    syntax errors.
-
-Tue Jan 27 16:17:47 CET 2004 <jong@cwi.nl>
- * text/editor-hive.c, text/{common,emacs,gvim}/...
-   add support for autosave: we can now ask gvim+emacs to "write-contents"
 
 Mon Jan 26 11:17:58 CET 2004 <jong@cwi.nl>
  * editors/text/common/Makefile.am:
