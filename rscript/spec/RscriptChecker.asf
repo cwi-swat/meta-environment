@@ -170,8 +170,8 @@ $Error]>
 
 [i2s]	rvar2str(rvar(Char*)) = strcon(""" Char* """)
 
-[cve-1] convert-errors(errors[$Error+]) = feedback("RscriptChecker", "Rscript", [convert-errors1(errors[$Error+])])
-[cve-1] convert-errors(errors[]) =  feedback("RscriptChecker", "Rscript", [info("Rscript is type correct!", [])])
+[cve-1] convert-errors(errors[$Error+]) = summary("RscriptChecker", "Rscript", [convert-errors1(errors[$Error+])])
+[cve-1] convert-errors(errors[]) =  summary("RscriptChecker", "Rscript", [info("Rscript is type correct!", [])])
 
 
 [cve-1] $Feedback* := convert-errors1(errors[$Error*])
@@ -180,44 +180,44 @@ $Error]>
 
 [cve-2] convert-errors1(errors[]) = 
 
-[e2i-1] e2i($Exp cannot be typed)	= error("Expression cannot be typed", [subject("expr", get-location($Exp))])
-[e2i-2] e2i($Stat cannot be typed)	= error("Statement cannot be typed", [subject("stat", get-location($Stat))])
-[e2i-3] e2i($Gen cannot be typed) 	= error("Generator cannot be typed", [subject("generator", get-location($Gen))])
-[e2i-4] e2i($Bag cannot be typed) 	= error("Bag cannot be typed", [subject("bag", get-location($Bag))])
-[e2i-5] e2i($Rel cannot be typed) 	= error("Relation cannot be typed", [subject("relation", get-location($Rel))])
-[e2i-6] e2i(Undeclared $Var) 		= error("Undeclared:", [subject(rvar2str($Var), get-location($Var))])
-[e2i-7] e2i($Var redeclared) 		= error("Redeclared:", [subject(rvar2str($Var), get-location($Var))])
+[e2i-1] e2i($Exp cannot be typed)	= error("Expression cannot be typed", [localized("expr", get-location($Exp))])
+[e2i-2] e2i($Stat cannot be typed)	= error("Statement cannot be typed", [localized("stat", get-location($Stat))])
+[e2i-3] e2i($Gen cannot be typed) 	= error("Generator cannot be typed", [localized("generator", get-location($Gen))])
+[e2i-4] e2i($Bag cannot be typed) 	= error("Bag cannot be typed", [localized("bag", get-location($Bag))])
+[e2i-5] e2i($Rel cannot be typed) 	= error("Relation cannot be typed", [localized("relation", get-location($Rel))])
+[e2i-6] e2i(Undeclared $Var) 		= error("Undeclared:", [localized(rvar2str($Var), get-location($Var))])
+[e2i-7] e2i($Var redeclared) 		= error("Redeclared:", [localized(rvar2str($Var), get-location($Var))])
 
 [e2i-8]	e2i($Var not initialized in Rstore)
-					= error("Not initialized in Rstore: ", [subject( rvar2str($Var), get-location($Var))])
+					= error("Not initialized in Rstore: ", [localized( rvar2str($Var), get-location($Var))])
 
 [e2i-9]	e2i($Var conflicting initialization in Rscript and in Rstore) =
 	error("Conflicting initialization in Rscript and in Rstore: ", 
-	[subject(rvar2str($Var), get-location($Var))])
+	[localized(rvar2str($Var), get-location($Var))])
 
 [e2i-10] e2i(Incompatible argument types $Etype in $Exp) = 
-	 error("Incompatible arguments of type ", [subject(t2s($Etype), get-location($Exp))])
+	 error("Incompatible arguments of type ", [localized(t2s($Etype), get-location($Exp))])
 
 [e2i-11] e2i($Exp should have type $Etype)= 
-	 error("Expression should have type ", [subject(t2s($Etype), get-location($Exp))])
+	 error("Expression should have type ", [localized(t2s($Etype), get-location($Exp))])
 
 [e2i-12] e2i($Exp should be of type bag) = 
-	 error("Expression should be of type bag", [subject("exp", get-location($Exp))])
+	 error("Expression should be of type bag", [localized("exp", get-location($Exp))])
 
 [e2i-13] e2i($Exp should be of type rel) = 
-	 error("Expression should be of type relation", [subject("exp", get-location($Exp))])
+	 error("Expression should be of type relation", [localized("exp", get-location($Exp))])
 
 %%[e2i-14] $StrCon = " with argument " || t2s($Etype)
 %%	 ==============================================================
 %%	 e2i(No definition for $Var with argument $Etype) = 
-%%	 error("No definition for ", [subject(rvar2str($Var), get-location($Var)), 
-%%				      subject($StrCon, get-location($Etype))])
+%%	 error("No definition for ", [localized(rvar2str($Var), get-location($Var)), 
+%%				      localized($StrCon, get-location($Etype))])
 
 [e2i-15] e2i(No definition for field $Var) =  
-	 error("No definition for ", [subject(rvar2str($Var), get-location($Var))])
+	 error("No definition for ", [localized(rvar2str($Var), get-location($Var))])
 
 [e2i-16] e2i($Var exceeds number of targets of generator) =  
-	 error("Destination contains too many targets", [subject("var", get-location($Var))])
+	 error("Destination contains too many targets", [localized("var", get-location($Var))])
 
 %%[e2i-17] e2i(Field name $Var used at different record positions) =
 %%		   error("Field " || rvar2str($Var) || " used at different record positions", get-location($Var))

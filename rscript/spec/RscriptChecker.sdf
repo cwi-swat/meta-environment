@@ -3,7 +3,7 @@ module RscriptChecker
 imports Rscript
 imports containers/Table[RVAR REXPTYPE]
 
-imports basic/Feedback
+imports basic/Errors
 
 imports utilities/PosInfo[RSTAT]
 imports utilities/PosInfo[REXP]
@@ -62,9 +62,9 @@ exports
 
 	t2s(REXPTYPE)						-> StrCon
 	tl2sl({REXPTYPE ","}*)					-> StrCon
-	e2i(ERROR)						-> Feedback
+	e2i(ERROR)						-> Error
 	 convert-errors(ERRORS)                    		-> Summary
-	 convert-errors1(ERRORS)                    		-> {Feedback ","}*
+	 convert-errors1(ERRORS)                    		-> {Error ","}*
          rvar2str(RVAR)		 	        		-> StrCon
  
 	<Table[[RVAR,REXPTYPE]], ERRORS> 			-> TENV {prefer}
@@ -208,7 +208,7 @@ hiddens
      "$Gen*" [0-9\']*   	-> {GENERATOR ","}*
      "$Gen+" [0-9\']*   	-> {GENERATOR ","}+
 
-      "$Feedback*" [0-9\']*	-> {Feedback ","}*
+      "$Feedback*" [0-9\']*	-> {Error ","}*
 
       "$InitVar" [0-9\']*	-> INITVAR
       "$InitVar*" [0-9\']*	-> INITVAR*
