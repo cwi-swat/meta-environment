@@ -17,7 +17,6 @@ in
   .
   (
     rec-msg(se-create(EditorId?, ParseTree?))
-    . printf("StructureEditor:se-create: %t\n", EditorId)
     . snd-do(SE, create-editor(EditorId, ParseTree))
   +
     rec-msg(se-update(EditorId?, ParseTree?))

@@ -271,7 +271,6 @@ in
       snd-msg(se-set-cursor-at-offset(EditorId, Offset)) .
       snd-msg(se-get-focus-at-cursor(EditorId)) .
       rec-msg(se-focus-at-cursor(EditorId, Focus?)) .
-      printf("focus at cursor: %t\n", Focus) .
       snd-msg(te-set-focus(EditorId, Focus))
     else
       tau

@@ -123,6 +123,7 @@ let
   Action : str,
   ActionEvent : term,
   ArgList : list,
+  Direction: term,
   EditorId : term,
   EditorId2 : term,
   EditorName : str,
@@ -256,21 +257,13 @@ in
         ReturnFailed(EditorId,Stack)
       fi
     +
-    rec-msg(move-left, Stack?, EditorId?).
-    snd-msg(se-move-focus(EditorId,"Left")) .
-    ReturnSuccess(EditorId,Stack)
-    +
-    rec-msg(move-right, Stack?, EditorId?).
-    snd-msg(se-move-focus(EditorId,"Right")) .
-    ReturnSuccess(EditorId,Stack)
-    +
-    rec-msg(move-up, Stack?, EditorId?).
-    snd-msg(se-move-focus(EditorId,"Up")) .
-    ReturnSuccess(EditorId,Stack)
-    +
-    rec-msg(move-down, Stack?, EditorId?).
-    snd-msg(se-move-focus(EditorId,"Down")) .
-    ReturnSuccess(EditorId,Stack)
+      rec-msg(move-cursor, Stack?, EditorId?) .
+      StackPopTerm(Stack, Stack?, Direction?) .
+      snd-msg(se-move-cursor(EditorId, Direction)) .
+      snd-msg(se-get-focus-at-cursor(EditorId)) .
+      rec-msg(se-focus-at-cursor(EditorId, Focus?)) .
+      snd-msg(te-set-focus(EditorId, Focus)) .
+      ReturnSuccess(EditorId, Stack)
     +
     rec-msg(convert-feedback, Stack?, EditorId?) .
     StackPopTerm(Stack, Stack?, Feedback?) .
