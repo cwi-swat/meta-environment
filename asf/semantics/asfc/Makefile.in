@@ -18,7 +18,7 @@ docdir		= $(top_srcdir)/docs
 
 SHELL		= @SHELL@
 CC		= @CC@
-CFLAGS		= -O ${XCFLAGS}
+CFLAGS		= -O4 ${XCFLAGS}
 CPP		= @CPP@
 CPPFLAGS	= @CPP@ ${XCPPFLAGS}
 DEFS		= @DEFS@ ${XDEFS}
