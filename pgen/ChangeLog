@@ -18,6 +18,11 @@
 
 $Id$
 
+2000/4/05 (mdejonge @cwi.nl)
+   * Version is now 0.3
+   * Adapted for use with separate asfix distribution (i.e., libasfix is no
+     longer distributed as part of the aterm library).
+
 2000/3/31 (mdejonge @cwi.nl)
    * The toolbus is no longer required during the build process of pgen
 

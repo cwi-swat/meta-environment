@@ -32,33 +32,38 @@ Installation Instructions
       www.gnu.org
 
   -The ASF+SDF compiler runtime library, available from:
-      www.cwi.nl/projects/MetaEnv/progsoft
+      www.cwi.nl/projects/MetaEnv/
 
   -The ATerm library, available from:
-      www.cwi.nl/projects/MetaEnv/progsoft
+      www.cwi.nl/projects/MetaEnv/
+  -The AsFix library, available from:
+      www.cwi.nl/projects/MetaEnv/
 
   -The Scannerless Generalized LR Parser (sglr), available from:
-      www.cwi.nl/projects/MetaEnv/progsoft
+      www.cwi.nl/projects/MetaEnv/
 
   -The ToolBus, available from:
-      www.cwi.nl/projects/MetaEnv/progsoft
+      www.cwi.nl/projects/MetaEnv/
 
   Before building the parser generator, you should first install these
   packages.
 
 2) Configuring the parser generator.
 
-  Assuming that the aterm library, sglr, and the toolbus are installed in
-  <aterm>, <sglr>, and <toolbus> respectively and that the parser generator
-  should be installed in <pgen> then the following command will configure
-  pgen accordingly:
+  Assuming that the aterm library, the asfix library, the runtime library,
+  sglr, and the toolbus are installed in <aterm>, <asfix>, <asc>, <sglr>,
+  and <toolbus> respectively and that the parser generator should be
+  installed in <pgen> then the following command will configure pgen
+  accordingly:
 
-  ./configre --with-aterm=<aterm> --with-sglr=<sglr> --with-toolbus=<toolbus>
+  ./configure --with-aterm=<aterm> --with-asfix=<asfix> --with-asc=<asc> \
+              --with-sglr=<sglr> --with-toolbus=<toolbus>
 
-  Note. The location of sglr needs only to be specified when sglr is not
-  included in your path during the compilation of the parser generator. 
-  After installation the parse generator uses your PATH variable to locate
-  sglr.
+  Note. For all required packages (except the ASC runtime library) the
+  following holds: when you installed such a package in <some prefix>, and
+  <some prefix>/bin is included in your PATH, then configure can find its
+  location and you don't need to specify it explicitly (as we did in the
+  example above).
 
 3) Building the parser generator
 
