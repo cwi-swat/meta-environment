@@ -1,5 +1,15 @@
 # $Id$
 
+2003/03/24 ({markvdb, iversen}@cwi.nl)
+
+* Added button-action show-area, which takes a modulename as argument and an 
+  aterm containing position info from the stack, and then highlights the 
+  position, using the module to parse the file containing the position. 
+
+* Also added position-info annotation to all terms.
+
+* Removed button-action add-pos-info.
+
 2003/03/20 (markvdb@cwi.nl)
  * Added a "Delete this module" for a non-existing module, this
    omission was reported by PDM.
