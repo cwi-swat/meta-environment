@@ -47,8 +47,8 @@ public class DebugRule
   static public ATerm lifeInt2Term(int lifetime)
   {
     if(lifetime == ONE_SHOT)
-      return new ATermAppl("one-shot", null);
-    return new ATermAppl("persistent", null);
+      return new ATermAppl("one-shot");
+    return new ATermAppl("persistent");
   }
 
   //}
@@ -156,7 +156,7 @@ public class DebugRule
   public boolean isBreakpoint()
   {
     ATerms acts = actions;
-    while(acts != null) {
+    while(!acts.isEmpty()) {
       if(patternBreak.match(acts.getFirst()))
 	return true;
       acts = acts.getNext();
@@ -175,7 +175,7 @@ public class DebugRule
   public boolean isWatchpoint()
   {
     ATerms acts = actions;
-    while(acts != null) {
+    while(!acts.isEmpty()) {
       if(patternWatch.match(acts.getFirst()))
 	return true;
       acts = acts.getNext();

@@ -67,12 +67,12 @@ class DebugProcess
   static public ATerm execStateInt2Term(int es)
   {
     switch(es) {
-      case ES_STOP:             return new ATermAppl("stop", null);
-      case ES_RUN:              return new ATermAppl("run", null);
-      case ES_SINGLE_STEP:      return new ATermAppl("single-step", null);
-      case ES_STEP_OVER:        return new ATermAppl("step-over", null);
-      case ES_RUN_UNTIL_PARENT: return new ATermAppl("run-until-parent", null);
-      case ES_ALL:              return new ATermAppl("all", null);
+      case ES_STOP:             return new ATermAppl("stop");
+      case ES_RUN:              return new ATermAppl("run");
+      case ES_SINGLE_STEP:      return new ATermAppl("single-step");
+      case ES_STEP_OVER:        return new ATermAppl("step-over");
+      case ES_RUN_UNTIL_PARENT: return new ATermAppl("run-until-parent");
+      case ES_ALL:              return new ATermAppl("all");
     }
     throw new IllegalArgumentException("illegal exec-state: " + es);
   }

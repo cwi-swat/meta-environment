@@ -17,11 +17,22 @@ public class ATerms extends ATerm
   }
 
   //}
+  //{ public ATerms()
+
+  /*
+   * Construct the empty list.
+   */
+
+  public ATerms()
+  {
+    update(new ATermsImpl());
+  }
+  
   //{ public ATerms(ATerm f, ATerms n)
 
   public ATerms(ATerm f, ATerms n)
   {
-    update(new ATermsImpl(f.getATermImpl(), n == null ? null : (ATermsImpl)n.getATermImpl()));
+    update(new ATermsImpl(f.getATermImpl(), (ATermsImpl)n.getATermImpl()));
   }
 
   //}
@@ -29,8 +40,7 @@ public class ATerms extends ATerm
 
   public ATerms(ATerm first, ATerms next, ATerm anno)
   {
-    update(new ATermsImpl(first.getATermImpl(), 
-		      next == null ? null : (ATermsImpl)next.getATermImpl(),
+    update(new ATermsImpl(first.getATermImpl(),(ATermsImpl)next.getATermImpl(),
 		      anno == null ? null : anno.getATermImpl()));
   }
 
@@ -39,7 +49,7 @@ public class ATerms extends ATerm
 
   public ATerms(ATerm f)
   {
-    this(f, null);
+    this(f, new ATerms());
   }
 
   //}
@@ -106,7 +116,7 @@ public class ATerms extends ATerm
       case ATermImpl.REAL:	return new ATermReal((ATermRealImpl)term);
       case ATermImpl.PLACEHOLDER: return new ATermPlaceholder((ATermPlaceholderImpl)term);
     }
-    return null;
+    throw new RuntimeException("Illegal term type: " + term.getType());
   }
 
   //}
@@ -114,10 +124,19 @@ public class ATerms extends ATerm
 
   public ATerms getNext()
   {
-    if(t.getNext() == null)
-      return null;
-    
     return new ATerms(t.getNext());
+  }
+
+  //}
+  //{ public boolean isEmpty() 
+
+  /**
+    * Check if this list is empty.
+    */
+
+  public boolean isEmpty() 
+  {
+    return t.isEmpty();
   }
 
   //}
@@ -134,11 +153,18 @@ public class ATerms extends ATerm
 
   public void setNext(ATerms next)
   {
-    update(new ATermsImpl(t.getFirst(), next == null ? null : next.getATermsImpl()));
+    update(new ATermsImpl(t.getFirst(), next.getATermsImpl()));
   }
 
   //}
+  //{ public void makeEmpty()
 
+  public void makeEmpty()
+  {
+    update(new ATermsImpl());
+  }
+
+  //}
   //{ public int length()
 
   /**
@@ -147,9 +173,6 @@ public class ATerms extends ATerm
 
   public int length()
   {
-    if(t == null)
-      return 0;
-
     return t.length();
   }
 
@@ -164,13 +187,13 @@ public class ATerms extends ATerm
   {
     ATermsImpl cur = t;
     int index = 0;
-    do {
+    while(!cur.isEmpty()) {
       if(cur.getFirst() == el.getATermImpl())
 	return index;
        
       index++;
       cur = cur.getNext();
-    } while(cur != null);
+    }
 
     return -1;
   }
@@ -185,7 +208,7 @@ public class ATerms extends ATerm
   public int rsearch(ATerm el)
   {
     int index = 0, last = -1;
-    for(ATermsImpl cur = t; cur != null; cur = cur.getNext()) {
+    for(ATermsImpl cur = t; !cur.isEmpty(); cur = cur.getNext()) {
       if(cur.getFirst() == el.getATermImpl())
 	last = index;
       index++;
@@ -203,9 +226,6 @@ public class ATerms extends ATerm
 
   public ATerms concat(ATerms rhs)
   {
-    if(rhs == null)
-      return (ATerms)clone();
-
     return new ATerms(getATermsImpl().concat(rhs.getATermsImpl()));
   }
 
@@ -222,10 +242,6 @@ public class ATerms extends ATerm
   }
 
   //}
- 
-  public boolean empty() {
-    return (this.length() == 0);
-  }
 
 /* ToDo:
    insert, remove, delete, deleteOnce, replace, index, slice, reverse,

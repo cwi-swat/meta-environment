@@ -1,6 +1,6 @@
 // Java tool interface class Testing
 // This file is generated automatically, please do not edit!
-// generation time: 11-Dec-97 6:02:45 PM
+// generation time: 11-Dec-97 9:15:22 PM
 
 package toolbus.tool;
 import toolbus.aterm.*;
@@ -35,12 +35,12 @@ abstract public class Testing extends toolbus.tool.Tool
   private void initSigTable()
   {
     try {
-      sigTable.put(ATermParser.makeSimple("rec-terminate(<testing>,<term>)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-ack-event(<testing>,<term>)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-eval(<testing>,question(square))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<testing>,testit(<str>,f(<int>)))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<testing>,testit(<str>,<int>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<testing>,testit(<str>))"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-terminate(<testing>,<term>,)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-ack-event(<testing>,<term>,)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-eval(<testing>,question(square,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<testing>,testit(<str>,f(<int>,),),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<testing>,testit(<str>,<int>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<testing>,testit(<str>,),)"), new Boolean(true));
     } catch (ParseError e) { }
   }
 
@@ -48,12 +48,12 @@ abstract public class Testing extends toolbus.tool.Tool
   private void initPatterns()
   {
     try {
-      Ptestit0 = new ATermPattern("rec-do(testit(<str>))");
-      Ptestit1 = new ATermPattern("rec-do(testit(<str>,<int>))");
-      Ptestit2 = new ATermPattern("rec-do(testit(<str>,<appl>))");
-      Pquestion0 = new ATermPattern("rec-eval(question(<appl>))");
-      PrecTerminate0 = new ATermPattern("rec-terminate(<term>)");
-      PrecAckEvent0 = new ATermPattern("rec-ack-event(<term>)");
+      Ptestit0 = new ATermPattern("rec-do(testit(<str>,))");
+      Ptestit1 = new ATermPattern("rec-do(testit(<str>,<int>,))");
+      Ptestit2 = new ATermPattern("rec-do(testit(<str>,<appl>,))");
+      Pquestion0 = new ATermPattern("rec-eval(question(<appl>,))");
+      PrecTerminate0 = new ATermPattern("rec-terminate(<term>,)");
+      PrecAckEvent0 = new ATermPattern("rec-ack-event(<term>,)");
     } catch (ParseError e) {}
   }
 
@@ -98,7 +98,7 @@ abstract public class Testing extends toolbus.tool.Tool
          throws ToolException
   {
     ATerms sigs = list.getATerms();
-    while(sigs != null) {
+    while(!sigs.isEmpty()) {
       ATermAppl sig = (ATermAppl)sigs.getFirst();
       sigs = sigs.getNext();
       if(!sigTable.containsKey(sig)) {

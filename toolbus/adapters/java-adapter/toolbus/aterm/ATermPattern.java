@@ -277,15 +277,15 @@ public class ATermPattern extends Vector
   {
     Vector result = new Vector();
     
-    while(terms != null) {
+    while(!terms.isEmpty()) {
       if(terms.getFirst().getType() == ATermImpl.PLACEHOLDER) {
 	ATermImpl type = ((ATermPlaceholderImpl)terms.getFirst()).getPlaceholderType();
 	if(type.getType() == ATermImpl.APPL) {
 	  if(((ATermApplImpl)type).getFun().equals("terms") &&
-	     ((ATermApplImpl)type).getArgs() == null) {
+	     ((ATermApplImpl)type).getArgs().isEmpty()) {
 	    ATerms elsref = (ATerms)e.nextElement();
-	    ATermsImpl els = (elsref == null ? null : elsref.getATermsImpl());
-	    while(els != null) {
+	    ATermsImpl els = elsref.getATermsImpl();
+	    while(!els.isEmpty()) {
 	      ATermImpl el = els.getFirst();
 	      els = els.getNext();
 	      switch(el.getType()) {
@@ -323,7 +323,7 @@ public class ATermPattern extends Vector
       terms = terms.getNext();
     }
 
-    ATerms R = null;
+    ATerms R = new ATerms();
     
     for(int i=result.size()-1; i>=0; i--)
       R = new ATerms((ATerm)result.elementAt(i), R);
@@ -341,25 +341,25 @@ public class ATermPattern extends Vector
       String fun = appl.getFun();
       ATermsImpl args = appl.getArgs();
       
-      if(fun.equals("int") && args == null) {
+      if(fun.equals("int") && args.isEmpty()) {
 	Integer Int = (Integer)e.nextElement();
 	return new ATermInt(Int.intValue());
       }
-      if(fun.equals("real") && args == null) {
+      if(fun.equals("real") && args.isEmpty()) {
 	Double D = (Double)e.nextElement();
 	return new ATermReal(D.doubleValue());
       }
-      if(fun.equals("appl") && args == null)
+      if(fun.equals("appl") && args.isEmpty())
 	return (ATermAppl)e.nextElement();
-      if(fun.equals("term") && args == null)
+      if(fun.equals("term") && args.isEmpty())
 	return (ATerm)e.nextElement();
-      if(fun.equals("list") && args == null)
+      if(fun.equals("list") && args.isEmpty())
 	return (ATermList)e.nextElement();
-      if(fun.equals("str") && args == null)
-	return new ATermAppl((String)e.nextElement(), null, true);
+      if(fun.equals("str") && args.isEmpty())
+	return new ATermAppl((String)e.nextElement(), new ATerms(), true);
       if(fun.equals("fun")) {
 	if(args == null)
-	  return new ATermAppl((String)e.nextElement(), null);
+	  return new ATermAppl((String)e.nextElement(), new ATerms());
 	else
 	  return new ATermAppl((String)e.nextElement(), makeTerms(args, e));
       }

@@ -106,7 +106,7 @@ abstract public class Tool implements Runnable
   private void init()
   {
     try {
-      termSndVoid = new ATermAppl("snd-void", null);
+      termSndVoid = new ATermAppl("snd-void", new ATerms());
       patternRecDo = new ATermPattern("rec-do(<term>)");
       patternRecTerminate = new ATermPattern("rec-terminate(<term>)");
       patternRecAckEvent = new ATermPattern("rec-ack-event(<term>)");

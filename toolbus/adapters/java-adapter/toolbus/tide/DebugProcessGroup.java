@@ -193,7 +193,7 @@ class DebugProcessGroupList extends DebugProcessGroup
     return name;
   }
   public boolean contains(int pid) {
-    while(procs != null) {
+    while(!procs.isEmpty()) {
       ATermInt proc = (ATermInt)procs.getFirst();
       if(proc.getInt() == pid)
 	return true;

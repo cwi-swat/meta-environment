@@ -27,7 +27,7 @@ public class ATermList extends ATerm
 
   public ATermList(ATerms terms)
   {
-    update(new ATermListImpl(terms == null ? null : terms.getATermsImpl()));
+    update(new ATermListImpl(terms.getATermsImpl()));
   }
 
   //}
@@ -39,7 +39,7 @@ public class ATermList extends ATerm
 
   public ATermList(ATerms terms, ATerm anno)
   {
-    update(new ATermListImpl(terms == null ? null : terms.getATermsImpl(), 
+    update(new ATermListImpl(terms.getATermsImpl(), 
 			 anno == null ? null : anno.getATermImpl()));
   }
 
@@ -60,8 +60,7 @@ public class ATermList extends ATerm
 
   protected void finalize()
   {
-    if(list != null)
-      list.decreaseRef();
+    list.decreaseRef();
   }
 
   //}
@@ -76,12 +75,8 @@ public class ATermList extends ATerm
   {
     if(list != null)
       list.decreaseRef();
-    if(lst == null)
-      list = null;
-    else {
-      list = (ATermListImpl)lst.unique();
-      list.increaseRef();
-    }
+    list = (ATermListImpl)lst.unique();
+    list.increaseRef();
   }
 
   //}
@@ -106,8 +101,6 @@ public class ATermList extends ATerm
 
   public ATerms getATerms()
   {
-    if(list == null || list.getATermsImpl() == null)
-      return null;
     return new ATerms(list.getATermsImpl());
   }
 
@@ -116,7 +109,19 @@ public class ATermList extends ATerm
 
   public void setATerms(ATerms terms)
   {
-    update(terms == null ? null : new ATermListImpl(terms.getATermsImpl()));
+    update(new ATermListImpl(terms.getATermsImpl()));
+  }
+
+  //}
+  //{ public boolean isEmpty()
+
+  /**
+    * Check if this is the empty list.
+    */
+
+  public boolean isEmpty()
+  {
+    return list.isEmpty();
   }
 
   //}

@@ -47,12 +47,22 @@ public class ATermAppl extends ATerm
   }
 
   //}
- 
+  //{ public ATermAppl(String fun)
+
+  /**
+   *
+   */ 
+
+  public ATermAppl(String fun)
+  {
+    this(fun, new ATerms());
+  }
+  
   //{ public ATermAppl(String fun, ATerms args)
 
   public ATermAppl(String fun, ATerms args)
   {
-    update(new ATermApplImpl(fun, args == null ? null : args.getATermsImpl()));
+    update(new ATermApplImpl(fun, args.getATermsImpl()));
   }
 
   //}
@@ -60,8 +70,7 @@ public class ATermAppl extends ATerm
 
   public ATermAppl(String fun, ATerms args, boolean isquoted)
   {
-    update(new ATermApplImpl(fun, args == null ? null : args.getATermsImpl(),
-				 isquoted));
+    update(new ATermApplImpl(fun, args.getATermsImpl(), isquoted));
   }
 
   //}
@@ -73,8 +82,8 @@ public class ATermAppl extends ATerm
 
   public ATermAppl(String fun, ATerms args, ATerm anno)
   {
-    update(new ATermApplImpl(fun, args == null ? null : args.getATermsImpl(),
-			    anno == null ? null : anno.getATermImpl()));
+    update(new ATermApplImpl(fun, args.getATermsImpl(), 
+			anno == null ? null : anno.getATermImpl()));
   }
 
   //}
@@ -82,7 +91,7 @@ public class ATermAppl extends ATerm
 
   public ATermAppl(String fun, ATerms args, boolean isquoted, ATerm anno)
   {
-    update(new ATermApplImpl(fun, args == null ? null : args.getATermsImpl(),
+    update(new ATermApplImpl(fun, args.getATermsImpl(),
 			 isquoted, anno == null ? null : anno.getATermImpl()));
   }
 
@@ -123,9 +132,6 @@ public class ATermAppl extends ATerm
 
   public ATerms getArgs()
   {
-    if(appl.getArgs() == null)
-      return null;
-
     return new ATerms(appl.getArgs());
   }
 
@@ -150,9 +156,8 @@ public class ATermAppl extends ATerm
 
   public void setArgs(ATerms args)
   {
-    update(new ATermApplImpl(appl.getFun(), args == null ? null : 
-           args.getATermsImpl(), appl.isQuoted(), 
-		this.getAnno() == null ? null : 
+    update(new ATermApplImpl(appl.getFun(), args.getATermsImpl(), 
+		appl.isQuoted(), this.getAnno() == null ? null : 
                               this.getAnno().getATermImpl()));
   }
 

@@ -36,7 +36,7 @@ public class ATermParser
       case '[':	
 	if(channel.readNext() == ']') {
 	  channel.readNext();
-	  result = new ATermList((ATerms)null);
+	  result = new ATermList(new ATerms());
 	} else {
 	  terms = parseATerms(channel);
 	  if(channel.last() != ']')
@@ -63,7 +63,7 @@ public class ATermParser
 	  result = new ATermAppl(fun, terms, true);
 	  channel.readNext();
 	} else
-	  result = new ATermAppl(fun, null, true);
+	  result = new ATermAppl(fun, new ATerms(), true);
 	break;
       case '-':
       case '0':	case '1':	case '2': 	case '3': 	case '4':
@@ -82,7 +82,7 @@ public class ATermParser
 	    result = new ATermAppl(fun, terms, false);
 	    channel.readNext();
 	  } else
-	    result = new ATermAppl(fun, null, false);
+	    result = new ATermAppl(fun, new ATerms(), false);
 	} else {
 	  throw new ParseError(channel, channel.last(), "illegal character");
 	}
@@ -103,7 +103,7 @@ public class ATermParser
       channel.readNext();
       stack.push(parseATerm(channel));
     }
-    ATerms result = null;
+    ATerms result = new ATerms();
     while(!stack.empty())
       result = new ATerms((ATerm)stack.pop(), result);
     return result;

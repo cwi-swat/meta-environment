@@ -216,9 +216,9 @@ abstract public class DebugPort
   ATerm getWhenTerm()
   {
     switch(when) {
-      case WHEN_BEFORE: return new ATermAppl("before", null);
-      case WHEN_AFTER:  return new ATermAppl("after", null);
-      case WHEN_AT:     return new ATermAppl("at", null);
+      case WHEN_BEFORE: return new ATermAppl("before", new ATerms());
+      case WHEN_AFTER:  return new ATermAppl("after",  new ATerms());
+      case WHEN_AT:     return new ATermAppl("at",     new ATerms());
     }
     throw new IllegalArgumentException("illegal when type: " + when);
   }

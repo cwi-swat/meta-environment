@@ -99,7 +99,7 @@ public class ATermPlaceholder extends ATerm
       case ATermImpl.REAL:	return new ATermReal((ATermRealImpl)term);
       case ATermImpl.PLACEHOLDER: return new ATermPlaceholder((ATermPlaceholderImpl)term);
     }
-    return null;
+    throw new RuntimeException("illegal term type: " + term.getType());
   }
 
   //}

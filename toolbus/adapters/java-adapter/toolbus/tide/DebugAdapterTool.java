@@ -126,7 +126,7 @@ class DebugAdapterTool extends DebugAdapterTif
   {
     ATerm result;
     try {
-      ATerms info = null;
+      ATerms info = new ATerms();
       ATermPattern addPattern = new ATermPattern("[[<fun>,<term>],<terms>]");
       ATermPattern returnPattern = new ATermPattern("snd-value(info([<terms>]))");
       Properties props = debugger.getProperties();
@@ -159,13 +159,13 @@ class DebugAdapterTool extends DebugAdapterTif
     ATerm result = null;
 
     try {
-      ATerms procs = null;
+      ATerms procs = new ATerms();
       ATermPattern add = new ATermPattern("[<term>,<terms>]");
       ATermPattern pair = new ATermPattern("[<int>,<str>]");
       Enumeration e = debugger.getProcesses();
       while(e.hasMoreElements()) {
 	DebugProcess process = (DebugProcess)e.nextElement();
-	add.make(pair.make(new Integer(process.getPid())), process.getName());
+	procs = new ATerms(add.make(pair.make(new Integer(process.getPid())), process.getName()), procs);
       }
       ATermPattern value = new ATermPattern("snd-value(processes(<term>))");
       result = value.make(procs);

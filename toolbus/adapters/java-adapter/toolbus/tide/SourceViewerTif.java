@@ -1,6 +1,6 @@
 // Java tool interface class SourceViewerTif
 // This file is generated automatically, please do not edit!
-// generation time: 15-Aug-97 3:24:28 PM
+// generation time: 12-Dec-97 2:06:13 PM
 
 package toolbus.tide;
 import toolbus.aterm.*;
@@ -42,45 +42,55 @@ abstract public class SourceViewerTif extends toolbus.tool.Tool
   private void initSigTable()
   {
     try {
-      sigTable.put(ATermParser.makeSimple("rec-terminate(<debug-adapter>,<term>)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-terminate(<source-viewer>,<term>)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-terminate(<watchpoint-viewer>,<term>)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-terminate(<process-viewer>,<term>)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-ack-event(<watchpoint-viewer>,<term>)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,watchpoint(<debug-adapter>,<term>,<int>,<list>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,rule-destroyed(<debug-adapter>,<term>,<int>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,rule-modified(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,rule-created(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,dap-disconnected(<debug-adapter>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,dap-connected(<debug-adapter>,<list>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,ask-watchpoint(<debug-adapter>,<term>,<term>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,create-watchpoint(<debug-adapter>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-ack-event(<process-viewer>,<term>)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<process-viewer>,disconnected(<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<process-viewer>,connected(<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<process-viewer>,watchpoint(<debug-adapter>,<term>,<int>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<process-viewer>,dap-disconnected(<debug-adapter>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<process-viewer>,dap-connected(<debug-adapter>,<list>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<process-viewer>,new-tool(<str>,<term>,<list>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-ack-event(<source-viewer>,<term>)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,current-port(<debug-adapter>,<term>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,process-destruction(<debug-adapter>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,process-creation(<debug-adapter>,<term>,<str>,<list>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,exec-state(<debug-adapter>,<term>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,cpe(<debug-adapter>,<term>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,rule-destroyed(<debug-adapter>,<int>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,rule-modified(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,rule-created(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,dap-disconnected(<debug-adapter>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,dap-connected(<debug-adapter>,<list>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,view-process(<debug-adapter>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-ack-event(<debug-adapter>,<term>)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-eval(<debug-adapter>,exec-actions(<term>,<list>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<debug-adapter>,destroy-rule(<term>,<int>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-do(<debug-adapter>,modify-rule(<int>,<term>,<term>,<term>,<list>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-eval(<debug-adapter>,create-rule(<term>,<term>,<term>,<list>,<term>))"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-eval(<debug-adapter>,get-processes)"), new Boolean(true));
-      sigTable.put(ATermParser.makeSimple("rec-eval(<debug-adapter>,get-info)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-terminate(<debug-adapter>,<term>,)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-terminate(<source-viewer>,<term>,)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-terminate(<rule-viewer>,<term>,)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-terminate(<watchpoint-viewer>,<term>,)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-terminate(<process-viewer>,<term>,)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-ack-event(<watchpoint-viewer>,<term>,)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,watchpoint(<debug-adapter>,<term>,<int>,<list>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,rule-destroyed(<debug-adapter>,<term>,<int>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,rule-modified(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,rule-created(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,dap-disconnected(<debug-adapter>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,dap-connected(<debug-adapter>,<list>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,ask-watchpoint(<debug-adapter>,<term>,<term>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<watchpoint-viewer>,create-watchpoint(<debug-adapter>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-ack-event(<process-viewer>,<term>,)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<process-viewer>,disconnected(<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<process-viewer>,connected(<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<process-viewer>,watchpoint(<debug-adapter>,<term>,<int>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<process-viewer>,dap-disconnected(<debug-adapter>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<process-viewer>,dap-connected(<debug-adapter>,<list>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<process-viewer>,new-tool(<str>,<term>,<list>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-ack-event(<rule-viewer>,<term>,)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<rule-viewer>,current-port(<debug-adapter>,<term>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<rule-viewer>,watchpoint(<debug-adapter>,<term>,<int>,<list>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<rule-viewer>,rule-destroyed(<debug-adapter>,<term>,<int>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<rule-viewer>,rule-modified(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<rule-viewer>,rule-created(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<rule-viewer>,dap-disconnected(<debug-adapter>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<rule-viewer>,dap-connected(<debug-adapter>,<list>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<rule-viewer>,view-rules(<debug-adapter>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-ack-event(<source-viewer>,<term>,)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,current-port(<debug-adapter>,<term>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,process-destruction(<debug-adapter>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,process-creation(<debug-adapter>,<term>,<str>,<list>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,exec-state(<debug-adapter>,<term>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,cpe(<debug-adapter>,<term>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,rule-destroyed(<debug-adapter>,<int>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,rule-modified(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,rule-created(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,dap-disconnected(<debug-adapter>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,dap-connected(<debug-adapter>,<list>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<source-viewer>,view-process(<debug-adapter>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-ack-event(<debug-adapter>,<term>,)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-eval(<debug-adapter>,exec-actions(<term>,<list>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<debug-adapter>,destroy-rule(<term>,<int>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-do(<debug-adapter>,modify-rule(<int>,<term>,<term>,<term>,<list>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-eval(<debug-adapter>,create-rule(<term>,<term>,<term>,<list>,<term>,),)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-eval(<debug-adapter>,get-processes,)"), new Boolean(true));
+      sigTable.put(ATermParser.makeSimple("rec-eval(<debug-adapter>,get-info,)"), new Boolean(true));
     } catch (ParseError e) { }
   }
 
@@ -88,19 +98,19 @@ abstract public class SourceViewerTif extends toolbus.tool.Tool
   private void initPatterns()
   {
     try {
-      Pcpe0 = new ATermPattern("rec-do(cpe(<debug-adapter>,<term>,<term>))");
-      PcurrentPort0 = new ATermPattern("rec-do(current-port(<debug-adapter>,<term>,<term>))");
-      PdapDisconnected0 = new ATermPattern("rec-do(dap-disconnected(<debug-adapter>))");
-      PruleCreated0 = new ATermPattern("rec-do(rule-created(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>))");
-      PruleDestroyed0 = new ATermPattern("rec-do(rule-destroyed(<debug-adapter>,<int>))");
-      PexecState0 = new ATermPattern("rec-do(exec-state(<debug-adapter>,<term>,<term>))");
-      PdapConnected0 = new ATermPattern("rec-do(dap-connected(<debug-adapter>,<list>,<term>))");
-      PruleModified0 = new ATermPattern("rec-do(rule-modified(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>))");
-      PprocessCreation0 = new ATermPattern("rec-do(process-creation(<debug-adapter>,<term>,<str>,<list>))");
-      PviewProcess0 = new ATermPattern("rec-do(view-process(<debug-adapter>,<term>))");
-      PprocessDestruction0 = new ATermPattern("rec-do(process-destruction(<debug-adapter>,<term>))");
-      PrecTerminate0 = new ATermPattern("rec-terminate(<term>)");
-      PrecAckEvent0 = new ATermPattern("rec-ack-event(<term>)");
+      Pcpe0 = new ATermPattern("rec-do(cpe(<debug-adapter>,<term>,<term>,))");
+      PcurrentPort0 = new ATermPattern("rec-do(current-port(<debug-adapter>,<term>,<term>,))");
+      PdapDisconnected0 = new ATermPattern("rec-do(dap-disconnected(<debug-adapter>,))");
+      PruleCreated0 = new ATermPattern("rec-do(rule-created(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,))");
+      PruleDestroyed0 = new ATermPattern("rec-do(rule-destroyed(<debug-adapter>,<int>,))");
+      PexecState0 = new ATermPattern("rec-do(exec-state(<debug-adapter>,<term>,<term>,))");
+      PdapConnected0 = new ATermPattern("rec-do(dap-connected(<debug-adapter>,<list>,<term>,))");
+      PruleModified0 = new ATermPattern("rec-do(rule-modified(<debug-adapter>,<term>,<int>,<term>,<term>,<term>,<term>,))");
+      PprocessCreation0 = new ATermPattern("rec-do(process-creation(<debug-adapter>,<term>,<str>,<list>,))");
+      PviewProcess0 = new ATermPattern("rec-do(view-process(<debug-adapter>,<term>,))");
+      PprocessDestruction0 = new ATermPattern("rec-do(process-destruction(<debug-adapter>,<term>,))");
+      PrecTerminate0 = new ATermPattern("rec-terminate(<term>,)");
+      PrecAckEvent0 = new ATermPattern("rec-ack-event(<term>,)");
     } catch (ParseError e) {}
   }
 
@@ -173,7 +183,7 @@ abstract public class SourceViewerTif extends toolbus.tool.Tool
          throws ToolException
   {
     ATerms sigs = list.getATerms();
-    while(sigs != null) {
+    while(!sigs.isEmpty()) {
       ATermAppl sig = (ATermAppl)sigs.getFirst();
       sigs = sigs.getNext();
       if(!sigTable.containsKey(sig)) {

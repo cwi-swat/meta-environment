@@ -1377,8 +1377,8 @@ class DapPicture extends RemoteDebugAdapterInfo
 
   public void start(String mode)
   {
-    ATerm procs = new ATermAppl("all", null);
-    ATerms actions = new ATerms(new ATermAppl(mode, null), null);
+    ATerm procs = new ATermAppl("all");
+    ATerms actions = new ATerms(new ATermAppl(mode));
 
     sendExecuteActions(procs, new ATermList(actions));
   }
@@ -1392,8 +1392,8 @@ class DapPicture extends RemoteDebugAdapterInfo
 
   public void stop()
   {
-    ATerm procs = new ATermAppl("all", null);
-    ATerms actions = new ATerms(new ATermAppl("stop", null), null);
+    ATerm procs = new ATermAppl("all");
+    ATerms actions = new ATerms(new ATermAppl("stop"));
 
     sendExecuteActions(procs, new ATermList(actions));
   }
@@ -1595,7 +1595,7 @@ class ProcessPicture extends DebugProcess
   public void start(String mode)
   {
     ATerms procs = new ATerms(new ATermInt(getPid()));
-    ATerms actions = new ATerms(new ATermAppl(mode, null), null);
+    ATerms actions = new ATerms(new ATermAppl(mode));
 
     adapter.sendExecuteActions(new ATermList(procs), 
 			       new ATermList(actions));
@@ -1611,7 +1611,7 @@ class ProcessPicture extends DebugProcess
   public void stop()
   {
     ATerms procs = new ATerms(new ATermInt(getPid()));
-    ATerms actions = new ATerms(new ATermAppl("stop", null), null);
+    ATerms actions = new ATerms(new ATermAppl("stop"));
 
     adapter.sendExecuteActions(new ATermList(procs),
 			       new ATermList(actions));

@@ -77,7 +77,7 @@ public class WatchpointViewerTool extends WatchpointViewerTif
 			throw new IllegalArgumentException("internal parse error");
 		}
 
-		while(proclist != null)
+		while(!proclist.isEmpty())
 		{
 			ATermList triple = (ATermList)proclist.getFirst();
 			proclist = proclist.getNext();

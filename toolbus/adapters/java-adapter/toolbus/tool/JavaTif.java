@@ -96,7 +96,7 @@ class TifGenerator
   public void readTifs(String tifsfile)
     throws IOException, ParseError
   {
-    tifs = null;
+    tifs = new ATerms();
 
     ATermAppl appl = null;
 
@@ -116,11 +116,11 @@ class TifGenerator
     throws ParseError, IOException
   {
     ATerms list = tifs;
-    ATerm T = new ATermPlaceholder(new ATermAppl(tool, null));
+    ATerm T = new ATermPlaceholder(new ATermAppl(tool, new ATerms()));
 
-    while(list != null) {
+    while(!list.isEmpty()) {
       ATermAppl appl = (ATermAppl)list.getFirst();
-      if(appl.getArgs() != null && appl.getFun().startsWith("rec-") &&
+      if(!appl.getArgs().isEmpty() && appl.getFun().startsWith("rec-") &&
 	 appl.getArgs().getFirst().equals(T)) {
 	if(appl.getFun().equals("rec-do")) {
 	  appl = (ATermAppl)appl.getArgs().getNext().getFirst();
@@ -268,7 +268,7 @@ class TifGenerator
     out.println("  {");
     ATerms sigs = tifs;
     out.println("    try {");
-    while(sigs != null) {
+    while(!sigs.isEmpty()) {
       ATerm sig = sigs.getFirst();
       sigs = sigs.getNext();
       out.print("      sigTable.put(ATermParser.makeSimple(\"");
@@ -386,7 +386,7 @@ class TifGenerator
     out.println("         throws ToolException");
     out.println("  {");
     out.println("    ATerms sigs = list.getATerms();");
-    out.println("    while(sigs != null) {");
+    out.println("    while(!sigs.isEmpty()) {");
     out.println("      ATermAppl sig = (ATermAppl)sigs.getFirst();");
     out.println("      sigs = sigs.getNext();");
     out.println("      if(!sigTable.containsKey(sig)) {");
@@ -419,7 +419,7 @@ class TifGenerator
   private ATermAppl normalize(ATermAppl appl)
   {
     ATerms args = appl.getArgs();
-    if(args != null) {
+    if(!args.isEmpty()) {
       int len = args.length();
       ATerm[] newargs = new ATerm[len];
       String type = null;
@@ -445,9 +445,9 @@ class TifGenerator
 	    break;
 	}
 	if(newargs[i] == null)
-	  newargs[i] = new ATermPlaceholder(new ATermAppl(type, null));
+	  newargs[i] = new ATermPlaceholder(new ATermAppl(type, new ATerms()));
       }
-      args = null;
+      args = new ATerms();
       for(int i = len-1; i >= 0; i--)
 	args = new ATerms(newargs[i], args);
     }
@@ -480,10 +480,6 @@ private boolean moreSpecific(ATerm a, ATerm b)
 {
   if(a == b)
     return true;
-  if(a == null)
-    return true;
-  if(b == null)
-    return false;
   if(a.equals(b))
     return true;
   if(a.getType() > b.getType())
@@ -506,6 +502,10 @@ private boolean moreSpecific(ATerm a, ATerm b)
     case ATerm.ATERMS:
       ATerms terms1 = (ATerms)a;
       ATerms terms2 = (ATerms)b;
+      if(terms1.isEmpty())
+	return true;
+      if(terms2.isEmpty())
+	return false;
       if(terms1.getFirst().equals(terms2.getFirst()))
 	return moreSpecific(terms1.getNext(), terms2.getNext());
       return moreSpecific(terms1.getFirst(), terms2.getFirst());
@@ -596,7 +596,7 @@ private boolean moreSpecific(ATerm a, ATerm b)
   {
     int idx = 0;
 
-    while(args != null) {
+    while(!args.isEmpty()) {
       ATermPlaceholder ph = (ATermPlaceholder)args.getFirst();
       String fun = ((ATermAppl)ph.getPlaceholderType()).getFun();
       args = args.getNext();
@@ -614,7 +614,7 @@ private boolean moreSpecific(ATerm a, ATerm b)
 	out.print("(String)P.elementAt(" + idx + ")");
       else
 	out.print("(ATermAppl)P.elementAt(" + idx + ")");
-      if(args != null)
+      if(!args.isEmpty())
         out.print(", ");
       idx++;
     }
@@ -643,7 +643,7 @@ private boolean moreSpecific(ATerm a, ATerm b)
   {
     int idx = 0;
 
-    while(args != null) {
+    while(!args.isEmpty()) {
       ATermPlaceholder ph = (ATermPlaceholder)args.getFirst();
       String fun = ((ATermAppl)ph.getPlaceholderType()).getFun();
       args = args.getNext();
@@ -662,7 +662,7 @@ private boolean moreSpecific(ATerm a, ATerm b)
       else
 	out.print("ATermAppl a" + idx);
 
-      if(args != null)
+      if(!args.isEmpty())
         out.print(", ");
       idx++;
     }

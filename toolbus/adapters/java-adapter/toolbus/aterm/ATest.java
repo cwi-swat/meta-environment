@@ -80,11 +80,11 @@ public class ATest
     System.out.println("testing ATermImpl classes");
     T[0] = new ATermIntImpl(5);
     T[1] = new ATermRealImpl(3.14);
-    T[2] = new ATermApplImpl("abc", null, true);
-    ATermsImpl terms = new ATermsImpl(T[0], new ATermsImpl(T[1], new ATermsImpl(T[2], null)));
+    T[2] = new ATermApplImpl("abc", new ATermsImpl(), true);
+    ATermsImpl terms = new ATermsImpl(T[0], new ATermsImpl(T[1], new ATermsImpl(T[2], new ATermsImpl())));
     T[3] = new ATermListImpl(terms);
     T[4] = new ATermApplImpl("abc", terms);
-    T[5] = new ATermApplImpl("abc\002def", null);
+    T[5] = new ATermApplImpl("abc\002def", new ATermsImpl());
     
     PrintWriter w = new PrintWriter(System.out);
     for(int i=0; i<5; i++) {
@@ -107,11 +107,11 @@ public class ATest
     System.out.println("testing ATerm classes");
     T[0] = new ATermInt(5);
     T[1] = new ATermReal(3.14);
-    T[2] = new ATermAppl("abc", null, true);
+    T[2] = new ATermAppl("abc", new ATerms(), true);
     ATerms terms = new ATerms(T[0], new ATerms(T[1], new ATerms(T[2])));
     T[3] = new ATermList(terms);
     T[4] = new ATermAppl("abc", terms);
-    T[5] = new ATermAppl("abc\002def", null);
+    T[5] = new ATermAppl("abc\002def", new ATerms());
 
     for(int i=0; i<3; i++) {
       System.out.print("term " + i + ": ");
@@ -156,7 +156,7 @@ public class ATest
     T[0] = ATermParser.makeSimple("[0,1,2,3,4,5,4,3,2,1]");
     Ts[0] = ((ATermList)T[0]).getATerms();
     T[1] = ATermParser.makeSimple("[]");
-    Ts[1] = null;
+    Ts[1] = new ATerms();
     T[2] = ATermParser.makeSimple("[1,2,3]");
     Ts[2] = ((ATermList)T[2]).getATerms();
     T[3] = ATermParser.makeSimple("[4,5,6]");
@@ -248,9 +248,9 @@ public class ATest
     T[0] = new ATermInt(1);
     T[1] = new ATermInt(2);
     T[2] = new ATermInt(3);
-    T[3] = new ATermAppl("a", null);
-    T[4] = new ATermAppl("b", null);
-    T[5] = new ATermAppl("c", null);
+    T[3] = new ATermAppl("a", new ATerms());
+    T[4] = new ATermAppl("b", new ATerms());
+    T[5] = new ATermAppl("c", new ATerms());
     T[6] = ATermParser.makeSimple("f(a,b,c)");
     T[7] = ATermParser.makeSimple("[1,2,3]");
     T[8] = ATermParser.makeSimple("f(1,2,3)");
@@ -269,9 +269,9 @@ public class ATest
     test(P[1].make(T[3]).equals(T[3]), "make-2");
     test(P[2].make("b").equals(T[4]), "make-3");
     test(P[3].make(new Double(3.14)).equals(new ATermReal(3.14)), "make-4");
-    test(P[4].make(new ATermAppl("real", null)).equals(P[3].getPattern()), "make-5");
+    test(P[4].make(new ATermAppl("real", new ATerms())).equals(P[3].getPattern()), "make-5");
     test(P[5].make(T[7]).equals(T[7]), "make-6");
-    test(P[6].make(T[3], "b", new ATerms(T[5], null)).equals(T[6]), "make-7");
+    test(P[6].make(T[3], "b", new ATerms(T[5], new ATerms())).equals(T[6]), "make-7");
     test(P[7].make("f", new Integer(2)).equals(T[8]), "make-8");
     test(P[8].make(((ATermList)T[7]).getATerms()).equals(T[7]), "make-9");
   }

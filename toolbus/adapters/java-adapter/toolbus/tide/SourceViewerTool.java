@@ -184,7 +184,7 @@ class SourceViewerTool extends SourceViewerTif
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
     }
-    while(proclist != null) {
+    while(!proclist.isEmpty()) {
       ATermList triple = (ATermList)proclist.getFirst();
       proclist = proclist.getNext();
       if(!patTriple.match(triple))
@@ -394,7 +394,7 @@ class SourceViewerTool extends SourceViewerTif
 
     // Update all viewers
     Vector viewers = (Vector)viewerTable.get(dapid);
-    if(viewers != null) {
+    if(!viewers.isEmpty()) {
       Enumeration viewerList = viewers.elements();
       while(viewerList.hasMoreElements())
 	((SourceViewer)viewerList.nextElement()).cpe(pid, port.getLocation());
@@ -937,7 +937,7 @@ class SourceViewer extends Frame implements TextHandler
     if(evt.target == start) {
       int pid = curProcess.getPid();
       ATerms procs = new ATerms(new ATermInt(pid));
-      ATerms actions = new ATerms(new ATermAppl(processMode.getSelectedItem(), null), null);
+      ATerms actions = new ATerms(new ATermAppl(processMode.getSelectedItem()));
       dap.sendExecuteActions(new ATermList(procs), new ATermList(actions));
       return true;
     }
@@ -948,7 +948,7 @@ class SourceViewer extends Frame implements TextHandler
     if(evt.target == stop) {
       int pid = curProcess.getPid();
       ATerms procs = new ATerms(new ATermInt(pid));
-      ATerms actions = new ATerms(new ATermAppl("stop", null), null);
+      ATerms actions = new ATerms(new ATermAppl("stop"));
       dap.sendExecuteActions(new ATermList(procs), new ATermList(actions));
       return true;
     }

@@ -50,7 +50,7 @@ public class DebugAdapterInfo
     try {
       info = new Hashtable();
       ATermPattern patPair = new ATermPattern("[<appl>,<term>]");
-      while(inf != null) {
+      while(!inf.isEmpty()) {
 	if(!patPair.match(inf.getFirst()))
 	  throw new IllegalArgumentException("malformed information list: " 
 					     + inf.getFirst().toString());
@@ -120,7 +120,7 @@ public class DebugAdapterInfo
 	result = new DebugProcess[cur.length()];
 	try {
 	  ATermPattern pat = new ATermPattern("<int>");
-	  for(int i=0; cur != null; i++) {
+	  for(int i=0; !cur.isEmpty(); i++) {
 	    pat.match(cur.getFirst());
 	    result[i] = (DebugProcess)processes.get(pat.elementAt(0));
 	    cur = cur.getNext();
@@ -202,12 +202,12 @@ public class DebugAdapterInfo
   {
     Vector vector = new Vector();
     ATerms paths = ((ATermList)getInfo("search-paths")).getATerms();
-    while(paths != null) {
+    while(!paths.isEmpty()) {
       ATerms pair = ((ATermList)paths.getFirst()).getATerms();
       ATermAppl kind = (ATermAppl)pair.getFirst();
       if(kind.getFun().equals("source")) {
 	paths = ((ATermList)pair.getNext().getFirst()).getATerms();
-	while(paths != null) {
+	while(!paths.isEmpty()) {
 	  ATermAppl path = (ATermAppl)paths.getFirst();
 	  vector.addElement(path.getFun());
 	  paths = paths.getNext();

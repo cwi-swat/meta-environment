@@ -107,7 +107,7 @@ public class ProcessViewerTool extends ProcessViewerTif
       // Then we add the new processes
       ATerms proclist = ((ATermList)procs).getATerms();
       ATermPattern patTriple = new ATermPattern("[<int>,<str>,<list>]");
-      while(proclist != null) {
+      while(!proclist.isEmpty()) {
 	ATermList triple = (ATermList)proclist.getFirst();
 	proclist = proclist.getNext();
 	if(!patTriple.match(triple))
@@ -115,7 +115,7 @@ public class ProcessViewerTool extends ProcessViewerTif
 	int pid = ((Integer)patTriple.elementAt(0)).intValue();
 	viewer.addProcess(dapid, pid, (String)patTriple.elementAt(1));
 	ATerms aliases = ((ATermList)patTriple.elementAt(2)).getATerms();
-	while(aliases != null) {
+	while(!aliases.isEmpty()) {
 	  viewer.addAlias(dapid, pid, aliases.getFirst());
 	  aliases = aliases.getNext();
 	}
@@ -124,38 +124,38 @@ public class ProcessViewerTool extends ProcessViewerTif
       //{ From now on, we want to watch process creation/destruction 
 
       RemoteDebugAdapterInfo dp = viewer.getAdapter(dapid);
-      dp.sendCreateRule("process-creation", new ATermAppl("all", null),
+      dp.sendCreateRule("process-creation", new ATermAppl("all"),
 			new ProcessCreationPort(),
-			new ATermAppl("always", null),
+			new ATermAppl("always"),
 			patternWatchProcessCreation.make(),
 			DebugRule.PERSISTENT);
 
-      dp.sendCreateRule("process-destruction", new ATermAppl("all", null),
+      dp.sendCreateRule("process-destruction", new ATermAppl("all"),
 			new ProcessDestructionPort(),
-			new ATermAppl("always", null),
+			new ATermAppl("always"),
 			patternWatchProcessDestruction.make(),
 			DebugRule.PERSISTENT);
 
       //}
       //{ And the exec state of its processes 
 
-      dp.sendCreateRule("exec-state", new ATermAppl("all", null),
+      dp.sendCreateRule("exec-state", new ATermAppl("all"),
 			new ExecStatePort(DebugProcess.ES_ALL, DebugPort.WHEN_AT),
-			new ATermAppl("always", null), 
+			new ATermAppl("always"), 
 			patternWatchExecState.make(), DebugRule.PERSISTENT);
 
       //}
       //{ And the sending/receiving of messages 
 
-      dp.sendCreateRule("send", new ATermAppl("all", null),
+      dp.sendCreateRule("send", new ATermAppl("all"),
 			new SendPort(DebugPort.WHEN_AT, "<term>"),
-			new ATermAppl("always", null),
+			new ATermAppl("always"),
 			patternWatchSend.make(),
 			DebugRule.PERSISTENT);
 
-      dp.sendCreateRule("receive", new ATermAppl("all", null),
+      dp.sendCreateRule("receive", new ATermAppl("all"),
 			new ReceivePort(DebugPort.WHEN_AT, "<term>"),
-			new ATermAppl("always", null),
+			new ATermAppl("always"),
 			patternWatchReceive.make(),
 			DebugRule.PERSISTENT);
 
@@ -191,7 +191,7 @@ public class ProcessViewerTool extends ProcessViewerTif
     //System.out.println("watchpoint, proc=" + proc + ", exprs=" + exprs.toString());
     int dapid = DebugAdapterInfo.debugAdapterId(dap);
     ATerms exprlist = ((ATermList)exprs).getATerms();
-    while(exprlist != null) {
+    while(!exprlist.isEmpty()) {
       ATerms pair = ((ATermList)exprlist.getFirst()).getATerms();
       watchpoint(dapid, proc, pair.getFirst(), pair.getNext().getFirst());
       exprlist = exprlist.getNext();
@@ -249,7 +249,7 @@ public class ProcessViewerTool extends ProcessViewerTif
       aliases = ((ATermList)patternProcessCreation.elementAt(1)).getATerms();
       viewer.addProcess(dapid, pid, name);
 
-      while(aliases != null) {
+      while(!aliases.isEmpty()) {
 	viewer.addAlias(dapid, pid, aliases.getFirst());
 	aliases = aliases.getNext();
       }
@@ -325,7 +325,7 @@ public class ProcessViewerTool extends ProcessViewerTif
     }
 
     ATerms toollist = tools.getATerms();
-    while(toollist != null) {
+    while(!toollist.isEmpty()) {
       ATerm pair = toollist.getFirst();
       if(!pat.match(pair))
 	throw new IllegalArgumentException("illegal tool def: " + pair);
