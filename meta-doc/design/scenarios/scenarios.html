@@ -27,9 +27,8 @@ Sofar, we have developed scenarios for the following tasks:
 <LI> <A HREF="#Shutdown">Scenario for shutting down the system</A>
 </UL>
 
-<A NAME="ParsingTerms">
-<H2>Scenario for Parsing Terms</H2>
-</A>
+
+<H2><A NAME="ParsingTerms">Scenario for Parsing Terms</A></H2>
 
 Case: a user wants to parse a term over a certain module.
 We assume that at least this module and all modules imported by it
@@ -66,9 +65,8 @@ this is presented to the user. If the parse result contains
 a parse tree the editor switches to 'structure editing mode'.
 </OL>
 
-<A NAME="ParserGenerator">
-<H2>Scenario for Generating Parse Tables</H2>
-</A>
+
+<H2><A NAME="ParserGenerator">Scenario for Generating Parse Tables</A></H2>
 
 Case: the module database requests a new parse table.
 
@@ -92,9 +90,8 @@ The generated parse table must then contain information which transitions
 are valid for each specific module. This will reduce the number of tables
 that must be maintained by the parser considerably (to one?).
 
-<A NAME="HybridEditing">
-<H2>Scenario for Hybrid Editing</H2>
-</A>
+
+<H2><A NAME="HybridEditing">Scenario for Hybrid Editing</A></H2>
 
 Case: The <EM>hybrid editor</EM>, a combination of a
 <EM>text editor</EM> and a <EM>structure editor</EM>, can be used
@@ -145,9 +142,8 @@ to edit terms, and syntax and equations of modules.
      database for updating.
 </OL>
 
-<A NAME="UpdatingTerms">
-<H2>Scenario for Updating Terms</H2>
-</A>
+
+<H2><A NAME="UpdatingTerms">Scenario for Updating Terms</A></H2>
 
 Some components in the system can change terms. The most prominent one
 is the <EM>hybrid editor</EM>, but in the future other components
@@ -165,9 +161,9 @@ should also be able to change terms.
 </OL>
 
 
-<A NAME="UpdatingSyntax">
-<H2>Scenario for Updating the Syntax of a Module</H2>
-</A>
+
+<H2><A NAME="UpdatingSyntax">Scenario for Updating the Syntax of a Module</A></H2>
+
 
 Some components in the system can change the syntax of a module. 
 The most prominent one is the <EM>hybrid editor</EM>, that can be used
@@ -190,9 +186,9 @@ should also be able to change the syntax of modules.
      database.
 </OL>
 
-<A NAME="UpdatingEquations">
-<H2>Scenario for Updating the Equations of a Module</H2>
-</A>
+
+<H2><A NAME="UpdatingEquations">Scenario for Updating the Equations of a Module</A></H2>
+
 
 Some components in the system can change the equations of a module. 
 The most prominent one is the <EM>hybrid editor</EM>, that can be used
@@ -210,9 +206,7 @@ to change the equations of a module.
      assigned to the equations.
 </OL>
 
-<A NAME="Shutdown">
-<H2>Scenario for Shutting Down the System</H2>
-</a>
+<H2><A NAME="Shutdown">Scenario for Shutting Down the System,</A></H2>
 
 Shutting down a distributed system is not trivial. Some components might
 have changed data that must be saved, and sometimes confirmation from
