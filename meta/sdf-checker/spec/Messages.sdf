@@ -17,7 +17,7 @@ exports
     kernel-syntax-construction(ModuleId, Literal)                -> Message
     inconsistent-rhs-in-priorities(ModuleId, Symbol, Production) -> Message
     double-used-label(ModuleId, Literal, Production)             -> Message
-    constructor-has-already-been-used(ModuleId, Literal, Symbol) -> Message
+    constructor-has-already-been-used(ModuleId, Literal, Production) -> Message
 
   context-free syntax
     "{" Message* "}"       -> Messages

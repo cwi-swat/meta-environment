@@ -20,10 +20,12 @@ hiddens
                                  ModuleId) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
     get-constructor-symbol-pairs(Attributes,
                                  Constructors-Msg-Tuple,
-                                 ModuleId, Symbol) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
+                                 ModuleId, Symbol,
+                                 Production) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
     get-constructor-symbol-pairs(Attribute,
                                  Constructors-Msg-Tuple,
-                                 ModuleId, Symbol) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
+                                 ModuleId, Symbol,
+                                 Production) -> Constructors-Msg-Tuple {traversal(accu, top-down)}
 
 hiddens
   variables
@@ -46,3 +48,4 @@ hiddens
     "$Literal"[0-9]*    -> Literal
 
     "ConsMsgTuple"[0-9]*    -> Constructors-Msg-Tuple
+    "Prod"[0-9]*            -> Production

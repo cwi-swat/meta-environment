@@ -27,22 +27,28 @@ equations
   [gcsp-1'1] get-constructor-symbol-pairs(Symbol* -> Symbol Attrs,
                                           ConsMsgTuple,
                                           $ModuleId) =
-               get-constructor-symbol-pairs(Attrs, ConsMsgTuple, $ModuleId, Symbol)
+               get-constructor-symbol-pairs(Attrs, ConsMsgTuple, 
+                                            $ModuleId, Symbol,
+                                            Symbol* -> Symbol Attrs)
 
-  [gcsp-1'1] get-constructor-symbol-pairs($Literal ( Symbol,* ) -> Symbol Attrs,
+  [gcsp-1'1] get-constructor-symbol-pairs($Literal(Symbol,*) -> Symbol Attrs,
                                           ConsMsgTuple,
                                           $ModuleId) =
-               get-constructor-symbol-pairs(Attrs, ConsMsgTuple, $ModuleId, Symbol)
+               get-constructor-symbol-pairs(Attrs, ConsMsgTuple, 
+                                            $ModuleId, Symbol,
+                                            $Literal(Symbol,*) -> Symbol Attrs)
 
   [gcsp-1'1] contains(Symbol, $Literal, ConstructorSet) = true
              =================================================
              get-constructor-symbol-pairs(cons( $Literal ), 
-                                          [ConstructorSet, Msgs], $ModuleId, Symbol) =
+                                          [ConstructorSet, Msgs], 
+                                          $ModuleId, Symbol, Prod) =
                [ConstructorSet, 
-Msgs + constructor-has-already-been-used($ModuleId, $Literal, Symbol)]
+Msgs + constructor-has-already-been-used($ModuleId, $Literal, Prod)]
 
   [gcsp-1'1] contains(Symbol, $Literal, ConstructorSet) = false
              ==================================================
              get-constructor-symbol-pairs(cons( $Literal ), 
-                                          [ConstructorSet, Msgs], $ModuleId, Symbol) =
+                                          [ConstructorSet, Msgs], 
+                                          $ModuleId, Symbol, Prod) =
                [add(Symbol, $Literal, ConstructorSet), Msgs]
