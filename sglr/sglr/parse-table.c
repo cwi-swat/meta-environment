@@ -112,13 +112,9 @@ parse_table *SG_NewParseTable(int states, int productions)
 
   pt               = SG_Malloc(sizeof(struct _parse_table));
   pt->init         = -1;
-
   pt->action_table = ATtableCreate(states*1.4,    75);
   pt->goto_table   = ATtableCreate(states*1.4,  75);
   pt->productions  = ATtableCreate((productions + 256)*1.4, 75);
-
-//  pt->vertices     = SG_Malloc(sizeof(ATerm ) * states);
-//  pt->org_table    = ATempty;
 
   return pt;
 }
@@ -168,10 +164,7 @@ void SG_AddToTable(ATermTable tbl, state s, int c, ATermList as, ATbool make_lis
   key = (ATerm) ATmakeList2((ATerm) ATmakeInt(s), (ATerm) ATmakeInt(c));
   prev = (ATermList) ATtableGet(tbl, key);
 
-//  ATfprintf(stderr, "adding %t for key %t\n", as, key);
-
   if(!prev) {             /* New key, add a new list */
-// ATfprintf(stderr, "adding %t for new key %t\n", as, key);
     if(ATgetType(as) == AT_LIST)
       ATtablePut(tbl, key, (ATerm) as);
     else
@@ -180,7 +173,6 @@ void SG_AddToTable(ATermTable tbl, state s, int c, ATermList as, ATbool make_lis
       else
         ATtablePut(tbl, key, (ATerm) as);
   } else {                /* Existing key, insert into existing list */
-// ATfprintf(stderr, "adding %t to existing key %t\n", as, key);
     if(!make_list)
         ATerror("SG_AddToTable: attempt to add value to non-list table\n");
     switch(ATgetType(prev)) {
@@ -207,7 +199,6 @@ void SG_AddClassesToTable(ATermTable tbl, state s, ATermList classes, ATermList 
     currClass = (ATermList) ATgetFirst(classes);
     for(; !ATisEmpty(currClass); currClass = ATgetNext(currClass)) {
       firstTerm = ATgetFirst(currClass);
-//      ATfprintf(stderr, "adding class %t for state %d, action %t\n", firstTerm, s, as);
       if (ATmatch(firstTerm, "<int>", &first)) {
         SG_AddToTable(tbl, s, first, as, make_list);
       } else {
@@ -334,7 +325,6 @@ void SG_AddPTGrammar(ATermList grammar, parse_table *pt)
   }
 }
 
-// TEMPORARY debugging
 void dump_ATtable(ATermTable t, char *s)
 {
   ATermList keys;
@@ -361,7 +351,6 @@ parse_table *SG_BuildParseTable(ATerm t)
   parse_table *pt;
 
   pt = SG_NewParseTable(16384, 4096);
-//  pt->org_table = t;
 
   if(!ATmatch(t, "parse-table(<int>,[<list>],states([<list>]))",
               &(pt->init), &prods, &sts)) {
@@ -369,9 +358,7 @@ parse_table *SG_BuildParseTable(ATerm t)
     return NULL;
   }
   SG_AddPTStates(sts, pt);
-//  dump_ATtable(pt->goto_table, "goto");
   SG_AddPTGrammar(prods, pt);
-//  dump_ATtable(pt->action_table, "action");
   return pt;
 }
 

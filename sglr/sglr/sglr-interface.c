@@ -98,11 +98,9 @@ FILE *SGopenFile(char *prgname, char *std_error, char *FN)
   if (FN == NULL || strcmp(FN, "") == 0 || !strcmp(FN, "-")) {
       if (std_error == NULL) return stdin;
       ATfprintf(stderr,"%s: %s\n", prgname, std_error);
-//      usage(stderr, ATfalse);
       exit(1);
   } else if ((file = fopen(FN, "r")) == NULL) {
       ATfprintf(stderr, "%s: cannot open %s\n", prgname, FN);
-//      usage(stderr, ATfalse);
       exit(1);
   } else
     return file;

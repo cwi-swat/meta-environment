@@ -216,7 +216,6 @@ void SG_TreeToDot(FILE *dot, ATerm t, int child, ATerm parent,
   ATermList args;
   int       c, n=0;
 
-//  SG_MARK_UNPRINTED(t);
   if (ATmatch(t, "<int>", &c)) {
     ATfprintf(dot, "\tN%d%d%d [label=\"", (int) parent, child, c);
     SG_PrintChar(dot, c);
@@ -226,7 +225,6 @@ void SG_TreeToDot(FILE *dot, ATerm t, int child, ATerm parent,
     prev_char = c;
   }
   if (SG_IS_PRINTED(t)) return;
-//  SG_MARK_PRINTED(t);
 
   if (ATmatch(t, "appl(<term>,[<list>])", &fun, &args)) {
     if(!suppress_lexicals || !SG_IsLexical(fun)) {

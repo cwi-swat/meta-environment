@@ -1,4 +1,4 @@
-/* $id: $ */
+/* $Id$ */
 
 #ifndef _MEM_ALLOC
 #define _MEM_ALLOC
@@ -9,7 +9,7 @@
   #define SG_Malloc(n)    GC_malloc(n)
   #define SG_Realloc(o,s) GC_realloc(o,s)
   #define SG_free(o)      GC_free(o)
-//#define free(n)    ;
+  #define free(n)    ;
 #else
   #include <stdlib.h>
   #define SG_Calloc(m,n)  calloc(m,n)

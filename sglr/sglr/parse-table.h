@@ -61,10 +61,6 @@ struct _parse_table  {
   ATermTable action_table;
   ATermTable goto_table;
   ATermTable productions;
-//  int        nvertices;
-//  ATerm      **vertices;
-//  ATerm        org_table;
-//  parse_table  *org_table;
 };
 
 #endif

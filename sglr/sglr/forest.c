@@ -121,9 +121,9 @@ ATerm SG_YieldPT(ATerm t)
       if(fun == SG_ApplAfun()) {
         ATermList ambs;
         ATermInt  idx = (ATermInt) ATgetAnnotation(t, SG_ApplLabel());
-
-//if (!idx) ATfprintf(stderr, "Not annotated: %t\n", t);
-
+/*
+        if (!idx) ATfprintf(stderr, "Not annotated: %t\n", t);
+*/
         /*  Are we indeed encountering an ambiguity cluster?  */
         if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL)))
           ret = (ATerm)ATmakeAppl2(SG_ApplAfun(),
@@ -226,7 +226,6 @@ void SG_Amb(ATerm existing, ATerm new) {
     newidxs = ATmakeList2(ex_annot, nw_annot);
   } else {
     /* Expand existing ambiguity */
-//      ATfprintf(stderr, "Existing amb; args (%t,%t), found %t\n", existing,new,ambs);
     newtrms = ATinsert((ATermList) ATgetFirst(ambs), nw_cln);
     newidxs = ATinsert((ATermList)  ATgetLast(ambs), nw_annot);
   }
@@ -235,53 +234,12 @@ void SG_Amb(ATerm existing, ATerm new) {
   /* Now update ambiguity list for all affected nodes */
   for(lst = newidxs; !ATisEmpty(lst); lst = ATgetNext(lst)) {
     index = (ATermInt) ATgetFirst(lst);
-//    ATfprintf(stderr, "AMB: setting index %t to %t\n",index, ambs);
     SG_AmbTable(SG_AMBTBL_ADD, index, ambs);
   }
 
   SGnrAmb(SG_NRAMB_INC);
   return;
 }
-
-#ifdef PREV
-void SG_Amb(ATerm existing, ATerm new) {
-  ATermList newidxs, newtrms, ambs, lst;
-  ATerm     e0, e1, n0, n1, exist2, new2;
-  ATermInt  index, e2, n2;
-
-  /* Sanity check cum variable instantiation */
-  if (   ATmatch(existing, "appl(<term>,<term>,<term>)", &e0, &e1, &e2)
-      && ATmatch(new,      "appl(<term>,<term>,<term>)", &n0, &n1, &n2)) {
-    /* Create/update ambiguity node. */
-    ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, e2, NULL);
-    /* Add ambterms sans index, to prevent circular lookup when yielding */
-    new2   = (ATerm) ATmakeAppl2(SG_ApplAfun(), n0, n1);
-    if(ATisEmpty(ambs)) {
-      /* New ambiguity */
-      exist2 = (ATerm) ATmakeAppl2(SG_ApplAfun(), e0, e1);
-      newtrms = ATmakeList2(exist2, new2);
-      newidxs = ATmakeList2((ATerm) e2, (ATerm) n2);
-    } else {
-      /* Expand existing ambiguity */
-//      ATfprintf(stderr, "Existing amb; args (%t,%t), found %t\n", existing,new,ambs);
-      newtrms = ATinsert((ATermList) ATgetFirst(ambs), new2);
-      newidxs = ATinsert((ATermList)  ATgetLast(ambs), (ATerm) n2);
-    }
-    ambs = ATmakeList2((ATerm) newtrms, (ATerm) newidxs);
-
-    /* Now update ambiguity list for all affected nodes */
-    for(lst = newidxs; !ATisEmpty(lst); lst = ATgetNext(lst)) {
-      index = (ATermInt) ATgetFirst(lst);
-//      ATfprintf(stderr, "AMB: updating index %t\n",index);
-      SG_AmbTable(SG_AMBTBL_ADD, index, ambs);
-    }
-  } else
-    ATerror("SG_Amb: symbolnode is not appl or amb\n%t\n", existing);
-
-  SGnrAmb(SG_NRAMB_INC);
-  return;
-}
-#endif /* PREV */
 
 ATerm SG_TreeType(ATerm t)
 {
@@ -418,6 +376,5 @@ ATerm SG_DotTermYield(ATerm t)
   SG_TYAuxBuf(TYA_INIT, 0);          /* Initialize (hidden) buffer */
   SG_DotTermYieldAux(t);            /* Yield to (hidden) buffer   */
                                     /* Collect & return buffer    */
-//ATfprintf(stderr, "Final Yield: ->%s<-\n", SG_TYAuxBuf(TYA_INQUIRE, 0));
   return ATmake("<str>", SG_TYAuxBuf(TYA_INQUIRE, 0));
 }
