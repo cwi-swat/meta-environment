@@ -56,6 +56,7 @@ in
   subscribe(move-editor-to-front(<term>)) .
   subscribe(reload-file(<term>,<term>)) .
   subscribe(kill-text-editor(<term>)) .
+  snd-msg(text-editor-initialized(EditorId)) .
   (
     rec-note(set-focus(EditorId,
       focus(Path?, SortName?, area(StartPos?, Length?),Dirty?))) .
