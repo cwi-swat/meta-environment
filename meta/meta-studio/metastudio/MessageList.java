@@ -17,33 +17,23 @@ import aterm.ATermList;
 import aterm.ParseError;
 import aterm.pure.PureFactory;
 
-public class MessageWindow extends JFrame implements ListSelectionListener {
+public class MessageList extends JPanel implements ListSelectionListener {
 	private JList list;
 	private String moduleName;
 	private UserInterfaceBridge bridge;
 	private PureFactory factory;
 	private ATermList data;
 
-	public MessageWindow(UserInterfaceBridge bridge, PureFactory factory) {
+	public MessageList(UserInterfaceBridge bridge, PureFactory factory) {
 		this.bridge = bridge;
 		this.factory = factory;
-
+        
 		list = new JList();
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.addListSelectionListener(this);
-
-		Container content = getContentPane();
-		JPanel mainPanel = new JPanel();
-
-		mainPanel.setLayout(new BorderLayout());
-		mainPanel.setBorder(BorderFactory.createTitledBorder("Messages"));
-		mainPanel.add(new JScrollPane(list), BorderLayout.CENTER);
-		content.setLayout(new BorderLayout());
-		content.add(mainPanel, BorderLayout.CENTER);
-
-		setTitle("Message list");
-		setSize(300, 400);
-
+		
+		setLayout(new BorderLayout());
+		add(new JScrollPane(list), BorderLayout.CENTER);
 	}
 
 	public void setContent(String moduleName, ATermList data) {
