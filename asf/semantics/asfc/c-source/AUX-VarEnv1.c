@@ -50,6 +50,8 @@ static Symbol lf_AUX_VarEnv1_12sym ;
 static ATerm lf_AUX_VarEnv1_12 ( ATerm arg1 ) ;
 static Symbol lf_AUX_VarEnv1_14sym ;
 static ATerm lf_AUX_VarEnv1_14 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_AUX_VarEnv1_15sym ;
+static ATerm lf_AUX_VarEnv1_15 ( ATerm arg1 , ATerm arg2 ) ;
 void register_AUX_VarEnv1 ( ) {
 lf_AUX_VarEnv1_2sym = ATmakeSymbol ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"[\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"VarEnv\"),w(\"\"),no-attrs)"
  , 1 , ATtrue ) ;
@@ -80,6 +82,8 @@ lf_AUX_VarEnv1_12sym = ATmakeSymbol ( "listtype(sort(\"NamePair\"),ql(\",\"))" ,
 ATprotectSymbol ( lf_AUX_VarEnv1_12sym ) ;
 lf_AUX_VarEnv1_14sym = ATmakeSymbol ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IdTablePair\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_VarEnv1_14sym ) ;
+lf_AUX_VarEnv1_15sym = ATmakeSymbol ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Module\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"MN-struct\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
+ATprotectSymbol ( lf_AUX_VarEnv1_15sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"Term\"),ql(\",\"))" ) , lf_AUX_VarEnv1_1 , lf_AUX_VarEnv1_1sym ) ;
 register_prod ( ATparse ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"[\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"VarEnv\"),w(\"\"),no-attrs)" ) , lf_AUX_VarEnv1_2 , lf_AUX_VarEnv1_2sym ) ;
 register_prod ( ATparse ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"[\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntVarEnv\"),w(\"\"),no-attrs)" ) , lf_AUX_VarEnv1_3 , lf_AUX_VarEnv1_3sym ) ;
@@ -94,10 +98,15 @@ register_prod ( ATparse ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\
 register_prod ( ATparse ( "listtype(sort(\"NamePair\"),ql(\",\"))" ) , lf_AUX_VarEnv1_12 , lf_AUX_VarEnv1_12sym ) ;
 register_prod ( ATparse ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NameTable\"),w(\"\"),no-attrs)" ) , lf_AUX_VarEnv1_13 , lf_AUX_VarEnv1_13sym ) ;
 register_prod ( ATparse ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IdTablePair\"),w(\"\"),no-attrs)" ) , lf_AUX_VarEnv1_14 , lf_AUX_VarEnv1_14sym ) ;
+register_prod ( ATparse ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Module\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"MN-struct\"),w(\"\"),no-attrs)" ) , lf_AUX_VarEnv1_15 , lf_AUX_VarEnv1_15sym ) ;
 }
 void resolve_AUX_VarEnv1 ( ) {
 }
 void init_AUX_VarEnv1 ( ) {
+}
+ATerm lf_AUX_VarEnv1_15 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_AUX_VarEnv1_15sym , ATmakeAppl ( lf_AUX_VarEnv1_15sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_VarEnv1_15sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_VarEnv1_14 ( ATerm arg0 , ATerm arg1 ) {
 CONS_ENTRY ( lf_AUX_VarEnv1_14sym , ATmakeAppl ( lf_AUX_VarEnv1_14sym , arg0 , arg1 ) ) ;
