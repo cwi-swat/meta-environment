@@ -4,7 +4,7 @@ Tue Mar  1 14:07:44 CET 2005 <jurgenv@cwi.nl>
  * Syntax highlighting improved. There are now three levels, in increasing
    priority:
 	* default level: categorizes sub-tree into a few classes: MetaKeyword,
-	  MetaOperator, MetaAmbiguity, MetaVariable
+	  MetaAmbiguity, MetaVariable
 	* production level: the user can annotate a production with the
 	  category(<str>) attribute. A number of predefined categories exist
 	  for the users convenience, but new ones can be added. Currently
