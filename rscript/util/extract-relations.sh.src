@@ -5,7 +5,7 @@ set -e
 # {{{  variables
 
 PRG=`basename $0`
-OUTPUT_DIR=./rstore
+OUTPUT_DIR=./extracted-rstores
 TOP_SORT=
 INPUT_FILES=
 EXTRACTION_FUNCTION=extractRelations
