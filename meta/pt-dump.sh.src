@@ -10,17 +10,11 @@ sglr=__SGLR__
 pgen=__PGEN__
 asf=__ASF__
 toolbus=__TOOLBUS__
-xemacs=__XEMACS__
-graphviz=__GRAPHVIZ__
 prefix=__PREFIX__
 
-wish=__WISH__
-
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
-      ${asf}/bin:${asf}/bin:${toolbus}/bin:${xemacs}/bin:${PATH}"; 
+      ${asf}/bin:${asf}/bin:${toolbus}/bin:${PATH}"; 
 export PATH
-
-TCLLIBPATH=${graphviz}/lib; export TCLLIBPATH
 
 ###
 #  Handle the command line, &c.
@@ -28,13 +22,12 @@ TCLLIBPATH=${graphviz}/lib; export TCLLIBPATH
 
 myname=`basename $0`
 myversion=`echo $Revision| cut -d' ' -f2`
-verbose=0
 xargs=""
 
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="C:dhT:vV"
+myarguments="C:dhm:tT:vV"
 
 # Usage: displays helpful usage information
 Usage() {
@@ -44,31 +37,14 @@ Options:
     -C file         specifies the configuration file to be processed
     -d              run in debug mode (with viewer)
     -h              display help information (usage)
+    -m modulename   specifies the modulename for which a table has to generated
     -T <port>       specifies TB_PORT for toolbus
-    -v              run verbose mode (with logger)
     -V              reveal program version (i.e. $myversion)
 E_O_USAGE
 }
 
 Version() {
     echo "$myname v$myversion" >&2
-    addeqssyntax -V
-    unparsePT -V
-    baffle -v
-    asfc -V
-    asfe -V
-    graph-browser -V
-    in-output -V
-    module-db -V
-    parsetablegen -V
-    removevarsyntax -V
-    sglr -V
-    toolbus -version
-    xemacs -V
-    echo 'puts "wish v$tk_version" ;\
-          package require Tcldot;\
-          puts "tcldot v[package versions Tcldot]";\
-          exit;' | $wish
 }
 
 # getopt handles command line...
@@ -96,13 +72,12 @@ do
 		xargs="$xargs -viewer" ;;
         -h)
 		Usage ; exit 0 ;;
-        -t)
-		;;
+        -m)
+                shift
+                modulename=$1
+                ;;
         -T)
 		shift; xargs="$xargs -TB_PORT $1" ;;
-        -v)
-		xargs="$xargs -logger"
-		verbose=1 ;;
 	-V)
 		Version ; exit 0 ;;
 	--)
@@ -118,11 +93,7 @@ done
 #  Get to the real work now...
 ###
 
-toolbusdefs="-DCONFIG_FILE=\\\"${configfile}\\\""
-
-if [ $verbose -gt 0 ] ; then
-   set -x
-fi
+toolbusdefs="-DMODULENAME=\\\"${modulename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\""
 
 toolbus $xargs ${toolbusdefs} \
    -I${prefix}/share \
@@ -131,4 +102,4 @@ toolbus $xargs ${toolbusdefs} \
    -I${sglr}/share \
    -I${pgen}/share \
    -I${asf}/share \
-   ${prefix}/share/meta.tb
+   ${prefix}/share/pt-dumper.tb

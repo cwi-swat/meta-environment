@@ -6,13 +6,13 @@ SUBDIRS     = config editors graph-browser \
               in-output module-db utils tbscripts demo \
               configuration-manager
 
-EXTRA_DIST  = make_rules meta.sh.src meta.pod reconf
+EXTRA_DIST  = make_rules meta.sh.src pt-dump.sh.src eqs-dump.sh.src meta.pod reconf
 
-bin_SCRIPTS = meta
+bin_SCRIPTS = meta pt-dump eqs-dump
 
 man_MANS    = meta.1
 
-CLEANFILES  = meta meta.1
+CLEANFILES  = meta meta.1 pt-dump eqs-dump
 
 % : %.sh.src Makefile
 	sed 's@__PREFIX__@$(prefix)@g;\
