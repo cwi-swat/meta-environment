@@ -9,7 +9,7 @@ fac_LDADD	= -L../../lib-c -ltide-adapter \
 
 EXTRA_DIST	= fac.pico
 
-CFLAGS		= -g -Wall -O2 -D__SRCDIR__="\"`cd ${srcdir}; pwd`\""
 INCLUDES	= -I${top_srcdir}/lib-c \
 		-I${ATERM}/include \
-		-I${TOOLBUSLIB}/include
+		-I${TOOLBUSLIB}/include \
+                -D__SRCDIR__="\"`cd ${srcdir}; pwd`\""

@@ -13,13 +13,10 @@ debug-adapter.tif.c debug-adapter.tif.h: ../toolbus/tide.tifs
 		-prefix ta_ \
 		../toolbus/tide.tifs
 
-#TA.h TA.c TA_dict.c TA_dict.h: TA.adt
-
 regen:
 	adt-to-c -i TA.adt --prefix TA_
 
 
 EXTRA_DIST	= TA.adt TA.h TA.c TA_dict.h TA_dict.c
 
-CFLAGS		+= ${DEVELOP_DEF}
-INCLUDES	= -I${ATERM}/include -I${TOOLBUSLIB}/include
+INCLUDES	= -I${ATERM}/include -I${TOOLBUSLIB}/include ${DEVELOP_DEF}

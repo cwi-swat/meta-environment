@@ -1,6 +1,8 @@
 
 SUBDIRS		= toolbus lib-c tide META-INF images examples scripts .
 
+ACLOCAL_FLAGS = -I .
+
 EXTRA_DIST      = $(wildcard *.pkg)
 
 data_DATA	= tide.jar

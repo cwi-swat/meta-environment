@@ -1,12 +1,14 @@
 
-AC_INIT(configure.in)
+AC_INIT
+AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(tide, 0.5beta)
+AC_PREREQ(2.59)
 
 ACLOCAL="${ACLOCAL} -I ."
 
 dnl Which compiler to use?
 AC_PROG_CC
-AC_SET_MAKE
+AC_PROG_MAKE_SET([])
 
 dnl Handle --with-cflags option
 AC_ARG_WITH(cflags,
@@ -37,7 +39,7 @@ AC_SUBST(ATERM)
 
 AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
         [  --with-aterm-java=DIR  ATerm-Java-library is in DIR])
-JAVA_ATERM=`${ATERM_JAVA}/bin/aterm-java-config`
+JAVA_ATERM=\`${ATERM_JAVA}/bin/aterm-java-config\`
 AC_SUBST(JAVA_ATERM)
 
 dnl Require ToolBus library
@@ -75,7 +77,7 @@ if test ${GETHOSTNAME_FOUND} = no; then
    AC_CHECK_LIB(nsl,gethostname,[GETHOSTNAME_FOUND=yes;LIBS="$LIBS -lnsl"])
 fi
 
-AC_OUTPUT( \
+AC_CONFIG_FILES([\
 	Makefile \
 	scripts/Makefile \
 	toolbus/Makefile \
@@ -92,4 +94,5 @@ AC_OUTPUT( \
 	META-INF/Makefile \
         examples/Makefile \
 	examples/pico/Makefile \
-	, )
+	])
+AC_OUTPUT
