@@ -391,10 +391,10 @@ in
         rec-msg(exists(FileName?), Stack?, EditorId?) .
         snd-msg(io-exists-file(FileName)) .
         (
-          rec-msg(io-file-exists(FileName)) .
+          rec-msg(io-file-exists) .
           ReturnSuccess(EditorId,Stack)
         +
-          rec-msg(io-file-not-exists(FileName)) .
+          rec-msg(io-file-not-exists) .
           snd-note(ui-status(errorf("%s does not exist", 
                                     [FileName]))) .
           ReturnAbort(EditorId,Stack)
