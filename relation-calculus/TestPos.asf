@@ -1,0 +1,3 @@
+equations
+
+[1] label(Stat) = get-start-line(Stat) : Stat
