@@ -40,10 +40,14 @@ link-test.c: remove-old $(PACKAGE_SRC) $(MODULES)
 	${top_srcdir}/utils/gen-link-test.sh "${BUILTINS}" > $@
 
 remove-old:
+	touch $(top_builddir)/src/builtins.lst
 	sed -e "s@${subdir}:.*@@g"  $(top_builddir)/src/builtins.lst > \
-           $(top_builddir)/src/builtins.lst
+           $(top_builddir)/src/builtins.lst.tmp 
+	mv $(top_builddir)/src/builtins.lst.tmp $(top_builddir)/src/builtins.lst
+	touch $(top_builddir)/src/objects.lst
 	sed -e "s@${subdir}:.*@@g"  $(top_builddir)/src/objects.lst > \
-           $(top_builddir)/src/objects.lst
+           $(top_builddir)/src/objects.lst.tmp
+	mv $(top_builddir)/src/objects.lst.tmp $(top_builddir)/src/objects.lst
 
 # Installation hooks take care of modifying access bits and installing
 # the files in the right order (time stamps are important here)
