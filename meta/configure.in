@@ -1,4 +1,4 @@
-dnl $Id$
+toodnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT
@@ -52,19 +52,43 @@ AC_SUBST(INCLUDES)
 
 dnl Handle --with-aterm=... argument to configure
 AC_ARG_WITH(aterm,
-[  --with-aterm		which aterm-library to use],
+[  --with-aterm            which aterm-library to use],
 ATERM=${withval},)
 AC_SUBST(ATERM)
+AC_ARG_WITH(aterm-bin,
+[  --with-aterm-bin        path to ATerm executables],
+ATERMBIN=${withval},ATERMBIN=${ATERM}/bin)
+AC_SUBST(ATERMBIN)
+AC_ARG_WITH(aterm-lib,
+[  --with-aterm-lib        path to ATerm libraries],
+ATERMLIB=${withval},ATERMLIB=${ATERM}/lib)
+AC_SUBST(ATERMLIB)
+AC_ARG_WITH(aterm-inc,
+[  --with-aterm-inc        path to ATerm header files],
+ATERMINC=${withval},ATERMINC=${ATERM}/include)
+AC_SUBST(ATERMINC)
 
-dnl Handle --with-toolbus=... argument to configure
+dnl Handle --with-toolbus[-...]=... arguments to configure
 AC_ARG_WITH(toolbus,
-[  --with-toolbus	which ToolBus distribution to use],
+[  --with-toolbus          which ToolBus distribution to use],
 TOOLBUS=${withval},)
 AC_SUBST(TOOLBUS)
+AC_ARG_WITH(toolbus-bin,
+[  --with-toolbus-bin      path to ToolBus executables],
+TOOLBUSBIN=${withval},TOOLBUSBIN=${TOOLBUS}/bin)
+AC_SUBST(TOOLBUSBIN)
+AC_ARG_WITH(toolbus-lib,
+[  --with-toolbus-lib      path to ToolBus libraries],
+TOOLBUSLIB=${withval},TOOLBUSLIB=${TOOLBUS}/lib)
+AC_SUBST(TOOLBUSLIB)
+AC_ARG_WITH(toolbus-inc,
+[  --with-toolbus-inc      path to ToolBus header files],
+TOOLBUSINC=${withval},TOOLBUSINC=${TOOLBUS}/include)
+AC_SUBST(TOOLBUSINC)
 
 dnl Handle --with-tcldot=... argument to configure
 AC_ARG_WITH(tcldot,
-[  --with-tcldot 	location of tcldot library to use],
+[  --with-tcldot           location of tcldot library to use],
 TCLDOT=${withval},
 AC_MSG_ERROR(\nPlease specify location of tcldot using --with-tcldot=/path/to/tcldot.so\nIf you are at CWI/UvA a good guess would be ~gipe/petr/lib/Tcldot)
 )
