@@ -1,6 +1,6 @@
 module Rstore
 
-imports Rscript RSF
+imports Rscript RSF Rviz
 
 exports 
   sorts RVALUE RSTORE
@@ -16,16 +16,17 @@ exports
 
 %% The RSTORE itself, maps RVARs to RVALUEs
 
-       "rstore" "(" {  <RVAR, RVALUE>  ","}* ")"	-> RSTORE {prefer}
-        assign(RVAR, RVALUE, RSTORE)          		-> RSTORE
-	assign-when-undef(RVAR, RVALUE, RSTORE)		-> RSTORE
-        value(RVAR, RSTORE)                   		-> RVALUE
+       "rstore" "(" {  <RVAR, REXPTYPE, RVALUE>  ","}* ")"	-> RSTORE {prefer}
+        assign(RVAR, RVALUE, RSTORE)				-> RSTORE
+        assign(RVAR, REXPTYPE, RVALUE, RSTORE)			-> RSTORE
+	assign-when-undef(RVAR, REXPTYPE, RVALUE, RSTORE)	-> RSTORE
+        value(RVAR, RSTORE)					-> RVALUE
 
 %% Extension functions on RSTOREs intended for fact extraction tools
 
 	add-elem(RVAR, Elem, RSTORE)			-> RSTORE
-	add-tuple(RVAR, <Elem, Elem>, RSTORE)  		-> RSTORE
-	add-tuples(RVAR, Bag[[Elem]], RSTORE) 		-> RSTORE
+	add-tuple(RVAR, Tuple, RSTORE)  		-> RSTORE
+	add-tuples(RVAR, Bag[[Elem]], RSTORE)		-> RSTORE
 
 	filter(RSTORE, Bag[[Elem]])			-> RSTORE
 	rvar2str(RVAR)					-> String
@@ -35,6 +36,13 @@ exports
 	import1(RSFFILE, RSTORE)			-> RSTORE
 	rsfname2rvar(RSFNAME)				-> RVAR
 	rsfname2str(RSFNAME)				-> String
+
+%% Export an RVIZ file
+	export-rviz(RSTORE)				-> RVIZ
+	export(RSTORE)					-> VDATA*
+	export-pair(RVAR, REXPTYPE, RVALUE)		-> VDATA*
+	VDATA* "++" VDATA*				-> VDATA*
+	export-pair					-> RVAR {reject}
 
 exports
   context-free syntax
@@ -57,7 +65,17 @@ hiddens
   variables
 	"$Rstore" [0-9\']*             -> RSTORE
         "$Val" [0-9\']*                -> RVALUE
-        "$VPair*" [0-9\']*             -> { <RVAR, RVALUE> ","}*
+        "$VPair*" [0-9\']*             -> { <RVAR, REXPTYPE, RVALUE> ","}*
+        "$String" [0-9\']*             -> String
+        "$Area" [0-9\']*	       -> Area
+        "$Tuple" [0-9\']*	       -> Tuple
+        "$Tuple*" [0-9\']*	       -> {Tuple ","}*
+
+        "$Type" [0-9\']*	       -> REXPTYPE
+
+       "$Vdata*" [0-9\']*	       -> VDATA*
+	
+	
 
         "$Var" [0-9\']*                -> RVAR
         "$Var*" [0-9\']*               -> {RVAR ","}*
