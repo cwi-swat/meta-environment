@@ -159,7 +159,7 @@ static PT_Tree pList(PT_Tree tree, int *i, SDF_Symbol ssym)
   assert(PT_isTreeApplList(tree) && "This tool only supports AsFix2ME");
   assert(SDF_isSymbolIterStar(ssym) || SDF_isSymbolIter(ssym));
 
-  layout = SDF_getSymbolWsAfterSymbol(ssym);
+  layout = (PT_Tree) SDF_getSymbolWsAfterSymbol(ssym);
   elems  = PT_getTreeArgs(tree);
   newElems = PT_makeArgsEmpty();
 
@@ -198,8 +198,8 @@ static PT_Tree pSepList(PT_Tree tree, int *i, SDF_Symbol ssym)
   assert(PT_isTreeApplList(tree) && 
 	 (SDF_isSymbolIterStarSep(ssym) || SDF_isSymbolIterSep(ssym)));
 
-  layout = SDF_getSymbolWsAfterSymbol(ssym);
-  layout2 = SDF_getSymbolWsAfterSep(ssym);
+  layout = (PT_Tree) SDF_getSymbolWsAfterSymbol(ssym);
+  layout2 = (PT_Tree) SDF_getSymbolWsAfterSep(ssym);
 
   elems  = PT_getTreeArgs(tree);
   newElems = PT_makeArgsEmpty();
