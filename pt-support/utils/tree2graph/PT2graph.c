@@ -14,9 +14,7 @@
 
 /*{{{  globals */
 
-static ATbool sharing_on;
 static ATbool characters_on;
-static ATbool characters_sharing_on;
 static ATbool productions_on;
 static ATbool layout_on;
 static ATbool literals_on;
@@ -89,12 +87,7 @@ static long makeNodeId(PT_Tree tree)
 {
   long key;
 
-  if (sharing_on) {
-    key = (long) tree;
-  }
-  else {
-    key = ++unique_key;
-  }
+  key = ++unique_key;
 
   return key;
 }
@@ -103,32 +96,52 @@ static long makeNodeId(PT_Tree tree)
 
 /*{{{  static Graph printNode(Graph graph, int parent, int node, char *contents) */
 
-static Graph printNode(Graph graph, int parent, int nodeNr, char *contents, 
+static Graph printNode(Graph graph, 
+                       int parentNr, 
+                       int nodeNr, 
+                       char *contents, 
 		       char *attr)
 {
-  char *escaped = escape(contents);
+  char *escaped;
+  char str[BUFSIZ];
+  Attribute nameAttr;
+  AttributeList attrList = makeAttributeListEmpty();
   Node node;
   Shape shape;
   NodeList nodes;
   Edge edge;
   EdgeList edges;
+  Attribute shapeAttr;
+  NodeId nodeId;
+  NodeId parentId;
+
+  sprintf(str, "N%d", nodeNr); 
+  nodeId = makeNodeIdDefault(str);
+
+  sprintf(str, "N%d", parentNr);
+  parentId = makeNodeIdDefault(str);
    
+  escaped = escape(contents);
+  nameAttr = makeAttributeLabel(escaped);
+  attrList = makeAttributeListMulti(nameAttr, attrList);
+  
   if (productions_on) {
     shape = makeShapeBox();
   }
   else {
     shape = makeShapeEllipse();
   }
+  shapeAttr = makeAttributeShape(shape);
+  attrList = makeAttributeListMulti(shapeAttr, attrList);
 
-  node = makeNodeUnsized(escaped, shape);
+  node = makeNodeDefault(nodeId, attrList);
 
   nodes = getGraphNodes(graph);
   nodes = makeNodeListMulti(node, nodes);
   graph = setGraphNodes(graph, nodes);
 
-  if (parent != 0) {
-    /*dot = append(dot,"\tN%d -> N%d\n",parent,node);*/
-    edge = makeEdgeUnpositioned("aap", "noot");
+  if (parentNr != 0) {
+    edge = makeEdgeDefault(parentId, nodeId, makeAttributeListEmpty());
 
     edges = getGraphEdges(graph);
     edges = makeEdgeListMulti(edge, edges);
@@ -143,65 +156,43 @@ static Graph printNode(Graph graph, int parent, int nodeNr, char *contents,
 /*}}}  */
 /*{{{  static Graph printAmbNode(Graph graph, int parent, int node, char *contents) */
 
-static Graph printAmbNode(Graph graph, int parent, int nodeNr, char *contents)
+static Graph printAmbNode(Graph graph, int parentNr, int nodeNr, char *contents)
 {
-  char *escaped = escape(contents);
+  char *escaped;
+  char str[BUFSIZ];
+  Attribute nameAttr;
+  AttributeList attrList = makeAttributeListEmpty();
   Node node;
   Shape shape;
   NodeList nodes;
   Edge edge;
-  EdgeList edges;
+  EdgeList edges; 
+  Attribute shapeAttr;
+  NodeId nodeId;
+  NodeId parentId;
+ 
+  sprintf(str, "N%d", nodeNr);
+  nodeId = makeNodeIdDefault(str);
+ 
+  sprintf(str, "N%d", parentNr);
+  parentId = makeNodeIdDefault(str);
+ 
+  escaped = escape(contents);
+  nameAttr = makeAttributeLabel(escaped);
+  attrList = makeAttributeListMulti(nameAttr, attrList);
    
-  shape = makeShapeDiamond();
-
-  node = makeNodeUnsized(escaped, shape);
+  shape = makeShapeDiamond(); 
+  shapeAttr = makeAttributeShape(shape);
+  attrList = makeAttributeListMulti(shapeAttr, attrList);
+ 
+  node = makeNodeDefault(nodeId, attrList);
 
   nodes = getGraphNodes(graph);
   nodes = makeNodeListMulti(node, nodes);
   graph = setGraphNodes(graph, nodes);
 
-  if (parent != 0) {
-    /*dot = append(dot,"\tN%d -> N%d\n",parent,node);*/
-    edge = makeEdgeUnpositioned("aap", "noot");
-
-    edges = getGraphEdges(graph);
-    edges = makeEdgeListMulti(edge, edges);
-    graph = setGraphEdges(graph, edges);
-  }
-
-  free(escaped);
-
-  return graph;
-}
-
-/*}}}  */
-/*{{{  static Graph printCharNode(Graph graph, int parent, int node, char *contents) */
-
-static Graph printCharNode(Graph graph, int parent, int nodeNr, char *contents)
-{
-  char *escaped = escape(contents);
-  Node node;
-  Shape shape;
-  NodeList nodes;
-  Edge edge;
-  EdgeList edges;
-   
-  if (productions_on) {
-    shape = makeShapeBox();
-  }
-  else {
-    shape = makeShapeEllipse();
-  }
-
-  node = makeNodeUnsized(escaped, shape);
-
-  nodes = getGraphNodes(graph);
-  nodes = makeNodeListMulti(node, nodes);
-  graph = setGraphNodes(graph, nodes);
-
-  if (parent != 0) {
-    /*dot = append(dot,"\tN%d -> N%d\n",parent,node);*/
-    edge = makeEdgeUnpositioned("aap", "noot");
+  if (parentNr != 0) {
+    edge = makeEdgeDefault(parentId, nodeId, makeAttributeListEmpty());
 
     edges = getGraphEdges(graph);
     edges = makeEdgeListMulti(edge, edges);
@@ -228,12 +219,7 @@ static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
       char ch[2] = { '\0', '\0'};
       ch[0] = PT_getTreeCharacter(tree);
 
-      if (characters_sharing_on) {
-        graph = printNode(graph,parent,key,ch,"character");
-      }
-      else {
-	graph = printCharNode(graph,parent,key,ch);
-      }
+      graph = printNode(graph,parent,key,ch,"character");
     }
 
     /*}}}  */
@@ -306,17 +292,15 @@ static Graph treeToGraph(Graph graph, PT_Tree tree, int parent)
 
 /*}}}  */
 
-/*{{{  Graph PT_printTreeToGraph(PT_Tree tree, ATbool sharing, ATbool characters,  */
+/*{{{  Graph PT_printTreeToGraph(PT_Tree tree, ATbool characters,  */
 
-Graph PT_printTreeToGraph(PT_Tree tree, ATbool sharing, ATbool characters, 
-			  ATbool characters_sharing, ATbool productions, 
+Graph PT_printTreeToGraph(PT_Tree tree, ATbool characters, 
+			  ATbool productions, 
 			  ATbool layout, ATbool literals)
 {
   Graph graph = makeGraphDefault(makeNodeListEmpty(), makeEdgeListEmpty());
 
-  sharing_on = sharing;
   characters_on = characters;
-  characters_sharing_on = characters_sharing;
   productions_on = productions;
   layout_on = layout;
   literals_on = literals;
@@ -331,40 +315,40 @@ Graph PT_printTreeToGraph(PT_Tree tree, ATbool sharing, ATbool characters,
 }
 
 /*}}}  */
-/*{{{  Graph PT_printParseTreeToGraph(PT_ParseTree parsetree, ATbool sharing,  */
+/*{{{  Graph PT_printParseTreeToGraph(PT_ParseTree parsetree,  */
 
-Graph PT_printParseTreeToGraph(PT_ParseTree parsetree, ATbool sharing, 
-			     ATbool characters, ATbool characters_sharing,
+Graph PT_printParseTreeToGraph(PT_ParseTree parsetree, 
+			     ATbool characters, 
 			     ATbool productions, ATbool layout, 
 			     ATbool literals)
 {
-  return PT_printTreeToGraph(PT_getParseTreeTop(parsetree),sharing,characters,
-			   characters_sharing, productions, layout, literals);
+  return PT_printTreeToGraph(PT_getParseTreeTop(parsetree),characters,
+			   productions, layout, literals);
 }
 
 /*}}}  */
 
-/*{{{  Graph PT_printAnyToGraph(ATerm term, ATbool sharing, ATbool characters,  */
+/*{{{  Graph PT_printAnyToGraph(ATerm term, ATbool characters,  */
 
-Graph PT_printAnyToGraph(ATerm term, ATbool sharing, ATbool characters, 
-  		         ATbool characters_sharing, ATbool productions, 
+Graph PT_printAnyToGraph(ATerm term, ATbool characters, 
+  		         ATbool productions, 
 		         ATbool layout, ATbool literals)
 {
   if (ATmatchTerm(term, PT_patternParseTreeTop, NULL, NULL)){
-    return PT_printParseTreeToGraph((PT_ParseTree) term, sharing, characters, 
-				    characters_sharing, productions, layout,
+    return PT_printParseTreeToGraph((PT_ParseTree) term, characters, 
+				    productions, layout,
 				    literals);
   }
   else if (ATgetType(term) == AT_LIST) {
     PT_Production prod = PT_makeProductionList(PT_makeSymbolLit("*dummy*"));
     PT_Tree dummy = PT_makeTreeAppl(prod, (PT_Args) term);
 
-    return PT_printTreeToGraph(dummy, sharing, characters, characters_sharing, 
+    return PT_printTreeToGraph(dummy, characters, 
 			       productions, layout, literals);
   }
 
-  return PT_printTreeToGraph((PT_Tree) term, sharing, characters, 
-			     characters_sharing, productions, layout, literals);
+  return PT_printTreeToGraph((PT_Tree) term, characters, 
+			     productions, layout, literals);
 }
 
 /*}}}  */

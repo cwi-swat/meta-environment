@@ -15,6 +15,7 @@
 
 #include <aterm1.h>
 #include <MEPT-utils.h>
+#include "PT2graph.h"
 
 #ifndef WITHOUT_TOOLBUS
 #include "tree2graph.tif.h"
@@ -27,7 +28,7 @@
 
 static char myname[] = "tree2graph";
 static char myversion[] = "1.0";
-static char myarguments[] = "chi:lmo:Vxps";
+static char myarguments[] = "bchi:lmo:ptV";
 
 
 /*}}}  */
@@ -39,11 +40,14 @@ void usage(void)
   fprintf(stderr,
           "Usage: %s [%s]\n"
           "Options:\n"
-          "\t-a              visualize ambiguity clusters\n"
+          "\t-b              save graph in binary format\n"
+          "\t-c              display individual characters\n"
           "\t-h              display help information (usage)\n"
           "\t-i filename     input from file (default stdin)\n"
+          "\t-l              display layout nodes\n"
           "\t-o filename     output to file (default stdout)\n"
-          "\t-v              verbose mode\n"
+          "\t-p              show the productions\n"
+          "\t-t              save graph in textual format\n"
           "\t-V              reveal program version (i.e. %s)\n",
           myname, myarguments, myversion);
 }
@@ -72,17 +76,16 @@ int main (int argc, char *argv[])
   int c; /* option character */
   ATerm bottomOfStack;
   ATerm tree;
-  char *dot = NULL;
+  Graph graph;
 
   char   *input_file_name  = "-";
   char   *output_file_name = "-";
 
   ATbool characters = ATfalse;
-  ATbool sharing = ATfalse;
-  ATbool characters_sharing = ATfalse;
   ATbool productions = ATfalse;
   ATbool layout = ATfalse;
   ATbool literals = ATtrue;
+  ATbool binary = ATtrue;
 
 #ifndef WITHOUT_TOOLBUS
   ATbool use_toolbus = ATfalse;
@@ -96,6 +99,7 @@ int main (int argc, char *argv[])
     int cid;
     ATBinit(argc, argv, &bottomOfStack);
     PT_initMEPTApi();
+    initGraphApi();
     cid = ATBconnect(NULL, NULL, -1, tree2graph_handler);
     ATBeventloop();
   }
@@ -104,15 +108,15 @@ int main (int argc, char *argv[])
   {
     while ((c = getopt(argc, argv, myarguments)) != EOF)
       switch (c) {
-        case 'c':  characters_sharing = ATtrue;  break;
+        case 'b':  binary = ATtrue;              break;
+        case 'c':  characters = ATtrue;          break;
         case 'h':  usage();                      exit(0);
         case 'i':  input_file_name  = optarg;    break;
         case 'l':  layout = ATtrue;              break;
         case 'm':  literals = ATfalse;           break;
         case 'o':  output_file_name = optarg;    break;
-        case 'x':  characters = ATtrue;          break;
         case 'p':  productions = ATtrue;         break;
-        case 's':  sharing = ATtrue;         break;
+        case 't':  binary = ATfalse;             break;
         case 'V':  fprintf(stderr, "%s %s\n", myname, myversion);
                                                  exit(0);
         default :  usage();                      exit(1);
@@ -120,6 +124,7 @@ int main (int argc, char *argv[])
 
     ATinit(argc, argv, &bottomOfStack);
     PT_initMEPTApi();
+    initGraphApi();
 
     tree = ATreadFromNamedFile(input_file_name);
 
@@ -128,24 +133,24 @@ int main (int argc, char *argv[])
 	      myname, input_file_name);
     }
 
-    dot = PT_printAnyToDot(tree, sharing, characters,
-			   characters_sharing, productions,
-			   layout,literals);
+    graph = PT_printAnyToGraph(tree, characters, productions,
+			       layout, literals);
 
     if (!strcmp(output_file_name,"-")) {
-      fprintf(stdout,dot);
+      if (binary) {
+        ATwriteToBinaryFile(GraphToTerm(graph), stdout);
+      } 
+      else {
+        ATwriteToTextFile(GraphToTerm(graph), stdout);
+      } 
     }
     else {
-      FILE *fp = fopen(output_file_name,"wb");
-
-      if (fp != NULL) {
-        fprintf(fp,dot);
-        fclose(fp);
-      }
+      if (binary) {
+        ATwriteToNamedBinaryFile(GraphToTerm(graph), output_file_name);
+      } 
       else {
-        ATerror("Could not open %s for writing\n", output_file_name);
-        return 1;
-      }
+        ATwriteToNamedTextFile(GraphToTerm(graph), output_file_name);
+      } 
     }
   }
 
