@@ -66,7 +66,7 @@ ATerm extract_tests(int cid, ATerm modules)
     }
   }
 
-  return ATmake("snd-value(extract-test-result(<term>))",
+  return ATmake("snd-value(extract-tests-result(<term>))",
 		ATBpack(ASF_ASFTestEquationTestListToTerm(eqsList)));
 }
 
