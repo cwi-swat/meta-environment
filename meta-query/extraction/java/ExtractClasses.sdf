@@ -3,6 +3,7 @@ module ExtractClasses
 imports Rstore
 imports JavaOperations
 imports MyPosInfo[ClassDeclaration]
+imports MyPosInfo[ClassInstanceCreationExpression]
 imports MyPosInfo[ClassType]
 imports MyPosInfo[CompilationUnit]
 imports MyPosInfo[Identifier]

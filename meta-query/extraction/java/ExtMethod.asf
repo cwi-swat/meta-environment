@@ -29,6 +29,8 @@ equations
   &Rstore2 = add-tuple(METHOD_DECL, &Tuple1, &Rstore1),
   &Tuple2 = <&MethodId, &Area>,
   &Rstore3 = add-tuple(METHOD_DECL_OCCURS, &Tuple2, &Rstore2),
-  &Rstore4 = extractMethod(&MethodBody, &Rstore3, &Area)
+  &Tuple3 = <&MethodId, get-area(&MethodDeclaration)>,
+  &Rstore4 = add-tuple(METHOD_SIZE, &Tuple3, &Rstore3),
+  &Rstore5 = extractMethod(&MethodBody, &Rstore4, &Area)
   ===>
-  extractMethod(&MethodDeclaration, &Rstore1, &Area) = &Rstore4
+  extractMethod(&MethodDeclaration, &Rstore1, &Area) = &Rstore5

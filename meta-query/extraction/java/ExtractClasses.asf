@@ -13,9 +13,11 @@ equations
   &Rstore2 = add-tuple(CLASS_DECL, &Tuple1, &Rstore1),
   &Tuple2 = <&ClassId, &Area>,
   &Rstore3 = add-tuple(CLASS_OCCURS, &Tuple2, &Rstore2),
-  &Rstore4 = extractClasses(&ClassBody, &Rstore3, &ClassId)
+  &Tuple3 = <&ClassId, get-area(&ClassDeclaration)>,
+  &Rstore4 = add-tuple(CLASS_SIZE, &Tuple3, &Rstore3),
+  &Rstore5 = extractClasses(&ClassBody, &Rstore4, &ClassId)
   ===>
-  extractClasses(&ClassDeclaration, &Rstore1, &Area) = &Rstore4
+  extractClasses(&ClassDeclaration, &Rstore1, &Area) = &Rstore5
 
 [extract-classes-1]
   &ClassInstanceCreationExpression = new &ClassType ( &Expressions ) &ClassBody,
@@ -25,9 +27,11 @@ equations
   &Rstore2 = add-tuple(CLASS_DECL, &Tuple1, &Rstore1),
   &Tuple2 = <&ClassId, &Area>,
   &Rstore3 = add-tuple(CLASS_OCCURS, &Tuple2, &Rstore2),
-  &Rstore4 = extractClasses(&ClassBody, &Rstore3, &ClassId)
+  &Tuple3 = <&ClassId, get-area(&ClassInstanceCreationExpression)>,
+  &Rstore4 = add-tuple(CLASS_SIZE, &Tuple3, &Rstore3),
+  &Rstore5 = extractClasses(&ClassBody, &Rstore4, &ClassId)
   ===>
-  extractClasses(&ClassInstanceCreationExpression, &Rstore1, &Area) = &Rstore4
+  extractClasses(&ClassInstanceCreationExpression, &Rstore1, &Area) = &Rstore5
 
 [extract-classes-2]
   &ClassInstanceCreationExpression = new &ClassType ( &Expressions ),
@@ -36,6 +40,8 @@ equations
   &Tuple1 = <&ClassId, "anonymous " || name2str(&Name)>,
   &Rstore2 = add-tuple(CLASS_DECL, &Tuple1, &Rstore1),
   &Tuple2 = <&ClassId, &Area>,
-  &Rstore3 = add-tuple(CLASS_OCCURS, &Tuple2, &Rstore2)
+  &Rstore3 = add-tuple(CLASS_OCCURS, &Tuple2, &Rstore2),
+  &Tuple3 = <&ClassId, get-area(&ClassInstanceCreationExpression)>,
+  &Rstore4 = add-tuple(CLASS_SIZE, &Tuple3, &Rstore3)
   ===>
-  extractClasses(&ClassInstanceCreationExpression, &Rstore1, &Area) = &Rstore3
+  extractClasses(&ClassInstanceCreationExpression, &Rstore1, &Area) = &Rstore4

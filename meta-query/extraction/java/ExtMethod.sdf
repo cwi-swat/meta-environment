@@ -6,6 +6,7 @@ imports MyPosInfo[ClassDeclaration]
 imports MyPosInfo[ClassType]
 imports MyPosInfo[CompilationUnit]
 imports MyPosInfo[Identifier]
+imporst MyPosInfo[MethodDeclaration]
 
 exports
   context-free syntax
