@@ -28,10 +28,10 @@ equations
               (Funcdef*1,(Namepair*,Funid2,Aint1,Aint2)),
             eqs2rules(Amodule[equations],(Namepair*,ef,1,Aint1)) =
               (Funcdef*2,Rule*,Nametable),
-            Funcdef*1 ++ Funcdef*2 = Funcdef*3
+            Funcdef*1 ++ Funcdef*2 = Funcdef*3,
+            module Mname signature Funcdef*3 rules Rule* = Module
             ==================================
-            asfix2muasf(Amodule) =
-              (module Mname signature Funcdef*3 rules Rule*,Nametable)
+            asfix2muasf(Amodule) = (Module,Nametable)
 
   [e2r-1'1] eqs2rules(no-equations,Nametable) = (,,Nametable)
 

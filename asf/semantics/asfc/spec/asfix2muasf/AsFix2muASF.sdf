@@ -24,12 +24,10 @@
 %% into explicit default rules in \muasf.
 module AsFix2muASF
 
-imports TermAsFix2muASF 
+imports TermAsFix2muASF
 
 exports
-  sorts MN-struct
-  context-free syntax
-    "(" Module "," NameTable ")" -> MN-struct
+  
   context-free syntax
     asfix2muasf(ATerm) -> MN-struct
 

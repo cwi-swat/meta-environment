@@ -18,7 +18,7 @@
 %%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 %%
 %%  TermAsFix2muASF
-module TermAsFix2muASF
+module TermAsFix2muASF 
 
 imports AsFix2Sign
 
@@ -26,7 +26,7 @@ exports
   context-free syntax
     "term-equ2rules" "(" AFun "," ATerm "," NameTable ")" -> FuncRuleTableTuple
   context-free syntax
-    make-c-list-cons({Term ","}*,{Term ","}*) -> Term
+    make-c-list-cons({Term ","}*,{Term ","}*) -> Term {prefer}
 
 hiddens
   context-free syntax
