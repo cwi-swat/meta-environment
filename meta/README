@@ -4,95 +4,135 @@ This is the README file for the ASF+SDF Meta-Environment distribution.
 
 Installation instructions:
 
-Prerequisite tools: 
-To compile this distribution you will need the following tools:
- -- gmake (GNU make, from <http://www.gnu.org/software/make/make.html>)
- -- noweb (The noweb set of literate programming utilities, from 
-      <http://www.cs.virginia.edu/~nr/noweb/>)
- -- jdk (The Java Development Kit, from 
-      <http://www.javasoft.com/products/jdk/>). Make sure you get version
-      1.1 or higher.
- -- wish (A user-interface system, part of Tcl/Tk, from 
-      <http://www.tclconsortium.org/resources/download.html>) Make sure you
-      get version 8.0 or higher.
- -- tcldot (A graph visualization library from AT&T. Part of their graphviz
-      package, from <http://www.research.att.com/sw/tools/graphviz/>)
-      Move the directory lib/Tcldot to some convenient place. This is
-      the only directory from the distribution that is used. Remember
-      the location, you'll need it later.
-      (At CWI/UvA, it will be under ~gipe/petr/lib/Tcldot)
- -- xemacs (A text editor for X-windows systems, available from 
-      <http://www.xemacs.org/>). Make sure you get version 20.4 or newer,
-      and make sure your installation includes an executable named 
-      "gnuclient". Then add the line
-        (gnuserv-start)
-      to your ~/.emacs file.
-      The Meta-Environment is untested with other versions of xemacs, but
-      may very well work. (Or may not...)
- -- lthe Boehm Garbage Collector, available from
-    <http://reality.sgi.com/employees/boehm_mti/gc.html>
-    Make as appropriate for your system; install the resulting
-    `gc.a' as libgc.a in an appropriate place, typically the
-    Meta-Environment's lib directory and install `gc.h' in an
-    appropriate include directory (e.g. the Meta-Environment's
-    include directory).
-    If you insist, you can omit Boehm GC, in which case you need to
-    disable it in sglr's Makefile.in.
+ * Prerequisite tools
 
-As well as a full set of UNIX development utilities.
+   To compile this distribution you will need the following items:
 
-The Meta-Environment distribution depends on four other distributions. 
-Using CVS, you can get these distributions as follows: (if you have accounts
-at both UvA and CWI. External distribution will be available at a later stage)
-
-- cd to the directory just above new-meta (new-meta/..)
-- issue the following commands: 
-$ cvs -d heijnst.cwi.nl:/ufs/gipe/CVS-repository checkout gel
-$ cvs -d heijnst.cwi.nl:/ufs/gipe/CVS-repository checkout toolbus
-$ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout aterm-lib
-$ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout aterm
-(and, if you hadn't done so already)
-$ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout new-meta
-
-Now everything needs to be configured and compiled.
-
-Here is the basic set-up: These commands are the minimal config options for 
-the Meta-Environment to compile: (and remember, order is important here)
-This will install everything in the directory new-meta/../{bin,lib,include}.
-Make sure that your PATH points to the above new-meta/../bin directory, for 
-instance by typing:
-$ setenv PATH /path/to/new-meta/../bin:${PATH}
-(if you have a csh)
-Then proceed as follows:
-$ cd gel
-$ ./configure
-$ gmake install
-$ cd ..
-$ cd toolbus
-$ ./configure --prefix=.. --with-java
-$ gmake install
-$ cd ..
-$ cd aterm-lib
-$ ./configure
-$ gmake install
-$ cd ..
-$ cd aterm
-$ autoconf
-$ ./configure
-$ gmake install
-$ cd ..
-$ cd new-meta
-$ ./configure --with-tcldot=/path/to/directory/Tcldot (see above)
-$ gmake install
-$ cd ..
+    -- gmake (GNU make, from <http://www.gnu.org/software/make/make.html>)
+    -- noweb (The noweb set of literate programming utilities, from 
+         <http://www.cs.virginia.edu/~nr/noweb/>)
+    -- jdk (The Java Development Kit, from 
+         <http://www.javasoft.com/products/jdk/>). Make sure you get version
+         1.1 or higher.
+    -- wish (A user-interface system, part of Tcl/Tk, from 
+         <http://www.tclconsortium.org/resources/download.html>) Make sure you
+         get version 8.0 or higher.
+    -- tcldot (A graph visualization library from AT&T. Part of their graphviz
+         package, from <http://www.research.att.com/sw/tools/graphviz/>)
+         Move the directory lib/Tcldot to some convenient place. This is
+         the only directory from the distribution that is used. Remember
+         the location, you'll need it later.
+         (At CWI/UvA, it will be under ~gipe/petr/lib/Tcldot)
+    -- xemacs (A text editor for X-windows systems, available from 
+         <http://www.xemacs.org/>). Make sure you get version 20.4 or newer,
+         and make sure your installation includes an executable named 
+         "gnuclient". Then add the line
+           (gnuserv-start)
+         to your ~/.emacs file.
+         The Meta-Environment is untested with other versions of xemacs, but
+         may very well work. (Or may not...)
+    -- a full set of UNIX development utilities.
 
 
-After compilation:
+  * Optional items
 
-If you now add the path to the directory new-meta/../bin to your PATH, you 
-are al set up. Furthermore, you should make sure that your java installation 
-correctly setup, and that your CLASSPATH variable points to the Java classes 
-that come with your JDK.
+    The following items provide (optional) extra functionality, or
+    enable alternative builds.
 
-The Meta-Environment development team wishes you happy environmentaling, 
+    -- for the parser (sglr): the Boehm Garbage Collector, available
+       from <http://reality.sgi.com/employees/boehm_mti/gc.html>.
+       Make as appropriate for your system; install the resulting
+       `gc.a' as libgc.a in an appropriate place, typically the
+       Meta-Environment's lib directory and install `gc.h' in an
+       appropriate include directory (e.g. the Meta-Environment's
+       include directory).
+       With Boehm GC installed, sglr's `-gc' compilation targets
+       can be used (read sglr/src/Makefile.in if interested).
+
+
+  * Dependencies
+
+    The Meta-Environment distribution depends on four other
+    distributions.  Using CVS, you can get these distributions as
+    follows (assuming you have accounts at both UvA and CWI.  External
+    distribution will be available at a later stage)
+
+    -- cd to the directory just above new-meta (new-meta/..)
+    -- issue the following commands: 
+         $ cvs -d heijnst.cwi.nl:/ufs/gipe/CVS-repository checkout gel
+         $ cvs -d heijnst.cwi.nl:/ufs/gipe/CVS-repository checkout toolbus
+         $ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout aterm-lib
+         $ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout aterm
+       (and, if you hadn't done so already)
+         $ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout new-meta
+
+    Now everything is set up for configuration and compilation.
+
+
+  * Configuring and compiling: final installation
+
+    Here is the basic set-up.  These commands are the minimal config
+    options for the Meta-Environment to compile.  Note that the order
+    of execution is significant.  This will install everything in the
+    directory new-meta/../{bin,lib,include}.
+
+    Make sure that your PATH points to the above new-meta/../bin
+    directory, for instance by typing:
+
+      $ PATH=/path/to/new-meta/../bin:${PATH}; export PATH
+    for the sh family of shells, or alternatively (for csh-ish shells):
+      % setenv PATH /path/to/new-meta/../bin:${PATH}
+      (in shells of the csh-family)
+
+    Then proceed as follows:
+
+      $ cd [the_directory_where_you've_put_the_aforementioned_distributions]
+      $ cd gel
+      $ ./configure
+      $ gmake install
+      $ cd ..
+      $ cd toolbus
+      $ ./configure --prefix=.. --with-java
+      $ gmake install
+      $ cd ..
+      $ cd aterm-lib
+      $ ./configure
+      $ gmake install
+      $ cd ..
+      $ cd aterm
+      $ autoconf
+      $ ./configure
+      $ gmake install
+      $ cd ..
+      $ cd new-meta
+      $ ./configure --with-tcldot=/path/to/directory/Tcldot (see above)
+      $ gmake install
+      $ cd ..
+
+    At this point, everything should be configured, compiled, and
+    installed.
+
+    If you now add the path to the directory new-meta/../bin to your PATH
+    (see above), you are al set up. Furthermore, you should make sure
+    that your java installation's setup is correct, and that your CLASSPATH
+    variable points to the Java classes that came with your JDK.
+
+
+The Meta-Environment development team wishes you happy environmentaling; 
 and may all your grammars be context free.
+
+
+
+
+
+                                   ``Per me si va nella citt`a dolente;
+                                     per me si van nell'eterno dolore;
+                                     per me si va tra la perduta gente.
+                                     Giustizia mosse il mio alto Fattore;
+                                     fecemi la divina Potestate,
+                                     la somma Sapienza e il primo Amore.
+                                     Dinanzi a me non fur cose create,
+                                     se non eterne, ed io eterno duro:
+                                     lasciate ogni speranza, voi ch'entrate.''
+
+                                               -- Dante Alighieri, `Inferno'
