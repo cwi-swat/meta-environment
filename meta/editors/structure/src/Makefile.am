@@ -1,7 +1,5 @@
 # $Id$
 
-CFLAGS += -Werror
-
 include $(top_srcdir)/make_rules
 
 EXTRA_DIST		= se.idef
