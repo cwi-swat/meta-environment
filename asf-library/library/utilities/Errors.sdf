@@ -1,0 +1,38 @@
+module utilities/Errors
+
+imports basic/Strings
+
+exports
+
+sorts Error Area Location ErrorProducer ErrorDescription 
+
+context-free syntax
+
+error(id:String, 
+      producer:ErrorProducer,  
+      severity:ErrorSeverity,
+      description:ErrorDescription,
+      subjects:ErrorSubjects) -> Error {cons("full")}
+
+"info"       -> ErrorDescription {cons("info")}
+"warning"    -> ErrorDescription {cons("warning")}
+"non-fatal"  -> ErrorDescription {cons("non-fatal")}
+"fatal"      -> ErrorDescription {cons("fatal")}
+
+producer(id:String,type:String)     -> ErrorProducer {cons("available")}
+"unavailable"                       -> ErrorProducer {cons("unavailable")}
+
+description(format:String) -> ErrorDescription {cons("available")}
+"unavailable"              -> ErrorDescription {cons("unavailable")}
+
+"[" ErrorSubjects "]" -> ErrorSubjects {cons("list")}
+
+subject(id:String, location:Location) -> ErrorSubject
+
+location(file:String, area:Area) -> Location {cons("available")}
+"unavailable"                    -> Location {cons("unavailable")}
+
+area(start-line:NatCon, start-column:NatCon,
+     end-line:NatCon, end-column:NatCon,
+     start-offset:NatCon, end-offset:NatCon) -> Area {cons("full")}
+
