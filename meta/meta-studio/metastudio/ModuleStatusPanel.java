@@ -43,12 +43,12 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
             public void actionPerformed(ActionEvent e) {
                 String selected = (String) importsBox.getSelectedItem();
                 if (selected != null) {
-                  moduleManager.selectModule(selected);
+                    moduleManager.selectModule(selected);
                 }
             }
         });
         add(importsBox);
-        
+
         importedByBox = new JComboBox();
         importedByBox.setToolTipText("imported by");
         importedByBox.setModel(new ComboBoxModel(importedBy));
@@ -56,7 +56,7 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
             public void actionPerformed(ActionEvent e) {
                 String selected = (String) importedByBox.getSelectedItem();
                 if (selected != null) {
-                  moduleManager.selectModule(selected);
+                    moduleManager.selectModule(selected);
                 }
             }
         });
@@ -64,7 +64,7 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
 
         moduleManager.addModuleSelectionListener(this);
     }
-    
+
     public void moduleSelected(Module module) {
         if (module == null) {
             clearInfo();
@@ -77,14 +77,9 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
         border.setTitle(NO_MODULE_NAME);
 
         imports.clear();
-        importsBox.removeAll();
-
         importedBy.clear();
-        importedByBox.removeAll();
 
         repaint();
-        importsBox.repaint();
-        importedByBox.repaint();
     }
 
     private void updateInfo(Module module) {
@@ -105,11 +100,5 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
         importedByBox.setSelectedItem(null);
 
         repaint();
-        importsBox.repaint();
-        importedByBox.repaint();
-    }
-
-    public void setModuleInfo(String module, List entries) {
-        // nothing to do ?
     }
 }

@@ -28,7 +28,9 @@ public class ImportGraphPanel extends ZoomableGraphPanel implements ModuleSelect
                     Module module;
                     if (node == null) {
                         module = null;
+                        System.err.println("Graph, selecting null");                        
                     } else {
+                        System.err.println("Graph, selecting:" + node.getLabel());                        
                         module = moduleManager.getModule(node.getLabel());
                     }
                     moduleManager.selectModule(module);
