@@ -1,10 +1,11 @@
 #! /bin/sh
 
 set -e
-prefix=/home/paulk/research/relation-calculus/tmp
-TABLE=${prefix}/Rstore.trm.tbl
-RSTORE=${prefix}/Rstore
-RESULT=result.rstore
+datadir=/home/paulk/research/relation-calculus/tmp/share/relation-calculus
+bindir=/home/paulk/research/relation-calculus/tmp/bin
+TABLE=${datadir}/Rstore.trm.tbl
+RSTORE=${bindir}/Rstore
+RESULT=result.rstore.pt
 
 echo -n "creating empty ${RESULT} .."
 echo "rstore()" | sglr -p ${TABLE} -o ${RESULT}
