@@ -124,9 +124,14 @@ in
 	snd-msg(file-extension-hook(Type)) .
 	rec-msg(file-extension-hook-result(Extension?)) .
         LocateFile(Module, Extension, Path?) .
-        Open-Module(Path, Module, Type, Status?, RealModule?, Imports?).
-        Modules := join(Imports, Modules).
-        RealModules := join(RealModules, RealModule)
+	if not-equal(Path, "") then
+          Open-Module(Path, Module, Type, Status?, RealModule?, Imports?).
+          Modules := join(Imports, Modules).
+          RealModules := join(RealModules, RealModule)
+        else 
+          printf("Opening module %s failed: file not found!\n", Module) .
+          Error("Opening module %s failed: file not found!", [Module])
+        fi
       )
     fi *
     if equal(Modules, []) then
