@@ -116,6 +116,20 @@ AC_ARG_WITH(graphviz,
    GRAPHVIZ=${withval})
 AC_SUBST(GRAPHVIZ)
 
+dnl Handle --with-layout 
+AC_ARG_WITH(layout,
+   [ --with-layout       evaluator keeps layout while rewriting],
+   LAYOUTDEF=-DKEEP_LAYOUT
+)
+AC_SUBST(LAYOUTDEF)
+
+dnl Handle --with-traversals
+AC_ARG_WITH(traversals,
+   [ --with-traversals   evaluator implements traveral functions],
+   TRAVERSALSDEF=-DTRAVERSALS
+)
+AC_SUBST(TRAVERSALSDEF)
+
 dnl Of course, the latest version of wish is not always called "wish". :-(
 dnl If we can't find something called wish8.1 or wish8.0, we'll assume
 dnl that "wish" is at version 8 or higher (as it is in a _normal_ setup)
