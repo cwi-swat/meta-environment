@@ -1,0 +1,101 @@
+#! @SHELL@
+# $Id$
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=${exec_prefix}/bin
+libdir=${exec_prefix}/lib
+
+PATH="$PATH:$bindir"
+
+TMP=/tmp/`basename $0`.$$	# Junk files
+trap "rm -f $TMP*" 0 1 2 15	# Clean up afterwards
+
+PGEN="${bindir}/pgen -silent"
+A2TOA1="${bindir}/a2toa1 -silent"
+ASOURCE="${bindir}/asource -silent"
+ADDFUNC="${bindir}/add-norm-func -silent"
+EXTENSIONS=".sdf .sdf2"
+VERBOSE=0;
+
+Notify () {
+        if [ $VERBOSE -gt 0 ]
+        then
+                echo $*                                   >&2
+        fi
+}
+
+
+while [ $# -gt 0 ]	# Handle command line options
+do
+	case $1
+	in
+		-v*)
+			VERBOSE=1 ;;
+		-*)
+			echo Unknown option ignored: $1 ;;
+		*)
+			Files="$Files $1" ;;
+	esac
+	shift
+done
+
+for f in $Files
+do
+	# Convert to AsFix1, if necessary
+	dir=`dirname $f`
+	case $f in
+	*.asfix2)
+			file=`basename $f .asfix2`
+			Notify "Converting Asfix2 file $f to AsFix1 file $dir/$file.asfix1"
+			out=$dir/$file.asfix1
+			err=$dir/$file.a2toa1.err
+			if $A2TOA1 < $f > $out 2> $err;
+			then
+				rm -f $err
+			else
+				if [ -f $out -a ! -s $out ]; then rm -f $out; fi
+				echo "a2toa1: error (see $err)"
+				exit 1
+			fi
+			f=$out
+			;;
+	*.asfix1)
+			file=`basename $f .asfix1`
+			;;
+	*.asfix)
+			file=`basename $f .asfix`
+			;;
+	*)
+			echo "$f: input must be AsFix1 or AsFix2" 1>&2
+			continue
+			;;
+	esac
+	for ext in $EXTENSIONS
+	do
+		file=`basename $file $ext`
+	done
+	Notify "Running add-norm-func|pgen on $f..."
+	out=$TMP.asrc
+	err=$dir/$file.norm.err
+	if $ADDFUNC < $f | $PGEN > $out 2> $err
+	then
+		rm -f $err
+	else
+		if [ -f $out -a ! -s $out ]; then rm -f $out; fi
+		echo "pgen: error (see $err)"
+		exit 2
+	fi
+	in=$out
+	Notify "Running asource..."
+	out=$dir/$file.norm
+	err=$dir/$file.asource.err
+	if $ASOURCE $TERMTABLE < $in 2> $err > $out  2>> $err
+	then
+		rm -f $err
+	else
+		if [ -f $out -a ! -s $out ]; then rm -f $out; fi
+		echo "asource: error (see $err)"
+		exit 3
+	fi
+done

@@ -54,7 +54,8 @@ CSRC            = meta-paths.c meta-utils.c imports.c module-utils.c
 CHDR            = meta-utils.h module-utils.h libutil.h
 #All files in BINFILES are installed in $(bindir)
 # Ordering is important here: the toolbus dir. should come first
-BINFILES	= gen-table parse-sdf2 ps-dot sdf2table idef2tif meta-paths imports
+BINFILES	= gen-table parse-sdf2 ps-dot sdf2table idef2tif \
+                  meta-paths normalize-pt imports
 LIBFILES	= Sdf2.baf
 INCLUDEFILES	=
 

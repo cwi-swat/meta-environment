@@ -142,10 +142,10 @@ AC_OUTPUT(
 	stred/nl/cwi/gipe/stred/Makefile \
 	toolbus/Makefile toolbus/edit-module.tb \
 	toolbus/open-modules.tb toolbus/revert-module.tb \
-	utils/Makefile utils/gen-table utils/idef2tif \
+	utils/Makefile utils/gen-table utils/idef2tif utils/normalize-sdf \
 	utils/parse-sdf2 utils/ps-dot utils/sdf2table \
   , chmod +x meta install-prog-sh install-data-sh; \
     chmod +x graph-browser/graph-browser editor/editor; \
-    chmod +x utils/gen-table utils/idef2tif \
+    chmod +x utils/gen-table utils/idef2tif utils/normalize-sdf \
              utils/parse-sdf2 utils/ps-dot utils/sdf2table 
 )
