@@ -1041,7 +1041,7 @@ ATwarning("contentDescription = %s\n", contentDescription);
   }
   else {
     sprintf(errorDescription, "Parse error");
-    sprintf(contentDescription, "character %c unexpected", current_token);
+    sprintf(contentDescription, "character '%c' unexpected", current_token);
   }
 
   if (excess_ambs && ambtrak) {
