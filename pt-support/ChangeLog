@@ -2,6 +2,10 @@
 2002/10/03 (vandenbr@loria.fr)
  * Removed a very subtle off by one bug in combination with '\\'.
 
+2002/10/03 ({moreau,vinju}@loria.fr)
+ * Added PT_renameInTree function that replaces one symbol by another
+   in a parse tree.
+
 2002/09/26 (vinju@loria.fr)
  * Commented out an assert in yieldPT (fixme). The assert fails when really
    big files (like Sdf2.sdf2) are unparsed.
