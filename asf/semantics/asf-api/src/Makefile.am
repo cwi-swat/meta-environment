@@ -9,7 +9,7 @@ ASFSDFApigen_SOURCES = \
 	toolASFSDFApigen.tif.c
 
 ASFSDFApigen_LDADD =\
-	-L${ASC_SUPPORT}/lib -ltb-asc-support-me \
+	-L${ASC_SUPPORT}/lib -lasc-support-me \
 	-L${SGLR}/lib -lsglr \
 	-L${ASF_SUPPORT}/lib -lASFME \
 	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
