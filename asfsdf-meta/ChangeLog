@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Mon May  3 16:12:49 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * rewrite "Upgrade Sdf" to use "execute-action" (iso activate-given-tree
+   plus writing to a fixed, named file "intermediate.txt")
+
 Tue Apr 20 16:29:59 CEST 2004 <{jong,kooiker}@cwi.nl>
  * fix split-file-name arguments
 

@@ -68,7 +68,7 @@ in
       snd-note(ui-status(endstat(Id))) 
     +  
       rec-msg(specification-incomplete(Summary?)) .
-      ShowSummaryInGUI(Summary) .
+      snd-msg(ui-show-feedback-summary(Summary)) .
       snd-note(ui-status(endstat(Id))) .
       snd-note(ui-status(errorf("Equations incomplete for %s", [ModuleName])))
     )
