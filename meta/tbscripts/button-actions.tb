@@ -115,6 +115,7 @@ let
   ActionEvent: term,
   Available: bool,
   ArgList: list,
+  AsfExt: str,
   Cursor: term,
   Direction: term,
   Directory: str,
@@ -152,6 +153,8 @@ let
   Query: str,
   Recursive: bool,
   RTree: term,
+  SdfExt: str,
+  SdfPath: str,
   Sid: term,
   SList: list,
   STree: term,
@@ -695,13 +698,15 @@ in
     fi
   +
     rec-msg(edit-equations, Stack?, EditorId?)
-    . StackIsEmpty(Stack, Empty?)
+    . StackPopString(Stack, Stack?, Modulename?)
+    . LocateFile(Modulename, sdf, SdfPath?)
     .
-    if equal(Empty, true) then
-      ReturnSuccess(EditorId, Stack)
+    if equal(Path, "") then
+      ReturnAbort(EditorId, Stack)
     else
-      StackPopString(Stack, Stack?, Modulename?)
-      . LocateFile(Modulename, asf, Path?)
+      snd-msg(file-extension-hook(asf))
+      . rec-msg(file-extension-hook-result(AsfExt?))
+      . ReplaceExtension(SdfPath, AsfExt, Path?)
       . snd-msg(ts-put-str-value("path-modulename", Path, Modulename))
       . create(EditEquations(Path), Pid?)
       . rec-msg(equations-editor-started(Path, Sid?))

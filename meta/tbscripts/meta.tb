@@ -29,7 +29,6 @@
 #include "editing.tb"
 #include "restore-term-brackets.tb"
 #include "open-modules.tb"
-#include "file-creator.tb"
 #include "module-db.tb"
 #include "module-utils.tb"
 #include "print-module.tb"
@@ -93,7 +92,6 @@ in
   . create(DumpEquations, Pid?)
   . create(DumpParseTable, Pid?)
   . create(DumpSdfDefinition, Pid?)
-  . create(File-creator, Pid?)
   . create(BuildParseTable, Pid?)
   . create(Meta-Interface, Pid?)
   . create(ModuleDB, Pid?)

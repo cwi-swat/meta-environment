@@ -4,6 +4,18 @@ process BuildPath(Directory: str, Filename: str, Extension: str, Path: str?) is
   snd-msg(io-get-filename(Directory, Filename, Extension))
   . rec-msg(io-filename(Path?))
 
+process ReplaceExtension(SrcPath: str, Extension: str, DstPath: str?) is
+let
+  Directory: str,
+  Filename: str
+in
+  snd-msg(io-get-path-directory(SrcPath))
+  . rec-msg(io-directory(SrcPath, Directory?))
+  . snd-msg(io-get-path-filename(SrcPath))
+  . rec-msg(io-filename(SrcPath, Filename?))
+  . BuildPath(Directory, Filename, Extension, DstPath?)
+endlet
+
 process DrawImportGraph is
 let
   ImportRelations: list

@@ -202,7 +202,7 @@ in
     snd-msg(add-posinfo-to-depth(Filename,EqsTree, POSINFO_DEPTH)) .
     rec-msg(tree-with-pos-info(EqsTree?)) .
     snd-msg(ts-put-term-value("asf-tree", Name, EqsTree)) .
-    EqsTree := no-tree .
+    EqsTree := help-the-garbage-collector .
     snd-msg(eqs-updated)
   +
     rec-msg(update-eqs-text-in-db(Name?, EqsText?))
@@ -311,7 +311,7 @@ in
     (
       rec-msg(ts-value(Syntax?)) .
       snd-msg(syntax(Syntax)) .
-      Syntax := no-tree
+      Syntax := help-the-garbage-collector
     +
       rec-msg(ts-no-value) .
       snd-msg(unavailable)
@@ -322,7 +322,7 @@ in
     (
       rec-msg(ts-value(EqsTree?)) .
       snd-msg(equations(EqsTree)) .
-      EqsTree := no-tree
+      EqsTree := help-the-garbage-collector
     +
       rec-msg(ts-no-value) .
       snd-msg(no-equations)
@@ -478,10 +478,10 @@ in
       MDB-ContainedIn(Name, Imports, Status?) .
       if equal(Status, success) then
         snd-msg(sm-remove-import-from-module(Syntax, Name)) .
-        Syntax := no-tree .
+        Syntax := help-the-garbage-collector .
         rec-msg(sm-import-removed-from-module(Syntax?)) .
         MDB-StoreModuleTree(Module, Syntax) .
-        Syntax := no-tree
+        Syntax := help-the-garbage-collector
       else
         tau
       fi
@@ -510,14 +510,14 @@ in
   snd-msg(sm-rename-modulename-in-module(Syntax, NewName)) .
   rec-msg(sm-modulename-renamed-in-module(Syntax?)) .
   MDB-StoreModuleTree(NewName, Syntax) .
-  Syntax := no-tree .
+  Syntax := help-the-garbage-collector .
   snd-msg(ts-put-str-value("module-path", NewName, NewPath)) .
   MDB-RegisterPath(NewPath, NewName) .
   snd-msg(ts-get-term-value("asf-tree", OldName)) .
   (
     rec-msg(ts-value(Tree?)) .
     snd-msg(ts-put-term-value("asf-tree", NewName, Tree)) .
-    Tree := no-tree
+    Tree := help-the-garbage-collector
   +
     rec-msg(ts-no-value)
   ) .
@@ -538,10 +538,9 @@ in
   snd-msg(ts-get-term-value("sdf-tree", ModuleId)) .
   rec-msg(ts-value(Syntax?)) .
   snd-msg(sm-add-import-to-module(Syntax, Import)) .
-  Syntax := no-tree .
+  Syntax := help-the-garbage-collector .
   rec-msg(sm-import-added-to-module(Syntax?)) .
-  MDB-StoreModuleTree(ModuleId, Syntax) .
-  Syntax := no-tree
+  MDB-StoreModuleTree(ModuleId, Syntax)
 endlet
 
 process MDB-ContainedIn(Name : str, Modules : list, Status : term?) is

@@ -11,7 +11,6 @@ TBSCRIPTS = \
   dump-sdf-definition.tb \
   editing.tb \
   feedback.tb \
-  file-creator.tb \
   graph-utils.tb \
   get-parsetable.tb \
   meta.tb \
