@@ -38,10 +38,7 @@ public class ModuleStatusPanel extends JPanel implements ModuleSelectionListener
 	private JList parents;
 	private JList imports;
 
-	private ModuleTreeModel moduleManager;
-
 	public ModuleStatusPanel(final ModuleTreeModel moduleManager) {
-		this.moduleManager = moduleManager;
 		moduleManager.addModuleSelectionListener(this);
 
 		border = new TitledBorder(new LineBorder(Color.black), "No module");
@@ -98,8 +95,8 @@ public class ModuleStatusPanel extends JPanel implements ModuleSelectionListener
 
 		if (module == null) {
 			border.setTitle("No module");
-			imports.setModel(new ListListModel(new LinkedList()));
-			parents.setModel(new ListListModel(new LinkedList()));
+			imports.setModel(new ListModel(new LinkedList()));
+			parents.setModel(new ListModel(new LinkedList()));
 		} else {
 			border.setTitle(module.getName());
 

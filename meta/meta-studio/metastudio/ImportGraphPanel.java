@@ -7,11 +7,8 @@ import java.awt.event.MouseListener;
 import metastudio.graph.Node;
 
 public class ImportGraphPanel extends GraphPanel implements ModuleSelectionListener {
-  private ModuleTreeModel moduleManager;
-
   public ImportGraphPanel(final ModuleTreeModel moduleManager) {
     super("import");
-    this.moduleManager = moduleManager;
     moduleManager.addModuleSelectionListener(this);
 
     MouseListener listener = new MouseAdapter() {

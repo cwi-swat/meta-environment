@@ -3,7 +3,6 @@ package metastudio;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import javax.swing.ListModel;
 
 public class Module implements Comparable {
 	public static final int STATE_NORMAL = 0;
@@ -14,8 +13,8 @@ public class Module implements Comparable {
 	private List _parent;
 
 	private List _child;
-	private ListListModel childListModel;
-	private ListListModel parentListModel;
+	private ListModel childListModel;
+	private ListModel parentListModel;
 
 	private int State = STATE_NORMAL;
 
@@ -23,8 +22,8 @@ public class Module implements Comparable {
 		setName(name);
 		initParentList();
 
-		childListModel = new ListListModel(_child);
-		parentListModel = new ListListModel(_parent);
+		childListModel = new ListModel(_child);
+		parentListModel = new ListModel(_parent);
 		initChildList();
 	}
 

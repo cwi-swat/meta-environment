@@ -1,6 +1,5 @@
 package metastudio.graph;
 
-import aterm.*;
 import aterm.pure.PureFactory;
 public class MetaGraphFactory
 {

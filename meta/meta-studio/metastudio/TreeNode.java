@@ -28,8 +28,6 @@ public class TreeNode {
 	public TreeNode addChild(String p, StringTokenizer tokens) {
 		String childName = tokens.nextToken();
 		TreeNode childNode = null;
-		int i = 0;
-
 		if (tokens.hasMoreTokens()) {
 		    int childIndex = getNodeChild(childName);
 

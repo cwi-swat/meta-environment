@@ -1,6 +1,5 @@
 package metastudio.graph;
 
-import aterm.*;
 
 abstract public class NodeListImpl extends MetaGraphConstructor
 {

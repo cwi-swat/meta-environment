@@ -102,21 +102,6 @@ abstract public class Node extends NodeImpl {
         return null;
     }
 
-    private Node setInfoAttribute(Attribute_Info infoAttr) {
-        AttributeList result = factory.makeAttributeList_Empty();
-        AttributeList attrs = getAttributes();
-        while (!attrs.isEmpty()) {
-            Attribute attr = attrs.getHead();
-            if (!attr.isInfo()) {
-                result = factory.makeAttributeList_Multi(attr, result);
-            }
-            attrs = attrs.getTail();
-        }
-
-        result = factory.makeAttributeList_Multi(infoAttr, result);
-        return setAttributes(result);
-    }
-
     public int getX() {
         Attribute_Location location = getLocationAttribute();
         return location.getX();

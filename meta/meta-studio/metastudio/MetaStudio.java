@@ -7,11 +7,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Frame;
-import java.awt.LayoutManager;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -78,6 +77,8 @@ import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
 import aterm.pure.PureFactory;
+import errorapi.Factory;
+import errorapi.types.Summary;
 
 public class MetaStudio
     extends JFrame
@@ -124,13 +125,13 @@ public class MetaStudio
     private Graph graph;
     private ImportGraphPanel importGraphPanel;
     private ParseTreePanel parseTreePanel;
+    private FeedbackList feedbackList;
 
     private Map graphPanels;
 
     private ModuleStatusPanel moduleStatus;
 
     private JCheckBox tideBox;
-    private JComboBox scaleBox;
 
     private Frame topFrame;
 
@@ -177,8 +178,6 @@ public class MetaStudio
     }
 
     public MetaStudio(String[] args) throws IOException {
-        Color color;
-
         topFrame = this;
         graphPanels = new HashMap();
 
@@ -238,7 +237,7 @@ public class MetaStudio
     }
 
     private MessageList createMessageWindow() throws IOException {
-        return new MessageList(bridge, factory);
+        return new MessageList(factory, bridge);
     }
 
     private void createParsetreePanel() {
@@ -321,11 +320,13 @@ public class MetaStudio
     private JTabbedPane createMessageTabs() {
         JTabbedPane messageTabs = new JTabbedPane();
         MessageList messageList;
+        feedbackList = new FeedbackList(factory, bridge);
         
         try {
             messageList = createMessageWindow();
             messageTabs.insertTab("history",null,createHistoryPanel(),"Execution history and error messages",0);
             messageTabs.insertTab("messages",null,messageList,"Message list",1);
+            messageTabs.insertTab("errors",null,feedbackList,"Clickable error messages",2);
         } catch (IOException e) {
             e.printStackTrace();
             postQuitEvent();
@@ -571,14 +572,6 @@ public class MetaStudio
         StyleConstants.setForeground(style, foreground);
 
         return style;
-    }
-
-    private void resetGraph() {
-        NodeList nodes = metaGraphFactory.makeNodeList_Empty();
-        EdgeList edges = metaGraphFactory.makeEdgeList_Empty();
-        AttributeList attrs = metaGraphFactory.makeAttributeList_Empty();
-
-        graph = metaGraphFactory.makeGraph_Default(nodes, edges, attrs);
     }
 
     public void run() {
@@ -848,8 +841,6 @@ public class MetaStudio
 
     public void updateList(String moduleName, String actions) {
         ATerm data = factory.parse(actions);
-
-        messageWindow.setVisible(true);
 
         if (data instanceof ATermAppl) {
             ATermAppl applData = (ATermAppl) data;
@@ -1245,7 +1236,6 @@ public class MetaStudio
     }
 
     public ATerm showQuestionDialog(String question) {
-        String option;
         int choice = JOptionPane.showConfirmDialog(topFrame, question);
 
         if (choice == JOptionPane.YES_OPTION) {
@@ -1281,5 +1271,10 @@ public class MetaStudio
         }
 
         return null;
+    }
+
+    public void displayFeedbackSummary(ATerm t0) {
+        Summary summary = new Factory(factory).SummaryFromTerm(t0);
+        feedbackList.setFeedbackList(summary);
     }
 }

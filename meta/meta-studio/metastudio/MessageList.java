@@ -1,12 +1,8 @@
 package metastudio;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 
-import javax.swing.BorderFactory;
-import javax.swing.JFrame;
 import javax.swing.JList;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -17,16 +13,13 @@ import aterm.ATermList;
 import aterm.ParseError;
 import aterm.pure.PureFactory;
 
-public class MessageList extends JPanel implements ListSelectionListener {
+public class MessageList extends JPanelTool implements ListSelectionListener {
 	private JList list;
 	private String moduleName;
-	private UserInterfaceBridge bridge;
-	private PureFactory factory;
 	private ATermList data;
 
-	public MessageList(UserInterfaceBridge bridge, PureFactory factory) {
-		this.bridge = bridge;
-		this.factory = factory;
+	public MessageList(PureFactory factory, UserInterfaceBridge bridge) {
+        super(factory, bridge);
         
 		list = new JList();
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -84,8 +77,8 @@ public class MessageList extends JPanel implements ListSelectionListener {
 				if (matching == null) {
 					System.err.println("This is not a valid listitem: " + sel);
 				} else {
-					bridge.postEvent(
-						factory.make(
+					postEvent(
+						getFactory().make(
 							"element-selected(<str>,<term>)",
 							moduleName,
 							matching.get(1)));

@@ -28,7 +28,9 @@ let
   Type : term,
   Arguments : list,
   ModuleList : term,
-  EditorId : term
+  EditorId : term,
+  Feedback : term,
+  FeedbackSummary : term
 in
   subscribe(display-import-graph(<list>)) .
   subscribe(ui-status(<term>)) .
@@ -159,7 +161,12 @@ in
     +
       rec-msg(update-list-view(ModuleName?, ButtonNames?)) .
       snd-do(UI, update-list(ModuleName, ButtonNames))
-    
+    +
+      rec-msg(display-feedback-summary(FeedbackSummary?)) .
+      snd-do(UI, display-feedback-summary(FeedbackSummary))
+    +
+      rec-event(UI, feedback-selected(Feedback?)) .
+      printf("meta-studio.idef: %s selected\n", Feedback)
     ) * 
     (
       rec-event(UI, quit)

@@ -89,20 +89,6 @@ extends GraphImpl
 	  return newNodes;
   }
 
-  private EdgeList deleteNodeFromEdges(String id, EdgeList edges) {
-	  EdgeList newEdges = factory.makeEdgeList_Empty();
-	  while (!edges.isEmpty()) {
-		  Edge edge = edges.getHead();
-		  if (!edge.getFrom().getId().equals(id) && !edge.getTo().getId().equals(id)) {
-			  newEdges = factory.makeEdgeList_Multi(edge, newEdges);
-		  }
-
-		  edges = edges.getTail();
-	  }
-
-	  return newEdges;
-  }
-
   public Graph sizeNodes(NodeSizer nodeSizer) {
           Graph newGraph;
 	  NodeList nodes = getNodes();

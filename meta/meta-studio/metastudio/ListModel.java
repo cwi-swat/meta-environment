@@ -3,10 +3,10 @@ package metastudio;
 import javax.swing.AbstractListModel;
 import java.util.List;
 
-public class ListListModel extends AbstractListModel {
+public class ListModel extends AbstractListModel {
 	private List list;
 
-	public ListListModel(List list) {
+	public ListModel(List list) {
 		this.list = list;
 	}
 

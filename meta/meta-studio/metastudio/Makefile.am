@@ -28,9 +28,10 @@ java_JAVA = \
 	${ACSOURCES} \
 	${GENSOURCES} \
 	ExtensionFilter.java \
+	JPanelTool.java\
 	GraphPanel.java \
 	ImportGraphPanel.java \
-	ListListModel.java \
+	ListModel.java \
 	MetaStudio.java \
 	Module.java \
 	ModuleSelectionListener.java \
@@ -42,8 +43,11 @@ java_JAVA = \
 	UserInterfaceTif.java \
 	UserInterfaceTool.java \
 	MessageList.java \
+	FeedbackList.java\
+	FeedbackListCellRenderer.java\
 	ButtonAction.java \
 	ModuleTreeModel.java \
 	TreeModelSupport.java \
 	TreeNode.java \
-	ModuleSelectionModel.java
+	ModuleSelectionModel.java\
+	JPanelTool.java

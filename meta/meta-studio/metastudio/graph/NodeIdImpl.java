@@ -1,7 +1,5 @@
 package metastudio.graph;
 
-import aterm.*;
-
 abstract public class NodeIdImpl extends MetaGraphConstructor
 {
   protected NodeIdImpl(MetaGraphFactory factory) {
