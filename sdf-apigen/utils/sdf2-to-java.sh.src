@@ -7,6 +7,7 @@
     PKGDATA=__PKGDATA__
         PRG=`basename $0`
      APIGEN=__APIGEN__
+    SDF2ADT="__SDF2ADT__"
 
 # }}}
 
@@ -81,7 +82,7 @@ ONLYBOTTOM=0
 NAME=""
 
 # binaries
-SDF2TOADT=${bindir}/sdf2-to-adt
+SDF2TOADT=${SDF2ADT}
 ADTTOJAVA=${APIGEN}/bin/adt-to-java
 # }}}
 

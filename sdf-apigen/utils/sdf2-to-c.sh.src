@@ -1,5 +1,5 @@
 #! /bin/sh
-set -x
+
 # {{{ variables
 
      prefix=__PREFIX__
@@ -7,6 +7,7 @@ set -x
     PKGDATA=__PKGDATA__
         PRG=`basename $0`
      APIGEN=__APIGEN__
+    SDF2ADT=__SDF2ADT__
 
 # }}}
 
