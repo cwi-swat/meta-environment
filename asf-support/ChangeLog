@@ -1,3 +1,6 @@
+2001/07/06 (markvdb@cwi.nl)
+  * Removed AsFix1 depending functionality.
+
 2001/07/03 (markvdb@cwi.nl)
   * Added a union function for CondEquationLists based on indexed sets.
 
