@@ -1,3 +1,7 @@
+2001/02/22 (markvdb@cwi.nl)
+ * Fixed bug in translation from AsFix2ME to AsFix1 with list
+   variables as single element in a list.
+
 2001/02/21 (markvdb@cwi.nl)
  * Functionality added to obtain the yield of a production rule.
  * Fixed a bug in the conversion from AsFix2ME to AsFix1.

@@ -34,7 +34,7 @@
 
 /* Function prototypes (only the badly needed ones) */
 
-static ATerm termToAsFix1(PT_Tree);
+static ATerm termToAsFix1(PT_Tree, ATbool inList);
 
 /*  patterns  */
 
@@ -135,7 +135,7 @@ argsToAsFix1(PT_Args args)
   }
   else {
     return ATinsert(argsToAsFix1(PT_getArgsTail(args)),
-		    termToAsFix1(PT_getArgsHead(args)));
+		    termToAsFix1(PT_getArgsHead(args), ATfalse));
   }
 }
 
@@ -166,7 +166,7 @@ listToAsFix1(PT_Args list)
 	  newTerm = separatorToAsFix1(elem);
 	}
 	else {
-	  newTerm = termToAsFix1(elem);
+	  newTerm = termToAsFix1(elem, ATtrue);
 	}
 	newList = ATappend(newList, newTerm);
 
@@ -482,13 +482,14 @@ parseTreeToAsFix1(PT_ParseTree pt)
         args = PT_getArgsTail(args);
         layoutAfterTree = PT_getArgsHead(args);
 
-        return ATmake("term(l(\"term\"),w(\" \"),l(\"X\"),w(\" \"),id(\"X\"),"
+        return ATmake("term(l(\"term\"),w(\"\"),l(\"X\"),w(\"\"),id(\"X\"),"
 		      "<term>,<term>,<term>,no-abbreviations)",
 		      layoutToAsFix1(layoutBeforeTree),
-		      termToAsFix1(applTree), layoutToAsFix1(layoutAfterTree));
+		      termToAsFix1(applTree, ATfalse),
+                      layoutToAsFix1(layoutAfterTree));
       }
     }
-    return termToAsFix1(tree);
+    return termToAsFix1(tree, ATfalse);
   }
   else {
     ATerror("parseTreeToAsFix1: expected parse tree, got %t\n", pt);
@@ -503,13 +504,14 @@ literalToAsFix1(PT_Tree t)
 }
 
 static ATerm
-varSymbolToAsFix1(PT_Tree tree)
+varSymbolToAsFix1(PT_Tree tree, ATbool inList)
 {
   PT_Symbol     sort;
   char         *sep;
   PT_Production prod = PT_getTreeProd(tree);
   ATerm         newSortOrIter = NULL;
   ATerm         varTerm = treeToString(tree);
+  ATerm         newVarTerm;
   PT_Symbol     sortOrIter = PT_getSymbolSymbol(PT_getProductionRhs(prod));
 
   if (PT_isSymbolIterPlus(sortOrIter)) {
@@ -521,6 +523,15 @@ varSymbolToAsFix1(PT_Tree tree)
     else {
       ATerror("varSymbolToAsFix1: not a sort %t\n", sort);
     }
+    newVarTerm = ATmakeTerm(pattern_asfix_varterm, varTerm, newSortOrIter);
+    if (inList) {
+      return newVarTerm;
+    }
+    else {
+      return ATmakeTerm(pattern_asfix_list, 
+                        newSortOrIter, pattern_asfix_ews,
+                        ATmakeList1(newVarTerm));
+    }
   }
   else if (PT_isSymbolIterStar(sortOrIter)) {
     sort = PT_getSymbolSymbol(sortOrIter);
@@ -530,6 +541,15 @@ varSymbolToAsFix1(PT_Tree tree)
     }
     else {
       ATerror("varSymbolToAsFix1: not a sort %t\n", sort);
+    }
+    newVarTerm = ATmakeTerm(pattern_asfix_varterm, varTerm, newSortOrIter);
+    if (inList) {
+      return newVarTerm;
+    }
+    else {
+      return ATmakeTerm(pattern_asfix_list, 
+                        newSortOrIter, pattern_asfix_ews,
+                        ATmakeList1(newVarTerm));
     }
   }
   else if (PT_isSymbolIterPlusSep(sortOrIter)) {
@@ -542,6 +562,15 @@ varSymbolToAsFix1(PT_Tree tree)
     else {
       ATerror("varSymbolToAsFix1: not a sort %t\n", sort);
     }
+    newVarTerm = ATmakeTerm(pattern_asfix_varterm, varTerm, newSortOrIter);
+    if (inList) {
+      return newVarTerm;
+    }
+    else {
+      return ATmakeTerm(pattern_asfix_list, 
+                        newSortOrIter, pattern_asfix_ews,
+                        ATmakeList1(newVarTerm));
+    }
   }
   else if (PT_isSymbolIterStarSep(sortOrIter)) {
     sort = PT_getSymbolSymbol(sortOrIter);
@@ -553,12 +582,20 @@ varSymbolToAsFix1(PT_Tree tree)
     else {
       ATerror("varSymbolToAsFix1: not a sort %t\n", sort);
     }
+    newVarTerm = ATmakeTerm(pattern_asfix_varterm, varTerm, newSortOrIter);
+    if (inList) {
+      return newVarTerm;
+    }
+    else {
+      return ATmakeTerm(pattern_asfix_list, 
+                        newSortOrIter, pattern_asfix_ews,
+                        ATmakeList1(newVarTerm));
+    }
   }
   else {
     newSortOrIter = PT_makeTermFromSymbol(sortOrIter);
+    return ATmakeTerm(pattern_asfix_varterm, varTerm, newSortOrIter);
   }
-
-  return ATmakeTerm(pattern_asfix_varterm, varTerm, newSortOrIter);
 }
 
 static ATerm
@@ -590,7 +627,7 @@ iterToAsFix1(PT_Production prod, PT_Args args)
 }
 
 static ATerm
-applicationToAsFix1(PT_Tree tree)
+applicationToAsFix1(PT_Tree tree, ATbool inList)
 {
   PT_Production prod = PT_getTreeProd(tree);
   PT_Args args = PT_getTreeArgs(tree);
@@ -606,7 +643,7 @@ applicationToAsFix1(PT_Tree tree)
   }
 
   if (PT_isVarDefault(prod)) {
-    return varSymbolToAsFix1(tree);
+    return varSymbolToAsFix1(tree, inList);
   }
 
   if (PT_prodHasIterSepAsRhs(prod)) {
@@ -623,24 +660,24 @@ applicationToAsFix1(PT_Tree tree)
 }
 
 static ATerm
-termToAsFix1(PT_Tree t)
+termToAsFix1(PT_Tree tree, ATbool inList)
 {
-  if (PT_isTreeAmb(t)) {
+  if (PT_isTreeAmb(tree)) {
     ATerror("termToAsFix1: ambiguities can not be converted to AsFix1: %t\n",
-	    t);
+	    tree);
     return NULL;
   }
 
-  if (PT_isTreeLit(t)) {
-    return literalToAsFix1(t);
+  if (PT_isTreeLit(tree)) {
+    return literalToAsFix1(tree);
   }
 
-  if (!PT_isTreeAppl(t)) {
-    ATerror("termToAsFix1: not an application term: %t\n", t);
+  if (!PT_isTreeAppl(tree)) {
+    ATerror("termToAsFix1: not an application term: %t\n", tree);
     return NULL;
   }
 
-  return applicationToAsFix1(t);
+  return applicationToAsFix1(tree, inList);
 }
 
 static ATerm
@@ -660,25 +697,26 @@ treeToAsFix1(PT_Tree tree)
       args = PT_getArgsTail(args);
       layoutAfterTree = PT_getArgsHead(args);
 
-      return ATmake("term(l(\"term\"),w(\" \"),l(\"X\"),w(\" \"),id(\"X\"),"
+      return ATmake("term(l(\"term\"),w(\"\"),l(\"X\"),w(\"\"),id(\"X\"),"
                     "<term>,<term>,<term>,no-abbreviations)",
                     layoutToAsFix1(layoutBeforeTree),
-                    termToAsFix1(applTree), layoutToAsFix1(layoutAfterTree));
+                    termToAsFix1(applTree, ATfalse), 
+                    layoutToAsFix1(layoutAfterTree));
     }
   }
-  return termToAsFix1(tree);
+  return termToAsFix1(tree, ATfalse);
 }
 
 ATerm
-a2metoa1(PT_ParseTree t)
+a2metoa1(PT_ParseTree ptree)
 {
   init_patterns();
-  return parseTreeToAsFix1(t);
+  return parseTreeToAsFix1(ptree);
 }
 
 ATerm
-tree2a1(PT_Tree t)
+tree2a1(PT_Tree tree)
 {
   init_patterns();
-  return treeToAsFix1(t);
+  return treeToAsFix1(tree);
 }
