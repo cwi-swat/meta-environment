@@ -25,7 +25,7 @@
 #include "sglr.idef"
 #include "editor.tb"
 #include "structure-editor.tb"
-#include "evaluator.tb"
+#include "evaluator.idef"
 #include "focus.tb"
 #include "edit-term.tb"
 #include "asource.idef"
