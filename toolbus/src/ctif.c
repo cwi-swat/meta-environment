@@ -215,6 +215,32 @@ void C_test_eval_do(char *els, char *op, term *t, term *whole)
   C_test_in_sign(whole);
 }
 
+void C_test_monitor(char *els, term *t, term *whole)
+{
+  term_list *fargs;
+  char *fname;
+
+  C_proto("term *", t);
+  fout = tmp1;
+
+  if(TBmatch(t, "%f(%l)", &fname, &fargs)){
+    fprintf(fout, "%sif(TBmatch(e, \"%s(", els, fname);
+    C_visit_args(fargs, "", C_format_arg);
+
+    fprintf(fout, ")\"%s ", fargs ? "," : "");
+    C_visit_args(fargs, "&", C_var_arg);
+    fprintf(fout, ")){\n\t\t");
+    fprintf(fout, "return ");
+    C_fun_name(fname, fout);
+    fprintf(fout, "(");
+    C_visit_args(fargs, "", C_var_arg);
+    fprintf(fout, ");\n\t");
+    fprintf(fout, "}");
+  } else 
+    err_fatal("panic C_monitor: %t", t);
+  C_test_in_sign(whole);
+}
+
 void C_test_other(char *els, term *t, term *whole)
 { term_list *fargs;
   char *fname;
@@ -310,12 +336,14 @@ void read_tifs(int tifs, char *the_tool_name)
 	if(streq(atf, "rec-do") || streq(atf, "rec-eval")) {
 	  C_test_eval_do(els, atf, first(arg), t);
 	  els = " else ";
-	} else if(streq(atf, "rec-terminate") 
-		  || streq(atf , "rec-ack-event")
-		  || streq(atf , "rec-monitor")) {
+	} else if(streq(atf, "rec-terminate") || streq(atf , "rec-ack-event")){
 	  term *trm = mk_appl1(TBlookup(atf), first(arg));
 	  C_test_other(els, trm, t);
 	  els = " else ";
+	} else if(streq(atf, "rec-monitor")) {
+          term *trm = mk_appl1(TBlookup(atf), first(arg));
+          C_test_monitor(els, trm, t);
+          els = " else ";
 	} else if(streq(atf, "snd-value") || streq(atf, "snd-event") ||
 		  streq(atf, "snd-connect") || streq(atf, "snd-disconnect")){
 	} else
