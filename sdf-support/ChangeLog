@@ -2,6 +2,7 @@ $Id$
 
 2003/06/03 (markvdb@cs.vu.nl)
  * Added import removal functionality.
+ * Prepared for renaming.
 
 2003/06/03 ({markvdb,jong}@cwi.nl)
  * Fixed a bug in the renaming of renamings.

@@ -317,4 +317,3 @@ SDF_Module SDF_removeModuleImport(SDF_Module module, SDF_Import import)
 }
 
 /*}}}  */
-
