@@ -800,20 +800,14 @@ void SG_Reducer(stack *st0, state s, label prodl,
                 SG_GETLABEL(SG_GetApplProdLabel(SG_LK_TREE(nl))))
       );
       if (attribute == SG_PT_REJECT) {
-        /*  Reject?  */
         SG_MarkLinkRejected(nl);
-        SG_CreateAmbCluster((tree) SG_LK_TREE(nl), (tree) t,
-               sg_tokens_read - SG_LK_LENGTH(nl) - 1);
-      } else {
-        /*  Don't add the rejects themselves to the amb cluster!  */
-        SG_CreateAmbCluster((tree) SG_LK_TREE(nl), (tree) t,
-               sg_tokens_read - SG_LK_LENGTH(nl) - 1);
       }
+      SG_CreateAmbCluster((tree) SG_LK_TREE(nl), (tree) t,
+                          sg_tokens_read - SG_LK_LENGTH(nl) - 1);
     }
     else {
-      /*
-       No ambiguity; add new direct link from |st1| to |st0| and recheck
-       all reductions for |st1|.
+      /* No ambiguity; add new direct link from |st1| to |st0| and recheck
+       * all reductions for |st1|.
        */
       register stacks *sts;
 
@@ -827,23 +821,22 @@ void SG_Reducer(stack *st0, state s, label prodl,
                   SG_GETSTATE(SG_ST_STATE(st0)), SG_GETSTATE(SG_ST_STATE(st1)));
         );
       }
-      for(sts = active_stacks; sts; sts = SG_TAIL(sts)) {
+      for (sts = active_stacks; sts; sts = SG_TAIL(sts)) {
         stack  *st2;
   
         st2 = SG_HEAD(sts);
         if (!SG_Rejected(st2)
-            && !SG_InReduceStacks(st2, for_actor, ATfalse)
-            && !SG_InReduceStacks(st2, for_actor_delayed, ATfalse)) {
+            && !SG_InReduceStacks(st2, for_actor)
+            && !SG_InReduceStacks(st2, for_actor_delayed)) {
           register actions as;
 
-          for(as = SG_LookupAction(table, SG_ST_STATE(st2), current_token);
-              as && !ATisEmpty(as); as = ATgetNext(as)) {
+          for (as = SG_LookupAction(table, SG_ST_STATE(st2), current_token);
+               as && !ATisEmpty(as); as = ATgetNext(as)) {
             action  a = ATgetFirst(as);
 
-            if(SG_ActionKind(a) == REDUCE
-               || (SG_ActionKind(a) == REDUCE_LA
-                   && SG_CheckLookAhead(SG_A_LOOKAHEAD(a)))) {
-
+            if (SG_ActionKind(a) == REDUCE
+                || (SG_ActionKind(a) == REDUCE_LA
+                    && SG_CheckLookAhead(SG_A_LOOKAHEAD(a)))) {
               SG_DoLimitedReductions(st2, a, nl);
             }
           }

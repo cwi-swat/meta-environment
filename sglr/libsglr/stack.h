@@ -99,9 +99,6 @@ void      SG_MarkStackRejected(stack *);
 void      SG_MarkLinkRejected(st_link *);
 ATbool    SG_Rejected(stack *);
 ATbool    SG_DeeplyRejected(stack *);
-ATbool    SG_InStacks(stack *, stacks *, ATbool);
-ATbool    SG_SubStack(stack *, stack *);
-ATbool    SG_InReduceStacks(stack *, stacks *, ATbool);
-ATbool    SG_ReduceSubStack(stack *, stack *);
+ATbool    SG_InReduceStacks(stack *, stacks *);
 
 #endif  /* _STACK_H_ */

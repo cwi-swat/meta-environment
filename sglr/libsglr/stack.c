@@ -146,13 +146,13 @@ list *SG_MallocPool(list **free_list, size_t dtsize, size_t chunksize)
 {
   list *lst;
 
-  if(*free_list == NULL) {
+  if (*free_list == NULL) {
     /*  When out of free items, allocate a new chunk of 'em  */
     list **pool;
     register int i;
     pool = SG_Malloc(chunksize, dtsize);
     pool[0] = (list *) pool;
-    for(i=1; i<chunksize; i++) {
+    for (i=1; i<chunksize; i++) {
       pool[i] = (list *) ((size_t)pool[i-1] + (size_t)dtsize);
       pool[i-1]->tail = pool[i];
     }
@@ -174,13 +174,13 @@ stack *SG_MallocStack(void)
 {
   stack *st;
 
-  if(sg_stack_pool_free == NULL) {
+  if (sg_stack_pool_free == NULL) {
     /*  When out of free items, allocate a new chunk of 'em  */
     stack **pool;
     register int i;
     pool = SG_Malloc(SG_STACKMEMCHUNK, sizeof(stack));
     pool[0] = (stack *) pool;
-    for(i=1; i< SG_STACKMEMCHUNK; i++) {
+    for (i=1; i< SG_STACKMEMCHUNK; i++) {
       pool[i] = (stack *)((size_t)pool[i-1] + (size_t)sizeof(stack));
       pool[i-1]->links = (st_links *) pool[i];
 /*
@@ -202,13 +202,13 @@ stacks *SG_MallocStacks(void)
 {
   stacks *sts;
 
-  if(sg_stacks_pool_free == NULL) {
+  if (sg_stacks_pool_free == NULL) {
     /*  When out of free items, allocate a new chunk of 'em  */
     stacks **pool;
     register int i;
     pool = SG_Malloc(SG_STACKMEMCHUNK, sizeof(stacks));
     pool[0] = (stacks *) pool;
-    for(i=1; i< SG_STACKSMEMCHUNK; i++) {
+    for (i=1; i< SG_STACKSMEMCHUNK; i++) {
       pool[i] = (stacks *) ((size_t)pool[i-1] + (size_t)sizeof(stacks));
       pool[i-1]->tail = pool[i];
     }
@@ -225,13 +225,13 @@ st_link *SG_MallocLink(void)
 {
   st_link *lk;
 
-  if(sg_link_pool_free == NULL) {
+  if (sg_link_pool_free == NULL) {
     /*  When out of free items, allocate a new chunk of 'em  */
     st_link **pool;
     register int i;
     pool = SG_Malloc(SG_LINKMEMCHUNK, sizeof(st_link));
     pool[0] = (st_link *) pool;
-    for(i=1; i< SG_LINKMEMCHUNK; i++) {
+    for (i=1; i< SG_LINKMEMCHUNK; i++) {
       pool[i] = (st_link *)((size_t)pool[i-1] + (size_t)sizeof(st_link));
       pool[i-1]->stack = (stack *)pool[i];
     }
@@ -248,13 +248,13 @@ st_links *SG_MallocLinks(void)
 {
   st_links *lks;
 
-  if(sg_links_pool_free == NULL) {
+  if (sg_links_pool_free == NULL) {
     /*  When out of free items, allocate a new chunk of 'em  */
     st_links **pool;
     register int i;
     pool = SG_Malloc(SG_LINKSMEMCHUNK, sizeof(st_link));
     pool[0] = (st_links *) pool;
-    for(i=1; i< SG_LINKSMEMCHUNK; i++) {
+    for (i=1; i< SG_LINKSMEMCHUNK; i++) {
       pool[i] = (st_links *) ((size_t)pool[i-1] + (size_t)sizeof(st_links));
       pool[i-1]->tail = pool[i];
     }
@@ -273,7 +273,7 @@ stack *SG_NewStack(state s, ATbool isshift)
 {
   stack *st;
 
-  if((st = SG_MallocStack())) {
+  if ((st = SG_MallocStack())) {
     st->state     = s;
     st->links     = NULL;
     st->refcount  = 0;
@@ -287,7 +287,7 @@ stack *SG_NewStack(state s, ATbool isshift)
 
 void SG_DeleteStack(stack *st)
 {
-  if(!st) {
+  if (!st) {
     ATwarning("NULL stack not deleted!\n");
     return;
   }
@@ -300,7 +300,7 @@ void SG_DeleteStack(stack *st)
 stacks *SG_AddStack(stack *st, stacks *osts) {
   stacks *nsts;
 
-  if((nsts = SG_MallocStacks())) {
+  if ((nsts = SG_MallocStacks())) {
     nsts->head = st;
     nsts->tail = osts;
 #ifdef  MEMSTATS
@@ -334,7 +334,7 @@ st_link *SG_NewLink(tree t, size_t tl, stack *st)
     return lk;
   } 
 
-  if((lk = SG_MallocLink())) {
+  if ((lk = SG_MallocLink())) {
     lk->tree = t;
     ATprotect((ATerm *) &(lk->tree));
     lk->length = tl;
@@ -363,7 +363,7 @@ st_link *SG_AddLink(stack *frm, stack *to, tree t, size_t tl)
 {
   st_link *link;
 
-  if((link = SG_NewLink(t, tl, to))) {
+  if ((link = SG_NewLink(t, tl, to))) {
     frm->links = SG_AddLinks(link, frm->links);
   }
   return link;
@@ -373,7 +373,7 @@ st_links *SG_AddLinks(st_link *l, st_links *ls)
 {
   st_links *lks;
 
-  if((lks = SG_MallocLinks())) {
+  if ((lks = SG_MallocLinks())) {
     lks->head = l;
     lks->tail = ls;
 #ifdef  MEMSTATS
@@ -391,72 +391,13 @@ void SG_DeleteLinks(st_links *lks)
 #endif
 }
 
-ATbool SG_InStacks(stack *st1, stacks *sts, ATbool deep)
+ATbool SG_InReduceStacks(stack *st1, stacks *sts)
 {
   stack *st0;
 
-  while(sts) {
+  for (; sts; sts = SG_TAIL(sts)) {
     st0 = SG_HEAD(sts);
-    sts = SG_TAIL(sts);
-    if(st1 == st0) return ATtrue;
-    if(deep && SG_SubStack(st1, st0)) {
-      return ATtrue;
-    }
-  }
-  return ATfalse;
-}
-
-ATbool SG_SubStack(stack *st1, stack *st0)
-{
-  stack    *s;
-  st_links *ls;
-
-  if(st1 == st0)
-    return ATtrue;
-  if(!st0 || !st1)
-    return ATfalse;
-
-  ls = SG_ST_LINKS(st0);
-  for (; ls; ls = SG_TAIL(ls)) {
-    s = SG_LK_STACK(SG_HEAD(ls));
-    if (SG_SubStack(st1, s)) {
-      return ATtrue;
-    }
-  }
-  return ATfalse;
-}
-
-ATbool SG_InReduceStacks(stack *st1, stacks *sts, ATbool deep)
-{
-  stack *st0;
-
-  for(; sts; sts = SG_TAIL(sts)) {
-    st0 = SG_HEAD(sts);
-    if(st1 == st0) return ATtrue;
-    if(deep && SG_ReduceSubStack(st1, st0)) {
-      return ATtrue;
-    }
-  }
-  return ATfalse;
-}
-
-ATbool SG_ReduceSubStack(stack *st1, stack *st0)
-{
-  stack    *s;
-  st_links *ls;
-
-  if(st1 == st0)
-    return ATtrue;
-  if(!st0 || !st1)
-    return ATfalse;
-
-  if(SG_ST_ISSHIFT(st0))
-    return ATfalse;
-
-  ls = SG_ST_LINKS(st0);
-  for (; ls; ls = SG_TAIL(ls)) {
-    s = SG_LK_STACK(SG_HEAD(ls));
-    if (SG_SubStack(st1, s)) {
+    if (st1 == st0) {
       return ATtrue;
     }
   }
@@ -468,7 +409,7 @@ ATbool SG_ReduceSubStack(stack *st1, stack *st0)
 stack *SG_FindStack(state s, stacks *sts)
 {
   for (; sts; sts = SG_TAIL(sts)) {
-    if(SG_ST_STATE(SG_HEAD(sts)) == s) {
+    if (SG_ST_STATE(SG_HEAD(sts)) == s) {
       return SG_HEAD(sts);
     }
   }
@@ -482,7 +423,7 @@ st_link *SG_FindDirectLink(stack *st0, stack *st1)
   st_links *ls = NULL;
 
   for (ls = SG_ST_LINKS(st0); ls; ls = SG_TAIL(ls)) {
-    if(SG_LK_STACK(SG_HEAD(ls)) == st1) {
+    if (SG_LK_STACK(SG_HEAD(ls)) == st1) {
       return SG_HEAD(ls);
     }
   }
@@ -520,7 +461,4 @@ ATbool SG_Rejected(stack *st)
   }
   /*  All links are rejected  */
   return ATtrue;
-#if 0
-  return ATfalse;
-#endif
 }
