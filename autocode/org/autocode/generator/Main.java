@@ -47,8 +47,6 @@ public class Main
     forest = parser.PropertyForest();
     reader.close();
 
-    System.out.println("properties: " + forest);
-
     Iterator iter = files.iterator();
     while (iter.hasNext()) {
       String fileName = (String)iter.next();
@@ -73,28 +71,20 @@ public class Main
     iter = generators.iterator();
     while (iter.hasNext()) {
       String generatorName = (String)iter.next();
-      PropertyContext genContext =
+      PropertyContext generatorContext =
 	new PropertyContext(appContext, "generator", generatorName);
 
-      String className = genContext.getSingletonValue("class");
+      String className = generatorContext.getSingletonValue("class");
 
-      /*
-      defaults = "/" + className.replace('.', '/') + ".aco";
-      stream = getClass().getResourceAsStream(defaults);
-      reader = new InputStreamReader(stream);
-      parser.ReInit(reader);
-      genContext.merge(parser.PropertyForest());
-      reader.close();
-      */
-
-      if (genContext.getBoolean("enabled")) {
+      if (generatorContext.getBoolean("enabled")) {
 	// Generator is active!
 	System.out.println("Activating generator: " + generatorName
 			   + " (" + className + ")");
 	Class generatorClass = Class.forName(className);
 	AutocodeGenerator generator =
 	  (AutocodeGenerator)generatorClass.newInstance();
-	generator.generate(genContext);
+	generator.generate(generatorContext);
+	generator.emit(generatorContext);
       }
     }
   }

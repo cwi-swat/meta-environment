@@ -1,12 +1,14 @@
 application client-app {
   generator java {
     enabled := true
+    rootdir := "/tmp"
 
     @import "Client.add"
     @import "Order.add"
 
     type * {
       access := private
+      package := "org.autocode.test"
     }
 
     type Client {

@@ -48,6 +48,16 @@ public class PropertyContext
 
   //}}}
 
+  //{{{ public String getName()
+
+  public String getName()
+  {
+    String[] pair = (String[])path.get(path.size()-1);
+    return pair[1];
+  }
+
+  //}}}
+
   //{{{ public int getInteger(String key)
 
   public int getInteger(String key)

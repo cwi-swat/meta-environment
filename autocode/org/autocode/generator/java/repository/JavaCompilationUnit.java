@@ -1,8 +1,9 @@
-package org.autocode.generator.repository.java;
+package org.autocode.generator.java.repository;
 
 //{{{ imports
 
 import org.autocode.generator.repository.*;
+import org.autocode.generator.java.repository.*;
 import java.util.*;
 
 //}}}
@@ -17,7 +18,7 @@ public class JavaCompilationUnit
   private String superClass;
   private Set importedSet;
 
-  private int _access;
+  private JavaAccessSpecifier _access;
   private boolean _static;
   private boolean _abstract;
   private boolean _final;
@@ -27,7 +28,7 @@ public class JavaCompilationUnit
   //{{{ public JavaCompilationUnit(package, class, super, access, static, abstract, final)
 
   public JavaCompilationUnit(String packageName, String className,
-			     String superClass, int access,
+			     String superClass, JavaAccessSpecifier access,
 			     boolean isstatic, boolean isabstract,
 			     boolean isfinal)
   {
@@ -76,9 +77,9 @@ public class JavaCompilationUnit
 
   //}}}
 
-  //{{{ public int getAccess()
+  //{{{ public JavaAccessSpecifier getAccess()
 
-  public int getAccess()
+  public JavaAccessSpecifier getAccess()
   {
     return _access;
   }

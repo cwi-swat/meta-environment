@@ -1,1 +1,1 @@
-SUBDIRS = bootstrap property generator
+SUBDIRS = property generator

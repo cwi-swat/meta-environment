@@ -3,33 +3,27 @@ package org.autocode.generator.java;
 //{{{ imports
 
 import org.autocode.*;
-import org.autocode.support.*;
+import org.autocode.property.*;
 import org.autocode.generator.*;
-import org.autocode.bootstrap.*;
-import org.autocode.bootstrap.generator.java.*;
-import org.autocode.bootstrap.generator.repository.*;
-
-import java.util.*;
+import org.autocode.generator.repository.*;
+import org.autocode.generator.java.repository.*;
 
 //}}}
 
-public class ConstructorPlugin
+public class Constructor
   extends JavaGeneratorPlugin
 {
-  //{{{ public void generateConstructors(JavaGenerator generator)
+  //{{{ public void generateConstructor(JavaGenerator generator)
 
-  public void generateConstructors(JavaGenerator generator)
+  public void generateConstructor(JavaGenerator generator, PropertyContext context,
+				  String typeName)
   {
-    CompoundType type = (CompoundType)getType();
-
+    /*
     JavaCompilationUnit unit = generator.getCompilationUnit();
     String constructorName = JavaGenerator.javaTypeName(type.getName());
 
     DataDefinition def = generator.getDataDefinition();
     String application = generator.getApplication();
-
-    /* Generate a constructor with all field values as parameters,
-       except list, map, set */
 
     MethodBody body = new MethodBody();
     JavaMethod constructor = createTypeMethod("constructors",
@@ -59,6 +53,7 @@ public class ConstructorPlugin
     }
 
     unit.addMethod(constructor);
+    */
   }
 
   //}}}

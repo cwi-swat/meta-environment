@@ -4,6 +4,11 @@ class := "org.autocode.generator.java.JavaGenerator"
 folding := true		// Enable folding support by default
 
 type * {
+  access := public	// All types are public by default
+  static := false	// and are not static
+  final := false	// nor final
+  abstract := false	// nor abstract
+
   operation * {
     access := public
     abstract := false
@@ -12,16 +17,16 @@ type * {
   }
 
   field * {
+    access := private	  // All attributes have private access by default
+    static := false	  // and are not static
+    final := false	  // nor final
+
     operation * {
       access := public
       abstract := false
       static := false
       final := false
     }
-
-    access := private	  // All attributes have private access by default
-    static := false	  // and are not static
-    final := false	  // nor final
   }
 }
 

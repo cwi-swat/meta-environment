@@ -1,69 +1,45 @@
-package org.autocode.generator.repository.java;
+package org.autocode.generator.java.repository;
 
 //{{{ imports
 
 import org.autocode.generator.repository.*;
+
 import java.util.*;
 
 //}}}
 
 public class JavaMethod
   extends Method
-  implements JavaAccessSpecifiers
 {
   //{{{ attributes
 
-  private int _access;
+  private JavaAccessSpecifier _access;
   private boolean _abstract;
   private boolean _final;
   private boolean _static;
 
   //}}}
 
-  //{{{ public JavaMethod(String name, String resultType, MethodBody body)
+  //{{{ public JavaMethod(name, type, access, abstract, final, static, body)
 
-  public JavaMethod(String name, String resultType, MethodBody body)
+  public JavaMethod(String name, String resultType, JavaAccessSpecifier access,
+		    boolean isabstract, boolean isfinal, boolean isstatic,
+		    MethodBody body)
   {
     super(name, resultType, body);
-    _access = ACCESS_PUBLIC;
-    _abstract = false;
-    _final = false;
-    _static = false;
-  }
-
-  //}}}
-  //{{{ public JavaMethod(String name, String resultType)
-
-  public JavaMethod(String name, String resultType)
-  {
-    this(name, resultType,
-	 new MethodBody("throw new UnsupportedOperationException();"));
+    _access = access;
+    _abstract = isabstract;
+    _final = isfinal;
+    _static = isstatic;
   }
 
   //}}}
 
-  //{{{ public JavaMethod(String name)
+  //{{{ public JavaAccessSpecifier getAccess()
 
-  public JavaMethod(String name)
-  {
-    this(name, null);
-  }
-
-  //}}}
-
-  //{{{ public int getAccess()
-
-  public int getAccess()
+  public JavaAccessSpecifier getAccess()
   {
     return _access;
-  }
-
-  //}}}
-  //{{{ public void setAccess(int access)
-
-  public void setAccess(int access)
-  {
-    _access = access;
   }
 
   //}}}
@@ -76,15 +52,6 @@ public class JavaMethod
   }
 
   //}}}
-  //{{{ public void setAbstract(boolean on)
-
-  public void setAbstract(boolean on)
-  {
-    _abstract = on;
-  }
-
-  //}}}
-
   //{{{ public boolean isFinal()
 
   public boolean isFinal()
@@ -93,28 +60,11 @@ public class JavaMethod
   }
 
   //}}}
-  //{{{ public void setFinal(boolean on)
-
-  public void setFinal(boolean on)
-  {
-    _final = on;
-  }
-
-  //}}}
-
   //{{{ public boolean isStatic()
 
   public boolean isStatic()
   {
     return _static;
-  }
-
-  //}}}
-  //{{{ public void setStatic(boolean on)
-
-  public void setStatic(boolean on)
-  {
-    _static = on;
   }
 
   //}}}

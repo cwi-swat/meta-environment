@@ -1,71 +1,94 @@
 package org.autocode.generator;
 
+//{{{ imports
+
 import org.autocode.property.*;
 
+import java.io.*;
 import java.util.*;
 import java.lang.reflect.Method;
+
+//}}}
 
 abstract public class AutocodeGenerator
 {
   private PropertyContext generatorContext;
 
-  //{{{ public void generate(PropertyContext context)
+  abstract public void emit(PropertyContext generatorContext) throws IOException;
 
-  public void generate(PropertyContext context)
+  //{{{ public PropertyContext getGeneratorContext()
+
+  public PropertyContext getGeneratorContext()
   {
-    generatorContext = context;
+    return generatorContext;
+  }
 
-    Set types = context.getValueSet("type");
+  //}}}
+
+  //{{{ public void generate(PropertyContext generatorContext)
+
+  public void generate(PropertyContext generatorContext)
+  {
+    this.generatorContext = generatorContext;
+
+    System.out.println("forest: " + generatorContext.getRootForest());
+
+    Set types = generatorContext.getValueSet("type");
     Iterator iter = types.iterator();
     while (iter.hasNext()) {
       String typeName = (String)iter.next();
-      generateType(typeName, new PropertyContext(context, "type", typeName));
+      generateType(new PropertyContext(generatorContext, "type", typeName));
     }
   }
 
   //}}}
-  //{{{ protected void generateType(String typeName, PropertyContext context)
+  //{{{ protected void generateType(PropertyContext typeContext)
 
-  protected void generateType(String typeName, PropertyContext context)
+  protected void generateType(PropertyContext typeContext)
   {
-    Set operations = context.getValueSet("operation");
+    System.out.println("generateType: " + typeContext);
+    Set operations = typeContext.getValueSet("operation");
     Iterator iter = operations.iterator();
     while (iter.hasNext()) {
       String operationName = (String)iter.next();
-      PropertyContext opContext =
-        new PropertyContext(context, "operation", operationName);
-      generateTypeOperation(typeName, operationName, opContext);
+      System.out.println("  operationName: " + operationName);
+      PropertyContext operationContext
+	= new PropertyContext(typeContext, "operation", operationName);
+      generateTypeOperation(typeContext, operationContext);
     }
 
-    Set fields = context.getValueSet("field");
+    Set fields = typeContext.getValueSet("field");
     iter = fields.iterator();
     while (iter.hasNext()) {
       String fieldName = (String)iter.next();
+      System.out.println("  fieldName: " + fieldName);
       PropertyContext fieldContext =
-        new PropertyContext(context, "field", fieldName);
-      generateField(typeName, fieldName, fieldContext);
+        new PropertyContext(typeContext, "field", fieldName);
+      generateField(typeContext, fieldContext);
     }
   }
 
   //}}}
+  //{{{ protected void generateTypeOperation(typeContext, operationContext)
 
-  //{{{ protected void generateTypeOperation(type, operation, context)
-
-  protected void generateTypeOperation(String typeName,
-				       String operationName,
-				       PropertyContext typeContext)
+  protected void generateTypeOperation(PropertyContext typeContext,
+			     PropertyContext operationContext)
   {
+    String operationName = operationContext.getName();
     Iterator iter = generatorContext.getValueSet("plugin").iterator();
     while (iter.hasNext()) {
       String pluginName = (String)iter.next();
       PropertyContext pluginContext = new PropertyContext(generatorContext);
       pluginContext.descend("plugin", pluginName);
-      pluginContext.descend("provides", "operations");
-      Set provides = pluginContext.getValueSet("type");
-      if (provides.contains(operationName)) {
+
+      PropertyContext providesContext = new PropertyContext(pluginContext);
+      providesContext.descend("provides", "operations");
+
+      Set providedOperations = providesContext.getValueSet("type");
+      if (providedOperations.contains(operationName)) {
 	System.out.println("plugin '" + pluginName
 			   + "' provides type-operation: " + operationName);
-	invokeType(pluginName, typeName, operationName, typeContext);
+	invokeType(typeContext, operationContext, pluginContext);
 	return;
       }
     }
@@ -75,27 +98,26 @@ abstract public class AutocodeGenerator
   }
 
   //}}}
+  //{{{ private void invokeType(typeContext, operationContext, pluginContext)
 
-  //{{{ private void invokeType(plugin, type, operation, context)
-
-  private void invokeType(String pluginName, String typeName,
-			  String operationName,
-			  PropertyContext typeContext)
+  private void invokeType(PropertyContext typeContext,
+			  PropertyContext operationContext,
+			  PropertyContext pluginContext)
   {
-    Class[] formalParams =
-      { this.getClass(), typeContext.getClass(), typeName.getClass() };
-    Object[] actualParams = { this, typeContext, typeName };
+    String typeName = typeContext.getName();
+    String operationName = operationContext.getName();
+    String pluginName = pluginContext.getName();
 
-    PropertyContext pluginContext =
-      new PropertyContext(generatorContext, "plugin", pluginName);
-    String className = pluginContext.getString("class");
+    Object[] parameters = { this, typeContext, operationContext };
+
+    String pluginClassName = pluginContext.getString("class");
 
     try {
-      Class pluginClass = Class.forName(className);
+      Class pluginClass = Class.forName(pluginClassName);
       String methodName = javaMethodName("generate-" + operationName);
       Method method;
       try {
-	method = pluginClass.getMethod(methodName, formalParams);
+	method = pluginClass.getMethod(methodName, getFormalParameters(parameters));
       } catch (NoSuchMethodException e) {
 	System.err.println("Plugin " + pluginName + " cannot generate "
 			   + " type-operation: " + operationName);
@@ -103,7 +125,7 @@ abstract public class AutocodeGenerator
       }
 
       GeneratorPlugin plugin = (GeneratorPlugin)pluginClass.newInstance();
-      method.invoke(plugin, actualParams);
+      method.invoke(plugin, parameters);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -111,45 +133,97 @@ abstract public class AutocodeGenerator
 
   //}}}
 
-  //{{{ protected void generateField(type, field, fieldContext)
+  //{{{ protected void generateField(typeContext, fieldContext)
 
-  protected void generateField(String typeName, String fieldName,
+  protected void generateField(PropertyContext typeContext,
 			       PropertyContext fieldContext)
   {
     Set operations = fieldContext.getValueSet("operation");
     Iterator iter = operations.iterator();
     while (iter.hasNext()) {
-      String operationName = (String)iter.next();
-      PropertyContext opContext =
-        new PropertyContext(fieldContext, "operation", operationName);
-      generateFieldOperation(typeName, fieldName, operationName, opContext);
+      PropertyContext operationContext
+	= new PropertyContext(fieldContext, "operation", (String)iter.next());
+      generateFieldOperation(typeContext, fieldContext, operationContext);
     }
   }
 
   //}}}
-  //{{{ protected void generateFieldOperation(type, field, operation, context)
+  //{{{ protected void generateFieldOperation(typeContext, fieldContext, operationContext)
 
-  protected void generateFieldOperation(String typeName,
-					String fieldName,
-					String operationName,
-					PropertyContext fieldContext)
+  protected void generateFieldOperation(PropertyContext typeContext,
+				       	PropertyContext fieldContext,
+					PropertyContext operationContext)
   {
+    String typeName = typeContext.getName();
+    String operationName = operationContext.getName();
     Iterator iter = generatorContext.getValueSet("plugin").iterator();
     while (iter.hasNext()) {
       String pluginName = (String)iter.next();
       PropertyContext pluginContext = new PropertyContext(generatorContext);
       pluginContext.descend("plugin", pluginName);
-      pluginContext.descend("provides", "operations");
-      Set provides = pluginContext.getValueSet("field");
-      if (provides.contains(operationName)) {
+
+      PropertyContext providesContext = new PropertyContext(pluginContext);
+      providesContext.descend("provides", "operations");
+      Set providedOperations = providesContext.getValueSet("field");
+      if (providedOperations.contains(operationName)) {
 	System.out.println("plugin '" + pluginName
 			   + "' provides field-operation: " + operationName);
+	invokeField(typeContext, fieldContext, operationContext, pluginContext);
 	return;
       }
     }
 
     throw new RuntimeException("no plugin found that provides "
 			       + "field-operation '" + operationName + "'");
+  }
+
+  //}}}
+  //{{{ protected void invokeField(typeContext, fieldContext, operationContext, pluginContext)
+
+  protected void invokeField(PropertyContext typeContext,
+			     PropertyContext fieldContext,
+			     PropertyContext operationContext,
+			     PropertyContext pluginContext)
+  {
+    String typeName = typeContext.getName();
+    String fieldName = fieldContext.getName();
+    String operationName = operationContext.getName();
+    String pluginName = pluginContext.getName();
+
+    Object[] parameters = { this, typeContext, fieldContext, operationContext };
+
+    String className = pluginContext.getString("class");
+    try {
+      Class pluginClass = Class.forName(className);
+      String methodName = javaMethodName("generate-" + operationName);
+      Method method;
+      try {
+	method = pluginClass.getMethod(methodName,
+				       getFormalParameters(parameters));
+      } catch(NoSuchMethodException e) {
+	System.err.println("Plugin " + pluginName + " cannot generate "
+			   + " field-operation: "+ operationName);
+	return;
+      }
+
+      GeneratorPlugin plugin = (GeneratorPlugin)pluginClass.newInstance();
+      method.invoke(plugin, parameters);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  //}}}
+
+  //{{{ private Class[] getFormalParameters(Object[] actualParams)
+
+  private Class[] getFormalParameters(Object[] actualParams)
+  {
+    Class[] formalParams = new Class[actualParams.length];
+    for (int i=0; i<actualParams.length; i++) {
+      formalParams[i] = actualParams[i].getClass();
+    }
+    return formalParams;
   }
 
   //}}}

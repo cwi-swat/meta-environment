@@ -16,12 +16,12 @@ autocode-test: Makefile.am
 	@( \
 	echo "#! /bin/sh"; \
 	echo "set -e"; \
-	echo "java -classpath" `pwd` "${CLASS}" '$$@'; \
+	echo "java -classpath" .:`pwd` "${CLASS}" '$$@'; \
 	) > $@ && chmod +x $@
 
 autocode: Makefile.am
 	@( \
 	echo "#! /bin/sh"; \
 	echo "set -e"; \
-	echo "java -classpath ${javadir} ${CLASS}" '$$@'; \
+	echo "java -classpath .:${javadir} ${CLASS}" '$$@'; \
 	) > $@ && chmod +x $@

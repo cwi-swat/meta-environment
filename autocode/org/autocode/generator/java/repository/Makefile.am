@@ -5,8 +5,7 @@ JAVAROOT = ${top_builddir}
 EXTRA_DIST = Accessor.aco Constructor.aco
 
 java_JAVA = \
-	JavaAccessSpecifiers.java \
+	JavaAccessSpecifier.java \
 	JavaCompilationUnit.java \
 	JavaMethod.java \
-	JavaAttribute.java \
-	JavaMethodAccess.java
+	JavaAttribute.java

@@ -1,42 +1,40 @@
 package org.autocode.generator.java;
 
+//{{{ imports
+
 import org.autocode.*;
+import org.autocode.property.*;
 import org.autocode.generator.*;
-import org.autocode.bootstrap.*;
-import org.autocode.bootstrap.generator.repository.*;
-import org.autocode.bootstrap.generator.java.*;
+import org.autocode.generator.repository.*;
+import org.autocode.generator.java.repository.*;
+
+//}}}
 
 public class JavaGeneratorPlugin
-  extends GeneratorPlugin
+  implements GeneratorPlugin
 {
-  //{{{ public JavaMethod createFieldMethod(op, name, typeName, body)
+  //{{{ public JavaMethod createMethod(operation, name, resultType, body)
 
-  public JavaMethod createFieldMethod(String operation, String methodName,
-				      String typeName, MethodBody body)
+  public JavaMethod createMethod(PropertyContext operationContext,
+				 String methodName, String typeName,
+				 MethodBody body)
   {
-    JavaMethod method = new JavaMethod(methodName, typeName, body);
-    DataDefinition def = getDataDefinition();
-    Property prop =
-      def.getFieldProperty("operations." + operation + ".access",
-			   getApplication(), getType().getName(),
-			   getField().getName());
-    method.setAccess(JavaMethodAccess.parse(prop.getSingletonValue()));
+    boolean isAbstract = operationContext.getBoolean("abstract");
+    boolean isStatic = operationContext.getBoolean("static");
+    boolean isFinal = operationContext.getBoolean("final");
+    String access = operationContext.getString("access");
+    JavaAccessSpecifier accessSpecifier = JavaAccessSpecifier.parse(access);
+    JavaMethod method = new JavaMethod(methodName, typeName, accessSpecifier,
+				       isAbstract, isFinal, isStatic, body);
 
-    return method;
-  }
-
-  //}}}
-  //{{{ public JavaMethod createTypeMethod(op, name, typeName, body)
-
-  public JavaMethod createTypeMethod(String operation, String methodName,
-				      String typeName, MethodBody body)
-  {
-    JavaMethod method = new JavaMethod(methodName, typeName, body);
-    DataDefinition def = getDataDefinition();
-    Property prop =
-      def.getTypeProperty("operations." + operation + ".access",
-			  getApplication(), getType().getName());
-    method.setAccess(JavaMethodAccess.parse(prop.getSingletonValue()));
+    System.out.println("creating method: "
+		       + (isAbstract ? "abstract " : "")
+		       + (isStatic ? "static " : "")
+		       + (isFinal ? "final " : "")
+		       + access
+		       + " "
+		       + methodName
+		       +"()");
 
     return method;
   }

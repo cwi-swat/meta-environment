@@ -3,29 +3,29 @@ package org.autocode.generator.java;
 //{{{ imports
 
 import org.autocode.*;
+import org.autocode.property.*;
 import org.autocode.generator.*;
-import org.autocode.bootstrap.*;
-import org.autocode.bootstrap.generator.repository.*;
-import org.autocode.bootstrap.generator.java.*;
-import org.autocode.support.*;
+import org.autocode.generator.repository.*;
+import org.autocode.generator.java.repository.*;
 
 //}}}
 
 public class Accessor
-  implements JavaGeneratorPlugin
+  extends JavaGeneratorPlugin
 {
-  //{{{ private void addAttribute(application, type, field, unit)
+  //{{{ private void addAttribute(JavaCompilationUnit unit, PropertyContext fieldContext)
 
-  private void addAttribute(String application, Type type, Field field,
-			    JavaCompilationUnit unit)
+  private void addAttribute(JavaCompilationUnit unit, PropertyContext fieldContext)
   {
-    String fieldName = JavaGenerator.javaFieldName(field.getName());
-    String typeName = JavaGenerator.javaTypeName(field.getType());
-    TypedMap fieldAttributes = createFieldAttributeMap(application,
-						       type.getName(),
-						       field.getName());
+    String fieldName = fieldContext.getName();
+    String fieldTypeName = fieldContext.getString("type");
 
-    JavaAttribute attr = new JavaAttribute(fieldName, typeName, fieldAttributes);
+    boolean isStatic = fieldContext.getBoolean("static");
+    boolean isFinal = fieldContext.getBoolean("final");
+    String access = fieldContext.getString("access");
+    JavaAccessSpecifier accessSpecifier = JavaAccessSpecifier.parse(access);
+    JavaAttribute attr = new JavaAttribute(fieldName, fieldTypeName, accessSpecifier,
+					   isFinal, isStatic);
     if (!unit.hasAttribute(attr)) {
       unit.addAttribute(attr);
     }
@@ -33,61 +33,72 @@ public class Accessor
 
   //}}}
 
-  //{{{ public void generateGet(JavaGenerator generator)
+  //{{{ public void generateGet(generator, type, field, operation)
 
-  public void generateGet(JavaGenerator generator, PropertyContext context,
-			  String typeName, String fieldName)
+  public void generateGet(JavaGenerator generator,
+			  PropertyContext typeContext,
+			  PropertyContext fieldContext,
+			  PropertyContext operationContext)
   {
-    String fieldName = generator.attributeName(fieldName);
-    String typeName = generator.className(getFieldType(context, fieldName));
+    String fieldName = fieldContext.getName();
+    String fieldTypeName = fieldContext.getString("type");
+
+    String attributeName = generator.attributeName(fieldName);
+    String attributeType = generator.typeName(fieldTypeName);
     String methodName = generator.methodName("get-" + fieldName);
 
     MethodBody body = new MethodBody();
     body.addLine("return " + fieldName + ";");
 
     JavaCompilationUnit unit = generator.getCompilationUnit();
-    unit.addMethod(createFieldMethod("get", methodName, typeName, body));
+    unit.addMethod(createMethod(operationContext, methodName, fieldTypeName, body));
 
-    addAttribute(generator.getApplication(), type, field, unit);
+    addAttribute(unit, fieldContext);
+
+    System.out.println("Generating get for: " + fieldName);
   }
 
   //}}}
-  //{{{ public void generateSet(JavaGenerator generator)
+  //{{{ public void generateSet(generator, type, field, operation)
 
-  public void generateSet(JavaGenerator generator)
+  public void generateSet(JavaGenerator generator,
+			  PropertyContext typeContext,
+			  PropertyContext fieldContext,
+			  PropertyContext operationContext)
   {
-    Field field = getField();
-    Type type = getType();
+    String fieldName = fieldContext.getName();
+    String fieldTypeName = fieldContext.getString("type");
 
-    if (field.getType().instanceOfCollectionType()) {
-      return;
-    }
+    String attributeName = generator.attributeName(fieldName);
+    String attributeType = generator.typeName(fieldTypeName);
+    String methodName = generator.methodName("set-" + fieldName);
 
-    JavaCompilationUnit unit = generator.getCompilationUnit();
-
-    String fieldName = JavaGenerator.javaFieldName(field.getName());
-    String typeName = JavaGenerator.javaTypeName(field.getType());
-    String methodName = JavaGenerator.javaMethodName("set-" + field.getName());
-
-    String paramName = JavaGenerator.javaParameterName(field.getName());
-    FormalParameter arg = new FormalParameter(paramName, typeName);
-
+    String paramName = generator.javaParameterName(fieldName);
+    FormalParameter arg = new FormalParameter(paramName, attributeType);
 
     MethodBody body = new MethodBody();
-    body.addLine(fieldName + " = " + paramName + ";");
-    JavaMethod method = createFieldMethod("set", methodName, "void", body);
+    body.addLine(attributeName + " = " + paramName + ";");
+    JavaMethod method = createMethod(operationContext, methodName, "void", body);
     method.addFormalParameter(arg);
 
+    JavaCompilationUnit unit = generator.getCompilationUnit();
     unit.addMethod(method);
 
-    addAttribute(generator.getApplication(), type, field, unit);
+    addAttribute(unit, fieldContext);
   }
 
   //}}}
   //{{{ public void generateInit(JavaGenerator generator)
 
-  public void generateInit(JavaGenerator generator)
+  public void generateInit(JavaGenerator generator,
+			   PropertyContext typeContext,
+			   PropertyContext fieldContext,
+			   PropertyContext operationContext)
   {
+    String fieldName = fieldContext.getName();
+    String fieldTypeName = fieldContext.getString("type");
+
+    /*
     Field field = getField();
     Type type = getType();
 
@@ -96,14 +107,11 @@ public class Accessor
     BasicType fieldType = field.getType();
 
     if (!fieldType.instanceOfCollectionType()) {
-      return; /* <PO> need some mechanism to specify which operations
-		 are valid for which builtin types */
+      return;
     }
 
     CollectionType ctype = (CollectionType)fieldType;
     String cname = ctype.getCollectionName();
-
-    JavaCompilationUnit unit = generator.getCompilationUnit();
 
     String fieldName = JavaGenerator.javaFieldName(field.getName());
     String typeName = JavaGenerator.javaTypeName(field.getType());
@@ -123,8 +131,11 @@ public class Accessor
     JavaMethod method = createFieldMethod("init", methodName, "void", body);
 
     unit.addMethod(method);
+    */
 
-    addAttribute(generator.getApplication(), type, field, unit);
+    JavaCompilationUnit unit = generator.getCompilationUnit();
+
+    addAttribute(unit, fieldContext);
   }
 
   //}}}

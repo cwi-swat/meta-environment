@@ -1,19 +1,23 @@
-package org.autocode.generator.repository.java;
+package org.autocode.generator.java.repository;
+
+//{{{ imports
 
 import org.autocode.generator.repository.*;
+import org.autocode.generator.java.repository.*;
+
+//}}}
 
 public class JavaAttribute
   extends Attribute
-  implements JavaAccessSpecifiers
 {
-  private int _access;
+  private JavaAccessSpecifier _access;
   private boolean _final;
   private boolean _static;
 
-  //{{{ public JavaAttribute(String name, String type, TypedMap accessSpecifiers)
+  //{{{ public JavaAttribute(name, type, access, isfinal, isstatic)
 
-  public JavaAttribute(String name, String type, int access, boolean isfinal,
-		       boolean isstatic)
+  public JavaAttribute(String name, String type, JavaAccessSpecifier access,
+		       boolean isfinal, boolean isstatic)
   {
     super(name, type);
 
@@ -24,9 +28,9 @@ public class JavaAttribute
 
   //}}}
 
-  //{{{ public int getAccess()
+  //{{{ public JavaAccessSpecifier getAccess()
 
-  public int getAccess()
+  public JavaAccessSpecifier getAccess()
   {
     return _access;
   }
@@ -41,7 +45,7 @@ public class JavaAttribute
   }
 
   //}}}
-  //{{{ public booaccessSpecifiers.getBoolean("final");lean isStatic()
+  //{{{ public boolean isStatic()
 
   public boolean isStatic()
   {
