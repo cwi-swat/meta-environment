@@ -97,6 +97,7 @@ context-free priorities
   >
   {Yielder InfixDataOp Yielder  -> Yielder}
 
+
 context-free priorities
 
   {"(" Yielder ")"	-> Yielder}
@@ -204,13 +205,13 @@ context-free syntax
   PrefixAction Action             -> Action       
   Action InfixAction Action       -> Action {left, prefer}
 
-  "(" Action ")"	-> Action {bracket}
+  "(" Action ")"	-> Action
         
 context-free priorities
 
   { PrefixAction Action         -> Action }
   >
-  { Action InfixAction Action   -> Action {left, prefer}}
+  { Action InfixAction Action   -> Action }
 
 
 %% data/Data.sdf
@@ -237,6 +238,9 @@ lexical syntax
   "="		-> InfixDataOp
   "defined"	-> PrefixDataOp
   "list"	-> PrefixDataOp
+
+  "invert"	-> PrefixDataOp
+  "consdata"	-> PrefixDataOp
 
   "-1" | [1-9][0-9]*   -> Index
 
@@ -265,7 +269,7 @@ lexical syntax
 
   "disj-union"          -> PrefixDataOp
   "binding"             -> PrefixDataOp
-  "bound"               -> PrefixDataOp 
+  "bound"               -> PrefixDataOp {avoid}
   "overriding"          -> PrefixDataOp
  
 %% types/Atomic
@@ -301,10 +305,18 @@ exports
 context-free syntax
 
   Boolean	-> Data
+  Integer	-> Data
+  Token		-> Data
 
 lexical syntax
 
   "not"		-> PrefixDataOp
+
+%% module data/Numbers
+
+context-free syntax
+
+  Integer	-> Data
 
 
 %% basic/boolean
@@ -314,15 +326,6 @@ exports
 
   context-free syntax
     BoolCon                     -> Boolean {cons("constant")}
-    lhs:Boolean "|" rhs:Boolean -> Boolean {left, cons("or")}
-    lhs:Boolean "&" rhs:Boolean -> Boolean {left, cons("and")}
-    "not" "(" Boolean ")" 	-> Boolean {cons("not")}
-    "(" Boolean ")"       	-> Boolean {bracket, cons("bracket")}
-
-  context-free priorities
-    Boolean "&" Boolean -> Boolean >
-    Boolean "|" Boolean -> Boolean
-
 
 %% basic/BoolCon
 
@@ -334,3 +337,26 @@ context-free syntax
     "true"  -> BoolCon {cons("true")}
     "false" -> BoolCon {cons("false")}
 
+%% basic/Integer
+exports
+
+sorts Integer Natural NatCon
+context-free syntax
+    NatCon	-> Natural
+    Natural    	-> Integer
+
+%% basic/NatCon
+
+lexical syntax
+ [0-9]+ -> NatCon {cons("default")}
+
+lexical restrictions
+
+ NatCon -/- [0-9]
+
+
+%% Eval/Data/Token
+
+lexical syntax
+
+  ("\""~[\"]+"\"") | [0-9]+	-> Token {avoid}

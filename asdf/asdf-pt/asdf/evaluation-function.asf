@@ -26,37 +26,32 @@ equations
 
 [use-to-type-1] 
 
-   bytes($CH2) := lower-case(bytes($CH1))
+   bytes($CH2*) := chars-to-lower-case(bytes($CH1*))
    =================================================================
-   use-to-type(sort($CH1$CH1*)) = atomictype($CH2$CH1*)
+   use-to-type(sort($CH1*)) = atomictype($CH2*)
 
 [use-to-type-2] 
 
-   $TY := action
+   $ATY := atomictype("a""c""t""i""o""n")
    =======================================================================
-   use-to-type(Action & $SFR1*) = $TY
+   use-to-type(Action & $SFR1*) = $ATY
 
 [get-eval-prefixdataop-1]
-    get-eval-prefixdataop($LT : $ASA, $LS*) = use-to-char($ASA)
+    get-eval-prefixdataop($LT : $ASA, $LS*) = use-to-char($LT)
 
 [use-to-char-1] 
+   use-to-char(uqliteral($CH1$CH1*)) = prefixdataop($CH1$CH1*)
 
-   bytes($CH2) := lower-case(bytes($CH1))
-   =================================================================
-   use-to-char(sort($CH1$CH1*)) = prefixdataop($CH2$CH1*)
-
-[use-to-char-2] 
-   use-to-char(Action & $SFR1*) = prefixdataop("a" "c" "t" "i" "o" "n")
 
 [get-eval-dataop-1]
    get-eval-dataop($SO ::= $ARR, $DOS) = 
    get-eval-dataop(sort-to-type($SO), $ARR, $DOS)
 
 [get-eval-dataop-2]
-   $DOS2 := concat([<get-eval-prefixdataop($LS*),datasel(type($CH+),give the get-eval-use($LS*))>], $DOS1)
+   $DOS2 := concat([<get-eval-prefixdataop($LS*),datasel(atomictype($CH+),give the get-eval-use($LS*))>], $DOS1)
    =======================================================================
    get-eval-dataop($ATY, uqliteral($CH+)($LS*), $DOS1) = 
-      <prefixdataop($CH+),datacon(type($CH+),get-eval-use($LS*))>:$DOS2
+      <prefixdataop($CH+),datacon(atomictype($CH+),get-eval-use($LS*))>:$DOS2
 
 [get-eval-dataop-3]
    get-eval-dataop($ATY, $ARR1 | $ARR2, $DOS) = 

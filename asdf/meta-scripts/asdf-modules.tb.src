@@ -141,7 +141,7 @@ in
       if not-equal(Modules, []) then
         Module := first(Modules) .
         Modules := next(Modules) .
-	snd-note(ui-status(statf(Id, "Generating asf+sdf for %s",[Module]))) .
+	snd-note(ui-status(statf(Id, "Collecting information from %s",[Module]))) .
         GenerateASFSDF(Module, Status?)
       fi
     )*
@@ -746,7 +746,7 @@ in
   +
     rec-msg(add-initial-syntax-modules-hook(Modules?, trm)) .
 /* DebugTS("SDF Trees", "sdf-tree") . */
-    snd-msg(ts-get-term-value("asdf-initialmodules-table", "Whitespace")).
+    snd-msg(ts-get-term-value("asdf-initialmodules-table", "ANModules")).
     (
       rec-msg(ts-value(Whitespace?)) .
       Modules := join(Modules, Whitespace) .
@@ -855,6 +855,19 @@ in
     +
       rec-msg(asdf-pt-not-generated(ErrorMsg?)) .
        snd-msg(pre-get-all-syntax-hook-result(failure(ErrorMsg)))       
+    )
+  +         
+    /* called from module.db when reducing a asdf term */
+    rec-msg(pre-get-all-syntax-hook(ModuleNames?, trm))
+    . snd-msg(generate-asfsdf-for-modules(ModuleNames))
+    .
+    (
+      rec-msg(asfsdf-generated)
+      . snd-msg(pre-get-all-syntax-hook-result(tablename("sdf-tree")))
+    +
+      rec-msg(asfsdf-not-generated(ErrorMsg?))
+      . snd-note(ui-status(error(ErrorMsg)))
+      . snd-msg(pre-get-all-syntax-hook-result(failure(ErrorMsg)))       
     )
   +
     /* Send from CheckModuleConsistency in module-utils.tb. */
@@ -1206,7 +1219,6 @@ in
   rec-msg(asdf-reduce-and-evaluate, Stack?, EditorId?)
   . StackPopString(Stack, Stack?, ModuleName?)
   . StackPopTerm(Stack, Stack?, STree?)
-  . printf("Evaluating... %t\n", ModuleName)
   . ReduceASDFTerm(STree, ModuleName, RTree?)
   .
   if not-equal(RTree, error-tree) then
@@ -1231,7 +1243,6 @@ in
 +
   /* Term editor, evaluate term. */
   rec-msg(asdf-evaluate, Stack?, EditorId?)
-  . printf("Evaluating... %t\n", ModuleName)
   . StackPopString(Stack, Stack?, ModuleName?)
   . IsStructureEditorRegistered(EditorId, Registered?)
   .
@@ -1500,10 +1511,16 @@ endlet
 
 
 process JoinEvalInfo(EvalInfo1 : term, EvalInfo2 : term?) is
+let
+  Id : int
+in
   /* and concat it with already collected info */
-  snd-msg(apply-rewrite("Asdfsupport", "join-eval-info", "EvalInfo", [EvalInfo1, EvalInfo2]))
+  Id := process-id
+  . snd-note(ui-status(endstat(Id)))
+  . snd-note(ui-status(statf(Id, "Joining collected information")))
+  . snd-msg(apply-rewrite("Asdfsupport", "join-eval-info", "EvalInfo", [EvalInfo1, EvalInfo2]))
   . rec-msg(normalform("Asdfsupport", EvalInfo2?)) 
-
+endlet
 
 process GetEvalInfo(ModuleName : str, EvalInfo : term?) is
 let
@@ -1511,7 +1528,6 @@ let
   ModuleTree: term
 in
   Id := process-id
-  . snd-note(ui-status(endstat(Id)))
   . snd-note(ui-status(statf(Id, "Collecting information for evaluation from %s",[ModuleName])))
   . snd-msg(ts-get-term-value("asdf-tree", ModuleName))
   .
@@ -1607,6 +1623,8 @@ in
   . rec-msg(io-file-written)
   . snd-msg(io-write-term-in-baf(".info", AllInfo))
   . rec-msg(io-file-written)
+  . snd-note(ui-status(endstat(Id)))
+  . snd-note(ui-status(statf(Id, "Executing evaluator...")))
   . snd-msg(gen-adapter-string-to-string-evaluate(asdf-eval-id,"__ASDF_BIN__/evaluation", "hest"))
   . rec-msg(gen-adapter-string-to-string-result(asdf-eval-id, ErrorText?))
   . snd-note(ui-status(endstat(Id)))

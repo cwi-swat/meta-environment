@@ -70,18 +70,33 @@ still working although start would be set to zero!?!
 - - Consistency check, maybe a problem when including asf+sdf modules.
 
 
-Husk at tilføje til cvs
- evaluation
-? evaluation.sh.src
-? initial.termstore
-
-
-Crash hvis reduce som første ting.
-
 --------------------- Changes: --------------------
 
 
-Tue, Sep 27
+Thu, Sep 30
+Note:
+- Working on fixing the interface issue. Most things seems to work but
+the data constructor issue still needs attending.
+
+- asdf-modules.tb.src: ASDF, added pre-get-all-syntax-hook for asdf
+  terms. This was needed due to the following bug: if a asdf term was
+  opend as the first thing after loading a asdf module and reduced the
+  env. would crash.
+  When introducing sdf modules in the action env. there is a
+  difference between asdf terms and sdf terms!
+
+- meta-interface.tb.src: Meta-Interface, removed the
+  pre-get-all-syntax-hook for asdf terms.
+
+
+Wed, Sep 29
+Note:
+- Working on fixing the interface issue.
+
+- Included Integers and Tokens in AN
+
+
+Tue, Sep 28
 Note:
 - Identified the place where the solution to the following bug lies:
   If the generated asf won't parse, the corresponding asdf module need

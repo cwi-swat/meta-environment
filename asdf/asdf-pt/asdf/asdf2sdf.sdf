@@ -50,7 +50,7 @@ exports
     "$transform-production"(AS-Requires-Production)	-> Grammar {prefer}
 
     "$transform-syntax-rhs"(Symbol, AS-Syntax-Rhs)	-> Production* {prefer}
-    "$transform-requires-rhs"(Symbol, AS-Requires-Rhs)	-> Production* {prefer}
+    "$transform-requires-rhs"(Symbol, AS-Requires-Rhs)	-> Grammar {prefer}
 
     "$transform-decons"({(Literal ":" AS-Argument) ","}*)	
 							-> Production* {prefer}
@@ -130,6 +130,8 @@ exports
     "AS-Syntax-Rhs"[0-9]*         -> AS-Syntax-Rhs
     "AS-Requires-Rhs"[0-9]*         -> AS-Requires-Rhs
     "Grammar"[0-9]*        -> Grammar
+    "Grammar*"[0-9]*	   -> Grammar*
+    "Grammar+"[0-9]*	   -> Grammar+
     "Sort"[0-9]*	   -> Sort
     "Literal"[0-9]*        -> Literal
     "Symbol"[0-9]*         -> Symbol
@@ -149,3 +151,4 @@ exports
     "FNR"[0-9]?		   -> ActionType
     "LCS"[0-9]?"*"	   -> {(Literal ":" AS-Argument) ","}*
     "ASA"[0-9]?		   -> AS-Argument
+    "QLiteral"[0-9]*        -> QLiteral

@@ -41,16 +41,6 @@ lexical restrictions
   UserDefPrefixDataOp -/- [a-z\-]
   Variable -/- [a-z0-9\*\+]  
 
-  InfixAction -/- [a-z]
-  PrefixAction -/- [a-z]
-  Action -/- [a-z]
-
-context-free restrictions
-
-  InfixAction -/- [a-z]
-  PrefixAction -/- [a-z]
-  Action -/- [a-z]
-
 %%%%%%%%%%
 % Reject %
 %%%%%%%%%%
@@ -164,6 +154,8 @@ lexical syntax
   "furthermore"		-> Type {reject}
   "before"		-> Type {reject}
   "apply"		-> Type {reject}
+
+  "invert"		-> Type {reject}
 
   "n"			-> AtomicType {reject}
 

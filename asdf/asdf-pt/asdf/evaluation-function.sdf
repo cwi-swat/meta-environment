@@ -49,7 +49,7 @@ context-free syntax
 
   get-eval-prefixdataop({(Literal ":" AS-Argument) ","}*)  -> DataOp
 
-  use-to-char(AS-Argument)	  -> DataOp
+  use-to-char(Literal)	  -> DataOp
 
 %% Sorts
 

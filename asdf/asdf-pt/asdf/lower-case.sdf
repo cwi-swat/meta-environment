@@ -8,9 +8,18 @@ imports
 
 exports
 
+context-free start-symbols Bytes
+
 context-free syntax
 
   lower-case(Bytes)	-> Bytes
+  chars-to-lower-case(Bytes) -> Bytes
 
+hiddens
+
+variables
+
+  "$CH"[0-9]?	-> CHAR
+  "$CH"[0-9]?"*"	-> CHAR*
   
 

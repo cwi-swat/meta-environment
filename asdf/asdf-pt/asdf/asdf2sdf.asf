@@ -89,24 +89,28 @@ Grammar
   [tsy-1] Grammar1 := $transform-syntax(AS-Syntax),
           Grammar2 := $transform-syntax(AS-Syntax+)
 	  =======================================
-	  $transform-syntax(AS-Syntax AS-Syntax+) = Grammar1 
-Grammar2
+	  $transform-syntax(AS-Syntax AS-Syntax+) =
+	  Grammar1 
+	  Grammar2
 
   [tsy-3] $transform-syntax(Sort ::= AS-Syntax-Rhs) = 
-context-free start-symbols Sort
-sorts Sort
-context-free syntax
-  $transform-syntax-rhs(Sort, AS-Syntax-Rhs)
+	  context-free start-symbols Sort
+	  sorts Sort
+ 	  context-free syntax
+	  $transform-syntax-rhs(Sort, AS-Syntax-Rhs)
 
   [tsr-1] $transform-syntax-rhs(Sort, AS-Syntax-Rhs1 | AS-Syntax-Rhs2) = 
-$transform-syntax-rhs(Sort, AS-Syntax-Rhs1)
-$transform-syntax-rhs(Sort, AS-Syntax-Rhs2)
+	  $transform-syntax-rhs(Sort, AS-Syntax-Rhs1)
+	  $transform-syntax-rhs(Sort, AS-Syntax-Rhs2)
 
   [tsr-2] $transform-syntax-rhs(Sort1, Sort2) = Sort2 -> Sort1
 
   [tsr-2] $transform-syntax-rhs(Sort, Literal) = Literal -> Sort
 
-  [tsr-3] $transform-syntax-rhs(Sort, Literal(Symbol,*) ) = Literal(Symbol,*) -> Sort
+  [tsr-3] $transform-syntax-rhs(Sort, Literal(Symbol,*) ) = 
+	  Literal(Symbol,*) -> Sort
+
+
 
   [trq-1] Grammar1 := $transform-requires(AS-Requires),
           Grammar2 := $transform-requires(AS-Requires+)
@@ -114,11 +118,14 @@ $transform-syntax-rhs(Sort, AS-Syntax-Rhs2)
           $transform-requires(AS-Requires AS-Requires+) = Grammar1 
 Grammar2
 
-  [trq-2] $transform-requires(AS-Variable) = $transform-variable(AS-Variable)
+  [trq-2] $transform-requires(AS-Variable) =
+	  $transform-variable(AS-Variable)
 
-  [trq-3] $transform-requires(AS-Requires-Production) = $transform-production(AS-Requires-Production)
+  [trq-3] $transform-requires(AS-Requires-Production) =
+	  $transform-production(AS-Requires-Production)
 
-  [trq-4] $transform-requires(AS-Constant) = $transform-constant(AS-Constant)
+  [trq-4] $transform-requires(AS-Constant) =
+	  $transform-constant(AS-Constant)
 
 
   [tsm-1] Grammar1 := $transform-semantics(AS-Semantics),
@@ -127,92 +134,115 @@ Grammar2
 	  $transform-semantics(AS-Semantics AS-Semantics+) = Grammar1 
 Grammar2
 
-  [tsm-2] $transform-semantics(Literal : Sort1 -> FNR) = context-free syntax
-  Literal Sort1 -> sort("A""c""t""i""o""n")
+  [tsm-2] $transform-semantics(Literal : Sort1 -> FNR) = 
+	  context-free syntax
+	  Literal Sort1 -> sort("A""c""t""i""o""n")
 
   [tsm-3] $transform-semantics(AS-Eqs-Tag AS-Eqs-Lhs = A) = 
-context-free syntax
+	  context-free syntax
 
   [tsm-1] eqlist(ASFequation*1) := $get-equations(AS-Semantics),
           eqlist(ASFequation*2) := $get-equations(AS-Semantics+)
 	  =======================================
-	  $get-equations(AS-Semantics AS-Semantics+) = eqlist(ASFequation*1
-ASFequation*2)
+	  $get-equations(AS-Semantics AS-Semantics+) =
+	  eqlist(ASFequation*1 ASFequation*2)
 
-  [tsm-2] $get-equations(AS-Semantics) = eqlist() when Literal : Sort1 -> FNR := AS-Semantics
+  [tsm-2] $get-equations(AS-Semantics) =
+	  eqlist() when Literal : Sort1 -> FNR := AS-Semantics
 
-  [tsm-3] $get-equations(AS-Eqs-Tag AS-Eqs-Lhs = A) = eqlist(AS-Eqs-Tag AS-Eqs-Lhs = (A))
+  [tsm-3] $get-equations(AS-Eqs-Tag AS-Eqs-Lhs = A) =
+	  eqlist(AS-Eqs-Tag AS-Eqs-Lhs = (A))
 
 
   [default-tp-2] $transform-production(Sort ::= AS-Requires-Rhs) = 
-lexical syntax
-  $transform-requires-rhs(Sort, AS-Requires-Rhs) 
+		 $transform-requires-rhs(Sort, AS-Requires-Rhs) 
 
-  [trhs-1] Production+1 := $transform-requires-rhs(Sort, AS-Requires-Rhs1),
-            Production+2 := $transform-requires-rhs(Sort, AS-Requires-Rhs2)
-            =========================================================
-            $transform-requires-rhs(Sort, AS-Requires-Rhs1 | AS-Requires-Rhs2) = 
-	    Production+1
-	    Production+2
+  [trhs-1] Grammar1 := $transform-requires-rhs(Sort, AS-Requires-Rhs1),
+           Grammar2 := $transform-requires-rhs(Sort, AS-Requires-Rhs2)
+           =========================================================
+           $transform-requires-rhs(Sort, AS-Requires-Rhs1 | AS-Requires-Rhs2) = 
+	    Grammar1
+	    Grammar2
 
   [trhs-2] 
-	   bytes($CH2) := lower-case(bytes($CH1)),
-	   bytes($CH4) := lower-case(bytes($CH3))
+	   bytes($CH2*) := chars-to-lower-case(bytes($CH1*)),
+	   bytes($CH4*) := chars-to-lower-case(bytes($CH3*))
 	   =================================================
-	   $transform-requires-rhs(sort($CH1$CH1*), sort($CH3$CH3*)) =
-	   sort($CH3$CH3*) -> sort($CH1$CH1*)
-	   qliteral("""$CH2$CH1*""") -> sort("A""t""o""m""i""c""T""y""p""e")
-	   qliteral("""$CH4$CH3*""") -> sort("A""t""o""m""i""c""T""y""p""e")
+	   $transform-requires-rhs(sort($CH1*), sort($CH3*)) =
+	   context-free syntax
+	   sort($CH3*) -> sort($CH1*)
+	   lexical syntax
+	   qliteral("""$CH2*""") -> sort("A""t""o""m""i""c""T""y""p""e")
+	   qliteral("""$CH4*""") -> sort("A""t""o""m""i""c""T""y""p""e")
 
-  [trhs-2] $transform-requires-rhs(Sort, Literal) = Literal -> Sort
+  [trhs-2-q] $transform-requires-rhs(Sort, QLiteral) = 
+	   lexical syntax
+	   QLiteral -> Sort
 
-  [trhs-3] $transform-requires-rhs(Sort, uqliteral($CH+)(Symbol,*) ) = qliteral("""$CH+""") -> PrefixDataOp
+  [trhs-2-uq] $transform-requires-rhs(Sort, uqliteral($CH+)) = 
+	   lexical syntax
+	   qliteral("""$CH+""") -> Sort
+
+  [trhs-3] $transform-requires-rhs(Sort, uqliteral($CH+)(Symbol,*) ) =
+	   lexical syntax
+	   qliteral("""$CH+""") -> PrefixDataOp
 
   [trhs-3] $transform-requires-rhs(Sort, uqliteral($CH+)(LCS*) ) = 
-qliteral("""$CH+""")	-> sort("A""t""o""m""i""c""T""y""p""e")
-qliteral("""$CH+""") -> PrefixDataOp
-$transform-decons(LCS*)
+	   lexical syntax
+	   qliteral("""$CH+""")	-> sort("A""t""o""m""i""c""T""y""p""e")
+	   qliteral("""$CH+""") -> PrefixDataOp
+	   $transform-decons(LCS*)
 
   [trhs-4] Sort == sort($CH+1)
 	   ========================
-	   $transform-requires-rhs(sort($CH+1), uqliteral($CH+2) Sort ) = qliteral("""$CH+2""") -> sort("P""r""e""f""i""x"$CH+1)
-sort("P""r""e""f""i""x"$CH+1) Sort -> sort($CH+1)
+	   $transform-requires-rhs(sort($CH+1), uqliteral($CH+2) Sort) =
+	   lexical syntax
+	   qliteral("""$CH+2""") -> sort("P""r""e""f""i""x"$CH+1)
+	   context-free syntax
+	   sort("P""r""e""f""i""x"$CH+1) Sort -> sort($CH+1)
 
   [default-trhs-4] $transform-requires-rhs(Sort, uqliteral($CH+) Sort1 ) = 
-qliteral("""$CH+""") Sort1 -> Sort
+		   context-free syntax
+		   qliteral("""$CH+""") Sort1 -> Sort
 
   [trhs-5] Sort == sort($CH+1)
 	   ========================
-	   $transform-requires-rhs(sort($CH+1), Sort uqliteral($CH+2) Sort) = qliteral("""$CH+2""") -> sort("I""n""f""i""x"$CH+1)
-Sort sort("I""n""f""i""x"$CH+1) Sort -> sort($CH+1)
+	   $transform-requires-rhs(sort($CH+1), Sort uqliteral($CH+2) Sort) =
+	   lexical syntax
+	   qliteral("""$CH+2""") -> sort("I""n""f""i""x"$CH+1)
+	   context-free syntax
+	   Sort sort("I""n""f""i""x"$CH+1) Sort -> sort($CH+1)
 
-  [default-trhs-5] $transform-requires-rhs(Sort, Sort1 uqliteral($CH+) Sort2) = 
-Sort1 qliteral("""$CH+""") Sort2	-> Sort
+  [default-trhs-5] $transform-requires-rhs(Sort, Sort1 uqliteral($CH+)  Sort2) = 
+		   context-free syntax
+		   Sort1 qliteral("""$CH+""") Sort2	-> Sort
 
   [td-1] $transform-decons(uqliteral($CH+) : ASA, LCS*) = 
-qliteral("""$CH+""")	-> PrefixDataOp
-$transform-decons(LCS*)
+	 qliteral("""$CH+""")	-> PrefixDataOp
+	 $transform-decons(LCS*)
 
   [td-2] $transform-decons() = 
 
   [tv-1] $transform-variable(varlexprefix($CH+) : Sort) = 
-sorts Sort
-variables qliteral("""$CH+""")[0-9\']* 		-> Sort
-	  qliteral("""$CH+""")[0-9\']*"+"	-> Sort+
-	  qliteral("""$CH+""")[0-9\']*"*"	-> Sort*
+	 sorts Sort
+	 variables qliteral("""$CH+""")[0-9\']* 		-> Sort
+		   qliteral("""$CH+""")[0-9\']*"+"		-> Sort+
+		   qliteral("""$CH+""")[0-9\']*"*"		-> Sort*
 
   [tc-1] $transform-constant(Literal : Sort) = 
-context-free syntax
-  Literal -> Sort
-lexical syntax
-  Literal -> Data
+	 context-free syntax
+	  Literal -> Sort
+	 lexical syntax
+	  Literal -> Data
 
   [ei-1] $extract-imports(sort($CH+),Import*) = 
          $add-to(moduleid($CH+), Import*)
 
-  [ei-2] $extract-imports(Sort ::= AS-Requires-Rhs, Import*) = $extract-req-imports(AS-Requires-Rhs, Import*)
+  [ei-2] $extract-imports(Sort ::= AS-Requires-Rhs, Import*) =
+	 $extract-req-imports(AS-Requires-Rhs, Import*)
 
-  [ei-2] $extract-imports(Literal : Sort, Import*) = $extract-req-imports(Sort, Import*)
+  [ei-2] $extract-imports(Literal : Sort, Import*) =
+	 $extract-req-imports(Sort, Import*)
    
   [ei-2] $extract-imports(semantics AS-Semantics*,Import*) = Import*
 

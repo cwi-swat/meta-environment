@@ -26,4 +26,15 @@ equations
 [lc-x] lower-case(bytes("X")) = bytes("x")
 [lc-y] lower-case(bytes("Y")) = bytes("y")
 [lc-z] lower-case(bytes("Z")) = bytes("z")
+[default-lc] lower-case(bytes($CH)) = bytes($CH)
+
+
+[chars-to-lower-case-1]
+  chars-to-lower-case(bytes($CH)) = lower-case(bytes($CH))
+
+[chars-to-lower-case-2]
+  bytes($CH2*) := chars-to-lower-case(bytes($CH1*)),
+  bytes($CH2)  := lower-case(bytes($CH1))
+  ==========================================
+  chars-to-lower-case(bytes($CH1$CH1*)) =  bytes($CH2$CH2*)
 
