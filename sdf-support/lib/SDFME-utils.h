@@ -54,6 +54,7 @@ ATbool SDF_hasPreferAttribute(SDF_Production prod);
 ATbool SDF_hasAvoidAttribute(SDF_Production prod);
 
 SDF_OptLayout SDF_makeLayoutEmpty();
+SDF_OptLayout SDF_makeLayoutSpace();
 
 SDF_Import SDFmakeImport(char *moduleName);
 SDF_Module SDFaddModuleImport(SDF_Module module, SDF_Import import);

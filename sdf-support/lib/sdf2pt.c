@@ -3,8 +3,8 @@
 #include <ctype.h>
 
 #include <MEPT-utils.h>
-#include <SDFME-utils.h>
-#include <SDF2PT.h>
+#include "SDFME-utils.h"
+#include "SDF2PT.h"
 
 static PT_Symbols    SDFSymbolsToPtSymbols(SDF_Symbols sdfSymbols);
 static PT_Attributes SDFAttributesToPtAttributes(SDF_Attributes sdfAttributes);
@@ -65,7 +65,7 @@ PT_Production SDFProductionToPtProduction(SDF_Production sdfProduction)
     ptSymbols = SDFSymbolsToPtSymbols(sdfSymbols);
   }
   else {
-    ATerror("SDFProductionToPtProduction: unable to flatten %s\n", 
+    ATerror("SDFProductionToPtProduction: unable to convert %s\n", 
 	    PT_yieldTree((PT_Tree) sdfProduction));
     return NULL;
   }
@@ -259,7 +259,7 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     result = PT_makeSymbolStrategy(ptLeft, ptRight);
   }
   else {
-    ATerror("SDFSymbolToPtSymbol: unable to flatten symbol %t: %s\n", 
+    ATerror("SDFSymbolToPtSymbol: unable to convert symbol %t: %s\n", 
 	    sdfSymbol, PT_yieldTree((PT_Tree) sdfSymbol));
     result = NULL;
   }
@@ -356,7 +356,7 @@ static PT_Attr SDFAttributeToPtAttr(SDF_Attribute sdfAttribute)
   else if (SDF_isAttributeTerm(sdfAttribute)) {
     ATerm term = ATmake(PT_yieldTree((PT_Tree) sdfAttribute));
     if (term == NULL) {
-      ATerror("SDFAttributeToPtAttr: unable to flatten %s\n",
+      ATerror("SDFAttributeToPtAttr: unable to convert %s\n",
 	      PT_yieldTree((PT_Tree) sdfAttribute));
       ptAttr = NULL;
     }
@@ -365,7 +365,7 @@ static PT_Attr SDFAttributeToPtAttr(SDF_Attribute sdfAttribute)
     }
   }
   else {
-     ATerror("SDFAttributeToPtAttr: unable to flatten %s\n", 
+     ATerror("SDFAttributeToPtAttr: unable to convert %s\n", 
 	     PT_yieldTree((PT_Tree) sdfAttribute));
      ptAttr = NULL;
   }
@@ -393,7 +393,7 @@ static int SDFCharacterToInt(SDF_Character sdfCharacter)
     }
   }
   else {
-    ATerror("SDFCharacterToInt: unable to flatten %s\n",
+    ATerror("SDFCharacterToInt: unable to convert %s\n",
 	    PT_yieldTree((PT_Tree) sdfCharacter));
     result = -1;
   }
@@ -418,7 +418,7 @@ static PT_CharRange SDFCharRangeToPtCharRange(SDF_CharRange sdfCharRange)
     result = PT_makeCharRangeRange(ptStart,ptEnd);
   }
   else {
-    ATerror("SDFCharRangeToPtCharRange: unable to flatten %s\n",
+    ATerror("SDFCharRangeToPtCharRange: unable to convert %s\n",
 	    PT_yieldTree((PT_Tree) sdfCharRange));
     result = NULL;
   } 
@@ -443,7 +443,7 @@ static PT_CharRanges SDFCharRangesToPtCharRanges(SDF_CharRanges sdfCharRanges)
     return PT_concatCharRanges(ptLeft, ptRight);
   }
   else {
-    ATerror("SDFCharRangesToPtCharRanges: unable to flatten %s\n",
+    ATerror("SDFCharRangesToPtCharRanges: unable to convert %s\n",
 	    PT_yieldTree((PT_Tree) sdfCharRanges));
     result = NULL;
   }
@@ -467,7 +467,7 @@ static PT_CharRanges SDFCharClassToPtCharRanges(SDF_CharClass sdfCharClass)
     } 
   }
   else {
-    ATerror("SDFCharClassToPtCharRanges: unable to flatten characterclass: %s\n",
+    ATerror("SDFCharClassToPtCharRanges: unable to convert characterclass: %s\n",
 	    PT_yieldTree((PT_Tree) sdfCharClass));
     result = NULL;
   }
