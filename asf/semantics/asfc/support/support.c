@@ -470,13 +470,12 @@ static ATermList innermost_list(ATermList l)
 {
 	ATermList result = ATempty;
 	int length = ATgetLength(l);
-
+	ATerm el;
+ 
 	/* When a list is shorter than 16 elements, we assume that
      it is not worth it to malloc a buffer. We use ATreverse
      to restore the correct list order. */
 	if(length < 16) {
-		ATerm el;
- 
 		while(!ATisEmpty(l)) {
 			el = innermost(ATgetFirst(l));
 			if(el)  
@@ -486,7 +485,7 @@ static ATermList innermost_list(ATermList l)
 		return ATreverse(result);
 	} else {
 		int idx = 0;
-		ATerm *elems = malloc(sizeof(ATerm)*length);
+		ATerm *elems = (ATerm *)malloc(sizeof(ATerm)*length);
 		if(!elems)
 			ATerror("innermost_list: no room for %d elements.\n", length);
 
@@ -496,8 +495,11 @@ static ATermList innermost_list(ATermList l)
 		}
 		assert(idx == length);
 
-		for(--idx; idx>=0; idx--)
-			result = ATinsert(result, innermost(elems[idx]));
+		for(--idx; idx>=0; idx--) {
+			el = innermost(elems[idx]);
+			if(el)
+				 result = ATinsert(result, el);
+		}
 		
 		free(elems);
 		return result;
