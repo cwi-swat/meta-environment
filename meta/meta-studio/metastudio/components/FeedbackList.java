@@ -148,5 +148,6 @@ public class FeedbackList extends UserInterfacePanel {
         }
         
         data.removeAll(removed);
+        repaint();
     }
 }
