@@ -23,7 +23,7 @@ exports
         "[" {REXPTYPE ","}* "]"                 		-> REXPTYPE
 
         is-var(REXPTYPE)                        		-> Boolean
-	is-simple-type(REXPTYPE)				-> Boolean
+	is-simple-type-or-tuple(REXPTYPE)			-> Boolean
 	is-compound-type(REXPTYPE)				-> Boolean
 
 	REXPTYPE "==" REXPTYPE					-> Boolean

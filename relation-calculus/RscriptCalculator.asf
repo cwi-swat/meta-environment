@@ -96,16 +96,18 @@
 
 %% ---- Eval statements
 
-[S1]	eval-rscript(bool $Var, $Store) 	= assign($Var, true, $Store)
-[S2]	eval-rscript(int $Var, $Store)  	= assign($Var, 0, $Store)
-[S3]	eval-rscript(str $Var, $Store)  	= assign($Var, "", $Store)
-[S4]	eval-rscript(bag[$Etype] $Var, $Store)  = assign($Var, EmptyElemBag, $Store)	
-[S4]	eval-rscript(bag[$Etype] $Var = {}, $Store)  = assign($Var, EmptyElemBag, $Store)
+%%[S1]	eval-rscript(bool $Var, $Store) 	= assign($Var, true, $Store)
+%%[S2]	eval-rscript(int $Var, $Store)  	= assign($Var, 0, $Store)
+%%[S3]	eval-rscript(str $Var, $Store)  	= assign($Var, "", $Store)
+%%[S4]	eval-rscript(node $Var, $Store)		= assign($Var, area("",0,0,0,0), $Store)
+%%[S4]	eval-rscript(bag[$Etype] $Var, $Store)  = assign($Var, *empty*, $Store)	
+%%[S4]	eval-rscript(bag[$Etype] $Var = {}, $Store)  = assign($Var, *empty*, $Store)
 	
-[S5]	eval-rscript(rel[$Etype1, $Etype2] $Var, $Store) 
-						 = assign($Var, EmptyElemRel, $Store)
-[S5]	eval-rscript(rel[$Etype1, $Etype2] $Var = {}, $Store) 
-						 = assign($Var, EmptyElemRel, $Store)
+%%[S5]	eval-rscript(rel[$Etype1, $Etype2] $Var, $Store) 
+%%						 = assign($Var, *empty*, $Store)
+%%[S5]	eval-rscript(rel[$Etype1, $Etype2] $Var = {}, $Store) 
+%%						 = assign($Var, *empty*, $Store)
+[S1]	eval-rscript($Etype $Var, $Store)	= $Store
 
 [S6]	eval-rscript($Etype $Var = $Exp, $Store) = assign($Var, evalx($Exp, $Store), $Store)
 [S7]	eval-rscript($Etype1 $Var1($Etype2 $Var2) = $Exp, $Store) 

@@ -79,7 +79,7 @@ buttons([
 	  get-root,
            check-sort("PROGRAM"),
 
-	   push-filename("uninit.rscript"),
+	   push-filename("rscripts/uninit.rscript"),
            parse("Rscript", "RSCRIPT"),
 
 	   push-string("\"UNDEF\""),
