@@ -1,5 +1,8 @@
 # $Id$
 
+2003/09/29 <markvdb@cwi.nl>
+ * Fixed a problem with deleting a module.
+
 2003/09/25 <{markvdb,jurgenv}@cwi.nl>
  * Fixed the problems with close-modules.
  * Fixed the layouting of the graph, font size and order are
