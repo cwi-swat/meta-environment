@@ -8,8 +8,6 @@
 #include <aterm2.h>
 
 #include <MEPT-utils.h>
-#include <asfix2.h>
-#include <conversion.h>
 
 static char myname[] = "flattenPT";
 static char myversion[] = "1.0";
