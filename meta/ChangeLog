@@ -1,5 +1,13 @@
 # $Id$
 
+2002/04/24 <olivierp@cwi.nl>
+ * Dragging when the menu is active no longer moves the graph
+ * Operations on multiple modules are now possible
+ * Clear all no also clears the list of modules
+ * Fixed bug that caused small graphs to jump to the lower right
+   when dragging
+ * Added status panel
+
 2002/04/19 ({jong,jurgenv}@cwi.nl)
  * Small refactorings in configure.in to make things more clear
  * Release 0.9

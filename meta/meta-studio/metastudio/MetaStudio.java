@@ -25,6 +25,7 @@ public class MetaStudio
 
   private static final String PREF_TREEPANE_BACKGROUND = "treepane.background";
   private static final String PREF_MSGPANE_BACKGROUND = "messagepane.background";
+  private static final String PREF_MSGPANE_STATUS = "messagepane.status";
   private static final String PREF_GRAPHPANE_BACKGROUND = "graphpane.background";
   private static final String PREF_GRAPHPANE_SCALES = "graphpane.scales";
   private static final String PREF_STATUSPANE_BACKGROUND = "statuspane.background";
@@ -76,6 +77,9 @@ public class MetaStudio
   private Style styleError;
   private Style styleWarning;
   private Style styleMessage;
+  private JLabel statusBar;
+  private JCheckBox statusLog;
+  private List statusMessages;
 
   private Action actionOpenModule;
   private Action actionNewModule;
@@ -130,6 +134,7 @@ public class MetaStudio
 
     factory = new aterm.pure.PureFactory();
     moduleManager = new ModuleManager();
+    statusMessages = new LinkedList();
 
     //{{{ Read preferences
 
@@ -545,6 +550,10 @@ public class MetaStudio
     color = Preferences.getColor(PREF_MSGPANE_BACKGROUND);
     history.setBackground(color);
 
+    statusBar = new JLabel("idle");
+    statusLog = new JCheckBox("Log Status");
+    statusLog.setSelected(Preferences.getBoolean(PREF_MSGPANE_STATUS + ".log"));
+
     //}}}
     //{{{ Create module status panel
 
@@ -560,7 +569,32 @@ public class MetaStudio
     //{{{ Glue UI components
 
     JPanel treePanel    = new JPanel();
+
     historyPane = new JScrollPane(history);
+
+    JPanel historyPanel = new JPanel();
+    historyPanel.setLayout(new BorderLayout());
+    JPanel statusBarPanel = new JPanel();
+    statusBarPanel.setLayout(new BorderLayout());
+
+    color = Preferences.getColor(PREF_MSGPANE_STATUS + ".background");
+    //statusBar.setBackground(color);
+    statusLog.setBackground(color);
+    statusBarPanel.setBackground(color);
+    color = Preferences.getColor(PREF_MSGPANE_STATUS + ".foreground");
+    //statusBar.setForeground(color);
+    statusLog.setForeground(color);
+    statusBarPanel.setForeground(color);
+    Font font = Preferences.getFont(PREF_MSGPANE_STATUS + ".font");
+    statusBar.setFont(font);
+    statusLog.setFont(font);
+    //statusBarPanel.setFont(font);
+
+    statusBarPanel.add(statusBar, BorderLayout.CENTER);
+    statusBarPanel.add(statusLog, BorderLayout.EAST);
+    historyPanel.add(historyPane, BorderLayout.CENTER);
+    historyPanel.add(statusBarPanel, BorderLayout.SOUTH);
+
     //historyPane.setMinimumSize(new Dimension(50, 100));
 
     Container content = getContentPane();
@@ -573,7 +607,7 @@ public class MetaStudio
     leftPanel.setResizeWeight(0.8);
 
     JSplitPane rightPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-					   graphPane, historyPane);
+					   graphPane, historyPanel);
     rightPanel.setResizeWeight(0.8);
 
     JSplitPane mainPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
@@ -729,7 +763,19 @@ public class MetaStudio
 
   void clearStatus(String id)
   {
-    //msgLabel.setText("-");
+    ListIterator iter = statusMessages.listIterator();
+    while (iter.hasNext()) {
+      String[] pair = (String[])iter.next();
+      if (pair[0].equals(id)) {
+	iter.remove();
+      }
+    }
+
+    if (statusMessages.size() == 0) {
+      statusBar.setText("idle");
+    } else {
+      statusBar.setText(((String[])statusMessages.get(0))[1]);
+    }
   }
 
   //}}}
@@ -762,7 +808,13 @@ public class MetaStudio
 
   public void addStatus(ATerm id, String message)
   {
-    addMessage(styleMessage, id.toString(), message);
+    String ids = id.toString();
+    if (statusLog.isSelected()) {
+      addMessage(styleMessage, ids, message);
+    }
+    statusBar.setText(message);
+    String[] pair = { ids, message };
+    statusMessages.add(pair);
   }
 
   //}}}
@@ -771,7 +823,7 @@ public class MetaStudio
   public void addStatusf(ATerm id, String format, ATerm args)
   {
     String message = formatString(format, (ATermList)args);
-    addMessage(styleMessage, id.toString(), message);
+    addStatus(id, message);
   }
 
   //}}}
