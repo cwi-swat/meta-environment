@@ -199,7 +199,8 @@ Recall that there is no fixed grammar since the basic \asdf-grammar
 can be extended by the user.  The solution we have adopted is to
 introduce the intermediate format \asfix\ (\asdf\ fixed format) which
 is used to represent the parse trees of the \asdf\ modules in a
-machine processable format. The user-defined syntax is replaced by
+format that is easy processable by a machine. 
+The user-defined syntax is replaced by
 prefix functions. The parse trees in the \asfix\ format are self
 contained.
 
@@ -210,7 +211,7 @@ language \muasf\ as an intermediate representation to ease the
 compilation process and to perform various transformations before
 generating C code.
 \muasf\ is in fact a single sorted (algebraic) specification formalism
-using only prefix notation.
+that uses only prefix notation.
 \muasf\ can be considered as the abstract syntax representation
 of \asdf.
 \asfix\ and \muasf\ live on different levels, \muasf\ is only visible
@@ -551,7 +552,7 @@ in the \asdf\ compiler):
 \item Postponing term construction.  Only the (sub)terms of the normal
 form must be constructed, {\em all} other (sub)terms are only needed
 to direct the rewriting process.  By transforming the specification
-and extended it with rewrite rules that reflect the steering effect of
+and extending it with rewrite rules that reflect the steering effect of
 the intermediate terms, the amount of term construction can be
 reduced. In the context of functional languages this technique is
 known as \emph{deforestation}~\cite{Wadler1990}.  Its benefits for
