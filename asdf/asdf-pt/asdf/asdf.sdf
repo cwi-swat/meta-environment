@@ -10,6 +10,8 @@ imports
 
 exports
 
+  context-free start-symbols AS-Module
+
   sorts 
 
     AS-Module AS-Section AS-Syntax AS-Requires AS-Semantics 

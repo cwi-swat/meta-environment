@@ -9,7 +9,9 @@ imports
   containers/List[<DataOp, FunResult>]
   containers/List[<Data, Type>]
 
+
 exports
+  context-free start-symbols TypeInfo
 
 sorts
 
@@ -21,7 +23,7 @@ context-free syntax
 
   <Signatures, SubTypes, DataOpSigs, DataConstants>	-> TypeInfo
 
-  List[[<DataOp, FunResult>]]		-> DataOpSigs
+  List[[<DataOp,FunResult>]]		-> DataOpSigs
 
   List[[<Data, Type>]]			-> DataConstants
 

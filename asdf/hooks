@@ -1,0 +1,138 @@
+---------- New Hooks: ----------
+New hooks introduced in the meta-env.
+For each new hook, there is a short motivation and a list of files and
+process changed in order to implement the hook.
+
+
+------- termstore-consistency-check-hook -------
+Motivation:
+When loading an initial termstore as is the case in the ASDF package,
+we might not need the consistency check.
+
+- meta/tbscripts/module-utils.tb: TermStoreActivation, added
+  termstore-consistency-check-hook.
+
+- asdf/meta-script/asdf-modules.tb.src: ActionSdf-hooks, added
+  termstore-consistency-check-hook
+
+- asfsdf/meta-script/meta-interface.tb.src: Meta-Interface, 
+  termstore-consistency-check-hook and
+  get-modulenames-for-consistency-checking-hook.
+
+
+
+------- get-modulenames-for-consistency-checking-hook -------
+Motivation:
+It might not bee all modules, which should be included in an
+consistency check. E.g. if an initial termstore is part of a given
+termstore, one might not want to do consistency check of the modules
+of the initial termstore, because, they should never change doing the
+lifetime of a meta env. distribution.
+
+- meta/tbscripts/module-utils.tb: TermStoreActivation, added
+  get-modulenames-for-consistency-checking-hook.
+
+- asdf/meta-script/asdf-modules.tb.src: ActionSdf-hooks, added
+  get-modulenames-for-consistency-checking-hook.
+
+- asfsdf/meta-script/meta-interface.tb.src: Meta-Interface, added
+  get-modulenames-for-consistency-checking-hook.
+
+
+
+------- do-consistency-check-hook -------
+Motivation:
+How to do consistency check is package dependent. E.g. an ASDF module
+should not be checked the same way as an asf+sdf module.
+
+- meta/tbscripts/module-utils.tb: CheckModuleConsistency, added
+  do-consistency-check-hook.
+
+- asdf/meta-script/asdf/meta-script/asdf-modules.tb.src: ActionSdf-hooks2,
+  do-consistency-check-hook.
+
+- asfsdf/meta-script/meta-interface.tb.src: Additional-Interface,
+  do-consistency-check-hook.
+
+
+
+------- extra-mod-path-hook -------
+Motivation:
+We need to be able to locate files outside the current directory and
+the asf-library. Furthermore we must avoid collision with files
+created by the user.
+
+- meta/tbscripts/button-actions.tb LocateFile, added
+  extra-mod-path-hook.
+
+- asdf/meta-script/asdf-modules.tb.src: ActionSdf-hooks, added set-extra-mod-path,
+  clear-extra-mod-path, extra-mod-path-hook.
+
+- asfsdf/meta-scripts/meta-interface.tb.src: Meta-Interface, added
+  extra-mod-path-hook.
+
+
+
+------- get-asf-equations-text-hook -------
+Motivation:
+The asf generated for the asdf modules should not be saved on the
+disk, and therefor we can not use the previous implementation.
+We need to load the text from the termstore.
+
+- meta/tbscripts/process-eqs.tb: GetAsfModule, added the 
+  get-asf-equations-text-hook.
+
+- asdf/meta-script/asdf-modules.tb.src: ActionSdf-hooks added the
+  get-asf-equations-text-hook.
+
+- asfsdf/meta-script/met-interface.tb.src Meta-Interface, added
+  get-asf-equations-text-hook.
+
+
+
+------- get-parse-equation-checking-hook -------
+Motivation:
+Since the asf which we generate should be valid under any circumstance
+it is not necessary to check it. Therefor we need to be able to disable
+the checking option to GetParseTable in ParseEquationsText.
+
+- meta/tbscripts/process-eqs.tb: ParseEquationsText, added the
+  get-parse-equation-checking-hook.
+
+- asdf-modules.tb.src: ActionSdf-hooks added the
+  get-parse-equation-checking-hook.
+
+- asfsdf/meta-script/met-interface.tb.src Meta-Interface, added
+  get-parse-equation-checking-hook.
+
+
+
+------- get-open-syntax-parse-handler-hook -------
+Motivation:
+The choice of syntax parse handler is dependent of the type of module,
+which needs to be parsed.
+
+- meta/tbscripts/open-modules.tb: OpenSyntax, use of
+  get-open-syntax-parse-handler-hook and 
+  get-open-syntax-parse-handler-hook-result(Pid?)
+
+- asdf/meta-script/asdf-modules.tb.src: ActionSdf-hooks, added
+  get-open-syntax-parse-handler-hook and
+  get-open-syntax-parse-handler-hook-result
+
+- asfsdf/meta-script/meta-interface.tb.src  Meta-Interface, added
+  get-open-syntax-parse-handler-hook and
+  get-open-syntax-parse-handler-hook-result
+
+
+
+------- set-module-syntax-text-hook -------
+Motivation:
+Which table the module text needs to be saved in is depending on the
+type of module.
+
+- meta/tbscripts/open-modules.tb: OpenSyntax, added
+  set-module-syntax-text-hook.
+
+- asdf/meta-script/asdf-modules.tb.src: ActionSdf-hooks, added
+  set-module-syntax-text-hook.

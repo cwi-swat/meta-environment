@@ -11,7 +11,7 @@ imports asdf/an
 imports basic/Whitespace
 imports Import*2
 exports sorts Action
-
+context-free start-symbols Action
 Section*
 
   [t-2] $sections-to-asf(AS-Section*) == eqlist()
@@ -93,6 +93,7 @@ Grammar
 Grammar2
 
   [tsy-3] $transform-syntax(Sort ::= AS-Syntax-Rhs) = 
+context-free start-symbols Sort
 sorts Sort
 context-free syntax
   $transform-syntax-rhs(Sort, AS-Syntax-Rhs)

@@ -2,56 +2,105 @@
 #include "Asdfsupport.idef"
 #include "Typecheck.idef"
 
+#define USEINITTERMSTORE
+#define DEBUGGING
+
 /* copy of Open-initial-module in open-modules.tb */
 process ASDF is
 let
-  Path : str,
+  ANModules : list,
+  Directories : str,
+  EditorId : term,
+  ErrorMsg: str,
+  Extension : str,
+  Id : int,
+  Imports : list,
+  InitialModules : list,
   Module : str,
   Modules : list,
   ModuleNames : list,
-  Extension : str,
-  RealModule : str,
-  Imports : list,
-  Status : term,
-  ErrorMsg: str,
+  Path : str,
   Pid : int,
+  RealModule : str,
+  Sid : term,
+  Stack : list,
+  Status : term,
   Type : str, 
-  EditorId : term,
-  Id : int,
-  ANModules : list,
-  Whitespace : list,
-  InitialModules : list
+  Whitespace : list
 in
-  Id := process-id .
-  snd-msg(ts-add-table("asdf-text","str")) .
-  snd-msg(ts-add-table("asdf-tree","term")) .
-  snd-msg(ts-add-table("asdf-pt-text","str")) .
-  snd-msg(ts-add-table("asdf-pt-tree","term")) .
-  snd-msg(ts-add-table("asdf-parse-table","term")) .
-  create(Open-ActionSdf-Language, Pid?) .
-  create(ASDF-ModuleDB, Pid?) .
-  create(ASDF-Support, Pid?) .
-  create(ActionSdf-hooks, Pid?) .
-  create(Obtain-ParseTable-hooks, Pid?) .
-  create(ASDFButtons, Pid?) .
-  rec-msg(post-initialization-hook) .
-  Open-Initial-Module("__ASF_LIBRARY__","basic/Whitespace") .
+  Id := process-id
+  /* Create tables for storing ASDF information */
+  . snd-msg(ts-add-table("asdf-text","str"))
+  . snd-msg(ts-add-table("asdf-tree","term"))
+  . snd-msg(ts-add-table("asdf-pt-text","str"))
+  . snd-msg(ts-add-table("asdf-pt-tree","term"))
+  . snd-msg(ts-add-table("asdf-parse-table","term"))
+  . snd-msg(ts-add-table("asdf-initialmodules-table","term"))
+
+  /* Create ASDF processes */
+  . create(Open-ActionSdf-Language, Pid?)
+  . create(ASDF-ModuleDB, Pid?)
+  . create(ASDF-Support, Pid?)
+  . create(ActionSdf-hooks, Pid?)
+  . create(Obtain-ParseTable-hooks, Pid?)
+  . create(ASDFButtons, Pid?)
+
+  /* Wait for initialization of other layers */
+  . rec-msg(post-initialization-hook)
+
+  /* Load initial modules */
+  . printf("Loading initial ASDF support modules from ") .
+
+#ifndef USEINITTERMSTORE
+  printf("module files on disk... ") .
+  /* Opening ASF+SDF modules used in connection with 
+     ASF+SDF generated from ASDF. Saving parse trees in 
+     "Whitespace", "ANModules" and "InitialModules" */
+
+  Open-Initial-Module("__ASF_LIBRARY__","basic/Whitespace","__ASF_LIBRARY__/basic/Whitespace.sdf") .
   snd-msg(ts-get-all-values("sdf-tree")) .
   rec-msg(ts-all-values(Whitespace?)) .
-  Open-Initial-Module("__ASDF_PT__","asdf/an") .
+  snd-msg(ts-put-term-value("asdf-initialmodules-table", "Whitespace", Whitespace)) .
+
+  /* Add __ASDF_PT__ and __ASF_LIBRARY__ to the list of extra search paths */
+  snd-msg(set-extra-mod-path("__ASDF_PT__")).
+  rec-msg(set-extra-mod-path-done).
+  snd-msg(set-extra-mod-path("__ASF_LIBRARY__")).
+  rec-msg(set-extra-mod-path-done).
+
+  Open-Initial-Module("__ASDF_PT__","asdf/an","__ASDF_PT__/asdf/an.sdf") .
   snd-msg(ts-get-all-values("sdf-tree")) .
   rec-msg(ts-all-values(ANModules?)) .
-  Open-Initial-Module("__ASDF_PT__","asdf/asdf") .
-  Open-Initial-Module("__ASF_LIBRARY__","languages/asf/syntax/Equations") .
+  snd-msg(ts-put-term-value("asdf-initialmodules-table", "ANModules", ANModules)) .
+
+  Open-Initial-Module("__ASDF_PT__","asdf/asdf","__ASDF_PT__/asdf/asdf.sdf") .
+
+  /* Add the list of extra search paths */
+  snd-msg(clear-extra-mod-path).
+  rec-msg(clear-extra-mod-path-done).
+
+  Open-Initial-Module("__ASF_LIBRARY__","languages/asf/syntax/Equations","__ASF_LIBRARY__/languages/asf/syntax/Equations.sdf") .
   snd-msg(ts-get-all-values("sdf-tree")) .
   rec-msg(ts-all-values(InitialModules?)) .
+  snd-msg(ts-put-term-value("asdf-initialmodules-table", "InitialModules", InitialModules)) .
+#endif
+ 
+#ifdef USEINITTERMSTORE
+  printf("initial termstore... ") .
+  InitializeTermStore("/users/fagidiot/asenv/examples/initial.termstore") .
+#endif
+  printf("done. \n").
+
+  /* Clear import relations table, so initial modules do not appear in
+     import graph */
   snd-msg(ts-clear-table("import-relations")) .
   DrawImportGraph() .
+
+  /* Tell main process that we are done initializing */
   snd-msg(post-initialization-hook-finished) .
+  /* Wait for messages */
   (
-    rec-msg(edit-asdf(Module?)) .
-    ASDFEditorCreator(Module)
-  + 
+    /* Handle generate-asfsdf button action (not used) */
     rec-msg(gen-asfsdf(Module?)) .
     GenerateASFSDF(Module, Status?) .
     if equal(Status, success) then
@@ -61,6 +110,7 @@ in
       snd-note(ui-status(error(ErrorMsg)))
     fi
   +
+    /* Handle generate-asdf-pt button action (not used) */
     rec-msg(gen-asdf-pt(Module?)) .
     GenerateASDF-PT(Module, Status?) .
     if equal(Status, success) then
@@ -70,12 +120,21 @@ in
       snd-note(ui-status(error(ErrorMsg)))
     fi
   +
+    /* Handle revert-asdf-module button action (not used) */
     rec-msg(revert-asdf-module(Module?)) .
     snd-note(ui-status(statf(Id, "Reverting %s",[Module]))).
     DoRevertActionSdfModule(Module) .
     snd-note(ui-status(endstat(Id))) .
     snd-msg(asdf-module-reverted(Module))
   +
+    /* Handle edit-asdf button action */
+    rec-msg(edit-asdf(Module?)) .
+    LocateFile(Module, asdf, Path?) .
+    create(EditASDF(Path), Pid?) .
+    rec-msg(asdf-editor-started(Path?, Sid?)) .
+    snd-msg(editor-opened(Module,Sid?))
+  + 
+    /* Generates ASF+SDF for terms for all modules */
     rec-msg(generate-asfsdf-for-modules(Modules?)) .
     Status := success .
     (
@@ -95,7 +154,8 @@ in
       snd-msg(asfsdf-not-generated(ErrorMsg)) 
     fi
   +
-    rec-msg(generate-asdf-pt-for-modules(Modules?)) .
+   /* Generates SDF for parsing ASDF module */
+   rec-msg(generate-asdf-pt-for-modules(Modules?)) .
     Status := success .
     (
       if not-equal(Modules, []) then
@@ -114,10 +174,12 @@ in
       snd-msg(asdf-pt-not-generated(ErrorMsg)) 
     fi
   +
+    /* Removes asf-parse-trees for changed ASDF modules */
+    /* (Is this correct behaviour, 
+       or should also sdf be removed?) */ 
     rec-msg(notify-about-changed-modules(Modules?, asdf)) .
     if not-equal(Modules,[]) then
       Module := first(Modules) .
-printf("Module = %s\n", Module).
       Modules := next(Modules) .
       snd-msg(ts-remove-value("asf-tree", Module)) 
     fi *
@@ -125,28 +187,11 @@ printf("Module = %s\n", Module).
       snd-msg(notify-about-changed-modules-done)
     fi
   +
+    /* Handle save-asfsdf-text button action */
     rec-msg(save-asfsdf-text(Module?)) .
     SaveASFSDF(Module) .
     snd-msg(asfsdf-text-saved)
-  +
-    rec-msg(add-initial-syntax-modules-hook(Modules?, asdf)) .
-DebugTS("SDF Trees", "sdf-tree") .
-    Modules := join(Modules, InitialModules) .
-    snd-msg(initial-modules-added(Modules)) 
-  +
-    rec-msg(add-initial-syntax-modules-hook(Modules?, eqs)) .
-DebugTS("SDF Trees", "sdf-tree") .
-    Modules := join(Modules, ANModules) .
-    snd-msg(initial-modules-added(Modules)) 
-  +
-    rec-msg(add-initial-syntax-modules-hook(Modules?, trm)) .
-DebugTS("SDF Trees", "sdf-tree") .
-    Modules := join(Modules, Whitespace) .
-    snd-msg(initial-modules-added(Modules)) 
-  + 
-    rec-msg(add-initial-eqs-module-names-hook(ModuleNames?)) .
-    ModuleNames := join(ModuleNames, ["asdf/an","basic/Whitespace"]).
-    snd-msg(initial-eqs-module-names-added(ModuleNames)) 
+
   ) * 
   delta
 endlet
@@ -154,25 +199,33 @@ endlet
 
 
 /* copy of Open-Sdf2-Language in open-modules.tb */
+/* Used to open the ASDF parse-table for the first parse 
+   of the ASDF module. Called from Obtain-ParseTable-hooks */ 
 process Open-ActionSdf-Language is
 let
-  Table : term,
-  Message : str
+  Error : term,
+  Table : term
 in
   (
-    rec-msg(open-language(asdf)) .
-    snd-msg(io-read-term-file("__ASDF_PT__asdf/all.trm.tbl")) .
+    rec-msg(get-parse-table(asdf))
+    . snd-msg(io-read-and-pack-term("__ASDF_PT__/asdf/all.trm.tbl"))
+    .
     (
-      rec-msg(io-file-contents(Table?)) .
-      snd-msg(parse-table(trm("ASDF"), Table))
+      rec-msg(io-packed-term(Table?))
+      . snd-msg(parse-table(asdf, Table))
     +
-      rec-msg(io-error-reading(Message?)) .
-      snd-msg(no-parse-table)
+      rec-msg(io-error-reading(Error?))
+      . snd-msg(no-parse-table(asdf, Error))
     )
-  ) *
-    delta
+   )
+   *
+   delta
 endlet
 
+
+
+/* Implements ASDF specific calls to the module database 
+   (see meta/tbscripts/module-db.tb) */
 process ASDF-ModuleDB is
 let
   Path      : str,
@@ -195,7 +248,10 @@ let
   Pairs    : list
 in
 (
+    /* Update relevant tables in module database when adding a new
+       ASDF module */
     rec-msg(add-module-to-db(Name?, Path?, asdf, SyntaxText?, SyntaxTree?)).
+    /* if no errors, we proceed. */
     if and(not-equal(SyntaxTree, error-tree),
 	   not-equal(SyntaxTree, no-tree)) then
       snd-msg(asdf-get-module-id(SyntaxTree)) .
@@ -206,7 +262,7 @@ in
       snd-msg(ts-put-term-value("asdf-tree", ModuleId, SyntaxTree)) .
       snd-msg(asdf-get-imported-module-names(SyntaxTree)) .
       rec-msg(asdf-imported-module-names(Modules?)) .
-/* MDB-ActionSdf-AddModulePosInfo(ModuleId, SyntaxTree, SyntaxTree?) .*/
+      MDB-ActionSdf-AddModulePosInfo(ModuleId, SyntaxTree, SyntaxTree?) .
       SyntaxTree := no-tree 
     else 
       ModuleId := Name .
@@ -221,11 +277,13 @@ in
     rec-msg(ts-keys(Modules?)) .
     snd-msg(adding-succeeded(Name, ModuleId, Path, Modules))
   +
+    /* Update changed ASDF module in database.
+       Called from ParseActionSDF */
     rec-msg(update-module-in-db(Name?, SyntaxTree?, asdf)).
     snd-msg(asdf-get-module-id(SyntaxTree)) .
     rec-msg(asdf-module-id(ModuleId?)) .
     if equal(Name, ModuleId) then
-      /* MDB-AddModulePosInfo(ModuleId, SyntaxTree, SyntaxTree?) .*/
+      MDB-AddModulePosInfo(ModuleId, SyntaxTree, SyntaxTree?) .
       snd-msg(ts-put-term-value("asdf-tree", Name, SyntaxTree)) .
       RemoveGeneratedValues(Name) .
       snd-msg(asdf-get-imported-module-names(SyntaxTree)) .
@@ -239,6 +297,8 @@ in
       snd-msg(error-opening(Name, name-inconsistent))
     fi
   +
+    /* Update text of changed ASDF module.
+       Called from ParseActionSDF */
     rec-msg(update-module-text-in-db(Name?, SyntaxText?, SyntaxTree?, asdf)).
     if equal(SyntaxTree, no-tree) then
       ModuleId := Name
@@ -257,7 +317,7 @@ in
         snd-msg(ts-remove-value("asdf-tree", Name)) .
         snd-msg(ts-put-term-value("import-relations", Name, [])) .
         SyntaxText := "" .
-        MDB-GetAllDependingModules(Name, DependingModules?) .
+        GetDependingModules(Name, DependingModules?) .
         MDB-InvalidateModule(Name, asdf) .
         MDB-InvalidateModules(DependingModules, asdf) .
         snd-msg(updating-succeeded(DependingModules))
@@ -266,12 +326,17 @@ in
       snd-msg(error-opening(Name, name-inconsistent))
     fi
   +
+    /* Remove generated values for ASDF module from 
+       database when module text changes */
     rec-msg(invalidate-asdf-in-db(Name)).
     snd-msg(ts-remove-value("asdf-tree", Name)) .
     snd-msg(ts-remove-value("asdf-parse-table", Name)) .
     snd-msg(ts-remove-value("asdf-pt-text", Name)) .
     snd-msg(ts-remove-value("asdf-pt-tree", Name)) 
   + 
+    /* Called from SecondParse => GetParseTable */
+    /* PROBLEM: Will apperantly always return no-table since 
+       table is never updated only cleared */
     rec-msg(get-table-from-db(Name?, asdf)) .
     snd-msg(ts-get-term-value("asdf-parse-table", Name)).
     (
@@ -282,10 +347,12 @@ in
       snd-msg(no-table)
     )
   +
+    /* Called from GetParseTable */
     rec-msg(add-parse-table-to-db(Name?, asdf, Table?)) .
     /* Do nothing because this is second parse of ActionSdf module */
     snd-msg(parse-table-added)
   +
+    /* Clear ASDF tables. Called when closing all modules */
     rec-msg(clear-module-db-hook) .
     snd-msg(ts-clear-table("asdf-text")) .
     snd-msg(ts-clear-table("asdf-tree")) .
@@ -306,6 +373,7 @@ let
  Str : str
 in
   (
+    /* Calls external tool to get module name from ASDF module */
     rec-msg(asdf-get-module-id(Module?)) .
     snd-msg(apply-rewrite("Asdfsupport", "getModuleName", "ModuleName", [Module])).
     rec-msg(normalform("Asdfsupport", Tree?)).
@@ -313,20 +381,25 @@ in
     rec-msg(unparsed-text(ModuleName?)) .
     snd-msg(asdf-module-id(ModuleName)) 
   +
+    /* Calls external tool to get imported modules 
+       from ASDF module */
     rec-msg(asdf-get-imported-module-names(Module?)) .
     snd-msg(apply-rewrite("Asdfsupport", "getImportedModules", "ATermList", [Module])).
     rec-msg(normalform("Asdfsupport", Tree?)).
     snd-msg(unparse(Tree)) .
     rec-msg(unparsed-text(ModuleName?)) .
-    snd-msg(io-write-text-file("foo", [ModuleName])) .
+    snd-msg(io-write-text-list("foo", [ModuleName])) .
     rec-msg(io-file-written) .
-    snd-msg(io-read-packed-term-file("foo")) .
-    rec-msg(io-file-contents(ModuleNames?)) .
+    snd-msg(io-read-term("foo")) .
+    rec-msg(io-term(ModuleNames?)) .
     Imports := ModuleNames .
     snd-msg(asdf-imported-module-names(Imports))
   ) * delta
 endlet
 
+
+
+/* Used in ASDF-ModuleDB */
 process MDB-ActionSdf-AddModulePosInfo(Module : str, In : term , Out : term?) is
 let
   Path : str,
@@ -341,44 +414,118 @@ in
 endlet
 
 
-process ASDFEditorCreator (ModuleName : str) is
-let
-  Tree : term,
-  Text : str,
-  FileName : str,
-  Message : str,
-  Path : str
-in
-  Tree := none.
-  Text := "".
-  snd-msg(get-path-from-db(ModuleName)) .
-  rec-msg(path(Path?)) .
-  snd-msg(io-get-filename(Path, ModuleName, ".asdf")) .
-  rec-msg(io-filename(FileName?)) .
+
+/* Returns the ASDF parsetree corresponding to the module */
+process GetASDFTree(ModuleName: str, Tree: term?) is
   snd-msg(ts-get-term-value("asdf-tree", ModuleName)) .
   (
     rec-msg(ts-value(Tree?))
   +
     rec-msg(ts-no-value) .
-    snd-msg(io-read-file(FileName)) .
+    printf("ERROR No asdf-tree found for Module: %s \n", ModuleName)
+  )
+
+
+
+/* Creates an ASDFEditor
+   Almost a copy of EditSyntax in editing.tb.
+   Perhaps we can refactor EditSyntax. */
+process EditASDF (Path : str) is
+let
+  AlreadyExists: bool,
+  Available: bool,
+  EditorType: term,
+  HasText: bool,
+  HasStructure: bool,
+  Id: int,
+  ModuleId: str,
+  ParseSucceeded: bool,
+  Sid: term,
+  Tree: term
+
+in
+  Id := process-id
+  . EditorType := asdf-editor
+  . Edit(Path, Sid?)
+  . EditText(Sid, EditorType, AlreadyExists?)
+  . snd-msg(asdf-editor-started(Path, Sid))
+  .
+  if equal(AlreadyExists, false) then
+    snd-msg(ts-get-str-value("path-modulename", Path))
+    .
     (
-      rec-msg(io-file-contents(Text?))
+      rec-msg(ts-value(ModuleId?))
+      . snd-msg(em-bind-session(Sid, ModuleId))
+      . rec-msg(em-session-bound(Sid, ModuleId))
+      . GetASDFTree(ModuleId, Tree?)
+
+      /* It looks like we assume that the parsetree is allways available,
+         time will tell heather we are mistaking */
+      . EditStructure(Sid, Tree)
+      /* Do a parse of the ASDF module,
+         this makes the semantics section appear with the correct
+         syntatic sort */
+      . ParseASDF(Sid, ParseSucceeded?)
+      .
+      if equal(ParseSucceeded, true) then
+        snd-note(ui-status(statf(Id, "Parse succesful of %s", [ModuleId])))
+      else
+        snd-note(ui-status(errorf(Id, "Error during parse of %s", [ModuleId])))
+      fi
     +
-      rec-msg(io-error-reading(Message?))
+      rec-msg(ts-no-value)
+      . snd-msg(ts-get-str-value("path-weak-modulename", Path))
+      .
+      (
+        rec-msg(ts-value(ModuleId?))
+        . snd-msg(em-bind-session(Sid, ModuleId))
+        . rec-msg(em-session-bound(Sid, ModuleId))
+      +
+        rec-msg(ts-no-value)
+      )
     )
-  ) .
-  CreateEditor(syntax-editor,ModuleName,FileName,Text,Tree)
+    .
+    (
+      MenuSelected(Sid, EditorType)
+    +
+      MouseClicked(Sid)
+    +
+      TextChanged(Sid)
+    )
+    *
+    EditorDisconnected(Sid)
+    . IsTextEditorRegistered(Sid, HasText?)
+    . IsStructureEditorRegistered(Sid, HasStructure?)
+    . DeleteSession(Sid)
+    .
+    if and(HasText, not(HasStructure)) then
+      OpenSyntax(Path, asdf)
+    else
+      tau
+    fi
+  else
+    tau
+  fi
 endlet
 
+/* Get all modules used by a module and generate ASF+SDF 
+   for each module. */
 process RecursiveGenASFSDF(Module : str) is
 let
   Modules : list,
   ErrorMsg : str
 in
-    MDB-GetAllImportedModuleNames(Module, Modules?) .
-    snd-msg(generate-asfsdf-for-modules(Modules)) 
+   MDB-GetAllImportedModulenames(Module, Modules?)
+   . snd-msg(generate-asfsdf-for-modules(Modules)) 
 endlet
 
+
+
+/* Generate ASF+SDF from ASDF for use in connection with
+   terms. With respect to terms the ASDF layer should be 
+   transparent, such that when ASF+SDF is generated it is 
+   just the underlying layers that are used for working 
+   with terms */
 process GenerateASFSDF(Module : str, Result : term?) is
 let
    ModuleText : str,
@@ -391,21 +538,30 @@ in
      rec-msg(ts-value(ModuleText?)) .
      Result := success 
    +
+     /* SDF doesn't exist for this module so we generate it */
      rec-msg(ts-no-value) .
      snd-msg(ts-get-term-value("asdf-tree", Module)) .
      (
+        /* A parse tree of the ASDF module exist */
         rec-msg(ts-value(ModuleTree?)) .
+
+	/* Call external tool to generate SDF */
         snd-msg(apply-rewrite("Asdfsupport", "asdf2sdf", "Module", [ModuleTree])).
         rec-msg(normalform("Asdfsupport", GenModuleTree?)).
+
+	/* Store SDF tree and text */
         snd-msg(ts-put-term-value("sdf-tree", Module, GenModuleTree)) .
         snd-msg(unparse(GenModuleTree)) .
         rec-msg(unparsed-text(GenModuleText?)) .
      	snd-msg(ts-put-str-value("sdf-text", Module, GenModuleText)) .
+
+	/* Call external tool to generate ASF */
         snd-msg(apply-rewrite("Asdfsupport", "asdf2asf", "ASFEquations", [ModuleTree])).
         rec-msg(normalform("Asdfsupport", GenModuleTree?)).
+	/* Store ASF text only (tree must be generated 
+	   using generated SDF) */
         snd-msg(unparse(GenModuleTree)) .
         rec-msg(unparsed-text(GenModuleText?)) .
-printf("ModuleName = %s gives ASF = %s\n", Module, GenModuleText) .
         snd-msg(ts-put-str-value("asf-text", Module, GenModuleText)) .
         Result := success
      +
@@ -415,6 +571,10 @@ printf("ModuleName = %s gives ASF = %s\n", Module, GenModuleText) .
   )
 endlet
 
+/* Generate SDF for use when doing a second parse of ASDF,
+   such that parse tree for 'semantics' section is correct. 
+   External tool generates SDF and underlying layers generate 
+   parse table. */
 process GenerateASDF-PT(Module : str, Result : term?) is
 let
    ModuleText : str,
@@ -427,13 +587,18 @@ in
      rec-msg(ts-value(ModuleText?)) .
      Result := success 
    +
+     /* ASDF parse table doesn't exist */
      rec-msg(ts-no-value) .
      snd-msg(ts-get-term-value("asdf-tree", Module)) .
      (
+       /* Parse tree of module exists, now call external tool
+          that generates SDF for parse table */
        rec-msg(ts-value(ModuleTree?)) .
        snd-msg(apply-rewrite("Asdfsupport", "$asdf2asdf-pt", "Module", [ModuleTree])).
        rec-msg(normalform("Asdfsupport", GenModuleTree?)).
+       /* Store generated SDF parse tree */
        snd-msg(ts-put-term-value("asdf-pt-tree", Module, GenModuleTree)) .
+       /* Store generated SDF text */
        snd-msg(unparse(GenModuleTree)) .
        rec-msg(unparsed-text(GenModuleText?)) .
        snd-msg(ts-put-str-value("asdf-pt-text", Module, GenModuleText)) .
@@ -453,32 +618,53 @@ in
   snd-msg(get-modified-status(EditorId)) .
   rec-msg(modified-status(EditorId, ModifiedStatus?)) .
   if equal(ModifiedStatus, modified) then
+    /* If module text has changed regenerate ASF+SDF.
+       Why do we revert module after regenerating ASF+SDF? */
     snd-msg(gen-asfsdf(ModuleName)) .       
     DoRevertActionSdfModule(ModuleName) .
     snd-note(ui-status(errorf("ASF+SDF is regenerated for dirty module %s",
-                       [ModuleName]))).
-    MDB-DisplayGraph
+                       [ModuleName])))
+   . DrawImportGraph
+/* Undeclared process name.
+    MDB-DisplayGraph */
   else
     tau
   fi
 endlet
 
-/* Copy of DoRevertModule from module-utils.tb */
+/* Close module and open it again. */
 process DoRevertActionSdfModule(ModuleName : str) is
-  HardCloseModuleInDB(ModuleName).
-  snd-msg(open-modules([ModuleName], asdf)) .
-  rec-msg(finished-opening-modules)
+  CloseModule(ModuleName, true)
+  . snd-msg(open-modules([ModuleName], asdf))
+  . rec-msg(finished-opening-modules)
 
+
+
+/* Implement hooks called from underlying layers */
 process ActionSdf-hooks is
 let
-  Type : str, 
+  ANModules : list,
+  Checking : term,
+  CheckConsistencyOfTermStore : bool,
   EditorId : term,
+  ExtraModule : str,
+  ExtraModules : list,
+  InitialModules : list,
   Module : str,
+  ModuleId : str,
+  Modules : list,
+  OpenSyntaxHandlerPid : int,
+  Path : str,
   Pid : int,
   Syntax : term,
-  Checking : term
+  Type : str,
+  Text : str,
+  Whitespace : list
 in
-  create(ActionSdf-hooks2, Pid?) .
+  ExtraModules := []
+  . CheckConsistencyOfTermStore := false
+  . create(ActionSdf-hooks2, Pid?)
+  .
   (
     rec-msg(file-extension-hook(asdf)).
     snd-msg(file-extension-hook-result(".asdf"))
@@ -504,10 +690,117 @@ in
   + 
     rec-msg(preprocess-syntax-hook(Module?, asdf, Checking?, Syntax?)).
     snd-msg(preprocess-syntax-hook-result(Module, Syntax)) 
+  +
+    /* Implement hooks that returns initial modules used for parse
+    table generation. */ 
+    rec-msg(add-initial-syntax-modules-hook(Modules?, asdf)) .
+/* DebugTS("SDF Trees", "sdf-tree") . */
+    snd-msg(ts-get-term-value("asdf-initialmodules-table", "InitialModules")).
+    (
+      rec-msg(ts-value(InitialModules?)) .
+      Modules := join(Modules, InitialModules) .
+      snd-msg(initial-modules-added(Modules)) 
+    +
+      rec-msg(ts-no-value) .
+      printf("Error: No value in asdf-initialmodules-table for InitialModules \n")
+    )
+  +
+    rec-msg(add-initial-syntax-modules-hook(Modules?, eqs)) .
+/* DebugTS("SDF Trees", "sdf-tree") . */
+    snd-msg(ts-get-term-value("asdf-initialmodules-table", "ANModules")).
+    (
+      rec-msg(ts-value(ANModules?)) .
+      Modules := join(Modules, ANModules) .
+      snd-msg(initial-modules-added(Modules)) 
+    +
+      rec-msg(ts-no-value) .
+      printf("Error: No value in asdf-initialmodules-table for ANModules \n")
+    )
+  +
+    rec-msg(add-initial-syntax-modules-hook(Modules?, trm)) .
+/* DebugTS("SDF Trees", "sdf-tree") . */
+    snd-msg(ts-get-term-value("asdf-initialmodules-table", "Whitespace")).
+    (
+      rec-msg(ts-value(Whitespace?)) .
+      Modules := join(Modules, Whitespace) .
+      snd-msg(initial-modules-added(Modules)) 
+    +
+      rec-msg(ts-no-value) .
+      printf("Error: No value in asdf-initialmodules-table for Whitespace \n")
+    )
+  +
+    /* Send from ASDF in asdf-module.tb.src, used to extend the searchpath */
+    rec-msg(set-extra-mod-path(ExtraModule?)).
+    ExtraModules := join(ExtraModules, ExtraModule).
+    snd-msg(set-extra-mod-path-done)
+  +
+    rec-msg(clear-extra-mod-path).
+    ExtraModules := [].
+    snd-msg(clear-extra-mod-path-done)
+  +
+    /* Send from LocateFile  in button-actions.tb, used to retreive
+    the extended searchpath */
+    rec-msg(extra-mod-path-hook).
+    snd-msg(extra-mod-path-hook-result(ExtraModules))
+  +
+    /* Send from OpenSyntax in open-modules.tb, to open the
+       correct ParseHandler */
+    rec-msg(get-open-syntax-parse-handler-hook(asdf,Path?)).
+    create(OpenASDFSyntaxParseHandler(Path), OpenSyntaxHandlerPid?) .
+    snd-msg(get-open-syntax-parse-handler-hook-result(OpenSyntaxHandlerPid))
+  +
+    /* Send from OpenSyntax in open-modules.tb, to open the
+       correct ParseHandler */
+    rec-msg(get-open-syntax-parse-handler-hook(sdf,Path?)).
+    create(OpenSyntaxParseHandler(Path), OpenSyntaxHandlerPid?) .
+    snd-msg(get-open-syntax-parse-handler-hook-result(OpenSyntaxHandlerPid))
+  +
+    /* Send from OpenSyntax in open-modules.tb, when opening an asdf
+    module */
+    rec-msg(set-module-syntax-text-hook(asdf,ModuleId?,Text?)).
+    snd-msg(ts-put-str-value("asdf-text", ModuleId, Text))
+  +
+    /* Send from ParseEquation in process.tb before calling
+    GetParseTable */
+    rec-msg(get-parse-equation-checking-hook) .
+    snd-msg(get-parse-equation-checking-hook-result(false))
+  +
+    /* Send from ParseEquation in process.tb to obtain the text of asf
+    equations before parsing */
+    rec-msg(get-asf-equations-text-hook(ModuleId?)) .
+    snd-msg(ts-get-str-value("asf-text", ModuleId)) .
+    (
+      rec-msg(ts-value(Text?))
+      . snd-msg(get-asf-equations-text-hook-result(Text))
+    +
+      rec-msg(ts-no-value)
+      . snd-msg(get-asf-equations-text-hook-result(Text))
+    )
+  +
+    /* Send from TermStoreActivation in module-utils.tb.
+       Should we check the consistency of the termstore? */
+    rec-msg(termstore-consistency-check-hook)
+    .
+    if equal(CheckConsistencyOfTermStore, true) then
+      snd-msg(termstore-consistency-check-hook-result(CheckConsistencyOfTermStore))
+    else
+      snd-msg(termstore-consistency-check-hook-result(CheckConsistencyOfTermStore))
+      . CheckConsistencyOfTermStore := true
+    fi
+  +
+    /* Send from TermStoreActivation in module-utils.tb.
+       Which modules in the termstore should be checked? */
+    rec-msg(get-modulenames-for-consistency-checking-hook)
+    . snd-msg(ts-get-all-keys("import-relations"))
+    . rec-msg(ts-all-keys(Modules?))
+    . snd-msg(get-modulenames-for-consistency-checking-hook-result(Modules))
    )* delta
 endlet
 
-/* Because KillActionSdfEditor uses other hooks */
+
+/* Implement hooks called from underlying layers.
+   Needed because KillActionSdfEditor uses other hooks and 
+   this causes a conflict */
 process ActionSdf-hooks2 is
 let
   Type : str, 
@@ -515,6 +808,7 @@ let
   Module : str,
   ModuleNames : list,
   ErrorMsg : str,
+  Path : str,
   Table : term,
   TermType : term,
   Checking : term
@@ -524,7 +818,9 @@ in
     KillActionSdfEditor(EditorId, Module) .
     snd-msg(kill-editor-unknown-type-hook-result)
   +
-    rec-msg(pre-get-all-syntax-hook(ModuleNames?, asdf)) .
+    /* Generate ASDF parse table and return table name where parse
+       table can be found */
+     rec-msg(pre-get-all-syntax-hook(ModuleNames?, asdf)) .
     snd-msg(generate-asdf-pt-for-modules(ModuleNames)) .
     (
        rec-msg(asdf-pt-generated) .
@@ -533,9 +829,93 @@ in
        rec-msg(asdf-pt-not-generated(ErrorMsg?)) .
        snd-msg(pre-get-all-syntax-hook-result(failure(ErrorMsg)))       
     )
+  +
+    /* Send from CheckModuleConsistency in module-utils.tb. */
+    rec-msg(do-consistency-check-hook(Module?, Path?))
+    . CheckSyntaxConsistency(Module, Path, asdf)
+    . snd-msg(do-consistency-check-hook-result)
    )* delta
 endlet
 
+
+
+/* OpenASDFSyntaxParseHandler
+   The ASDF version of OpenSyntaxParseHandler found in open-modules.tb
+*/
+process OpenASDFSyntaxParseHandler(Path: str) is
+let
+  AnnotatedTree: term,
+  Directory: str,
+  Error: term,
+  Extension: str,
+  Filename: str,
+  Imports: list,
+  ModuleId: str,
+  PathSdf: str,
+  ParseResult: term,
+  Pid: int,
+  Summary: term
+in
+  Pid := process-id
+  .
+  (
+    (
+      /* The parse-tree is received from ParseText in parse-focuses.tb */
+      rec-msg(parse-tree(Pid, ParseResult?))
+    +
+      /* A parse-forest properly means that the parse was ambiguous,
+         which is an error. */
+      rec-msg(parse-forest(Pid, ParseResult?, Error?))
+      . ParseErrorToSummary(Error, Path, Summary?)
+      . snd-msg(ui-show-feedback-summary(Summary))
+    )
+    /* Add position information to the tree, used in editors */
+    . AnnotateTree(ParseResult, Path, AnnotatedTree?)
+
+    . snd-msg(asdf-get-module-id(ParseResult))
+    . rec-msg(asdf-module-id(ModuleId?))
+
+    . snd-msg(io-get-path-directory(Path))
+    . rec-msg(io-directory(Path, Directory?))
+
+    . snd-msg(sm-get-module-path(Directory, ModuleId))
+    . rec-msg(sm-module-path(Directory?))
+
+    . snd-msg(io-get-path-extension(Path))
+    . rec-msg(io-extension(Path, Extension?))
+
+    . BuildPath(Directory, ModuleId, Extension, Filename?)
+    .
+    if equal(Filename, Path) then
+      snd-msg(ts-put-str-value("module-path", ModuleId, Directory))
+      . snd-msg(ts-put-str-value("path-modulename", Path, ModuleId))
+
+/*      . BuildPath(Directory, ModuleId, ".sdf", PathSdf?)
+      . snd-msg(ts-put-str-value("path-modulename", PathSdf,
+    ModuleId))
+*/
+      /* It have to be the AnnotatedTree. */
+      . snd-msg(ts-put-term-value("asdf-tree", ModuleId, AnnotatedTree))
+
+      . snd-msg(asdf-get-imported-module-names(ParseResult))
+      . rec-msg(asdf-imported-module-names(Imports?))
+      . SetModuleImports(ModuleId, Imports)
+
+    else
+      Error("Module %s should be in a file named %s\n", [ModuleId, Filename])
+    fi
+    . snd-msg(open-syntax-parse-handler-done(Pid, ModuleId))
+
+  +
+    rec-msg(parse-error(Pid, Error?))
+    . ParseErrorToSummary(Error, Path, Summary?)
+    . snd-msg(ui-show-feedback-summary(Summary))
+    . snd-msg(open-syntax-parse-handler-done(Pid))
+  )
+endlet
+
+
+/* Called from ObtainParseTable */
 process Obtain-ParseTable-hooks is
 let
   Module : str,
@@ -544,8 +924,9 @@ let
   Checking : term
 in
   (
+    /* Parse table for first parse of ASDF module */
     rec-msg(obtain-parse-table-hook(asdf1, Module?, Checking?)) .
-    snd-msg(open-language(asdf)) .
+    snd-msg(get-parse-table(asdf)) .
     (
       rec-msg(parse-table(TermType?, Table?))
     +
@@ -554,6 +935,8 @@ in
     ).
     snd-msg(obtain-parse-table-hook-result(Table))
   + 
+    /* Parse table for second parse of ASDF module based 
+       on generated SDF */ 
     rec-msg(obtain-parse-table-hook(asdf, Module?, Checking?)) .
     snd-msg(get-parsetable(Module, asdf, Checking)) .
     (
@@ -566,6 +949,8 @@ in
    )* delta
 endlet
 
+/* For a given module, remove info in all tables in 
+   this layer about this module */
 process RemoveGeneratedValues(Module : str)  is
   snd-msg(ts-remove-value("sdf-tree", Module)) .
   snd-msg(ts-remove-value("sdf-text", Module)) .
@@ -576,6 +961,8 @@ process RemoveGeneratedValues(Module : str)  is
   snd-msg(ts-remove-value("asdf-parse-table", Module)) 
 
 
+/* Used to implement the button action save-asfsdf-text.
+   Only used for debugging */
 process SaveASFSDF(Module : str) is
 let
    ModuleNames	: list,
@@ -609,6 +996,7 @@ in
    fi
 endlet
 
+/* Called from  SaveASFSDF */
 process SaveFromDB(Module : str, Path : str, Table : str, Type : term) is
 let
    Extension : str,
@@ -639,60 +1027,120 @@ in
    rec-msg(ts-all-keys(Keys?)) 
 endlet
 
-process Open-Initial-Module(Path : str, InitModule : str) is 
+/* Used to open initial modules when environment is starting up */
+process Open-Initial-Module(Path : str, Module : str, Dir : str) is 
 let
   Imports : list,
   Modules : list,
-  Module : str,
   Id : int,
   LibPath : str,
   Directories : list
 in 
-  Id := process-id.
-  snd-note(ui-status(stat(Id,"Initializing"))). 
-  Modules := [InitModule].
-  snd-msg(library-location-hook).
-  rec-msg(library-location-hook-result(LibPath?)) .
-  if not-equal(Modules, []) then
-    Module := first(Modules).
-    Modules := next(Modules).
-    snd-msg(is-module-in-db(Module)).
-    (
-      rec-msg(exists-in-module-db(Module))
-    +
-      rec-msg(not-exists-in-module-db(Module)).
+  Id := process-id
+  . snd-note(ui-status(stat(Id,"Initializing")))
+  . snd-msg(is-module-in-db(Module))
+  .
+  (
+    rec-msg(exists-in-module-db(Module))
+  +
+    rec-msg(not-exists-in-module-db(Module))
       /* Necessary if module uses library module */
-      snd-msg(io-find-file([Path], Module, ".sdf")) .
-      (
-        rec-msg(io-file-not-found) .
-printf("Opening Module (%s,%s)\n", LibPath, Module).
-        Open-Module(LibPath, Module, sdf, Imports?).
-        Modules := join(Imports, Modules)
-      +
-        rec-msg(io-file-found(Directories?)) .
-printf("Opening Module (%s,%s)\n", Path, Module).
-        Open-Module(Path, Module, sdf, Imports?).
-        Modules := join(Imports, Modules)
-      )
+    . snd-msg(io-find-file([Path], Module, ".sdf"))
+    .
+    (
+      rec-msg(io-file-not-found)
+      . printf("Can not open module (%s,%s)\n", Path, Module)
+    +
+      rec-msg(io-file-found(Directories?))
+      . printf("Opening Module (%s,%s,%s)\n", Path, Module, Dir)
+      . OpenModule(Dir, sdf, Module)
     )
-  fi *
-  if equal(Modules, []) then
-    snd-note(ui-status(endstat(Id))) 
-  fi
+  )
+  . snd-note(ui-status(endstat(Id)))
 endlet
 
+
+/* Evaluates ASDF specific button actions */
 process ASDFButtons is
 let
-  ModuleName : str,
   ConstraintMod : str,
-  Stack : list,
+  InStr : str,
+  ModuleName : str,
   EditorId : term,
   EditorId2 : term,
-  InStr : str,
+  Ext : str,
+  ParseSucceeded: bool,
   Path : str,
-  Ext : str
+  Directory : str,
+  Pid: int,
+  RTree : term,
+  Stack : list,
+  STree : term
+
 in
 (
+  /* (Not used) */
+  rec-msg(revert-asdf-module, Stack?, EditorId?) .
+  StackPopString(Stack, Stack?, ModuleName?) .
+  snd-msg(revert-asdf-module(ModuleName)) .
+  rec-msg(asdf-module-reverted(ModuleName)) .
+  ReturnSuccess(EditorId, Stack)	
++
+  /* (Not used) */
+  rec-msg(generate-asfsdf, Stack?, EditorId?) .
+  StackPopString(Stack, Stack?, ModuleName?) .    
+  snd-msg(gen-asfsdf(ModuleName)).
+  ReturnSuccess(EditorId, Stack)
++
+  /* (Not used) */
+  rec-msg(generate-asdf-pt, Stack?, EditorId?) .
+  StackPopString(Stack, Stack?, ModuleName?) .    
+  snd-msg(gen-asdf-pt(ModuleName)).
+  ReturnSuccess(EditorId, Stack)
++
+  /* (Not used) */
+  rec-msg(save-asfsdf-text, Stack?, EditorId?) .
+  StackPopString(Stack,Stack?,ModuleName?) .
+  snd-msg(save-asfsdf-text(ModuleName)) .
+  rec-msg(asfsdf-text-saved) .
+  snd-note(ui-status(errorf("Saving ASF+SDF done"))) .        
+  ReturnSuccess(EditorId, Stack)			
++
+  /* Studio, edit ASDF. */
+  rec-msg(edit-asdf, Stack?, EditorId?) .
+  StackPopString(Stack,Stack?,ModuleName?) .
+  snd-msg(edit-asdf(ModuleName)) .
+  rec-msg(editor-opened(ModuleName,EditorId2?)) .
+  ReturnSuccess(EditorId, Stack)
++
+  /* Studio, open existing ASDF module from disk */
+  rec-msg(open-asdf-module, Stack?, EditorId?)
+  . StackPopString(Stack, Stack?, Ext?)
+  . StackPopString(Stack, Stack?, Directory?)
+  . StackPopString(Stack, Stack?, ModuleName?)
+  . BuildPath(Directory, ModuleName, Ext, Path?)
+  . OpenModule(Path, asdf, ModuleName)
+  . ReturnSuccess(EditorId, Stack)
++
+  /* Studio, create new ASDF module on disk */
+  rec-msg(new-asdf-module, Stack?, EditorId?) .
+  StackPopString(Stack, Stack?, Ext?) .
+  StackPopString(Stack, Stack?, Path?) .
+  StackPopString(Stack, Stack?, ModuleName?) .
+  create(NewModuleContentHandler(), Pid?) .
+  CreateModule(Pid, Path, ModuleName, asdf) .
+  ReturnSuccess(EditorId, Stack)	
++
+  /* ASDF editor, Parse ASDF */
+  rec-msg(parse-asdf-action, Stack?, EditorId?) .
+  ParseASDF(EditorId, ParseSucceeded?) .
+  if equal(ParseSucceeded, true) then
+    ReturnSuccess(EditorId, Stack)
+  else
+    ReturnAbort(EditorId, Stack)
+  fi
++
+  /* Term editor, parse term. */
   rec-msg(asdf-parse-action, Stack?, EditorId?) .
   StackPopString(Stack,Stack?,ModuleName?) .
   RecursiveGenASFSDF(ModuleName) .
@@ -705,62 +1153,24 @@ in
   ) .
   ReturnSuccess(EditorId,Stack)
 +
-  rec-msg(edit-asdf, Stack?, EditorId?) .
-  StackPopString(Stack,Stack?,ModuleName?) .
-  snd-msg(edit-asdf(ModuleName)) .
-  rec-msg(editor-opened(ModuleName,EditorId2?)) .
-  ReturnSuccess(EditorId, Stack)
-+
-  rec-msg(open-asdf-module, Stack?, EditorId?) .
-  StackPopString(Stack, Stack?, Ext?) .
-  StackPopString(Stack, Stack?, Path?) .
+  /* Term editor, reduce term. */
+  rec-msg(asdf-reduce, Stack?, EditorId?) .
   StackPopString(Stack, Stack?, ModuleName?) .
-  snd-msg(open-initial-module(Path, ModuleName, Ext)) .
-  ReturnSuccess(EditorId, Stack)	
+  StackPopTerm(Stack, Stack?, STree?) .
+  ReduceASDFTerm(STree, ModuleName, RTree?)
+    .
+    if not-equal(RTree, error-tree) then
+      snd-msg(promote-posinfo-to-origin(RTree))
+      . rec-msg(promoted-posinfo-to-origin(RTree?))
+      . AnnotateTree(RTree, "reduct.out", RTree?)
+      . snd-msg(put-term-tree("reduct.out", RTree))
+      . StackPushTerm(Stack, Stack?, RTree)
+      . ReturnSuccess(EditorId, Stack)
+    else
+      ReturnAbort(EditorId, Stack)
+    fi
 +
-  rec-msg(revert-asdf-module, Stack?, EditorId?) .
-  StackPopString(Stack, Stack?, ModuleName?) .
-  snd-msg(revert-asdf-module(ModuleName)) .
-  rec-msg(asdf-module-reverted(ModuleName)) .
-  ReturnSuccess(EditorId, Stack)	
-+
-  rec-msg(new-asdf-module, Stack?, EditorId?) .
-  StackPopString(Stack, Stack?, Ext?) .
-  StackPopString(Stack, Stack?, Path?) .
-  StackPopString(Stack, Stack?, ModuleName?) .
-  snd-msg(create-new-module(Path, ModuleName, asdf)) . 
-  rec-msg(new-module-created(Path?, ModuleName?)) .
-  ReturnSuccess(EditorId, Stack)	
-+
-  rec-msg(generate-asfsdf, Stack?, EditorId?) .
-  StackPopString(Stack, Stack?, ModuleName?) .    
-  snd-msg(gen-asfsdf(ModuleName)).
-  ReturnSuccess(EditorId, Stack)
-+
-  rec-msg(generate-asdf-pt, Stack?, EditorId?) .
-  StackPopString(Stack, Stack?, ModuleName?) .    
-  snd-msg(gen-asdf-pt(ModuleName)).
-  ReturnSuccess(EditorId, Stack)
-+
-  rec-msg(parse-asdf-action, Stack?, EditorId?).
-  StackPopString(Stack,Stack?,ModuleName?) .
-  ParseActionSdf(EditorId, ModuleName, asdf) .
-  ReturnSuccess(EditorId,Stack)
-+
-  rec-msg(create-asdf-module, Stack?, EditorId?) .
-  StackPopString(Stack, Stack?, ModuleName?) .
-  snd-msg(io-relative-to-absolute(["."])) .
-  rec-msg(io-absolute-directories([Path?])) .
-  snd-msg(create-new-module(Path, ModuleName, asdf)) .           
-  ReturnSuccess(EditorId, Stack)	
-+
-  rec-msg(save-asfsdf-text, Stack?, EditorId?) .
-  StackPopString(Stack,Stack?,ModuleName?) .
-  snd-msg(save-asfsdf-text(ModuleName)) .
-  rec-msg(asfsdf-text-saved) .
-  snd-note(ui-status(errorf("Saving ASF+SDF done"))) .        
-  ReturnSuccess(EditorId, Stack)			
-+
+  /* , type check of ASDF */
   rec-msg(type-check-asdf, Stack?, EditorId?) .
 printf("Stack = %t\n", Stack) .
   StackPopString(Stack, Stack?, Ext?) .
@@ -772,90 +1182,148 @@ printf("Stack = %t\n", Stack) .
 ) * delta
 endlet
 
-process ParseActionSdf(EditorId : term, ModuleName : str, Type : term) is
+
+process ParseASDF(Sid: term, ParseSucceeded: bool?) is
 let
-  Tree             : term,
-  Text             : str,
-  Focus            : term,
-  NewModules       : list,
-  DependingModules : list,
-  ModuleId	   : str,
-  Modules          : list
+  DependingModules: list,
+  Directory: str,
+  Id: int,
+  ModuleId: str,
+  Modulename: str,
+  NewModules: list,
+  Nonterminal: term,
+  Path: str,
+  Pid: int,
+  Table: term,
+  Text: str,
+  Tree: term,
+  Type: term
 in
-  InvalidateEditor(EditorId).
-  snd-msg(get-module-id-hook(Type)) .
-  rec-msg(get-module-id-hook-result(ModuleId?)) .
-  snd-msg(notify-about-changed-modules([ModuleName], Type)) .
-  rec-msg(notify-about-changed-modules-done) .
-  snd-msg(parse-focusses(EditorId, ModuleId, asdf1)) .
+  Id := process-id
+  . Type := asdf
+  . snd-msg(em-get-modulename(Sid))
+  . rec-msg(em-modulename(Sid, Modulename?))
+  . snd-note(ui-status(statf(Id, "Parsing ASDF of %s", [Modulename])))
+  . snd-msg(get-module-id-hook(Type))
+  . rec-msg(get-module-id-hook-result(ModuleId?))
+
+     /* The type parameter 'asdf1' is important */
+  . GetParseTable(ModuleId, asdf1, true, Table?)
+  . snd-msg(syntax-top-sort-hook(asdf))
+  . rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?)))
+  . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
+  .
   (
-    rec-msg(parse-ok(ModuleId)) .
-    snd-msg(se-get-tree(EditorId)) .
+    rec-msg(parse-editor-ok(Sid))
+    . GetPath(Sid, Path?)
+    . snd-msg(io-get-path-directory(Path))
+    . rec-msg(io-directory(Path, Directory?))
+    . snd-msg(ts-put-str-value("module-path", Modulename, Directory))
+    . ParseSucceeded := true
+    . GetParsetree(Sid, Tree?)
+    . snd-msg(unparse(Tree))
+    . rec-msg(unparsed-text(Text?))
+    . snd-msg(update-module-text-in-db(Modulename, Text, Tree, Type))
+    .
     (
-      rec-msg(se-tree(Tree?)) .
-      snd-msg(unparse(Tree)) .
-      rec-msg(unparsed-text(Text?)) .
-      snd-msg(update-module-text-in-db(ModuleName, Text, Tree, Type)) .
+      rec-msg(no-updating-needed)
+      . SecondParse(Sid, Modulename,ParseSucceeded?)
+      . snd-msg(te-clear-focus(Sid))
+      . snd-msg(te-display-message(Sid, "Parse successful"))
+    +
+      rec-msg(updating-succeeded(DependingModules?))
+      . snd-msg(update-module-in-db(Modulename, Tree, Type))
+      .
       (
-	rec-msg(no-updating-needed).
-	SecondParse(EditorId, ModuleName)
+        rec-msg(updating-succeeded(NewModules?))
+        . OpenModules(NewModules, Type)
+        . snd-msg(te-clear-focus(Sid))
+	/* First parse went okay, and now we do the second... */
+ 	. SecondParse(Sid, Modulename, ParseSucceeded?)
+        . snd-msg(te-display-message(Sid, "Parse successful"))
       +
-        rec-msg(updating-succeeded(DependingModules?)).
-        snd-msg(update-module-in-db(ModuleName, Tree, Type)) .
-	(
-          rec-msg(updating-succeeded(NewModules?)).
-	  snd-msg(notify-about-changed-modules(DependingModules, Type)) .
-	  rec-msg(notify-about-changed-modules-done) .
-          snd-msg(open-modules(NewModules, Type)).
-          rec-msg(finished-opening-modules) .
-          snd-note(te-clear-focus(EditorId)). 
-  	  SecondParse(EditorId, ModuleName)
-        +
-          rec-msg(error-opening(ModuleName, name-inconsistent)).
-          snd-msg(invalidate-sdf-in-db(ModuleName)).
-          InvalidateEditor(EditorId).
-          snd-note(ui-status(
-            errorf("Changing the name of %s is not permitted.",[ModuleName])))
-        )
-      +
-        rec-msg(error-opening(ModuleName, name-inconsistent)).
-        snd-msg(invalidate-sdf-in-db(ModuleName)).
-        InvalidateEditor(EditorId).
-        snd-note(ui-status(
-            errorf("Changing the name of %s is not permitted.",[ModuleName])))
+        rec-msg(error-opening(Modulename, name-inconsistent))
+        . snd-msg(invalidate-sdf-in-db(Modulename))
+        . snd-note(ui-status(errorf("Changing the name of %s is not permitted.",
+                                    [Modulename])))
       )
     +
-      rec-msg(se-no-tree) /* editor dissappeared */
+      rec-msg(error-opening(Modulename, name-inconsistent))
+      . snd-msg(invalidate-sdf-in-db(Modulename))
+      . snd-note(ui-status(errorf("Changing the name of %s is not permitted.",
+                                  [Modulename])))
     )
   +
-    rec-msg(parse-failed(ModuleId, Focus?)) .
-    snd-msg(invalidate-sdf-in-db(ModuleName))
-  ) 
+    rec-msg(parse-editor-failed(Sid))
+    . ParseSucceeded := false
+    . snd-msg(invalidate-sdf-in-db(Modulename))
+  )
+  . snd-note(ui-status(endstat(Id)))
 endlet
 
-process SecondParse(EditorId : term, ModuleName : str) is
+
+/* Do the second parse of an ASDF module */
+process SecondParse(Sid : term, ModuleName : str, ParseSucceeded : term?) is
 let
-   Focus : term,
-   Tree : term
+  Id: int,
+  Nonterminal: term,
+  Pid: int,
+  Table: term,
+  Tree: term
 in
-    InvalidateEditor(EditorId) .
-    snd-msg(parse-focusses(EditorId, ModuleName, asdf)) .
-    (
-      rec-msg(parse-ok(ModuleName)) .
-      snd-msg(se-get-tree(EditorId)) .
-      (
-	rec-msg(se-tree(Tree?)) .
-	snd-note(te-clear-focus(EditorId))
-      +
-	rec-msg(se-no-tree)
-      )
-    +
-      rec-msg(parse-failed(ModuleName, Focus?)).
-      snd-msg(invalidate-sdf-in-db(ModuleName)).
-      snd-msg(invalidate-asdf-in-db(ModuleName))
-    )
+  Id := process-id
+  . snd-note(ui-status(statf(Id, "Second parse of %s", [ModuleName])))
+  . ParseSucceeded := true
+     /* The type parameter 'asdf' is important */
+  . GetParseTable(ModuleName, asdf, true, Table?)
+  . snd-msg(other-top-sort-hook(asdf))
+  . rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
+  . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
+  .
+  (
+    rec-msg(parse-editor-ok(Sid))
+    . snd-msg(se-get-parse-tree(Sid))
+    . rec-msg(se-parse-tree(Sid, Tree?))
+    . snd-note(te-clear-focus(Sid))
+    . snd-msg(te-display-message(Sid, "Second parse successful"))
+  +
+    rec-msg(parse-editor-failed(Sid))
+    . ParseSucceeded := false
+    . snd-msg(invalidate-sdf-in-db(ModuleName))
+    . snd-msg(invalidate-asdf-in-db(ModuleName))
+  )
 endlet
 
+process ReduceASDFTerm(Tree: term, Modulename: str, NormalForm: term?) is
+let
+  Summary: term,
+  Equations: term,
+  Id: int,
+  Pid: int,
+  Specification: term
+in
+  Id := process-id
+  . snd-note(ui-status(stat(Id, "Retrieving equations")))
+  . create(GetSpecification(Modulename), Pid?)
+  .
+  (
+    rec-msg(specification(Specification?))
+    . GetSpecificationEquations(Specification, Equations?)
+    . snd-note(ui-status(endstat(Id)))
+    . snd-msg(interpret-term-hook(Modulename, Equations, Tree))
+    . rec-msg(interpret-term-hook-result(NormalForm?))
+  +
+    rec-msg(specification-incomplete(Summary?))
+    . snd-note(ui-status(endstat(Id)))
+    . snd-msg(ui-show-feedback-summary(Summary))
+    . NormalForm := error-tree
+  )
+endlet
+
+/* Process that traveres all modules used by a module to 
+   collect type information and then performs a type check 
+   by calling an external type checker with the collected 
+   information and the module */
 process TypeCheckModule(ModuleName : str, ConstraintsModule : str) is
 let
    ModuleNames : list,
@@ -878,6 +1346,7 @@ in
      rec-msg(ts-no-values) .
      ImModuleTrees := []    
    ) .
+   /* Open extra constraint module if necessary */
    if equal(ConstraintsModule, "") then
      tau   
    else
@@ -893,6 +1362,7 @@ in
    fi.
    ImModuleTree := first(ImModuleTrees) .
    ImModuleTrees := next(ImModuleTrees) .
+   /* Collect type info from one module */
    snd-msg(apply-rewrite("Asdfsupport", "get-type-info", 
                          "TypeInfo", [ImModuleTree])) .
    rec-msg(normalform("Asdfsupport", AllTypeInfo?)) .
@@ -900,10 +1370,12 @@ in
      if not-equal(ImModuleTrees, []) then
        ImModuleTree := first(ImModuleTrees) .
        ImModuleTrees := next(ImModuleTrees) .
+       /* Collect type info from one module */
        snd-msg(apply-rewrite("Asdfsupport", "get-type-info", 
 	 		    "TypeInfo", [ImModuleTree])) .
        rec-msg(normalform("Asdfsupport", TypeInfo?)) .
-       snd-msg(apply-rewrite("Asdfsupport", "join-type-info", 
+        /* and concat it with already collected info */
+      snd-msg(apply-rewrite("Asdfsupport", "join-type-info", 
 	 		    "TypeInfo", [AllTypeInfo, TypeInfo])) .
        rec-msg(normalform("Asdfsupport", AllTypeInfo?)) 
      fi
@@ -927,7 +1399,9 @@ in
    rec-msg(normalform("Typecheck", ErrorTree?)).*/
    snd-msg(gen-adapter-term-evaluate(asdf-typecheck-id,"__ASDF_BIN__/typecheck", hest)).
    rec-msg(gen-adapter-term-result(asdf-typecheck-id, ErrorTree?)).
-/*   snd-msg(unparse(ErrorTree)) .
+/* The following improvement doesn't work, can't remember why.  
+
+   snd-msg(unparse(ErrorTree)) .
    rec-msg(unparsed-text(ErrorText?)) .
    snd-msg(io-write-text-file("foo", [ErrorText])) .
    rec-msg(io-file-written) .
@@ -937,3 +1411,23 @@ printf("ErrorTree = %t\n", ErrorTree).
    snd-note(show-feedback-summary(ErrorTree))
 endlet
 
+/* Prints the contents of the given list */
+process PrintList(Ls: list) is
+let
+  FirstStr: term,
+  Todo: list
+in
+  Todo := Ls
+  . printf("\n")
+  . 
+  if not-equal(Todo, []) then
+    FirstStr := first(Todo)
+    . Todo := next(Todo)
+    . printf("Item = %t\n", FirstStr)
+  fi
+  *
+  if equal(Todo, []) then
+   printf("\n")
+   . snd-note(end-open-modules-batch)
+  fi
+endlet

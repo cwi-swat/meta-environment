@@ -29,9 +29,11 @@ equations
 
 [default-get-subs-1] get-subs($ATY, $ARR, $STS) = $STS
 
+
+
+
 [get-dataop-sigs-1] get-dataop-sigs($SO ::= $ARR, $DOS) = 
 		get-dataop-sigs(sort-to-type($SO), $ARR, $DOS)
-
 
 [get-dataop-sigs-2] 
 
@@ -44,6 +46,10 @@ equations
 	get-dataop-sigs($ATY, $ARR1, get-dataop-sigs($ATY, $ARR2, $DOS))
 
 [default-get-dataop-sigs-1] get-dataop-sigs($ATY, $ARR, $DOS) = $DOS
+
+
+
+
 
 [get-data-cons-1] get-data-constants(uqliteral($CH+) : $SO, $DCS) = 
 		  <data($CH+), sort-to-type($SO)>:$DCS

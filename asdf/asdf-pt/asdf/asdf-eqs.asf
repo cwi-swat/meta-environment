@@ -16,6 +16,8 @@ sorts
 
     ASDFModule
 
+context-free start-symbols ASDFModule
+
 context-free syntax
 
 AS-FunctionSig			-> ASF-ConditionalEquation

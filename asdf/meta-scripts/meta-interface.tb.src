@@ -216,18 +216,22 @@ in
   ) * delta
 endlet
 
-process GetActions(Actions : str?) is
+process GetActions is
 let
+  Actions: str,
   ErrorMessage : str
 in
   snd-msg(io-read-file("__ASDF__/standard.asdf.buttons")) .
   (
-    rec-msg(io-file-contents(Actions?))
+    rec-msg(io-file-contents(Actions?)).
+    snd-msg(cm-add-system-properties(Actions)).
+    rec-msg(cm-system-properties-added)
   +
     rec-msg(io-error-reading(ErrorMessage?)) .
-    Actions := "buttons([])"
+    printf("GetActions: %s\n", ErrorMessage)
   )
 endlet
+
 
 process Meta-Interface is
 let
@@ -243,11 +247,8 @@ in
   Id := process-id.
   Create-Asf-Processes.
   create(ParseTable-hooks, Pid?) .
+  GetActions() .
   (
-    rec-msg(actions-hook) .
-    GetActions(Actions?) .
-    snd-msg(actions-hook-result(Actions))
-  +
     rec-msg(environment-name-hook).
     snd-msg(environment-name-hook-result("Action Environment"))
   +
