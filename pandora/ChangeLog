@@ -1,5 +1,8 @@
 # $Id$
 
+Wed Mar  3 10:20:15 CET 2004 <kooiker@cwi.nl>
+ * Bumped to version 1.1 
+
 Tue Mar  2 15:21:26 CET 2004 <{jurgenv,kooiker}@cwi.nl>
  * generator/main.c: 
    - Pack term before sending it to the toolbus. 
