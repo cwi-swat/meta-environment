@@ -616,7 +616,7 @@ proc CompileModules { modlist } {
     global outputdir
     foreach mod $modlist {
 	set posting \
-	[format "compile-module(%s,%s)" [ToId $mod] [ToId $outputdir]]
+	[format "compile-module(%s)" [ToId $mod]]
 	GBpost $posting
     }
 }
@@ -630,34 +630,34 @@ proc DumpEquations { module } {
   GBevent "dump-equations([ToId $module])"
 }
 
-proc CompileModuleWidget { mods } {
-    global g
-
-    set nrModules [llength $mods]
-
-    # Bail out if no modules were selected
-    if { $nrModules != 1 } {
-	Warning "Please select a single module to compile"
-	return
-    }
-
-    set w .compilemodule
-    catch {destroy $w}
-    toplevel $w
-    wm title $w "Compile Module"
-    wm iconname $w "Compile Module"
-    label $w.message -text "Output directory:"
-    entry $w.compilerOutput -textvariable outputdir
-    bind $w.compilerOutput <Return> "CompileModules $mods ; destroy $w"
-    frame $w.buttons
-    button $w.buttons.confirm \
-	-text OK \
-	-command "CompileModules $mods ; destroy $w"
-    button $w.buttons.cancel -text Cancel -command "destroy $w"
-    pack $w.buttons.confirm $w.buttons.cancel -side left -expand 1
-    pack $w.message $w.compilerOutput -side top -anchor w
-    pack $w.buttons -side bottom -expand y -fill x -pady 2m
-}
+#proc CompileModuleWidget { mods } {
+#    global g
+#
+#    set nrModules [llength $mods]
+#
+#    # Bail out if no modules were selected
+#    if { $nrModules != 1 } {
+#	Warning "Please select a single module to compile"
+#	return
+#    }
+#
+#    set w .compilemodule
+#    catch {destroy $w}
+#    toplevel $w
+#    wm title $w "Compile Module"
+#    wm iconname $w "Compile Module"
+#    label $w.message -text "Output directory:"
+#    entry $w.compilerOutput -textvariable outputdir
+#    bind $w.compilerOutput <Return> "CompileModules $mods ; destroy $w"
+#    frame $w.buttons
+#    button $w.buttons.confirm \
+#	-text OK \
+#	-command "CompileModules $mods ; destroy $w"
+#    button $w.buttons.cancel -text Cancel -command "destroy $w"
+#    pack $w.buttons.confirm $w.buttons.cancel -side left -expand 1
+#    pack $w.message $w.compilerOutput -side top -anchor w
+#    pack $w.buttons -side bottom -expand y -fill x -pady 2m
+#}
 
 #--
 # RenameModule(M)
@@ -1178,7 +1178,7 @@ proc define-modules-frame {} {
     button .modules.buttons.deletemod -text "Delete" \
 	-command {DeleteModules [SelectedModules]}
     button .modules.buttons.compile -text "Compile..." \
-	-command {CompileModuleWidget [SelectedModules]}
+	-command {CompileModules [SelectedModules]}
     button .modules.buttons.printmod -text "Print" \
 	-command {PrintModules [SelectedModules]}
     button .modules.buttons.modinfo -text "Info" \
@@ -1279,7 +1279,7 @@ proc define-module-popup {} {
         -command {DeleteModules [GetObjectName $c]}
     $m add separator
     $m add command -label "Compile Module..." \
-        -command {CompileModuleWidget [GetObjectName $c]}
+        -command {CompileModules [GetObjectName $c]}
     $m add command -label "Dump Equations..." \
         -command {DumpEquations [GetObjectName $c]}
     $m add separator
@@ -1321,7 +1321,7 @@ proc define-modlist-popup {} {
         -command {DeleteModules [SelectedModules]}
     $m add separator
     $m add command -label "Compile Module..." \
-        -command {CompileModuleWidget [SelectedModules]}
+        -command {CompileModules [SelectedModules]}
     $m add command -label "Dump Equations..." \
         -command {DumpEquations [SelectedModules]}
     $m add separator
