@@ -1,9 +1,5 @@
 equations
 
-[extractPackage-start]
-  extractPackage(&CompilationUnit) 
-  = extractPackage(&CompilationUnit, rstore())
-
 [extractPackage-0]
   &PackageDeclaration = package &Name ;,
   &PackageId = get-area(&PackageDeclaration),

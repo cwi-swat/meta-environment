@@ -6,10 +6,6 @@ imports MyPosInfo[CompilationUnit]
 
 exports
   context-free syntax
-    extractInterface(CompilationUnit) -> RSTORE
-
-hiddens
-  context-free syntax
     extractInterface(CompilationUnit, RSTORE)
 	-> RSTORE {traversal(accu, top-down, break)}
 

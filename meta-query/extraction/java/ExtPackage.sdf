@@ -1,13 +1,10 @@
 module ExtPackage
 
 imports Rstore
+imports JavaOperations
 imports MyPosInfo[PackageDeclaration]
 
 exports
-  context-free syntax
-    extractPackage(CompilationUnit) -> RSTORE
-
-hiddens
   context-free syntax
     extractPackage(CompilationUnit, RSTORE)
 	-> RSTORE {traversal(accu, top-down, break)}

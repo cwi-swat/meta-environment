@@ -4,6 +4,6 @@ equations
   &Area = get-area(&CompilationUnit),
   &FileName = get-filename(&Area),
   &Tuple = <&Area, &FileName>,
-  &Rstore = add-tuple(FILES, &Tuple, rstore())
+  &Rstore2 = add-tuple(FILES, &Tuple, &Rstore1)
   ===>
-  extractCompilationUnit(&CompilationUnit) = &Rstore
+  extractCompilationUnit(&CompilationUnit, &Rstore1) = &Rstore2
