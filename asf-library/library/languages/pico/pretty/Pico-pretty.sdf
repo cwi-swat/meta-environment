@@ -4,6 +4,9 @@ imports languages/box/syntax/Box
 imports languages/pico/syntax/Pico-Syntax
 
 exports
+  context-free start-symbols
+    PROGRAM
+
   context-free syntax
     decls2box(DECLS)                    -> Box {to-box}
     exp2box(EXP)                        -> Box {to-box}
