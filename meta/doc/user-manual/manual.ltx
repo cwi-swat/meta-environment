@@ -1571,7 +1571,8 @@ Spaces are only significant inside strings and character classes.
 
 In their simplest form, declarations of lexical functions consist of a
 sequence of zero or more strings or sort names followed by `{\tt ->}' and the
-name of a result sort, say $L$. The regular expression associated with $L$
+name of a result sort, say $L$, followed by a possible empty list of
+attributes. The regular expression associated with $L$
 consists of the \emph{or} of all left-hand sides of lexical functions with
 result sort $L$. All sort names appearing in left-hand sides of declarations
 are replaced by the regular expression associated with them. Circular
@@ -1967,7 +1968,6 @@ next like in C, see Figure \ref{CODE:c-comment}.
 \begin{figure}[!h]
 \begin{IncCode}
 \begin{boxedverbatim}
-
   sorts ComWord Comment
   lexical syntax
     [\ \n\t]     -> LAYOUT
@@ -1992,8 +1992,9 @@ structure of sentences in a language. A context-free syntax contains a set of
 declarations for \emph{context-free functions}, each consisting of zero or
 more literals, sort names, or lists followed by `{\tt ->}' and a result sort.
 They may be followed by attributes that control how parentheses and brackets
-affect the abstract syntax or by attributes that define the associativity of a
-rule. All functions with the same result sort together define the alternatives
+affect the abstract syntax, by attributes that define the associativity of a
+rule, or by attributes which influence the rewriting process. 
+All functions with the same result sort together define the alternatives
 for that sort.
 
 \subsubsection{Context-free Functions}
@@ -2002,32 +2003,49 @@ In their simplest form, declarations of context-free functions consist of a
 sequence of zero or more literal strings or sort names followed by `{\tt ->}'
 and the name of a result sort. All literal strings appearing in a context-free
 function declaration are implicitly added to the lexical syntax. Consider the
-following language of coordinates and drawing commands:
+language of coordinates and drawing commands presented in 
+Figure \ref{simple-cf}.
 
-\begin{verbatim}
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
 sorts NAT COORD CMND 
 
 lexical syntax
-   [0-9]+ -> NAT 
-   [\ \n] -> LAYOUT 
+  [0-9]+ -> NAT 
+  [\ \n] -> LAYOUT 
+
+context-free restrictions
+  LAYOUT? -/- [\ \n]
 
 context-free syntax
-   "(" NAT "," NAT ")" -> COORD
-   "line" "to" COORD   -> CMND 
-   "move" "to" COORD   -> CMND
-\end{verbatim}
+  "(" NAT "," NAT ")" -> COORD
+  "line" "to" COORD   -> CMND 
+  "move" "to" COORD   -> CMND
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Simple context-free syntax definition}\label{CODE:simple-cf}
+\end{figure}   
 
-Written as a conventional BNF grammar (and not considering lexical syntax) this is equivalent to:
 
-\begin{verbatim}
+An equivalent conventional BNF grammar (and not considering lexical syntax) 
+of the grammar of Figure \ref{CODE:simple-cf} is presented in Figure
+\ref{CODE:simple-bnf}.
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
 <COORD> ::= "(" <NAT> "," <NAT> ")" 
 <CMND>  ::= "line" "to" <COORD> | "move" "to" <COORD>
-\end{verbatim}
+\end{boxedverbatim}
+\end{IncCode}
+\caption{BNF definition of simple grammar}\label{CODE:simple-bnf}
+\end{figure}   
 
-When a literal in a context-free function consists only of lower case letters
-and digits and is not a keyword of \asfsdf, it need not be surrounded with
-quotes. You may therefore write `{\tt move to COORD -> CMND}' instead of the
-definition given above.
+%When a literal in a context-free function consists only of lower case letters
+%and digits and is not a keyword of \asfsdf, it need not be surrounded with
+%quotes. You may therefore write `{\tt move to COORD -> CMND}' instead of the
+%definition given above.
 
 \subsubsection{List Structures}
 
@@ -2052,40 +2070,49 @@ primitives for this:
 
 \begin{itemize}
 
-\item[{\tt \{$S$ $sep$}*\}] defines zero or more repetitions of sort $S$ separated by the literal
-$sep$.
+\item[{\tt \{$S$ $sep$\}*}] defines zero or more repetitions of 
+sort $S$ separated by the literal $sep$.
 
-\item[{\tt \{$S$ $sep$\}+}] defines one or more repetitions of sort $S$ separated by the literal
-$sep$.
+\item[{\tt \{$S$ $sep$\}+}] defines one or more repetitions of 
+sort $S$ separated by the literal $sep$.
 
 \end{itemize}
 
 \end{itemize}
 
 Lists may be used in the left-hand side of a context-free function and in the
-right-hand side of a variable declaration. see Section ***[Variables]. They
-may {\bf not} be used as result sort in the right-hand side of a context-free
-function. This imposes no real restriction since a new sort can be introduced
+right-hand side of a variable declaration, see Section \ref{variables}. They
+may {\em not} be used as result sort in the right-hand side of a context-free
+function\footnote{This restriction is \sdf1 specific \sdf2 does no longer
+impose this restriction}.
+This imposes no real restriction since a new sort can be introduced
 representing a list. This new sort may then be used in the left-hand side of
 other context-free rules.
 
-Using lists, the syntax of a list of identifiers (occurring in a declaration
-in a Pascal-like language) can be defined as follows:
+Figure \ref{CODE:pascal-ids} shows how lists can be used to define 
+the syntax of a list of identifiers (occurring in a declaration
+in a Pascal-like language).
 
-\begin{verbatim}
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
 sorts ID DECL TYPE 
 
 lexical syntax
+  [a-z]+ -> ID 
+  [\ \n] -> LAYOUT
 
-   [a-z]+ -> ID 
-   " "    -> LAYOUT 
+context-free restrictions
+  LAYOUT? -/- [\ \n] 
 
 context-free syntax
-
-   decl { ID "," }+ ":" TYPE -> DECL
-   integer                   -> TYPE 
-   real                      -> TYPE
-\end{verbatim}
+  "decl" {ID ","}+ ":" TYPE -> DECL
+  "integer"                 -> TYPE 
+  "real"                    -> TYPE
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Syntax definition of a list of identifiers}\label{CODE:pascal-ids}
+\end{figure}
 
 \subsubsection{Chain Functions}
 
@@ -2097,9 +2124,9 @@ numbers in reals. Such a \emph{chain function} has one of the following forms:
 \begin{itemize}
 
 \item {\tt $SMALL$ -> $BIG$} 
-\item {\tt {$SMALL$ $sep$}* -> $BIG$} 
+\item {\tt \{$SMALL$ $sep$\}* -> $BIG$} 
 \item {\tt $SMALL$* -> $BIG$} 
-\item {\tt {$SMALL$ $sep$}+ -> $BIG$} 
+\item {\tt \{$SMALL$ $sep$\}+ -> $BIG$} 
 \item {\tt $SMALL$+ -> $BIG$}
 
 \end{itemize}
@@ -2111,38 +2138,35 @@ Chain functions do not appear in the abstract syntax but correspond to a
 
 A bracket function has the form `{\tt $open$ $S$ $close$ -> $S$}' where $open$
 and $close$ are literals acting as opening and closing parenthesis for sort
-$S$. Examples are `{\tt (}' and `{\tt )}' in arithmetic expressions and `{\tt
-  begin}' and `{\tt end}' in programs. In most cases, such brackets are only
+$S$. Examples are `{\tt (}' and `{\tt )}' in arithmetic expressions 
+and `{\tt begin}' and `{\tt end}' in programs. 
+In most cases, such brackets are only
 introduced for grouping and disambiguation, but have no further meaning. By
 adding the attribute {\tt bracket} to the function declaration, it will not be
 included in the abstract syntax.
 
 Since brackets are necessary for overruling the priority and associativity of
-functions (see ***[Priorities]), it is required that bracket functions are
+functions (see Section \ref{priorities}), 
+it is required that bracket functions are
 declared for the argument and result sorts of
 
 \begin{itemize}
 
 \item all functions appearing in priority declarations, and
   
-\item all functions having one of the attributes {\tt left}, {\tt right}, {\tt
-    assoc}, or {\tt non-assoc}.
+\item all functions having one of the attributes {\tt left}, {\tt right}, 
+{\tt assoc}, or {\tt non-assoc}.
 
 \end{itemize}
 
-\subsubsection{Explicit Naming of Operators in the Abstract Syntax}
 
-(*** Outdated ****)
+%\subsection{Optional Operator}
 
-This section is only relevant when you want to implement yourself functions that operate on the trees constructed by the Meta-environment (or the stand-alone SDF implementation). The following is never needed when you are only writing ASF+SDF specifications.
+%\subsection{Alternative Operator}
 
-For each context-free function, the system automatically generates an internal name to label nodes in the abstract syntax tree corresponding to this function. When used inside the ASF+SDF Meta-environment names are thus redundant. However, names are indispensable if you want to build external tools that work directly on the tree structures generated. To name a rule explicitly, write the operator name followed by a colon before the context-free function declaration, like in
+%\subsection{Tupling Operator}
 
-plus : EXP "+" EXP -? EXP For list constructs, names are generated of the form SortSeparator.list where Sort is the element sort and Separator is a keyword replacing the iterated separator. The rule for a list of expressions separated by a semi-colon:
-
-- EXP ";" ""+ -? EXP.S generates the name `EXPSEMIC.list' which may be used elsewhere. You may override the automatic naming mechanism by inserting a name, preceded by a colon, after the iterator:
-
-- EXP ";" ""+:exp.s -? EXP.S User defined operator names may not be used more than once.
+%\subsection{Tupling Operator}
 
 \subsection{Priorities}
 
@@ -2345,6 +2369,8 @@ context-free syntax
 context-free priorities
    sub sup > { left: sub , sup}
 \end{verbatim}
+
+\subsection{Restrictions}
 
 \subsection{Variables}
 
