@@ -217,10 +217,11 @@ static ATermList checkCondition(ASF_Tag tag,
     if (ASF_isConditionNegative(condition)) {
       return checkNegativeCondition(tag, condition, lhsCond, rhsCond, variables);
     }
-    else if (ASF_isConditionNegative(condition)) {
+    else if (ASF_isConditionPositive(condition)) {
       return checkPositiveCondition(tag, condition, lhsCond, rhsCond, variables);
     }
     else {
+    ATwarning("condition = %t\n", condition);
       return ATmakeList1(
               makeMessage(
                 "strange condition encountered", 
