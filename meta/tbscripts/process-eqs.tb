@@ -116,7 +116,9 @@ in
           Modules := next(Modules) .
           snd-msg(get-equations-for-module(Module)) .
           (
-            rec-msg(plain-equations(Equations?))
+            rec-msg(plain-equations(Equations?)) .
+            snd-msg(get-equation-list(Equations)) .
+            rec-msg(equations(Equations?)) 
           +
             rec-msg(renaming-equations(Renamings?, Equations?)) .
             snd-msg(rename(Renamings, Equations)) .
@@ -125,6 +127,9 @@ in
             rec-msg(parameterized-equations(FormalName?, Parameters?, Equations?)) .
             snd-msg(substitute(FormalName, Parameters, Equations)) .
             rec-msg(equations(Equations?)) 
+          +
+	    rec-msg(no-equations) .
+	    Equations := []
           ) .
           snd-msg(union-equations(AllEquations, Equations)) .
           rec-msg(equations(AllEquations?))
