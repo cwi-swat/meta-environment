@@ -2,60 +2,171 @@ module asdf/an
 
 exports
 
-imports
-
 sorts
-  
-   Action Yielder DataOp PrefixDataOp InfixAction PrefixAction 
-   InfixDataOp Data Datum Index Type AtmYielder
 
-context-free start-symbols
-
-  Action
-
-%%%%%%%%%%%%%%%
-%% Kernel AN %%
-%%%%%%%%%%%%%%%
+  Action Yielder AtmYielder
 
 context-free syntax
+
+%% Data-flow
+
+  "give" AtmYielder	-> Action
+  "given" AtmYielder	-> Action 
+  "check" AtmYielder	-> Action
+  Action AtmYielder	-> Action {right}
+  Action DataOp		-> Action {right}  
+
+  Data		   -> AtmYielder
+  DataOp	   -> Yielder {avoid}
+  InfixDataOp	   -> Yielder {reject}
+
+  InfixAction	-> InfixDataOp
+  PrefixAction	-> PrefixDataOp
+
+  "it"		   -> AtmYielder
+
+  AtmYielder	   -> Yielder
+
+  "(" {Yielder ","}+ ")"   -> AtmYielder
+
+%%  "(" AtmYielder ")"	-> AtmYielder {bracket}
+%%  "(" Yielder ")"	-> Yielder {bracket}
+
+  PrefixDataOp Yielder		-> Yielder
+  Yielder InfixDataOp Yielder   -> Yielder {left}
+
+  "maybe"	-> PrefixAction
+
+%% bindings
+
+  "bound-to" Yielder	-> AtmYielder {prefer}
+
+%% Storing
+
+  "stored-at" Yielder	-> AtmYielder
+
+%% Actions as data
+
+  "closure" Yielder	-> AtmYielder
+
+lexical syntax
+
+%% Bindings
+
+  "furthermore"		-> PrefixAction
+  "before"		-> InfixAction
+
+  "bind"		-> Action
+  "current-bindings"	-> AtmYielder
+
+context-free priorities
+
+  { Action AtmYielder              -> Action }
+  >
+  { "give" DataOp		-> Action }
+  >
+  { "check" DataOp		-> Action }
+  >
+  { "give" AtmYielder           -> Action }
+  >
+  { "given" AtmYielder           -> Action }
+  >
+  { "check" AtmYielder		-> Action } 
+  >
+  { PrefixAction Action         -> Action }
+
+context-free priorities
+
+  {PrefixDataOp Yielder         -> AtmYielder}
+  >
+  {Yielder InfixDataOp Yielder  -> AtmYielder}
+
+context-free priorities
+
+  {"give" DataOp	-> Action}
+  >
+  {"give" AtmYielder	-> Action}
+  >
+  { "given" AtmYielder           -> Action }
+  >
+  { "check" AtmYielder		-> Action } 
+  >
+  {Yielder InfixDataOp Yielder  -> AtmYielder}
+
+
+context-free priorities
+
+  {"(" Yielder ")"	-> Yielder}
+  >
+  {AtmYielder	   -> Yielder}
+
+lexical syntax
+
+  "bound-to"		-> Token {reject}
+  "the"			-> Token {reject}
+  "cons"		-> Token {reject}
+
+hiddens 
+
+variables
+
+  "ATMY"[0-9]?		-> AtmYielder
+  "Y"[0-9]?		-> Yielder
+  "Y"[0-9]?"+"		-> {Yielder ","}+
+  "DOP"[0-9]?		-> PrefixDataOp
+  "DOI"[0-9]?		-> InfixDataOp
+  "A"[0-9]?		-> Action
+  "TK"[0-9]?		-> Token
+
+exports
+
+context-free syntax
+     
+%% Data-flow   
 
   "result" Data		-> Action
   "give" DataOp		-> Action
   "check" DataOp	-> Action
 
-   PrefixAction Action		-> Action 
-   Action InfixAction Action	-> Action {left, prefer}
-
-
 lexical syntax
 
-  "copy"		-> Action
-  "skip"		-> Action
-  "then"		-> InfixAction
-  "and-then"		-> InfixAction
-  "and"			-> InfixAction
-  "indivisibly"		-> PrefixAction
-  "unfold"		-> Action
-  "unfolding"		-> PrefixAction
-  "throw"		-> Action
-  "catch"		-> InfixAction
-  "err"			-> Action
-  "and-catch"		-> InfixAction
-  "fail"		-> Action
-  "else"		-> InfixAction
-  "choose-nat"		-> Action
+%% Data-flow
+
+  "copy"	-> Action
+  "skip"	-> Action
+  "then"	-> InfixAction
+  "and-then"	-> InfixAction
+  "and"		-> InfixAction
+  "indivisibly"	-> PrefixAction
+  "unfold"	-> Action
+  "unfolding"	-> PrefixAction
+  "throw"	-> Action
+  "catch"	-> InfixAction
+  "err"		-> Action
+  "and-catch"	-> InfixAction
+  "fail"	-> Action
+  "else"	-> InfixAction
+  "choose-nat"	-> Action
+
+%% Bindings
 
   "copy-bindings"	-> Action
   "scope"		-> InfixAction
 
-  "create"		-> Action
-  "inspect"		-> Action
-  "update"		-> Action
+%% Storing
 
-  "enact"		-> Action
-  "apply"		-> Action
-  "close"		-> Action
-  "recursively"		-> PrefixAction
+  "create"	-> Action
+  "inspect"	-> Action
+  "update"	-> Action
+
+%% Actions as data
+
+  "enact"	 -> Action
+  "apply"	 -> Action
+  "close"	 -> Action
+  "recursively"	 -> PrefixAction  
+
+%% Communication
 
   "activate"		-> Action
   "deactivate"		-> Action
@@ -64,121 +175,64 @@ lexical syntax
   "receive"		-> Action
   "give-current-time"	-> Action
 
-  "disj-union"		-> PrefixDataOp {prefer}
-  "binding"		-> PrefixDataOp {prefer}
-  "bound"		-> PrefixDataOp {prefer}
-  "overriding"		-> PrefixDataOp {prefer}
-
-  "no-bindings"		-> Datum {prefer}
-
-%%%%%%%%%%%%%
-%% Full AN %%
-%%%%%%%%%%%%%
-
-context-free syntax
-
-  "give"  AtmYielder	-> Action
-  "given" AtmYielder	-> Action
-  "check" AtmYielder	-> Action
-  Action AtmYielder	-> Action {right}
-  Action DataOp		-> Action {right}
-
-
-  Data			-> AtmYielder
-  DataOp		-> Yielder
-  AtmYielder		-> Yielder
-  "current-bindings"	-> AtmYielder
-  "bound-to" Yielder	-> AtmYielder
-  "stored-at" Yielder	-> AtmYielder
-  "closure" Yielder	-> AtmYielder
-
-  "it"			-> DataOp
-
-  "maybe"		-> PrefixAction
-
-  "bind"		-> Action
-  "furthermore"		-> PrefixAction
-  "before"		-> InfixAction
-	
-  Yielder InfixDataOp Yielder	-> Yielder {left}
-
-  PrefixDataOp Yielder		-> Yielder
-  "(" {Yielder ","}+ ")" 	-> AtmYielder
-	
-  InfixAction			-> InfixDataOp  {avoid}
-  PrefixAction			-> PrefixDataOp  {avoid}
-
-  "(" Action ")"		-> Action 
 
 context-free priorities
 
-  { PrefixDataOp Yielder 	-> Yielder }
+  { "result" Data	-> Action} 
   >
-  { "bound-to" Yielder	  -> AtmYielder
-    "stored-at" Yielder	  -> AtmYielder
-    "closure" Yielder	  -> AtmYielder }
-  >
-  { Yielder InfixDataOp Yielder	-> Yielder {left}}
+  { Action InfixAction Action	-> Action}
 
-context-free priorities
+exports
 
-  { "(" Data ")"	-> Data }
-  >
-  { Action   -> Data}
-  >
-  { Yielder InfixDataOp Yielder		-> Yielder {left}}
+context-free start-symbols
 
-context-free priorities
+  Action
 
-  { Action AtmYielder	-> Action }
-  >
-  { "give" DataOp       -> Action
-    "check" DataOp      -> Action }
-  >
-  { "give" AtmYielder 	-> Action 
-    "given" AtmYielder 	-> Action 
-    "check" AtmYielder	-> Action}
-  >
-  { PrefixAction Action         -> Action }
-  >
-  { Action InfixAction Action	-> Action }
-	
+sorts
 
-%%%%%%%%
-% Data %
-%%%%%%%%
-
-context-free syntax
-
-  "#" Index       -> PrefixDataOp
-  "the" Type		-> PrefixDataOp
-
-lexical syntax
-
-  "-1" | [1-9][0-9]*   -> Index
-
-context-free syntax
-
-  Datum 	-> Data 
-
-  "(" Data ")"	-> Data	{bracket}
-
-  Action	-> Data
-
-lexical syntax
-
-%%  [0-9]+                  -> IntConst
-%%  "\""~[\"]*"\""          -> StrConst
-%%  [a-zA-Z][a-zA-Z0-9]*    -> IdConst
-
-%%  IntConst | StrConst | IdConst   -> Cons
-
-  "="			-> InfixDataOp
-
-  "not" | "def"  	-> PrefixDataOp {prefer}
+  Action PrefixAction InfixAction
 
 context-free syntax
         
-  InfixDataOp     -> DataOp
-  PrefixDataOp    -> DataOp
+  PrefixAction Action             -> Action       
+  Action InfixAction Action       -> Action {left, prefer}
 
+  "(" Action ")"	-> Action {bracket}
+        
+context-free priorities
+
+  { PrefixAction Action         -> Action }
+  >
+  { Action InfixAction Action   -> Action }
+
+
+
+exports
+
+sorts
+
+  DataOp InfixDataOp Data PrefixDataOp Index Type
+
+context-free syntax
+
+  InfixDataOp   -> DataOp
+  PrefixDataOp  -> DataOp
+
+  "the" Type	-> PrefixDataOp
+
+  "#" Index	-> PrefixDataOp
+
+  "(" { Data "," }* ")"		-> Data {prefer}
+
+lexical syntax
+
+  "="		-> InfixDataOp
+  "defined"	-> PrefixDataOp
+  "list"	-> PrefixDataOp
+
+  "-1" | [1-9][0-9]*   -> Index
+
+variables
+
+  "D"[0-9]?	-> Data
+  "DO"[0-9]?	-> DataOp
