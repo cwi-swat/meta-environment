@@ -29,11 +29,11 @@ module AsFix2C
 imports AsFix2muASF MuASF2C MuASF2MuASF
 exports
   context-free syntax
-    "asfix2c" "(" ATerm ")" -> CProgram
+    asfix2c ( ATerm ) -> CProgram
 
 hiddens
   context-free syntax
-    "asfix2muasf1" "(" ATerm ")" -> Module
+    asfix2muasf1 ( ATerm ) -> Module
 
 hiddens
   variables

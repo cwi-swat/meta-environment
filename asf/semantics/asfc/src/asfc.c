@@ -220,10 +220,10 @@ static ATerm make_compiler_term(char *name, ATerm term)
 
   a_name = ATmake("l(<str>)",name);
   t_mod_name = ATparse("id(\"AsFix2C\")");
-  t_name = ATparse("l(\"asfix2c\")");
+  t_name = ATparse("ql(\"asfix2c\")");
   abbrevs = ATparse("abbreviations([])");
-  term_open = ATparse("l(\"(\")");
-  term_close = ATparse("l(\")\")");
+  term_open = ATparse("ql(\"(\")");
+  term_close = ATparse("ql(\")\")");
   term_ws = ATparse("w(\"\")");
 
   prod = AFmakeProd(t_mod_name,

@@ -110,15 +110,11 @@ equations
 
   [default-ic-1'3] is-char(Funid) = false
 
-  [s-1'1] space = " "
-
   [tc-1'4] translate-char(funid("\" "t")) = 9
 
   [tc-1'4] translate-char(funid("\" "n")) = 10
 
-  [tc-1'1] funid(""" Char """) = space
-           ===========================
-           translate-char(funid("'" Char)) = 32
+  [tc-1'1] translate-char(funid("'" " ")) = 32
 
   [tc-1'2] translate-char(funid("'" "!")) = 33
 

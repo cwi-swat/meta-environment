@@ -40,4 +40,4 @@ compiler_LDADD   = compiler.tif.o \
 
 INCLUDES         = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
 
-compiler.o : compiler.tif.h
+compiler.o : compiler.tif.h c-source/libAsFix2C.a

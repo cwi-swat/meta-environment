@@ -175,40 +175,39 @@ SPEC_SRCS5=\
    AUX-AsFix2Sign12.c AUX-AsFix2Sign11.c AUX-AsFix2Sign10.c AUX-AsFix2Sign9.c\
    AUX-AsFix2Sign8.c AUX-AsFix2Sign7.c AUX-AsFix2Sign6.c AUX-AsFix2Sign5.c\
    AUX-AsFix2Sign4.c AUX-AsFix2Sign3.c AUX-AsFix2Sign2.c AUX-AsFix2Sign1.c\
-   AUX-C-Basics16.c AUX-C-Basics15.c AUX-C-Basics14.c AUX-C-Basics13.c\
-   AUX-C-Basics12.c AUX-C-Basics11.c AUX-C-Basics10.c AUX-C-Basics9.c\
-   AUX-C-Basics8.c AUX-C-Basics7.c AUX-C-Basics6.c AUX-C-Basics5.c\
-   AUX-C-Basics4.c AUX-C-Basics3.c AUX-C-Basics2.c AUX-C-Basics1.c\
-   AUX-Improve-C-code12.c AUX-Improve-C-code11.c AUX-Improve-C-code10.c\
-   AUX-Improve-C-code9.c AUX-Improve-C-code8.c AUX-Improve-C-code7.c\
-   AUX-Improve-C-code6.c AUX-Improve-C-code5.c AUX-Improve-C-code4.c\
-   AUX-Improve-C-code3.c AUX-Improve-C-code2.c AUX-Improve-C-code1.c\
-   AUX-Transform-Constructors7.c AUX-Transform-Constructors6.c\
-   AUX-Transform-Constructors5.c AUX-Transform-Constructors4.c\
-   AUX-Transform-Constructors3.c AUX-Transform-Constructors2.c\
-   AUX-Transform-Constructors1.c AUX-Locate-Constants24.c\
-   AUX-Locate-Constants23.c AUX-Locate-Constants22.c AUX-Locate-Constants21.c\
-   AUX-Locate-Constants20.c AUX-Locate-Constants19.c AUX-Locate-Constants18.c\
-   AUX-Locate-Constants17.c AUX-Locate-Constants16.c AUX-Locate-Constants15.c\
-   AUX-Locate-Constants14.c AUX-Locate-Constants13.c AUX-Locate-Constants12.c\
-   AUX-Locate-Constants11.c AUX-Locate-Constants10.c AUX-Locate-Constants9.c\
-   AUX-Locate-Constants8.c AUX-Locate-Constants7.c AUX-Locate-Constants6.c
+   AUX-C-Basics15.c AUX-C-Basics14.c AUX-C-Basics13.c AUX-C-Basics12.c\
+   AUX-C-Basics11.c AUX-C-Basics10.c AUX-C-Basics9.c AUX-C-Basics8.c\
+   AUX-C-Basics7.c AUX-C-Basics6.c AUX-C-Basics5.c AUX-C-Basics4.c\
+   AUX-C-Basics3.c AUX-C-Basics2.c AUX-C-Basics1.c AUX-Improve-C-code12.c\
+   AUX-Improve-C-code11.c AUX-Improve-C-code10.c AUX-Improve-C-code9.c\
+   AUX-Improve-C-code8.c AUX-Improve-C-code7.c AUX-Improve-C-code6.c\
+   AUX-Improve-C-code5.c AUX-Improve-C-code4.c AUX-Improve-C-code3.c\
+   AUX-Improve-C-code2.c AUX-Improve-C-code1.c AUX-Transform-Constructors7.c\
+   AUX-Transform-Constructors6.c AUX-Transform-Constructors5.c\
+   AUX-Transform-Constructors4.c AUX-Transform-Constructors3.c\
+   AUX-Transform-Constructors2.c AUX-Transform-Constructors1.c\
+   AUX-Locate-Constants24.c AUX-Locate-Constants23.c AUX-Locate-Constants22.c\
+   AUX-Locate-Constants21.c AUX-Locate-Constants20.c AUX-Locate-Constants19.c\
+   AUX-Locate-Constants18.c AUX-Locate-Constants17.c AUX-Locate-Constants16.c\
+   AUX-Locate-Constants15.c AUX-Locate-Constants14.c AUX-Locate-Constants13.c\
+   AUX-Locate-Constants12.c AUX-Locate-Constants11.c AUX-Locate-Constants10.c\
+   AUX-Locate-Constants9.c AUX-Locate-Constants8.c AUX-Locate-Constants7.c\
+   AUX-Locate-Constants6.c AUX-Locate-Constants5.c AUX-Locate-Constants4.c
 
 SPEC_SRCS6=\
-   AUX-Locate-Constants5.c AUX-Locate-Constants4.c AUX-Locate-Constants3.c\
-   AUX-Locate-Constants2.c AUX-Locate-Constants1.c AUX-Remove-Lists-Aux10.c\
-   AUX-Remove-Lists-Aux9.c AUX-Remove-Lists-Aux8.c AUX-Remove-Lists-Aux7.c\
-   AUX-Remove-Lists-Aux6.c AUX-Remove-Lists-Aux5.c AUX-Remove-Lists-Aux4.c\
-   AUX-Remove-Lists-Aux3.c AUX-Remove-Lists-Aux2.c AUX-Remove-Lists-Aux1.c\
-   AUX-RenameVars7.c AUX-RenameVars6.c AUX-RenameVars5.c AUX-RenameVars4.c\
-   AUX-RenameVars3.c AUX-RenameVars2.c AUX-RenameVars1.c\
-   AUX-Normalize-Conds16.c AUX-Normalize-Conds15.c AUX-Normalize-Conds14.c\
-   AUX-Normalize-Conds13.c AUX-Normalize-Conds12.c AUX-Normalize-Conds11.c\
-   AUX-Normalize-Conds10.c AUX-Normalize-Conds9.c AUX-Normalize-Conds8.c\
-   AUX-Normalize-Conds7.c AUX-Normalize-Conds6.c AUX-Normalize-Conds5.c\
-   AUX-Normalize-Conds4.c AUX-Normalize-Conds3.c AUX-Normalize-Conds2.c\
-   AUX-Normalize-Conds1.c AUX-Trans-Set-Pats3.c AUX-Trans-Set-Pats2.c\
-   AUX-Trans-Set-Pats1.c AUX-MuASF-Equations-Ops32.c\
+   AUX-Locate-Constants3.c AUX-Locate-Constants2.c AUX-Locate-Constants1.c\
+   AUX-Remove-Lists-Aux10.c AUX-Remove-Lists-Aux9.c AUX-Remove-Lists-Aux8.c\
+   AUX-Remove-Lists-Aux7.c AUX-Remove-Lists-Aux6.c AUX-Remove-Lists-Aux5.c\
+   AUX-Remove-Lists-Aux4.c AUX-Remove-Lists-Aux3.c AUX-Remove-Lists-Aux2.c\
+   AUX-Remove-Lists-Aux1.c AUX-RenameVars7.c AUX-RenameVars6.c\
+   AUX-RenameVars5.c AUX-RenameVars4.c AUX-RenameVars3.c AUX-RenameVars2.c\
+   AUX-RenameVars1.c AUX-Normalize-Conds16.c AUX-Normalize-Conds15.c\
+   AUX-Normalize-Conds14.c AUX-Normalize-Conds13.c AUX-Normalize-Conds12.c\
+   AUX-Normalize-Conds11.c AUX-Normalize-Conds10.c AUX-Normalize-Conds9.c\
+   AUX-Normalize-Conds8.c AUX-Normalize-Conds7.c AUX-Normalize-Conds6.c\
+   AUX-Normalize-Conds5.c AUX-Normalize-Conds4.c AUX-Normalize-Conds3.c\
+   AUX-Normalize-Conds2.c AUX-Normalize-Conds1.c AUX-Trans-Set-Pats3.c\
+   AUX-Trans-Set-Pats2.c AUX-Trans-Set-Pats1.c AUX-MuASF-Equations-Ops32.c\
    AUX-MuASF-Equations-Ops31.c AUX-MuASF-Equations-Ops30.c\
    AUX-MuASF-Equations-Ops29.c AUX-MuASF-Equations-Ops28.c\
    AUX-MuASF-Equations-Ops27.c AUX-MuASF-Equations-Ops26.c\
@@ -224,10 +223,10 @@ SPEC_SRCS6=\
    AUX-MuASF-Equations-Ops7.c AUX-MuASF-Equations-Ops6.c\
    AUX-MuASF-Equations-Ops5.c AUX-MuASF-Equations-Ops4.c\
    AUX-MuASF-Equations-Ops3.c AUX-MuASF-Equations-Ops2.c\
-   AUX-MuASF-Equations-Ops1.c AUX-TermAsFix2muASF8.c AUX-TermAsFix2muASF7.c
+   AUX-MuASF-Equations-Ops1.c AUX-TermAsFix2muASF8.c AUX-TermAsFix2muASF7.c\
+   AUX-TermAsFix2muASF6.c AUX-TermAsFix2muASF5.c AUX-TermAsFix2muASF4.c
 
 SPEC_SRCS7=\
-   AUX-TermAsFix2muASF6.c AUX-TermAsFix2muASF5.c AUX-TermAsFix2muASF4.c\
    AUX-TermAsFix2muASF3.c AUX-TermAsFix2muASF2.c AUX-TermAsFix2muASF1.c\
    AUX-MuASF-Sign2C12.c AUX-MuASF-Sign2C11.c AUX-MuASF-Sign2C10.c\
    AUX-MuASF-Sign2C9.c AUX-MuASF-Sign2C8.c AUX-MuASF-Sign2C7.c\
@@ -256,13 +255,14 @@ SPEC_SRCS7=\
    AUX-Make-Assign-Conds1.c AUX-AsFix2muASF12.c AUX-AsFix2muASF11.c\
    AUX-AsFix2muASF10.c AUX-AsFix2muASF9.c AUX-AsFix2muASF8.c\
    AUX-AsFix2muASF7.c AUX-AsFix2muASF6.c AUX-AsFix2muASF5.c\
-   AUX-AsFix2muASF4.c AUX-AsFix2muASF3.c AUX-AsFix2muASF2.c
+   AUX-AsFix2muASF4.c AUX-AsFix2muASF3.c AUX-AsFix2muASF2.c\
+   AUX-AsFix2muASF1.c AUX-MuASF2C7.c AUX-MuASF2C6.c AUX-MuASF2C5.c
 
 SPEC_SRCS8=\
-   AUX-AsFix2muASF1.c AUX-MuASF2C7.c AUX-MuASF2C6.c AUX-MuASF2C5.c\
    AUX-MuASF2C4.c AUX-MuASF2C3.c AUX-MuASF2C2.c AUX-MuASF2C1.c\
    AUX-MuASF2MuASF2.c AUX-MuASF2MuASF1.c AUX-AsFix2C3.c AUX-AsFix2C2.c\
    AUX-AsFix2C1.c
+
 SPEC_SRCS = $(SPEC_SRCS1) $(SPEC_SRCS2) $(SPEC_SRCS3) $(SPEC_SRCS4) $(SPEC_SRCS5) $(SPEC_SRCS6) $(SPEC_SRCS7) $(SPEC_SRCS8)
 
 init.c: $(SPEC_SRCS)

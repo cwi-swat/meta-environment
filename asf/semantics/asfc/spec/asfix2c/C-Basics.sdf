@@ -58,10 +58,6 @@ exports
     is-char(FunId)                           -> Bool
     translate-char(FunId)                    -> Expression
 
-hiddens
-  context-free syntax
-    space                                    -> FunId
-
 exports
   variables
     "Decls"[0-9]*        -> Declaration-list
