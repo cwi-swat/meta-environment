@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-static char version[] = "1.1";
+static char version[] = "1.2";
 
 #define streq(str1, str2) (!strcmp(str1, str2))
 
