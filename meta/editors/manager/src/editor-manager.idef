@@ -28,12 +28,14 @@ process EditorManager is
 let
   EM : editor-manager,
   Name : str,
+  ModuleName: str,
+  Editors: list,
   EditorId : term
 in
   execute(editor-manager, EM?) .
   (
-    rec-msg(get-editor-id(Name?)) .
-    snd-eval(EM, get-editor-id(Name)) .
+    rec-msg(get-editor-id(Name?, ModuleName?)) .
+    snd-eval(EM, get-editor-id(Name, ModuleName)) .
     (
       rec-value(EM, new-editor(EditorId?)) .
       snd-msg(new-editor(Name, EditorId))
@@ -41,6 +43,11 @@ in
       rec-value(EM, existing-editor(EditorId?)) .
       snd-msg(existing-editor(Name, EditorId))
     )
+  +
+    rec-msg(get-editors-by-module(Name?)) .
+    snd-eval(EM, get-editors-by-module(Name)) .
+    rec-value(EM, editors-by-module(Editors?)) .
+    snd-msg(editors-by-module(Editors))
   +
     rec-msg(delete-editor(EditorId?)) .
     snd-do(EM, delete-editor(EditorId))

@@ -20,6 +20,11 @@
 #
 # $Id$
 
+2000/7/7 (jong@cwi.nl)
+   * editor-manager now knows the module each editor is related to.
+   * upon closing of a module, all related structure-editors,
+     text-editors and ToolBus-processes are removed.
+
 2000/7/5 (jong@cwi.nl)
    * Revamped editors' directory structure.
    * An editor-manager now dispenses editor-ids. This implies you

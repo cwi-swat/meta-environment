@@ -22,6 +22,28 @@
 
 */
 
+process DeleteEditorsForModule(ModuleName: str) is
+let
+  EditorId   : term,
+  EditorList : list
+in
+  snd-msg(get-editors-by-module(ModuleName)) .
+  rec-msg(editors-by-module(EditorList?)) .
+  (
+    if not-equal(EditorList, []) then
+      EditorId := first(EditorList) .
+      snd-msg(delete-text-editor(EditorId)) .
+      snd-msg(delete-structure-editor(EditorId)) .
+      snd-msg(delete-editor(EditorId)) .
+      snd-msg(kill-editor(EditorId)) .
+      EditorList := next(EditorList)
+    fi
+  ) *
+  if equal(EditorList, []) then
+    tau
+  fi
+endlet
+
 process EditorCreator is
 let
   Id         : int,
@@ -39,7 +61,7 @@ in
     rec-msg(edit-syntax(ModuleName?)) .
     snd-msg(get-sdf2-path-from-db(ModuleName)) .
     rec-msg(path(FileName?)) .
-    snd-msg(get-editor-id(FileName)) .
+    snd-msg(get-editor-id(FileName, ModuleName)) .
     (
       rec-msg(new-editor(FileName, EditorId?)) .
       create(TextEditor("syntax", EditorId), Id?) .
@@ -54,7 +76,7 @@ in
     rec-msg(edit-equations(ModuleName?)) .
     snd-msg(get-eqs-path-from-db(ModuleName)) .
     rec-msg(path(FileName?)) .
-    snd-msg(get-editor-id(FileName)) .
+    snd-msg(get-editor-id(FileName, ModuleName)) .
     (
       rec-msg(new-editor(FileName, EditorId?)) .
       create(TextEditor("equations", EditorId), Id?) .
@@ -67,7 +89,7 @@ in
   +
     %% Edit a Term from file
     rec-msg(edit-term-file(ModuleName?, FileName?)) .
-    snd-msg(get-editor-id(FileName)) .
+    snd-msg(get-editor-id(FileName, ModuleName)) .
     (
       rec-msg(new-editor(FileName, EditorId?))
     +
@@ -90,6 +112,9 @@ in
     snd-msg(delete-structure-editor(EditorId)) .
     snd-msg(delete-editor(EditorId)) .
     snd-msg(kill-editor(EditorId))
+  +
+    rec-msg(delete-editors-for-module(ModuleName?)) .
+    DeleteEditorsForModule(ModuleName)
   )
   * delta
 endlet

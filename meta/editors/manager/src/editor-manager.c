@@ -28,8 +28,9 @@
 #include "editor-manager.tif.h"
 
 
-#define	POS_ID    0
-#define	POS_NAME  1
+#define	POS_ID     0
+#define	POS_NAME   1
+#define	POS_MODULE 2
 
 
 char editor_manager_id[] = "$Id$";
@@ -54,11 +55,27 @@ nameStringToTerm(const char *name)
 }
 
 static ATerm
-newEditor(ATerm id, ATerm name)
+moduleStringToTerm(const char *module)
+{
+  assert(module);
+
+  return ATmake("module(<str>)", module);
+}
+
+static ATerm
+newEditor(ATerm id, ATerm name, ATerm module)
 {
   assert(id && name);
 
-  return ATmake("editor(<term>,<term>)", id, name);
+  return ATmake("editor(<term>,<term>,<term>)", id, name, module);
+}
+
+static ATerm
+getEditorId(ATerm editor)
+{
+  assert(editor);
+
+  return ATgetArgument((ATermAppl) editor, POS_ID);
 }
 
 static ATerm
@@ -70,11 +87,11 @@ getEditorName(ATerm editor)
 }
 
 static ATerm
-getEditorId(ATerm editor)
+getModule(ATerm editor)
 {
   assert(editor);
 
-  return ATgetArgument((ATermAppl) editor, POS_ID);
+  return (ATerm) ATgetArgument((ATermAppl) editor, POS_MODULE);
 }
 
 static ATerm
@@ -121,6 +138,28 @@ getEditorById(ATerm id)
   return NULL;
 }
 
+static ATermList
+getEditorsByModule(ATerm module)
+{
+  ATermList list;
+  ATermList result;
+
+  assert(editors);
+
+  list   = editors;
+  result = ATempty;
+
+  while (!ATisEmpty(list)) {
+    ATerm entry = ATgetFirst(list);
+    if (ATisEqual(getModule(entry), module)) {
+      result = ATinsert(result, getEditorId(entry));
+    }
+    list = ATgetNext(list);
+  }
+
+  return result;
+}
+
 static void
 addEditor(ATerm editor)
 {
@@ -146,11 +185,12 @@ sndValue(ATerm result)
 }
 
 ATerm
-get_editor_id(int conn, char *nameAsString)
+get_editor_id(int conn, char *nameAsString, char *moduleAsString)
 {
   ATerm editor;
   ATerm editorId;
   ATerm nameAsTerm;
+  ATerm moduleAsTerm;
 
   assert(nameAsString);
 
@@ -163,7 +203,8 @@ get_editor_id(int conn, char *nameAsString)
   }
 
   editorId = getUniqueId();
-  addEditor(newEditor(editorId, nameAsTerm));
+  moduleAsTerm = moduleStringToTerm(moduleAsString);
+  addEditor(newEditor(editorId, nameAsTerm, moduleAsTerm));
 
   return sndValue(ATmake("new-editor(<term>)", editorId));
 }
@@ -184,6 +225,21 @@ delete_editor(int conn, ATerm editorId)
 
   removeEditor(editor);
 }
+
+ATerm
+get_editors_by_module(int conn, char *moduleAsString)
+{
+  ATerm moduleAsTerm;
+  ATermList editorsByModule;
+
+  assert(moduleAsString);
+
+  moduleAsTerm    = moduleStringToTerm(moduleAsString);
+  editorsByModule = getEditorsByModule(moduleAsTerm);
+
+  return sndValue(ATmake("editors-by-module([<list>])", editorsByModule));
+}
+
 
 void
 rec_terminate(int conn, ATerm reason)
