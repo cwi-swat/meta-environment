@@ -181,10 +181,19 @@ AC_CHECK_HEADER(getopt.h)
 
 AC_SUBST(SOCKLIBS)
 
+ASFIX='${top_srcdir}/asfix'
+ASFIXBIN='$(ASFIX)'
+ASFIXINC='$(ASFIX)/libasfix'
+ASFIXLIB='$(ASFIX)/libasfix'
+
+AC_SUBST(ASFIX)
+AC_SUBST(ASFIXBIN)
+AC_SUBST(ASFIXINC)
+AC_SUBST(ASFIXLIB)
+
 dnl Which files need updating?
 AC_OUTPUT(
 	Makefile Makefile.skel meta \
-	asource/Makefile asource/test/Makefile \
 	compiler/Makefile compiler/c-source/Makefile \
 	editor/Makefile editor/editor \
 	evaluator/Makefile evaluator/test/Makefile evaluator/test/reduce-test \
@@ -204,6 +213,7 @@ AC_OUTPUT(
              utils/parse-sdf2 utils/ps-dot \
              utils/genmakefile.sh utils/parse-file
 )
+
 
 dnl Handle subpackages...
 AC_CONFIG_PKG(asfix)

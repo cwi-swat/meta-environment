@@ -57,6 +57,10 @@ ATERM		= @ATERM@
 ATERMBIN	= @ATERMBIN@
 ATERMLIB	= @ATERMLIB@
 ATERMINC	= @ATERMINC@
+ASFIX           = @ASFIX@
+ASFIXBIN        = @ASFIXBIN@
+ASFIXLIB        = @ASFIXLIB@
+ASFIXINC        = @ASFIXINC@
 TOOLBUS		= @TOOLBUS@
 TOOLBUSBIN	= @TOOLBUSBIN@
 TOOLBUSLIB	= @TOOLBUSLIB@
@@ -68,8 +72,8 @@ include ${top_srcdir}/implicit-rules
 # The eXtra parts of some variables
 XCFLAGS         =
 XCPPFLAGS       =
-XINCLUDES       = -I$(ATERMINC) -I.
-XLIBS           = -L$(ATERMLIB) -lATerm -lAsFix
+XINCLUDES       = -I$(ASFIXINC) -I$(ATERMINC) -I.
+XLIBS           = -L$(ASFIXLIB) -L$(ATERMLIB) -lATerm -lAsFix
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
