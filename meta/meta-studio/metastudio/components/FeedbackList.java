@@ -69,7 +69,7 @@ public class FeedbackList extends UserInterfacePanel {
         removeFeedbackSummary(ANONYMOUS_ORIGIN, ANONYMOUS_ORIGIN);
     }
 
-    public void displayFeedbackSummary(ATerm t0) {
+    public void showFeedbackSummary(ATerm t0) {
         Summary summary = new Factory((PureFactory) getFactory()).SummaryFromTerm(t0);
         setFeedbackList(summary);
     }
