@@ -3,6 +3,7 @@
  */
 
 #include "abort.tb"
+#include "parse-utils.tb"
 #include "sglr.idef"
 #include "in-output.idef"
 #include "open-modules.tb"

@@ -9,6 +9,7 @@
 #endif
 
 #include "abort.tb"
+#include "parse-utils.tb"
 #include "sglr.idef"
 #include "text-editor.idef"
 #include "editor-creator.tb"

@@ -91,57 +91,6 @@ in
   ParseString(ModuleId, Nonterminal, Text, Tree?, ParseError?)
 endlet
 
-process ProcessParseError(ModuleName : str, ParseError: term) is
-let
-  Co           : int,
-  Li           : int,
-  I            : int,
-  Ch           : int,
-  Cycle        : term,
-  ErrorList    : list,
-  ErrorContent : term,
-  FunSym       : str
-in
-  FunSym := fun(ParseError) .
-  if not-equal(FunSym, "no-errors") then
-    ErrorList := first(args(ParseError)) .
-    ErrorContent := first(next(args(ParseError))) .
-    FunSym := fun(ErrorContent) .
-    if equal(FunSym, "ambiguities") then
-      I := first(args(ErrorContent)) .
-      snd-note(ui-status(errorf("Parse of %s returned %d ambiguities",
-                                [ModuleName,I])))
-    else
-      tau
-    fi .
-    if equal(FunSym, "cycle") then
-      Cycle := first(args(ErrorContent)) .
-      snd-note(ui-status(errorf("Parse returned a cycle: %t\n",
-                                [Cycle])))
-    else
-      tau
-    fi .
-    if equal(FunSym, "eof") then
-      snd-note(ui-status(errorf("EOF unexpected while parsing %s\n",
-                                    [ModuleName]))) 
-    else
-      tau
-    fi .
-    if equal(FunSym, "plain") then
-      Ch := first(args(first(ErrorList))) .
-      Li := first(args(first(next(ErrorList)))) .
-      Co := first(args(first(next(next(ErrorList))))) .
-      snd-note(ui-status(errorf(
-               "Character %d unexpected in %s, line %d, column %d\n",
-               [Ch, ModuleName, Li, Co])))
-    else
-      tau
-    fi
-  else
-    tau
-  fi
-endlet
-
 process GetTree(EditorId: term, ModuleName: str, Tree: term?) is
 let
   DirtyFoci  : term
