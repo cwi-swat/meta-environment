@@ -2,6 +2,7 @@
 
 2003/07/17 (markvdb@cwi.nl)
  * Repaired the Move-Down bug reported by Hayco.
+ * show-area now activates also syntax and equations editors correctly.
 
 2003/07/17 ({markvdb,jurgenv}@cwi.nl)
  * Show area now sets the focus and lets the cursor jump to the beginning
