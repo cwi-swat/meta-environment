@@ -104,9 +104,12 @@ void rec_ack_event(int cid, ATerm t) {
 			start_symbol?start_symbol:"",
 			buf));
     free(buf);
-  } else if(ATmatch(t, "parse-error([<list>],<term>)", &errlist, &errtype)) {
+  } else if(ATmatch(t, "parsetext(<int>,<str>,<str>,<str>,"
+                                 "parse-error([<list>],<term>))",
+                    NULL,NULL,NULL,NULL,&errlist, &errtype)) {
     if(debug_mode) ATwarning("parse-client: received parse-error\n");
-    WriteFile(output_file_name, ATmake("parse-error(<list>)", errlist));
+    WriteFile(output_file_name, ATmake("parse-error([<list>],<term>)",
+              errlist,errtype));
     ATBwriteTerm(cid, ATmake("snd-disconnect"));
     exit(1);
   } else if(ATmatch(t, "parsetext(<int>,<str>,<str>,<str>,<term>)",
