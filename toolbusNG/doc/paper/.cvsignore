@@ -9,6 +9,7 @@
 *.ind
 *.log
 *.ps
+*.tar.gz
 *.toc
 Makefile
 Makefile.in

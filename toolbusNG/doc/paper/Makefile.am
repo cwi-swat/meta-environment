@@ -1,6 +1,6 @@
 # $Id$
 
-include latex_rules
+include ${top_srcdir}/latex_rules
 
 PAPERS = position.ps
 SOURCES = position.ltx
@@ -9,4 +9,4 @@ SOURCES = position.ltx
 noinst_DATA = $(PAPERS)
 
 CLEANFILES = *.aux *.blg *.dvi *.log *.ps
-EXTRA_DIST = latex_rules
+EXTRA_DIST = latex_rules $(PAPERS)

@@ -1,7 +1,7 @@
 dnl $Id$
 
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(tbdoc, 1.0)
+AM_INIT_AUTOMAKE(toolbus-papers, 1.0)
 
 AC_SET_MAKE
 
