@@ -129,7 +129,6 @@ in
           Modules := join(Imports, Modules).
           RealModules := join(RealModules, RealModule)
         else 
-          printf("Opening module %s failed: file not found!\n", Module) .
           Error("Opening module %s failed: file not found!", [Module])
         fi
       )
