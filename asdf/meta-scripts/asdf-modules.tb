@@ -156,7 +156,7 @@ let
 in
   (
     rec-msg(open-language(asdf)) .
-    snd-msg(io-read-term-file("/users/jive/PROGRAMS/asenv/install/share/asdf/asdf-pt//asdf/all.trm.tbl")) .
+    snd-msg(io-read-term-file("/users/jive/PROGRAMS/asenv/install/share/asdf/asdf-pt/asdf/all.trm.tbl")) .
     (
       rec-msg(io-file-contents(Table?)) .
       snd-msg(parse-table(trm("ASDF"), Table))
@@ -633,14 +633,46 @@ in
    rec-msg(ts-all-keys(Keys?)) 
 endlet
 
-process Open-Initial-Module(Path : str, Name : str) is 
+process Open-Initial-Module(Path : str, InitModule : str) is 
 let
   Imports : list,
-  RealModule : str
+  Modules : list,
+  Module : str,
+  Id : int,
+  LibPath : str,
+  Directories : list
 in 
-  Open-Module(Path, Name, sdf, Imports?) .
-  snd-msg(open-modules(Imports, sdf)) .
-  rec-msg(finished-opening-modules) 
+  Id := process-id.
+  snd-note(ui-status(stat(Id,"Initializing"))). 
+  Modules := [InitModule].
+  snd-msg(library-location-hook).
+  rec-msg(library-location-hook-result(LibPath?)) .
+  if not-equal(Modules, []) then
+    Module := first(Modules).
+    Modules := next(Modules).
+    snd-msg(is-module-in-db(Module)).
+    (
+      rec-msg(exists-in-module-db(Module))
+    +
+      rec-msg(not-exists-in-module-db(Module)).
+      /* Necessary if module uses library module */
+      snd-msg(io-find-file([Path], Module, ".sdf")) .
+      (
+        rec-msg(io-file-not-found) .
+printf("Opening Module (%s,%s)\n", LibPath, Module).
+        Open-Module(LibPath, Module, sdf, Imports?).
+        Modules := join(Imports, Modules)
+      +
+        rec-msg(io-file-found(Directories?)) .
+printf("Opening Module (%s,%s)\n", Path, Module).
+        Open-Module(Path, Module, sdf, Imports?).
+        Modules := join(Imports, Modules)
+      )
+    )
+  fi *
+  if equal(Modules, []) then
+    snd-note(ui-status(endstat(Id))) 
+  fi
 endlet
 
 process ASDFButtons is
@@ -815,10 +847,13 @@ endlet
 process TypeCheckModule(ModuleName : str) is
 let
    ModuleNames : list,
-   ModuleTrees : list,
+   ImModuleTrees : list,
+   ImModuleTree : term,
    ModuleTree : term,
+   ModuleText : str,
    Signatures : term,
    AllSignatures : term, 
+   SignatureText : str,
    ErrorTree : term,
    ErrorText : str
 in
@@ -827,41 +862,54 @@ in
    rec-msg(all-imported-module-names(ModuleNames?)) .
    snd-msg(ts-get-values("asdf-tree", ModuleNames)) .
    (
-     rec-msg(ts-values(ModuleTrees?)) 
+     rec-msg(ts-values(ImModuleTrees?)) 
    + 
      rec-msg(ts-no-values) .
-     ModuleTrees := []    
+     ImModuleTrees := []    
    ) .
-   ModuleTree := first(ModuleTrees) .
-   ModuleTrees := next(ModuleTrees) .
-   snd-msg(apply-rewrite("Asdfsupport", "getSignatures", 
-                         "Signatures", [ModuleTree])) .
+   ImModuleTree := first(ImModuleTrees) .
+   ImModuleTrees := next(ImModuleTrees) .
+   snd-msg(apply-rewrite("Asdfsupport", "get-signatures", 
+                         "Signatures", [ImModuleTree])) .
    rec-msg(normalform("Asdfsupport", AllSignatures?)) .
    (
-     if not-equal(ModuleTrees, []) then
-       ModuleTree := first(ModuleTrees) .
-       ModuleTrees := next(ModuleTrees) .
-       snd-msg(apply-rewrite("Asdfsupport", "getSignatures", 
-	 		    "Signatures", [ModuleTree])) .
+     if not-equal(ImModuleTrees, []) then
+       ImModuleTree := first(ImModuleTrees) .
+       ImModuleTrees := next(ImModuleTrees) .
+       snd-msg(apply-rewrite("Asdfsupport", "get-signatures", 
+	 		    "Signatures", [ImModuleTree])) .
        rec-msg(normalform("Asdfsupport", Signatures?)) .
-       snd-msg(apply-rewrite("Asdfsupport", "joinSignatures", 
+       snd-msg(apply-rewrite("Asdfsupport", "join-signatures", 
 	 		    "Signatures", [AllSignatures, Signatures])) .
        rec-msg(normalform("Asdfsupport", AllSignatures?)) 
      fi
    )*
-   if equal(ModuleTrees, []) then
+   if equal(ImModuleTrees, []) then
      tau
    fi .
    /* typecheck with signatures */
-   snd-msg(apply-rewrite("Typecheck", "type-check", 
+   snd-msg(io-unpack-term(AllSignatures)) .
+   rec-msg(io-term(AllSignatures?)).
+   snd-msg(ts-get-term-value("asdf-tree",ModuleName)) .
+   rec-msg(ts-value(ModuleTree?)) .
+   snd-msg(io-unpack-term(ModuleTree)) .
+   rec-msg(io-term(ModuleTree?)).
+   snd-msg(io-write-packed-term-file("module", ModuleTree)) .
+   rec-msg(io-file-written) .
+   snd-msg(io-write-packed-term-file("signatures", AllSignatures)) .
+   rec-msg(io-file-written) .
+/*   snd-msg(apply-rewrite("Typecheck", "typecheck", 
 	 		"Summary", [ModuleTree, AllSignatures])).
-   rec-msg(normalform("Typecheck", ErrorTree?)).
-   snd-msg(unparse(ErrorTree)) .
+   rec-msg(normalform("Typecheck", ErrorTree?)).*/
+   snd-msg(gen-adapter-term-evaluate(asdf-typecheck-id,"/users/jive/PROGRAMS/asenv/install/bin/typecheck", hest)).
+   rec-msg(gen-adapter-term-result(asdf-typecheck-id, ErrorTree?)).
+/*   snd-msg(unparse(ErrorTree)) .
    rec-msg(unparsed-text(ErrorText?)) .
    snd-msg(io-write-text-file("foo", [ErrorText])) .
    rec-msg(io-file-written) .
    snd-msg(io-read-packed-term-file("foo")) .
-   rec-msg(io-file-contents(ErrorTree?)) .
+   rec-msg(io-file-contents(ErrorTree?)) .*/
+printf("ErrorTree = %t\n", ErrorTree).
    snd-note(show-feedback-summary(ErrorTree))
 endlet
 
