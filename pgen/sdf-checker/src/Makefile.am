@@ -11,7 +11,7 @@ INCLUDES		= -I$(ASC_SUPPORT)/include \
 
 bin_PROGRAMS = sdfchecker
 
-data_DATA    = sdfchecker.idef
+pkgdata_DATA    = sdfchecker.idef
 
 EXTRA_DIST   = sdfchecker.idef sdfchecker.tif.c sdfchecker.tif.h
 
