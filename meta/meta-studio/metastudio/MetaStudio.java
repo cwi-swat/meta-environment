@@ -363,6 +363,17 @@ public class MetaStudio
         }
       });
 
+    modulePopup.add(new AbstractAction("Import Module")
+      {
+        public void actionPerformed(ActionEvent event)
+        {
+	  Object[] values = moduleList.getSelectedValues();
+	  for (int i=0; i<values.length; i++) {
+	    doImportModule((String)values[i]);
+	  }
+        }
+      });
+
     modulePopup.addSeparator();
 
     modulePopup.add(new AbstractAction("Compile Module")
@@ -1064,6 +1075,7 @@ public class MetaStudio
     boolean showPopup = false;
 
     showPopup |= e.isPopupTrigger();
+    
     /* <PO:REMOVE> 
        if (!showPopup) {
       showPopup |= e.getButton() == MouseEvent.BUTTON3;
@@ -1233,6 +1245,26 @@ public class MetaStudio
       String path = getFilePath(file, extension);
 
       ATerm event = factory.make("copy-module(<str>,<str>,<str>)", oldModule,
+				 module, path);
+      bridge.postEvent(event);
+    }
+  }
+
+  //}}}
+  //{{{ void doImportModule(String oldModule)
+
+  void doImportModule(String oldModule)
+  {
+    File oldFile = new File(oldModule);
+    File file = showFileBrowser(Preferences.getString("text.import-module"),
+				System.getProperty("user.dir"));
+
+    if (file != null) {
+      String extension = Preferences.getString("module.extension");
+      String module = getFileModule(file, extension);
+      String path = getFilePath(file, extension);
+
+      ATerm event = factory.make("import-module(<str>,<str>,<str>)", oldModule,
 				 module, path);
       bridge.postEvent(event);
     }

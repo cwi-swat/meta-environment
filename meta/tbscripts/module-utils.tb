@@ -14,6 +14,9 @@ in
   +
     rec-msg(copy-module(OldModuleName?, NewModuleName?, NewPath?)).
     DoCopyModule(OldModuleName, NewModuleName, NewPath)
+  +
+    rec-msg(import-module(OldModuleName?, NewModuleName?, NewPath?)).
+    DoImportModule(OldModuleName, NewModuleName, NewPath)
   ) *
   delta
 endlet
@@ -62,6 +65,27 @@ in
     else tau fi
   else tau fi.
   HandleCopyModuleErrors(Old, RealNew, Status) . tau
+endlet
+
+process DoImportModule(Mod : str, Import : str, Path : str)  is
+let
+  Status : term,
+  Changed : list,
+  RealImport : str
+in
+  Status := success.
+  GetRealModuleName(Import, Path, Status?, RealImport?).
+  if equal(Status, success) then
+    CheckExistence(RealImport, Status?).
+    if not(equal (Status, success)) then
+      Status := success.
+      AddImportInDB(Mod, RealImport, Path, Status?, Changed?).
+      if equal (Status, success) then
+        SaveSdfModules(Changed).
+	SaveAsfSdfModule(Mod)
+      else tau fi
+    else tau fi
+  else tau fi
 endlet
 
 process GetRealModuleName(Name : str, Path : str, Status : term?,
@@ -125,6 +149,18 @@ is
     rec-msg(copy-not-done(Old)).
     Status := module-not-copied
   )
+
+process AddImportInDB(Mod : str, Import : str, Path : str, Status : term?, 
+                       Changed : list?)
+is
+  snd-msg(add-import-in-db(Mod, Import, Path)) .
+  (
+    rec-msg(add-import-done(Mod, Changed?))
+  +
+    rec-msg(add-import-not-done(Mod)).
+    Status := import-not-done
+  )
+
 
 process CheckExistence(New : str, Status : term?) is
     snd-msg(is-module-in-db(New)) .

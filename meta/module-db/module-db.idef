@@ -128,6 +128,19 @@ snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
     snd-msg(renaming-not-done(OldName))
   )
 +
+  rec-msg(add-import-in-db(OldName?, NewName?, Path?)) .
+  snd-eval(Mdb, add-import(OldName, NewName, Path)) .
+  (
+    rec-value(Mdb, imports(changed-modules(Modules?),
+                           import-graph(ActualMods?, Pairs?))) .
+    snd-note(import-graph(ActualMods, Pairs)) .
+    snd-msg(add-import-done(OldName, Modules))
+  +
+    rec-value(Mdb, illegal-module-name(NewName)) .
+    snd-note(ui-status(errorf("illegal module name %s", [NewName]))) .
+    snd-msg(add-import-not-done(OldName))
+  )
++
   rec-msg(copy-module-in-db(OldName?, NewName?, Path?)) .
   snd-eval(Mdb, copy-module(OldName, NewName, Path)) .
   (
