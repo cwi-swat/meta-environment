@@ -1,4 +1,4 @@
-#!/bin
+#!/bin/sh
 #
 #  Date: 18/2/1998
 # Athor: Merijn de jonge
