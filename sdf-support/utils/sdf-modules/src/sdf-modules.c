@@ -43,36 +43,6 @@ static void version(const char *msg)
 
 /*}}}  */
 
-/*{{{  static ATermList importsToModuleList(SDF_ImportList imports) */
-
-static ATermList importsToModuleList(SDF_ImportList imports)
-{
-  ATermList modules = ATempty;
-
-  while (!SDF_isImportListEmpty(imports)) {
-    SDF_Import import = SDF_getImportListHead(imports);
-    SDF_ModuleId id = SDF_getModuleNameModuleId(
-			SDF_getImportModuleName(import));
-    ATerm name = ATmake("<str>", SDF_getCHARLISTString(
-                                   SDF_getModuleIdChars(id)));
-
-    if (ATindexOf(modules, name, 0) < 0) {
-      modules = ATinsert(modules, name);
-    }
-
-    if (SDF_hasImportListTail(imports)) {
-      imports = SDF_getImportListTail(imports);
-    }
-    else {
-      break;
-    }
-  }
-
-  return modules;
-}
-
-/*}}}  */
-
 /*{{{  ATerm get_all_needed_module_names(int cid, ATerm atModules, char* name)  */
 
 ATerm get_all_needed_module_names(int cid, ATerm pairs, char* name) 
@@ -80,18 +50,6 @@ ATerm get_all_needed_module_names(int cid, ATerm pairs, char* name)
   ATerm id = ATmake("<str>", name);
   ATermList imports = PI_getTransitiveImports((ATermList) ATBunpack(pairs), id);
   return ATmake("snd-value(all-needed-module-names(<term>))", imports);
-}
-
-/*}}}  */
-/*{{{  ATerm get_all_needed_modules(int cid, ATerm atModules, char* name)  */
-
-ATerm get_all_needed_modules(int cid, ATerm atModules, char* name) 
-{
-  ATermList list = (ATermList) ATBunpack(atModules);
-  SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
-  ATermList result = SI_getTransitiveImportedModules(list, id);
-
-  return ATmake("snd-value(all-needed-modules(<term>))", result);
 }
 
 /*}}}  */
@@ -124,13 +82,13 @@ ATerm get_imported_module_names(int cid, ATerm atModule)
 
 /*{{{  ATerm get_all_depending_modules(int cid, ATerm atModules, char* name) */
 
-ATerm get_all_depending_module_names(int cid, ATerm atModules, char* name)
+ATerm get_all_depending_module_names(int cid, ATerm pairs, char* name)
 {
-  ATermList list = (ATermList) ATBunpack(atModules);
-  SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
+  ATerm id = ATmake("<str>", name);
+  ATermList depending = PI_getDependingModules((ATermList) pairs, id);
 
   return ATmake("snd-value(all-depending-module-names(<term>))",
-		(ATerm) SI_getDependingModuleIds(list, id));
+		depending);
 }
 
 /*}}}  */
@@ -195,9 +153,8 @@ ATerm get_module_path(int cid, char *path, char *id)
 
 /*{{{  ATerm make_sdf_definition(int cid, ATerm atModules) */
 
-ATerm make_sdf_definition(int cid, ATerm atModules, char *name)
+ATerm make_sdf_definition(int cid, ATerm atModules)
 {
-  SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
   ATermList list;
   SDF_ModuleList modules;
   SDF_OptLayout space;
@@ -205,7 +162,7 @@ ATerm make_sdf_definition(int cid, ATerm atModules, char *name)
   SDF_Start start;
   ATerm result;
 
-  list = ATBunpack(atModules);
+  list = (ATermList) ATBunpack(atModules);
 
   modules = SDF_makeModuleListEmpty();
   space = SDF_makeLayoutSpace();

@@ -45,14 +45,8 @@ in
     rec-value(SM, all-needed-module-names(ModuleNames?)) .
     snd-msg(sm-all-needed-module-names(ModuleNames))
   +
-    rec-msg(sm-get-all-needed-modules(Modules?, ModuleId?)) .
-    snd-eval(SM, get-all-needed-modules(Modules, ModuleId)) .
-    rec-value(SM, all-needed-modules(Modules?)) .
-    snd-msg(sm-all-needed-modules(Modules)) .
-    Modules := []
-  +
-    rec-msg(sm-get-all-depending-module-names(Modules?, ModuleId?)) .
-    snd-eval(SM, get-all-depending-module-names(Modules, ModuleId)) .
+    rec-msg(sm-get-all-depending-module-names(ModuleImportPairs?, ModuleId?)) .
+    snd-eval(SM, get-all-depending-module-names(ModuleImportPairs, ModuleId)) .
     Modules := [] .
     rec-value(SM, all-depending-module-names(ModuleNames?)) .
     snd-msg(sm-all-depending-module-names(ModuleNames))
@@ -68,8 +62,8 @@ in
     rec-value(SM, imported-module-names(ModuleNames?)) .
     snd-msg(sm-imported-module-names(ModuleNames))
   +
-    rec-msg(sm-make-sdf-definition(Modules?, ModuleId?)) .
-    snd-eval(SM, make-sdf-definition(Modules, ModuleId)) .
+    rec-msg(sm-make-sdf-definition(Modules?)) .
+    snd-eval(SM, make-sdf-definition(Modules)) .
     Modules := [] .
     rec-value(SM, sdf-definition(Definition?)) .
     snd-msg(sm-sdf-definition(Definition)) .

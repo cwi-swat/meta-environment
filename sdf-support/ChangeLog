@@ -7,7 +7,9 @@ $Id$
  * Optimized transitive imports to do as less work as possible using the
    result cache.
  * Implemented transitive closure based on pure ATerm representation of the
-   import relation
+   import relation 
+ * getDependingModules based on new transitive closure, not on complete 
+   modules anymore
 
 2003/05/28 ({jong,jurgenv,markvdb}@cwi.nl)
  * utils/sdf-modules/sdf-modules.c: ATBpack added to make_sdf_definition

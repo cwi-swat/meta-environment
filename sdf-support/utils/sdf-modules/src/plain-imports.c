@@ -41,12 +41,12 @@ static ATermList merge(ATermList l1, ATermList l2)
   return l2;
 }
 
-ATermList PI_getTransitiveImports(ATermList idImportPairs, ATerm id)
+static ATermList getTransitiveImports(ATerm id)
 {
-  ATermList todo = ATmakeList1(id);
   ATermList result = ATempty;
+  ATermList todo = ATmakeList1(id);
 
-  initImportsTable(idImportPairs);
+  assert(importsTable != NULL && "importsTable should be initialized");
 
   while (!ATisEmpty(todo)) {
     ATerm module = ATgetFirst(todo);
@@ -58,6 +58,47 @@ ATermList PI_getTransitiveImports(ATermList idImportPairs, ATerm id)
     result = merge(ATmakeList1(module), result);
   }
 
+  return result;
+}
+  
+static ATermList getDependingModules(ATerm id)
+{
+  ATermList modules;
+  ATermList result = ATempty;
+
+  assert(importsTable != NULL && "importsTable should be initialized");
+  
+  modules = ATtableKeys(importsTable);
+
+  for( ;!ATisEmpty(modules); modules = ATgetNext(modules)) {
+    ATerm module = ATgetFirst(modules);
+    ATermList imports = getTransitiveImports(module);
+
+    if (isElem(id, imports)) {
+      result = ATinsert(result, module);
+    }
+  }
+
+  return result;
+}
+
+ATermList PI_getTransitiveImports(ATermList idImportPairs, ATerm id)
+{
+  ATermList result;
+
+  initImportsTable(idImportPairs);
+  result = getTransitiveImports(id);
+
   destroyImportsTable();
   return result; 
+}
+
+ATermList PI_getDependingModules(ATermList idImportPairs, ATerm id)
+{
+  ATermList result;
+  
+  initImportsTable(idImportPairs);
+  result = getDependingModules(id);
+  destroyImportsTable();
+  return result;
 }
