@@ -1,3 +1,8 @@
+2003/09/16 (jurgenv@cwi.nl)
+  * Extracted asf-library from the asf package. The ChangeLog in the
+    asf package between 2003/07/06 and 2003/09/16 contains some relevant
+    messages for this new package!
+
 2003/07/06 (jurgenv@cwi.nl)
   * Removed all .baf and .tbl files because they are not loaded anymore
     by the Meta-Environment anyway. This saves a lot of space in the

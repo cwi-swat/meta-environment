@@ -1,0 +1,34 @@
+dnl $Id$
+
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(asf-library, 1.0)
+
+ACLOCAL="${ACLOCAL} -I ."
+AC_SET_MAKE
+
+dnl {{{  List output files
+
+AC_OUTPUT(
+   Makefile
+   library/Makefile
+   library/asfix/Makefile
+   library/asfix/syntax/Makefile
+   library/asf/Makefile
+   library/asf/syntax/Makefile
+   library/asf/tools/Makefile
+   library/basic/Makefile
+   library/containers/Makefile
+   library/disambiguation/Makefile
+   library/functions/Makefile
+   library/strategies/Makefile
+   library/aterm/Makefile
+   library/system/Makefile
+   library/sdf2/Makefile
+   library/sdf2/syntax/Makefile
+   library/sdf2/normalization/Makefile
+   library/sdf2/projection/Makefile
+   library/sdf2/renaming/Makefile
+)
+
+dnl }}}

@@ -1,2 +1,10 @@
-Makefile.in
 Makefile
+diff.out
+configure
+aclocal.m4
+config.h.in
+Makefile.in
+config.log
+config.cache
+config.status
+autom4te-2.53.cache

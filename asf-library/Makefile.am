@@ -1,11 +1,6 @@
 EXTRA_DIST=make_rules
 
-SUBDIRS=asf basic aterm sdf2 system \
-        disambiguation containers strategies functions \
-        asfix
-
-clean:
-	rm -f $(top_builddir)/src/*.lst
+SUBDIRS=library
 
 uninstall:
 	chmod -R ugo+wr $(DESTDIR)$(pkgdatadir)
