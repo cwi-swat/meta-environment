@@ -30,6 +30,11 @@ in
     rec-value(SM, all-needed-module-names(ModuleNames?)) .
     snd-msg(sm-all-needed-module-names(ModuleNames))
   +
+    rec-msg(get-all-needed-modules(Modules?, ModuleId?)) .
+    snd-eval(SM, get-all-needed-modules(Modules, ModuleId)) .
+    rec-value(SM, all-needed-modules(Modules?)) .
+    snd-msg(sm-all-needed-modules(Modules))
+  +
     rec-msg(sm-get-all-depending-module-names(Modules?, ModuleId?)) .
     snd-eval(SM, get-all-depending-module-names(Modules, ModuleId)) .
     rec-value(SM, depending-module-names(ModuleNames?)) .

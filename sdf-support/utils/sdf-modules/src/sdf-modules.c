@@ -83,6 +83,19 @@ ATerm get_all_needed_module_names(int cid, ATerm atModules, char* name)
 }
 
 /*}}}  */
+/*{{{  ATerm get_all_needed_modules(int cid, ATerm atModules, char* name)  */
+
+ATerm get_all_needed_modules(int cid, ATerm atModules, char* name) 
+{
+  SDF_ModuleId id = SDF_makeModuleIdWord(SDF_makeCHARLISTString(name));
+  ATermList result = SDF_getTransitiveImportedModules((ATermList) atModules, 
+						      id);
+ 
+
+  return ATmake("snd-value(all-needed-modules(<term>))", result);
+}
+
+/*}}}  */
 /*{{{  ATerm get_all_needed_imports(int cid, ATerm atModules, char* name)  */
 
 ATerm get_all_needed_imports(int cid, ATerm atModules, char* name) 

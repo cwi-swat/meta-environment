@@ -4,7 +4,9 @@ $Id$
  * Added a generic tool that applies a number of SDF renamings to a parse tree
    and returns a list of parse trees accordingly. This code is based on
    the old asf-operations and elan-operations tool and designed to replace
-   it
+   it.
+ * Added get-all-imported-modules to the sdf-modules tool that does not
+   return a list of imported module names, but the modules themselves
   
 2003/05/21 ({markvdb,jurgenv}@cwi.nl)
  * Fixed a large number of bugs in sdf-modules.

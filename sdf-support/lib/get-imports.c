@@ -317,3 +317,54 @@ ATermList SDF_getDependingModuleIds(ATermList modules, SDF_ModuleId moduleId)
 }
 
 /*}}}  */
+
+/*{{{  static ATermList collect_imported_modules(SDF_ImportList imports) */
+
+static ATermList collect_imported_modules(SDF_ImportList imports)
+{
+  ATermList result = ATempty;
+ 
+  assert(moduleTable && "moduleTable not initialized");
+
+  while (!SDF_isImportListEmpty(imports)) {
+    SDF_Import import = SDF_getImportListHead(imports);
+    SDF_ModuleName importName = SDF_getImportModuleName(import);
+    SDF_ModuleId importId = SDF_getModuleNameModuleId(importName);
+    SDF_Start module = MT_getModule(moduleTable, importId);
+
+    result = ATinsert(result, SDF_StartToTerm(module));
+
+    if (SDF_hasImportListTail(imports)) {
+      imports = SDF_getImportListTail(imports);
+    }
+    else {
+      break;
+    }
+  }
+
+  return result;
+}
+
+/*}}}  */
+
+/*{{{  ATermList SDF_getTransitiveImportedModules(ATermList modules,  */
+
+ATermList SDF_getTransitiveImportedModules(ATermList modules, 
+					   SDF_ModuleId moduleId)
+{
+  ATermList result = ATempty;
+  SDF_ImportList imports;
+
+  moduleTable = MT_createModuleTable();
+  initModuleTable(modules);
+ 
+  imports = do_get_transitive_imports(moduleId);
+  result = collect_imported_modules(imports);
+
+  MT_destroyModuleTable(moduleTable);
+  moduleTable = NULL;
+
+  return result;
+}
+
+/*}}}  */
