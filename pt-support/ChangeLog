@@ -3,6 +3,10 @@ $Id$
 2003/10/09 (markvdb@cwi.nl)
  * By accident the strategy symbol was removed, added again.
 
+2003/10/09 (jurgenv@cwi.nl)
+ * Added comparePT tool. Compares two parse trees modulo layout 
+   and returns -1, 0 or 1
+
 2003/10/09 ({jurgenv,markvdb}@cwi.nl)
  * Regenerated AsFix.def from library and synchronized.
 
