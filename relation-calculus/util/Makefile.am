@@ -1,16 +1,10 @@
 
-bin_SCRIPTS=extract-relations merge-rstores rscript rstore2rviz
+include $(top_srcdir)/make_rules
 
-SOURCES=$(wildcard *.sh.src)
+bin_SCRIPTS	= extract-relations merge-rstores rscript rstore2rviz
 
-CLEANFILES=extract-relations merge-rstores rscript rscript2rviz
+EXTRA_DIST	= $(wildcard *.sh.src)
 
-% : %.sh.src Makefile
-	sed 's@__PREFIX__@$(prefix)@g;\
-	     s@__BINDIR__@$(bindir)@g;\
-	     s@__DATADIR__@$(pkgdatadir)@g;\
-	     s@__VERSION__@$(VERSION)@g;' < $< > $@ && \
-	chmod +x $@
-
+CLEANFILES	= extract-relations merge-rstores rscript rstore2rviz
 
 

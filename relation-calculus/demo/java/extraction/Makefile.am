@@ -1,17 +1,31 @@
 include $(top_srcdir)/make_rules
 
+# ---- extract-java
+
 bin_SCRIPTS 	= extract-java
 
-pkgdata_DATA    = JavaAnalysis.eqs
+EXTRA_DIST	= $(wildcard *.sh.src)
 
 CLEANFILES	= extract-java
 
-SOURCES 	= $(wildcard *.sh.src)
+# ---- dumped extraction specification
 
-EXTRA_DIST      = $(wildcard *.sdf) \
+javadir         = $(pkgdatadir)/demo/java
+
+# ---- extraction specification itself
+
+javaextractiondir= $(pkgdatadir)/demo/java/extraction
+
+JAVAEXTRACTION 	=  \
+		  JavaAnalysis.eqs \
+		  $(wildcard *.sdf) \
 		  $(wildcard *.asf) \
-		  $(wildcard *.tbl) \
-		  $(wildcard *.eqs) \
 		  meta.buttons \
 		  meta.conf
+
+EXTRA_DIST 	+= $(JAVAEXTRACTION)
+
+javaextraction_DATA = $(JAVAEXTRACTION)
+
+
 

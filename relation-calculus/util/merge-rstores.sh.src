@@ -3,18 +3,59 @@
 set -e
 datadir=__DATADIR__
 bindir=__BINDIR__
+PRG=`basename $0`
+
 TABLE=${datadir}/Rstore.trm.tbl
 RSTORE=${bindir}/Rstore
 RESULT=result.rstore.pt
+VERBOSE=no
 
-echo -n "creating empty ${RESULT} .."
+usage() {
+
+cat << ENDCAT >&2 
+Usage: $PRG [options] filename ... 
+
+Options:
+  -o (--output)  filename  name of resulting Rstore (default: result.rstore.pt)
+  -v (--verbose)           verbose output (default:none)
+  -h (--help)              print help message
+
+Examples:
+  $PRG rscript/*.rstore.pt
+  $PRG -v -o hotdraw.rstore.pt rscript/*.rstore.pt
+
+ENDCAT
+}
+
+while [ $# -gt 0 ]
+do
+  case "$1" in
+    -h | --help)
+      usage; exit 1;;
+    -v | --verbose)
+      VERBOSE=yes ;;
+    -o | --output)
+      shift; RESULT=$1 ;;
+    -*)
+      usage; exit 1 ;;
+    *) break;;
+  esac
+  shift
+done
+
+if [ $# -eq 0 ]; then
+  usage
+  exit 1
+fi
+
+test $VERBOSE == yes && echo -n "creating empty ${RESULT} .."
 echo "rstore()" | sglr -p ${TABLE} -o ${RESULT}
-echo " done."
+test $VERBOSE == yes && echo " done."
 
 for f in $*; do
-  echo -n "merging $f into ${RESULT} .."
+  if test $VERBOSE == yes; then echo -n "merging $f into ${RESULT} ..."; else echo -n "."; fi
   $RSTORE -f merge-rstores -r RSTORE -i $f -i ${RESULT} -o ${RESULT}
-  echo " done."
+  test $VERBOSE == yes && echo " done."
 done
 
 ls -l ${RESULT}
