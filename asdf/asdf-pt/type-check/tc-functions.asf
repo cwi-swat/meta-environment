@@ -1,8 +1,12 @@
 equations
 
-[tcm-1] defs($FD*) := get-function-defs($AM),
+[tcm-1] defs() == get-function-defs($AM)
+	=====================================================
+	typecheck($AM, sigs($AFS*)) = gen-summary(yes)
+
+[tcm-1] defs($FD+) := get-function-defs($AM),
 	$ENV := set-signatures(empty-env, sigs($AFS*)),
-	$ANS := typecheck-definitions(defs($FD*), $ENV),
+	$ANS := typecheck-definitions(defs($FD+), $ENV),
 	$SUM := gen-summary($ANS)
 	=====================================================
 	typecheck($AM, sigs($AFS*)) = $SUM

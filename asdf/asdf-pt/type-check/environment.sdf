@@ -1,9 +1,9 @@
 module type-check/environment
 
-imports asdf/functions
-imports
+imports 
 
-  type-check/types
+  asdf/functions
+  type-check/types  
 
 exports
 
@@ -21,7 +21,17 @@ context-free syntax
 
   "empty-env"						-> Environment
 
+  get-fun-name(AS-FunctionSig)	-> Literal
+  get-using(AS-FunctionSig)	-> Type
+  get-giving(AS-FunctionSig)	-> Type
+  get-raising(AS-FunctionSig)	-> Type
+
 hiddens variables
 
   "SIGS"[0-9]?	-> Signatures
   "AT"[0-9]?	-> ActionType
+  "$LT"[0-9]?		-> Literal
+  "$SO"[0-9]?		-> Sort
+  "$FR"[0-9]?		-> FunResult
+  "$SFR"[0-9]?"*"	-> { SingleFunResult "&" }*
+  "$TY"[0-9]?		-> Type

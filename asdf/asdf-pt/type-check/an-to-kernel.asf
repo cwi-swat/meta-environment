@@ -8,6 +8,8 @@ equations
 
 [give-4] give $DOP $Y  = give $Y then give $DOP
 
+[give-4] give ($DOP1 $Y1, $DOP2 $Y2)  = (give $Y1 then give $DOP1) and (give $Y2 then give $DOP2)
+
 [give-5] give $Y1 $DOI $Y2  = (give $Y1 and give $Y2) then give $DOI
 
 [give-6] give ($Y1, $Y2, $Y+)  = give $Y1 and give ($Y2, $Y+)

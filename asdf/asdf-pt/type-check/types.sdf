@@ -32,7 +32,6 @@ context-free syntax
 
   ActionResult  		-> Type
 
-  "empty"			-> Type
  
 %% Type operators
 
@@ -53,6 +52,7 @@ lexical syntax
   "yes"		-> Answer
   "no"		-> Answer
 
+  "empty"	-> Type {prefer}
 
 hiddens 
 

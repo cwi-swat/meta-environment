@@ -51,12 +51,12 @@ lexical syntax
   "close"		-> Action
   "recursively"		-> PrefixAction
 
-  "disj-union"		-> PrefixDataOp
-  "binding"		-> PrefixDataOp
-  "bound"		-> PrefixDataOp
-  "overriding"		-> PrefixDataOp
+  "disj-union"		-> PrefixDataOp {prefer}
+  "binding"		-> PrefixDataOp {prefer}
+  "bound"		-> PrefixDataOp {prefer}
+  "overriding"		-> PrefixDataOp {prefer}
 
-  "no-bindings"		-> Datum
+  "no-bindings"		-> Datum {prefer}
 
 context-free syntax
 	
@@ -76,7 +76,7 @@ context-free priorities
 
   { Action Yielder    		-> Action }
   >
-  { "give" Yielder         	-> Action } 
+  { "give" Yielder         	-> Action }
   >
   { PrefixAction Action 	-> Action }
   >
@@ -158,7 +158,7 @@ lexical syntax
 
   "="			-> InfixDataOp
 
-  "not" | "def"  	-> PrefixDataOp
+  "not" | "def"  	-> PrefixDataOp {prefer}
 
 context-free syntax
         

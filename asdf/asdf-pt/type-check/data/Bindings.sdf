@@ -6,7 +6,7 @@ exports
 
 context-free syntax
 
-  "no-bindings"		-> Data
+  "no-bindings"		-> Datum
 
 lexical syntax
 

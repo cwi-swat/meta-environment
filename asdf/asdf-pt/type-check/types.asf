@@ -41,15 +41,15 @@ equations
 
 [subtype-9] cell(TY) subtype-of cell = yes
 
-[subtype-10] integer subtype-of value = yes
+[subtype-10] integer subtype-of val = yes
 
-[subtype-11] boolean subtype-of value = yes
+[subtype-11] boolean subtype-of val = yes
 
 [subtype-10] integer subtype-of storable = yes
 
 [subtype-11] boolean subtype-of storable = yes
 
-[subtype-11] value subtype-of storable = yes
+[subtype-11] val subtype-of storable = yes
 
 [subtype-12] cell subtype-of bindable = yes
 

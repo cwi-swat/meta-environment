@@ -9,3 +9,17 @@ equations
 [set-1] set-signatures(<SIGS1, AT>, SIGS2) = <SIGS2, AT>
 
 [set-2] set-unfold-type(<SIGS, AT1>, AT2) = <SIGS, AT2>
+
+[get-fun-name-1] get-fun-name($LT : $SO -> $FR) = $LT
+
+[get-using-1] get-using($LT : $SO -> $SFR1* & using $TY & $SFR2*) = $TY
+
+[default-get-using-1] get-using($LT : $SO -> $FR) = data
+
+[get-giving-1] get-giving($LT : $SO -> $SFR1* & giving $TY & $SFR2*) = $TY
+
+[default-get-giving-1] get-giving($LT : $SO -> $FR) = empty
+
+[get-raising-1] get-raising($LT : $SO -> $SFR1* & raising $TY & $SFR2*) = $TY
+
+[default-get-raising-1] get-raising($LT : $SO -> $FR) = empty

@@ -32,10 +32,6 @@ context-free syntax
   lookup-signature(FunctionSignature, ActionType, Literal) 
 		-> ActionType {traversal(accu, break, bottom-up)}
 
-  get-fun-name(AS-FunctionSig)	-> Literal
-  get-using(AS-FunctionSig)	-> Type
-  get-giving(AS-FunctionSig)	-> Type
-  get-raising(AS-FunctionSig)	-> Type
 
 hiddens variables
 
@@ -47,9 +43,4 @@ hiddens variables
   "$FS"			-> AS-FunctionSig
   "$FD*"		-> {AS-FunctionDef ","}*
   "$FD"			-> AS-FunctionDef
-  "$LT"[0-9]?		-> Literal
-  "$SO"[0-9]?		-> Sort
-  "$FR"[0-9]?		-> FunResult
-  "$SFR"[0-9]?"*"	-> { SingleFunResult "&" }*
-  "$TY"[0-9]?		-> Type
 

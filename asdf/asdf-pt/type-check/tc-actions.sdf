@@ -2,7 +2,6 @@ module type-check/tc-actions
 
 imports
 
-  type-check/types 
   type-check/environment
   type-check/data/all
   asdf/an-supplement

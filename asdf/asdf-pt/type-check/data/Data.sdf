@@ -12,6 +12,8 @@ sorts
 
 context-free syntax
 
+  Datum	     -> Data
+
   InfixDataOp   -> DataOp
   PrefixDataOp  -> DataOp
 

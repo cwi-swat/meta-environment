@@ -10,7 +10,7 @@ sorts
 
 context-free syntax
 
-  Boolean	-> Data
+  Boolean	-> Datum
 
 lexical syntax
 
