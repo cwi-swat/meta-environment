@@ -1,5 +1,11 @@
 $Id$
 
+2001/11/29 (jurgenv@cwi.nl)
+ * Adapted the normalizer such that in the attributes of productions 
+   ATerm functions are no longer quoted automatically.
+ * Bootstrapped the normalizer and the sdf2 table after that.
+ * Regenerated regression tests.
+
 2001/11/25 (mdejonge@cwi.nl)
  * src/Makefile.am: added miussing generated .h file to EXTRA_DIST variable
  * package now uses toolbuslib package

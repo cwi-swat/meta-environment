@@ -5,9 +5,15 @@ imports
 exports
   context-free syntax
     "l[[" Grammar "]]"     -> Grammar
+    "q[[" Grammar "]]"     -> Grammar
     literals(SymbolSet)    -> Productions
     chars(Literal)         -> Symbols
     symbols({Symbol ","}*) -> Symbols
+
+hiddens
+  context-free syntax
+    quotes(Grammar) -> Grammar {traversal(trafo)}
+    quotes(Symbol)  -> Symbol  {traversal(trafo)}
 
 hiddens
   variables

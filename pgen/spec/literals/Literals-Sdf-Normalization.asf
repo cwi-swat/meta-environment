@@ -5,7 +5,12 @@ equations
 %% \smallskip\noindent
 %% Unquoted literals are translated to quoted literals.
 
-  [0] uqliteral(c+) = literal(""" c+ """)
+%% This rule also quoted ATerms in the attributes, which is not wanted!
+%%  [0] uqliteral(c+) = literal(""" c+ """)
+
+%% So, we introduce a new function for symbols that quots unquoted literal symbols
+[0] q[[_G]] = quotes(_G)
+[0] quotes(uqliteral(c+)) = literal(""" c+ """)
 
 %% The function $\mfun{l}\sem{\_}$ generates a production for each literal symbol
 %% in the grammar.

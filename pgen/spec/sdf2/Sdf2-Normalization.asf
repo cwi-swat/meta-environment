@@ -25,10 +25,11 @@ equations
         topsorts[[ _G3 ]](_A) = _G4,
         r[[ _G4 ]] = _G5,
         p[[ _G5 ]] = _G6,
-        l[[ _G6 ]] = _G7,
-        k[[ _G7 ]] = _G8
+        q[[ _G6 ]] = _G7,
+        l[[ _G7 ]] = _G8,
+        k[[ _G8 ]] = _G9
         ================
-        normalize[[definition d]](M, _A) = _G8
+        normalize[[definition d]](M, _A) = _G9
 
 %% <PO> rhs was: reachable({<Start>}, _G8)
 
