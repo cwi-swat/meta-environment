@@ -186,7 +186,7 @@ point."
 		    ; return delete(Bufname,Loc,Count)
 				(TBevent (concat "delete(" 
                          (TBstring (buffer-name)) "," 
-                         (number-to-string (+ (+ start oldlength) 1)) "," 
+                         (number-to-string (+ start oldlength)) "," 
                          (number-to-string oldlength) ")" 
                  )
         )
