@@ -14,6 +14,5 @@ UTILSRCS		= get-module-name.c get-imports.c grammar.c prod.c \
 EXTRA_DIST		= SDFME.adt
 
 CFLAGS			= -g -Wall -O2
-INCLUDES		= -I${ATERM}/include
-LDFLAGS			= -L${ATERM}/lib
-LDADD			= -lATerm
+INCLUDES		= -I${ATERM}/include \
+                          -I${PT_SUPPORT}/include
