@@ -5,6 +5,9 @@ Thu Jun 10 13:57:59 CEST 2004 <jurgenv@cwi.nl>
  * Put basic ASF pretty printer in that directory
  * Added directory languages/sdf2/pretty
  * Moved SDF2 pretty printer to that directory
+ * library/make_rules: added automated generation of .cvsignore files for library directories
+ * Added the pico example specifications (originating from the asfsdf-meta
+   package) to the library
 
 Mon Jun  7 13:56:45 CEST 2004 <kooiker@cwi.nl>
  * library/languages/sdf2/syntax:
