@@ -47,8 +47,9 @@ asf+sdf-user-manual.ps: manual.dvi $(PSJES)
 	dvips -o $@ $<
 
 asf+sdf-user-manual.pdf: $(MANUAL) $(PDFJES)
-	pdflatex manual.ltx
+	latex manual.ltx
 	makeindex manual.idx
 	bibtex manual
-	pdflatex manual.ltx
-	pdflatex manual.ltx
+	latex manual.ltx
+	latex manual.ltx
+	dvipdf manual.dvi

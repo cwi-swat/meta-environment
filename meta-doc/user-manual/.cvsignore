@@ -11,3 +11,4 @@ Makefile.in
 *.ps
 *.toc
 *.log
+*.pdf

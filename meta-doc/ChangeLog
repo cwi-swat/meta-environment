@@ -1,3 +1,8 @@
+2003/05/30 (jurgenv@cwi.nl)
+  * Changed generation of pdf file from using pdflatex to using latex
+    and then dvipdf. This is because pdflatex dumps core on manual.ltx
+    for some vague reason.
+
 2003/04/16 (markvdb@cwi.nl)
   * Started to adapt the user manual to the new user interface.
 
