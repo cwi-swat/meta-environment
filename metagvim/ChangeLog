@@ -1,4 +1,12 @@
 # $Id$
 
+Mon Mar 11 09:43:08 CET 2002 <jong@cwi.nl>
+ * version 0.2
+ * fix debug prints removed
+ * fix magical constants refactored into macros
+
+Fri Mar  8 15:40:41 CET 2002 <jong@cwi.nl>
+ * fix missing buffer termination in tb_get_focus_text after fread()
+
 Tue Mar  5 15:54:51 CET 2002 <jong@cwi.nl>
- * Initial checkin
+ * initial version

@@ -34,3 +34,5 @@ WWWDIR = /hosts/www/projects/MetaEnv/unreleased
 
 www-dist: distcheck
 	install --mode=0664 --group=sen ${DISTFILE} ${WWWDIR}
+	install --mode=0664 --group=sen ChangeLog \
+		${WWWDIR}/metagvim.ChangeLog.txt

@@ -14,7 +14,12 @@
 /*}}}  */
 /*{{{  defines */
 
-#define SEPARATOR  '#'
+#define SEPARATOR '#'
+#define HANDSHAKE "handshake"
+#define ANONYMOUS "anonymous"
+
+#define PIPE_READ 0
+#define PIPE_WRITE 1
 
 /*}}}  */
 /*{{{  variables */
@@ -35,6 +40,7 @@ static void sendToVimVerbatim(const char *cmd)
 {
   char buf[BUFSIZ];
   sprintf(buf, "gvim --servername %s --remote-send '%s'", id, cmd);
+  /*fprintf(stderr, "system call: [%s]\n", buf);*/
   system(buf);
 }
 
@@ -184,16 +190,21 @@ ATerm tb_get_focus_text(int conn, char *fid, int start, int len)
     }
     else {
       int nr_read = fread(contents, sizeof(char), size, f);
-      if (nr_read != size) {
+      if (nr_read == size) {
+	fclose(f);
+	contents[size] = '\0';
+      }
+      else {
 	perror("fread");
       }
-      fclose(f);
     }
   }
 
   if (contents == NULL) {
     ATerror("Unable to get focus text (%s, %d, %d)\n", fid, start, len);
   }
+
+  /*fprintf(stderr, "focus-text(%d,%d) = [%s]\n", start, len, contents);*/
 
   return ATmake("snd-value(focus-text(<str>,<str>))", fid, contents);
 }
@@ -333,7 +344,7 @@ int main(int argc, char *argv[])
 
   pwent = getpwuid(getuid());
 
-  sprintf(buf, "meta:%s:%d", pwent ? pwent->pw_name : "anon", (int)getpid());
+  sprintf(buf, "meta:%s:%d", pwent ? pwent->pw_name : ANONYMOUS, (int)getpid());
   id = strdup(buf);
   for (p=id; *p; p++) {
     *p = (char)toupper((int)*p);
@@ -354,13 +365,15 @@ int main(int argc, char *argv[])
   }
   else if (pid == 0) {
     /* parent */
-    close(from_vim[1]);
-    vim_fd = from_vim[0];
-    if (read(vim_fd, buf, 9) != 9) {
+    int handshake_length = strlen(HANDSHAKE);
+
+    close(from_vim[PIPE_WRITE]);
+    vim_fd = from_vim[PIPE_READ];
+    if (read(vim_fd, buf, handshake_length) != handshake_length) {
       perror("read");
       return -1;
     }
-    else if (strncmp(buf, "handshake", 9)) {
+    else if (strncmp(buf, HANDSHAKE, handshake_length)) {
       ATerror("%s: protocol error in handshake.\n", argv[0]);
       return -1;
     }
@@ -372,13 +385,13 @@ int main(int argc, char *argv[])
   }
   else {
     /* child */
-    close(from_vim[0]);
+    close(from_vim[PIPE_READ]);
     /*ATwarning("forking, pid=%d, servername=\"%s\"\n", pid, id);*/
 
     sprintf(buf,
 	    "let tb_pipe = %d"
 	    "| call libcallnr(\"%s\", \"handshake\", tb_pipe)",
-	    from_vim[1], path_lib);
+	    from_vim[PIPE_WRITE], path_lib);
 
     execlp("gvim", "gvim", "--servername", id, "-c", buf, NULL);
 
