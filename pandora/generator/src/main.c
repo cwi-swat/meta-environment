@@ -52,9 +52,7 @@ int main(int argc, char *argv[])
   char *input = "-";
   char *output = "-";
   char *syntax = "";
-  ATbool useToolbus = ATfalse;
   int c;
-  int i;
 
   ATerm at_tree;
   PT_ParseTree tree;
@@ -96,8 +94,5 @@ int main(int argc, char *argv[])
     ATwarning("No such file: %s\n", input); 
     return 1; 
   }
-
-  return 0;
-}
 
 /*}}}  */

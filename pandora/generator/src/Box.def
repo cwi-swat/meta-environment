@@ -96,7 +96,7 @@ exports
 exports
   sorts Box BoxList
   context-free syntax
-    Box*    -> BoxList
+    Box*    -> BoxList {cons("Taeke")}
 
   context-free syntax
     StrCon  -> Box {cons("string")}

@@ -1,5 +1,3 @@
-#include <SDFME-utils.h>
-#include <SDF2PT.h>
 #include <MEPT-utils.h>
 #include <assert.h>
 #include <string.h>
@@ -370,9 +368,9 @@ static PT_ParseTree pParseTree(PT_ParseTree parsetree)
 
 /*}}}  */
 
-/*{{{  PT_ParseTree pretty(SDF_SDF syntax, PT_ParseTree parsetree) */
+/*{{{  PT_ParseTree pandora(PT_ParseTree parsetree) */
 
-PT_ParseTree pretty(SDF_SDF syntax, PT_ParseTree parsetree)
+PT_ParseTree pandora(PT_ParseTree parsetree)
 {
   SDF_ProductionList productions = collectProductions(syntax);
   createMappingToPT(productions);

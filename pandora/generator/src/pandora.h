@@ -3,6 +3,6 @@
 #ifndef PRETTY_H
 #define PRETTY_H
 
-PT_ParseTree pretty(SDF_SDF syntax, PT_ParseTree parsetree);
+PT_ParseTree pandora(PT_ParseTree parsetree);
 
 #endif
