@@ -9,7 +9,6 @@
  */
 #include "abort.tb"
 #include "parse-utils.tb"
-#include "editor-creator.tb"
 #include "editors.tb"
 #include "restore-term-brackets.tb"
 #include "open-modules.tb"

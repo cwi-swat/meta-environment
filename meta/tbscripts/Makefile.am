@@ -8,7 +8,6 @@ TBSCRIPTS = \
   dump-equations.tb \
   dump-parsetable.tb \
   editors.tb \
-  editor-creator.tb \
   eqs-dumper.tb \
   file-creator.tb \
   gen.tb \
