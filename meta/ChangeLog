@@ -1,5 +1,13 @@
 # $Id$
 
+Tue Nov 30 14:39:34 CET 2004 <kooiker@cwi.nl>
+ * tbscripts/commandline-handler.tb:
+   - Handles ui-messages in commandline runs
+ * tbscripts/Makefile.am
+   - Added commandline-handler.tb
+ * tbscripts/start-meta-eqs-dumper.tb:
+   - Add creation of CommandLineHandler 
+
 Mon Nov 29 11:38:48 CET 2004 <{jurgenv,kooiker,jong}@cwi.nl>
  * Graph layout algorithm fixed such that arrows point in the
    right direction.

@@ -4,6 +4,7 @@
 TBSCRIPTS = \
   button-actions.tb \
   close-all.tb \
+  commandline-handler.tb \
   compile-module.tb \
   dump-equations.tb \
   dump-parsetable.tb \
