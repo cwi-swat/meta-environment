@@ -70,7 +70,7 @@ arm-adapter.c arm-adapter.h: arm-adapter.c.nw
 	touch arm-adapter.c arm-adapter.h
 
 arm.tif.c: arm.tifs
-	ctif -backdoor -newstyle -tool arm -tifs arm.tifs 
+	ctif -backdoor -multi -tool arm -tifs arm.tifs 
 
 arm.tifs: arm.tb
 	toolbus -gentifs arm.tb
@@ -82,7 +82,7 @@ armcmd.o: armcmd.c armcmd.tif.c
 	$(COMPILE) -c armcmd.c
 
 armcmd.tif.c: arm.tifs
-	ctif -newstyle -tool armcmd -tifs arm.tifs
+	ctif -multi -tool armcmd -tifs arm.tifs
 
 armcmd.c armcmd.c.tex: armcmd.c.nw
 	$(NOWEB) armcmd.c.nw
