@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 #include "asc-support2-me.h"
+#include <ASFME.h>
 
 /*}}}  */
 /*{{{  globals */
@@ -100,6 +101,7 @@ int asc_support_main(int argc, char *argv[],
  
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
+  ASF_initASFMEApi();
   ASC_initRunTime(INITIAL_TABLE_SIZE);
 
   register_all();

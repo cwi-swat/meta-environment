@@ -15,11 +15,13 @@
 /*{{{  meta includes */
 
 #include <MEPT-utils.h>
+#include <ASFME-utils.h>
 
 /*}}}  */
 /*{{{  local includes */
 
 #include "asc-support-me.h"
+#include "asc-traversals.h"
 #include "muasf2pt.h"
 #include "prod2str.h"
 
@@ -142,7 +144,17 @@ ATerm innermost(PT_Tree tree)
 
     if (PT_hasProductionBracketAttr(prod)) {
       result = innermost(PT_getArgsArgumentAt(args, 2));    
-    } 
+    }
+    else if (ASF_isTreeTraversalFunction((ASF_Tree) tree)) {
+      PT_Production prod;
+      PT_Args args;
+
+      tree = ASC_transformTraversalFunction(tree);
+      prod = PT_getTreeProd(tree);
+      args = PT_getTreeArgs(tree);
+
+      result = call(prod, innermost_list(args));
+    }
     else {
       result = call(prod, innermost_list(args));
     }

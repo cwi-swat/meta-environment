@@ -1,5 +1,10 @@
 $Id$
 
+2001/12/13 (jurgenv@cwi.nl)
+ * Added support for traversal functions in input terms of specifications.
+ * Asc-support library now needs asf-support
+ * Bumped version to 1.3beta
+
 2001/11/14 (jong@cwi.nl)
  * released version 1.2
  * fixed free-bug in asc-support

@@ -2,7 +2,7 @@ dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(asc-support, 1.2)
+AM_INIT_AUTOMAKE(asc-support, 1.3beta)
 
 ACLOCAL="${ACLOCAL} -I ."
 
@@ -31,6 +31,12 @@ dnl Require pt-support package
 AC_PACKAGE_REQUIRE(pt-support, unparsePT,
    [  --with-pt-support=DIR   pt-support is in DIR])
 AC_SUBST(PT_SUPPORT)
+
+dnl Require asf-support package
+AC_PACKAGE_REQUIRE(asf-support, asf-support-config,
+   [  --with-asf-support=DIR  asf-support is in DIR])
+AC_SUBST(PT_SUPPORT)
+
 
 dnl Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
