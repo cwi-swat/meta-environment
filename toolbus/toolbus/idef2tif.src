@@ -29,7 +29,7 @@ $idefsuf = '.idef';
 $tifsuf = '.tifs';
 
 sub usage {
-  print "Usage: idef2tif file$idefsuf [outputfile$tifsuf]\n";
+  print "Usage: idef2tif inputfile$idefsuf [outputfile$tifsuf]\n";
   exit 0;
 }
 
@@ -37,22 +37,14 @@ if ($#ARGV < 0) {
   &usage;
 }
 
-
 # Get filename form commandline
-$fullname = $ARGV[0];
+$inputfile = $ARGV[0];
 # Get basename
-@dirarray = split(/\//,$fullname);
+@dirarray = split(/\//,$inputfile);
 $basename = pop(@dirarray);
 $dir = join("/",@dirarray);
 if ($dir ne "") {
   $dir .= "/";
-}
-
-if ($#ARGV < 1) {
-  $output = $basename$tifsuf;
-}
-else {
-  $output = $ARGV[1];
 }
 
 # Where to put temporary files?
@@ -60,14 +52,22 @@ $tmpdir=$ENV{'TMPDIR'}?$ENV{'TMPDIR'}:'/tmp';
 # Check for right suffix
 if ($basename =~ /(.+)\Q$idefsuf\E$/) {
   $base = $1;
-  $stmp = "$tmpdir/$1.tmp.$$";
-  $serr = "$tmpdir/$1.err.$$";
 } else {
   print STDERR "$basename has unknown suffix\n";
   &usage;
 }
 
-open(IDEF,"$fullname") || die("can't open $fullname");
+if ($#ARGV < 1) {
+  $outputfile = "$base$tifsuf";
+}
+else {
+  $outputfile = "$ARGV[1]";
+}
+
+$stmp = "$tmpdir/$base.tmp.$$";
+$serr = "$tmpdir/$base.err.$$";
+
+open(IDEF,"$inputfile") || die("can't open $inputfile");
 open(TB,">$stmp") || die("can't create $stmp ($!)");
 
 $pc = 0;
@@ -87,7 +87,7 @@ while(<IDEF>) {
 close(IDEF);
 
 if ($pc != 1) {
-  print STDERR "Not exactly 1 process definition in $fullname ($pc)\n";
+  print STDERR "Not exactly 1 process definition in $inputfile ($pc)\n";
   print STDERR "Please make sure your idef file has exactly 1 process definition.\n";
   print STDERR "Abort.";
   exit 2;
@@ -96,7 +96,8 @@ if ($pc != 1) {
 print TB "toolbus(",$process,")\n";
 close(TB);
 
-system("toolbus -output $output -gentifs $stmp 2> $serr > /dev/null");
+print "toolbus -gentifs $stmp 2> $serr > /dev/null";
+system("toolbus -gentifs $stmp 2> $serr > /dev/null");
 #$err=-s $serr;
 $err=$?;
 if($err) {
@@ -104,8 +105,8 @@ if($err) {
   print STDERR while(<ERR>);
   close ERR;
 } else {
-  system("mv $stmp.tifs $dir$base.tifs");
-  print STDOUT "Tool interfaces written to \`$dir$base.tifs\'\n";
+  system("mv $stmp.tifs $outputfile");
+  print STDOUT "Tool interfaces written to \`$outputfile\'\n";
 }
 
 unlink($serr,$stmp);
