@@ -157,7 +157,6 @@ in
   snd-note(ui-status(statf(Id,"Opening %s",[Module]))).
   Imports := [].
   (
-    printf("Open-Module: %s, %s\n", Path, Module) .
     Open-Syntax(Path, Module, Type, Status?, RealModule?, RealPath?, Imports?).
     if equal(Status, success) then
       if equal(Type, sdf) then 
