@@ -8,19 +8,6 @@
 
 /*}}}  */
 
-/*{{{  prologue */
-
-typedef struct _PME_CHARLIST *PME_CHARLIST;
-
-ATbool PME_isValidCHARLIST(PME_CHARLIST arg);
-ATbool PME_isCHARLISTString(PME_CHARLIST arg);
-char*  PME_getCHARLISTString(PME_CHARLIST arg);
-PME_CHARLIST  PME_setCHARLISTString(PME_CHARLIST arg, char *str);
-ATerm  PME_CHARLISTToTerm(PME_CHARLIST arg);
-PME_CHARLIST PME_CHARLISTFromTerm(ATerm trm);
-PME_CHARLIST PME_makeCHARLISTString(char *str);
-
-/*}}}  */
 /*{{{  typedefs */
 
 typedef struct _PME_Feedback *PME_Feedback;
@@ -37,6 +24,14 @@ typedef struct _PME_Location *PME_Location;
 typedef struct _PME_Area *PME_Area;
 typedef struct _PME_Start *PME_Start;
 typedef struct _PME_OptLayout *PME_OptLayout;
+
+/*}}}  */
+
+/*{{{  definition of bottom types */
+
+typedef ATerm PME_String;
+typedef ATerm PME_NatCon;
+typedef ATerm PME_CHARLIST;
 
 /*}}}  */
 
@@ -623,7 +618,3 @@ PME_OptLayout PME_visitOptLayout(PME_OptLayout arg, PME_CHARLIST (*acceptChars)(
 /*}}}  */
 
 #endif /* _PARSEDERRORS_H */
-/*{{{  definition of bottom types */
-
-typedef ATerm PME_String;typedef ATerm PME_NatCon;typedef ATerm PME_CHARLIST;
-/*}}}  */

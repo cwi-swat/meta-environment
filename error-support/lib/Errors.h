@@ -29,6 +29,11 @@ typedef struct _ME_Area *ME_Area;
 
 /*}}}  */
 
+/*{{{  definition of bottom types */
+
+
+/*}}}  */
+
 void ME_initErrorsApi(void);
 
 /*{{{  term conversion functions */
@@ -315,7 +320,3 @@ ME_Area ME_visitArea(ME_Area arg, int (*acceptStartLine)(int), int (*acceptStart
 /*}}}  */
 
 #endif /* _ERRORS_H */
-/*{{{  definition of bottom types */
-
-
-/*}}}  */
