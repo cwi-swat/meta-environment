@@ -1,3 +1,8 @@
+2003/02/18 (jurgenv@cwi.nl)
+ * The files of the installed ASF+SDF library are no longer write-protected
+   either. A different solution must be found to make these files read-only
+   when opening them in the Meta-Environment.
+
 2003/02/13 (jurgenv@cwi.nl)
  * The directories of the installed ASF+SDF library are no longer
    write-protected automatically.
