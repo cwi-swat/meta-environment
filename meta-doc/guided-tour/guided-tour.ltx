@@ -44,7 +44,8 @@
 \newcommand{\asfsdf}{{\textsc ASF}+{\textsc SDF}}
 \newcommand{\ATerm}{ATerm}
 \newcommand{\ATerms}{ATerms}
-\newcommand{\xemacs}{{\tt XEmacs}}
+\newcommand{\emacs}{{\tt Emacs}}
+\newcommand{\gvim}{{\tt GVim}}
 
 \newcommand{\fignegspacebefore}{\vspace*{-0.25cm}}
 \newcommand{\fignegspacebetween}{\vspace*{-0.25cm}}
@@ -400,7 +401,7 @@ an interactive viewer will be started that
 allows the study of the internal behaviour of the system,
 the so-called \link{``ToolBus viewer''}[. This viewer is shown in Figure~\Ref]{FIG:viewer}.
 
-\item {\tt -e} use the \xlink{\xemacs}{http://www.xemacs.org} editor, this
+\item {\tt -e} use the \emacs\ editor, this
 is the default editor.
 
 \item {\tt -g} use the \xlink{gvim}{http://www.vim.org/} editor, the
@@ -485,15 +486,27 @@ The main window consists of the following parts:
       \item opening a library module, 
       \item opening an existing module,
       \item creating of a new module, 
-      \item reading a saved term store,
-      \item saving the current term store,
-      \item closing a specification, 
-      \item clearing the message panel (history of error messages), 
-      \item refreshing of buttons, and
+      \item closing a specification, and
       \item exiting the \ASmetaenv.
      \end{itemize}
-    The {\tt File} menu is described in  \link*{File Menu}[Section~\Ref]{FileMenu}.
+    The {\tt File} menu is described in
+\link*{File Menu}[Section~\Ref]{FileMenu}.
+
+   \item {\tt Cache}: for 
+    \begin{itemize}
+      \item loading a saved term store and
+      \item saving the current term store.
+     \end{itemize}
+    The {\tt Cache} menu is described in
+\link*{Cache Menu}[Section~\Ref]{CacheMenu}.
     
+   \item {\tt Tools}: for 
+    \begin{itemize}
+      \item clearing the info and log panel and
+      \item refreshing of buttons.
+     \end{itemize}
+    The {\tt Tools} menu is described in
+\link*{Tools Menu}[Section~\Ref]{ToolsMenu}.
 
   \end{itemize}
 
@@ -505,10 +518,9 @@ The main window consists of the following parts:
    \item {\tt New Module} (the empty page) for creating a new module.
    \item {\tt Open Module} (the non-empty page) for opening an existing
          module.
-   \item {\tt Save Term Store} (the diskette) for saving the internal term store.
-   \item {\tt Clear History} (the eraser) for clearing the message panel.
+   \item {\tt Clear History} (the eraser) for clearing the Info and Log
+panels.
    \item {\tt Exit} (the open door) for exiting the \ASmetaenv.
-   \item {\tt 100\%} for scaling both the import graph and parse tree.
   \end{itemize}
   These icons are described in \link*{File Menu}[Section~\Ref]{FileMenu}.
   
@@ -531,26 +543,45 @@ The main window consists of the following parts:
   The module pane is described in 
   \link*{Module Pane}[Section~\Ref]{ModulePane}.
 
- 
-\item The lower left part with the name {\tt No module} shows the import 
-      relations of a selected module. It contains 3 small panes: 
+\item Below the \emph{module pane} shows rectangle which will show
+the import relations of a selected module. This is shown via 
+two folders:
       \begin{description}
-      \item {\tt Info}: showing the exact location of the selected module. 
-      \item {\tt Imports}: showing the list of modules the selected module
+      \item {\tt imports}: showing the list of modules the selected module
              imports.
-      \item {\tt Imported by}: showing the list of modules that import the
+      \item {\tt imported by}: showing the list of modules that import the
             selected module.
       \end{description}
-      These panes are very convenient when processing a big specification.
+If no module is selected this part remains empty.
+By clicking on one of these shows the list of imports or imported
+modules.
+These folders are very convenient when processing a big specification.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:imports-panel}
+\T \includegraphics[width=3cm]{imports-panel}
+\W \htmlimage{imports-panel.gif}
+\caption{Part of the main window showing the imports and imported by
+"folders".}
+\end{Label}
+\end{center}
+\end{figure}
   
-\item The empty rectangle below the {\tt import} and {\tt parsetree} pane
-      will be used for display warnings and error messages.
+\item Below the module panel three panels are showns: \emph{Errors},
+\emph{Info}, and \emph{Log}. The \emph{Errors} panel will be used for 
+displaying warnings and error messages. The messages shown in
+this panel are clickable and will invoke the editors in which
+the warning or error is found. The \emph{Info} panel shows general
+information derived during processing a specification. The \emph{Log}
+panel shows all information which is also shown in the status bar,
+see below. The \emph{Info} and \emph{Log} panels can be cleared
+via the {\tt Clear History} button in the main window.
 
 \item A \emph{status bar} at the bottom of the window that shows the current
   activity of the system. Examples are: {\tt idle} (the system is doing
   nothing), {\tt parsing} (the system is performing a syntactic analysis of
   some module or term), and {\tt rewriting} (the system is rewriting a term).
-
 \end{itemize}
 
 \begin{figure}
@@ -581,6 +612,9 @@ specifications as well as for quitting the \ASmetaenv.
 \end{center}
 \end{figure}
 
+{\tt About} loads a module which contains version information
+and a number of links to web pages with more detailed information
+on the Meta-Environment.
 {\tt Open Library Module} is used for opening a predefined 
 \asfsdf\ module. A \link{dialog window}[, see
 Figure~\Ref)]{FIG:open-library} appears.
@@ -598,7 +632,19 @@ Figure~\Ref)]{FIG:open-library} appears.
 
 {\tt New Module} and {\tt Open Module} are used for creating
 a new module and opening an existing one, respectively.
-In both cases a \link{dialog window}[ (Figure~\Ref)]{FIG:open-file} appears.
+In case of {\tt New Module} a \link{dialog window}[ (Figure~\Ref)]{FIG:new-file} appears.
+In case of {\tt Open Module} a \link{dialog window}[
+(Figure~\Ref)]{FIG:open-file} appears.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:new-file}
+\T \includegraphics[width=8cm]{new-file}
+\W \htmlimage{new-file.gif}
+\caption{Dialog for creating a new module ({\tt File} menu)}
+\end{Label}
+\end{center}
+\end{figure}
 
 \begin{figure}
 \begin{center}
@@ -609,16 +655,6 @@ In both cases a \link{dialog window}[ (Figure~\Ref)]{FIG:open-file} appears.
 \end{Label}
 \end{center}
 \end{figure}
-
-{\tt Read Term Store} reads a previously saved term store and
-replaces/initializes the term store. It can
-only read the term store with the name {\tt meta.termstore}.
-
-{\tt Save Term Store} saves the internal term store to disk. All
-information available in the interal term store is saved to disk,
-among others, generated parse tables, parsed equations, derived
-import relations. Using the term store when (re-)starting the system leads
-to a speed up because saved parse tables, etc.\ need not be regenerated.
 
 {\tt Close All} removes all modules from the
 Meta-Environment. If modules have been modified, you are explicitly
@@ -632,6 +668,75 @@ term-editors.
 
 {\tt Exit} ends the execution of the \ASmetaenv, before exiting the user is
 explicitly asked whether he/she wants to save the term store.
+
+\subsection{The Cache menu}
+\label{CacheMenu}
+
+The \link{{\tt Cache} menu}[]{FIG:cache-menu} 
+is used for loading and saving the term store in
+the \ASmetaenv.  
+\T It is shown in Figure \ref{FIG:cache-menu}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:cache-menu}
+\T \includegraphics[width=3cm]{cache-menu}
+\W \htmlimage{cache-menu.gif}
+\caption{{\tt Cache} menu (main window)}
+\end{Label}
+\end{center}
+\end{figure}
+
+{\tt Load Term Store...} reads a previously saved term store and
+replaces/initializes the term store. The termstore can be selected
+via the \link{dialog window}[(Figure~\Ref)]{FIG:open-termstore}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:open-termstore}
+\T \includegraphics[width=8cm]{open-termstore}
+\W \htmlimage{open-termstore.gif}
+\caption{Dialog for loading a termstore ({\tt Cache} menu)}
+\end{Label}
+\end{center}
+\end{figure}
+
+{\tt Save Term Store...} saves the internal term store to disk. All
+information available in the interal term store is saved to disk,
+among others, generated parse tables, parsed equations, derived
+import relations. Using the term store when (re-)starting the system leads
+to a speed up because saved parse tables, etc.\ need not be regenerated.
+The name of the saved termstore can be selected or entered
+via the \link{dialog window}[(Figure~\Ref)]{FIG:save-termstore}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:save-termstore}
+\T \includegraphics[width=8cm]{save-termstore}
+\W \htmlimage{save-termstore.gif}
+\caption{Dialog for saving a termstore ({\tt Cache} menu)}
+\end{Label}
+\end{center}
+\end{figure}
+
+\subsection{The Tools menu}
+\label{ToolsMenu}
+
+The \link{{\tt Tools} menu}[]{FIG:tools-menu} 
+is used for clearing the {\tt Info} and {\tt Log} panels of
+the \ASmetaenv\ and for reloading the {\tt meta.buttons} file.
+\T It is shown in Figure \ref{FIG:tools-menu}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:tools-menu}
+\T \includegraphics[width=3cm]{tools-menu}
+\W \htmlimage{tools-menu.gif}
+\caption{{\tt Tools} menu (main window)}
+\end{Label}
+\end{center}
+\end{figure}
+
 
 \subsection{The Panes of the Main Window}
 
@@ -710,35 +815,71 @@ selected module by pushing a button from the button pane.  For
 instance, pushing the {\tt Edit Syntax} button will create editors for
 the syntax of all the selected modules.
 
-\subsubsection{The Module Menu}
-\label{ButtonPane}
-
-First, a module can be selected via the import or module pane. 
-Next, one of the following operations can be applied to it.
-
-{\tt Edit Syntax}, {\tt Edit Equations}, and {\tt Edit Term} 
-activate (structure) editors for editing syntax, equations, 
-or terms, respectively.
-
-{\tt Revert Module} removes the selected module and re-opens the removed module
-from disk, the effect is that modifications made to these modules are discarded.
-
-{\tt Close Module} this action removes a module from the specification.
-This action has only effect if the module is not imported by other modules.
-If the module imports other modules the user can decide to recursively
-close all imported modules as well. This can be done via 
-\link{{\tt Select an Option} window}[ (see Figure~\Ref)]{FIG:select-window}.
+The import pane can be manually resized via the ruler on left of the 
+import pane or automatically by clicking on the {\tt Z} at the top of
+the ruler.
 
 \begin{figure}
 \begin{center}
-\begin{Label}{FIG:select-window}
-\T \includegraphics[width=8cm]{select-window}
-\W \htmlimage{select-window.gif}
-\caption{Select an Option window}
+\begin{Label}{FIG:ruler}
+
+\T \includegraphics[width=2cm]{ruler}
+\W \htmlimage{ruler.gif}
+\caption{Ruler in the import pane}
 
 \end{Label}
 \end{center}
 \end{figure}
+
+\subsubsection{The Module Menu}
+\label{ButtonPane}
+
+First, a module can be selected via the import or module pane. 
+Next, one of the following operations can be applied to it:
+{\tt Edit}, {\tt Check}, {\tt Exports}, {\tt Tools}, {\tt Refactor},
+{\tt Close...}, and {\tt Reopen}.
+
+\paragraph{Edit}
+By clicking on {\tt Edit} a \link{pop up menu}[ as shown in
+Figure~\Ref]{FIG:edit-menu}. 
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:edit-menu}
+
+\T \includegraphics[width=3cm]{edit-menu}
+\W \htmlimage{edit-menu.gif}
+\caption{Pop up menu for invoking various editors for a module}
+\end{Label}
+\end{center}
+\end{figure}
+
+{\tt Syntax}, {\tt Equations}, and {\tt Term...} 
+activate (structure) editors for editing syntax, equations, 
+or terms, respectively.
+{\tt New Term...} enables the creation of a new file to be edited.
+
+\paragraph{Edit}
+By clicking on {\tt Check} a \link{pop up menu}[ as shown in
+Figure~\Ref]{FIG:check-menu}. 
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:check-menu}
+
+\T \includegraphics[width=3cm]{check-menu}
+\W \htmlimage{check-menu.gif}
+\caption{Pop up menu for invoking various checkers for a module}
+\end{Label}
+\end{center}
+\end{figure}
+
+Via the {\tt Syntax} entry it is possible to invoke the checker
+which checks the well-formedness of SDF definitions.
+The {\tt Equations} entry invokes the asf-checker to check the
+equations.
+The entry {\tt Run Unit Tests} allows you to run the tests that
+are in the selected module.
 
 \paragraph{Export}
 
@@ -758,27 +899,57 @@ a number of export operations.
 \end{center}
 \end{figure}
 
-The {\tt Dump Module} entry enables you to save the text of both \sdf\ and
-\asf\ to disk.
+For all operations described below a file selector will be launched for
+selecting
+a the appropriate file or entering a new file name.
 
-The {\tt Dump Equations} entry allows you to dump the equation of the selected
-module and all its imports. This feature is needed in order to 
+The {\tt ASF Equations...} entry allows you to dump the equation of 
+the selected module and all its imports. This feature is needed in order to 
 run the evaluator in a stand-alone way, or to compile the specification
 on the command line. 
 
-The {\tt Dump Term ParseTable} entry allows you to dump the parse table of the selected module and
+The {\tt SDF Definition...} entry allows you to dump the transitive
+closure of SDF modules into one file.
+
+The {\tt Term ParseTable...} entry allows you to dump the parse table of the selected module and
 all its imports in order to parse terms. This functionality is needed in
 order to use the parser in a stand-alone way.
 
-The {\tt Dump Equations ParseTable} entry allows you to dump the parse 
+The {\tt ASF ParseTable} entry allows you to dump the parse 
 table of the selected module and
 all its imports in order to parse the equations text of module. This
 functionality is only needed for debugging purposes.
 
-The {\tt Compile Module} entry allows you to invoke the \asfsdf-compiler to generate C code.  
-
-The {\tt Print Module} entry allows you to print the text represention
+The {\tt ASF+SDF Module Text} entry allows you to print the text represention
 of both syntax and the equation part together in one file.
+
+\paragraph{Tools}
+
+The {\tt Tools} menu opens a new \link{menu}[ (see
+Figure~\Ref)]{FIG:tools2-menu} in order to perform
+a number of operations.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:tools2-menu}
+
+\T \includegraphics[width=5cm]{tools2-menu}
+\W \htmlimage{tools2-menu.gif}
+\caption{Tools menu}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+For all operations described below a file selector will be launched for
+selecting
+a the appropriate file or entering a new file name.
+The {\tt Compile Equations...} entry allows you to invoke the \asfsdf-compiler to generate C code.  
+
+The {\tt Generate ASF+SDF API...} entry allows you to derive from an
+SDF module a new module which contains functionality to compare and
+manipulate the items defined in the SDF definition.
+
 
 \paragraph{Refactor}
 {\tt Refactor} opens another 
@@ -813,19 +984,42 @@ The {\tt Remove Import...} allows you to cancel an import relation between
 2 modules.
 
 
+\paragraph{Close...}
+This action removes a module from the specification. This action
+has only effect of the module is not imported by other modules.
+If the module imports other modules the user can decide to
+recursively close all imported modules as well. 
+This can be done via
+\link{{\tt Select an Option} window}[ (see
+Figure~\Ref)]{FIG:select-window}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:select-window}
+\T \includegraphics[width=8cm]{select-window}
+\W \htmlimage{select-window.gif}
+\caption{Select an Option window}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+\paragraph{Reopen}
+This entry allows you to revert this specific module from disk.
+
 %}}}
 %{{{ Editing Specifications
 
 \section{Editing Specifications}
 
 The editors used to create and modify specifications and terms are
-based on \xemacs, so some familiarity with this editor is assumed.
-See \xlink{xemacs.org}{http://www.xemacs.org/Documentation/index.html}
-for documentation on \xemacs.
+based on \emacs, so some familiarity with this editor is assumed.
+In this guided tour we restrict ourselves to the \emacs\ editors.
+But it is also possible to use \gvim.
 
-The various pull-down menus {\tt Actions}, {\tt Actions},
-and {\tt Move} have been added to the standard user-interface of \xemacs, 
-depending on the editor type:
+The various pull-down menus {\tt Actions}, {\tt Move},
+and {\tt Upgrade} have been added to the standard user-interface 
+of \emacs, depending on the editor type:
 
 \begin{itemize}
 \item The {\tt Action} menu, for syntax and equation editors, contains two 
@@ -913,10 +1107,10 @@ status line in the main window displays {\tt Idle} again.
 
 Note: when parsing a large term it may take
 some time for the editor to be active again. If the parse was
-successful, the bottom line in the \xemacs\ window displays the message
+successful, the bottom line in the \emacs\ window displays the message
 {\tt Focus sort: None}. If the term contains an error, the cursor is
 located at the position where the error was detected and the bottom line
-in the \xemacs\ window displays the message
+in the \emacs\ window displays the message
 {\tt Parse error near cursor}. 
 
 \subsection{Editing the Equations Section of a Module}
