@@ -22,27 +22,27 @@
 
 include ${top_srcdir}/make_rules
 
-bin_PROGRAMS       = meta-paths imports remove-annotation apply-function
-bin_SCRIPTS        = genmakefile parse-file parse-sdf2 ps-dot insert-license \
-                     insert-header genamakefile change-sdf2-ext sdf2stats
+bin_PROGRAMS       = meta-paths imports
+bin_SCRIPTS        = parse-file parse-sdf2 ps-dot insert-license \
+                     insert-header change-sdf2-ext sdf2stats
 
 man_MANS           = parse-sdf2.1
 
-data_DATA          = genmakefile.proto lang.types
+data_DATA          = lang.types
 
 noinst_LIBRARIES   = libutils.a
 
 TESTS              = perform-test
 
-EXTRA_DIST         = genmakefile.in parse-file.sh.src parse-sdf2.sh.src \
+EXTRA_DIST         = parse-file.sh.src parse-sdf2.sh.src \
                      ps-dot.sh.src insert-header.pl.src \
                      insert-license.sh.src test-help test-version \
-                     genmakefile.proto lang.types perform-test.sh.src \
+                     lang.types perform-test.sh.src \
                      parse-sdf2.pod genamakefile.sh.src change-sdf2-ext \
                      sdf2stats
 
-CLEANFILES         = genmakefile parse-file parse-sdf2 ps-dot insert-header \
-                     insert-license perform-test parse-sdf2.1 genamakefile \
+CLEANFILES         = parse-file parse-sdf2 ps-dot insert-header \
+                     insert-license perform-test parse-sdf2.1 \
                      sdf2stats
 
 meta_paths_SOURCES = meta-paths.c
@@ -55,14 +55,7 @@ imports_LDADD      = libutils.a \
                      -L$(PT_SUPPORT)/lib -lAsFix \
                      -L$(ATERM)/lib -lATerm
 
-remove_annotation_SOURCES = remove-annotation.c
-remove_annotation_LDADD = -L$(ATERM)/lib -lATerm
-
-apply_function_SOURCES = apply-function.c
-apply_function_LDADD = -L$(ATERM)/lib -lATerm -L$(PT_SUPPORT)/lib -lAsFix
-
 libutils_a_SOURCES = meta-utils.c meta-utils.h module-utils.c module-utils.h
-
 
 INCLUDES           = -I$(PT_SUPPORT)/include -I$(ATERM)/include
 
