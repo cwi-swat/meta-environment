@@ -52,7 +52,7 @@ Options:
     -h              display help information (usage)
     -M <int>        MetaEnvironment will abort after <int> seconds
     -m modulename   specifies the name of the top module to start with
-    -o              output file (only works with -P and -E)
+    -o <file>       output file (only works with -P and -E)
     -p <path>       add <path> to PATH of Meta-Environment
     -P              dump only .trm.tbl file for <modulename>
     -S              save intermediate files to disk (only works with -P and -E)
@@ -97,7 +97,7 @@ extra_scripts="-I${prefix}/share/meta"
 meta_script=${prefix}/share/meta/meta.tb
 time_out_def=""
 saving="false"
-filename="-"
+filename=""
 
 while [ $#  -gt 0 ]
 do
@@ -154,7 +154,6 @@ do
     esac
     shift
 done
-
 
 ###
 #  Get to the real work now...
