@@ -2,6 +2,7 @@
 import string
 import kjParseBuild
 import kjParser
+import time
 
 # some regular expressions
 INTREGEX	= "[+\-]?[0-9]+"
@@ -268,3 +269,11 @@ def test_term_parser(G):
 	test_parser(G, '"abc\\"def"')
 	test_parser(G, 'abc("d\\\\ef","x\\\\\\"yz\\\\")')
 	test_parser(G, 'rec-do(signature([rec-terminate(<p>,<term>),rec-do(<p>,doit(<str>))],[snd-connect(<p>)]))')
+	start = time.time()
+	print 'start timing at: ', start
+	for i in range(1,1000):
+		G.DoParse('abc(1,def)')	
+	end = time.time()	
+	print 'end timing at: ', end
+	print 'difference: ', end-start
+

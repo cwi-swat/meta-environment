@@ -33,7 +33,7 @@ NOWEB		= @NOWEB@
 COMPILE 	= $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS)
 
 DISTFILES	= Makefile.in python-adapter.in \
-		$(SOURCE) $(DOC) $(SRCDOC) $(GENSRC)
+		$(SOURCE) $(DOC) $(SRCDOC) $(GENSRC) $(LIBFILES)
 
 # With a little bit of luck, you only have to change the value of
 # these variables, and add some rules to actually build your programs:
@@ -61,10 +61,9 @@ parser: TBterm.py
 # defines listed above. You probably won't have to change them.
 
 clean:
-	${CLEAN} ${PROGRAMS}
 
 distclean: clean
-	${CLEAN} Makefile
+	${CLEAN} Makefile ${PROGRAMS}
 
 dist: $(DISTFILES)
 	@for file in $(DISTFILES); do \
