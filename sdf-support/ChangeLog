@@ -1,5 +1,9 @@
 $Id$
 
+2003/09/26 ({jurgenv,jong}@cwi.nl)
+ * Refactored implementation of get-new-modulename in sdf-modules tool and
+   fixed a compiler warning in it.
+ 
 2003/09/25 (markvdb@cwi.nl)
  * Made robust against the absence of correct modules.
 

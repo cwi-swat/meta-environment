@@ -172,52 +172,48 @@ ATerm get_module_path(int cid, char *path, char *id)
 ATerm get_new_module_name(int cid, ATerm searchPaths, char *path, char* id)
 {
   ATermList search = (ATermList) searchPaths;
-  char chosenPath[PATH_LEN];
+  char chosenPath[PATH_LEN] = "";
+  int chosenPathLen = 0;
   char chosenId[PATH_LEN];
-  int i;
  
-  /* We will choose the first longest search path that matches the path of
-   * the chosen module, then construct a compound module id to complete
-   * the filename.
+  /* We will choose the longest search path that matches the path of
+   * the chosen module.
    */
 
-  chosenPath[0] = '\0';
-
   for (; !ATisEmpty(search); search = ATgetNext(search)) {
-    char *firstPath = ATgetName(ATgetAFun((ATermAppl) ATgetFirst(search)));
-    int len = strlen(firstPath);
+    char *current = ATgetName(ATgetAFun((ATermAppl) ATgetFirst(search)));
+    int currentLen = strlen(current);
 
-    if (strlen(path) >= len) {
-      char end = path[len];
-      path[len] = '\0';
-
-      if (end == SEP || end == '\0') { 
-	if (!strcmp(path, firstPath)) {
-	  if (strlen(chosenPath) < strlen(firstPath)) {
-	    strcpy(chosenPath,firstPath);
-	  }
-	}
+    if (strncmp(current, path, currentLen) == 0) {
+      if (currentLen > chosenPathLen) {
+	strcpy(chosenPath, current);
+	chosenPathLen = currentLen;
       }
-
-      path[len] = end;
     }
   }
 
-  if (strcmp(chosenPath,"")) {
-    /* skip trailing slashes */
-    for (i = strlen(chosenPath); i < strlen(path), path[i] == '/'; i++);
+  /* Now construct a compound module id to complete
+   * the filename.
+   */
 
-    /* The modulename is what's left of the path concatenated before
-     * the module id
-     */
-    strcpy(chosenId,path+i);
-    strcat(chosenId,id);
+  if (chosenPathLen > 0) {
+    int i = chosenPathLen;
+    
+    while (path[i] == SEP) {
+      i++;
+    } 
+
+    if (strcmp(chosenPath, path) == 0) {
+      strcpy(chosenId, id);
+    }
+    else {
+      sprintf(chosenId, "%s%c%s", path+i, SEP, id);
+    }
 
     return ATmake("snd-value(new-module-name(<str>,<str>))", chosenPath, 
 		  chosenId);
   }
   else {
-    ATwarning("here\n");
     return ATmake("snd-value(module-name-inconsistent)");
   }
 }
