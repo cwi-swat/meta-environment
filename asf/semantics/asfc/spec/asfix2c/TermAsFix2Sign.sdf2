@@ -88,8 +88,3 @@ hiddens
     "CfElem"[0-9\']*       -> ATerm
     "Char*"[0-9]*          -> CHAR*
     "Sortlist"[0-9]*       -> SortList
-
-hiddens
-  priorities
-    <<ATerm -CF> -VAR> -> <ATerm -CF> >
-    "Symbol" -> <AFun -CF>

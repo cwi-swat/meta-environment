@@ -1,6 +1,7 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+%%                        The Netherlands. 
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -20,7 +21,7 @@
 %% are defined to be used by the various transformation phases.
 module  MuASF-Equations-Ops
 
-imports MuASF-Signature-Ops
+imports MuASF-Signature-Ops VarEnv
 
 exports
   sorts FuncTermPair FuncRuleTuple FuncRulePair FuncRuleStruct
@@ -41,7 +42,7 @@ exports
   context-free syntax
     get-funid(Term)                   -> FunId
     get-funid(Rule)                   -> FunId
-    get-funid(Term,{NamePair ","}*)          -> FunId
+    get-funid(Term,{NamePair ","}*)   -> FunId
     get-funargs(Term)                 -> TermList
     get-funargs(Rule)                 -> TermList
     is-list-funid(FunId)              -> Bool
@@ -63,7 +64,6 @@ exports
     is-plus-var(Term)                 -> Bool
     is-star-var(Term)                 -> Bool
 
-
   context-free syntax
     make-list-args({Term ","}*)  -> Term
 
@@ -72,10 +72,6 @@ exports
     make-conditional-rule({Cond "&"}*,Rule) -> Rule
     make-rule(Bool,Term,Term)               -> Rule
     make-rule(Bool,{Cond "&"}*,Term,Term)   -> Rule
-
-  context-free syntax
-    lit2str(Literal)     -> Term
-    qlit2str(Literal)    -> Term
 
 hiddens
   context-free syntax

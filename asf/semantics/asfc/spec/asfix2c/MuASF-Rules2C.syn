@@ -30,7 +30,7 @@ hiddens
   context-free syntax
     asfrules2cfuncs({FuncDef ";"}*,{Rule ";"}+,
                     {NamePair ","}*)                   -> FT-tuple
-    asfrules2cfuncs({FuncDef ";"}*,{Rule ";"}+,
+    asfrules2cfuncs({FuncDef ";"}*,{Rule ";"}*,
                     {Rule ";"}*,{NamePair ","}*)       -> FT-tuple
     asfrules2cfunc({Rule ";"}+,{NamePair ","}*)        -> Declaration
     funargs2cargs({Term ","}+,IntCon)                    -> PA-tuple

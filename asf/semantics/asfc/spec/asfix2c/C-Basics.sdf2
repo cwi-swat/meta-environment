@@ -62,6 +62,7 @@ hiddens
   context-free syntax
     space                                    -> FunId
 
+exports
   variables
     "Decls"[0-9]*        -> Declaration-list
     "Decl"[0-9]*         -> Declaration
