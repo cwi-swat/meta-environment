@@ -70,10 +70,7 @@ static PT_Args termsToArgs(PT_Symbols args, ATermAppl appl)
     PT_Tree tree = NULL;
 
     if (PT_isOptLayoutSymbol(symbol)) {
-      PT_Tree layout = PT_makeTreeLayoutFromString(" ");
-ATwarning("layout: %t\n");
-      result = PT_makeArgsList(layout, result);
-      assert(tree != NULL);
+      tree = PT_makeTreeLayoutFromString(" ");
     }
     else if(PT_isSymbolLit(symbol)) {
       char *str = PT_getSymbolString(symbol);
@@ -81,6 +78,7 @@ ATwarning("layout: %t\n");
       assert(tree != NULL);
     } 
     else { 
+      assert(j >= 0 && j < arity);
       arg = ATgetArgument(appl, j--);
       tree = termToTree(arg);
       assert(tree != NULL);

@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     if(run_verbose) {
       ATfprintf(stderr,"Reducing finished.\n");
     }
-
+ 
     asfix = toasfix(reduct);
 
     ATwriteToNamedBinaryFile(PT_makeTermFromParseTree(asfix),output);
