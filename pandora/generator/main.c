@@ -18,7 +18,7 @@
 
 static char* myname = "pandora";
 static char* myversion = VERSION;
-static char* myarguments = "i:o:vVhs:";
+static char* myarguments = "i:o:vVh";
 static ATbool run_verbose = ATfalse;
 
 /*}}}  */
@@ -50,7 +50,6 @@ static void usage(void)
 	    "\t-h              display help information\n"
 	    "\t-i filename     input (parsed) file                [stdin]\n"
 	    "\t-o filename     output (parsed) file               [stdout]\n"
-	    "\t-s filename     input (parsed) syntax definition   [obligatory]\n"
 	    "\t-v              verbose mode\n"
 	    "\t-V              reveal program version (i.e. %s)\n",
 	    myname, myversion);
