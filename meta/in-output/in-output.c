@@ -210,7 +210,7 @@ ATerm read_raw_from_named_file(char *fn, char *n)
     ATfprintf(stderr, "error reading %s\n", fn);
     t = open_error(n);
   } else {
-    ATfprintf(stderr, "raw read from %s\n", fn);
+    if(run_verbose) ATwarning("raw read from %s\n", fn);
     t = ATmake("snd-value(opened-file(raw,<str>,<str>,<str>,"
                "timestamp(<int>)))",
                n, buf, fn, filetime(fn));
