@@ -1,4 +1,4 @@
-process UI is                        %% command="wish-adapter -script ui-calc.tcl"
+process UI is
      ( ( CALC-BUTTON() + LOG-BUTTON() ) * delta
      ||
        TIME-BUTTON() * delta
@@ -10,16 +10,11 @@ process CALC-BUTTON is
   let  E : expr, V : int
   in
      event button(calc) .
-     eval get-expr-dialog,  E?  .     %% expr get-expr-dialog()
+     eval get-expr-dialog . value E?  .     %% expr get-expr-dialog()
      snd-msg compute(E) . rec-msg compute(E, V?) .
      do display-value(V) .            %% void display-value(expr)
-     ack-event button(calc)
-
      >> 
-     rec-msg cancel .
-     ack-event button(calc)
-
-
+     event cancel
   endlet
 
 process LOG-BUTTON is
@@ -28,7 +23,6 @@ process LOG-BUTTON is
       event button(showLog)  .
       snd-msg showLog  .  rec-msg showLog(L?) .
       do display-log(L) .             %% void display-log(log)
-      ack-event button(calc)
   endlet
 
 process TIME-BUTTON is
@@ -37,65 +31,116 @@ process TIME-BUTTON is
       event button(showTime) .
       snd-msg showTime to P? . rec-msg showTime(T?) from P .
       do display-time(T) .            %% void display-time(time)
-      ack-event showTime
   endlet
 
 process QUIT-BUTTON is
   event button(quit) .
   shutdown "End of calc demo"
 
+tool user-interface-tool defines
+     signature
+	functions
+		expr get-expr-dialog()
+		void display-value(expr)
+		void display-log(log)
+		void display-time(time)
+	events
+		button(calc)
+		button(showLog)
+		button(showTime)
+		button(quit)
+	kind = external/tcl
+	command="wish-adapter -script ui-calc.tcl"
+end
+
 %% -------------------------------------------------------------------------------
 
-process CALC is                       %% command = "./calc"
+process CALC is
   let E : expr, V : int, P : process
   in
      ( rec-msg compute(E?) from P? . 
-       eval compute(E), V? .          %% int compute(expr)
+       eval compute(E) . value V? .          %% int compute(expr)
        snd-msg compute(E, V) to P . 
        snd-note compute(E, V)
      ) * delta
   endlet
 
+tool calc-tool defines
+     signature
+	int compute(expr)
+     kind = external/c
+     command = "./calc"
+end
+
 %% -------------------------------------------------------------------------------
 
-process Clock is                      %% command = "./clock"
+process CLOCK is
  let T : time, P : process
  in
      ( rec-msg showTime from P? .
-       eval readTime, T? .            %% time readtime()
+       eval readTime . value T? .            %% time readtime()
        snd-msg showTime(T) to P
      ) * delta
  endlet
 
+tool clock-tool defines
+     signature
+	functions 
+		  time readtime()
+	kind = externa/c
+	command = "./clock"
+end	  
+
 %% -------------------------------------------------------------------------------
 
-process BATCH is                      %% command = "./batch"
+process BATCH is
   let E : expr, V : int
   in
-     ( eval fromFile, E? .            %% expr fromFile()
+     ( eval fromFile . value E? .            %% expr fromFile()
        snd-msg compute(E). 
        rec-msg compute(E, V?).
        do toFile(E, V)                %% void toFile(expr, int)
      ) * delta
   endlet
 
+tool batch-tool defines
+     signature
+	functions
+		expr fromFile()
+		void toFile(expr, int)
+     kind = external/c
+     command ="./batch"
+end
+
 %% -------------------------------------------------------------------------------
 
-process  LOG is                      %% command = "./log"
+process  LOG is
   let  E : str, V : int, L : log, P : process
   in
      ( rec-note compute(E?, V?) . 
        do writeLog(E, V)             %% void writeLog(expr,int)
      + 
        rec-msg showLog from P? . 
-       eval readLog, L? .            %% log readLog()
+       eval readLog . value L? .            %% log readLog()
        snd-msg readLog(L) to P
      ) * delta
   endlet
+
+tool log-tool defines
+     signature
+	functions
+	 void writeLog(expr,int)
+	 log readLog()
+	 kind = external/c
+	 command = "./log"
+end
   
 %% -------------------------------------------------------------------------------
 
-toolbus(UI, CALC, LOG, CLOCK)
+toolbus(UI using user-interface-tool, 
+	CALC using calc-tool, 
+        LOG using log-tool, 
+        CLOCK using clock-tool)
 
 %% -------------------------------------------------------------------------------
 
