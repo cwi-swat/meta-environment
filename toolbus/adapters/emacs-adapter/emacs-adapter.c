@@ -139,7 +139,7 @@ term *handle_input_from_toolbus(term *e) {
   char *fname;
   term_list *fargs;
   
-  TBprintf(stderr, "Get term from toolbus: %t", e);
+  /*  TBprintf(stderr, "Get term from toolbus: %t", e);*/
   /*    printf("In handle_input\n");*/
   /* rec-terminate appears to fail sometimes. So far, it only fails when 
      the ToolBus is run in regular mode. If it runs in -viewer mode 
@@ -181,7 +181,8 @@ void exec_cmd(void) {
   int cmd_pid; /* The pid of the child process */
 
   gnuc_func = cmd_buf;
-  
+
+#ifdef 0  
   if ((cmd_pid = fork())) {
     /* This is the parent process */
     if (cmd_pid < 0)
@@ -192,14 +193,24 @@ void exec_cmd(void) {
       err_sys_fatal("Can't execute %s", gnuclient);
     }
   }
-  sleep(5);
+
+  /* We need to sleep here for some time, in order to prevent execs
+     following each other too rapidly. This is obviously not the most
+     elegant solution. So far it appears to work. Timing is still
+     experimental, though. */
+  
+  usleep((long)1000);
+
   /*while ((r = wait(&status)) != cmd_pid && r != 0)
     fprintf(stderr, "wait = %d\n", r);  
 */
+#endif
+  fprintf(stdout,"(%s)\n",gnuc_func);
+  fflush(NULL);
 }
 
 term *handle_input_from_emacs(term *e) {
-  TBprintf(stderr,"term from emacs: %t\n", e);
+  /*  TBprintf(stderr,"term from emacs: %t\n", e);*/
   return e;
 }
 
@@ -243,12 +254,12 @@ int main(int argc, char *argv[]) {
 */
   new_stdin = dup(STDIN_FILENO);
   if ((fcntl(new_stdin, F_SETFD, (long) 0)) != -1) {
-    fprintf(stderr,"**********THE FD COMING FROM EMACS IS: %d *************************************\n",new_stdin);
+    /*    fprintf(stderr,"**********THE FD COMING FROM EMACS IS: %d *************************************\n",new_stdin);*/
   } else {
     fprintf(stderr,"Unsetting close-on-exec on stdin failed\n");
   }
 
- fprintf(stderr,"The value of the fcntl flags of stdin: %d\n", fcntl(new_stdin, F_GETFL));
+  /* fprintf(stderr,"The value of the fcntl flags of stdin: %d\n", fcntl(new_stdin, F_GETFL));*/
  
  
  

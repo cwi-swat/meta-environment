@@ -19,9 +19,55 @@
 	  (start-process "adapter" "*adapter*" "emacs-adapter" args)
 	  )
 	)
+  (set-process-filter adapter-process 'handle-term-from-toolbus)
   )
 
+(defvar current-partial-msg ""
+  "The variable that holds partial messages from the ToolBus, while waiting
+for the rest of the msg"
+)
 
+(defun debug-out (str)
+  "Send string to stdout"
+  (send-string-to-terminal (concat str "\n"))
+)
+
+(defun handle-term-from-toolbus (proc string)
+  "This is the filter function that processes input from the toolbus. PROC 
+is the adapter process, STRING is the string to be processed"
+  (debug-out "In handle-term")
+  (debug-out string)
+  (setq new-string (concat current-partial-msg string))
+  (debug-out (concat "String conc with old string: " new-string))
+  (let ((eval-list (split-string new-string "\n"))
+	(last-char (substring new-string -1)))
+    (debug-out (concat "eval-list: " (prin1-to-string eval-list)))
+    (debug-out (concat "last-char: " last-char))
+    (while (< 2 (list-length eval-list))
+      (debug-out (concat "car of eval-list: " (car eval-list)))
+      (let ((eval-elems (split-string (car eval-list) "[ ]"))
+	    (eval-fun (car (split-string (car eval-list) "[ ]")))
+	    (eval-args (cdr (split-string (car eval-list) "[ ]"))))
+;;	(debug-out (concat "eval-elems: " (prin1-to-string eval-elems)))
+	(debug-out (concat "eval-fun: " (prin1-to-string eval-fun)))
+	(debug-out (concat "eval-args: " (prin1-to-string eval-args)))
+	(eval (car (read-from-string (car eval-list))))
+;;	(apply eval-fun eval-args)
+	(set 'eval-list (cdr eval-list))
+	)
+      )
+    (if (not (string= last-char "\n"))
+	(setq current-partial-msg (car eval-list))
+      (let ((eval-elems (split-string (car eval-list) " ")))
+	(eval (car (read-from-string (car eval-list))))
+;;	(apply eval-fun eval-args)
+;;	(set 'eval-list (cdr eval-list))
+	(setq current-partial-msg "")
+	)
+      )
+    )
+  )
+      
 ;;(setq chunk 5120)
 
 ; Define lenspec and min-msg-size. These should be called upon initialization.
