@@ -7,8 +7,15 @@ imports basic/ReadWriteCon
 exports
 
 context-free syntax
-  parse-bytes(Bytes)      -> ParseResult[[X]] {built-in("parse-bytes")}
-  parse-file(file:String) -> ParseResult[[X]] {built-in("parse-file")}
+  parse-bytes(Bytes)      -> Parsetree[[X]] {built-in("parse-bytes")}
+  parse-file(file:String) -> Parsetree[[X]] {built-in("parse-file")}
+
+context-free syntax
+
+  read-parse-tree(file:String)  -> Parsetree[[X]] 
+    {built-in("read-term-from-file")}
+  write-parse-tree(file:String, X)   -> Write
+    {built-in("write-term-to-file")}
 
 context-free syntax
   unparse(X)                     -> Bytes

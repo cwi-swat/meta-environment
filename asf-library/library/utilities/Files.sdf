@@ -1,28 +1,22 @@
-module utilities/Files[X]
+module utilities/Files
 
-imports basic/ParsetreeCon[X]
 imports basic/ReadWriteCon
 imports basic/Strings
 
 exports
 
 context-free syntax
-  read-parse-tree(file:String)  -> ParseResult[[X]] 
-    {built-in("read-term-from-file")}
 
   read-bytes(file:String)       -> Read 
     {built-in("read-bytes-from-file")}
 
-context-free syntax
-  write-parse-tree(file:String, X)   -> Write
-    {built-in("write-term-to-file")}
-
   write-bytes(file:String,Bytes)       -> Write 
     {built-in("write-bytes-to-file")}
 
-hiddens
-imports basic/Whitespace
+context-free syntax
 
-variables
-  "Bytes" -> Bytes
-  "Sort"  -> X
+  read-from-command(command:String) -> Read
+    {built-in("read-from-command")}
+
+  execute-command(command:Bytes)    -> NatCon 
+    {built-in("execute-command")}
