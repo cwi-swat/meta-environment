@@ -37,7 +37,7 @@ public class FeedbackList extends ToolComponent {
             public void mouseClicked(MouseEvent e) {
                 Feedback feedback = (Feedback) list.getSelectedValue();
 
-                if (feedback != null) {
+                if (feedback != null && !feedback.getList().isEmpty()) {
                     postEvent(
                         getFactory().make(
                             "feedback-selected(<term>)",

@@ -159,7 +159,8 @@ in
       snd-do(UI, display-feedback-summary(FeedbackSummary))
     +
       rec-event(UI, feedback-selected(Feedback?)) .
-      printf("meta-studio.idef: %t selected\n", Feedback) .
+      snd-msg(extra-button-action(click, [Feedback],
+                                  feedback-list, "*", feedback-list)) .
       snd-ack-event(UI, feedback-selected(Feedback))
     ) * 
     (

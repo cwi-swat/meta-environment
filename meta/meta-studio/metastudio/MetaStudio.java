@@ -162,14 +162,15 @@ public class MetaStudio extends JFrame  {
         if (historyPanel == null) {
             historyPanel = new HistoryPanel(factory, getBridge());
         }
-        messageTabs.insertTab("history", null, historyPanel, "Execution history", 0);
-
-        ToolComponent messageList = new MessageList(factory, getBridge());
-        messageTabs.insertTab("messages", null, messageList, "Message list", 1);
-
+        
         ToolComponent feedbackList = new FeedbackList(factory, getBridge());
-        messageTabs.insertTab("errors", null, feedbackList, "Clickable messages", 2);
-
+        messageTabs.insertTab("feedback", null, feedbackList, "feedback messages", 0);
+       
+        ToolComponent messageList = new MessageList(factory, getBridge());
+        messageTabs.insertTab("messages", null, messageList, "old-style messages", 1);
+        
+        messageTabs.insertTab("history", null, historyPanel, "Execution history", 2);
+      
         return messageTabs;
     }
 
