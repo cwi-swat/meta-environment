@@ -3,8 +3,8 @@ let
   AID : int
 in
   rec-msg(create-address) .
-  snd-eval(AB, create-address) .
-  rec-value(AB, new-address(AID?)) .
+  snd-eval(AB, create-entry) .
+  rec-value(AB, new-entry(AID?)) .
   snd-msg(address-created(AID))
 endlet
 
@@ -30,7 +30,7 @@ let
   AID : int
 in
   rec-msg(delete-address(AID?)) .
-  snd-do(AB, delete-address(AID)) .
+  snd-do(AB, delete-entry(AID)) .
   snd-msg(address-deleted(AID))
 endlet
 
@@ -43,7 +43,7 @@ in
   ) * delta
 endlet
 
-tool address-book is { command = "java-adapter -class AddressBookService" }
+tool address-book is { command = "java-adapter -class TBAddressBookService" }
 
 process CLIENT is
 let

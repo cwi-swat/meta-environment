@@ -614,8 +614,37 @@ In Java, we implement the \emph{AddressBookEntry} as follows:
 \verbatiminput{AddressBookEntry.java}
 \end{footnotesize}
 
+The \emph{AddressBookService} has the following interface:
+
+\begin{footnotesize}
+\begin{verbatim}
+public interface IAddressBookService {
+  public int createEntry();
+  public void deleteEntry(int id);
+  public void setName(int id, String name);
+  public void setAddress(int id, String address);
+}
+\end{verbatim}
+\end{footnotesize}
+
+\begin{footnotesize}
 \verbatiminput{AddressBookService.java}
+\end{footnotesize}
+
+Given the following use cases of our \emph{address book service}:
+
+\begin{description}
+  \item[create] a new entry in the addressbook database;
+  \item[update] an existing entry in the database;
+  \item[delete] an existing entry from the database.
+\end{description}
+
+We can easily describe the desired behaviour of these use cases
+in a ToolBus script:
+
+\begin{footnotesize}
 \verbatiminput{address-book.tb}
+\end{footnotesize}
 
 \section{Concluding Remarks}
 
