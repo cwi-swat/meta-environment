@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
   ATerm bottomOfStack;
 
   ATinit(argc, argv, &bottomOfStack);
+  PT_initMEPTApi();
   SDF_initSDFMEApi();
 
   return testSorts();
