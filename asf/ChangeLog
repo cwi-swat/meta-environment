@@ -1,5 +1,8 @@
 # $Id$
 
+Mon May 17 09:48:59 CEST 2004 <kooiker@cwi.nl>
+ * semantics/asf-checker/src/Makefile.am: Added PT-Support to LD_ADD section 
+
 Mon May 10 10:57:20 CEST 2004 <jurgenv@cwi.nl>
  * added new warning: If lexical is exactly the same as the sort name
    it is parsed over it was probably a variable!

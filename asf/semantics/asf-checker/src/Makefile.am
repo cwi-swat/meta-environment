@@ -22,6 +22,7 @@ asfchecker_SOURCES = asfchecker.c equationChecker.c asfchecker.tif.c \
 
 asfchecker_LDADD   = \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
+	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(ASF_SUPPORT)/lib -lASFME \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI -lLocationAPI \
         -L$(TOOLBUSLIB)/lib -lATB \
