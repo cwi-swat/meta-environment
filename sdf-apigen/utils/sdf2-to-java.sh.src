@@ -184,7 +184,7 @@ if [ ${ONLYBOTTOM} -eq 0 ]; then
 info " generating ADT "
 ${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
              -i ${INPUT} -o ${BASE}.adt || err
-${CONCATADT} ${BASE}.adt ${PKGDATA}/string.adt -o ${BASE}.adt
+${CONCATADT} -o ${BASE}.adt ${BASE}.adt ${PKGDATA}/string.adt
 fi
 
 
