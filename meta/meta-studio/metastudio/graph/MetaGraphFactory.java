@@ -1,13 +1,8 @@
 package metastudio.graph;
 
-  //{{{ imports
-
 import aterm.pure.PureFactory;
-  //}}}
 public class MetaGraphFactory extends PureFactory
 {
-  //{{{ private members
-
   private aterm.AFun funGraph_Default;
   private Graph protoGraph_Default;
   private aterm.AFun funNodeList_Empty;
@@ -78,7 +73,6 @@ public class MetaGraphFactory extends PureFactory
   private Polygon protoPolygon_Multi;
   private aterm.AFun funPoint_Default;
   private Point protoPoint_Default;
-  //}}}
   public MetaGraphFactory()
   {
      super();
@@ -96,170 +90,168 @@ public class MetaGraphFactory extends PureFactory
     Graph.initialize(this);
 
     Graph_Default.initializePattern();
-    funGraph_Default = makeAFun("Graph_Default", 2, false);
+    funGraph_Default = makeAFun("default", 2, false);
     protoGraph_Default = new Graph_Default();
 
     NodeList.initialize(this);
 
     NodeList_Empty.initializePattern();
-    funNodeList_Empty = makeAFun("NodeList_Empty", 0, false);
+    funNodeList_Empty = makeAFun("empty", 0, false);
     protoNodeList_Empty = new NodeList_Empty();
 
     NodeList_Multi.initializePattern();
-    funNodeList_Multi = makeAFun("NodeList_Multi", 2, false);
+    funNodeList_Multi = makeAFun("multi", 2, false);
     protoNodeList_Multi = new NodeList_Multi();
 
     Node.initialize(this);
 
     Node_Default.initializePattern();
-    funNode_Default = makeAFun("Node_Default", 2, false);
+    funNode_Default = makeAFun("default", 2, false);
     protoNode_Default = new Node_Default();
 
     NodeId.initialize(this);
 
     NodeId_Default.initializePattern();
-    funNodeId_Default = makeAFun("NodeId_Default", 1, false);
+    funNodeId_Default = makeAFun("default", 1, false);
     protoNodeId_Default = new NodeId_Default();
 
     AttributeList.initialize(this);
 
     AttributeList_Empty.initializePattern();
-    funAttributeList_Empty = makeAFun("AttributeList_Empty", 0, false);
+    funAttributeList_Empty = makeAFun("empty", 0, false);
     protoAttributeList_Empty = new AttributeList_Empty();
 
     AttributeList_Multi.initializePattern();
-    funAttributeList_Multi = makeAFun("AttributeList_Multi", 2, false);
+    funAttributeList_Multi = makeAFun("multi", 2, false);
     protoAttributeList_Multi = new AttributeList_Multi();
 
     Attribute.initialize(this);
 
     Attribute_Label.initializePattern();
-    funAttribute_Label = makeAFun("Attribute_Label", 1, false);
+    funAttribute_Label = makeAFun("label", 1, false);
     protoAttribute_Label = new Attribute_Label();
 
     Attribute_Shape.initializePattern();
-    funAttribute_Shape = makeAFun("Attribute_Shape", 1, false);
+    funAttribute_Shape = makeAFun("shape", 1, false);
     protoAttribute_Shape = new Attribute_Shape();
 
     Attribute_Location.initializePattern();
-    funAttribute_Location = makeAFun("Attribute_Location", 2, false);
+    funAttribute_Location = makeAFun("location", 2, false);
     protoAttribute_Location = new Attribute_Location();
 
     Attribute_Size.initializePattern();
-    funAttribute_Size = makeAFun("Attribute_Size", 2, false);
+    funAttribute_Size = makeAFun("size", 2, false);
     protoAttribute_Size = new Attribute_Size();
 
     Attribute_CurvePoints.initializePattern();
-    funAttribute_CurvePoints = makeAFun("Attribute_CurvePoints", 1, false);
+    funAttribute_CurvePoints = makeAFun("curve-points", 1, false);
     protoAttribute_CurvePoints = new Attribute_CurvePoints();
 
     Attribute_Direction.initializePattern();
-    funAttribute_Direction = makeAFun("Attribute_Direction", 1, false);
+    funAttribute_Direction = makeAFun("direction", 1, false);
     protoAttribute_Direction = new Attribute_Direction();
 
     Shape.initialize(this);
 
     Shape_Plaintext.initializePattern();
-    funShape_Plaintext = makeAFun("Shape_Plaintext", 0, false);
+    funShape_Plaintext = makeAFun("plaintext", 0, false);
     protoShape_Plaintext = new Shape_Plaintext();
 
     Shape_Ellipse.initializePattern();
-    funShape_Ellipse = makeAFun("Shape_Ellipse", 0, false);
+    funShape_Ellipse = makeAFun("ellipse", 0, false);
     protoShape_Ellipse = new Shape_Ellipse();
 
     Shape_Circle.initializePattern();
-    funShape_Circle = makeAFun("Shape_Circle", 0, false);
+    funShape_Circle = makeAFun("circle", 0, false);
     protoShape_Circle = new Shape_Circle();
 
     Shape_Egg.initializePattern();
-    funShape_Egg = makeAFun("Shape_Egg", 0, false);
+    funShape_Egg = makeAFun("egg", 0, false);
     protoShape_Egg = new Shape_Egg();
 
     Shape_Triangle.initializePattern();
-    funShape_Triangle = makeAFun("Shape_Triangle", 0, false);
+    funShape_Triangle = makeAFun("triangle", 0, false);
     protoShape_Triangle = new Shape_Triangle();
 
     Shape_Box.initializePattern();
-    funShape_Box = makeAFun("Shape_Box", 0, false);
+    funShape_Box = makeAFun("box", 0, false);
     protoShape_Box = new Shape_Box();
 
     Shape_Diamond.initializePattern();
-    funShape_Diamond = makeAFun("Shape_Diamond", 0, false);
+    funShape_Diamond = makeAFun("diamond", 0, false);
     protoShape_Diamond = new Shape_Diamond();
 
     Shape_Trapezium.initializePattern();
-    funShape_Trapezium = makeAFun("Shape_Trapezium", 0, false);
+    funShape_Trapezium = makeAFun("trapezium", 0, false);
     protoShape_Trapezium = new Shape_Trapezium();
 
     Shape_Parallelogram.initializePattern();
-    funShape_Parallelogram = makeAFun("Shape_Parallelogram", 0, false);
+    funShape_Parallelogram = makeAFun("parallelogram", 0, false);
     protoShape_Parallelogram = new Shape_Parallelogram();
 
     Shape_House.initializePattern();
-    funShape_House = makeAFun("Shape_House", 0, false);
+    funShape_House = makeAFun("house", 0, false);
     protoShape_House = new Shape_House();
 
     Shape_Hexagon.initializePattern();
-    funShape_Hexagon = makeAFun("Shape_Hexagon", 0, false);
+    funShape_Hexagon = makeAFun("hexagon", 0, false);
     protoShape_Hexagon = new Shape_Hexagon();
 
     Shape_Octagon.initializePattern();
-    funShape_Octagon = makeAFun("Shape_Octagon", 0, false);
+    funShape_Octagon = makeAFun("octagon", 0, false);
     protoShape_Octagon = new Shape_Octagon();
 
     Direction.initialize(this);
 
     Direction_Forward.initializePattern();
-    funDirection_Forward = makeAFun("Direction_Forward", 0, false);
+    funDirection_Forward = makeAFun("forward", 0, false);
     protoDirection_Forward = new Direction_Forward();
 
     Direction_Back.initializePattern();
-    funDirection_Back = makeAFun("Direction_Back", 0, false);
+    funDirection_Back = makeAFun("back", 0, false);
     protoDirection_Back = new Direction_Back();
 
     Direction_Both.initializePattern();
-    funDirection_Both = makeAFun("Direction_Both", 0, false);
+    funDirection_Both = makeAFun("both", 0, false);
     protoDirection_Both = new Direction_Both();
 
     Direction_None.initializePattern();
-    funDirection_None = makeAFun("Direction_None", 0, false);
+    funDirection_None = makeAFun("none", 0, false);
     protoDirection_None = new Direction_None();
 
     EdgeList.initialize(this);
 
     EdgeList_Empty.initializePattern();
-    funEdgeList_Empty = makeAFun("EdgeList_Empty", 0, false);
+    funEdgeList_Empty = makeAFun("empty", 0, false);
     protoEdgeList_Empty = new EdgeList_Empty();
 
     EdgeList_Multi.initializePattern();
-    funEdgeList_Multi = makeAFun("EdgeList_Multi", 2, false);
+    funEdgeList_Multi = makeAFun("multi", 2, false);
     protoEdgeList_Multi = new EdgeList_Multi();
 
     Edge.initialize(this);
 
     Edge_Default.initializePattern();
-    funEdge_Default = makeAFun("Edge_Default", 3, false);
+    funEdge_Default = makeAFun("default", 3, false);
     protoEdge_Default = new Edge_Default();
 
     Polygon.initialize(this);
 
     Polygon_Empty.initializePattern();
-    funPolygon_Empty = makeAFun("Polygon_Empty", 0, false);
+    funPolygon_Empty = makeAFun("empty", 0, false);
     protoPolygon_Empty = new Polygon_Empty();
 
     Polygon_Multi.initializePattern();
-    funPolygon_Multi = makeAFun("Polygon_Multi", 2, false);
+    funPolygon_Multi = makeAFun("multi", 2, false);
     protoPolygon_Multi = new Polygon_Multi();
 
     Point.initialize(this);
 
     Point_Default.initializePattern();
-    funPoint_Default = makeAFun("Point_Default", 2, false);
+    funPoint_Default = makeAFun("default", 2, false);
     protoPoint_Default = new Point_Default();
 
   }
-
-  //{{{ make Graph_Default
 
   protected Graph_Default makeGraph_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoGraph_Default) {
@@ -273,8 +265,6 @@ public class MetaGraphFactory extends PureFactory
     return makeGraph_Default( funGraph_Default, args, empty);
   }
 
-  //{{{ make NodeList_Empty
-
   protected NodeList_Empty makeNodeList_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoNodeList_Empty) {
       protoNodeList_Empty.initHashCode(annos,fun,args);
@@ -286,8 +276,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeNodeList_Empty( funNodeList_Empty, args, empty);
   }
-
-  //{{{ make NodeList_Multi
 
   protected NodeList_Multi makeNodeList_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoNodeList_Multi) {
@@ -301,8 +289,6 @@ public class MetaGraphFactory extends PureFactory
     return makeNodeList_Multi( funNodeList_Multi, args, empty);
   }
 
-  //{{{ make Node_Default
-
   protected Node_Default makeNode_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoNode_Default) {
       protoNode_Default.initHashCode(annos,fun,args);
@@ -314,8 +300,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {_id, _attributes};
     return makeNode_Default( funNode_Default, args, empty);
   }
-
-  //{{{ make NodeId_Default
 
   protected NodeId_Default makeNodeId_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoNodeId_Default) {
@@ -329,8 +313,6 @@ public class MetaGraphFactory extends PureFactory
     return makeNodeId_Default( funNodeId_Default, args, empty);
   }
 
-  //{{{ make AttributeList_Empty
-
   protected AttributeList_Empty makeAttributeList_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttributeList_Empty) {
       protoAttributeList_Empty.initHashCode(annos,fun,args);
@@ -342,8 +324,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeAttributeList_Empty( funAttributeList_Empty, args, empty);
   }
-
-  //{{{ make AttributeList_Multi
 
   protected AttributeList_Multi makeAttributeList_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttributeList_Multi) {
@@ -357,8 +337,6 @@ public class MetaGraphFactory extends PureFactory
     return makeAttributeList_Multi( funAttributeList_Multi, args, empty);
   }
 
-  //{{{ make Attribute_Label
-
   protected Attribute_Label makeAttribute_Label(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Label) {
       protoAttribute_Label.initHashCode(annos,fun,args);
@@ -370,8 +348,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {makeAppl(makeAFun(_label, 0, true))};
     return makeAttribute_Label( funAttribute_Label, args, empty);
   }
-
-  //{{{ make Attribute_Shape
 
   protected Attribute_Shape makeAttribute_Shape(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Shape) {
@@ -385,8 +361,6 @@ public class MetaGraphFactory extends PureFactory
     return makeAttribute_Shape( funAttribute_Shape, args, empty);
   }
 
-  //{{{ make Attribute_Location
-
   protected Attribute_Location makeAttribute_Location(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Location) {
       protoAttribute_Location.initHashCode(annos,fun,args);
@@ -398,8 +372,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_x.intValue()), makeInt(_y.intValue())};
     return makeAttribute_Location( funAttribute_Location, args, empty);
   }
-
-  //{{{ make Attribute_Size
 
   protected Attribute_Size makeAttribute_Size(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Size) {
@@ -413,8 +385,6 @@ public class MetaGraphFactory extends PureFactory
     return makeAttribute_Size( funAttribute_Size, args, empty);
   }
 
-  //{{{ make Attribute_CurvePoints
-
   protected Attribute_CurvePoints makeAttribute_CurvePoints(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_CurvePoints) {
       protoAttribute_CurvePoints.initHashCode(annos,fun,args);
@@ -426,8 +396,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {_points};
     return makeAttribute_CurvePoints( funAttribute_CurvePoints, args, empty);
   }
-
-  //{{{ make Attribute_Direction
 
   protected Attribute_Direction makeAttribute_Direction(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Direction) {
@@ -441,8 +409,6 @@ public class MetaGraphFactory extends PureFactory
     return makeAttribute_Direction( funAttribute_Direction, args, empty);
   }
 
-  //{{{ make Shape_Plaintext
-
   protected Shape_Plaintext makeShape_Plaintext(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Plaintext) {
       protoShape_Plaintext.initHashCode(annos,fun,args);
@@ -454,8 +420,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Plaintext( funShape_Plaintext, args, empty);
   }
-
-  //{{{ make Shape_Ellipse
 
   protected Shape_Ellipse makeShape_Ellipse(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Ellipse) {
@@ -469,8 +433,6 @@ public class MetaGraphFactory extends PureFactory
     return makeShape_Ellipse( funShape_Ellipse, args, empty);
   }
 
-  //{{{ make Shape_Circle
-
   protected Shape_Circle makeShape_Circle(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Circle) {
       protoShape_Circle.initHashCode(annos,fun,args);
@@ -482,8 +444,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Circle( funShape_Circle, args, empty);
   }
-
-  //{{{ make Shape_Egg
 
   protected Shape_Egg makeShape_Egg(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Egg) {
@@ -497,8 +457,6 @@ public class MetaGraphFactory extends PureFactory
     return makeShape_Egg( funShape_Egg, args, empty);
   }
 
-  //{{{ make Shape_Triangle
-
   protected Shape_Triangle makeShape_Triangle(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Triangle) {
       protoShape_Triangle.initHashCode(annos,fun,args);
@@ -510,8 +468,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Triangle( funShape_Triangle, args, empty);
   }
-
-  //{{{ make Shape_Box
 
   protected Shape_Box makeShape_Box(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Box) {
@@ -525,8 +481,6 @@ public class MetaGraphFactory extends PureFactory
     return makeShape_Box( funShape_Box, args, empty);
   }
 
-  //{{{ make Shape_Diamond
-
   protected Shape_Diamond makeShape_Diamond(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Diamond) {
       protoShape_Diamond.initHashCode(annos,fun,args);
@@ -538,8 +492,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Diamond( funShape_Diamond, args, empty);
   }
-
-  //{{{ make Shape_Trapezium
 
   protected Shape_Trapezium makeShape_Trapezium(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Trapezium) {
@@ -553,8 +505,6 @@ public class MetaGraphFactory extends PureFactory
     return makeShape_Trapezium( funShape_Trapezium, args, empty);
   }
 
-  //{{{ make Shape_Parallelogram
-
   protected Shape_Parallelogram makeShape_Parallelogram(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Parallelogram) {
       protoShape_Parallelogram.initHashCode(annos,fun,args);
@@ -566,8 +516,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Parallelogram( funShape_Parallelogram, args, empty);
   }
-
-  //{{{ make Shape_House
 
   protected Shape_House makeShape_House(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_House) {
@@ -581,8 +529,6 @@ public class MetaGraphFactory extends PureFactory
     return makeShape_House( funShape_House, args, empty);
   }
 
-  //{{{ make Shape_Hexagon
-
   protected Shape_Hexagon makeShape_Hexagon(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Hexagon) {
       protoShape_Hexagon.initHashCode(annos,fun,args);
@@ -594,8 +540,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeShape_Hexagon( funShape_Hexagon, args, empty);
   }
-
-  //{{{ make Shape_Octagon
 
   protected Shape_Octagon makeShape_Octagon(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Octagon) {
@@ -609,8 +553,6 @@ public class MetaGraphFactory extends PureFactory
     return makeShape_Octagon( funShape_Octagon, args, empty);
   }
 
-  //{{{ make Direction_Forward
-
   protected Direction_Forward makeDirection_Forward(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoDirection_Forward) {
       protoDirection_Forward.initHashCode(annos,fun,args);
@@ -622,8 +564,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeDirection_Forward( funDirection_Forward, args, empty);
   }
-
-  //{{{ make Direction_Back
 
   protected Direction_Back makeDirection_Back(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoDirection_Back) {
@@ -637,8 +577,6 @@ public class MetaGraphFactory extends PureFactory
     return makeDirection_Back( funDirection_Back, args, empty);
   }
 
-  //{{{ make Direction_Both
-
   protected Direction_Both makeDirection_Both(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoDirection_Both) {
       protoDirection_Both.initHashCode(annos,fun,args);
@@ -650,8 +588,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeDirection_Both( funDirection_Both, args, empty);
   }
-
-  //{{{ make Direction_None
 
   protected Direction_None makeDirection_None(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoDirection_None) {
@@ -665,8 +601,6 @@ public class MetaGraphFactory extends PureFactory
     return makeDirection_None( funDirection_None, args, empty);
   }
 
-  //{{{ make EdgeList_Empty
-
   protected EdgeList_Empty makeEdgeList_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoEdgeList_Empty) {
       protoEdgeList_Empty.initHashCode(annos,fun,args);
@@ -678,8 +612,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {};
     return makeEdgeList_Empty( funEdgeList_Empty, args, empty);
   }
-
-  //{{{ make EdgeList_Multi
 
   protected EdgeList_Multi makeEdgeList_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoEdgeList_Multi) {
@@ -693,8 +625,6 @@ public class MetaGraphFactory extends PureFactory
     return makeEdgeList_Multi( funEdgeList_Multi, args, empty);
   }
 
-  //{{{ make Edge_Default
-
   protected Edge_Default makeEdge_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoEdge_Default) {
       protoEdge_Default.initHashCode(annos,fun,args);
@@ -706,8 +636,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {_from, _to, _attributes};
     return makeEdge_Default( funEdge_Default, args, empty);
   }
-
-  //{{{ make Polygon_Empty
 
   protected Polygon_Empty makePolygon_Empty(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoPolygon_Empty) {
@@ -721,8 +649,6 @@ public class MetaGraphFactory extends PureFactory
     return makePolygon_Empty( funPolygon_Empty, args, empty);
   }
 
-  //{{{ make Polygon_Multi
-
   protected Polygon_Multi makePolygon_Multi(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoPolygon_Multi) {
       protoPolygon_Multi.initHashCode(annos,fun,args);
@@ -734,8 +660,6 @@ public class MetaGraphFactory extends PureFactory
     aterm.ATerm[] args = new aterm.ATerm[] {_head, _tail};
     return makePolygon_Multi( funPolygon_Multi, args, empty);
   }
-
-  //{{{ make Point_Default
 
   protected Point_Default makePoint_Default(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoPoint_Default) {

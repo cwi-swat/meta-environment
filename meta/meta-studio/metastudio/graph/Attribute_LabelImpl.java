@@ -1,9 +1,6 @@
 package metastudio.graph;
 
-  //{{{ imports
-
-  //}}}
-public class Attribute_LabelImpl
+abstract public class Attribute_LabelImpl
 extends Attribute
 {
   static private aterm.ATerm pattern = null;
@@ -11,10 +8,7 @@ extends Attribute
   protected aterm.ATerm getPattern() {
     return pattern;
   }
-  //{{{ field indexes
-
   private static int index_label = 0;
-  //}}}
   public shared.SharedObject duplicate() {
     Attribute_Label clone = new Attribute_Label();
      clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
@@ -24,15 +18,10 @@ extends Attribute
   protected aterm.ATermAppl make(aterm.AFun fun, aterm.ATerm[] i_args, aterm.ATermList annos) {
     return getMetaGraphFactory().makeAttribute_Label(fun, i_args, annos);
   }
-  //{{{ initializePattern()
-
   static public void initializePattern()
   {
     pattern = getStaticFactory().parse("label(<str>)");
   }
-
-  //}}}
-  //{{{ fromTerm(ATerm trm)
 
   static public Attribute fromTerm(aterm.ATerm trm)
   {
@@ -47,7 +36,6 @@ extends Attribute
       return null;
     }
   }
-  //}}}
   public aterm.ATerm toTerm() {
     if(term == null) {
       java.util.List args = new java.util.LinkedList();
@@ -56,8 +44,6 @@ extends Attribute
     }
     return term;
   }
-
-  //{{{ isXXX and hasXXX properties
 
   public boolean isLabel()
   {
@@ -68,9 +54,6 @@ extends Attribute
   {
     return true;
   }
-
-  //}}}
-  //{{{ getters and setters
 
   public String getLabel()
   {
@@ -93,5 +76,4 @@ extends Attribute
     }
     return super.setArgument(arg, i);
   }
-  //}}}
 }

@@ -1,38 +1,24 @@
 package metastudio.graph;
 
-  //{{{ imports
-
 import java.io.InputStream;
 import java.io.IOException;
-  //}}}
 
 abstract public class AttributeImpl extends MetaGraphConstructor
 {
-  //{{{ fromString()
-
   static Attribute fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  //}}}
-  //{{{ fromTextFile()
-
   static Attribute fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);
   }
-  //}}}
-  //{{{ isEqual(Attribute)
-
   public boolean isEqual(Attribute peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  //}}}
-  //{{{ fromTerm(aterm.ATerm trm)
-
   public static Attribute fromTerm(aterm.ATerm trm)
   {
     Attribute tmp;
@@ -63,9 +49,6 @@ abstract public class AttributeImpl extends MetaGraphConstructor
 
     throw new RuntimeException("This is not a Attribute: " + trm);
   }
-  //}}}
-
-  //{{{ default isX and hasX properties
 
   public boolean isLabel()
   {
@@ -136,9 +119,6 @@ abstract public class AttributeImpl extends MetaGraphConstructor
   {
     return false;
   }
-
-  //}}}
-  //{{{ default getters and setters
 
   public String getLabel()
   {
@@ -220,7 +200,6 @@ abstract public class AttributeImpl extends MetaGraphConstructor
      throw new RuntimeException("This Attribute has no Direction");
   }
 
-  //}}}
 
 }
 

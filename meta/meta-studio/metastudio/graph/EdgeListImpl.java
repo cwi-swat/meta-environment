@@ -1,38 +1,24 @@
 package metastudio.graph;
 
-  //{{{ imports
-
 import java.io.InputStream;
 import java.io.IOException;
-  //}}}
 
 abstract public class EdgeListImpl extends MetaGraphConstructor
 {
-  //{{{ fromString()
-
   static EdgeList fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  //}}}
-  //{{{ fromTextFile()
-
   static EdgeList fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);
   }
-  //}}}
-  //{{{ isEqual(EdgeList)
-
   public boolean isEqual(EdgeList peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  //}}}
-  //{{{ fromTerm(aterm.ATerm trm)
-
   public static EdgeList fromTerm(aterm.ATerm trm)
   {
     EdgeList tmp;
@@ -47,9 +33,6 @@ abstract public class EdgeListImpl extends MetaGraphConstructor
 
     throw new RuntimeException("This is not a EdgeList: " + trm);
   }
-  //}}}
-
-  //{{{ default isX and hasX properties
 
   public boolean isEmpty()
   {
@@ -71,9 +54,6 @@ abstract public class EdgeListImpl extends MetaGraphConstructor
     return false;
   }
 
-  //}}}
-  //{{{ default getters and setters
-
   public Edge getHead()
   {
      throw new RuntimeException("This EdgeList has no Head");
@@ -94,7 +74,6 @@ abstract public class EdgeListImpl extends MetaGraphConstructor
      throw new RuntimeException("This EdgeList has no Tail");
   }
 
-  //}}}
 
 }
 

@@ -1,38 +1,24 @@
 package metastudio.graph;
 
-  //{{{ imports
-
 import java.io.InputStream;
 import java.io.IOException;
-  //}}}
 
 abstract public class NodeListImpl extends MetaGraphConstructor
 {
-  //{{{ fromString()
-
   static NodeList fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  //}}}
-  //{{{ fromTextFile()
-
   static NodeList fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);
   }
-  //}}}
-  //{{{ isEqual(NodeList)
-
   public boolean isEqual(NodeList peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  //}}}
-  //{{{ fromTerm(aterm.ATerm trm)
-
   public static NodeList fromTerm(aterm.ATerm trm)
   {
     NodeList tmp;
@@ -47,9 +33,6 @@ abstract public class NodeListImpl extends MetaGraphConstructor
 
     throw new RuntimeException("This is not a NodeList: " + trm);
   }
-  //}}}
-
-  //{{{ default isX and hasX properties
 
   public boolean isEmpty()
   {
@@ -71,9 +54,6 @@ abstract public class NodeListImpl extends MetaGraphConstructor
     return false;
   }
 
-  //}}}
-  //{{{ default getters and setters
-
   public Node getHead()
   {
      throw new RuntimeException("This NodeList has no Head");
@@ -94,7 +74,6 @@ abstract public class NodeListImpl extends MetaGraphConstructor
      throw new RuntimeException("This NodeList has no Tail");
   }
 
-  //}}}
 
 }
 

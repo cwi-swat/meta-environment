@@ -1,38 +1,24 @@
 package metastudio.graph;
 
-  //{{{ imports
-
 import java.io.InputStream;
 import java.io.IOException;
-  //}}}
 
 abstract public class DirectionImpl extends MetaGraphConstructor
 {
-  //{{{ fromString()
-
   static Direction fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  //}}}
-  //{{{ fromTextFile()
-
   static Direction fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);
   }
-  //}}}
-  //{{{ isEqual(Direction)
-
   public boolean isEqual(Direction peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  //}}}
-  //{{{ fromTerm(aterm.ATerm trm)
-
   public static Direction fromTerm(aterm.ATerm trm)
   {
     Direction tmp;
@@ -55,9 +41,6 @@ abstract public class DirectionImpl extends MetaGraphConstructor
 
     throw new RuntimeException("This is not a Direction: " + trm);
   }
-  //}}}
-
-  //{{{ default isX and hasX properties
 
   public boolean isForward()
   {
@@ -79,10 +62,6 @@ abstract public class DirectionImpl extends MetaGraphConstructor
     return false;
   }
 
-  //}}}
-  //{{{ default getters and setters
-
-  //}}}
 
 }
 

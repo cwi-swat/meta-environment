@@ -1,9 +1,6 @@
 package metastudio.graph;
 
-  //{{{ imports
-
-  //}}}
-public class Polygon_EmptyImpl
+abstract public class Polygon_EmptyImpl
 extends Polygon
 {
   static private aterm.ATerm pattern = null;
@@ -11,9 +8,6 @@ extends Polygon
   protected aterm.ATerm getPattern() {
     return pattern;
   }
-  //{{{ field indexes
-
-  //}}}
   public shared.SharedObject duplicate() {
     Polygon_Empty clone = new Polygon_Empty();
      clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
@@ -23,15 +17,10 @@ extends Polygon
   protected aterm.ATermAppl make(aterm.AFun fun, aterm.ATerm[] i_args, aterm.ATermList annos) {
     return getMetaGraphFactory().makePolygon_Empty(fun, i_args, annos);
   }
-  //{{{ initializePattern()
-
   static public void initializePattern()
   {
     pattern = getStaticFactory().parse("[]");
   }
-
-  //}}}
-  //{{{ fromTerm(ATerm trm)
 
   static public Polygon fromTerm(aterm.ATerm trm)
   {
@@ -46,21 +35,14 @@ extends Polygon
       return null;
     }
   }
-  //}}}
-  //{{{ isXXX and hasXXX properties
-
   public boolean isEmpty()
   {
     return true;
   }
 
-  //}}}
-  //{{{ getters and setters
-
   public aterm.ATermAppl setArgument(aterm.ATerm arg, int i) {
       throw new RuntimeException("Polygon_Empty has no arguments");
   }
-  //}}}
   protected int hashFunction() {
     int c = 0 + (getAnnotations().hashCode()<<8);
     int a = 0x9e3779b9;

@@ -1,9 +1,6 @@
 package metastudio.graph;
 
-  //{{{ imports
-
-  //}}}
-public class NodeId_DefaultImpl
+abstract public class NodeId_DefaultImpl
 extends NodeId
 {
   static private aterm.ATerm pattern = null;
@@ -11,10 +8,7 @@ extends NodeId
   protected aterm.ATerm getPattern() {
     return pattern;
   }
-  //{{{ field indexes
-
   private static int index_id = 0;
-  //}}}
   public shared.SharedObject duplicate() {
     NodeId_Default clone = new NodeId_Default();
      clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
@@ -24,15 +18,10 @@ extends NodeId
   protected aterm.ATermAppl make(aterm.AFun fun, aterm.ATerm[] i_args, aterm.ATermList annos) {
     return getMetaGraphFactory().makeNodeId_Default(fun, i_args, annos);
   }
-  //{{{ initializePattern()
-
   static public void initializePattern()
   {
     pattern = getStaticFactory().parse("<str>");
   }
-
-  //}}}
-  //{{{ fromTerm(ATerm trm)
 
   static public NodeId fromTerm(aterm.ATerm trm)
   {
@@ -47,7 +36,6 @@ extends NodeId
       return null;
     }
   }
-  //}}}
   public aterm.ATerm toTerm() {
     if(term == null) {
       java.util.List args = new java.util.LinkedList();
@@ -56,8 +44,6 @@ extends NodeId
     }
     return term;
   }
-
-  //{{{ isXXX and hasXXX properties
 
   public boolean isDefault()
   {
@@ -68,9 +54,6 @@ extends NodeId
   {
     return true;
   }
-
-  //}}}
-  //{{{ getters and setters
 
   public String getId()
   {
@@ -93,5 +76,4 @@ extends NodeId
     }
     return super.setArgument(arg, i);
   }
-  //}}}
 }

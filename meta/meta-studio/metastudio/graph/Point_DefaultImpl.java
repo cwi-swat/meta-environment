@@ -1,9 +1,6 @@
 package metastudio.graph;
 
-  //{{{ imports
-
-  //}}}
-public class Point_DefaultImpl
+abstract public class Point_DefaultImpl
 extends Point
 {
   static private aterm.ATerm pattern = null;
@@ -11,11 +8,8 @@ extends Point
   protected aterm.ATerm getPattern() {
     return pattern;
   }
-  //{{{ field indexes
-
   private static int index_x = 0;
   private static int index_y = 1;
-  //}}}
   public shared.SharedObject duplicate() {
     Point_Default clone = new Point_Default();
      clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
@@ -25,15 +19,10 @@ extends Point
   protected aterm.ATermAppl make(aterm.AFun fun, aterm.ATerm[] i_args, aterm.ATermList annos) {
     return getMetaGraphFactory().makePoint_Default(fun, i_args, annos);
   }
-  //{{{ initializePattern()
-
   static public void initializePattern()
   {
     pattern = getStaticFactory().parse("point(<int>,<int>)");
   }
-
-  //}}}
-  //{{{ fromTerm(ATerm trm)
 
   static public Point fromTerm(aterm.ATerm trm)
   {
@@ -48,7 +37,6 @@ extends Point
       return null;
     }
   }
-  //}}}
   public aterm.ATerm toTerm() {
     if(term == null) {
       java.util.List args = new java.util.LinkedList();
@@ -58,8 +46,6 @@ extends Point
     }
     return term;
   }
-
-  //{{{ isXXX and hasXXX properties
 
   public boolean isDefault()
   {
@@ -75,9 +61,6 @@ extends Point
   {
     return true;
   }
-
-  //}}}
-  //{{{ getters and setters
 
   public Integer getX()
   {
@@ -115,5 +98,4 @@ extends Point
     }
     return super.setArgument(arg, i);
   }
-  //}}}
 }

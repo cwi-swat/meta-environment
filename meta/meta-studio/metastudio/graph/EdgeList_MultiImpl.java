@@ -1,9 +1,6 @@
 package metastudio.graph;
 
-  //{{{ imports
-
-  //}}}
-public class EdgeList_MultiImpl
+abstract public class EdgeList_MultiImpl
 extends EdgeList
 {
   static private aterm.ATerm pattern = null;
@@ -11,11 +8,8 @@ extends EdgeList
   protected aterm.ATerm getPattern() {
     return pattern;
   }
-  //{{{ field indexes
-
   private static int index_head = 0;
   private static int index_tail = 1;
-  //}}}
   public shared.SharedObject duplicate() {
     EdgeList_Multi clone = new EdgeList_Multi();
      clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
@@ -25,15 +19,10 @@ extends EdgeList
   protected aterm.ATermAppl make(aterm.AFun fun, aterm.ATerm[] i_args, aterm.ATermList annos) {
     return getMetaGraphFactory().makeEdgeList_Multi(fun, i_args, annos);
   }
-  //{{{ initializePattern()
-
   static public void initializePattern()
   {
     pattern = getStaticFactory().parse("[<term>,<list>]");
   }
-
-  //}}}
-  //{{{ fromTerm(ATerm trm)
 
   static public EdgeList fromTerm(aterm.ATerm trm)
   {
@@ -48,9 +37,6 @@ extends EdgeList
       return null;
     }
   }
-  //}}}
-  //{{{ isXXX and hasXXX properties
-
   public boolean isMulti()
   {
     return true;
@@ -65,9 +51,6 @@ extends EdgeList
   {
     return true;
   }
-
-  //}}}
-  //{{{ getters and setters
 
   public Edge getHead()
   {
@@ -105,7 +88,6 @@ extends EdgeList
     }
     return super.setArgument(arg, i);
   }
-  //}}}
   protected int hashFunction() {
     int c = getArgument(1).hashCode() + (getAnnotations().hashCode()<<8);
     int a = 0x9e3779b9;

@@ -1,38 +1,24 @@
 package metastudio.graph;
 
-  //{{{ imports
-
 import java.io.InputStream;
 import java.io.IOException;
-  //}}}
 
 abstract public class NodeImpl extends MetaGraphConstructor
 {
-  //{{{ fromString()
-
   static Node fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  //}}}
-  //{{{ fromTextFile()
-
   static Node fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);
   }
-  //}}}
-  //{{{ isEqual(Node)
-
   public boolean isEqual(Node peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  //}}}
-  //{{{ fromTerm(aterm.ATerm trm)
-
   public static Node fromTerm(aterm.ATerm trm)
   {
     Node tmp;
@@ -43,9 +29,6 @@ abstract public class NodeImpl extends MetaGraphConstructor
 
     throw new RuntimeException("This is not a Node: " + trm);
   }
-  //}}}
-
-  //{{{ default isX and hasX properties
 
   public boolean isDefault()
   {
@@ -61,9 +44,6 @@ abstract public class NodeImpl extends MetaGraphConstructor
   {
     return false;
   }
-
-  //}}}
-  //{{{ default getters and setters
 
   public NodeId getId()
   {
@@ -85,7 +65,6 @@ abstract public class NodeImpl extends MetaGraphConstructor
      throw new RuntimeException("This Node has no Attributes");
   }
 
-  //}}}
 
 }
 

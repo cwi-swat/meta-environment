@@ -1,9 +1,6 @@
 package metastudio.graph;
 
-  //{{{ imports
-
-  //}}}
-public class Graph_DefaultImpl
+abstract public class Graph_DefaultImpl
 extends Graph
 {
   static private aterm.ATerm pattern = null;
@@ -11,11 +8,8 @@ extends Graph
   protected aterm.ATerm getPattern() {
     return pattern;
   }
-  //{{{ field indexes
-
   private static int index_nodes = 0;
   private static int index_edges = 1;
-  //}}}
   public shared.SharedObject duplicate() {
     Graph_Default clone = new Graph_Default();
      clone.init(hashCode(), getAnnotations(), getAFun(), getArgumentArray());
@@ -25,15 +19,10 @@ extends Graph
   protected aterm.ATermAppl make(aterm.AFun fun, aterm.ATerm[] i_args, aterm.ATermList annos) {
     return getMetaGraphFactory().makeGraph_Default(fun, i_args, annos);
   }
-  //{{{ initializePattern()
-
   static public void initializePattern()
   {
     pattern = getStaticFactory().parse("graph(<term>,<term>)");
   }
-
-  //}}}
-  //{{{ fromTerm(ATerm trm)
 
   static public Graph fromTerm(aterm.ATerm trm)
   {
@@ -48,9 +37,6 @@ extends Graph
       return null;
     }
   }
-  //}}}
-  //{{{ isXXX and hasXXX properties
-
   public boolean isDefault()
   {
     return true;
@@ -65,9 +51,6 @@ extends Graph
   {
     return true;
   }
-
-  //}}}
-  //{{{ getters and setters
 
   public NodeList getNodes()
   {
@@ -105,7 +88,6 @@ extends Graph
     }
     return super.setArgument(arg, i);
   }
-  //}}}
   protected int hashFunction() {
     int c = 0 + (getAnnotations().hashCode()<<8);
     int a = 0x9e3779b9;

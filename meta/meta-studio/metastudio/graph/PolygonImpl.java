@@ -1,38 +1,24 @@
 package metastudio.graph;
 
-  //{{{ imports
-
 import java.io.InputStream;
 import java.io.IOException;
-  //}}}
 
 abstract public class PolygonImpl extends MetaGraphConstructor
 {
-  //{{{ fromString()
-
   static Polygon fromString(String str)
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().parse(str);
     return fromTerm(trm);
   }
-  //}}}
-  //{{{ fromTextFile()
-
   static Polygon fromTextFile(InputStream stream) throws aterm.ParseError, IOException
   {
     aterm.ATerm trm = getStaticMetaGraphFactory().readFromTextFile(stream);
     return fromTerm(trm);
   }
-  //}}}
-  //{{{ isEqual(Polygon)
-
   public boolean isEqual(Polygon peer)
   {
     return term.isEqual(peer.toTerm());
   }
-  //}}}
-  //{{{ fromTerm(aterm.ATerm trm)
-
   public static Polygon fromTerm(aterm.ATerm trm)
   {
     Polygon tmp;
@@ -47,9 +33,6 @@ abstract public class PolygonImpl extends MetaGraphConstructor
 
     throw new RuntimeException("This is not a Polygon: " + trm);
   }
-  //}}}
-
-  //{{{ default isX and hasX properties
 
   public boolean isEmpty()
   {
@@ -71,9 +54,6 @@ abstract public class PolygonImpl extends MetaGraphConstructor
     return false;
   }
 
-  //}}}
-  //{{{ default getters and setters
-
   public Point getHead()
   {
      throw new RuntimeException("This Polygon has no Head");
@@ -94,7 +74,6 @@ abstract public class PolygonImpl extends MetaGraphConstructor
      throw new RuntimeException("This Polygon has no Tail");
   }
 
-  //}}}
 
 }
 
