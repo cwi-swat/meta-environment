@@ -4,8 +4,11 @@ include $(top_srcdir)/make_rules
 
 bin_PROGRAMS = editor-manager
 lib_LIBRARIES = libEditorManager.a
-noinst_HEADERS = editor-manager.tif.h
 pkgdata_DATA = editor-manager.idef
+noinst_HEADERS = \
+	editor-manager.tif.h \
+	EditorManager_dict.h \
+	EditorManager.h
 
 AM_CFLAGS = -g -O2 -Wall -Werror
 
@@ -27,13 +30,9 @@ libEditorManager_a_SOURCES = \
 	EditorManager.c \
 	EditorManager_dict.c
 
-CLEANFILES = \
-	editor-manager.tifs
+CLEANFILES = editor-manager.tifs
 
-EXTRA_DIST = \
-	editor-manager.idef \
-	editor-manager.tif.c \
-	editor-manager.tif.h
+EXTRA_DIST = editor-manager.idef
 
 # Developers
 api: EditorManager.sdf

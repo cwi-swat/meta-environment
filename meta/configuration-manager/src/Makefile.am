@@ -20,6 +20,10 @@ pkgdata_DATA = \
 	user-configuration.tb \
 	meta-kernel.properties
 
+CLEANFILES = \
+	kernel-configuration.tb \
+	user-configuration.tb
+
 EXTRA_DIST = \
 	configuration-manager.idef \
 	kernel-configuration.tb.src \

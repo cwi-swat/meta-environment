@@ -4,8 +4,11 @@ include ${top_srcdir}/make_rules
 
 bin_PROGRAMS = structure-editor
 lib_LIBRARIES = libStructureEditor.a
-noinst_HEADERS = structure-editor.tif.h
 pkgdata_DATA = structure-editor.idef
+noinst_HEADERS = \
+	StructureEditor.h \
+	StructureEditor_dict.h \
+	structure-editor.tif.h
 
 AM_CFLAGS = -Wall -Werror -g -O2
 
@@ -39,13 +42,9 @@ libStructureEditor_a_SOURCES = \
 	StructureEditor.c \
 	StructureEditor_dict.c
 
-CLEANFILES = \
-	structure-editor.tifs
+CLEANFILES = structure-editor.tifs
 
-EXTRA_DIST = \
-	structure-editor.idef \
-	structure-editor.tif.c \
-	structure-editor.tif.h
+EXTRA_DIST = structure-editor.idef
 
 # Developers
 api: StructureEditor.sdf
