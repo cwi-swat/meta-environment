@@ -35,40 +35,25 @@ public class Constructor
       PropertyContext fieldContext
 	= new PropertyContext(typeContext, "field", fieldName);
       PropertyContext fieldTypeContext = new PropertyContext(fieldContext, "type");
-      String attrName = generator.parameterName(fieldName);
-      String attrType = generator.typeName(fieldTypeContext);
-      FormalParameter param = new FormalParameter(attrName, attrType);
-      param.setDescription(fieldContext.getString("description"));
-      constructor.addFormalParameter(param);
-    }
+      String paramName = generator.parameterName(fieldName);
+      String paramType = generator.typeName(fieldTypeContext);
 
-    generator.getCompilationUnit().addMethod(constructor);
-    /*
-    Iterator iter = type.fetchFieldIterator();
-    while (iter.hasNext()) {
-      Field field = (Field)iter.next();
-
-      BasicType fieldType = field.getType();
-
-      if (fieldType.instanceOfCollectionType()) {
-	CollectionType collection = (CollectionType)fieldType;
-	String collName = collection.getCollectionName();
-	String init = JavaGenerator.javaMethodName("init-" + field.getName()
-					       + "-" + collName);
+      if (fieldTypeContext.getBoolean("collection")) {
+	String collectionName = fieldTypeContext.getString("interface");
+	String init = generator.javaMethodName("init-" + fieldName
+					       + "-" + collectionName);
 	body.addLine(init + "();");
       } else {
-	String paramName = JavaGenerator.javaParameterName(field.getName());
-	String typeName = JavaGenerator.javaTypeName(fieldType);
-	FormalParameter formal = new FormalParameter(paramName, typeName);
-	constructor.addFormalParameter(formal);
+	FormalParameter param = new FormalParameter(paramName, paramType);
+	param.setDescription("the " + fieldContext.getString("description"));
+	constructor.addFormalParameter(param);
 
-	String setMethod = JavaGenerator.javaMethodName("set-" + field.getName());
+	String setMethod = generator.javaMethodName("set-" + fieldName);
 	body.addLine(setMethod + "(" + paramName + ");");
       }
     }
 
-    unit.addMethod(constructor);
-    */
+    generator.getCompilationUnit().addMethod(constructor);
   }
 
   //}}}

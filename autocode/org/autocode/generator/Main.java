@@ -41,7 +41,7 @@ public class Main
       }
     }
 
-    System.out.println("extra properties: " + extraProperties);
+    //System.out.println("extra properties: " + extraProperties);
 
     // Read Autocode defaults
     String defaults = "AutocodeGenerator.aco";
@@ -75,7 +75,7 @@ public class Main
 
     Set generators = appContext.getValueSet("generator");
     System.out.println("generators: " + generators);
-    System.out.println("forest: " + forest);
+    //System.out.println("forest: " + forest);
 
     iter = generators.iterator();
     while (iter.hasNext()) {

@@ -132,7 +132,7 @@ public class PropertyContext
   {
     found = false;
 
-    Set values = new HashSet();
+    Set values = new LinkedHashSet();
 
     getValue(key, path, forest, values);
 

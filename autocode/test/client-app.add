@@ -3,29 +3,29 @@ application client-app {
     enabled := true
     javadoc := true
 
-    @import "Client.add"
-    @import "Order.add"
+    //{{{ type *
 
     type * {
       package := "org.autocode.test"
     }
 
+    //}}}
+    //{{{ type Client
+
+    @import "Client.add"
     type Client {
       operation := { constructor }
-      interface := { Serializable, Runnable }
   
       field * { access := public }
 
-      field name {
-        operation += { init }
-        access := public
-        static := true
-      }
-
       field order {
-        implementation list {
-          type := "ArrayList"
-          type "ArrayList" { import := "java.util.ArrayList" }
+        operation += { init }
+	operation init { access := private }
+        type list {
+          implementation := "ArrayList"
+          implementation "ArrayList" {
+	    import := "java.util.ArrayList"
+          }
         }
       }
       
@@ -33,6 +33,23 @@ application client-app {
         operation := { get, set }
       }
     }
+
+    //}}}
+    //{{{ type Order
+
+    @import "Order.add"
+    type Order {
+      operation := { constructor }
+      field * {
+	operation := { get, set }
+      }
+    }
+
+    //}}}
+    //{{{ type Article
+
+    @import "Article.add"
+
+    //}}}
   }
 }
-

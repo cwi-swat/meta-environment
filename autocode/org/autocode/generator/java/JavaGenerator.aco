@@ -10,6 +10,8 @@ type * {
   final := false	// nor final
   abstract := false	// nor abstract
 
+  //{{{ operation *
+
   operation * {
     access := public
     abstract := false
@@ -17,12 +19,18 @@ type * {
     final := false
   }
 
+  //}}}
+  //{{{ field *
+
   field * {
     access := private	  // All attributes have private access by default
     static := false	  // and are not static
     final := false	  // nor final
 
+    //{{{ type *
+
     type * {
+      collection := false
       implementation := { }
       implementation * {
         import := { }
@@ -33,23 +41,39 @@ type * {
       }
     }
 
+    //}}}
+    //{{{ type boolean?
+
     type boolean? {
       implementation := "boolean"
     }
 
+    //}}}
+    //{{{ type integer?
+
     type integer? {
-      implementation := "integer"
+      implementation := "int"
     }
 
-    type string? {
-      implementation := "String"
-    }
+    //}}}
+    //{{{ type real?
 
     type real? {
       implementation := "float"
     }
 
+    //}}}
+    //{{{ type string?
+
+    type string? {
+      implementation := "String"
+    }
+
+    //}}}
+    //{{{ type list?
+
     type list? {
+      collection := true
       interface "List" {
         import := "java.util.List"
       }
@@ -59,7 +83,11 @@ type * {
       }
     }
 
+    //}}}
+    //{{{ type map?
+
     type map? {
+      collection := true
       interface "Map" {
         import := "java.util.Map"
       }
@@ -69,7 +97,11 @@ type * {
       }
     }
 
+    //}}}
+    //{{{ type set?
+
     type set? {
+      collection := true
       interface "Set" {
         import := "java.util.Set"
       }
@@ -79,13 +111,21 @@ type * {
       }
     }
 
+    //}}}
+
+    //{{{ operation *
+
     operation * {
       access := public
       abstract := false
       static := false
       final := false
     }
+
+    //}}}
   }
+
+  //}}}
 }
 
 @import "org/autocode/generator/java/plugin/Constructor.aco"

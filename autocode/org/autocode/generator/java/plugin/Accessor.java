@@ -9,6 +9,8 @@ import org.autocode.generator.repository.*;
 import org.autocode.generator.java.*;
 import org.autocode.generator.java.repository.*;
 
+import java.util.*;
+
 //}}}
 
 public class Accessor
@@ -29,7 +31,7 @@ public class Accessor
     JavaAttribute attr =
       new JavaAttribute(attrName, attrType, access, isFinal, isStatic);
 
-    String desc = fieldContext.getString("description");
+    String desc = "the " + fieldContext.getString("description");
     attr.setDescription(desc);
 
     if (!unit.hasAttribute(attr)) {
@@ -58,7 +60,7 @@ public class Accessor
 
     JavaMethod method
       = createMethod(operationContext, methodName, attrType, body);
-    method.setDescription("get " + fieldContext.getString("description"));
+    method.setDescription("get the " + fieldContext.getString("description"));
 
     JavaCompilationUnit unit = generator.getCompilationUnit();
     unit.addMethod(method);
@@ -90,7 +92,7 @@ public class Accessor
     body.addLine(attrName + " = " + paramName + ";");
     JavaMethod method = createMethod(operationContext, methodName, "void", body);
     method.addFormalParameter(param);
-    method.setDescription("set " + fieldContext.getString("description"));
+    method.setDescription("set the " + fieldContext.getString("description"));
 
     JavaCompilationUnit unit = generator.getCompilationUnit();
     unit.addMethod(method);
@@ -106,47 +108,30 @@ public class Accessor
 			   PropertyContext fieldContext,
 			   PropertyContext operationContext)
   {
-    String fieldName = fieldContext.getName();
-    String fieldTypeName = fieldContext.getString("type");
-
-    /*
-    Field field = getField();
-    Type type = getType();
-
-    DataDefinition def = getDataDefinition();
-
-    BasicType fieldType = field.getType();
-
-    if (!fieldType.instanceOfCollectionType()) {
+    PropertyContext fieldTypeContext = new PropertyContext(fieldContext, "type");
+    if (!fieldTypeContext.getBoolean("collection")) {
       return;
     }
 
-    CollectionType ctype = (CollectionType)fieldType;
-    String cname = ctype.getCollectionName();
-
-    String fieldName = JavaGenerator.javaFieldName(field.getName());
-    String typeName = JavaGenerator.javaTypeName(field.getType());
-    String methodName = JavaGenerator.javaMethodName("init-" + field.getName()
-					       + "-" + cname);
-
-    MethodBody body = new MethodBody();
-
-    String propName = cname + ".implementation";
-    FieldProperty prop = def.getFieldProperty(propName,
-					      generator.getApplication(),
-					      type.getName(),
-					      field.getName());
-    String impl = prop.getSingletonValue();
-    body.addLine(fieldName + " = new " + impl + "();");
-
-    JavaMethod method = createFieldMethod("init", methodName, "void", body);
-
-    unit.addMethod(method);
-    */
-
     JavaCompilationUnit unit = generator.getCompilationUnit();
 
-    //addAttribute(unit, fieldContext);
+    String fieldName = fieldContext.getName();
+    String collection = fieldTypeContext.getString("interface");
+    String methodName
+      = generator.javaMethodName("init-" + fieldName + "-" + collection);
+
+    String implementation = fieldTypeContext.getString("implementation");
+    PropertyContext implementationContext
+      = new PropertyContext(fieldTypeContext, "implementation");
+    Set imports = implementationContext.getValueSet("import");
+    unit.mergeImportedCollection(imports);
+
+    MethodBody body = new MethodBody();
+    String attrName = generator.attributeName(fieldName);
+    body.addLine(attrName + " = new " + implementation + "();");
+
+    JavaMethod method = createMethod(operationContext, methodName, "void", body);
+    unit.addMethod(method);
   }
 
   //}}}

@@ -31,7 +31,7 @@ abstract public class AutocodeGenerator
   {
     this.generatorContext = generatorContext;
 
-    System.out.println("forest: " + generatorContext.getRootForest());
+    //System.out.println("forest: " + generatorContext.getRootForest());
 
     Set types = generatorContext.getValueSet("type");
     Iterator iter = types.iterator();
