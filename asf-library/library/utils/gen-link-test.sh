@@ -36,4 +36,11 @@ done
 
   return 1; 
 }
+
+/* interface to term rewriter stub (to prevent circular dependency) */
+PT_Tree rewrite(PT_Tree trm)
+{
+  ATwarning("Hey dummy! Don't call this dummy function!\n");
+  return trm;
+}
 END_OF_FILE
