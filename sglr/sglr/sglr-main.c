@@ -75,8 +75,6 @@ char   *input_file_name   = "-";
 char   *output_file_name  = "-";
 char   *start_symbol      = NULL;
 char   *parse_table_name  = NULL;
-char   *dotoutput         = NULL;
-char   *stackoutput       = NULL;
 
 
 /*
@@ -171,7 +169,6 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-p file  : use parse table |file| (required)    [%s]\n"
               "\t-P       : toggle position information          [%s]\n"
               "\t-s symbol: define start symbol                  [%s]\n"
-              "\t-S file  : trace stack history in dot |file|s   [%s]\n"
               "\t-t       : use PlainText AsFix output format    [%s]\n"
               "\t-v       : toggle verbose mode                  [%s]\n"
               "\t-V       : reveal program version (i.e. %s)\n",
@@ -193,7 +190,6 @@ void SG_Usage(FILE *stream, ATbool long_message)
               parse_table_name?parse_table_name:"unspecified",
               DEFAULTMODE(posinfoflag),
               start_symbol ? start_symbol:"any", 
-              stackoutput ? stackoutput : "off",
               DEFAULTMODE(!binaryflag),
               DEFAULTMODE(verboseflag),
               VERSION
@@ -231,7 +227,6 @@ struct option longopts[] =
   {"parse-table",   required_argument, NULL,               'p'},
   {"position-info", no_argument,       &posinfoflag,       'P'},
   {"start-symbol",  required_argument, NULL,               's'},
-  {"stack",         required_argument, NULL,               'S'},
   {"statistics",    no_argument,       &statisticsflag,    ATfalse},
   {"text-output",   no_argument,       &binaryflag,        ATfalse},
   {"verbose",       no_argument,       &verboseflag,       ATtrue},
@@ -285,8 +280,6 @@ void handle_options (int argc, char **argv)
       case 'p':   parse_table_name = optarg;              break;
       case 'P':   posinfoflag      = !posinfoflag;        break;
       case 's':   start_symbol     = optarg;              break;
-      case 'S':   stackoutput = optarg; SG_StackDotOut(stackoutput);
-        break;
       case 't':   binaryflag       = ATfalse;             break;
       case 'v':   verboseflag      = !verboseflag;        break;
       case 'V':   show_version     = ATtrue;              break;
@@ -311,7 +304,6 @@ ATbool set_global_options(void)
   if(cycleflag)      SG_CYCLE_ON();
   if(start_symbol)   SG_STARTSYMBOL_ON();
   if(statisticsflag) SG_SHOWSTAT_ON();
-  if(stackoutput)    SG_SHOWSTACK_ON();
   if(outputflag)     SG_OUTPUT_ON();
 #ifndef NO_A2TOA1
   if(asfix1flag)     SG_ASFIX1_ON();
