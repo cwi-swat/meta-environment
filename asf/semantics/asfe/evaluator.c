@@ -1084,7 +1084,6 @@ int main(int argc, char *argv[])
   char *input = "-";
   char *output = "-";
   char *eqsfile = "-";
-  int proceed = 1;
   int bafmode = 1;
   char *name = "Standalone";
   
@@ -1136,47 +1135,45 @@ int main(int argc, char *argv[])
       }
     }
 
-    if(proceed) {
-      if (!(iofile = fopen(eqsfile, "r")))
-        ATerror("%s: cannot open %s\n", myname, eqsfile);
+    if (!(iofile = fopen(eqsfile, "r")))
+      ATerror("%s: cannot open %s\n", myname, eqsfile);
 
-      eqs = ATreadFromFile(iofile);
+    eqs = ATreadFromFile(iofile);
 
-      neweqs = RWprepareEqs((ATermList) eqs);
-      enter_equations(name, neweqs);
+    neweqs = RWprepareEqs((ATermList) eqs);
+    enter_equations(name, neweqs);
 
-      if (!strcmp(input, "") || !strcmp(input, "-"))
-        iofile = stdin;
-      else if (!(iofile = fopen(input, "r")))
-        ATerror("%s: cannot open %s\n", myname, input);
+    if (!strcmp(input, "") || !strcmp(input, "-"))
+      iofile = stdin;
+    else if (!(iofile = fopen(input, "r")))
+      ATerror("%s: cannot open %s\n", myname, input);
  
-      term = ATreadFromFile(iofile);
+    term = ATreadFromFile(iofile);
 
-      term = ATremoveAllAnnotations(term);
-      aterm = asfix_get_term(term);
-      realterm = RWprepareTerm(aterm);
+    term = ATremoveAllAnnotations(term);
+    aterm = asfix_get_term(term);
+    realterm = RWprepareTerm(aterm);
 
-      /*rewrite_steps = 0;*/
-      select_equations(name);
+    /*rewrite_steps = 0;*/
+    select_equations(name);
 
-      if(run_verbose) ATwarning("rewriting...\n");
-      /*times(&start);*/
-      newterm = rewrite(realterm,(ATerm) ATempty);
-      /*times(&rewriting);*/
+    if(run_verbose) ATwarning("rewriting...\n");
+    /*times(&start);*/
+    newterm = rewrite(realterm,(ATerm) ATempty);
+    /*times(&rewriting);*/
 
-      newaterm = RWrestoreTerm(newterm);
-      result = asfix_put_term(term,newaterm);
+    newaterm = RWrestoreTerm(newterm);
+    result = asfix_put_term(term,newaterm);
 
-      if (!strcmp(output, "") || !strcmp(output, "-"))
-        iofile = stdout;
-      else if (!(iofile = fopen(output, "w")))
-        ATerror("%s: cannot open %s\n", myname, output);
+    if (!strcmp(output, "") || !strcmp(output, "-"))
+      iofile = stdout;
+    else if (!(iofile = fopen(output, "w")))
+      ATerror("%s: cannot open %s\n", myname, output);
 
-      if(bafmode)
-        ATwriteToBinaryFile(result, iofile);
-      else
-        ATwriteToTextFile(result, iofile);  
-    }
+    if(bafmode)
+      ATwriteToBinaryFile(result, iofile);
+    else
+      ATwriteToTextFile(result, iofile);  
   }
   return 0;
 }
