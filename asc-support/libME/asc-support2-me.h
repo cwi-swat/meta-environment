@@ -2,7 +2,6 @@
 #define ASC_SUPPORT2_H
 
 #include "asc-support-me.h"
-#include "asc-apply-me.h"
 #include <MEPT-utils.h>
 
 extern ATerm innermost(PT_Tree tree);
