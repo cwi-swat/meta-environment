@@ -1,27 +1,6 @@
 /*{{{  File header */
 
 /*
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
-                        The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/*
   $Id$
  */
 
@@ -550,7 +529,7 @@ argMatching(ATerm env,
       args1 = PT_getTreeArgs(arg1);
       args2 = PT_getTreeArgs(arg2);
 
-      /*newenv = (ATerm) argsMatching(newenv, NULL, args1, args2, lhs_posinfo, depth);*/
+/*
       newenv = (ATerm) argsMatching(newenv, NULL, args1, args2, NULL, depth);
       if (newenv == fail_env) {
 	if (runVerbose) {
@@ -560,6 +539,11 @@ argMatching(ATerm env,
       }
       return (ATerm) argsMatching(newenv, conds, orgargs1, orgargs2,
 				  lhs_posinfo, depth);
+*/
+      return (ATerm) argsMatching(newenv, conds, 
+                                  PT_concatArgs(args1, orgargs1),
+                                  PT_concatArgs(args2, orgargs2),
+                                  lhs_posinfo, depth);
     }
 
     if (PT_isVarDefault(prod1)) {
@@ -608,7 +592,8 @@ argMatching(ATerm env,
 
 /* Two arguments lists are matched. As long as there are arguments
    to be matched this is performed if both argument lists are empty
-   the conditions are inspected. */
+   the conditions are inspected. 
+*/
 static ATerm
 argsMatching(ATerm env, ASF_ConditionList conds,
              PT_Args args1, PT_Args args2, 
@@ -616,6 +601,12 @@ argsMatching(ATerm env, ASF_ConditionList conds,
 {
   PT_Tree arg1, arg2;
   ATerm newenv = env;
+
+  if (runVerbose) {
+    ATwarning("args %t matched against %t\n", 
+        yieldArgs(args1),
+        yieldArgs(args2));
+  }
 
   if (PT_hasArgsHead(args1)) {
     arg1 = PT_getArgsHead(args1);
@@ -752,7 +743,13 @@ subListMatching(ATerm env, PT_Tree elem,
 {
   ATerm subenv, newenv;
   PT_Args last;
-  
+ 
+/* 
+ATwarning("subListMatching entered for %t with %t\n",
+          yieldTree(elem),
+          yieldArgs(elems2)); 
+*/
+
   if (PT_isTreeVarListStar(elem)) {
     /* try to match with zero elements for star variable */
     newenv = putListVariableValue(env, elem, PT_makeArgsEmpty(),
@@ -770,9 +767,9 @@ subListMatching(ATerm env, PT_Tree elem,
     }
   }
 
-    /* Make sure we begin at a regular element */
-    elems2 = skipWhitespace(elems2);
-    pedantic_assert(isValidList(elems2));
+  /* Make sure we begin at a regular element */
+  elems2 = skipWhitespace(elems2);
+  pedantic_assert(isValidList(elems2));
 
   /* If the star variable didn't match or we have a plus variable
    * we continue matching with increasing length while possible.
@@ -813,6 +810,13 @@ lastListElementMatching(ATerm env, PT_Tree elem1,
 {
   PT_Tree elem2;
   ATerm newenv;
+
+  if (runVerbose) {
+    ATwarning("lastListElementMatching: %t matched with %t\n",
+              yieldTree(elem1),
+              yieldArgs(elems2));
+  }
+
   if (PT_isTreeVarList(elem1)) {
     Slice trms = getListVariableValue(env, elem1);
     if (trms) {
@@ -923,10 +927,6 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
 {
   PT_Tree elem2 = NULL;
   ATerm newenv;
-  /* <MB>
-  PT_Tree newarg1, newarg2;
-  PT_Args newargs1, newargs2;
-   */
 
   if (runVerbose) {
     ATwarning("%t:matching next element: %t\ngiven %t\n and %s\n\n\n",
@@ -960,10 +960,6 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
     }
   }
   else if (isListSeparator(elem1, listProd)) {
-    /* <PO>
-    elems2 = skipWhitespace(elems2);
-    pedantic_assert(isValidList(elems2));
-     */
     if (PT_hasArgsHead(elems2)) {
       elem2 = PT_getArgsHead(elems2);
 
@@ -972,10 +968,6 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
         elems2 = skipWhitespace(PT_getArgsTail(elems2));
         pedantic_assert(isValidList(elems2));
       
-	/*<PO> newenv = argMatching(env, elem1, elem2, NULL,
-			     PT_makeArgsEmpty(), PT_makeArgsEmpty(),
-			     lhs_posinfo, depth);
-	 */
 	newenv = argMatching(env, elem1, elem2, NULL,
 			     PT_makeArgsEmpty(), PT_makeArgsEmpty(),
 			     NULL, depth);
@@ -986,16 +978,6 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
 	return listMatching(newenv, listProd, elems1, elems2, conds,
 			    args1, args2, lhs_posinfo, depth);
 
-	/* <MB>
-        newarg1 = PT_makeTreeAppl(listProd, elems1);
-        newarg2 = PT_makeTreeAppl(listProd, elems2);
-        newargs1 = PT_makeArgsList(newarg1, args1);
-        newargs2 = PT_makeArgsList(newarg2, args2);
-
-        newenv = argMatching(env, elem1, elem2, conds, 
-                             newargs1, newargs2, 
-                             lhs_posinfo, depth);
-	 */
       }
       else {
         elems1 = skipWhitespace(PT_getArgsTail(elems1)); 
@@ -1012,10 +994,6 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
     }
   }
   else {  /* elem1 is not a list variable and not a separator */
-    /* <PO>
-    elems2 = skipWhitespace(elems2);
-    pedantic_assert(isValidList(elems2));
-     */
     if (PT_hasArgsHead(elems2)) {
       elem2 = PT_getArgsHead(elems2);
 
@@ -1028,10 +1006,6 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
                               lhs_posinfo, depth);
       }
       else {
-	/*<PO> newenv = argMatching(env, elem1, elem2, NULL,
-			     PT_makeArgsEmpty(), PT_makeArgsEmpty(),
-			     lhs_posinfo, depth);
-	 */
 	newenv = argMatching(env, elem1, elem2, NULL,
 			     PT_makeArgsEmpty(), PT_makeArgsEmpty(),
 			     NULL, depth);
@@ -1041,16 +1015,6 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
 
 	return listMatching(newenv, listProd, elems1, elems2, conds,
 			    args1, args2, lhs_posinfo, depth);
-	/* <MB>
-        newarg1 = PT_makeTreeAppl(listProd, elems1);
-        newarg2 = PT_makeTreeAppl(listProd, elems2);
-        newargs1 = PT_makeArgsList(newarg1, args1);
-        newargs2 = PT_makeArgsList(newarg2, args2);
-
-        newenv = argMatching(env, elem1, elem2, conds, 
-                             newargs1, newargs2, 
-                             lhs_posinfo, depth);
-	 */
       }
     }
     else {
