@@ -89,10 +89,8 @@ static void help(void)
   char * str =
 "\n\
 Generic tool options are:\n\
--TB_INPORT N          use N as well-known input socket of ToolBus\n\
--TB_OUTPORT N         use N as well-known output socket of ToolBus\n\
+-TB_PORT N            use N as well-known socket of ToolBus\n\
 -TB_HOST Name         use the ToolBus running on machine Name\n\
--TB_LOCAL_PORTS       use only local port names\n\
 -TB_TOOL_NAME Name    the name of this tool is Name\n\
 -TB_TOOL_ID N         the allocated tool id for this tool is N\n\
 -TB_SINGLE            stand-alone execution, do connect with ToolBus\n\

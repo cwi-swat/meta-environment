@@ -269,7 +269,7 @@ static int create_socket (const char *host, int port)
 
   /* Prepare socket queue for connect requests */
   assert(sock >= 0);
-  listen(sock,1);
+  listen(sock,5);
 
   return sock;
 }

@@ -78,9 +78,7 @@ Options are:\n\
 -controller           attach a controller tool\n\
 -gentifs              generate tool interfaces, do not execute script\n\
 -fixed-seed           use a fixed seed for the random generator\n\
--TB_INPORT N          use N as well-known input socket of ToolBus\n\
--TB_OUTPORT N         use N as well-known output socket of ToolBus\n\
--TB_LOCAL_PORTS       use only local port names\n\n\
+-TB_PORT N            use N as well-known socket of ToolBus\n\
 Options for the preprocessor are:\n\
 -Dmacro               define macro with value 1\n\
 -Dmacro=defn          define macro with value defn\n\
