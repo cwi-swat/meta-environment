@@ -9,16 +9,17 @@ Name2 : term,
 T     : term,
 T1    : term,
 T2    : term,
-Text  : str,
-Path  : str,
-Fid   : str,
-TE    : text-edit,
-Clst  : list, 
-Flst  : list, 
-Tslst : list,
-Src   : str,
-Table : str,
-I     : int,
+  Text  : str,
+  Path  : str,
+  Dir   : str,
+  Fid   : str,
+  TE    : text-edit,
+  Clst  : list, 
+  Flst  : list, 
+  Tslst : list,
+  Src   : str,
+  Table : str,
+  I     : int,
   Ch      : int,
   Li      : int,
   Co      : int,
@@ -34,7 +35,7 @@ in
  */
     snd-msg(rewrite(Mod,T))
     + 
-    rec-msg(Id,opened-file(raw,Name?,Text?,Path?)).
+    rec-msg(Id,opened-file(raw,Name?,Text?,Dir?,Path?)).
     snd-msg(process-eqs(Mod)).
     rec-msg(eqs-processed(Name2?)).
     snd-msg(get-table-from-db(Mod)).
@@ -70,12 +71,15 @@ in
        snd-note(ui-status(endstat(Id)))
      )
      +
-     ( rec-msg(Id, parse-result(parse-error([character(Ch?),line(Li?),col(Co?),char(Char?)]))).
+     ( rec-msg(Id, parse-result(parse-error([character(Ch?),
+                                             line(Li?),
+                                             col(Co?),
+                                             char(Char?)]))).
        printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co).
        snd-note(ui-status(endstat(Id)))
      ))
     +
-    rec-msg(error-opening(Str?)).
+    rec-msg(Id,error-opening(Str?)).
 /*    snd-note(ui-status(stat(Id,"Creating new term"))).
     create(Editor(Name,"",Fn,Id),Tid?).*/
     snd-note(ui-status(endstat(Id)))
