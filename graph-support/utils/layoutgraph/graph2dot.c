@@ -95,9 +95,18 @@ static void printNodes(NodeList nodes, FILE *file)
 static void printEdge(Edge edge, FILE *file)
 {
   // Edges are reversed to get the graph in the Meta-Environt to look 'right'
-  ATfprintf(file, "%t -> %t [", getEdgeTo(edge), getEdgeFrom(edge));
+  ATfprintf(file, "%t -> %t ", getEdgeTo(edge), getEdgeFrom(edge));
+  if (!isAttributeListEmpty(getEdgeAttributes(edge))) {
+    ATfprintf(file,"[");
+  }
   printAttributes(getEdgeAttributes(edge), file);
-  ATfprintf(file, "]\n");
+
+
+  if (!isAttributeListEmpty(getEdgeAttributes(edge))) {
+    ATfprintf(file, "]");
+  }
+
+  ATfprintf(file,"\n");
 }
 
 /*}}}  */
