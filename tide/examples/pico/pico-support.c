@@ -260,14 +260,14 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
     int left, right;
 
     right = column + dist;
-    if (right < len && isalnum(line[right])) {
+    if (right < len && isalnum((int)line[right])) {
       pos += (right-column);
       column = right;
       break;
     }
 
     left = column - dist;
-    if (left >= 0 && isalnum(line[left])) {
+    if (left >= 0 && isalnum((int)line[left])) {
       pos -= (column-left);
       column = left;
       break;
@@ -277,12 +277,13 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
   /* Extend start to the left */
   start = column;
   while(ATtrue) {
-    while (start > 1 && isalpha(line[start-1])) {
+    while (start > 1 && isalpha((int)line[start-1])) {
       start--;
     }
-    for (posstart=start-1; posstart > 0 && isdigit(line[posstart]); posstart--) {
+    for (posstart=start-1; posstart > 0 && isdigit((int)line[posstart]); 
+	 posstart--) {
     }
-    if (isalpha(line[posstart])) {
+    if (isalpha((int)line[posstart])) {
       start = posstart;
     } else {
       break;
@@ -291,7 +292,7 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
 
   /* Extend end to the right */
   end = column;
-  while (end < (len-1) && isalnum(line[end+1])) {
+  while (end < (len-1) && isalnum((int) line[end+1])) {
     end++;
   }
 
