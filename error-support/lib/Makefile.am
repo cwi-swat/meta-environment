@@ -1,6 +1,6 @@
 # $Id$
 
-lib_LIBRARIES=libmerrors.a
+lib_LIBRARIES=libErrorAPI.a
 
 include_HEADERS=\
 	Errors.h\
@@ -8,7 +8,7 @@ include_HEADERS=\
 	ParsedErrors.h\
 	ParsedErrors_dict.h
 
-libmerrors_a_SOURCES = \
+libErrorAPI_a_SOURCES = \
 	Errors.c \
 	Errors_dict.c\
 	ParsedErrors.c \
