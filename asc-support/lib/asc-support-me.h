@@ -311,5 +311,7 @@ ATerm innermost(PT_Tree tree);
 ATerm getParseTable();
 void setParseTable(ATerm tbl);
 void setKeepAnnotations(ATbool on);
+void setCid(int cur_cid);
+int getCid();
 
 #endif  /* ASC_SUPPORT_H */

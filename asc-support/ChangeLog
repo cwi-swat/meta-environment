@@ -1,5 +1,13 @@
 $Id$
 
+Mon Oct 18 22:54:09 CEST 2004 <jurgenv@cwi.nl>
+ * Merged tide builtins from 1.5 into trunk.
+
+Mon Oct 11 14:56:32 CEST 2004 <sgmcorne@science.uva.nl,jurgenv@cwi.nl>
+ * Added ASF builtins that implement a tide adapter.
+ * Temporarily added dependency on Tide package, until that package
+   is split up into the pieces that are really needed for asc-support.
+
 Fri Aug 27 14:42:20 CEST 2004 <jong@cwi.nl>
  * refactor to use new PT_yield functions in MEPT API
 
