@@ -3489,7 +3489,7 @@ each subterm encountered an attempt is made to reduce it.
 Next, the rules are traversed one after the other.  The textual order of the
 rules is irrelevant.  Instead they are ordered according to their
 \emph{specificity}: more specific rules come before more general rules and
-default rules (see Section~\ref{DefaultEquations} come last.  
+default rules (see Section~\ref{DefaultEquations}) come last.  
 If the selected subterm and the left-hand side of a
 rule (more precisely: of the left-hand side of its conclusion) match, we say
 that a \emph{redex} has been found and the following happens. The conditions
@@ -3504,10 +3504,10 @@ further reductions are possible and a normal form is reached (if any).
 
 \subsubsection{List Matching}
 
-List matching also known as associative matching is a powerful
-mechanism to describe complex functionality in a compact way.
-See Figure \ref{CODE:sets} for a compact specification to remove
-double elements from a set.
+List matching, also known as associative matching, is a powerful
+mechanism to describe complex functionality in a compact way.  See Figure
+\ref{CODE:sets} for a compact specification to remove double elements
+from a set.
 
 \begin{figure}
 \begin{IncCode}
@@ -3601,9 +3601,9 @@ derived, the corresponding syntax definition is:
 {\tt "lex" "(" CHAR* ")" -> LEX}.
 The sort {\tt CHAR} is a predefined sort to access the characters.
 
-Characters can directly addressed by the representation or via
+Characters can be directly addressed by the representation or via
 variables which are either of the sort {\tt CHAR}, {\tt CHAR*}, or
-{\tt CHAR+}, where the latter two represent list of characters.
+{\tt CHAR+}, where the latter two represent lists of characters.
 In Figure \ref{CODE:lcfs} a lexical constructor function is used
 to remove the leading zeros for a number.
 
@@ -3614,15 +3614,14 @@ lexical constructor function.
 
 The evaluation strategy for normalizing terms given the equations is
 based on innermost rewriting. All equations have the same priority.
-Given the outermost function symbol of a redex the set of equations
-with this outermost function symbol in the left-hand side is selected
-and all these rules will be tried.
-However, sometimes a specification writer would like to write down
-a rule with a special status ``{\em try this rule if all other rules fail}''.
-A kind of default behaviour is needed. \asf\ offers functionality in order
-to obtain this behaviour. If the $TagId$ of a equation starts with
-{\tt default-} this equation is considered as special equation which
-will only applied if none of the other rules match.
+Given the outermost function symbol of a redex the set of equations with
+this outermost function symbol in the left-hand side is selected and all
+these rules will be tried.  However, sometimes a specification writer
+would like to write down a rule with a special status ``{\em try this rule
+if all other rules fail}''.  A kind of default behaviour is needed. \asf\
+offers functionality in order to obtain this behaviour. If the $TagId$
+of an equation starts with {\tt default-} this equation is considered to
+be a special equation which will only be applied if no other rule matches.
 Figure \ref{CODE:types} shows an example of the use of a default equation.
 
 \begin{figure}
@@ -3659,27 +3658,23 @@ equations
 \subsubsection{Memo Functions} \label{MemoFunctions}
 
 Rewriting as execution model is not very efficient. Memo functions
-improve the efficiency of \asfsdf\ specifications.
-Given a set of argument values for some function the normal
-form can be obtained via rewriting. It is possible that
-some function is called with the same set of arguments
-over and over again. Each time the function is rewritten
-to obtain the same normal again. By means of adding
-an attribute {\tt memo} this behaviour is improved by
-storing the set of argument values and the derived normal form
-in a memo-table.
-For each set of argument values it is checked whether there
-exists a normal form in the memo-table. If so, this normal is returned.
-If not, the function given this set of argument values
-is normalized and stored in a memo-table.
+improve the efficiency of \asfsdf\ specifications.  Given a set of
+argument values for some function the normal form can be obtained via
+rewriting. It is possible that some function is called with the same set
+of arguments over and over again. Each time the function is rewritten to
+obtain the same normal again. By means of adding the {\tt memo} attribute,
+this behaviour is improved by storing the set of argument values and the
+derived normal form in a memo-table.  For each set of argument values it
+is checked whether there exists a normal form in the memo-table. If so,
+this normal form is returned.  If not, the function given this set of
+argument values is normalized and stored in the memo-table.
 
-There is some overhead involved in accessing the memo-table. 
-Therefore, it is not wise to add to each function this memo attribute.
-With respect to the operational behaviour adding a memo attribute does not
-have any effect.
-In Figure~\ref{CODE:fib} the Fibonacci function is decorated with the
-memo attribute and has thus a more efficient behaviour, see 
-Table~\ref{TABLE:fibn} for some figures on the performance improvement.
+There is some overhead involved in accessing the memo-table.  Therefore,
+it is not wise to the memo attribute to each function.  With respect
+to the operational behaviour adding a memo attribute does not have any
+effect.  In Figure~\ref{CODE:fib} the Fibonacci function is decorated with
+the memo attribute, improving its efficiency. See Table~\ref{TABLE:fibn}
+for some figures on the performance improvement.
 
 \begin{table}[tb]
 \begin{center}
@@ -3781,15 +3776,14 @@ some nodes or make changes to certain other nodes.
 
 The kinds of nodes that may appear in a program's syntax tree are
 determined by the grammar of the language the program is written
-in. Typically, each rule in the grammar corresponds to a node category in
-the syntax tree. Real-life languages are described by grammars
-containing a few hundred up to one thousand grammar rules.
+in. Typically, each rule in the grammar corresponds to a node category
+in the syntax tree. Real-life languages are described by grammars which
+can easily contain several hundred, if not thousands of grammar rules.
 This immediately reveals a hurdle for writing tree traversals: a naive
-recursive traversal function should consider many
-node categories and the size of its definition will grow accordingly.
-This becomes even more dramatic if we realize that the traversal
-function will only do some real work (apart from traversing) for very
-few node categories.
+recursive traversal function should consider many node categories and
+the size of its definition will grow accordingly.  This becomes even
+more dramatic if we realize that the traversal function will only do
+some real work (apart from traversing) for very few node categories.
 
 Traversal functions in \asfsdf~\cite{BKV01} solve this 
 problem\footnote{Traversal functions are currently only supported 
@@ -3859,12 +3853,13 @@ type of traversal:
   \outerm\ selects this behavior.
 \end{description}
 
-We give two simple examples of traversal functions that are both based on the
-tree language defined in Figure~\ref{FIG:tree-language}.  Our first example
-transforms a given tree into a new tree in which all numbers have been
-incremented (Figure~\ref{FIG:inc}).  Our second example summs all numbers in
-atree (Figure~\ref{FIG:sum}).  For many more examples and a detailed
-description of traversal functions see~\cite{BKV01}.
+We give two simple examples of traversal functions that are both
+based on the tree language defined in Figure~\ref{FIG:tree-language}.
+Our first example transforms a given tree into a new tree in which
+all numbers have been incremented (Figure~\ref{FIG:inc}).  Our second
+example computes the sum of all numbers in a tree (Figure~\ref{FIG:sum}).
+For many more examples and a detailed description of traversal functions
+see~\cite{BKV01}.
 
 Implicitly, each traversal function corresponds to a set of functions,
 one for each sort that can be reached during a traversal.
@@ -3880,10 +3875,10 @@ There are two approaches how to define these functions:
 
 \end{itemize}
 
-Experience learns that the automatic generation of syntax is nice for smaller
-examples but become a burden for real-life specifications: generation times
-become much longer and the generated function definitions may given undesired
-and hard to resolve syntactic ambiguities.
+Experience learns that the automatic generation of syntax is nice for
+smaller examples but becomes a burden for real-life specifications:
+generation times become much longer and the generated function definitions
+may yield undesired, and hard to resolve syntactic ambiguities.
 
 
 \begin{figure}
@@ -3967,10 +3962,10 @@ equations
 
 \subsubsection{Which Specifications are Executable?}
 
-Which \asfsdf\ specifications can be executed? The following specification of
-sets illustrates a non-executable specification, since equation {\tt [2]}, that
-expresses that two elements in a set may be exchanged, will lead to an
-infinite loop during rewriting.
+Which \asfsdf\ specifications can be executed? The specification of sets
+in Figure~\ref{CODE:itemsets} illustrates a non-executable specification,
+since equation {\tt [2]}, which expresses that two elements in a set may
+be exchanged, will lead to an infinite rewriting loop.
 
 \subsubsection{Common Errors when Executing Specifications}
 
@@ -3989,7 +3984,7 @@ defining the function.
 \item The rewriting process does not stop. Your equations probably contain
 an infinite loop.
 
-\item Be carefull  when a condition contains both instantiated and 
+\item Be careful when a condition contains both instantiated and 
 uninstantiated variables.
 
 \end{itemize}
@@ -4625,7 +4620,7 @@ modules, parse tables, user-defined terms, etc.
 \newpage
 \section{Selected Components of the \ASmetaenv}\label{SEC:Components}
 
-Now we will describe a selection of components that are usefull for
+Now we will describe a selection of components that are useful for
 building stand-alone tools. \emph{Be aware that the information in the
 following pages is still very much in a state of flux.}
 
