@@ -1,5 +1,9 @@
 $Id$
 
+2003-03-18 <jurgenv@cwi.nl>
+ * Use shared-objects-config and aterm-java-config to obtain last versions
+   of their jar files in configure.in
+
 Mon Mar 17 10:11:35 CET 2003 <jong@cwi.nl>
  * Major hack to fix unexpected dependency on jjtraveler:
    expect it in the same location as aterm-java.jar and use
