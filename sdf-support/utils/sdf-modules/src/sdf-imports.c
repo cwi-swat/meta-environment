@@ -230,9 +230,12 @@ static SDF_Module getModuleByImport(SDF_Import import)
 
   moduleStart = MT_getModule(moduleTable, id);
 
-  assert(moduleStart != NULL && "incomplete specification not expected!");
-  
-  return SDF_getStartTopModule(moduleStart);
+  if (moduleStart != NULL) {
+    return SDF_getStartTopModule(moduleStart);
+  }
+  else {
+    return NULL;
+  }
 }
 
 /*}}}  */
@@ -657,22 +660,25 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
       SDF_Renamings renamings;
       SDF_ImportList imports;
       SDF_Module module = getModuleByImport(import);
-      SDF_ModuleName formalName = SDF_getModuleModuleName(module);
-      SDF_ModuleName actualName = SDF_getImportModuleName(import);
 
-      renamings = makeRenamingsFromModuleNames(formalName, actualName);
-      renamings = appendUserRenamings(import, renamings);
+      if (module != NULL) {
+	SDF_ModuleName formalName = SDF_getModuleModuleName(module);
+	SDF_ModuleName actualName = SDF_getImportModuleName(import);
 
-      imports = SI_getModuleImportsList(module);
-      imports = applyRenamingsToImports(renamings, imports);
-      imports = inheritUserRenamings(import, imports);
+	renamings = makeRenamingsFromModuleNames(formalName, actualName);
+	renamings = appendUserRenamings(import, renamings);
 
-      todo = SDF_mergeImportList(todo, imports);
-      import = makeRenamedImport(actualName, renamings);
-    
-      if (!SDF_containsImportListImport(processed, plainImport)) { 
-	processed = SDF_insertImport(plainImport, processed);
-	result = SDF_insertImport(import, result);
+	imports = SI_getModuleImportsList(module);
+	imports = applyRenamingsToImports(renamings, imports);
+	imports = inheritUserRenamings(import, imports);
+
+	todo = SDF_mergeImportList(todo, imports);
+	import = makeRenamedImport(actualName, renamings);
+
+	if (!SDF_containsImportListImport(processed, plainImport)) { 
+	  processed = SDF_insertImport(plainImport, processed);
+	  result = SDF_insertImport(import, result);
+	}
       }
     }
   }
