@@ -1,0 +1,139 @@
+equations
+
+[initial-1] initial-dataop-sigs = 
+	     [<binding, using (token, bindable) & giving bindings>,
+	      <bound, using (bindings, token) & giving bindable>,
+	      <overriding, using (bindings, bindings) & giving bindings>,
+	      <disj-union, using (bindings, bindings) & giving bindings>,
+	      <not, using boolean & giving boolean>,
+	      <def, using data & giving boolean>,
+	      <+, using (integer, integer) & giving integer>,
+	      <*, using (integer, integer) & giving integer>,
+	      <-, using (integer, integer) & giving integer>,
+	      <<, using (integer, integer) & giving integer>
+	      ]
+
+[brackets-1] ($TY) = $TY
+
+[tcd-1] typecheck-data((), $EN) = ()
+
+[tcd-3] typecheck-data(($D1, $D2), $EN) = 
+			    (typecheck-data($D1, $EN), typecheck-data($D2, $EN))
+
+[tcd-4] 
+
+	($TY*) := typecheck-data(($D2, $D+), $EN)
+	================================================================
+	typecheck-data(($D1, $D2, $D+), $EN) = (typecheck-data($D1, $EN), $TY*)
+
+[tcd-5] typecheck-data($N, $EN) = integer
+
+[tcd-6] typecheck-data($B, $EN) = boolean
+
+[tcd-7] 
+
+        AR[nor=$TY1, exc=$TY2, $END] := typecheck-action($A, data, $EN)
+	=================================================================
+        typecheck-data($A, $EN) = action[using data giving $TY1 raising $TY2]
+
+
+[tcd-8] typecheck-data($TK, $EN) = token($TK)
+
+[tcd-9] typecheck-data(no-bindings, $EN) = bindings
+
+
+[tcdo-1] 
+	 [$DF1*, <$DO, $FR>, $DF2*] := get-dataop-sigs($EN),
+	 $TY2 := get-using(test : Test -> $FR),
+	 subtype-of($TY1, $TY2, get-subtypes($EN)) == yes,
+	 $TY3 := get-giving(test : Test -> $FR)
+	 ==============================================================
+	 typecheck-dataop($DO, $TY1, $EN) = AR[nor=$TY3, exc=empty, no]
+
+
+[tcdo-select-1] typecheck-dataop(#1, ($TY), $EN) = AR[nor=$TY, exc=empty, no]
+
+[tcdo-select-1] 
+ 
+          typecheck-dataop(#1, ($TY, $TY*), $EN) = AR[nor=$TY, exc=empty, no]
+
+[tcdo-select-2] 
+
+         typecheck-dataop(#2, ($TY1, $TY2), $EN) = AR[nor=$TY2, exc=empty, no]
+
+[tcdo-select-2] typecheck-dataop(#2, ($TY1, $TY2, $TY*), $EN) = 
+			AR[nor=$TY2, exc=empty, no]
+
+[tcdo-select-3] typecheck-dataop(#3, ($TY1, $TY2, $TY3), $EN) = 
+			AR[nor=$TY3, exc=empty, no]
+
+[tcdo-select-3] typecheck-dataop(#3, ($TY1, $TY2, $TY3, $TY*), $EN) = 
+			AR[nor=$TY3, exc=empty, no]	 
+
+[tcdo-select-1] typecheck-dataop(#$IN, data, $EN) = AR[nor=data, exc=empty, no]
+
+[tcdo-the-sort-1] 
+
+      subtype-of($TY1, $TY2, get-subtypes($EN)) == yes
+      ===================================================================
+      typecheck-dataop(the $TY1, $TY2, $EN) = AR[nor=$TY1, exc=empty, no] 
+	 	
+[tcdo-the-sort-2] 
+
+      subtype-of($TY2, $TY1, get-subtypes($EN)) == yes
+      ===================================================================
+      typecheck-dataop(the $TY1, $TY2, $EN) = AR[nor=$TY1, exc=empty, no] 
+
+[default-tcdo] 
+
+      prefixdataop($CH+) := $DO,
+      $SC := "Bad argument for " || strcon(""" $CH+ """)
+      ===============================================================
+      typecheck-dataop($DO, $TY1, $EN) = error("Type error", 
+				    [localized($SC, get-location($DO))])
+
+
+[tcdo-3] typecheck-dataop(it, $TY1, $EN) = AR[nor=$TY1, exc=empty, no]
+
+[default-tcdo] 
+
+      the $TY := $DO
+      ====================================================================
+      typecheck-dataop($DO, $TY1, $EN) = error("Type error", 
+   [localized("Can't project to this sort", get-location($DO))])
+
+[default-tcdo] 
+
+      # index($CH+) := $DO,
+      $SC := "Wrong number of arguments for #" || strcon(""" $CH+ """)
+      ================================================================
+      typecheck-dataop($DO, $TY1, $EN) = error("Type error", 
+				        [localized($SC, get-location($DO))])
+		
+[default-tcdo] 
+
+      infixdataop($CH+) := $DO,
+      $SC := "Bad argument for " || strcon(""" $CH+ """)
+      ===============================================================
+      typecheck-dataop($DO, $TY1, $EN) = error("Type error", 
+   [localized($SC, get-location($DO))])
+
+
+[tcdo-equal] 
+
+      subtype-of($TY1, $TY2, get-subtypes($EN)) == yes
+      ================================================================
+      typecheck-dataop(=, ($TY1, $TY2), $EN) = AR[nor=(boolean), exc=(), no]
+
+[tcdo-equal] 
+
+      subtype-of($TY2, $TY1, get-subtypes($EN)) == yes
+      ================================================================
+      typecheck-dataop(=, ($TY1, $TY2), $EN) = AR[nor=(boolean), exc=(), no]
+
+[tcdo-def] typecheck-dataop(def, $TY1, $EN) = AR[nor=boolean, exc=empty, no]
+
+[tcdp-1] AR[nor=$TY2, exc=$TY3, $END] := typecheck-dataop($DO, $TY1, $EN),
+	 subtype-of($TY2, boolean,get-subtypes($EN)) == yes
+	 ===========================================================
+	 typecheck-datapred($DO, $TY1, $EN) = AR[nor=$TY1, exc=$TY3, no]

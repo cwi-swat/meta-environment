@@ -1,0 +1,16 @@
+module asdf/lower-case
+
+imports
+
+  basic/Whitespace
+  basic/Bytes
+  
+
+exports
+
+context-free syntax
+
+  lower-case(Bytes)	-> Bytes
+
+  
+

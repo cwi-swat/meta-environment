@@ -1,0 +1,57 @@
+equations
+
+[subtype-1] $TY1 == $TY2
+	    ==================================
+	    subtype-of($TY1, $TY2, $STS) = yes
+
+[subtype-2] [$AA1*, <$ATY2, $ATY1>, $AA2*] := $STS
+	    =======================================
+	    subtype-of($ATY1, $ATY2, $STS) = yes
+
+[subtype-3] [$AA1*, <$ATY3, $ATY1>, $AA2*] := $STS,
+	    subtype-of($ATY3, $ATY2, $STS) == yes
+	    =======================================
+	    subtype-of($ATY1, $ATY2, $STS) = yes
+
+[subtype-4] subtype-of(empty, $TY, $STS) = yes
+
+[subtype-5] 
+	    subtype-of($TY1, $TY4, $STS) == yes, 
+	    subtype-of($TY5, $TY2, $STS) == yes, 
+	    subtype-of($TY6, $TY3, $STS) == yes 
+	    ================================================
+	    subtype-of(action[using $TY1 giving $TY2 raising $TY3],
+	               action[using $TY4 giving $TY5 raising $TY6], $STS) = yes 
+[subtype-5] 
+
+   subtype-of(action[using $TY1 giving $TY2 raising $TY3], action, $STS) = yes 
+
+
+[subtype-6] subtype-of($TY1, $TY2, $STS) == yes
+	    ================================
+	    subtype-of(($TY1), ($TY2), $STS) = yes
+
+[subtype-7] subtype-of($TY1, $TY2, $STS) == yes
+	    ====================================
+	    subtype-of($TY1, ($TY2), $STS) = yes
+
+[subtype-8] subtype-of($TY1, $TY2, $STS) == yes
+	    ====================================
+	    subtype-of(($TY1), $TY2, $STS) = yes
+
+[subtype-9] subtype-of($TY1, $TY2, $STS) == yes, 
+	    subtype-of(($TY1*), ($TY2*), $STS) == yes
+	    ====================================================
+	    subtype-of(($TY1, $TY1*), ($TY2, $TY2*), $STS) = yes 
+	     
+[subtype-10] subtype-of(($TY*), data, $STS) = yes
+
+[subtype-11] subtype-of(data, ($TY*), $STS) = yes
+
+[subtype-12] subtype-of($TY, datum, $STS) = yes
+
+[subtype-13] subtype-of($TY, data, $STS) = yes
+
+[subtype-14] subtype-of(cell($TY), cell, $STS) = yes
+
+

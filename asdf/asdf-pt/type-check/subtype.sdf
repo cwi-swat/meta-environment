@@ -1,0 +1,28 @@
+module type-check/subtype
+
+imports
+
+  containers/List[<AtomicType, AtomicType>]
+  type-check/Layout
+  type-check/types/asdf-types
+
+exports
+
+sorts
+
+  Type
+
+context-free syntax
+
+  List[[<AtomicType, AtomicType>]]	-> SubTypes
+
+  subtype-of(Type, Type, SubTypes)	-> Answer
+
+
+hiddens variables
+
+  "$ATY"[0-9]?		-> AtomicType
+  "$TY"[0-9]?		-> Type
+  "$TY"[0-9]?"*"	-> { Type "," }*
+  "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
+  "$AA"[0-9]?"*"	-> { <AtomicType, AtomicType> "," }*

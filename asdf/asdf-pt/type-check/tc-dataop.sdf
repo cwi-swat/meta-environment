@@ -1,0 +1,49 @@
+module type-check/tc-dataop
+
+imports
+
+  type-check/tc-actions
+  type-check/environment
+  type-check/data/all
+  asdf/an-supplement
+  type-check/an-to-kernel
+
+exports 
+
+context-free syntax 
+
+  typecheck-data(Data, Environment)		-> Type
+  typecheck-dataop(DataOp, Type, Environment)	-> ActionResult
+  typecheck-datapred(DataOp, Type, Environment)	-> ActionResult
+  
+hiddens 
+
+variables
+
+  "$TY"[1-9]?	-> Type
+  "$TY"[1-9]?"*"	-> {Type ","}*
+  "$AT"[1-9]?	-> ActionType	
+	
+  "$SE"		-> SignatureEnv
+  "$EN"		-> Environment
+  "$CH+"[1-9]?	-> CHAR+
+  "$SC"[1-9]?	-> StrCon		
+  "$A"[1-9]?	-> Action
+  "$IA"		-> InfixAction
+  "$D+"		-> {Data ","}+
+  "$D"[0-9]?	-> Data
+  "$N"		-> Number
+  "$B"		-> Boolean
+  "$TK"[0-9]?	-> Token
+  "$END"[1-9]?	-> ExcepNoData
+  "$R"[1-9]?	-> ActionResult
+  "$ER"[1-9]?"+"	-> Error+
+  "$DO"[0-9]?	-> DataOp
+  "$IN"[0-9]?	-> Index
+
+  "$DF"[0-9]?"*"   -> {<DataOp, FunResult> "," }*
+  "$FR"[0-9]?	   -> FunResult
+
+sorts
+
+  ExcepNoData SignatureEnv ActionType Type ErrorMessage	
