@@ -33,7 +33,7 @@ xargs=""
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="C:I:deghi:m:o:p:sS:t:T:vV"
+myarguments="C:I:deghi:m:o:p:qsS:t:T:vV"
 
 # Usage: displays helpful usage information
 Usage() {
@@ -50,6 +50,7 @@ Options:
     -m modulename   specifies the name of the top module to start with
     -o <file>       output file works only when dumping parse table or equations
     -p <path>       add <path> to PATH of Meta-Environment
+    -q		    enable Meta-Environment query support
     -s              save intermediate files to disk (only works with -P and -E)
     -S              execute the given tb-script
     -t <int>        MetaEnvironment will abort after <int> seconds
@@ -91,6 +92,7 @@ modulename=""
 extra_scripts="-I${prefix}/share/meta"
 meta_script=${prefix}/share/meta/meta.tb
 time_out_def=""
+query_def=""
 saving="false"
 outputfilename=""
 inputfilename=""
@@ -136,6 +138,9 @@ do
 	        PATH="$1:${PATH}"
 		export PATH
 		;;
+	-q)
+		query_def="-DQUERY"
+		;;
 	-s)     
 		saving="true"
 		;;
@@ -170,7 +175,7 @@ done
 #  Get to the real work now...
 ###
 
-toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DSAVING=\\\"${saving}\\\" -DINFILENAME=\\\"${inputfilename}\\\" -DOUTFILENAME=\\\"${outputfilename}\\\" -DMODULENAME=\\\"${modulename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${time_out_def}"
+toolbusdefs="-DEDITOR=\\\"${editor}\\\" -DSAVING=\\\"${saving}\\\" -DINFILENAME=\\\"${inputfilename}\\\" -DOUTFILENAME=\\\"${outputfilename}\\\" -DMODULENAME=\\\"${modulename}\\\" -DCONFIG_FILE=\\\"${configfile}\\\" ${time_out_def} ${query_def}"
 
 if [ $verbose -gt 0 ] ; then
    set -x

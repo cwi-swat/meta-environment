@@ -1,5 +1,12 @@
 # $Id$
 
+Thu May 22 14:42:02 CEST 2003 <jong@cwi.nl>
+ * query-tool/**: move to a separate package "meta-query"
+ * tbscripts/button-actions.tb: add support for queries
+ * tbscripts/query.tb: cleanup (delete) standalone/ui stuff
+ * tbscripts/meta.tb: Query processes conditional in toolbus() call
+ * src/generic-meta.sh.src: add -q flag to enable query support
+
 2003/05/21 ({markvdb,jurgenv}@cwi.nl)
  * working towards implementing the module-db coordination tasks in ToolBus
    in tbscripts/module-db.tb
