@@ -19,7 +19,8 @@ TEST_MODULES=Bracket \
              Traversal-Typecheck \
              Tuple \
              Combination-Typecheck \
-             Pico-Xml
+             Pico-Xml \
+             Lookup
 
 TEST_MODULES_ASFE_ONLY=BoolAPI
 
