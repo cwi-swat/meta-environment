@@ -1,5 +1,8 @@
 $Id$
 
+2003/09/25 (markvdb@cwi.nl)
+ * Added a function to check for constructor attributes.
+
 2003/09/25 (jurgenv@cwi.nl)
  * Added PT_compareTree a lexicographical ordering on parse trees.
    It ignores layout and annotations, is complete and stable (if the
