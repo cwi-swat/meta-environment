@@ -25,23 +25,24 @@ bin_SCRIPTS	= tifstojava
 CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${ATERM}/classes
 
 JAVATIFCLASSES = \
+	Tool.class \
 	AbstractTool.class \
 	JavaTif.class \
-	SpecOrderVector.class \
-	Tool.class
+	SpecOrderVector.class
 
 ${EXAMPLECLASSES}: example.tifs $(JAVATIFCLASSES)
 	$(CLASSPATH_ENV) \
-	${top_srcdir}/adapters/java-adapter/toolbus/tifstojava \
-	-tifs example.tifs -tool example -package toolbus
+	${top_builddir}/adapters/java-adapter/toolbus/tifstojava \
+	-tifs $(srcdir)/example.tifs -tool example -package toolbus
 
 ${TESTCLASSES}: test.tifs $(JAVATIFCLASSES)
 	$(CLASSPATH_ENV) \
-	${top_srcdir}/adapters/java-adapter/toolbus/tifstojava \
-	-tifs test.tifs -tool testing -package toolbus
+	${top_builddir}/adapters/java-adapter/toolbus/tifstojava \
+	-tifs $(srcdir)/test.tifs -tool testing -package toolbus
 
 test.tifs: test.tb
 	${top_builddir}/toolbus/toolbus -gentifs test.tb
+	
 
 example.tifs: example.tb
 	${top_builddir}/toolbus/toolbus -gentifs example.tb
