@@ -22,7 +22,8 @@ specification as rewrite rules.
 <LI> A central control tool
 that gives an overview of the specifications at the module level.
 This control tool allows the user to load and save specifications,
-add and delete modules, and controls the creation of new editors instances. 
+add and delete modules, typeset specifications in TeX or HTML,
+and controls the creation of new editors instances. 
 </UL>
 
 <H2>Control Tool</H2>
@@ -34,31 +35,34 @@ A number of buttons and menu items give access to the functionality
 of the tool.
 The control tool must provide the following functionality:
 <UL>
+<LI> Load a module and all its submodules.
 <LI> Show the import relation between the currently loaded modules.
 <LI> Show a list of all currently loaded modules.
-<LI> Load a module and all its submodules.
 <LI> Save changes in a specific module.
 <LI> Save all elements that have been changed since the last 
      save operations, be it modules or terms.
 <LI> Remove a module from the Meta-environment, even if some
      other module still depends on this module. Modules that are now
      no longer in working order, should be 'greyed out' somehow.
-<LI> Quit the Meta-environment.
 <LI> Inspect and change the list of search-paths in which the Meta-environment
      searches for new modules.
+<LI> Set and/or change the directory in which the compiler writes the
+     generated C programs.
 <LI> Create new module and term editors.
 <LI> Show a list of currently active module editors and term editors,
      and enable the user to activate (bring them to the front) and
      remove them.
+<LI> Quit the Meta-environment.
 </UL>
 
 <H3>Extensibility</H3>
 In the future, we can imagine all kinds of other operations on modules
 or even whole specifications. Examples include queries on specifications
-to select all modules using a specific function, or calculating some
-complexity metrics to find possible weak spots in a specification.
+to select all modules using a specific function, calculating some
+complexity metrics to find possible weak spots in a specification, or 
+restructure specifications based on some clustering results.
 These kind of extensions can be implemented in separate tools, but the
-user interface extension needed to access this new functionality should
+user interface extension needed to access this new functionality must
 be added to the existing user interface. In order to do this, the
 control tool must provide a way to add user interface items like
 buttons and menu items, from within the controlling ToolBus script.
@@ -76,7 +80,7 @@ The structure editor must provide the following functionality:
      In structure editing mode, the user can perform operations on
      subtrees of the term/module. Typical operations include:
      <UL> 
-     <LI> Show the sort of the current subtree (focus)
+     <LI> Show the sort of the current subtree (focus).
      <LI> Provide a notion of placeholders, which represent
           a hole in the tree.
      <LI> Replace the current subtree with another subtree of the same
@@ -103,7 +107,7 @@ of different terms.
 
 <H2>Parser Generator</H2>
 
-Given the syntax definition of a language (as defined in the SDF parts of the
+Given the syntax definition of a language (as defined in the Sdf parts of the
 modules in a specification),
 a parse table must be generated for parsing the equations in the modules
 and terms.
@@ -134,19 +138,82 @@ parsed.
 <LI> Generation of error messages if the text contains some syntax error.
 <LI> A mechanism to store parse tables, so that a parse table need not
 be regenerated for every text that must be parsed.
+<LI> A mechanism to select only these entries of a parse table which are
+valid for a specific Sdf modules.
 </UL>
 
 <H2>Evaluator</H2>
-We can distinguish two different types of evaluators:
-<OL> 
-<LI> interpreter/debugger; and
-<LI> compiler.
-</OL>
-The interpreter and the debugger may be integrated 
+
+We consider both the interpreter, the debugger, and generated C executables
+as instances of the evaluator.
+The basic functionality of the interpreter is rewriting terms given a set
+of equations without user interactions where as the debugger offers
+the same functionality however influenced by the user.
+The generated C executables take a term and rewrites it by the C program.
+
+<P> The minimal functionality of the interpreter is:
+<UL>
+<LI> Rewriting a term given some module name.
+<LI> Construction of a normal form.
+<LI> A mechanism to store sets of equations, so that these need not be
+retrieved fore every term that must be rewritten.
+</UL>
+
+<P> The minimal functionality of the debugger is:
+<UL>
+<LI> Rewriting a term given some module name.
+<LI> Construction of a normal form.
+<LI> PIETER VERDER UITWERKEN.
+</UL>
+
+<P> The minimal functionality of the generated C executables is:
+<UL>
+<LI> Rewriting a term given some module name.
+<LI> Construction of a normal form.
+</UL>
+
+<H3>Extensions</H3>
+Enabling the interpreter to use compiled modules when rewriting terms.
+Provide origin tracking information during rewriting in the interpreter
+and the generated C executables.
+Storing intermediate rewrite results for functions annotated by
+the user with the memo-attribute.
+Provide facilities to incorporate incremental rewriting techniques.
+
+<H2>Compiler</H2>
+
+Given a module name the compiler generates C programs, these C programs
+consist of functions corresponding to the context-free functions in the
+specification.
+Furthermore functions are generated to register local function definitions,
+to resolve external function calls and to transform AsFix terms into
+the internal term representation used by the C functions.
+The registering and resolving of function definitions and calls is
+necessary to enable the separate compilation of Asf+Sdf modules.
+
+<H3>Extensions</H3>
+
+The generated C code should be extended with so-called "active" predicates
+to enable to possibility to rewrite over other modules than the top
+module. This is needed when the generated C executables are to replace
+the interpreter, because if a term is to be rewritten over a lower
+level module  not all equations may be active.
+Generate C code which takes care of origin tracking.
+Incorporate functionality to store intermediate rewrite results to enable
+memo functions.
+Provide a mechanism to implement heavily used modules such as the integers
+directly in C.
+
+<P> The interpreter, debugger and the generated C executables should
+<EM>all</EM> implement the same Asf semantics.
 
 <H2>Module and Term Databases</H2>
 
-<H2>Unparser (Generator)</H2>
+<H2>Unparser</H2>
+
+The unparser or pretty printer should provide the following functionality:
+
+<H2>Unparser Generator</H2>
 
 </BODY>
 </HTML>
