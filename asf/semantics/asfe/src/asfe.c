@@ -136,7 +136,7 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
 		     ATtrue);
 
   if (RWgetError() == NULL) {
-    return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
+    return ATmake("snd-value(rewrite-result(<term>))", result);
   }
   else {
     return ATmake("snd-value(rewrite-errors([<term>]))", RWgetError());
