@@ -1782,10 +1782,7 @@ static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra
   PT_Symbol rhs = PT_getProductionRhs(prod);
   PT_Tree value = getVariableValue(env, var, rhs);
 
-  if (!value) {
-    RWsetError("Uninitialized variable.",(ATerm) var);
-    return var;
-  }
+  assert(value != NULL && "uninitialized variable);
 
   return value;
 }
