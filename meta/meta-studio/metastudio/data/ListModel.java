@@ -21,8 +21,13 @@ public class ListModel extends AbstractListModel {
 	public int getSize() {
 		return list.size();
 	}
-
+    
 	public void elementAdded() {
 		fireIntervalAdded(list, list.size() - 1, list.size());
 	}
+    
+    public void add(Object o) {
+        list.add(list.size(), o);
+        elementAdded();
+    }
 }

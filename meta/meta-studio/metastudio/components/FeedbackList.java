@@ -1,10 +1,9 @@
 package metastudio.components;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -12,59 +11,53 @@ import javax.swing.ListSelectionModel;
 
 import metastudio.MultiBridge;
 import metastudio.data.ListModel;
+import metastudio.utils.StringFormatter;
 import aterm.ATerm;
+import aterm.ATermList;
 import aterm.pure.PureFactory;
 import errorapi.Factory;
 import errorapi.types.Feedback;
 import errorapi.types.Summary;
 
-public class FeedbackList extends ToolComponent implements MouseListener {
+// TODO: add copy/paste facility
+public class FeedbackList extends ToolComponent {
     private JList list;
-    private List data;
+    private ListModel data;
+    private Factory factory;
 
     public FeedbackList(aterm.ATermFactory factory, MultiBridge bridge) {
         super(factory, bridge);
 
-        this.data = new LinkedList();
+        this.factory = new Factory((PureFactory) factory);
+        this.data = new metastudio.data.ListModel(new LinkedList());
 
         this.list = new JList();
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        list.addMouseListener(this);
+        list.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                Feedback feedback = (Feedback) list.getSelectedValue();
 
-        list.setModel(new ListModel(data));
+                if (feedback != null) {
+                    postEvent(
+                        getFactory().make(
+                            "feedback-selected(<term>)",
+                            feedback.toTerm()));
+                }
+            }
+        });
+
+        list.setModel(data);
         list.setCellRenderer(new FeedbackListCellRenderer());
 
-        setLayout(new BorderLayout());
         add(new JScrollPane(list), BorderLayout.CENTER);
+    }
 
-        // just testing
-        setFeedbackList(
-            new Factory((PureFactory) factory).SummaryFromString(
-                "feedback("
-                    + "[info("
-                    + "\"1\","
-                    + "\"1\","
-                    + "\"asf-checker\","
-                    + "\"an example info message\","
-                    + "[subject(\"subject-id\",location(\"filename\",area(0,0,0,0,0,0)))]),"
-                    + "warning("
-                    + "\"2\","
-                    + "\"1\","
-                    + "\"sdf-checker\","
-                    + "\"an example warning\","
-                    + "[subject(\"subject-id\",location(\"filename\",area(0,0,0,0,0,0)))]),"
-                    + "error("
-                    + "\"3\","
-                    + "\"1\","
-                    + "\"toolbus\","
-                    + "\"an example error\","
-                    + "[subject(\"subject-id\",location(\"filename\",area(0,0,0,0,0,0)))]),"
-                    + "fatal-error("
-                    + "\"8\","
-                    + "\"-1\","
-                    + "\"system\","
-                    + "\"an example fatal error\","
-                    + "[subject(\"subject-id\",location(\"filename\",area(0,0,0,0,0,0)))])])"));
+    private Factory getErrorFactory() {
+        return factory;
+    }
+
+    public void clearHistory() {
+        data.setList(new LinkedList());
     }
 
     public void displayFeedbackSummary(ATerm t0) {
@@ -73,34 +66,62 @@ public class FeedbackList extends ToolComponent implements MouseListener {
     }
 
     private void setFeedbackList(Summary summary) {
-        data.clear();
-
         errorapi.types.FeedbackList messages = summary.getList();
         for (; !messages.isEmpty(); messages = messages.getTail()) {
             data.add(messages.getHead());
         }
-
         list.repaint();
     }
 
-    public void mouseClicked(MouseEvent e) {
-        Feedback feedback = (Feedback) list.getSelectedValue();
-        postEvent(getFactory().make("feedback-selected(<term>)", feedback.toTerm()));
+    private void addFeedback(Feedback feedback) {
+        data.add(feedback);
+        list.repaint();
     }
 
-    public void mousePressed(MouseEvent e) {
-        // do nothing
+    private Feedback makeAnonymousError(String msg) {
+        return getErrorFactory().makeFeedback_Error(
+            "unknown",
+            msg,
+            getErrorFactory().makeSubjectList());
     }
 
-    public void mouseReleased(MouseEvent e) {
-        // do nothing
+    private Feedback makeAnonymousWarning(String msg) {
+        return getErrorFactory().makeFeedback_Warning(
+            "unknown",
+            msg,
+            getErrorFactory().makeSubjectList());
+    }
+    private Feedback makeAnonymousInfo(String msg) {
+        return getErrorFactory().makeFeedback_Info(
+            "unknown",
+            msg,
+            getErrorFactory().makeSubjectList());
     }
 
-    public void mouseEntered(MouseEvent e) {
-        // do nothing
+    public void errorf(String format, ATerm args) {
+        String message = StringFormatter.format(format, (ATermList) args);
+        addFeedback(makeAnonymousError(message));
     }
 
-    public void mouseExited(MouseEvent e) {
-        // do nothing
+    public void error(String message) {
+        addFeedback(makeAnonymousError(message));
+    }
+
+    public void messagef(String format, ATerm args) {
+        String message = StringFormatter.format(format, (ATermList) args);
+        addFeedback(makeAnonymousInfo(message));
+    }
+
+    public void message(String message) {
+        addFeedback(makeAnonymousInfo(message));
+    }
+
+    public void warningf(String format, ATerm args) {
+        String message = StringFormatter.format(format, (ATermList) args);
+        addFeedback(makeAnonymousWarning(message));
+    }
+
+    public void warning(String message) {
+        addFeedback(makeAnonymousWarning(message));
     }
 }

@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
 import metastudio.MultiBridge;
@@ -19,7 +18,6 @@ import aterm.ATermList;
 
 public class StatusBar extends ToolComponent {
     private JLabel statusBar;
-    private JCheckBox statusLog;
     private List statusMessages;
     private HistoryPanel history;
 
@@ -38,14 +36,6 @@ public class StatusBar extends ToolComponent {
         setBackground(bgColor);
         setForeground(fgColor);
         setLayout(new BorderLayout());
-
-        statusLog = new JCheckBox("Log Status");
-        statusLog.setSelected(
-            Preferences.getBoolean(Preferences.PREF_MSGPANE_STATUS + ".log"));
-        statusLog.setBackground(bgColor);
-        statusLog.setForeground(fgColor);
-        statusLog.setFont(font);
-        add(statusLog, BorderLayout.EAST);
 
         statusBar = new JLabel("idle");
         statusBar.setFont(font);
@@ -73,9 +63,7 @@ public class StatusBar extends ToolComponent {
     }
 
     public void addStatus(ATerm id, String message) {
-        if (statusLog.isSelected()) {
-            history.message(message);
-        }
+        history.addMessage(message);
 
         statusBar.setText(message);
         String[] pair = { id.toString(), message };
@@ -84,6 +72,7 @@ public class StatusBar extends ToolComponent {
 
     public void addStatusf(ATerm id, String format, ATerm args) {
         String message = StringFormatter.format(format, (ATermList) args);
+        history.addMessage(message);
         addStatus(id, message);
     }
 }
