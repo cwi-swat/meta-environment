@@ -238,7 +238,7 @@ for the syntax part and the equations part of a module.
 All editing in the Meta-environment is done by creating
 instances of a \emph{generic syntax-directed editor}.
 
-After each editing operation on a module its \emph{implementation} is updated
+After each editing operation on a module, its \emph{implementation} is updated
 immediately. It consists of a parser, a pretty
 printer, and a term rewriting system which are all derived from the
 module automatically.
@@ -299,7 +299,7 @@ We only give a brief sketch of the underlying
 [ (Section~\Ref)]{SEC:TechnologyandArchitecture}.
 
 \item The stand-alone usage of various parts of the system.
-We only describe the \link{usage of the most important components}[(Section~\Ref)]{SEC:Components}.
+We only describe the \link{usage of the most important components}[ (Section~\Ref)]{SEC:Components}.
 \end{itemize}
 
 \subsection{Downloading the \ASmetaenv}
@@ -354,7 +354,8 @@ overview of selected publications:
 
 \end{description}
 
-
+\section*{Acknowledgements}
+Peter D. Mosses, Arthur Hofkamp, Akim Demaille, Jurgen Vinju.
 
 
 \section{Starting the System}
@@ -625,7 +626,7 @@ will only be shown when the loading of the specification is complete.
 \subsection{The Debug Menu}
 \label{DebugMenu}
 
-The \link{{\tt Debug} menu}[ is shown in Figure~Ref and ]{FIG:debug-menu} 
+The \link{{\tt Debug} menu}[ as is shown in Figure~\Ref]{FIG:debug-menu} 
 contains the
 single check box {\tt Diagnostic messages}.  When enabled, diagnostic
 messages will be displayed.  Otherwise the systems runs silently.
@@ -645,7 +646,7 @@ messages will be displayed.  Otherwise the systems runs silently.
 \subsection{The Help Menu}
 \label{HelpMenu}
 
-The \link{{\tt Help} menu}[ is shown in Figure~\Ref and]{FIG:help-menu}
+The \link{{\tt Help} menu}[as is shown in Figure~\Ref]{FIG:help-menu}
 provides various (still experimental) help features.
 
 \begin{figure}
@@ -809,7 +810,7 @@ the effect is that modifications made to these modules are discarded.
 the file system}.
 
 {\tt Compile} ({\tt Compile Module...}) invokes the \asfsdf-compiler to generate C code.  
-\link{Compiling Specifications}[Section~\Ref]{compiling-specs} 
+\link{Compiling Specifications}[ Section~\Ref]{compiling-specs} 
 gives more details on the compilation of \asfsdf\ specifications.
 
 {\tt Dump Equations...} dumps the equation of the selected
@@ -836,7 +837,7 @@ based on \xemacs, so some familiarity with this editor is assumed.
 See \xlink{xemacs.org}{http://www.xemacs.org/Documentation/index.html}
 for documentation on \xemacs.
 
-The two pull-down menus {\tt Meta-Environment} and {\tt Move}have been
+The two pull-down menus {\tt Meta-Environment} and {\tt Move} have been
 added to the standard user-interface of \xemacs:
 
 \begin{itemize}
@@ -907,7 +908,7 @@ Initially the entire text is
 highlighted and the message ``{\tt Focus symbol: term}'' appears
 in the status line at the bottom of the main window.
 
-Via the entry {\tt Parse Buffer} in the {\tt Meta-Environment} menu of the
+Via the entry {\tt Parse} in the {\tt Meta-Environment} menu of the
 editor, the parser can be activated.  The parser is finished when the
 status line in the main window displays ``{\tt Idle}'' again.
 
@@ -1012,7 +1013,7 @@ user-manual where detailed information can be found.
 When configuring the Meta-Environment a directory was giving where
 the Meta-Environment will be installed, e.g., {\tt <path>/asfsdf-meta}. 
 You will then find the files needed for this Guided Tour in the directory 
-{\tt <path>/asfsdf-meta/share/demo/pico}. 
+{\tt <path>/share/asfsdf-meta/demo/pico}. 
 It is advisable to make your personal copy of this
 directory.  In this Guided Tour we will use `{\tt pico}' to refer to your own
 copy of the directory. Furthermore, all the examples given in this
@@ -1030,8 +1031,8 @@ For each module in a specification two files exist: `{\tt
 
 \item Files for the Pico-specification.
 
-\item Three examples of Pico-programs: `{\tt big.pico}', `{\tt fac.pico}',
-  `{\tt small.pico}'.
+\item Three examples of Pico-programs: `{\tt big.trm}', `{\tt fac.trm}',
+  `{\tt small.trm}'.
 
 \item Terms for typechecking and evaluating these Pico-programs.
 
@@ -1041,7 +1042,7 @@ For each module in a specification two files exist: `{\tt
 
 \begin{itemize}
 
-\item Go to directory {\tt pico}. 
+\item Go to your personal copy of the directory {\tt pico}. 
 \item Type the command {\tt meta}. The \link{main window}[]{FIG:meta-start}
 of the Meta-environment will
 \begin{ifhtml}
@@ -1093,37 +1094,37 @@ The specification is \link*{as follows}[shown in Figure~\Ref]{CODE:Bool-example}
 \begin{IncCode}
 \begin{verbatim}
 module Bool-example
-  exports
-    sorts BOOL 
-    lexical syntax
-      [\ \t\n]           -> LAYOUT
 
-    context-free syntax
-      "true"             -> BOOL
-      "false"            -> BOOL 
-      BOOL "|" BOOL      -> BOOL {left}
-      BOOL "&" BOOL      -> BOOL {left}
-      "not" "(" BOOL ")" -> BOOL
-      "(" BOOL ")"       -> BOOL {bracket}
+imports basic/Whitespace
+exports
+  sorts BOOL 
 
-  hiddens
-    variables
-      "Bool"[0-9\']* -> BOOL
+  context-free syntax
+    "true"             -> BOOL
+    "false"            -> BOOL 
+    BOOL "|" BOOL      -> BOOL {left}
+    BOOL "&" BOOL      -> BOOL {left}
+    "not" "(" BOOL ")" -> BOOL
+    "(" BOOL ")"       -> BOOL {bracket}
 
-    context-free priorities
-      BOOL "&" BOOL -> BOOL >
-      BOOL "|" BOOL -> BOOL
+  context-free priorities
+    BOOL "&" BOOL -> BOOL >
+    BOOL "|" BOOL -> BOOL
 
-    equations
+hiddens
+  variables
+    "Bool"[0-9\']* -> BOOL
 
-    [B1] true | Bool = true 
-    [B2] false | Bool = Bool
+equations
 
-    [B3] true & Bool = Bool 
-    [B4] false & Bool = false
+  [B1] true | Bool = true 
+  [B2] false | Bool = Bool
 
-    [B5] not(false) = true 
-    [B6] not(true) = false
+  [B3] true & Bool = Bool 
+  [B4] false & Bool = false
+
+  [B5] not(false) = true 
+  [B6] not(true) = false
 \end{verbatim}
 \end{IncCode}
 \caption{Specification of module {\tt Bool-example}}
@@ -1186,13 +1187,11 @@ The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.asf}.
 \begin{itemize}
 \item Open a term-editor over module {\tt Bool-example} by first selecting
   module {\tt Bool-example} in the module pane, and then pushing the {\tt
-    New Term} button.  A standard dialog window pops up.
+    Edit Term ...} button.  A standard dialog window pops up.
     Enter any new filename, for instance, `{\tt my-term}'.
 
 \item 
-  Type the term `{\tt true \& false}' in this editor. Observe how the text
-  that you type gets a different background color.
-  This is called a \emph{focus}. 
+  Type the term `{\tt true \& false}' in this editor. 
 The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm}.
 
 \begin{figure}
@@ -1211,7 +1210,7 @@ The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm}.
 \item Click in the focus, this will move the cursor (a single character-sized
   rectangle) 
   
-\item From menu {\tt Meta-Environment} click the {\tt Parse} button.  The text
+\item From menu {\tt Term-Actions} click the {\tt Parse} button.  The text
   in the focus is now parsed and the different background color has 
   disappeared. 
 The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm2}
@@ -1268,7 +1267,7 @@ will be selected and becomes the focus.
 \begin{itemize}
   
 \item Reduce the term in the term-editor by clicking the {\tt Reduce} button
-  in the {\tt Meta-Environment} menu of the editor.  The result will appear in
+  in the {\tt Term-Actions} menu of the editor.  The result will appear in
   a new \link{term editor window}[ (Figure~\Ref)]{FIG:reduct.out}.
 
 \begin{figure}
@@ -1291,8 +1290,8 @@ will be selected and becomes the focus.
   
 \item Edit the term `{\tt true \& false}' such that the new term will be
   syntactically incorrect. For instance, type `{\tt true \& wrong}'. Force a
-  parse of the term by selecting the {\tt Parse Buffer} button of the 
-  {\tt Meta-Environment} menu.
+  parse of the term by selecting the {\tt Parse} button of the 
+  {\tt Term-Actions} menu.
   
   In the status line at the bottom of the edit window a message appears
   `{\tt Parse error near cursor}' and the cursor will be positioned in
@@ -1307,7 +1306,7 @@ will be selected and becomes the focus.
 \item Erase the term in your term-editor and type a new term `{\tt true \&
     false \& true}'. 
 
-\item Parse the term using the {\tt Parse Buffer} button.
+\item Parse the term using the {\tt Parse} button.
 
 \item  Try to find out how this term has been parsed by clicking
   on different parts of the term and studying the resulting focus.
@@ -1323,7 +1322,7 @@ corresponds with this parse.
   
 \item Erase the term in your term-window and type a new term `{\tt true |
     false \& true}'. 
-\item Parse the term using the {\tt Parse Buffer} button.
+\item Parse the term using the {\tt Parse} button.
   
 \item Try to find out how this term has been parsed by clicking on various
   parts of the term and studying the resulting focus.
@@ -1574,7 +1573,7 @@ In fact, the sort {\tt SERIES}
   button pane. A dialog window pops up and type `{\tt small.pico}' as name of
   the term.
 
-\item Press the {\tt Parse Buffer} button in the {\tt Meta-Environment} menu of the
+\item Press the {\tt Parse} button in the {\tt Meta-Environment} menu of the
   editor. As a result, {\tt small.pico} is parsed.
 
 \item Press the {\tt Reduce} button in the {\tt Meta-Environment} menu of the
@@ -2020,9 +2019,15 @@ least $n$ times ({\tt n+}). Examples are:
 
 \end{itemize}
 
-Both the element and the separator can be an arbitrary symbol.  To avoid
-confusion it is, however, advisable that the element and the separator are not
-the same symbol, e.g., {\tt \{Bool Bool\}*}.
+In case of a separated list the element can be an arbitrary symbol, but
+the separator can only be a plain literal.  It is possible to write,
+for instance {\tt \{Int Bool\}*} or {\tt \{Int (","|";")\}*},
+but the \link{{\tt asfsdf-checker}}[, see Section~\Ref]{SEC:SDF-checker}, 
+will produce a warning indicating
+that this type of symbol is not supported. 
+Both the \link{interpreter}[, see Section~\Ref]{SEC:interpretationgofterms} 
+and the \link{compiler}[, see Section~\Ref]{SEC:reducingofterms} do
+not support this type of separated lists.
 
 \subsubsection{Alternative}
 \label{AlternativeOperator}
