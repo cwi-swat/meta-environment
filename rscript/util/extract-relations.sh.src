@@ -45,28 +45,28 @@ add_input_file() {
 # {{{  parse
 
 parse() {
-  echo -n "Parsing $1 .."
+#  echo -n "Parsing $1 .."
   sglr -p ${PARSE_TABLE} -i $1 -o $1.pt -s ${TOP_SORT}
-  echo " done."
+#  echo " done."
 }
 
 # }}}
 # {{{  addposinfo
 
 addposinfo() {
-  echo -n "AddPosInfo $1 .."
+#  echo -n "AddPosInfo $1 .."
   addPosInfo -i $1.pt -o $1.pos -p $1
-  echo " done."
+#  echo " done."
 }
 
 # }}}
 # {{{  extract
 
 extract() {
-  echo -n "Rewriting $1 .."
+#  echo -n "Rewriting $1 .."
   apply-function -f $EXTRACTION_FUNCTION -s "RSTORE" -i $1.pos \
     | asfe -e ${EQUATIONS} -o ${OUTPUT_DIR}/`basename $1`.rstore.pt
-  echo " done."
+#  echo " done."
 }
 
 # }}}
@@ -120,5 +120,6 @@ done
 mkdir -p ${OUTPUT_DIR}
 
 for f in $INPUT_FILES; do
+  echo $f
   extract_relations $f
 done
