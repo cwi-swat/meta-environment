@@ -399,16 +399,23 @@ ATbool SG_CycleEncountered(int Mode)
   return CycleEncountered;
 }
 
-ATermList SG_CyclicTerm(forest t)
+ATermList SG_CyclicTerm(parse_table *pt, forest t)
 {
   Cycle = NULL;
 
   if(!SG_TermIsCyclic(t))
     return ATempty;
 
-  if(Cycle)
-    return ATreverse(Cycle);
+  if(Cycle) {
+    ATermList cycleprods = ATempty;
 
+    for(; !ATisEmpty(Cycle); Cycle = ATgetNext(Cycle)) {
+      cycleprods = ATinsert(cycleprods,
+                            SG_LookupProduction(pt,
+                              ATgetInt((ATermInt) ATgetFirst(Cycle))));
+    }
+    return cycleprods;
+  }
   return ATempty;
 }
 

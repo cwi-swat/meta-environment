@@ -1,4 +1,4 @@
-r
+
     SGLR - the Scannerless Generalized LR parser.
     Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
 
@@ -17,6 +17,10 @@ r
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 $Id$
+
+2000/6/28 (js@cwi.nl)
+   * Cycles are reported with expanded productions rather than production
+     numbers
 
 2000/6/28 (js@cwi.nl)
    * Bumped version to 2.36

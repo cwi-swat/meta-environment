@@ -972,8 +972,8 @@ forest SG_ParseResult(char *sort)
 
     /*  Expand at least the top node to get the top sort  */
     woods = SG_YieldForest(table,
-                              (forest) SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack))),
-                              ATfalse, ATtrue);
+                           (forest) SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack))),
+                           ATfalse, ATtrue);
 
     /*  Select only the desired start symbols when so requested  */
     if(sort) {
@@ -991,10 +991,11 @@ forest SG_ParseResult(char *sort)
     /*  Now detect, and report, cycles for the (pruned?) forest  */
     if(SG_CYCLE && SG_NEED_OUTPUT) {
       IF_STATISTICS(SG_Timer());
-      cycle = SG_CyclicTerm(woods);
+      cycle = SG_CyclicTerm(table, woods);
       IF_STATISTICS(fprintf(SG_log(), "Cycle detection took %.4fs\n", SG_Timer()));
-      if(!ATisEmpty(cycle))
+      if(!ATisEmpty(cycle)) {
         return SG_ParseError(cycle, 0, NULL);
+      }
     }
 
     SGsort(SG_SET, woods);

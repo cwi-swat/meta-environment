@@ -65,7 +65,7 @@ void       SG_Amb(parse_table *, tree, tree);
 
 enum       SG_CYCLEMODE { SG_CYCLE_ENCOUNTERED, SG_CYCLE_RESET };
 ATbool     SG_CycleEncountered(int Mode);
-ATermList  SG_CyclicTerm(forest t);
+ATermList  SG_CyclicTerm(parse_table *pt, forest t);
 
 forest     SG_YieldForest(parse_table *pt, forest t,
                           ATbool recurse, ATbool doambs);
