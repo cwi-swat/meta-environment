@@ -1,5 +1,8 @@
 $Id$
 
+Tue May  4 13:23:03 CEST 2004 <markvdb@cwi.nl>
+ * Improved the clickable error messages and solved bug 295.
+
 Mon May  3 16:28:32 CEST 2004 <markvdb@cwi.nl>
  * Introduced clickable error message.
 

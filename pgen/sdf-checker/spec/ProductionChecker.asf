@@ -9,12 +9,8 @@ equations
   [gp-1'1] get-cf-prods(context-free syntax Prod*, ProductionsSet) =
               get-prods(Prod*, ProductionsSet)
 
-  [gp-2'1] get-prods(Symbol* -> Symbol Attrs, productions(Prod*2)) =
-             productions(Symbol* -> Symbol Prod*2)
-
-  [gp-2'1] get-prods($Literal ( Symbol,* ) -> Symbol Attrs, 
-                     productions(Prod*2)) =
-             productions($Literal ( Symbol,* ) -> Symbol Prod*2)
+  [gp-2'1] get-prods(Prod, productions(Prod*2)) =
+             productions(Prod Prod*2)
 
   [gpp-1'1] get-prods-in-prios(syntax Prod*, 
                                ProductionsSet) = ProductionsSet
@@ -35,12 +31,7 @@ equations
                                ProductionsSet) =
               get-prods-in-prios(Priorities, ProductionsSet)
 
-  [gpp-1'7] get-prods-in-prios(Symbol* -> Symbol Attrs, productions(Prod*)) =
-              productions(Symbol* -> Symbol Prod*)
-
-  [gpp-1'8] get-prods-in-prios($Literal ( Symbol,* ) -> Symbol Attrs,
-                               productions(Prod*)) =
-              productions($Literal ( Symbol,* ) -> Symbol Prod*)
+  [gpp-1'7] get-prods-in-prios(Prod, productions(Prod*)) = productions(Prod Prod*)
 	
   [cm1] $ModuleId := get-module-name(Module),
         productions(Prod*1) := get-exported-cf-prods(Module, productions()),
@@ -59,8 +50,8 @@ equations
         Msgs2 := check-right-hand-sides(Module, , $ModuleId),
         Msgs3 := check-right-hand-side-lexical-prod(Module, , $ModuleId),
 
-        productions(Prod*7) := diff(productions(Prod*3), 
-                                    productions(Prod*6)),
+        productions(Prod*7) := diff-modulo-attrs(productions(Prod*3), 
+                                                 productions(Prod*6)),
 
         $String1 := moduleid2str($ModuleId),
         $String2 := "used in priorities but undefined in " || $String1,
@@ -126,11 +117,13 @@ equations
   [grp-2'2] get-rhs-production($Literal (Symbol,*) -> Symbol Attrs, 
                                symbols()) = symbols(Symbol)
 
-  [iip-1'1] is-injection-production(Symbol1, Symbol2, productions(Prod*1 Symbol1 -> Symbol2 Prod*2)) = true
+  [iip-1'1] is-injection-production(Symbol1, Symbol2, 
+                                    productions(Prod*1 Symbol1 -> Symbol2 Attrs Prod*2)) = true
 
   [iip-1'2] is-injection-production(Symbol3, Symbol2, productions(Prod*1 Prod*2)) == true
             ====>
-            is-injection-production(Symbol1, Symbol2, productions(Prod*1 Symbol1 -> Symbol3 Prod*2)) = true
+            is-injection-production(Symbol1, Symbol2, 
+              productions(Prod*1 Symbol1 -> Symbol3 Attrs Prod*2)) = true
 
   [default-iip-1'3] is-injection-production(Symbol1, Symbol2, ProductionsSet) = false
 

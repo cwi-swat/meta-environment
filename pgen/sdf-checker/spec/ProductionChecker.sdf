@@ -2,6 +2,7 @@ module ProductionChecker
 
 imports Sdf-Type-Environment
 imports utilities/PosInfo[Symbol]
+imports utilities/PosInfo[Production]
 
 exports
   context-free syntax
