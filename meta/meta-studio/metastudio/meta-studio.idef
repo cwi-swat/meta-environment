@@ -75,9 +75,6 @@ in
       rec-msg(display-graph(GraphId?, Graph?)) .
       snd-do(UI, display-graph(GraphId, Graph))
     +
-      rec-msg(ui-delete-modules(Mods?)).
-      snd-do(UI, delete-modules(Mods))
-    +
       rec-event(UI, get-module-info(ModuleName?)).
       snd-msg(get-module-info(ModuleName)) .           
       rec-msg(module-info(ModuleName, Info?)) .

@@ -707,21 +707,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     }
   }
 
-  public void deleteModules(ATerm mods) {
-    ATermList modules = (ATermList) mods;
-
-    for (; !modules.isEmpty(); modules = modules.getNext()) {
-      String name = ((ATermAppl) modules.getFirst()).getAFun().getName();
-      Module module = moduleManager.getModule(name);
-      if (module != null) {
-	moduleManager.removeModule(name);
-	graph.deleteNode(name);
-      }
-    }
-    moduleManager.selectModule(currentModule);
-    layoutGraph(importGraphPanel, graph);
-  }
-
   public void newGraph(ATerm importRelations) {
     setModules((ATermList) importRelations);
     setImports((ATermList) importRelations);
@@ -742,8 +727,8 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       }
     };
 
-    graph.orderNodes();
-    graph.sizeNodes(sizer);
+    graph = graph.orderNodes();
+    graph = graph.sizeNodes(sizer);
 
     bridge.postEvent(factory.make("layout-graph(<str>,<term>)", graphPanel.getId(), graph.toTerm()));
   }
