@@ -1,5 +1,11 @@
 # $Id$
 
+Tue Mar  5 23:27:25 CET 2002 <jong@cwi.nl>
+ * Refactored gvim-support. That is, I removed it alltogether from
+   the meta package, and put it in its own package. This should
+   fix the libtool problems until the next person decides to use
+   a dynamic library :)
+
 2002/04/03 (jurgenv@cwi.nl)
  * Added support for lexical variables in sdf-checker
 
