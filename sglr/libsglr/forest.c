@@ -205,7 +205,7 @@ tree SG_Apply(parse_table *pt, label l, ATermList ts, int attr, ATerm pi)
 #endif
 
 #ifdef KEEPINJECTCOUNT
-  ATermList args;
+  register ATermList args;
   ATerm     arg;
   ATermInt  annot;
 #endif
@@ -479,7 +479,7 @@ forest SG_ExpandApplNode(parse_table *pt, forest t, ATbool recurse,
       } else IF_DEBUG(
                       RemovedSome = ATtrue;
                       fprintf(SGlog(), "Removing term from ambiguity cluster\n");
-                      )
+                      );
     }
       if(ATisEmpty(trms))
         return NULL;
@@ -506,7 +506,7 @@ forest SG_ExpandApplNode(parse_table *pt, forest t, ATbool recurse,
 forest SG_YieldPT(parse_table *pt, forest t)
 {
   forest    elt, res;
-  ATermList args, l;
+  register ATermList args, l;
 
   if(!t)
     return NULL;
@@ -766,7 +766,7 @@ ATermList SG_GetMultiSetKeys(multiset ms)
   return ATtableKeys(ms);
 }
 
-multiset SG_GetMultiSet(tree t, multiset ms)
+multiset SG_GetMultiSet(register tree t, register multiset ms)
 {
   label    l;
   int      count;
@@ -798,9 +798,9 @@ multiset SG_GetMultiSet(tree t, multiset ms)
 ATbool SG_MultiSetGtr(parse_table *pt, multiset msM, ATermList kM,
                       multiset msN, ATermList kN)
 {
-  ATermInt  x, y;
-  ATermList M, N;
-  ATbool    somethingtocheck;
+  register ATermList M, N;
+  register ATermInt x, y;
+  ATbool somethingtocheck;
 
   IF_STATISTICS(SG_MultiSetGtrCalls(SG_NR_INC));
 
@@ -864,8 +864,8 @@ ATbool SG_MultiSetGtr(parse_table *pt, multiset msM, ATermList kM,
 
 ATbool ATsubTable(ATermTable t1, ATermTable t2, ATermList k1)
 {
-  ATerm     key;
-  ATermList keys;
+  ATerm key;
+  register ATermList keys;
 
   if(!t2)
     return ATfalse;
@@ -916,10 +916,9 @@ ATbool SG_MultiSetEqual(multiset M1, multiset M2, ATermList k1, ATermList k2)
   return ATtableIsEqual(M1, M2, k1, k2);
 }
 
-int SG_CountInjections(parse_table *pt, multiset ms, ATermList keys)
+int SG_CountInjections(parse_table *pt, multiset ms, register ATermList keys)
 {
-  int       ret = 0;
-
+  int ret = 0;
   ATermInt  key;
 
   if(!keys)

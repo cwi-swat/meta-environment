@@ -32,7 +32,7 @@ void SG_MarkStack(stack *st)
   if(st) {
     SG_ST_INCCOUNT(st);
     if(SG_ST_COUNT(st) == 1) {
-      st_links *lks;
+      register st_links *lks;
 
       for(lks = SG_ST_LINKS(st); lks; lks = SG_TAIL(lks))
         SG_MarkStack(SG_LK_STACK(SG_HEAD(lks)));
@@ -56,7 +56,7 @@ void SG_SweepStack(stack *st, ATbool delete)
   if(st) {
     SG_ST_DECCOUNT(st);
     if(SG_ST_COUNT(st) <= 0) {
-      st_links *lks, *lks2;
+      register st_links *lks, *lks2;
 
       for(lks = SG_ST_LINKS(st); lks;) {
         st_link  *lk = SG_HEAD(lks);

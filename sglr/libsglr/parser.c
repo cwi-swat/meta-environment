@@ -171,7 +171,7 @@ path *SG_NewPath(stack *st, ATermList sons, path *ps)
   return p;
 }
 
-void SG_ClearPath(path *p)
+void SG_ClearPath(register path *p)
 {
   path *oldp;
 
@@ -191,7 +191,7 @@ void SG_ClearPath(path *p)
 path *SG_FindPaths(stack *st, int i, st_link *l0, ATbool link_seen,
                    ATermList sons, path *paths)
 {
-  st_links  *ls = NULL;
+  register st_links  *ls = NULL;
   st_link   *l1 = NULL;
   ATermList newsons = NULL;
 
@@ -334,8 +334,8 @@ void  SG_ParserCleanup(void)
     IF_STATISTICS(
       allocated = SG_Allocated();
       if(allocated > 0)
-      fprintf(SGlog(), "[mem] extra ATerm memory allocated for parse tree: %ld\n",
-              allocated);
+        fprintf(SGlog(), "[mem] extra ATerm memory allocated for parse tree: %ld\n",
+                allocated);
     );
 #if 0
     /*  Seems to trigger a bug related to ATerm gc if running as ToolBus tool  */
@@ -397,7 +397,8 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void))
 void SG_ParseToken(void)
 {
   stack   *st;
-  stacks  *s, *actives = active_stacks;
+  stacks  *s;
+  register stacks *actives = active_stacks;
 
   for_actor         = NULL;
   for_actor_delayed = NULL;
@@ -438,7 +439,7 @@ void SG_ParseToken(void)
 
 void SG_Actor(stack *st)
 {
-  actions as;
+  register actions as;
   action  a;
 
   as = SG_LookupAction(table, SG_ST_STATE(st), current_token);
@@ -471,7 +472,7 @@ void SG_Actor(stack *st)
   }
 }
 
-ATbool SG_CharInCharClass(int c, ATermList cc)
+ATbool SG_CharInCharClass(int c, register ATermList cc)
 {
   ATerm ccitem;
 
@@ -486,7 +487,7 @@ ATbool SG_CharInCharClass(int c, ATermList cc)
         break;
       case AT_LIST:
       {
-        ATermList l = (ATermList) ccitem;
+        register ATermList l = (ATermList) ccitem;
 
         for(; !ATisEmpty(l); l = ATgetNext(l))
           if(c == ATgetInt((ATermInt) ATgetFirst((ATermList) l)))
@@ -536,12 +537,13 @@ ATbool SG_CheckLookAhead(lookahead las)
 
 void SG_DoReductions(stack *st, action a)
 {
-  path  *fps, *ps;
+  path  *fps;
+  register path *ps;
   label prod;
 
   prod = SG_A_PROD(a);
 
-  for(ps= fps = SG_FindPaths(st, SG_A_NR_ARGS(a), NULL, ATtrue, ATempty, NULL);
+  for(ps = fps = SG_FindPaths(st, SG_A_NR_ARGS(a), NULL, ATtrue, ATempty, NULL);
       ps; ps = SG_P_NEXT(ps)) {
 #ifndef DEBUG
     SG_Reducer(SG_P_STACK(ps),
@@ -649,7 +651,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
      No ambiguity; add new direct link from |st1| to |st0| and recheck
      all reductions for |st1|.
      */
-    stacks *sts;
+    register stacks *sts;
 
     nl = SG_AddLink(st1, st0, t);
     /*  Reject?  */
@@ -669,7 +671,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
       if(!SG_Rejected(st2)
          && !SG_InReduceStacks(st2, for_actor, ATfalse)
          && !SG_InReduceStacks(st2, for_actor_delayed, ATfalse)) {
-        actions as;
+        register actions as;
 
         for(as = SG_LookupAction(table, SG_ST_STATE(st2), current_token);
             as && !ATisEmpty(as); as = ATgetNext(as)) {
@@ -687,7 +689,8 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 
 void SG_DoLimitedReductions(stack *st, action a, st_link *l)
 {
-  path  *fps, *ps;
+  path  *fps;
+  register path *ps;
   label prod;
 
   prod = SG_A_PROD(a);
@@ -757,359 +760,359 @@ void SG_Shifter(void)
 
 #if !defined(HAVE_BOEHMGC)
 #ifdef  MEMSTATS
-    IF_STATISTICS(SG_MaxAllocStats())
+    IF_STATISTICS(SG_MaxAllocStats());
 #endif
-      if(SG_GC)
-        SG_CollectOldStacks(active_stacks, new_active_stacks, accepting_stack);
+    if(SG_GC)
+      SG_CollectOldStacks(active_stacks, new_active_stacks, accepting_stack);
 #endif
 
-    active_stacks = new_active_stacks;
+  active_stacks = new_active_stacks;
 } /*  Shifter  */
 
-  /*
-   If all tokens have been read or if no more stacks are alive, parsing
-   is done and the the result of parsing is returned.  If parsing
-   succeeded, |accepting_stack| points to a stack that has a direct
-   link to the initial state.  The tree on this link is the parse forest
-   with all possible parse trees.  If parsing failed an error term is
-   returned.  A distinction is made between an error at end of file an
-   error in the middle of the file.
-   */
+/*
+ If all tokens have been read or if no more stacks are alive, parsing
+ is done and the the result of parsing is returned.  If parsing
+ succeeded, |accepting_stack| points to a stack that has a direct
+ link to the initial state.  The tree on this link is the parse forest
+ with all possible parse trees.  If parsing failed an error term is
+ returned.  A distinction is made between an error at end of file an
+ error in the middle of the file.
+ */
 
-  char *SG_ProdSort(production t)
-  {
-    char          *sort = NULL;
-    char           listtype = '\0';
-    static char   *sortcopy = NULL;
-    static size_t  sortcopysize = 0;
+char *SG_ProdSort(production t)
+{
+  char          *sort = NULL;
+  char           listtype = '\0';
+  static char   *sortcopy = NULL;
+  static size_t  sortcopysize = 0;
 
-    if(ATmatch((ATerm) t, "prod([<term>,cf(sort(<str>)),<term>],sort(\"<START>\"),no-attrs)",
-               NULL, &sort, NULL, NULL, NULL)) {
+  if(ATmatch((ATerm) t, "prod([<term>,cf(sort(<str>)),<term>],sort(\"<START>\"),no-attrs)",
+             NULL, &sort, NULL, NULL, NULL)) {
+    return sort;
+  }
+
+  if(ATmatch((ATerm) t, "prod([<list>],cf(<term>),<term>)",  NULL, &t, NULL)
+     || ATmatch((ATerm) t, "prod([<list>],lex(<term>),<term>)", NULL, &t, NULL)) {
+    if(ATmatch((ATerm) t, "sort(<str>)", &sort)) {
       return sort;
+    } else if(ATmatch((ATerm) t, "iter(sort(<str>))", &sort)) {
+      listtype = '+';
+    } else if(ATmatch((ATerm) t, "iter-star(sort(<str>))", &sort)) {
+      listtype = '*';
     }
+    if(listtype && sort) {
+      size_t slen;
 
-    if(ATmatch((ATerm) t, "prod([<list>],cf(<term>),<term>)",  NULL, &t, NULL)
-       || ATmatch((ATerm) t, "prod([<list>],lex(<term>),<term>)", NULL, &t, NULL)) {
-      if(ATmatch((ATerm) t, "sort(<str>)", &sort)) {
-        return sort;
-      } else if(ATmatch((ATerm) t, "iter(sort(<str>))", &sort)) {
-        listtype = '+';
-      } else if(ATmatch((ATerm) t, "iter-star(sort(<str>))", &sort)) {
-        listtype = '*';
+      slen = strlen(sort)+1;    /*  need to store an extra character  */
+      if(slen > sortcopysize) {
+        sortcopy = sortcopy ? SG_Malloc(slen, sizeof(char))
+        : SG_Realloc(sortcopy, slen, sizeof(char));
+        sortcopysize = slen;
       }
-      if(listtype && sort) {
-        size_t slen;
-
-        slen = strlen(sort)+1;    /*  need to store an extra character  */
-        if(slen > sortcopysize) {
-          sortcopy = sortcopy ? SG_Malloc(slen, sizeof(char))
-          : SG_Realloc(sortcopy, slen, sizeof(char));
-          sortcopysize = slen;
-        }
-        if(sortcopy) {
-          strcpy(sortcopy, sort);
-          sortcopy[slen-1] = listtype;
-          sortcopy[slen]   = '\0';
-          return sortcopy;
-        }
+      if(sortcopy) {
+        strcpy(sortcopy, sort);
+        sortcopy[slen-1] = listtype;
+        sortcopy[slen]   = '\0';
+        return sortcopy;
       }
     }
-    return sort?sort:"[unknown sort]";
+  }
+  return sort?sort:"[unknown sort]";
+}
+
+char *SG_ApplSort(tree t)
+{
+  production prod;
+
+  if(!SG_NEED_TOP)
+    return "[unavailable]";
+
+  if(ATmatch((ATerm) t, "appl(<term>,<list>)", &prod, NULL)) {
+    return SG_ProdSort(prod);
   }
 
-  char *SG_ApplSort(tree t)
-  {
-    production prod;
+  if(ATisEqual(ATgetAFun((ATermAppl) t), SG_Amb_AFun))
+    return("[multiple sorts]");
 
-    if(!SG_NEED_TOP)
-      return "[unavailable]";
+  return "[unknown sort]";
+}
 
-    if(ATmatch((ATerm) t, "appl(<term>,<list>)", &prod, NULL)) {
-      return SG_ProdSort(prod);
-    }
+forest SG_Prune(forest a_forest, char *desiredsort)
+{
+  /*  Prune the forest  */
+  ATermList trees, bonsai = ATempty;
+  tree      t;
+  char      *sort;
+  ATbool    AmbStart;
 
-    if(ATisEqual(ATgetAFun((ATermAppl) t), SG_Amb_AFun))
-      return("[multiple sorts]");
-
-    return "[unknown sort]";
+  /*  Is the top node ambiguous?  If so, all trees in it must be done.  */
+  if(!(AmbStart = ATmatch((ATerm) a_forest, "amb([<list>])", &trees))) {
+    trees = ATmakeList1((ATerm) a_forest);
   }
 
-  forest SG_Prune(forest a_forest, char *desiredsort)
-  {
-    /*  Prune the forest  */
-    ATermList trees, bonsai = ATempty;
-    tree      t;
-    char      *sort;
-    ATbool    AmbStart;
-
-    /*  Is the top node ambiguous?  If so, all trees in it must be done.  */
-    if(!(AmbStart = ATmatch((ATerm) a_forest, "amb([<list>])", &trees))) {
-      trees = ATmakeList1((ATerm) a_forest);
-    }
-
-    for(; !ATisEmpty(trees); trees=ATgetNext(trees)) {
-      t = (tree) ATgetFirst(trees);
-      sort = SG_ApplSort(t);
-      if(sort) {
-        if(!strcmp(desiredsort, sort)) {
-          bonsai = ATinsert(bonsai, (ATerm) t);
-        }
+  for(; !ATisEmpty(trees); trees=ATgetNext(trees)) {
+    t = (tree) ATgetFirst(trees);
+    sort = SG_ApplSort(t);
+    if(sort) {
+      if(!strcmp(desiredsort, sort)) {
+        bonsai = ATinsert(bonsai, (ATerm) t);
       }
     }
-    if(!ATisEmpty(bonsai)) {
-      if(AmbStart) {
-        if(ATgetLength(bonsai) > 1) {
-          return (forest) ATmakeAppl1(SG_Amb_AFun, (ATerm) bonsai);
-        } else {
-          SGnrAmb(SG_NR_DEC);
-          return (forest) ATgetFirst(bonsai);
-        }
+  }
+  if(!ATisEmpty(bonsai)) {
+    if(AmbStart) {
+      if(ATgetLength(bonsai) > 1) {
+        return (forest) ATmakeAppl1(SG_Amb_AFun, (ATerm) bonsai);
       } else {
+        SGnrAmb(SG_NR_DEC);
         return (forest) ATgetFirst(bonsai);
       }
-    } else {    /*  Nothing left  */
-      SGnrAmb(SG_NR_ZERO);
-      return (forest) NULL;
+    } else {
+      return (forest) ATgetFirst(bonsai);
     }
+  } else {    /*  Nothing left  */
+    SGnrAmb(SG_NR_ZERO);
+    return (forest) NULL;
   }
+}
 
-  char *SGsort(int Mode, forest t)
+char *SGsort(int Mode, forest t)
+{
+  static char *sort = NULL;
+
+  switch(Mode)
   {
-    static char *sort = NULL;
-
-    switch(Mode)
-    {
-      case SG_GET:
-        break;
-      case SG_UNSET:
-        sort = NULL;
-        break;
-      case SG_SET:
-        sort = SG_ApplSort((tree) t);
-        break;
-    }
-    return sort?sort:"[undetermined]";
+    case SG_GET:
+      break;
+    case SG_UNSET:
+      sort = NULL;
+      break;
+    case SG_SET:
+      sort = SG_ApplSort((tree) t);
+      break;
   }
+  return sort?sort:"[undetermined]";
+}
 
-  ATermList SG_CurrentPosInfo(void)
+ATermList SG_CurrentPosInfo(void)
+{
+  return
+  ATmakeList4(
+              (ATerm) ATmakeAppl1(SG_Character_AFun,
+                                  (ATerm) SG_GetATint(current_token, 0)),
+              (ATerm) ATmakeAppl1(SG_Line_AFun,
+                                  (ATerm) SG_GetATint(line, 0)),
+              (ATerm) ATmakeAppl1(SG_Col_AFun,
+                                  (ATerm) SG_GetATint(col, 0)),
+              (ATerm) ATmakeAppl1(SG_Offset_AFun,
+                                  (ATerm) SG_GetATint(sg_tokens_read, 0))
+              );
+
+}
+
+forest SG_ParseError(ATermList cycle, int excess_ambs)
+{
+  ATermAppl  errcode;
+
+  SG_ERROR_ON();
+
+  if(!ATisEmpty(cycle))
+    errcode = ATmakeAppl1(SG_Cycle_Error_AFun, (ATerm) cycle);
+  else if(excess_ambs)
+    errcode = ATmakeAppl1(SG_Amb_Error_AFun, (ATerm)SG_GetATint(excess_ambs, 0));
+  else if(current_token == SG_GETTOKEN(SG_EOF_Token))
+    errcode = ATmakeAppl0(SG_EOF_Error_AFun);
+  else
+    errcode = ATmakeAppl0(SG_Plain_Error_AFun);
+
+  return (forest) ATmakeAppl2(SG_ParseError_AFun, (ATerm) SG_CurrentPosInfo(),
+                              (ATerm) errcode);
+}
+
+forest SG_ParseResult(char *sort)
+{
+  if(!accepting_stack)
+    return SG_ParseError(ATempty, 0);
+
   {
-    return
-    ATmakeList4(
-                (ATerm) ATmakeAppl1(SG_Character_AFun,
-                                    (ATerm) SG_GetATint(current_token, 0)),
-                (ATerm) ATmakeAppl1(SG_Line_AFun,
-                                    (ATerm) SG_GetATint(line, 0)),
-                (ATerm) ATmakeAppl1(SG_Col_AFun,
-                                    (ATerm) SG_GetATint(col, 0)),
-                (ATerm) ATmakeAppl1(SG_Offset_AFun,
-                                    (ATerm) SG_GetATint(sg_tokens_read, 0))
-                );
+    ATermList cycle;
+    forest    woods;
 
-  }
+    /*  Expand at least the top node to get the top sort  */
 
-  forest SG_ParseError(ATermList cycle, int excess_ambs)
-  {
-    ATermAppl  errcode;
+    woods = SG_ExpandApplNode(table,
+                              (forest) SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack))),
+                              ATfalse, ATtrue);
 
-    SG_ERROR_ON();
-
-    if(!ATisEmpty(cycle))
-      errcode = ATmakeAppl1(SG_Cycle_Error_AFun, (ATerm) cycle);
-    else if(excess_ambs)
-      errcode = ATmakeAppl1(SG_Amb_Error_AFun, (ATerm)SG_GetATint(excess_ambs, 0));
-    else if(current_token == SG_GETTOKEN(SG_EOF_Token))
-      errcode = ATmakeAppl0(SG_EOF_Error_AFun);
-    else
-      errcode = ATmakeAppl0(SG_Plain_Error_AFun);
-
-    return (forest) ATmakeAppl2(SG_ParseError_AFun, (ATerm) SG_CurrentPosInfo(),
-                                (ATerm) errcode);
-  }
-
-  forest SG_ParseResult(char *sort)
-  {
-    if(!accepting_stack)
-      return SG_ParseError(ATempty, 0);
-
-    {
-      ATermList cycle;
-      forest    woods;
-
-      /*  Expand at least the top node to get the top sort  */
-
-      woods = SG_ExpandApplNode(table,
-                                (forest) SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack))),
-                                ATfalse, ATtrue);
-
-      /*  Select only the desired start symbols when so requested  */
-      if(sort) {
-        IF_STATISTICS(SG_Timer());
-        woods = SG_Prune(woods, sort);
-        IF_STATISTICS(fprintf(SGlog(), "Topsort selection took %.4fs\n",
-                              SG_Timer()));
-        if(!woods) {
-          /*  Flag this error at start, not end, of file  */
-          SG_ResetCoordinates();
-          return SG_ParseError(ATempty, 0);
-        }
-      }
-
-      /*  Now detect, and report, cycles for the (pruned?) forest  */
-      if(SG_CYCLE && SG_NEED_OUTPUT) {
-        IF_STATISTICS(SG_Timer());
-        cycle = SG_CyclicTerm(woods);
-        IF_STATISTICS(fprintf(SGlog(), "Cycle detection took %.4fs\n", SG_Timer()));
-        if(!ATisEmpty(cycle))
-          return SG_ParseError(cycle, 0);
-      }
-
-      SGsort(SG_SET, woods);
-
-      /*  A full yield provides the output term and an exact ambiguity count  */
-      if(SG_NEED_OUTPUT) {
-        IF_STATISTICS(SG_Timer());
-        woods = SG_YieldPT(table, woods);
-        IF_STATISTICS(fprintf(SGlog(),
-                              "Aprod expansion took %.4fs\n", SG_Timer()));
-      }
-
+    /*  Select only the desired start symbols when so requested  */
+    if(sort) {
+      IF_STATISTICS(SG_Timer());
+      woods = SG_Prune(woods, sort);
+      IF_STATISTICS(fprintf(SGlog(), "Topsort selection took %.4fs\n",
+                            SG_Timer()));
       if(!woods) {
-        ATwarning("Successful parse yielded no parse tree\n");
+        /*  Flag this error at start, not end, of file  */
+        SG_ResetCoordinates();
         return SG_ParseError(ATempty, 0);
       }
+    }
+
+    /*  Now detect, and report, cycles for the (pruned?) forest  */
+    if(SG_CYCLE && SG_NEED_OUTPUT) {
+      IF_STATISTICS(SG_Timer());
+      cycle = SG_CyclicTerm(woods);
+      IF_STATISTICS(fprintf(SGlog(), "Cycle detection took %.4fs\n", SG_Timer()));
+      if(!ATisEmpty(cycle))
+        return SG_ParseError(cycle, 0);
+    }
+
+    SGsort(SG_SET, woods);
+
+    /*  A full yield provides the output term and an exact ambiguity count  */
+    if(SG_NEED_OUTPUT) {
+      IF_STATISTICS(SG_Timer());
+      woods = SG_YieldPT(table, woods);
+      IF_STATISTICS(fprintf(SGlog(),
+                            "Aprod expansion took %.4fs\n", SG_Timer()));
+    }
+
+    if(!woods) {
+      ATwarning("Successful parse yielded no parse tree\n");
+      return SG_ParseError(ATempty, 0);
+    }
 
 #ifndef NO_A2TOA1
-      /*  Convert the forest in-line to AsFix1 upon request  */
-      if(SG_OUTPUT && SG_ASFIX1) {
-        int nr_ambs = SGnrAmb(SG_NR_ASK);
+    /*  Convert the forest in-line to AsFix1 upon request  */
+    if(SG_OUTPUT && SG_ASFIX1) {
+      int nr_ambs = SGnrAmb(SG_NR_ASK);
 
-        if(nr_ambs > 0) {
-          IF_DEBUG(
-            ATwarning("error: cannot represent parse forest (%d ambiguit%s)"
-                      " in AsFix1\n",
-                      nr_ambs, nr_ambs>1?"ies":"y")
-          );
-          return SG_ParseError(ATempty, nr_ambs);
-        }
-        IF_VERBOSE(ATwarning("converting AsFix2 parse tree to AsFix1\n"));
-        IF_STATISTICS(SG_Timer());
-        woods = (forest) a2toa1((ATerm) woods, ATfalse);
-        IF_STATISTICS(fprintf(SGlog(),
-                              "AsFix1 conversion took %.4fs\n", SG_Timer()));
-        return woods;
+      if(nr_ambs > 0) {
+        IF_DEBUG(
+          ATwarning("error: cannot represent parse forest (%d ambiguit%s)"
+                    " in AsFix1\n",
+                    nr_ambs, nr_ambs>1?"ies":"y")
+        );
+        return SG_ParseError(ATempty, nr_ambs);
       }
-#endif
-
-      woods = (forest) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) woods,
-                                   (ATerm) SG_GetATint(
-                                                       (SG_NEED_OUTPUT ?
-                                                        SGnrAmb(SG_NR_ASK) :
-                                                        SG_MaxNrAmb(SG_NR_ASK)), 0));
+      IF_VERBOSE(ATwarning("converting AsFix2 parse tree to AsFix1\n"));
+      IF_STATISTICS(SG_Timer());
+      woods = (forest) a2toa1((ATerm) woods, ATfalse);
+      IF_STATISTICS(fprintf(SGlog(),
+                            "AsFix1 conversion took %.4fs\n", SG_Timer()));
       return woods;
     }
+#endif
+
+    woods = (forest) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) woods,
+                                 (ATerm) SG_GetATint(
+                                                     (SG_NEED_OUTPUT ?
+                                                      SGnrAmb(SG_NR_ASK) :
+                                                      SG_MaxNrAmb(SG_NR_ASK)), 0));
+    return woods;
   }
+}
 
 
 #ifdef DEBUG
-  /*  A few diagnostic routines (for debugging purposes)  */
+/*  A few diagnostic routines (for debugging purposes)  */
 
-  void SG_ShowLinks(st_links *lks, int depth)
-  {
-    for (; lks; lks = SG_TAIL(lks)) {
-      fprintf(stderr, "%*.*s--%x-->\n", 2*depth, 2*depth, "", (int)SG_HEAD(lks));
-      SG_ShowStack(SG_LK_STACK(SG_HEAD(lks)), depth+1);
-    }
+void SG_ShowLinks(st_links *lks, int depth)
+{
+  for (; lks; lks = SG_TAIL(lks)) {
+    fprintf(stderr, "%*.*s--%x-->\n", 2*depth, 2*depth, "", (int)SG_HEAD(lks));
+    SG_ShowStack(SG_LK_STACK(SG_HEAD(lks)), depth+1);
   }
+}
 
-  void SG_ShowStack(stack *st, int depth)
-  {
-    if (!st)
-      return;
+void SG_ShowStack(stack *st, int depth)
+{
+  if (!st)
+    return;
 
-    fprintf(stderr, "%*.*s%x %d\n", 2*depth, 2*depth, "", (int)st,
-            SG_GETSTATE(SG_ST_STATE(st)));
+  fprintf(stderr, "%*.*s%x %d\n", 2*depth, 2*depth, "", (int)st,
+          SG_GETSTATE(SG_ST_STATE(st)));
 
-    SG_ShowLinks(SG_ST_LINKS(st), depth+1);
+  SG_ShowLinks(SG_ST_LINKS(st), depth+1);
+}
+
+void SG_ShowStacks(stacks *sts)
+{
+  if (!sts)
+    return;
+
+  while(sts) {
+    SG_ShowStack(SG_HEAD(sts),0);
+    sts = SG_TAIL(sts);
   }
+}
 
-  void SG_ShowStacks(stacks *sts)
-  {
-    if (!sts)
-      return;
-
-    while(sts) {
-      SG_ShowStack(SG_HEAD(sts),0);
-      sts = SG_TAIL(sts);
-    }
+void SG_ShowStackAncestors(stack *st)
+{
+  while(st && st->parent) {
+    ATwarning("\t%d%s induced %d%s\n",
+              SG_GETSTATE(SG_ST_STATE(st->parent)),
+              SG_Rejected(st->parent)?"R":"",
+              SG_GETSTATE(SG_ST_STATE(st)),
+              SG_Rejected(st)?"R":"");
+    st = st->parent;
   }
+}
 
-  void SG_ShowStackAncestors(stack *st)
-  {
-    while(st && st->parent) {
-      ATwarning("\t%d%s induced %d%s\n",
-                SG_GETSTATE(SG_ST_STATE(st->parent)),
-                SG_Rejected(st->parent)?"R":"",
-                SG_GETSTATE(SG_ST_STATE(st)),
-                SG_Rejected(st)?"R":"");
-      st = st->parent;
-    }
+void SG_ShowActiveStackStates(signed int c)
+{
+  stacks *astks = active_stacks;
+  stack  *stk;
+  static int level = 0;
+
+  level = (level>1)?(level+c):0;
+  fprintf(stderr, "%*.*s%cActive states: ", level, level, "", c>0?'+':'-');
+  while(astks) {
+    stk   =  SG_HEAD(astks);
+    astks =  SG_TAIL(astks);
+    ATwarning("%d%s ", SG_GETSTATE(SG_ST_STATE(stk)),
+              SG_Rejected(stk)?"r":"");
   }
+  ATwarning("\n");
+}
 
-  void SG_ShowActiveStackStates(signed int c)
-  {
-    stacks *astks = active_stacks;
-    stack  *stk;
-    static int level = 0;
+void SG_ShowStackRejects(stack *st, int depth)
+{
+  st_links *ls = SG_ST_LINKS(st);
+  st_link *l;
 
-    level = (level>1)?(level+c):0;
-    fprintf(stderr, "%*.*s%cActive states: ", level, level, "", c>0?'+':'-');
-    while(astks) {
-      stk   =  SG_HEAD(astks);
-      astks =  SG_TAIL(astks);
-      ATwarning("%d%s ", SG_GETSTATE(SG_ST_STATE(stk)),
-                SG_Rejected(stk)?"r":"");
-    }
-    ATwarning("\n");
+  if(depth > 666) return;
+
+  for (; ls; ls = SG_TAIL(ls)) {
+    l = SG_HEAD(ls);
+
+    ATwarning("%*.*s%s%x: state %d --> state %d\n", 2*depth, 2*depth,
+              "", SG_LK_REJECTED(l)?"~":" ", (int) l,
+              SG_GETSTATE(SG_ST_STATE(st)),
+              SG_GETSTATE(SG_ST_STATE(SG_LK_STACK(l))));
+    SG_ShowStackRejects(SG_LK_STACK(l), depth+1);
   }
+}
 
-  void SG_ShowStackRejects(stack *st, int depth)
-  {
-    st_links *ls = SG_ST_LINKS(st);
-    st_link *l;
 
-    if(depth > 666) return;
+void SG_ShowActiveStackLinks(stacks *astks)
+{
+  stack  *stk;
 
-    for (; ls; ls = SG_TAIL(ls)) {
-      l = SG_HEAD(ls);
-
-      ATwarning("%*.*s%s%x: state %d --> state %d\n", 2*depth, 2*depth,
-                "", SG_LK_REJECTED(l)?"~":" ", (int) l,
-                SG_GETSTATE(SG_ST_STATE(st)),
-                SG_GETSTATE(SG_ST_STATE(SG_LK_STACK(l))));
-      SG_ShowStackRejects(SG_LK_STACK(l), depth+1);
-    }
+  while(astks) {
+    stk   =  SG_HEAD(astks);
+    astks =  SG_TAIL(astks);
+    SG_ShowStackRejects(stk,2);
   }
+}
 
+void SG_ShowShiftPairs()
+{
+  int i;
 
-  void SG_ShowActiveStackLinks(stacks *astks)
-  {
-    stack  *stk;
-
-    while(astks) {
-      stk   =  SG_HEAD(astks);
-      astks =  SG_TAIL(astks);
-      SG_ShowStackRejects(stk,2);
-    }
+  ATwarning("Shifters:\n");
+  for(i = 0; i < sg_sp_idx; i++) {
+    ATwarning("%d: ", SG_SP_STATE(sg_shift_pairs[i]));
+    SG_ShowStackAncestors(SG_SP_STACK(sg_shift_pairs[i]));
   }
-
-  void SG_ShowShiftPairs()
-  {
-    int i;
-
-    ATwarning("Shifters:\n");
-    for(i = 0; i < sg_sp_idx; i++) {
-      ATwarning("%d: ", SG_SP_STATE(sg_shift_pairs[i]));
-      SG_ShowStackAncestors(SG_SP_STACK(sg_shift_pairs[i]));
-    }
-  }
+}
 #endif  /* DEBUG */

@@ -178,7 +178,7 @@ char *SGreadFile(char *prg, char *err, char *fnam, size_t *fsize)
     SGcloseFile(in);
   } else {
     size_t curbufsize = SG_BUFCHUNK;
-    int    c;
+    register int    c;
 
     buf = SG_Malloc(1, SG_BUFCHUNK);
     while((c = getc(in)) != EOF) {

@@ -175,8 +175,8 @@ hashkey SG_ComputeGotoHashKey(parse_table *pt, state s, label l)
 
 state SG_LookupGoto(parse_table *pt, state s, label l)
 {
-  gotobucket *b;
-  hashkey    h;
+  register gotobucket *b;
+  hashkey h;
 
   h = SG_ComputeGotoHashKey(pt, s, l);
 
@@ -194,8 +194,8 @@ state SG_LookupGoto(parse_table *pt, state s, label l)
 
 actions SG_LookupAction(parse_table *pt, state s, token c)
 {
-  actionbucket *a;
-  hashkey       h;
+  register actionbucket *a;
+  hashkey h;
 
   h = SG_ComputeGotoHashKey(pt, s, c);
 
@@ -318,95 +318,32 @@ void SG_AddToActionTable(parse_table *pt, state s, token c, actions acts)
   actionbucket *ab;
   hashkey       h;
 
-#if 0     /*  Contrary to naive expectations, this wreaks havoc!  */
-  /****  Start of Ad-Hoc Action Filter  ****/
-  /*
-   Conflicts may occur in the action table; without resorting
-   to explicit disambiguation (rejects, priorities, restrictions, ...)
-   there still are `hints' that may be of use.  The following filter
-   selects a subset of reduce-actions in the following way:
+  if(sg_action_pool_free == NULL) {
+    /* If the action pool is empty, allocate a new chunk of action buckets */
+    register size_t         i;
 
-   - there are four kinds of reduce actions:  regular,
-   reject, prefer, and avoid
-   - preferred reduces take precedence over regular reduces
-   - regular reduces take precedence over default reduces
-
-   The set of reductions registered is the set of reductions of the
-   highest precedence: if there are preferred reduces, regular and
-   default reduces are ignored.  Otherwise: if there are regular
-   reduces, default reduces disappear.
-   */
-  actions as, preferred = NULL;
-  action  ac;
-  ATbool  haseager, hasregular, hasavoid;
-
-  if(ATgetLength(acts) > 1) ATwarning("Actions: %t\n", acts);
-
-  for(as = acts, haseager = hasregular = hasavoid = ATfalse;
-      !haseager && as && !ATisEmpty(as); as = ATgetNext(as)) {
-    ac = ATgetFirst(as);
-    if(ATgetAFun(ac) == SG_Reduce_AFun) {
-      switch(SG_A_ATTRIBUTE(ac)) {
-        case SG_PT_REGULAR:
-          hasregular = ATtrue;
-          break;
-        case SG_PT_EAGER:
-          haseager = ATtrue;
-          break;
-        case SG_PT_UNEAGER:
-          hasavoid = ATtrue;
-          break;
-        case SG_PT_REJECT:
-        default:
-          break;
-      }
+    sg_action_pool_free = SG_Malloc(SG_ACTIONPOOLCHUNK, sizeof(actionbucket));
+    if(!sg_action_pool_free) {
+      ATerror("failed to expand action pool\n");
     }
-  }
 
-  if(haseager || (hasregular && hasavoid)) { /*  Exclude certain reductions  */
-    for(as = acts, preferred = ATempty; as && !ATisEmpty(as); as = ATgetNext(as)) {
-      ac = ATgetFirst(as);
-      if(ATgetAFun(ac) != SG_Reduce_AFun ||    /*  Only weed out certain reduces  */
-        (!SG_UneagerAction(ac)           &&    /*  Ditch avoid reductions..  */
-        !(haseager && SG_RegularAction(ac)))) {
-        /*  ...and regulars, iff prefers exist */
-        preferred = ATinsert(preferred, ac);
-      }
+    for(i=0, ab=sg_action_pool_free; i < (SG_ACTIONPOOLCHUNK-1); i++) {
+      ab->next = (actionbucket *) ((size_t) ab + (size_t)sizeof(actionbucket));
+      ab = ab->next;
     }
+    ab->next = NULL;
   }
+  ab = sg_action_pool_free;
+  sg_action_pool_free = sg_action_pool_free->next;
 
-if(preferred && !ATisEmpty(preferred)) {
-  acts = preferred;
-}
-/****  End of Ad-Hoc Action Filter  ****/
-#endif
+  h = SG_ComputeGotoHashKey(pt, s, c);
 
-if(sg_action_pool_free == NULL) {
-  /* If the action pool is empty, allocate a new chunk of action buckets */
-  size_t         i;
-
-  sg_action_pool_free = SG_Malloc(SG_ACTIONPOOLCHUNK, sizeof(actionbucket));
-  if(!sg_action_pool_free) {
-    ATerror("failed to expand action pool\n");
-  }
-
-  for(i=0, ab=sg_action_pool_free; i < (SG_ACTIONPOOLCHUNK-1); i++) {
-    ab->next = (actionbucket *) ((size_t) ab + (size_t)sizeof(actionbucket));
-    ab = ab->next;
-  }
-  ab->next = NULL;
-}
-ab = sg_action_pool_free;
-sg_action_pool_free = sg_action_pool_free->next;
-
-h = SG_ComputeGotoHashKey(pt, s, c);
-
-ab->next = pt->actions.table[h];
-ab->s = s;
-ab->c = c;
-ab->a = acts;
-ATprotect((ATerm *) &(ab->a));
-pt->actions.table[h] = ab;
+  ab->next = pt->actions.table[h];
+  ab->s = s;
+  ab->c = c;
+  ab->a = acts;
+  ATprotect((ATerm *) &(ab->a));
+  pt->actions.table[h] = ab;
 }
 
 
@@ -474,7 +411,7 @@ void SG_AddPTActions(parse_table *pt, state s, ATermList acts)
 }
 
 
-size_t SG_CountPTActions(ATermList acts)
+size_t SG_CountPTActions(register ATermList acts)
 {
   ATerm     act;
   size_t    numactions = 0;
@@ -495,13 +432,12 @@ size_t SG_CountPTActions(ATermList acts)
 void SG_AddToGotoTable(parse_table *pt, state from, label l, state to)
 {
   /*  A goto for label l and state s is guaranteed not to exist  */
-
   gotobucket *gb;
   hashkey     h;
 
   if(sg_goto_pool_free == NULL) {
     /* If the goto pool is empty, allocate a new chunk of goto buckets */
-    size_t         i;
+    register size_t         i;
 
     sg_goto_pool_free = SG_Malloc(SG_ACTIONPOOLCHUNK, sizeof(gotobucket));
     if(!sg_goto_pool_free) {
@@ -526,7 +462,7 @@ void SG_AddToGotoTable(parse_table *pt, state from, label l, state to)
   pt->gotos.table[h] = gb;
 }
 
-size_t SG_CountClassesInGotoTable(ATermList classes)
+size_t SG_CountClassesInGotoTable(register ATermList classes)
 {
   ATerm     firstTerm;
   size_t    numgotos = 0;
@@ -570,7 +506,7 @@ void SG_AddClassesToGotoTable(parse_table *pt, state from, ATermList classes,
   }
 }
 
-size_t SG_CountPTGotos(ATermList goto_lst)
+size_t SG_CountPTGotos(register ATermList goto_lst)
 {
   ATerm     firstTerm;
   size_t    numgotos = 0;
@@ -604,7 +540,7 @@ void SG_AddPTGotos(parse_table *pt, state s, ATermList goto_lst, size_t nprods)
   }
 }
 
-size_t SG_CountPTStates(ATermList states)
+size_t SG_CountPTStates(register ATermList states)
 {
   ATerm     curstate;
   size_t    numgotos = 0;
@@ -711,7 +647,7 @@ void SG_AddPTGrammar(parse_table *pt, ATermList grammar)
 
 enum SG_PRIORITIES { P_IGNORE, P_GTR, P_LEFT, P_RIGHT };
 
-void SG_AddPTPriorities(parse_table *pt, ATermList prios)
+void SG_AddPTPriorities(parse_table *pt, register ATermList prios)
 {
   ATerm     prio;
   AFun      fun;
@@ -821,7 +757,7 @@ parse_table *SG_NewParseTable(state initial, size_t numstates, size_t numprods,
 
 void SG_DiscardActions(parse_table *pt)
 {
-  size_t      s;
+  register size_t s;
   actionbucket *a, *next;
 
   for(s=0; s<pt->actions.size; s++) {
@@ -837,7 +773,7 @@ void SG_DiscardActions(parse_table *pt)
 
 void SG_DiscardGotos(parse_table *pt)
 {
-  size_t      s;
+  register size_t s;
   gotobucket *g, *next;
 
   for(s=0; s<pt->gotos.size; s++) {
@@ -852,7 +788,7 @@ void SG_DiscardGotos(parse_table *pt)
 
 void SG_DiscardProductions(parse_table *pt)
 {
-  int p;
+  register size_t p;
 
   for(p=0; p<SG_PT_NUMPRODS(pt); p++) {
     if(pt->productions[p] != NULL) {
@@ -934,7 +870,8 @@ parse_table *SG_BuildParseTable(ATermAppl t)
 #define SG_OLDPTFORMAT  "<int>,[<list>],states([<list>])"
 #define SG_PTFORMAT     SG_OLDPTFORMAT",priorities([<list>])"
 
-  ATermList   prods, states, sts, prios = ATempty;
+  ATermList   prods, states;
+  register ATermList sts, prios = ATempty;
   state       initial_state;
   parse_table *pt = NULL;
   AFun        ptfun;
