@@ -590,7 +590,7 @@ in
        	StackPopString(Stack, Stack?, Path?) .
        	StackPopString(Stack, Stack?, NewModName?) .
        	StackPopString(Stack, Stack?, ModuleName?) .
-	snd-msg(rename-module(ModuleName, NewModName, Path, Ext)) .
+	snd-msg(rename-module(ModuleName, NewModName, Path)) .
 	ReturnSuccess(EditorId, Stack)	
       +
         rec-msg(import-module, Stack?, EditorId?) .

@@ -112,8 +112,8 @@ in
     fi
   +
     rec-msg(rename-module-in-db(OldName?, NewName?, Path?)) .
-    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
-    snd-msg(renaming-not-done(OldName))
+    MDB-RenameModule(OldName, NewName, Modules?) .
+    snd-msg(renaming-module-done(OldName, Modules))
   +
     rec-msg(add-import-in-db(OldName?, NewName?)) .
     MDB-AddImportToModule(OldName, NewName) .
@@ -419,6 +419,55 @@ in
   MDB-DisplayGraph
 endlet
 
+process MDB-RenameModule(OldName : str, NewName : str, Changed : list?) is
+let
+  Status : term,
+  Modules : list,
+  Imports : list,
+  Module : str,
+  Path : str,
+  Syntax : term
+in
+  MDB-GetAllDependingModules(OldName, Modules?) .
+  Changed := [] .
+  if not(equal(Modules,[])) then
+    Module := first(Modules) .
+    Modules := next(Modules) .
+    snd-msg(ts-get-term-value("sdf-tree", Module)) .
+    rec-msg(ts-value(Syntax?)) .
+    snd-msg(sm-get-imported-module-names(Syntax)) .
+    rec-msg(sm-imported-module-names(Imports?)) .
+    MDB-ContainedIn(OldName, Imports, Status?) .
+    if equal(Status, success) then
+      snd-msg(sm-remove-import-from-module(Syntax, OldName)) .
+      rec-msg(sm-import-removed-from-module(Syntax?)) .
+      snd-msg(sm-add-import-to-module(Syntax, NewName)) .
+      rec-msg(sm-import-added-to-module(Syntax?)) .
+      MDB-StoreModuleTree(Module, Syntax) .
+      Syntax := no-tree .
+      Changed := join(Changed, Module)
+    else
+      tau
+    fi
+  fi
+  *
+  if equal(Modules,[]) then
+    tau
+  fi .
+  snd-msg(ts-get-term-value("sdf-tree", OldName)) .
+  rec-msg(ts-value(Syntax?)) .
+  snd-msg(ts-get-str-value("module-paths", OldName)) .
+  rec-msg(ts-value(Path?)) .
+  snd-msg(ts-put-str-value("module-paths", NewName, Path)) .
+  snd-msg(ts-put-str-value("active-modules", NewName, Path)) .
+  snd-msg(sm-rename-modulename-in-module(Syntax, NewName)) .
+  rec-msg(sm-modulename-renamed-in-module(Syntax?)) .
+  MDB-StoreModuleTree(NewName, Syntax) .
+  Syntax := no-tree .
+  snd-msg(ts-remove-value-from-all-tables(OldName)) .
+  MDB-DisplayGraph
+endlet
+
 process MDB-AddImportToModule(OldName : str, NewName : str) is
 let
   Syntax : term
@@ -516,10 +565,10 @@ let
   Path : str,
   FileName : str
 in
-      snd-msg(ts-get-str-value("module-paths", Module)) .
-      rec-msg(ts-value(Path?)) .
-      snd-msg(io-get-filename(Path, Module, ".sdf")) .
-      rec-msg(io-filename(FileName?)) .
-      snd-msg(add-posinfo-packed(FileName, In)) .
-      rec-msg(tree-with-pos-info(Out?)) 
+  snd-msg(ts-get-str-value("module-paths", Module)) .
+  rec-msg(ts-value(Path?)) .
+  snd-msg(io-get-filename(Path, Module, ".sdf")) .
+  rec-msg(io-filename(FileName?)) .
+  snd-msg(add-posinfo-packed(FileName, In)) .
+  rec-msg(tree-with-pos-info(Out?)) 
 endlet

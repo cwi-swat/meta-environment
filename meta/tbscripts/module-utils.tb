@@ -160,16 +160,14 @@ in
   Status := success.
   GetRealModuleName(New, Path, Status?, RealNew?).
   if equal(Status, success) then
-    CheckExistence(RealNew, Status?).
+    CheckExistence(New, RealNew, Status?).
     if equal(Status, success) then
       DeleteEditors(Old). tau.
       if equal(Status, success) then
-        RenameModuleInDB(Old, RealNew, Path, Status?, Changed?). tau.
-        if equal(Status, success) then 
-          SaveSdfModules(Changed). tau.
-          SaveAsfSdfModule(RealNew). tau.
-          RemoveModuleFromDisk(Old). tau
-        else tau fi
+        RenameModuleInDB(Old, New, Path, Changed?) .
+        SaveSdfModules(Changed).
+        SaveAsfSdfModule(RealNew). 
+        RemoveModuleFromDisk(Old)
       else tau fi
     else tau fi
   else tau fi.
@@ -185,7 +183,7 @@ in
   Status := success.
   GetRealModuleName(New, Path, Status?, RealNew?).
   if equal(Status, success) then
-    CheckExistence(RealNew, Status?).
+    CheckExistence(New, RealNew, Status?).
     if equal (Status, success) then
       CopyModuleInDB(Old, RealNew, Path, Status?, Changed?).
       if equal (Status, success) then
@@ -304,16 +302,10 @@ process CloseModuleInUI(ModuleName : str) is
 process CloseModulesInUI(Modules : list) is
   snd-msg(ui-delete-modules(Modules))
 
-process RenameModuleInDB(Old : str, New : str, Path : str, Status : term?, 
-                         Changed : list?)
+process RenameModuleInDB(Old : str, New : str, Path : str, Changed : list?)
 is
   snd-msg(rename-module-in-db(Old, New, Path)) .
-  (
-    rec-msg(renaming-done(Old, Changed?)) 
-  + 
-    rec-msg(renaming-not-done(Old)).
-    Status := module-not-changed
-  )
+  rec-msg(renaming-module-done(Old, Changed?)) 
 
 process CopyModuleInDB(Old : str, New : str, Path : str, Status : term?, 
                        Changed : list?)
@@ -336,20 +328,20 @@ is
   snd-msg(remove-import-in-db(Mod, Import, Path)) .
   rec-msg(remove-import-done)
 
-process CheckExistence(New : str, Status : term?) is
-    snd-msg(is-module-in-db(New)) .
+process CheckExistence(Name : str, FileName : str, Status : term?) is
+    snd-msg(is-module-in-db(Name)) .
     (
-      rec-msg(exists-in-module-db(New)).
+      rec-msg(exists-in-module-db(Name)).
       Status := module-exists-in-db
     +
-      rec-msg(not-exists-in-module-db(New))
+      rec-msg(not-exists-in-module-db(Name))
     ).
-    snd-msg(exists-syntax-module("/", New)) .
+    snd-msg(io-exists-file(FileName)) .
     (
-      rec-msg(syntax-module-exists(New)) .
+      rec-msg(io-file-exists) .
       Status := module-exists-on-disk
       +
-      rec-msg(syntax-module-not-exists(New))
+      rec-msg(io-file-not-exists)
     )
 
 process DeleteEditors(Module : str) is
