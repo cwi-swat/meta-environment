@@ -120,17 +120,127 @@ A first version of the \ASmetaenv\ for Release 1.
 \newpage
 
 %}}}
-%{{{ Introduction
 
-%----[ INTRODUCTION ]----  
-\section{Introduction}\label{intro}   
+%{{{ Overview
+
+%---- [ OVERVIEW ]---- 
+
+\section{Overview}\label{overview} 
+
+\subsection{When to use the ASF+SDF Meta-Environment?}
+
+The ASF+SDF Meta-Environment is an interactive development environment
+for the automatic generation of interactive systems for manipulating
+programs, specifications, or other texts written in a formal
+language. The generation process is controlled by a definition of the
+target language, which typically includes such features as syntax,
+pretty printing, type checking and execution of programs in the target
+language. The ASF+SDF Meta-environment can help you if:
+
+\begin{itemize}
+
+  \item You have to write a formal specification for some problem
+  and you need interactive support to do this.
+
+  \item You have developed your own (application) language and want to
+  create an interactive environment for it.
+
+  \item You have programs in some existing programming language and you
+   want to analyze or transform them.
+\end{itemize}
+
+The ASF+SDF formalism allows the definition of syntactic as well as
+semantic issues. It can be used for the definition of languages (for
+programming, for writing specifications, for querying databases, for
+text processing, or for dedicated applications). In addition it can be
+used for the formal specification of a wide variety of
+problems. ASF+SDF provides you with:
+
+\begin{itemize}
+
+  \item A general-purpose algebraic specification formalism based on equational logic. 
+
+  \item Modular structuring of specifications.
+
+  \item Integrated definition of lexical, context-free and abstract syntax. 
+
+  \item User-defined syntax, allowing you to write specifications using your own notation. 
+
+  \item Complete integration of the definition of syntax and
+  semantics.
+
+\end{itemize}
+
+The ASF+SDF Meta-environment offers: 
+
+\begin{itemize}
+
+  \item Syntax-directed editing of ASF+SDF specifications.
+
+  \item Incremental compilation and testing of specifications.
+
+  \item Compilation of ASF+SDF specifications into dedicated
+interactive environments containing various tools such as a lexical
+analyzer, a parser, a pretty printer, a syntax-directed editor, a
+debugger, and an interpreter or compiler.
+
+\end{itemize}
+
+The advantages of creating interactive environments in this way are twofold:
+
+\begin{itemize}
+
+  \item \emph{Increased uniformity}. Similar tools for different
+  languages often suffer from a lack of uniformity.  Generating tools
+  from language definitions will result in a large increase in
+  uniformity, with corresponding benefits for the user.
+
+  \item \emph{Reduced implementation effort.} Preparing a language
+  definition requires significantly less effort than developing an
+  environment from scratch.
+
+\end{itemize}
+
+\subsection{Global Structure of the Meta-Environment}
+
+You can create new specifications or modify and test existing ones
+using the Meta-Environment. Specifications consist of a series of
+modules, and individual modules can be edited by invoking a module
+editor. All editing in the Meta-environment is done by creating
+instances of a \emph{generic syntax-directed editor}.
+
+After each editing operation on a module its \emph{implementation} is updated
+immediately. It consists of a lexical scanner, a parser, a pretty
+printer, and a term rewriting system which are all derived from the
+module automatically.
+
+A module can be tested by invoking a \emph{term editor} to create and
+evaluate terms defined by the module. Term editors use the syntax of
+the module for parsing the textual representation of terms and for
+converting them to internal format (abstract syntax trees). The
+equations of the module are then used to reduce the terms into normal
+form. This result is, in its turn, converted back to textual form by
+pretty printing it.
+
+%%The reduction of a term can be monitored by using EDB (Equation
+%%Debugger), a debugging system that allows you to reduce a term
+%%step-by-step or to place breakpoints for interrupting the reduction
+%%process at specific moments.
+
+Finally, term editors can be customized by adding \emph{buttons} whose
+activation starts the evaluation of a function which is defined in the
+specification. In this way you can customize the user-interface of the
+application by adding, for instance, a typechecking or evaluation
+button to a term editor. (** check; not in Release 1.**)
+
+\subsection{About this Manual}
 
 This manual is intended for the first generation user of the new
 \ASmetaenv. In the sequel we will use \ASmetaenv\ to address the new
 system and old \ASmetaenv\ when addressing the old system.
 
 The focus in this manual will be on using the system to write a specification
-like a type checker or evaluator for the PICO language.
+like a type checker or evaluator for the toy language PICO.
 Topics that will be addressed are:
 \begin{itemize}
 \item How to start the system.
@@ -147,7 +257,7 @@ Topics that will be addressed are:
 \item How to unparse parse and/or normalized terms.
 \end{itemize}
 
-The first version of the \ASmetaenv\ supports not full \sdf2. Furthermore
+(****) The first version of the \ASmetaenv\ supports not full \sdf2. Furthermore
 this manual is restricted to the usage of the \ASmetaenv\ and abstracts
 from \sdf, \sdf2, and \asf. How to use the separate tools, like SGLR, compiled
 specification, etc., will be addressed in the final sections.
