@@ -3,23 +3,20 @@ equations
 [set-location-0]
   set-location(X, Location) = set-posinfo(X, Location)
 
-[] set-posinfo(X, area-in-file(strcon(\" char* \"),
-                               area(BeginLine, BeginColumn,
-                                    EndLine, EndColumn,
-                                    Offset, Length))) = 
+[] set-posinfo(X, area-in-file(Path, area(BeginLine, BeginColumn,
+                                                   EndLine, EndColumn,
+                                                   Offset, Length))) = 
      set-term-anno(X, "pos-info", 
-                   area-in-file(strcon(\" char* \"),
-                                area(BeginLine, BeginColumn,
-                                     EndLine, EndColumn,
-                                     Offset, Length)))
-
+                   area-in-file(Path, area(BeginLine, BeginColumn,
+                                                      EndLine, EndColumn,
+                                                      Offset, Length)))
 [get-location-0]
   get-location(X) = get-posinfo(X)
 
-[] get-posinfo(X) = area-in-file(strcon(Char*), area(BeginLine, BeginColumn,
+[] get-posinfo(X) = area-in-file(Path, area(BeginLine, BeginColumn,
                               EndLine, EndColumn,
                               Offset, Length)) 
-     when area-in-file(qliteral(Char*), area(BeginLine, BeginColumn,
+     when area-in-file(Path, area(BeginLine, BeginColumn,
                               EndLine, EndColumn,
                               Offset, Length)) := get-term-anno(X, "pos-info")
 

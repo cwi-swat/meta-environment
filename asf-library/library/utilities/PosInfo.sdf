@@ -5,6 +5,7 @@ imports basic/LocationOperations
 imports utilities/ATermAnnotations[X]
 imports basic/AreaOperations
 imports basic/LocationOperations
+imports basic/Whitespace
 
 exports
 
