@@ -30,12 +30,7 @@ configuration([
           get-root,
           push-active-module,
           pretty-print,
-          push-filename("pretty-print.out"),
-          push-active-module,
-          close-editor,
-          push-filename("pretty-print.out"),
-          push-active-module,
-          activate-editor
+          set-root
          ]),
   button("*",
          [description(syntax-editor, menu(["Actions", "ViewTree"])),
