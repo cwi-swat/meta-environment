@@ -25,7 +25,7 @@
 
 # Script to generate a Makefile.am by inspecting <target>.module-list
 #
-# usage genamekfile.sh <module>
+# usage genamakefile.sh <module>
 
 VERSION=__VERSION__
 
@@ -80,17 +80,22 @@ cat <<ENDCAT
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 #    USA
 
-INCLUDES         = -I\$(ASCINC) \
-                   -I\$(ASFIXINC) \
-                   -I\$(ATERMINC)
+INCLUDES		= -I\$(ASCINC) -I\$(ASFIXINC) -I\$(ATERMINC)
 
-noinst_LIBRARIES = lib$1.a
+LDFLAGS			= -L\${ASCLIB} -L\${ASFIXLIB} -L\${ATERMLIB}
+LDLIBS          	= -lasc-support -lAsFix -lATB -lATerm
 
-BUILT_SOURCES    = init.c
+noinst_LIBRARIES	= lib$1.a
 
-lib${MOD}_a_SOURCES  = \$(SPEC_SRCS)
+BUILT_SOURCES		= init.c
 
-lib${MOD}_a_LIBADD   = init.o
+bin_PROGRAMS		= $1
+
+${MOD}_SOURCES		= init.c
+${MOD}_LDADD		= lib$1.a \${LDLIBS}
+
+lib${MOD}_a_SOURCES	= \$(SPEC_SRCS)
+lib${MOD}_a_LIBADD	= init.o
 
 # Old versions of automake put all dependencies on a single line which
 # causes several tools to crash (sed for instance) because of line length
@@ -131,8 +136,7 @@ BEGIN{
    }
 }
 END{
-   print;print
-   print "SPEC_SRCS =" spec_srcs
+   print "\n\nSPEC_SRCS =" spec_srcs
 }'`
 
 init.c: \$(SPEC_SRCS)
