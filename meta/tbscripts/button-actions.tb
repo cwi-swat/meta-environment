@@ -451,11 +451,15 @@ endlet
 
 process ShowTree(Tree: term) is
 let
-  Graph : term
+  Graph : term,
+  Id : int
 in
+  Id := process-id.
+  snd-note(ui-status(stat(Id,"Computing graph layout..."))) .
   snd-msg(tree2graph(Tree)) .
   rec-msg(graph(Graph?)) .
-  snd-msg(display-graph("parsetree", Graph))
+  snd-msg(display-graph("parsetree", Graph)).
+  snd-note(ui-status(endstat(Id)))
 endlet
 
 process ParseTerm(EditorId: term, ModuleName: str) is
