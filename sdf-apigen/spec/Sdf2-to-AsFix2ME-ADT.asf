@@ -221,14 +221,15 @@ equations
 
 [0] $FieldType = sort-to-afun($Sort),
    $Sort = sort($Char* ),
-   $AltId = afun($Char*)
+   $AltId = afun($Char*),
+   $FieldId = afun("t" "o" "p" "-" $Char*)
    ===>
    start-sort-to-adt($Sort, [ $Entries ]) = 
     [ [Start, $AltId,
       parsetree(appl(prod(
                      [cf(opt(layout)),cf(sort($FieldType)),cf(opt(layout))],
                        sort("<START>"), no-attrs),
-                [<ws-before(Layout)>,<top($FieldType)>,<ws-after(Layout)>]),
+             [<ws-before(Layout)>,<$FieldId($FieldType)>,<ws-after(Layout)>]),
                               <amb-cnt(int)>)], $Entries]
 
 
