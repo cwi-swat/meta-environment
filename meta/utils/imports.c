@@ -13,7 +13,7 @@
  *    module         AsFix representation of ASF+SDF module
  *  
  *    options:
- *       -g  outpur graph corresponding to import graph
+ *       -g  output graph corresponding to import graph
  *       -h  displays this message
  *       -l  print full paths names of modules
  *       -r  construct a list of modules recursively
@@ -57,7 +57,7 @@ extern char* optarg;
    "      module         AsFix representation of ASF+SDF module\n"\
    "\n"\
    "      options:\n"\
-   "         -g  outpur graph corresponding to import graph\n"\
+   "         -g  output graph corresponding to import graph\n"\
    "         -h  displays this message\n"\
    "         -l  print full paths names of modules\n"\
    "         -r  construct a list of modules recursively\n"\
