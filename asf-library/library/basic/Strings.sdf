@@ -17,7 +17,7 @@ exports
     "\\n" | "\\t" |  "\\\"" | "\\\\"        -> Escaped
     "\\" [0-7][0-7][0-7]		    -> Escaped
 
-    "\"" {Contents "\\\n"}+ "\"" -> StrCon
+    "\"" Contents ("\\\n" Contents)* "\"" -> StrCon
 
     (Normal | Escaped)* -> Contents
 
