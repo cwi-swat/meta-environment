@@ -1,18 +1,24 @@
 package toolbus.tifs;
 
+import aterm.*;
+
 public class Eval extends Communication {
-  private String resultType;
+  private ATermAppl representation;
+    
+  public Eval(ATerm t) {
+    setRepresentation(t);
+  }
   
-  public Eval(String name, String resultType) {
-    super(name);
-    setResultType(resultType);
+  private void setRepresentation(ATerm t) {
+    this.representation = (ATermAppl) t;
   }
   
   public String getResultType() {
-    return resultType;
+    ATermAppl resultTerm = (ATermAppl) representation.getArgument(1);
+    return resultTerm.getAFun().getName();
   }
 
-  private void setResultType(String resultType) {
-    this.resultType = resultType;
+  public String toString() {
+    return "eval(...," + getResultType() + ")";
   }
 }
