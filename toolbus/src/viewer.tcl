@@ -214,7 +214,7 @@ proc mkViewer {} {
    pack $w.text -side left -expand 1 -fill x
 
    bind $w.text <Double-Button-1> "addBreak $w.text"
-   defHelp $w.text "Doubel click to (re)set breakpoint on a line"
+   defHelp $w.text "Double click to (re)set breakpoint on a line"
    defHelp $w.scroll "Scroll text of script"
 
    #Create Options menu
