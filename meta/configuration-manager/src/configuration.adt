@@ -20,6 +20,7 @@
 
   constructor(ButtonArgs, click, click),
   constructor(ButtonArgs, icon, icon(<title(str)>, <path(str)>)),
+
   constructor(ButtonArgs, default, menu(<items(Items)>)),
   constructor(ButtonArgs, shortcut, menu(<items(Items)>, <shortcut(str)>)),
   list(Items, str),

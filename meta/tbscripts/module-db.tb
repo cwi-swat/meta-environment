@@ -162,10 +162,6 @@ in
       snd-msg(error-opening(Name, name-inconsistent))
     fi
   +
-    rec-msg(rename-module-in-db(OldName?, NewName?, Path?)) .
-    MDB-RenameModule(OldName, NewName, Path, Modules?) .
-    snd-msg(renaming-module-done(OldName, Modules))
-  +
     rec-msg(add-import-in-db(OldName?, NewName?)) .
     MDB-AddImportToModule(OldName, NewName) .
     snd-msg(add-import-done(OldName))
@@ -499,48 +495,6 @@ in
   fi
 endlet
 
-process MDB-RenameModule(OldName : str, NewName : str, NewPath : str,
-                         Changed : list?) is
-let
-  Status : term,
-  Modules : list,
-  Imports : list,
-  Module : str,
-  Path : str,
-  Text : str,
-  Syntax : term,
-  Tree : term
-in
-  GetDependingModules(OldName, Modules?) .
-  Changed := [] .
-  if not(equal(Modules,[])) then
-    Module := first(Modules) .
-    Modules := next(Modules) .
-    snd-msg(ts-get-term-value("sdf-tree", Module)) .
-    rec-msg(ts-value(Syntax?)) .
-    snd-msg(sm-get-imported-module-names(Syntax)) .
-    rec-msg(sm-imported-module-names(Imports?)) .
-    MDB-ContainedIn(OldName, Imports, Status?) .
-    if equal(Status, success) then
-      snd-msg(sm-remove-import-from-module(Syntax, OldName)) .
-      rec-msg(sm-import-removed-from-module(Syntax?)) .
-      snd-msg(sm-add-import-to-module(Syntax, NewName)) .
-      rec-msg(sm-import-added-to-module(Syntax?)) .
-      MDB-StoreModuleTree(Module, Syntax) .
-      Syntax := no-tree .
-      Changed := join(Changed, Module)
-    else
-      tau
-    fi
-  fi
-  *
-  if equal(Modules,[]) then
-    tau
-  fi .
-  MDB-CopyModule(OldName, NewName, NewPath) .
-  snd-msg(ts-remove-value-from-all-tables(OldName))
-endlet
-
 process MDB-RegisterPath(Path : str, ModuleId : str) is
   snd-msg(ts-put-str-value("path-modulename", Path, ModuleId)) 
 
@@ -577,16 +531,16 @@ in
   )
 endlet
 
-process MDB-AddImportToModule(OldName : str, NewName : str) is
+process MDB-AddImportToModule(ModuleId: str, Import: str) is
 let
   Syntax : term
 in
-  snd-msg(ts-get-term-value("sdf-tree", OldName)) .
+  snd-msg(ts-get-term-value("sdf-tree", ModuleId)) .
   rec-msg(ts-value(Syntax?)) .
-  snd-msg(sm-add-import-to-module(Syntax, NewName)) .
+  snd-msg(sm-add-import-to-module(Syntax, Import)) .
   Syntax := no-tree .
   rec-msg(sm-import-added-to-module(Syntax?)) .
-  MDB-StoreModuleTree(OldName, Syntax) .
+  MDB-StoreModuleTree(ModuleId, Syntax) .
   Syntax := no-tree
 endlet
 

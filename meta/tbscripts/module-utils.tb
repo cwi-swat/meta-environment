@@ -12,29 +12,6 @@ let
 in
   Id := process-id.
   (
-    rec-msg(rename-module(ModuleName1?, ModuleName2?, Path?)) .
-    snd-note(ui-status(statf(Id, 
-             "Renaming %s to %s",[ModuleName1,ModuleName2]))).
-    DoRenameModule(ModuleName1, ModuleName2, Path).
-    snd-note(ui-status(endstat(Id)))
-  +
-    rec-msg(import-module(ModuleName1?, ModuleName2?)).
-    snd-note(ui-status(statf(Id, 
-             "Adding %s to imports of %s",[ModuleName2,ModuleName1]))).
-    DoImportModule(ModuleName1, ModuleName2).
-    snd-note(ui-status(endstat(Id)))
-  +
-    rec-msg(delete-module(ModuleName1?)) .
-    snd-note(ui-status(statf(Id, "Deleting %s",[ModuleName1]))).
-    DoDeleteModule(ModuleName1).
-    snd-note(ui-status(endstat(Id)))
-  +
-    rec-msg(unimport-module(ModuleName1?, ModuleName2?)).
-    snd-note(ui-status(statf(Id, 
-             "Removing %s from imports of %s",[ModuleName2,ModuleName1]))).
-    DoUnimportModule(ModuleName1, ModuleName2).
-    snd-note(ui-status(endstat(Id)))
-  +
     rec-msg(revert-module(ModuleName1?))
     . snd-note(ui-status(statf(Id, "Reverting %s",[ModuleName1])))
     . RevertModule(ModuleName1)
@@ -142,73 +119,61 @@ in
   fi
 endlet  
 
-process RevertModule(Modulename : str) is
+process RevertModule(Modulename: str) is
   CloseModuleInDBandInvalidateDependingModules(Modulename)
   . OpenModules([Modulename], sdf)
   . DrawImportGraph()
   . snd-msg(module-reverted(Modulename))
 
-process DoDeleteModule(ModuleName : str) is
+process DeleteModule(ModuleName: str) is
 let
-  Directories : list,
-  Changed : list,
-  Path : str,
-  Extension : str,
-  Status : term
+  Directories: list,
+  Changed: list,
+  Id: int,
+  Path: str,
+  Extension: str,
+  Status: term
 in
-    snd-msg(get-search-paths) . 
-    rec-msg(search-paths(Directories?)) .
-    snd-msg(file-extension-hook(sdf)) .
-    rec-msg(file-extension-hook-result(Extension?)) .
-    snd-msg(get-path-from-db(ModuleName)) .
-    ( 
-      rec-msg(path(Path?)) .
-      RemoveModuleFromDisk(Path, ModuleName, Status?)
-    +
-      rec-msg(no-path)
-    ) .
-    DeleteSessions(ModuleName).
-    snd-msg(delete-module-from-db(ModuleName)) .
-    rec-msg(changed-modules(Changed?)) .
-    SaveSdfModules(Changed, Status?) .
-    DrawImportGraph()
+  Id := process-id
+  . snd-note(ui-status(statf(Id, "Deleting %s", [ModuleName])))
+  . snd-msg(get-search-paths)
+  . rec-msg(search-paths(Directories?))
+  . snd-msg(file-extension-hook(sdf))
+  . rec-msg(file-extension-hook-result(Extension?))
+  . snd-msg(get-path-from-db(ModuleName))
+  .
+  ( 
+    rec-msg(path(Path?))
+    . RemoveModuleFromDisk(Path, ModuleName, Status?)
+  +
+    rec-msg(no-path)
+  )
+  . DeleteSessions(ModuleName)
+  . snd-msg(delete-module-from-db(ModuleName))
+  . rec-msg(changed-modules(Changed?))
+  . SaveSdfModules(Changed, Status?)
+  . snd-note(ui-status(endstat(Id)))
 endlet
 
-process DoRenameModule(Old : str, New : str, Path : str) is
+process RenameModule(ModuleId: str, Directory: str, Filename: str) is
 let
-  Status : term,
-  Changed : list,
-  RealNew : str,
-  RealPath : str,
-  OldPath : str
+  Extension: str,
+  Id: int,
+  NewModule: str,
+  Path: str,
+  Status: term
 in
-  Status := success.
-  GetRealModuleName(New, Path, Status?, RealNew?, RealPath?).
-  snd-msg(get-path-from-db(Old)) .
-  rec-msg(path(OldPath?)) .
-  if equal(Status, success) then
-    CheckExistence(RealNew, RealPath, Status?).
-    if equal(Status, success) then
-      DeleteSessions(Old). 
-      if equal(Status, success) then
-        RenameModuleInDB(Old, RealNew, RealPath, Changed?) .
-        SaveSdfModules(Changed, Status?).
-	if equal(Status, success) then
-	  SaveAsfSdfModule(RealNew, Status?). 
-	  if equal(Status, success) then
-	    RemoveModuleFromDisk(OldPath, Old, Status?)
-          else 
-            RenameModuleInDB(RealNew, Old, RealPath, Changed?) .
-            SaveSdfModules(Changed, Status?)
-          fi
-	else 
-          RenameModuleInDB(RealNew, Old, RealPath, Changed?) .
-          SaveSdfModules(Changed, Status?)
-	fi
-      else tau fi
-    else tau fi
-  else tau fi.
-  HandleRenameModuleErrors(Old, RealNew, Status)
+  Id := process-id
+  . snd-note(ui-status(statf(Id, "Renaming %s", [ModuleId])))
+  . CopySdfModule(ModuleId, Directory, Filename)
+  . CopyAsfModule(ModuleId, Directory, Filename)
+  . snd-msg(file-extension-hook(sdf))
+  . rec-msg(file-extension-hook-result(Extension?))
+  . BuildPath(Directory, Filename, Extension, Path?)
+  . GetModuleForPath(Path, NewModule?)
+  . RenameImports(ModuleId, NewModule)
+  . DeleteModule(ModuleId)
+  . snd-note(ui-status(endstat(Id)))
 endlet
 
 process CreateModule(Pid: int, Directory: str, Filename: str, Type: term) is
@@ -330,22 +295,25 @@ in
   . snd-msg(module-contents(Pid, [Contents]))
 endlet
 
-process DoImportModule(Mod : str, RealImport : str)  is
+process AddImport(ModuleId: str, Import: str)  is
 let
-  Status : term
+  Depending: list,
+  Status: term
 in
-  DeleteEditorAndInvalidateDependingModules(Mod). 
-  AddImportInDB(Mod, RealImport).
-  SaveAsfSdfModule(Mod, Status?) 
+  DeleteSessions(ModuleId)
+  . GetDependingModules(ModuleId, Depending?)
+  . MDB-InvalidateModules(Depending, sdf)
+  . AddImportInDB(ModuleId, Import)
+  . SaveAsfSdfModule(ModuleId, Status?) 
 endlet  
 
-process DoUnimportModule(Mod : str, RealImport : str) is
+process RemoveImport(Mod: str, RealImport: str) is
 let
   Status : term
 in
-  DeleteEditorAndInvalidateDependingModules(Mod). 
-  RemoveImportInDB(Mod, RealImport) .
-  SaveAsfSdfModule(Mod, Status?)
+  DeleteEditorAndInvalidateDependingModules(Mod)
+  . RemoveImportInDB(Mod, RealImport)
+  . SaveAsfSdfModule(Mod, Status?)
 endlet  
 
 process GetRealModuleName(Name : str, Path : str, Status : term?,
@@ -418,20 +386,51 @@ in
 endlet
 
 process CloseModuleInDBandInvalidateDependingModules(ModuleName : str) is
-  DeleteEditorAndInvalidateDependingModules(ModuleName).
-  snd-msg(close-module-in-db(ModuleName))
-    . rec-msg(module-closed(ModuleName))
+  DeleteEditorAndInvalidateDependingModules(ModuleName)
+  . snd-msg(close-module-in-db(ModuleName))
+  . rec-msg(module-closed(ModuleName))
 
   
-process RenameModuleInDB(Old : str, New : str, Path : str, Changed : list?)
-is
-  snd-msg(rename-module-in-db(Old, New, Path)) .
-  rec-msg(renaming-module-done(Old, Changed?)) 
+process RenameImports(OldImport: str, NewImport: str) is
+let
+  Imports: list,
+  ImportRelations: list,
+  ModuleId: str,
+  Depending: list
+in
+  snd-msg(ts-get-key-value-pairs("import-relations"))
+  . rec-msg(ts-pairs(ImportRelations?))
+  . snd-msg(sm-get-depending-module-names(ImportRelations, OldImport))
+  . rec-msg(sm-depending-module-names(Depending?))
+  .
+  if not-equal(Depending, [])
+  then
+    ModuleId := first(Depending)
+    . RenameImport(ModuleId, OldImport, NewImport)
+    . Depending := next(Depending)
+  fi
+  *
+  if equal(Depending, [])
+  then
+    tau
+  fi
+endlet
 
-process CopyModuleInDB(Old : str, New : str, Path : str)
-is
-  snd-msg(copy-module-in-db(Old, New, Path)) .
-  rec-msg(copy-module-done(Old))
+process RenameImport(ModuleId: str, OldImport: str, NewImport: str) is
+let
+  Status: term,
+  Tree: term
+in
+  snd-msg(ts-get-term-value("sdf-tree", ModuleId))
+  . rec-msg(ts-value(Tree?))
+  . snd-msg(sm-remove-import-from-module(Tree, OldImport))
+  . rec-msg(sm-import-removed-from-module(Tree?))
+  . snd-msg(sm-add-import-to-module(Tree, NewImport))
+  . rec-msg(sm-import-added-to-module(Tree?))
+  . MDB-StoreModuleTree(ModuleId, Tree)
+  . snd-msg(save-module(ModuleId, sdf))
+  . rec-msg(saved-module(ModuleId, Status?))
+endlet
 
 process AddImportInDB(Mod : str, Import : str)
 is
@@ -475,8 +474,6 @@ in
   DeleteSessions(Modulename)
   . GetDependingModules(Modulename, Depending?)
   . MDB-InvalidateModules(Depending, sdf)
-  . snd-msg(notify-about-changed-modules(Depending, sdf))
-  . rec-msg(notify-about-changed-modules-done)
 endlet
 
 process DeleteEditorsForModulename(Modulename: str) is

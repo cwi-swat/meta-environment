@@ -68,22 +68,22 @@ context-free syntax
   "activate-editor" -> Action {cons("activate-editor")}
   "activate-given-tree" "(" StrCon ")" -> Action {cons("activate-given-tree")}
   "apply" "(" function:StrCon "," sort:StrCon "," NatCon ")" -> Action {cons("apply")}
-  "ask-question" "(" StrCon ")" -> Action {cons("ask-question")}
   "asfsdfapigen" -> Action {cons("asfsdfapigen")}
+  "ask-question" "(" StrCon ")" -> Action {cons("ask-question")}
   "check-sort" -> Action {cons("check-sort")}
   "close-editor" -> Action {cons("close-editor")}
-  "copy-module" -> Action {cons("copy-module")}
   "compile-module" -> Action {cons("compile-module")}
+  "copy-module" -> Action {cons("copy-module")}
   "create-module" -> Action {cons("create-module")}
   "delete-module" -> Action {cons("delete-module")}
   "display-message" -> Action {cons("display-message")}
-  "dup" -> Action {cons("dup")}
-  "dump-equations" -> Action {cons("dump-equations")}
   "dump-eqs-parse-table" -> Action {cons("dump-eqs-parse-table")}
+  "dump-equations" -> Action {cons("dump-equations")}
   "dump-parse-table" -> Action {cons("dump-parse-table")}
   "dump-sdf-definition" -> Action {cons("dump-sdf-definition")}
-  "edit-syntax" -> Action {cons("edit-syntax")}
+  "dup" -> Action {cons("dup")}
   "edit-equations" -> Action {cons("edit-equations")}
+  "edit-syntax" -> Action {cons("edit-syntax")}
   "edit-term" -> Action {cons("edit-term")}
   "execute-action" "(" StrCon ")" -> Action {cons("execute-action")}
   "exists" "(" StrCon ")" -> Action {cons("exists")}
@@ -93,8 +93,8 @@ context-free syntax
   "get-root" -> Action {cons("get-root")}
   "import-module" -> Action {cons("import-module")}
   "locate" "(" StrCon ")" -> Action {cons("locate")}
-  "move-cursor" -> Action {cons("move-cursor")}
   "message" "(" StrCon ")" -> Action {cons("message")}
+  "move-cursor" -> Action {cons("move-cursor")}
   "new-module" -> Action {cons("new-module")}
   "open-module" -> Action {cons("open-module")}
   "pack-tree" -> Action {cons("pack-tree")}
@@ -113,12 +113,12 @@ context-free syntax
   "push-modulename" "(" StrCon ")" -> Action {cons("push-modulename")}
   "push-string" "(" StrCon ")" -> Action {cons("push-string")}
   "push-term" "(" Term ")" -> Action {cons("push-term")}
-  "rename-module" -> Action {cons("rename-module")}
   "read-tree" -> Action {cons("read-tree")}
   "receive" -> Action {cons("receive")}
   "reduce" -> Action {cons("reduce")}
-  "run-asf-tests" -> Action {cons("run-asf-tests")}
+  "rename-module" -> Action {cons("rename-module")}
   "rewrite" "(" StrCon ")" -> Action {cons("rewrite")}
+  "run-asf-tests" -> Action {cons("run-asf-tests")}
   "save-tree" -> Action {cons("save-tree")}
   "send" -> Action {cons("send")}
   "set-focus" -> Action {cons("set-focus")}
@@ -135,7 +135,7 @@ context-free syntax
   "if-equal" "("
     "[" then:{Action ","}* "]"
   ","
-    "[" else:{Action ","}* "]"
+    "[" otherwise:{Action ","}* "]"
   ")" -> Action {cons("if-equal")}
 
 sorts Term
