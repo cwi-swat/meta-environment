@@ -40,5 +40,6 @@ install-prepared:
           fi; fi; \
         done;
 
+
 make-read-only:
 	chmod ugo-w $(DESTDIR)$(libpackagedir) 
