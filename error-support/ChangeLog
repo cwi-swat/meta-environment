@@ -1,5 +1,8 @@
 $Id$
 
+Wed Dec  1 13:24:18 CET 2004 <kooiker@cwi.nl, markvdb@cwi.nl>
+ * Transformed non-localized subjects to localized subjects.
+
 Wed Oct 20 14:54:04 CEST 2004 <kooiker@cwi.nl>
  * Added location api to error-support-config 
 

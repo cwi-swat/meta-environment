@@ -273,10 +273,18 @@ ATerm add_filename_in_error(int cid, const char *filename, ATerm t)
 
   while (!ERR_isSubjectListEmpty(subjects)) {
     ERR_Subject subject = ERR_getSubjectListHead(subjects);
-    ERR_Location location = ERR_getSubjectLocation(subject);
-    ERR_Area area = ERR_getLocationArea(location);
-    location = ERR_makeLocationAreaInFile(filename, area);
-    subject = ERR_setSubjectLocation(subject, location);
+    ERR_Location location;
+    if (ERR_isSubjectLocalized(subject)) {
+      location = ERR_getSubjectLocation(subject);
+      ERR_Area area = ERR_getLocationArea(location);
+      location = ERR_makeLocationAreaInFile(filename, area);
+      subject = ERR_setSubjectLocation(subject, location);
+    }
+    else {
+      char *description = ERR_getSubjectDescription(subject);
+      location = ERR_makeLocationFile(filename);
+      subject = ERR_makeSubjectLocalized(description, location);
+    }
     result = ERR_makeSubjectListMany(subject, result);
     subjects = ERR_getSubjectListTail(subjects);
   }
