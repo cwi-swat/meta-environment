@@ -258,13 +258,15 @@ void rec_ack_event(int cid, ATerm t)
 /*{{{  ATerm compile_module(int cid, char *moduleName, ATerm equations, char *output) */
 
 ATerm compile_module(int cid, const char *moduleName, const char *output, 
-		     ATerm equations)
+		     ATerm equations, ATerm parsetable)
 {
   PT_ParseTree result;
 
   toolbus_id = cid;
 
-  result = compile(moduleName, ATBunpack(equations), NULL, output);
+  parse_io = ATtrue;
+  result = compile(moduleName, ATBunpack(equations), ATBunpack(parsetable),
+		   output);
 
   return ATmake("snd-value(compilation-done)");
 }                              

@@ -6,12 +6,13 @@ let
   ModuleName    : str,
   Equations     : term,
   Progress       : str,
+  ParseTable  : term,
   OutputFile : str
 in
   (
-    rec-msg(compile-module(ModuleName?, OutputFile?, Equations?)) .
+    rec-msg(compile-module(ModuleName?, OutputFile?, Equations?, ParseTable?)) .
     execute(asfc, COM?) .
-    snd-eval(COM, compile-module(ModuleName, OutputFile, Equations)) .
+    snd-eval(COM, compile-module(ModuleName, OutputFile, Equations, ParseTable)) .
     ( 
       rec-event(COM, asfc-progress(Progress?)).
       snd-note(asfc-progress(Progress)).

@@ -8,7 +8,7 @@
 #define NR_SIG_ENTRIES	3
 
 static char *signature[NR_SIG_ENTRIES] = {
-  "rec-eval(<asfc>,compile-module(<str>,<str>,<term>))",
+  "rec-eval(<asfc>,compile-module(<str>,<str>,<term>,<term>))",
   "rec-ack-event(<asfc>,<term>)",
   "rec-terminate(<asfc>,<term>)",
 };
@@ -19,10 +19,10 @@ ATerm asfc_handler(int conn, ATerm term)
   ATerm in, out;
   /* We need some temporary variables during matching */
   char *s0, *s1;
-  ATerm t0;
+  ATerm t0, t1;
 
-  if(ATmatch(term, "rec-eval(compile-module(<str>,<str>,<term>))", &s0, &s1, &t0)) {
-    return compile_module(conn, s0, s1, t0);
+  if(ATmatch(term, "rec-eval(compile-module(<str>,<str>,<term>,<term>))", &s0, &s1, &t0, &t1)) {
+    return compile_module(conn, s0, s1, t0, t1);
   }
   if(ATmatch(term, "rec-ack-event(<term>)", &t0)) {
     rec_ack_event(conn, t0);
