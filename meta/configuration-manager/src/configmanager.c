@@ -123,7 +123,7 @@ ATerm get_button_actions(int cid, char *buttonName, char *moduleName)
       buttonActions = ATinsert(buttonActions, 
                                ATmake("reduce(<str>)", moduleName));
       buttonActions = ATinsert(buttonActions, 
-                               ATmake("get-root(<str>)", moduleName));
+                               ATmake("get-root"));
     }
   }
   return ATmake("snd-value(button-actions(<term>))", buttonActions);
