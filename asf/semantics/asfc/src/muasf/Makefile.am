@@ -8,7 +8,7 @@ lib_LIBRARIES		= libMuASF.a
 include_HEADERS		= MuASF.h MuASF_dict.h
 libMuASF_a_SOURCES	= MuASF.c MuASF_dict.c 
 
-EXTRA_DIST		= MuASF.adt
+EXTRA_DIST		= MuASF.label.def
 
 CFLAGS			= -g -Wall -O2
 INCLUDES		= -I${ATERM}/include
