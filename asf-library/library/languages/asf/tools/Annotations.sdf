@@ -6,10 +6,3 @@ context-free syntax
 
 set-anno(X,Key,Value) -> X     {built-in("set-anno")}
 get-anno(X,Key)       -> Value {built-in("get-anno")}
-get-term-anno(X,Key)  -> ATerm {built-in("get-term-anno")}
-
-%% Example usage: 
-%%
-%% import asf/tools/Annotations[Bool "pos-info" ATerm]
-%% equations
-%% [] test(Bool) = get-term-anno(Bool, pos-info) 

@@ -1,0 +1,16 @@
+module asf/tools/Annotations[X]
+
+imports aterms/ATerms
+imports basic/Strings
+
+exports
+
+context-free syntax
+
+get-term-anno(X,String)  -> ATerm {built-in("get-term-anno")}
+
+%% Example usage: 
+%%
+%% import asf/tools/Annotations[Bool "pos-info" ATerm]
+%% equations
+%% [] test(Bool) = get-term-anno(Bool, pos-info) 
