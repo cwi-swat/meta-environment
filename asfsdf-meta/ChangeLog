@@ -1,0 +1,7 @@
+
+2002/10/13 (vinju@loria.fr)
+ * This package uses the meta package and the asf package to construct
+   an ASF+SDF Meta-Environment. It contains some ToolBus scripts that
+   communicate with the rest of the Meta-Environment and some shell scripts
+   to start everything up.
+ * Version is 1.3beta

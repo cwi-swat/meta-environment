@@ -1,0 +1,29 @@
+dnl $Id$
+
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(asfsdf-meta,1.3beta)
+
+ACLOCAL="${ACLOCAL} -I ."
+
+dnl What commands are needed to set the variable MAKE in Makefiles?
+AC_SET_MAKE
+
+AC_PACKAGE_REQUIRE(meta, generic-meta,
+   [  --with-meta=DIR          Meta-Environment is in DIR])
+AC_SUBST(META)
+
+AC_PACKAGE_REQUIRE(asf, asfc,
+   [  --with-asf=DIR           Asf is in DIR])
+AC_SUBST(ASF)
+
+AC_PACKAGE_REQUIRE(asf-library, asf-library-config,
+   [  --with-asf-library=DIR           Asf library is in DIR])
+AC_SUBST(ASF_LIBRARY)
+
+dnl Which files need updating?
+AC_OUTPUT(
+  Makefile
+  meta-scripts/Makefile
+  src/Makefile
+)
