@@ -10,6 +10,8 @@ import aterm.*;
 
 public class Expr
 {
+  //{{{ Patterns
+
   private static final String PATTERN_LOC_LC =
     "location(lc(<str>,<int>,<int>))";
   private static final String PATTERN_LOC_LINE =
@@ -18,6 +20,8 @@ public class Expr
     "location(area(<str>,<int>,<int>,<int>,<int>))";
   private static final String PAT_SOURCE_VAR =
     "source-var(<str>,<int>,<int>,<int>,<str>)";
+  private static final String PAT_VARIABLE =
+    "variable(<str>,<term>)";
   private static final String PAT_VAR =
     "var(<str>,<term>,<int>,<int>,<int>,<int>)";
   private static final String PAT_VAR_UNKNOWN =
@@ -28,6 +32,12 @@ public class Expr
     "source-path(<str>)";
   private static final String PAT_SOURCE_LIST =
     "source-list([<list>])";
+  private static final String PAT_STACK_TRACE =
+    "stack([<list>])";
+  private static final String PAT_STACK_FRAME =
+    "frame(<int>,<str>,<term>,<term>)";
+
+  //}}}
 
   public static ATermFactory factory;
 
@@ -244,6 +254,16 @@ public class Expr
   }
 
   //}}}
+  //{{{ public String getLocationShortFile()
+
+  public String getLocationShortFile()
+  {
+    String file = getLocationFileName();
+    int index = file.lastIndexOf('/');
+    return file.substring(index+1);
+  }
+
+  //}}}
   //{{{ public int getLocationStartLine()
 
   public int getLocationStartLine()
@@ -333,6 +353,42 @@ public class Expr
     }
 
     throw new RuntimeException("illegal location: " + term);
+  }
+
+  //}}}
+
+  //{{{ public boolean isVariable()
+
+  public boolean isVariable()
+  {
+    List result = term.match(PAT_VARIABLE);
+    return result != null;
+  }
+
+  //}}}
+  //{{{ public String getVariableName()
+
+  public String getVariableName()
+  {
+    List result = term.match(PAT_VARIABLE);
+    if (result != null) {
+      return (String)result.get(0);
+    }
+
+    throw new RuntimeException("not a variable: " + term);
+  }
+
+  //}}}
+  //{{{ public Expr getVariableValue()
+
+  public Expr getVariableValue()
+  {
+    List result = term.match(PAT_VARIABLE);
+    if (result != null) {
+      return Expr.make((ATerm)result.get(1));
+    }
+
+    throw new RuntimeException("not a variable: " + term);
   }
 
   //}}}
@@ -502,6 +558,84 @@ public class Expr
 
   //}}}
 
+  //{{{ public boolean isStackTrace()
+
+  public boolean isStackTrace()
+  {
+    return term.match(PAT_STACK_TRACE) != null;
+  }
+
+  //}}}
+  //{{{ public Iterator frameIterator()
+
+  public Iterator frameIterator()
+  {
+    List result = term.match(PAT_STACK_TRACE);
+    if (result != null) {
+      return new ExprIterator((ATermList)result.get(0));
+    }
+
+    throw new RuntimeException("not a stacktrace: " + term);
+  }
+
+  //}}}
+  //{{{ public boolean isStackFrame()
+
+  public boolean isStackFrame()
+  {
+    return term.match(PAT_STACK_FRAME) != null;
+  }
+
+  //}}}
+  //{{{ public int getFrameDepth()
+
+  public int getFrameDepth()
+  {
+    List result = term.match(PAT_STACK_FRAME);
+    if (result != null) {
+      return ((Integer)result.get(0)).intValue();
+    }
+    throw new RuntimeException("not a stackframe: " + term);
+  }
+
+  //}}}
+  //{{{ public String getFrameName()
+
+  public String getFrameName()
+  {
+    List result = term.match(PAT_STACK_FRAME);
+    if (result != null) {
+      return (String)result.get(1);
+    }
+    throw new RuntimeException("not a stackframe: " + term);
+  }
+
+  //}}}
+  //{{{ public Expr getFrameLocation()
+
+  public Expr getFrameLocation()
+  {
+    List result = term.match(PAT_STACK_FRAME);
+    if (result != null) {
+      return new Expr((ATerm)result.get(2));
+    }
+    throw new RuntimeException("not a stackframe: " + term);
+  }
+
+  //}}}
+  //{{{ public Expr getFrameVariables()
+
+  public Expr getFrameVariables()
+  {
+    List result = term.match(PAT_STACK_FRAME);
+    if (result != null) {
+      return new Expr((ATerm)result.get(3));
+    }
+    throw new RuntimeException("not a stackframe: " + term);
+  }
+
+  //}}}
+
   //{{{ public Iterator iterator()
 
   public Iterator iterator()
@@ -523,6 +657,15 @@ public class Expr
 
   public String toString()
   {
+    if (isVariable()) {
+      return getVariableName() + " = " + getVariableValue();
+    } else if (isLocation() && !isLocationUnknown()) {
+      return getLocationShortFile() + " "
+	+ getLocationStartLine() + "," + getLocationStartColumn()
+	+ "-"
+	+ getLocationEndLine() + "," + getLocationEndColumn();
+    }
+      
     return term.toString();
   }
 

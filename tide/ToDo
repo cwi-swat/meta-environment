@@ -20,7 +20,6 @@ the actual adapter implementation.
 1. General Bugs
 ---------------
 1.1 CPE sometimes out of visual range				 4	 1h
-1.2 Breakpoint/Watchpoint menu at the wrong location		 7	 1h
 
 2. General Features
 -------------------
@@ -33,6 +32,7 @@ the actual adapter implementation.
     to variables.
 2.6 View the result of expressions not just plain variables	 7	 1d
     Note: this point is closely related to 2.5
+2.7 Rough timing support
 
 A. Asf+Sdf Adapter Features
 ---------------------------

@@ -6,8 +6,8 @@
 
 /*{{{  typedefs */
 
-typedef struct ATerm _TA_Location;
-typedef struct ATerm _TA_Port;
+typedef struct _ATerm _TA_Location;
+typedef struct _ATerm _TA_Port;
 
 /*}}}  */
 

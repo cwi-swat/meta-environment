@@ -1,3 +1,13 @@
+
+
+Improvements:
+ * Scrolling is now done more intelligently
+   (one line at a time instead of one pixel)
+ * Implemented first version of StackViewer
+
+Bugs fixed:
+ * Breakpoint/Watchpoint menu at the wrong location
+
 2001/07/03 (olivierp@cwi.nl)
  * Version is now 0.3
  * Fixed problems with exceptions occuring when a debug-adapter disconnected
