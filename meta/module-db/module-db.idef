@@ -271,9 +271,6 @@ snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
     rec-value(Mdb, renaming-equations(Renamings?, Equations?)) .
     snd-msg(renaming-equations(Renamings, Equations))
   +
-    rec-value(Mdb, parameterized-equations(ModName?, Params?, Equations?)) .
-    snd-msg(parameterized-equations(ModName, Params, Equations))
-  +
     rec-value(Mdb, no-equations) .
     snd-msg(no-equations)
   )
