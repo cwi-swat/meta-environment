@@ -36,9 +36,11 @@ let
   Specification : term,
   Equations : term,
   Tests : term,
-  TestResults : term,
   ModuleName : str,
-  Id : int
+  Id : int,
+  Total : int,
+  Failed : int,
+  Tags : list
 in
   (
     rec-msg(run-asf-tests(ModuleName?)) .
@@ -53,12 +55,15 @@ in
       snd-note(ui-status(endstat(Id))) .
       snd-note(ui-status(stat(Id, "Running tests"))) .
       snd-msg(run-tests(ModuleName, Equations, Tests)) .
-      rec-msg(test-results(TestResults?)) .
+      rec-msg(test-results(Total?, Failed?, Tags?)) .
       snd-note(ui-status(endstat(Id))) .
-      if equal(TestResults, []) then
-        snd-note(ui-status(warning("All tests succeeded\n")))
+      if equal(Failed, 0) then
+        snd-note(ui-status(
+          warningf("Test report: all %d tests succeeded\n", [Total])))
       else 
-        snd-note(ui-status(errorf("These tests failed: %t\n", [TestResults])))
+        snd-note(ui-status(
+          errorf("Test report: %d out of %d tests failed:\n %t\n", 
+                 [Failed, Total, Tags])))
       fi
     +  
       rec-msg(equations-incomplete) .
