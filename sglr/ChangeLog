@@ -1,5 +1,8 @@
 $Id$
 
+2001/10/30 (mdejonge@cwi.nl)
+  * Makefile.am: added program-check.m4 to EXTRA_DIST variable
+
 2001/10/30 (markvdb@cwi.nl)
   * BitMap introduced to mark that for a specific position a
     ambiguity cluster was created.

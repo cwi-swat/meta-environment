@@ -2,6 +2,6 @@
 
 SUBDIRS     = doc libsglr sglr dump test
 
-EXTRA_DIST  = make_rules reconf
+EXTRA_DIST  = make_rules reconf program-check.m4
 
 ACLOCAL_AMFLAGS = -I .
