@@ -15,7 +15,7 @@ char* escape(const char* str, const char* escaped_chars, QuotedOption quoted)
 {
   int i,j,e;
   int len = strlen(str);
-  char *escaped = (char*) malloc(2 * len * sizeof(char) + (quoted ? 3 : 1));
+  char *escaped = (char*) malloc(2 * len * sizeof(char) + (quoted ? 2 : 0) + 1);
 
   if (escaped == NULL) {
     ATerror("escape: could not allocate enough memory for escaping:\n%s\n",str);

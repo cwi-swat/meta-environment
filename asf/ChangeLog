@@ -4,6 +4,11 @@
    
 2003/02/12 (markvdb@cs.vu.nl)
  * Improved the asfchecker with respect to ambiguities.
+
+2003/02/11 ({jong,markvdb})@cwi.nl)
+ * Bumped into 1.7beta.
+ * Added \r as character in quoted literals.
+ * Improved AlphaNumericalEscChar.
  
 2003/02/07 (jurgenv@cwi.nl)
  * Added new builtin get-term-anno to be able to retrieve posinfo information
