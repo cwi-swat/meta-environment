@@ -607,8 +607,8 @@ equations
 
 tests
 
-[concat] "aaa" || "aaa" = "aaaaaa"
-[len] length("aaa") + length("aaa") = length("aaaaaa")
+[concat] "aaa" || "aaa" == "aaaaaa"
+[len] length("aaa") + length("aaa") == length("aaaaaa")
 [bytes-test]  
-	bytes-to-string(string-to-bytes("a\n\t\\\"b\007")) = "a\n\t\\\"b\007"
+	bytes-to-string(string-to-bytes("a\n\t\\\"b\007")) == "a\n\t\\\"b\007"
 

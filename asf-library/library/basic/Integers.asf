@@ -175,6 +175,6 @@ tests
 [priority-plus-star] 2 + 2 * 3 == 8
 [priority-minus-star] 2 - 2 * 3 == -4
 [max-test] max(2,3) == 3
-[max-test-2] max(3,2) = 3
+[max-test-2] max(3,2) == 3
 
 
