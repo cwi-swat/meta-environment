@@ -183,6 +183,6 @@ in
     snd-msg(add-eqs-to-db(Module, RealPath, tree(Tree), text(Text), Time)) .
     rec-msg(eqs-added)
   +
-    rec-msg(error-opening(Module)).
+    rec-msg(error-opening(Module))
   )
 endlet
