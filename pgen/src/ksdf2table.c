@@ -314,6 +314,8 @@ ATerm process_productions(SDF_ProductionList prods)
   IF_STATISTICS(fprintf(PT_log (), "Maximum number of members per left hand side is %d\n", max_nr_lhs_members));
   IF_STATISTICS(fprintf(PT_log (), "Average number of members per left hand side is %d\n", (nr_of_lhs_members/nr_of_kernel_prods)));
 
+  ATindexedSetDestroy(unique_prods);
+
   return ATmake("[<list>]", labelentries);
 }
 

@@ -1,6 +1,7 @@
 $Id$
 
 2001/07/27 ({markvdb,jong}@cwi.nl)
+ * Fixed three memory leaks
  * Fixed a free/unprotect bug.
  * Fixed an initialization/protect bug.
 

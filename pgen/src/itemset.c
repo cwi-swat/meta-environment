@@ -97,6 +97,8 @@ static void ITS_flush(ItemSet set)
       free(cur);
     }
   }
+
+  free(set->items_per_dotsym);
 }
 
 /*}}}  */

@@ -445,12 +445,13 @@ void vertex(int statenr)
     CC_partitionSet(&chars);
 
     gotoset = gotos(vertex_closure, prods, &chars);
-    if (ATgetLength(gotoset) + CC_getSetSize(&chars)> max_gotos) {
+    if (ATgetLength(gotoset) + CC_getSetSize(&chars) > max_gotos) {
       max_gotos = ATgetLength(gotoset) + CC_getSetSize(&chars);
     }
 
     actions(vertex_kernel, vertex_closure, &chars, gotoset);
     ITS_destroy(vertex_closure);
+    CC_flushSet(&chars);
   }
 }
 
