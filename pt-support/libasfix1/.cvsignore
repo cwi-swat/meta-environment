@@ -4,3 +4,4 @@ Makefile.in
 *.o
 libPT.a
 get-parsetree
+add-posinfo
