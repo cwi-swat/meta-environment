@@ -4,6 +4,7 @@ Tue May 11 15:30:00 CEST 2004 <kooiker@cwi.nl>
  * library/sandbox/toolbus: 
    - Added Tscript-pretty-traversal which does pretty-printing using traversal
      functions and which pretty-prints the + operator context-sensitive 
+   - Added flattening of recursive left associative + lists
 
 Mon May 10 09:37:44 CEST 2004 <kooiker@cwi.nl>
  * library/sandbox/toolbus: 

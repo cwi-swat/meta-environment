@@ -144,15 +144,9 @@ equations
 
 [processexpr2box-choice]
   ProcessExpr1 + ProcessExpr2 = 
-    box2processexpr(V vs=1 [processexpr2box(ProcessExpr1)
+    box2processexpr(V vs=1 [I [processexpr2box(ProcessExpr1)]
                             "+" 
-                            processexpr2box(ProcessExpr2)])
-
-%%[processexpr2box-bracket]
-%%  ( ProcessExpr ) = 
-%%    box2processexpr(V vs=1 ["("
-%%                            I [processexpr2box(ProcessExpr)]
-%%                            ")"]) 
+                            I [processexpr2box(ProcessExpr2)]])
 
 [processexpr2box-star]
   ProcessExpr1 * ProcessExpr2 =
@@ -206,3 +200,13 @@ equations
   ===>
   processinvocations2box(ProcessInvocation, ProcessInvocation+) =
     H hs=1 [H hs=0 [processinvocation2box(ProcessInvocation) ","] Box*]
+
+[flatten]
+  H[Box*5] := H[Box*1 Box*3],
+  H[Box*6] := H[Box*4 Box*2]
+  ===>
+  V vs=1 [Box*1 I [V vs=1 [Box*3 I [Box1] "+" I [Box2] Box*4]] Box*2]
+    = V vs=1 [Box*5 I [Box1] "+" I [Box2] Box*6]
+
+[simplify] 
+  processexpr2box(box2processexpr(Box)) = Box
