@@ -31,6 +31,9 @@ exports
 
     {Term ","}*               -> TermList
 
+%% Terms can be annotated by types
+    Term ":" Term             -> Term {assoc}
+
 %% \vspace{\baselineskip}
   sorts Annotations FuncDef FuncDefList SigArg SigArgList
   context-free syntax

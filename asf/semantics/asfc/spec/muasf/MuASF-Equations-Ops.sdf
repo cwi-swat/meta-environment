@@ -35,6 +35,7 @@ exports
     is-trans-list-funid(FunId)        -> Bool
     is-returns-list-funid(FunId)      -> Bool {prefer}
     remove-returns-list(FunId)        -> Bool
+    is-string-funid(FunId)            -> Bool
     is-list-var-term(Term)            -> Bool
     is-var-term(Term)                 -> Bool
     is-boolean-term(Term)             -> Bool
