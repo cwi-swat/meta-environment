@@ -162,6 +162,181 @@ static SDF_ImpSectionList rename_modulename_in_impsections(
 
 /*}}}  */
 
+/*{{{  static SDF_ImportList delete_modulename_from_importlist( */
+
+static SDF_ImportList delete_modulename_from_importlist(
+                                       SDF_ImportList orgImports,
+                                       SDF_ModuleId oldModuleName)
+{
+  if (!SDF_isImportListEmpty(orgImports)) {
+    SDF_Import import = SDF_getImportListHead(orgImports);
+    SDF_ModuleName moduleName = SDF_getImportModuleName(import);
+    SDF_ModuleId moduleId = SDF_getModuleNameModuleId(moduleName);
+    
+    if (SDF_hasImportListTail(orgImports)) {
+      SDF_ImportList imports = SDF_getImportListTail(orgImports);
+      SDF_ImportList newImports =
+        delete_modulename_from_importlist(imports, oldModuleName);
+      if (!SDF_isEqualImportList(newImports, imports)) {
+        orgImports = SDF_setImportListTail(orgImports, newImports);
+      }
+    }
+
+    if (SDF_isEqualModuleId(moduleId, oldModuleName)) {
+      if (SDF_hasImportListTail(orgImports)) {
+	orgImports = SDF_getImportListTail(orgImports);
+      }
+      else {
+	orgImports = SDF_makeImportListEmpty();
+      }
+    }
+    
+  }
+  return orgImports;
+}
+
+/*}}}  */
+/*{{{  static SDF_ImpSection delete_modulename_from_impsection( */
+
+static SDF_ImpSection delete_modulename_from_impsection(
+                                       SDF_ImpSection impSection,
+                                       SDF_ModuleId oldModuleName)
+{
+  SDF_Imports    imports     = SDF_getImpSectionList(impSection);
+  SDF_ImportList importsList = SDF_getImportsList(imports);
+
+  SDF_ImportList newImportsList = 
+    delete_modulename_from_importlist(importsList, oldModuleName);
+  SDF_Imports newImports;
+
+  newImports = SDF_setImportsList(imports, newImportsList);
+  
+  return SDF_setImpSectionList(impSection, newImports);
+}
+
+/*}}}  */
+/*{{{  static SDF_Grammar delete_modulename_from_grammar( */
+
+static SDF_Grammar delete_modulename_from_grammar(
+                                       SDF_Grammar orgGrammar,
+                                       SDF_ModuleId oldModuleName)
+{
+  if (SDF_isGrammarImpSection(orgGrammar)) {
+    SDF_ImpSection impSection = SDF_getGrammarImpSection(orgGrammar);
+    SDF_ImpSection newImpSection =
+      delete_modulename_from_impsection(impSection, oldModuleName);
+
+    if (newImpSection != NULL) {
+      orgGrammar = SDF_setGrammarImpSection(orgGrammar, newImpSection);
+    }
+    else {
+      orgGrammar = NULL;
+    }
+  }
+  if (SDF_isGrammarConcGrammars(orgGrammar)) {
+    SDF_Grammar leftGrammar = SDF_getGrammarLeft(orgGrammar);
+    SDF_Grammar rightGrammar = SDF_getGrammarRight(orgGrammar);
+    SDF_Grammar newLeftGrammar = 
+      delete_modulename_from_grammar(leftGrammar, oldModuleName);
+    SDF_Grammar newRightGrammar = 
+      delete_modulename_from_grammar(rightGrammar, oldModuleName);
+    orgGrammar = SDF_setGrammarLeft(orgGrammar, newLeftGrammar);
+    orgGrammar = SDF_setGrammarRight(orgGrammar, newRightGrammar);
+  }
+  return orgGrammar;
+}
+
+/*}}}  */
+/*{{{  static SDF_Section delete_modulename_from_section( */
+
+static SDF_Section delete_modulename_from_section(
+                                       SDF_Section orgSection,
+                                       SDF_ModuleId oldModuleName)
+{
+  if (SDF_hasSectionGrammar(orgSection)) {
+    SDF_Grammar grammar  = SDF_getSectionGrammar(orgSection);
+
+    SDF_Grammar newGrammar = 
+      delete_modulename_from_grammar(grammar, oldModuleName);
+
+    if (newGrammar != NULL) {
+      orgSection = SDF_setSectionGrammar(orgSection, newGrammar);   
+    }
+    else {
+      orgSection = NULL;
+    }
+  }
+  return orgSection;
+}
+
+/*}}}  */
+/*{{{  static SDF_SectionList delete_modulename_from_sectionlist( */
+
+static SDF_SectionList delete_modulename_from_sectionlist(
+                                       SDF_SectionList orgSections,
+                                       SDF_ModuleId oldModuleName)
+{
+  if (!SDF_isSectionListEmpty(orgSections)) {
+    SDF_Section section  = SDF_getSectionListHead(orgSections);
+    SDF_Section newSection = 
+      delete_modulename_from_section(section, oldModuleName);
+
+    if (SDF_hasSectionListTail(orgSections)) {
+      SDF_SectionList sections = 
+        SDF_getSectionListTail(orgSections);
+      SDF_SectionList newSections = 
+        delete_modulename_from_sectionlist(sections, oldModuleName);
+      if (!SDF_isEqualSectionList(newSections, sections)) {
+        orgSections = SDF_setSectionListTail(orgSections, newSections);
+      }
+    }
+
+    if (newSection == NULL) {
+      if (SDF_hasSectionListTail(orgSections)) {
+	orgSections = SDF_getSectionListTail(orgSections);
+      }
+      else {
+	orgSections = SDF_makeSectionListEmpty();
+      }
+    }
+    else if (!SDF_isEqualSection(newSection, section)) {
+      orgSections = SDF_setSectionListHead(orgSections, newSection);
+    }
+  }
+  return orgSections;
+}
+
+/*}}}  */
+/*{{{  static SDF_ImpSectionList delete_modulename_from_impsections( */
+
+static SDF_ImpSectionList delete_modulename_from_impsections(
+                                       SDF_ImpSectionList orgImpSections,
+                                       SDF_ModuleId oldModuleName)
+{
+  if (!SDF_isImpSectionListEmpty(orgImpSections)) {
+    SDF_ImpSection impSection  = SDF_getImpSectionListHead(orgImpSections);
+    SDF_ImpSection newImpSection = 
+      delete_modulename_from_impsection(impSection, oldModuleName);
+    if (SDF_hasImpSectionListTail(orgImpSections)) {
+      SDF_ImpSectionList impSections = 
+        SDF_getImpSectionListTail(orgImpSections);
+      SDF_ImpSectionList newImpSections = 
+        delete_modulename_from_impsections(impSections, oldModuleName);
+      if (!SDF_isEqualImpSectionList(newImpSections, impSections)) {
+        orgImpSections = SDF_setImpSectionListTail(orgImpSections, 
+                                                   newImpSections);
+      }
+    }
+    if (!SDF_isEqualImpSection(newImpSection, impSection)) {
+      orgImpSections = SDF_setImpSectionListHead(orgImpSections, 
+                                                 newImpSection);
+    }
+  }
+  return orgImpSections;
+}
+
+/*}}}  */
+
 /*{{{  SDF_Module rename_modulename_in_module(SDF_Module module, */
 
 SDF_Module rename_modulename_in_module(SDF_Module module,
@@ -330,4 +505,29 @@ SDF_ImportList renameParametersInImportList(SDF_ModuleName moduleName,
   return replaceParametersInImportList(importList, formalParams, actualParams);
 }
  
+/*}}}  */
+
+/*{{{  SDF_Module delete_modulename_from_module(SDF_Module module, */
+
+SDF_Module delete_modulename_from_module(SDF_Module module,
+                                       SDF_ModuleId oldModuleName)
+{
+  SDF_Sections sections = SDF_getModuleSections(module);
+  SDF_ImpSectionList impSections = SDF_getModuleList(module);
+  SDF_ImpSectionList newImpSections =
+    delete_modulename_from_impsections(impSections, oldModuleName);
+
+  module = SDF_setModuleList(module, newImpSections);
+
+  if (SDF_hasSectionsList(sections)) {
+    SDF_SectionList sectionList = SDF_getSectionsList(sections);
+    SDF_SectionList newSectionList =
+      delete_modulename_from_sectionlist(sectionList, oldModuleName); 
+    SDF_Sections newSections = SDF_setSectionsList(sections, newSectionList);
+    module = SDF_setModuleSections(module, newSections);
+  }
+
+  return module;
+}
+
 /*}}}  */

@@ -688,7 +688,7 @@ ATerm get_asf_tree(int cid, char *modulename)
  
   entry = MDB_EntryFromTerm(GetValue(modules_db, modname));
   if (!entry) {
-    ATwarning("Module %s not in database!", modulename);
+    ATwarning("Module %s not in database!!", modulename);
     return ATmake("snd-value(asfix(unavailable))");
   }
  
@@ -879,6 +879,53 @@ void invalidate_parse_tables(int cid, char *modulename)
 }
 
 /*}}}  */
+ /*{{{  delete_modulename_from_modules(ATermList mods, char *oldModuleName)  */
+
+static ATermList delete_modulename_from_modules(ATermList mods, 
+						char *oldModuleName) 
+{
+  ATerm oldSdfTree, newSdfTree;
+  MDB_Entry entry;
+  PT_ParseTree oldParseTree, newParseTree;
+  PT_Tree oldTree, newTree;
+  SDF_Module oldSdfModule, newSdfModule;
+  ATerm modName;
+  ATermList unknowns, imports, changedMods = ATempty;
+  SDF_ImportList fullImports;
+ 
+  SDF_ModuleId oldName = SDFmakeModuleId(oldModuleName);
+
+  while (!ATisEmpty(mods)) {
+    modName = ATgetFirst(mods);
+    entry = MDB_EntryFromTerm(GetValue(modules_db, modName));
+
+    oldSdfTree   = MDB_getEntrySdfTree(entry);
+    oldParseTree = PT_makeParseTreeFromTerm(oldSdfTree);
+    oldTree      = PT_getParseTreeTree(oldParseTree);
+    oldSdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(oldTree));
+    newSdfModule = delete_modulename_from_module(oldSdfModule, oldName);
+    
+    if (!SDF_isEqualModule(oldSdfModule, newSdfModule)) {
+      changedMods = ATinsert(changedMods, modName);
+    }
+    newTree      = PT_makeTreeFromTerm(SDF_makeTermFromModule(newSdfModule));
+    newParseTree = PT_setParseTreeTree(oldParseTree, newTree);
+    newSdfTree   = PT_makeTermFromParseTree(newParseTree);
+    entry = MDB_setEntrySdfTree(entry, newSdfTree);
+
+    PutValue(modules_db, modName, MDB_EntryToTerm(entry));
+
+    imports = SDF_getImports(newSdfModule);
+    fullImports = SDF_getModuleImportsList(newSdfModule);
+    unknowns = replace_imports(modName, imports, fullImports);
+
+    mods = ATgetNext(mods);
+  }
+
+  return changedMods;
+}
+
+/*}}}  */
 /*{{{  ATerm delete_module(int cid, char *moduleName) */
 /* If a module is delete a list of depending modules
  * should be calculated and returned.
@@ -887,16 +934,30 @@ void invalidate_parse_tables(int cid, char *modulename)
 ATerm delete_module(int cid, char *moduleName)
 {
   ATerm name = ATmake("<str>",moduleName);
-  ATermList changedMods;
+  ATermList changedMods, tmp;
 
   changedMods = modules_depend_on(name,ATempty);
+  changedMods =
+    delete_modulename_from_modules(changedMods, moduleName);
+
+  /* remove the module itself from the list of changed modules */
+  for(tmp=ATempty; !ATisEmpty(changedMods); 
+      changedMods = ATgetNext(changedMods)) {
+    ATerm head = ATgetFirst(changedMods);
+    if (!ATisEqual(name, head)) {
+      tmp = ATinsert(tmp, head);
+    }
+  }
+  changedMods = tmp;
+
   update_syntax_status_of_modules(changedMods); 
+
   RemoveKey(modules_db,name);
   RemoveKey(import_db,name);
   RemoveKey(full_import_db,name);
   reset_trans_db();
-  return ATmake("snd-value(changed-modules([<term>,<list>]))",
-                name, changedMods);
+
+  return ATmake("snd-value(changed-modules([<list>]))", changedMods);
 }
 
 /*}}}  */
@@ -1609,12 +1670,19 @@ ATerm get_module_info(int cid, char *moduleName)
   ATerm atName;
   char *path;
   ATermList info = ATempty;
+  ATerm entry = NULL;
 
   atName = ATmake("<str>", moduleName);
-  
-  path = MDB_getEntryPath(MDB_EntryFromTerm(GetValue(modules_db, atName)));
-  if (pathAvailable(path)) {
-    info = ATinsert(info, ATmake("[path,<str>]", path));
+ 
+  entry = GetValue(modules_db, atName);
+  if (entry != NULL) {
+    path = MDB_getEntryPath(MDB_EntryFromTerm(entry));
+    if (pathAvailable(path)) {
+      info = ATinsert(info, ATmake("[path,<str>]", path));
+    }
+  }
+  else  {
+    info = ATinsert(info, ATmake("[path,\"not available\"]"));
   }
 
   return ATmake("snd-value(module-info(<str>,<term>))", moduleName, info);
@@ -1668,6 +1736,7 @@ int main(int argc, char *argv[])
   MDB_NONE = ATparse("unavailable");
   ATprotect(&MDB_NONE);
 
+  ATsetChecking(ATtrue);
   cid = ATBconnect(NULL, NULL, -1, module_db_handler);
 
   ATBeventloop();
