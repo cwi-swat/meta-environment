@@ -34,3 +34,13 @@ assert "a5": calledFromF == {"e", "g"}
 bag[str] commonProcs = calledFromA inter calledFromF
 
 assert "a6": commonProcs == {"e"}
+
+bag[str] Parts = {"Appl", "DB", "Lib"}
+
+rel[str, str] partOf = {<"main", "Appl">, <"a", "Appl">, <"b", "DB">, <"c",
+"Lib">, <"d", "Lib">}
+
+rel[str,str] lift(rel[str,str] calls, rel[str,str] partOf, bag[str] Parts) =
+	     { <X, Y> | <A, B> : calls, <X, Y> : partOf[A] x partOf[B]}
+
+rel[str,str] callsLift = lift(calls, partOf, Parts)

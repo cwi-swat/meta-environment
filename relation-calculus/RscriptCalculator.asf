@@ -150,7 +150,21 @@
 
 %% ---- Eval elements, tuples and variables
 
-[ELM]	evalx($Elem, $Rstore) = $Elem
+%%[ELM]	evalx($Elem, $Rstore) = $Elem
+
+[Bool]	evalx($BoolCon, $Rstore) = $BoolCon
+
+[int]	evalx($Integer, $Rstore) = $Integer
+
+[st1r]	evalx($String, $Rstore) = $String
+
+[area1]	evalx($Area, $Rstore) = $Area
+
+[tup1]	evalx($Tuple, $Rstore) = $Tuple
+
+%%[bag1]	evalx($Bag, $Rstore) = sort($Bag)
+
+[bag1]	evalx($Bag, $Rstore) = $Bag
 
 [VAR1]	$Elem = value($Var, $Rstore)
 	=================================================

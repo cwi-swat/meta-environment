@@ -27,6 +27,7 @@ exports
      elem-less-equal(Elem, Elem)		-> Boolean
 
      elem-greater(Elem, Elem)			-> Boolean
+     elem-greater-equal(Elem, Elem)			-> Boolean
 
      elem-equal(Elem, Elem)			-> Boolean
 
