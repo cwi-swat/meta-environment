@@ -2,6 +2,7 @@
   * Extracted asf-library from the asf package. The ChangeLog in the
     asf package between 2003/07/06 and 2003/09/16 contains some relevant
     messages for this new package!
+  * Set version number to 1.0
 
 2003/07/06 (jurgenv@cwi.nl)
   * Removed all .baf and .tbl files because they are not loaded anymore

@@ -1,5 +1,3 @@
-EXTRA_DIST=make_rules
-
 SUBDIRS=library
 
 uninstall:
