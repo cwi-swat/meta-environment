@@ -191,6 +191,7 @@ equations
 
   [ar2cs-2'6] get-first-vf-path(C-rule+) = (Funid,Aint+),
               is-list-funid(Funid) = false,
+              is-ignored-funid(Funid) = false, %% JURGEN
               make-c-expression((Funid,Aint+),Namepair*) = Ltest,
               make-select-stat(Aint+) = Decl*,
               asfrules2cstats1(C-rule+,Namepair*,Aint1) = (Stat*1,Aint2),
@@ -198,6 +199,14 @@ equations
               ================================
               asfrules2cstats(C-rule+,,Namepair*,Aint1) =
                 (Decl* ++d Stat*2,Aint2)
+
+[ar2cs-2'6'2] get-first-vf-path(C-rule+) = (Funid,Aint+),
+              is-list-funid(Funid) = false,
+              is-ignored-funid(Funid) = true, %% JURGEN
+              asfrules2cstats1(C-rule+,Namepair*,Aint1) = (Stat*1,Aint2)
+              ================================
+              asfrules2cstats(C-rule+,,Namepair*,Aint1) =
+                (Stat*1,Aint2)
 
   [ar2cs-2'7] get-first-vf-path(C-rule+1) = (Funid,Aint+),
               is-list-funid(Funid) = true,
@@ -213,6 +222,7 @@ equations
                 (Stat*4,Aint4)
 
   [ar2cs-2'9] get-first-vf-path(C-rule+1) = (Funid,Aint+),
+              is-ignored-funid(Funid) = false,
               make-c-expression((Funid,Aint+),Namepair*) = Ltest,
               make-select-stat(Aint+) = Decl*,
               is-list-funid(Funid) = false,
@@ -302,8 +312,7 @@ equations
   [rifin-3] restore-ignored-funids-in-nf(,,Namepair*) = 
 
   [rifia-1] is-ignored-funid(Funid) = true,
-            remove-ignored-from-funid(Funid) = Funid2,
-            pn-lookup(Funid2, Namepair*) = funid(Char+),
+            lookup-ignored-funid(Funid,Namepair*) = funid(Char+),
             restore-ignored-funids-in-arg(Expression, Term, Namepair*) = Expression2
             =====
             restore-ignored-funids-in-arg(Expression, Funid(Term), Namepair*) =
@@ -311,6 +320,16 @@ equations
 
   [default-rifia] restore-ignored-funids-in-arg(Expression, Term, Namepair*) = 
                     Expression
+
+  [lif-0] remove-ignored-from-funid(Funid) = Funid2,
+          pn-lookup(Funid2, Namepair*) = funid(""" Char+ """)
+          =====
+          lookup-ignored-funid(Funid, Namepair*) = funid(Char+)
+
+  [default-lif] remove-ignored-from-funid(Funid) = Funid2,
+                pn-lookup(Funid2, Namepair*) = Funid3
+                ====
+                lookup-ignored-funid(Funid, Namepair*) = Funid3
 
   [sa2cs-1'1] sigargs2cbuild(Sigarg+,0) =
                 (ActualArgs,Stat*1,natcon(Char*2)),
@@ -339,7 +358,8 @@ equations
              is-ignored-funid(Funid) = false,
              make-atmp(Aint+) = Expression,
              make-c-temp(Aint1) = Expression2,
-             listpatterns2cstats(C-rule+1,Expression2,Namepair*,succ(Aint1)) = (Stat*2,Aint2),
+             listpatterns2cstats(C-rule+1,Expression2,Namepair*,succ(Aint1)) = 
+                    (Stat*2,Aint2),
              make-c-expression((Funid,Aint+),Namepair*) = Ltest,
              Expression2 = arg_0(Expression); = Stat*1,
              Stat*1 ++ Stat*2 = Stat*3,
@@ -362,9 +382,11 @@ equations
 
   [lps2cs-1'1] listpatterns2cstats(,Expression1,Namepair*,Aint) = (,Aint)
 
-  [lps2cs-1'2] listpattern2cstats(C-rule,Expression1,Namepair*,Aint1) = (Decl*,Stat*,Aint2)
-               ============================================================================
-               listpatterns2cstats(C-rule,Expression1,Namepair*,Aint1) = (Decl* ++d Stat*,Aint2)
+  [lps2cs-1'2] listpattern2cstats(C-rule,Expression1,Namepair*,Aint1) = 
+                 (Decl*,Stat*,Aint2)
+               ==================================================================
+               listpatterns2cstats(C-rule,Expression1,Namepair*,Aint1) = 
+                  (Decl* ++d Stat*,Aint2)
 
   [lps2cs-1'3] select-on-same-list-pat(C-rule;C-rule+1) = (C-rule+2,C-rule*),
                listpattern2cstats(C-rule+2,Expression1,Namepair*,Aint1) = (Decl*,Stat*1,Aint2),

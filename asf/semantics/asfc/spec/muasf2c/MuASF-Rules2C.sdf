@@ -32,7 +32,8 @@ hiddens
   context-free syntax
     restore-ignored-funids-in-nf(Argument-expression-list, TermList, {NamePair ","}*) -> 
                                                               Argument-expression-list
-    restore-ignored-funids-in-arg(Expression, Term, {NamePair ","}*) -> Expression
+    restore-ignored-funids-in-arg(Expression, Term, {NamePair ","}*) -> Expression 
+    lookup-ignored-funid(FunId, {NamePair ","}*) -> FunId
 
   context-free syntax
     asfrules2cfuncs({FuncDef ";"}*,{Rule ";"}+,

@@ -294,7 +294,13 @@ equations
         remove-emb-cond(FunId(Term1) == FunId(Term2), FunId has EmbeddingAt) =
           Term3 == Term4
 
-[rec-1] FunId != FunId2,
+[rec-1] remove-emb-term(FunId(Term1), FunId has EmbeddingAt,remove) = Term3,
+        remove-emb-term(FunId(Term2), FunId has EmbeddingAt,remove) = Term4
+        ====
+        remove-emb-cond(FunId(Term1) != FunId(Term2), FunId has EmbeddingAt) =
+          Term3 != Term4
+
+[rec-2] FunId != FunId2,
         remove-emb-term(FunId(Term1), FunId has EmbeddingAt,remove) = Term3,
         remove-emb-term(FunId(FunId2(Term2)), FunId has EmbeddingAt,remove) = FunId3(Term4),
         Term4 != FunId2(Term2)
@@ -302,18 +308,12 @@ equations
         remove-emb-cond(FunId(Term1) == FunId2(Term2), FunId has EmbeddingAt) =
           Term3 == Term4
 
-[rec-2] FunId != FunId2,
+[rec-3] FunId != FunId2,
         remove-emb-term(FunId(Term1), FunId has EmbeddingAt,remove) = Term3,
         remove-emb-term(FunId(FunId2(Term2)), FunId has EmbeddingAt,remove) = FunId3(Term4),
         Term4 != FunId2(Term2)
         ====
-        remove-emb-cond(FunId2(Term1) == FunId(Term2), FunId has EmbeddingAt) =
-          Term3 == Term4
-
-[rec-3] remove-emb-term(FunId(Term1), FunId has EmbeddingAt,remove) = Term3,
-        remove-emb-term(FunId(Term2), FunId has EmbeddingAt,remove) = Term4
-        ====
-        remove-emb-cond(FunId(Term1) == FunId(Term2), FunId has EmbeddingAt) =
+        remove-emb-cond(FunId2(Term1) != FunId(Term2), FunId has EmbeddingAt) =
           Term3 != Term4
 
 [rec-4] FunId != FunId2,
@@ -322,14 +322,14 @@ equations
         Term4 != FunId2(Term2)
         ====
         remove-emb-cond(FunId(Term1) == FunId2(Term2), FunId has EmbeddingAt) =
-          Term3 != Term4
+          Term3 == Term4
 
 [rec-5] FunId != FunId2,
         remove-emb-term(FunId(Term1), FunId has EmbeddingAt,remove) = Term3,
         remove-emb-term(FunId(FunId2(Term2)), FunId has EmbeddingAt,remove) = FunId3(Term4),
         Term4 != FunId2(Term2)
         ====
-        remove-emb-cond(FunId2(Term1) == FunId(Term2), FunId has EmbeddingAt) =
+        remove-emb-cond(FunId2(Term1) != FunId(Term2), FunId has EmbeddingAt) =
           Term3 != Term4
 
 
