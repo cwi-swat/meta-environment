@@ -85,6 +85,7 @@ AC_OUTPUT(
   libmept/Makefile
   libptmept/Makefile
   libasfix2/Makefile
+  test/Makefile
   utils/Makefile
   utils/implodePT/Makefile
   utils/implodePT/test/Makefile
