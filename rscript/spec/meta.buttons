@@ -13,9 +13,8 @@ configuration([
          	apply("check-rscript", "Summary", 1),
          	push-modulename("RscriptChecker"),
          	reduce,
- 
-
-         	display-feedback],
+		convert-feedback,
+         	show-feedback],
 		[ message("Not an Rscript")
 		]
          )
