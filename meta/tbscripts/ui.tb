@@ -152,7 +152,7 @@ in
    )+
    ( rec-event(UI,parse-equations(Str?)).
      snd-msg(process-eqs(Str)).
-     rec-msg(eqs-processed(Str1?)).
+     rec-msg(eqs-processed(Str)).
      snd-ack-event(UI,parse-equations(Str))
    ) +
    ( rec-event(UI,jitterbug-wanted).

@@ -34,6 +34,8 @@ in
   (
     rec-msg(dump-equations(ModuleName?)).
     snd-note(ui-status(stat(Id, "Dumping equations"))).
+    snd-msg(process-eqs(ModuleName)).
+    rec-msg(eqs-processed(ModuleName)).
     snd-msg(get-all-equations(ModuleName)).
     (
       rec-msg(all-equations(Equations?)).
