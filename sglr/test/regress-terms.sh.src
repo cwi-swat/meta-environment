@@ -149,8 +149,7 @@ do
 		org=$dir/$asfile.org
 		out=${TMPDIR:-/var/tmp}/$asfile.$$
 		if [ ! -f $org ] ; then
-			Notify "No reference term for $base"
-			continue
+			Error "No reference term for $base"
 		fi
 		if $SGLR $VERBOSE -2 -p $ptbl -i $file -o $out
 		then
