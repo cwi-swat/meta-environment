@@ -16,7 +16,6 @@ jtif:
 		-package metastudio -swing
 
 java_JAVA = \
-	TreeSelectionButtonAction.java \
 	ExtensionFilter.java \
 	MetaStudio.java \
 	Preferences.java \

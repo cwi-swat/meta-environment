@@ -18,7 +18,6 @@ import metastudio.TreeNode;
 import metastudio.components.ModuleSelectionListener;
 
 public class ModuleTreeModel extends TreeModelSupport implements TreeModel, Serializable {
-
 	private TreeNode root;
 	private List moduleSelectionListeners;
 	private Map moduleTable;

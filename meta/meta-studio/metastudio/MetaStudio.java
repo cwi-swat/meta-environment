@@ -5,11 +5,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -17,49 +12,35 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 import javax.swing.BoxLayout;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTree;
-import javax.swing.KeyStroke;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.TreePath;
-
 import metastudio.components.FeedbackList;
 import metastudio.components.FileDialog;
 import metastudio.components.HistoryPanel;
 import metastudio.components.MenuBar;
 import metastudio.components.MessageList;
-import metastudio.components.ModuleSelectionListener;
+import metastudio.components.ModulePopupMenu;
 import metastudio.components.ModuleStatusPanel;
+import metastudio.components.ModuleTree;
 import metastudio.components.QuestionDialog;
 import metastudio.components.StatusBar;
 import metastudio.components.ToolBar;
+import metastudio.components.ToolComponent;
 import metastudio.components.graphs.GraphPanel;
 import metastudio.components.graphs.ImportGraphPanel;
 import metastudio.components.graphs.NodeSizer;
 import metastudio.components.graphs.ParseTreePanel;
 import metastudio.components.graphs.ZoomableGraphPanel;
 import metastudio.data.Module;
-import metastudio.data.ModuleSelectionModel;
 import metastudio.data.ModuleTreeModel;
 import metastudio.data.graph.AttributeList;
 import metastudio.data.graph.EdgeList;
@@ -76,14 +57,9 @@ import aterm.pure.PureFactory;
 
 public class MetaStudio
     extends JFrame
-    implements UserInterfaceTif, Runnable, ModuleSelectionListener {
+    implements UserInterfaceTif, Runnable {
 
     private static final double RIGHTPANEL_DIVIDER_LOCATION = 0.8;
-
-    private static ATerm ACTION_MENUBAR;
-    private static ATerm ACTION_TOOLBAR;
-    private static ATerm ACTION_MODULE_POPUP;
-    private static ATerm ACTION_NEW_MODULE_POPUP;
 
     public static PureFactory factory;
     public static MetaGraphFactory metaGraphFactory;
@@ -91,13 +67,6 @@ public class MetaStudio
     private UserInterfaceBridge bridge;
 
     private ToolBar toolBar;
-    
-    private JTree moduleTree;
-    //	private JPopupMenu popupMenu;
-    private JComponent component;
-
-    private int mouseX;
-    private int mouseY;
 
     private JTabbedPane mainTabs;
 
@@ -113,7 +82,6 @@ public class MetaStudio
     private HistoryPanel historyPanel;
     private MessageList messageList;
 
-    private String currentModule;
     private ModuleTreeModel moduleManager;
 
     private LinkedList toolComponents;
@@ -127,23 +95,6 @@ public class MetaStudio
         MenuBar menuBar = new MenuBar(factory, bridge, this);
         addToolComponent(menuBar);
         return menuBar;
-    }
-
-    private JPopupMenu createPopupMenu() {
-        JPopupMenu popup = new JPopupMenu();
-
-        popup.addPopupMenuListener(new PopupMenuListener() {
-            public void popupMenuCanceled(PopupMenuEvent event) {
-            }
-            public void popupMenuWillBecomeVisible(PopupMenuEvent event) {
-                importGraphPanel.setDragEnabled(false);
-            }
-            public void popupMenuWillBecomeInvisible(PopupMenuEvent event) {
-                importGraphPanel.setDragEnabled(true);
-            }
-        });
-
-        return popup;
     }
 
     private ToolBar createToolBar() {
@@ -163,26 +114,22 @@ public class MetaStudio
         moduleManager = new ModuleTreeModel();
 
         initializeProperties();
-        initializeATermPatterns();
 
         createToolBusBridge(args);
         handleCloseRequests();
 
-        moduleManager.addModuleSelectionListener(this);
         createContentPane();
 
-        addToolComponent(new QuestionDialog(factory, bridge, this.getRootPane()));
-        addToolComponent(new FileDialog(factory, bridge));
+        createPopupHandlers();
 
         makeStudioVisible();
 
     }
 
-    private void initializeATermPatterns() {
-        ACTION_MENUBAR = factory.parse("studio-menubar");
-        ACTION_TOOLBAR = factory.parse("studio-toolbar");
-        ACTION_MODULE_POPUP = factory.parse("module-popup");
-        ACTION_NEW_MODULE_POPUP = factory.parse("new-module-popup");
+    private void createPopupHandlers() {
+        addToolComponent(new QuestionDialog(factory, bridge, this.getRootPane()));
+        addToolComponent(new FileDialog(factory, bridge));
+        addToolComponent(new ModulePopupMenu(factory, bridge));
     }
 
     private void initializeProperties() throws IOException {
@@ -249,11 +196,12 @@ public class MetaStudio
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
-        JScrollPane moduleTreePane = createModuleTreePane();
-        createModuleStatusPanel();
+        ToolComponent moduleTree = new ModuleTree(factory, bridge, moduleManager);
+        leftPanel.add(moduleTree);
 
-        leftPanel.add(moduleTreePane);
+        createModuleStatusPanel();
         leftPanel.add(moduleStatus);
+        
         return leftPanel;
     }
 
@@ -346,76 +294,8 @@ public class MetaStudio
 
         importGraphPanel = new ImportGraphPanel(factory, bridge, moduleManager);
 
-        importGraphPanel.getGraphPanel().addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                checkModulePopup(e);
-            }
-            public void mouseReleased(MouseEvent e) {
-                checkModulePopup(e);
-            }
-        });
-
         color = Preferences.getColor(Preferences.PREF_GRAPHPANE_BACKGROUND);
         importGraphPanel.setBackground(color);
-    }
-
-    private JScrollPane createModuleTreePane() {
-        Color color;
-        moduleTree = new JTree(moduleManager);
-        moduleTree.setRootVisible(false);
-        moduleTree.setShowsRootHandles(true);
-        moduleTree.setExpandsSelectedPaths(true);
-        moduleTree.setSelectionModel(new ModuleSelectionModel());
-
-        TreeSelectionListener moduleTreeListener = new TreeSelectionListener() {
-            public void valueChanged(TreeSelectionEvent event) {
-                moduleManager.selectModule(moduleManager.getModule(getCurrentModule()));
-            }
-        };
-
-        moduleTree.addTreeSelectionListener(moduleTreeListener);
-
-        moduleTree.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                checkModulePopup(e);
-            }
-            public void mouseReleased(MouseEvent e) {
-                checkModulePopup(e);
-            }
-        });
-
-        Action a = new AbstractAction("popupmenu mnemonic") {
-            public void actionPerformed(ActionEvent e) {
-                if (moduleTree.getSelectionPath() != null) {
-                    TreePath p = moduleTree.getSelectionPath();
-                    Rectangle r = moduleTree.getPathBounds(p);
-                    MouseEvent me =
-                        new MouseEvent(
-                            moduleTree,
-                            0,
-                            Calendar.getInstance().getTimeInMillis(),
-                            0,
-                            r.x + r.width / 2,
-                            r.y + r.height,
-                            1,
-                            true,
-                            MouseEvent.BUTTON3);
-                    checkModulePopup(me);
-                }
-            }
-        };
-        String key = new String("popupmenu mnemonic");
-        KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0);
-        moduleTree.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(
-            ks,
-            key);
-        moduleTree.getActionMap().put(key, a);
-
-        JScrollPane listPane = new JScrollPane(moduleTree);
-
-        color = Preferences.getColor(Preferences.PREF_TREEPANE_BACKGROUND);
-        moduleTree.setBackground(color);
-        return listPane;
     }
 
     private void handleCloseRequests() {
@@ -557,219 +437,20 @@ public class MetaStudio
         graphPanel.repaint();
         mainTabs.setSelectedIndex(graphPanel.getIndex());
     }
-
-    public void moduleSelected(Module module) {
-        if (module == null) {
-            moduleTree.clearSelection();
-        } else {
-            TreePath path = moduleManager.makeTreePath(module.getName());
-
-            moduleTree.setSelectionPath(path);
-            moduleTree.scrollPathToVisible(path);
-        }
-    }
-
-    void checkModulePopup(MouseEvent e) {
-        if (e.isPopupTrigger()) {
-            Module module;
-            mouseX = e.getX();
-            mouseY = e.getY();
-
-            if (e.getSource() == moduleTree) {
-                component = moduleTree;
-                currentModule = getCurrentModule();
-            } else if (e.getSource() == importGraphPanel.getGraphPanel()) {
-                component = importGraphPanel;
-                Node node = importGraphPanel.getNodeAt(mouseX, mouseY);
-
-                if (node != null) {
-                    currentModule = node.getLabel();
-                } else {
-                    currentModule = null;
-                }
-            } else {
-                component = null;
-            }
-
-            if (currentModule != null && component != null) {
-                module = moduleManager.getModule(currentModule);
-                moduleManager.selectModule(module);
-
-                switch (module.getState()) {
-                    case Module.STATE_NORMAL :
-                        showModulePopup(ACTION_MODULE_POPUP);
-                        break;
-                    case Module.STATE_NEW :
-                        showModulePopup(ACTION_NEW_MODULE_POPUP);
-                        break;
-                }
-            }
-        }
-    }
-
-    private void showModulePopup(ATerm buttonType) {
-        bridge.postEvent(
-            factory.make("get-buttons(<term>,<str>)", buttonType, currentModule));
-
-    }
+    
+//    private void showModulePopup(ATerm buttonType) {
+//        bridge.postEvent(
+//            factory.make("get-buttons(<term>,<str>)", buttonType, currentModule));
+//
+//    }
 
     public void buttonsFound(ATerm buttonType, String moduleName, ATerm buttons) {
-        if (buttonType.equals(ACTION_TOOLBAR) || buttonType.equals(ACTION_MENUBAR)) {
-            Iterator iter = getToolComponents().iterator();
-
-            while (iter.hasNext()) {
-                UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-                tif.buttonsFound(buttonType, moduleName, buttons);
-            }
-        } else {
-            JPopupMenu popupMenu = createPopupMenu();
-            addPopupMenuItems(
-                popupMenu,
-                buttonType,
-                moduleName,
-                (ATermList) buttons,
-                factory.makeList());
-            popupMenu.show(component, mouseX, mouseY);
+        Iterator iter = getToolComponents().iterator();
+        System.err.println("buttonsFound for " + buttonType);
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.buttonsFound(buttonType, moduleName, buttons);
         }
-    }
-
-    // TODO: change algorithm, do it in two parts: first find tree structure,
-    // then
-    // build the menus
-
-    // The next two methods (addPopupMenuItems, addMenuItems) are exactly the
-    // same. The reason is that JPopupMenu and JMenu have the same methods,
-    // but are in different hierarchies. Also, we did not succeed in making
-    // the methods smaller.
-    public void addPopupMenuItems(
-        JPopupMenu menu,
-        ATerm buttonType,
-        String moduleName,
-        ATermList buttons,
-        ATermList prefixButtonName) {
-
-        while (!buttons.isEmpty()) {
-            ATerm action = buttons.getFirst();
-            ATermList buttonList = (ATermList) ((ATermAppl) action).getArgument(0);
-            ATermAppl buttonNamePrefix = (ATermAppl) (buttonList.getFirst());
-
-            buttons = buttons.getNext();
-
-            if (buttonList.getLength() == 1) {
-                menu.add(
-                    new TreeSelectionButtonAction(
-                        buttonNamePrefix.getName(),
-                        buttonType,
-                        action,
-                        moduleTree,
-                        bridge,
-                        metaGraphFactory));
-            } else {
-                ATermList buttonRunner = buttons;
-                JMenu nextLevel = new JMenu(buttonNamePrefix.getName());
-                ATerm apifyMe = factory.make("menu(<term>)", buttonList.getNext());
-                ATermList subMenu = factory.makeList(apifyMe);
-
-                // collect a list of buttons that are in the same
-                // 'menuNamePrefix'
-                for (; !buttonRunner.isEmpty(); buttonRunner = buttonRunner.getNext()) {
-                    ATerm cur = buttonRunner.getFirst();
-                    ATermList curList = (ATermList) ((ATermAppl) cur).getArgument(0);
-                    ATerm menuNamePrefix = curList.getFirst();
-
-                    if (buttonNamePrefix.isEqual(menuNamePrefix)) {
-                        apifyMe = factory.make("menu(<term>)", curList.getNext());
-                        // TODO: apification
-                        subMenu = subMenu.insert(apifyMe);
-                        buttons = buttons.remove(cur);
-                    }
-                }
-
-                addMenuItems(
-                    nextLevel,
-                    buttonType,
-                    moduleName,
-                    subMenu,
-                    prefixButtonName.insertAt(
-                        buttonNamePrefix,
-                        prefixButtonName.getLength()));
-                menu.add(nextLevel);
-            }
-        }
-    }
-
-    public void addMenuItems(
-        JMenu menu,
-        ATerm buttonType,
-        String moduleName,
-        ATermList buttons,
-        ATermList prefixButtonName) {
-
-        buttons = buttons.reverse();
-
-        while (!buttons.isEmpty()) {
-            ATerm action = buttons.getFirst();
-            ATermList buttonList = (ATermList) ((ATermAppl) action).getArgument(0);
-            ATermAppl buttonNamePrefix = (ATermAppl) (buttonList.getFirst());
-
-            buttons = buttons.getNext();
-
-            if (buttonList.getLength() == 1) {
-                ATerm apifyMe =
-                    factory.make("menu(<term>)", prefixButtonName.concat(buttonList));
-                menu.add(
-                    new TreeSelectionButtonAction(
-                        buttonNamePrefix.getName(),
-                        buttonType,
-                        apifyMe,
-                        moduleTree,
-                        bridge,
-                        metaGraphFactory));
-            } else {
-                ATermList buttonRunner = buttons;
-                JMenu nextLevel = new JMenu(buttonNamePrefix.getName());
-                ATermList subMenu = factory.makeList((ATerm) buttonList.getNext());
-
-                // collect a list of buttons that are in the same
-                // 'menuNamePrefix'
-                while (!buttonRunner.isEmpty()) {
-                    ATerm cur = buttonRunner.getFirst();
-                    ATermList curList = (ATermList) ((ATermAppl) cur).getArgument(0);
-                    ATerm menuNamePrefix = curList.getFirst();
-
-                    if (buttonNamePrefix.isEqual(menuNamePrefix)) {
-                        ATerm apifyMe = factory.make("menu(<term>)", curList.getNext());
-                        // TODO: apification
-                        subMenu = subMenu.insert(apifyMe);
-                        buttons = buttons.remove(cur);
-                    }
-
-                    buttonRunner = buttonRunner.getNext();
-                }
-
-                addMenuItems(
-                    nextLevel,
-                    buttonType,
-                    moduleName,
-                    subMenu,
-                    prefixButtonName.insertAt(
-                        buttonNamePrefix,
-                        prefixButtonName.getLength()));
-                menu.add(nextLevel);
-            }
-        }
-    }
-
-    String getCurrentModule() {
-        TreePath path = moduleTree.getSelectionPath();
-
-        if (path != null) {
-            TreeNode selectedModule = (TreeNode) path.getLastPathComponent();
-
-            return selectedModule.getFullName();
-        }
-
-        return null;
     }
 
     public void addStatus(ATerm id, String message) {
@@ -887,7 +568,7 @@ public class MetaStudio
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             result = tif.showQuestionDialog(question);
-            
+
             if (result != null) {
                 return factory.make("snd-value(<term>)", result);
             }
@@ -903,7 +584,7 @@ public class MetaStudio
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             result = tif.showFileDialog(label, loc, extension);
-            
+
             if (result != null) {
                 return factory.make("snd-value(<term>)", result);
             }

@@ -19,5 +19,7 @@ StatusBar.java\
 QuestionDialog.java\
 FileDialog.java\
 ToolBar.java\
-MenuBar.java
+MenuBar.java\
+ModulePopupMenu.java\
+ModuleTree.java
 

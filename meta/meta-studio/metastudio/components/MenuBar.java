@@ -15,8 +15,10 @@ import aterm.ATermAppl;
 import aterm.ATermFactory;
 import aterm.ATermList;
 
-// TODO: apification of button actions
-// TODO: simplification of menu construction algorithm
+// TODO:  * apification of button actions
+//        * simplification of menu construction algorithm
+//        * what can be shared with ModulePopupMenu?
+//        * add nested menu's?
 
 public class MenuBar extends ToolComponent {
     private static ATerm ACTION_MENUBAR;
@@ -106,9 +108,10 @@ public class MenuBar extends ToolComponent {
             final ATerm action = buttons.getFirst();
             ATermList menuItems = (ATermList) ((ATermAppl) action).getArgument(0);
             ATerm menuItem = menuItems.getFirst();
-            String menuName = ((ATermAppl) menuItem).getName();
+            final String menuName = ((ATermAppl) menuItem).getName();
             JMenu menu = getMenuItem(getMenu(menuName), menuItems.getNext());
-            menu.add(new AbstractAction() {
+            String label = getMenuLabel(menuItems.getNext());
+            menu.add(new AbstractAction(label) {
                 public void actionPerformed(ActionEvent e) {
                     ATerm event =
                         getFactory().make(
@@ -121,5 +124,9 @@ public class MenuBar extends ToolComponent {
             });
             buttons = buttons.getNext();
         }
+    }
+
+    private String getMenuLabel(ATermList list) {
+        return ((ATermAppl) list.getFirst()).getName();
     }
 }

@@ -4,21 +4,30 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
+
 import metastudio.UserInterfaceBridge;
+import metastudio.components.ModulePopupMenu;
 import metastudio.components.ModuleSelectionListener;
 import metastudio.data.Module;
 import metastudio.data.ModuleTreeModel;
 import metastudio.data.graph.Node;
 import aterm.ATermFactory;
 
-public class ImportGraphPanel extends ZoomableGraphPanel implements ModuleSelectionListener {
+public class ImportGraphPanel
+    extends ZoomableGraphPanel
+    implements ModuleSelectionListener {
     private GraphPanel panel;
-    
-    public ImportGraphPanel(ATermFactory factory, UserInterfaceBridge bridge, final ModuleTreeModel moduleManager) {
+
+    public ImportGraphPanel(
+        ATermFactory factory,
+        UserInterfaceBridge bridge,
+        final ModuleTreeModel moduleManager) {
         super(factory, bridge, "import");
-        
+
         panel = getGraphPanel();
-       
+
         moduleManager.addModuleSelectionListener(this);
 
         panel.addMouseListener(makeMouseListener(moduleManager));
@@ -28,15 +37,27 @@ public class ImportGraphPanel extends ZoomableGraphPanel implements ModuleSelect
         MouseListener listener = new MouseAdapter() {
             public void mouseClicked(MouseEvent event) {
                 Node node = panel.getNodeAt(event.getX(), event.getY());
-                if (node != panel.getSelectedNode()) {
-                    Module module;
-                    if (node == null) {
-                        module = null;
-                    } else {
-                        module = moduleManager.getModule(node.getLabel());
+                ModulePopupMenu.setPopupLocation(
+                    (JComponent) event.getSource(),
+                    event.getX(),
+                    event.getY());
+
+                Module module;
+
+                if (node == null) {
+                    module = null;
+                } else {
+                    module = moduleManager.getModule(node.getLabel());
+                    if (event.isPopupTrigger()
+                        || SwingUtilities.isRightMouseButton(event)) {
+                        postEvent(
+                            getFactory().make(
+                                "get-buttons(module-popup,<str>)",
+                                node.getLabel()));
                     }
-                    moduleManager.selectModule(module);
+
                 }
+                moduleManager.selectModule(module);
             }
         };
         return listener;
