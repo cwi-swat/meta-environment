@@ -95,6 +95,7 @@ void enter_equation(equation_table *table, ATerm equation)
 
   ATerm equ, lhs, top_ofs,first_ofs, tag, rhs;
   ATermList lhsargs, conds;
+	ATerm condlist, conditions;
   unsigned hnr;
 
   if(AFTisSimpleCondEqu(equation)) {
@@ -108,7 +109,9 @@ void enter_equation(equation_table *table, ATerm equation)
   else if(AFTisImpliesCondEqu(equation)) {
     tag = AFTgetImpliesCondEquTag(equation); 
     equ = AFTgetImpliesCondEquEqu(equation);  
-    conds = AFTgetListElements(AFTgetImpliesCondEquConds(equation)); 
+		conditions = AFTgetImpliesCondEquConds(equation);
+		condlist = AFTgetCondsCondList(conditions);
+    conds = AFTgetListElements(condlist);
  
     lhs = AFTgetSimpleEquLHS(equ); 
     rhs = AFTgetSimpleEquRHS(equ);
@@ -116,8 +119,10 @@ void enter_equation(equation_table *table, ATerm equation)
   else if(AFTisWhenCondEqu(equation)) {
     tag = AFTgetWhenCondEquTag(equation); 
     equ = AFTgetWhenCondEquEqu(equation);  
-    conds = AFTgetListElements(AFTgetWhenCondEquConds(equation)); 
- 
+		conditions = AFTgetWhenCondEquConds(equation);
+		condlist = AFTgetCondsCondList(conditions);
+    conds = AFTgetListElements(condlist);
+
     lhs = AFTgetSimpleEquLHS(equ); 
     rhs = AFTgetSimpleEquRHS(equ);
   }
@@ -137,7 +142,7 @@ void enter_equation(equation_table *table, ATerm equation)
   }
 
   if(ATisEmpty(lhsargs) || asfix_is_var(ATgetFirst(lhsargs))
-		 || asfix_is_default_equ(equation))
+		 || AFisDefaultTag(tag))
     first_ofs = (ATerm)ATempty; /* <PO> ? */
   else
     first_ofs = asfix_get_appl_ofs(ATgetFirst(lhsargs));
@@ -177,7 +182,7 @@ void enter_equation(equation_table *table, ATerm equation)
 		if(anno)
 			ATfprintf(stderr, "annotations: %t\n", anno);
 		else
-			ATfprintf(stderr, "no annotations: %t\n", AT_getAnnotations(equation));
+			ATfprintf(stderr, "no annotations.\n");
 	}
 }
 
@@ -318,7 +323,7 @@ ATerm prepare_cond(ATerm cond)
   return NULL;
 }
 
-ATerm prepare_conds(ATerm conds)
+ATerm prepare_condlist(ATerm conds)
 {
   ATerm cond, iter, wl;
   ATerm newcond;
@@ -340,6 +345,18 @@ ATerm prepare_conds(ATerm conds)
     newconds = ATappend(newconds, newcond);
   }
   return AFTbuildList(iter, wl, newconds);
+}
+
+ATerm prepare_conds(ATerm conds)
+{
+	if(AFTisConds(conds)) {
+		ATerm condlist = AFTgetCondsCondList(conds);
+		condlist = prepare_condlist(condlist);
+		return AFTbuildConds(condlist);
+	}
+
+	ATerror("expected conds, got: %t\n", conds);
+	return NULL;
 }
 
 /*}}}  */
@@ -373,7 +390,7 @@ ATerm prepare_simple_equ(ATerm equ)
 
 ATerm prepare_equ(ATerm equ)
 {
-  ATerm w[6], tag, simplequ, newequ, lit;
+  ATerm w[6], tag, simplequ, newequ, lit, lex;
   ATerm annos;
   ATerm conds, newconds;
 
@@ -393,12 +410,12 @@ ATerm prepare_equ(ATerm equ)
     conds = AFTgetImpliesCondEquConds(equ);
     newconds = prepare_conds(conds);
     w[1] = AFTgetImpliesCondEquWS1(equ);
-    lit  = AFTgetImpliesCondEquLit(equ);
+    lex  = AFTgetImpliesCondEquBarLex(equ);
     w[2] = AFTgetImpliesCondEquWS2(equ);
     simplequ = AFTgetImpliesCondEquEqu(equ);
     newequ = prepare_simple_equ(simplequ);
     equ = AFTbuildImpliesCondEqu(tag, w[0], newconds, w[1], 
-                                     lit, w[2], newequ);
+                                     lex, w[2], newequ);
   }
   else if(AFTisWhenCondEqu(equ)) {
     tag  = AFTgetWhenCondEquTag(equ);
@@ -431,7 +448,7 @@ ATerm prepare_equ(ATerm equ)
 
 ATerm lexical_to_list(ATerm lextrm)
 {
-  ATerm sort, newtrm, newlex, newname, newiter;
+  ATerm sort, newtrm, newlex, newname, qnewname, newiter;
   ATerm newargs, newfargs, newprod, newappl;
   int i, l;
   char cbuf[4] = "\" \"", *lexstr, *sortstr;
@@ -452,11 +469,12 @@ ATerm lexical_to_list(ATerm lextrm)
     newtrmlist = ATappend(newtrmlist, newtrm);
   }
   newname  = ATmake("l(<str>)", sortstr);
+  qnewname = ATmake("ql(<str>)", sortstr);
   newiter  = ATmake("iter(sort(\"CHAR\"),w(\"\"),l(\"+\"))");
   newlex   = ATmake("list(<term>,w(\"\"),<term>)", newiter, newtrmlist);
-  newfargs = ATmake("[<term>,w(\"\"),ql(\"(\"),w(\"\"),<term>,w(\"\"),ql(\")\")]",newname, newiter);
+  newfargs = ATmake("[<term>,w(\"\"),ql(\"(\"),w(\"\"),<term>,w(\"\"),ql(\")\")]",qnewname, newiter);
   newargs  = ATmake("[<term>,l(\"(\"),<term>,l(\")\")]", newname, newlex);
-  newprod  = ATmake("prod(id(\"caller\"),w(\"\"),<term>,w(\"\")," \
+  newprod  = ATmake("prod(id(\"Equations\"),w(\"\"),<term>,w(\"\")," \
 			"l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)",newfargs,sort);
   newappl  = ATmake("appl(<term>,w(\"\"),<term>)", newprod, newargs);
 

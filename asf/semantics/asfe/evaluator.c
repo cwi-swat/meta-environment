@@ -59,6 +59,7 @@ A first version of an INTERPRETER in ToolBus C.
 #include <unistd.h>
 #include <aterm2.h>
 #include <AsFix.h>
+#include <AsFix-access.h>
 #include <atb-tool.h>
 #include <string.h>
 #include <sys/times.h>
@@ -287,7 +288,7 @@ ATerm add_equations(int cid, ATerm name, ATerm equs)
   ATermList newequs;
   int l;
   
-  ATfprintf(stderr, "preparing equations...: %t\n", equs);
+  ATfprintf(stderr, "preparing equations...\n");
   newequs = RWprepareEqs((ATermList) equs);
   enter_equations(name, newequs);
   l = ATgetLength(newequs);
@@ -352,53 +353,6 @@ ATfprintf(stderr,"result = %t\n", result);
   return ATmake("snd-value(result(<term>))",result);
 }
 
-
-/*}}}  */
-/*{{{  ATermList sort_and_filter_on_ofs(ATerm name,ATerm firstofs,ATermList eqs) */
-
-/* The function ``filter_on_ofs'' selects the rewrite rules 
-   with the same outermost function symbol in their left hand side.
-   This function gets a module name, an outermost function symbol,
-   and a list of equations. Equations with the same ofs as the 
-   argument ofs are added to a new list and removed from the argument
-   list. If all equations in the argument list are inspected the
-   new constructed list is added to the equation database in the
-   entry of the module name. The function returns the argument list
-   without the filtered equations. */
-ATermList sort_and_filter_on_ofs(ATerm name,
-                                 ATerm firstofs,
-                                 ATermList eqs)
-{
-  ATerm eq, lhs, ofs, pair;
-  ATermList oldpairs, newpairs;
-  ATermList sameofs = ATempty;
-  ATermList neweqs = ATempty;
-
-  while(!ATisEmpty(eqs)) {
-    eq = ATgetFirst(eqs);
-    lhs = asfix_get_equ_lhs(eq);
-    ofs = asfix_get_appl_ofs(lhs);
-    if(ATisEqual(firstofs, ofs)) {
-      if(AFisDefaultEquation(eq))
-        sameofs = ATappend(sameofs, eq);
-      else
-        sameofs = ATinsert(sameofs, eq);
-    }
-    else
-      neweqs = ATinsert(neweqs, eq);
-    eqs = ATgetNext(eqs);
-  };
-
-/* Create a pair of the ofs and the list of equations
-   with the same ofs in the left hand side.
-   Update the entry in the equation-database */
-  pair = ATmake("[<term>,<list>]", firstofs, sameofs);
-  oldpairs = (ATermList)ATdictGet(equations_db, name);
-  newpairs = ATappend(oldpairs, pair);
-	equations_db = ATdictPut(equations_db, name, (ATerm)newpairs);
-
-  return neweqs;
-}
 
 /*}}}  */
 /*{{{  ATbool no_new_vars(ATerm trm,ATermList env) */
@@ -469,6 +423,8 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
   ATermList args1, args2;
   ATermList elems1, elems2;
   ATerm newenv = env;
+
+	ATfprintf(stderr, "arg_matching: %t\n with %t\n\n", arg1, arg2);
 
   if(ATisEqual(arg1,arg2))
     return args_matching(newenv,conds,orgargs1,orgargs2);
@@ -746,9 +702,9 @@ ATerm conds_satisfied(ATermList conds, ATerm env)
 			 list of conditions! */
     cond = ATgetFirst(conds);
     conds = ATgetNext(conds);
-    lhs = asfix_get_cond_lhs(cond);
-    rhs = asfix_get_cond_rhs(cond);
-    if(asfix_is_equality_cond(cond)) {
+		lhs = AFTgetCondLHS(cond);
+		rhs = AFTgetCondRHS(cond);
+    if(AFTisEqualityCond(cond)) {
 			/* <PO:opt> couldn't we determine this statically? */
       if(no_new_vars(lhs,newenv)) {
         lhstrm = rewrite(lhs,newenv);
@@ -864,7 +820,6 @@ ATfprintf(stderr,"Equation: %t failed\n",entry->tag);
  
   return (ATerm) make_cenv(trm, fail_env);
 }
-
 
 /*}}}  */
 /*{{{  ATerm select_and_rewrite(ATerm trm) */
