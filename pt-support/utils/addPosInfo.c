@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 {
   ATerm     bottomOfStack;
   ATerm     contents;
-  FILE   *input  = stdin;
+  char   *input  = "-";
   FILE   *output = stdout;
   char   *path = NULL;
   int depth = -1;
@@ -55,9 +55,9 @@ int main(int argc, char *argv[])
   for (lcv = 1; lcv < argc; lcv++) {
     if (streq(argv[lcv], "-i")) {
       requireArgument(argc, argv, lcv);
-      input = fopen(argv[++lcv], "rb");
+      input = strdup(argv[++lcv]);
       if (input == NULL) {
-        ATerror("%s: unable to open %s for reading.\n", argv[0], argv[lcv]);
+        ATerror("MRF");
       }
     }
     else if (streq(argv[lcv], "-o")) {
@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     }
   }
 
-  contents = ATreadFromFile(input);
+  contents = ATreadFromNamedFile(input);
   assert(contents != NULL);
 
   parseTree =  PT_makeParseTreeFromTerm(contents);
