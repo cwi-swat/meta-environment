@@ -1,0 +1,76 @@
+equations
+
+[as-1] add-pred($Rel, $Rstore) = extend-rel(PRED, $Rel, $Rstore)
+ 
+[ex1] Stat = while Exp do Stat* od,
+      $Area = get-area(Stat),
+      $Rstore' = add-pred({<$Area, get-first(Stat*)>}, $Rstore),
+      $Rstore''= add-last(Stat*, $Area, $Rstore'),
+      $Rstore''' = extract-used-vars(Exp, $Rstore'', $Area)
+      =========================================================
+      extract(Stat, $Rstore) = $Rstore'''
+
+[ex2]
+      Stat = if Exp then Stat*1 else Stat*2 fi,
+      $Area = get-area(Stat),
+      $Rstore' = add-pred({ <$Area, get-first(Stat*1)>,
+                           <$Area, get-first(Stat*2)> }, $Rstore),
+      $Rstore'' =  extract-used-vars(Exp, $Rstore', $Area)
+      ========================================================
+      extract(Stat, $Rstore) = $Rstore''
+
+[ex3] extract(Stat, $Rstore) = $Rstore',
+      extract(Stat+, $Rstore') = $Rstore''
+      ========================================================
+      extract(Stat ; Stat+, $Rstore) = 
+      add-pred(product(get-last(Stat), {get-first(Stat+)}), $Rstore'')
+
+[ex4] Stat = Id := Exp,
+      $Area = get-area(Stat),
+      $Area' = get-area(Id),
+      $Rstore' = extract-used-vars(Exp, $Rstore, $Area),
+      $Rstore'' = add-tuple(DEFS, <$Area, id2str(Id)>, $Rstore'),
+      $Rstore''' = add-tuple(DEF_OCCURS, <<$Area, id2str(Id)>, $Area'>, $Rstore'')
+      ========================================================
+      extract(Stat, $Rstore) = $Rstore'''
+
+[default-ex]
+     extract(Stat, $Rstore) = extract-used-vars(Stat, $Rstore, get-area(Stat))
+
+
+[exv-1] $Area' = get-area(Id),
+	add-tuple(USES, <$Area, id2str(Id)> , $Rstore) = $Rstore',
+        add-tuple(USE_OCCURS, <<$Area, id2str(Id)>, $Area'>, $Rstore') = $Rstore''
+	=====================================================
+        extract-used-vars(Id, $Rstore, $Area) = $Rstore''
+
+[gf-1] get-first(Stat; Stat*) = get-area(Stat)
+
+[gl-2] get-last(Stat*; if Exp then Stat*1 else Stat*2 fi) = 
+       union(get-last(Stat*1), get-last(Stat*2))
+
+[default-gl-3] 
+       get-last(Stat*; Stat) = {get-area(Stat)}
+
+[al-1] get-last(Stat*) = $Bag
+       ========================================================
+       add-last(Stat*, $Area, $Rstore) = add-pred(product($Bag, {$Area}), $Rstore)
+
+[er-1] Program = begin Decls Stat+ end,
+       $Area =  area("",0,0,0,0),
+       $Rstore = assign(ROOT, $Area, rstore()),
+       $Rstore' = add-pred({<$Area, get-first(Stat+)>}, $Rstore),
+       extract(Program, $Rstore') = $Rstore''
+       =======================================================
+       extractRelations(Program) = $Rstore''
+
+[i2s] id2str(pico-id(Char*)) = strcon(""" Char* """)
+
+[cvt-1] convert(<$String, $Area>) = listitem("Unitialized variable " || $String, $Area)
+
+[cvt-2] convertl({$Elem*}) = [$ListItem*]
+        ================================================
+        convertl({<$String, $Area>, $Elem*})= [convert(<$String, $Area>), $ListItem*]
+
+[cvt-3] convertl({}) = []
+
