@@ -1,7 +1,8 @@
 dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(configure.in)
+AC_INIT
+AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(asf-support, 1.2)
 
 ACLOCAL="${ACLOCAL} -I ."
@@ -45,11 +46,11 @@ AC_PROG_RANLIB
 AC_PATH_PROG(AR,ar,/usr/bin/ar)
 
 dnl What commands are needed to set the variable MAKE in Makefiles?
-AC_SET_MAKE
+AC_PROG_MAKE_SET([])
 
 dnl Which files need updating?
-AC_OUTPUT(
-  Makefile
+AC_CONFIG_FILES([Makefile
   lib/Makefile
   utils/Makefile
-)
+])
+AC_OUTPUT
