@@ -1,5 +1,5 @@
 #    Meta-Environment - An environment for language prototyping.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, 
+#    Copyright (C) 2000  Stichting Mathematisch Centrum,
 #                        Amsterdam, The Netherlands.
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -20,28 +20,23 @@
 #
 # $Id$
 
-include ${top_srcdir}/make_rules
+include $(top_srcdir)/make_rules
 
-SUBDIRS     = asfix asc-support sglr pgen compiler asfix2c-compiler editors \
-              evaluator graph-browser in-output module-db utils toolbus \
-              grammars demo doc asf-syntax
+bin_PROGRAMS      = se
+data_DATA         = se.idef
 
-EXTRA_DIST  = make_rules meta.sh.src meta.pod
+EXTRA_DIST        = se.idef
 
-bin_SCRIPTS = meta
+CLEANFILES        = se.tifs se.tif.c se.tif.h
 
-man_MANS    = meta.1
+se_SOURCES = area.c editor.c focus.c path.c posinfo.c se.c sort.c tree.c \
+	     area.h editor.h focus.h path.h posinfo.h se.h sort.h tree.h
+se_LDADD   = se.tif.o \
+                    -L$(ASCLIB) -lasc-support \
+                    -L$(ASFIXLIB) -lAsFix \
+                    -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
 
-CLEANFILES  = meta meta.1
+INCLUDES          = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC) \
+                    -DBINDIR=\"$(bindir)\"
 
-TOOLBUSDEFS = @TRAVERSALSDEF@
-
-% : %.sh.src Makefile
-	sed 's@__TOOLBUS_DEFS__@$(TOOLBUSDEFS)@g;\
-             s@__PREFIX__@$(prefix)@g;\
-	     s@__BINDIR__@$(bindir)@g;\
-	     s@__DATADIR__@$(datadir)@g;\
-	     s@__TOOLBUS__@$(TOOLBUSBIN)/toolbus@g' < $< > $@ && \
-	chmod +x $@
-
-
+area.o : se.tif.h

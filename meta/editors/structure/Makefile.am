@@ -1,5 +1,5 @@
 #    Meta-Environment - An environment for language prototyping.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, 
+#    Copyright (C) 2000  Stichting Mathematisch Centrum,
 #                        Amsterdam, The Netherlands.
 #
 #    This program is free software; you can redistribute it and/or modify
@@ -20,28 +20,4 @@
 #
 # $Id$
 
-include ${top_srcdir}/make_rules
-
-SUBDIRS     = asfix asc-support sglr pgen compiler asfix2c-compiler editors \
-              evaluator graph-browser in-output module-db utils toolbus \
-              grammars demo doc asf-syntax
-
-EXTRA_DIST  = make_rules meta.sh.src meta.pod
-
-bin_SCRIPTS = meta
-
-man_MANS    = meta.1
-
-CLEANFILES  = meta meta.1
-
-TOOLBUSDEFS = @TRAVERSALSDEF@
-
-% : %.sh.src Makefile
-	sed 's@__TOOLBUS_DEFS__@$(TOOLBUSDEFS)@g;\
-             s@__PREFIX__@$(prefix)@g;\
-	     s@__BINDIR__@$(bindir)@g;\
-	     s@__DATADIR__@$(datadir)@g;\
-	     s@__TOOLBUS__@$(TOOLBUSBIN)/toolbus@g' < $< > $@ && \
-	chmod +x $@
-
-
+SUBDIRS = src

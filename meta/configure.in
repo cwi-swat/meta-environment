@@ -186,18 +186,26 @@ AC_SUBST(ASCLIB)
 dnl Which files need updating?
 AC_OUTPUT(
 Makefile
-compiler/Makefile compiler/c-source/Makefile
+compiler/Makefile
+compiler/c-source/Makefile
 asfix2c-compiler/Makefile
-editor/Makefile
-evaluator/Makefile evaluator/src/Makefile evaluator/test/Makefile 
+evaluator/Makefile
+evaluator/src/Makefile
+evaluator/test/Makefile 
 evaluator/test/terms/Makefile
-graph-browser/Makefile graph-browser/graph-browser.tcl
-in-output/Makefile in-output/test/Makefile
-module-db/Makefile module-db/test/Makefile
-stred/Makefile 
-stred/src/Makefile stred/src/test/Makefile 
-toolbus/Makefile toolbus/test/Makefile
-utils/Makefile 
+graph-browser/Makefile
+graph-browser/graph-browser.tcl
+in-output/Makefile
+in-output/test/Makefile
+module-db/Makefile
+module-db/test/Makefile
+editors/Makefile
+editors/text/Makefile
+editors/structure/Makefile
+editors/structure/src/Makefile
+toolbus/Makefile
+toolbus/test/Makefile
+utils/Makefile
 utils/genmakefile
 grammars/Makefile
 grammars/aterm/Makefile
@@ -209,15 +217,15 @@ demo/user-manual-examples/Makefile
 doc/Makefile
 doc/html/Makefile
 asf-syntax/Makefile
-asf-syntax/addeqs/Makefile 
+asf-syntax/addeqs/Makefile
 asf-syntax/addeqs/src/Makefile
 asf-syntax/addeqs/c-source/Makefile
 asf-syntax/addeqs/spec/Makefile
-asf-syntax/removevars/Makefile 
+asf-syntax/removevars/Makefile
 asf-syntax/removevars/src/Makefile
 asf-syntax/removevars/c-source/Makefile
 asf-syntax/removevars/spec/Makefile
-asf-syntax/traversals/Makefile 
+asf-syntax/traversals/Makefile
 asf-syntax/traversals/src/Makefile
 asf-syntax/traversals/c-source/Makefile
 asf-syntax/traversals/spec/Makefile

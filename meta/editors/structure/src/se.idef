@@ -1,0 +1,117 @@
+/*
+
+   Meta-Environment - An environment for language prototyping.
+   Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                       The Netherlands. 
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+
+   $Id$
+*/
+
+tool se is {
+  command = "se"
+}
+
+process SE is
+let
+  EditorId     : term,
+  Focus        : term,
+  Error        : list,
+  Focuses      : list,
+  FocusList    : list,
+  StartSymbols : list,
+  Location     : int,
+  SE           : se,
+  Text         : str,
+  Number       : int,
+  Nonterminal  : str,
+  Tree         : term
+in 
+  execute(se, SE?) .
+  (
+    rec-msg(initialize-structure-editor(EditorId?, Text?)) .
+    snd-eval(SE, newEditor(EditorId, Text)) .
+    rec-value(SE, Focus?) .       
+    snd-msg(initial-focus(Focus))
+  +
+    rec-msg(initialize-structure-editor-with-tree(EditorId?, Tree?)) .
+    snd-eval(SE, newEditorGivenTree(EditorId, Tree)) .
+    rec-value(SE, Focus?) .       
+    snd-msg(initial-focus(Focus))
+  +
+    rec-msg(insert-chars(EditorId?, Location?, Text?)) .
+    snd-eval(SE, insertChars(EditorId, Location, Text)) .
+    rec-value(SE, Focus?) .       
+    snd-msg(ack-insert-chars(EditorId)).
+    snd-msg(set-focus(EditorId, Focus))
+  +
+    rec-msg(delete-chars(EditorId?, Location?, Number?)).
+    snd-eval(SE, deleteChars(EditorId, Location, Number)) .
+    rec-value(SE, Focus?) .
+    snd-msg(ack-delete-chars(EditorId)).
+    snd-msg(set-focus(EditorId, Focus))
+  +
+    rec-msg(replace-focus(EditorId?, Focus?, Tree?)) .
+    snd-do(SE, replaceFocus(EditorId, Focus, Tree))
+  +
+    rec-msg(set-focus(EditorId?, Focuses?)) .
+    snd-do(SE, setMultipleFocus(EditorId, Focuses))
+  +
+    rec-msg(move-focus(EditorId?, Text?)) .
+    snd-eval(SE, moveFocus(EditorId, Text)) .
+    rec-value(SE, Focus?) .
+    snd-msg(set-focus(EditorId, Focus))
+  +
+    rec-msg(invalidate-tree(EditorId?)) .
+    snd-eval(SE, makeTreeInvalid(EditorId)) .
+    rec-value(SE, Focus?) .
+    snd-msg(set-focus(EditorId, Focus))
+  +
+    rec-msg(set-current-location(EditorId?, Location?)) .
+    snd-eval(SE, setFocusAtLocation(EditorId, Location)) .
+    rec-value(SE, Focus?) .  
+    snd-msg(set-focus(EditorId, Focus)) 
+  +
+    rec-msg(get-tree(EditorId?)) .
+    snd-eval(SE, getTree(EditorId)) .
+    rec-value(SE, Tree?) .
+    snd-msg(tree(Tree))
+  +
+    rec-msg(register-startsymbols(EditorId?, StartSymbols?)) .
+    snd-eval(SE, registerSymbols(EditorId, StartSymbols)) .
+    rec-value(SE, startsymbols-registered) .
+    snd-msg(startsymbols-registered)
+  + 
+    rec-msg(get-focus-sort(Nonterminal?, Focus?)) .
+    snd-eval(SE, makeFocusSort(Nonterminal, Focus)) .
+    rec-value(SE, Nonterminal?) .
+    snd-msg(focus-sort(Nonterminal))
+  +
+    rec-msg(get-dirty-focuses(EditorId?)) .
+    snd-eval(SE, getDirtyFocuses(EditorId)) .
+    rec-value(SE, FocusList?) .
+    snd-msg(dirty-focuses(FocusList))
+  +
+    rec-msg(get-error-position(Focus?, Error?)) .
+    snd-eval(SE, calcErrorLocation(Focus, Error)) .
+    rec-value(SE, Location?) .
+    snd-msg(error-position(Location))
+  +
+    rec-msg(remove-tree(EditorId?)).
+    snd-do(SE, remove-tree(EditorId))
+  ) *
+  delta
+endlet
