@@ -1,5 +1,8 @@
 $Id$
 
+2001/08/28 (jong@cwi.nl)
+ * Added proper #include directives to satisfy gcc-3.0.1
+
 2001/08/22 (mdejonge@cwi.nl)
  * grammar/Makefile.am: added -m switch to sglr to explicitly instruct sglr
    to produce asfix2me as output.

@@ -1,8 +1,11 @@
-#include <unistd.h>
 #include <stdio.h> 
-#include <aterm1.h> 
+#include <string.h>
+#include <unistd.h>
 #include <sys/time.h> 
 #include <sys/resource.h>    
+
+#include <aterm1.h> 
+
 #include "statistics.h"
 
 struct rusage rsrc_usage;

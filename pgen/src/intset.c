@@ -1,12 +1,13 @@
-
 /*{{{  includes */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "intset.h"
 
 /*}}}  */
+
 /*{{{  defines */
 
 #define BITS_PER_LONG (sizeof(unsigned long)*8)
