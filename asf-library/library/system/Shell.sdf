@@ -1,0 +1,7 @@
+module system/Shell
+
+imports basic/Strings
+
+exports
+  context-free syntax
+    shell(String) -> String {built-in("shell")}

@@ -1,0 +1,14 @@
+module system/FileIO[X]
+
+imports basic/Strings
+
+exports
+
+context-free syntax
+ 
+  read-term-from-file(filename:String)       -> X
+  {built-in("read-term-from-file")}
+  
+  write-term-to-file(filename:String,term:X) -> X
+  {built-in("write-term-to-file")}
+
