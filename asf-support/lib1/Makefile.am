@@ -19,5 +19,4 @@
 #
 # $Id$
 
-SUBDIRS = addeqs removevars traversals
-
+SUBDIRS = addeqs removevars 
