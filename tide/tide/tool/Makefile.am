@@ -1,5 +1,6 @@
 
-SUBDIRS		= support proclist ruleinspector srcviewer prefeditor
+SUBDIRS		= support proclist ruleinspector srcviewer prefeditor \
+		stackviewer
 
 javadir		= ${prefix}/classes/tide/tool
 JAVAROOT	= ${top_builddir}

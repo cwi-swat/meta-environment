@@ -1,5 +1,6 @@
 package tide.tool;
 
+import java.net.*;
 import javax.swing.*;
 
 import tide.tool.support.*;
@@ -73,6 +74,16 @@ public abstract class TideTool
   public void setTarget(Object target)
   {
     this.target = target;
+  }
+
+  //}}}
+
+  //{{{ protected Icon loadIcon(String name)
+
+  protected Icon loadIcon(String name)
+  {
+    URL url = getClass().getClassLoader().getResource("images/" + name);
+    return new ImageIcon(url);
   }
 
   //}}}

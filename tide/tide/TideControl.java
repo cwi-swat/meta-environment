@@ -14,6 +14,7 @@ import tide.tool.proclist.*;
 import tide.tool.ruleinspector.*;
 import tide.tool.srcviewer.*;
 import tide.tool.prefeditor.*;
+import tide.tool.stackviewer.*;
 
 public class TideControl
   extends JFrame
@@ -84,6 +85,7 @@ public class TideControl
 
     manager.registerProcessTool(new RuleInspectorFactory(manager));
     manager.registerProcessTool(new SourceViewerFactory(manager));
+    manager.registerProcessTool(new StackViewerFactory(manager));
     manager.registerTool(new PreferencesEditorFactory(manager));
 
     //}}}

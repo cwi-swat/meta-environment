@@ -112,6 +112,14 @@ public class Expr
   }
 
   //}}}
+  //{{{ public static Expr makeStackTrace()
+
+  public static Expr makeStackTrace()
+  {
+    return make("stack-trace");
+  }
+
+  //}}}
   //{{{ public static Expr make(String expr)
 
   public static Expr make(String expr)

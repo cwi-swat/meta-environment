@@ -11,6 +11,8 @@ import javax.swing.*;
 import tide.*;
 import tide.tool.support.*;
 
+import tide.tool.ruleinspector.*;
+
 public class ToolManager
 {
   private JDesktopPane desktop;
@@ -293,6 +295,18 @@ public class ToolManager
       AdapterAction action = (AdapterAction)iter.next();
       action.setAdapter(adapter);
     }
+  }
+
+  //}}}
+
+  //{{{ public void editRule(DebugProcess process, Rule rule)
+
+  public void editRule(DebugProcess process, Rule rule)
+  {
+    String toolName = RuleInspectorFactory.NAME;
+    RuleInspector inspector = 
+      (RuleInspector)launchProcessTool(toolName, process);
+    inspector.editRule(rule);
   }
 
   //}}}
