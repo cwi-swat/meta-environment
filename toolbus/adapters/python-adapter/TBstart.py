@@ -123,7 +123,6 @@ def createsocket(host, port):
 	if not host:
 		sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
 		adr = "/usr/tmp/%d" % port
-		print "createsocket: ", adr
 	else:
 		sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		adr = (socket.gethostbyname(host), port)
@@ -276,7 +275,7 @@ def check_sig(F):
 		raise "IllegalSignature", "Malformed signature: %s" % F
 
 def require(mod, name, args):
-	print "require: %s,%s,%s", mod, name, str(args)
+	#print "require: %s,%s,%s", mod, name, str(args)
 	name = regsub.gsub("-", "_", name)
 	dict = globals()[mod].__dict__
 	if not(dict.has_key(name) and callable(dict[name])):
