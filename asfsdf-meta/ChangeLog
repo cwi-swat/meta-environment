@@ -1,5 +1,8 @@
 /* $Id$ */
 
+2003/10/03 (markvdb@cwi.nl)
+ * Switch of the AddApiSyntax functionality.
+
 2003/10/02 (markvdb@cwi.nl)
  * Added ASF to Equations topsort.
 
