@@ -1,0 +1,36 @@
+module sdf2/normalization/Priority
+imports
+        sdf2/normalization/Kernel
+        sdf2/projection/Priority
+exports
+  context-free syntax
+    "p[[" Grammar "]]"              -> Grammar
+    "assoc"  "[[" Grammar "]]"      -> Priorities
+    "assoc"  "[[" Productions "]]"  -> Priorities
+    "syntax" "[[" Priorities "]]"   -> Grammar
+    "norm"   "[[" Priorities "]]"   -> Priorities
+    "trans"  "[[" Priorities "]]"   -> Priorities
+
+hiddens
+  context-free syntax
+    trans0 "[[" Priorities "]]" -> Priorities
+    trans1 "[[" Priority "|" Priorities "]]" -> Priorities
+    trans2 "[[" Priorities "]]" -> Priorities
+
+hiddens
+  variables
+    "g"[0-9\']*       -> Group
+    "gg*"[0-9\']*     -> {Group ">"}*
+    "gg+"[0-9\']*     -> {Group ">"}+
+    "pr"[0-9\']*      -> Priority
+    "pr""*"[0-9\']*   -> {Priority ","}*
+    "pr""+"[0-9\']*   -> {Priority ","}+
+    "as"[0-9\']*      -> Associativity
+    [p][0-9\']*         -> Production
+    [p]"*"[0-9\']*      -> Production*
+    [p]"+"[0-9\']*      -> Production+ 
+    "_G"[0-9\']*        -> Grammar 
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+ 
+    "attr""*"[0-9\']*   -> {Attribute ","}*

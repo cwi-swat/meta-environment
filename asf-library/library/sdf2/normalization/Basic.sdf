@@ -1,0 +1,35 @@
+module sdf2/normalization/Basic
+imports sdf2/syntax/Basic
+        sdf2/syntax/Regular 
+        sdf2/syntax/Priority
+        sdf2/normalization/Kernel
+exports
+  context-free syntax
+    "b[[" Grammar "]]"          -> Grammar
+    "b-aux[[" Grammar "]]"      -> Grammar
+
+    "<" Symbols     "-LEXs"">" -> Symbols
+    "<" Production  "-LEX" ">" -> Production
+    "<" Productions "-LEXs"">" -> Productions
+    "<" Grammar     "-LEX" ">" -> Grammar
+
+    "<" Symbols     "-CFs" ">" -> Symbols
+    "<" Production  "-CF"  ">" -> Production
+    "<" Productions "-CFs" ">" -> Productions
+    "<" Grammar     "-CF"  ">" -> Grammar
+
+    "<" Productions "-VARs"    ">" -> Productions
+    "<" Productions "-LEXVARs" ">" -> Productions
+
+hiddens
+  variables
+    "!"[0-9\']*         -> Attributes
+    [p][0-9\']*         -> Production
+    [p]"*"[0-9\']*      -> Production*
+    [p]"+"[0-9\']*      -> Production+
+    "_G"[0-9\']*        -> Grammar
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+ 
+    "cc"                -> CharClass
+    

@@ -1,0 +1,10 @@
+module sdf2/projection/Sorts
+imports sdf2/projection/Kernel sdf2/syntax/Sorts
+exports
+  context-free syntax
+    "S" ( Grammar ) -> Symbols
+
+hiddens
+  variables
+    "'"[abc][0-9\']*    -> Symbol*
+    "_G"[0-9\']*        -> Grammar

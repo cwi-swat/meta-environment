@@ -1,0 +1,10 @@
+%%%% $Id$
+
+equations
+
+%% \noindent
+%% The declared sorts of a grammar.
+
+  [S1] S(sorts 'a)   = 'a
+  [S2] S(_G1 _G2)    = S(_G1) ++ S(_G2)
+  [default-S3] S(_G) =

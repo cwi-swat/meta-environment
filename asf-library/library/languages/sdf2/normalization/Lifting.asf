@@ -1,0 +1,32 @@
+equations
+
+   [0] lift[[_G]] = lift(_G)
+
+   [0] lift(`_A`) = sym2syntax(_A)
+
+   [0] sym2syntax(())      = ""
+   [0] sym2syntax((_A _B)) = ("(" sym2syntax(_A) sym2syntax(_B) ")")
+   [0] sym2syntax((_A _B 'a+)) = ("(" _A'  _B' 'a+' ")")
+          when sym2syntax(_A) = _A',
+               sym2syntax((_B 'a+)) = ("(" _B' 'a+' ")")
+ 
+   [0] sym2syntax(_A ?) = (sym2syntax(_A) "?")
+   [0] sym2syntax(_A *) = (sym2syntax(_A) "*")
+   [0] sym2syntax(_A +) = (sym2syntax(_A) "+")
+   [0] sym2syntax({_A _B}+) = ("{" sym2syntax(_A) sym2syntax(_B) "}" "+") 
+   [0] sym2syntax({_A _B}*) = ("{" sym2syntax(_A) sym2syntax(_B) "}" "*") 
+   [0] sym2syntax(_A n+) = (sym2syntax(_A) literal("""c*""") "+")
+          when n = natcon(c*)         
+   [0] sym2syntax({_A _B} n+) = 
+        ("{" sym2syntax(_A) sym2syntax(_B) "}" literal("""c*""") "+")
+          when  n = natcon(c*)
+
+   [0] sym2syntax(( => _B))  = ("(" "=>" sym2syntax(_B) ")")
+   [0] sym2syntax((_A 'a => _B)) = ( "(" sym2syntax(_A) 'a' "=>" _B' ")" )
+          when sym2syntax(('a => _B)) = ( "(" 'a' "=>" _B' ")" ) 
+
+   [0] sym2syntax(_A | _B) = ( sym2syntax(_A) "|" sym2syntax(_B) )
+   [0] sym2syntax(_A # _B) = ( sym2syntax(_A) "#" sym2syntax(_B) )
+   [0] sym2syntax((_A -> _B)) = ("(" sym2syntax(_A) "->" sym2syntax(_B) ")")
+   [0] sym2syntax(literal("""c*""")) = literal(""" "\" """ c* "\" """ """)
+   [0] sym2syntax(sort(c*)) = literal("""c*""")   

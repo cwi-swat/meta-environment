@@ -1,0 +1,64 @@
+%%%% $Id$
+
+equations
+
+%% \smallskip\noindent
+%% Unquoted literals are translated to quoted literals.
+
+%% This rule also quoted ATerms in the attributes, which is not wanted!
+%%  [0] uqliteral(c+) = literal(""" c+ """)
+
+%% So, we introduce a new function for symbols that quots unquoted literal symbols
+[0] q[[_G]] = quotes(_G)
+[0] quotes(uqliteral(c+)) = literal(""" c+ """)
+
+%% The function $\mfun{l}\sem{\_}$ generates a production for each literal symbol
+%% in the grammar.
+%% The production generated for a literal $L$ has the form $\alpha\to{}L$, where
+%% $\alpha$ is a list of singleton character classes representing the characters
+%% of $L$. This list is produced by the function \fun{chars}.
+
+  [0]         l[[_G]]             = _G syntax literals(symbols(_G))
+  [0]         literals({L})       = chars(L) -> L
+  [default-0] literals({_A})      =
+  [0]         literals({})        =
+  [0]         literals({'a+ 'b+}) = literals({'a+}) ++ literals({'b+})
+
+%% The function \fun{chars} scans the characters in the literal string,
+%% translating them to short characters. These are then normalized to
+%% numeric character codes by character normalization. The third equation
+%% tries if the first character of the string is a short-character by
+%% normalizing it and then testing whether it has reduced to a numeric
+%% character. This works for letters and digits.
+%% If this fails, the fourth equation translates the character
+%% to an escaped short-character, which succeeds for all other characters.
+%% Characters that are already escaped are handled by the second equation.
+
+  [0]
+        chars( "" )  =
+  [0]
+        [shortchar("\" c)] = cc%%%,
+        %%%literal(c) != literal("\")
+        =======================================================================
+        chars( literal(""" "\" c c* """) ) = cc ++ chars( literal(""" c* """) )
+%%%  []
+%%%        [shortchar("\" "\")] = cc
+%%%        =======================================================================
+%%%        chars( literal(""" "\" "\" c* """) ) = cc ++ cc ++ chars( literal(""" c* """) )
+  [0]
+        [shortchar(c)] = cc, cc = [numchar(c+)]
+        ====================================================================
+         chars( literal(""" c c* """) ) = cc ++ chars( literal(""" c* """) )
+  [default-0]
+        [shortchar("\" c )] = cc,
+        'a = chars( literal(""" c* """) )
+        =========================================
+        chars( literal(""" c c* """) ) = cc ++ 'a
+
+%% Prefix function productions are translated to normal productions by enclosing
+%% the parentheses and commas in double quotes.
+
+  [0] L ('g) -> _A!       = L "(" ++ symbols('g) ++ ")" -> _A!
+  [0] symbols()           =
+  [0] symbols(_A)         = _A
+  [0] symbols('g+1, 'g+2) = symbols('g+1) ++ "," ++ symbols('g+2)

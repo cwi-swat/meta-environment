@@ -1,0 +1,22 @@
+module sdf2/normalization/Regular
+imports sdf2/syntax/Regular
+        sdf2/syntax/Priority
+        sdf2/syntax/Literals
+        sdf2/normalization/Kernel
+exports
+  context-free syntax
+    "r[[" Grammar "]]"             -> Grammar
+    "r[[" Symbols "]]"             -> Grammar
+    alt(Symbol, Symbol)            -> Grammar
+    tup(Symbol)                    -> Symbols
+    perm(Symbols)                  -> Productions
+    perm3(Symbols, Symbols)        -> Productions
+
+hiddens
+  variables 
+    "_G"[0-9\']*        -> Grammar  
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+
+    [p][0-9\']*         -> Production 
+    [n][0-9\']*         -> NatCon 

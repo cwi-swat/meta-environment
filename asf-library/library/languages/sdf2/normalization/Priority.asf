@@ -1,0 +1,142 @@
+%%%% $Id$
+
+equations
+
+%% \noindent
+%% The normalization function $\mfun{p}\sem{\_}$ extracts syntax information from
+%% priorities and priority information from syntax, normalizes the
+%% priorities declarations and takes the transitive closure.
+
+  [0]
+        Pr(_G) = pr*1, 
+        norm[[ pr*1 ]] = pr*2,
+        %% ~Pr(_G) syntax[[ pr*2 ]] = _G'
+        ~Pr(_G) = _G'
+        =============
+        p[[ _G ]] = _G' priorities pr*2 ++ assoc[[_G']]
+
+%% <PO> was: p[[ _G ]] = _G' priorities trans[[ pr*2 ++ assoc[[_G']] ]]
+
+%% The function $\mfun{norm}\sem{\_}$ normalizes a priority declaration to a list
+%% of pairs of the form $p>p'$ or $p\;as\;p'$ by eliminating $>$-chains and
+%% $\{\_\}$ groups.
+
+  [0] norm[[p > p']]  = p > p'
+  [0] norm[[p as p']] = p as p', p' as p
+
+%% Each of the priority declarations in the list is normalized.
+
+  [0] norm[[]]           =
+  [0] norm[[p]]          =
+  [0] norm[[pr+1, pr+2]] = norm[[pr+1]] ++ norm[[pr+2]]
+
+%% A $>$ chain is broken into binary $>$ declarations. The transitive closure
+%% defined below ensures that $p_1>p_3$ if $p_1>p_2>p_3$ was specified.
+
+  [0] norm[[gg+1 > gg+2 > gg+3]] = norm[[gg+1 > gg+2, gg+2 > gg+3]]
+
+%% Groups and priority.
+%% A group is an abbreviation for a pointwise extension of the declared
+%% relation to the members of the group.
+
+  [0] norm[[{p}]]                =
+  [0] norm[[{} > g]]             =
+  [0] norm[[g > {}]]             =
+  [0] norm[[{p+1 p+2} > g]]      = norm[[{p+1} > g, {p+2} > g]]
+  [0] norm[[g > {p+1 p+2}]]      = norm[[g > {p+1}, g > {p+2}]]
+  [0] norm[[{p} > g]]            = norm[[p > g]]
+  [0] norm[[g > {p}]]            = norm[[g > p]]
+  [0] norm[[{as: p*} > g]]       = norm[[{as: p*}, {p*} > g]]
+  [0] norm[[g > {as: p*}]]       = norm[[{as: p*}, g > {p*}]]
+
+%% Groups and associativity.
+
+  [0] norm[[{} as g]]           = norm[[g]]
+  [0] norm[[{p p*} as g]]       = norm[[p as g, {p*} as g]]
+  [0] norm[[g as {}]]           = norm[[g]]
+  [0] norm[[g as {p p*}]]       = norm[[g as p, g as {p*}]]
+  [0] norm[[{as1: p*} as2 g]]   = norm[[{as1: p*}, {p*} as2 g]]
+  [0] norm[[g as2 {as1: p*}]]   = norm[[{as1: p*}, g as2 {p*}]]
+
+%% Associativity groups are abbreviations. The members of an associativity
+%% group are mutually associative with respect to the declared relation.
+%% If the group contains a single production, it is taken to define the
+%% associativity for that production. Otherwise, the associativities are
+%% defined only \emph{between} the members of the group and are not
+%% defined reflexively. This makes it possible, for instance,
+%%  to have a production that
+%% is left-associative with respect to itself, but right-associative with
+%% respect to a group of other productions.
+
+  [0] norm[[{as: p}]]           = p as p
+  [0] norm[[{as: p1 p2}]]       = p1 as p2
+  [0] norm[[{as: p1 p2 p+}]]    = norm[[p1 as p2, {as: p1 p+}, {as: p2 p+}]]
+
+%% The function $\mfun{trans}\sem{\_}$ takes the transitive closure of the $>$
+%% relation.
+
+%%%   []
+%%%        trans[[pr*1, pr, pr*2, pr, pr*3]] = trans[[pr*1, pr, pr*2, pr*3]]
+
+   [tr-1]   trans0[[pr*1]] = pr*2
+            =====================
+            trans[[pr*1]] = trans2[[pr*2]]
+
+   [tr0-1]   trans1[[pr | pr*1]] = pr*2,
+             trans0[[pr*2]] = pr*3
+             =====================
+             trans0[[pr, pr*1]] = pr, pr*3
+
+   [tr0-2]   trans0[[]] =
+
+   [tr1-1]   trans1[[pr | ]] =
+
+   [tr1-2]   trans1[[pr | pr, pr*]] = trans1[[pr | pr*]]
+
+   [tr1-3]   pr1 != pr2,
+             trans1[[pr1 | pr*1]] = pr*2
+             ===========================
+             trans1[[pr1 | pr2, pr*1]] = pr2, pr*2
+
+  [tr2-1] pr*1, p1 > p2, pr*2 = pr*,
+          pr* = pr*3, p2 > p3, pr*4,
+          p1 > p3 (- pr* != true
+          ======================
+          trans2[[pr*]] = trans2[[p1 > p3, pr*]]
+  [default-tr2-2]  trans2[[pr*]] = pr*
+
+%%%  []
+%%%        pr*1, p1 > p2, pr*2 = pr*, pr* = pr*3, p2 > p3, pr*4, p1 > p3 (- pr* != true
+%%%        ============================================================================
+%%%        trans[[pr*]] = trans[[p1 > p3, pr*]]
+%%%  []
+%%%        trans[[pr*1, pr, pr*2, pr, pr*3]] = trans[[pr*1, pr, pr*2, pr*3]]
+%%%  [default-]
+%%%        trans[[pr*]] = pr*
+
+%% The function $\mfun{assoc}\sem{\_}$ derives associativity declarations from the productions
+%% of a grammar. Productions that have an attribute declaring them as left, right,
+%% or non-associative produce a declaration of that associativity in the priorities
+%% declaration.
+
+  [0] assoc[[_G]]         = assoc[[ P(_G) ]]
+  [0] assoc[[]]           =
+  [0] assoc[[p+1 p+2]]    = assoc[[p+1]] ++ assoc[[p+2]]
+  [0] assoc[[p]]          = p as p  when p = 'a -> _A {attr*1, as, attr*2}
+  [default-0] assoc[[p]]  =
+
+%% The function \fun{syntax} derives from a priorities declaration the list of all
+%% productions referred to in that declaration.
+
+  [0] syntax[[ ]]            = (/)
+  [0] syntax[[ pr+1, pr+2 ]] = syntax[[ pr+1 ]] syntax[[ pr+2 ]]
+  [0] syntax[[ p1 > p2  ]]   = syntax p1 p2
+  [0] syntax[[ p1 as p2 ]]   = syntax p1 p2
+
+%% Merging and ordering of grammars.
+
+  [0] priorities                          = (/)
+  [0] priorities pr*1 <> priorities pr*2  = <priorities pr*1, pr*2, (/)>
+  [0] priorities pr*  <> syntax p*        = <syntax p*, priorities pr*>
+
+%%%

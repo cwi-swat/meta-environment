@@ -1,0 +1,38 @@
+%%%% $Id$
+
+equations
+
+%% \noindent
+%% Concatenation of priority declarations.
+
+  [0]   pr*1 ++ pr*2 = pr*1, pr*2
+
+%% The priorities and non-priorities of a grammar.
+
+  [Pr0] Pr(_G1) = nm-Pr(_G1)
+
+  [Pr0] nm-Pr(priorities pr*) = pr*
+  [Pr2] nm-Pr(_G1 _G2)        = nm-Pr(_G1) ++ nm-Pr(_G2)
+  [default-Pr3] nm-Pr(_G)     =
+  [Pr0] ~Pr(priorities pr*) = (/)
+  [Pr2] ~Pr(_G1 _G2)        = ~Pr(_G1) ~Pr(_G2)
+  [default-Pr3] ~Pr(_G)     = _G
+
+%% Membership of a priority declaration. A pair is member of
+%% a declaration if the declaration contains a pair with similar
+%% productions. Recall from \Section{Mod:Kernel-Sdf-Projection} that
+%% two productions are similar if they are the same except for their
+%% attributes, which may be different.
+
+   [pr-mbr3]
+        p1 ~= p3 = true, p2 ~= p4 = true
+        =====================================
+        p1 > p2 (- pr*1, p3 > p4, pr*2 = true
+   [pr-mbr4]
+        p1 ~= p3 & p2 ~= p4 | p1 ~= p4 & p2 ~= p3 = true
+        ===================================================
+        p1 as p2 (- pr*1, p3 as p4, pr*2 = true
+   [default-pr-mbr6]
+        pr (- pr* = false
+
+%%%

@@ -1,0 +1,9 @@
+module sdf2/projection/Sdf2-Projection
+
+imports sdf2/projection/Kernel
+        sdf2/projection/Sorts
+        sdf2/projection/Priority
+        sdf2/projection/Renaming
+        sdf2/projection/Modular
+        sdf2/projection/Aliases
+        sdf2/projection/Restrictions

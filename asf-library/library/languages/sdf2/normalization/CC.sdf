@@ -1,0 +1,5 @@
+module sdf2/normalization/CC
+imports sdf2/syntax/CC
+        sdf2/normalization/Character-Class 
+        sdf2/normalization/Kernel
+

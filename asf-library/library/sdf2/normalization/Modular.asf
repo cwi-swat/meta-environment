@@ -1,0 +1,93 @@
+%%%% $Id$
+
+equations
+
+%% \noindent
+%% Normalization of order of grammars.
+
+  [0]         imports                      = (/)
+  [0]         imports _i*1 <> imports _i*2 = <imports _i*1 _i*2, (/)>
+  [default-0] _G           <> imports _i*  = <imports _i*, _G>
+
+%% Normalization of module sections. Exports and hiddens sections can
+%% be merged.
+
+  [0] module M is* is s* = module M is* exports is s*
+  [0] s*1 exports _G1 exports _G2 s*2 = s*1 exports _G1 _G2 s*2
+  [0] s*1 hiddens _G1 hiddens _G2 s*2 = s*1 hiddens _G1 _G2 s*2
+  [0] s*1 hiddens _G1 exports _G2 s*2 = s*1 exports _G2 hiddens _G1 s*2
+
+%% The semantics of a module named $M$ in a definition $d$ is expressed by
+%% $\mfun{m}\sem{d}(M)$ and is the composition of the exported and hidden
+%% grammars of module $M$ with all imports replaced by the exported grammars of
+%% the modules they refer to.
+%%
+%% NOTE: In the above explicit annotation was added (for all productions), we
+%% dispense with hiding for now.  Should we need to add this information,
+%% we need to modify the annotate-rules.  The obvious candidates for this
+%% are found in `Sdf2-Normalization'.
+
+  [0]
+        proj_M(d) = s*, gra[[d]]( , Hid(s*)) = <_i*1, _G1>, gra[[d]](_i*1, Exp(s*)) = <_i*2, _G2>
+        =========================================================================================
+        m[[d]]( M ) = _G2 hide(M, _G1)
+
+%% The function \fun{hide} marks all productions in the hiddens part of
+%% a module with the module name by attaching the attribute $\mfun{id}(M)$
+%% to it.
+
+  [0] hide(M, (/))        = (/)
+  [0] hide(M, _G1 _G2)    = hide(M, _G1) hide(M, _G2)
+  [0] hide(M, syntax p*)  = syntax hide(M, p*)
+  [default-0] hide(M, _G) = _G
+  [0] hide(M, 'a -> _A!)  = 'a -> _A ! ++ {id(M)}
+  [0] hide(M, )           =
+  [0] hide(M, p+1 p+2)    = hide(M, p+1) ++ hide(M, p+2)
+
+%% The function \fun{gra} expands all the imports in a grammar.
+%% It returns a structure $\langle{\sf i}^*,\Grammar\rangle$, which
+%% denotes
+%% a flattened grammar with the list of imports ${\sf i}^*$ that were expanded
+%% to flatten the grammar. This list is passed on to the rest of the flattening
+%% process in order to prevent multiple imports of the same module. This
+%% is important in particular in the presence of cyclic imports.
+
+  [0]
+        gra[[d]](_i*1, _G1) = <_i*2, _G1'>, gra[[d]](_i*2, _G2) = <_i*3, _G2'>
+        ======================================================================
+        gra[[d]](_i*1, _G1 _G2) = <_i*3, _G1' _G2'>
+  [0]
+        gra[[d]](_i*1, imports _i*2) = ims[[d]](_i*1, _i*2)
+  [default-0]
+        gra[[d]](_i*, _G) = <_i*, _G>
+
+%% The function \fun{ims} yields the flattened grammars for a list of
+%% imports.
+
+  [0]
+        ims[[d]](_i* ,) = <_i*, (/)>
+  [0]
+        imp[[d]](_i*1, _i) = <_i*3, _G1>, ims[[d]](_i*3, _i*2) = <_i*4, _G2>
+        ====================================================================
+        ims[[d]](_i*1, _i _i*2) = <_i*4, _G1 _G2>
+
+%% The function \fun{imp} yields the flattened grammar associated with
+%% the exported grammar of an import.
+%% The first list of imports denotes the imports that
+%% are already expanded. If a module was already imported it is not imported again.
+%% This is a protection against cyclic imports.
+
+  [0]
+        _G = if M (- _i* then (/) else Exp(proj_M(d)) fi
+        ===========================================
+        imp[[d]](_i*, M) = gra[[d]](_i* M, _G)
+  [0]
+        _G = if M 'r (- _i* then (/) else (Exp(proj_M(d)))'r fi
+        ======================================================
+        imp[[d]](_i*, M 'r) = gra[[d]](_i* M 'r, _G)
+
+%% As we will see in the next section, the renaming $\rho$ that is applied
+%% to the exported part of the imported module $M$ in the last equation above
+%% is also applied to the imports of that module and hence is applied recursively
+%% to all modules imported via $M$.
+%%%
