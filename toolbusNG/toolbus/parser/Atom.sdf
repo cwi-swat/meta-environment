@@ -1,0 +1,32 @@
+module Atom
+imports TBTerms
+
+exports
+  sorts Atom
+
+  context-free syntax
+    "tau"				-> Atom {cons("Tau")}
+    "delta"				-> Atom {cons("Delta")}
+
+     Var ":=" TBTerm 			-> Atom {cons("Assign")}
+
+    "print" TBTerm			-> Atom {cons("Print")}
+
+    "shutdown" TBTerm			-> Atom {cons("ShutDown")}
+
+    "snd-msg" TBTerm			-> Atom	{cons("SndMsg")}
+    "snd-msg" TBTerm "to" TBTerm	-> Atom	{cons("SndMsg")}
+
+    "rec-msg" TBTerm			-> Atom {cons("RecMsg")}
+    "rec-msg" TBTerm "from" TBTerm	-> Atom {cons("RecMsg")}
+
+    "snd-note" TBTerm			-> Atom {cons("SndNote")}
+    "rec-note" TBTerm			-> Atom {cons("RecNote")}
+
+    "eval" TBTerm "," TBTerm		-> Atom	{cons("Eval")}
+
+    "do" TBTerm				-> Atom {cons("Do")}
+ 
+    "event" TBTerm			-> Atom {cons("Event")}
+
+    "ack-event" TBTerm			-> Atom {cons("AckEvent")}

@@ -1,0 +1,41 @@
+
+module ProcessExpr
+imports Atom VarDecls TimeExpr
+
+exports
+  sorts ProcessExpr ProcessName ProcessCall
+
+  lexical restrictions
+    ProcessName -/- [a-zA-Z\-0-9]
+
+  lexical syntax
+    [A-Z] [a-zA-Z\-0-9]* -> ProcessName
+
+  context-free syntax
+    Atom 					-> ProcessExpr
+%%    Atom TimeExpr 				-> ProcessExpr
+    "create" "(" ProcessName ("(" {TBTerm ","}* ")")?  "," GenVar ")" 
+						-> ProcessExpr {cons("Create")}
+
+    ProcessName					-> ProcessCall  {cons("ProcCall")}
+    ProcessName ("(" {TBTerm ","}* ")") 	-> ProcessCall  {cons("ProcCall")}
+    ProcessCall					-> ProcessExpr
+
+    ProcessExpr "." ProcessExpr 		-> ProcessExpr {left, cons("Sequence")}
+
+    ProcessExpr "+" ProcessExpr 		-> ProcessExpr {left, cons("Alternative")}
+    ProcessExpr "*" ProcessExpr 		-> ProcessExpr {left, cons("Iteration")}
+    ProcessExpr "||" ProcessExpr 		-> ProcessExpr {left, cons("Merge")}
+    ProcessExpr ">>" ProcessExpr 		-> ProcessExpr {left, cons("Disrupt")}
+    "(" ProcessExpr ")" 			-> ProcessExpr {bracket}
+    "let" VarDecls "in" ProcessExpr "endlet" 	-> ProcessExpr {cons("LetDefinition")}
+    "if" TBTerm "then" ProcessExpr "fi" 	-> ProcessExpr {cons("IfThen")}
+    "if" TBTerm "then" ProcessExpr "else" ProcessExpr "fi" 
+						-> ProcessExpr {cons("IfElse")}
+
+  context-free priorities
+    ProcessExpr "." ProcessExpr -> ProcessExpr  >
+    ProcessExpr "*" ProcessExpr -> ProcessExpr  >
+    ProcessExpr "||" ProcessExpr -> ProcessExpr  >
+    ProcessExpr "+" ProcessExpr -> ProcessExpr >
+    ProcessExpr ">>" ProcessExpr -> ProcessExpr

@@ -1,0 +1,1 @@
+sglr -p Tscript.trm.tbl -i $1 | implodePT -tlILXpcO
