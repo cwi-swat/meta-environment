@@ -1,0 +1,16 @@
+module TComment
+
+imports basic/Whitespace
+
+exports
+  lexical syntax
+    "/*" ( ~[\*] | Asterisk )* "*/" -> Comment
+    Comment                         -> LAYOUT
+    [\*]                            -> Asterisk
+    "//" ~[\n]* [\n]                -> Comment
+
+  lexical restrictions
+    Asterisk -/- [\/]
+
+hiddens
+  sorts Asterisk Comment

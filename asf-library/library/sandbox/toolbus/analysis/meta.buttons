@@ -1,4 +1,12 @@
 buttons([
+  button("*",
+         ["message-list"],
+         ["ShowSource"],
+         [show-area("Rscript")]),
+  button("*",
+         ["message-list"],
+         ["ShowSource"],
+         [show-area("Tscript")]),
   button("Rscript",
          ["term"],
          ["Rscript", "Check Rscript"],
@@ -11,91 +19,18 @@ buttons([
           unparse,
           show-list
          ]),
-  button("*",
-         ["message-list"],
-         ["ShowSource"],
-         [show-area("Rscript")]),
-  button("*",
-         ["message-list"],
-         ["ShowSource"],
-         [show-area("Tscript")]),
   button("Tscript",
          ["term"],
-         ["ToolBus", "Unused Variables"],
-         [push-filename("all.rscript"),
-          parse("Rscript", "RSCRIPT"),
-
-          push-string("\"UNUSED_VARS\""),
-          parse("basic/Strings", "String"),
-
-          push-filename("extracted-relations.trm"),
-          read-tree,
-          check-sort("RSTORE"),
-
-          apply("display-query", "List", 3),
-          push-modulename("DisplayQuery"),
-          reduce,
-          unparse,
-          show-list
-        ]),
+         ["ToolBus", "Show Query Results"],
+	 [push-filename("query-result.jil"),
+	  read-tree,
+	  check-sort("List"),
+	  unparse,
+	  show-list
+	]),
   button("Tscript",
          ["term"],
-         ["ToolBus", "Unused Processes"],
-         [push-filename("all.rscript"),
-          parse("Rscript", "RSCRIPT"),
-
-          push-string("\"UNUSED_PROCESSES\""),
-          parse("basic/Strings", "String"),
-
-          push-filename("extracted-relations.trm"),
-          read-tree,
-          check-sort("RSTORE"),
-
-          apply("display-query", "List", 3),
-          rewrite("DisplayQuery"),
-          unparse,
-          show-list
-        ]),
-  button("Tscript",
-         ["term"],
-         ["ToolBus", "Unmatched Messages"],
-         [push-filename("all.rscript"),
-          parse("Rscript", "RSCRIPT"),
-
-          push-string("\"UNMATCHED_MESSAGES\""),
-          parse("basic/Strings", "String"),
-
-          push-filename("extracted-relations.trm"),
-          read-tree,
-          check-sort("RSTORE"),
-
-          apply("display-query", "List", 3),
-          rewrite("DisplayQuery"),
-          unparse,
-          show-list
-        ]),
-  button("Tscript",
-         ["term"],
-         ["ToolBus", "Test"],
-         [push-filename("all.rscript"),
-          parse("Rscript", "RSCRIPT"),
-
-          push-string("\"MATCHED_PARAM\""),
-          parse("basic/Strings", "String"),
-
-          push-filename("extracted-relations.trm"),
-          read-tree,
-          check-sort("RSTORE"),
-
-          apply("display-query", "List", 3),
-          rewrite("DisplayQuery"),
-	  push-filename("query.out"),
-          push-modulename("DisplayQuery"),
-          activate-editor
-        ]),
-  button("Tscript",
-         ["term"],
-         ["ToolBus", "All"],
+         ["ToolBus", "Evaluate Query"],
          [push-filename("all.rscript"),
           parse("Rscript", "RSCRIPT"),
 
@@ -108,8 +43,9 @@ buttons([
 
           apply("display-query", "List", 3),
           rewrite("DisplayQuery"),
-	  unparse,
-          show-list
+	  push-filename("query-result.jil"),
+	  save-tree,
+	  message("Derived query-results saved.")
         ]),
   button("Tscript",
          ["term"],
@@ -122,6 +58,6 @@ buttons([
           reduce,
           push-filename("extracted-relations.trm"),
           save-tree,
-          message("Saving done")
+          message("Extracted relations saved.")
          ])
 ])

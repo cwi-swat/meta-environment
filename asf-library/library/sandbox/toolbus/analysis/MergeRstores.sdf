@@ -8,8 +8,7 @@ exports
     
 hiddens
   variables
-    "$VPair*" [0-9\']*             -> { RVAR # RVALUE ","}*
-    "$Var" [0-9\']*                -> RVAR
-    "$Store" [0-9\']*              -> RSTORE
-    "$Val" [0-9\']*                -> RVALUE
-    "$Tuple*" [0-9\']*             -> { Elem # Elem ","}*
+    "$VPair*" [0-9\']*    -> { RVAR # RVALUE ","}*
+    "$Var" [0-9\']*       -> RVAR
+    "$Store" [0-9\']*     -> RSTORE
+    "$Val" [0-9\']*       -> RVALUE

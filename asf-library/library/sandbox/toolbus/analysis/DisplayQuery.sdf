@@ -4,8 +4,11 @@ imports ListOperations
 
 exports
   context-free syntax
-    display-query(RSCRIPT, String, RSTORE) -> List
+    evaluate-query(RSCRIPT, String, RSTORE) -> RVALUE
+    display-result(RVALUE) -> List
 
+exports
+  context-free syntax
     str2rvar(String) -> RVAR
 
 hiddens

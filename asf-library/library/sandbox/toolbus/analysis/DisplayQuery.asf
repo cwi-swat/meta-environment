@@ -1,11 +1,10 @@
 equations
 
-[display-query1] 
-  display-query($Script, $String2, $Rstore) =
-    convertl(
-      rval2rel(
-        eval-rscript($Script, 
-                     str2rvar($String2), 
-                     $Rstore)))
+[display-result-1]
+  display-result($Rvalue) = convertl(rval2rel($Rvalue))
+
+[evaluate-rscript-1]
+  evaluate-query($Script, $String, $Rstore)
+    = eval-rscript($Script, str2rvar($String), $Rstore)
 
 [sv1] str2rvar(strcon("""  $Char* """)) = rvar($Char*)

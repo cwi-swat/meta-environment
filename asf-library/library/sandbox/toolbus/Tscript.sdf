@@ -1,6 +1,6 @@
 module Tscript
 
-imports ProcessDef ToolDef 
+imports ProcessDef ToolDef TComment
 
 exports
   sorts Tscript TscriptDef
