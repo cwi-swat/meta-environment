@@ -80,11 +80,6 @@ while(<IDEF>) {
   elsif (/command \= ([A-Z]+)/) {
     print TB "command = \"\"\n";
   }
-  elsif (/\s*toolbus\(/) {
-    print STDERR "toolbus(..) statements not allowed in idef file\n";
-    print STDERR "Abort.\n";
-    exit 3;
-  }
   else {
     print TB $_;
   }
