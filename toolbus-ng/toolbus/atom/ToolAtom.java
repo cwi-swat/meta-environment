@@ -14,6 +14,7 @@ abstract class ToolAtom extends Atom {
   private ToolBus TB;
 
   public ToolAtom(ATerm trm) {
+    super();
     toolarg = new Ref(trm);
     setAtomArgs(toolarg);
   }

@@ -28,7 +28,7 @@ public class ProcessCall implements ProcessExpression {
   }
 
   public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
-    System.out.println("expand(" + P + "," + calls + ")");
+    System.out.println("ProcessCall.expand(" + P + "," + calls + ")");
     if (calls.contains(name)) {
       throw new ToolBusException("recursive call of " + name);
     }
@@ -40,10 +40,12 @@ public class ProcessCall implements ProcessExpression {
   }
 
   public void compile(ProcessInstance P, AtomSet follows) throws ToolBusException {
+    System.out.println("ProcessCallcompile(" + P + "," + follows + ")");  
     Environment env = P.getEnv();
     definition.enterScope(env);
     PE.compile(P, follows);
     definition.leaveScope(env);
+    System.out.println("ProcessCall.compile:PE = " + PE);  
   }
 
   public AtomSet getFirst() {

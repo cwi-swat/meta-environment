@@ -20,7 +20,6 @@ class Ref {
 }
 
 abstract public class Atom extends AbstractProcessExpression {
-  //private ATermList args; // arguments of this atom (modified by compile)
   private ProcessInstance processInstance;
   // process instance to which the atom belongs
   private Environment env; // the environment of that process instance
@@ -28,6 +27,10 @@ abstract public class Atom extends AbstractProcessExpression {
   private Ref[] atomArgs = new Ref[0];
 
 
+  public Atom(){
+    super();
+    addToFirst(this);
+  }
   public void setAtomArgs(Ref r) {
     atomArgs = new Ref[] { r };
   }
@@ -44,50 +47,35 @@ abstract public class Atom extends AbstractProcessExpression {
     atomArgs = refs;
   }
 
-//  public void setAtomArgs(ATermList alist) {
-//    args = alist;
-//    atomArgs = new Ref[args.getLength()];
-//    for (int i = 0; i < args.getLength(); i++) {
-//      atomArgs[i] = new Ref(alist.getFirst());
-//      alist = alist.getNext();
-//      System.out.println("setAtomArgs: atomArgs[" + i + "] = " + atomArgs[i]);
-//    }
-//    System.out.println("setAtomArgs: " + this.args);
-//  }
-
-//  public ProcessExpression copy() {
-//    try {
-//      System.out.println("before");
-//      System.out.println(this.getClass());
-//      System.out.println(atomArgs.getClass());
-//
-//      Constructor[] constructors = this.getClass().getConstructors();
-//      Constructor cons = null;
-//      for (int i = 0; i < constructors.length; i++) {
-//        Class parameters[] = constructors[i].getParameterTypes();
-//        if (parameters.length != 1 || !parameters[0].getName().equals("toolbus.atom.Ref"))
-//          continue;
-//        else
-//          cons = constructors[i];
-//      }
-//
-//      if (cons == null)
-//        System.out.println("is null!");
-//      System.out.println("after: " + cons);
-//      return (Atom) cons.newInstance(new Object[] { atomArgs });
-//
-//    } catch (Exception e) {
-//      throw new ToolBusInternalError(e.getMessage());
-//    }
-//  }
 
   public Environment getEnv() {
     return env;
   }
+  
+   public ProcessState getStartState() {
+    return getFirst();
+  }
 
-//  public ATermList getArgs() {
-//    return args;
-//  }
+  public ATerm getTest() {
+    return test;
+  }
+
+  public void setTest(ATerm test) throws ToolBusException {
+    this.test = TBTerm.compileVars(test, env);
+  }
+
+  public ProcessInstance getProcess() {
+    return processInstance;
+  }
+
+  public ToolBus getToolBus() {
+    return processInstance.getToolBus();
+  }
+  
+   public AtomSet getAtoms() {
+    return getFirst();
+  }
+
 
   public String toString() {
     ATerm pid;
@@ -106,11 +94,18 @@ abstract public class Atom extends AbstractProcessExpression {
     }
     return res + ")" + strtest;
   }
-
-  public AtomSet getAtoms() {
-    return getFirst();
+  
+    public ATerm toATerm() throws ToolBusException {
+    return null;
+//    int nargs = args.getLength();
+//
+//    AFun afun = TBTerm.factory.makeAFun(this.getClass().getName(), nargs, false);
+//    ATerm pat = TBTerm.makePattern(args, getEnv(), true);
+//
+//    return TBTerm.factory.makeAppl(afun, (ATermList) pat);
   }
 
+ 
   public boolean canCommunicate(Atom a) {
     return false;
   }
@@ -126,16 +121,6 @@ abstract public class Atom extends AbstractProcessExpression {
   public boolean hasPartners() {
     //return partners.size() > 0;
     return false;
-  }
-
-  public ATerm toATerm() throws ToolBusException {
-    return null;
-//    int nargs = args.getLength();
-//
-//    AFun afun = TBTerm.factory.makeAFun(this.getClass().getName(), nargs, false);
-//    ATerm pat = TBTerm.makePattern(args, getEnv(), true);
-//
-//    return TBTerm.factory.makeAppl(afun, (ATermList) pat);
   }
 
   public void expand(ProcessInstance P, Stack calls) {
@@ -154,27 +139,7 @@ abstract public class Atom extends AbstractProcessExpression {
     }
   }
 
-  public boolean execute() throws ToolBusException {
-    if (!isEnabled()) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  public ProcessState getStartState() {
-    return getFirst();
-  }
-
-  public ATerm getTest() {
-    return test;
-  }
-
-  public void setTest(ATerm test) throws ToolBusException {
-    this.test = TBTerm.compileVars(test, env);
-  }
-
-  public boolean isEnabled() throws ToolBusException {
+ public boolean isEnabled() throws ToolBusException {
     if (test == null)
       return true;
     else {
@@ -183,13 +148,15 @@ abstract public class Atom extends AbstractProcessExpression {
       return res;
     }
   }
-
-  public ProcessInstance getProcess() {
-    return processInstance;
+  
+  public boolean execute() throws ToolBusException {
+    if (!isEnabled()) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
-  public ToolBus getToolBus() {
-    return processInstance.getToolBus();
-  }
+ 
 
 }

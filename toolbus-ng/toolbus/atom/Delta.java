@@ -8,6 +8,10 @@ import toolbus.process.ProcessExpression;
 
 public class Delta extends Atom {
   
+  public Delta(){
+    super();
+  }
+  
   public ProcessExpression copy(){
     return new Delta();
   }

@@ -13,6 +13,7 @@ public class Create extends Atom {
   private Ref rvar;
 
   public Create(ATerm c, ATerm v) {
+    super();
     pcall = new Ref(c);
     rvar = new Ref(v);
     setAtomArgs(pcall, rvar);
