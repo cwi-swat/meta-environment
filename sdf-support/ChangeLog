@@ -1,5 +1,12 @@
 $Id$
 
+2003/06/25 (jurgenv@cwi.nl)
+ * Added computation of new module names based on a search path to
+   the sdf-modules tool. This is used to support compound module names,
+   the user can select a path to a module name and the system computes
+   which part is the path to the module name and which part should be
+   the compound module name.
+
 2003/06/18 ({jong,markvdb}@cwi.nl)
  * Added explicit ATBpack to parsetrees.
 
