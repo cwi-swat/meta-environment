@@ -39,7 +39,7 @@ int SG_InjectionFilterSucceeded(int mode)
   }
 }
 
-int SG_MultiSetFilterSucceeded(int mode)
+int SG_CountEagernessFilterSucceeded(int mode)
 {
   static int count = 0;
 
@@ -73,7 +73,7 @@ int SG_InjectionCountCalls(int mode)
   }
 }
 
-int SG_MultiSetGtrCalls(int mode)
+int SG_CountEagernessGtrCalls(int mode)
 {
   static int count = 0;
 
@@ -246,6 +246,21 @@ ATbool SG_TermIsCyclicAmbs(tree t, ATermList ambs, Bitmap visited)
   return hasCycle;
 }
 
+static label SG_GetProdLabel(tree aprod)
+{
+  return ATgetInt((ATermInt) ATgetArgument(aprod, 0));
+}
+
+label SG_GetApplProdLabel(tree appl)
+{
+  return SG_GetProdLabel((tree) ATgetArgument(appl, 0));
+}
+
+label SG_GetRejectProdLabel(tree appl)
+{
+  return SG_GetProdLabel((tree) ATgetArgument(appl, 0));
+}
+
 ATbool SG_TermIsCyclicRecursive(tree t, ATbool inAmbs, Bitmap visited)
 {
   ATermList ambs;
@@ -333,7 +348,6 @@ ATbool SG_TermIsCyclic(tree t)
 }
 
 
-void SG_PrintTree(tree t, ATbool inAmbs);
 ATermList SG_CyclicTerm(parse_table *pt, forest t)
 {
   Cycle = NULL;
@@ -396,7 +410,7 @@ tree SG_YieldTree(parse_table *pt, tree t)
   case AT_APPL:
     fun  = ATgetAFun(t);
 
-    /*  A small sanity check  */
+    /*  A small sanity check */
     assert(fun != SG_Reject_AFun);
 
     if(fun == SG_Amb_AFun) {
@@ -502,21 +516,6 @@ ATerm SG_AmbTable(int Mode, ATerm key, ATerm value)
   return ret;
 }
 
-label SG_GetProdLabel(tree aprod)
-{
-  return ATgetInt((ATermInt) ATgetArgument(aprod, 0));
-}
-
-label SG_GetApplProdLabel(tree appl)
-{
-  return SG_GetProdLabel((tree) ATgetArgument(appl, 0));
-}
-
-label SG_GetRejectProdLabel(tree appl)
-{
-  return SG_GetProdLabel((tree) ATgetArgument(appl, 0));
-}
-
 /*
  SG_GtrPriority(l0, l1) returns true iff priority(l0) > priority(l0)
  */
@@ -531,7 +530,7 @@ static ATbool SG_GtrPriority(parse_table *pt, ATermInt lt0, ATermInt lt1)
   return ATfalse;
 }
 
-int SG_ProdType_Label(parse_table *pt, ATermInt prodlbl)
+static int SG_ProdType_Label(parse_table *pt, ATermInt prodlbl)
 {
   ATerm        attr;
   ATermList    attrs;
@@ -607,6 +606,20 @@ static int SG_ProdType_Tree(tree t)
 /* Recursive check whether a tree contains at least
  * one reject node.
  */
+
+static ATbool SG_HasRejectProd(tree t)
+{
+  AFun     fun;
+
+  if (ATgetType(t) == AT_APPL) {
+    fun = ATgetAFun(t);
+    if (fun == SG_Reject_AFun) {
+      return ATtrue;
+    }
+  }
+  return ATfalse;
+}
+
 static ATbool SG_ContainsReject(tree t)
 {
   AFun     fun;
@@ -655,44 +668,6 @@ static ATbool SG_ContainsReject(tree t)
       break;
   }
   return result;
-}
-
-/*
- SG_MoreEager(t0, t1) returns true iff either
-    - t0 is eager and t1 is regular or avoid
-    - t0 is regular and t1 is avoid
- */
-
-ATbool SG_MoreEager(int prodtype0, int prodtype1)
-{
-  if(prodtype0 == prodtype1
-     || prodtype0 == SG_PT_REJECT
-     || prodtype0 == SG_PT_UNEAGER
-     || prodtype1 == SG_PT_EAGER)
-    return ATfalse;
-
-  /*
-   pt1 != EAGER, and pt0 either EAGER or REGULAR.
-   if pt0 == EAGER,   pt0 outranks pt1 (!=EAGER).
-   if pt0 == REGULAR, pt0 outranks pt1 (!=EAGER, but also !=pt0, leaving
-                                        only UNEAGER and REJECT for pt1)
-   */
-  return ATtrue;
-}
-
-
-ATbool SG_EagerPriority_Tree(tree t0, tree t1)
-{
-  return SG_MoreEager(SG_ProdType_Tree(t0), SG_ProdType_Tree(t1));
-}
-
-ATbool SG_EagerPriority(parse_table *pt, ATermInt lt0, ATermInt lt1)
-{
-  /*  Don't even bother comparing if there are no preferences anyway  */
-  if (!SG_PT_HAS_PREFERENCES(pt)) {
-    return ATfalse;
-  }
-  return SG_MoreEager(SG_ProdType_Label(pt, lt0), SG_ProdType_Label(pt, lt1));
 }
 
 /* For each production in the tree the number of occurrences is
@@ -751,7 +726,7 @@ static MultiSet SG_CreateMultiSetRecursive(parse_table *pt, MultiSetTable mst,
   return ms;
 }
 
-MultiSet SG_CreateMultiSetUsingTree(parse_table *pt, MultiSetTable mst, 
+static MultiSet SG_CreateMultiSetUsingTree(parse_table *pt, MultiSetTable mst, 
                                     tree t)
 {
   MultiSet ms, ims;
@@ -861,6 +836,29 @@ static ATbool SG_FilterOnPreferAndAvoid(parse_table *pt,
 static size_t SG_CountInjectionsInTree(parse_table *pt, tree t)
 {
   label l;
+  size_t injections = 0;
+  AFun fun;
+  tree kid;
+
+  if (ATgetType(t) == AT_APPL) {
+    fun = ATgetAFun((ATerm) t);
+  
+    if (fun != SG_Amb_AFun) {
+      l = SG_GetApplProdLabel(t);
+
+      if (SG_ProdIsInjection(pt, l)) {
+        injections++;
+        kid = (tree)ATgetFirst((ATermList)ATgetArgument((ATermAppl) t, 1));
+        injections += SG_CountInjectionsInTree(pt, kid);
+      }
+    }
+  }
+  return injections;
+}    
+
+static size_t SG_CountAllInjectionsInTree(parse_table *pt, tree t)
+{
+  label l;
   ATermList ambs;
   ATerm kids;
   size_t injections = 0;
@@ -871,7 +869,7 @@ static size_t SG_CountInjectionsInTree(parse_table *pt, tree t)
   case AT_APPL:
     fun = ATgetAFun((ATerm) t);
     l = SG_GetApplProdLabel(t);
-  
+
     if(fun == SG_Amb_AFun) {
       ambs = (ATermList) ATgetArgument((ATermAppl) t, 0);
       /* Either we have a singleton or
@@ -880,14 +878,14 @@ static size_t SG_CountInjectionsInTree(parse_table *pt, tree t)
        */
       first = (tree) ATgetFirst(ambs);
       injections += SG_CountInjectionsInTree(pt, first);
-    
+
     } else {
       kids = ATgetArgument((ATermAppl) t, 1);
 
       if (SG_ProdIsInjection(pt, l)) {
         injections++;
       }
-      
+
       injections += SG_CountInjectionsInTree(pt, (tree) kids);
     }
     break;
@@ -906,7 +904,7 @@ static size_t SG_CountInjectionsInTree(parse_table *pt, tree t)
   }
 
   return injections;
-}    
+}     
 
 /* Below we define the filters that compare two trees */
 
@@ -929,16 +927,85 @@ static tree SG_Priority_Filter(parse_table *pt, tree t0, tree t1)
 }
 */
 
+/*
+ SG_MoreEager(t0, t1) returns true iff either
+    - t0 is eager and t1 is regular or avoid
+    - t0 is regular and t1 is avoid
+ */
+
+static tree SG_Jump_Over_Injections(parse_table *pt, tree t)
+{
+  if (ATgetType(t) == AT_APPL &&
+      ATgetAFun(t) != SG_Amb_AFun) {
+    label prod = SG_GetApplProdLabel(t);
+      
+    while (SG_ProdIsInjection(pt, prod)) {
+      ATermList injSons = (ATermList)ATgetArgument((ATerm)t, 1);
+      t = (tree)ATgetFirst(injSons);
+
+      if (ATgetType(t) == AT_APPL &&
+          ATgetAFun(t) != SG_Amb_AFun) {
+        prod = SG_GetApplProdLabel(t);
+      }
+      else {
+        return t;
+      }
+    }
+  }
+  return t;
+}
+
+static ATbool SG_MoreEager(int prodtype0, int prodtype1)
+{
+  if (prodtype0 != prodtype1 && 
+      (prodtype0 == SG_PT_EAGER
+       || prodtype1 == SG_PT_UNEAGER)) {
+    return ATtrue;
+  }
+
+  return ATfalse;
+}
+
+static ATbool SG_EagerPriority_Tree(parse_table *pt, tree t0, tree t1)
+{
+  tree newt0 = SG_Jump_Over_Injections(pt, t0);
+  tree newt1 = SG_Jump_Over_Injections(pt, t1);
+  if (SG_MoreEager(SG_ProdType_Tree(t0), SG_ProdType_Tree(t1))) {
+    return ATtrue;
+  }
+  if (ATgetType(newt0) == AT_APPL &&
+      ATgetAFun(newt0) != SG_Amb_AFun) {
+    if (SG_MoreEager(SG_ProdType_Tree(newt0), SG_ProdType_Tree(t1))) {
+      return ATtrue;
+    }
+  }
+  if (ATgetType(newt1) == AT_APPL &&
+      ATgetAFun(newt1) != SG_Amb_AFun) {
+    if (SG_MoreEager(SG_ProdType_Tree(t0), SG_ProdType_Tree(newt1))) {
+      return ATtrue;
+    }
+  }
+  if (ATgetType(newt0) == AT_APPL &&
+      ATgetAFun(newt0) != SG_Amb_AFun &&
+      ATgetType(newt1) == AT_APPL &&
+      ATgetAFun(newt1) != SG_Amb_AFun) {
+    if (SG_MoreEager(SG_ProdType_Tree(newt0), SG_ProdType_Tree(newt1))) {
+      return ATtrue;
+    }
+  }
+  return ATfalse;
+}
+
 static tree SG_Direct_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
 {
  ATermInt l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
  ATermInt l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
 
-  if (SG_EagerPriority_Tree(t0, t1)) {
+  if (SG_EagerPriority_Tree(pt, t0, t1)) {
      IF_DEBUG(ATfprintf(SG_log(), "(Un)Eagerness Priority: %t > %t\n", l0, l1))
      return t0;
   }
-  if (SG_EagerPriority_Tree(t1, t0)) {
+  if (SG_EagerPriority_Tree(pt, t1, t0)) {
     IF_DEBUG(ATfprintf(SG_log(), "(Un)Eagerness Priority: %t < %t\n", l0, l1))
     return t1;
   }
@@ -946,14 +1013,16 @@ static tree SG_Direct_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
   return NULL;
 }
 
-static tree SG_Multiset_Filter(parse_table *pt, MultiSetTable mst,
-                               tree t0, tree t1)
+static tree SG_Count_Eagerness_Filter(parse_table *pt, MultiSetTable mst,
+                                      tree t0, tree t1)
 {
   tree max = NULL;
   ATermInt  l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
   ATermInt  l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
   MultiSet ms0 = MultiSetTableGet(mst, (ATerm) t0);
   MultiSet ms1 = MultiSetTableGet(mst, (ATerm) t1);
+
+  IF_STATISTICS(SG_CountEagernessGtrCalls(SG_NR_INC));
 
   if (ms0 == NULL) {
     ms0 = SG_CreateMultiSetUsingTree(pt, mst, t0);
@@ -996,7 +1065,7 @@ static tree SG_Multiset_Filter(parse_table *pt, MultiSetTable mst,
   }
   
   if (max) {
-    IF_STATISTICS(SG_MultiSetFilterSucceeded(SG_NR_INC));
+    IF_STATISTICS(SG_CountEagernessFilterSucceeded(SG_NR_INC));
   }
 
   return max;
@@ -1010,11 +1079,6 @@ static tree SG_InjectionCount_Filter(parse_table *pt, tree t0, tree t1)
   size_t in0   = SG_CountInjectionsInTree(pt, t0);
   size_t in1   = SG_CountInjectionsInTree(pt, t1);
  
-/* 
-ATwarning("tree %t has %d injections\n", l0, in0);
-ATwarning("tree %t has %d injections\n", l1, in1);
-*/
-
   IF_STATISTICS(
     SG_InjectionCountCalls(SG_NR_INC);
     if (in0 != in1) {
@@ -1035,26 +1099,31 @@ ATwarning("tree %t has %d injections\n", l1, in1);
   return NULL;
 }
 
-tree SG_RejectFilter(tree t0, tree t1)
+static tree SG_FullInjectionCount_Filter(parse_table *pt, tree t0, tree t1)
 {
-  tree max = NULL;
-
-  ATbool rejects0 = SG_ContainsReject(t0);                                        ATbool rejects1 = SG_ContainsReject(t1);
   ATermInt  l0 = SG_GetATint(SG_GetApplProdLabel(t0), 0);
   ATermInt  l1 = SG_GetATint(SG_GetApplProdLabel(t1), 0);
+  size_t in0   = SG_CountAllInjectionsInTree(pt, t0);
+  size_t in1   = SG_CountAllInjectionsInTree(pt, t1);
+ 
+  IF_STATISTICS(
+    SG_InjectionCountCalls(SG_NR_INC);
+    if (in0 != in1) {
+      SG_InjectionFilterSucceeded(SG_NR_INC);
+    }
+    );
 
-  if (rejects0 && !rejects1) {
-    IF_DEBUG(ATfprintf(SG_log(), 
-      "Reject filtering: %t (contains rejects) vs %t (contains no rejects)\n", 
-      l0, l1));
-    max = t1;
+  if (in0 > in1) {
+    IF_DEBUG(ATfprintf(SG_log(), "Injection Priority: %t < %t (%d > %d)\n",
+      				 l0, l1, in0, in1))
+      return t1;
+  } else if (in0 < in1) {
+    IF_DEBUG(ATfprintf(SG_log(), "Injection Priority: %t > %t (%d < %d)\n",
+      				 l0, l1, in0, in1))
+      return t0;
   }
-  if (!rejects0 && rejects1) {
-    IF_DEBUG(ATfprintf(SG_log(), 
-      "Reject filtering: %t (contains no rejects) vs %t (contains rejects)\n", l0, l1));
-    max = t0;
-  }
-  return max;
+
+  return NULL;
 }
 
 /*
@@ -1065,36 +1134,35 @@ tree SG_RejectFilter(tree t0, tree t1)
  Returns:    the preferred term of the two, or NULL if there is no
  filter that prefers either one of them
  */
-tree SG_Filter(parse_table *pt, MultiSetTable mst, tree t0, tree t1)
+static tree SG_Filter(parse_table *pt, MultiSetTable mst, tree t0, tree t1)
 {
   tree max = NULL;
  
-  /* equal terms are ambiguous by definition */
+  /* equal terms just select on */
   if (ATisEqual(t0, t1)) {
-    return NULL;
+    return t0;
   }
  
-  if (SG_FILTER_REJECT && SG_PT_HAS_REJECTS(pt)) {
-    max = SG_RejectFilter(t0, t1);
-    if (max) {
-      return max;
-    }
-  }
-
   /* only try these filters if the parsetable contains such info */
-  if (SG_PT_HAS_PRIORITIES(pt) || SG_PT_HAS_PREFERENCES(pt)) {
+  if (SG_PT_HAS_PREFERENCES(pt)) {
     
-    /*  Next, inspect eager/avoid status  */
+    /*  Next, inspect direct eager/avoid status  */
     if (SG_FILTER_DIRECTEAGERNESS) {
       max = SG_Direct_Eagerness_Filter(pt, t0, t1);
       if(max) {
 	return max;
       }
     }
- 
+  }
+
+  /* Last resort if none of the previous filters was successfull
+   * this filter might resolve some ambiguities.
+   */
+
+  if (SG_PT_HAS_PREFERENCES(pt)) {
     /* deep eagerness filter */
     if (SG_FILTER_EAGERNESS) {
-      max = SG_Multiset_Filter(pt, mst, t0, t1);
+      max = SG_Count_Eagerness_Filter(pt, mst, t0, t1);
       if (max) {
 	return max;
       }
@@ -1103,14 +1171,17 @@ tree SG_Filter(parse_table *pt, MultiSetTable mst, tree t0, tree t1)
 
   /* injectionscount filter */
   if (SG_FILTER_INJECTIONCOUNT) {
-    max = SG_InjectionCount_Filter(pt, t0, t1);
+    max = SG_FullInjectionCount_Filter(pt, t0, t1);
+    if (max) {
+      return max;
+    }
   }
 
   return max;
 }
 
-ATermList SG_FilterList(parse_table *pt, MultiSetTable mst, ATermList ambs, 
-                        tree t)
+ATermList SG_FilterAmbList(parse_table *pt, MultiSetTable mst, ATermList ambs, 
+                           tree t)
 {
   ATermList  new = ATempty;
   tree       amb, max;
@@ -1245,28 +1316,6 @@ static tree SG_Right_Associativity_Filter(tree t, label prodl)
   return t;
 }
 
-static tree SG_Jump_Over_Injections(parse_table *pt, tree t)
-{
-  if (ATgetType(t) == AT_APPL &&
-      ATgetAFun(t) != SG_Amb_AFun) {
-    label prod = SG_GetApplProdLabel(t);
-      
-    while (SG_ProdIsInjection(pt, prod)) {
-      ATermList injSons = (ATermList)ATgetArgument((ATerm)t, 1);
-      t = (tree)ATgetFirst(injSons);
-
-      if (ATgetType(t) == AT_APPL &&
-          ATgetAFun(t) != SG_Amb_AFun) {
-        prod = SG_GetApplProdLabel(t);
-      }
-      else {
-        return t;
-      }
-    }
-  }
-  return t;
-}
-
 static tree SG_Replace_Under_Injections(tree t, tree injT, tree newTree)
 {
   if (ATisEqual(t, injT)) {
@@ -1381,7 +1430,17 @@ static tree SG_FilterAmbs(parse_table *pt, MultiSetTable mst, ATermList ambs)
 {
   ATermList newambs;
   tree amb, newamb;
+  ATermList localAmbs = ambs;
 
+
+  if (SG_FILTER_REJECT && SG_PT_HAS_REJECTS(pt)) {
+    for (;!ATisEmpty(localAmbs); localAmbs = ATgetNext(localAmbs)) {
+      amb = (tree) ATgetFirst(localAmbs);
+      if (SG_HasRejectProd(amb)) {
+        return NULL;
+      }
+    }
+  }
 
   /* first we do the children */
   newambs = ATempty;
@@ -1410,7 +1469,7 @@ static tree SG_FilterAmbs(parse_table *pt, MultiSetTable mst, ATermList ambs)
         amb = (tree) ATgetFirst(ambscopy);
         ambschanged = ATremoveElement(ambs, (ATerm) amb);
         if (!ATisEqual(ambs, ambschanged)) {
-          ambs = SG_FilterList(pt, mst, ambschanged, amb);
+          ambs = SG_FilterAmbList(pt, mst, ambschanged, amb);
         }
       }
     }       
@@ -1462,6 +1521,12 @@ static tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
       t = newt;
     }
     else {
+      if (SG_FILTER_REJECT && SG_PT_HAS_REJECTS(pt)) {
+        if (SG_HasRejectProd(t)) {
+          return NULL;
+        }
+      }
+
       args = (ATermList) ATgetArgument((ATerm) t, 1); /* get the kids */
       newargs = (ATermList)SG_FilterTreeRecursive(pt, mst, 
                                                   (tree) args, ATfalse);

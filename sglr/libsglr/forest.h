@@ -36,9 +36,9 @@ enum SG_AmbTblKind { SG_AMBTBL_INIT, SG_AMBTBL_CLEAR, SG_AMBTBL_GET,
 ATerm      SG_AmbTable(int Mode, ATerm key, ATerm value);
 
 int        SG_InjectionFilterSucceeded(int mode);
-int        SG_MultiSetFilterSucceeded(int mode);
+int        SG_CountEagernessFilterSucceeded(int mode);
 int        SG_InjectionCountCalls(int Mode);
-int        SG_MultiSetGtrCalls(int Mode);
+int        SG_CountEagernessGtrCalls(int Mode);
 int        SG_AmbCalls(int Mode);
 
 int        SG_MaxNrAmb(int Mode);
@@ -52,11 +52,9 @@ ATermList  SG_CyclicTerm(parse_table *pt, forest t);
 tree       SG_FilterTree(parse_table *pt, tree t);
 tree       SG_SelectOnTopSort(parse_table *pt, tree t, char *sort); 
 forest     SG_YieldTree(parse_table *pt, tree t);
-ATerm      SG_AmbTracker(forest t);
 tree       SG_Apply(parse_table *, label, ATermList, int attr);
 ATerm      SG_TreeType(ATerm);
-label      SG_GetProdLabel(tree aprod);
-label      SG_GetApplProdLabel(tree applprod);
-label      SG_GetRejectProdLabel(tree rejectprod);
+label      SG_GetRejectProdLabel(tree applprod);
+label      SG_GetApplProdLabel(tree appl);
 
 #endif  /* _FOREST_H_ */

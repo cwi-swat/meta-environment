@@ -440,9 +440,9 @@ void SG_PostParseResult(void)
     long allocated;
 
     if(SG_FILTER) {
-      fprintf(SG_log(), "MultiSet Comparisons: total %d, successful %d\n",
-              SG_MultiSetGtrCalls(SG_NR_ASK),
-              SG_MultiSetFilterSucceeded(SG_NR_ASK));
+      fprintf(SG_log(), "Count Eagerness Comparisons: total %d, successful %d\n",
+              SG_CountEagernessGtrCalls(SG_NR_ASK),
+              SG_CountEagernessFilterSucceeded(SG_NR_ASK));
       fprintf(SG_log(), "Number of Injection Counts: total %d, successful %d\n",
               SG_InjectionCountCalls(SG_NR_ASK),
               SG_InjectionFilterSucceeded(SG_NR_ASK));
@@ -771,7 +771,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
   );
 
   /*  A stack with state s already exists?  */
-  if(!(st1 = SG_FindStack(s, active_stacks))) {
+  if (!(st1 = SG_FindStack(s, active_stacks))) {
     /*  No existing stack for state s: new stack  */
 #ifndef DEBUG
     st1 = SG_NewStack(s, ATfalse);
@@ -790,61 +790,66 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
       SG_MarkLinkRejected(nl);
       IF_DEBUG(fprintf(SG_log(), "Reject [new]\n"))
     }
-    return;
   }
-
   /*  A stack with state s already exists.  Ambiguity?  */
-  if ((nl = SG_FindDirectLink(st1, st0))) {
-    IF_DEBUG(
-      fprintf(SG_log(), "Ambiguity: direct link %d -> %d%s\n",
-              SG_GETSTATE(SG_ST_STATE(st0)),
-              SG_GETSTATE(SG_ST_STATE(st1)),
-              (attribute == SG_PT_REJECT)?" {reject}":"")
-    );
-    if (attribute == SG_PT_REJECT) {
-      /*  Reject?  */
-      SG_MarkLinkRejected(nl);
-    } else {
-      /*  Don't add the rejects themselves to the amb cluster!  */
-      SG_Amb(table, (tree) SG_LK_TREE(nl), (tree) t);
-    }
-  } else {
-    /*
-     No ambiguity; add new direct link from |st1| to |st0| and recheck
-     all reductions for |st1|.
-     */
-    register stacks *sts;
-
-    nl = SG_AddLink(st1, st0, t);
-    /*  Reject?  */
-    if (attribute == SG_PT_REJECT) {
-      SG_MarkLinkRejected(nl);
+  else {
+    if ((nl = SG_FindDirectLink(st1, st0))) {
       IF_DEBUG(
-        fprintf(SG_log(), "Warning: stack with state %d rejected in "
-                "presence of other links (linked to stack %d)\n",
-                SG_GETSTATE(SG_ST_STATE(st0)), SG_GETSTATE(SG_ST_STATE(st1)));
+        fprintf(SG_log(), "Ambiguity: direct link %d -> %d%s\n",
+                SG_GETSTATE(SG_ST_STATE(st0)),
+                SG_GETSTATE(SG_ST_STATE(st1)),
+                (attribute == SG_PT_REJECT)?" {reject}":"")
       );
+      IF_DEBUG(
+        fprintf(SG_log(), 
+                "nl is %s for %d\n", (SG_LK_REJECTED(nl)?" {reject}":""),
+                SG_GETLABEL(SG_GetApplProdLabel(SG_LK_TREE(nl))))
+      );
+      if (attribute == SG_PT_REJECT) {
+        /*  Reject?  */
+        SG_MarkLinkRejected(nl);
+        SG_Amb(table, (tree) SG_LK_TREE(nl), (tree) t);
+      } else {
+        /*  Don't add the rejects themselves to the amb cluster!  */
+        SG_Amb(table, (tree) SG_LK_TREE(nl), (tree) t);
+      }
     }
+    else {
+      /*
+       No ambiguity; add new direct link from |st1| to |st0| and recheck
+       all reductions for |st1|.
+       */
+      register stacks *sts;
 
-    for(sts = active_stacks; sts; sts = SG_TAIL(sts)) {
-      stack  *st2;
+      nl = SG_AddLink(st1, st0, t);
+      /*  Reject?  */
+      if (attribute == SG_PT_REJECT) {
+        SG_MarkLinkRejected(nl);
+        IF_DEBUG(
+          fprintf(SG_log(), "Warning: stack with state %d rejected in "
+                  "presence of other links (linked to stack %d)\n",
+                  SG_GETSTATE(SG_ST_STATE(st0)), SG_GETSTATE(SG_ST_STATE(st1)));
+        );
+      }
+      for(sts = active_stacks; sts; sts = SG_TAIL(sts)) {
+        stack  *st2;
+  
+        st2 = SG_HEAD(sts);
+        if (!SG_Rejected(st2)
+            && !SG_InReduceStacks(st2, for_actor, ATfalse)
+            && !SG_InReduceStacks(st2, for_actor_delayed, ATfalse)) {
+          register actions as;
 
-      st2 = SG_HEAD(sts);
-      if(!SG_Rejected(st2)
-         && !SG_InReduceStacks(st2, for_actor, ATfalse)
-         && !SG_InReduceStacks(st2, for_actor_delayed, ATfalse)) {
-        register actions as;
+          for(as = SG_LookupAction(table, SG_ST_STATE(st2), current_token);
+              as && !ATisEmpty(as); as = ATgetNext(as)) {
+            action  a = ATgetFirst(as);
 
-        for(as = SG_LookupAction(table, SG_ST_STATE(st2), current_token);
-            as && !ATisEmpty(as); as = ATgetNext(as)) {
-          action  a = ATgetFirst(as);
+            if(SG_ActionKind(a) == REDUCE
+               || (SG_ActionKind(a) == REDUCE_LA
+                   && SG_CheckLookAhead(SG_A_LOOKAHEAD(a)))) {
 
-
-          if(SG_ActionKind(a) == REDUCE
-          || (  SG_ActionKind(a) == REDUCE_LA
-             && SG_CheckLookAhead(SG_A_LOOKAHEAD(a)))) {
-
-            SG_DoLimitedReductions(st2, a, nl);
+              SG_DoLimitedReductions(st2, a, nl);
+            }
           }
         }
       }
@@ -1114,12 +1119,10 @@ tree SG_ParseResult(char *sort)
          * converts amb clusters to amb nodes
          */
 
-        if (SGnrAmb(SG_NR_ASK) > 0) {
-          IF_STATISTICS(SG_Timer());
-          t = SG_FilterTree(table, t);
-          IF_STATISTICS(fprintf(SG_log(), 
-                                "Filtering took %.6fs\n", SG_Timer()));
-        }
+        IF_STATISTICS(SG_Timer());
+        t = SG_FilterTree(table, t);
+        IF_STATISTICS(fprintf(SG_log(), 
+                              "Filtering took %.6fs\n", SG_Timer()));
       }
 
       /* Finally, the parse tree (in AsFix format) is produced, if desired. */

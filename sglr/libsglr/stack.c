@@ -503,9 +503,11 @@ ATbool SG_ReduceSubStack(stack *st1, stack *st0)
 
 stack *SG_FindStack(state s, stacks *sts)
 {
-  for (; sts; sts = SG_TAIL(sts))
-    if(SG_ST_STATE(SG_HEAD(sts)) == s)
+  for (; sts; sts = SG_TAIL(sts)) {
+    if(SG_ST_STATE(SG_HEAD(sts)) == s) {
       return SG_HEAD(sts);
+    }
+  }
   return NULL;
 }
 
@@ -515,9 +517,11 @@ st_link *SG_FindDirectLink(stack *st0, stack *st1)
 {
   st_links *ls = NULL;
 
-  for (ls = SG_ST_LINKS(st0); ls; ls = SG_TAIL(ls))
-    if(SG_LK_STACK(SG_HEAD(ls)) == st1)
+  for (ls = SG_ST_LINKS(st0); ls; ls = SG_TAIL(ls)) {
+    if(SG_LK_STACK(SG_HEAD(ls)) == st1) {
       return SG_HEAD(ls);
+    }
+  }
   return NULL;
 }
 
@@ -527,11 +531,6 @@ st_link *SG_FindDirectLink(stack *st0, stack *st1)
 void SG_MarkLinkRejected(st_link *l)
 {
   SG_LK_REJECTED(l) = ATtrue;
-  /*
-   ATwarning("Link state %d --> state %d rejected\n",
-             SG_GETSTATE(SG_ST_STATE(st)),
-             SG_GETSTATE(SG_ST_STATE(SG_LK_STACK(l))));
-   */
 }
 
 /*
@@ -557,4 +556,7 @@ ATbool SG_Rejected(stack *st)
   }
   /*  All links are rejected  */
   return ATtrue;
+#if 0
+  return ATfalse;
+#endif
 }
