@@ -2682,6 +2682,7 @@ trap 'rm -fr `echo "Makefile src/Makefile tide/Makefile tide/tide doc/Makefile \
 	adapters/java-adapter/toolbus/aterm/Makefile \
 	adapters/java-adapter/toolbus/util/Makefile \
 	adapters/java-adapter/toolbus/tool/Makefile \
+	adapters/java-adapter/toolbus/tool/javatif \
 	adapters/java-adapter/toolbus/tide/Makefile \
 	tbviz/Makefile \
 	tbviz/sh/Makefile \
@@ -2787,6 +2788,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile src/Makefile tide/Makefile tide/tide doc/
 	adapters/java-adapter/toolbus/aterm/Makefile \
 	adapters/java-adapter/toolbus/util/Makefile \
 	adapters/java-adapter/toolbus/tool/Makefile \
+	adapters/java-adapter/toolbus/tool/javatif \
 	adapters/java-adapter/toolbus/tide/Makefile \
 	tbviz/Makefile \
 	tbviz/sh/Makefile \
@@ -2848,7 +2850,7 @@ rm -f conftest.subs
 
 
 \
-mkdir doc/adapters
+	mkdir -p doc/adapters
 	
 exit 0
 EOF

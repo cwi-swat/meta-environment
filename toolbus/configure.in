@@ -296,6 +296,7 @@ AC_OUTPUT(Makefile src/Makefile tide/Makefile tide/tide doc/Makefile \
 	adapters/java-adapter/toolbus/aterm/Makefile \
 	adapters/java-adapter/toolbus/util/Makefile \
 	adapters/java-adapter/toolbus/tool/Makefile \
+	adapters/java-adapter/toolbus/tool/javatif \
 	adapters/java-adapter/toolbus/tide/Makefile \
 	tbviz/Makefile \
 	tbviz/sh/Makefile \
