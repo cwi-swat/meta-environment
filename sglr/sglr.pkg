@@ -12,5 +12,6 @@ configuration interface
 
 requires
    pt-support	1.0
+   error-support 0.1
    aterm        2.0.2
    toolbuslib	0.5.1

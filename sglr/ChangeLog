@@ -1,5 +1,8 @@
 $Id$
 
+2004/01/12 (jurgenv@cwi.nl)
+ * Added dependency on error-support
+ 
 2004/01/06 (markvdb@cwi.nl)
  * Simplified the TB interface of SGLR. A parse request contains
    directly the parse table.
@@ -8,8 +11,9 @@ $Id$
  * Brought up-to-date with pt-support, libconversion and libasfix2 
    are now part of libmept.
  * Refactored sglr-interface and sglr-main such that ATBpack is not used
-   in sglr-interface anymore
-
+   in sglr-interface anymore. Note that in sglr-interface there seems
+   to be to much knowledge about communication with the ToolBus. libsglr
+   should not know anything about the context in which it is applied!
 
 2003/10/08 (markvdb@cwi.nl)
  * Reverse the list of ambiguities, fixed bug #55.

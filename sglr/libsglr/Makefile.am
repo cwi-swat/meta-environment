@@ -5,6 +5,7 @@
 include $(top_srcdir)/make_rules
 INCLUDES		= -I$(ATERM)/include \
 			-I$(TOOLBUSLIB)/include \
+			-I$(ERROR_SUPPORT)/include \
 			-I$(PT_SUPPORT)/include
 
 lib_LIBRARIES		= libsglr.a

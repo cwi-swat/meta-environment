@@ -26,6 +26,12 @@ AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
+dnl {{{ Require error-support library
+AC_PACKAGE_REQUIRE(error-support, error-support-config,
+   [  --with-error-support=DIR error-support is in DIR])
+AC_SUBST(ERROR_SUPPORT)
+dnl }}}
+
 dnl Require ToolBus library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])

@@ -8,6 +8,7 @@ INCLUDES = \
 	-I$(top_srcdir)/libsglr \
 	-I$(PT_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
+	-I$(ERROR_SUPPORT)/include \
 	-I$(ATERM)/include
 
 pkgdata_DATA = sglr.idef
@@ -19,6 +20,7 @@ sglr_SOURCES = sglr.tif.c sglr-main.c getopt.c getopt1.c
 sglr_LDADD = \
 	-L$(top_builddir)/libsglr -lsglr \
 	-L$(PT_SUPPORT)/lib -lmept \
+	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
