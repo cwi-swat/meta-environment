@@ -39,14 +39,14 @@ equations
           pico-nat-con(y1 c1) + pico-nat-con(y2 c2) = pico-nat-con(y c)
 
    [85b]  pico-nat-con(c1) + pico-nat-con(c2) = pico-nat-con(x c),
-          pico-nat-con ("0" x1) + pico-nat-con(y2) + pico-nat-con("0" x) = pico-nat-con(y)
+          pico-nat-con(y2) + pico-nat-con("0" x) = pico-nat-con(y)
           ========================================================
-          pico-nat-con(x1 c1) + pico-nat-con(y2 c2) = pico-nat-con(y c)
+          pico-nat-con(c1) + pico-nat-con(y2 c2) = pico-nat-con(y c)
 
    [85c]  pico-nat-con(c1) + pico-nat-con(c2) = pico-nat-con(x c),
-          pico-nat-con (y1) + pico-nat-con("0" x2) + pico-nat-con("0" x) = pico-nat-con(y)
+          pico-nat-con (y1) + pico-nat-con("0" x) = pico-nat-con(y)
           ========================================================
-          pico-nat-con(y1 c1) + pico-nat-con(x2 c2) = pico-nat-con(y c)
+          pico-nat-con(y1 c1) + pico-nat-con(c2) = pico-nat-con(y c)
 
    [86]   pico-nat-con(c) -// pico-nat-con(c) = 0
    [87]   pico-nat-con(c) -// 0 = pico-nat-con(c)
