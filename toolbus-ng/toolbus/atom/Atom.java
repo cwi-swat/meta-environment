@@ -70,15 +70,6 @@ abstract public class Atom extends AbstractProcessExpression {
     return newAtom;
   }
 
-  public void extendFollow(AtomSet f) {
-    //System.out.println(this + ": extendFollow(" + f + ")");
-    //System.out.println("follow was: " + follow);	
-    //if(follow.size() == 0)
-    addToFollow(f);
-
-    //System.out.println("follow becomes: " + follow);
-  }
-
   public Environment getEnv() {
     return env;
   }

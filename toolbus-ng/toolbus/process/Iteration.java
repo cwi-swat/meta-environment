@@ -27,23 +27,17 @@ public class Iteration extends AbstractProcessExpression {
   public void expand(ProcessInstance P,  Stack calls) throws ToolBusException {
     left.expand(P, calls);
     right.expand(P, calls);
+    setFirst(left.getFirst().union(right.getFirst()));
    }
 
   public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
-    right.compile(P, follow);
-    left.compile(P, right.getFirst());
-    left.extendFollow(left.getFirst());
-    setFirst(left.getFirst().union(right.getFirst()));
-    setFollow(follow);
+    
+      left.compile(P, getFirst());
+      right.compile(P, follow);
+      
+      setFollow(follow);
   }
   
-  public void extendFollow(AtomSet f) {
-    //left.extendFollow(f);
-    right.extendFollow(f);
-    if (getFollow().size() == 0) {
-      addToFollow(f);
-    }
-  }
 
   public AtomSet getAtoms() {
     return left.getAtoms().union(right.getAtoms());

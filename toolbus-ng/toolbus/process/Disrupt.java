@@ -18,30 +18,24 @@ public class Disrupt extends AbstractProcessExpression {
     return new Disrupt(left, right);
   }
 
-  public void extendFollow(AtomSet f) {
-    left.extendFollow(f);
-    right.extendFollow(f);
-    if (getFollow().size() == 0) {
-      addToFollow(f);
-    }
-  }
-   public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
+  public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
     left.expand(P, calls);
     right.expand(P, calls);
-   }
+    setFirst(left.getFirst().union(right.getFirst()));
+  }
 
   public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
     left.compile(P, follow);
     right.compile(P, follow);
 
     AtomSet rightFirst = right.getFirst();
-    setFirst(left.getFirst().union(rightFirst));
+
     setFollow(follow);
 
     Vector atoms = left.getAtoms().getAtomsAsVector();
     for (int i = 0; i < atoms.size(); i++) {
       Atom at = (Atom) atoms.get(i);
-      if(at.getFollow().size() != 0){
+      if (at.getFollow().size() != 0) {
         at.addToFollow(rightFirst);
       }
     }

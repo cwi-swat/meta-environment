@@ -13,6 +13,5 @@ public interface ProcessExpression {
   public ProcessExpression copy();
   public AtomSet getFirst();
   public AtomSet getFollow();
-  public void extendFollow(AtomSet followSet);
   public AtomSet getAtoms();
 }
