@@ -160,7 +160,7 @@ void version(void)
 int main(int argc, char *argv[])
 {
   ATerm syntax = NULL, extended = NULL;
-  char *moduleName = "";
+  char *moduleName = "Main";
   char *input = "-";
   char *output = "-"; 
   int cid;
