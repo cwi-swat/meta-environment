@@ -1,10 +1,12 @@
 # $Id$
 
-SUBDIRS		= lib utils
+SUBDIRS = lib utils
+
+ACLOCAL_FLAGS = -I .
 
 CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 
-EXTRA_DIST	= program-check.m4 $(wildcard *.pkg)
+EXTRA_DIST = program-check.m4 $(wildcard *.pkg)
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
