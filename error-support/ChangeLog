@@ -1,5 +1,8 @@
 $Id$
 
+Thu Jul  1 14:25:05 CEST 2004 <jurgenv@cwi.nl>
+ * added Slices to locations api
+
 Thu Jun 10 13:31:22 CEST 2004 <M336@cwi.nl>
  * fix error-diff to diff errors, not summaries
 
