@@ -28,14 +28,16 @@ do
 				;;	
 		-class)		CLASS=$2; shift; shift
 				;;
+		-jvm-arg)	ARGS="$ARGS $2" ;shift;shift
+				;;
 		-arg)		ARGS="$ARGS $2" ;shift;shift
 				;;
 		-details)	DETAILS=$2; shift;shift
 				;;
 		-java-args)	shift; SCRIPTARGS="-args $@" ;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift
 				;;
-		-*)		$echo "unknown option: $1"
-				$echo "$usage" >&2
+		-*)		echo "unknown option: $1"
+				echo "$usage" >&2
 				exit 1
 				;;
 		*) break
