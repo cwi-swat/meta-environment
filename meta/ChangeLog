@@ -20,13 +20,6 @@
 #
 # $Id$
 
-2000/6/23 (js@cwi.nl)
-   *  Fixed a tiny bug in sglr's handling of follow restrictions
-      of levels deeper than 1
-   *  Added the Follower language, and both an offending and a
-      non-offending input term w.r.t. the follow-restrictions
-   *  Bumped version to 2.34
-
 2000/6/20 (jong@cwi.nl)
    * In-output warns when it encounters unresolvable entries in searchpath.
    * In-output warns when more than one match for a given module is found.
@@ -37,19 +30,6 @@
    * Terms are now opened via two common dialogs: open term and new term.
    * Only terms in the paths of meta.conf can be openened.
    * Xemacs opens new window for each file.
-
-2000/5/15 (js@cwi.nl)
-   * Extended the SGLR API documentation to cover greater detail
-   * Fixed a case of usage of uninitialized AFun (that broke the daily build)
-   * Implemented a routine that returns the available start symbols,
-     available through both ToolBus as well as the public API
-   * Bumped the version number (now at 2.32)
-
-2000/5/13 (js@cwi.nl)
-   * Documented (pod) the SGLR API
-   * Cleaned up function naming to strictly use thepublic vs. private
-     convention; accordingly, several cleanups/reshuffles in bits
-     containing public routines especially
 
 2000/5/12 (markvdb@cwi.nl)
    * C version of the structure editor activated. It is still a prototype
