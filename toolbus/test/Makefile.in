@@ -36,8 +36,7 @@ all:    ${PROGRAMS}
 	@for TST in ${PROGRAMS} ; \
 	do \
 		echo "Running test program $${TST}"; \
-		./$${TST};  \
-		if $? ; then \
+		if `${srcdir}/$${TST}`; then \
 		echo "test program $${TST} OK" ; \
 		else \
 		echo "*** test $${TST} FAILED" ; \
