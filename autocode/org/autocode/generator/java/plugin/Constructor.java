@@ -1,4 +1,4 @@
-package org.autocode.generator.java;
+package org.autocode.generator.java.plugin;
 
 //{{{ imports
 
@@ -6,7 +6,10 @@ import org.autocode.*;
 import org.autocode.property.*;
 import org.autocode.generator.*;
 import org.autocode.generator.repository.*;
+import org.autocode.generator.java.*;
 import org.autocode.generator.java.repository.*;
+
+import java.util.*;
 
 //}}}
 
@@ -15,20 +18,32 @@ public class Constructor
 {
   //{{{ public void generateConstructor(JavaGenerator generator)
 
-  public void generateConstructor(JavaGenerator generator, PropertyContext context,
-				  String typeName)
+  public void generateConstructor(JavaGenerator generator,
+				  PropertyContext typeContext,
+				  PropertyContext operationContext)
   {
-    /*
-    JavaCompilationUnit unit = generator.getCompilationUnit();
-    String constructorName = JavaGenerator.javaTypeName(type.getName());
-
-    DataDefinition def = generator.getDataDefinition();
-    String application = generator.getApplication();
+    String constructorName = generator.constructorName(typeContext.getName());
 
     MethodBody body = new MethodBody();
-    JavaMethod constructor = createTypeMethod("constructors",
-					      constructorName, null, body);
 
+    JavaMethod constructor
+      = createConstructor(operationContext, constructorName, body);
+
+    Iterator iter = typeContext.getValueSet("field").iterator();
+    while (iter.hasNext()) {
+      String fieldName = (String)iter.next();
+      PropertyContext fieldContext
+	= new PropertyContext(typeContext, "field", fieldName);
+      PropertyContext fieldTypeContext = new PropertyContext(fieldContext, "type");
+      String attrName = generator.parameterName(fieldName);
+      String attrType = generator.typeName(fieldTypeContext);
+      FormalParameter param = new FormalParameter(attrName, attrType);
+      param.setDescription(fieldContext.getString("description"));
+      constructor.addFormalParameter(param);
+    }
+
+    generator.getCompilationUnit().addMethod(constructor);
+    /*
     Iterator iter = type.fetchFieldIterator();
     while (iter.hasNext()) {
       Field field = (Field)iter.next();

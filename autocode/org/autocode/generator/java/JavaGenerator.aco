@@ -2,6 +2,7 @@
 class := "org.autocode.generator.java.JavaGenerator"
 
 folding := true		// Enable folding support by default
+javadoc := false
 
 type * {
   access := public	// All types are public by default

@@ -68,4 +68,50 @@ public class JavaMethod
   }
 
   //}}}
+
+  //{{{ public String toString()
+
+  public String toString()
+  {
+    StringBuffer buf = new StringBuffer();
+
+    buf.append(getAccess().yield());
+    buf.append(' ');
+
+    if (isAbstract()) {
+      buf.append("abstract ");
+    }
+
+    if (isStatic()) {
+      buf.append("static ");
+    }
+
+    if (isFinal()) {
+      buf.append("final ");
+    }
+
+    String resultType = getResultType();
+    if (resultType != null) {
+      buf.append(resultType);
+      buf.append(' ');
+    }
+
+    buf.append(getName());
+    buf.append('(');
+
+    Iterator iter = fetchFormalParameterIterator();
+    while (iter.hasNext()) {
+      FormalParameter param = (FormalParameter)iter.next();
+      buf.append(param.toString());
+      if (iter.hasNext()) {
+	buf.append(", ");
+      }
+    }
+
+    buf.append(')');
+
+    return buf.toString();
+  }
+
+  //}}}
 }

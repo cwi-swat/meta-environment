@@ -12,6 +12,7 @@ public class Method
 
   private String name;
   private String resultType;
+  private String description;
   private MethodBody body;
   private Set exceptionSet;
   private List formalParameterList;
@@ -44,6 +45,23 @@ public class Method
   public String getResultType()
   {
     return resultType;
+  }
+
+  //}}}
+
+  //{{{ public String getDescription()
+
+  public String getDescription()
+  {
+    return description;
+  }
+
+  //}}}
+  //{{{ public void setDescription(String description)
+
+  public void setDescription(String description)
+  {
+    this.description = description;
   }
 
   //}}}

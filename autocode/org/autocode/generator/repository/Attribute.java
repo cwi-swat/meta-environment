@@ -6,6 +6,7 @@ public class Attribute
 {
   private String name;
   private String type;
+  private String description;
 
   //{{{ public Attribute(String name, String type)
 
@@ -30,6 +31,23 @@ public class Attribute
   public String getType()
   {
     return type;
+  }
+
+  //}}}
+
+  //{{{ public String getDescription()
+
+  public String getDescription()
+  {
+    return description;
+  }
+
+  //}}}
+  //{{{ public void setDescription(String description)
+
+  public void setDescription(String description)
+  {
+    this.description = description;
   }
 
   //}}}

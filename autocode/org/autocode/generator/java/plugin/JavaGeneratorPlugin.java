@@ -1,4 +1,4 @@
-package org.autocode.generator.java;
+package org.autocode.generator.java.plugin;
 
 //{{{ imports
 
@@ -29,16 +29,16 @@ public class JavaGeneratorPlugin
     JavaMethod method = new JavaMethod(methodName, typeName, accessSpecifier,
 				       isAbstract, isFinal, isStatic, body);
 
-    System.out.println("creating method: "
-		       + (isAbstract ? "abstract " : "")
-		       + (isStatic ? "static " : "")
-		       + (isFinal ? "final " : "")
-		       + access
-		       + " "
-		       + methodName
-		       +"()");
-
     return method;
+  }
+
+  //}}}
+  //{{{ public JavaMethod createMethod(operation, name, body)
+
+  public JavaMethod createConstructor(PropertyContext operationContext,
+				      String name, MethodBody body)
+  {
+    return createMethod(operationContext, name, null, body);
   }
 
   //}}}

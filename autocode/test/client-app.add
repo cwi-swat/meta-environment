@@ -1,27 +1,22 @@
 application client-app {
   generator java {
     enabled := true
+    javadoc := true
 
     @import "Client.add"
     @import "Order.add"
 
     type * {
-      access := private
       package := "org.autocode.test"
     }
 
     type Client {
-      access := public
       operation := { constructor }
       interface := { Serializable, Runnable }
   
+      field * { access := public }
+
       field name {
-        type string {
-          implementation := "MyString"
-          implementation "MyString" {
-            import := "nl.cwi.aterm"
-          }
-        }
         operation += { init }
         access := public
         static := true
@@ -36,10 +31,6 @@ application client-app {
       
       field * {
         operation := { get, set }
-      }
-
-      operation constructor {
-        access := proctected
       }
     }
   }

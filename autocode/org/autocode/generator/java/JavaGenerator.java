@@ -47,7 +47,6 @@ public class JavaGenerator
 
   protected void generateType(PropertyContext typeContext)
   {
-    System.out.println("generating type: " + typeContext.getName());
     String typeName = typeContext.getName();
     String pkg = typeContext.getString("package");
     String className = javaTypeName(typeName);
@@ -172,8 +171,24 @@ public class JavaGenerator
     String access = attr.getAccess().yield();
     String type = attr.getType();
     String name = attr.getName();
+    String description = attr.getDescription();
 
+    emitAttributeDocumentation(attr);
     println(access + " " + type + " " + name + ";");
+    println();
+  }
+
+  //}}}
+  //{{{ protected void emitAttributeDocumentation(JavaAttribute attr)
+
+  protected void emitAttributeDocumentation(JavaAttribute attr)
+  {
+    if (getGeneratorContext().getBoolean("javadoc")) {
+      String desc = attr.getDescription();
+      if (desc != null ) {
+	println("/** " + capitalize(desc) + " */");
+      }
+    }
   }
 
   //}}}
@@ -181,9 +196,29 @@ public class JavaGenerator
 
   protected void emitMethods(JavaCompilationUnit unit)
   {
-    Iterator iter = unit.fetchMethodIterator();
-    while (iter.hasNext()) {
-      emitMethod((JavaMethod)iter.next());
+    for (Iterator i = unit.fetchMethodIterator(); i.hasNext();) {
+      emitMethod((JavaMethod)i.next());
+    }
+  }
+
+  //}}}
+  //{{{ protected void emitMethodDocumentation(JavaMethod method)
+
+  protected void emitMethodDocumentation(JavaMethod method)
+  {
+    if (getGeneratorContext().getBoolean("javadoc")) {
+      println("/**");
+      String methodDescription = method.getDescription();
+      if (methodDescription != null) {
+	println("* " + capitalize(method.getDescription()));
+	println("*");
+      }
+      Iterator iter = method.fetchFormalParameterIterator();
+      while (iter.hasNext()) {
+	FormalParameter param = (FormalParameter)iter.next();
+	println("* @param " + param.getName() + " " + param.getDescription());
+      }
+      println("*/");
     }
   }
 
@@ -192,51 +227,10 @@ public class JavaGenerator
 
   protected void emitMethod(JavaMethod method)
   {
-    StringBuffer buf = new StringBuffer();
-
-    buf.append(method.getAccess().yield());
-    buf.append(' ');
-
-    if (method.isAbstract()) {
-      buf.append("abstract ");
-    }
-
-    if (method.isStatic()) {
-      buf.append("static ");
-    }
-
-    if (method.isFinal()) {
-      buf.append("final ");
-    }
-
-    String resultType = method.getResultType();
-    if (resultType != null) {
-      buf.append(method.getResultType());
-      buf.append(' ');
-    }
-
-    buf.append(method.getName());
-    buf.append('(');
-    Iterator iter = method.fetchFormalParameterIterator();
-    boolean first = true;
-    while (iter.hasNext()) {
-      if (first) {
-	first = false;
-      }
-      else {
-	buf.append(", ");
-      }
-
-      FormalParameter param = (FormalParameter)iter.next();
-      buf.append(javaTypeName(param.getType()));
-      buf.append(' ');
-      buf.append(param.getName());
-    }
-    buf.append(')');
-
-    String decl = buf.toString();
+    String decl = method.toString();
 
     foldOpen(decl);
+    emitMethodDocumentation(method);
     println(decl);
     println("{");
     method.getBody().emit(indentLevel+1, writer);
@@ -326,27 +320,35 @@ public class JavaGenerator
   }
 
   //}}}
-  //{{{ public String attributeName(String attributeName)
+  //{{{ public String attributeName(String name)
 
-  public String attributeName(String attributeName)
+  public String attributeName(String name)
   {
-    return AutocodeGenerator.javaAttributeName(attributeName);
+    return AutocodeGenerator.javaAttributeName(name);
   }
 
   //}}}
-  //{{{ public String methodName(String methodName)
+  //{{{ public String methodName(String name)
 
-  public String methodName(String methodName)
+  public String methodName(String name)
   {
-    return AutocodeGenerator.javaMethodName(methodName);
+    return AutocodeGenerator.javaMethodName(name);
   }
 
   //}}}
-  //{{{ public String parameterName(String parameterName)
+  //{{{ public String constructorName(String name)
 
-  public String parameterName(String parameterName)
+  public String constructorName(String name)
   {
-    return AutocodeGenerator.javaParameterName(parameterName);
+    return capitalize(methodName(name));
+  }
+
+  //}}}
+  //{{{ public String parameterName(String name)
+
+  public String parameterName(String name)
+  {
+    return AutocodeGenerator.javaParameterName(name);
   }
 
   //}}}

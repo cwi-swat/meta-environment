@@ -4,3 +4,7 @@ type Client
   referrer: Client
   order: list<Order>
 }
+
+Client.name->description := "the name of a client"
+Client.referrer->description := "the referrer"
+Client.order->description := "the list of orders"
