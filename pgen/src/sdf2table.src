@@ -169,9 +169,13 @@ do
 	then
 	        if [ $checker -gt 0 ] ;
 		then
-		        Notify "Checking definition: $f"
-		        $ADDPOSINFO -i $af1name -o $afposname -p $f
-		        $CHECKER -i $afposname
+			Notify "Checking definition: $f"
+			$ADDPOSINFO -i $af1name -o $afposname -p $f
+			if [ "$modulename" = "-" ] ; then
+				$CHECKER -i $afposname
+			else
+				$CHECKER -i $afposname -m $modulename
+			fi
                 fi
 
 	        Notify "Generating parse table ..."

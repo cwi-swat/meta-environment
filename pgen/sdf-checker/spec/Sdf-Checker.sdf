@@ -24,6 +24,9 @@ hiddens
     check-imports(ImportsSet, Definition, Info-Msg-Tuple)      -> Info-Msg-Tuple
     post-check-modules(Definition, ImportsSet, Info-Msg-Tuple) -> Info-Msg-Tuple
     post-check-modules(ImportsSet, Info-Msg-Tuple)             -> Info-Msg-Tuple
+    contains-main(Definition, Boolean)                         -> Boolean {traversal(accu, top-down, break)}
+    contains-main(Module, Boolean)                             -> Boolean {traversal(accu, top-down, break)}
+    main-message(Boolean)                                      -> {Error ","}*
 
 hiddens
   variables
@@ -52,6 +55,8 @@ hiddens
     "AliasedSymbolPairSet"[0-9]*  -> SymbolsSet
 
     "$Msgs"[0-9]*           -> {Error ","}*
+  
+    "Bool"[0-9]* -> Boolean
 
     "$Char*"[0-9]* -> CHAR*
 

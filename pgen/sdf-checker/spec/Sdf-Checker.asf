@@ -8,10 +8,12 @@ equations
              summary("SdfChecker", strcon(""" $Char* """), [Msg*])
 
   [cs-1'1] InfoMsgTuple := check-sdf(Definition, Unknown),
-           Msg* := get-messages(InfoMsgTuple)
+           Msg*1 := get-messages(InfoMsgTuple),
+           Bool := contains-main(Definition, false),
+           Msg*2 := main-message(Bool)
            ====>
            check-sdf(definition Definition) =
-             summary("SdfChecker", "Unknown", [Msg*])
+             summary("SdfChecker", "Unknown", [Msg*2, Msg*1])
 
   [cs-1'1] Msg*1 := check-labels(Definition1),
            Definition2 := remove-labels(Definition1),
@@ -162,3 +164,12 @@ make-error("module not available", strcon(""" $Char* """), $Location),
            InfoMsgTuple2 := put-messages($Msgs1, $Msgs2, InfoMsgTuple1)
            ====>
            post-check-modules(imports(Import*), InfoMsgTuple1) = InfoMsgTuple2
+
+  [cm-1'1] Main == get-module-name(Module)
+           ====>
+           contains-main(Module, Bool) = true
+
+  [mm-1'1] main-message(true) =
+
+  [mm-1'1] main-message(false) = 
+             make-error("Main module not defined", "Main")

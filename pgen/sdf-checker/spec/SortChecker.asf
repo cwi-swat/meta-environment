@@ -191,7 +191,9 @@ equations
         SymbolsSet2 := diff(SymbolsSet, RenamedSymbolsSet),
 
         SymbolsSet3 := diff(StartSymbolPairsSet,
-                            merge(DefinedSymbolsSet, DefinedSymbolsSet2)),
+                            merge(RenamedSymbolsSet,
+                                  merge(DefinedSymbolsSet, 
+                                        DefinedSymbolsSet2))),
 
         $String1 := moduleid2str($ModuleId),
         $String2 := "undeclared sorts in " || $String1,

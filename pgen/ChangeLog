@@ -1,5 +1,15 @@
 $Id$
 
+Mon Nov 15 13:18:02 CET 2004 <markvdb@cwi.nl>
+ * Merged 1.5 and trunk.
+
+Wed Nov 10 12:05:55 CET 2004 <markvdb@cwi.nl>
+ * Improved the bug fix.
+
+Tue Nov  9 20:25:52 CET 2004 <markvdb@cwi.nl>
+ * Regenerated the Sdf-Normalizer in order to solve bug #404:
+   fixed the manipulation of renamings.
+
 Wed Sep 29 15:31:05 CEST 2004 <markvdb@cwi.nl>
  * Moved the check on cons attributes from the SdfChecker
    to the AsfSdfChecker.

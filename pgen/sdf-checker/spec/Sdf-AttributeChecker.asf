@@ -84,9 +84,7 @@ equations
            check-attributes2(Production, Msgs, $ModuleId) = 
              Msgs, make-warning("illegal attribute: non-assoc", $String, $Location)
 
-  [ibd-1'1] is-binary-definition($Symbol1 $Symbol2 $Symbol1 -> $Symbol1) = true 
-
-  [ibd-1'2] is-binary-definition($Symbol $Symbol -> $Symbol) = true 
+  [ibd-1'1] is-binary-definition($Symbol1 $Symbol* $Symbol1 -> $Symbol1) = true  
 
   [default-ibd-1'3] is-binary-definition(Production) = false
 
