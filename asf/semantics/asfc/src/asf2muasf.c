@@ -475,9 +475,10 @@ static MA_FuncDef prodToFuncDef(PT_Production ptProd, MA_Term type)
   arity = getProdArity(ptProd, WITHOUT_LAYOUT);
 
   if (PT_isProductionDefault(ptProd)) {
-    ptAttributes = PT_getProductionAttributes(ptProd);
     MA_TermTerms maAnnos = NULL;
     MA_Annotations wrappedAnnos;
+
+    ptAttributes = PT_getProductionAttributes(ptProd);
 
     if (PT_isAttributesAttrs(ptAttributes)) {
       maAnnos = attrsToTermList(PT_getAttributesAttrs(ptAttributes));
