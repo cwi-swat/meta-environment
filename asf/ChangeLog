@@ -1,5 +1,6 @@
 2001/05/30 (markvdb@cwi.nl)
   * Fixed a "bug" in addeqssyntax with respect to prefix functions.
+  * Regenerated C code for Remove-Var-Syntax and Add-Eqs-Syntax.
 
 2001/05/23 (markvdb@cwi.nl)
   * Released version 0.2, and bumped into 0.3.  
