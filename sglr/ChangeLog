@@ -18,6 +18,9 @@
 
 $Id$
 
+* Tue Mar 28 14:04:09 MET DST 2000 (mdejonge @cwi.nl)
+  - No longer distribute DEVELOPERS-INFO
+
 * Thu Mar  2 20:44:51 MET 2000 (mdejong@cwi.nl)
 
   - sglr build/configuration now using automake
