@@ -1,5 +1,12 @@
 $Id$
 
+Tue Feb 22 16:48:01 CET 2005 <jurgenv@cwi.nl>
+ * languages/c/syntax/Simplified-C.sdf: Added a definition of C that 
+   maximally uses priorities, optionals and lists. Priorities for
+   specific arguments are exploited such that only one Expression sort
+   remains. The priorities of operators is not guaranteed to be ANSI
+   compliant. This needs to be investigated later.
+
 Wed Feb  9 09:15:20 CET 2005 <jurgenv@cwi.nl>
  * languages/asf/compiler: stored the fact that a builtin function has
    a side-effect attribute in the name of the function. Locate-Constants
