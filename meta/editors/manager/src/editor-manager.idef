@@ -24,6 +24,11 @@ in
       snd-msg(existing-editor(Name, EditorId))
     )
   +
+    rec-msg(get-editor-name(EditorId?)) .
+    snd-eval(EM, get-editor-name(EditorId)).
+    rec-value(EM, editor-name(Name?)).
+    snd-msg(editor-name(Name))
+  +
     rec-msg(get-editors-by-module(Name?)) .
     snd-eval(EM, get-editors-by-module(Name)) .
     rec-value(EM, editors-by-module(Editors?)) .
