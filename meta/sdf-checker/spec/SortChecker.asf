@@ -64,10 +64,6 @@ equations
           [symbols($Symbol*1), $Msgs1],
         get-hidden-declared-symbols($Module, [symbols(), {}], $ModuleId, symbols($Symbol*1 $Symbol*5)) = 
           [symbols($Symbol*2), $Msgs2],
-        %%get-exported-declared-symbols($Module, [symbols(),{}], $ModuleId, symbols()) = 
-        %%  [symbols($Symbol*1), $Msgs1],
-        %%get-hidden-declared-symbols($Module, [symbols(), {}], $ModuleId, symbols()) = 
-        %%  [symbols($Symbol*2), $Msgs2],
         get-used-symbols($Module, symbols()) = symbols($Symbol*3),
         get-defined-symbols($Module, symbols()) = symbols($Symbol*4),
 

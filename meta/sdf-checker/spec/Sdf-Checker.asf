@@ -50,6 +50,7 @@ equations
         check-imports(ImportsSet, Definition, InfoMsgTuple2) = InfoMsgTuple3,
 
         check-module-sorts(Module, InfoMsgTuple3) = InfoMsgTuple4,
-        check-module-prods(Module, InfoMsgTuple4) = InfoMsgTuple5
-        =========================================================
-        check-module(Module, Definition, InfoMsgTuple1) = InfoMsgTuple5
+        check-module-prods(Module, InfoMsgTuple4) = InfoMsgTuple5,
+        check-module-constructors(Module, InfoMsgTuple5) = InfoMsgTuple6
+        ================================================================
+        check-module(Module, Definition, InfoMsgTuple1) = InfoMsgTuple6

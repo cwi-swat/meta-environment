@@ -21,13 +21,14 @@ hiddens
 
 hiddens
   context-free syntax
-    check-priorities(Module, Messages, ModuleId)               -> Messages {traversal(accu, top-down)}
-    check-priorities(Priority, Messages, ModuleId)             -> Messages {traversal(accu, top-down)}
-    check-priorities(Group, Messages, ModuleId, Symbol)        -> Messages {traversal(accu, top-down)}
-    check-priorities({Group ">"}+, Messages, ModuleId, Symbol) -> Messages {traversal(accu, top-down)}
-    check-priorities(Production, Messages, ModuleId, Symbol)   -> Messages {traversal(accu, top-down)}
+    check-priorities(Module, Messages, ModuleId, ProductionsSet)               -> Messages {traversal(accu, top-down)}
+    check-priorities(Priority, Messages, ModuleId, ProductionsSet)             -> Messages {traversal(accu, top-down)}
+    check-priorities(Group, Messages, ModuleId, Symbol, ProductionsSet)        -> Messages {traversal(accu, top-down)}
+    check-priorities({Group ">"}+, Messages, ModuleId, Symbol, ProductionsSet) -> Messages {traversal(accu, top-down)}
+    check-priorities(Production, Messages, ModuleId, Symbol, ProductionsSet)   -> Messages {traversal(accu, top-down)}
     get-rhs-production(Group, SymbolsSet)                        -> SymbolsSet {traversal(accu, top-down)}
     get-rhs-production(Production, SymbolsSet)                   -> SymbolsSet {traversal(accu, top-down)}
+    is-injection-production(Symbol, Symbol, ProductionsSet) -> Bool
 
 
 hiddens

@@ -1,6 +1,6 @@
 module Sdf-Type-Environment
 
-imports Messages Booleans ImportOperations
+imports Messages Booleans ImportOperations ConstructorSetOperations
 
 exports
   sorts Info-Msg-Tuple Module-Info-Entry Module-Info-Table
@@ -18,7 +18,7 @@ exports
     put-messages(Messages, Info-Msg-Tuple)             -> Info-Msg-Tuple
 
   context-free syntax
-    "[" SymbolsSet "," ProductionsSet "]" -> Module-Info
+    "[" SymbolsSet "," ProductionsSet "," ConstructorSet "]" -> Module-Info
 
   context-free syntax
     "[" ModuleId "," Bool "," Module-Info "]" -> Module-Info-Entry
@@ -41,6 +41,13 @@ exports
                         Module-Info-Table)                 -> Module-Info-Table
     get-defined-productions(ImportsSet, Module-Info-Table) -> ProductionsSet
 
+  context-free syntax
+    get-constructors(ModuleId, Module-Info-Table)   -> ConstructorSet
+    put-constructor-info(ModuleId,
+                         ConstructorSet, 
+                         Module-Info-Table)         -> Module-Info-Table
+    get-constructors(ImportsSet, Module-Info-Table) -> ConstructorSet
+
 hiddens
   variables
     "Bool"[0-9]*             -> Bool
@@ -56,3 +63,5 @@ hiddens
     "Import*"[0-9]*          -> Import*
     "Production*"[0-9]*      -> Production*
     "ProductionsSet"[0-9]*   -> ProductionsSet
+    "ConstructorSet"[0-9]*   -> ConstructorSet
+    "SymbolCons*"[0-9]*      -> SymbolConsPair*
