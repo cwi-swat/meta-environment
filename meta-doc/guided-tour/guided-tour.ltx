@@ -1147,8 +1147,9 @@ disk.
 
 An editor for editing the syntax part of a module can be activated by
 pressing the {\tt Edit Syntax} button
-of the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane} or
-in the \link{Module Pane}[ (Section~\Ref)]{ModulePane}.
+of the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane},
+in the \link{Module Pane}[ (Section~\Ref)]{ModulePane}, or via an equation
+or term editor.
 An example is shown \link*{here}[ in Figure~\Ref]{FIG:Bool-example.sdf}.
 
 Initially the text is not highlighted, but the text has already
@@ -1168,36 +1169,41 @@ successful, the bottom line in the \emacs\ window displays the message
 {\tt Focus sort: None}. If the term contains an error, the cursor is
 located at the position where the error was detected and the bottom line
 in the \emacs\ window displays the message
-{\tt Parse error near cursor}. 
+{\tt Parse error near cursor}. When pushing the parse button the text
+will be saved first and then parsed.
 
 \subsection{Editing the Equations Section of a Module}
 
 An editor for editing the equations section of a module is activated
 via the button {\tt Edit Equations}
-in the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane} or
-in the \link{Module Pane}[ (Section~\Ref)]{ModulePane}.
+in the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane},
+in the \link{Module Pane}[ (Section~\Ref)]{ModulePane}, or via a
+syntax or term editor.
 An example is shown  \link*{here}[ in Figure \Ref]{FIG:Bool-example.asf}.
 
 The entry {\tt Parse} in the {\tt Actions} menu of the editor 
 activates the parser for the
 equations. It is possible that in order to parse the equations, a
-parse table must be generated. This is visible through the status
-message {\tt Generating parsetable <ModuleName>}.
+parse table must first be generated. This is visible through the status
+message {\tt Generating parsetable <ModuleName>}. When pushing the parse
+button the text will be saved first and then parsed.
 
 \subsection{Editing Terms}
 \label{EditingTerms}
 
 An editor for editing a term over a module is activated via the button
 {\tt Edit Term}
-in the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane} or
-in the \link{Module Pane}[ (Section~\Ref)]{ModulePane}.
-An example is shown  \link{here}[ in Figure~\Ref]{FIG:Bool-example.trm}.
+in the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane},
+in the \link{Module Pane}[ (Section~\Ref)]{ModulePane}, or via
+a syntax or equation editor.
+An example is shown \link{here}[ in Figure~\Ref]{FIG:Bool-example.trm}.
 
 The entry {\tt Parse} in the {\tt Actions} menu of the editor 
 activate the parser for this
 term. It is possible that in order to parse the term, a parse table
 must be generated. This is visible through the status message {\tt
-Generating parsetable <ModuleName>}.
+Generating parsetable <ModuleName>}. The parse action again
+involves saving of the text.
 
 The entry {\tt Reduce} in the {\tt Actions} menu of the
 editor activates the evaluator\footnote{We will also use interpreter,
@@ -1206,7 +1212,8 @@ interpreting, rewriting, reducing, or evaluating of a term, respectively}.
 The term is reduced given the specified equations (if any). 
 In order to reduce the term it may be necessary to parse the 
 equations of various modules and to initialize the evaluator 
-with this set of equations.
+with this set of equations. Note that, clicking on the reduce
+button does not always imply saving and parsing the text.
 
 When you have created a term (using a \link{term editor}[, see
 Section~\Ref]{EditingTerms}), 
@@ -1217,9 +1224,11 @@ form is reached (a term for which no applicable rule can be
 found). This normal form is the result of the execution and is
 displayed in a new term window.
 
-The entry {\tt ViewTree} in the {\tt Actions} menu of the term editor
+The entry {\tt View Tree} and {\tt View Full Tree} in i
+the {\tt Actions} menu of the term editor
 displays the parse tree of the focus, if any. The parse tree will be shown
-in the \link{{\tt parsetree} panel}[, see Figure~\Ref]{FIG:parsetree-panel}.
+in the \link{{\tt parsetree} panel}[, see Figure~\Ref]{FIG:parsetree-panel}
+or \link{{\tt parsetree} panel}[, see Figure~\Ref]{FIG:full-parsetree-panel}.
 
 \begin{figure}[t]
 \begin{center}
@@ -1251,52 +1260,71 @@ showing a more detailed version of the parsetree}
 \section{Error Messages}
 \label{SEC:ErrorMessages}
 
-Two categories of messages can be distinguished in the \ASmetaenv.
+There are various categories of messages in the \ASmetaenv.
 \begin{enumerate}
 \item Parse errors.
-\item Type check warnings.
+\item SDF type check warnings.
+\item SDF type check errors.
+\item ASF type check errors.
 \end{enumerate}
 
 \subsection{Parse Errors}
 There are three different types of parse errors:
 \begin{enumerate}
-\item A real syntax error, which is reported by pinpointing the exact
+\item A syntax error, which is reported by pinpointing the exact
 location in the file and the message {\tt Parse error near cursor} in case
 of an editor or in the message pane an error message similar to 
-{\tt Character <n> unexpected in <filename>, line <n>, column <n>}.
+{\tt Parse error: character '<c>' unexpected}.
 This means that the parser detected a syntax error in the text to be parsed
 and can not proceed its parsing process.
-A variant of the syntax error message is: {\tt EOF unexpected while parsing
-<filename>}.
+Clicking on the error in the {\tt Errors}-pane moves the cursor to the
+exact error location and launches if needed the editor.
+A variant of the syntax error message is: {\tt Parse error: eof
+unexpected}.
 
-\item A cycle error, in case of an editor the cursor is positioned at the
-position where the first cycle is detected in the input and the message is {\tt
-Parse returned a cycle: <cycle>} is printed.  A cycle is reported whenever
+\item A cycle, in case of an editor the cursor is positioned at the
+position where the first cycle is detected in the input and the message 
+is {\tt Cycle: <list\_of\_production\_rules>} is printed.  
+A cycle is reported whenever
 the parser detects a non terminating chain of reductions.
+The {\tt <list\_of\_production\_rules>} shows all production rules
+on the cycle.
 
-\item An ambiguity error, again in case of an editor the cursor is
+\item An ambiguity, again in case of an editor the cursor is
 positioned at the position where the first ambiguity is detected in the
-input and the message {\tt Parse of <filename> returned <n> ambiguity/ies}
+input and the message {\tt Ambiguity: <list\_of\_production\_rules>}
 is printed. An ambiguity is reported whenever the parser was able to
 recognized a (part of) the input sentence in different ways.
+The {\tt <list\_of\_production\_rules>} shows all production rules
+that are involved in the ambiguity.
 
 \end{enumerate}
 
-\subsection{Type Check Warnings}
-
-Type check warnings for plain \sdf.
+\subsection{SDF type Check Warnings}
 \begin{itemize}
-\item {\tt module-not-available}
-\item {\tt undeclared-symbols}
+\item {\tt undeclared sorts}
+\item {\tt start-symbols in <ModuleName> not defined in any right-hand}
 \item {\tt sorts-without-production-definitions}
-\item {\tt double-declared-symbol}
-\item {\tt aliased-symbol-already-declared}
-\item {\tt illegal-attribute}
-\item {\tt used-in-priorities-but-undefined}
-\item {\tt inconsistent-rhs-in-priorities}
-\item {\tt double-used-label}
-\item {\tt constructor-has-already-been-used}
-\item {\tt unknown-constructor-used-in-priorities}
+\item {\tt double declared symbol}
+\item {\tt double declared start-symbol}
+\item {\tt aliased symbol already declared}
+\item {\tt illegal attribute: \{bracket, left, right, assoc, non-assoc\}}
+\item {\tt used in priorities but undefined}
+\item {\tt inconsistent rhs in priorities}
+\item {\tt constructor has already been used}
+\item {\tt unknown constructor used in priorities}
+\item {\tt deprecated tuple notation}
+\item {\tt deprecated unquoted symbol notation}
+\item {\tt sort CHAR used in production rule}
+\item {\tt deprecated non-plain sort definition}
+\end{itemize}
+
+Type check errors for plain \sdf.
+\begin{itemize}
+\item {\tt module not available}
+\item {\tt literal in right-hand-side not allowed}
+\item {\tt only sort allowed in right-hand-side of lexical-function}
+\item {\tt double used label}
 \end{itemize}
 
 Type check warnings for \asfsdf.
