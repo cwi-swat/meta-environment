@@ -48,8 +48,7 @@ TESTS = $(foreach f, ${TEST_MODULES}, $f.asfe.sh $f.asfc.sh $f.diff.sh ) \
 	 echo '  ${ASFE} -l -e ${EQS}/$*.eqs -i $$i | \'; \
          echo '  ${ATRMANNOS} -a -o `basename $$i`.asfe.out ' ; \
          echo '  ${ATDIFF} `basename $$i`.asfe.out ${OUT}/`basename $$i`' ; \
-	 echo 'done' ;\
-         echo 'printf "\n"' ) > $@ && chmod +x $@
+	 echo 'done' ) > $@ && chmod +x $@
 
 %.asfc.sh: 
 	(echo 'set -e' ; \
@@ -57,5 +56,4 @@ TESTS = $(foreach f, ${TEST_MODULES}, $f.asfe.sh $f.asfc.sh $f.diff.sh ) \
 	 echo 'for i in ${IN}/$*.*.pt; do ' ;\
 	 echo ' $* -i $$i -o `basename $$i`.asfc.out '; \
          echo ' ${ATDIFF} `basename $$i`.asfc.out ${OUT}/`basename $$i` '; \
-         echo 'done' ; \
-         echo 'printf "\n"') > $@ && chmod +x $@
+         echo 'done' ) > $@ && chmod +x $@
