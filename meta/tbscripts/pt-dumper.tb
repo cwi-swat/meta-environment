@@ -17,6 +17,7 @@
 #include "parsetablegen.idef"
 #include "asf-syntax.tb"
 #include "addeqssyntax.idef"
+#include "addapisyntax.idef"
 #include "removevarsyntax.idef"
 #include "configmanager.idef"
 #include "textual-error-display.tb"
@@ -41,5 +42,5 @@ toolbus(META, Parser, Unparser, Io, ConfigManager, StandalonePtDumper,
         ModuleDB, File-creator, SdfChecker, DisplayErrors,
 	Set-parsetable, GetParseTable, Open-Sdf2-Language, 
 	Asf-Syntax, RemoveVars, Open-modules, PGen, DumpParseTable, 
-        Status-display) 
+        Status-display, AddAPISyn) 
 
