@@ -1,5 +1,11 @@
 
 
+Fri Feb  4 16:33:56 CET 2005 <jurgenv@cwi.nl>
+ * Compiler adapted such that constant lists are not translated to
+   nested if-then-else, but to constant terms that are compared with
+   term_equal.
+ * Recompiler compiler and ASF-Normalization with the new compiler.
+
 Tue Feb  1 17:51:04 CET 2005 <jurgenv@cwi.nl>
  * Changed ASF-Normalizer to deal with annotated specifications
  * Regenerated it, now the tide debugger can be used again
