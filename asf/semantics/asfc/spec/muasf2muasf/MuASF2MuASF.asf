@@ -1,6 +1,7 @@
 equations
 
 [m2m-1'1]
+Module1 = module Modid signature Funcdef+ rules Rule+,
 find-constructors(Module1,Nametable) = (Module2, Nametable2),
 add-list-cons(Module2) = Module3,
 optimize-muasf(Module3,Nametable2) = <Module4, Nametable3>,
@@ -10,3 +11,6 @@ remove-list-matching(Module6) = Module7,
 normalize-conditions(Module7) = Module8
 ===>
 muasf2muasf(Module1, Nametable) =  (Module8, Nametable3)
+
+[default]
+muasf2muasf(Module, Nametable) = (Module,Nametable)

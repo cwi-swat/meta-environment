@@ -737,6 +737,10 @@ MA_SignatureOpt indexedSetToSignatureOpt(ATermIndexedSet funcdefs)
   ATermList list = ATindexedSetElements(funcdefs);
   MA_FuncDefElems elems = NULL;
 
+  if (ATisEmpty(list)) {
+    return MA_makeSignatureOptAbsent();
+  }
+
   for(;!ATisEmpty(list); list = ATgetNext(list)) {
     MA_FuncDef def = MA_FuncDefFromTerm(ATgetFirst(list));
 
@@ -765,7 +769,13 @@ MA_Module asfToMuASF(char *name, ASF_CondEquationList equations)
 
   initLayoutAbbreviations();
 
-  maRules = condEquationListToRulesOpt(equations, funcdefs); 
+  if (ASF_isCondEquationListEmpty(equations)) {
+    maRules = MA_makeRulesOptAbsent();
+  } 
+  else {
+    maRules = condEquationListToRulesOpt(equations, funcdefs); 
+  }
+
   maSignature = indexedSetToSignatureOpt(funcdefs);
   maName = makeModId(name);
 

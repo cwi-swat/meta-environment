@@ -12,6 +12,9 @@ muasf2nametable(module modid(Char*) Signopt Rulesopt) = (Module2, Nametable)
 rename-signatureopt(signature Funcdef*, Nametable) = 
 signature rename-funcdeflist(Funcdef*, Nametable)
 
+[rn-0-2]
+rename-signatureopt(,Nametable) =
+
 [rn-1]
 rename-funcdeflist(, Nametable) = 
 
@@ -41,6 +44,9 @@ pn-lookup(normal-prod(Funid),Namepair*)
 
 [rn-8]
 rename-rulesopt(rules Rule*,Nametable) = rules rename-rulelist(Rule*,Nametable)
+
+[rn-8-2]
+rename-rulesopt(,Nametable) = 
 
 [rn-9]
 rename-rulelist(,Nametable) =
