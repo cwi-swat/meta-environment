@@ -29,7 +29,7 @@ RegressGenTable () {
 	        	Notify Comparing $ptbl...
 	                if $COMPARE $ptbl $reference/$ptbl	>/dev/null 2>&1
 	                then
-		                Notify "Regress test for $1 successful"
+		                Notify "Regress test for $1 succeeded"
 		                rm -f $ptbl
 			        diffs=0
 	                fi
