@@ -13,6 +13,8 @@ static Symbol ef11sym;
 static funcptr ef11;
 static Symbol ef12sym;
 static funcptr ef12;
+static Symbol ef13sym;
+static funcptr ef13;
 static Symbol ef1sym;
 static funcptr ef1;
 static Symbol ef2sym;
@@ -62,10 +64,12 @@ ef9= lookup_func( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"integer-co
 ef9sym= lookup_sym( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"integer-constant\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Integer-constant\"),w(\"\"),no-attrs)"));
 ef10= lookup_func( ATreadFromString( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Primary-expression\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)"));
 ef10sym= lookup_sym( ATreadFromString( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Primary-expression\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Primary-expression\"),w(\"\"),no-attrs)"));
-ef11= lookup_func( ATreadFromString( "prod(id(\"ANumerals\"),w(\"\"),[l(\"succ\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"AInt\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AInt\"),w(\"\"),no-attrs)"));
-ef11sym= lookup_sym( ATreadFromString( "prod(id(\"ANumerals\"),w(\"\"),[l(\"succ\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"AInt\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AInt\"),w(\"\"),no-attrs)"));
-ef12= lookup_func( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"aint\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AInt\"),w(\"\"),no-attrs)"));
-ef12sym= lookup_sym( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"aint\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AInt\"),w(\"\"),no-attrs)"));
+ef11= lookup_func( ATreadFromString( "prod(id(\"ANumerals\"),w(\"\"),[l(\"succ\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"IntCon\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)"));
+ef11sym= lookup_sym( ATreadFromString( "prod(id(\"ANumerals\"),w(\"\"),[l(\"succ\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"IntCon\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)"));
+ef12= lookup_func( ATreadFromString( "prod(id(\"IntCon\"),w(\"\"),[sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)"));
+ef12sym= lookup_sym( ATreadFromString( "prod(id(\"IntCon\"),w(\"\"),[sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)"));
+ef13= lookup_func( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"natcon\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)"));
+ef13sym= lookup_sym( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"natcon\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)"));
 }
 static ATerm constant0= NULL;
 static ATerm constant1= NULL;
@@ -336,12 +340,15 @@ if( check_sym( tmp[ 17] , ef9sym)) {
 tmp[ 18]= arg_0( tmp[ 17]);
 if( check_sym( tmp[ 18] , lf2sym)) {
 tmp[ 19]= arg_0( tmp[ 18]);
-tmp[ 20]= ( * ef11)( ( * ef12)( lf2( make_list( tmp[ 19]))));
+tmp[ 20]= ( * ef11)( ( * ef12)( ( * ef13)( lf2( make_list( tmp[ 19])))));
 if( check_sym( tmp[ 20] , ef12sym)) {
 tmp[ 21]= arg_0( tmp[ 20]);
-if( check_sym( tmp[ 21] , lf2sym)) {
+if( check_sym( tmp[ 21] , ef13sym)) {
 tmp[ 22]= arg_0( tmp[ 21]);
-return ( * ef1)( ( * ef7)( ( constant0? constant0: ( constant0= ( * ef5)( lf2( (ATerm) ATmakeList( 5 , char_table[ 65] , char_table[ 84] , char_table[ 101] , char_table[ 114] , char_table[ 109]))))) , ( * ef3)( ( constant1? constant1: ( constant1= ( * ef4)( ( * ef5)( lf2( (ATerm) ATmakeList( 10 , char_table[ 65] , char_table[ 84] , char_table[ 109] , char_table[ 97] , char_table[ 107] , char_table[ 101] , char_table[ 76] , char_table[ 105] , char_table[ 115] , char_table[ 116])))))) , ( * ef6)( lf3( cons( make_list( ( * ef1)( ( * ef2)( ( * ef8)( ( * ef9)( lf2( make_list( tmp[ 22]))))))) , cons( make_list( ( * ef1)( ( * ef2)( ( * ef10)( ( constant3? constant3: ( constant3= ( * ef4)( ( * ef5)( lf2( (ATerm) ATmakeList( 10 , char_table[ 99] , char_table[ 104] , char_table[ 97] , char_table[ 114] , char_table[ 95] , char_table[ 116] , char_table[ 97] , char_table[ 98] , char_table[ 108] , char_table[ 101])))))) , arg0)))) , make_list( tmp[ 14]))))))));
+if( check_sym( tmp[ 22] , lf2sym)) {
+tmp[ 23]= arg_0( tmp[ 22]);
+return ( * ef1)( ( * ef7)( ( constant0? constant0: ( constant0= ( * ef5)( lf2( (ATerm) ATmakeList( 5 , char_table[ 65] , char_table[ 84] , char_table[ 101] , char_table[ 114] , char_table[ 109]))))) , ( * ef3)( ( constant1? constant1: ( constant1= ( * ef4)( ( * ef5)( lf2( (ATerm) ATmakeList( 10 , char_table[ 65] , char_table[ 84] , char_table[ 109] , char_table[ 97] , char_table[ 107] , char_table[ 101] , char_table[ 76] , char_table[ 105] , char_table[ 115] , char_table[ 116])))))) , ( * ef6)( lf3( cons( make_list( ( * ef1)( ( * ef2)( ( * ef8)( ( * ef9)( lf2( make_list( tmp[ 23]))))))) , cons( make_list( ( * ef1)( ( * ef2)( ( * ef10)( ( constant3? constant3: ( constant3= ( * ef4)( ( * ef5)( lf2( (ATerm) ATmakeList( 10 , char_table[ 99] , char_table[ 104] , char_table[ 97] , char_table[ 114] , char_table[ 95] , char_table[ 116] , char_table[ 97] , char_table[ 98] , char_table[ 108] , char_table[ 101])))))) , arg0)))) , make_list( tmp[ 14]))))))));
+}
 }
 }
 }

@@ -6,15 +6,15 @@ static ATerm lf_AUX_Booleans1_2( );
 static Symbol lf_AUX_Booleans1_3sym;
 static ATerm lf_AUX_Booleans1_3( ATerm arg1);
 void register_AUX_Booleans1( ) {
-lf_AUX_Booleans1_1sym= ATmakeSymbol( "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
+lf_AUX_Booleans1_1sym= ATmakeSymbol( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
  , 0 , ATtrue);
 ATprotectSymbol( lf_AUX_Booleans1_1sym);
-lf_AUX_Booleans1_2sym= ATmakeSymbol( "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" , 0 , ATtrue);
+lf_AUX_Booleans1_2sym= ATmakeSymbol( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" , 0 , ATtrue);
 ATprotectSymbol( lf_AUX_Booleans1_2sym);
 lf_AUX_Booleans1_3sym= ATmakeSymbol( "prod(id(\"Booleans\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Bool\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"bracket\")],w(\"\"),l(\"}\")))" , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_Booleans1_3sym);
-register_prod( ATparse( "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_Booleans1_1 , lf_AUX_Booleans1_1sym);
-register_prod( ATparse( "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_Booleans1_2 , lf_AUX_Booleans1_2sym);
+register_prod( ATparse( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_Booleans1_1 , lf_AUX_Booleans1_1sym);
+register_prod( ATparse( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_Booleans1_2 , lf_AUX_Booleans1_2sym);
 register_prod( ATparse( "prod(id(\"Booleans\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Bool\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"bracket\")],w(\"\"),l(\"}\")))") , lf_AUX_Booleans1_3 , lf_AUX_Booleans1_3sym);
 }
 void resolve_AUX_Booleans1( ) {

@@ -5,10 +5,10 @@ static Symbol ef1sym;
 static funcptr ef1;
 static Symbol ef3sym;
 static funcptr ef3;
-static Symbol ef4sym;
-static funcptr ef4;
 static Symbol ef2sym;
 static funcptr ef2;
+static Symbol ef4sym;
+static funcptr ef4;
 static Symbol lf2sym;
 static ATerm lf2( ATerm arg1);
 static Symbol ef5sym;
@@ -29,8 +29,8 @@ ef2= lookup_func( ATreadFromString( "prod(id(\"ATermPrint\"),w(\"\"),[l(\"print\
 ef2sym= lookup_sym( ATreadFromString( "prod(id(\"ATermPrint\"),w(\"\"),[l(\"print\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)"));
 ef3= lookup_func( ATreadFromString( "prod(id(\"ATerms\"),w(\"\"),[sort(\"ATerm\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"ATerms\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerms\"),w(\"\"),no-attrs)"));
 ef3sym= lookup_sym( ATreadFromString( "prod(id(\"ATerms\"),w(\"\"),[sort(\"ATerm\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"ATerms\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerms\"),w(\"\"),no-attrs)"));
-ef4= lookup_func( ATreadFromString( "prod(id(\"Literals\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))"));
-ef4sym= lookup_sym( ATreadFromString( "prod(id(\"Literals\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))"));
+ef4= lookup_func( ATreadFromString( "prod(id(\"Literals\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))"));
+ef4sym= lookup_sym( ATreadFromString( "prod(id(\"Literals\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))"));
 ef5= lookup_func( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)"));
 ef5sym= lookup_sym( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)"));
 }
@@ -51,7 +51,7 @@ if( check_sym( arg0 , ef3sym)) {
 ATerm atmp00= arg_0( arg0);
 {
 ATerm atmp01= arg_1( arg0);
-return ( * ef4)( ( * ef4)( ( * ef2)( atmp00) , ( constant0? constant0: ( constant0= ( * ef5)( lf2( (ATerm) ATmakeList( 3 , char_table[ 34] , char_table[ 44] , char_table[ 34])))))) , lf_AUX_ATermPrint3_1( atmp01));
+return ( * ef4)( ( * ef2)( atmp00) , ( * ef4)( ( constant0? constant0: ( constant0= ( * ef5)( lf2( (ATerm) ATmakeList( 3 , char_table[ 34] , char_table[ 44] , char_table[ 34]))))) , lf_AUX_ATermPrint3_1( atmp01)));
 }
 }
 }

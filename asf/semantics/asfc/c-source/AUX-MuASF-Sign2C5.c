@@ -47,10 +47,10 @@ static Symbol ef29sym;
 static funcptr ef29;
 static Symbol ef30sym;
 static funcptr ef30;
-static Symbol ef38sym;
-static funcptr ef38;
 static Symbol ef39sym;
 static funcptr ef39;
+static Symbol ef40sym;
+static funcptr ef40;
 static Symbol ef32sym;
 static funcptr ef32;
 static Symbol lf8sym;
@@ -91,10 +91,12 @@ static Symbol ef36sym;
 static funcptr ef36;
 static Symbol lf9sym;
 static ATerm lf9( ATerm arg1);
-static Symbol lf3sym;
-static ATerm lf3( ATerm arg1);
 static Symbol ef37sym;
 static funcptr ef37;
+static Symbol lf3sym;
+static ATerm lf3( ATerm arg1);
+static Symbol ef38sym;
+static funcptr ef38;
 void register_AUX_MuASF_Sign2C5( ) {
 lf_AUX_MuASF_Sign2C5_2sym= ATmakeSymbol( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[l(\"funcdef2cfuncs\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FTS-tuple\"),w(\"\"),no-attrs)"
  , 2 , ATtrue);
@@ -182,8 +184,8 @@ ef27= lookup_func( ATreadFromString( "prod(id(\"VarEnv\"),w(\"\"),[l(\"pn-lookup
 ef27sym= lookup_sym( ATreadFromString( "prod(id(\"VarEnv\"),w(\"\"),[l(\"pn-lookup\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
 ef28= lookup_func( ATreadFromString( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"is-list-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
 ef28sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"is-list-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef29= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef29sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef29= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef29sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
 ef30= lookup_func( ATreadFromString( "prod(id(\"VarEnv\"),w(\"\"),[l(\"np-lookup\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
 ef30sym= lookup_sym( ATreadFromString( "prod(id(\"VarEnv\"),w(\"\"),[l(\"np-lookup\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"));
 ef31= lookup_func( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),sort(\"Props\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)"));
@@ -196,14 +198,16 @@ ef34= lookup_func( ATreadFromString( "prod(id(\"Pure-C\"),w(\"\"),[],w(\"\"),l(\
 ef34sym= lookup_sym( ATreadFromString( "prod(id(\"Pure-C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)"));
 ef35= lookup_func( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)"));
 ef35sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)"));
-ef36= lookup_func( ATreadFromString( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[l(\"sigargs2cargs\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),l(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Parameter-list\"),w(\"\"),no-attrs)"));
-ef36sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[l(\"sigargs2cargs\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),l(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Parameter-list\"),w(\"\"),no-attrs)"));
-ef37= lookup_func( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"aint\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AInt\"),w(\"\"),no-attrs)"));
-ef37sym= lookup_sym( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"aint\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AInt\"),w(\"\"),no-attrs)"));
-ef38= lookup_func( ATreadFromString( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[l(\"countsigargs\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AInt\"),w(\"\"),no-attrs)"));
-ef38sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[l(\"countsigargs\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AInt\"),w(\"\"),no-attrs)"));
-ef39= lookup_func( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\"),w(\"\"),sort(\"Props\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)"));
-ef39sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\"),w(\"\"),sort(\"Props\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)"));
+ef36= lookup_func( ATreadFromString( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[l(\"sigargs2cargs\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),l(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Parameter-list\"),w(\"\"),no-attrs)"));
+ef36sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[l(\"sigargs2cargs\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),l(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Parameter-list\"),w(\"\"),no-attrs)"));
+ef37= lookup_func( ATreadFromString( "prod(id(\"IntCon\"),w(\"\"),[sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)"));
+ef37sym= lookup_sym( ATreadFromString( "prod(id(\"IntCon\"),w(\"\"),[sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)"));
+ef38= lookup_func( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"natcon\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)"));
+ef38sym= lookup_sym( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"natcon\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)"));
+ef39= lookup_func( ATreadFromString( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[l(\"countsigargs\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)"));
+ef39sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[l(\"countsigargs\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)"));
+ef40= lookup_func( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\"),w(\"\"),sort(\"Props\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)"));
+ef40sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\"),w(\"\"),sort(\"Props\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)"));
 }
 static ATerm constant0= NULL;
 static ATerm constant1= NULL;
@@ -443,7 +447,7 @@ if( check_sym( tmp[ 4] , ef2sym)) {
 tmp[ 5]= arg_0( tmp[ 4]);
 if( check_sym( tmp[ 5] , lf3sym)) {
 tmp[ 6]= arg_0( tmp[ 5]);
-tmp[ 7]= ( * ef36)( lf9( make_list( atmp010)) , ( constant25? constant25: ( constant25= ( * ef37)( lf3( make_list( make_char( 49)))))));
+tmp[ 7]= ( * ef36)( lf9( make_list( atmp010)) , ( constant25? constant25: ( constant25= ( * ef37)( ( * ef38)( lf3( make_list( make_char( 49))))))));
 return ( * ef3)( lf4( make_list( ( * ef35)( ( * ef2)( lf3( make_list( tmp[ 6]))) , lf9( make_list( atmp010))))) , ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( constant3? constant3: ( constant3= ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( (ATerm) ATmakeList( 6 , char_table[ 83] , char_table[ 121] , char_table[ 109] , char_table[ 98] , char_table[ 111] , char_table[ 108])))))))))) , ( * ef12)( ( * ef11)( lf3( cons( make_list( tmp[ 6]) , ( constant4? constant4: ( constant4= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109]))))))))) , ( * ef7)( ( constant5? constant5: ( constant5= ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( (ATerm) ATmakeList( 5 , char_table[ 65] , char_table[ 84] , char_table[ 101] , char_table[ 114] , char_table[ 109])))))))))) , ( * ef13)( ( * ef11)( lf3( make_list( tmp[ 6]))) , tmp[ 7])))) , ( * ef15)( ( * ef16)( ( * ef17)( ( * ef18)( ( * ef19)( ( * ef20)( ( * ef21)( ( * ef22)( ( * ef11)( lf3( cons( make_list( tmp[ 6]) , ( constant4? constant4: ( constant4= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109]))))))))) , ( * ef20)( ( * ef21)( ( * ef23)( ( constant7? constant7: ( constant7= ( * ef22)( ( * ef11)( lf3( (ATerm) ATmakeList( 12 , char_table[ 65] , char_table[ 84] , char_table[ 109] , char_table[ 97] , char_table[ 107] , char_table[ 101] , char_table[ 83] , char_table[ 121] , char_table[ 109] , char_table[ 98] , char_table[ 111] , char_table[ 108])))))) , ( * ef24)( lf7( cons( make_list( ( * ef20)( ( * ef21)( ( * ef22)( ( * ef11)( lf3( cons( ( constant8? constant8: ( constant8= make_list_char( 34))) , cons( ( constant9? constant9: ( constant9= make_list_char( 108))) , cons( ( constant10? constant10: ( constant10= make_list_char( 105))) , cons( ( constant11? constant11: ( constant11= make_list_char( 115))) , cons( ( constant12? constant12: ( constant12= make_list_char( 116))) , cons( ( constant12? constant12: ( constant12= make_list_char( 116))) , cons( ( constant13? constant13: ( constant13= make_list_char( 121))) , cons( ( constant14? constant14: ( constant14= make_list_char( 112))) , cons( ( constant15? constant15: ( constant15= make_list_char( 101))) , cons( ( constant16? constant16: ( constant16= make_list_char( 40))) , cons( make_list( tmp[ 3]) , ( constant17? constant17: ( constant17= (ATerm) ATmakeList( 2 , char_table[ 41] , char_table[ 34])))))))))))))))))))) , ( constant18? constant18: ( constant18= cons( make_list( ( * ef20)( ( * ef21)( ( * ef25)( ( * ef26)( lf3( make_list( make_char( 49)))))))) , make_list( ( * ef20)( ( * ef21)( ( * ef22)( ( * ef11)( lf3( (ATerm) ATmakeList( 6 , char_table[ 65] , char_table[ 84] , char_table[ 116] , char_table[ 114] , char_table[ 117] , char_table[ 101]))))))))))))))))))) , ( * ef18)( ( * ef20)( ( * ef21)( ( * ef23)( ( constant19? constant19: ( constant19= ( * ef22)( ( * ef11)( lf3( (ATerm) ATmakeList( 15 , char_table[ 65] , char_table[ 84] , char_table[ 112] , char_table[ 114] , char_table[ 111] , char_table[ 116] , char_table[ 101] , char_table[ 99] , char_table[ 116] , char_table[ 83] , char_table[ 121] , char_table[ 109] , char_table[ 98] , char_table[ 111] , char_table[ 108])))))) , ( * ef24)( lf7( make_list( ( * ef20)( ( * ef21)( ( * ef22)( ( * ef11)( lf3( cons( make_list( tmp[ 6]) , ( constant4? constant4: ( constant4= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109])))))))))))))))))));
 }
 }
@@ -463,13 +467,15 @@ if( check_sym( tmp[ 0] , ef2sym)) {
 tmp[ 1]= arg_0( tmp[ 0]);
 if( check_sym( tmp[ 1] , lf3sym)) {
 tmp[ 2]= arg_0( tmp[ 1]);
-tmp[ 3]= ( * ef36)( lf9( make_list( atmp010)) , ( constant25? constant25: ( constant25= ( * ef37)( lf3( make_list( make_char( 49)))))));
-tmp[ 4]= ( * ef38)( lf9( make_list( atmp010)));
+tmp[ 3]= ( * ef36)( lf9( make_list( atmp010)) , ( constant25? constant25: ( constant25= ( * ef37)( ( * ef38)( lf3( make_list( make_char( 49))))))));
+tmp[ 4]= ( * ef39)( lf9( make_list( atmp010)));
 if( check_sym( tmp[ 4] , ef37sym)) {
 tmp[ 5]= arg_0( tmp[ 4]);
-if( check_sym( tmp[ 5] , lf3sym)) {
+if( check_sym( tmp[ 5] , ef38sym)) {
 tmp[ 6]= arg_0( tmp[ 5]);
-return ( * ef3)( lf4( make_list( ( * ef35)( ( * ef2)( lf3( make_list( atmp0000))) , lf9( make_list( atmp010))))) , ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( constant3? constant3: ( constant3= ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( (ATerm) ATmakeList( 6 , char_table[ 83] , char_table[ 121] , char_table[ 109] , char_table[ 98] , char_table[ 111] , char_table[ 108])))))))))) , ( * ef12)( ( * ef11)( lf3( cons( make_list( atmp0000) , ( constant4? constant4: ( constant4= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109]))))))))) , ( * ef7)( ( constant5? constant5: ( constant5= ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( (ATerm) ATmakeList( 5 , char_table[ 65] , char_table[ 84] , char_table[ 101] , char_table[ 114] , char_table[ 109])))))))))) , ( * ef13)( ( * ef11)( lf3( make_list( atmp0000))) , tmp[ 3])))) , ( * ef15)( ( * ef16)( ( * ef17)( ( * ef18)( ( * ef19)( ( * ef20)( ( * ef21)( ( * ef22)( ( * ef11)( lf3( cons( make_list( atmp0000) , ( constant4? constant4: ( constant4= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109]))))))))) , ( * ef20)( ( * ef21)( ( * ef23)( ( constant7? constant7: ( constant7= ( * ef22)( ( * ef11)( lf3( (ATerm) ATmakeList( 12 , char_table[ 65] , char_table[ 84] , char_table[ 109] , char_table[ 97] , char_table[ 107] , char_table[ 101] , char_table[ 83] , char_table[ 121] , char_table[ 109] , char_table[ 98] , char_table[ 111] , char_table[ 108])))))) , ( * ef24)( lf7( cons( make_list( ( * ef20)( ( * ef21)( ( * ef22)( ( * ef11)( lf3( make_list( tmp[ 2]))))))) , cons( make_list( ( * ef20)( ( * ef21)( ( * ef25)( ( * ef26)( lf3( make_list( tmp[ 6]))))))) , ( constant26? constant26: ( constant26= make_list( ( * ef20)( ( * ef21)( ( * ef22)( ( * ef11)( lf3( (ATerm) ATmakeList( 6 , char_table[ 65] , char_table[ 84] , char_table[ 116] , char_table[ 114] , char_table[ 117] , char_table[ 101]))))))))))))))))))) , ( * ef18)( ( * ef20)( ( * ef21)( ( * ef23)( ( constant19? constant19: ( constant19= ( * ef22)( ( * ef11)( lf3( (ATerm) ATmakeList( 15 , char_table[ 65] , char_table[ 84] , char_table[ 112] , char_table[ 114] , char_table[ 111] , char_table[ 116] , char_table[ 101] , char_table[ 99] , char_table[ 116] , char_table[ 83] , char_table[ 121] , char_table[ 109] , char_table[ 98] , char_table[ 111] , char_table[ 108])))))) , ( * ef24)( lf7( make_list( ( * ef20)( ( * ef21)( ( * ef22)( ( * ef11)( lf3( cons( make_list( atmp0000) , ( constant4? constant4: ( constant4= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109])))))))))))))))))));
+if( check_sym( tmp[ 6] , lf3sym)) {
+tmp[ 7]= arg_0( tmp[ 6]);
+return ( * ef3)( lf4( make_list( ( * ef35)( ( * ef2)( lf3( make_list( atmp0000))) , lf9( make_list( atmp010))))) , ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( constant3? constant3: ( constant3= ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( (ATerm) ATmakeList( 6 , char_table[ 83] , char_table[ 121] , char_table[ 109] , char_table[ 98] , char_table[ 111] , char_table[ 108])))))))))) , ( * ef12)( ( * ef11)( lf3( cons( make_list( atmp0000) , ( constant4? constant4: ( constant4= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109]))))))))) , ( * ef7)( ( constant5? constant5: ( constant5= ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( (ATerm) ATmakeList( 5 , char_table[ 65] , char_table[ 84] , char_table[ 101] , char_table[ 114] , char_table[ 109])))))))))) , ( * ef13)( ( * ef11)( lf3( make_list( atmp0000))) , tmp[ 3])))) , ( * ef15)( ( * ef16)( ( * ef17)( ( * ef18)( ( * ef19)( ( * ef20)( ( * ef21)( ( * ef22)( ( * ef11)( lf3( cons( make_list( atmp0000) , ( constant4? constant4: ( constant4= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109]))))))))) , ( * ef20)( ( * ef21)( ( * ef23)( ( constant7? constant7: ( constant7= ( * ef22)( ( * ef11)( lf3( (ATerm) ATmakeList( 12 , char_table[ 65] , char_table[ 84] , char_table[ 109] , char_table[ 97] , char_table[ 107] , char_table[ 101] , char_table[ 83] , char_table[ 121] , char_table[ 109] , char_table[ 98] , char_table[ 111] , char_table[ 108])))))) , ( * ef24)( lf7( cons( make_list( ( * ef20)( ( * ef21)( ( * ef22)( ( * ef11)( lf3( make_list( tmp[ 2]))))))) , cons( make_list( ( * ef20)( ( * ef21)( ( * ef25)( ( * ef26)( lf3( make_list( tmp[ 7]))))))) , ( constant26? constant26: ( constant26= make_list( ( * ef20)( ( * ef21)( ( * ef22)( ( * ef11)( lf3( (ATerm) ATmakeList( 6 , char_table[ 65] , char_table[ 84] , char_table[ 116] , char_table[ 114] , char_table[ 117] , char_table[ 101]))))))))))))))))))) , ( * ef18)( ( * ef20)( ( * ef21)( ( * ef23)( ( constant19? constant19: ( constant19= ( * ef22)( ( * ef11)( lf3( (ATerm) ATmakeList( 15 , char_table[ 65] , char_table[ 84] , char_table[ 112] , char_table[ 114] , char_table[ 111] , char_table[ 116] , char_table[ 101] , char_table[ 99] , char_table[ 116] , char_table[ 83] , char_table[ 121] , char_table[ 109] , char_table[ 98] , char_table[ 111] , char_table[ 108])))))) , ( * ef24)( lf7( make_list( ( * ef20)( ( * ef21)( ( * ef22)( ( * ef11)( lf3( cons( make_list( atmp0000) , ( constant4? constant4: ( constant4= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109])))))))))))))))))));
 }
 }
 }
@@ -487,7 +493,8 @@ return ( * ef3)( lf4( make_list( ( * ef35)( ( * ef2)( lf3( make_list( atmp0000))
 }
 }
 }
-if( check_sym( arg0 , ef39sym)) {
+}
+if( check_sym( arg0 , ef40sym)) {
 {
 ATerm atmp00= arg_0( arg0);
 if( check_sym( atmp00 , ef2sym)) {
@@ -544,7 +551,7 @@ if( term_equal( list_head( tmp[ 9]) , make_char( 97))) {
 tmp[ 10]= list_tail( tmp[ 9]);
 if( is_single_element( tmp[ 10])) {
 if( term_equal( list_head( tmp[ 10]) , make_char( 108))) {
-tmp[ 11]= ( * ef36)( lf9( make_list( atmp010)) , ( constant25? constant25: ( constant25= ( * ef37)( lf3( make_list( make_char( 49)))))));
+tmp[ 11]= ( * ef36)( lf9( make_list( atmp010)) , ( constant25? constant25: ( constant25= ( * ef37)( ( * ef38)( lf3( make_list( make_char( 49))))))));
 return ( * ef3)( ( constant22? constant22: ( constant22= lf4( make_list( null( ))))) , ( * ef4)( ( * ef5)( ( * ef6)( ( * ef7)( ( constant3? constant3: ( constant3= ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( (ATerm) ATmakeList( 6 , char_table[ 83] , char_table[ 121] , char_table[ 109] , char_table[ 98] , char_table[ 111] , char_table[ 108])))))))))) , ( * ef12)( ( * ef11)( lf3( cons( make_list( atmp0000) , ( constant4? constant4: ( constant4= (ATerm) ATmakeList( 3 , char_table[ 115] , char_table[ 121] , char_table[ 109]))))))))) , ( * ef7)( ( constant23? constant23: ( constant23= ( * ef8)( lf5( cons( make_list( ( * ef9)( )) , make_list( ( * ef10)( ( * ef11)( lf3( (ATerm) ATmakeList( 7 , char_table[ 102] , char_table[ 117] , char_table[ 110] , char_table[ 99] , char_table[ 112] , char_table[ 116] , char_table[ 114])))))))))) , ( * ef12)( ( * ef11)( lf3( make_list( atmp0000))))))) , ( constant24? constant24: ( constant24= ( * ef34)( ))));
 }
 }

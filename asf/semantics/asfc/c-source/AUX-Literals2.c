@@ -6,12 +6,12 @@ static funcptr ef1;
 static Symbol lf2sym;
 static ATerm lf2( ATerm arg1);
 void register_AUX_Literals2( ) {
-lf_AUX_Literals2_1sym= ATmakeSymbol( "prod(id(\"Literals\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))"
+lf_AUX_Literals2_1sym= ATmakeSymbol( "prod(id(\"Literals\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))"
  , 2 , ATtrue);
 ATprotectSymbol( lf_AUX_Literals2_1sym);
 lf2sym= ATmakeSymbol( "listtype(sort(\"CHAR\"))" , 1 , ATtrue);
 ATprotectSymbol( lf2sym);
-register_prod( ATparse( "prod(id(\"Literals\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))") , lf_AUX_Literals2_1 , lf_AUX_Literals2_1sym);
+register_prod( ATparse( "prod(id(\"Literals\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))") , lf_AUX_Literals2_1 , lf_AUX_Literals2_1sym);
 register_prod( ATparse( "listtype(sort(\"CHAR\"))") , lf2 , lf2sym);
 }
 void resolve_AUX_Literals2( ) {

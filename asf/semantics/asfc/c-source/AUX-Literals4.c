@@ -19,24 +19,22 @@ register_prod( ATparse( "listtype(sort(\"CHAR\"))") , lf2 , lf2sym);
 void resolve_AUX_Literals4( ) {
 ef1= lookup_func( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)"));
 ef1sym= lookup_sym( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)"));
-ef2= lookup_func( ATreadFromString( "prod(id(\"Literals\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))"));
-ef2sym= lookup_sym( ATreadFromString( "prod(id(\"Literals\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))"));
+ef2= lookup_func( ATreadFromString( "prod(id(\"Literals\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))"));
+ef2sym= lookup_sym( ATreadFromString( "prod(id(\"Literals\"),w(\"\"),[sort(\"Literal\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))"));
 }
 static ATerm constant0= NULL;
 static ATerm constant1= NULL;
 static ATerm constant2= NULL;
 static ATerm constant3= NULL;
-static ATerm constant4= NULL;
 void init_AUX_Literals4( ) {
 ATprotect( & constant0);
 ATprotect( & constant1);
 ATprotect( & constant2);
 ATprotect( & constant3);
-ATprotect( & constant4);
 }
 ATerm lf_AUX_Literals4_1( ATerm arg0) {
 {
-ATerm tmp[7];
+ATerm tmp[8];
 PROF( prof_lf_AUX_Literals4_1);
 if( check_sym( arg0 , ef1sym)) {
 {
@@ -67,7 +65,8 @@ tmp[ 5]= list_tail( tmp[ 3]);
 if( not_empty_list( tmp[ 5])) {
 tmp[ 6]= list_prefix( tmp[ 5]);
 if( term_equal( list_last( tmp[ 5]) , make_char( 34))) {
-return ( * ef2)( ( constant1? constant1: ( constant1= ( * ef1)( lf2( (ATerm) ATmakeList( 3 , char_table[ 34] , char_table[ 92] , char_table[ 34]))))) , lf_AUX_Literals4_1( ( * ef1)( lf2( cons( ( constant2? constant2: ( constant2= make_list_char( 34))) , cons( make_list( tmp[ 6]) , ( constant3? constant3: ( constant3= make_list( make_char( 34))))))))));
+tmp[ 7]= ( * ef2)( ( constant1? constant1: ( constant1= ( * ef1)( lf2( cons( make_list( make_char( 34)) , cons( make_list( make_char( 92)) , make_list( make_char( 34)))))))) , lf_AUX_Literals4_1( ( * ef1)( lf2( cons( ( constant2? constant2: ( constant2= make_list( make_char( 34)))) , cons( make_list( tmp[ 6]) , ( constant2? constant2: ( constant2= make_list( make_char( 34))))))))));
+return tmp[ 7];
 }
 }
 }
@@ -76,7 +75,8 @@ tmp[ 5]= list_tail( tmp[ 3]);
 if( not_empty_list( tmp[ 5])) {
 tmp[ 6]= list_prefix( tmp[ 5]);
 if( term_equal( list_last( tmp[ 5]) , make_char( 34))) {
-return ( * ef2)( ( constant4? constant4: ( constant4= ( * ef1)( lf2( (ATerm) ATmakeList( 3 , char_table[ 34] , char_table[ 34] , char_table[ 34]))))) , lf_AUX_Literals4_1( ( * ef1)( lf2( cons( ( constant2? constant2: ( constant2= make_list_char( 34))) , cons( make_list( tmp[ 6]) , ( constant3? constant3: ( constant3= make_list( make_char( 34))))))))));
+tmp[ 7]= ( * ef2)( ( constant3? constant3: ( constant3= ( * ef1)( lf2( cons( make_list( make_char( 34)) , cons( make_list( make_char( 34)) , make_list( make_char( 34)))))))) , lf_AUX_Literals4_1( ( * ef1)( lf2( cons( ( constant2? constant2: ( constant2= make_list( make_char( 34)))) , cons( make_list( tmp[ 6]) , ( constant2? constant2: ( constant2= make_list( make_char( 34))))))))));
+return tmp[ 7];
 }
 }
 }
@@ -107,7 +107,8 @@ tmp[ 2]= list_tail( tmp[ 0]);
 if( not_empty_list( tmp[ 2])) {
 tmp[ 3]= list_prefix( tmp[ 2]);
 if( term_equal( list_last( tmp[ 2]) , make_char( 34))) {
-return ( * ef2)( ( * ef1)( lf2( cons( ( constant2? constant2: ( constant2= make_list_char( 34))) , cons( make_list( tmp[ 1]) , ( constant3? constant3: ( constant3= make_list( make_char( 34)))))))) , lf_AUX_Literals4_1( ( * ef1)( lf2( cons( ( constant2? constant2: ( constant2= make_list_char( 34))) , cons( make_list( tmp[ 3]) , ( constant3? constant3: ( constant3= make_list( make_char( 34))))))))));
+tmp[ 4]= ( * ef2)( ( * ef1)( lf2( cons( ( constant2? constant2: ( constant2= make_list( make_char( 34)))) , cons( make_list( tmp[ 1]) , ( constant2? constant2: ( constant2= make_list( make_char( 34)))))))) , lf_AUX_Literals4_1( ( * ef1)( lf2( cons( ( constant2? constant2: ( constant2= make_list( make_char( 34)))) , cons( make_list( tmp[ 3]) , ( constant2? constant2: ( constant2= make_list( make_char( 34))))))))));
+return tmp[ 4];
 }
 }
 }
