@@ -1,10 +1,10 @@
 process ASFSDFApigen is
 let
-ASFSDFApigenTool : toolASFSDFApigen,
-Term       : term,
-Args       : list,
- Function   : str,
- Sort       : str
+  ASFSDFApigenTool : toolASFSDFApigen,
+  Term       : term,
+  Args       : list,
+  Function   : str,
+  Sort       : str
 in
   (
     (
@@ -26,4 +26,3 @@ endlet
 
 tool toolASFSDFApigen is { command = "ASFSDFApigen" }
 toolbus(ASFSDFApigen)
-

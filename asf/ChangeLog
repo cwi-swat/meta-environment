@@ -1,5 +1,12 @@
 # $Id$
 
+Tue Mar  2 15:42:10 CET 2004 <jurgenv@cwi.nl>
+ * fixed a bug in the condition checker:
+   id := f(id)
+   was not recognized as an error because the left-hand side was processed
+   first, indicating that id was indeed initialized, before the right-hand
+   side was checker for uninitialized variables.
+
 2004/02/16 (markvdb@cwi.nl)
  * Added the top module name to the asfsdf-checker.
 

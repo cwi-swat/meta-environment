@@ -272,21 +272,21 @@ static ERR_FeedbackList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition 
 
 static ERR_FeedbackList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
 {
+  if (!noNewVariables((PT_Tree) rhsCond, *variables)) {
+    return ERR_makeFeedbackListSingle(
+	 makeMessage(
+	     "right-hand side of matching condition introduces variables",
+	     ASF_makeTermFromASFCondition(condition)));
+  }
+
   if (noNewVariables((PT_Tree) lhsCond, *variables)) {
     return ERR_makeFeedbackListSingle(
-				 makeMessage(
-					     "matching condition does not introduce new variables",
-					     ASF_makeTermFromASFCondition(condition)));
+	 makeMessage(
+	     "matching condition does not introduce new variables",
+		     ASF_makeTermFromASFCondition(condition)));
   }
   else {
     *variables = collectVariables((PT_Tree)lhsCond, *variables);
-  }
-
-  if (!noNewVariables((PT_Tree) rhsCond, *variables)) {
-    return ERR_makeFeedbackListSingle(
-				 makeMessage(
-					     "right-hand side of matching condition introduces variables",
-					     ASF_makeTermFromASFCondition(condition)));
   }
 
   return ERR_makeFeedbackListEmpty();

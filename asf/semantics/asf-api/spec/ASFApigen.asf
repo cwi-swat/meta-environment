@@ -106,7 +106,6 @@ generate-get-and-set-field(Symbol, Pattern, ArgNr) =
 equations
 
 [make]
-is-prefix(Symbol* -> Symbol) == false,
 Equation := [] generate-make-match(Name, Symbol*) = 
   generate-pattern(Symbol* -> Symbol, 0)
 ===>

@@ -35,10 +35,6 @@ collect-labelled-symbols(Production, Symbol*) -> Symbol*
 collect-labelled-symbols(Symbol, Symbol*) -> Symbol* 
 {traversal(accu, top-down, break)}
 
-context-free syntax
-
-  is-prefix(Production) -> Boolean
-
 hiddens
 
 variables

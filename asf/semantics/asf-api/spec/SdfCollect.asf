@@ -29,16 +29,4 @@ collect-labelled-symbols(Literal : Symbol, Symbol*) =
 Symbol* Literal : Symbol
 
 
-equations
-
-[] is-prefix(Literal -> Symbol Attributes) = true
-[] is-prefix(Literal ( Symbol,* ) -> Symbol Attributes) = true
-[] is-prefix(Literal "(" Symbol1 ")" -> Symbol2 Attributes) = true
-[] is-prefix(Literal "(" Symbol*1 "," Symbol*2 ")" -> Symbol Attributes) = true
-[default] is-prefix(Production) = false
-
-tests
-
-[] is-prefix("no-area" -> Area {cons("no-area")}) == true
-[] is-prefix("not" "(" Boolean ")" -> Boolean {cons("not")}) == true
 

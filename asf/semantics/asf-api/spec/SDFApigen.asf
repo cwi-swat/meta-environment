@@ -126,7 +126,6 @@ generate-get-and-set(Symbol, Result) =
 equations
 
 [top]
-is-prefix(Field* -> Result) == false,
 Symbol,* := generate-make-fields(Field*)
 ===>
 generate-make(qliteral("""c*"""), Field*, Result) =
