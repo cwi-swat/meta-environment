@@ -54,6 +54,9 @@ additional letter:
  e.g., "sglr -fi" will toggle the injection count filter.
 
 These specific toggles are supposed to be used for debugging purposes only.
+So, do not use these options to tweak your language implementations! It is
+highly probable that there will be no backward compatibility for them in 
+future versions.
 
 =item -B<g>
 

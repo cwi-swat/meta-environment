@@ -204,8 +204,12 @@ applies a few common disambiguation strategies: subtree preference
 filtering, multiset filtering, and injection count filtering.  By
 default, filtering is applied; use B<SG_FILTER_ON>() to enable,
 B<SG_FILTER_OFF>() to disable all filters. If filtering is enabled,
-each filter can be toggled specifically also. This is meant for
-debugging purposes.
+each filter can be toggled specifically also. 
+
+These specific toggles are supposed to be used for debugging purposes only.
+So, do not use these options to tweak your language implementations! It is
+highly probable that there will be no backward compatibility for them in 
+future versions.
 
 =back
 
