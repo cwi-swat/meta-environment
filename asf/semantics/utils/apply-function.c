@@ -71,7 +71,7 @@ main (int argc, char **argv)
   PT_Tree newTree;
   char *inputs[MAX_ARGS] = { "-" };
   int  nInputs = 0;
-  char *output = "";
+  char *output = "-";
   char *function = "";
   char *sort = "";
   char *module = "";
