@@ -61,7 +61,7 @@ typedef struct _SDF_Alias *SDF_Alias;
 typedef struct _SDF_Aliases *SDF_Aliases;
 typedef struct _SDF_AliasAliass *SDF_AliasAliass;
 typedef struct _SDF_Symbols *SDF_Symbols;
-typedef struct _SDF_SymbolSymbols *SDF_SymbolSymbols;
+typedef struct _SDF_SymbolList *SDF_SymbolList;
 typedef struct _SDF_Renamings *SDF_Renamings;
 typedef struct _SDF_RenamingRenamings *SDF_RenamingRenamings;
 typedef struct _SDF_Renaming *SDF_Renaming;
@@ -180,8 +180,8 @@ SDF_AliasAliass SDF_makeAliasAliassFromTerm(ATerm t);
 ATerm SDF_makeTermFromAliasAliass(SDF_AliasAliass arg);
 SDF_Symbols SDF_makeSymbolsFromTerm(ATerm t);
 ATerm SDF_makeTermFromSymbols(SDF_Symbols arg);
-SDF_SymbolSymbols SDF_makeSymbolSymbolsFromTerm(ATerm t);
-ATerm SDF_makeTermFromSymbolSymbols(SDF_SymbolSymbols arg);
+SDF_SymbolList SDF_makeSymbolListFromTerm(ATerm t);
+ATerm SDF_makeTermFromSymbolList(SDF_SymbolList arg);
 SDF_Renamings SDF_makeRenamingsFromTerm(ATerm t);
 ATerm SDF_makeTermFromRenamings(SDF_Renamings arg);
 SDF_RenamingRenamings SDF_makeRenamingRenamingsFromTerm(ATerm t);
@@ -369,10 +369,10 @@ SDF_Aliases SDF_makeAliasesDefault(SDF_AliasAliass aliass);
 SDF_AliasAliass SDF_makeAliasAliassEmpty();
 SDF_AliasAliass SDF_makeAliasAliassSingle(SDF_Alias head);
 SDF_AliasAliass SDF_makeAliasAliassMany(SDF_Alias head, SDF_Layout wsAfterFirst, SDF_AliasAliass tail);
-SDF_Symbols SDF_makeSymbolsDefault(SDF_SymbolSymbols symbols);
-SDF_SymbolSymbols SDF_makeSymbolSymbolsEmpty();
-SDF_SymbolSymbols SDF_makeSymbolSymbolsSingle(SDF_Symbol head);
-SDF_SymbolSymbols SDF_makeSymbolSymbolsMany(SDF_Symbol head, SDF_Layout wsAfterFirst, SDF_SymbolSymbols tail);
+SDF_Symbols SDF_makeSymbolsDefault(SDF_SymbolList list);
+SDF_SymbolList SDF_makeSymbolListEmpty();
+SDF_SymbolList SDF_makeSymbolListSingle(SDF_Symbol head);
+SDF_SymbolList SDF_makeSymbolListMany(SDF_Symbol head, SDF_Layout wsAfterFirst, SDF_SymbolList tail);
 SDF_Renamings SDF_makeRenamingsRenamings(SDF_Layout wsAfterBracketOpen, SDF_RenamingRenamings renamings, SDF_Layout wsAfterRenamings);
 SDF_RenamingRenamings SDF_makeRenamingRenamingsEmpty();
 SDF_RenamingRenamings SDF_makeRenamingRenamingsSingle(SDF_Renaming head);
@@ -479,7 +479,7 @@ ATbool SDF_isEqualAlias(SDF_Alias arg0, SDF_Alias arg1);
 ATbool SDF_isEqualAliases(SDF_Aliases arg0, SDF_Aliases arg1);
 ATbool SDF_isEqualAliasAliass(SDF_AliasAliass arg0, SDF_AliasAliass arg1);
 ATbool SDF_isEqualSymbols(SDF_Symbols arg0, SDF_Symbols arg1);
-ATbool SDF_isEqualSymbolSymbols(SDF_SymbolSymbols arg0, SDF_SymbolSymbols arg1);
+ATbool SDF_isEqualSymbolList(SDF_SymbolList arg0, SDF_SymbolList arg1);
 ATbool SDF_isEqualRenamings(SDF_Renamings arg0, SDF_Renamings arg1);
 ATbool SDF_isEqualRenamingRenamings(SDF_RenamingRenamings arg0, SDF_RenamingRenamings arg1);
 ATbool SDF_isEqualRenaming(SDF_Renaming arg0, SDF_Renaming arg1);
@@ -1468,26 +1468,26 @@ SDF_AliasAliass SDF_setAliasAliassHead(SDF_AliasAliass arg, SDF_Alias head);
 
 ATbool SDF_isValidSymbols(SDF_Symbols arg);
 ATbool SDF_isSymbolsDefault(SDF_Symbols arg);
-ATbool SDF_hasSymbolsSymbols(SDF_Symbols arg);
-SDF_SymbolSymbols SDF_getSymbolsSymbols(SDF_Symbols arg);
-SDF_Symbols SDF_setSymbolsSymbols(SDF_Symbols arg, SDF_SymbolSymbols symbols);
+ATbool SDF_hasSymbolsList(SDF_Symbols arg);
+SDF_SymbolList SDF_getSymbolsList(SDF_Symbols arg);
+SDF_Symbols SDF_setSymbolsList(SDF_Symbols arg, SDF_SymbolList list);
 
 /*}}}  */
-/*{{{  SDF_SymbolSymbols accessor prototypes */
+/*{{{  SDF_SymbolList accessor prototypes */
 
-ATbool SDF_isValidSymbolSymbols(SDF_SymbolSymbols arg);
-ATbool SDF_isSymbolSymbolsEmpty(SDF_SymbolSymbols arg);
-ATbool SDF_isSymbolSymbolsSingle(SDF_SymbolSymbols arg);
-ATbool SDF_isSymbolSymbolsMany(SDF_SymbolSymbols arg);
-ATbool SDF_hasSymbolSymbolsWsAfterFirst(SDF_SymbolSymbols arg);
-SDF_Layout SDF_getSymbolSymbolsWsAfterFirst(SDF_SymbolSymbols arg);
-SDF_SymbolSymbols SDF_setSymbolSymbolsWsAfterFirst(SDF_SymbolSymbols arg, SDF_Layout wsAfterFirst);
-ATbool SDF_hasSymbolSymbolsTail(SDF_SymbolSymbols arg);
-SDF_SymbolSymbols SDF_getSymbolSymbolsTail(SDF_SymbolSymbols arg);
-SDF_SymbolSymbols SDF_setSymbolSymbolsTail(SDF_SymbolSymbols arg, SDF_SymbolSymbols tail);
-ATbool SDF_hasSymbolSymbolsHead(SDF_SymbolSymbols arg);
-SDF_Symbol SDF_getSymbolSymbolsHead(SDF_SymbolSymbols arg);
-SDF_SymbolSymbols SDF_setSymbolSymbolsHead(SDF_SymbolSymbols arg, SDF_Symbol head);
+ATbool SDF_isValidSymbolList(SDF_SymbolList arg);
+ATbool SDF_isSymbolListEmpty(SDF_SymbolList arg);
+ATbool SDF_isSymbolListSingle(SDF_SymbolList arg);
+ATbool SDF_isSymbolListMany(SDF_SymbolList arg);
+ATbool SDF_hasSymbolListWsAfterFirst(SDF_SymbolList arg);
+SDF_Layout SDF_getSymbolListWsAfterFirst(SDF_SymbolList arg);
+SDF_SymbolList SDF_setSymbolListWsAfterFirst(SDF_SymbolList arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasSymbolListTail(SDF_SymbolList arg);
+SDF_SymbolList SDF_getSymbolListTail(SDF_SymbolList arg);
+SDF_SymbolList SDF_setSymbolListTail(SDF_SymbolList arg, SDF_SymbolList tail);
+ATbool SDF_hasSymbolListHead(SDF_SymbolList arg);
+SDF_Symbol SDF_getSymbolListHead(SDF_SymbolList arg);
+SDF_SymbolList SDF_setSymbolListHead(SDF_SymbolList arg, SDF_Symbol head);
 
 /*}}}  */
 /*{{{  SDF_Renamings accessor prototypes */

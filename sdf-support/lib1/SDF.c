@@ -48,7 +48,7 @@ typedef struct ATerm _SDF_Alias;
 typedef struct ATerm _SDF_Aliases;
 typedef struct ATerm _SDF_AliasAliass;
 typedef struct ATerm _SDF_Symbols;
-typedef struct ATerm _SDF_SymbolSymbols;
+typedef struct ATerm _SDF_SymbolList;
 typedef struct ATerm _SDF_Renamings;
 typedef struct ATerm _SDF_RenamingRenamings;
 typedef struct ATerm _SDF_Renaming;
@@ -790,17 +790,17 @@ ATerm SDF_makeTermFromSymbols(SDF_Symbols arg)
 }
 
 /*}}}  */
-/*{{{  SDF_SymbolSymbols SDF_makeSymbolSymbolsFromTerm(ATerm t) */
+/*{{{  SDF_SymbolList SDF_makeSymbolListFromTerm(ATerm t) */
 
-SDF_SymbolSymbols SDF_makeSymbolSymbolsFromTerm(ATerm t)
+SDF_SymbolList SDF_makeSymbolListFromTerm(ATerm t)
 {
-  return (SDF_SymbolSymbols)t;
+  return (SDF_SymbolList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromSymbolSymbols(SDF_SymbolSymbols arg) */
+/*{{{  ATerm SDF_makeTermFromSymbolList(SDF_SymbolList arg) */
 
-ATerm SDF_makeTermFromSymbolSymbols(SDF_SymbolSymbols arg)
+ATerm SDF_makeTermFromSymbolList(SDF_SymbolList arg)
 {
   return (ATerm)arg;
 }
@@ -2295,35 +2295,35 @@ SDF_AliasAliass SDF_makeAliasAliassMany(SDF_Alias head, SDF_Layout wsAfterFirst,
 }
 
 /*}}}  */
-/*{{{  SDF_Symbols SDF_makeSymbolsDefault(SDF_SymbolSymbols symbols) */
+/*{{{  SDF_Symbols SDF_makeSymbolsDefault(SDF_SymbolList list) */
 
-SDF_Symbols SDF_makeSymbolsDefault(SDF_SymbolSymbols symbols)
+SDF_Symbols SDF_makeSymbolsDefault(SDF_SymbolList list)
 {
-  return (SDF_Symbols)ATmakeTerm(SDF_patternSymbolsDefault, symbols);
+  return (SDF_Symbols)ATmakeTerm(SDF_patternSymbolsDefault, list);
 }
 
 /*}}}  */
-/*{{{  SDF_SymbolSymbols SDF_makeSymbolSymbolsEmpty() */
+/*{{{  SDF_SymbolList SDF_makeSymbolListEmpty() */
 
-SDF_SymbolSymbols SDF_makeSymbolSymbolsEmpty()
+SDF_SymbolList SDF_makeSymbolListEmpty()
 {
-  return (SDF_SymbolSymbols)ATmakeTerm(SDF_patternSymbolSymbolsEmpty);
+  return (SDF_SymbolList)ATmakeTerm(SDF_patternSymbolListEmpty);
 }
 
 /*}}}  */
-/*{{{  SDF_SymbolSymbols SDF_makeSymbolSymbolsSingle(SDF_Symbol head) */
+/*{{{  SDF_SymbolList SDF_makeSymbolListSingle(SDF_Symbol head) */
 
-SDF_SymbolSymbols SDF_makeSymbolSymbolsSingle(SDF_Symbol head)
+SDF_SymbolList SDF_makeSymbolListSingle(SDF_Symbol head)
 {
-  return (SDF_SymbolSymbols)ATmakeTerm(SDF_patternSymbolSymbolsSingle, head);
+  return (SDF_SymbolList)ATmakeTerm(SDF_patternSymbolListSingle, head);
 }
 
 /*}}}  */
-/*{{{  SDF_SymbolSymbols SDF_makeSymbolSymbolsMany(SDF_Symbol head, SDF_Layout wsAfterFirst, SDF_SymbolSymbols tail) */
+/*{{{  SDF_SymbolList SDF_makeSymbolListMany(SDF_Symbol head, SDF_Layout wsAfterFirst, SDF_SymbolList tail) */
 
-SDF_SymbolSymbols SDF_makeSymbolSymbolsMany(SDF_Symbol head, SDF_Layout wsAfterFirst, SDF_SymbolSymbols tail)
+SDF_SymbolList SDF_makeSymbolListMany(SDF_Symbol head, SDF_Layout wsAfterFirst, SDF_SymbolList tail)
 {
-  return (SDF_SymbolSymbols)ATmakeTerm(SDF_patternSymbolSymbolsMany, head, wsAfterFirst, tail);
+  return (SDF_SymbolList)ATmakeTerm(SDF_patternSymbolListMany, head, wsAfterFirst, tail);
 }
 
 /*}}}  */
@@ -3022,7 +3022,7 @@ ATbool SDF_isEqualSymbols(SDF_Symbols arg0, SDF_Symbols arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool SDF_isEqualSymbolSymbols(SDF_SymbolSymbols arg0, SDF_SymbolSymbols arg1)
+ATbool SDF_isEqualSymbolList(SDF_SymbolList arg0, SDF_SymbolList arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -13479,9 +13479,9 @@ ATbool SDF_isSymbolsDefault(SDF_Symbols arg)
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasSymbolsSymbols(SDF_Symbols arg) */
+/*{{{  ATbool SDF_hasSymbolsList(SDF_Symbols arg) */
 
-ATbool SDF_hasSymbolsSymbols(SDF_Symbols arg)
+ATbool SDF_hasSymbolsList(SDF_Symbols arg)
 {
   if (SDF_isSymbolsDefault(arg)) {
     return ATtrue;
@@ -13490,193 +13490,193 @@ ATbool SDF_hasSymbolsSymbols(SDF_Symbols arg)
 }
 
 /*}}}  */
-/*{{{  SDF_SymbolSymbols SDF_getSymbolsSymbols(SDF_Symbols arg) */
+/*{{{  SDF_SymbolList SDF_getSymbolsList(SDF_Symbols arg) */
 
-SDF_SymbolSymbols SDF_getSymbolsSymbols(SDF_Symbols arg)
+SDF_SymbolList SDF_getSymbolsList(SDF_Symbols arg)
 {
   if (SDF_isSymbolsDefault(arg)) {
-    return (SDF_SymbolSymbols)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), 2);
+    return (SDF_SymbolList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), 2);
   }
 
-  ATabort("Symbols has no Symbols: %t\n", arg);
+  ATabort("Symbols has no List: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_Symbols SDF_setSymbolsSymbols(SDF_Symbols arg, SDF_SymbolSymbols symbols) */
+/*{{{  SDF_Symbols SDF_setSymbolsList(SDF_Symbols arg, SDF_SymbolList list) */
 
-SDF_Symbols SDF_setSymbolsSymbols(SDF_Symbols arg, SDF_SymbolSymbols symbols)
+SDF_Symbols SDF_setSymbolsList(SDF_Symbols arg, SDF_SymbolList list)
 {
   if (SDF_isSymbolsDefault(arg)) {
-    return (SDF_Symbols)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), (ATerm)symbols, 2), 0), 2);
+    return (SDF_Symbols)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), (ATerm)list, 2), 0), 2);
   }
 
-  ATabort("Symbols has no Symbols: %t\n", arg);
+  ATabort("Symbols has no List: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
 
 /*}}}  */
-/*{{{  SDF_SymbolSymbols accessor implementations */
+/*{{{  SDF_SymbolList accessor implementations */
 
-/*{{{  ATbool SDF_isValidSymbolSymbols(SDF_SymbolSymbols arg) */
+/*{{{  ATbool SDF_isValidSymbolList(SDF_SymbolList arg) */
 
-ATbool SDF_isValidSymbolSymbols(SDF_SymbolSymbols arg)
+ATbool SDF_isValidSymbolList(SDF_SymbolList arg)
 {
-  if (SDF_isSymbolSymbolsEmpty(arg)) {
+  if (SDF_isSymbolListEmpty(arg)) {
     return ATtrue;
   }
-  else if (SDF_isSymbolSymbolsSingle(arg)) {
+  else if (SDF_isSymbolListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isSymbolSymbolsMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isSymbolSymbolsEmpty(SDF_SymbolSymbols arg) */
-
-ATbool SDF_isSymbolSymbolsEmpty(SDF_SymbolSymbols arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternSymbolSymbolsEmpty);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isSymbolSymbolsSingle(SDF_SymbolSymbols arg) */
-
-ATbool SDF_isSymbolSymbolsSingle(SDF_SymbolSymbols arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternSymbolSymbolsSingle, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isSymbolSymbolsMany(SDF_SymbolSymbols arg) */
-
-ATbool SDF_isSymbolSymbolsMany(SDF_SymbolSymbols arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternSymbolSymbolsMany, NULL, NULL, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_hasSymbolSymbolsWsAfterFirst(SDF_SymbolSymbols arg) */
-
-ATbool SDF_hasSymbolSymbolsWsAfterFirst(SDF_SymbolSymbols arg)
-{
-  if (SDF_isSymbolSymbolsMany(arg)) {
+  else if (SDF_isSymbolListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Layout SDF_getSymbolSymbolsWsAfterFirst(SDF_SymbolSymbols arg) */
+/*{{{  ATbool SDF_isSymbolListEmpty(SDF_SymbolList arg) */
 
-SDF_Layout SDF_getSymbolSymbolsWsAfterFirst(SDF_SymbolSymbols arg)
+ATbool SDF_isSymbolListEmpty(SDF_SymbolList arg)
 {
-  if (SDF_isSymbolSymbolsMany(arg)) {
+  return ATmatchTerm((ATerm)arg, SDF_patternSymbolListEmpty);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isSymbolListSingle(SDF_SymbolList arg) */
+
+ATbool SDF_isSymbolListSingle(SDF_SymbolList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternSymbolListSingle, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isSymbolListMany(SDF_SymbolList arg) */
+
+ATbool SDF_isSymbolListMany(SDF_SymbolList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternSymbolListMany, NULL, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_hasSymbolListWsAfterFirst(SDF_SymbolList arg) */
+
+ATbool SDF_hasSymbolListWsAfterFirst(SDF_SymbolList arg)
+{
+  if (SDF_isSymbolListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  SDF_Layout SDF_getSymbolListWsAfterFirst(SDF_SymbolList arg) */
+
+SDF_Layout SDF_getSymbolListWsAfterFirst(SDF_SymbolList arg)
+{
+  if (SDF_isSymbolListMany(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), 0);
   }
 
-  ATabort("SymbolSymbols has no WsAfterFirst: %t\n", arg);
+  ATabort("SymbolList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_SymbolSymbols SDF_setSymbolSymbolsWsAfterFirst(SDF_SymbolSymbols arg, SDF_Layout wsAfterFirst) */
+/*{{{  SDF_SymbolList SDF_setSymbolListWsAfterFirst(SDF_SymbolList arg, SDF_Layout wsAfterFirst) */
 
-SDF_SymbolSymbols SDF_setSymbolSymbolsWsAfterFirst(SDF_SymbolSymbols arg, SDF_Layout wsAfterFirst)
+SDF_SymbolList SDF_setSymbolListWsAfterFirst(SDF_SymbolList arg, SDF_Layout wsAfterFirst)
 {
-  if (SDF_isSymbolSymbolsMany(arg)) {
-    return (SDF_SymbolSymbols)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
+  if (SDF_isSymbolListMany(arg)) {
+    return (SDF_SymbolList)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
   }
 
-  ATabort("SymbolSymbols has no WsAfterFirst: %t\n", arg);
+  ATabort("SymbolList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasSymbolSymbolsTail(SDF_SymbolSymbols arg) */
+/*{{{  ATbool SDF_hasSymbolListTail(SDF_SymbolList arg) */
 
-ATbool SDF_hasSymbolSymbolsTail(SDF_SymbolSymbols arg)
+ATbool SDF_hasSymbolListTail(SDF_SymbolList arg)
 {
-  if (SDF_isSymbolSymbolsMany(arg)) {
+  if (SDF_isSymbolListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_SymbolSymbols SDF_getSymbolSymbolsTail(SDF_SymbolSymbols arg) */
+/*{{{  SDF_SymbolList SDF_getSymbolListTail(SDF_SymbolList arg) */
 
-SDF_SymbolSymbols SDF_getSymbolSymbolsTail(SDF_SymbolSymbols arg)
+SDF_SymbolList SDF_getSymbolListTail(SDF_SymbolList arg)
 {
-  if (SDF_isSymbolSymbolsMany(arg)) {
-    return (SDF_SymbolSymbols)ATgetTail((ATermList)arg, 2);
+  if (SDF_isSymbolListMany(arg)) {
+    return (SDF_SymbolList)ATgetTail((ATermList)arg, 2);
   }
 
-  ATabort("SymbolSymbols has no Tail: %t\n", arg);
+  ATabort("SymbolList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_SymbolSymbols SDF_setSymbolSymbolsTail(SDF_SymbolSymbols arg, SDF_SymbolSymbols tail) */
+/*{{{  SDF_SymbolList SDF_setSymbolListTail(SDF_SymbolList arg, SDF_SymbolList tail) */
 
-SDF_SymbolSymbols SDF_setSymbolSymbolsTail(SDF_SymbolSymbols arg, SDF_SymbolSymbols tail)
+SDF_SymbolList SDF_setSymbolListTail(SDF_SymbolList arg, SDF_SymbolList tail)
 {
-  if (SDF_isSymbolSymbolsMany(arg)) {
-    return (SDF_SymbolSymbols)ATreplaceTail((ATermList)arg, (ATermList)tail, 2);
+  if (SDF_isSymbolListMany(arg)) {
+    return (SDF_SymbolList)ATreplaceTail((ATermList)arg, (ATermList)tail, 2);
   }
 
-  ATabort("SymbolSymbols has no Tail: %t\n", arg);
+  ATabort("SymbolList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasSymbolSymbolsHead(SDF_SymbolSymbols arg) */
+/*{{{  ATbool SDF_hasSymbolListHead(SDF_SymbolList arg) */
 
-ATbool SDF_hasSymbolSymbolsHead(SDF_SymbolSymbols arg)
+ATbool SDF_hasSymbolListHead(SDF_SymbolList arg)
 {
-  if (SDF_isSymbolSymbolsSingle(arg)) {
+  if (SDF_isSymbolListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isSymbolSymbolsMany(arg)) {
+  else if (SDF_isSymbolListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Symbol SDF_getSymbolSymbolsHead(SDF_SymbolSymbols arg) */
+/*{{{  SDF_Symbol SDF_getSymbolListHead(SDF_SymbolList arg) */
 
-SDF_Symbol SDF_getSymbolSymbolsHead(SDF_SymbolSymbols arg)
+SDF_Symbol SDF_getSymbolListHead(SDF_SymbolList arg)
 {
-  if (SDF_isSymbolSymbolsSingle(arg)) {
+  if (SDF_isSymbolListSingle(arg)) {
     return (SDF_Symbol)ATelementAt((ATermList)arg, 0);
   }
-  else if (SDF_isSymbolSymbolsMany(arg)) {
+  else if (SDF_isSymbolListMany(arg)) {
     return (SDF_Symbol)ATelementAt((ATermList)arg, 0);
   }
 
-  ATabort("SymbolSymbols has no Head: %t\n", arg);
+  ATabort("SymbolList has no Head: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_SymbolSymbols SDF_setSymbolSymbolsHead(SDF_SymbolSymbols arg, SDF_Symbol head) */
+/*{{{  SDF_SymbolList SDF_setSymbolListHead(SDF_SymbolList arg, SDF_Symbol head) */
 
-SDF_SymbolSymbols SDF_setSymbolSymbolsHead(SDF_SymbolSymbols arg, SDF_Symbol head)
+SDF_SymbolList SDF_setSymbolListHead(SDF_SymbolList arg, SDF_Symbol head)
 {
-  if (SDF_isSymbolSymbolsSingle(arg)) {
-    return (SDF_SymbolSymbols)ATreplace((ATermList)arg, (ATerm)head, 0);
+  if (SDF_isSymbolListSingle(arg)) {
+    return (SDF_SymbolList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
-  else if (SDF_isSymbolSymbolsMany(arg)) {
-    return (SDF_SymbolSymbols)ATreplace((ATermList)arg, (ATerm)head, 0);
+  else if (SDF_isSymbolListMany(arg)) {
+    return (SDF_SymbolList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
 
-  ATabort("SymbolSymbols has no Head: %t\n", arg);
+  ATabort("SymbolList has no Head: %t\n", arg);
   return NULL;
 }
 

@@ -10616,14 +10616,14 @@ w (
 "" )
 , 
 < 
-symbols ( 
+list ( 
 
-Symbol-symbols ) > ) ] ) ]
+Symbol-list ) > ) ] ) ]
 , 
 
 [ 
 
-Symbol-symbols
+Symbol-list
 , 
 empty
 , 
@@ -10634,7 +10634,7 @@ empty
 
 [ 
 
-Symbol-symbols
+Symbol-list
 , 
 single
 , 
@@ -10649,7 +10649,7 @@ Symbol ) > ] ]
 
 [ 
 
-Symbol-symbols
+Symbol-list
 , 
 many
 , 
@@ -10674,7 +10674,7 @@ Layout ) > )
 
 tail ( 
 
-Symbol-symbols ) ] > ] ]
+Symbol-list ) ] > ] ]
 , 
 
 [ 

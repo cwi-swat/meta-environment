@@ -1,5 +1,5 @@
 /*
- * Generated at Wed Jan 24 10:55:18 2001
+ * Generated at Wed Jan 24 14:43:06 2001
  */
 
 #ifndef __SDF_dict_H
@@ -67,9 +67,9 @@ extern ATerm SDF_patternRenamingRenamingsMany;
 extern ATerm SDF_patternRenamingRenamingsSingle;
 extern ATerm SDF_patternRenamingRenamingsEmpty;
 extern ATerm SDF_patternRenamingsRenamings;
-extern ATerm SDF_patternSymbolSymbolsMany;
-extern ATerm SDF_patternSymbolSymbolsSingle;
-extern ATerm SDF_patternSymbolSymbolsEmpty;
+extern ATerm SDF_patternSymbolListMany;
+extern ATerm SDF_patternSymbolListSingle;
+extern ATerm SDF_patternSymbolListEmpty;
 extern ATerm SDF_patternSymbolsDefault;
 extern ATerm SDF_patternAliasAliassMany;
 extern ATerm SDF_patternAliasAliassSingle;

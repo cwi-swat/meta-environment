@@ -1,5 +1,5 @@
 /*
- * Generated at Wed Jan 24 10:55:18 2001
+ * Generated at Wed Jan 24 14:43:06 2001
  */
 
 #include "SDF_dict.h"
@@ -64,9 +64,9 @@ ATerm SDF_patternRenamingRenamingsMany = NULL;
 ATerm SDF_patternRenamingRenamingsSingle = NULL;
 ATerm SDF_patternRenamingRenamingsEmpty = NULL;
 ATerm SDF_patternRenamingsRenamings = NULL;
-ATerm SDF_patternSymbolSymbolsMany = NULL;
-ATerm SDF_patternSymbolSymbolsSingle = NULL;
-ATerm SDF_patternSymbolSymbolsEmpty = NULL;
+ATerm SDF_patternSymbolListMany = NULL;
+ATerm SDF_patternSymbolListSingle = NULL;
+ATerm SDF_patternSymbolListEmpty = NULL;
 ATerm SDF_patternSymbolsDefault = NULL;
 ATerm SDF_patternAliasAliassMany = NULL;
 ATerm SDF_patternAliasAliassSingle = NULL;
@@ -266,9 +266,9 @@ ATerm SDF_patternSymbolStart = NULL;
  * SDF_patternRenamingRenamingsSingle = [<term>]
  * SDF_patternRenamingRenamingsEmpty = []
  * SDF_patternRenamingsRenamings = appl(prod(id("Renaming-Sdf-Syntax"),w(""),[ql("["),w(""),iter(sort("Renaming"),w(""),l("*")),w(""),ql("]")],w(""),l("->"),w(""),sort("Renamings"),w(""),no-attrs),w(""),[l("["),w(<term>),list(iter(sort("Renaming"),w(""),l("*")),w(""),<term>),w(<term>),l("]")])
- * SDF_patternSymbolSymbolsMany = [<term>,w(<term>),<list>]
- * SDF_patternSymbolSymbolsSingle = [<term>]
- * SDF_patternSymbolSymbolsEmpty = []
+ * SDF_patternSymbolListMany = [<term>,w(<term>),<list>]
+ * SDF_patternSymbolListSingle = [<term>]
+ * SDF_patternSymbolListEmpty = []
  * SDF_patternSymbolsDefault = appl(prod(id("Symbols"),w(""),[iter(sort("Symbol"),w(""),l("*"))],w(""),l("->"),w(""),sort("Symbols"),w(""),no-attrs),w(""),[list(iter(sort("Symbol"),w(""),l("*")),w(""),<term>)])
  * SDF_patternAliasAliassMany = [<term>,w(<term>),<list>]
  * SDF_patternAliasAliassSingle = [<term>]
@@ -876,11 +876,11 @@ void init_SDF_dict()
   terms = ATgetNext(terms);
   SDF_patternRenamingsRenamings = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  SDF_patternSymbolSymbolsMany = ATgetFirst(terms);
+  SDF_patternSymbolListMany = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  SDF_patternSymbolSymbolsSingle = ATgetFirst(terms);
+  SDF_patternSymbolListSingle = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  SDF_patternSymbolSymbolsEmpty = ATgetFirst(terms);
+  SDF_patternSymbolListEmpty = ATgetFirst(terms);
   terms = ATgetNext(terms);
   SDF_patternSymbolsDefault = ATgetFirst(terms);
   terms = ATgetNext(terms);
