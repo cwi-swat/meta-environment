@@ -33,8 +33,8 @@ equations
 
 %% --- Type of element
 
-[to1]	type-of($Integer) = int 
-[to2]	type-of($Boolean) = bool
+[to1]	type-of($NatCon) = int 
+[to2]	type-of($BoolCon) = bool
 [to3]	type-of($String)  = str
 [to4]	type-of($Area)    = area
 
@@ -144,10 +144,10 @@ $Error]>
 %% --- Check Elementary values
 
 [check-const-bool] 
-      check-const($Boolean, $Tenv) = <type-of($Boolean), $Tenv>
+      check-const($BoolCon, $Tenv) = <type-of($BoolCon), $Tenv>
 
 [check-const-int] 
-      check-const($Integer, $Tenv) = <type-of($Integer), $Tenv>
+      check-const($NatCon, $Tenv) = <type-of($NatCon), $Tenv>
 
 [check-const-str]
       check-const($String, $Tenv) = <type-of($String), $Tenv>
@@ -309,6 +309,8 @@ $Error]>
 [compat-cmp5]
 	compat-cmp($Exp, int, int, $Tenv) = $Tenv
 [compat-cmp6]
+	compat-cmp($Exp, area, area, $Tenv) = $Tenv
+[compat-cmp7]
 	compat-cmp($Exp, $Etype1, $Etype2, $Tenv) = 
 	$Tenv + Incompatible argument types [$Etype1, $Etype2] in $Exp
 
@@ -338,6 +340,29 @@ $Error]>
       $Exp = $Exp1 > $Exp2
       ===========================================
       check($Exp, $Tenv) = check-cmp($Exp, $Exp1, $Exp2, $Tenv)
+
+%% ---- Integers operators
+
+[check-int1]
+	require-type($Exp1, int, $Tenv) = $Tenv',
+	require-type($Exp2, int, $Tenv') = $Tenv''
+	=========================================
+	check-int($Exp, $Exp1, $Exp2, $Tenv) = <int, $Tenv''>
+
+[check-add1]
+ 	$Exp = $Exp1 + $Exp2
+      	===========================================
+      	check($Exp, $Tenv) = check-int($Exp, $Exp1, $Exp2, $Tenv)
+
+[check-sub1]
+ 	$Exp = $Exp1 - $Exp2
+      	===========================================
+      	check($Exp, $Tenv) = check-int($Exp, $Exp1, $Exp2, $Tenv)
+	
+[check-mul1]
+ 	$Exp = $Exp1 * $Exp2
+      	===========================================
+      	check($Exp, $Tenv) = check-int($Exp, $Exp1, $Exp2, $Tenv)
 
 %% --- Union-like operators
 

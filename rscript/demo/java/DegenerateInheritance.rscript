@@ -1,6 +1,6 @@
 
 rel[str,str] CALL
-rel[str,str] CONTAIN
+rel[str,str] CONTAINMENT
 rel[str,str] INHERITANCE
 
 

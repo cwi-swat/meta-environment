@@ -1,13 +1,20 @@
 
 rel[str,str] CALL
-rel[str,str] CONTAIN
-rel[str,str] INHERIT
+rel[str,str] CONTAINMENT
+rel[str,str] INHERITANCE
 
-rel[str,str] USE = CALL union CONTAIN union INHERIT
+rel[str,str] USE = CALL union CONTAINMENT union INHERITANCE
 
 bag[str] ClassesInCycle = {C1 | <C1, C2> : USE+, C1 == C2}
 
 int size = # ClassesInCycle
 
 yield size
+
+bag[str] CLASSES = carrier(USE)
+
+rel[str,str] USETRANS = USE+
+
+rel[str,bag[str]] ClassCycles = {<C, USETRANS[C]> | C : CLASSES, <C, C> in USETRANS }
+yield ClassCycles
 

@@ -1,4 +1,16 @@
 module Test
 imports basic/Whitespace
 
-imports Relations[Integer]
+imports Bags[Integer]
+imports basic/Booleans basic/Integers
+
+exports
+	sorts Bag[[Integer]]
+context-free syntax
+	run(Integer, Bag[[Integer]], Bag[[Integer]])	-> Boolean
+
+  imports asf/syntax/Comments
+variables
+	"$Bag" [0-9\']*		-> Bag[[Integer]]
+	"$N" [0-9\']*		-> Integer
+	"$Bool" [0-9\']*	-> Boolean

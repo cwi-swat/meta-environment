@@ -12,8 +12,8 @@
 
 %% ---- Equality on elements
 
-[ee1]	equal-elem($Bool, $Bool)	= true
-[ee2]	equal-elem($Integer, $Integer)	= true
+[ee1]	equal-elem($BoolCon, $BoolCon)	= true
+[ee2]	equal-elem($NatCon, $NatCon)	= true
 [ee3]	equal-elem($String, $String)	= true
 [ee4]	equal-elem($Bag1, $Bag2) 	= equal($Bag1, $Bag2)
 
@@ -154,13 +154,13 @@
 
 %% ---- Specialized versions of evalx that return value of required type
 
-[EVP]	$Bool = evalx($Exp, $Rstore) 	===> evalp($Exp, $Rstore) = $Bool
+[EVP]	$BoolCon = evalx($Exp, $Rstore) ===> evalp($Exp, $Rstore) = $BoolCon
+[EVI]	$NatCon = evalx($Exp, $Rstore)	===> evali($Exp, $Rstore) = $NatCon
 [EVE1]	$Elem = evalx($Exp, $Rstore)   	===> evale($Exp, $Rstore) = $Elem
 [EVE2]	$Tuple = evalx($Exp, $Rstore)	===> evalt($Exp, $Rstore) = $Tuple
 [EVB1]	$Bag = evalx($Exp, $Rstore)     ===> evalb($Exp, $Rstore) = $Bag
 [EVR1]	$Rel = evalx($Exp, $Rstore)     ===> evalr($Exp, $Rstore) = $Rel
 [EVA1]	$Area = evalx($Exp, $Rstore)    ===> evala($Exp, $Rstore) = $Area
-
 
 %% ---- The main evaluation function evalx
 
@@ -192,37 +192,109 @@
 
 %% ---- Eval binary operators
 
-[AND1]	evalx($Exp1 and $Exp2, $Rstore) 	= evalp($Exp1, $Rstore) & evalp($Exp2, $Rstore)
+[AND1]	$BoolCon = evalp($Exp1, $Rstore) & evalp($Exp2, $Rstore)
+	====================================================
+	evalx($Exp1 and $Exp2, $Rstore) = $BoolCon
 
-[OR1]	evalx($Exp1 or $Exp2, $Rstore) 		= evalp($Exp1, $Rstore) | evalp($Exp2, $Rstore)
+[OR1]	$BoolCon = evalp($Exp1, $Rstore) | evalp($Exp2, $Rstore)
+	====================================================
+	evalx($Exp1 or $Exp2, $Rstore) 	= $BoolCon
 
-[IMP1]	evalx($Exp1 implies $Exp2, $Rstore) 	= not(evalp($Exp1, $Rstore) & not(evalp($Exp2, $Rstore)))
+[IMP1]	$BoolCon = not(evalp($Exp1, $Rstore) & not(evalp($Exp2, $Rstore)))
+	====================================================
+	evalx($Exp1 implies $Exp2, $Rstore) = $BoolCon
 
-[NOT1]	evalx(not $Exp, $Rstore) 		= not(evalp($Exp, $Rstore))
+[NOT1]	$BoolCon = not(evalp($Exp, $Rstore))
+	====================================================
+	evalx(not $Exp, $Rstore) = $BoolCon
 
-[IN1]	evalx($Exp1 in $Exp2, $Rstore) 		= in(evalx($Exp1, $Rstore), evalb($Exp2, $Rstore))
+[IN1]	$BoolCon = in(evalx($Exp1, $Rstore), evalb($Exp2, $Rstore))
+	====================================================
+	evalx($Exp1 in $Exp2, $Rstore) = $BoolCon
 
-[NI1]	evalx($Exp1 notin $Exp2, $Rstore)	= not(in(evalx($Exp1, $Rstore), evalb($Exp2, $Rstore)))
+[NI1]	$BoolCon = not(in(evalx($Exp1, $Rstore), evalb($Exp2, $Rstore)))
+	====================================================
+	evalx($Exp1 notin $Exp2, $Rstore) = $BoolCon
 
-[EQ1]	evalx($Exp1 == $Exp2, $Rstore) 		= equal-elem(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
+[EQ1]	$BoolCon = equal-elem(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
+	====================================================
+	evalx($Exp1 == $Exp2, $Rstore) 	= $BoolCon
 
-[NE1]	evalx($Exp1 != $Exp2, $Rstore) 		= not(equal-elem(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore)))
+[NE1]	$BoolCon = not(equal-elem(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore)))
+	====================================================
+	evalx($Exp1 != $Exp2, $Rstore) 	=  $BoolCon
 
 %% ---- aux functions for evaluating comparison operators
 
+[EQI1]	$Integer == $Integer = true
+[default-EQI]
+	$Integer1 == $Integer2 = false
+
 [LE1]	eval-le($Bag1, $Bag2)			= subset($Bag1, $Bag2)
-[LE2]	eval-le($Integer1, $Integer2) 		= $Integer1 <= $Integer2
+[LE2]	eval-le($NatCon1, $NatCon2) 		= $NatCon1 <= $NatCon2
+
+[LE3]	$Integer1 = get-beginline($Area1),
+	$Integer1' = get-beginline($Area2),
+	$Integer2 = get-begincol($Area1),
+	$Integer2' = get-begincol($Area2),
+	$Integer3 = get-endline($Area1),
+	$Integer3' = get-endline($Area2),
+	$Integer4 = get-endcol($Area1),
+	$Integer4' = get-endcol($Area2),
+	$BoolCon = equal-elem(get-filename($Area1), get-filename($Area2)) &
+		    (($Integer1 > $Integer1') | (($Integer1 == $Integer1') & ($Integer2 >= $Integer2'))) &
+		    (($Integer3 < $Integer3') | (($Integer3 == $Integer3') & ($Integer4 <= $Integer4')))
+	====================================================
+	eval-le($Area1, $Area2) = $BoolCon
+
 
 [LT1]	eval-lt($Bag1, $Bag2) 			= strict-subset($Bag1,  $Bag2)
-[LT2]	eval-lt($Integer1, $Integer2) 		= $Integer1 < $Integer2
+[LT2]	eval-lt($NatCon1, $NatCon2) 		= $NatCon1 < $NatCon2
 
-[LE1]	evalx($Exp1 <= $Exp2, $Rstore) 		= eval-le(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
+[LT3]	$Integer1 = get-beginline($Area1),
+	$Integer1' = get-beginline($Area2),
+	$Integer2 = get-begincol($Area1),
+	$Integer2' = get-begincol($Area2),
+	$Integer3 = get-endline($Area1),
+	$Integer3' = get-endline($Area2),
+	$Integer4 = get-endcol($Area1),
+	$Integer4' = get-endcol($Area2),
+	$BoolCon = equal-elem(get-filename($Area1), get-filename($Area2)) &
+		    (($Integer1 > $Integer1') | (($Integer1 == $Integer1') & ($Integer2 > $Integer2'))) &
+		    (($Integer3 < $Integer3') | (($Integer3 == $Integer3') & ($Integer4 < $Integer4')))
+	====================================================
+	eval-lt($Area1, $Area2) = $BoolCon
 
-[LT1]	evalx($Exp1 < $Exp2, $Rstore) 		= eval-lt(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
 
-[GE1]	evalx($Exp1 >= $Exp2, $Rstore) 		= not(eval-lt(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore)))
+[LE1]	$BoolCon = eval-le(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
+	====================================================
+	evalx($Exp1 <= $Exp2, $Rstore) 	= $BoolCon
 
-[GT1]	evalx($Exp1 > $Exp2, $Rstore) 		= not(eval-le(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore)))
+[LT1]	$BoolCon = eval-lt(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore))
+	====================================================
+	evalx($Exp1 < $Exp2, $Rstore) = $BoolCon
+
+[GE1]	$BoolCon = not(eval-lt(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore)))
+	====================================================
+	evalx($Exp1 >= $Exp2, $Rstore) 	= $BoolCon
+
+[GT1]	$BoolCon = not(eval-le(evalx($Exp1, $Rstore), evalx($Exp2, $Rstore)))
+	====================================================
+	evalx($Exp1 > $Exp2, $Rstore) = $BoolCon
+
+[ADD1]	$NatCon = evali($Exp1, $Rstore) + evali($Exp2, $Rstore)
+	====================================================
+	evalx($Exp1 + $Exp2, $Rstore) 		= $NatCon
+
+[SUB1]	$NatCon = evali($Exp1, $Rstore) - evali($Exp2, $Rstore)
+	====================================================
+	evalx($Exp1 - $Exp2, $Rstore) 		= $NatCon
+
+[MUL1]	$NatCon = evali($Exp1, $Rstore) * evali($Exp2, $Rstore)
+	====================================================
+	evalx($Exp1 * $Exp2, $Rstore) 		= $NatCon
+
+%% Divide is still missing, since it is missing from Integers
 
 [UN1]	evalx($Exp1 union $Exp2, $Rstore)	= union(evalb($Exp1, $Rstore), evalb($Exp2, $Rstore))
 
@@ -254,7 +326,9 @@
 
 [RTC1]	evalx($Exp *, $Rstore)			= rtrans-closure(evalb($Exp, $Rstore))
 
-[SZ1]	evalx(# $Exp, $Rstore) 			= size(evalb($Exp, $Rstore))
+[SZ1]	$NatCon = size(evalb($Exp, $Rstore))
+	=================================================
+	evalx(# $Exp, $Rstore) 	= $NatCon
 
 %% ---- Eval comprehensions
 
@@ -344,38 +418,44 @@
 
 %% ---- Exists
 
-[EXB1]	$Bag = evalb($Exp, $Rstore)
+[EXB1]	$Bag = evalb($Exp, $Rstore),
+	$BoolCon = exists($Var, $Bag, $Test, $Rstore)
 	=========================================
-	evalx(exists($Var : $Exp | $Test), $Rstore) = exists($Var, $Bag, $Test, $Rstore)
+	evalx(exists($Var : $Exp | $Test), $Rstore) = $BoolCon
 
-[EXB1]	$Bag = evalb($Exp, $Rstore)
+[EXB1]	$Bag = evalb($Exp, $Rstore),
+	$BoolCon = exists($Var1, $Var2, $Bag, $Test, $Rstore)
 	=========================================
-	evalx(exists(<$Var1, $Var2> : $Exp | $Test), $Rstore) = exists($Var1, $Var2, $Bag, $Test, $Rstore)
+	evalx(exists(<$Var1, $Var2> : $Exp | $Test), $Rstore) = $BoolCon
 
-[EXB1]	$Bag = evalb($Exp, $Rstore)
+[EXB1]	$Bag = evalb($Exp, $Rstore),
+	$BoolCon = exists($Var1, $Var2, $Var+, $Bag, $Test, $Rstore)
 	=========================================
-	evalx(exists(<$Var1, $Var2, $Var+> : $Exp | $Test), $Rstore) = exists($Var1, $Var2, $Var+, $Bag, $Test, $Rstore)
+	evalx(exists(<$Var1, $Var2, $Var+> : $Exp | $Test), $Rstore) = $BoolCon
 
-[ex1]	$Rstore' = store-rvars($Var+, $Elem, $Rstore)
-	======================================================
-	exists($Var+, {$Elem, $Elem*}, $Test, $Rstore) = 
-	if evalp($Test, $Rstore') then true else exists($Var+, {$Elem*}, $Test, $Rstore) fi
+%%>>[ex1]	$Rstore' = store-rvars($Var+, $Elem, $Rstore),
+%%	$BoolCon = if evalp($Test, $Rstore') then true else exists($Var+, {$Elem*}, $Test, $Rstore) fi
+%%	======================================================
+%%	exists($Var+, {$Elem, $Elem*}, $Test, $Rstore) = $BoolCon
 
 [ex2]	exists($Var+, {}, $Test, $Rstore) = false
 
 %% ---- Forall
 
-[AL1]	$Bool = evalp(exists($Var : $Exp | not $Test), $Rstore)
+[AL1]	$Bool = evalp(exists($Var : $Exp | not $Test), $Rstore),
+	$BoolCon =  not($Bool)
 	==========================================
-	evalx(forall($Var : $Exp | $Test), $Rstore) = not($Bool)
+	evalx(forall($Var : $Exp | $Test), $Rstore) = $BoolCon
 
-[AL2]	$Bool = evalp(exists(<$Var1, $Var2> : $Exp | not $Test), $Rstore)
+[AL2]	$Bool = evalp(exists(<$Var1, $Var2> : $Exp | not $Test), $Rstore),
+	$BoolCon = not($Bool)
 	==========================================
-	evalx(forall(<$Var1, $Var2> : $Exp | $Test), $Rstore) = not($Bool)
+	evalx(forall(<$Var1, $Var2> : $Exp | $Test), $Rstore) = $BoolCon
 
-[AL3]	$Bool = evalp(exists(<$Var1, $Var2, $Var+> : $Exp | not $Test), $Rstore)
+[AL3]	$Bool = evalp(exists(<$Var1, $Var2, $Var+> : $Exp | not $Test), $Rstore),
+	$BoolCon =  not($Bool)
 	==========================================
-	evalx(forall(<$Var1, $Var2, $Var+> : $Exp | $Test), $Rstore) = not($Bool)
+	evalx(forall(<$Var1, $Var2, $Var+> : $Exp | $Test), $Rstore) = $BoolCon
 
 %% ---- Where expressions
 
@@ -514,73 +594,84 @@
 
 [fn]	evalx(filename($Exp), $Rstore)	=  get-filename(evala($Exp, $Rstore))
 
-[bl]	evalx(beginline($Exp), $Rstore) = get-beginline(evala($Exp, $Rstore))
+[bl]	$NatCon = get-beginline(evala($Exp, $Rstore))
+	====================================================
+	evalx(beginline($Exp), $Rstore) = $NatCon
 
-[bc]	evalx(begincol($Exp), $Rstore) 	= get-begincol(evala($Exp, $Rstore))
+[bc]	$NatCon = get-begincol(evala($Exp, $Rstore))
+	====================================================
+	evalx(begincol($Exp), $Rstore) 	= $NatCon
 
-[el]	evalx(endline($Exp), $Rstore) 	= get-endline(evala($Exp, $Rstore))
+[el]	$NatCon = get-endline(evala($Exp, $Rstore))
+	====================================================
+	evalx(endline($Exp), $Rstore) 	= $NatCon
 
-[ec]	evalx(endcol($Exp), $Rstore) 	= get-endcol(evala($Exp, $Rstore))
+[ec]	$NatCon = get-endcol(evala($Exp, $Rstore))
+	====================================================
+	evalx(endcol($Exp), $Rstore) 	= $NatCon
 
 %% ---- sum
 
 [sumx1]
-	sumx({$Integer1, $Elem*}, $Integer2) = sumx({$Elem*}, $Integer1 + $Integer2)
+	sumx({$NatCon1, $Elem*}, $NatCon2) = sumx({$Elem*}, $NatCon1 + $NatCon2)
 
-[sumx2]	sumx({}, $Integer) = $Integer
+[sumx2]	sumx({}, $NatCon) = $NatCon
 
 [default-sumx]
-	sumx({$Elem, $Elem*}, $Integer2) = sumx({$Elem*}, $Integer2)
+	sumx({$Elem, $Elem*}, $NatCon2) = sumx({$Elem*}, $NatCon2)
 
-[sum1]	$Bag = evalx($Exp, $Rstore)
+[sum1]	$Bag = evalx($Exp, $Rstore),
+	$NatCon = sumx($Bag, 0)
 	========================================
-	evalx(sum($Exp), $Rstore) = sumx($Bag, 0)
+	evalx(sum($Exp), $Rstore) = $NatCon
 
 %% ---- max
 
 [max11]
-	max1({$Integer, $Elem*}) = max2({$Elem*}, $Integer)
+	max1({$NatCon, $Elem*}) = max2({$Elem*}, $NatCon)
 [max12]
 	max1({}) = 0
 [default-max1]
 	max1({$Elem, $Elem*}) = max1({$Elem*})
 
 
-[max21]	$Integer1 > $Integer2 = true
+[max21]	$NatCon1 > $NatCon2 = true
 	===========================================================================
-	max2({$Integer1, $Elem*}, $Integer2) = max2({$Elem*}, $Integer1)
+	max2({$NatCon1, $Elem*}, $NatCon2) = max2({$Elem*}, $NatCon1)
 
-[max22]	max2({}, $Integer) = $Integer
+[max22]	max2({}, $NatCon) = $NatCon
 
 [default-max2]
-	max2({$Elem, $Elem*}, $Integer2) = max2({$Elem*}, $Integer2)
+	max2({$Elem, $Elem*}, $NatCon2) = max2({$Elem*}, $NatCon2)
 
-[max-1]	$Bag = evalx($Exp, $Rstore)
+[max-1]	$Bag = evalx($Exp, $Rstore),
+	$NatCon = max1($Bag)
 	========================================
-	evalx(max($Exp), $Rstore) = max1($Bag)
+	evalx(max($Exp), $Rstore) = $NatCon
 
 %% ---- min
 
 [min11]
-	min1({$Integer, $Elem*}) = min2({$Elem*}, $Integer)
+	min1({$NatCon, $Elem*}) = min2({$Elem*}, $NatCon)
 [min12]
 	min1({}) = 0
 [default-min1]
 	min1({$Elem, $Elem*}) = min1({$Elem*})
 
 
-[min21]	$Integer1 < $Integer2 = true
+[min21]	$NatCon1 < $NatCon2 = true
 	===========================================================================
-	min2({$Integer1, $Elem*}, $Integer2) = min2({$Elem*}, $Integer1)
+	min2({$NatCon1, $Elem*}, $NatCon2) = min2({$Elem*}, $NatCon1)
 
-[min22]	min2({}, $Integer) = $Integer
+[min22]	min2({}, $NatCon) = $NatCon
 
 [default-min2]
-	min2({$Elem, $Elem*}, $Integer2) = min2({$Elem*}, $Integer2)
+	min2({$Elem, $Elem*}, $NatCon2) = min2({$Elem*}, $NatCon2)
 
-[min-1]	$Bag = evalx($Exp, $Rstore)
+[min-1]	$Bag = evalx($Exp, $Rstore),
+	$NatCon = min1($Bag)
 	========================================
-	evalx(min($Exp), $Rstore) = min1($Bag)
+	evalx(min($Exp), $Rstore) = $NatCon
 
 
 

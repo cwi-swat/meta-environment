@@ -96,6 +96,8 @@ exports
 	compat-cmp(REXP, REXPTYPE, REXPTYPE, TENV)		-> TENV
 	check-cmp(REXP, REXP, REXP, TENV)			-> REXPTYPE # TENV
 
+	check-int(REXP, REXP, REXP, TENV)			-> REXPTYPE # TENV
+
 	compat-un(REXP, REXPTYPE, REXPTYPE, TENV)		-> REXPTYPE # TENV
 	check-un(REXP, REXP, REXP, TENV)			-> REXPTYPE # TENV
 
@@ -160,7 +162,9 @@ hiddens
      "$Bag" [0-9\']*        	-> Bag[[Elem]]
      "$Rel" [0-9\']*        	-> Bag[[Elem]]
 
+     "$BoolCon" [0-9\']*    	-> BoolCon
      "$Boolean" [0-9\']*    	-> Boolean
+     "$NatCon" [0-9\']*    	-> NatCon
      "$Integer" [0-9\']*    	-> Integer
      "$Area" [0-9\']*    	-> Area
      "$String" [0-9\']*    	-> String

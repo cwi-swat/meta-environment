@@ -1,23 +1,25 @@
 equations
 
 [ETS1]	$Rstore = eval-rstats($Stat*, rstore(<NPASSED,0>,<NFAILED,0>,<FAILED,{}>)),
-	$Integer1 = value(NPASSED, $Rstore),
-	$Integer2 = value(NFAILED, $Rstore),
+	$NatCon1 = value(NPASSED, $Rstore),
+	$NatCon2 = value(NFAILED, $Rstore),
 	$Val = value(FAILED, $Rstore)
 	==========================================================
-	eval-rscript-testsuite($Stat*) = testsuite-report($Integer1, $Integer2, $Val)
+	eval-rscript-testsuite($Stat*) = testsuite-report($NatCon1, $NatCon2, $Val)
 
-[TSR1] testsuite-report($Integer, 0, $Val) = All $Integer tests passed
-[TSR2] 	$Integer2 != 0
+[TSR1] testsuite-report($NatCon, 0, $Val) = All $NatCon tests passed
+[TSR2] 	$NatCon2 != 0
 	===========================================================
-	testsuite-report($Integer1, $Integer2, $Val) = 
-	$Integer2 of $Integer1 tests failed: $Val
+	testsuite-report($NatCon1, $NatCon2, $Val) = 
+	$NatCon2 of $NatCon1 tests failed: $Val
 
 %% Increment a variable
 
-[INC1]	value($Var, $Rstore) = $Integer
+[INC1]	value($Var, $Rstore) = $NatCon,
+	$Integer =  $NatCon + 1,
+	$NatCon' = $Integer
 	==================================================
-	increment($Var, $Rstore) = assign($Var, $Integer + 1, $Rstore)
+	increment($Var, $Rstore) = assign($Var, $NatCon', $Rstore)
 
 [S10]	evalp($Exp,$Rstore) = true
 	===================================================
