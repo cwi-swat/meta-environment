@@ -1,0 +1,34 @@
+equations
+
+[extractMethod-start]
+  &Area = get-area(&CompilationUnit),
+  &Rstore2 = extractMethod(&CompilationUnit, &Rstore1, &Area)
+  ===>
+  extractMethod(&CompilationUnit, &Rstore1) = &Rstore2
+
+[extractMethod-0]
+  &ClassDeclaration = &Modifiers class &Identifier &Super &Interfaces &ClassBody,
+  &ClassId = get-area(&Identifier),
+  &Rstore2 = extractMethod(&ClassBody, &Rstore1, &ClassId)
+  ===>
+  extractMethod(&ClassDeclaration, &Rstore1, &Area) = &Rstore2
+
+[extractMethod-1]
+  &ClassInstanceCreationExpression = new &ClassType ( &Expressions ) &ClassBody,
+  &ClassId = get-area(&ClassType),
+  &Rstore2 = extractMethod(&ClassBody, &Rstore1, &ClassId)
+  ===>
+  extractMethod(&ClassInstanceCreationExpression, &Rstore1, &Area) = &Rstore2
+
+[extractMethod-2]
+  &MethodDeclaration = &MethodHeader &MethodBody,
+  &MethodHeader = &Modifiers &MethodRes &MethodDeclarator &Throws,
+  &MethodDeclarator = &Identifier ( &FormalParameters ),
+  &MethodId = get-area(&Identifier),
+  &Tuple1 = <&MethodId, id2str(&Identifier)>,
+  &Rstore2 = add-tuple(METHOD_DECL, &Tuple1, &Rstore1),
+  &Tuple2 = <&MethodId, &Area>,
+  &Rstore3 = add-tuple(METHOD_DECL_OCCURS, &Tuple2, &Rstore2),
+  &Rstore4 = extractMethod(&MethodBody, &Rstore3, &Area)
+  ===>
+  extractMethod(&MethodDeclaration, &Rstore1, &Area) = &Rstore4

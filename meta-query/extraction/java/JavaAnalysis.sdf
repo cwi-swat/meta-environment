@@ -3,6 +3,7 @@ module JavaAnalysis
 imports ExtClass
 imports ExtCompilationUnit
 imports ExtInterface
+imports ExtMethod
 imports ExtPackage
 
 exports

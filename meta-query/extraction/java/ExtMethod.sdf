@@ -1,0 +1,58 @@
+module ExtMethod
+
+imports Rstore
+imports JavaOperations
+imports MyPosInfo[ClassDeclaration]
+imports MyPosInfo[ClassType]
+imports MyPosInfo[CompilationUnit]
+imports MyPosInfo[Identifier]
+
+exports
+  context-free syntax
+    extractMethod(CompilationUnit, RSTORE) -> RSTORE
+
+hiddens
+  context-free syntax
+    extractMethod(CompilationUnit, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractMethod(ClassDeclaration, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractMethod(ClassBody, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractMethod(ClassInstanceCreationExpression, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractMethod(MethodBody, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractMethod(MethodDeclaration, RSTORE, Area)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  variables
+    "&Area" -> Area
+    "&ClassBody" -> ClassBody
+    "&ClassDeclaration" -> ClassDeclaration
+    "&ClassId" -> Area
+    "&ClassInstanceCreationExpression" -> ClassInstanceCreationExpression
+    "&ClassType" -> ClassType
+    "&CompilationUnit" -> CompilationUnit
+    "&Expressions" -> {Expression ","}*
+    "&FormalParameters" -> {FormalParameter ","}*
+    "&Identifier" -> Identifier
+    "&Interfaces" -> Interfaces?
+    "&MethodBody" -> MethodBody
+    "&MethodDeclaration" -> MethodDeclaration
+    "&MethodDeclarator" -> MethodDeclarator
+    "&MethodHeader" -> MethodHeader
+    "&MethodId" -> Area
+    "&MethodRes" -> MethodRes
+    "&Modifiers" -> Modifier*
+    "&Name" -> Name
+    "&Rstore"[0-9]* -> RSTORE
+    "&Super" -> Super?
+    "&Throws" -> Throws?
+    "&Tuple"[0-9]* -> Elem # Elem
