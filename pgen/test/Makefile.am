@@ -21,11 +21,6 @@
 
 SUBDIRS    = first grammars tables
 
-EXTRA_DIST = lang-types regress-lang trmdiff trmdiff.in
+EXTRA_DIST = lang-types regress-lang 
 
 TESTS      = regress-lang
-
-regress-lang: dummy
-	@chmod +x $@
-
-dummy:

@@ -20,7 +20,7 @@
 #
 # make sure you have installed automake version 1.4 or above.
 
-aclocal 
+aclocal -I .
 autoconf
 autoheader
 automake -a

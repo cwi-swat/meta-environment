@@ -25,26 +25,27 @@ include ${top_srcdir}/make_rules
 bin_PROGRAMS = normalizer
 bin_SCRIPTS  = normalize-sdf
 
-#TESTS        = normalize-normalize-check
-
 EXTRA_DIST   = normalize-sdf.sh.src normalize-normalize-check.sh.src \
                normalize-test.sdf
 
 CLEANFILES   = normalize-sdf normalize-normalize-check
 
 normalizer_SOURCES = normalizer.c asf-interface.c asf-interface.h
-normalizer_LDADD   = -L$(top_builddir)/pgen/c-source -lSdf2-Normalization \
-                     -L$(top_builddir)/pgen/c-lib -lnative \
+normalizer_LDADD   = -L$(PGEN)/c-source -lSdf2-Normalization \
+                     -L$(PGEN)/c-lib -lnative \
                      -L$(ASC)/lib -lasc-support \
-                     -L$(ASFIX)/lib -lAsFix \
+                     -L$(TREE)/libasfix-old/libasfix -lAsFix \
                      -L$(ATERM)/lib -lATB -lATerm \
                      $(SOCKLIBS)
+
+ASFIXBIN=${TREE}/libasfix-old/libasfix/asfix-tools
+SGLRLOC=${SGLR}/sglr/sglr
 
 % : %.sh.src Makefile
 	sed 's@__PKGDATADIR__@$(pkgdatadir)@g;\
 	     s@__ASFIXBIN__@$(ASFIXBIN)@g;\
 	     s@__BINDIR__@$(bindir)@g;\
-	     s@__SGLR__@$(SGLR)@g;\
+	     s@__SGLR__@$(SGLRLOC)@g;\
 	     s@__VERSION__@$(VERSION)@g;'\
 	   < $< > $@
 	chmod 755 $@
