@@ -103,7 +103,7 @@ static void hiveClosed(int write_to_editor_fd)
 
 static void clearFocus(int write_to_editor_fd)
 {
-  ATBwriteTerm(write_to_editor_fd, ATparse("snd-do(clear-focus)"));
+  ATBwriteTerm(write_to_editor_fd, ATparse("rec-do(clear-focus)"));
 }
 
 /*}}}  */
@@ -111,7 +111,7 @@ static void clearFocus(int write_to_editor_fd)
 
 static void moveToFront(int write_to_editor_fd)
 {
-  ATBwriteTerm(write_to_editor_fd, ATparse("snd-do(editor-to-front)"));
+  ATBwriteTerm(write_to_editor_fd, ATparse("rec-do(editor-to-front)"));
 }
 
 /*}}}  */
@@ -119,7 +119,7 @@ static void moveToFront(int write_to_editor_fd)
 
 static void writeContents(int write_to_editor_fd)
 {
-  ATBwriteTerm(write_to_editor_fd, ATparse("snd-do(write-contents)"));
+  ATBwriteTerm(write_to_editor_fd, ATparse("rec-do(write-contents)"));
 }
 
 /*}}}  */
@@ -127,7 +127,7 @@ static void writeContents(int write_to_editor_fd)
 
 static void rereadContents(int write_to_editor_fd)
 {
-  ATBwriteTerm(write_to_editor_fd, ATparse("snd-do(reread-contents)"));
+  ATBwriteTerm(write_to_editor_fd, ATparse("rec-do(reread-contents)"));
 }
 
 /*}}}  */
@@ -135,7 +135,7 @@ static void rereadContents(int write_to_editor_fd)
 
 static void isModified(int write_to_editor_fd)
 {
-  ATBwriteTerm(write_to_editor_fd, ATparse("snd-do(is-modified)"));
+  ATBwriteTerm(write_to_editor_fd, ATparse("rec-do(is-modified)"));
 }
 
 /*}}}  */
@@ -145,7 +145,7 @@ static void addActions(int write_to_editor_fd, TE_Action action)
 {
   ATerm t;
 
-  t = ATmake("snd-do(add-actions(<term>))", TE_getActionActions(action));
+  t = ATmake("rec-do(add-actions(<term>))", TE_getActionActions(action));
 
   ATBwriteTerm(write_to_editor_fd, t);
 }
@@ -157,7 +157,7 @@ static void displayMessage(int write_to_editor_fd, TE_Action action)
 {
   ATerm t;
 
-  t = ATmake("snd-do(display-message(<str>))", TE_getActionMessage(action));
+  t = ATmake("rec-do(display-message(<str>))", TE_getActionMessage(action));
 
   ATBwriteTerm(write_to_editor_fd, t);
 }
@@ -169,7 +169,7 @@ static void setFocus(int write_to_editor_fd, TE_Action action)
 {
   ATerm t;
 
-  t = ATmake("snd-do(set-focus(<term>))", TE_getActionFocus(action));
+  t = ATmake("rec-do(set-focus(<term>))", TE_getActionFocus(action));
 
   ATBwriteTerm(write_to_editor_fd, t);
 }
@@ -181,7 +181,7 @@ static void setCursorAtOffset(int write_to_editor_fd, TE_Action action)
 {
   ATerm t;
 
-  t = ATmake("snd-do(set-cursor-at-offset(<int>))", TE_getActionOffset(action));
+  t = ATmake("rec-do(set-cursor-at-offset(<int>))", TE_getActionOffset(action));
 
   ATBwriteTerm(write_to_editor_fd, t);
 }
