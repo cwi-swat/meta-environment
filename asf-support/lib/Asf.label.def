@@ -3,31 +3,38 @@ definition
 module Equations
 imports Characters
 exports
-  sorts Equations
+  sorts ASF-Equations
 
 hiddens
-  sorts Tag TagId CondEquation Equation Implies Condition Equations
+  sorts ASF-Tag 
+        ASF-TagId 
+        ASF-ConditionalEquation 
+        ASF-Equation 
+        ASF-Implies 
+        ASF-Condition 
+        ASF-Conditions
+
 exports
   lexical syntax
-    "===" [\=]* [\>]?  -> Implies {cons("default")}
-    [A-Za-z0-9\"\']                                  -> TagId {avoid,cons("one-char")}
-    [A-Za-z0-9\"\'][A-Za-z0-9\"\'\-]*[A-Za-z0-9\"\'] -> TagId {avoid,cons("many-chars")}
+    "===" [\=]* [\>]?  -> ASF-Implies {cons("default")}
+    [A-Za-z0-9\"\']                                  -> ASF-TagId {avoid,cons("one-char")}
+    [A-Za-z0-9\"\'][A-Za-z0-9\"\'\-]*[A-Za-z0-9\"\'] -> ASF-TagId {avoid,cons("many-chars")}
      
   lexical restrictions
-    Implies -/- [\=]
+    ASF-Implies -/- [\=]
 
   context-free syntax
 
-    list:{Condition ","}+           -> Conditions
-                                    -> Equations {cons("absent")} 
-    "equations" list:CondEquation*  -> Equations {cons("present")}
+    list:{ASF-Condition ","}+                  -> ASF-Conditions
+                                               -> ASF-Equations {cons("absent")} 
+    "equations" list:ASF-ConditionalEquation*  -> ASF-Equations {cons("present")}
 
-    Tag Equation                    -> CondEquation {cons("simple")}
-    Tag Conditions Implies Equation -> CondEquation {cons("implies")}
-    Tag Equation "when" Conditions  -> CondEquation {cons("when")}
+    ASF-Tag ASF-Equation                            -> ASF-ConditionalEquation {cons("simple")}
+    ASF-Tag ASF-Conditions ASF-Implies ASF-Equation -> ASF-ConditionalEquation {cons("implies")}
+    ASF-Tag ASF-Equation "when" ASF-Conditions      -> ASF-ConditionalEquation {cons("when")}
 
-    "[" "]"                         -> Tag {cons("empty")}
-    "[" TagId "]"                   -> Tag {cons("not-empty")}
+    "[" "]"           -> ASF-Tag {cons("empty")}
+    "[" ASF-TagId "]" -> ASF-Tag {cons("not-empty")}
 
 module GEN-LexConsFuncs
 
@@ -67,9 +74,9 @@ exports
 %% FOR EACH Sort IN ASF+SDF SPEC DO
 %%   Tree := Sort;
 %%   ADD PRODUCTIONS {
-       lhs:Tree          "=" rhs:Tree -> Equation
-       lhs:Tree          "=" rhs:Tree -> Condition {cons("positive")}
-       lhs:Tree unequal:"!=" rhs:Tree -> Condition {cons("negative")}
+       lhs:Tree          "=" rhs:Tree -> ASF-Equation
+       lhs:Tree          "=" rhs:Tree -> ASF-Condition {cons("positive")}
+       lhs:Tree unequal:"!=" rhs:Tree -> ASF-Condition {cons("negative")}
        "amb" "(" ambs:{Tree ","}* ")" -> Tree      {cons("ambiguity-constructor")}
 %%   }
 %% NEXT Sort
@@ -80,7 +87,7 @@ hiddens
   sorts CHAR
 exports
   lexical syntax
-    [\"] value:~[\257] [\"]         -> CHAR {cons("default")}
+    [\"] value:~[\257] [\"] -> CHAR {cons("default")}
 
 module Main
   imports GEN-Equations

@@ -11,7 +11,7 @@ CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
 
 
 api: subst-eqs
-	sdf2-to-adt -r -i Asf.label.def -o ASFME.raw
+	sdf2-to-adt -i Asf.label.def -o ASFME.raw
 	sdf2-to-c -b -o ASFME --prefix ASF_
 	./subst-eqs ASFME.raw > ASFME.adt
 	echo "typedef ATerm ASF_Symbol;" >> ASFME.pro

@@ -20,12 +20,12 @@
 
 /*{{{  ATbool ASF_isTagDefault(ASF_Tag tag) */
 
-ATbool ASF_isTagDefault(ASF_Tag tag)
+ATbool ASF_isTagDefault(ASF_ASFTag tag)
 {
-  if (ASF_isTagNotEmpty(tag)) {
-    ASF_TagId tagId = ASF_getTagTagId(tag);
+  if (ASF_isASFTagNotEmpty(tag)) {
+    ASF_ASFTagId tagId = ASF_getASFTagASFTagId(tag);
 
-    char *lex = ASF_getCHARLISTString(ASF_getTagIdChars(tagId));
+    char *lex = ASF_getCHARLISTString(ASF_getASFTagIdChars(tagId));
     return streqn(lex, DEFAULT_TAG_PREFIX, strlen(DEFAULT_TAG_PREFIX)) 
            ||
            streq(lex, DEFAULT_TAG);
@@ -34,11 +34,11 @@ ATbool ASF_isTagDefault(ASF_Tag tag)
 }
 
 /*}}}  */
-/*{{{  int ASF_getCondEquationListLength(ASF_CondEquationList eqs) */
+/*{{{  int ASF_getASFConditionalEquationListLength(ASF_ASFConditionalEquationList eqs) */
 
-int ASF_getCondEquationListLength(ASF_CondEquationList eqs)
+int ASF_getASFConditionalEquationListLength(ASF_ASFConditionalEquationList eqs)
 {
-   return (ATgetLength((ATermList)ASF_makeTermFromCondEquationList(eqs))/2)+1;
+   return (ATgetLength((ATermList)ASF_makeTermFromASFConditionalEquationList(eqs))/2)+1;
 }
 
 /*}}}  */
@@ -52,28 +52,28 @@ int ASF_getCHARListLength(ASF_CHARList list)
 /*}}}  */
 /*{{{  int ASF_getConditionListLength(ASF_ConditionList list) */
 
-int ASF_getConditionListLength(ASF_ConditionList list)
+int ASF_getConditionListLength(ASF_ASFConditionList list)
 {
-  return (ATgetLength((ATermList) ASF_makeTermFromConditionList(list)) / 2) + 1;
+  return (ATgetLength((ATermList) ASF_makeTermFromASFConditionList(list)) / 2) + 1;
 }
 
 /*}}}  */
-/*{{{  ASF_CondEquationList ASF_concatCondEquationList(ASF_CondEquationList l1, l2) */
+/*{{{  ASF_ASFConditionalEquationList ASF_concatASFConditionalEquationList(ASF_ASFConditionalEquationList l1, l2) */
 
-ASF_CondEquationList ASF_concatCondEquationList(ASF_CondEquationList l1,
-						ASF_CondEquationList l2)
+ASF_ASFConditionalEquationList ASF_concatASFConditionalEquationList(ASF_ASFConditionalEquationList l1,
+						ASF_ASFConditionalEquationList l2)
 {
-  if (!ASF_isCondEquationListEmpty(l2)) {
-    if (ASF_hasCondEquationListHead(l1)) {
-      ASF_CondEquation head = ASF_getCondEquationListHead(l1);
-      if (ASF_hasCondEquationListTail(l1)) {
-        ASF_CondEquationList tail = ASF_getCondEquationListTail(l1);
+  if (!ASF_isASFConditionalEquationListEmpty(l2)) {
+    if (ASF_hasASFConditionalEquationListHead(l1)) {
+      ASF_ASFConditionalEquation head = ASF_getASFConditionalEquationListHead(l1);
+      if (ASF_hasASFConditionalEquationListTail(l1)) {
+        ASF_ASFConditionalEquationList tail = ASF_getASFConditionalEquationListTail(l1);
       
-        return ASF_makeCondEquationListMany(head, ASF_makeLayoutEmpty(),
-                 ASF_concatCondEquationList(tail, l2));
+        return ASF_makeASFConditionalEquationListMany(head, ASF_makeLayoutEmpty(),
+                 ASF_concatASFConditionalEquationList(tail, l2));
       }
       else {
-        return ASF_makeCondEquationListMany(head, ASF_makeLayoutEmpty(), l2);
+        return ASF_makeASFConditionalEquationListMany(head, ASF_makeLayoutEmpty(), l2);
       }
     }
     else {
@@ -85,48 +85,48 @@ ASF_CondEquationList ASF_concatCondEquationList(ASF_CondEquationList l1,
 }
 
 /*}}}  */
-/*{{{  ASF_CondEquationList ASF_unionCondEquationList(ASF_CondEquationList l1, l2) */
+/*{{{  ASF_ASFConditionalEquationList ASF_unionASFConditionalEquationList(ASF_ASFConditionalEquationList l1, l2) */
 
-ASF_CondEquationList ASF_unionCondEquationList(ASF_CondEquationList cel1,
-                                               ASF_CondEquationList cel2)
+ASF_ASFConditionalEquationList ASF_unionASFConditionalEquationList(ASF_ASFConditionalEquationList cel1,
+                                               ASF_ASFConditionalEquationList cel2)
 {
-  if (!ASF_isCondEquationListEmpty(cel2)) {
-    if (!ASF_isCondEquationListEmpty(cel1)) {
-      int len1 = ASF_getCondEquationListLength(cel1);
-      int len2 = ASF_getCondEquationListLength(cel2);
+  if (!ASF_isASFConditionalEquationListEmpty(cel2)) {
+    if (!ASF_isASFConditionalEquationListEmpty(cel1)) {
+      int len1 = ASF_getASFConditionalEquationListLength(cel1);
+      int len2 = ASF_getASFConditionalEquationListLength(cel2);
       ATermIndexedSet iSet = ATindexedSetCreate((len1+len2)*2, 75);
-      ASF_CondEquation ce;
-      ASF_CondEquationList newCel = ASF_makeCondEquationListEmpty();
+      ASF_ASFConditionalEquation ce;
+      ASF_ASFConditionalEquationList newCel = ASF_makeASFConditionalEquationListEmpty();
       int maxIndex = 0, index;
       ATbool ignored;
 
-      while (ASF_hasCondEquationListHead(cel1)) {
-        ce = ASF_getCondEquationListHead(cel1);
+      while (ASF_hasASFConditionalEquationListHead(cel1)) {
+        ce = ASF_getASFConditionalEquationListHead(cel1);
         index = ATindexedSetPut(iSet, 
-                                ASF_makeTermFromCondEquation(ce),
+                                ASF_makeTermFromASFConditionalEquation(ce),
                                 &ignored);
         if (index > maxIndex) {
           maxIndex = index;
         }
                                    
-        if (ASF_hasCondEquationListTail(cel1)) {
-          cel1 = ASF_getCondEquationListTail(cel1);
+        if (ASF_hasASFConditionalEquationListTail(cel1)) {
+          cel1 = ASF_getASFConditionalEquationListTail(cel1);
         }
         else {
           break;
         }
       }
-      while (ASF_hasCondEquationListHead(cel2)) {
-        ce = ASF_getCondEquationListHead(cel2);
+      while (ASF_hasASFConditionalEquationListHead(cel2)) {
+        ce = ASF_getASFConditionalEquationListHead(cel2);
         index = ATindexedSetPut(iSet, 
-                                ASF_makeTermFromCondEquation(ce),
+                                ASF_makeTermFromASFConditionalEquation(ce),
                                 &ignored);
         if (index > maxIndex) {
           maxIndex = index;
         }
                                    
-        if (ASF_hasCondEquationListTail(cel2)) {
-          cel2 = ASF_getCondEquationListTail(cel2);
+        if (ASF_hasASFConditionalEquationListTail(cel2)) {
+          cel2 = ASF_getASFConditionalEquationListTail(cel2);
         }
         else {
           break;
@@ -134,8 +134,8 @@ ASF_CondEquationList ASF_unionCondEquationList(ASF_CondEquationList cel1,
       }
       
       for (index=0; index <= maxIndex; index++) {
-        ce = ASF_makeCondEquationFromTerm(ATindexedSetGetElem(iSet, index));
-        newCel = ASF_makeCondEquationListMany(ce,
+        ce = ASF_makeASFConditionalEquationFromTerm(ATindexedSetGetElem(iSet, index));
+        newCel = ASF_makeASFConditionalEquationListMany(ce,
                                               ASF_makeLayoutEmpty(), 
                                               newCel);
       }
@@ -149,22 +149,22 @@ ASF_CondEquationList ASF_unionCondEquationList(ASF_CondEquationList cel1,
 }
 
 /*}}}  */
-/*{{{  ASF_CondEquationList ASF_makeCondEquationListFromParseTrees(ATermList l) */
+/*{{{  ASF_ASFConditionalEquationList ASF_makeASFConditionalEquationListFromParseTrees(ATermList l) */
 
-ASF_CondEquationList ASF_makeCondEquationListFromParseTrees(ATermList l)
+ASF_ASFConditionalEquationList ASF_makeASFConditionalEquationListFromParseTrees(ATermList l)
 {
-  ASF_CondEquationList alleqs = ASF_makeCondEquationListEmpty();
+  ASF_ASFConditionalEquationList alleqs = ASF_makeASFConditionalEquationListEmpty();
 
   for(; !ATisEmpty(l); l = ATgetNext(l)) {
     PT_ParseTree parseTree = PT_makeParseTreeFromTerm(ATgetFirst(l));
     PT_Tree  tree = PT_getParseTreeTree(parseTree);
-    ASF_CondEquationList list;
-    ASF_Equations equations;
+    ASF_ASFConditionalEquationList list;
+    ASF_ASFEquations equations;
 
-    equations = ASF_makeEquationsFromTerm(PT_makeTermFromTree(tree));
+    equations = ASF_makeASFEquationsFromTerm(PT_makeTermFromTree(tree));
 
-    list = ASF_getEquationsList(equations);
-    alleqs = ASF_unionCondEquationList(list,alleqs);
+    list = ASF_getASFEquationsList(equations);
+    alleqs = ASF_unionASFConditionalEquationList(list,alleqs);
   }
 
   return alleqs;
