@@ -219,12 +219,8 @@ ATerm SGparseStringAsAsFix2ME(language L, char *G, char *S)
   if (SGisParseTree(t)) {
     tree = ATgetArgument(t, 0);
     amb  = ATgetArgument(t, 1); 
-    if (SG_TOOLBUS) {
-      t = (ATerm) ATmakeAppl2(SG_ParseTree_AFun, ATBpack(tree), amb);
-    }
-    else {
-      t = (ATerm) ATmakeAppl1(SG_ParseTree_AFun, t);
-    }
+
+    return (ATerm) ATmakeAppl1(SG_ParseTree_AFun, t);
   }
 
   return SG_TermToToolbus(t);

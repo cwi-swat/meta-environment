@@ -58,7 +58,17 @@ ATerm parse_string(int conn, ATerm L, char *G, char *S)
 
 ATerm parse_string_as_asfix2me(int conn, ATerm L, char *G, char *S)
 {
-  return SGparseStringAsAsFix2ME(L, G, S);
+  PT_ParseTree tree = NULL;
+  ATerm result = SGparseStringAsAsFix2ME(L, G, S);
+
+  if (ATmatch(result, "parsetree(<term>)", &tree)) {
+    PT_Tree pt = PT_getParseTreeTop(tree);
+    int amb = PT_getParseTreeAmbCnt(tree);
+
+    return ATmake("parsetree(<term>,<int>)", ATBpack((ATerm) pt), amb);
+  }
+
+  return result;
 }
 
 ATerm open_language_from_term(int conn, ATerm L, ATerm tbl)
