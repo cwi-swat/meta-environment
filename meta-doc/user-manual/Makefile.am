@@ -14,14 +14,7 @@ EXTRA_DIST = $(wildcard *.ltx) \
 
 MANUAL	= manual.ltx
 
-PSJES = Bool-example_asf.ps Bool-example_sdf2.ps Bool-example_trm.ps \
-	Bool-example_trm3.ps \
-	pico-syntax-term-actions-menu.ps \
-	open-file.ps file-menu.ps refactor-menu.ps select-window.ps \
-	meta-Bool-example.ps meta-Pico-syntax.ps \
-	meta-env-menu1.ps meta-env-menu2.ps meta-pico.ps \
-	meta-parsetree.ps meta-start.ps module-menu.ps move-menu.ps \
-	reduct_out.ps viewer.ps newarch.eps
+PSJES = newarch.eps
 
 EPSJES = ${PSJES:.ps=.eps}
 PDFJES = ${EPSJES:.eps=.pdf}
@@ -33,12 +26,13 @@ CLEANFILES = manual.aux manual.bbl manual.blg manual.dvi \
 
 manual: asf+sdf-user-manual.pdf
 
-manual.dvi: $(MANUAL)
-	latex manual.ltx
+manual.ps: $(MANUAL)
+	pdflatex manual.ltx
 	makeindex manual.idx
 	bibtex manual
-	latex manual.ltx
-	latex manual.ltx
+	pdflatex manual.ltx
+	pdflatex manual.ltx
+	acroread -toPostScript manual.pdf
 
 spell:
 	detex manual.ltx | spell -b +words.txt

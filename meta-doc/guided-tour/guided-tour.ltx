@@ -1,0 +1,1603 @@
+%{{{ LaTeX configuration
+
+% vim:ts=4:sw=4:tw=75
+\documentclass[a4paper,twoside]{article}
+\usepackage{hyperlatex} 
+\usepackage{xspace}
+\usepackage{verbatim}
+\usepackage[english]{babel}
+\usepackage{times}
+\usepackage{a4wide}
+\usepackage{alltt}
+\usepackage{moreverb}  
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\W\usepackage{longtable}
+\W\usepackage{makeidx}
+\W\usepackage{frames}
+%%%% \W\usepackage{manpanels}
+\W\usepackage{sequential}
+
+\T\usepackage{graphicx}
+
+%\begin{ifhtml}
+\makeindex
+%\end{ifhtml}
+
+\xmlattributes{body}{bgcolor= "#ffffe6"}
+\xmlattributes{TABLE}{BORDER}
+
+\htmltopname{ASF+SDF Meta-Environment User Manual}
+
+\newcommand{\printindex}{%
+  \htmlonly{\HlxSection{-5}{}*{\indexname}\label{hlxindex}}%
+  \texorhtml{\IfFileExists{manual.ind}{\input{manual.ind}}}{\htmlprintindex}}
+
+\htmlpanelfield{Contents}{hlxcontents}
+\htmlpanelfield{Index}{hlxindex}
+
+\newcommand{\ASmetaenv}{{\textsc ASF}+{\textsc SDF} Meta-En\-vir\-on\-ment}
+\newcommand{\sdf}{{\textsc SDF}}
+\newcommand{\asf}{{\textsc ASF}}
+\newcommand{\asfsdf}{{\textsc ASF}+{\textsc SDF}}
+\newcommand{\ATerm}{ATerm}
+\newcommand{\ATerms}{ATerms}
+\newcommand{\xemacs}{{\tt XEmacs}}
+
+\newcommand{\fignegspacebefore}{\vspace*{-0.25cm}}
+\newcommand{\fignegspacebetween}{\vspace*{-0.25cm}}
+\newcommand{\fignegspaceafter}{\vspace*{-0.5cm}}        
+
+\newenvironment{Code}
+        {\begin{small}\begin{center}}
+        {\end{center}\end{small}}
+
+\newcommand{\crule}{
+   \htmlonly{\htmlrule}
+%% \htmlimage{grey-line.gif}
+  \texonly{\hrulefill}
+}
+
+\newenvironment{IncCode}
+        {\crule \begin{small}}
+        {\end{small} \crule}  
+
+\newenvironment{CodeExample}
+        {\crule \begin{center} \begin{small}}
+        {\end{small} \end{center} \crule}
+
+\newcommand{\warning}{
+	\htmlonly{\htmlimage{warning.gif}}
+	\texonly{\noindent {\bf Warning}:}
+}
+
+\newcommand{\traversalprod}[2]{\ensuremath{f(S_1 ,\dots, S_{#1}) \rightarrow #2}}
+\newcommand{\transformerprod}{\ensuremath{f(S_1 ,\dots, S_n) \rightarrow S_1} \{\traversal(\trafo)\}}
+\newcommand{\accumulatorprod}[1]{\ensuremath{f(S_1 , S_2 ,\dots, S_{#1}) \rightarrow S_2}}
+\newcommand{\combinationprod}[1]{\ensuremath{f(S_1 , S_2 ,\dots, S_{#1}) \rightarrow S_1 \# S_2}}
+\newcommand{\accu}[0]{{\tt accu}}
+\newcommand{\trafo}[0]{{\tt trafo}}
+\newcommand{\accutrafo}[0]{{\tt accu, trafo}}
+\newcommand{\traversal}[0]{{\tt traversal}}
+\newcommand{\innerm}[0]{{\tt bottom-up}}
+\newcommand{\outerm}[0]{{\tt top-down}}
+\newcommand{\suppress}[0]{{\tt suppress-syntax-generation}}
+\newcommand{\generate}[0]{{\tt generate-syntax}}
+%}}}
+%{{{ Title page and table of contents
+
+%----[ TITLE PAGE ]----           
+\title{\ASmetaenv: Guided Tour \\ $Revision$}
+\author{M.G.J. van den Brand and P. Klint\\
+        {\small Centrum voor Wiskunde en Informatica (CWI),}\\
+{\small Kruislaan 413, 1098 SJ Amsterdam, The Netherlands}}
+
+\htmltitle{ASF+SDF Meta-Environment: Guided Tour \\ $Revision$}
+\htmldirectory{html} 
+\htmlname{user-manual}
+\htmladdress{M.G.J. van den Brand and P. Klint, \today}
+
+\newcommand{\homepage}{http://www.cwi.nl/\~{}markvdb/}
+
+\xmlattributes{BODY}{BGCOLOR="#ffffe6"}
+\xmlattributes{TABLE}{BORDER}
+\setcounter{htmldepth}{3}
+\setcounter{secnumdepth}{3}
+
+\date{\today}
+\begin{document}
+\maketitle    
+
+
+\begin{ifhtml}
+\begin{center}
+This document is also available as both 
+\xlink{postscript}{http://www.cwi.nl/projects/MetaEnv/meta/doc/manual.ps.gz}
+and \xlink{pdf}{http://www.cwi.nl/projects/MetaEnv/meta/doc/manual.pdf}
+documents.
+\end{center}
+\end{ifhtml}
+
+\begin{abstract}
+This is a preliminary user manual for the \ASmetaenv\ Release 1.
+This is work under construction.
+
+\end{abstract}
+
+Some images $\copyright$ 2001-2002 \xlink{www.arttoday.com}{http://www.arttoday.com}.
+
+\T\tableofcontents
+
+\W\htmlmenu{0}
+
+%}}}
+
+%{{{ Overview
+
+%---- [ OVERVIEW ]---- 
+
+\section*{Update with respect to previous version}
+
+\begin{itemize}
+\item Introduced the new user interface.
+\end{itemize}
+
+\section{Overview}
+\label{overview} 
+
+\subsection{When to use the \ASmetaenv?}
+
+\index{Asf+Sdf Meta-Environment@\ASmetaenv}
+\index{Asf+Sdf formalism@\asfsdf\ formalism}
+The \ASmetaenv\ is an interactive development environment
+for the automatic generation of interactive systems for manipulating
+programs, specifications, or other texts written in a formal
+language. The generation process is controlled by a definition of the
+target language, which typically includes such features as syntax,
+pretty printing, type checking and execution of programs in the target
+language. The \ASmetaenv\ can help you if:
+
+\begin{itemize}
+
+  \item You have to write a formal specification for some problem
+  and you need interactive support to do this.
+
+  \item You have developed your own (application) language and want to
+  create an interactive environment for it.
+
+  \item You have programs in some existing programming language and you
+   want to analyze or transform them.
+\end{itemize}
+
+The \asfsdf\ formalism allows the definition of syntactic as well as
+semantic aspects of a (programming) language. 
+It can be used for the definition of languages (for
+programming, for writing specifications, for querying databases, for
+text processing, or for dedicated applications). In addition it can be
+used for the formal specification of a wide variety of
+problems. \asfsdf\ provides you with:
+
+\begin{itemize}
+
+  \item A general-purpose algebraic specification formalism based on equational logic. 
+
+  \item Modular structuring of specifications.
+
+  \item Integrated definition of lexical, context-free, and abstract syntax. 
+
+  \item User-defined syntax, allowing you to write specifications using your own notation. 
+
+  \item Complete integration of the definition of syntax and
+  semantics.
+
+\end{itemize}
+
+The \ASmetaenv\ offers: 
+
+\begin{itemize}
+
+  \item Syntax-directed editing of \asfsdf\ specifications.
+
+  \item Testing of specifications by means of interpretation.
+
+  \item Compilation of \asfsdf\ specifications into dedicated
+interactive environments containing various tools such as a parser, 
+a pretty printer, a syntax-directed editor, a
+debugger, and an interpreter or compiler.
+
+\end{itemize}
+
+The advantages of creating interactive environments in this way are twofold:
+
+\begin{itemize}
+
+  \item \emph{Increased uniformity}. Similar tools for different
+  languages often suffer from a lack of uniformity.  Generating tools
+  from language definitions will result in a large increase in
+  uniformity, with corresponding benefits for the user.
+
+  \item \emph{Reduced implementation effort.} Preparing a language
+  definition requires significantly less effort than developing an
+  environment from scratch.
+
+\end{itemize}
+
+\subsection{Global Structure of the Meta-Environment}
+
+\index{generic syntax-directed editor@generic syntax-directed editor}
+\index{syntax-directed editor@syntax-directed editor}
+\index{term editor@term editor}
+You can create new specifications or modify and test existing ones
+using the Meta-Environment. Specifications consist of a series of
+modules, and individual modules can be edited by invoking editors
+for the syntax part and the equations part of a module.
+All editing in the Meta-Environment is done by creating
+instances of a \emph{generic syntax-directed editor}.
+
+After each editing operation on a module, its \emph{implementation} is updated
+immediately. It consists of a parser, a pretty
+printer, and a term rewriting system which are all derived from the
+module automatically.
+
+A module can be tested by invoking a \emph{term editor} to create and evaluate
+terms defined by the module. Term editors use the syntax of the module for
+parsing the textual representation of terms and for converting them to
+internal format (syntax trees). The equations of the module are then used to
+reduce the terms into normal form. This result is, in its turn, converted back
+to textual form by pretty printing it.
+
+%%The reduction of a term can be monitored by using EDB (Equation
+%%Debugger), a debugging system that allows you to reduce a term
+%%step-by-step or to place breakpoints for interrupting the reduction
+%%process at specific moments.
+
+%%Finally, term editors can be customized by adding \emph{buttons} whose
+%%activation starts the evaluation of a function which is defined in the
+%%specification. In this way you can customize the user-interface of the
+%%application by adding, for instance, a typechecking or evaluation
+%%button to a term editor. (** check; not in Release 1.**)
+
+\subsection{About this Manual}
+
+This manual is intended for those users that want to try
+out the \ASmetaenv. This manual is
+still under development and we welcome all feed back and comments.
+
+%%In the sequel we will use \ASmetaenv\ to address the new
+%%system and old \ASmetaenv\ when addressing the old system.
+
+The focus of this manual will be on using the system to write a
+specification like a type checker or evaluator for the toy language
+PICO. It follows the user-interface to explain the capabilities of the
+system.  Topics that will be addressed include:
+\begin{itemize}
+\item How to start the system and exit it.
+\item How to create, open, and save a specification.
+\item How to edit the syntax and/or equations part of a module.
+\item How to edit a term.
+\item How to evaluate a term.
+\item How to compile a specification.
+\item How to parse a term outside the \ASmetaenv.
+\item How to rewrite a term using a compiled specification outside the
+\ASmetaenv.
+\item How to unparse parsed and/or normalized terms.
+\end{itemize}
+
+\noindent We do \emph{not} explain in detail:
+
+\begin{itemize}
+\item The formalism \asfsdf. 
+We only give a \link{quick introduction to \asfsdf}[ (Section~\Ref)]{ASF+SDF}.
+
+\item The architecture and implementation of the system.
+We only give a brief sketch of the underlying 
+\link{technology and architecture of the \ASmetaenv}
+[ (Section~\Ref)]{SEC:TechnologyandArchitecture}.
+
+\item The stand-alone usage of various parts of the system.
+We only describe the \link{usage of the most important components}[ (Section~\Ref)]{SEC:Components}.
+\end{itemize}
+
+\subsection{Downloading the \ASmetaenv}
+
+\index{download@download}
+You can download the \ASmetaenv\ from the following location:
+\begin{verbatim}
+   http://www.cwi.nl/projects/MetaEnv/
+\end{verbatim}
+
+\noindent It provides links to the software as well as to related documents.
+
+\subsection{Further Reading}
+
+There are many publications about the \ASmetaenv\ itself, about the
+implementation techniques used, and about applications.
+Also see the overview of
+\link{architecture and implementation techniques}[ (Section~\Ref)]{SEC:TechnologyandArchitecture}. 
+We give here a brief
+overview of selected publications:
+
+\begin{description}
+
+\item{Overviews:} \cite{HKKL85}, \cite{Kli93}, \cite{B*97}, \cite{B*01}.
+
+\item{General ideas:} \cite{HK85b}, \cite{HK00}, \cite{H00}.
+
+\item{ASF:} \cite{BHK89}.
+
+\item{SDF:} \cite{HHKR89}, \cite{Vis97}.
+
+\item{ASF+SDF:} \cite{BHK89}, \cite{DHK96}.
+
+\item{Parser generation and parsing}: \cite{Rek87b}, \cite{HKR90},
+\cite{RK91}, \cite{R92}, \cite{Vis97}, \cite{BSVV02}, \cite{BKMV03}.
+
+\item{Pretty printing:} \cite{BV96}, \cite{Jon00}.
+
+\item{Rewriting and Compilation:} \cite{BKO99}, \cite{vdBHK00}, \cite{vdBV00},
+\cite{BKV01}, \cite{BHKO02}.
+
+\item{ToolBus}: \cite{BK98}.
+
+\item{ATerms:} \cite{BJKO00}.
+
+\item{Applications:} \cite{BDKKM96},\cite{BS00}, \cite{BR00}.
+
+\item{Generic debugging}: \cite{Oli00}.
+
+\item{Traversal functions}: \cite{BKV02}, \cite{BKV03}.
+
+\item{User manuals:} \cite{ATmanual}, \cite{TBmanual},
+\cite{MEmanual}.
+
+\end{description}
+
+\section*{Acknowledgements}
+Peter D. Mosses, Albert Hofkamp, Akim Demaille, Jurgen Vinju.
+
+
+\section{Starting the System}
+\label{StartingMeta}
+
+\index{meta@{\tt meta}}
+\index{Asf+Sdf Meta-Environment@\ASmetaenv}
+The \ASmetaenv\ can be invoked via the command {\tt meta}.  As a
+result, 
+\link{the \ASmetaenv\ main window pops up.}[ This is shown in Figure~\Ref.]{FIG:meta-start}
+
+\begin{figure}[t]
+\begin{center}
+\begin{Label}{FIG:meta-start}
+\T \includegraphics[width=12cm]{meta-start}
+\W \htmlimage{meta-start.gif}
+
+\caption{Main window of \ASmetaenv}
+\end{Label}
+\end{center}
+\end{figure}
+
+The {\tt meta} command has the following options, which may come in handy
+later on. As a novice user, you may want to skip the remainder of this section
+and continue with the description of the 
+\link{Main Window}[ (Section~\Ref)]{MainWindow}.
+
+\begin{itemize}
+
+\item {\tt -C \emph{file}} specifies the configuration file to be used,
+in the default case the configuration file {\tt meta.conf} is used.
+
+\item {\tt -d} starts the \ASmetaenv\ in debug mode. As a result,
+an interactive viewer will be started that 
+allows the study of the internal behaviour of the system,
+the so-called \link{``ToolBus viewer''}[. This viewer is shown in Figure~\Ref]{FIG:viewer}.
+
+\item {\tt -h } shows help information for the {\tt meta} command.
+
+\item {\tt -m \emph{modulename}} starts the Meta-Environment and the
+module with the name \emph{modulename} is automatically opened.
+
+\item {\tt -t \emph{int}}  the Meta-Environment will abort after \emph{int}
+seconds.
+
+\item {\tt -T \emph{port}} controls the communication ports that will
+be used for communication between the components of the \ASmetaenv.
+Note that these ports are also controlled by the environment variable
+{\tt TB\_PORT}.  The default value is {\tt 8999}, but this port may be
+in use by someone else (or by an aborted previous run of the
+\ASmetaenv). In that case, it is advisable to use other values in the
+range 9000 and up.
+
+\item {\tt -v} runs the \ASmetaenv\ in verbose mode.
+
+\item {\tt -V} shows the version number of the \ASmetaenv\ you are running.
+
+\end{itemize}
+
+Search paths can be initialized by creating a file ``meta.conf'' in
+the directory from which the {\tt meta} command is initiated.  This
+file may contain a list of absolute and/or relative path names (each
+on a separate line) that will be searched when opening modules.  For
+instance, in the {\tt pico} directory (see 
+the \link{Guided Tour}[, Section~\Ref]{GuidedTour})
+you will find an example {\tt meta.conf} file which only contains the
+path `{\tt .}', i.e., only the current directory will be searched.
+
+\begin{figure}[t]
+\begin{center}
+\begin{Label}{FIG:viewer}
+\T \includegraphics[width=14cm]{viewer}
+\W \htmlimage{viewer.gif}
+\caption{ToolBus viewer}
+\end{Label}
+\end{center}
+\end{figure}
+
+\section{The Main Window}
+\label{MainWindow}
+
+The main window of the \ASmetaenv\ immediately after starting the system was
+already \link{shown}[ (Figure~\Ref)]{FIG:meta-start}.
+After loading a specification it may look as shown
+\link*{below}[in Figure~\Ref]{FIG:meta-pico}.
+
+The main window consists of the following parts:
+
+\begin{itemize}
+\item At the top of the window is a menu bar that contains the following menu:
+  \begin{itemize}
+
+   \item {\tt File}: for opening and creating of a module, opening a
+    library module, saving and closing a specification, 
+    refreshing of buttons as well as for leaving the \ASmetaenv.
+    The {\tt File} menu is described in  \link*{File Menu}[Section~\Ref]{FileMenu}.
+    
+
+  \end{itemize}
+
+\item Below {\tt File} a list of icons is shown:
+  \begin{itemize}
+ 
+   \item {\tt New Module} (the empty page) for creating a new module.
+   \item {\tt Open Module} (the non-empty page) for opening an existing
+         module.
+   \item {\tt Open Library Module} (the nicely wrapped box) for opening a
+         library module.
+   \item {\tt Save All} (the diskette) for saving the specification.
+   \item {\tt Close All} (the eraser) for closing a specification.
+   \item {\tt Exit} (the open door) for exiting the \ASmetaenv.
+   \item The bug with the magnifying glass for activating the debugger.
+   \item {\tt 100\%} for scaling the import graph.
+  \end{itemize}
+  These icons are described in 
+  \link*{Button Pane}[Section~\Ref]{ButtonPane}.
+  
+\item The pane \emph{import}: A graphical canvas (either \link{empty}[ in
+  Figure~\Ref]{FIG:meta-start}, or containing \link{rectangles
+    and arrows}[ in Figure~\Ref]{FIG:meta-pico}) at the right
+  hand side of the window shows the import graph of the specification you are
+  editing.  The import pane is described in 
+  \link*{Import Pane}[Section~\Ref]{ImportPane}.
+
+\item The pane \emph{parsetree}: Again a graphical canvas which will be
+      used to visualize the parse tree of a selected piece of a parsed
+      term.
+  
+\item The \emph{module pane}: a vertical list (either \link{empty}[ in
+  Figure~\Ref]{FIG:meta-start}, or containing names like
+  \link{{\tt Pico-syntax}, {\tt basic/Booleans}, ... }[ in  Figure~\Ref]{FIG:meta-pico}) 
+  at the left part (in the middle) of the
+  window that shows the names of all modules in the current specification.
+  The module pane is described in 
+  \link*{Module Pane}[Section~\Ref]{ModulePane}.
+
+ 
+\item The lower left part with the name {\tt No module} shows the import 
+      relations of a selected module. It contains 3 small panes: 
+      \begin{description}
+      \item {\tt Info}: showing the exact location of the selected module. 
+      \item {\tt Imports}: showing the list of modules the selected module
+             imports.
+      \item {\tt Imported by}: showing the list of modules that import the
+            selected module.
+      \end{description}
+      These panes are very convenient when processing a big specification.
+  
+\item The empty rectangle below the {\tt import} and {\tt parsetree} pane
+      will be used for display warnings and error messages.
+
+\item A \emph{status bar} at the bottom of the window that shows the current
+  activity of the system. Examples are: {\tt idle} (the system is doing
+  nothing), {\tt parsing} (the system is performing a syntactic analysis of
+  some module or term), and {\tt rewriting} (the system is rewriting a term).
+
+\end{itemize}
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:meta-pico}
+\T \includegraphics[width=12cm]{meta-pico}
+\W \htmlimage{meta-pico.gif}
+\caption{Main window after loading the Pico specification}
+\end{Label}
+\end{center}
+\end{figure}
+
+\subsection{The File menu}
+\label{FileMenu}
+
+The \link{{\tt File} menu}[]{FIG:file-menu} 
+is used for creating, opening, and saving
+specifications as well as for quitting the \ASmetaenv.  
+\T It is shown in Figure \ref{FIG:file-menu}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:file-menu}
+\T \includegraphics[width=3cm]{file-menu}
+\W \htmlimage{file-menu.gif}
+\caption{{\tt File} menu (main window)}
+\end{Label}
+\end{center}
+\end{figure}
+
+{\tt New Module} and {\tt Open Module} are used for creating
+a new module and opening an existing one, respectively.
+In both cases a dialog window appears as shown 
+\link{dialog window}[ (Figure~\Ref)]{FIG:open-file} appears.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:open-file}
+\T \includegraphics[width=8cm]{open-file}
+\W \htmlimage{open-file.gif}
+\caption{Dialog for opening a module ({\tt File} menu)}
+\end{Label}
+\end{center}
+\end{figure}
+
+{\tt Save All} saves all modules, this means the entire specification. 
+
+{\tt Close All} removes all modules from the
+Meta-Environment. If modules have been modified, you are explicitly
+asked to save them. The same effect can be achieved by exiting the
+Meta-Environment (using {\tt Quit}, see below) and starting a new
+version of the Meta-Environment using the {\tt meta} command.
+
+{\tt Refresh Buttons} reloads the file {\tt meta.buttons}, if available, which
+contains a description of which buttons have to be added to which
+term-editors.
+
+{\tt Exit} ends the execution of the \ASmetaenv.
+
+\subsection{The Panes of the Main Window}
+
+The two panes below the icons of the main window give two, alternative,
+views on the \asfsdf\ specification that has been loaded into the
+Meta-Environment.  In the rightmost pane you see the import graph, in the
+left-most pane you see a list of modules.  Using one of these views, 
+the same set of operations is available via a pop up menu.
+
+\subsubsection{The Import Pane}
+\label{ImportPane}
+
+The pane with the name \emph{import} gives a graphical view of the specification by
+displaying the \emph{import} relation between modules in the form of a
+graph. A module $M_1$ imports another module $M_2$ if $M_1$ contains
+an import statement of the form {\tt imports $M_2$}.
+
+Each module is represented by a rectangle. An arrow between two
+rectangles represents an import relation between the two corresponding
+modules. 
+%%Modules with a special status (e.g., imported by some other
+%%module but never defined, or containing syntax errors) are represented
+%%by a circle.
+
+The import pane has the following interaction facilities:
+
+\begin{itemize}
+  
+\item Different parts of the import graph can be displayed by using the
+  horizontal or vertical scrollbar at the right and at the bottom of the
+  import pane.
+
+\item The import graph can be scaled using the {\tt 100\%} icon.
+
+\item By clicking and holding the one mouse button outside any
+module, the import graph can be dragged across the import pane.
+
+\item Clicking \emph{on} a module yields 
+a \link{pop up menu}[ as shown in Figure~\Ref]{FIG:module-menu}. 
+The functionality of the various entries is discussed in the
+\link{module menu}[ (see Section~\Ref)]{ButtonPane}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:module-menu}
+
+\T \includegraphics[width=3cm]{module-menu}
+\W \htmlimage{module-menu.gif}
+\caption{Pop up menu for module operations (import pane)}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+\end{itemize}
+
+\subsubsection{The Module Pane}
+\label{ModulePane}
+
+The import pane is particularly useful when you want to understand the
+overall structure of a specification but it may become unwieldy for
+very large specifications. For large specifications the module pane
+may give you quicker access to the modules in the specification.
+It presents a vertical, scrollable, list of the names of all the modules in
+the specification.
+
+The main purpose of the module pane is to select one or more modules from
+the specification on which an operation from the 
+\link{button pane}[ (Section~\Ref)]{ButtonPane}
+is to be performed.  One module is selected
+by clicking on the corresponding module name in the module pane.  More
+than one module can be selected by clicking on a module name, keeping
+the mouse button down and and then dragging the mouse to the last
+desired module name.
+
+After making the selection, an operation can be performed on all the
+selected modules by pushing a button from the button pane.  For
+instance, pushing the {\tt Edit Syntax} button will create editors for
+the syntax of all the selected modules.
+
+\subsubsection{The Module Menu}
+\label{ButtonPane}
+
+First, one module can be selected via the import pane or the
+module pane. Next, one of the following operations can be applied to
+them.
+
+{\tt Edit Syntax}, {\tt Edit Equations},
+and {\tt Edit Term ...} activate (structure) editors for
+editing syntax, equations, or terms, respectively, for the selected module(s).
+
+{\tt Save Module} saves the tree representation of the 
+syntax definition and the equations section of the selected module(s).
+
+{\tt Revert Module} removes the selected module and re-opens the removed module, 
+the effect is that modifications made to these modules are discarded.
+
+{\tt Close Module} this action removes a module from the specification.
+This action has only effect of the module is not imported by other modules.
+If the module imports other modules the user can decide to recursively
+close all imported modules as well. This can be done via 
+\link{{\tt Select an Option} window}[ (see Figure~\Ref)]{FIG:select-window}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:select-window}
+
+\T \includegraphics[width=8cm]{select-window}
+\W \htmlimage{select-window.gif}
+\caption{Select an Option window}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+{\tt Refactor} opens another 
+\link{menu}[ (see Figure~\Ref)]{FIG:refactor-menu} in order to refactor the specification.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:refactor-menu}
+
+\T \includegraphics[width=3cm]{refactor-menu}
+\W \htmlimage{refactor-menu.gif}
+\caption{Refactor menu}
+
+\end{Label}
+\end{center}
+\end{figure}
+The {\tt Copy...} entry in the refactor menu allows you to make a copy of
+a module.
+The {\tt Delete...} entry allows you to delete a module, not only in the
+import pane but also on disk! The import sections of the modules importing
+the deleted module are updated as well.
+The {\tt Rename...} allows you to rename a module and the renaming is also
+performed in the import sections of the modules importing the renamed
+module.
+The {\tt Add Import...} allows you to create a new import relation between 
+2 modules.
+The {\tt Remove Import...} allows you to cancel an import relation between
+2 modules.
+All this functionality allows you to restructure your specification in a
+less tedious way.
+
+{\tt Compile Module} invokes the \asfsdf-compiler to generate C code.  
+\link{Compiling Specifications}[ Section~\Ref]{compiling-specs} 
+gives more details on the compilation of \asfsdf\ specifications.
+
+{\tt Dump Equations} dumps the equation of the selected
+module and all its imports. This feature is needed in order to 
+\link{run the evaluator in a stand-alone way}[, see
+Section~\Ref]{SEC:interpretationgofterms}, or to compile the specification
+on the command line. 
+
+{\tt Dump ParseTable} dumps the parse table of the selected module and
+all its imports in order to parse terms. This functionality is needed in
+order to 
+\link{use the parser in a stand-alone way}[, see Section~\Ref]{SEC:parsingofterms}.
+
+{\tt Print Module} prints the syntax and the equation part
+together in one file.
+
+\section{Editing Specifications}
+
+The editors used to create and modify specifications and terms are
+based on \xemacs, so some familiarity with this editor is assumed.
+See \xlink{xemacs.org}{http://www.xemacs.org/Documentation/index.html}
+for documentation on \xemacs.
+
+The various pull-down menus {\tt Meta-Environment}, {\tt Term-Actions},
+and {\tt Move} have been added to the standard user-interface of \xemacs, 
+depending on the editor type:
+
+\begin{itemize}
+\item The {\tt Meta-Environment} menu, which is only available for
+syntax and equation editors, contains a 
+\link{single button}[ (Figure~\Ref)]{FIG:meta-env-menu1} 
+{\tt Parse} for applying the \asfsdf\ parser to the complete text buffer.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:meta-env-menu1}
+
+\T \includegraphics[width=1.2cm]{meta-env-menu1}
+\W \htmlimage{meta-env-menu1.gif}
+\caption{{\tt Meta-Environment} menu (editor)}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+\item The {\tt Move} pull-down menu
+contains \link{four buttons}[ (Figure~\Ref)]{FIG:move-menu}
+for structured traversal of the syntax tree of the text in the editor.
+Using the entries {\tt Left}, {\tt Righ}t, {\tt Up}, {\tt Down} the
+user can navigate in the tree.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:move-menu}
+
+\T \includegraphics[width=1.2cm]{move-menu}
+\W \htmlimage{move-menu.gif}
+\caption{{\tt Move} menu (editor)}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+\item The term editors have the {\tt Term-Actions} menu which contains
+at least \link{three buttons}[ (Figure~\Ref)]{FIG:meta-env-menu2}: 
+{\tt Parse}, {\tt Reduce}, and {\tt ViewTree}. 
+
+\begin{description}
+\item[{\tt Parse}] parses the term in the editor.
+\item[{\tt Reduce}] that applies the evaluator to the text in the editor.
+\item[{\tt ViewTree}] displays the parse tree structure of the focus in
+the {\tt parsetree} pane.
+\end{description}
+These 3 buttons are the standard buttons in the {\tt Term-Actions} menu,
+however it is possible that the {\tt Term-Actions} contains more
+\link{user-defined buttons}[, see Section~Ref]{SEC:button-scripts}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:meta-env-menu2}
+
+\T \includegraphics[width=1.6cm]{meta-env-menu2}
+\W \htmlimage{meta-env-menu2.gif}
+\caption{{\tt Term-Actions} menu (term editor)}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+\end{itemize}
+
+Editing is now described in more detail.
+
+\subsection{Editing the Syntax Part of a Module}
+
+An editor for editing the syntax part of a module can be activated by
+pressing the {\tt Edit Syntax} button
+of the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane} or
+in the \link{Module Pane}[ (Section~\Ref)]{ModulePane}.
+An example is shown \link*{here}[ in Figure~\Ref]{FIG:Bool-example.sdf}.
+
+Initially the text is not highlighted, but the text has already
+been parsed. Click at an arbitrary place you will see that
+part of the text will be highlighted, this is what we will
+call the \emph{focus} and the message ``{\tt Focus symbol: <SORT>}'' appears
+in the status line at the bottom of the main window, where {\tt <SORT>}
+will be the non-terminal/sort of the focus.
+
+Via the entry {\tt Parse} in the {\tt Meta-Environment} menu of the
+editor, the parser can be activated.  The parser is finished when the
+status line in the main window displays {\tt Idle} again.
+
+Note: when parsing a large term it may take
+some time for the editor to be active again. If the parse was
+successful, the bottom line in the \xemacs\ window displays the message
+{\tt Focus sort: None}. If the term contains an error, the cursor is
+located at the position where the error was detected and the bottom line
+in the \xemacs\ window displays the message
+{\tt Parse error near cursor}. 
+
+\subsection{Editing the Equations Section of a Module}
+
+An editor for editing the equations section of a module is activated
+via the button {\tt Edit Equations}
+in the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane} or
+in the \link{Module Pane}[ (Section~\Ref)]{ModulePane}.
+An example is shown  \link*{here}[ in Figure \Ref]{FIG:Bool-example.asf}.
+
+The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor 
+activates the parser for the
+equations. It is possible that in order to parse the equations, a
+parse table must be generated. This is visible through the status
+message {\tt Generating parsetable <ModuleName>}.
+
+\subsection{Editing Terms}
+\label{EditingTerms}
+
+An editor for editing a term over a module is activated via the button
+{\tt Edit Term}
+in the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane} or
+in the \link{Module Pane}[ (Section~\Ref)]{ModulePane}.
+An example is shown  \link{here}[ in Figure~\Ref]{FIG:Bool-example.trm}.
+
+The entry {\tt Parse} in the {\tt Term-Actions} menu of the editor 
+activate the parser for this
+term. It is possible that in order to parse the term, a parse table
+must be generated. This is visible through the status message {\tt
+Generating parsetable <ModuleName>}.
+
+The entry {\tt Reduce} in the {\tt Term-Actions} menu of the
+editor activates the evaluator\footnote{We will also use interpreter,
+rewriter, or reducer instead of evaluator, and equivalently we use 
+interpreting, rewriting, reducing, or evaluating of a term, respectively}. 
+The term is reduced given the specified equations (if any). 
+In order to reduce the term it may be necessary to parse the 
+equations of various modules and to initialize the evaluator 
+with this set of equations.
+
+When you have created a term (using a \link{term editor}[, see
+Section~\Ref]{EditingTerms}), 
+you can reduce it (by selecting the {\tt Reduce} entry from 
+the {\tt Term-Actions} menu of the term editor).  
+As a result, rewrite rules will be applied until a normal
+form is reached (a term for which no applicable rule can be
+found). This normal form is the result of the execution and is
+displayed in a new term window.
+
+The entry {\tt ViewTree} in the {\tt Term-Actions} menu of the term editor
+displays the parse tree of the focus, if any. The parse tree will be shown
+in the \link{{\tt parsetree} panel}[, see Figure~\Ref]{FIG:meta-parsetree}.
+
+\begin{figure}[t]
+\begin{center}
+\begin{Label}{FIG:meta-parsetree}
+\T \includegraphics[width=12cm]{meta-parsetree}
+\W \htmlimage{meta-parsetree.gif}
+
+\caption{Main window of \ASmetaenv\ with the parsetree panel activated}
+\end{Label}
+\end{center}
+\end{figure}
+
+\subsection{Parse Errors}
+
+\section{Button Scripts}
+\label{SEC:button-scripts}
+
+\section{Guided Tour}
+\label{GuidedTour}
+
+%%\begin{figure}
+%%\begin{center}
+%%\begin{Label}{FIG:meta-booleans}
+
+%%\T \includegraphics[width=12cm]{meta-booleans}
+%%\W \htmlimage{meta-booleans.gif}
+%%\caption{Main window after opening {\tt Pico-Booleans}}
+
+%%\end{Label}
+%%\end{center}
+%%\end{figure}
+
+To help you get acquainted with the \ASmetaenv\ the system
+contains two example specifications. The first one is a very simple specification:
+{\tt Booleans}, and the second is the specification of the syntax, 
+typechecker, and dynamic semantics of the small programming language Pico.
+
+This Guided Tour is meant to guide you through these specifications, and show
+you the main features of the \ASmetaenv. Only global information
+is given about these features but references are made to parts of the
+user-manual where detailed information can be found.
+
+\subsection{Before you start the Guided Tour}
+
+When configuring the Meta-Environment a directory was giving where
+the Meta-Environment will be installed, e.g., {\tt <path>/asfsdf-meta}. 
+You will then find the files needed for this Guided Tour in the directory 
+{\tt <path>/share/asfsdf-meta/demo/pico}. 
+It is advisable to make your personal copy of this
+directory.  In this Guided Tour we will use {\tt pico} to refer to your own
+copy of the directory. Furthermore, all the examples given in this
+manual can be found in$\\$
+{\tt <path>/asfsdf-meta/share/demo/user-manual-examples}.
+
+For each module in a specification two files exist: {\tt $module$.sdf}
+contains the syntax of $module$ and {\tt $module$.asf} contains the 
+equations (semantics) of $module$. The directory {\tt pico} contains:
+
+\begin{itemize}
+
+\item Two files for the module {\tt Booleans}.
+
+\item Files for the Pico-specification.
+
+\item Three examples of Pico-programs: {\tt big.trm}, {\tt fac.trm},
+  {\tt small.trm}.
+
+\item Terms for typechecking and evaluating these Pico-programs.
+
+\end{itemize}
+
+\subsection{Beginning the Guided Tour}
+
+\begin{itemize}
+
+\item Go to your personal copy of the directory {\tt pico}. 
+\item Type the command {\tt meta}. The \link{main window}[]{FIG:meta-start}
+of the Meta-Environment will
+\begin{ifhtml}
+appear.
+\end{ifhtml}
+\begin{iftex}
+appear as shown in Figure~\ref{FIG:meta-start}.
+\end{iftex}
+  
+\item Add the module {\tt Booleans} by selecting the File menu, and
+  choosing the {\tt Open Module} button. 
+  In a dialog window, the system asks you to give
+  the name of the module to be opened. It presents a list of all files with
+  extension {\tt sdf}. Click once on {\tt Booleans.sdf} and then
+  push the {\tt Open Module} button. This will load the module {\tt Booleans}
+  (both its syntax and equations!) into the system.
+  
+\item Verify that module {\tt Booleans} appears as a rectangle in
+the import pane as well as in the module pane of the 
+\link{main window}[ as shown in Figure~\Ref]{FIG:meta-Bool-example}.
+
+\end{itemize}
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:meta-Bool-example}
+
+\T \includegraphics[width=12cm]{meta-Bool-example}
+\W \htmlimage{meta-Bool-example.gif}
+\caption{Main window after opening {\tt Booleans}}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+\subsection{The Module Booleans}
+\label{Bool-example}
+
+One of the simplest specifications possible, and therefore frequently used as
+an example, is the datatype of the Boolean values. It defines the constants
+{\tt true} and {\tt false} and the functions \emph{and} and \emph{or}
+ (written in infix notation using
+the left-associative operators `{\tt \&}' and `{\tt |}', respectively) and
+\emph{not} (written in prefix notation using the function symbol `{\tt not}').
+The specification is \link*{as follows}[shown in Figure~\Ref]{CODE:Bool-example}.
+
+\begin{figure}
+\begin{Label}{CODE:Bool-example}
+\begin{IncCode}
+\begin{verbatim}
+module Bool-example
+
+imports basic/Whitespace
+exports
+  sorts Bool 
+
+  context-free syntax
+    "true"             -> Bool
+    "false"            -> Bool 
+    Bool "|" Bool      -> Bool {left}
+    Bool "&" Bool      -> Bool {left}
+    "not" "(" Bool ")" -> Bool
+    "(" Bool ")"       -> Bool {bracket}
+
+  context-free priorities
+    Bool "&" Bool -> Bool >
+    Bool "|" Bool -> Bool
+
+hiddens
+  variables
+    "Bool"[0-9\']* -> Bool
+
+equations
+
+  [B1] true | Bool = true 
+  [B2] false | Bool = Bool
+
+  [B3] true & Bool = Bool 
+  [B4] false & Bool = false
+
+  [B5] not(false) = true 
+  [B6] not(true) = false
+\end{verbatim}
+\end{IncCode}
+\caption{Specification of module {\tt Booleans}}
+\end{Label}
+\end{figure}
+
+The \asfsdf\ features used in this specification are explained in
+\link*{Introduction to \asfsdf}[Section~\Ref]{ASF+SDF}.
+
+\subsubsection{The Module Editor for {\tt Booleans}}
+
+\begin{itemize}
+  
+\item Select module {\tt Booleans} from the module pane (the vertical list
+  of module names that now contains {\tt Booleans} and 
+  {\tt basic/Whitespace}) by clicking on it once.
+  
+\item Push the button {\tt Edit Syntax} in the button pane at the right-hand
+  side of the main window.  An editor will appear containing the syntax part
+  of the {\tt Booleans} specification: the \sdf\ section.  This editor is
+  a version of the standard text editor Emacs extended with the menus 
+ {\tt Meta-Environment} and {\tt Move}.
+The result is shown  \link*{below}[ in Figure~\Ref]{FIG:Bool-example.sdf}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:Bool-example.sdf}
+
+\T \includegraphics[width=12cm]{Bool-example_sdf2}
+\W \htmlimage{Bool-example.sdf2.gif}
+\caption{Editor for the syntax of {\tt Booleans}}
+
+\end{Label}
+\end{center}
+\end{figure}
+  
+\item Push the button {\tt Edit Equations}.  This will open a new 
+  instance of Emacs containing the semantic part
+  of the {\tt Booleans} specification: a list of conditional equations.
+  Note that the syntax of the equations is determined by the syntax defined in
+  the \sdf\ section. 
+The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.asf}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:Bool-example.asf}
+
+\T \includegraphics[width=12cm]{Bool-example_asf}
+\W \htmlimage{Bool-example.asf.gif}
+\caption{Editor for the equations of {\tt Booleans}}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+\end{itemize}
+
+\subsubsection{A Term Editor for {\tt Booleans}}
+
+\begin{itemize}
+\item Open a term-editor over module {\tt Booleans} by first selecting
+  module {\tt Booleans} in the module pane, and then pushing the {\tt
+    Edit Term ...} button.  A standard dialog window pops up.
+    Enter any new filename, for instance, `{\tt my-term}'.
+
+\item 
+  Type the term `{\tt true \& false}' in this editor. 
+The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:Bool-example.trm}
+
+\T \includegraphics[width=12cm]{Bool-example_trm}
+\W \htmlimage{Bool-example.trm.gif}
+\caption{Term editor for {\tt Booleans} after entering `{\tt true \& false}'}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+\item From menu {\tt Term-Actions} click the {\tt Parse} button.  The text
+  in the focus is now being parsed.
+
+
+\item Click on one of the characters of the word `{\tt false}', this will
+move the cursor (a single character-sized rectangle).  You
+have selected `{\tt false}' as new focus and the blue background
+appears. 
+This is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm3}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:Bool-example.trm3}
+
+\T \includegraphics[width=12cm]{Bool-example_trm3}
+\W \htmlimage{Bool-example.trm3.gif}
+\caption{Term editor for {\tt Bool-example} after clicking on `{\tt false}'}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+\item Click on the \emph{and} operator `{\tt \&}'.  The whole expression is
+  now selected as focus.
+
+\end{itemize}
+
+The movements of the focus are \emph{syntax-directed}: when you click on any
+character in the text, the smallest syntactic unit enclosing that character
+will be selected and becomes the focus.
+
+
+\begin{itemize}
+  
+\item Reduce the term in the term-editor by clicking the {\tt Reduce} button
+  in the {\tt Term-Actions} menu of the editor.  The result will appear in
+  a new \link{term editor window}[ (Figure~\Ref)]{FIG:reduct.out}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:reduct.out}
+
+\T \includegraphics[width=12cm]{reduct_out}
+\W \htmlimage{reduct.out.gif}
+\caption{New term editor with normal form of `{\tt true \& false}'}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+\end{itemize}
+
+\paragraph{Error-messages}
+
+\begin{itemize}
+  
+\item Edit the term `{\tt true \& false}' such that the new term will be
+  syntactically incorrect. For instance, type `{\tt true \& wrong}'. Force a
+  parse of the term by selecting the {\tt Parse} button of the 
+  {\tt Term-Actions} menu.
+  
+  In the status line at the bottom of the edit window a message appears
+  `{\tt Parse error near cursor}' and the cursor will be positioned in
+  the word `{\tt wrong}'.
+
+\end{itemize}
+
+\paragraph{Associativity, Priorities and Brackets}
+
+\begin{itemize}
+  
+\item Erase the term in your term-editor and type a new term `{\tt true \&
+    false \& true}'. 
+
+\item Parse the term using the {\tt Parse} button.
+
+\item  Try to find out how this term has been parsed by clicking
+  on different parts of the term and studying the resulting focus.
+
+\end{itemize}
+
+The {\tt left} attribute in the \sdf\ definition indicates that the `{\tt \&}'
+operator is left associative. The term will thus be parsed as `{\tt (true \&
+  false) \& true}'. Clicking on the left or right {\tt \&} yields a focus that
+corresponds with this parse.
+
+\begin{itemize}
+  
+\item Erase the term in your term-window and type a new term `{\tt true |
+    false \& true}'. 
+\item Parse the term using the {\tt Parse} button.
+  
+\item Try to find out how this term has been parsed by clicking on various
+  parts of the term and studying the resulting focus.
+
+\end{itemize}
+
+The {\tt context-free priorities} definitions in the \sdf\ 
+definition state that the `{\tt
+  \&}' operator binds stronger than the `{\tt |}' operator.
+
+\begin{itemize}
+  
+\item Erase the term in the term-editor and type a new term `{\tt true \&
+    false}'.  Click on `false', so that the focus is around `false' only. Then
+  add `{\tt | true}' after `{\tt false}', so that the resulting term is `{\tt
+    true \& false | true}'.  
+
+\item Parse the term.
+
+\item Click on the `{\tt \&}' symbol. Is this what you wanted? Probably not.
+\end{itemize}
+  
+To resolve a priority conflict `{\tt (}' and `{\tt )}' which are defined as
+brackets in the \sdf\ definition are put around the term `{\tt false | true}'.
+Thus `{\tt true \& (false | true})' is more likely to express what you
+intended.
+
+\subsubsection{Modifying {\tt Booleans}}
+
+The \ASmetaenv\ is an \emph{incremental environment generator}. After
+each edit operation on a module, its \emph{implementation} (i.e., scanner, parser and
+term rewriting system) is updated immediately.
+
+The editing of both the syntax section and the equations section of a module is
+syntax-directed like the editing of terms in a term editor.
+
+\paragraph{Modifying the Equations}
+
+The equations section of a module begins with the keyword {\tt equations}
+and is saved in files ending on `{\tt .asf}'.
+
+\begin{itemize}
+
+\item  Click in the equation section to investigate the focus behavior.
+  
+\item Change the equations, for instance replace in equation {\tt [B1]} the
+  last part `{\tt = true}' by `{\tt = false}'. 
+  
+\item Study the effect on the reduction of terms in the term-editor.
+
+\end{itemize}
+
+\paragraph{Modifying the Syntax}
+
+The syntax part of a module starts with the keyword {\tt module}
+and  is saved in files ending on `{\tt .sdf}'.
+Modifying the syntax causes the generated scanner and parser to be adapted.
+After each edit operation in the \sdf\ section that is followed by a parse of
+the \sdf\ section, the focus in both the equations section and the term editor
+is extended to completely contain the text in these editors.
+
+Modifying the context-free syntax:
+
+\begin{itemize}
+  
+\item Change the syntax of the defined functions. E.g, replace `{\tt not}' by
+  `{\tt negation}'.
+
+\item Try to re-parse the equations. 
+  
+%%\item Investigate the expand menu in the term-editor. (type `{\tt <BOOL>}' and
+%%  select {\tt expand}.)
+
+\end{itemize}
+
+Modifying the priorities: 
+
+\begin{itemize}
+
+\item Remove the priority declaration. 
+  
+\item Type the term `{\tt true \& false | true}' in the term-editor (or
+  anything similar according to your current syntax). Try to parse this term.
+
+\item Add the priority declarations again.
+
+\end{itemize}
+
+Modifying layout in the lexical section: 
+
+\begin{itemize}
+
+\item Remove the lexical syntax with the {\tt LAYOUT} definitions. 
+
+\item Try parsing equations of {\tt Booleans}.
+
+\end{itemize}
+
+\paragraph{Frequently occurring errors} Omitting the {\tt LAYOUT} definition is one of most common
+errors made when writing a new specification; always make sure your syntax
+definitions define at least spaces and newlines to be {\tt LAYOUT}.
+
+\begin{itemize}
+  
+\item End the editing of your term and the module {\tt Booleans} by
+  selecting the {\tt Exit XEmacs} from the {\tt File} menu of the editor.  
+  If you like, you can save the changes to module {\tt Booleans}.
+
+\end{itemize}
+
+If you save the changes the files `{\tt Booleans.sdf}' and `{\tt
+  Booleans.asf}' will be modified.
+
+
+\begin{itemize}
+  
+\item Exit the system by pushing the {\tt Quit} entry in the {\tt File} menu
+  of the main window of the \ASmetaenv.
+
+\end{itemize}
+
+
+\subsection{The Pico Specification}
+
+More features of the  \ASmetaenv\  can be studied by looking at the
+Pico specification. Pico is a toy language used demonstration purposes.
+We turn our attention to the complete Pico language.
+
+\begin{itemize}
+  
+\item Leave the \ASmetaenv.  This is done by
+selecting {\tt Quit} from the \link{{\tt File} menu}[ (Section~\Ref)]{FileMenu}.
+
+\item Restart the \ASmetaenv\ by entering \link{{\tt meta}}[ (Section~\Ref)]{StartingMeta} at the command line.
+  
+\item Add the module {\tt Pico-syntax} by selecting the {\tt File} menu, and
+  selecting the {\tt Open...} button.  In the dialog window that appears, click
+  on {\tt Pico-syntax.sdf} and push the {\tt Open} button.
+  
+\item As you can see in both \link{the import pane and the module pane}[
+(see Figure~\Ref)]{FIG:Pico-syntax}, not only
+  {\tt Pico-syntax} has been added, but also all modules that are directly or
+  transitively imported by {\tt Pico-syntax}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:Pico-syntax}
+
+\T \includegraphics[width=12cm]{meta-Pico-syntax}
+\W \htmlimage{meta-Pico-syntax.gif}
+\caption{Main window after opening {\tt Pico-syntax}}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+
+\end{itemize}
+
+\subsubsection{The Module Editor for Pico-syntax}
+
+\begin{itemize}
+  
+\item Open an editor for the syntax of {\tt Pico-syntax} (using the {\tt Edit
+    Syntax} button).
+
+\end{itemize}
+  
+  A Pico program consists of the word `{\tt begin}', a declaration section, a
+  series of zero or more statements, and the word `{\tt end}'. The declaration
+  section consists of the word `{\tt declare}', a list of zero or more tuples
+  `{\em identifier} {\tt :} {\em type}' and a semi-colon `{\tt ;}'. 
+  Types are `{\tt string}' and `{\tt natural}'.  
+  There are three kinds of statements:
+  assignments, if-then-else statements and while-loops. The Pico language
+  has also expressions for adding and subtracting natural numbers and
+  for concatenating strings.
+
+\noindent Notes:
+
+\begin{itemize}
+  
+\item In the context-free section the list constructs 
+`{\tt \{ID-TYPE ","\}*}' and `{\tt \{STATEMENT ","\}*}' are used. 
+
+\item  The Pico-syntax module contains no equations.
+
+\end{itemize}
+
+\subsubsection{A Term Editor for Pico-syntax}
+
+\begin{itemize}
+  
+\item Open a term-editor for the Pico-program `{\tt fac.pico}': select {\tt
+    Pico-syntax} in the module pane and push the {\tt term} button in the
+  button pane. A dialog window pops up and type `{\tt fac.pico}' as name of
+  the term.
+
+\item Press the {\tt Parse} button in the {\tt Meta-Environment} menu of the
+  editor. As a result, {\tt fac.pico} is parsed.
+
+\item Press the {\tt Reduce} button in the {\tt Meta-Environment} menu of the
+  editor.
+
+\end{itemize}
+
+This has the following effects:
+
+\begin{itemize}
+
+\item  The term in the editor is parsed. 
+  
+\item All the equations that are valid for this editor are parsed and compiled
+  into a rewrite system.  In this case that means the equations of the
+  imported modules {\tt basic/Booleans}, {\tt basic/Integers}, and {\tt
+basic/Strings}. This may take some time.
+  
+\item The term in the editor is reduced. As no equation can be applied to
+  reduce this term, the term itself is returned in the shell window from which
+  the Meta-Environment has been started.
+\end{itemize}
+
+  
+Reducing a term for the second time is notably faster: the equations have been
+processed already. If you are curious what is going, have a look at the
+status field at the bottom of the main window. It reveals the steps that
+are necessary to arrive at a specification which can be interpreted.
+
+\begin{itemize}
+\item Verify this by pushing the {\tt Reduce} button once more.
+\end{itemize}
+
+Push the {\tt TypeCheck} button.  This has the following effects:
+
+\begin{itemize}
+
+\item  The module {\tt Pico-typecheck} is added to the specification. 
+  
+\item The term in {\tt smalltc.pico} is identical to the one in 
+  {\tt small.pico}, except that the program has been surrounded by `{\tt tcp(}'
+  and `{\tt )}'.  The function {\tt tcp} (for type check program), applies the
+  typing rules for the Pico language to its single argument: a complete Pico
+  program. The result is {\tt true} or {\tt false}, depending on whether
+  the Pico program is properly typed.
+  
+\item All equations of {\tt Pico-typecheck} and its imported
+  modules are being compiled.
+  
+\item The term {\tt smalltc.pico} is reduced using the equations of {\tt
+    Pico-typecheck}.
+
+\end{itemize}
+  
+Typechecking a term for the second time is notably faster, the
+modules have been added already and the equations have been compiled.
+
+\begin{itemize}
+
+\item Verify this, by pushing {\tt Reduce} once more.
+  
+\item Make some modifications to `{\tt smalltc.pico}' in the term-editor.
+  Typecheck the modified program.
+  
+\item Open term-editors with other pico programs (`{\tt fac.pico}', `{\tt
+    big.pico}') or create your own program. The corresponding applications of
+  the type check function are in `{\tt factc.pico}' and `{\tt bigtc.pico}', 
+  respectively.  Typecheck these programs.
+
+\end{itemize}
+
+The evaluation of Pico programs is achieved in a similar fashion. 
+The evaluation rules are defined in the module `{\tt
+  Pico-eval}'. Applications of the evaluation function `{\tt evp}' can be
+found in `{\tt smallev.pico}', `{\tt facev.pico}', and `{\tt bigev.pico}.
+
+\begin{itemize}
+  
+\item Repeat the steps described above for typechecking, now for the
+  evaluation of Pico programs.
+
+\end{itemize}
+
+\subsubsection{More Exercises to Study the Pico Specification}
+
+\begin{itemize}
+
+\item Study other modules in the specification. The modules {\tt
+    Pico-typecheck} and {\tt  Pico-eval} are explained in the next sections.
+  
+\item Add a repeat statement `{\tt repeat SERIES until EXP}' to {\tt
+    Pico-syntax}, add typecheck equations to {\tt Pico-typecheck}, and
+  eval-equations to {\tt Pico-eval}, for this new statement.
+
+\item Add your own module to the specification. 
+
+\item Make your own specification. Create a new directory for each
+  specification.
+
+\end{itemize}
+
+\subsubsection{Module Pico-typecheck}
+
+\begin{itemize}
+
+\item Open an editor for the syntax of {\tt Pico-typecheck}.
+
+\end{itemize}
+
+The function `{\tt tcp}' is defined for typechecking Pico-programs.
+Variants of this function exist for typechecking various parts of a Pico program. 
+The
+typechecking of the declarations yields a type-environment: a table of
+identifiers and their types. This type-environment, and the `{\tt lookup}'
+function is specified in the module {\tt Type-environments}. The typechecking
+of statements uses a type-environment and yields a Boolean value.
+
+
+\begin{itemize}
+
+\item Open an editor for the equations of {\tt Pico-typecheck}.
+
+\end{itemize}
+
+The equations define how a Pico-program is typechecked. Equation {\tt
+  [Tc1]} says that the typechecking of a program is `{\tt true}' if the
+typechecking of the Series in the type-environments, `{\tt tcd(Decls)}', is
+`{\tt true}'.
+
+Equations {\tt [Tc2]} and {\tt [Tc3]} specify how a type-environment is
+constructed, when the declarations are typechecked.
+
+Equations {\tt [Tc3a]} and {\tt [Tc3b]} specify the typechecking of a,
+possibly empty, list of statements. Equations {\tt [Tc4a]} through {\tt
+  [default-Tc6]} specify how the three kinds of Statements are typechecked
+using the information from the type-environment.
+
+The rest of the equations deal with the typechecking of expressions.
+
+\subsubsection{Module Pico-eval}
+
+\begin{itemize}
+
+\item Open an editor for the syntax of {\tt Pico-eval}.
+
+\end{itemize}
+
+The functions `{\tt evp}' and variants are defined for describing the dynamic semantics of
+Pico. The result of evaluation is a value-environment: a table of identifiers
+and values with the final values of the declared identifiers. (Note that Pico
+does not have an output-statement.)
+
+
+\begin{itemize}
+
+\item Open an editor for the equations of {\tt Pico-eval}.
+
+\end{itemize}
+
+The equations define how a program is evaluated. Equation {\tt [Ev1]}
+says that the evaluation of a program is the evaluation of the Series in the
+value-environments, `{\tt evs(Decls)}'.
+
+Equations {\tt [Ev2]} thorugh {\tt [Ev3c]}  specify how a
+value-environment is constructed, when the declarations are evaluated.
+Identifiers of type `{\tt natural}' get value `{\tt 0}', Identifiers of type
+`{\tt string}' get value `{\tt ""}' (the empty-string).
+
+Equations {\tt [Ev4a]} and {\tt [Ev4b]} specify the evaluation of a, possibly
+empty, list of statements. Equations {\tt [Ev5a]} through {\tt [Ev5e]}
+specify how the three kinds of statements are
+evaluated using the information from the type-environment. Evaluating
+statements means updating the value-environment.
+
+The rest of the equations deal with the evaluation of expressions. Evaluating
+an expression results in a value.
+
+\bibliographystyle{plain}
+\bibliography{manual}
+ 
+\printindex
+
+\begin{ifhtml}
+\tableofcontents
+\end{ifhtml}
+
+\end{document}
