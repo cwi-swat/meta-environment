@@ -693,12 +693,13 @@ void compile_module(int cid,arena *ar,aterm_list *newmods)
 
 /*
   char *path = "/home/markvdb/AsFix2C/muASF/asfixfiles/";
-  char *path = "/home/markvdb/AsFix2C/muASF-list/asfixfiles/";
   char *path = "/home/markvdb/AsFix2C/muASF/TESTING/sets/";
   char *path = "/home/markvdb/NEW-META/new-meta/compiler/ctest/";
+  char *path = "/home/markvdb/NEW-META/new-meta/pgen/cfiles/";
+  char *path = "/home/markvdb/AsFix2C/muASF-lists/asfixfiles1/";
 */
 
-  char *path = "/home/markvdb/NEW-META/new-meta/pgen/cfiles/";
+  char *path = "/home/markvdb/AsFix2C/muASF-lists/asfixfiles3/";
 
   TinitArena(NULL, &local);
 
