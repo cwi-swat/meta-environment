@@ -8,3 +8,6 @@ tif:
 	  ${IDEF} $$i; \
 	  ${TIFS} -tool `basename $$i .idef` `basename $$i .idef`.tifs; \
 	done
+
+clean-tif:
+	rm -f *.tifs *.tif.[ch]
