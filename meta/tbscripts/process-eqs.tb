@@ -48,10 +48,17 @@ in
              snd-msg(update-eqs-tree-in-db(Module, tree(EqsTree))) .
              rec-msg(eqs-updated)
            + 
-             rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,
-                                                         ambiguities(I?, Ambs?)))).
+	     (
+               rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,
+                                                 ambiguities(I?, Ambs?))))
+	     +
+	       rec-msg(parse-result-asfix2me(Id,
+	                 ambiguous-tree(EqsTree?, ErrList?, 
+			 ambiguities(I?, Ambs?))))
+	     ).
              snd-note(ui-status(errorf("Parse of %s returned %d ambiguities",
                                        [Module,I])))
+	     
            + 
              rec-msg(parse-result-asfix2me(Id?,parse-error(ErrList?,
                                                          cycle(Cycle?)))).
