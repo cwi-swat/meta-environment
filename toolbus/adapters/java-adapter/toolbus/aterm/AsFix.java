@@ -15,8 +15,8 @@ public class AsFix {
 
   /** acc is the AsFix access or selection function. <p> <tt>t[sym]</tt>
   in the specification is <tt>acc(t,sym)</tt> here. This will return
-  the element named <tt>sym</tt> from the term <tt>t</tt> <p> @see
-  toolbus.aterm.AFun#init to find out which named elements are
+  the element named <tt>sym</tt> from the term <tt>t</tt> <p> 
+  @see toolbus.aterm.AFun#init to find out which named elements are
   defined.  */
 
   public static ATerm acc(ATermAppl t, AFun af2) throws Exception {
@@ -29,7 +29,8 @@ public class AsFix {
   /** repl is the AsFix replacement function. <p> <tt>t[sym :=
   t']</tt> in the specification is <tt>repl(t,sym,t')</tt> here. It
   replaces named element <tt>sym</tt> of <tt>t</tt> with term
-  <tt>t'</tt>.  <p> @see toolbus.aterm.AFun#init to find out which
+  <tt>t'</tt>.  <p> 
+  @see toolbus.aterm.AFun#init to find out which
   named elements are defined.*/
 
   public static ATermAppl repl(ATermAppl t1, AFun af, ATerm t2) throws Exception {
