@@ -1,0 +1,21 @@
+module WfAsFixTerm
+
+imports AsFixParseTrees
+
+exports
+  context-free syntax
+    asfix-type-error                            -> AFun
+    eq-asfix-type(ATerm, ATerm)                 -> Bool
+    asfix-type-of(ATerm)                        -> ATerm
+
+    is-list-type(ATerm)                         -> Bool
+    eq-type-in-list(ATerm, ATerm, ATerm)        -> Bool
+    match-list-type-with-sep(ATermList, ATerm, ATerm, ATermList) -> Bool
+    match-list-type(ATerm, ATerm, ATermList) -> Bool
+
+    wf-AsFixTerm                                -> AFun
+
+  hiddens
+    variables
+        Sep  -> ATerm
+        Iter -> ATerm

@@ -1,0 +1,48 @@
+equations
+
+%% \noindent
+%% Literal concatenation.
+
+[lconc] literal(""" c*1 """) ++ literal(""" c*2 """) = literal(""" c*1 c*2 """)
+
+%% String literals usually require special treatment of quotes inside literals. We will
+%% use the character \verb+\+  as escape character and define two operations:
+%% \spec{escape} will escape all quotes and escape characters occurring in a literal,
+%% while \spec{de-escape} performs the inverse operation.
+
+[esc-1]
+        L = literal(""" "\" """ """) ++ escape(literal(""" c* """))
+        ===========================================================
+        escape(literal(""" """ c* """)) = L
+[esc-2]
+        L = literal(""" "\" "\" """) ++ escape(literal(""" c* """))
+        ===========================================================
+        escape(literal(""" "\" c* """)) = L
+[esc-3]
+        escape(literal(""" """)) = literal(""" """)
+[default-esc-4]
+        L = literal(""" c """) ++ escape(literal("""c* """))
+        ====================================================
+        escape(literal(""" c c* """)) = L
+
+%% The function \fun{de-escape} undoes one level of escape.
+
+[de-esc-1]
+        L = literal(""" """ """) ++ de-escape(literal(""" c* """))
+        ==========================================================
+        de-escape(literal(""" "\" """ c* """)) = L
+[de-esc-2]
+        L = literal(""" "\" """) ++ de-escape(literal(""" c* """))
+        ==========================================================
+        de-escape(literal(""" "\" "\" c* """)) = L
+[de-esc-3]
+        de-escape(literal(""" """)) = literal(""" """)
+[default-de-esc-4]
+        L = literal(""" c """) ++ de-escape(literal(""" c* """))
+        ==========================================================
+        de-escape(literal(""" c c* """)) = L
+
+%% The function \fun{quote} escapes all special characters in a literal including
+%% the outermost quotes.
+
+[quote-1] quote(literal(c*)) = escape(literal(""" c* """))

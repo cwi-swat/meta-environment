@@ -1,0 +1,27 @@
+equations
+%%\noindent Define concatenation of \spec{Symbols}  and \spec{Productions}.
+
+[conc-1] \alpha ++ \beta = \alpha \beta
+[conc-2] P*1 ++ P*2 = P*1 P*2
+
+%% The purpose of normalizing a grammar is to give a uniform treatment to both
+%% lexical and context-free productions.  This is achieved by taking lexical
+%% productions unchanged and by transforming context-free productions such
+%% that a \spec{Layout} non-terminal is inserted between each pair of adjacent
+%% symbols in the left-hand side of the context-free rule.
+
+%% Normalize a grammar by normalizing its context-free productions.
+
+[normg-1] normg(lexical syntax P*1 context-free syntax P*2) = P*1 ++ normp(P*2)
+
+%% Normalize a production by normalizing the symbols appearing at the left-hand side of the rule.
+
+[normp-1] normp(\alpha -> A Attrs P*) = norm(\alpha) -> A Attrs ++ normp(P*)
+[normp-2] normp() =
+
+%% Normalize a sequence of symbols by inserting \spec{Layout} between
+%% adjacent symbols.
+
+[norm-1] norm(\alpha+ \beta+) = norm(\alpha+) ++ Layout ++ norm(\beta+)
+[norm-2] norm() =
+[norm-3] norm(A) = A

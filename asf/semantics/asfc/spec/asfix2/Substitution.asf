@@ -1,0 +1,64 @@
+equations
+
+  [value-1]
+        value(AVar, []) = AVar
+  [value-2]
+        first(Tl) = [AVar', T'],
+        avar-name(AVar') = avar-name(AVar)
+        ======================================
+        value(AVar, Tl) =
+        if is-avar(T') \/ is-result-avar(T') then value(avar-name(T'), rest(Tl)) else T' fi
+  [default-value-3]
+        value(AVar, Tl) =  value(AVar, rest(Tl))
+
+  [undefined-1] value(AVar, Tl) = AVar
+        ==============================
+        undefined(AVar, Tl) = true
+  [default-undefined-2]
+        undefined(AVar, Tl) = false
+
+  [assign-1]
+        assign(AVar, [], T) = [[AVar, T]]
+
+  [assign-2]
+        first(Tl) = [AVar', T'],
+        avar-name(AVar') = avar-name(AVar)
+        ========================================
+        assign(AVar, Tl, T) =
+        if is-result-avar(T') then [[AVar', T']] ++ assign(avar-name(T'), rest(Tl), T)
+        else  [[AVar', T]] ++ rest(Tl)
+        fi
+
+  [default-assign-3]
+        assign(AVar, Tl, T) = [first(Tl)]++ assign(AVar, rest(Tl), T)
+
+  [substitute-1]
+        substitute(AVar, Tl) = value(AVar, Tl)
+  [substitute-2]
+        substitute(AFun(Ts), Tl) = AFun(aterms(substitute([Ts], Tl)))
+  [substitute-3]
+        substitute([], Tl) = []
+  [substitute-4]
+        substitute([Ts], Tl) = [substitute(first([Ts]), Tl)] ++ atermlist(substitute(rest([Ts]), Tl))
+  [substitute-5]
+        substitute(ACon1, Tl) = ACon2,
+        aterms(substitute([Ts1],Tl)) = Ts2
+        ==================================
+        substitute(ACon1 {Ts1}, Tl) = ACon2 {Ts2}
+  [substitute-5]
+        substitute(AFun1, Tl) = AFun2,
+        aterms(substitute([Ts1],Tl)) = Ts2
+        ==================================
+        substitute(AFun1 {Ts1}, Tl) = AFun2 {Ts2}
+  [substitute-5]
+        substitute(AFun1(Ts1), Tl) = AFun2(Ts3),
+        aterms(substitute([Ts2],Tl)) = Ts4
+        ==================================
+        substitute(AFun1(Ts1) {Ts2}, Tl) = AFun2(Ts3) {Ts4}
+  [substitute-5]
+        substitute(Tl1, Tl2) = Tl3,
+        aterms(substitute([Ts1],Tl2)) = Ts2
+        ===================================
+        substitute(Tl1 {Ts1}, Tl2) =Tl3 {Ts2}
+  [default-substitute-6]
+        substitute(T, Tl) = T

@@ -1,0 +1,22 @@
+equations
+%%\noindent  For the uniform treatment of conditional and unconditional equations,
+%% define the list of conditions of an unconditional equation to be the empty list.
+
+   [conds-1] get-cons(T) = ceq-equ ===>  T[conditions] = []
+
+%% Define the well-formedness predicate for conditional equations.
+%% Note that there are certain properties for which we do {\em not} test here,
+%% e.g., restrictions on variable occurrences.
+
+    [wf-CondEquation-1]
+        T[conditions] = Tl
+        ======
+        holds(wf-CondEquation, T) =
+       %% is(CondEquation, T) /\
+           eq-asfix-type(asfix-type-of(T[lhs]), asfix-type-of(T[rhs]))
+           /\ for-all(wf-Condition, filter(is(Condition), Tl))
+
+    [wf-Condition-1]
+        holds(wf-Condition,T) =
+        %%is(Condition, T) /\
+        eq-asfix-type(asfix-type-of(T[lhs]), asfix-type-of(T[rhs]))

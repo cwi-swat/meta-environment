@@ -1,0 +1,30 @@
+%%  MuASF2C
+module MuASF2C
+
+imports MuASF-Sign2C Locate-Constants Make-Left-Linear %%VarEnv
+
+exports
+  context-free syntax
+    muASF2C(Module)                    -> CProgram
+    muASF2C-internal(Module,NameTable) -> CProgram
+
+hiddens
+  context-free syntax
+    funcdefs2cfuncs({FuncDef ";"}*) -> Declaration-list-opt
+    funcdef2cfuncs({FuncDef ";"}*)  -> Declaration
+
+hiddens
+  context-free syntax
+    create-name-table(SignatureOpt,NameTable) -> NameTable
+    funcdefs2table({FuncDef ";"}+,NameTable)  -> NameTable
+    funcdef2table(FuncDef,NameTable)          -> NameTable
+
+hiddens
+  variables
+    "Transunitopt"[0-9]* -> Declaration-list-opt
+
+hiddens
+  variables
+    "Char"[0-9]*    -> CHAR
+    "Char*"[0-9]*   -> CHAR*
+    "Char+"[0-9]*   -> CHAR+

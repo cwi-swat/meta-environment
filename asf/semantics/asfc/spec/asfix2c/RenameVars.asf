@@ -1,0 +1,142 @@
+equations
+
+  [rir-1'1] rename-in-rules() =
+
+  [rir-1'2] rename-in-rule(Rule1,[1,]) = Rule2,
+            rename-in-rules(Rule*1) = Rule*2
+            ================================
+            rename-in-rules(Rule1;Rule*1) = Rule2;Rule*2
+
+  [rir-2'1] rename-in-term(Term1,Ivvarenv1) = [Term3,Ivvarenv2],
+            rename-in-term(Term2,Ivvarenv2) = [Term4,Ivvarenv3]
+            ===================================================
+            rename-in-rule(Term1 = Term2,Ivvarenv1) = Term3 = Term4
+
+  [rir-2'2] rename-in-term(Term1,Ivvarenv1) = [Term3,Ivvarenv2],
+            rename-in-term(Term2,Ivvarenv2) = [Term4,Ivvarenv3]
+            ===================================================
+            rename-in-rule(default:Term1 = Term2,Ivvarenv1) = default:Term3 = Term4
+
+  [rir-2'3] rename-in-term(Term1,Ivvarenv1) = [Term3,Ivvarenv2],
+            rename-in-conds(Cond+1,Ivvarenv2) = [Cond+2,Ivvarenv3],
+            rename-in-term(Term2,Ivvarenv3) = [Term4,Ivvarenv4]
+            ===================================================
+            rename-in-rule(Cond+1 ==> Term1 = Term2,Ivvarenv1) = Cond+2 ==> Term3 = Term4
+
+  [rir-2'4] rename-in-term(Term1,Ivvarenv1) = [Term3,Ivvarenv2],
+            rename-in-conds(Cond+1,Ivvarenv2) = [Cond+2,Ivvarenv3],
+            rename-in-term(Term2,Ivvarenv3) = [Term4,Ivvarenv4]
+            ===================================================
+            rename-in-rule(default:Cond+1 ==> Term1 = Term2,Ivvarenv1) =
+              default:Cond+2 ==> Term3 = Term4
+
+  [rit-1'1] vv-enter(Varid1,Ivvarenv1) = [Varid2,Ivvarenv2]
+            ===============================================
+            rename-in-term(Varid1,Ivvarenv1) = [Varid2,Ivvarenv2]
+
+  [default-rit-1'2] rename-in-term(Term,Ivvarenv) = [Term,Ivvarenv]
+
+  [rit-1'3] rename-in-terms(Term+1,Ivvarenv1) = [Term+2,Ivvarenv2]
+            ======================================================
+            rename-in-term(Funid(Term+1),Ivvarenv1) = [Funid(Term+2),Ivvarenv2]
+
+  [rit-2'1] rename-in-term(Term1,Ivvarenv1) = [Term2,Ivvarenv2]
+            ===================================================
+            rename-in-terms(Term1,Ivvarenv1) = [Term2,Ivvarenv2]
+
+  [rit-2'2] rename-in-term(Term1,Ivvarenv1) = [Term2,Ivvarenv2],
+            rename-in-terms(Term+1,Ivvarenv2) = [Term+2,Ivvarenv3]
+            ======================================================
+            rename-in-terms(Term1,Term+1,Ivvarenv1) = [Term2,Term+2,Ivvarenv3]
+
+  [cit-1'1] rename-in-cond(Cond1,Ivvarenv1) = [Cond2,Ivvarenv2]
+            ===================================================
+            rename-in-conds(Cond1,Ivvarenv1) = [Cond2,Ivvarenv2]
+
+  [cit-1'2] rename-in-cond(Cond1,Ivvarenv1) = [Cond2,Ivvarenv2],
+            rename-in-conds(Cond+1,Ivvarenv2) = [Cond+2,Ivvarenv3]
+            ======================================================
+            rename-in-conds(Cond1 & Cond+1,Ivvarenv1) = [Cond2 & Cond+2,Ivvarenv3]
+
+  [cit-2'1] rename-in-term(Term1,Ivvarenv1) = [Term3,Ivvarenv2],
+            rename-in-term(Term2,Ivvarenv2) = [Term4,Ivvarenv3]
+            ===================================================
+            rename-in-cond(Term1 == Term2,Ivvarenv1) = [Term3 == Term4,Ivvarenv3]
+
+  [cit-2'2] rename-in-term(Term1,Ivvarenv1) = [Term3,Ivvarenv2],
+            rename-in-term(Term2,Ivvarenv2) = [Term4,Ivvarenv3]
+            ===================================================
+            rename-in-cond(Term1 != Term2,Ivvarenv1) = [Term3 != Term4,Ivvarenv3]
+
+  [cit-2'3] rename-in-term(Term1,Ivvarenv1) = [Term3,Ivvarenv2],
+            rename-in-term(Term2,Ivvarenv2) = [Term4,Ivvarenv3]
+            ===================================================
+            rename-in-cond(Term1 =: Term2,Ivvarenv1) = [Term3 =: Term4,Ivvarenv3]
+
+  [mc-1'1] move-cons-terms-in-rules(,Namepair*) =
+
+  [mc-1'1] move-cons-terms-in-rule(Rule1,Namepair*) = Rule2,
+           move-cons-terms-in-rules(Rule*1,Namepair*) = Rule*2
+           ===================================================
+           move-cons-terms-in-rules(Rule1;Rule*1,Namepair*) = Rule2;Rule*2
+
+  [mc-2'1] move-cons-terms-in-terms(Term+1,Namepair*,1) = [Term+2,Cond*,Aint]
+           ==================================================================
+           move-cons-terms-in-rule(Funid(Term+1) = Term,Namepair*) =
+             make-rule(false,Cond*, Funid(Term+2), Term)
+
+  [mc-2'2] move-cons-terms-in-terms(Term+1,Namepair*,1) = [Term+2,Cond*,Aint]
+           ==================================================================
+           move-cons-terms-in-rule(default:Funid(Term+1) = Term,Namepair*) =
+             make-rule(true,Cond*, Funid(Term+2), Term)
+
+  [mc-2'3] move-cons-terms-in-terms(Term+1,Namepair*,1) = [Term+2,Cond*,Aint]
+           ==================================================================
+           move-cons-terms-in-rule(Cond+ ==> Funid(Term+1) = Term,Namepair*) =
+             make-rule(false,Cond* & Cond+, Funid(Term+2), Term)
+
+  [mc-2'4] move-cons-terms-in-terms(Term+1,Namepair*,1) = [Term+2,Cond*,Aint]
+           ==================================================================
+           move-cons-terms-in-rule(default:Cond+ ==> Funid(Term+1) = Term,Namepair*) =
+             make-rule(true,Cond* & Cond+, Funid(Term+2), Term)
+
+  [default-mc-2'5] move-cons-terms-in-rule(Rule,Namepair*) = Rule
+
+  [mc-3'1] move-cons-terms-in-term(Term1,Namepair*,Aint1) = [Term2,Cond*,Aint2]
+           ====================================================================
+           move-cons-terms-in-terms(Term1,Namepair*,Aint1) = [Term2,Cond*,Aint2]
+
+  [mc-3'2] move-cons-terms-in-term(Term1,Namepair*,Aint1) = [Term2,Cond*1,Aint2],
+           move-cons-terms-in-terms(Term+1,Namepair*,Aint2) = [Term+2,Cond*2,Aint3]
+           ========================================================================
+           move-cons-terms-in-terms(Term1,Term+1,Namepair*,Aint1) =
+             [Term2,Term+2,Cond*1 & Cond*2,Aint3]
+
+  [mc-4'1] is-constructor(Funid,Namepair*) = true,
+           are-constructor-terms(Term+,Namepair*) = true,
+           Aint = natcon(Char+),
+           varid("N""C""V" Char+) = Varid
+           ==============================
+           move-cons-terms-in-term(Funid(Term+),Namepair*,Aint) =
+             [Varid,term-equal(Varid,Funid(Term+)) =: t,succ(Aint)]
+
+  [default-mc4'2] move-cons-terms-in-term(Term,Namepair*,Aint) = [Term,,Aint]
+
+  [mc-4'1] are-constructor-terms(Term1,Namepair*) =
+             is-constructor-term(Term1,Namepair*)
+
+  [mc-3'2] is-constructor-term(Term1,Namepair*) = Bool1,
+           are-constructor-terms(Term+1,Namepair*) = Bool2
+           ===============================================
+           are-constructor-terms(Term1,Term+1,Namepair*) = Bool1 /\ Bool2
+
+  [mc-4'1] is-constructor(Funid,Namepair*) = true,
+           are-constructor-terms(Term+,Namepair*) = true
+           =============================================
+           is-constructor-term(Funid(Term+),Namepair*) = true
+
+  [mc-4'2] is-constructor(Funid,Namepair*) = true
+           ======================================
+           is-constructor-term(Funid,Namepair*) = true
+
+  [default-mc4'3] is-constructor-term(Term,Namepair*) = false

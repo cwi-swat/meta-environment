@@ -8,9 +8,6 @@
 #define MAX_LOAD 75
 
 #define PROF(var)
-/*
-#define streq(a,b) (!strcmp((a),(b)))
-*/
 
 #define is_char(t,c) (ATgetType(t) == AT_INT && ATgetInt((ATermInt) t) == (c))
 #define make_char(c) (char_table[c])

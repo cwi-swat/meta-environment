@@ -1,0 +1,231 @@
+equations
+
+%% \noindent
+%% Get the constructor (\spec{get-cons}) of (the root of) a parse tree. This function
+%% is provided as abstract interface in order to hide the actual representation
+%% (in this version, a function application with the constructor as function symbol).
+
+[get-cons-1] get-cons(AFun(Ts)) = AFun
+
+[is-cons-1] is-cons(AFun, T) = fun(T) == AFun
+
+%% Make a new parse tree, given a list of constituents.
+
+[make-1]
+        is-cons(AFun, AFun(Ts)) = true
+        ======================================
+        make(AFun, [Ts]) = AFun(Ts)
+[default-make-2]
+        make(AFun, Tl) = []
+
+%% Iterated syntactic constructs will be represented by an ATerm list, but
+%% where do we leave the white space and separators between elements?
+%% We will use the following approach:
+%% \begin{itemize}
+%% \item For iterated constructs without separator, we put the layout between
+%% between consecutive elements in the list. For instance, the list
+%%  of constructs $T_1 ,..., T_n$ will be represented by:
+%% {\tt [$T_1$, ws($L_1$), $T_2$, ws($L_2$) $,...,$ ws($T_{n-1}$), $T_n$]}.
+%% This case is treated by the function \spec{get-list-tail},
+%% which returns a pair of the form:
+%% \begin{quote}
+%% {\tt [{\em white space before next element}, {\em remainder of list}}]
+%% \end{quote}
+%% \item For iterated constructs with separator, we put the white space before
+%% the separator, the separator, and the white space following the separator
+%% between consecutive elements.
+%% For instance, the list
+%% of constructs $T_1 ,..., T_n$ separated by $L$ will be represented by:
+%% {\tt [$T_1$, ws($L_1$), sep($L$), ws($L_1'$), $T_2$, ws($L_2$), sep($L$), ws($L_2'$) $,...,$
+%% ws($T_{n-1}'$), $T_n$]}.
+%% This case is treated by the function \spec{get-list-tail-with-sep},
+%% which returns a 4-tuple of the form:
+%% \begin{quote}
+%% {\tt [{\em white space before separator}, {\em separator}, {\em white space following separator}, {\em
+%% remainder of list}}]
+%% \end{quote}
+%% \end{itemize}
+
+%% Define \spec{get-list-tail-with-sep}.
+
+[glt-ws-1]
+          get-list-tail-with-sep([T, w(L1), sep(L2), w(L3), Ts]) = [w(L1), sep(L2), w(L3), Ts]
+[glt-ws-2]
+        get-list-tail-with-sep([T]) = []
+
+%% Define \spec{get-list-tail}.
+
+[glt-1]
+       get-list-tail([T, w(L1), Ts]) = [w(L1), Ts]
+
+[glt-2]
+       get-cons(first([Ts])) != w
+       ============================================
+       get-list-tail([T, Ts]) = [w(""), Ts]
+
+[glt-3]
+       get-list-tail([T]) = []
+
+%%\noindent Apply function to all elements of a list except when they
+%% are whitespace terms. This is implemented using the function $\spec{wid}(Fun)$
+%% that behaves as the identity on whitespace and as $Fun$ on other terms.
+
+  [wmap-1] wmap(Fun, T)       = map(wid(Fun), atermlist(T))
+  [wid-1]  apply(wid(Fun), T) = apply(Fun, T)     when is-cons(w, T) = false
+  [wid-2]  apply(wid(Fun), T) = T                 when is-cons(w, T) = true
+  [fwmap]  apply(fun-wmap(Fun), Tl) = wmap(Fun, Tl)
+
+%%\noindent Define the default case for the ``is-constructor'' (\spec{is-cons})
+%% predicate. Note that the other cases are language specific and are derived
+%% from the grammar of each specific language.
+
+%%%[is-cons-1]  is-cons(AFun, T{Ts}) = is-cons(AFun, T)
+[default-is-cons-1] is-cons(AFun, T) = false
+
+%% Define all generic rules for the well-formedness predicate \spec{is}.
+%% Note that the remaining cases are language-specific and depend on the
+%% the definition of each non-terminal in the grammar.
+
+[is-1]  is(Text, Lvar) = true
+[is-2]  is(ATerm, Tvar) = true
+[is-3]  is(Lvar, l(Lvar)) = true
+[is-4]  is(Lvar, Lvar) = true
+%%%[is-5]  is(A, Tvar1 {Ts}) = is(A, Tvar1)
+[is-6]  is(A*, []) = true
+[is-7]  is(A*, [Ts]) = is(A+, [Ts])
+[is-8]  is(A+, []) = false
+[is-9]  get-list-tail(Tl) = [w(L1), Ts]
+        ===============================
+        is(A+, Tl) = is(A, first(Tl)) /\ is(A*, [Ts])
+[is-10] get-list-tail(Tl) = []
+        ===============================
+        is(A+, Tl) = is(A, first(Tl))
+[is-11] is({A B}*, []) = true
+[is-12] is({A B}+, []) = false
+[is-13] is({A B}*, [Ts]) = is({A B}+, [Ts])
+[is-14]
+        get-list-tail-with-sep(Tl) = [w(L1), sep(L'), w(L2), Ts], L = L'
+        ===============================================================
+        is({A L}+, Tl) = is(A, first(Tl)) /\ is({A L}*, [Ts])
+
+[is-15] is({A L}+, [T]) = is(A, T)
+[is-16] is(AFun, meta-var(L, AFun)) = true
+[is-17] is(AFun*, meta-var(L1, iter(sort(cons2lit(AFun)), L2,"*"))) = true
+[is-18] is(AFun+, meta-var(L1, iter(sort(cons2lit(AFun)), L2,"+"))) = true
+[is-19] is({AFun L}*, meta-var(L1, iter-sep("{", L2, sort(cons2lit(AFun)), L3, L, L4, "}", L5, "*")))
+        = true
+[is-20] is({AFun L}+, meta-var(L1, iter-sep("{", L2, sort(cons2lit(AFun)), L3, L, L4, "}", L5, "+")))
+        = true
+[default-is-21]
+        is(A,T) = false
+
+[holds-is-1]
+        holds(is(A), T) = is(A, T)
+
+%% Define generic access and replacement functions for parse trees. We define them
+%% using default equations; this makes it possible that language specific definitions
+%% for these functions can be used as well.
+
+[nelem-1] first(Tl1) = AFun
+          ============================
+          named-elem(AFun, Tl1, Tl2) = first(Tl2)
+[default-nelem-2]
+          named-elem(AFun, [T1, Ts1], [T2, Ts2]) = named-elem(AFun, [Ts1], [Ts2])
+
+[pos-1]   first(Tl) = AFun
+          ============================
+          position(AFun, Tl, n) = n
+[default-pos-2]
+          position(AFun, [T, Ts], n) = position(AFun, [Ts], n + 1)
+
+
+%% Select: extract a named component of a parse tree
+
+  [get-1]
+        init(AFun1) = AFun1'(Ts')
+        =================================================
+        AFun1(Ts)[AFun2] = named-elem(AFun2, [Ts'], [Ts])
+  [get-2]
+        AFun1(Ts) Ann [AFun2] = AFun1(Ts)[AFun2]
+  [get-3]
+        T[AFun.Fields] = T[AFun][Fields]
+
+%% Assignment: replace a named component of a parse tree
+
+  [asg-2]
+        init(AFun1) = AFun1'(Ts')
+        =====================================================================================
+        AFun1(Ts) [AFun2 := T'] = AFun1(aterms(replace([Ts], position(AFun2, [Ts'], 0), T')))
+  [asg-2]
+        AFun1(Ts) [AFun2 := T'] = AFun1'(Ts')
+        ============================================
+        AFun1(Ts) Ann [AFun2 := T'] = AFun1(Ts') Ann
+  [asg-3]
+        T [AFun . Fields := T'] = T [AFun := T[AFun][Fields := T']]
+
+%% Extract or replace the whitespace {\em preceeding} a named component of a parse tree.
+
+%%%  [getl-2]
+%%%        AFun1 = fun(T), init(AFun2) = AFun2(Ts')
+%%%        ==========================================================
+%%%        T[< AFun2] = index(sons(T), position(AFun2, [Ts'], 0) - 1)
+%%%  [asgl-2]
+%%%        AFun1 = fun(T), init(AFun1) = AFun1(Ts')
+%%%        =====================================================================
+%%%        T [< AFun2 := T'] = replace-son(T, position(AFun2, [Ts'], 0) - 1, T')
+  [getl-2]
+        init(AFun1) = AFun1'(Ts')
+        ====================================================================
+        AFun1(Ts) [< AFun2] = index([Ts], position(AFun2, [Ts'], 0) - 1)
+  [asgl-2]
+        init(AFun1) = AFun1'(Ts')
+        ================================================================================================
+        AFun1(Ts) [< AFun2 := T'] = AFun1(aterms(replace([Ts], position(AFun2, [Ts'], 0) - 1, T')))
+
+%% Extract or replace the whitespace {\em following} a named component of a parse tree.
+
+  [getr-2]
+        init(AFun1) = AFun1'(Ts')
+        ====================================================================
+        AFun1(Ts) [> AFun2] = index([Ts], position(AFun2, [Ts'], 0) + 1)
+  [asgr-2]
+        init(AFun1) = AFun1'(Ts')
+        ================================================================================================
+        AFun1(Ts) [> AFun2 := T'] = AFun1(aterms(replace([Ts], position(AFun2, [Ts'], 0) + 1, T')))
+
+%% Concatenation assignment: append a list to a named component of a parse tree,
+%% which should be a list.
+
+  [asgc-1] T[Fields ++= Tl] = T[Fields := atermlist(T[Fields]) ++ Tl]
+
+%% Application assignment: apply function Fun to the named component of
+%% the tree and substitute the new value for the old value.
+
+  [asga-1] T[Fields @= Fun] = T[Fields := apply(Fun, T[Fields])]
+
+%% Map assignment: apply function Fun to all elements of the named
+%% component, which should be a list.
+
+  [asga-1] T[Fields *= Fun] = T[Fields := wmap(Fun, T[Fields])]
+
+%% printing new AFuns
+
+%%%  [print-w]             print(w)        = "w"
+%%%  [print-l]             print(l)        = "l"
+%%%  [print-sort]          print(sort)     = "sort"
+%%%  [print-meta-var]      print(meta-var) = "meta-var"
+%%%  [print-sep]           print(sep)      = "sep"
+%%%  [print-iter]          print(iter)     = "iter"
+%%%  [print-iter-sep]      print(iter-sep) = "iter-sep"
+
+%% inits
+[pp-1] pp(Lvar) = Lvar
+[pp-2] pp(AFun(T)) = pp(T)
+[pp-3] pp([T, Ts]) = pp(T) ++ pp([Ts])
+[pp-4] pp([T]) = pp(T)
+[pp-5] pp([]) =  ""
+[pp-6] pp(ACon {Ts}) = pp(ACon) ++ "{" ++ pp([Ts]) ++ "}"
+[pp-6] pp(AFun {Ts}) = pp(AFun) ++ "{" ++ pp([Ts]) ++ "}"
+[pp-6] pp(AFun(Ts1) {Ts2}) = pp(AFun(Ts1)) ++ "{" ++ pp([Ts2]) ++ "}"
+[pp-6] pp(Tl {Ts}) = pp(Tl) ++ "{" ++ pp([Ts]) ++ "}"
+[default-pp-6] pp(Tvar) = Tvar

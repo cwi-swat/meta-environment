@@ -1,0 +1,22 @@
+module AVars
+
+imports ATerms
+
+exports
+  sorts
+    AName AVar
+  lexical syntax
+    [A-Z][A-Za-z0-9\-]* -> AName
+  context-free syntax
+    AName                       -> AVar           %% Simple variable
+    AName ":" ATerm             -> AVar           %% Typed variable
+    AName "?"                   -> AVar           %% Simple Result variable
+    AName ":" ATerm "?"         -> AVar           %% Typed Result variable
+    AVar                        -> ATerm
+  context-free syntax
+    is-avar(ATerm)                    -> Bool
+    is-result-avar(ATerm)             -> Bool
+    avar-name(ATerm)                  -> AName
+
+  variables
+    "AVar"[0-9\']* -> AVar

@@ -1,0 +1,46 @@
+%% The module {\tt AsFix2muASFnames} contains all functions to
+%% translate the \asfix\ representation of context-free functions
+%% into \muasf\ names.
+module AsFix2muASFnames
+
+imports AsFixPrint C-Basics %%MuASF-SingleSorted MuASF-ManySorted
+
+exports
+  context-free syntax
+    modname2lf(ATerm)         -> FunId
+    cffunc2id(ATerm)          -> FunId
+    iter2id(ATerm)            -> FunId
+    sort2id(ATerm)            -> FunId
+    make-caller-func(Literal) -> FunId
+
+  context-free syntax
+    "id2modname" "(" ATerm ")"      -> ModId
+    "get-org-modname" "(" ATerm ")" -> ATerm
+    "avar2muvar" "(" ATerm ")"      -> Var
+    "upper2lower" "(" Literal ")"   -> Literal
+    "literal2id" "(" Literal ")"    -> FunId
+
+hiddens
+  context-free syntax
+    qliteral2id(Literal) -> FunId
+    sep2id(ATerm)        -> FunId
+    iterop2id(ATerm)     -> FunId
+    svar2muvar(ATerm)    -> VarId
+
+
+hiddens
+  variables
+    "Literal"[0-9\']*  -> Literal
+    "CfFunc"[0-9\']*   -> ATerm
+    "CfElems"[0-9\']*  -> ATermList
+    "CfElem*"[0-9\']*  -> ATerms
+    "CfElem"[0-9\']*   -> ATerm
+    "Symbol"[0-9\']*   -> ATerm
+    "Iter"[0-9\']*     -> ATerm
+    "Attribs"[0-9\']*  -> ATermList
+    "Attrib*"[0-9\']*  -> ATerms
+    "Attrib"[0-9\']*   -> ATerm
+
+    "Char*"[0-9]*      -> CHAR*
+    "Char+"[0-9]*      -> CHAR+
+    "Char"[0-9]*       -> CHAR

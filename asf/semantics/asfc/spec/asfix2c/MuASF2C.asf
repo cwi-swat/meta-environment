@@ -1,0 +1,87 @@
+equations
+
+  [ma2c-1'1] create-name-table(Signopt,(,funid("l""f""_" Char*),1,1)) = Nametable,
+             make-left-linear(module modid(Char*) Signopt Rulesopt) = Module
+             ===============================================================
+             muASF2C(module modid(Char*)
+                     Signopt
+                     Rulesopt) =
+                muASF2C-internal(Module,Nametable)
+
+%% The function definitions returned by the function {\tt rulesopt2cfuncs}
+%% are constructor functions. For these functions a C function must be
+%% generated which only returns the normal form.
+
+  [ma2c-2'1] signopt2cfuncs(Modid,Signopt,Nametable) = (Funcdef*1,Decl*1),
+             rulesopt2cfuncs(Funcdef*1,Rulesopt,Nametable) = (Funcdef*2,Decl*2),
+             funcdefs2cfuncs(Funcdef*2) = Decl*3,
+             locate-constants-in-decls(Modid,Decl*2 ++ Decl*3) = Decl*4
+             ==========================================================
+             muASF2C-internal(module Modid
+                              Signopt
+                              Rulesopt,Nametable) =
+               #include "asc-support.h"
+               Decl*1 ++ Decl*4 %%++ Decl*3
+
+  [fds2cf-1'1] funcdefs2cfuncs() =
+
+  [fds2cf-1'2] funcdef2cfuncs(Funcdef) = Decl,
+               funcdefs2cfuncs(Funcdef*) = Decl*
+               =================================
+               funcdefs2cfuncs(Funcdef;Funcdef*) = Decl* ++ Decl
+
+  [fd2c-1'1] sigargs2cstats(funid(Char*),) = Stat*
+             =====================================
+             funcdef2cfuncs(funid(Char*)) =
+               ATerm identifier(Char*)() { Stat* }
+
+  [fd2c-1'2] sigargs2cstats(funid(Char*),) = Stat*
+             =====================================
+             funcdef2cfuncs(funid(Char*) Attrs) =
+               ATerm identifier(Char*)() { Stat* }
+
+  [fd2c-1'3] sigargs2cargs(Sigarg+,0) = FormalArgs,
+             sigargs2cstats(funid(Char*),Sigarg+) = Stat*
+             ============================================
+             funcdef2cfuncs(funid(Char*)(Sigarg+)) =
+               ATerm identifier(Char*)(FormalArgs) { Stat* }
+
+  [fd2c-1'4] sigargs2cargs(Sigarg+,0) = FormalArgs,
+             sigargs2cstats(funid(Char*),Sigarg+) = Stat*
+             ============================================
+             funcdef2cfuncs(funid(Char*)(Sigarg+) Attrs) =
+               ATerm identifier(Char*)(FormalArgs) { Stat* }
+
+  [cnt-1'1] create-name-table(,Nametable) = Nametable
+
+  [cnt-1'2] create-name-table(signature ,Nametable) = Nametable
+
+  [cnt-1'3] funcdefs2table(Funcdef+,Nametable1) = Nametable2
+            ================================================
+            create-name-table(signature Funcdef+,Nametable1) = Nametable2
+
+  [f2t-1'1] funcdefs2table(Funcdef,Nametable) =
+              funcdef2table(Funcdef,Nametable)
+
+  [f2t-1'2] funcdef2table(Funcdef,Nametable1) = Nametable2,
+            funcdefs2table(Funcdef+,Nametable2) = Nametable3
+            ================================================
+            funcdefs2table(Funcdef;Funcdef+,Nametable1) = Nametable3
+
+  [f2t-2'1] nt-add(funid(Char*),funid("_" Char*),Nametable1) = Nametable2
+            =============================================================
+            funcdef2table(funid(Char*)(Sigarg+),Nametable1) = Nametable2
+
+  [f2t-2'2] Attrs = {Term*},
+            nt-add(funid(Char*),funid("_" Char*),Term*,Nametable1) = Nametable2
+            ===================================================================
+            funcdef2table(funid(Char*)(Sigarg+) Attrs,Nametable1) = Nametable2
+
+  [f2t-2'3] nt-add(funid(Char*),funid("_" Char*),Nametable1) = Nametable2
+            =============================================================
+            funcdef2table(funid(Char*),Nametable1) = Nametable2
+
+  [f2t-2'4] Attrs = {Term*},
+            nt-add(funid(Char*),funid("_" Char*),Term*,Nametable1) = Nametable2
+            ===================================================================
+            funcdef2table(funid(Char*) Attrs,Nametable1) = Nametable2

@@ -1,0 +1,14 @@
+module WfAsFix
+
+imports WfAsFixEq
+
+exports
+  context-free syntax
+     expand(ATerm, ATerm)        -> ATerm
+
+     expand-aprod(ATermList)     -> AFun
+     expand-module(ATerm)        -> ATerm
+     expand-term(ATerm)          -> ATerm
+     wf-Module                   -> AFun
+     wf-Term                     -> AFun
+     wf-AsFix                    -> AFun

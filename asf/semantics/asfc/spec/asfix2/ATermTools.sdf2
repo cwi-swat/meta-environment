@@ -1,0 +1,7 @@
+module ATermTools
+
+imports Matching ATerm-Tables ATerm-Trees
+
+exports
+  context-free syntax
+    replace-afun(AFun, ATerm, AFun) -> ATerm

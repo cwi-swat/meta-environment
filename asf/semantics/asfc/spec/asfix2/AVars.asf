@@ -1,0 +1,13 @@
+equations
+
+[is-avar-1] is-avar(AVar) = true
+[default-is-avar-2] is-avar(T) = false
+
+[is-result-avar-1] is-result-avar(AName ?) = true
+[is-result-avar-2] is-result-avar(AName : T ?) = true
+[default-is-result-var-3] is-result-avar(T) = false
+
+[avar-name-1] avar-name(AName) = AName
+[avar-name-2] avar-name(AName : T) = AName
+[avar-name-3] avar-name(AName?) = AName
+[avar-name-4] avar-name(AName : T?) = AName

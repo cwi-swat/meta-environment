@@ -1,0 +1,23 @@
+%%%% $Id$
+module ATerm-Trees
+
+imports ATerm-Lists
+exports
+  context-free syntax
+    sons(ATerm)                   -> ATermList
+    put-sons(ATerm, ATermList)    -> ATerm
+    fun(ATerm)                    -> ATerm
+
+    map-sons(ATerm, ATerm)         -> ATerm
+    replace-son(ATerm, Int, ATerm) -> ATerm
+
+    subterms(ATerm, ATerm)        -> ATermList
+    subtermsf                     -> AFun
+    treplace(ATerm, ATerm, ATerm) -> ATerm
+    treplacef                     -> AFun
+    tmap(ATerm, ATerm)            -> ATerm
+    tmapf                         -> AFun
+    for-some-st(ATerm, ATerm)     -> Bool
+    for-some-stf                  -> AFun
+    contains(ATerm, ATerm)        -> Bool
+    containsf                     -> AFun

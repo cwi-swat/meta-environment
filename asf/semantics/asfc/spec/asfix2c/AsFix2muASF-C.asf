@@ -1,0 +1,199 @@
+equations
+
+%% Before a translation can take place the abbreviations
+%% in the equation have to be expanded.
+  [a2m-1'1] Amodule[module-name] = Aname,
+            id2modname(Aname) = Mname,
+            modname2lf(Aname) = Funid1,
+            asfix2sign(Amodule,(,Funid1,1,1)) =
+              (Funcdef*1,(Namepair*,Funid2,Aint1,Aint2)),
+            eqs2rules(Amodule[equations],(Namepair*,ef,1,Aint1)) =
+              (Funcdef*2,Rule*,Nametable),
+            Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
+            =====================================
+            asfix2muasf(Amodule) =
+              (module Mname signature Funcdef*3 rules Rule*,Nametable)
+
+  [e2r-1'1] eqs2rules(no-equations,Nametable) = (,,Nametable)
+
+  [e2r-1'2] get-cons(Equations) = equations,
+            Equations[cond-equations] = CeqEqs
+            ==================================
+            eqs2rules(Equations,Nametable) = ceqeqs2rules(CeqEqs,Nametable)
+
+  [ces2r-1'1] ceqeqs2rules([],Nametable) = (,,Nametable)
+
+  [ces2r-1'2] CeqEqs1 != [],
+              get-iter-tail(CeqEqs1) = CeqEqs2,
+              first(CeqEqs1) = CeqEq,
+              pln-ceqeq2rules(CeqEq,Nametable1) = (Funcdef*1,Rule,Nametable2),
+              ceqeqs2rules(CeqEqs2,Nametable2) = (Funcdef*2,Rule*,Nametable3),
+              Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
+              =====================================
+              ceqeqs2rules(CeqEqs1,Nametable1) = (Funcdef*3,Rule; Rule*,Nametable3)
+
+  [pce2r-1'1] remove-annotation(CeqEq1) = CeqEq2,
+              is-term-ceq(CeqEq2) = true
+              ==========================
+              pln-ceqeq2rules(CeqEq1,Nametable) = term-equ2rules(get-equ-type(CeqEq2),CeqEq2,Nametable)
+
+  [pce2r-1'2] remove-annotation(CeqEq1) = CeqEq2,
+              is-term-ceq(CeqEq2) = false
+              ===========================
+              pln-ceqeq2rules(CeqEq1,Nametable) = ceqeq2rules(get-cons(CeqEq2),CeqEq2,Nametable)
+
+  [ce2r-1'1] CeqEq[lhs] = Alhs,
+             aterm2muasf(get-cons(Alhs),Alhs,Nametable1) = (Funcdef*1,Term1,Nametable2),
+             CeqEq[rhs] = Arhs,
+             aterm2muasf(get-cons(Arhs),Arhs,Nametable2) = (Funcdef*2,Term2,Nametable3),
+             Funcdef*1 ++_ss Funcdef*2 = Funcdef*3,
+             make-rule(is-default(CeqEq[tag]),Term1,Term2) = Rule
+             ====================================================
+             ceqeq2rules(ceq-equ,CeqEq,Nametable1) = (Funcdef*3,Rule,Nametable3)
+
+  [ce2r-1'2] CeqEq[lhs] = Alhs,
+             aterm2muasf(get-cons(Alhs),Alhs,Nametable1) = (Funcdef*1,Term1,Nametable2),
+             CeqEq[rhs] = Arhs,
+             aterm2muasf(get-cons(Arhs),Arhs,Nametable2) = (Funcdef*2,Term2,Nametable3),
+             CeqEq[conditions] = Aconds,
+             conds2muasf(Aconds,Nametable3) = (Funcdef*3,Cond+,Nametable4),
+             Funcdef*1 ++_ss Funcdef*2 ++_ss Funcdef*3 = Funcdef*4,
+             make-rule(is-default(CeqEq[tag]),Cond+,Term1,Term2) = Rule
+             ==========================================================
+             ceqeq2rules(ceq-when,CeqEq,Nametable1) = (Funcdef*4,Rule,Nametable4)
+
+  [ce2r-1'3] CeqEq[lhs] = Alhs,
+             aterm2muasf(get-cons(Alhs),Alhs,Nametable1) = (Funcdef*1,Term1,Nametable2),
+             CeqEq[rhs] = Arhs,
+             aterm2muasf(get-cons(Arhs),Arhs,Nametable2) = (Funcdef*2,Term2,Nametable3),
+             CeqEq[conditions] = Aconds,
+             conds2muasf(Aconds,Nametable3) = (Funcdef*3,Cond+,Nametable4),
+             Funcdef*1 ++_ss Funcdef*2 ++_ss Funcdef*3 = Funcdef*4,
+             make-rule(is-default(CeqEq[tag]),Cond+,Term1,Term2) = Rule
+             ==========================================================
+             ceqeq2rules(ceq-impl,CeqEq,Nametable1) = (Funcdef*4,Rule,Nametable4)
+
+  [at2ma-1'1] avar2muvar(Aterm) = Var
+              =======================
+              aterm2muasf(var,Aterm,Nametable) = (,Var,Nametable)
+
+  [at2ma-1'2] Aterm[prod] = Afunc,
+              is-bracket-func(Afunc) = true,
+              Aterm[args] = Args
+              ==================
+              aterm2muasf(appl,Aterm,Nametable1) = args2muasf(Args,Nametable1)
+
+  [at2ma-1'3] Aterm[prod] = Afunc,
+              is-bracket-func(Afunc) = false,
+              cffunc2id(Afunc) = Funid1,
+              Afunc[attrs] = Attr,
+              attrs2terms(Attr) = Term*1,
+              nt-lookup(Funid1,Term*1,Nametable1) = (Funid2,Nametable2),
+              Aterm[args] = Args,
+              args2muasf(Args,Nametable2) = (Funcdef*1,Term*2,Nametable3),
+              make-external-funcdef(Funid2,Term*2) = Funcdef,
+              Funcdef ++_ss Funcdef*1 = Funcdef*2
+              ===================================
+              aterm2muasf(appl,Aterm,Nametable1) =
+                (Funcdef*2,make-func(Funid2,Term*2),Nametable3)
+
+  [at2ma-1'4] Aterm[sym] = Afunc,
+              iter2id(Afunc) = Funid1,
+              ntl-lookup(Funid1,Nametable1) = (Funid2,Nametable2),
+              Aterm[elems] = Args,
+              listargs2muasf(Args,Nametable2) = (Funcdef*1,Term*,Nametable3),
+              make-funcdef(Funid1,null)= Funcdef,
+              Funcdef ++_ss Funcdef*1 = Funcdef*2
+              ===================================
+              aterm2muasf(list,Aterm,Nametable1) =
+                (Funcdef*2,make-list-func(Funid1,Term*),Nametable3)
+
+  [at2ma-1'5] Aterm[sym] = sort("CHAR"),
+              Aterm[name] = L,
+              qlit2str(L) = Term
+              ==================
+              aterm2muasf(lex,Aterm,Nametable) = (,Term,Nametable)
+
+  [at2ma-1'6] Aterm[sym] = sort(L1),
+              L1 != literal(""" "C""H""A""R" """),
+              Aterm[name] = L2,
+              "{sort(\"CHAR\")}" = Funid1,
+              ntl-lookup(Funid1,Nametable1) = (Funid2,Nametable2),
+              make-funcdef(Funid1,null) = Funcdef1,
+              make-caller-func(L1) = Funid3,
+              nt-lookup(Funid3,Nametable2) = (Funid4,Nametable3),
+              make-external-funcdef(Funid4,null) = Funcdef2,
+              lit2str(L2) = Term
+              ==================
+              aterm2muasf(lex,Aterm,Nametable1) =
+                (Funcdef1;Funcdef2,Funid4(Funid1(Term)),Nametable3)
+
+  [default-at2ma-1'7] aterm2muasf(Afun,Aterm,Nametable) = (,,Nametable)
+
+  [a2ma-1'1] args2muasf([],Nametable) = (,,Nametable)
+
+  [a2ma-1'2] Args1 != [],
+             get-iter-tail(Args1) = Args2,
+             first(Args1) = Aterm,
+             aterm2muasf(get-cons(Aterm),Aterm,Nametable1) = (Funcdef*1,Term*1,Nametable2),
+             args2muasf(Args2,Nametable2) = (Funcdef*2,Term*2,Nametable3),
+             Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
+             =====================================
+             args2muasf(Args1,Nametable1) = (Funcdef*3,Term*1,Term*2,Nametable3)
+
+  [la2ma-1'1] listarg2muasf(Aterm,Nametable) =
+                aterm2muasf(get-cons(Aterm),Aterm,Nametable)
+
+  [la2ma-1'1] listargs2muasf([],Nametable) = (,,Nametable)
+
+  [la2ma-1'2] Args1 != [],
+              get-iter-tail(Args1) = Args2,
+              first(Args1) = Aterm,
+              listarg2muasf(Aterm,Nametable1) = (Funcdef*1,Term*1,Nametable2),
+              listargs2muasf(Args2,Nametable2) = (Funcdef*2,Term*2,Nametable3),
+              Funcdef*1 ++_ss Funcdef*2 = Funcdef*3,
+              make-c-list-cons(Term*1,Term*2) = Term
+              ======================================
+              listargs2muasf(Args1,Nametable1) = (Funcdef*3,Term,Nametable3)
+
+  [cs2ma-1'1] conds2muasf([],Nametable) = (,,Nametable)
+
+  [cs2ma-1'2] Aconds1 != [],
+              get-itersep-tail(Aconds1) = Aconds2,
+              first(Aconds1) = Acond,
+              cond2muasf(Acond,Nametable1) = (Funcdef*1,Cond1,Nametable2),
+              conds2muasf(Aconds2,Nametable2) = (Funcdef*2,Cond*2,Nametable3),
+              Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
+              =====================================
+              conds2muasf(Aconds1,Nametable1) = (Funcdef*3,Cond1 & Cond*2,Nametable3)
+
+%% We assume that the assignment operator is already used in the
+%% AsFix representation of a module.
+  [c2ma-1'1] Acond[cop] = l("=:"),
+             Acond[lhs] = Alhs,
+             aterm2muasf(get-cons(Alhs),Alhs,Nametable1) = (Funcdef*1,Term1,Nametable2),
+             Acond[rhs] = Arhs,
+             aterm2muasf(get-cons(Arhs),Arhs,Nametable2) = (Funcdef*2,Term2,Nametable3),
+             Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
+             =====================================
+             cond2muasf(Acond,Nametable1) = (Funcdef*3,Term1 =: Term2,Nametable3)
+
+  [c2ma-1'2] Acond[cop] = l("="),
+             Acond[lhs] = Alhs,
+             %%%get-sort-from-term(Alhs) = Sortid,
+             aterm2muasf(get-cons(Alhs),Alhs,Nametable1) = (Funcdef*1,Term1,Nametable2),
+             Acond[rhs] = Arhs,
+             aterm2muasf(get-cons(Arhs),Arhs,Nametable2) = (Funcdef*2,Term2,Nametable3),
+             Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
+             =====================================
+             cond2muasf(Acond,Nametable1) = (Funcdef*3,Term1 == Term2,Nametable3)
+
+  [c2ma-1'3] Acond[cop] = l("!="),
+             Acond[lhs] = Alhs,
+             %%%get-sort-from-term(Alhs) = Sortid,
+             aterm2muasf(get-cons(Alhs),Alhs,Nametable1) = (Funcdef*1,Term1,Nametable2),
+             Acond[rhs] = Arhs,
+             aterm2muasf(get-cons(Arhs),Arhs,Nametable2) = (Funcdef*2,Term2,Nametable3),
+             Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
+             =====================================
+             cond2muasf(Acond,Nametable1) = (Funcdef*3,Term1 != Term2,Nametable3)

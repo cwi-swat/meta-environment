@@ -1,0 +1,13 @@
+module ATypes
+
+imports AVars ATerm-Lists AsFix-Constructors
+
+exports
+  context-free syntax
+    int  -> AFun
+    str  -> AFun
+%%%    term -> AFun
+%%%    list -> AFun
+
+    type-of(ATerm)             -> ATerm
+    require-type(ATerm, ATerm) -> Bool

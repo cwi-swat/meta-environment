@@ -1,0 +1,106 @@
+equations
+
+%% \noindent
+%% Give the list of all direct descendants of a term.
+
+  [sons-4] sons(ACon)     = []     [sons-5] sons(ACon Ann)     = []
+  [sons-2] sons(Tl)       = Tl     [sons-6] sons(Tl Ann)       = Tl
+  [sons-3] sons(AFun)     = []     [sons-7] sons(AFun Ann)     = []
+  [sons-1] sons(AFun(Ts)) = [Ts]   [sons-8] sons(AFun(Ts) Ann) = [Ts]
+
+%% Replace the direct descendants of a term.
+
+  [put-sons-1] put-sons(ACon, Tl)         = ACon
+  [put-sons-2] put-sons(Tl1, Tl2)         = Tl2
+  [put-sons-3] put-sons(AFun, Tl)         = AFun
+  [put-sons-4] put-sons(AFun(Ts1), [Ts2]) = AFun(Ts2)
+  [put-sons-5] put-sons(ACon Ann, Tl)         = ACon Ann
+  [put-sons-6] put-sons(Tl1 Ann, Tl2)         = Tl2 Ann
+  [put-sons-7] put-sons(AFun Ann, Tl)         = AFun Ann
+  [put-sons-8] put-sons(AFun(Ts1) Ann, [Ts2]) = AFun(Ts2) Ann
+
+%% The type of constructor can be characterized by the function \fun{fun}.
+
+  [fun-1] fun(ACon)     = ACon
+  [fun-2] fun(Tl)       = []
+  [fun-3] fun(AFun)     = AFun
+  [fun-4] fun(AFun(Ts)) = AFun
+
+%% With the functions \fun{sons}, \fun{put-sons} and \fun{fun}, all ATerms are completely
+%% characterized in terms of a function symbol and a list of children.
+%% We can handle recursive functions over trees with
+%% one equation that applies some appropriate higher-order list function to the list
+%% of sons and applies a function to the result given the function.
+%%
+%% First we extend several list operations to operations on the sons of a term.
+%% A recurring operation is the application of a function to all children of
+%% a term. This operation is expressed by the function \fun{map-sons} that
+%% applies a function $Fun$ to all sons of a term $T$.
+
+  [map-sons-1]
+        map-sons(Fun, T) = put-sons(T, map(Fun, sons(T)))
+
+%% Replace the $n$-th son by a new term.
+
+  [replace-son-1]
+        replace-son(T, n, T') = put-sons(T, replace(sons(T), n, T'))
+
+%% Using the functions above, a number of very generic term traversal functions can be
+%% specified.
+%%
+%% The function \fun{subterms} extracts all subterms from a term
+%% for which predicate $Pred$ holds.
+
+  [subterms-1]
+        Tl2 = concat(map(subtermsf(Pred), sons(T)))
+        =============================================================
+        subterms(Pred, T) = if holds(Pred,T) then T : Tl2 else Tl2 fi
+  [subterms-3]
+        apply(subtermsf, Pred, T) = subterms(Pred, T)
+
+%% The function \fun{replace} replaces all subterms of a term $T$ that
+%% satisfy the predicate \var{Pred} by the result of applying the
+%% function \var{Fun} to that term.
+
+  [replace-1]
+        holds(Pred, T) = true
+        =====================================
+        treplace(Pred, Fun, T) = apply(Fun, T)
+  [replace-2]
+        holds(Pred, T) = false
+        ========================================================
+        treplace(Pred, Fun, T) = map-sons(treplacef(Pred, Fun), T)
+  [replace-2]
+        apply(treplacef, Pred, Fun, T) = treplace(Pred, Fun, T)
+
+%% The function \fun{tmap} is a simplication of \fun{replace} that
+%% applies a function to each subterm of a term.
+
+  [tmap-1]
+        tmap(Fun, T) = apply(Fun, map-sons(tmapf(Fun), T))
+  [tmap-2]
+        apply(tmapf, Fun, T) = tmap(Fun, T)
+
+%% The predicate \fun{for-some-st} determines whether predicate $Pred$ holds
+%% for some subterm of a term.
+
+  [fsst-1]
+        holds(Pred, T) = true
+        ===========================
+        for-some-st(Pred, T) = true
+  [fsst-2]
+        holds(Pred, T) = false
+        ============================================================
+        for-some-st(Pred, T) = for-some(for-some-stf(Pred), sons(T))
+  [ffsst-3]
+        holds(for-some-stf, Pred, T) = for-some-st(Pred, T)
+
+%% The predicate \fun{contains} determines whether a term $T'$ is contained in another
+%% term $T$, i.e., if it is equal to some subterm of $T$. Observe how this predicate
+%% is defined in terms of the higher-order predicate \fun{for-some-st}, using the partial
+%% application of the equality predicate \fun{eq} to $T$.
+
+  [contains-1]
+        contains(T, T') = for-some-st(eq(T), T')
+  [contains-2]
+        holds(containsf, T, T') = contains(T, T')

@@ -1,0 +1,318 @@
+equations
+
+  [tlf2e-1'1] term-get-symbol-prod(LexFunc) = Symbol,
+              includes-sortname(Symbol,Sortlist) = true
+              =========================================
+              term-lexfunc2sign(LexFunc,Sortlist,Nametable) = (,Sortlist,Nametable)
+
+  [tlf2e-1'2] term-get-symbol-prod(LexFunc) = Symbol,
+              includes-sortname(Symbol,{Lexsort*}) = false,
+              Symbol = sort(L),
+              sort2id(Symbol) = Funid1,
+              make-lex-cons-func(L) = Funid3,
+              nt-lookup("{sort(\"CHAR\")}",Nametable1) =
+                (Funid4,Nametable2),
+              nt-lookup(Funid3,Nametable2) =
+                (Funid5,Nametable3)
+              =========================================
+              term-lexfunc2sign(LexFunc,{Lexsort*},Nametable1) =
+               ("{sort(\"CHAR\")}"( _ );
+                Funid5( _ ),{Lexsort*;Symbol},Nametable3)
+
+  [tcf2e-1'1] term-cffunc2id(Aname,CfFunc) = Funid1,
+              term-get-args-prod(CfFunc) = CfArgs,
+              term-cfelems2args(CfArgs,Nametable1) = (Funcdef*1,Term*1,Nametable2),
+              term-get-attrs-prod(CfFunc) = Attr,
+              term-attrs2terms(Attr) = Term*2,
+              nt-lookup(Funid1,Term*2,Nametable2) = (Funid2,Nametable3),
+              make-funcdef(Funid2,Term*1) = Funcdef,
+              Funcdef ++_ss Funcdef*1 = Funcdef*2
+              ===================================
+              term-cffunc2sign(Aname,CfFunc,Nametable1) = (Funcdef*2,Nametable3)
+
+  [tcf2a-1'1] term-cfelems2args([],Nametable) = (,,Nametable)
+
+  [tcf2a-1'2] CfElems1 != [],
+              get-iter-tail(CfElems1) = CfElems2,
+              term-cfelem2args(first(CfElems1),Nametable1) = (Funcdef*1,Term*1,Nametable2),
+              term-cfelems2args(CfElems2,Nametable2) = (Funcdef*2,Term*2,Nametable3),
+              Funcdef*1 ++_ss Funcdef*2 = Funcdef*3
+              =====================================
+              term-cfelems2args(CfElems1,Nametable1) = (Funcdef*3,Term*1,Term*2,Nametable3)
+
+%% Only for sorts and lists arguments in the function definition have to
+%% be generated. Furthermore, the function definitions for the specific list constructors
+%% have to be generated.
+  [tcf2a-2'1] is-sort-symbol-prod(Prod) = true,
+              gen-var(1) = Varid
+              ==================
+              term-cfelem2args(appl(Prod,Ws,[Sort]),Nametable) = (,Varid,Nametable)
+
+  [tcf2a-2'2] is-iter-sep-term(Symbol) = true,
+              gen-var(1) = Varid,
+              term-iter2id(Symbol) = Funid1,
+              nt-lookup(Funid1,Nametable1) = (Funid2,Nametable2),
+              make-funcdef(Funid1,Varid) = Funcdef
+              ====================================
+              term-cfelem2args(Symbol,Nametable1) = (Funcdef,Varid,Nametable2)
+
+  [tcf2a-2'3] is-iter-term(Symbol) = true,
+              gen-var(1) = Varid,
+              term-iter2id(Symbol) = Funid1,
+              nt-lookup(Funid1,Nametable1) = (Funid2,Nametable2),
+              make-funcdef(Funid1,Varid) = Funcdef
+              ====================================
+              term-cfelem2args(Symbol,Nametable1) = (Funcdef,Varid,Nametable2)
+
+  [default-cf2a-2'4] term-cfelem2args(CfElem,Nametable) = (,,Nametable)
+
+
+  [tcf2i-1'1] is-production-prod(Prod) = true,
+              symbols2id(Symbols) = Funid1,
+              symbol2id(Symbol) = Funid2,
+              attrs2id(Attr) = Funid3
+              =======================
+              term-cffunc2id(id(literal(""" Char* """)),appl(Prod,w(""),
+                                  [Symbols,Ws1,l("->"),Ws2,Symbol,Ws3,Attr])) =
+                "prod(id(" ++ funid(""" "\" """ Char* "\" """ """) ++ "),w(\"\")," ++ Funid1 ++ ",w(\"\"),l(\"->\"),w(\"\")," ++ Funid2 ++  ",w(\"\")," ++ Funid3 ++ ")"
+
+  [ss2i-1'1] is-symbols-prod(Prod) = true,
+             symbollist2id(SymbolList) = Funid
+             =================================
+             symbols2id(appl(Prod,Ws,
+                             [SymbolList])) = "[" ++ Funid ++ "]"
+
+  [sl2i-1'1] is-symbol-iter(Iter) = true
+             ===========================
+             symbollist2id(list(Iter,w(""),[])) = ""
+
+  [sl2i-1'2] is-symbol-iter(Iter) = true,
+             symbolplus2id(Symbol+) = Funid
+             ==============================
+             symbollist2id(list(Iter,w(""),[Symbol+])) = Funid
+
+  [sp2i-1'1] symbolplus2id(Symbol) = symbol2id(Symbol)
+
+  [sp2i-1'2] symbol2id(Symbol) = Funid1,
+             symbolplus2id(Symbol+) = Funid2
+             ===============================
+             symbolplus2id(Symbol,Ws,Symbol+) = Funid1 ++  ",w(\"\")," ++ Funid2
+
+  [s2i-1'1] is-literal-symbol-prod(Prod) = true,
+            literal2id(Literal) = Funid
+            ===========================
+            symbol2id(appl(Prod,Ws,[Literal])) = Funid
+
+  [s2i-1'2] is-sort-symbol-prod(Prod) = true,
+            term-sort2id(Sort) = Funid
+            ==========================
+            symbol2id(appl(Prod,Ws,[Sort])) = Funid
+
+  [s2i-1'3] is-iter-term(Symbol) = true
+            ===========================
+            symbol2id(Symbol) = ext-term-iter2id(Symbol)
+
+  [s2i-1'4] is-iter-sep-term(Symbol) = true
+            ===============================
+            symbol2id(Symbol) = ext-term-iter2id(Symbol)
+
+  [ts2i-1'1] term-sort2id(lex(literal(Char*),sort("Sort"))) = "sort(\"" ++ funid(Char*) ++ "\")"
+
+  [l2i-1'1] is-uqliteral-prod(Prod) = true,
+            literal2id(Literal) = Funid
+            ===========================
+            literal2id(appl(Prod,Ws,[Literal])) = Funid
+
+  [l2i-1'1] literal2id(lex(literal(""" "\" """ Char* "\" """ """),sort("Literal"))) = "ql(\"" ++ funid(""" Char* """) ++ "\")"
+
+  [default-l2i-1'1] literal2id(lex(literal(""" Char* """),sort("UQLiteral"))) = "ql(\"" ++ funid(""" Char* """) ++ "\")"
+
+  [l2i-1'1] literal2id(lex(literal(""" "\" """ Char* "\" """ """),sort("UQLiteral"))) = "ql(\"" ++ funid(""" Char* """) ++ "\")"
+
+  [default-l2i-1'1] literal2id(lex(literal(""" Char* """),sort("Literal"))) = "l(" ++ funid(""" Char* """) ++ ")"
+
+  [ss2i-1'1] is-no-attr-prod(Prod) = true
+             ============================
+             attrs2id(appl(Prod,Ws,[])) = "no-attrs"
+
+  [ss2i-1'1] is-attr-prod(Prod) = true,
+             attrlist2id(AttrList) = Funid
+             ============================
+             attrs2id(appl(Prod,Ws,[l("{"),Ws1,AttrList,Ws2,l("}")])) = "attrs(l(\"{\"),w(\"\")," ++ Funid ++ ",w(\"\"),l(\"}\"))"
+
+  [sl2i-1'2] is-attr-iter(Iter) = true,
+             attrplus2id(Attr+) = Funid
+             ==========================
+             attrlist2id(list(Iter,w(""),[Attr+])) = "[" ++ Funid ++ "]"
+
+  [ap2i-1'1] attrplus2id(Attr) = attr2id(Attr)
+
+  [ap2i-1'2] attr2id(Attr) = Funid1,
+             attrplus2id(Attr+) = Funid2
+             ===============================
+             attrplus2id(Attr,Ws,Attr+) = Funid1 ++  ",w(\"\")," ++ Funid2
+
+  [ap2i-1'1] is-bracket-attr-prod(Prod) = true
+             =================================
+             attr2id(appl(Prod,Ws,Attr)) = "l(\"bracket\")"
+
+  [ap2i-1'2] is-constructor-attr-prod(Prod) = true
+             =====================================
+             attr2id(appl(Prod,Ws,Attr)) = "l(\"constructor\")"
+
+  [ap2i-1'3] is-memo-attr-prod(Prod) = true
+             ==============================
+             attr2id(appl(Prod,Ws,Attr)) = "l(\"memo\")"
+
+  [ap2i-1'4] is-reject-attr-prod(Prod) = true
+             ================================
+             attr2id(appl(Prod,Ws,Attr)) = "l(\"reject\")"
+
+  [ap2i-1'5] is-associativity-attr-prod(Prod) = true,
+             associativity-attr2id(Attr) = Funid
+             ===================================
+             attr2id(appl(Prod,Ws,[Attr])) = Funid
+
+  [aap2i-1'1] is-left-assoc-prod(Prod) = true
+              ===============================
+              associativity-attr2id(appl(Prod,Ws,Attr)) = "l(\"left\")"
+
+  [aap2i-1'2] is-right-assoc-prod(Prod) = true
+              ================================
+              associativity-attr2id(appl(Prod,Ws,Attr)) = "l(\"right\")"
+
+  [aap2i-1'3] is-assoc-assoc-prod(Prod) = true
+              ================================
+              associativity-attr2id(appl(Prod,Ws,Attr)) = "l(\"assoc\")"
+
+  [aap2i-1'2] is-nonassoc-assoc-prod(Prod) = true
+              ===================================
+              associativity-attr2id(appl(Prod,Ws,Attr)) = "l(\"non-assoc\")"
+
+  [ti2i-1'1] is-iter-star-prod(Prod) = true,
+             symbol2id(Symbol) = Funid
+             =========================
+             term-iter2id(appl(Prod,Ws,[Symbol,Ws2,l("*")])) = "{" ++ Funid ++ "}"
+
+  [ti2i-1'2] is-iter-plus-prod(Prod) = true,
+             symbol2id(Symbol) = Funid
+             =========================
+             term-iter2id(appl(Prod,Ws,[Symbol,Ws2,l("+")])) = "{" ++ Funid ++ "}"
+
+  [ti2i-1'3] is-iter-sep-star-prod(Prod) = true,
+             symbol2id(Symbol1) = Funid1,
+             symbol2id(Symbol2) = Funid2
+             ===========================
+             term-iter2id(appl(Prod,Ws1,[l("{"),Ws2,Symbol1,Ws3,Symbol2,Ws4,l("}"),Ws5,l("*")])) =
+               "{" ++ Funid1 ++ "," ++ Funid2 ++ "}"
+
+  [ti2i-1'4] is-iter-sep-plus-prod(Prod) = true,
+             symbol2id(Symbol1) = Funid1,
+             symbol2id(Symbol2) = Funid2
+             ===========================
+             term-iter2id(appl(Prod,Ws1,[l("{"),Ws2,Symbol1,Ws3,Symbol2,Ws4,l("}"),Ws5,l("+")])) =
+               "{" ++ Funid1 ++ "," ++ Funid2 ++ "}"
+
+  [ti2i-1'1] is-iter-star-prod(Prod) = true,
+             symbol2id(Symbol) = Funid
+             =========================
+             ext-term-iter2id(appl(Prod,Ws,[Symbol,Ws2,l("*")])) =
+               "iter(" ++ Funid ++ ",w(\"\"),l(\"*\"))"
+
+  [ti2i-1'2] is-iter-plus-prod(Prod) = true,
+             symbol2id(Symbol) = Funid
+             =========================
+             ext-term-iter2id(appl(Prod,Ws,[Symbol,Ws2,l("+")])) = "iter(" ++ Funid ++ ",w(\"\"),l(\"+\"))"
+
+  [ti2i-1'3] is-iter-sep-star-prod(Prod) = true,
+             symbol2id(Symbol1) = Funid1,
+             symbol2id(Symbol2) = Funid2
+             ===========================
+             ext-term-iter2id(appl(Prod,Ws1,[l("{"),Ws2,Symbol1,Ws3,Symbol2,Ws4,l("}"),Ws5,l("*")])) =
+               "iter-sep(l(\"{\"),w(\"\")," ++ Funid1 ++ ",w(\"\")," ++
+               Funid2 ++ ",w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))"
+
+  [ti2i-1'4] is-iter-sep-plus-prod(Prod) = true,
+             symbol2id(Symbol1) = Funid1,
+             symbol2id(Symbol2) = Funid2
+             ===========================
+             ext-term-iter2id(appl(Prod,Ws1,[l("{"),Ws2,Symbol1,Ws3,Symbol2,Ws4,l("}"),Ws5,l("+")])) =
+               "iter-sep(l(\"{\"),w(\"\")," ++ Funid1 ++ ",w(\"\")," ++
+               Funid2 ++ ",w(\"\"),l(\"}\"),w(\"\"),l(\"+\"))"
+
+  [ta2t-1'1] is-no-attr-prod(Prod) = true
+             ============================
+             term-attrs2terms(appl(Prod,Ws,[])) =
+
+  [ta2t-1'2] is-attr-prod(Prod) = true,
+             AttrList = list(Iter,w(""),[Attr+]),
+             is-attr-iter(Iter) = true,
+             term-attrlist2terms(Attr+) = Term*
+             =====================================
+             term-attrs2terms(appl(Prod,Ws,[l("{"),Ws1,AttrList,Ws2,l("}")])) = Term*
+
+  [ta2t-2'2] term-attrlist2terms(Attr) = term-attr2term(Attr)
+
+  [ta2t-2'2] term-attr2term(Attr) = Term1,
+             term-attrlist2terms(Attr+) = Term*
+             ==================================
+             term-attrlist2terms(Attr,Ws,Attr+) =  Term1 ++del Term*
+
+%%%  [ta2t-3'1] term-attr2term(l(literal(""" "d""e""l""a""y""i""n""g" Char* """))) = delaying(natcon(Char*))
+
+%%%  [default-ta2t-3'2] term-attr2term(l(literal(""" Char* """))) = funid(Char*)
+
+  [ta2t-3'1] is-bracket-attr-prod(Prod) = true
+             =================================
+             term-attr2term(appl(Prod,Ws,Attr)) = funid("b""r""a""c""k""e""t")
+
+  [ta2t-3'2] is-constructor-attr-prod(Prod) = true
+             =====================================
+             term-attr2term(appl(Prod,Ws,Attr)) = funid("c""o""n""s""t""r""u""c""t""o""r")
+
+  [ta2t-3'3] is-memo-attr-prod(Prod) = true
+             ==============================
+             term-attr2term(appl(Prod,Ws,Attr)) = funid("m""e""m""o")
+
+  [ta2t-3'4] is-reject-attr-prod(Prod) = true
+             ================================
+             term-attr2term(appl(Prod,Ws,Attr)) = funid("r""e""j""e""c""t")
+
+  [ta2t-3'5] is-associativity-attr-prod(Prod1) = true,
+             Attr1 = appl(Prod2,Ws2,Attr2),
+             is-left-assoc-prod(Prod2) = true
+             ================================
+             term-attr2term(appl(Prod1,Ws1,[Attr1])) = funid("l""e""f""t")
+
+  [ta2t-3'6] is-associativity-attr-prod(Prod1) = true,
+             Attr1 = appl(Prod2,Ws2,Attr2),
+             is-right-assoc-prod(Prod2) = true
+             =================================
+             term-attr2term(appl(Prod1,Ws1,[Attr1])) = funid("r""i""g""h""t")
+
+  [ta2t-3'7] is-associativity-attr-prod(Prod1) = true,
+             Attr1 = appl(Prod2,Ws2,Attr2),
+             is-assoc-assoc-prod(Prod2) = true
+             =================================
+             term-attr2term(appl(Prod1,Ws1,[Attr1])) = funid("a""s""s""o""c")
+
+  [ta2t-3'8] is-associativity-attr-prod(Prod1) = true,
+             Attr1 = appl(Prod2,Ws2,Attr2),
+             is-nonassoc-assoc-prod(Prod2) = true
+             ====================================
+             term-attr2term(appl(Prod1,Ws1,[Attr1])) = funid("n""o""n""a""s""s""o""c")
+
+  [mcf-1'1]  upper2lower(Lexical1) = Lexical2
+             ================================
+             make-lex-cons-func(Lexical1) =
+               "prod(id(\"GEN-LexConsFuncs\"),w(\"\")," ++
+               "[ql(\"" ++ literal2id(Lexical2) ++ "\"),w(\"\")," ++
+               "ql(\"(\"),w(\"\")," ++
+               "iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\")," ++
+               "ql(\")\")],w(\"\")," ++
+               "l(\"->\"),w(\"\")," ++
+               "sort(\"" ++ literal2id(Lexical1) ++ "\"),w(\"\"),no-attrs)"
+
+  [tc-1'1] delaying(Term) ++del Term*1,delaying(Term*2),Term*3 = Term*1,delaying(Term,Term*2),Term*3
+
+  [default-tc-1'2] Term ++del Term* = Term,Term*

@@ -1,0 +1,102 @@
+equations
+
+%% The function {\tt includes-sortname} checks whether
+%% a sortname is defined in the sort definition list.
+  [in-1'1] includes-sortname(Symbol,{Symbol;Lexsort*}) = true
+
+  [in-1'2] Symbol1 != Symbol2
+           ==================
+           includes-sortname(Symbol1,{Symbol2;Lexsort*}) =
+             includes-sortname(Symbol1,{Lexsort*})
+
+  [in-1'3] includes-sortname(Symbol,{}) = false
+
+%% The function {\tt get-itersep-tail} retrieves the
+%% tail of an ``itersep'' list.
+  [gist-1'1] Tl != [],
+             get-list-tail(Tl) = []
+             ======================
+             get-itersep-tail(Tl) = []
+
+  [gist-1'2] Tl != [],
+             get-list-tail-with-sep(Tl) =
+               [w(L1),sep(L2),w(L3),Ts]
+             ==========================
+             get-itersep-tail(Tl) = [Ts]
+
+%% The function {\tt get-itersep-tail} retrieves the
+%% tail of an ``iter'' list.
+  [git-1'1] Tl != [],
+            get-list-tail(Tl) = []
+            ======================
+            get-iter-tail(Tl) = []
+
+  [git-1'2] Tl != [],
+            get-list-tail(Tl) = [w(L),Ts]
+            =============================
+            get-iter-tail(Tl) = [Ts]
+
+%% The function {\tt get-tail} retrieves the
+%% tail of an arbitrary \asfix\ list, given
+%% the type of the list {\tt iter} or {\tt iter-sep}.
+  [gt-1'1] get-tail(iter,Tl) = get-iter-tail(Tl)
+
+  [gt-1'2] get-tail(iter-sep,Tl) = get-itersep-tail(Tl)
+
+%%%%% The boolean function {\tt is\_CHAR\_list} checks whether
+%%%%% an {\sc AsFix} term represents
+%%%%% a list of {\tt CHAR}s.
+%%%  [iCl-1'1] is-list(T) = true,
+%%%            T[sym] = sort("CHAR")
+%%%            =====================
+%%%            is-CHAR-list(T) = true
+%%%
+%%%  [default-iCl-1'2] is-CHAR-list(T) = false
+%%%
+%%% The boolean function {\tt is-list} checks whether
+%%% an {\sc AsFix} term represents a list.
+%%%  [il-1'1] get-cons(T) = iter
+%%%           ==================
+%%%           is-asfix-list(T) = true
+
+%%%  [il-1'2] get-cons(T) = iter-sep
+%%%           ======================
+%%%           is-asfix-list(T) = true
+
+%%%  [default-il-1'3] is-asfix-list(T) = false
+
+%%%  [iam-1'1] Amodule[module-name] = Aname,
+%%%            Aname = id(literal(""" "A" "U" "X" "-" Char*2 """))
+%%%            ==================================================
+%%%            is-aux-module(Amodule) = true
+
+%%%  [default-iam-1'2] is-aux-module(Amodule) = false
+
+%% The function {\tt is-default} tests whether there is the word default in the
+%% tag of the equation or not.
+  [id-1'1] is-default(l(literal(""" "[" "d" "e" "f" "a" "u" "l" "t" "-" Char* """))) = true
+
+  [default-id-1'2] is-default(T) = false
+
+%% The function {\tt is-bracket} checks whether the context-free
+%% function is indeed a bracket function. This can be easily dectected
+%% via the bracket attribute, which is also presented in the {\sc AsFix} term.
+  [ibf-1'1] Cffunc[attrs] != no-attrs,
+            Cffunc[attrs][attrs] = Attribs
+            ==============================
+            is-bracket-func(Cffunc) = is-attribute(Attribs,l("bracket"))
+
+  [default-ibf-1'2] is-bracket-func(Cffunc) = false
+
+  [ia-1'1] is-attribute([],Attrib) = false
+
+  [ia-1'2] Attribs != [],
+           first(Attribs) = Attrib
+           =======================
+           is-attribute(Attribs,Attrib) = true
+
+  [ia-1'3] Attribs1 != [],
+           first(Attribs1) != Attrib,
+           get-itersep-tail(Attribs1) = Attribs2
+           =====================================
+           is-attribute(Attribs1,Attrib) = is-attribute(Attribs2,Attrib)

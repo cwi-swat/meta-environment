@@ -1,0 +1,10 @@
+module Matching
+
+imports Substitution
+
+exports
+  sorts Subs
+  context-free syntax
+     ATermList                      -> Subs
+     nomatch                        -> Subs
+     match1(ATerm, ATerm, Subs)     -> Subs

@@ -1,0 +1,201 @@
+equations
+
+%% \noindent
+%% Add an element in front of a list.
+
+  [cons1] T : []              = [T]
+  [cons2] T : [Ts]            = [T, Ts]
+  [cons3] apply(consf, T, Tl) = T : Tl
+
+%% Concatenation of lists.
+
+  [conc-1] [] ++ Tl              = Tl
+  [conc-2] Tl ++ []              = Tl
+  [conc-3] [Ts1] ++ [Ts2]        = [Ts1 ++a Ts2]
+  [conc-5] Tl1 ++a Tl2 = T
+           ===============
+           apply(concf, Tl1, Tl2) = T
+
+%% Concatenation of a list of lists.
+
+  [conc-6] concat([])        = []
+  [conc-7] concat([Tl])      = Tl
+  [conc-8] concat([Tl,Ts])   = Tl ++ concat([Ts])
+  [conc-9] apply(concatf, Tl) = concat(Tl)
+
+%% Test for empty list.
+
+  [empty-1] empty([])         = true
+  [empty-2] empty([Ts])       = false
+  [empty-3] holds(emptyp, Tl) = empty(Tl)
+
+%% First element of list.
+
+  [first-1] first([T])        = T
+  [first-2] first([T, Ts])    = T
+  [first-3] apply(firstf, Tl) = first(Tl)
+
+%% Remainder of list.
+
+  [rest-1] rest([])         = []
+  [rest-2] rest([T])        = []
+  [rest-3] rest([T, Ts])    = [Ts]
+  [rest-4] apply(restf, Tl) = rest(Tl)
+
+%% Size of a list.
+
+  [size-1] size([])         = 0
+  [size-2] 1 + size(rest([Ts])) = Int
+           ==========================
+           size([Ts])       = Int
+  [size-4] apply(sizef, Tl) = size(Tl)
+
+%% Retrieve a list element by its index. The first element of a list has index zero.
+
+  [index-1]
+        index([Ts], 0) = first([Ts])
+  [index-2]
+        n != 0
+        =========================================
+        index([Ts], n) = index(rest([Ts]), n - 1)
+  [index-3]
+        apply(indexf, Tl, n) = index(Tl, n)
+
+%% Replace a list element at given index.
+
+  [repl-1]
+        replace([Ts], 0, T) = T : rest([Ts])
+  [repl-2]
+        n != 0
+        ===============================================================
+        replace([Ts], n, T) = first([Ts]) : replace(rest([Ts]), n-1, T)
+  [repl-3]
+        apply(replacef, Tl, n, T) = replace(Tl, n, T)
+
+%% Delete all occurrences of a term from a list.
+
+  [del-1]
+        delete([], T) = []
+  [del-2]
+        T = first([Ts]), Tl = delete(rest([Ts]), T')
+        ====================================================
+        delete([Ts], T') = if T == T' then Tl else T : Tl fi
+  [del-3]
+        apply(deletef, Tl, T) = delete(Tl, T)
+
+%% Delete the first occurrence of a term from a list.
+
+  [del-1]
+        delete1([], T)        = []
+  [del-2]
+        first([Ts]) == T' = true
+        ===============================
+        delete1([Ts], T') = rest([Ts])
+  [del-3]
+        first([Ts]) = T, T == T' = false
+        ===============================================
+        delete1([Ts], T') = T : delete1(rest([Ts]), T')
+  [del-4]
+        apply(delete1f, Tl, T) = delete1(Tl, T)
+
+%% \HigherOrderFuns
+%%
+%% \EQUATIONSBEGIN
+%%
+%% \noindent
+%% The predicate \fun{for-all} determines whether predicate $Pred$ holds
+%% for all elements in a list.
+
+  [for-all-1]
+        for-all(Pred, []) = true
+  [for-all-2]
+        T = first([Ts]), Tl = rest([Ts])
+        =========================================================
+        for-all(Pred, [Ts]) = holds(Pred, T) /\ for-all(Pred, Tl)
+  [for-all-3]
+        holds(for-allp, Fun, Tl) = for-all(Fun, Tl)
+
+%% The predicate \fun{for-some} determines whether a predicate $Pred$ holds
+%% for some elements in a list.
+
+  [for-some-1]
+        for-some(Pred, []) = false
+  [for-some-3]
+        T = first([Ts]), Tl = rest([Ts])
+        ==========================================================
+        for-some(Pred, [Ts]) = holds(Pred,T) \/ for-some(Pred, Tl)
+  [for-some-4]
+        holds(for-somep, Pred, Tl) = for-some(Pred, Tl)
+
+%% The function \fun{filter} selects all elements from a list for which a predicate $Pred$ holds.
+
+  [filter-1]
+        filter(Pred, []) = []
+  [filter-2]
+        T = first([Ts]), Tl = filter(Pred, rest([Ts]))
+        =============================================================
+        filter(Pred, [Ts]) = if holds(Pred, T) then T : Tl else Tl fi
+  [filter-3]
+        apply(filterf, Pred, Tl) = filter(Pred, Tl)
+
+%% The function \fun{map} applies a function $Fun$ to all elements of a list.
+
+  [map-1]
+        map(Fun, []) = []
+  [map-2]
+        map(Fun, rest([Ts])) = Tl
+        =============================================
+        map(Fun, [Ts]) = apply(Fun, first([Ts])) : Tl
+  [map-3]
+        apply(mapf, Fun, Tl) = map(Fun, Tl)
+
+%% The function \fun{zip} combines the elements of two lists by applying the function \var{Fun}
+%% to each pair of first elements until either of the lists is empty.
+
+  [zip-1]
+        zip(Fun, [], Tl) = []
+  [zip-2]
+        zip(Fun, Tl, []) = []
+  [zip-3]
+        T = first([Ts]), T' = first([Ts']), Tl = rest([Ts]), Tl' = rest([Ts'])
+        ======================================================================
+        zip(Fun, [Ts], [Ts']) = apply(Fun, T, T') : zip(Fun, Tl, Tl')
+  [zip-4]
+        apply(zipf, Fun, Tl1, Tl2) = zip(Fun, Tl1, Tl2)
+
+%% The function \fun{foldr}
+
+  [foldr-1]
+        foldr(Fun, T0, []) = T0
+  [foldr-3]
+        T0' = foldr(Fun, T0, rest([Ts]))
+        ===================================================
+        foldr(Fun, T0, [Ts]) = apply(Fun, first([Ts]), T0')
+  [foldr-4]
+        apply(foldrf, Fun, T0, Tl) = foldr(Fun, T0, Tl)
+
+%% The function \fun{foldl}
+
+  [foldr-1]
+        foldl(Fun, T0, []) = T0
+  [foldr-2]
+        T0' = apply(Fun, T0, first([Ts]))
+        ==================================================
+        foldl(Fun, T0, [Ts]) = foldl(Fun, T0', rest([Ts]))
+  [foldr-3]
+        apply(foldlf, Fun, T0, Tl) = foldl(Fun, T0, Tl)
+
+%% The function \fun{foldr-zip} combines \fun{foldr} and \fun{zip}
+
+  [zip-1]
+        foldr-zip(Fun, T0, T1, [], Tl) = if empty(Tl) then T0 else T1 fi
+  [zip-2]
+        foldr-zip(Fun, T0, T1, Tl, []) = if empty(Tl) then T0 else T1 fi
+  [zip-3]
+        first([Ts]) = T, first([Ts']) = T',
+        foldr-zip(Fun, T0, T1, rest([Ts]), rest([Ts'])) = T2
+        ===========================================================
+        foldr-zip(Fun, T0, T1, [Ts], [Ts']) = apply(Fun, T, T', T2)
+  [zip-4]
+        apply(foldr-zipf, Fun, T0, T1, Tl1, Tl2)
+        = foldr-zip(Fun, T0, T1, Tl1, Tl2)

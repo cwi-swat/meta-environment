@@ -1,0 +1,66 @@
+%%%% $Id$
+
+equations
+
+%% Get the value of a term from a table. If no binding to the term is present
+%% return the term itself.
+
+  [get-1]         get([], T)         = T
+  [get-2]         first([Ts]) = [T'', T'],
+                  T = T''
+                  =======
+                  get([Ts], T)       = T'
+  [default-get-3] get([Ts], T)       = get(rest([Ts]), T)
+  [get-4]         apply(getf, Tl, T) = get(Tl, T)
+
+%% Get the value of a term from a table. If no binding to the term is present
+%% return \fun{fail}. (e from error)
+
+  [eget-1]         eget([], T)         = fail
+  [eget-2]         first([Ts]) = [T'', T'],
+                   T = T''
+                   =======
+                   eget([Ts], T)       = T'
+  [default-eget-3] eget([Ts], T)       = eget(rest([Ts]), T)
+  [eget-4]         apply(egetf, Tl, T) = eget(Tl, T)
+
+%% Put a new binding in the table. If a binding to the term already exists,
+%% overwrite it. It is assumed that only one binding per term is present, i.e.,
+%% only the first is overwritten.
+
+  [put-1]
+        put([], [T1, T2]) = [[T1, T2]]
+  [put-2]
+        first([Ts]) = [T4, T3],
+        T1 = T4
+        =======
+        put([Ts], [T1, T2]) = [T1, T2] : rest([Ts])
+  [default-put-3]
+        put(Tl, T) = first(Tl) : put(rest(Tl), T)
+  [get-4]
+        apply(putf, Tl, T) = put(Tl, T)
+
+%% Put a new binding in the table. If a binding already exists it should be
+%% the same (be consistent, hence \fun{cput}).
+
+  [put-1]
+        cput([], [T1, T2]) = [[T1, T2]]
+  [put-2]
+        first([Ts]) = [T4, T3],
+        T1 = T4,
+        if T2 == T3 then [Ts] else fail([Ts], [T1, T2]) fi = T5
+        =======================================================
+        cput([Ts], [T1, T2]) = T5
+  [default-put-3]
+        cput([Ts], T) = first([Ts]) : cput(rest([Ts]), T)
+  [get-4]
+        apply(cputf, Tl, T) = cput(Tl, T)
+
+%% Determine whether a term has a binding (is defined) in a table.
+
+  [def-1]
+        def([], T) = false
+  [def-2]
+        def([Ts], T) = first(atermlist(first([Ts]))) == T \/ def(rest([Ts]), T)
+  [def-3]
+        holds(deff, Tl, T) = def(Tl, T)

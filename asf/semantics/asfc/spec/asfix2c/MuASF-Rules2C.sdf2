@@ -1,0 +1,52 @@
+%%  MuASF-Rules2C
+module MuASF-Rules2C
+
+imports MuASF-Conds2C RenameVars Improve-C-code
+
+exports
+  context-free syntax
+    rulesopt2cfuncs({FuncDef ";"}*,RulesOpt,NameTable)  -> FT-tuple
+    sigargs2cstats(FunId,{SigArg ","}*)                 -> Statement-list-opt
+    funargs2cstats(FunId,Argument-expression-list,IntCon) -> SlI-tuple
+
+hiddens
+  context-free syntax
+    asfrules2cfuncs({FuncDef ";"}*,{Rule ";"}+,
+                    {NamePair ","}*)                   -> FT-tuple
+    asfrules2cfuncs({FuncDef ";"}*,{Rule ";"}+,
+                    {Rule ";"}*,{NamePair ","}*)       -> FT-tuple
+    asfrules2cfunc({Rule ";"}+,{NamePair ","}*)        -> Declaration
+    funargs2cargs({Term ","}+,IntCon)                    -> PA-tuple
+    asfrules2cstats({Rule ";"}*,{NamePair ","}*) -> SlI-tuple
+
+  context-free syntax
+    asfrules2cstats({C-Rule ";"}*,{C-Rule ";"}*,
+                    {NamePair ","}*,IntCon)              -> SlI-tuple
+    asfrules2cstats1({C-Rule ";"}*,
+                     {NamePair ","}*,IntCon)             -> SlI-tuple
+    asfrules2cstats2({C-Rule ";"}*,
+                     {NamePair ","}*,IntCon)             -> SlI-tuple
+
+  context-free syntax
+    sigargs2cbuild({SigArg ","}+,IntCon) -> ADS-tuple
+
+  context-free syntax
+    list2cstats({C-Rule ";"}+,{NamePair ","}*,IntCon) -> SlI-tuple
+    listpatterns2cstats({C-Rule ";"}*,Expression,
+                        {NamePair ","}*,IntCon)       -> SlI-tuple
+    listpattern2cstats({C-Rule ";"}+,Expression,
+                       {NamePair ","}*,IntCon)        -> ADSI-tuple
+    listpattern2cstats(Bool,{FV-Path ","}+,{C-Rule ";"}+,
+                       Expression,{NamePair ","}*,
+                       IntCon)                              -> ADSI-tuple
+
+hiddens
+  variables
+    "Char"[0-9]*     -> CHAR
+    "Char*"[0-9]*    -> CHAR*
+    "Char+"[0-9]*    -> CHAR+
+    "Aexp"[0-9]*     -> Expression
+    "Eipair"[0-9]*   -> EI-pair
+    "Eipair*"[0-9]*  -> {EI-pair ","}*
+    "Eipair+"[0-9]*  -> {EI-pair ","}+
+    "Cint"[0-9]*     -> Integer-constant

@@ -1,0 +1,31 @@
+equations
+
+  [replace-1]
+        replace-afun(AFun, AFun(Ts), AFun') = AFun'(AFun(Ts))
+  [replace-2]
+        AFun1 != AFun2, [Ts'] = replace-afun(AFun1, [Ts], AFun')
+        ==================================================
+        replace-afun(AFun1, AFun2(Ts), AFun') = AFun2(Ts')
+  [replace-3]
+        replace-afun(AFun, [], AFun') = []
+  [replace-4]
+        replace-afun(AFun, [Ts], AFun') =
+        [replace-afun(AFun, first([Ts]), AFun')] ++ atermlist(replace-afun(AFun, rest([Ts]), AFun'))
+  [replace-5]
+        replace-afun(AFun, ACon1, AFun') = ACon2
+        ==================================
+        replace-afun(AFun, ACon1 {Ts} , AFun') = ACon2 {Ts}
+  [replace-5]
+        replace-afun(AFun, AFun1, AFun') = AFun2
+        ===================================
+        replace-afun(AFun, AFun1 {Ts} , AFun') = AFun2 {Ts}
+  [replace-5]
+        replace-afun(AFun, AFun1(Ts1), AFun') = AFun2(Ts2)
+        =============================================
+        replace-afun(AFun, AFun1(Ts1) {Ts} , AFun') = AFun2(Ts2) {Ts}
+  [replace-5]
+        replace-afun(AFun, Tl1, AFun') = Tl2
+        ===============================
+        replace-afun(AFun, Tl1 {Ts} , AFun') = Tl2 {Ts}
+  [default-replace-6]
+        replace-afun(AFun, T, AFun') = T

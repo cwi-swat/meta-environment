@@ -1,0 +1,275 @@
+equations
+[x] is-cons ( w , w ( Tvar1 ) ) = is(Text,Tvar1) [x] init ( w ) = w ( chars )
+[x] is-cons ( l , l ( Tvar1 ) ) = is(Text,Tvar1) [x] init ( l ) = l ( chars )
+[x] is-cons ( ql , ql ( Tvar1 ) ) = is(Text,Tvar1)
+[x] init ( ql ) = ql ( chars )
+[x] is-cons ( id , id ( Tvar1 ) ) = is(Text,Tvar1)
+[x] init ( id ) = id ( chars )
+[x] is-cons ( sort , sort ( Tvar1 ) ) = is(Text,Tvar1)
+[x] init ( sort ) = sort ( chars )
+[x] is-cons ( sep , sep ( Tvar1 ) ) = is(Text,Tvar1)
+[x] init ( sep ) = sep ( chars )
+[x] is-cons ( char-class , char-class ( Tvar1 ) ) = is(Text,Tvar1)
+[x] init ( char-class ) = char-class ( chars )
+[x] is-cons ( var , var ( Tvar1 , Tvar2 ) ) =
+is(Text,Tvar1) /\ is(Symbol,Tvar2)
+[x] init ( var ) = var ( name , sym )
+[x] is-cons ( lex , lex ( Tvar1 , Tvar2 ) ) =
+is(Text,Tvar1) /\ is(Symbol,Tvar2)
+[x] init ( lex ) = lex ( name , sym )
+[x] is-cons ( aprod , aprod ( Tvar1 ) ) = is(Text,Tvar1)
+[x] init ( aprod ) = aprod ( chars )
+[x] is-cons ( abbreviations , abbreviations ( Tvar1 ) ) = is(ATerm *,Tvar1)
+[x] init ( abbreviations ) = abbreviations ( pairs )
+[x] is-cons ( asfix , asfix ( Tvar1 , Tvar2 , Tvar3 ) ) =
+is(Module *,Tvar1) /\ is(Term *,Tvar3)
+[x] init ( asfix ) = asfix ( modules , w ( "" ) , terms )
+[x]
+is-cons   (
+module   ,
+module   (
+Tvar1 , Tvar2 , Tvar3 , Tvar4 , Tvar5 , Tvar6 , Tvar7 , Tvar8 , Tvar9 ) ) =
+is(Id,Tvar3)   /\
+is(Section *,Tvar5) /\ is(Equations,Tvar7) /\ is(Abbreviations,Tvar9)
+[x]   init ( module )   =
+module   (
+l ( "module" )   ,
+w ( "" )   ,
+module-name , w ( "" ) , sections , w ( "" ) , equations , w ( "" ) , abbrevs
+)
+[x] is-cons ( imports , imports ( Tvar1 , Tvar2 , Tvar3 ) ) = is(Id +,Tvar3)
+[x] init ( imports ) = imports ( l ( "imports" ) , w ( "" ) , ids )
+[x] is-cons ( exports , exports ( Tvar1 , Tvar2 , Tvar3 ) ) =
+is(Grammar +,Tvar3)
+[x] init ( exports ) = exports ( l ( "exports" ) , w ( "" ) , grammars )
+[x] is-cons ( hiddens , hiddens ( Tvar1 , Tvar2 , Tvar3 ) ) =
+is(Grammar +,Tvar3)
+[x] init ( hiddens ) = hiddens ( l ( "hiddens" ) , w ( "" ) , grammars )
+[x] is-cons ( sorts , sorts ( Tvar1 , Tvar2 , Tvar3 ) ) = is(Sort +,Tvar3)
+[x] init ( sorts ) = sorts ( l ( "sorts" ) , w ( "" ) , sorts )
+[x] is-cons ( lexical-syntax , lexical-syntax ( Tvar1 , Tvar2 , Tvar3 ) ) =
+is(Production +,Tvar3)
+[x]   init ( lexical-syntax )   =
+lexical-syntax ( l ( "lexical syntax" ) , w ( "" ) , productions )
+[x]
+is-cons ( context-free-syntax , context-free-syntax ( Tvar1 , Tvar2 , Tvar3 )
+)
+= is(Production +,Tvar3)
+[x]   init ( context-free-syntax )   =
+context-free-syntax ( l ( "context-free syntax" ) , w ( "" ) , productions )
+[x] is-cons ( priorities , priorities ( Tvar1 , Tvar2 , Tvar3 ) ) =
+is({ Priority "," } +,Tvar3)
+[x]   init ( priorities )   =
+priorities ( l ( "priorities" ) , w ( "" ) , priorities )
+[x] is-cons ( variables , variables ( Tvar1 , Tvar2 , Tvar3 ) ) =
+is(Production +,Tvar3)
+[x]   init ( variables )   =
+variables ( l ( "variables" ) , w ( "" ) , productions )
+[x]
+is-cons   (
+prod   ,
+prod ( Tvar1 , Tvar2 , Tvar3 , Tvar4 , Tvar5 , Tvar6 , Tvar7 , Tvar8 , Tvar9
+)
+)
+=
+is(Id,Tvar1)   /\
+is(Symbol *,Tvar3) /\ is(Symbol,Tvar7) /\ is(Attributes,Tvar9)
+[x]   init ( prod )   =
+prod   (
+module-name   ,
+w ( "" ) , syms , w ( "" ) , l ( "->" ) , w ( "" ) , sym , w ( "" ) , attrs )
+[x] is-cons ( no-attrs , no-attrs ) = true
+[x] init ( no-attrs ) = no-attrs ( [ ] )
+[x] is-cons ( attrs , attrs ( Tvar1 , Tvar2 , Tvar3 , Tvar4 , Tvar5 ) ) =
+is({ Attribute "," } *,Tvar3)
+[x]   init ( attrs )   =
+attrs ( l ( "{" ) , w ( "" ) , attrs , w ( "" ) , l ( "}" ) )
+[x]
+is-cons   (
+attr , attr ( Tvar1 , Tvar2 , Tvar3 , Tvar4 , Tvar5 , Tvar6 , Tvar7 ) ) =
+is(Literal,Tvar1) /\ is({ Attribute "," } +,Tvar5)
+[x]   init ( attr )   =
+attr ( fun , w ( "" ) , l ( "(" ) , w ( "" ) , attrs , w ( "" ) , l ( ")" ) )
+[x]
+is-cons   (
+iter-sep   ,
+iter-sep   (
+Tvar1 , Tvar2 , Tvar3 , Tvar4 , Tvar5 , Tvar6 , Tvar7 , Tvar8 , Tvar9 ) ) =
+is(Symbol,Tvar3) /\ is(Symbol,Tvar5) /\ is(Literal,Tvar9)
+[x]   init ( iter-sep )   =
+iter-sep   (
+l ( "{" )   ,
+w ( "" ) , sym , w ( "" ) , sep , w ( "" ) , l ( "}" ) , w ( "" ) , iter )
+[x] is-cons ( iter , iter ( Tvar1 , Tvar2 , Tvar3 ) ) =
+is(Symbol,Tvar1) /\ is(Literal,Tvar3)
+[x] init ( iter ) = iter ( sym , w ( "" ) , iter )
+[x] is-cons ( neg , neg ( Tvar1 , Tvar2 , Tvar3 ) ) = is(CharClass,Tvar3)
+[x] init ( neg ) = neg ( l ( "~" ) , w ( "" ) , char-class )
+[x] is-cons ( label , label ( Tvar1 , Tvar2 , Tvar3 , Tvar4 , Tvar5 ) ) =
+is(Id,Tvar1) /\ is(Symbol,Tvar5)
+[x] init ( label ) = label ( label , w ( "" ) , l ( ":" ) , w ( "" ) , sym )
+[x] is-cons ( prod-skel , prod-skel ( Tvar1 , Tvar2 , Tvar3 ) ) =
+is(Symbol +,Tvar1) /\ is(Production,Tvar3)
+[x] init ( prod-skel ) = prod-skel ( syms , w ( "" ) , prod )
+[x] is-cons ( group , group ( Tvar1 , Tvar2 , Tvar3 , Tvar4 , Tvar5 ) ) =
+is({ ProdSkel "," } *,Tvar3)
+[x]   init ( group )   =
+group ( l ( "{" ) , w ( "" ) , prods , w ( "" ) , l ( "}" ) )
+[x]
+is-cons   (
+agroup   ,
+agroup   (
+Tvar1 , Tvar2 , Tvar3 , Tvar4 , Tvar5 , Tvar6 , Tvar7 , Tvar8 , Tvar9 ) ) =
+is(Assoc,Tvar3) /\ is({ ProdSkel "," } *,Tvar7)
+[x]   init ( agroup )   =
+agroup   (
+l ( "{" )   ,
+w ( "" )   ,
+assoc , w ( "" ) , l ( ":" ) , w ( "" ) , prods , w ( "" ) , l ( "}" ) )
+[x] is-cons ( decr-chain , decr-chain ( Tvar1 ) ) = is({ Group ">" } +,Tvar1)
+[x] init ( decr-chain ) = decr-chain ( groups )
+[x] is-cons ( incr-chain , incr-chain ( Tvar1 ) ) = is({ Group "<" } +,Tvar1)
+[x] init ( incr-chain ) = incr-chain ( groups )
+[x]
+is-cons ( prio-assoc , prio-assoc ( Tvar1 , Tvar2 , Tvar3 , Tvar4 , Tvar5 ) )
+= is(Group,Tvar1) /\ is(Assoc,Tvar3) /\ is(Group,Tvar5)
+[x]   init ( prio-assoc )   =
+prio-assoc ( lhs , w ( "" ) , assoc , w ( "" ) , rhs )
+[x] is-cons ( no-equations , no-equations ) = true
+[x] init ( no-equations ) = no-equations ( [ ] )
+[x] is-cons ( equations , equations ( Tvar1 , Tvar2 , Tvar3 ) ) =
+is(CondEquation *,Tvar3)
+[x]   init ( equations )   =
+equations ( l ( "equations" ) , w ( "" ) , cond-equations )
+[x]
+is-cons ( condition , condition ( Tvar1 , Tvar2 , Tvar3 , Tvar4 , Tvar5 ) ) =
+is(AsFixTerm,Tvar1) /\ is(Literal,Tvar3) /\ is(AsFixTerm,Tvar5)
+[x] init ( condition ) = condition ( lhs , w ( "" ) , cop , w ( "" ) , rhs )
+[x]
+is-cons   (
+ceq-equ   ,
+ceq-equ   (
+Tvar1 , Tvar2 , Tvar3 , Tvar4 , Tvar5 , Tvar6 , Tvar7 , Tvar8 , Tvar9 ) ) =
+is(Id,Tvar1)   /\
+is(Literal,Tvar3) /\ is(AsFixTerm,Tvar5) /\ is(AsFixTerm,Tvar9)
+[x]   init ( ceq-equ )   =
+ceq-equ   (
+module-name   ,
+w ( "" ) , tag , w ( "" ) , lhs , w ( "" ) , l ( "=" ) , w ( "" ) , rhs )
+[x]
+is-cons   (
+ceq-when   ,
+ceq-when   (
+Tvar1   ,
+Tvar2   ,
+Tvar3   ,
+Tvar4   ,
+Tvar5 , Tvar6 , Tvar7 , Tvar8 , Tvar9 , Tvar10 , Tvar11 , Tvar12 , Tvar13 ) )
+=
+is(Id,Tvar1)   /\
+is(Literal,Tvar3)   /\
+is(AsFixTerm,Tvar5) /\ is(AsFixTerm,Tvar9) /\ is({ Condition "," } *,Tvar13)
+[x]   init ( ceq-when )   =
+ceq-when   (
+module-name   ,
+w ( "" )   ,
+tag   ,
+w ( "" )   ,
+lhs   ,
+w ( "" )   ,
+l ( "=" ) , w ( "" ) , rhs , w ( "" ) , l ( "when" ) , w ( "" ) , conditions
+)
+[x]
+is-cons   (
+ceq-impl   ,
+ceq-impl   (
+Tvar1   ,
+Tvar2   ,
+Tvar3   ,
+Tvar4   ,
+Tvar5 , Tvar6 , Tvar7 , Tvar8 , Tvar9 , Tvar10 , Tvar11 , Tvar12 , Tvar13 ) )
+=
+is(Id,Tvar1)   /\
+is(Literal,Tvar3)   /\
+is({ Condition "," } *,Tvar5)   /\
+is(Literal,Tvar7) /\ is(AsFixTerm,Tvar9) /\ is(AsFixTerm,Tvar13)
+[x]   init ( ceq-impl )   =
+ceq-impl   (
+module-name   ,
+w ( "" )   ,
+tag   ,
+w ( "" )   ,
+conditions   ,
+w ( "" ) , impl , w ( "" ) , lhs , w ( "" ) , l ( "=" ) , w ( "" ) , rhs )
+[x] is-cons ( appl , appl ( Tvar1 , Tvar2 , Tvar3 ) ) =
+is(Production,Tvar1) /\ is(ExtAsFixTerm *,Tvar3)
+[x] init ( appl ) = appl ( prod , w ( "" ) , args )
+[x] is-cons ( list , list ( Tvar1 , Tvar2 , Tvar3 ) ) =
+is(Symbol,Tvar1) /\ is(ExtAsFixTerm *,Tvar3)
+[x] init ( list ) = list ( sym , w ( "" ) , elems )
+[x]
+is-cons   (
+term   ,
+term ( Tvar1 , Tvar2 , Tvar3 , Tvar4 , Tvar5 , Tvar6 , Tvar7 , Tvar8 , Tvar9
+)
+)
+=
+is(Literal,Tvar3)   /\
+is(Id,Tvar5) /\ is(AsFixTerm,Tvar7) /\ is(Abbreviations,Tvar9)
+[x]   init ( term )   =
+term   (
+l ( "term" )   ,
+w ( "" )   ,
+name , w ( "" ) , module-name , w ( "" ) , term , w ( "" ) , abbrevs )
+[x] is(Layout,Tvar) = is-cons ( w , Tvar )
+[x] is(Literal,Tvar) = is-cons ( l , Tvar )
+[x] is(QLiteral,Tvar) = is-cons ( ql , Tvar )
+[x] is(Id,Tvar) = is-cons ( id , Tvar )
+[x] is(Sort,Tvar) = is-cons ( sort , Tvar )
+[x] is(Separator,Tvar) = is-cons ( sep , Tvar )
+[x] is(CharClass,Tvar) = is-cons ( char-class , Tvar )
+[x]   is(AsFixTerm,Tvar)   =
+is(Literal,Tvar)   \/
+is-cons ( var , Tvar )   \/
+is-cons ( lex , Tvar ) \/ is-cons ( appl , Tvar ) \/ is-cons ( list , Tvar )
+[x] is(Production,Tvar) = is-cons ( aprod , Tvar ) \/ is-cons ( prod , Tvar )
+[x] is(Abbreviations,Tvar) = is-cons ( abbreviations , Tvar )
+[x] is(AsFix,Tvar) = is-cons ( asfix , Tvar )
+[x] is(Module,Tvar) = is-cons ( module , Tvar )
+[x]   is(Section,Tvar)   =
+is-cons ( imports , Tvar )   \/
+is-cons ( exports , Tvar ) \/ is-cons ( hiddens , Tvar )
+[x]   is(Grammar,Tvar)   =
+is-cons ( sorts , Tvar )   \/
+is-cons ( lexical-syntax , Tvar )   \/
+is-cons ( context-free-syntax , Tvar )   \/
+is-cons ( priorities , Tvar ) \/ is-cons ( variables , Tvar )
+[x]   is(Attributes,Tvar)   =
+is-cons ( no-attrs , Tvar ) \/ is-cons ( attrs , Tvar )
+[x] is(Attribute,Tvar) = is(Literal,Tvar) \/ is-cons ( attr , Tvar )
+[x]   is(Symbol,Tvar)   =
+is(Literal,Tvar)   \/
+is(QLiteral,Tvar)   \/
+is(Sort,Tvar)   \/
+is(CharClass,Tvar)   \/
+is-cons ( iter-sep , Tvar )   \/
+is-cons ( iter , Tvar ) \/ is-cons ( neg , Tvar ) \/ is-cons ( label , Tvar )
+[x]   is(Assoc,Tvar)   =
+is("left",Tvar)   \/
+is("right",Tvar) \/ is("non-assoc",Tvar) \/ is("assoc",Tvar)
+[x] is(ProdSkel,Tvar) = is-cons ( prod-skel , Tvar )
+[x]   is(Group,Tvar)   =
+is(ProdSkel,Tvar) \/ is-cons ( group , Tvar ) \/ is-cons ( agroup , Tvar )
+[x]   is(Priority,Tvar)   =
+is(Group,Tvar)   \/
+is-cons ( decr-chain , Tvar )   \/
+is-cons ( incr-chain , Tvar ) \/ is-cons ( prio-assoc , Tvar )
+[x]   is(Equations,Tvar)   =
+is-cons ( no-equations , Tvar ) \/ is-cons ( equations , Tvar )
+[x] is(Condition,Tvar) = is-cons ( condition , Tvar )
+[x]   is(CondEquation,Tvar)   =
+is-cons ( ceq-equ , Tvar )   \/
+is-cons ( ceq-when , Tvar ) \/ is-cons ( ceq-impl , Tvar )
+[x]   is(ExtAsFixTerm,Tvar)   =
+is(AsFixTerm,Tvar) \/ is(Layout,Tvar) \/ is(Separator,Tvar)
+[x] is(Term,Tvar) = is-cons ( term , Tvar )
