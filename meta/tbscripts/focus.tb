@@ -11,7 +11,7 @@ let
   Ln : int,
   I  : int
 in  
-( printf("Process Focus is running").
+( /*printf("Process Focus is running").*/
 (
   rec-msg(TE, set-focus(Fid,focus(T?,sort(Str?),area(start(St?),length(Ln?))))).
 /*  snd-do(TE,tb-unhighlight).
