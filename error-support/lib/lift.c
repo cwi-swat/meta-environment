@@ -24,46 +24,46 @@ static PERR_NatCon ERR_liftNatCon(int natcon)
 
 PERR_Area ERR_liftArea(ERR_Area area)
 {
-  int startLine;
-  int startColumn;
+  int beginLine;
+  int beginColumn;
   int endLine;
   int endColumn;
-  int startOffset;
+  int beginOffset;
   int endOffset;
-  PERR_NatCon pStartLine;
-  PERR_NatCon pStartColumn;
+  PERR_NatCon pBeginLine;
+  PERR_NatCon pBeginColumn;
   PERR_NatCon pEndLine;
   PERR_NatCon pEndColumn;
-  PERR_NatCon pStartOffset;
+  PERR_NatCon pBeginOffset;
   PERR_NatCon pEndOffset;
   PERR_OptLayout e;
 
   if (ERR_isAreaArea(area)) {
-    startLine = ERR_getAreaStartLine(area);
-    startColumn = ERR_getAreaStartColumn(area);
+    beginLine = ERR_getAreaBeginLine(area);
+    beginColumn = ERR_getAreaBeginColumn(area);
     endLine = ERR_getAreaEndLine(area);
     endColumn = ERR_getAreaEndColumn(area);
-    startOffset = ERR_getAreaStartOffset(area);
+    beginOffset = ERR_getAreaBeginOffset(area);
     endOffset = ERR_getAreaEndOffset(area);
 
-    pStartLine = ERR_liftNatCon(startLine);
-    pStartColumn = ERR_liftNatCon(startColumn);
+    pBeginLine = ERR_liftNatCon(beginLine);
+    pBeginColumn = ERR_liftNatCon(beginColumn);
     pEndLine = ERR_liftNatCon(endLine);
     pEndColumn = ERR_liftNatCon(endColumn);
-    pStartOffset = ERR_liftNatCon(startOffset);
+    pBeginOffset = ERR_liftNatCon(beginOffset);
     pEndOffset = ERR_liftNatCon(endOffset);
     e = PERR_makeOptLayoutAbsent();
 
     return PERR_makeAreaArea(e,e,
-			    pStartLine,
+			    pBeginLine,
 			    e,e,
-			    pStartColumn,
+			    pBeginColumn,
 			    e,e,
 			    pEndLine,
 			    e,e,
 			    pEndColumn,
 			    e,e,
-			    pStartOffset,
+			    pBeginOffset,
 			    e,e,
 			    pEndOffset,
 			    e);

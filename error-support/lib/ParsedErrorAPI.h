@@ -191,19 +191,19 @@ PERR_Location PERR_makeLocationLocation(PERR_OptLayout wsAfterLocation,
 PERR_Location PERR_makeLocationNoLocation();
 PERR_Area PERR_makeAreaArea(PERR_OptLayout wsAfterArea,
 			    PERR_OptLayout wsAfterParenOpen,
-			    PERR_NatCon startLine,
-			    PERR_OptLayout wsAfterStartLine,
+			    PERR_NatCon beginLine,
+			    PERR_OptLayout wsAfterBeginLine,
 			    PERR_OptLayout wsAfterComma,
-			    PERR_NatCon startColumn,
-			    PERR_OptLayout wsAfterStartColumn,
+			    PERR_NatCon beginColumn,
+			    PERR_OptLayout wsAfterBeginColumn,
 			    PERR_OptLayout wsAfterComma1, PERR_NatCon endLine,
 			    PERR_OptLayout wsAfterEndLine,
 			    PERR_OptLayout wsAfterComma2,
 			    PERR_NatCon endColumn,
 			    PERR_OptLayout wsAfterEndColumn,
 			    PERR_OptLayout wsAfterComma3,
-			    PERR_NatCon startOffset,
-			    PERR_OptLayout wsAfterStartOffset,
+			    PERR_NatCon beginOffset,
+			    PERR_OptLayout wsAfterBeginOffset,
 			    PERR_OptLayout wsAfterComma4,
 			    PERR_NatCon endOffset,
 			    PERR_OptLayout wsAfterEndOffset);
@@ -440,24 +440,24 @@ ATbool PERR_hasAreaWsAfterParenOpen(PERR_Area arg);
 PERR_OptLayout PERR_getAreaWsAfterParenOpen(PERR_Area arg);
 PERR_Area PERR_setAreaWsAfterParenOpen(PERR_Area arg,
 				       PERR_OptLayout wsAfterParenOpen);
-ATbool PERR_hasAreaStartLine(PERR_Area arg);
-PERR_NatCon PERR_getAreaStartLine(PERR_Area arg);
-PERR_Area PERR_setAreaStartLine(PERR_Area arg, PERR_NatCon startLine);
-ATbool PERR_hasAreaWsAfterStartLine(PERR_Area arg);
-PERR_OptLayout PERR_getAreaWsAfterStartLine(PERR_Area arg);
-PERR_Area PERR_setAreaWsAfterStartLine(PERR_Area arg,
-				       PERR_OptLayout wsAfterStartLine);
+ATbool PERR_hasAreaBeginLine(PERR_Area arg);
+PERR_NatCon PERR_getAreaBeginLine(PERR_Area arg);
+PERR_Area PERR_setAreaBeginLine(PERR_Area arg, PERR_NatCon beginLine);
+ATbool PERR_hasAreaWsAfterBeginLine(PERR_Area arg);
+PERR_OptLayout PERR_getAreaWsAfterBeginLine(PERR_Area arg);
+PERR_Area PERR_setAreaWsAfterBeginLine(PERR_Area arg,
+				       PERR_OptLayout wsAfterBeginLine);
 ATbool PERR_hasAreaWsAfterComma(PERR_Area arg);
 PERR_OptLayout PERR_getAreaWsAfterComma(PERR_Area arg);
 PERR_Area PERR_setAreaWsAfterComma(PERR_Area arg,
 				   PERR_OptLayout wsAfterComma);
-ATbool PERR_hasAreaStartColumn(PERR_Area arg);
-PERR_NatCon PERR_getAreaStartColumn(PERR_Area arg);
-PERR_Area PERR_setAreaStartColumn(PERR_Area arg, PERR_NatCon startColumn);
-ATbool PERR_hasAreaWsAfterStartColumn(PERR_Area arg);
-PERR_OptLayout PERR_getAreaWsAfterStartColumn(PERR_Area arg);
-PERR_Area PERR_setAreaWsAfterStartColumn(PERR_Area arg,
-					 PERR_OptLayout wsAfterStartColumn);
+ATbool PERR_hasAreaBeginColumn(PERR_Area arg);
+PERR_NatCon PERR_getAreaBeginColumn(PERR_Area arg);
+PERR_Area PERR_setAreaBeginColumn(PERR_Area arg, PERR_NatCon beginColumn);
+ATbool PERR_hasAreaWsAfterBeginColumn(PERR_Area arg);
+PERR_OptLayout PERR_getAreaWsAfterBeginColumn(PERR_Area arg);
+PERR_Area PERR_setAreaWsAfterBeginColumn(PERR_Area arg,
+					 PERR_OptLayout wsAfterBeginColumn);
 ATbool PERR_hasAreaWsAfterComma1(PERR_Area arg);
 PERR_OptLayout PERR_getAreaWsAfterComma1(PERR_Area arg);
 PERR_Area PERR_setAreaWsAfterComma1(PERR_Area arg,
@@ -484,13 +484,13 @@ ATbool PERR_hasAreaWsAfterComma3(PERR_Area arg);
 PERR_OptLayout PERR_getAreaWsAfterComma3(PERR_Area arg);
 PERR_Area PERR_setAreaWsAfterComma3(PERR_Area arg,
 				    PERR_OptLayout wsAfterComma3);
-ATbool PERR_hasAreaStartOffset(PERR_Area arg);
-PERR_NatCon PERR_getAreaStartOffset(PERR_Area arg);
-PERR_Area PERR_setAreaStartOffset(PERR_Area arg, PERR_NatCon startOffset);
-ATbool PERR_hasAreaWsAfterStartOffset(PERR_Area arg);
-PERR_OptLayout PERR_getAreaWsAfterStartOffset(PERR_Area arg);
-PERR_Area PERR_setAreaWsAfterStartOffset(PERR_Area arg,
-					 PERR_OptLayout wsAfterStartOffset);
+ATbool PERR_hasAreaBeginOffset(PERR_Area arg);
+PERR_NatCon PERR_getAreaBeginOffset(PERR_Area arg);
+PERR_Area PERR_setAreaBeginOffset(PERR_Area arg, PERR_NatCon beginOffset);
+ATbool PERR_hasAreaWsAfterBeginOffset(PERR_Area arg);
+PERR_OptLayout PERR_getAreaWsAfterBeginOffset(PERR_Area arg);
+PERR_Area PERR_setAreaWsAfterBeginOffset(PERR_Area arg,
+					 PERR_OptLayout wsAfterBeginOffset);
 ATbool PERR_hasAreaWsAfterComma4(PERR_Area arg);
 PERR_OptLayout PERR_getAreaWsAfterComma4(PERR_Area arg);
 PERR_Area PERR_setAreaWsAfterComma4(PERR_Area arg,
@@ -644,12 +644,12 @@ PERR_Area PERR_visitArea(PERR_Area arg,
 			 PERR_OptLayout(*acceptWsAfterArea) (PERR_OptLayout),
 			 PERR_OptLayout(*acceptWsAfterParenOpen)
 			 (PERR_OptLayout),
-			 PERR_NatCon(*acceptStartLine) (PERR_NatCon),
-			 PERR_OptLayout(*acceptWsAfterStartLine)
+			 PERR_NatCon(*acceptBeginLine) (PERR_NatCon),
+			 PERR_OptLayout(*acceptWsAfterBeginLine)
 			 (PERR_OptLayout),
 			 PERR_OptLayout(*acceptWsAfterComma) (PERR_OptLayout),
-			 PERR_NatCon(*acceptStartColumn) (PERR_NatCon),
-			 PERR_OptLayout(*acceptWsAfterStartColumn)
+			 PERR_NatCon(*acceptBeginColumn) (PERR_NatCon),
+			 PERR_OptLayout(*acceptWsAfterBeginColumn)
 			 (PERR_OptLayout),
 			 PERR_OptLayout(*acceptWsAfterComma1)
 			 (PERR_OptLayout),
@@ -663,8 +663,8 @@ PERR_Area PERR_visitArea(PERR_Area arg,
 			 (PERR_OptLayout),
 			 PERR_OptLayout(*acceptWsAfterComma3)
 			 (PERR_OptLayout),
-			 PERR_NatCon(*acceptStartOffset) (PERR_NatCon),
-			 PERR_OptLayout(*acceptWsAfterStartOffset)
+			 PERR_NatCon(*acceptBeginOffset) (PERR_NatCon),
+			 PERR_OptLayout(*acceptWsAfterBeginOffset)
 			 (PERR_OptLayout),
 			 PERR_OptLayout(*acceptWsAfterComma4)
 			 (PERR_OptLayout),
