@@ -1,5 +1,11 @@
 # $Id$
 
+2003/09/25 <{markvdb,jurgenv}@cwi.nl>
+ * Fixed the problems with close-modules.
+ * Fixed the layouting of the graph, font size and order are
+   correct.
+ * Graph no longer flips.
+
 2003/09/25 <markvdb@cwi.nl>
  * Refactoring the manipulation of the name of the termstore.
 
