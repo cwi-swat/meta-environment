@@ -184,5 +184,6 @@ AC_OUTPUT(
   , chmod +x meta install-prog-sh install-data-sh; \
     chmod +x graph-browser/graph-browser editor/editor; \
     chmod +x utils/gen-table utils/normalize-sdf \
-             utils/parse-sdf2 utils/ps-dot utils/sdf2table 
+             utils/parse-sdf2 utils/ps-dot utils/sdf2table \
+						 utils/genmakefile.sh utils/parse-file
 )
