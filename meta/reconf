@@ -1,6 +1,3 @@
 #! /bin/sh
 
-libtoolize --force --copy --automake
-aclocal -I ./config
-autoconf
-automake -a
+autoreconf --install --symlink $*

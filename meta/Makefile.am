@@ -1,13 +1,14 @@
 # $Id$
 
+ACLOCAL_FLAGS = -I .
+
 include ${top_srcdir}/make_rules
 
-EXTRA_DIST = make_rules $(wildcard *.pkg)
+EXTRA_DIST = make_rules program-check.m4 $(wildcard *.pkg)
 
 CLEANFILES = ${PACKAGE}-${VERSION}.pkg
 
 SUBDIRS = \
-	config \
 	editors \
 	meta-studio \
 	src \

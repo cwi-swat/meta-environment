@@ -4,11 +4,8 @@ AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(meta, 1.3)
 AC_PREREQ(2.53)
 
-dnl Let aclocal use macros in ./config directory
-ACLOCAL="${ACLOCAL} -I ./config"
-
-dnl Which compiler to use?
 AC_PROG_CC
+AC_PROG_LIBTOOL
 
 dnl Handle cflags option
 AC_ARG_WITH(cflags,
@@ -117,11 +114,6 @@ AC_ARG_WITH(tide,
 AC_SUBST(TIDEDEF)
 AC_SUBST(USE_TIDE)
 
-AM_PROG_LIBTOOL
-dnl Is ranlib needed on this system?
-dnl AC_PROG_RANLIB
-dnl AC_PATH_PROG(AR,ar,/usr/bin/ar)
-
 AC_PATH_PROG(JAVA, java)
 if test "x${JAVA}" = "x"; then
   AC_MSG_ERROR("make sure java version 1.4 or better is in your PATH")
@@ -161,7 +153,6 @@ AC_CHECK_HEADER(getopt.h)
 dnl Which files need updating?
 AC_CONFIG_FILES([Makefile
    src/Makefile
-   config/Makefile
    meta-studio/Makefile
    meta-studio/META-INF/Makefile
    meta-studio/images/Makefile
