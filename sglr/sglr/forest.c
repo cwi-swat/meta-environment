@@ -425,6 +425,7 @@ ATbool ATsubTable(ATermTable t1, ATermTable t2)
   if(t1 == NULL)
     return ATtrue;
 
+  /*  Now check if all the keys in t1 exist in t2, with equal values  */
   for(keys = ATtableKeys(t1); keys && !ATisEmpty(keys);
             keys=ATgetNext(keys)) {
     key = ATgetFirst(keys);
@@ -438,17 +439,19 @@ ATbool ATtableIsEqual(ATermTable t1, ATermTable t2)
 {
   if(t1 == t2)
     return ATtrue;
+
   if(t1 == NULL || t2 == NULL)
     return ATfalse;
 
-  /*  First check if all the keys in t1 exist in t2, with equal values  */
+  if(!ATisEqual(ATtableKeys(t1), ATtableKeys(t2)))
+    return ATfalse;
+
   if(!ATsubTable(t1, t2))
     return ATfalse;
 
-  /*  Now check if all the keys in t2 exist in t1, with equal values  */
   if(!ATsubTable(t2, t1))
     return ATfalse;
-  /*  Both directions checked  */
+
   return ATtrue;
 }
 
@@ -463,15 +466,15 @@ ATermAppl SG_MultiSetPriority(parse_table *pt, ATermAppl tree1, ATermAppl tree2)
   multiset1 = ATtableCreate(256, 75);
   multiset2 = ATtableCreate(256, 75);
 
-  if(ATtableIsEqual(multiset1, multiset2))
-    return NULL;	/*  multi-prio is irreflexive  */
-
   SG_MakeMultiSet((ATerm) tree1, multiset1);
   SG_MakeMultiSet((ATerm) tree2, multiset2);
 
+  if(ATtableIsEqual(multiset1, multiset2))
+    return NULL;	/*  multi-prio is irreflexive  */
+
   if(SG_MultiSetGtr(pt, multiset1, multiset2)) {
     if(SG_DEBUG)
-      ATfprintf(SGlog(), "MultiSet Priority: aprod %t > aprod %t\n",
+      ATfprintf(SGlog(), "Multiset Priority: aprod %t >> aprod %t\n",
                 SG_GetApplProdLabel(tree1), SG_GetApplProdLabel(tree2));
     max = tree1;
   }
@@ -484,7 +487,7 @@ ATermAppl SG_MultiSetPriority(parse_table *pt, ATermAppl tree1, ATermAppl tree2)
       max = NULL;
     } else {
       if(SG_DEBUG)
-        ATfprintf(SGlog(), "MultiSet Priority: aprod %t < aprod %t\n",
+        ATfprintf(SGlog(), "Multiset Priority: aprod %t << aprod %t\n",
                   SG_GetApplProdLabel(tree1), SG_GetApplProdLabel(tree2));
       max = tree2;
     }
@@ -494,7 +497,7 @@ ATermAppl SG_MultiSetPriority(parse_table *pt, ATermAppl tree1, ATermAppl tree2)
   ATtableDestroy(multiset2);
 
   if(max == NULL && SG_DEBUG)
-    ATfprintf(SGlog(), "MultiSet Priority: %t <> %t\n",
+    ATfprintf(SGlog(), "Multiset Priority: %t >!< %t\n",
               SG_GetApplProdLabel(tree1), SG_GetApplProdLabel(tree2));
 
   return max;
@@ -507,10 +510,14 @@ ATermAppl SG_MaxPriority(parse_table *pt, ATermAppl t0, ATermAppl t1)
   l0 = SG_GetApplProdLabel((ATermAppl) t0);
   l1 = SG_GetApplProdLabel((ATermAppl) t1);
 
-  if(SG_GtrPriority(pt, l0, l1))
+  if(SG_GtrPriority(pt, l0, l1)) {
+    ATfprintf(stderr, "Direct priorityY: %t > %t (bad parse table?)\n", l0, l1);
     return t0;
-  if(SG_GtrPriority(pt, l1, l0))
+  }
+  if(SG_GtrPriority(pt, l1, l0)) {
+    ATfprintf(stderr, "Direct priority: %t > %t (bad parse table?)\n", l1, l0);
     return t1;
+  }
 
   /*  No direct priority relation -- compare using multiset ordering  */
   return SG_MultiSetPriority(pt, t0, t1);

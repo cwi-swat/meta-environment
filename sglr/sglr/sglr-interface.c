@@ -296,7 +296,6 @@ ATerm SGtermToFile(char *prgname, ATerm t, char *FN)
 ATerm SGparseFileUsingTable(char *prg, char *ptblfil, char *sort,
                             char *infil, char *outfil)
 {
-  if(!SG_LookupParseTable(ptblfil, ATtrue))
-    SGopenLanguage(prg, 0, ptblfil, ptblfil);
+  SGopenLanguage(prg, 0, ptblfil, ptblfil);
   return SGtermToFile(prg, SGparseFile(prg, 0, ptblfil, sort, infil), outfil);
 }
