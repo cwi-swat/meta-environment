@@ -1,21 +1,23 @@
 module Test
 
 imports basic/Integers
-imports Relations[Elem] [ EmptyBag => EmptyRel ]
+imports Relations[TElem] [ EmptyBag => EmptyRel ]
 
-imports basic/Whitespace
+imports asf/syntax/Comments basic/Whitespace
 
 exports
-	sorts Elem
+	sorts TElem
 
 	context-free syntax
-	     Integer	   -> Elem
-	     Bag[[Elem]]   -> Elem
-	     Bag[[Elem#Elem]] -> Elem
-%%	     Rel[[Elem]]   -> Elem
-	     Elem # Elem   -> Elem
+	     Integer	   -> TElem
+%%	     Bag[[TElem | TElem # TElem]]   -> TElem
+%%	     Rel[[TElem]]   -> TElem
+%%	     TElem # TElem   -> TElem
 
- 	     f(Elem)	   -> Integer
-
+ 	     f(TElem)	   -> Integer
+hiddens
 variables
-	"E" -> Elem
+	"E" -> TElem
+	"E*"	-> {TElem ","}*
+	"T*"	-> {TElem # TElem ","}*
+	"ET*"	-> { TElem | TElem # TElem ","}*

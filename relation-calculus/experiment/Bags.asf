@@ -6,7 +6,7 @@ equations
 
 %% --- add(E, Bag)
 
-[a1] add(E, {E*}) = {E, E*}
+%%[a1] add(E, {E*}) = {E, E*}
 
 %% --- union(Bag1, Bag2)
 

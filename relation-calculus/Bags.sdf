@@ -24,6 +24,8 @@ context-free syntax
    superset(Bag[[Elem]], Bag[[Elem]])        	-> Boolean
    strict-superset(Bag[[Elem]], Bag[[Elem]])	-> Boolean
 
+   union1(Elem, Bag[[Elem]])			-> Bag[[Elem]]
+   union2(Bag[[Elem]], Elem)			-> Bag[[Elem]]
    union(Bag[[Elem]], Bag[[Elem]])           	-> Bag[[Elem]]
    inter(Bag[[Elem]],  Bag[[Elem]])          	-> Bag[[Elem]]
    diff(Bag[[Elem]], Bag[[Elem]])            	-> Bag[[Elem]]

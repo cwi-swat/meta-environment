@@ -46,6 +46,24 @@ equations
 
 [ssup-1] strict-superset(Bag1, Bag2) = strict-subset(Bag2, Bag1)
 
+%% --- union1(E, Bag)
+
+[un1-1]	in(E, Bag) = true
+	=============================
+	union1(E, Bag) = Bag
+
+[default-un1-2]
+	union1(E, {E*}) = {E, E*}
+
+%% --- union2(Bag, E)
+
+[un2-1]	in(E, Bag) = true
+	=============================
+	union2(Bag, E) = Bag
+
+[default-un2-2]
+	union2({E*}, E) = {E*, E}
+
 %% --- union(Bag1, Bag2)
 
 [un-1] union({}, {E*}) = {E*}
