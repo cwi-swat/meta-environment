@@ -16,9 +16,10 @@ public class Main {
     TBTerm.init(aterms);
     
     //atomTest();
-    PETest();
+    //TauTest();
+    //PETest();
     //LetTest();
-    //CallTest();
+    CallTest();
      //CallTest2();
     //IfTest(); 
     //CreateTest();
@@ -40,6 +41,20 @@ public class Main {
     set.add(t);
     set.add(d);
     System.out.println(set);
+  }
+  
+  static void TauTest(){
+     ProcessDefinition P = new ProcessDefinition("P", new Tau());
+      try {    
+      ToolBus T = new ToolBus();
+      T.addProcessDefinition(P);
+      T.addProcess("P");
+      T.execute();
+      }
+    catch (ToolBusException e) {
+      System.out.println(e.getMessage());
+    } 
+     
   }
   
   static void PETest(){
@@ -74,6 +89,9 @@ public class Main {
       T.addProcessDefinition(P1);
       T.addProcessDefinition(P2);
       T.addProcessDefinition(P3); 
+      T.addProcess("P1");
+      T.addProcess("P2");
+      T.addProcess("P3");
       T.execute();
     }
     catch (ToolBusException e) {

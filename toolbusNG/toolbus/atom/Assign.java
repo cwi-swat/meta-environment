@@ -14,6 +14,7 @@ public class Assign extends Atom {
   private Ref exp;
 
   public Assign(ATerm v, ATerm e) {
+    super();
     var = new Ref(v);
     exp = new Ref(e);
     setAtomArgs(var, exp);

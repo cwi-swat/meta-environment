@@ -18,6 +18,7 @@ abstract class CommAtom extends Atom {
   private Ref msg;
 
    public CommAtom(ATerm msg){
+    super();
     this.msg = new Ref(msg);
     setAtomArgs(this.msg);
    }

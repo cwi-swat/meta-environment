@@ -12,6 +12,7 @@ public class ShutDown extends Atom {
   private Ref arg;
 
   public ShutDown(ATerm trm) {
+    super();
     arg = new Ref(trm);
     setAtomArgs(arg);
   }

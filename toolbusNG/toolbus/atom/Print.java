@@ -12,6 +12,7 @@ public class Print extends Atom {
   private Ref arg;
 
   public Print(ATerm a) {
+    super();
     arg = new Ref(a);
     setAtomArgs(arg);
   }

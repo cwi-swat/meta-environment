@@ -7,6 +7,10 @@ import toolbus.process.ProcessExpression;
  */
 
 public class Tau extends Atom {
+  
+  public Tau(){
+    super();
+  }
 
   public ProcessExpression copy() {
     return new Tau();
