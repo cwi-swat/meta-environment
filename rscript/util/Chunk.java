@@ -4,10 +4,13 @@ import java.io.*;
 public class Chunk
 {
   private static int nrStores = 0;
-
+  private static String outputFile;
+  
   private static void generateMerge(String inputArgs) {
     StringBuffer buf = new StringBuffer();
-    buf.append("Rstore -f merge8 -r RSTORE -o merge8-");
+    buf.append("Rstore -f merge8 -r RSTORE -o ");
+    buf.append(outputFile);
+    buf.append("-");
     buf.append(nrStores++);
     buf.append(".rstore ");
     buf.append(inputArgs);
@@ -50,6 +53,7 @@ public class Chunk
     while ( (line = lnr.readLine()) != null) {
       lines.add(line);
     }
+    outputFile = args[1];
     chunk(lines);
   }
 }
