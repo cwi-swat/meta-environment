@@ -1,6 +1,7 @@
 Makefile.in
 Makefile
 tifstoc
+merge-tifs
 tblog
 tblog-interface.tifs
 .deps

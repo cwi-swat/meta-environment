@@ -1,5 +1,10 @@
 $Id$
 
+Tue Jul  1 14:38:00 CEST 2003 <jong@cwi.nl>
+ * aterm:
+   - added first version of 'merge-tifs' which merges two tifs files.
+     This version is *not* robust against commandline mistakes.
+
 Mon Jun 30 10:03:16 CEST 2003 <jong@cwi.nl>
  * add "--with-trans-adapter" to enable transparent TB-adapter
  * adapters/trans:

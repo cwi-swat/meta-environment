@@ -1,25 +1,40 @@
 # $Id$
 
-EXTRA_DIST		= tblog-interface.tb tblog.dict
+bin_PROGRAMS = tifstoc tblog merge-tifs
 
-ATINC			= $(ATERM)/include
-ATBIN			= $(ATERM)/bin
-ATLIB			= $(ATERM)/lib
-TBDIR			= ${top_builddir}/toolbus
-ATBLIB			= $(TOOLBUSLIB)/lib
+EXTRA_DIST = \
+	tblog-interface.tb \
+	tblog.dict
 
-INCLUDES		= -I$(TOOLBUSLIB)/include -I$(ATINC)
+CLEANFILES = \
+	logger.tif.[ch] \
+	tblog_dict.[ch] \
+	tblog-interface.tifs
 
-bin_PROGRAMS		= tifstoc tblog
+ATINC = $(ATERM)/include
+ATBIN = $(ATERM)/bin
+ATLIB = $(ATERM)/lib
+TBDIR = ${top_builddir}/toolbus
+ATBLIB = $(TOOLBUSLIB)/lib
 
+INCLUDES = \
+	-I$(TOOLBUSLIB)/include \
+	-I$(ATINC)
 
-tblog_SOURCES		= tblog_dict.c logger.tif.c tblog.c
-tblog_LDADD		= -L$(ATBLIB) -lATB -L$(ATLIB) -lATerm
+tblog_SOURCES = tblog_dict.c logger.tif.c tblog.c
+tblog_LDADD = \
+	-L$(ATBLIB) -lATB \
+	-L$(ATLIB) -lATerm
 
-tifstoc_SOURCES         = tifstoc.c
-tifstoc_LDADD           = -L$(ATBLIB) -lATB -L$(ATLIB) -lATerm
+tifstoc_SOURCES = tifs.c tifstoc.c
+tifstoc_LDADD = \
+	-L$(ATBLIB) -lATB \
+	-L$(ATLIB) -lATerm
 
-CLEANFILES		= logger.tif.[ch] tblog_dict.[ch] tblog-interface.tifs
+merge_tifs_SOURCES = tifs.c merge-tifs.c
+merge_tifs_LDADD = \
+	-L$(ATBLIB) -lATB \
+	-L$(ATLIB) -lATerm
 
 tblog.o: tblog_dict.h logger.tif.h
 
