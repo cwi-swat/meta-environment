@@ -30,6 +30,10 @@ extern ATerm ERR_patternFeedbackListMany;
 extern ATerm ERR_patternFeedbackListSingle;
 extern ATerm ERR_patternFeedbackListEmpty;
 extern ATerm ERR_patternSummaryFeedback;
+extern ATerm ERR_patternNatConNatCon;
+extern ATerm ERR_patternStrConStrCon;
+extern ATerm ERR_patternEscapedEscaped;
+extern ATerm ERR_patternNormalNormal;
 
 extern void init_ErrorAPI_dict();
 

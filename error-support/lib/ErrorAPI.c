@@ -44,6 +44,10 @@ char *ERR_charsToString(ATerm arg)
 
 /*{{{  typedefs */
 
+typedef struct ATerm _ERR_Normal;
+typedef struct ATerm _ERR_Escaped;
+typedef struct ATerm _ERR_StrCon;
+typedef struct ATerm _ERR_NatCon;
 typedef struct ATerm _ERR_Summary;
 typedef struct ATerm _ERR_FeedbackList;
 typedef struct ATerm _ERR_Feedback;
@@ -63,8 +67,131 @@ void ERR_initErrorAPIApi(void)
 
 /*}}}  */
 
+/*{{{  protect functions */
+
+void ERR_protectNormal(ERR_Normal *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void ERR_protectEscaped(ERR_Escaped *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void ERR_protectStrCon(ERR_StrCon *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void ERR_protectNatCon(ERR_NatCon *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void ERR_protectSummary(ERR_Summary *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void ERR_protectFeedbackList(ERR_FeedbackList *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void ERR_protectFeedback(ERR_Feedback *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void ERR_protectSubjectList(ERR_SubjectList *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void ERR_protectSubject(ERR_Subject *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void ERR_protectLocation(ERR_Location *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void ERR_protectArea(ERR_Area *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+
+/*}}}  */
 /*{{{  term conversion functions */
 
+/*{{{  ERR_Normal ERR_NormalFromTerm(ATerm t) */
+
+ERR_Normal ERR_NormalFromTerm(ATerm t)
+{
+  return (ERR_Normal)t;
+}
+
+/*}}}  */
+/*{{{  ATerm ERR_NormalToTerm(ERR_Normal arg) */
+
+ATerm ERR_NormalToTerm(ERR_Normal arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  ERR_Escaped ERR_EscapedFromTerm(ATerm t) */
+
+ERR_Escaped ERR_EscapedFromTerm(ATerm t)
+{
+  return (ERR_Escaped)t;
+}
+
+/*}}}  */
+/*{{{  ATerm ERR_EscapedToTerm(ERR_Escaped arg) */
+
+ATerm ERR_EscapedToTerm(ERR_Escaped arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  ERR_StrCon ERR_StrConFromTerm(ATerm t) */
+
+ERR_StrCon ERR_StrConFromTerm(ATerm t)
+{
+  return (ERR_StrCon)t;
+}
+
+/*}}}  */
+/*{{{  ATerm ERR_StrConToTerm(ERR_StrCon arg) */
+
+ATerm ERR_StrConToTerm(ERR_StrCon arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  ERR_NatCon ERR_NatConFromTerm(ATerm t) */
+
+ERR_NatCon ERR_NatConFromTerm(ATerm t)
+{
+  return (ERR_NatCon)t;
+}
+
+/*}}}  */
+/*{{{  ATerm ERR_NatConToTerm(ERR_NatCon arg) */
+
+ATerm ERR_NatConToTerm(ERR_NatCon arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
 /*{{{  ERR_Summary ERR_SummaryFromTerm(ATerm t) */
 
 ERR_Summary ERR_SummaryFromTerm(ATerm t)
@@ -257,6 +384,38 @@ ERR_SubjectList ERR_makeSubjectList6(ERR_Subject elem1, ERR_Subject elem2, ERR_S
 /*}}}  */
 /*{{{  constructors */
 
+/*{{{  ERR_Normal ERR_makeNormalNormal(char* string) */
+
+ERR_Normal ERR_makeNormalNormal(char* string)
+{
+  return (ERR_Normal)(ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue));
+}
+
+/*}}}  */
+/*{{{  ERR_Escaped ERR_makeEscapedEscaped(char* string) */
+
+ERR_Escaped ERR_makeEscapedEscaped(char* string)
+{
+  return (ERR_Escaped)(ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue));
+}
+
+/*}}}  */
+/*{{{  ERR_StrCon ERR_makeStrConStrCon(char* string) */
+
+ERR_StrCon ERR_makeStrConStrCon(char* string)
+{
+  return (ERR_StrCon)(ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue));
+}
+
+/*}}}  */
+/*{{{  ERR_NatCon ERR_makeNatConNatCon(char* string) */
+
+ERR_NatCon ERR_makeNatConNatCon(char* string)
+{
+  return (ERR_NatCon)(ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue));
+}
+
+/*}}}  */
 /*{{{  ERR_Summary ERR_makeSummaryFeedback(char* producer, char* id, ERR_FeedbackList list) */
 
 ERR_Summary ERR_makeSummaryFeedback(char* producer, char* id, ERR_FeedbackList list)
@@ -389,6 +548,26 @@ ERR_Area ERR_makeAreaNoArea()
 /*}}}  */
 /*{{{  equality functions */
 
+ATbool ERR_isEqualNormal(ERR_Normal arg0, ERR_Normal arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool ERR_isEqualEscaped(ERR_Escaped arg0, ERR_Escaped arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool ERR_isEqualStrCon(ERR_StrCon arg0, ERR_StrCon arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool ERR_isEqualNatCon(ERR_NatCon arg0, ERR_NatCon arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
 ATbool ERR_isEqualSummary(ERR_Summary arg0, ERR_Summary arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
@@ -423,6 +602,246 @@ ATbool ERR_isEqualArea(ERR_Area arg0, ERR_Area arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
+
+/*}}}  */
+/*{{{  ERR_Normal accessors */
+
+/*{{{  ATbool ERR_isValidNormal(ERR_Normal arg) */
+
+ATbool ERR_isValidNormal(ERR_Normal arg)
+{
+  if (ERR_isNormalNormal(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isNormalNormal(ERR_Normal arg) */
+
+inline ATbool ERR_isNormalNormal(ERR_Normal arg)
+{
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ERR_patternNormalNormal, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasNormalString(ERR_Normal arg) */
+
+ATbool ERR_hasNormalString(ERR_Normal arg)
+{
+  if (ERR_isNormalNormal(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* ERR_getNormalString(ERR_Normal arg) */
+
+char* ERR_getNormalString(ERR_Normal arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) arg));
+}
+
+/*}}}  */
+/*{{{  ERR_Normal ERR_setNormalString(ERR_Normal arg, char* string) */
+
+ERR_Normal ERR_setNormalString(ERR_Normal arg, char* string)
+{
+  if (ERR_isNormalNormal(arg)) {
+    return (ERR_Normal)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue)));
+  }
+
+  ATabort("Normal has no String: %t\n", arg);
+  return (ERR_Normal)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  ERR_Escaped accessors */
+
+/*{{{  ATbool ERR_isValidEscaped(ERR_Escaped arg) */
+
+ATbool ERR_isValidEscaped(ERR_Escaped arg)
+{
+  if (ERR_isEscapedEscaped(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isEscapedEscaped(ERR_Escaped arg) */
+
+inline ATbool ERR_isEscapedEscaped(ERR_Escaped arg)
+{
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ERR_patternEscapedEscaped, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasEscapedString(ERR_Escaped arg) */
+
+ATbool ERR_hasEscapedString(ERR_Escaped arg)
+{
+  if (ERR_isEscapedEscaped(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* ERR_getEscapedString(ERR_Escaped arg) */
+
+char* ERR_getEscapedString(ERR_Escaped arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) arg));
+}
+
+/*}}}  */
+/*{{{  ERR_Escaped ERR_setEscapedString(ERR_Escaped arg, char* string) */
+
+ERR_Escaped ERR_setEscapedString(ERR_Escaped arg, char* string)
+{
+  if (ERR_isEscapedEscaped(arg)) {
+    return (ERR_Escaped)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue)));
+  }
+
+  ATabort("Escaped has no String: %t\n", arg);
+  return (ERR_Escaped)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  ERR_StrCon accessors */
+
+/*{{{  ATbool ERR_isValidStrCon(ERR_StrCon arg) */
+
+ATbool ERR_isValidStrCon(ERR_StrCon arg)
+{
+  if (ERR_isStrConStrCon(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isStrConStrCon(ERR_StrCon arg) */
+
+inline ATbool ERR_isStrConStrCon(ERR_StrCon arg)
+{
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ERR_patternStrConStrCon, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasStrConString(ERR_StrCon arg) */
+
+ATbool ERR_hasStrConString(ERR_StrCon arg)
+{
+  if (ERR_isStrConStrCon(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* ERR_getStrConString(ERR_StrCon arg) */
+
+char* ERR_getStrConString(ERR_StrCon arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) arg));
+}
+
+/*}}}  */
+/*{{{  ERR_StrCon ERR_setStrConString(ERR_StrCon arg, char* string) */
+
+ERR_StrCon ERR_setStrConString(ERR_StrCon arg, char* string)
+{
+  if (ERR_isStrConStrCon(arg)) {
+    return (ERR_StrCon)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue)));
+  }
+
+  ATabort("StrCon has no String: %t\n", arg);
+  return (ERR_StrCon)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  ERR_NatCon accessors */
+
+/*{{{  ATbool ERR_isValidNatCon(ERR_NatCon arg) */
+
+ATbool ERR_isValidNatCon(ERR_NatCon arg)
+{
+  if (ERR_isNatConNatCon(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isNatConNatCon(ERR_NatCon arg) */
+
+inline ATbool ERR_isNatConNatCon(ERR_NatCon arg)
+{
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ERR_patternNatConNatCon, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasNatConString(ERR_NatCon arg) */
+
+ATbool ERR_hasNatConString(ERR_NatCon arg)
+{
+  if (ERR_isNatConNatCon(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* ERR_getNatConString(ERR_NatCon arg) */
+
+char* ERR_getNatConString(ERR_NatCon arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl) arg));
+}
+
+/*}}}  */
+/*{{{  ERR_NatCon ERR_setNatConString(ERR_NatCon arg, char* string) */
+
+ERR_NatCon ERR_setNatConString(ERR_NatCon arg, char* string)
+{
+  if (ERR_isNatConNatCon(arg)) {
+    return (ERR_NatCon)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue)));
+  }
+
+  ATabort("NatCon has no String: %t\n", arg);
+  return (ERR_NatCon)NULL;
+}
+
+/*}}}  */
 
 /*}}}  */
 /*{{{  ERR_Summary accessors */
@@ -1588,6 +2007,58 @@ ERR_Area ERR_setAreaLength(ERR_Area arg, int length)
 /*}}}  */
 /*{{{  sort visitors */
 
+/*{{{  ERR_Normal ERR_visitNormal(ERR_Normal arg, char* (*acceptString)(char*)) */
+
+ERR_Normal ERR_visitNormal(ERR_Normal arg, char* (*acceptString)(char*))
+{
+  if (ERR_isNormalNormal(arg)) {
+    return ERR_makeNormalNormal(
+        acceptString ? acceptString(ERR_getNormalString(arg)) : ERR_getNormalString(arg));
+  }
+  ATabort("not a Normal: %t\n", arg);
+  return (ERR_Normal)NULL;
+}
+
+/*}}}  */
+/*{{{  ERR_Escaped ERR_visitEscaped(ERR_Escaped arg, char* (*acceptString)(char*)) */
+
+ERR_Escaped ERR_visitEscaped(ERR_Escaped arg, char* (*acceptString)(char*))
+{
+  if (ERR_isEscapedEscaped(arg)) {
+    return ERR_makeEscapedEscaped(
+        acceptString ? acceptString(ERR_getEscapedString(arg)) : ERR_getEscapedString(arg));
+  }
+  ATabort("not a Escaped: %t\n", arg);
+  return (ERR_Escaped)NULL;
+}
+
+/*}}}  */
+/*{{{  ERR_StrCon ERR_visitStrCon(ERR_StrCon arg, char* (*acceptString)(char*)) */
+
+ERR_StrCon ERR_visitStrCon(ERR_StrCon arg, char* (*acceptString)(char*))
+{
+  if (ERR_isStrConStrCon(arg)) {
+    return ERR_makeStrConStrCon(
+        acceptString ? acceptString(ERR_getStrConString(arg)) : ERR_getStrConString(arg));
+  }
+  ATabort("not a StrCon: %t\n", arg);
+  return (ERR_StrCon)NULL;
+}
+
+/*}}}  */
+/*{{{  ERR_NatCon ERR_visitNatCon(ERR_NatCon arg, char* (*acceptString)(char*)) */
+
+ERR_NatCon ERR_visitNatCon(ERR_NatCon arg, char* (*acceptString)(char*))
+{
+  if (ERR_isNatConNatCon(arg)) {
+    return ERR_makeNatConNatCon(
+        acceptString ? acceptString(ERR_getNatConString(arg)) : ERR_getNatConString(arg));
+  }
+  ATabort("not a NatCon: %t\n", arg);
+  return (ERR_NatCon)NULL;
+}
+
+/*}}}  */
 /*{{{  ERR_Summary ERR_visitSummary(ERR_Summary arg, char* (*acceptProducer)(char*), char* (*acceptId)(char*), ERR_FeedbackList (*acceptList)(ERR_FeedbackList)) */
 
 ERR_Summary ERR_visitSummary(ERR_Summary arg, char* (*acceptProducer)(char*), char* (*acceptId)(char*), ERR_FeedbackList (*acceptList)(ERR_FeedbackList))

@@ -6,7 +6,7 @@
 static PERR_StrCon ERR_liftStrCon(const char *str)
 {
   ATerm quotedAppl = (ATerm) ATmakeAppl0(ATmakeAFun(str, 0, ATtrue));
-  return PERR_makeStrConString(ATwriteToString(quotedAppl));
+  return PERR_makeStrConDefault(ATwriteToString(quotedAppl));
 }
 
 /*}}}  */
@@ -15,7 +15,7 @@ static PERR_StrCon ERR_liftStrCon(const char *str)
 static PERR_NatCon ERR_liftNatCon(int natcon)
 {
   ATerm atint = (ATerm) ATmakeInt(natcon);
-  return PERR_makeNatConString(ATwriteToString(atint));
+  return PERR_makeNatConDefault(ATwriteToString(atint));
 }
 
 /*}}}  */

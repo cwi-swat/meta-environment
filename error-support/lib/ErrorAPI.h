@@ -12,6 +12,10 @@
 
 /*{{{  typedefs */
 
+typedef struct _ERR_Normal *ERR_Normal;
+typedef struct _ERR_Escaped *ERR_Escaped;
+typedef struct _ERR_StrCon *ERR_StrCon;
+typedef struct _ERR_NatCon *ERR_NatCon;
 typedef struct _ERR_Summary *ERR_Summary;
 typedef struct _ERR_FeedbackList *ERR_FeedbackList;
 typedef struct _ERR_Feedback *ERR_Feedback;
@@ -27,21 +31,33 @@ typedef struct _ERR_Area *ERR_Area;
 
 /*}}}  */
 
-/*{{{  protect macros */
-
-#define ERR_protectSummary(arg) (ATprotect((ATerm*)((void*) arg)))
-#define ERR_protectFeedbackList(arg) (ATprotect((ATerm*)((void*) arg)))
-#define ERR_protectFeedback(arg) (ATprotect((ATerm*)((void*) arg)))
-#define ERR_protectSubjectList(arg) (ATprotect((ATerm*)((void*) arg)))
-#define ERR_protectSubject(arg) (ATprotect((ATerm*)((void*) arg)))
-#define ERR_protectLocation(arg) (ATprotect((ATerm*)((void*) arg)))
-#define ERR_protectArea(arg) (ATprotect((ATerm*)((void*) arg)))
-
-/*}}}  */
 void ERR_initErrorAPIApi(void);
 
+/*{{{  protect functions */
+
+void ERR_protectNormal(ERR_Normal * arg);
+void ERR_protectEscaped(ERR_Escaped * arg);
+void ERR_protectStrCon(ERR_StrCon * arg);
+void ERR_protectNatCon(ERR_NatCon * arg);
+void ERR_protectSummary(ERR_Summary * arg);
+void ERR_protectFeedbackList(ERR_FeedbackList * arg);
+void ERR_protectFeedback(ERR_Feedback * arg);
+void ERR_protectSubjectList(ERR_SubjectList * arg);
+void ERR_protectSubject(ERR_Subject * arg);
+void ERR_protectLocation(ERR_Location * arg);
+void ERR_protectArea(ERR_Area * arg);
+
+/*}}}  */
 /*{{{  term conversion functions */
 
+ERR_Normal ERR_NormalFromTerm(ATerm t);
+ATerm ERR_NormalToTerm(ERR_Normal arg);
+ERR_Escaped ERR_EscapedFromTerm(ATerm t);
+ATerm ERR_EscapedToTerm(ERR_Escaped arg);
+ERR_StrCon ERR_StrConFromTerm(ATerm t);
+ATerm ERR_StrConToTerm(ERR_StrCon arg);
+ERR_NatCon ERR_NatConFromTerm(ATerm t);
+ATerm ERR_NatConToTerm(ERR_NatCon arg);
 ERR_Summary ERR_SummaryFromTerm(ATerm t);
 ATerm ERR_SummaryToTerm(ERR_Summary arg);
 ERR_FeedbackList ERR_FeedbackListFromTerm(ATerm t);
@@ -110,6 +126,10 @@ ERR_SubjectList ERR_makeSubjectList6(ERR_Subject elem1, ERR_Subject elem2,
 /*}}}  */
 /*{{{  constructors */
 
+ERR_Normal ERR_makeNormalNormal(char *string);
+ERR_Escaped ERR_makeEscapedEscaped(char *string);
+ERR_StrCon ERR_makeStrConStrCon(char *string);
+ERR_NatCon ERR_makeNatConNatCon(char *string);
 ERR_Summary ERR_makeSummaryFeedback(char *producer, char *id,
 				    ERR_FeedbackList list);
 ERR_FeedbackList ERR_makeFeedbackListEmpty();
@@ -135,6 +155,10 @@ ERR_Area ERR_makeAreaNoArea();
 /*}}}  */
 /*{{{  equality functions */
 
+ATbool ERR_isEqualNormal(ERR_Normal arg0, ERR_Normal arg1);
+ATbool ERR_isEqualEscaped(ERR_Escaped arg0, ERR_Escaped arg1);
+ATbool ERR_isEqualStrCon(ERR_StrCon arg0, ERR_StrCon arg1);
+ATbool ERR_isEqualNatCon(ERR_NatCon arg0, ERR_NatCon arg1);
 ATbool ERR_isEqualSummary(ERR_Summary arg0, ERR_Summary arg1);
 ATbool ERR_isEqualFeedbackList(ERR_FeedbackList arg0, ERR_FeedbackList arg1);
 ATbool ERR_isEqualFeedback(ERR_Feedback arg0, ERR_Feedback arg1);
@@ -142,6 +166,42 @@ ATbool ERR_isEqualSubjectList(ERR_SubjectList arg0, ERR_SubjectList arg1);
 ATbool ERR_isEqualSubject(ERR_Subject arg0, ERR_Subject arg1);
 ATbool ERR_isEqualLocation(ERR_Location arg0, ERR_Location arg1);
 ATbool ERR_isEqualArea(ERR_Area arg0, ERR_Area arg1);
+
+/*}}}  */
+/*{{{  ERR_Normal accessors */
+
+ATbool ERR_isValidNormal(ERR_Normal arg);
+inline ATbool ERR_isNormalNormal(ERR_Normal arg);
+ATbool ERR_hasNormalString(ERR_Normal arg);
+char *ERR_getNormalString(ERR_Normal arg);
+ERR_Normal ERR_setNormalString(ERR_Normal arg, char *string);
+
+/*}}}  */
+/*{{{  ERR_Escaped accessors */
+
+ATbool ERR_isValidEscaped(ERR_Escaped arg);
+inline ATbool ERR_isEscapedEscaped(ERR_Escaped arg);
+ATbool ERR_hasEscapedString(ERR_Escaped arg);
+char *ERR_getEscapedString(ERR_Escaped arg);
+ERR_Escaped ERR_setEscapedString(ERR_Escaped arg, char *string);
+
+/*}}}  */
+/*{{{  ERR_StrCon accessors */
+
+ATbool ERR_isValidStrCon(ERR_StrCon arg);
+inline ATbool ERR_isStrConStrCon(ERR_StrCon arg);
+ATbool ERR_hasStrConString(ERR_StrCon arg);
+char *ERR_getStrConString(ERR_StrCon arg);
+ERR_StrCon ERR_setStrConString(ERR_StrCon arg, char *string);
+
+/*}}}  */
+/*{{{  ERR_NatCon accessors */
+
+ATbool ERR_isValidNatCon(ERR_NatCon arg);
+inline ATbool ERR_isNatConNatCon(ERR_NatCon arg);
+ATbool ERR_hasNatConString(ERR_NatCon arg);
+char *ERR_getNatConString(ERR_NatCon arg);
+ERR_NatCon ERR_setNatConString(ERR_NatCon arg, char *string);
 
 /*}}}  */
 /*{{{  ERR_Summary accessors */
@@ -257,6 +317,10 @@ ERR_Area ERR_setAreaLength(ERR_Area arg, int length);
 /*}}}  */
 /*{{{  sort visitors */
 
+ERR_Normal ERR_visitNormal(ERR_Normal arg, char *(*acceptString) (char *));
+ERR_Escaped ERR_visitEscaped(ERR_Escaped arg, char *(*acceptString) (char *));
+ERR_StrCon ERR_visitStrCon(ERR_StrCon arg, char *(*acceptString) (char *));
+ERR_NatCon ERR_visitNatCon(ERR_NatCon arg, char *(*acceptString) (char *));
 ERR_Summary ERR_visitSummary(ERR_Summary arg,
 			     char *(*acceptProducer) (char *),
 			     char *(*acceptId) (char *),

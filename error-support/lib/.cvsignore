@@ -1,8 +1,9 @@
+*.adt
+*.def
+*.dict
+*.jar
+.deps
 Makefile
 Makefile.in
-.deps
-*.adt
-*.dict
-ParsedErrors.pro
-*.def
 errorapi
+locationapi

@@ -1,52 +1,66 @@
 # $Id$
 
-pkgdata_DATA=errorapi-${VERSION}.jar
-EXTRA_DIST=errorapi-${VERSION}.jar
+pkgdata_DATA = errorapi-${VERSION}.jar locationapi-${VERSION}.jar
 
-lib_LIBRARIES=libErrorAPI.a
+EXTRA_DIST = errorapi-${VERSION}.jar locationapi-${VERSION}.jar
 
-include_HEADERS=\
-	ErrorAPI.h\
-	ErrorAPI_dict.h\
-	ParsedErrorAPI.h\
-	ParsedErrorAPI_dict.h\
+lib_LIBRARIES = libErrorAPI.a libLocationAPI.a
+
+include_HEADERS = \
+	LocationAPI.h \
+	LocationAPI_dict.h \
+	ParsedLocationAPI.h \
+	ParsedLocationAPI_dict.h \
+	ErrorAPI.h \
+	ErrorAPI_dict.h \
+	ParsedErrorAPI.h \
+	ParsedErrorAPI_dict.h \
 	ErrorAPI-utils.h
 
 libErrorAPI_a_SOURCES = \
 	ErrorAPI.c \
-	ErrorAPI_dict.c\
+	ErrorAPI_dict.c \
 	ParsedErrorAPI.c \
 	ParsedErrorAPI_dict.c \
-	init.c\
-	display.c\
-	lift.c\
+	init.c \
+	display.c \
+	lift.c \
 	lower.c
 
-#CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
-INCLUDES                = -I${ATERM}/include
+libLocationAPI_a_SOURCES = \
+	LocationAPI.c \
+	LocationAPI_dict.c \
+	ParsedLocationAPI.c \
+	ParsedLocationAPI_dict.c
 
-SOURCE_MODULES=basic/Feedback basic/Locations
-ABSOLUTE_SOURCE_MODULES=\
-  $(foreach i, ${SOURCE_MODULES}, ${top_srcdir}/../asf-library/library/$i.sdf)
+#CFLAGS += -DDISABLE_DYNAMIC_CHECKING
+INCLUDES = -I${ATERM}/include
+
+BASIC_MODULES = basic/StrCon basic/NatCon
+LOCATION_MODULES = basic/Locations
+FEEDBACK_MODULES = basic/Feedback
+
+api: error-api location-api
+
+ABS_ERROR_MODULES = \
+	$(foreach i, \
+	${BASIC_MODULES} ${FEEDBACK_MODULES} ${LOCATION_MODULES}, \
+	${top_srcdir}/../asf-library/library/$i.sdf)
 
 MetaErrors.def: Makefile
-	@(echo "definition"; cat ${ABSOLUTE_SOURCE_MODULES}) > $@
-	
-MetaErrors.impl.def: Makefile
-	@(echo "definition"; \
-	  cat ${ABSOLUTE_SOURCE_MODULES}) > $@
+	@(echo "definition"; cat ${ABS_ERROR_MODULES}) > $@
 
-api: parsed-api imploded-api java-api
+error-api: parsed-error-api imploded-error-api errorapi-${VERSION}.jar
 
-parsed-api: MetaErrors.def Makefile  
+parsed-error-api: MetaErrors.def Makefile  
 	sdf2-to-c --input $< --prefix PERR_ --output ParsedErrorAPI
 	indent ParsedErrorAPI.h
 
-imploded-api: MetaErrors.impl.def Makefile 
+imploded-error-api: MetaErrors.def Makefile 
 	sdf2-to-c --imploded --input $< --prefix ERR_ --output ErrorAPI
 	indent ErrorAPI.h
 
-java-api: MetaErrors.impl.def Makefile
+errorapi-${VERSION}.jar: MetaErrors.def Makefile
 	sdf2-to-java \
 		--imploded \
 		--input $< \
@@ -54,5 +68,28 @@ java-api: MetaErrors.impl.def Makefile
 		--output . \
 		--version ${VERSION}
 
-api-clean:
-	${RM} MEPT.[ch] MEPT_dict.[ch] MEPT.dict 
+ABS_LOCATION_MODULES = \
+	$(foreach i, \
+	${BASIC_MODULES} ${LOCATION_MODULES}, \
+	${top_srcdir}/../asf-library/library/$i.sdf)
+
+Location.def: Makefile
+	@(echo "definition"; cat ${ABS_LOCATION_MODULES}) > $@
+
+location-api: parsed-location-api imploded-location-api locationapi-${VERSION}.jar
+
+parsed-location-api: Location.def Makefile
+	sdf2-to-c --input $< --prefix PLOC_ --output ParsedLocationAPI
+	indent ParsedLocationAPI.h
+
+imploded-location-api: Location.def Makefile
+	sdf2-to-c --imploded --input $< --prefix LOC_ --output LocationAPI
+	indent LocationAPI.h
+
+locationapi-${VERSION}.jar: Location.def Makefile
+	sdf2-to-java \
+		--imploded \
+		--input $< \
+		--name locationapi \
+		--output . \
+		--version ${VERSION}

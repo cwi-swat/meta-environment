@@ -12,6 +12,10 @@
 
 /*{{{  typedefs */
 
+typedef struct _PERR_Normal *PERR_Normal;
+typedef struct _PERR_Escaped *PERR_Escaped;
+typedef struct _PERR_StrCon *PERR_StrCon;
+typedef struct _PERR_NatCon *PERR_NatCon;
 typedef struct _PERR_Summary *PERR_Summary;
 typedef struct _PERR_FeedbackList *PERR_FeedbackList;
 typedef struct _PERR_Feedback *PERR_Feedback;
@@ -19,10 +23,8 @@ typedef struct _PERR_SubjectList *PERR_SubjectList;
 typedef struct _PERR_Subject *PERR_Subject;
 typedef struct _PERR_Location *PERR_Location;
 typedef struct _PERR_Area *PERR_Area;
-typedef struct _PERR_NatCon *PERR_NatCon;
-typedef struct _PERR_StrCon *PERR_StrCon;
-typedef struct _PERR_OptLayout *PERR_OptLayout;
 typedef struct _PERR_Start *PERR_Start;
+typedef struct _PERR_OptLayout *PERR_OptLayout;
 
 /*}}}  */
 
@@ -31,25 +33,35 @@ typedef struct _PERR_Start *PERR_Start;
 
 /*}}}  */
 
-/*{{{  protect macros */
-
-#define PERR_protectSummary(arg) (ATprotect((ATerm*)((void*) arg)))
-#define PERR_protectFeedbackList(arg) (ATprotect((ATerm*)((void*) arg)))
-#define PERR_protectFeedback(arg) (ATprotect((ATerm*)((void*) arg)))
-#define PERR_protectSubjectList(arg) (ATprotect((ATerm*)((void*) arg)))
-#define PERR_protectSubject(arg) (ATprotect((ATerm*)((void*) arg)))
-#define PERR_protectLocation(arg) (ATprotect((ATerm*)((void*) arg)))
-#define PERR_protectArea(arg) (ATprotect((ATerm*)((void*) arg)))
-#define PERR_protectNatCon(arg) (ATprotect((ATerm*)((void*) arg)))
-#define PERR_protectStrCon(arg) (ATprotect((ATerm*)((void*) arg)))
-#define PERR_protectOptLayout(arg) (ATprotect((ATerm*)((void*) arg)))
-#define PERR_protectStart(arg) (ATprotect((ATerm*)((void*) arg)))
-
-/*}}}  */
 void PERR_initParsedErrorAPIApi(void);
 
+/*{{{  protect functions */
+
+void PERR_protectNormal(PERR_Normal * arg);
+void PERR_protectEscaped(PERR_Escaped * arg);
+void PERR_protectStrCon(PERR_StrCon * arg);
+void PERR_protectNatCon(PERR_NatCon * arg);
+void PERR_protectSummary(PERR_Summary * arg);
+void PERR_protectFeedbackList(PERR_FeedbackList * arg);
+void PERR_protectFeedback(PERR_Feedback * arg);
+void PERR_protectSubjectList(PERR_SubjectList * arg);
+void PERR_protectSubject(PERR_Subject * arg);
+void PERR_protectLocation(PERR_Location * arg);
+void PERR_protectArea(PERR_Area * arg);
+void PERR_protectStart(PERR_Start * arg);
+void PERR_protectOptLayout(PERR_OptLayout * arg);
+
+/*}}}  */
 /*{{{  term conversion functions */
 
+PERR_Normal PERR_NormalFromTerm(ATerm t);
+ATerm PERR_NormalToTerm(PERR_Normal arg);
+PERR_Escaped PERR_EscapedFromTerm(ATerm t);
+ATerm PERR_EscapedToTerm(PERR_Escaped arg);
+PERR_StrCon PERR_StrConFromTerm(ATerm t);
+ATerm PERR_StrConToTerm(PERR_StrCon arg);
+PERR_NatCon PERR_NatConFromTerm(ATerm t);
+ATerm PERR_NatConToTerm(PERR_NatCon arg);
 PERR_Summary PERR_SummaryFromTerm(ATerm t);
 ATerm PERR_SummaryToTerm(PERR_Summary arg);
 PERR_FeedbackList PERR_FeedbackListFromTerm(ATerm t);
@@ -64,20 +76,16 @@ PERR_Location PERR_LocationFromTerm(ATerm t);
 ATerm PERR_LocationToTerm(PERR_Location arg);
 PERR_Area PERR_AreaFromTerm(ATerm t);
 ATerm PERR_AreaToTerm(PERR_Area arg);
-PERR_NatCon PERR_NatConFromTerm(ATerm t);
-ATerm PERR_NatConToTerm(PERR_NatCon arg);
-PERR_StrCon PERR_StrConFromTerm(ATerm t);
-ATerm PERR_StrConToTerm(PERR_StrCon arg);
-PERR_OptLayout PERR_OptLayoutFromTerm(ATerm t);
-ATerm PERR_OptLayoutToTerm(PERR_OptLayout arg);
 PERR_Start PERR_StartFromTerm(ATerm t);
 ATerm PERR_StartToTerm(PERR_Start arg);
+PERR_OptLayout PERR_OptLayoutFromTerm(ATerm t);
+ATerm PERR_OptLayoutToTerm(PERR_OptLayout arg);
 
 /*}}}  */
 /*{{{  list functions */
 
 int PERR_getFeedbackListLength(PERR_FeedbackList arg);
-PERR_FeedbackList reverseFeedbackList(PERR_FeedbackList arg);
+PERR_FeedbackList PERR_reverseFeedbackList(PERR_FeedbackList arg);
 PERR_FeedbackList PERR_appendFeedbackList(PERR_FeedbackList arg0,
 					  PERR_OptLayout wsAfterHead,
 					  PERR_OptLayout wsAfterSep,
@@ -124,7 +132,7 @@ PERR_FeedbackList PERR_makeFeedbackList6(PERR_OptLayout wsAfterHead,
 					 PERR_Feedback elem5,
 					 PERR_Feedback elem6);
 int PERR_getSubjectListLength(PERR_SubjectList arg);
-PERR_SubjectList reverseSubjectList(PERR_SubjectList arg);
+PERR_SubjectList PERR_reverseSubjectList(PERR_SubjectList arg);
 PERR_SubjectList PERR_appendSubjectList(PERR_SubjectList arg0,
 					PERR_OptLayout wsAfterHead,
 					PERR_OptLayout wsAfterSep,
@@ -167,6 +175,11 @@ PERR_SubjectList PERR_makeSubjectList6(PERR_OptLayout wsAfterHead,
 /*}}}  */
 /*{{{  constructors */
 
+PERR_Normal PERR_makeNormalDefault(char *string);
+PERR_Escaped PERR_makeEscapedSpecialCharacter(char *string);
+PERR_Escaped PERR_makeEscapedOctal(char *string);
+PERR_StrCon PERR_makeStrConDefault(char *string);
+PERR_NatCon PERR_makeNatConDefault(char *string);
 PERR_Summary PERR_makeSummaryFeedback(PERR_OptLayout wsAfterFeedback,
 				      PERR_OptLayout wsAfterParenOpen,
 				      PERR_StrCon producer,
@@ -259,10 +272,6 @@ PERR_Area PERR_makeAreaArea(PERR_OptLayout wsAfterArea,
 			    PERR_OptLayout wsAfterComma4, PERR_NatCon length,
 			    PERR_OptLayout wsAfterLength);
 PERR_Area PERR_makeAreaNoArea();
-PERR_NatCon PERR_makeNatConString(char *string);
-PERR_StrCon PERR_makeStrConString(char *string);
-PERR_OptLayout PERR_makeOptLayoutAbsent();
-PERR_OptLayout PERR_makeOptLayoutPresent(char *string);
 PERR_Start PERR_makeStartArea(PERR_OptLayout wsBefore, PERR_Area topArea,
 			      PERR_OptLayout wsAfter, int ambCnt);
 PERR_Start PERR_makeStartLocation(PERR_OptLayout wsBefore,
@@ -277,10 +286,28 @@ PERR_Start PERR_makeStartFeedback(PERR_OptLayout wsBefore,
 PERR_Start PERR_makeStartSummary(PERR_OptLayout wsBefore,
 				 PERR_Summary topSummary,
 				 PERR_OptLayout wsAfter, int ambCnt);
+PERR_Start PERR_makeStartNatCon(PERR_OptLayout wsBefore,
+				PERR_NatCon topNatCon, PERR_OptLayout wsAfter,
+				int ambCnt);
+PERR_Start PERR_makeStartEscaped(PERR_OptLayout wsBefore,
+				 PERR_Escaped topEscaped,
+				 PERR_OptLayout wsAfter, int ambCnt);
+PERR_Start PERR_makeStartNormal(PERR_OptLayout wsBefore,
+				PERR_Normal topNormal, PERR_OptLayout wsAfter,
+				int ambCnt);
+PERR_Start PERR_makeStartStrCon(PERR_OptLayout wsBefore,
+				PERR_StrCon topStrCon, PERR_OptLayout wsAfter,
+				int ambCnt);
+PERR_OptLayout PERR_makeOptLayoutAbsent();
+PERR_OptLayout PERR_makeOptLayoutPresent(char *string);
 
 /*}}}  */
 /*{{{  equality functions */
 
+ATbool PERR_isEqualNormal(PERR_Normal arg0, PERR_Normal arg1);
+ATbool PERR_isEqualEscaped(PERR_Escaped arg0, PERR_Escaped arg1);
+ATbool PERR_isEqualStrCon(PERR_StrCon arg0, PERR_StrCon arg1);
+ATbool PERR_isEqualNatCon(PERR_NatCon arg0, PERR_NatCon arg1);
 ATbool PERR_isEqualSummary(PERR_Summary arg0, PERR_Summary arg1);
 ATbool PERR_isEqualFeedbackList(PERR_FeedbackList arg0,
 				PERR_FeedbackList arg1);
@@ -289,10 +316,45 @@ ATbool PERR_isEqualSubjectList(PERR_SubjectList arg0, PERR_SubjectList arg1);
 ATbool PERR_isEqualSubject(PERR_Subject arg0, PERR_Subject arg1);
 ATbool PERR_isEqualLocation(PERR_Location arg0, PERR_Location arg1);
 ATbool PERR_isEqualArea(PERR_Area arg0, PERR_Area arg1);
-ATbool PERR_isEqualNatCon(PERR_NatCon arg0, PERR_NatCon arg1);
-ATbool PERR_isEqualStrCon(PERR_StrCon arg0, PERR_StrCon arg1);
-ATbool PERR_isEqualOptLayout(PERR_OptLayout arg0, PERR_OptLayout arg1);
 ATbool PERR_isEqualStart(PERR_Start arg0, PERR_Start arg1);
+ATbool PERR_isEqualOptLayout(PERR_OptLayout arg0, PERR_OptLayout arg1);
+
+/*}}}  */
+/*{{{  PERR_Normal accessors */
+
+ATbool PERR_isValidNormal(PERR_Normal arg);
+inline ATbool PERR_isNormalDefault(PERR_Normal arg);
+ATbool PERR_hasNormalString(PERR_Normal arg);
+char *PERR_getNormalString(PERR_Normal arg);
+PERR_Normal PERR_setNormalString(PERR_Normal arg, char *string);
+
+/*}}}  */
+/*{{{  PERR_Escaped accessors */
+
+ATbool PERR_isValidEscaped(PERR_Escaped arg);
+inline ATbool PERR_isEscapedSpecialCharacter(PERR_Escaped arg);
+inline ATbool PERR_isEscapedOctal(PERR_Escaped arg);
+ATbool PERR_hasEscapedString(PERR_Escaped arg);
+char *PERR_getEscapedString(PERR_Escaped arg);
+PERR_Escaped PERR_setEscapedString(PERR_Escaped arg, char *string);
+
+/*}}}  */
+/*{{{  PERR_StrCon accessors */
+
+ATbool PERR_isValidStrCon(PERR_StrCon arg);
+inline ATbool PERR_isStrConDefault(PERR_StrCon arg);
+ATbool PERR_hasStrConString(PERR_StrCon arg);
+char *PERR_getStrConString(PERR_StrCon arg);
+PERR_StrCon PERR_setStrConString(PERR_StrCon arg, char *string);
+
+/*}}}  */
+/*{{{  PERR_NatCon accessors */
+
+ATbool PERR_isValidNatCon(PERR_NatCon arg);
+inline ATbool PERR_isNatConDefault(PERR_NatCon arg);
+ATbool PERR_hasNatConString(PERR_NatCon arg);
+char *PERR_getNatConString(PERR_NatCon arg);
+PERR_NatCon PERR_setNatConString(PERR_NatCon arg, char *string);
 
 /*}}}  */
 /*{{{  PERR_Summary accessors */
@@ -603,34 +665,6 @@ PERR_Area PERR_setAreaWsAfterLength(PERR_Area arg,
 				    PERR_OptLayout wsAfterLength);
 
 /*}}}  */
-/*{{{  PERR_NatCon accessors */
-
-ATbool PERR_isValidNatCon(PERR_NatCon arg);
-inline ATbool PERR_isNatConString(PERR_NatCon arg);
-ATbool PERR_hasNatConString(PERR_NatCon arg);
-char *PERR_getNatConString(PERR_NatCon arg);
-PERR_NatCon PERR_setNatConString(PERR_NatCon arg, char *string);
-
-/*}}}  */
-/*{{{  PERR_StrCon accessors */
-
-ATbool PERR_isValidStrCon(PERR_StrCon arg);
-inline ATbool PERR_isStrConString(PERR_StrCon arg);
-ATbool PERR_hasStrConString(PERR_StrCon arg);
-char *PERR_getStrConString(PERR_StrCon arg);
-PERR_StrCon PERR_setStrConString(PERR_StrCon arg, char *string);
-
-/*}}}  */
-/*{{{  PERR_OptLayout accessors */
-
-ATbool PERR_isValidOptLayout(PERR_OptLayout arg);
-inline ATbool PERR_isOptLayoutAbsent(PERR_OptLayout arg);
-inline ATbool PERR_isOptLayoutPresent(PERR_OptLayout arg);
-ATbool PERR_hasOptLayoutString(PERR_OptLayout arg);
-char *PERR_getOptLayoutString(PERR_OptLayout arg);
-PERR_OptLayout PERR_setOptLayoutString(PERR_OptLayout arg, char *string);
-
-/*}}}  */
 /*{{{  PERR_Start accessors */
 
 ATbool PERR_isValidStart(PERR_Start arg);
@@ -639,6 +673,10 @@ inline ATbool PERR_isStartLocation(PERR_Start arg);
 inline ATbool PERR_isStartSubject(PERR_Start arg);
 inline ATbool PERR_isStartFeedback(PERR_Start arg);
 inline ATbool PERR_isStartSummary(PERR_Start arg);
+inline ATbool PERR_isStartNatCon(PERR_Start arg);
+inline ATbool PERR_isStartEscaped(PERR_Start arg);
+inline ATbool PERR_isStartNormal(PERR_Start arg);
+inline ATbool PERR_isStartStrCon(PERR_Start arg);
 ATbool PERR_hasStartWsBefore(PERR_Start arg);
 PERR_OptLayout PERR_getStartWsBefore(PERR_Start arg);
 PERR_Start PERR_setStartWsBefore(PERR_Start arg, PERR_OptLayout wsBefore);
@@ -665,10 +703,37 @@ PERR_Start PERR_setStartTopFeedback(PERR_Start arg,
 ATbool PERR_hasStartTopSummary(PERR_Start arg);
 PERR_Summary PERR_getStartTopSummary(PERR_Start arg);
 PERR_Start PERR_setStartTopSummary(PERR_Start arg, PERR_Summary topSummary);
+ATbool PERR_hasStartTopNatCon(PERR_Start arg);
+PERR_NatCon PERR_getStartTopNatCon(PERR_Start arg);
+PERR_Start PERR_setStartTopNatCon(PERR_Start arg, PERR_NatCon topNatCon);
+ATbool PERR_hasStartTopEscaped(PERR_Start arg);
+PERR_Escaped PERR_getStartTopEscaped(PERR_Start arg);
+PERR_Start PERR_setStartTopEscaped(PERR_Start arg, PERR_Escaped topEscaped);
+ATbool PERR_hasStartTopNormal(PERR_Start arg);
+PERR_Normal PERR_getStartTopNormal(PERR_Start arg);
+PERR_Start PERR_setStartTopNormal(PERR_Start arg, PERR_Normal topNormal);
+ATbool PERR_hasStartTopStrCon(PERR_Start arg);
+PERR_StrCon PERR_getStartTopStrCon(PERR_Start arg);
+PERR_Start PERR_setStartTopStrCon(PERR_Start arg, PERR_StrCon topStrCon);
+
+/*}}}  */
+/*{{{  PERR_OptLayout accessors */
+
+ATbool PERR_isValidOptLayout(PERR_OptLayout arg);
+inline ATbool PERR_isOptLayoutAbsent(PERR_OptLayout arg);
+inline ATbool PERR_isOptLayoutPresent(PERR_OptLayout arg);
+ATbool PERR_hasOptLayoutString(PERR_OptLayout arg);
+char *PERR_getOptLayoutString(PERR_OptLayout arg);
+PERR_OptLayout PERR_setOptLayoutString(PERR_OptLayout arg, char *string);
 
 /*}}}  */
 /*{{{  sort visitors */
 
+PERR_Normal PERR_visitNormal(PERR_Normal arg, char *(*acceptString) (char *));
+PERR_Escaped PERR_visitEscaped(PERR_Escaped arg,
+			       char *(*acceptString) (char *));
+PERR_StrCon PERR_visitStrCon(PERR_StrCon arg, char *(*acceptString) (char *));
+PERR_NatCon PERR_visitNatCon(PERR_NatCon arg, char *(*acceptString) (char *));
 PERR_Summary PERR_visitSummary(PERR_Summary arg,
 			       PERR_OptLayout(*acceptWsAfterFeedback)
 			       (PERR_OptLayout),
@@ -788,10 +853,6 @@ PERR_Area PERR_visitArea(PERR_Area arg,
 			 PERR_NatCon(*acceptLength) (PERR_NatCon),
 			 PERR_OptLayout(*acceptWsAfterLength)
 			 (PERR_OptLayout));
-PERR_NatCon PERR_visitNatCon(PERR_NatCon arg, char *(*acceptString) (char *));
-PERR_StrCon PERR_visitStrCon(PERR_StrCon arg, char *(*acceptString) (char *));
-PERR_OptLayout PERR_visitOptLayout(PERR_OptLayout arg,
-				   char *(*acceptString) (char *));
 PERR_Start PERR_visitStart(PERR_Start arg,
 			   PERR_OptLayout(*acceptWsBefore) (PERR_OptLayout),
 			   PERR_Area(*acceptTopArea) (PERR_Area),
@@ -800,7 +861,13 @@ PERR_Start PERR_visitStart(PERR_Start arg,
 			   PERR_Location(*acceptTopLocation) (PERR_Location),
 			   PERR_Subject(*acceptTopSubject) (PERR_Subject),
 			   PERR_Feedback(*acceptTopFeedback) (PERR_Feedback),
-			   PERR_Summary(*acceptTopSummary) (PERR_Summary));
+			   PERR_Summary(*acceptTopSummary) (PERR_Summary),
+			   PERR_NatCon(*acceptTopNatCon) (PERR_NatCon),
+			   PERR_Escaped(*acceptTopEscaped) (PERR_Escaped),
+			   PERR_Normal(*acceptTopNormal) (PERR_Normal),
+			   PERR_StrCon(*acceptTopStrCon) (PERR_StrCon));
+PERR_OptLayout PERR_visitOptLayout(PERR_OptLayout arg,
+				   char *(*acceptString) (char *));
 
 /*}}}  */
 
