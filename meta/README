@@ -82,6 +82,10 @@ Installation instructions:
       % setenv PATH /path/to/new-meta/../bin:${PATH}
       (in shells of the csh-family)
 
+    If there are no configure files in the sub-directories: toolbus, aterm, 
+    and new-met, please run autoconf to generate the configure file in each 
+    of these sub-directories.
+
     Then proceed as follows:
 
       $ cd [the_directory_where_you've_put_the_aforementioned_distributions]
