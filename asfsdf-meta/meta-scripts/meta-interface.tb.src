@@ -72,8 +72,7 @@ in
   (
     rec-msg(rewrite-event(ModuleName?,EventName?,EventTerm?,EventString?)).
     printf("Rewrite event (%t) received:\n%s\n",EventName,EventString).
-    EventResult := EventTerm.
-    snd-msg(rewrite-event-result(ModuleName,EventName,EventResult))
+    snd-msg(rewrite-event-result(ModuleName,EventName,EventTerm)).
   )*delta
 endlet
 
