@@ -1,22 +1,3 @@
-#
-#    PGEN - the SDF2 parse table generator.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
-#                        The Netherlands. 
-#
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program; if not, write to the Free Software
-#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-#
 # $Id$
 
 include ${top_srcdir}/make_rules
@@ -35,14 +16,11 @@ data_DATA    = removevarsyntax.idef
 EXTRA_DIST   = removevarsyntax.idef removevarsyntax.tif.c removevarsyntax.tif.h \
                removevarsyntax.pod
 
-removevarsyntax_SOURCES = removevarsyntax.c
+removevarsyntax_SOURCES = removevarsyntax.c RemoveVarSyntax.c
 removevarsyntax_LDADD   = removevarsyntax.tif.o \
-                       -L$(top_builddir)/removevarsyntax/c-source \
-                       -lRemove-Var-Syntax \
-                       -L$(ASC_SUPPORT)/lib -lasc-support \
-                       -L$(ASF_SUPPORT)/lib -lASF \
-                       -L$(SDF_SUPPORT)/lib -lSDF \
-                       -L$(PT_SUPPORT)/lib -lPT \
+                       -L$(ASC_SUPPORT)/lib -lasc-support-me \
+                       -L$(SDF_SUPPORT)/lib -lSDFME \
+                       -L$(PT_SUPPORT)/lib -lmept \
                        -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 

@@ -1,31 +1,3 @@
-/*
-
-    PGEN - the SDF2 parse table generator.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
-                        The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/**
-  * Library support for rewriting terms.
-  *
-  * Pieter Olivier
-  * Thu Aug 14 11:36:34 MET DST 1997
-  */
-
 #ifndef WIN32
 	/* These files can not be included in Windows NT*/
 	#include <atb-tool.h>
@@ -38,8 +10,8 @@
 #include <ctype.h>
 #include <unistd.h>   
 
-#include <asc-support2.h>
-#include <SDF.h>
+#include <asc-support2-me.h>
+#include <SDFME-utils.h>
 
 /*{{{  globals */
 
@@ -61,6 +33,10 @@ static char myarguments[] = "m:hi:o:vV";
 void init_patterns();
 void c_rehash(int newsize);
 
+extern void register_Add045Eqs045Syntax();
+extern void resolve_Add045Eqs045Syntax();
+extern void init_Add045Eqs045Syntax();
+
 /*}}}  */
 /*{{{  ATerm *get_name(int cid) */
 
@@ -73,8 +49,7 @@ ATerm get_name(int cid)
 
 static PT_Tree addEqsSyntaxFunction(char *name, PT_ParseTree parseTree)
 {
-  SDF_ModuleName sdfModuleName = SDF_makeModuleNameUnparameterized(
-			       SDF_makeModuleIdWord(name));
+  SDF_ModuleName sdfModuleName = SDFmakeModuleName(name);
   PT_Tree ptModuleName = PT_makeTreeFromTerm(
 			   SDF_makeTermFromModuleName(sdfModuleName));
   PT_Tree newTree = NULL;
@@ -172,13 +147,13 @@ int main(int argc, char *argv[])
   }
  
   ATinit(argc, argv, &bottomOfStack);
-  SDF_initSDFApi();
+  SDF_initSDFMEApi();
 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
 
-  register_all();
-  resolve_all();
-  init_all();
+  register_Add045Eqs045Syntax();
+  resolve_Add045Eqs045Syntax();
+  init_Add045Eqs045Syntax();
 
   if(toolbus_mode) {
     #ifndef WIN32 /* Code with Toolbus calls, non Windows */
