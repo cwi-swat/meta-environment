@@ -632,7 +632,6 @@ void mdb_invalidate_parse_tables(ATermList visited, char *modulename)
     if(ATindexOf(visited, modname, 0) < 0) {
       if(!is_valid_parse_table(ATempty, modname, 
                                timeOfEqsTable, timeOfTrmTable)) {
-				ATwarning("Making parsetables unavailable\n");
         entry = ATreplace(entry,ATparse("unavailable"), EQS_TABLE_LOC);
         entry = ATreplace(entry,ATparse("unavailable"), TRM_TABLE_LOC);
         entry = ATreplace(entry,ATparse("unavailable"), EQS_TREE_LOC);
