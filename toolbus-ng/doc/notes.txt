@@ -69,6 +69,17 @@ Alternatives:
   
   Question: Are there other cases?
   
+  Pieter: I don't think the issue is related to process creation versus subscription.
+  The problem is related to initial state retrieval (often through messages) and subsequent
+  state updates through notes:
+  - You want to be sure you only receive updates that originate after the initial retrieval
+    of the state
+  - You want to be sure you don't loose any updates after the initial state retrieval.
+  - You want to be sure you don't receive excessive notes after you are no longer interested
+    in state changes.
+  This seems to suggest you want complete control over the moment your subsription starts,
+  and thus that you need an explicit subscribe (and unsubscribe) mechanism.
+  
 - Combining the previous two alternatives we should do the following:
 
   - make subscribe implicit
@@ -78,15 +89,7 @@ Alternatives:
   Some extension is conceivable that allows addresses like room(13, male, above18).
   Further discussion is needed for this.
     
-    
-    
-    
-    
-    
- 			
- 			
   
-
   
 
 
