@@ -142,6 +142,7 @@ path *SG_NewPath(stack *st, ATermList sons, path *ps)
     p->stack = st;
     p->args  = sons;
     p->next  = ps;
+    ATprotect((ATerm *) &(p->args));
   }
   return p;
 }
@@ -153,6 +154,7 @@ void SG_ClearPath(path *p)
   while(p) {
     oldp = p;
     p = p->next;
+    ATunprotect((ATerm *) &(oldp->args));
     SG_free(oldp);
   }
 }
