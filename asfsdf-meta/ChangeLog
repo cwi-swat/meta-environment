@@ -5,6 +5,12 @@ Mon Jan 10 18:05:30 CET 2005 <markvdb@cwi.nl>
    Modified files:
    - meta-scripts/standard.asfsdf.buttons.src
 
+Wed Jan 26 11:13:10 CET 2005 <jurgenv@cwi.nl>
+ * Added button to term editors: Edit Term. For opening a new term on
+   the same module.
+ * Disabled RemoveVarSyntax until it gets fixed.
+ * Disabled SDF checker until it gets fixed.
+
 Wed Dec  1 09:54:14 CET 2004 <{kooiker,jurgenv}@cwi.nl>
  * Bumped to 1.6
  * Removed integration tests because they need an installed environment
