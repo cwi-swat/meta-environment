@@ -1,11 +1,25 @@
 
-#include <ASFME.h>
+#include <ASFME-utils.h>
 #include <PTMEPT-utils.h>
 
 #include <assert.h>
 
 static ASF_OptLayout newline = NULL;
 static ASF_OptLayout space = NULL;
+/*{{{  static void initLayout() */
+
+static void initLayout()
+{
+  if (newline == NULL || space == NULL) {
+    newline = ASF_makeLayoutNewline();
+    ASF_protectOptLayout(&newline);
+
+    space = ASF_makeLayoutSpace();
+    ASF_protectOptLayout(&space);
+  }
+}
+
+/*}}}  */
 
 /* This library lowers the terms in an ASF specification to AsFix level.
  * The idea is that before and after lowering a TYPE CORRECT specification
@@ -112,11 +126,13 @@ static ASF_ASFConditionalEquation ASF_lowerConditionalEquation(ASF_ASFConditiona
 }
 
 /*}}}  */
-/*{{{  static ASF_ASFTestEquationTestList ASF_lowerEquations(ASF_ASFTestEquationTestList list) */
+/*{{{  static ASF_ASFTestEquationTestList ASF_lowerTests(ASF_ASFTestEquationTestList list) */
 
 static ASF_ASFTestEquationTestList ASF_lowerTests(ASF_ASFTestEquationTestList list)
 {
   ASF_ASFTestEquationTestList result = ASF_makeASFTestEquationTestListEmpty();
+
+  initLayout();
 
   for ( ; !ASF_isASFTestEquationTestListEmpty(list);
 	list = ASF_getASFTestEquationTestListTail(list)) {
@@ -133,9 +149,11 @@ static ASF_ASFTestEquationTestList ASF_lowerTests(ASF_ASFTestEquationTestList li
 /*}}}  */
 /*{{{  static ASF_ASFConditionalEquationList ASF_lowerEquations(ASF_ASFConditionalEquationList list) */
 
-static ASF_ASFConditionalEquationList ASF_lowerEquations(ASF_ASFConditionalEquationList list)
+ASF_ASFConditionalEquationList ASF_lowerEquations(ASF_ASFConditionalEquationList list)
 {
   ASF_ASFConditionalEquationList result = ASF_makeASFConditionalEquationListEmpty();
+
+  initLayout();
 
   for ( ; !ASF_isASFConditionalEquationListEmpty(list);
 	list = ASF_getASFConditionalEquationListTail(list)) {
@@ -175,12 +193,13 @@ static ASF_ASFSection ASF_lowerSection(ASF_ASFSection section)
 
 /*}}}  */
 
-/*{{{  ASF_ASFModule ASF_lowerModule(ASF_ASFModule module) */
+/*{{{  ASF_ASFSections ASF_lowerSections(ASF_ASFSection sections) */
 
-ASF_ASFModule ASF_lowerModule(ASF_ASFModule module)
+ASF_ASFSectionList ASF_lowerSections(ASF_ASFSectionList sections)
 {
-  ASF_ASFSectionList sections = ASF_getASFModuleList(module);
   ASF_ASFSectionList result = ASF_makeASFSectionListEmpty();
+
+  initLayout();
 
   for ( ; !ASF_isASFSectionListEmpty(sections); 
 	sections = ASF_getASFSectionListTail(sections)) {
@@ -191,7 +210,20 @@ ASF_ASFModule ASF_lowerModule(ASF_ASFModule module)
     result = ASF_makeASFSectionListMany(head, newline, result);
   }
 
-  return ASF_setASFModuleList(module, result);
+  return result;
+
+}
+
+/*}}}  */
+/*{{{  ASF_ASFModule ASF_lowerModule(ASF_ASFModule module) */
+
+ASF_ASFModule ASF_lowerModule(ASF_ASFModule module)
+{
+  ASF_ASFSectionList sections = ASF_getASFModuleList(module);
+
+  sections = ASF_lowerSections(sections);
+
+  return ASF_setASFModuleList(module, sections);
 }
 
 /*}}}  */

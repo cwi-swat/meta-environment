@@ -1,11 +1,26 @@
 
-#include <ASFME.h>
+#include <ASFME-utils.h>
 #include <PTMEPT-utils.h>
 
 #include <assert.h>
 
 static ASF_OptLayout newline = NULL;
 static ASF_OptLayout space = NULL;
+
+/*{{{  static void initLayout() */
+
+static void initLayout()
+{
+  if (newline == NULL || space == NULL) {
+    newline = ASF_makeLayoutNewline();
+    ASF_protectOptLayout(&newline);
+
+    space = ASF_makeLayoutSpace();
+    ASF_protectOptLayout(&space);
+  }
+}
+
+/*}}}  */
 
 /* This library lifts the terms in an ASF specification to AsFix level.
  * The idea is that before and after lifting a TYPE CORRECT specification
@@ -30,6 +45,8 @@ static ASF_ASFEquation ASF_liftEquation(ASF_ASFEquation equation)
     PTPT_liftTree((PT_Tree) ASF_getASFEquationRhs(equation));
   ATerm type = PT_SymbolToTerm(PT_makeSymbolCf(PT_makeSymbolSort("Tree")));
 
+  initLayout();
+
   equation = ASF_makeASFEquationDefault(type,type,lhs,space,space,rhs);
 
   return equation;
@@ -46,6 +63,8 @@ static ASF_ASFCondition ASF_liftCondition(ASF_ASFCondition condition)
   ASF_Tree rhs = (ASF_Tree) 
     PTPT_liftTree((PT_Tree) ASF_getASFConditionRhs(condition));
   ATerm type = PT_SymbolToTerm(PT_makeSymbolCf(PT_makeSymbolSort("Tree")));
+
+  initLayout();
 
   /* using the setters, we can abstract from the type of condition */
   condition = ASF_setASFConditionTypeOfLhs(condition, type);
@@ -106,7 +125,7 @@ static ASF_ASFConditionalEquation ASF_liftConditionalEquation(ASF_ASFConditional
 }
 
 /*}}}  */
-/*{{{  static ASF_ASFTestEquationTestList ASF_liftEquations(ASF_ASFTestEquationTestList list) */
+/*{{{  static ASF_ASFTestEquationTestList ASF_liftTests(ASF_ASFTestEquationTestList list) */
 
 static ASF_ASFTestEquationTestList ASF_liftTests(ASF_ASFTestEquationTestList list)
 {
@@ -127,7 +146,7 @@ static ASF_ASFTestEquationTestList ASF_liftTests(ASF_ASFTestEquationTestList lis
 /*}}}  */
 /*{{{  static ASF_ASFConditionalEquationList ASF_liftEquations(ASF_ASFConditionalEquationList list) */
 
-static ASF_ASFConditionalEquationList ASF_liftEquations(ASF_ASFConditionalEquationList list)
+ASF_ASFConditionalEquationList ASF_liftEquations(ASF_ASFConditionalEquationList list)
 {
   ASF_ASFConditionalEquationList result = ASF_makeASFConditionalEquationListEmpty();
 
@@ -169,12 +188,13 @@ static ASF_ASFSection ASF_liftSection(ASF_ASFSection section)
 
 /*}}}  */
 
-/*{{{  ASF_ASFModule ASF_liftModule(ASF_ASFModule module) */
+/*{{{  ASF_ASFSectionList ASF_liftSections(ASF_ASFSectionList sections) */
 
-ASF_ASFModule ASF_liftModule(ASF_ASFModule module)
+ASF_ASFSectionList ASF_liftSections(ASF_ASFSectionList sections)
 {
-  ASF_ASFSectionList sections = ASF_getASFModuleList(module);
   ASF_ASFSectionList result = ASF_makeASFSectionListEmpty();
+
+  initLayout();
 
   for ( ; !ASF_isASFSectionListEmpty(sections); 
 	sections = ASF_getASFSectionListTail(sections)) {
@@ -185,7 +205,20 @@ ASF_ASFModule ASF_liftModule(ASF_ASFModule module)
     result = ASF_makeASFSectionListMany(head, newline, result);
   }
 
-  return ASF_setASFModuleList(module, result);
+  return result;
+}
+
+/*}}}  */
+
+/*{{{  ASF_ASFModule ASF_liftModule(ASF_ASFModule module) */
+
+ASF_ASFModule ASF_liftModule(ASF_ASFModule module)
+{
+  ASF_ASFSectionList sections = ASF_getASFModuleList(module);
+
+  sections = ASF_liftSections(sections);
+
+  return ASF_setASFModuleList(module, sections);
 }
 
 /*}}}  */

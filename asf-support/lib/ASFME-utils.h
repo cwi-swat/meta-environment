@@ -30,5 +30,9 @@ ASF_ASFTagId ASF_makeTagId(const char* str);
 
 ASF_ASFModule ASF_liftModule(ASF_ASFModule module);
 ASF_ASFModule ASF_lowerModule(ASF_ASFModule module);
+ASF_ASFSectionList ASF_liftSections(ASF_ASFSectionList module);
+ASF_ASFSectionList ASF_lowerSections(ASF_ASFSectionList module);
+ASF_ASFConditionalEquationList ASF_liftEquations(ASF_ASFConditionalEquationList list);
+ASF_ASFConditionalEquationList ASF_lowerEquations(ASF_ASFConditionalEquationList list);
 
 #endif
