@@ -250,9 +250,9 @@ PT_ParseTree updateParseTree(PT_ParseTree parse_tree, SE_Path path,
   PT_Tree new_tree;
 
   if (SE_isPathRoot(path)) {
+    parse_tree = PT_makeValidParseTreeFromTree(tree);
     parse_tree = PT_setParseTreeLayoutBeforeTree(parse_tree, 
                    PT_makeTreeLayoutNonEmpty(leftLayoutArgs));
-    parse_tree = PT_setParseTreeTree(parse_tree, tree);
     parse_tree = PT_setParseTreeLayoutAfterTree(parse_tree, 
                    PT_makeTreeLayoutNonEmpty(rightLayoutArgs));
     return parse_tree;
@@ -278,7 +278,7 @@ PT_ParseTree updateParseTree(PT_ParseTree parse_tree, SE_Path path,
   if (rightLayout != NULL) {
     PT_Args localRightLayout = PT_getTreeArgs(                                                                   PT_getParseTreeLayoutBeforeTree(parse_tree));
     PT_Tree newRightLayout = PT_makeTreeLayoutNonEmpty(                                                        concatRightLayout(localRightLayout, rightLayout));
-    parse_tree = PT_setParseTreeLayoutBeforeTree(parse_tree, newRightLayout);
+    parse_tree = PT_setParseTreeLayoutAfterTree(parse_tree, newRightLayout);
   }
 
   return PT_setParseTreeTree(parse_tree, new_tree);
