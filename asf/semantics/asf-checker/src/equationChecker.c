@@ -14,7 +14,7 @@ ERR_Feedback makeMessage(char *msg, ASF_ASFTag tag, ATerm subject)
     subjects = ERR_makeSubjectListSingle(sub);
   }
   
-  return ERR_makeFeedbackError("asf-checker", msg, subjects);
+  return ERR_makeFeedbackError(msg, subjects);
 }
 
 /*}}}  */
