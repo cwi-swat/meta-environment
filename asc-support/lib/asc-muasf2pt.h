@@ -6,5 +6,6 @@
 #include <MEPT.h>
 
 PT_Tree muASFToTree(ATerm tree);
+PT_Tree muASFToTreeWithLayout(ATerm tree, PT_Tree layout);
 
 #endif

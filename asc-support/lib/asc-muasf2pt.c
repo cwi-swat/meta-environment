@@ -34,6 +34,7 @@ static size_t term_store_begin;
 static size_t term_store_end;   
 static size_t term_store_size;
 static PT_Tree* term_store = NULL;
+static PT_Tree defaultLayout  = NULL;
 
 /*}}}  */
 
@@ -236,7 +237,7 @@ static PT_Args termsToArgs(PT_Symbols args, ATermAppl appl)
 }
 
 /*}}}  */
-/*{{{  PT_Tree termToTree(ATerm tree) */
+/*{{{  static PT_Tree termToTree(ATerm tree) */
 
 static PT_Tree termToTree(ATerm tree)
 {
@@ -290,14 +291,17 @@ static PT_Tree termToTree(ATerm tree)
 
 /*}}}  */
 
-/*{{{  PT_Tree yieldTree(ATerm tree) */
+/*{{{  PT_Tree muASFToTree(ATerm tree, PT_Tree layout) */
 
-PT_Tree muASFToTree(ATerm tree)
+PT_Tree muASFToTreeWithLayout(ATerm tree, PT_Tree layout)
 {
   PT_Tree result;
 
   treeTable = ATtableCreate(TREE_TABLE_INITIAL_SIZE,
 			    TREE_TABLE_MAX_LOAD_PERCENTAGE);
+
+  ATprotect((ATerm*) ((void*) &defaultLayout));
+  defaultLayout = layout;
 
   createTermStore();
 
@@ -306,8 +310,17 @@ PT_Tree muASFToTree(ATerm tree)
   ATtableDestroy(treeTable);
   treeTable = NULL;
   destroyTermStore();
+  ATunprotect((ATerm*) ((void*) &defaultLayout));
 
   return result;
+}
+
+/*}}}  */
+/*{{{  PT_Tree muASFToTree(ATerm tree, PT_Tree layout) */
+
+PT_Tree muASFToTree(ATerm tree) 
+{
+  return muASFToTreeWithLayout(tree, PT_makeTreeLayoutFromString(" "));
 }
 
 /*}}}  */

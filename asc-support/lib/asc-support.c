@@ -870,7 +870,19 @@ PT_ParseTree toasfix(ATerm term)
 {
   PT_Tree tree;
 
-  tree = muASFToTree(term);  
+  tree = muASFToTree(term);
+
+  return PT_makeValidParseTreeFromTree(tree);
+}
+
+/*}}}  */
+/*{{{  PT_ParseTree toasfixNoLayout(ATerm term) */
+
+PT_ParseTree toasfixNoLayout(ATerm term)
+{
+  PT_Tree tree;
+
+  tree = muASFToTreeWithLayout(term, PT_makeTreeLayoutEmpty());
 
   return PT_makeValidParseTreeFromTree(tree);
 }
