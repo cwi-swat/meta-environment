@@ -1,6 +1,6 @@
 EXTRA_DIST = $(wildcard *.sdf *.asf)
 
-TEST_SPECS=Basic
+TEST_SPECS=Basic Demo
 
 TESTS=$(foreach s, ${TEST_SPECS}, $s.dump.sh)
 

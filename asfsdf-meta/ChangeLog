@@ -6,3 +6,5 @@
    to start everything up.
  * Version is 1.3beta
  * Moved the demo directory to this location.
+ * Added integration tests (there is a problem with termination in case
+   of a ToolBus deadlock here that needs to be solved)
