@@ -1,3 +1,4 @@
+
 %%
 %%    Meta-Environment - An environment for language prototyping.
 %%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
@@ -139,7 +140,7 @@
 %{{{ Title page and table of contents
 
 %----[ TITLE PAGE ]----           
-\title{\ASmetaenv\ User Manual \\ Version $Revision$}
+\title{\ASmetaenv\ User Manual \\ $Revision$}
 \author{M.G.J. van den Brand and P. Klint\\
         {\small\sl Centrum voor Wiskunde en Informatica (CWI),}\\
 {\small\sl Kruislaan 413, 1098 SJ Amsterdam, The Netherlands}}
@@ -1608,15 +1609,20 @@ in this manual, but further details can be found in \cite{Vis9?.thesis}.
 \subsubsection{Lexical Functions} \label{LexicalFunctions}
 
 In their simplest form, declarations of lexical functions consist of a
-sequence of zero or more strings or sort names followed by `{\tt ->}' and the
-name of a result sort, say $L$.  A lexical function may be followed by a list
-of attributes. The regular expression associated with $L$ consists of the
-\emph{or} of all left-hand sides of lexical functions with result sort $L$.
-All sort names appearing in left-hand sides of declarations are replaced by
-the regular expression associated with them. Circular dependencies between
-declarations in the lexical syntax are forbidden.  See Figure
-\ref{CODE:simplelex} for an example of a very simple lexical 
-function definition.
+sequence of zero or more strings or sort names followed by `{\tt ->}'
+and the name of a result sort, say $L$.  A lexical function may be
+followed by a list of attributes. The regular expression associated
+with $L$ consists of the \emph{or} of all left-hand sides of lexical
+functions with result sort $L$.  All sort names appearing in left-hand
+sides of declarations are replaced by the regular expression
+associated with them. Circular dependencies between declarations in
+the lexical syntax are forbidden.  Figure \ref{CODE:simplelex} shows
+an example of a simple lexical function definition for defining the
+first three words that Dutch children learn to read.  The three sorts
+{\tt Aap}, {\tt Noot} and {\tt Mies}, each recognize, respectively,
+the strings {\tt aap}, {\tt noot} and {\tt mies}. The sort {\tt
+LeesPlank} recognizes the single string {\tt aapnootmies}.
+
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -1626,6 +1632,7 @@ module LeesPlank
 imports Layout
 
 exports
+  sorts Aap Noot Mies
   lexical syntax
     "aap"         -> Aap
     "noot"        -> Noot
@@ -1667,6 +1674,49 @@ restrictions should apply:
 character code of $c_2$ is larger than that of $c_1$.
 \end{itemize}
 
+Definitions for lower case letter ({\tt LCLetter}), uppercase letters
+({\tt UCLetter}), lower and upper case letters ({\tt Letter}) and
+digits ({\tt Digit}) are shown in Figure~\ref{CODE:LettersDigits1}.
+Figure~\ref{CODE:LettersDigits2} gives
+a definition of the sort {\tt LetterOrDigit} that recognizes a single letter
+(upper case or lower case) or digit.
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module LettersDigits1
+
+imports Layout
+
+exports
+  sorts LCLetter UCLetter Letter Digit
+  lexical syntax
+    [a-z]    -> LCLetter
+    [A-Z]    -> UCLetter
+    [a-zA-Z] -> Letter
+    [0-9]    -> Digit
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Defining letter (lower case and upper case) and digit}\label{CODE:LettersDigits1}
+\end{figure}   
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module LettersDigits2
+
+imports Layout
+
+exports
+  sorts LetterOrDigit
+  lexical syntax
+    [a-z]    -> LetterOrDigit
+    [A-Z]    -> LetterOrDigit
+    [0-9]    -> LetterOrDigit
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Defining a single letter or digit}\label{CODE:LettersDigits2}
+\end{figure}   
 
 \paragraph{Escape Conventions}
 
@@ -1713,10 +1763,27 @@ The following operators are available for character classes
 \item {\tt  \verb+\+/}: union of two character classes. Accepts all characters
   that are accepted by either character class.
 \end{itemize}
-The first operator is a unary operator, whereas the other three are
+\noindent The first operator is a unary operator, whereas the other three are
 left-associative binary operators.
-See Figure \ref{CODE:charclasses} of lexical definitions
-using character classes. This definition of characters contains
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module LettersDigits3
+exports
+  sorts LetterOrDigit
+  lexical syntax
+    [a-z] \/ [A-Z] \/ [0-9]   -> LetterOrDigit
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Defining a single letter or digit using the alternative operator}\label{CODE:LettersDigits3}
+\end{figure}
+
+Figure~\ref{CODE:LettersDigits3} shows the definion of a single letter or digit
+using the alternative operator {\tt  \verb+\+/}.
+This definition is equivalent to the one given earlier in ~\ref{CODE:LettersDigits2}.
+Another example is shown in Figure \ref{CODE:charclasses}.
+This definition of characters contains
 all possible characters, either by means of the ordinary representation
 or via the decimal representation of characters. The character class union
 is used as a kind of abbreviation mechanism.
@@ -1729,6 +1796,7 @@ module Characters
 imports Layout
 
 exports
+  sorts AlphaNumericalEscChar DecimalEscChar EscChar L-Char
   lexical syntax
     "\\" ~[]                 -> AlphaNumericalEscChar
 
@@ -1762,16 +1830,19 @@ purpose:
 
 \end{itemize}
 
-\noindent Figure \ref{CODE:repetition} shows the use of these repetition operators.
+\noindent Figure \ref{CODE:repetition} shows the use of the repetition
+operator {\tt *} for defining identifiers consisting of a letter
+followed by zero or more letters or digits.
 
 \begin{figure}[tb]
 \begin{IncCode}
 \begin{boxedverbatim}
-module Idetntifiers-repetition
+module Identifiers-repetition
 
 imports Layout
 
 exports
+  sorts Let NumLet
   lexical syntax
     [a-z]       -> Let
     [a-z0-9]    -> NumLet
@@ -1779,17 +1850,17 @@ exports
     Let NumLet* -> Id
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Example of repetition operator {\tt *} }\label{CODE:repetition}
+\caption{Defining identifiers using the repetition operator {\tt *} }\label{CODE:repetition}
 \end{figure}   
 
-\subsubsection{The Optional Operator}
+\subsubsection{The Option Operator}
 
 If zero or exactly one occurence of a lexical token is desired the
 postfix operator {\tt ?} is available. It indicates that there
 should be zero or one occurence of the sort, literal or
 character class preceding the {\tt ?}. 
 
-Figure \ref{CODE:optional} shows the use of this optional operator.
+Figure \ref{CODE:option} shows the use of the optionoperator.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -1799,6 +1870,7 @@ module Identifiers-optional
 imports Layout
 
 exports
+  sorts Let Num
   lexical syntax
     [a-z]+   -> Let
     [0-9]    -> Num
@@ -1806,7 +1878,7 @@ exports
     Let Num? -> Id
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Example of optional operator {\tt ?} }\label{CODE:optional}
+\caption{Defining a letter followed by an optional number using the option operator {\tt ?} }\label{CODE:option}
 \end{figure}   
 
 \subsubsection{The Alternative Operator}
@@ -1851,7 +1923,8 @@ module Identifiers-alternative1
 
 imports Layout
 
-exports
+exports\
+  sorts UcLet ScLets Digs
   lexical syntax
     [A-Z]    -> UcLet
     [a-z]*   -> ScLets
@@ -1875,6 +1948,7 @@ module Identifiers-alternative2
 imports Layout
 
 exports
+  sorts UcLet ScLets Digs
   lexical syntax
     [A-Z]    -> UcLet
     [a-z]*   -> ScLets
@@ -1895,8 +1969,11 @@ in order to get some ideas what can be specified using
 
 \paragraph{Defining Numbers}
 
-Definition of integers and real numbers can be found in 
-Figure \ref{CODE:numbers}.
+Definitions of integers and real numbers are shown in Figure
+\ref{CODE:numbers}. Note the use of the alternative operator in the
+definitions of {\tt UnsignedInt} and {\tt Number}.  Also note the use
+of the option operator in the definitions of {\tt SignedReal} and {\tt
+UnsignedReal}.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -1924,8 +2001,17 @@ exports
 
 \paragraph{Defining Strings}
 
-Figure \ref{CODE:string} contains the lexical definition of
-strings which may contain escaped quotes in the actual string.
+Figure \ref{CODE:string} gives the lexical definition of
+strings which may contain escaped double quote characters.
+It defines a {\tt StringChar} as either
+\begin{itemize}
+\item zero or more
+arbitrary characters except double quote or newline, or
+\item an escaped double quote, i.e., \verb+\"+.
+\end{itemize}
+
+\noindent A string consists of zero or more {\tt StringChar}s surrounded by
+double quotes.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -1960,8 +2046,7 @@ for that sort.
 
 Members in the left-hand side of a context-free function
 are separated by an invisible non-terminal {\tt LAYOUT?} 
-(optional {\tt LAYOUT}).
-So, that between these members layout may be recognized. 
+(optional {\tt LAYOUT}) in order to permit layout between these members.
 This optional layout non-terminal is automatically inserted by the
 parser generator.
 %%\footnote{\sdf2 offers the possibility to write
