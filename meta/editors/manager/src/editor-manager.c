@@ -210,6 +210,7 @@ ATerm get_editor_id(int conn, char *nameAsString, char *moduleAsString)
   ATerm editorId;
   ATerm nameAsTerm;
   ATerm moduleAsTerm;
+  ATerm storedModuleName;
 
   assert(nameAsString);
 
@@ -220,7 +221,9 @@ ATerm get_editor_id(int conn, char *nameAsString, char *moduleAsString)
     editorId = getEditorId(editor);
 
     moduleAsTerm = moduleStringToTerm(moduleAsString);
-    if (ATisEqual(moduleAsTerm, getModule(editorId))) {
+    storedModuleName = getModule(editor);
+
+    if (ATisEqual(moduleAsTerm, storedModuleName)) {
       return sndValue(ATmake("consistent-existing-editor(<term>)", editorId));
     }
     else {
