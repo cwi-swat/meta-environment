@@ -179,7 +179,6 @@ public class EditorModel extends Observable {
 		texteditorapi.types.Items items;
 		items = textFactory.makeItems(action, menuItem);
 		menuEvent = textFactory.makeMenu_Default(items);
-		textFactory.makeEvent_Menu(menuEvent);
 		return textFactory.makeEvent_Menu(menuEvent).toTerm();
 	}
 

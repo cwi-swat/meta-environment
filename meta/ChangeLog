@@ -1,5 +1,9 @@
 # $Id$
 
+Wed Jan 26 13:19:42 CET 2005 <kooiker@cwi.nl>
+ * editors/text/swing/metaedit/EditorModel.java:
+   - Removed superfluous line
+
 Wed Jan 26 11:19:30 CET 2005 <jurgenv@cwi.nl>
  * Slice-tree adapted to deal with structured lexicals (for syntax
    highlighting)
