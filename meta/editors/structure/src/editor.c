@@ -114,7 +114,7 @@ static SE_Editor moveFocusDown(SE_Editor editor)
 
   assert(tree);
 
-  if (PT_hasTreeArgs(tree)) {
+  if (PT_isTreeAppl(tree)) {
     SE_Path new_path = pathDown(path);
     tree = getParseTreeTreeAt(parse_tree, new_path);
     if (tree) {
