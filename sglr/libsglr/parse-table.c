@@ -35,7 +35,8 @@ token SG_EOF_Token;
 token SG_Zero_Token;
 AFun  SG_GtrPrio_AFun, SG_LeftPrio_AFun, SG_RightPrio_AFun, 
       SG_NonAssocPrio_AFun,
-      SG_Shift_AFun, SG_Reduce_AFun, SG_ReduceLA_AFun, SG_Accept_AFun,
+      SG_Shift_AFun, SG_ShiftKW_AFun, SG_Reduce_AFun, 
+      SG_ReduceLA_AFun, SG_Accept_AFun,
       SG_Appl_AFun, SG_Regular_AFun, SG_Reject_AFun,
       SG_Eager_AFun, SG_Uneager_AFun,
       SG_Aprod_AFun, SG_Amb_AFun, SG_Range_AFun, SG_CharClass_AFun,
@@ -78,6 +79,7 @@ void SG_InitPTGlobals(void)
   SG_AFUN_INIT(SG_NonAssocPrio_AFun, ATmakeAFun(SG_NONASSOCPRIO_AFUN, 2, ATfalse));
 	
   SG_AFUN_INIT(SG_Shift_AFun,       ATmakeAFun(SG_SHIFT_AFUN,       1, ATfalse));
+  SG_AFUN_INIT(SG_ShiftKW_AFun,     ATmakeAFun(SG_SHIFT_KW_AFUN,    2, ATfalse));
   SG_AFUN_INIT(SG_Reduce_AFun,      ATmakeAFun(SG_REDUCE_AFUN,      3, ATfalse));
   SG_AFUN_INIT(SG_ReduceLA_AFun,    ATmakeAFun(SG_REDUCE_AFUN,      4, ATfalse));
   SG_AFUN_INIT(SG_Accept_AFun,      ATmakeAFun(SG_ACCEPT_AFUN,      0, ATfalse));
@@ -134,6 +136,8 @@ actionkind SG_ActionKind(action a)
     return REDUCE_LA;
   } else if(ATisEqualAFun(fun, SG_Shift_AFun)) {
     return SHIFT;
+  } else if(ATisEqualAFun(fun, SG_ShiftKW_AFun)) {
+    return SHIFT_KW;
   } else if(ATisEqualAFun(fun, SG_Accept_AFun)) {
     return ACCEPT;
   }

@@ -54,7 +54,7 @@ typedef struct _parse_table  {
 #endif
 } parse_table;
 
-typedef enum ActionKind {ERROR, SHIFT, REDUCE, REDUCE_LA, ACCEPT}  actionkind;
+typedef enum ActionKind {ERROR, SHIFT, SHIFT_KW, REDUCE, REDUCE_LA, ACCEPT}  actionkind;
 
 
 /*  Some global variables/macros  */
@@ -137,6 +137,7 @@ parse_table  *SG_LookupParseTable(language L);
 #endif
 
 #define       SG_A_STATE(a)         ATgetInt((ATermInt) ATgetArgument(a, 0))
+#define       SG_A_TOKEN(a)         ATgetArgument(a, 1)
 #define       SG_A_NR_ARGS(a)       ATgetInt((ATermInt) ATgetArgument(a, 0))
 #define       SG_A_PROD(a)          ATgetInt((ATermInt) ATgetArgument(a, 1))
 #define       SG_A_ATTRIBUTE(a)     ATgetInt((ATermInt) ATgetArgument(a, 2))

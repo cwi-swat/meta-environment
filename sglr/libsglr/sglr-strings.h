@@ -12,6 +12,7 @@
 #define SG_AMB_AFUN          "amb"
 #define SG_GTRPRIO_AFUN      "gtr-prio"
 #define SG_SHIFT_AFUN        "shift"
+#define SG_SHIFT_KW_AFUN     "shift-kw"
 #define SG_REDUCE_AFUN       "reduce"
 #define SG_ACCEPT_AFUN       "accept"
 #define SG_RANGE_AFUN        "range"

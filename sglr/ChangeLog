@@ -1,5 +1,9 @@
 $Id$
 
+2002/07/31 (vandenbr@loria.fr)
+ * Bumped to version 3.9beta.
+ * Started working on an improved treatement of keywords.
+
 2002/07/24 (jurgenv@cwi.nl)
  * Release 3.8
 

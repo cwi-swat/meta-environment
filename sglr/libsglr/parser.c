@@ -35,6 +35,20 @@ typedef struct shift_pair {
 #define SG_SP_STATE(x)                  (x).state
 #define SG_SP_STACK(x)                  (x).stack
 
+typedef struct shift_tuple {
+  state     state;
+  ATermList token;
+  int       index;
+  int       length;
+  stack     *stack;
+} shift_tuple;
+
+#define SG_STPL_STATE(x)                  (x).state
+#define SG_STPL_TOKEN(x)                  (x).token
+#define SG_STPL_INDEX(x)                  (x).index
+#define SG_STPL_STACK(x)                  (x).stack
+#define SG_STPL_LENGTH(x)                 (x).length
+
 /*
  A path is a pair of a stack and a list of terms.  A path represents the
  path from a certain point |p1| in a stack to another point |p2| in a
@@ -75,15 +89,9 @@ void      SG_ParseToken(void);
 void      SG_Actor(stack *);
 ATbool    SG_CheckLookAhead(lookahead la);
 void      SG_DoReductions(stack*, action);
-#ifndef DEBUG
 void    SG_Reducer(stack *st0, state s, label prodl, 
                    ATermList kids, size_t length,
                    int attr);
-#else
-void    SG_Reducer(stack *st0, state s, label prodl, 
-                   ATermList kids, size_t length,
-                   int attr, stack *stpt);
-#endif
 void      SG_DoLimitedReductions(stack*, action, st_link*);
 void      SG_Shifter(void);
 ATermList SG_CurrentPosInfo(void);
@@ -163,6 +171,43 @@ void  SG_DiscardShiftPair(void)
 void  SG_DiscardShiftPairs(void)
 {
   sg_sp_idx = 0;
+}
+
+#define     SG_STPL_CHUNK 16
+shift_tuple  *sg_shift_tuples = NULL;
+int         sg_stpl_max = 0, sg_stpl_idx;
+
+void SG_AddShiftTuple(stack *st, action a)
+{
+  if(sg_shift_tuples == NULL) {
+    sg_stpl_max = SG_STPL_CHUNK;
+    sg_shift_tuples = SG_Malloc(SG_STPL_CHUNK, sizeof(shift_tuple));
+  }
+  if(sg_stpl_idx >= sg_stpl_max) {
+    sg_stpl_max += SG_STPL_CHUNK;
+    sg_shift_tuples = SG_Realloc(sg_shift_tuples, sg_stpl_max, sizeof(shift_tuple));
+  }
+  sg_shift_tuples[sg_stpl_idx].stack = st;
+  sg_shift_tuples[sg_stpl_idx].state = SG_A_STATE(a);
+  sg_shift_tuples[sg_stpl_idx].token = (ATermList)SG_A_TOKEN(a);
+  sg_shift_tuples[sg_stpl_idx].index = 0;
+  sg_shift_tuples[sg_stpl_idx].length = ATgetLength((ATermList)SG_A_TOKEN(a))-1;
+//  ATwarning("token = %t\n", SG_A_TOKEN(a));
+  sg_stpl_idx++;
+  IF_STATISTICS(
+    if(sg_stpl_idx > sg_sp_maxidx) {
+      sg_sp_maxidx    = sg_stpl_idx;
+      sg_sp_maxtoken  = current_token;
+      sg_sp_maxline   = line;
+      sg_sp_maxcol    = col;
+      sg_sp_maxoffset = sg_tokens_read;
+    }
+  );
+}
+
+void  SG_DiscardShiftTuple(void)
+{
+  sg_stpl_idx--;
 }
 
 path *SG_NewPath(stack *st, ATermList sons, size_t length, path *ps)
@@ -402,11 +447,7 @@ void  SG_ParserPreparation(void)
 #ifdef  MEMSTATS
   IF_STATISTICS(SG_ZeroAllocStats());
 #endif
-#ifndef DEBUG
   active_stacks = SG_NewStacks(SG_NewStack(SG_PT_INITIAL(table), ATfalse));
-#else
-  active_stacks = SG_NewStacks(SG_NewStack(SG_PT_INITIAL(table), NULL, ATfalse));
-#endif
   SG_ERROR_OFF();
   IF_STATISTICS(
     SG_PageFlt(&sg_major, &sg_minor);
@@ -620,6 +661,9 @@ void SG_Actor(stack *st)
       case SHIFT:
         SG_AddShiftPair(st, SG_A_STATE(a));
         break;
+      case SHIFT_KW:
+        SG_AddShiftTuple(st, a);
+        break;
       case REDUCE:
         SG_DoReductions(st, a);
         break;
@@ -728,15 +772,9 @@ void SG_DoReductions(stack *st, action a)
   }
 
   for(ps = fps; ps; ps = SG_P_NEXT(ps)) {
-#ifndef DEBUG
     SG_Reducer(SG_P_STACK(ps),
                SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
                prod, SG_P_ARGS(ps), SG_P_LENGTH(ps), SG_A_ATTRIBUTE(a));
-#else
-    SG_Reducer(SG_P_STACK(ps),
-               SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
-               prod, SG_P_ARGS(ps), SG_P_LENGTH(ps), SG_A_ATTRIBUTE(a), st);
-#endif
   }
   SG_ClearPath(fps);
 }
@@ -765,15 +803,9 @@ void SG_DoReductions(stack *st, action a)
  |st0| with |t| as parse tree.
  */
 
-#ifndef DEBUG
 void SG_Reducer(stack *st0, state s, label prodl, 
                 ATermList kids, size_t length,
                 int attribute)
-#else
-void SG_Reducer(stack *st0, state s, label prodl, 
-                ATermList kids, size_t length,
-                int attribute, stack *stpt)
-#endif
 {
   tree      t;
   st_link   *nl;
@@ -791,11 +823,7 @@ void SG_Reducer(stack *st0, state s, label prodl,
   /*  A stack with state s already exists?  */
   if (!(st1 = SG_FindStack(s, active_stacks))) {
     /*  No existing stack for state s: new stack  */
-#ifndef DEBUG
     st1 = SG_NewStack(s, ATfalse);
-#else
-    st1 = SG_NewStack(s, stpt, ATfalse);
-#endif
     nl  = SG_AddLink(st1, st0, t, length);
     /*
      Add eventual reject stacks to the active stacks too;
@@ -890,15 +918,9 @@ void SG_DoLimitedReductions(stack *st, action a, st_link *l)
   fps = SG_FindLimitedPaths(st, SG_A_NR_ARGS(a), l);
 
   for (ps = fps; ps; ps = SG_P_NEXT(ps)) {
-#ifndef DEBUG
     SG_Reducer(SG_P_STACK(ps),
                SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
                prod, SG_P_ARGS(ps), SG_P_LENGTH(ps), SG_A_ATTRIBUTE(a));
-#else
-    SG_Reducer(SG_P_STACK(ps),
-               SG_LookupGoto(table, SG_ST_STATE(SG_P_STACK(ps)), prod),
-               prod, SG_P_ARGS(ps), SG_P_LENGTH(ps), SG_A_ATTRIBUTE(a), st);
-#endif
   }
   SG_ClearPath(fps);
 }
@@ -929,27 +951,56 @@ void SG_Shifter(void)
 
   t = SG_LookupProduction(table, current_token);
 
+  for (i = 0; i < sg_stpl_idx; i++) {
+    ATermList token = SG_STPL_TOKEN(sg_shift_tuples[i]);
+    int index       = SG_STPL_INDEX(sg_shift_tuples[i]);
+    int length      = SG_STPL_LENGTH(sg_shift_tuples[i]);
+    s               = SG_STPL_STATE(sg_shift_tuples[i]);
+    st0             = SG_STPL_STACK(sg_shift_tuples[i]);
+
+//ATwarning("entering shifter with %t and %d\n", token, index);  
+    if (index == length) { 
+      if (!SG_PT_HAS_REJECTS(table) || !SG_Rejected(st0)) {
+        if (!(st1 = SG_FindStack(s, new_active_stacks))) {
+          st1 = SG_NewStack(s, ATtrue);
+          new_active_stacks = SG_AddStack(st1, new_active_stacks);
+        }
+        l = SG_AddLink(st1, st0, (tree) t, 1);
+      }
+      SG_DiscardShiftTuple();
+    }
+    else {
+      if (current_token == ATgetInt((ATermInt) ATelementAt(token, index))) {
+        index++;
+        sg_shift_tuples[i].index = index;
+
+        new_active_stacks = SG_AddStack(st0, new_active_stacks);
+      } 
+      else {
+        SG_DiscardShiftTuple();
+      }
+    }
+  }
+
   for(i = 0; i < sg_sp_idx; i++) {
     s   = SG_SP_STATE(sg_shift_pairs[i]);
     st0 = SG_SP_STACK(sg_shift_pairs[i]);
 
-    if(!SG_PT_HAS_REJECTS(table) || !SG_Rejected(st0)) {
+    if (!SG_PT_HAS_REJECTS(table) || !SG_Rejected(st0)) {
       if(!(st1 = SG_FindStack(s, new_active_stacks))) {
-#ifndef DEBUG
         st1 = SG_NewStack(s, ATtrue);
-#else
-        st1 = SG_NewStack(s, NULL, ATtrue);
-#endif
         new_active_stacks = SG_AddStack(st1, new_active_stacks);
       }
       l = SG_AddLink(st1, st0, (tree) t, 1);
-
-    } else IF_DEBUG(
-      fprintf(SG_log(), "Shifter: skipping rejected stack with state %d\n",
-              SG_GETSTATE(SG_ST_STATE(st0)))
-    );
+    }
+    else {
+      IF_DEBUG(
+        fprintf(SG_log(), "Shifter: skipping rejected stack with state %d\n",
+                SG_GETSTATE(SG_ST_STATE(st0)))
+      );
+    }
   }
-    SG_DiscardShiftPairs();
+  SG_DiscardShiftPairs();
 
   old_active_stacks[(sg_tokens_read-1) % GC_CYCLE] = active_stacks;
   if (((sg_tokens_read-1) % GC_CYCLE) == (GC_CYCLE-1)) {
