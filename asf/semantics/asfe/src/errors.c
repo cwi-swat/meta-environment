@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "error.h"
+#include "errors.h"
 #include "evaluator.h"
 
 #include <aterm2.h>
