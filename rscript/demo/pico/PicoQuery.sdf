@@ -4,6 +4,9 @@ imports RscriptCalculator
 imports PicoExtraction %% should be only convertl
 
 exports
+
+  start-symbols Summary
+
   context-free syntax
 	pico-query(RSCRIPT, RSTORE, StrCon) 	-> Summary
 

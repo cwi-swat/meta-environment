@@ -15,7 +15,7 @@ exports
      BoolCon                                	-> Elem  
      Integer                               	-> Elem  
      String				    	-> Elem  
-     Location				    	-> Elem 
+     Location				    	-> Elem {prefer}
 
 %%     "*undefined*"				-> Elem 
 

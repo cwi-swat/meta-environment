@@ -27,7 +27,7 @@ button("Pico-syntax",
             push-filename("extracted-relations.trm"),
             parse("PicoExtraction", "RSTORE"),
             push-filename("extracted-relations.rstore"),
-	    push-modulename("RscriptCalculator"),
+	    push-modulename("Rstore"),
             activate-editor
           ]),
 
@@ -47,7 +47,7 @@ button("Pico-syntax",
 			 parse("RscriptCalculator", "RSTORE"),
 
 			 push-string("\"UNINIT-OCC\""),
-			 parse("basic/StrCon", "StrCon"),
+			 parse("RscriptCalculator", "StrCon"),
 
 			 apply("pico-query", "Summary", 3),
 			 push-modulename("PicoQuery"),
@@ -55,6 +55,8 @@ button("Pico-syntax",
 			 convert-feedback,
 			 show-feedback],
 		     [ message("Not a Pico program") ]
+
+
 	   )
            ])
 

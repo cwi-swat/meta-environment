@@ -16,4 +16,6 @@ rel[stat, var] UNINIT =
 rel[var, var-occ] UNINIT-OCC =
    { <V, VO> | <stat S, var V> : UNINIT, var-occ VO : OCCURS[V], VO <= S }
 
+yield UNINIT-OCC
+
                          

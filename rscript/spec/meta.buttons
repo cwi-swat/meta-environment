@@ -2,8 +2,8 @@ configuration([
 
  extension("Rscript", ".rscript"),
 
- button("Rscript",
-        [description(term-editor, menu(["Rscript", "Check"]))],
+ button("--disabled--Rscript",
+        [description(term-editor, menu(["Rscript", "Check (interpreted)"]))],
         [push-active-module,
          get-root,
 	 push-string("RSCRIPT"),
@@ -19,8 +19,9 @@ configuration([
 		]
          )
         ]),
+
  button("Rscript",
-        [description(term-editor, menu(["Rscript", "Check compiled"]))],
+        [description(term-editor, menu(["Rscript", "Check"]))],
         [push-active-module,
          get-root,
 	 push-string("RSCRIPT"),
@@ -29,7 +30,7 @@ configuration([
 	 if-equal([
          	apply("check-rscript", "Summary", 1),
 		unpack-tree,
-		execute-action("./RscriptChecker -t"),
+		execute-action("RscriptChecker -t"),
    		convert-feedback, 
  		show-feedback],
 		[ message("Not an Rscript")
@@ -46,11 +47,11 @@ button("Rscript",
 	   push-term(true),
 	   if-equal([
            	      	apply("check-rscript", "Summary", 1),
-           		push-modulename("RscriptChecker"),
-           		reduce,
+			unpack-tree,
+           		execute-action("RscriptChecker -t"),
 			convert-feedback,
 	   		dup,
- 			push-string("feedback(\"RscriptChecker\",\"Rscript\",[info(\"Rscript is type correct!\",[])])"),
+ 			push-string("summary(\"RscriptChecker\",\"Rscript\",[info(\"Rscript is type correct!\",[])])"),
            		parse("RscriptChecker", "Summary"),
 			convert-feedback,
            		if-equal([	push-active-module,
@@ -127,7 +128,7 @@ button("Rscript",
           ]),
 
  button("Rscript",
-	  [description(term-editor, menu(["Rscript", "Run interpreted"]))],
+	  [description(term-editor, menu(["Rscript", "Run (interpreted)"]))],
           [push-active-module,
            get-root,
            push-string("RSCRIPT"),

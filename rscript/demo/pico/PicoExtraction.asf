@@ -56,7 +56,7 @@ equations
        add-last(Stat*, $Loc, $Rstore) = add-pred(product($Bag, {$Loc}), $Rstore)
 
 [er-1] begin Decls Stat+ end := Program,
-       $Loc :=  location("", area(0,0,0,0,0,0)),
+       $Loc :=  area-in-file("", area(0,0,0,0,0,0)),
        $Rstore1 := assign(ROOT, area, $Loc, rstore()),
        $Rstore2 := assign(USES, rel[area,str], {}, $Rstore1),
        $Rstore3 := assign(OCCURS, rel[str,area], {}, $Rstore2),
@@ -67,12 +67,12 @@ equations
 
 [i2s] id2str(pico-id($Char*)) = strcon(""" $Char* """)
 
-[cvt-1] convert2feedback(<$StrCon, $Loc>) = error("Uninitialized variable", [subject($StrCon, $Loc)])
+[cvt-1] convert2error(<$StrCon, $Loc>) = error("Uninitialized variable", [localized($StrCon, $Loc)])
 
-[cvt-2] convert2feedbacklist({<$String, $Loc>, $Elem*}) = 
-	convert2feedback(<$String, $Loc>),  convert2feedbacklist({$Elem*})
+[cvt-2] convert2errorlist({<$String, $Loc>, $Elem*}) = 
+	convert2error(<$String, $Loc>),  convert2errorlist({$Elem*})
 
-[cvt-3] convert2feedbacklist({}) = 
+[cvt-3] convert2errorlist({}) = 
 
-[cvt-4]	convert2summary($Elem) = feedback("PicoQuery", "PicoQuery", [convert2feedbacklist($Elem)])
+[cvt-4]	convert2summary($Elem) = summary("PicoQuery", "PicoQuery", [convert2errorlist($Elem)])
 

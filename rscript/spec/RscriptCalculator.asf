@@ -57,7 +57,7 @@
 [S1]	eval-rstat(bool $Var, $Rstore) 		= assign-when-undef($Var, bool, true, $Rstore)
 [S2]	eval-rstat(int $Var, $Rstore)  		= assign-when-undef($Var, int, 0, $Rstore)
 [S3]	eval-rstat(str $Var, $Rstore)  		= assign-when-undef($Var, str, "", $Rstore)
-[S4]	eval-rstat(area $Var, $Rstore)		= assign-when-undef($Var, area, location("",area(0,0,0,0,0,0)), $Rstore)
+[S4]	eval-rstat(loc $Var, $Rstore)		= assign-when-undef($Var, loc, file(""), $Rstore)
 [S5]	eval-rstat(bag[$Etype] $Var, $Rstore)  	= assign-when-undef($Var, bag[$Etype], empty-bag, $Rstore)
 	
 [S6]	eval-rstat(rel[$Etype1, $Etype2] $Var, $Rstore) 
@@ -155,12 +155,12 @@
 %% ---- Specialized versions of evalx that return value of required type
 
 [EVP]	$BoolCon := evalx($Exp, $Rstore) ===> evalp($Exp, $Rstore) = $BoolCon
-[EVI]	$Integer := evalx($Exp, $Rstore)	===> evali($Exp, $Rstore) = $Integer
-[EVE1]	$Elem := evalx($Exp, $Rstore)   	===> evale($Exp, $Rstore) = $Elem
-[EVE2]	$Tuple := evalx($Exp, $Rstore)	===> evalt($Exp, $Rstore) = $Tuple
-[EVB1]	$Bag := evalx($Exp, $Rstore)     ===> evalb($Exp, $Rstore) = $Bag
-[EVR1]	$Rel := evalx($Exp, $Rstore)     ===> evalr($Exp, $Rstore) = $Rel
-[EVA1]	$Loc := evalx($Exp, $Rstore)    ===> evall($Exp, $Rstore) = $Loc
+[EVI]	$Integer := evalx($Exp, $Rstore) ===> evali($Exp, $Rstore) = $Integer
+[EVE1]	$Elem    := evalx($Exp, $Rstore) ===> evale($Exp, $Rstore) = $Elem
+[EVE2]	$Tuple   := evalx($Exp, $Rstore) ===> evalt($Exp, $Rstore) = $Tuple
+[EVB1]	$Bag     := evalx($Exp, $Rstore) ===> evalb($Exp, $Rstore) = $Bag
+[EVR1]	$Rel     := evalx($Exp, $Rstore) ===> evalr($Exp, $Rstore) = $Rel
+[EVA1]	$Loc     := evalx($Exp, $Rstore) ===> evall($Exp, $Rstore) = $Loc
 
 %% ---- The main evaluation function evalx
 
@@ -174,7 +174,7 @@
 
 [st1r]	evalx($String, $Rstore) = $String
 
-[area1]	evalx($Loc, $Rstore) = $Loc
+[loc1]	evalx($Loc, $Rstore) = $Loc
 
 [tup1]	evalx($Tuple, $Rstore) = $Tuple
 
@@ -672,7 +672,7 @@
 
 %% ---- Access functions for locations
 
-[fn]	evalx(filename($Exp), $Rstore)	=  get-filename(evall($Exp, $Rstore))
+[fn]	evalx(filename($Exp), $Rstore)	= get-filename(evall($Exp, $Rstore))
 
 [bl]	evalx(beginline($Exp), $Rstore) = get-begin-line(evall($Exp, $Rstore))
 

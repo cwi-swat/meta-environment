@@ -5,6 +5,8 @@ imports Rscript RSF Rviz
 exports 
   sorts RVALUE RSTORE
 
+  start-symbols RSTORE
+
   context-free syntax
 %% The values that a variable in the RSTORE may have
 
