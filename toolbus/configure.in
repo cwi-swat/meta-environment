@@ -64,7 +64,7 @@ AC_SUBST(ATERM)
 
 dnl Require toolbuslib library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
-   [  --with-toolbuslib=DIR        ToolBus library is in DIR])
+   [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 
 dnl Which additional adapters to build?
@@ -109,14 +109,14 @@ AC_ARG_WITH(wish,
 AC_SUBST(WISH_ADAPTER)
 
 AC_ARG_WITH(graphviz,
-  [  --with-graphviz=DIR           include dot support (same as --with-dot)],
-  DOT=${withval}
-  DOT_ADAPTER=dot-adapter
+   [  --with-graphviz=DIR     include dot support (same as --with-dot)],
+   DOT=${withval}
+   DOT_ADAPTER=dot-adapter
 )
 AC_ARG_WITH(dot,
-  [  --with-dot=DIR           add dot support (dot-adapter, graph layouting)],
-  DOT=${withval}
-  DOT_ADAPTER=dot-adapter
+   [  --with-dot=DIR          add dot support (dot-adapter, graph layouting)],
+   DOT=${withval}
+   DOT_ADAPTER=dot-adapter
 )
 AC_SUBST(DOT)
 AC_SUBST(DOT_ADAPTER)
