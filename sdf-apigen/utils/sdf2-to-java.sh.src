@@ -201,24 +201,20 @@ info "Generating ADT "
 ${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
              -i ${INPUT} -o ${BASE}.adt || bail_out
 
-info "Adding string support (?)"
-${CONCATADT} -o ${BASE}.adt ${BASE}.adt ${PKGDATA}/string.adt
-
 info "Generating java from ADT "
 ${ADTTOJAVA} ${VERBOSEOPT} ${VISITABLEOPT} \
              --input ${BASE}.adt --output ${OUTPUT} \
 	     --package ${PACKAGE} -n ${NAME}
 fi
 
-
-if [ ${GENBOTTOMSORT} -gt 0 ]; then
-  info "Overwriting CHARLIST_String.java"
-  sed "s@__PACKAGE__@${PACKAGE}.${LOWERNAME}@g;\
-       s@__NAME__@${CAPNAME}@g;\
-       s@__LOWERNAME__@${LOWERNAME}@g;\
-       s@__PACKAGEDECL__@${PACKAGEDECL}@g" \
-       < ${PKGDATA}/CHARLIST_String.java.template \
-       > ${OUTPUT}/${PACKAGE}/${LOWERNAME}/types/charlist/Chars.java
-fi
+#if [ ${GENBOTTOMSORT} -gt 0 ]; then
+#  info "Overwriting CHARLIST_String.java"
+#  sed "s@__PACKAGE__@${PACKAGE}.${LOWERNAME}@g;\
+#       s@__NAME__@${CAPNAME}@g;\
+#       s@__LOWERNAME__@${LOWERNAME}@g;\
+##       s@__PACKAGEDECL__@${PACKAGEDECL}@g" \
+#       < ${PKGDATA}/CHARLIST_String.java.template \
+#       > ${OUTPUT}/${PACKAGE}/${LOWERNAME}/types/charlist/Chars.java
+#fi
 
 # }}}

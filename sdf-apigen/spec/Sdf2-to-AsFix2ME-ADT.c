@@ -1775,9 +1775,53 @@ FUNC_EXIT ( make_nf1 ( lf_145sym , arg0 ) ) ;
 }
 }
 ATerm lf_137 ( ATerm arg0 ) {
+{
+ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_137sym , ATmakeAppl ( lf_137sym , arg0 ) ) ;
-FUNC_EXIT ( arg0 ) ;
+if ( check_sym ( arg0 , lf_14sym ) ) {
+{
+ATerm atmp00 = arg_0 ( arg0 ) ;
+if ( check_sym ( atmp00 , lf_13sym ) ) {
+{
+ATerm atmp000 = arg_0 ( atmp00 ) ;
+if ( check_sym ( atmp000 , lf_list_6sym ) ) {
+{
+ATerm atmp0000 = arg_0 ( atmp000 ) ;
+if ( not_empty_list ( atmp0000 ) ) {
+if ( term_equal ( list_head ( atmp0000 ) , make_char ( 34 ) ) ) {
+( tmp [ 0 ] = list_tail ( atmp0000 ) ) ;
+if ( not_empty_list ( tmp [ 0 ] ) ) {
+( tmp [ 1 ] = list_prefix ( tmp [ 0 ] ) ) ;
+if ( term_equal ( list_last ( tmp [ 0 ] ) , make_char ( 34 ) ) ) {
+FUNC_EXIT ( make_nf1 ( lf_14sym , make_nf1 ( lf_13sym , make_nf1 ( lf_list_6sym , cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 1 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+if ( check_sym ( arg0 , lf_8sym ) ) {
+{
+ATerm atmp00 = arg_0 ( arg0 ) ;
+if ( check_sym ( atmp00 , lf_7sym ) ) {
+{
+ATerm atmp000 = arg_0 ( atmp00 ) ;
+if ( check_sym ( atmp000 , lf_list_6sym ) ) {
+{
+ATerm atmp0000 = arg_0 ( atmp000 ) ;
+FUNC_EXIT ( make_nf1 ( lf_14sym , make_nf1 ( lf_13sym , make_nf1 ( lf_list_6sym , cons ( make_list_char ( 34 ) , cons ( make_list ( atmp0000 ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ;
+}
+}
+}
+}
+}
+}
 FUNC_EXIT ( make_nf1 ( lf_137sym , arg0 ) ) ;
+}
 }
 ATerm lf_54 ( ATerm arg0 ) {
 {

@@ -203,12 +203,12 @@ info "Generating ${OUTPUT} from ${INPUT}:"
 info " - Parsing ${INPUT} (${APITABLE})"
 ${SGLR} -p ${APITABLE} -s SDF -i ${INPUT} -o .api_1_$$ || err
 
-info " - Labeling ${INPUT} (parsed)"
-${APPLYFUNC} -f add-labels -s SDF -i .api_1_$$ -o .api_2_$$ || err
-${EVALUATOR} -e ${ADDLABELS} -i .api_2_$$ -o .api_3_$$ || err
+#info " - Labeling ${INPUT} (parsed)"
+#${APPLYFUNC} -f add-labels -s SDF -i .api_1_$$ -o .api_2_$$ || err
+#${EVALUATOR} -e ${ADDLABELS} -i .api_2_$$ -o .api_3_$$ || err
 
 info " - Generating ADT (${GENERATOR})"
-${APPLYFUNC} -f ${FUNC} -s ATerm < .api_3_$$ > .api_4_$$ || err
+${APPLYFUNC} -f ${FUNC} -s ATerm < .api_1_$$ > .api_4_$$ || err
 ${GENERATOR} < .api_4_$$ | ${UNPARSE} > ${OUTPUT} || err
 
 # }}}

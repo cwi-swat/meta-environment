@@ -2,8 +2,6 @@
 #include <aterm2.h>
 #include "__STEM__.h"
 
-typedef struct ATerm ___NAME__CHARLIST;
-
 static ATermList __NAME__convertStringToChars(char *str)
 {
   int i;
@@ -27,36 +25,6 @@ static char * __NAME__convertCharsToString(ATermList list)
 
   tmp[i] = '\0';
   return tmp;
-}
-
-ATbool __NAME__isValidCHARLIST(__NAME__CHARLIST arg)
-{
-  return ATtrue;
-}
-
-ATbool __NAME__isCHARLISTString(__NAME__CHARLIST arg)
-{
-  return ATtrue;
-}
-
-char*  __NAME__getCHARLISTString(__NAME__CHARLIST arg)
-{
-  return __NAME__convertCharsToString((ATermList) arg);
-}
-
-__NAME__CHARLIST  __NAME__setCHARLISTString(__NAME__CHARLIST arg, char *str)
-{
-  return (__NAME__CHARLIST) __NAME__convertStringToChars(str);
-}
-
-ATerm  __NAME__CHARLISTToTerm(__NAME__CHARLIST arg)
-{
-  return (ATerm) arg;
-}
-
-__NAME__CHARLIST __NAME__CHARLISTFromTerm(ATerm trm)
-{
-  return (__NAME__CHARLIST) trm;
 }
 
 __NAME__CHARLIST __NAME__makeCHARLISTString(char *str)

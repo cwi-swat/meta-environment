@@ -111,8 +111,11 @@ equations
   ===>
   build-asfix-charranges($CharRanges1 $CharRanges2) = [$AFArgs1,$AFArgs2]
 
-[equ-sdflit-to-lit]
-  sdflit-to-lit($Literal) = $Literal
+[equ-sdflit-to-lit-unquoted]
+  sdflit-to-lit(uqliteral($Char*)) = qliteral(""" $Char* """)
+
+[equ-sdflit-to-lit-quoted]
+  sdflit-to-lit(qliteral(""" $Char* """)) = qliteral(""" $Char* """)
 
 [equ-build-asfix-appl-args-empty]
   build-asfix-appl-args() =

@@ -13,7 +13,7 @@ public class PeanoTest {
 
   public PeanoTest(Factory factory) {
     this.factory = factory;
-    this.e = factory.makeOptLayout_Present(factory.makeCHARLIST_Chars(" "));
+    this.e = factory.makeOptLayout_Present(factory.makeCHARLIST(' '));
   }
 
   public Nat make(int n) {

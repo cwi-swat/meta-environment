@@ -176,7 +176,7 @@ fi
 
 if [ ${ONLYBOTTOM} -eq 0 ]; then
   info " generating C from ADT "
-  set -x
+
   ${ADTTOC} ${COMPATTERMOPT} ${VERBOSEOPT} \
                --input ${OUTPUT}.adt --prefix ${PREFIX} \
 	       --prologue ${OUTPUT}.pro \
