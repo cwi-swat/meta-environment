@@ -309,8 +309,8 @@ ATerm open_eqs_text_file(int cid, char *name)
   if((full = find_newest_in_path(fullname))) {
     t = read_raw_from_named_file(full, name);
   } else {
-    ATfprintf(stderr,"no such file: %s.eqs\n", name);
-    t = open_error(name);
+    ATfprintf(stderr,"no such file: %s\n", fullname);
+    t = open_error(fullname);
   }
   return t;
 }
