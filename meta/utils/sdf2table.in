@@ -40,15 +40,15 @@ done
 for f in $Files
 do
 	base=`dirname $f`/`basename $f .sdf2`
-	af2name=$base.asfix1
+	af1name=$base.asfix1
 	tblname=$base.tbl
 	Notify "Parsing $f..."
-	if $PARSER $OPTS $f -o $af2name
+	if $PARSER $OPTS $f -o $af1name
 	then
 	        Notify "Generating parse table ..."
-	        if $GENERATOR $OPTS $af2name
+	        if $GENERATOR $OPTS $af1name
 		then
-			:
+			rm -f $af1name
 		else
 			echo "Error rewriting $f"	>&2	
 			ERROR=1

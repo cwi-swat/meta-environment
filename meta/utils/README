@@ -1,0 +1,90 @@
+                                     $ Id: $
+
+README for utils/*
+~~~~~~~~~~~~~~~~~~
+
+
+Contents
+
+  gen-table
+  parse-sdf2
+  sdf2table
+  Sdf2.baf
+
+
+Descriptions
+
+
+    Name
+
+      gen-table
+    
+    Synopsis
+
+      gen-table [-v] AsFix-File-0 ... AsFix-File-n
+
+    Description
+
+      From AsFix representations of syntax definitions, specified
+      as arguments, gen-table builds parse tables.  Input files
+      can be in Asfix2 or AsFix1 format, but it should be noted
+      that file extensions are used to determine the format:
+      ".asfix2" is taken to be an AsFix2 file, and ".asfix1"/".asfix"
+      are considered to be AsFix1.  Options are:
+
+        -v   switches gen-table into a more verbose operating mode
+
+
+
+    Name
+
+      parse-sdf2
+
+    Synopsis
+
+      parse-sdf2 [-12] [-dlv] [-o outfile] Sdf2-File-0 ... Sdf2-File-n
+
+    Description
+
+      The SDF2 input files are parsed, and the resulting parse tree
+      is written into AsFix format.  Options are:
+
+        -1   write files in AsFix1 output (with "asfix1" extension)
+
+        -2   write files in AsFix2 output (with "asfix2" extension)
+
+        -d   switch parser into debugging mode
+
+        -l   tells parser to log a few obscure statistics
+
+        -v   switches into verbose operating mode
+
+        -o _file_
+             write output to file (note: does not combine well with
+             multiple input files)
+
+
+    Name
+
+      sdf2table
+    
+    Synopsis
+
+      sdf2table [-v] Sdf2-File-0 ... Sdf2-File-n
+
+    Description
+
+      Builds parse tables for the specified SDF2 input files,
+      writing output (if successful) into correspondingly named
+      files with `tbl' extension.  Options are:
+
+        -v   verbose operating mode
+
+
+    Name
+
+      Sdf2.baf
+    
+    Description
+
+      This is the parse table for SDF2.
