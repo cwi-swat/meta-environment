@@ -1,5 +1,5 @@
 
-EXTRA_DIST = asf-library-config.src
+EXTRA_DIST = $(wildcard *.src) $(wildcard *.sh)
 
 bin_SCRIPTS = asf-library-config 
 noinst_SCRIPTS = gen-protos.sh gen-forward.sh
