@@ -148,11 +148,11 @@ equations
                             "+" 
                             processexpr2box(ProcessExpr2)])
 
-[processexpr2box-bracket]
-  ( ProcessExpr ) = 
-    box2processexpr(V vs=1 ["("
-                            I [processexpr2box(ProcessExpr)]
-                            ")"]) 
+%%[processexpr2box-bracket]
+%%  ( ProcessExpr ) = 
+%%    box2processexpr(V vs=1 ["("
+%%                            I [processexpr2box(ProcessExpr)]
+%%                            ")"]) 
 
 [processexpr2box-star]
   ProcessExpr1 * ProcessExpr2 =
