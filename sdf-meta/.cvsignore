@@ -1,0 +1,11 @@
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache
+config.log
+config.status
+configure
+toolbus-java-adapter-*.jar
+toolbus-java-adapter-*.pkg
+toolbus-java-adapter-*.tar.gz
+toolbus-java-adapter-config

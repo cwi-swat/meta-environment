@@ -1,0 +1,15 @@
+package 
+identification
+   name=sdf-meta
+   version=0.1
+   location=http://www.cwi.nl/projects/MetaEnv/sdf-meta
+   info=http://www.cwi.nl/projects/MetaEnv/sdf-meta
+   description='The basic implementation of an SDF IDE'
+   keywords=meta-environment, SDF, grammars 
+
+configuration interface
+
+requires
+   aterm-java 1.6
+
+

@@ -1,0 +1,15 @@
+SDF META
+--------
+
+This package will contain the SDF layer around the kernel
+Meta-Environment.  It should provide an SDF programming environment,
+as well as the base implementation for other SDF-based languages
+(like ASF+SDF).
+
+This package will incrementally grow as more components are moved from
+the following packages to this one, possibly originating from:
+	- meta (toolbus scripts, sdf specific components)
+	- sdf-support (import graph builder, sdf-modules, etc)
+
+This package should not only provide the environment, but also the
+commandline tools for dealing with *modular* SDF.
