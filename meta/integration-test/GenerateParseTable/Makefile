@@ -2,6 +2,8 @@
 
 include ../Metarules.include
 
+all:
+
 test: $(PICO).tbl
 
 clean:
