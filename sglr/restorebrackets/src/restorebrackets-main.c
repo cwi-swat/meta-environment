@@ -38,7 +38,7 @@ static PT_Args RestoreBracketsInArgs(PT_Args args, parse_table *pt)
 
   if (!PT_isEqualTree(head, newHead) ||
       !PT_isEqualArgs(tail, newTail)) {
-    return PT_makeArgsList(newHead, newTail);
+    return PT_makeArgsMany(newHead, newTail);
   }
   else {
     return args;
@@ -68,7 +68,7 @@ static PT_Args AddBracketsToArgsIfNeeded(int label,
 
   if (!PT_isEqualTree(head, newHead) ||
       !PT_isEqualArgs(tail, newTail)) {
-    return PT_makeArgsList(newHead, newTail);
+    return PT_makeArgsMany(newHead, newTail);
   }
   else {
     return args;
@@ -89,11 +89,11 @@ static PT_Tree AddBrackets(PT_Tree tree, parse_table *pt)
     PT_Symbol closeBracketSym = PT_getSymbolsSymbolAt(bracketSymbols, 4);
     PT_Tree openBracket = PT_TreeFromTerm(PT_SymbolToTerm(openBracketSym));
     PT_Tree closeBracket = PT_TreeFromTerm(PT_SymbolToTerm(closeBracketSym));
-    PT_Args newArgs = PT_makeArgsList(closeBracket,PT_makeArgsEmpty());
-    newArgs = PT_makeArgsList(PT_makeTreeLayoutEmpty(), newArgs);
-    newArgs = PT_makeArgsList(tree, newArgs);
-    newArgs = PT_makeArgsList(PT_makeTreeLayoutEmpty(), newArgs);
-    newArgs = PT_makeArgsList(openBracket, newArgs);
+    PT_Args newArgs = PT_makeArgsSingle(closeBracket);
+    newArgs = PT_makeArgsMany(PT_makeTreeLayoutEmpty(), newArgs);
+    newArgs = PT_makeArgsMany(tree, newArgs);
+    newArgs = PT_makeArgsMany(PT_makeTreeLayoutEmpty(), newArgs);
+    newArgs = PT_makeArgsMany(openBracket, newArgs);
     return PT_makeTreeAppl(bracketProd, newArgs);
   }
   else {

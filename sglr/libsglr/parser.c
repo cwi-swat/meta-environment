@@ -12,6 +12,8 @@
 #include <string.h>
 #include <assert.h>
 
+#include <MEPT-utils.h>
+#include <Error.h>
 #include <aterm2.h>
 
 #include "parser.h"
@@ -21,7 +23,6 @@
 #include "sglr-strings.h"
 #include "rsrc-usage.h"
 
-#include <MEPT-utils.h>
 
 
 /*
