@@ -1,4 +1,11 @@
 equations
 
-    [bc-1'1] bytes(Char*1) || bytes(Char*2) =
-                bytes(Char*1 Char*2)
+  [c-1] text2btext() =
+
+  [c-2] text2btext(string string*) = string2bytes(string) text2btext(string*)
+  [c-3] bytes := string-to-bytes(string)
+        ===>
+        string2bytes(string) = bytes || newlinechar
+
+  [bc-1'3] bytes(Char+1) || bytes(Char+2) =
+             bytes(Char+1 Char+2)

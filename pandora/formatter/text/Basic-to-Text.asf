@@ -5,22 +5,24 @@ equations
 %% take care of the case in which the right margin is explicitly given.
 %%\smallskip
 
-  [BtT1'0]   box2text(B) = text(B)
-  [BtT1'0]   box2text(B,Int) = text(B,Int)
+  [BtT1'0]   Text := text(B)
+             ===>
+             box2text(B) = text2btext(Text)
+%%  [BtT1'0]   box2text(B,Int) = string2bytes(text(B,Int))
 
-  [BtT1'1]   text() = bytes()
+  [BtT1'1]   text() = ""
 
-  [BtT1'2]   text(,Int) = bytes()
+  [BtT1'2]   text(,Int) = ""
 
   [BtT1'3]   Point1 & Defs := make frame,
-             Text && Point2 := place B with Point1 & Defs and bytes() && Point1 and V
-             ===>
+             Text && Point2 := place B with Point1 & Defs and "" && Point1 and V
+             ==================================================================
              text(B) = Text
 
   [BtT1'4]   Frame := make frame,
              Point1 & Defs := set rmargin Int in Frame,
-             Text && Point2 := place B with Point1 & Defs and bytes() && Point1 and V
-             ===>
+             Text && Point2 := place B with Point1 & Defs and "" && Point1 and V
+             ==================================================================
              text(B,Int) = Text
 
 %% The function {\tt place \_ with \_ and \_ and \_} considers all possible elements in the
@@ -33,20 +35,20 @@ equations
 
   [BtT2'1]   String2 := deslash(String1),
              Text2 :=
-               addToLastLine(Text1,
+               add to last line (Text1,
                                string of X1 - X2 layoutchars || String2)
-             ===>
+             =======
              place String1 with (X1,Y) & Defs and Text1 && (X2,Y) and 'C =
                Text2 && (X1 + length of String2,Y)
 
   [BtT2'2]   Y1 != Y2
              ========
              place String with (X1,Y1) & Defs and Text1 && (X2,Y2) and 'C =
-               place String with (X1,Y1) & Defs and Text1 || newlinechar && (0,Y2 + 1) and 'C
+               place String with (X1,Y1) & Defs and Text1 "" && (0,Y2 + 1) and 'C
 
   [BtT2'3]   Text2 :=
-               addToLastLine(Text1,
-                             string of X1 - X2 layoutchars || String)
+               add to last line (Text1,
+                               string of X1 - X2 layoutchars || String)
              =======
              place String (X,Y) with (X1,Y1) & Defs and Text1 && (X2,Y1) and 'C =
                Text2 && (X1 + X,Y1)
@@ -54,7 +56,7 @@ equations
   [BtT2'4]   Y1 != Y2
              ========
              place String Point with (X1,Y1) & Defs and Text1 && (X2,Y2) and 'C =
-               place String Point with (X1,Y1) & Defs and Text1 || newlinechar && (0,Y2 + 1) and 'C
+               place String Point with (X1,Y1) & Defs and Text1 "" && (0,Y2 + 1) and 'C
 
 %% The equations \ref{Eq:BtT2'5} through \ref{Eq:BtT2'7} deal with the box operator {\sf H}.
 %% The space between two boxes is calculated only once. The auxilary
@@ -282,4 +284,8 @@ equations
 %%%  [default-BtT8'2] dplace B with Frame and Struct and 'C =
 %%%                     place "*** unprintable box expression ***" with Frame and Struct and 'C
 
-  [BtT9'1]   addToLastLine(Text, String) = Text || string-to-bytes(String)
+  [BtT9'1]   String3 := String1 || String2
+             ====>
+             add to last line (String1, String2) = String3
+
+  [BtT9'2]   add to last line (Text String1, String2) = Text String1 || String2
