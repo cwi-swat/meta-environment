@@ -1,5 +1,25 @@
 # $Id$
 
+Wed Sep 1 14:20:06 CEST 2004 <fagidiot@daimi.au.dk>
+ * tbscripts/button-actions.tb:
+   - process LocateFile, added
+      extra-mod-path-hook.
+ * tbscripts/module-utils.tb:
+   - process CheckModuleConsistency, added
+      do-consistency-check-hook.
+   - process TermStoreActivation, added
+      get-modulenames-for-consistency-checking-hook,
+      termstore-consistency-check-hook.
+ * tbscripts/open-modules.tb:
+   - process OpenSyntax, added
+      set-module-syntax-text-hook,
+      get-open-syntax-parse-handler-hook.
+ * tbscripts/process-eqs.tb:
+   - process ParseEquationsText, added
+      get-parse-equation-checking-hook.
+   - process GetAsfModule, added 
+      get-asf-equations-text-hook.
+	
 Tue Aug 17 13:34:17 CEST 2004 <kooiker@cwi.nl>
  * editors/text/gvim/connector.c:
    - Escape double quotes in displayMessage
