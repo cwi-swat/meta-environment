@@ -1,5 +1,12 @@
 # $Id$
 
+2003/05/20 ({jurgenv,jong}@cwi.nl)
+ * added a number of new functions to the in-output tool:
+   - find-file: searches a file in a given number of paths
+   - compare-files: checks if filenames point to the same file on the system
+   - get-filename: construct filename from dir+name+ext
+ * renamed some functions in the in-output tool
+
 2003/05/19 (jurgenv@cwi.nl)
  * Moved term-store tool to toplevel
  * Copied sdf specific functionality from module-db to sdf-modules tool
