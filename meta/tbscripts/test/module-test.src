@@ -29,6 +29,8 @@ toolbus="__TOOLBUS__/bin/toolbus \
            -I__TOP_SRCDIR__/module-db \
            -I__TOP_SRCDIR__/tbscripts"
 
+PATH=${PATH}:__SGLR__/bin
+PATH=${PATH}:__TOP_BUILDDIR__/module-db
 
 tests=0
 failed=0    

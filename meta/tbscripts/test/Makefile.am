@@ -22,20 +22,25 @@
 
 TESTS       = toolbus-test module-test parser-test
 
-noinst_SCRIPTS = ambi-test.tb
+TBSCRIPTS = new-eqs-test.tb.src new-module-test-1.tb.src \
+            new-module-test-2.tb.src new-module-test-3.tb.src \
+            open-sdf2-lang-test.tb.src open-table-test-1.tb.src \
+            open-table-test-2.tb.src update-test-module.tb.src \
+            ambi-test.tb.src
 
 EXTRA_DIST  = toolbus-test.src module-test.src parser-test.src \
-              new-eqs-test.tb new-module-test-1.tb new-module-test-2.tb \
-              new-module-test-3.tb open-sdf2-lang-test.tb \
-              open-table-test-1.tb open-table-test-2.tb update-test-module.tb \
               Empty.sdf Empty.sdf.baf AmbiLanguage.baf ambi-test.tb.src \
-              Pico-Booleans.sdf Pico-Booleans.sdf.baf
+              Pico-Booleans.sdf Pico-Booleans.sdf.baf \
+              ${TBSCRIPTS}
 
-CLEANFILES  = $(TESTS)
+noinst_SCRIPTS = ${TBSCRIPTS:.src=}
+
+CLEANFILES  = $(TESTS) ${TBSCRIPTS:.src=}
 
 % : %.src Makefile
 	sed 's@__TOOLBUS__@$(TOOLBUS)@g;\
              s@__TOP_SRCDIR__@$(top_srcdir)@g; \
+             s@__TOP_BUILDDIR__@$(top_builddir)@g; \
              s@__SRCDIR__@$(srcdir)@g; \
              s@__SGLR__@$(SGLR)@g; \
 	     s@__DATADIR__@$(datadir)@g' < $< > $@ && \
