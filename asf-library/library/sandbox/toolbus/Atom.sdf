@@ -2,6 +2,7 @@ module Atom
 imports Terms
 
 exports
+  context-free start-symbols Atom AtomArgs ProcessName
   sorts Atom AtomArgs ProcessName
 
   lexical restrictions
@@ -34,4 +35,3 @@ context-free syntax
 "delta" -> Atom {cons("delta")}
 "tau" -> Atom {cons("tau")}
 Var ":=" Term -> Atom {cons("assignment")}
-

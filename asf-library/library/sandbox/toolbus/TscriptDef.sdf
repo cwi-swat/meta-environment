@@ -5,6 +5,7 @@ imports TComment
 imports ToolDef
 
 exports
+  context-free start-symbols TscriptDef
   sorts TscriptDef
 
   context-free syntax

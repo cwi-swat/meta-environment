@@ -2,11 +2,17 @@ module ProcessExpr
 
 imports Atom TimeExpr
 
-exports sorts ProcessExpr
-exports sorts ProcessInvocation
-exports sorts ProcessCreation
+exports
+  context-free start-symbols ProcessExpr
+  sorts ProcessExpr
 
-exports context-free syntax
+  context-free start-symbols ProcessInvocation
+  sorts ProcessInvocation
+
+  context-free start-symbols ProcessCreation
+  sorts ProcessCreation
+
+context-free syntax
     Atom -> ProcessExpr {cons("atomProcExpr")}
     Atom TimeExpr -> ProcessExpr {cons("atomTimeExpr")}
     "create""("ProcessInvocation"," GenVar")" -> ProcessCreation {cons("createProcArgs")}
@@ -16,48 +22,29 @@ exports context-free syntax
     ProcessCreation -> ProcessExpr {cons("procCreaExpr")}
 
 exports context-free syntax
-  ProcessExpr "."
-ProcessExpr -> ProcessExpr {left, cons("seqComp")}
+  ProcessExpr "." ProcessExpr -> ProcessExpr {left, cons("seqComp")}
 
 exports context-free syntax
-  ProcessExpr
-"+"
-ProcessExpr -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr3")}
+  ProcessExpr "+" ProcessExpr -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr3")}
 
 exports context-free syntax
-  ProcessExpr "*"
-ProcessExpr -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr1")}
+  ProcessExpr "*" ProcessExpr -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr1")}
 
 exports context-free syntax
-  ProcessExpr
-"||"
-ProcessExpr -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr2")}
+  ProcessExpr "||" ProcessExpr -> ProcessExpr {left, cons("ProcessExpr-ProcessExpr2")}
 
 exports context-free syntax
-"("
-  ProcessExpr
-")"
--> ProcessExpr %% {bracket} removed for prettyprinting purposes
+"(" ProcessExpr ")" -> ProcessExpr %% {bracket} removed for prettyprinting purposes
  
 exports context-free syntax
-"if"
-  Term
-"then"
-  ProcessExpr
-"fi" -> ProcessExpr {cons("ifthen")}
+"if" Term "then" ProcessExpr "fi" -> ProcessExpr {cons("ifthen")}
 
 exports context-free syntax
-"if"
-  Term
-"then"
-  ProcessExpr
-"else"
-  ProcessExpr
-"fi" -> ProcessExpr {cons("ifthenelse")}
+"if" Term "then" ProcessExpr "else" ProcessExpr "fi"
+  -> ProcessExpr {cons("ifthenelse")}
 
   context-free priorities
     ProcessExpr "." ProcessExpr -> ProcessExpr {cons("seqComp")} >
     ProcessExpr "*" ProcessExpr -> ProcessExpr {cons("ProcessExpr-ProcessExpr1")} >
     ProcessExpr "||" ProcessExpr -> ProcessExpr {cons("ProcessExpr-ProcessExpr2")} >
     ProcessExpr "+" ProcessExpr -> ProcessExpr {cons("ProcessExpr-ProcessExpr3")}
-

@@ -1,4 +1,5 @@
 module VarDecls
+
 imports Terms
 
 exports
@@ -8,5 +9,4 @@ exports context-free syntax
     Var":" Term -> VarDecl {cons("vardecl")}
 
 exports context-free syntax
-    {VarDecl","
-} * -> VarDecls {cons("varDeclStar")}
+    {VarDecl"," } * -> VarDecls {cons("varDeclStar")}
