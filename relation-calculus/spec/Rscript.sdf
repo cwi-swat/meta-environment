@@ -121,7 +121,7 @@ exports
 
      YIELD DCLRVAR				-> RSTAT
 
-     "type" RVAR "=" "<" {DCLRVAR ","}+ ">"	-> RSTAT
+     "type" RVAR "="  "<" {DCLRVAR ","}+ ">" 	-> RSTAT
      "type" RVAR "=" REXPTYPE			-> RSTAT
 
      YIELD DCLRVAR "=" REXP                 	-> INITVAR
