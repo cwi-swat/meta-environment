@@ -5,6 +5,7 @@ imports
         Modular-Sdf-Normalization
         Priority-Sdf-Normalization
         Regular-Sdf-Normalization
+        Lifting-Sdf-Normalization
         Literals-Sdf-Normalization
         Sorts-Sdf-Normalization
         Restrictions-Sdf-Normalization

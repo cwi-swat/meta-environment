@@ -1,0 +1,31 @@
+module Lifting-Sdf-Normalization
+
+
+imports sdf2/syntax/Regular
+        sdf2/syntax/Literals
+        sdf2/syntax/Lifting
+        sdf2/syntax/Sorts
+        Kernel-Sdf-Normalization
+
+exports
+
+context-free syntax
+
+  "lift[[" Grammar "]]" -> Grammar
+
+hiddens
+
+context-free syntax
+    lift(Grammar)   -> Grammar {traversal(trafo, top-down, break)}
+    lift(Symbol)    -> Symbol {traversal(trafo, top-down, break)}
+    sym2syntax(Symbol) -> Symbol 
+
+hiddens
+  variables 
+    "_G"[0-9\']*        -> Grammar  
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+
+    [p][0-9\']*         -> Production 
+    [n][0-9\']*         -> NatCon 
+    "c*"[0-9\']*        -> CHAR*

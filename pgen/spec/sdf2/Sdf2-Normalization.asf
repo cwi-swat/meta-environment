@@ -20,16 +20,17 @@ equations
 %% from those top sorts.
 
   [0]   m[[d]](M) = _G1,
-        b[[ _G1 ]] = _G2,
-        a[[ _G2 ]] = _G3,
-        topsorts[[ _G3 ]](_A) = _G4,
-        r[[ _G4 ]] = _G5,
-        p[[ _G5 ]] = _G6,
-        q[[ _G6 ]] = _G7,
-        l[[ _G7 ]] = _G8,
-        k[[ _G8 ]] = _G9
+        lift[[_G1]] = _G2,
+        b[[ _G2 ]] = _G3,
+        a[[ _G3 ]] = _G4,
+        topsorts[[ _G4 ]](_A) = _G5,
+        r[[ _G5 ]] = _G7,
+        p[[ _G7 ]] = _G8,
+        q[[ _G8 ]] = _G9,
+        l[[ _G9 ]] = _G10,
+        k[[ _G10 ]] = _G11
         ================
-        normalize[[definition d]](M, _A) = _G9
+        normalize[[definition d]](M, _A) = _G11
 
 %% <PO> rhs was: reachable({<Start>}, _G8)
 
