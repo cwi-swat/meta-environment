@@ -2,6 +2,7 @@
  * Changed -v option of addPosInfo to -V option
  * Set version of addPosInfo to 1.2
  * Bumped to pt-support to 0.9beta
+ * All tools now print version on stderr
 
 2002/02/07 (jurgenv@cwi.nl)
  * Release 0.8
