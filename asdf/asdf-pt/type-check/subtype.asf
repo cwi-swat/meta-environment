@@ -44,10 +44,6 @@ equations
 	    ====================================================
 	    subtype-of(($TY1, $TY1*), ($TY2, $TY2*), $STS) = yes 
 	     
-[subtype-10] subtype-of(($TY*), data, $STS) = yes
-
-[subtype-11] subtype-of(data, ($TY*), $STS) = yes
-
 [subtype-12] subtype-of($TY, datum, $STS) = yes
 
 [subtype-13] subtype-of($TY, data, $STS) = yes

@@ -3,6 +3,7 @@ module type-check/tc-actions
 imports
 
   type-check/tc-dataop
+  type-check/tc-unfolding
 
 exports 
 

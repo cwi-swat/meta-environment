@@ -194,9 +194,13 @@ equations
 
 [tca-unfolding] 
 
-    typecheck-action(unfolding $A, $TY, $EN) = typecheck-action($A, $TY, $EN)
+    typecheck-action(unfolding $A, $TY, $EN) = fix(3, $A, $TY, $EN)
 
-[tca-unfold] typecheck-action(unfold, $TY, $EN) = AR[nor=data, exc=data, yes]
+[tca-unfold] 
+
+    action[using $TY1 giving $TY2 raising $TY3] := get-unfold-type($EN)
+    ===================================================================
+    typecheck-action(unfold, $TY, $EN) = AR[nor=$TY2, exc=$TY3, no]
 
 [tca-recursively] 
 
