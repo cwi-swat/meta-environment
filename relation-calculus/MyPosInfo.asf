@@ -2,7 +2,7 @@ equations
 
 [c1] convert(literal(Char*)) = strcon(Char*)
 
-[ga-1] get-area(X) = area(convert(get-path(X)), 
+[ga-1] get-area(X) = area(get-path(X), 
 			     get-start-line(X), 
 			     get-start-column(X), 
 			     get-end-line(X), 

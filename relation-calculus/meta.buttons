@@ -1,0 +1,18 @@
+buttons([
+   button("Pico-syntax",
+          "term",
+          ["Actions", "Undefined Vars"],
+          [get-root,
+           check-sort("PROGRAM"),
+           apply("analyze", "List", 1),
+           push-modulename("PosAnalysis"),
+           reduce,
+           execute-action("unparsePT"),
+           show-list]),
+
+    button("*",
+          "message-list",
+          ["ShowSource"],
+          [show-area("Pico-syntax")]) 
+
+])
