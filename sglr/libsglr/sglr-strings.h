@@ -39,10 +39,12 @@
 #define SG_OFFSET_AFUN       "char"
 #define SG_LEFTPRIO_AFUN     "left-prio"
 #define SG_RIGHTPRIO_AFUN    "right-prio"
+#define SG_NONASSOCPRIO_AFUN "non-assoc-prio"
 
 /* Symbols */
 #define SG_LEFTPRIO_SYMBOL     "left-prio"
 #define SG_RIGHTPRIO_SYMBOL    "right-prio"
+#define SG_NONASSOCPRIO_SYMBOL "non-assoc-prio"
 
 /*  Attributes  */
 

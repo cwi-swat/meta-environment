@@ -83,6 +83,7 @@ ATermList     SG_LookupGtrPriority(parse_table *pt, label l);
 ATermInt      SG_GetATint(int l, size_t numprods);
 ATbool SG_IsLeftAssociative(parse_table *pt, label l);
 ATbool SG_IsRightAssociative(parse_table *pt, label l);
+ATbool SG_IsNonAssocAssociative(parse_table *pt, label l);
 
 actionkind    SG_ActionKind(action a);
 ATbool        SG_ReduceAction(action a);

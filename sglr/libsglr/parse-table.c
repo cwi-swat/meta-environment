@@ -33,7 +33,8 @@
 
 token SG_EOF_Token;
 token SG_Zero_Token;
-AFun  SG_GtrPrio_AFun, SG_LeftPrio_AFun, SG_RightPrio_AFun,
+AFun  SG_GtrPrio_AFun, SG_LeftPrio_AFun, SG_RightPrio_AFun, 
+      SG_NonAssocPrio_AFun,
       SG_Shift_AFun, SG_Reduce_AFun, SG_ReduceLA_AFun, SG_Accept_AFun,
       SG_Appl_AFun, SG_Regular_AFun, SG_Reject_AFun,
       SG_Eager_AFun, SG_Uneager_AFun,
@@ -46,7 +47,7 @@ AFun  SG_GtrPrio_AFun, SG_LeftPrio_AFun, SG_RightPrio_AFun,
       SG_SndValue_AFun, SG_Character_AFun, SG_Line_AFun, SG_Col_AFun,
       SG_Offset_AFun;
 
-ATerm SG_LeftPrio_Symbol, SG_RightPrio_Symbol;
+ATerm SG_LeftPrio_Symbol, SG_RightPrio_Symbol, SG_NonAssocPrio_Symbol;
 
 /*}}}  */
 
@@ -71,8 +72,9 @@ void SG_InitPTGlobals(void)
   SG_AFUN_INIT(SG_Amb_AFun,         ATmakeAFun(SG_AMB_AFUN,         1, ATfalse));
 
   SG_AFUN_INIT(SG_GtrPrio_AFun,     ATmakeAFun(SG_GTRPRIO_AFUN,     2, ATfalse));
-	SG_AFUN_INIT(SG_LeftPrio_AFun,    ATmakeAFun(SG_LEFTPRIO_AFUN,    2, ATfalse));
-	SG_AFUN_INIT(SG_RightPrio_AFun,    ATmakeAFun(SG_RIGHTPRIO_AFUN,    2, ATfalse));
+  SG_AFUN_INIT(SG_LeftPrio_AFun,     ATmakeAFun(SG_LEFTPRIO_AFUN,    2, ATfalse));
+  SG_AFUN_INIT(SG_RightPrio_AFun,    ATmakeAFun(SG_RIGHTPRIO_AFUN,    2, ATfalse));
+  SG_AFUN_INIT(SG_NonAssocPrio_AFun, ATmakeAFun(SG_NONASSOCPRIO_AFUN, 2, ATfalse));
 	
   SG_AFUN_INIT(SG_Shift_AFun,       ATmakeAFun(SG_SHIFT_AFUN,       1, ATfalse));
   SG_AFUN_INIT(SG_Reduce_AFun,      ATmakeAFun(SG_REDUCE_AFUN,      3, ATfalse));
@@ -108,8 +110,9 @@ void SG_InitPTGlobals(void)
   SG_AFUN_INIT(SG_Col_AFun,         ATmakeAFun(SG_COL_AFUN,         1, ATfalse));
   SG_AFUN_INIT(SG_Offset_AFun,      ATmakeAFun(SG_OFFSET_AFUN,      1, ATfalse));
 
-  SG_ATRM_INIT(SG_LeftPrio_Symbol,    ATparse(SG_LEFTPRIO_SYMBOL));
-  SG_ATRM_INIT(SG_RightPrio_Symbol,   ATparse(SG_RIGHTPRIO_SYMBOL));
+  SG_ATRM_INIT(SG_LeftPrio_Symbol,     ATparse(SG_LEFTPRIO_SYMBOL));
+  SG_ATRM_INIT(SG_RightPrio_Symbol,    ATparse(SG_RIGHTPRIO_SYMBOL));
+  SG_ATRM_INIT(SG_NonAssocPrio_Symbol, ATparse(SG_NONASSOCPRIO_SYMBOL));
 
   inited = ATtrue;
 }
@@ -351,6 +354,16 @@ ATbool SG_IsRightAssociative(parse_table *pt, label l)
 	ATerm assoc = ATtableGet(SG_PT_ASSOCIATIVITIES(pt), (ATerm) SG_GetATint(l, 0));
 
 	return ATisEqual(assoc, SG_RightPrio_Symbol);
+}
+
+/*}}}  */
+/*{{{  ATbool SG_IsNonAssocAssociative(parse_table *pt, label l) */
+
+ATbool SG_IsNonAssocAssociative(parse_table *pt, label l)
+{
+	ATerm assoc = ATtableGet(SG_PT_ASSOCIATIVITIES(pt), (ATerm) SG_GetATint(l, 0));
+
+	return ATisEqual(assoc, SG_NonAssocPrio_Symbol);
 }
 
 /*}}}  */
@@ -775,7 +788,7 @@ void SG_AddPTGrammar(parse_table *pt, ATermList grammar)
 
 /*}}}  */
 
-enum SG_PRIORITIES { P_IGNORE, P_GTR, P_LEFT, P_RIGHT };
+enum SG_PRIORITIES { P_IGNORE, P_GTR, P_LEFT, P_RIGHT, P_NONASSOC };
 
 /*{{{  void SG_AddPTPriorities(parse_table *pt, register ATermList prios) */
 
@@ -796,6 +809,8 @@ void SG_AddPTPriorities(parse_table *pt, register ATermList prios)
       ptype = P_LEFT;
     } else if(ATisEqualAFun(fun, SG_RightPrio_AFun)) {
       ptype = P_RIGHT;
+    } else if(ATisEqualAFun(fun, SG_NonAssocPrio_AFun)) {
+      ptype = P_NONASSOC;
     } else {
       ptype = P_IGNORE;
     }
@@ -833,6 +848,13 @@ void SG_AddPTPriorities(parse_table *pt, register ATermList prios)
                        SG_RightPrio_Symbol);
           }
           break;
+	case P_NONASSOC:
+	/* register non-assoc  associative productions */
+	  if(ATisEqual(pr_num1, pr_num2)) {
+            ATtablePut(SG_PT_ASSOCIATIVITIES(pt), (ATerm) pr_num1,
+                       SG_NonAssocPrio_Symbol);
+	  }
+	  break;
         default:
           break;
       }

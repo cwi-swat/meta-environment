@@ -1,6 +1,8 @@
 $Id$
 
 2001/12/17 (vandenbr@loria.fr)
+ * SGLR ignored the non-assoc attribute when processing the
+   parse table.
  * Added basic functionality to enable restoring of brackets.
  * Released version 3.6beta.
 
