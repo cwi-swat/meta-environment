@@ -340,6 +340,9 @@ ATerm open_eqs_asfix_file(int cid, char *name)
   if((full = find_newest_in_path(fullname))) {
     t = read_term_from_named_file(full, name, ATfalse);
   } else {
+    if(run_verbose) {
+      ATwarning("no such file: %s\n", fullname);
+    }
     t = open_error(name);
   }
   return t;
@@ -358,7 +361,7 @@ ATerm open_eqs_text_file(int cid, char *name)
     if(run_verbose) {
       ATwarning("no such file: %s\n", fullname);
     }
-    t = open_error(fullname);
+    t = open_error(name);
   }
   return t;
 }
