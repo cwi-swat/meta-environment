@@ -6,6 +6,8 @@
 #include "module-operations.h"
 #include "../module-db.h"
 
+/*{{{  ATermList SO_transformImportsToImportIds(SDF_ImportList imports) */
+
 ATermList SO_transformImportsToImportIds(SDF_ImportList imports)
 {
   ATermList ids = ATempty;
@@ -28,6 +30,10 @@ ATermList SO_transformImportsToImportIds(SDF_ImportList imports)
   return ids; 
 }
 
+/*}}}  */
+
+/*{{{  static ATermList stripImportList(SDF_ImportList imports) */
+
 static ATermList stripImportList(SDF_ImportList imports)
 {
   ATermList result = ATempty;
@@ -47,6 +53,9 @@ static ATermList stripImportList(SDF_ImportList imports)
 
   return result;
 }
+
+/*}}}  */
+/*{{{  ATermList SO_getTransitiveImports(SDF_ImportList todo) */
 
 ATermList SO_getTransitiveImports(SDF_ImportList todo)
 {
@@ -90,6 +99,9 @@ ATermList SO_getTransitiveImports(SDF_ImportList todo)
   return stripImportList(result);
 }
 
+/*}}}  */
+/*{{{  ATbool SO_checkModuleNameWithPath(const char *moduleName,  */
+
 ATbool SO_checkModuleNameWithPath(const char *moduleName, 
                                   const char *path)
 {
@@ -115,6 +127,9 @@ ATbool SO_checkModuleNameWithPath(const char *moduleName,
   return ATtrue;
 }
 
+/*}}}  */
+/*{{{  SDF_Renamings SO_getModuleRenamings(SDF_Import import, SDF_Module module)  */
+
 SDF_Renamings SO_getModuleRenamings(SDF_Import import, SDF_Module module) 
 {
   if (SDF_isImportRenamedModule(import)) {
@@ -135,3 +150,4 @@ SDF_Renamings SO_getModuleRenamings(SDF_Import import, SDF_Module module)
   }
 }
 
+/*}}}  */

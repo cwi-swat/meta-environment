@@ -64,7 +64,7 @@ ATerm get_all_imported_modules(int cid, char *moduleName)
 {
   ATermList imports = SO_getTransitiveImports(
                         SDF_makeImportListSingle(
-                         SDFmakeImport(moduleName)));
+                         SDF_makeImport(moduleName)));
 
   return ATmake("snd-value(all-modules([<list>]))", imports);
 }
@@ -83,12 +83,12 @@ ATerm add_sdf_module(int cid, char *moduleName, char *path,
   SDF_Module sdfModule = SDF_getStartTopModule(
                            SDF_StartFromTerm(sdfTree));
 
-  if (!SO_checkModuleNameWithPath(SDFgetModuleName(sdfModule), 
+  if (!SO_checkModuleNameWithPath(SDF_getModuleName(sdfModule), 
                                   path)) {
     return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
   }
   
-  atModuleName = makeString(SDFgetModuleName(sdfModule)); 
+  atModuleName = makeString(SDF_getModuleName(sdfModule)); 
 
   sdfTree = PT_makeTermFromParseTree(
               PT_addParseTreePosInfo(
@@ -115,7 +115,7 @@ ATerm update_sdf2_module(int cid, char *moduleName, ATerm sdfTree)
 
   SDF_Module sdfModule = SDF_getStartTopModule(
                            SDF_StartFromTerm(sdfTree));
-  char *newModuleName = SDFgetModuleName(sdfModule);
+  char *newModuleName = SDF_getModuleName(sdfModule);
 
   if (strcmp(moduleName, newModuleName)) {
     return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
@@ -263,7 +263,9 @@ ATerm get_equations_for_module(int cid, ATerm atImport)
 	  fullImports = SDF_makeImportListEmpty();
         }
 	else {
-	  fullImports = SDF_getModuleImportsList(module);
+	  ATwarning("broken due to refactoring in sdf-support\n");
+	  /*fullImports = SDF_getModuleImportsList(module);*/
+	  fullImports = NULL;
 	}
 	return ATmake("snd-value(renaming-equations(<term>,<term>,<term>))",
 		      SDF_makeTermFromRenamings(renamings),
@@ -316,7 +318,9 @@ ATerm get_equations_for_renamed_import(int cid, ATerm atImport, ATerm atRenaming
 	    fullImports = SDF_makeImportListEmpty();
           }
 	  else {
-	    fullImports = SDF_getModuleImportsList(module);
+	    ATwarning("broken due to refactoring in sdf-support\n");
+	    /*fullImports = SDF_getModuleImportsList(module);*/
+	    fullImports = NULL;
 	  }
 	  return ATmake("snd-value(renamed-equations(<term>,<term>,<term>))",
 		        SDF_makeTermFromRenamings(newRenamings),

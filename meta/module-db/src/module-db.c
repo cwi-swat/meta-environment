@@ -23,6 +23,7 @@ SDF_ImportList MDB_getImports(ATerm moduleName)
     SDF_Module module = SDF_getStartTopModule(
                           SDF_StartFromTerm(
                             MS_getSdfTree(moduleName)));
+    printf("broken due to refactoring in sdf-support");
     result = SDF_getModuleImportsList(module);
   }
   else {
@@ -167,7 +168,7 @@ ATerm MDB_getSdfDefinition(ATerm moduleName)
   if (MDB_completeSdfSpecification(moduleName, ATempty)) {
     ATermList imports = SO_getTransitiveImports(
                           SDF_makeImportListSingle(
-                           SDFmakeImport(getString(moduleName))));
+                           SDF_makeImport(getString(moduleName))));
     SDF_SDF definition = getSyntaxDefinition(imports);
     return SDF_StartToTerm(SDF_makeStartSDF(SDF_makeOptLayoutAbsent(),
 			   definition,
@@ -185,7 +186,7 @@ ATermList MDB_getModulesWithoutEqs(ATerm moduleName)
   if (MS_existsModule(moduleName)) {
     ATermList imports = SO_getTransitiveImports(
                           SDF_makeImportListSingle(
-                            SDFmakeImport(getString(moduleName))));
+                            SDF_makeImport(getString(moduleName))));
     
     while (!ATisEmpty(imports)) {
       ATerm module = SDF_getModuleNamePlain(
@@ -262,7 +263,7 @@ ATermList MDB_getDependingModules(ATerm moduleName)
 
     imports = SO_getTransitiveImports(
 		SDF_makeImportListSingle(
-	          SDFmakeImport(getString(module))));
+	          SDF_makeImport(getString(module))));
 
     if (ATindexOf(imports, moduleName, 0) >= 0) {
       dependingModules = ATinsert(dependingModules, module);
@@ -282,7 +283,7 @@ static void MDB_deleteModuleFromImportsInModule(ATerm moduleName,
 			      SDF_StartFromTerm(oldSdfTree));
   SDF_Module newSdfModule = SO_deleteModuleNameFromModule(
 			      oldSdfModule, 
-                              SDFmakeModuleId(getString(importName)));
+                              SDF_makeModuleId(getString(importName)));
   ATerm newSdfTree = SDF_StartToTerm(SDF_setStartTopModule(
 		       SDF_StartFromTerm(oldSdfTree), newSdfModule));
 
