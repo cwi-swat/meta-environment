@@ -84,7 +84,17 @@ static void handleVimInput(const char *cmd)
     int loc = atoi(p);
     event = ATmake("set-current-location(<str>,<int>)", fid, loc);
   }
-  else {
+  else if (*p == '_') {
+    p++;
+    if (strcmp(p, "modified") == 0) {
+      event = ATmake("modified(<str>)", fid);
+    }
+    else {
+      ATwarning("unrecognized input: [%s]\n", p);
+      return;
+    }
+  }
+  else { /* Handle generic menu event */
     char *item;
     char *menu = p;
     p = strchr(p, SEPARATOR);
