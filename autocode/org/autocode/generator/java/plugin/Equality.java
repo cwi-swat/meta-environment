@@ -46,7 +46,9 @@ public class Equality
       String fieldName = (String)iter.next();
       PropertyContext fieldContext
 	= new PropertyContext(typeContext, "field", fieldName);
-      PropertyContext fieldTypeContext = new PropertyContext(fieldContext, "type");
+
+      PropertyContext fieldTypeContext
+	= new PropertyContext(fieldContext, "type");
 
       String getter = fieldContext.getString("getter");
       if (getter == null) {
@@ -75,8 +77,12 @@ public class Equality
     //}}}
 
     String typeName = generator.typeName(typeContext.getName());
-    method.setDescription("checks (deep) equality between two "
-			  + typeName + " objects.");
+    StringBuffer desc = new StringBuffer();
+    desc.append("compares this object to the specified object.");
+    desc.append(" The result is true if and only if the argument is not null");
+    desc.append(" and is an instance of " + typeName + " that contains ");
+    desc.append(" the same attribute values as this object.");
+    method.setDescription(desc.toString());
 
     generator.getCompilationUnit().addMethod(method);
   }
@@ -146,9 +152,11 @@ public class Equality
     body.addLine("return code;");
 
     String typeName = generator.typeName(typeContext.getName());
-    method.setDescription("calculate the hashcode based on the hashcodes"
-			  + " of the attributes.");
-
+    StringBuffer desc = new StringBuffer();
+    desc.append("returns a hash code for this " + typeName + " object.");
+    desc.append(" The hash code value is based on the hash code values");
+    desc.append(" of the attributes of this object.");
+    method.setDescription(desc.toString());
     generator.getCompilationUnit().addMethod(method);
   }
 

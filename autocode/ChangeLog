@@ -3,6 +3,7 @@ $Id$
 Wed Mar 13 10:00:10 CET 2002 <jong@cwi.nl>
  * fix java-generateHashCode checked for "integer" i.s.o. "int" 
  * add description to peerObject parameter in generateEquality
+ * add some more descriptive text to equality/hashcode generators
 
 Tue Mar 12 10:58:06 CET 2002 <jong@cwi.nl>
  * first make at toplevel dir before going down the rest of the buildtree
