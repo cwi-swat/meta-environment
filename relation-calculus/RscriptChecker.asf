@@ -170,60 +170,75 @@ $Error]>
 
 [i2s]	rvar2str(rvar(Char*)) = strcon(""" Char* """)
 
-[cve-1] convert-errors(errors[$Error+]) = convert-errors1(errors[$Error+])
-[cve-1] convert-errors(errors[]) =  [listitem("Rscript is type correct!", location("",area(0,0,0,0,0,0)))]
+[cve-1] convert-errors(errors[$Error+]) = feedback("RscriptChecker", "1", [convert-errors1(errors[$Error+])])
+[cve-1] convert-errors(errors[]) =  feedback("RscriptChecker", "1", [info("Rscript is type correct!", [])])
 
 
-[cve-1] [$ListItem*] := convert-errors1(errors[$Error*])
+[cve-1] $Feedback* := convert-errors1(errors[$Error*])
       	================================================
-        convert-errors1(errors[$Error; $Error*])= [e2i($Error), $ListItem*]
+        convert-errors1(errors[$Error; $Error*])= e2i($Error), $Feedback*
 
-[cve-2] convert-errors1(errors[]) = []
+[cve-2] convert-errors1(errors[]) = 
 
-[e2i-1] e2i($Exp cannot be typed)	= listitem("Expression cannot be typed", get-location($Exp))
-[e2i-2] e2i($Stat cannot be typed)	= listitem("Statement cannot be typed", get-location($Stat))
-[e2i-3] e2i($Gen cannot be typed) 	= listitem("Generator cannot be typed", get-location($Gen))
-[e2i-4] e2i($Bag cannot be typed) 	= listitem("Bag cannot be typed", get-location($Bag))
-[e2i-5] e2i($Rel cannot be typed) 	= listitem("Relation cannot be typed", get-location($Rel))
-[e2i-6] e2i(Undeclared $Var) 		= listitem("Undeclared: " || rvar2str($Var), get-location($Var))
-[e2i-7] e2i($Var redeclared) 		= listitem("Redeclared: " || rvar2str($Var), get-location($Var))
+[e2i-1] e2i($Exp cannot be typed)	= error("Expression cannot be typed", [subject("expr", get-location($Exp))])
+[e2i-2] e2i($Stat cannot be typed)	= error("Statement cannot be typed", [subject("stat", get-location($Stat))])
+[e2i-3] e2i($Gen cannot be typed) 	= error("Generator cannot be typed", [subject("generator", get-location($Gen))])
+[e2i-4] e2i($Bag cannot be typed) 	= error("Bag cannot be typed", [subject("bag", get-location($Bag))])
+[e2i-5] e2i($Rel cannot be typed) 	= error("Relation cannot be typed", [subject("relation", get-location($Rel))])
+[e2i-6] e2i(Undeclared $Var) 		= error("Undeclared:", [subject(rvar2str($Var), get-location($Var))])
+[e2i-7] e2i($Var redeclared) 		= error("Redeclared:", [subject(rvar2str($Var), get-location($Var))])
 
 [e2i-8]	e2i($Var not initialized in Rstore)
-					= listitem("Not initialized in Rstore: " || rvar2str($Var), get-location($Var))
+					= error("Not initialized in Rstore: ", [subject( rvar2str($Var), get-location($Var))])
 
 [e2i-9]	e2i($Var conflicting initialization in Rscript and in Rstore)
-					= listitem("Conflicting initialization in Rscript and in Rstore: " || rvar2str($Var), get-location($Var))
+					= error("Conflicting initialization in Rscript and in Rstore: ", [subject(rvar2str($Var), get-location($Var))])
 
 [e2i-10] e2i(Incompatible argument types $Etype in $Exp) = 
-		listitem("Incompatible arguments of type " || t2s($Etype), get-location($Exp))
+		error("Incompatible arguments of type ", [subject(t2s($Etype), get-location($Exp))])
 [e2i-11] e2i($Exp should have type $Etype)= 
-	listitem("Expression should have type " || t2s($Etype), get-location($Exp))
-[e2i-12] e2i($Exp should be of type bag) = listitem("Expression should be of type bag", get-location($Exp))
-[e2i-13] e2i($Exp should be of type rel) = listitem("Expression should be of type relation", get-location($Exp))
-[e2i-14] e2i(No definition for $Var with argument $Etype) = 
-        listitem("No definition for " || rvar2str($Var) || " with argument " || t2s($Etype), get-location($Var))
+	error("Expression should have type ", [subject(t2s($Etype), get-location($Exp))])
+[e2i-12] e2i($Exp should be of type bag) = error("Expression should be of type bag", [subject("exp", get-location($Exp))])
+[e2i-13] e2i($Exp should be of type rel) = error("Expression should be of type relation", [subject("exp", get-location($Exp))])
+%%[e2i-14] e2i(No definition for $Var with argument $Etype) = 
+%%        error("No definition for ", [subject(rvar2str($Var), get-location($Var)), 
+%%				     subject(" with argument " || t2s($Etype), get-location($$Etype))])
 
-[e2i-15] e2i(No definition for field $Var) =  listitem("No definition for " || rvar2str($Var), get-location($Var))
-[e2i-16] e2i($Var exceeds number of targets of generator) =  listitem("Destination contains too many targets", get-location($Var))
-[e2i-17] e2i(Field name $Var used at different record positions) =
-		   listitem("Field " || rvar2str($Var) || " used at different record positions", get-location($Var))
+[e2i-15] e2i(No definition for field $Var) =  error("No definition for ", [subject(rvar2str($Var), get-location($Var))])
+[e2i-16] e2i($Var exceeds number of targets of generator) =  
+	 error("Destination contains too many targets", [subject("var", get-location($Var))])
+%%[e2i-17] e2i(Field name $Var used at different record positions) =
+%%		   error("Field " || rvar2str($Var) || " used at different record positions", get-location($Var))
 
 [t2s-1]	t2s(int) 			= "int"
 [t2s-2] t2s(bool) 			= "bool"
 [t2s-3] t2s(str) 			= "str"
 [t2s-4] t2s(area) 			= "area"
 [t2s-5] t2s(undefined) 			= "undefined"
-[t2s-6] t2s(< $Etype+ >)		= "<" || tl2sl($Etype+) || ">"
+	
+[t2s-6] $StrCon :=  "<" || tl2sl($Etype+) || ">"
+	========================================================
+	t2s(< $Etype+ >)		= $StrCon
 [t2s-ta] t2s(empty-bag-type)		= "{}"
-[t2s-7] t2s(bag[$Etype])		= "bag[" || t2s($Etype) || "]"
-[t2s-8] t2s(rel[$Etype+])		= "rel[" || tl2sl($Etype+) || "]"
+[t2s-7] $StrCon :=  "bag[" || t2s($Etype) || "]"
+	========================================================
+	t2s(bag[$Etype])		= $StrCon
 
-[t2s-8] t2s([$Etype*]) 			= "[" || tl2sl($Etype*) || "]"
+[t2s-8] $StrCon := "rel[" || tl2sl($Etype+) || "]"
+	========================================================
+	t2s(rel[$Etype+])		= $StrCon
+
+[t2s-8]  $StrCon := "[" || tl2sl($Etype*) || "]"
+	========================================================	 
+	t2s([$Etype*]) 			= $StrCon
 [t2s-9] t2s($Var) 			= rvar2str($Var)
-[t2s-10] t2s(& $Var) 			= "&" || rvar2str($Var)
+[t2s-10]  $StrCon :=  "&" || rvar2str($Var)
+	========================================================	 
+	 t2s(& $Var) 			= $StrCon
 
-[tl2sl-1]
-	tl2sl($Etype, $Etype+)		= t2s($Etype) || "," || tl2sl($Etype+)
+[tl2sl-1]  $StrCon :=t2s($Etype) || "," || tl2sl($Etype+)
+	========================================================	 
+	tl2sl($Etype, $Etype+)		= $StrCon
 [tl2sl-1]
 	tl2sl($Etype)			= t2s($Etype)
 [tl2sl-2]
