@@ -111,7 +111,11 @@ static void clearFocus(int write_to_editor_fd)
 
 static void registerTextCategories(int write_to_editor_fd, TE_Action action)
 {
-  /* no implementation */
+  ATerm categories = TE_getActionCategories(action);
+
+  ATBwriteTerm(write_to_editor_fd, 
+	       ATmake("rec-do(register-text-categories(<term>))",
+		      categories));
 }
 
 /*}}}  */
@@ -119,7 +123,11 @@ static void registerTextCategories(int write_to_editor_fd, TE_Action action)
 
 static void highlightSlices(int write_to_editor_fd, TE_Action action)
 {
-  /* no implementation */
+  ATerm slices = TE_getActionSlices(action);
+
+  ATBwriteTerm(write_to_editor_fd, 
+	       ATmake("rec-do(highlight-slices(<term>))",
+		      slices));
 }
 
 /*}}}  */
