@@ -210,7 +210,7 @@ static Attribute parseCoordinateList(char *coords, ATbool appendFirstToEnd)
   }
 
 	poly = PolygonFromTerm((ATerm)ATreverse((ATermList)PolygonToTerm(poly)));
-ATwarning("poly: %t\n", poly);
+
   return makeAttributeCurvePoints(poly);
 }
 
@@ -225,7 +225,7 @@ static AttributeList buildAttributeList(int type, ATermList dotAttributes)
 		ATerm key = ATgetFirst(pair);
 		ATerm value = ATgetFirst(ATgetNext(pair));
 		char *sval = ATgetName(ATgetAFun((ATermAppl)value));
-		ATwarning("key=%t, value=%s\n", key, sval); 
+		/* ATwarning("key=%t, value=%s\n", key, sval);  */
 
 		if (ATisEqual(key, ATparse("\"width\""))) {
       width = inchToPixel(atof(sval));
