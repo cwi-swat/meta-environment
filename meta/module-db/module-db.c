@@ -44,7 +44,7 @@ ATermTable import_db;
 ATermTable trans_db;
 
 /* adding position info can stop at the condition level */
-#define DEPTH_OF_CONDITIONS 8
+#define DEPTH_OF_CONDITIONS   5
 
 /*}}}  */
 
@@ -560,9 +560,10 @@ ATerm update_eqs_tree(int cid, char *moduleName, ATerm newEqsTree)
   atPath = ATelementAt((ATermList)entry, PATH_EQS_LOC);
   if (ATmatch(atPath, "<str>", &path)) {
     newEqsTree = PT_makeTermFromParseTree(
-                   PT_addParseTreePosInfo(
+                   PT_addParseTreePosInfoToDepth(
                      path, 
-                     PT_makeParseTreeFromTerm(newEqsTree)));
+                     PT_makeParseTreeFromTerm(newEqsTree),
+                     DEPTH_OF_CONDITIONS));
   }
   else {
     ATwarning("No path for %s equations section\n", moduleName);
