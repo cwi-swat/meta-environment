@@ -1,5 +1,8 @@
 $Id$
 
+2001/07/02 (jurgenv@cwi.nl)
+ * Fully implemented AsFix2ME version of asc-support
+
 2001/06/21 (jurgenv@cwi.nl)
  * Iniated a AsFix2ME version of asc-support
 
