@@ -1006,47 +1006,50 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
   //}}}
 
-  //{{{ public void addPopupMenuItems(JPopupMenu menu, String buttonType, String moduleName, ATermList buttonList, ATermList prefixButtonName)
+  //{{{ public void addMenuItems(JMenu menu, String buttonType, String moduleName, ATerm buttons)
     
+  // The next two methods (addPopupMenuItems, addMenuItems) are exactly the same. The reason is
+  // that JPopupMenu and JMenu have the same methods, but are in different hierarchies. Also, we did
+  // not succeed in making the methods smaller.
   public void addPopupMenuItems(JPopupMenu menu, String buttonType, String moduleName, 
-				ATermList buttonList, ATermList prefixButtonName)
+			   ATermList buttonList, ATermList prefixButtonName)
   {
-
-      for(int i = buttonList.getLength()-1; i >= 0 ; i--) {
-	  ATermList buttonName = (ATermList)(buttonList.elementAt(i));
-	  ATermAppl unquotedName = (ATermAppl)(buttonName.getFirst());
-
+      buttonList = buttonList.reverse();
+ 
+      while( !buttonList.isEmpty())  {
+	  ATermList buttonName = (ATermList) buttonList.getFirst();
+	  ATermAppl buttonNamePrefix = (ATermAppl)(buttonName.getFirst());
+    
+      buttonList = buttonList.getNext();
+      
 	  if(buttonName.getLength() == 1) {
-	      menu.add(new ButtonAction(unquotedName.getName(),
+	      menu.add(new ButtonAction(buttonNamePrefix.getName(),
 					buttonType, prefixButtonName.concat(buttonName),
 					moduleTree, bridge, factory));
 	  }
 	  else {
-	      JMenu nextLevel = new JMenu(unquotedName.getName());
-	      ATermList menuName = (ATermList)(buttonList.elementAt(i));
-	      ATermAppl unquotedMenu = (ATermAppl)(menuName.getFirst());
-	      ATermList subMenu = factory.makeList();
-	      int j;
-	      boolean contLoop = true;
-	      
-	      for (j = i-1; unquotedName.isEqual(unquotedMenu) && contLoop; j--) {
-		  subMenu = subMenu.insert(menuName.getNext());
-		  if (j < 0) {
-		      contLoop = false;
-		  }
-		  else {
-		      menuName = (ATermList)(buttonList.elementAt(j));
-		      unquotedMenu = (ATermAppl)(menuName.getFirst());
-		  }
+          ATermList buttonRunner = buttonList;
+	      JMenu nextLevel = new JMenu(buttonNamePrefix.getName());
+          ATermList subMenu = factory.makeList((ATerm) buttonName.getNext());
+   
+          // collect a list of buttons that are in the same 'menuNamePrefix'
+	      for (; !buttonRunner.isEmpty(); buttonRunner = buttonRunner.getNext()) {
+              ATermList menuName = (ATermList) buttonRunner.getFirst();
+              ATerm menuNamePrefix = menuName.getFirst();
+              
+              if (buttonNamePrefix.isEqual(menuNamePrefix)) {    
+                  subMenu = subMenu.insert(menuName.getNext());
+                  buttonList = buttonList.remove(menuName);     
+              }
 	      }
-	      
+          
 	      addMenuItems(nextLevel, buttonType, moduleName, 
-			   subMenu, prefixButtonName.insertAt(unquotedName, prefixButtonName.getLength()));
+			   subMenu, prefixButtonName.insertAt(buttonNamePrefix, prefixButtonName.getLength()));
 	      menu.add(nextLevel);
-	      i = j+2;
 	  }
       }
-  }      
+  }
+
   //}}}
 
   //{{{ public void addMenuItems(JMenu menu, String buttonType, String moduleName, ATerm buttons)
@@ -1054,41 +1057,41 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   public void addMenuItems(JMenu menu, String buttonType, String moduleName, 
 			   ATermList buttonList, ATermList prefixButtonName)
   {
-      for(int i = buttonList.getLength()-1; i >= 0 ; i--) {
-	  ATermList buttonName = (ATermList)(buttonList.elementAt(i));
-	  ATermAppl unquotedName = (ATermAppl)(buttonName.getFirst());
-
+      buttonList = buttonList.reverse();
+ 
+      while( !buttonList.isEmpty())  {
+	  ATermList buttonName = (ATermList) buttonList.getFirst();
+	  ATermAppl buttonNamePrefix = (ATermAppl)(buttonName.getFirst());
+    
+      buttonList = buttonList.getNext();
+      
 	  if(buttonName.getLength() == 1) {
-	      menu.add(new ButtonAction(unquotedName.getName(),
+	      menu.add(new ButtonAction(buttonNamePrefix.getName(),
 					buttonType, prefixButtonName.concat(buttonName),
 					moduleTree, bridge, factory));
 	  }
 	  else {
-	      JMenu nextLevel = new JMenu(unquotedName.getName());
-	      ATermList menuName = (ATermList)(buttonList.elementAt(i));
-	      ATermAppl unquotedMenu = (ATermAppl)(menuName.getFirst());
-	      ATermList subMenu = factory.makeList();
-	      int j;
-	      boolean contLoop = true;
-	      
-	      for (j = i-1; unquotedName.isEqual(unquotedMenu) && contLoop; j--) {
-		  subMenu = subMenu.insert(menuName.getNext());
-		  if (j < 0) {
-		      contLoop = false;
-		  }
-		  else {
-		      menuName = (ATermList)(buttonList.elementAt(j));
-		      unquotedMenu = (ATermAppl)(menuName.getFirst());
-		  }
+          ATermList buttonRunner = buttonList;
+	      JMenu nextLevel = new JMenu(buttonNamePrefix.getName());
+          ATermList subMenu = factory.makeList((ATerm) buttonName.getNext());
+   
+          // collect a list of buttons that are in the same 'menuNamePrefix'
+	      for (; !buttonRunner.isEmpty(); buttonRunner = buttonRunner.getNext()) {
+              ATermList menuName = (ATermList) buttonRunner.getFirst();
+              ATerm menuNamePrefix = menuName.getFirst();
+              
+              if (buttonNamePrefix.isEqual(menuNamePrefix)) {    
+                  subMenu = subMenu.insert(menuName.getNext());
+                  buttonList = buttonList.remove(menuName);     
+              }
 	      }
-	      
+          
 	      addMenuItems(nextLevel, buttonType, moduleName, 
-			   subMenu, prefixButtonName.insertAt(unquotedName, prefixButtonName.getLength()));
+			   subMenu, prefixButtonName.insertAt(buttonNamePrefix, prefixButtonName.getLength()));
 	      menu.add(nextLevel);
-	      i = j+2;
 	  }
       }
-  }      
+  }            
   //}}}
 
   //{{{ private File showFileBrowser(String label, String location, String extension, String desc)

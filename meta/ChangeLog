@@ -1,5 +1,8 @@
 # $Id$
 
+2003/06/23 ({jurgenv,iversen}@cwi.nl)
+ * Refactored a bit in the module tree panel 
+
 Tue Jun 24 10:07:50 CEST 2003 <{jong,markvdb}@cwi.nl>
  * Fixed bug in button-actions.tb:read-tree
 
