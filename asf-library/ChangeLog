@@ -1,3 +1,7 @@
+2003/10/13 (jurgenv@cwi.nl)
+  * Removed old C grammar
+  * ANSI-C grammar is now half-finished, waiting on SDF2 extensions
+
 2003/10/09 (markvdb@cwi.nl)
   * Added the strategy symbol again, was removed by accident.
 
