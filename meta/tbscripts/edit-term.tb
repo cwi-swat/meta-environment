@@ -287,7 +287,6 @@ let
   Focus      : term,
   ArgList    : list,
   Stack      : list,
-  Killed     : term,
   EditorId2  : term,
   STree      : term,
   RTree      : term,
@@ -312,9 +311,6 @@ in
   fi  . 
   rec-msg(initial-focus(Focus?)) .
   snd-msg(set-focus(EditorId, Focus)) .
-  Killed := false .
-  (
-    (
       (
         rec-note(syntax-changed(ModuleName)) .
         snd-msg(invalidate-tree(EditorId))
@@ -527,13 +523,6 @@ in
 	snd-note(ui-status(errorf("%s", [String]))) .
         snd-msg(stack(Stack), EditorId)
       ) *
-      if equal(Killed, true) then
-        tau
-      fi
-    )
-    ||
-    rec-msg(kill-editor(EditorId)).
-    Killed := true .
-    snd-msg(kill-editor-done(EditorId))
-  )
+      rec-msg(kill-editor(EditorId)).
+      snd-msg(kill-editor-done(EditorId))
 endlet
