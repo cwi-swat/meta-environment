@@ -126,9 +126,14 @@ void add_predefined_actions(int cid, char *contents)
 {
   ATerm actions = ATreadFromString(contents);
 
-  if (MC_isValidConfiguration(MC_ConfigurationFromTerm(actions))) {
-    MC_Properties newActions = MC_getConfigurationList(MC_ConfigurationFromTerm(actions));
-    standardProperties = MC_concatProperties(newActions, standardProperties);
+  if (actions != NULL) {
+    if (MC_isValidConfiguration(MC_ConfigurationFromTerm(actions))) {
+      MC_Properties newActions = MC_getConfigurationList(MC_ConfigurationFromTerm(actions));
+      standardProperties = MC_concatProperties(newActions, standardProperties);
+    }
+  }
+  else {
+    ATwarning("A syntax error was found in the predefined configuration.");
   }
 }
 
