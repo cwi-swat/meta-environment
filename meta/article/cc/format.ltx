@@ -7,7 +7,7 @@
 %\usepackage{epsfig}
 \usepackage{psfig}
 
-\title{Memory Management in the ASF+SDF Compiler}
+\title{Compilation and Memory Management for ASF+SDF}
 \author{Mark van den Brand$^{^1}$,
         Paul Klint$^{^{1,2}}$,
         Pieter Olivier$^{^2}$\\
@@ -46,12 +46,12 @@ We have developed a compiler for the specification formalism
 This result is achieved in two ways: the compiler performs a variety
 of optimizations and generates efficient C code, and the compiled code
 uses a run-time memory management system based on maximal subterm
-sharing and mark-and sweep garbage collection.
+sharing and mark-and-sweep garbage collection.
 
-In this paper, we present an overview of these techniques and evaluate
-their effectiveness in several benchmarks. It turns out that execution
-speed of compiled \asdf\ specifications is at least as good as that of
-comparable systems, while our memory usage is in many cases an order
+We present an overview of these techniques and evaluate their
+effectiveness in several benchmarks. It turns out that execution speed
+of compiled \asdf\ specifications is at least as good as that of
+comparable systems, while memory usage is in many cases an order
 of magnitude smaller.
 
 \end{abstract}
@@ -66,26 +66,25 @@ The main characteristic of industrial applications is their
 therefore be the ability to handle huge problems.
 
 In this paper we take the specification formalism \asdf\
-\cite{BHK89,HHKR89.update} as point of departure. 
-Its main focus is on language prototyping \cite{DHK96} and on the
-development of language specific tools, such as unparsers \cite{BV96} and
-program transformation tools \cite{Bru96}.
-\asdf\ is based on general context-free grammars for describing syntax and
-on conditional equations for describing semantics.  In this way, one
-can easily describe the syntax of a (new or existing) language and
-specify operations on programs in that language such as static type
-checking, interpretation, compilation or transformation.
-
-\asdf\ has been applied successfully in a number of industrial 
-projects \cite{BDKKM96}, such as the development of a domain-specific
-language for describing interest products (in the financial domain)
-\cite{ADR95} and a renovation factory for restructuring of COBOL code
-\cite{BSV97b}.  In such industrial applications, the execution speed
-is very important, but when processing huge COBOL programs memory
-usage becomes a critical issue as well.  Other applications of
-\asdf\ include the development of a GLR parser generator \cite{Vis97}, an
-unparser generator \cite{BV96}, and the compiler discussed in this
-paper.
+\cite{BHK89,HHKR89.update} as point of departure.  Its main focus is
+on language prototyping \cite{DHK96} and on the development of
+language specific tools, such as unparsers \cite{BV96} and program
+transformation tools \cite{Bru96}.  \asdf\ is based on general
+context-free grammars for describing syntax and on conditional
+equations for describing semantics.  In this way, one can easily
+describe the syntax of a (new or existing) language and specify
+operations on programs in that language such as static type checking,
+interpretation, compilation or transformation.  \asdf\ has been
+applied successfully in a number of industrial projects
+\cite{BDKKM96,VanDenBrandKlintVerhoef:98}, such as the development of
+a domain-specific language for describing interest products (in the
+financial domain) \cite{ADR95} and a renovation factory for
+restructuring of COBOL code \cite{BSV97b}.  In such industrial
+applications, the execution speed is very important, but when
+processing huge COBOL programs memory usage becomes a critical issue
+as well.  Other applications of \asdf\ include the development of a
+GLR parser generator \cite{Vis97}, an unparser generator \cite{BV96},
+and the compiler discussed in this paper.
 
 What are the performance standards one should strive for when writing
 a compiler for, in our case, an algebraic specification formalism?
@@ -100,7 +99,7 @@ input problems.
 In this paper, we present a compiler for \asdf\ that performs a
 variety of optimizations and generates efficient C code. The compiled
 code uses a run-time memory management system based on maximal subterm
-sharing and mark-and sweep garbage collection.  The contribution of
+sharing and mark-and-sweep garbage collection.  The contribution of
 this paper is to bring the performance of executable specifications
 based on term rewriting into the realm of industrial applications.
 
@@ -130,8 +129,9 @@ defining equations, the syntax in equations is thus\emph{user-defined}.
 
 \begin{figure}
 \centerline{\fbox{
-\begin{minipage}[htb]{\textwidth}
+\begin{minipage}[tb]{\textwidth}
 {\NOAUTOHEADER  \input{./Booleans.mtx}}
+\vspace{-1.7\baselineskip}
 \end{minipage}
 }
 }
@@ -176,8 +176,9 @@ reduces to {\tt true} when applying the equations of Figure
 
 \begin{figure}
 \centerline{\fbox{
-\begin{minipage}[htb]{\textwidth}
+\begin{minipage}[tb]{\textwidth}
 {\NOAUTOHEADER  \input{./Sets.mtx}}
+\vspace{-1.7\baselineskip}
 \end{minipage}
 }
 }
@@ -194,7 +195,7 @@ Recall that there is no fixed grammar since the basic \asdf-grammar
 can be extended by the user.  The solution we have adopted is to
 introduce the intermediate format \asfix\ (\asdf\ fixed format) which
 is used to represent the parse trees of the \asdf\ modules in a
-machine processable format. The user defined syntax is replaced by
+machine processable format. The user-defined syntax is replaced by
 prefix functions. The parse trees in the \asfix\ format are self
 contained.
 
@@ -247,7 +248,7 @@ by introducing new variables and an auxiliary condition.
 
 \begin{figure}
 \centerline{\fbox{
-\begin{minipage}[htb]{\textwidth}
+\begin{minipage}[tb]{\textwidth}
 \begin{tabbing}
 {\tt module Booleans}\\
 {\tt si}\={\tt gnature}\\
@@ -272,7 +273,7 @@ by introducing new variables and an auxiliary condition.
 
 \begin{figure}
 \centerline{\fbox{
-\begin{minipage}[htb]{\textwidth}
+\begin{minipage}[tb]{\textwidth}
 \begin{tabbing}
 {\tt module Set}\\
 {\tt si}\={\tt gnature}\\
@@ -281,7 +282,7 @@ by introducing new variables and an auxiliary condition.
 \>{\tt cons(\_,\_);}\\
 {\tt rules}\\
 \>{\tt se}\={\tt t(\{list\}(cons(*Id1,cons(Id,cons(*Id2,cons(Id,*Id3)))))) =}\\
-\>\>{\tt set(\{list\}(cons(*Id1,cons(Id,cons(*Id2,*Id3)))));}\\
+\>\>{\tt set(\{list\}(cons(*Id1,cons(Id,cons(*Id2,*Id3)))));}
 \end{tabbing}
 \end{minipage}
 }
@@ -291,7 +292,7 @@ by introducing new variables and an auxiliary condition.
 
 \begin{figure}
 \centerline{\fbox{
-\begin{minipage}[htb]{\textwidth}
+\begin{minipage}[tb]{\textwidth}
 \begin{tabbing}
 {\tt module Set}\\
 {\tt si}\={\tt gnature}\\
@@ -304,7 +305,7 @@ by introducing new variables and an auxiliary condition.
 \>{\tt term-equal(Id1,Id2) == t} \\
 \>{\tt ==>}\\
 \>{\tt se}\={\tt t(\{list\}(cons(*Id1,cons(Id,cons(*Id2,cons(Id,*Id3)))))) =}\\
-\>\>{\tt set(\{list\}(cons(*Id1,cons(Id,cons(*Id2,*Id3)))));}\\
+\>\>{\tt set(\{list\}(cons(*Id1,cons(Id,cons(*Id2,*Id3)))));}
 \end{tabbing}
 \end{minipage}
 }
@@ -364,7 +365,7 @@ the function {\tt false()}.
 
 \begin{figure}
 \centerline{\fbox{
-\begin{minipage}[htb]{\textwidth}
+\begin{minipage}[tb]{\textwidth}
 \begin{tabbing}
 {\tt ATe}\={\tt rm}\=\ {\tt and(ATerm arg0, ATerm arg1) \{}\\
 \>{\tt if (check\_sym(arg0, truesym))}\\
@@ -394,7 +395,7 @@ checks the equality of two terms.
 
 \begin{figure}
 \centerline{\fbox{
-\begin{minipage}[htb]{\textwidth}
+\begin{minipage}[tb]{\textwidth}
 \begin{tabbing}
 {\tt ATe}\={\tt rm set(ATerm arg0) \{}\\
 \>{\tt if}\={\tt (check\_sym(arg0,listsym)) \{}\\
@@ -438,7 +439,7 @@ of \asdf\ specifications that deserve special attention.
 The first issue concerns the identification and linking of names
 appearing in separately compiled modules. Essentially, this amounts to
 the question how to translate the \asdf\ names into C names.  This
-problem arizes since a direct translation would generate names that
+problem arises since a direct translation would generate names that
 are too long for C compilers en linkage editors.  We have opted for a
 solution in which each generated C file contains a ``register''
 function which stores at run-time for each locally defined function a
@@ -460,7 +461,7 @@ module.  However, we want to generate a single C function for each
 function in the specification (for efficiency reasons) but in \asdf\
 specification functions can be defined using multiple equations
 occurring in several modules.  The solution is to use a single
-function as compilation unit and to {\em reshuffle} the equations
+function as compilation unit and to {\em re-shuffle} the equations
 before translating the specification.  Equations are thus stored
 depending on the module they occur in as well as on their outermost
 function symbol.  When the user changes an equation, only those
@@ -484,21 +485,20 @@ in the \asdf\ compiler):
 
 \begin{itemize}
 
-\item Postponing term construction.  In fact only the (sub)terms of
-the normal form must be constructed, {\em all} other (sub)terms are
-only needed to direct the rewriting process. By postponing the
-construction of these terms the amount of constructed terms can be
-reduced enormously.  However, this requires a transformation of the
-specification in order to add rewrite rules that reflect the steering
-effect of the intermediate terms.  The resulting gain in efficiency is
-unclear. (*** Explain the relation with deforestation in
-functional languages ***)
+\item Postponing term construction.  Only the (sub)terms of the normal
+form must be constructed, {\em all} other (sub)terms are only needed
+to direct the rewriting process.  By transforming the specification
+and extended it with rewrite rules that reflect the steering effect of
+the intermediate terms, the amount of term construction can be
+reduced. In the context of functional languages this technique is
+known as \emph{deforestation}~\cite{Wadler1990}.  Its benefits for
+term rewriting are not yet clear.
 
 \item Local sharing of terms, only those terms are shared that result
 from non-linear right-hand sides, e.g., {\tt f(X) = g(X,X)}.  Only
 those terms will be shared of which the sharing can be established at
 compile-time; the amount of sharing will thus be limited.  This
-technique is also applied in ELAN \cite{}.
+technique is also applied in ELAN~\cite{BorovanskyEtAl:96}.
 
 \item Local reuse of terms, i.e., common subterms are only reduced
 once and their normal form is reused several times.  Here again, the
@@ -552,10 +552,15 @@ one hash table lookup.
 
 Fortunately, we get two returns on this investment.  First, the
 considerably reduced memory usage also leads to reduced (real-time)
-execution time.  Second, we gain substantially since the frequently
-occurring equality check on terms ({\tt equal\_term}) becomes very
-cheap: it reduces from an operation that is linear in the number of
-subterms to be compared to a constant operation (pointer equality).
+execution time.  Second, we gain substantially since the equality
+check on terms ({\tt term\_equal}) becomes very cheap: it reduces from
+an operation that is linear in the number of subterms to be compared
+to a constant operation (pointer equality).  Note that the compiler
+generates calls to {\tt term\_equal} in the translation of
+patterns and conditions.
+
+The idea of subterm sharing is known in the LISP community as
+\emph{hash consing}~\cite{Alan:78} and will be discussed below.
 
 \subsection{Shared Terms versus Destructive Updates}
 
@@ -567,14 +572,28 @@ and that terms should effectively be \emph{immutable} after creation.
 During rewriting of terms by the generated code this restriction
 causes no problems since terms are created in a fully functional way.
 Normal forms are constructed bottom-up and there is no need to perform
-destructive updates on a term one it has been constructed.
+destructive updates on a term once it has been constructed.
 
 However, destructive operations on lists, like list concatenation and
 list slicing, become expensive. For instance, the most efficient way
-to concatenate two lists is to physically replace one of the lists
-by the concatenation result.  In our case, this effect can only be
-achieved by copying the first list, appending the elements of the
-second list to it, and return the new list as result.
+to concatenate two lists is to physically replace one of the lists by
+the concatenation result.  In our case, this effect can only be
+achieved by taking the second list, prepending the elements of the
+first list to it, and return the new list as result.
+
+In LISP, the success of hash consing has been limited by the existence
+of the functions \texttt{rplaca} and \texttt{rplacd} that can
+destructively modify a list structure. To support destructive updates,
+one has to support two kinds of lists structures ``mono copy'' lists
+with maximal sharing and ``multi copy'' lists without maximal sharing.
+Before destructively changing a mono copy list, it has to be converted
+to a multi copy list.
+
+In the case of the \asdf\ compiler, we \emph{generate} the code that
+creates and manipulates terms and we can selectively generate code
+that copies subterms in cases where the effect of a destructive update
+is needed (as sketched above). This explains why we can apply the
+technique of subterm sharing with more success.
 
 \subsection{Reclaiming Unused Terms}
 
@@ -584,26 +603,29 @@ results to guide the rewriting process. This means that terms that are
 no longer used have to be reclaimed in some way.
 
 After experimentation with various alternatives (reference counting,
-mark-compact garbage collection) we have finally opted for a
-mark-sweep garbage collection algorithm to reclaim unused terms.
-Mark-sweep collection is more efficient,
+mark-and-compact garbage collection) we have finally opted for a
+mark--and-sweep garbage collection algorithm to reclaim unused terms.
+Mark-and-sweep collection is more efficient,
 both in time and space than reference counting \cite{JL96}.
 The typical space overhead for a mark-sweep garbage collection algorithm is
 only 1 bit per object.
 
-Mark-sweep garbage collection works using three (sometimes two) phases.
+Mark-and-sweep garbage collection works using three (sometimes two) phases.
 In the first phase, all the objects on the heap are marked as `dead'.
 In the second phase, all objects reachable from the known set of root
 objects are marked as `live'. In the third phase, all `dead' objects
 are swept into a list of free objects.
 
-Mark-sweep garbage collection is also attractive, because it can be
+Mark-and-sweep garbage collection is also attractive, because it can be
 implemented efficiently in C and can work without support from the
 programmer or compiler \cite{BW88}. We have implemented a specialized
 version of Boehm's conservative garbage collector~\cite{Boe93} that
 exploits the fact that we are managing ATerms.
 
 \section{\label{Benchmarks}Benchmarks}
+
+{\bf Note that this is still work in progress, more systems (SML)
+as well as more benchmarks will appear in the final paper.}
 
 Does maximal sharing of subterms lead to reductions in memory usage?
 How does it affect execution speed?  Does the combination of techniques
@@ -629,7 +651,8 @@ lazy evaluation, and the like. They cannot (yet) be used to give an
 overall comparison between the various systems.  Also note that some
 systems failed to compute results for the complete range $14 \leq n
 \leq 30$ in some benchmarks. In those cases, the corresponding graph
-also ends prematurely.
+also ends prematurely.  Measurements were performed on an ULTRA
+SPARC-IIi (300 MHz) with 576 Mb of memory.
 
 So far we have used the following implementations
 in our benchmarks:
@@ -638,21 +661,22 @@ in our benchmarks:
 
 \item The \asdf\ compiler as discussed in this paper.
 \item The Clean compiler developed at the University of Nijmegen~\cite{clean94}.
-\item The ELAN compiler developed at INRIA, Nancy~\cite{}.
+\item The ELAN compiler developed at INRIA, Nancy~\cite{BorovanskyEtAl:96}.
 \item The Opal compiler developed at the Technische Universit\"{a}t
-Berlin~\cite{opal97}.
+Berlin~\cite{DidrichEtAl:94}.
 \item The Glasgow Haskell compiler~\cite{ghc93}.
 \end{itemize}
 
-(*** Note that this is still work in progress, more systems will
-appear in the final paper ***)
 
-\subsection{The {\tt evalsym} benchmark}
 
-\begin{figure}[htb]
+
+
+\begin{figure}[tb]
   \centerline{\psfig{figure=evalsym-tlog.eps}}
   \caption{\label{evalsym-tlog}Execution times for the {\tt evalsym} benchmark}
 \end{figure}
+
+\subsection{The {\tt evalsym} benchmark}
 
 The first benchmark is called {\tt evalsym} and uses an algorithm that
 is CPU intensive, but does not use a lot of memory.  This benchmark is
@@ -662,6 +686,16 @@ The differences between the various systems are indeed small.
 Although, \asdf\ cannot benefit from maximal sharing, it does not
 loose much either.
 
+\begin{figure}[tb]
+  \centerline{\psfig{figure=evalexp-mlin.eps}}
+  \caption{\label{evalexp-mem}Memory usage for the {\tt evalexp} benchmark}
+\end{figure}
+
+\begin{figure}[tb]
+  \centerline{\psfig{figure=evalexp-tlog.eps}}
+  \caption{\label{evalexp-tlog}Execution times for the {\tt evalexp} benchmark}
+\end{figure}
+
 \subsection{The {\tt evalexp} benchmark}
 
 The second benchmark is called {\tt evalexp} and is based on an algorithm
@@ -669,15 +703,6 @@ that uses a lot of memory when a typical eager (strict) implementation
 is used. Using a lazy implementation, the amount of memory needed is
 relatively small.
 
-\begin{figure}[htb]
-  \centerline{\psfig{figure=evalexp-mlin.eps}}
-  \caption{\label{evalexp-mem}Memory usage for the {\tt evalexp} benchmark}
-\end{figure}
-
-\begin{figure}[htb]
-  \centerline{\psfig{figure=evalexp-tlog.eps}}
-  \caption{\label{evalexp-tlog}Execution times for the {\tt evalexp} benchmark}
-\end{figure}
 
 Memory usage is shown in Figure \ref{evalexp-mem}.  Clearly, normal
 strict implementations cannot cope with the excessive memory
@@ -685,12 +710,19 @@ requirements of this benchmark. Interestingly, \asdf\ has no problems
 whatsoever due to the use of maximal sharing, although it is also
 based on strict evaluation
 
-Execution times are plotted in Figure \ref{evalexp-tlog}.
-(*** weglaten : It is interesting to see that the lazy implementations seem to loose more
-time in order to keep the memory usage down than our implementation based
-on maximal sharing. ***)
-Opal and Clean(lazy) are faster than \asdf\ but the differences are small.
-The Haskell implementation is somewhat lagging behind.
+Execution times are plotted in Figure \ref{evalexp-tlog}.  Opal and
+Clean(lazy) are faster than \asdf\ but the differences are small.  The
+Haskell implementation is somewhat lagging behind.
+
+\begin{figure}[tb]
+  \centerline{\psfig{figure=evaltree-mlin.eps}}
+  \caption{\label{evaltree-mlin}Memory usage for the {\tt evaltree} benchmark}
+\end{figure}
+
+\begin{figure}[tb]
+  \centerline{\psfig{figure=evaltree-tlog.eps}}
+  \caption{\label{evaltree-tlog}Execution times for the {\tt evaltree} benchmark}
+\end{figure}
 
 \subsection{The {\tt evaltree} benchmark}
 
@@ -704,32 +736,36 @@ requirements at an acceptable level due to its maximal sharing.
 The execution times plotted in Figure \ref{evaltree-tlog}
 show that only \asdf\ scales-up for $n > 20$.
 
-\begin{figure}[htb]
-  \centerline{\psfig{figure=evaltree-mlin.eps}}
-  \caption{\label{evaltree-mlin}Memory usage for the {\tt evaltree} benchmark}
-\end{figure}
-
-\begin{figure}[htb]
-  \centerline{\psfig{figure=evaltree-tlog.eps}}
-  \caption{\label{evaltree-tlog}Execution times for the {\tt evaltree} benchmark}
-\end{figure}
-
-
 \section{Concluding remarks}
 \label{Conclusions}
 
-\begin{itemize}
-\item There exists old work with a title like ``hash consing'' from the
-LISP world.
-\item Compile time analyse with respect to reducing the generation
-of run-time garbage.
+We have presented the techniques for the compilation of \asdf\ to C,
+with emphasis on memory management issues.  We conclude that
+compiled \asdf\ specifications run with speeds comparable to that of
+other systems, while memory usage is in some cases an order of
+magnitude smaller.  We have mostly used and adjusted existing
+techniques but their combination in the \asdf\ compiler turns out to
+be very effective.
 
-\item Memo-functions.
+There are several topics that need further exploration.  First, we
+want to study the potential of compile-time analysis for reducing the
+amount of garbage that is generated at run-time.  Second, we have just
+started exploring the implementation of \emph{memo-functions}.
+Although the idea of memo-functions is rather old, they have not be
+used very much in practice due to their considerable memory
+requirements.  We believe that our setting of maximally shared
+subterms will provide a new perspective on the implementation of
+memo-functions. Finally, our ongoing concern is to achieve an even
+further scale-up of prototyping based on term rewriting.
 
-\end{itemize}
+\section*{Acknowledgments}
+The discussions with Jan Heering on \asdf\ compilation are much
+appreciated.  The idea for the benchmarks in Section~\ref{Benchmarks}
+originates from Jan Bergstra.
 
 
 \bibliographystyle{plain}
-\bibliography{/home/gipe/lib/tex/LanguageProto,metabib}
+%\bibliography{/home/gipe/lib/tex/LanguageProto,metabib}
+\bibliography{metabib}
 
 \end{document}
