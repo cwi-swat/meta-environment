@@ -154,7 +154,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-1       : use AsFix1 output format             [%s]\n"
               "\t-2       : use AsFix2 output format             [%s]\n"
 #endif
-              "\t-b       : use Binary AsFix (BAF) output format [%s]\n"
+              "\t-b       : output AsFix in binary format (BAF)  [%s]\n"
               "\t-c       : toggle cycle detection               [%s]\n"
               "\t-d       : toggle debug mode                    [%s]\n"
               "\t-f       : toggle filtering                     [%s]\n"
@@ -169,7 +169,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-p file  : use parse table |file| (required)    [%s]\n"
               "\t-P       : toggle position information          [%s]\n"
               "\t-s symbol: define start symbol                  [%s]\n"
-              "\t-t       : use PlainText AsFix output format    [%s]\n"
+              "\t-t       : output AsFix in textual format       [%s]\n"
               "\t-v       : toggle verbose mode                  [%s]\n"
               "\t-V       : reveal program version (i.e. %s)\n",
 #if !defined(NO_A2TOA1)
