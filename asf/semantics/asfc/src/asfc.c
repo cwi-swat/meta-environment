@@ -152,6 +152,11 @@ void ToC_code(ATerm asfix, FILE *file)
   do {
     size3++;
     c = *bp++;
+    if ((bp-buf) >= size) {
+      fprintf(stderr, "could not find '#' marker, "
+              "maybe the reduction failed?\n");
+      exit (1);
+    }
   } while(c != '#');
 
   while(c != '"') {
