@@ -22,7 +22,7 @@
 
 TESTS       = toolbus-test module-test parser-test
 
-TBSCRIPTS = new-eqs-test.tb.src new-module-test-1.tb.src \
+TBSCRIPTS = new-module-test-1.tb.src \
             new-module-test-2.tb.src new-module-test-3.tb.src \
             open-sdf2-lang-test.tb.src open-table-test-1.tb.src \
             open-table-test-2.tb.src update-test-module.tb.src \
