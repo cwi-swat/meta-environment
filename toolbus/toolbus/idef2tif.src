@@ -75,13 +75,19 @@ while(<IDEF>) {
   if (/process ([\w-]+) is/) {
     $process = $1;
     $pc++;
+    print TB $_;
   }
-  if (/\s*toolbus\(/) {
+  elsif (/command \= ([A-Z]+)/) {
+    print TB "command = \"\"\n";
+  }
+  elsif (/\s*toolbus\(/) {
     print STDERR "toolbus(..) statements not allowed in idef file\n";
     print STDERR "Abort.\n";
     exit 3;
   }
-  print TB $_;
+  else {
+    print TB $_;
+  }
 }
 
 close(IDEF);

@@ -1,5 +1,8 @@
 $Id$
 
+Tue May 13 14:02:52 CEST 2003 <{jong,kooiker}@cwi.nl>
+ * fix toolbus/idef2tif.src: handle "command = EDITOR" kind of #defines
+
 2003-03-30 <jurgenv@cwi.nl>
  * Used backquotes to delay calling *-config scripts to after
    configure phase. Otherwise autobundle can't configure all packages
