@@ -1,5 +1,13 @@
 /* $Id$ */
 
+Mon Aug  2 14:32:37 CEST 2004 <{jurgenv,kooiker}@cwi.nl>
+ * meta-scripts/error-display.tb:
+   - Added message for clearing rewrite errors
+   - Fixed displaying of errors in ui
+ * meta-scripts/meta-interface.tb.src:
+   - Fixed displaying of errors in ui
+   - Call clear-rewrite-errors after succesful rewrite 
+
 Fri Jul  9 14:31:48 CEST 2004 <{jong,kooiker}@cwi.nl>
  * removed 97 unused variables as reported by our relation calculus script
 

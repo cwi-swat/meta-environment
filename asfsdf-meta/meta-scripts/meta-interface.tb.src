@@ -56,9 +56,10 @@ in
       snd-msg(run-tests(ModuleName, Equations, Tests)) .
       (
         rec-msg(test-results(Errors?)) .
-        snd-note(remove-feedback-summary("asf-tests",ModuleName)) .
-        snd-note(show-feedback-summary(feedback("asf-tests",ModuleName,Errors)))
-/* TODO:        snd-note(refresh-feedback-summary(summary("asf-tests",ModuleName,Errors))) */
+        snd-msg(ui-remove-feedback-summary("asf-tests",ModuleName)) .
+	snd-msg(es-make-summary("asf-tests", ModuleName, Errors)).
+	rec-msg(es-summary(Summary?)).
+        snd-msg(ui-show-feedback-summary(Summary))
       +
         rec-msg(rewrite-errors(Errors?)).
         snd-msg(display-rewrite-errors(ModuleName, Errors))
@@ -149,12 +150,15 @@ in
     snd-note(ui-status(stat(Id, "Rewriting"))) .
     snd-msg(rewrite(ModuleName, Semantics, Tree)).
     (
-      rec-msg(rewrite-result(NormalForm?)).
-      snd-msg(restore-term-brackets(ModuleName, NormalForm)).
-      rec-msg(restore-term-brackets-result(ModuleName, NormalForm?))
-    +
-      rec-msg(rewrite-text(Text?)) .
-      NormalForm := quote(str(Text))
+      (
+	rec-msg(rewrite-result(NormalForm?)).
+	snd-msg(restore-term-brackets(ModuleName, NormalForm)).
+	rec-msg(restore-term-brackets-result(ModuleName, NormalForm?))
+      +
+	rec-msg(rewrite-text(Text?)) .
+	NormalForm := quote(str(Text))
+      )
+      . snd-msg(clear-rewrite-errors)
     +
       rec-msg(rewrite-errors(Errors?)).
       snd-msg(display-rewrite-errors(ModuleName, Errors)).
