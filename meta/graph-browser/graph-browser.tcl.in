@@ -231,9 +231,25 @@ proc set-status { str } {
 }
 
 #---
-# snd-do(add-status(id,s))
+# snd-do(add-statusf(id,format,args))
 #-
-# sets status message to s, for process with id id. Only called from process
+# sets status message to format(args), for process with id id. Only called from process
+# Status-display. Should not be used directly.
+#---
+proc add-statusf { id format args } {
+#  Why do we need to strip of a list layer here??
+	  set nwargs [lindex $args 0] 
+	  set format [TCLstring $format]
+
+    set str [eval "format \"$format\" $nwargs"]
+    
+	  add-status $id $str
+}
+
+#---
+# snd-do(add-status(id,str))
+#-
+# sets status message to format, for process with id id. Only called from process
 # Status-display. Should not be used directly.
 #---
 proc add-status { id str } {
@@ -255,7 +271,7 @@ proc add-status { id str } {
 #---
 proc end-status { id } {
     global statuslist
-
+    
     set listrm {}
     for {set i [expr [llength $statuslist]-1]} {$i >= 0} {incr i -1} {
 	if {[lindex [lindex $statuslist $i] 0] == $id} {
