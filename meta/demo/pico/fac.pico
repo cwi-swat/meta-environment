@@ -12,10 +12,10 @@ begin
     repnr := input;
     while repnr - 1 do
       output := output + rep;
-      
+
       repnr := repnr - 1
     od;
     input := input - 1
   od
-end
+end          
 
