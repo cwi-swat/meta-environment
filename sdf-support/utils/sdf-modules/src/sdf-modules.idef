@@ -82,9 +82,14 @@ in
     rec-msg(sm-make-sdf-definition(Modules?)) .
     snd-eval(SM, make-sdf-definition(Modules)) .
     Modules := [] .
-    rec-value(SM, sdf-definition(Definition?)) .
-    snd-msg(sm-sdf-definition(Definition)) .
-    Definition := no-tree
+    (
+      rec-value(SM, sdf-definition(Definition?)) .
+      snd-msg(sm-sdf-definition(Definition)) .
+      Definition := no-tree
+    +
+      rec-value(SM, no-sdf-definition) .
+      snd-msg(sm-no-sdf-definition)
+    )
   +
     rec-msg(sm-is-valid-modulename(ModuleId?)) .
     snd-eval(SM, is-valid-modulename(ModuleId)) .

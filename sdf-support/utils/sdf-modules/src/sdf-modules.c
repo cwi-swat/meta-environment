@@ -252,11 +252,16 @@ ATerm make_sdf_definition(int cid, ATerm atModules)
     }
   }
 
-  sdf = SDF_makeSDFDefinition(space, SDF_makeDefinitionDefault(modules));
-  start = SDF_makeStartSDF(space, sdf, space, 0);
-  result = ATBpack(SDF_StartToTerm(start));
+  if (!SDF_isModuleListEmpty(modules)) {
+    sdf = SDF_makeSDFDefinition(space, SDF_makeDefinitionDefault(modules));
+    start = SDF_makeStartSDF(space, sdf, space, 0);
+    result = ATBpack(SDF_StartToTerm(start));
 
-  return ATmake("snd-value(sdf-definition(<term>))", result);
+    return ATmake("snd-value(sdf-definition(<term>))", result);
+  }
+  else {
+    return ATmake("snd-value(no-sdf-definition)");
+  }
 }
 
 /*}}}  */
