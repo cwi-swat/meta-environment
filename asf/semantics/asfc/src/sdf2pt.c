@@ -255,7 +255,8 @@ static PT_Attributes flattenSdfAttributes(SDF_Attributes sdfAttributes)
       }
     }
 
-    ptAttributes = PT_makeAttributesAttrs(ptAttrList);
+    ptAttributes = PT_makeAttributesAttrs(
+                     PT_reverseAttrs(ptAttrList));
   }
 
   return ptAttributes;
