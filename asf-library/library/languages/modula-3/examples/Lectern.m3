@@ -2684,7 +2684,7 @@ PROCEDURE ImageBody(contents: Images.RawContents): Rect.T =
     END Grayed;
 (* The procedure "Blurred" is the straightforward encoding of the blurring
    algorithm, but it's too slow.  It's replaced by code in DarkRow and
-   DarkColumn, but it remains here for documentation. *)
+   DarkColumn, but it remains here for documentation.
   <*INLINE*> PROCEDURE Blurred(thisIndexH, thisIndexV: INTEGER): Images.Gray =
       (* Returns a pixel of the image converted to gray then blurred *)
       (* Convolves the image with a low-pass filter approximated by the
@@ -2712,7 +2712,7 @@ PROCEDURE ImageBody(contents: Images.RawContents): Rect.T =
                  8 (* rounding *) ) DIV 16 (* normalize to 1 *);
       END;
     END Blurred;
-
+*)
     <*INLINE*> PROCEDURE DarkRow(minH, maxH, v: INTEGER): BOOLEAN =
       (* Returns TRUE if [minH..maxH] of row v have a dark pixel *)
       VAR prev, this, next: INTEGER := 255 + 255*2 + 255;
