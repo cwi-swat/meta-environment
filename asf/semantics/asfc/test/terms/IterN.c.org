@@ -38,33 +38,6 @@ void resolve_IterN ( ) {
 }
 void init_IterN ( ) {
 }
-ATerm lf_1 ( ATerm arg0 , ATerm arg1 ) {
-{
-ATerm tmp [ 9 ] ;
-FUNC_ENTRY ( lf_1sym , ATmakeAppl ( lf_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , lf_5sym ) ) {
-( tmp [ 0 ] = arg_0 ( arg1 ) ) ;
-( tmp [ 1 ] = arg_1 ( arg1 ) ) ;
-if ( check_sym ( tmp [ 1 ] , lf_4sym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , lf_3sym ) ) {
-( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
-( tmp [ 5 ] = arg_1 ( tmp [ 3 ] ) ) ;
-if ( check_sym ( tmp [ 5 ] , lf_list_2sym ) ) {
-( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
-if ( not_empty_list ( tmp [ 6 ] ) ) {
-( tmp [ 7 ] = list_head ( tmp [ 6 ] ) ) ;
-( tmp [ 8 ] = list_tail ( tmp [ 6 ] ) ) ;
-FUNC_EXIT ( make_nf2 ( lf_5sym , arg0 , make_nf2 ( lf_4sym , tmp [ 0 ] , make_nf2 ( lf_3sym , tmp [ 2 ] , make_nf1 ( lf_list_2sym , cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ) ) ) ) ;
-}
-}
-}
-}
-}
-FUNC_EXIT ( make_nf2 ( lf_1sym , arg0 , arg1 ) ) ;
-}
-}
 ATerm lf_6 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 18 ] ;
@@ -109,6 +82,33 @@ FUNC_EXIT ( make_nf2 ( lf_5sym , tmp [ 0 ] , make_nf2 ( lf_4sym , tmp [ 2 ] , ma
 }
 }
 FUNC_EXIT ( make_nf2 ( lf_6sym , arg0 , arg1 ) ) ;
+}
+}
+ATerm lf_1 ( ATerm arg0 , ATerm arg1 ) {
+{
+ATerm tmp [ 9 ] ;
+FUNC_ENTRY ( lf_1sym , ATmakeAppl ( lf_1sym , arg0 , arg1 ) ) ;
+if ( check_sym ( arg1 , lf_5sym ) ) {
+( tmp [ 0 ] = arg_0 ( arg1 ) ) ;
+( tmp [ 1 ] = arg_1 ( arg1 ) ) ;
+if ( check_sym ( tmp [ 1 ] , lf_4sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
+if ( check_sym ( tmp [ 3 ] , lf_3sym ) ) {
+( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
+( tmp [ 5 ] = arg_1 ( tmp [ 3 ] ) ) ;
+if ( check_sym ( tmp [ 5 ] , lf_list_2sym ) ) {
+( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
+if ( not_empty_list ( tmp [ 6 ] ) ) {
+( tmp [ 7 ] = list_head ( tmp [ 6 ] ) ) ;
+( tmp [ 8 ] = list_tail ( tmp [ 6 ] ) ) ;
+FUNC_EXIT ( make_nf2 ( lf_5sym , arg0 , make_nf2 ( lf_4sym , tmp [ 0 ] , make_nf2 ( lf_3sym , tmp [ 2 ] , make_nf1 ( lf_list_2sym , cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ) ) ) ) ;
+}
+}
+}
+}
+}
+FUNC_EXIT ( make_nf2 ( lf_1sym , arg0 , arg1 ) ) ;
 }
 }
 ATerm lf_5 ( ATerm arg0 , ATerm arg1 ) {
