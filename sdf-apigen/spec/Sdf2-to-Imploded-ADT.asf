@@ -8,7 +8,8 @@ equations
   sdf-to-imploded-adt(definition ) = [ ]
 
 [equ-sdf-to-adt-definition-divide]
-  $ADT1 := sdf-module-to-imploded-adt($Module),
+  $Module2 := add-labels($Module),
+  $ADT1 := sdf-module-to-imploded-adt($Module2),
   $ADT2 := merge-adts([], $ADT1),
   $ADT3 := sdf-to-imploded-adt(definition $Module*),
   $ADT4 := merge-adts($ADT2, $ADT3)

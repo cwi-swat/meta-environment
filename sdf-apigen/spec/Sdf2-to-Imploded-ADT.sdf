@@ -1,6 +1,8 @@
 module Sdf2-to-Imploded-ADT
 
 imports Build-AsFix2ME-ADT
+imports AddLabels
+imports UniqueLabels
 
 exports 
 
@@ -59,7 +61,7 @@ hiddens
     "$ListType"		-> AFun
     "$Literal"		-> Literal
     "$ModName"		-> ModuleName
-    "$Module"		-> Module
+    "$Module"[0-9]*		-> Module
     "$Module*"		-> Module*
     "$Production"	-> Production
     "$Production*"	-> Production*
