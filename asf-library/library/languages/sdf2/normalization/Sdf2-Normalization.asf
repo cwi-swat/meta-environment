@@ -19,16 +19,16 @@ equations
 %% the top sorts of the definition and to remove productions not reachable
 %% from those top sorts.
 
-  [0]   m[[d]](M) = _G1,
-        lift[[_G1]] = _G2,
-        b[[ _G2 ]] = _G3,
-        a[[ _G3 ]] = _G4,
-        topsorts[[ _G4 ]](_A) = _G5,
-        r[[ _G5 ]] = _G7,
-        p[[ _G7 ]] = _G8,
-        q[[ _G8 ]] = _G9,
-        l[[ _G9 ]] = _G10,
-        k[[ _G10 ]] = _G11
+  [0]   _G1 := m[[d]](M),
+        _G2 := lift[[_G1]],
+        _G3 := b[[ _G2 ]],
+        _G4 := a[[ _G3 ]],
+        _G5 := topsorts[[ _G4 ]](_A),
+        _G7 := r[[ _G5 ]],
+        _G8 := p[[ _G7 ]],
+        _G9 := q[[ _G8 ]],
+        _G10 := l[[ _G9 ]],
+        _G11 := k[[ _G10 ]]
         ================
         normalize[[definition d]](M, _A) = _G11
 
@@ -41,7 +41,7 @@ equations
 %% that sort which starts and ends with layout.
 
   [0]
-        _G' = syntax _A [\EOF] -> <Start> ++ topsorts(_A, S(_G))
+        _G' := syntax _A [\EOF] -> <Start> ++ topsorts(_A, S(_G))
         ========================================================
         topsorts[[ _G ]](_A) = _G' _G
 
@@ -71,7 +71,7 @@ equations
   [0] r[[ _S ]] = (/)           %% [0] r[[ LAYOUT ]] = (/)
   [0] r[[ cc ]] = (/)            [0] r[[ <START> ]] = (/)
   [0] r[[ L  ]] = (/)            [0] r[[ <Start> ]] = (/)
-  [0] <_A?-CF> = <LAYOUT?-CF>
+  [0] <_A?-CF> == <LAYOUT?-CF>
       ===========
       r[[ _A ]] = (/)
 
@@ -111,15 +111,15 @@ equations
 %% that were added at the level of \SDFII{}.
 
   [0]
-        _G1 = context-free priorities pr*, _G2 = context-free syntax p*
+        context-free priorities pr* := _G1, context-free syntax p* := _G2
         ==================================================================
         _G1 <> _G2 = <context-free syntax p*, context-free priorities pr*>
   [0]
-        _G1 = context-free priorities pr*, _G2 = lexical syntax p*
+        context-free priorities pr* := _G1, lexical syntax p* := _G2
         =============================================================
         _G1 <> _G2 = <lexical syntax p*, context-free priorities pr*>
   [0]
-        _G1 = context-free priorities pr*1, _G2 = context-free priorities pr*2
+        context-free priorities pr*1 := _G1, context-free priorities pr*2 := _G2
         ======================================================================
         _G1 <> _G2 =  <context-free priorities pr*1, pr*2, (/)>
 
@@ -132,7 +132,7 @@ equations
 
    [0] b-aux[[context-free priorities pr*]] = <priorities pr* -CF>
    [0] <priorities pr*-CF>      = priorities <norm[[pr*]]-CFp>
-   [0] <pr*-CFp>                = when pr* =
+   [0] <pr*-CFp>                = when pr* ==
    [0] <pr+1, pr+2-CFp>         = <pr+1-CFp> ++ <pr+2-CFp>
    [0] <p1 > p2-CFp>            = <p1-CF> > <p2-CF>
    [0] <p1 as p2-CFp>           = <p1-CF> as <p2-CF>
@@ -141,7 +141,7 @@ equations
 
    [0] b-aux[[lexical priorities pr*]] = <priorities pr* -LEX>
    [0] <priorities pr*-LEX>     = priorities <norm[[pr*]]-LEXp>
-   [0] <pr*-LEXp>               = when pr* =
+   [0] <pr*-LEXp>               = when pr* ==
    [0] <pr+1, pr+2-LEXp>        = <pr+1-LEXp> ++ <pr+2-LEXp>
    [0] <p1 > p2-LEXp>           = <p1-LEX> > <p2-LEX>
    [0] <p1 as p2-LEXp>          = <p1-LEX> as <p2-LEX>
@@ -150,17 +150,17 @@ equations
 
    [0] b-aux[[lexical restrictions restr*]] = restrictions <restr* -LEX>
 
-   [0] <restr* -LEX>          = when restr* =
+   [0] <restr* -LEX>          = when restr* ==
    [0] <restr+1 restr+2 -LEX> = <restr+1 -LEX> ++ <restr+2 -LEX>
    [0] <'a -/- las -LEX>       = <'a -LEXs> -/- las
 
    [0] b-aux[[context-free restrictions restr*]] = restrictions <restr* -CF>
 
-   [0] <restr* -CF>          = when restr* =
+   [0] <restr* -CF>          = when restr* ==
    [0] <restr+1 restr+2 -CF> = <restr+1 -CF> ++ <restr+2 -CF>
    [0] <'a -/- las -CF>        = <'a -CFr> -/- las
 
-   [0] <'a      -CFr>  =         when 'a =
+   [0] <'a      -CFr>  =         when 'a ==
    [0] <_A      -CFr>  = <_A-CF>
    [0] <'a+ 'b+ -CFr>  = <'a+ -CFr> ++ <'b+ -CFr>
 
@@ -181,6 +181,6 @@ equations
 %% \paragraph{Aliases}
 
   [0]
-        _G1 = aliases al*, _G2 = sorts 'a
+        aliases al* := _G1, sorts 'a := _G2
         ====================================
         _G1 <> _G2 = <sorts 'a, aliases al*>

@@ -8,7 +8,7 @@ equations
 %% in one of the productions of the grammar.
 %% Existing productions are not affected.
 
-   [0] r[[ _G ]] = _G r[[ 'a ]] when {'a} = symbols(_G)
+   [0] r[[ _G ]] = _G r[[ 'a ]] when {'a} := symbols(_G)
 
 %% Recall that the function \fun{symbols}, defined in \Section{Mod:Kernel-Sdf-Projection},
 %% gives the set of all symbols in a grammar. The function $\mfun{r}\sem{\_}$
@@ -26,7 +26,7 @@ equations
    [0]
         r[[ () ]] = syntax  -> ()
    [0]
-        p = _A 'a+ -> (_A 'a+)
+        p := _A 'a+ -> (_A 'a+)
         ======================================
         r[[ (_A 'a+) ]] = syntax p r[[_A 'a+]]
 
@@ -70,8 +70,8 @@ equations
 %% The \emph{optional construct} $\Sym{A}?$ is either empty or $\Sym{A}$.
 
    [0]
-        p1 =    -> _A?,
-        p2 = _A -> _A?
+        p1 :=    -> _A?,
+        p2 := _A -> _A?
         ==================================
         r[[ _A ? ]] = syntax p1 p2 r[[_A]]
 
@@ -79,13 +79,13 @@ equations
 %% \input{iteration.ltx}
 
    [0]
-        p0 = _A      -> _A+,
-        p1 = _A+ _A+ -> _A+ {left},
-        p2 = _A+ _A* -> _A+,
-        p3 = _A* _A+ -> _A+,
-        p4 = _A* _A* -> _A* {left},
-        p5 =         -> _A*,
-        p6 = _A+     -> _A*
+        p0 := _A      -> _A+,
+        p1 := _A+ _A+ -> _A+ {left},
+        p2 := _A+ _A* -> _A+,
+        p3 := _A* _A+ -> _A+,
+        p4 := _A* _A* -> _A* {left},
+        p5 :=         -> _A*,
+        p6 := _A+     -> _A*
         =============================================================
         r[[_A*]] = syntax p0 p1 p2 p3 p4 p5 p6
                    priorities {left: p1 p2 p3 p4} > {p5 p6} r[[ _A ]]
@@ -100,13 +100,13 @@ equations
 %% $\Sym{A}*$.
 
    [0]
-        p0 = _A                   -> {_A _B}+,
-        p1 = {_A _B}+ _B {_A _B}+ -> {_A _B}+ {left},
-        p2 = {_A _B}+ _B {_A _B}* -> {_A _B}+,
-        p3 = {_A _B}* _B {_A _B}+ -> {_A _B}+,
-        p4 = {_A _B}* _B {_A _B}* -> {_A _B}* {left},
-        p5 =                      -> {_A _B}*,
-        p6 = {_A _B}+             -> {_A _B}*
+        p0 := _A                   -> {_A _B}+,
+        p1 := {_A _B}+ _B {_A _B}+ -> {_A _B}+ {left},
+        p2 := {_A _B}+ _B {_A _B}* -> {_A _B}+,
+        p3 := {_A _B}* _B {_A _B}+ -> {_A _B}+,
+        p4 := {_A _B}* _B {_A _B}* -> {_A _B}* {left},
+        p5 :=                      -> {_A _B}*,
+        p6 := {_A _B}+             -> {_A _B}*
         ================================================================
         r[[{_A _B}*]] = syntax p0 p1 p2 p3 p4 p5 p6
                         priorities {left: p1 p2 p3 p4} > {p5 p6} r[[ _A _B ]]
@@ -127,7 +127,7 @@ equations
    [0] _A 1+ = _A+
 
    [0]
-        n >= 2 = true, n - 1 = n', p = _A _A n'+ -> _A n+
+        n >= 2 == true, n' := n - 1, p := _A _A n'+ -> _A n+
         =================================================
         r[[ _A n+]] = syntax p r[[ _A n'+ ]]
 
@@ -137,7 +137,7 @@ equations
    [0] {_A _B} 1+ = {_A _B}+
 
    [0]
-        n >= 2 = true, n-1 = n', p = _A _B {_A _B}n'+ -> {_A _B}n+
+        n >= 2 == true, n' := n-1, p := _A _B {_A _B}n'+ -> {_A _B}n+
         ==========================================================
         r[[ {_A _B}n+]] = syntax p r[[ {_A _B}n'+ ]]
 
@@ -152,7 +152,7 @@ equations
 %% where the $T_i$ are expresions of type $\Sym{A}_i$.
 
     [0]
-         "<" ++ tup(_A # _B) ++ ">" = 'a, p = 'a -> _A # _B
+         'a := "<" ++ tup(_A # _B) ++ ">", p := 'a -> _A # _B
           ==================================================
           r[[ _A # _B ]] =  syntax p r[[ 'a ]]
 
@@ -164,8 +164,8 @@ equations
 
 
   [0]
-        "<" ++ tups(_A) ++ "," ++ tups('a,+) ++ ">" = 'a, 
-        p = 'a ->  <_A , 'a,+>
+        'a := "<" ++ tups(_A) ++ "," ++ tups('a,+) ++ ">", 
+        p := 'a ->  <_A , 'a,+>
         ==================================================
         r[[ <_A , 'a,+> ]] =  syntax p r[[ 'a ]]
 
@@ -184,7 +184,7 @@ equations
 %% function to an argument.
 
    [0]
-        p = ('a => _B) "(" 'a ")" -> _B
+        p := ('a => _B) "(" 'a ")" -> _B
         =======================================
         r[[ ('a => _B) ]] = syntax p r[['a _B]]
 

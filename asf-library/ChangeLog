@@ -1,3 +1,10 @@
+2003/11/10 (jurgenv@cwi.nl)
+  * Upgraded SDF2 normalizer specification in languages/sdf2. One ambiguity
+    occurred over a condition with lists of priorities separated by comma's.
+    Introduced a "priorities" keyword on both sides of the two involved
+    conditions to solve the problem.
+  * Solved several new warnings of the SDF checker in the normalizer too.
+
 2003/11/03 (jurgenv@cwi.nl)
   * Added lower-from-tree function.
 

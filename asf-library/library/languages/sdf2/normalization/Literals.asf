@@ -37,16 +37,16 @@ equations
   [0]
         chars( "" )  =
   [0]
-        [shortchar("\" c)] = cc
+        cc := [shortchar("\" c)]
         =======================================================================
         chars( qliteral(""" "\" c c* """) ) = cc ++ chars( qliteral(""" c* """) )
   [0]
-        [shortchar(c)] = cc, cc = [numchar(c+)]
+        cc := [shortchar(c)], [numchar(c+)] := cc
         ====================================================================
          chars( qliteral(""" c c* """) ) = cc ++ chars( qliteral(""" c* """) )
   [default-0]
-        [shortchar("\" c )] = cc,
-        'a = chars( qliteral(""" c* """) )
+        cc := [shortchar("\" c )],
+        'a := chars( qliteral(""" c* """) )
         =========================================
         chars( qliteral(""" c c* """) ) = cc ++ 'a
 

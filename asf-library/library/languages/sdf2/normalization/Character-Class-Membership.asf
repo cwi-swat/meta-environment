@@ -28,7 +28,7 @@ equations
   [inc1] []          sub cc = true
   [inc2] [_c]        sub cc = _c in cc
   [inc3] [_c-_c]     sub cc = _c in cc
-  [inc4] [_c1-_c2]   sub cc = _c1 in cc & [succ(_c1)-_c2] sub cc when _c1 < _c2 = true
+  [inc4] [_c1-_c2]   sub cc = _c1 in cc & [succ(_c1)-_c2] sub cc when _c1 < _c2 == true
   [inc5] [cr+1 cr+2] sub cc = [cr+1] sub cc & [cr+2] sub cc
 
 %% Equivalence: two character classes are equivalent if both are subsets

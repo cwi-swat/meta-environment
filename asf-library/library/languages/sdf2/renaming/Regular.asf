@@ -5,7 +5,7 @@ equations
 %% Renaming symbols in regular expressions.
 
    [0] [()] 'r          = ()
-   [0] [(_A 'a+)] 'r    = (_B 'b+) when (_A 'a+)* 'r = _B 'b+
+   [0] [(_A 'a+)] 'r    = (_B 'b+) when _B 'b+ := (_A 'a+)* 'r
    [0] [_A?] 'r         = (_A) 'r ?
    [0] [_A+] 'r         = (_A) 'r +
    [0] [_A*] 'r         = (_A) 'r *

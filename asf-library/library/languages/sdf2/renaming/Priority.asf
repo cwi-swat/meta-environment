@@ -10,17 +10,17 @@ equations
 
 %% Lists of priorities.
 
-  [0] (pr*) 'r        =                         when pr* =
+  [0] (pr*) 'r        =                         when pr* ==
   [0] (pr+1, pr+2) 'r = (pr+1) 'r ++ (pr+2) 'r
 
 %% Associativity and priority declarations.
 
   [0] (g1 as g2) 'r     = (g1)G'r as (g2)G'r
   [0] (g1 > g2) 'r      = (g1)G'r > (g2)G'r
-  [0] (g1 > g2 > gg+)'r = (g1)G'r > g2' > gg+' when g2' > gg+' = (g2 > gg+)'r
+  [0] (g1 > g2 > gg+)'r = (g1)G'r > g2' > gg+' when g2' > gg+' := (g2 > gg+)'r
 
 %% Groups.
 
-  [0] (g)G'r            = p' when g = p, p' = (p)'r
+  [0] (g)G'r            = p' when p := g, p' := (p)'r
   [0] ({p*})G'r         = {(p*)*'r}
   [0] ({as:p*})G'r      = {as: (p*)*'r}

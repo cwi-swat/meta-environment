@@ -10,6 +10,8 @@ exports
     CharClass "equiv" CharClass  -> Boolean
 
 hiddens
+  sorts CharRanges OptCharRanges CharRange
+
   variables
     "_c"[0-9\']*    -> Character
     "cr"[0-9\']*    -> CharRange

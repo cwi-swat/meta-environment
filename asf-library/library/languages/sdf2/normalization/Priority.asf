@@ -8,10 +8,10 @@ equations
 %% priorities declarations and takes the transitive closure.
 
   [0]
-        Pr(_G) = pr*1, 
-        norm[[ pr*1 ]] = pr*2,
+        pr*1 := Pr(_G), 
+        pr*2 := norm[[ pr*1 ]],
         %% ~Pr(_G) syntax[[ pr*2 ]] = _G'
-        ~Pr(_G) = _G'
+        _G' := ~Pr(_G)
         =============
         p[[ _G ]] = _G' priorities pr*2 ++ assoc[[_G']]
 
@@ -78,12 +78,12 @@ equations
 %%%   []
 %%%        trans[[pr*1, pr, pr*2, pr, pr*3]] = trans[[pr*1, pr, pr*2, pr*3]]
 
-   [tr-1]   trans0[[pr*1]] = pr*2
+   [tr-1]   pr*2 := trans0[[pr*1]]
             =====================
             trans[[pr*1]] = trans2[[pr*2]]
 
-   [tr0-1]   trans1[[pr | pr*1]] = pr*2,
-             trans0[[pr*2]] = pr*3
+   [tr0-1]   pr*2 := trans1[[pr | pr*1]],
+             pr*3 := trans0[[pr*2]]
              =====================
              trans0[[pr, pr*1]] = pr, pr*3
 
@@ -94,12 +94,12 @@ equations
    [tr1-2]   trans1[[pr | pr, pr*]] = trans1[[pr | pr*]]
 
    [tr1-3]   pr1 != pr2,
-             trans1[[pr1 | pr*1]] = pr*2
+             pr*2 := trans1[[pr1 | pr*1]]
              ===========================
              trans1[[pr1 | pr2, pr*1]] = pr2, pr*2
 
-  [tr2-1] pr*1, p1 > p2, pr*2 = pr*,
-          pr* = pr*3, p2 > p3, pr*4,
+  [tr2-1] priorities pr*1, p1 > p2, pr*2 := priorities pr*,
+          priorities pr*3, p2 > p3, pr*4 := priorities pr*,
           p1 > p3 (- pr* != true
           ======================
           trans2[[pr*]] = trans2[[p1 > p3, pr*]]
@@ -122,7 +122,7 @@ equations
   [0] assoc[[_G]]         = assoc[[ P(_G) ]]
   [0] assoc[[]]           =
   [0] assoc[[p+1 p+2]]    = assoc[[p+1]] ++ assoc[[p+2]]
-  [0] assoc[[p]]          = p as p  when p = 'a -> _A {attr*1, as, attr*2}
+  [0] assoc[[p]]          = p as p  when 'a -> _A {attr*1, as, attr*2} := p
   [default-0] assoc[[p]]  =
 
 %% The function \fun{syntax} derives from a priorities declaration the list of all

@@ -4,7 +4,7 @@ exports
   context-free syntax
    Restrictions "++" Restrictions        -> Restrictions {right}
     "R"(Grammar)                         -> Restrictions
-    proj "_" Symbol "(" Restrictions ")" -> Lookaheads
+    "proj" "_" Symbol "(" Restrictions ")" -> Lookaheads
 
 hiddens
   variables

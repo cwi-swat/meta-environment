@@ -13,9 +13,9 @@ hiddens
   sorts IG
   context-free syntax
     "<" Imports "," Grammar ">"                         -> IG
-    imp"[[" Definition "]]" "(" Imports "," Import  ")" -> IG
-    ims"[[" Definition "]]" "(" Imports "," Imports ")" -> IG
-    gra"[[" Definition "]]" "(" Imports "," Grammar ")" -> IG
+    "imp" "[[" Definition "]]" "(" Imports "," Import  ")" -> IG
+    "ims" "[[" Definition "]]" "(" Imports "," Imports ")" -> IG
+    "gra" "[[" Definition "]]" "(" Imports "," Grammar ")" -> IG
 
 hiddens 
   variables

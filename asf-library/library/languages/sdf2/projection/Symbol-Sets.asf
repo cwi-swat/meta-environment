@@ -13,7 +13,7 @@ equations
   [0]           'u        || {}   = 'u
 %%%Mark: 13-07-1999  [0]           {'a+ 'b+} || 'u   = {'a+} || {'b+} || 'u
   [0]           {_A 'b+} || 'u   = {_A} || {'b+} || 'u
-  [0]           {_A}      || 'u   = 'u when _A (- 'u = true
+  [0]           {_A}      || 'u   = 'u when _A (- 'u == true
   [default-0]   {_A}      || {'a} = {_A 'a}
 
 %% Difference
@@ -21,7 +21,7 @@ equations
   [0]             {} / 'u           = {}
   [0]             'u / {}           = 'u
   [0]             {'a+ 'b+} / 'u    = {'a+} / 'u || {'b+} / 'u
-  [0]             {_A} / 'u         = {}  when _A (- 'u = true
+  [0]             {_A} / 'u         = {}  when _A (- 'u == true
   [default-0]     {_A} / 'u         = {_A}
 
 %%%

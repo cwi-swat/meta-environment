@@ -77,7 +77,7 @@ equations
  [0]
         reachable('u, {}, p*) =
  [0]
-        _A (- 'u1 = false, P__A(p*1) = p*2, symbols(p*2) / 'u1 = 'u2
+        _A (- 'u1 == false, p*2 := P__A(p*1), 'u2 := symbols(p*2) / 'u1
         ==============================================================================
         reachable('u1, {_A 'a}, p*1) = p*2 ++ reachable('u1 || {_A}, 'u2 || {'a}, p*1)
  [default-0]

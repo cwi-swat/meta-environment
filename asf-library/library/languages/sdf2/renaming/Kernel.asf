@@ -7,13 +7,13 @@ equations
 %% by its value in the renaming. Otherwise, the renaming is applied recursively
 %% to the subsymbols of the symbol, which is done by the function $[\_]\rho$.
 
-  [0]         (_A)'r = _B     when proj__A('r) = _B, _A != _B
+  [0]         (_A)'r = _B     when _B := proj__A('r), _A != _B
   [default-0] (_A)'r = [_A]'r
 
 %% Renaming a production works similarly. If the production is defined in
 %% the renaming it is replaced by its value. Otherwise, its symbols are renamed.
 
-  [0]         (p)'r          = p' when proj_p('r) = p', p' != p
+  [0]         (p)'r          = p' when p' := proj_p('r), p' != p
   [default-0] ('a -> _A !)'r = ('a)*'r -> (_A)'r !
 
 %% For all other grammar constructs, renaming is a homomorphism that applies
@@ -22,7 +22,7 @@ equations
 %% \noindent
 %% Renaming lists of symbols.
 
-  [0] ('a)*'r      =           when 'a =
+  [0] ('a)*'r      =           when 'a ==
   [0] ('a+ 'b+)*'r = ('a+)* 'r ++ ('b+)*'r
   [0] (_A)*'r      = (_A)'r
 
@@ -34,7 +34,7 @@ equations
 %% Renaming lists of productions.
 
   [0] (p)*'r        = (p)'r
-  [0] (p*1)*'r      =         when p*1 =
+  [0] (p*1)*'r      =         when p*1 ==
   [0] (p+1 p+2)*'r  = (p+1)*'r ++ (p+2)*'r
 
 %% Renaming grammars.

@@ -25,7 +25,7 @@ equations
 %% The constant is used to normalize degenerate ranges like
 %% $\Char{10}-\Char{9}$ that are empty.
 
-   [rn2] _c1 - _c2 = (/) when _c1 <= _c2 = false
+   [rn2] _c1 - _c2 = (/) when _c1 <= _c2 == false
 
 %% From now on we will assume that all ranges $c_1-c_2$ in left-hand sides of equations
 %% are proper, i.e., $c_1<c_2$.
@@ -98,19 +98,19 @@ equations
    [mrg1]
         _c |> _c = <_c>
    [mrg2]
-        succ(_c1) = _c2
+        succ(_c1) == _c2
         ========================
         _c1 |> _c2 = <_c1 - _c2>
    [mrg3]
-        _c1 <= _c3 = true, _c3 <= succ(_c2) = true
+        _c1 <= _c3 == true, _c3 <= succ(_c2) == true
         ==========================================
         _c1 - _c2 |> _c3 = <_c1 - max(_c2,_c3)>
    [mrg4]
-        _c1 == _c2 | succ(_c1) == _c2 = true
+        _c1 == _c2 | succ(_c1) == _c2 == true
         =====================================
         _c1 |> _c2 - _c3 = <_c1 - _c3>
    [mrg5]
-        _c1 <= _c3 = true, _c3 <= succ(_c2) = true
+        _c1 <= _c3 == true, _c3 <= succ(_c2) == true
         =============================================
         _c1 - _c2 |> _c3 - _c4 = <_c1 - max(_c2,_c4)>
 
@@ -171,15 +171,15 @@ equations
 %% then concatenates the result with the tail of the first list.
 
    [cat3]
-        cr1 -<<< head(cr+3) = true
+        cr1 -<<< head(cr+3) == true
         =================================
         (cr1 cr+2) cr+3 = cr1 (cr+2 cr+3)
    [cat4]
-        head(cr+2) -< head(cr+1) = true
+        head(cr+2) -< head(cr+1) == true
         ===============================
         cr+1 cr+2 = cr+2 cr+1
    [cat5]
-        head(cr+1) |> head(cr+2) = <cr3>
+        <cr3> := head(cr+1) |> head(cr+2)
         =======================================
         cr+1 cr+2 = (cr3 tail(cr+1)) tail(cr+2)
 
@@ -210,7 +210,7 @@ equations
         _c1 - _c2 / _c3 = if(_c1 <= _c3 & _c3 <= _c2,
                                  [_c1 - pred(_c3) succ(_c3) - _c2], [_c1 - _c2])
    [d4]
-        succ(_c4) = _c4'
+        _c4' := succ(_c4)
         ==========================================================================
         _c1 - _c2 / _c3 - _c4 = if(_c3 <= _c2 & _c1 < _c4',
                                        [_c1 - pred(_c3) _c4' - _c2] , [_c1 - _c2])
@@ -224,11 +224,11 @@ equations
 %% the smallest can be skipped.
 
    [d7]
-        head(cr+2) -<< head(cr+1) = true
+        head(cr+2) -<< head(cr+1) == true
         =======================================
         [cr+1] / [cr+2] = [cr+1] / [tail(cr+2)]
    [d8]
-        head(cr+1) -<< head(cr+2) = true
+        head(cr+1) -<< head(cr+2) == true
         =======================================================
         [cr+1] / [cr+2] = [head(cr+1)] \/ [tail(cr+1)] / [cr+2]
 
@@ -237,7 +237,7 @@ equations
 %% ranges are taken.
 
    [default-d9]
-        head(cr+1) = cr1, head(cr+2) = cr2
+        cr1 := head(cr+1), cr2 := head(cr+2)
         ===============================================
         [cr+1] / [cr+2] = (cr1 / cr2 \/ [tail(cr+1)])
                           / (cr2 / cr1 \/ [tail(cr+2)])
@@ -270,8 +270,8 @@ equations
   [0] _c (- _c'       = false when _c != _c'
   [0] _c (- _c1 - _c2 = _c1 <= _c & _c <= _c2
   [0] _c (-           = false
-  [0] _c (- cr cr+    = false when _c -< cr = true
-  [0] _c (- cr cr+    = true  when _c (- cr = true
+  [0] _c (- cr cr+    = false when _c -< cr == true
+  [0] _c (- cr cr+    = true  when _c (- cr == true
   [default-0] _c (- cr cr+ = _c (- cr+
 
   [0] _c (- [cr*] = _c (- cr*

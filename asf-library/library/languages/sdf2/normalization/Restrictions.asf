@@ -30,7 +30,7 @@ equations
 %% Normalizing lookaheads
 
   [r12]    [] . las   = []
-  [r13]    cc . cc'   = cc when cc' = ~[]
+  [r13]    cc . cc'   = cc when cc' == ~[]
   [r14]    cc . [[ ]] = cc
 
   [r15]    [[la*1, [], la*2]] = [[la*1, la*2]]
@@ -41,12 +41,12 @@ equations
   [r17]    [[la*1, cc1, la*2, cc2, la*3]] =
         [[la*1, cc1 \/ cc2, la*2, la*3]]
 
-  [r18]    cc1 /\ cc2 = cc3, cc3 != []
+  [r18]    cc3 := cc1 /\ cc2, cc3 != []
         ==================================
         [[cc1, la*2, cc2 . las, la*3]] =
         [[cc1, la*2, cc2 / cc3 . las, la*3]]
 
-  [r19]    cc1 /\ cc2 = cc3, cc3 != []
+  [r19]    cc3 := cc1 /\ cc2, cc3 != []
         =======================================================================
         [[la*1, cc1 . las1, la*2, cc2 . las2, la*3]] =
         [[la*1, cc1 / cc3 . las1, cc3 . (las1 | las2), la*2, cc2 / cc3 . las2, la*3]]

@@ -12,5 +12,5 @@ equations
 
 %% Subgrammars can be swapped as specified by the function $\Diamond$.
 
-    [grm-sort1]   _G1 _G2     = _G1' _G2'     when _G1 <> _G2 = <_G1', _G2'>
-    [grm-sort2]   _G1 _G2 _G3 = _G1 _G2' _G3' when _G2 <> _G3 = <_G2', _G3'>
+    [grm-sort1]   _G1 _G2     = _G1' _G2'     when <_G1', _G2'> := _G1 <> _G2
+    [grm-sort2]   _G1 _G2 _G3 = _G1 _G2' _G3' when <_G2', _G3'> := _G2 <> _G3

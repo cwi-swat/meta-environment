@@ -28,7 +28,7 @@ equations
 %% are found in `Sdf2-Normalization'.
 
   [0]
-        proj_M(d) = s*, gra[[d]]( , Hid(s*)) = <_i*1, _G1>, gra[[d]](_i*1, Exp(s*)) = <_i*2, _G2>
+        s* := proj_M(d), <_i*1, _G1> := gra[[d]]( , Hid(s*)), <_i*2, _G2> := gra[[d]](_i*1, Exp(s*))
         =========================================================================================
         m[[d]]( M ) = _G2 hide(M, _G1)
 
@@ -53,7 +53,7 @@ equations
 %% is important in particular in the presence of cyclic imports.
 
   [0]
-        gra[[d]](_i*1, _G1) = <_i*2, _G1'>, gra[[d]](_i*2, _G2) = <_i*3, _G2'>
+        <_i*2, _G1'> := gra[[d]](_i*1, _G1), <_i*3, _G2'> := gra[[d]](_i*2, _G2)
         ======================================================================
         gra[[d]](_i*1, _G1 _G2) = <_i*3, _G1' _G2'>
   [0]
@@ -67,7 +67,7 @@ equations
   [0]
         ims[[d]](_i* ,) = <_i*, (/)>
   [0]
-        imp[[d]](_i*1, _i) = <_i*3, _G1>, ims[[d]](_i*3, _i*2) = <_i*4, _G2>
+        <_i*3, _G1> := imp[[d]](_i*1, _i), <_i*4, _G2> := ims[[d]](_i*3, _i*2)
         ====================================================================
         ims[[d]](_i*1, _i _i*2) = <_i*4, _G1 _G2>
 
@@ -78,11 +78,11 @@ equations
 %% This is a protection against cyclic imports.
 
   [0]
-        _G = if M (- _i* then (/) else Exp(proj_M(d)) fi
+        _G := if M (- _i* then (/) else Exp(proj_M(d)) fi
         ===========================================
         imp[[d]](_i*, M) = gra[[d]](_i* M, _G)
   [0]
-        _G = if M 'r (- _i* then (/) else (Exp(proj_M(d)))'r fi
+        _G := if M 'r (- _i* then (/) else (Exp(proj_M(d)))'r fi
         ======================================================
         imp[[d]](_i*, M 'r) = gra[[d]](_i* M 'r, _G)
 

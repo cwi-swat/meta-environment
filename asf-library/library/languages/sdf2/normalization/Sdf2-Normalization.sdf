@@ -17,8 +17,8 @@ exports
 
 hiddens
   context-free syntax
-    normalize "[[" SDF "]]" "(" ModuleName "," Symbol ")" -> Grammar
-    topsorts "[[" Grammar "]]" "(" Symbol ")"             -> Grammar
+    "normalize" "[[" SDF "]]" "(" ModuleName "," Symbol ")" -> Grammar
+    "topsorts" "[[" Grammar "]]" "(" Symbol ")"             -> Grammar
     topsorts(Symbol, Symbols)                             -> Productions
 
 %% \def\InterferenceSYN{

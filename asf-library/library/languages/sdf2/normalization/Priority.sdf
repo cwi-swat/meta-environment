@@ -13,9 +13,9 @@ exports
 
 hiddens
   context-free syntax
-    trans0 "[[" Priorities "]]" -> Priorities
-    trans1 "[[" Priority "|" Priorities "]]" -> Priorities
-    trans2 "[[" Priorities "]]" -> Priorities
+    "trans0" "[[" Priorities "]]" -> Priorities
+    "trans1" "[[" Priority "|" Priorities "]]" -> Priorities
+    "trans2" "[[" Priorities "]]" -> Priorities
 
 hiddens
   variables

@@ -14,7 +14,7 @@ equations
 %% is defined by the production added by the function $\mfun{b}\sem{\_}$.
 
    [0]
-        p = <LAYOUT-CF> <LAYOUT-CF> -> <LAYOUT-CF> {left}
+        p := <LAYOUT-CF> <LAYOUT-CF> -> <LAYOUT-CF> {left}
         =================================================
         b[[_G]] = syntax p b-aux[[_G]]
 
@@ -35,15 +35,15 @@ equations
 
    [0] b-aux[[lexical syntax p*]] = <syntax p* -LEX>
 
-   [0] <'a      -LEXs>   =            when 'a =
+   [0] <'a      -LEXs>   =            when 'a ==
    [0] <_A      -LEXs>   = <_A -LEX>
    [0] <'a+ 'b+ -LEXs>   = <'a+ -LEXs> ++ <'b+ -LEXs>
    [0] <'a -> _A! -LEX>   = <'a -LEXs> -> <_A-LEX> !
 
 %% Do not introduce the injection if it causes a cc cycle 
-   [0] <'a -> _A! -LEXs> = <'a -> _A! -LEX> when <_A -LEXs> -> <_A-CF> = cc -> cc
-   [default] <'a -> _A! -LEXs> = <'a -> _A! -LEX> <_A -LEXs> -> <_A-CF>
-   [0] <p*        -LEXs> =   when p* =
+   [0] <'a -> _A! -LEXs> = <'a -> _A! -LEX> when cc -> cc
+   := <_A -LEXs> -> <_A-CF> [default] <'a -> _A! -LEXs> = <'a -> _A! -LEX> <_A -LEXs> -> <_A-CF>
+   [0] <p*        -LEXs> =   when p* ==
    [0] <p+1 p+2   -LEXs> = <p+1 -LEXs> ++ <p+2 -LEXs>
    [0] <syntax p* -LEX>  = syntax <p* -LEXs>
    [0] <_G1 _G2-LEX>     = <_G1-LEX> <_G2-LEX>
@@ -57,12 +57,12 @@ equations
 %% of a production is separated by the symbol $\cfsort{{\tt LAYOUT}?}$.
    [0] b-aux[[context-free syntax p*]] = <syntax p* -CF>
 
-   [0] <'a      -CFs>  =         when 'a =
+   [0] <'a      -CFs>  =         when 'a ==
    [0] <_A      -CFs>  = <_A-CF>
    [0] <'a+ 'b+ -CFs>  = <'a+ -CFs> ++ <LAYOUT?-CF> ++ <'b+ -CFs>
    [default-0] <'a -> _A!-CF>   = <'a -CFs> -> <_A-CF>!
    [0] < p      -CFs>   = <p -CF>
-   [0] <p*      -CFs>   =                        when p* =
+   [0] <p*      -CFs>   =                        when p* ==
    [0] <p+1 p+2 -CFs>   = <p+1 -CFs> ++ <p+2 -CFs>
    [0] <syntax p*-CF>   = syntax <p* -CFs>
    [0] <_G1 _G2-CF>     = <_G1-CF> <_G2-CF>
@@ -108,26 +108,26 @@ equations
 %% We only show two of the equations, the other cases are similar.
 
    [0]
-        _G1 = context-free syntax p*1, _G2 = context-free syntax p*2
+        context-free syntax p*1 := _G1, context-free syntax p*2 := _G2
         ============================================================
         _G1 <> _G2 = <context-free syntax p*1 p*2, (/)>
    [0]
-        _G1 = context-free syntax p*1, _G2 = lexical syntax p*2
+        context-free syntax p*1 := _G1, lexical syntax p*2 := _G2
         ==========================================================
         _G1 <> _G2 = <lexical syntax p*2, context-free syntax p*1>
 
 %% \def\FORGET{
 
    [0]
-        _G1 = lexical syntax p*1, _G2 = lexical syntax p*2
+        lexical syntax p*1 := _G1, lexical syntax p*2 := _G2
         ==================================================
         _G1 <> _G2 = <lexical syntax p*1 p*2, (/)>
    [0]
-        _G1 = lexical variables p*1, _G2 = lexical variables p*2
+        lexical variables p*1 := _G1, lexical variables p*2 := _G2
         ========================================================
         _G1 <> _G2 = <lexical variables p*1 p*2, (/)>
    [0]
-        _G1 = variables p*1, _G2 = variables p*2
+        variables p*1 := _G1, variables p*2 := _G2
         ========================================
         _G1 <> _G2 = <variables p*1 p*2, (/)>
 %%}
@@ -136,19 +136,19 @@ equations
 
 %%\def\FORGET{
    [0]
-        _G1 = lexical variables p*1, _G2 = context-free syntax p*2
+        lexical variables p*1 := _G1, context-free syntax p*2 := _G2
         =============================================================
         _G1 <> _G2 = <context-free syntax p*2, lexical variables p*1>
    [0]
-        _G1 = variables p*1, _G2 = context-free syntax p*2
+        variables p*1 := _G1, context-free syntax p*2 := _G2
         =====================================================
         _G1 <> _G2 = <context-free syntax p*2, variables p*1>
    [0]
-        _G1 = lexical variables p*1, _G2 = lexical syntax p*2
+        lexical variables p*1 := _G1, lexical syntax p*2 := _G2
         ========================================================
         _G1 <> _G2 = <lexical syntax p*2, lexical variables p*1>
    [0]
-        _G1 = variables p*1, _G2 = lexical variables p*2
+        variables p*1 := _G1, lexical variables p*2 := _G2
         ===================================================
         _G1 <> _G2 = <lexical variables p*2, variables p*1>
 

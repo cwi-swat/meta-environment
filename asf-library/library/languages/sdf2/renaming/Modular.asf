@@ -5,7 +5,7 @@ equations
 %% \noindent
 %% Renaming sections.
 
-  [0] (s*)'r         = when s* =
+  [0] (s*)'r         = when s* ==
   [0] (exports _G)'r = exports (_G)'r
   [0] (hiddens _G)'r = hiddens (_G)'r
   [0] (s+1 s+2)'r    = (s+1)'r ++ (s+2)'r
@@ -16,8 +16,8 @@ equations
 
   [0] (imports _i*)'r = imports (_i*)'r
   [0] ( M ) 'r        = M 'r
-  [0] (_i*)'r         =           when _i* =
-  [0] (_i+1 _i+2)'r   = _i+3 _i+4 when _i+3 = (_i+1)'r, _i+4 = (_i+2)'r
+  [0] (_i*)'r         =           when _i* ==
+  [0] (_i+1 _i+2)'r   = _i+3 _i+4 when _i+3 := (_i+1)'r, _i+4 := (_i+2)'r
 
 %% If the imported module has already a renaming attached to it, the
 %% new renaming is applied to the first, yielding the composition of
