@@ -54,7 +54,7 @@ Id := process-id.
       rec-msg(no-syntax(ErrorMsg?)) .
       snd-note(ui-status(endstat(Id))) .
       snd-note(ui-status(errorf("%s",[ErrorMsg]))).
-      snd-msg(no-parse-table)
+      snd-msg(no-parse-table(ModuleId))
     )
   )
 ) *
