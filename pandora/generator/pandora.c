@@ -346,14 +346,17 @@ static BOX_Box argsManyToBox(PT_Tree tree)
   for (; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) 
   {
     PT_Tree head = PT_getArgsHead(args);
-    BOX_Box prettyHead = treeToBox(head);
-
-    if (isNonTerminal(head) 
-	&& isIndentedType(PT_getTreeProd(tree))) 
+    if(!PT_isTreeLayout(head))
     {
-      prettyHead = BOX_makeBoxIEmptyLayout(prettyHead);
-    } 
-    boxList = BOX_makeBoxListMany(prettyHead, optLayout, boxList); 
+      BOX_Box prettyHead = treeToBox(head);
+
+      if (isNonTerminal(head) 
+	  && isIndentedType(PT_getTreeProd(tree))) 
+      {
+	prettyHead = BOX_makeBoxIEmptyLayout(prettyHead);
+      } 
+      boxList = BOX_makeBoxListMany(prettyHead, optLayout, boxList); 
+    }
   }
   boxList = BOX_reverseBoxList(boxList);
 

@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Feb 17 14:01:28 CET 2004 <kooiker@cwi.nl>
+ * generator/pandora.c:
+   - Skip layout in argsmanytobox
+
 Fri Feb 13 16:31:13 CET 2004 <kooiker@cwi.nl>
  * generator/pandora.c:
    - Fixed number of escapes (missed one) 
