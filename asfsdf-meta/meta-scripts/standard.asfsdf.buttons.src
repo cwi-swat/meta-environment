@@ -1,4 +1,4 @@
-buttons([
+configuration([
   button("*",
          [description(syntax-editor, menu(["Actions", "Parse"]))],
          [push-active-module,
