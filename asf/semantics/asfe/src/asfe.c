@@ -575,7 +575,7 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
   ATerm newenv = env;
 
 	if(run_verbose) {
-		ATwarning("%t:matching arguments: %t\nwith\n%t\n\n",asource(tagCurrentRule), asource(arg1),asource(arg2));
+		ATwarning("%t:matching arguments: %t\nwith\n%t\n\n",asource(tagCurrentRule), arg1,arg2);
 	}
 
 	if(!keep_layout && isAsFixEqual(arg1,arg2)) {
@@ -595,7 +595,10 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
 				     lhs_posinfo, depth);
     }
     else {
-			return fail_env;
+			return fail_env; 
+			if(run_verbose) { 
+				ATwarning("*** fail_env on line %d\n", __LINE__); 
+			}
 		}
 	} else if(asfix_is_list(arg1) && asfix_is_list(arg2)) {
 		ATbool ok = ATfalse;
@@ -615,8 +618,12 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
       newenv = list_matching(sym1,newenv,elems1,elems2,
 			     conds,orgargs1,orgargs2, lhs_posinfo, depth);
     }
-    else
-      newenv = fail_env;
+    else {
+      newenv = fail_env; 
+			if(run_verbose) { 
+				ATwarning("*** fail_env on line %d\n", __LINE__); 
+			}
+    }
   } else if(asfix_is_var(arg1)) {
     trm = v_lookup_plain(newenv, arg1);
     if(trm) {
@@ -624,8 +631,11 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
         newenv = args_matching(newenv, conds, orgargs1, orgargs2,
 			       lhs_posinfo, depth);
       } else {
-        newenv = fail_env;
-    }
+        newenv = fail_env; 
+				if(run_verbose) { 
+					ATwarning("*** fail_env on line %d\n", __LINE__); 
+				}
+			}
     }
     else {
       if(AT_getAnnotations(arg1) != NULL)
@@ -643,10 +653,16 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
 				 return args_matching(newenv, conds, orgargs1, orgargs2,
 			     lhs_posinfo, depth);
 			 } else {
-				 newenv = fail_env;
+				 newenv = fail_env; 
+				 if(run_verbose) { 
+					 ATwarning("*** fail_env on line %d\n", __LINE__); 
+				 }
 			 }
 		} else { 
-			newenv = fail_env;
+			newenv = fail_env; 
+			if(run_verbose) { 
+				ATwarning("*** fail_env on line %d\n", __LINE__); 
+			}
 		}
   }
   return newenv;
@@ -675,12 +691,18 @@ ATerm args_matching(ATerm env, ATermList conds,
 			    lhs_posinfo, depth);
     }
     else {
-      newenv = fail_env;
+      newenv = fail_env; 
+			if(run_verbose) { 
+				ATwarning("*** fail_env on line %d\n", __LINE__); 
+			}
 		}
   }
   else {
     if(!ATisEmpty(args2)) {
-      newenv = fail_env;
+      newenv = fail_env; 
+			if(run_verbose) { 
+				ATwarning("*** fail_env on line %d\n", __LINE__); 
+			}
 		} else {
       if(lhs_posinfo) {
 				TIDE_STEP(lhs_posinfo, newenv, depth);
@@ -803,7 +825,10 @@ ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
 			   lhs_posinfo, depth);
   } else {
 		/* if plus variable, do not try to match with zero elements */
-    subenv = fail_env;
+    subenv = fail_env; 
+		if(run_verbose) { 
+			ATwarning("*** fail_env on line %d\n", __LINE__); 
+		}
 	}
 
 	if(keep_layout) {
@@ -855,8 +880,11 @@ ATerm list_matching(ATerm sym,
 	if(keep_layout) {
 		elems1 = skipWhitespace(elems1);
 		assert(isValidList(elems1));		
+		elems2 = skipWhitespace(elems2);
+		assert(isValidList(elems2));
 	}
 	
+
   if(!ATisEmpty(elems1)) {
 		elem1 = ATgetFirst(elems1);
 
@@ -868,11 +896,17 @@ ATerm list_matching(ATerm sym,
             newenv = args_matching(env, conds, args1, args2,
 				   lhs_posinfo, depth);
 					} else {
-            newenv = fail_env;
+            newenv = fail_env; 
+						if(run_verbose) { 
+							ATwarning("*** fail_env on line %d\n", __LINE__); 
+						}
 					}
         } else { /* TdictGet(env,elem1) == Tfalse */
           if(asfix_is_plus_var(elem1) && ATisEmpty(elems2)) {
-						newenv = fail_env;
+						newenv = fail_env; 
+						if(run_verbose) { 
+							ATwarning("*** fail_env on line %d\n", __LINE__); 
+						}
 					} else {
             if(AT_getAnnotations(elem1) != NULL)
               elem1 = AT_removeAnnotations(elem1);
@@ -898,7 +932,10 @@ ATerm list_matching(ATerm sym,
           newenv = arg_matching(env, elem1, elem2, conds, args1, args2,
 				lhs_posinfo, depth);
         } else {
-          newenv = fail_env;
+          newenv = fail_env; 
+					if(run_verbose) { 
+						ATwarning("*** fail_env on line %d\n", __LINE__); 
+					}
 				}
       }
     } else { /* TlistSize(elems1) != 1 */
@@ -912,7 +949,10 @@ ATerm list_matching(ATerm sym,
             newenv = list_matching(sym, env, elems1, elems2, conds,
 				   args1, args2, lhs_posinfo, depth);
           } else {
-            newenv = fail_env;
+            newenv = fail_env; 
+						if(run_verbose) { 
+							ATwarning("*** fail_env on line %d\n", __LINE__); 
+						}
 					}
         } else  {/* TdictGet(env,elem1) == Tfalse */
           newenv = sub_list_matching(sym,env,elem1,elems1,elems2,
@@ -940,13 +980,19 @@ ATerm list_matching(ATerm sym,
           newenv = arg_matching(env, elem1, elem2, conds, newargs1, newargs2,
 				lhs_posinfo, depth);
         } else {
-					newenv = fail_env;
+					newenv = fail_env; 
+					if(run_verbose) { 
+						ATwarning("*** fail_env on line %d\n", __LINE__); 
+					}
 				}
       }
     }
   } else {/* !elems1 */
     if(!ATisEmpty(elems2)) {
-      newenv = fail_env;
+      newenv = fail_env; 
+			if(run_verbose) { 
+				ATwarning("*** fail_env on line %d\n", __LINE__); 
+			}
 		} else {
       newenv = args_matching(env, conds, args1, args2,
 			     lhs_posinfo, depth);
@@ -988,7 +1034,10 @@ ATerm conds_satisfied(ATermList conds, ATerm env, int depth)
 					if(isAsFixEqual(lhstrm,rhstrm)) {
 						newenv = conds_satisfied(conds, newenv, depth);
 					} else {
-            newenv = fail_env;
+            newenv = fail_env; 
+						if(run_verbose) { 
+							ATwarning("*** fail_env on line %d\n", __LINE__); 
+						}
 					}
         }
         else {
@@ -1008,14 +1057,20 @@ ATerm conds_satisfied(ATermList conds, ATerm env, int depth)
         }
         else {
 					rewrite_error("Both sides of condition introduce new variables.", cond);
-          newenv = fail_env;
+          newenv = fail_env; 
+					if(run_verbose) { 
+						ATwarning("*** fail_env on line %d\n", __LINE__); 
+					}
         }
       }
     }
     else {
       if(!no_new_vars(lhs,newenv) || !no_new_vars(rhs,newenv)) {
         rewrite_error("Negative condition introduces new variables.",cond);
-        newenv = fail_env;
+        newenv = fail_env; 
+				if(run_verbose) { 
+					ATwarning("*** fail_env on line %d\n", __LINE__); 
+				}
       }
       else {
 				TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
@@ -1024,7 +1079,10 @@ ATerm conds_satisfied(ATermList conds, ATerm env, int depth)
         rhstrm = rewrite(rhs, newenv, depth+1);
 				TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
         if(isAsFixEqual(lhstrm,rhstrm)) {
-          newenv = fail_env;
+          newenv = fail_env; 
+					if(run_verbose) { 
+						ATwarning("*** fail_env on line %d\n", __LINE__); 
+					}
         } else {
           newenv = conds_satisfied(conds, newenv, depth);
 				}
