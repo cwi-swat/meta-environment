@@ -1047,43 +1047,13 @@ ATerm rewrite(ATerm trm, ATerm env)
   return rewtrm;
 }
 
-/*}}}  */
-/*{{{  void usage(void)    
- *     Usage: displays helpful usage information
+ /*     Usage: displays helpful usage information
  */
 
-void usage(void)
+void usage(char *prg)
 {
-    static char *myargumentsexplained = NULL;
-
-    /*  Represent the argument string in a slightly friendlier manner  */
-    if(!myargumentsexplained && *myarguments) {
-        int  i, hyphen = 0;
-        char *ptr0, *ptr1;
-
-        for(ptr0 = myarguments, i=0; *ptr0; ptr0++)
-            if(*ptr0 == ':')
-                i++;
-        ptr1 = myargumentsexplained =
-            (char *) malloc(strlen(myarguments) + 8*i + 2);
-        for(ptr0 = myarguments; *ptr0; ptr0++)
-            if(!*(ptr0+1) || *(ptr0+1) != ':') {
-                if(!hyphen++) {
-                    *ptr1++ = ' ';
-                    *ptr1++ = '-';
-                }
-                *ptr1++ = *ptr0;            } else {
-                hyphen = 0;
-                if(*(ptr1-1) != ' ')
-                    *ptr1++ = ' ';
-                *ptr1++ = '-'; *ptr1++ = *ptr0++; *ptr1++ = ' ';
-                *ptr1++ = 'f'; *ptr1++ = 'i'; *ptr1++ = 'l'; *ptr1++ = 'e';
-            }
-        *ptr1++ = '\0';
-    }
-
     ATwarning(
-        "Usage: %s%s . . .\n"
+        "Usage: %s [options]\n"
         "Options:\n"
         "\t-b              output terms in BAF format (default)\n"   
         "\t-t              output terms in plaintext format\n"    
@@ -1093,18 +1063,16 @@ void usage(void)
         "\t-o filename     output to file (default stdout)\n"
         "\t-v              verbose mode\n"
         "\t-V              reveal program version (i.e. %s)\n",
-        myname, myargumentsexplained, myversion);
+        prg, myversion);
+		exit(1);
 }
 
-/*}}}  */
-/*{{{  void version(void) */
-
-void version(void)
+void version(char *prg)
 {
-    ATwarning("%s v%s\n", myname, myversion);
+    ATwarning("%s v%s\n", prg, myversion);
+		exit(1);
 }
 
-/*}}}  */
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
@@ -1161,14 +1129,12 @@ int main(int argc, char *argv[])
         case 'e':  eqsfile=optarg;                         break;
         case 'i':  input=optarg;                           break;
         case 'o':  output=optarg;                          break;
-        case 'V':  version(); proceed = 0;                 break;
+        case 'V':  version(argv[0]);                       break;
 
         case 'h':
-        default:   usage(); proceed = 0;                   break;
+        default:   usage(argv[0]);                         break;
       }
     }
-    argc -= optind;
-    argv += optind;
 
     if(proceed) {
       if (!(iofile = fopen(eqsfile, "r")))
