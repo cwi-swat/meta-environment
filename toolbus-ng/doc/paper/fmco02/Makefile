@@ -4,6 +4,8 @@ SOURCES = fmco02.ltx
 
 all: fmco02.ps
 
+doc: all
+
 fmco02.ps: fmco02.dvi
 fmco.dvi: $(SOURCES)
 

@@ -395,9 +395,9 @@ to the tool, so it can update its state. In this case, our tool yields
 a unique id for reference to the new entry, which is returned as the
 result of the creation message.
 
-The \texttt{DELETE} process is defined in a similar way, except
-there is no result value, which is demonstrated by the fact that a
-\texttt{snd-do} is sent to the tool, as opposed to the \texttt{snd-eval},
+The \texttt{DELETE} process is defined in a similar way, except there is
+no result value, which is demonstrated by the fact that a \texttt{snd-do}
+is used to communicate with the tool, as opposed to the \texttt{snd-eval},
 \texttt{rec-value} construct which is used in the \texttt{CREATE} process.
 
 \begin{footnotesize}
@@ -412,6 +412,31 @@ endlet
 \end{verbatim}
 \end{footnotesize}
 
+The \texttt{UPDATE} process is somewhat more interesting. It shows
+that each access on an address entry is \emph{guarded} by a pair of
+\texttt{update-address}, \texttt{update-address-done} messages. 
+
+\begin{footnotesize}
+\begin{verbatim}
+process UPDATE(AB : address-book) is
+let
+  AID : int,
+  Name : str,
+  Address : str,
+  Zip : str
+in
+  rec-msg(update-address(AID?)) .
+  ( rec-msg(set-name(Name?)) .
+    snd-do(AB, set-name(AID, Name))
+  + rec-msg(set-address(Address?)) .
+    snd-do(AB, set-address(AID, Address))
+  ) *
+  rec-msg(update-address-done(AID))
+endlet
+\end{verbatim}
+\end{footnotesize}
+
+
 \section{Application to the \asdf\ Meta-Environment}
 
 \begin{figure}
@@ -420,7 +445,7 @@ endlet
 \caption{\label{Fig:meta-env}Architecture of the \asdf\ Meta-Environment.}
 \end{figure}
 
-As already sketches above, the \TB\ has been used to restructure the
+As already sketched above, the \TB\ has been used to restructure the
 \asdf\ Meta-Environment. It consists of a cooperation of 27 tools
 ranging from a user-interface, graph browser, various editors,
 compiler and interpreter, to a parser generator and a repository for
