@@ -1,3 +1,8 @@
+2003/07/06 (jurgenv@cwi.nl)
+  * Removed all .baf and .tbl files because they are not loaded anymore
+    by the Meta-Environment anyway. This saves a lot of space in the
+    distribution.
+
 2003/05/20 (jurgenv@cwi.nl)
   * Fixed bug in containers/Set module. It imported basic/Boolean in an
     hiddens section, but the 'elem' function exported a Boolean result.
