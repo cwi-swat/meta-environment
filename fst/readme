@@ -9,6 +9,5 @@ This will create a directory fst.
 To commit:
  cvs commit
 That should be done from withing the directory fst.
-
-??
+ >??
 
