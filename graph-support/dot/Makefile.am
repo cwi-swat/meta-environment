@@ -20,7 +20,8 @@ dot_adapter_LDADD = \
 	lex.yy.o y.tab.o \
 	-L${top_builddir}/lib -lGraph \
 	-L${TOOLBUSLIB}/lib -lATB \
-	-L$(ATERM)/lib -lATerm
+	-L$(ATERM)/lib -lATerm \
+        ${SOCKLIBS}
 
 y.tab.c y.tab.h: dot.y
 	$(YACC) -v $(AM_YFLAGS) $(YFLAGS) $<

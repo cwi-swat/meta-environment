@@ -1,5 +1,8 @@
 $Id$
 
 
+2003/03/30 (jurgenv@cwi.nl)
+ * Fixed SOCKLIBS configuration for SunOs.
+
 2003/03/28 (jurgenv@cwi.nl)
  * Started graph-support version 0.1beta

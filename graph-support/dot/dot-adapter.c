@@ -464,8 +464,6 @@ int main(int argc, char *argv[])
   ATBinit(argc, argv, &bottomOfStack);
   initGraphApi();
 
-  /*ATsetChecking(ATtrue);*/
-
   initTermStore();
   ATprotect((ATerm *)&termStore);
 
