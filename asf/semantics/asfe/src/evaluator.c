@@ -36,6 +36,7 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
                 ATbool debug, ATbool remove_layout, ATbool mark_new_layout,
 		ATbool allow_ambs)
 {
+  ASF_OptLayout e = ASF_makeOptLayoutAbsent();
   PT_Tree result;
   PT_Tree tree;
 
@@ -59,7 +60,7 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
     memo_table = MemoTableCreate();
   }
 
-  tagCurrentRule = (ASF_Tag) PT_makeTreeLit("*undefined*");
+  tagCurrentRule = ASF_makeTagNotEmpty(e,ASF_makeTagIdManyChars(ASF_makeCHARLISTString("*undefined*")),e);
   rewrite_steps = 0;
   initBuiltins();
   

@@ -30,8 +30,10 @@ void RWclearError()
 
 void RWsetError(const char *message, ATerm subject)
 {
+  ASF_OptLayout e = ASF_makeOptLayoutAbsent();
+
   if (tagCurrentRule == NULL) {
-    tagCurrentRule = (ASF_Tag) PT_makeTreeLit("*undefined*");
+    tagCurrentRule = ASF_makeTagNotEmpty(e,ASF_makeTagIdManyChars(ASF_makeCHARLISTString("*undefined*")),e);
   }
 
   if (rewriteError == NULL) {
