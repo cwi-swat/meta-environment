@@ -15,4 +15,4 @@ configuration interface
 requires
    aterm 2.3
 
-toolbuslib 0.6
+toolbuslib 0.8
