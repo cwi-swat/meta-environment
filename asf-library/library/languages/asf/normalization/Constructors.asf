@@ -50,10 +50,10 @@ equations
 	digits(Digits)
 
  [deconstruct-regular-shortchars-to-real-chars]
-	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[char-class([range(48,57)])])),no-attrs),[appl(prod([cf(sort("ASF-ShortChar"))],cf(sort("CHAR")),attrs([term(cons("short"))])),[appl(prod([lex(sort("ASF-ShortChar"))],cf(sort("ASF-ShortChar")),no-attrs),[appl(prod([char-class([range(48,57),range(65,90),range(97,122)])],lex(sort("ASF-ShortChar")),attrs([term(cons("regular"))])),[Tree])_Ann4])_Ann3])_Ann2])_Ann1) = Tree
+	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[_Symbol])),_Attributes),[appl(prod([cf(sort("ASF-ShortChar"))],cf(sort("CHAR")),attrs([term(cons("short"))])),[appl(prod([lex(sort("ASF-ShortChar"))],cf(sort("ASF-ShortChar")),no-attrs),[appl(prod([char-class([range(48,57),range(65,90),range(97,122)])],lex(sort("ASF-ShortChar")),attrs([term(cons("regular"))])),[Tree])_Ann4])_Ann3])_Ann2])_Ann1) = Tree
 
  [deconstruct-escaped-char-to-real-char]
-	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[char-class([range(48,57)])])),no-attrs),[appl(prod([cf(sort("ASF-ShortChar"))],cf(sort("CHAR")),attrs([term(cons("short"))])),[appl(prod([lex(sort("ASF-ShortChar"))],cf(sort("ASF-ShortChar")),no-attrs),[appl(prod([char-class([92]),char-class([range(32,47),range(58,64),range(91,96),110,114,116,range(123,255)])],lex(sort("ASF-ShortChar")),attrs([term(cons("escaped"))])),[92,Tree])_Ann4])_Ann3])_Ann2])_Ann1) = 
+	deconstruct(appl(prod([cf(sort("CHAR"))],cf(parameterized-sort("CHARS",[_Symbol])),_Attributes),[appl(prod([cf(sort("ASF-ShortChar"))],cf(sort("CHAR")),attrs([term(cons("short"))])),[appl(prod([lex(sort("ASF-ShortChar"))],cf(sort("ASF-ShortChar")),no-attrs),[appl(prod([char-class([92]),char-class([range(32,47),range(58,64),range(91,96),110,114,116,range(123,255)])],lex(sort("ASF-ShortChar")),attrs([term(cons("escaped"))])),[92,Tree])_Ann4])_Ann3])_Ann2])_Ann1) = 
 	reserved-chars(Tree)
 
 [deconstruct-CHAR-variable-to-lexical-variable]

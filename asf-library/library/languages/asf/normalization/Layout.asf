@@ -63,6 +63,11 @@ equations
 	===>
 	find-layout(Tree, [Tree*]) = [Tree, Tree*]
 
+[found-layout-variable]
+	is-layout-variable(Tree) == true
+	===>
+	find-layout(Tree, [Tree*]) = [layout-to-list-variable(Tree), Tree*]
+
 equations
 
 [yes]
@@ -77,8 +82,34 @@ equations
 
 equations
 
+[annotated]
+	is-layout-variable(Tree _Ann) = is-layout-variable(Tree)
+
+[yes]
+	is-layout-variable(
+	appl(prod(_Symbols,varsym(cf(parameterized-sort("CHARS",[layout]))),_Attrs),_Args)) = true
+
+[default-no]
+	is-layout-variable(_Tree) = false
+
+equations
+
+[annotated]
+	layout-to-list-variable(Tree Ann) = Tree2 Ann
+	when Tree2 := layout-to-list-variable(Tree)
+
+[translate]
+	layout-to-list-variable(
+	appl(prod(Symbols,varsym(cf(parameterized-sort("CHARS",[layout]))),Attributes),Args)) =
+	appl(prod(Symbols,varsym(lex(iter-star(layout))),Attributes),Args)
+
+equations
+
 [yes]
 	is-layout(appl(prod(_Symbols,cf(opt(layout)),_Attrs),_Args)) = true
+
+[annotated]
+	is-layout(Tree _Ann) = is-layout(Tree)
 
 [default-no]
 	is-layout(_Tree) = false

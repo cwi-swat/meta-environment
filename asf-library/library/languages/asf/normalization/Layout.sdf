@@ -19,6 +19,13 @@ normalize-layout(Module) -> Module
 
 hiddens
 
+context-free start-symbols
+	P-Tree
+	Module
+	Equation
+	Condition
+	Boolean
+
 context-free syntax
 
 fix-layout(Module)     -> Module {traversal(trafo,top-down,break)}
@@ -35,6 +42,8 @@ context-free syntax
 find-layout(P-Tree,P-Args) -> P-Args {traversal(accu,top-down,break)}
 is-lexical-constructor(P-Tree) -> Boolean
 is-layout(P-Tree) -> Boolean
+is-layout-variable(P-Tree) -> Boolean
+layout-to-list-variable(P-Tree) -> P-Tree
 space() -> P-Tree
 layout(P-Args) -> P-Tree
 variable-layout() -> P-Tree
@@ -44,6 +53,7 @@ variables
 "Symbols"[0-9]* -> P-Symbols	{strict}
 "Symbol"[0-9]*  -> P-Symbol	{strict}
 "Attr*"[0-9]* -> {P-Attr ","}*	{strict}
+"Attributes"[0-9]* -> P-Attributes	{strict}
 "Args"[0-9]* -> P-Args		{strict}
 "Tree"[0-9]* -> P-Tree		{strict}
 "Tree*"[0-9]* -> {P-Tree ","}* 	{strict}
@@ -54,6 +64,7 @@ variables
 "Cond+"[0-9]* -> {Condition ","}+	{strict}
 "Lhs"[0-9]* -> P-Tree 		{strict}
 "Rhs"[0-9]* -> P-Tree 		{strict}
+"Ann"[0-9]* -> P-Annotation	{strict}
 
 variables
 
@@ -64,3 +75,4 @@ variables
 "_Tree*"[0-9]* -> {P-Tree ","}* {wild}
 "_Attrs"[0-9]* -> P-Attributes 	{wild}
 "_Tree"[0-9]* -> P-Tree		{wild}
+"_Ann"[0-9]* -> P-Annotation 	{wild}
