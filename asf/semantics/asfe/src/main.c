@@ -29,6 +29,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
+
 #include <aterm2.h>
 #include <AsFix.h>
 #include <AsFix2src.h>
@@ -79,6 +81,15 @@ void version(char *prg)
 
 /*}}}  */
 
+/*{{{  void abort_handler(int signal) */
+
+void abort_handler(int signal)
+{
+  RWsetError("aborted by user", (ATerm)ATempty);
+}
+
+/*}}}  */
+
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
@@ -107,6 +118,7 @@ int main(int argc, char *argv[])
     toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
   }
 
+  signal(SIGUSR1, abort_handler);
 
   AFinit(argc, argv, &bottomOfStack);
 

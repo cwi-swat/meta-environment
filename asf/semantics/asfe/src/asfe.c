@@ -158,6 +158,8 @@ ATerm equations_db = NULL;
 
 static char error_buf[BUFSIZ];
 
+static ATbool aborted = ATfalse;
+
 /*}}}  */
 
 /*{{{  void rec_terminate(int cid, ATerm t) */
@@ -193,6 +195,7 @@ void RWsetError(const char *message, ATerm subject)
     rewrite_error = ATmake("[<str>,<term>,<term>])", 
 			    message, tagCurrentRule, subject);
   }
+  aborted = ATtrue;
 }
 
 /*}}}  */
@@ -491,6 +494,8 @@ ATerm interpret(int cid, char *modname, ATerm trm)
   }
 
   times(&start);
+
+  aborted = ATfalse;
 
   newtrm = rewrite(realtrm,(ATerm) ATempty, 0);
 
@@ -1365,6 +1370,10 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
   ATerm newtrm, sym, rewtrm;
   ATermList args, newargs;
   ATermList elems, newelems;
+
+  if (aborted) {
+    return trm;
+  }
 
   if (depth > MAX_DEPTH) {   
     sprintf(error_buf, "maximum stack depth (%d) exceeded.", MAX_DEPTH);
