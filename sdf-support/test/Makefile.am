@@ -8,10 +8,10 @@ TESTS			= grammars sorts
 
 noinst_PROGRAMS		= ${TESTS}
 CFLAGS			= -g -Wall -O2
-INCLUDES		= -I$(ATERM)/include \
-                          -I$(PT_SUPPORT)/include \
-                          -I${top_srcdir}/libME \
-                          -DSRC_DIR=\"${srcdir}\"
+INCLUDES		= -I${top_srcdir}/libME \
+			-I$(ATERM)/include \
+			-I$(PT_SUPPORT)/include \
+			-DSRC_DIR=\"${srcdir}\"
 
 LDLIBS			= -L../libME -lSDFME \
                           -L$(PT_SUPPORT)/lib -lmept \
