@@ -123,6 +123,9 @@ lengthOfSymbol(PT_Symbol symbol)
   if (PT_isSymbolCharClass(symbol)) {
     return lengthOfCharRanges(PT_getSymbolRanges(symbol)) + 2;
   }
+  if (PT_isSymbolLayout(symbol)) {
+    return 0;
+  }
 
   ATwarning("lengthOfSymbol: unknown symbol: %t\n", symbol);
   return 0;
@@ -151,13 +154,19 @@ lengthOfAttributes(PT_Attributes attrs)
 static int  
 lengthOfProd(PT_Production prod)
 {
-  PT_Symbols lhs = PT_getProductionLhs(prod);
   PT_Symbol rhs = PT_getProductionRhs(prod);
-  PT_Attributes attrs = PT_getProductionAttributes(prod);
 
-  return lengthOfSymbols(lhs) + 4 +
-         lengthOfSymbol(rhs) +
-         lengthOfAttributes(attrs);
+  if (PT_isProductionList(prod)) {
+    return lengthOfSymbol(rhs); 
+  }
+  else {
+    PT_Symbols lhs = PT_getProductionLhs(prod);
+    PT_Attributes attrs = PT_getProductionAttributes(prod);
+
+    return lengthOfSymbols(lhs) + 4 +
+	   lengthOfSymbol(rhs) +
+	   lengthOfAttributes(attrs);
+  }
 }
 
 static int yieldInteger(int ch, int idx, char *buf, int bufSize)
@@ -369,17 +378,22 @@ yieldAttributes(PT_Attributes attrs, int idx, char *buf, int bufSize)
 static int 
 yieldProd(PT_Production prod, int idx, char *buf, int bufSize)
 {
-  PT_Symbols lhs = PT_getProductionLhs(prod);
   PT_Symbol rhs = PT_getProductionRhs(prod);
-  PT_Attributes attrs = PT_getProductionAttributes(prod);
 
-  idx = yieldSymbols(lhs, idx, buf, bufSize);
-  buf[idx++] = '-';
-  buf[idx++] = '>';
-  buf[idx++] = ' ';
-  idx = yieldSymbol(rhs, idx, buf, bufSize);
-  idx = yieldAttributes(attrs, idx, buf, bufSize);
+  if (PT_isProductionList(prod)) {
+    idx = yieldSymbol(rhs, idx, buf, bufSize);
+  }
+  else {
+    PT_Symbols lhs = PT_getProductionLhs(prod);
+    PT_Attributes attrs = PT_getProductionAttributes(prod);
 
+    idx = yieldSymbols(lhs, idx, buf, bufSize);
+    buf[idx++] = '-';
+    buf[idx++] = '>';
+    buf[idx++] = ' ';
+    idx = yieldSymbol(rhs, idx, buf, bufSize);
+    idx = yieldAttributes(attrs, idx, buf, bufSize);
+  }
   return idx;
 }
 
