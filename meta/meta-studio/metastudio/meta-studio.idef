@@ -116,7 +116,12 @@ in
     ) +
     ( rec-msg(cannot-open-module(ModName?)).
       snd-note(ui-status(errorf("cannot open module %s",[ModName])))
-    ) +
+    )
+    +
+    ( rec-msg(display-graph(GraphId?, Graph?)) .
+      snd-do(UI, display-graph(GraphId, Graph))
+    )
+    +
     ( rec-event(UI, delete-module(ModName?)) .
       snd-msg(delete-module(ModName)) .
       snd-ack-event(UI, delete-module(ModName))

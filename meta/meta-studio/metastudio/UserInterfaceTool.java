@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Feb 12, 2003 11:25:07 AM
+// generation time: Feb 18, 2003 10:59:31 AM
 
 package metastudio;
 
@@ -27,6 +27,7 @@ abstract public class UserInterfaceTool
   private ATerm PinitializeUi0;
   private ATerm PdeleteModules0;
   private ATerm Perror0;
+  private ATerm PdisplayGraph0;
   private ATerm PnewGraph0;
   private ATerm PendStatus0;
   private ATerm PrecAckEvent0;
@@ -58,6 +59,7 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-do(<user-interface>,errorf(<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,initialize-ui(<str>,<str>,<str>,<str>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,finished-opening-modules(<term>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<user-interface>,display-graph(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,delete-modules(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,module-info(<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,new-graph(<list>,<list>))"), new Boolean(true));
@@ -81,6 +83,7 @@ abstract public class UserInterfaceTool
     PinitializeUi0 = factory.parse("rec-do(initialize-ui(<str>,<str>,<str>,<str>,<str>))");
     PdeleteModules0 = factory.parse("rec-do(delete-modules(<term>))");
     Perror0 = factory.parse("rec-do(error(<str>))");
+    PdisplayGraph0 = factory.parse("rec-do(display-graph(<str>,<term>))");
     PnewGraph0 = factory.parse("rec-do(new-graph(<term>,<term>))");
     PendStatus0 = factory.parse("rec-do(end-status(<term>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
@@ -139,6 +142,11 @@ abstract public class UserInterfaceTool
     result = term.match(Perror0);
     if (result != null) {
       error((String)result.get(0));
+      return null;
+    }
+    result = term.match(PdisplayGraph0);
+    if (result != null) {
+      displayGraph((String)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PnewGraph0);

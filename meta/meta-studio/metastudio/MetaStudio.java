@@ -1045,6 +1045,16 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   //}}}
 
+  //{{{ public void displayGraph(String id, ATerm graphTerm)
+
+  public void displayGraph(String id, ATerm graphTerm)
+  {
+    Graph graph = GraphWrapper.fromTerm(graphTerm);
+
+    bridge.postEvent(factory.make("layout-graph(<str>,<term>)", graphPanel.getId(), graph.toTerm()));
+  }
+
+  //}}}
   //{{{ public void graphLayouted(String id, ATerm graphTerm)
 
   public void graphLayouted(String id, ATerm graphTerm) {

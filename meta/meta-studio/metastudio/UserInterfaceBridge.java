@@ -1,6 +1,6 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: Feb 12, 2003 11:25:07 AM
+// generation time: Feb 18, 2003 10:59:31 AM
 
 package metastudio;
 
@@ -135,6 +135,19 @@ public class UserInterfaceBridge
     }
     else {
       throw new UnsupportedOperationException("method `error' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void displayGraph(String s0, ATerm t1)
+
+  public void displayGraph(String s0, ATerm t1)
+  {
+    if (tool != null) {
+      tool.displayGraph(s0, t1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `displayGraph' not supported.");
     }
   }
 
