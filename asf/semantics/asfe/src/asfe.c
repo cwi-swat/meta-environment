@@ -189,7 +189,10 @@ getVariableValue(ATerm env, PT_Tree var, PT_Symbol symbol)
   if (PT_isIterSepSymbol(symbol) || 
       PT_isIterSymbol(symbol)) {
     Slice slice = getListVariableValue(env, var);
-    PT_Args newelems = appendSlice(PT_makeArgsEmpty(), slice);
+    PT_Args newelems;
+    
+    assert(slice);
+    newelems = appendSlice(PT_makeArgsEmpty(), slice);
     return PT_makeTreeAppl(PT_makeProductionList(symbol), newelems);
   }
   else {
@@ -1214,9 +1217,16 @@ apply_rule(PT_Tree trm, int depth)
 
         conds = entry->conds;
         equargs = PT_getTreeArgs(entry->lhs);
+        if (PT_isProductionList(top_ofs)) {
+          env = listMatching((ATerm) ATempty, top_ofs, equargs, termargs,
+                             conds, PT_makeArgsEmpty(),  PT_makeArgsEmpty(), 
+                             PT_getTreeAnnotation(entry->lhs, posinfo), depth); 
+        }
+        else {
+          env = argsMatching((ATerm) ATempty, conds, equargs, termargs,
+	   		     PT_getTreeAnnotation(entry->lhs, posinfo), depth);
+        }
 
-        env = argsMatching((ATerm) ATempty, conds, equargs, termargs,
-			   PT_getTreeAnnotation(entry->lhs, posinfo), depth);
         tagCurrentRule = entry->tag;
 
         if (!is_fail_env(env)) {
@@ -1247,8 +1257,15 @@ apply_rule(PT_Tree trm, int depth)
     conds = entry->conds;
     equargs = PT_getTreeArgs(entry->lhs);
 
-    env = argsMatching((ATerm) ATempty, conds, equargs, termargs,
-                       PT_getTreeAnnotation(entry->lhs, posinfo), depth);
+    if (PT_isProductionList(top_ofs)) {
+      env = listMatching((ATerm) ATempty, top_ofs, equargs, termargs,
+			 conds, PT_makeArgsEmpty(),  PT_makeArgsEmpty(), 
+			 PT_getTreeAnnotation(entry->lhs, posinfo), depth); 
+    }
+    else {
+      env = argsMatching((ATerm) ATempty, conds, equargs, termargs,
+			 PT_getTreeAnnotation(entry->lhs, posinfo), depth);
+    }
     tagCurrentRule = entry->tag;
 
     if (!is_fail_env(env)) {
@@ -1480,13 +1497,12 @@ rewriteInnermost(PT_Tree trm, ATerm env, int depth, Traversal *traversal)
     PT_Args elems;
     PT_Args newelems;
     PT_Production listProd = PT_getTreeProd(trm);
-    
     elems = PT_getTreeArgs(trm);
 
     newelems = rewriteElems(listProd, elems, env, depth, NO_TRAVERSAL);
     if (newelems) {
       assert(isValidList(newelems));
-      rewtrm = PT_setTreeArgs(trm, newelems);
+      rewtrm = selectAndRewrite(PT_setTreeArgs(trm, newelems), depth);
     }
     else {
       rewtrm = trm;
@@ -1587,7 +1603,23 @@ rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal * traversal)
     return trm;
   }
 
-  if (PT_isTreeAppl(trm)) { 
+
+  if (PT_isTreeApplList(trm)) {
+    PT_Args elems = PT_getTreeArgs(trm);
+    PT_Args newelems;
+    PT_Production listProd = PT_getTreeProd(trm);
+
+    newelems = rewriteElems(listProd, elems, env, depth, traversal);
+
+    if (newelems) {
+      assert(isValidList(newelems));
+      rewtrm = selectAndRewrite(PT_setTreeArgs(trm, newelems), depth);
+    }
+    else {
+      rewtrm = trm;
+    }
+  }
+  else if (PT_isTreeAppl(trm)) { 
     PT_Production prod = PT_getTreeProd(trm);
 
     if (PT_isVarDefault(prod)) {
@@ -1626,21 +1658,6 @@ rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal * traversal)
           rewtrm = trm;
         }
       }
-    }
-  }
-  else if (PT_isTreeApplList(trm)) {
-    PT_Args elems = PT_getTreeArgs(trm);
-    PT_Args newelems;
-    PT_Production listProd = PT_getTreeProd(trm);
-
-    newelems = rewriteElems(listProd, elems, env, depth, traversal);
-
-    if (newelems) {
-      assert(isValidList(newelems));
-      rewtrm = PT_setTreeArgs(trm, newelems);
-    }
-    else {
-      rewtrm = trm;
     }
   }
   else {
