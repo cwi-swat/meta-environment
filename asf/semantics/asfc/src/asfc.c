@@ -32,6 +32,7 @@
 #include "muasf2c.h"
 #include "c-code.h"
 #include "c-compiler.h"
+#include "chars.h"
 
 /*}}}  */
 
@@ -123,6 +124,7 @@ void rec_terminate(int cid, ATerm t)
 ATerm compile_module(int cid, char *moduleName, ATerm equations, 
 		     char *output)
 {
+  char *normalmodname = toalfanum(moduleName);
   ASF_CondEquationList eqsList;
   PT_ParseTree result;
   FILE *fp;
@@ -155,16 +157,18 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations,
       ATwarning("pretty printing c code\n");
     }
 
-    ToC_code(moduleName, result, fp , myversion);
+    ToC_code(normalmodname, result, fp , myversion);
     fclose(fp);
 
     if (use_c_compiler) {
       if (run_verbose) {
 	ATwarning("calling c compiler\n");
       }
-      call_c_compiler(moduleName, output);
+      call_c_compiler(normalmodname, output);
     }
   }
+
+  free(normalmodname);
 
   return ATmake("snd-value(compilation-done)");
 }                              
@@ -192,7 +196,6 @@ int main(int argc, char *argv[])
     toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
   }
 
-  
   ATinit(argc, argv, &bottom);
   PT_initMEPTApi();
   SDF_initSDFMEApi();
