@@ -16,7 +16,7 @@ public class Do extends ToolAtom {
   }
   
   public ProcessExpression copy(){
-    return new Do(getToolarg());
+    return new Do(getToolTerm());
   }
 
   public boolean execute() throws ToolBusException {
@@ -24,7 +24,7 @@ public class Do extends ToolAtom {
       return false;
 
     ToolInstance ti = getToolInstance();
-    ti.sndDoToTool(getSubstitutedArg());
+    ti.sndDoToTool(getSubstitutedCall(), getSubstitutedId());
     return nextState();
   }
 

@@ -16,7 +16,7 @@ public class AckEvent extends ToolAtom {
   }
   
   public ProcessExpression copy(){
-    return new AckEvent(getToolarg());
+    return new AckEvent(getToolTerm());
   }
 
   public void compile(ProcessInstance P, State follow) throws ToolBusException {
@@ -29,7 +29,7 @@ public class AckEvent extends ToolAtom {
 
     ToolInstance ti = getToolInstance();
 
-    ti.sndEvalToTool(getSubstitutedArg());
+    ti.sndEvalToTool(getSubstitutedCall(), getSubstitutedId());
     return nextState();
   }
 

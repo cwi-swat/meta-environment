@@ -36,13 +36,20 @@ public class ProcessInstance {
     definition = TB.getProcessDefinition(processName);
 
     env = new Environment();
+    
     AFun afun = TBTerm.factory.makeAFun(processName, 1, false);
     processId = TBTerm.factory.makeAppl(afun, TBTerm.factory.makeInt(processCount++));
+    
+    ATerm tid = TBTerm.TransactionIdVar;
+    
+    env.introduceVars(TBTerm.factory.makeList(tid));
 
     call.expand(this, new Stack());
     call.compile(this, empty);
     currentState = call.getStartState();
+    tid = TBTerm.resolveVars(tid, env);
     env.setExecuting();
+    env.assignVar(tid, processId);
 
     Vector procs = TB.getProcesses();
     elements = call.getAtoms();

@@ -17,7 +17,7 @@ public class Event extends ToolAtom {
   }
   
   public ProcessExpression copy(){
-    return new Event(getToolarg());
+    return new Event(getToolTerm());
   }
 
   public boolean execute() throws ToolBusException {
@@ -25,7 +25,7 @@ public class Event extends ToolAtom {
       return false;
 
     ToolInstance ti = getToolInstance();
-    if (ti.getEventFromTool(getToolarg(), getEnv())){
+    if (ti.getEventFromTool(getToolTerm(), getEnv())){
       //mr.getLeft().update(getEnv());
       return nextState();
     } else
