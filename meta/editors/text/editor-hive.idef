@@ -67,7 +67,6 @@ in
   +
     rec-event(Hive, mouse-event(EditorId?, Offset?))
     . snd-ack-event(Hive, mouse-event(EditorId, Offset))
-    . printf("te-mouse-click-at-offset(%t, %d)\n", EditorId, Offset)
     . snd-msg(te-mouse-click-at-offset(EditorId, Offset))
   +
     rec-event(Hive, menu-event(EditorId?, MenuEvent?))
