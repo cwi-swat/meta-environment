@@ -1,3 +1,6 @@
+2001/12/21 (jurgenv@cwi.nl)
+  * Added --with-pt-support, --with-sglr and --with-asf configure options.
+
 2001/08/30 (markvdb@cwi.nl)
   * improved the efficiency of the addition.
 
