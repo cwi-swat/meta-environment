@@ -1,6 +1,6 @@
 equations
 
-[pq1] toolbus-query($Tscript, $Script, $String, $Rstore) =
+[pq1] toolbus-query($Script, $String, $Rstore) =
       convertl(rval2rel(eval-rscript($Script, str2rvar($String), $Rstore)))
 
 [sv1] str2rvar(strcon("""  Char* """)) = rvar(Char*)

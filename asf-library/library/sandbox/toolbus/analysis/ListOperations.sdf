@@ -1,12 +1,12 @@
 module ListOperations
 
 imports ListItems
-imports RelationCalculator
+imports RscriptCalculator
 
 exports
   context-free syntax
     convertl(Rel[[Elem]])  -> List
-    convert(String # Area) -> ListItem
+    convert(Area # String) -> ListItem
 
 hiddens
   variables

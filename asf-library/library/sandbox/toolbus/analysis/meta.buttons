@@ -1,0 +1,53 @@
+buttons([
+  button("Rscript",
+         ["term"],
+         ["Rscript", "Check Rscript"],
+         [push-active-module,
+          get-root,
+          check-sort("RSCRIPT"),
+          apply("check-rscript", "List", 1),
+          push-modulename("RscriptChecker"),
+          reduce,
+          execute-action("unparsePT"),
+          show-list
+         ]),
+  button("*",
+         ["message-list"],
+         ["ShowSource"],
+         [show-area("Rscript")]),
+  button("Tscript",
+         ["term"],
+         ["ToolBus", "Extract Relations"],
+         [push-active-module,
+          get-root,
+          check-sort("Tscript"),
+          apply("extractRelations", "RSTORE", 1),
+          push-modulename("ToolBusExtraction"),
+          reduce,
+          push-filename("extracted-relations.trm"),
+          push-active-module,
+          activate-editor
+         ]),
+  button("Tscript",
+         ["term"],
+         ["ToolBus", "Unused Variables"],
+         [push-filename("unused.rscript"),
+          parse("Rscript", "RSCRIPT"),
+
+          push-string("\"UNUSED_VARS\""),
+          parse("basic/Strings", "String"),
+
+          push-active-module,
+          get-root,
+          check-sort("Tscript"),
+          apply("extractRelations", "RSTORE", 1),
+          push-modulename("ToolBusExtraction"),
+          reduce,
+
+          apply("toolbus-query", "List", 3),
+          push-modulename("ToolBusQuery"),
+          reduce,
+          execute-action("unparsePT"),
+          show-list
+        ])
+])

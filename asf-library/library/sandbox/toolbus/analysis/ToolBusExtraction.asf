@@ -16,16 +16,19 @@ equations
     findVarInProcess($Var : $Term, $Rstore1, $ProcessDefId) = $Rstore3
 
   [extractRelations-genvar]
-    $Tuple = <get-area($Var), var2str($Var)>,
-    $Rstore2 = add-tuple(USES, $Tuple, $Rstore1)
+    $VarId = get-area($Var),
+    $Tuple = <$ProcessDefId, var2str($Var)>,
+    $Rstore2 = add-tuple(USES, $Tuple, $Rstore1),
+    $Tuple2 = <$Tuple, $VarId>,
+    $Rstore3 = add-tuple(USE_OCCURS, $Tuple2, $Rstore2)
     ===>
-    findVarInProcess($Var, $Rstore1, $ProcessDefId) = $Rstore2
+    findVarInProcess($Var, $Rstore1, $ProcessDefId) = $Rstore3
 
   [extractRelations-genvar-q]
     $VarId = get-area($Var),
-    $Tuple = <$VarId, var2str($Var)>,
-    $Rstore2 = add-tuple(YIELD, $Tuple, $Rstore1),
-    $Tuple2 = <$ProcessDefId, $VarId>,
-    $Rstore3 = add-tuple(DEFS, $Tuple2, $Rstore2)
+    $Tuple = <$ProcessDefId, var2str($Var)>,
+    $Rstore2 = add-tuple(DEFS, $Tuple, $Rstore1),
+    $Tuple2 = <$Tuple, $VarId>,
+    $Rstore3 = add-tuple(DEF_OCCURS, $Tuple2, $Rstore2)
     ===>
     findVarInProcess($Var?, $Rstore1, $ProcessDefId) = $Rstore3

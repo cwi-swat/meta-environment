@@ -1,6 +1,7 @@
-extractRelations(
 process Editor1 is
 let
+  Aap : term,
+  Noot : term,
   Editor : term,
   Pid : int
 in
@@ -22,4 +23,4 @@ in
 endlet
 
 toolbus(Editor1)
-)
+
