@@ -54,7 +54,7 @@ public class ImportGraphPanel
 
     private MouseListener makeMouseListener(final ModuleTreeModel moduleManager) {
         MouseListener listener = new MouseAdapter() {
-            public void mouseClicked(MouseEvent event) {
+            public void mousePressed(MouseEvent event) {
                 Node node = panel.getNodeAt(event.getX(), event.getY());
                 ModulePopupMenu.setPopupLocation(
                     (JComponent) event.getSource(),
@@ -75,7 +75,12 @@ public class ImportGraphPanel
 
                 }
                 moduleManager.selectModule(module);
+
             }
+            
+			public void mouseReleased(MouseEvent e) {
+		      mousePressed(e);
+	        }
         };
         return listener;
     }

@@ -41,7 +41,7 @@ public class ModuleTree extends UserInterfacePanel {
             }
         });
         tree.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 ModulePopupMenu.setPopupLocation(
                     (JComponent) e.getSource(),
                     e.getX(),
@@ -55,8 +55,11 @@ public class ModuleTree extends UserInterfacePanel {
                     }
 
                 }
-
             }
+            
+			public void mouseReleased(MouseEvent e) {
+				mousePressed(e);
+			}
         });
 
         add(new JScrollPane(tree));
