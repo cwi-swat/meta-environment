@@ -45,6 +45,8 @@ context-free syntax
    size(Bag[[Elem]])                         	-> Integer
    in(Elem, Bag[[Elem]])                   	-> Boolean
 
+   unique(Bag[[Elem]])				-> Bag[[Elem]]
+
    "if" Boolean "then" Bag[[Elem]] "else" Bag[[Elem]] "fi" 
                                            	-> Bag[[Elem]]
 

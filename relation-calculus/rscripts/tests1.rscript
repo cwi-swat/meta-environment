@@ -1,4 +1,3 @@
-
 %% Test suite for built-in operators
 
 int ONE = 1
@@ -218,7 +217,7 @@ assert "> 5a": not(A30 > A3)
 assert "> 5b": not(A31 > A3)
 
 assert "> 6": not({} > {})
-assert "> 7": not({} > BigBag)
+assert "> 7": not {} > BigBag
 assert "> 8": BigBag > {}
 assert "> 9": BigBag > SmallBag
 assert "> 10": not(SmallBag >= BigBag)
@@ -239,7 +238,7 @@ assert "union 9" : {<1,2,3,4>, <2,3,4,5>} union {<2,3,4,5>,<3,4,5,6>} == {<1,2,3
 assert "union 10" : {} union Rel2 == Rel2
 assert "union 11": Rel1 union {} == Rel1
 assert "union 12": {} union {} == {}
-assert "union 13": {1,2,3,2,1} union {1,2,2,3,3,3} == {1,1,2,2,3,3,3}
+assert "union 13": {1,2,3,2,1,4} union {1,2,2,3,3,3} == {1,1,2,2,3,3,3,4}
 
 %% --- inter
 
@@ -268,6 +267,7 @@ assert "inter 20": {} inter Rel1 == {}
 assert "inter 21": Rel1 inter Rel2 == {<3,30>}
 assert "inter 22": Rel2 inter Rel1 == {<3,30>}
 assert "inter 23": {1,2,3,2,1} inter {1,2,2,3,3,3} == {1,2,2,3}
+assert "inter 24": {1,2,3,2,1,4} inter {1,2,2,3,3,3} == {1,2,2,3}
 
 %% --- \
 
@@ -282,6 +282,7 @@ assert "diff 7": Rel1 \ Rel2 == {<1,10>, <2,20>}
 assert "diff 8": Rel2 \ Rel1 == {<4,40>, <5,50>}
 
 assert "diff 9": {1,2,3,2,1} \  {1,2,2,3,3,3} == {1}
+assert "diff 10": {1,2,3,2,1,4} \  {1,2,2,3,3,3} == {1,4}
 
 %% --- o
 

@@ -1157,6 +1157,7 @@ $Error]>
 		<bottom,  	fun [ rel[&T,&T] ] 			to bag[&T]>,
        		<inv,     	fun [ rel[&T1,&T2] ] 			to rel[&T2,&T1]>,
 		<compl,   	fun [ rel[&T1, &T2] ] 			to rel[&T1,&T2]>,
+		<unique,      	fun [ bag[&T] ] 			to bag[&T]>,
 
        		<domainR, 	fun [ rel[&T1,&T2], bag[&T1] ]		to rel[&T1,&T2]>,
        		<rangeR,    	fun [ rel[&T1,&T2], bag[&T2] ] 		to rel[&T1,&T2]>,

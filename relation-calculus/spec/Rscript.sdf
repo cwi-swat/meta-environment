@@ -101,8 +101,7 @@ exports
 
 %% Functions
 
-     RVAR "(" {REXP ","}* ")"                 	-> REXP
-
+     RVAR "(" {REXP ","}* ")"                 	-> REXP %% {avoid}
 
 %% Types
 

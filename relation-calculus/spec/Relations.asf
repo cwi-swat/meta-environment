@@ -225,11 +225,11 @@ equations
 
 %% ---- bottom
 
-[top-1]  top($Rel) = diff(domain($Rel), range($Rel))
+[top-1]  top($Rel) = diff(unique(domain($Rel)), range($Rel))
 
 %% ----	 bottom
 
-[bot-1]  bottom($Rel) = diff(range($Rel), domain($Rel))
+[bot-1]  bottom($Rel) = diff(unique(range($Rel)), domain($Rel))
 
 %% ----	 rimage
 

@@ -8,6 +8,8 @@
 	bag[proc] procs = carrier(Calls)
 
 	int nprocs = # carrier(Calls)
+        bag[str] dCalls = domain(Calls)
+	bag[str] rCalls = range(Calls)
 
 	bag[proc] entryPoints = top(Calls)
 
