@@ -39,7 +39,7 @@ exports
         "inter"                      -> OP
         "\\"                         -> OP
         "o"                          -> OP
-%%        "x"                          -> OP
+        "x"                          -> OP
         "."                          -> OP
 
         eval(STAT, RSTORE)           -> RSTORE

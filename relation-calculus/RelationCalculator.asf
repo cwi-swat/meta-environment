@@ -103,10 +103,6 @@
 [GT2]  apply(Bag1 > Bag2) = Bag1 > Bag2
 [GT3]  apply(Rel1 > Rel2) = Rel1 > Rel2
 
-[IB1]  E = evale(Exp1, Store), Bag = evalb(Exp2, Store)
-       ====================================================
-       evalx(Exp1 in Exp2, Store) = E in Bag
-
 %% ---- Eval Elements
 
 [EE1]  evalx(E, Store) = E
@@ -174,11 +170,11 @@
 
 [CM2]  apply(Rel1 o Rel2) = Rel1 o Rel2
 
-%%[XXX]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
-%%       ====================================================
-%%       evalx(Exp1 x  Exp2, Store) = apply(Val1 x Val2)
+[CP1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
+       ====================================================
+       evalx(Exp1 x  Exp2, Store) = apply(Val1 x Val2)
 
-%%[xxx]  apply(Bag1 x Bag2) = Bag1 x Bag2
+[CP2]  apply(Bag1 x Bag2) = Bag1 x Bag2
 
 [PJ1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
        ====================================================

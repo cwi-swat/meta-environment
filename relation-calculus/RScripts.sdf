@@ -3,7 +3,7 @@ module RScripts[Elem]
 imports Relations[Elem]
 
 exports
-  sorts SCRIPT STAT VAR FROM BFROM RFROM TEXP EXP
+  sorts SCRIPT STAT VAR FROM TEXP EXP
 
   lexical syntax
      [\$]?[A-Za-z][A-Za-z0-9]*                -> VAR
@@ -12,17 +12,15 @@ exports
 
      "true"                                  -> EXP
      "false"                                 -> EXP
-     EXP "and" EXP                           -> EXP
-     EXP "or" EXP                            -> EXP
+     EXP "and" EXP                           -> EXP {left}
+     EXP "or" EXP                            -> EXP {left}
      "not" EXP                               -> EXP
 
-     EXP "==" EXP                            -> EXP
-     EXP "<=" EXP                            -> EXP
-     EXP "<" EXP                             -> EXP
-     EXP ">=" EXP                            -> EXP
-     EXP ">" EXP                             -> EXP
-
-     EXP in EXP                              -> EXP
+     EXP "==" EXP                            -> EXP {left}
+     EXP "<=" EXP                            -> EXP {non-assoc}
+     EXP "<" EXP                             -> EXP {non-assoc}
+     EXP ">=" EXP                            -> EXP {non-assoc}
+     EXP ">" EXP                             -> EXP {non-assoc}
 
 %% Elementary values
 
@@ -37,26 +35,23 @@ exports
 
 %% Operators
 
-     EXP "union" EXP                         -> EXP
-     EXP "inter" EXP                         -> EXP
-     EXP "\\" EXP                            -> EXP
-     EXP "o" EXP                             -> EXP
-     EXP "x" EXP                             -> EXP
-     EXP "." EXP                             -> EXP
+     EXP "union" EXP                         -> EXP {left}
+     EXP "inter" EXP                         -> EXP {left}
+     EXP "\\" EXP                            -> EXP {left}
+     EXP "o" EXP                             -> EXP {left}
+     EXP "x" EXP                             -> EXP {left}
+     EXP "." EXP                             -> EXP {left}
      EXP "+"                                 -> EXP
      EXP "*"                                 -> EXP
      EXP "until" "(" EXP "," EXP ")"         -> EXP
 
 %% value formers
 
-     "{" BFROM "|" EXP "}"                  -> EXP
-     "{" {FROM ","}+ "|" EXP "|" EXP "}"    -> EXP
+     "{" FROM "|" EXP "}"                    -> EXP
+     "{" {FROM ","}+ "|" EXP "|" EXP "}"     -> EXP
 
-     "{" RFROM "|" EXP "}"                  -> EXP
-
-     VAR "in" EXP                            -> BFROM
-     "<" VAR "," VAR ">" in EXP              -> RFROM
-     BFROM | RFROM                           -> FROM
+     VAR "in" EXP                            -> FROM
+     "<" VAR "," VAR ">" in EXP              -> FROM
 
 %% functions
 
