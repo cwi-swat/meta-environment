@@ -1,5 +1,9 @@
 $Id$
 
+2002/11/22 (vandenbr@loria.fr)
+ * Removed the check that a preferred/avoided subtree occurring in both
+   trees are not counted as preferred/avoided when counting nested
+   preferred/avoided subtrees.
 
 2002/10/29 (vinju@loria.fr)
  * Removed implicit generation of ToolBus interfaces. *.tif.[ch] are

@@ -602,6 +602,7 @@ static ATbool SG_ProdIsPrefer(int prodtype)
   return prodtype == SG_PT_EAGER;
 } 
 
+/*
 static ATbool SG_TreeOccursInTree(tree t0, tree t1)
 {
   ATermList ambs;
@@ -652,6 +653,7 @@ static ATbool SG_TreeOccursInTree(tree t0, tree t1)
     return ATfalse;
   }
 }
+*/
 
 static size_t SG_CountAvoidsInTree(tree t0, tree t1)
 {
@@ -674,12 +676,15 @@ static size_t SG_CountAvoidsInTree(tree t0, tree t1)
     }
     else {
       if (SG_ProdIsAvoid(SG_ProdType_Tree(t0))) {
+/*
         if (SG_TreeOccursInTree(t0, t1)) {
           return 0;
         }
         else {
           return 1;
         }
+*/
+        return 1;
       }
       else if (SG_ProdIsPrefer(SG_ProdType_Tree(t0))) {
         return 0;
@@ -726,12 +731,15 @@ static size_t SG_CountPrefersInTree(tree t0, tree t1)
     }
     else {
       if (SG_ProdIsPrefer(SG_ProdType_Tree(t0))) {
+/*
         if (SG_TreeOccursInTree(t0, t1)) {
           return 0;
         }
         else {
           return 1;
         }
+*/
+        return 1;
       }
       else if (SG_ProdIsAvoid(SG_ProdType_Tree(t0))) {
         return 0;
@@ -1033,7 +1041,7 @@ static tree SG_Count_Eagerness_Filter(parse_table *pt, tree t0, tree t1)
     pT1 = SG_CountPrefersInTree(t1, t0);
     aT0 = SG_CountAvoidsInTree(t0, t1);
     aT1 = SG_CountAvoidsInTree(t1, t0);
-    
+
     if (((pT0 > pT1) && (aT0 <= aT1)) ||
         ((pT0 == pT1) && (aT0 < aT1))) { 
       IF_DEBUG(ATfprintf(SG_log(), "Eagerness Priority: %t > %t\n", l0, l1))

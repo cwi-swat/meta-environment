@@ -264,6 +264,7 @@ ATerm SGparseFile(char *prgname, language L, char *G, char *FN)
   if((SG_theText = SG_ReadFile(prgname, NULL, FN, &ntok)) == NULL) {
     return NULL;
   }
+  
 
   /* make sure the string is terminated */
   SG_textEnd = ntok;
