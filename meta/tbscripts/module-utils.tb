@@ -133,7 +133,8 @@ let
   Directories : list,
   Changed : list,
   Path : str,
-  Extension : str
+  Extension : str,
+  Status : term
 in
     snd-msg(get-search-paths) . 
     rec-msg(search-paths(Directories?)) .
@@ -149,11 +150,7 @@ in
     DeleteSessions(ModuleName).
     snd-msg(delete-module-from-db(ModuleName)) .
     rec-msg(changed-modules(Changed?)) .
-    SaveSdfModules(Changed).
-/*
-    snd-msg(notify-about-changed-modules(Changed, sdf)) .
-    rec-msg(notify-about-changed-modules-done) .
-*/
+    SaveSdfModules(Changed, Status?) .
     MDB-DisplayGraph
 endlet
 
@@ -175,9 +172,19 @@ in
       DeleteSessions(Old). 
       if equal(Status, success) then
         RenameModuleInDB(Old, RealNew, RealPath, Changed?) .
-        SaveSdfModules(Changed).
-        SaveAsfSdfModule(RealNew). 
-        RemoveModuleFromDisk(OldPath, Old)
+        SaveSdfModules(Changed, Status?).
+	if equal(Status, success) then
+	  SaveAsfSdfModule(RealNew, Status?). 
+	  if equal(Status, success) then
+	    RemoveModuleFromDisk(OldPath, Old)
+          else 
+            RenameModuleInDB(RealNew, Old, RealPath, Changed?) .
+            SaveSdfModules(Changed, Status?)
+          fi
+	else 
+          RenameModuleInDB(RealNew, Old, RealPath, Changed?) .
+          SaveSdfModules(Changed, Status?)
+	fi
       else tau fi
     else tau fi
   else tau fi.
@@ -197,21 +204,29 @@ in
     CheckExistence(RealNew, RealPath, Status?).
     if equal (Status, success) then
       CopyModuleInDB(Old, RealNew, RealPath).
-      SaveAsfSdfModule(RealNew)
+      SaveAsfSdfModule(RealNew, Status?)
     else tau fi
   else tau fi.
   HandleCopyModuleErrors(Old, RealNew, Status) . tau
 endlet
 
 process DoImportModule(Mod : str, RealImport : str)  is
+let
+  Status : term
+in
   DeleteEditorAndInvalidateDependingModules(Mod). 
   AddImportInDB(Mod, RealImport).
-  SaveAsfSdfModule(Mod) 
+  SaveAsfSdfModule(Mod, Status?) 
+endlet  
 
 process DoUnimportModule(Mod : str, RealImport : str) is
+let
+  Status : term
+in
   DeleteEditorAndInvalidateDependingModules(Mod). 
   RemoveImportInDB(Mod, RealImport) .
-  SaveAsfSdfModule(Mod)
+  SaveAsfSdfModule(Mod, Status?)
+endlet  
 
 process GetRealModuleName(Name : str, Path : str, Status : term?,
                           RealName : str?, RealPath : str?)
@@ -234,7 +249,7 @@ in
   )
 endlet
 
-process SaveSdfModules(Modules : list) is
+process SaveSdfModules(Modules : list, Status : term?) is
 let
   Runner : list,
   Module : str
@@ -243,7 +258,7 @@ in
   if not-equal(Runner, []) then
     Module := first(Runner) .
     snd-msg(save-module(Module, sdf)) .
-    rec-msg(saved-module(Module)) .
+    rec-msg(saved-module(Module, Status?)) .
     Runner := next(Runner)
   fi * 
   if equal(Runner, []) then
@@ -251,9 +266,9 @@ in
   fi
 endlet
 
-process SaveAsfSdfModule(Module : str) is
+process SaveAsfSdfModule(Module : str, Status : term?) is
    snd-msg(save-module(Module, asfsdf)) .
-   rec-msg(saved-module(Module))
+   rec-msg(saved-module(Module, Status?))
 
 process RemoveModuleFromDisk(Path : str, Module : str) is
 let
