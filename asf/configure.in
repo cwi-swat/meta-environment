@@ -153,6 +153,8 @@ AC_OUTPUT(
    semantics/asfe/src/api/Makefile
    semantics/asf-checker/Makefile
    semantics/asf-checker/src/Makefile
+   semantics/asf-upgrade/Makefile
+   semantics/asf-upgrade/src/Makefile
    semantics/asf-operations/Makefile
    semantics/asf-operations/src/Makefile
    semantics/utils/Makefile

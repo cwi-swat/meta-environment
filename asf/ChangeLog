@@ -1,5 +1,18 @@
 # $Id$
 
+
+2003/11/05 (jurgenv@cwi.nl)
+ * Added asfupgrader, a tool that upgrades the old condition syntax 
+   automatically to the new syntax.
+
+2003/11/04 (jurgenv@cwi.nl)
+ * Added two new condition syntaxes: "==" equality and ":=" match.
+   They are each translated to "=" now before interpreting or compiling. 
+ * The asfchecker gives much more informative error messages when either of 
+   the new condition syntaxes is used. 
+ * In the future, the old "=" syntax will dissappear such that the code
+   of the interpreter and the compiler can be simplified (and optimized).
+
 2003/10/17 (markvdb@cwi.nl)
  * Added a message on deprecated unquoted literals.
  * Added a message on usage of non Sort symbols in
