@@ -641,6 +641,15 @@ proc RenameModule { mod newmod newpath} {
 }
 
 #--
+# CopyModule(M)
+#-
+# generates the toolbus event to request copying of a module M
+#--
+proc CopyModule { mod newmod newpath} {
+    GBevent "copy-module([ToId $mod],[ToId $newmod], [ToId $newpath])"
+}
+
+#--
 # RenameModuleWidget(M)
 #-
 # generates a widget to enter the new name for the selected module.
@@ -660,6 +669,29 @@ proc RenameModuleWidget {module} {
   if [ expr [ string length $file ] > 0 ] {
     set newmodule [lindex [split $file "/"] end]
     RenameModule $module $newmodule $file 
+  }
+}
+
+#--
+# CopyModuleWidget(M)
+#-
+# generates a widget to enter the new name for the selected module.
+#--
+proc CopyModuleWidget {module} {
+  global syntax_ext
+
+  set sdftype {{SDF}}
+  lappend sdftype $syntax_ext
+  set anytype {{Any}    *          }
+  lappend types $sdftype
+  lappend types $anytype
+
+  set file [tk_getSaveFile -initialfile [lindex [split $module "/"] end]  \
+            -filetypes $types -title "Copy Module..."]
+
+  if [ expr [ string length $file ] > 0 ] {
+    set newmodule [lindex [split $file "/"] end]
+    CopyModule $module $newmodule $file 
   }
 }
 
@@ -1277,6 +1309,8 @@ proc define-module-popup {} {
         -command {DeleteModules [GetObjectName $c]}
     $m add command -label "Rename Module" \
         -command {RenameModuleWidget [GetObjectName $c]}
+    $m add command -label "Copy Module" \
+        -command {CopyModuleWidget [GetObjectName $c]}
     $m add separator
     $m add command -label "Compile Module..." \
         -command {CompileModules [GetObjectName $c]}
@@ -1319,6 +1353,8 @@ proc define-modlist-popup {} {
         -command {DeleteModules [SelectedModules]}
     $m add command -label "Rename Module..." \
         -command {RenameModuleWidget [SelectedModules]}
+    $m add command -label "Copy Module..." \
+        -command {CopyModuleWidget [SelectedModules]}
     $m add separator
     $m add command -label "Compile Module..." \
         -command {CompileModules [SelectedModules]}

@@ -24,7 +24,7 @@
 #include "file-creator.tb"
 #include "close-module.tb"
 #include "revert-module.tb"
-#include "rename-module.tb"
+#include "module-utils.tb"
 #include "print-module.tb"
 #include "ui.tb"
 #include "clear-all.tb"

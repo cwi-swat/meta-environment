@@ -11,6 +11,9 @@ in
   (
     rec-msg(rename-module(OldModuleName?, NewModuleName?, NewPath?)) .
     DoRenameModule(OldModuleName, NewModuleName, NewPath)
+  +
+    rec-msg(copy-module(OldModuleName?, NewModuleName?, NewPath?)).
+    DoCopyModule(OldModuleName, NewModuleName, NewPath)
   ) *
   delta
 endlet
@@ -38,6 +41,27 @@ in
     else tau fi
   else tau fi.
   HandleRenameModuleErrors(Old, RealNew, Status) . tau
+endlet
+
+process DoCopyModule(Old : str, New : str, Path : str)  is
+let
+  Status : term,
+  Changed : list,
+  RealNew : str
+in
+  Status := success.
+  GetRealModuleName(New, Path, Status?, RealNew?).
+  if equal(Status, success) then
+    CheckExistence(RealNew, Status?).
+    if equal (Status, success) then
+      CopyModuleInDB(Old, RealNew, Status?, Changed?).
+      if equal (Status, success) then
+        SaveSdfModules(Changed).
+	SaveAsfSdfModule(RealNew)
+      else tau fi
+    else tau fi
+  else tau fi.
+  HandleCopyModuleErrors(Old, RealNew, Status) . tau
 endlet
 
 process GetRealModuleName(Name : str, Path : str, Status : term?,
@@ -90,6 +114,16 @@ is
     Status := module-not-changed
   )
 
+process CopyModuleInDB(Old : str, New : str, Status : term?, Changed : list?)
+is
+  snd-msg(copy-module-in-db(Old, New)) .
+  (
+    rec-msg(copy-done(Old, Changed?))
+  +
+    rec-msg(copy-not-done(Old)).
+    Status := module-not-copied
+  )
+
 process CheckExistence(New : str, Status : term?) is
     snd-msg(is-module-in-db(New)) .
     (
@@ -127,6 +161,14 @@ endlet
 process HandleRenameModuleErrors(Old : str, New : str, Status : term) is
   if not-equal(Status, success) then
     snd-note(ui-status(errorf("Error during renaming of %s to %s: %s\n", 
+                            [Old, New, Status])))
+  else
+    tau
+  fi
+
+process HandleCopyModuleErrors(Old : str, New : str, Status : term) is
+  if not-equal(Status, success) then
+    snd-note(ui-status(errorf("Error during copying of %s to %s: %s\n", 
                             [Old, New, Status])))
   else
     tau
