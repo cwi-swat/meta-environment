@@ -43,6 +43,16 @@ static char *paths[MAX_PATHS];
 
 /*}}}  */
 
+/*{{{  static char *ATgetString(ATerm t) */
+
+static char *ATgetString(ATerm t)
+{
+  assert(t != NULL && ATgetType(t) == AT_APPL);
+
+  return ATgetName(ATgetAFun((ATermAppl) t));
+}
+
+/*}}}  */
 /*{{{  static ATerm createErrorMessage(char *message) */
 
 static ATerm createErrorMessage(char *message)
@@ -59,13 +69,29 @@ static ATerm createSuccessMessage()
 }
 
 /*}}}  */
+/*{{{  static ATerm createFileNotFoundMessage() */
 
-/*{{{  static int fileExists(const char *fname) */
+static ATerm createFileNotFoundMessage()
+{
+  return ATmake("snd-value(file-not-found)");
+}
 
-static int fileExists(const char *fname)
+/*}}}  */
+/*{{{  static ATerm createFileFoundMessage(ATermList directories) */
+
+static ATerm createFileFoundMessage(ATermList directories)
+{
+  return ATmake("snd-value(file-found(<term>))", directories);
+}
+
+/*}}}  */
+
+/*{{{  static ATbool fileExists(const char *fname) */
+
+static ATbool fileExists(const char *fname)
 {
   struct stat st;
-  return stat(fname, &st) != EOF;
+  return stat(fname, &st) != EOF ? ATtrue : ATfalse;
 }
 
 /*}}}  */
@@ -127,7 +153,7 @@ static ATerm read_raw_from_named_file(char *fileName)
   if (!(buf = readFileContents(fileName, &size))) {
     t = createErrorMessage("could not open file");
   } else {
-    t = ATmake("snd-value(opened-file(text(<str>)))", buf);
+    t = ATmake("snd-value(file-contents(<str>))", buf);
     free(buf);
   }
   return t;
@@ -239,42 +265,45 @@ static char *makeFileName(char *path, char *extension)
 }
 
 /*}}}  */
-/*{{{  static char *makePath(char *path, char *name) */
 
-static char *makePath(char *path, char *name)
+/*{{{  ATerm relative_to_absolute(int cid, ATerm paths) */
+
+ATerm relative_to_absolute(int cid, ATerm paths)
 {
-  char *newPath = NULL;
+  ATermList relativePaths = (ATermList) paths;
+  ATermList result = ATempty;
+  char *relativePath = NULL;
+  char *absolutePath = NULL;
 
-  assert(strlen(path) != 0 && "path is empty");
-  assert(strlen(name) != 0 && "name is empty");
+  for (; !ATisEmpty(relativePaths); relativePaths = ATgetNext(relativePaths)) {
+    relativePath = ATgetString(ATgetFirst(relativePaths));
+    absolutePath = expandPath(relativePath);
 
-  newPath = calloc(sizeof(char), strlen(path) + strlen(SEP) +
-                   strlen(name) + 1);
-
-  if (newPath != NULL) {
-    sprintf(newPath,"%s%s%s", path, SEP, name);
+    if (absolutePath != NULL) {
+      result = ATinsert(result, ATmake("<str>", absolutePath));
+    }
+    else {
+      ATwarning("Unable to expand %s, skipping...\n", relativePath);
+    }
   }
-  else {
-    return NULL;
-  }
 
-  return newPath;
+  return ATmake("snd-value(absolute-directories(<term>))", ATreverse(result));
 }
 
 /*}}}  */
 
-/*{{{  ATerm open_named_text_file(int cid, char *fileName) */
+/*{{{  ATerm read_named_text_file(int cid, char *fileName) */
 
-ATerm open_named_text_file(int cid, char *fileName)
+ATerm read_named_text_file(int cid, char *fileName)
 {
   return read_raw_from_named_file(fileName);
 }
 
 /*}}}  */
 
-/*{{{  ATerm open_text_file(int cid, char *path, char *name,  */
+/*{{{  ATerm read_text_file(int cid, char *path, char *extension) */
 
-ATerm open_text_file(int cid, char *path, char *extension)
+ATerm read_text_file(int cid, char *path, char *extension)
 {
   char *fileName = makeFileName(path, extension);
   ATerm t = read_raw_from_named_file(fileName);
@@ -398,26 +427,34 @@ ATerm exists_file(int cid, char *path, char *extension)
 
 /*}}}  */
 
-/*{{{  ATerm find_file(int cid, char *path, char *name, char *extension) */
+/*{{{  ATerm find_file(int cid, ATerm paths, char *name, char *extension) */
 
-ATerm find_file(int cid, char *path, char *name, char *extension)
+ATerm find_file(int cid, ATerm paths, char *name, char *extension)
 {
-  char *newPath = makePath(path, name);
-  char *fileName = makeFileName(newPath, extension);
-  ATerm result;
+  char filename[PATH_LEN];
+  ATermList searchPaths = (ATermList) paths;
+  ATermList directories = ATempty;
+ 
+  for (; !ATisEmpty(searchPaths); searchPaths = ATgetNext(searchPaths)) {
+    ATerm path = ATgetFirst(searchPaths);
+    char *pathString = ATgetString(path);
+    sprintf(filename, "%s%s%s%s", pathString, SEP, name, extension);
 
-  if (fileExists(fileName)) { 
-    result = ATmake("snd-value(file-found(<str>))", newPath);
-  }   
-  else {
-    result = createErrorMessage("file does not exist");
+    if (fileExists(filename)) {
+      directories = ATinsert(directories, path);
+    }
   }
-  free(newPath);
-  free(fileName);
-  return result;
+
+  if (ATisEmpty(directories)) {
+    return createFileNotFoundMessage();
+  }
+  else {
+    return createFileFoundMessage(directories);
+  }
 }
 
 /*}}}  */
+
 /*{{{  ATerm process_search_paths(int cid, ATerm paths) */
 
 ATerm process_search_paths(int cid, ATerm paths)
@@ -492,6 +529,19 @@ static ATbool filesEqual(const char *f1, const char *f2)
 ATerm compare_files(int cid, char *f1, char *f2)
 {
   return createCompareMessage(filesEqual(f1, f2));
+}
+
+/*}}}  */
+
+/*{{{  ATerm get_filename(int cid, char *directory, char *name, char *extension) */
+
+ATerm get_filename(int cid, char *directory, char *name, char *extension)
+{
+  char fileName[PATH_LEN];
+
+  sprintf(fileName, "%s%s%s%s", directory, SEP, name, extension);
+
+  return ATmake("snd-value(filename(<str>))", fileName);
 }
 
 /*}}}  */

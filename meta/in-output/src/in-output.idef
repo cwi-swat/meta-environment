@@ -5,50 +5,35 @@
 process Io is
 let
   IO         : in-output,
-  Tree       : term,
   Name       : str,
   Path       : str,
-  SyntaxPath : str,
   Text       : str,
-  FunSym     : str,
   Term       : term,
-  SyntaxText : str,
-  RulesText  : str,
   FileName1 : str,
   FileName2 : str,
+  FileName : str,
   Contents   : term,
   ContentList: list,
-  TableType  : term,
-  Table      : term,
-  Paths      : list,
-  SyntaxExt  : str,
-  RulesExt   : str,
-  TermExt    : str,
   Extension  : str,
-  RealName   : str,
-  EditorId     : term,
-  ErrorMessage : str
+  ErrorMessage : str,
+  Directory : str,
+  Directories : list
 in
   execute(in-output,IO?).
   (
-    rec-msg(process-search-paths(Name?, Paths?)) .
-    snd-eval(IO, process-search-paths(Paths)) .
-    rec-value(IO, search-paths-processed) .
-    snd-msg(search-paths-processed(Name))
+    rec-msg(relative-to-absolute(Directories?)) .
+    snd-eval(IO, relative-to-absolute(Directories)) .
+    rec-value(IO, absolute-directories(Directories?)) .
+    snd-msg(absolute-directories(Directories))
   +
-    rec-msg(retrieve-search-paths) .
-    snd-eval(IO, retrieve-search-paths) .
-    rec-value(IO, search-paths(Paths?)) .
-    snd-msg(search-paths(Paths))
-  +
-    rec-msg(find-file(Path?, Name?, Extension?)) .
-    snd-eval(IO, find-file(Path, Name, Extension)) .
+    rec-msg(find-file(Directories?, Name?, Extension?)) .
+    snd-eval(IO, find-file(Directories, Name, Extension)) .
     (
-      rec-value(IO, failure(ErrorMessage?)) .
-      snd-msg(file-not-found)
+      rec-value(IO, file-found(Directories?)) .
+      snd-msg(file-found(Directories))
     +
-      rec-value(IO, file-found(Path?)) .
-      snd-msg(file-found(Path))
+      rec-value(IO, file-not-found) .
+      snd-msg(file-not-found)
     )
   +
     rec-msg(exists-file(Path?, Extension?)) .
@@ -81,24 +66,24 @@ in
       snd-msg(file-not-written(Text))
     )
   +
-    rec-msg(open-named-file(Path?)).
-    snd-eval(IO,open-named-text-file(Path)).
+    rec-msg(read-named-file(Path?)).
+    snd-eval(IO,read-named-text-file(Path)).
     (
-      rec-value(IO,opened-file(Contents?)).
-      snd-msg(opened-file(Contents))
+      rec-value(IO,file-contents(Contents?)).
+      snd-msg(file-contents(Contents))
     + 
       rec-value(IO, failure(ErrorMessage?)).
-      snd-msg(error-opening(Path))
+      snd-msg(error-reading(Path))
     )
   +
-    rec-msg(open-file(Path?, Extension?)).
-    snd-eval(IO,open-text-file(Path, Extension)).
+    rec-msg(read-file(Path?, Extension?)).
+    snd-eval(IO,read-text-file(Path, Extension)).
     (
-      rec-value(IO,opened-file(Contents?)).
-      snd-msg(opened-file(Contents))
+      rec-value(IO,file-contents(Contents?)).
+      snd-msg(file-contents(Contents))
     + 
       rec-value(IO,failure(ErrorMessage?)).
-      snd-msg(error-opening(ErrorMessage))
+      snd-msg(error-reading(ErrorMessage))
     )
   +
     rec-msg(exists-named-file(Name?)) .
@@ -115,11 +100,16 @@ in
     snd-eval(IO, compare-files(FileName1, FileName2)) .
     (
       rec-value(IO, equal) .
-      snd-msg(files-equal(FileName1, FileName2))
+      snd-msg(files-equal)
     +
       rec-value(IO, different) .
-      snd-msg(files-differ(FileName1, FileName2))
+      snd-msg(files-differ)
     )
+  +
+    rec-msg(get-filename(Directory?, Name?, Extension?)) .
+    snd-eval(IO, get-filename(Directory, Name, Extension)) .
+    rec-value(IO, filename(FileName?)) .
+    snd-msg(filename(FileName))
   ) *
   delta
 endlet
