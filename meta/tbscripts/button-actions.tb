@@ -124,7 +124,7 @@ let
   Error : term,
   Trees : list,
   ActionEvent : term,
-  Area : term,
+  PosInfo : term,
   SortName : str,
   FilePath : str,
   NewModuleName : str,
@@ -512,13 +512,16 @@ in
         ReturnSuccess(EditorId,Stack)
       +
         rec-msg(show-area, Stack?, EditorId?) .
-        StackPopTerm(Stack, Stack?, Area?) .
+        StackPopTerm(Stack, Stack?, PosInfo?) .
         StackPopString(Stack,Stack?, ModuleName?) .
-        FileName := first(args(Area)) .
+        FileName := first(args(PosInfo)) .
         snd-msg(edit-general(FileName)) .
-        rec-msg(editor-opened(ModuleName, EditorId2?)) .
-	snd-msg(set-cursor-at-error-location(EditorId2, Area)) .
-	snd-msg(set-focus-at-error-location(EditorId2, Area)) .
+        rec-msg(editor-opened(ModuleName, EditorId2?)).
+        GetTree(EditorId2, ModuleName, Tree?) .
+        snd-msg(get-focus-at-posinfo(EditorId2, PosInfo)) .
+        rec-msg(focus-at-posinfo(EditorId2, PosInfo, Focus?)) .
+	snd-msg(set-cursor-at-focus(EditorId2, Focus)) .
+	snd-msg(set-focus(EditorId2, Focus)) .
         ReturnSuccess(EditorId,Stack)        
       +
         rec-msg(show-feedback-location, Stack?, EditorId?) .
@@ -721,30 +724,14 @@ in
 	fi
       +
         rec-msg(import-module, Stack?, EditorId?) .
-       	StackPopString(Stack, Stack?, Ext?) .
-       	StackPopString(Stack, Stack?, Path?) .
-       	StackPopString(Stack, Stack?, NewModuleName?) .
-	StackIsEmpty(Stack, Empty?) .
-	if equal(Empty, true) then
-	  ReturnSuccess(EditorId, Stack)
-        else
-       	  StackPopString(Stack, Stack?, ModuleName?) .
-	  snd-msg(import-module(ModuleName, NewModuleName, Path)) .
-	  ReturnSuccess(EditorId, Stack)	
-	fi
+       	StackPopString(Stack, Stack?, ModuleName?) .
+	ImportModule(ModuleName) .
+	ReturnSuccess(EditorId, Stack)
       +
         rec-msg(unimport-module, Stack?, EditorId?) .
-       	StackPopString(Stack, Stack?, Ext?) .
-       	StackPopString(Stack, Stack?, Path?) .
-       	StackPopString(Stack, Stack?, NewModuleName?) .
-	StackIsEmpty(Stack, Empty?) .
-	if equal(Empty, true) then
-	  ReturnSuccess(EditorId, Stack)
-        else
-       	  StackPopString(Stack, Stack?, ModuleName?) .
-	  snd-msg(unimport-module(ModuleName, NewModuleName, Path)) .
-	  ReturnSuccess(EditorId, Stack)	
-	fi
+       	StackPopString(Stack, Stack?, ModuleName?) .
+	UnImportModule(ModuleName) .
+	ReturnSuccess(EditorId, Stack)
       +
 	rec-msg(compile-module, Stack?, EditorId?) .
 	StackIsEmpty(Stack, Empty?) .
@@ -1193,3 +1180,39 @@ in
   )
 
 endlet
+
+process ImportModule(ModuleName : str) is
+let
+  Title : str,
+  Choices : list,
+  Chosen : str
+in
+  snd-msg(get-all-module-names) .
+  rec-msg(all-module-names(Choices?)) .
+  Title := "Add import" .
+  snd-msg(show-list-choice(Title, "Choose a module to import", Choices)) .
+  (
+    rec-msg(list-choice(Title, Chosen?)) .
+    snd-msg(import-module(ModuleName, Chosen))
+  +
+    rec-msg(cancel-list-choice(Title)) 
+  )
+endlet  
+
+process UnImportModule(ModuleName : str) is
+let
+  Title : str,
+  Choices : list,
+  Chosen : str
+in
+  snd-msg(get-all-imported-module-names(ModuleName)) .
+  rec-msg(all-imported-module-names(Choices?)) .
+  Title := "Remove import" .
+  snd-msg(show-list-choice(Title, "Choose a module to remove from the imports", Choices)) .
+  (
+    rec-msg(list-choice(Title, Chosen?)) .
+    snd-msg(unimport-module(ModuleName, Chosen)) 
+  +
+    rec-msg(cancel-list-choice(Title)) 
+  )
+endlet  
