@@ -181,7 +181,7 @@ ATbool ASF_isTreeAmbConstructorFunction(ASF_Tree tree)
   extern ATerm ASF_patternTreeAmbConstructor;
 
   if (ATmatchTerm(ASF_TreeToTerm(tree), ASF_patternTreeAmbConstructor,
-                  NULL, NULL, NULL, NULL, NULL, NULL)) {
+                  NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
     return ATtrue;
   }
 
@@ -243,3 +243,22 @@ ATbool ASF_isTreeTraversalFunction(ASF_Tree tree)
 }
 
 /*}}}  */
+
+/*{{{  ATbool ASF_isTreeGetterFunction(ASF_Tree tree) */
+
+ATbool ASF_isTreeGetterFunction(ASF_Tree tree)
+{
+  PT_Tree ptree = (PT_Tree) tree;
+
+  if (PT_hasTreeProd(ptree)) {
+    PT_Production prod = PT_getTreeProd(ptree);
+    PT_Attr attr = PT_makeAttrTerm(ATparse("asf-getter"));
+
+    return PT_hasProductionCertainAttr(prod, attr);
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
+

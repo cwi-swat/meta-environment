@@ -6,7 +6,8 @@
 
 ATbool ASF_isTreeLexicalConstructorFunction(ASF_Tree tree);
 ATbool ASF_isTreeAmbConstructorFunction(ASF_Tree tree);
-ATbool ASF_isTreeTraversalFunction(ASF_Tree tree);                               
+ATbool ASF_isTreeTraversalFunction(ASF_Tree tree);                              ATbool ASF_isTreeGetterFunction(ASF_Tree tree);
+
 ATbool ASF_isTagDefault(ASF_Tag tag);
 int    ASF_getCondEquationListLength(ASF_CondEquationList eqs);
 
