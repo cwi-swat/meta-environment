@@ -52,8 +52,7 @@ XDEFS		= -DPROFILING
 XCFLAGS		=
 XCPPFLAGS	=
 XINCLUDES	= -I$(ATERMINC)
-XLIBS		= -L$(ATERMLIB) -lATB-dbg -lAsFix-dbg -lATerm-dbg \
-			$(SOCKLIBS)
+XLIBS		= -L$(ATERMLIB) -lATB -lAsFix -lATerm $(SOCKLIBS)
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
@@ -131,5 +130,3 @@ distclean: clean
 # Updating of included dependencies (CC needs to be gcc!)
 depend: $(CSRC) $(CHDR)
 	@$(MAKEDEPEND) $(INCLUDES) $(CSRC) > depend
-
-
