@@ -29,13 +29,7 @@ in
   subscribe(disconnected(<term>)).
   snd-note(ui-status(stat(Id,"Opening term editor"))).
   snd-msg(Id,open-trm-file(Term)).
-  ( rec-msg(Id,opened-file(asfix,Name?,T?,Path?)).
-/* This is to dissappear. Currently, editing a term is synonym for 
- * rewriting a term, since we do not have an editor. In a later stage
- * the Rewrite process should be created by the editor/user.
- */
-    snd-msg(rewrite(id(Mod),T))
-    + 
+  ( 
 /* Dit stuk is van Tobias
     rec-msg(Id,opened-file(raw,Name?,Text?,Dir?,Path?)).
     printf("Name: %t, Path: %t", Name, Path).
@@ -43,9 +37,7 @@ in
     snd-note(ui-status(endstat(Id)))
     snd-msg(process-eqs(Mod)).
 Tot hier */
-    rec-msg(Id,opened-file(raw,Name?,Text?,Dir?,Path?)).
-   /* snd-msg(process-eqs(Mod)). */
-/*    rec-msg(eqs-processed(Name2?)).*/
+    rec-msg(Id,opened-file(raw,Name?,Text?,Dir?,Path?)). 
     snd-msg(get-table-from-db(id(Mod))).
     ( rec-msg(table(Table?)).
       snd-note(ui-status(endstat(Id)))
@@ -87,14 +79,27 @@ Tot hier */
                                              char(Char?)]))).
        printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co).
        snd-note(ui-status(endstat(Id)))
-     ))
-
+     )) 
+*/ 
     +
-    rec-msg(Id,error-opening(Str?)).
-*/
-/*    snd-note(ui-status(stat(Id,"Creating new term"))).
-    create(Editor(Name,"",Fn,Id),Tid?).*/
-/*    snd-note(ui-status(endstat(Id)))*/
+    rec-msg(Id,error-opening(Str?,Path?)). 
+    snd-msg(get-table-from-db(id(Mod))).
+    ( rec-msg(table(Table?)).
+      snd-note(ui-status(endstat(Id)))
+    +
+      rec-msg(no-table).
+      snd-note(ui-status(endstat(Id))).
+      snd-note(ui-status(stat(Id,"Generating Parse Table ..."))).
+      snd-msg(generate-parsetable(id(Mod))).
+      rec-msg(parsetable(Table?)).
+      snd-msg(add-table-to-db(id(Mod),Table)).
+      rec-msg(done).
+      snd-note(ui-status(endstat(Id)))
+    ).
+    snd-note(ui-status(stat(Id,"Creating new term"))).
+    create(Editor(id(Str),"",Path,Mod), Tid?). 
+    snd-msg(open-language(Mod,Table)).
+    snd-note(ui-status(endstat(Id)))
   ).
   rec-note(disconnected(TE))
 endlet
