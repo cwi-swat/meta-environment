@@ -44,11 +44,13 @@ SDF2_TO_ADT	= ATerm-Utils ATerm-Syntax Literal-Syntax \
 
 Sdf2_to_ADT_SOURCES	= Sdf2-to-AsFix2ME-ADT.c
 Sdf2_to_ADT_LDADD	= -L$(ASCLIB) -lasc-support-me \
+			-L$(SGLR)/lib -lsglr \
 			-L$(ASF_SUPPORT)/lib -lASFME \
 			-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 			-L$(ATERM)/lib -lATerm
 Sdf2_to_Imploded_ADT_SOURCES = Sdf2-to-Imploded-ADT.c
 Sdf2_to_Imploded_ADT_LDADD = -L$(ASCLIB) -lasc-support-me \
+			-L$(SGLR)/lib -lsglr \
 			-L$(ASF_SUPPORT)/lib -lASFME \
 			-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 			-L$(ATERM)/lib -lATerm
