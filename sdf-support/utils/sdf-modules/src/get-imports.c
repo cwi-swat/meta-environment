@@ -1,4 +1,5 @@
 #include "SDFME-utils.h"
+#include "MEPT-utils.h"
 #include "module-table.h"
 #include <assert.h>
 #include <aterm2.h>
@@ -10,7 +11,7 @@ static ModuleTable moduleTable = NULL;
 
 static void initModuleTable(ATermList modules)
 {
-  ATwarning("initializing with %d modules\n", ATgetLength(modules));
+  ATwarning("Initializing module cache with %d modules\n", ATgetLength(modules));
   /* initialize the hash table with all modules */
   for (;!ATisEmpty(modules); modules = ATgetNext(modules)) {
     ATerm atModule = ATBunpack(ATgetFirst(modules));
@@ -101,8 +102,9 @@ SDF_ImportList GI_getModuleImportsList(SDF_Module module)
   imps = SDF_getModuleList(module);
   while (!SDF_isImpSectionListEmpty(imps)) {
     SDF_ImpSection impsection = SDF_getImpSectionListHead(imps);
-    imports = SDF_concatImportList(getImpsectionImportsList(impsection),
-                                   imports);
+    SDF_ImportList list = getImpsectionImportsList(impsection);
+
+    imports = SDF_mergeImportList(list, imports);
 
     if (SDF_isImpSectionListSingle(imps)) {
       break;
@@ -462,6 +464,13 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
 
     import = SDF_removeImportAnnotations(SDF_getImportListHead(todo));
 
+    if (SDF_hasImportListTail(todo)) {
+      todo = SDF_getImportListTail(todo);
+    }
+    else {
+      todo = SDF_makeImportListEmpty();
+    }
+
     if (!SDF_containsImportListImport(result, import)) {
       SDF_Renamings renamings;
       SDF_ImportList imports;
@@ -474,16 +483,12 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
       imports = applyRenamingsToImports(renamings, imports);
 
       todo = SDF_mergeImportList(todo, imports);
-
+      
       import = makeRenamedImport(actualName, renamings);
-      result = SDF_insertImport(import, result);
-    }
-
-    if (SDF_hasImportListTail(todo)) {
-      todo = SDF_getImportListTail(todo);
-    }
-    else {
-      break;
+    
+      if (!SDF_containsImportListImport(result, import)) { 
+	result = SDF_insertImport(import, result);
+      }
     }
   }
 
@@ -568,7 +573,6 @@ static ATermList collect_imported_modules(SDF_ImportList imports)
     SDF_ModuleId importId = SDF_getModuleNameModuleId(importName);
     SDF_Start module = MT_getModule(moduleTable, 
 				    SDF_removeModuleIdAnnotations(importId));
-
     assert(module != NULL && "its a precondition to have this module stored"); 
     
     result = ATinsert(result, SDF_StartToTerm(module));
@@ -594,8 +598,9 @@ SDF_ImportList GI_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId)
 
   moduleTable = MT_createModuleTable();
   initModuleTable(modules);
- 
+
   result = do_get_transitive_imports(moduleId);
+ 
   MT_destroyModuleTable(moduleTable);
   moduleTable = NULL;
   return result;
@@ -630,7 +635,7 @@ ATermList GI_getTransitiveImportedModules(ATermList modules,
 
   moduleTable = MT_createModuleTable();
   initModuleTable(modules);
- 
+
   imports = do_get_transitive_imports(moduleId);
   result = collect_imported_modules(imports);
 

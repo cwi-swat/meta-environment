@@ -7,6 +7,7 @@
 #include <assert.h>
 
 #include <SDFME-utils.h>
+#include <MEPT.h>
 #include "sdf-modules.tif.h"
 #include "get-imports.h"
 
@@ -210,6 +211,7 @@ ATerm make_sdf_definition(int cid, ATerm atModules, char *name)
   ATerm result;
 
   list = GI_getTransitiveImportedModules((ATermList) ATBunpack(atModules), id);
+
   modules = SDF_makeModuleListEmpty();
   space = SDF_makeLayoutSpace();
 
@@ -278,6 +280,7 @@ int main(int argc, char *argv[])
 
   ATBinit(argc, argv, &bottomOfStack);
   SDF_initSDFMEApi();
+  PT_initMEPTApi();
 ATsetChecking(ATtrue);
 
   cid = ATBconnect(NULL, NULL, -1, sdf_modules_handler);
