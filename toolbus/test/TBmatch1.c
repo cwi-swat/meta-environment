@@ -191,6 +191,22 @@ void main(int argc, char *argv[])
 
   TST_P(140, "<int>", "<int>"); NL;
 
+
+  TST_OK(150, "{attr(1) : b}");
+  TST_OK(151, "f({1 : a}, b)");
+  TST_OK(152, "[a, {2 : b}, c]");
+
+  TST_P(160, "{attr(1) : b}", "b");NL;
+  TST_P(161, "f({1 : a}, b)", "f(a,b)");NL;
+  TST_P(162, "[a, {2 : b}, c]", "[a,b,c]");NL;
+
+  TST_T(170, "{attr(x) : b}", "{attr(%t):b}", "x");
+  TST_S(171, "{attr(x) : b}", "{%f(x):b}", "attr");
+  TST_T(172, "{attr(x) : b}", "{attr(x):%t}", "b");
+  TST_T(173, "f({attr(x) : b})", "f({attr(%t):b})", "x");
+  TST_S(174, "f({attr(x) : b})", "f({%f(x):b})", "attr");
+  TST_T(175, "f({attr(x) : b})", "f({attr(x):%t})", "b");
+
   if(nerr)
     fprintf(stderr, "TBmatch1: %d ERRORS\n", nerr);
   else
