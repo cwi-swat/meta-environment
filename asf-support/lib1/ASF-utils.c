@@ -38,6 +38,10 @@ foreachConditionInList(ASF_ConditionList list, ASF_ConditionVisitor visitor)
   ASF_ConditionList newList;
   ASF_Separator sep = ASF_getConditionListSep(list);
   ASF_Layout layout = ASF_getConditionListWsAfterFirst(list);
+
+  /* note that in the general case we have to save each layout node and
+   * put it back after applying the visitor! (to be implemented)
+   */
  
   /* apply func to each element */
   for (store = ATempty; 
@@ -59,6 +63,43 @@ foreachConditionInList(ASF_ConditionList list, ASF_ConditionVisitor visitor)
     ASF_Condition newCond = ASF_makeConditionFromTerm(ATgetFirst(store));
     newList = ASF_makeConditionListMany(newCond, layout, sep, layout, newList); 
   } 
+
+  return newList;
+}
+
+ASF_CondEquationList
+foreachCondEquationInList(ASF_CondEquationList list, 
+                          ASF_CondEquationVisitor visitor)
+{
+  ATermList store;
+  ASF_CondEquationList newList;
+  ASF_Layout layout = ASF_getCondEquationListWsAfterFirst(list);
+
+  /* note that in the general case we have to save each layout node and
+   * put it back after applying the visitor! (to be implemented)
+   */ 
+
+  /* apply func to each element */
+  for (store = ATempty;
+      ASF_hasCondEquationListHead(list);
+      list = ASF_getCondEquationListTail(list)) {
+    store = ATinsert(store,
+                     ASF_makeTermFromCondEquation(
+                     visitor(ASF_getCondEquationListHead(list))));
+  }
+
+  if(ATisEmpty(store)) {
+    return ASF_makeCondEquationListEmpty();
+  }
+
+  newList = ASF_makeCondEquationListSingle(
+            ASF_makeCondEquationFromTerm(ATgetFirst(store)));
+
+  for (; !ATisEmpty(store); store = ATgetNext(store)) {
+    ASF_CondEquation newEqu = ASF_makeCondEquationFromTerm(ATgetFirst(store));
+    newList = ASF_makeCondEquationListMany(newEqu, 
+                                           layout, newList);
+  }
 
   return newList;
 }
