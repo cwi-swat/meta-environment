@@ -90,12 +90,19 @@ in
         +
           rec-msg(parse-result-asfix1(Id,
             parse-error(ErrList?, ambiguities(Amount?, Ambs?)))) .
-          printf("Parse of %s returned %d ambiguities", Text, Amount) .
+          snd-msg(get-error-position(Focus, ErrList)).
+          rec-msg(error-position(Pos?)).
+          snd-msg(display-error(EditorId, Pos)).
+          snd-note(ui-status(
+                   errorf("%d ambiguities found:\n%s\n",[Amount, Ambs]))).
           ErrorFoci := join(ErrorFoci, Focus)
         +
-          rec-msg(parse-result-asfix1(Id, parse-error(ErrList?, cycle(Cycle?)))) .
-          printf("Parse of %s returned a cycle\n", Text) .
-          printf("Cycle is: %t\n", Cycle) .
+          rec-msg(parse-result-asfix1(Id, 
+                  parse-error(ErrList?, cycle(Cycle?)))) .
+          snd-msg(get-error-position(Focus, ErrList)).
+          rec-msg(error-position(Pos?)).
+          snd-msg(display-error(EditorId, Pos)).
+          snd-note(ui-status(errorf("Cycle detected:\n%s\n", Cycle))). 
           ErrorFoci := join(ErrorFoci, Focus)
         )
       else
