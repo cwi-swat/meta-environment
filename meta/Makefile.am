@@ -17,12 +17,11 @@ CLEANFILES  = meta meta.1
 % : %.sh.src Makefile
 	sed 's@__PREFIX__@$(prefix)@g;\
 	     s@__ATERM__@$(ATERM)@g;\
-	     s@__ASF__@$(ASF)@g;\
-	     s@__SGLR__@$(SGLR)@g;\
-	     s@__PGEN__@$(PGEN)@g;\
-	     s@__ASF__@$(ASF)@g;\
-	     s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
 	     s@__TOOLBUS__@$(TOOLBUS)/toolbus@g;\
+	     s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
+	     s@__PGEN__@$(PGEN)@g;\
+	     s@__SGLR__@$(SGLR)@g;\
+	     s@__ASF__@$(ASF)@g;\
 	     s@__WISH__@$(WISH)@g;\
 	     s@__XEMACS__@$(XEMACS)@g;\
 	     s@__GRAPHVIZ__@$(GRAPHVIZ)@g;' < $< > $@ && \
