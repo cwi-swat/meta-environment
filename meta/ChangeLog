@@ -1,5 +1,9 @@
 # $Id$
 
+2002/05/06 (jurgenv@cwi.nl)
+ * Opening initial module with a compound module name fixed.
+ * Removed check on module name consistency for the moment.
+
 2002/05/06 (vandenbr@loria.fr)
  * Improved the button manipulation.
  * Fixed the bug that caused empty editors when there was a syntax
