@@ -8,7 +8,7 @@ sorts Symbol Symbols CharRange CharRanges
 
 context-free syntax
 
-empty                                                    -> Symbol  {cons("empty")}
+"empty"                                                  -> Symbol  {cons("empty")}
 lit(string:QLiteral)                                     -> Symbol  {cons("lit")}
 cf(symbol:Symbol)                                        -> Symbol   {cons("cf")}
 lex(symbol:Symbol)                                       -> Symbol   {cons("lex")}
@@ -25,7 +25,7 @@ iter-n(symbol:Symbol,number:NatCon)                      -> Symbol   {cons("iter
 "iter-sep-n" "(" symbol:Symbol comma1:"," separator:Symbol comma2:"," number:NatCon ")" -> Symbol  {cons("iter-sep-n")}
 func(symbols:Symbols,symbol:Symbol)                      -> Symbol  {cons("func")}
 varsym(symbol:Symbol)                                    -> Symbol  {cons("varsym")}
-layout                                                   -> Symbol  {cons("layout")}
+"layout"                                                 -> Symbol  {cons("layout")}
 char-class(CharRanges)                                   -> Symbol  {cons("char-class")}
 strategy(lhs:Symbol,rhs:Symbol)                          -> Symbol {cons("strategy")}
 parametrized-sort(sort:QLiteral,parameters:Symbols)       -> Symbol  {cons("parametrized-sort")}
