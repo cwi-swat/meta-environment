@@ -14,3 +14,4 @@ parse-sdf2.1
 perform-test
 remove-annotation
 apply-function
+sdf2stats
