@@ -982,8 +982,23 @@ Instead of writing a Java interface as is done in RMI, in CORBA the
 programmer writes the definition in IDL: a special purpose, interface
 language used as the base for CORBA implementations. This IDL definition
 is then used to generate the necessary \emph{stubs} (client side proxies
-to delegate method invocations to the server) and \emph{skeletons} (server
-side classes that hide low-level CORBA details which can be extended).
+to delegate method invocations to the server) and \emph{skeletons},
+\emph{holder} and \emph{helper} classes (server side classes that hide
+low-level CORBA details) which can be extended.
+
+\medskip
+\begin{figure}
+\begin{tabular}{|l|l|l|l|l|}\hline
+          & ToolBus & RMI & RMI-IIOP & CORBA \\ \hline
+Interface & ToolBus Script & Java Interface & Java Interface & IDL \\ \hline
+GC        & yes & yes & yes & no \\ \hline
+params and    & by-value & local: by-value & local: by-value & "in" and "out" \\
+return values & & remote: by-ref & remote: by-ref & params \\ \hline
+language & any via    & only Java & CORBA objects if &  any via \\
+         & TB adapter &           & interface in Java & IDL compiler \\ \hline
+\hline
+\end{tabular}
+\end{figure}
 
 %%Using the ToolBus communication primitives we can exactly specify which
 %%pattern of messages (communications) are allowed and in what order. The
