@@ -312,6 +312,7 @@ to \asfsdf\ in Section~\ref{ASF+SDF}.
 
 %%\cite{DHK96}
 
+\newpage
 \section{Starting the System}
 
 The \ASmetaenv\ can be invoked via the command {\tt meta}.  As a
@@ -371,9 +372,10 @@ path `{\tt .}', i.e., only the current directory will be searched.
 
 \end{figure}
 
+\newpage
 \section{The Main Window} \label{MainWindow}
 
-The main window of \ASmetaenv\ immediately after starting of the
+The main window of the \ASmetaenv\ immediately after starting of the
 system was already shown in Figure~\ref{FIG:meta-start}.  After
 loading a specification it may look like Figure~\ref{FIG:meta-pico}.
 The main window consists of the following parts:
@@ -432,6 +434,7 @@ The main window consists of the following parts:
   \caption{\label{FIG:meta-pico} Main window after loading the Pico specification}
 \end{figure}
 
+\newpage
 \section{The Menus of the Main Window}
  
 \subsection{The File menu} \label{FileMenu}
@@ -452,17 +455,17 @@ Figure~\ref{FIG:open-file}.
 
 {\tt Clear} removes all modules that have been opened so far from the
 Meta-Environment. If modules have been modified, you are expicitly
-asked to save them. he same effect can be achieved by leaving the
+asked to save them. The same effect can be achieved by leaving the
 Meta-Environment (using {\tt Quit}, see below) and starting a new
 version of the Meta-Environment using the {\tt meta} command.
 
 {\tt Export} allows the export of the import pane in various graphical
 formats.  {\tt Print Setup} allows the customization of the command
 used for printing.  Its dialog window is shown in
-Figure~\ref{FIG:printer-setup}.  {\tt Print} print the current import
+Figure~\ref{FIG:printer-setup}.  {\tt Print} prints the current import
 pane.
 
-The entry {\tt Quit} ends the execution of the \ASmetaenv.
+{\tt Quit} ends the execution of the \ASmetaenv.
 
 \begin{figure}[t]
   \centerline{\epsfig{file=printer-setup.ps,width=3cm}}
@@ -484,7 +487,8 @@ The entry {\tt Quit} ends the execution of the \ASmetaenv.
 \end{figure}
 
 The {\tt Edit} menu is used for setting the preferences of a user.
-However, for the moment this menu is not activated.
+At this moment this functionality is not yet implemented and
+this menu is disabled.
 
 \subsection{The Graph Menu} \label{GraphMenu}
 
@@ -551,6 +555,7 @@ facility to report bugs to the developers.
 Both {\tt Online Help} and {\tt JitterBug Activated} assume that there
 is a {\tt Netscape} running, other browsers are not yet supported.
 
+\newpage
 \section{The Panes of the Main Window}
 
 The two left-most panes of the main window give two, alternative,
@@ -575,9 +580,10 @@ by a circle.
 The import pane has the following interaction facilities:
 
 \begin{itemize}
-
-\item Different parts of the import graph can be displayed by using
-the horizontal or vertical scrollbar next to the import pane.
+  
+\item Different parts of the import graph can be displayed by using the
+  horizontal or vertical scrollbar at the right and at the bottom of the
+  import pane.
 
 \item By clicking and holding the middle mouse button outside any
 module, the import graph can be dragged across the import pane.
@@ -657,7 +663,7 @@ Pushing the {\tt Cancel} button aborts the compilation.
 Section~\ref{compiling-specs}
 gives more details on the compilation of \asfsdf\ specifications.
 
-{\tt Info} gives module information (not yet implemented).
+{\tt Info} gives detailed information for the selected modules (not yet implemented).
 
 \begin{figure}[t]
   \centerline{\epsfig{file=compiler-warning.ps,width=4cm}}
@@ -669,6 +675,7 @@ gives more details on the compilation of \asfsdf\ specifications.
   \caption{\label{FIG:compiler-dir}Dialog for setting directory path ({\tt Compile Module...})}
 \end{figure}
 
+\newpage
 \section{Editing Specifications}
 
 The editors used to create and modify specifications and terms are
@@ -755,10 +762,24 @@ rewriter, or reducer instead of evaluator, and equivalently we use
 evaluating, interpreting, rewriting, or reducing of a term}. The term is
 reduced given the specified equations (if any). In order to reduce the
 term it may be necessary to parse the equations of various modules and
-to initialize the evaluator with this set of equations.  Section
-\ref{eval-term} gives more details on reducing terms.
+to initialize the evaluator with this set of equations.
 
+\newpage
+\section{Executing Specifications} 
+\label{ExecutingSpecifications}
 
+Some (but not all!) \asfsdf\ specifications can be executed by interpreting
+each equation as a (conditional) rewrite rule from left to right.
+
+When you have created a term (using a term editor, see
+Section~\ref{EditingTerms}), you can reduce it (by selecting the {\tt Reduce}
+entry from the {\tt Meta-Environment} menu of the term editor).  As a result,
+rewrite rules will be applied until a normal form is reached (a term for which
+no applicable rule can be found). This normal form is the result of the
+execution and is displayed in the window from which the \ASmetaenv\ was
+started. The rewriting process is further described in Section~\ref{Equations}.
+
+\newpage
 \section{Guided Tour} \label{GuidedTour}
 
 \begin{figure}[t]
@@ -792,14 +813,14 @@ For each module in a specification two files exist: `{\tt
 
 \begin{itemize}
 
-\item two files for the module {\tt Bool-example}.
+\item Two files for the module {\tt Bool-example}.
 
-\item files for the Pico-specification.
+\item Files for the Pico-specification.
 
-\item three examples of Pico-programs: `{\tt big.pico}', `{\tt fac.pico}',
+\item Three examples of Pico-programs: `{\tt big.pico}', `{\tt fac.pico}',
   `{\tt small.pico}'.
 
-\item terms for typechecking and evaluating these Pico-programs.
+\item Terms for typechecking and evaluating these Pico-programs.
 
 \end{itemize}
 
@@ -829,7 +850,7 @@ shown in Figure~\ref{FIG:meta-Bool-example}.
   \caption{\label{FIG:meta-Bool-example}Main window after opening {\tt Bool-example}}
 \end{figure}
 
-\subsection{The Module Bool-example}
+\subsection{The Module Bool-example} \label{Bool-example}
 
 One of the simplest specifications possible, and therefore frequently used as
 an example, is the datatype of the Boolean values. It defines the constants
@@ -872,8 +893,10 @@ module Bool-example
 
     [B5] not(false) = true 
     [B6] not(true) = false
-
 \end{verbatim}
+
+For an explanation of the \asfsdf\ features used in this specification we
+refer to Section~\ref{ASF+SDF}.
 
 \begin{figure}[t]
   \centerline{\epsfig{file=Bool-example.sdf2.ps,width=12cm}}
@@ -895,9 +918,10 @@ module Bool-example
   
 \item Push the button {\tt Edit Syntax} in the button pane at the right-hand
   side of the main window.  An editor will appear containing the syntax part
-  of the {\tt Bool-example} specification: the \sdf\ section.  This editor is a
-  version of the standard text editor Emacs extended with the menu {\tt
-    Meta-Environment}. The result is shown in Figure~\ref{FIG:Bool-example.sdf2}.
+  of the {\tt Bool-example} specification: the \sdf\ section.  This editor is
+  a version of the standard text editor Emacs extended with the menus {\tt
+    Meta-Environment} and {\tt Move}. The result is shown in
+  Figure~\ref{FIG:Bool-example.sdf2}.
   
 \item Push the button {\tt Edit Equations}.  This will reuse the already 
   existing
@@ -931,7 +955,7 @@ The result is shown in Figure~\ref{FIG:Bool-example.eqs}.
 \begin{itemize}
 \item Open a term-editor over module {\tt Bool-example} by first selecting
   module {\tt Bool-example} in the module pane, and then pushing the {\tt
-    Term} button.  A dialog window pops up\footnote{
+    Term} button.  A dialog window pops up.\footnote{
     In following releases this will be changed into a standard file dialog}
     Enter any new filename, for instance, `{\tt my-term}'.
 
@@ -1433,6 +1457,7 @@ statements means updating the value-environment.
 The rest of the equations deal with the evaluation of expressions. Evaluating
 an expression results in a value.
 
+\newpage
 \section{An Introduction to \asfsdf} \label{ASF+SDF}
 
 \asfsdf\ is the result of the marriage of two formalisms \asf\ (Algebraic
@@ -1498,45 +1523,45 @@ separate files.  For each module $M$ in a specification two files
 exist: `{\tt $M$.sdf2}' contains the syntax sections of $M$ and `{\tt
 $M$.eqs}' contains the equations section of $M$.
 
-A {\tt <Section>} is either an \emph{export section} or a \emph{hidden
-  section}. The former starts with the keyword {\tt exports} and makes all entities
-in the section visible to other modules.  The latter starts with the keyword
-{\tt hiddens} and makes all entities in the section local to the module.
+An {\tt <ExportOrHiddenSection>} is either an \emph{export section} or a
+\emph{hidden section}. The former starts with the keyword {\tt exports} and
+makes all entities in the section visible to other modules.  The latter starts
+with the keyword {\tt hiddens} and makes all entities in the section local to
+the module.
 
-A {\tt <Section>} has the form:
+An {\tt <ExportOrHiddeSection>} has thus one of the two forms:
 
 \begin{verbatim}
-exports-or-hiddens
-  <Grammar>+
+exports                               hiddens
+  <Grammar>+                            <Grammar>+
 \end{verbatim}
   
 \noindent A {\tt <Grammar>} 
 can be a definition of one of the following: 
 \begin{itemize}
-\item imports (Section~\ref{Imports});
-\item sorts (Section~\ref{Sorts});
-\item lexical syntax (Section~\ref{LexicalSyntax});
-\item context-free syntax (Section~\ref{ContexFreeSyntax});
+\item Imports (Section~\ref{Imports}).
+\item Sorts (Section~\ref{Sorts}).
+\item Lexical syntax (Section~\ref{LexicalSyntax}).
+\item Context-free syntax (Section~\ref{ContexFreeSyntax}).
+\item Attributes of Lexical and Context-free Functions (Section~\ref{Attributes}).
 %\item lexical variables;
 %\item lexical priorities;
-\item context-free priorities (Section~\ref{ContextFreePriorities});
-%\item priorities;
-\item lexical restrictions (Section~\ref{Restrictions});
-\item context-free restrictions (Section~\ref{Restrictions});
-\item variables (Section~\ref{Variables}).
-%\item restrictions;
+\item Priorities (Section~\ref{Priorities}).
+\item Variables (Section~\ref{Variables}).
 %\item aliases;
 \end{itemize}
 
-\noindent Each of these entities will now be described and illustrated by examples.
+\noindent Each of these entities will now be described and illustrated by
+examples.
+
+Descriptions of syntactic disambiguation (Section~\ref{Disambiguation}) and of
+equations (Section~\ref{Equations}) complete this overview of an \asfsdf\ 
+module.
 
 \subsection{Imports} \label{Imports}
 
 Each {\tt <ImportSection>} starts with the keyword {\tt imports} followed
-by one or more module names.
-%module name should be imports where, an import is either a module name
-%or a module name followed by renamings.
-An {\tt <ImportSection>} has the form:
+by one or more module names:
 
 \begin{verbatim}
 imports
@@ -1559,8 +1584,7 @@ importing module but they are not exported by the importing module.
 
 \subsection{Sorts} \label{Sorts}
 
-Sorts are declared by listing their name in a sorts section of a
-module.
+Sorts are declared by listing their name in a sorts section of the form:
 
 \begin{verbatim}
 sorts
@@ -1619,19 +1643,19 @@ in this manual, but further details can be found in \cite{Vis9?.thesis}.
 \subsubsection{Lexical Functions} \label{LexicalFunctions}
 
 In their simplest form, declarations of lexical functions consist of a
-sequence of zero or more strings or sort names followed by `{\tt ->}'
-and the name of a result sort, say $L$.  A lexical function may be
-followed by a list of attributes. The regular expression associated
-with $L$ consists of the logical \emph{or} of all left-hand sides of lexical
-functions with result sort $L$.  All sort names appearing in left-hand
-sides of declarations are replaced by the regular expression
-associated with them. Circular dependencies between declarations in
-the lexical syntax are forbidden.  Figure \ref{CODE:simplelex} shows
-an example of a simple lexical function definition for defining the
-first three words that Dutch children learn to read.  The three sorts
-{\tt Aap}, {\tt Noot} and {\tt Mies}, each recognize, respectively,
-the strings {\tt aap}, {\tt noot} and {\tt mies}. The sort {\tt
-LeesPlank} recognizes the single string {\tt aapnootmies}.
+sequence of zero or more strings or sort names followed by `{\tt ->}' and the
+name of a result sort, say $L$.  A lexical function may be followed by a list
+of attributes. The regular expression associated with $L$ consists of the
+logical \emph{or} of all left-hand sides of lexical functions with result sort
+$L$.  All sort names appearing in left-hand sides of declarations are replaced
+by the regular expression associated with them. Circular dependencies between
+declarations in the lexical syntax are forbidden.\footnote{Does this
+  limitation still apply?}  Figure \ref{CODE:simplelex} shows an example of a
+simple lexical function definition for defining the first three words that
+Dutch children learn to read.  The three sorts {\tt Aap}, {\tt Noot} and {\tt
+  Mies}, each recognize, respectively, the strings {\tt aap}, {\tt noot} and
+{\tt mies}. The sort {\tt LeesPlank} (a reading-desk used in primary
+education) recognizes the single string {\tt aapnootmies}.
 
 
 \begin{figure}[tb]
@@ -1656,7 +1680,7 @@ exports
 
 \paragraph{Lexical constructor functions}%
 \hspace{-0.3cm}\footnote{Lexical contructor functions will disappear when full \sdf2\ becomes available in the \ASmetaenv.}
-For each sort that appears as result sort in the lexical syntax a lexical
+For each sort {\tt L} that appears as result sort in the lexical syntax a lexical
 constructor function of the form {\tt l "(" CHAR+ ")" -> L} is automatically
 added to the context-free syntax of the specification.  Here, `{\tt l}' is the
 name of sort `{\tt L}' written in lower-case letters.  In this way, you can
@@ -1796,8 +1820,7 @@ Figure~\ref{CODE:LettersDigits2}.
 Another example is shown in Figure \ref{CODE:charclasses}.
 This definition of characters contains
 all possible characters, either by means of the ordinary representation
-or via the decimal representation of characters. The character class union
-is used as a kind of abbreviation mechanism.
+or via their decimal representation.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -1846,7 +1869,7 @@ exports
 
 \subsubsection{Repetition Operators}
 
-Lexical tokens are often be described by patterns that
+Lexical tokens are often described by patterns that
 exhibit a certain repetition. Two postfix operators are available for this
 purpose:
 
@@ -1872,7 +1895,11 @@ postfix operator {\tt ?} is available. It indicates that there
 should be zero or one occurence of the sort, literal or
 character class preceding the {\tt ?}. 
 
-Figure \ref{CODE:option} shows the use of the option operator.
+
+The use of the option operator is illustrated in Figure \ref{CODE:option}
+which defines identifiers consisting of one letter followed by one, optional,
+digit. This definition accepts {\tt a} and {\tt z8}, but rejects {\tt ab} or {\tt
+  z789}.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -1924,9 +1951,19 @@ understood by looking at the line defining {\tt Id}. A parenthesized
 version of this same line would read as follows:
 \begin{quote}
 \begin{verbatim}
-  UCLetter (LCLetters | UCLetter* | Digits) -> Id
+  UCLetter (LCLetter* | UCLetter* | Digit*) -> Id
 \end{verbatim}
 \end{quote}
+As an aside, note that moving the {\tt *} outside the parentheses as in
+\begin{quote}
+\begin{verbatim}
+  UCLetter (LCLetter | UCLetter | Digit)* -> Id
+\end{verbatim}
+\end{quote}
+yields a completely different definition: it describes identifiers starting
+with an uppercase letter followed by zero or more lower-case letters,
+uppercase letters or digits. According to this definition {\tt MiES}, {\tt
+  B49a} and {\tt 007} would, for instance, be acceptable.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -1936,21 +1973,22 @@ module Identifiers-alternative1
 imports Layout
 
 exports
-  sorts UCLetter LCLetters Digits
+  sorts UCLetter Digit
   lexical syntax
-    [A-Z]    -> UCLetter
-    [a-z]*   -> LCLetters
-    [0-9]*   -> Digits
+    [A-Z]   -> UCLetter
+    [a-z]   -> LCLetter
+    [0-9]   -> Digit
 
-  UCLetter LCLetters | UCLetter* | Digits -> Id
+  UCLetter LCLetter* | UCLetter* | Digit* -> Id
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Example of alternative operator {\tt |} }\label{CODE:alternative1}
 \end{figure}   
 
-\noindent An equivalent, and more readable, definition is
-given in Figure \ref{CODE:alternative2}. We recommend to use parentheses to
-make the scope of alternatives explicit.
+\noindent A slightly more readable defintion that is equivalent to the original one
+in Figure~\ref{CODE:alternative1} is shown in Figure~\ref{CODE:alternative2}.  In
+any case, we recommend to use parentheses to make the scope of alternatives
+explicit.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -1960,13 +1998,13 @@ module Identifiers-alternative2
 imports Layout
 
 exports
-  sorts UCLetter LCLetters Digits
+  sorts UCLetter LCLetterDigit
   lexical syntax
-    [A-Z]    -> UCLetter
-    [a-z]*   -> LCLetters
-    [0-9]*   -> Digits
+    [A-Z]   -> UCLetter
+    [a-z]   -> LCLetter
+    [0-9]   -> Digit
 
-    (UCLetter LCLetters) | (UCLetter UCLetter*) | (UCLetter Digits) -> Id
+    (UCLetter LCLetter*) | (UCLetter UCLetter*) | (UCLetter Digit*) -> Id
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Example of alternative operator {\tt |} }\label{CODE:alternative2}
@@ -2052,15 +2090,14 @@ declarations for \emph{context-free functions}, each consisting of zero or
 more literals, sort names, or lists followed by `{\tt ->}' and a result sort.
 They may be followed by attributes that control how parentheses and brackets
 affect the abstract syntax, by attributes that define the associativity of a
-rule, or by attributes which influence the rewriting process. 
-All functions with the same result sort together define the alternatives
-for that sort.
+rule, or by attributes which influence the rewriting process, see
+Section~\ref{Attributes}.  All functions with the same result sort together
+define the alternatives for that sort.
 
-Members in the left-hand side of a context-free function
+Elements of the left-hand side of a context-free function
 are separated by an invisible non-terminal {\tt LAYOUT?} 
 (optional {\tt LAYOUT}) in order to permit layout between these members.
-This optional layout non-terminal is automatically inserted by the
-parser generator.
+This optional layout non-terminal is automatically inserted.
 %%\footnote{\sdf2 offers the possibility to write
 %%down syntax rules in which the optional layout non-terminal
 %%is {\em not} automatically inserted. These rules should
@@ -2153,7 +2190,7 @@ sort $S$ separated by the literal $sep$.
 Lists may be used in the left-hand side of a context-free function and in the
 right-hand side of a variable declaration, see Section \ref{Variables}. They
 may {\em not} be used as result sort in the right-hand side of a context-free
-function.
+function.\footnote{This restriction will be lifted when full \sdf2\ will be supported.}
 This imposes no real restriction since a new sort can be introduced
 representing a list. This new sort may then be used in the right-hand side of
 other context-free rules.
@@ -2212,7 +2249,7 @@ sort {\tt SORT-B} is required.
 
 %%(* EXAMPLE should be added *)
 
-\subsection{Attributes of Lexical and Context-free Functions}
+\subsection{Attributes of Lexical and Context-free Functions} \label{Attributes}
 
 The definition of a lexical or context-free functions may be followed by
 \emph{attributes} that define additional (syntactic or semantic) properties of
@@ -2256,32 +2293,28 @@ arguments of a function (Section~\ref{Delay}).
 \end{itemize}
 
 
-%\subsection{Optional Operator}
-
-%\subsection{Alternative Operator}
-
 %\subsection{Tupling Operator}
 
 %\subsection{Tupling Operator}
 
-\subsection{Priorities} \label{ContextFreePriorities} \label{Priorities}
+\subsection{Priorities} \label{Priorities}
 
 The context-free syntax defined in an \asfsdf\ specification may be 
 ambiguous: there are sentences which have more than one associated tree. 
-The common example is the arithmetic expressions in which definitions 
+The common example is the arithmetic expression in which definitions 
 of the priority or associativity of operators are missing. There are 
 three mechanisms for defining associativity and priority:
 
 \begin{itemize}
 
-\item relative priorities of functions (defined in 
-the `{\tt context-free priorities}' section); 
+\item Relative priorities of functions (defined in 
+the `{\tt context-free priorities}' section, see Section~\ref{RelativePriorities}). 
 
-\item associativity of functions (defined as an attribute following 
-the function declaration); 
+\item Associativity of functions (defined as an attribute following 
+the function declaration, see Section~\ref{AssociativeFunctions}).
 
-\item associativity of groups of functions (defined in 
-the `{\tt context-free priorities}' section).
+\item Associativity of groups of functions (defined in 
+the `{\tt context-free priorities}' section, see Section~\ref{GroupAssoc}).
 
 \end{itemize}
 
@@ -2334,7 +2367,7 @@ exports
 \caption{Syntax definition with a bracket function}\label{CODE:bracket-expr}
 \end{figure}
 
-\subsubsection{Relative Priorities}
+\subsubsection{Relative Priorities}\label{RelativePriorities}
 
 The relative priority of two functions is defined 
 in the `{\tt context-free priorities}' section 
@@ -2349,7 +2382,7 @@ declaration: {\tt $F$ > \{$G$, $H$\}} is an
 abbreviation for {\tt $F$ > $G$, $F$ > $H$}.
 Note that this tells us nothing about the priority relation between $G$ and $H$. 
 
-\subsubsection{Associative Functions}
+\subsubsection{Associative Functions} \label{AssociativeFunctions}
 
 Associativity attributes can be attached to binary functions of the form 
 `{\tt $S$ $op$ $S$ -> $S$}', where $op$ is a literal, non-terminal, or empty. 
@@ -2359,7 +2392,7 @@ sentence `{\tt S-string op S-string op S-string}' where
 `{\tt S-string}' is a string of sort $S$. The particular associativity 
 associated with $op$ determines the indented interpretation of such sentences.
   
-We call two occurrences of functions $F$ and $G$ related, when the node
+We call two occurrences of functions $F$ and $G$ \emph{related}, when the node
 corresponding to $F$ has a node corresponding to $G$ as first or last child.
 The associativity attributes define how to accept or reject trees containing
 related occurrences of the same function, $F$:
@@ -2410,7 +2443,7 @@ exports
 \caption{Simple context-free priority definition}\label{CODE:simple-prio}
 \end{figure}   
 
-\subsubsection{Groups of Associative Functions}
+\subsubsection{Groups of Associative Functions} \label{GroupAssoc}
 
 Groups of associative functions define how to accept or reject trees
 containing related occurrences of different functions with the same priority.
@@ -2490,8 +2523,9 @@ in two flavors:
 \end{verbatim}
  
 \noindent In case of lexical restrictions {\tt <Symbol>} may be   
-either a literal or a sort.  In case of context-free restrictions only a sort is
-allowed.
+either a literal or a sort.  In case of context-free restrictions only a sort
+is allowed. The restriction operator {\tt -/-} should be read as ``may not be
+followed by''.
 
 {\tt <Lookaheads>} are slightly more complex.  The most compact way is to
 give the \sdf\ definition of the {\tt <Lookaheads>} and illustrate their use by
@@ -2575,9 +2609,10 @@ exports
 
 The last example is shown in Figure~\ref{CODE:c-comment} and illustrates the
 use of restrictions to extend the previous layout definition with C++-style
-comments. The context-free restriction defined in Figure~\ref{CODE:safe-layout}
-is here repeated. This repetition is redundant but it makes the example
-more self contained.
+comments. For readability we give here \emph{two} restrictions whereas the
+first one is already imported from module {\tt Layout}
+(Figure~\ref{CODE:safe-layout}).  The repetition of this first restriction is
+redundant and could be eliminated.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -2630,66 +2665,17 @@ to eliminate complicated syntactic structures.
 Examples of the use of {\tt prefer}, {\tt avoid} and {\tt reject} 
 will be discussed in Section~\ref{Disambiguation}.
 
-\subsection{Variables} \label{Variables}
-
-Variables are declared in the `{\tt variables}' section of a module.  Like all
-other entities in a module---except equations---variables may be exported
-(Section \ref{modules}). A variables section consists of a list of variable
-names followed by their sort. In fact, a variable declaration can define an
-infinite collection of variables by using a \emph{naming scheme} instead of a
-simple variable name.  A naming scheme is a regular expression like the ones
-allowed in the lexical syntax (Section \ref{lexical-syntax}) except that sorts
-are not allowed. The sort of a variable may be a simple sort, or a list with
-or without separators.
-
-In Figure \ref{CODE:variables}, `{\tt Id}', `{\tt Type3}', and `{\tt Id-list}'
-are examples of variables declared by the naming schemes in the {\tt
-  variables} section.
-Strings that occur in the left-hand side of variable declarations
-should {\em always} be quoted.
-
-\begin{figure}[tb]
-\begin{IncCode}
-\begin{boxedverbatim}
-module VarDecls
-
-imports Layout
-
-exports
-  sorts ID DECL TYPE 
-
-  lexical syntax
-    [a-z]+ -> ID
- 
-  context-free syntax
-    "decl" {ID ","}+ ":" TYPE -> DECL 
-    "integer"                 -> TYPE 
-    "real"                    -> TYPE 
-
-  variables
-    "Id"           -> ID 
-    "Type"[0-9]*   -> TYPE 
-    "Id-list"[\']* -> {ID ","}* 
-    "Id-ne-list"   -> {ID ","}+
-\end{boxedverbatim}
-\end{IncCode}
-\caption{Variable declarations using naming schemes}\label{CODE:variables}
-\end{figure}         
-
-Declared variables can only be used when defining equations. It is not
-allowed to use them in terms.
-
-Ambiguities due to variables are resolved by the {\em Prefer Variables}
-strategy that is further discussed in Section \ref{lex-ambiguity}.
 
 \subsection{Disambiguation} \label{Disambiguation}
 
 \subsubsection{Lexical Ambiguities}
 \label{lex-ambiguity}
 
-\sdf\ offers {\em no automatic} lexical disambiguation, but it has a number of
-mechanisms to disambiguate at the lexical level. The specification writer has
-to specify the disambiguation rules explicitly. We will discuss various
+\sdf\ provides a number of elementary lexical disambiguation features but does
+not offer {\em fully automatic} lexical disambiguation.
+As a result, the specification writer has to be aware of lexical ambiguities
+and has to specify disambiguation rules explicitly.
+We will discuss various
 approaches to lexical disambiguation\footnote{This behaviour is specific for
   \sdf2. In the original \sdf, most of these disambiguations were built-in.}
 and illustrate them by means of examples.
@@ -2744,12 +2730,12 @@ Section~\ref{PreferAvoidReject}).  The idea is to define context-free grammar
 rules for all literals with the undesired lexical sort (e.g., {\tt Id}) in the
 right-hand side followed by the attribute {\tt reject},  Figure
 \ref{CODE:reject-id} illustrates this.  The {\tt reject} attribute indicates
-that the recognizition of a keyword as a literal of the given sort should be
+that the recognizition of a keyword as a literal of the sort {\tt Id} should be
 rejected. This approach has the major disadvantage that the addition of a
 literal in any context-free rule also requires the addition of a new reject
 rule for that literal.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Identifiers-reject
@@ -2799,8 +2785,9 @@ exports
 \caption{Using {\tt avoid} to implement Prefer Literals}\label{CODE:avoid-id}
 \end{figure}   
 
-\paragraph{Prefer Non-Layout} Eliminate all interpretations of the text 
-as layout symbol. This built-in behaviour of \asfsdf.
+\paragraph{Prefer Non-Layout} If there are interpretations of the text as
+layout symbol and as non-layout symbol, eliminate all interpretations as layout
+symbol. This is built-in behaviour of \asfsdf.
 
 \paragraph{Prefer Variables} Give preference to interpretation as a 
 variable (as defined in a variables section) over interpretation as a lexical
@@ -2809,6 +2796,15 @@ extending each variable declaration with the attribute {\tt prefer}
 (Section~\ref{PreferAvoidReject}).
 
 \subsubsection{Context-free ambiguities}
+
+Context-free grammars may be ambiguous and, as a result, the parser may yield
+different parses of a text. More precisely, the result of a parse is a single
+tree in which the ambiguities are explicitly marked. Each marked ambiguity
+consists of a set of different parse trees for that ambiguity.  Many---but not
+all!--- of these different parses can be eliminated by the following
+strategies that are built-in the \ASmetaenv. These strategies use the
+priorities and associativities as defined in the specification. In addition,
+some standard heuristics are used.
 
 \paragraph{Associativity filtering} The associativity filtering
 is performed during the generation of the parse table. Based
@@ -2821,9 +2817,12 @@ The simplest application of priority and associativity declarations is the
 elimination of trees that contain conflicts:
 
 \begin{itemize}
-\item a parent node has a child with a lower priority than the parent itself; 
-\item a parent has a first or last child that is in conflict with
-associativity relation between this parent and child.
+
+\item A parent node has a child with a lower priority than the parent itself.
+  
+\item A parent has a first or last child that is in conflict with
+  an associativity relation between this parent and child.
+
 \end{itemize}
 
 Given the example of Figure \ref{CODE:complex-prio} we will give a
@@ -2845,32 +2844,32 @@ language definition in this example.
 \end{tabular}
 \end{center}
 
-\paragraph{Removing Trees using direct Priorities or direct {\tt prefer}/
-{\tt avoid} Attributes}
+\paragraph{Removing Trees using Priorities or {\tt prefer}/
+{\tt avoid} Attributes at the root}
 
 The priority declarations are used to eliminate trees 
-in two phases: 
+in three phases: 
 
 \begin{enumerate}
+  
+\item Trees containing direct conflicts (regarding priority) are eliminated.
+  Given the trees $T_1$ and $T_2$ tree $T_2$ is removed if for production rule
+  $p_1$ at the top of $T_1$ and production rule $p_2$ at the top of $T_2$
+  holds that $p_1 > p_2$.
+  
+\item If there are trees of which the syntax rule at the top node has a {\tt
+    prefer} attribute, all other trees are removed.
 
-\item Trees containing direct conflicts (regarding priority) 
-are eliminated. Given the trees $T_1$ and $T_2$
-tree $T_2$ is removed if for production rule $p_1$ at the top
-of $T_1$ and production rule $p_2$ at the top
-of $T_2$ holds that $p_1 > p_2$. 
-
-\item Trees of which the syntax rule at top node has a {\tt prefer}
-attribute are selected whereas tree of which the syntax rule at the top
-node has an {\tt avoid} attribute are removed.
-
-\item Trees which contain a syntax rule with a {\tt prefer} attribute
-are selected, the trees without such rules are removed.
+\item  If there are trees of which the syntax rule at the top node has a {\tt
+    avoid} attribute and there are other trees without an {\tt avoid} attribute at
+  the root node, then all trees with {\tt avoid} attribute are removed.
+  
 \end{enumerate}
 
-\paragraph{Removing Trees containing Priorities or direct {\tt prefer}/
+\paragraph{Removing Trees containing Priorities or {\tt prefer}/
 {\tt avoid} Attributes}
 
-After removing all trees containing conflicts, more than one tree may remain.
+After removing all trees containing conflicts, more than one tree may still remain.
 To further reduce this set of remaining trees, the priority ordering `{\tt >}'
 on context-free functions including the {\tt prefer}/{\tt avoid}
 attributes is extended to a priority ordering `{\tt >>}' 
@@ -2890,7 +2889,7 @@ trees $T_1$ and $T_2$ if
        occurrences of $x$ is smaller in $T_2$ than in $T_1$).
 
       The production rules with a {\tt prefer} attribute are now considered
-      as production rules with higher priority than rules without this
+      as production rules with higher priority than any other rules without this
       attribute or with the {\tt avoid} attribute. The production rules
       with an {\tt avoid} attribute have the lowest priority.
 \end{itemize}
@@ -2900,19 +2899,7 @@ Finally, the number of injections in each of the resulting trees
 is calculated, the tree with the smallest number of injections
 is prefered.
 
-\paragraph{Example}
-
-The following example shows how the interaction (and resulting ambiguities)
-between general context-free functions and special case functions can be
-described using priorities. It concerns expressions for describing subscripts
-and superscripts in the typesetting language EQN. The crucial point is that,
-for typesetting reasons, we want to treat a subscript followed by a
-superscript in a special way. Therefore, the special case `{\tt E sub E sup E
-  -> E}' is introduced, which has priority over a combination of the two
-functions `{\tt E sub E -> E}' and `{\tt E sup E -> E}'.
-See, Figure \ref{CODE:eqn-exprs} for the \sdf\ definition.
-
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Eqn
@@ -2938,30 +2925,161 @@ exports
 \caption{Syntax definition of EQN expressions}\label{CODE:eqn-exprs}
 \end{figure}
 
+\paragraph{Example}
 
-\subsection{Equations}
+The following example shows how the interaction (and resulting ambiguities)
+between general context-free functions and special case functions can be
+described using priorities. It concerns expressions for describing subscripts
+and superscripts in the typesetting language EQN. The crucial point is that,
+for typesetting reasons, we want to treat a subscript followed by a
+superscript in a special way. Therefore, the special case `{\tt E sub E sup E
+  -> E}' is introduced, which has priority over a combination of the two
+functions `{\tt E sub E -> E}' and `{\tt E sup E -> E}'.
+See, Figure \ref{CODE:eqn-exprs} for the \sdf\ definition.
+
+
+
+\subsection{Variables} \label{Variables}
+
+Variables are declared in the `{\tt variables}' section of a module.  Like all
+other entities in a module---except equations---variables may be exported
+(Section \ref{modules}). A variables section consists of a list of variable
+names followed by their sort. In fact, a variable declaration can define an
+infinite collection of variables by using a \emph{naming scheme} instead of a
+simple variable name.  A naming scheme is a regular expression like the ones
+allowed in the lexical syntax (Section \ref{lexical-syntax}) except that sorts
+are not allowed. The sort of a variable may be a simple sort, or a list with
+or without separators.
+
+In Figure \ref{CODE:variables}, `{\tt Id}', `{\tt Type3}', and `{\tt Id-list}'
+are examples of variables declared by the naming schemes in the {\tt
+  variables} section.
+Strings that occur in the left-hand side of variable declarations
+should {\em always} be quoted.
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module VarDecls
+
+imports Layout
+
+exports
+  sorts ID DECL TYPE 
+
+  lexical syntax
+    [a-z]+ -> ID
+ 
+  context-free syntax
+    "decl" {ID ","}+ ":" TYPE -> DECL 
+    "integer"                 -> TYPE 
+    "real"                    -> TYPE 
+
+  variables
+    "Id"           -> ID 
+    "Type"[0-9]*   -> TYPE 
+    "Id-list"[\']* -> {ID ","}* 
+    "Id-ne-list"   -> {ID ","}+
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Variable declarations using naming schemes}\label{CODE:variables}
+\end{figure}         
+
+Declared variables can only be used when defining equations. It is not
+allowed to use them in terms.
+
+Ambiguities due to variables are resolved by the {\em Prefer Variables}
+strategy that is further discussed in Section \ref{lex-ambiguity}.
+
+\subsection{Equations} \label{Equations}
 
 With equations a meaning or semantics may be added to functions declared in
-the context-free syntax. The equality of two terms $S$ and $T$ is defined by
-an unconditional equation of the form:
+the context-free syntax. In particular, equations consist of two \emph{open
+  terms}, i.e. terms possibly containing variables.
+
+In the context of \asfsdf, an open term is any string that can be parsed
+according to one of the sorts in the specification (possibly including
+variables).  Recalling the {\tt Bool-example} specification in
+Section~\ref{Bool-example}, examples of open terms are `{\tt true}', `{\tt
+  not(false)}' and `{\tt true | Bool}'.
+
+\subsubsection{Unconditional Equations}
+
+An equality then consists of two open $L$ (lefthand side) and $R$ (righthand
+side) such that:
+
+\begin{itemize}
+
+\item $L$ and $R$ are of the same sort.
+
+\item $L$ is not a single variable.
+  
+\item The variables that occur in $R$ also occur in $L$.
+
+\end{itemize}
+
+It is assumed that the
+variables occurring in the equation are universally quantified. In other
+words, the equality holds for all possible values of the variables.
+
+The equality of two terms $L$ and $R$ is defined  in \asfsdf\ by the following
+\emph{unconditional} equation:
 
 \begin{quote}
-{\tt [$TagId$] $S$ = $T$} 
+{\tt [$TagId$] $L$ = $R$} 
 \end{quote}
 
-where $TagId$ is a sequence of letters, digits, and/or {\tt -} 
-starting with an letter or a digit, and $S$ and $T$ must be 
-terms of the same sort. 
-A conditional equation consists of a number of conditions 
-(also called premises)
-and a conclusion. It can be written in three (syntactically different) ways:
+\noindent where $TagId$ is a sequence of letters, digits, and/or minus signs ({\tt -}) 
+starting with an letter or a digit.
+
+In the \ASmetaenv, equations can be executed as \emph{rewrite rules}.  The
+above equation is thus executed as the rewrite rule $L \rightarrow R$. This
+can be used to reduce some initial closed term (i.e., not containing
+variables) to a \emph{normal form} (i.e., a term that is not reducible any
+further) by repeatedly applying rules from the specification.
+
+A term is always reduced in the context of a certain module, say $M$. The
+rewrite rules that may be used for the reduction of the term are the rules
+declared in $M$ itself and in the modules that are (directly or indirectly)
+imported by $M$.
+
+The search for an applicable rule is determined by the reduction strategy,
+that is, the procedure used to select a subterm for possible reduction. In our
+case the \emph{leftmost-innermost} reduction strategy is used. This means that a
+left-to-right, depth-first traversal of the term is performed and that for
+each subterm encountered an attempt is made to reduce it.
+
+Next, the rules are traversed one after the other.  The textual order of the
+rules is irrelevant.  Instead they are ordered according to their
+\emph{specificity}: more specific rules come before more general rules and
+default rules come last.  If the selected subterm and the left-hand side of a
+rule (more precisely: of the left-hand side of its conclusion) match, we say
+that a \emph{redex} has been found and the following happens. The conditions
+of the rule are evaluated and if the evaluation of a condition fails, other
+rules (if any) with matching left-hand sides are tried.  If the evaluation of
+all conditions succeeds, the selected subterm is replaced by the right-hand
+side of the rule (more precisely: the right-hand side of the conclusion of the
+rule) after performing proper \emph{substitutions}. Substitutions come into
+existence by the initial matching of the rule and by the evaluation of its
+conditions.  For the resulting term the above process is repeated until no
+further reductions are possible and a normal form is reached (if any).
+
+\subsubsection{Conditional Equations}
+
+An unconditional equation is a special case of a \emph{conditional equation},
+i.e., an equality with one or more associated conditions (premises).  The
+equality is sometimes called the \emph{conclusion} of the conditional
+equation.
+
+In \asfsdf\ a conditional equaltion can be written in two (syntactically
+different) ways:
 
 \begin{tabbing}
-(a) \= {\tt [$TagId$]} \= {\tt $S$ = $T$ when $C_1$, $C_2$, ...} \\
-%(b) \> {\tt [$TagId$]} \> {\tt $C_1$, $C_2$, ... ====> $S$ = $T$} \\ 
+(a) \= {\tt [$TagId$]} \= {\tt $L$ = $R$ when $C_1$, $C_2$, ...} \\\\
+%(b) \> {\tt [$TagId$]} \> {\tt $C_1$, $C_2$, ... ====> $L$ = $R$} \\ 
 (b) \> {\tt [$TagId$]} \> {\tt $C_1$, $C_2$, ...} \\
              \>    \> {\tt =================} \\
-             \>    \> \ \ \ \ \ {\tt $S$ = $T$}
+             \>    \> \ \ \ \ \ {\tt $L$ = $R$}
 \end{tabbing}
 
 
@@ -2969,22 +3087,78 @@ and a conclusion. It can be written in three (syntactically different) ways:
 either positive (and have  the form `{\tt $S$ = $T$}'), 
 or negative (and have the form `{\tt $S$ != $T$}').
 
-%Note that list sorts are not allowed as the sort of the term at the 
-%left-hand side or right-hand side of a condition or 
-%conclusion (but see Section ***[Lists]). This restriction can be 
-%circumvented by introducing a new sort for the list.
+The conditions of an equation are evaluated from left to right. Let,
+initially, $V$ be the set of variables occurring in the left-hand side $L$ of the
+conclusion of the equation. For the evaluation of each positive condition we
+distinguish the following cases:
 
-Equations establish equalities between terms. How they are executed is
-discussed in Section \ref{ExecutingSpecifications}.
-The evaluation strategy is based on innermost rewriting.
-One thing the specification writer has to keep in mind
-that there is {\em no} semantics related to the order in which
-the rules are specified.
+\begin{itemize}
+  
+\item The condition contains only variables in $V$. Reduce both sides of the
+  condition to normal form and the condition succeeds if both normal forms are
+  identical.
+  
+\item One of the sides of the condition contains new variables not in $V$.
+  Reduce the side that does not contain new variables to normal form and the
+  condition succeeds if this normal form and the other (unnormalized) side of
+  the condition match. The new variables resulting from this match are added
+  to $V$.
 
-In Section \ref{large-examples} we will present a number of larger
-examples. We conclude this section with a number of smaller examples
-to illustrate the use of list matching, lexical constructor functions,
-default equations, memo functions, and delaying.
+\end{itemize}
+  
+The evaluation of negative conditions is described by replacing in the above
+description `identical' and `match' by `not identical' and `do not
+match', respectively. 
+However, it is not allowed to introduce new variables in a negative condition.
+%%A warning is appropriate here: a negative condition that introduces
+%%new variables nearly always succeeds (unless the sort has exactly one
+%% element) and this is almost certainly not what you want.
+
+After the successful evaluation of the conditions, all variables occurring in
+the right-hand side of the conclusion of the equation should be in $V$.
+
+New variables (see above) should therefore {\bf not} occur on \emph{both} 
+sides of a positive condition, in a negative condition, 
+or in the right-hand side of the conclusion.
+
+
+\begin{figure}
+\begin{IncCode}
+\begin{boxedverbatim}
+module Split
+
+imports Integers
+
+exports
+  sorts El List
+  lexical syntax
+    [a-z]+ -> El
+  context-free syntax
+    {El ","}* -> List
+    "length" "(" List ")"       -> Int
+    "split-in-two" "(" List ")" -> List
+
+  variables
+    "El"[0-9]*  -> El
+    "El*"[0-9]* -> {El ","}* 
+
+equations
+
+  [l-1] length() = 0
+
+  [l-2] length(El, El*) = 1 + length(El*)
+
+  [s-1] length(El*1) = length(El*2)
+        ===========================
+        split-in-two(El*1, El*2) = El*1
+
+  [s-1] length(El*1) = length(El*2)
+        ===========================
+        split-in-two(El*1, El, El*2) = El*1 
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Split-in-two specification}\label{CODE:split}
+\end{figure}  
 
 \subsubsection{List Matching}
 
@@ -2993,7 +3167,7 @@ mechanism to describe complex functionality in a compact way.
 See Figure \ref{CODE:sets} for a compact specification to remove
 double elements from a set.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Sets
@@ -3013,7 +3187,6 @@ exports
     "Elem"[0-9]*  -> Elem
     "Elem*"[0-9]* -> {Elem ","}*
 
-%% Sets.eqs
 equations
   
   [set] {Elem*1, Elem, Elem*2, Elem, Elem*3} = {Elem*1, Elem, Elem*2, Elem*3} 
@@ -3022,9 +3195,59 @@ equations
 \caption{Set specification}\label{CODE:sets}
 \end{figure}   
 
-Note: although Figure \ref{CODE:sets} contains both the syntax definition
-as well as the equations this is within the \ASmetaenv\ not possible.
-The equations are physically separated from the syntax definition.
+Unlike the matching of ordinary (non-list) variables, the matching of a list
+variable may have more than one solution since the variable can match lists of
+arbitrary length.
+
+As a result, backtracking is needed. For instance, to match {\tt X Y} (a list
+expression containing the two list variables {\tt X} and {\tt Y} indicating
+the division of a list into twbo sublists) with the list {\tt ab} (a list
+containing two elements) the following three alternatives have to be
+considered:
+
+\begin{quote}
+{\tt X = (empty), Y = ab, \\
+X = a, Y = b, \\
+X = ab, Y = (empty)}.
+\end{quote}
+
+In the unconditional case, backtracking occurs only during matching. When
+conditions are present, the failure of a condition following the match of a
+list variable leads to the trial of the next possible match of the list
+variable and the repeated evaluation of following conditions.
+
+This is exemplified by the Set specification presented in 
+Figure \ref{CODE:sets}.
+Yet another example of list matching in combination with the evaluation
+of conditions is shown in Figure \ref{CODE:split}.
+A list of elements is split into two parts of equal length, if the list
+has an even number of elements. In case of a list of uneven length
+the middle element is ignored. The first part of the list is returned
+as result.
+
+\begin{figure}
+\begin{IncCode}
+\begin{boxedverbatim}
+module Nats
+
+imports Layout
+
+exports
+  sorts NAT-CON
+  lexical syntax
+    [0-9]+ -> NAT-CON 
+
+hiddens
+  variables
+    "Char+"[0-9]* -> CHAR+
+
+equations
+
+  [1] nat-con("0" Char+) = nat-con(Char+)  
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Use of lexical constructor functions}\label{CODE:lcfs}
+\end{figure}    
 
 \subsubsection{Lexical Constructor Functions}
 
@@ -3041,30 +3264,7 @@ variables which are either of the sort {\tt CHAR}, {\tt CHAR*}, or
 In Figure \ref{CODE:lcfs} a lexical constructor function is used
 to remove the leading zeros for a number.
 
-\begin{figure}[tb]
-\begin{IncCode}
-\begin{boxedverbatim}
-module Nats
 
-imports Layout
-
-exports
-  sorts NAT-CON
-  lexical syntax
-    [0-9]+ -> NAT-CON 
-
-hiddens
-  variables
-    "Char+"[0-9]* -> CHAR+
-
-%% Nats.eqs
-equations
-
-  [1] nat-con("0" Char+) = nat-con(Char+)  
-\end{boxedverbatim}
-\end{IncCode}
-\caption{Use of lexical constructor functions}\label{CODE:lcfs}
-\end{figure}   
 
 \noindent Note: there is no check on the use of characters within the
 lexical constructor function.
@@ -3087,7 +3287,7 @@ to obtain this behaviour. If the $TagId$ of a equation starts with
 will only applied if none of the other rules match.
 Figure \ref{CODE:types} shows an example of the use of a default equation.
 
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module Types
@@ -3104,7 +3304,6 @@ exports
   variables
     "Type"[0-9]*  -> Type
 
-%% Types.eqs
 equations
 
   [Type-1]  compatible(natural, natural) = true
@@ -3146,163 +3345,7 @@ Both the compiler and the evaluator are based on innermost rewriting.
 In some cases it is more efficient to overrule this rewriting
 strategy.
 
-\section{Executing Specifications} 
-\label{ExecutingSpecifications}
-
-Some (but not all!) \asfsdf\ specifications can be executed by interpreting
-each equation as a (conditional) rewrite rule from left to right.
-
-When you have created a term (using a term editor, see
-Section~\ref{EditingTerms}), you can reduce it (by selecting the {\tt Reduce}
-entry from the {\tt Meta-Environment} menu of the term editor).  As a result,
-rewrite rules will be applied until a normal form is reached (a term for which
-no applicable rule can be found). This normal form is the result of the
-execution and is displayed in the window from which the \ASmetaenv\ was
-started.
-
-\subsection{Which Rule Will Be Applied Where?}
-
-A term is always reduced in the context of a certain module, say $M$. The
-rewrite rules that may be used for the reduction of the term are the rules
-declared in $M$ itself and in the modules that are (directly or indirectly)
-imported by $M$.
-
-The search for an applicable rule is determined by the reduction strategy,
-that is, the procedure used to select a subterm for possible reduction. In our
-case the leftmost-innermost reduction strategy is used. This means that a
-left-to-right, depth-first traversal of the term is performed and that for
-each subterm encountered an attempt is made to reduce it.
-
-Next, the rules are traversed one after the other.  The textual order of the
-rules is irrelevant.  Instead they are ordered according to their
-\emph{specificity}: more specific rules come before more general rules and
-default rules come last.  If the selected subterm and the left-hand side of a
-rule (more precisely: of the left-hand side of its conclusion) match, we say
-that a \emph{redex} has been found and the following happens. The conditions
-of the rule are evaluated and if the evaluation of a condition fails, other
-rules (if any) with matching left-hand sides are tried.  If the evaluation of
-all conditions succeeds, the selected subterm is replaced by the right-hand
-side of the rule (more precisely: the right-hand side of the conclusion of the
-rule) after performing proper \emph{substitutions}. Substitutions come into
-existence by the initial matching of the rule and by the evaluation of its
-conditions.  For the resulting term the above process is repeated until no
-further reductions are possible and a normal form is reached (if any).
-
-\subsection{The Evaluation of Conditions}
-
-The conditions of an equation are evaluated from left to right. Let,
-initially, $V$ be the set of variables occurring in the left-hand side of the
-conclusion of the equation. For the evaluation of each positive condition we
-distinguish the following cases:
-
-\begin{itemize}
-  
-\item The condition contains only variables in $V$. Reduce both sides of the
-  condition to normal form and the condition succeeds if both normal forms are
-  identical.
-  
-\item One of the sides of the condition contains new variables not in $V$.
-  Reduce the side that does not contain new variables to normal form and the
-  condition succeeds if this normal form and the other (unnormalized) side of
-  the condition match. The new variables resulting from this match are added
-  to $V$.
-
-\end{itemize}
-  
-The evaluation of negative conditions is described by replacing in the above
-description `identical' and `match' by `not identical' and `do not
-match', respectively. 
-However, it is not allow to introduce new variables in a negative condition.
-%%A warning is appropriate here: a negative condition that introduces
-%%new variables nearly always succeeds (unless the sort has exactly one
-%% element) and this is almost certainly not what you want.
-
-After the successful evaluation of the conditions, all variables occurring in
-the right-hand side of the conclusion of the equation should be in $V$.
-
-New variables (see above) should therefore {\bf not} occur on \emph{both} 
-sides of a positive condition, in a negative condition, 
-or in the right-hand side of the conclusion.
-
-\subsection{The Treatment of List Variables}
-
-Unlike the matching of ordinary (non-list) variables, the matching of a list
-variable may have more than one solution since the variable can match lists of
-arbitrary length.
-
-As a result, backtracking is needed. For instance, to match {\tt X Y} (a list
-expression containing the two list variables {\tt X} and {\tt Y} indicating
-the division of a list into twbo sublists) with the list {\tt ab} (a list
-containing two elements) the following three alternatives have to be
-considered:
-
-\begin{quote}
-{\tt X = (empty), Y = ab, \\
-X = a, Y = b, \\
-X = ab, Y = (empty)}.
-\end{quote}
-
-In the unconditional case, backtracking occurs only during matching. When
-conditions are present, the failure of a condition following the match of a
-list variable leads to the trial of the next possible match of the list
-variable and the repeated evaluation of following conditions.
-
-This is exemplified by the Set specification presented in 
-Figure \ref{CODE:sets}.
-Yet another example of list matching in combination with the evaluation
-of conditions is shown in Figure \ref{CODE:split}.
-A list of elements is split into two parts of equal length, if the list
-has an even number of elements. In case of a list of uneven length
-the middle element is ignored. The first part of the list is returned
-as result.
-
-\begin{figure}[tb]
-\begin{IncCode}
-\begin{boxedverbatim}
-module Split
-
-imports Integers
-
-exports
-  sorts El List
-  lexical syntax
-    [a-z]+ -> El
-  context-free syntax
-    {El ","}* -> List
-    "length" "(" List ")"       -> Int
-    "split-in-two" "(" List ")" -> List
-
-  variables
-    "El"[0-9]*  -> El
-    "El*"[0-9]* -> {El ","}* 
-
-%% Split.eqs
-equations
-
-  [l-1] length() = 0
-
-  [l-2] length(El, El*) = 1 + length(El*)
-
-  [s-1] length(El*1) = length(El*2)
-        ===========================
-        split-in-two(El*1, El*2) = El*1
-
-  [s-1] length(El*1) = length(El*2)
-        ===========================
-        split-in-two(El*1, El, El*2) = El*1 
-\end{boxedverbatim}
-\end{IncCode}
-\caption{Split-in-two specification}\label{CODE:split}
-\end{figure}   
-
-\subsection{Which Specifications are Executable?}
-
-Which \asfsdf\ specifications can be executed? The following specification of
-sets illustrates a non-executable specification, since equation {\tt [2]}, that
-expresses that two elements in a set may be exchanged, will lead to an
-infinite loop during rewriting.
-
-\begin{figure}[tb]
+\begin{figure}
 \begin{IncCode}
 \begin{boxedverbatim}
 module ItemSet
@@ -3322,26 +3365,437 @@ exports
     "i"[0-9]* -> Item
     "l"[0-9]* -> {Item ","}* 
 
-%% ItemSet
 equations
 
   [1] {l1, i, l2, i, l3}   = {l1, i, l2, l3} 
   [2] {l1, i1, l2, i2, l3} = {l1, i2, l2, i1, l3}
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Set specification which can not be executed}\label{CODE:itemsets}
+\caption{Non-executable specification for sets}\label{CODE:itemsets}
 \end{figure}   
 
-\subsection{Common Errors when Executing Specifications}
+\subsubsection{Which Specifications are Executable?}
+
+Which \asfsdf\ specifications can be executed? The following specification of
+sets illustrates a non-executable specification, since equation {\tt [2]}, that
+expresses that two elements in a set may be exchanged, will lead to an
+infinite loop during rewriting.
+
+\subsubsection{Common Errors when Executing Specifications}
 
 Note: new variable in {\tt !=}, lacking equation, infinite loops, 
 WARNING when a condition contains both instantiated and 
 uninstantiated variables.
 
-\subsection{Evaluating Terms}
-\label{eval-term}
+\newpage
+\section{Examples of \asfsdf\ Specifications}
+\label{large-examples}
 
-\subsection{Compiling a Specification}
+\begin{figure}
+\begin{IncCode}
+\begin{boxedverbatim}
+module Diff 
+
+imports Layout
+
+exports
+  sorts NAT VAR EXP
+ 
+  lexical syntax
+    [0-9]+   -> NAT 
+    [XYZ]    -> VAR
+
+  context-free syntax
+    NAT                 -> EXP 
+    VAR                 -> EXP 
+    EXP "+" EXP         -> EXP {left} 
+    EXP "*" EXP         -> EXP {left} 
+    "(" EXP ")"         -> EXP {bracket} 
+    "d" EXP "/" "d" VAR -> EXP
+
+  variables
+    "N"       -> NAT 
+    "V"[0-9]* -> VAR 
+    "E"[0-9]* -> EXP 
+
+ context-free priorities
+   EXP "*" EXP -> EXP > EXP "+" EXP -> EXP
+
+equations 
+  [ 1] dN/dV = 0            [ 2] dV/dV = 1 
+  [ 3] V1 != V2 ==> dV1/dV2 = 0 
+  [ 4] d(E1+E2)/dV = dE1/dV + dE2/dV 
+  [ 5] d(E1*E2)/dV = dE1/dV * E2 + E1 * dE2/dV 
+  [ 6] E + 0 = E            [ 7] 0 + E = E 
+  [ 8] E * 1 = E            [ 9] 1 * E = E 
+  [10] 0 * E = 0            [11] E * 0 = 0
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for differentiating}\label{CODE:diff}
+\end{figure}   
+
+
+
+Here are some examples of \asfsdf\ specifications, which are selected to
+illustrate specific features of the formalism. Larger examples can be found in
+the online specifications.
+
+\newpage
+\subsection{Symbolic Differentiation}
+
+Computing the derivative of an expression with respect to some variable is a
+classical problem we discuss in this example. 
+Computing the derivative of {\tt X * (X + Y + Z)} with respect to X gives:
+\begin{quote}
+{\tt d(X * (X + Y + Z)) / dX ) X + Y + Z + X}
+\end{quote}
+
+\noindent Differentiation is defined in three stages. First, the sorts {\tt NAT}
+(natural numbers), {\tt VAR} (variables), and {\tt EXP} (expressions) are
+introduced. Next, a differentiation operator of the form {\tt d $E$/d$V$} is
+defined. Then, the differentiation rules are defined (equations [1]-[5]).
+Finally, some rules for simplifying expressions are given. As the above
+example shows, further simplification rules could have been added to collect
+multiple occurrences of a variable (giving {\tt 2*X + Y + Z}) or to 
+compute constant expressions.
+
+\begin{figure}
+\begin{IncCode}
+\begin{boxedverbatim}
+module Flag
+
+imports Layout
+
+exports
+  sorts Color Flag 
+
+  context-free syntax
+    "red"          -> Color 
+    "white"        -> Color 
+    "blue"         -> Color 
+    "{" Color+ "}" -> Flag 
+
+variables
+    "Cs"[0-9]* -> Color* 
+    "C"[0-9]*  -> Color 
+
+equations
+
+  [1] {Cs1 white red Cs2}  = {Cs1 red white Cs2}
+
+  [2] {Cs1 blue white Cs2} = {Cs1 white blue Cs2} 
+
+  [3] {Cs1 blue red Cs2}   = {Cs1 red blue Cs2}
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for sorting}\label{CODE:flag}
+\end{figure} 
+
+
+\newpage
+\subsection{Sorting}
+
+The use of list structures is illustrated by the specification of
+the "Dutch National Flag" problem presented in Figure \ref{CODE:flag}: 
+given an arbitrary list of the colours red,
+white and blue, sort them in the order as they appear in the Dutch National
+Flag. We want:
+
+{\tt \{white blue red blue red white red\} $\Rightarrow$ \{red red red white
+ white blue blue\}}
+
+In the following specification, the list variables {\tt Cs1} and {\tt Cs2}
+permit a succinct formulation of the search for adjacent colours that are in
+the wrong order.
+
+\begin{figure}
+\begin{IncCode}
+\begin{boxedverbatim}
+module BasicNotions 
+exports
+  sorts Nat Id 
+  lexical syntax
+    [0-9]+         -> Nat 
+    [a-z][a-z0-9]* -> Id
+
+variables
+  "Nat"[0-9\']* -> Nat 
+  "Id"[0-9\']*  -> Id
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for BasicNotions}\label{CODE:basicnotions}
+\end{figure}
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Expressions 
+
+imports BasicNotions
+
+exports
+  sorts Exp 
+  context-free syntax
+    Nat         -> Exp 
+    Id          -> Exp 
+    Exp "+" Exp -> Exp {left}
+    Exp "-" Exp -> Exp {left}
+    Exp "*" Exp -> Exp {left}
+
+  variables
+    "Exp"[0-9\']* -> Exp 
+
+  context-free priorities
+    Exp "*" Exp -> Exp > {left: Exp "+" Exp -> Exp
+                                Exp "-" Exp -> Exp}
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for Expressions}\label{CODE:expressions}
+\end{figure}
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Statements 
+
+imports Expressions 
+
+exports
+  sorts Stat Stats 
+  context-free syntax
+    Id ":=" Exp                 -> Stat 
+    "if" Exp "then" Stats "fi"  -> Stat 
+    "while" Exp "do" Stats "od" -> Stat
+    {Stat ";"}+                 -> Stats 
+
+  variables
+    "Stat"[0-9\']*  -> Stat
+    "Stat+"[0-9\']* -> {Stat ";"}+
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for Statements}\label{CODE:statements}
+\end{figure}
+
+\begin{figure}
+\begin{IncCode}
+\begin{boxedverbatim}
+module AssemblyLanguage
+
+imports BasicNotions 
+exports 
+  sorts Label Instr Instrs
+  lexical syntax
+    [a-z0-9]+ -> Label 
+  context-free syntax
+    "push" Nat      -> Instr
+    "rvalue" Id     -> Instr 
+    "lvalue" Id     -> Instr 
+    "assign"        -> Instr 
+    "add"           -> Instr 
+    "sub"           -> Instr 
+    "mul"           -> Instr 
+    "label" Label   -> Instr 
+    "goto" Label    -> Instr 
+    "gotrue" Label  -> Instr 
+    "gofalse" Label -> Instr
+    {Instr ";"}+   -> Instrs 
+
+  variables
+    "Instr"[0-9\']*      -> Instr 
+    "Instr-list"[0-9\']* -> {Instr ";"}+
+    "Label"[0-9\']*      -> Label
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for AssemblyLanguage}\label{CODE:assemblylanguage}
+\end{figure}
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module NextLabel
+  
+imports AssemblyLanguage
+  
+exports
+  context-free syntax
+    "nextlabel" "(" Label ")" -> Label 
+  variables
+    "Label"[0-9\']* -> LABEL
+
+hiddens
+  variables
+    "Char*"[0-9]* -> CHAR*
+
+equations
+
+ [1] nextlabel(label(Char*)) = label(Char* "x")
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for NextLabel}\label{CODE:nextlabel}
+\end{figure}
+
+\begin{figure}
+\begin{IncCode}
+\begin{boxedverbatim}
+module CodeGenerator
+
+imports Statements AssemblyLanguage NextLabel 
+  
+exports
+  context-free syntax
+    "tr" "(" Stats ")" -> Instrs
+  
+hiddens
+  sorts Instrs-lab 
+  context-free syntax
+    "<" Instrs "," Label ">"     -> Instrs-lab 
+    "tr" "(" Stats "," Label ")" -> Instrs-lab 
+    "tr" "(" Exp ")"             -> Instrs
+
+equations 
+
+[1] tr(Stat-list, x) = <Instr-list, Label>
+    ======================================
+    tr(Stat-list) = Instr-list
+
+[2] tr(Stat, Label) = <Instr-list1, Label'>, 
+    tr(Stat-list, Label') = <Instr-list2, Label''>
+    ================================================================== 
+    tr(Stat ; Stat-list, Label) = <Instr-list1 ; Instr-list2, Label''>
+
+[3] tr(Exp) = Instr-list
+    ============================================================= 
+    tr(Id := Exp, Label) = <lvalue Id; Instr-list; assign, Label>
+
+[4] tr(Exp) = Instr-list1, tr(Stat-list, Label) = <Instr-list2, Label'>,
+    Label'' = nextlabel(Label') 
+    ================================================================ 
+    tr(if Exp then Stat-list fi, Label) =
+    <Instr-list1; gofalse Label''; Instr-list2; label Label'', Label''>
+
+[5] tr(Exp) = Instr-list1, tr(Stat-list, Label) = <Instr-list2, Label'>,
+    Label'' = nextlabel(Label'), Label''' = nextlabel(Label'') 
+    ================================================================ 
+    tr(while Exp do Stat-list od, Label) =
+    <label Label''; Instr-list1; gofalse Label'''; Instr-list2;
+     goto Label''; label Label''', Label'''>
+
+[6] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
+    =============================================== 
+    tr(Exp1 + Exp2) = Instr-list1; Instr-list2; add
+
+[7] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
+    =============================================== 
+    tr(Exp1 - Exp2) = Instr-list1; Instr-list2; sub
+
+[8] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
+    =============================================== 
+    tr(Exp1 * Exp2) = Instr-list1; Instr-list2; mul
+
+[9] tr(Nat) = push Nat 
+[10] tr(Id) = rvalue Id
+\end{boxedverbatim}
+\end{IncCode}
+\caption{\asfsdf\ specification for CodeGenerator}\label{CODE:codegenerator}
+\end{figure}
+
+\newpage
+\subsection{Code Generation}
+
+Consider a simple statement language (with assignment, if-statement and
+while-statement) and suppose we want to compile this language to the following
+stack machine code:
+
+\begin{description}
+\item{\tt push $N$} Push the number $N$. 
+\item{\tt rvalue $I$} Push the contents of data location $I$.
+\item{\tt lvalue $I$} Push the address of data location $I$. 
+\item{\tt pop} Remove the top of the stack. 
+\item{\tt copy} Push a copy of the top value on the stack. 
+\item{\tt assign} The r-value on top of the stack is stored in the l-value
+  below it and both are popped.
+\item{\tt add, sub, mul}
+Replace the two values on top of the stack by their sum (difference,
+product). 
+\item{\tt label $L$} Place a label (target of jumps). 
+\item{\tt goto $L$} Next instruction is taken from statement following label
+  $L$. 
+\item{\tt gotrue $L$} Pop the top value; jump if it is nonzero.
+\item{\tt  gofalse $L$}
+Pop the top value; jump if it is zero.
+\end{description}
+
+\noindent The statement:
+\begin{quote}
+{\tt while a do a := a - 1; b := a * c od }
+\end{quote}
+will now be translated to the following instruction sequence:
+\begin{verbatim}
+label xx ; 
+rvalue a ; 
+gofalse xxx ; 
+lvalue a ; 
+rvalue a ; 
+push 1 ;
+sub ; 
+assign ;
+lvalue b ; 
+rvalue a ; 
+rvalue c ; 
+mul ; 
+assign ; 
+goto xx ; 
+label xxx
+\end{verbatim}
+
+\noindent Figure \ref{CODE:basicnotions} defines the 
+sorts {\tt Nat} (numbers) and {\tt Id} (identifiers).
+Given these basic notions the expressions and statements of our little 
+source language are defined, see Figure \ref{CODE:expressions} and
+\ref{CODE:statements}, respectively.
+
+
+
+
+
+
+The instructions of the stack machine are defined in 
+Figure \ref{CODE:assemblylanguage}.
+Next, we define a function to construct a next label given the
+previous one. It is defined on the lexical notion of labels ({\tt Label}). 
+The scheme of appending the character `{\tt x}' to the previous label is, of
+course, naive and will in real life be replaced by a more sophisticated one,
+see Figure \ref{CODE:nextlabel} for the actual definition.
+
+
+
+
+
+It remains to define a function `{\tt tr}' that translates statements into
+instructions. During code generation we should generate new label names for
+the translation of if- and while-statements. This is an instance of a
+frequently occurring problem: how do we maintain global information (in this
+case: the last label name generated)? A standard solution is to introduce an
+auxiliary sort ({\tt Instrs-Lab}) that contains both the generated instruction
+sequence and the last label name generated so far.
+Figure \ref{CODE:codegenerator} show the module containing this actual
+translation function.
+
+This completes the specification of our code generator.
+
+
+\subsection{Large \asfsdf\ specifications}
+
+There are a number of very large \asfsdf\ specifications:
+\begin{itemize}
+\item the \asfsdf2C compiler.
+\item a part of the parse table generator for \sdf2.
+\item the syntax and type checking of a domain specific language for
+describing financial products. 
+\end{itemize}
+
+\newpage
+\section{Compiling Specifications}
 \label{compiling-specs}
 
 By means of the button {\tt Compile ...} in the pop up menu for module
@@ -3412,404 +3866,7 @@ new generated intermediate $\mbox{\tt AUX-M}_{ij}$ module
 differs from the stored one. If so, new C code is generated, but
 if they are equal {\em no} new C code will be generated.
 
-\section{Examples of \asfsdf\ Specifications}
-\label{large-examples}
-
-Here are some examples of \asfsdf\ specifications, which are selected to
-illustrate specific features of the formalism. Larger examples can be found in
-the online specifications.
-
-\subsection{Symbolic Differentiation}
-
-Computing the derivative of an expression with respect to some variable is a
-classical problem we discuss in this example. 
-Computing the derivative of {\tt X * (X + Y + Z)} with respect to X gives:
-
-{\tt d(X * (X + Y + Z)) / dX ) X + Y + Z + X}
-
-Differentiation is defined in three stages. First, the sorts {\tt NAT}
-(natural numbers), {\tt VAR} (variables), and {\tt EXP} (expressions) are
-introduced. Next, a differentiation operator of the form {\tt d $E$/d$V$} is
-defined. Then, the differentiation rules are defined (equations [1]-[5]).
-Finally, some rules for simplifying expressions are given. As the above
-example shows, further simplification rules could have been added to collect
-multiple occurrences of a variable (giving {\tt 2*X + Y + Z}) or to 
-compute constant expressions.
-\begin{figure}[tb]
-\begin{IncCode}
-\begin{boxedverbatim}
-module Diff 
-
-imports Layout
-
-exports
-  sorts NAT VAR EXP
- 
-  lexical syntax
-    [0-9]+   -> NAT 
-    [XYZ]    -> VAR
-
-  context-free syntax
-    NAT                 -> EXP 
-    VAR                 -> EXP 
-    EXP "+" EXP         -> EXP {left} 
-    EXP "*" EXP         -> EXP {left} 
-    "(" EXP ")"         -> EXP {bracket} 
-    "d" EXP "/" "d" VAR -> EXP
-
-  variables
-    "N"       -> NAT 
-    "V"[0-9]* -> VAR 
-    "E"[0-9]* -> EXP 
-
- context-free priorities
-   EXP "*" EXP -> EXP > 
-   EXP "+" EXP -> EXP
-
-%% Diff.eqs
-equations 
-  [1] dN/dV = 0
-  [2] dV/dV = 1 
-  [3] V1 != V2 ==> dV1/dV2 = 0 
-  [4] d(E1+E2)/dV = dE1/dV + dE2/dV 
-  [5] d(E1*E2)/dV = dE1/dV * E2 + E1 * dE2/dV 
-  [6] E + 0 = E 
-  [7] 0 + E = E 
-  [8] E * 1 = E 
-  [9] 1 * E = E 
-  [10] 0 * E = 0 
-  [11] E * 0 = 0
-\end{boxedverbatim}
-\end{IncCode}
-\caption{\asfsdf\ specification for differentiating}\label{CODE:diff}
-\end{figure}   
-
-\subsection{Sorting}
-
-The use of list structures is illustrated by the specification of
-the "Dutch National Flag" problem presented in Figure \ref{CODE:flag}: 
-given an arbitrary list of the colours red,
-white and blue, sort them in the order as they appear in the Dutch National
-Flag. We want:
-
-{\tt \{white blue red blue red white red\} $\Rightarrow$ \{red red red white
- white blue blue\}}
-
-In the following specification, the list variables {\tt Cs1} and {\tt Cs2}
-permit a succinct formulation of the search for adjacent colours that are in
-the wrong order.
-
-\begin{figure}[tb]
-\begin{IncCode}
-\begin{boxedverbatim}
-module Flag
-
-imports Layout
-
-exports
-  sorts Color Flag 
-
-  context-free syntax
-    "red"          -> Color 
-    "white"        -> Color 
-    "blue"         -> Color 
-    "{" Color+ "}" -> Flag 
-
-variables
-    "Cs"[0-9]* -> Color* 
-    "C"[0-9]*  -> Color 
-
-%% Flag.eqs
-equations
-
-  [1] {Cs1 white red Cs2}  = {Cs1 red white Cs2}
-
-  [2] {Cs1 blue white Cs2} = {Cs1 white blue Cs2} 
-
-  [3] {Cs1 blue red Cs2}   = {Cs1 red blue Cs2}
-\end{boxedverbatim}
-\end{IncCode}
-\caption{\asfsdf\ specification for sorting}\label{CODE:flag}
-\end{figure} 
-
-\subsection{Code Generation}
-
-Consider a simple statement language (with assignment, if-statement and
-while-statement) and suppose we want to compile this language to the following
-stack machine code:
-
-\begin{description}
-\item{\tt push $N$} Push the number $N$. 
-\item{\tt rvalue $I$} Push the contents of data location $I$.
-\item{\tt lvalue $I$} Push the address of data location $I$. 
-\item{\tt pop} Remove the top of the stack. 
-\item{\tt copy} Push a copy of the top value on the stack. 
-\item{\tt assign} The r-value on top of the stack is stored in the l-value
-  below it and both are popped.
-\item{\tt add, sub, mul}
-Replace the two values on top of the stack by their sum (difference,
-product). 
-\item{\tt label $L$} Place a label (target of jumps). 
-\item{\tt goto $L$} Next instruction is taken from statement following label
-  $L$. 
-\item{\tt gotrue $L$} Pop the top value; jump if it is nonzero.
-\item{\tt  gofalse $L$}
-Pop the top value; jump if it is zero.
-\end{description}
-
-\noindent The statement:
-\begin{quote}
-{\tt while a do a := a - 1; b := a * c od }
-\end{quote}
-will now be translated to the following instruction sequence:
-\begin{verbatim}
-label xx ; 
-rvalue a ; 
-gofalse xxx ; 
-lvalue a ; 
-rvalue a ; 
-push 1 ;
-sub ; 
-assign ;
-lvalue b ; 
-rvalue a ; 
-rvalue c ; 
-mul ; 
-assign ; 
-goto xx ; 
-label xxx
-\end{verbatim}
-
-\noindent Figure \ref{CODE:basicnotions} defines the 
-sorts {\tt Nat} (numbers) and {\tt Id} (identifiers).
-Given these basic notions the expressions and statements of our little 
-source language are defined, see Figure \ref{CODE:expressions} and
-\ref{CODE:statements}, respectively.
-
-\begin{figure}[tb]
-\begin{IncCode}
-\begin{boxedverbatim}
-module BasicNotions 
-exports
-  sorts Nat Id 
-  lexical syntax
-    [0-9]+         -> Nat 
-    [a-z][a-z0-9]* -> Id
-
-variables
-  "Nat"[0-9\']* -> Nat 
-  "Id"[0-9\']*  -> Id
-\end{boxedverbatim}
-\end{IncCode}
-\caption{\asfsdf\ specification for BasicNotions}\label{CODE:basicnotions}
-\end{figure}
-
-\begin{figure}[tb]
-\begin{IncCode}
-\begin{boxedverbatim}
-module Expressions 
-
-imports BasicNotions
-
-exports
-  sorts Exp 
-  context-free syntax
-    Nat         -> Exp 
-    Id          -> Exp 
-    Exp "+" Exp -> Exp {left}
-    Exp "-" Exp -> Exp {left}
-    Exp "*" Exp -> Exp {left}
-
-  variables
-    "Exp"[0-9\']* -> Exp 
-
-  context-free priorities
-    Exp "*" Exp -> Exp > {left: Exp "+" Exp -> Exp
-                                Exp "-" Exp -> Exp}
-\end{boxedverbatim}
-\end{IncCode}
-\caption{\asfsdf\ specification for Expressions}\label{CODE:expressions}
-\end{figure}
-
-\begin{figure}[tb]
-\begin{IncCode}
-\begin{boxedverbatim}
-module Statements 
-
-imports Expressions 
-
-exports
-  sorts Stat Stats 
-  context-free syntax
-    Id ":=" Exp                 -> Stat 
-    "if" Exp "then" Stats "fi"  -> Stat 
-    "while" Exp "do" Stats "od" -> Stat
-    {Stat ";"}+                 -> Stats 
-
-  variables
-    "Stat"[0-9\']*  -> Stat
-    "Stat+"[0-9\']* -> {Stat ";"}+
-\end{boxedverbatim}
-\end{IncCode}
-\caption{\asfsdf\ specification for Statements}\label{CODE:statements}
-\end{figure}
-
-
-The instructions of the stack machine are defined in 
-Figure \ref{CODE:assemblylanguage}.
-Next, we define a function to construct a next label given the
-previous one. It is defined on the lexical notion of labels ({\tt Label}). 
-The scheme of appending the character `{\tt x}' to the previous label is, of
-course, naive and will in real life be replaced by a more sophisticated one,
-see Figure \ref{CODE:nextlabel} for the actual definition.
-
-\begin{figure}[tb]
-\begin{IncCode}
-\begin{boxedverbatim}
-module AssemblyLanguage
-
-imports BasicNotions 
-exports 
-  sorts Label Instr Instrs
-  lexical syntax
-    [a-z0-9]+ -> Label 
-  context-free syntax
-    "push" Nat      -> Instr
-    "rvalue" Id     -> Instr 
-    "lvalue" Id     -> Instr 
-    "assign"        -> Instr 
-    "add"           -> Instr 
-    "sub"           -> Instr 
-    "mul"           -> Instr 
-    "label" Label   -> Instr 
-    "goto" Label    -> Instr 
-    "gotrue" Label  -> Instr 
-    "gofalse" Label -> Instr
-    {Instr ";"}+   -> Instrs 
-
-  variables
-    "Instr"[0-9\']*      -> Instr 
-    "Instr-list"[0-9\']* -> {Instr ";"}+
-    "Label"[0-9\']*      -> Label
-\end{boxedverbatim}
-\end{IncCode}
-\caption{\asfsdf\ specification for AssemblyLanguage}\label{CODE:assemblylanguage}
-\end{figure}
-
-\begin{figure}[tb]
-\begin{IncCode}
-\begin{boxedverbatim}
-module NextLabel
-  
-imports AssemblyLanguage
-  
-exports
-  context-free syntax
-    "nextlabel" "(" Label ")" -> Label 
-  variables
-    "Label"[0-9\']* -> LABEL
-
-hiddens
-  variables
-    "Char*"[0-9]* -> CHAR*
-
-%% NextLabel.eqs
-equations
-
- [1] nextlabel(label(Char*)) = label(Char* "x")
-\end{boxedverbatim}
-\end{IncCode}
-\caption{\asfsdf\ specification for NextLabel}\label{CODE:nextlabel}
-\end{figure}
-
-It remains to define a function `{\tt tr}' that translates statements into
-instructions. During code generation we should generate new label names for
-the translation of if- and while-statements. This is an instance of a
-frequently occurring problem: how do we maintain global information (in this
-case: the last label name generated)? A standard solution is to introduce an
-auxiliary sort ({\tt Instrs-Lab}) that contains both the generated instruction
-sequence and the last label name generated so far.
-Figure \ref{CODE:codegenerator} show the module containing this actual
-translation function.
-
-This completes the specification of our code generator.
-
-\begin{figure}[tb]
-\begin{IncCode}
-\begin{boxedverbatim}
-module CodeGenerator
-
-imports Statements AssemblyLanguage NextLabel 
-  
-exports
-  context-free syntax
-    "tr" "(" Stats ")" -> Instrs
-  
-hiddens
-  sorts Instrs-lab 
-  context-free syntax
-    "<" Instrs "," Label ">"     -> Instrs-lab 
-    "tr" "(" Stats "," Label ")" -> Instrs-lab 
-    "tr" "(" Exp ")"             -> Instrs
-
-%% CodeGenerator.eqs
-equations 
-
-[1] tr(Stat-list, x) = <Instr-list, Label>
-    ======================================
-    tr(Stat-list) = Instr-list
-
-[2] tr(Stat, Label) = <Instr-list1, Label'>, 
-    tr(Stat-list, Label') = <Instr-list2, Label''>
-    ================================================================== 
-    tr(Stat ; Stat-list, Label) = <Instr-list1 ; Instr-list2, Label''>
-
-[3] tr(Exp) = Instr-list
-    ============================================================= 
-    tr(Id := Exp, Label) = <lvalue Id; Instr-list; assign, Label>
-
-[4] tr(Exp) = Instr-list1, tr(Stat-list, Label) = <Instr-list2, Label'>,
-    Label'' = nextlabel(Label') 
-    ================================================================ 
-    tr(if Exp then Stat-list fi, Label) =
-    <Instr-list1; gofalse Label''; Instr-list2; label Label'', Label''>
-
-[5] tr(Exp) = Instr-list1, tr(Stat-list, Label) = <Instr-list2, Label'>,
-    Label'' = nextlabel(Label'), Label''' = nextlabel(Label'') 
-    ================================================================ 
-    tr(while Exp do Stat-list od, Label) =
-    <label Label''; Instr-list1; gofalse Label'''; Instr-list2;
-     goto Label''; label Label''', Label'''>
-
-[6] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
-    =============================================== 
-    tr(Exp1 + Exp2) = Instr-list1; Instr-list2; add
-
-[7] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
-    =============================================== 
-    tr(Exp1 - Exp2) = Instr-list1; Instr-list2; sub
-
-[8] tr(Exp1) = Instr-list1, tr(Exp2) = Instr-list2
-    =============================================== 
-    tr(Exp1 * Exp2) = Instr-list1; Instr-list2; mul
-
-[9] tr(Nat) = push Nat 
-[10] tr(Id) = rvalue Id
-\end{boxedverbatim}
-\end{IncCode}
-\caption{\asfsdf\ specification for CodeGenerator}\label{CODE:codegenerator}
-\end{figure}
-
-\subsection{Large \asfsdf\ specifications}
-
-There are a number of very large \asfsdf\ specifications:
-\begin{itemize}
-\item the \asfsdf2C compiler.
-\item a part of the parse table generator for \sdf2.
-\item the syntax and type checking of a domain specific language for
-describing financial products. 
-\end{itemize}
-
+\newpage
 \section{Miscellaneous}
 
 \subsection{Parsing a term outside the \ASmetaenv}
