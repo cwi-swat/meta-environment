@@ -14,7 +14,6 @@
 #include <AsFix-init-patterns.h>
 #include <atb-tool.h>
 #include <deprecated.h>
-/* #include <gc.h> */
 
 #include "support.h"
 #include "rewriter.tif.h"
