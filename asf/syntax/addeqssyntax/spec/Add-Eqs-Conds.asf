@@ -80,6 +80,9 @@ equations
                  Symbol "=" Symbol  -> ASF-Equation
                  Symbol "=" Symbol  -> ASF-Condition {cons("positive")}
                  Symbol "!=" Symbol -> ASF-Condition {cons("negative")}
+                 Symbol "==" Symbol -> ASF-Condition {cons("equality")}
+                 Symbol ":=" Symbol -> ASF-Condition {cons("match")}
+                 Symbol "!:=" Symbol -> ASF-Condition {cons("no-match")}
                  "amb" "(" {Symbol ","}* ")" -> Symbol {cons("ambiguity-constructor")})
 
   [eacfp-2'2] includes(Symbol, SymbolsSet1) = false,
@@ -91,6 +94,9 @@ equations
                  Symbol "=" Symbol  -> ASF-Equation
                  Symbol "=" Symbol  -> ASF-Condition {cons("positive")}
                  Symbol "!=" Symbol -> ASF-Condition {cons("negative")}
+                 Symbol "==" Symbol -> ASF-Condition {cons("equality")}
+                 Symbol ":=" Symbol -> ASF-Condition {cons("match")}
+                 Symbol "!:=" Symbol -> ASF-Condition {cons("no-match")}
                  "amb" "(" {Symbol ","}* ")" -> Symbol {cons("ambiguity-constructor")})
 
   [eacfp-2'2] includes(Symbol, SymbolsSet) = true
