@@ -108,10 +108,10 @@ bininstall:	${PROG}
 	done
 
 distclean realclean:	clean
-	rm -f	${SGLRLIBS} ${PROGS} ${PUREPROGS} Makefile
+	rm -f	 ${GETOPTOBJ} ${SGLRLIBS} ${PROGS} ${PUREPROGS} Makefile
 
 clean:
-	rm -f	core sglr.tifs sglr.tif.[ch] ${GETOPTOBJ}
+	rm -f	core sglr.tifs sglr.tif.[ch]
 	rm -f	${OBJ} ${LIBOBJ}
 	rm -f	${OBJA2TOA1} ${LIBOBJA2TOA1}
 	rm -f	${LIBOBJGC}
@@ -173,6 +173,10 @@ sglr-prof: ${GETOPTOBJ} ${OBJ} ${SGLRLIBPROF}
 sglr-main.o:	sglr.tif.c
 
 parse-table.o: parse-table.h
+
+# ObTribute to Larry Wall
+love:
+	@echo "not war"
 
 
 # The GNU getopt sources ${GETOPTC} don't compile silently

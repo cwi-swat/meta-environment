@@ -52,7 +52,6 @@ SG_AllocStats(INC);
     res->links  = NULL;
     res->rejected  = ATfalse;
     res->protected = ATtrue;
-    res->freed     = ATfalse;
   }
   return res;
 }
@@ -75,7 +74,6 @@ st_link *SG_NewLink(tree t, stack *st) {
     ATprotect(&(res->tree));
     res->stack = st;
     res->rejected = ATfalse;
-    res->freed    = ATfalse;
   }
   return res;
 }
@@ -122,8 +120,11 @@ st_links *SG_AddLinks(st_link *l, st_links *ls)
 stacks *SG_PurgeOldStacks(stacks *old, stacks *new, stack *accept)
 {
 //ATfprintf(stderr,"stack allocs before: %d\n", SG_AllocStats(NOP));
+//ATfprintf(stderr,"GC..");
   SG_UnprotectUnusedStacks(old, new, accept);
+//ATfprintf(stderr,"..");
   SG_DisposeUnusedStacks(old);
+//ATfprintf(stderr,"..\n");
 //ATfprintf(stderr,"stack allocs after:  %d\n", SG_AllocStats(NOP));
   return new;
 }
@@ -137,22 +138,24 @@ void SG_UnprotectUnusedStacks(stacks *old, stacks *new, stack *accept)
   stack *st;
 
   while(shift(st, old))
-    SG_UnprotectUnusedStack(st, new, accept);
+    SG_UnprotectUnusedStack(st, NULL, new, accept);
 }
 
-void SG_UnprotectUnusedStack(stack *st, stacks *new, stack *accept)
+void SG_UnprotectUnusedStack(stack *st, st_link *unprotector, stacks *new, stack *accept)
 {
     if(st->protected                    /*  Done if already unprotected */
     && !SG_SubStack(st, accept)         /*  Accepting stack is sacred   */
     && !SG_InStacks(st, new, ATtrue)) { /*  as are the living stacks    */
       st_links *lks = SG_ST_LINKS(st);
 
-      if(st->parent != NULL) st->parent->kid = NULL;
-      st->protected = ATfalse;
+        st->protected = ATfalse;
+        st->unprotector = unprotector;
 
       /*  The stacks descendants might also have been obsoleted         */
       for (; lks != NULL; lks = tail(lks)) {
-        SG_UnprotectUnusedStack(SG_LK_STACK(head(lks)), new, accept);
+        st_link *lk = head(lks);
+
+        SG_UnprotectUnusedStack(SG_LK_STACK(lk), lk, new, accept);
       }
     }
 }
@@ -167,19 +170,22 @@ void SG_DisposeUnusedStacks(stacks *sts)
   stack *st;
 
   while(shift(st, sts)) {
-    SG_DisposeUnusedStack(st);
+    SG_DisposeUnusedStack(st, NULL);
   }
 }
 
-void SG_DisposeUnusedStack(stack *st)
+void SG_DisposeUnusedStack(stack *st, st_link *unprotector)
 {
-    if(!st->protected) {
+    if(!st->protected && (st->unprotector == unprotector)) {
       st_links *lks = SG_ST_LINKS(st);
 
-      SG_DeleteStack(st);
       for (; lks != NULL; lks = tail(lks)) {
-        SG_DisposeUnusedStack(SG_LK_STACK(head(lks)));
+        st_link *lk = head(lks);
+
+        SG_DisposeUnusedStack(SG_LK_STACK(lk), lk);
       }
+//      ATfprintf(stderr, "Deleting stack %xd, unprotected by %xd\n", st, unprotector);
+      SG_DeleteStack(st);
     }
 }
 
@@ -194,12 +200,6 @@ stacks *SG_DeleteStacks(stacks *sts)
 
 void SG_DeleteStack(stack *st)
 {
-//  ATfprintf(stderr, " deleting stack %xd\n", (int) st);
-  if(st->freed) {
-    ATfprintf(stderr, "freeing already freed stack %xd\n", st);
-    return;
-  }
-  st->freed = ATtrue;
 SG_AllocStats(DEC);
   SG_DeleteLinks(SG_ST_LINKS(st));
   SG_free(st);
@@ -216,8 +216,6 @@ st_links *SG_DeleteLinks(st_links *lks)
 void SG_DeleteLink(st_link *lk)
 {
 //  ATfprintf(stderr, "  deleting link %xd\n", (int) lk);
-  if(lk->freed) ATfprintf(stderr, "freeing already freed link %xd\n", lk);
-  lk->freed = ATtrue;
   ATunprotect(&(lk->tree));
   SG_free(lk);
 }
