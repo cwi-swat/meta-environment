@@ -48,4 +48,4 @@ EXTRA_DIST = sglr.idef
 CLEANFILES = sglr.tif.c sglr.tif.h
 
 # extra dependency for sglr-main.c to generate sglr.tif.[ch]
-${srcdir}/sglr-main.c : sglr.tif.c sglr.tif.h
+sglr-main.o : sglr.tif.c sglr.tif.h
