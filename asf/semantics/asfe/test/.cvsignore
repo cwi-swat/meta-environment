@@ -9,3 +9,4 @@ prepare-restore-test
 equalModuloWhitespace-test
 whitespace-test
 regress-test
+Combination-Typecheck.1.res.afme
