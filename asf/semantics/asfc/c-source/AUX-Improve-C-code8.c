@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -24,14 +24,14 @@
 #include  "asc-support.h"
 static Symbol lf_AUX_Improve_C_code8_1sym ;
 static ATerm lf_AUX_Improve_C_code8_1 ( ATerm arg1 ) ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol ef2sym ;
 static funcptr ef2 ;
 static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
 void register_AUX_Improve_C_code8 ( ) {
 lf_AUX_Improve_C_code8_1sym = ATmakeSymbol ( "prod(id(\"Improve-C-code\"),w(\"\"),[ql(\"transform-arg-in-stats\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)"
  , 1 , ATtrue ) ;
@@ -64,10 +64,6 @@ ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( check_sym ( atmp000 , lf2sym ) ) {
 {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
-if ( is_single_element ( atmp0000 ) ) {
-( tmp [ 0 ] = list_head ( atmp0000 ) ) ;
-FUNC_EXIT ( ( * ef1 ) ( make_nf1 ( ef2sym , lf2 ( make_list ( ( * ef3 ) ( tmp [ 0 ] ) ) ) ) ) ) ;
-}
 if ( not_empty_list ( atmp0000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp0000 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp0000 ) ) ;
@@ -87,6 +83,10 @@ FUNC_EXIT ( ( * ef1 ) ( make_nf1 ( ef2sym , lf2 ( cons ( make_list ( tmp [ 2 ] )
 }
 }
 }
+}
+if ( is_single_element ( atmp0000 ) ) {
+( tmp [ 0 ] = list_head ( atmp0000 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( make_nf1 ( ef2sym , lf2 ( make_list ( ( * ef3 ) ( tmp [ 0 ] ) ) ) ) ) ) ;
 }
 }
 }

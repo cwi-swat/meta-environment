@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -26,10 +26,10 @@ static Symbol lf_AUX_MuASF2C6_2_recursivesym ;
 static ATerm lf_AUX_MuASF2C6_2_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_AUX_MuASF2C6_2sym ;
 static ATerm lf_AUX_MuASF2C6_2 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef1sym ;
-static funcptr ef1 ;
 static Symbol lf_AUX_MuASF2C6_1sym ;
 static ATerm lf_AUX_MuASF2C6_1 ( ATerm arg1 ) ;
+static Symbol ef1sym ;
+static funcptr ef1 ;
 void register_AUX_MuASF2C6 ( ) {
 lf_AUX_MuASF2C6_2_recursivesym = ATmakeSymbol ( "prod(id(\"MuASF2C\"),w(\"\"),[ql(\"funcdefs2table\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NameTable\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -55,10 +55,6 @@ FUNC_ENTRY ( lf_AUX_MuASF2C6_2sym , ATmakeAppl ( lf_AUX_MuASF2C6_2sym , arg0 , a
 if ( check_sym ( arg0 , lf_AUX_MuASF2C6_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-FUNC_EXIT ( ( * ef1 ) ( tmp [ 0 ] , arg1 ) ) ;
-}
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
@@ -67,6 +63,10 @@ if ( not_empty_list ( tmp [ 1 ] ) ) {
 ( tmp [ 3 ] = lf_AUX_MuASF2C6_2_recursive ( make_list ( tmp [ 1 ] ) , tmp [ 2 ] ) ) ;
 FUNC_EXIT ( tmp [ 3 ] ) ;
 }
+}
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 0 ] , arg1 ) ) ;
 }
 }
 }
@@ -79,10 +79,6 @@ ATerm tmp [ 4 ] ;
 FUNC_ENTRY ( lf_AUX_MuASF2C6_2_recursivesym , ATmakeAppl ( lf_AUX_MuASF2C6_2_recursivesym , arg0 , arg1 ) ) ;
 {
 ATerm atmp00 = arg0 ;
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-FUNC_EXIT ( ( * ef1 ) ( tmp [ 0 ] , arg1 ) ) ;
-}
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
@@ -91,6 +87,10 @@ if ( not_empty_list ( tmp [ 1 ] ) ) {
 ( tmp [ 3 ] = lf_AUX_MuASF2C6_2_recursive ( make_list ( tmp [ 1 ] ) , tmp [ 2 ] ) ) ;
 FUNC_EXIT ( tmp [ 3 ] ) ;
 }
+}
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 0 ] , arg1 ) ) ;
 }
 }
 FUNC_EXIT ( make_nf2 ( lf_AUX_MuASF2C6_2_recursivesym , lf_AUX_MuASF2C6_1 ( arg0 ) , arg1 ) ) ;

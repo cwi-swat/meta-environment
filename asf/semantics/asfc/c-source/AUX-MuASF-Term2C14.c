@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -42,10 +42,10 @@ static Symbol lf3sym ;
 static ATerm lf3 ( ATerm arg1 ) ;
 static Symbol ef7sym ;
 static funcptr ef7 ;
-static Symbol ef8sym ;
-static funcptr ef8 ;
 static Symbol lf_AUX_MuASF_Term2C14_1sym ;
 static ATerm lf_AUX_MuASF_Term2C14_1 ( ATerm arg1 ) ;
+static Symbol ef8sym ;
+static funcptr ef8 ;
 void register_AUX_MuASF_Term2C14 ( ) {
 lf_AUX_MuASF_Term2C14_2sym = ATmakeSymbol ( "prod(id(\"MuASF-Term2C\"),w(\"\"),[ql(\"unquote-plain-argument\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Expression\"),w(\"\"),no-attrs)"
  , 3 , ATtrue ) ;

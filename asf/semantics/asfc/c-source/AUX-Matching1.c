@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -23,28 +23,28 @@
 
 #include  "asc-support.h"
 static Symbol lf_AUX_Matching1_1sym ;
-static ATerm lf_AUX_Matching1_1 ( ATerm arg1 ) ;
+static ATerm lf_AUX_Matching1_1 ( ) ;
 static Symbol lf_AUX_Matching1_2sym ;
-static ATerm lf_AUX_Matching1_2 ( ) ;
+static ATerm lf_AUX_Matching1_2 ( ATerm arg1 ) ;
 void register_AUX_Matching1 ( ) {
-lf_AUX_Matching1_1sym = ATmakeSymbol ( "prod(id(\"Matching\"),w(\"\"),[sort(\"ATermList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Subs\"),w(\"\"),no-attrs)"
- , 1 , ATtrue ) ;
+lf_AUX_Matching1_1sym = ATmakeSymbol ( "prod(id(\"Matching\"),w(\"\"),[ql(\"nomatch\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Subs\"),w(\"\"),no-attrs)"
+ , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Matching1_1sym ) ;
-lf_AUX_Matching1_2sym = ATmakeSymbol ( "prod(id(\"Matching\"),w(\"\"),[ql(\"nomatch\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Subs\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_Matching1_2sym = ATmakeSymbol ( "prod(id(\"Matching\"),w(\"\"),[sort(\"ATermList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Subs\"),w(\"\"),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Matching1_2sym ) ;
-register_prod ( ATparse ( "prod(id(\"Matching\"),w(\"\"),[sort(\"ATermList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Subs\"),w(\"\"),no-attrs)" ) , lf_AUX_Matching1_1 , lf_AUX_Matching1_1sym ) ;
-register_prod ( ATparse ( "prod(id(\"Matching\"),w(\"\"),[ql(\"nomatch\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Subs\"),w(\"\"),no-attrs)" ) , lf_AUX_Matching1_2 , lf_AUX_Matching1_2sym ) ;
+register_prod ( ATparse ( "prod(id(\"Matching\"),w(\"\"),[ql(\"nomatch\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Subs\"),w(\"\"),no-attrs)" ) , lf_AUX_Matching1_1 , lf_AUX_Matching1_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"Matching\"),w(\"\"),[sort(\"ATermList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Subs\"),w(\"\"),no-attrs)" ) , lf_AUX_Matching1_2 , lf_AUX_Matching1_2sym ) ;
 }
 void resolve_AUX_Matching1 ( ) {
 }
 void init_AUX_Matching1 ( ) {
 }
-ATerm lf_AUX_Matching1_2 ( ) {
-CONS_ENTRY ( lf_AUX_Matching1_2sym , ATmakeAppl0 ( lf_AUX_Matching1_2sym ) ) ;
-CONS_EXIT ( make_nf0 ( lf_AUX_Matching1_2sym ) ) ;
+ATerm lf_AUX_Matching1_2 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_AUX_Matching1_2sym , ATmakeAppl ( lf_AUX_Matching1_2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Matching1_2sym , arg0 ) ) ;
 }
-ATerm lf_AUX_Matching1_1 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_AUX_Matching1_1sym , ATmakeAppl ( lf_AUX_Matching1_1sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_AUX_Matching1_1sym , arg0 ) ) ;
+ATerm lf_AUX_Matching1_1 ( ) {
+CONS_ENTRY ( lf_AUX_Matching1_1sym , ATmakeAppl0 ( lf_AUX_Matching1_1sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_AUX_Matching1_1sym ) ) ;
 }
 

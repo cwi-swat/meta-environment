@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -28,10 +28,10 @@ static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol ef2sym ;
 static funcptr ef2 ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
 static Symbol lf_AUX_MuASF_Equations_Ops3_1sym ;
 static ATerm lf_AUX_MuASF_Equations_Ops3_1 ( ATerm arg1 ) ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
 void register_AUX_MuASF_Equations_Ops3 ( ) {
 lf_AUX_MuASF_Equations_Ops3_2sym = ATmakeSymbol ( "prod(id(\"MuASF-Equations-Ops\"),w(\"\"),[ql(\"addto-rulesopt\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -42,12 +42,12 @@ register_prod ( ATparse ( "listtype(sort(\"Rule\"),ql(\";\"))" ) , lf_AUX_MuASF_
 register_prod ( ATparse ( "prod(id(\"MuASF-Equations-Ops\"),w(\"\"),[ql(\"addto-rulesopt\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)" ) , lf_AUX_MuASF_Equations_Ops3_2 , lf_AUX_MuASF_Equations_Ops3_2sym ) ;
 }
 void resolve_AUX_MuASF_Equations_Ops3 ( ) {
-ef1 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)" ) ) ;
-ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)" ) ) ;
-ef2 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[ql(\"rules\"),w(\"\"),sort(\"RuleList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)" ) ) ;
-ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[ql(\"rules\"),w(\"\"),sort(\"RuleList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)" ) ) ;
-ef3 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"RuleList\"),w(\"\"),no-attrs)" ) ) ;
-ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"RuleList\"),w(\"\"),no-attrs)" ) ) ;
+ef1 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[ql(\"rules\"),w(\"\"),sort(\"RuleList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)" ) ) ;
+ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[ql(\"rules\"),w(\"\"),sort(\"RuleList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"RuleList\"),w(\"\"),no-attrs)" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"RuleList\"),w(\"\"),no-attrs)" ) ) ;
+ef3 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)" ) ) ;
+ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
 void init_AUX_MuASF_Equations_Ops3 ( ) {
@@ -56,22 +56,9 @@ ATprotect ( & constant0 ) ;
 ATerm lf_AUX_MuASF_Equations_Ops3_2 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_AUX_MuASF_Equations_Ops3_2sym , ATmakeAppl ( lf_AUX_MuASF_Equations_Ops3_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
-if ( check_sym ( arg1 , lf_AUX_MuASF_Equations_Ops3_1sym ) ) {
-{
-ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( not_empty_list ( atmp10 ) ) {
-FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf_AUX_MuASF_Equations_Ops3_1 ( make_list ( atmp10 ) ) ) ) ) ;
-}
-else {
-FUNC_EXIT ( arg0 ) ;
-}
-}
-}
-}
-if ( check_sym ( arg0 , ef2sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , ef3sym ) ) {
+if ( check_sym ( atmp00 , ef2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( check_sym ( atmp000 , lf_AUX_MuASF_Equations_Ops3_1sym ) ) {
@@ -80,26 +67,39 @@ ATerm atmp0000 = arg_0 ( atmp000 ) ;
 if ( check_sym ( arg1 , lf_AUX_MuASF_Equations_Ops3_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( ! not_empty_list ( atmp0000 ) ) {
-if ( not_empty_list ( atmp10 ) ) {
-FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf_AUX_MuASF_Equations_Ops3_1 ( make_list ( atmp10 ) ) ) ) ) ;
+if ( not_empty_list ( atmp0000 ) ) {
+if ( ! not_empty_list ( atmp10 ) ) {
+FUNC_EXIT ( ( * ef1 ) ( make_nf1 ( ef2sym , lf_AUX_MuASF_Equations_Ops3_1 ( make_list ( atmp0000 ) ) ) ) ) ;
 }
 else {
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( make_nf1 ( ef2sym , lf_AUX_MuASF_Equations_Ops3_1 ( cons ( make_list ( atmp0000 ) , make_list ( atmp10 ) ) ) ) ) ) ;
 }
 }
 else {
-if ( not_empty_list ( atmp10 ) ) {
-FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf_AUX_MuASF_Equations_Ops3_1 ( cons ( make_list ( atmp0000 ) , make_list ( atmp10 ) ) ) ) ) ) ;
+if ( ! not_empty_list ( atmp10 ) ) {
+FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
 }
 else {
-FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf_AUX_MuASF_Equations_Ops3_1 ( make_list ( atmp0000 ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( make_nf1 ( ef2sym , lf_AUX_MuASF_Equations_Ops3_1 ( make_list ( atmp10 ) ) ) ) ) ;
 }
 }
 }
 }
 }
 }
+}
+}
+}
+}
+if ( check_sym ( arg0 , ef3sym ) ) {
+if ( check_sym ( arg1 , lf_AUX_MuASF_Equations_Ops3_1sym ) ) {
+{
+ATerm atmp10 = arg_0 ( arg1 ) ;
+if ( ! not_empty_list ( atmp10 ) ) {
+FUNC_EXIT ( arg0 ) ;
+}
+else {
+FUNC_EXIT ( ( * ef1 ) ( make_nf1 ( ef2sym , lf_AUX_MuASF_Equations_Ops3_1 ( make_list ( atmp10 ) ) ) ) ) ;
 }
 }
 }

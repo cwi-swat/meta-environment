@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -28,26 +28,26 @@ static Symbol lf_AUX_Remove_Lists4_2sym ;
 static ATerm lf_AUX_Remove_Lists4_2 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol ef2sym ;
 static funcptr ef2 ;
-static Symbol ef1sym ;
-static funcptr ef1 ;
-static Symbol lf_AUX_Remove_Lists4_1sym ;
-static ATerm lf_AUX_Remove_Lists4_1 ( ATerm arg1 ) ;
 static Symbol ef3sym ;
 static funcptr ef3 ;
 static Symbol ef4sym ;
 static funcptr ef4 ;
+static Symbol ef1sym ;
+static funcptr ef1 ;
 static Symbol lf3sym ;
 static ATerm lf3 ( ATerm arg1 ) ;
+static Symbol lf_AUX_Remove_Lists4_1sym ;
+static ATerm lf_AUX_Remove_Lists4_1 ( ATerm arg1 ) ;
 void register_AUX_Remove_Lists4 ( ) {
 lf_AUX_Remove_Lists4_2_recursivesym = ATmakeSymbol ( "prod(id(\"Remove-Lists\"),w(\"\"),[ql(\"rem-lists-from-rules\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncRuleTuple\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Remove_Lists4_2_recursivesym ) ;
 lf_AUX_Remove_Lists4_2sym = ATmakeSymbol ( "prod(id(\"Remove-Lists\"),w(\"\"),[ql(\"rem-lists-from-rules\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncRuleTuple\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Remove_Lists4_2sym ) ;
-lf_AUX_Remove_Lists4_1sym = ATmakeSymbol ( "listtype(sort(\"Rule\"),ql(\";\"))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_AUX_Remove_Lists4_1sym ) ;
 lf3sym = ATmakeSymbol ( "listtype(sort(\"FuncDef\"),ql(\";\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf3sym ) ;
+lf_AUX_Remove_Lists4_1sym = ATmakeSymbol ( "listtype(sort(\"Rule\"),ql(\";\"))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_AUX_Remove_Lists4_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"Rule\"),ql(\";\"))" ) , lf_AUX_Remove_Lists4_1 , lf_AUX_Remove_Lists4_1sym ) ;
 register_prod ( ATparse ( "prod(id(\"Remove-Lists\"),w(\"\"),[ql(\"rem-lists-from-rules\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncRuleTuple\"),w(\"\"),no-attrs)" ) , lf_AUX_Remove_Lists4_2 , lf_AUX_Remove_Lists4_2sym ) ;
 register_prod ( ATparse ( "prod(id(\"Remove-Lists\"),w(\"\"),[ql(\"rem-lists-from-rules\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncRuleTuple\"),w(\"\"),no-attrs)" ) , lf_AUX_Remove_Lists4_2_recursive , lf_AUX_Remove_Lists4_2_recursivesym ) ;
@@ -72,7 +72,10 @@ FUNC_ENTRY ( lf_AUX_Remove_Lists4_2sym , ATmakeAppl ( lf_AUX_Remove_Lists4_2sym 
 if ( check_sym ( arg0 , lf_AUX_Remove_Lists4_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( not_empty_list ( atmp00 ) ) {
+if ( ! not_empty_list ( atmp00 ) ) {
+FUNC_EXIT ( ( * ef1 ) ( lf3 ( make_list ( null ( ) ) ) , lf_AUX_Remove_Lists4_1 ( make_list ( null ( ) ) ) , arg1 ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ;
@@ -107,9 +110,6 @@ FUNC_EXIT ( ( * ef1 ) ( lf3 ( make_list ( tmp [ 16 ] ) ) , lf_AUX_Remove_Lists4_
 }
 }
 }
-}
-else {
-FUNC_EXIT ( ( * ef1 ) ( lf3 ( make_list ( null ( ) ) ) , lf_AUX_Remove_Lists4_1 ( make_list ( null ( ) ) ) , arg1 ) ) ;
 }
 }
 }
@@ -122,7 +122,10 @@ ATerm tmp [ 17 ] ;
 FUNC_ENTRY ( lf_AUX_Remove_Lists4_2_recursivesym , ATmakeAppl ( lf_AUX_Remove_Lists4_2_recursivesym , arg0 , arg1 ) ) ;
 {
 ATerm atmp00 = arg0 ;
-if ( not_empty_list ( atmp00 ) ) {
+if ( ! not_empty_list ( atmp00 ) ) {
+FUNC_EXIT ( ( * ef1 ) ( lf3 ( make_list ( null ( ) ) ) , lf_AUX_Remove_Lists4_1 ( make_list ( null ( ) ) ) , arg1 ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ;
@@ -158,19 +161,16 @@ FUNC_EXIT ( ( * ef1 ) ( lf3 ( make_list ( tmp [ 16 ] ) ) , lf_AUX_Remove_Lists4_
 }
 }
 }
-else {
-FUNC_EXIT ( ( * ef1 ) ( lf3 ( make_list ( null ( ) ) ) , lf_AUX_Remove_Lists4_1 ( make_list ( null ( ) ) ) , arg1 ) ) ;
-}
 }
 FUNC_EXIT ( make_nf2 ( lf_AUX_Remove_Lists4_2_recursivesym , lf_AUX_Remove_Lists4_1 ( arg0 ) , arg1 ) ) ;
 }
 }
-ATerm lf3 ( ATerm arg0 ) {
-CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
-}
 ATerm lf_AUX_Remove_Lists4_1 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_AUX_Remove_Lists4_1sym , ATmakeAppl ( lf_AUX_Remove_Lists4_1sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_AUX_Remove_Lists4_1sym , arg0 ) ) ;
+}
+ATerm lf3 ( ATerm arg0 ) {
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 

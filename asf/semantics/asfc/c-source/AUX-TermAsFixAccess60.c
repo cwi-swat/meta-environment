@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -82,12 +82,12 @@ ef9 = lookup_func ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"Lite
 ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) ) ;
 ef10 = lookup_func ( ATreadFromString ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)" ) ) ;
 ef10sym = lookup_sym ( ATreadFromString ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)" ) ) ;
-ef11 = lookup_func ( ATreadFromString ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-production-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef11sym = lookup_sym ( ATreadFromString ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-production-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef11 = lookup_func ( ATreadFromString ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-prefix-production-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef11sym = lookup_sym ( ATreadFromString ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-prefix-production-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef12 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef12sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef13 = lookup_func ( ATreadFromString ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-prefix-production-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef13sym = lookup_sym ( ATreadFromString ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-prefix-production-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef13 = lookup_func ( ATreadFromString ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-production-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef13sym = lookup_sym ( ATreadFromString ( "prod(id(\"TermAsFixAccess\"),w(\"\"),[ql(\"is-production-prod\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
 void init_AUX_TermAsFixAccess60 ( ) {
@@ -171,35 +171,6 @@ ATerm atmp011100011111 = arg_1 ( atmp01110001111 ) ;
 if ( check_sym ( atmp011100011111 , ef3sym ) ) {
 {
 ATerm atmp0111000111110 = arg_0 ( atmp011100011111 ) ;
-{
-ATerm atmp0111000111111 = arg_1 ( atmp011100011111 ) ;
-if ( check_sym ( atmp0111000111111 , ef4sym ) ) {
-{
-ATerm atmp01110001111110 = arg_0 ( atmp0111000111111 ) ;
-if ( not_empty_list ( atmp0111000110100000 ) ) {
-if ( term_equal ( list_head ( atmp0111000110100000 ) , make_char ( 34 ) ) ) {
-( tmp [ 0 ] = list_tail ( atmp0111000110100000 ) ) ;
-if ( not_empty_list ( tmp [ 0 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 45 ) ) ) {
-( tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ) ;
-if ( not_empty_list ( tmp [ 1 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 62 ) ) ) {
-( tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ) ;
-if ( is_single_element ( tmp [ 2 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 34 ) ) ) {
-if ( term_equal ( ( * ef11 ) ( atmp010 ) , ( constant0 ? constant0 : ( constant0 = ( * ef12 ) ( ) ) ) ) ) {
-FUNC_EXIT ( atmp01110001111110 ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
 {
 ATerm atmp0111000111111 = arg_1 ( atmp011100011111 ) ;
 if ( check_sym ( atmp0111000111111 , ef3sym ) ) {
@@ -304,7 +275,7 @@ if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 62 ) ) ) {
 ( tmp [ 6 ] = list_tail ( tmp [ 5 ] ) ) ;
 if ( is_single_element ( tmp [ 6 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 6 ] ) , make_char ( 34 ) ) ) {
-if ( term_equal ( ( * ef13 ) ( atmp010 ) , ( constant0 ? constant0 : ( constant0 = ( * ef12 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef11 ) ( atmp010 ) , ( constant0 ? constant0 : ( constant0 = ( * ef12 ) ( ) ) ) ) ) {
 FUNC_EXIT ( atmp01110001111111111110 ) ;
 }
 }
@@ -364,6 +335,35 @@ FUNC_EXIT ( atmp01110001111111111110 ) ;
 }
 }
 }
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+{
+ATerm atmp0111000111111 = arg_1 ( atmp011100011111 ) ;
+if ( check_sym ( atmp0111000111111 , ef4sym ) ) {
+{
+ATerm atmp01110001111110 = arg_0 ( atmp0111000111111 ) ;
+if ( not_empty_list ( atmp0111000110100000 ) ) {
+if ( term_equal ( list_head ( atmp0111000110100000 ) , make_char ( 34 ) ) ) {
+( tmp [ 0 ] = list_tail ( atmp0111000110100000 ) ) ;
+if ( not_empty_list ( tmp [ 0 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 45 ) ) ) {
+( tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ) ;
+if ( not_empty_list ( tmp [ 1 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 1 ] ) , make_char ( 62 ) ) ) {
+( tmp [ 2 ] = list_tail ( tmp [ 1 ] ) ) ;
+if ( is_single_element ( tmp [ 2 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 34 ) ) ) {
+if ( term_equal ( ( * ef13 ) ( atmp010 ) , ( constant0 ? constant0 : ( constant0 = ( * ef12 ) ( ) ) ) ) ) {
+FUNC_EXIT ( atmp01110001111110 ) ;
 }
 }
 }

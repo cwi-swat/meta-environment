@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -84,7 +84,10 @@ if ( check_sym ( atmp10 , lf3sym ) ) {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 {
 ATerm atmp11 = arg_1 ( arg1 ) ;
-if ( not_empty_list ( atmp00 ) ) {
+if ( ! not_empty_list ( atmp00 ) ) {
+FUNC_EXIT ( ( * ef2 ) ( lf3 ( make_list ( atmp100 ) ) , make_nf1 ( ef3sym , lf_AUX_Locate_Constants9_1 ( make_list ( null ( ) ) ) ) , atmp11 ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = ( * ef4 ) ( tmp [ 0 ] , ( * ef1 ) ( lf3 ( make_list ( atmp100 ) ) , atmp11 ) ) ) ;
@@ -112,9 +115,6 @@ FUNC_EXIT ( ( * ef2 ) ( lf3 ( make_list ( tmp [ 11 ] ) ) , make_nf1 ( ef3sym , l
 }
 }
 }
-}
-else {
-FUNC_EXIT ( ( * ef2 ) ( lf3 ( make_list ( atmp100 ) ) , make_nf1 ( ef3sym , lf_AUX_Locate_Constants9_1 ( make_list ( null ( ) ) ) ) , atmp11 ) ) ;
 }
 }
 }
@@ -140,7 +140,10 @@ if ( check_sym ( atmp10 , lf3sym ) ) {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 {
 ATerm atmp11 = arg_1 ( arg1 ) ;
-if ( not_empty_list ( atmp00 ) ) {
+if ( ! not_empty_list ( atmp00 ) ) {
+FUNC_EXIT ( ( * ef2 ) ( lf3 ( make_list ( atmp100 ) ) , make_nf1 ( ef3sym , lf_AUX_Locate_Constants9_1 ( make_list ( null ( ) ) ) ) , atmp11 ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = ( * ef4 ) ( tmp [ 0 ] , ( * ef1 ) ( lf3 ( make_list ( atmp100 ) ) , atmp11 ) ) ) ;
@@ -168,9 +171,6 @@ FUNC_EXIT ( ( * ef2 ) ( lf3 ( make_list ( tmp [ 11 ] ) ) , make_nf1 ( ef3sym , l
 }
 }
 }
-}
-else {
-FUNC_EXIT ( ( * ef2 ) ( lf3 ( make_list ( atmp100 ) ) , make_nf1 ( ef3sym , lf_AUX_Locate_Constants9_1 ( make_list ( null ( ) ) ) ) , atmp11 ) ) ;
 }
 }
 }

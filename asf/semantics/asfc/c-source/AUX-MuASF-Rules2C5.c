@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -87,12 +87,7 @@ ATerm atmp100 = arg_0 ( atmp10 ) ;
 if ( check_sym ( arg2 , lf_AUX_MuASF_Rules2C5_1sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( ! not_empty_list ( atmp000 ) ) {
-if ( ! not_empty_list ( atmp100 ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf3 ( make_list ( null ( ) ) ) ) ) ;
-}
-}
-else {
+if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
@@ -109,6 +104,11 @@ FUNC_EXIT ( make_nf1 ( ef1sym , lf3 ( cons ( make_list ( tmp [ 4 ] ) , make_list
 }
 }
 }
+}
+}
+else {
+if ( ! not_empty_list ( atmp100 ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf3 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 if ( is_single_element ( atmp000 ) ) {
@@ -149,12 +149,7 @@ ATerm atmp100 = arg_0 ( atmp10 ) ;
 if ( check_sym ( arg2 , lf_AUX_MuASF_Rules2C5_1sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
-if ( ! not_empty_list ( atmp000 ) ) {
-if ( ! not_empty_list ( atmp100 ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf3 ( make_list ( null ( ) ) ) ) ) ;
-}
-}
-else {
+if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
@@ -171,6 +166,11 @@ FUNC_EXIT ( make_nf1 ( ef1sym , lf3 ( cons ( make_list ( tmp [ 4 ] ) , make_list
 }
 }
 }
+}
+}
+else {
+if ( ! not_empty_list ( atmp100 ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf3 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 if ( is_single_element ( atmp000 ) ) {

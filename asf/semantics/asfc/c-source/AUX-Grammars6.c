@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -70,6 +70,20 @@ if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
+{
+ATerm atmp000 = arg_0 ( atmp00 ) ;
+if ( is_single_element ( atmp000 ) ) {
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 0 ] ) ) ) ) ;
+}
+if ( ! not_empty_list ( atmp000 ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
+}
+}
+}
+{
+ATerm atmp00 = arg_0 ( arg0 ) ;
+if ( check_sym ( atmp00 , lf2sym ) ) {
 ( tmp [ 0 ] = arg_0 ( atmp00 ) ) ;
 {
 ATerm atmp0000 [ 2 ] ;
@@ -88,20 +102,6 @@ FUNC_EXIT ( ( * ef2 ) ( lf_AUX_Grammars6_1_recursive ( slice ( atmp0000 [ 0 ] , 
 }
 }
 }
-{
-ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( check_sym ( atmp00 , lf2sym ) ) {
-{
-ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( ! not_empty_list ( atmp000 ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
-}
-if ( is_single_element ( atmp000 ) ) {
-( tmp [ 0 ] = list_head ( atmp000 ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 0 ] ) ) ) ) ;
-}
-}
-}
 }
 }
 FUNC_EXIT ( make_nf1 ( lf_AUX_Grammars6_1sym , arg0 ) ) ;
@@ -111,6 +111,18 @@ ATerm lf_AUX_Grammars6_1_recursive ( ATerm arg0 ) {
 {
 ATerm tmp [ 1 ] ;
 FUNC_ENTRY ( lf_AUX_Grammars6_1_recursivesym , ATmakeAppl ( lf_AUX_Grammars6_1_recursivesym , arg0 ) ) ;
+{
+ATerm atmp00 = arg0 ;
+{
+ATerm atmp000 = atmp00 ;
+if ( is_single_element ( atmp000 ) ) {
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 0 ] ) ) ) ) ;
+}
+if ( ! not_empty_list ( atmp000 ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
+}
+}
 {
 ATerm atmp00 = arg0 ;
 ( tmp [ 0 ] = atmp00 ) ;
@@ -128,18 +140,6 @@ FUNC_EXIT ( ( * ef2 ) ( lf_AUX_Grammars6_1_recursive ( slice ( atmp0000 [ 0 ] , 
 ( tmp [ 0 ] = atmp0000 [ 1 ] ) ;
 }
 }
-}
-}
-{
-ATerm atmp00 = arg0 ;
-{
-ATerm atmp000 = atmp00 ;
-if ( ! not_empty_list ( atmp000 ) ) {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ;
-}
-if ( is_single_element ( atmp000 ) ) {
-( tmp [ 0 ] = list_head ( atmp000 ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 0 ] ) ) ) ) ;
 }
 }
 }

@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -24,18 +24,18 @@
 #include  "asc-support.h"
 static Symbol lf_AUX_Rules2C_Aux27_2sym ;
 static ATerm lf_AUX_Rules2C_Aux27_2 ( ATerm arg1 ) ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
 static Symbol lf_AUX_Rules2C_Aux27_1sym ;
 static ATerm lf_AUX_Rules2C_Aux27_1 ( ATerm arg1 ) ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
 static Symbol lf3sym ;
 static ATerm lf3 ( ATerm arg1 ) ;
 static Symbol lf5sym ;
 static ATerm lf5 ( ATerm arg1 ) ;
-static Symbol ef2sym ;
-static funcptr ef2 ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
 static Symbol lf4sym ;
 static ATerm lf4 ( ATerm arg1 ) ;
 void register_AUX_Rules2C_Aux27 ( ) {
@@ -59,10 +59,10 @@ register_prod ( ATparse ( "listtype(sort(\"Cond\"),ql(\"&\"))" ) , lf5 , lf5sym 
 void resolve_AUX_Rules2C_Aux27 ( ) {
 ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"[\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"|\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\"&\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"|\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\"|\"),w(\"\"),sort(\"C-env\"),w(\"\"),ql(\"|\"),w(\"\"),sort(\"C-env\"),w(\"\"),ql(\"|\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"C-Rule\"),w(\"\"),no-attrs)" ) ) ;
 ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"[\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"|\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\"&\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"|\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\"|\"),w(\"\"),sort(\"C-env\"),w(\"\"),ql(\"|\"),w(\"\"),sort(\"C-env\"),w(\"\"),ql(\"|\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"C-Rule\"),w(\"\"),no-attrs)" ) ) ;
-ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),no-attrs)" ) ) ;
-ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),no-attrs)" ) ) ;
-ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),no-attrs)" ) ) ;
-ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),no-attrs)" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),no-attrs)" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),no-attrs)" ) ) ;
+ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),no-attrs)" ) ) ;
+ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FV-Path\"),w(\"\"),no-attrs)" ) ) ;
 }
 void init_AUX_Rules2C_Aux27 ( ) {
 }
@@ -97,33 +97,33 @@ if ( not_empty_list ( tmp [ 8 ] ) ) {
 ( tmp [ 11 ] = list_tail ( tmp [ 8 ] ) ) ;
 if ( check_sym ( tmp [ 10 ] , ef3sym ) ) {
 ( tmp [ 12 ] = arg_0 ( tmp [ 10 ] ) ) ;
+( tmp [ 13 ] = arg_1 ( tmp [ 10 ] ) ) ;
+if ( check_sym ( tmp [ 13 ] , lf4sym ) ) {
+( tmp [ 14 ] = arg_0 ( tmp [ 13 ] ) ) ;
+if ( not_empty_list ( tmp [ 14 ] ) ) {
+FUNC_EXIT ( ( * ef3 ) ( tmp [ 12 ] , lf4 ( make_list ( tmp [ 14 ] ) ) ) ) ;
+}
+}
+}
+if ( check_sym ( tmp [ 10 ] , ef2sym ) ) {
+( tmp [ 12 ] = arg_0 ( tmp [ 10 ] ) ) ;
 if ( check_sym ( tmp [ 12 ] , lf3sym ) ) {
 ( tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ) ;
 if ( not_empty_list ( tmp [ 13 ] ) ) {
 ( tmp [ 14 ] = list_head ( tmp [ 13 ] ) ) ;
 ( tmp [ 15 ] = list_tail ( tmp [ 13 ] ) ) ;
 if ( not_empty_list ( tmp [ 15 ] ) ) {
-if ( check_sym ( tmp [ 14 ] , ef2sym ) ) {
+if ( check_sym ( tmp [ 14 ] , ef3sym ) ) {
 ( tmp [ 16 ] = arg_0 ( tmp [ 14 ] ) ) ;
 ( tmp [ 17 ] = arg_1 ( tmp [ 14 ] ) ) ;
 if ( check_sym ( tmp [ 17 ] , lf4sym ) ) {
 ( tmp [ 18 ] = arg_0 ( tmp [ 17 ] ) ) ;
 if ( not_empty_list ( tmp [ 18 ] ) ) {
-FUNC_EXIT ( ( * ef2 ) ( tmp [ 16 ] , lf4 ( make_list ( tmp [ 18 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( tmp [ 16 ] , lf4 ( make_list ( tmp [ 18 ] ) ) ) ) ;
 }
 }
 }
 }
-}
-}
-}
-if ( check_sym ( tmp [ 10 ] , ef2sym ) ) {
-( tmp [ 12 ] = arg_0 ( tmp [ 10 ] ) ) ;
-( tmp [ 13 ] = arg_1 ( tmp [ 10 ] ) ) ;
-if ( check_sym ( tmp [ 13 ] , lf4sym ) ) {
-( tmp [ 14 ] = arg_0 ( tmp [ 13 ] ) ) ;
-if ( not_empty_list ( tmp [ 14 ] ) ) {
-FUNC_EXIT ( ( * ef2 ) ( tmp [ 12 ] , lf4 ( make_list ( tmp [ 14 ] ) ) ) ) ;
 }
 }
 }

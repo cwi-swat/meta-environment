@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -62,19 +62,6 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-if ( is_single_element ( atmp000 ) ) {
-( tmp [ 0 ] = list_head ( atmp000 ) ) ;
-( tmp [ 1 ] = make_nf1 ( ef1sym , lf2 ( make_list ( ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ) ) ) ;
-if ( check_sym ( tmp [ 1 ] , ef1sym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf2sym ) ) {
-( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 3 ] ) ) ) ) ;
-}
-}
-}
-}
 if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
@@ -85,6 +72,19 @@ if ( not_empty_list ( tmp [ 1 ] ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
 FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) ;
+}
+}
+}
+if ( is_single_element ( atmp000 ) ) {
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
+( tmp [ 1 ] = make_nf1 ( ef1sym , lf2 ( make_list ( ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ) ) ) ;
+if ( check_sym ( tmp [ 1 ] , ef1sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf2sym ) ) {
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+if ( not_empty_list ( tmp [ 3 ] ) ) {
+FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 3 ] ) ) ) ) ;
+}
 }
 }
 }
@@ -103,19 +103,6 @@ FUNC_ENTRY ( lf_AUX_Optimize_MuASF13_1_recursivesym , ATmakeAppl ( lf_AUX_Optimi
 ATerm atmp00 = arg0 ;
 {
 ATerm atmp000 = atmp00 ;
-if ( is_single_element ( atmp000 ) ) {
-( tmp [ 0 ] = list_head ( atmp000 ) ) ;
-( tmp [ 1 ] = make_nf1 ( ef1sym , lf2 ( make_list ( ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ) ) ) ;
-if ( check_sym ( tmp [ 1 ] , ef1sym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf2sym ) ) {
-( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 3 ] ) ) ) ) ;
-}
-}
-}
-}
 if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
@@ -126,6 +113,19 @@ if ( not_empty_list ( tmp [ 1 ] ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ) ;
 if ( not_empty_list ( tmp [ 5 ] ) ) {
 FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) ;
+}
+}
+}
+if ( is_single_element ( atmp000 ) ) {
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
+( tmp [ 1 ] = make_nf1 ( ef1sym , lf2 ( make_list ( ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ) ) ) ;
+if ( check_sym ( tmp [ 1 ] , ef1sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf2sym ) ) {
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+if ( not_empty_list ( tmp [ 3 ] ) ) {
+FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 3 ] ) ) ) ) ;
+}
 }
 }
 }

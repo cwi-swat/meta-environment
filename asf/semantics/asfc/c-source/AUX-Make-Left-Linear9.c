@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -28,10 +28,10 @@ static Symbol lf_AUX_Make_Left_Linear9_2sym ;
 static ATerm lf_AUX_Make_Left_Linear9_2 ( ATerm arg1 , ATerm arg2 , ATerm arg3 ) ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
-static Symbol ef2sym ;
-static funcptr ef2 ;
 static Symbol lf_AUX_Make_Left_Linear9_1sym ;
 static ATerm lf_AUX_Make_Left_Linear9_1 ( ATerm arg1 ) ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
 void register_AUX_Make_Left_Linear9 ( ) {
 lf_AUX_Make_Left_Linear9_2_recursivesym = ATmakeSymbol ( "prod(id(\"Make-Left-Linear\"),w(\"\"),[ql(\"make-l-l-conds\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\"&\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"VarEnv\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntVarEnv\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CList-VarEnv\"),w(\"\"),no-attrs)"
  , 3 , ATtrue ) ;
@@ -45,10 +45,10 @@ register_prod ( ATparse ( "prod(id(\"Make-Left-Linear\"),w(\"\"),[ql(\"make-l-l-
 register_prod ( ATparse ( "prod(id(\"Make-Left-Linear\"),w(\"\"),[ql(\"make-l-l-conds\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\"&\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"VarEnv\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntVarEnv\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CList-VarEnv\"),w(\"\"),no-attrs)" ) , lf_AUX_Make_Left_Linear9_2_recursive , lf_AUX_Make_Left_Linear9_2_recursivesym ) ;
 }
 void resolve_AUX_Make_Left_Linear9 ( ) {
-ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Make-Left-Linear\"),w(\"\"),[ql(\"make-l-l-cond\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"VarEnv\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntVarEnv\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CList-VarEnv\"),w(\"\"),no-attrs)" ) ) ;
-ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Make-Left-Linear\"),w(\"\"),[ql(\"make-l-l-cond\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"VarEnv\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntVarEnv\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CList-VarEnv\"),w(\"\"),no-attrs)" ) ) ;
-ef2 = lookup_func ( ATreadFromString ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\"&\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntVarEnv\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CList-VarEnv\"),w(\"\"),no-attrs)" ) ) ;
-ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\"&\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntVarEnv\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CList-VarEnv\"),w(\"\"),no-attrs)" ) ) ;
+ef1 = lookup_func ( ATreadFromString ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\"&\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntVarEnv\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CList-VarEnv\"),w(\"\"),no-attrs)" ) ) ;
+ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\"&\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntVarEnv\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CList-VarEnv\"),w(\"\"),no-attrs)" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Make-Left-Linear\"),w(\"\"),[ql(\"make-l-l-cond\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"VarEnv\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntVarEnv\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CList-VarEnv\"),w(\"\"),no-attrs)" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Make-Left-Linear\"),w(\"\"),[ql(\"make-l-l-cond\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"VarEnv\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntVarEnv\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CList-VarEnv\"),w(\"\"),no-attrs)" ) ) ;
 }
 void init_AUX_Make_Left_Linear9 ( ) {
 }
@@ -59,32 +59,32 @@ FUNC_ENTRY ( lf_AUX_Make_Left_Linear9_2sym , ATmakeAppl ( lf_AUX_Make_Left_Linea
 if ( check_sym ( arg0 , lf_AUX_Make_Left_Linear9_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-FUNC_EXIT ( ( * ef1 ) ( tmp [ 0 ] , arg1 , arg2 ) ) ;
-}
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 2 ] = ( * ef1 ) ( tmp [ 0 ] , arg1 , arg2 ) ) ;
-if ( check_sym ( tmp [ 2 ] , ef2sym ) ) {
+( tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] , arg1 , arg2 ) ) ;
+if ( check_sym ( tmp [ 2 ] , ef1sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
 ( tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , lf_AUX_Make_Left_Linear9_1sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 3 ] ) ) ;
 ( tmp [ 6 ] = lf_AUX_Make_Left_Linear9_2 ( lf_AUX_Make_Left_Linear9_1 ( make_list ( tmp [ 1 ] ) ) , arg1 , tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 6 ] , ef2sym ) ) {
+if ( check_sym ( tmp [ 6 ] , ef1sym ) ) {
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
 ( tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ) ;
 if ( check_sym ( tmp [ 7 ] , lf_AUX_Make_Left_Linear9_1sym ) ) {
 ( tmp [ 9 ] = arg_0 ( tmp [ 7 ] ) ) ;
-FUNC_EXIT ( ( * ef2 ) ( lf_AUX_Make_Left_Linear9_1 ( cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 9 ] ) ) ) , tmp [ 8 ] ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Make_Left_Linear9_1 ( cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 9 ] ) ) ) , tmp [ 8 ] ) ) ;
 }
 }
 }
 }
 }
+}
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( tmp [ 0 ] , arg1 , arg2 ) ) ;
 }
 }
 }
@@ -97,32 +97,32 @@ ATerm tmp [ 10 ] ;
 FUNC_ENTRY ( lf_AUX_Make_Left_Linear9_2_recursivesym , ATmakeAppl ( lf_AUX_Make_Left_Linear9_2_recursivesym , arg0 , arg1 , arg2 ) ) ;
 {
 ATerm atmp00 = arg0 ;
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-FUNC_EXIT ( ( * ef1 ) ( tmp [ 0 ] , arg1 , arg2 ) ) ;
-}
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 2 ] = ( * ef1 ) ( tmp [ 0 ] , arg1 , arg2 ) ) ;
-if ( check_sym ( tmp [ 2 ] , ef2sym ) ) {
+( tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] , arg1 , arg2 ) ) ;
+if ( check_sym ( tmp [ 2 ] , ef1sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
 ( tmp [ 4 ] = arg_1 ( tmp [ 2 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , lf_AUX_Make_Left_Linear9_1sym ) ) {
 ( tmp [ 5 ] = arg_0 ( tmp [ 3 ] ) ) ;
 ( tmp [ 6 ] = lf_AUX_Make_Left_Linear9_2 ( lf_AUX_Make_Left_Linear9_1 ( make_list ( tmp [ 1 ] ) ) , arg1 , tmp [ 4 ] ) ) ;
-if ( check_sym ( tmp [ 6 ] , ef2sym ) ) {
+if ( check_sym ( tmp [ 6 ] , ef1sym ) ) {
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
 ( tmp [ 8 ] = arg_1 ( tmp [ 6 ] ) ) ;
 if ( check_sym ( tmp [ 7 ] , lf_AUX_Make_Left_Linear9_1sym ) ) {
 ( tmp [ 9 ] = arg_0 ( tmp [ 7 ] ) ) ;
-FUNC_EXIT ( ( * ef2 ) ( lf_AUX_Make_Left_Linear9_1 ( cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 9 ] ) ) ) , tmp [ 8 ] ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_Make_Left_Linear9_1 ( cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 9 ] ) ) ) , tmp [ 8 ] ) ) ;
 }
 }
 }
 }
 }
+}
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( tmp [ 0 ] , arg1 , arg2 ) ) ;
 }
 }
 FUNC_EXIT ( make_nf3 ( lf_AUX_Make_Left_Linear9_2_recursivesym , lf_AUX_Make_Left_Linear9_1 ( arg0 ) , arg1 , arg2 ) ) ;

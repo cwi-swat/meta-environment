@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -26,12 +26,12 @@ static Symbol lf_AUX_Normalize_Conds5_2_recursivesym ;
 static ATerm lf_AUX_Normalize_Conds5_2_recursive ( ATerm arg1 ) ;
 static Symbol lf_AUX_Normalize_Conds5_2sym ;
 static ATerm lf_AUX_Normalize_Conds5_2 ( ATerm arg1 ) ;
-static Symbol ef2sym ;
-static funcptr ef2 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol lf_AUX_Normalize_Conds5_1sym ;
 static ATerm lf_AUX_Normalize_Conds5_1 ( ATerm arg1 ) ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
 void register_AUX_Normalize_Conds5 ( ) {
 lf_AUX_Normalize_Conds5_2_recursivesym = ATmakeSymbol ( "prod(id(\"Normalize-Conds\"),w(\"\"),[ql(\"normalize-rules\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"RuleList\"),w(\"\"),no-attrs)"
  , 1 , ATtrue ) ;
@@ -59,10 +59,6 @@ FUNC_ENTRY ( lf_AUX_Normalize_Conds5_2sym , ATmakeAppl ( lf_AUX_Normalize_Conds5
 if ( check_sym ( arg0 , lf_AUX_Normalize_Conds5_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Normalize_Conds5_1 ( make_list ( ( * ef2 ) ( tmp [ 0 ] ) ) ) ) ) ;
-}
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
@@ -79,6 +75,10 @@ FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Normalize_Conds5_1 ( cons ( make_list ( t
 }
 }
 }
+}
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Normalize_Conds5_1 ( make_list ( ( * ef2 ) ( tmp [ 0 ] ) ) ) ) ) ;
 }
 }
 }
@@ -91,10 +91,6 @@ ATerm tmp [ 6 ] ;
 FUNC_ENTRY ( lf_AUX_Normalize_Conds5_2_recursivesym , ATmakeAppl ( lf_AUX_Normalize_Conds5_2_recursivesym , arg0 ) ) ;
 {
 ATerm atmp00 = arg0 ;
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Normalize_Conds5_1 ( make_list ( ( * ef2 ) ( tmp [ 0 ] ) ) ) ) ) ;
-}
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
@@ -111,6 +107,10 @@ FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Normalize_Conds5_1 ( cons ( make_list ( t
 }
 }
 }
+}
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Normalize_Conds5_1 ( make_list ( ( * ef2 ) ( tmp [ 0 ] ) ) ) ) ) ;
 }
 }
 FUNC_EXIT ( make_nf1 ( lf_AUX_Normalize_Conds5_2_recursivesym , lf_AUX_Normalize_Conds5_1 ( arg0 ) ) ) ;

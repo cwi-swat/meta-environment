@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -24,14 +24,14 @@
 #include  "asc-support.h"
 static Symbol lf_AUX_Rules2C_Aux30_2sym ;
 static ATerm lf_AUX_Rules2C_Aux30_2 ( ATerm arg1 ) ;
-static Symbol ef1sym ;
-static funcptr ef1 ;
-static Symbol ef2sym ;
-static funcptr ef2 ;
 static Symbol ef4sym ;
 static funcptr ef4 ;
 static Symbol lf_AUX_Rules2C_Aux30_1sym ;
 static ATerm lf_AUX_Rules2C_Aux30_1 ( ATerm arg1 ) ;
+static Symbol ef1sym ;
+static funcptr ef1 ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
 static Symbol ef3sym ;
 static funcptr ef3 ;
 static Symbol lf3sym ;
@@ -67,21 +67,6 @@ FUNC_ENTRY ( lf_AUX_Rules2C_Aux30_2sym , ATmakeAppl ( lf_AUX_Rules2C_Aux30_2sym 
 if ( check_sym ( arg0 , lf_AUX_Rules2C_Aux30_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
-( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
-if ( check_sym ( tmp [ 1 ] , ef2sym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf3sym ) ) {
-( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
-if ( not_empty_list ( tmp [ 3 ] ) ) {
-FUNC_EXIT ( ( * ef3 ) ( lf3 ( cons ( make_list_char ( 97 ) , cons ( make_list_char ( 114 ) , cons ( make_list_char ( 103 ) , make_list ( tmp [ 3 ] ) ) ) ) ) ) ) ;
-}
-}
-}
-}
-}
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_prefix ( atmp00 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
@@ -104,6 +89,21 @@ FUNC_EXIT ( ( * ef3 ) ( lf3 ( cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [
 }
 }
 }
+}
+}
+}
+}
+}
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
+if ( check_sym ( tmp [ 1 ] , ef2sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf3sym ) ) {
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+if ( not_empty_list ( tmp [ 3 ] ) ) {
+FUNC_EXIT ( ( * ef3 ) ( lf3 ( cons ( make_list_char ( 97 ) , cons ( make_list_char ( 114 ) , cons ( make_list_char ( 103 ) , make_list ( tmp [ 3 ] ) ) ) ) ) ) ) ;
 }
 }
 }

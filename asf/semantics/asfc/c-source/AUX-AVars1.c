@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -42,23 +42,23 @@ lf_AUX_AVars1_1sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))"
 ATprotectSymbol ( lf_AUX_AVars1_1sym ) ;
 lf_AUX_AVars1_2sym = ATmakeSymbol ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"aname\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AName\"),w(\"\"),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_AVars1_2sym ) ;
-lf_AUX_AVars1_3sym = ATmakeSymbol ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AName\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AVar\"),w(\"\"),no-attrs)" , 1 , ATtrue ) ;
+lf_AUX_AVars1_3sym = ATmakeSymbol ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AVar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_AVars1_3sym ) ;
-lf_AUX_AVars1_4sym = ATmakeSymbol ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AName\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"ATerm\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AVar\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
+lf_AUX_AVars1_4sym = ATmakeSymbol ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AName\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\"?\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AVar\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_AVars1_4sym ) ;
 lf_AUX_AVars1_5sym = ATmakeSymbol ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AName\"),w(\"\"),ql(\"?\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AVar\"),w(\"\"),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_AVars1_5sym ) ;
-lf_AUX_AVars1_6sym = ATmakeSymbol ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AName\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\"?\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AVar\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
+lf_AUX_AVars1_6sym = ATmakeSymbol ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AName\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"ATerm\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AVar\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_AVars1_6sym ) ;
-lf_AUX_AVars1_7sym = ATmakeSymbol ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AVar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" , 1 , ATtrue ) ;
+lf_AUX_AVars1_7sym = ATmakeSymbol ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AName\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AVar\"),w(\"\"),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_AVars1_7sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf_AUX_AVars1_1 , lf_AUX_AVars1_1sym ) ;
 register_prod ( ATparse ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"aname\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AName\"),w(\"\"),no-attrs)" ) , lf_AUX_AVars1_2 , lf_AUX_AVars1_2sym ) ;
-register_prod ( ATparse ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AName\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AVar\"),w(\"\"),no-attrs)" ) , lf_AUX_AVars1_3 , lf_AUX_AVars1_3sym ) ;
-register_prod ( ATparse ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AName\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"ATerm\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AVar\"),w(\"\"),no-attrs)" ) , lf_AUX_AVars1_4 , lf_AUX_AVars1_4sym ) ;
+register_prod ( ATparse ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AVar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) , lf_AUX_AVars1_3 , lf_AUX_AVars1_3sym ) ;
+register_prod ( ATparse ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AName\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\"?\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AVar\"),w(\"\"),no-attrs)" ) , lf_AUX_AVars1_4 , lf_AUX_AVars1_4sym ) ;
 register_prod ( ATparse ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AName\"),w(\"\"),ql(\"?\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AVar\"),w(\"\"),no-attrs)" ) , lf_AUX_AVars1_5 , lf_AUX_AVars1_5sym ) ;
-register_prod ( ATparse ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AName\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\"?\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AVar\"),w(\"\"),no-attrs)" ) , lf_AUX_AVars1_6 , lf_AUX_AVars1_6sym ) ;
-register_prod ( ATparse ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AVar\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) , lf_AUX_AVars1_7 , lf_AUX_AVars1_7sym ) ;
+register_prod ( ATparse ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AName\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"ATerm\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AVar\"),w(\"\"),no-attrs)" ) , lf_AUX_AVars1_6 , lf_AUX_AVars1_6sym ) ;
+register_prod ( ATparse ( "prod(id(\"AVars\"),w(\"\"),[sort(\"AName\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AVar\"),w(\"\"),no-attrs)" ) , lf_AUX_AVars1_7 , lf_AUX_AVars1_7sym ) ;
 }
 void resolve_AUX_AVars1 ( ) {
 }

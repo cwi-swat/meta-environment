@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -28,18 +28,18 @@ static Symbol lf_AUX_Optimize_MuASF24_1sym ;
 static ATerm lf_AUX_Optimize_MuASF24_1 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol ef2sym ;
 static funcptr ef2 ;
-static Symbol ef5sym ;
-static funcptr ef5 ;
 static Symbol ef4sym ;
 static funcptr ef4 ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
 static Symbol ef6sym ;
 static funcptr ef6 ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
+static Symbol ef5sym ;
+static funcptr ef5 ;
 void register_AUX_Optimize_MuASF24 ( ) {
 lf_AUX_Optimize_MuASF24_1_recursivesym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"conds-call-function\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"CondList\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -55,16 +55,16 @@ register_prod ( ATparse ( "listtype(sort(\"Cond\"),ql(\"&\"))" ) , lf2 , lf2sym 
 void resolve_AUX_Optimize_MuASF24 ( ) {
 ef1 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\"&\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"CondList\"),w(\"\"),no-attrs)" ) ) ;
 ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\"&\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"CondList\"),w(\"\"),no-attrs)" ) ) ;
-ef2 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"Term\"),w(\"\"),ql(\"!=\"),w(\"\"),sort(\"Term\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Cond\"),w(\"\"),no-attrs)" ) ) ;
-ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"Term\"),w(\"\"),ql(\"!=\"),w(\"\"),sort(\"Term\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Cond\"),w(\"\"),no-attrs)" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef3 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[sort(\"Bool\"),w(\"\"),ql(\"\\\\\\\\/\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
 ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[sort(\"Bool\"),w(\"\"),ql(\"\\\\\\\\/\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
-ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"term-calls-function\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"term-calls-function\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef5 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"Term\"),w(\"\"),ql(\"==\"),w(\"\"),sort(\"Term\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Cond\"),w(\"\"),no-attrs)" ) ) ;
-ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"Term\"),w(\"\"),ql(\"==\"),w(\"\"),sort(\"Term\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Cond\"),w(\"\"),no-attrs)" ) ) ;
-ef6 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef4 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"Term\"),w(\"\"),ql(\"==\"),w(\"\"),sort(\"Term\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Cond\"),w(\"\"),no-attrs)" ) ) ;
+ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"Term\"),w(\"\"),ql(\"==\"),w(\"\"),sort(\"Term\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Cond\"),w(\"\"),no-attrs)" ) ) ;
+ef5 = lookup_func ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"term-calls-function\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"term-calls-function\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef6 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"Term\"),w(\"\"),ql(\"!=\"),w(\"\"),sort(\"Term\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Cond\"),w(\"\"),no-attrs)" ) ) ;
+ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"Term\"),w(\"\"),ql(\"!=\"),w(\"\"),sort(\"Term\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Cond\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
 void init_AUX_Optimize_MuASF24 ( ) {
@@ -80,23 +80,6 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( is_single_element ( atmp100 ) ) {
-( tmp [ 0 ] = list_head ( atmp100 ) ) ;
-if ( check_sym ( tmp [ 0 ] , ef5sym ) ) {
-( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
-( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
-( tmp [ 3 ] = ( * ef4 ) ( arg0 , tmp [ 1 ] ) ) ;
-( tmp [ 4 ] = ( * ef4 ) ( arg0 , tmp [ 2 ] ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( tmp [ 3 ] , tmp [ 4 ] ) ) ;
-}
-if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
-( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
-( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
-( tmp [ 3 ] = ( * ef4 ) ( arg0 , tmp [ 1 ] ) ) ;
-( tmp [ 4 ] = ( * ef4 ) ( arg0 , tmp [ 2 ] ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( tmp [ 3 ] , tmp [ 4 ] ) ) ;
-}
-}
 if ( not_empty_list ( atmp100 ) ) {
 ( tmp [ 0 ] = list_head ( atmp100 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp100 ) ) ;
@@ -104,6 +87,25 @@ if ( not_empty_list ( tmp [ 1 ] ) ) {
 ( tmp [ 2 ] = lf_AUX_Optimize_MuASF24_1_recursive ( arg0 , make_list ( tmp [ 0 ] ) ) ) ;
 ( tmp [ 3 ] = lf_AUX_Optimize_MuASF24_1_recursive ( arg0 , make_list ( tmp [ 1 ] ) ) ) ;
 FUNC_EXIT ( ( * ef3 ) ( tmp [ 2 ] , tmp [ 3 ] ) ) ;
+}
+}
+{
+if ( is_single_element ( atmp100 ) ) {
+( tmp [ 0 ] = list_head ( atmp100 ) ) ;
+if ( check_sym ( tmp [ 0 ] , ef6sym ) ) {
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
+( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
+( tmp [ 3 ] = ( * ef5 ) ( arg0 , tmp [ 1 ] ) ) ;
+( tmp [ 4 ] = ( * ef5 ) ( arg0 , tmp [ 2 ] ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( tmp [ 3 ] , tmp [ 4 ] ) ) ;
+}
+if ( check_sym ( tmp [ 0 ] , ef4sym ) ) {
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
+( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
+( tmp [ 3 ] = ( * ef5 ) ( arg0 , tmp [ 1 ] ) ) ;
+( tmp [ 4 ] = ( * ef5 ) ( arg0 , tmp [ 2 ] ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( tmp [ 3 ] , tmp [ 4 ] ) ) ;
+}
 }
 }
 }
@@ -118,7 +120,7 @@ if ( check_sym ( atmp10 , lf2sym ) ) {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 if ( is_single_element ( atmp100 ) ) {
 ( tmp [ 0 ] = list_head ( atmp100 ) ) ;
-FUNC_EXIT_CONST ( constant0 , ( * ef6 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 }
 }
@@ -135,23 +137,6 @@ FUNC_ENTRY ( lf_AUX_Optimize_MuASF24_1_recursivesym , ATmakeAppl ( lf_AUX_Optimi
 ATerm atmp10 = arg1 ;
 {
 ATerm atmp100 = atmp10 ;
-if ( is_single_element ( atmp100 ) ) {
-( tmp [ 0 ] = list_head ( atmp100 ) ) ;
-if ( check_sym ( tmp [ 0 ] , ef5sym ) ) {
-( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
-( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
-( tmp [ 3 ] = ( * ef4 ) ( arg0 , tmp [ 1 ] ) ) ;
-( tmp [ 4 ] = ( * ef4 ) ( arg0 , tmp [ 2 ] ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( tmp [ 3 ] , tmp [ 4 ] ) ) ;
-}
-if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
-( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
-( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
-( tmp [ 3 ] = ( * ef4 ) ( arg0 , tmp [ 1 ] ) ) ;
-( tmp [ 4 ] = ( * ef4 ) ( arg0 , tmp [ 2 ] ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( tmp [ 3 ] , tmp [ 4 ] ) ) ;
-}
-}
 if ( not_empty_list ( atmp100 ) ) {
 ( tmp [ 0 ] = list_head ( atmp100 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp100 ) ) ;
@@ -159,6 +144,25 @@ if ( not_empty_list ( tmp [ 1 ] ) ) {
 ( tmp [ 2 ] = lf_AUX_Optimize_MuASF24_1_recursive ( arg0 , make_list ( tmp [ 0 ] ) ) ) ;
 ( tmp [ 3 ] = lf_AUX_Optimize_MuASF24_1_recursive ( arg0 , make_list ( tmp [ 1 ] ) ) ) ;
 FUNC_EXIT ( ( * ef3 ) ( tmp [ 2 ] , tmp [ 3 ] ) ) ;
+}
+}
+{
+if ( is_single_element ( atmp100 ) ) {
+( tmp [ 0 ] = list_head ( atmp100 ) ) ;
+if ( check_sym ( tmp [ 0 ] , ef6sym ) ) {
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
+( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
+( tmp [ 3 ] = ( * ef5 ) ( arg0 , tmp [ 1 ] ) ) ;
+( tmp [ 4 ] = ( * ef5 ) ( arg0 , tmp [ 2 ] ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( tmp [ 3 ] , tmp [ 4 ] ) ) ;
+}
+if ( check_sym ( tmp [ 0 ] , ef4sym ) ) {
+( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
+( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
+( tmp [ 3 ] = ( * ef5 ) ( arg0 , tmp [ 1 ] ) ) ;
+( tmp [ 4 ] = ( * ef5 ) ( arg0 , tmp [ 2 ] ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( tmp [ 3 ] , tmp [ 4 ] ) ) ;
+}
 }
 }
 }
@@ -169,7 +173,7 @@ ATerm atmp10 = arg1 ;
 ATerm atmp100 = atmp10 ;
 if ( is_single_element ( atmp100 ) ) {
 ( tmp [ 0 ] = list_head ( atmp100 ) ) ;
-FUNC_EXIT_CONST ( constant0 , ( * ef6 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 }
 }

@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -37,28 +37,28 @@ static ATerm lf_AUX_ParseTree_Constructors1_6 ( ) ;
 static Symbol lf_AUX_ParseTree_Constructors1_7sym ;
 static ATerm lf_AUX_ParseTree_Constructors1_7 ( ) ;
 void register_AUX_ParseTree_Constructors1 ( ) {
-lf_AUX_ParseTree_Constructors1_1sym = ATmakeSymbol ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"w\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)"
+lf_AUX_ParseTree_Constructors1_1sym = ATmakeSymbol ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"iter-sep\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)"
  , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ParseTree_Constructors1_1sym ) ;
-lf_AUX_ParseTree_Constructors1_2sym = ATmakeSymbol ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"l\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ParseTree_Constructors1_2sym = ATmakeSymbol ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"iter\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ParseTree_Constructors1_2sym ) ;
-lf_AUX_ParseTree_Constructors1_3sym = ATmakeSymbol ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"sort\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ParseTree_Constructors1_3sym = ATmakeSymbol ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"sep\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ParseTree_Constructors1_3sym ) ;
 lf_AUX_ParseTree_Constructors1_4sym = ATmakeSymbol ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"meta-var\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ParseTree_Constructors1_4sym ) ;
-lf_AUX_ParseTree_Constructors1_5sym = ATmakeSymbol ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"sep\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ParseTree_Constructors1_5sym = ATmakeSymbol ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"sort\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ParseTree_Constructors1_5sym ) ;
-lf_AUX_ParseTree_Constructors1_6sym = ATmakeSymbol ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"iter\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ParseTree_Constructors1_6sym = ATmakeSymbol ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"l\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ParseTree_Constructors1_6sym ) ;
-lf_AUX_ParseTree_Constructors1_7sym = ATmakeSymbol ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"iter-sep\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ParseTree_Constructors1_7sym = ATmakeSymbol ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"w\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ParseTree_Constructors1_7sym ) ;
-register_prod ( ATparse ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"w\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ParseTree_Constructors1_1 , lf_AUX_ParseTree_Constructors1_1sym ) ;
-register_prod ( ATparse ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"l\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ParseTree_Constructors1_2 , lf_AUX_ParseTree_Constructors1_2sym ) ;
-register_prod ( ATparse ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"sort\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ParseTree_Constructors1_3 , lf_AUX_ParseTree_Constructors1_3sym ) ;
+register_prod ( ATparse ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"iter-sep\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ParseTree_Constructors1_1 , lf_AUX_ParseTree_Constructors1_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"iter\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ParseTree_Constructors1_2 , lf_AUX_ParseTree_Constructors1_2sym ) ;
+register_prod ( ATparse ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"sep\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ParseTree_Constructors1_3 , lf_AUX_ParseTree_Constructors1_3sym ) ;
 register_prod ( ATparse ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"meta-var\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ParseTree_Constructors1_4 , lf_AUX_ParseTree_Constructors1_4sym ) ;
-register_prod ( ATparse ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"sep\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ParseTree_Constructors1_5 , lf_AUX_ParseTree_Constructors1_5sym ) ;
-register_prod ( ATparse ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"iter\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ParseTree_Constructors1_6 , lf_AUX_ParseTree_Constructors1_6sym ) ;
-register_prod ( ATparse ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"iter-sep\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ParseTree_Constructors1_7 , lf_AUX_ParseTree_Constructors1_7sym ) ;
+register_prod ( ATparse ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"sort\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ParseTree_Constructors1_5 , lf_AUX_ParseTree_Constructors1_5sym ) ;
+register_prod ( ATparse ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"l\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ParseTree_Constructors1_6 , lf_AUX_ParseTree_Constructors1_6sym ) ;
+register_prod ( ATparse ( "prod(id(\"ParseTree-Constructors\"),w(\"\"),[ql(\"w\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ParseTree_Constructors1_7 , lf_AUX_ParseTree_Constructors1_7sym ) ;
 }
 void resolve_AUX_ParseTree_Constructors1 ( ) {
 }

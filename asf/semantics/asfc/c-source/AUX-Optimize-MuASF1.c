@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -23,91 +23,91 @@
 
 #include  "asc-support.h"
 static Symbol lf_AUX_Optimize_MuASF1_1sym ;
-static ATerm lf_AUX_Optimize_MuASF1_1 ( ATerm arg1 ) ;
+static ATerm lf_AUX_Optimize_MuASF1_1 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_AUX_Optimize_MuASF1_2sym ;
-static ATerm lf_AUX_Optimize_MuASF1_2 ( ) ;
+static ATerm lf_AUX_Optimize_MuASF1_2 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_AUX_Optimize_MuASF1_3sym ;
-static ATerm lf_AUX_Optimize_MuASF1_3 ( ) ;
+static ATerm lf_AUX_Optimize_MuASF1_3 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_AUX_Optimize_MuASF1_4sym ;
+static ATerm lf_AUX_Optimize_MuASF1_4 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol lf_AUX_Optimize_MuASF1_6sym ;
+static ATerm lf_AUX_Optimize_MuASF1_6 ( ATerm arg1 ) ;
 static Symbol lf_AUX_Optimize_MuASF1_5sym ;
 static ATerm lf_AUX_Optimize_MuASF1_5 ( ATerm arg1 ) ;
-static Symbol lf_AUX_Optimize_MuASF1_4sym ;
-static ATerm lf_AUX_Optimize_MuASF1_4 ( ATerm arg1 ) ;
-static Symbol lf_AUX_Optimize_MuASF1_6sym ;
-static ATerm lf_AUX_Optimize_MuASF1_6 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_AUX_Optimize_MuASF1_7sym ;
-static ATerm lf_AUX_Optimize_MuASF1_7 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_AUX_Optimize_MuASF1_7 ( ) ;
 static Symbol lf_AUX_Optimize_MuASF1_8sym ;
-static ATerm lf_AUX_Optimize_MuASF1_8 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_AUX_Optimize_MuASF1_8 ( ) ;
 static Symbol lf_AUX_Optimize_MuASF1_9sym ;
-static ATerm lf_AUX_Optimize_MuASF1_9 ( ATerm arg1 , ATerm arg2 ) ;
+static ATerm lf_AUX_Optimize_MuASF1_9 ( ATerm arg1 ) ;
 void register_AUX_Optimize_MuASF1 ( ) {
-lf_AUX_Optimize_MuASF1_1sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"remove-dummy-list-ids\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Module\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Module\"),w(\"\"),no-attrs)"
- , 1 , ATtrue ) ;
+lf_AUX_Optimize_MuASF1_1sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"is-list-injection\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
+ , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Optimize_MuASF1_1sym ) ;
-lf_AUX_Optimize_MuASF1_2sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"unavailable\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"EmbeddingAt\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_Optimize_MuASF1_2sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"remove-emb-side\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Optimize_MuASF1_2sym ) ;
-lf_AUX_Optimize_MuASF1_3sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"unavailable\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_Optimize_MuASF1_3sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"has\"),w(\"\"),sort(\"EmbeddingAt\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Optimize_MuASF1_3sym ) ;
-lf_AUX_Optimize_MuASF1_5sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"[\"),w(\"\"),iter(sort(\"FunId\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Embedding\"),w(\"\"),no-attrs)" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_AUX_Optimize_MuASF1_5sym ) ;
-lf_AUX_Optimize_MuASF1_4sym = ATmakeSymbol ( "listtype(sort(\"FunId\"))" , 1 , ATtrue ) ;
+lf_AUX_Optimize_MuASF1_4sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[sort(\"Embedding\"),w(\"\"),ql(\"at\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"EmbeddingAt\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Optimize_MuASF1_4sym ) ;
-lf_AUX_Optimize_MuASF1_6sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[sort(\"Embedding\"),w(\"\"),ql(\"at\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"EmbeddingAt\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
+lf_AUX_Optimize_MuASF1_6sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"[\"),w(\"\"),iter(sort(\"FunId\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Embedding\"),w(\"\"),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Optimize_MuASF1_6sym ) ;
-lf_AUX_Optimize_MuASF1_7sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"has\"),w(\"\"),sort(\"EmbeddingAt\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
+lf_AUX_Optimize_MuASF1_5sym = ATmakeSymbol ( "listtype(sort(\"FunId\"))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_AUX_Optimize_MuASF1_5sym ) ;
+lf_AUX_Optimize_MuASF1_7sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"unavailable\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Optimize_MuASF1_7sym ) ;
-lf_AUX_Optimize_MuASF1_8sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"remove-emb-side\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
+lf_AUX_Optimize_MuASF1_8sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"unavailable\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"EmbeddingAt\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Optimize_MuASF1_8sym ) ;
-lf_AUX_Optimize_MuASF1_9sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"is-list-injection\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
+lf_AUX_Optimize_MuASF1_9sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"remove-dummy-list-ids\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Module\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Module\"),w(\"\"),no-attrs)" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Optimize_MuASF1_9sym ) ;
-register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"remove-dummy-list-ids\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Module\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Module\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_1 , lf_AUX_Optimize_MuASF1_1sym ) ;
-register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"unavailable\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"EmbeddingAt\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_2 , lf_AUX_Optimize_MuASF1_2sym ) ;
-register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"unavailable\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_3 , lf_AUX_Optimize_MuASF1_3sym ) ;
-register_prod ( ATparse ( "listtype(sort(\"FunId\"))" ) , lf_AUX_Optimize_MuASF1_4 , lf_AUX_Optimize_MuASF1_4sym ) ;
-register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"[\"),w(\"\"),iter(sort(\"FunId\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Embedding\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_5 , lf_AUX_Optimize_MuASF1_5sym ) ;
-register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[sort(\"Embedding\"),w(\"\"),ql(\"at\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"EmbeddingAt\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_6 , lf_AUX_Optimize_MuASF1_6sym ) ;
-register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"has\"),w(\"\"),sort(\"EmbeddingAt\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_7 , lf_AUX_Optimize_MuASF1_7sym ) ;
-register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"remove-emb-side\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_8 , lf_AUX_Optimize_MuASF1_8sym ) ;
-register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"is-list-injection\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_9 , lf_AUX_Optimize_MuASF1_9sym ) ;
+register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"is-list-injection\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_1 , lf_AUX_Optimize_MuASF1_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"remove-emb-side\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_2 , lf_AUX_Optimize_MuASF1_2sym ) ;
+register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"has\"),w(\"\"),sort(\"EmbeddingAt\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_3 , lf_AUX_Optimize_MuASF1_3sym ) ;
+register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[sort(\"Embedding\"),w(\"\"),ql(\"at\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"EmbeddingAt\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_4 , lf_AUX_Optimize_MuASF1_4sym ) ;
+register_prod ( ATparse ( "listtype(sort(\"FunId\"))" ) , lf_AUX_Optimize_MuASF1_5 , lf_AUX_Optimize_MuASF1_5sym ) ;
+register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"[\"),w(\"\"),iter(sort(\"FunId\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Embedding\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_6 , lf_AUX_Optimize_MuASF1_6sym ) ;
+register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"unavailable\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunIdHasEmbeddingAt\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_7 , lf_AUX_Optimize_MuASF1_7sym ) ;
+register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"unavailable\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"EmbeddingAt\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_8 , lf_AUX_Optimize_MuASF1_8sym ) ;
+register_prod ( ATparse ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"remove-dummy-list-ids\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Module\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Module\"),w(\"\"),no-attrs)" ) , lf_AUX_Optimize_MuASF1_9 , lf_AUX_Optimize_MuASF1_9sym ) ;
 }
 void resolve_AUX_Optimize_MuASF1 ( ) {
 }
 void init_AUX_Optimize_MuASF1 ( ) {
 }
-ATerm lf_AUX_Optimize_MuASF1_9 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_AUX_Optimize_MuASF1_9sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_9sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_AUX_Optimize_MuASF1_9sym , arg0 , arg1 ) ) ;
+ATerm lf_AUX_Optimize_MuASF1_9 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_AUX_Optimize_MuASF1_9sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_9sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Optimize_MuASF1_9sym , arg0 ) ) ;
 }
-ATerm lf_AUX_Optimize_MuASF1_8 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_AUX_Optimize_MuASF1_8sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_8sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_AUX_Optimize_MuASF1_8sym , arg0 , arg1 ) ) ;
+ATerm lf_AUX_Optimize_MuASF1_8 ( ) {
+CONS_ENTRY ( lf_AUX_Optimize_MuASF1_8sym , ATmakeAppl0 ( lf_AUX_Optimize_MuASF1_8sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_AUX_Optimize_MuASF1_8sym ) ) ;
 }
-ATerm lf_AUX_Optimize_MuASF1_7 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_AUX_Optimize_MuASF1_7sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_7sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_AUX_Optimize_MuASF1_7sym , arg0 , arg1 ) ) ;
-}
-ATerm lf_AUX_Optimize_MuASF1_6 ( ATerm arg0 , ATerm arg1 ) {
-CONS_ENTRY ( lf_AUX_Optimize_MuASF1_6sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_6sym , arg0 , arg1 ) ) ;
-CONS_EXIT ( make_nf2 ( lf_AUX_Optimize_MuASF1_6sym , arg0 , arg1 ) ) ;
-}
-ATerm lf_AUX_Optimize_MuASF1_4 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_AUX_Optimize_MuASF1_4sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_4sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_AUX_Optimize_MuASF1_4sym , arg0 ) ) ;
+ATerm lf_AUX_Optimize_MuASF1_7 ( ) {
+CONS_ENTRY ( lf_AUX_Optimize_MuASF1_7sym , ATmakeAppl0 ( lf_AUX_Optimize_MuASF1_7sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_AUX_Optimize_MuASF1_7sym ) ) ;
 }
 ATerm lf_AUX_Optimize_MuASF1_5 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_AUX_Optimize_MuASF1_5sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_5sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_AUX_Optimize_MuASF1_5sym , arg0 ) ) ;
 }
-ATerm lf_AUX_Optimize_MuASF1_3 ( ) {
-CONS_ENTRY ( lf_AUX_Optimize_MuASF1_3sym , ATmakeAppl0 ( lf_AUX_Optimize_MuASF1_3sym ) ) ;
-CONS_EXIT ( make_nf0 ( lf_AUX_Optimize_MuASF1_3sym ) ) ;
+ATerm lf_AUX_Optimize_MuASF1_6 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_AUX_Optimize_MuASF1_6sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_6sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Optimize_MuASF1_6sym , arg0 ) ) ;
 }
-ATerm lf_AUX_Optimize_MuASF1_2 ( ) {
-CONS_ENTRY ( lf_AUX_Optimize_MuASF1_2sym , ATmakeAppl0 ( lf_AUX_Optimize_MuASF1_2sym ) ) ;
-CONS_EXIT ( make_nf0 ( lf_AUX_Optimize_MuASF1_2sym ) ) ;
+ATerm lf_AUX_Optimize_MuASF1_4 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_AUX_Optimize_MuASF1_4sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_4sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Optimize_MuASF1_4sym , arg0 , arg1 ) ) ;
 }
-ATerm lf_AUX_Optimize_MuASF1_1 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_AUX_Optimize_MuASF1_1sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_1sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_AUX_Optimize_MuASF1_1sym , arg0 ) ) ;
+ATerm lf_AUX_Optimize_MuASF1_3 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_AUX_Optimize_MuASF1_3sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_3sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Optimize_MuASF1_3sym , arg0 , arg1 ) ) ;
+}
+ATerm lf_AUX_Optimize_MuASF1_2 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_AUX_Optimize_MuASF1_2sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_2sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Optimize_MuASF1_2sym , arg0 , arg1 ) ) ;
+}
+ATerm lf_AUX_Optimize_MuASF1_1 ( ATerm arg0 , ATerm arg1 ) {
+CONS_ENTRY ( lf_AUX_Optimize_MuASF1_1sym , ATmakeAppl ( lf_AUX_Optimize_MuASF1_1sym , arg0 , arg1 ) ) ;
+CONS_EXIT ( make_nf2 ( lf_AUX_Optimize_MuASF1_1sym , arg0 , arg1 ) ) ;
 }
 

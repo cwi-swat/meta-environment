@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -26,18 +26,18 @@ static Symbol lf_AUX_ParseTrees12_2_recursivesym ;
 static ATerm lf_AUX_ParseTrees12_2_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_AUX_ParseTrees12_2sym ;
 static ATerm lf_AUX_ParseTrees12_2 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef2sym ;
-static funcptr ef2 ;
+static Symbol ef1sym ;
+static funcptr ef1 ;
+static Symbol lf_AUX_ParseTrees12_1sym ;
+static ATerm lf_AUX_ParseTrees12_1 ( ATerm arg1 ) ;
 static Symbol ef3sym ;
 static funcptr ef3 ;
 static Symbol ef4sym ;
 static funcptr ef4 ;
 static Symbol ef5sym ;
 static funcptr ef5 ;
-static Symbol ef1sym ;
-static funcptr ef1 ;
-static Symbol lf_AUX_ParseTrees12_1sym ;
-static ATerm lf_AUX_ParseTrees12_1 ( ATerm arg1 ) ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
 void register_AUX_ParseTrees12 ( ) {
 lf_AUX_ParseTrees12_2_recursivesym = ATmakeSymbol ( "prod(id(\"ParseTrees\"),w(\"\"),[sort(\"ATerm\"),w(\"\"),ql(\"[\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"AFun\"),w(\"\"),ql(\".\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -51,16 +51,16 @@ register_prod ( ATparse ( "prod(id(\"ParseTrees\"),w(\"\"),[sort(\"ATerm\"),w(\"
 register_prod ( ATparse ( "prod(id(\"ParseTrees\"),w(\"\"),[sort(\"ATerm\"),w(\"\"),ql(\"[\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"AFun\"),w(\"\"),ql(\".\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) , lf_AUX_ParseTrees12_2_recursive , lf_AUX_ParseTrees12_2_recursivesym ) ;
 }
 void resolve_AUX_ParseTrees12 ( ) {
-ef1 = lookup_func ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AFun\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerms\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
-ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AFun\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerms\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
-ef2 = lookup_func ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[ql(\"named-elem\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"AFun\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"ATermList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"ATermList\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
-ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[ql(\"named-elem\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"AFun\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"ATermList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"ATermList\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
-ef3 = lookup_func ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),sort(\"ATerms\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)" ) ) ;
-ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),sort(\"ATerms\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)" ) ) ;
-ef4 = lookup_func ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[ql(\"init\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"AFun\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
-ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[ql(\"init\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"AFun\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
-ef5 = lookup_func ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AFun\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerms\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Ann\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
-ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AFun\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerms\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Ann\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
+ef1 = lookup_func ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AFun\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerms\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Ann\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
+ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AFun\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerms\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Ann\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AFun\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerms\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AFun\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerms\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
+ef3 = lookup_func ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[ql(\"named-elem\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"AFun\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"ATermList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"ATermList\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
+ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[ql(\"named-elem\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"AFun\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"ATermList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"ATermList\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
+ef4 = lookup_func ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),sort(\"ATerms\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)" ) ) ;
+ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),sort(\"ATerms\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)" ) ) ;
+ef5 = lookup_func ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[ql(\"init\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"AFun\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
+ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"ParseTrees\"),w(\"\"),[ql(\"init\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"AFun\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
 }
 void init_AUX_ParseTrees12 ( ) {
 }
@@ -73,28 +73,6 @@ if ( check_sym ( arg0 , ef1sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-if ( check_sym ( arg1 , lf_AUX_ParseTrees12_1sym ) ) {
-{
-ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( is_single_element ( atmp10 ) ) {
-( tmp [ 0 ] = list_head ( atmp10 ) ) ;
-( tmp [ 1 ] = ( * ef4 ) ( atmp00 ) ) ;
-if ( check_sym ( tmp [ 1 ] , ef1sym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
-FUNC_EXIT ( ( * ef2 ) ( tmp [ 0 ] , ( * ef3 ) ( tmp [ 3 ] ) , ( * ef3 ) ( atmp01 ) ) ) ;
-}
-}
-}
-}
-}
-}
-}
-if ( check_sym ( arg0 , ef5sym ) ) {
-{
-ATerm atmp00 = arg_0 ( arg0 ) ;
-{
-ATerm atmp01 = arg_1 ( arg0 ) ;
 {
 ATerm atmp02 = arg_2 ( arg0 ) ;
 if ( check_sym ( arg1 , lf_AUX_ParseTrees12_1sym ) ) {
@@ -102,7 +80,29 @@ if ( check_sym ( arg1 , lf_AUX_ParseTrees12_1sym ) ) {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( is_single_element ( atmp10 ) ) {
 ( tmp [ 0 ] = list_head ( atmp10 ) ) ;
-FUNC_EXIT ( lf_AUX_ParseTrees12_2_recursive ( ( * ef1 ) ( atmp00 , atmp01 ) , make_list ( tmp [ 0 ] ) ) ) ;
+FUNC_EXIT ( lf_AUX_ParseTrees12_2_recursive ( ( * ef2 ) ( atmp00 , atmp01 ) , make_list ( tmp [ 0 ] ) ) ) ;
+}
+}
+}
+}
+}
+}
+}
+if ( check_sym ( arg0 , ef2sym ) ) {
+{
+ATerm atmp00 = arg_0 ( arg0 ) ;
+{
+ATerm atmp01 = arg_1 ( arg0 ) ;
+if ( check_sym ( arg1 , lf_AUX_ParseTrees12_1sym ) ) {
+{
+ATerm atmp10 = arg_0 ( arg1 ) ;
+if ( is_single_element ( atmp10 ) ) {
+( tmp [ 0 ] = list_head ( atmp10 ) ) ;
+( tmp [ 1 ] = ( * ef5 ) ( atmp00 ) ) ;
+if ( check_sym ( tmp [ 1 ] , ef2sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( tmp [ 0 ] , ( * ef4 ) ( tmp [ 3 ] ) , ( * ef4 ) ( atmp01 ) ) ) ;
 }
 }
 }
@@ -139,34 +139,34 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
 {
-ATerm atmp10 = arg1 ;
-if ( is_single_element ( atmp10 ) ) {
-( tmp [ 0 ] = list_head ( atmp10 ) ) ;
-( tmp [ 1 ] = ( * ef4 ) ( atmp00 ) ) ;
-if ( check_sym ( tmp [ 1 ] , ef1sym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
-FUNC_EXIT ( ( * ef2 ) ( tmp [ 0 ] , ( * ef3 ) ( tmp [ 3 ] ) , ( * ef3 ) ( atmp01 ) ) ) ;
-}
-}
-}
-}
-}
-}
-if ( check_sym ( ltmp [ 0 ] , ef5sym ) ) {
-{
-ATerm atmp00 = arg_0 ( arg0 ) ;
-{
-ATerm atmp01 = arg_1 ( arg0 ) ;
-{
 ATerm atmp02 = arg_2 ( arg0 ) ;
 {
 ATerm atmp10 = arg1 ;
 if ( is_single_element ( atmp10 ) ) {
 ( tmp [ 0 ] = list_head ( atmp10 ) ) ;
-( arg0 = ( * ef1 ) ( atmp00 , atmp01 ) ) ;
+( arg0 = ( * ef2 ) ( atmp00 , atmp01 ) ) ;
 ( arg1 = make_list ( tmp [ 0 ] ) ) ;
 goto lbl_lf_AUX_ParseTrees12_2_recursive ;
+}
+}
+}
+}
+}
+}
+if ( check_sym ( ltmp [ 0 ] , ef2sym ) ) {
+{
+ATerm atmp00 = arg_0 ( arg0 ) ;
+{
+ATerm atmp01 = arg_1 ( arg0 ) ;
+{
+ATerm atmp10 = arg1 ;
+if ( is_single_element ( atmp10 ) ) {
+( tmp [ 0 ] = list_head ( atmp10 ) ) ;
+( tmp [ 1 ] = ( * ef5 ) ( atmp00 ) ) ;
+if ( check_sym ( tmp [ 1 ] , ef2sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( tmp [ 0 ] , ( * ef4 ) ( tmp [ 3 ] ) , ( * ef4 ) ( atmp01 ) ) ) ;
 }
 }
 }

@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -61,64 +61,64 @@ static ATerm lf_AUX_ATerm_Lists1_18 ( ) ;
 static Symbol lf_AUX_ATerm_Lists1_19sym ;
 static ATerm lf_AUX_ATerm_Lists1_19 ( ) ;
 void register_AUX_ATerm_Lists1 ( ) {
-lf_AUX_ATerm_Lists1_1sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"consf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)"
+lf_AUX_ATerm_Lists1_1sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"foldr-zipf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)"
  , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_1sym ) ;
-lf_AUX_ATerm_Lists1_2sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"concf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_2sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"foldlf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_2sym ) ;
-lf_AUX_ATerm_Lists1_3sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"concatf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_3sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"foldrf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_3sym ) ;
-lf_AUX_ATerm_Lists1_4sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"emptyp\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_4sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"zipf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_4sym ) ;
-lf_AUX_ATerm_Lists1_5sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"firstf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_5sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"mapf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_5sym ) ;
-lf_AUX_ATerm_Lists1_6sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"restf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_6sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"filterf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_6sym ) ;
-lf_AUX_ATerm_Lists1_7sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"sizef\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_7sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"for-somep\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_7sym ) ;
-lf_AUX_ATerm_Lists1_8sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"indexf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_8sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"for-allp\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_8sym ) ;
-lf_AUX_ATerm_Lists1_9sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"replacef\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_9sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"delete1f\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_9sym ) ;
 lf_AUX_ATerm_Lists1_10sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"deletef\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_10sym ) ;
-lf_AUX_ATerm_Lists1_11sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"delete1f\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_11sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"replacef\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_11sym ) ;
-lf_AUX_ATerm_Lists1_12sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"for-allp\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_12sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"indexf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_12sym ) ;
-lf_AUX_ATerm_Lists1_13sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"for-somep\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_13sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"sizef\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_13sym ) ;
-lf_AUX_ATerm_Lists1_14sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"filterf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_14sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"restf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_14sym ) ;
-lf_AUX_ATerm_Lists1_15sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"mapf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_15sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"firstf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_15sym ) ;
-lf_AUX_ATerm_Lists1_16sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"zipf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_16sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"emptyp\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_16sym ) ;
-lf_AUX_ATerm_Lists1_17sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"foldrf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_17sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"concatf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_17sym ) ;
-lf_AUX_ATerm_Lists1_18sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"foldlf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_18sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"concf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_18sym ) ;
-lf_AUX_ATerm_Lists1_19sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"foldr-zipf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_ATerm_Lists1_19sym = ATmakeSymbol ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"consf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Lists1_19sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"consf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_1 , lf_AUX_ATerm_Lists1_1sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"concf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_2 , lf_AUX_ATerm_Lists1_2sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"concatf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_3 , lf_AUX_ATerm_Lists1_3sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"emptyp\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_4 , lf_AUX_ATerm_Lists1_4sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"firstf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_5 , lf_AUX_ATerm_Lists1_5sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"restf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_6 , lf_AUX_ATerm_Lists1_6sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"sizef\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_7 , lf_AUX_ATerm_Lists1_7sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"indexf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_8 , lf_AUX_ATerm_Lists1_8sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"replacef\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_9 , lf_AUX_ATerm_Lists1_9sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"foldr-zipf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_1 , lf_AUX_ATerm_Lists1_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"foldlf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_2 , lf_AUX_ATerm_Lists1_2sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"foldrf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_3 , lf_AUX_ATerm_Lists1_3sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"zipf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_4 , lf_AUX_ATerm_Lists1_4sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"mapf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_5 , lf_AUX_ATerm_Lists1_5sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"filterf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_6 , lf_AUX_ATerm_Lists1_6sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"for-somep\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_7 , lf_AUX_ATerm_Lists1_7sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"for-allp\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_8 , lf_AUX_ATerm_Lists1_8sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"delete1f\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_9 , lf_AUX_ATerm_Lists1_9sym ) ;
 register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"deletef\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_10 , lf_AUX_ATerm_Lists1_10sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"delete1f\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_11 , lf_AUX_ATerm_Lists1_11sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"for-allp\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_12 , lf_AUX_ATerm_Lists1_12sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"for-somep\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_13 , lf_AUX_ATerm_Lists1_13sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"filterf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_14 , lf_AUX_ATerm_Lists1_14sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"mapf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_15 , lf_AUX_ATerm_Lists1_15sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"zipf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_16 , lf_AUX_ATerm_Lists1_16sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"foldrf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_17 , lf_AUX_ATerm_Lists1_17sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"foldlf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_18 , lf_AUX_ATerm_Lists1_18sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"foldr-zipf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_19 , lf_AUX_ATerm_Lists1_19sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"replacef\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_11 , lf_AUX_ATerm_Lists1_11sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"indexf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_12 , lf_AUX_ATerm_Lists1_12sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"sizef\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_13 , lf_AUX_ATerm_Lists1_13sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"restf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_14 , lf_AUX_ATerm_Lists1_14sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"firstf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_15 , lf_AUX_ATerm_Lists1_15sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"emptyp\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_16 , lf_AUX_ATerm_Lists1_16sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"concatf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_17 , lf_AUX_ATerm_Lists1_17sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"concf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_18 , lf_AUX_ATerm_Lists1_18sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Lists\"),w(\"\"),[ql(\"consf\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Lists1_19 , lf_AUX_ATerm_Lists1_19sym ) ;
 }
 void resolve_AUX_ATerm_Lists1 ( ) {
 }

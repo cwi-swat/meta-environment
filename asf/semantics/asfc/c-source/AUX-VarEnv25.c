@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -26,32 +26,32 @@ static Symbol lf_AUX_VarEnv25_2_recursivesym ;
 static ATerm lf_AUX_VarEnv25_2_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_AUX_VarEnv25_2sym ;
 static ATerm lf_AUX_VarEnv25_2 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef2sym ;
-static funcptr ef2 ;
-static Symbol ef4sym ;
-static funcptr ef4 ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
-static Symbol lf4sym ;
-static ATerm lf4 ( ATerm arg1 ) ;
-static Symbol ef1sym ;
-static funcptr ef1 ;
-static Symbol lf3sym ;
-static ATerm lf3 ( ATerm arg1 ) ;
 static Symbol lf_AUX_VarEnv25_1sym ;
 static ATerm lf_AUX_VarEnv25_1 ( ATerm arg1 ) ;
+static Symbol ef1sym ;
+static funcptr ef1 ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
+static Symbol lf4sym ;
+static ATerm lf4 ( ATerm arg1 ) ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
+static Symbol ef4sym ;
+static funcptr ef4 ;
+static Symbol lf3sym ;
+static ATerm lf3 ( ATerm arg1 ) ;
 void register_AUX_VarEnv25 ( ) {
 lf_AUX_VarEnv25_2_recursivesym = ATmakeSymbol ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"get-delaying-args\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TermList\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_VarEnv25_2_recursivesym ) ;
 lf_AUX_VarEnv25_2sym = ATmakeSymbol ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"get-delaying-args\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TermList\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_VarEnv25_2sym ) ;
+lf_AUX_VarEnv25_1sym = ATmakeSymbol ( "listtype(sort(\"NamePair\"),ql(\",\"))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_AUX_VarEnv25_1sym ) ;
 lf4sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf4sym ) ;
 lf3sym = ATmakeSymbol ( "listtype(sort(\"Term\"),ql(\",\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf3sym ) ;
-lf_AUX_VarEnv25_1sym = ATmakeSymbol ( "listtype(sort(\"NamePair\"),ql(\",\"))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_AUX_VarEnv25_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"NamePair\"),ql(\",\"))" ) , lf_AUX_VarEnv25_1 , lf_AUX_VarEnv25_1sym ) ;
 register_prod ( ATparse ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"get-delaying-args\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TermList\"),w(\"\"),no-attrs)" ) , lf_AUX_VarEnv25_2 , lf_AUX_VarEnv25_2sym ) ;
 register_prod ( ATparse ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"get-delaying-args\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TermList\"),w(\"\"),no-attrs)" ) , lf_AUX_VarEnv25_2_recursive , lf_AUX_VarEnv25_2_recursivesym ) ;
@@ -147,9 +147,6 @@ if ( is_single_element ( tmp [ 27 ] ) ) {
 ( tmp [ 28 ] = list_head ( tmp [ 27 ] ) ) ;
 if ( term_equal ( tmp [ 28 ] , make_char ( 103 ) ) ) {
 if ( not_empty_list ( tmp [ 13 ] ) ) {
-if ( term_equal ( arg0 , tmp [ 3 ] ) ) {
-FUNC_EXIT ( make_nf1 ( ef4sym , lf3 ( make_list ( tmp [ 13 ] ) ) ) ) ;
-}
 if ( check_sym ( arg0 , ef3sym ) ) {
 ( tmp [ 29 ] = arg_0 ( arg0 ) ) ;
 if ( check_sym ( tmp [ 29 ] , lf4sym ) ) {
@@ -169,6 +166,9 @@ FUNC_EXIT ( make_nf1 ( ef4sym , lf3 ( make_list ( tmp [ 13 ] ) ) ) ) ;
 }
 }
 }
+}
+if ( term_equal ( arg0 , tmp [ 3 ] ) ) {
+FUNC_EXIT ( make_nf1 ( ef4sym , lf3 ( make_list ( tmp [ 13 ] ) ) ) ) ;
 }
 }
 }
@@ -315,9 +315,6 @@ if ( is_single_element ( tmp [ 27 ] ) ) {
 ( tmp [ 28 ] = list_head ( tmp [ 27 ] ) ) ;
 if ( term_equal ( tmp [ 28 ] , make_char ( 103 ) ) ) {
 if ( not_empty_list ( tmp [ 13 ] ) ) {
-if ( term_equal ( ltmp [ 0 ] , tmp [ 3 ] ) ) {
-FUNC_EXIT ( make_nf1 ( ef4sym , lf3 ( make_list ( tmp [ 13 ] ) ) ) ) ;
-}
 if ( check_sym ( ltmp [ 0 ] , ef3sym ) ) {
 ( tmp [ 29 ] = arg_0 ( ltmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 29 ] , lf4sym ) ) {
@@ -337,6 +334,9 @@ FUNC_EXIT ( make_nf1 ( ef4sym , lf3 ( make_list ( tmp [ 13 ] ) ) ) ) ;
 }
 }
 }
+}
+if ( term_equal ( ltmp [ 0 ] , tmp [ 3 ] ) ) {
+FUNC_EXIT ( make_nf1 ( ef4sym , lf3 ( make_list ( tmp [ 13 ] ) ) ) ) ;
 }
 }
 }
@@ -402,10 +402,6 @@ FUNC_EXIT ( make_nf2 ( lf_AUX_VarEnv25_2_recursivesym , ltmp [ 0 ] , lf_AUX_VarE
 }
 }
 }
-ATerm lf_AUX_VarEnv25_1 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_AUX_VarEnv25_1sym , ATmakeAppl ( lf_AUX_VarEnv25_1sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_AUX_VarEnv25_1sym , arg0 ) ) ;
-}
 ATerm lf3 ( ATerm arg0 ) {
 CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
@@ -413,5 +409,9 @@ CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 ATerm lf4 ( ATerm arg0 ) {
 CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
+}
+ATerm lf_AUX_VarEnv25_1 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_AUX_VarEnv25_1sym , ATmakeAppl ( lf_AUX_VarEnv25_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_VarEnv25_1sym , arg0 ) ) ;
 }
 

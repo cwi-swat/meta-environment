@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -28,30 +28,30 @@ static Symbol lf_AUX_VarEnv23_2sym ;
 static ATerm lf_AUX_VarEnv23_2 ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
-static Symbol ef5sym ;
-static funcptr ef5 ;
-static Symbol ef4sym ;
-static funcptr ef4 ;
-static Symbol lf4sym ;
-static ATerm lf4 ( ATerm arg1 ) ;
-static Symbol ef2sym ;
-static funcptr ef2 ;
 static Symbol lf3sym ;
 static ATerm lf3 ( ATerm arg1 ) ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
+static Symbol lf4sym ;
+static ATerm lf4 ( ATerm arg1 ) ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
+static Symbol ef4sym ;
+static funcptr ef4 ;
 static Symbol lf_AUX_VarEnv23_1sym ;
 static ATerm lf_AUX_VarEnv23_1 ( ATerm arg1 ) ;
+static Symbol ef5sym ;
+static funcptr ef5 ;
 void register_AUX_VarEnv23 ( ) {
 lf_AUX_VarEnv23_2_recursivesym = ATmakeSymbol ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"is-memo\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_VarEnv23_2_recursivesym ) ;
 lf_AUX_VarEnv23_2sym = ATmakeSymbol ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"is-memo\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_VarEnv23_2sym ) ;
-lf4sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf4sym ) ;
 lf3sym = ATmakeSymbol ( "listtype(sort(\"Term\"),ql(\",\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf3sym ) ;
+lf4sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf4sym ) ;
 lf_AUX_VarEnv23_1sym = ATmakeSymbol ( "listtype(sort(\"NamePair\"),ql(\",\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_VarEnv23_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"NamePair\"),ql(\",\"))" ) , lf_AUX_VarEnv23_1 , lf_AUX_VarEnv23_1sym ) ;
@@ -61,16 +61,16 @@ register_prod ( ATparse ( "listtype(sort(\"Term\"),ql(\",\"))" ) , lf3 , lf3sym 
 register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf4 , lf4sym ) ;
 }
 void resolve_AUX_VarEnv23 ( ) {
-ef1 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef2 = lookup_func ( ATreadFromString ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NamePair\"),w(\"\"),no-attrs)" ) ) ;
-ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NamePair\"),w(\"\"),no-attrs)" ) ) ;
-ef3 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) ) ;
-ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) ) ;
-ef4 = lookup_func ( ATreadFromString ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
-ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
-ef5 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef1 = lookup_func ( ATreadFromString ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NamePair\"),w(\"\"),no-attrs)" ) ) ;
+ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"VarEnv\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NamePair\"),w(\"\"),no-attrs)" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) ) ;
+ef3 = lookup_func ( ATreadFromString ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
+ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
+ef4 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef5 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
 static ATerm constant1 = NULL ;
@@ -90,7 +90,7 @@ if ( not_empty_list ( atmp10 ) ) {
 {
 ( tmp [ 1 ] = list_tail ( atmp10 ) ) ;
 {
-if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
+if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ) ;
 ( tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ) ;
@@ -103,10 +103,10 @@ while ( not_empty_list ( tmp [ 5 ] ) ) {
 ( tmp [ 8 ] = list_head ( tmp [ 5 ] ) ) ;
 ( tmp [ 5 ] = list_tail ( tmp [ 5 ] ) ) ;
 {
-if ( check_sym ( tmp [ 8 ] , ef3sym ) ) {
+if ( check_sym ( tmp [ 8 ] , ef2sym ) ) {
 ( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
 {
-if ( check_sym ( tmp [ 9 ] , ef4sym ) ) {
+if ( check_sym ( tmp [ 9 ] , ef3sym ) ) {
 ( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
 {
 if ( check_sym ( tmp [ 10 ] , lf4sym ) ) {
@@ -130,19 +130,19 @@ if ( term_equal ( tmp [ 16 ] , make_char ( 109 ) ) ) {
 if ( is_single_element ( tmp [ 17 ] ) ) {
 ( tmp [ 18 ] = list_head ( tmp [ 17 ] ) ) ;
 if ( term_equal ( tmp [ 18 ] , make_char ( 111 ) ) ) {
-if ( check_sym ( arg0 , ef4sym ) ) {
+if ( check_sym ( arg0 , ef3sym ) ) {
 ( tmp [ 19 ] = arg_0 ( arg0 ) ) ;
 if ( check_sym ( tmp [ 19 ] , lf4sym ) ) {
 ( tmp [ 20 ] = arg_0 ( tmp [ 19 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , ef4sym ) ) {
+if ( check_sym ( tmp [ 3 ] , ef3sym ) ) {
 ( tmp [ 21 ] = arg_0 ( tmp [ 3 ] ) ) ;
 if ( check_sym ( tmp [ 21 ] , lf4sym ) ) {
 ( tmp [ 22 ] = arg_0 ( tmp [ 21 ] ) ) ;
 if ( not_empty_list ( tmp [ 22 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 22 ] ) , make_char ( 95 ) ) ) {
 ( tmp [ 23 ] = list_tail ( tmp [ 22 ] ) ) ;
-if ( term_equal ( ( * ef4 ) ( lf4 ( make_list ( tmp [ 20 ] ) ) ) , ( * ef4 ) ( lf4 ( make_list ( tmp [ 23 ] ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef5 ) ( ) ) ;
+if ( term_equal ( ( * ef3 ) ( lf4 ( make_list ( tmp [ 20 ] ) ) ) , ( * ef3 ) ( lf4 ( make_list ( tmp [ 23 ] ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant0 , ( * ef4 ) ( ) ) ;
 }
 }
 }
@@ -151,7 +151,7 @@ FUNC_EXIT_CONST ( constant0 , ( * ef5 ) ( ) ) ;
 }
 }
 if ( term_equal ( arg0 , tmp [ 3 ] ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef5 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef4 ) ( ) ) ;
 }
 }
 }
@@ -181,7 +181,7 @@ FUNC_EXIT_CONST ( constant0 , ( * ef5 ) ( ) ) ;
 }
 }
 else {
-FUNC_EXIT_CONST ( constant1 , ( * ef1 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef5 ) ( ) ) ;
 }
 }
 }
@@ -191,7 +191,7 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( not_empty_list ( atmp10 ) ) {
 ( tmp [ 0 ] = list_head ( atmp10 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp10 ) ) ;
-if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
+if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ) ;
 ( tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ) ;
@@ -221,7 +221,7 @@ if ( not_empty_list ( atmp10 ) ) {
 {
 ( tmp [ 1 ] = list_tail ( atmp10 ) ) ;
 {
-if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
+if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ) ;
 ( tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ) ;
@@ -234,10 +234,10 @@ while ( not_empty_list ( tmp [ 5 ] ) ) {
 ( tmp [ 8 ] = list_head ( tmp [ 5 ] ) ) ;
 ( tmp [ 5 ] = list_tail ( tmp [ 5 ] ) ) ;
 {
-if ( check_sym ( tmp [ 8 ] , ef3sym ) ) {
+if ( check_sym ( tmp [ 8 ] , ef2sym ) ) {
 ( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
 {
-if ( check_sym ( tmp [ 9 ] , ef4sym ) ) {
+if ( check_sym ( tmp [ 9 ] , ef3sym ) ) {
 ( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
 {
 if ( check_sym ( tmp [ 10 ] , lf4sym ) ) {
@@ -261,19 +261,19 @@ if ( term_equal ( tmp [ 16 ] , make_char ( 109 ) ) ) {
 if ( is_single_element ( tmp [ 17 ] ) ) {
 ( tmp [ 18 ] = list_head ( tmp [ 17 ] ) ) ;
 if ( term_equal ( tmp [ 18 ] , make_char ( 111 ) ) ) {
-if ( check_sym ( ltmp [ 0 ] , ef4sym ) ) {
+if ( check_sym ( ltmp [ 0 ] , ef3sym ) ) {
 ( tmp [ 19 ] = arg_0 ( ltmp [ 0 ] ) ) ;
 if ( check_sym ( tmp [ 19 ] , lf4sym ) ) {
 ( tmp [ 20 ] = arg_0 ( tmp [ 19 ] ) ) ;
-if ( check_sym ( tmp [ 3 ] , ef4sym ) ) {
+if ( check_sym ( tmp [ 3 ] , ef3sym ) ) {
 ( tmp [ 21 ] = arg_0 ( tmp [ 3 ] ) ) ;
 if ( check_sym ( tmp [ 21 ] , lf4sym ) ) {
 ( tmp [ 22 ] = arg_0 ( tmp [ 21 ] ) ) ;
 if ( not_empty_list ( tmp [ 22 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 22 ] ) , make_char ( 95 ) ) ) {
 ( tmp [ 23 ] = list_tail ( tmp [ 22 ] ) ) ;
-if ( term_equal ( ( * ef4 ) ( lf4 ( make_list ( tmp [ 20 ] ) ) ) , ( * ef4 ) ( lf4 ( make_list ( tmp [ 23 ] ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef5 ) ( ) ) ;
+if ( term_equal ( ( * ef3 ) ( lf4 ( make_list ( tmp [ 20 ] ) ) ) , ( * ef3 ) ( lf4 ( make_list ( tmp [ 23 ] ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant0 , ( * ef4 ) ( ) ) ;
 }
 }
 }
@@ -282,7 +282,7 @@ FUNC_EXIT_CONST ( constant0 , ( * ef5 ) ( ) ) ;
 }
 }
 if ( term_equal ( ltmp [ 0 ] , tmp [ 3 ] ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef5 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef4 ) ( ) ) ;
 }
 }
 }
@@ -312,7 +312,7 @@ FUNC_EXIT_CONST ( constant0 , ( * ef5 ) ( ) ) ;
 }
 }
 else {
-FUNC_EXIT_CONST ( constant1 , ( * ef1 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef5 ) ( ) ) ;
 }
 }
 {
@@ -320,7 +320,7 @@ ATerm atmp10 = arg1 ;
 if ( not_empty_list ( atmp10 ) ) {
 ( tmp [ 0 ] = list_head ( atmp10 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp10 ) ) ;
-if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
+if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ) ;
 ( tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ) ;
@@ -340,12 +340,12 @@ ATerm lf_AUX_VarEnv23_1 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_AUX_VarEnv23_1sym , ATmakeAppl ( lf_AUX_VarEnv23_1sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_AUX_VarEnv23_1sym , arg0 ) ) ;
 }
-ATerm lf3 ( ATerm arg0 ) {
-CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
-}
 ATerm lf4 ( ATerm arg0 ) {
 CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
+}
+ATerm lf3 ( ATerm arg0 ) {
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 

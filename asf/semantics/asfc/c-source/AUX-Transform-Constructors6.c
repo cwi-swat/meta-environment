@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -26,12 +26,12 @@ static Symbol lf_AUX_Transform_Constructors6_3_recursivesym ;
 static ATerm lf_AUX_Transform_Constructors6_3_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_AUX_Transform_Constructors6_3sym ;
 static ATerm lf_AUX_Transform_Constructors6_3 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef2sym ;
-static funcptr ef2 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol lf_AUX_Transform_Constructors6_1sym ;
 static ATerm lf_AUX_Transform_Constructors6_1 ( ATerm arg1 ) ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
 static Symbol lf_AUX_Transform_Constructors6_2sym ;
 static ATerm lf_AUX_Transform_Constructors6_2 ( ATerm arg1 ) ;
 void register_AUX_Transform_Constructors6 ( ) {
@@ -50,10 +50,10 @@ register_prod ( ATparse ( "prod(id(\"Transform-Constructors\"),w(\"\"),[ql(\"are
 register_prod ( ATparse ( "prod(id(\"Transform-Constructors\"),w(\"\"),[ql(\"are-constructor-terms\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_Transform_Constructors6_3_recursive , lf_AUX_Transform_Constructors6_3_recursivesym ) ;
 }
 void resolve_AUX_Transform_Constructors6 ( ) {
-ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Transform-Constructors\"),w(\"\"),[ql(\"is-constructor-term\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Transform-Constructors\"),w(\"\"),[ql(\"is-constructor-term\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef2 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[sort(\"Bool\"),w(\"\"),ql(\"/\\\\\\\\\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
-ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[sort(\"Bool\"),w(\"\"),ql(\"/\\\\\\\\\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
+ef1 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[sort(\"Bool\"),w(\"\"),ql(\"/\\\\\\\\\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
+ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[sort(\"Bool\"),w(\"\"),ql(\"/\\\\\\\\\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Transform-Constructors\"),w(\"\"),[ql(\"is-constructor-term\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Transform-Constructors\"),w(\"\"),[ql(\"is-constructor-term\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
 void init_AUX_Transform_Constructors6 ( ) {
 }
@@ -67,18 +67,18 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( arg1 , lf_AUX_Transform_Constructors6_2sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-FUNC_EXIT ( ( * ef1 ) ( tmp [ 0 ] , lf_AUX_Transform_Constructors6_2 ( make_list ( atmp10 ) ) ) ) ;
-}
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 2 ] = ( * ef1 ) ( tmp [ 0 ] , lf_AUX_Transform_Constructors6_2 ( make_list ( atmp10 ) ) ) ) ;
+( tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] , lf_AUX_Transform_Constructors6_2 ( make_list ( atmp10 ) ) ) ) ;
 ( tmp [ 3 ] = lf_AUX_Transform_Constructors6_3_recursive ( make_list ( tmp [ 1 ] ) , lf_AUX_Transform_Constructors6_2 ( make_list ( atmp10 ) ) ) ) ;
-FUNC_EXIT ( ( * ef2 ) ( tmp [ 2 ] , tmp [ 3 ] ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 2 ] , tmp [ 3 ] ) ) ;
 }
+}
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( tmp [ 0 ] , lf_AUX_Transform_Constructors6_2 ( make_list ( atmp10 ) ) ) ) ;
 }
 }
 }
@@ -96,18 +96,18 @@ ATerm atmp00 = arg0 ;
 if ( check_sym ( arg1 , lf_AUX_Transform_Constructors6_2sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-FUNC_EXIT ( ( * ef1 ) ( tmp [ 0 ] , lf_AUX_Transform_Constructors6_2 ( make_list ( atmp10 ) ) ) ) ;
-}
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 2 ] = ( * ef1 ) ( tmp [ 0 ] , lf_AUX_Transform_Constructors6_2 ( make_list ( atmp10 ) ) ) ) ;
+( tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] , lf_AUX_Transform_Constructors6_2 ( make_list ( atmp10 ) ) ) ) ;
 ( tmp [ 3 ] = lf_AUX_Transform_Constructors6_3_recursive ( make_list ( tmp [ 1 ] ) , lf_AUX_Transform_Constructors6_2 ( make_list ( atmp10 ) ) ) ) ;
-FUNC_EXIT ( ( * ef2 ) ( tmp [ 2 ] , tmp [ 3 ] ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 2 ] , tmp [ 3 ] ) ) ;
 }
+}
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( tmp [ 0 ] , lf_AUX_Transform_Constructors6_2 ( make_list ( atmp10 ) ) ) ) ;
 }
 }
 }

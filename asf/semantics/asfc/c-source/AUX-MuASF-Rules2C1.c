@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -27,13 +27,13 @@ static ATerm lf_AUX_MuASF_Rules2C1_1 ( ) ;
 static Symbol lf_AUX_MuASF_Rules2C1_2sym ;
 static ATerm lf_AUX_MuASF_Rules2C1_2 ( ) ;
 void register_AUX_MuASF_Rules2C1 ( ) {
-lf_AUX_MuASF_Rules2C1_1sym = ATmakeSymbol ( "prod(id(\"MuASF-Rules2C\"),w(\"\"),[ql(\"make-select-stat\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"MakeSelectStat\"),w(\"\"),no-attrs)"
+lf_AUX_MuASF_Rules2C1_1sym = ATmakeSymbol ( "prod(id(\"MuASF-Rules2C\"),w(\"\"),[ql(\"no-select-stat\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"MakeSelectStat\"),w(\"\"),no-attrs)"
  , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_MuASF_Rules2C1_1sym ) ;
-lf_AUX_MuASF_Rules2C1_2sym = ATmakeSymbol ( "prod(id(\"MuASF-Rules2C\"),w(\"\"),[ql(\"no-select-stat\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"MakeSelectStat\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
+lf_AUX_MuASF_Rules2C1_2sym = ATmakeSymbol ( "prod(id(\"MuASF-Rules2C\"),w(\"\"),[ql(\"make-select-stat\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"MakeSelectStat\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_MuASF_Rules2C1_2sym ) ;
-register_prod ( ATparse ( "prod(id(\"MuASF-Rules2C\"),w(\"\"),[ql(\"make-select-stat\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"MakeSelectStat\"),w(\"\"),no-attrs)" ) , lf_AUX_MuASF_Rules2C1_1 , lf_AUX_MuASF_Rules2C1_1sym ) ;
-register_prod ( ATparse ( "prod(id(\"MuASF-Rules2C\"),w(\"\"),[ql(\"no-select-stat\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"MakeSelectStat\"),w(\"\"),no-attrs)" ) , lf_AUX_MuASF_Rules2C1_2 , lf_AUX_MuASF_Rules2C1_2sym ) ;
+register_prod ( ATparse ( "prod(id(\"MuASF-Rules2C\"),w(\"\"),[ql(\"no-select-stat\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"MakeSelectStat\"),w(\"\"),no-attrs)" ) , lf_AUX_MuASF_Rules2C1_1 , lf_AUX_MuASF_Rules2C1_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"MuASF-Rules2C\"),w(\"\"),[ql(\"make-select-stat\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"MakeSelectStat\"),w(\"\"),no-attrs)" ) , lf_AUX_MuASF_Rules2C1_2 , lf_AUX_MuASF_Rules2C1_2sym ) ;
 }
 void resolve_AUX_MuASF_Rules2C1 ( ) {
 }

@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -69,7 +69,10 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( arg1 , lf_AUX_MuASF_Term2C12_2sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( not_empty_list ( atmp00 ) ) {
+if ( ! not_empty_list ( atmp00 ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf_AUX_MuASF_Term2C12_1 ( make_list ( null ( ) ) ) ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] , lf_AUX_MuASF_Term2C12_2 ( make_list ( atmp10 ) ) ) ) ;
@@ -81,9 +84,6 @@ if ( check_sym ( tmp [ 4 ] , lf_AUX_MuASF_Term2C12_1sym ) ) {
 FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_MuASF_Term2C12_1 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) ;
 }
 }
-}
-else {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf_AUX_MuASF_Term2C12_1 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
@@ -101,7 +101,10 @@ ATerm atmp00 = arg0 ;
 if ( check_sym ( arg1 , lf_AUX_MuASF_Term2C12_2sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( not_empty_list ( atmp00 ) ) {
+if ( ! not_empty_list ( atmp00 ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf_AUX_MuASF_Term2C12_1 ( make_list ( null ( ) ) ) ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] , lf_AUX_MuASF_Term2C12_2 ( make_list ( atmp10 ) ) ) ) ;
@@ -113,9 +116,6 @@ if ( check_sym ( tmp [ 4 ] , lf_AUX_MuASF_Term2C12_1sym ) ) {
 FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_MuASF_Term2C12_1 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) ;
 }
 }
-}
-else {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf_AUX_MuASF_Term2C12_1 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }

@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -91,19 +91,6 @@ if ( check_sym ( atmp10 , lf3sym ) ) {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 {
 ATerm atmp11 = arg_1 ( arg1 ) ;
-if ( is_single_element ( atmp000 ) ) {
-( tmp [ 0 ] = list_head ( atmp000 ) ) ;
-( tmp [ 1 ] = ( * ef5 ) ( tmp [ 0 ] , ( * ef2 ) ( lf3 ( make_list ( atmp100 ) ) , atmp11 ) ) ) ;
-if ( check_sym ( tmp [ 1 ] , ef6sym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
-( tmp [ 4 ] = arg_2 ( tmp [ 1 ] ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf3sym ) ) {
-( tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 5 ] ) ) , ( * ef4 ) ( make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 3 ] ) ) ) ) , tmp [ 4 ] ) ) ;
-}
-}
-}
 if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_prefix ( atmp000 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
@@ -137,6 +124,19 @@ FUNC_EXIT ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 14 ] ) ) , ( * ef4 ) ( make_nf1 
 }
 }
 }
+}
+}
+}
+if ( is_single_element ( atmp000 ) ) {
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
+( tmp [ 1 ] = ( * ef5 ) ( tmp [ 0 ] , ( * ef2 ) ( lf3 ( make_list ( atmp100 ) ) , atmp11 ) ) ) ;
+if ( check_sym ( tmp [ 1 ] , ef6sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
+( tmp [ 4 ] = arg_2 ( tmp [ 1 ] ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf3sym ) ) {
+( tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 5 ] ) ) , ( * ef4 ) ( make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 3 ] ) ) ) ) , tmp [ 4 ] ) ) ;
 }
 }
 }
@@ -168,19 +168,6 @@ if ( check_sym ( atmp10 , lf3sym ) ) {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 {
 ATerm atmp11 = arg_1 ( arg1 ) ;
-if ( is_single_element ( atmp000 ) ) {
-( tmp [ 0 ] = list_head ( atmp000 ) ) ;
-( tmp [ 1 ] = ( * ef5 ) ( tmp [ 0 ] , ( * ef2 ) ( lf3 ( make_list ( atmp100 ) ) , atmp11 ) ) ) ;
-if ( check_sym ( tmp [ 1 ] , ef6sym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
-( tmp [ 4 ] = arg_2 ( tmp [ 1 ] ) ) ;
-if ( check_sym ( tmp [ 2 ] , lf3sym ) ) {
-( tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 5 ] ) ) , ( * ef4 ) ( make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 3 ] ) ) ) ) , tmp [ 4 ] ) ) ;
-}
-}
-}
 if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_prefix ( atmp000 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
@@ -214,6 +201,19 @@ FUNC_EXIT ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 14 ] ) ) , ( * ef4 ) ( make_nf1 
 }
 }
 }
+}
+}
+}
+if ( is_single_element ( atmp000 ) ) {
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
+( tmp [ 1 ] = ( * ef5 ) ( tmp [ 0 ] , ( * ef2 ) ( lf3 ( make_list ( atmp100 ) ) , atmp11 ) ) ) ;
+if ( check_sym ( tmp [ 1 ] , ef6sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
+( tmp [ 4 ] = arg_2 ( tmp [ 1 ] ) ) ;
+if ( check_sym ( tmp [ 2 ] , lf3sym ) ) {
+( tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 5 ] ) ) , ( * ef4 ) ( make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 3 ] ) ) ) ) , tmp [ 4 ] ) ) ;
 }
 }
 }

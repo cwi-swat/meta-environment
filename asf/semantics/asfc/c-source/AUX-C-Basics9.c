@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -24,14 +24,14 @@
 #include  "asc-support.h"
 static Symbol lf_AUX_C_Basics9_1sym ;
 static ATerm lf_AUX_C_Basics9_1 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
-static Symbol ef2sym ;
-static funcptr ef2 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
 void register_AUX_C_Basics9 ( ) {
 lf_AUX_C_Basics9_1sym = ATmakeSymbol ( "prod(id(\"C-Basics\"),w(\"\"),[ql(\"celookup\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"C-env\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"E-tuple\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -73,12 +73,12 @@ if ( not_empty_list ( atmp100 ) ) {
 if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ) ;
-if ( term_equal ( ltmp [ 0 ] , tmp [ 2 ] ) ) {
-FUNC_EXIT ( ( * ef3 ) ( tmp [ 3 ] ) ) ;
-}
-else {
+if ( ! term_equal ( ltmp [ 0 ] , tmp [ 2 ] ) ) {
 ( arg1 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ;
 goto lbl_lf_AUX_C_Basics9_1 ;
+}
+else {
+FUNC_EXIT ( ( * ef3 ) ( tmp [ 3 ] ) ) ;
 }
 }
 }

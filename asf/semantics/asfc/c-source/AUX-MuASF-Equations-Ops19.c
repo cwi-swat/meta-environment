@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -70,6 +70,13 @@ if ( not_empty_list ( tmp [ 3 ] ) ) {
 if ( term_equal ( tmp [ 5 ] , make_char ( 34 ) ) ) {
 ( tmp [ 6 ] = list_prefix ( tmp [ 4 ] ) ) ;
 {
+if ( not_empty_list ( tmp [ 6 ] ) ) {
+if ( not_empty_list ( tmp [ 4 ] ) ) {
+if ( term_equal ( list_last ( tmp [ 4 ] ) , make_char ( 125 ) ) ) {
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list_char ( 123 ) , cons ( make_list ( tmp [ 6 ] ) , ( ATerm ) ATmakeList ( 2 , char_table [ 125 ] , char_table [ 34 ] ) ) ) ) ) ) ) ;
+}
+}
+}
 if ( not_empty_list ( tmp [ 4 ] ) ) {
 if ( term_equal ( list_last ( tmp [ 4 ] ) , make_char ( 115 ) ) ) {
 ( tmp [ 7 ] = list_prefix ( tmp [ 6 ] ) ) ;
@@ -104,13 +111,6 @@ FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list_ch
 }
 }
 }
-}
-}
-}
-if ( not_empty_list ( tmp [ 6 ] ) ) {
-if ( not_empty_list ( tmp [ 4 ] ) ) {
-if ( term_equal ( list_last ( tmp [ 4 ] ) , make_char ( 125 ) ) ) {
-FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list_char ( 123 ) , cons ( make_list ( tmp [ 6 ] ) , ( ATerm ) ATmakeList ( 2 , char_table [ 125 ] , char_table [ 34 ] ) ) ) ) ) ) ) ;
 }
 }
 }

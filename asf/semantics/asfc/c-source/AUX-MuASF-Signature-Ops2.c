@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -26,18 +26,18 @@ static Symbol lf_AUX_MuASF_Signature_Ops2_1_recursivesym ;
 static ATerm lf_AUX_MuASF_Signature_Ops2_1_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_AUX_MuASF_Signature_Ops2_1sym ;
 static ATerm lf_AUX_MuASF_Signature_Ops2_1 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol ef5sym ;
+static funcptr ef5 ;
 static Symbol ef8sym ;
 static funcptr ef8 ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
-static Symbol ef4sym ;
-static funcptr ef4 ;
 static Symbol ef2sym ;
 static funcptr ef2 ;
 static Symbol ef7sym ;
 static funcptr ef7 ;
-static Symbol ef5sym ;
-static funcptr ef5 ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
+static Symbol ef4sym ;
+static funcptr ef4 ;
 static Symbol ef6sym ;
 static funcptr ef6 ;
 static Symbol ef1sym ;
@@ -61,16 +61,16 @@ ef1 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[iter-sep(l(\
 ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),no-attrs)" ) ) ;
 ef2 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[ql(\"is-external-funcdef\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[ql(\"is-external-funcdef\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef3 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef4 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[ql(\"remove-external-funcdef\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" ) ) ;
-ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[ql(\"remove-external-funcdef\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" ) ) ;
-ef5 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[sort(\"FuncDef\"),w(\"\"),ql(\"in\"),w(\"\"),sort(\"FuncDefList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[sort(\"FuncDef\"),w(\"\"),ql(\"in\"),w(\"\"),sort(\"FuncDefList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef6 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef7 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[ql(\"add-external-funcdef\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" ) ) ;
-ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[ql(\"add-external-funcdef\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" ) ) ;
+ef3 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef4 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[sort(\"FuncDef\"),w(\"\"),ql(\"in\"),w(\"\"),sort(\"FuncDefList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[sort(\"FuncDef\"),w(\"\"),ql(\"in\"),w(\"\"),sort(\"FuncDefList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef5 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[ql(\"add-external-funcdef\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" ) ) ;
+ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[ql(\"add-external-funcdef\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" ) ) ;
+ef6 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef7 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[ql(\"remove-external-funcdef\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" ) ) ;
+ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[ql(\"remove-external-funcdef\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),no-attrs)" ) ) ;
 ef8 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[ql(\"remove-funcdef\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),no-attrs)" ) ) ;
 ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Signature-Ops\"),w(\"\"),[ql(\"remove-funcdef\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),no-attrs)" ) ) ;
 }
@@ -82,7 +82,7 @@ ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_MuASF_Signature_Ops2_1 ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 13 ] ;
+ATerm tmp [ 12 ] ;
 FUNC_ENTRY ( lf_AUX_MuASF_Signature_Ops2_1sym , ATmakeAppl ( lf_AUX_MuASF_Signature_Ops2_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
@@ -100,51 +100,50 @@ if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
 ( tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] ) ) ;
-if ( term_equal ( tmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
-( tmp [ 3 ] = ( * ef5 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
-if ( term_equal ( tmp [ 3 ] , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
-FUNC_EXIT ( lf_AUX_MuASF_Signature_Ops2_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
-}
-( tmp [ 4 ] = ( * ef6 ) ( ) ) ;
-if ( term_equal ( tmp [ 3 ] , tmp [ 4 ] ) ) {
-( tmp [ 5 ] = ( * ef7 ) ( tmp [ 0 ] ) ) ;
-( tmp [ 6 ] = ( * ef5 ) ( tmp [ 5 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
-if ( term_equal ( tmp [ 6 ] , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
-( tmp [ 7 ] = lf_AUX_MuASF_Signature_Ops2_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
+if ( term_equal ( tmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+( tmp [ 3 ] = ( * ef4 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
+if ( term_equal ( tmp [ 3 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+( tmp [ 4 ] = ( * ef5 ) ( tmp [ 0 ] ) ) ;
+( tmp [ 5 ] = ( * ef4 ) ( tmp [ 4 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
+if ( term_equal ( tmp [ 5 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+( tmp [ 6 ] = lf_AUX_MuASF_Signature_Ops2_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
+( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
-( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ) ;
 }
-if ( term_equal ( tmp [ 6 ] , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
-( tmp [ 7 ] = ( * ef8 ) ( tmp [ 5 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
-if ( check_sym ( tmp [ 7 ] , ef1sym ) ) {
+if ( term_equal ( tmp [ 5 ] , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
+( tmp [ 6 ] = ( * ef8 ) ( tmp [ 4 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
+if ( check_sym ( tmp [ 6 ] , ef1sym ) ) {
+( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
+if ( check_sym ( tmp [ 7 ] , lf2sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
-if ( check_sym ( tmp [ 8 ] , lf2sym ) ) {
-( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
-( tmp [ 10 ] = lf_AUX_MuASF_Signature_Ops2_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 9 ] ) ) ) ) ) ;
+( tmp [ 9 ] = lf_AUX_MuASF_Signature_Ops2_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 8 ] ) ) ) ) ) ;
+( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
 ( tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ) ;
-( tmp [ 12 ] = arg_0 ( tmp [ 11 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 12 ] ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 11 ] ) ) ) ) ) ;
 }
 }
 }
 }
+if ( term_equal ( tmp [ 3 ] , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
+FUNC_EXIT ( lf_AUX_MuASF_Signature_Ops2_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
 }
-( tmp [ 3 ] = ( * ef3 ) ( ) ) ;
+}
+( tmp [ 3 ] = ( * ef6 ) ( ) ) ;
 if ( term_equal ( tmp [ 2 ] , tmp [ 3 ] ) ) {
-( tmp [ 4 ] = ( * ef4 ) ( tmp [ 0 ] ) ) ;
-( tmp [ 5 ] = ( * ef5 ) ( tmp [ 4 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
-if ( term_equal ( tmp [ 5 ] , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
+( tmp [ 4 ] = ( * ef7 ) ( tmp [ 0 ] ) ) ;
+( tmp [ 5 ] = ( * ef4 ) ( tmp [ 4 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
+if ( term_equal ( tmp [ 5 ] , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
 FUNC_EXIT ( lf_AUX_MuASF_Signature_Ops2_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
 }
-if ( term_equal ( tmp [ 5 ] , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
-if ( term_equal ( ( * ef5 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 5 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef4 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
 FUNC_EXIT ( lf_AUX_MuASF_Signature_Ops2_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
 }
 }
-if ( term_equal ( ( * ef5 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
-( tmp [ 4 ] = ( * ef4 ) ( tmp [ 0 ] ) ) ;
-if ( term_equal ( ( * ef5 ) ( tmp [ 4 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef4 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+( tmp [ 4 ] = ( * ef7 ) ( tmp [ 0 ] ) ) ;
+if ( term_equal ( ( * ef4 ) ( tmp [ 4 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
 ( tmp [ 5 ] = lf_AUX_MuASF_Signature_Ops2_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
@@ -169,7 +168,7 @@ FUNC_EXIT ( make_nf2 ( lf_AUX_MuASF_Signature_Ops2_1sym , arg0 , arg1 ) ) ;
 }
 ATerm lf_AUX_MuASF_Signature_Ops2_1_recursive ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 13 ] ;
+ATerm tmp [ 12 ] ;
 FUNC_ENTRY ( lf_AUX_MuASF_Signature_Ops2_1_recursivesym , ATmakeAppl ( lf_AUX_MuASF_Signature_Ops2_1_recursivesym , arg0 , arg1 ) ) ;
 {
 ATerm ltmp [ 2 ] ;
@@ -189,57 +188,56 @@ if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
 ( tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] ) ) ;
-if ( term_equal ( tmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
-( tmp [ 3 ] = ( * ef5 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
-if ( term_equal ( tmp [ 3 ] , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
-( arg0 = make_list ( tmp [ 1 ] ) ) ;
-( arg1 = make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ;
-goto lbl_lf_AUX_MuASF_Signature_Ops2_1_recursive ;
-}
-( tmp [ 4 ] = ( * ef6 ) ( ) ) ;
-if ( term_equal ( tmp [ 3 ] , tmp [ 4 ] ) ) {
-( tmp [ 5 ] = ( * ef7 ) ( tmp [ 0 ] ) ) ;
-( tmp [ 6 ] = ( * ef5 ) ( tmp [ 5 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
-if ( term_equal ( tmp [ 6 ] , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
-( tmp [ 7 ] = lf_AUX_MuASF_Signature_Ops2_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
+if ( term_equal ( tmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+( tmp [ 3 ] = ( * ef4 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
+if ( term_equal ( tmp [ 3 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+( tmp [ 4 ] = ( * ef5 ) ( tmp [ 0 ] ) ) ;
+( tmp [ 5 ] = ( * ef4 ) ( tmp [ 4 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
+if ( term_equal ( tmp [ 5 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+( tmp [ 6 ] = lf_AUX_MuASF_Signature_Ops2_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
+( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
-( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ) ;
 }
-if ( term_equal ( tmp [ 6 ] , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
-( tmp [ 7 ] = ( * ef8 ) ( tmp [ 5 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
-if ( check_sym ( tmp [ 7 ] , ef1sym ) ) {
+if ( term_equal ( tmp [ 5 ] , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
+( tmp [ 6 ] = ( * ef8 ) ( tmp [ 4 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
+if ( check_sym ( tmp [ 6 ] , ef1sym ) ) {
+( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;
+if ( check_sym ( tmp [ 7 ] , lf2sym ) ) {
 ( tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ) ;
-if ( check_sym ( tmp [ 8 ] , lf2sym ) ) {
-( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
-( tmp [ 10 ] = lf_AUX_MuASF_Signature_Ops2_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 9 ] ) ) ) ) ) ;
+( tmp [ 9 ] = lf_AUX_MuASF_Signature_Ops2_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( tmp [ 8 ] ) ) ) ) ) ;
+( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
 ( tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ) ;
-( tmp [ 12 ] = arg_0 ( tmp [ 11 ] ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 12 ] ) ) ) ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf2 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 11 ] ) ) ) ) ) ;
 }
 }
 }
 }
+if ( term_equal ( tmp [ 3 ] , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
+( arg0 = make_list ( tmp [ 1 ] ) ) ;
+( arg1 = make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ;
+goto lbl_lf_AUX_MuASF_Signature_Ops2_1_recursive ;
 }
-( tmp [ 3 ] = ( * ef3 ) ( ) ) ;
+}
+( tmp [ 3 ] = ( * ef6 ) ( ) ) ;
 if ( term_equal ( tmp [ 2 ] , tmp [ 3 ] ) ) {
-( tmp [ 4 ] = ( * ef4 ) ( tmp [ 0 ] ) ) ;
-( tmp [ 5 ] = ( * ef5 ) ( tmp [ 4 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
-if ( term_equal ( tmp [ 5 ] , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
+( tmp [ 4 ] = ( * ef7 ) ( tmp [ 0 ] ) ) ;
+( tmp [ 5 ] = ( * ef4 ) ( tmp [ 4 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
+if ( term_equal ( tmp [ 5 ] , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
 ( arg0 = make_list ( tmp [ 1 ] ) ) ;
 ( arg1 = make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ;
 goto lbl_lf_AUX_MuASF_Signature_Ops2_1_recursive ;
 }
-if ( term_equal ( tmp [ 5 ] , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
-if ( term_equal ( ( * ef5 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 5 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef4 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
 ( arg0 = make_list ( tmp [ 1 ] ) ) ;
 ( arg1 = make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ;
 goto lbl_lf_AUX_MuASF_Signature_Ops2_1_recursive ;
 }
 }
-if ( term_equal ( ( * ef5 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
-( tmp [ 4 ] = ( * ef4 ) ( tmp [ 0 ] ) ) ;
-if ( term_equal ( ( * ef5 ) ( tmp [ 4 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef4 ) ( tmp [ 0 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+( tmp [ 4 ] = ( * ef7 ) ( tmp [ 0 ] ) ) ;
+if ( term_equal ( ( * ef4 ) ( tmp [ 4 ] , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
 ( tmp [ 5 ] = lf_AUX_MuASF_Signature_Ops2_1_recursive ( make_list ( tmp [ 1 ] ) , make_nf1 ( ef1sym , lf2 ( make_list ( atmp100 ) ) ) ) ) ;
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
 ( tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ) ;

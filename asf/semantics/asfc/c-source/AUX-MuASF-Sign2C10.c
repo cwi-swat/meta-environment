@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -28,12 +28,12 @@ static Symbol lf_AUX_MuASF_Sign2C10_2sym ;
 static ATerm lf_AUX_MuASF_Sign2C10_2 ( ATerm arg1 ) ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
-static Symbol lf_AUX_MuASF_Sign2C10_1sym ;
-static ATerm lf_AUX_MuASF_Sign2C10_1 ( ATerm arg1 ) ;
 static Symbol ef2sym ;
 static funcptr ef2 ;
+static Symbol lf_AUX_MuASF_Sign2C10_1sym ;
+static ATerm lf_AUX_MuASF_Sign2C10_1 ( ATerm arg1 ) ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
 void register_AUX_MuASF_Sign2C10 ( ) {
 lf_AUX_MuASF_Sign2C10_2_recursivesym = ATmakeSymbol ( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[ql(\"namepairs2lstats\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)"
  , 1 , ATtrue ) ;
@@ -47,12 +47,12 @@ register_prod ( ATparse ( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[ql(\"namepairs2lst
 register_prod ( ATparse ( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[ql(\"namepairs2lstats\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" ) , lf_AUX_MuASF_Sign2C10_2_recursive , lf_AUX_MuASF_Sign2C10_2_recursivesym ) ;
 }
 void resolve_AUX_MuASF_Sign2C10 ( ) {
-ef1 = lookup_func ( ATreadFromString ( "prod(id(\"C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" ) ) ;
-ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" ) ) ;
+ef1 = lookup_func ( ATreadFromString ( "prod(id(\"C-Basics\"),w(\"\"),[sort(\"Statement-list-opt\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Statement-list-opt\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
+ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"C-Basics\"),w(\"\"),[sort(\"Statement-list-opt\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Statement-list-opt\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
 ef2 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[ql(\"namepair2lstats\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" ) ) ;
 ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[ql(\"namepair2lstats\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" ) ) ;
-ef3 = lookup_func ( ATreadFromString ( "prod(id(\"C-Basics\"),w(\"\"),[sort(\"Statement-list-opt\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Statement-list-opt\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
-ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"C-Basics\"),w(\"\"),[sort(\"Statement-list-opt\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Statement-list-opt\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
+ef3 = lookup_func ( ATreadFromString ( "prod(id(\"C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" ) ) ;
+ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
 void init_AUX_MuASF_Sign2C10 ( ) {
@@ -65,15 +65,15 @@ FUNC_ENTRY ( lf_AUX_MuASF_Sign2C10_2sym , ATmakeAppl ( lf_AUX_MuASF_Sign2C10_2sy
 if ( check_sym ( arg0 , lf_AUX_MuASF_Sign2C10_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( not_empty_list ( atmp00 ) ) {
+if ( ! not_empty_list ( atmp00 ) ) {
+FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_prefix ( atmp00 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
 ( tmp [ 1 ] = list_last ( atmp00 ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( lf_AUX_MuASF_Sign2C10_2_recursive ( make_list ( tmp [ 0 ] ) ) , ( * ef2 ) ( tmp [ 1 ] ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_MuASF_Sign2C10_2_recursive ( make_list ( tmp [ 0 ] ) ) , ( * ef2 ) ( tmp [ 1 ] ) ) ) ;
 }
-}
-else {
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
 }
 if ( is_single_element ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
@@ -90,15 +90,15 @@ ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_AUX_MuASF_Sign2C10_2_recursivesym , ATmakeAppl ( lf_AUX_MuASF_Sign2C10_2_recursivesym , arg0 ) ) ;
 {
 ATerm atmp00 = arg0 ;
-if ( not_empty_list ( atmp00 ) ) {
+if ( ! not_empty_list ( atmp00 ) ) {
+FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_prefix ( atmp00 ) ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
 ( tmp [ 1 ] = list_last ( atmp00 ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( lf_AUX_MuASF_Sign2C10_2_recursive ( make_list ( tmp [ 0 ] ) ) , ( * ef2 ) ( tmp [ 1 ] ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_MuASF_Sign2C10_2_recursive ( make_list ( tmp [ 0 ] ) ) , ( * ef2 ) ( tmp [ 1 ] ) ) ) ;
 }
-}
-else {
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
 }
 if ( is_single_element ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;

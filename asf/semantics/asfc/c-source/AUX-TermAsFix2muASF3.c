@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -70,9 +70,6 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( is_single_element ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 {
-if ( ! not_empty_list ( atmp10 ) ) {
-FUNC_EXIT ( tmp [ 0 ] ) ;
-}
 if ( is_single_element ( atmp10 ) ) {
 ( tmp [ 1 ] = list_head ( atmp10 ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
@@ -115,6 +112,9 @@ FUNC_EXIT ( lf_AUX_TermAsFix2muASF3_2_recursive ( make_list ( tmp [ 10 ] ) , lf_
 }
 }
 }
+}
+if ( ! not_empty_list ( atmp10 ) ) {
+FUNC_EXIT ( tmp [ 0 ] ) ;
 }
 }
 }
@@ -164,9 +164,6 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( is_single_element ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 {
-if ( ! not_empty_list ( atmp10 ) ) {
-FUNC_EXIT ( tmp [ 0 ] ) ;
-}
 if ( is_single_element ( atmp10 ) ) {
 ( tmp [ 1 ] = list_head ( atmp10 ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
@@ -211,6 +208,9 @@ goto lbl_lf_AUX_TermAsFix2muASF3_2_recursive ;
 }
 }
 }
+}
+if ( ! not_empty_list ( atmp10 ) ) {
+FUNC_EXIT ( tmp [ 0 ] ) ;
 }
 }
 }

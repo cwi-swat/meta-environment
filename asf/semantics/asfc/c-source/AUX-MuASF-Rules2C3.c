@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -24,20 +24,8 @@
 #include  "asc-support.h"
 static Symbol lf_AUX_MuASF_Rules2C3_2sym ;
 static ATerm lf_AUX_MuASF_Rules2C3_2 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef11sym ;
-static funcptr ef11 ;
-static Symbol ef14sym ;
-static funcptr ef14 ;
-static Symbol ef12sym ;
-static funcptr ef12 ;
-static Symbol ef13sym ;
-static funcptr ef13 ;
-static Symbol ef15sym ;
-static funcptr ef15 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
-static Symbol lf_AUX_MuASF_Rules2C3_1sym ;
-static ATerm lf_AUX_MuASF_Rules2C3_1 ( ATerm arg1 ) ;
 static Symbol ef2sym ;
 static funcptr ef2 ;
 static Symbol ef3sym ;
@@ -48,6 +36,18 @@ static Symbol ef4sym ;
 static funcptr ef4 ;
 static Symbol ef7sym ;
 static funcptr ef7 ;
+static Symbol ef11sym ;
+static funcptr ef11 ;
+static Symbol lf_AUX_MuASF_Rules2C3_1sym ;
+static ATerm lf_AUX_MuASF_Rules2C3_1 ( ATerm arg1 ) ;
+static Symbol ef14sym ;
+static funcptr ef14 ;
+static Symbol ef12sym ;
+static funcptr ef12 ;
+static Symbol ef13sym ;
+static funcptr ef13 ;
+static Symbol ef15sym ;
+static funcptr ef15 ;
 static Symbol ef10sym ;
 static funcptr ef10 ;
 static Symbol lf5sym ;
@@ -66,10 +66,10 @@ void register_AUX_MuASF_Rules2C3 ( ) {
 lf_AUX_MuASF_Rules2C3_2sym = ATmakeSymbol ( "prod(id(\"MuASF-Rules2C\"),w(\"\"),[ql(\"sigargs2cstats\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"SigArg\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_MuASF_Rules2C3_2sym ) ;
-lf_AUX_MuASF_Rules2C3_1sym = ATmakeSymbol ( "listtype(sort(\"SigArg\"),ql(\",\"))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf_AUX_MuASF_Rules2C3_1sym ) ;
 lf4sym = ATmakeSymbol ( "listtype(sort(\"Statement\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf4sym ) ;
+lf_AUX_MuASF_Rules2C3_1sym = ATmakeSymbol ( "listtype(sort(\"SigArg\"),ql(\",\"))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf_AUX_MuASF_Rules2C3_1sym ) ;
 lf5sym = ATmakeSymbol ( "listtype(sort(\"Expression\"),ql(\",\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf5sym ) ;
 lf3sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
@@ -127,10 +127,7 @@ ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( check_sym ( arg1 , lf_AUX_MuASF_Rules2C3_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( ! not_empty_list ( atmp10 ) ) {
-FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf4 ( cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( lf3 ( ( ATerm ) ATmakeList ( 10 , char_table [ 67 ] , char_table [ 79 ] , char_table [ 78 ] , char_table [ 83 ] , char_table [ 95 ] , char_table [ 69 ] , char_table [ 78 ] , char_table [ 84 ] , char_table [ 82 ] , char_table [ 89 ] ) ) ) ) , make_nf1 ( ef10sym , lf5 ( cons ( make_list ( ( * ef5 ) ( ( * ef6 ) ( ( * ef8 ) ( ( * ef9 ) ( lf3 ( cons ( make_list ( atmp000 ) , ( ATerm ) ATmakeList ( 3 , char_table [ 115 ] , char_table [ 121 ] , char_table [ 109 ] ) ) ) ) ) ) ) ) , make_list ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( lf3 ( ( ATerm ) ATmakeList ( 11 , char_table [ 65 ] , char_table [ 84 ] , char_table [ 109 ] , char_table [ 97 ] , char_table [ 107 ] , char_table [ 101 ] , char_table [ 65 ] , char_table [ 112 ] , char_table [ 112 ] , char_table [ 108 ] , char_table [ 48 ] ) ) ) ) , make_nf1 ( ef10sym , lf5 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( ( * ef8 ) ( ( * ef9 ) ( lf3 ( cons ( make_list ( atmp000 ) , ( ATerm ) ATmakeList ( 3 , char_table [ 115 ] , char_table [ 121 ] , char_table [ 109 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_list ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( lf3 ( ( ATerm ) ATmakeList ( 9 , char_table [ 67 ] , char_table [ 79 ] , char_table [ 78 ] , char_table [ 83 ] , char_table [ 95 ] , char_table [ 69 ] , char_table [ 88 ] , char_table [ 73 ] , char_table [ 84 ] ) ) ) ) , make_nf1 ( ef10sym , lf5 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( lf3 ( ( ATerm ) ATmakeList ( 8 , char_table [ 109 ] , char_table [ 97 ] , char_table [ 107 ] , char_table [ 101 ] , char_table [ 95 ] , char_table [ 110 ] , char_table [ 102 ] , char_table [ 48 ] ) ) ) ) , make_nf1 ( ef10sym , lf5 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( ( * ef8 ) ( ( * ef9 ) ( lf3 ( cons ( make_list ( atmp000 ) , ( ATerm ) ATmakeList ( 3 , char_table [ 115 ] , char_table [ 121 ] , char_table [ 109 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
-}
-else {
+if ( not_empty_list ( atmp10 ) ) {
 ( tmp [ 0 ] = ( * ef11 ) ( lf_AUX_MuASF_Rules2C3_1 ( make_list ( atmp10 ) ) , ( * ef12 ) ( ( * ef13 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 0 ] , ef14sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
@@ -149,6 +146,9 @@ FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf4 ( cons ( make_list ( ( * ef4 ) (
 }
 }
 }
+else {
+FUNC_EXIT ( ( * ef2 ) ( make_nf1 ( ef3sym , lf4 ( cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( lf3 ( ( ATerm ) ATmakeList ( 10 , char_table [ 67 ] , char_table [ 79 ] , char_table [ 78 ] , char_table [ 83 ] , char_table [ 95 ] , char_table [ 69 ] , char_table [ 78 ] , char_table [ 84 ] , char_table [ 82 ] , char_table [ 89 ] ) ) ) ) , make_nf1 ( ef10sym , lf5 ( cons ( make_list ( ( * ef5 ) ( ( * ef6 ) ( ( * ef8 ) ( ( * ef9 ) ( lf3 ( cons ( make_list ( atmp000 ) , ( ATerm ) ATmakeList ( 3 , char_table [ 115 ] , char_table [ 121 ] , char_table [ 109 ] ) ) ) ) ) ) ) ) , make_list ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( lf3 ( ( ATerm ) ATmakeList ( 11 , char_table [ 65 ] , char_table [ 84 ] , char_table [ 109 ] , char_table [ 97 ] , char_table [ 107 ] , char_table [ 101 ] , char_table [ 65 ] , char_table [ 112 ] , char_table [ 112 ] , char_table [ 108 ] , char_table [ 48 ] ) ) ) ) , make_nf1 ( ef10sym , lf5 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( ( * ef8 ) ( ( * ef9 ) ( lf3 ( cons ( make_list ( atmp000 ) , ( ATerm ) ATmakeList ( 3 , char_table [ 115 ] , char_table [ 121 ] , char_table [ 109 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , make_list ( ( * ef4 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( lf3 ( ( ATerm ) ATmakeList ( 9 , char_table [ 67 ] , char_table [ 79 ] , char_table [ 78 ] , char_table [ 83 ] , char_table [ 95 ] , char_table [ 69 ] , char_table [ 88 ] , char_table [ 73 ] , char_table [ 84 ] ) ) ) ) , make_nf1 ( ef10sym , lf5 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( lf3 ( ( ATerm ) ATmakeList ( 8 , char_table [ 109 ] , char_table [ 97 ] , char_table [ 107 ] , char_table [ 101 ] , char_table [ 95 ] , char_table [ 110 ] , char_table [ 102 ] , char_table [ 48 ] ) ) ) ) , make_nf1 ( ef10sym , lf5 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( ( * ef8 ) ( ( * ef9 ) ( lf3 ( cons ( make_list ( atmp000 ) , ( ATerm ) ATmakeList ( 3 , char_table [ 115 ] , char_table [ 121 ] , char_table [ 109 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+}
 }
 }
 }
@@ -166,12 +166,12 @@ ATerm lf5 ( ATerm arg0 ) {
 CONS_ENTRY ( lf5sym , ATmakeAppl ( lf5sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf5sym , arg0 ) ) ;
 }
-ATerm lf4 ( ATerm arg0 ) {
-CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
-}
 ATerm lf_AUX_MuASF_Rules2C3_1 ( ATerm arg0 ) {
 CONS_ENTRY ( lf_AUX_MuASF_Rules2C3_1sym , ATmakeAppl ( lf_AUX_MuASF_Rules2C3_1sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf_AUX_MuASF_Rules2C3_1sym , arg0 ) ) ;
+}
+ATerm lf4 ( ATerm arg0 ) {
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 

@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -26,12 +26,12 @@ static Symbol lf_AUX_Remove_Lists_Aux10_2_recursivesym ;
 static ATerm lf_AUX_Remove_Lists_Aux10_2_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_AUX_Remove_Lists_Aux10_2sym ;
 static ATerm lf_AUX_Remove_Lists_Aux10_2 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef2sym ;
-static funcptr ef2 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol lf_AUX_Remove_Lists_Aux10_1sym ;
 static ATerm lf_AUX_Remove_Lists_Aux10_1 ( ATerm arg1 ) ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
 void register_AUX_Remove_Lists_Aux10 ( ) {
 lf_AUX_Remove_Lists_Aux10_2_recursivesym = ATmakeSymbol ( "prod(id(\"Remove-Lists-Aux\"),w(\"\"),[ql(\"remove-list-cons-from-terms\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Bool\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TermList\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -59,10 +59,6 @@ FUNC_ENTRY ( lf_AUX_Remove_Lists_Aux10_2sym , ATmakeAppl ( lf_AUX_Remove_Lists_A
 if ( check_sym ( arg1 , lf_AUX_Remove_Lists_Aux10_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( is_single_element ( atmp10 ) ) {
-( tmp [ 0 ] = list_head ( atmp10 ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Remove_Lists_Aux10_1 ( make_list ( ( * ef2 ) ( arg0 , tmp [ 0 ] ) ) ) ) ) ;
-}
 if ( not_empty_list ( atmp10 ) ) {
 ( tmp [ 0 ] = list_head ( atmp10 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp10 ) ) ;
@@ -79,6 +75,10 @@ FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Remove_Lists_Aux10_1 ( cons ( make_list (
 }
 }
 }
+}
+if ( is_single_element ( atmp10 ) ) {
+( tmp [ 0 ] = list_head ( atmp10 ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Remove_Lists_Aux10_1 ( make_list ( ( * ef2 ) ( arg0 , tmp [ 0 ] ) ) ) ) ) ;
 }
 }
 }
@@ -91,10 +91,6 @@ ATerm tmp [ 6 ] ;
 FUNC_ENTRY ( lf_AUX_Remove_Lists_Aux10_2_recursivesym , ATmakeAppl ( lf_AUX_Remove_Lists_Aux10_2_recursivesym , arg0 , arg1 ) ) ;
 {
 ATerm atmp10 = arg1 ;
-if ( is_single_element ( atmp10 ) ) {
-( tmp [ 0 ] = list_head ( atmp10 ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Remove_Lists_Aux10_1 ( make_list ( ( * ef2 ) ( arg0 , tmp [ 0 ] ) ) ) ) ) ;
-}
 if ( not_empty_list ( atmp10 ) ) {
 ( tmp [ 0 ] = list_head ( atmp10 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp10 ) ) ;
@@ -111,6 +107,10 @@ FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Remove_Lists_Aux10_1 ( cons ( make_list (
 }
 }
 }
+}
+if ( is_single_element ( atmp10 ) ) {
+( tmp [ 0 ] = list_head ( atmp10 ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Remove_Lists_Aux10_1 ( make_list ( ( * ef2 ) ( arg0 , tmp [ 0 ] ) ) ) ) ) ;
 }
 }
 FUNC_EXIT ( make_nf2 ( lf_AUX_Remove_Lists_Aux10_2_recursivesym , arg0 , lf_AUX_Remove_Lists_Aux10_1 ( arg1 ) ) ) ;

@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -26,12 +26,12 @@ static Symbol lf_AUX_Make_Left_Linear4_2_recursivesym ;
 static ATerm lf_AUX_Make_Left_Linear4_2_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_AUX_Make_Left_Linear4_2sym ;
 static ATerm lf_AUX_Make_Left_Linear4_2 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef2sym ;
-static funcptr ef2 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol lf_AUX_Make_Left_Linear4_1sym ;
 static ATerm lf_AUX_Make_Left_Linear4_1 ( ATerm arg1 ) ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
 void register_AUX_Make_Left_Linear4 ( ) {
 lf_AUX_Make_Left_Linear4_2_recursivesym = ATmakeSymbol ( "prod(id(\"Make-Left-Linear\"),w(\"\"),[ql(\"make-l-l-rules\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"VarEnv\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"RuleList\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -59,11 +59,6 @@ FUNC_ENTRY ( lf_AUX_Make_Left_Linear4_2sym , ATmakeAppl ( lf_AUX_Make_Left_Linea
 if ( check_sym ( arg0 , lf_AUX_Make_Left_Linear4_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-( tmp [ 1 ] = ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Make_Left_Linear4_1 ( make_list ( tmp [ 1 ] ) ) ) ) ;
-}
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
@@ -80,6 +75,11 @@ FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Make_Left_Linear4_1 ( cons ( make_list ( 
 }
 }
 }
+}
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+( tmp [ 1 ] = ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Make_Left_Linear4_1 ( make_list ( tmp [ 1 ] ) ) ) ) ;
 }
 }
 }
@@ -92,11 +92,6 @@ ATerm tmp [ 6 ] ;
 FUNC_ENTRY ( lf_AUX_Make_Left_Linear4_2_recursivesym , ATmakeAppl ( lf_AUX_Make_Left_Linear4_2_recursivesym , arg0 , arg1 ) ) ;
 {
 ATerm atmp00 = arg0 ;
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-( tmp [ 1 ] = ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ;
-FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Make_Left_Linear4_1 ( make_list ( tmp [ 1 ] ) ) ) ) ;
-}
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
@@ -113,6 +108,11 @@ FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Make_Left_Linear4_1 ( cons ( make_list ( 
 }
 }
 }
+}
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+( tmp [ 1 ] = ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ;
+FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_Make_Left_Linear4_1 ( make_list ( tmp [ 1 ] ) ) ) ) ;
 }
 }
 FUNC_EXIT ( make_nf2 ( lf_AUX_Make_Left_Linear4_2_recursivesym , lf_AUX_Make_Left_Linear4_1 ( arg0 ) , arg1 ) ) ;

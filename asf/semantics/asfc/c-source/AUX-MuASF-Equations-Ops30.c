@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -64,10 +64,6 @@ FUNC_ENTRY ( lf_AUX_MuASF_Equations_Ops30_2sym , ATmakeAppl ( lf_AUX_MuASF_Equat
 if ( check_sym ( arg0 , lf_AUX_MuASF_Equations_Ops30_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-FUNC_EXIT ( tmp [ 0 ] ) ;
-}
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
@@ -75,6 +71,10 @@ if ( not_empty_list ( tmp [ 1 ] ) ) {
 ( tmp [ 2 ] = lf_AUX_MuASF_Equations_Ops30_2_recursive ( make_list ( tmp [ 1 ] ) ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( lf3 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf_AUX_MuASF_Equations_Ops30_1 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 2 ] ) ) ) ) ) ;
 }
+}
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+FUNC_EXIT ( tmp [ 0 ] ) ;
 }
 }
 }
@@ -87,10 +87,6 @@ ATerm tmp [ 3 ] ;
 FUNC_ENTRY ( lf_AUX_MuASF_Equations_Ops30_2_recursivesym , ATmakeAppl ( lf_AUX_MuASF_Equations_Ops30_2_recursivesym , arg0 ) ) ;
 {
 ATerm atmp00 = arg0 ;
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-FUNC_EXIT ( tmp [ 0 ] ) ;
-}
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
@@ -98,6 +94,10 @@ if ( not_empty_list ( tmp [ 1 ] ) ) {
 ( tmp [ 2 ] = lf_AUX_MuASF_Equations_Ops30_2_recursive ( make_list ( tmp [ 1 ] ) ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( lf3 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf_AUX_MuASF_Equations_Ops30_1 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 2 ] ) ) ) ) ) ;
 }
+}
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+FUNC_EXIT ( tmp [ 0 ] ) ;
 }
 }
 FUNC_EXIT ( make_nf1 ( lf_AUX_MuASF_Equations_Ops30_2_recursivesym , lf_AUX_MuASF_Equations_Ops30_1 ( arg0 ) ) ) ;

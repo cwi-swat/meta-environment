@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -26,14 +26,14 @@ static Symbol lf_AUX_RenameVars5_2_recursivesym ;
 static ATerm lf_AUX_RenameVars5_2_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_AUX_RenameVars5_2sym ;
 static ATerm lf_AUX_RenameVars5_2 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef2sym ;
-static funcptr ef2 ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol lf_AUX_RenameVars5_1sym ;
 static ATerm lf_AUX_RenameVars5_1 ( ATerm arg1 ) ;
+static Symbol ef2sym ;
+static funcptr ef2 ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
 void register_AUX_RenameVars5 ( ) {
 lf_AUX_RenameVars5_2_recursivesym = ATmakeSymbol ( "prod(id(\"RenameVars\"),w(\"\"),[ql(\"rename-in-terms\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntVVarEnv\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TIVEs\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -63,15 +63,6 @@ FUNC_ENTRY ( lf_AUX_RenameVars5_2sym , ATmakeAppl ( lf_AUX_RenameVars5_2sym , ar
 if ( check_sym ( arg0 , lf_AUX_RenameVars5_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-( tmp [ 1 ] = ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ;
-if ( check_sym ( tmp [ 1 ] , ef3sym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
-FUNC_EXIT ( ( * ef1 ) ( lf_AUX_RenameVars5_1 ( make_list ( tmp [ 2 ] ) ) , tmp [ 3 ] ) ) ;
-}
-}
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
@@ -92,6 +83,15 @@ FUNC_EXIT ( ( * ef1 ) ( lf_AUX_RenameVars5_1 ( cons ( make_list ( tmp [ 3 ] ) , 
 }
 }
 }
+}
+}
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+( tmp [ 1 ] = ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ;
+if ( check_sym ( tmp [ 1 ] , ef3sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_RenameVars5_1 ( make_list ( tmp [ 2 ] ) ) , tmp [ 3 ] ) ) ;
 }
 }
 }
@@ -105,15 +105,6 @@ ATerm tmp [ 9 ] ;
 FUNC_ENTRY ( lf_AUX_RenameVars5_2_recursivesym , ATmakeAppl ( lf_AUX_RenameVars5_2_recursivesym , arg0 , arg1 ) ) ;
 {
 ATerm atmp00 = arg0 ;
-if ( is_single_element ( atmp00 ) ) {
-( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-( tmp [ 1 ] = ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ;
-if ( check_sym ( tmp [ 1 ] , ef3sym ) ) {
-( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
-( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
-FUNC_EXIT ( ( * ef1 ) ( lf_AUX_RenameVars5_1 ( make_list ( tmp [ 2 ] ) ) , tmp [ 3 ] ) ) ;
-}
-}
 if ( not_empty_list ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
@@ -134,6 +125,15 @@ FUNC_EXIT ( ( * ef1 ) ( lf_AUX_RenameVars5_1 ( cons ( make_list ( tmp [ 3 ] ) , 
 }
 }
 }
+}
+}
+if ( is_single_element ( atmp00 ) ) {
+( tmp [ 0 ] = list_head ( atmp00 ) ) ;
+( tmp [ 1 ] = ( * ef2 ) ( tmp [ 0 ] , arg1 ) ) ;
+if ( check_sym ( tmp [ 1 ] , ef3sym ) ) {
+( tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ) ;
+( tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf_AUX_RenameVars5_1 ( make_list ( tmp [ 2 ] ) ) , tmp [ 3 ] ) ) ;
 }
 }
 }

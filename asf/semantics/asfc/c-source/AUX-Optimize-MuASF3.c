@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -24,6 +24,8 @@
 #include  "asc-support.h"
 static Symbol lf_AUX_Optimize_MuASF3_1sym ;
 static ATerm lf_AUX_Optimize_MuASF3_1 ( ATerm arg1 , ATerm arg2 ) ;
+static Symbol ef1sym ;
+static funcptr ef1 ;
 static Symbol ef7sym ;
 static funcptr ef7 ;
 static Symbol ef8sym ;
@@ -50,8 +52,6 @@ static Symbol ef6sym ;
 static funcptr ef6 ;
 static Symbol lf3sym ;
 static ATerm lf3 ( ATerm arg1 ) ;
-static Symbol ef1sym ;
-static funcptr ef1 ;
 void register_AUX_Optimize_MuASF3 ( ) {
 lf_AUX_Optimize_MuASF3_1sym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"optimize-recursive-list-functions\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Module\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"MN-struct\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;

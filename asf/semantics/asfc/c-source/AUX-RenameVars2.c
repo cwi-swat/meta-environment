@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -83,7 +83,10 @@ FUNC_ENTRY ( lf_AUX_RenameVars2_2sym , ATmakeAppl ( lf_AUX_RenameVars2_2sym , ar
 if ( check_sym ( arg0 , lf_AUX_RenameVars2_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-if ( not_empty_list ( atmp00 ) ) {
+if ( ! not_empty_list ( atmp00 ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf_AUX_RenameVars2_1 ( make_list ( null ( ) ) ) ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] , ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( make_list ( make_char ( 49 ) ) ) ) ) , lf4 ( make_list ( null ( ) ) ) ) ) ) ;
@@ -95,9 +98,6 @@ if ( check_sym ( tmp [ 4 ] , lf_AUX_RenameVars2_1sym ) ) {
 FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_RenameVars2_1 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) ;
 }
 }
-}
-else {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf_AUX_RenameVars2_1 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
@@ -110,7 +110,10 @@ ATerm tmp [ 6 ] ;
 FUNC_ENTRY ( lf_AUX_RenameVars2_2_recursivesym , ATmakeAppl ( lf_AUX_RenameVars2_2_recursivesym , arg0 ) ) ;
 {
 ATerm atmp00 = arg0 ;
-if ( not_empty_list ( atmp00 ) ) {
+if ( ! not_empty_list ( atmp00 ) ) {
+FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf_AUX_RenameVars2_1 ( make_list ( null ( ) ) ) ) ) ;
+}
+else {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp00 ) ) ;
 ( tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] , ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( make_list ( make_char ( 49 ) ) ) ) ) , lf4 ( make_list ( null ( ) ) ) ) ) ) ;
@@ -122,9 +125,6 @@ if ( check_sym ( tmp [ 4 ] , lf_AUX_RenameVars2_1sym ) ) {
 FUNC_EXIT ( make_nf1 ( ef1sym , lf_AUX_RenameVars2_1 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) ;
 }
 }
-}
-else {
-FUNC_EXIT_CONST ( constant0 , make_nf1 ( ef1sym , lf_AUX_RenameVars2_1 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 FUNC_EXIT ( make_nf1 ( lf_AUX_RenameVars2_2_recursivesym , lf_AUX_RenameVars2_1 ( arg0 ) ) ) ;

@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -26,20 +26,20 @@ static Symbol lf_AUX_Normalize_Conds16_2_recursivesym ;
 static ATerm lf_AUX_Normalize_Conds16_2_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_AUX_Normalize_Conds16_2sym ;
 static ATerm lf_AUX_Normalize_Conds16_2 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef1sym ;
-static funcptr ef1 ;
-static Symbol lf3sym ;
-static ATerm lf3 ( ATerm arg1 ) ;
 static Symbol ef2sym ;
 static funcptr ef2 ;
+static Symbol lf3sym ;
+static ATerm lf3 ( ATerm arg1 ) ;
 static Symbol ef3sym ;
 static funcptr ef3 ;
-static Symbol lf4sym ;
-static ATerm lf4 ( ATerm arg1 ) ;
-static Symbol lf_AUX_Normalize_Conds16_1sym ;
-static ATerm lf_AUX_Normalize_Conds16_1 ( ATerm arg1 ) ;
+static Symbol ef1sym ;
+static funcptr ef1 ;
 static Symbol ef4sym ;
 static funcptr ef4 ;
+static Symbol lf_AUX_Normalize_Conds16_1sym ;
+static ATerm lf_AUX_Normalize_Conds16_1 ( ATerm arg1 ) ;
+static Symbol lf4sym ;
+static ATerm lf4 ( ATerm arg1 ) ;
 void register_AUX_Normalize_Conds16 ( ) {
 lf_AUX_Normalize_Conds16_2_recursivesym = ATmakeSymbol ( "prod(id(\"Normalize-Conds\"),w(\"\"),[ql(\"normalize-list-args\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TC-tuple\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -48,10 +48,10 @@ lf_AUX_Normalize_Conds16_2sym = ATmakeSymbol ( "prod(id(\"Normalize-Conds\"),w(\
 ATprotectSymbol ( lf_AUX_Normalize_Conds16_2sym ) ;
 lf3sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf3sym ) ;
-lf4sym = ATmakeSymbol ( "listtype(sort(\"Cond\"),ql(\"&\"))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf4sym ) ;
 lf_AUX_Normalize_Conds16_1sym = ATmakeSymbol ( "listtype(sort(\"Term\"),ql(\",\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Normalize_Conds16_1sym ) ;
+lf4sym = ATmakeSymbol ( "listtype(sort(\"Cond\"),ql(\"&\"))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf4sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"Term\"),ql(\",\"))" ) , lf_AUX_Normalize_Conds16_1 , lf_AUX_Normalize_Conds16_1sym ) ;
 register_prod ( ATparse ( "prod(id(\"Normalize-Conds\"),w(\"\"),[ql(\"normalize-list-args\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TC-tuple\"),w(\"\"),no-attrs)" ) , lf_AUX_Normalize_Conds16_2 , lf_AUX_Normalize_Conds16_2sym ) ;
 register_prod ( ATparse ( "prod(id(\"Normalize-Conds\"),w(\"\"),[ql(\"normalize-list-args\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TC-tuple\"),w(\"\"),no-attrs)" ) , lf_AUX_Normalize_Conds16_2_recursive , lf_AUX_Normalize_Conds16_2_recursivesym ) ;
@@ -59,14 +59,14 @@ register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf3 , lf3sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"Cond\"),ql(\"&\"))" ) , lf4 , lf4sym ) ;
 }
 void resolve_AUX_Normalize_Conds16 ( ) {
-ef1 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) ) ;
-ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) ) ;
-ef2 = lookup_func ( ATreadFromString ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
-ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
-ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Normalize-Conds\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\"&\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TC-tuple\"),w(\"\"),no-attrs)" ) ) ;
-ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Normalize-Conds\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\"&\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TC-tuple\"),w(\"\"),no-attrs)" ) ) ;
-ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Normalize-Conds\"),w(\"\"),[ql(\"normalize-list-arg\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TC-tuple\"),w(\"\"),no-attrs)" ) ) ;
-ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Normalize-Conds\"),w(\"\"),[ql(\"normalize-list-arg\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TC-tuple\"),w(\"\"),no-attrs)" ) ) ;
+ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Normalize-Conds\"),w(\"\"),[ql(\"normalize-list-arg\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TC-tuple\"),w(\"\"),no-attrs)" ) ) ;
+ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Normalize-Conds\"),w(\"\"),[ql(\"normalize-list-arg\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TC-tuple\"),w(\"\"),no-attrs)" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) ) ;
+ef3 = lookup_func ( ATreadFromString ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
+ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
+ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Normalize-Conds\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\"&\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TC-tuple\"),w(\"\"),no-attrs)" ) ) ;
+ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Normalize-Conds\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Cond\"),w(\"\"),ql(\"&\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TC-tuple\"),w(\"\"),no-attrs)" ) ) ;
 }
 void init_AUX_Normalize_Conds16 ( ) {
 }
@@ -79,10 +79,10 @@ if ( check_sym ( arg0 , lf_AUX_Normalize_Conds16_1sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( is_single_element ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
+if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
-if ( check_sym ( tmp [ 1 ] , ef2sym ) ) {
+if ( check_sym ( tmp [ 1 ] , ef3sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , lf3sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
@@ -104,8 +104,8 @@ if ( not_empty_list ( tmp [ 5 ] ) ) {
 ( tmp [ 10 ] = list_tail ( tmp [ 5 ] ) ) ;
 if ( is_single_element ( tmp [ 10 ] ) ) {
 ( tmp [ 11 ] = list_head ( tmp [ 10 ] ) ) ;
-( tmp [ 12 ] = ( * ef4 ) ( tmp [ 9 ] , arg1 ) ) ;
-if ( check_sym ( tmp [ 12 ] , ef3sym ) ) {
+( tmp [ 12 ] = ( * ef1 ) ( tmp [ 9 ] , arg1 ) ) ;
+if ( check_sym ( tmp [ 12 ] , ef4sym ) ) {
 ( tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ) ;
 ( tmp [ 14 ] = arg_1 ( tmp [ 12 ] ) ) ;
 ( tmp [ 15 ] = arg_2 ( tmp [ 12 ] ) ) ;
@@ -116,7 +116,7 @@ if ( check_sym ( tmp [ 14 ] , lf4sym ) ) {
 if ( is_single_element ( tmp [ 16 ] ) ) {
 ( tmp [ 18 ] = list_head ( tmp [ 16 ] ) ) ;
 ( tmp [ 19 ] = lf_AUX_Normalize_Conds16_2 ( lf_AUX_Normalize_Conds16_1 ( make_list ( tmp [ 11 ] ) ) , tmp [ 15 ] ) ) ;
-if ( check_sym ( tmp [ 19 ] , ef3sym ) ) {
+if ( check_sym ( tmp [ 19 ] , ef4sym ) ) {
 ( tmp [ 20 ] = arg_0 ( tmp [ 19 ] ) ) ;
 ( tmp [ 21 ] = arg_1 ( tmp [ 19 ] ) ) ;
 ( tmp [ 22 ] = arg_2 ( tmp [ 19 ] ) ) ;
@@ -126,7 +126,7 @@ if ( check_sym ( tmp [ 21 ] , lf4sym ) ) {
 ( tmp [ 24 ] = arg_0 ( tmp [ 21 ] ) ) ;
 if ( is_single_element ( tmp [ 23 ] ) ) {
 ( tmp [ 25 ] = list_head ( tmp [ 23 ] ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( lf_AUX_Normalize_Conds16_1 ( make_list ( ( * ef1 ) ( ( * ef2 ) ( lf3 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf_AUX_Normalize_Conds16_1 ( cons ( make_list ( tmp [ 18 ] ) , make_list ( tmp [ 25 ] ) ) ) ) ) ) , lf4 ( cons ( make_list ( tmp [ 17 ] ) , make_list ( tmp [ 24 ] ) ) ) , tmp [ 22 ] ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( lf_AUX_Normalize_Conds16_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( lf3 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf_AUX_Normalize_Conds16_1 ( cons ( make_list ( tmp [ 18 ] ) , make_list ( tmp [ 25 ] ) ) ) ) ) ) , lf4 ( cons ( make_list ( tmp [ 17 ] ) , make_list ( tmp [ 24 ] ) ) ) , tmp [ 22 ] ) ) ;
 }
 }
 }
@@ -157,7 +157,7 @@ if ( check_sym ( arg0 , lf_AUX_Normalize_Conds16_1sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( is_single_element ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-FUNC_EXIT ( ( * ef4 ) ( tmp [ 0 ] , arg1 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 0 ] , arg1 ) ) ;
 }
 }
 }
@@ -172,10 +172,10 @@ FUNC_ENTRY ( lf_AUX_Normalize_Conds16_2_recursivesym , ATmakeAppl ( lf_AUX_Norma
 ATerm atmp00 = arg0 ;
 if ( is_single_element ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
+if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
 ( tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ) ;
-if ( check_sym ( tmp [ 1 ] , ef2sym ) ) {
+if ( check_sym ( tmp [ 1 ] , ef3sym ) ) {
 ( tmp [ 3 ] = arg_0 ( tmp [ 1 ] ) ) ;
 if ( check_sym ( tmp [ 3 ] , lf3sym ) ) {
 ( tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ) ;
@@ -197,8 +197,8 @@ if ( not_empty_list ( tmp [ 5 ] ) ) {
 ( tmp [ 10 ] = list_tail ( tmp [ 5 ] ) ) ;
 if ( is_single_element ( tmp [ 10 ] ) ) {
 ( tmp [ 11 ] = list_head ( tmp [ 10 ] ) ) ;
-( tmp [ 12 ] = ( * ef4 ) ( tmp [ 9 ] , arg1 ) ) ;
-if ( check_sym ( tmp [ 12 ] , ef3sym ) ) {
+( tmp [ 12 ] = ( * ef1 ) ( tmp [ 9 ] , arg1 ) ) ;
+if ( check_sym ( tmp [ 12 ] , ef4sym ) ) {
 ( tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ) ;
 ( tmp [ 14 ] = arg_1 ( tmp [ 12 ] ) ) ;
 ( tmp [ 15 ] = arg_2 ( tmp [ 12 ] ) ) ;
@@ -209,7 +209,7 @@ if ( check_sym ( tmp [ 14 ] , lf4sym ) ) {
 if ( is_single_element ( tmp [ 16 ] ) ) {
 ( tmp [ 18 ] = list_head ( tmp [ 16 ] ) ) ;
 ( tmp [ 19 ] = lf_AUX_Normalize_Conds16_2 ( lf_AUX_Normalize_Conds16_1 ( make_list ( tmp [ 11 ] ) ) , tmp [ 15 ] ) ) ;
-if ( check_sym ( tmp [ 19 ] , ef3sym ) ) {
+if ( check_sym ( tmp [ 19 ] , ef4sym ) ) {
 ( tmp [ 20 ] = arg_0 ( tmp [ 19 ] ) ) ;
 ( tmp [ 21 ] = arg_1 ( tmp [ 19 ] ) ) ;
 ( tmp [ 22 ] = arg_2 ( tmp [ 19 ] ) ) ;
@@ -219,7 +219,7 @@ if ( check_sym ( tmp [ 21 ] , lf4sym ) ) {
 ( tmp [ 24 ] = arg_0 ( tmp [ 21 ] ) ) ;
 if ( is_single_element ( tmp [ 23 ] ) ) {
 ( tmp [ 25 ] = list_head ( tmp [ 23 ] ) ) ;
-FUNC_EXIT ( ( * ef3 ) ( lf_AUX_Normalize_Conds16_1 ( make_list ( ( * ef1 ) ( ( * ef2 ) ( lf3 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf_AUX_Normalize_Conds16_1 ( cons ( make_list ( tmp [ 18 ] ) , make_list ( tmp [ 25 ] ) ) ) ) ) ) , lf4 ( cons ( make_list ( tmp [ 17 ] ) , make_list ( tmp [ 24 ] ) ) ) , tmp [ 22 ] ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( lf_AUX_Normalize_Conds16_1 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( lf3 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf_AUX_Normalize_Conds16_1 ( cons ( make_list ( tmp [ 18 ] ) , make_list ( tmp [ 25 ] ) ) ) ) ) ) , lf4 ( cons ( make_list ( tmp [ 17 ] ) , make_list ( tmp [ 24 ] ) ) ) , tmp [ 22 ] ) ) ;
 }
 }
 }
@@ -248,19 +248,19 @@ FUNC_EXIT ( ( * ef3 ) ( lf_AUX_Normalize_Conds16_1 ( make_list ( ( * ef1 ) ( ( *
 ATerm atmp00 = arg0 ;
 if ( is_single_element ( atmp00 ) ) {
 ( tmp [ 0 ] = list_head ( atmp00 ) ) ;
-FUNC_EXIT ( ( * ef4 ) ( tmp [ 0 ] , arg1 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( tmp [ 0 ] , arg1 ) ) ;
 }
 }
 FUNC_EXIT ( make_nf2 ( lf_AUX_Normalize_Conds16_2_recursivesym , lf_AUX_Normalize_Conds16_1 ( arg0 ) , arg1 ) ) ;
 }
 }
-ATerm lf_AUX_Normalize_Conds16_1 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_AUX_Normalize_Conds16_1sym , ATmakeAppl ( lf_AUX_Normalize_Conds16_1sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_AUX_Normalize_Conds16_1sym , arg0 ) ) ;
-}
 ATerm lf4 ( ATerm arg0 ) {
 CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
+}
+ATerm lf_AUX_Normalize_Conds16_1 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_AUX_Normalize_Conds16_1sym , ATmakeAppl ( lf_AUX_Normalize_Conds16_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_Normalize_Conds16_1sym , arg0 ) ) ;
 }
 ATerm lf3 ( ATerm arg0 ) {
 CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;

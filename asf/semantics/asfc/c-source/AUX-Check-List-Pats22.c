@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -26,14 +26,14 @@ static Symbol lf_AUX_Check_List_Pats22_2_recursivesym ;
 static ATerm lf_AUX_Check_List_Pats22_2_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_AUX_Check_List_Pats22_2sym ;
 static ATerm lf_AUX_Check_List_Pats22_2 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
-static Symbol lf_AUX_Check_List_Pats22_1sym ;
-static ATerm lf_AUX_Check_List_Pats22_1 ( ATerm arg1 ) ;
 static Symbol ef2sym ;
 static funcptr ef2 ;
+static Symbol lf_AUX_Check_List_Pats22_1sym ;
+static ATerm lf_AUX_Check_List_Pats22_1 ( ATerm arg1 ) ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
 void register_AUX_Check_List_Pats22 ( ) {
 lf_AUX_Check_List_Pats22_2_recursivesym = ATmakeSymbol ( "prod(id(\"Check-List-Pats\"),w(\"\"),[ql(\"are-rhs-args\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -47,10 +47,10 @@ register_prod ( ATparse ( "prod(id(\"Check-List-Pats\"),w(\"\"),[ql(\"are-rhs-ar
 register_prod ( ATparse ( "prod(id(\"Check-List-Pats\"),w(\"\"),[ql(\"are-rhs-args\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_Check_List_Pats22_2_recursive , lf_AUX_Check_List_Pats22_2_recursivesym ) ;
 }
 void resolve_AUX_Check_List_Pats22 ( ) {
-ef1 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Check-List-Pats\"),w(\"\"),[ql(\"contains-rhs-pattern\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Check-List-Pats\"),w(\"\"),[ql(\"contains-rhs-pattern\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Check-List-Pats\"),w(\"\"),[ql(\"contains-rhs-pattern\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Check-List-Pats\"),w(\"\"),[ql(\"contains-rhs-pattern\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef3 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
@@ -67,30 +67,32 @@ FUNC_ENTRY ( lf_AUX_Check_List_Pats22_2sym , ATmakeAppl ( lf_AUX_Check_List_Pats
 if ( check_sym ( arg1 , lf_AUX_Check_List_Pats22_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
+if ( is_single_element ( atmp10 ) ) {
+( tmp [ 0 ] = list_head ( atmp10 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( arg0 , tmp [ 0 ] ) ) ;
+}
+{
 if ( not_empty_list ( atmp10 ) ) {
 ( tmp [ 0 ] = list_head ( atmp10 ) ) ;
 {
 ( tmp [ 1 ] = list_tail ( atmp10 ) ) ;
 {
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 2 ] = ( * ef2 ) ( arg0 , tmp [ 0 ] ) ) ;
-if ( term_equal ( tmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ) ) {
-if ( term_equal ( lf_AUX_Check_List_Pats22_2 ( arg0 , lf_AUX_Check_List_Pats22_1 ( make_list ( tmp [ 1 ] ) ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
+( tmp [ 2 ] = ( * ef1 ) ( arg0 , tmp [ 0 ] ) ) ;
+if ( term_equal ( tmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+if ( term_equal ( lf_AUX_Check_List_Pats22_2 ( arg0 , lf_AUX_Check_List_Pats22_1 ( make_list ( tmp [ 1 ] ) ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef2 ) ( ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant1 , ( * ef2 ) ( ) ) ;
 }
 }
-if ( term_equal ( tmp [ 2 ] , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
-if ( term_equal ( lf_AUX_Check_List_Pats22_2 ( arg0 , lf_AUX_Check_List_Pats22_1 ( make_list ( tmp [ 1 ] ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
-}
-}
-}
+if ( term_equal ( tmp [ 2 ] , ( constant1 ? constant1 : ( constant1 = ( * ef2 ) ( ) ) ) ) ) {
+if ( term_equal ( lf_AUX_Check_List_Pats22_2 ( arg0 , lf_AUX_Check_List_Pats22_1 ( make_list ( tmp [ 1 ] ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant1 , ( * ef2 ) ( ) ) ;
 }
 }
 }
-if ( is_single_element ( atmp10 ) ) {
-( tmp [ 0 ] = list_head ( atmp10 ) ) ;
-FUNC_EXIT ( ( * ef2 ) ( arg0 , tmp [ 0 ] ) ) ;
+}
+}
+}
 }
 }
 }
@@ -103,30 +105,32 @@ ATerm tmp [ 3 ] ;
 FUNC_ENTRY ( lf_AUX_Check_List_Pats22_2_recursivesym , ATmakeAppl ( lf_AUX_Check_List_Pats22_2_recursivesym , arg0 , arg1 ) ) ;
 {
 ATerm atmp10 = arg1 ;
+if ( is_single_element ( atmp10 ) ) {
+( tmp [ 0 ] = list_head ( atmp10 ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( arg0 , tmp [ 0 ] ) ) ;
+}
+{
 if ( not_empty_list ( atmp10 ) ) {
 ( tmp [ 0 ] = list_head ( atmp10 ) ) ;
 {
 ( tmp [ 1 ] = list_tail ( atmp10 ) ) ;
 {
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-( tmp [ 2 ] = ( * ef2 ) ( arg0 , tmp [ 0 ] ) ) ;
-if ( term_equal ( tmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ) ) {
-if ( term_equal ( lf_AUX_Check_List_Pats22_2 ( arg0 , lf_AUX_Check_List_Pats22_1 ( make_list ( tmp [ 1 ] ) ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
+( tmp [ 2 ] = ( * ef1 ) ( arg0 , tmp [ 0 ] ) ) ;
+if ( term_equal ( tmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+if ( term_equal ( lf_AUX_Check_List_Pats22_2 ( arg0 , lf_AUX_Check_List_Pats22_1 ( make_list ( tmp [ 1 ] ) ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef2 ) ( ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant1 , ( * ef2 ) ( ) ) ;
 }
 }
-if ( term_equal ( tmp [ 2 ] , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
-if ( term_equal ( lf_AUX_Check_List_Pats22_2 ( arg0 , lf_AUX_Check_List_Pats22_1 ( make_list ( tmp [ 1 ] ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( ) ) ;
-}
-}
-}
+if ( term_equal ( tmp [ 2 ] , ( constant1 ? constant1 : ( constant1 = ( * ef2 ) ( ) ) ) ) ) {
+if ( term_equal ( lf_AUX_Check_List_Pats22_2 ( arg0 , lf_AUX_Check_List_Pats22_1 ( make_list ( tmp [ 1 ] ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
+FUNC_EXIT_CONST ( constant1 , ( * ef2 ) ( ) ) ;
 }
 }
 }
-if ( is_single_element ( atmp10 ) ) {
-( tmp [ 0 ] = list_head ( atmp10 ) ) ;
-FUNC_EXIT ( ( * ef2 ) ( arg0 , tmp [ 0 ] ) ) ;
+}
+}
+}
 }
 }
 FUNC_EXIT ( make_nf2 ( lf_AUX_Check_List_Pats22_2_recursivesym , arg0 , lf_AUX_Check_List_Pats22_1 ( arg1 ) ) ) ;

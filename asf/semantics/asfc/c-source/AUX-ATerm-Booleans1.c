@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -23,37 +23,37 @@
 
 #include  "asc-support.h"
 static Symbol lf_AUX_ATerm_Booleans1_1sym ;
-static ATerm lf_AUX_ATerm_Booleans1_1 ( ) ;
+static ATerm lf_AUX_ATerm_Booleans1_1 ( ATerm arg1 ) ;
 static Symbol lf_AUX_ATerm_Booleans1_2sym ;
 static ATerm lf_AUX_ATerm_Booleans1_2 ( ) ;
 static Symbol lf_AUX_ATerm_Booleans1_3sym ;
-static ATerm lf_AUX_ATerm_Booleans1_3 ( ATerm arg1 ) ;
+static ATerm lf_AUX_ATerm_Booleans1_3 ( ) ;
 void register_AUX_ATerm_Booleans1 ( ) {
-lf_AUX_ATerm_Booleans1_1sym = ATmakeSymbol ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
- , 0 , ATtrue ) ;
+lf_AUX_ATerm_Booleans1_1sym = ATmakeSymbol ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Bool\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"bracket\")],w(\"\"),l(\"}\")))"
+ , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Booleans1_1sym ) ;
 lf_AUX_ATerm_Booleans1_2sym = ATmakeSymbol ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Booleans1_2sym ) ;
-lf_AUX_ATerm_Booleans1_3sym = ATmakeSymbol ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Bool\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"bracket\")],w(\"\"),l(\"}\")))" , 1 , ATtrue ) ;
+lf_AUX_ATerm_Booleans1_3sym = ATmakeSymbol ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" , 0 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_ATerm_Booleans1_3sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Booleans1_1 , lf_AUX_ATerm_Booleans1_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Bool\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"bracket\")],w(\"\"),l(\"}\")))" ) , lf_AUX_ATerm_Booleans1_1 , lf_AUX_ATerm_Booleans1_1sym ) ;
 register_prod ( ATparse ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Booleans1_2 , lf_AUX_ATerm_Booleans1_2sym ) ;
-register_prod ( ATparse ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Bool\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"bracket\")],w(\"\"),l(\"}\")))" ) , lf_AUX_ATerm_Booleans1_3 , lf_AUX_ATerm_Booleans1_3sym ) ;
+register_prod ( ATparse ( "prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) , lf_AUX_ATerm_Booleans1_3 , lf_AUX_ATerm_Booleans1_3sym ) ;
 }
 void resolve_AUX_ATerm_Booleans1 ( ) {
 }
 void init_AUX_ATerm_Booleans1 ( ) {
 }
-ATerm lf_AUX_ATerm_Booleans1_3 ( ATerm arg0 ) {
-CONS_ENTRY ( lf_AUX_ATerm_Booleans1_3sym , ATmakeAppl ( lf_AUX_ATerm_Booleans1_3sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf_AUX_ATerm_Booleans1_3sym , arg0 ) ) ;
+ATerm lf_AUX_ATerm_Booleans1_3 ( ) {
+CONS_ENTRY ( lf_AUX_ATerm_Booleans1_3sym , ATmakeAppl0 ( lf_AUX_ATerm_Booleans1_3sym ) ) ;
+CONS_EXIT ( make_nf0 ( lf_AUX_ATerm_Booleans1_3sym ) ) ;
 }
 ATerm lf_AUX_ATerm_Booleans1_2 ( ) {
 CONS_ENTRY ( lf_AUX_ATerm_Booleans1_2sym , ATmakeAppl0 ( lf_AUX_ATerm_Booleans1_2sym ) ) ;
 CONS_EXIT ( make_nf0 ( lf_AUX_ATerm_Booleans1_2sym ) ) ;
 }
-ATerm lf_AUX_ATerm_Booleans1_1 ( ) {
-CONS_ENTRY ( lf_AUX_ATerm_Booleans1_1sym , ATmakeAppl0 ( lf_AUX_ATerm_Booleans1_1sym ) ) ;
-CONS_EXIT ( make_nf0 ( lf_AUX_ATerm_Booleans1_1sym ) ) ;
+ATerm lf_AUX_ATerm_Booleans1_1 ( ATerm arg0 ) {
+CONS_ENTRY ( lf_AUX_ATerm_Booleans1_1sym , ATmakeAppl ( lf_AUX_ATerm_Booleans1_1sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf_AUX_ATerm_Booleans1_1sym , arg0 ) ) ;
 }
 

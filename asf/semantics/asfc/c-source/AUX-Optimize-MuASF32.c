@@ -1,7 +1,7 @@
 /*
 
     Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
     The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
@@ -26,24 +26,24 @@ static Symbol lf_AUX_Optimize_MuASF32_1_recursivesym ;
 static ATerm lf_AUX_Optimize_MuASF32_1_recursive ( ATerm arg1 , ATerm arg2 ) ;
 static Symbol lf_AUX_Optimize_MuASF32_1sym ;
 static ATerm lf_AUX_Optimize_MuASF32_1 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef6sym ;
-static funcptr ef6 ;
+static Symbol ef4sym ;
+static funcptr ef4 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
 static Symbol ef2sym ;
 static funcptr ef2 ;
-static Symbol ef7sym ;
-static funcptr ef7 ;
 static Symbol ef3sym ;
 static funcptr ef3 ;
-static Symbol ef4sym ;
-static funcptr ef4 ;
-static Symbol lf3sym ;
-static ATerm lf3 ( ATerm arg1 ) ;
 static Symbol ef5sym ;
 static funcptr ef5 ;
+static Symbol lf3sym ;
+static ATerm lf3 ( ATerm arg1 ) ;
+static Symbol ef6sym ;
+static funcptr ef6 ;
+static Symbol ef7sym ;
+static funcptr ef7 ;
 void register_AUX_Optimize_MuASF32 ( ) {
 lf_AUX_Optimize_MuASF32_1_recursivesym = ATmakeSymbol ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"check-emb-terms\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"TermList\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"EmbeddingAt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
@@ -66,14 +66,14 @@ ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[sor
 ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[sort(\"Embedding\"),w(\"\"),ql(\"at\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"EmbeddingAt\"),w(\"\"),no-attrs)" ) ) ;
 ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Basic-Integers\"),w(\"\"),[sort(\"IntCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),no-attrs)" ) ) ;
 ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Basic-Integers\"),w(\"\"),[sort(\"IntCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),no-attrs)" ) ) ;
-ef4 = lookup_func ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
-ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
-ef5 = lookup_func ( ATreadFromString ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"natcon\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)" ) ) ;
-ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"natcon\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)" ) ) ;
-ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"check-emb-term\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Embedding\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"check-emb-term\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Embedding\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
-ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Integers\"),w(\"\"),[sort(\"Int\"),w(\"\"),ql(\"-\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
-ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Integers\"),w(\"\"),[sort(\"Int\"),w(\"\"),ql(\"-\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
+ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Integers\"),w(\"\"),[sort(\"Int\"),w(\"\"),ql(\"-\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
+ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Integers\"),w(\"\"),[sort(\"Int\"),w(\"\"),ql(\"-\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
+ef5 = lookup_func ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
+ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
+ef6 = lookup_func ( ATreadFromString ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"natcon\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)" ) ) ;
+ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"natcon\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)" ) ) ;
+ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"check-emb-term\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Embedding\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
+ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Optimize-MuASF\"),w(\"\"),[ql(\"check-emb-term\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Embedding\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
 void init_AUX_Optimize_MuASF32 ( ) {
 }
@@ -95,33 +95,33 @@ ATerm atmp11 = arg_1 ( arg1 ) ;
 if ( check_sym ( atmp11 , ef3sym ) ) {
 {
 ATerm atmp110 = arg_0 ( atmp11 ) ;
-if ( check_sym ( atmp110 , ef4sym ) ) {
+if ( check_sym ( atmp110 , ef5sym ) ) {
 {
 ATerm atmp1100 = arg_0 ( atmp110 ) ;
-if ( check_sym ( atmp1100 , ef5sym ) ) {
+if ( check_sym ( atmp1100 , ef6sym ) ) {
 {
 ATerm atmp11000 = arg_0 ( atmp1100 ) ;
 if ( check_sym ( atmp11000 , lf3sym ) ) {
 {
 ATerm atmp110000 = arg_0 ( atmp11000 ) ;
-if ( is_single_element ( atmp000 ) ) {
-( tmp [ 0 ] = list_head ( atmp000 ) ) ;
-if ( is_single_element ( atmp110000 ) ) {
-if ( term_equal ( list_head ( atmp110000 ) , make_char ( 48 ) ) ) {
-( tmp [ 1 ] = ( * ef6 ) ( tmp [ 0 ] , atmp10 ) ) ;
-FUNC_EXIT ( tmp [ 1 ] ) ;
-}
-}
-}
 if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
 if ( is_single_element ( atmp110000 ) ) {
 if ( term_equal ( list_head ( atmp110000 ) , make_char ( 48 ) ) ) {
-( tmp [ 2 ] = ( * ef6 ) ( tmp [ 0 ] , atmp10 ) ) ;
+( tmp [ 2 ] = ( * ef7 ) ( tmp [ 0 ] , atmp10 ) ) ;
 FUNC_EXIT ( tmp [ 2 ] ) ;
 }
+}
+}
+}
+if ( is_single_element ( atmp000 ) ) {
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
+if ( is_single_element ( atmp110000 ) ) {
+if ( term_equal ( list_head ( atmp110000 ) , make_char ( 48 ) ) ) {
+( tmp [ 1 ] = ( * ef7 ) ( tmp [ 0 ] , atmp10 ) ) ;
+FUNC_EXIT ( tmp [ 1 ] ) ;
 }
 }
 }
@@ -137,8 +137,8 @@ if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-if ( ! term_equal ( atmp110 , ( * ef4 ) ( ( * ef5 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) {
-FUNC_EXIT ( lf_AUX_Optimize_MuASF32_1_recursive ( make_list ( tmp [ 1 ] ) , ( * ef2 ) ( atmp10 , ( * ef7 ) ( ( * ef3 ) ( atmp110 ) , ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ;
+if ( ! term_equal ( atmp110 , ( * ef5 ) ( ( * ef6 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) {
+FUNC_EXIT ( lf_AUX_Optimize_MuASF32_1_recursive ( make_list ( tmp [ 1 ] ) , ( * ef2 ) ( atmp10 , ( * ef4 ) ( ( * ef3 ) ( atmp110 ) , ( * ef3 ) ( ( * ef5 ) ( ( * ef6 ) ( lf3 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -175,33 +175,33 @@ ATerm atmp11 = arg_1 ( arg1 ) ;
 if ( check_sym ( atmp11 , ef3sym ) ) {
 {
 ATerm atmp110 = arg_0 ( atmp11 ) ;
-if ( check_sym ( atmp110 , ef4sym ) ) {
+if ( check_sym ( atmp110 , ef5sym ) ) {
 {
 ATerm atmp1100 = arg_0 ( atmp110 ) ;
-if ( check_sym ( atmp1100 , ef5sym ) ) {
+if ( check_sym ( atmp1100 , ef6sym ) ) {
 {
 ATerm atmp11000 = arg_0 ( atmp1100 ) ;
 if ( check_sym ( atmp11000 , lf3sym ) ) {
 {
 ATerm atmp110000 = arg_0 ( atmp11000 ) ;
-if ( is_single_element ( atmp000 ) ) {
-( tmp [ 0 ] = list_head ( atmp000 ) ) ;
-if ( is_single_element ( atmp110000 ) ) {
-if ( term_equal ( list_head ( atmp110000 ) , make_char ( 48 ) ) ) {
-( tmp [ 1 ] = ( * ef6 ) ( tmp [ 0 ] , atmp10 ) ) ;
-FUNC_EXIT ( tmp [ 1 ] ) ;
-}
-}
-}
 if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
 if ( is_single_element ( atmp110000 ) ) {
 if ( term_equal ( list_head ( atmp110000 ) , make_char ( 48 ) ) ) {
-( tmp [ 2 ] = ( * ef6 ) ( tmp [ 0 ] , atmp10 ) ) ;
+( tmp [ 2 ] = ( * ef7 ) ( tmp [ 0 ] , atmp10 ) ) ;
 FUNC_EXIT ( tmp [ 2 ] ) ;
 }
+}
+}
+}
+if ( is_single_element ( atmp000 ) ) {
+( tmp [ 0 ] = list_head ( atmp000 ) ) ;
+if ( is_single_element ( atmp110000 ) ) {
+if ( term_equal ( list_head ( atmp110000 ) , make_char ( 48 ) ) ) {
+( tmp [ 1 ] = ( * ef7 ) ( tmp [ 0 ] , atmp10 ) ) ;
+FUNC_EXIT ( tmp [ 1 ] ) ;
 }
 }
 }
@@ -217,9 +217,9 @@ if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
 ( tmp [ 1 ] = list_tail ( atmp000 ) ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-if ( ! term_equal ( atmp110 , ( * ef4 ) ( ( * ef5 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) {
+if ( ! term_equal ( atmp110 , ( * ef5 ) ( ( * ef6 ) ( lf3 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) {
 ( arg0 = make_list ( tmp [ 1 ] ) ) ;
-( arg1 = ( * ef2 ) ( atmp10 , ( * ef7 ) ( ( * ef3 ) ( atmp110 ) , ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ;
+( arg1 = ( * ef2 ) ( atmp10 , ( * ef4 ) ( ( * ef3 ) ( atmp110 ) , ( * ef3 ) ( ( * ef5 ) ( ( * ef6 ) ( lf3 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ;
 goto lbl_lf_AUX_Optimize_MuASF32_1_recursive ;
 }
 }
