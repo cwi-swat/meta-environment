@@ -46,6 +46,16 @@ void rec_terminate(int cid, ATerm t)
   exit(0);
 }
 
+ATerm equal_trees(int cid, ATerm tree1, ATerm tree2)
+{
+  if (ATisEqual(tree1, tree2)) {
+    return ATmake("snd-value(result(true))");
+  }
+  else {
+    return ATmake("snd-value(result(false))");
+  }
+}
+
 ATerm get_argument_given_nr(int cid, ATerm tree, int argNr)
 {
   PT_ParseTree parseTree, newParseTree;

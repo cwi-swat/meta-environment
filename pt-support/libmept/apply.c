@@ -4,7 +4,8 @@ static PT_Symbols
 makeNewLhs(char *sort)
 {
   return  PT_makeSymbolsList(PT_makeOptLayoutSymbol(),
-            PT_makeSymbolsList(PT_makeSymbolSort(sort), 
+            PT_makeSymbolsList(PT_makeSymbolCf(
+			         PT_makeSymbolSort(sort)), 
               PT_makeSymbolsList(PT_makeOptLayoutSymbol(),
                 PT_makeSymbolsEmpty())));
 }

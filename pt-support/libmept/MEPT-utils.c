@@ -1118,7 +1118,12 @@ PT_ParseTree PT_makeValidParseTreeFromTree(PT_Tree tree)
 {
   PT_Production prod = PT_getTreeProd(tree);
   PT_Symbol rhs = PT_getProductionRhs(prod);
-  PT_Symbols lhs = PT_makeSymbolsList(rhs, PT_makeSymbolsEmpty());
+  PT_Symbols lhs = PT_makeSymbolsList(PT_makeOptLayoutSymbol(),
+		                      PT_makeSymbolsList(
+                                        rhs,
+                                        PT_makeSymbolsList(
+                                          PT_makeOptLayoutSymbol(),
+                                          PT_makeSymbolsEmpty())));
  
   return PT_makeParseTreeTree(lhs,
                               PT_makeTreeLayoutEmpty(),

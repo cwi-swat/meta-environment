@@ -10,6 +10,8 @@ let
   TreeList : list,
   ArgNr    : int,
   Tree     : term,
+  Tree2    : term,
+  Result   : term,
   ArgTree  : term
 in
   (
@@ -26,6 +28,13 @@ in
     rec-value(AF, tree(ArgTree?)).
     snd-terminate(AF, "done") .
     snd-msg(tree(ArgTree))
+  +
+    rec-msg(equal-trees(Tree?, Tree2?)).
+    execute(apply-function, AF?).
+    snd-eval(AF, equal-trees(Tree, Tree2)).
+    rec-value(AF, result(Result?)).
+    snd-terminate(AF, "done") .
+    snd-msg(Result)
   ) *
   delta
 endlet

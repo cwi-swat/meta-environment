@@ -1,3 +1,7 @@
+2002/05/16 (vandenbr@loria.fr)
+ * Added functionality to check the equality between 2 trees.
+ * Fixes some minor bugs in parse tree construction functions.
+
 2002/05/13 (vandenbr@loria.fr)
  * Added functionality to obtain the arguments of a tree.
 
