@@ -259,10 +259,7 @@ PT_Tree ASC_parse_bytes(ATerm aterm)
 
 static PT_Tree unparse_to_bytes(PT_Tree tree)
 {
-  CO_OptLayout l = CO_makeOptLayoutAbsent();
-
-  return (PT_Tree)
-    CO_makeBytesResultSuccess(l,l,make_bytes(PT_yieldTree(tree)),l);
+  return (PT_Tree) make_bytes(PT_yieldTree(tree));
 }
 
 /*}}}  */
@@ -271,8 +268,10 @@ static PT_Tree unparse_to_bytes(PT_Tree tree)
 PT_Tree ASFE_unparse_to_bytes(PT_Tree input)
 {
   PT_Tree tree = CO_getFunctionArgument(input,0);
+  CO_OptLayout l = CO_makeOptLayoutAbsent();
 
-  return unparse_to_bytes(tree);
+  return (PT_Tree)
+        CO_makeBytesResultSuccess(l,l,(CO_Bytes) unparse_to_bytes(tree),l);
 }
 
 /*}}}  */
@@ -281,8 +280,10 @@ PT_Tree ASFE_unparse_to_bytes(PT_Tree input)
 PT_Tree ASC_unparse_to_bytes(ATerm input)
 {
   PT_Tree tree = muASFToTree(input);
+  CO_OptLayout l = CO_makeOptLayoutAbsent();
 
-  return unparse_to_bytes(tree);
+  return (PT_Tree)
+        CO_makeBytesResultSuccess(l,l,(CO_Bytes) unparse_to_bytes(tree),l);
 }
 
 /*}}}  */
