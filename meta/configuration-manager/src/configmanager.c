@@ -236,6 +236,7 @@ void add_system_properties(int cid, const char *contents)
 	addSystemProperty(property);
 	properties = MC_getPropertiesTail(properties);
       }
+      modulePaths = ATreverse(modulePaths);
     }
   }
   else {
