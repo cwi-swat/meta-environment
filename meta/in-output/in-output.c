@@ -505,6 +505,27 @@ ATerm save_asfix(int cid, char *name, char *fn, ATerm tree)
     return write_term_to_named_file(tree, fn, name);
 }
 
+ATerm save_parsetable(int cid, char *name, ATerm table, ATerm tableType)
+{
+	char filename[PATH_LEN];
+	FILE *fd = NULL;
+
+	if(ATisEqual(tableType, ATmake("eqs"))) {
+		sprintf(filename, "%s%s", name, EQS_TBL_EXT);
+	} else {
+		sprintf(filename, "%s%s", name, TRM_TBL_EXT);
+	}
+
+	if(!(fd = fopen(filename, "w"))) {
+		ATwarning("%s: cannot create\n", filename);
+	} else {
+		ATwriteToBinaryFile(table,fd);
+		fclose(fd);
+	}
+
+	return ATmake("snd-value(save-done(<str>))", name);
+}
+
 ATerm save_text_file(int cid, char *filename, char *text)
 {
     FILE *file;

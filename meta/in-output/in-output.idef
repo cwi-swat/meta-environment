@@ -159,6 +159,16 @@ in
     rec-value(IO, save-done(Path)) .
     snd-msg(save-done(Path))
   +
+    rec-msg(save-term-table(Name?, Asfix?)) .
+    snd-eval(IO, save-parsetable(Name, Asfix, trm)) .
+    rec-value(IO, save-done(Name)).
+    snd-msg(save-done)
+  +
+    rec-msg(save-eqs-table(Name?, Asfix?)) .
+    snd-eval(IO, save-parsetable(Name, Asfix, eqs)) .
+    rec-value(IO, save-done(Name)).
+    snd-msg(save-done)
+  +
     rec-msg(create-equations-dump-file(Name?, Asfix?)).
     snd-eval(IO, create-equations-dump-file(Name, Asfix)).
     (
