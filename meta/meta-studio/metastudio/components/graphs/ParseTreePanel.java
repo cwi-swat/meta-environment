@@ -10,10 +10,12 @@ import metastudio.data.graph.Node;
 import aterm.pure.PureFactory;
 
 public class ParseTreePanel extends ZoomableGraphPanel {
-    private GraphPanel panel;
+    private static final String MESSAGE = "message";
+	private static final String PARSETREE = "parsetree";
+	private GraphPanel panel;
     
     public ParseTreePanel(PureFactory factory, final MultiBridge bridge) {
-        super(new MetaGraphFactory(factory), bridge, "parsetree");
+        super(new MetaGraphFactory(factory), bridge, PARSETREE);
         this.panel = getGraphPanel();
         
         MouseListener listener = new MouseAdapter() {
@@ -21,8 +23,8 @@ public class ParseTreePanel extends ZoomableGraphPanel {
                 Node node = panel.getNodeAt(event.getX(), event.getY());
                 if (node != panel.getSelectedNode()) {
                     if (node != null) {
-                        if (node.hasInfo("message")) {
-                            bridge.postEvent(node.getInfo("message"));
+                        if (node.hasInfo(MESSAGE)) {
+                            bridge.postEvent(node.getInfo(MESSAGE));
                         }
                         panel.setSelectedNode(node);
                     }

@@ -1,5 +1,11 @@
 # $Id$
 
+Thu Apr 15 14:16:19 CEST 2004 <jurgenv@cwi.nl>
+ * Added concept of ValueChangedListener to UserInterfacePanels. This
+   can be used to let other components change their behaviour when the contents
+   of any UserInterfacePanel changes. The first usage is to make Tabs visible
+   when a ZoomableGraphPanel is updated with a new graph 
+
 Thu Apr 15 10:31:44 CEST 2004 <jurgenv@cwi.nl>
  * Fixed a nasty bug: modules would dissappear if you would rename them into
    a non-existing directory

@@ -123,6 +123,8 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
             Graph graph = factory.GraphFromTerm(graphTerm);
             layoutGraph(graph);
         }
+        
+        fireValueChangedListener();
     }
 
     public void layoutGraph(Graph graph) {
