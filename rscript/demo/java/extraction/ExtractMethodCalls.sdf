@@ -2,77 +2,27 @@ module ExtractMethodCalls
 
 imports Rstore
 imports JavaOperations
-imports utilities/PosInfo[ClassDeclaration]
-imports utilities/PosInfo[ClassType]
-imports utilities/PosInfo[CompilationUnit]
-imports utilities/PosInfo[ExplicitConstructorInvocation]
 imports utilities/PosInfo[Identifier]
 
 exports
   context-free syntax
-    extractMethodCalls(CompilationUnit, RSTORE) -> RSTORE
+    extractMethodCalls(CompilationUnit, Rel[[Elem]])
+      -> Rel[[Elem]] {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
-    extractMethodCalls(CompilationUnit, RSTORE, Location)
-      -> RSTORE {traversal(accu, top-down, break)}
-
-hiddens
-  context-free syntax
-    extractMethodCalls(ClassDeclaration, RSTORE, Location)
-      -> RSTORE {traversal(accu, top-down, break)}
-
-    extractMethodCalls(ClassBody, RSTORE, Location)
-      -> RSTORE {traversal(accu, top-down, break)}
-
-hiddens
-  context-free syntax
-    extractMethodCalls(MethodDeclaration, RSTORE, Location)
-      -> RSTORE {traversal(accu, top-down, break)}
-
-    extractMethodCalls(MethodBody, RSTORE, Location)
-      -> RSTORE {traversal(accu, top-down, break)}
-
-hiddens
-  context-free syntax
-    extractMethodCalls(MethodInvocation, RSTORE, Location)
-      -> RSTORE {traversal(accu, top-down, break)}
-
-    extractMethodCalls(ExplicitConstructorInvocation, RSTORE, Location)
-      -> RSTORE {traversal(accu, top-down, break)}
-
-hiddens
-  context-free syntax
-    addMethodCall(Identifier, {Identifier "."}+, Location, RSTORE) -> RSTORE
-
-    addSuperCall(Location, Location, RSTORE) -> RSTORE
+    extractMethodCalls(MethodInvocation, Rel[[Elem]])
+      -> Rel[[Elem]] {traversal(accu, top-down, break)}
 
 hiddens
   variables
-    "&Loc" -> Location
-    "&ClassBody" -> ClassBody
-    "&ClassDeclaration" -> ClassDeclaration
-    "&ClassId" -> Location
-    "&CompilationUnit" -> CompilationUnit
-    "&Expressions" -> {Expression ","}*
-    "&ExplicitConstructorInvocation" -> ExplicitConstructorInvocation
-    "&ExplicitConstructorInvocationId" -> Location
-    "&FormalParameters" -> {FormalParameter ","}*
-    "&Identifier" -> Identifier
-    "&Interfaces" -> Interfaces?
-    "&MethodBody" -> MethodBody
-    "&MethodCall" -> {Identifier "."}+
-    "&MethodDeclaration" -> MethodDeclaration
-    "&MethodDeclarator" -> MethodDeclarator
-    "&MethodHeader" -> MethodHeader
-    "&MethodId" -> Location
-    "&MethodInvocation" -> MethodInvocation
-    "&MethodRes" -> MethodRes
-    "&Modifiers" -> Modifier*
-    "&Name" -> Name
-    "&Rstore"[0-9]* -> RSTORE
-    "&Super" -> Super?
-    "&Throws" -> Throws?
-    "&Tuple"[0-9]* -> Tuple
-    "&Var" -> Identifier
-    "&VarId" -> Location
+    "&Rel"[0-9]*			-> Rel[[Elem]] 
+    "&Name"				-> Name
+    "&Expressions"			-> {Expression ","}*
+    "&ExplicitConstructorInvocation"	-> ExplicitConstructorInvocation
+    "&ExplicitConstructorInvocationId"	-> Location
+    "&Identifier"			-> Identifier
+    "&MethodCall"			-> {Identifier "."}+
+    "&MethodInvocation"			-> MethodInvocation
+    "&Var"				-> Identifier
+ 

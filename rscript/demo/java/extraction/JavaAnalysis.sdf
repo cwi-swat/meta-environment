@@ -9,11 +9,16 @@ imports ExtractMethod
 imports ExtractPackage
 imports ExtractClasses
 
+imports RscriptCalculator
+
 exports
   context-free syntax
     extractRelations(CompilationUnit) -> RSTORE
 
 hiddens
   variables
-    "&CompilationUnit" -> CompilationUnit
-    "&Rstore"[0-9]* -> RSTORE
+    "$CompilationUnit" -> CompilationUnit
+
+ 
+    
+    

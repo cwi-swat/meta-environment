@@ -1,6 +1,6 @@
 include $(top_srcdir)/make_rules
 
-bin_PROGRAMS    = RscriptChecker RscriptCalculator Rstore RscriptTestsuites
+bin_PROGRAMS    = RscriptCalculator Rstore RscriptTestsuites
 
 pkgdata_DATA    = Rscript.trm.tbl Rstore.trm.tbl \
 			$(wildcard *.sdf) \

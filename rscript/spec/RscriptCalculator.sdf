@@ -17,11 +17,13 @@ exports
         eval-rscript-with-rstore-and-yield(RSCRIPT, RSTORE, StrCon)   	-> Elem
         eval-rscript-with-rstore-and-yield(RSCRIPT, RSTORE, RVAR)   	-> Elem
 
-	Summary						-> RVALUE
+	Summary								-> RVALUE
 
-	"[|" RSTAT* "|]"				-> RSTORE
-	"[|" RSTAT* "|]" "yield" RVAR			-> RVALUE
-        "[|" REXP "|]"                                  -> RVALUE
+	RSTORE "[|" RSTAT* "|]"						-> RSTORE
+	"[|" RSTAT* "|]"						-> RSTORE
+
+	"[|" RSTAT* "|]" "yield" RVAR					-> RVALUE
+        "[|" REXP "|]"							-> RVALUE
 
 %% should be hidden
 

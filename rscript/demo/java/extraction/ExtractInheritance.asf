@@ -1,56 +1,36 @@
 equations
 
-[extractInheritance-start]
-	&Rstore1 := assign-when-undef(EXTENDS_INTERFACE, rel[Interface, Interface], {}, &Rstore),
-	&Rstore2 := assign-when-undef(EXTENDS_CLASS, rel[Class, Class], {}, &Rstore1),
-	&Rstore3 := assign-when-undef(IMPLEMENTS, rel[Class, Interface], {}, &Rstore2),
-	&Rstore4 := extractInheritance(&CompilationUnit, &Rstore3, "")
-	============================================================================
-	extractInheritance(&CompilationUnit, &Rstore) = &Rstore4
+%% ---- extends class
 
-[extractInheritance-0]
-	&Modifiers class &Identifier &SuperOpt &Interfaces &ClassBody := &ClassDeclaration,
-	&ClassId := id2str(&Identifier),
-	&Rstore2 := extractExtendsClass(&SuperOpt, &Rstore1, &ClassId), 
-	&Rstore3 := extractImplements(&Interfaces, &Rstore2, &ClassId), 
-	&Rstore4 := extractInheritance(&ClassBody, &Rstore3, &ClassId)
-	============================================================================
-	extractInheritance(&ClassDeclaration, &Rstore1, &String) = &Rstore4
+[extractExtendsClass-1]
+	&Modifiers class &Identifier extends &ClassType &Interfaces &ClassBody	:= &ClassDeclaration,
+	&Name := &ClassType
+	=============================================================================================
+	extractExtendsClass(&ClassDeclaration, &Rel) = 
+	&Rel union { < id2str(&Identifier), name2str(&Name) > }
 
-[extractInheritance-1]
-	&Modifiers interface &Identifier &ExtendsInterfacesOpt &InterfaceBody := &InterfaceDeclaration,
-	&String == id2str(&Identifier),     %% <==== sb :=
-	&Rstore2 := extractExtendsInterface(&ExtendsInterfacesOpt, &Rstore1, &String)
-	============================================================================
-	extractInheritance(&InterfaceDeclaration, &Rstore1, &String) = &Rstore2
+%% ---- implements interfaces
 
-[extractExtendsInterface-0]
-	extends &InterfaceTypes := &ExtendsInterfaces,
-	&Rstore2 := extractExtendsInterface(&InterfaceTypes, &Rstore1, &ClassId)
-	============================================================================
-	extractExtendsInterface(&ExtendsInterfaces, &Rstore1, &ClassId) = &Rstore2 
+[extractImplements-1]
+	&Modifiers class &Identifier &SuperOpt implements &InterfaceTypes &ClassBody := &ClassDeclaration
+	=================================================================================================
+	extractImplements(&ClassDeclaration, &Rel) =
+	extractInterfaceTypes(&InterfaceTypes, &Rel, id2str(&Identifier))
+
+%% ---- extends interfaces
 
 [extractExtendsInterface-1]
-	&Name := &InterfaceType,
-	&InterfaceName := name2str(&Name),
-	&Tuple := <&ClassId, &InterfaceName>,
-	&Rstore2 := add-tuple(EXTENDS_INTERFACE, &Tuple, &Rstore1)
-	============================================================================
-	extractExtendsInterface(&InterfaceType, &Rstore1, &ClassId) = &Rstore2
+	&Modifiers interface &Identifier extends &InterfaceTypes &InterfaceBody := &InterfaceDeclaration
+	================================================================================================
+	extractExtendsInterface(&InterfaceDeclaration, &Rel) = 
+	extractInterfaceTypes(&InterfaceTypes, &Rel, id2str(&Identifier))
 
-[extractExtendsClass-0]
-	extends &ClassType := &Super,
-	&Name := &ClassType,
-	&SuperName := name2str(&Name),  
-	&Tuple := <&ClassId, &SuperName>,
-	&Rstore2 := add-tuple(EXTENDS_CLASS, &Tuple, &Rstore1)
-	============================================================================
-	extractExtendsClass(&Super, &Rstore1, &ClassId) = &Rstore2
+%% ---- auxiliary function: extract InterfaceTypes
 
-[extractImplements-0]
-	&Name := &InterfaceType,
-	&InterfaceName := name2str(&Name),
-	&Tuple := <&ClassId, &InterfaceName>,      %%<===== upgrade generates a ==
-	&Rstore2 := add-tuple(IMPLEMENTS, &Tuple, &Rstore1)
-	============================================================================
-	extractImplements(&InterfaceType, &Rstore1, &ClassId) = &Rstore2
+[extractInterfaceTypes-1]
+	&Name := &InterfaceType
+	=======================================================
+	extractInterfaceTypes(&InterfaceType, &Rel, &ClassId) = 
+	&Rel union { < &ClassId, name2str(&Name)> }
+
+

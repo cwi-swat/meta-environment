@@ -5,6 +5,7 @@
 # - parse and check an Rscript
 # - parse, check and evaluate an Rscript
 # - parse, check and evaluate an Rscript with a given Rstore
+# - parse and check an Rscript and run it as test suite
 
 set -e
 
@@ -34,8 +35,7 @@ THE_RSCRIPT=
 OUTPUT_AS_TREE=
 OUTPUT=
 RSTORE=
-# TYPE_CHECKER="asfe -e ${datadir}/RscriptChecker.eqs"
-TYPE_CHECKER=${bindir}/RscriptChecker
+TYPE_CHECKER=$EVALUATOR
 OUTPUT_TYPE_CHECKER=./.checker.feedback
 TYPE_CHECKING_OK="Rscript is type correct!"
 TMP_FILES=$OUTPUT_TYPE_CHECKER
@@ -114,11 +114,18 @@ parse_rstore() {
 # {{{  check
 
 check() {
-  addPosInfo -p $THE_RSCRIPT -i $THE_RSCRIPT.pt \
-  | apply-function -f check-rscript -s Summary \
-  | $TYPE_CHECKER \
+  addPosInfo -p $THE_RSCRIPT -i $THE_RSCRIPT.pt -o  $THE_RSCRIPT.pt
+  $TYPE_CHECKER -f check-rscript -r Summary -i  $THE_RSCRIPT.pt\
   | unparsePT >$OUTPUT_TYPE_CHECKER
 }
+
+
+# check() {
+#   addPosInfo -p $THE_RSCRIPT -i $THE_RSCRIPT.pt \
+#   | apply-function -f check-rscript -s Summary \
+#   | $TYPE_CHECKER \
+#   | unparsePT >$OUTPUT_TYPE_CHECKER
+# }
 
 # }}}
 

@@ -11,7 +11,7 @@ datadir=__DATADIR__
 
 PRG=`basename $0`
 JAVA_PARSE_TABLE=${datadir}/demo/java/Java.trm.tbl
-JAVA_ANALYSIS=${datadir}/demo/java/extraction/JavaAnalysis.eqs
+JAVA_ANALYSIS=${bindir}/JavaAnalysis
 
 # }}}
 

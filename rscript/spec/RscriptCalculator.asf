@@ -64,11 +64,11 @@
 
 %% ---- Execute Rscript for given Rstore
 
-%%[EX1]   $Rstore[| $Stat* |] = eval-rstats($Stat*, $Rstore)
+[EX1]   $Rstore[| $Stat* |] = eval-rstats($Stat*, $Rstore)
 
 %% ---- Execute Rscript for empty Rstore
 
-%%[EX]	[| $Stat* |] = eval-rstats($Stat*, rstore())
+[EX]	[| $Stat* |] = eval-rstats($Stat*, rstore())
 
 %% ---- Execute Rscript for empty Rstore and yield value of a var
 
@@ -82,7 +82,7 @@
 
 %% ---- Execute given Rexp
 
-%%[EXX1]	[| $Exp |] = evalx($Exp, rstore())
+[EXX1]	[| $Exp |] = evalx($Exp, rstore())
 
 %% ---- Eval statements
 

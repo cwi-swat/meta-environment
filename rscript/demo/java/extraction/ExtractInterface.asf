@@ -1,14 +1,7 @@
 equations
 
 [extractInterface-1]
-	&Rstore1 := assign-when-undef(INTERFACES, rel[Interface,loc], {}, &Rstore),
-	&Rstore2 := extractInterface1(&CompilationUnit, &Rstore1)
+	&Modifiers interface &Identifier &ExtendsInterfaces &InterfaceBody := &InterfaceDeclaration
 	=========================================================
-	extractInterface(&CompilationUnit, &Rstore) = &Rstore2
-
-[extractInterface1-1]
-	&Modifiers interface &Identifier &ExtendsInterfaces &InterfaceBody := &InterfaceDeclaration,
-	&Tuple := <id2str(&Identifier), get-location(&InterfaceDeclaration)>,
-	&Rstore2 := add-tuple(INTERFACES, &Tuple, &Rstore1)
-	=========================================================
-	extractInterface1(&InterfaceDeclaration, &Rstore1) = &Rstore2
+	extractInterface(&InterfaceDeclaration, &Rel) = 
+	&Rel union {<id2str(&Identifier), get-location(&InterfaceDeclaration)>}

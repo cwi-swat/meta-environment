@@ -146,7 +146,6 @@ export-pair($Var1, rel[$Var2, $Var3], {$Elem*})
 %%[vc1]	Vdata*1 ++ Vdata*2 = Vdata*1 Vdata*2		
 
 
-
 %% ----- Merge two Rstores
 
 [zip-rstores-0]

@@ -6,12 +6,10 @@ imports utilities/PosInfo[CompilationUnit]
 
 exports
   context-free syntax
-    extractCompilationUnit(CompilationUnit, RSTORE) -> RSTORE
+    extractCompilationUnit(CompilationUnit, Rel[[Elem]]) -> Rel[[Elem]]
 
 hiddens
   variables
     "&Loc"		-> Location
     "&CompilationUnit"	-> CompilationUnit
-    "&FileName"		-> String
-    "&Rstore"[0-9]*	-> RSTORE
-    "&Tuple"		-> Tuple
+    "&Rel"[0-9]*	-> Rel[[Elem]]
