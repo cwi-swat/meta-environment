@@ -101,8 +101,8 @@ exports
      REXP "." REXP -> REXP >
      REXP "inter" REXP -> REXP >
      REXP "union" REXP -> REXP >
-     REXP "elem" REXP -> REXP >    
      REXP "\\" REXP -> REXP >
+     REXP "elem" REXP -> REXP >    
      "#" REXP -> REXP >
     
 
