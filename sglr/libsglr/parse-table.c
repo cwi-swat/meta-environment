@@ -315,7 +315,8 @@ production SG_LookupBracketProd(parse_table *pt, PT_Symbol symbol)
 }
 
 /*}}}  */
-/*{{{  ATermList SG_LookupGtrPriority(parse_table *pt, label l) */
+
+
 /*{{{  label SG_LookupLabel(parse_table *pt, production p) */
 
 label SG_LookupLabel(parse_table *pt, production p)
@@ -403,7 +404,6 @@ ATbool SG_IsNonAssocAssociative(parse_table *pt, label l)
 #define SG_ACTIONPOOLCHUNK  (2*SG_POOLCHUNK)
 #define SG_GOTOPOOLCHUNK    (SG_POOLCHUNK)
 
-/*actionbucket *sg_action_pool_free = NULL;*/
 gotobucket   *sg_goto_pool_free = NULL;
 
 /*{{{  void SG_AddToActionTable(parse_table *pt, state s, token c, actions acts) */
@@ -715,20 +715,54 @@ ATbool SG_Injection(production prod)
 {
   production in;
 
-  if(ATmatch((ATerm) prod, "prod([<term>],cf(sort(<term>)),<term>)",
-             &in, NULL, NULL)) {
-    if(ATmatch((ATerm) in, "lit(<str>)", NULL))
+  if (ATmatch((ATerm) prod, "prod([<term>],cf(<term>),<term>)",
+              &in, NULL, NULL)) {
+    if (ATmatch((ATerm) in, "lit(<str>)", NULL)) {
       return ATfalse;
-    else
+    }
+    else {
       return ATtrue;
+    }
   }
 
-  if(ATmatch((ATerm) prod, "prod([<term>],lex(sort(<str>)),<term>)",
-             &in, NULL, NULL)) {
-    if(ATmatch((ATerm) in, "lit(<str>)", NULL))
+  if (ATmatch((ATerm) prod, "prod([<term>],lex(sort(<str>)),<term>)",
+              &in, NULL, NULL)) {
+    if (ATmatch((ATerm) in, "lit(<str>)", NULL)) {
       return ATfalse;
-    else
+    }
+    else {
       return ATtrue;
+    }
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool SG_UserDefinedInjection(production prod) */
+
+ATbool SG_UserDefinedInjection(production prod)
+{
+  production in;
+
+  if (ATmatch((ATerm) prod, "prod([<term>],cf(sort(<term>)),<term>)",
+              &in, NULL, NULL)) {
+    if (ATmatch((ATerm) in, "lit(<str>)", NULL)) {
+      return ATfalse;
+    }
+    else {
+      return ATtrue;
+    }
+  }
+
+  if (ATmatch((ATerm) prod, "prod([<term>],lex(sort(<str>)),<term>)",
+              &in, NULL, NULL)) {
+    if (ATmatch((ATerm) in, "lit(<str>)", NULL)) {
+      return ATfalse;
+    }
+    else {
+      return ATtrue;
+    }
   }
 
   return ATfalse;
@@ -757,6 +791,19 @@ void SG_AddInjection(injectiontable tbl, label lbl, ATbool is_inject)
 ATbool SG_ProdIsInjection(parse_table *pt, label l)
 {
   return SG_PT_INJECTIONS(pt)[SG_GETLABEL(l)-SG_PROD_START];
+}
+
+/*}}}  */
+/*{{{  ATbool SG_ProdIsUserDefinedInjection(parse_table *pt, label l) */
+
+ATbool SG_ProdIsUserDefinedInjection(parse_table *pt, label l)
+{
+  if (SG_PT_INJECTIONS(pt)[SG_GETLABEL(l)-SG_PROD_START]) {
+    return SG_UserDefinedInjection(SG_LookupProduction(pt, l));   
+  }
+  else {
+    return ATfalse;
+  }
 }
 
 /*}}}  */

@@ -778,7 +778,7 @@ static tree SG_Jump_Over_Injections(parse_table *pt, tree t)
       ATgetAFun(t) != SG_Amb_AFun) {
     label prod = SG_GetApplProdLabel(t);
         
-    while (SG_ProdIsInjection(pt, prod)) {
+    while (SG_ProdIsUserDefinedInjection(pt, prod)) {
       ATermList injSons = (ATermList)ATgetArgument((ATerm)t, 1);
       t = (tree)ATgetFirst(injSons);
   

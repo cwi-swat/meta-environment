@@ -78,6 +78,7 @@ production    SG_LookupProduction(parse_table *pt, label c);
 production    SG_LookupBracketProd(parse_table *pt, PT_Symbol r);
 label         SG_LookupLabel(parse_table *pt, production p);
 ATbool        SG_ProdIsInjection(parse_table *pt, label l);
+ATbool        SG_ProdIsUserDefinedInjection(parse_table *pt, label l);
 ATbool        SGGtrPriority(parse_table *pt, label l0, label l1);
 ATermList     SG_LookupGtrPriority(parse_table *pt, label l);
 ATermInt      SG_GetATint(int l, size_t numprods);
