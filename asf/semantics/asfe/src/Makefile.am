@@ -21,7 +21,7 @@ asfe_SOURCES = asfe.tif.c asfe.c evaluator.c equations.c debug.c \
 
 asfe_LDADD		= \
 			-L$(ASF_SUPPORT)/lib -lASFME \
-			-L$(ASC_SUPPORT)/lib -lasf-builtins -lasc-support-me \
+			-L$(ASC_SUPPORT)/lib -lasc-support-me \
                         -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 			-L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm \
