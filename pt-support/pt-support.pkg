@@ -1,0 +1,17 @@
+package 
+identification
+   name=pt-support
+   version=0.12beta
+   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   info=http://www.cwi.nl/projects/MetaEnv/pt-support
+   description='The AsFix Parsetree support library containing support for
+                AsFix1, AsFix2, and AsFix2me'
+
+
+   keywords=meta-environment, asfix, parsetree, sdf
+
+configuration interface
+
+requires
+  aterm		2.0.1
+  toolbuslib	0.4

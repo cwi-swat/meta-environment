@@ -1,5 +1,8 @@
 $Id$
 
+2003/06/26 (jurgenv@cwi.nl)
+ * Added package definition file
+
 2003/06/23 (markvdb@cwi.nl)
  * equal-trees have to unpack their arguments.
 
