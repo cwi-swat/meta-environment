@@ -303,7 +303,7 @@ char *print_args(term_list *args) {
 
 /** This handles incoming terms from the ToolBus */
 term *handle_input_from_toolbus(term *e) {
-  term *result;
+  term *result = NULL;
   term *arg;
   char *fname;
   term_list *fargs;
