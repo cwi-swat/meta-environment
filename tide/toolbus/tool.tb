@@ -18,9 +18,6 @@ let
   Rule    : int,
   Pattern : term
 in
-  subscribe(event(<term>,<int>,<term>)) .
-  subscribe(process-created(<term>,<str>)) .
-  subscribe(process-destroyed(<term>)) .
   (
     rec-event(T, evaluate(Process?, Expr?, Tag?)) .
     snd-msg(evaluate(Process, Expr)) .
@@ -61,13 +58,13 @@ in
     rec-msg(adapter-disconnected(Dap?)) .
     snd-do(T, adapter-disconnected(Dap))
     +
-    rec-note(process-created(Process?, Name?)) .
+    rec-msg(process-created(Process?, Name?)) .
     snd-do(T, process-created(Process, Name))
     +
-    rec-note(process-destroyed(Process?)) .
+    rec-msg(process-destroyed(Process?)) .
     snd-do(T, process-destroyed(Process))
     +
-    rec-note(event(Process?, Rule?, Result?)) .
+    rec-msg(event(Process?, Rule?, Result?)) .
     snd-do(T, event(Process, Rule, Result))
   ) * rec-disconnect(T)
 endlet

@@ -22,52 +22,46 @@ in
     rec-msg(evaluate(proc(A, Pid?), Expr?)) .
     snd-eval(A, evaluate(Pid, Expr)) .
     rec-value(A, evaluated(Result?)) .
-    snd-note(evaluation(proc(A, Pid), Expr, Result)) .
     snd-msg(evaluated(proc(A, Pid), Result))
     +
     rec-msg(create-rule(proc(A, Pid?), Port?, Cond?, Action?, Tag?, Enabled?)) .
     snd-eval(A, create-rule(Pid, Port, Cond, Action, Tag, Enabled)) .
     rec-value(A, rule-created(Rule?)) .
-    snd-note(rule-creation(proc(A, Pid), Port, Cond, Action, Tag, Enabled, Rule)).
     snd-msg(rule-created(proc(A, Pid), Rule))
     +
     rec-msg(enable-rule(proc(A, Pid?), Rule?)) .
     snd-eval(A, enable-rule(Pid, Rule)) .
     rec-value(A, rule-enabled) .
-    snd-note(rule-enabling(proc(A, Pid), Rule)) .
     snd-msg(rule-enabled(proc(A, Pid)))
     +
     rec-msg(disable-rule(proc(A, Pid?), Rule?)) .
     snd-eval(A, disable-rule(Pid, Rule)) .
     rec-value(A, rule-disabled) .
-    snd-note(rule-disabling(proc(A, Pid), Rule)) .
     snd-msg(rule-disabled(proc(A, Pid)))
     +
     rec-msg(modify-rule(proc(A, Pid?), Rule?, Port?, Cond?, Action?, Enabled?)) .
     snd-eval(A, modify-rule(Pid, Rule, Port, Cond, Action, Enabled)) .
     rec-value(A, rule-modified) .
-    snd-note(rule-modification(proc(A, Pid), Rule, Port, Cond, Action, Enabled)) .
     snd-msg(rule-modified(proc(A, Pid)))
     +
     rec-msg(delete-rule(proc(A, Pid?), Rule?)) .
     snd-eval(A, delete-rule(Pid, Rule)) .
     rec-value(A, rule-deleted) .
-    snd-note(rule-deletion(proc(A, Pid), Rule)) .
     snd-msg(rule-deleted(proc(A, Pid)))
     +
     rec-event(A, event(Pid?, Rule?, Result?)) .
-    snd-note(event(proc(A, Pid), Rule, Result)) .
+    snd-msg(event(proc(A, Pid), Rule, Result)) .
     snd-ack-event(A, event(Pid, Rule, Result))
     +
     rec-event(A, process-created(Pid?, Name?)) .
-    snd-note(process-created(proc(A, Pid), Name)) .
+    snd-msg(process-created(proc(A, Pid), Name)) .
     snd-ack-event(A, process-created(Pid, Name))
     +
     rec-event(A, process-destroyed(Pid)) .
-    snd-note(process-destroyed(proc(A, Pid))) .
+    snd-msg(process-destroyed(proc(A, Pid))) .
     snd-ack-event(A, process-destroyed(Pid))
   ) *  rec-disconnect(A) .
-  snd-msg(adapter-disconnected(A))
+  snd-msg(adapter-disconnected(A)) 
 endlet 
 
 
