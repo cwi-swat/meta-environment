@@ -27,6 +27,10 @@ exports
     "Nat-con" [0-9\']*  -> PICO-NAT-CON
     "Int" [0-9\']*      -> PICO-INT
 
+  context-free priorities
+    PICO-INT "*" PICO-INT -> PICO-INT >
+    {left: PICO-INT "+" PICO-INT -> PICO-INT
+           PICO-INT "-" PICO-INT -> PICO-INT}
 
 hiddens
   context-free syntax
@@ -39,9 +43,3 @@ hiddens
     "c" [0-9]* -> CHAR
     "x" [0-9]* -> CHAR*
     "y" [0-9]* -> CHAR+
-
-  context-free priorities
-    PICO-INT "*" PICO-INT -> PICO-INT >
-    {left: PICO-INT "+" PICO-INT -> PICO-INT {left} 
-           PICO-INT "-" PICO-INT -> PICO-INT {left}
-    }

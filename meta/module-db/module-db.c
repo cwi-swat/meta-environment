@@ -127,6 +127,40 @@ ATerm get_all_equations(int cid, char *moduleName)
   }
 }
 
+static ATerm transformEquations(ATermList equations)
+{
+  ATermList newEquations = ATempty;
+
+  while (!ATisEmpty(equations)) {
+    PT_Tree equation = PT_makeTreeFromTerm(ATgetFirst(equations));
+    ATerm newEquation = tree2a1(equation);
+    newEquations = ATappend(newEquations, newEquation);
+    equations = ATgetNext(equations);
+  }
+  return (ATerm)newEquations;
+}  
+
+ATerm get_all_equations_for_compiler(int cid, char *moduleName)
+{
+  ATerm name;
+  ATermList mods;
+  ATerm result;
+
+/* calculate the transitive closure of the imported modules. */
+  
+  name = ATmake("<str>",moduleName);
+  if (complete_asf_specification(ATempty, name)) {
+    mods = get_imported_modules(name);
+    result = transformEquations(
+               (ATermList)ASF_makeTermFromCondEquationList(
+                            getEquations(mods))); 
+    return ATmake("snd-value(equations(<term>))", ATBpack(result));
+  }
+  else {
+    return ATmake("snd-value(equations-incomplete)");
+  }
+}
+
 /*}}}  */
 /*{{{  void create_module_db(int cid) */
 
@@ -1134,6 +1168,7 @@ ATerm get_all_sdf2_definitions(int cid, char *moduleName)
                                      PT_makeTreeLayoutEmpty(), 0);
 /*
     result = PT_makeTermFromParseTree(parseTree);
+ATwarning("syntax = %t\n", result);
 */
     result = a2metoa1(parseTree);
     return ATmake("snd-value(syntax(<term>))", ATBpack(result));

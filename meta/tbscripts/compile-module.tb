@@ -40,7 +40,7 @@ in
         rec-msg(syntax(Syntax?)) .
         snd-msg(process-eqs(ModuleName)) .
         rec-msg(eqs-processed(ModuleName)) .
-        snd-msg(get-all-equations(ModuleName)) .
+        snd-msg(get-all-equations-for-compiler(ModuleName)) .
         (
           rec-msg(all-equations(Equations?)) .
           snd-msg(compiler-output-dir(OutputDir)) .
