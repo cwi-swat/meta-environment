@@ -35,7 +35,13 @@ UNINSTALL	= @UNINSTALL@
 AR		= @AR@
 
 ATERM		= @ATERM@
+ATERMBIN	= @ATERMBIN@
+ATERMLIB	= @ATERMLIB@
+ATERMINC	= @ATERMINC@
 TOOLBUS		= @TOOLBUS@
+TOOLBUSBIN	= @TOOLBUSBIN@
+TOOLBUSLIB	= @TOOLBUSLIB@
+TOOLBUSINC	= @TOOLBUSINC@
 
 # Implicit rules
 include $(top_srcdir)/implicit-rules 
@@ -44,8 +50,8 @@ include $(top_srcdir)/implicit-rules
 XDEFS		= -DPROFILING
 XCFLAGS		=
 XCPPFLAGS	=
-XINCLUDES	= -I$(ATERM)/include
-XLIBS		= -L$(ATERM)/lib -lATB-dbg -lAsFix-dbg -lATerm-dbg \
+XINCLUDES	= -I$(ATERMINC)
+XLIBS		= -L$(ATERMLIB) -lATB-dbg -lAsFix-dbg -lATerm-dbg \
 			$(SOCKLIBS)
 
 # Other variables
@@ -73,7 +79,7 @@ MODULES	= evaluator.o preparation.o
 
 # Explicit rules
 evaluator.tif.c: $(top_srcdir)/toolbus/meta.tifs
-	$(ATERM)/bin/tifstoc -tool evaluator $(top_srcdir)/toolbus/meta.tifs
+	$(ATERMBIN)/tifstoc -tool evaluator $(top_srcdir)/toolbus/meta.tifs
 
 evaluator: $(MODULES)
 	$(CC) -o evaluator $(MODULES) $(LIBS)

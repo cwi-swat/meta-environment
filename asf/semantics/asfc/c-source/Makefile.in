@@ -31,13 +31,16 @@ INSTALL_DATA    = @INSTALL_DATA@
 INSTALL_PROG    = @INSTALL_PROG@
 UNINSTALL   = @UNINSTALL@
 
-ATERM       = @ATERM@
+ATERM		= @ATERM@
+ATERMBIN	= @ATERMBIN@
+ATERMLIB	= @ATERMLIB@
+ATERMINC	= @ATERMINC@
 
 include Make.modules
 
 XCFLAGS = ${INCLUDE}
-INCLUDE = -I../support -I$(includedir) -I$(ATERM)/include
-LIBS	= -L$(ATERM)/lib   \
+INCLUDE = -I../support -I$(includedir) -I$(ATERMINC)
+LIBS	= -L$(ATERMLIB)   \
 	-L../support -L$(libdir) -lsupport-${CC} -lATerm-${CC}	\
 	-lAsFix-${CC} -lATB-${CC} \
 	$(SOCKLIBS) 

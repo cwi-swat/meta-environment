@@ -34,7 +34,13 @@ UNINSTALL	= @UNINSTALL@
 AR		= @AR@
 
 ATERM		= @ATERM@
+ATERMBIN	= @ATERMBIN@
+ATERMLIB	= @ATERMLIB@
+ATERMINC	= @ATERMINC@
 TOOLBUS		= @TOOLBUS@
+TOOLBUSBIN	= @TOOLBUSBIN@
+TOOLBUSLIB	= @TOOLBUSLIB@
+TOOLBUSINC	= @TOOLBUSINC@
 
 # Implicit rules
 include ${top_srcdir}/implicit-rules
@@ -42,7 +48,7 @@ include ${top_srcdir}/implicit-rules
 # The eXtra parts of some variables
 XCFLAGS		=
 XCPPFLAGS	=
-XINCLUDES	= -I$(ATERM)/include
+XINCLUDES	= -I$(ATERMINC)
 XLIBS		= 
 
 # Other variables
@@ -80,13 +86,13 @@ all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 # example: 'mytest.c: mytest.c.nw'
 
 rewriter.tif.c: rewriter.tifs
-	$(ATERM)/bin/tifstoc -tool rewriter rewriter.tifs
+	$(ATERMBIN)/tifstoc -tool rewriter rewriter.tifs
 
 rewriter.tif.h: rewriter.tifs
-	$(ATERM)/bin/tifstoc -tool rewriter rewriter.tifs
+	$(ATERMBIN)/tifstoc -tool rewriter rewriter.tifs
 
 rewriter.tifs: rewriter.tb
-	$(TOOLBUS)/bin/toolbus -gentifs rewriter.tb
+	$(TOOLBUSBIN)/toolbus -gentifs rewriter.tb
 
 %-cc.o: %.c
 	cc -O $(INCLUDES) -c -o $@ $<
