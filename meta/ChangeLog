@@ -1,5 +1,8 @@
 # $Id$
 
+2001/05/15 ({jong,jurgenv}@cwi.nl)
+ * Fixed a bug. Closing unparsed equations resulted in module-db inconsistency.
+
 2001/05/14 ({jong,markvdb}@cwi.nl)
  * restructured {in-output,module-db.tbscripts} so that asf-sections,
    .sdf.baf, .asf.baf, and parsetables are now read/looked up/written 

@@ -475,6 +475,27 @@ void add_text_eqs_section(int cid, char *moduleName, char* path,
 }
 
 /*}}}  */
+
+void update_eqs_text(int cid, char *moduleName, char *eqsText)
+{
+  ATerm entry;
+  ATerm isChanged = Mtrue;
+  ATerm atModuleName;
+  ATerm atEqsText;
+
+  atModuleName = ATmake("<str>", moduleName);
+  atEqsText = ATmake("<str>", eqsText);
+
+  entry = GetValue(modules_db, atModuleName);
+
+  entry = (ATerm)ATreplace((ATermList)entry, isChanged, EQS_UPDATED_LOC);
+  entry = (ATerm)ATreplace((ATermList)entry, atEqsText, EQS_TEXT_LOC);
+  entry = (ATerm)ATreplace((ATermList)entry, 
+                           ATparse("unavailable"), EQS_TREE_LOC); 
+
+  PutValue(modules_db, atModuleName, entry);
+}
+
 /*{{{  void add_empty_eqs_section(int cid, char *moduleName, char* path) */
 
 void add_empty_eqs_section(int cid, char *moduleName, char* path)
@@ -498,6 +519,7 @@ void add_empty_eqs_section(int cid, char *moduleName, char* path)
 }
 
 /*}}}  */
+
 /*{{{  ATerm update_eqs_tree(int cid, char *moduleName, ATerm newEqsTree) */
 
 ATerm update_eqs_tree(int cid, char *moduleName, ATerm newEqsTree)
