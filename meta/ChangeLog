@@ -1,5 +1,11 @@
 # $Id$
 
+Tue Mar 23 15:40:35 CET 2004 <{jong,kooiker}@cwi.nl>
+ * editors/structure:
+   - set-cursor-at-offset and get-focus-at-cursor are working again
+ * editors/structure/src: removed
+ * editors/text/{emacs,gvim}: remove references to old SE
+
 Wed Mar 17 14:36:14 CET 2004 <{jong,kooiker}@cwi.nl>
  * editors/structure:
    - started work on structure-editorNG that: uses Location API, and

@@ -59,7 +59,7 @@ void create_editor(int cid, ATerm editorId, ATerm parseTreeTerm)
   PT_ParseTree parseTree;
   SE_StructureEditor editor;
 
-  parseTree = PT_ParseTreeFromTerm(parseTreeTerm);
+  parseTree = PT_ParseTreeFromTerm(ATBunpack(parseTreeTerm));
   assertParseTreeHasPosInfo(parseTree);
 
   editor = SE_makeStructureEditorUnedited(parseTree);
@@ -75,7 +75,7 @@ void update_editor(int cid, ATerm editorId, ATerm parseTreeTerm)
 
   editor = SE_StructureEditorFromTerm(ATtableGet(editors, editorId));
   if (editor != NULL) {
-    PT_ParseTree parseTree = PT_ParseTreeFromTerm(parseTreeTerm);
+    PT_ParseTree parseTree = PT_ParseTreeFromTerm(ATBunpack(parseTreeTerm));
     assertParseTreeHasPosInfo(parseTree);
     editor = SE_setStructureEditorParseTree(editor, parseTree);
     ATtablePut(editors, editorId, SE_StructureEditorToTerm(editor));
@@ -102,9 +102,11 @@ void set_cursor_at_offset(int cid, ATerm editorId, int offset)
 {
   SE_StructureEditor editor;
 
+  ATwarning("set_cursor_at_offset: editorId %t, offset=%d\n", editorId, offset);
   editor = SE_StructureEditorFromTerm(ATtableGet(editors, editorId));
   if (editor != NULL) {
-    editor = SE_setStructureEditorCursor(editor, offset);
+    PT_ParseTree parseTree = SE_getStructureEditorParseTree(editor);
+    editor = SE_makeStructureEditorDefault(parseTree, offset);
     ATtablePut(editors, editorId, SE_StructureEditorToTerm(editor));
   }
   else {
@@ -126,10 +128,14 @@ ATerm get_focus_at_cursor(int cid, ATerm editorId)
       PT_ParseTree parseTree = SE_getStructureEditorParseTree(editor);
       PT_Tree tree = PT_getParseTreeTop(parseTree);
       LOC_Area area = getAreaAtOffset(tree, cursor);
+      if (area == NULL) {
+	area = LOC_getLocationArea(PT_getTreeLocation(tree));
+      }
       return ATmake("snd-value(focus(<term>))", area);
     }
 
     ATwarning("get_focus_at_cursor: no cursor yet in %t\n", editorId);
+    return NULL;
   }
 
   ATwarning("get_focus_at_cursor: no such editor: %t\n", editorId);
@@ -159,12 +165,17 @@ void rec_terminate(int cid, ATerm message)
 int main(int argc, char *argv[])
 {
   ATerm bottomOfStack;
+  int cid;
 
   ATBinit(argc, argv, &bottomOfStack);
+  PT_initMEPTApi();
+  LOC_initLocationApi();
+  SE_initStructureEditorApi();
 
   editors = ATtableCreate(100, 75);
 
-  return 0;
+  cid = ATBconnect(NULL, NULL, -1, structure_editor_handler);
+  return ATBeventloop();
 }
 
 /*}}}  */

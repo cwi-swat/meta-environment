@@ -17,7 +17,6 @@
 
 #include <connector.h>
 #include <TextEditor.h>
-#include <EditorData.h>
 #include <Location.h>
 
 /*}}}  */
@@ -254,11 +253,10 @@ static void setActions(int write_to_editor_fd, TE_Action edAction)
 static void setFocus(int write_to_editor_fd, TE_Action edAction)
 {
   ATerm focusTerm = TE_getActionFocus(edAction);
-  SE_Focus focus = SE_FocusFromTerm(focusTerm);
-  SE_Area area = SE_getFocusArea(focus);
-  int start = SE_getAreaStart(area) + 1;
-  int length = SE_getAreaLength(area);
-  char *s = SE_getFocusSort(focus);
+  LOC_Area area = LOC_AreaFromTerm(focusTerm);
+  int start = LOC_getAreaOffset(area)+1;
+  int length = LOC_getAreaLength(area);
+  char *s = "komt-later";
   char buf[BUFSIZ];
 
   sprintf(buf, "(set-focus %d %d)", start, start+length);
@@ -364,7 +362,6 @@ int main(int argc, char *argv[])
   ATBinit(argc, argv, &bottomOfStack);
   LOC_initLocationApi();
   TE_initTextEditorApi();
-  SE_initEditorDataApi();
 
   for (i=1; i<argc; i++) {
     char *cur = argv[i];

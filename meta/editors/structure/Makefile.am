@@ -1,7 +1,5 @@
 # $Id$
 
-SUBDIRS = src
-
 include ${top_srcdir}/make_rules
 
 bin_PROGRAMS = structure-editor
@@ -32,7 +30,7 @@ structure_editor_LDADD = \
 	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI -lLocationAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm \
+	-L$(ATERM)/lib -lATerm-dbg \
 	$(SOCKLIBS)
 
 libStructureEditor_a_SOURCES = \

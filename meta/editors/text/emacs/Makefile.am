@@ -6,7 +6,6 @@ SCRIPT = gnu-emacs.el
 
 INCLUDES = \
 	-I$(top_srcdir)/editors/text/common \
-	-I$(top_srcdir)/editors/structure/src \
 	-I$(ATERM)/include \
 	-I$(PT_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
@@ -27,7 +26,6 @@ emacs_connector_DEPENDENCIES = $(COMMONLIB)
 
 emacs_connector_LDADD = \
 	$(COMMONLIB) \
-	-L$(top_builddir)/editors/structure/src -lStructure \
 	-L$(TOOLBUSLIB)/lib -lATB \
         -L$(ERROR_SUPPORT)/lib -lLocationAPI \
 	-L$(ATERM)/lib -lATerm \
