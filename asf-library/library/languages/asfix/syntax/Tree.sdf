@@ -10,7 +10,7 @@ sorts Tree Args Production
 context-free syntax
 
 appl(prod:Production,args:Args) -> Tree  {cons("appl")}
-character:Integer               -> Tree  {cons("char")}
+character:NatCon                -> Tree  {cons("char")}
 lit(string:Literal)             -> Tree  {cons("lit")}
 amb(args:Args)                  -> Tree  {cons("amb")}
 "[" {Tree ","}* "]"             -> Args  {cons("list")}

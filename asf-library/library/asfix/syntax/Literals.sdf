@@ -18,5 +18,3 @@ EscChar                     -> L-Char    {cons("escaped")}
 
 [A-Za-z\-\_][A-Za-z0-9\_\-]*[A-Za-z0-9]   -> Literal
 [A-Za-z]   -> Literal
-
-[0-9]+                      -> Integer

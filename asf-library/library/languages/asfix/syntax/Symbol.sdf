@@ -21,7 +21,7 @@ iter-star(symbol:Symbol)                                 -> Symbol {cons("iter-s
 iter-sep(symbol:Symbol,separator:Symbol)                 -> Symbol {cons("iter-sep")}
 iter-star-sep(symbol:Symbol,separator:Symbol)            -> Symbol {cons("iter-star-sep")}
 iter-n(symbol:Symbol,number:NatCon)                      -> Symbol {cons("iter-n")}
-iter-sep-n(symbol:Symbol,separator:Symbol,number:Integer)-> Symbol {cons("iter-sep-n")}
+"iter-sep-n" "(" symbol:Symbol comma1:"," separator:Symbol comma2:"," number:NatCon ")" -> Symbol {cons("iter-sep-n")}
 perm(symbols:Symbols)                                    -> Symbol {cons("perm")}
 set(symbol:Symbol)                                       -> Symbol {cons("set")}
 func(symbols:Symbols,symbol:Symbol)                      -> Symbol {cons("func")}
@@ -35,5 +35,5 @@ parametrized-sort(sort:Literal,parameters:Symbols)       -> Symbol {cons("parame
 
 "[" { CharRange ","}* "]"      -> CharRanges  {cons("list")}
 
-integer: Integer                 -> CharRange {cons("character")}
-range(start:Integer,end:Integer) -> CharRange {cons("range")}
+integer: NatCon                 -> CharRange {cons("character")}
+range(start:NatCon,end:NatCon) -> CharRange {cons("range")}
