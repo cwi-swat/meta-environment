@@ -1,5 +1,5 @@
 /*
- * Generated at Fri Jan 26 13:25:47 2001
+ * Generated at Fri Jan 26 14:43:52 2001
  */
 
 #include "SDF_dict.h"
@@ -100,10 +100,10 @@ ATerm SDF_patternPriorityListMany = NULL;
 ATerm SDF_patternPriorityListSingle = NULL;
 ATerm SDF_patternPriorityListEmpty = NULL;
 ATerm SDF_patternPrioritiesDefault = NULL;
-ATerm SDF_patternGroupGrouppMany = NULL;
-ATerm SDF_patternGroupGrouppSingle = NULL;
-ATerm SDF_patternPriorityPriorityAssoc = NULL;
-ATerm SDF_patternPriorityPriorityChain = NULL;
+ATerm SDF_patternGroupListMany = NULL;
+ATerm SDF_patternGroupListSingle = NULL;
+ATerm SDF_patternPriorityAssoc = NULL;
+ATerm SDF_patternPriorityChain = NULL;
 ATerm SDF_patternGroupAssocGroup = NULL;
 ATerm SDF_patternGroupProdsGroup = NULL;
 ATerm SDF_patternGroupSimpleGroup = NULL;
@@ -302,10 +302,10 @@ ATerm SDF_patternSymbolStart = NULL;
  * SDF_patternPriorityListSingle = [<term>]
  * SDF_patternPriorityListEmpty = []
  * SDF_patternPrioritiesDefault = appl(prod(id("Priority-Sdf-Syntax"),w(""),[iter-sep(l("{"),w(""),sort("Priority"),w(""),ql(","),w(""),l("}"),w(""),l("*"))],w(""),l("->"),w(""),sort("Priorities"),w(""),no-attrs),w(""),[list(iter-sep(l("{"),w(""),sort("Priority"),w(""),ql(","),w(""),l("}"),w(""),l("*")),w(""),<term>)])
- * SDF_patternGroupGrouppMany = [<term>,w(<term>),<term>,w(<term>),<list>]
- * SDF_patternGroupGrouppSingle = [<term>]
- * SDF_patternPriorityPriorityAssoc = appl(prod(id("Priority-Sdf-Syntax"),w(""),[sort("Group"),w(""),sort("Associativity"),w(""),sort("Group")],w(""),l("->"),w(""),sort("Priority"),w(""),no-attrs),w(""),[<term>,w(<term>),<term>,w(<term>),<term>])
- * SDF_patternPriorityPriorityChain = appl(prod(id("Priority-Sdf-Syntax"),w(""),[iter-sep(l("{"),w(""),sort("Group"),w(""),ql(">"),w(""),l("}"),w(""),l("+"))],w(""),l("->"),w(""),sort("Priority"),w(""),no-attrs),w(""),[list(iter-sep(l("{"),w(""),sort("Group"),w(""),ql(">"),w(""),l("}"),w(""),l("*")),w(""),<term>)])
+ * SDF_patternGroupListMany = [<term>,w(<term>),<term>,w(<term>),<list>]
+ * SDF_patternGroupListSingle = [<term>]
+ * SDF_patternPriorityAssoc = appl(prod(id("Priority-Sdf-Syntax"),w(""),[sort("Group"),w(""),sort("Associativity"),w(""),sort("Group")],w(""),l("->"),w(""),sort("Priority"),w(""),no-attrs),w(""),[<term>,w(<term>),<term>,w(<term>),<term>])
+ * SDF_patternPriorityChain = appl(prod(id("Priority-Sdf-Syntax"),w(""),[iter-sep(l("{"),w(""),sort("Group"),w(""),ql(">"),w(""),l("}"),w(""),l("+"))],w(""),l("->"),w(""),sort("Priority"),w(""),no-attrs),w(""),[list(iter-sep(l("{"),w(""),sort("Group"),w(""),ql(">"),w(""),l("}"),w(""),l("*")),w(""),<term>)])
  * SDF_patternGroupAssocGroup = appl(prod(id("Priority-Sdf-Syntax"),w(""),[ql("{"),w(""),sort("Associativity"),w(""),ql(":"),w(""),sort("Productions"),w(""),ql("}")],w(""),l("->"),w(""),sort("Group"),w(""),no-attrs),w(""),[l("{"),w(<term>),<term>,w(<term>),l(":"),w(<term>),<term>,w(<term>),l("}")])
  * SDF_patternGroupProdsGroup = appl(prod(id("Priority-Sdf-Syntax"),w(""),[ql("{"),w(""),sort("Productions"),w(""),ql("}")],w(""),l("->"),w(""),sort("Group"),w(""),no-attrs),w(""),[l("{"),w(<term>),<term>,w(<term>),l("}")])
  * SDF_patternGroupSimpleGroup = appl(prod(id("Priority-Sdf-Syntax"),w(""),[sort("Production")],w(""),l("->"),w(""),sort("Group"),w(""),no-attrs),w(""),[<term>])
@@ -948,13 +948,13 @@ void init_SDF_dict()
   terms = ATgetNext(terms);
   SDF_patternPrioritiesDefault = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  SDF_patternGroupGrouppMany = ATgetFirst(terms);
+  SDF_patternGroupListMany = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  SDF_patternGroupGrouppSingle = ATgetFirst(terms);
+  SDF_patternGroupListSingle = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  SDF_patternPriorityPriorityAssoc = ATgetFirst(terms);
+  SDF_patternPriorityAssoc = ATgetFirst(terms);
   terms = ATgetNext(terms);
-  SDF_patternPriorityPriorityChain = ATgetFirst(terms);
+  SDF_patternPriorityChain = ATgetFirst(terms);
   terms = ATgetNext(terms);
   SDF_patternGroupAssocGroup = ATgetFirst(terms);
   terms = ATgetNext(terms);

@@ -44,7 +44,7 @@ typedef struct _SDF_SymbolTail *SDF_SymbolTail;
 typedef struct _SDF_Associativity *SDF_Associativity;
 typedef struct _SDF_Group *SDF_Group;
 typedef struct _SDF_Priority *SDF_Priority;
-typedef struct _SDF_GroupGroupp *SDF_GroupGroupp;
+typedef struct _SDF_GroupList *SDF_GroupList;
 typedef struct _SDF_Priorities *SDF_Priorities;
 typedef struct _SDF_PriorityList *SDF_PriorityList;
 typedef struct _SDF_Sort *SDF_Sort;
@@ -146,8 +146,8 @@ SDF_Group SDF_makeGroupFromTerm(ATerm t);
 ATerm SDF_makeTermFromGroup(SDF_Group arg);
 SDF_Priority SDF_makePriorityFromTerm(ATerm t);
 ATerm SDF_makeTermFromPriority(SDF_Priority arg);
-SDF_GroupGroupp SDF_makeGroupGrouppFromTerm(ATerm t);
-ATerm SDF_makeTermFromGroupGroupp(SDF_GroupGroupp arg);
+SDF_GroupList SDF_makeGroupListFromTerm(ATerm t);
+ATerm SDF_makeTermFromGroupList(SDF_GroupList arg);
 SDF_Priorities SDF_makePrioritiesFromTerm(ATerm t);
 ATerm SDF_makeTermFromPriorities(SDF_Priorities arg);
 SDF_PriorityList SDF_makePriorityListFromTerm(ATerm t);
@@ -333,10 +333,10 @@ SDF_Associativity SDF_makeAssociativityAssoc();
 SDF_Group SDF_makeGroupSimpleGroup(SDF_Production production);
 SDF_Group SDF_makeGroupProdsGroup(SDF_Layout wsAfterBraceOpen, SDF_Productions productions, SDF_Layout wsAfterProductions);
 SDF_Group SDF_makeGroupAssocGroup(SDF_Layout wsAfterBraceOpen, SDF_Associativity associativity, SDF_Layout wsAfterAssociativity, SDF_Layout wsAfterColon, SDF_Productions productions, SDF_Layout wsAfterProductions);
-SDF_Priority SDF_makePriorityPriorityChain(SDF_GroupGroupp groupp);
-SDF_Priority SDF_makePriorityPriorityAssoc(SDF_Group left, SDF_Layout wsAfterLeft, SDF_Associativity associativity, SDF_Layout wsAfterAssociativity, SDF_Group right);
-SDF_GroupGroupp SDF_makeGroupGrouppSingle(SDF_Group head);
-SDF_GroupGroupp SDF_makeGroupGrouppMany(SDF_Group head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_GroupGroupp tail);
+SDF_Priority SDF_makePriorityChain(SDF_GroupList list);
+SDF_Priority SDF_makePriorityAssoc(SDF_Group left, SDF_Layout wsAfterLeft, SDF_Associativity associativity, SDF_Layout wsAfterAssociativity, SDF_Group right);
+SDF_GroupList SDF_makeGroupListSingle(SDF_Group head);
+SDF_GroupList SDF_makeGroupListMany(SDF_Group head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_GroupList tail);
 SDF_Priorities SDF_makePrioritiesDefault(SDF_PriorityList list);
 SDF_PriorityList SDF_makePriorityListEmpty();
 SDF_PriorityList SDF_makePriorityListSingle(SDF_Priority head);
@@ -462,7 +462,7 @@ ATbool SDF_isEqualSymbolTail(SDF_SymbolTail arg0, SDF_SymbolTail arg1);
 ATbool SDF_isEqualAssociativity(SDF_Associativity arg0, SDF_Associativity arg1);
 ATbool SDF_isEqualGroup(SDF_Group arg0, SDF_Group arg1);
 ATbool SDF_isEqualPriority(SDF_Priority arg0, SDF_Priority arg1);
-ATbool SDF_isEqualGroupGroupp(SDF_GroupGroupp arg0, SDF_GroupGroupp arg1);
+ATbool SDF_isEqualGroupList(SDF_GroupList arg0, SDF_GroupList arg1);
 ATbool SDF_isEqualPriorities(SDF_Priorities arg0, SDF_Priorities arg1);
 ATbool SDF_isEqualPriorityList(SDF_PriorityList arg0, SDF_PriorityList arg1);
 ATbool SDF_isEqualSort(SDF_Sort arg0, SDF_Sort arg1);
@@ -1163,8 +1163,8 @@ SDF_Group SDF_setGroupWsAfterColon(SDF_Group arg, SDF_Layout wsAfterColon);
 /*{{{  SDF_Priority accessor prototypes */
 
 ATbool SDF_isValidPriority(SDF_Priority arg);
-ATbool SDF_isPriorityPriorityChain(SDF_Priority arg);
-ATbool SDF_isPriorityPriorityAssoc(SDF_Priority arg);
+ATbool SDF_isPriorityChain(SDF_Priority arg);
+ATbool SDF_isPriorityAssoc(SDF_Priority arg);
 ATbool SDF_hasPriorityRight(SDF_Priority arg);
 SDF_Group SDF_getPriorityRight(SDF_Priority arg);
 SDF_Priority SDF_setPriorityRight(SDF_Priority arg, SDF_Group right);
@@ -1174,9 +1174,9 @@ SDF_Priority SDF_setPriorityWsAfterAssociativity(SDF_Priority arg, SDF_Layout ws
 ATbool SDF_hasPriorityWsAfterLeft(SDF_Priority arg);
 SDF_Layout SDF_getPriorityWsAfterLeft(SDF_Priority arg);
 SDF_Priority SDF_setPriorityWsAfterLeft(SDF_Priority arg, SDF_Layout wsAfterLeft);
-ATbool SDF_hasPriorityGroupp(SDF_Priority arg);
-SDF_GroupGroupp SDF_getPriorityGroupp(SDF_Priority arg);
-SDF_Priority SDF_setPriorityGroupp(SDF_Priority arg, SDF_GroupGroupp groupp);
+ATbool SDF_hasPriorityList(SDF_Priority arg);
+SDF_GroupList SDF_getPriorityList(SDF_Priority arg);
+SDF_Priority SDF_setPriorityList(SDF_Priority arg, SDF_GroupList list);
 ATbool SDF_hasPriorityAssociativity(SDF_Priority arg);
 SDF_Associativity SDF_getPriorityAssociativity(SDF_Priority arg);
 SDF_Priority SDF_setPriorityAssociativity(SDF_Priority arg, SDF_Associativity associativity);
@@ -1185,26 +1185,26 @@ SDF_Group SDF_getPriorityLeft(SDF_Priority arg);
 SDF_Priority SDF_setPriorityLeft(SDF_Priority arg, SDF_Group left);
 
 /*}}}  */
-/*{{{  SDF_GroupGroupp accessor prototypes */
+/*{{{  SDF_GroupList accessor prototypes */
 
-ATbool SDF_isValidGroupGroupp(SDF_GroupGroupp arg);
-ATbool SDF_isGroupGrouppSingle(SDF_GroupGroupp arg);
-ATbool SDF_isGroupGrouppMany(SDF_GroupGroupp arg);
-ATbool SDF_hasGroupGrouppWsAfterFirst(SDF_GroupGroupp arg);
-SDF_Layout SDF_getGroupGrouppWsAfterFirst(SDF_GroupGroupp arg);
-SDF_GroupGroupp SDF_setGroupGrouppWsAfterFirst(SDF_GroupGroupp arg, SDF_Layout wsAfterFirst);
-ATbool SDF_hasGroupGrouppWsAfterSep(SDF_GroupGroupp arg);
-SDF_Layout SDF_getGroupGrouppWsAfterSep(SDF_GroupGroupp arg);
-SDF_GroupGroupp SDF_setGroupGrouppWsAfterSep(SDF_GroupGroupp arg, SDF_Layout wsAfterSep);
-ATbool SDF_hasGroupGrouppTail(SDF_GroupGroupp arg);
-SDF_GroupGroupp SDF_getGroupGrouppTail(SDF_GroupGroupp arg);
-SDF_GroupGroupp SDF_setGroupGrouppTail(SDF_GroupGroupp arg, SDF_GroupGroupp tail);
-ATbool SDF_hasGroupGrouppHead(SDF_GroupGroupp arg);
-SDF_Group SDF_getGroupGrouppHead(SDF_GroupGroupp arg);
-SDF_GroupGroupp SDF_setGroupGrouppHead(SDF_GroupGroupp arg, SDF_Group head);
-ATbool SDF_hasGroupGrouppSep(SDF_GroupGroupp arg);
-SDF_Separator SDF_getGroupGrouppSep(SDF_GroupGroupp arg);
-SDF_GroupGroupp SDF_setGroupGrouppSep(SDF_GroupGroupp arg, SDF_Separator sep);
+ATbool SDF_isValidGroupList(SDF_GroupList arg);
+ATbool SDF_isGroupListSingle(SDF_GroupList arg);
+ATbool SDF_isGroupListMany(SDF_GroupList arg);
+ATbool SDF_hasGroupListWsAfterFirst(SDF_GroupList arg);
+SDF_Layout SDF_getGroupListWsAfterFirst(SDF_GroupList arg);
+SDF_GroupList SDF_setGroupListWsAfterFirst(SDF_GroupList arg, SDF_Layout wsAfterFirst);
+ATbool SDF_hasGroupListWsAfterSep(SDF_GroupList arg);
+SDF_Layout SDF_getGroupListWsAfterSep(SDF_GroupList arg);
+SDF_GroupList SDF_setGroupListWsAfterSep(SDF_GroupList arg, SDF_Layout wsAfterSep);
+ATbool SDF_hasGroupListTail(SDF_GroupList arg);
+SDF_GroupList SDF_getGroupListTail(SDF_GroupList arg);
+SDF_GroupList SDF_setGroupListTail(SDF_GroupList arg, SDF_GroupList tail);
+ATbool SDF_hasGroupListHead(SDF_GroupList arg);
+SDF_Group SDF_getGroupListHead(SDF_GroupList arg);
+SDF_GroupList SDF_setGroupListHead(SDF_GroupList arg, SDF_Group head);
+ATbool SDF_hasGroupListSep(SDF_GroupList arg);
+SDF_Separator SDF_getGroupListSep(SDF_GroupList arg);
+SDF_GroupList SDF_setGroupListSep(SDF_GroupList arg, SDF_Separator sep);
 
 /*}}}  */
 /*{{{  SDF_Priorities accessor prototypes */

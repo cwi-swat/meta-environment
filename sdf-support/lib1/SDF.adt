@@ -6763,7 +6763,7 @@ l (
 
 Priority
 , 
-priority-chain
+chain
 , 
 appl ( 
 
@@ -6919,14 +6919,14 @@ w (
 "" )
 , 
 < 
-groupp ( 
+list ( 
 
-Group-groupp ) > ) ] ) ]
+Group-list ) > ) ] ) ]
 , 
 
 [ 
 
-Group-groupp
+Group-list
 , 
 single
 , 
@@ -6941,7 +6941,7 @@ Group ) > ] ]
 
 [ 
 
-Group-groupp
+Group-list
 , 
 many
 , 
@@ -6978,14 +6978,14 @@ Layout ) > )
 
 tail ( 
 
-Group-groupp ) ] > ] ]
+Group-list ) ] > ] ]
 , 
 
 [ 
 
 Priority
 , 
-priority-assoc
+assoc
 , 
 appl ( 
 

@@ -31,7 +31,7 @@ typedef struct ATerm _SDF_SymbolTail;
 typedef struct ATerm _SDF_Associativity;
 typedef struct ATerm _SDF_Group;
 typedef struct ATerm _SDF_Priority;
-typedef struct ATerm _SDF_GroupGroupp;
+typedef struct ATerm _SDF_GroupList;
 typedef struct ATerm _SDF_Priorities;
 typedef struct ATerm _SDF_PriorityList;
 typedef struct ATerm _SDF_Sort;
@@ -518,17 +518,17 @@ ATerm SDF_makeTermFromPriority(SDF_Priority arg)
 }
 
 /*}}}  */
-/*{{{  SDF_GroupGroupp SDF_makeGroupGrouppFromTerm(ATerm t) */
+/*{{{  SDF_GroupList SDF_makeGroupListFromTerm(ATerm t) */
 
-SDF_GroupGroupp SDF_makeGroupGrouppFromTerm(ATerm t)
+SDF_GroupList SDF_makeGroupListFromTerm(ATerm t)
 {
-  return (SDF_GroupGroupp)t;
+  return (SDF_GroupList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm SDF_makeTermFromGroupGroupp(SDF_GroupGroupp arg) */
+/*{{{  ATerm SDF_makeTermFromGroupList(SDF_GroupList arg) */
 
-ATerm SDF_makeTermFromGroupGroupp(SDF_GroupGroupp arg)
+ATerm SDF_makeTermFromGroupList(SDF_GroupList arg)
 {
   return (ATerm)arg;
 }
@@ -2007,35 +2007,35 @@ SDF_Group SDF_makeGroupAssocGroup(SDF_Layout wsAfterBraceOpen, SDF_Associativity
 }
 
 /*}}}  */
-/*{{{  SDF_Priority SDF_makePriorityPriorityChain(SDF_GroupGroupp groupp) */
+/*{{{  SDF_Priority SDF_makePriorityChain(SDF_GroupList list) */
 
-SDF_Priority SDF_makePriorityPriorityChain(SDF_GroupGroupp groupp)
+SDF_Priority SDF_makePriorityChain(SDF_GroupList list)
 {
-  return (SDF_Priority)ATmakeTerm(SDF_patternPriorityPriorityChain, groupp);
+  return (SDF_Priority)ATmakeTerm(SDF_patternPriorityChain, list);
 }
 
 /*}}}  */
-/*{{{  SDF_Priority SDF_makePriorityPriorityAssoc(SDF_Group left, SDF_Layout wsAfterLeft, SDF_Associativity associativity, SDF_Layout wsAfterAssociativity, SDF_Group right) */
+/*{{{  SDF_Priority SDF_makePriorityAssoc(SDF_Group left, SDF_Layout wsAfterLeft, SDF_Associativity associativity, SDF_Layout wsAfterAssociativity, SDF_Group right) */
 
-SDF_Priority SDF_makePriorityPriorityAssoc(SDF_Group left, SDF_Layout wsAfterLeft, SDF_Associativity associativity, SDF_Layout wsAfterAssociativity, SDF_Group right)
+SDF_Priority SDF_makePriorityAssoc(SDF_Group left, SDF_Layout wsAfterLeft, SDF_Associativity associativity, SDF_Layout wsAfterAssociativity, SDF_Group right)
 {
-  return (SDF_Priority)ATmakeTerm(SDF_patternPriorityPriorityAssoc, left, wsAfterLeft, associativity, wsAfterAssociativity, right);
+  return (SDF_Priority)ATmakeTerm(SDF_patternPriorityAssoc, left, wsAfterLeft, associativity, wsAfterAssociativity, right);
 }
 
 /*}}}  */
-/*{{{  SDF_GroupGroupp SDF_makeGroupGrouppSingle(SDF_Group head) */
+/*{{{  SDF_GroupList SDF_makeGroupListSingle(SDF_Group head) */
 
-SDF_GroupGroupp SDF_makeGroupGrouppSingle(SDF_Group head)
+SDF_GroupList SDF_makeGroupListSingle(SDF_Group head)
 {
-  return (SDF_GroupGroupp)ATmakeTerm(SDF_patternGroupGrouppSingle, head);
+  return (SDF_GroupList)ATmakeTerm(SDF_patternGroupListSingle, head);
 }
 
 /*}}}  */
-/*{{{  SDF_GroupGroupp SDF_makeGroupGrouppMany(SDF_Group head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_GroupGroupp tail) */
+/*{{{  SDF_GroupList SDF_makeGroupListMany(SDF_Group head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_GroupList tail) */
 
-SDF_GroupGroupp SDF_makeGroupGrouppMany(SDF_Group head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_GroupGroupp tail)
+SDF_GroupList SDF_makeGroupListMany(SDF_Group head, SDF_Layout wsAfterFirst, SDF_Separator sep, SDF_Layout wsAfterSep, SDF_GroupList tail)
 {
-  return (SDF_GroupGroupp)ATmakeTerm(SDF_patternGroupGrouppMany, head, wsAfterFirst, sep, wsAfterSep, tail);
+  return (SDF_GroupList)ATmakeTerm(SDF_patternGroupListMany, head, wsAfterFirst, sep, wsAfterSep, tail);
 }
 
 /*}}}  */
@@ -2937,7 +2937,7 @@ ATbool SDF_isEqualPriority(SDF_Priority arg0, SDF_Priority arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool SDF_isEqualGroupGroupp(SDF_GroupGroupp arg0, SDF_GroupGroupp arg1)
+ATbool SDF_isEqualGroupList(SDF_GroupList arg0, SDF_GroupList arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -10517,29 +10517,29 @@ SDF_Group SDF_setGroupWsAfterColon(SDF_Group arg, SDF_Layout wsAfterColon)
 
 ATbool SDF_isValidPriority(SDF_Priority arg)
 {
-  if (SDF_isPriorityPriorityChain(arg)) {
+  if (SDF_isPriorityChain(arg)) {
     return ATtrue;
   }
-  else if (SDF_isPriorityPriorityAssoc(arg)) {
+  else if (SDF_isPriorityAssoc(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_isPriorityPriorityChain(SDF_Priority arg) */
+/*{{{  ATbool SDF_isPriorityChain(SDF_Priority arg) */
 
-ATbool SDF_isPriorityPriorityChain(SDF_Priority arg)
+ATbool SDF_isPriorityChain(SDF_Priority arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternPriorityPriorityChain, NULL);
+  return ATmatchTerm((ATerm)arg, SDF_patternPriorityChain, NULL);
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_isPriorityPriorityAssoc(SDF_Priority arg) */
+/*{{{  ATbool SDF_isPriorityAssoc(SDF_Priority arg) */
 
-ATbool SDF_isPriorityPriorityAssoc(SDF_Priority arg)
+ATbool SDF_isPriorityAssoc(SDF_Priority arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternPriorityPriorityAssoc, NULL, NULL, NULL, NULL, NULL);
+  return ATmatchTerm((ATerm)arg, SDF_patternPriorityAssoc, NULL, NULL, NULL, NULL, NULL);
 }
 
 /*}}}  */
@@ -10547,7 +10547,7 @@ ATbool SDF_isPriorityPriorityAssoc(SDF_Priority arg)
 
 ATbool SDF_hasPriorityRight(SDF_Priority arg)
 {
-  if (SDF_isPriorityPriorityAssoc(arg)) {
+  if (SDF_isPriorityAssoc(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -10558,7 +10558,7 @@ ATbool SDF_hasPriorityRight(SDF_Priority arg)
 
 SDF_Group SDF_getPriorityRight(SDF_Priority arg)
 {
-  if (SDF_isPriorityPriorityAssoc(arg)) {
+  if (SDF_isPriorityAssoc(arg)) {
     return (SDF_Group)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 4);
   }
 
@@ -10571,7 +10571,7 @@ SDF_Group SDF_getPriorityRight(SDF_Priority arg)
 
 SDF_Priority SDF_setPriorityRight(SDF_Priority arg, SDF_Group right)
 {
-  if (SDF_isPriorityPriorityAssoc(arg)) {
+  if (SDF_isPriorityAssoc(arg)) {
     return (SDF_Priority)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)right, 4), 2);
   }
 
@@ -10584,7 +10584,7 @@ SDF_Priority SDF_setPriorityRight(SDF_Priority arg, SDF_Group right)
 
 ATbool SDF_hasPriorityWsAfterAssociativity(SDF_Priority arg)
 {
-  if (SDF_isPriorityPriorityAssoc(arg)) {
+  if (SDF_isPriorityAssoc(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -10595,7 +10595,7 @@ ATbool SDF_hasPriorityWsAfterAssociativity(SDF_Priority arg)
 
 SDF_Layout SDF_getPriorityWsAfterAssociativity(SDF_Priority arg)
 {
-  if (SDF_isPriorityPriorityAssoc(arg)) {
+  if (SDF_isPriorityAssoc(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 3), 0);
   }
 
@@ -10608,7 +10608,7 @@ SDF_Layout SDF_getPriorityWsAfterAssociativity(SDF_Priority arg)
 
 SDF_Priority SDF_setPriorityWsAfterAssociativity(SDF_Priority arg, SDF_Layout wsAfterAssociativity)
 {
-  if (SDF_isPriorityPriorityAssoc(arg)) {
+  if (SDF_isPriorityAssoc(arg)) {
     return (SDF_Priority)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 3), (ATerm)wsAfterAssociativity, 0), 3), 2);
   }
 
@@ -10621,7 +10621,7 @@ SDF_Priority SDF_setPriorityWsAfterAssociativity(SDF_Priority arg, SDF_Layout ws
 
 ATbool SDF_hasPriorityWsAfterLeft(SDF_Priority arg)
 {
-  if (SDF_isPriorityPriorityAssoc(arg)) {
+  if (SDF_isPriorityAssoc(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -10632,7 +10632,7 @@ ATbool SDF_hasPriorityWsAfterLeft(SDF_Priority arg)
 
 SDF_Layout SDF_getPriorityWsAfterLeft(SDF_Priority arg)
 {
-  if (SDF_isPriorityPriorityAssoc(arg)) {
+  if (SDF_isPriorityAssoc(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 1), 0);
   }
 
@@ -10645,7 +10645,7 @@ SDF_Layout SDF_getPriorityWsAfterLeft(SDF_Priority arg)
 
 SDF_Priority SDF_setPriorityWsAfterLeft(SDF_Priority arg, SDF_Layout wsAfterLeft)
 {
-  if (SDF_isPriorityPriorityAssoc(arg)) {
+  if (SDF_isPriorityAssoc(arg)) {
     return (SDF_Priority)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 1), (ATerm)wsAfterLeft, 0), 1), 2);
   }
 
@@ -10654,39 +10654,39 @@ SDF_Priority SDF_setPriorityWsAfterLeft(SDF_Priority arg, SDF_Layout wsAfterLeft
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasPriorityGroupp(SDF_Priority arg) */
+/*{{{  ATbool SDF_hasPriorityList(SDF_Priority arg) */
 
-ATbool SDF_hasPriorityGroupp(SDF_Priority arg)
+ATbool SDF_hasPriorityList(SDF_Priority arg)
 {
-  if (SDF_isPriorityPriorityChain(arg)) {
+  if (SDF_isPriorityChain(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_GroupGroupp SDF_getPriorityGroupp(SDF_Priority arg) */
+/*{{{  SDF_GroupList SDF_getPriorityList(SDF_Priority arg) */
 
-SDF_GroupGroupp SDF_getPriorityGroupp(SDF_Priority arg)
+SDF_GroupList SDF_getPriorityList(SDF_Priority arg)
 {
-  if (SDF_isPriorityPriorityChain(arg)) {
-    return (SDF_GroupGroupp)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), 2);
+  if (SDF_isPriorityChain(arg)) {
+    return (SDF_GroupList)ATgetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), 2);
   }
 
-  ATabort("Priority has no Groupp: %t\n", arg);
+  ATabort("Priority has no List: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_Priority SDF_setPriorityGroupp(SDF_Priority arg, SDF_GroupGroupp groupp) */
+/*{{{  SDF_Priority SDF_setPriorityList(SDF_Priority arg, SDF_GroupList list) */
 
-SDF_Priority SDF_setPriorityGroupp(SDF_Priority arg, SDF_GroupGroupp groupp)
+SDF_Priority SDF_setPriorityList(SDF_Priority arg, SDF_GroupList list)
 {
-  if (SDF_isPriorityPriorityChain(arg)) {
-    return (SDF_Priority)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), (ATerm)groupp, 2), 0), 2);
+  if (SDF_isPriorityChain(arg)) {
+    return (SDF_Priority)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0), (ATerm)list, 2), 0), 2);
   }
 
-  ATabort("Priority has no Groupp: %t\n", arg);
+  ATabort("Priority has no List: %t\n", arg);
   return NULL;
 }
 
@@ -10695,7 +10695,7 @@ SDF_Priority SDF_setPriorityGroupp(SDF_Priority arg, SDF_GroupGroupp groupp)
 
 ATbool SDF_hasPriorityAssociativity(SDF_Priority arg)
 {
-  if (SDF_isPriorityPriorityAssoc(arg)) {
+  if (SDF_isPriorityAssoc(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -10706,7 +10706,7 @@ ATbool SDF_hasPriorityAssociativity(SDF_Priority arg)
 
 SDF_Associativity SDF_getPriorityAssociativity(SDF_Priority arg)
 {
-  if (SDF_isPriorityPriorityAssoc(arg)) {
+  if (SDF_isPriorityAssoc(arg)) {
     return (SDF_Associativity)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 2);
   }
 
@@ -10719,7 +10719,7 @@ SDF_Associativity SDF_getPriorityAssociativity(SDF_Priority arg)
 
 SDF_Priority SDF_setPriorityAssociativity(SDF_Priority arg, SDF_Associativity associativity)
 {
-  if (SDF_isPriorityPriorityAssoc(arg)) {
+  if (SDF_isPriorityAssoc(arg)) {
     return (SDF_Priority)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)associativity, 2), 2);
   }
 
@@ -10732,7 +10732,7 @@ SDF_Priority SDF_setPriorityAssociativity(SDF_Priority arg, SDF_Associativity as
 
 ATbool SDF_hasPriorityLeft(SDF_Priority arg)
 {
-  if (SDF_isPriorityPriorityAssoc(arg)) {
+  if (SDF_isPriorityAssoc(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -10743,7 +10743,7 @@ ATbool SDF_hasPriorityLeft(SDF_Priority arg)
 
 SDF_Group SDF_getPriorityLeft(SDF_Priority arg)
 {
-  if (SDF_isPriorityPriorityAssoc(arg)) {
+  if (SDF_isPriorityAssoc(arg)) {
     return (SDF_Group)ATelementAt((ATermList)ATgetArgument((ATermAppl)arg, 2), 0);
   }
 
@@ -10756,7 +10756,7 @@ SDF_Group SDF_getPriorityLeft(SDF_Priority arg)
 
 SDF_Priority SDF_setPriorityLeft(SDF_Priority arg, SDF_Group left)
 {
-  if (SDF_isPriorityPriorityAssoc(arg)) {
+  if (SDF_isPriorityAssoc(arg)) {
     return (SDF_Priority)ATsetArgument((ATermAppl)arg, (ATerm)ATreplace((ATermList)ATgetArgument((ATermAppl)arg, 2), (ATerm)left, 0), 2);
   }
 
@@ -10767,228 +10767,228 @@ SDF_Priority SDF_setPriorityLeft(SDF_Priority arg, SDF_Group left)
 /*}}}  */
 
 /*}}}  */
-/*{{{  SDF_GroupGroupp accessor implementations */
+/*{{{  SDF_GroupList accessor implementations */
 
-/*{{{  ATbool SDF_isValidGroupGroupp(SDF_GroupGroupp arg) */
+/*{{{  ATbool SDF_isValidGroupList(SDF_GroupList arg) */
 
-ATbool SDF_isValidGroupGroupp(SDF_GroupGroupp arg)
+ATbool SDF_isValidGroupList(SDF_GroupList arg)
 {
-  if (SDF_isGroupGrouppSingle(arg)) {
+  if (SDF_isGroupListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isGroupGrouppMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isGroupGrouppSingle(SDF_GroupGroupp arg) */
-
-ATbool SDF_isGroupGrouppSingle(SDF_GroupGroupp arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternGroupGrouppSingle, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_isGroupGrouppMany(SDF_GroupGroupp arg) */
-
-ATbool SDF_isGroupGrouppMany(SDF_GroupGroupp arg)
-{
-  return ATmatchTerm((ATerm)arg, SDF_patternGroupGrouppMany, NULL, NULL, NULL, NULL, NULL);
-}
-
-/*}}}  */
-/*{{{  ATbool SDF_hasGroupGrouppWsAfterFirst(SDF_GroupGroupp arg) */
-
-ATbool SDF_hasGroupGrouppWsAfterFirst(SDF_GroupGroupp arg)
-{
-  if (SDF_isGroupGrouppMany(arg)) {
+  else if (SDF_isGroupListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Layout SDF_getGroupGrouppWsAfterFirst(SDF_GroupGroupp arg) */
+/*{{{  ATbool SDF_isGroupListSingle(SDF_GroupList arg) */
 
-SDF_Layout SDF_getGroupGrouppWsAfterFirst(SDF_GroupGroupp arg)
+ATbool SDF_isGroupListSingle(SDF_GroupList arg)
 {
-  if (SDF_isGroupGrouppMany(arg)) {
+  return ATmatchTerm((ATerm)arg, SDF_patternGroupListSingle, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_isGroupListMany(SDF_GroupList arg) */
+
+ATbool SDF_isGroupListMany(SDF_GroupList arg)
+{
+  return ATmatchTerm((ATerm)arg, SDF_patternGroupListMany, NULL, NULL, NULL, NULL, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool SDF_hasGroupListWsAfterFirst(SDF_GroupList arg) */
+
+ATbool SDF_hasGroupListWsAfterFirst(SDF_GroupList arg)
+{
+  if (SDF_isGroupListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  SDF_Layout SDF_getGroupListWsAfterFirst(SDF_GroupList arg) */
+
+SDF_Layout SDF_getGroupListWsAfterFirst(SDF_GroupList arg)
+{
+  if (SDF_isGroupListMany(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), 0);
   }
 
-  ATabort("GroupGroupp has no WsAfterFirst: %t\n", arg);
+  ATabort("GroupList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_GroupGroupp SDF_setGroupGrouppWsAfterFirst(SDF_GroupGroupp arg, SDF_Layout wsAfterFirst) */
+/*{{{  SDF_GroupList SDF_setGroupListWsAfterFirst(SDF_GroupList arg, SDF_Layout wsAfterFirst) */
 
-SDF_GroupGroupp SDF_setGroupGrouppWsAfterFirst(SDF_GroupGroupp arg, SDF_Layout wsAfterFirst)
+SDF_GroupList SDF_setGroupListWsAfterFirst(SDF_GroupList arg, SDF_Layout wsAfterFirst)
 {
-  if (SDF_isGroupGrouppMany(arg)) {
-    return (SDF_GroupGroupp)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
+  if (SDF_isGroupListMany(arg)) {
+    return (SDF_GroupList)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 1), (ATerm)wsAfterFirst, 0), 1);
   }
 
-  ATabort("GroupGroupp has no WsAfterFirst: %t\n", arg);
+  ATabort("GroupList has no WsAfterFirst: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasGroupGrouppWsAfterSep(SDF_GroupGroupp arg) */
+/*{{{  ATbool SDF_hasGroupListWsAfterSep(SDF_GroupList arg) */
 
-ATbool SDF_hasGroupGrouppWsAfterSep(SDF_GroupGroupp arg)
+ATbool SDF_hasGroupListWsAfterSep(SDF_GroupList arg)
 {
-  if (SDF_isGroupGrouppMany(arg)) {
+  if (SDF_isGroupListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Layout SDF_getGroupGrouppWsAfterSep(SDF_GroupGroupp arg) */
+/*{{{  SDF_Layout SDF_getGroupListWsAfterSep(SDF_GroupList arg) */
 
-SDF_Layout SDF_getGroupGrouppWsAfterSep(SDF_GroupGroupp arg)
+SDF_Layout SDF_getGroupListWsAfterSep(SDF_GroupList arg)
 {
-  if (SDF_isGroupGrouppMany(arg)) {
+  if (SDF_isGroupListMany(arg)) {
     return (SDF_Layout)ATgetArgument((ATermAppl)ATelementAt((ATermList)arg, 3), 0);
   }
 
-  ATabort("GroupGroupp has no WsAfterSep: %t\n", arg);
+  ATabort("GroupList has no WsAfterSep: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_GroupGroupp SDF_setGroupGrouppWsAfterSep(SDF_GroupGroupp arg, SDF_Layout wsAfterSep) */
+/*{{{  SDF_GroupList SDF_setGroupListWsAfterSep(SDF_GroupList arg, SDF_Layout wsAfterSep) */
 
-SDF_GroupGroupp SDF_setGroupGrouppWsAfterSep(SDF_GroupGroupp arg, SDF_Layout wsAfterSep)
+SDF_GroupList SDF_setGroupListWsAfterSep(SDF_GroupList arg, SDF_Layout wsAfterSep)
 {
-  if (SDF_isGroupGrouppMany(arg)) {
-    return (SDF_GroupGroupp)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 3), (ATerm)wsAfterSep, 0), 3);
+  if (SDF_isGroupListMany(arg)) {
+    return (SDF_GroupList)ATreplace((ATermList)arg, (ATerm)ATsetArgument((ATermAppl)ATelementAt((ATermList)arg, 3), (ATerm)wsAfterSep, 0), 3);
   }
 
-  ATabort("GroupGroupp has no WsAfterSep: %t\n", arg);
+  ATabort("GroupList has no WsAfterSep: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasGroupGrouppTail(SDF_GroupGroupp arg) */
+/*{{{  ATbool SDF_hasGroupListTail(SDF_GroupList arg) */
 
-ATbool SDF_hasGroupGrouppTail(SDF_GroupGroupp arg)
+ATbool SDF_hasGroupListTail(SDF_GroupList arg)
 {
-  if (SDF_isGroupGrouppMany(arg)) {
+  if (SDF_isGroupListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_GroupGroupp SDF_getGroupGrouppTail(SDF_GroupGroupp arg) */
+/*{{{  SDF_GroupList SDF_getGroupListTail(SDF_GroupList arg) */
 
-SDF_GroupGroupp SDF_getGroupGrouppTail(SDF_GroupGroupp arg)
+SDF_GroupList SDF_getGroupListTail(SDF_GroupList arg)
 {
-  if (SDF_isGroupGrouppMany(arg)) {
-    return (SDF_GroupGroupp)ATgetTail((ATermList)arg, 4);
+  if (SDF_isGroupListMany(arg)) {
+    return (SDF_GroupList)ATgetTail((ATermList)arg, 4);
   }
 
-  ATabort("GroupGroupp has no Tail: %t\n", arg);
+  ATabort("GroupList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_GroupGroupp SDF_setGroupGrouppTail(SDF_GroupGroupp arg, SDF_GroupGroupp tail) */
+/*{{{  SDF_GroupList SDF_setGroupListTail(SDF_GroupList arg, SDF_GroupList tail) */
 
-SDF_GroupGroupp SDF_setGroupGrouppTail(SDF_GroupGroupp arg, SDF_GroupGroupp tail)
+SDF_GroupList SDF_setGroupListTail(SDF_GroupList arg, SDF_GroupList tail)
 {
-  if (SDF_isGroupGrouppMany(arg)) {
-    return (SDF_GroupGroupp)ATreplaceTail((ATermList)arg, (ATermList)tail, 4);
+  if (SDF_isGroupListMany(arg)) {
+    return (SDF_GroupList)ATreplaceTail((ATermList)arg, (ATermList)tail, 4);
   }
 
-  ATabort("GroupGroupp has no Tail: %t\n", arg);
+  ATabort("GroupList has no Tail: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasGroupGrouppHead(SDF_GroupGroupp arg) */
+/*{{{  ATbool SDF_hasGroupListHead(SDF_GroupList arg) */
 
-ATbool SDF_hasGroupGrouppHead(SDF_GroupGroupp arg)
+ATbool SDF_hasGroupListHead(SDF_GroupList arg)
 {
-  if (SDF_isGroupGrouppSingle(arg)) {
+  if (SDF_isGroupListSingle(arg)) {
     return ATtrue;
   }
-  else if (SDF_isGroupGrouppMany(arg)) {
+  else if (SDF_isGroupListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Group SDF_getGroupGrouppHead(SDF_GroupGroupp arg) */
+/*{{{  SDF_Group SDF_getGroupListHead(SDF_GroupList arg) */
 
-SDF_Group SDF_getGroupGrouppHead(SDF_GroupGroupp arg)
+SDF_Group SDF_getGroupListHead(SDF_GroupList arg)
 {
-  if (SDF_isGroupGrouppSingle(arg)) {
+  if (SDF_isGroupListSingle(arg)) {
     return (SDF_Group)ATelementAt((ATermList)arg, 0);
   }
-  else if (SDF_isGroupGrouppMany(arg)) {
+  else if (SDF_isGroupListMany(arg)) {
     return (SDF_Group)ATelementAt((ATermList)arg, 0);
   }
 
-  ATabort("GroupGroupp has no Head: %t\n", arg);
+  ATabort("GroupList has no Head: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_GroupGroupp SDF_setGroupGrouppHead(SDF_GroupGroupp arg, SDF_Group head) */
+/*{{{  SDF_GroupList SDF_setGroupListHead(SDF_GroupList arg, SDF_Group head) */
 
-SDF_GroupGroupp SDF_setGroupGrouppHead(SDF_GroupGroupp arg, SDF_Group head)
+SDF_GroupList SDF_setGroupListHead(SDF_GroupList arg, SDF_Group head)
 {
-  if (SDF_isGroupGrouppSingle(arg)) {
-    return (SDF_GroupGroupp)ATreplace((ATermList)arg, (ATerm)head, 0);
+  if (SDF_isGroupListSingle(arg)) {
+    return (SDF_GroupList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
-  else if (SDF_isGroupGrouppMany(arg)) {
-    return (SDF_GroupGroupp)ATreplace((ATermList)arg, (ATerm)head, 0);
+  else if (SDF_isGroupListMany(arg)) {
+    return (SDF_GroupList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
 
-  ATabort("GroupGroupp has no Head: %t\n", arg);
+  ATabort("GroupList has no Head: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool SDF_hasGroupGrouppSep(SDF_GroupGroupp arg) */
+/*{{{  ATbool SDF_hasGroupListSep(SDF_GroupList arg) */
 
-ATbool SDF_hasGroupGrouppSep(SDF_GroupGroupp arg)
+ATbool SDF_hasGroupListSep(SDF_GroupList arg)
 {
-  if (SDF_isGroupGrouppMany(arg)) {
+  if (SDF_isGroupListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  SDF_Separator SDF_getGroupGrouppSep(SDF_GroupGroupp arg) */
+/*{{{  SDF_Separator SDF_getGroupListSep(SDF_GroupList arg) */
 
-SDF_Separator SDF_getGroupGrouppSep(SDF_GroupGroupp arg)
+SDF_Separator SDF_getGroupListSep(SDF_GroupList arg)
 {
-  if (SDF_isGroupGrouppMany(arg)) {
+  if (SDF_isGroupListMany(arg)) {
     return (SDF_Separator)ATelementAt((ATermList)arg, 2);
   }
 
-  ATabort("GroupGroupp has no Sep: %t\n", arg);
+  ATabort("GroupList has no Sep: %t\n", arg);
   return NULL;
 }
 
 /*}}}  */
-/*{{{  SDF_GroupGroupp SDF_setGroupGrouppSep(SDF_GroupGroupp arg, SDF_Separator sep) */
+/*{{{  SDF_GroupList SDF_setGroupListSep(SDF_GroupList arg, SDF_Separator sep) */
 
-SDF_GroupGroupp SDF_setGroupGrouppSep(SDF_GroupGroupp arg, SDF_Separator sep)
+SDF_GroupList SDF_setGroupListSep(SDF_GroupList arg, SDF_Separator sep)
 {
-  if (SDF_isGroupGrouppMany(arg)) {
-    return (SDF_GroupGroupp)ATreplace((ATermList)arg, (ATerm)sep, 2);
+  if (SDF_isGroupListMany(arg)) {
+    return (SDF_GroupList)ATreplace((ATermList)arg, (ATerm)sep, 2);
   }
 
-  ATabort("GroupGroupp has no Sep: %t\n", arg);
+  ATabort("GroupList has no Sep: %t\n", arg);
   return NULL;
 }
 

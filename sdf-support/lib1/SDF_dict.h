@@ -1,5 +1,5 @@
 /*
- * Generated at Fri Jan 26 13:25:47 2001
+ * Generated at Fri Jan 26 14:43:52 2001
  */
 
 #ifndef __SDF_dict_H
@@ -103,10 +103,10 @@ extern ATerm SDF_patternPriorityListMany;
 extern ATerm SDF_patternPriorityListSingle;
 extern ATerm SDF_patternPriorityListEmpty;
 extern ATerm SDF_patternPrioritiesDefault;
-extern ATerm SDF_patternGroupGrouppMany;
-extern ATerm SDF_patternGroupGrouppSingle;
-extern ATerm SDF_patternPriorityPriorityAssoc;
-extern ATerm SDF_patternPriorityPriorityChain;
+extern ATerm SDF_patternGroupListMany;
+extern ATerm SDF_patternGroupListSingle;
+extern ATerm SDF_patternPriorityAssoc;
+extern ATerm SDF_patternPriorityChain;
 extern ATerm SDF_patternGroupAssocGroup;
 extern ATerm SDF_patternGroupProdsGroup;
 extern ATerm SDF_patternGroupSimpleGroup;
