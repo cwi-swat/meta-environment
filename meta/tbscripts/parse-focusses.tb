@@ -48,7 +48,13 @@ in
       rec-msg(set-rules-top-sort(sort(Nonterminal?)))
     else
       Nonterminal := ""
-    fi . 
+    fi .
+    if equal(Type, sdf) then
+      snd-msg(syntax-top-sort-hook(sdf)) .
+      rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?))) 
+    else
+      Nonterminal := ""
+    fi .
     GetText(EditorId, Text?, Focus?, Status?) .
     if equal(Status, parse-needed) then
       UpdateTextInModuleDb(Type, ModuleName, Text).

@@ -4,7 +4,7 @@ process ObtainParseTable(ModuleName : str, Type : term, Table : term?) is
 let
   TermType : term
 in
-  if and(equal(Type, trm), equal(ModuleName, "Sdf2")) then
+  if equal(Type, sdf) then
     snd-msg(open-language(sdf)) .
     (
       rec-msg(parse-table(TermType?, Table?))

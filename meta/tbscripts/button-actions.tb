@@ -970,7 +970,7 @@ in
   rec-msg(get-module-id-hook-result(ModuleId?)) .
   snd-msg(notify-about-changed-modules([ModuleName], Type)) .
   rec-msg(notify-about-changed-modules-done) .
-  snd-msg(parse-focusses(EditorId, ModuleId, trm)) .
+  snd-msg(parse-focusses(EditorId, ModuleId, sdf)) .
   (
     rec-msg(parse-ok(ModuleId)) .
     snd-msg(get-tree(EditorId)) .
