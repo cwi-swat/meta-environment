@@ -6,24 +6,20 @@ module languages/c/syntax/Simplified-C
 %%
 %% It accepts more than ANSI-C because:
 %%   * more combinations of Expressions are allowed, while still remaining 
-%%     unambiguous.
-%%   * Watch out: the priority of the operators HAS NOT BEEN CHECKED 
-%%     completely with the standard yet.
+%%     unambiguous, and priorities are according to the ANSI-C standard.
 %%   * All type specifiers have been put into one non-terminal, so this
 %%     grammar accepts more type incorrect C code than the ANSI-C grammar.
+%%     For example: int main(static int a) is accepted, but illegal in ANSI-C.
 %%   * Abstract declarators and normal declarators are the same now, so 
 %%     this grammar also accepts partially abstract declarators, which is 
 %%     illegal in C. Also abstract declarators are accepted where 
 %%     previously only concrete declarators where accepted and vice versa.
 %%
-%% TODO: - The priority definitions still contain a lot of duplication
-%%       - Check the priorities with actual ANSI standard
-%%
 %% DONT: try to fully disambiguate this grammar because that would ruin
 %%       its declarative nature. C is ambiguous. However, the expression
 %%       grammar should be fully unambiguous (Expression).
 
-imports basic/Whitespace
+imports languages/c/syntax/Whitespace
 imports languages/cpp/syntax/CommentsAsLayout
 
 hiddens
@@ -130,7 +126,7 @@ FloatingPointConstant 			-> Expression
 StringConstant 				-> Expression
 "(" Expression ")" 			-> Expression {bracket}
 Expression "["	Expression "]"	 	-> Expression
-Expression "("  Expression? ")"		-> Expression
+Expression "("  {Expression ","}* ")"	-> Expression
 Expression "." Identifier 		-> Expression 
 Expression "->" Identifier 		-> Expression
 Expression "++" 			-> Expression
@@ -199,66 +195,17 @@ Expression "|=" Expression 	-> Expression {right}
 
 context-free syntax
 
-{Expression ","}+	 	-> Expression
-
-context-free priorities %% preventing cycle
-Expression        -> {Expression ","}+ >
-{Expression ","}+ -> Expression
+Expression "," Expression 	-> Expression {left}
 
 context-free priorities
 {
-"(" TypeName ")" Expression 	-> Expression
-"sizeof" Expression 	  	-> Expression
-"sizeof" "(" TypeName ")"	-> Expression
-} >
-{left:
-Expression "<" Expression 	-> Expression {left}
-Expression ">" Expression 	-> Expression {left}
-Expression "<=" Expression 	-> Expression {left}
-Expression ">=" Expression 	-> Expression {left}
-Expression "==" Expression 	-> Expression {left}
-Expression "!=" Expression 	-> Expression {left}
-}
-
-context-free priorities
-Expression "(" Expression? ")"	-> Expression <0>
->
-{
-"++" Expression 			-> Expression
-"--" Expression 			-> Expression
-"&" Expression 				-> Expression
-"*" Expression 				-> Expression
-"+" Expression 				-> Expression
-"-" Expression 				-> Expression
-"~" Expression 				-> Expression
-"!" Expression 				-> Expression
-"sizeof" Expression 	  		-> Expression
-}
-
-
-
-context-free priorities
-Expression "["	Expression "]"	 	-> Expression <0> 
-> {
-"++" Expression 			-> Expression
-"--" Expression 			-> Expression
-"&" Expression 				-> Expression
-"*" Expression 				-> Expression
-"+" Expression 				-> Expression
-"-" Expression 				-> Expression
-"~" Expression 				-> Expression
-"!" Expression 				-> Expression
-"sizeof" Expression 	  		-> Expression
-} 
-
-context-free priorities
-{
-Expression "." Identifier 		-> Expression 
-Expression "->" Identifier 		-> Expression
-Expression "++" 			-> Expression
-Expression "--" 			-> Expression
-} >
-{
+Expression "." Identifier 	-> Expression 
+Expression "->" Identifier 	-> Expression
+Expression "++" 		-> Expression
+Expression "--" 		-> Expression
+Expression "(" {Expression ","}* ")"	-> Expression 
+Expression "[" Expression "]"	-> Expression 
+} <0> > {
 "++" Expression 		-> Expression
 "--" Expression 		-> Expression
 "&" Expression 			-> Expression
@@ -268,8 +215,8 @@ Expression "--" 			-> Expression
 "~" Expression 			-> Expression
 "!" Expression 			-> Expression
 "sizeof" Expression 	  	-> Expression
-} 
-> "(" TypeName ")" Expression -> Expression 
+"(" TypeName ")" Expression -> Expression 
+}
 > { left:
 Expression "*" Expression -> Expression {left}
 Expression "/" Expression -> Expression {left}
@@ -285,6 +232,8 @@ Expression "<" Expression -> Expression {left}
 Expression ">" Expression -> Expression {left}
 Expression "<=" Expression -> Expression {left}
 Expression ">=" Expression -> Expression {left}
+} >
+{left:
 Expression "==" Expression -> Expression {left}
 Expression "!=" Expression -> Expression {left}
 }
@@ -293,8 +242,8 @@ Expression "!=" Expression -> Expression {left}
 > Expression "|" Expression -> Expression {left}
 > Expression "&&" Expression -> Expression {left}
 > Expression "||" Expression -> Expression {left}
->
-{right:
+> Expression "?" Expression ":" Expression -> Expression <0,4> 
+> {right:
 Expression "=" Expression -> Expression {right}
 Expression "*=" Expression -> Expression {right}
 Expression "/=" Expression -> Expression {right}
@@ -308,47 +257,22 @@ Expression "^=" Expression -> Expression {right}
 Expression "|=" Expression -> Expression {right}
 }
 >
-{Expression ","}+ -> Expression {left}
-
-context-free priorities
-
-context-free priorities
-{ left:
-Expression "<" Expression -> Expression {left}
-Expression ">" Expression -> Expression {left}
-Expression "<=" Expression -> Expression {left}
-Expression ">=" Expression -> Expression {left}
-Expression "==" Expression -> Expression {left}
-Expression "!=" Expression -> Expression {left}
-} 
-> Expression "&" Expression -> Expression {left}
-> Expression "^" Expression -> Expression {left}
-> Expression "|" Expression -> Expression {left}
-> Expression "&&" Expression -> Expression {left}
-> Expression "||" Expression -> Expression {left}
->
-Expression "?" Expression ":" Expression -> Expression 
-
-context-free priorities
-Expression "?" Expression ":" Expression -> Expression <0,4> >
-{right:
-Expression "=" Expression -> Expression {right}
-Expression "*=" Expression -> Expression {right}
-Expression "/=" Expression -> Expression {right}
-Expression "%=" Expression -> Expression {right}
-Expression "+=" Expression -> Expression {right}
-Expression "-=" Expression -> Expression {right}
-Expression "<<=" Expression -> Expression {right}
-Expression ">>=" Expression -> Expression {right}
-Expression "&=" Expression -> Expression {right}
-Expression "^=" Expression -> Expression {right}
-Expression "|=" Expression -> Expression {right}
-}
+Expression "," Expression -> Expression {left}
 
 
 context-free priorities
 Expression "?" Expression ":" Expression -> Expression <0> >
 Expression "?" Expression ":" Expression -> Expression
+
+%% The , needs some extra attention, in order to give the initializer
+%% separator and actual argument separator a higher priority than the
+%% left associative comma expression.
+context-free priorities
+Expression -> Initializer >
+Expression "," Expression -> Expression,
+
+Expression -> {Expression ","}+ >
+Expression "," Expression -> Expression
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 context-free syntax
@@ -387,6 +311,10 @@ context-free syntax
 "enum"            "{" {Enumerator ","}+  "}"	 -> Specifier
 "enum" Identifier "{" {Enumerator ","}+  "}"	 -> Specifier
 "enum" Identifier                                -> Specifier
+
+lexical restrictions
+	"enum" -/- [0-9a-zA-Z\_]
+	"struct" | "union" -/- [0-9a-zA-Z\_]
 
 context-free syntax
 Specifier+ {StructDeclarator ","}+ ";" -> StructDeclaration

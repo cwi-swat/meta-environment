@@ -4,8 +4,8 @@ exports
 
 lexical syntax
 
-[\ \t\n] -> LAYOUT
+[\ \t\n\r\11\12] -> LAYOUT
 
 context-free restrictions
 
-LAYOUT? -/- [\ \t\n]
+LAYOUT? -/- [\ \t\n\r\11\12]

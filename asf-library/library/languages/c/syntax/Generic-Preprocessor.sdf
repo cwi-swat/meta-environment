@@ -17,6 +17,10 @@ lexical syntax
 lexical syntax
 [\\][\n] -> LAYOUT
 
+context-free restrictions
+
+LAYOUT -/- [\\].[\n]
+
 context-free syntax
 
 String String -> String {left}

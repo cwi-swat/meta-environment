@@ -19,7 +19,14 @@ imports languages/c/syntax/Generic-Preprocessor[
 	Statement
 ]
 
+exports
+
+context-free syntax
+	"va_arg" "(" Expression "," TypeName ")" -> Expression {prefer}
+
 hiddens
+
 context-free start-symbols
 	TranslationUnit
+
 
