@@ -174,7 +174,6 @@ AC_CONFIG_FILES([Makefile
    editors/text/gvim/Makefile
    editors/text/emacs/Makefile
    editors/structure/Makefile
-   editors/structure/src/Makefile
    tbscripts/Makefile
    configuration-manager/Makefile
    configuration-manager/src/Makefile
