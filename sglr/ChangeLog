@@ -1,5 +1,8 @@
 $Id$
 
+2002/08/05 (jong@cwi.nl)
+ * Improved check for stacks which are in 'keyword-lookup' mode.
+
 2002/08/01 (vandenbr@loria.fr)
  * Improved the (efficient) treatment of keywords.
 

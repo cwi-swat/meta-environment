@@ -684,52 +684,45 @@ void SG_Actor(stack *st)
 {
   register actions as;
   action  a;
-  shift_tuple *cur_tuple, *next_tuple;
-  ATbool exists = ATfalse;
+  shift_tuple *cur_tuple;
 
-  for (cur_tuple = sg_shift_tuples; cur_tuple; cur_tuple = next_tuple) {
-    int index = SG_STPL_INDEX(cur_tuple);
-    stack *cst = SG_STPL_STACK(cur_tuple);
- 
-    if (cst == st && index != 0) {
-      exists = ATtrue;
+  for (cur_tuple = sg_shift_tuples; cur_tuple; cur_tuple = cur_tuple->next) {
+    if (SG_STPL_STACK(cur_tuple) == st && SG_STPL_INDEX(cur_tuple) != 0) {
+      return;
     }
-    next_tuple = cur_tuple->next; 
   }
 
-  if (!exists) {
-    as = SG_LookupAction(table, SG_ST_STATE(st), current_token);
+  as = SG_LookupAction(table, SG_ST_STATE(st), current_token);
 
-    for (; as && !ATisEmpty(as); as = ATgetNext(as)) {
-      a = ATgetFirst(as);
-      switch(SG_ActionKind(a)) {
-        case SHIFT:
-          SG_AddShiftPair(st, SG_A_STATE(a));
-          break;
-        case SHIFT_KW:
-          SG_AddShiftTuple(st, a);
-          break;
-        case REDUCE:
-          SG_DoReductions(st, a);
-          break;
-        case REDUCE_LA:
-          if (SG_CheckLookAhead(SG_A_LOOKAHEAD(a))) {
-            SG_DoReductions(st, a);
-          }
-          else {
-            IF_DEBUG(ATfprintf(SG_log(),"Lookahead restriction prohibited %t\n",a));
-          }
-          break;
-        case ACCEPT:
-          if (!SG_Rejected(st)) {
-            IF_DEBUG(fprintf(SG_log(), "Reached the accept state\n"));
-            accepting_stack = st;
-          }
-          break;
-        default:
-        case ERROR:
-          break;
-      }
+  for (; as && !ATisEmpty(as); as = ATgetNext(as)) {
+    a = ATgetFirst(as);
+    switch(SG_ActionKind(a)) {
+      case SHIFT:
+	SG_AddShiftPair(st, SG_A_STATE(a));
+	break;
+      case SHIFT_KW:
+	SG_AddShiftTuple(st, a);
+	break;
+      case REDUCE:
+	SG_DoReductions(st, a);
+	break;
+      case REDUCE_LA:
+	if (SG_CheckLookAhead(SG_A_LOOKAHEAD(a))) {
+	  SG_DoReductions(st, a);
+	}
+	else {
+	  IF_DEBUG(ATfprintf(SG_log(),"Lookahead restriction prohibited %t\n",a));
+	}
+	break;
+      case ACCEPT:
+	if (!SG_Rejected(st)) {
+	  IF_DEBUG(fprintf(SG_log(), "Reached the accept state\n"));
+	  accepting_stack = st;
+	}
+	break;
+      default:
+      case ERROR:
+	break;
     }
   }
 }
