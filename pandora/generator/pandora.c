@@ -135,7 +135,7 @@ static PT_Args skipLayout(PT_Args args)
 
 /*}}}  */
 
-/*{{{  static ATbool hasProductionFromoBoxAttribute(PT_Production prod) */
+/*{{{  static ATbool hasProductionFromBoxAttribute(PT_Production prod) */
 
 static ATbool hasProductionFromBoxAttribute(PT_Production prod)
 {
@@ -144,7 +144,6 @@ static ATbool hasProductionFromBoxAttribute(PT_Production prod)
 }
 
 /*}}}  */
- 
 /*{{{  static ATbool hasProductionToBoxAttribute(PT_Production prod) */
 
 static ATbool hasProductionToBoxAttribute(PT_Production prod)
@@ -417,8 +416,7 @@ static BOX_Box processTree(PT_Tree tree)
   while (!PT_isArgsEmpty(args)) {
     PT_Tree arg = PT_getArgsHead(args);
 
-    if (!PT_isTreeLayout(arg) &&
-	!PT_isTreeLit(arg)) {
+    if (!PT_isTreeLayout(arg) && !PT_isTreeLit(arg)) {
       treeTree = arg;
     }
     args = PT_getArgsTail(args);
@@ -467,7 +465,7 @@ static PT_Tree transformBox(PT_Tree tree)
 }
 
 /*}}}  */
-/*{{{  static BOX_Box insertBox(PT_Tree tree) */
+/*{{{  static BOX_Box processBox(PT_Tree tree) */
 
 static BOX_Box processBox(PT_Tree tree)
 {
