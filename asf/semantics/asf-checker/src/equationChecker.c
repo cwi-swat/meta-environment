@@ -1,9 +1,20 @@
 /* $Id$ */
 
 /*{{{  includes */
+#include <ctype.h>
 
 #include <Error.h>
 #include "equationChecker.h"
+#include "statistics.h"
+
+/*}}}  */
+
+/*{{{  static int ASF_getASFConditionsListLength(ASF_ASFConditionsList l) */
+
+static int ASF_getASFConditionsListLength(ASF_ASFConditionList l)
+{
+  return (ATgetLength((ATermList) l) / 4) + 1;
+}
 
 /*}}}  */
 
@@ -70,6 +81,80 @@ static ATbool lookupVariable(PT_Tree tree, PT_Args variables)
 }
 
 /*}}}  */
+
+/*{{{  static void normalizeSortname(char *name) */
+
+static void normalizeSortname(char *name)
+{
+  int from,to;
+  int len = strlen(name);
+
+  for (from = 0, to = 0; from < len; from++, to++) {
+    name[to] = tolower(name[from]);
+
+    if (!isalpha((int) name[from])) {
+      to--;
+    }
+  }
+}
+
+/*}}}  */
+
+/*{{{  static ERR_ErrorList checkForPossibleVariables(PT_Tree lexical) */
+
+static ERR_ErrorList checkForPossibleVariables(PT_Tree lexical)
+{
+  ERR_ErrorList messages = ERR_makeErrorListEmpty();
+  PT_Production prod = PT_getTreeProd(lexical);
+  PT_Symbol rhs = PT_getProductionRhs(prod);
+  char *treeString = strdup(PT_yieldTree(lexical));
+  char *symbolString = strdup(PT_yieldSymbol(rhs));
+  char message[1024];
+
+  normalizeSortname(treeString); 
+  normalizeSortname(symbolString);
+
+  if (strcmp(treeString, symbolString) == 0) {
+    sprintf(message, "Lexical probably intended to be a variable: %s",
+	    PT_yieldTree(lexical));
+    messages = ERR_makeErrorListSingle(
+      makeWarning(message, PT_TreeToTerm(lexical)));
+  }
+
+  free(treeString);
+  free(symbolString);
+
+  return messages;
+}
+
+/*}}}  */
+/*{{{  static ERR_ErrorList locatePossibleVariables(PT_Tree tree) */
+
+static ERR_ErrorList locatePossibleVariables(PT_Tree tree)
+{
+  ERR_ErrorList messages = ERR_makeErrorListEmpty();
+
+  if (PT_isTreeLexical(tree)) {
+    return checkForPossibleVariables(tree);
+  }
+
+  if (PT_isTreeAppl(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
+
+    while (!PT_isArgsEmpty(args)) {
+      PT_Tree arg = PT_getArgsHead(args);
+
+      messages = ERR_concatErrorList(messages, locatePossibleVariables(arg));
+
+      args = PT_getArgsTail(args);
+    }
+  }
+
+  return messages;
+}
+
+/*}}}  */
+
 /*{{{  static ERR_ErrorList checkTreeGivenVariables(ASF_ASFTag tag,  */
 
 static ERR_ErrorList checkTreeGivenVariables(ASF_ASFTag tag, 
@@ -82,6 +167,7 @@ static ERR_ErrorList checkTreeGivenVariables(ASF_ASFTag tag,
   if (PT_isTreeAmb(tree)) {
     return makeAmbiguityMessage(tree);
   }
+
   if (PT_isTreeVar(tree)) {
     if (!lookupVariable(tree, variables)) {
       message = makeMessage("uninstantiated variable occurrence",  
@@ -97,7 +183,9 @@ static ERR_ErrorList checkTreeGivenVariables(ASF_ASFTag tag,
       PT_Tree arg = PT_getArgsHead(args);
 
       messages = ERR_concatErrorList(messages,
-					checkTreeGivenVariables(tag, arg, variables));
+				     checkTreeGivenVariables(tag, 
+							     arg, variables));
+      messages = ERR_concatErrorList(messages, locatePossibleVariables(arg));
 
       args = PT_getArgsTail(args);
     }
@@ -202,7 +290,7 @@ static ATbool instantiatedVariables(PT_Tree tree, PT_Args varList)
 /*}}}  */
 /*{{{  static ATbool isSingleton(PT_Tree tree)  */
 
-static ATbool isSingleton(PT_Tree tree) 
+static ATbool isContextFreeSingleton(PT_Tree tree) 
 {
   /* This function checks for trees that look like this:
    *    S* -> S-List, list(S*), [S]   or this:
@@ -215,14 +303,17 @@ static ATbool isSingleton(PT_Tree tree)
     PT_Production prod = PT_getTreeProd(tree);
     PT_Args args = PT_getTreeArgs(tree);
 
-    if (PT_isProductionList(prod)) {
+    if (PT_isLexicalProd(prod)) {
+      return ATfalse;
+    }
+    else if (PT_isProductionList(prod)) {
       if (PT_getArgsLength(args) == 1) {
 	return !PT_isTreeVar(PT_getArgsHead(args));
       }
     }
     else {
       if (PT_isProductionInjection(prod)) {
-	return isSingleton(PT_getArgsHead(args));
+	return isContextFreeSingleton(PT_getArgsHead(args));
       }
     }
   }
@@ -267,10 +358,14 @@ static ERR_ErrorList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition con
 
   if (noNewVariables((PT_Tree) lhsCond, *variables)) {
     *variables = collectVariables((PT_Tree)rhsCond, *variables);
+    messages = ERR_concatErrorList(messages, 
+				   locatePossibleVariables((PT_Tree) rhsCond));
     return messages;
   }
   else if (noNewVariables((PT_Tree) rhsCond, *variables)) {
     *variables = collectVariables((PT_Tree)lhsCond, *variables);
+    messages = ERR_concatErrorList(messages, 
+				   locatePossibleVariables((PT_Tree) lhsCond));
     return messages;
   }
   else {
@@ -288,15 +383,22 @@ static ERR_ErrorList checkPositiveCondition(ASF_ASFTag tag, ASF_ASFCondition con
 
 static ERR_ErrorList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
 {
+  ERR_ErrorList messages;
+
+  messages = locatePossibleVariables((PT_Tree) lhsCond);
+  messages = ERR_concatErrorList(messages,
+				 locatePossibleVariables((PT_Tree) rhsCond));
+
   if (!noNewVariables((PT_Tree) lhsCond, *variables) || 
       !noNewVariables((PT_Tree) rhsCond, *variables)) {
-    return ERR_makeErrorListSingle(
+    messages = ERR_concatErrorList(messages,
+				   ERR_makeErrorListSingle(
 				 makeMessage(
-					     "uninstantiated variables in equality condition",
-					     ASF_makeTermFromASFCondition(condition)));
+			    "uninstantiated variables in equality condition",
+			     ASF_makeTermFromASFCondition(condition))));
   }
 
-  return ERR_makeErrorListEmpty();
+  return messages;
 }
 
 /*}}}  */
@@ -304,6 +406,8 @@ static ERR_ErrorList checkEqualityCondition(ASF_ASFTag tag, ASF_ASFCondition con
 
 static ERR_ErrorList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condition, ASF_Tree lhsCond, ASF_Tree rhsCond, PT_Args *variables) 
 {
+  ERR_ErrorList messages = ERR_makeErrorListEmpty();
+
   if (!noNewVariables((PT_Tree) rhsCond, *variables)) {
     return ERR_makeErrorListSingle(
 	 makeMessage(
@@ -319,9 +423,11 @@ static ERR_ErrorList checkMatchCondition(ASF_ASFTag tag, ASF_ASFCondition condit
   }
   else {
     *variables = collectVariables((PT_Tree)lhsCond, *variables);
+    messages = ERR_concatErrorList(messages, 
+				   locatePossibleVariables((PT_Tree) lhsCond));
   }
 
-  return ERR_makeErrorListEmpty();
+  return messages;
 }
 
 /*}}}  */
@@ -351,6 +457,9 @@ static ERR_ErrorList checkNoMatchCondition(ASF_ASFTag tag, ASF_ASFCondition cond
 
 static ERR_ErrorList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, PT_Args *variables) 
 {
+
+  SCOUNT(nrConditions);
+
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFConditionToTerm(condition)))) {
     return makeAmbiguityMessage(condition);
   }
@@ -366,18 +475,23 @@ static ERR_ErrorList checkCondition(ASF_ASFTag tag, ASF_ASFCondition condition, 
     }
 
     if (ASF_isASFConditionNegative(condition)) {
+      SCOUNT(nrInequalityConditions);
       return checkNegativeCondition(tag, condition, lhsCond, rhsCond, variables);
     }
     else if (ASF_isASFConditionPositive(condition)) {
+      SCOUNT(nrEqualityConditions);
       return checkPositiveCondition(tag, condition, lhsCond, rhsCond, variables);
     }
     else if (ASF_isASFConditionMatch(condition)) {
+      SCOUNT(nrAssignmentConditions);
       return checkMatchCondition(tag, condition, lhsCond, rhsCond, variables);
     }
     else if (ASF_isASFConditionNoMatch(condition)) {
+      SCOUNT(nrNonAssignmentConditions);
       return checkNoMatchCondition(tag, condition, lhsCond, rhsCond, variables);
     }
     else if (ASF_isASFConditionEquality(condition)) {
+      SCOUNT(nrEqualityConditions);
       return checkEqualityCondition(tag, condition, lhsCond, rhsCond, variables);
     }
     else {
@@ -396,11 +510,15 @@ static ERR_ErrorList checkConditions(ASF_ASFTag tag, ASF_ASFConditions condition
 {
   ERR_ErrorList messages = ERR_makeErrorListEmpty();
 
+ 
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFConditionsToTerm(conditions)))) {
     return makeAmbiguityMessage(conditions);
   }
   else {
     ASF_ASFConditionList conditionList = ASF_getASFConditionsList(conditions);
+
+    SMAX(maxNrConditionsPerEquation, 
+	 ASF_getASFConditionsListLength(conditionList));
 
     while (ASF_hasASFConditionListHead(conditionList)) {
       ASF_ASFCondition condition =
@@ -429,6 +547,8 @@ static ERR_ErrorList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree)
     return makeAmbiguityMessage(ptTree);
   }
   else {
+    SADD(outermostFunctions, PT_getTreeProd(ptTree));
+
     if (PT_hasProductionConstructorAttr(PT_getTreeProd(ptTree))) {
       ERR_Error message = 
 	makeWarning(
@@ -436,7 +556,7 @@ static ERR_ErrorList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree)
     PT_TreeToTerm(ptTree));
       return ERR_makeErrorListSingle(message);
     }
-    else if (isSingleton(ptTree)) {
+    else if (isContextFreeSingleton(ptTree)) {
       ERR_Error message = 
           makeMessage(
           "Left hand side is contained in a list", PT_TreeToTerm(ptTree));
@@ -454,6 +574,12 @@ static ERR_ErrorList checkLhs(ASF_ASFTag tag, ASF_Tree asfTree)
 static ERR_ErrorList checkEquation(ASF_ASFConditionalEquation condEquation) 
 {
   ERR_ErrorList messages = ERR_makeErrorListEmpty();
+
+  SCOUNT(nrEquations);
+
+  if (ASF_isTagDefault(ASF_getASFConditionalEquationASFTag(condEquation))) {
+    SCOUNT(nrDefaultEquations);
+  }
 
   if (PT_isTreeAmb(PT_TreeFromTerm(ASF_ASFConditionalEquationToTerm(condEquation)))) {
     return makeAmbiguityMessage(condEquation);
@@ -473,8 +599,11 @@ static ERR_ErrorList checkEquation(ASF_ASFConditionalEquation condEquation)
 					   PT_makeArgsEmpty());
 
       messages = ERR_concatErrorList(messages, checkLhs(tag, lhsEq));
+      messages = ERR_concatErrorList(messages, 
+				     locatePossibleVariables((PT_Tree)lhsEq));
 
       if (ASF_hasASFConditionalEquationASFConditions(condEquation)) {
+	SCOUNT(nrEquationsWithConditions);
 	messages = ERR_concatErrorList(messages,
 					  checkConditions(tag,
 							  ASF_getASFConditionalEquationASFConditions(condEquation),
@@ -482,9 +611,12 @@ static ERR_ErrorList checkEquation(ASF_ASFConditionalEquation condEquation)
       }
 
       messages =  ERR_concatErrorList(messages,
-					 checkTreeGivenVariables(tag, 
-								 (PT_Tree)rhsEq, 
+				      checkTreeGivenVariables(tag, 
+							      (PT_Tree)rhsEq, 
 								 variables));
+      messages = ERR_concatErrorList(messages, 
+				     locatePossibleVariables((PT_Tree) rhsEq));
+
       return messages;
     }
   }
@@ -529,9 +661,11 @@ static ERR_ErrorList checkTest(ASF_ASFTestEquation testEquation)
       }
 
       messages =  ERR_concatErrorList(messages,
-					 checkTreeGivenVariables(tag, 
-								 (PT_Tree)rhsCond, 
+				      checkTreeGivenVariables(tag, 
+							      (PT_Tree)rhsCond, 
 								 variables));
+      messages = ERR_concatErrorList(messages, 
+				     locatePossibleVariables((PT_Tree)rhsCond));
       return messages;
     }
   }
@@ -544,7 +678,7 @@ static ERR_ErrorList checkTest(ASF_ASFTestEquation testEquation)
 ERR_ErrorList checkASFConditionalEquationList(ASF_ASFConditionalEquationList condEquationList) 
 {
   ERR_ErrorList messages = ERR_makeErrorListEmpty();
-
+  
   while (!ASF_isASFConditionalEquationListEmpty(condEquationList)) {
     ASF_ASFConditionalEquation condEquation =
       ASF_getASFConditionalEquationListHead(condEquationList);
@@ -589,6 +723,7 @@ ERR_ErrorList checkASFTestEquationList(ASF_ASFTestEquationTestList testEquationL
 
 ERR_ErrorList checkEquations(ASF_ASFConditionalEquationList equations) 
 {
+
   if (PT_isTreeAmb(PT_TreeFromTerm((ATerm) equations))) {
     return makeAmbiguityMessage(equations);
   }

@@ -16,6 +16,7 @@
 #include <Error-utils.h>
 
 #include "equationChecker.h"
+#include "statistics.h"
 
 /*}}}  */
 
@@ -24,10 +25,11 @@
 static char *name;
 
 ATbool run_verbose;
+ATbool statistics;
 
 static char myname[] = "asfchecker";
 static char myversion[] = "0.1";
-static char myarguments[] = "hi:vV";
+static char myarguments[] = "hi:svV";
 
 /*}}}  */
 
@@ -35,9 +37,12 @@ static char myarguments[] = "hi:vV";
 
 static ERR_ErrorList checkAsf(ATerm term)
 {
+  ERR_ErrorList result = NULL;
+  initStatistics();
+
   if (ATgetType(term) == AT_LIST) {
     ASF_ASFConditionalEquationList rules = ASF_makeASFConditionalEquationListFromTerm(term);
-    return checkASFConditionalEquationList(rules);
+    result = checkASFConditionalEquationList(rules);
   }
   else {
     PT_ParseTree parseTree = PT_ParseTreeFromTerm(term);
@@ -47,24 +52,21 @@ static ERR_ErrorList checkAsf(ATerm term)
       ASF_ASFConditionalEquationList rules = ASF_getASFModuleEquationList(module);
       ASF_ASFTestEquationTestList tests = ASF_getASFModuleTestList(module);
 
-      return ERR_concatErrorList(checkEquations(rules), checkTests(tests));
+      result = ERR_concatErrorList(checkEquations(rules), checkTests(tests));
     }
     else {
-      return makeAmbiguityMessage(PT_getParseTreeTop(parseTree));
+      result = makeAmbiguityMessage(PT_getParseTreeTop(parseTree));
     }
   }
-}
 
-/*}}}  */
 
-/*{{{  static void displayMessages(ATermList errorList) */
-
-static void displayMessages(ERR_ErrorList errorList)
-{
-  while (!ERR_isErrorListEmpty(errorList)) {
-    ERR_Error fb = ERR_getErrorListHead(errorList);
-    ATwarning("%s\n", ERR_getErrorDescription(fb));
+  if (statistics) {
+    printStatistics();
   }
+
+  cleanStatistics();
+
+  return result;
 }
 
 /*}}}  */
@@ -98,6 +100,7 @@ static void usage(void)
     "\t-h              display help information (usage)\n"
     "\t-i filename     input from file (default stdin)\n"
     "\t-v              verbose mode\n"
+    "\t-s              print statistics\n"
     "\t-V              reveal program version (i.e. %s)\n",
     myname, myversion);
 }
@@ -124,7 +127,10 @@ int main(int argc, char *argv[])
   ATerm bottomOfStack;
   name = argv[0];
 
-/*  Check whether we're a ToolBus process  */
+  statistics = ATfalse;
+  run_verbose = ATfalse;
+
+  /*  Check whether we're a ToolBus process  */
   for(c=1; !toolbus_mode && c<argc; c++) {
     toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
   }
@@ -148,6 +154,7 @@ int main(int argc, char *argv[])
       switch (c) {
         case 'v':  run_verbose = ATtrue;                   break;
         case 'i':  input=optarg;                           break;
+	case 's':  statistics=ATtrue;                      break;
         case 'V':  version(); exit(0);                     break;
   
         case 'h':
@@ -162,7 +169,8 @@ int main(int argc, char *argv[])
     msgs = checkAsf(rules);
 
     if (!ATisEmpty(msgs)) {
-      displayMessages(msgs);
+      ERR_Summary sum = ERR_makeSummarySummary("asfchecker",input,msgs);
+      ERR_displaySummary(sum);
       return 1;
     }
   }
