@@ -20,7 +20,7 @@ dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(meta, 0.1.2)
+AM_INIT_AUTOMAKE(meta, 0.1.3)
 
 
 dnl Default locations of other components
