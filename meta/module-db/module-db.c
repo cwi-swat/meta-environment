@@ -523,6 +523,7 @@ void update_eqs_text(int cid, char *moduleName, char *eqsText)
   entry = (ATerm)ATreplace((ATermList)entry, 
                            ATparse("unavailable"), EQS_TREE_LOC); 
 
+  reset_eqs_db();
   PutValue(modules_db, atModuleName, entry);
 }
 
@@ -604,6 +605,7 @@ ATerm update_eqs_tree(int cid, char *moduleName, ATerm newEqsTree)
     entry = (ATerm)ATreplace((ATermList)entry, newEqsTree, EQS_TREE_LOC);
     PutValue(modules_db, atModuleName, entry);
     changedModules = modules_depend_on(atModuleName, ATempty);
+    reset_eqs_db();
     return ATmake("snd-value(changed-modules([<term>,<list>]))",
       atModuleName, changedModules);
   }
