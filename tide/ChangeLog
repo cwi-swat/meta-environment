@@ -6,6 +6,9 @@ Mon May 24 10:42:55 CEST 2004 <{jurgenv,sgmcorne}@cwi.nl>
    components reusable without a JFrame
  * Fixed cleaning up Listener objects after a debug tool such as 
    the StackViewer is closed and reopened.
+ * removed all unnecessary asynchronous communication from tide.tb
+ * split tide.tb into tool.tb, adapter.tb, control.tb and tide.tb
+
 
 Sat May 22 11:52:04 CEST 2004 <jurgenv@cwi.nl>
  * Brought tide up-to-date with format of locations and areas in 
