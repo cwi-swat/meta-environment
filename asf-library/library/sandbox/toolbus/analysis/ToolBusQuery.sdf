@@ -1,0 +1,17 @@
+module ToolBusQuery
+
+imports ToolBusExtraction 
+imports ListOperations
+
+exports
+  context-free syntax
+    toolbus-query(Tscript, RSCRIPT, String, RSTORE) -> List
+
+    str2rvar(String) -> RVAR
+
+hiddens
+  variables
+    "$Rstore"[0-9]*  -> RSTORE
+    "$Tscript"[0-9]* -> Tscript
+    "$Script"[0-9]*  -> RSCRIPT
+    "$String"[0-9]*  -> String

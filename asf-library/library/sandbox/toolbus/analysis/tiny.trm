@@ -1,4 +1,3 @@
-extractRelations(
 process Editor1 is
 let
   Editor : term,
@@ -22,4 +21,3 @@ in
 endlet
 
 toolbus(Editor1, Editor2)
-)

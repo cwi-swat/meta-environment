@@ -1,0 +1,16 @@
+module ListOperations
+
+imports ListItems
+imports RelationCalculator
+
+exports
+  context-free syntax
+    convertl(Rel[[Elem]])  -> List
+    convert(String # Area) -> ListItem
+
+hiddens
+  variables
+    "$Area"[0-9]*      -> Area
+    "$String"[0-9]*    -> String
+    "$Tuple*"[0-9]*    -> {Elem # Elem ","}*
+    "$ListItem*"[0-9]* -> {ListItem ","}*

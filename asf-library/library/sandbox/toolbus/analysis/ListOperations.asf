@@ -1,0 +1,12 @@
+equations
+
+  [cvt-1] convert(<$String, $Area>) = 
+            listitem("Unused variable " || $String, [ "ShowSource" ], $Area)
+
+  [cvtl-1] convertl({$Tuple*}) = list([$ListItem*])
+           ===>
+           convertl({<$String, $Area>, $Tuple*}) = 
+             list([convert(<$String, $Area>),
+$ListItem*])
+
+  [cvtl-2] convertl({}) = list([])
