@@ -1,3 +1,6 @@
+2003/10/16 (jurgenv@cwi.nl)
+  * Added tests to basic/Booleans,Integers,Strings
+
 2003/10/13 (jurgenv@cwi.nl)
   * Removed old C grammar
   * ANSI-C grammar is now half-finished, waiting on SDF2 extensions

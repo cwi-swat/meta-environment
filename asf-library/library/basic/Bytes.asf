@@ -631,3 +631,10 @@ equations
 [252]	byte-to-octal(byte("ü")) = 374
 [253]	byte-to-octal(byte("ý")) = 375
 [254]	byte-to-octal(byte("þ")) = 376
+
+
+tests
+
+[concat] "aaa" || "aaa" = "aaaaaa"
+[length] str-len("aaa") + str-len("aaa") = str-len("aaaaaa")
+[bytes]  bytes-to-string(string-to-bytes("a\n\t\"\\b\007")) = "a\n\t\"\\b\007"

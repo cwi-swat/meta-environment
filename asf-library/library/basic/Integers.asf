@@ -154,3 +154,20 @@ equations
 %% -- no minus zero
    [167] - 0 = 0
 
+tests
+
+[sanity] 0 != 1
+[leading-zeroes] 007 = 7
+[addition-with-carry] 189 + 13 = 202
+[subtraction-below-zero] 13 - 189 = -176
+[multiplication] 13 * 17 = 221
+[negative-multiplication] -13 * 17 = -221
+[negative-multiplication-twice] -13 * -17 = 221
+[comparison-less-negative] -7 < 5 = true
+[comparison-less-positive] 7 < 5 = false
+[comparison-greater-positive] 5 > 7 = false
+[comparison-greater-negative] -5 > -7 = true
+[priority-plus-star] 2 + 2 * 3 = 8
+[priority-minus-star] 2 - 2 * 3 = -4
+
+
