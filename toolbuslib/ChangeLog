@@ -1,5 +1,8 @@
 $Id$
 
+2003/07/02 (jurgenv@cwi.nl)
+ * Release 0.5
+
 Tue Jul  1 13:20:05 CEST 2003 <jong@cwi.nl>
  * aterm/atb-tool.c:
    - clear buffer before sending out a term to prevent a previous term
