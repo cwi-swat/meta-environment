@@ -207,7 +207,8 @@ ATerm add_eqs_syntax(int cid, char *name, ATerm t)
     asfix = toasfix(reduct, file, modname);
   } else
     ATerror("not an asfix term: %t\n", t);
-  return ATmake("snd-value(extended-syntax(<term>))", asfix);
+
+  return ATmake("snd-value(extended-syntax(<term>))", ATBpack(asfix));
 }
 
 /*}}}  */

@@ -207,7 +207,7 @@ ATerm remove_var_syntax(int cid, char *name, ATerm t)
     asfix = toasfix(reduct, file, modname);
   } else
     ATerror("not an asfix term: %t\n", t);
-  return ATmake("snd-value(changed-syntax(<term>))", asfix);
+  return ATmake("snd-value(changed-syntax(<term>))", ATBpack(asfix));
 }
 
 /*}}}  */

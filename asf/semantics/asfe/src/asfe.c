@@ -374,7 +374,7 @@ ATerm equations_available(int cid, char *name)
 
 
 /*}}}  */
-/*{{{  void add_equations(int cid, char *modname, ATermList equs) */
+/*{{{  void add_equations(int cid, char *modname, ATerm equs) */
 
 /* The procedure ``add_equations'' takes care of adding a new list
    of equations that is added to the internal database. The arguments
