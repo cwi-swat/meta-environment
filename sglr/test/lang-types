@@ -28,3 +28,4 @@ rjct	Reject
 exp	Expression
 inj	Injection
 chi	ChiExpressions
+ambrule	AmbiRules
