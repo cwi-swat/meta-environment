@@ -1,3 +1,4 @@
+calculate-mismatches(
 find-facts(
 process AbortMetaEnvironment is
 let
@@ -4961,4 +4962,5 @@ toolbus(META, META-START, Parser, Unparser, AddPosInfo, Io, ConfigManager, Ui,
 
 
         )
+)
 )

@@ -1,0 +1,38 @@
+module Calculate
+
+imports FindFacts basic/Booleans
+
+exports
+  sorts Messages Message
+  context-free syntax
+    "unused-send" "(" ProcessName "," {Term ","}+ ")" -> Message {constructor}
+    Message* -> Messages
+  context-free syntax
+    calculate-mismatches(ToolBusFacts) -> Messages
+
+hiddens
+  context-free syntax
+    calculate-send-mismatches(ProcessFactsSet) -> Messages
+    calculate-send-mismatches(ProcessFactsSet, Messages, ProcessFactsSet) -> Messages {traversal(accu, top-down, break)}
+    calculate-send-mismatches(ProcessFacts, Messages, ProcessFactsSet)     -> Messages {traversal(accu, top-down, break)}
+  context-free syntax
+    calculate-sends(SendFacts, Messages, ProcessFactsSet, ProcessName) -> Messages {traversal(accu, top-down, break)}
+    calculate-sends(SendFact, Messages, ProcessFactsSet, ProcessName)  -> Messages {traversal(accu, top-down, break)}
+  context-free syntax
+    find-matching-receive(ProcessFactsSet, Boolean, SendFact) -> Boolean {traversal(accu, top-down, break)}
+    find-matching-receive(ReceiveFact, Boolean, SendFact)     -> Boolean {traversal(accu, top-down, break)}
+
+  variables
+    "ProcessFactsSet"[0-9]* -> ProcessFactsSet
+    "ProcessFacts"[0-9]* -> ProcessFacts
+    "Messages"[0-9]* -> Message*
+    "SendFact"[0-9]* -> SendFact
+    "ProcessName"[0-9]* -> ProcessName
+    "CreationFacts"[0-9]* -> CreationFacts
+    "InvocationFacts"[0-9]* -> InvocationFacts
+    "SendFacts"[0-9]*       -> SendFacts
+    "ReceiveFacts"[0-9]*    -> ReceiveFacts
+    "TermPlus"[0-9]*        -> {Term ","}+
+    "Boolean"[0-9]*         -> Boolean
+    "StartupFacts"[0-9]*    -> StartupFacts
+

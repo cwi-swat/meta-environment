@@ -1,4 +1,4 @@
-process Editors is
+process Editor1 is
 let
   Editor : term,
   Pid : int
@@ -9,4 +9,15 @@ in
   create(SE, Pid?)
 endlet
 
-toolbus(Editors)
+process Editor2 is
+let
+  Editor : str,
+  Pid : int
+in
+  rec-msg(open(Editor,Pid?)) .
+  create(EditorManager,Pid?) .
+  create(EditorCreator,Pid?) .
+  create(SE, Pid?)
+endlet
+
+toolbus(Editor1, Editor2)

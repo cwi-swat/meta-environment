@@ -30,6 +30,21 @@ buttons([
            reduce,
            push-filename("reduct.out"),
            push-modulename("FindFacts"),
+           activate-editor]),
+  button("Calculate",
+         "term",
+         ["ToolBus", "Derive"],
+         [push-active-module,
+           get-root,
+           check-sort("Tscript"),
+           apply("find-facts", "ToolBusFacts", 1),
+           push-modulename("FindFacts"),
+           reduce,
+           apply("calculate-mismatches", "Messages", 1),
+           push-modulename("Calculate"),
+           reduce,
+           push-filename("reduct.out"),
+           push-modulename("Calculate"),
            activate-editor])
 ])
 

@@ -1,0 +1,28 @@
+equations
+  [calculate-mismatch]
+    calculate-mismatches(<StartupFacts, ProcessFactsSet>) =
+      calculate-send-mismatches(ProcessFactsSet)
+  
+  [calculate-send-mismatch-initial]
+    calculate-send-mismatches(ProcessFactsSet) =
+      calculate-send-mismatches(ProcessFactsSet, , ProcessFactsSet)
+
+  [calculate-send-mismatch-send-match]
+    calculate-send-mismatches(process-facts[process-declaration ProcessName, 
+                                            CreationFacts,  
+                                            InvocationFacts, 
+                                            SendFacts,  
+                                            ReceiveFacts],
+                              Messages,
+                              ProcessFactsSet) =
+      calculate-sends(SendFacts, Messages, ProcessFactsSet, ProcessName)
+
+  [calculate-send]
+    find-matching-receive(ProcessFactsSet, false, SendFact) = false,
+    SendFact = send-atom TermPlus
+    ===>
+    calculate-sends(SendFact, Messages, ProcessFactsSet, ProcessName) =
+      Messages unused-send(ProcessName, TermPlus)
+
+  [find-matching-rec]
+    find-matching-receive(recv-atom TermPlus, Boolean, send-atom TermPlus) = true
