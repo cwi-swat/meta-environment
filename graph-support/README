@@ -1,0 +1,7 @@
+$Id$
+
+This package holds graph manipulation tools for the Meta-Environment:
+  - visualization of parse trees using dot
+  - a graph format based on ATerms
+  - an algorithm to compute the layout of a graph in this graph format 
+    via dot 

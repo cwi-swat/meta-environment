@@ -1,0 +1,44 @@
+[
+[Graph, default, graph(<nodes(NodeList)>,<edges(EdgeList)>)],
+
+[NodeList, empty, []],
+[NodeList, multi, [<head(Node)>,<[tail(NodeList)]>]],
+
+[Node, default, node(<id(NodeId)>,<attributes(AttributeList)>)],
+
+[NodeId, default, <id(str)>],
+
+[AttributeList, empty, []],
+[AttributeList, multi, [<head(Attribute)>,<[tail(AttributeList)]>]],
+
+[Attribute, label, label(<label(str)>)],
+[Attribute, shape, shape(<shape(Shape)>)],
+[Attribute, location, location(<x(int)>,<y(int)>)],
+[Attribute, size, size(<width(int)>,<height(int)>)],
+[Attribute, curve-points, curve-points(<points(Polygon)>)],
+
+[Shape, plaintext, plaintext],
+[Shape, ellipse, ellipse],
+[Shape, circle, circle],
+[Shape, egg, egg],
+[Shape, triangle, triangle],
+[Shape, box, box],
+[Shape, diamond, diamond],
+[Shape, trapezium, trapezium],
+[Shape, parallelogram, parallelogram],
+[Shape, house, house],
+[Shape, hexagon, hexagon],
+[Shape, octagon, octagon],
+
+
+[EdgeList, empty, []],
+[EdgeList, multi, [<head(Edge)>,<[tail(EdgeList)]>]],
+
+[Edge, default, edge(<from(NodeId)>,<to(NodeId)>,<attributes(AttributeList)>)],
+
+[Polygon, empty, []],
+[Polygon, multi, [<head(Point)>,<[tail(Polygon)]>]],
+
+[Point, default, point(<x(int)>,<y(int)>)]
+]
+

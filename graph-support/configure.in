@@ -1,0 +1,109 @@
+dnl $Id$
+
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(graph-support, 0.1beta)
+
+ACLOCAL="${ACLOCAL} -I ."
+
+dnl Which compiler to use?
+AC_PROG_CC
+
+dnl {{{  Set CFLAGS
+
+dnl Handle --with-cflags option
+AC_ARG_WITH(cflags,
+   [  --with-cflags=CFLAGS    standard options of c compiler],
+   CFLAGS=${withval},
+   if test "a${GCC}" = "ayes"; then
+     CFLAGS="-Wall -g -O2"
+   fi;
+)
+AC_SUBST(CFLAGS)
+
+dnl }}}
+
+dnl {{{  ATerm
+
+dnl Require ATerm library
+AC_PACKAGE_REQUIRE(aterm, baffle,
+   [  --with-aterm=DIR        ATerm-library is in DIR])
+AC_SUBST(ATERM)
+
+
+dnl }}}
+dnl {{{  pt-support
+
+dnl Require pt-support package
+AC_PACKAGE_REQUIRE(pt-support, unparsePT,
+   [  --with-pt-support=DIR   pt-support is in DIR])
+AC_SUBST(PT_SUPPORT)
+
+
+dnl }}}
+dnl {{{  ToolBus library
+
+dnl Require ToolBus library
+AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
+   [  --with-toolbuslib=DIR   ToolBus library is in DIR])
+AC_SUBST(TOOLBUSLIB)
+
+dnl }}}
+dnl {{{  GraphViz 
+
+AC_PACKAGE_REQUIRE(graphviz, dot,
+   [  --with-graphviz=DIR     GraphViz is in DIR])
+AC_SUBST(GRAPHVIZ)
+
+dnl }}}
+
+dnl Need lex and yacc support
+AM_PROG_LEX
+AC_PROG_YACC
+AC_CHECK_LIB(y,yyerror,YACCLIB="-ly",YACCLIB="")
+AC_SUBST(YACCLIB)
+
+dnl Our own version of libdir whose value is set dynamically
+AC_SUBST(INSTLIBDIR)
+INSTLIBDIR="$libdir"
+
+dnl {{{  Require socket/gethostname
+
+NOSOCKLIBS=$LIBS
+dnl {{{  check for socket in -lsun and -lsocket
+SOCKET_FOUND=no
+SOCKLIBS=
+AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
+if test ${SOCKET_FOUND} = no; then
+  AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
+fi
+  
+dnl }}}
+dnl {{{  check for gethostname in -lsun and -lsocket
+
+GHN_FOUND=no
+AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
+if test ${GHN_FOUND} = no; then
+  AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
+fi
+
+dnl }}}
+AC_SUBST(SOCKLIBS)
+LIBS=$NOSOCKLIBS
+
+dnl }}}
+
+dnl {{{  Is ranlib needed on this system?
+AC_PROG_RANLIB
+AC_PATH_PROG(AR,ar,/usr/bin/ar)
+
+dnl }}}
+
+AC_OUTPUT(
+  Makefile
+  lib/Makefile
+  dot/Makefile
+  utils/Makefile
+  utils/tree2graph/Makefile
+  utils/tree2dot/Makefile
+)

@@ -1,0 +1,19 @@
+
+process DOT-ADAPTER is
+let
+  D : dot-adapter,
+  Graph : term
+in
+  execute(dot-adapter, D?) .
+  (
+    rec-msg(layout-graph(Graph?)) .
+        /*printf("unlayouted graph: %t\n", Graph) .*/
+    snd-eval(D, layout-graph(Graph)) .
+    rec-value(D, graph-layouted(Graph?)) .
+        /*printf("layouted graph: %t\n", Graph) .*/
+    snd-msg(graph-layouted(Graph))
+  ) * delta
+endlet
+
+tool dot-adapter is { command = "dot-adapter" }
+
