@@ -37,8 +37,7 @@ in
     rec-msg(parse-ok(trm(ModuleName))) .
     snd-msg(clear-focus(EditorId))
   +
-    rec-msg(parse-failed(trm(ModuleName), ErrorFoci?)) .
-    snd-msg(set-focus(EditorId, ErrorFoci))
+    rec-msg(parse-failed(trm(ModuleName), ErrorFoci?))
   )
 endlet
 
