@@ -44,7 +44,6 @@ static char *start_buf_ptr;         /* start value of buf_ptr, for error message
 int buf_size = TB_INIT_BUFFER;      /* also used in sockets.c */
 
 #define BEGIN_OF_DATA               &buffer[LENSPEC]
-#define MIN_MSG_SIZE                128
 
 char this_host[MAXHOSTNAMELEN];
 char single_prompt [] = "Enter term (followed by ; character):\n";

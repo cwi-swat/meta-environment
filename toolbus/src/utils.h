@@ -19,6 +19,9 @@
 
 #define TB_PORT     8999
 
+/* The minimal message size for messages coming over a socket */
+#define MIN_MSG_SIZE                128
+
 extern char *tool_name;
 extern int buf_size;
 /*
