@@ -1,5 +1,3 @@
-" $Id$
-
 let meta_dlso = "__LIBDIR__/lib_gvim.so"
 
 func! Handshake()
@@ -70,8 +68,34 @@ func! RereadContents()
   call EnableModificationDetection()
 endfunc
 
+func! SetFocus(startchar, length)
+  let cur = line2byte(".") + col(".") - 1
+
+  let pos = a:startchar + 1
+  exe ":goto " . pos
+  let startline = line(".")
+  let startcol = col(".")
+
+  let pos = a:startchar + a:length
+  exe ":goto " . pos
+  let endline = line(".")
+  let endcol = col(".")
+
+  if col("$") != 1
+    let endcol = endcol + 1
+  endif
+
+  exe ":goto " . cur
+
+  exe ':silent syn region Focus start="\%' . startline . 'l\%' . startcol . 'c" end="\%' . endline . 'l\%' . endcol . 'c"'
+endfunc
+
 " Remap <CTRL-]> to update focus around current location
 map <silent> <C-]> :call SetLocation()<CR>
+map <silent> <LeftRelease> :call SetLocation()<CR>
+
+highlight Focus guibg=#f9f9bb
+let &filetype = 'asf-sdf-syntax-highlighting-override'
 
 call EnableModificationDetection()
 call Handshake()

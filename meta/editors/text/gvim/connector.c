@@ -1,5 +1,3 @@
-/* $Id$ */
-
 /*{{{  includes */
 
 #include <stdio.h>
@@ -208,6 +206,7 @@ static void rereadContents(int write_to_editor_fd)
 
 static void clearFocus(int write_to_editor_fd)
 {
+  sendToVim(":silent! syn clear Focus");
   sendToVim(":echo \"Focus symbol: <none>\"");
 }
 
@@ -234,22 +233,13 @@ static void setFocus(int write_to_editor_fd, TE_Action edAction)
 {
   ATerm focusTerm = TE_getActionFocus(edAction);
   LOC_Area area = LOC_AreaFromTerm(focusTerm);
-  int start = LOC_getAreaOffset(area) + 1;
+  int start = LOC_getAreaOffset(area);
   int length = LOC_getAreaLength(area);
   char buf[BUFSIZ];
 
-  /* go to start location */
-  sprintf(buf, "%dgo", start);
-  sendToVimVerbatim(buf);
-
-  /* activate visual selection mode */
-  sendToVimVerbatim("v");
-
-  /* emulate focus by "selecting" all the characters in it */
-  if (length > 1) {
-    sprintf(buf, "%d ", length-1);
-    sendToVimVerbatim(buf);
-  }
+  sendToVim(":silent! syn clear Focus");
+  sprintf(buf, ":call SetFocus(%d, %d)", start, length);
+  sendToVim(buf);
 }
 
 /*}}}  */
