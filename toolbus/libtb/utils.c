@@ -266,7 +266,7 @@ static term *parse_term0(void)
   skip_layout();
   begin = buf_ptr - 1;
 
-  /* fprintf(stderr, "parse_term0: %s\n", buf_ptr); */
+  /*fprintf(stderr, "parse_term0: %s\n", buf_ptr); */
   if(isupper(lastc) || (lastc == '_')){     /* variable or formal */
 
     get_char();
@@ -287,26 +287,33 @@ static term *parse_term0(void)
     }
   } else
     if(isdigit(lastc) || (lastc == '-')){ /* integer */
+      int nr_digits = 0;
       int sign = 1, n = 0;
       if(lastc == '-'){
 	get_char();
 	sign = -1;
       }
       while(isdigit(lastc)) {
+	nr_digits++;
 	n = n * 10 + (lastc - '0');
 	get_char();
       }
       if(lastc == '.'){
 	char *endp;
 	double d;
-	d = strtod(buf_ptr-1, &endp); /* start at '.' */
+	/* Backup to start of number */
+	while (nr_digits > 0) {
+	  unget_char();
+	  nr_digits--;
+	}
+	d = strtod(buf_ptr-1, &endp);
 	if(endp == buf_ptr){
 	  parse_error("Malformed real constant");
 	  return NULL;
 	}
 	buf_ptr = endp;
 	get_char();
-	return mk_real(sign * (n + d));
+	return mk_real(sign * d);
       } else
 	return mk_int(sign * n);
     } else
