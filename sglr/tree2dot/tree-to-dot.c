@@ -187,6 +187,34 @@ ATbool SG_IsLexical(ATerm fun)
 }
 
 
+ATerm SG_TreeType(ATerm t)
+{
+  ATerm     type;
+  ATermList args;
+
+  if (ATgetType(t) == AT_INT)
+    return t;
+  if (ATmatch(t, "appl(prod(<term>,<term>,<term>),<term>)",
+              NULL, &type, NULL,NULL)) {
+    return type;
+  }
+  if (ATmatch(t, "amb([<list>])", &args))
+    return SG_TreeType(ATgetFirst(args));
+
+  if(ATmatch(t, "appl(aprod(<int>),<list>)", NULL, NULL)
+  || ATmatch(t, "reject(aprod(<int>),<list>)", NULL, NULL)) {
+    extern    parse_table *table;
+
+    return SG_TreeType(
+            ATmake("appl(<term>,[])",
+                   SG_LookupProduction(table, SG_GetApplProdLabel((tree) t))));
+  }
+
+  ATerror("SG_TreeType: tree not well-formed\n%t\n", t);
+  return NULL;   /* Silence the compiler */
+}
+
+
 void SG_TreeToDot(FILE *dot, ATerm t, int child, ATerm parent,
                   ATbool suppress_lexicals)
 {
@@ -257,7 +285,6 @@ void SGtreeToDotFile(char *prg, char *file, ATerm t, ATbool suppress)
 
 void SG_LinkToDot(FILE *dot, stack *st, st_link *l)
 {
-  int  c;
   ATerm t, tree;
 
   ATfprintf(dot, "N%d [label=\"%d\" shape=box height=0.2, width=0.2];\n",
@@ -265,8 +292,8 @@ void SG_LinkToDot(FILE *dot, stack *st, st_link *l)
   ATfprintf(dot, "N%d -> N%d [label=\"", (int) SG_LK_STACK(l), (int) st);
   tree = (ATerm) SG_LK_TREE(l);
   t = SG_TreeType(tree);
-  if(ATmatch(t, "<int>", &c)) {
-    SG_PrintChar(dot, c);
+  if(ATgetType(tree) == AT_INT) {
+    SG_PrintChar(dot, ATgetInt((ATermInt) t));
   } else {
     ATfprintf(dot, "%s : ", SG_DotTermYield(tree));
     SG_PrintSymbol(dot, t);
@@ -445,7 +472,8 @@ void SG_DotTermYieldAux(ATerm t)
       break;
     case AT_APPL:
       fun = ATgetAFun((ATermAppl) t);
-      if(AFunIs(fun, "appl", 2, ATfalse)) {
+      if(AFunIs(fun, "appl", 2, ATfalse)
+      || AFunIs(fun, "reject", 2, ATfalse)) {
         args = (ATermList) ATelementAt(ATgetArguments((ATermAppl) t), 1);
         if(ATgetLength(args) > 1) {
           SG_TYAuxBuf(TYA_ADD, '[');
