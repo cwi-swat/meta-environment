@@ -1,0 +1,20 @@
+Corba IDL compiler
+------------------
+- Generated code is not meant to be readable (and is unreadable)
+- Distributed approach
+- Well-defined mappings to specific target languages (whitepapers)
+- Only getters/setters
+- Corba specific functionality
+- Interface centric instead of datatype centric
+- No date type
+
+Aspect-J
+--------
+- aspects are meant to express cross-type concerns while autocode
+  is meant to express type-full concerns
+- aspect weaving can be performed after autocode code generation
+  because generated code is well-understood.
+- aspect-j is Java only
+- in autocode the generators can implement some cross-type
+  concerns (profiling, tracing, etc).
+
