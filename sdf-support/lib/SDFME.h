@@ -90,6 +90,7 @@ typedef struct _SDF_ShortChar *SDF_ShortChar;
 typedef struct _SDF_Character *SDF_Character;
 typedef struct _SDF_OptExp *SDF_OptExp;
 typedef struct _SDF_RealCon *SDF_RealCon;
+typedef struct _SDF_Start *SDF_Start;
 
 /*}}}  */
 
@@ -385,6 +386,10 @@ ATerm SDF_OptExpToTerm(SDF_OptExp arg);
 SDF_RealCon SDF_RealConFromTerm(ATerm t);
 #define SDF_makeTermFromRealCon(t) (SDF_RealConToTerm(t))
 ATerm SDF_RealConToTerm(SDF_RealCon arg);
+#define SDF_makeStartFromTerm(t) (SDF_StartFromTerm(t))
+SDF_Start SDF_StartFromTerm(ATerm t);
+#define SDF_makeTermFromStart(t) (SDF_StartToTerm(t))
+ATerm SDF_StartToTerm(SDF_Start arg);
 
 /*}}}  */
 /*{{{  constructors */
@@ -585,6 +590,10 @@ SDF_Character SDF_makeCharacterLabelUnderscoreStart();
 SDF_OptExp SDF_makeOptExpPresent(SDF_Layout wsAfterE, SDF_IntCon IntCon);
 SDF_OptExp SDF_makeOptExpAbsent();
 SDF_RealCon SDF_makeRealConRealCon(SDF_IntCon IntCon, SDF_Layout wsAfterIntCon, SDF_Layout wsAfterPeriod, SDF_NatCon NatCon, SDF_Layout wsAfterNatCon, SDF_OptExp OptExp);
+SDF_Start SDF_makeStartGrammar(SDF_Layout wsBefore, SDF_Grammar top, SDF_Layout wsAfter, int ambCnt);
+SDF_Start SDF_makeStartDefinition(SDF_Layout wsBefore, SDF_Grammar top, SDF_Layout wsAfter, int ambCnt);
+SDF_Start SDF_makeStartModule(SDF_Layout wsBefore, SDF_Grammar top, SDF_Layout wsAfter, int ambCnt);
+SDF_Start SDF_makeStartSDF(SDF_Layout wsBefore, SDF_Grammar top, SDF_Layout wsAfter, int ambCnt);
 
 /*}}}  */
 /*{{{  equality functions */
@@ -661,6 +670,7 @@ ATbool SDF_isEqualShortChar(SDF_ShortChar arg0, SDF_ShortChar arg1);
 ATbool SDF_isEqualCharacter(SDF_Character arg0, SDF_Character arg1);
 ATbool SDF_isEqualOptExp(SDF_OptExp arg0, SDF_OptExp arg1);
 ATbool SDF_isEqualRealCon(SDF_RealCon arg0, SDF_RealCon arg1);
+ATbool SDF_isEqualStart(SDF_Start arg0, SDF_Start arg1);
 
 /*}}}  */
 /*{{{  SDF_Symbol accessors */
@@ -2152,6 +2162,27 @@ SDF_OptExp SDF_getRealConOptExp(SDF_RealCon arg);
 SDF_RealCon SDF_setRealConOptExp(SDF_RealCon arg, SDF_OptExp OptExp);
 
 /*}}}  */
+/*{{{  SDF_Start accessors */
+
+ATbool SDF_isValidStart(SDF_Start arg);
+inline ATbool SDF_isStartGrammar(SDF_Start arg);
+inline ATbool SDF_isStartDefinition(SDF_Start arg);
+inline ATbool SDF_isStartModule(SDF_Start arg);
+inline ATbool SDF_isStartSDF(SDF_Start arg);
+ATbool SDF_hasStartWsBefore(SDF_Start arg);
+SDF_Layout SDF_getStartWsBefore(SDF_Start arg);
+SDF_Start SDF_setStartWsBefore(SDF_Start arg, SDF_Layout wsBefore);
+ATbool SDF_hasStartTop(SDF_Start arg);
+SDF_Grammar SDF_getStartTop(SDF_Start arg);
+SDF_Start SDF_setStartTop(SDF_Start arg, SDF_Grammar top);
+ATbool SDF_hasStartWsAfter(SDF_Start arg);
+SDF_Layout SDF_getStartWsAfter(SDF_Start arg);
+SDF_Start SDF_setStartWsAfter(SDF_Start arg, SDF_Layout wsAfter);
+ATbool SDF_hasStartAmbCnt(SDF_Start arg);
+int SDF_getStartAmbCnt(SDF_Start arg);
+SDF_Start SDF_setStartAmbCnt(SDF_Start arg, int ambCnt);
+
+/*}}}  */
 /*{{{  sort visitors */
 
 SDF_Symbol SDF_visitSymbol(SDF_Symbol arg, SDF_Layout (*acceptWsAfterLessThan)(SDF_Layout), SDF_Layout (*acceptWsAfterSymbol)(SDF_Layout), SDF_Layout (*acceptWsAfterCF)(SDF_Layout), SDF_Layout (*acceptWsAfterLEX)(SDF_Layout), SDF_Layout (*acceptWsAfterVAR)(SDF_Layout), SDF_Layout (*acceptWsAfterParenOpen)(SDF_Layout), SDF_Layout (*acceptWsAfterHead)(SDF_Layout), SDF_SymbolTail (*acceptTail)(SDF_SymbolTail), SDF_Layout (*acceptWsAfterTail)(SDF_Layout), SDF_Layout (*acceptWsAfterBraceOpen)(SDF_Layout), SDF_Layout (*acceptWsAfterSep)(SDF_Layout), SDF_Layout (*acceptWsAfterBraceClose)(SDF_Layout), SDF_NatCon (*acceptN)(SDF_NatCon), SDF_Layout (*acceptWsAfterN)(SDF_Layout), SDF_Layout (*acceptWsAfterSet)(SDF_Layout), SDF_Layout (*acceptWsAfterBracketOpen)(SDF_Layout), SDF_Layout (*acceptWsAfterLeft)(SDF_Layout), SDF_Layout (*acceptWsAfterHash)(SDF_Layout), SDF_Symbols (*acceptArguments)(SDF_Symbols), SDF_Layout (*acceptWsAfterArguments)(SDF_Layout), SDF_Layout (*acceptWsAfterEqualsGreaterThan)(SDF_Layout), SDF_Layout (*acceptWsAfterResults)(SDF_Layout), SDF_Layout (*acceptWsAfterBar)(SDF_Layout), SDF_Layout (*acceptWsAfterLessThanLessThan)(SDF_Layout), SDF_Symbols (*acceptSymbols)(SDF_Symbols), SDF_Layout (*acceptWsAfterSymbols)(SDF_Layout), SDF_Layout (*acceptWsAfterGreaterThan)(SDF_Layout), SDF_Layout (*acceptWsAfterRight)(SDF_Layout), SDF_CharClass (*acceptCharClass)(SDF_CharClass), SDF_Sort (*acceptSort)(SDF_Sort), SDF_Layout (*acceptWsAfterSort)(SDF_Layout), SDF_Layout (*acceptWsAfterBracketOpenBracketOpen)(SDF_Layout), SDF_SymbolParameters (*acceptParameters)(SDF_SymbolParameters), SDF_Layout (*acceptWsAfterParameters)(SDF_Layout), SDF_Literal (*acceptLiteral)(SDF_Literal), SDF_Literal (*acceptLabel)(SDF_Literal), SDF_Layout (*acceptWsAfterLabel)(SDF_Layout), SDF_Layout (*acceptWsAfterColon)(SDF_Layout));
@@ -2226,6 +2257,7 @@ SDF_ShortChar SDF_visitShortChar(SDF_ShortChar arg, SDF_Lexical (*acceptLex)(SDF
 SDF_Character SDF_visitCharacter(SDF_Character arg, SDF_NumChar (*acceptNumChar)(SDF_NumChar), SDF_ShortChar (*acceptShortChar)(SDF_ShortChar));
 SDF_OptExp SDF_visitOptExp(SDF_OptExp arg, SDF_Layout (*acceptWsAfterE)(SDF_Layout), SDF_IntCon (*acceptIntCon)(SDF_IntCon));
 SDF_RealCon SDF_visitRealCon(SDF_RealCon arg, SDF_IntCon (*acceptIntCon)(SDF_IntCon), SDF_Layout (*acceptWsAfterIntCon)(SDF_Layout), SDF_Layout (*acceptWsAfterPeriod)(SDF_Layout), SDF_NatCon (*acceptNatCon)(SDF_NatCon), SDF_Layout (*acceptWsAfterNatCon)(SDF_Layout), SDF_OptExp (*acceptOptExp)(SDF_OptExp));
+SDF_Start SDF_visitStart(SDF_Start arg, SDF_Layout (*acceptWsBefore)(SDF_Layout), SDF_Grammar (*acceptTop)(SDF_Grammar), SDF_Layout (*acceptWsAfter)(SDF_Layout), int (*acceptAmbCnt)(int));
 
 /*}}}  */
 

@@ -103,8 +103,9 @@ exports
 
 module Kernel-Sdf-Syntax
 imports Symbols Grammar-Syntax
-exports
+hiddens
   sorts Attribute Attributes Production Productions
+exports
   context-free syntax
     aterm:ATerm                           -> Attribute      {cons("term"),avoid}
     "{" list:{Attribute ","}* "}"         -> Attributes     {cons("attrs")}
@@ -130,9 +131,12 @@ exports
 
 module Modular-Sdf-Syntax
 imports Kernel-Sdf-Syntax Renaming-Sdf-Syntax
-exports
+exports 
+  sorts Module Definition
+hiddens
   sorts ModuleId ModuleName Import Imports
-        Section Sections Module Definition ImpSection
+        Section Sections ImpSection
+exports
   lexical syntax
     [A-Za-z0-9\_\-]+        -> ModuleWord			{cons("word")}
     ModuleWord              -> ModuleId				{cons("word")}
@@ -183,8 +187,9 @@ exports
 
 module Priority-Sdf-Syntax
 imports Kernel-Sdf-Syntax
-exports
+hiddens
   sorts Associativity Group Priority Priorities
+exports
   context-free syntax
     "left"                                    -> Associativity  {cons("left")}
     "right"                                   -> Associativity  {cons("right")}
@@ -208,8 +213,9 @@ exports
 
 module Sorts-Sdf-Syntax
 imports Kernel-Sdf-Syntax
-exports
+hiddens
   sorts Sort
+exports
   lexical syntax
     [A-Z]                          -> Sort			{cons("one-char")}
     [A-Z][A-Za-z0-9\-]*[A-Za-z0-9] -> Sort			{cons("more-chars")}
@@ -220,8 +226,9 @@ exports
 
 module Literals-Sdf-Syntax
 imports Kernel-Sdf-Syntax Literals
-exports
+hiddens
   sorts UQLiteral
+exports
   lexical syntax
     [a-z]                          -> UQLiteral {cons("one-char")}
     [a-z][A-Za-z0-9\-]*[A-Za-z0-9] -> UQLiteral {cons("more-chars")}
@@ -232,15 +239,16 @@ exports
       "->" result:Symbol Attributes                      -> Production	{avoid, cons("prod-fun")}
 
 module Label-Sdf-Syntax
-imports Kernel-Sdf-Syntax Literals-Sdf-Syntax ATerms
+imports Kernel-Sdf-Syntax Literals-Sdf-Syntax 
 exports
   context-free syntax
     label:Literal ":" Symbol   -> Symbol	{cons("label")}
 
 module Restrictions-Sdf-Syntax
 imports CC-Sdf-Syntax
-exports
+hiddens
   sorts Restriction Restrictions
+exports
   context-free syntax
     CharClass                    	-> Lookahead	{cons("char-class")}
     head:CharClass "." tail:Lookaheads  -> Lookahead  	{cons("seq")}
@@ -265,8 +273,9 @@ exports
 
 module Alias-Sdf-Syntax
 imports Kernel-Sdf-Syntax
-exports
+hiddens
   sorts Alias Aliases
+exports
   context-free syntax
     "aliases" Aliases              -> Grammar  {cons("aliases")}
     Symbol arrow:"->" alias:Symbol -> Alias    {cons("alias")}
@@ -274,8 +283,9 @@ exports
 
 module Symbols
 imports Layout
-exports
+hiddens
   sorts Symbol Symbols
+exports
   context-free syntax
     "(" Symbol ")"       -> Symbol {bracket}
     list:Symbol*         -> Symbols
@@ -284,6 +294,7 @@ module Grammar-Syntax
 imports Layout
 exports
   sorts Grammar
+exports
   context-free syntax
     "(/)"                 -> Grammar				{cons("empty-grammar")}
     "left":Grammar "right":Grammar  -> Grammar			{assoc,cons("conc-grammars")}
@@ -291,8 +302,9 @@ exports
 
 module Renaming-Sdf-Syntax
 imports Kernel-Sdf-Syntax
-exports
+hiddens
   sorts Renaming Renamings
+exports
   context-free syntax
     "[" list:Renaming* "]"              -> Renamings  {cons("renamings")}
     from:Symbol     "=>" to:Symbol      -> Renaming   {cons("symbol")}
@@ -300,8 +312,9 @@ exports
 
 module IntCon
 imports Layout
-exports
+hiddens
   sorts NatCon IntCon
+exports
   lexical syntax
     [0-9]+ -> NatCon  {cons("digits")}
   context-free syntax
@@ -311,8 +324,9 @@ exports
 
 module Character-Class-Syntax
 imports Character-Syntax
+hiddens
+  sorts CharRange CharRanges OptCharRanges CharClass
 exports
-  %% sorts CharRange CharRanges OptCharRanges CharClass
   context-free syntax
     Character                 		-> CharRange	
     start:Character "-" end:Character   -> CharRange           	{cons("range")}
@@ -336,8 +350,9 @@ exports
 
 module Literals
 imports Layout
-exports
+hiddens
   sorts Literal
+exports
   lexical syntax
     "\\" ~ []			-> AlphaNumericalEscChar {cons("default")}
     "\\" [01] [0-9] [0-9]	-> DecimalEscChar	 {cons("dec0_199")}
@@ -353,8 +368,9 @@ exports
 
 module ATerms
 imports Literals IntCon RealCon
+hiddens
+  sorts ATermList ACon AFun ATerm Ann
 exports
-  sorts ATerms ATermList ACon AFun ATerm Ann
   context-free syntax
     "[" elems:{ ATerm ","}* "]"       -> ATermList {cons("not-empty")}
     IntCon                            -> ACon      {cons("int")}
@@ -379,8 +395,9 @@ exports
 
 module Character-Syntax
 imports Layout
-exports
+hiddens
   sorts Character NumChar ShortChar
+exports
   lexical syntax
     [\\] [0-9]+                    -> NumChar   {cons("digits")}
     [a-zA-Z0-9]                    -> ShortChar {cons("regular")}
@@ -395,8 +412,9 @@ exports
 
 module RealCon
 imports IntCon
-exports
+hiddens
   sorts OptExp RealCon
+exports
   context-free syntax
     "e" IntCon                -> OptExp		{cons("present")}
                               -> OptExp		{cons("absent")}
