@@ -1,6 +1,9 @@
 # $Id$
 
-2003/06/25 ({jurgenv,iversen}@cwi.nl)
+2003/06/25 (iversen@cwi.nl)
+ * Improved the code in the TreeModel
+
+2003/06/25 (jurgenv@cwi.nl)
  * fixed a number of bugs in the refactoring facilities:
    - compound module names were not supported
    - the old path names were stored instead of the new ones
