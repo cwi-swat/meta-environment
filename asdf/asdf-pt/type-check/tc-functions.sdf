@@ -12,11 +12,12 @@ sorts
 
 context-free syntax
 
-  typecheck(Functions) -> Answers
-  typecheck(AS-Module, AS-FunctionDefs)	-> Answers
-  typecheck-definitions(AS-FunctionDefs, Environment) -> Answers
+  typecheck(AS-Module, Signatures)		-> Summary
+  typecheck-definitions(FunctionDefs, Environment) -> Answers
 
   gen-summary(Answers)	-> Summary
+
+  {AS-FunctionDef ","}* 	-> SortWithPosition
 
   Error		-> Answer
   Answer+	-> Answers
@@ -25,14 +26,16 @@ hiddens
 
 variables
 
-  "AM"[1-9]?	-> AS-Module
+  "$AM"[1-9]?	-> AS-Module
   "$F"[1-9]?	-> Function
-  "$F+"		-> Functions {prefer}
+  "$F+"		-> Functions 
   "$FS"[1-9]?	-> FunctionSignature
   "$FS"[1-9]?"*"	-> {FunctionSignature ","}*
+  "$AFS"[1-9]?	-> AS-FunctionSig
+  "$AFS"[1-9]?"*"	-> {AS-FunctionSig ","}*
   "$FD"[1-9]?	-> AS-FunctionDef
-  "$FDS"[1-9]?	-> {AS-FunctionDef ","}+
   "$FD"[1-9]?"*"	-> {AS-FunctionDef ","}*
+  "$FD"[1-9]?"+"	-> {AS-FunctionDef ","}+
 
   "$SE"[1-9]?	-> SignatureEnv
   "$ENV"[1-9]?	-> Environment
@@ -51,6 +54,8 @@ variables
   "$ER"[1-9]?"+"	-> Error+
   "$AC"[1-9]?	-> Action
   "$SC"[0-9]?	-> StrCon
+
+  "$SUM"	-> Summary
 		
 sorts
 

@@ -5,6 +5,7 @@ imports
   asdf/an
   languages/sdf2/syntax/Sdf2
   basic/Integers
+  type-check/types/asdf-types
 	
 
 exports

@@ -154,6 +154,8 @@ equations
 	 ===========================================================
 	 typecheck-datapred(DO, TY1) = AR[nor=TY1, exc=TY3, no]
 
+[tca-bracket] typecheck-action((A), TY, EN) = typecheck-action(A, TY, EN)
+
 [tca-copy] typecheck-action(copy, TY, EN) = AR[nor=TY, exc=empty, no]
 
 [tca-skip] typecheck-action(skip, TY, EN) = AR[nor=(), exc=empty, no]
@@ -294,14 +296,14 @@ equations
   AR[nor=TY1, exc=TY2, END] := typecheck-action(A, TY, EN),
   TY2 != empty
   ==================================================
-  typecheck-action(maybe A, TY, EN) = AR[nor=TY1, exc=empty, yes]
+  typecheck-action(maybe A, TY, EN) = AR[nor=(), exc=empty, yes]
 
 
-[tca-maybe-1] 
+[tca-maybe-2] 
 
   AR[nor=TY1, exc=empty, END] := typecheck-action(A, TY, EN)
   ==================================================
-  typecheck-action(maybe A, TY, EN) = AR[nor=TY1, exc=empty, END]
+  typecheck-action(maybe A, TY, EN) = AR[nor=(), exc=empty, END]
 
 [tca-else] 
 
@@ -309,10 +311,9 @@ equations
     AR[nor=TY2, exc=TY3, END1] := typecheck-action(A1, TY1, EN),
     AR[nor=TY4, exc=TY5, END2] := typecheck-action(A2, (), EN),
     TY6 := unify(TY2, TY4),
-    TY7 := unify(TY3, TY5),
-    END3 := END1 answerOr END2
+    TY7 := unify(TY3, TY5)
     ==================================================================
-    typecheck-action(A1 else A2, TY1, EN) = AR[nor=TY6, exc=TY7, END3]
+    typecheck-action(A1 else A2, TY1, EN) = AR[nor=TY6, exc=TY7, END2]
 
 [tca-else] 
 
@@ -321,7 +322,7 @@ equations
     ==================================================
     typecheck-action(A1 else A2, TY1, EN) = ER+
 
-[default-tca-else] 
+[tca-else] 
 
     ER+ := typecheck-action(A1, TY1, EN)
     ==========================================

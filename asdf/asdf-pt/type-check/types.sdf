@@ -4,8 +4,7 @@ imports
 
   basic/Errors
   type-check/pos-annotate
-  type-check/types/all
-  
+  type-check/types/asdf-types
 
 exports 
 
@@ -49,7 +48,7 @@ context-free syntax
 		
 lexical syntax
 
-  "value"	-> Type
+  "value"	-> AtomicType
 
   "yes"		-> Answer
   "no"		-> Answer

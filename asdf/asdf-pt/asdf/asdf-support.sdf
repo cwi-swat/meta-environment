@@ -1,26 +1,17 @@
 module asdf/asdf-support
 
-imports asdf/asdf2sdf
+imports 
+
+  asdf/asdf2sdf
+  asdf/functions
 
 exports
 
 sorts
 
-	Signatures AS-FunctionDef
+  Signatures AS-FunctionDef
 
 context-free syntax
-
-  getSigs(AS-Module, Signatures)	-> Signatures {traversal(accu, break, top-down)}
-  getSigs(AS-Section*, Signatures)	-> Signatures {traversal(accu, break, top-down)}
-  getSigs(AS-FunctionSig, Signatures)	-> Signatures {traversal(accu, break, top-down)}
-
-  getSignatures(AS-Module)	-> Signatures
-
-  joinSignatures(Signatures, Signatures)  -> Signatures
-
-  getFunctions(AS-Module, AS-FunctionDef*)	-> AS-FunctionDef* {traversal(accu, break, top-down)}
-  getFunctions(AS-Section*, AS-FunctionDef*)	-> AS-FunctionDef* {traversal(accu, break, top-down)}
-  getFunctions(AS-FunctionDef, AS-FunctionDef*)	-> AS-FunctionDef* {traversal(accu, break, top-down)}
 
   getModuleName(AS-Module) 	-> ModuleName
   getImportedModules(AS-Module)		-> ATermList 

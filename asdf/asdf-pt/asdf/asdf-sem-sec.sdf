@@ -20,6 +20,8 @@ exports
     AS-Eqs-Tag AS-Eqs-Lhs "=" Action	   -> AS-FunctionDef {cons("fundef")}
 
     sigs({AS-FunctionSig ","}*)		   -> Signatures
+    defs({AS-FunctionDef ","}*)		   -> FunctionDefs	
+
 
     Literal Constructor 	   -> AS-Eqs-Lhs {cons("eqs-lhs")} 
     Literal "(" {VarLex ","}+ ")"  -> Constructor {prefer, cons("cons-comma")}

@@ -1,8 +1,8 @@
 module type-check/environment
 
+imports asdf/functions
 imports
 
-  type-check/functions
   type-check/types
 
 exports
@@ -11,17 +11,17 @@ context-free syntax
 
 %% Signatures , Unfold type
 
-  <SignatureEnv, ActionType>	-> Environment
+  <Signatures, ActionType>	-> Environment
 
-  get-signatures(Environment)  -> SignatureEnv
+  get-signatures(Environment)  -> Signatures
   get-unfold-type(Environment)	   -> ActionType
 
-  set-signatures(Environment, SignatureEnv)		-> Environment
+  set-signatures(Environment, Signatures)		-> Environment
   set-unfold-type(Environment, ActionType)		-> Environment
 
   "empty-env"						-> Environment
 
 hiddens variables
 
-  "SE"[0-9]?	-> SignatureEnv
+  "SIGS"[0-9]?	-> Signatures
   "AT"[0-9]?	-> ActionType

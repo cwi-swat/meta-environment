@@ -1,51 +1,38 @@
 equations
 
-[tcf-1] $SE := collect-signatures($F+, sigs()), 
-        defs($FD*) := collect-definitions($F+, defs()),
-	$ENV := set-signatures(empty-env, $SE),
-	$ANS := typecheck-definitions(defs($FD*), $ENV)
-        ============================================
-        typecheck($F+) = $ANS
-
-[col-sig-1] collect-signatures($FS $FD, sigs($FS*)) = sigs($FS*, $FS)
-
-[col-sig-2] collect-signatures($FS $FD $F+, sigs($FS*)) = sigs($FS*, $FS)
-
-[loo-sig-1] lookup-signature($LT1 : $SO -> $AT1, $AT2, $LT1) = $AT1
-
-[col-def-0] collect-definitions($FS $FD, defs($FD*)) =  defs($FD, $FD*) 
-
-[col-def-1] collect-definitions($FD, defs($FD*)) = defs($FD, $FD*)
-
-[col-def-2] collect-definitions($FS $FD $F+, defs($FD*)) = defs($FD, $FD*)
-
-[col-def-3] collect-definitions($FD $F+, defs($FD*)) = defs($FD, $FD*)
+[tcm-1] defs($FD*) := get-function-defs($AM),
+	$ENV := set-signatures(empty-env, sigs($AFS*)),
+	$ANS := typecheck-definitions(defs($FD*), $ENV),
+	$SUM := gen-summary($ANS)
+	=====================================================
+	typecheck($AM, sigs($AFS*)) = $SUM
 
 [tcd-1] $ANS1 := typecheck-definitions(defs($FD), $ENV),
-	$ANS2 := typecheck-definitions(defs($FDS), $ENV)
+	$ANS2 := typecheck-definitions(defs($FD+), $ENV)
         ====================================================
-        typecheck-definitions(defs($FD, $FDS), $ENV) = $ANS1 $ANS2
-
-
+        typecheck-definitions(defs($FD, $FD+), $ENV) = $ANS1 $ANS2
 
 [tcd-3] 	
 
-      sigs($FS1*, $FS1, $FS2*) := get-signatures($ENV),
-      $LT: $SO -> action[using $TY1 giving $TY3 raising $TY4] := $FS1, 
-      AR[nor=$TY5, exc=$TY6, $END] := typecheck-action($AC, $TY1, $ENV),
-      yes == $TY5 subtype-of $TY3, 
-      yes == $TY6 subtype-of $TY4
+      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($ENV),
+      $LT == get-fun-name($AFS1),
+      $TY1 := get-using($AFS1),
+      $TY2 := get-giving($AFS1),
+      $TY3 := get-raising($AFS1),
+      AR[nor=$TY4, exc=$TY5, $END] := typecheck-action($AC, $TY1, $ENV),
+      yes == $TY4 subtype-of $TY2, 
+      yes == $TY5 subtype-of $TY3
       =========================================================================
       typecheck-definitions(defs($ET $LT $CO = $AC), $ENV) = yes
 
 [tcd-4] 
 
-     sigs($FS1*, $FS1, $FS2*) := get-signatures($ENV),
-     $LT: $SO -> action[using $TY1 giving $TY3 raising $TY4] := $FS1, 
-     $ER := typecheck-action($AC, $TY1, $ENV)
-     ========================================================================
-     typecheck-definitions(defs($ET $LT $CO = $AC), $ENV) = $ER
-
+      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($ENV),
+      $LT == get-fun-name($AFS1),
+      $TY1 := get-using($AFS1),
+      $ER := typecheck-action($AC, $TY1, $ENV)
+      ========================================================================
+      typecheck-definitions(defs($ET $LT $CO = $AC), $ENV) = $ER
 
 [default-tcd] typecheck-definitions(defs($FD*), $ENV) = 
 	      error("Type error", 
@@ -53,11 +40,14 @@ equations
 
 [tca-function] 
 
-     sigs($FS1*, $FS1, $FS2*) := get-signatures($ENV),
-     $LT: $SO -> action[using $TY2 giving $TY3 raising $TY4] := $FS1,
-     $TY5 := unify($TY1, $TY2)
-     ============================================================
-     typecheck-action($LT $CO, $TY1, $ENV) = AR[nor=$TY3, exc=$TY4, no]
+      sigs($AFS1*, $AFS1, $AFS2*) := get-signatures($ENV),
+      $LT == get-fun-name($AFS1),
+      $TY2 := get-using($AFS1),
+      $TY3 := get-giving($AFS1),
+      $TY4 := get-raising($AFS1),
+      $TY5 := unify($TY1, $TY2)
+      ============================================================
+      typecheck-action($LT $CO, $TY1, $ENV) = AR[nor=$TY3, exc=$TY4, no]
 
 [default-function] typecheck-action($LT $CO, $TY1, $ENV) = 
 		error("Type error", 
