@@ -30,28 +30,10 @@
 #include "AsFix-access.h"
 #include <deprecated.h>
 #include "preparation.h"
+#include "asfix_utils.h"
 
 static equation_table *tables = NULL;
 static equation_table *equations = NULL;
-
-extern ATbool keep_whitespace;
-
-/* temp debug function */
-ATerm text(ATerm asfix)
-{
-	char *temp = (char*) malloc(AFsourceSize(asfix)+1);
-	ATerm term; 
-
-	if(!temp) {
-		ATerror("MRF in text");
-	}
-	AFsource(asfix,temp);
-
-	term = ATmake("<str>",temp);
-	free(temp);
-
-	return term;
-}
 
 /*{{{  equation_table *create_equation_table(int size) */
 
@@ -608,8 +590,12 @@ ATerm lexical_to_list(ATerm lextrm)
   newlex   = ATmake("list(<term>,w(\"\"),<term>)", newiter, newtrmlist);
   newfargs = ATmake("[<term>,w(\"\"),ql(\"(\"),w(\"\"),<term>,w(\"\"),ql(\")\")]",
 										qnewname, newiter);
-  newargs  = ATmake("[<term>,w(\"\"),l(\"(\"),w(\"\"),<term>,w(\"\"),l(\")\")]", 
-										newname, newlex);
+	if(keep_whitespace) {
+		newargs  = ATmake("[<term>,w(\"\"),l(\"(\"),w(\"\"),<term>,w(\"\"),l(\")\")]", 
+											newname, newlex);
+	} else {
+		newargs  = ATmake("[<term>,l(\"(\"),<term>,l(\")\")]", newname, newlex);
+	}
   newprod  = ATmake("prod(id(\"GEN-LexConsFuncs\"),w(\"\"),<term>,w(\"\")," \
 			"l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)",newfargs,sort);
   newappl  = ATmake("appl(<term>,w(\"\"),<term>)", newprod, newargs);
@@ -824,7 +810,7 @@ ATerm list_to_lexical(ATerm lexappl)
 							"<term>,<term>,no-attrs)", &modname, &w[0], &args, &w[1], 
 							&lit, &w[2], &sort, &w[3]))
 		ATerror("not a prod: %t\n", prod);
-  lexlist = ATelementAt(lexargs, 4);
+  lexlist = ATelementAt(lexargs, keep_whitespace ? 4 : 2);
   if(!ATmatch(lexlist,"list(<term>,<term>,<term>)",&sym,&w[0],&listargs))
 		ATerror("not a list: %t\n", lexlist);
   len = ATgetLength(listargs);
