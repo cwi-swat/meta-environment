@@ -32,8 +32,21 @@ print_character(FILE *dot, int c)
     break;
   case '\t' : fprintf(dot, "\\\\\\\\t");
     break;
+
+/*
+	JS -- handle the next chars with extra care
+ */
+  case '\\' : fprintf(dot, "\\\\");
+    break;
+  case '"' : fprintf(dot, "\\\"");
+    break;
+
   default :
-    fprintf(dot, "%c", c);
+	if(!isprint(c)) {
+		fprintf(dot, "\\\\%i", c);
+	} else {
+		fprintf(dot, "%c", c);
+	}
   }
 }
 
@@ -61,7 +74,7 @@ print_symbol(FILE *dot, term *t)
 	  {
 	  case '\\': fprintf(dot, "\\\\"); break;
 	  case '"':  fprintf(dot, "\\\""); break;
-	  default:   fprintf(dot, "%c", name[n]);
+	  default:  fprintf(dot, "%c", name[n]);
 	  }
       fprintf(dot, "\\\"");
     }
@@ -230,6 +243,12 @@ tree_to_dot(FILE *dot, term *t, int child, term *parent)
 		parent, c, c);
 	else
       */
+
+/* JS/tmp
+      TBprintf(dot, "t_t_d TBprintf \tN%d%d%d [shape = plaintext label = \"", parent, child, c);
+      print_character(dot, c);
+      TBprintf(dot, "\"]\n", 0);
+*/
       fprintf(dot, "\tN%d%d%d [shape = plaintext " 
 	      "label = \"",
 	      parent, child, c);
