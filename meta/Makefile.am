@@ -38,8 +38,7 @@ CLEANFILES  = meta meta.1
 	sed 's@__PREFIX__@$(prefix)@g;\
 	     s@__ATERM__@$(ATERM)@g;\
 	     s@__ASFIX__@$(ASFIX)@g;\
-	     s@__SGLR__@$(SGLR)@g;\
-	     s@__PGEN__@$(PGEN)@g;\
+	     s@__SDF__@$(SDF)@g;\
 	     s@__EVALUATOR__@$(EVALUATOR)@g;\
 	     s@__TOOLBUS__@$(TOOLBUS)/toolbus@g;\
 	     s@__WISH__@$(WISH)@g;\

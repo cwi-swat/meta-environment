@@ -86,15 +86,10 @@ AC_PACKAGE_REQUIRE(asfix, asource,
    [  --with-asfix=DIR        AsFix-library is in DIR])
 AC_SUBST(ASFIX)
 
-dnl Require sglr package
-AC_PACKAGE_REQUIRE(sglr, sglr,
-   [  --with-sglr=DIR         sglr is in DIR])
-AC_SUBST(SGLR)
-
-dnl Require pgen package
-AC_PACKAGE_REQUIRE(pgen,parsetablegen, 
-   [  --with-pgen=DIR         pgen is in DIR])
-AC_SUBST(PGEN)
+dnl Require sdf package
+AC_PACKAGE_REQUIRE(sdf, sglr,
+   [  --with-sdf=DIR         sdf is in DIR])
+AC_SUBST(SDF)
 
 dnl Require evaluator package
 AC_PACKAGE_REQUIRE(evaluator, evaluator, 

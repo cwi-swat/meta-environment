@@ -25,7 +25,7 @@
 process Open-Sdf2-Language is
   (
     rec-msg(open-sdf2-language) .
-    snd-msg(open-language(trm("Sdf2"), "__PGEN__/share/pgen/Sdf2.baf")) .
+    snd-msg(open-language(trm("Sdf2"), "__SDF__/share/pgen/Sdf2.baf")) .
     (
       rec-msg(language-opened(trm("Sdf2"))) .
       snd-msg(sdf2-language-opened)

@@ -35,8 +35,7 @@ CLEANFILES  = $(TESTS)
 
 % : %.sh.src Makefile
 	sed 's@__TOOLBUS__@$(TOOLBUS)@g;\
-	     s@__DATADIR__@$(datadir)@g;\
-	     s@__SGLR__@$(SGLR)@g' < $< > $@ && \
+	     s@__DATADIR__@$(datadir)@g' < $< > $@ && \
 	chmod +x $@
 
 %.tb : %.tb.src Makefile
