@@ -150,7 +150,7 @@ createTraversalPattern(PT_Tree term)
   if (PT_isEqualSymbol(traversed, symbol)) {
     traversal.type = TRANSFORMER;
   } 
-  else if(PT_isEqualSymbol(accumulated, symbol)) {
+  else if(PT_isEqualSymbol(accumulated, cleanSymbol)) {
     traversal.type = ACCUMULATOR;
   }
   else if(PT_isSymbolPair(cleanSymbol)) {
