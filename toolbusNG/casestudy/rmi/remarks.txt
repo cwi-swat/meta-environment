@@ -1,3 +1,65 @@
+Basic RMI:
+
+four steps:
+1. Write desired remote functionality in terms of Java Interface.
+   - This interface must extend java.rmi.Remote;
+   - each method in the interface must declare that it throws RemoteException:
+   
+   public interface AddressBook extends java.rmi.Remote {
+     public void setAddress(String name, String address) throws java.rmi.RemoteException;
+     public String getAddress(String name) throws java.rmi.RemoteException;
+   }
+   
+2. Write a class implementing the interface in one of two ways:
+   a) extend UnicastRemoteObject. Override constructor and super() will take
+      care of registering the service with the rmi-registry. A constructor
+      must be written that must throw RemoteException
+   b) extend <whatever>. No automagic registration of instances is done, but
+      instead must be manually exported to the rmi-registry at some opportune
+      time by invoking UnicastRemoteObject.exportObject( ... );
+   
+   public class AddressBookImpl extends UnicastRemoteObject implements AddressBook {
+     private HashTable addresses;
+     public AddressBookImpl() throws RemoteException {
+       super();
+       hashTable = new HashTable();
+       ...
+     }
+     public Address getAddress(String name) throws RemoteException {
+       ...
+     }
+     public void setAddress(String name, Address address) throws RemoteException {
+       ...
+     }
+   }
+
+3. Write a Server class that creates an instance of the service-implementation and binds
+   this instance to the rmi-registry using rmi naming mechanism:
+   public class AddressBookServer {
+     public static void main(String[] args) {
+       try {
+         AddressBook ab = new AddressBookImpl();
+         Naming.bind("rmi://localhost:1099/AddressBookService", ab);
+       } catch(Exception e) {
+         System.out.println("Trouble: " + e);
+       }
+     }
+   }
+   In reality a host of exceptions can be thrown which should be taken care of properly.
+   
+4. Write a Client that declares a member of the interface type, and gets an implementation
+   by querying the rmi-registry:
+   public class RemoteClient {
+     public static void main(String[] args) {
+       try {
+         AddressBook ab = (AddressBook) Naming.lookup("rmi://localhost/AddressBookService");
+       } catch (Exception e) {
+         ...
+       }
+       Address a1 = ab.getAddress("hayco");
+     }
+   }
+   
 [sharing]
  * Naive sharing approach does not work:
 
