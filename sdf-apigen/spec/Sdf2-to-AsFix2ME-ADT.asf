@@ -166,14 +166,14 @@ equations
   $ElemType := sort-to-afun($Sort),
   $ListType := afun-concat($ElemType $FieldId)
   ===>
-  build-list-entries($Label : $Sort *) = [separated-list($ListType, $ElemType,[<ws-after-first(OptLayout)>])]
+  build-list-entries($Label : $Sort *) = separated-list($ListType, $ElemType,[<ws-after-first(OptLayout)>])
 
 [equ-build-list-entries-iter-plus]
   $FieldId := sdflit-to-afun($Label),
   $ElemType := sort-to-afun($Sort),
   $ListType := afun-concat($ElemType $FieldId)
   ===>
-  build-list-entries($Label : $Sort +) = [separated-list($ListType, $ElemType,[<ws-after-first(OptLayout)>])]
+  build-list-entries($Label : $Sort +) = separated-list($ListType, $ElemType,[<ws-after-first(OptLayout)>])
     
 
 [equ-build-list-entries-iter-sep-star]
@@ -182,7 +182,7 @@ equations
   $ListType := afun-concat($ElemType $FieldId)
   ===>
   build-list-entries($Label : { $Sort $Sep } *) = 
-    [separated-list($ListType, $ElemType,[<ws-after-first(OptLayout)>,lit(<sep(str)>), <ws-after-sep(OptLayout)>])]
+    separated-list($ListType, $ElemType,[<ws-after-first(OptLayout)>,lit(<sep(str)>), <ws-after-sep(OptLayout)>])
 
   
 [equ-build-list-entries-iter-sep-plus]
@@ -191,7 +191,7 @@ equations
   $ListType := afun-concat($ElemType $FieldId)
   ===>
   build-list-entries($Label : { $Sort $Sep } +) = 
-    [separated-list($ListType, $ElemType,[<ws-after-first(OptLayout)>,lit(<sep(str)>), <ws-after-sep(OptLayout)>])]
+    separated-list($ListType, $ElemType,[<ws-after-first(OptLayout)>,lit(<sep(str)>), <ws-after-sep(OptLayout)>])
 
 [default-equ-build-list-entries]
   build-list-entries($Symbol) =
