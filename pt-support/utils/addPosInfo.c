@@ -18,7 +18,7 @@ static void usage(const char *myname, const char* myversion)
         "  -p <path>      - Path of file (obligatory)\n"
         "  -d <int>       - Maximum tree depth to traverse          (Default: unlimited)\n"
         "  -h             - Display help information (usage)\n"
-        "  -v             - Print version information (i.e. %s)\n",
+        "  -V             - Print version information (i.e. %s)\n",
         myname, myversion);
 }
 
@@ -83,8 +83,8 @@ int main(int argc, char *argv[])
       usage(argv[0],version);
       exit(0);
     }
-    else if (streq(argv[lcv], "-v")) {
-      fprintf(stderr, "%s - Version: %s\n", argv[0], version);
+    else if (streq(argv[lcv], "-V")) {
+      fprintf(stderr, "%s v%s\n", argv[0], version);
       exit(0);
     }
   }
