@@ -20,14 +20,15 @@ ATerm lf_AUX_IntCon2_2 ( ATerm arg0 ) {
 {
 ATerm tmp [ 1 ] ;
 FUNC_ENTRY ( lf_AUX_IntCon2_2sym , ATmakeAppl ( lf_AUX_IntCon2_2sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_AUX_IntCon2_1sym ) ) {
+lbl_lf_AUX_IntCon2_2 : if ( check_sym ( arg0 , lf_AUX_IntCon2_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( not_empty_list ( atmp00 ) ) {
 if ( term_equal ( list_head ( atmp00 ) , make_char ( 48 ) ) ) {
 tmp [ 0 ] = list_tail ( atmp00 ) ;
 if ( not_empty_list ( tmp [ 0 ] ) ) {
-FUNC_EXIT ( lf_AUX_IntCon2_2 ( lf_AUX_IntCon2_1 ( make_list ( tmp [ 0 ] ) ) ) ) ;
+arg0 = lf_AUX_IntCon2_1 ( make_list ( tmp [ 0 ] ) ) ;
+goto lbl_lf_AUX_IntCon2_2 ;
 }
 }
 }

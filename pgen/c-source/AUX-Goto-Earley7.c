@@ -48,15 +48,13 @@ ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Earley-Items\"),w(\"\"),[sor
 ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Earley-Items\"),w(\"\"),[ql(\"[\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\".\"),w(\"\"),sort(\"Production\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Item\"),w(\"\"),no-attrs)" ) ) ;
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Earley-Items\"),w(\"\"),[ql(\"[\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\".\"),w(\"\"),sort(\"Production\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Item\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_Goto_Earley7 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Goto_Earley7_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 7 ] ;
 FUNC_ENTRY ( lf_AUX_Goto_Earley7_1sym , ATmakeAppl ( lf_AUX_Goto_Earley7_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Goto_Earley7_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
@@ -81,7 +79,7 @@ FUNC_EXIT ( ( * ef5 ) ( ( * ef2 ) ( lf3 ( make_list ( ( * ef6 ) ( ( * ef4 ) ( lf
 }
 }
 else {
-FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( lf3 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf3 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
@@ -96,7 +94,9 @@ ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( not_empty_list ( atmp000 ) ) {
 tmp [ 0 ] = list_head ( atmp000 ) ;
 tmp [ 1 ] = list_tail ( atmp000 ) ;
-FUNC_EXIT ( lf_AUX_Goto_Earley7_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , arg1 ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+arg1 = arg1 ;
+goto lbl_lf_AUX_Goto_Earley7_1 ;
 }
 }
 }

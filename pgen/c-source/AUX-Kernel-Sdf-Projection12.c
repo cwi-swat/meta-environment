@@ -59,17 +59,13 @@ ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"Symbol-Sets\"),w(\"\"),[sort
 ef10 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[l(\"symbols\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Productions\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),no-attrs)" ) ) ;
 ef10sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[l(\"symbols\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Productions\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_Kernel_Sdf_Projection12 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Kernel_Sdf_Projection12_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 6 ] ;
 FUNC_ENTRY ( lf_AUX_Kernel_Sdf_Projection12_1sym , ATmakeAppl ( lf_AUX_Kernel_Sdf_Projection12_1sym , arg0 , arg1 , arg2 ) ) ;
-if ( check_sym ( arg1 , ef1sym ) ) {
+lbl_lf_AUX_Kernel_Sdf_Projection12_1 : if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef2sym ) ) {
@@ -87,7 +83,7 @@ ATerm atmp200 = arg_0 ( atmp20 ) ;
 if ( not_empty_list ( atmp1000 ) ) {
 tmp [ 0 ] = list_head ( atmp1000 ) ;
 tmp [ 1 ] = list_tail ( atmp1000 ) ;
-if ( term_equal ( ( * ef6 ) ( tmp [ 0 ] , arg0 ) , ( constant0 ? constant0 : ( constant0 = ( * ef7 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef6 ) ( tmp [ 0 ] , arg0 ) , ( * ef7 ) ( ) ) ) {
 tmp [ 2 ] = ( * ef8 ) ( tmp [ 0 ] , ( * ef3 ) ( lf3 ( make_list ( atmp200 ) ) ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef3sym ) ) {
 tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
@@ -100,7 +96,7 @@ FUNC_EXIT ( ( * ef4 ) ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 4 ] ) ) ) , lf_AUX_K
 }
 }
 else {
-FUNC_EXIT_CONST ( constant1 , ( * ef3 ) ( lf3 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( lf3 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
@@ -130,7 +126,10 @@ ATerm atmp200 = arg_0 ( atmp20 ) ;
 if ( not_empty_list ( atmp1000 ) ) {
 tmp [ 0 ] = list_head ( atmp1000 ) ;
 tmp [ 1 ] = list_tail ( atmp1000 ) ;
-FUNC_EXIT ( lf_AUX_Kernel_Sdf_Projection12_1 ( arg0 , ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) , ( * ef3 ) ( lf3 ( make_list ( atmp200 ) ) ) ) ) ;
+arg0 = arg0 ;
+arg1 = ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ;
+arg2 = ( * ef3 ) ( lf3 ( make_list ( atmp200 ) ) ) ;
+goto lbl_lf_AUX_Kernel_Sdf_Projection12_1 ;
 }
 }
 }

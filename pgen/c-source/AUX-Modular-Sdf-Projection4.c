@@ -73,7 +73,7 @@ ATerm lf_AUX_Modular_Sdf_Projection4_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 12 ] ;
 FUNC_ENTRY ( lf_AUX_Modular_Sdf_Projection4_1sym , ATmakeAppl ( lf_AUX_Modular_Sdf_Projection4_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef5sym ) ) {
+lbl_lf_AUX_Modular_Sdf_Projection4_1 : if ( check_sym ( arg0 , ef5sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
@@ -238,7 +238,9 @@ tmp [ 6 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( check_sym ( tmp [ 6 ] , lf4sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
 if ( ! not_empty_list ( tmp [ 5 ] ) ) {
-FUNC_EXIT ( lf_AUX_Modular_Sdf_Projection4_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+arg0 = arg0 ;
+arg1 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+goto lbl_lf_AUX_Modular_Sdf_Projection4_1 ;
 }
 }
 }

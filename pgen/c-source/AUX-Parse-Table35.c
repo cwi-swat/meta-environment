@@ -40,7 +40,7 @@ static funcptr ef8 ;
 static Symbol lf4sym ;
 static ATerm lf4 ( ATerm arg1 ) ;
 void register_AUX_Parse_Table35 ( ) {
-lf_AUX_Parse_Table35_1sym = ATmakeSymbol ( "prod(id(\"Parse-Table\"),w(\"\"),[sort(\"Action-Table\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\":=\"),w(\"\"),sort(\"ActionSet\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Action-Table\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"memo\")],w(\"\"),l(\"}\")))"
+lf_AUX_Parse_Table35_1sym = ATmakeSymbol ( "prod(id(\"Parse-Table\"),w(\"\"),[sort(\"Action-Table\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\":=\"),w(\"\"),sort(\"ActionSet\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Action-Table\"),w(\"\"),no-attrs)"
  , 3 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Parse_Table35_1sym ) ;
 lf2sym = ATmakeSymbol ( "listtype(sort(\"Action-Entry\"),ql(\",\"))" , 1 , ATtrue ) ;
@@ -49,7 +49,7 @@ lf3sym = ATmakeSymbol ( "listtype(sort(\"Label\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf3sym ) ;
 lf4sym = ATmakeSymbol ( "listtype(sort(\"Action\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf4sym ) ;
-register_prod ( ATparse ( "prod(id(\"Parse-Table\"),w(\"\"),[sort(\"Action-Table\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\":=\"),w(\"\"),sort(\"ActionSet\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Action-Table\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"memo\")],w(\"\"),l(\"}\")))" ) , lf_AUX_Parse_Table35_1 , lf_AUX_Parse_Table35_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"Parse-Table\"),w(\"\"),[sort(\"Action-Table\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\":=\"),w(\"\"),sort(\"ActionSet\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Action-Table\"),w(\"\"),no-attrs)" ) , lf_AUX_Parse_Table35_1 , lf_AUX_Parse_Table35_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"Action-Entry\"),ql(\",\"))" ) , lf2 , lf2sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"Label\"))" ) , lf3 , lf3sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"Action\"))" ) , lf4 , lf4sym ) ;
@@ -88,22 +88,14 @@ ef15sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w
 ef16 = lookup_func ( ATreadFromString ( "prod(id(\"Actions\"),w(\"\"),[sort(\"ActionSet\"),w(\"\"),ql(\"||\"),w(\"\"),sort(\"ActionSet\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ActionSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
 ef16sym = lookup_sym ( ATreadFromString ( "prod(id(\"Actions\"),w(\"\"),[sort(\"ActionSet\"),w(\"\"),ql(\"||\"),w(\"\"),sort(\"ActionSet\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ActionSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
 }
-static ATermTable table_lf_AUX_Parse_Table35_1 ;
 static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_Parse_Table35 ( ) {
-create_table ( table_lf_AUX_Parse_Table35_1 , 0 ) ;
 ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Parse_Table35_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
-ATerm interm = make_tuple3 ( arg0 , arg1 , arg2 ) ;
-ATermTable table = get_table ( table_lf_AUX_Parse_Table35_1 ) ;
-ATerm result = get_result ( table , interm ) ;
-if ( result ) return result ;
-else {
 {
 ATerm tmp [ 20 ] ;
+FUNC_ENTRY ( lf_AUX_Parse_Table35_1sym , ATmakeAppl ( lf_AUX_Parse_Table35_1sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
@@ -181,16 +173,12 @@ tmp [ 17 ] = ( constant0 ? constant0 : ( constant0 = ( * ef13 ) ( ( * ef14 ) ( )
 if ( term_equal ( tmp [ 16 ] , tmp [ 17 ] ) ) {
 tmp [ 18 ] = lf_AUX_Parse_Table35_1 ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) , ( * ef3 ) ( ( * ef4 ) ( lf3 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( tmp [ 15 ] ) ) ) ) ) ) , ( * ef7 ) ( ( * ef8 ) ( lf4 ( make_list ( atmp2000 ) ) ) ) ) ;
 tmp [ 19 ] = ( * ef9 ) ( ( * ef10 ) ( ( * ef3 ) ( ( * ef4 ) ( lf3 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( tmp [ 13 ] ) ) ) ) ) ) , ( * ef7 ) ( ( * ef8 ) ( lf4 ( make_list ( tmp [ 10 ] ) ) ) ) ) , tmp [ 18 ] ) ;
-result = tmp [ 19 ] ;
-put_result ( table , interm , result ) ;
-return result ;
+FUNC_EXIT ( tmp [ 19 ] ) ;
 }
 else {
 tmp [ 18 ] = lf_AUX_Parse_Table35_1 ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) , ( * ef3 ) ( ( * ef4 ) ( lf3 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( ( * ef15 ) ( tmp [ 15 ] , tmp [ 16 ] ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef8 ) ( lf4 ( make_list ( atmp2000 ) ) ) ) ) ;
 tmp [ 19 ] = ( * ef9 ) ( ( * ef10 ) ( ( * ef3 ) ( ( * ef4 ) ( lf3 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( ( * ef15 ) ( tmp [ 13 ] , tmp [ 16 ] ) ) ) ) ) ) ) , ( * ef7 ) ( ( * ef8 ) ( lf4 ( make_list ( tmp [ 10 ] ) ) ) ) ) , ( * ef9 ) ( ( * ef10 ) ( ( * ef3 ) ( ( * ef4 ) ( lf3 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( tmp [ 16 ] ) ) ) ) ) ) , ( * ef16 ) ( ( * ef7 ) ( ( * ef8 ) ( lf4 ( make_list ( tmp [ 10 ] ) ) ) ) , ( * ef7 ) ( ( * ef8 ) ( lf4 ( make_list ( atmp2000 ) ) ) ) ) ) , tmp [ 18 ] ) ) ;
-result = tmp [ 19 ] ;
-put_result ( table , interm , result ) ;
-return result ;
+FUNC_EXIT ( tmp [ 19 ] ) ;
 }
 }
 }
@@ -228,9 +216,7 @@ if ( check_sym ( tmp [ 0 ] , ef5sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 1 ] , ef6sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
-result = ( * ef9 ) ( ( * ef10 ) ( ( * ef3 ) ( ( * ef4 ) ( lf3 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( tmp [ 2 ] ) ) ) ) ) ) , ( * ef7 ) ( ( * ef8 ) ( lf4 ( make_list ( atmp2000 ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef11 ) ( ) ) ) ) ;
-put_result ( table , interm , result ) ;
-return result ;
+FUNC_EXIT ( ( * ef9 ) ( ( * ef10 ) ( ( * ef3 ) ( ( * ef4 ) ( lf3 ( make_list ( ( * ef5 ) ( ( * ef6 ) ( tmp [ 2 ] ) ) ) ) ) ) , ( * ef7 ) ( ( * ef8 ) ( lf4 ( make_list ( atmp2000 ) ) ) ) ) , ( * ef11 ) ( ) ) ) ;
 }
 }
 }
@@ -254,7 +240,6 @@ return result ;
 }
 }
 FUNC_EXIT ( make_nf3 ( lf_AUX_Parse_Table35_1sym , arg0 , arg1 , arg2 ) ) ;
-}
 }
 }
 ATerm lf4 ( ATerm arg0 ) {

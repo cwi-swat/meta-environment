@@ -45,7 +45,7 @@ ATerm lf_AUX_Priority_Sdf_Normalization10_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 26 ] ;
 FUNC_ENTRY ( lf_AUX_Priority_Sdf_Normalization10_1sym , ATmakeAppl ( lf_AUX_Priority_Sdf_Normalization10_1sym , arg0 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Priority_Sdf_Normalization10_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
@@ -99,7 +99,8 @@ if ( check_sym ( tmp [ 23 ] , ef3sym ) ) {
 tmp [ 25 ] = arg_0 ( tmp [ 23 ] ) ;
 if ( term_equal ( tmp [ 12 ] , tmp [ 24 ] ) ) {
 if ( ! term_equal ( ( * ef4 ) ( ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef3 ) ( tmp [ 11 ] ) ) , make_list ( ( * ef3 ) ( tmp [ 25 ] ) ) ) ) ) , ( * ef1 ) ( lf2 ( make_list ( atmp000 ) ) ) ) , ( * ef5 ) ( ) ) ) {
-FUNC_EXIT ( lf_AUX_Priority_Sdf_Normalization10_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef3 ) ( tmp [ 11 ] ) ) , make_list ( ( * ef3 ) ( tmp [ 25 ] ) ) ) ) ) ) , make_list ( atmp000 ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef3 ) ( tmp [ 11 ] ) ) , make_list ( ( * ef3 ) ( tmp [ 25 ] ) ) ) ) ) ) , make_list ( atmp000 ) ) ) ) ;
+goto lbl_lf_AUX_Priority_Sdf_Normalization10_1 ;
 }
 }
 }

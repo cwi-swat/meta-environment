@@ -20,7 +20,7 @@ ATerm lf_AUX_Character_Syntax2_2 ( ATerm arg0 ) {
 {
 ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_AUX_Character_Syntax2_2sym , ATmakeAppl ( lf_AUX_Character_Syntax2_2sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_AUX_Character_Syntax2_1sym ) ) {
+lbl_lf_AUX_Character_Syntax2_2 : if ( check_sym ( arg0 , lf_AUX_Character_Syntax2_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( not_empty_list ( atmp00 ) ) {
@@ -30,7 +30,8 @@ if ( not_empty_list ( tmp [ 0 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 0 ] ) , make_char ( 48 ) ) ) {
 tmp [ 1 ] = list_tail ( tmp [ 0 ] ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-FUNC_EXIT ( lf_AUX_Character_Syntax2_2 ( lf_AUX_Character_Syntax2_1 ( cons ( make_list_char ( 92 ) , make_list ( tmp [ 1 ] ) ) ) ) ) ;
+arg0 = lf_AUX_Character_Syntax2_1 ( cons ( make_list ( make_char ( 92 ) ) , make_list ( tmp [ 1 ] ) ) ) ;
+goto lbl_lf_AUX_Character_Syntax2_2 ;
 }
 }
 }

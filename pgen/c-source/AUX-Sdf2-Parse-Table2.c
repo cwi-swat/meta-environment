@@ -56,9 +56,7 @@ if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 tmp [ 0 ] = ( * ef3 ) ( arg0 , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ( * ef5 ) ( lf2 ( cons ( make_list ( make_char ( 77 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 105 ) ) , make_list ( make_char ( 110 ) ) ) ) ) ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ;
-ATfprintf(stderr,"normalize[[definition d]](Main,<START>) = _G finished\n");
 tmp [ 1 ] = ( * ef7 ) ( tmp [ 0 ] ) ;
-ATfprintf(stderr,"table[[_G]] = pt finished\n");
 FUNC_EXIT ( ( * ef2 ) ( tmp [ 1 ] ) ) ;
 }
 }

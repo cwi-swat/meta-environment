@@ -28,7 +28,7 @@ ATerm lf_AUX_Kernel_Sdf_Projection3_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_AUX_Kernel_Sdf_Projection3_1sym , ATmakeAppl ( lf_AUX_Kernel_Sdf_Projection3_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Kernel_Sdf_Projection3_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
@@ -47,7 +47,9 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-FUNC_EXIT ( lf_AUX_Kernel_Sdf_Projection3_1 ( ( * ef1 ) ( lf2 ( slice ( atmp0000 [ 0 ] , atmp0000 [ 1 ] ) ) ) , lf_AUX_Kernel_Sdf_Projection3_1 ( ( * ef1 ) ( lf2 ( tmp [ 0 ] ) ) , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( slice ( atmp0000 [ 0 ] , atmp0000 [ 1 ] ) ) ) ;
+arg1 = lf_AUX_Kernel_Sdf_Projection3_1 ( ( * ef1 ) ( lf2 ( tmp [ 0 ] ) ) , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) ;
+goto lbl_lf_AUX_Kernel_Sdf_Projection3_1 ;
 }
 }
 }

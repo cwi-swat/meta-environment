@@ -34,15 +34,13 @@ ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Earley-Items\"),w(\"\"),[sor
 ef5 = lookup_func ( ATreadFromString ( "prod(id(\"Goto-Earley\"),w(\"\"),[l(\"pred\"),w(\"\"),ql(\"[[\"),w(\"\"),sort(\"Grammar\"),w(\"\"),ql(\"]]\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Item\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ItemSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"parameter\")],w(\"\"),l(\"}\")))" ) ) ;
 ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Goto-Earley\"),w(\"\"),[l(\"pred\"),w(\"\"),ql(\"[[\"),w(\"\"),sort(\"Grammar\"),w(\"\"),ql(\"]]\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Item\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ItemSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"parameter\")],w(\"\"),l(\"}\")))" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_Goto_Earley9 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Goto_Earley9_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_AUX_Goto_Earley9_1sym , ATmakeAppl ( lf_AUX_Goto_Earley9_1sym , arg0 , arg1 , arg2 ) ) ;
-if ( check_sym ( arg2 , ef1sym ) ) {
+lbl_lf_AUX_Goto_Earley9_1 : if ( check_sym ( arg2 , ef1sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( check_sym ( atmp20 , lf2sym ) ) {
@@ -51,8 +49,11 @@ ATerm atmp200 = arg_0 ( atmp20 ) ;
 if ( not_empty_list ( atmp200 ) ) {
 tmp [ 0 ] = list_head ( atmp200 ) ;
 tmp [ 1 ] = list_tail ( atmp200 ) ;
-if ( term_equal ( ( * ef2 ) ( tmp [ 0 ] , arg1 ) , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
-FUNC_EXIT ( lf_AUX_Goto_Earley9_1 ( arg0 , arg1 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+if ( term_equal ( ( * ef2 ) ( tmp [ 0 ] , arg1 ) , ( * ef3 ) ( ) ) ) {
+arg0 = arg0 ;
+arg1 = arg1 ;
+arg2 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+goto lbl_lf_AUX_Goto_Earley9_1 ;
 }
 }
 else {
@@ -71,7 +72,10 @@ ATerm atmp200 = arg_0 ( atmp20 ) ;
 if ( not_empty_list ( atmp200 ) ) {
 tmp [ 0 ] = list_head ( atmp200 ) ;
 tmp [ 1 ] = list_tail ( atmp200 ) ;
-FUNC_EXIT ( lf_AUX_Goto_Earley9_1 ( arg0 , ( * ef4 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , arg1 ) , ( * ef4 ) ( ( * ef5 ) ( arg0 , tmp [ 0 ] ) , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
+arg0 = arg0 ;
+arg1 = ( * ef4 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , arg1 ) ;
+arg2 = ( * ef4 ) ( ( * ef5 ) ( arg0 , tmp [ 0 ] ) , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ;
+goto lbl_lf_AUX_Goto_Earley9_1 ;
 }
 }
 }

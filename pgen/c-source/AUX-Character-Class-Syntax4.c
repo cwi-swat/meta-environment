@@ -25,20 +25,19 @@ ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Normalizatio
 ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"OptCharRanges\"),w(\"\"),no-attrs)" ) ) ;
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"OptCharRanges\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_Character_Class_Syntax4 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Character_Class_Syntax4_1 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_AUX_Character_Class_Syntax4_1sym , ATmakeAppl ( lf_AUX_Character_Class_Syntax4_1sym , arg0 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Character_Class_Syntax4_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( check_sym ( atmp000 , ef3sym ) ) {
-FUNC_EXIT_CONST ( constant0 , lf_AUX_Character_Class_Syntax4_1 ( ( * ef4 ) ( ) ) ) ;
+arg0 = ( * ef4 ) ( ) ;
+goto lbl_lf_AUX_Character_Class_Syntax4_1 ;
 }
 }
 }

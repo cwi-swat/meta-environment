@@ -34,15 +34,13 @@ ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Earley-Graphs\"),w(\"\"),[so
 ef5 = lookup_func ( ATreadFromString ( "prod(id(\"CC-Sdf-Syntax\"),w(\"\"),[sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
 ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"CC-Sdf-Syntax\"),w(\"\"),[sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_Goto_PCC2 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Goto_PCC2_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 4 ] ;
 FUNC_ENTRY ( lf_AUX_Goto_PCC2_1sym , ATmakeAppl ( lf_AUX_Goto_PCC2_1sym , arg0 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Goto_PCC2_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
@@ -59,12 +57,13 @@ if ( check_sym ( tmp [ 0 ] , ef4sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 2 ] , ef5sym ) ) {
 tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
-FUNC_EXIT ( lf_AUX_Goto_PCC2_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+goto lbl_lf_AUX_Goto_PCC2_1 ;
 }
 }
 }
 else {
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }

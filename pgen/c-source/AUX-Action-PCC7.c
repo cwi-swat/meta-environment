@@ -98,8 +98,8 @@ ef10 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"numcha
 ef10sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"numchar\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NumChar\"),w(\"\"),no-attrs)" ) ) ;
 ef11 = lookup_func ( ATreadFromString ( "prod(id(\"Basic-Integers\"),w(\"\"),[sort(\"IntCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),no-attrs)" ) ) ;
 ef11sym = lookup_sym ( ATreadFromString ( "prod(id(\"Basic-Integers\"),w(\"\"),[sort(\"IntCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),no-attrs)" ) ) ;
-ef12 = lookup_func ( ATreadFromString ( "prod(id(\"Parse-Table\"),w(\"\"),[sort(\"Action-Table\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\":=\"),w(\"\"),sort(\"ActionSet\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Action-Table\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"memo\")],w(\"\"),l(\"}\")))" ) ) ;
-ef12sym = lookup_sym ( ATreadFromString ( "prod(id(\"Parse-Table\"),w(\"\"),[sort(\"Action-Table\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\":=\"),w(\"\"),sort(\"ActionSet\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Action-Table\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"memo\")],w(\"\"),l(\"}\")))" ) ) ;
+ef12 = lookup_func ( ATreadFromString ( "prod(id(\"Parse-Table\"),w(\"\"),[sort(\"Action-Table\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\":=\"),w(\"\"),sort(\"ActionSet\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Action-Table\"),w(\"\"),no-attrs)" ) ) ;
+ef12sym = lookup_sym ( ATreadFromString ( "prod(id(\"Parse-Table\"),w(\"\"),[sort(\"Action-Table\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\":=\"),w(\"\"),sort(\"ActionSet\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Action-Table\"),w(\"\"),no-attrs)" ) ) ;
 ef13 = lookup_func ( ATreadFromString ( "prod(id(\"Labels\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Labels\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),no-attrs)" ) ) ;
 ef13sym = lookup_sym ( ATreadFromString ( "prod(id(\"Labels\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Labels\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),no-attrs)" ) ) ;
 ef14 = lookup_func ( ATreadFromString ( "prod(id(\"Labels\"),w(\"\"),[iter(sort(\"Label\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Labels\"),w(\"\"),no-attrs)" ) ) ;
@@ -125,21 +125,13 @@ ef23sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w
 ef24 = lookup_func ( ATreadFromString ( "prod(id(\"Actions\"),w(\"\"),[l(\"shift\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Int\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Action\"),w(\"\"),no-attrs)" ) ) ;
 ef24sym = lookup_sym ( ATreadFromString ( "prod(id(\"Actions\"),w(\"\"),[l(\"shift\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Int\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Action\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
-static ATerm constant3 = NULL ;
 void init_AUX_Action_PCC7 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
-ATprotect ( & constant3 ) ;
 }
 ATerm lf_AUX_Action_PCC7_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 15 ] ;
 FUNC_ENTRY ( lf_AUX_Action_PCC7_1sym , ATmakeAppl ( lf_AUX_Action_PCC7_1sym , arg0 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Action_PCC7_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
@@ -159,11 +151,10 @@ tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
 {
 if ( check_sym ( tmp [ 3 ] , ef11sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
-tmp [ 5 ] = ( * ef20 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( * ef21 ) ( ( * ef9 ) ( ( * ef10 ) ( lf3 ( cons ( make_list ( make_char ( 92 ) ) , make_list ( make_char ( 49 ) ) ) ) ) ) , ( * ef22 ) ( ) ) ) ) ) ) ) , tmp [ 2 ] ) ;
+tmp [ 5 ] = ( * ef20 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( * ef21 ) ( ( * ef9 ) ( ( * ef10 ) ( lf3 ( cons ( make_list ( make_char ( 92 ) ) , make_list ( make_char ( 49 ) ) ) ) ) ) , ( * ef22 ) ( ) ) ) ) ) , tmp [ 2 ] ) ;
 if ( ! term_equal ( tmp [ 5 ] , ( * ef5 ) ( ( * ef23 ) ( ) ) ) ) {
 tmp [ 6 ] = lf_AUX_Action_PCC7_1 ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
 tmp [ 7 ] = ( * ef12 ) ( tmp [ 6 ] , ( * ef13 ) ( ( * ef14 ) ( lf4 ( make_list ( ( * ef15 ) ( ( * ef16 ) ( tmp [ 5 ] ) ) ) ) ) ) , ( * ef17 ) ( ( * ef18 ) ( lf5 ( make_list ( ( * ef24 ) ( ( * ef11 ) ( tmp [ 4 ] ) ) ) ) ) ) ) ;
-tmp [ 6 ] = NULL;
 FUNC_EXIT ( tmp [ 7 ] ) ;
 }
 }
@@ -189,8 +180,7 @@ tmp [ 12 ] = list_tail ( tmp [ 10 ] ) ;
 if ( is_single_element ( tmp [ 12 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 12 ] ) , make_char ( 48 ) ) ) {
 tmp [ 13 ] = lf_AUX_Action_PCC7_1 ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
-tmp [ 14 ] = ( * ef12 ) ( tmp [ 13 ] , ( constant1 ? constant1 : ( constant1 = ( * ef13 ) ( ( * ef14 ) ( lf4 ( make_list ( ( * ef15 ) ( ( * ef16 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( lf3 ( cons ( make_list ( make_char ( 92 ) ) , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( constant2 ? constant2 : ( constant2 = ( * ef17 ) ( ( * ef18 ) ( lf5 ( make_list ( ( * ef19 ) ( ) ) ) ) ) ) ) ) ;
-tmp [ 13 ] = NULL;
+tmp [ 14 ] = ( * ef12 ) ( tmp [ 13 ] , ( * ef13 ) ( ( * ef14 ) ( lf4 ( make_list ( ( * ef15 ) ( ( * ef16 ) ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( lf3 ( cons ( make_list ( make_char ( 92 ) ) , make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef17 ) ( ( * ef18 ) ( lf5 ( make_list ( ( * ef19 ) ( ) ) ) ) ) ) ;
 FUNC_EXIT ( tmp [ 14 ] ) ;
 }
 }
@@ -210,7 +200,7 @@ FUNC_EXIT ( tmp [ 14 ] ) ;
 }
 }
 else {
-FUNC_EXIT_CONST ( constant3 , ( * ef3 ) ( ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ) ) ;
 }
 }
 }
@@ -235,7 +225,8 @@ tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 3 ] , ef11sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
-FUNC_EXIT ( lf_AUX_Action_PCC7_1 ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ;
+goto lbl_lf_AUX_Action_PCC7_1 ;
 }
 }
 }

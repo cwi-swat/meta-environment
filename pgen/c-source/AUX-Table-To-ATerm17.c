@@ -47,8 +47,8 @@ ATerm lf_AUX_Table_To_ATerm17_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_AUX_Table_To_ATerm17_1sym , ATmakeAppl ( lf_AUX_Table_To_ATerm17_1sym , arg0 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ;
+lbl_lf_AUX_Table_To_ATerm17_1 : if ( check_sym ( arg0 , ef1sym ) ) {
+FUNC_EXIT ( ( * ef2 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ;
 }
 if ( check_sym ( arg0 , ef3sym ) ) {
 {
@@ -63,7 +63,8 @@ else {
 tmp [ 0 ] = list_head ( atmp000 ) ;
 tmp [ 1 ] = list_tail ( atmp000 ) ;
 if ( ! term_equal ( tmp [ 0 ] , ( * ef4 ) ( ) ) ) {
-FUNC_EXIT ( lf_AUX_Table_To_ATerm17_1 ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+arg0 = ( * ef3 ) ( lf3 ( make_list ( tmp [ 1 ] ) ) ) ;
+goto lbl_lf_AUX_Table_To_ATerm17_1 ;
 }
 if ( term_equal ( list_head ( atmp000 ) , ( constant1 ? constant1 : ( constant1 = ( * ef4 ) ( ) ) ) ) ) {
 tmp [ 0 ] = list_tail ( atmp000 ) ;

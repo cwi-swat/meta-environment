@@ -54,16 +54,14 @@ ef11 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Normalization
 ef11sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Normalization\"),w(\"\"),[sort(\"CharRange\"),w(\"\"),ql(\"-<\"),w(\"\"),sort(\"CharRange\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_Character_Class_Normalization12 ( ) {
 ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Character_Class_Normalization12_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 1 ] ;
 FUNC_ENTRY ( lf_AUX_Character_Class_Normalization12_1sym , ATmakeAppl ( lf_AUX_Character_Class_Normalization12_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , ef1sym ) ) {
+lbl_lf_AUX_Character_Class_Normalization12_1 : if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef2sym ) ) {
@@ -73,10 +71,10 @@ if ( check_sym ( atmp100 , ef3sym ) ) {
 {
 ATerm atmp1000 = arg_0 ( atmp100 ) ;
 if ( term_equal ( arg0 , atmp1000 ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef4 ) ( ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( ) ) ;
 }
 else {
-FUNC_EXIT_CONST ( constant1 , ( * ef5 ) ( ) ) ;
+FUNC_EXIT ( ( * ef5 ) ( ) ) ;
 }
 }
 }
@@ -104,12 +102,12 @@ if ( check_sym ( atmp100 , ef2sym ) ) {
 ATerm atmp1000 = arg_0 ( atmp100 ) ;
 {
 ATerm atmp101 = arg_1 ( atmp10 ) ;
-tmp [ 0 ] = ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ;
+tmp [ 0 ] = ( * ef4 ) ( ) ;
 if ( term_equal ( ( * ef11 ) ( ( * ef3 ) ( arg0 ) , atmp1000 ) , tmp [ 0 ] ) ) {
-FUNC_EXIT_CONST ( constant1 , ( * ef5 ) ( ) ) ;
+FUNC_EXIT ( ( * ef5 ) ( ) ) ;
 }
 if ( term_equal ( lf_AUX_Character_Class_Normalization12_1 ( arg0 , ( * ef1 ) ( ( * ef2 ) ( atmp1000 ) ) ) , tmp [ 0 ] ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef4 ) ( ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( ) ) ;
 }
 }
 }
@@ -120,7 +118,7 @@ FUNC_EXIT_CONST ( constant0 , ( * ef4 ) ( ) ) ;
 }
 }
 if ( check_sym ( arg1 , ef9sym ) ) {
-FUNC_EXIT_CONST ( constant1 , ( * ef5 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef5 ) ( ) ) ;
 }
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
@@ -133,7 +131,9 @@ if ( check_sym ( atmp100 , ef2sym ) ) {
 ATerm atmp1000 = arg_0 ( atmp100 ) ;
 {
 ATerm atmp101 = arg_1 ( atmp10 ) ;
-FUNC_EXIT ( lf_AUX_Character_Class_Normalization12_1 ( arg0 , ( * ef1 ) ( atmp101 ) ) ) ;
+arg0 = arg0 ;
+arg1 = ( * ef1 ) ( atmp101 ) ;
+goto lbl_lf_AUX_Character_Class_Normalization12_1 ;
 }
 }
 }

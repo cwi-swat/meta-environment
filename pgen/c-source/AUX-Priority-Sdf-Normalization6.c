@@ -56,15 +56,13 @@ ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\")
 ef8 = lookup_func ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Associativity\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Group\"),w(\"\"),no-attrs)" ) ) ;
 ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"Priority-Sdf-Syntax\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Associativity\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Group\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_Priority_Sdf_Normalization6 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Priority_Sdf_Normalization6_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 12 ] ;
 FUNC_ENTRY ( lf_AUX_Priority_Sdf_Normalization6_1sym , ATmakeAppl ( lf_AUX_Priority_Sdf_Normalization6_1sym , arg0 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Priority_Sdf_Normalization6_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
@@ -91,7 +89,8 @@ if ( check_sym ( tmp [ 7 ] , ef7sym ) ) {
 tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ;
 if ( check_sym ( tmp [ 8 ] , lf4sym ) ) {
 tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ;
-FUNC_EXIT ( lf_AUX_Priority_Sdf_Normalization6_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( make_list ( ( * ef8 ) ( tmp [ 6 ] , ( * ef7 ) ( lf4 ( make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) , make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( make_list ( tmp [ 9 ] ) ) ) ) ) , make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( make_list ( ( * ef8 ) ( tmp [ 6 ] , ( * ef7 ) ( lf4 ( make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) , make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( make_list ( tmp [ 9 ] ) ) ) ) ) , make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ;
+goto lbl_lf_AUX_Priority_Sdf_Normalization6_1 ;
 }
 }
 }
@@ -115,7 +114,8 @@ tmp [ 8 ] = list_tail ( tmp [ 8 ] ) ;
 tmp [ 10 ] = tmp [ 8 ] ;
 while ( not_empty_list ( tmp [ 8 ] ) ) {
 if ( not_empty_list ( tmp [ 8 ] ) ) {
-FUNC_EXIT ( lf_AUX_Priority_Sdf_Normalization6_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( slice ( tmp [ 9 ] , tmp [ 10 ] ) ) ) ) ) , make_list ( tmp [ 5 ] ) ) ) ) ) , make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( tmp [ 8 ] ) ) ) ) , make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( slice ( tmp [ 9 ] , tmp [ 10 ] ) ) ) ) ) , make_list ( tmp [ 5 ] ) ) ) ) ) , make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( tmp [ 8 ] ) ) ) ) , make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ;
+goto lbl_lf_AUX_Priority_Sdf_Normalization6_1 ;
 }
 tmp [ 10 ] = list_tail ( tmp [ 10 ] ) ;
 tmp [ 8 ] = tmp [ 10 ] ;
@@ -126,11 +126,12 @@ if ( check_sym ( tmp [ 7 ] , lf4sym ) ) {
 tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ;
 {
 if ( ! not_empty_list ( tmp [ 8 ] ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 if ( is_single_element ( tmp [ 8 ] ) ) {
 tmp [ 9 ] = list_head ( tmp [ 8 ] ) ;
-FUNC_EXIT ( lf_AUX_Priority_Sdf_Normalization6_1 ( ( * ef1 ) ( lf2 ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef3 ) ( tmp [ 9 ] ) ) , make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( ( * ef3 ) ( tmp [ 9 ] ) ) , make_list ( tmp [ 5 ] ) ) ) ) ) ) ) ;
+goto lbl_lf_AUX_Priority_Sdf_Normalization6_1 ;
 }
 }
 }
@@ -144,7 +145,8 @@ if ( check_sym ( tmp [ 7 ] , ef7sym ) ) {
 tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ;
 if ( check_sym ( tmp [ 8 ] , lf4sym ) ) {
 tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ;
-FUNC_EXIT ( lf_AUX_Priority_Sdf_Normalization6_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( make_list ( ( * ef8 ) ( tmp [ 6 ] , ( * ef7 ) ( lf4 ( make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) , make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( tmp [ 3 ] ) , make_list ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( make_list ( ( * ef8 ) ( tmp [ 6 ] , ( * ef7 ) ( lf4 ( make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) , make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( tmp [ 3 ] ) , make_list ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ) ) ) ;
+goto lbl_lf_AUX_Priority_Sdf_Normalization6_1 ;
 }
 }
 }
@@ -161,7 +163,8 @@ tmp [ 8 ] = list_tail ( tmp [ 8 ] ) ;
 tmp [ 10 ] = tmp [ 8 ] ;
 while ( not_empty_list ( tmp [ 8 ] ) ) {
 if ( not_empty_list ( tmp [ 8 ] ) ) {
-FUNC_EXIT ( lf_AUX_Priority_Sdf_Normalization6_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( tmp [ 3 ] ) , make_list ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( slice ( tmp [ 9 ] , tmp [ 10 ] ) ) ) ) ) ) ) ) ) , make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( tmp [ 3 ] ) , make_list ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( tmp [ 8 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( tmp [ 3 ] ) , make_list ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( slice ( tmp [ 9 ] , tmp [ 10 ] ) ) ) ) ) ) ) ) ) , make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( tmp [ 3 ] ) , make_list ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( tmp [ 8 ] ) ) ) ) ) ) ) ) ) ) ) ;
+goto lbl_lf_AUX_Priority_Sdf_Normalization6_1 ;
 }
 tmp [ 10 ] = list_tail ( tmp [ 10 ] ) ;
 tmp [ 8 ] = tmp [ 10 ] ;
@@ -172,11 +175,12 @@ if ( check_sym ( tmp [ 7 ] , lf4sym ) ) {
 tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ;
 {
 if ( ! not_empty_list ( tmp [ 8 ] ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 if ( is_single_element ( tmp [ 8 ] ) ) {
 tmp [ 9 ] = list_head ( tmp [ 8 ] ) ;
-FUNC_EXIT ( lf_AUX_Priority_Sdf_Normalization6_1 ( ( * ef1 ) ( lf2 ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( tmp [ 3 ] ) , make_list ( ( * ef3 ) ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( make_list ( ( * ef2 ) ( lf3 ( cons ( make_list ( tmp [ 3 ] ) , make_list ( ( * ef3 ) ( tmp [ 9 ] ) ) ) ) ) ) ) ) ;
+goto lbl_lf_AUX_Priority_Sdf_Normalization6_1 ;
 }
 }
 }
@@ -209,7 +213,8 @@ if ( not_empty_list ( tmp [ 9 ] ) ) {
 tmp [ 10 ] = list_head ( tmp [ 9 ] ) ;
 tmp [ 11 ] = list_tail ( tmp [ 9 ] ) ;
 if ( not_empty_list ( tmp [ 11 ] ) ) {
-FUNC_EXIT ( lf_AUX_Priority_Sdf_Normalization6_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef4 ) ( ( * ef3 ) ( tmp [ 8 ] ) , tmp [ 4 ] , ( * ef3 ) ( tmp [ 10 ] ) ) ) , cons ( make_list ( ( * ef2 ) ( lf3 ( make_list ( ( * ef8 ) ( tmp [ 4 ] , ( * ef7 ) ( lf4 ( cons ( make_list ( tmp [ 8 ] ) , make_list ( tmp [ 11 ] ) ) ) ) ) ) ) ) ) , make_list ( ( * ef2 ) ( lf3 ( make_list ( ( * ef8 ) ( tmp [ 4 ] , ( * ef7 ) ( lf4 ( cons ( make_list ( tmp [ 10 ] ) , make_list ( tmp [ 11 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef4 ) ( ( * ef3 ) ( tmp [ 8 ] ) , tmp [ 4 ] , ( * ef3 ) ( tmp [ 10 ] ) ) ) , cons ( make_list ( ( * ef2 ) ( lf3 ( make_list ( ( * ef8 ) ( tmp [ 4 ] , ( * ef7 ) ( lf4 ( cons ( make_list ( tmp [ 8 ] ) , make_list ( tmp [ 11 ] ) ) ) ) ) ) ) ) ) , make_list ( ( * ef2 ) ( lf3 ( make_list ( ( * ef8 ) ( tmp [ 4 ] , ( * ef7 ) ( lf4 ( cons ( make_list ( tmp [ 10 ] ) , make_list ( tmp [ 11 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+goto lbl_lf_AUX_Priority_Sdf_Normalization6_1 ;
 }
 }
 if ( is_single_element ( tmp [ 9 ] ) ) {
@@ -231,7 +236,7 @@ FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( ( * ef4 ) ( ( * ef3 ) ( tmp [ 8 ] ) , 
 }
 if ( check_sym ( tmp [ 3 ] , ef3sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 if ( check_sym ( tmp [ 3 ] , ef6sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
@@ -241,7 +246,7 @@ if ( check_sym ( tmp [ 5 ] , lf4sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
 if ( is_single_element ( tmp [ 6 ] ) ) {
 tmp [ 7 ] = list_head ( tmp [ 6 ] ) ;
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
@@ -263,7 +268,8 @@ tmp [ 2 ] = list_tail ( tmp [ 2 ] ) ;
 tmp [ 6 ] = tmp [ 2 ] ;
 while ( not_empty_list ( tmp [ 2 ] ) ) {
 if ( not_empty_list ( tmp [ 2 ] ) ) {
-FUNC_EXIT ( lf_AUX_Priority_Sdf_Normalization6_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( cons ( slice ( tmp [ 3 ] , tmp [ 4 ] ) , slice ( tmp [ 5 ] , tmp [ 6 ] ) ) ) ) ) , make_list ( ( * ef2 ) ( lf3 ( cons ( slice ( tmp [ 5 ] , tmp [ 6 ] ) , tmp [ 2 ] ) ) ) ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( cons ( slice ( tmp [ 3 ] , tmp [ 4 ] ) , slice ( tmp [ 5 ] , tmp [ 6 ] ) ) ) ) ) , make_list ( ( * ef2 ) ( lf3 ( cons ( slice ( tmp [ 5 ] , tmp [ 6 ] ) , tmp [ 2 ] ) ) ) ) ) ) ) ;
+goto lbl_lf_AUX_Priority_Sdf_Normalization6_1 ;
 }
 tmp [ 6 ] = list_tail ( tmp [ 6 ] ) ;
 tmp [ 2 ] = tmp [ 6 ] ;
@@ -286,7 +292,8 @@ if ( check_sym ( tmp [ 5 ] , ef7sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
 if ( check_sym ( tmp [ 6 ] , lf4sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
-FUNC_EXIT ( lf_AUX_Priority_Sdf_Normalization6_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( make_list ( ( * ef8 ) ( tmp [ 4 ] , ( * ef7 ) ( lf4 ( make_list ( tmp [ 7 ] ) ) ) ) ) ) ) ) , make_list ( ( * ef4 ) ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( make_list ( tmp [ 7 ] ) ) ) ) , tmp [ 2 ] , tmp [ 3 ] ) ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( make_list ( ( * ef8 ) ( tmp [ 4 ] , ( * ef7 ) ( lf4 ( make_list ( tmp [ 7 ] ) ) ) ) ) ) ) ) , make_list ( ( * ef4 ) ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( make_list ( tmp [ 7 ] ) ) ) ) , tmp [ 2 ] , tmp [ 3 ] ) ) ) ) ) ;
+goto lbl_lf_AUX_Priority_Sdf_Normalization6_1 ;
 }
 }
 }
@@ -307,12 +314,14 @@ if ( check_sym ( tmp [ 5 ] , lf4sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
 {
 if ( ! not_empty_list ( tmp [ 6 ] ) ) {
-FUNC_EXIT ( lf_AUX_Priority_Sdf_Normalization6_1 ( ( * ef1 ) ( lf2 ( make_list ( ( * ef2 ) ( lf3 ( make_list ( tmp [ 3 ] ) ) ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( make_list ( ( * ef2 ) ( lf3 ( make_list ( tmp [ 3 ] ) ) ) ) ) ) ;
+goto lbl_lf_AUX_Priority_Sdf_Normalization6_1 ;
 }
 else {
 tmp [ 7 ] = list_head ( tmp [ 6 ] ) ;
 tmp [ 8 ] = list_tail ( tmp [ 6 ] ) ;
-FUNC_EXIT ( lf_AUX_Priority_Sdf_Normalization6_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef4 ) ( ( * ef3 ) ( tmp [ 7 ] ) , tmp [ 2 ] , tmp [ 3 ] ) ) , make_list ( ( * ef4 ) ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( make_list ( tmp [ 8 ] ) ) ) ) , tmp [ 2 ] , tmp [ 3 ] ) ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef4 ) ( ( * ef3 ) ( tmp [ 7 ] ) , tmp [ 2 ] , tmp [ 3 ] ) ) , make_list ( ( * ef4 ) ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( make_list ( tmp [ 8 ] ) ) ) ) , tmp [ 2 ] , tmp [ 3 ] ) ) ) ) ) ;
+goto lbl_lf_AUX_Priority_Sdf_Normalization6_1 ;
 }
 }
 }
@@ -332,10 +341,12 @@ tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
 if ( not_empty_list ( tmp [ 6 ] ) ) {
 tmp [ 7 ] = list_head ( tmp [ 6 ] ) ;
 tmp [ 8 ] = list_tail ( tmp [ 6 ] ) ;
-FUNC_EXIT ( lf_AUX_Priority_Sdf_Normalization6_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef4 ) ( tmp [ 1 ] , tmp [ 2 ] , ( * ef3 ) ( tmp [ 7 ] ) ) ) , make_list ( ( * ef4 ) ( tmp [ 1 ] , tmp [ 2 ] , ( * ef6 ) ( ( * ef7 ) ( lf4 ( make_list ( tmp [ 8 ] ) ) ) ) ) ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef4 ) ( tmp [ 1 ] , tmp [ 2 ] , ( * ef3 ) ( tmp [ 7 ] ) ) ) , make_list ( ( * ef4 ) ( tmp [ 1 ] , tmp [ 2 ] , ( * ef6 ) ( ( * ef7 ) ( lf4 ( make_list ( tmp [ 8 ] ) ) ) ) ) ) ) ) ) ;
+goto lbl_lf_AUX_Priority_Sdf_Normalization6_1 ;
 }
 else {
-FUNC_EXIT ( lf_AUX_Priority_Sdf_Normalization6_1 ( ( * ef1 ) ( lf2 ( make_list ( ( * ef2 ) ( lf3 ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( make_list ( ( * ef2 ) ( lf3 ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
+goto lbl_lf_AUX_Priority_Sdf_Normalization6_1 ;
 }
 }
 }
@@ -350,14 +361,15 @@ if ( check_sym ( tmp [ 5 ] , ef7sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
 if ( check_sym ( tmp [ 6 ] , lf4sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
-FUNC_EXIT ( lf_AUX_Priority_Sdf_Normalization6_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( make_list ( ( * ef8 ) ( tmp [ 4 ] , ( * ef7 ) ( lf4 ( make_list ( tmp [ 7 ] ) ) ) ) ) ) ) ) , make_list ( ( * ef4 ) ( tmp [ 1 ] , tmp [ 2 ] , ( * ef6 ) ( ( * ef7 ) ( lf4 ( make_list ( tmp [ 7 ] ) ) ) ) ) ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef2 ) ( lf3 ( make_list ( ( * ef8 ) ( tmp [ 4 ] , ( * ef7 ) ( lf4 ( make_list ( tmp [ 7 ] ) ) ) ) ) ) ) ) , make_list ( ( * ef4 ) ( tmp [ 1 ] , tmp [ 2 ] , ( * ef6 ) ( ( * ef7 ) ( lf4 ( make_list ( tmp [ 7 ] ) ) ) ) ) ) ) ) ) ;
+goto lbl_lf_AUX_Priority_Sdf_Normalization6_1 ;
 }
 }
 }
 }
 }
 if ( ! not_empty_list ( atmp000 ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }

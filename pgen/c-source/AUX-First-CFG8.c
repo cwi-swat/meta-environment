@@ -66,7 +66,7 @@ ATerm lf_AUX_First_CFG8_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 7 ] ;
 FUNC_ENTRY ( lf_AUX_First_CFG8_1sym , ATmakeAppl ( lf_AUX_First_CFG8_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_First_CFG8_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
@@ -83,7 +83,9 @@ if ( check_sym ( tmp [ 2 ] , ef3sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ;
 if ( check_sym ( tmp [ 5 ] , lf3sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
-FUNC_EXIT ( lf_AUX_First_CFG8_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef4 ) ( ( * ef5 ) ( lf4 ( make_list ( ( * ef6 ) ( ( * ef7 ) ( tmp [ 3 ] ) , ( * ef8 ) ( arg1 , ( * ef9 ) ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 6 ] ) ) ) ) ) ) ) ) ) , arg1 ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+arg1 = ( * ef4 ) ( ( * ef5 ) ( lf4 ( make_list ( ( * ef6 ) ( ( * ef7 ) ( tmp [ 3 ] ) , ( * ef8 ) ( arg1 , ( * ef9 ) ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 6 ] ) ) ) ) ) ) ) ) ) , arg1 ) ;
+goto lbl_lf_AUX_First_CFG8_1 ;
 }
 }
 }

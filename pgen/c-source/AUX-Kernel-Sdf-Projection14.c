@@ -35,15 +35,13 @@ ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Symbols\"),w(\"\"),[iter(sor
 ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Productions\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Productions\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_Kernel_Sdf_Projection14 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Kernel_Sdf_Projection14_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 7 ] ;
 FUNC_ENTRY ( lf_AUX_Kernel_Sdf_Projection14_1sym , ATmakeAppl ( lf_AUX_Kernel_Sdf_Projection14_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , ef1sym ) ) {
+lbl_lf_AUX_Kernel_Sdf_Projection14_1 : if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
@@ -68,7 +66,7 @@ FUNC_EXIT ( ( * ef4 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef2 ) ( ( * ef3 ) ( lf
 }
 }
 else {
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
@@ -83,7 +81,9 @@ ATerm atmp100 = arg_0 ( atmp10 ) ;
 if ( not_empty_list ( atmp100 ) ) {
 tmp [ 0 ] = list_head ( atmp100 ) ;
 tmp [ 1 ] = list_tail ( atmp100 ) ;
-FUNC_EXIT ( lf_AUX_Kernel_Sdf_Projection14_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+arg0 = arg0 ;
+arg1 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+goto lbl_lf_AUX_Kernel_Sdf_Projection14_1 ;
 }
 }
 }

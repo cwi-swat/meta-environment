@@ -251,51 +251,13 @@ ef52sym = lookup_sym ( ATreadFromString ( "prod(id(\"Regular-Sdf-Syntax\"),w(\"\
 ef53 = lookup_func ( ATreadFromString ( "prod(id(\"Regular-Sdf-Normalization\"),w(\"\"),[l(\"perm\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Symbols\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
 ef53sym = lookup_sym ( ATreadFromString ( "prod(id(\"Regular-Sdf-Normalization\"),w(\"\"),[l(\"perm\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Symbols\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
-static ATerm constant3 = NULL ;
-static ATerm constant4 = NULL ;
-static ATerm constant5 = NULL ;
-static ATerm constant6 = NULL ;
-static ATerm constant7 = NULL ;
-static ATerm constant8 = NULL ;
-static ATerm constant9 = NULL ;
-static ATerm constant10 = NULL ;
-static ATerm constant11 = NULL ;
-static ATerm constant12 = NULL ;
-static ATerm constant13 = NULL ;
-static ATerm constant14 = NULL ;
-static ATerm constant15 = NULL ;
-static ATerm constant16 = NULL ;
-static ATerm constant17 = NULL ;
-static ATerm constant18 = NULL ;
 void init_AUX_Regular_Sdf_Normalization3 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
-ATprotect ( & constant3 ) ;
-ATprotect ( & constant4 ) ;
-ATprotect ( & constant5 ) ;
-ATprotect ( & constant6 ) ;
-ATprotect ( & constant7 ) ;
-ATprotect ( & constant8 ) ;
-ATprotect ( & constant9 ) ;
-ATprotect ( & constant10 ) ;
-ATprotect ( & constant11 ) ;
-ATprotect ( & constant12 ) ;
-ATprotect ( & constant13 ) ;
-ATprotect ( & constant14 ) ;
-ATprotect ( & constant15 ) ;
-ATprotect ( & constant16 ) ;
-ATprotect ( & constant17 ) ;
-ATprotect ( & constant18 ) ;
 }
 ATerm lf_AUX_Regular_Sdf_Normalization3_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 10 ] ;
 FUNC_ENTRY ( lf_AUX_Regular_Sdf_Normalization3_1sym , ATmakeAppl ( lf_AUX_Regular_Sdf_Normalization3_1sym , arg0 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Regular_Sdf_Normalization3_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
@@ -309,12 +271,14 @@ FUNC_EXIT ( ( * ef12 ) ( lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 (
 }
 if ( check_sym ( tmp [ 0 ] , ef13sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-FUNC_EXIT ( lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+goto lbl_lf_AUX_Regular_Sdf_Normalization3_1 ;
 }
 if ( check_sym ( tmp [ 0 ] , ef14sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
-FUNC_EXIT ( lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 2 ] ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 2 ] ) ) ) ;
+goto lbl_lf_AUX_Regular_Sdf_Normalization3_1 ;
 }
 if ( check_sym ( tmp [ 0 ] , ef21sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
@@ -322,7 +286,7 @@ tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 2 ] , lf2sym ) ) {
 tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
 if ( not_empty_list ( tmp [ 3 ] ) ) {
-tmp [ 4 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 1 ] ) , make_list ( tmp [ 3 ] ) ) ) ) , ( * ef21 ) ( tmp [ 1 ] , lf2 ( make_list ( tmp [ 3 ] ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
+tmp [ 4 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 1 ] ) , make_list ( tmp [ 3 ] ) ) ) ) , ( * ef21 ) ( tmp [ 1 ] , lf2 ( make_list ( tmp [ 3 ] ) ) ) , ( * ef20 ) ( ) ) ;
 FUNC_EXIT ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( make_list ( tmp [ 4 ] ) ) ) ) , lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 1 ] ) , make_list ( tmp [ 3 ] ) ) ) ) ) ) ) ;
 }
 }
@@ -334,52 +298,54 @@ FUNC_EXIT ( ( * ef23 ) ( ( * ef22 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef22 ) ( tmp
 }
 if ( check_sym ( tmp [ 0 ] , ef24sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-tmp [ 2 ] = ( * ef19 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ) , ( * ef24 ) ( tmp [ 1 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
-tmp [ 3 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef24 ) ( tmp [ 1 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
+tmp [ 2 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) , ( * ef24 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
+tmp [ 3 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef24 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
 FUNC_EXIT ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 3 ] ) ) ) ) ) , lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
 }
 if ( check_sym ( tmp [ 0 ] , ef25sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-tmp [ 2 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef33 ) ( tmp [ 1 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
-tmp [ 3 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef33 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef33 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef33 ) ( tmp [ 1 ] ) , ( constant2 ? constant2 : ( constant2 = ( * ef34 ) ( lf6 ( make_list ( ( * ef35 ) ( ( * ef31 ) ( ) ) ) ) ) ) ) ) ;
-tmp [ 4 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef33 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef33 ) ( tmp [ 1 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
-tmp [ 5 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef33 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef33 ) ( tmp [ 1 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
-tmp [ 6 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef25 ) ( tmp [ 1 ] ) , ( constant2 ? constant2 : ( constant2 = ( * ef34 ) ( lf6 ( make_list ( ( * ef35 ) ( ( * ef31 ) ( ) ) ) ) ) ) ) ) ;
-tmp [ 7 ] = ( * ef19 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ) , ( * ef25 ) ( tmp [ 1 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
-tmp [ 8 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef33 ) ( tmp [ 1 ] ) ) ) ) , ( * ef25 ) ( tmp [ 1 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
+tmp [ 2 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef33 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
+tmp [ 3 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef33 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef33 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef33 ) ( tmp [ 1 ] ) , ( * ef34 ) ( lf6 ( make_list ( ( * ef35 ) ( ( * ef31 ) ( ) ) ) ) ) ) ;
+tmp [ 4 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef33 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef33 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
+tmp [ 5 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef33 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef33 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
+tmp [ 6 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) , make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) ) ) ) , ( * ef25 ) ( tmp [ 1 ] ) , ( * ef34 ) ( lf6 ( make_list ( ( * ef35 ) ( ( * ef31 ) ( ) ) ) ) ) ) ;
+tmp [ 7 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) , ( * ef25 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
+tmp [ 8 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef33 ) ( tmp [ 1 ] ) ) ) ) , ( * ef25 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
 FUNC_EXIT ( ( * ef15 ) ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 2 ] ) , cons ( make_list ( tmp [ 3 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 5 ] ) , cons ( make_list ( tmp [ 6 ] ) , cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ) ) ) ) ) ) , ( * ef26 ) ( ( * ef27 ) ( lf4 ( make_list ( ( * ef28 ) ( lf5 ( cons ( make_list ( ( * ef29 ) ( tmp [ 2 ] ) ) , cons ( make_list ( ( * ef29 ) ( tmp [ 3 ] ) ) , cons ( make_list ( ( * ef30 ) ( ( * ef31 ) ( ) , ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 5 ] ) , make_list ( tmp [ 6 ] ) ) ) ) ) ) ) , make_list ( ( * ef32 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 7 ] ) , make_list ( tmp [ 8 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
 }
 if ( check_sym ( tmp [ 0 ] , ef33sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-FUNC_EXIT ( lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( make_list ( ( * ef25 ) ( tmp [ 1 ] ) ) ) ) ;
+goto lbl_lf_AUX_Regular_Sdf_Normalization3_1 ;
 }
 if ( check_sym ( tmp [ 0 ] , ef36sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
-tmp [ 3 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
-tmp [ 4 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( constant2 ? constant2 : ( constant2 = ( * ef34 ) ( lf6 ( make_list ( ( * ef35 ) ( ( * ef31 ) ( ) ) ) ) ) ) ) ) ;
-tmp [ 5 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
-tmp [ 6 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
-tmp [ 7 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( constant2 ? constant2 : ( constant2 = ( * ef34 ) ( lf6 ( make_list ( ( * ef35 ) ( ( * ef31 ) ( ) ) ) ) ) ) ) ) ;
-tmp [ 8 ] = ( * ef19 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ) , ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
-tmp [ 9 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) , ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
+tmp [ 3 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
+tmp [ 4 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef34 ) ( lf6 ( make_list ( ( * ef35 ) ( ( * ef31 ) ( ) ) ) ) ) ) ;
+tmp [ 5 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
+tmp [ 6 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
+tmp [ 7 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) , ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef34 ) ( lf6 ( make_list ( ( * ef35 ) ( ( * ef31 ) ( ) ) ) ) ) ) ;
+tmp [ 8 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) , ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
+tmp [ 9 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef37 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) , ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
 FUNC_EXIT ( ( * ef15 ) ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 3 ] ) , cons ( make_list ( tmp [ 4 ] ) , cons ( make_list ( tmp [ 5 ] ) , cons ( make_list ( tmp [ 6 ] ) , cons ( make_list ( tmp [ 7 ] ) , cons ( make_list ( tmp [ 8 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ) , ( * ef26 ) ( ( * ef27 ) ( lf4 ( make_list ( ( * ef28 ) ( lf5 ( cons ( make_list ( ( * ef29 ) ( tmp [ 3 ] ) ) , cons ( make_list ( ( * ef29 ) ( tmp [ 4 ] ) ) , cons ( make_list ( ( * ef30 ) ( ( * ef31 ) ( ) , ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 5 ] ) , cons ( make_list ( tmp [ 6 ] ) , make_list ( tmp [ 7 ] ) ) ) ) ) ) ) , make_list ( ( * ef32 ) ( ( * ef18 ) ( lf3 ( cons ( make_list ( tmp [ 8 ] ) , make_list ( tmp [ 9 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 1 ] ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ;
 }
 if ( check_sym ( tmp [ 0 ] , ef37sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
-FUNC_EXIT ( lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( make_list ( ( * ef36 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) ) ;
+goto lbl_lf_AUX_Regular_Sdf_Normalization3_1 ;
 }
 if ( check_sym ( tmp [ 0 ] , ef38sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
-if ( term_equal ( ( * ef39 ) ( ( * ef40 ) ( ( * ef41 ) ( tmp [ 2 ] ) ) , ( constant3 ? constant3 : ( constant3 = ( * ef40 ) ( ( * ef41 ) ( ( * ef42 ) ( lf7 ( make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) , ( constant4 ? constant4 : ( constant4 = ( * ef43 ) ( ) ) ) ) ) {
-tmp [ 3 ] = ( * ef44 ) ( ( * ef40 ) ( ( * ef41 ) ( tmp [ 2 ] ) ) , ( constant5 ? constant5 : ( constant5 = ( * ef40 ) ( ( * ef41 ) ( ( * ef42 ) ( lf7 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ;
+if ( term_equal ( ( * ef39 ) ( ( * ef40 ) ( ( * ef41 ) ( tmp [ 2 ] ) ) , ( * ef40 ) ( ( * ef41 ) ( ( * ef42 ) ( lf7 ( make_list ( make_char ( 50 ) ) ) ) ) ) ) , ( * ef43 ) ( ) ) ) {
+tmp [ 3 ] = ( * ef44 ) ( ( * ef40 ) ( ( * ef41 ) ( tmp [ 2 ] ) ) , ( * ef40 ) ( ( * ef41 ) ( ( * ef42 ) ( lf7 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 3 ] , ef40sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( check_sym ( tmp [ 4 ] , ef41sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
-tmp [ 6 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 1 ] ) , make_list ( ( * ef38 ) ( tmp [ 1 ] , tmp [ 5 ] ) ) ) ) ) , ( * ef38 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
+tmp [ 6 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 1 ] ) , make_list ( ( * ef38 ) ( tmp [ 1 ] , tmp [ 5 ] ) ) ) ) ) , ( * ef38 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
 FUNC_EXIT ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( make_list ( tmp [ 6 ] ) ) ) ) , lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( make_list ( ( * ef38 ) ( tmp [ 1 ] , tmp [ 5 ] ) ) ) ) ) ) ) ;
 }
 }
@@ -389,13 +355,13 @@ if ( check_sym ( tmp [ 0 ] , ef45sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
 tmp [ 3 ] = arg_2 ( tmp [ 0 ] ) ;
-if ( term_equal ( ( * ef39 ) ( ( * ef40 ) ( ( * ef41 ) ( tmp [ 3 ] ) ) , ( constant3 ? constant3 : ( constant3 = ( * ef40 ) ( ( * ef41 ) ( ( * ef42 ) ( lf7 ( make_list ( make_char ( 50 ) ) ) ) ) ) ) ) ) , ( constant4 ? constant4 : ( constant4 = ( * ef43 ) ( ) ) ) ) ) {
-tmp [ 4 ] = ( * ef44 ) ( ( * ef40 ) ( ( * ef41 ) ( tmp [ 3 ] ) ) , ( constant5 ? constant5 : ( constant5 = ( * ef40 ) ( ( * ef41 ) ( ( * ef42 ) ( lf7 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ;
+if ( term_equal ( ( * ef39 ) ( ( * ef40 ) ( ( * ef41 ) ( tmp [ 3 ] ) ) , ( * ef40 ) ( ( * ef41 ) ( ( * ef42 ) ( lf7 ( make_list ( make_char ( 50 ) ) ) ) ) ) ) , ( * ef43 ) ( ) ) ) {
+tmp [ 4 ] = ( * ef44 ) ( ( * ef40 ) ( ( * ef41 ) ( tmp [ 3 ] ) ) , ( * ef40 ) ( ( * ef41 ) ( ( * ef42 ) ( lf7 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 4 ] , ef40sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( check_sym ( tmp [ 5 ] , ef41sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
-tmp [ 7 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 1 ] ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef45 ) ( tmp [ 1 ] , tmp [ 2 ] , tmp [ 6 ] ) ) ) ) ) ) , ( * ef45 ) ( tmp [ 1 ] , tmp [ 2 ] , tmp [ 3 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
+tmp [ 7 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 1 ] ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( ( * ef45 ) ( tmp [ 1 ] , tmp [ 2 ] , tmp [ 6 ] ) ) ) ) ) ) , ( * ef45 ) ( tmp [ 1 ] , tmp [ 2 ] , tmp [ 3 ] ) , ( * ef20 ) ( ) ) ;
 FUNC_EXIT ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( make_list ( tmp [ 7 ] ) ) ) ) , lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( make_list ( ( * ef45 ) ( tmp [ 1 ] , tmp [ 2 ] , tmp [ 6 ] ) ) ) ) ) ) ) ;
 }
 }
@@ -404,24 +370,24 @@ FUNC_EXIT ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( make_list ( tmp [ 7 ] )
 if ( check_sym ( tmp [ 0 ] , ef46sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
-tmp [ 3 ] = ( * ef47 ) ( ( * ef47 ) ( ( constant6 ? constant6 : ( constant6 = ( * ef1 ) ( lf2 ( make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 60 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef49 ) ( ( * ef46 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) , ( constant7 ? constant7 : ( constant7 = ( * ef1 ) ( lf2 ( make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 62 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+tmp [ 3 ] = ( * ef47 ) ( ( * ef47 ) ( ( * ef1 ) ( lf2 ( make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 60 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) , ( * ef49 ) ( ( * ef46 ) ( tmp [ 1 ] , tmp [ 2 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 62 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 3 ] , ef1sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf2sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
-tmp [ 6 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , ( * ef46 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
+tmp [ 6 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) , ( * ef46 ) ( tmp [ 1 ] , tmp [ 2 ] ) , ( * ef20 ) ( ) ) ;
 FUNC_EXIT ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( make_list ( tmp [ 6 ] ) ) ) ) , lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 5 ] ) ) ) ) ) ) ;
 }
 }
 }
 if ( check_sym ( tmp [ 0 ] , ef50sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-tmp [ 2 ] = ( * ef1 ) ( lf2 ( cons ( ( constant8 ? constant8 : ( constant8 = make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 123 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) , cons ( make_list ( ( * ef36 ) ( tmp [ 1 ] , ( constant9 ? constant9 : ( constant9 = ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 44 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) , ( constant10 ? constant10 : ( constant10 = make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 125 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
+tmp [ 2 ] = ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 123 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) , cons ( make_list ( ( * ef36 ) ( tmp [ 1 ] , ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 44 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) , make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 125 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 2 ] , ef1sym ) ) {
 tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
 if ( check_sym ( tmp [ 3 ] , lf2sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
-tmp [ 5 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 4 ] ) ) ) , ( * ef50 ) ( tmp [ 1 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
+tmp [ 5 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 4 ] ) ) ) , ( * ef50 ) ( tmp [ 1 ] ) , ( * ef20 ) ( ) ) ;
 FUNC_EXIT ( ( * ef15 ) ( lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 4 ] ) ) ) ) , ( * ef17 ) ( ( * ef18 ) ( lf3 ( make_list ( tmp [ 5 ] ) ) ) ) ) ) ;
 }
 }
@@ -433,7 +399,7 @@ if ( check_sym ( tmp [ 1 ] , ef1sym ) ) {
 tmp [ 3 ] = arg_0 ( tmp [ 1 ] ) ;
 if ( check_sym ( tmp [ 3 ] , lf2sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
-tmp [ 5 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef51 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 4 ] ) ) ) , tmp [ 2 ] ) ) , cons ( ( constant11 ? constant11 : ( constant11 = make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 40 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) , cons ( make_list ( tmp [ 4 ] ) , ( constant12 ? constant12 : ( constant12 = make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 41 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , tmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef20 ) ( ) ) ) ) ;
+tmp [ 5 ] = ( * ef19 ) ( ( * ef1 ) ( lf2 ( cons ( make_list ( ( * ef51 ) ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 4 ] ) ) ) , tmp [ 2 ] ) ) , cons ( make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 40 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) , cons ( make_list ( tmp [ 4 ] ) , make_list ( ( * ef7 ) ( ( * ef48 ) ( lf7 ( cons ( make_list ( make_char ( 34 ) ) , cons ( make_list ( make_char ( 41 ) ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ) ) ) ) ) , tmp [ 2 ] , ( * ef20 ) ( ) ) ;
 FUNC_EXIT ( ( * ef15 ) ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( make_list ( tmp [ 5 ] ) ) ) ) , lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 4 ] ) , make_list ( tmp [ 2 ] ) ) ) ) ) ) ) ;
 }
 }
@@ -450,36 +416,36 @@ FUNC_EXIT ( ( * ef15 ) ( ( * ef17 ) ( ( * ef53 ) ( ( * ef1 ) ( lf2 ( make_list (
 }
 if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-FUNC_EXIT_CONST ( constant13 , ( * ef3 ) ( ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ) ) ;
 }
 if ( check_sym ( tmp [ 0 ] , ef5sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-FUNC_EXIT_CONST ( constant13 , ( * ef3 ) ( ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ) ) ;
 }
 if ( check_sym ( tmp [ 0 ] , ef7sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-FUNC_EXIT_CONST ( constant13 , ( * ef3 ) ( ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ) ) ;
 }
 if ( check_sym ( tmp [ 0 ] , ef9sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 FUNC_EXIT ( ( * ef10 ) ( lf_AUX_Regular_Sdf_Normalization3_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
 }
 tmp [ 0 ] = list_head ( atmp000 ) ;
-if ( term_equal ( tmp [ 0 ] , ( constant14 ? constant14 : ( constant14 = ( * ef6 ) ( ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant13 , ( * ef3 ) ( ) ) ;
+if ( term_equal ( tmp [ 0 ] , ( * ef6 ) ( ) ) ) {
+FUNC_EXIT ( ( * ef3 ) ( ) ) ;
 }
-if ( term_equal ( tmp [ 0 ] , ( constant15 ? constant15 : ( constant15 = ( * ef8 ) ( ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant13 , ( * ef3 ) ( ) ) ;
+if ( term_equal ( tmp [ 0 ] , ( * ef8 ) ( ) ) ) {
+FUNC_EXIT ( ( * ef3 ) ( ) ) ;
 }
-if ( term_equal ( tmp [ 0 ] , ( constant16 ? constant16 : ( constant16 = ( * ef16 ) ( ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant17 , ( * ef17 ) ( ( * ef18 ) ( lf3 ( make_list ( ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) , ( * ef16 ) ( ) , ( * ef20 ) ( ) ) ) ) ) ) ) ;
+if ( term_equal ( tmp [ 0 ] , ( * ef16 ) ( ) ) ) {
+FUNC_EXIT ( ( * ef17 ) ( ( * ef18 ) ( lf3 ( make_list ( ( * ef19 ) ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) , ( * ef16 ) ( ) , ( * ef20 ) ( ) ) ) ) ) ) ) ;
 }
-if ( term_equal ( tmp [ 0 ] , ( constant18 ? constant18 : ( constant18 = ( * ef4 ) ( ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant13 , ( * ef3 ) ( ) ) ;
+if ( term_equal ( tmp [ 0 ] , ( * ef4 ) ( ) ) ) {
+FUNC_EXIT ( ( * ef3 ) ( ) ) ;
 }
 }
 if ( ! not_empty_list ( atmp000 ) ) {
-FUNC_EXIT_CONST ( constant13 , ( * ef3 ) ( ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ) ) ;
 }
 }
 }

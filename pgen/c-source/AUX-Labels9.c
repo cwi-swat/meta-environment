@@ -30,17 +30,13 @@ ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Labels\"),w(\"\"),[sort(\"La
 ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_Labels9 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Labels9_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 6 ] ;
 FUNC_ENTRY ( lf_AUX_Labels9_1sym , ATmakeAppl ( lf_AUX_Labels9_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Labels9_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
@@ -52,12 +48,14 @@ ATerm atmp0000 = arg_0 ( atmp000 ) ;
 if ( not_empty_list ( atmp0000 ) ) {
 tmp [ 0 ] = list_head ( atmp0000 ) ;
 tmp [ 1 ] = list_tail ( atmp0000 ) ;
-if ( term_equal ( ( * ef3 ) ( tmp [ 0 ] , arg1 ) , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ) ) {
-FUNC_EXIT ( lf_AUX_Labels9_1 ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) , arg1 ) ) ;
+if ( term_equal ( ( * ef3 ) ( tmp [ 0 ] , arg1 ) , ( * ef4 ) ( ) ) ) {
+arg0 = ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ;
+arg1 = arg1 ;
+goto lbl_lf_AUX_Labels9_1 ;
 }
 }
 else {
-FUNC_EXIT_CONST ( constant1 , ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ) ;
 }
 }
 }

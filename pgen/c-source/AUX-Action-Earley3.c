@@ -104,8 +104,8 @@ ef12 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\
 ef12sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"CharRange\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharRanges\"),w(\"\"),no-attrs)" ) ) ;
 ef13 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"Character\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharRange\"),w(\"\"),no-attrs)" ) ) ;
 ef13sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"Character\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharRange\"),w(\"\"),no-attrs)" ) ) ;
-ef14 = lookup_func ( ATreadFromString ( "prod(id(\"Parse-Table\"),w(\"\"),[sort(\"Action-Table\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\":=\"),w(\"\"),sort(\"ActionSet\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Action-Table\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"memo\")],w(\"\"),l(\"}\")))" ) ) ;
-ef14sym = lookup_sym ( ATreadFromString ( "prod(id(\"Parse-Table\"),w(\"\"),[sort(\"Action-Table\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\":=\"),w(\"\"),sort(\"ActionSet\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Action-Table\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"memo\")],w(\"\"),l(\"}\")))" ) ) ;
+ef14 = lookup_func ( ATreadFromString ( "prod(id(\"Parse-Table\"),w(\"\"),[sort(\"Action-Table\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\":=\"),w(\"\"),sort(\"ActionSet\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Action-Table\"),w(\"\"),no-attrs)" ) ) ;
+ef14sym = lookup_sym ( ATreadFromString ( "prod(id(\"Parse-Table\"),w(\"\"),[sort(\"Action-Table\"),w(\"\"),ql(\"[\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\":=\"),w(\"\"),sort(\"ActionSet\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Action-Table\"),w(\"\"),no-attrs)" ) ) ;
 ef15 = lookup_func ( ATreadFromString ( "prod(id(\"Labels\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Labels\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),no-attrs)" ) ) ;
 ef15sym = lookup_sym ( ATreadFromString ( "prod(id(\"Labels\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Labels\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),no-attrs)" ) ) ;
 ef16 = lookup_func ( ATreadFromString ( "prod(id(\"Labels\"),w(\"\"),[iter(sort(\"Label\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Labels\"),w(\"\"),no-attrs)" ) ) ;
@@ -135,7 +135,7 @@ ATerm lf_AUX_Action_Earley3_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg
 {
 ATerm tmp [ 18 ] ;
 FUNC_ENTRY ( lf_AUX_Action_Earley3_1sym , ATmakeAppl ( lf_AUX_Action_Earley3_1sym , arg0 , arg1 , arg2 , arg3 ) ) ;
-if ( check_sym ( arg2 , ef1sym ) ) {
+lbl_lf_AUX_Action_Earley3_1 : if ( check_sym ( arg2 , ef1sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 if ( check_sym ( atmp20 , ef2sym ) ) {
@@ -174,7 +174,11 @@ tmp [ 15 ] = arg_0 ( tmp [ 14 ] ) ;
 if ( check_sym ( tmp [ 15 ] , ef13sym ) ) {
 tmp [ 16 ] = arg_0 ( tmp [ 15 ] ) ;
 tmp [ 17 ] = ( * ef14 ) ( arg3 , ( * ef15 ) ( ( * ef16 ) ( lf4 ( make_list ( ( * ef17 ) ( ( * ef18 ) ( tmp [ 11 ] ) ) ) ) ) ) , ( * ef19 ) ( ( * ef20 ) ( lf5 ( make_list ( ( * ef21 ) ( ( * ef22 ) ( ( * ef4 ) ( lf3 ( make_list ( tmp [ 5 ] ) ) ) ) , ( * ef23 ) ( ( * ef24 ) ( ( * ef25 ) ( tmp [ 16 ] ) ) ) , ( * ef8 ) ( ( * ef5 ) ( ( * ef4 ) ( lf3 ( make_list ( tmp [ 5 ] ) ) ) , tmp [ 7 ] , tmp [ 8 ] ) ) ) ) ) ) ) ) ;
-FUNC_EXIT ( lf_AUX_Action_Earley3_1 ( arg0 , arg1 , ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) , tmp [ 17 ] ) ) ;
+arg0 = arg0 ;
+arg1 = arg1 ;
+arg2 = ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ;
+arg3 = tmp [ 17 ] ;
+goto lbl_lf_AUX_Action_Earley3_1 ;
 }
 }
 }
@@ -208,7 +212,11 @@ ATerm atmp2000 = arg_0 ( atmp200 ) ;
 if ( not_empty_list ( atmp2000 ) ) {
 tmp [ 0 ] = list_head ( atmp2000 ) ;
 tmp [ 1 ] = list_tail ( atmp2000 ) ;
-FUNC_EXIT ( lf_AUX_Action_Earley3_1 ( arg0 , arg1 , ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) , arg3 ) ) ;
+arg0 = arg0 ;
+arg1 = arg1 ;
+arg2 = ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ;
+arg3 = arg3 ;
+goto lbl_lf_AUX_Action_Earley3_1 ;
 }
 }
 }

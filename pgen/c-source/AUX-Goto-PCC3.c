@@ -43,15 +43,13 @@ ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"CC-Sdf-Syntax\"),w(\"\"),[so
 ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Sets\"),w(\"\"),[sort(\"CharClassSet\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClassSet\"),w(\"\"),no-attrs)" ) ) ;
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Sets\"),w(\"\"),[sort(\"CharClassSet\"),w(\"\"),ql(\":\"),w(\"\"),sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClassSet\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_Goto_PCC3 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Goto_PCC3_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 4 ] ;
 FUNC_ENTRY ( lf_AUX_Goto_PCC3_1sym , ATmakeAppl ( lf_AUX_Goto_PCC3_1sym , arg0 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Goto_PCC3_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
@@ -62,7 +60,8 @@ tmp [ 0 ] = list_head ( atmp000 ) ;
 tmp [ 1 ] = list_tail ( atmp000 ) ;
 if ( check_sym ( tmp [ 0 ] , ef3sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
-FUNC_EXIT ( lf_AUX_Goto_PCC3_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+goto lbl_lf_AUX_Goto_PCC3_1 ;
 }
 if ( check_sym ( tmp [ 0 ] , ef4sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
@@ -73,7 +72,7 @@ FUNC_EXIT ( ( * ef6 ) ( lf_AUX_Goto_PCC3_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [
 }
 }
 else {
-FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( lf3 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( lf3 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }

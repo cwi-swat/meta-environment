@@ -61,7 +61,7 @@ tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 3 ] , ef3sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( term_equal ( tmp [ 4 ] , atmp20 ) ) {
-FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( insert ( ( * ef4 ) ( ( * ef5 ) ( tmp [ 2 ] , arg1 ) , ( * ef3 ) ( tmp [ 4 ] ) ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( cons ( make_list ( ( * ef4 ) ( ( * ef5 ) ( tmp [ 2 ] , arg1 ) , ( * ef3 ) ( tmp [ 4 ] ) ) ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
 }
 }
 }
@@ -99,7 +99,7 @@ if ( check_sym ( tmp [ 3 ] , ef2sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf2sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
-FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( insert ( tmp [ 0 ] , make_list ( tmp [ 5 ] ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [ 5 ] ) ) ) ) ) ) ;
 }
 }
 }

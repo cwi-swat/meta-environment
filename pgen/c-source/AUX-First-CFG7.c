@@ -26,7 +26,7 @@ void init_AUX_First_CFG7 ( ) {
 }
 ATerm lf_AUX_First_CFG7_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 FUNC_ENTRY ( lf_AUX_First_CFG7_1sym , ATmakeAppl ( lf_AUX_First_CFG7_1sym , arg0 , arg1 , arg2 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_First_CFG7_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
@@ -45,7 +45,10 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-FUNC_EXIT ( lf_AUX_First_CFG7_1 ( ( * ef1 ) ( lf2 ( make_list ( atmp000 ) ) ) , arg2 , ( * ef2 ) ( ( * ef1 ) ( lf2 ( make_list ( atmp000 ) ) ) , arg2 ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( make_list ( atmp000 ) ) ) ;
+arg1 = arg2 ;
+arg2 = ( * ef2 ) ( ( * ef1 ) ( lf2 ( make_list ( atmp000 ) ) ) , arg2 ) ;
+goto lbl_lf_AUX_First_CFG7_1 ;
 }
 }
 }

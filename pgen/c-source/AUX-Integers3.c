@@ -46,19 +46,13 @@ ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"tr
 ef8 = lookup_func ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[ql(\"-\"),w(\"\"),sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
 ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[ql(\"-\"),w(\"\"),sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
 void init_AUX_Integers3 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_Integers3_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 7 ] ;
 FUNC_ENTRY ( lf_AUX_Integers3_1sym , ATmakeAppl ( lf_AUX_Integers3_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Integers3_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
@@ -134,12 +128,12 @@ if ( check_sym ( atmp1000 , lf2sym ) ) {
 ATerm atmp10000 = arg_0 ( atmp1000 ) ;
 if ( is_single_element ( atmp10000 ) ) {
 tmp [ 0 ] = list_head ( atmp10000 ) ;
-if ( term_equal ( ( * ef6 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef7 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef6 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) , ( * ef3 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) , ( * ef7 ) ( ) ) ) {
 FUNC_EXIT ( ( * ef4 ) ( arg0 , lf_AUX_Integers3_1 ( arg0 , ( * ef5 ) ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 0 ] ) ) ) ) ) , ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( make_char ( 49 ) ) ) ) ) ) ) ) ) ) ;
 }
 tmp [ 0 ] = list_head ( atmp10000 ) ;
 if ( term_equal ( tmp [ 0 ] , make_char ( 48 ) ) ) {
-FUNC_EXIT_CONST ( constant2 , ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 0 ] , make_char ( 49 ) ) ) {
 FUNC_EXIT ( arg0 ) ;
@@ -198,7 +192,9 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef8sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-FUNC_EXIT ( lf_AUX_Integers3_1 ( ( * ef1 ) ( ( * ef2 ) ( atmp000 ) ) , ( * ef1 ) ( ( * ef2 ) ( atmp100 ) ) ) ) ;
+arg0 = ( * ef1 ) ( ( * ef2 ) ( atmp000 ) ) ;
+arg1 = ( * ef1 ) ( ( * ef2 ) ( atmp100 ) ) ;
+goto lbl_lf_AUX_Integers3_1 ;
 }
 }
 }

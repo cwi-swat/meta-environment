@@ -67,18 +67,16 @@ ef13 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"
 ef13sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Projection\"),w(\"\"),[sort(\"Attributes\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Attributes\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attributes\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
 }
 static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_Kernel_Sdf_ATerms8 ( ) {
 ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Kernel_Sdf_ATerms8_1 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_AUX_Kernel_Sdf_ATerms8_1sym , ATmakeAppl ( lf_AUX_Kernel_Sdf_ATerms8_1sym , arg0 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Kernel_Sdf_ATerms8_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ) ) ;
 }
 }
 }
@@ -94,7 +92,8 @@ ATerm atmp010 = arg_0 ( atmp01 ) ;
 if ( check_sym ( atmp010 , ef7sym ) ) {
 {
 ATerm atmp0100 = arg_0 ( atmp010 ) ;
-FUNC_EXIT ( lf_AUX_Kernel_Sdf_ATerms8_1 ( ( * ef7 ) ( atmp0100 ) ) ) ;
+arg0 = ( * ef7 ) ( atmp0100 ) ;
+goto lbl_lf_AUX_Kernel_Sdf_ATerms8_1 ;
 }
 }
 }
@@ -107,7 +106,7 @@ if ( check_sym ( arg0 , ef7sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef8sym ) ) {
-FUNC_EXIT_CONST ( constant1 , ( * ef9 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef9 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;

@@ -45,7 +45,7 @@ ATerm lf_AUX_Kernel_Sdf_Normalization4_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 14 ] ;
 FUNC_ENTRY ( lf_AUX_Kernel_Sdf_Normalization4_1sym , ATmakeAppl ( lf_AUX_Kernel_Sdf_Normalization4_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , ef1sym ) ) {
+lbl_lf_AUX_Kernel_Sdf_Normalization4_1 : if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
@@ -74,7 +74,9 @@ if ( term_equal ( tmp [ 6 ] , tmp [ 11 ] ) ) {
 if ( term_equal ( tmp [ 3 ] , tmp [ 8 ] ) ) {
 tmp [ 12 ] = ( * ef5 ) ( tmp [ 4 ] , tmp [ 9 ] ) ;
 tmp [ 13 ] = ( * ef3 ) ( ( * ef4 ) ( lf3 ( make_list ( tmp [ 6 ] ) ) ) , tmp [ 3 ] , tmp [ 12 ] ) ;
-FUNC_EXIT ( lf_AUX_Kernel_Sdf_Normalization4_1 ( tmp [ 13 ] , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+arg0 = tmp [ 13 ] ;
+arg1 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+goto lbl_lf_AUX_Kernel_Sdf_Normalization4_1 ;
 }
 }
 }

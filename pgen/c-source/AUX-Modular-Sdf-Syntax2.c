@@ -41,7 +41,7 @@ ATerm lf_AUX_Modular_Sdf_Syntax2_2 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 5 ] ;
 FUNC_ENTRY ( lf_AUX_Modular_Sdf_Syntax2_2sym , ATmakeAppl ( lf_AUX_Modular_Sdf_Syntax2_2sym , arg0 , arg1 , arg2 ) ) ;
-if ( check_sym ( arg1 , lf_AUX_Modular_Sdf_Syntax2_1sym ) ) {
+lbl_lf_AUX_Modular_Sdf_Syntax2_2 : if ( check_sym ( arg1 , lf_AUX_Modular_Sdf_Syntax2_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( arg2 , ef1sym ) ) {
@@ -58,7 +58,10 @@ if ( check_sym ( tmp [ 2 ] , ef1sym ) ) {
 tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
 if ( check_sym ( tmp [ 3 ] , lf3sym ) ) {
 tmp [ 4 ] = arg_0 ( tmp [ 3 ] ) ;
-FUNC_EXIT ( lf_AUX_Modular_Sdf_Syntax2_2 ( arg0 , lf_AUX_Modular_Sdf_Syntax2_1 ( make_list ( tmp [ 0 ] ) ) , ( * ef1 ) ( lf3 ( cons ( make_list ( ( * ef3 ) ( ( * ef4 ) ( tmp [ 1 ] ) ) ) , make_list ( tmp [ 4 ] ) ) ) ) ) ) ;
+arg0 = arg0 ;
+arg1 = lf_AUX_Modular_Sdf_Syntax2_1 ( make_list ( tmp [ 0 ] ) ) ;
+arg2 = ( * ef1 ) ( lf3 ( cons ( make_list ( ( * ef3 ) ( ( * ef4 ) ( tmp [ 1 ] ) ) ) , make_list ( tmp [ 4 ] ) ) ) ) ;
+goto lbl_lf_AUX_Modular_Sdf_Syntax2_2 ;
 }
 }
 }
@@ -69,7 +72,10 @@ tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 1 ] , lf3sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
 if ( ! term_equal ( ( * ef1 ) ( lf3 ( make_list ( atmp200 ) ) ) , ( * ef1 ) ( lf3 ( make_list ( tmp [ 2 ] ) ) ) ) ) {
-FUNC_EXIT ( lf_AUX_Modular_Sdf_Syntax2_2 ( arg0 , lf_AUX_Modular_Sdf_Syntax2_1 ( make_list ( null ( ) ) ) , ( * ef1 ) ( lf3 ( make_list ( tmp [ 2 ] ) ) ) ) ) ;
+arg0 = arg0 ;
+arg1 = lf_AUX_Modular_Sdf_Syntax2_1 ( make_list ( null ( ) ) ) ;
+arg2 = ( * ef1 ) ( lf3 ( make_list ( tmp [ 2 ] ) ) ) ;
+goto lbl_lf_AUX_Modular_Sdf_Syntax2_2 ;
 }
 }
 }

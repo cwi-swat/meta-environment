@@ -77,7 +77,7 @@ ATerm lf_AUX_Table_To_ATerm19_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 14 ] ;
 FUNC_ENTRY ( lf_AUX_Table_To_ATerm19_1sym , ATmakeAppl ( lf_AUX_Table_To_ATerm19_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Table_To_ATerm19_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
@@ -170,7 +170,9 @@ tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
 if ( check_sym ( tmp [ 7 ] , ef9sym ) ) {
 tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ;
 if ( ! term_equal ( arg0 , tmp [ 4 ] ) ) {
-FUNC_EXIT ( lf_AUX_Table_To_ATerm19_1 ( arg0 , ( * ef3 ) ( lf3 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+arg0 = arg0 ;
+arg1 = ( * ef3 ) ( lf3 ( make_list ( tmp [ 1 ] ) ) ) ;
+goto lbl_lf_AUX_Table_To_ATerm19_1 ;
 }
 }
 }

@@ -26,15 +26,13 @@ ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(
 ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Sets\"),w(\"\"),[sort(\"CharClassSet\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"CharClassSet\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClassSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
 ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Sets\"),w(\"\"),[sort(\"CharClassSet\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"CharClassSet\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClassSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"assoc\")],w(\"\"),l(\"}\")))" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_Character_Class_Sets4 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Character_Class_Sets4_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_AUX_Character_Class_Sets4_1sym , ATmakeAppl ( lf_AUX_Character_Class_Sets4_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Character_Class_Sets4_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
@@ -58,7 +56,7 @@ FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( ( * ef2 ) ( tmp [ 0 ] , tmp [ 1 ] ) ) 
 }
 }
 if ( ! not_empty_list ( atmp000 ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 }
@@ -108,7 +106,9 @@ tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
 atmp1000 [ 1 ] = tmp [ 0 ] ;
 while ( not_empty_list ( tmp [ 0 ] ) ) {
 if ( not_empty_list ( tmp [ 0 ] ) ) {
-FUNC_EXIT ( lf_AUX_Character_Class_Sets4_1 ( lf_AUX_Character_Class_Sets4_1 ( arg0 , ( * ef1 ) ( lf2 ( slice ( atmp1000 [ 0 ] , atmp1000 [ 1 ] ) ) ) ) , ( * ef1 ) ( lf2 ( tmp [ 0 ] ) ) ) ) ;
+arg0 = lf_AUX_Character_Class_Sets4_1 ( arg0 , ( * ef1 ) ( lf2 ( slice ( atmp1000 [ 0 ] , atmp1000 [ 1 ] ) ) ) ) ;
+arg1 = ( * ef1 ) ( lf2 ( tmp [ 0 ] ) ) ;
+goto lbl_lf_AUX_Character_Class_Sets4_1 ;
 }
 atmp1000 [ 1 ] = list_tail ( atmp1000 [ 1 ] ) ;
 tmp [ 0 ] = atmp1000 [ 1 ] ;

@@ -8,12 +8,12 @@ static funcptr ef1 ;
 static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
 void register_AUX_Follow_Earley8 ( ) {
-lf_AUX_Follow_Earley8_1sym = ATmakeSymbol ( "prod(id(\"Follow-Earley\"),w(\"\"),[l(\"sons\"),w(\"\"),ql(\"[[\"),w(\"\"),sort(\"Grammar\"),w(\"\"),ql(\"]]\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Item\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol-Table\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"memo\")],w(\"\"),l(\"}\")))"
+lf_AUX_Follow_Earley8_1sym = ATmakeSymbol ( "prod(id(\"Follow-Earley\"),w(\"\"),[l(\"sons\"),w(\"\"),ql(\"[[\"),w(\"\"),sort(\"Grammar\"),w(\"\"),ql(\"]]\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Item\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol-Table\"),w(\"\"),no-attrs)"
  , 4 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Follow_Earley8_1sym ) ;
 lf2sym = ATmakeSymbol ( "listtype(sort(\"Production\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf2sym ) ;
-register_prod ( ATparse ( "prod(id(\"Follow-Earley\"),w(\"\"),[l(\"sons\"),w(\"\"),ql(\"[[\"),w(\"\"),sort(\"Grammar\"),w(\"\"),ql(\"]]\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Item\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol-Table\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"memo\")],w(\"\"),l(\"}\")))" ) , lf_AUX_Follow_Earley8_1 , lf_AUX_Follow_Earley8_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"Follow-Earley\"),w(\"\"),[l(\"sons\"),w(\"\"),ql(\"[[\"),w(\"\"),sort(\"Grammar\"),w(\"\"),ql(\"]]\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Item\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol-Table\"),w(\"\"),no-attrs)" ) , lf_AUX_Follow_Earley8_1 , lf_AUX_Follow_Earley8_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"Production\"))" ) , lf2 , lf2sym ) ;
 }
 void resolve_AUX_Follow_Earley8 ( ) {
@@ -22,31 +22,22 @@ ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\")
 ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Follow-Earley\"),w(\"\"),[l(\"nm-sons\"),w(\"\"),ql(\"[[\"),w(\"\"),sort(\"Grammar\"),w(\"\"),ql(\"]]\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Item\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol-Table\"),w(\"\"),no-attrs)" ) ) ;
 ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Follow-Earley\"),w(\"\"),[l(\"nm-sons\"),w(\"\"),ql(\"[[\"),w(\"\"),sort(\"Grammar\"),w(\"\"),ql(\"]]\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Productions\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Item\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"LabelSet\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbol-Table\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATermTable table_lf_AUX_Follow_Earley8_1 ;
 void init_AUX_Follow_Earley8 ( ) {
-create_table ( table_lf_AUX_Follow_Earley8_1 , 0 ) ;
 }
 ATerm lf_AUX_Follow_Earley8_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 ) {
-ATerm interm = make_tuple4 ( arg0 , arg1 , arg2 , arg3 ) ;
-ATermTable table = get_table ( table_lf_AUX_Follow_Earley8_1 ) ;
-ATerm result = get_result ( table , interm ) ;
-if ( result ) return result ;
-else {
+FUNC_ENTRY ( lf_AUX_Follow_Earley8_1sym , ATmakeAppl ( lf_AUX_Follow_Earley8_1sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-result = ( * ef2 ) ( arg0 , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) , arg2 , arg3 ) ;
-put_result ( table , interm , result ) ;
-return result ;
+FUNC_EXIT ( ( * ef2 ) ( arg0 , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) , arg2 , arg3 ) ) ;
 }
 }
 }
 }
 FUNC_EXIT ( make_nf4 ( lf_AUX_Follow_Earley8_1sym , arg0 , arg1 , arg2 , arg3 ) ) ;
-}
 }
 ATerm lf2 ( ATerm arg0 ) {
 CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;

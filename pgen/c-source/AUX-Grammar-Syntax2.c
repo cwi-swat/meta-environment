@@ -27,7 +27,7 @@ ATerm lf_AUX_Grammar_Syntax2_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 3 ] ;
 FUNC_ENTRY ( lf_AUX_Grammar_Syntax2_1sym , ATmakeAppl ( lf_AUX_Grammar_Syntax2_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Grammar_Syntax2_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 FUNC_EXIT ( arg1 ) ;
 }
 if ( check_sym ( arg0 , lf_AUX_Grammar_Syntax2_1sym ) ) {
@@ -39,7 +39,9 @@ tmp [ 0 ] = ( * ef2 ) ( atmp01 , arg1 ) ;
 if ( check_sym ( tmp [ 0 ] , ef3sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
-FUNC_EXIT ( lf_AUX_Grammar_Syntax2_1 ( lf_AUX_Grammar_Syntax2_1 ( atmp00 , tmp [ 1 ] ) , tmp [ 2 ] ) ) ;
+arg0 = lf_AUX_Grammar_Syntax2_1 ( atmp00 , tmp [ 1 ] ) ;
+arg1 = tmp [ 2 ] ;
+goto lbl_lf_AUX_Grammar_Syntax2_1 ;
 }
 }
 }
@@ -52,7 +54,9 @@ if ( check_sym ( arg1 , lf_AUX_Grammar_Syntax2_1sym ) ) {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 {
 ATerm atmp11 = arg_1 ( arg1 ) ;
-FUNC_EXIT ( lf_AUX_Grammar_Syntax2_1 ( lf_AUX_Grammar_Syntax2_1 ( arg0 , atmp10 ) , atmp11 ) ) ;
+arg0 = lf_AUX_Grammar_Syntax2_1 ( arg0 , atmp10 ) ;
+arg1 = atmp11 ;
+goto lbl_lf_AUX_Grammar_Syntax2_1 ;
 }
 }
 }
@@ -60,7 +64,9 @@ tmp [ 0 ] = ( * ef2 ) ( arg0 , arg1 ) ;
 if ( check_sym ( tmp [ 0 ] , ef3sym ) ) {
 tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
-FUNC_EXIT ( lf_AUX_Grammar_Syntax2_1 ( tmp [ 1 ] , tmp [ 2 ] ) ) ;
+arg0 = tmp [ 1 ] ;
+arg1 = tmp [ 2 ] ;
+goto lbl_lf_AUX_Grammar_Syntax2_1 ;
 }
 FUNC_EXIT ( make_nf2 ( lf_AUX_Grammar_Syntax2_1sym , arg0 , arg1 ) ) ;
 }

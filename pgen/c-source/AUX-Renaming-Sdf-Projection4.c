@@ -43,15 +43,13 @@ ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\")
 ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Renaming-Sdf-Syntax\"),w(\"\"),[sort(\"Symbol\"),w(\"\"),ql(\"=>\"),w(\"\"),sort(\"Symbol\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Renaming\"),w(\"\"),no-attrs)" ) ) ;
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Renaming-Sdf-Syntax\"),w(\"\"),[sort(\"Symbol\"),w(\"\"),ql(\"=>\"),w(\"\"),sort(\"Symbol\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Renaming\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_Renaming_Sdf_Projection4 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Renaming_Sdf_Projection4_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 14 ] ;
 FUNC_ENTRY ( lf_AUX_Renaming_Sdf_Projection4_1sym , ATmakeAppl ( lf_AUX_Renaming_Sdf_Projection4_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef3sym ) ) {
+lbl_lf_AUX_Renaming_Sdf_Projection4_1 : if ( check_sym ( arg0 , ef3sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef4sym ) ) {
@@ -84,7 +82,7 @@ if ( check_sym ( tmp [ 4 ] , ef4sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 4 ] ) ;
 if ( check_sym ( tmp [ 7 ] , lf3sym ) ) {
 tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ;
-if ( term_equal ( tmp [ 6 ] , ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 6 ] , ( * ef5 ) ( ) ) ) {
 if ( check_sym ( tmp [ 3 ] , ef3sym ) ) {
 tmp [ 9 ] = arg_0 ( tmp [ 3 ] ) ;
 tmp [ 10 ] = arg_1 ( tmp [ 3 ] ) ;
@@ -93,7 +91,7 @@ if ( check_sym ( tmp [ 9 ] , ef4sym ) ) {
 tmp [ 12 ] = arg_0 ( tmp [ 9 ] ) ;
 if ( check_sym ( tmp [ 12 ] , lf3sym ) ) {
 tmp [ 13 ] = arg_0 ( tmp [ 12 ] ) ;
-if ( term_equal ( tmp [ 11 ] , ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 11 ] , ( * ef5 ) ( ) ) ) {
 if ( term_equal ( atmp0000 , tmp [ 8 ] ) ) {
 if ( term_equal ( atmp01 , tmp [ 5 ] ) ) {
 FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( lf3 ( make_list ( tmp [ 13 ] ) ) ) , tmp [ 10 ] , atmp02 ) ) ;
@@ -140,7 +138,9 @@ FUNC_EXIT ( tmp [ 3 ] ) ;
 if ( check_sym ( tmp [ 0 ] , ef6sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
-FUNC_EXIT ( lf_AUX_Renaming_Sdf_Projection4_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+arg0 = arg0 ;
+arg1 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+goto lbl_lf_AUX_Renaming_Sdf_Projection4_1 ;
 }
 }
 else {
@@ -162,7 +162,9 @@ tmp [ 1 ] = list_tail ( atmp100 ) ;
 if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
-FUNC_EXIT ( lf_AUX_Renaming_Sdf_Projection4_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+arg0 = arg0 ;
+arg1 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+goto lbl_lf_AUX_Renaming_Sdf_Projection4_1 ;
 }
 }
 }

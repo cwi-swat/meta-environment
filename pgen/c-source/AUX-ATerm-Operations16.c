@@ -189,11 +189,13 @@ ef44sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\")
 ef45 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\"),[l(\"term\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
 ef45sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\"),[l(\"term\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)" ) ) ;
 }
+static ATerm constant0 = NULL ;
 void init_AUX_ATerm_Operations16 ( ) {
+ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerm_Operations16_1 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_AUX_ATerm_Operations16_1sym , ATmakeAppl ( lf_AUX_ATerm_Operations16_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_ATerm_Operations16_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
@@ -621,7 +623,9 @@ if ( check_sym ( arg1 , ef3sym ) ) {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 {
 ATerm atmp11 = arg_1 ( arg1 ) ;
-FUNC_EXIT ( lf_AUX_ATerm_Operations16_1 ( atmp10 , atmp11 ) ) ;
+arg0 = atmp10 ;
+arg1 = atmp11 ;
+goto lbl_lf_AUX_ATerm_Operations16_1 ;
 }
 }
 }
@@ -664,7 +668,9 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( check_sym ( atmp01 , ef4sym ) ) {
 {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
-FUNC_EXIT ( lf_AUX_ATerm_Operations16_1 ( atmp010 , arg1 ) ) ;
+arg0 = atmp010 ;
+arg1 = arg1 ;
+goto lbl_lf_AUX_ATerm_Operations16_1 ;
 }
 }
 {
@@ -674,7 +680,9 @@ if ( check_sym ( atmp01 , ef3sym ) ) {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
 {
 ATerm atmp011 = arg_1 ( atmp01 ) ;
-FUNC_EXIT ( lf_AUX_ATerm_Operations16_1 ( atmp010 , ( * ef4 ) ( lf_AUX_ATerm_Operations16_1 ( ( * ef40 ) ( ( * ef41 ) ( ) , atmp011 ) , arg1 ) ) ) ) ;
+arg0 = atmp010 ;
+arg1 = ( * ef4 ) ( lf_AUX_ATerm_Operations16_1 ( ( * ef40 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef41 ) ( ) ) ) , atmp011 ) , arg1 ) ) ;
+goto lbl_lf_AUX_ATerm_Operations16_1 ;
 }
 }
 }
@@ -694,7 +702,9 @@ if ( check_sym ( arg0 , ef40sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-FUNC_EXIT ( lf_AUX_ATerm_Operations16_1 ( ( * ef1 ) ( atmp00 ) , ( * ef42 ) ( atmp01 , arg1 ) ) ) ;
+arg0 = ( * ef1 ) ( atmp00 ) ;
+arg1 = ( * ef42 ) ( atmp01 , arg1 ) ;
+goto lbl_lf_AUX_ATerm_Operations16_1 ;
 }
 }
 }

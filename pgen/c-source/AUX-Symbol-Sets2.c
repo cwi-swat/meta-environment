@@ -30,15 +30,13 @@ ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Symbol-Sets\"),w(\"\"),[sort
 ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_Symbol_Sets2 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Symbol_Sets2_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 1 ] ;
 FUNC_ENTRY ( lf_AUX_Symbol_Sets2_1sym , ATmakeAppl ( lf_AUX_Symbol_Sets2_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Symbol_Sets2_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
@@ -52,7 +50,7 @@ FUNC_EXIT ( arg1 ) ;
 }
 if ( is_single_element ( atmp0000 ) ) {
 tmp [ 0 ] = list_head ( atmp0000 ) ;
-if ( term_equal ( ( * ef3 ) ( tmp [ 0 ] , arg1 ) , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef3 ) ( tmp [ 0 ] , arg1 ) , ( * ef4 ) ( ) ) ) {
 FUNC_EXIT ( arg1 ) ;
 }
 }
@@ -70,7 +68,9 @@ tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
 atmp00000 [ 1 ] = tmp [ 0 ] ;
 while ( not_empty_list ( tmp [ 0 ] ) ) {
 if ( not_empty_list ( tmp [ 0 ] ) ) {
-FUNC_EXIT ( lf_AUX_Symbol_Sets2_1 ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( slice ( atmp00000 [ 0 ] , atmp00000 [ 1 ] ) ) ) ) , lf_AUX_Symbol_Sets2_1 ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( tmp [ 0 ] ) ) ) , arg1 ) ) ) ;
+arg0 = ( * ef1 ) ( ( * ef2 ) ( lf2 ( slice ( atmp00000 [ 0 ] , atmp00000 [ 1 ] ) ) ) ) ;
+arg1 = lf_AUX_Symbol_Sets2_1 ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( tmp [ 0 ] ) ) ) , arg1 ) ;
+goto lbl_lf_AUX_Symbol_Sets2_1 ;
 }
 atmp00000 [ 1 ] = list_tail ( atmp00000 [ 1 ] ) ;
 tmp [ 0 ] = atmp00000 [ 1 ] ;

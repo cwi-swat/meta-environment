@@ -24,7 +24,7 @@ ATerm lf_AUX_Actions3_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 1 ] ;
 FUNC_ENTRY ( lf_AUX_Actions3_1sym , ATmakeAppl ( lf_AUX_Actions3_1sym , arg0 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Actions3_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
@@ -45,7 +45,8 @@ while ( not_empty_list ( tmp [ 0 ] ) ) {
 atmp0001110 = list_head ( tmp [ 0 ] ) ;
 tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
 if ( term_equal ( atmp00010 , atmp0001110 ) ) {
-FUNC_EXIT ( lf_AUX_Actions3_1 ( ( * ef1 ) ( lf2 ( cons ( slice ( atmp0000 [ 0 ] , atmp0000 [ 1 ] ) , cons ( make_list ( atmp00010 ) , cons ( slice ( atmp000110 [ 0 ] , atmp000110 [ 1 ] ) , tmp [ 0 ] ) ) ) ) ) ) ) ;
+arg0 = ( * ef1 ) ( lf2 ( cons ( slice ( atmp0000 [ 0 ] , atmp0000 [ 1 ] ) , cons ( make_list ( atmp00010 ) , cons ( slice ( atmp000110 [ 0 ] , atmp000110 [ 1 ] ) , tmp [ 0 ] ) ) ) ) ) ;
+goto lbl_lf_AUX_Actions3_1 ;
 }
 atmp000110 [ 1 ] = list_tail ( atmp000110 [ 1 ] ) ;
 tmp [ 0 ] = atmp000110 [ 1 ] ;

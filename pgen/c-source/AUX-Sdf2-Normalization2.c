@@ -71,27 +71,18 @@ void init_AUX_Sdf2_Normalization2 ( ) {
 ATerm lf_AUX_Sdf2_Normalization2_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 8 ] ;
-ATfprintf(stderr,"normalize entered\n");
 FUNC_ENTRY ( lf_AUX_Sdf2_Normalization2_1sym , ATmakeAppl ( lf_AUX_Sdf2_Normalization2_1sym , arg0 , arg1 , arg2 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 tmp [ 0 ] = ( * ef6 ) ( atmp00 , arg1 ) ;
-ATfprintf(stderr,"m[[d]](M) = _G1 finished\n");
 tmp [ 1 ] = ( * ef7 ) ( tmp [ 0 ] ) ;
-ATfprintf(stderr,"b[[ _G1 ]] = _G2 finished\n");
 tmp [ 2 ] = ( * ef8 ) ( tmp [ 1 ] ) ;
-ATfprintf(stderr,"a[[ _G2 ]] = _G3 finished\n");
 tmp [ 3 ] = ( * ef9 ) ( tmp [ 2 ] , arg2 ) ;
-ATfprintf(stderr,"topsorts[[ _G3 ]](_A) = _G4 finished\n");
 tmp [ 4 ] = ( * ef10 ) ( tmp [ 3 ] ) ;
-ATfprintf(stderr,"r[[ _G4 ]] = _G5 finished\n");
 tmp [ 5 ] = ( * ef11 ) ( tmp [ 4 ] ) ;
-ATfprintf(stderr,"p[[ _G5 ]] = _G6 finished\n");
 tmp [ 6 ] = ( * ef12 ) ( tmp [ 5 ] ) ;
-ATfprintf(stderr,"l[[ _G6 ]] = _G7 finished\n");
 tmp [ 7 ] = ( * ef13 ) ( tmp [ 6 ] ) ;
-ATfprintf(stderr,"k[[ _G7 ]] = _G8 finished\n");
 FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( lf2 ( make_list ( ( * ef5 ) ( ) ) ) ) ) , tmp [ 7 ] ) ) ;
 }
 }

@@ -22,15 +22,13 @@ ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(
 ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"OptCharRanges\"),w(\"\"),no-attrs)" ) ) ;
 ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Character-Class-Syntax\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"OptCharRanges\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_Character_Class_Sets2 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Character_Class_Sets2_2 ( ATerm arg0 ) {
 {
 ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_AUX_Character_Class_Sets2_2sym , ATmakeAppl ( lf_AUX_Character_Class_Sets2_2sym , arg0 ) ) ;
-if ( check_sym ( arg0 , lf_AUX_Character_Class_Sets2_1sym ) ) {
+lbl_lf_AUX_Character_Class_Sets2_2 : if ( check_sym ( arg0 , lf_AUX_Character_Class_Sets2_1sym ) ) {
 tmp [ 0 ] = arg_0 ( arg0 ) ;
 {
 ATerm atmp0010 ;
@@ -42,8 +40,9 @@ atmp0010 = list_head ( tmp [ 0 ] ) ;
 tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ;
 if ( check_sym ( atmp0010 , ef1sym ) ) {
 tmp [ 1 ] = arg_0 ( atmp0010 ) ;
-if ( term_equal ( tmp [ 1 ] , ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ) ) ) ) ) {
-FUNC_EXIT ( lf_AUX_Character_Class_Sets2_2 ( lf_AUX_Character_Class_Sets2_1 ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , tmp [ 0 ] ) ) ) ) ;
+if ( term_equal ( tmp [ 1 ] , ( * ef2 ) ( ) ) ) {
+arg0 = lf_AUX_Character_Class_Sets2_1 ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , tmp [ 0 ] ) ) ;
+goto lbl_lf_AUX_Character_Class_Sets2_2 ;
 }
 }
 atmp000 [ 1 ] = list_tail ( atmp000 [ 1 ] ) ;
