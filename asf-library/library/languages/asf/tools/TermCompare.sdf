@@ -1,0 +1,9 @@
+module asf/tools/TermCompare[X]
+
+imports basic/Booleans
+
+exports
+
+context-free syntax
+
+  less(X,X) -> Boolean {builtin("term-compare-less")}
