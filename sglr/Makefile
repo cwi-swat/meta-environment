@@ -10,7 +10,7 @@ all doc install:	libs
 
 libs:	config.status
 
-all libs doc clean install uninstall distclean test:
+all libs doc clean install uninstall distclean:
 	@for DIR in $(SUBDIRS);	\
 	do \
 		if [ -d $$DIR ]; then \
@@ -20,6 +20,14 @@ all libs doc clean install uninstall distclean test:
 			cd ..; \
 		fi \
 	done
+
+test:	termtest
+
+termtest:
+	@cd regress-test; ./regress-terms
+
+langtest:
+	@cd regress-test; ./regress-lang
 
 config.status:	configure
 	@echo "Warning: no up to date configuration"
