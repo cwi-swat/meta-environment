@@ -1,5 +1,9 @@
 /* $Id$ */
 
+Tue May  4 12:44:58 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * fix Upgrade Sdf scenario: now invoke parse-action first to make
+   sure syntax is parsed
+
 Mon May  3 16:12:49 CEST 2004 <{jong,kooiker}@cwi.nl>
  * rewrite "Upgrade Sdf" to use "execute-action" (iso activate-given-tree
    plus writing to a fixed, named file "intermediate.txt")

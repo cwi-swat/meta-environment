@@ -264,12 +264,14 @@ configuration([
           execute-action("__ASF__/bin/asfupgrader"),
           set-root,
           push-active-module,
-          parse-equations-action
+          parse-equations-action,
+          push-string("Conditions upgraded"),
+          display-message
          ]),
   button("*",
          [description(syntax-editor, menu(["Refactor", "Upgrade syntax"]))],
-         [push-active-module,
-          get-root,
+         [parse-syntax-action,
+          get-parsetree,
           apply("sdf-upgrade", "Module", 1),
           unpack-tree,
           execute-action("__ASF__/bin/asfe -t -e __PGEN__/share/pgen/SdfUpgrade.eqs"),
