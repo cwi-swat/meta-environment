@@ -32,6 +32,8 @@ public class InfoList extends JPanel implements InfoListTif, Runnable {
 
         this.list = new JList();
 
+        setLayout(new BorderLayout());
+        
         list.setModel(data);
         list.setBackground(Preferences.getColor("messagepane.background"));
         list.setForeground(Preferences.getColor("error.info.foreground"));

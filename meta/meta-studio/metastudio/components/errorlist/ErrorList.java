@@ -34,6 +34,8 @@ public class ErrorList extends JPanel implements ErrorListTif, Runnable {
 		this.data = new metastudio.data.ErrorListModel();
 		this.list = new JList();
 		
+		setLayout(new BorderLayout());
+		
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
