@@ -1,0 +1,34 @@
+equations
+
+[extractVariable-start]
+  &Area = get-area(&CompilationUnit),
+  &Rstore2 = extractVariable(&CompilationUnit, &Rstore1, &Area)
+  ===>
+  extractVariable(&CompilationUnit, &Rstore1) = &Rstore2
+
+[extractVariable-0]
+  &ClassDeclaration = &Modifiers class &Identifier &Super &Interfaces &ClassBody,
+  &ClassId = get-area(&Identifier),
+  &Rstore2 = extractVariable(&ClassBody, &Rstore1, &ClassId)
+  ===>
+  extractVariable(&ClassDeclaration, &Rstore1, &Area) = &Rstore2
+
+[extractVariable-1]
+  &FieldDeclaration = &Modifiers &Type &VariableDeclarators ;,
+  &Rstore2 = extractField(&VariableDeclarators, &Rstore1, &Area, &Type)
+  ===>
+  extractVariable(&FieldDeclaration, &Rstore1, &Area) = &Rstore2
+
+[extractField-0]
+  &VariableDeclarator = &VariableDeclaratorId,
+  &VariableDeclaratorId = &Identifier,
+  &VariableDeclaratorIdId = get-area(&VariableDeclaratorId),
+  &Tuple1 = <&VariableDeclaratorIdId, id2str(&Identifier)>,
+  &Rstore2 = add-tuple(FIELD_DECL, &Tuple1, &Rstore1),
+  &Tuple2 = <&VariableDeclaratorIdId, &Area>,
+  &Rstore3 = add-tuple(FIELD_DECL_OCCURS, &Tuple2, &Rstore2),
+  &Type = &Name,
+  &Tuple3 = <&VariableDeclaratorIdId, name2str(&Name)>,
+  &Rstore4 = add-tuple(FIELD_DECL_TYPE, &Tuple3, &Rstore3)
+  ===>
+  extractField(&VariableDeclarator, &Rstore1, &Area, &Type) = &Rstore4

@@ -6,6 +6,9 @@ imports ExtInheritance
 imports ExtInterface
 imports ExtMethod
 imports ExtPackage
+imports ExtVariable
+
+
 
 exports
   context-free syntax

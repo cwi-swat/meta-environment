@@ -19,4 +19,3 @@ equations
   #String = ids2str(#Identifiersp)
   ===>
   name2str(#Identifiersp) = #String
-
