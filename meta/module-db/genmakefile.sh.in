@@ -170,7 +170,7 @@ profile: $1-prof
 
 init.c: $(SPEC_SRCS)
 	@(echo "/*GENERATED AUTOMATICALLY, DO NOT MODIFY */" ;\\
-	NAMES=\`echo $(SPEC_SRCS) | tr ' ' '\\n' | sed 's/.c\$\$//g;s/-/_/g'\`; export NAMES ;\\
+	NAMES=\`echo $(SPEC_SRCS) | fmt | sed 's/.c\$\$//g;s/-/_/g'\`; export NAMES ;\\
 	for file in \$\${NAMES}; do \\
 		echo "extern void register_\$\$file();" ;\\
 		echo "extern void resolve_\$\$file();"  ;\\
