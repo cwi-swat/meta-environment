@@ -7,19 +7,19 @@ sorts Attributes Attrs Attr Associativity
 
 context-free syntax
 
-"no-attrs"                -> Attributes  {cons("no-attrs")}
-attrs(attributes:Attrs)        -> Attributes  {cons("attrs")}
+"no-attrs"                -> Attributes  
+attrs(attributes:Attrs)        -> Attributes  
 
-"[" {Attr ","}+ "]"       -> Attrs {cons("many")}
+"[" {Attr ","}+ "]"       -> Attrs 
 
-"assoc"("assocativity":Associativity)  -> Attr {cons("assoc")}
-term(aterm:ATerm)                -> Attr {cons("term")}
-id(module-name:Literal)         -> Attr {cons("id")}
+"assoc"("assocativity":Associativity)  -> Attr 
+term(aterm:ATerm)                -> Attr 
+id(module-name:Literal)         -> Attr 
 
-"bracket" -> Attr {cons("bracket")}
-"reject"  -> Attr {cons("reject")}
-"prefer"  -> Attr {cons("prefer")}
-"avoid"   -> Attr {cons("avoid")}
+"bracket" -> Attr 
+"reject"  -> Attr 
+"prefer"  -> Attr
+"avoid"   -> Attr
 
 "bracket" | "reject" | "prefer" | "avoid" -> ATerm {reject}
 id(Literal)                               -> ATerm {reject}

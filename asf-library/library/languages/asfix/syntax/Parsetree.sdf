@@ -10,4 +10,4 @@ sorts ParseTree
 
 context-free syntax
 
-parsetree(top:Tree,amb-cnt:NatCon) -> ParseTree {cons("top")}
+parsetree(top:Tree,amb-cnt:NatCon) -> ParseTree 

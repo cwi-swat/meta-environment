@@ -6,4 +6,4 @@ exports
 
 context-free syntax
 
-Tree Ann -> Tree {cons("annotated")}
+Tree Ann -> Tree 
