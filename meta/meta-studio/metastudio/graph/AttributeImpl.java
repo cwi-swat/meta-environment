@@ -21,22 +21,12 @@ abstract public class AttributeImpl extends MetaGraphConstructor
     return true;
   }
 
-  public boolean isLabel()
+  public boolean isBoundingBox()
   {
     return false;
   }
 
-  public boolean isShape()
-  {
-    return false;
-  }
-
-  public boolean isLocation()
-  {
-    return false;
-  }
-
-  public boolean isSize()
+  public boolean isColor()
   {
     return false;
   }
@@ -46,12 +36,12 @@ abstract public class AttributeImpl extends MetaGraphConstructor
     return false;
   }
 
-  public boolean isBoundingBox()
+  public boolean isDirection()
   {
     return false;
   }
 
-  public boolean isDirection()
+  public boolean isFillColor()
   {
     return false;
   }
@@ -61,37 +51,27 @@ abstract public class AttributeImpl extends MetaGraphConstructor
     return false;
   }
 
-  public boolean hasLabel()
+  public boolean isLabel()
   {
     return false;
   }
 
-  public boolean hasShape()
+  public boolean isLocation()
   {
     return false;
   }
 
-  public boolean hasX()
+  public boolean isShape()
   {
     return false;
   }
 
-  public boolean hasY()
+  public boolean isSize()
   {
     return false;
   }
 
-  public boolean hasWidth()
-  {
-    return false;
-  }
-
-  public boolean hasHeight()
-  {
-    return false;
-  }
-
-  public boolean hasPoints()
+  public boolean isStyle()
   {
     return false;
   }
@@ -102,6 +82,16 @@ abstract public class AttributeImpl extends MetaGraphConstructor
   }
 
   public boolean hasSecond()
+  {
+    return false;
+  }
+
+  public boolean hasColor()
+  {
+    return false;
+  }
+
+  public boolean hasPoints()
   {
     return false;
   }
@@ -121,74 +111,39 @@ abstract public class AttributeImpl extends MetaGraphConstructor
     return false;
   }
 
-  public String getLabel()
+  public boolean hasLabel()
   {
-     throw new UnsupportedOperationException("This Attribute has no Label");
+    return false;
   }
 
-  public Attribute setLabel(String _label)
+  public boolean hasX()
   {
-     throw new IllegalArgumentException("Illegal argument: " + _label);
+    return false;
   }
 
-  public Shape getShape()
+  public boolean hasY()
   {
-     throw new UnsupportedOperationException("This Attribute has no Shape");
+    return false;
   }
 
-  public Attribute setShape(Shape _shape)
+  public boolean hasShape()
   {
-     throw new IllegalArgumentException("Illegal argument: " + _shape);
+    return false;
   }
 
-  public int getX()
+  public boolean hasWidth()
   {
-     throw new UnsupportedOperationException("This Attribute has no X");
+    return false;
   }
 
-  public Attribute setX(int _x)
+  public boolean hasHeight()
   {
-     throw new IllegalArgumentException("Illegal argument: " + _x);
+    return false;
   }
 
-  public int getY()
+  public boolean hasStyle()
   {
-     throw new UnsupportedOperationException("This Attribute has no Y");
-  }
-
-  public Attribute setY(int _y)
-  {
-     throw new IllegalArgumentException("Illegal argument: " + _y);
-  }
-
-  public int getWidth()
-  {
-     throw new UnsupportedOperationException("This Attribute has no Width");
-  }
-
-  public Attribute setWidth(int _width)
-  {
-     throw new IllegalArgumentException("Illegal argument: " + _width);
-  }
-
-  public int getHeight()
-  {
-     throw new UnsupportedOperationException("This Attribute has no Height");
-  }
-
-  public Attribute setHeight(int _height)
-  {
-     throw new IllegalArgumentException("Illegal argument: " + _height);
-  }
-
-  public Polygon getPoints()
-  {
-     throw new UnsupportedOperationException("This Attribute has no Points");
-  }
-
-  public Attribute setPoints(Polygon _points)
-  {
-     throw new IllegalArgumentException("Illegal argument: " + _points);
+    return false;
   }
 
   public Point getFirst()
@@ -209,6 +164,26 @@ abstract public class AttributeImpl extends MetaGraphConstructor
   public Attribute setSecond(Point _second)
   {
      throw new IllegalArgumentException("Illegal argument: " + _second);
+  }
+
+  public Color getColor()
+  {
+     throw new UnsupportedOperationException("This Attribute has no Color");
+  }
+
+  public Attribute setColor(Color _color)
+  {
+     throw new IllegalArgumentException("Illegal argument: " + _color);
+  }
+
+  public Polygon getPoints()
+  {
+     throw new UnsupportedOperationException("This Attribute has no Points");
+  }
+
+  public Attribute setPoints(Polygon _points)
+  {
+     throw new IllegalArgumentException("Illegal argument: " + _points);
   }
 
   public Direction getDirection()
@@ -239,6 +214,76 @@ abstract public class AttributeImpl extends MetaGraphConstructor
   public Attribute setValue(aterm.ATerm _value)
   {
      throw new IllegalArgumentException("Illegal argument: " + _value);
+  }
+
+  public String getLabel()
+  {
+     throw new UnsupportedOperationException("This Attribute has no Label");
+  }
+
+  public Attribute setLabel(String _label)
+  {
+     throw new IllegalArgumentException("Illegal argument: " + _label);
+  }
+
+  public int getX()
+  {
+     throw new UnsupportedOperationException("This Attribute has no X");
+  }
+
+  public Attribute setX(int _x)
+  {
+     throw new IllegalArgumentException("Illegal argument: " + _x);
+  }
+
+  public int getY()
+  {
+     throw new UnsupportedOperationException("This Attribute has no Y");
+  }
+
+  public Attribute setY(int _y)
+  {
+     throw new IllegalArgumentException("Illegal argument: " + _y);
+  }
+
+  public Shape getShape()
+  {
+     throw new UnsupportedOperationException("This Attribute has no Shape");
+  }
+
+  public Attribute setShape(Shape _shape)
+  {
+     throw new IllegalArgumentException("Illegal argument: " + _shape);
+  }
+
+  public int getWidth()
+  {
+     throw new UnsupportedOperationException("This Attribute has no Width");
+  }
+
+  public Attribute setWidth(int _width)
+  {
+     throw new IllegalArgumentException("Illegal argument: " + _width);
+  }
+
+  public int getHeight()
+  {
+     throw new UnsupportedOperationException("This Attribute has no Height");
+  }
+
+  public Attribute setHeight(int _height)
+  {
+     throw new IllegalArgumentException("Illegal argument: " + _height);
+  }
+
+  public Style getStyle()
+  {
+     throw new UnsupportedOperationException("This Attribute has no Style");
+  }
+
+  public Attribute setStyle(Style _style)
+  {
+     throw new IllegalArgumentException("Illegal argument: " + _style);
   }
 
 }

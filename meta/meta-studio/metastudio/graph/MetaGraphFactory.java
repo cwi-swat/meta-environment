@@ -26,66 +26,96 @@ public class MetaGraphFactory
   private aterm.AFun funAttributeList_Multi;
   private AttributeList protoAttributeList_Multi;
   private aterm.ATerm patternAttributeList_Multi;
-  private aterm.AFun funAttribute_Label;
-  private Attribute protoAttribute_Label;
-  private aterm.ATerm patternAttribute_Label;
-  private aterm.AFun funAttribute_Shape;
-  private Attribute protoAttribute_Shape;
-  private aterm.ATerm patternAttribute_Shape;
-  private aterm.AFun funAttribute_Location;
-  private Attribute protoAttribute_Location;
-  private aterm.ATerm patternAttribute_Location;
-  private aterm.AFun funAttribute_Size;
-  private Attribute protoAttribute_Size;
-  private aterm.ATerm patternAttribute_Size;
-  private aterm.AFun funAttribute_CurvePoints;
-  private Attribute protoAttribute_CurvePoints;
-  private aterm.ATerm patternAttribute_CurvePoints;
   private aterm.AFun funAttribute_BoundingBox;
   private Attribute protoAttribute_BoundingBox;
   private aterm.ATerm patternAttribute_BoundingBox;
+  private aterm.AFun funAttribute_Color;
+  private Attribute protoAttribute_Color;
+  private aterm.ATerm patternAttribute_Color;
+  private aterm.AFun funAttribute_CurvePoints;
+  private Attribute protoAttribute_CurvePoints;
+  private aterm.ATerm patternAttribute_CurvePoints;
   private aterm.AFun funAttribute_Direction;
   private Attribute protoAttribute_Direction;
   private aterm.ATerm patternAttribute_Direction;
+  private aterm.AFun funAttribute_FillColor;
+  private Attribute protoAttribute_FillColor;
+  private aterm.ATerm patternAttribute_FillColor;
   private aterm.AFun funAttribute_Info;
   private Attribute protoAttribute_Info;
   private aterm.ATerm patternAttribute_Info;
-  private aterm.AFun funShape_Plaintext;
-  private Shape protoShape_Plaintext;
-  private aterm.ATerm patternShape_Plaintext;
-  private aterm.AFun funShape_Ellipse;
-  private Shape protoShape_Ellipse;
-  private aterm.ATerm patternShape_Ellipse;
-  private aterm.AFun funShape_Circle;
-  private Shape protoShape_Circle;
-  private aterm.ATerm patternShape_Circle;
-  private aterm.AFun funShape_Egg;
-  private Shape protoShape_Egg;
-  private aterm.ATerm patternShape_Egg;
-  private aterm.AFun funShape_Triangle;
-  private Shape protoShape_Triangle;
-  private aterm.ATerm patternShape_Triangle;
+  private aterm.AFun funAttribute_Label;
+  private Attribute protoAttribute_Label;
+  private aterm.ATerm patternAttribute_Label;
+  private aterm.AFun funAttribute_Location;
+  private Attribute protoAttribute_Location;
+  private aterm.ATerm patternAttribute_Location;
+  private aterm.AFun funAttribute_Shape;
+  private Attribute protoAttribute_Shape;
+  private aterm.ATerm patternAttribute_Shape;
+  private aterm.AFun funAttribute_Size;
+  private Attribute protoAttribute_Size;
+  private aterm.ATerm patternAttribute_Size;
+  private aterm.AFun funAttribute_Style;
+  private Attribute protoAttribute_Style;
+  private aterm.ATerm patternAttribute_Style;
+  private aterm.AFun funColor_Rgb;
+  private Color protoColor_Rgb;
+  private aterm.ATerm patternColor_Rgb;
+  private aterm.AFun funStyle_Bold;
+  private Style protoStyle_Bold;
+  private aterm.ATerm patternStyle_Bold;
+  private aterm.AFun funStyle_Dashed;
+  private Style protoStyle_Dashed;
+  private aterm.ATerm patternStyle_Dashed;
+  private aterm.AFun funStyle_Dotted;
+  private Style protoStyle_Dotted;
+  private aterm.ATerm patternStyle_Dotted;
+  private aterm.AFun funStyle_Filled;
+  private Style protoStyle_Filled;
+  private aterm.ATerm patternStyle_Filled;
+  private aterm.AFun funStyle_Invisible;
+  private Style protoStyle_Invisible;
+  private aterm.ATerm patternStyle_Invisible;
+  private aterm.AFun funStyle_Solid;
+  private Style protoStyle_Solid;
+  private aterm.ATerm patternStyle_Solid;
   private aterm.AFun funShape_Box;
   private Shape protoShape_Box;
   private aterm.ATerm patternShape_Box;
+  private aterm.AFun funShape_Circle;
+  private Shape protoShape_Circle;
+  private aterm.ATerm patternShape_Circle;
   private aterm.AFun funShape_Diamond;
   private Shape protoShape_Diamond;
   private aterm.ATerm patternShape_Diamond;
-  private aterm.AFun funShape_Trapezium;
-  private Shape protoShape_Trapezium;
-  private aterm.ATerm patternShape_Trapezium;
-  private aterm.AFun funShape_Parallelogram;
-  private Shape protoShape_Parallelogram;
-  private aterm.ATerm patternShape_Parallelogram;
-  private aterm.AFun funShape_House;
-  private Shape protoShape_House;
-  private aterm.ATerm patternShape_House;
+  private aterm.AFun funShape_Egg;
+  private Shape protoShape_Egg;
+  private aterm.ATerm patternShape_Egg;
+  private aterm.AFun funShape_Ellipse;
+  private Shape protoShape_Ellipse;
+  private aterm.ATerm patternShape_Ellipse;
   private aterm.AFun funShape_Hexagon;
   private Shape protoShape_Hexagon;
   private aterm.ATerm patternShape_Hexagon;
+  private aterm.AFun funShape_House;
+  private Shape protoShape_House;
+  private aterm.ATerm patternShape_House;
   private aterm.AFun funShape_Octagon;
   private Shape protoShape_Octagon;
   private aterm.ATerm patternShape_Octagon;
+  private aterm.AFun funShape_Parallelogram;
+  private Shape protoShape_Parallelogram;
+  private aterm.ATerm patternShape_Parallelogram;
+  private aterm.AFun funShape_Plaintext;
+  private Shape protoShape_Plaintext;
+  private aterm.ATerm patternShape_Plaintext;
+  private aterm.AFun funShape_Trapezium;
+  private Shape protoShape_Trapezium;
+  private aterm.ATerm patternShape_Trapezium;
+  private aterm.AFun funShape_Triangle;
+  private Shape protoShape_Triangle;
+  private aterm.ATerm patternShape_Triangle;
   private aterm.AFun funDirection_Forward;
   private Direction protoDirection_Forward;
   private aterm.ATerm patternDirection_Forward;
@@ -161,86 +191,128 @@ public class MetaGraphFactory
     protoAttributeList_Multi = new AttributeList_Multi(this);
 
 
-    patternAttribute_Label = factory.parse("label(<str>)");
-    funAttribute_Label = factory.makeAFun("_Attribute_label", 1, false);
-    protoAttribute_Label = new Attribute_Label(this);
+    patternAttribute_BoundingBox = factory.parse("bounding-box(<term>,<term>)");
+    funAttribute_BoundingBox = factory.makeAFun("_Attribute_bounding-box", 2, false);
+    protoAttribute_BoundingBox = new Attribute_BoundingBox(this);
 
-    patternAttribute_Shape = factory.parse("shape(<term>)");
-    funAttribute_Shape = factory.makeAFun("_Attribute_shape", 1, false);
-    protoAttribute_Shape = new Attribute_Shape(this);
-
-    patternAttribute_Location = factory.parse("location(<int>,<int>)");
-    funAttribute_Location = factory.makeAFun("_Attribute_location", 2, false);
-    protoAttribute_Location = new Attribute_Location(this);
-
-    patternAttribute_Size = factory.parse("size(<int>,<int>)");
-    funAttribute_Size = factory.makeAFun("_Attribute_size", 2, false);
-    protoAttribute_Size = new Attribute_Size(this);
+    patternAttribute_Color = factory.parse("color(<term>)");
+    funAttribute_Color = factory.makeAFun("_Attribute_color", 1, false);
+    protoAttribute_Color = new Attribute_Color(this);
 
     patternAttribute_CurvePoints = factory.parse("curve-points(<term>)");
     funAttribute_CurvePoints = factory.makeAFun("_Attribute_curve-points", 1, false);
     protoAttribute_CurvePoints = new Attribute_CurvePoints(this);
 
-    patternAttribute_BoundingBox = factory.parse("bounding-box(<term>,<term>)");
-    funAttribute_BoundingBox = factory.makeAFun("_Attribute_bounding-box", 2, false);
-    protoAttribute_BoundingBox = new Attribute_BoundingBox(this);
-
     patternAttribute_Direction = factory.parse("direction(<term>)");
     funAttribute_Direction = factory.makeAFun("_Attribute_direction", 1, false);
     protoAttribute_Direction = new Attribute_Direction(this);
+
+    patternAttribute_FillColor = factory.parse("fill-color(<term>)");
+    funAttribute_FillColor = factory.makeAFun("_Attribute_fill-color", 1, false);
+    protoAttribute_FillColor = new Attribute_FillColor(this);
 
     patternAttribute_Info = factory.parse("info(<str>,<term>)");
     funAttribute_Info = factory.makeAFun("_Attribute_info", 2, false);
     protoAttribute_Info = new Attribute_Info(this);
 
+    patternAttribute_Label = factory.parse("label(<str>)");
+    funAttribute_Label = factory.makeAFun("_Attribute_label", 1, false);
+    protoAttribute_Label = new Attribute_Label(this);
 
-    patternShape_Plaintext = factory.parse("plaintext");
-    funShape_Plaintext = factory.makeAFun("_Shape_plaintext", 0, false);
-    protoShape_Plaintext = new Shape_Plaintext(this);
+    patternAttribute_Location = factory.parse("location(<int>,<int>)");
+    funAttribute_Location = factory.makeAFun("_Attribute_location", 2, false);
+    protoAttribute_Location = new Attribute_Location(this);
 
-    patternShape_Ellipse = factory.parse("ellipse");
-    funShape_Ellipse = factory.makeAFun("_Shape_ellipse", 0, false);
-    protoShape_Ellipse = new Shape_Ellipse(this);
+    patternAttribute_Shape = factory.parse("shape(<term>)");
+    funAttribute_Shape = factory.makeAFun("_Attribute_shape", 1, false);
+    protoAttribute_Shape = new Attribute_Shape(this);
 
-    patternShape_Circle = factory.parse("circle");
-    funShape_Circle = factory.makeAFun("_Shape_circle", 0, false);
-    protoShape_Circle = new Shape_Circle(this);
+    patternAttribute_Size = factory.parse("size(<int>,<int>)");
+    funAttribute_Size = factory.makeAFun("_Attribute_size", 2, false);
+    protoAttribute_Size = new Attribute_Size(this);
 
-    patternShape_Egg = factory.parse("egg");
-    funShape_Egg = factory.makeAFun("_Shape_egg", 0, false);
-    protoShape_Egg = new Shape_Egg(this);
+    patternAttribute_Style = factory.parse("style(<term>)");
+    funAttribute_Style = factory.makeAFun("_Attribute_style", 1, false);
+    protoAttribute_Style = new Attribute_Style(this);
 
-    patternShape_Triangle = factory.parse("triangle");
-    funShape_Triangle = factory.makeAFun("_Shape_triangle", 0, false);
-    protoShape_Triangle = new Shape_Triangle(this);
+
+    patternColor_Rgb = factory.parse("rgb(<int>,<int>,<int>)");
+    funColor_Rgb = factory.makeAFun("_Color_rgb", 3, false);
+    protoColor_Rgb = new Color_Rgb(this);
+
+
+    patternStyle_Bold = factory.parse("bold");
+    funStyle_Bold = factory.makeAFun("_Style_bold", 0, false);
+    protoStyle_Bold = new Style_Bold(this);
+
+    patternStyle_Dashed = factory.parse("dashed");
+    funStyle_Dashed = factory.makeAFun("_Style_dashed", 0, false);
+    protoStyle_Dashed = new Style_Dashed(this);
+
+    patternStyle_Dotted = factory.parse("dotted");
+    funStyle_Dotted = factory.makeAFun("_Style_dotted", 0, false);
+    protoStyle_Dotted = new Style_Dotted(this);
+
+    patternStyle_Filled = factory.parse("filled");
+    funStyle_Filled = factory.makeAFun("_Style_filled", 0, false);
+    protoStyle_Filled = new Style_Filled(this);
+
+    patternStyle_Invisible = factory.parse("invisible");
+    funStyle_Invisible = factory.makeAFun("_Style_invisible", 0, false);
+    protoStyle_Invisible = new Style_Invisible(this);
+
+    patternStyle_Solid = factory.parse("solid");
+    funStyle_Solid = factory.makeAFun("_Style_solid", 0, false);
+    protoStyle_Solid = new Style_Solid(this);
+
 
     patternShape_Box = factory.parse("box");
     funShape_Box = factory.makeAFun("_Shape_box", 0, false);
     protoShape_Box = new Shape_Box(this);
 
+    patternShape_Circle = factory.parse("circle");
+    funShape_Circle = factory.makeAFun("_Shape_circle", 0, false);
+    protoShape_Circle = new Shape_Circle(this);
+
     patternShape_Diamond = factory.parse("diamond");
     funShape_Diamond = factory.makeAFun("_Shape_diamond", 0, false);
     protoShape_Diamond = new Shape_Diamond(this);
 
-    patternShape_Trapezium = factory.parse("trapezium");
-    funShape_Trapezium = factory.makeAFun("_Shape_trapezium", 0, false);
-    protoShape_Trapezium = new Shape_Trapezium(this);
+    patternShape_Egg = factory.parse("egg");
+    funShape_Egg = factory.makeAFun("_Shape_egg", 0, false);
+    protoShape_Egg = new Shape_Egg(this);
 
-    patternShape_Parallelogram = factory.parse("parallelogram");
-    funShape_Parallelogram = factory.makeAFun("_Shape_parallelogram", 0, false);
-    protoShape_Parallelogram = new Shape_Parallelogram(this);
-
-    patternShape_House = factory.parse("house");
-    funShape_House = factory.makeAFun("_Shape_house", 0, false);
-    protoShape_House = new Shape_House(this);
+    patternShape_Ellipse = factory.parse("ellipse");
+    funShape_Ellipse = factory.makeAFun("_Shape_ellipse", 0, false);
+    protoShape_Ellipse = new Shape_Ellipse(this);
 
     patternShape_Hexagon = factory.parse("hexagon");
     funShape_Hexagon = factory.makeAFun("_Shape_hexagon", 0, false);
     protoShape_Hexagon = new Shape_Hexagon(this);
 
+    patternShape_House = factory.parse("house");
+    funShape_House = factory.makeAFun("_Shape_house", 0, false);
+    protoShape_House = new Shape_House(this);
+
     patternShape_Octagon = factory.parse("octagon");
     funShape_Octagon = factory.makeAFun("_Shape_octagon", 0, false);
     protoShape_Octagon = new Shape_Octagon(this);
+
+    patternShape_Parallelogram = factory.parse("parallelogram");
+    funShape_Parallelogram = factory.makeAFun("_Shape_parallelogram", 0, false);
+    protoShape_Parallelogram = new Shape_Parallelogram(this);
+
+    patternShape_Plaintext = factory.parse("plaintext");
+    funShape_Plaintext = factory.makeAFun("_Shape_plaintext", 0, false);
+    protoShape_Plaintext = new Shape_Plaintext(this);
+
+    patternShape_Trapezium = factory.parse("trapezium");
+    funShape_Trapezium = factory.makeAFun("_Shape_trapezium", 0, false);
+    protoShape_Trapezium = new Shape_Trapezium(this);
+
+    patternShape_Triangle = factory.parse("triangle");
+    funShape_Triangle = factory.makeAFun("_Shape_triangle", 0, false);
+    protoShape_Triangle = new Shape_Triangle(this);
 
 
     patternDirection_Forward = factory.parse("forward");
@@ -491,120 +563,62 @@ public class MetaGraphFactory
     args.add((arg.getHead()).toTerm());    args.add((arg.getTail()).toTerm());    return factory.make(patternAttributeList_Multi, args);
   }
 
-  protected Attribute_Label makeAttribute_Label(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    synchronized (protoAttribute_Label) {
-      protoAttribute_Label.initHashCode(annos,fun,args);
-      return (Attribute_Label) factory.build(protoAttribute_Label);
+  protected Attribute_BoundingBox makeAttribute_BoundingBox(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoAttribute_BoundingBox) {
+      protoAttribute_BoundingBox.initHashCode(annos,fun,args);
+      return (Attribute_BoundingBox) factory.build(protoAttribute_BoundingBox);
     }
   }
 
-  public Attribute_Label makeAttribute_Label(String _label) {
-    aterm.ATerm[] args = new aterm.ATerm[] {factory.makeAppl(factory.makeAFun(_label, 0, true))};
-    return makeAttribute_Label(funAttribute_Label, args, factory.getEmpty());
+  public Attribute_BoundingBox makeAttribute_BoundingBox(Point _first, Point _second) {
+    aterm.ATerm[] args = new aterm.ATerm[] {_first, _second};
+    return makeAttribute_BoundingBox(funAttribute_BoundingBox, args, factory.getEmpty());
   }
 
-  public Attribute Attribute_LabelFromTerm(aterm.ATerm trm)
+  public Attribute Attribute_BoundingBoxFromTerm(aterm.ATerm trm)
   {
-    java.util.List children = trm.match(patternAttribute_Label);
+    java.util.List children = trm.match(patternAttribute_BoundingBox);
 
     if (children != null) {
-      Attribute tmp = makeAttribute_Label((String) children.get(0));
+      Attribute tmp = makeAttribute_BoundingBox(PointFromTerm( (aterm.ATerm) children.get(0)), PointFromTerm( (aterm.ATerm) children.get(1)));
       return tmp;
     }
     else {
       return null;
     }
   }
-  protected aterm.ATerm toTerm(Attribute_LabelImpl arg) {
+  protected aterm.ATerm toTerm(Attribute_BoundingBoxImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add(arg.getLabel());    return factory.make(patternAttribute_Label, args);
+    args.add((arg.getFirst()).toTerm());    args.add((arg.getSecond()).toTerm());    return factory.make(patternAttribute_BoundingBox, args);
   }
 
-  protected Attribute_Shape makeAttribute_Shape(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    synchronized (protoAttribute_Shape) {
-      protoAttribute_Shape.initHashCode(annos,fun,args);
-      return (Attribute_Shape) factory.build(protoAttribute_Shape);
+  protected Attribute_Color makeAttribute_Color(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoAttribute_Color) {
+      protoAttribute_Color.initHashCode(annos,fun,args);
+      return (Attribute_Color) factory.build(protoAttribute_Color);
     }
   }
 
-  public Attribute_Shape makeAttribute_Shape(Shape _shape) {
-    aterm.ATerm[] args = new aterm.ATerm[] {_shape};
-    return makeAttribute_Shape(funAttribute_Shape, args, factory.getEmpty());
+  public Attribute_Color makeAttribute_Color(Color _color) {
+    aterm.ATerm[] args = new aterm.ATerm[] {_color};
+    return makeAttribute_Color(funAttribute_Color, args, factory.getEmpty());
   }
 
-  public Attribute Attribute_ShapeFromTerm(aterm.ATerm trm)
+  public Attribute Attribute_ColorFromTerm(aterm.ATerm trm)
   {
-    java.util.List children = trm.match(patternAttribute_Shape);
+    java.util.List children = trm.match(patternAttribute_Color);
 
     if (children != null) {
-      Attribute tmp = makeAttribute_Shape(ShapeFromTerm( (aterm.ATerm) children.get(0)));
+      Attribute tmp = makeAttribute_Color(ColorFromTerm( (aterm.ATerm) children.get(0)));
       return tmp;
     }
     else {
       return null;
     }
   }
-  protected aterm.ATerm toTerm(Attribute_ShapeImpl arg) {
+  protected aterm.ATerm toTerm(Attribute_ColorImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    args.add((arg.getShape()).toTerm());    return factory.make(patternAttribute_Shape, args);
-  }
-
-  protected Attribute_Location makeAttribute_Location(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    synchronized (protoAttribute_Location) {
-      protoAttribute_Location.initHashCode(annos,fun,args);
-      return (Attribute_Location) factory.build(protoAttribute_Location);
-    }
-  }
-
-  public Attribute_Location makeAttribute_Location(int _x, int _y) {
-    aterm.ATerm[] args = new aterm.ATerm[] {factory.makeInt(_x), factory.makeInt(_y)};
-    return makeAttribute_Location(funAttribute_Location, args, factory.getEmpty());
-  }
-
-  public Attribute Attribute_LocationFromTerm(aterm.ATerm trm)
-  {
-    java.util.List children = trm.match(patternAttribute_Location);
-
-    if (children != null) {
-      Attribute tmp = makeAttribute_Location(((Integer) children.get(0)).intValue(), ((Integer) children.get(1)).intValue());
-      return tmp;
-    }
-    else {
-      return null;
-    }
-  }
-  protected aterm.ATerm toTerm(Attribute_LocationImpl arg) {
-    java.util.List args = new java.util.LinkedList();
-    args.add(new Integer(arg.getX()));    args.add(new Integer(arg.getY()));    return factory.make(patternAttribute_Location, args);
-  }
-
-  protected Attribute_Size makeAttribute_Size(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    synchronized (protoAttribute_Size) {
-      protoAttribute_Size.initHashCode(annos,fun,args);
-      return (Attribute_Size) factory.build(protoAttribute_Size);
-    }
-  }
-
-  public Attribute_Size makeAttribute_Size(int _width, int _height) {
-    aterm.ATerm[] args = new aterm.ATerm[] {factory.makeInt(_width), factory.makeInt(_height)};
-    return makeAttribute_Size(funAttribute_Size, args, factory.getEmpty());
-  }
-
-  public Attribute Attribute_SizeFromTerm(aterm.ATerm trm)
-  {
-    java.util.List children = trm.match(patternAttribute_Size);
-
-    if (children != null) {
-      Attribute tmp = makeAttribute_Size(((Integer) children.get(0)).intValue(), ((Integer) children.get(1)).intValue());
-      return tmp;
-    }
-    else {
-      return null;
-    }
-  }
-  protected aterm.ATerm toTerm(Attribute_SizeImpl arg) {
-    java.util.List args = new java.util.LinkedList();
-    args.add(new Integer(arg.getWidth()));    args.add(new Integer(arg.getHeight()));    return factory.make(patternAttribute_Size, args);
+    args.add((arg.getColor()).toTerm());    return factory.make(patternAttribute_Color, args);
   }
 
   protected Attribute_CurvePoints makeAttribute_CurvePoints(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -636,35 +650,6 @@ public class MetaGraphFactory
     args.add((arg.getPoints()).toTerm());    return factory.make(patternAttribute_CurvePoints, args);
   }
 
-  protected Attribute_BoundingBox makeAttribute_BoundingBox(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    synchronized (protoAttribute_BoundingBox) {
-      protoAttribute_BoundingBox.initHashCode(annos,fun,args);
-      return (Attribute_BoundingBox) factory.build(protoAttribute_BoundingBox);
-    }
-  }
-
-  public Attribute_BoundingBox makeAttribute_BoundingBox(Point _first, Point _second) {
-    aterm.ATerm[] args = new aterm.ATerm[] {_first, _second};
-    return makeAttribute_BoundingBox(funAttribute_BoundingBox, args, factory.getEmpty());
-  }
-
-  public Attribute Attribute_BoundingBoxFromTerm(aterm.ATerm trm)
-  {
-    java.util.List children = trm.match(patternAttribute_BoundingBox);
-
-    if (children != null) {
-      Attribute tmp = makeAttribute_BoundingBox(PointFromTerm( (aterm.ATerm) children.get(0)), PointFromTerm( (aterm.ATerm) children.get(1)));
-      return tmp;
-    }
-    else {
-      return null;
-    }
-  }
-  protected aterm.ATerm toTerm(Attribute_BoundingBoxImpl arg) {
-    java.util.List args = new java.util.LinkedList();
-    args.add((arg.getFirst()).toTerm());    args.add((arg.getSecond()).toTerm());    return factory.make(patternAttribute_BoundingBox, args);
-  }
-
   protected Attribute_Direction makeAttribute_Direction(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoAttribute_Direction) {
       protoAttribute_Direction.initHashCode(annos,fun,args);
@@ -692,6 +677,35 @@ public class MetaGraphFactory
   protected aterm.ATerm toTerm(Attribute_DirectionImpl arg) {
     java.util.List args = new java.util.LinkedList();
     args.add((arg.getDirection()).toTerm());    return factory.make(patternAttribute_Direction, args);
+  }
+
+  protected Attribute_FillColor makeAttribute_FillColor(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoAttribute_FillColor) {
+      protoAttribute_FillColor.initHashCode(annos,fun,args);
+      return (Attribute_FillColor) factory.build(protoAttribute_FillColor);
+    }
+  }
+
+  public Attribute_FillColor makeAttribute_FillColor(Color _color) {
+    aterm.ATerm[] args = new aterm.ATerm[] {_color};
+    return makeAttribute_FillColor(funAttribute_FillColor, args, factory.getEmpty());
+  }
+
+  public Attribute Attribute_FillColorFromTerm(aterm.ATerm trm)
+  {
+    java.util.List children = trm.match(patternAttribute_FillColor);
+
+    if (children != null) {
+      Attribute tmp = makeAttribute_FillColor(ColorFromTerm( (aterm.ATerm) children.get(0)));
+      return tmp;
+    }
+    else {
+      return null;
+    }
+  }
+  protected aterm.ATerm toTerm(Attribute_FillColorImpl arg) {
+    java.util.List args = new java.util.LinkedList();
+    args.add((arg.getColor()).toTerm());    return factory.make(patternAttribute_FillColor, args);
   }
 
   protected Attribute_Info makeAttribute_Info(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -723,149 +737,352 @@ public class MetaGraphFactory
     args.add(arg.getKey());    args.add((aterm.ATerm)arg.getValue());    return factory.make(patternAttribute_Info, args);
   }
 
-  protected Shape_Plaintext makeShape_Plaintext(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    synchronized (protoShape_Plaintext) {
-      protoShape_Plaintext.initHashCode(annos,fun,args);
-      return (Shape_Plaintext) factory.build(protoShape_Plaintext);
+  protected Attribute_Label makeAttribute_Label(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoAttribute_Label) {
+      protoAttribute_Label.initHashCode(annos,fun,args);
+      return (Attribute_Label) factory.build(protoAttribute_Label);
     }
   }
 
-  public Shape_Plaintext makeShape_Plaintext() {
-    aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Plaintext(funShape_Plaintext, args, factory.getEmpty());
+  public Attribute_Label makeAttribute_Label(String _label) {
+    aterm.ATerm[] args = new aterm.ATerm[] {factory.makeAppl(factory.makeAFun(_label, 0, true))};
+    return makeAttribute_Label(funAttribute_Label, args, factory.getEmpty());
   }
 
-  public Shape Shape_PlaintextFromTerm(aterm.ATerm trm)
+  public Attribute Attribute_LabelFromTerm(aterm.ATerm trm)
   {
-    java.util.List children = trm.match(patternShape_Plaintext);
+    java.util.List children = trm.match(patternAttribute_Label);
 
     if (children != null) {
-      Shape tmp = makeShape_Plaintext();
+      Attribute tmp = makeAttribute_Label((String) children.get(0));
       return tmp;
     }
     else {
       return null;
     }
   }
-  protected aterm.ATerm toTerm(Shape_PlaintextImpl arg) {
+  protected aterm.ATerm toTerm(Attribute_LabelImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return factory.make(patternShape_Plaintext, args);
+    args.add(arg.getLabel());    return factory.make(patternAttribute_Label, args);
   }
 
-  protected Shape_Ellipse makeShape_Ellipse(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    synchronized (protoShape_Ellipse) {
-      protoShape_Ellipse.initHashCode(annos,fun,args);
-      return (Shape_Ellipse) factory.build(protoShape_Ellipse);
+  protected Attribute_Location makeAttribute_Location(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoAttribute_Location) {
+      protoAttribute_Location.initHashCode(annos,fun,args);
+      return (Attribute_Location) factory.build(protoAttribute_Location);
     }
   }
 
-  public Shape_Ellipse makeShape_Ellipse() {
-    aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Ellipse(funShape_Ellipse, args, factory.getEmpty());
+  public Attribute_Location makeAttribute_Location(int _x, int _y) {
+    aterm.ATerm[] args = new aterm.ATerm[] {factory.makeInt(_x), factory.makeInt(_y)};
+    return makeAttribute_Location(funAttribute_Location, args, factory.getEmpty());
   }
 
-  public Shape Shape_EllipseFromTerm(aterm.ATerm trm)
+  public Attribute Attribute_LocationFromTerm(aterm.ATerm trm)
   {
-    java.util.List children = trm.match(patternShape_Ellipse);
+    java.util.List children = trm.match(patternAttribute_Location);
 
     if (children != null) {
-      Shape tmp = makeShape_Ellipse();
+      Attribute tmp = makeAttribute_Location(((Integer) children.get(0)).intValue(), ((Integer) children.get(1)).intValue());
       return tmp;
     }
     else {
       return null;
     }
   }
-  protected aterm.ATerm toTerm(Shape_EllipseImpl arg) {
+  protected aterm.ATerm toTerm(Attribute_LocationImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return factory.make(patternShape_Ellipse, args);
+    args.add(new Integer(arg.getX()));    args.add(new Integer(arg.getY()));    return factory.make(patternAttribute_Location, args);
   }
 
-  protected Shape_Circle makeShape_Circle(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    synchronized (protoShape_Circle) {
-      protoShape_Circle.initHashCode(annos,fun,args);
-      return (Shape_Circle) factory.build(protoShape_Circle);
+  protected Attribute_Shape makeAttribute_Shape(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoAttribute_Shape) {
+      protoAttribute_Shape.initHashCode(annos,fun,args);
+      return (Attribute_Shape) factory.build(protoAttribute_Shape);
     }
   }
 
-  public Shape_Circle makeShape_Circle() {
-    aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Circle(funShape_Circle, args, factory.getEmpty());
+  public Attribute_Shape makeAttribute_Shape(Shape _shape) {
+    aterm.ATerm[] args = new aterm.ATerm[] {_shape};
+    return makeAttribute_Shape(funAttribute_Shape, args, factory.getEmpty());
   }
 
-  public Shape Shape_CircleFromTerm(aterm.ATerm trm)
+  public Attribute Attribute_ShapeFromTerm(aterm.ATerm trm)
   {
-    java.util.List children = trm.match(patternShape_Circle);
+    java.util.List children = trm.match(patternAttribute_Shape);
 
     if (children != null) {
-      Shape tmp = makeShape_Circle();
+      Attribute tmp = makeAttribute_Shape(ShapeFromTerm( (aterm.ATerm) children.get(0)));
       return tmp;
     }
     else {
       return null;
     }
   }
-  protected aterm.ATerm toTerm(Shape_CircleImpl arg) {
+  protected aterm.ATerm toTerm(Attribute_ShapeImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return factory.make(patternShape_Circle, args);
+    args.add((arg.getShape()).toTerm());    return factory.make(patternAttribute_Shape, args);
   }
 
-  protected Shape_Egg makeShape_Egg(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    synchronized (protoShape_Egg) {
-      protoShape_Egg.initHashCode(annos,fun,args);
-      return (Shape_Egg) factory.build(protoShape_Egg);
+  protected Attribute_Size makeAttribute_Size(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoAttribute_Size) {
+      protoAttribute_Size.initHashCode(annos,fun,args);
+      return (Attribute_Size) factory.build(protoAttribute_Size);
     }
   }
 
-  public Shape_Egg makeShape_Egg() {
-    aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Egg(funShape_Egg, args, factory.getEmpty());
+  public Attribute_Size makeAttribute_Size(int _width, int _height) {
+    aterm.ATerm[] args = new aterm.ATerm[] {factory.makeInt(_width), factory.makeInt(_height)};
+    return makeAttribute_Size(funAttribute_Size, args, factory.getEmpty());
   }
 
-  public Shape Shape_EggFromTerm(aterm.ATerm trm)
+  public Attribute Attribute_SizeFromTerm(aterm.ATerm trm)
   {
-    java.util.List children = trm.match(patternShape_Egg);
+    java.util.List children = trm.match(patternAttribute_Size);
 
     if (children != null) {
-      Shape tmp = makeShape_Egg();
+      Attribute tmp = makeAttribute_Size(((Integer) children.get(0)).intValue(), ((Integer) children.get(1)).intValue());
       return tmp;
     }
     else {
       return null;
     }
   }
-  protected aterm.ATerm toTerm(Shape_EggImpl arg) {
+  protected aterm.ATerm toTerm(Attribute_SizeImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return factory.make(patternShape_Egg, args);
+    args.add(new Integer(arg.getWidth()));    args.add(new Integer(arg.getHeight()));    return factory.make(patternAttribute_Size, args);
   }
 
-  protected Shape_Triangle makeShape_Triangle(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    synchronized (protoShape_Triangle) {
-      protoShape_Triangle.initHashCode(annos,fun,args);
-      return (Shape_Triangle) factory.build(protoShape_Triangle);
+  protected Attribute_Style makeAttribute_Style(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoAttribute_Style) {
+      protoAttribute_Style.initHashCode(annos,fun,args);
+      return (Attribute_Style) factory.build(protoAttribute_Style);
     }
   }
 
-  public Shape_Triangle makeShape_Triangle() {
-    aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Triangle(funShape_Triangle, args, factory.getEmpty());
+  public Attribute_Style makeAttribute_Style(Style _style) {
+    aterm.ATerm[] args = new aterm.ATerm[] {_style};
+    return makeAttribute_Style(funAttribute_Style, args, factory.getEmpty());
   }
 
-  public Shape Shape_TriangleFromTerm(aterm.ATerm trm)
+  public Attribute Attribute_StyleFromTerm(aterm.ATerm trm)
   {
-    java.util.List children = trm.match(patternShape_Triangle);
+    java.util.List children = trm.match(patternAttribute_Style);
 
     if (children != null) {
-      Shape tmp = makeShape_Triangle();
+      Attribute tmp = makeAttribute_Style(StyleFromTerm( (aterm.ATerm) children.get(0)));
       return tmp;
     }
     else {
       return null;
     }
   }
-  protected aterm.ATerm toTerm(Shape_TriangleImpl arg) {
+  protected aterm.ATerm toTerm(Attribute_StyleImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return factory.make(patternShape_Triangle, args);
+    args.add((arg.getStyle()).toTerm());    return factory.make(patternAttribute_Style, args);
+  }
+
+  protected Color_Rgb makeColor_Rgb(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoColor_Rgb) {
+      protoColor_Rgb.initHashCode(annos,fun,args);
+      return (Color_Rgb) factory.build(protoColor_Rgb);
+    }
+  }
+
+  public Color_Rgb makeColor_Rgb(int _red, int _green, int _blue) {
+    aterm.ATerm[] args = new aterm.ATerm[] {factory.makeInt(_red), factory.makeInt(_green), factory.makeInt(_blue)};
+    return makeColor_Rgb(funColor_Rgb, args, factory.getEmpty());
+  }
+
+  public Color Color_RgbFromTerm(aterm.ATerm trm)
+  {
+    java.util.List children = trm.match(patternColor_Rgb);
+
+    if (children != null) {
+      Color tmp = makeColor_Rgb(((Integer) children.get(0)).intValue(), ((Integer) children.get(1)).intValue(), ((Integer) children.get(2)).intValue());
+      return tmp;
+    }
+    else {
+      return null;
+    }
+  }
+  protected aterm.ATerm toTerm(Color_RgbImpl arg) {
+    java.util.List args = new java.util.LinkedList();
+    args.add(new Integer(arg.getRed()));    args.add(new Integer(arg.getGreen()));    args.add(new Integer(arg.getBlue()));    return factory.make(patternColor_Rgb, args);
+  }
+
+  protected Style_Bold makeStyle_Bold(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoStyle_Bold) {
+      protoStyle_Bold.initHashCode(annos,fun,args);
+      return (Style_Bold) factory.build(protoStyle_Bold);
+    }
+  }
+
+  public Style_Bold makeStyle_Bold() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeStyle_Bold(funStyle_Bold, args, factory.getEmpty());
+  }
+
+  public Style Style_BoldFromTerm(aterm.ATerm trm)
+  {
+    java.util.List children = trm.match(patternStyle_Bold);
+
+    if (children != null) {
+      Style tmp = makeStyle_Bold();
+      return tmp;
+    }
+    else {
+      return null;
+    }
+  }
+  protected aterm.ATerm toTerm(Style_BoldImpl arg) {
+    java.util.List args = new java.util.LinkedList();
+    return factory.make(patternStyle_Bold, args);
+  }
+
+  protected Style_Dashed makeStyle_Dashed(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoStyle_Dashed) {
+      protoStyle_Dashed.initHashCode(annos,fun,args);
+      return (Style_Dashed) factory.build(protoStyle_Dashed);
+    }
+  }
+
+  public Style_Dashed makeStyle_Dashed() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeStyle_Dashed(funStyle_Dashed, args, factory.getEmpty());
+  }
+
+  public Style Style_DashedFromTerm(aterm.ATerm trm)
+  {
+    java.util.List children = trm.match(patternStyle_Dashed);
+
+    if (children != null) {
+      Style tmp = makeStyle_Dashed();
+      return tmp;
+    }
+    else {
+      return null;
+    }
+  }
+  protected aterm.ATerm toTerm(Style_DashedImpl arg) {
+    java.util.List args = new java.util.LinkedList();
+    return factory.make(patternStyle_Dashed, args);
+  }
+
+  protected Style_Dotted makeStyle_Dotted(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoStyle_Dotted) {
+      protoStyle_Dotted.initHashCode(annos,fun,args);
+      return (Style_Dotted) factory.build(protoStyle_Dotted);
+    }
+  }
+
+  public Style_Dotted makeStyle_Dotted() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeStyle_Dotted(funStyle_Dotted, args, factory.getEmpty());
+  }
+
+  public Style Style_DottedFromTerm(aterm.ATerm trm)
+  {
+    java.util.List children = trm.match(patternStyle_Dotted);
+
+    if (children != null) {
+      Style tmp = makeStyle_Dotted();
+      return tmp;
+    }
+    else {
+      return null;
+    }
+  }
+  protected aterm.ATerm toTerm(Style_DottedImpl arg) {
+    java.util.List args = new java.util.LinkedList();
+    return factory.make(patternStyle_Dotted, args);
+  }
+
+  protected Style_Filled makeStyle_Filled(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoStyle_Filled) {
+      protoStyle_Filled.initHashCode(annos,fun,args);
+      return (Style_Filled) factory.build(protoStyle_Filled);
+    }
+  }
+
+  public Style_Filled makeStyle_Filled() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeStyle_Filled(funStyle_Filled, args, factory.getEmpty());
+  }
+
+  public Style Style_FilledFromTerm(aterm.ATerm trm)
+  {
+    java.util.List children = trm.match(patternStyle_Filled);
+
+    if (children != null) {
+      Style tmp = makeStyle_Filled();
+      return tmp;
+    }
+    else {
+      return null;
+    }
+  }
+  protected aterm.ATerm toTerm(Style_FilledImpl arg) {
+    java.util.List args = new java.util.LinkedList();
+    return factory.make(patternStyle_Filled, args);
+  }
+
+  protected Style_Invisible makeStyle_Invisible(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoStyle_Invisible) {
+      protoStyle_Invisible.initHashCode(annos,fun,args);
+      return (Style_Invisible) factory.build(protoStyle_Invisible);
+    }
+  }
+
+  public Style_Invisible makeStyle_Invisible() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeStyle_Invisible(funStyle_Invisible, args, factory.getEmpty());
+  }
+
+  public Style Style_InvisibleFromTerm(aterm.ATerm trm)
+  {
+    java.util.List children = trm.match(patternStyle_Invisible);
+
+    if (children != null) {
+      Style tmp = makeStyle_Invisible();
+      return tmp;
+    }
+    else {
+      return null;
+    }
+  }
+  protected aterm.ATerm toTerm(Style_InvisibleImpl arg) {
+    java.util.List args = new java.util.LinkedList();
+    return factory.make(patternStyle_Invisible, args);
+  }
+
+  protected Style_Solid makeStyle_Solid(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoStyle_Solid) {
+      protoStyle_Solid.initHashCode(annos,fun,args);
+      return (Style_Solid) factory.build(protoStyle_Solid);
+    }
+  }
+
+  public Style_Solid makeStyle_Solid() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeStyle_Solid(funStyle_Solid, args, factory.getEmpty());
+  }
+
+  public Style Style_SolidFromTerm(aterm.ATerm trm)
+  {
+    java.util.List children = trm.match(patternStyle_Solid);
+
+    if (children != null) {
+      Style tmp = makeStyle_Solid();
+      return tmp;
+    }
+    else {
+      return null;
+    }
+  }
+  protected aterm.ATerm toTerm(Style_SolidImpl arg) {
+    java.util.List args = new java.util.LinkedList();
+    return factory.make(patternStyle_Solid, args);
   }
 
   protected Shape_Box makeShape_Box(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -897,6 +1114,35 @@ public class MetaGraphFactory
     return factory.make(patternShape_Box, args);
   }
 
+  protected Shape_Circle makeShape_Circle(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoShape_Circle) {
+      protoShape_Circle.initHashCode(annos,fun,args);
+      return (Shape_Circle) factory.build(protoShape_Circle);
+    }
+  }
+
+  public Shape_Circle makeShape_Circle() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeShape_Circle(funShape_Circle, args, factory.getEmpty());
+  }
+
+  public Shape Shape_CircleFromTerm(aterm.ATerm trm)
+  {
+    java.util.List children = trm.match(patternShape_Circle);
+
+    if (children != null) {
+      Shape tmp = makeShape_Circle();
+      return tmp;
+    }
+    else {
+      return null;
+    }
+  }
+  protected aterm.ATerm toTerm(Shape_CircleImpl arg) {
+    java.util.List args = new java.util.LinkedList();
+    return factory.make(patternShape_Circle, args);
+  }
+
   protected Shape_Diamond makeShape_Diamond(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Diamond) {
       protoShape_Diamond.initHashCode(annos,fun,args);
@@ -926,91 +1172,62 @@ public class MetaGraphFactory
     return factory.make(patternShape_Diamond, args);
   }
 
-  protected Shape_Trapezium makeShape_Trapezium(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    synchronized (protoShape_Trapezium) {
-      protoShape_Trapezium.initHashCode(annos,fun,args);
-      return (Shape_Trapezium) factory.build(protoShape_Trapezium);
+  protected Shape_Egg makeShape_Egg(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoShape_Egg) {
+      protoShape_Egg.initHashCode(annos,fun,args);
+      return (Shape_Egg) factory.build(protoShape_Egg);
     }
   }
 
-  public Shape_Trapezium makeShape_Trapezium() {
+  public Shape_Egg makeShape_Egg() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Trapezium(funShape_Trapezium, args, factory.getEmpty());
+    return makeShape_Egg(funShape_Egg, args, factory.getEmpty());
   }
 
-  public Shape Shape_TrapeziumFromTerm(aterm.ATerm trm)
+  public Shape Shape_EggFromTerm(aterm.ATerm trm)
   {
-    java.util.List children = trm.match(patternShape_Trapezium);
+    java.util.List children = trm.match(patternShape_Egg);
 
     if (children != null) {
-      Shape tmp = makeShape_Trapezium();
+      Shape tmp = makeShape_Egg();
       return tmp;
     }
     else {
       return null;
     }
   }
-  protected aterm.ATerm toTerm(Shape_TrapeziumImpl arg) {
+  protected aterm.ATerm toTerm(Shape_EggImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return factory.make(patternShape_Trapezium, args);
+    return factory.make(patternShape_Egg, args);
   }
 
-  protected Shape_Parallelogram makeShape_Parallelogram(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    synchronized (protoShape_Parallelogram) {
-      protoShape_Parallelogram.initHashCode(annos,fun,args);
-      return (Shape_Parallelogram) factory.build(protoShape_Parallelogram);
+  protected Shape_Ellipse makeShape_Ellipse(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoShape_Ellipse) {
+      protoShape_Ellipse.initHashCode(annos,fun,args);
+      return (Shape_Ellipse) factory.build(protoShape_Ellipse);
     }
   }
 
-  public Shape_Parallelogram makeShape_Parallelogram() {
+  public Shape_Ellipse makeShape_Ellipse() {
     aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_Parallelogram(funShape_Parallelogram, args, factory.getEmpty());
+    return makeShape_Ellipse(funShape_Ellipse, args, factory.getEmpty());
   }
 
-  public Shape Shape_ParallelogramFromTerm(aterm.ATerm trm)
+  public Shape Shape_EllipseFromTerm(aterm.ATerm trm)
   {
-    java.util.List children = trm.match(patternShape_Parallelogram);
+    java.util.List children = trm.match(patternShape_Ellipse);
 
     if (children != null) {
-      Shape tmp = makeShape_Parallelogram();
+      Shape tmp = makeShape_Ellipse();
       return tmp;
     }
     else {
       return null;
     }
   }
-  protected aterm.ATerm toTerm(Shape_ParallelogramImpl arg) {
+  protected aterm.ATerm toTerm(Shape_EllipseImpl arg) {
     java.util.List args = new java.util.LinkedList();
-    return factory.make(patternShape_Parallelogram, args);
-  }
-
-  protected Shape_House makeShape_House(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
-    synchronized (protoShape_House) {
-      protoShape_House.initHashCode(annos,fun,args);
-      return (Shape_House) factory.build(protoShape_House);
-    }
-  }
-
-  public Shape_House makeShape_House() {
-    aterm.ATerm[] args = new aterm.ATerm[] {};
-    return makeShape_House(funShape_House, args, factory.getEmpty());
-  }
-
-  public Shape Shape_HouseFromTerm(aterm.ATerm trm)
-  {
-    java.util.List children = trm.match(patternShape_House);
-
-    if (children != null) {
-      Shape tmp = makeShape_House();
-      return tmp;
-    }
-    else {
-      return null;
-    }
-  }
-  protected aterm.ATerm toTerm(Shape_HouseImpl arg) {
-    java.util.List args = new java.util.LinkedList();
-    return factory.make(patternShape_House, args);
+    return factory.make(patternShape_Ellipse, args);
   }
 
   protected Shape_Hexagon makeShape_Hexagon(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -1042,6 +1259,35 @@ public class MetaGraphFactory
     return factory.make(patternShape_Hexagon, args);
   }
 
+  protected Shape_House makeShape_House(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoShape_House) {
+      protoShape_House.initHashCode(annos,fun,args);
+      return (Shape_House) factory.build(protoShape_House);
+    }
+  }
+
+  public Shape_House makeShape_House() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeShape_House(funShape_House, args, factory.getEmpty());
+  }
+
+  public Shape Shape_HouseFromTerm(aterm.ATerm trm)
+  {
+    java.util.List children = trm.match(patternShape_House);
+
+    if (children != null) {
+      Shape tmp = makeShape_House();
+      return tmp;
+    }
+    else {
+      return null;
+    }
+  }
+  protected aterm.ATerm toTerm(Shape_HouseImpl arg) {
+    java.util.List args = new java.util.LinkedList();
+    return factory.make(patternShape_House, args);
+  }
+
   protected Shape_Octagon makeShape_Octagon(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
     synchronized (protoShape_Octagon) {
       protoShape_Octagon.initHashCode(annos,fun,args);
@@ -1069,6 +1315,122 @@ public class MetaGraphFactory
   protected aterm.ATerm toTerm(Shape_OctagonImpl arg) {
     java.util.List args = new java.util.LinkedList();
     return factory.make(patternShape_Octagon, args);
+  }
+
+  protected Shape_Parallelogram makeShape_Parallelogram(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoShape_Parallelogram) {
+      protoShape_Parallelogram.initHashCode(annos,fun,args);
+      return (Shape_Parallelogram) factory.build(protoShape_Parallelogram);
+    }
+  }
+
+  public Shape_Parallelogram makeShape_Parallelogram() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeShape_Parallelogram(funShape_Parallelogram, args, factory.getEmpty());
+  }
+
+  public Shape Shape_ParallelogramFromTerm(aterm.ATerm trm)
+  {
+    java.util.List children = trm.match(patternShape_Parallelogram);
+
+    if (children != null) {
+      Shape tmp = makeShape_Parallelogram();
+      return tmp;
+    }
+    else {
+      return null;
+    }
+  }
+  protected aterm.ATerm toTerm(Shape_ParallelogramImpl arg) {
+    java.util.List args = new java.util.LinkedList();
+    return factory.make(patternShape_Parallelogram, args);
+  }
+
+  protected Shape_Plaintext makeShape_Plaintext(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoShape_Plaintext) {
+      protoShape_Plaintext.initHashCode(annos,fun,args);
+      return (Shape_Plaintext) factory.build(protoShape_Plaintext);
+    }
+  }
+
+  public Shape_Plaintext makeShape_Plaintext() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeShape_Plaintext(funShape_Plaintext, args, factory.getEmpty());
+  }
+
+  public Shape Shape_PlaintextFromTerm(aterm.ATerm trm)
+  {
+    java.util.List children = trm.match(patternShape_Plaintext);
+
+    if (children != null) {
+      Shape tmp = makeShape_Plaintext();
+      return tmp;
+    }
+    else {
+      return null;
+    }
+  }
+  protected aterm.ATerm toTerm(Shape_PlaintextImpl arg) {
+    java.util.List args = new java.util.LinkedList();
+    return factory.make(patternShape_Plaintext, args);
+  }
+
+  protected Shape_Trapezium makeShape_Trapezium(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoShape_Trapezium) {
+      protoShape_Trapezium.initHashCode(annos,fun,args);
+      return (Shape_Trapezium) factory.build(protoShape_Trapezium);
+    }
+  }
+
+  public Shape_Trapezium makeShape_Trapezium() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeShape_Trapezium(funShape_Trapezium, args, factory.getEmpty());
+  }
+
+  public Shape Shape_TrapeziumFromTerm(aterm.ATerm trm)
+  {
+    java.util.List children = trm.match(patternShape_Trapezium);
+
+    if (children != null) {
+      Shape tmp = makeShape_Trapezium();
+      return tmp;
+    }
+    else {
+      return null;
+    }
+  }
+  protected aterm.ATerm toTerm(Shape_TrapeziumImpl arg) {
+    java.util.List args = new java.util.LinkedList();
+    return factory.make(patternShape_Trapezium, args);
+  }
+
+  protected Shape_Triangle makeShape_Triangle(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
+    synchronized (protoShape_Triangle) {
+      protoShape_Triangle.initHashCode(annos,fun,args);
+      return (Shape_Triangle) factory.build(protoShape_Triangle);
+    }
+  }
+
+  public Shape_Triangle makeShape_Triangle() {
+    aterm.ATerm[] args = new aterm.ATerm[] {};
+    return makeShape_Triangle(funShape_Triangle, args, factory.getEmpty());
+  }
+
+  public Shape Shape_TriangleFromTerm(aterm.ATerm trm)
+  {
+    java.util.List children = trm.match(patternShape_Triangle);
+
+    if (children != null) {
+      Shape tmp = makeShape_Triangle();
+      return tmp;
+    }
+    else {
+      return null;
+    }
+  }
+  protected aterm.ATerm toTerm(Shape_TriangleImpl arg) {
+    java.util.List args = new java.util.LinkedList();
+    return factory.make(patternShape_Triangle, args);
   }
 
   protected Direction_Forward makeDirection_Forward(aterm.AFun fun, aterm.ATerm[] args, aterm.ATermList annos) {
@@ -1429,22 +1791,12 @@ public class MetaGraphFactory
   public Attribute AttributeFromTerm(aterm.ATerm trm)
   {
     Attribute tmp;
-    tmp = Attribute_LabelFromTerm(trm);
+    tmp = Attribute_BoundingBoxFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = Attribute_ShapeFromTerm(trm);
-    if (tmp != null) {
-      return tmp;
-    }
-
-    tmp = Attribute_LocationFromTerm(trm);
-    if (tmp != null) {
-      return tmp;
-    }
-
-    tmp = Attribute_SizeFromTerm(trm);
+    tmp = Attribute_ColorFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
@@ -1454,12 +1806,12 @@ public class MetaGraphFactory
       return tmp;
     }
 
-    tmp = Attribute_BoundingBoxFromTerm(trm);
+    tmp = Attribute_DirectionFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = Attribute_DirectionFromTerm(trm);
+    tmp = Attribute_FillColorFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
@@ -1469,18 +1821,85 @@ public class MetaGraphFactory
       return tmp;
     }
 
-
-    throw new RuntimeException("This is not a Attribute: " + trm);
-  }
-  public Shape ShapeFromTerm(aterm.ATerm trm)
-  {
-    Shape tmp;
-    tmp = Shape_PlaintextFromTerm(trm);
+    tmp = Attribute_LabelFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = Shape_EllipseFromTerm(trm);
+    tmp = Attribute_LocationFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
+    tmp = Attribute_ShapeFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
+    tmp = Attribute_SizeFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
+    tmp = Attribute_StyleFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
+
+    throw new RuntimeException("This is not a Attribute: " + trm);
+  }
+  public Color ColorFromTerm(aterm.ATerm trm)
+  {
+    Color tmp;
+    tmp = Color_RgbFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
+
+    throw new RuntimeException("This is not a Color: " + trm);
+  }
+  public Style StyleFromTerm(aterm.ATerm trm)
+  {
+    Style tmp;
+    tmp = Style_BoldFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
+    tmp = Style_DashedFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
+    tmp = Style_DottedFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
+    tmp = Style_FilledFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
+    tmp = Style_InvisibleFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
+    tmp = Style_SolidFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
+
+    throw new RuntimeException("This is not a Style: " + trm);
+  }
+  public Shape ShapeFromTerm(aterm.ATerm trm)
+  {
+    Shape tmp;
+    tmp = Shape_BoxFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
@@ -1490,37 +1909,17 @@ public class MetaGraphFactory
       return tmp;
     }
 
-    tmp = Shape_EggFromTerm(trm);
-    if (tmp != null) {
-      return tmp;
-    }
-
-    tmp = Shape_TriangleFromTerm(trm);
-    if (tmp != null) {
-      return tmp;
-    }
-
-    tmp = Shape_BoxFromTerm(trm);
-    if (tmp != null) {
-      return tmp;
-    }
-
     tmp = Shape_DiamondFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = Shape_TrapeziumFromTerm(trm);
+    tmp = Shape_EggFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
 
-    tmp = Shape_ParallelogramFromTerm(trm);
-    if (tmp != null) {
-      return tmp;
-    }
-
-    tmp = Shape_HouseFromTerm(trm);
+    tmp = Shape_EllipseFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
@@ -1530,7 +1929,32 @@ public class MetaGraphFactory
       return tmp;
     }
 
+    tmp = Shape_HouseFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
     tmp = Shape_OctagonFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
+    tmp = Shape_ParallelogramFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
+    tmp = Shape_PlaintextFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
+    tmp = Shape_TrapeziumFromTerm(trm);
+    if (tmp != null) {
+      return tmp;
+    }
+
+    tmp = Shape_TriangleFromTerm(trm);
     if (tmp != null) {
       return tmp;
     }
@@ -1665,6 +2089,22 @@ public class MetaGraphFactory
   }
   public Attribute AttributeFromFile(java.io.InputStream stream) throws java.io.IOException {
     return AttributeFromTerm(factory.readFromFile(stream));
+  }
+  public Color ColorFromString(String str)
+  {
+    aterm.ATerm trm = factory.parse(str);
+    return ColorFromTerm(trm);
+  }
+  public Color ColorFromFile(java.io.InputStream stream) throws java.io.IOException {
+    return ColorFromTerm(factory.readFromFile(stream));
+  }
+  public Style StyleFromString(String str)
+  {
+    aterm.ATerm trm = factory.parse(str);
+    return StyleFromTerm(trm);
+  }
+  public Style StyleFromFile(java.io.InputStream stream) throws java.io.IOException {
+    return StyleFromTerm(factory.readFromFile(stream));
   }
   public Shape ShapeFromString(String str)
   {

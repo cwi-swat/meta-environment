@@ -14,31 +14,45 @@ AttributeList.java AttributeListImpl.java\
 AttributeList_EmptyImpl.java AttributeList_Empty.java\
 AttributeList_MultiImpl.java AttributeList_Multi.java\
 Attribute.java AttributeImpl.java\
-Attribute_LabelImpl.java Attribute_Label.java\
-Attribute_ShapeImpl.java Attribute_Shape.java\
-Attribute_LocationImpl.java Attribute_Location.java\
-Attribute_SizeImpl.java Attribute_Size.java\
-Attribute_CurvePointsImpl.java Attribute_CurvePoints.java\
 Attribute_BoundingBoxImpl.java Attribute_BoundingBox.java\
+Attribute_ColorImpl.java Attribute_Color.java\
+Attribute_CurvePointsImpl.java Attribute_CurvePoints.java\
 Attribute_DirectionImpl.java Attribute_Direction.java\
+Attribute_FillColorImpl.java Attribute_FillColor.java\
 Attribute_InfoImpl.java Attribute_Info.java\
+Attribute_LabelImpl.java Attribute_Label.java\
+Attribute_LocationImpl.java Attribute_Location.java\
+Attribute_ShapeImpl.java Attribute_Shape.java\
+Attribute_SizeImpl.java Attribute_Size.java\
+Attribute_StyleImpl.java Attribute_Style.java\
+Color.java ColorImpl.java\
+Color_RgbImpl.java Color_Rgb.java\
+Style.java StyleImpl.java\
+Style_BoldImpl.java Style_Bold.java\
+Style_DashedImpl.java Style_Dashed.java\
+Style_DottedImpl.java Style_Dotted.java\
+Style_FilledImpl.java Style_Filled.java\
+Style_InvisibleImpl.java Style_Invisible.java\
+Style_SolidImpl.java Style_Solid.java\
 Shape.java ShapeImpl.java\
-Shape_PlaintextImpl.java Shape_Plaintext.java\
-Shape_EllipseImpl.java Shape_Ellipse.java\
-Shape_CircleImpl.java Shape_Circle.java\
-Shape_EggImpl.java Shape_Egg.java\
-Shape_TriangleImpl.java Shape_Triangle.java\
 Shape_BoxImpl.java Shape_Box.java\
+Shape_CircleImpl.java Shape_Circle.java\
 Shape_DiamondImpl.java Shape_Diamond.java\
-Shape_TrapeziumImpl.java Shape_Trapezium.java\
-Shape_ParallelogramImpl.java Shape_Parallelogram.java\
-Shape_HouseImpl.java Shape_House.java\
+Shape_EggImpl.java Shape_Egg.java\
+Shape_EllipseImpl.java Shape_Ellipse.java\
 Shape_HexagonImpl.java Shape_Hexagon.java\
+Shape_HouseImpl.java Shape_House.java\
 Shape_OctagonImpl.java Shape_Octagon.java\
+Shape_ParallelogramImpl.java Shape_Parallelogram.java\
+Shape_PlaintextImpl.java Shape_Plaintext.java\
+Shape_TrapeziumImpl.java Shape_Trapezium.java\
+Shape_TriangleImpl.java Shape_Triangle.java\
 Direction.java DirectionImpl.java\
 Direction_ForwardImpl.java Direction_Forward.java\
 Direction_BackImpl.java Direction_Back.java\
-Direction_BothImpl.java Direction_Both.java\
+Direction_BothImpl.java Direction_Both.java
+
+MetaGraphAPI1=\
 Direction_NoneImpl.java Direction_None.java\
 EdgeList.java EdgeListImpl.java\
 EdgeList_EmptyImpl.java EdgeList_Empty.java\
@@ -53,4 +67,4 @@ Point_DefaultImpl.java Point_Default.java
 
 MetaGraphAPI=\
 MetaGraphFactory.java MetaGraphConstructor.java\
-${MetaGraphAPI0} 
+${MetaGraphAPI1} ${MetaGraphAPI0} 

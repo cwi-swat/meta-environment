@@ -53,6 +53,14 @@ implements aterm.ATerm
     return false;
   }
 
+  public boolean isSortColor() {
+    return false;
+  }
+
+  public boolean isSortStyle() {
+    return false;
+  }
+
   public boolean isSortShape() {
     return false;
   }

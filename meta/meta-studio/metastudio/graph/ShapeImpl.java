@@ -21,12 +21,7 @@ abstract public class ShapeImpl extends MetaGraphConstructor
     return true;
   }
 
-  public boolean isPlaintext()
-  {
-    return false;
-  }
-
-  public boolean isEllipse()
+  public boolean isBox()
   {
     return false;
   }
@@ -36,37 +31,17 @@ abstract public class ShapeImpl extends MetaGraphConstructor
     return false;
   }
 
-  public boolean isEgg()
-  {
-    return false;
-  }
-
-  public boolean isTriangle()
-  {
-    return false;
-  }
-
-  public boolean isBox()
-  {
-    return false;
-  }
-
   public boolean isDiamond()
   {
     return false;
   }
 
-  public boolean isTrapezium()
+  public boolean isEgg()
   {
     return false;
   }
 
-  public boolean isParallelogram()
-  {
-    return false;
-  }
-
-  public boolean isHouse()
+  public boolean isEllipse()
   {
     return false;
   }
@@ -76,7 +51,32 @@ abstract public class ShapeImpl extends MetaGraphConstructor
     return false;
   }
 
+  public boolean isHouse()
+  {
+    return false;
+  }
+
   public boolean isOctagon()
+  {
+    return false;
+  }
+
+  public boolean isParallelogram()
+  {
+    return false;
+  }
+
+  public boolean isPlaintext()
+  {
+    return false;
+  }
+
+  public boolean isTrapezium()
+  {
+    return false;
+  }
+
+  public boolean isTriangle()
   {
     return false;
   }

@@ -263,18 +263,24 @@ public class GraphPanel extends JComponent implements Scrollable {
 
         Color node_bg, node_fg, node_border;
 
-        if (selectedNode != null && selectedNode.getId().equals(node.getId())) {
+        if (selectedNode != null
+	    && selectedNode.getId().equals(node.getId())) {
             node_bg = nodeBGSelected;
             node_fg = nodeFGSelected;
             node_border = nodeBorderSelected;
-        } else if (hoveredNode != null && hoveredNode.getId().equals(node.getId())) {
+        } else if (hoveredNode != null
+		   && hoveredNode.getId().equals(node.getId())) {
             node_bg = nodeBGHovered;
             node_fg = nodeFGHovered;
             node_border = nodeBorderHovered;
-        } else {
-            node_bg = nodeBG;
-            node_fg = nodeFG;
-            node_border = nodeBorder;
+	} else {
+	    node_fg = nodeFG;
+
+	    Color borderColor = node.getColor();
+	    node_border = (borderColor == null ? nodeBorder : borderColor);
+
+	    Color fillColor = node.getFillColor();
+	    node_bg = (fillColor == null ? nodeBG : fillColor);
         }
 
         Shape shape = Graph.getNodeShape(node);
@@ -286,7 +292,7 @@ public class GraphPanel extends JComponent implements Scrollable {
         } else if (shape.isDiamond()) {
             paintDiamond(g, x, y, w, h, node_bg, node_border);
         } else {
-            // defautl case, we draw a rectangle
+            // default case, we draw a rectangle
             paintBox(g, x, y, w, h, node_bg, node_border);
         }
 

@@ -20,6 +20,32 @@ abstract public class Node extends NodeImpl {
         return null;
     }
 
+    private Attribute_Color getColorAttribute() {
+        AttributeList attrs = getAttributes();
+        while (!attrs.isEmpty()) {
+            Attribute attr = attrs.getHead();
+            if (attr.isColor()) {
+                return (Attribute_Color) attr;
+            }
+            attrs = attrs.getTail();
+        }
+
+        return null;
+    }
+
+    private Attribute_FillColor getFillColorAttribute() {
+        AttributeList attrs = getAttributes();
+        while (!attrs.isEmpty()) {
+            Attribute attr = attrs.getHead();
+            if (attr.isFillColor()) {
+                return (Attribute_FillColor) attr;
+            }
+            attrs = attrs.getTail();
+        }
+
+        return null;
+    }
+
     private Attribute_Label getLabelAttribute() {
         AttributeList attrs = getAttributes();
         while (!attrs.isEmpty()) {
@@ -118,6 +144,27 @@ abstract public class Node extends NodeImpl {
         }
 
         return label.getLabel();
+    }
+
+    private static java.awt.Color makeColor(Attribute attr) {
+	if (attr == null || !attr.hasColor()) {
+	  return null;
+	}
+	else {
+	  Color color = attr.getColor();
+	  int r = color.getRed();
+	  int g = color.getGreen();
+	  int b = color.getBlue();
+	  return new java.awt.Color(r, g, b);
+	}
+    }
+
+    public java.awt.Color getColor() {
+      return makeColor(getColorAttribute());
+    }
+
+    public java.awt.Color getFillColor() {
+	return makeColor(getFillColorAttribute());
     }
 
     public Node setSize(int width, int height) {
