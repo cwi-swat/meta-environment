@@ -1,6 +1,0 @@
-equations
-
-[eq-1]   Rel1 = BagEE1, Rel2 = BagEE2
-         =========================
-         equalr(Rel1, Rel2) = equal(BagEE1, BagEE2)
-

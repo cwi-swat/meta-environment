@@ -1,4 +1,4 @@
-check-rscript(
+
 int ROOT = 0 
 
 rel[str,int] DEFS  = {<"x", 1>, <"z", 3>, <"x", 4>, <"y", 5>}
@@ -65,9 +65,6 @@ bool C = Bag1 x Bag2 <= Bag2 x Bag1
 
 rel[str,str] C2 = (Bag1 x Bag2)+
 
-%%rel[int,int] C3 = SUCC *
+rel[int,int] C3 = PRED *
 
 int mysize(bag[int] B) = # B
-
-
-)
