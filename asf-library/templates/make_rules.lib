@@ -34,10 +34,11 @@ OBJECTS_REGISTRY=${top_srcdir}/src/objects.lst
 
 BUILT_SOURCES=link-test.c
 
-# create the stub and at the same time register the built-ins
+# create the stub 
 link-test.c: $(MODULES)
 	${GENLINKTEST} "${PACKAGE_BUILTINS}" > $@
 
+# register the built-ins and the source code that implements them
 register: $(PACKAGE_SRC) $(MODULES)
 	${REGISTER} ${BUILTINS_REGISTRY} ${subdir} "${PACKAGE_BUILTINS}"
 	${REGISTER} ${OBJECTS_REGISTRY} ${subdir} "${PACKAGE_OBJECTS}"
