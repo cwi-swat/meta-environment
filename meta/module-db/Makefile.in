@@ -121,4 +121,5 @@ include .depend
 depend: $(CSRC) $(CHDR)
 	$(CC) -MM $(CFLAGS) $(INCLUDES) $(CSRC) > .depend
 
-
+# Tell make that .depend really is depend
+.depend: depend
