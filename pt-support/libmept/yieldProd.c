@@ -34,13 +34,13 @@ static int lengthOfInteger(int ch)
   if (isalnum((char) ch)) {
     return 1;
   }
-  else if (isprint((char) ch) ||
+  else if (isgraph((char) ch) ||
            ch == '\n' ||
            ch == '\t' ||
            ch == ' ') {
     return 2;
   }
- 
+  
   return 4;
 }
 
@@ -168,7 +168,7 @@ static int yieldInteger(int ch, int idx, char *buf, int bufSize)
     buf[idx++] = (char) ch;
     return idx;
   }
-  else if (isprint(ch)) {
+  else if (isgraph(ch)) {
     buf[idx++] = '\\';
     buf[idx++] = (char) ch;
     return idx;
@@ -191,7 +191,7 @@ static int yieldInteger(int ch, int idx, char *buf, int bufSize)
   
   /* create escaped octal number */
   buf[idx++] = '\\';
-  sprintf(buf+idx,"%0o",ch);
+  sprintf(buf+idx,"%03o",ch);
   idx += 3;
 
   return idx;
