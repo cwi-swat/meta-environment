@@ -46,7 +46,7 @@ void DumpAllActions(FILE *out, parse_table *pt)
     DumpOneAction(out, pt, s);
 }
 
-void DoDump(parse_table *pt, int requested)
+void DoDump(parse_table *pt, int requested, ATbool unparsed)
 {
   if(requested >= 0)
     DumpOneAction(stdout, pt, requested);

@@ -29,4 +29,4 @@
 #include "parser.h"
 #include "sglr.h"
 
-void DoDump(parse_table *pt, int requested);
+void DoDump(parse_table *pt, int requested, ATbool unparsed);

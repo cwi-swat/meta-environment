@@ -46,7 +46,7 @@ void DumpAllGotos(FILE *out, parse_table *pt)
     DumpOneGoto(out, pt, s);
 }
 
-void DoDump(parse_table *pt, int requested)
+void DoDump(parse_table *pt, int requested, ATbool unparsed)
 {
   if(requested >= 0)
     DumpOneGoto(stdout, pt, requested);

@@ -28,12 +28,14 @@
 
 #include "parser.h"
 #include "sglr.h"
+#include "MEPT.h"
 
-void DoDump(parse_table *pt, int requested);
+void DoDump(parse_table *pt, int requested, ATbool unparsed);
 
 void usage(char *prg)
 {
-  fprintf(stderr, "usage: %s [parse-table [state]]\n", prg);
+  fprintf(stderr, "usage: %s [-u] [parse-table [state]]\n", prg);
+  fprintf(stderr, "\t-u:\tUnparse productions\n\n");
   fprintf(stderr, "note that no -at-xxx options can be used, "
           "except -at-help :-(\n");
   exit(0);
@@ -44,23 +46,33 @@ int main (int argc, char **argv)
   ATerm       bottomOfStack;
   char        *err;
   char        *pt_name;
+  ATbool      unparsed = ATfalse;
   language    lang_name;
   parse_table *pt;
   int         requested = -1;
+  int         lcv;
 
-  if(argc == 2 && strcmp(argv[1], "-h") == 0) {
-    usage(argv[0]);
+  for(lcv = 0; lcv < argc; lcv++) {
+    if (!strcmp(argv[lcv],"-u")) {
+      unparsed = ATtrue;
+    }
+    if (!strcmp(argv[lcv],"-h")) {
+      usage(argv[0]);
+      exit(0);
+    }
   }
 
   ATinit(argc, argv, &bottomOfStack);     /* Initialize Aterm library */
-  switch(argc) {
+  PT_initMEPTApi();
+
+  switch(argc - (unparsed ? 1 : 0)) {
     case 1:
       pt_name = "-";
       break;
     case 3:
-      requested = atoi(argv[2]);
+      requested = atoi(argv[argc + (unparsed ? 1 : 0)]);
     default:
-      pt_name = argv[1];
+      pt_name = argv[1 + (unparsed ? 1 : 0)];
       break;
   }
 
@@ -75,6 +87,6 @@ int main (int argc, char **argv)
     ATfprintf(stderr, "failed to find parse table for languate %s\n", pt_name);
     return 1;
   }
-  DoDump(pt, requested);
+  DoDump(pt, requested, unparsed);
   return 0;
 }

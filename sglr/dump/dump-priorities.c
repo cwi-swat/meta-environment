@@ -40,7 +40,7 @@ void DumpAllPriorities(FILE *out, parse_table *pt)
     DumpOnePriority(out, pt, l);
 }
 
-void DoDump(parse_table *pt, int requested)
+void DoDump(parse_table *pt, int requested, ATbool unparsed)
 {
   if(requested >= 0)
     DumpOnePriority(stdout, pt, requested);
