@@ -9,8 +9,11 @@ exports
     extractControlFlow(Tscript, RSTORE) -> RSTORE {traversal(accu, top-down, continue)}
     extractControlFlow(ProcessExpr, RSTORE) -> RSTORE {traversal(accu, top-down, continue)}
 
+hiddens
   context-free syntax
-    addControlFlow({ProcessExpr ","}*, RSTORE) -> RSTORE
+    extractProcessExprFlow({ProcessExpr ","}*, RSTORE) -> RSTORE
+    addControlFlow(ProcessExpr, ProcessExpr, RSTORE) -> RSTORE
+    removeif(ProcessExpr) -> ProcessExpr
 
 hiddens
   variables
@@ -20,4 +23,5 @@ hiddens
     "$ProcessExprId"[0-9]* -> Location
     "$ProcessExprStr"[0-9]* -> StrCon
     "$Rstore"[0-9]* -> RSTORE
+    "$Term"[0-9]* -> Term
     "$Tuple"[0-9]* -> Tuple
