@@ -18,8 +18,8 @@ context-free syntax
 "rec-msg""("AtomArgs")" -> Atom {cons("rec-msg")}
 "snd-eval""("AtomArgs")" -> Atom {cons("snd-eval")}
 "rec-value""("AtomArgs")" -> Atom {cons("rec-value")}
-"rec-event""("AtomArgs")" -> Atom {cons("rec-event")}
-"snd-ack-event""("AtomArgs")" -> Atom {cons("snd-ack-event")}
+"rec-event""("Var"," AtomArgs")" -> Atom {cons("rec-event")}
+"snd-ack-event""("Var"," AtomArgs")" -> Atom {cons("snd-ack-event")}
 "snd-do""("AtomArgs")" -> Atom {cons("snd-do")}
 "subscribe""("AtomArgs")" -> Atom {cons("subscribe")}
 "unsubscribe""("AtomArgs")" -> Atom {cons("unsubscribe")}

@@ -1,6 +1,6 @@
 module Terms
 
-imports asf/syntax/Comments
+imports basic/Whitespace
 imports basic/Booleans
 imports basic/Integers
 

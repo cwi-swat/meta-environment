@@ -21,10 +21,8 @@ exports context-free syntax
   ProcessExpr
 "endlet" -> ProcessBody {cons("letBody")}
 
-hiddens
-  sorts ProcessDef
-
 exports
+  sorts ProcessDef
   context-free syntax
 "process" ProcessSignature "is"
   ProcessBody -> ProcessDef {cons("procDef")}

@@ -8,55 +8,55 @@ imports
 exports
   sorts ProcessFactsSet
   context-free syntax
-    Set[[ProcessFacts]] -> ProcessFactsSet
+    Set[[ProcessFacts]]                                                   -> ProcessFactsSet
 
   context-free syntax
-    find-process-facts( Tscript ) -> ProcessFactsSet
+    find-process-facts( Tscript )                                         -> ProcessFactsSet
 
 hiddens
   context-free syntax
-    find-process-facts( TscriptDef*, ProcessFactsSet ) -> ProcessFactsSet {traversal(accu,top-down,break)}
-    find-process-facts( ProcessDef, ProcessFactsSet )  -> ProcessFactsSet {traversal(accu,top-down,break)}
+    find-process-facts( TscriptDef*, ProcessFactsSet )                    -> ProcessFactsSet {traversal(accu,top-down,break)}
+    find-process-facts( ProcessDef, ProcessFactsSet )                     -> ProcessFactsSet {traversal(accu,top-down,break)}
 
   context-free syntax
     find-facts-in-process(ProcessBody, ProcessFacts, 
-                          {FormalParam ","}*, {VarDecl ","}*) -> ProcessFacts {traversal(accu,top-down,continue)}
+                          {FormalParam ","}*, {VarDecl ","}*)             -> ProcessFacts {traversal(accu,top-down,continue)}
     find-facts-in-process(ProcessCreation, ProcessFacts,  
-                          {FormalParam ","}*, {VarDecl ","}*) -> ProcessFacts {traversal(accu,top-down,continue)}
+                          {FormalParam ","}*, {VarDecl ","}*)             -> ProcessFacts {traversal(accu,top-down,continue)}
     find-facts-in-process(ProcessInvocation, ProcessFacts,  
-                          {FormalParam ","}*, {VarDecl ","}*) -> ProcessFacts {traversal(accu,top-down,continue)}
+                          {FormalParam ","}*, {VarDecl ","}*)             -> ProcessFacts {traversal(accu,top-down,continue)}
     find-facts-in-process(Atom, ProcessFacts,  
-                          {FormalParam ","}*, {VarDecl ","}*) -> ProcessFacts {traversal(accu,top-down,continue)}
+                          {FormalParam ","}*, {VarDecl ","}*)             -> ProcessFacts {traversal(accu,top-down,continue)}
 
   context-free syntax
-    make-signature(Atom, {FormalParam ","}*, {VarDecl ","}* )        -> Fact
+    make-signature(Atom, {FormalParam ","}*, {VarDecl ","}* )             -> Fact
     make-signature-term({Term ","}+, {FormalParam ","}*, {VarDecl ","}* ) -> {Term ","}+ {traversal(trafo,top-down,break)}
     make-signature-term(Term, {FormalParam ","}*, {VarDecl ","}* )        -> Term {traversal(trafo,top-down,break)}
 
   variables
-    "TscriptDefs"                               -> TscriptDef*
-    "ProcessInvocations"                          -> {ProcessInvocation ","}+
-    "ProcessCreations"                          -> {ProcessCreation ","}+
-    "ProcessFacts"[0-9\']*                      -> ProcessFacts
-    "StartupFacts"[0-9\']*                      -> StartupFacts
-    "CollectedFacts"[0-9\']*                      -> ProcessFacts
-    "ProcessFactsSet"[0-9\']*                   -> Set[[ProcessFacts]]
-    "ProcessSignature"                                 -> ProcessSignature
-    "ProcessName"                                 -> ProcessName
-    "ProcessNames"                                -> ProcessName*
-    "FormalParam"                                     -> FormalParam
-    "FormalParams"[0-9]*                              -> {FormalParam ","}*
-    "VarDecl"                                     -> VarDecl
-    "VarDecls"[0-9]*                              -> {VarDecl ","}*
-    "ProcessBody"                                 -> ProcessBody
-    "ProcessExpr"                                 -> ProcessExpr
-    "GenVar"                                      -> GenVar
-    "Id"                                          -> Id
-    "Term"[0-9]*                                  -> Term
-    "Terms"[0-9]*                                 -> {Term ","}*
-    "TermPlus"[0-9]*                              -> {Term ","}+
-    "TermList"                                    -> TermList
-    "Table"[0-9\']*                               -> Table[[Var # Term]]
-    "Var"                                         -> Var
-    "SendFact"[0-9]*                              -> SendFact
-    "RecFact"[0-9]*                              -> ReceiveFact
+    "TscriptDefs"                                                         -> TscriptDef*
+    "ProcessInvocations"                                                  -> {ProcessInvocation ","}+
+    "ProcessCreations"                                                    -> {ProcessCreation ","}+
+    "ProcessFacts"[0-9\']*                                                -> ProcessFacts
+    "StartupFacts"[0-9\']*                                                -> StartupFacts
+    "CollectedFacts"[0-9\']*                                              -> ProcessFacts
+    "ProcessFactsSet"[0-9\']*                                             -> Set[[ProcessFacts]]
+    "ProcessSignature"                                                    -> ProcessSignature
+    "ProcessName"                                                         -> ProcessName
+    "ProcessNames"                                                        -> ProcessName*
+    "FormalParam"                                                         -> FormalParam
+    "FormalParams"[0-9]*                                                  -> {FormalParam ","}*
+    "VarDecl"                                                             -> VarDecl
+    "VarDecls"[0-9]*                                                      -> {VarDecl ","}*
+    "ProcessBody"                                                         -> ProcessBody
+    "ProcessExpr"                                                         -> ProcessExpr
+    "GenVar"                                                              -> GenVar
+    "Id"                                                                  -> Id
+    "Term"[0-9]*                                                          -> Term
+    "Terms"[0-9]*                                                         -> {Term ","}*
+    "TermPlus"[0-9]*                                                      -> {Term ","}+
+    "TermList"                                                            -> TermList
+    "Table"[0-9\']*                                                       -> Table[[Var # Term]]
+    "Var"                                                                 -> Var
+    "SendFact"[0-9]*                                                      -> SendFact
+    "RecFact"[0-9]*                                                       -> ReceiveFact
