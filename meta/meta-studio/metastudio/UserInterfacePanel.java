@@ -78,10 +78,6 @@ public abstract class UserInterfacePanel extends JPanel implements UserInterface
         // intentionally left empty
     }
 
-    public void newGraph(ATerm t0) {
-        // intentionally left empty
-    }
-
     public void displayGraph(String s0, ATerm t1) {
         // intentionally left empty
     }
@@ -90,7 +86,7 @@ public abstract class UserInterfacePanel extends JPanel implements UserInterface
         // intentionally left empty
     }
 
-    public void graphLayouted(String s0, ATerm t1) {
+    public void renderGraph(String s0, ATerm t1) {
         // intentionally left empty
     }
 

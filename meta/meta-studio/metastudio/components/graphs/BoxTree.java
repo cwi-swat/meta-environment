@@ -21,70 +21,69 @@ import aterm.ATermFactory;
 import aterm.pure.PureFactory;
 
 public class BoxTree extends UserInterfacePanel {
-    private MetaGraphFactory factory;
-    private JPanel rootPanel;
+	private MetaGraphFactory factory;
+	private JPanel rootPanel;
 
-    public BoxTree(ATermFactory factory, MultiBridge bridge) {
-        super(factory, bridge);
-        this.factory = new MetaGraphFactory((PureFactory) factory);
+	public BoxTree(ATermFactory factory, MultiBridge bridge) {
+		super(factory, bridge);
+		this.factory = new MetaGraphFactory((PureFactory) factory);
 
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-        rootPanel = new JPanel();
-        rootPanel.setBackground(Color.white);
-        JScrollPane scrolledPane = new JScrollPane(rootPanel);
-        JViewport view = scrolledPane.getViewport();
-        view.setBackground(Preferences.getColor("box.background"));
-        add(scrolledPane);
-    }
+		rootPanel = new JPanel();
+		rootPanel.setBackground(Color.white);
+		JScrollPane scrolledPane = new JScrollPane(rootPanel);
+		JViewport view = scrolledPane.getViewport();
+		view.setBackground(Preferences.getColor("box.background"));
+		add(scrolledPane);
+	}
 
-    public void displayGraph(String id, ATerm graphTerm) {
-        if (id.equals(getId())) {
-            Graph graph = factory.GraphFromTerm(graphTerm);
-            setGraph(graph);
-            repaint();
-        }
-    }
+	public void displayGraph(String id, ATerm graphTerm) {
+		if (id.equals(getId())) {
+			Graph graph = factory.GraphFromTerm(graphTerm);
+			setGraph(graph);
+			repaint();
+		}
+	}
 
-    private String getId() {
-        return "parsetree";
-    }
+	private String getId() {
+		return "parsetree";
+	}
 
-    private void setGraph(Graph graph) {
-        rootPanel.removeAll();
-        Node root = Graph.getRootNode(graph);
+	private void setGraph(Graph graph) {
+		rootPanel.removeAll();
+		Node root = Graph.getRootNode(graph);
 
-        if (root != null) {
-            rootPanel.add(buildHierarchy(graph, root));
-        }
+		if (root != null) {
+			rootPanel.add(buildHierarchy(graph, root));
+		}
 
-        repaint();
-    }
+		repaint();
+	}
 
-    // TODO: remove recursion here, it gets too deep!
-    private JComponent buildHierarchy(Graph graph, Node node) {
-        List children = Graph.getChildren(graph, node);
+	// TODO: remove recursion here, it gets too deep!
+	private JComponent buildHierarchy(Graph graph, Node node) {
+		List children = Graph.getChildren(graph, node);
 
-        if (children.size() == 0) {
-        	if (Graph.getNodeShape(node).isEllipse()) {
-              return new NodeBox(getBridge(), node, true);
-        	}
-        	else {
-        		return null;
-        	}
-        } else {
-            NodeBox box = new NodeBox(getBridge(), node, false);
-            Iterator iter = children.iterator();
+		if (children.size() == 0) {
+			if (Graph.getNodeShape(node).isEllipse()) {
+				return new NodeBox(getBridge(), node, true);
+			} else {
+				return null;
+			}
+		} else {
+			NodeBox box = new NodeBox(getBridge(), node, false);
+			Iterator iter = children.iterator();
 
-            while (iter.hasNext()) {
-                Node child = (Node) iter.next();
-                JComponent tree = buildHierarchy(graph, child);
-                
-                if (tree != null) {
-                  box.add(tree);
-                }
-            }
-            return box;
-        }
-    }
+			while (iter.hasNext()) {
+				Node child = (Node) iter.next();
+				JComponent tree = buildHierarchy(graph, child);
+
+				if (tree != null) {
+					box.add(tree);
+				}
+			}
+			return box;
+		}
+	}
 }

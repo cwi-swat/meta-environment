@@ -24,15 +24,6 @@ public class MultiBridge extends UserInterfaceTool {
         getToolComponents().add(new UserInterfaceBridge(factory, tool));
     }
     
-    public void newGraph(ATerm importRelations) {
-        Iterator iter = getToolComponents().iterator();
-
-        while (iter.hasNext()) {
-            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.newGraph(importRelations);
-        }
-    }
-
     public void displayGraph(String id, ATerm graphTerm) {
         Iterator iter = getToolComponents().iterator();
 
@@ -42,12 +33,12 @@ public class MultiBridge extends UserInterfaceTool {
         }
     }
 
-    public void graphLayouted(String id, ATerm graphTerm) {
+    public void renderGraph(String id, ATerm graphTerm) {
         Iterator iter = getToolComponents().iterator();
 
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-            tif.graphLayouted(id, graphTerm);
+            tif.renderGraph(id, graphTerm);
         }
     }
     

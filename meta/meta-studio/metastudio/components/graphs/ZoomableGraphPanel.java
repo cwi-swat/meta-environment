@@ -27,164 +27,157 @@ import aterm.ATerm;
 
 // TODO: extract functionality from the GraphPanel that should be here.
 public class ZoomableGraphPanel extends UserInterfacePanel {
-    private int SLIDER_STEP_SIZE;
-    private int SLIDER_MINIMUM;
-    private int SLIDER_MAXIMUM;
-    private int SLIDER_DEFAULT;
-    private GraphPanel graphPanel;
-    private JSlider slider;
-    private MetaGraphFactory factory;
-    private JViewport view;
-    private JLabel zoomToFit;
+	private int SLIDER_STEP_SIZE;
+	private int SLIDER_MINIMUM;
+	private int SLIDER_MAXIMUM;
+	private int SLIDER_DEFAULT;
+	private GraphPanel graphPanel;
+	private JSlider slider;
+	private MetaGraphFactory factory;
+	private JViewport view;
+	private JLabel zoomToFit;
 
-    public ZoomableGraphPanel(
-        MetaGraphFactory factory,
-        MultiBridge bridge,
-        String id) {
-        super(factory.getPureFactory(), bridge);
-        this.factory = factory;
+	public ZoomableGraphPanel(MetaGraphFactory factory, MultiBridge bridge,
+			String id) {
+		super(factory.getPureFactory(), bridge);
+		this.factory = factory;
 
-        graphPanel = new GraphPanel(id);
+		graphPanel = new GraphPanel(id);
 
-        slider = createSlider();
-        setSliderToolTip();
-        MouseWheelListener wheel = new MouseWheelListener() {
-            public void mouseWheelMoved(MouseWheelEvent e) {
-                slider.setValue(slider.getValue() - e.getUnitsToScroll());
-            }
-        };
+		slider = createSlider();
+		setSliderToolTip();
+		MouseWheelListener wheel = new MouseWheelListener() {
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				slider.setValue(slider.getValue() - e.getUnitsToScroll());
+			}
+		};
 
-        JScrollPane scrolledPane = new JScrollPane(graphPanel);
-        view = scrolledPane.getViewport();
-        
-        Color bgcolor = Preferences.getColor("graph.background");
+		JScrollPane scrolledPane = new JScrollPane(graphPanel);
+		view = scrolledPane.getViewport();
+
+		Color bgcolor = Preferences.getColor("graph.background");
 		view.setBackground(bgcolor);
-        view.addMouseWheelListener(wheel);
+		view.addMouseWheelListener(wheel);
 
-        add(scrolledPane, BorderLayout.CENTER);
-        
-        JPanel sliderPanel = new JPanel();
-        sliderPanel.setLayout(new BorderLayout());
-        
-        zoomToFit = new JLabel("Z",JLabel.CENTER);
-        zoomToFit.setBackground(bgcolor);
-        zoomToFit.addMouseListener(new MouseInputAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                int scale = graphPanel.getZoomToFitFactor(view.getVisibleRect());
-                slider.setValue(Math.min(scale, SLIDER_MAXIMUM));
-            }
-        });
-        zoomToFit.setToolTipText("Zoom to fit");
-        sliderPanel.add(zoomToFit, BorderLayout.NORTH);
-        sliderPanel.add(slider, BorderLayout.CENTER);
-        sliderPanel.setBackground(bgcolor);
-        
-        add(sliderPanel, BorderLayout.WEST);
-        
+		add(scrolledPane, BorderLayout.CENTER);
 
-        scrolledPane.getViewport().addMouseWheelListener(wheel);
-        graphPanel.setScale(Preferences.getInteger("graph.scale.default"));
-    }
-    
-    public MetaGraphFactory getGraphFactory() {
-        return factory;
-    }
-    
-    private void setSliderToolTip() {
-        slider.setToolTipText("Zoom" + slider.getValue() + "%");
-    }
+		JPanel sliderPanel = new JPanel();
+		sliderPanel.setLayout(new BorderLayout());
 
-    private JSlider createSlider() {
-        SLIDER_MINIMUM = Preferences.getInteger("graph.scale.minimum");
-        SLIDER_MAXIMUM = Preferences.getInteger("graph.scale.maximum");
-        SLIDER_STEP_SIZE = Preferences.getInteger("graph.scale.stepsize");
-        SLIDER_DEFAULT = Preferences.getInteger("graph.scale.default");
-        slider = new JSlider(SLIDER_MINIMUM, SLIDER_MAXIMUM, SLIDER_STEP_SIZE);
-        slider.setOrientation(SwingConstants.VERTICAL);
-        slider.setBackground(Preferences.getColor("graph.scale.background"));
-        slider.setValue(SLIDER_DEFAULT);
+		zoomToFit = new JLabel("Z", JLabel.CENTER);
+		zoomToFit.setBackground(bgcolor);
+		zoomToFit.addMouseListener(new MouseInputAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int scale = graphPanel
+						.getZoomToFitFactor(view.getVisibleRect());
+				slider.setValue(Math.min(scale, SLIDER_MAXIMUM));
+			}
+		});
+		zoomToFit.setToolTipText("Zoom to fit");
+		sliderPanel.add(zoomToFit, BorderLayout.NORTH);
+		sliderPanel.add(slider, BorderLayout.CENTER);
+		sliderPanel.setBackground(bgcolor);
 
-        slider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                graphPanel.setScale(slider.getValue());
-                setSliderToolTip();
-                graphPanel.setSelectedNode(graphPanel.getSelectedNode());
-                graphPanel.setToolTipEnabled(slider.getValue() < 100);
-            }
-        });
+		add(sliderPanel, BorderLayout.WEST);
 
-        return slider;
-    }
+		scrolledPane.getViewport().addMouseWheelListener(wheel);
+		graphPanel.setScale(Preferences.getInteger("graph.scale.default"));
+	}
 
-    public void displayGraph(String id, ATerm graphTerm) {
-        if (id.equals(getId())) {
-            Graph graph = factory.GraphFromTerm(graphTerm);
-            layoutGraph(graph);
-        }
-        
-        fireValueChangedListener();
-    }
+	public MetaGraphFactory getGraphFactory() {
+		return factory;
+	}
 
-    public void layoutGraph(Graph graph) {
-        final FontMetrics metrics =
-            graphPanel.getFontMetrics(Preferences.getFont(GraphPanel.PREF_NODE_FONT));
+	private void setSliderToolTip() {
+		slider.setToolTipText("Zoom" + slider.getValue() + "%");
+	}
 
-        NodeSizer sizer = new NodeSizer() {
-            public int getWidth(Node node) {
-                return metrics.stringWidth(node.getLabel())
-                    + Preferences.getInteger("graph.node.border.width") * 2;
-            }
-            public int getHeight(Node node) {
-                return metrics.getHeight()
-                    + Preferences.getInteger("graph.node.border.height") * 2;
-            }
-        };
+	private JSlider createSlider() {
+		SLIDER_MINIMUM = Preferences.getInteger("graph.scale.minimum");
+		SLIDER_MAXIMUM = Preferences.getInteger("graph.scale.maximum");
+		SLIDER_STEP_SIZE = Preferences.getInteger("graph.scale.stepsize");
+		SLIDER_DEFAULT = Preferences.getInteger("graph.scale.default");
+		slider = new JSlider(SLIDER_MINIMUM, SLIDER_MAXIMUM, SLIDER_STEP_SIZE);
+		slider.setOrientation(SwingConstants.VERTICAL);
+		slider.setBackground(Preferences.getColor("graph.scale.background"));
+		slider.setValue(SLIDER_DEFAULT);
 
-        graph = orderNodes(graph);
-        graph = sizeNodes(graph, sizer);
+		slider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				graphPanel.setScale(slider.getValue());
+				setSliderToolTip();
+				graphPanel.setSelectedNode(graphPanel.getSelectedNode());
+				graphPanel.setToolTipEnabled(slider.getValue() < 100);
+			}
+		});
 
-        postEvent(
-            getFactory().make("layout-graph(<str>,<term>)", getId(), graph.toTerm()));
-    }
-    
-    protected Graph orderNodes(Graph graph) {
-        return graph;
-    }
-    
-    protected Graph sizeNodes(Graph graph, NodeSizer sizer) {
-        return graph.sizeNodes(sizer);
-    }
-    
-    public void graphLayouted(String id, ATerm graphTerm) {
-        if (id.equals(getId())) {
-            Graph graph = factory.GraphFromTerm(graphTerm);
-            setGraph(graph);
-            setVisible(true);
-            graphPanel.repaint();
-        }
-    }
+		return slider;
+	}
 
-    public GraphPanel getGraphPanel() {
-        return graphPanel;
-    }
+	public void displayGraph(String id, ATerm graphTerm) {
+		if (id.equals(getId())) {
+			Graph graph = factory.GraphFromTerm(graphTerm);
+			setGraph(graph);
+			setVisible(true);
+			graphPanel.repaint();
+		}
 
-    public String getId() {
-        return graphPanel.getId();
-    }
+		fireValueChangedListener();
+	}
 
-    public Node getNodeAt(int x, int y) {
-        return graphPanel.getNodeAt(x, y);
-    }
+	public void renderGraph(String id, ATerm graphTerm) {
+		Graph graph = factory.GraphFromTerm(graphTerm);
+		final FontMetrics metrics = graphPanel.getFontMetrics(Preferences
+				.getFont(GraphPanel.PREF_NODE_FONT));
 
-    public void setDragEnabled(boolean on) {
-        graphPanel.setDragEnabled(on);
-    }
+		NodeSizer sizer = new NodeSizer() {
+			public int getWidth(Node node) {
+				return metrics.stringWidth(node.getLabel())
+						+ Preferences.getInteger("graph.node.border.width") * 2;
+			}
+			public int getHeight(Node node) {
+				return metrics.getHeight()
+						+ Preferences.getInteger("graph.node.border.height")
+						* 2;
+			}
+		};
 
-    public void setGraph(Graph graph) {
-        graphPanel.setGraph(graph);
-    }
+		graph = orderNodes(graph);
+		graph = sizeNodes(graph, sizer);
 
-    public int getIndex() {
-        return graphPanel.getIndex();
-    }
+		postEvent(getFactory().make("graph-rendered(<str>,<term>)", getId(),
+				graph.toTerm()));
+	}
+
+	protected Graph orderNodes(Graph graph) {
+		return graph;
+	}
+
+	protected Graph sizeNodes(Graph graph, NodeSizer sizer) {
+		return graph.sizeNodes(sizer);
+	}
+
+	public GraphPanel getGraphPanel() {
+		return graphPanel;
+	}
+
+	public String getId() {
+		return graphPanel.getId();
+	}
+
+	public Node getNodeAt(int x, int y) {
+		return graphPanel.getNodeAt(x, y);
+	}
+
+	public void setDragEnabled(boolean on) {
+		graphPanel.setDragEnabled(on);
+	}
+
+	public void setGraph(Graph graph) {
+		graphPanel.setGraph(graph);
+	}
+
+	public int getIndex() {
+		return graphPanel.getIndex();
+	}
 }

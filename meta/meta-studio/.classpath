@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-    <classpathentry kind="src" path=""/>
-    <classpathentry kind="var" path="JRE_LIB" sourcepath="JRE_SRC"/>
-    <classpathentry kind="src" path="/aterm-java"/>
-    <classpathentry kind="src" path="/java-adapter"/>
-    <classpathentry kind="src" path="/JJTraveler"/>
-    <classpathentry kind="src" path="/shared-objects"/>
-    <classpathentry kind="output" path=""/>
+	<classpathentry kind="src" path=""/>
+	<classpathentry sourcepath="JRE_SRC" kind="var" path="JRE_LIB"/>
+	<classpathentry kind="src" path="/aterm-java"/>
+	<classpathentry kind="src" path="/java-adapter"/>
+	<classpathentry kind="src" path="/JJTraveler"/>
+	<classpathentry kind="src" path="/shared-objects"/>
+	<classpathentry kind="lib" path="/error-support/lib/errorapi-0.2.1.jar"/>
+	<classpathentry kind="output" path=""/>
 </classpath>
