@@ -428,12 +428,21 @@ char* create_compound_module_name(const char* path, const char *moduleName)
   char *longest = "";
   int len;
 
-  assert(pathcpy && tmp && "out of memory");
+  if (tmp == NULL) {
+    ATerror("out of memory");
+    return NULL;
+  }
+
+  if (pathcpy == NULL) {
+    return NULL;
+  }
+
   tmp[0] = '\0';
 
   pathcpy[strlen(pathcpy) - strlen(moduleName)] = '\0';
 
   /* find the longest search path that matches the path of the new module */
+
   for (--p; p >= 0; p--) {
     if (strlen(paths[p]) < strlen(pathcpy)) {
       char save = pathcpy[strlen(paths[p])];
@@ -580,6 +589,8 @@ ATerm create_empty_rules_section(int cid, char *name, char *syntaxPath)
 
 /*}}}  */
 
+/*{{{  char* normalize_filename(const char *path) */
+
 static char* normalize_filename(const char *path)
 {
   int i;
@@ -588,6 +599,8 @@ static char* normalize_filename(const char *path)
   char *newprefix = NULL;
   char *newpath = NULL;
 
+  ATwarning("normalize_filename: %s\n", path);
+
   for (i = len; i >= 0 && path[i] != '/' && path[i] != '\\'; i--);
 
   prefix = strdup(path);
@@ -595,9 +608,17 @@ static char* normalize_filename(const char *path)
     ATerror("normalize_filename: out of memory.\n");
     return NULL;
   }
-  prefix[i] = '\0';
+
+  prefix[i >= 0 ? i : 0] = '\0';
+
+  /* if the path is empty, we assume the current directory */
+  if (strlen(prefix) == 0) {
+    free(prefix);
+    prefix = strdup(".");
+  }
 
   newprefix = expand_path(prefix);
+
   if (newprefix != NULL) {
     newpath = (char*) malloc(strlen(newprefix) + (len - i) + 1);
 
@@ -612,8 +633,11 @@ static char* normalize_filename(const char *path)
   }
   free(prefix);
 
+
   return newpath;
 }
+
+/*}}}  */
 
 /*{{{  ATerm open_file(int cid, char *path) */
 
