@@ -26,6 +26,7 @@ equations
 
 [ruvp-0]
   get-variable-declarations($ProcessDef) = $VarDecls,
+  $VarDecls != ,
   ruv-var-decls($VarDecls, $Area) = $VarDecls2,
   set-variable-declarations($ProcessDef, $VarDecls2) = $ProcessDef2
   ===>
@@ -61,6 +62,10 @@ equations
   get-variable-declarations($ProcessBody) =
 
 [svdb-0]
+  set-variable-declarations(let $VarDecls in $ProcessExpr endlet, )
+  = $ProcessExpr
+
+[svdb-1]
   set-variable-declarations(let $VarDecls in $ProcessExpr endlet, $VarDecls2)
   = let $VarDecls2 in $ProcessExpr endlet
 
