@@ -1,5 +1,10 @@
 # $Id$
 
+2003/06/03 (iversen@cwi.nl)
+ * made menuitems in MetaStudio configurable with button-scripts.
+ * added some new button actions to support this.
+ * added MetaStudio menuitems to standard.buttons.
+
 2003/06/03 (markvdb@cwi.nl)
  * First refactoring operation (add-import) enabled.
 
