@@ -12,6 +12,7 @@ mydir=`pwd`
 languages=$mydir/lang-types
 tables=$mydir/tables
 terms=$mydir/terms
+errterms=$mydir/erroneous
 
 extensions=`egrep -v '^#' $languages |cut -f1`
 
@@ -25,27 +26,47 @@ Notify () {
 for ext in $extensions
 do
 	files=`ls $terms/*.$ext 2>/dev/null`
+	errfiles=`ls $errterms/*.$ext 2>/dev/null`
 	lang=`egrep "^$ext" $languages | cut -f2`
 	ptbl=$tables/$lang.tbl
+
         for file in $files
         do
 		base=`basename $file`
 		dir=`dirname $file`
 		out=$dir/`basename $base .$ext`.asfix2
-		if sglr -p $ptbl -i $file -to $out
+		if $SGLR -p $ptbl -i $file -to $out
 		then
+			Notify "Regression test for valid term $base \c"
 	                if diff -w $out $out.org	> /dev/null 2>&1
 	                then
-		                Notify "Regression test for $base succeeded."
+		                Notify "succeeded."
 		                rm -f $out
 	                else
-		                Notify "Regression test for $base failed."
+		                Notify "failed."
 				ERROR=1
 	                fi
 		else
 			echo "Error parsing $file!"	>&2
 			ERROR=1
 		fi
+	done
+
+        for file in $errfiles
+        do
+		base=`basename $file`
+		dir=`dirname $file`
+		out=$dir/`basename $base .$ext`.asfix2
+		$SGLR -p $ptbl -i $file -to $out
+		Notify "Regression test for error term $base \c"
+	        if diff -w $out $out.org	> /dev/null 2>&1
+	        then
+		        Notify "succeeded."
+		        rm -f $out
+	        else
+		        Notify "failed."
+			ERROR=1
+	        fi
 	done
 done
 

@@ -1,0 +1,1444 @@
+
+
+
+parse-table ( 
+
+
+
+0 , 
+
+
+[ 
+
+
+label ( 
+
+
+prod ( 
+
+
+[ 
+
+
+cf ( 
+
+
+layout ) , 
+
+
+cf ( 
+
+
+layout ) ] , 
+
+
+cf ( 
+
+
+layout ) , 
+
+
+attrs ( 
+
+
+[ 
+
+
+atr ( 
+
+
+"left" ) ] ) ) , 
+
+
+
+264 ) , 
+
+
+label ( 
+
+
+prod ( 
+
+
+[ 
+
+
+cf ( 
+
+
+layout ) ] , 
+
+
+cf ( 
+
+
+opt ( 
+
+
+layout ) ) , 
+
+
+no-attrs ) , 
+
+
+
+263 ) , 
+
+
+label ( 
+
+
+prod ( 
+
+
+[ ] , 
+
+
+cf ( 
+
+
+opt ( 
+
+
+layout ) ) , 
+
+
+no-attrs ) , 
+
+
+
+262 ) , 
+
+
+label ( 
+
+
+prod ( 
+
+
+[ 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+97 ] ) ] , 
+
+
+lit ( 
+
+
+"a" ) , 
+
+
+no-attrs ) , 
+
+
+
+261 ) , 
+
+
+label ( 
+
+
+prod ( 
+
+
+[ 
+
+
+lit ( 
+
+
+"a" ) ] , 
+
+
+cf ( 
+
+
+sort ( 
+
+
+"A" ) ) , 
+
+
+attrs ( 
+
+
+[ 
+
+
+id ( 
+
+
+"Main" ) ] ) ) , 
+
+
+
+260 ) , 
+
+
+label ( 
+
+
+prod ( 
+
+
+[ 
+
+
+cf ( 
+
+
+sort ( 
+
+
+"A" ) ) , 
+
+
+cf ( 
+
+
+opt ( 
+
+
+layout ) ) , 
+
+
+cf ( 
+
+
+sort ( 
+
+
+"A" ) ) ] , 
+
+
+cf ( 
+
+
+sort ( 
+
+
+"A" ) ) , 
+
+
+attrs ( 
+
+
+[ 
+
+
+id ( 
+
+
+"Main" ) ] ) ) , 
+
+
+
+259 ) , 
+
+
+label ( 
+
+
+prod ( 
+
+
+[ ] , 
+
+
+cf ( 
+
+
+sort ( 
+
+
+"A" ) ) , 
+
+
+attrs ( 
+
+
+[ 
+
+
+id ( 
+
+
+"Main" ) ] ) ) , 
+
+
+
+258 ) , 
+
+
+label ( 
+
+
+prod ( 
+
+
+[ 
+
+
+cf ( 
+
+
+opt ( 
+
+
+layout ) ) , 
+
+
+cf ( 
+
+
+sort ( 
+
+
+"A" ) ) , 
+
+
+cf ( 
+
+
+opt ( 
+
+
+layout ) ) ] , 
+
+
+sort ( 
+
+
+"<START>" ) , 
+
+
+no-attrs ) , 
+
+
+
+257 ) , 
+
+
+label ( 
+
+
+prod ( 
+
+
+[ 
+
+
+sort ( 
+
+
+"<START>" ) , 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+0 ] ) ] , 
+
+
+sort ( 
+
+
+"<Start>" ) , 
+
+
+no-attrs ) , 
+
+
+
+256 ) ] , 
+
+
+states ( 
+
+
+[ 
+
+
+state-rec ( 
+
+
+
+0 , 
+
+
+[ 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+264 ] ) , 
+
+
+
+1 ) , 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+range ( 
+
+
+
+262 , 
+
+
+
+263 ) ] ) , 
+
+
+
+2 ) , 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+257 ] ) , 
+
+
+
+3 ) , 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+256 ] ) , 
+
+
+
+4 ) ] , 
+
+
+actions ( 
+
+
+[ 
+
+
+action ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+0 , 
+
+
+
+97 ] ) , 
+
+
+[ 
+
+
+reduce ( 
+
+
+
+0 , 
+
+
+
+262 , 
+
+
+
+0 ) ] ) ] ) ) , 
+
+
+state-rec ( 
+
+
+
+1 , 
+
+
+[ ] , 
+
+
+actions ( 
+
+
+[ 
+
+
+action ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+0 , 
+
+
+
+97 ] ) , 
+
+
+[ 
+
+
+reduce ( 
+
+
+
+1 , 
+
+
+
+263 , 
+
+
+
+0 ) ] ) ] ) ) , 
+
+
+state-rec ( 
+
+
+
+2 , 
+
+
+[ 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+range ( 
+
+
+
+258 , 
+
+
+
+260 ) ] ) , 
+
+
+
+5 ) , 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+261 ] ) , 
+
+
+
+6 ) , 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+97 ] ) , 
+
+
+
+7 ) ] , 
+
+
+actions ( 
+
+
+[ 
+
+
+action ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+97 ] ) , 
+
+
+[ 
+
+
+shift ( 
+
+
+
+7 ) , 
+
+
+reduce ( 
+
+
+
+0 , 
+
+
+
+258 , 
+
+
+
+0 ) ] ) , 
+
+
+action ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+0 ] ) , 
+
+
+[ 
+
+
+reduce ( 
+
+
+
+0 , 
+
+
+
+258 , 
+
+
+
+0 ) ] ) ] ) ) , 
+
+
+state-rec ( 
+
+
+
+3 , 
+
+
+[ 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+0 ] ) , 
+
+
+
+8 ) ] , 
+
+
+actions ( 
+
+
+[ 
+
+
+action ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+0 ] ) , 
+
+
+[ 
+
+
+accept ] ) ] ) ) , 
+
+
+state-rec ( 
+
+
+
+4 , 
+
+
+[ ] , 
+
+
+actions ( 
+
+
+[ ] ) ) , 
+
+
+state-rec ( 
+
+
+
+5 , 
+
+
+[ 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+range ( 
+
+
+
+262 , 
+
+
+
+263 ) ] ) , 
+
+
+
+9 ) , 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+264 ] ) , 
+
+
+
+10 ) ] , 
+
+
+actions ( 
+
+
+[ 
+
+
+action ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+0 , 
+
+
+
+97 ] ) , 
+
+
+[ 
+
+
+reduce ( 
+
+
+
+0 , 
+
+
+
+262 , 
+
+
+
+0 ) ] ) ] ) ) , 
+
+
+state-rec ( 
+
+
+
+6 , 
+
+
+[ ] , 
+
+
+actions ( 
+
+
+[ 
+
+
+action ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+0 , 
+
+
+
+97 ] ) , 
+
+
+[ 
+
+
+reduce ( 
+
+
+
+1 , 
+
+
+
+260 , 
+
+
+
+0 ) ] ) ] ) ) , 
+
+
+state-rec ( 
+
+
+
+7 , 
+
+
+[ ] , 
+
+
+actions ( 
+
+
+[ 
+
+
+action ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+0 , 
+
+
+
+97 ] ) , 
+
+
+[ 
+
+
+reduce ( 
+
+
+
+1 , 
+
+
+
+261 , 
+
+
+
+0 ) ] ) ] ) ) , 
+
+
+state-rec ( 
+
+
+
+8 , 
+
+
+[ ] , 
+
+
+actions ( 
+
+
+[ ] ) ) , 
+
+
+state-rec ( 
+
+
+
+9 , 
+
+
+[ 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+range ( 
+
+
+
+258 , 
+
+
+
+260 ) ] ) , 
+
+
+
+11 ) , 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+261 ] ) , 
+
+
+
+6 ) , 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+97 ] ) , 
+
+
+
+7 ) ] , 
+
+
+actions ( 
+
+
+[ 
+
+
+action ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+97 ] ) , 
+
+
+[ 
+
+
+shift ( 
+
+
+
+7 ) , 
+
+
+reduce ( 
+
+
+
+0 , 
+
+
+
+258 , 
+
+
+
+0 ) ] ) , 
+
+
+action ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+0 ] ) , 
+
+
+[ 
+
+
+reduce ( 
+
+
+
+0 , 
+
+
+
+258 , 
+
+
+
+0 ) , 
+
+
+reduce ( 
+
+
+
+3 , 
+
+
+
+257 , 
+
+
+
+0 ) ] ) ] ) ) , 
+
+
+state-rec ( 
+
+
+
+10 , 
+
+
+[ ] , 
+
+
+actions ( 
+
+
+[ 
+
+
+action ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+0 , 
+
+
+
+97 ] ) , 
+
+
+[ 
+
+
+reduce ( 
+
+
+
+1 , 
+
+
+
+263 , 
+
+
+
+0 ) ] ) ] ) ) , 
+
+
+state-rec ( 
+
+
+
+11 , 
+
+
+[ 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+range ( 
+
+
+
+262 , 
+
+
+
+263 ) ] ) , 
+
+
+
+12 ) , 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+264 ] ) , 
+
+
+
+10 ) ] , 
+
+
+actions ( 
+
+
+[ 
+
+
+action ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+0 , 
+
+
+
+97 ] ) , 
+
+
+[ 
+
+
+reduce ( 
+
+
+
+3 , 
+
+
+
+259 , 
+
+
+
+0 ) , 
+
+
+reduce ( 
+
+
+
+0 , 
+
+
+
+262 , 
+
+
+
+0 ) ] ) ] ) ) , 
+
+
+state-rec ( 
+
+
+
+12 , 
+
+
+[ 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+range ( 
+
+
+
+258 , 
+
+
+
+260 ) ] ) , 
+
+
+
+11 ) , 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+261 ] ) , 
+
+
+
+6 ) , 
+
+
+goto ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+97 ] ) , 
+
+
+
+7 ) ] , 
+
+
+actions ( 
+
+
+[ 
+
+
+action ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+97 ] ) , 
+
+
+[ 
+
+
+shift ( 
+
+
+
+7 ) , 
+
+
+reduce ( 
+
+
+
+0 , 
+
+
+
+258 , 
+
+
+
+0 ) ] ) , 
+
+
+action ( 
+
+
+char-class ( 
+
+
+[ 
+
+
+
+0 ] ) , 
+
+
+[ 
+
+
+reduce ( 
+
+
+
+0 , 
+
+
+
+258 , 
+
+
+
+0 ) ] ) ] ) ) ] ) , 
+
+
+priorities ( 
+
+
+[ 
+
+
+left-prio ( 
+
+
+
+264 , 
+
+
+
+264 ) ] ) )

@@ -1,6 +1,7 @@
 # Extensions mapping
 # Ext	Lang
 casl	Casl
+cycle	Cyclops
 c	C
 h	C
 java	Java
