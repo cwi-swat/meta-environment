@@ -3,8 +3,14 @@
 SPECS = LexConcat     \
         Pico-Booleans \
         Pico-Integers \
-        SetAndElem
-
+        SetAndElem \
+        Func \
+        IterN \
+        Perm \
+        OutermostList \
+        Set \
+        Tuple
+           
 EQS = $(SPECS:=.eqs)
 
 CORGS = $(SPECS:=.c.org)
