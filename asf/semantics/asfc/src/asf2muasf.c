@@ -445,10 +445,6 @@ static MA_TermArgs argsToTermArgs(PT_Args args, MA_FuncDefElems *funcdefs)
     
     if (term != NULL) {
       termArgs = MA_makeTermArgsSingle(term);
-    
-      if (PT_hasArgsTail(args)) {
-        args = PT_getArgsTail(args);
-      }
     }
     else {
       /* no real arguments */
@@ -514,15 +510,15 @@ static MA_Term treeToTerm(PT_Tree tree, MA_FuncDefElems *funcdefs,
 			  LayoutOption layout)
 {
   MA_Term result = NULL;
-
   if (layout == WITHOUT_LAYOUT && PT_isTreeLayout(tree)) {
     result = NULL; /* ignore layout */
   }
   else if (ASF_isTreeLexicalConstructorFunction((ASF_Tree) tree)) {
-    return treeToTerm(constructorTreeToLexicalTree(tree), funcdefs, layout);
+    PT_Tree converted = constructorTreeToLexicalTree(tree);
+    result = treeToTerm(converted, funcdefs, layout);
   }
   else if (PT_isTreeVar(tree)) {
-    return variableToTerm(tree);
+    result = variableToTerm(tree);
   }
   else if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
@@ -530,7 +526,6 @@ static MA_Term treeToTerm(PT_Tree tree, MA_FuncDefElems *funcdefs,
     PT_Args args = PT_getTreeArgs(tree);
     MA_FunId funid = prodToFunId(prod);
     MA_TermArgs terms = argsToTermArgs(args, funcdefs);
-
     addFuncDefToFuncDefs(funcdef, funcdefs);
 
     if (terms != NULL) {
@@ -542,8 +537,9 @@ static MA_Term treeToTerm(PT_Tree tree, MA_FuncDefElems *funcdefs,
   }
   else if (PT_isTreeChar(tree)) {
     int ch = PT_getTreeCharacter(tree);
-    MA_FunId funid = intToFunId(ch);
+    MA_FunId funid;
 
+    funid = intToFunId(ch);
     result = MA_makeTermConstant(funid);
   }
   else if (PT_isTreeLit(tree)) {
