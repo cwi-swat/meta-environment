@@ -86,17 +86,20 @@ static void createMappingToPT(SDF_ProductionList productions)
 
   while (SDF_hasProductionListHead(productions)) {
     SDF_Production prod = SDF_getProductionListHead(productions);
-    PT_Production ptprod = SDFProductionToPtProduction(prod);
 
-    if (ptprod) {
-      ATtablePut(mapping, (ATerm) normalizeProduction(ptprod), (ATerm) prod);
-    }
+    if (SDF_isProductionProd(prod)) {
+      PT_Production ptprod = SDFProductionToPtProduction(prod);
 
-    if (!SDF_hasProductionListTail(productions)) {
-      break;
-    }
-    else {
-      productions = SDF_getProductionListTail(productions);
+      if (ptprod) {
+	ATtablePut(mapping, (ATerm) normalizeProduction(ptprod), (ATerm) prod);
+      }
+
+      if (!SDF_hasProductionListTail(productions)) {
+	break;
+      }
+      else {
+	productions = SDF_getProductionListTail(productions);
+      }
     }
   }
 }

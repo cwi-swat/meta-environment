@@ -121,13 +121,11 @@ int main(int argc, char *argv[])
       exit(1);
     }
 
-
-    ATsetChecking(ATtrue);
-
     at_sdf = ATreadFromNamedFile(syntax);
-    at_tree   = ATreadFromNamedFile(input);
+    at_tree = ATreadFromNamedFile(input);
 
     if (at_tree != NULL) {
+
       tree = PT_ParseTreeFromTerm(at_tree);
       sdf = SDF_SDFFromTerm((ATerm) PT_getParseTreeTree(
 				PT_ParseTreeFromTerm(at_sdf)));
