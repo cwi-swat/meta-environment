@@ -141,7 +141,8 @@ void print_args(term_list *args) {
 	print_term(list_first(args));
 	/*	if(!is_list(list_first(args)))
 		wprintf("}");*/
-	strcat(cmd_buf," ");
+	if (list_next(args))
+	    strcat(cmd_buf," ");
 	args = list_next(args);
     }
 }
