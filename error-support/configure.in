@@ -2,7 +2,7 @@ dnl $Id$
 
 AC_INIT
 AC_CONFIG_SRCDIR([configure.in])
-AM_INIT_AUTOMAKE(error-support, 0.1)
+AM_INIT_AUTOMAKE(error-support, 0.2)
 AC_PREREQ(2.59)
 
 dnl Nota Bene:
