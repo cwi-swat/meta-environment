@@ -113,7 +113,7 @@ dnl Handle --with-debug-c-code to activate c debug info
 dnl and shut off optimizations
 CFLAGS="-Wall -O4 -DNDEBUG"
 AC_ARG_WITH(debug-c-code,
-   [ --with-debug-c-code      C flags set to -Wall -g],
+   [  --with-debug-c-code     C flags set to -Wall -g -O2],
    CFLAGS="-Wall -g -O2"
 )
 AC_SUBST(CFLAGS)
