@@ -250,15 +250,22 @@ SDF_ImportList SDF_getTransitiveImports(ATermList modules, SDF_ModuleId moduleId
 
 /*{{{  static ATbool imports_contains_id(ATermList imports, SDF_ModuleId id) */
 
-static ATbool imports_contains_id(ATermList imports, SDF_ModuleId id)
+static ATbool imports_contains_id(SDF_ImportList imports, SDF_ModuleId id)
 {
-  for(; !ATisEmpty(imports); imports = ATgetNext(imports)) {
-    SDF_Import import = SDF_ImportFromTerm(ATgetFirst(imports));
+  while (!SDF_isImportListEmpty(imports))  {
+    SDF_Import import = SDF_getImportListHead(imports);
     SDF_ModuleId importId = SDF_getModuleNameModuleId(
                                SDF_getImportModuleName(import));
 
     if (SDF_isEqualModuleId(id, importId)) {
       return ATtrue;
+    }
+
+    if (SDF_hasImportListTail(imports)) {
+      imports = SDF_getImportListTail(imports);
+    }
+    else {
+      break;
     }
   }
 
@@ -278,7 +285,7 @@ static ATermList get_depending_module_ids(SDF_ModuleId moduleId)
   
   for (;!ATisEmpty(modules); modules = ATgetNext(modules)) {
     SDF_ModuleId module = SDF_ModuleIdFromTerm(ATgetFirst(modules));
-    ATermList imports = do_get_transitive_imports(module);
+    SDF_ImportList imports = do_get_transitive_imports(module);
 
     if (imports_contains_id(imports, moduleId)) {
       ATerm mid = ATmake("<str>", 
