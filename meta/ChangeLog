@@ -20,6 +20,10 @@
 #
 # $Id$
 
+2000/12/01 (mdejonge@cwi.nl)
+   * genamakefile: removed BUILT_SOURCES definition because it causes
+     dependency problems.
+
 2000/11/08 ({markvdb,jurgenv,olivierp,jong}@cwi.nl)
    * in-output tool refactorized
    * configuration manager tool introduced.
