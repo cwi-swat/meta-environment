@@ -21,6 +21,7 @@
 # $Id$
 
 2001/05/04 (markvdb@cwi.nl)
+  * Enabled the compilation of specifications.
   * Various bug fixes in structure editor.
 
 2001/04/23 (markvdb@cwi.nl)
