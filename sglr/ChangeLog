@@ -1,5 +1,8 @@
 $Id$
 
+2003/08/01 (jurgenv@cwi.nl)
+ * Set version to 3.10.1
+
 2003/07/30 (markvdb@cs.vu.nl)
  * Fixed the injection bug reported by Albert Hofkamp.
    Added the corresponding regression test.
