@@ -68,6 +68,8 @@ snd-do(Mdb, create-module-db).
   rec-value(Mdb,irels(Pairs?)).
   snd-note(import-relations(irels(Pairs)))
 +
+/* Path is the directory in which the file containing Module lives.
+   Module is the parsed SDF2 representation in Asfix1 */
   rec-msg(add-sdf2-module-to-db(Path?,Module?)).
   snd-eval(Mdb,add-sdf2-module(Path,Module)).
   rec-value(Mdb,imports(Name?,need-modules(Modules?))).
