@@ -88,7 +88,8 @@ BOX_Box treeToBox(PT_Tree tree)
     BOX_OptLayout optLayout = BOX_makeOptLayoutAbsent();
     BOX_SOptions soptions = BOX_makeSOptionsDefault(BOX_makeSOptionListEmpty()); 
 
-    if (PT_getArgsLength(args) == 1) {
+    /* if Tree has one argument */
+    if (PT_isProductionInjection(PT_getTreeProd(tree))) {
       PT_Tree head = PT_getArgsHead(args);
       return(treeToBox(head));
     }

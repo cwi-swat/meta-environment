@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Jan 29 17:57:18 CET 2004 <kooiker@cwi.nl>
+ * Added pattern matching on rules of type indented
+ * If appl contains only 1 argument don't loop over it 
+
 Thu Jan 29 09:57:17 CET 2004 <{jong,kooiker}@cwi.nl>
  * Fixed bug due to statement before declaring variables in pandora.c 
 
