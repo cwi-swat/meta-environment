@@ -1,4 +1,4 @@
-/* $Id */
+/* $Id$ */
 
 #include "configuration-manager.idef"
 #include "editor-hive.idef"
@@ -11,16 +11,14 @@
 #include "sglr.idef"
 #include "structure-editor.idef"
 #include "unparser.idef"
-#include "meta-studio.idef"
+
+#include "meta-studio.idef"  /* ?? */
 
 #ifdef QUERY
 #include "DisplayQuery.idef" 
 #endif
 
 process InitKernel is
-let
-  Unused : term
-in
   (
     rec-msg(library-location-hook)
     . snd-msg(library-location-hook-result(""))
@@ -31,6 +29,5 @@ in
     rec-msg(environment-name-hook)
     . snd-msg(environment-name-hook-result("Kernel environment"))
   ) * delta
-endlet
 
 toolbus(InitKernel)
