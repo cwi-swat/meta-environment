@@ -33,7 +33,7 @@ libasc_support_a_SOURCES = $(SRCS)
 libasc_support_a_LIBADD  = rewriter.tif.o
 
 # Default include directories
-INCLUDES   = -I. -I$(ATERMINC)
+INCLUDES   = -I. -I$(ASFIXINC) -I$(ATERMINC)
 
 rewriter.o: rewriter.tif.h
 

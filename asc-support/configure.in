@@ -20,14 +20,29 @@ dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(Makefile.in)
-AM_INIT_AUTOMAKE(asc-support, 0.2)
+AM_INIT_AUTOMAKE(asc-support, 0.3)
 
 
-AC_PATH_PROG(ATERM, tifstoc, no)
+AC_PATH_PROG(ATERM, baffle, no)
 if test "${ATERM}" = "no"; then
 	ATERM='${prefix}'
 else
 	ATERM=`dirname \`dirname ${ATERM}\``
+fi
+
+ASFIX=
+AC_PATH_PROG(ASFIX, afexpand, no)
+if test "${ASFIX}" = "no"; then
+	ASFIX='${prefix}'
+else
+	ASFIX=`dirname \`dirname ${ASFIX}\``
+fi
+
+AC_PATH_PROG(TOOLBUS, toolbus, no)
+if test "${TOOLBUS}" = "no"; then
+	TOOLBUS='${prefix}'
+else
+	TOOLBUS=`dirname \`dirname ${TOOLBUS}\``
 fi
 
 AC_REQUIRE([AC_PROG_CC])
@@ -61,6 +76,27 @@ AC_ARG_WITH(aterm-inc,
    [  --with-aterm-inc=DIR    ATerm header files are in DIR],
    ATERMINC=${withval},ATERMINC=${ATERM}/include)
 AC_SUBST(ATERMINC)
+
+dnl Handle --with-asfix=... argument to configure
+AC_ARG_WITH(asfix,
+[  --with-asfix=DIR        AsFix-library is in DIR],
+   ASFIX=${withval},)
+AC_SUBST(ASFIX)
+
+AC_ARG_WITH(asfix-bin,
+   [  --with-asfix-bin=DIR    AsFix executables are in DIR],
+   ASFIXBIN=${withval},ASFIXBIN=${ASFIX}/bin)
+AC_SUBST(ASFIXBIN)
+
+AC_ARG_WITH(asfix-lib,
+   [  --with-asfix-lib=DIR    AsFix libraries are in DIR],
+   ASFIXLIB=${withval},ASFIXLIB=${ASFIX}/lib)
+AC_SUBST(ASFIXLIB)
+
+AC_ARG_WITH(asfix-inc,
+   [  --with-asfix-inc=DIR    AsFix header files are in DIR],
+   ASFIXINC=${withval},ASFIXINC=${ASFIX}/include)
+AC_SUBST(ASFIXINC)
 
 dnl Handle --with-toolbus[-...]=... arguments to configure
 AC_ARG_WITH(toolbus,
