@@ -2,7 +2,6 @@ module ExtractInitialProcesses
 
 imports ToolBusExtraction
 imports utilities/Parsing[ProcessName]
-imports utilities/PosInfo[ProcessName]
 
 exports
   context-free syntax

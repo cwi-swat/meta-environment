@@ -49,13 +49,13 @@ equations
       term2str($Term) || strcon(""" "," """) || terms2str($TermPlus)
 
   [make-signature-send]
-    make-simple-signature($TermPlus1) = $TermPlus2
+    $TermPlus2 := make-simple-signature($TermPlus1)
     ===>
     make-signature(snd-msg($TermPlus1), $FormalParams, $VarDecls) = 
       msg($TermPlus2)
 
   [make-signature-receive]
-    make-simple-signature($TermPlus1) = $TermPlus2
+    $TermPlus2 := make-simple-signature($TermPlus1)
     ===>
     make-signature(rec-msg($TermPlus1), $FormalParams, $VarDecls) = 
       msg($TermPlus2)

@@ -2,6 +2,18 @@ equations
 
 [extract-all-0]
   $Rstore := rstore(),
-  $Rstore1 := extractControlFlow($Tscript, $Rstore)
+  $Rstore2 := extractEvents($Tscript, $Rstore),
+  $Rstore3 := extractInitialProcesses($Tscript, $Rstore2),
+  $Rstore4 := extractMessages($Tscript, $Rstore3),
+  $Rstore5 := extractParameters($Tscript, $Rstore4),
+  $Rstore6 := extractProcessCreations($Tscript, $Rstore5),
+  $Rstore7 := extractProcessDeclarations($Tscript, $Rstore6),
+  $Rstore8 := extractProcessInvocations($Tscript, $Rstore7),
+  $Rstore9 := extractProcessReferences($Tscript, $Rstore8),
+  $Rstore10 := extractProcessUses($Tscript, $Rstore9),
+  $Rstore11 := extractToolDeclarations($Tscript, $Rstore10),
+  $Rstore12 := extractVariableDeclarations($Tscript, $Rstore11),
+  $Rstore13 := extractVariableDefinitions($Tscript, $Rstore12),
+  $Rstore14 := extractVariableUses($Tscript, $Rstore13)
   ===>
-  extractAll($Tscript) = $Rstore1
+  extractAll($Tscript) = $Rstore14
