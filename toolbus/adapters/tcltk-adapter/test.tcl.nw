@@ -1,0 +1,76 @@
+
+This file is used to test the {\tt tcltk-adapter}.
+
+<<test.tcl*>>=
+<<input>>
+<<input2>>
+<<activate>>
+<<generate-error>>
+<<rec-ack-event>>
+<<rec-terminate>>
+
+button .error -text "Error" -command "generate-error"
+button .activate -text "Activate" -command "activate"
+pack .error -side top -fill x
+pack .activate -side top -fill x
+@
+
+
+The procedure input waits for input and then sends some
+weird output.
+
+<<input>>=
+proc input { arg } {
+  puts stderr "input: '$arg'"
+#  TBsend "snd-event(output([TBstring $arg]))"
+  set Arg [TBstring "a\[b\]c\""]
+  TBsend "snd-event(output($Arg))"
+}
+@
+
+The procedure input2 waits for input and does some processing
+on it.
+<<input2>>=
+proc input2 { arg } {
+  puts stderr "input2: '$arg'"
+  foreach el $arg {
+    puts stderr "el: $el"
+    if { [llength $el] > 1 } {
+      foreach subel $el {
+        puts stderr "subel: $subel"
+      }
+    }
+  }
+}
+@
+
+Event acknowledgements are just printed.
+<<rec-ack-event>>=
+proc rec-ack-event { event } {
+  puts stderr "ack: $event"
+}
+@
+
+<<rec-terminate>>=
+proc rec-terminate { arg } {
+  exit
+}
+@
+
+Generate an error (somebody forgot to put in a dollar sign).
+<<generate-error>>=
+proc generate-error { } {
+  puts stderr "Generating an error!"
+  set a [expr 4+abc]
+  puts stderr "huh?, a=$a"
+}
+@
+
+Send an activate event in response to the Activate button
+being pressed.
+<<activate>>=
+proc activate { } {
+  puts stderr "Activate:"
+  TBsend "snd-event(activate)"
+}
+@

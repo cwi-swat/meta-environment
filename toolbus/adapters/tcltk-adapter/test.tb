@@ -1,0 +1,20 @@
+
+process TEST is
+let
+  T : test,
+  S : str
+in
+  execute(test, T?) .
+  snd-do(T, input2(["{", ["}{} {{", []]])) .
+  snd-do(T, input([f(a,b), "a\"a} {b [b]c\nd }ef"])) .
+  rec-event(T, output(S?)) .
+  printf("event received: %s\n", S) .
+  snd-ack-event(T, output(S)) .
+  snd-do(T, input2(S)) .
+  tau delay(sec(100))
+endlet
+
+tool test is { command = "./tcltk-adapter -script test.tcl" }
+
+toolbus(TEST)
+
