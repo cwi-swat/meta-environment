@@ -20,7 +20,8 @@ ptpretty_LDADD = \
 	-L$(SDF_SUPPORT)/lib -lSDFME -lSDF2PT \
 	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(TOOLBUSLIB)/lib -lATB \
-	-L$(ATERM)/lib -lATerm 
+	-L$(ATERM)/lib -lATerm  \
+	$(SOCKLIBS)
 
 tif:
 	for i in `ls *.idef`; do \

@@ -44,6 +44,32 @@ AC_SUBST(SDF_SUPPORT)
 dnl What commands are needed to set the variable MAKE in Makefiles?
 AC_SET_MAKE
 
+dnl {{{  Require socket/gethostname
+
+NOSOCKLIBS=$LIBS
+dnl {{{  check for socket in -lsun and -lsocket
+SOCKET_FOUND=no
+SOCKLIBS=
+AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
+if test ${SOCKET_FOUND} = no; then
+  AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
+fi
+
+dnl }}}
+dnl {{{  check for gethostname in -lsun and -lsocket
+
+GHN_FOUND=no
+AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
+if test ${GHN_FOUND} = no; then
+  AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
+fi
+
+dnl }}}
+AC_SUBST(SOCKLIBS)
+LIBS=$NOSOCKLIBS
+
+dnl }}}
+
 dnl Which files need updating?
 AC_OUTPUT(
    Makefile
