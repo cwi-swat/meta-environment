@@ -1,10 +1,14 @@
 $Id$
 
-Tue Mar  5 15:07:02 CET 2002 <jong@cwi.nl>
+2002/04/19 (jurgenv@cwi.nl)
+* Released 0.2
+
+2002/03/05 (jong@cwi.nl)
 * Increased magical LENSPEC from 8 bytes to 12 bytes
 * Improved atb-tool support wrt to use of LENSPEC define
+* Bumped to 0.2beta
 
-2001-11-25 Merijn de Jonge <mdejonge@cwi.nl>
+2001/11/25 (mdejonge@cwi.nl)
 * Released version 0.1
 * Added toolbuslib-config utility
 * Created toolbuslib package from the subdirs aterm and libtb of the toolbus
