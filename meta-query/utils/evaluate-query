@@ -1,0 +1,79 @@
+#! /bin/sh
+
+set -e
+
+# {{{  variables
+
+PRG=`basename $0`
+CALCULATOR=
+PARSE_TABLE=
+QUERY=
+STORE=
+TYPE_CHECKER=
+
+# }}}
+
+# {{{  usage
+
+usage() {
+cat << ENDCAT >&2
+Usage: $PRG [options]
+
+Parameters:
+
+Example:
+
+ENDCAT
+}
+
+# }}}
+# {{{  parse-query
+
+parse() {
+  sglr -p $PARSE_TABLE -s RSCRIPT -i $QUERY -o $QUERY.pt
+}
+
+# }}}
+# {{{  check-query
+
+check() {
+  addPosInfo -p $QUERY -i $QUERY.pt \
+  | $TYPE_CHECKER -f check-rscript -r List \
+  | unparsePT
+}
+
+# }}}
+
+evaluate() {
+  $CALCULATOR -f "eval-rscript-with-rstore" \
+    -i $QUERY.pt -i $STORE -r RSTORE \
+  | unparsePT
+}
+
+if [ $# -eq 0 ]; then
+  usage
+  exit 1
+fi
+
+while [ $# -gt 0 ]
+do
+  case "$1" in
+    -c | --calculator)
+      shift; CALCULATOR=$1 ;;
+    -p | --parse-table)
+      shift; PARSE_TABLE=$1 ;;
+    -q | --query)
+      shift; QUERY=$1 ;;
+    -s | --store)
+      shift; STORE=$1 ;;
+    -t | --type-checker)
+      shift; TYPE_CHECKER=$1 ;;
+    *)
+      usage; exit 1 ;;
+  esac
+  shift
+done
+
+parse
+check
+evaluate

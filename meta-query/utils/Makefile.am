@@ -1,10 +1,12 @@
 EXTRA_DIST = \
 	meta-query-config.src \
-	extract-relations
+	extract-relations \
+	evaluate-query
 
 bin_SCRIPTS = \
 	meta-query-config \
-	extract-relations
+	extract-relations \
+	evaluate-query
 
 CLEANFILES = meta-query-config
 
