@@ -1,4 +1,4 @@
-SUBDIRS	= org test
+SUBDIRS	= . org test
 
 EXTRA_DIST = brainstorm.txt todo.txt
 

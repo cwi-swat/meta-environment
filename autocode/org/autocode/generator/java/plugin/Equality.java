@@ -16,7 +16,7 @@ import java.util.*;
 public class Equality
   extends JavaGeneratorPlugin
 {
-  //{{{ public void generateEquals(JavaGenerator generator)
+  //{{{ public void generateEquals(generator, typeContext, operationContext)
 
   public void generateEquals(JavaGenerator generator,
 			     PropertyContext typeContext,
@@ -80,7 +80,7 @@ public class Equality
   }
 
   //}}}
-  //{{{ public void generateHashCode()
+  //{{{ public void generateHashCode(generator, typeContext, operationContext)
 
   public void generateHashCode(JavaGenerator generator,
 			       PropertyContext typeContext,
@@ -101,7 +101,8 @@ public class Equality
       String fieldName = (String)iter.next();
       PropertyContext fieldContext
 	= new PropertyContext(typeContext, "field", fieldName);
-      PropertyContext fieldTypeContext = new PropertyContext(fieldContext, "type");
+      PropertyContext fieldTypeContext
+	= new PropertyContext(fieldContext, "type");
 
       if (fieldContext.getBoolean("hash")) {
 	String getter = fieldContext.getString("getter");
@@ -143,7 +144,7 @@ public class Equality
     body.addLine("return code;");
 
     String typeName = generator.typeName(typeContext.getName());
-    method.setDescription("calculate the hascode based on the hashcodes "
+    method.setDescription("calculate the hashcode based on the hashcodes "
 			  + " of the attributes.");
 
     generator.getCompilationUnit().addMethod(method);
