@@ -5,6 +5,7 @@ include ${top_srcdir}/make_rules
 INCLUDES	= -I$(ASC_SUPPORT)/include \
 		-I$(PT_SUPPORT)/include \
 		-I$(ASF_SUPPORT)/include \
+		-I$(ERROR_SUPPORT)/include \
 		-I$(ATERM)/include
 
 CFLAGS += -DASF_MAIN
@@ -22,6 +23,7 @@ ActionScriptChecker_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
 			-L$(SGLR)/lib -lsglr \
 			-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 			-L$(ASF_SUPPORT)/lib -lASFME \
+			-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 			-L$(ATERM)/lib -lATerm
 
 pkgdata_DATA = ActionScriptChecker.trm.tbl \
