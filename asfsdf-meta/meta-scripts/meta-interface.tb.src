@@ -58,7 +58,7 @@ in
       (
         rec-msg(test-results(Errors?)) .
         snd-note(remove-feedback-summary("asf-tests",ModuleName)) .
-        snd-note(display-feedback-summary(feedback("asf-tests",ModuleName,Errors)))
+        snd-note(show-feedback-summary(feedback("asf-tests",ModuleName,Errors)))
       +
         rec-msg(rewrite-errors(Errors?)).
         snd-msg(display-rewrite-errors(ModuleName, Errors))
@@ -81,18 +81,19 @@ let
 in
   (
     rec-msg(preprocess-syntax-hook(ModuleName?, eqs, Syntax?)).
+/*
     snd-msg(check-asfsdf(Syntax)) .
     rec-msg(messages(Msgs?)) .
-    snd-msg(display-sdf-errors(Msgs)) . 
+    snd-msg(display-sdf-errors(Msgs)) .  */
     snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
     rec-msg(extended-syntax(Syntax?)) .
     snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
     Syntax := no-tree
   +
     rec-msg(preprocess-syntax-hook(ModuleName?, trm, Syntax?)).
-    snd-msg(check-asfsdf(Syntax)) .
+/*    snd-msg(check-asfsdf(Syntax)) .
     rec-msg(messages(Msgs?)) .
-    snd-msg(display-sdf-errors(Msgs)) . 
+    snd-msg(display-sdf-errors(Msgs)) .  */
     snd-msg(remove-var-syntax(ModuleName, Syntax)) .
     rec-msg(changed-syntax(Syntax?)) .
     snd-msg(preprocess-syntax-hook-result(ModuleName, Syntax)) .
