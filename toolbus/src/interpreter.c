@@ -1678,8 +1678,6 @@ struct timeval *get_timeout(void)
 #include <signal.h>
 
 static void alarm_handler(int sig){
-  signal(SIGALRM, alarm_handler);
-
   time(&current_time);
   if((next_abs_timeout > 0) && (current_time > next_abs_timeout)){
     err_warn("***** Alarm: timeout expired");
@@ -1689,7 +1687,18 @@ static void alarm_handler(int sig){
 
 void all_internal_steps(void)
 {  
-  signal(SIGALRM, alarm_handler);
+  struct sigaction act;
+  struct sigaction oact;
+
+  act.sa_handler = alarm_handler;
+  sigemptyset(&act.sa_mask);
+  act.sa_flags = 0;
+
+  #ifdef SA_INTERRUPT
+  act.sa_flags = SA_INTERRUPT;	/* SunOS */
+  #endif
+
+  sigaction(SIGALRM, &act, &oact);
   time(&current_time);
   next_abs_delay = -1;
   do {
@@ -1704,8 +1713,10 @@ void all_internal_steps(void)
   } while(((next_abs_delay != -1) && (next_abs_delay <= current_time)) ||
 	  pending_events());
   alarm(0);
-
+  /* reset alarm */
+  sigaction(SIGALRM, &oact, NULL);
 }
+
 /*--- interpreter ------------------------------*/
 
 static void prompt(void)

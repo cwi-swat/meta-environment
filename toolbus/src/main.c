@@ -15,6 +15,7 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <fcntl.h>
 #include <signal.h>
 #include <unistd.h>
@@ -98,13 +99,19 @@ int main(int argc, char *argv[])
   TBbool gen_tifs = TBfalse;
   term *monitor;
   TBbool fixed_seed = TBfalse;
+  struct sigaction act;
 
   extern time_t startup_time;
   extern TBbool parse_script(char *, int, char **);
   extern int mk_server_ports(TBbool);
   extern void chld_handler(int);
 
-  signal(SIGCHILD, chld_handler);
+  act.sa_handler = interrupt_handler;
+  sigemptyset(&act.sa_mask);
+  act.sa_flags = SA_RESTART;
+  sigaction(SIGINT,  &act, NULL);
+  act.sa_handler = chld_handler;
+  sigaction(SIGCHLD, &act, NULL);
   
   if(time(&startup_time) == -1)
     err_sys_fatal("Cannot read current time");

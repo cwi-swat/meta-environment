@@ -33,12 +33,11 @@ static int pgid = -1;
 void chld_handler(int sig)
 {
    signal(sig, SIG_IGN);
-   if( pgid != -1 )
+   if(pgid != -1)
    {
       /* wait for childs in process group pgid */
-      waitpid( -pgid, NULL, WNOHANG );
+      waitpid(-pgid, NULL, WNOHANG);
    }
-   signal(sig, chld_handler);
 }
 
 
@@ -616,7 +615,6 @@ tool_id *create_tool(term *creator, term_list *args)
     }
     if(pgid == -1)
       pgid = pid;	/* One processgroup for all slaves */
-    setpgid(pid, pgid);
     /* lcc generated bad code for the next line (Probably because of
        the many recursive calls when the preprocessor expands it. I've
        tried many experiments, but haven't been able to reproduce it in
@@ -631,6 +629,10 @@ tool_id *create_tool(term *creator, term_list *args)
   } else {
     /* tool: the child */
     /* <PO> sleep(n_tool_inst); */
+    if(pgid == -1)
+      pgid = getpid();
+    if(setpgid(pid, pgid) == -1)
+      err_sys_warn("setpgid failed");
     if(execvp(command, std_args) < 0){
       err_sys_warn("can't execute tool `%s'", command);
       return NULL;

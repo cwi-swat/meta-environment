@@ -47,6 +47,7 @@ int TB_newConnection(char *tool_name, char *host, int port,
       connections[i]->verbose	= TBfalse;
       connections[i]->tid	= -1;
       connections[i]->suspended = TBfalse;
+      connections[i]->socket	= -1;
 
       return i;
     }
@@ -715,12 +716,16 @@ term_list *TB_getConnections()
 {
   int i;
   term_list *l = NULL;
+  char *host;
 
   for(i=0; i<MAX_CONNECTIONS; i++) {
     if(TB_validConnection(i) && TB_getSocket(i) >= 0) {
+      host = TB_getHost(i);
+      host = host ? host : "";
+      assert(host);
       l = list_concat_term(l, TB_make("[<int>,<str>,<int>,<int>,<int>]",
         i,
-        TB_getHost(i),
+        host,
         TB_getPort(i),
         TB_getTid(i),
         TB_getSocket(i)));
