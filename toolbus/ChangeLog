@@ -1,5 +1,10 @@
 $Id$
 
+2002/10/30 (vinju@cwi.nl)
+ * Added new dependency on aterm-java package
+ * Added new dependency on shared-objects package
+ * Changed code of java-adapter according to changed makeAppl interface.
+
 2002/10/28 (vinju@cwi.nl)
  * Added output file commandline options to 'toolbus -gentifs' and idef2tif
 

@@ -67,6 +67,11 @@ AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
+dnl Require Shared-objects library
+AC_PACKAGE_REQUIRE(shared-objects, shared-objects-config,
+   [  --with-shared-objects=DIR Shared-Objects-library is in DIR])
+AC_SUBST(SHARED_OBJECTS)
+
 dnl Require ATerm library
 AC_PACKAGE_REQUIRE(aterm-java, aterm-java-config,
    [  --with-aterm-java=DIR   ATerm-java-library is in DIR])
