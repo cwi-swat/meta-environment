@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Feb 25, 2003 12:36:17 PM
+// generation time: Feb 25, 2003 12:40:31 PM
 
 package metastudio;
 
