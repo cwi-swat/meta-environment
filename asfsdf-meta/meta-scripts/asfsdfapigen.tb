@@ -20,8 +20,10 @@ let
   SdfExt : str,
   AsfExt : str,
   SearchPaths : list,
-  Feedback : term
+  Feedback : term,
+  WarningBanner : str
 in
+  WarningBanner := "%% WARNING: DO NOT EDIT, THIS MODULE IS GENERATED\n\n" .
   Rewriter := "ASFSDFApigen" .
   snd-msg(file-extension-hook(sdf)) .
   rec-msg(file-extension-hook-result(SdfExt?)) .
@@ -52,7 +54,7 @@ in
 	rec-msg(unparsed-text(NewSyntaxText?)) .
 	snd-msg(io-get-filename(NewPath, NewModuleName, SdfExt)) .
 	rec-msg(io-filename(FullPath?)) .
-	snd-msg(io-write-text-file(FullPath, [NewSyntaxText])) .
+	snd-msg(io-write-text-file(FullPath, [WarningBanner,NewSyntaxText])) .
 	(
 	  rec-msg(io-file-written) .
 	  snd-msg(apply-rewrite(Rewriter, "generate-equations", "Skeleton", 
