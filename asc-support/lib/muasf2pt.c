@@ -63,21 +63,27 @@ static PT_Args termsToArgs(PT_Symbols args, ATermAppl appl)
   int i;
   int j = arity-1; 
   int len = PT_getSymbolsLength(args);
-  
+  ATerm arg;
+
   for(i=len-1; i>=0; i--) {
     PT_Symbol symbol = PT_getSymbolsSymbolAt(args,i);
     PT_Tree tree = NULL;
 
-    if (PT_isSymbolLayout(symbol)) {
-        result = PT_makeArgsList(PT_makeTreeLayoutFromString(" "), result);
+    if (PT_isOptLayoutSymbol(symbol)) {
+      PT_Tree layout = PT_makeTreeLayoutFromString(" ");
+ATwarning("layout: %t\n");
+      result = PT_makeArgsList(layout, result);
+      assert(tree != NULL);
     }
     else if(PT_isSymbolLit(symbol)) {
       char *str = PT_getSymbolString(symbol);
       tree = PT_makeTreeLit(str);
+      assert(tree != NULL);
     } 
     else { 
-      ATerm arg = ATgetArgument(appl, j--);
+      arg = ATgetArgument(appl, j--);
       tree = termToTree(arg);
+      assert(tree != NULL);
     }
 
     result = PT_makeArgsList(tree ,result);
