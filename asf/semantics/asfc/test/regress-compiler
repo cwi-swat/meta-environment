@@ -1,0 +1,50 @@
+#!/bin/sh
+# $Id$
+
+VERBOSE=1
+ERROR=0
+
+cd `dirname $0`;
+mydir=`pwd`
+
+RM=rm
+COMPILER="compiler"
+COMPARE="diff"
+
+terms=$mydir/terms
+
+Notify () {
+	if [ $VERBOSE -gt 0 ]
+	then
+		echo $*                                   >&2
+	fi
+}
+
+files=`ls $terms/*.asfix 2>/dev/null`
+
+for file in $files
+do
+	base=`basename $file`
+	dir=`dirname $file`
+	out=$dir/`basename $base .asfix`.c
+	if [ ! -f $out.org ] ; then
+		Notify "No reference term for $base"
+		continue
+	fi
+	if $COMPILER -i $file -o $out
+	then
+                if $COMPARE $out $out.org	> /dev/null
+                then
+			Notify "Regression test for valid term $base succeeded"
+	                ${RM} -f $out
+		else
+			Notify "Regression test for valid term $base failed"
+			ERROR=1
+                fi
+	else
+		echo "Error compiling $file"	>&2
+		ERROR=1
+	fi
+done
+
+exit $ERROR
