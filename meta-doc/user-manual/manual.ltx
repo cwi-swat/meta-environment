@@ -48,9 +48,18 @@
         {\begin{small}\begin{center}}
         {\end{center}\end{small}}
 
+\newcommand{\crule}{
+  \htmlonly{\htmlrule}
+  \texonly{\hrulefill}
+}
+
 \newenvironment{IncCode}
-        {\begin{small}}
-        {\end{small}}      
+        {\crule \begin{small}}
+        {\end{small} \crule}  
+
+\newenvironment{CodeExample}
+        {\crule \begin{center} \begin{small}}
+        {\end{small} \end{center} \crule}
 
 \newcommand{\traversalprod}[2]{\ensuremath{f(S_1 ,\dots, S_{#1}) \rightarrow #2}}
 \newcommand{\transformerprod}{\ensuremath{f(S_1 ,\dots, S_n) \rightarrow S_1} \{\traversal(\trafo)\}}
@@ -1129,6 +1138,7 @@ the left-associative operators `{\tt \&}' and `{\tt |}', respectively) and
 in prefix notation using the function symbol `{\tt not}'). Here is the
 specification:
 
+\begin{IncCode}
 \begin{verbatim}
 module Bool-example
   exports
@@ -1163,6 +1173,7 @@ module Bool-example
     [B5] not(false) = true 
     [B6] not(true) = false
 \end{verbatim}
+\end{IncCode}
 
 For an explanation of the \asfsdf\ features used in this specification 
 \begin{iftex}
@@ -2292,8 +2303,6 @@ education) recognizes the single string {\tt aapnootmies}.
 
 
 \begin{figure}
-\htmlrule
-\T\begin{center}
 \begin{IncCode}
 \begin{verbatim}
 module LeesPlank
@@ -2309,9 +2318,7 @@ exports
     Aap Noot Mies -> LeesPlank  
 \end{verbatim}
 \end{IncCode}
-\T\end{center}
 \caption{Simple lexical functions}\label{CODE:simplelex}
-\htmlrule
 \end{figure}   
       
 
@@ -2363,7 +2370,6 @@ a definition of the sort {\tt LetterOrDigit} that recognizes a single letter
 (upper-case or lower-case) or digit.
 
 \begin{figure}
-\T\begin{center}
 \begin{IncCode}
 \begin{verbatim}
 module LettersDigits1
@@ -2380,11 +2386,9 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Defining letter (lower-case and upper-case) and digit}\label{CODE:LettersDigits1}
-\T\end{center}
 \end{figure}   
 
 \begin{figure}
-\T\begin{center}
 \begin{IncCode}
 \begin{verbatim}
 module LettersDigits2
@@ -2399,7 +2403,6 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{Defining a single letter or digit}\label{CODE:LettersDigits2}
-\T\end{center}
 \end{figure}   
 
 \paragraph{Escape Conventions}
@@ -4865,6 +4868,32 @@ uninstantiated variables.
 \section{Examples of \asfsdf\ Specifications}
 \label{large-examples}
 
+
+
+
+Here are some examples of \asfsdf\ specifications, which are selected to
+illustrate specific features of the formalism. Larger examples can be found in
+the online specifications.
+
+\subsection{Symbolic Differentiation}
+
+
+Computing the derivative of an expression with respect to some variable is a
+classical problem we discuss in this example. 
+Computing the derivative of {\tt X * (X + Y + Z)} with respect to X gives:
+\begin{quote}
+{\tt d(X * (X + Y + Z)) / dX ) = X + Y + Z + X}
+\end{quote}
+
+\noindent Differentiation is defined in three stages. First, the sorts {\tt NAT}
+(natural numbers), {\tt VAR} (variables), and {\tt EXP} (expressions) are
+introduced. Next, a differentiation operator of the form {\tt d $E$/d$V$} is
+defined. Then, the differentiation rules are defined (equations [1]-[5]).
+Finally, some rules for simplifying expressions are given. As the above
+example shows, further simplification rules could have been added to collect
+multiple occurrences of a variable (giving {\tt 2*X + Y + Z}) or to 
+compute constant expressions.
+
 \begin{figure}
 \begin{IncCode}
 \begin{verbatim}
@@ -4910,27 +4939,25 @@ equations
 \end{figure}   
 
 
-Here are some examples of \asfsdf\ specifications, which are selected to
-illustrate specific features of the formalism. Larger examples can be found in
-the online specifications.
+\subsection{Sorting}
 
-\subsection{Symbolic Differentiation}
 
-Computing the derivative of an expression with respect to some variable is a
-classical problem we discuss in this example. 
-Computing the derivative of {\tt X * (X + Y + Z)} with respect to X gives:
-\begin{quote}
-{\tt d(X * (X + Y + Z)) / dX ) = X + Y + Z + X}
-\end{quote}
 
-\noindent Differentiation is defined in three stages. First, the sorts {\tt NAT}
-(natural numbers), {\tt VAR} (variables), and {\tt EXP} (expressions) are
-introduced. Next, a differentiation operator of the form {\tt d $E$/d$V$} is
-defined. Then, the differentiation rules are defined (equations [1]-[5]).
-Finally, some rules for simplifying expressions are given. As the above
-example shows, further simplification rules could have been added to collect
-multiple occurrences of a variable (giving {\tt 2*X + Y + Z}) or to 
-compute constant expressions.
+The use of list structures is illustrated by the specification of
+the \link{"Dutch National Flag" problem}[ presented in Figure
+\ref{CODE:flag}]{CODE:flag}: 
+given an arbitrary list of the colours red,
+white and blue, sort them in the order as they appear in the Dutch National
+Flag. We want:
+
+{\tt \{white blue red blue red white red\} $\Rightarrow$ \{red red red white
+ white blue blue\}}
+
+In the \link{specification}[ of Figure~\ref{CODE:flag}]{CODE:flag}, 
+the list variables {\tt Cs1} and {\tt Cs2}
+permit a succinct formulation of the search for adjacent colours that are in
+the wrong order.
+
 
 \begin{figure}
 \begin{IncCode}
@@ -4965,23 +4992,63 @@ equations
 \caption{\asfsdf\ specification for sorting}\label{CODE:flag}
 \end{figure} 
 
+\subsection{Code Generation}
 
-\subsection{Sorting}
+Consider a simple statement language (with assignment, if-statement and
+while-statement) and suppose we want to compile this language to the following
+stack machine code:
 
-The use of list structures is illustrated by the specification of
-the \link{"Dutch National Flag" problem}[ presented in Figure
-\ref{CODE:flag}]{CODE:flag}: 
-given an arbitrary list of the colours red,
-white and blue, sort them in the order as they appear in the Dutch National
-Flag. We want:
+\begin{description}
+\item{\tt push $N$} Push the number $N$. 
+\item{\tt rvalue $I$} Push the contents of data location $I$.
+\item{\tt lvalue $I$} Push the address of data location $I$. 
+\item{\tt pop} Remove the top of the stack. 
+\item{\tt copy} Push a copy of the top value on the stack. 
+\item{\tt assign} The r-value on top of the stack is stored in the l-value
+  below it and both are popped.
+\item{\tt add, sub, mul}
+Replace the two values on top of the stack by their sum (difference,
+product). 
+\item{\tt label $L$} Place a label (target of jumps). 
+\item{\tt goto $L$} Next instruction is taken from statement following label
+  $L$. 
+\item{\tt gotrue $L$} Pop the top value; jump if it is nonzero.
+\item{\tt  gofalse $L$}
+Pop the top value; jump if it is zero.
+\end{description}
 
-{\tt \{white blue red blue red white red\} $\Rightarrow$ \{red red red white
- white blue blue\}}
+\noindent The statement:
+\begin{quote}
+{\tt while a do a := a - 1; b := a * c od }
+\end{quote}
+will now be translated to the following instruction sequence:
+\begin{verbatim}
+label xx ; 
+rvalue a ; 
+gofalse xxx ; 
+lvalue a ; 
+rvalue a ; 
+push 1 ;
+sub ; 
+assign ;
+lvalue b ; 
+rvalue a ; 
+rvalue c ; 
+mul ; 
+assign ; 
+goto xx ; 
+label xxx
+\end{verbatim}
 
-In the \link{specification}[ of Figure~\ref{CODE:flag}]{CODE:flag}, 
-the list variables {\tt Cs1} and {\tt Cs2}
-permit a succinct formulation of the search for adjacent colours that are in
-the wrong order.
+
+\noindent 
+The \link{specification}[, in Figure
+\ref{CODE:basicnotions},]{CODE:basicnotions} defines the 
+sorts {\tt Nat} (numbers) and {\tt Id} (identifiers).
+Given these basic notions the \link{expressions}[, see Figure
+\ref{CODE:expressions}]{CODE:expressions}, and 
+\link{statements}[, see Figure \ref{CODE:statements},]{CODE:statements}
+of our little source language are defined.
 
 \begin{figure}
 \begin{IncCode}
@@ -5040,6 +5107,16 @@ exports
 \caption{\asfsdf\ specification for Statements}\label{CODE:statements}
 \end{figure}
 
+
+The instructions of the \link{stack machine are defined}[ in 
+Figure \ref{CODE:assemblylanguage}]{CODE:assemblylanguage}.
+Next, we define a function to construct a next label given the
+previous one. It is defined on the lexical notion of labels ({\tt Label}). 
+The \link{scheme}[, see Figure \ref{CODE:nextlabel} for the actual
+definition,]{CODE:nextlabel} of appending the 
+character `{\tt x}' to the previous label is, of
+course, naive and will in real life be replaced by a more sophisticated one.
+
 \begin{figure}
 \begin{IncCode}
 \begin{verbatim}
@@ -5090,6 +5167,25 @@ equations
 \end{IncCode}
 \caption{\asfsdf\ specification for NextLabel}\label{CODE:nextlabel}
 \end{figure}
+
+It remains to define a function `{\tt tr}' that translates statements into
+instructions. During code generation we should generate new label names for
+the translation of if- and while-statements. This is an instance of a
+frequently occurring problem: how do we maintain global information (in this
+case: the last label name generated)? A standard solution is to introduce an
+auxiliary sort ({\tt Instrs-Lab}) that contains both the generated instruction
+sequence and the last label name generated so far.
+\begin{iftex}
+The Figures \ref{CODE:codegenerator.sdf} and \ref{CODE:codegenerator.asf} 
+show the module containing this actual translation function.
+\end{iftex}
+\begin{ifhtml}
+The \link{\sdf\ part}[]{CODE:codegenerator.sdf} and
+\link{\asf\ part}[]{CODE:codegenerator.asf} define
+the actual translation function.
+\end{ifhtml}
+
+This completes the specification of our code generator.
 
 \begin{figure}
 \begin{IncCode}
@@ -5176,92 +5272,6 @@ equations
 \caption{\asfsdf\ specification for
 CodeGenerator}\label{CODE:codegenerator.asf}
 \end{figure}
-
-\subsection{Code Generation}
-
-Consider a simple statement language (with assignment, if-statement and
-while-statement) and suppose we want to compile this language to the following
-stack machine code:
-
-\begin{description}
-\item{\tt push $N$} Push the number $N$. 
-\item{\tt rvalue $I$} Push the contents of data location $I$.
-\item{\tt lvalue $I$} Push the address of data location $I$. 
-\item{\tt pop} Remove the top of the stack. 
-\item{\tt copy} Push a copy of the top value on the stack. 
-\item{\tt assign} The r-value on top of the stack is stored in the l-value
-  below it and both are popped.
-\item{\tt add, sub, mul}
-Replace the two values on top of the stack by their sum (difference,
-product). 
-\item{\tt label $L$} Place a label (target of jumps). 
-\item{\tt goto $L$} Next instruction is taken from statement following label
-  $L$. 
-\item{\tt gotrue $L$} Pop the top value; jump if it is nonzero.
-\item{\tt  gofalse $L$}
-Pop the top value; jump if it is zero.
-\end{description}
-
-\noindent The statement:
-\begin{quote}
-{\tt while a do a := a - 1; b := a * c od }
-\end{quote}
-will now be translated to the following instruction sequence:
-\begin{verbatim}
-label xx ; 
-rvalue a ; 
-gofalse xxx ; 
-lvalue a ; 
-rvalue a ; 
-push 1 ;
-sub ; 
-assign ;
-lvalue b ; 
-rvalue a ; 
-rvalue c ; 
-mul ; 
-assign ; 
-goto xx ; 
-label xxx
-\end{verbatim}
-
-\noindent 
-The \link{specification}[, in Figure
-\ref{CODE:basicnotions},]{CODE:basicnotions} defines the 
-sorts {\tt Nat} (numbers) and {\tt Id} (identifiers).
-Given these basic notions the \link{expressions}[, see Figure
-\ref{CODE:expressions}]{CODE:expressions}, and 
-\link{statements}[, see Figure \ref{CODE:statements},]{CODE:statements}
-of our little source language are defined.
-
-The instructions of the \link{stack machine are defined}[ in 
-Figure \ref{CODE:assemblylanguage}]{CODE:assemblylanguage}.
-Next, we define a function to construct a next label given the
-previous one. It is defined on the lexical notion of labels ({\tt Label}). 
-The \link{scheme}[, see Figure \ref{CODE:nextlabel} for the actual
-definition,]{CODE:nextlabel} of appending the 
-character `{\tt x}' to the previous label is, of
-course, naive and will in real life be replaced by a more sophisticated one.
-
-
-It remains to define a function `{\tt tr}' that translates statements into
-instructions. During code generation we should generate new label names for
-the translation of if- and while-statements. This is an instance of a
-frequently occurring problem: how do we maintain global information (in this
-case: the last label name generated)? A standard solution is to introduce an
-auxiliary sort ({\tt Instrs-Lab}) that contains both the generated instruction
-sequence and the last label name generated so far.
-\begin{iftex}
-The Figures \ref{CODE:codegenerator.sdf} and \ref{CODE:codegenerator.asf} 
-show the module containing this actual translation function.
-\end{iftex}
-\begin{ifhtml}
-The \link{\sdf\ part}[]{CODE:codegenerator.sdf} and
-\link{\asf\ part}[]{CODE:codegenerator.asf} define
-the actual translation function.
-\end{ifhtml}
-
-This completes the specification of our code generator.
 
 
 \subsection{Large \asfsdf\ Specifications}
