@@ -28,4 +28,4 @@ INCLUDES = -I${ATERM}/include
 LDFLAGS  = -L${ATERM}/lib
 LDADD    = -lATerm
 
-EXTRA_DIST = Developers.make
+EXTRA_DIST = Developer.make
