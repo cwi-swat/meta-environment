@@ -218,7 +218,6 @@ TBbool tc_tool_atom2(atom *a)
     case a_rec_disconnect:
       return req_arg1_tool_id(a, TBtrue) && req_nargs(a, 1);
     case a_rec_value:
-    case a_rec_event:
       if(req_arg1_tool_id(a, TBtrue)){
 	if (req_arg2_appl(a)) {
 	  warn_res_vars(a, TBtrue);
@@ -226,8 +225,16 @@ TBbool tc_tool_atom2(atom *a)
 	} else {
 	  return TBfalse;
 	}
-      } else
+      } else {
 	return TBfalse;
+      }
+    case a_rec_event:
+      if(req_arg1_tool_id(a, TBtrue)){
+	warn_res_vars(a, TBtrue);
+	return TBtrue;
+      } else {
+	return TBfalse;
+      }
 
     case a_snd_terminate:
       return req_arg1_tool_id(a, TBtrue) && req_nargs(a, 2);
