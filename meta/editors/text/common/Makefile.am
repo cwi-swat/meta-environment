@@ -30,6 +30,5 @@ api: TextEditor.adt
 	adt-to-c \
 		--input $<.upgraded \
 		--name TextEditor \
-		--prefix TE_ \
-		--version 1.1
+		--prefix TE_ 
 	rm -f $<.upgraded

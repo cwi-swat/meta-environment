@@ -1,5 +1,6 @@
 [
   [Action, to-front, action(to-front)],
+  [Action, quit, action(quit)],
   [Action, write-contents, action(write-contents)],
   [Action, reread-contents, action(reread-contents)],
   [Action, get-contents, action(get-contents)],

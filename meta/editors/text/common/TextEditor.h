@@ -56,6 +56,7 @@ ATerm TE_PipeToTerm(TE_Pipe arg);
 /*{{{  constructors */
 
 TE_Action TE_makeActionToFront(void);
+TE_Action TE_makeActionQuit(void);
 TE_Action TE_makeActionWriteContents(void);
 TE_Action TE_makeActionRereadContents(void);
 TE_Action TE_makeActionGetContents(void);
@@ -90,6 +91,7 @@ ATbool TE_isEqualPipe(TE_Pipe arg0, TE_Pipe arg1);
 
 ATbool TE_isValidAction(TE_Action arg);
 inline ATbool TE_isActionToFront(TE_Action arg);
+inline ATbool TE_isActionQuit(TE_Action arg);
 inline ATbool TE_isActionWriteContents(TE_Action arg);
 inline ATbool TE_isActionRereadContents(TE_Action arg);
 inline ATbool TE_isActionGetContents(TE_Action arg);

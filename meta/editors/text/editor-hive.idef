@@ -56,7 +56,7 @@ in
     rec-msg(te-editor-to-front(EditorId?))
     . snd-do(Hive, editor-to-front(EditorId))
   +
-    rec-msg(te-kill-text-editor(EditorId?))
+    rec-msg(te-kill-text-editor(EditorId?)) 
     . snd-do(Hive, kill-editor(EditorId))
   +
     rec-event(Hive, contents-changed(EditorId?))

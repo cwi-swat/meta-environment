@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <dlfcn.h>
+#include <ltdl.h>
 #include <errno.h>
 #include <assert.h>
 #include <sys/types.h>
@@ -22,7 +22,7 @@
 #define PIPE_READ 0
 #define PIPE_WRITE 1
 
-#define DYNAMIC_LIBRARY_NAME "lib_%s.so"
+#define DYNAMIC_LIBRARY_NAME "lib_%s"
 #define STARTUP "startup"
 
 #define INITIAL_SIZE 128
@@ -55,19 +55,20 @@ static void executeEditor(const char *library,
   read_from_hive_fd = TE_getPipeRead(TE_getProcessToChild(process));
   write_to_hive_fd = TE_getPipeWrite(TE_getProcessFromChild(process));
 
-  handler = dlopen(library, RTLD_NOW);
+  handler = lt_dlopenext(library);
   if (handler == NULL) {
-    fprintf(stderr, "dlopen failed: %s\n", dlerror());
+    fprintf(stderr, "dlopen failed: %s\n", lt_dlerror());
     exit(errno);
   }
 
-  startup = (external_startup) dlsym(handler, STARTUP);
+  startup = (external_startup) lt_dlsym(handler, STARTUP);
 
   if (startup != NULL) {
     startup(filename, read_from_hive_fd, write_to_hive_fd);
   }
   else {
-    const char *error = dlerror();
+    const char *error = lt_dlerror();
+
     if (error != NULL) {
       fprintf(stderr, "%s in %s\n", error, library);
     }
@@ -158,7 +159,7 @@ static void setEditorProcess(ATerm id, TE_Process process)
 static void removeEditorProcess(ATerm id)
 {
   TE_Process process = getEditorProcess(id);
-
+  
   if (process != NULL) {
     if (close(TE_getPipeWrite(TE_getProcessToChild(process))) == -1) {
       perror("editor-hive:close:write-to-child");
@@ -330,6 +331,12 @@ void edit_file(int c, ATerm editorId, const char *editor, const char *filename)
 
 void kill_editor(int c, ATerm editorId)
 {
+  TE_Process process = getEditorProcess(editorId);
+
+  if (process != NULL) {
+    sendToEditor(process, TE_makeActionQuit());
+  }
+
   removeEditorProcess(editorId);
 }
 
@@ -477,15 +484,22 @@ int main(int argc, char *argv[])
 {
   ATerm bottomOfStack;
   int fd;
+  int result;
 
   ATBinit(argc, argv, &bottomOfStack);
   TE_initTextEditorApi();
+
+  lt_dlinit();
 
   editorsById = ATtableCreate(INITIAL_SIZE, LOAD_PERCENTAGE);
 
   fd = ATBconnect(NULL, NULL, -1, editor_hive_handler);
 
-  return eventloop(fd);
+  result = eventloop(fd);
+
+  lt_dlexit();
+
+  return result;
 }
 
 /*}}}  */

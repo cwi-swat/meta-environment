@@ -19,6 +19,7 @@ extern AFun TE_afun2;
 extern AFun TE_afun7;
 extern AFun TE_afun12;
 extern AFun TE_afun15;
+extern AFun TE_afun18;
 extern AFun TE_afun6;
 extern AFun TE_afun1;
 
@@ -40,6 +41,7 @@ extern ATerm TE_patternActionDisplayMessage;
 extern ATerm TE_patternActionGetContents;
 extern ATerm TE_patternActionRereadContents;
 extern ATerm TE_patternActionWriteContents;
+extern ATerm TE_patternActionQuit;
 extern ATerm TE_patternActionToFront;
 
 extern void init_TextEditor_dict();

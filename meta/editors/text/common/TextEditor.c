@@ -210,11 +210,19 @@ TE_Action TE_makeActionToFront(void)
 }
 
 /*}}}  */
+/*{{{  TE_Action TE_makeActionQuit(void) */
+
+TE_Action TE_makeActionQuit(void)
+{
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun2));
+}
+
+/*}}}  */
 /*{{{  TE_Action TE_makeActionWriteContents(void) */
 
 TE_Action TE_makeActionWriteContents(void)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun2));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun3));
 }
 
 /*}}}  */
@@ -222,7 +230,7 @@ TE_Action TE_makeActionWriteContents(void)
 
 TE_Action TE_makeActionRereadContents(void)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun3));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun4));
 }
 
 /*}}}  */
@@ -230,7 +238,7 @@ TE_Action TE_makeActionRereadContents(void)
 
 TE_Action TE_makeActionGetContents(void)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun4));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun5));
 }
 
 /*}}}  */
@@ -238,7 +246,7 @@ TE_Action TE_makeActionGetContents(void)
 
 TE_Action TE_makeActionDisplayMessage(const char* message)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun5, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(message, 0, ATtrue))));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun6, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(message, 0, ATtrue))));
 }
 
 /*}}}  */
@@ -246,7 +254,7 @@ TE_Action TE_makeActionDisplayMessage(const char* message)
 
 TE_Action TE_makeActionSetCursorAtOffset(int offset)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun6, (ATerm) (ATerm) ATmakeInt(offset)));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun7, (ATerm) (ATerm) ATmakeInt(offset)));
 }
 
 /*}}}  */
@@ -254,7 +262,7 @@ TE_Action TE_makeActionSetCursorAtOffset(int offset)
 
 TE_Action TE_makeActionSetFocus(ATerm focus)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun7, (ATerm) focus));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun8, (ATerm) focus));
 }
 
 /*}}}  */
@@ -262,7 +270,7 @@ TE_Action TE_makeActionSetFocus(ATerm focus)
 
 TE_Action TE_makeActionClearFocus(void)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun8));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun9));
 }
 
 /*}}}  */
@@ -270,7 +278,7 @@ TE_Action TE_makeActionClearFocus(void)
 
 TE_Action TE_makeActionSetActions(TE_ActionList actions)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun9, (ATerm) actions));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun10, (ATerm) actions));
 }
 
 /*}}}  */
@@ -294,7 +302,7 @@ TE_ActionList TE_makeActionListMulti(TE_Menu head, TE_ActionList tail)
 
 TE_Menu TE_makeMenuDefault(const char* main, const char* sub)
 {
-  return (TE_Menu)(ATerm)ATmakeAppl1(TE_afun10, (ATerm)ATinsert(ATmakeList1((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sub, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(main, 0, ATtrue))));
+  return (TE_Menu)(ATerm)ATmakeAppl1(TE_afun11, (ATerm)ATinsert(ATmakeList1((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sub, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(main, 0, ATtrue))));
 }
 
 /*}}}  */
@@ -302,7 +310,7 @@ TE_Menu TE_makeMenuDefault(const char* main, const char* sub)
 
 TE_Menu TE_makeMenuShortcut(const char* main, const char* sub, const char* shortcut)
 {
-  return (TE_Menu)(ATerm)ATmakeAppl2(TE_afun11, (ATerm)ATinsert(ATmakeList1((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sub, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(main, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
+  return (TE_Menu)(ATerm)ATmakeAppl2(TE_afun12, (ATerm)ATinsert(ATmakeList1((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sub, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(main, 0, ATtrue))), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(shortcut, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -310,7 +318,7 @@ TE_Menu TE_makeMenuShortcut(const char* main, const char* sub, const char* short
 
 TE_Event TE_makeEventMenu(TE_Menu menu)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun12, (ATerm) menu);
+  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun13, (ATerm) menu);
 }
 
 /*}}}  */
@@ -318,7 +326,7 @@ TE_Event TE_makeEventMenu(TE_Menu menu)
 
 TE_Event TE_makeEventMouse(int location)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun13, (ATerm) (ATerm) ATmakeInt(location));
+  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun14, (ATerm) (ATerm) ATmakeInt(location));
 }
 
 /*}}}  */
@@ -326,7 +334,7 @@ TE_Event TE_makeEventMouse(int location)
 
 TE_Event TE_makeEventContents(const char* text)
 {
-  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun14, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(text, 0, ATtrue)));
+  return (TE_Event)(ATerm)ATmakeAppl1(TE_afun15, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(text, 0, ATtrue)));
 }
 
 /*}}}  */
@@ -334,7 +342,7 @@ TE_Event TE_makeEventContents(const char* text)
 
 TE_Event TE_makeEventModified(void)
 {
-  return (TE_Event)(ATerm)ATmakeAppl0(TE_afun15);
+  return (TE_Event)(ATerm)ATmakeAppl0(TE_afun16);
 }
 
 /*}}}  */
@@ -342,7 +350,7 @@ TE_Event TE_makeEventModified(void)
 
 TE_Process TE_makeProcessDefault(TE_Pipe toChild, TE_Pipe fromChild)
 {
-  return (TE_Process)(ATerm)ATmakeAppl2(TE_afun16, (ATerm) toChild, (ATerm) fromChild);
+  return (TE_Process)(ATerm)ATmakeAppl2(TE_afun17, (ATerm) toChild, (ATerm) fromChild);
 }
 
 /*}}}  */
@@ -350,7 +358,7 @@ TE_Process TE_makeProcessDefault(TE_Pipe toChild, TE_Pipe fromChild)
 
 TE_Pipe TE_makePipeDefault(int read, int write)
 {
-  return (TE_Pipe)(ATerm)ATmakeAppl2(TE_afun17, (ATerm) (ATerm) ATmakeInt(read), (ATerm) (ATerm) ATmakeInt(write));
+  return (TE_Pipe)(ATerm)ATmakeAppl2(TE_afun18, (ATerm) (ATerm) ATmakeInt(read), (ATerm) (ATerm) ATmakeInt(write));
 }
 
 /*}}}  */
@@ -398,6 +406,9 @@ ATbool TE_isValidAction(TE_Action arg)
   if (TE_isActionToFront(arg)) {
     return ATtrue;
   }
+  else if (TE_isActionQuit(arg)) {
+    return ATtrue;
+  }
   else if (TE_isActionWriteContents(arg)) {
     return ATtrue;
   }
@@ -440,6 +451,28 @@ inline ATbool TE_isActionToFront(TE_Action arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, TE_patternActionToFront);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool TE_isActionQuit(TE_Action arg) */
+
+inline ATbool TE_isActionQuit(TE_Action arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TE_patternActionQuit);
       last_gc = ATgetGCCount();
     }
 
@@ -1456,6 +1489,9 @@ TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acc
 {
   if (TE_isActionToFront(arg)) {
     return TE_makeActionToFront();
+  }
+  if (TE_isActionQuit(arg)) {
+    return TE_makeActionQuit();
   }
   if (TE_isActionWriteContents(arg)) {
     return TE_makeActionWriteContents();

@@ -151,7 +151,6 @@ static void makeVimMenuItem(char *menu, char *item)
 static void hiveClosed(int write_to_editor_fd)
 {
   assert(write_to_editor_fd == -1);
-
   sendToVim(":qa!");
 }
 

@@ -4,8 +4,6 @@ include ${top_srcdir}/make_rules
 
 SUBDIRS = common . gvim emacs
 
-#AM_CFLAGS = -Werror
-
 CLEANFILES = \
 	editor-hive.tifs
 
@@ -37,4 +35,4 @@ editor_hive_LDADD = \
 	-L$(top_builddir)/editors/text/common -lTextEditor \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm \
-	$(SOCKLIBS) -ldl
+	$(SOCKLIBS) -lltdl

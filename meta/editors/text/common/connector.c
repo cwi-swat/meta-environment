@@ -180,6 +180,9 @@ static void handleHiveInput(TextEditor editor,
   if (TE_isActionGetContents(action)) {
     getContents(write_to_hive_fd);
   }
+  else if (TE_isActionQuit(action)) {
+    editor->hiveClosed(write_to_editor_fd);
+  }
   else if (TE_isActionClearFocus(action)) {
     editor->clearFocus(write_to_editor_fd);
   }
@@ -301,6 +304,7 @@ int eventloop(TextEditor editor, TE_Pipe hiveToEditor, TE_Pipe editorToHive)
 	editor->hiveClosed(write_to_editor_fd);
 	return 0;
       }
+
       handleHiveInput(editor,
 		      write_to_editor_fd,
 		      write_to_hive_fd,

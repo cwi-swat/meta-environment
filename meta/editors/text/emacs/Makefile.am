@@ -2,8 +2,6 @@
 
 SCRIPT = gnu-emacs.el
 
-#AM_CFLAGS = -Werror
-
 INCLUDES = \
 	-I$(top_srcdir)/editors/text/common \
 	-I$(ATERM)/include \
@@ -32,3 +30,4 @@ emacs_connector_LDADD = \
 	$(SOCKLIBS)
 
 lib_gnu_emacs_la_SOURCES = startup.c
+lib_gnu_emacs_la_LDFLAGS = -module
