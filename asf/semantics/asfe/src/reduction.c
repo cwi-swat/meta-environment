@@ -357,13 +357,14 @@ static PT_Tree rewriteAPIAppl(PT_Tree tree, ATerm env, int depth, void*extra)
   apiresult = interpretAPICall(tree);
 
   if (apiresult == FAIL) {
-    apiresult = tree; 
+    result = tree;
   }
-  
-  result = rewriteInnermost(apiresult, env, depth, extra);
+  else {
+    result = rewriteInnermost(apiresult, env, depth, extra);
 
-  if (result == FAIL && apiresult != FAIL) {
-    result = apiresult;
+    if (result == FAIL) {
+      result = apiresult;
+    }
   }
 
   return result;
