@@ -4,7 +4,7 @@ CLEANFILES	= test.tifs example.tifs \
 		Example{Tif,Tool,Bridge}.java \
 		Testing{Tif,Tool,Bridge}.java
 
-EXTRA_DIST	= test.tb test.tifs example.tb example.tifs
+EXTRA_DIST	= ${java_JAVA} test.tb test.tifs example.tb example.tifs
 
 java_JAVA	= Tool.java AbstractTool.java TestTool.java JavaTif.java \
 		Testing.java Example.java SwingTool.java

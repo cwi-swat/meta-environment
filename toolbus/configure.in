@@ -97,7 +97,7 @@ AC_SUBST(JAVA_ADAPTER)
 
 AC_ARG_WITH(trans,
    [  --with-trans-adapter    transparently connects to another toolbus],
-   JAVA_ADAPTER=trans-adapter)
+   TRANS_ADAPTER=trans-adapter)
 AC_SUBST(TRANS_ADAPTER)
 
 AC_ARG_WITH(tcltk,

@@ -1,5 +1,7 @@
 SUBDIRS    = toolbus aterm adapters tbviz doc demos test
 
+CLEANFILES = ${PACKAGE}-${VERSION}.pkg
+
 EXTRA_DIST = program-check.m4 reconf DEVELOPERS-INFO $(wildcard *.pkg)
 
 noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg

@@ -30,7 +30,24 @@ OK_TESTS        = if-ok msg-ok notes-ok bind-ok expr-ok types-ok garbage-ok
 
 ERROR_TESTS     = expr-errors-fail tc-errors-fail scope-fail
 
-CLEANFILES      = $(OK_TESTS) $(ERROR_TESTS) test-removesocket test-annos read
+GENERATED_BY_TESTS = \
+	fa \
+	fb \
+	fc \
+	fd \
+	fe \
+	ff \
+	fbin \
+	test.out \
+	blobby
+
+CLEANFILES = \
+	$(OK_TESTS) \
+	$(ERROR_TESTS) \
+	$(GENERATED_BY_TESTS) \
+	test-removesocket \
+	test-annos \
+	read
 
 LDADD           = -L$(TOOLBUSLIB)/lib -ltb
 INCLUDES        = -I$(TOOLBUSLIB)/include

@@ -1,5 +1,8 @@
 $Id$
 
+Mon Feb  2 16:34:09 CET 2004 <{jong,kooiker}@cwi.nl>
+ * upgraded several Makefile.am files to get 'distcheck' working
+
 2003/11/07 <{jong,jurgenv}@cwi.nl>
  * Set version of toolbus to 1.0. Notice that versions 0.3 and 0.3.1 
    are strange because the version before 0.3 was 0.25 (a later version).

@@ -18,5 +18,4 @@ DIST_SUBDIRS = \
 	tcltk-adapter \
 	toolbus-adapter \
 	trans-adapter \
-	trans-adapter \
 	wish-adapter 
