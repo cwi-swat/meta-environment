@@ -1,5 +1,9 @@
 $Id$
 
+Fri Jul  9 11:54:37 CEST 2004 <markvdb@cwi.nl>
+ * left-/right-/assoc-/non-assoc-prios have been replaced
+   by numbered priorities.
+
 Mon Jul  5 13:01:00 CEST 2004 <markvdb@cwi.nl>
  * Bug fix wrt the translation of non-assoc in number priorities.
 

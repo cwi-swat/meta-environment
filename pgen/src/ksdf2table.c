@@ -57,12 +57,8 @@ AFun afun_goto = 0;
 AFun afun_prod = 0;
 AFun afun_range = 0;
 AFun afun_shift = 0;
-AFun afun_non_assoc_prio = 0;
 AFun afun_gtr_prio = 0;
 AFun afun_arg_gtr_prio = 0;
-AFun afun_left_prio = 0;
-AFun afun_right_prio = 0;
-AFun afun_assoc_prio = 0;
 AFun afun_state_rec = 0;
 AFun afun_label = 0;
 AFun afun_lit = 0;
@@ -128,14 +124,6 @@ void init_table_gen()
   ATprotectAFun(afun_range);
   afun_shift = ATmakeAFun("shift", 1, ATfalse);
   ATprotectAFun(afun_shift);
-  afun_left_prio = ATmakeAFun("left-prio", 2, ATfalse);
-  ATprotectAFun(afun_left_prio);
-  afun_right_prio = ATmakeAFun("right-prio", 2, ATfalse);
-  ATprotectAFun(afun_right_prio);
-  afun_assoc_prio = ATmakeAFun("assoc-prio", 2, ATfalse);
-  ATprotectAFun(afun_assoc_prio);
-  afun_non_assoc_prio = ATmakeAFun("non-assoc-prio", 2, ATfalse);
-  ATprotectAFun(afun_non_assoc_prio);
   afun_gtr_prio = ATmakeAFun("gtr-prio", 2, ATfalse);
   ATprotectAFun(afun_gtr_prio);
   afun_arg_gtr_prio = ATmakeAFun("arg-gtr-prio", 3, ATfalse);
@@ -357,48 +345,6 @@ static ATerm getProductionNumberForGroup(SDF_Group group)
   return nr;
 }
 
-/*{{{  ATerm process_priorities(SDF_PriorityList prios) */
-
-static ATerm processAssocPriority(SDF_Priority prio)
-{
-  ATerm leftnr = NULL, rightnr = NULL;
-  ATerm prioentry = NULL;
-  ATerm zero = (ATerm)ATmakeInt(0);
-
-  SDF_Group leftGroup = SDF_getPriorityLeft(prio);
-  SDF_Group rightGroup = SDF_getPriorityRight(prio);
-
-  leftnr = getProductionNumberForGroup(leftGroup);
-  rightnr = getProductionNumberForGroup(rightGroup);
-  
-  if (!ATisEqual(leftnr, zero) && !ATisEqual(rightnr, zero)) {
-    SDF_Associativity assoc = SDF_getPriorityAssociativity(prio);
-    if (SDF_isAssociativityLeft(assoc)) {
-      prioentry = (ATerm)ATmakeAppl2(afun_left_prio, 
-                                     leftnr, rightnr);
-    }
-    else if (SDF_isAssociativityRight(assoc)) {
-      prioentry = (ATerm)ATmakeAppl2(afun_right_prio, 
-                                     leftnr, rightnr);
-    }
-    else if (SDF_isAssociativityAssoc(assoc)) {
-      prioentry = (ATerm)ATmakeAppl2(afun_assoc_prio, 
-                                     leftnr, rightnr);
-    }
-    else if (SDF_isAssociativityNonAssoc(assoc)) {
-      prioentry = (ATerm)ATmakeAppl2(afun_non_assoc_prio, 
-                                     leftnr, rightnr);
-    }
-    else {
-      ATerror("Associativity expected, got %t\n", assoc);
-    }
-  }
-  else {
-    prioentry = NULL;
-  }
-  return prioentry;
-}
-
 static ATerm processChainPriority(SDF_Priority prio)
 {
   ATerm leftnr = NULL, rightnr = NULL;
@@ -547,7 +493,8 @@ static ATerm process_priorities(SDF_PriorityList prios)
     SDF_Priority prio = SDF_getPriorityListHead(prios);
     
     if (SDF_isPriorityAssoc(prio)) {
-      prioentry = processAssocPriority(prio);
+      ATabort("Assoc priorities may not occur after normalization %t\n", prio);
+      prioentry = NULL;
     }
 
     if (prioentry) {

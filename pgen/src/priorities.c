@@ -53,32 +53,20 @@ ATbool conflicts(Item item, ATerm label)
 
   if (iptr == 0) {
     if (len > 1) {
-      priorel = (ATerm)ATmakeAppl2(afun_right_prio, prodnr, label);
+      priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prodnr, label);
       if (PRIORITY_EXISTS(priorel)) {
         result = ATtrue;
       }
       else {
-        priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prodnr, label);
-	if (PRIORITY_EXISTS(priorel)) {
+        priorel = (ATerm)ATmakeAppl3(afun_arg_gtr_prio, 
+                                     prodnr, 
+                                     (ATerm)ATmakeInt(iptr),
+                                     label);
+        if (PRIORITY_EXISTS(priorel)) {
           result = ATtrue;
         }
         else {
-          priorel = (ATerm)ATmakeAppl3(afun_arg_gtr_prio, 
-                                       prodnr, 
-                                       (ATerm)ATmakeInt(iptr),
-                                       label);
-	  if (PRIORITY_EXISTS(priorel)) {
-            result = ATtrue;
-          }
-          else {
-            priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio, prodnr, label);
-	    if (PRIORITY_EXISTS(priorel)) {
-              result = ATtrue;
-            }
-            else {
-              result = ATfalse;
-            }
-          }
+          result = ATfalse;
         }
       }
     }
@@ -102,39 +90,21 @@ ATbool conflicts(Item item, ATerm label)
     }
   }
   else {
-    if(len > 1) {
-      priorel = (ATerm)ATmakeAppl2(afun_left_prio, prodnr, label);
+    if (len > 1) {
+      priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prodnr, label);
       if (PRIORITY_EXISTS(priorel)) {
         result = ATtrue;
       }
       else {
-        priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prodnr, label);
+        priorel = (ATerm)ATmakeAppl3(afun_arg_gtr_prio, 
+                                     prodnr, 
+                                     (ATerm)ATmakeInt(iptr),
+                                     label);
 	if (PRIORITY_EXISTS(priorel)) {
           result = ATtrue;
-	}
+        }
         else {
-          priorel = (ATerm)ATmakeAppl3(afun_arg_gtr_prio, 
-                                       prodnr, 
-                                       (ATerm)ATmakeInt(iptr),
-                                       label);
-	  if (PRIORITY_EXISTS(priorel)) {
-            result = ATtrue;
-          }
-          else {
-            priorel = (ATerm)ATmakeAppl2(afun_assoc_prio, prodnr, label);
-	    if (PRIORITY_EXISTS(priorel)) {
-              result = ATtrue;
-	    }
-            else {
-              priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio, prodnr, label);
-	      if (PRIORITY_EXISTS(priorel)) {
-                result = ATtrue;
-	      }
-              else {
-                result = ATfalse;
-	      }
-            }
-          }
+          result = ATfalse;
         }
       }
     }
