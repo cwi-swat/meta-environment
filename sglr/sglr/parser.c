@@ -324,21 +324,30 @@ ATerm SG_Parse(parse_table *ptable, char *sort, int(*get_next_char)(void))
   file an error in the middle of the file.
 */
 
+char *SG_ApplSort(ATerm t)
+{
+  char *sort;
+
+  if(ATmatch(t, "appl(prod([<term>,cf(sort(<str>)),<term>],<term>,<term>),"
+                "<list>)",
+         NULL, &sort, NULL, NULL, NULL, NULL)) {
+    return sort;
+  }
+  if(ATgetAFun((ATermAppl) t) == SG_AmbAFun())
+    return("[multiple sorts]"); 
+
+  return NULL;
+}
+
 ATerm SG_Prune(ATerm forest, char *desiredsort)
 {
   /*  Prune the forest  */
   ATermList trees, bonsai = ATempty;
   ATerm     tree;
   char      *sort;
-  ATbool    AmbStart, was_abbrev;
+  ATbool    AmbStart;
 
-  /*  We _must_ expand the top node, if we're going to select  */
-  was_abbrev = SG_ABBREV;
-  SG_ABBREV_OFF();
-  forest = (ATerm) SG_ExpandApplNode(table, (ATermAppl) forest, ATfalse);
-  if(was_abbrev) SG_ABBREV_ON();
-
-  /*  Is in in fact an ambiguity node?  If so, all trees in it must be done.  */
+  /*  Is the top node an ambiguity node?  If so, all trees in it must be done.  */
   if(!(AmbStart = ATmatch(forest, "amb([<list>])", &trees))) {
     trees = ATmakeList1(forest);
   }
@@ -346,9 +355,8 @@ ATerm SG_Prune(ATerm forest, char *desiredsort)
   for(; !ATisEmpty(trees); trees=ATgetNext(trees)) {
     tree = ATgetFirst(trees);
 
-    if(ATmatch(tree, "appl(prod([<term>,cf(sort(<str>)),<term>],<term>,<term>),"
-                          "<list>)",
-               NULL, &sort, NULL, NULL, NULL, NULL)) {
+    sort = SG_ApplSort(tree);
+    if(sort != NULL) {
       if(!strcmp(desiredsort, sort)) {
         bonsai = ATinsert(bonsai, tree);
       }
@@ -371,23 +379,50 @@ ATerm SG_Prune(ATerm forest, char *desiredsort)
   }
 }
 
+char *SGsort(int Mode, ATerm t)
+{
+  static char *sort = NULL;
+
+  switch(Mode)
+  {
+    case SG_GET:
+      break;
+    case SG_SET:
+      sort = SG_ApplSort(t);
+      break;
+  }
+  return sort;
+}
+
 ATerm SG_Result(char *sort)
 {
+  ATbool was_abbrev;
+
   if (accepting_stack != NULL) {
     ATerm forest;
 
     forest = SG_LK_TREE(head(SG_ST_LINKS(accepting_stack)));
+
+    /*  We _must_ expand at least the top node  */
+    was_abbrev = SG_ABBREV;
+    SG_ABBREV_OFF();
+    forest = (ATerm) SG_ExpandApplNode(table, (ATermAppl) forest, ATfalse);
+    if(was_abbrev) SG_ABBREV_ON();
+
     /*  Select only the desired start symbols when so requested  */
     if (sort!=NULL && !SG_ABBREV && (forest = SG_Prune(forest, sort))==NULL)
         return ATmake("parse-error([character(<int>), line(<int>),"
                       "col(<int>), char(<int>)])",
                       current_token, line, col, sg_tokens_read);
 
+    SGsort(SG_SET, forest);
+
     if(!SG_OUTPUT)  /*  Ambiguity count > 0 is an upper limit in this case  */
       forest = ATmake("parsetree(suppressed,<int>)", SG_MaxNrAmb(SG_NRAMB_ASK));
     else {          /*  An exact ambiguity count can be given  */
       forest = SG_YieldPT(table, forest);
       forest = ATmake("parsetree(<term>,<int>)", forest, SGnrAmb(SG_NRAMB_ASK));
+      SGsort(SG_SET, ATgetArgument((ATermAppl) forest, 0));
 #ifdef HAVE_A2TOA1
       if(SG_ASFIX1) {
         if(SGnrAmb(SG_NRAMB_ASK) > 0) {

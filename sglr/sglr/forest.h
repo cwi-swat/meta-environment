@@ -33,6 +33,10 @@ enum SG_ApplIDAction { SG_APPLID_ZERO, SG_APPLID_INC };
 
 ATermList SG_AmbTable(int Mode, ATermInt key, ATermList value);
 int   SG_MaxNrAmb(int Mode);
+AFun  SG_ApplAFun(void);
+AFun  SG_AprodAFun(void);
+AFun  SG_AmbAFun(void);
+
 void  SG_Amb(parse_table *, ATermAppl, ATermAppl);
 ATermAppl SG_ExpandApplNode(parse_table * pt, ATermAppl t, ATbool recurse);
 ATerm SG_YieldPT(parse_table *pt, ATerm t);
