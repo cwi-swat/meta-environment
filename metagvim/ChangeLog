@@ -1,5 +1,11 @@
 # $Id$
 
+Fri Jun  7 14:09:11 CEST 2002 <jong@cwi.nl>
+ * version 0.3
+ * add "reload_file" support
+ * del "edit_text" (was unimplemented)
+ * fix buffer overrun bug (did not realloc enough)
+
 Mon May 13 09:38:50 CEST 2002 <jong@cwi.nl>
  * add program-check.m4 to EXTRA_DIST
  * add AC_SET_MAKE and AC_PROG_RANLIB.

@@ -159,7 +159,7 @@ void tb_set_focus(int conn, char *fid, char *s, int start, int len)
 }
 
 /*}}}  */
-/*{{{  ATerm tb_get_focus_text(int conn, char *s, int i, int j) */
+/*{{{  ATerm tb_get_focus_text(int conn, char *fid, int start, int len) */
 
 ATerm tb_get_focus_text(int conn, char *fid, int start, int len)
 {
@@ -177,10 +177,11 @@ ATerm tb_get_focus_text(int conn, char *fid, int start, int len)
 
   if (size > 0) {
     FILE *f;
+    int needed = size + 1; /* for terminating '\0' */
 
-    contents = realloc(contents, size);
+    contents = realloc(contents, needed);
     if (contents == NULL) {
-      ATerror("tb_get_focus_text: failed to allocate %d bytes\n", size);
+      ATerror("tb_get_focus_text: failed to realloc to %d bytes\n", needed);
     }
 
     f = fopen(filename, "rb");
@@ -240,15 +241,6 @@ void tb_set_msg(int conn, char *msg)
 }
 
 /*}}}  */
-/*{{{  ATerm edit_text(int conn, char *s, char *t) */
-
-ATerm edit_text(int conn, char *s, char *t)
-{
-  ATwarning("edit_text: [%s], [%s], unimplemented!\n", s, t);
-  return NULL;
-}
-
-/*}}}  */
 /*{{{  ATerm edit_file(int conn, char *s) */
 
 ATerm edit_file(int conn, char *s)
@@ -264,6 +256,15 @@ ATerm edit_file(int conn, char *s)
 }
 
 /*}}}  */
+/*{{{  void reload_file(int conn, char *s) */
+
+void reload_file(int conn, char *s)
+{
+  sendToVim(":e!");
+}
+
+/*}}}  */
+
 /*{{{  void move_editor_to_front(int conn, char *s) */
 
 void move_editor_to_front(int conn, char *s)
