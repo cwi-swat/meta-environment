@@ -1,4 +1,8 @@
-buttons([
+configuration([
+  extension("Sdf2",".sdf"),
+  extension("Asf",".asf"),
+  extension("languages/pico/Pico-Syntax",".pico"),
+
   button("*",
          [description(tree-panel, click),
           description(message-list, click)],

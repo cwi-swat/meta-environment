@@ -1,0 +1,30 @@
+[
+  constructor(Configuration,List,configuration(<list(Properties)>)),
+  list(Properties,Property),
+  constructor(Property,button,button(<module(str)>,<descriptions(ButtonDescriptionList)>,<actions(term)>)),
+  constructor(Property,extension,extension(<language(str)>,<extension(str)>)),
+
+  list(ButtonDescriptionList,ButtonDescription),
+  constructor(ButtonDescription,default,description(<type(ButtonType)>,<args(ButtonArgs)>)),
+
+  constructor(ButtonType,term-editor,term-editor),
+  constructor(ButtonType,equations-editor,equations-editor),
+  constructor(ButtonType,syntax-editor,syntax-editor),
+  constructor(ButtonType,message-list,message-list),
+  constructor(ButtonType,feedback-list,feedback-list),
+  constructor(ButtonType,tree-panel,tree-panel),
+  constructor(ButtonType,module-popup,module-popup),
+  constructor(ButtonType,new-module-popup,new-module-popup),
+  constructor(ButtonType,studio-menubar,studio-menubar),
+  constructor(ButtonType,studio-toolbar,studio-toolbar),
+  constructor(ButtonType,wildcard,"*"),
+
+  constructor(ButtonArgs,click,click),
+  constructor(ButtonArgs,menu,menu(<list(MenuTitles)>)),
+  constructor(ButtonArgs,menuwithshortcut,menuwithshortcut(<list(MenuTitles)>,<shortcut(str)>)),
+  constructor(ButtonArgs,icon,icon(<title(str)>,<path(str)>)),
+
+  list(MenuTitles,str),
+
+  constructor(ModuleName,wildcard,"*")
+]

@@ -8,16 +8,16 @@ pkgdata_DATA  = configuration-manager.idef standard.meta.buttons
 
 EXTRA_DIST = configuration-manager.idef standard.meta.buttons
 
-#CFLAGS+= -DDISABLE_DYNAMIC_CHECKING
+CFLAGS+= -DDISABLE_DYNAMIC_CHECKING
 
-noinst_HEADERS = configmanager.tif.h configmanager.h
-include_HEADERS = MetaButtons.h MetaButtons_dict.h 
+noinst_HEADERS = configuration-manager.tif.h configmanager.h
+include_HEADERS = MetaConfig.h MetaConfig_dict.h 
 
 configmanager_SOURCES = \
-	MetaButtons.c \
-	MetaButtons_dict.c \
+	MetaConfig.c \
+	MetaConfig_dict.c \
 	configmanager.c \
-	configmanager.tif.c
+	configuration-manager.tif.c
 
 configmanager_LDADD = \
 	-L$(TOOLBUSLIB)/lib -lATB \
@@ -31,4 +31,9 @@ INCLUDES = \
 	-DSTANDARD_META_BUTTONS=\"$(pkgdatadir)/standard.meta.buttons\"
 
 api:
-	adt-to-c -i buttons.adt --prefix MB_ -o MetaButtons
+	adt-to-c \
+		--input configuration.adt \
+		--name MetaConfig \
+		--prefix MC_ \
+		--output . \
+		--verbose

@@ -1,6 +1,6 @@
 /* $Id$ */        
 
-tool configmanager is {
+tool configuration-manager is {
   command = "configmanager"
 }
 
@@ -12,7 +12,7 @@ tool configmanager is {
 #define BUTTON_FILE "meta.buttons"
 #endif
 
-process AddUserDefinedActions(CMNG: configmanager) is
+process AddUserDefinedActions(CMNG: configuration-manager) is
 let
   Contents : str,
   ErrorMessage : str
@@ -27,7 +27,7 @@ in
   )
 endlet
 
-process AddPredefinedActions(CMNG: configmanager) is
+process AddPredefinedActions(CMNG: configuration-manager) is
 let
   Contents : str
 in
@@ -38,7 +38,7 @@ endlet
   
 process ConfigurationManager is
 let
-  CMNG : configmanager,
+  CMNG : configuration-manager,
   ButtonActions : list,
   ButtonName : term,
   ButtonNames : list,
@@ -50,11 +50,12 @@ let
   ModuleName : str,
   Pid : int,
   SearchPaths : list,
+  Extensions : list,
   Term : term,
   Text : str,
   Tree : term
 in
-  execute(configmanager, CMNG?) .
+  execute(configuration-manager, CMNG?) .
   snd-msg(io-read-file(CONFIG_FILE)) .
   (
     rec-msg(io-file-contents(Text?))
@@ -87,6 +88,11 @@ in
     snd-eval(CMNG, get-button-actions(ModuleName, EditorType, ButtonName)) .
     rec-value(CMNG, button-actions(ButtonActions?)) .
     snd-msg(button-actions(ButtonName, EditorType, ModuleName, ButtonActions))
+  +
+    rec-msg(get-extensions) .
+    snd-eval(CMNG, get-extensions) .
+    rec-value(CMNG, extensions(Extensions?)) .
+    snd-msg(extensions(Extensions)) 
   +
     rec-msg(get-search-paths) .
     snd-eval(CMNG, get-search-paths) .

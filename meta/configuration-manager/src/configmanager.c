@@ -2,8 +2,9 @@
 
 /*{{{  includes */
 
-#include "configmanager.h"
-#include "MetaButtons.h"
+#include "configuration-manager.tif.h"
+#include <ctype.h>
+#include "MetaConfig.h"
 #include <unistd.h> 
 #include <assert.h>
 
@@ -15,20 +16,11 @@
 /*}}}  */
 /*{{{  globals */
 
-static char myversion[] = "3.0";     
-static MB_ButtonList buttons = NULL;
-static MB_ButtonList standardButtons = NULL;
+static char myversion[] = "4.0";     
+static MC_Properties properties = NULL;
+static MC_Properties standardProperties = NULL;
 static ATermList userSearchPaths = NULL;
 static ATerm librarySearchPath = NULL;
-
-/*}}}  */
-
-/*{{{  static MB_ButtonList MB_concatButtonList(MB_ButtonList l1, MB_ButtonList l2) */
-
-static MB_ButtonList MB_concatButtonList(MB_ButtonList l1, MB_ButtonList l2)
-{
-  return (MB_ButtonList) ATconcat((ATermList) l1, (ATermList) l2);
-}
 
 /*}}}  */
 
@@ -93,23 +85,15 @@ void register_user_directories(int cid, ATerm paths)
 }
 
 /*}}}  */
-/*{{{  void register_library(int cid, char *path) */
-
-void register_library(int cid, char *path)
-{
-  librarySearchPath = ATmake("<str>", path);
-}
-
-/*}}}  */
 /*{{{  void set_actions(int cid, char *contents) */
 
 void set_actions(int cid, char *contents)
 {
   ATerm atButtons = ATreadFromString(contents);
-  buttons = MB_makeButtonListEmpty();
+  properties = MC_makePropertiesEmpty();
 
-  if (MB_isValidButtons(MB_ButtonsFromTerm(atButtons))) {
-    buttons = MB_getButtonsList(MB_ButtonsFromTerm(atButtons));
+  if (MC_isValidConfiguration(MC_ConfigurationFromTerm(atButtons))) {
+    properties = MC_getConfigurationList(MC_ConfigurationFromTerm(atButtons));
   }
 }
 
@@ -118,7 +102,7 @@ void set_actions(int cid, char *contents)
 
 void remove_actions(int cid)
 {
-  buttons = MB_makeButtonListEmpty();
+  properties = MC_makePropertiesEmpty();
 }
 
 /*}}}  */
@@ -128,19 +112,19 @@ void add_predefined_actions(int cid, char *contents)
 {
   ATerm actions = ATreadFromString(contents);
 
-  if (MB_isValidButtons(MB_ButtonsFromTerm(actions))) {
-    MB_ButtonList newActions = MB_getButtonsList(MB_ButtonsFromTerm(actions));
-    standardButtons = MB_concatButtonList(newActions, standardButtons);
+  if (MC_isValidConfiguration(MC_ConfigurationFromTerm(actions))) {
+    MC_Properties newActions = MC_getConfigurationList(MC_ConfigurationFromTerm(actions));
+    standardProperties = MC_concatProperties(newActions, standardProperties);
   }
 }
 
 /*}}}  */
 
-/*{{{  static MB_ButtonList getButtonList() */
+/*{{{  static MC_Properties getProperties() */
 
-static MB_ButtonList getButtonList()
+static MC_Properties getProperties()
 {
-  return MB_concatButtonList(standardButtons, buttons);
+  return MC_concatProperties(standardProperties, properties);
 }
 
 /*}}}  */
@@ -152,70 +136,70 @@ static ATbool moduleNameMatches(const char *suspect, const char *peer)
 }
 
 /*}}}  */
-/*{{{  static ATbool typeMatches(MB_ButtonType suspect, MB_ButtonType peer) */
+/*{{{  static ATbool typeMatches(MC_ButtonType suspect, MC_ButtonType peer) */
 
-static ATbool typeMatches(MB_ButtonType suspect, MB_ButtonType peer)
+static ATbool typeMatches(MC_ButtonType suspect, MC_ButtonType peer)
 {
-  return MB_isEqualButtonType(suspect, peer)
-    || MB_isButtonTypeWildcard(suspect);
+  return MC_isEqualButtonType(suspect, peer)
+    || MC_isButtonTypeWildcard(suspect);
 }
 
 /*}}}  */
 
-/*{{{  static ATermList getButtonArgs(MB_Button button, MB_ButtonType requestedType) */
+/*{{{  static ATermList getButtonArgs(MC_Property button, MC_ButtonType requestedType) */
 
-static ATermList getButtonArgs(MB_Button button, MB_ButtonType requestedType)
+static ATermList getButtonArgs(MC_Property button, MC_ButtonType requestedType)
 {
   ATermList events = ATempty;
-  MB_ButtonDescriptionList descriptions;
+  MC_ButtonDescriptionList descriptions;
 
-  descriptions = MB_getButtonDescriptions(button);
-  assert(MB_isValidButtonDescriptionList(descriptions));
+  descriptions = MC_getPropertyDescriptions(button);
+  assert(MC_isValidButtonDescriptionList(descriptions));
 
-  while (!MB_isButtonDescriptionListEmpty(descriptions)) {
-    MB_ButtonDescription desc = MB_getButtonDescriptionListHead(descriptions);
-    MB_ButtonType type = MB_getButtonDescriptionType(desc);
+  while (!MC_isButtonDescriptionListEmpty(descriptions)) {
+    MC_ButtonDescription desc = MC_getButtonDescriptionListHead(descriptions);
+    MC_ButtonType type = MC_getButtonDescriptionType(desc);
 
-    assert(MB_isValidButtonType(type));
+    assert(MC_isValidButtonType(type));
 
     if (typeMatches(type, requestedType)) {
-      MB_ButtonArgs args = MB_getButtonDescriptionArgs(desc);
-      if (!MB_isValidButtonArgs(args)) {
+      MC_ButtonArgs args = MC_getButtonDescriptionArgs(desc);
+      if (!MC_isValidButtonArgs(args)) {
 	ATerror("configmanager.c:getButtonArgs: illegal args: %t\n", args);
       }
-      events = ATinsert(events, MB_ButtonArgsToTerm(args));
+      events = ATinsert(events, MC_ButtonArgsToTerm(args));
     }
 
-    descriptions = MB_getButtonDescriptionListTail(descriptions);
+    descriptions = MC_getButtonDescriptionListTail(descriptions);
   }
 
   return events;
 }
 
 /*}}}  */
-/*{{{  static ATbool buttonContainsDescription(MB_Button button, MB_ButtonDescription desc) */
+/*{{{  static ATbool buttonContainsDescription(MC_Property button, MC_ButtonDescription desc) */
 
-static ATbool buttonContainsDescription(MB_Button button,
-					MB_ButtonType type,
-					MB_ButtonArgs args)
+static ATbool buttonContainsDescription(MC_Property button,
+					MC_ButtonType type,
+					MC_ButtonArgs args)
 {
-  MB_ButtonDescriptionList descriptions;
+  MC_ButtonDescriptionList descriptions;
 
-  descriptions = MB_getButtonDescriptions(button);
-  assert(MB_isValidButtonDescriptionList(descriptions));
+  descriptions = MC_getPropertyDescriptions(button);
+  assert(MC_isValidButtonDescriptionList(descriptions));
 
-  while (!MB_isButtonDescriptionListEmpty(descriptions)) {
-    MB_ButtonDescription cur = MB_getButtonDescriptionListHead(descriptions);
-    MB_ButtonType curType = MB_getButtonDescriptionType(cur);
-    MB_ButtonArgs curArgs = MB_getButtonDescriptionArgs(cur);
+  while (!MC_isButtonDescriptionListEmpty(descriptions)) {
+    MC_ButtonDescription cur = MC_getButtonDescriptionListHead(descriptions);
+    MC_ButtonType curType = MC_getButtonDescriptionType(cur);
+    MC_ButtonArgs curArgs = MC_getButtonDescriptionArgs(cur);
 
-    assert(MB_isValidButtonType(curType));
+    assert(MC_isValidButtonType(curType));
 
-    if (typeMatches(curType, type) && MB_isEqualButtonArgs(curArgs, args)) {
+    if (typeMatches(curType, type) && MC_isEqualButtonArgs(curArgs, args)) {
       return ATtrue;
     }
 
-    descriptions = MB_getButtonDescriptionListTail(descriptions);
+    descriptions = MC_getButtonDescriptionListTail(descriptions);
   }
 
   return ATfalse;
@@ -227,18 +211,21 @@ static ATbool buttonContainsDescription(MB_Button button,
 
 ATerm get_button_names(int cid, char *modulename, ATerm requestedType)
 {
-  MB_ButtonList buttonList = getButtonList();
+  MC_Properties buttonList = getProperties();
   ATermList events = ATempty;
 
   while (!ATisEmpty(buttonList)) {
-    MB_Button button = MB_getButtonListHead(buttonList);
-    char *buttonModule = MB_getButtonModule(button);
+    MC_Property button = MC_getPropertiesHead(buttonList);
 
-    if (moduleNameMatches(buttonModule, modulename)) {
-      MB_ButtonType requestedButtonType = MB_ButtonTypeFromTerm(requestedType);
-      events = ATconcat(events, getButtonArgs(button, requestedButtonType));
+    if (MC_isPropertyButton(button)) {
+      char *buttonModule = MC_getPropertyModule(button);
+
+      if (moduleNameMatches(buttonModule, modulename)) {
+	MC_ButtonType requestedButtonType = MC_ButtonTypeFromTerm(requestedType);
+	events = ATconcat(events, getButtonArgs(button, requestedButtonType));
+      }
     }
-    buttonList = MB_getButtonListTail(buttonList);
+    buttonList = MC_getPropertiesTail(buttonList);
   }
 
   return ATmake("snd-value(button-names(<term>))", events);
@@ -249,22 +236,25 @@ ATerm get_button_names(int cid, char *modulename, ATerm requestedType)
 
 ATerm get_button_actions(int cid, char *modulename, ATerm type, ATerm args)
 {
-  MB_ButtonList buttonList = getButtonList();
+  MC_Properties buttonList = getProperties();
   ATerm actions = NULL;
 
   while (!ATisEmpty(buttonList)) {
-    MB_Button button = MB_getButtonListHead(buttonList);
-    char *buttonModule = MB_getButtonModule(button);
+    MC_Property button = MC_getPropertiesHead(buttonList);
 
-    if (moduleNameMatches(buttonModule, modulename)) {
-      MB_ButtonType curType = MB_ButtonTypeFromTerm(type);
-      MB_ButtonArgs curArgs = MB_ButtonArgsFromTerm(args);
-      if (buttonContainsDescription(button, curType, curArgs)) {
-	actions = MB_getButtonActions(button);
-	break;
+    if (MC_isPropertyButton(button)) {
+      char *buttonModule = MC_getPropertyModule(button);
+
+      if (moduleNameMatches(buttonModule, modulename)) {
+	MC_ButtonType curType = MC_ButtonTypeFromTerm(type);
+	MC_ButtonArgs curArgs = MC_ButtonArgsFromTerm(args);
+	if (buttonContainsDescription(button, curType, curArgs)) {
+	  actions = MC_getPropertyActions(button);
+	  break;
+	}
       }
     }
-    buttonList = MB_getButtonListTail(buttonList);
+    buttonList = MC_getPropertiesTail(buttonList);
   }
 
   if (actions == NULL) {
@@ -276,6 +266,30 @@ ATerm get_button_actions(int cid, char *modulename, ATerm type, ATerm args)
   }
 
   return ATmake("snd-value(button-actions(<term>))", actions);
+}
+
+/*}}}  */
+/*{{{  ATerm get_extensions(int cid) */
+
+ATerm get_extensions(int cid)
+{
+  MC_Properties properties = getProperties();
+  ATermList extensions = ATempty;
+
+  while (!MC_isPropertiesEmpty(properties)) {
+    MC_Property property = MC_getPropertiesHead(properties);
+
+    if (MC_isPropertyExtension(property)) {
+      char *language = MC_getPropertyLanguage(property);
+      char *extension = MC_getPropertyExtension(property);
+      ATerm lang = (ATerm) ATmakeAppl(ATmakeAFun(language, 0, ATtrue));
+      ATerm ext = (ATerm) ATmakeAppl(ATmakeAFun(extension, 0, ATtrue));
+      extensions = ATinsert(extensions, (ATerm) ATmakeList2(lang, ext));
+    }
+    properties = MC_getPropertiesTail(properties);
+  }
+
+  return ATmake("snd-value(extensions(<term>))", extensions);
 }
 
 /*}}}  */
@@ -327,26 +341,26 @@ int main(int argc, char *argv[])
   }
 
   ATBinit(argc, argv,&bottomOfStack);
-  MB_initMetaButtonsApi();
+  MC_initMetaConfigApi();
 
-  ATprotect((ATerm*) &buttons);
-  ATprotect((ATerm*) &standardButtons);
+  ATprotect((ATerm*) &properties);
+  ATprotect((ATerm*) &standardProperties);
   ATprotect((ATerm*) &userSearchPaths);
   ATprotect(&librarySearchPath);
 
-  buttons = MB_makeButtonListEmpty();
+  properties = MC_makePropertiesEmpty();
   standard = ATreadFromNamedFile(STANDARD_META_BUTTONS);
 
   if (standard != NULL) {
-    if (MB_isValidButtons(MB_ButtonsFromTerm(standard))) {
-      standardButtons = MB_getButtonsList(MB_ButtonsFromTerm(standard));
+    if (MC_isValidConfiguration(MC_ConfigurationFromTerm(standard))) {
+      standardProperties = MC_getConfigurationList(MC_ConfigurationFromTerm(standard));
     }
   }
   else {
     ATwarning("Could not read: " STANDARD_META_BUTTONS "\n");
   }
 
-  cid = ATBconnect(NULL, NULL, -1, configmanager_handler);
+  cid = ATBconnect(NULL, NULL, -1, configuration_manager_handler);
 
   ATBeventloop();
 
