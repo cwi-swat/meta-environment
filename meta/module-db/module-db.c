@@ -130,6 +130,7 @@ ATerm get_all_equations(int cid, char *moduleName)
   ATerm mod, entry, eqsterm, name;
   ATermList eqs, mods;
   ATermList equations = ATempty;
+  ATerm result;
 
 /* calculate the transitive closure of the imported modules. */
   
@@ -147,7 +148,9 @@ ATerm get_all_equations(int cid, char *moduleName)
       mods = ATgetNext(mods);
     };
 
-    return ATmake("snd-value(equations([<list>]))",equations);
+    result = ATmake("[<list>]", equations);
+    return ATmake("snd-value(equations(<term>))", ATBpack(result));
+    /*return ATmake("snd-value(equations([<list>]))",equations);*/
   } else {
     return ATmake("snd-value(equations-incomplete)");
   }
@@ -561,9 +564,9 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
                                updated_location);
       PutValue(new_modules_db, modname, entry);
       if (module_type == sdf2) {
-	  return ATmake("snd-value(syntax(<term>))", asfix);
+	  return ATmake("snd-value(syntax(<term>))", ATBpack(asfix));
       } else if (module_type == eqs) {
-	  return ATmake("snd-value(tree(<term>))", asfix);
+	  return ATmake("snd-value(tree(<term>))", ATBpack(asfix));
       }
     }
   } else {
@@ -573,10 +576,10 @@ ATerm get_asfix(int cid, char *modulename, ATerm type)
 	  if(ATisEqual(asfix, ATparse("unavailable"))) {
 	    return ATmake("snd-value(unavailable)");
 	  } else {
-	      return ATmake("snd-value(tree(<term>))", asfix);
+	      return ATmake("snd-value(tree(<term>))", ATBpack(asfix));
 	  }
       } else if (module_type == sdf2) {
-	  return ATmake("snd-value(syntax-unchanged(<term>))",asfix);
+	  return ATmake("snd-value(syntax-unchanged(<term>))", ATBpack(asfix));
       }
   }
   /* we never get here */
@@ -1201,7 +1204,7 @@ ATerm get_all_sdf2_definitions(int cid, char *modulename)
   if(complete_sdf2_specification(ATempty,name)) {
     imports = get_imported_modules(name);
     result = get_syntax(name,imports);
-    return ATmake("snd-value(syntax(<term>))",result);
+    return ATmake("snd-value(syntax(<term>))", ATBpack(result));
   }
   else {
     return ATmake("snd-value(sdf2-definition-error(\"Specification is incomplete, can not generate parse table\"))");

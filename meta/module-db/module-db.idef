@@ -38,7 +38,7 @@ let
   Mdb       : module-db,
   Modules   : list,
   ChngMods  : list,
-  Equations : list,
+  Equations : term,
   Pairs     : list,
   ActualMods: list,
   Status    : str,
