@@ -352,6 +352,8 @@ static PT_Production flattenProd(PT_Production prod)
   return prod;
 }
 
+/* This function does not work for separated lists in 
+ * a lexical syntax section! */
 static PT_Tree flattenLexical(PT_Tree tree)
 {
   if (PT_isTreeAppl(tree)) {
