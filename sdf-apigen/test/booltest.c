@@ -50,6 +50,7 @@ static void testBooleans(SDFBoolList l)
 
   assert(SDFhasBoolWsAfterAmp(b));
   layout = SDFgetBoolWsAfterAmp(b);
+  ATwarning("[%s]", SDFgetCHARLISTString(SDFgetOptLayoutChars(layout)));
 
   bool[1] = SDFmakeBoolOr(SDFmakeBoolAnd(true,layout,layout,SDFmakeBoolFalse()),
                           layout,layout,true);

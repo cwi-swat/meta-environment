@@ -9,7 +9,6 @@
    ATERMBIN=__ATERM__/bin
       PTBIN=__PT_SUPPORT__/bin
     PKGDATA=__PKGDATA__
-   SPECDATA=__SPECDATA__
         PRG=`basename $0`
 
 # }}}
@@ -100,8 +99,8 @@ IMPLODED=0
 CONSOPT='cons-expand'
 
 # data needed
- APITABLE=${SPECDATA}/Sdf2-to-ADT.trm.tbl
-ADDLABELS=${SPECDATA}/AddLabels.eqs
+ APITABLE=${PKGDATA}/Sdf2-to-ADT.trm.tbl
+ADDLABELS=${PKGDATA}/AddLabels.eqs
 
 # binaries
  SDF2TOADT=${bindir}/Sdf2-to-ADT

@@ -3,8 +3,6 @@
 #
 # $Id$
 #
-
-include ${top_srcdir}/make_rules
 include PeanoMakeRules.am
 
 SGLR			= ${SGLRBIN}/sglr
@@ -13,22 +11,21 @@ SDF2JAVA                = ${top_builddir}/utils/sdf2-to-java.test
 SDF2C                   = ${top_builddir}/utils/sdf2-to-c.test
 
 JTESTS			= PeanoTest
-TESTS			= $(foreach j, ${JTESTS}, $j.java.test)
-#TESTS			= booltest $(foreach j, ${JTESTS}, $j.java.test)
-#check_PROGRAMS		= booltest
-#check_LIBRARIES		= libBooleans.a
+TESTS			= booltest $(foreach j, ${JTESTS}, $j.java.test)
+check_PROGRAMS		= booltest
+
 
 # C programs
-#libBooleans_a_SOURCES	= Booleans.c Booleans_dict.c
-#booltest_SOURCES	= booltest.c
-#booltest_LDADD		= -L. -lBooleans -L$(PT_SUPPORT)/lib -lmept \
-#			-L$(ATERM)/lib -lATerm
-#booltest_DEPENDENCIES	= booltest.pt libBooleans.a
+INCLUDES                = -I${ATERM}/include
+booltest_SOURCES	= Booleans.c Booleans_dict.c Booleans_bottom.c booltest.c
+booltest_LDADD		= -L$(ATERM)/lib -lATerm
+booltest_DEPENDENCIES	= booltest.pt
 
 # Java programs
 javadir = ${top_builddir}/test/classfiles
 JAVAROOT = ${top_builddir}
 CLASSPATH_ENV = CLASSPATH=${top_builddir}:${SHARED_OBJECTS}:${JAVA_ATERM}:${srcdir}/$(JAVAROOT)::$$CLASSPATH
+
 
 check_JAVA = ${PeanoAPI} PeanoTest.java
 
@@ -41,7 +38,7 @@ EXTRA_DIST		= Booleans.sdf Booleans.pro booltest.trm Peano.sdf
 
 Booleans.c Booleans.h: Booleans.sdf 
 	${SDF2C} \
-		--input Booleans.sdf \
+		--input $< \
 		--prefix SDF \
 		--compat-term \
 		--verbose
@@ -56,7 +53,7 @@ ${PeanoAPI}: Peano.sdf
 	${SDF2JAVA} --input $< \
                     --output ${top_builddir}/test \
                     --package test \
-                    --name $* \
+                    --name Peano \
 		    --verbose
 	mv ${srcdir}/PeanoMakeRules ${srcdir}/PeanoMakeRules.am
 
@@ -65,5 +62,3 @@ ${PeanoAPI}: Peano.sdf
           echo "CLASSPATH=${top_builddir}:${JAVA_ATERM}:${SHARED_OBJECTS}";\
           echo "export CLASSPATH";\
           echo "java test.$*") > $@ && chmod +x $@
-
-

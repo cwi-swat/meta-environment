@@ -11,6 +11,7 @@ Booleans.adt
 Booleans.[ch]
 Booleans.dict
 Booleans_dict.[ch]
+Booleans_bottom.c
 booltest
 booltest.pt
 Booleans.trm.tbl

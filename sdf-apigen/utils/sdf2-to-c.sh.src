@@ -78,7 +78,7 @@ TIMESTAMPOPT=""
 GENBOTTOMSORT=1
 
 # binaries
-SDF2TOADT=${bindir}/sdf2-to-adt
+SDF2TOADT=${SDF2ADT}
 ADTTOC=${APIGEN}/bin/adt-to-c
 # }}}
 
@@ -162,7 +162,7 @@ err() {
 
 # }}}
 # {{{  generate C from SDF
-set -x
+
 if [ ${ONLYBOTTOM} -eq 0 ]; then
   info " generating ${OUTPUT}.adt "
   ${SDF2TOADT} ${IMPLODEDOPT} ${CONSOPT} ${VERBOSEOPT} \
