@@ -3,7 +3,7 @@ dnl $Id$
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT
 AC_CONFIG_SRCDIR([configure.in])
-AM_INIT_AUTOMAKE(sdf-support, 2.0)
+GLT_INIT_PACKAGE
 AC_PREREQ(2.59)
 
 AC_PROG_CC
@@ -36,12 +36,19 @@ AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
 AC_SUBST(TOOLBUSLIB)
 dnl }}}
+<<<<<<< configure.in
+dnl {{{  toolbus Java library
+AC_PACKAGE_REQUIRE(toolbus-java-adapter, toolbus-java-adapter-config,
+   [  --with-toolbus-java-adapter=DIR   ToolBus Java library is in DIR])
+AC_SUBST(TOOLBUS_JAVA_ADAPTER)
+=======
 dnl {{{  Toolbus Java Adapter 
 
 AC_PACKAGE_REQUIRE(toolbus-java-adapter, toolbus-java-adapter-config,
    [  --with-toolbus-java-adapter=DIR   java-adapter is in DIR])
 AC_SUBST(TOOLBUS_JAVA_ADAPTER)
 
+>>>>>>> 1.48
 dnl }}}
 dnl {{{  error-support
 
@@ -102,7 +109,11 @@ if test "x${JAVA}" = "x"; then
 fi
 
 dnl This variable holds all external jarfiles
+<<<<<<< configure.in
+EXTERNAL_JARS=${JAVA_ATERM}:\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`
+=======
 EXTERNAL_JARS=\`${TOOLBUS_JAVA_ADAPTER}/bin/toolbus-java-adapter-config\`:\`${GRAPH_SUPPORT}/bin/graph-support-config\`
+>>>>>>> 1.48
 AC_SUBST(EXTERNAL_JARS)
 
 dnl Our own version of libdir whose value is set dynamically
