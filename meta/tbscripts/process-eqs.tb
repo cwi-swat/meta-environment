@@ -18,6 +18,8 @@ let
   Li      : int,
   Co      : int,
   Char    : term,
+  Time1   : term,
+  Time2   : term,
   ErrList : list,
   Cycle   : list
 in
@@ -29,7 +31,7 @@ in
        Module  := first(Modules).
        Modules := next(Modules).
        snd-msg(Id,open-eqs-text-file(Module)).
-       ( rec-msg(Id, opened-file(raw,id(Mname?),FT?,Path?)).
+       ( rec-msg(Id, opened-file(raw,id(Mname?),FT?,Path?,Time1?)).
          snd-msg(get-table-from-db(Module)).
          ( rec-msg(table(Table?)).
            snd-note(ui-status(endstat(Id)))
@@ -38,21 +40,23 @@ in
            snd-note(ui-status(endstat(Id))).
            snd-msg(generate-parsetable(id(Mname))).
            rec-msg(parsetable(Table?)).
-           snd-msg(add-table-to-db(id(Mname),Table)).
+           snd-msg(Id,locate-parse-table-file(id(Mname))).
+           rec-msg(Id,located-parse-table-file(id(Mname),Table?,Time2?)).
+           snd-msg(add-table-to-db(id(Mname),Table,Time2)).
            rec-msg(done)
          ).
          snd-note(ui-status(stat(Id,"Parsing Equations ..."))).
-         snd-msg(open-language(Mname,Table)).
+         snd-msg(reopen-language(Mname,Table)).
          snd-msg(Id,parse-string-as-asfix1(Mname,"",FT)).
          ( rec-msg(parse-result-asfix1(Id?,parse-tree(T1?))).
            snd-note(ui-status(endstat(Id))). 
-           snd-msg(add-eqs-to-db(id(Mname),Path,T1,"changed")).
+           snd-msg(add-eqs-to-db(id(Mname),Path,T1,Time1,"changed")).
            rec-msg(done) 
          + 
            rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
                                                        ambiguities(I?)))).
            printf("Parse of %s returned %d ambiguities",Mname,I). 
-           snd-msg(add-eqs-to-db(id(Mname),Path,error,"unchanged")).
+           snd-msg(add-eqs-to-db(id(Mname),Path,error,Time1,"unchanged")).
            rec-msg(done)  
          + 
            rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
@@ -63,7 +67,7 @@ in
          +
            rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,eof))). 
            printf("EOF unexpected while parsing %s\n",Mname).
-           snd-msg(add-eqs-to-db(id(Mname),Path,error,"unchanged")).
+           snd-msg(add-eqs-to-db(id(Mname),Path,error,Time1,"unchanged")).
            rec-msg(done) 
          +
            rec-msg(parse-result-asfix1(Id?,
@@ -72,13 +76,13 @@ in
                                                     col(Co?),
                                                     char(Char?)],plain))).
            printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co).
-           snd-msg(add-eqs-to-db(id(Mname),Path,error,"unchanged")).
+           snd-msg(add-eqs-to-db(id(Mname),Path,error,Time1,"unchanged")).
            rec-msg(done) 
          ).
          snd-note(ui-status(endstat(Id)))
        +
        rec-msg(Id, error-opening(Mod?)).
-       snd-msg(add-eqs-to-db(Module,"",no-equations,"unchanged")).
+       snd-msg(add-eqs-to-db(Module,"",no-equations,0,"unchanged")).
        rec-msg(done)
       )
       fi

@@ -8,7 +8,8 @@
     Module -- Same as Name above, but as a string (without id(..))
               These obviously need to be integrated
 */
-process Editor(Name: term, Text: str, Filename: str, Module: str) is
+process Editor(Name: term, Text: str, Filename: str, Module: str,
+               IsTerm: str) is
 let
   TE  : text-edit,
   Tid : int,
@@ -36,7 +37,7 @@ in
   snd-do(TE,tb-add-menu-item("Move", "Up")).
   snd-do(TE,tb-add-menu-item("Move", "Down")).
   snd-note(ui-status(endstat(Id))).
-  create(Structure-editor(TE, Fid, Text, Module), Tid?).
+  create(Structure-editor(TE, Fid, Text, Module, IsTerm), Tid?).
   create(Focus(TE, Fid), Tid?). (
     rec-note(language-available(L?)).
     snd-do(TE,registerlang(L))

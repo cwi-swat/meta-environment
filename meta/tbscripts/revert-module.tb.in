@@ -16,6 +16,7 @@ let
   Li    : int,
   Co    : int,
   Char  : term,
+  Time  : term,
   ErrList : list,
   Cycle   : list
 in 
@@ -26,21 +27,21 @@ in
     rec-msg(done).
     snd-msg(Id,open-file(id(Str))). 
     (
-      rec-msg(Id, opened-file(asfix,Name2?,T?,Path?)).
-      snd-msg(add-module-to-db(T)).
+      rec-msg(Id, opened-file(asfix,Name2?,T?,Path?,Time?)).
+      snd-msg(add-module-to-db(T,Time)).
       rec-msg(need-modules(M1s?))
     +
-      rec-msg(Id, opened-file(baf,Name2?,T?,Path?)).
-      snd-msg(add-sdf2-module-to-db(Path,T)).
+      rec-msg(Id, opened-file(baf,Name2?,T?,Path?,Time?)).
+      snd-msg(add-sdf2-module-to-db(Path,T,Time,"unchanged")).
       rec-msg(need-modules(M1s?))
     +
-      rec-msg(Id, opened-file(raw,Name2?,FT?,Path?)). 
+      rec-msg(Id, opened-file(raw,Name2?,FT?,Path?,Time?)). 
       snd-msg(open-language("Sdf2", 
                             "@libdir@/Sdf2.baf")).
       snd-msg(Id,parse-string-as-asfix1("Sdf2","",FT)).
       ( rec-msg(parse-result-asfix1(Id?,parse-tree(T?))).
         snd-msg(ui,open-module(Name2)).
-        snd-msg(add-sdf2-module-to-db(Path,T1,"changed")).
+        snd-msg(add-sdf2-module-to-db(Path,T1,Time,"changed")).
         rec-msg(need-modules(M1s?)) 
       +
         rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,

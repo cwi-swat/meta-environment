@@ -18,6 +18,7 @@ let
   Pairs   : list,
   I       : int,
   T1      : term,
+  Time    : term,
   Ch      : int,
   Li      : int,
   Co      : int,
@@ -25,7 +26,8 @@ let
   ErrList : list,
   Cycle   : list
 in
-  Id := process-id. (
+  Id := process-id. 
+  (
     rec-msg(open-modules(Ms?)).
     M2s := Ms.
     snd-note(ui-status(stat(Id,"Opening Modules"))). (
@@ -41,31 +43,31 @@ in
           /* If it is not open, open it. */
           rec-msg(not-exists-in-module-db(Name?)). ( 
             snd-msg(Id, open-file(Name)). ( 
-              rec-msg(Id, opened-file(asfix,Name2?,T?,Path?)).
+              rec-msg(Id, opened-file(asfix,Name2?,T?,Path?,Time?)).
              /* Tell UI we added module Name */
               snd-msg(ui,open-module(Name2)).
              /* Tell mdb we add module Name containing term T */
-              snd-msg(add-module-to-db(T)).
+              snd-msg(add-module-to-db(T,Time)).
              /* mdb returns the imports section of Name as well as the
               * list of modules which have to be still opened M1s */
               rec-msg(need-modules(M1s?)).
              /* Add those modules to the list */
               Ms := join(Ms,M1s)
               +
-              rec-msg(Id, opened-file(baf,Name2?,T?,Path?)).
+              rec-msg(Id, opened-file(baf,Name2?,T?,Path?,Time?)).
               snd-msg(ui, open-module(Name2)).
-              snd-msg(add-sdf2-module-to-db(Path,T,"unchanged")).
+              snd-msg(add-sdf2-module-to-db(Path,T,Time,"unchanged")).
               rec-msg(need-modules(M1s?)).
               Ms := join(Ms,M1s).
               snd-msg(Id, read-parse-table(Name)).
               ( 
-                rec-msg(Id, table-on-disk(Table?)).
-                snd-msg(add-table-to-db(Name,Table)).
+                rec-msg(Id, table-on-disk(Table?, Time?)).
+                snd-msg(add-table-to-db(Name,Table,Time)).
                 rec-msg(done).
                 snd-msg(Id,open-eqs-asfix-file(Name)).
                 (
-                  rec-msg(Id?,opened-file(baf,Name2?,T?,Path?)).
-                  snd-msg(add-eqs-to-db(Name2,Path,T,"unchanged")).
+                  rec-msg(Id?,opened-file(baf,Name2?,T?,Path?,Time?)).
+                  snd-msg(add-eqs-to-db(Name2,Path,T,Time,"unchanged")).
                   rec-msg(done)
                 +
                   rec-msg(Id?,error-opening(Name2?))
@@ -74,12 +76,12 @@ in
                 rec-msg(Id, no-table-on-disk)
               )
               +
-              rec-msg(Id, opened-file(raw,Name2?,FT?,Path?)). 
+              rec-msg(Id, opened-file(raw,Name2?,FT?,Path?,Time?)). 
               snd-msg(open-language("Sdf2", "@libdir@/Sdf2.baf")).
               snd-msg(Id,parse-string-as-asfix1("Sdf2","",FT)).
               ( rec-msg(parse-result-asfix1(Id?,parse-tree(T?))).
                 snd-msg(ui,open-module(Name2)). 
-                snd-msg(add-sdf2-module-to-db(Path,T,"changed")).
+                snd-msg(add-sdf2-module-to-db(Path,T,Time,"changed")).
                 rec-msg(need-modules(M1s?)).
                 Ms := join(Ms,M1s) 
               + 
@@ -122,6 +124,7 @@ in
       fi
     ) *
     if equal(Ms,[]) then
+printf("Check tables for modules %l\n", M2s).
       (
         if not-equal(M2s, []) then
           Name := first(M2s).
@@ -136,9 +139,12 @@ in
           )
         fi
       ) *
-     /* We are finished. Inform UI */
-      snd-msg(finished-opening-modules)
+      if equal(M2s, []) then
+        tau
+      fi
     fi.
+/* We are finished. Inform UI */
+    snd-msg(finished-opening-modules).
     snd-note(ui-status(endstat(Id)))
   ) *
   delta

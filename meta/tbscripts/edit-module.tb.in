@@ -12,6 +12,7 @@ let
   Path   : str,
   Path2  : str,
   Syntax : term,
+  Time   : term,
   Src    : str
 in
   Id := process-id.
@@ -31,13 +32,13 @@ in
     rec-msg(unavailable).
     snd-msg(Id, open-file(id(Module))).
     (
-      rec-msg(Id, opened-file(raw,id(Mname?),Src?,Path?))
+      rec-msg(Id, opened-file(raw,id(Mname?),Src?,Path?,Time?))
     +
       rec-msg(Id, error-opening(Path2?)).
       Src := ""
     )
   ).
-  create(Editor(id("Sdf2"),Src,Path,"Sdf2"), Tid?). 
+  create(Editor(id("Sdf2"),Src,Path,"Sdf2","sdf"), Tid?). 
   snd-msg(open-language("Sdf2", 
                         "@libdir@/Sdf2.baf")).
   snd-note(ui-status(endstat(Id)))
@@ -53,6 +54,7 @@ let
   Path   : str,
   Path2  : str,
   Eqs    : term,
+  Time   : term,
   Table  : str,
   Mname  : str,
   Src    : str
@@ -67,11 +69,11 @@ in
     snd-msg(generate-parsetable(id(Module))) .
     rec-msg(parsetable(Table?)) .
     snd-msg(Id,locate-parse-table-file(id(Module))) .
-    rec-msg(Id,located-parse-table-file(id(Module),Table?)) .
-    snd-msg(add-table-to-db(id(Module),Table)) .
+    rec-msg(Id,located-parse-table-file(id(Module),Table?, Time?)) .
+    snd-msg(add-table-to-db(id(Module),Table,Time)) .
     rec-msg(done)
   ). 
-  snd-msg(open-language(Module,Table)).
+  snd-msg(reopen-language(Module,Table)).
   snd-msg(get-eqs-path-from-db(id(Module))).
   rec-msg(path(Path?)).
   snd-msg(get-eqs-asfix(id(Module))).
@@ -90,13 +92,13 @@ in
     rec-msg(unavailable).
     snd-msg(Id, open-eqs-text-file(id(Module))).
     (
-      rec-msg(Id, opened-file(raw,id(Mname?),Src?,Path?))
+      rec-msg(Id, opened-file(raw,id(Mname?),Src?,Path?,Time?))
     +
       rec-msg(Id, error-opening(Path2?)).
       Src := ""
     )
   ).
-  create(Editor(id(Module),Src,Path,Module), Tid?). 
-  snd-msg(open-language(Module, Table)).
+  create(Editor(id(Module),Src,Path,Module,"eqs"), Tid?). 
+  snd-msg(reopen-language(Module, Table)).
   snd-note(ui-status(endstat(Id)))
 endlet

@@ -11,7 +11,8 @@ tool anno is {
 }
 
 
-process Structure-editor(TE: text-edit, Fid: str, Text: str, Language: str) is
+process Structure-editor(TE: text-edit, Fid: str, Text: str, 
+                         Language: str, IsTerm: str) is
 let
   Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
   I: int, T: term, T1: term, T2: term, Ch: int, Li: int, Co: int,
@@ -87,13 +88,17 @@ in
     if equal(Fl,[]) then
       if equal(FF,[]) then
         /* All parses succeeded */
-        snd-eval(SE,getTree(Fid)).
-        rec-value(SE,T1?).
-        snd-msg(update-module-in-db(T1,Language)).
-        rec-msg(extra-modules(Modules?)).
-        snd-msg(open-modules(Modules)).
-        rec-msg(finished-opening-modules).
-        snd-msg(TE,clear-focus)
+        if equal(IsTerm,"sdf") then
+          snd-eval(SE,getTree(Fid)).
+          rec-value(SE,T1?).
+          snd-msg(update-module-in-db(T1,Language)).
+          rec-msg(extra-modules(Modules?)).
+          snd-msg(open-modules(Modules)).
+          rec-msg(finished-opening-modules).
+          snd-msg(TE,clear-focus)
+        else
+          snd-msg(TE,clear-focus)
+        fi
       else
         /* Some parses were ambiguous */
         snd-eval(SE,setFocus(Fid, FF)).
