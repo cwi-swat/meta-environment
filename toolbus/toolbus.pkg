@@ -1,0 +1,19 @@
+package 
+identification
+   name=toolbus
+   version=0.26beta
+   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   info=http://www.cwi.nl/projects/MetaEnv/toolbus
+   description='The ToolBus is a software architecture intended for
+                the flexible development of cooperating, distributed
+                applications.'
+
+   keywords=meta-environment, toolbus, coordination, distributed, applications
+
+configuration interface
+  java 'include java support  (java-adapter)'
+
+requires
+   aterm	2.0.1
+   aterm-java   1.2beta
+   toolbuslib	0.4
