@@ -82,12 +82,12 @@ in
     ( rec-event(UI, open-module(Path?, Str?)).
       snd-note(online-help(open-module)).
       snd-msg(open-initial-module(Path, Str)). 
+      snd-ack-event(UI, open-module(Path, Str)).
       ( rec-note(import-graph(Mods?,Pairs?)).
         snd-do(UI,new-graph(Mods,Pairs))
       )*
       rec-msg(finished-opening-initial-module).
-      snd-do(UI,finished-opening-modules(Str)).
-      snd-ack-event(UI, open-module(Path, Str))
+      snd-do(UI,finished-opening-modules(Str))
     ) 
     +
     ( rec-event(UI, delete-module(ModName?)) .
