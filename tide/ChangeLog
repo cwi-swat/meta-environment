@@ -1,5 +1,9 @@
 
 
+Wed May 19 15:19:09 CEST 2004
+<jurgenv@cwi.nl,pieter@gamesquare.nl,sgmcorne@science.uva.nl>
+ * Use SwingTool to prevent deadlocks with swing paint()
+
 Fri Apr 23 10:37:38 CEST 2004 <jurgenv@cwi.nl>
  * Upgraded Makefile.am and configure.in
  * Fixed distribution of gif images
