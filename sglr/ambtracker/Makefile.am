@@ -18,9 +18,18 @@
 #
 # $Id$
 
-SUBDIRS      = doc libtree2dot libsglr \
-               ambtracker tree2dot sglr client dump sdf1tosdf2 regress-test
+include ../make_rules
 
-EXTRA_DIST   = make_rules
+bin_PROGRAMS     = ambtracker
 
-test: check
+SRCS             = ambtracker.c
+HDRS             =
+
+ambtracker_SOURCES = $(SRCS) $(HDRS)
+
+LDADD            =  -L${top_builddir}/libsglr -lsglr \
+                    -L${top_builddir}/libtree2dot -ltree2dot \
+                     -L$(ASFIXLIB) -lAsFix \
+                    -L$(ATERMLIB) -lATerm -lATB $(SOCKLIBS)
+
+ambtracker.o: ${top_builddir}/libsglr/libsglr.a
