@@ -293,8 +293,62 @@ SDF_Symbol SDF_removeSymbolAnnotations(SDF_Symbol s)
 }
 
 /*}}}  */
+/*{{{  SDF_ModuleId SDF_removeModuleIdAnnotations(SDF_ModuleId s) */
+
 SDF_ModuleId SDF_removeModuleIdAnnotations(SDF_ModuleId s)
 {
   return SDF_ModuleIdFromTerm(ATremoveAllAnnotations(SDF_ModuleIdToTerm(s)));
 }
+
+/*}}}  */
+
+
+/*{{{  SDF_RenamingList SDF_reverseRenamingList(SDF_RenamingList l)  */
+
+SDF_RenamingList SDF_reverseRenamingList(SDF_RenamingList l) 
+{
+  return SDF_RenamingListFromTerm((ATerm) 
+			   ATreverse((ATermList) SDF_RenamingListToTerm(l)));
+
+}
+
+/*}}}  */
+/*{{{  SDF_RenamingList SDF_insertRenaming(SDF_Renaming r, SDF_RenamingList l) */
+
+SDF_RenamingList SDF_insertRenaming(SDF_Renaming r, SDF_RenamingList l)
+{
+  if (SDF_isRenamingListEmpty(l)) {
+    return SDF_makeRenamingListSingle(r);
+  }
+  else {
+    return SDF_makeRenamingListMany(r, SDF_makeLayoutSpace(), l);
+  }
+}
+
+/*}}}  */
+
+/*{{{  SDF_SymbolList SDF_reverseSymbolList(SDF_SymbolList l)  */
+
+SDF_SymbolList SDF_reverseSymbolList(SDF_SymbolList l) 
+{
+  return SDF_SymbolListFromTerm((ATerm) 
+			   ATreverse((ATermList) SDF_SymbolListToTerm(l)));
+
+}
+
+/*}}}  */
+/*{{{  SDF_SymbolList SDF_insertSymbol(SDF_Symbol r, SDF_SymbolList l) */
+
+SDF_SymbolList SDF_insertSymbol(SDF_Symbol r, SDF_SymbolList l)
+{
+  if (SDF_isSymbolListEmpty(l)) {
+    return SDF_makeSymbolListSingle(r);
+  }
+  else {
+    return SDF_makeSymbolListMany(r, SDF_makeLayoutSpace(), l);
+  }
+}
+
+/*}}}  */
+
 

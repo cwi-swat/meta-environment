@@ -15,8 +15,8 @@ SDF_Renamings SDF_makeRenamingsFromParameters(SDF_Symbols formals,
 
   renamingList = SDF_makeRenamingListEmpty();
 
-  while (SDF_hasSymbolListHead(actualList) &&
-	 SDF_hasSymbolListHead(formalList)) {
+  while (SDF_hasSymbolListHead(actualList) 
+	 && SDF_hasSymbolListHead(formalList)) {
     SDF_Symbol formal = SDF_getSymbolListHead(formalList);
     SDF_Symbol actual = SDF_getSymbolListHead(actualList);
     SDF_Renaming renaming = SDF_makeRenamingSymbol(formal,layout,layout,actual);
@@ -56,31 +56,32 @@ SDF_Renamings SDF_makeRenamingsFromModuleNames(SDF_ModuleName formal,
 
 /*}}}  */
 
-/*{{{  static SDF_Symbol SDF_renameSymbol(SDF_Symbol symbol, SDF_Symbol formalParam, SDF_Symbol actualParam) */
+/*{{{  static SDF_Symbol SDF_renameSymbol(SDF_Symbol symbol, SDF_Symbol from, SDF_Symbol into) */
 
-static SDF_Symbol SDF_renameSymbol(SDF_Symbol symbol, SDF_Symbol formalParam, SDF_Symbol actualParam)
+static SDF_Symbol SDF_renameSymbol(SDF_Symbol symbol, SDF_Symbol from, 
+				   SDF_Symbol into)
 {
   SDF_Symbol argSymbol;
   SDF_Symbol newArgSymbol;
 
   symbol = SDF_removeSymbolAnnotations(symbol);
 
-  if (SDF_isEqualSymbol(symbol, formalParam)) {
-    return actualParam;
+  if (SDF_isEqualSymbol(symbol, from)) {
+    return into;
   }
   if (SDF_hasSymbolSymbol(symbol)) {
     argSymbol = SDF_getSymbolSymbol(symbol);
-    newArgSymbol = SDF_renameSymbol(argSymbol, formalParam, actualParam);
+    newArgSymbol = SDF_renameSymbol(argSymbol, from, into);
     symbol = SDF_setSymbolSymbol(symbol, newArgSymbol);
   }
   if (SDF_hasSymbolLeft(symbol)) {
     argSymbol = SDF_getSymbolLeft(symbol);
-    newArgSymbol = SDF_renameSymbol(argSymbol, formalParam, actualParam);
+    newArgSymbol = SDF_renameSymbol(argSymbol, from, into);
     symbol = SDF_setSymbolLeft(symbol, newArgSymbol);
   }
   if (SDF_hasSymbolRight(symbol)) {
     argSymbol = SDF_getSymbolRight(symbol);
-    newArgSymbol = SDF_renameSymbol(argSymbol, formalParam, actualParam);
+    newArgSymbol = SDF_renameSymbol(argSymbol, from, into);
     symbol = SDF_setSymbolRight(symbol, newArgSymbol);
   }
   return symbol;

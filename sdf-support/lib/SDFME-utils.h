@@ -68,19 +68,13 @@ SDF_Import SDF_makeImport(char *moduleName);
 SDF_Module SDFaddModuleImport(SDF_Module module, SDF_Import import);
 
 
-SDF_Renamings SDF_makeRenamingsFromParameters(SDF_Symbols formals,
-					      SDF_Symbols actuals);
-SDF_Renamings SDF_makeRenamingsFromModuleNames(SDF_ModuleName formal,
-					       SDF_ModuleName actual);
-SDF_Renamings SDF_renameRenamings(SDF_Renamings source, SDF_Renamings target);
-SDF_ImportList SDF_renameParametersInImportList(SDF_ModuleName moduleName,
-                                            SDF_Module sdfModule,
-                                            SDF_ImportList importList);
-SDF_ImportList SDF_replaceParametersInImportList(SDF_ImportList importList,
-                                            SDF_Symbols formalParams,
-                                            SDF_Symbols actualParams);
-
 SDF_Symbol SDF_removeSymbolAnnotations(SDF_Symbol s);
 SDF_ModuleId SDF_removeModuleIdAnnotations(SDF_ModuleId s);
+
+SDF_RenamingList SDF_reverseRenamingList(SDF_RenamingList l);
+SDF_RenamingList SDF_insertRenaming(SDF_Renaming r, SDF_RenamingList l);
+
+SDF_SymbolList SDF_reverseSymbolList(SDF_SymbolList l);
+SDF_SymbolList SDF_insertSymbol(SDF_Symbol r, SDF_SymbolList l);
 
 #endif /* _SDF_UTILS_H */

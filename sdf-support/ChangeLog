@@ -3,6 +3,8 @@ $Id$
 2003/05/28 ({jong,jurgenv,markvdb}@cwi.nl)
  * utils/sdf-modules/sdf-modules.c: ATBpack added to make_sdf_definition
  * Added an ATBpack in renaming of equations.
+ * Rewrote a large part of the transitive import code and broke it! It
+   doesn't work at the moment but the code looks nicer.
  * Calculation of import graph removed.
 
 2003/05/27 (markvdb@cwi.nl)

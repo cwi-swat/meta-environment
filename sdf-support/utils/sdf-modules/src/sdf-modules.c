@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
 
   ATBinit(argc, argv, &bottomOfStack);
   SDF_initSDFMEApi();
-
+ATsetChecking(ATtrue);
 
   cid = ATBconnect(NULL, NULL, -1, sdf_modules_handler);
 
