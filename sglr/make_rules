@@ -5,7 +5,7 @@ POD2TXT=pod2text
 POD2HTML=pod2html
 
 %.tif.c %.tif.h: %.tifs
-	PATH=$(TOOLBUS)/bin:$PATH tifstoc -tool $* $<
+	PATH=$(TOOLBUS)/bin:$${PATH} tifstoc -tool $* $<
 
 # The output of idef2tif and toolbus is moved to $@ to make sure the
 # generated .tifs file exists in the current directory. The ToolBus and
