@@ -80,12 +80,10 @@ static ERR_SubjectList getAmbiguities(char *path,
   /*{{{  handle ambiguity cluster */
 
     PT_Args args = PT_getTreeArgs(tree); 
-    /*
     PT_Args ambs = args;
-    ATermList prods;
-    ATerm ambWithPos;
     char *str;
-    */
+    char ambString[1024];
+    int ambStringCnt;
     PT_Amb_Position here = *current;
     ERR_Area ambArea;
     ERR_Location ambLocation;
@@ -100,8 +98,9 @@ static ERR_SubjectList getAmbiguities(char *path,
 			                  ambSubjects);
     }
 
-    /*
-    for(prods = ATempty;PT_hasArgsHead(ambs); ambs = PT_getArgsTail(ambs)) {
+    ambStringCnt = 0;
+    ambString[0] = '\0';
+    for (;PT_hasArgsHead(ambs); ambs = PT_getArgsTail(ambs)) {
       PT_Tree amb = PT_getArgsHead(ambs);
       PT_Production prod;
 
@@ -110,15 +109,21 @@ static ERR_SubjectList getAmbiguities(char *path,
       prod = PT_getTreeProd(amb);
       str = PT_yieldProduction(prod);
  
-      prods = ATinsert(prods, ATmake("<str>",str));
+      if (ambStringCnt + strlen(str) + 1 <= 1024) {
+        if (ambStringCnt > 0) {
+          strcpy(ambString + ambStringCnt, ";");
+          ambStringCnt = ambStringCnt + 1;
+        }
+        strcpy(ambString + ambStringCnt, str);
+        ambStringCnt = ambStringCnt + strlen(str);
+      }
     }
-    */
 
     ambArea = ERR_makeAreaArea(here.line, here.col,
 			       current->line, current->col,
                                here.offset, (current->offset - here.offset));
     ambLocation = ERR_makeLocationLocation(path, ambArea);
-    ambSubject = ERR_makeSubjectSubject("ambiguity", ambLocation);
+    ambSubject = ERR_makeSubjectSubject(ambString, ambLocation);
 
     ambSubjects = ERR_appendSubjectList(ambSubjects, ambSubject);
   /*}}}  */
@@ -137,10 +142,15 @@ static ERR_SubjectList getAmbiguities(char *path,
 ATerm PT_reportTreeAmbiguities(char *path, PT_Tree tree)
 {
   PT_Amb_Position pos = {1,0,0}; 
-  ERR_SubjectList ambs = getAmbiguities(path, tree,&pos);
-  ERR_Feedback ambFeedback = ERR_makeFeedbackError("ambiguity", ambs);
+  ERR_SubjectList ambs = getAmbiguities(path, tree, &pos);
+  if (!ERR_isSubjectListEmpty(ambs)) {
+    ERR_Feedback ambFeedback = ERR_makeFeedbackError("Ambiguity", ambs);
 
-  return ERR_FeedbackToTerm(ambFeedback);
+    return ERR_FeedbackToTerm(ambFeedback);
+  }
+  else {
+    return NULL;
+  }
 }
 
 /*}}}  */
