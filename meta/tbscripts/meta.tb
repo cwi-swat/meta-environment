@@ -48,7 +48,10 @@
 #include "configmanager.idef"
 #include "editor-manager.idef"
 #include "apply-function.idef"
+
+#ifdef QUERY
 #include "query-tool.idef" 
+#endif
 
 process META is
 let 

@@ -139,7 +139,7 @@ do
 		export PATH
 		;;
 	-q)
-		query_def="-DQUERY"
+		query_def="-DQUERY -I`meta-query-config`/share/meta-query"
 		;;
 	-s)     
 		saving="true"
