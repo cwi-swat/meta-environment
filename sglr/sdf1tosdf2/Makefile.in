@@ -62,6 +62,7 @@ libs:	${LIBFILES}
 
 # install target (install binaries, include files, and libraries)
 install: all
+	mkdir -p $(bindir) $(libdir) $(includedir)
 	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
