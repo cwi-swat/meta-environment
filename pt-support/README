@@ -31,7 +31,7 @@ Installation Instructions
 3) Building Parse Tree Support.
 
    Assuming that GNU make is called "gmake" on your system then the
-   following commands will build and install SGLR:
+   following commands will build and install Parse Tree Support:
 
    gmake
    gmake install
