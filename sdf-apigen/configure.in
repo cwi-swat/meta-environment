@@ -90,14 +90,6 @@ PTBIN=${PT_SUPPORT}/bin
 AC_SUBST(PTBIN)
  
 dnl }}}
-dnl {{{ Handle --with-toolbuslib
- 
-AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
-      [  --with-toolbuslib=DIR   Toolbuslib is in DIR])
-AC_SUBST(TOOLBUSLIB)
- 
- 
-dnl }}}
 dnl {{{ Handle --with-error-support
  
 AC_PACKAGE_REQUIRE(error-support, error-support-config,
@@ -108,7 +100,7 @@ dnl }}}
 dnl {{{ Require ToolBus library
 AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
    [  --with-toolbuslib=DIR   ToolBus library is in DIR])
-   AC_SUBST(TOOLBUSLIB)
+AC_SUBST(TOOLBUSLIB)
 dnl }}}
 dnl {{{ Handle --with-asf-support
 
@@ -152,6 +144,29 @@ AC_ARG_WITH(cflags,
 )
 AC_SUBST(CFLAGS)
 
+
+dnl }}}
+
+dnl {{{  Determine which libraries are needed for socket() and gethostname()
+
+NOSOCKLIBS=$LIBS
+SOCKET_FOUND=no
+SOCKLIBS=
+AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
+if test ${SOCKET_FOUND} = no; then
+  AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
+fi
+
+dnl then gethostname
+GHN_FOUND=no
+AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
+if test ${GHN_FOUND} = no; then
+  AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
+fi
+
+AC_SUBST(SOCKLIBS)
+
+LIBS=$NOSOCKLIBS
 
 dnl }}}
 
