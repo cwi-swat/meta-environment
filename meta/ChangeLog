@@ -1,5 +1,8 @@
 # $Id$
 
+2002/10/02 (vandenbr@loria.fr)
+ * Hardwired file extensions removed.
+ 
 2002/09/27 (markvdb@cs.vu.nl)
  * ModuleDB is asf-support independent.
  * Scripts and code are more robust.
