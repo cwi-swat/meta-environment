@@ -1,8 +1,8 @@
 # $Id$
 #
-# Directory: sglr
+# Directory: pgen
 
-SUBDIRS		= c-files c-source
+SUBDIRS		= c-files c-source addeqs/c-source
 
 all doc clean install uninstall distclean:
 	@for DIR in $(SUBDIRS);	\
