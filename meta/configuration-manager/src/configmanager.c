@@ -86,7 +86,7 @@ ATerm get_button_names(int cid, char *editortype, char *modulename)
   }
 
   if (strcmp(editortype, "term") == 0) {
-    buttonNames = ATinsert(buttonNames, ATmake("<str>", "FocusToDot"));
+    buttonNames = ATinsert(buttonNames, ATmake("<str>", "ViewTree"));
     buttonNames = ATinsert(buttonNames, ATmake("<str>", "Reduce"));
     buttonNames = ATinsert(buttonNames, ATmake("<str>", "Parse"));
   }
