@@ -42,6 +42,8 @@
 
 #define isAsFixEqual(t1,t2) (isEqualModuloWhitespace(t1,t2))
 
+ATbool isListSeparator(PT_Tree tree, PT_Production listProd);
+
 /* isEqualModuloWhitespace computes equality disregarding any whitespace in the 
  * asfix. Both terms must contain whitespace keywords, but they may be different.
  */
@@ -51,6 +53,7 @@ ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2);
  * element that is not layout (whitespace or a separator).
  */
 PT_Args skipWhitespace(PT_Args list);
+PT_Args skipWhitespaceAndSeparator(PT_Args list, PT_Production listProd);
 
 /* skipToEndOfWhitespace. this function moves the list pointer
  * while the pointer is on whitespace.

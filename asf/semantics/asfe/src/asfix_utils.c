@@ -41,17 +41,45 @@
 #include "asfe.h"
 #include "preparation.h"
 
+/*{{{  ATbool isListSeparator(PT_Tree elem, PT_Production listProd) */
+
+ATbool isListSeparator(PT_Tree elem, PT_Production listProd)
+{
+  PT_Symbol symbol, listSymbol;
+  PT_Symbol separator;
+  char *str;
+  PT_Production prod;
+
+  listSymbol = PT_getProductionRhs(listProd);
+
+  if (PT_isIterSepSymbol(listSymbol)) { 
+    separator = PT_getIterSepSeparator(listSymbol);
+    if (PT_isTreeAppl(elem)) {
+      prod = PT_getTreeProd(elem);
+      symbol = PT_getSymbolSymbol(PT_getProductionRhs(prod));
+      return PT_isEqualSymbol(separator, symbol);
+    }
+    else {
+      pedantic_assert(PT_isTreeLit(elem));
+      str = PT_getTreeString(elem);
+      if (PT_isSymbolLit(separator)) {
+	return strcmp(str, PT_getSymbolString(separator)) == 0;
+      }
+    }
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+
+/*{{{  ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2) */
+
 ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2)
 {
-  /*
   asfix1 = PT_makeTreeFromTerm(
-	     ATremoveAllAnnotations(PT_makeTermFromTree(asfix1)));
+	       ATremoveAnnotations(PT_makeTermFromTree(asfix1)));
   asfix2 = PT_makeTreeFromTerm(
-	     ATremoveAllAnnotations(PT_makeTermFromTree(asfix2)));
-   */
-
-  asfix1 = PT_makeTreeFromTerm(ATremoveAnnotations(PT_makeTermFromTree(asfix1)));
-  asfix2 = PT_makeTreeFromTerm(ATremoveAnnotations(PT_makeTermFromTree(asfix2)));
+	       ATremoveAnnotations(PT_makeTermFromTree(asfix2)));
 
   if (!PT_isEqualTree(asfix1, asfix2)) {
     if (PT_isTreeAppl(asfix1) && PT_isTreeAppl(asfix2)) {
@@ -100,6 +128,10 @@ ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2)
   return ATtrue;
 }
 
+/*}}}  */
+
+/*{{{  ATerm yieldTree(PT_Tree asfix) */
+
 ATerm yieldTree(PT_Tree asfix)
 {
   char *temp = strdup(PT_yieldTree(asfix));
@@ -114,6 +146,10 @@ ATerm yieldTree(PT_Tree asfix)
 
   return term;
 }
+
+/*}}}  */
+
+/*{{{  ATerm yieldArgs(PT_Args asfix) */
 
 ATerm yieldArgs(PT_Args asfix)
 {
@@ -130,6 +166,10 @@ ATerm yieldArgs(PT_Args asfix)
   return term;
 }
 
+/*}}}  */
+
+/*{{{  PT_Args skipWhitespace(PT_Args list) */
+
 PT_Args skipWhitespace(PT_Args list)
 {
   PT_Tree elem;
@@ -145,6 +185,26 @@ PT_Args skipWhitespace(PT_Args list)
 
   return list;
 }
+
+/*}}}  */
+
+/*{{{  PT_Args skipWhitespaceAndSeparator(PT_Args list, PT_Production listProd) */
+
+PT_Args skipWhitespaceAndSeparator(PT_Args list, PT_Production listProd)
+{
+  list = skipWhitespace(list);
+
+  if (PT_hasArgsHead(list) &&
+      isListSeparator(PT_getArgsHead(list), listProd)) {
+    list = skipWhitespace(PT_getArgsTail(list));
+  }
+
+  return list;
+}
+
+/*}}}  */
+
+/*{{{  PT_Args skipToEndOfWhitespace(PT_Args list) */
 
 PT_Args skipToEndOfWhitespace(PT_Args list)
 {
@@ -164,10 +224,14 @@ PT_Args skipToEndOfWhitespace(PT_Args list)
   return prev;
 }
 
+/*}}}  */
+
 /* isValidList checks:
  *    - if no consecutive whitespaces nodes occur
  *    - if it doesn't begin or end with whitespace
  */
+/*{{{  ATbool isValidList(PT_Args list) */
+
 ATbool isValidList(PT_Args list)
 {
   PT_Tree elem1, elem2;
@@ -210,7 +274,11 @@ ATbool isValidList(PT_Args list)
   return ATtrue;
 }
 
+/*}}}  */
+
 /* isValidSlice does the same as isValidList but for a slice */
+/*{{{  ATbool isValidSlice(PT_Args begin, PT_Args end) */
+
 ATbool isValidSlice(PT_Args begin, PT_Args end)
 {
   PT_Tree elem1, elem2;
@@ -261,3 +329,5 @@ ATbool isValidSlice(PT_Args begin, PT_Args end)
 
   return ATtrue;
 }
+
+/*}}}  */

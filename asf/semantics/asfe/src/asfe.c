@@ -95,10 +95,12 @@ static ATbool no_new_vars(PT_Tree trm, ATerm env);
 static ATerm argMatching(ATerm env, PT_Tree arg1, PT_Tree arg2, ASF_ConditionList conds, PT_Args orgargs1, PT_Args orgargs2, ATerm lhs_posinfo, int depth);
 static ATerm argsMatching(ATerm env, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
 static ATbool compareLists(Slice tuple, PT_Args list);
-static PT_Args compareSubLists(Slice slice, PT_Args elems2);
+static PT_Args compareSubLists(Slice slice, PT_Args elems2, 
+			       PT_Production listProd);
 static ATerm subListMatching(ATerm env, PT_Tree elem, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
-static ATerm lastListElementMatching(ATerm env, PT_Tree elem1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
-static ATbool isListSeparator(PT_Tree elem, PT_Production listProd);
+static ATerm lastListElementMatching(ATerm env, PT_Tree elem1, PT_Args elems2, 
+				     PT_Production listProd, 
+				     ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
 static ATerm nextListElementMatching(ATerm env, PT_Tree elem1, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
 static ATerm listMatching(ATerm env, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
 static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth);
@@ -749,9 +751,11 @@ compareLists(Slice tuple, PT_Args list)
 
 
 /*}}}  */
-/*{{{  static PT_Args compareSubLists(Slice slice, PT_Args elems2) */
+/*{{{  static PT_Args compareSubLists(Slice slice, PT_Args elems2, 
+ * PT_Production listProd) */
 
-static PT_Args compareSubLists(Slice slice, PT_Args elems2)
+static PT_Args compareSubLists(Slice slice, PT_Args elems2, 
+			       PT_Production listProd)
 {
   PT_Tree elem1, elem2;
   PT_Args first, last;
@@ -761,14 +765,14 @@ static PT_Args compareSubLists(Slice slice, PT_Args elems2)
   first = getSliceFirst(slice);
   last = getSliceLast(slice);
 
-    first = skipWhitespace(first);
-    elems2 = skipWhitespace(elems2);
+    first = skipWhitespaceAndSeparator(first,listProd);
+    elems2 = skipWhitespaceAndSeparator(elems2,listProd);
 
     pedantic_assert(isValidSlice(first, last));
     pedantic_assert(isValidList(elems2));
 
   while (!PT_isEqualArgs(first, last) && match) {
-      first = skipWhitespace(first);
+      first = skipWhitespaceAndSeparator(first,listProd);
       assert(isValidSlice(first, last));
 
     elem1 = PT_getArgsHead(first);
@@ -776,7 +780,7 @@ static PT_Args compareSubLists(Slice slice, PT_Args elems2)
       elem2 = PT_getArgsHead(elems2);
       match = isAsFixEqual(elem1, elem2);
 
-	elems2 = skipWhitespace(PT_getArgsTail(elems2));
+	elems2 = skipWhitespaceAndSeparator(PT_getArgsTail(elems2),listProd);
 	assert(isValidList(elems2));
     }
     else {
@@ -839,7 +843,7 @@ ATwarning("subListMatching entered for %t with %t\n",
   }
 
   /* Make sure we begin at a regular element */
-  elems2 = skipWhitespace(elems2);
+  elems2 = skipWhitespaceAndSeparator(elems2, listProd);
   pedantic_assert(isValidList(elems2));
 
   /* If the star variable didn't match or we have a plus variable
@@ -850,7 +854,7 @@ ATwarning("subListMatching entered for %t with %t\n",
     for (last = PT_getArgsTail(elems2);	/* create a singleton */
 	 is_fail_env(subenv);
 	 /* add an element to the slice */
-	 last = PT_getArgsTail(skipWhitespace(last))) {
+	 last = PT_getArgsTail(skipWhitespaceAndSeparator(last, listProd))) {
       pedantic_assert(isValidSlice(elems2, last));
       newenv = putListVariableValue(env, elem, elems2, last);
       subenv =
@@ -875,6 +879,7 @@ ATwarning("subListMatching entered for %t with %t\n",
 static ATerm
 lastListElementMatching(ATerm env, PT_Tree elem1, 
                         PT_Args elems2,
+			PT_Production listProd,
                         ASF_ConditionList conds, 
                         PT_Args args1, PT_Args args2,
                         ATerm lhs_posinfo, int depth) 
@@ -910,7 +915,7 @@ lastListElementMatching(ATerm env, PT_Tree elem1,
         }
       }
       else {
-        elems2 = skipWhitespace(elems2);
+        elems2 = skipWhitespaceAndSeparator(elems2, listProd);
         pedantic_assert(isValidList(elems2));
 
         if (PT_hasArgsHead(elems2)) {
@@ -955,36 +960,6 @@ lastListElementMatching(ATerm env, PT_Tree elem1,
 
 
 /*}}}  */
-/*{{{  static ATbool isListSeparator(PT_Tree elem, PT_Production listProd) */
-
-static ATbool isListSeparator(PT_Tree elem, PT_Production listProd)
-{
-  PT_Symbol symbol, listSymbol;
-  PT_Symbol separator;
-  char *str;
-  PT_Production prod;
-
-  listSymbol = PT_getProductionRhs(listProd);
-
-  if (PT_isIterSepSymbol(listSymbol)) { 
-    separator = PT_getIterSepSeparator(listSymbol);
-    if (PT_isTreeAppl(elem)) {
-      prod = PT_getTreeProd(elem);
-      symbol = PT_getSymbolSymbol(PT_getProductionRhs(prod));
-      return PT_isEqualSymbol(separator, symbol);
-    }
-    else {
-      pedantic_assert(PT_isTreeLit(elem));
-      str = PT_getTreeString(elem);
-      if (PT_isSymbolLit(separator)) {
-	return strcmp(str, PT_getSymbolString(separator)) == 0;
-      }
-    }
-  }
-  return ATfalse;
-}
-
-/*}}}  */
 /*{{{  static ATerm nextListElementMatching(env, elem1, listProd, ...) */
 
 
@@ -1010,7 +985,7 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
   if (PT_isTreeVarList(elem1)) {
     Slice trms = getListVariableValue(env, elem1);
     if (trms) {
-      elems2 = compareSubLists(trms, elems2);
+      elems2 = compareSubLists(trms, elems2, listProd);
       if (elems2) {
         newenv = listMatching(env, listProd, elems1, elems2, conds,
                               args1, args2,
@@ -1037,6 +1012,7 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
       if (isListSeparator(elem2, listProd)) {
 
         elems2 = skipWhitespace(PT_getArgsTail(elems2));
+
         pedantic_assert(isValidList(elems2));
       
 	newenv = argMatching(env, elem1, elem2, NULL,
@@ -1112,9 +1088,9 @@ listMatching(ATerm env, PT_Production listProd,
   PT_Tree elem1;
   ATerm newenv;
 
-  elems1 = skipWhitespace(elems1);
+  elems1 = skipWhitespaceAndSeparator(elems1,listProd);
   pedantic_assert(isValidList(elems1));
-  elems2 = skipWhitespace(elems2);
+  elems2 = skipWhitespaceAndSeparator(elems2,listProd);
   pedantic_assert(isValidList(elems2));
 
   if (runVerbose) {
@@ -1132,7 +1108,7 @@ listMatching(ATerm env, PT_Production listProd,
     elems1 = PT_getArgsTail(elems1);
 
     if (PT_isArgsEmpty(elems1)) { /* elems1 was a single element list */
-      newenv = lastListElementMatching(env, elem1, elems2, conds, 
+      newenv = lastListElementMatching(env, elem1, elems2, listProd, conds, 
                                        args1, args2, lhs_posinfo, depth);
     }
     else { /* elems1 contained more than one element in its pattern */
@@ -1709,7 +1685,7 @@ rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth,
     elems = PT_getArgsTail(elems);
   }
 
-  newelems = skipWhitespace(newelems);
+  newelems = skipWhitespaceAndSeparator(newelems,listProd);
   pedantic_assert(isValidList(newelems));
 
   return newelems;
