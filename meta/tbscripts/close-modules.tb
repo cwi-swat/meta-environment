@@ -4,6 +4,7 @@
 process Close-modules is
 let
   Str : term,
+  ChngMods : list,
   Id  : term
 in
   Id := process-id. 
@@ -11,7 +12,9 @@ in
     rec-msg(close-module(Str?)).
     snd-note(ui-status(stat(Id,"Deleting ..."))).
     snd-msg(delete-module(Str)).
-    rec-msg(done).
+    rec-msg(changed-modules(ChngMods?)).
+    snd-msg(notify-about-changed-modules(ChngMods,"sdf")).
+    rec-msg(notify-about-changed-modules-done).
     snd-note(ui-status(endstat(Id))).
     snd-msg(closed-module(Str))
   ) *

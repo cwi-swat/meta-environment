@@ -27,12 +27,19 @@ in
     snd-note(ui-status(stat(Id,"Generating Parse Table..."))) .
     execute(parsetablegen,GENTABLE?) .
     snd-msg(add-eqs-syntax(Str)) .
-    rec-msg(extended-syntax(Syntax?)) .
-    snd-eval(GENTABLE,generate-table(Syntax,Str,"tbl")) .
-    rec-value(GENTABLE,generation-finished(Table?)) .
-    snd-msg(parsetable(Table)) .
-    snd-note(ui-status(endstat(Id))) .
-    snd-terminate(GENTABLE,"terminate")
+    (
+    	rec-msg(extended-syntax(Syntax?)) .
+    	snd-eval(GENTABLE,generate-table(Syntax,Str,"tbl")) .
+    	rec-value(GENTABLE,generation-finished(Table?)) .
+    	snd-msg(parsetable(Table)) .
+    	snd-note(ui-status(endstat(Id))) .
+    	snd-terminate(GENTABLE,"terminate")
+     +
+  	rec-msg(no-extended-syntax).
+    	snd-msg(no-parsetable(Str)).
+    	snd-note(ui-status(endstat(Id))).
+	snd-terminate(GENTABLE,"terminate")
+    )
   )*
   delta
 endlet

@@ -32,7 +32,9 @@
 #include "se.tb"
 #include "set-parsetable.tb"
 #include "sdf2-language.tb"
+#include "notification.tb"
 
 toolbus(Parser, Parsetrees, Prettyprinter, Io, Ui, Edit-master, ModuleDB, 
 	ProcessEqs, Save-modules, Revert-module, File-creator, SE, Anno, 
-	Set-parsetable, Open-Sdf2-Language, Evaluator) 
+	Set-parsetable, Open-Sdf2-Language, Evaluator, 
+        Notify-about-changed-modules) 

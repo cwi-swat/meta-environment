@@ -4,32 +4,44 @@
 
 process Set-parsetable is
 let
-  Module: str, Table: str, Time: term, Id: term
+  Module: str, Table: str, 
+  Time: term, Id: term,
+  NoTable : term
 in
 Id := process-id.
-( rec-msg(set-parsetable(Module?)) .
+
+( 
+  rec-msg(set-parsetable(Module?)) .
+  NoTable := false.
   snd-msg(get-table-from-db(Module)) .
   (
     rec-msg(table(Table?))
   +
     rec-msg(no-table) .
-    snd-note(ui-status(stat(Id,"Generating parse table"))) .
     snd-msg(generate-parsetable(Module)) .
-    rec-msg(parsetable(Table?)) .
-    snd-msg(get-table-timestamp(Module)) .
-    rec-msg(table-timestamp(Time?)) .
-    snd-msg(add-table-to-db(Module,Table,Time)) .
-    rec-msg(done) .
-    snd-note(ui-status(endstat(Id)))
+    (
+	rec-msg(parsetable(Table?)) .
+    	snd-msg(get-table-timestamp(Module)) .
+    	rec-msg(table-timestamp(Time?)) .
+    	snd-msg(add-table-to-db(Module,Table,Time)) .
+    	rec-msg(done)
+     +
+	rec-msg(no-parsetable(Module)).
+        NoTable := true
+    )
   ).
-  snd-msg(reopen-language(Module,Table)) .
-  (
-    rec-msg(language-opened(Module)) .
-    snd-msg(parsetable-set(Module))
-  +
-    rec-msg(language-not-opened(Module)) .
-    snd-msg(parsetable-not-set(Module))
-  )
+  if equal(NoTable, true) then
+    	snd-msg(parsetable-not-set(Module))
+  else
+  	snd-msg(reopen-language(Module,Table)) .
+  	(
+    	    rec-msg(language-opened(Module)) .
+	    snd-msg(parsetable-set(Module))
+	  +
+	    rec-msg(language-not-opened(Module)) .
+	    snd-msg(parsetable-not-set(Module))
+  	)
+  fi
 ) *
 delta
 endlet

@@ -9,10 +9,16 @@ let
 in  
   ( rec-msg(add-eqs-syntax(Name?)).
     snd-msg(get-all-sdf2-definitions(Name)).
-    rec-msg(syntax(Syntax?)).
-    snd-eval(AES,add-eqs-syntax(Name,Syntax)).
-    rec-value(AES,extended-syntax(NewSyntax?)). 
-    snd-msg(extended-syntax(NewSyntax))
+    (
+	rec-msg(syntax(Syntax?)).
+    	snd-eval(AES,add-eqs-syntax(Name,Syntax)).
+    	rec-value(AES,extended-syntax(NewSyntax?)). 
+    	snd-msg(extended-syntax(NewSyntax))
+    +
+    	rec-msg(no-syntax).
+        snd-msg(no-extended-syntax)
+    ) 
+    
   )*
   delta
 endlet

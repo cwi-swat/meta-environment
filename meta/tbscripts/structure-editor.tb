@@ -17,7 +17,7 @@ let
 in
   Id := process-id.
   subscribe(disconnected(<term>)).
-  subscribe(language-changed(Language)).
+  subscribe(syntax-changed(Language)).
   snd-note(ui-status(stat(Id,"Starting structure editor..."))).
   snd-msg(get-se-id).
   rec-msg(se-id(SE?)).
@@ -180,7 +180,7 @@ in
     snd-msg(TE,set-focus(Fid,Foc)).
     snd-ack-event(TE,menu-event("Move",Str,Fid))
     +
-    rec-note(language-changed(Language)).
+    rec-note(syntax-changed(Language)).
     snd-eval(SE,makeTreeInvalid(Fid)).
     rec-value(SE,Fl?).
     Foc := first(Fl).
