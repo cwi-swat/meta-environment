@@ -22,6 +22,8 @@
 
 include $(top_srcdir)/make_rules
 
+SUBDIRS=
+
 bin_PROGRAMS     = asfc
 data_DATA        = asfc.idef
 
