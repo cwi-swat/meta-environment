@@ -60,8 +60,8 @@ in
     ( rec-value(IO,opened-file(Name,Text?,Dir?,Path?)).
       snd-msg(Id,opened-file(raw,id(Name),Text,Dir,Path))
       +
-      rec-value(IO,error-opening(Name?)).
-      snd-msg(Id, error-opening(Name))
+      rec-value(IO,error-opening(Name?,Path?)).
+      snd-msg(Id, error-opening(Name,Path))
     )
   +
     rec-msg(save-sdf2-asfix(id(Name?),Path?,Asfix?)).

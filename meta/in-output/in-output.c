@@ -293,7 +293,9 @@ ATerm open_trm_file(int cid, char *name)
     }
   }
   ATfprintf(stderr,"File could not be found\n");
-  return ATmake("snd-value(error-opening(<str>))", name);
+  strcpy(full,"./");
+  strcat(full,name);
+  return ATmake("snd-value(error-opening(<str>,<str>))", name, full);
 }
 
 ATerm open_file(int cid, char *name)
