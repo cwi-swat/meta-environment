@@ -394,7 +394,7 @@ ATbool AFisTraverseCfFunc(ATerm prod)
 
       if(ATmatchTerm(attrs,pattern_attrs,NULL,NULL,&list,NULL,NULL)) {
         for(;!ATisEmpty(list);list = ATgetNext(list)) {
-          if(ATmatch(ATgetFirst(list),"l(\"memo\")")) {
+          if(ATmatch(ATgetFirst(list),"l(\"traverse\")")) {
             return ATtrue;
           }
         }
