@@ -73,7 +73,7 @@ class DeltaEnvironment {
     for (int i = 0; i < dict.size(); i += 2) {
       ATerm var = (ATerm) dict.elementAt(i);
       ATerm val = (ATerm) dict.elementAt(i + 1);
-      env.putVar(var, val);
+      env.assignVar(var, val);
     }
   }
 }

@@ -7,6 +7,31 @@ import java.util.Vector;
 
 import aterm.*;
 
+/**
+ * Environments to maintain a relation between variables and their values.
+ * The lifecyle of an environment consists of two phases: compile time and execution time.
+ * 
+ * During compile time (i.e. during compilation of a process definition) a vector is maintained
+ * of all current variables. Each vector entry contains a var or rvar term correspodning to a variable.
+ * The variable maxVar indicates the last addressable variable.
+ * Methods are:
+ * - introduceVars
+ * - introduceBindings
+ * - removeVars
+ * - getVarIndex
+ * - getVarType
+ * 
+ * During compilation, resolveVars use the environment to replace all varaible indeces by their
+ * actual value. During execution time, operations on variables amount to a simple indexing
+ * operation.
+ * 
+ * The switch to execution time is made by setExecuting. It sets the vector to null (to detect 
+ * uninitialized variables) and then the following methods are available:
+ * - assignVar
+ * - getValue
+ * 
+ */
+
 public class Environment {
   private int maxVar;
   private Vector declVec;
@@ -19,9 +44,14 @@ public class Environment {
     executing = false;
   }
 
-  // compile time methods
+  /**
+   * Compile time methods
+   */
 
-  public void add(ATermList vars) throws ToolBusException {
+  public void introduceVars(ATermList vars) throws ToolBusException {
+    if (executing) {
+      throw new ToolBusInternalError("introduceVars during execution");
+    }
     //System.err.println("Environment.add(" + vars + "), maxVar = " + maxVar + " declVec = " + declVec);
     for (int i = 0; i < vars.getLength(); i++) {
       ATerm var = vars.elementAt(i);
@@ -35,8 +65,11 @@ public class Environment {
     //System.err.println(declVec + ", maxVar = " + maxVar);
   }
 
-  public void add(ATermList vars, ATermList actuals) throws ToolBusException {
+  public void introduceBindings(ATermList vars, ATermList actuals) throws ToolBusException {
     //System.err.println("Environment.add(" + vars + ", " + actuals + "), maxVar = " + maxVar + " declVec = " + declVec);
+    if (executing) {
+      throw new ToolBusInternalError("introduceBindings during execution");
+    }
     for (int i = 0; i < vars.getLength(); i++) {
       ATerm var = vars.elementAt(i);
       if (TBTerm.isVar(var)) {
@@ -61,13 +94,19 @@ public class Environment {
     //System.out.println(declVec + ", maxVar = " + maxVar);
   }
 
-  public void delete(int delta) {
+  public void removeVars(int delta) {
+    if (executing) {
+      throw new ToolBusInternalError("removeVars during execution");
+    }
     //System.out.println("delete " + delta + " from " + this);
     maxVar -= delta;
     //System.out.println("after delete: " + this +"; maxVar =" + maxVar);
   }
 
   public int getVarIndex(ATerm var) throws ToolBusException {
+    if (executing) {
+      throw new ToolBusInternalError("getVarindex during execution");
+    }
     if (!(TBTerm.isVar(var) || TBTerm.isResVar(var)))
       throw new ToolBusInternalError("Environment.getVarIndex: illegal var " + var);
     String name = TBTerm.getVarName(var);
@@ -85,6 +124,9 @@ public class Environment {
   }
 
   public ATerm getVarType(ATerm var) {
+    if (executing) {
+      throw new ToolBusInternalError("getVarType during execution");
+    }
     if (!(TBTerm.isVar(var) || TBTerm.isResVar(var)))
       throw new ToolBusInternalError("Environment.getVarType: illegal var " + var);
     String name = TBTerm.getVarName(var);
@@ -94,21 +136,28 @@ public class Environment {
     throw new ToolBusInternalError("Environment.getVarIndex: undeclared var " + var);
   }
 
-  // run-time methods
+ 
 
   public void setExecuting() {
+    if (executing) {
+      throw new ToolBusInternalError("setExecuting during execution");
+    }
     executing = true;
     declVec.trimToSize();
     for (int i = 0; i < declVec.size(); i++)
       declVec.setElementAt(null, i);
   }
+  
+  /**
+   * Execution time methods
+   */
 
-  public void putVar(ATerm var, ATerm val) {
+  public void assignVar(ATerm var, ATerm val) {
     //System.out.println("putVar(" + var + ", " + val +")");
     declVec.setElementAt(val, TBTerm.getVarIndex(var));
   }
 
-  public ATerm getVar(ATerm var) throws ToolBusException {
+  public ATerm getValue(ATerm var) throws ToolBusException {
 
     ATerm val = (ATerm) declVec.elementAt(TBTerm.getVarIndex(var));
     //System.err.println("getVar(" + var + "): " + val);

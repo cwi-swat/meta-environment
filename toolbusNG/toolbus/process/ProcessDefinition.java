@@ -41,11 +41,11 @@ public class ProcessDefinition {
   }
 
   public void enterScope(Environment env, ATermList actuals) throws ToolBusException {
-    env.add(formals, actuals);
+    env.introduceBindings(formals, actuals);
   }
 
   public void leaveScope(Environment env) {
-    env.delete(formals.getLength());
+    env.removeVars(formals.getLength());
   }
 
   public ATermList getCompiledFormals(Environment env) throws ToolBusException {

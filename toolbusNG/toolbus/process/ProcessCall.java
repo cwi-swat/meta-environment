@@ -122,7 +122,7 @@ public class ProcessCall implements ProcessExpression, StateElement {
       ATerm actual = actuals1.getFirst();
       actuals1 = actuals1.getNext();
       if (!TBTerm.isResVar(formal)) {
-        env.putVar(formal, TBTerm.substitute(actual, env));
+        env.assignVar(formal, TBTerm.substitute(actual, env));
         //System.err.println(formal + " gets value " + env.getVar(formal));
       }
     }

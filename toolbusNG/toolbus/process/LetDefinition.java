@@ -30,9 +30,9 @@ public class LetDefinition implements ProcessExpression {
 
   public void compile(ProcessInstance P, State follows) throws ToolBusException {
     Environment env = P.getEnv();
-    env.add(formals);
+    env.introduceVars(formals);
     PE.compile(P, follows);
-    env.delete(formals.getLength());
+    env.removeVars(formals.getLength());
   }
 
   public State getFirst() {
