@@ -38,7 +38,7 @@ se_SOURCES = Editor.c Editor_dict.c se.c \
 			 area.c editor.c focus.c path.c sort.c tree.c length.c
 
 se_LDADD   = se.tif.o \
-			-L$(PT_SUPPORT)/lib -lmept -L$(ATERM)/lib -lATB -lATerm-dbg $(SOCKLIBS)
+			-L$(PT_SUPPORT)/lib -lmept -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 INCLUDES          = -I$(PT_SUPPORT)/include -I$(ATERM)/include
 
