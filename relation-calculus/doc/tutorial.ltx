@@ -27,7 +27,7 @@ This short note documents the current state of the \rscript language.
 Be aware, this work in progress.
 \end{abstract}
 
-\section{Introduction}
+\section{Introduction}\label{SEC:Introduction}
 
 \rscript is a small scripting language based on the relational
 calculus.  It is intended for analyzing and querying the source code
@@ -237,7 +237,7 @@ declares the variable {\tt day}, a relation that maps strings to integers.
 \subsection{Local variable declarations}
 Local variables can be introduced as follows:
 \begin{quote}
-{\tt $E$ where $T_1$ $V_1$ = $E_1$, ..., $T_n$ $V_n$ = $E_n$ endwhere}
+{\tt $E$ where $T_1$ $V_1$ = $E_1$, ..., $T_n$ $V_n$ = $E_n$ end where}
 \end{quote}
 First the local variables $V_i$ are bound to their respective values
 $E_i$, and then the value of expression $E$ is yielded.
@@ -311,22 +311,52 @@ fashion, the assert statement has no affect.
 {\tt assert "Equality on Bags 1": \{1, 2, 3, 1\} == \{3, 2, 1, 1\}}
 \end{quote}
 
-\subsection{Solvers}
-It is also possible to define mutually recursive variables by
+\subsection{Equations}
+It is also possible to define mutually dependent sets of equations:
+
 \begin{quote}
-{\tt solve \{
-  $V_1$ = $E_1$,
-  ...,
-  $V_n$ = $E_n$
-\}}
+{\tt equations \\
+       \hspace*{0.5cm}initial \\
+          \hspace*{1cm}$T_1$ $V_1$ init $I_1$\\
+          \hspace*{1cm}  ... \\
+          \hspace*{1cm}$T_n$ $V_n$ init $I_n$\\
+       \hspace*{0.5cm}satisfy\\
+          \hspace*{1cm}$V_1$ = $E_1$\\
+          \hspace*{1cm}...\\
+          \hspace*{1cm}$V_n$ = $E_n$\\
+end equations}
 \end{quote}
-Here, the expressions {\tt E}$_i$ may refer to any of the variables {\tt
-  V}$_i$ (and to any variables declared earlier).  This set of equations is
-  solved by evaluating the expressions {\tt E}$_i$, assigning their value to
-  the corresponding variables {\tt V}$_i$, and repeating this as long as the
+
+\noindent In the {\tt initial} section, the variables $V_i$ are declared and
+initialized.
+In the {\tt satisfy} section, the actual set of equations is given.
+The expressions $E_i$ may refer to any of the variables 
+  $V_i$ (and to any variables declared earlier).  This set of equations is
+  solved by evaluating the expressions $E_i$, assigning their value to
+  the corresponding variables $V_i$, and repeating this as long as the
   value of one of the variables was changed. This is typically used for
-  solving a set of dataflow equations. \footnote{Probably, the syntax of this
-  construct should more emphasize that it is a set of equations.}
+  solving a set of dataflow equations.
+
+\paragraph{Example}
+Equations can be used to define the transitive closure of a relation.
+Recall that \[R+ = R \cup (R \circ R) \cup (R \circ R \circ R) \cup ... .\]
+This can be expressed as follows.
+
+\begin{verbatim}
+rel[int,int] R =  {<1,2>, <2,3>, <3,4>}
+
+equations
+  initial
+     rel[int,int] T init R
+  satisfy
+     T = T union (T o R)
+end equations
+\end{verbatim}
+The resulting value of {\tt T} is as expected:
+\begin{verbatim}
+ {<1,2>, <2,3>, <3,4>, <1, 3>, <2, 4>, <1, 4>}
+\end{verbatim}
+
 
 \section{Built-in Operators}
 
@@ -662,11 +692,20 @@ bag {\tt Excl} are used.
   \{<1,3>, <1, 4>\}}.
 }
 
-\function{Powerser of a bag: {\tt power}}
-{\tt bag[bag[$T$]] power(bag[$T$] B) = primitive}
-{ Yields the powerset of bag {\tt B}.}
+\function{Powerset of a bag: {\tt power0}}
+{\tt bag[bag[$T$]] power0(bag[$T$] B) = primitive}
+{ Yields the powerset of bag {\tt B} (including the empty bag).}
 {
-\item \begin{sloppypar} {\tt power(\{1, 2, 3, 4})\} yields {\tt \{ \{\}, \{1\},
+\item \begin{sloppypar} {\tt power0(\{1, 2, 3, 4})\} yields {\tt \{ \{\}, \{1\},
+    \{2\}, \{3\}, \{4\},\{1,2\}, \{1,3\}, \{1,4\}, \{2,3\}, \{2,4\}, \{3,4\},
+    \{1,2,3\}, \{1,2,4\}, \{1,3,4\}, \{2,3,4\}, \{1,2,3,4\}\}} \end{sloppypar}
+}
+
+\function{Powerset of a bag: {\tt power1}}
+{\tt bag[bag[$T$]] power1(bag[$T$] B) = primitive}
+{ Yields the powerset of bag {\tt B} (excluding the empty bag).}
+{
+\item \begin{sloppypar} {\tt power1(\{1, 2, 3, 4})\} yields {\tt \{ \{1\},
     \{2\}, \{3\}, \{4\},\{1,2\}, \{1,3\}, \{1,4\}, \{2,3\}, \{2,4\}, \{3,4\},
     \{1,2,3\}, \{1,2,4\}, \{1,3,4\}, \{2,3,4\}, \{1,2,3,4\}\}} \end{sloppypar}
 }
@@ -803,15 +842,305 @@ of the calls relation as shown in Figure~\ref{FIG:calls}.
 Observe that such a visual inspection does not scale to large graphs.
 
 
+\subsection{Finding uninitialized variables in a program}
+
+Consider the folowing program in the toy language Pico:
+\begin{verbatim}
+[ 1] begin declare x : natural, y : natural,
+[ 2]              z : natural, p : natural;
+[ 3]  x := 3;
+[ 4]  p := 4;
+[ 5]  if q then
+[ 6]        z := y + x
+[ 7]  else
+[ 8]        x := 4
+[ 9]  fi;
+[10]  y := z
+[11] end
+\end{verbatim}
+
+Inspection of this program learns that some of the variables are being used
+before they have been initialized.  The variables in question are {\tt q}
+(line 5), {\tt y} (line 6), and {\tt z} (line 10). How can we automate this
+analysis?
+
+Recall from Section~\ref{SEC:Introduction} that we follow extract-enrich-view
+paradigm to approach such a problem.
+
+The first step is to determine which elementary facts we need about the
+program.  For this and many other kinds of program analysis, we need at least
+the following:
+
+\begin{itemize}
+\item The \emph{control flow graph} of the program. We represent it by a relation
+{\tt PRED} (for predecessor) which relates each statement with each
+predecessors.
+
+\item The \emph{definitions} of each variable, i.e., the program statements where a
+  value is assigned to the variable. It is represented by the relation {\tt
+  DEFS}.
+
+\item The \emph{uses} of each variable, i.e., the program statements where the
+  value of the variable is used.  It is represented by the relation {\tt
+  USES}.
+\end{itemize}
+
+In this example, we will use line numbers to identify the statements in the
+program.\footnote{In Section XXX, we will use areas to represent statements.}
+
+Assuming that there is a tool to extract the above information from a program text,
+we get the following for the above example:
+
+\begin{verbatim}
+int ROOT = 1
+rel[int,int] PRED = {<1,3>, <3,4>, <4,5>, <5,6>, <5,8>, <6,10>, <8,10>}
+rel[int,str] DEFS = {<3,"x">, <4,"p">, <6,"z">, <8,"x">, <10,"y">}
+rel[int,str] USES = {<5,"q">, <6,"y">, <6,"x">, <10,"z">}
+\end{verbatim}
+
+This concludes the extraction phase. Next, we have to enrich these basic
+facts to obtain the unitialized variables in the program. 
+
+So, when is a variable \emph{V} in some statement \emph{S} unitialized?  If we
+execute the program (starting in {\tt ROOT}), there may be several possible
+execution path that can reach statement \emph{S}.  All is well if \emph{all}
+these execution path contain a definition of \emph{V}.  However, if one or
+more of these path do \emph{not} contain a definition of \emph{V}, then
+\emph{V} may be uninitialized in statement \emph{S}. This can be formalized as
+follows:
+\begin{verbatim}
+rel[str,int] UNINIT = 
+   { <V,S> | <V, S>: USES, <ROOT, S> in reachX({ROOT}, DEFS[V], PRED)
+   }
+rel[int,str] UNINIT = 
+   { <S, V> | <S, V>: USES, <ROOT, S> in reachX({ROOT}, DEFS . V, PRED)
+    }
+\end{verbatim}
+
+\noindent We analyze this definition in detail:
+\begin{itemize}
+\item {\tt <S, V> : USES} enumerates all tuples in the {\tt USES} relation.
+In other words, we consider the use of each variable in turn.
+
+\item {\tt <ROOT, S> in reachX({ROOT}, DEFS . V, PRED)} is a test that
+  determines whether statement {\tt S} is reachable from the {\tt ROOT}
+  without encountering a definition of variable {\tt V}.
+  \begin{itemize}
+    \item {\tt \{ROOT\}} represents the initial set of nodes from which all
+    path should start.
+    \item {\tt DEFS . V} yields the set of all statements in which a definition
+    of variable {\tt V} occurs. These nodes form the eXclusion set for
+    {\tt reachX}: no path will be extended beyond an element in this set.
+    \item {\tt PRED} is the relation for which the reachability has to be
+    determined.
+    \item The result of  {\tt reachX({ROOT}, DEFS . V, PRED)} is a relation
+    that contains all pairs of nodes that are reachable from the
+    {\tt ROOT} (as well as all intermediate steps on each path).
+    \item Finally, {\tt <ROOT, S> in reachX({ROOT}, DEFS . V, PRED)} tests
+    whether statement {\tt S} can be reached from the {\tt ROOT}.
+  \end{itemize}
+\item The net effect is that {\tt UNINIT} will only conatin pairs
+that satisfy the test just described.
+\end{itemize}
+
+When we execute the resulting \rscript (i.e., the declarations of {\tt ROOT},
+{\tt PRED}, {\tt DEFS}, {\tt USES} and {\tt UNINIT}), we get as value
+for {\tt UNINIT}:
+
+\begin{verbatim}
+ {<5, "q">, <6, "y">, <10, "z">}
+\end{verbatim}
+and this is in concordance with the informal analysis given at the beginning of this
+example.
+
+As a bonus, we can also determine the \emph{unused} variables in a
+program, i.e., variables that are defined but are used nowhere.
+This is done as follows:
+\begin{verbatim}
+bag[str] UNUSED = range(DEFS) \ range(USES)
+\end{verbatim}
+Taking the range of the relations {\tt DEFS} and {\tt USES} yields the
+variables that are defined, respectively, used in the program. The difference
+of these two bags yields the unused variables, in this case {\tt \{"p"\}}.
+
+\subsection{Dataflow analysis}
+
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/reach.eps,width=10cm}
+\vspace*{-6cm}
+\end{center}
+\caption{\label{FIG:reach} Flow graph for reaching definitions}
+\end{figure}
+
+\emph{Dataflow analysis} is a program analysis technique that forms the basis
+for many compiler optimizations. It is described in any text book on compiler
+construction, e.g. XXX. The goal of dataflow analysis is to determine
+the effect of statements on their surroundings. Typical examples are:
+\begin{itemize}
+\item Reaching definitions: which definitions of variables are still valid at each statement?
+\item Available expressions: an expression is avaialble if it is computed
+  along each path from the start of the program to the current statement.
+\item Live variables: of which variables will the values be used by successors
+  of a statement?
+\item and more.
+\end{itemize}
+
+\subsubsection{Reaching definitions}
+
+We illustrate the calculation of reaching definitions using the example in
+Figure~\ref{FIG:reach} (based on an example in \ref{ASU}).
+
+As before, we assume the following basic relations {\tt PRED}, {\tt DEFS} and
+{\tt USES} about the program:
+\begin{verbatim}
+rel[int,int] PRED = { <1,2>, <2,3>, <3,4>, <4,5>, <5,6>, <5,7>, <6,7>, 
+                      <7,4>}
+rel[int, str] DEFS = { <1, "i">, <2, "j">, <3, "a">, <4, "i">, 
+                       <5, "j">, <6, "a">, <7, "i">}
+rel[int, str] USES = { <1, "m">, <2, "n">, <3, "u1">, <4, "i">, 
+                       <5, "j">, <6, "u2">, <7, "u3">}
+\end{verbatim}
+
+For convenience, we first revamp these basic relations into a more convenient
+format:
+\begin{verbatim}
+rel[int, <int, str>] DEF = {<S, <S, V>> | <S, V> : DEFS}
+rel[int, <int, str>] USE = {<S, <S, V>> | <S, V> : USES}
+\end{verbatim}
+The new {\tt DEF} relation gets as value:
+\begin{verbatim}
+ {<1, <1, "i">>, <2, <2, "j">>, <3, <3, "a">>, <4, <4, "i">>, 
+  <5, <5, "j">>, <6, <6, "a">>, <7, <7, "i">>
+\end{verbatim}
+and {\tt USE} gets as value:
+\begin{verbatim}
+{<1, <1, "m">>, <2, <2, "n">>, <3, <3, "u1">>, <4, <4, "i">>, 
+ <5, <5, "j">>, <6, <6, "u2">>, <7, <7, "u3">>}
+\end{verbatim}
+
+Now we are ready to define an important new relation {\tt KILL}.
+{\tt KILL} defines which variable definitions are undone (killed) at each
+ statement and is defined as follows:
+\begin{verbatim}
+rel[int, <int, str>] KILL = 
+   {<S1, <S2, V2>> | <S1, V1> : DEFS, <S2, V2> : DEFS, 
+                     V1 == V2, S1 != S2}
+\end{verbatim}
+In this definition, all variable definitions are compared with each other,
+and for each variable definition all \emph{other} definitions of the same variable
+are placed in its kill set. In the example, {\tt KILL} get the value
+and yields as value
+\begin{verbatim}
+{<1, <4, "i">>, <1, <7, "i">>, <2, <5, "j">>, <3, <6, "a">>, 
+ <4, <1, "i">>, <4, <7, "i">>, <5, <2, "j">>, <6, <3, "a">>, 
+ <7, <1, "i">>, <7, <4, "i">>}
+\end{verbatim}
+and, for instance, the definition of variable {\tt i} in statement
+{\tt 1} kills the definitions of {\tt i} in statements {\tt 4} and {\tt 7}.
+Next, we introduce two convenience variables:
+\begin{verbatim}
+bag[int] STATEMENTS = carrier(PRED)
+\end{verbatim}
+which gets as value {\tt \{1, 2, 3, 4, 5, 6, 7\}} and
+\begin{verbatim}
+rel[int,int] PRED-OF = inv(PRED)
+\end{verbatim}
+which gets as value
+\begin{verbatim}
+{<2,1>, <3,2>, <4,3>, <5,4>, <6,5>, <7,5>, <7,6>, <4,7>}
+\end{verbatim}
+
+After these preparations, we are ready to formulate the reaching definitions
+problem in terms of two relations {\tt IN} and {\tt OUT}.  {\tt IN} captures
+all the variable definitions that are valid at the entry of each statement and
+{\tt OUT} captures the definitions that are still valid after execution of
+each statement. Intuitively, for each statement {\tt S}, {\tt IN[S]} is equal to
+the union of the {\tt OUT} of all the predecesssors of {\tt S}.
+{\tt OUT[S]}, on the other hand, is equal to the definitions generated by
+{\tt S} to which we add {\tt IN[S]} minus the definitions that are killed
+in {\tt S}. Mathematically, the following set of equations captures this idea
+for each statement:
+
+\[
+IN[S] = \bigcup_{P \in predecessor of S} OUT[P] \]
+\[ OUT[S] = DEF[S] \cup (IN[S] - KILL[S]) \]
+
+\noindent This idea can be expressed in \rscript quite literally:
+
+\begin{verbatim}
+equations
+  initial
+    rel[int,<int,str>] IN init {}
+    rel[int,<int,str>] OUT init DEF
+  satisfy
+    IN  =  {{S} x OUT[P] | S : STATEMENTS, P : PRED-OF[S]}
+    OUT =  {{S} x (DEF[S] union (IN[S] \ KILL[S])) | S : STATEMENTS }
+end equations
+\end{verbatim}
+First, the relations {\tt IN} and {\tt OUT} are declared and initalized. Next, 
+two equations are given that very much resemble the ones given above.
+The carthesian product operator {\tt x} is used, to combine each statement
+with the relevant {\tt IN} or {\tt OUT} information.
+For our running example (Figure~\ref{FIG:reach}) the results are as follows.
+Relation {\tt IN} has as value:
+\begin{verbatim}
+{<2, <1, "i">>, <3, <2, "j">>, <3, <1, "i">>, <4, <3, "a">>, 
+ <4, <2, "j">>, <4, <1, "i">>, <4, <7, "i">>, <4, <5, "j">>, 
+ <4, <6, "a">>, <5, <4, "i">>, <5, <3, "a">>, <5, <2, "j">>, 
+ <5, <5, "j">>, <5, <6, "a">>, <6, <5, "j">>, <6, <4, "i">>, 
+ <6, <3, "a">>, <6, <6, "a">>, <7, <5, "j">>, <7, <4, "i">>, 
+ <7, <3, "a">>, <7, <6, "a">>}
+\end{verbatim}
+If we consider statement {\tt 3}, then the definitions of {\tt i} and {\tt j}
+from the preceeding two statements are still valid. A more interesting case
+are the definitions that can reach statement {\tt 4}:
+\begin{itemize}
+\item  The definitions of variables {\tt a}, {\tt j} and {\tt i} from,
+  respectively, statements {\tt 3}, {\tt 2} and {\tt 1}.
+
+\item The definition of variable {\tt i} from statement {\tt 7} (via the
+  backward control flow path from {\tt 7} to {\tt 4}).
+
+\item The definition of variable {\tt j} from statement{\tt 5} (via the path
+  {\tt 5}, {\tt 7}, {\tt 4}).
+\item The definition of variable {\tt a} from statement {\tt 6} (via the path
+ {\tt 6}, {\tt 7}, {\tt 4}).
+\end{itemize}
+
+Relation {\tt OUT} has as value:
+\begin{verbatim}
+{<1, <1, "i">>, <2, <2, "j">>, <2, <1, "i">>, <3, <3, "a">>, 
+ <3, <2, "j">>, <3, <1, "i">>, <4, <4, "i">>, <4, <3, "a">>, 
+ <4, <2, "j">>, <4, <5, "j">>, <4, <6, "a">>, <5, <5, "j">>, 
+ <5, <4, "i">>, <5, <3, "a">>, <5, <6, "a">>, <6, <6, "a">>, 
+ <6, <5, "j">>, <6, <4, "i">>, <7, <7, "i">>, <7, <5, "j">>, 
+ <7, <3, "a">>, <7, <6, "a">>}
+\end{verbatim}
+Observe, again for statement {\tt 4}, that
+all definitions of variable  {\tt i} are missing in {\tt OUT[4]} since
+they are killed by the definition of {\tt i} in statement {\tt 4} itself. Definitions for
+{\tt a} and {\tt j} are, however, contained in {\tt OUT[4]}.
+
+\subsubsection{Live Variables}
+
+\subsubsection{Others}
+\note{Some ideas:
+\begin{itemize}
+\item Dominator tree
+\item McCabe complexity
+\end{itemize}
+}
+
 \section{Running a \rscript}
 Currently, the definition of \rscript resides in {\tt /ufs/glt/CVS}.
- You can also checkout your own copy by means of
+ You can checkout your own copy by means of
 {\tt cvs -d ssh.cwi.nl:/ufs/glt/CVS co relation-calculus}.
 
 \paragraph{Running a script}
 \begin{itemize}
-\item Change to your copy of the directory {\tt relation-calculus}.
-\item Start the ASF+SDF Meta-Environment by the command {\tt meta}.
+\item Change to your checked out copy of the directory {\tt relation-calculus}.
+\item Start the ASF+SDF Meta-Environment with the command {\tt meta}.
 \item Open the module {\tt Rscript.sdf}.
 \item Open your own term, using the Rscript module.
 \item Observe that a new menu call {\tt Rscript} appears in the menu bar.
@@ -833,12 +1162,13 @@ failed.
 
 \paragraph{Miscellaneous}
 The subdirectory {\tt rscripts} contains several sample scripts.  See {\tt
-test1.rscript} and {\tt tests2.rscript} for examples of the use of built-in
+tests1.rscript} and {\tt tests2.rscript} for examples of the use of built-in
 operators and functions.
 
 The subdirectory {\tt demo} contains larger demos.
 
 \section{Pseudo definitions of some built-in operators and functions}
+\note{This section will be merged with preceeding ones.}
 
 It is interesting that most (but not all!) built-in operators and all
 functions can be defined in \rscript itself. They only serve convenience and

@@ -2,12 +2,11 @@
 
 rel[int,int] M =  {<1,2>, <2,3>, <3,4>}
 
-int I = 0
-
-rel[int,int] T = M
-
-solve {
+equations
+  initial
+     rel[int,int] T init M
+  satisfy
 	T = T union (T o M)
-}
+end equations
 
 

@@ -716,30 +716,39 @@ $Error]>
 [check-assert]
 	check-stat(assert $String : $Exp, $Tenv) = require-type($Exp, bool, $Tenv)
 
+%% --- Check yield statement
+
+[check-yield]
+	check($Var, $Tenv) = <$Etype, $Tenv'>
+	===============================================
+	check-stat(yield $Var, $Tenv) =  $Tenv'
+
 %% --- Check set of equations
 
-[CSL11]	check-stat(solve ($Integer) { $Var = $Exp }, $Tenv) = 
-	check-stat(solve { $Var = $Exp }, $Tenv)
+[CEQ1]	check-stat(equations (limit $Integer) initial $InitVar+ satisfy  $Eq+ end equations, $Tenv) = 
+	check-eqs($InitVar+, $Eq+, $Tenv)
 
-[CSL12]	check($Var, $Tenv) = <$Etype, $Tenv1>,
-	require-type($Exp, $Etype, $Tenv1) = $Tenv2
-	==========================================
-	check-stat(solve { $Var = $Exp }, $Tenv) = $Tenv2
+[CEQ2]	check-stat(equations initial $InitVar+ satisfy  $Eq+ end equations, $Tenv) = 
+	check-eqs($InitVar+, $Eq+, $Tenv)
 
-[CSL21]	check-stat(solve ($Integer) { $Var1 = $Exp1, $Var2 = $Exp2 }, $Tenv) =
-	check-stat(solve { $Var1 = $Exp1, $Var2 = $Exp2 }, $Tenv)
+[CEQS1]	check-stat($Etype $Var = $Exp, $Tenv) = $Tenv1
+	===============================================	
+	check-eqs($Etype $Var init $Exp $InitVar*, $Eq+, $Tenv) =
+	check-eqs($InitVar*, $Eq+, $Tenv1)
 
-[CSL22]	check($Var1, $Tenv) = <$Etype1, $Tenv1>,
-	require-type($Exp1, $Etype1, $Tenv1) = $Tenv2,
-	check($Var2, $Tenv2) = <$Etype2, $Tenv3>,
-	require-type($Exp2, $Etype2, $Tenv3) = $Tenv4
-	==========================================
-	check-stat(solve { $Var1 = $Exp1, $Var2 = $Exp2 }, $Tenv) = $Tenv4
+[CEQS2]	check($Var, $Tenv) = <$Etype, $Tenv1>,
+        require-type($Exp, $Etype, $Tenv1) = $Tenv2
+        =========================================
+	check-eqs( , $Var = $Exp $Eq*, $Tenv) = check-eqs( , $Eq*, $Tenv2)
+
+[CEQS2]	check-eqs( , , $Tenv) = $Tenv
+
+%% ---- Default case for chack-stat
 
 [default-check-stat]
 	 check-stat($Stat, $Tenv) = $Tenv +  $Stat cannot be typed
 
-%% -- Default cases for check
+%% -- Default case for check
 
 [default-check]
       check($Exp, $Tenv) = <undefined, $Tenv +  $Exp cannot be typed>
@@ -884,7 +893,8 @@ $Error]>
                 <first,     	fun [ <T1,T2>] 				to T1>,
                 <second,     	fun [ <T1,T2> ] 			to T2>,
 
-		<power,		fun[ bag[T] ]				to bag[bag[T]]>,
+		<power0,	fun[ bag[T] ]				to bag[bag[T]]>,
+		<power1,	fun[ bag[T] ]				to bag[bag[T]]>,
 
                 <reachX,  	fun [ bag[T], bag[T], rel[T,T] ] 	to rel[T,T] >,
                 <reachR,  	fun [ bag[T], bag[T], rel[T,T] ] 	to rel[T,T] >,

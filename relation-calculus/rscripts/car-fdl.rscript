@@ -10,7 +10,7 @@ str pullsTrailer = "pullsTrailer"
 str pullsNoTrailer = "pullsNoTrailer"
 
 bag[str] Transmission = { automatic, manual }
-bag[bag[str]] Engine = { {electric}, {gasoline}, {electric, gasoline}}
+bag[bag[str]] Engine = power1({electric, gasoline})
 bag[str] HorsePower = {lowPower, mediumPower, highPower}
 
 bag[str] PullsTrailerOpt = {pullsTrailer, pullsNoTrailer}
@@ -26,3 +26,4 @@ bag[bag[str]] Car = { {{T} union E union {H} union {PT}} |
 }
 
 int n = # Car
+

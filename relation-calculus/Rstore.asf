@@ -25,7 +25,13 @@ equations
 
 %% Add elem to bag
 
-[AE1]	add-elem($Var, $Elem, $Rstore) = assign($Var, xappend(value($Var, $Rstore), $Elem), $Rstore)
+[AE1]	$Val = value($Var, $Rstore),
+	$Val != *undefined*
+	=================================================================
+	add-elem($Var, $Elem, $Rstore) = assign($Var, xappend($Val, $Elem), $Rstore)
+
+[default-AE]
+	add-elem($Var, $Elem, $Rstore) = assign($Var, {$Elem}, $Rstore)
 
 %% ---- Add tuple to a relation
 
@@ -58,6 +64,20 @@ equations
 [AP1]	xappend($Elem, *undefined*) = $Elem
 [AP2]	xappend($Bag, $Elem) = union2($Bag, $Elem)
 [AP3]	xappend($Bag1, $Bag2) = union($Bag1, $Bag2)
+
+%% ---- Convert RVAR to String
+
+[rv2s] 	rvar2str(rvar($Char*)) = strcon(""" $Char* """)
+
+%% --- filter RSTORE
+
+[fr1]	$Bag != {},
+	in(rvar2str($Var), $Bag) = false
+	=========================================	
+	filter(rstore($VPair*1, <$Var, $Val>, $VPair*2), $Bag) = 
+	filter(rstore($VPair*1, $VPair*2), $Bag)
+
+[default-fr1]	filter($Rstore, $Bag) = $Rstore
 
 %% ---- if on RVALUEs
 

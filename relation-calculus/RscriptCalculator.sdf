@@ -32,8 +32,11 @@ exports
 	eval-le(RVALUE, RVALUE)					-> Boolean
 	eval-im(RVALUE, RVALUE)					-> Elem
 
+	eval-initvar(INITVAR*, RSTORE)				-> RSTORE
+
 	add-element(Elem, Bag[[Elem]])				-> Bag[[Elem]]
-	power(Bag[[Elem]])					-> Bag[[Elem]]
+	power0(Bag[[Elem]])					-> Bag[[Elem]]
+	power1(Bag[[Elem]])					-> Bag[[Elem]]
 
 	extract-rvars( {DCLRVAR ","}+ )				-> {RVAR  ","}+
 	bind-formals({RVAR ","}+, {REXP ","}+, RSTORE)		-> RSTORE
@@ -51,6 +54,7 @@ exports
 	solve2(Integer, RVAR, REXP, RVAR, REXP, RSTORE)		-> RSTORE
 
 	is-rel(RVALUE)						-> Boolean
+
 
 	"get-filename"						-> RVAR {reject}
 	"get-beginline"						-> RVAR {reject}
@@ -115,6 +119,15 @@ hiddens
 
 	"$DclRvar+" [0-9\']*		-> { DCLRVAR ","}+
 	"$Area" [0-9\']* 		-> Area
+
+	"$InitVar" [0-9\']*		-> INITVAR
+	"$InitVar*" [0-9\']*		-> INITVAR*
+	"$InitVar+" [0-9\']*		-> INITVAR+
+
+       "$Eq" [0-9\']*		-> EQU
+       "$Eq*" [0-9\']*		-> EQU*
+       "$Eq+" [0-9\']*		-> EQU+
+
 
 
      

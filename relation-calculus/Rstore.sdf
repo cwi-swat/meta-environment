@@ -27,6 +27,9 @@ exports
 	add-tuple(RVAR, Elem # Elem, RSTORE)  		-> RSTORE
 	add-tuples(RVAR, Bag[[Elem]], RSTORE) 		-> RSTORE
 
+	filter(RSTORE, Bag[[Elem]])			-> RSTORE
+	rvar2str(RVAR)					-> String
+
 hiddens
 
   context-free syntax
@@ -47,3 +50,5 @@ hiddens
         "$Elem+"  [0-9\']*             -> {Elem ","}+
 	"$Bag" [0-9\']*			-> Bag[[Elem]]
 	"$Rel" [0-9\']*			-> Bag[[Elem]]
+
+	"$Char*" [0-9\']*		-> CHAR*

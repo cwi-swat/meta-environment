@@ -11,10 +11,10 @@ assert "a2": bottomCalls == {"c", "e"}
 
 rel[str,str] closureCalls = calls+
 
-assert "a3": closurerCalls == 
+assert "a3": closureCalls == 
  		{<"a", "b">, <"b", "c">, <"b", "d">, <"d", "c">, 
 		<"d","e">, <"f", "e">, <"f", "g">, <"g", "e">, 
-		<"a", "c">, <"a", "d">, <"b", "e">, <"a", "e">}>
+		<"a", "c">, <"a", "d">, <"b", "e">, <"a", "e">}
 
 bag[str] calledFromA = closureCalls["a"]
 
