@@ -77,7 +77,12 @@ int main (int argc, char *argv[])
 	    myname, input_file_name);
   }
 
-  out = fopen(output_file_name,"w");
+  if (!strcmp(output_file_name,"-")) {
+    out = stdout;
+  }
+  else {
+    out = fopen(output_file_name,"w");
+  }
 
   if (out == NULL) {
     ATerror("%s: could not write dot to file %s\n",
