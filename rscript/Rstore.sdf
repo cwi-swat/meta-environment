@@ -10,13 +10,13 @@ exports
 
         Elem                          			-> RVALUE
         "*undefined*"                     		-> RVALUE
-         {RVAR ","}+ #  REXP            		-> RVALUE
+         < {RVAR ","}+,  REXP>            		-> RVALUE
 
         "if" Boolean "then" RVALUE "else" RVALUE "fi"   -> RVALUE
 
 %% The RSTORE itself, maps RVARs to RVALUEs
 
-       "rstore" "(" {  RVAR # RVALUE  ","}* ")"		-> RSTORE {prefer}
+       "rstore" "(" {  <RVAR, RVALUE>  ","}* ")"	-> RSTORE {prefer}
         assign(RVAR, RVALUE, RSTORE)          		-> RSTORE
 	assign-when-undef(RVAR, RVALUE, RSTORE)		-> RSTORE
         value(RVAR, RSTORE)                   		-> RVALUE
@@ -24,7 +24,7 @@ exports
 %% Extension functions on RSTOREs intended for fact extraction tools
 
 	add-elem(RVAR, Elem, RSTORE)			-> RSTORE
-	add-tuple(RVAR, Elem # Elem, RSTORE)  		-> RSTORE
+	add-tuple(RVAR, <Elem, Elem>, RSTORE)  		-> RSTORE
 	add-tuples(RVAR, Bag[[Elem]], RSTORE) 		-> RSTORE
 
 	filter(RSTORE, Bag[[Elem]])			-> RSTORE
@@ -55,22 +55,22 @@ hiddens
 	xunion(RVALUE, RVALUE)		-> Elem
 	xappend(RVALUE, RVALUE)		-> Elem
   variables
-       "$Rstore" [0-9\']*             -> RSTORE
+	"$Rstore" [0-9\']*             -> RSTORE
         "$Val" [0-9\']*                -> RVALUE
-        "$VPair*" [0-9\']*             -> { RVAR # RVALUE ","}*
+        "$VPair*" [0-9\']*             -> { <RVAR, RVALUE> ","}*
 
         "$Var" [0-9\']*                -> RVAR
         "$Var*" [0-9\']*               -> {RVAR ","}*
         "$Var+" [0-9\']*               -> {RVAR ","}+
 
 
-	        "$Elem"   [0-9\']*             -> Elem
+	"$Elem"   [0-9\']*             -> Elem
         "$Elem*"  [0-9\']*             -> {Elem ","}*
         "$Elem+"  [0-9\']*             -> {Elem ","}+
-	"$Bag" [0-9\']*			-> Bag[[Elem]]
-	"$Rel" [0-9\']*			-> Bag[[Elem]]
+	"$Bag" [0-9\']*		       -> Bag[[Elem]]
+	"$Rel" [0-9\']*		       -> Bag[[Elem]]
 
-	"$Char*" [0-9\']*		-> CHAR*
+	"$Char*" [0-9\']*	       -> CHAR*
 	
 	"$RsfName" [0-9\']*		-> RSFNAME
 

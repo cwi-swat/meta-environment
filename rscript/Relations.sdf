@@ -5,13 +5,13 @@ imports Bags[Elem]
 
 exports
 
-  sorts Tuple {Elem ","}+
+  sorts Tuple %% {Elem ","}+
 
   context-free syntax
 %%     Elem #  Elem					-> Tuple
      Tuple						-> Elem
 
-     "<"{Elem ","}+ ">"					-> Tuple
+     "<"{Elem ","}+ ">"					-> Tuple {prefer}
 
      compose(Bag[[Elem]], Bag[[Elem]])			-> Bag[[Elem]]	%%RRR
     

@@ -82,7 +82,7 @@ hiddens
    variables
         "$Rstore" [0-9\']*             -> RSTORE
         "$Val" [0-9\']*                -> RVALUE
-        "$VPair*" [0-9\']*             -> { RVAR # RVALUE ","}*
+        "$VPair*" [0-9\']*             -> { <RVAR, RVALUE> ","}*
 
         "$Var" [0-9\']*                -> RVAR
         "$Var*" [0-9\']*               -> {RVAR ","}*
