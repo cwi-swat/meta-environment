@@ -18,21 +18,21 @@
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
 # $Id$
-#
 
 include $(top_srcdir)/make_rules
 
-INCLUDES                 = -I$(ATERM)/include
+INCLUDES		= -I$(ATERM)/include
 
-# The following libraries are compiled to static libraries.
-lib_LIBRARIES            = libAsFix.a 
+lib_LIBRARIES		= libAsFix.a 
 
-SRCS                     = abbrevs.c asfix.c asfix2src.c expand2asfix.c \
-                           init-patterns.c posinfo.c AsFix-access.c a2toa1.c \
-                           buffer.c
+SRCS			= abbrevs.c asfix.c asfix2src.c expand2asfix.c \
+			  init-patterns.c posinfo.c AsFix-access.c a2toa1.c \
+			  buffer.c
 
-HDRS                     = AsFix-abbrevs.h AsFix-init-patterns.h AsFix2sym.h \
-		           AsFix-expand.h AsFix.h aterm-macs.h AsFix-fun.h \
-		           AsFix2src.h AsFix-access.h a2toa1.h buffer.h
+HDRS			= AsFix-abbrevs.h AsFix-init-patterns.h AsFix2sym.h \
+			  AsFix-expand.h AsFix.h aterm-macs.h AsFix-fun.h \
+			  AsFix2src.h AsFix-access.h a2toa1.h buffer.h
 
-libAsFix_a_SOURCES        = $(SRCS) $(HDRS)
+libAsFix_a_SOURCES	= $(SRCS) $(HDRS)
+
+include_HEADERS		= $(HDRS)
