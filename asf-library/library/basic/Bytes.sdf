@@ -12,6 +12,12 @@ exports
      bytes-to-string(Bytes) -> String 
 
      num-of-bytes(Bytes)        -> Integer 
+
+     Bytes "<"  Bytes  -> Boolean
+     Bytes "<=" Bytes  -> Boolean
+     Bytes ">"  Bytes  -> Boolean
+     Bytes ">=" Bytes  -> Boolean
+
      ascii-compare(Bytes,Bytes) -> Integer 
 
 hiddens

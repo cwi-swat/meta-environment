@@ -80,29 +80,30 @@ equations
 
 [nob2]	num-of-bytes(bytes(char char*)) = 1 + num-of-bytes(bytes(char*))
 
-[acmp1]	ascii-compare(bytes, bytes) = 0
+equations
 
-[acmp2]	ascii-compare(bytes(char char*1),bytes(char char*2)) =
-		ascii-compare(bytes(char*1),bytes(char*2))
+[less-0] bytes < bytes = false
+[less-1] 
+bytes(char char*1) < bytes(char char*2) = 
+bytes(char*1) < bytes(char*2)
 
-[acmp3]	byte(char1) != byte(char2),
-	byte-to-octal(byte(char1)) < byte-to-octal(byte(char2)) == true
-	===
-	ascii-compare(bytes(char1 char*1),bytes(char2 char*2)) = -1
+[less-2] 
+byte(char1) != byte(char2),
+byte-to-octal(byte(char1)) < byte-to-octal(byte(char2)) == true
+===>
+bytes(char1 char*2) < bytes(char2 char*2) = true
 
-[acmp3]	byte(char1) != byte(char2),
-	byte-to-octal(byte(char1)) > byte-to-octal(byte(char2)) == true
-	===
-	ascii-compare(bytes(char1 char*1),bytes(char2 char*2)) = 1
+[default-less] bytes1 < bytes2 = false
 
-[default-acmp4]	
-	ascii-compare(bytes(), bytes(char+)) = -1
+[greater] bytes1 > bytes2 = not(bytes1 <= bytes2)
 
-[default-acmp5]	
-	ascii-compare(bytes(char+), bytes()) = 1
+[less-equal] bytes <= bytes = true
+[default-less-equal] bytes1 <= bytes2 = bytes1 < bytes2
 
+[greater-equal] bytes >= bytes = true
+[default-greater-equal] bytes1 >= bytes2 = bytes1 > bytes2
 
-
+equations
 
 [otc1]	octal-to-string(natcon(char1)) = strcon("0" "0" char1)
 
@@ -635,5 +636,5 @@ equations
 tests
 
 [concat] "aaa" || "aaa" = "aaaaaa"
-[length] str-len("aaa") + str-len("aaa") = str-len("aaaaaa")
+[len] length("aaa") + length("aaa") = length("aaaaaa")
 [bytes]  bytes-to-string(string-to-bytes("a\n\t\"\\b\007")) = "a\n\t\"\\b\007"
