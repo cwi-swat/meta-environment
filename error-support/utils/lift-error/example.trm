@@ -1,1 +1,1 @@
-info("producer","description",[subject("subject-id",location("filename",area(0,0,0,0,0,0)))])
+info("description",[subject("subject-id",location("filename",area(0,0,0,0,0,0)))])
