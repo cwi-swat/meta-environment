@@ -1,0 +1,19 @@
+# $Id$
+
+top_srcdir      = @top_srcdir@
+prefix          = @prefix@
+exec_prefix     = @exec_prefix@
+bindir          = @bindir@
+
+PERL = @PERL@
+INSTALL         = @INSTALL@
+
+SCRIPTS = idef2tif
+
+all: $(SCRIPTS)
+
+idef2tif : idef2tif.src Makefile
+	sed 's#__PERL__#$(PERL)#g;s#__TOOLBUSBIN__#$(bindir)#g;' < $< > $@
+
+install: $(SCRIPTS)
+	$(INSTALL) idef2tif $(bindir)

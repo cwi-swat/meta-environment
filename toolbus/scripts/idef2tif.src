@@ -1,0 +1,102 @@
+#! __PERL__
+
+#$Id$
+
+# idef2tif takes an interface definition file (idef) and returns a 
+# toolbus interface file (tifs). 
+#
+# An idef file is a Tscript with exactly one process, and no toolbus(..) 
+# statement. The idea is that such a file exactly defines the interface
+# to a tool, and nothing more. In order to use it you need to #include it
+# in a larger Tscript which does include a toolbus(..) statement.
+
+# Author: Tobias Kuipers
+# Date:   1-feb-1999
+
+# Test for perl version:
+if ($] < 5) {
+  print "Please get perl 5 or better. idef2tif doesn't work under this version of perl\n";
+  exit(2);
+}
+
+# 17-feb-2000, Merijn de Jonge
+# Make sure location of toolbus binary is contained in PATH variable
+$ENV{'PATH'} = "__TOOLBUSBIN__:$ENV{'PATH'}" ;
+
+
+$idefsuf = '.idef';
+
+sub usage {
+  print "Usage: idef2tif file$idefsuf\n";
+  exit 1;
+}
+
+if ($#ARGV < 0) {
+  &usage;
+}
+
+# Get filename form commandline
+$fullname = $ARGV[0];
+# Get basename
+@dirarray = split(/\//,$fullname);
+$basename = pop(@dirarray);
+$dir = join("/",@dirarray);
+if ($dir ne "") {
+  $dir .= "/";
+}
+# Where to put temporary files?
+$tmpdir=$ENV{'TMPDIR'}?$ENV{'TMPDIR'}:'/tmp';
+# Check for right suffix
+if ($basename =~ /(.+)\Q$idefsuf\E$/) {
+  $base = $1;
+  $stmp = "$tmpdir/$1.tmp.$$";
+  $serr = "$tmpdir/$1.err.$$";
+} else {
+  print STDERR "$basename has unknown suffix\n";
+  &usage;
+}
+
+open(IDEF,"$fullname") || die("can't open $fullname");
+open(TB,">$stmp") || die("can't create $stmp ($!)");
+
+$pc = 0;
+while(<IDEF>) {
+  if (/process (\w+) is/) {
+    $process = $1;
+    $pc++;
+  }
+  if (/\s*toolbus\(/) {
+    print STDERR "toolbus(..) statements not allowed in idef file\n";
+    print STDERR "Abort.\n";
+    exit 3;
+  }
+  print TB $_;
+}
+
+close(IDEF);
+
+if ($pc != 1) {
+  print STDERR "Not exactly 1 process definition in $fullname\n";
+  print STDERR "Please make sure your idef file has exactly 1 process definition.\n";
+  print STDERR "Abort.";
+  exit 2;
+}
+
+print TB "toolbus(",$process,")\n";
+close(TB);
+
+system("toolbus -gentifs $stmp 2> $serr > /dev/null");
+#$err=-s $serr;
+$err=$?;
+if($err) {
+  open(ERR,"<$serr") || die "error opening $serr ($!)";
+  print STDERR while(<ERR>);
+  close ERR;
+} else {
+  system("mv $stmp.tifs $dir$base.tifs");
+  print STDOUT "Tool interfaces written to \`$dir$base.tifs\'\n";
+}
+
+unlink($serr,$stmp);
+
+exit $err;

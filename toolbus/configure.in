@@ -291,6 +291,9 @@ dnl If we can't find something called wish8.1 or wish8.0, we'll assume
 dnl that "wish" is at version 8 or higher.
 AC_PATH_PROGS(WISH,wish8.1 wish8.0 wish, /usr/local/bin/wish)
 
+dnl Where is perl5?
+AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
+
 # Check for math lib (-lm), use arbitrary function (atof) from
 # C library, since using, e.g., sin leads to compilation errors
 
@@ -298,7 +301,8 @@ AC_CHECK_LIB(m,atof,[LIBS="$LIBS -lm"])
 
 dnl add outputfiles as argument below
 AC_OUTPUT(Makefile
-	src/Makefile src/logger.tcl src/viewer.tcl
+	src/Makefile src/logger.tcl src/viewer.tcl \
+        scripts/Makefile \
 	tide/Makefile tide/tide
 	doc/Makefile \
 	test/Makefile \

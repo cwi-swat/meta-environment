@@ -1,4 +1,10 @@
 ------------------------------------------------------------------------------
+Date:		Fri Mar  3 17:07:59 MET 2000
+Version:	0.9.16f
+Author:		Meerijn
+
+- Added tool idef2tif and scripts directory
+------------------------------------------------------------------------------
 Date:		Fri Feb 23 11:10:17 MET 1996
 Version:	0.9.16f
 Author:		Pieter
