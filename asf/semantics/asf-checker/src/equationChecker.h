@@ -10,5 +10,6 @@ ERR_FeedbackList checkEquations(ASF_ASFConditionalEquationList eqs);
 ERR_FeedbackList checkTests(ASF_ASFTestEquationTestList tests); 
 ERR_FeedbackList checkASFConditionalEquationList(ASF_ASFConditionalEquationList condEquationList);
 ERR_Feedback makeMessage(char *msg, ASF_ASFTag tag, ATerm subject);
+ERR_FeedbackList makeAmbiguityMessage(void *subject);
 
 #endif  /* EQS_CHECKER_H */

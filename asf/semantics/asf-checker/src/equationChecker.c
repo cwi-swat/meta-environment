@@ -1,7 +1,7 @@
 #include "equationChecker.h"
 #include "ErrorAPI.h"
 
-/*{{{  static ERR_Feedback makeMessage(const char *msg, ASF_ASFTag tag, ATerm subject) */
+/*{{{  ERR_Feedback makeMessage(char *msg, ASF_ASFTag tag, ATerm subject) */
 
 ERR_Feedback makeMessage(char *msg, ASF_ASFTag tag, ATerm subject)
 {
@@ -19,9 +19,9 @@ ERR_Feedback makeMessage(char *msg, ASF_ASFTag tag, ATerm subject)
 
 /*}}}  */
 
-/*{{{  static ERR_FeedbackList makeAmbiguityMessage() */
+/*{{{  ERR_FeedbackList makeAmbiguityMessage(void *subject) */
 
-static ERR_FeedbackList makeAmbiguityMessage(void *subject)
+ERR_FeedbackList makeAmbiguityMessage(void *subject)
 {
   return ERR_makeFeedbackListSingle(makeMessage("equations contain ambiguities",
 						NULL, (ATerm) subject));

@@ -46,11 +46,8 @@ static ERR_FeedbackList checkAsf(ATerm term)
 
       return ERR_concatFeedbackList(checkEquations(rules), checkTests(tests));
     }
-    else if (ambs == 1) {
-      return ERR_makeFeedbackListSingle(makeMessage("Equations contain one ambiguity!", NULL, NULL));
-    }
     else {
-      return ERR_makeFeedbackListSingle(makeMessage("Equations contain ambiguitites!", NULL, NULL));
+      return makeAmbiguityMessage(PT_getParseTreeTop(parseTree));
     }
   }
 }
