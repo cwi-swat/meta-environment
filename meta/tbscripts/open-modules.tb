@@ -20,7 +20,7 @@ in
       rec-msg(exists-in-module-db(Module))
     ).
     snd-msg(finished-opening-initial-module)
-  )*
+  ) *
   delta
 endlet
 
@@ -72,7 +72,7 @@ in
     if equal(Status, success) then
       Open-ParseTables(RealModule, RealPath).
       tau. /* needed to activate the next process (bug in ToolBus) */
-      Open-Equations(RealModule, Path)
+      Open-Equations(RealModule, RealPath)
     else
       tau
     fi
@@ -137,7 +137,7 @@ in
     rec-msg(parse-result-asfix2me(Id?, parse-tree(Tree?)))
   +
     rec-msg(parse-result-asfix2me(Id?, parse-error(Errors?, Error?))).
-    Status := parse-error
+    Status := parse-error 
   )
 endlet
 
@@ -183,6 +183,6 @@ in
     snd-msg(add-eqs-to-db(Module, RealPath, tree(Tree), text(Text), Time)) .
     rec-msg(eqs-added)
   +
-    rec-msg(error-opening(Module))
+    rec-msg(error-opening(Module)).
   )
 endlet
