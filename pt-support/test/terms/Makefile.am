@@ -1,4 +1,6 @@
 
+# Just add a file ending with .pt to this directory and the dictonary
+# will get updated
 
 EXTRA_DIST=$(wildcard *.pt)
 
