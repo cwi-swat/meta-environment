@@ -70,7 +70,7 @@ exports
     "restrictions"      -> ModuleName {reject}
     "constructor"       -> ModuleName {reject}
     "memo"              -> ModuleName {reject}
-    Literal "(" {Symbol ","}* ")" -> Symbols {reject}
+    UQLiteral "(" {Symbol ","}* ")" -> Symbols {reject}
   restrictions
     <Sort -CF>
     <UQLiteral -CF>

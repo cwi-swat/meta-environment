@@ -27,6 +27,6 @@ exports
     [a-z]                          -> UQLiteral
     [a-z][A-Za-z0-9\-]*[A-Za-z0-9] -> UQLiteral
   context-free syntax
-    UQLiteral                                            -> Literal
-    Literal                                              -> Symbol
-    Literal "(" {Symbol ","}* ")" "->" Symbol Attributes -> Production        
+    UQLiteral                                              -> Literal
+    Literal                                                -> Symbol
+    UQLiteral "(" {Symbol ","}* ")" "->" Symbol Attributes -> Production        
