@@ -83,6 +83,7 @@ equations
 %% --- elem(E, Bag)
 
 [el-1]  elem(E, {E*1, E, E*2}) = true
+
 [default-el-2]
 	elem(E, {E*}) = false
 

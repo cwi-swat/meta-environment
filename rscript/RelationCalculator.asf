@@ -266,15 +266,29 @@
 
 %% ---- Eval bag and relation formers
 
-[EB10] evalx({ $Var in $Exp1 | $Exp2 }, $Store) = evalx({ $Var in $Exp1 | $Exp2 | {$Var}}, $Store)
+%%[EB10] evalx({ $Var in $Exp1 | $Exp2 }, $Store) = evalx({ $Var in $Exp1 | $Exp2 | {$Var}}, $Store)
 
-[EB11] evalx({ $From+ | $Exp1 | $Exp2}, $Store) =
+[EB11] evalx({ $From+ : if $Exp1 then $Exp2 }, $Store) =
        valformer(get_from($From+, $Store), *empty*, $Exp1, $Store, $Exp2)
 
-[ER11] evalx({ <$Var1, $Var2> in $Exp1 | $Exp2 }, $Store) =
-       evalx({ <$Var1, $Var2> in $Exp1 | $Exp2 | {<$Var1, $Var2>}}, $Store)
+[EB11] evalx({ $From+ : $Exp2 }, $Store) =
+       valformer(get_from($From+, $Store), *empty*, true, $Store, $Exp2)
+
+%%[EB10] evalx({ $Var in $Exp1 | $Exp2 }, $Store) = evalx({ $Var in $Exp1 | $Exp2 | {$Var}}, $Store)
+
+%%[EB11] evalx({ $Exp2 : $From+ | $Exp1 }, $Store) =
+%%       valformer(get_from($From+, $Store), *empty*, $Exp1, $Store, $Exp2)
+
+%%[ER11] evalx({ <$Var1, $Var2> in $Exp1 | $Exp2 }, $Store) =
+%%       evalx({ <$Var1, $Var2> in $Exp1 | $Exp2 | {<$Var1, $Var2>}}, $Store)
 
 %% ---- Auxiliary functions for bag and relation formers
+
+[AP0]  append($Elem1, $Elem2) = {$Elem1, $Elem2}
+[AP1]  append(*empty*, $Elem) = $Elem
+[AP2]  append(*empty*, $Tuple) = {$Tuple}
+[AP3]  append({$Elem*}, $Elem) = {$Elem*, $Elem}
+[AP4]  append({$Tuple*}, $Tuple) = {$Tuple*, $Tuple}
 
 [GF1]  $Bag = evalb($Exp, $Store),
        get_from($From*, $Store) = [$Gen*]
@@ -300,7 +314,7 @@
       valformer($Gens, $Val, $Exp1, $Store, $Exp2) =
        if $Bool
        then
-         valformer($Gens', apply(evalx($Exp2, $Store') union $Val), $Exp1, $Store, $Exp2)
+         valformer($Gens', append($Val, evalx($Exp2, $Store')), $Exp1, $Store, $Exp2)
        else
          valformer($Gens', $Val, $Exp1, $Store, $Exp2)
        fi
@@ -457,6 +471,21 @@
         ================================================= 
         evalx(dominators($Exp1, $Exp2, $Exp3), $Store) =
         dominators($Rel1, $Rel2, $Rel3)
+
+
+[FrX]   $Bag1 = evalb($Exp1, $Store),
+        $Bag2 = evalb($Exp2, $Store),
+        $Rel  = evalr($Exp3, $Store)
+        ================================================= 
+        evalx(reachX($Exp1, $Exp2, $Exp3), $Store) =
+        reachX($Bag1, $Bag2, $Rel)	
+
+[FrR]   $Bag1 = evalb($Exp1, $Store),
+        $Bag2 = evalb($Exp2, $Store),
+        $Rel  = evalr($Exp3, $Store)
+        ================================================= 
+        evalx(reachR($Exp1, $Exp2, $Exp3), $Store) =
+        reachR($Bag1, $Bag2, $Rel)	
 
 
 

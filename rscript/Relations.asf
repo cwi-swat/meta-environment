@@ -18,44 +18,52 @@ equations
 [ran-1]  range({<E,E'>, Tuple*}) = union({E'}, range({Tuple*}))
 [ran-2]  range({}) = {}
 
-[car-1]  carrier({<E,E'>, Tuple*}) = union({E}, union({E'}, carrier({Tuple*})))
+[car-1]  carrier({<E,E'>, Tuple*}) = union(union({E},{E'}), carrier({Tuple*}))
 [car-2]  carrier({}) = {}
 
-[domR-1] domR({<E, E'>, Tuple*}, {E*1}) = 
-         if elem(E, {E*1}) then union({<E,E'>}, domR({Tuple*}, {E*1}))
-                       else domR({Tuple*}, {E*1})
-         fi
-[domR-2] domR({}, {E*1}) = {}
+[domR-1] elem(E, {E*}) = false
+         ==================================================
+         domR({Tuple*1, <E, E'>, Tuple*2}, {E*}) = domR({Tuple*1, Tuple*2}, {E*})
 
-[domX-1] domX({<E, E'>, Tuple*}, {E*1}) = 
-         if elem(E, {E*1}) then domX({Tuple*}, {E*1})
-                       else union({<E,E'>}, domX({Tuple*}, {E*1}))
-         fi
-[domX-2] domX({}, {E*1}) = {}
+[default-domR]
+	 domR({Tuple*}, {E*}) = {Tuple*}
 
-[ranR-1] ranR({<E, E'>, Tuple*}, {E*1}) = 
-         if elem(E', {E*1}) then union({<E,E'>}, ranR({Tuple*}, {E*1}))
-                        else ranR({Tuple*}, {E*1})
-         fi
-[ranR-2] ranR({}, {E*1}) = {}
+[domX-1] elem(E, {E*}) = true
+         ==================================================
+         domX({Tuple*1, <E, E'>, Tuple*2}, {E*}) = domX({Tuple*1, Tuple*2}, {E*})
 
-[ranX-1] ranX({<E, E'>, Tuple*}, {E*1}) = 
-         if elem(E', {E*1}) then ranX({Tuple*}, {E*1})
-                        else union({<E,E'>}, ranX({Tuple*}, {E*1}))
-         fi
-[ranX-2] ranX({}, {E*1}) = {}
+[default-domX]
+	 domX({Tuple*}, {E*}) = {Tuple*}
 
-[carR-1] carR({<E, E'>, Tuple*}, {E*1}) = 
-         if elem(E, {E*1}) & elem(E', {E*1}) then union({<E,E'>}, carR({Tuple*}, {E*1}))
-                                     else carR({Tuple*}, {E*1})
-         fi
-[carR-2] carR({}, {E*1}) = {}
+[ranR-1] elem(E', {E*}) = false
+         ==================================================
+         ranR({Tuple*1, <E, E'>, Tuple*2}, {E*}) = ranR({Tuple*1, Tuple*2}, {E*})
 
-[carX-1] carX({<E, E'>, Tuple*}, {E*1}) = 
-         if elem(E, {E*1}) | elem(E', {E*1}) then carX({Tuple*}, {E*1})
-                                    else union({<E,E'>}, carX({Tuple*}, {E*1}))
-         fi
-[carX-2] carX({}, {E*1}) = {}
+[default-ranR]
+	 ranR({Tuple*}, {E*}) = {Tuple*}
+
+[ranX-1] elem(E', {E*}) = true
+         ==================================================
+         ranX({Tuple*1, <E, E'>, Tuple*2}, {E*}) = ranR({Tuple*1, Tuple*2}, {E*})
+
+[default-ranX]
+	 ranX({Tuple*}, {E*}) = {Tuple*}
+
+
+[carR-1] elem(E, {E*}) & elem(E', {E*}) = false
+         ==================================================
+         carR({Tuple*1, <E, E'>, Tuple*2}, {E*}) = carR({Tuple*1, Tuple*2}, {E*})
+
+[default-carR]
+	 carR({Tuple*}, {E*}) = {Tuple*}
+
+[carX-1] elem(E, {E*}) |  elem(E', {E*}) = true
+         ==================================================
+         carX({Tuple*1, <E, E'>, Tuple*2}, {E*}) = carX({Tuple*1, Tuple*2}, {E*})
+
+[default-carX]
+	 carX({Tuple*}, {E*}) = {Tuple*}
+
 
 [top-1]  top(Rel) = diff(domain(Rel), range(Rel))
 
@@ -97,15 +105,6 @@ equations
 [id-1]   id({E, E*}) = union({<E, E>}, id({E*}))
 [id-2]   id({}) ={}
 
-%%[cl-1]   compose(Rel2, Rel) = {}
-%%         =========================================
-%%    	 closure(Rel, Rel1, Rel2) = union(Rel1, Rel2)
-
-%%[cl-2]   compose(Rel2, Rel) = Rel', Rel' != {}
- %%        =========================================
-%%	 closure(Rel, Rel1, Rel2) = closure(Rel, union(Rel1, Rel2), Rel')
-
-
 [cl-1] closure(Rel, Rel1, Rel1) = Rel1
 
 [cl-2] Rel1 != Rel2
@@ -128,6 +127,34 @@ equations
          dominators1(Rel1, Rel2, Rel3, Rel4) = Rel1
 
 [dm-1]   dominators(Rel1, Rel2, Rel3) = dominators1(Rel1, Rel2, Rel3, Rel1)
+
+
+%% --- reachX
+
+[rX-1] reachX(Rel, Bag, Rel1, Rel1) = Rel1
+
+[rX-2] Rel1 != Rel2
+       =========================================
+       reachX(Rel, Bag, Rel1, Rel2) = reachX(Rel, Bag, Rel2, union(Rel2, compose(Rel2, Rel)))
+
+[rX-3] Rel' = carX(Rel, Bag2),
+       Rel''= domR(Rel', Bag1)
+       =========================================
+       reachX(Bag1, Bag2, Rel) = reachX(Rel', Bag2, {}, Rel'')
+
+%% --- reachR
+
+
+[rR-1] reachR(Rel, Bag, Rel1, Rel1) = Rel1
+
+[rR-2] Rel1 != Rel2
+       =========================================
+       reachR(Rel, Bag, Rel1, Rel2) = reachR(Rel, Bag, Rel2, union(Rel2, compose(Rel2, Rel)))
+
+[rX-3] Rel' = carR(Rel, Bag2),
+       Rel''= domR(Rel', Bag1)
+       =========================================
+       reachR(Bag1, Bag2, Rel) = reachR(Rel', Bag2, {}, Rel'')
 
 [if-1]   if true then Rel1 else Rel2 fi  = Rel1
 [if-2]   if false then Rel1 else Rel2 fi = Rel2

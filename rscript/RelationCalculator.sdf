@@ -84,6 +84,7 @@ exports
         "get_cur" "(" GENS "," RSTORE ")"                 -> RSTORE
 
         valformer(GENS, RVALUE, REXP, RSTORE, REXP)        -> RVALUE
+	append(RVALUE, RVALUE)				-> RVALUE
 
 hiddens
 %%  imports asf/syntax/Comments

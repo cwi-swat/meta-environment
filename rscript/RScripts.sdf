@@ -9,7 +9,7 @@ exports
   imports Relations[Elem]
 
   lexical syntax
-     [A-Za-z][A-Za-z0-9\_\-]*             -> RVAR {avoid}
+     [A-Za-z][A-Za-z0-9\_\-]*             	-> RVAR {avoid}
 
   context-free restrictions
      RVAR -/- [A-Za-z0-9\_\-]
@@ -17,76 +17,80 @@ exports
   context-free syntax
 
 %% Elementary values
-     Boolean                                -> Elem
-     Integer                                -> Elem
-     String				    -> Elem
-     Area				    -> Elem
+     Boolean                                	-> Elem
+     Integer                                	-> Elem
+     String				    	-> Elem
+     Area				    	-> Elem
 
 %% Extend Elem to allow nested bags and relations
 
-     Bag[[Elem]]                   	    -> Elem
-     Rel[[Elem]]                            -> Elem
-     Elem # Elem                            -> Elem
+     Bag[[Elem]]                   	    	-> Elem
+     Rel[[Elem]]                           	-> Elem
+     Elem # Elem                              	-> Elem
 
-     Elem                                    -> REXP {prefer}
-     RVAR                                    -> REXP
-     REXP # REXP			     -> REXP
-     "{" {REXP ","}* "}"                     -> REXP
+     Elem                                    	-> REXP {prefer}
+     RVAR                                    	-> REXP
+     REXP # REXP			     	-> REXP
+     "{" {REXP ","}* "}"                     	-> REXP
 
 %% Operators
-     REXP "and" REXP                         -> REXP {left}
-     REXP "or" REXP                          -> REXP {left}
-     "not" REXP                              -> REXP
-     REXP "elem" REXP			     -> REXP {non-assoc}
+     REXP "and" REXP                         	-> REXP {left}
+     REXP "or" REXP                          	-> REXP {left}
+     "not" REXP                              	-> REXP
+     REXP "elem" REXP			     	-> REXP {non-assoc}
 
-     REXP "==" REXP                          -> REXP {non-assoc}
-     REXP "<=" REXP                          -> REXP {non-assoc}
-     REXP "<" REXP                           -> REXP {non-assoc}
-     REXP ">=" REXP                          -> REXP {non-assoc}
-     REXP ">" REXP                           -> REXP {non-assoc}
+     REXP "==" REXP                          	-> REXP {non-assoc}
+     REXP "<=" REXP                          	-> REXP {non-assoc}
+     REXP "<" REXP                           	-> REXP {non-assoc}
+     REXP ">=" REXP                          	-> REXP {non-assoc}
+     REXP ">" REXP                           	-> REXP {non-assoc}
 
-     REXP "union" REXP                       -> REXP {left}
-     REXP "inter" REXP                       -> REXP {left}
-     REXP "\\" REXP                          -> REXP {left}
-     REXP "o" REXP                           -> REXP {left}
-     REXP "x" REXP                           -> REXP {left}
-     REXP "." REXP                           -> REXP {left}
-     REXP "+"                                -> REXP
-     REXP "*"                                -> REXP
+     REXP "union" REXP                       	-> REXP {left}
+     REXP "inter" REXP                       	-> REXP {left}
+     REXP "\\" REXP                          	-> REXP {left}
+     REXP "o" REXP                           	-> REXP {left}
+     REXP "x" REXP                           	-> REXP {left}
+     REXP "." REXP                           	-> REXP {left}
+     REXP "+"                                	-> REXP
+     REXP "*"                                	-> REXP
 
-     "#" REXP			    	     -> REXP
+     "#" REXP			    	     	-> REXP
 
 %% Types
 
-     "bool" | "int" | "str" | "node"	     -> ElemType
-     ElemType                                -> REXPTYPE
-     "<" REXPTYPE "," REXPTYPE ">"           -> REXPTYPE
-     "bag" "[" REXPTYPE "]"       	     -> REXPTYPE
-     "rel" "[" REXPTYPE "," REXPTYPE "]"     -> REXPTYPE
-     "@" RVAR				     -> REXPTYPE
+     "bool" | "int" | "str" | "node"	     	-> ElemType
+     ElemType                                	-> REXPTYPE
+     "<" REXPTYPE "," REXPTYPE ">"           	-> REXPTYPE
+     "bag" "[" REXPTYPE "]"       	     	-> REXPTYPE
+     "rel" "[" REXPTYPE "," REXPTYPE "]"     	-> REXPTYPE
+     RVAR				     	-> REXPTYPE
 
 %% value formers
 
-     "{" FROM "|" REXP "}"                    -> REXP
-     "{" {FROM ","}+ "|" REXP "|" REXP "}"    -> REXP
+%%     "{" FROM "|" REXP "}"                    -> REXP
+%%     "{" {FROM ","}+ "|" REXP "|" REXP "}"    -> REXP
 
-     RVAR "in" REXP                           -> FROM
-     "<" RVAR "," RVAR ">" in REXP            -> FROM
+    "{" {FROM ","}+ ":" REXP "}"             	-> REXP
+    "{" {FROM ","}+ ":" "if" REXP "then" REXP "}"
+						-> REXP
+
+     RVAR "in" REXP                           	-> FROM
+     "<" RVAR "," RVAR ">" in REXP            	-> FROM
 
 %% functions
 
-     RVAR "(" {REXP ","}* ")"                 -> REXP {avoid}
-     "(" REXP ")"                             -> REXP {bracket}
+     RVAR "(" {REXP ","}* ")"                 	-> REXP {avoid}
+     "(" REXP ")"                             	-> REXP {bracket}
 
 %% Statements and script
 
-     REXPTYPE RVAR			      -> DCLRVAR
+     REXPTYPE RVAR			      	-> DCLRVAR
 
-     DCLRVAR				      -> RSTAT
+     DCLRVAR				      	-> RSTAT
 
-     DCLRVAR "=" REXP                         -> RSTAT
+     DCLRVAR "=" REXP                         	-> RSTAT
 
-     DCLRVAR  "(" { DCLRVAR ","}* ")" "=" REXP -> RSTAT
+     DCLRVAR  "(" { DCLRVAR ","}* ")" "=" REXP	-> RSTAT
  
      RSTAT*                                     -> RSCRIPT
 
