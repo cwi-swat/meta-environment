@@ -1,5 +1,8 @@
 $Id$
 
+2003/07/09 (markvdb@cwi.nl)
+ * Limited the number of nodes in the graph to MAX_NR_OF_NODES (3000)!
+
 2003/07/03 (markvdb@cwi.nl)
  * tree2graph takes a (module) name as argument and uses this in
    the "ShowSource" message.
