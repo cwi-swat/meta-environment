@@ -2,7 +2,6 @@ module type-check/action-typeops
 
 imports
 
-  type-check/Layout
   type-check/subtype
   type-check/types/asdf-types
   type-check/environment
@@ -10,6 +9,10 @@ imports
   type-check/constraints
 
 exports
+
+context-free start-symbols
+
+  VariableMap
 
 sorts
 
@@ -30,13 +33,27 @@ context-free syntax
 
   at-has-property(ActionType, SingleActionType)		-> VariableMap
 
-  at-no-variables(ActionType)				-> Answer
-
-  at-not-in(SingleActionType, ActionType)		-> Answer
-
   at-contains(SingleActionType, ActionType)		-> Answer
 
+  at-diff(ActionType, ActionType)			-> ActionType
+
   get-variable(ActionType)				-> ActionType
+
+  at-has-variable(ActionType)				-> Answer
+
+  norm(ActionType)					-> ActionType
+
+  at-st(ActionType, ActionType, Environment)		-> VariableMap
+
+  help-at-st(ActionType, ActionType, Environment)	-> VariableMap
+
+  st-data(Type, Type, Environment)			-> VariableMap
+
+  st-empty(Type, Type, Environment)			-> VariableMap
+
+  get-giving(ActionType, Environment)			-> <Type, Environment>
+  get-using(ActionType, Environment)			-> <Type, Environment>
+  get-raising(ActionType, Environment)			-> <Type, Environment>
 
 hiddens variables
 
@@ -51,3 +68,5 @@ hiddens variables
   "$EN"[0-9]?		-> Environment
   "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
   "$AA"[0-9]?"*"	-> { <AtomicType, AtomicType> "," }*
+  "$M"[0-9]?		-> VariableMap
+  "$VT"[0-9]?"*"	-> {<Variable, Type, Type> ","}*

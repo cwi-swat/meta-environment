@@ -13,28 +13,44 @@ equations
 				      vmap($VT1*, <$VR, $TY1, $TY3>, $VT2*)
 
 [default-update-bot-1] update-bottom($VR, $TY, vmap($VT1*)) = 
-				      vmap($VT1*, <$VR, $TY, TOP>)
+				      vmap($VT1*, <$VR, $TY, data>)
 
 [update-top-1] update-top($VR, $TY1, vmap($VT1*, <$VR, $TY2, $TY3>, $VT2*)) = 
 				      vmap($VT1*, <$VR, $TY2, $TY1>, $VT2*)
 
 [default-update-top-1] update-top($VR, $TY, vmap($VT1*)) = 
-				      vmap($VT1*, <$VR, BOT, $TY>)
+				      vmap($VT1*, <$VR, empty, $TY>)
 
 [rem-dubs-1] 
 
-  $TY5 := highest-type($TY1, $TY3, $EN),
-  $TY6 := lowest-type($TY2, $TY4, $EN),
-  $M := insert(single($VR, $TY5, $TY6), vmap($VT1*, $VT2*, $VT3*))
+  $TV1 !:= $TY1, $TV2 !:= $TY2, $TV3 !:= $TY3, $TV4 !:= $TY4,
+  <$TY5, $M1> := highest-type-map($TY1, $TY3, $EN),
+  <$TY6, $M2> := lowest-type-map($TY2, $TY4, $EN),
+  $M3 := insert(single($VR, $TY5, $TY6), vmap($VT1*, $VT2*, $VT3*)),
+  $M4 := insert($M1, insert($M2, $M3))
   ====================================================================
   rem-dubs(vmap($VT1*, <$VR, $TY1, $TY2>, $VT2*, 
-		       <$VR, $TY3, $TY4>, $VT3*), $EN) = rem-dubs($M, $EN)
+		       <$VR, $TY3, $TY4>, $VT3*), $EN) = rem-dubs($M4, $EN)
 
 [rem-dubs-2] rem-dubs(vmap($VT1*, <$ATV, ($ATV), ($ATV)>, $VT2*), $EN) = 
 				 rem-dubs(vmap($VT1*, $VT2*), $EN)
 
 [rem-dubs-3] rem-dubs(vmap($VT1*, <$TV, $TV, $TV>, $VT2*), $EN) = 
 				 rem-dubs(vmap($VT1*, $VT2*), $EN)
+
+[rem-dubs-4] rem-dubs(vmap($VT1*, <$VR, empty, data>, $VT2*), $EN) = 
+				 rem-dubs(vmap($VT1*, $VT2*), $EN)
+
+[rem-dubs-5] 
+	     $TV1 != $TV2
+	     =================
+	     rem-dubs(vmap($VT1*, <$TV1, $TV2, data>, $VT2*, 
+		       <$TV2, $TV1, data>, $VT3*), $EN) = 
+       rem-dubs(vmap($VT1*, <$TV1, $TV2, $TV2>, $VT2*, $VT3*), $EN)
+
+[rem-dubs-7] rem-dubs(vmap($VT1*, <$VR, $TY1, $TY2>, $VT2*, 
+		       <$VR, $TY1, $TY2>, $VT3*), $EN) = 
+       rem-dubs(vmap($VT1*, <$VR, $TY1, $TY2>, $VT2*, $VT3*), $EN)
 
 [default-rem-dubs-1] rem-dubs($M, $EN) = $M
 
@@ -47,3 +63,45 @@ equations
 [insert-4] insert($M, $EM) = $EM
 
 [insert-5] insert(vmap($VT1*), vmap($VT2*)) = vmap($VT1*, $VT2*)
+
+[close-1] $TV1 !:= $TY1, $TV2 !:= $TY2, 
+	  vmap($VT3*) := st($TY1, $TY2, $EN),
+	  vmap($VT4*) := close(vmap($VT1*, $VT2*), $EN),
+	  $M2 := vmap(<$VR, $TY1, $TY2>, $VT3*, $VT4*)
+	  ==============================================================
+	  close(vmap($VT1*, <$VR, $TY1, $TY2>, $VT2*), $EN) = $M2
+
+[default-close-2] close($M, $EN) = $M
+
+[sort-1] 
+
+  sort(vmap($VT1*, <$ATV, $TY1, $TY2>, $VT2*, <$TV, $TY3, $TY4>, $VT3*)) =
+     sort(vmap($VT1*, <$TV, $TY3, $TY4>, $VT2*, <$ATV, $TY1, $TY2>, $VT3*))
+
+[sort-2] 
+
+  prec($TV2, $TV1) == true
+  ===================================================================
+  sort(vmap($VT1*, <$TV1, $TY1, $TY2>, $VT2*, <$TV2, $TY3, $TY4>, $VT3*)) =
+      sort(vmap($VT1*, <$TV2, $TY3, $TY4>, $VT2*, <$TV1, $TY1, $TY2>, $VT3*))
+
+[sort-3] 
+
+  prec($ATV2, $ATV1) == true
+  =============================================================================
+  sort(vmap($VT1*, <$ATV1, $TY1, $TY2>, $VT2*, <$ATV2, $TY3, $TY4>, $VT3*)) =
+      sort(vmap($VT1*, <$ATV2, $TY3, $TY4>, $VT2*, <$ATV1, $TY1, $TY2>, $VT3*))
+
+[default-sort-1] sort($M) = $M
+
+[prec-1] prec(_AV$N1, _AV$N2) = $N1 < $N2
+
+[prec-2] prec(_V$N1, _V$N2) = $N1 < $N2
+
+[map-consistent-1] 
+
+   $EM := st($TY1, $TY2, $EN)
+   =================================================================
+   map-consistent(vmap($VT1*, <$VR, $TY1, $TY2>, $VT2*), $EN) = no
+
+[defaultmap-consistent-1] map-consistent($M, $EN) = yes

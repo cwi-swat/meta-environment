@@ -3,8 +3,6 @@ equations
 [std-at-1] std-at = infallible & closed & terminates & stable & 
 		    ineffective & uncreative
 
-[tca-bracket] typecheck-action(($A), $EN) = typecheck-action($A, $EN)
-
 [tca-copy] 
 
    <$TV, $EN2> := new-type-var($EN1)
@@ -16,17 +14,17 @@ equations
    <$AT1, $EN2> := typecheck-action($A1, $EN1),
    <$AT2, $EN3> := typecheck-action($A2, $EN2),
    $TY1 := get-giving($AT1),
-   $TY1 != empty,
+   $EN4 := not-equal($TY1, empty, $EN3),
    $TY2 := get-using($AT2),
-   $EN4 := subtype-of($TY1, $TY2, $EN3),
-   <$TY3, $EN5> := lub(get-raising($AT1), get-raising($AT2), $EN4),
-   <$AT3, $EN6> := action-type-and($AT1, $AT2, $EN5)
+   $EN5 := subtype-of($TY1, $TY2, $EN4),
+   <$TY3, $EN6> := lub(get-raising($AT1), get-raising($AT2), $EN5),
+   <$AT3, $EN7> := action-type-and(rm-ugr($AT1), rm-ugr($AT2), $EN6)
    ===================================================================
    typecheck-action($A1 then $A2, $EN1) = <using get-using($AT1) &
 				           giving get-giving($AT2) &
 				           raising $TY3 & 
 				           $AT3,
-				           $EN6>
+				           $EN7>
 
 [tca-and-then] 
 
@@ -35,7 +33,7 @@ equations
    <$TY1, $EN4> := glb(get-using($AT1), get-using($AT2), $EN3),
    <$TY2, $EN5> := concat(get-giving($AT1), get-giving($AT2), $EN4),
    <$TY3, $EN6> := lub(get-raising($AT1), get-raising($AT2), $EN5),
-   <$AT3, $EN7> := action-type-and($AT1, $AT2, $EN6)
+   <$AT3, $EN7> := action-type-and(rm-ugr($AT1), rm-ugr($AT2), $EN6)
    =======================================================================
    typecheck-action($A1 and-then $A2, $EN1) = <using $TY1 &
 					       giving $TY2 &
@@ -49,9 +47,10 @@ equations
 
 [tca-result] 
 
-   <$AT1, $EN2> := typecheck-data($D, $EN1)
+   <$AT1, $EN2> := typecheck-data($D, $EN1),
+   <$TV, $EN3> := new-type-var($EN2)
    =========================================================
-   typecheck-action(result $D, $EN1) = <$AT1 & std-at, $EN2> 
+   typecheck-action(result $D, $EN1) = <$AT1 & using $TV & std-at, $EN3> 
 
 [default-result] 
 
@@ -83,17 +82,17 @@ equations
    <$AT1, $EN2> := typecheck-action($A1, $EN1),
    <$AT2, $EN3> := typecheck-action($A2, $EN2),
    $TY1 := get-raising($AT1),
-   $TY1 != empty,
+   $EN4 := not-equal($TY1, empty, $EN3),
    $TY2 := get-using($AT2),
-   $EN4 := subtype-of($TY1, $TY2, $EN3),
-   <$TY3, $EN5> := lub(get-giving($AT1), get-giving($AT2), $EN4),
-   <$AT3, $EN6> := action-type-and($AT1, $AT2, $EN5)
+   $EN5 := subtype-of($TY1, $TY2, $EN4),
+   <$TY3, $EN6> := lub(get-giving($AT1), get-giving($AT2), $EN5),
+   <$AT3, $EN7> := action-type-and(rm-ugr($AT1), rm-ugr($AT2), $EN6)
    ===================================================================
    typecheck-action($A1 catch $A2, $EN1) = <using get-using($AT1) &
 				            giving $TY3 &
 				            raising get-raising($AT2) & 
 				            $AT3, 
-				            $EN6>
+				            $EN7>
 
 [tca-fail] typecheck-action(fail, $EN) = <std-at \ infallible, $EN>
 
@@ -105,7 +104,7 @@ equations
    <$TY2, $EN5> := lub(get-giving($AT1), get-giving($AT2), $EN4),
    <$TY3, $EN6> := lub(get-raising($AT1), get-raising($AT2), $EN5),
    $EN7 := not-in(infallible, $AT1, $EN6),
-   <$AT3, $EN8> := action-type-and($AT1, $AT2, $EN7),
+   <$AT3, $EN8> := action-type-and(rm-ugr($AT1), rm-ugr($AT2), $EN7),
    $EN9 := infallible($AT2, $AT3, $EN8)
    ===================================================================
    typecheck-action($A1 else $A2, $EN1) = <using $TY1 &
@@ -152,7 +151,7 @@ equations
       $EN4 := subtype-of(get-giving($AT1), bindings, $EN3),
       <$TY1, $EN5> := glb(get-using($AT1), get-using($AT2), $EN4),
       <$TY2, $EN6> := lub(get-raising($AT1), get-raising($AT2), $EN5),
-      <$AT3, $EN7> := action-type-and($AT1, $AT2, $EN6),
+      <$AT3, $EN7> := action-type-and(rm-ugr($AT1), rm-ugr($AT2), $EN6),
       $EN8 := closed($AT1, $AT3, $EN7)
       ===================================================================
       typecheck-action($A1 scope $A2, $EN1) = <using $TY1 &
@@ -163,12 +162,15 @@ equations
 
 [tca-enact] 	  
 
-     <$ATV, $EN2> := new-action-type-var($EN1),
-     $EN3 := not-in(terminates, $ATV, $EN2)
-     ======================================================================
-     typecheck-action(enact, $EN1) = <using (using () & $ATV) & 
-			              $ATV,
-				      $EN3>
+     <$ATV1, $EN2> := new-action-type-var($EN1),
+     <$ATV2, $EN3> := new-action-type-var($EN2),
+     <$TV1, $EN4> := new-type-var($EN3),
+     <$TV2, $EN5> := new-type-var($EN4),
+     $EN6 := subtype-of(($ATV1 \ terminates), ($ATV2), $EN5)
+     ========================================================================
+     typecheck-action(enact, $EN1) = 
+	<using (using () & giving $TV1 & raising $TV2 & $ATV1) & 
+	 giving $TV1 & raising $TV2& $ATV2, $EN6>
 
 [default-enact] 
 
@@ -179,13 +181,17 @@ equations
 
 [tca-apply] 	  
 
-     <$TV, $EN2> := new-type-var($EN1),
-     <$ATV, $EN3> := new-action-type-var($EN2),
-     $EN4 := not-in(terminates, $ATV, $EN3)
+     <$TV1, $EN2> := new-type-var($EN1),
+     <$ATV1, $EN3> := new-action-type-var($EN2),
+     <$ATV2, $EN4> := new-action-type-var($EN3),
+     <$TV2, $EN5> := new-type-var($EN4),
+     <$TV3, $EN6> := new-type-var($EN5),
+     $EN7 := subtype-of(($ATV1 \ terminates), ($ATV2), $EN6)
      ======================================================================
-     typecheck-action(apply, $EN1) = <using ((using $TV & $ATV), $TV) & 
-				      $ATV,
-				      $EN4>
+     typecheck-action(apply, $EN1) = 
+	<using ((using $TV1 & giving $TV2 & raising $TV3 & $ATV1), $TV1) & 
+	 giving $TV2 & raising $TV3 & $ATV2,
+	 $EN7>
 
 [default-tca-apply] 	  
 

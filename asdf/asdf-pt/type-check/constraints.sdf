@@ -18,6 +18,9 @@ context-free syntax
   infallible-con(ActionType, ActionType)	-> Constraint
   closed-con(ActionType, ActionType)		-> Constraint
   not-in-con(ActionType, ActionType)		-> Constraint
+  not-equal-con(Type, Type)			-> Constraint
+  lub-con(Type, Type, Type)			-> Constraint
+  glb-con(Type, Type, Type)			-> Constraint
 
 variables
 

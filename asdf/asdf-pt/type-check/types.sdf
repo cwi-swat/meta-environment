@@ -50,6 +50,7 @@ variables
   "$TY"[1-9]?	-> Type
   "$AT"[0-9]?	-> ActionType
   "$SAT"[0-9]?	-> SingleActionType
+  "$SAT"[0-9]?"*"	-> {SingleActionType "&"}*
   "$TY"[1-9]?"*"	-> {Type ","}*
   "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
 

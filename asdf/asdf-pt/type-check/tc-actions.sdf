@@ -23,7 +23,7 @@ variables
   "$AT"[0-9]?		-> {SingleActionType "&"}*
   "$TV"[0-9]?		-> TypeVariable
   "$ATV"[0-9]?		-> ActionTypeVariable
-  "$EN"[0-9]?		-> Environment
+  "$EN"[0-9]*		-> Environment
   "$A"[0-9]?		-> Action
   "$IA"			-> InfixAction
   "$D"[0-9]?		-> Data

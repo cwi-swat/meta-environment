@@ -3,9 +3,13 @@ module type-check/tc-functions
 imports
 
   type-check/tc-actions
-  
+  type-check/solve  
 
 exports
+
+context-free start-symbols
+
+  Summary
 
 sorts 
 
@@ -66,7 +70,11 @@ variables
   "$SUM"	-> Summary
 
   "$SS"[0-9]?	-> Signatures
-		
+
+  "$M"[0-9]?	-> VariableMap		
+  "$LC"[0-9]?	-> List[[Constraint]]
+
+
 sorts
 
   FunctionSignature AS-FunctionDef AS-FunctionDefs LangConst 

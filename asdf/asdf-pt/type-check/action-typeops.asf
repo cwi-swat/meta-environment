@@ -27,47 +27,54 @@ equations
 
 [at-and-1] 
 
-   $ATV !:= $SAT,
-   $M1 := at-and($SAT1* & $SAT2*, $SAT3* & $SAT4*, $AT),
-   $M2 := at-has-property($AT, $SAT),
-   $M3 := insert($M1, $M2)
-   =================================================================
-   at-and($SAT1* & $SAT & $SAT2*, $SAT3* & $SAT & $SAT4*, $AT) = $M3
+   $ATV := get-variable($AT1),
+   no == at-has-variable($AT2),
+   no == at-has-variable($AT3),
+   Action == norm(at-diff($AT3, $AT2)),
+   $AT4 := norm(at-diff($AT3, $AT1)),
+   $M := single($ATV, ($AT4), ($AT4)),
+   norm(at-diff($AT2, $AT3)) == 
+		      norm(at-diff(at-diff($AT2, $AT3), at-diff($AT1, $AT3)))
+   ========================================================================
+   at-and($AT1, $AT2, $AT3) = $M
 
 [at-and-2] 
 
-   $ATV !:= $SAT,
-   $M1 := at-and($SAT1* & $SAT2*, $AT, $SAT3* & $SAT4*),
-   $M2 := at-has-property($AT, $SAT),
-   $M3 := insert($M1, $M2)
-   =================================================================
-   at-and($SAT1* & $SAT & $SAT2*, $AT, $SAT3* & $SAT & $SAT4*) = $M3
+   no == at-has-variable($AT1),
+   $ATV := get-variable($AT2),
+   no == at-has-variable($AT3),
+   Action == norm(at-diff($AT3, $AT1)),
+   $AT4 := norm(at-diff($AT3, $AT2)),
+   $M := single($ATV, ($AT4), ($AT4)),
+   norm(at-diff($AT1, $AT3)) == 
+		      norm(at-diff(at-diff($AT1, $AT3), at-diff($AT2, $AT3)))
+   ========================================================================
+   at-and($AT1, $AT2, $AT3) = $M
 
 [at-and-3] 
 
-   $ATV !:= $SAT,
-   $M1 := at-and($AT, $SAT1* & $SAT2*, $SAT3* & $SAT4*),
-   $M2 := at-has-property($AT, $SAT),
-   $M3 := insert($M1, $M2)
-   =================================================================
-   at-and($AT, $SAT1* & $SAT & $SAT2*, $SAT3* & $SAT & $SAT4*) = $M3
+   no == at-has-variable($AT1),
+   no == at-has-variable($AT2),
+   $ATV := get-variable($AT3),
+   $ATV == norm(at-diff($AT3, $AT1)),
+   $ATV == norm(at-diff($AT3, $AT2)),
+   $AT4 := norm(at-diff($AT1, at-diff($AT1, $AT2))),
+   $AT5 := norm(at-diff($AT4, $AT3)),
+   $M := single($ATV, ($AT5), ($AT5))
+   ===========================================
+   at-and($AT1, $AT2, $AT3) = $M
 
-[default-at-and-4]
+[at-and-4] 
 
-   $ATV1 := get-variable($AT1),
-   $ATV2 := get-variable($AT2),
-   $M1 := single($ATV1, BOT, ($ATV3)),
-   $M2 := single($ATV2, BOT, ($ATV3)),
-   $M3 := insert($M1, $M2)
-   ===================================
-   at-and($AT1, $AT2, $ATV3) = $M3
-
-[default-at-and-5] 
-
-   at-and($SAT1* & $SAT & $SAT2*, $SAT3* & $SAT & $SAT4*, ) = 
-		 error(nothing, nothing)
-
-
+   no == at-has-variable($AT1),
+   no == at-has-variable($AT2),
+   no == at-has-variable($AT3),
+   Action == norm(at-diff($AT3, $AT1)),
+   Action == norm(at-diff($AT3, $AT2)),
+   norm(at-diff($AT1, $AT3)) == 
+		      norm(at-diff(at-diff($AT1, $AT3), at-diff($AT2, $AT3)))
+   ==========================================================================
+   at-and($AT1, $AT2, $AT3) = empty-map
 
 [at-has-propety-1]
 
@@ -75,10 +82,117 @@ equations
 
 [default-at-has-propety-1] 
 
-   at-has-property($SAT1* & $ATV & $SAT2*, $SAT) = single($ATV, BOT, ($SAT))
+   at-has-property($SAT1* & $ATV & $SAT2*, $SAT) = single($ATV, empty, ($SAT))
 
 [at-contains-1] at-contains($SAT, $SAT1* & $SAT & $SAT2*) = yes
 
 [default-at-contains-1] at-contains($SAT, $AT) = no
 
+[at-diff-1] at-diff($SAT1* & $SAT & $SAT2*, $SAT & $SAT3*) = 
+				  at-diff($SAT1* & $SAT2*, $SAT3*)
+
+[default-at-diff-1] at-diff($AT, $SAT & $SAT3*) = 
+				  at-diff($AT, $SAT3*)
+
+[default-at-diff-2] at-diff($AT, ) = $AT
+				  
+
 [get-variable-1] get-variable($SAT1* & $ATV & $SAT2*) = $ATV
+
+[at-has-variable-1] at-has-variable($SAT1* & $ATV & $SAT2*) = yes
+
+[default-at-has-variable-1] at-has-variable($AT) = no
+
+[norm-1] == $AT 
+	 ==================
+	 norm($AT) = Action
+
+[norm-2] norm($SAT1* & $SAT & $SAT2* & $SAT & $SAT3*) = norm($SAT1* & $SAT & $SAT2* & $SAT3*)
+
+[norm-3] norm(Action & $SAT & $SAT2*) = norm($SAT & $SAT2*)
+
+[norm-4] norm($SAT2* & $SAT & Action) = norm($SAT2* & $SAT)
+
+[default-norm-2] norm($AT) = $AT
+
+[at-st-1] 
+
+       $M4 := help-at-st($AT1, $AT2, $EN),
+       $AT3 := rm-ugr($AT1),
+       $AT4 := rm-ugr($AT2),
+       Action == norm(at-diff($AT4, $AT3))
+       ================================================
+       at-st($AT1, $AT2, $EN) = $M4
+
+[at-st-2] 
+
+       $M4 := help-at-st($AT1, $AT2, $EN),
+       $AT3 := rm-ugr($AT1),
+       $AT4 := rm-ugr($AT2),
+       no == at-has-variable($AT3),
+       yes == at-has-variable($AT4),
+       $ATV := get-variable($AT4),
+       $ATV == norm(at-diff($AT4, $AT3)),
+       $M5 := single($ATV, (norm(at-diff($AT3, $AT4))), (Action))
+       =========================================================
+       at-st($AT1, $AT2, $EN) = insert($M4, $M5)
+
+[help-at-st-1] 
+
+       $TY1 := get-using($AT1),
+       $TY2 := get-giving($AT1),
+       $TY3 := get-raising($AT1),
+       $TY4 := get-using($AT2),
+       $TY5 := get-giving($AT2),
+       $TY6 := get-raising($AT2),
+       $M1 := st-data($TY4, $TY1, $EN), 
+       $M2 := st-empty($TY2, $TY5, $EN), 
+       $M3 := st-empty($TY3, $TY6, $EN),
+       vmap($VT*) := insert($M1, insert($M2, $M3))
+       ============================================
+       help-at-st($AT1, $AT2, $EN) = vmap($VT*)
+
+[st-data-1] st-data(data, $TY2, $EN) = empty-map
+
+[default-st-data-2] st-data($TY1, $TY2, $EN) = st($TY1, $TY2, $EN)
+
+[st-empty-1] st-empty($TY1, empty, $EN) = empty-map
+
+[default-st-empty-2] st-empty($TY1, $TY2, $EN) = st($TY1, $TY2, $EN)
+
+[diff-1] $SAT1* & $SAT & $SAT2* \ $SAT = $SAT1* & $SAT2* \ $SAT
+
+[default-diff-1] 
+
+        at-has-variable($SAT1*) == no
+	==========================
+	$SAT1* \ $SAT = $SAT1*
+
+
+[get-using-1] get-using($SAT1* & using $TY & $SAT2*, $EN) = <$TY, $EN>
+
+[default-get-using-1] 
+
+        <$TV, $EN2> := new-type-var($EN1),
+        $EN3 := subtype-of(($AT), (using $TV), $EN2)
+	=======================================
+	get-using($AT, $EN1) = <$TV, $EN3>
+
+[get-giving-1] get-giving($SAT1* & giving $TY & $SAT2*, $EN) = <$TY, $EN>
+
+[default-get-giving-1] 
+
+        <$TV, $EN2> := new-type-var($EN1),
+        $EN3 := subtype-of(($AT), (giving $TV), $EN2)
+	=======================================
+	get-giving($AT, $EN1) = <$TV, $EN3>
+
+[get-raising-1] get-raising($SAT1* & raising $TY & $SAT2*, $EN) = <$TY, $EN>
+
+[default-get-raising-1] 
+
+        <$TV, $EN2> := new-type-var($EN1),
+        $EN3 := subtype-of(($AT), (raising $TV), $EN2)
+	=======================================
+	get-giving($AT, $EN1) = <$TV, $EN3>
+

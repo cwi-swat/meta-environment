@@ -28,7 +28,17 @@ context-free syntax
   highest-type(Type, Type, Environment)	-> Type
   lowest-type(Type, Type, Environment)	-> Type
 
+  highest-type-map(Type, Type, Environment)	-> <Type, VariableMap>
+  lowest-type-map(Type, Type, Environment)	-> <Type, VariableMap>
+
   Type "+" Type				-> Type
+
+  not-equal(Type, Type, Environment)	-> Environment
+  
+  has-variable(Type, Answer)
+		-> Answer {traversal(top-down,accu,break)}
+  has-variable(ActionTypeVariable, Answer)
+		-> Answer {traversal(top-down,accu,break)}
 
 hiddens variables
 
@@ -42,3 +52,6 @@ hiddens variables
   "$EN"[0-9]?		-> Environment
   "$STS"[0-9]?		-> List[[<AtomicType, AtomicType>]]
   "$AA"[0-9]?"*"	-> { <AtomicType, AtomicType> "," }*
+  "$M"[0-9]?		-> VariableMap
+  "$AN"[0-9]?		-> Answer
+  "$VT"[0-9]?"*"	-> {<Variable, Type, Type> ","}*

@@ -39,9 +39,14 @@ context-free syntax
   get-using(ActionType)		-> Type 
   get-giving(ActionType)	-> Type 
   get-raising(ActionType)	-> Type 
-  get-using(ActionType, Type)	-> Type {traversal(accu, break, top-down)}
-  get-giving(ActionType, Type)	-> Type {traversal(accu, break, top-down)}
-  get-raising(ActionType, Type)	-> Type {traversal(accu, break, top-down)}
+  rm-using(ActionType)		-> ActionType 
+  rm-giving(ActionType)		-> ActionType 
+  rm-raising(ActionType)	-> ActionType 
+  rm-ugr(ActionType)		-> ActionType 
+
+%%  get-using(ActionType, Type)	-> Type {traversal(accu, break, top-down)}
+%%  get-giving(ActionType, Type)	-> Type {traversal(accu, break, top-down)}
+%%  get-raising(ActionType, Type)	-> Type {traversal(accu, break, top-down)}
 
 lexical syntax
 
@@ -54,7 +59,9 @@ context-free restrictions
 hiddens variables
 
    "$SAT"[0-9]?		-> SingleActionType
+   "$SAT"[0-9]?"*"	-> {SingleActionType "&"}*
    "$AT"[0-9]?		-> ActionType
+   "$TY"[0-9]?		-> Type
    "$AN"[0-9]?		-> Answer
    
 

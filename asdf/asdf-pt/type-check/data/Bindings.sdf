@@ -16,6 +16,6 @@ lexical syntax
 
   "disj-union"          -> PrefixDataOp
   "binding"             -> PrefixDataOp
-  "bound"               -> PrefixDataOp {avoid}
+  "bound"               -> PrefixDataOp 
   "overriding"          -> PrefixDataOp
   

@@ -3,7 +3,6 @@ module type-check/environment
 imports 
 
   asdf/functions
-  type-check/typeops
   type-check/constraints
 
 
@@ -39,35 +38,10 @@ context-free syntax
   add-constraint(Constraint, Environment)	-> Environment
 
   "empty-env"					-> Environment
-  "initial-dataop-sigs"				-> DataOpSigs
+  "initial-dataop-sigs"				-> List[[<DataOp, ActionType>]]
 
   new-type-var(Environment)		-> <TypeVariable, Environment>
   new-action-type-var(Environment)	-> <ActionTypeVariable, Environment>
-
-  get-fun-name(AS-FunctionSig)	-> Literal
-  get-using(AS-FunctionSig)	-> Type
-  get-giving(AS-FunctionSig)	-> Type
-  get-raising(AS-FunctionSig)	-> Type
-  failing(AS-FunctionSig)	-> Answer
-  terminates(AS-FunctionSig)	-> Answer
-  closed(AS-FunctionSig)	-> Answer
-  stable(AS-FunctionSig)	-> Answer
-  ineffective(AS-FunctionSig)	-> Answer
-  uncreative(AS-FunctionSig)	-> Answer
-  remove-using(ActionType)	-> {SingleActionType "&"}*
-  remove-giving(ActionType)	-> {SingleActionType "&"}*
-  remove-raising(ActionType)	-> {SingleActionType "&"}*
-  remove-infallible(ActionType)	-> {SingleActionType "&"}*
-  remove-terminates(ActionType)	-> {SingleActionType "&"}*
-  remove-closed(ActionType)	-> {SingleActionType "&"}*
-  remove-stable(ActionType)	-> {SingleActionType "&"}*
-  remove-ineffective(ActionType)   -> {SingleActionType "&"}*
-  remove-uncreative(ActionType)	-> {SingleActionType "&"}* 
-  remove-action(ActionType)	-> {SingleActionType "&"}* 
-  remove-dobble-sigs(Signatures, Environment)	-> Signatures
-  join-results(ActionType, ActionType, Environment)	
-				-> {SingleActionType "&"}*
-  remove-dobble-dataops(DataOpSigs, Environment)	-> DataOpSigs
 
   Error		-> Answer
   Answer+	-> Answers

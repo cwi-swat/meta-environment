@@ -3,11 +3,11 @@ module type-check/tc-dataop
 imports
 
   type-check/tc-actions
-  type-check/environment
+  type-check/signatures
   type-check/data/all
   asdf/an-supplement
   type-check/an-to-kernel
-  type-check/typeops
+  type-check/environment
 
 exports 
 

@@ -1,13 +1,14 @@
 equations
 
-[solve-1] $M2 := rem-dubs($M1, $EN),
-	  $M3 := replace-vars($M2, $M2),
-	  $LC2 := replace-vars($LC1, $M3),
-	  <$M4, $LC3> := solve-constraints($LC2, $EN),
-	  $M5 := insert($M3, $M4),
-	  <$M1, $LC1> != <$M5, $LC3>
+[solve-1] $M2 := close($M1, $EN),
+	  $M3 := rem-dubs($M2, $EN),
+	  $M4 := replace-vars($M3, $M3),
+	  $LC2 := replace-vars($LC1, $M4),
+	  <$M5, $LC3> := solve-constraints($LC2, $EN),
+	  $M6 := insert($M4, $M5),
+	  <$M3, $LC1> != <$M6, $LC3>
 	  ===============================
-	  solve($M1, $LC1, $EN) = solve($M5, $LC3, $EN)
+	  solve($M1, $LC1, $EN) = solve($M6, $LC3, $EN)
 
 [default-solve-1] solve($M1, $LC1, $EN) = <$M1, $LC1>
 
@@ -20,77 +21,129 @@ equations
 	  $CO2 := replace-vars($CO1, $M2),
 	  $M3 := solve-constraint($CO2, $EN),
 	  <$M4, $LC3> := handle-error($M3, $M2, $CO2, $LC2)
-	  =======================================================
+	  ==================================================
 	  solve-constraints($LC1, $EN) = <$M4, $LC3>
 
 [default-solve-con-2] solve-constraints([], $EN) = <empty-map, []>
 
 [handle-error-1] handle-error($EM, $M, $CO, $LC) = <$M, $CO:$LC>
 
-[handle-error-1] handle-error(vmap($VT*), $M, $CO, $LC) = 
+[handle-error-2] handle-error(vmap($VT*), $M, $CO, $LC) = 
 					 <insert(vmap($VT*), $M), $LC>
 
 [default-solve-con-1] solve-constraint($CO, $EN) = error(nothing, nothing)
 
 [subtype-con-1] 
 
-        $M1 := st($TY1, $TY2, $EN)
+        vmap($VT*) := st($TY1, $TY2, $EN)
 	====================================================
-	solve-constraint(subtype-con($TY1, $TY2), $EN) = $M1
+	solve-constraint(subtype-con($TY1, $TY2), $EN) = vmap($VT*)
 
 [action-type-and-con-1] 
 
-	$M := at-and($AT1, $AT2, $AT3)
+	vmap($VT*) := at-and($AT1, $AT2, $AT3)
 	=================================================================
-	solve-constraint(action-type-and-con($AT1, $AT2, $AT3), $EN) = $M
+	solve-constraint(action-type-and-con($AT1, $AT2, $AT3), $EN) = 
+								vmap($VT*)
 
 [concat-con-1]         
 
-	$M := st($TY1+$TY2, $TY3, $EN)
+	vmap($VT*) := st($TY1+$TY2, $TY3, $EN)
 	========================================================
-	solve-constraint(concat-con($TY1, $TY2, $TY3), $EN) = $M
+	solve-constraint(concat-con($TY1, $TY2, $TY3), $EN) = vmap($VT*)
 
 [infallible-con-1]         
 
-	$M := at-has-property($AT1, infallible)
+	vmap($VT*) := at-has-property($AT1, infallible)
 	============================================================
-	solve-constraint(infallible-con($AT1, infallible), $EN) = $M
+	solve-constraint(infallible-con($AT1, infallible), $EN) = vmap($VT*) 
 
 [default-infallible-con-1]         
 
-	empty-map == at-has-property($AT, infallible),
-	$M := single($ATV, infallible, infallible)
+	yes == at-contains(infallible, $AT),
+	vmap($VT*) := single($ATV, infallible, infallible)
 	=====================================================
-	solve-constraint(infallible-con($AT, $ATV), $EN) = $M
+	solve-constraint(infallible-con($AT, $ATV), $EN) = vmap($VT*)
 
 [closed-con-1]         
 
-	$M := at-has-property($AT1, closed)
+	vmap($VT*) := at-has-property($AT1, closed)
 	============================================================
-	solve-constraint(closed-con($AT1, closed), $EN) = $M
+	solve-constraint(closed-con($AT1, closed), $EN) = vmap($VT*)
 
 [default-closed-con-1]         
 
-	empty-map == at-has-property($AT, closed),
-	$M := single($ATV, closed, closed)
-	=================================================
-	solve-constraint(closed-con($AT, $ATV), $EN) = $M
+	yes == at-contains(closed, $AT),
+	vmap($VT*) := single($ATV, closed, closed)
+	=========================================================
+	solve-constraint(closed-con($AT, $ATV), $EN) = vmap($VT*)
 
 [not-in-con-1]         
 
-	at-no-variables($AT) == yes,
-	at-not-in($SAT, $AT) == yes
+	at-has-variable($AT) == no,
+	at-contains($SAT, $AT) == no
 	=========================================================
 	solve-constraint(not-in-con($SAT, $AT), $EN) = empty-map
 
-[rep-var-1] <($AT), ($AT)> := lookup($ATV, $M)
+[default-not-in-con-1] 
+
+        vmap($VT*) := st((using data & giving data & raising data & 
+			  std-at \ $SAT), ($AT), $EN)
+	=========================================================
+	solve-constraint(not-in-con($SAT, $AT), $EN) = vmap($VT*)
+
+[not-equal-con-1]         
+
+	has-variable($TY1,no) == no,
+	has-variable($TY2,no) == no,
+	$TY1 != $TY2
+	=========================================================
+	solve-constraint(not-equal-con($TY1, $TY2), $EN) = empty-map
+
+[not-equal-con-2]         
+
+	$TY != empty,
+	$TV !:= $TY
+	=========================================================
+	solve-constraint(not-equal-con($TY, empty), $EN) = empty-map
+
+[lub-con-1]         
+
+	st($TY1, $TY2, $EN) == empty-map,
+	$M := insert(st($TY2, $TY3, $EN), st($TY3, $TY2, $EN))
+	=========================================================
+	solve-constraint(lub-con($TY1, $TY2, $TY3), $EN) = $M
+
+[lub-con-2]         
+
+	st($TY2, $TY1, $EN) == empty-map,
+	$M := insert(st($TY1, $TY3, $EN), st($TY3, $TY1, $EN))
+	=========================================================
+	solve-constraint(lub-con($TY1, $TY2, $TY3), $EN) = $M
+
+[glb-con-1]         
+
+	st($TY2, $TY1, $EN) == empty-map,
+	$M := insert(st($TY2, $TY3, $EN), st($TY3, $TY2, $EN))
+	=========================================================
+	solve-constraint(glb-con($TY1, $TY2, $TY3), $EN) = $M
+
+[glb-con-2]         
+
+	st($TY1, $TY2, $EN) == empty-map,
+	$M := insert(st($TY1, $TY3, $EN), st($TY3, $TY1, $EN))
+	=========================================================
+	solve-constraint(glb-con($TY1, $TY2, $TY3), $EN) = $M
+
+[rep-var-1] <($SAT3*), ($SAT3*)> := lookup($ATV, $M)
 	    =======================================================
-	    replace-vars($ATV, $M) = replace-vars($AT, $M)
+	    replace-vars($SAT1* & $ATV & $SAT2*, $M) = 
+			    replace-vars($SAT1* & $SAT3* & $SAT2*, $M)
 
 [rep-var-2] <$TY, $TY> := lookup($TV, $M)
 	    =========================================
 	    replace-vars($TV, $M) = replace-vars($TY, $M)
 
 [rep-var-3] replace-vars(<$VR, $TY1, $TY2>, $M) = 
-			<$VR, replace-vars($TY1, $M), replace-vars($TY1, $M)>
+			<$VR, replace-vars($TY1, $M), replace-vars($TY2, $M)>
 
