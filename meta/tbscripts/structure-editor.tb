@@ -172,20 +172,24 @@ in
       fi.
       snd-ack-event(TE,menu-event("Meta-Environment","Parse",Fid))
     +
-    rec-event(TE,menu-event("Meta-Environment","Reduce",Fid)).
-    if equal(FF,[]) then
-      snd-note(ui-status(stat(Id,"Rewriting..."))).
-      snd-eval(SE, getTree(Fid)).
-      rec-value(SE, TrmTree?).
-      snd-msg(rewrite(Language, TrmTree)).
-      rec-msg(result(NormalFormTree?)).
-      snd-msg(unparse(NormalFormTree)).
-      rec-msg(unparsed-text(Src?)).
-      printf("\nNormal form is:\n%s\n", Src)
+    rec-event(TE,menu-event("Meta-Environment","Reduce",Fid)) .
+    if equal(IsTerm, "term") then
+      if equal(FF,[]) then
+        snd-note(ui-status(stat(Id,"Rewriting..."))).
+        snd-eval(SE, getTree(Fid)).
+        rec-value(SE, TrmTree?).
+        snd-msg(rewrite(Language, TrmTree)).
+        rec-msg(result(NormalFormTree?)).
+        snd-msg(unparse(NormalFormTree)).
+        rec-msg(unparsed-text(Src?)).
+        printf("\nNormal form is:\n%s\n", Src)
+      else
+        snd-note(ui-status(error("Please parse term before reducing")))
+      fi .
+      snd-note(ui-status(endstat(Id)))
     else
-      snd-note(ui-status(error("Please parse term before reducing")))
-    fi.
-    snd-note(ui-status(endstat(Id))) .
+      tau
+    fi .
     snd-ack-event(TE,menu-event("Meta-Environment","Reduce",Fid))
     +
     rec-event(TE,get-focus(Fid,I?)).
