@@ -37,11 +37,3 @@ exports
 %% 19.8.4 Productions from paragraph 8.5: Static Initializers
 %% Too short to put in a separate file.
     "static" Block                      -> StaticInitializer
-
- variables
-  "#ClassDecl"      [0-9\']+ -> ClassDeclaration
-  "#ClassBody"      [0-9\']+ -> ClassBody
-  "#ClassBodyDecl*" [0-9\']+ -> ClassBodyDeclaration*
-  "#Mod*"           [0-9\']+ -> Modifier*
-  "#Super"          [0-9\']+ -> SuperOpt
-  "#Interfaces"     [0-9\']+ -> InterfacesOpt

@@ -27,6 +27,3 @@ exports
     ClassDeclaration                    -> TypeDeclaration
     InterfaceDeclaration                -> TypeDeclaration
     ";"                                 -> TypeDeclaration
-
-  variables
-    "#CU"[0-9]*  -> CompilationUnit

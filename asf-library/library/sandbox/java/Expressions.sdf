@@ -154,7 +154,3 @@ exports
     AssignmentExpression        -> Expression
 
     Expression                  -> ConstantExpression
-
- variables
-  "#Exp*" [0-9\']+  -> Expressions
-  "#Exp+" [0-9\']+  -> {Expression ","}+

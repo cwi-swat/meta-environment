@@ -109,6 +109,3 @@ exports
     CharacterLiteral                    -> Literal
     StringLiteral                       -> Literal
     NullLiteral                         -> Literal
-
- variables
-  "#Id" [0-9\']+ -> Identifier

@@ -130,11 +130,3 @@ exports
     "catch" "(" FormalParameter ")" Block -> CatchClause
 
     "finally" Block                     -> Finally
-
- variables
-
-  "#Stat"  [0-9\']+  -> Statement
-  "#BStat" [0-9\']+  -> BlockStatement
-  "#BStat+" [0-9\']+ -> BlockStatement+
-  "#BStat*" [0-9\']+ -> BlockStatement*
-
