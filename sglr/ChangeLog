@@ -1,5 +1,8 @@
 $Id$
 
+2004/01/20 (markvdb@cwi.nl)
+ * First version of clickable error messages.
+
 2004/01/14 (markvdb@cwi.nl)
  * Cleanup of interface and first steps towards using error api.
 

@@ -82,9 +82,8 @@ void    SG_Reducer(stack *st0, state s, label prodl,
                    int attr);
 void      SG_DoLimitedReductions(stack*, action, st_link*);
 void      SG_Shifter(void);
-forest    SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak);
 forest    SG_AmbiguousParse(tree t, ATerm ambtrak);
-tree      SG_ParseResult(char *sort);
+tree      SG_ParseResult(char *path, char *sort);
 
 /*
  Some global vars, used for collecting statistics
@@ -502,7 +501,7 @@ void  SG_ParserCleanup(void)
  message depending on the status.
  */
 
-forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void),
+forest SG_Parse(char *path, parse_table *ptable, char *sort, int(*get_next_token)(void),
 		size_t length)
 {
   forest result;
@@ -541,7 +540,7 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void),
   /*  Core parsing done!  */
   SG_PostParse();
 
-  result = SG_ParseResult(sort);
+  result = SG_ParseResult(path, sort);
 
   SG_PostParseResult();
 
@@ -983,14 +982,12 @@ char *SGsort(int Mode, forest t)
   return SG_SAFE_STRING(sort);
 }
 
-static ATerm SG_CurrentPosInfo(char *fileName)
+static ERR_Location SG_CurrentPosInfo(char *fileName)
 {
-/*
   ERR_Area area = ERR_makeAreaArea(line, col, line, col, sg_tokens_read, 0);
-  ERR_Location location = ERR_makeLocationLocation(fileName, area);
+  return ERR_makeLocationLocation(fileName, area);
 
-  return ERR_LocationToTerm(location);
-*/
+/*
   return
   ATmakeList4(
               (ATerm) ATmakeAppl1(SG_Character_AFun,
@@ -1002,8 +999,10 @@ static ATerm SG_CurrentPosInfo(char *fileName)
               (ATerm) ATmakeAppl1(SG_Offset_AFun,
                                   (ATerm) SG_GetATint(sg_tokens_read, 0))
               );
+*/
 }
 
+/*
 static ATerm SG_ReverseAmbiguities(ATerm ambtrack)
 {
   ATermList ambiguities;
@@ -1017,71 +1016,90 @@ static ATerm SG_ReverseAmbiguities(ATerm ambtrack)
 
   return NULL;   
 }
+*/
 
-static ATermList SG_GetFirstAmbiguityPosInfo(ATerm ambtrack)
+static ERR_Location SG_GetFirstAmbiguityPosInfo(ATerm ambtrack)
 {
-  ATermList ambiguities;
-  ATerm first;
-  ATerm position;
-
-  if (ATmatch(ambtrack, "ambiguities(<int>,[<list>])",NULL,&ambiguities)) {
-    first = ATgetFirst(ambiguities);
-
-    if (ATmatch(first, 
-		"ambiguity(<term>,productions([<list>]))",&position,NULL)) {
-      return ATgetArguments((ATermAppl)position); 
-    }
+  ERR_Feedback feedback = ERR_FeedbackFromTerm(ambtrack);
+  if (ERR_isFeedbackError(feedback)) {
+    ERR_SubjectList ambiguities = ERR_getFeedbackList(feedback);
+    ERR_Subject first = ERR_getSubjectListHead(ambiguities);
+    
+    return ERR_getSubjectLocation(first);
   } 
 
-  return NULL;   
+  return ERR_makeLocationNoLocation();   
 }
 
-forest SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak)
+static int SG_CountAmbiguities(ERR_Feedback feedback)
 {
-  ATermAppl  errcode;
-  ATerm posinfo;
+  if (ERR_isFeedbackError(feedback)) {
+    return ERR_getSubjectListLength(ERR_getFeedbackList(feedback));
+  } 
+
+  return 0;
+}
+
+static forest SG_ParseError(char *path, ATermList cycle, int excess_ambs, ATerm ambtrak)
+{
+  ERR_Subject subject;
+  ERR_Feedback error;
+  ERR_Location posinfo;
+  char *description;
 
   SG_ERROR_ON();
 
   if (!ATisEmpty(cycle)) {
-    errcode = ATmakeAppl1(SG_Cycle_Error_AFun, (ATerm) cycle);
+    description = "cycle";
   }
   else if (excess_ambs) {
     if (ambtrak) {
-      errcode = (ATermAppl) ambtrak; 
+      description = "ambiguity";
     }
     else {
-       errcode = ATmakeAppl0(SG_Too_Many_Ambiguities_Error_AFun);
+      description = "too-many-ambiguities";
     }
   }
   else if (current_token == SG_GETTOKEN(SG_EOF_Token)) {
-    errcode = ATmakeAppl0(SG_EOF_Error_AFun);
+    description = "eof";
   }
   else {
-    errcode = ATmakeAppl0(SG_Plain_Error_AFun); 
+    description = "plain";
   }
 
   if (excess_ambs && ambtrak) {
-    ambtrak = SG_ReverseAmbiguities(ambtrak);
-    posinfo = (ATerm) SG_GetFirstAmbiguityPosInfo(ambtrak);
+    posinfo = SG_GetFirstAmbiguityPosInfo(ambtrak);
   }
   else {
-    posinfo = SG_CurrentPosInfo("Unknown");
+    posinfo = SG_CurrentPosInfo(path);
   }
 
-  return (forest) ATmakeAppl2(SG_ParseError_AFun, posinfo, (ATerm) errcode);
+  subject = ERR_makeSubjectSubject(description, posinfo);
+  error = ERR_makeFeedbackError("Parse error", 
+                                ERR_makeSubjectListSingle(subject));
+  return (forest)ERR_SummaryToTerm(
+                   ERR_makeSummaryFeedback("sglr", "unknown", 
+					   ERR_makeFeedbackListSingle(error)));
 }
 
 forest SG_AmbiguousParse(tree t, ATerm ambtrak)
 {
-  ATerm posinfo;
- 
   SG_ERROR_ON();
 
-  ambtrak = SG_ReverseAmbiguities(ambtrak);
-  posinfo = (ATerm) SG_GetFirstAmbiguityPosInfo(ambtrak);
+  ERR_Feedback ambiguities = ERR_FeedbackFromTerm(ambtrak);
+  int nrOfAmbs = SG_CountAmbiguities(ambiguities);
+  ERR_Summary ambiguityError;
+  ATerm result;
+
+  t = (tree) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) t, 
+                         (ATerm) SG_GetATint(nrOfAmbs, 0));
+  ambiguityError = ERR_makeSummaryFeedback("sglr", "unknown", 
+                     ERR_makeFeedbackListSingle(ambiguities));
  
-  return (forest) ATmakeAppl3(SG_AmbiguousTree_AFun, (ATerm)t, posinfo, ambtrak);
+  result = (ATerm)ATmakeAppl2(SG_AmbiguousTree_AFun, 
+                              (ATerm)t, ERR_SummaryToTerm(ambiguityError));
+ATwarning("result = %t\n", result);
+  return (forest)result;
 }
 
 tree SG_ConvertA2ToA2ME(tree t)
@@ -1096,7 +1114,7 @@ tree SG_ConvertA2ToA2ME(tree t)
   return t;
 }    
 
-tree SG_ParseResult(char *sort)
+tree SG_ParseResult(char *path, char *sort)
 {
   ATermList cycle;
   tree      t;
@@ -1117,7 +1135,7 @@ tree SG_ParseResult(char *sort)
         if (!t) {
           /*  Flag this error at start, not end, of file  */
           SG_ResetCoordinates();
-          return SG_ParseError(ATempty, 0, NULL);
+          return SG_ParseError(path, ATempty, 0, NULL);
         }
       }
 
@@ -1130,7 +1148,7 @@ tree SG_ParseResult(char *sort)
           IF_STATISTICS(fprintf(SG_log(), 
                                 "Cycle detection took %.6fs\n", SG_Timer()));
           if (!ATisEmpty(cycle)) {
-            return SG_ParseError(cycle, 0, NULL);
+            return SG_ParseError(path, cycle, 0, NULL);
           }
         }
       }
@@ -1150,7 +1168,6 @@ tree SG_ParseResult(char *sort)
 
       if (t) {
         t = SG_YieldTree(table, t);
-
         if (t) {
           IF_STATISTICS(fprintf(SG_log(),
                                 "Aprod expansion took %.6fs\n", SG_Timer()));
@@ -1160,11 +1177,10 @@ tree SG_ParseResult(char *sort)
           if (SG_TOOLBUS || SG_AMBIGUITY_ERROR) {
 	    ATerm ambtrak = NULL;
 	  
-            ambtrak = PT_reportTreeAmbiguities((PT_Tree) t);
-
-            if(ambtrak && !ATmatch(ambtrak, "ambiguities(0,[])")) {
+            ambtrak = PT_reportTreeAmbiguities(path, (PT_Tree) t);
+            if (ambtrak && !ATmatch(ambtrak, "error(\"ambiguity\",[])")) {
               if (SG_AMBIGUITY_ERROR) {  
-                return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
+                return SG_ParseError(path, ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
               }
               if (SG_ASFIX2ME) {
                 t = SG_ConvertA2ToA2ME(t);
@@ -1185,13 +1201,13 @@ tree SG_ParseResult(char *sort)
 	else {
           if (SGnrAmb(SG_NR_ASK) > SG_TOO_MANY_AMBS) {
 		  ATwarning("Too many ambiguities\n");
-            return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), NULL);
+            return SG_ParseError(path, ATempty, SGnrAmb(SG_NR_ASK), NULL);
           }
 	}
       }
     }
   }
-  return SG_ParseError(ATempty, 0, NULL);
+  return SG_ParseError(path, ATempty, 0, NULL);
 }
 
 /* a function to print a status bar on a tty */

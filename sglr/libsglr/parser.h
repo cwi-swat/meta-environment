@@ -5,7 +5,8 @@
 
 #include "stack.h"
 
-forest SG_Parse(parse_table *pt, char *sort, int(*getchar)(void), 
+forest SG_Parse(char *path,
+                parse_table *pt, char *sort, int(*getchar)(void), 
 		size_t length);
 
 void   SG_ZeroStackHist(void);

@@ -47,13 +47,13 @@ char   *parse_table_name  = NULL;
  *  ToolBus stubs
  */
 
-ATerm parse_string(int conn, ATerm L, char *G, char *S)
+ATerm parse_string(int conn, ATerm L, char *G, char *S, char *path)
 {
   ATerm tree = NULL;
   ATerm amb = NULL;
   ATerm result;
 
-  result = SGparseStringAsAsFix2ME(L, G, S);
+  result = SGparseStringAsAsFix2ME(L, G, S, path);
 
   if (ATmatch(result, "parsetree(<term>,<term>)", &tree, &amb)) {
     return ATmake("snd-value(parsetree(<term>,<term>))", ATBpack(tree), amb);
@@ -329,24 +329,25 @@ int SG_Batch (int argc, char **argv)
     return 2;
   }
 
-  if (SGisParseError(parse_tree)) {
-    ATermList errlist;
-    ATerm     errcode;
-    AFun      err;
-    int      c, line, col;
+ATwarning("parse result is %t\n", parse_tree);
+  if (!SGisParseTree(parse_tree)) {
+    ERR_Summary summary = ERR_SummaryFromTerm(parse_tree);
+    ERR_Feedback feedback = ERR_getFeedbackListHead(
+                              ERR_getSummaryList(summary));
+    ERR_Subject subject = ERR_getSubjectListHead(
+                            ERR_getFeedbackList(feedback));
+    ERR_Location location = ERR_getSubjectLocation(subject);
+    char *errorType = ERR_getSubjectDescription(subject);
+    ERR_Area area = ERR_getLocationArea(location);
+    int c    = 0;
+    int line = ERR_getAreaBeginLine(area);
+    int col = ERR_getAreaBeginColumn(area);
 
-    errlist = (ATermList) ATgetArgument((ATermAppl) parse_tree, 0);
-    errcode = ATgetArgument((ATermAppl) parse_tree, 1);
-    c    = ATgetInt((ATermInt) ATgetArgument(ATelementAt(errlist, 0), 0));
-    line = ATgetInt((ATermInt) ATgetArgument(ATelementAt(errlist, 1), 0));
-    col  = ATgetInt((ATermInt) ATgetArgument(ATelementAt(errlist, 2), 0));
-    err  = ATgetAFun(errcode);
-
-    if (err == SG_EOF_Error_AFun) {
+    if (strcmp(errorType, "eof") == 0) {
       ATwarning("%s: error in %s, line %d, col %d: end of file unexpected\n",
                 program_name, input_file_name, line, col);
     }
-    else if (err == SG_Plain_Error_AFun) {
+    else if (strcmp(errorType, "plain") == 0) {
       if (isprint(c)) {
         ATwarning("%s: error in %s, line %d, col %d: character `%c' (\\x%2.2x)"
                   " unexpected\n",
@@ -358,25 +359,21 @@ int SG_Batch (int argc, char **argv)
                   program_name, input_file_name, line, col, c);
       }
     } 
-    else if (err == SG_Cycle_Error_AFun) {
-      ATwarning("%s: error in %s, line %d, col %d: cycle detected, productions: %t\n",
+    else if (strcmp(errorType, "cycle") == 0) {
+      ATwarning("%s: error in %s, line %d, col %d: cycle detected, productions: \n",
                 program_name, 
                 input_file_name, 
                 line, 
-                col, 
-                ATgetArgument(errcode, 0));
+                col);
     }
-    else if (err == SG_Amb_Error_AFun) {
-      int ambiescount = ATgetInt((ATermInt) ATgetArgument(errcode,0));
-      ATwarning("%s: error in %s, line %d, col %d: cannot represent %d ambiguit%s\n",
+    else if (strcmp(errorType, "ambiguity") == 0) {
+      ATwarning("%s: error in %s, line %d, col %d: cannot represent ambiguities\n",
                 program_name, 
                 input_file_name, 
                 line, 
-                col, 
-                ambiescount,
-                (ambiescount > 1) ? "ies" : "y" );
+                col);
     }
-    else if (err == SG_Too_Many_Ambiguities_Error_AFun) {
+    else if (strcmp(errorType, "too-many-ambiguity") == 0) {
       ATwarning("%s: error in %s, line %d, col %d: too many ambiguities\n",
                 program_name, input_file_name, line, col);
     }

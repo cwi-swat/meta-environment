@@ -9,6 +9,7 @@
 
 #include <aterm1.h>
 #include <atb-tool.h>
+#include <ErrorAPI-utils.h>
 
 #include "sglr.h"
 #include "sglr-strings.h"
@@ -31,6 +32,7 @@ char  *SG_ReadFile(char *prg, char *err, char *fnam, size_t *fsize);
  */
 
 int  _SG_Mode = 0;
+char *SG_Path;
 
 /*  Globals that are private to sglr-interface  */
 
@@ -141,7 +143,7 @@ ATerm SGopenLanguage(char *prgname, language L, char *FN)
  This is done by duplicating it.
  */
 
-ATerm SGparseString(language L, char *G, char *S)
+ATerm SGparseString(language L, char *G, char *S, char *path)
 {
   ATerm t;
   parse_table *pt;
@@ -156,48 +158,30 @@ ATerm SGparseString(language L, char *G, char *S)
   SG_theText   = strdup(S);
   SG_textIndex = 0;
   SG_textEnd   = strlen(SG_theText);
-  t = (ATerm) SG_Parse(pt, G?(*G?G:NULL):NULL, SG_GetChar, SG_textEnd);
+  t = (ATerm) SG_Parse(path, pt, G?(*G?G:NULL):NULL, SG_GetChar, SG_textEnd);
   free(SG_theText);
   return t;
 }
 
 
-ATerm SGparseStringAsAsFix2(language L, char *G, char *S)
+ATerm SGparseStringAsAsFix2(language L, char *G, char *S, char *path)
 {
   ATerm t;
-  ATerm tree;
-  ATerm amb;
   
   SG_ASFIX2ME_OFF();
 
-  t = SGparseString(L, G, S);
-
-  if (!SGisParseError(t)) {
-    tree = ATgetArgument(t, 0);
-    amb  = ATgetArgument(t, 1); 
-
-    t = (ATerm) ATmakeAppl2(SG_ParseTree_AFun, tree, amb);
-  }
+  t = SGparseString(L, G, S, path);
 
   return SG_TermToToolbus(t);
 }
 
-ATerm SGparseStringAsAsFix2ME(language L, char *G, char *S)
+ATerm SGparseStringAsAsFix2ME(language L, char *G, char *S, char *path)
 {
   ATerm t;
-  ATerm tree;
-  ATerm amb;
 
   SG_ASFIX2ME_ON();
 
-  t = SGparseString(L, G, S);
-
-  if (SGisParseTree(t)) {
-    tree = ATgetArgument(t, 0);
-    amb  = ATgetArgument(t, 1); 
-
-    return (ATerm) ATmakeAppl2(SG_ParseTree_AFun, tree, amb);
-  }
+  t = SGparseString(L, G, S, path);
 
   return SG_TermToToolbus(t);
 }
@@ -238,7 +222,7 @@ ATerm SGparseFile(char *prgname, language L, char *G, char *FN)
   SG_theText[SG_textEnd] = '\0';
 
   IF_VERBOSE(ATwarning("%s: parsing file %s (%d tokens)\n", prgname, FN, ntok));
-  ret = SG_Parse(pt, G?(*G?G:0):NULL, SG_GetChar, SG_textEnd);
+  ret = SG_Parse(prgname, pt, G?(*G?G:0):NULL, SG_GetChar, SG_textEnd);
   SG_Free(SG_theText);
   return (ATerm) ret;
 }
@@ -316,7 +300,20 @@ ATbool SGisParseTree(ATerm t)
 
 ATbool SGisParseError(ATerm t)
 {
+  ERR_Summary summary = ERR_SummaryFromTerm(t);
+  if (ERR_isSummaryFeedback(summary)) {
+    ERR_FeedbackList feedbacks = ERR_getSummaryList(summary);
+    if (!ERR_isFeedbackListEmpty(feedbacks)) {
+      ERR_Feedback feedback = ERR_getFeedbackListHead(feedbacks);
+      if (ERR_isFeedbackError(feedback)) {
+        return ATtrue;
+      }
+    }
+  }
+  return ATfalse;
+/*
   return ATgetAFun(t) == SG_ParseError_AFun;
+*/
 }
 
 

@@ -73,9 +73,9 @@ void  SGshowMode(void);
 ATerm SGopenLanguage(char *prgname, language L, char *FN);
 ATerm SGopenLanguageFromTerm(char *prgname, language L, ATerm tbl);
 
-ATerm SGparseString(language L, char *G, char *S);
-ATerm SGparseStringAsAsFix2(language L, char *G, char *S);
-ATerm SGparseStringAsAsFix2ME(language L, char *G, char *S);
+ATerm SGparseString(language L, char *G, char *S, char *path);
+ATerm SGparseStringAsAsFix2(language L, char *G, char *S, char *path);
+ATerm SGparseStringAsAsFix2ME(language L, char *G, char *S, char *path);
 
 ATerm SGparseFile(char *prgname, language L, char *G, char *FN);
 ATerm SGtermToFile(char *prgname, ATerm t, char *FN);
