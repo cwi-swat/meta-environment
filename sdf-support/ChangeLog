@@ -1,6 +1,11 @@
 $Id$
 
 2003/08/01 (jurgenv@cwi.nl)
+ * SDFProductionToPtProduction does not abort anymore after encountering
+   a production it can not convert. A message is printed and NULL is 
+   returned instead.
+
+2003/08/01 (jurgenv@cwi.nl)
  * Set version to 1.1.2
  * Added new functionality to derive the direct dependencies of
    modules.
