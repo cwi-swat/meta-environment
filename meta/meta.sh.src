@@ -26,7 +26,6 @@ bindir=__BINDIR__
 datadir=__DATADIR__
 classdir=${prefix}/classes
 toolbus=__TOOLBUS__
-toolbusdefs=__TOOLBUS_DEFS__
 wish=__WISH__
 graphviz=__GRAPHVIZ__
 
@@ -146,7 +145,7 @@ done
 #  Get to the real work now...
 ###
 
-toolbusdefs="${toolbusdefs} -DCONFIG_FILE=\\\"${configfile}\\\""
+toolbusdefs="-DCONFIG_FILE=\\\"${configfile}\\\""
 
 if [ $verbose -gt 0 ] ; then
 	echo CLASSPATH: $CLASSPATH

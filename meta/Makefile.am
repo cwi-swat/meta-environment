@@ -34,14 +34,11 @@ man_MANS    = meta.1
 
 CLEANFILES  = meta meta.1
 
-TOOLBUSDEFS = $(TRAVERSALSDEF)
-
 % : %.sh.src Makefile
 	sed 's@__PREFIX__@$(prefix)@g;\
 	     s@__BINDIR__@$(bindir)@g;\
 	     s@__DATADIR__@$(datadir)@g;\
 	     s@__TOOLBUS__@$(TOOLBUSBIN)/toolbus@g;\
-	     s@__TOOLBUS_DEFS__@$(TOOLBUSDEFS)@g;\
 	     s@__WISH__@$(WISH)@g;\
 	     s@__GRAPHVIZ__@$(GRAPHVIZ)@g;' < $< > $@ && \
 	chmod +x $@
