@@ -31,8 +31,8 @@ process ErrorSelected(Error: term) is
 let
   Actions: list
 in
-  snd-msg(get-actions(click, feedback-list, "*"))
-  . rec-msg(actions(click, feedback-list, "*", Actions?))
+  snd-msg(cm-get-actions(feedback-list, click))
+  . rec-msg(cm-actions(Actions?))
   . snd-msg(perform-actions(feedback-list, Actions, [Error]))
   . rec-msg(actions-performed(feedback-list, Actions))
 endlet

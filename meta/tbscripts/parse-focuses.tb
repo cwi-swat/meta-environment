@@ -80,7 +80,7 @@ in
     . AnnotateTree(ParseResult, Filename, AnnotatedTree?)
     . EditStructure(Sid, AnnotatedTree)
     . ParseErrorToSummary(Error, Filename, Summary?)
-    . ShowSummary(Sid, Summary)
+    /*. ShowSummary(Sid, Summary)*/
     . snd-msg(ui-show-feedback-summary(Summary)) 
     . snd-msg(parse-editor-failed(Sid))
   +

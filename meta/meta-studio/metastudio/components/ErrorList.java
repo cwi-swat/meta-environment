@@ -100,6 +100,11 @@ public class ErrorList extends UserInterfacePanel {
     private void addAnonymousErrorItem(Error error) {
         data.add(ANONYMOUS_ORIGIN, ANONYMOUS_ORIGIN, error);
     }
+    
+    public void showFeedbackSummary(ATerm t0) {
+        Summary summary = factory.SummaryFromTerm(t0);
+        setFeedbackList(summary);
+    }
 
     public void removeFeedbackSummary(String producer, String summaryId) {
 	removeFeedbackList(producer, summaryId);

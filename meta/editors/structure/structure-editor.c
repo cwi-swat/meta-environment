@@ -284,10 +284,19 @@ void set_cursor_at_offset(int cid, ATerm editorId, int offset)
   if (editor != NULL) {
     PT_ParseTree parseTree = SE_getStructureEditorParseTree(editor);
     PT_Tree tree = PT_getParseTreeTop(parseTree);
-    PT_Tree cursor = PT_findTreeAtOffset(tree, offset);
+    PT_Tree cursor;
+
+    if (PT_getParseTreeAmbCnt(parseTree) > 0) {
+      cursor = PT_findTopAmbiguity(tree);
+    }
+    else { 
+      cursor = PT_findTreeAtOffset(tree, offset);
+    }
+
     if (cursor == NULL) {
       cursor = tree;
     }
+
     editor = SE_makeStructureEditorDefault(parseTree, cursor);
     setEditor(editorId, editor);
   }

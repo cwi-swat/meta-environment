@@ -563,7 +563,6 @@ in
     rec-msg(push-active-module, Stack?, EditorId?)
     . subscribe(delete-editor(EditorId))
     . snd-msg(em-get-modulename(EditorId))
-    . printf("Buttonactions: get-module-name\n")
     . rec-msg(em-modulename(EditorId, Modulename?))
     . StackPushString(Stack, Stack?, Modulename)
     . ReturnSuccess(EditorId, Stack)
