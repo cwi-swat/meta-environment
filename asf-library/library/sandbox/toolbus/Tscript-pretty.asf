@@ -114,6 +114,9 @@ equations
 [term2box-1]
   [ Term* ] = box2term(H hs=0 ["[" termlist2box(Term*) "]"])
 
+[term2box-2]
+  < Term > = box2term(H hs=0 ["<" term2box(Term) ">"])
+
 [termlist2box-0]
   termlist2box() = HV hs=1 []
 
