@@ -2,6 +2,8 @@
 
 pkgdata_DATA = $(wildcard *.idef)
 
+EXTRA_DIST = $(wildcard *.idef)
+
 bin_PROGRAMS=ASFSDFApigen
 
 ASFSDFApigen_SOURCES = \
