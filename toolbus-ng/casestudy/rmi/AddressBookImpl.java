@@ -11,11 +11,11 @@ public class AddressBookImpl extends UnicastRemoteObject implements AddressBook 
     super();
     addressMap = new HashMap();
 
-    Address shared = new Address("Balistraat", "130 II");
-    add("hayco", shared);
-    add("loge", shared);
+    Address address = new Address("John Doe");
+    address.setStreet("Elmstreet");
+    address.setNumber(7);
 
-    add("pieter", new Address("Ergens anders", "42"));
+    addressMap.put("john", address);
   }
 
   public void add(String name, Address address) throws RemoteException {
