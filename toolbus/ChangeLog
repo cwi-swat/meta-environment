@@ -19,6 +19,9 @@
 
 ------------------------------------------------------------------------------
 
+2001/08/21 (mdejonge@cwi.nl)
+ * Fixed search for header files in configure.in
+
 2001/08/21 (jong@cwi.nl)
  * switched to new ChangeLog format (more compatible with meta-env)
  * version 0.21beta

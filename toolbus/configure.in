@@ -122,12 +122,12 @@ dnl    fi,)
 dnl AC_SUBST(TBSWIPL)
 
 
-AC_HEADER_CHECK(arpa/inet.h,:, echo "*** no arpa/inet.h";exit)
-AC_HEADER_CHECK(assert.h,:, echo "*** no assert.h";exit)
-AC_HEADER_CHECK(ctype.h,:, echo "*** no ctype.h";exit)
-AC_HEADER_CHECK(errno.h,:, echo "*** no errno.h";exit)
-AC_HEADER_CHECK(netdb.h,:, echo "*** no netdb.h";exit)
-AC_HEADER_CHECK(netinet/in.h,:, echo "*** no netinet/in.h";exit)
+AC_HEADER_CHECK(arpa/inet.h,:, AC_MSG_ERROR("*** no arpa/inet.h"))
+AC_HEADER_CHECK(assert.h,:, AC_MSG_ERROR("*** no assert.h"))
+AC_HEADER_CHECK(ctype.h,:, AC_MSG_ERROR("*** no ctype.h"))
+AC_HEADER_CHECK(errno.h,:, AC_MSG_ERROR("*** no errno.h"))
+AC_HEADER_CHECK(netdb.h,:, AC_MSG_ERROR("*** no netdb.h"))
+AC_HEADER_CHECK(netinet/in.h,:, AC_MSG_ERROR("*** no netinet/in.h"))
 
 dnl Due to  bug in IRIX6.5 you can't merely include netinet/tcp.h, but
 dnl you need to include standards.h aswell.
@@ -137,26 +137,26 @@ AC_TRY_CPP(
 #include <standards.h>
 #endif
 #include <netinet/tcp.h>
-],AC_MSG_RESULT("yes"), echo "*** no netinet/tcp.h";exit)
+],AC_MSG_RESULT("yes"), AC_MSG_ERROR("*** no netinet/tcp.h"))
 
-dnl AC_HEADER_CHECK(netinet/tcp.h,:, echo "*** no netinet/tcp.h";exit)
-AC_HEADER_CHECK(signal.h,:, echo "*** no signal.h";exit)
-AC_HEADER_CHECK(stdarg.h,:, echo "*** no stdarg.h";exit)
-AC_HEADER_CHECK(stdio.h,:, echo "*** no stdio.h";exit)
-AC_HEADER_CHECK(stdlib.h,:, echo "*** no stdlib.h";exit)
-AC_HEADER_CHECK(string.h,:, echo "*** no string.h";exit)
+dnl AC_HEADER_CHECK(netinet/tcp.h,:, AC_MSG_ERROR("*** no netinet/tcp.h"))
+AC_HEADER_CHECK(signal.h,:, AC_MSG_ERROR("*** no signal.h"))
+AC_HEADER_CHECK(stdarg.h,:, AC_MSG_ERROR("*** no stdarg.h"))
+AC_HEADER_CHECK(stdio.h,:, AC_MSG_ERROR("*** no stdio.h"))
+AC_HEADER_CHECK(stdlib.h,:, AC_MSG_ERROR("*** no stdlib.h"))
+AC_HEADER_CHECK(string.h,:, AC_MSG_ERROR("*** no string.h"))
 
-AC_HEADER_CHECK(fcntl.h,:, echo "*** no fcntl.h";exit)
-AC_HEADER_CHECK(sys/ioctl.h,:, echo "*** no sys/ioctl.h";exit)
-AC_HEADER_CHECK(sys/param.h,:, echo "*** no sys/param.h";exit)
-AC_HEADER_CHECK(sys/socket.h,:, echo "*** no sys/socket.h";exit)
-AC_HEADER_CHECK(sys/stat.h,:, echo "*** no sys/stat.h";exit)
-AC_HEADER_CHECK(sys/time.h,:, echo "*** no sys/time.h";exit)
-AC_HEADER_CHECK(sys/types.h,:, echo "*** no sys/types.h";exit)
-AC_HEADER_CHECK(sys/uio.h,:, echo "*** no sys/uio.h";exit)
-AC_HEADER_CHECK(sys/un.h,:, echo "*** no sys/un.h";exit)
-AC_HEADER_CHECK(unistd.h,:, echo "*** no unistd.h";exit)
-AC_HEADER_CHECK(math.h,:, echo "*** no math.h";exit)
+AC_HEADER_CHECK(fcntl.h,:, AC_MSG_ERROR("*** no fcntl.h"))
+AC_HEADER_CHECK(sys/ioctl.h,:, AC_MSG_ERROR("*** no sys/ioctl.h"))
+AC_HEADER_CHECK(sys/param.h,:, AC_MSG_ERROR("*** no sys/param.h"))
+AC_HEADER_CHECK(sys/socket.h,:, AC_MSG_ERROR("*** no sys/socket.h"))
+AC_HEADER_CHECK(sys/stat.h,:, AC_MSG_ERROR("*** no sys/stat.h"))
+AC_HEADER_CHECK(sys/time.h,:, AC_MSG_ERROR("*** no sys/time.h"))
+AC_HEADER_CHECK(sys/types.h,:, AC_MSG_ERROR("*** no sys/types.h"))
+AC_HEADER_CHECK(sys/uio.h,:, AC_MSG_ERROR("*** no sys/uio.h"))
+AC_HEADER_CHECK(sys/un.h,:, AC_MSG_ERROR("*** no sys/un.h"))
+AC_HEADER_CHECK(unistd.h,:, AC_MSG_ERROR("*** no unistd.h"))
+AC_HEADER_CHECK(math.h,:, AC_MSG_ERROR("*** no math.h"))
 
 AC_HAVE_FUNCS(strerror)
 AC_HAVE_FUNCS(strdup)
