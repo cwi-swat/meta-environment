@@ -1,45 +1,47 @@
 \newcommand{\hint}{\par\noindent\textbf{Hint:~}}
 
+These exercises are meant to familiarize new users with the \ASmetaenv{}. They focus on the use of the \ASmetaenv{} as a language design tool. A \emph{Guided Tour} is also available as a part of the user-manual. The user-manual can be found at \url{http://www.cwi.nl/projects/MetaEnv/meta/doc/manual.ps.gz}, or in the \texttt{meta/doc} directory from the source distribution at \url{http://www.cwi.nl/projects/MetaEnv/asfsdf-meta}.
+
 \section{Getting acquainted}
 
 \begin{itemize}
 
-\item Copy the Pico-Booleans specification from \texttt{TODO: dir} and
-start the \ASmetaenv{}:
+\item Copy the Pico specification and start the \ASmetaenv{}:
 \begin{verbatim}
- > cp -r /path/to/meta-env/demo/pico .
+ > cp -r /source/location/asfsdf-meta/meta/demo/pico .
  > cd pico
  > meta
 \end{verbatim}
+\noindent Where \texttt{/source/location} is the path to the source distribution of the \ASmetaenv{}. 
+ 
+\item Open the Pico-Booleans specification (\texttt{File|Open}\footnote{This notation means: click on the \texttt{File} pull-down menu and choose the \texttt{Open} button.}) and have a look at the syntax
+and equations by selecting the \texttt{Edit Syntax} and \texttt{Edit
+Equations} options from the popup-menu. The popup-menu can be activated
+by clicking on the Pico-Booleans rectangle in the graph-browser.
 
-\item open the pico-booleans specification and have a look at the syntax
-and equations by selecting the \texttt{edit syntax} and \texttt{edit
-equations} options from the popup-menu. the popup-menu can be activated
-by clicking on the pico-booleans rectangle in the graph-browser.
+\item Create a new term by selecting the \texttt{New Term} option from
+the Pico-Booleans popup-menu. Choose any name you like, e.g. \texttt{bool.trm}.
 
-\item create a new term by selecting the \texttt{new term} option from
-the pico-booleans popup-menu.
-
-\item enter the following term over the pico-booleans specification:
+\item Enter the following term over the Pico-Booleans specification:
 \begin{verbatim}
   true & false
 \end{verbatim}
-note that the use of \emph{search \& replace} and \emph{auto-completion} in xemacs is not supported by the \\ASmetaenv{} and will cause it to crash.
+\hint The use of \emph{Search \& Replace} and \emph{Auto-Completion} in XEmacs is not supported by the \ASmetaenv{} and will cause unexpected behaviour.
 
-\item parse this term by selecting the \texttt{parse} option from the
-\texttt{meta-environment} menu (in the editor).
+\item Parse this term by selecting the \texttt{Parse} option from the
+\texttt{Meta-Environment} menu (in the editor).
 
-\item click on \texttt{true} in the editor and observe the focus that is
-now placed around the term. also note that the sort (\texttt{pico-bool})
+\item Click on \texttt{true} in the editor and observe the focus that is
+now placed around the term. Also note that the sort (\texttt{PICO-BOOL})
 is displayed in the bottom status area of the editor.
 
-\item reduce the term \texttt{true \& false} by selecting the
-\texttt{reduce} option from the menu. inspect that the result is
+\item Reduce the term \texttt{true \& false} by selecting the
+\texttt{Reduce} option from the menu. Inspect that the result is
 indeed what you expected it to be, and close the reduct-window.
 
-\item change the subterm \texttt{false} into \texttt{true} and select
-\texttt{reduce} again. there is no need to explicitly \texttt{parse}
-first as this is implied when you choose \texttt{reduce}.
+\item Change the subterm \texttt{false} into \texttt{true} and select
+\texttt{Reduce} again. There is no need to explicitly \texttt{Parse}
+first as this is implied when you choose \texttt{Reduce}.
 
 \end{itemize}
 
@@ -47,56 +49,56 @@ first as this is implied when you choose \texttt{reduce}.
 
 \begin{itemize}
 
-\item extend the syntax of pico-booleans by adding a syntax rule for
-the logical implication ($\rightarrow$).
+\item Extend the syntax of Pico-Booleans by adding a syntax rule for
+the logical implication ($\Rightarrow$).
 
-\item to activate the new syntax, re-parse it (\texttt{metaenvironment|parse}).
+\item To activate the new syntax, re-parse it (\texttt{Meta-Environment|Parse}).
 
-\item inspect the rule you just entered, observing the focus and the
+\item Inspect the rule you just entered, observing the focus and the
 sorts displayed at the bottom of the editor.
 
-\item open the pico-booleans equations (if you haven't done so already).
+\item Open the Pico-Booleans equations (if you haven't done so already).
 
-\item add the equations (semantic rules) for the $\rightarrow$ operator.
+\item Add the equations (semantic rules) for the $\Rightarrow$ operator.
 
-\item to activate the new equations, \texttt{parse} them.
+\item To activate the new equations, \texttt{Parse} them.
 
-\item open a term-editor (graph-browser: \texttt{new term}) over the
-pico-booleans and test the $\rightarrow$ semantics by entering and
+\item Open a term-editor (graph-browser: \texttt{New Term}) over the
+Pico-Booleans and test the $\Rightarrow$ semantics by entering and
 reducing several terms.
 \end{itemize}
 
-\hint close an editor after you have finished editing. this will save some memory, resulting in faster turnaround times.
+\hint Close an editor after you have finished editing. This will save some memory, resulting in faster turnaround times.
 
-\section{the pico programming language}
+\section{The Pico programming language}
 
-\subsection{The pico definition}
+\subsection{The Pico definition}
 \begin{itemize}
-\item open the pico-syntax specification. observe the modular design of the pico language. 
-\item open the term \texttt{fac.pico}. this is a pico program which computes the factorial.
-\item press \texttt{parse} and click around in the term to get acquainted with the structure of a pico program.
-\item also have a look at the pico-syntax syntax definition and some of the modules imported by it. 
-\item open the pico-typecheck module. this module defines a typechecker for pico programs. 
-\item test the typechecker by opening the term \texttt{factc.trm} and reducing it. create an error in \texttt{factc.trm}, for example by changing the type of a variable from \texttt{natural} to \texttt{string} and \texttt{reduce} again.
-\item open the pico-eval module. this module defines an interpreter for pico  programs.
-\item test this specification by reducing the term \texttt{facev.trm}. 
+\item Open the Pico-Syntax specification. Observe the modular design of the Pico language. 
+\item Open the term \texttt{fac.trm}. This is a Pico program which computes the factorial.
+\item Press \texttt{Parse} and click around in the term to get acquainted with the structure of a Pico program.
+\item Also have a look at the Pico-Syntax syntax definition and some of the modules imported by it. 
+\item Open the Pico-typecheck module. This module defines a typechecker for Pico programs. 
+\item Test the typechecker by opening the term \texttt{factc.trm} and reducing it. Create an error in \texttt{factc.trm}, for example by changing the type of a variable from \texttt{natural} to \texttt{string} and \texttt{Reduce} again.
+\item Open the Pico-eval module. This module defines an interpreter for Pico  programs.
+\item Test this specification by reducing the term \texttt{facev.trm}. 
 \end{itemize}
 
 \subsection{Optional \texttt{else} branches}
 \begin{itemize}
-\item adapt the syntax definition of pico such that a conditional statement can  be either an \texttt{if-then-fi} or an \texttt{if-then-else-fi}. note that there are several ways to do this. choose one you like.
-\item you have now broken the typechecker and the interpreter. after you have figured out why they are broken, fix them. 
+\item Adapt the syntax definition of Pico such that a conditional statement can  be either an \texttt{if-then-fi} or an \texttt{if-then-else-fi}. Note that there are several ways to do this. Choose one you like.
+\item You have now broken the typechecker and the interpreter. After you have figured out why they are broken, fix them. 
 \end{itemize}
 
-\hint remember to press \texttt{Parse} in order to effectuate your changes.
-\hint if you make a mistake that causes the \ASmetaenv{} to loop continuously, press \texttt{File|Quit} and restart it. If that does not work, type \begin{verbatim}CTRL+\\end{verbatim} in the terminal where you typed \texttt{meta}.
+\hint Remember to press \texttt{Parse} in order to effectuate your changes.
+\hint If you make a mistake that causes the \ASmetaenv{} to loop continuously, quit (\texttt{File|Quit}) and restart it. If that does not work, type \verb#CTRL+\# in the terminal where you typed \texttt{meta}.
 
 \subsection{A new basic type for Pico}
 \begin{itemize}
 \item Notice how Pico has only two basic types: \texttt{natural} and \texttt{string}. Add syntax for a new type: \texttt{boolean}.
 \item Extend the Pico expression syntax (sort \texttt{EXP}) with Boolean constants (\texttt{PICO-BOOL-CON}) and four operations: \texttt{\&} , \texttt{|}, \texttt{==} and \texttt{!=}. Also express the relative priorities for the newly added operators. The \texttt{\&} and \texttt{|} operators should be \texttt{left} associative, while \texttt{==} and \texttt{!=} should be made \texttt{non-assoc}.
-\item Extend the typechecker to cope with these kind of expressions. The operations \texttt{\&} and \texttt{|} only accept \texttt{boolean} operands. The \texttt{==} and \texttt{!=} operators should enforce that both operands are of \emph{equal} type. By doing this you are \emph{overloading} these two Pico operators for the three basic types. \hint use the \texttt{compatible} function defined in \texttt{Types} to do this.
-\item Extend the interpreter to cope with these kind of expressions. \hint first add \texttt{PICO-BOOL} as a new type of \texttt{VALUE} in the \texttt{Values} module. \hint don't forget to look at the initialization of a variable that is done during evaluation of the declaration.
+\item Extend the typechecker to cope with these kind of expressions. The operations \texttt{\&} and \texttt{|} only accept \texttt{boolean} operands. The \texttt{==} and \texttt{!=} operators should enforce that both operands are of \emph{equal} type. By doing this you are \emph{overloading} these two Pico operators for the three basic types. \hint Use the \texttt{compatible} function defined in \texttt{Types} to do this.
+\item Extend the interpreter to cope with these kind of expressions. \hint First add \texttt{PICO-BOOL} as a new type of \texttt{VALUE} in the Values module. \hint Don't forget to look at the initialization of a variable that is done during evaluation of the declaration.
 \end{itemize}
 
 \subsection{Boolean conditional expressions}
