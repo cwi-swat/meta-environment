@@ -52,7 +52,8 @@ XA2TOA1CFLAG	= -DHAVE_A2TOA1
 XA2TOA1LIB	= -la2toa1
 XGCCFLAG	= -DHAVE_BOEHMGC
 XGCLIB		= -lgc
-XCPPFLAGS	=
+XA2TOA1GCCFLAG	= ${XA2TOA1CFLAG} ${XGCCFLAG}
+XA2TOA1GCLIB	= ${XA2TOA1LIB} ${XGCLIB}
 XINCLUDES	= -I${ATERM}/include
 ATVERS		= ${CC}
 #ATVERS		= dbg
@@ -62,6 +63,7 @@ XLIBSPROF	= -lATerm-prof  -lAsFix-prof  -lATB-prof
 SGLRLIB         = libsglr.a
 SGLRLIBA2TOA1   = libsglr-a2toa1.a
 SGLRLIBGC       = libsglr-gc.a
+SGLRLIBA2TOA1GC = libsglr-a2toa1-gc.a
 SGLRLIBPROF     = libsglr-prof.a
 SGLRLIBS        = ${SGLRLIB} ${SGLRLIBA2TOA1} ${SGLRLIBGC} ${SGLRLIBPROF}
 SGLRINC         = sglr.h
@@ -69,11 +71,12 @@ LIBSRC          = sglr-interface.c parse-table.c parser.c forest.c stack.c tree-
 LIBOBJ          = ${patsubst %.c,%.o,${LIBSRC}}
 LIBOBJA2TOA1    = ${patsubst %.c,%-a2toa1.o,${LIBSRC}}
 LIBOBJGC        = ${patsubst %.c,%-gc.o,${LIBSRC}}
+LIBOBJA2TOA1GC  = ${patsubst %.c,%-a2toa1-gc.o,${LIBSRC}}
 LIBOBJPROF      = ${patsubst %.c,%-prof.o,${LIBSRC}}
 
 PROG            = sglr
 PURE            = ${patsubst %,%.pure,${PROG}}
-PROGS           = ${PROG} sglr-a2toa1 sglr-gc sglr-prof
+PROGS           = ${PROG} sglr-a2toa1 sglr-gc sglr-a2toa1-gc sglr-prof
 PUREPROGS       = ${patsubst %,%.pure,${PROGS}}
 GETOPTC         = getopt.c getopt1.c
 GETOPTOBJ       = ${patsubst %.c,%.o,${GETOPTC}}
@@ -130,6 +133,9 @@ clean:
 %-gc.o:	%.c
 	${CC} ${CFLAGS} ${XGCCFLAG} ${INCLUDES} -c $< -o $@
 
+%-a2toa1-gc.o:	%.c
+	${CC} ${CFLAGS} ${XA2TOA1GCCFLAG} ${INCLUDES} -c $< -o $@
+
 %-prof.o:	%.c
 	${CC} ${CFLAGSPROF} ${INCLUDES} -c $< -o $@
 
@@ -148,11 +154,14 @@ clean:
 libsglr.a:  ${LIBOBJ}
 	${AR} ${AR_FLAGS} $@ ${LIBOBJ}
 
+libsglr-a2toa1.a:  ${LIBOBJA2TOA1}
+	${AR} ${AR_FLAGS} $@ ${LIBOBJA2TOA1}
+
 libsglr-gc.a:  ${LIBOBJGC}
 	${AR} ${AR_FLAGS} $@ ${LIBOBJGC}
 
-libsglr-a2toa1.a:  ${LIBOBJA2TOA1}
-	${AR} ${AR_FLAGS} $@ ${LIBOBJA2TOA1}
+libsglr-a2toa1-gc.a:  ${LIBOBJA2TOA1GC}
+	${AR} ${AR_FLAGS} $@ ${LIBOBJA2TOA1GC}
 
 libsglr-prof.a:  ${LIBOBJPROF}
 	${AR} ${AR_FLAGS} $@ ${LIBOBJPROF}
@@ -167,12 +176,17 @@ sglr-a2toa1: ${GETOPTOBJ} ${OBJA2TOA1} ${SGLRLIBA2TOA1}
 sglr-gc: ${GETOPTOBJ} ${OBJ} ${SGLRLIBGC}
 	${CC} ${LDFLAGS} ${OBJ} ${GETOPTOBJ} ${SGLRLIBGC} ${XGCLIB} ${LIBS} -o $@
 
+sglr-a2toa1-gc: ${GETOPTOBJ} ${OBJA2TOA1} ${SGLRLIBA2TOA1GC}
+	${CC} ${LDFLAGS} ${OBJA2TOA1} ${GETOPTOBJ}		\
+		${SGLRLIBA2TOA1GC} ${XA2TOA1GCLIB} ${LIBS} -o $@
+
 sglr-prof: ${GETOPTOBJ} ${OBJ} ${SGLRLIBPROF}
 	${CC} ${LDFLAGSPROF} ${OBJ} ${GETOPTOBJ} ${SGLRLIBPROF} ${LIBSPROF} -o $@
 
 sglr-main.o:	sglr.tif.c
 
 parse-table.o: parse-table.h
+
 
 # ObTribute to Larry Wall
 love:

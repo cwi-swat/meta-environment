@@ -291,9 +291,11 @@ ATerm SG_TreeType(ATerm t)
   ATerm     type;
   ATermList args;
 
-  if (ATmatch(t, "appl(prod(<term>,<term>,<term>),<term>,<int>)", NULL, &type, NULL,NULL,NULL))
+  if (ATmatch(t, "appl(prod(<term>,<term>,<term>),<term>,<int>)",
+              NULL, &type, NULL,NULL,NULL))
     return type;
-  if (ATmatch(t, "appl(prod(<term>,<term>,<term>), <term>)", NULL, &type, NULL,NULL))
+  if (ATmatch(t, "appl(prod(<term>,<term>,<term>),<term>)",
+              NULL, &type, NULL,NULL))
     return type;
   else if (ATmatch(t, "amb([<list>])", &args))
     return SG_TreeType(ATgetFirst(args));

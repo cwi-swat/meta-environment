@@ -702,6 +702,7 @@ void SG_PropagateReject(stack *st)
   ATermList amb, trms, idxs, oldidxs, newtrms = ATempty;
   ATerm     compost, t, i;
   ATermInt  cmpstid;
+  int       oldlen, newlen;
 
   while(st != NULL) {
     compost = SG_LK_TREE(head(SG_ST_LINKS(st)));
@@ -710,6 +711,7 @@ void SG_PropagateReject(stack *st)
     if(!ATisEmpty(amb)) {             /*  Ambiguity encountered  */
       compost = ATremoveAnnotation(compost, SG_ApplLabel());
       trms = (ATermList) ATgetFirst(amb);
+      oldlen = ATgetLength(trms);
       idxs = oldidxs = (ATermList) ATelementAt(amb, 1);
       while(trms && !ATisEmpty(trms)) {
         t = ATgetFirst(trms); trms = ATgetNext(trms);
@@ -718,19 +720,27 @@ void SG_PropagateReject(stack *st)
           newtrms = ATinsert(newtrms, t);
         }
       }
-      if(!ATisEmpty(newtrms)) {       /* Update the full ambiguity cluster  */
-        amb = ATmakeList2((ATerm) newtrms, (ATerm) oldidxs);
-        for(; !ATisEmpty(oldidxs); oldidxs=ATgetNext(oldidxs)) {
-          SG_AmbTable(SG_AMBTBL_UPDATE, (ATermInt)ATgetFirst(oldidxs), amb);
-        }
-        return;
+      /*  Update the full ambiguity cluster  */
+      amb = ATmakeList2((ATerm) newtrms, (ATerm) oldidxs);
+      for(; !ATisEmpty(oldidxs); oldidxs=ATgetNext(oldidxs)) {
+        SG_AmbTable(SG_AMBTBL_UPDATE, (ATermInt)ATgetFirst(oldidxs), amb);
       }
+      newlen = ATgetLength(newtrms);
+      if(oldlen >= 2 && newlen < 2)   /*  One ambiguity resolved  */
+        SG_MaxNrAmb(SG_NRAMB_DEC);
+      if(newlen > 0) {
+        /*  Don't reject this link/propagate if part of this amb-cluster
+            is still valid
+         */
+        return;
+      } /*  If no terms were left in the amb-cluster: reject & propagate  */
     }
     SG_MarkLinkRejected(head(SG_ST_LINKS(st)));
     st = st->kid;
   }
 }
 
+#ifdef DOWENEEDTHIS
 void SG_PropagateUnreject(stack *st)
 {
   ATermList l;
@@ -751,7 +761,7 @@ ATfprintf(stderr, "unreject: %xd contains an amb link: %t\n", st, l);
     st = st->kid;
   }
 }
-
+#endif
 
 #ifdef DEBUG
 /*
