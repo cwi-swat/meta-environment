@@ -1,26 +1,24 @@
 /*{{{  includes */
 
+#include <assert.h>
 #include <ctype.h>
-#include <unistd.h>
+#include <errno.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
-#include <errno.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
 #include <aterm2.h>
 #include <atb-tool.h>
-#include <assert.h>
-#include <sys/stat.h>
 
 #include "in-output.tif.h"
-static char *expandPath(const char *relative_path);
 
 /*}}}  */
 /*{{{  defines */
 
-
 #define PATH_LEN (_POSIX_PATH_MAX)
-#define MAX_PATHS 256
 #define SEP "/"
 
 /*}}}  */
@@ -29,17 +27,7 @@ static char *expandPath(const char *relative_path);
 ATbool run_verbose = ATfalse;
 
 static char myversion[] = "1.5";
-
-/*
-   The argument vector: list of option letters, colons denote option
-   arguments.  See usage function, immediately below, for option
-   explanation.
- */
-
 static char myarguments[] = "hvV";
-
-static int  nr_paths = 0;
-static char *paths[MAX_PATHS];
 
 /*}}}  */
 
@@ -53,39 +41,6 @@ static char *ATgetString(ATerm t)
 }
 
 /*}}}  */
-/*{{{  static ATerm createErrorMessage(char *message) */
-
-static ATerm createErrorMessage(char *message)
-{
-  return ATmake("snd-value(failure(<str>))", message);
-}
-
-/*}}}  */
-/*{{{  static ATerm createSuccessMessage() */
-
-static ATerm createSuccessMessage()
-{
-  return ATmake("snd-value(success)");
-}
-
-/*}}}  */
-/*{{{  static ATerm createFileNotFoundMessage() */
-
-static ATerm createFileNotFoundMessage()
-{
-  return ATmake("snd-value(file-not-found)");
-}
-
-/*}}}  */
-/*{{{  static ATerm createFileFoundMessage(ATermList directories) */
-
-static ATerm createFileFoundMessage(ATermList directories)
-{
-  return ATmake("snd-value(file-found(<term>))", directories);
-}
-
-/*}}}  */
-
 /*{{{  static ATbool fileExists(const char *fname) */
 
 static ATbool fileExists(const char *fname)
@@ -104,7 +59,6 @@ static size_t getFileSize(const char *s)
 }
 
 /*}}}  */
-
 /*{{{  static char *readFileContents(char *fnam, size_t *size) */
 
 static char *readFileContents(char *fnam, size_t *size)
@@ -139,24 +93,6 @@ static char *readFileContents(char *fnam, size_t *size)
   fclose(fd);
   buf[*size] = '\0';	/* Terminate the string :-( */
   return buf ;
-}
-
-/*}}}  */
-/*{{{  static ATerm read_raw_from_named_file(char *fn, char *n) */
-
-static ATerm read_raw_from_named_file(char *fileName)
-{
-  ATerm t;
-  char   *buf;
-  size_t size;
-
-  if (!(buf = readFileContents(fileName, &size))) {
-    t = createErrorMessage("could not open file");
-  } else {
-    t = ATmake("snd-value(file-contents(<str>))", buf);
-    free(buf);
-  }
-  return t;
 }
 
 /*}}}  */
@@ -208,42 +144,6 @@ static char *expandPath(const char *relative_path)
 }
 
 /*}}}  */
-/*{{{  static void add_path(char *pathname) */
-
-static void add_path(char *pathname)
-{
-  int i;
-
-  /* Ward off illegal entries */
-  assert(pathname != NULL);
-
-  if (nr_paths >= MAX_PATHS) {
-    if (run_verbose) {
-      ATwarning("add_path(%s) failed, nr_paths exceeded (max = %d)\n",
-		pathname, MAX_PATHS);
-    }
-    return;
-  }
-
-  /* ignore duplicate entries */
-  for (i=0; i<nr_paths; i++) {
-    if (strcmp(paths[i], pathname) == 0) {
-      if (run_verbose) {
-	ATwarning("ignoring duplicate entry in searchpath: %s\n", pathname);
-      }
-      return;
-    }
-  }
-
-  if (run_verbose) {
-    ATwarning("path[%d] = %s\n", nr_paths, pathname);
-  }
-
-  paths[nr_paths++] = pathname;
-}
-
-/*}}}  */
-
 /*{{{  static char *makeFileName(char *path, char *extension) */
 
 static char *makeFileName(char *path, char *extension)
@@ -265,7 +165,119 @@ static char *makeFileName(char *path, char *extension)
 }
 
 /*}}}  */
+/*{{{  static ATbool filesEqual(const char *f1, const char *f2) */
 
+static ATbool filesEqual(const char *f1, const char *f2)
+{
+  struct stat st1;
+  struct stat st2;
+
+  if (stat(f1, &st1) == 0 && stat(f2, &st2) == 0) {
+    return st1.st_ino == st2.st_ino;
+  }
+  else {
+    perror("stat");
+    return ATfalse;
+  }
+}
+
+/*}}}  */
+
+/* ToolBus snd-eval return messages */
+/*{{{  static ATerm createErrorMessage(char *message) */
+
+static ATerm createErrorMessage(char *message)
+{
+  return ATmake("snd-value(failure(<str>))", message);
+}
+
+/*}}}  */
+/*{{{  static ATerm createSuccessMessage() */
+
+static ATerm createSuccessMessage()
+{
+  return ATmake("snd-value(success)");
+}
+
+/*}}}  */
+/*{{{  static ATerm createFileNotFoundMessage() */
+
+static ATerm createFileNotFoundMessage()
+{
+  return ATmake("snd-value(file-not-found)");
+}
+
+/*}}}  */
+/*{{{  static ATerm createFileFoundMessage(ATermList directories) */
+
+static ATerm createFileFoundMessage(ATermList directories)
+{
+  return ATmake("snd-value(file-found(<term>))", directories);
+}
+
+/*}}}  */
+/*{{{  static ATerm createFilesEqualMessage() */
+
+static ATerm createFilesEqualMessage()
+{
+  return ATmake("snd-value(equal)");
+}
+
+/*}}}  */
+/*{{{  static ATerm createFilesDifferentMessage() */
+
+static ATerm createFilesDifferentMessage()
+{
+  return ATmake("snd-value(different)");
+}
+
+/*}}}  */
+
+/* REFACTOR: remove these when no longer needed */
+/*{{{  static ATerm read_raw_from_named_file(char *fn, char *n) */
+
+static ATerm read_raw_from_named_file(char *fileName)
+{
+  ATerm t;
+  char   *buf;
+  size_t size;
+
+  if (!(buf = readFileContents(fileName, &size))) {
+    t = createErrorMessage("could not open file");
+  } else {
+    t = ATmake("snd-value(file-contents(<str>))", buf);
+    free(buf);
+  }
+  return t;
+}
+
+/*}}}  */
+/*{{{  ATerm read_named_text_file(int cid, char *fileName) */
+
+ATerm read_named_text_file(int cid, char *fileName)
+{
+  return read_raw_from_named_file(fileName);
+}
+
+/*}}}  */
+/*{{{  ATerm exists_named_file(int cid, char *fileName) */
+
+ATerm exists_named_file(int cid, char *fileName)
+{
+  ATerm result;
+
+  if (fileExists(fileName)) {
+    result = createSuccessMessage();
+  }
+  else {
+    result = createErrorMessage("file does not exist");
+  }
+  return result;
+}
+
+/*}}}  */
+
+/* io-tool interface implementation */
 /*{{{  ATerm relative_to_absolute(int cid, ATerm paths) */
 
 ATerm relative_to_absolute(int cid, ATerm paths)
@@ -291,16 +303,6 @@ ATerm relative_to_absolute(int cid, ATerm paths)
 }
 
 /*}}}  */
-
-/*{{{  ATerm read_named_text_file(int cid, char *fileName) */
-
-ATerm read_named_text_file(int cid, char *fileName)
-{
-  return read_raw_from_named_file(fileName);
-}
-
-/*}}}  */
-
 /*{{{  ATerm read_text_file(int cid, char *path, char *extension) */
 
 ATerm read_text_file(int cid, char *path, char *extension)
@@ -356,7 +358,6 @@ ATerm write_text_file(int cid, char *path,
 }
 
 /*}}}  */
-
 /*{{{  ATerm write_term_file(int cid, char *path, char *extension, ATerm content) */
 
 ATerm write_term_file(int cid, char *path, char *extension, 
@@ -391,23 +392,6 @@ ATerm write_term_file(int cid, char *path, char *extension,
 }
 
 /*}}}  */
-
-/*{{{  ATerm exists_named_file(int cid, char *fileName) */
-
-ATerm exists_named_file(int cid, char *fileName)
-{
-  ATerm result;
-
-  if (fileExists(fileName)) {
-    result = createSuccessMessage();
-  }
-  else {
-    result = createErrorMessage("file does not exist");
-  }
-  return result;
-}
-
-/*}}}  */
 /*{{{  ATerm exists_file(int cid, char *path, char *name, char *extension) */
 
 ATerm exists_file(int cid, char *path, char *extension)
@@ -426,7 +410,6 @@ ATerm exists_file(int cid, char *path, char *extension)
 }
 
 /*}}}  */
-
 /*{{{  ATerm find_file(int cid, ATerm paths, char *name, char *extension) */
 
 ATerm find_file(int cid, ATerm paths, char *name, char *extension)
@@ -454,85 +437,19 @@ ATerm find_file(int cid, ATerm paths, char *name, char *extension)
 }
 
 /*}}}  */
-
-/*{{{  ATerm process_search_paths(int cid, ATerm paths) */
-
-ATerm process_search_paths(int cid, ATerm paths)
-{
-  ATerm path = NULL;
-  char *contents;
-  char *absolute_path;
-
-  while (!ATisEmpty((ATermList) paths)) {
-    path = ATgetFirst((ATermList) paths);
-    paths = (ATerm) ATgetNext((ATermList) paths);
-
-    if (ATmatch(path, "<str>", &contents)) {
-      absolute_path = expandPath(contents);
-      if (absolute_path != NULL) {
-	add_path(absolute_path);
-      }
-    }
-  }
-
-  return ATmake("snd-value(search-paths-processed)");
-}
-
-/*}}}  */
-/*{{{  ATerm retrieve_search_paths(int cid) */
-
-ATerm retrieve_search_paths(int cid)
-{
-  int i;
-  ATermList atPaths = ATempty;
-
-  for (i=0; i<nr_paths; i++) {
-    atPaths = ATinsert(atPaths, ATmake("<str>", paths[i]));
-  }
-  return ATmake("snd-value(search-paths([<list>]))", atPaths);
-}
-
-/*}}}  */
-
-/*{{{  static ATerm createCompareMessage(ATbool result) */
-
-static ATerm createCompareMessage(ATbool filesEqual)
-{
-  if (filesEqual) {
-    return ATmake("snd-value(equal)");
-  }
-  else {
-    return ATmake("snd-value(different)");
-  }
-}
-
-/*}}}  */
-/*{{{  static ATbool filesEqual(const char *f1, const char *f2) */
-
-static ATbool filesEqual(const char *f1, const char *f2)
-{
-  struct stat st1;
-  struct stat st2;
-
-  if (stat(f1, &st1) == 0 && stat(f2, &st2) == 0) {
-    return st1.st_ino == st2.st_ino;
-  }
-  else {
-    perror("stat");
-    return ATfalse;
-  }
-}
-
-/*}}}  */
 /*{{{  ATerm compare_files(int cid, char *f1, char *f2) */
 
 ATerm compare_files(int cid, char *f1, char *f2)
 {
-  return createCompareMessage(filesEqual(f1, f2));
+  if (filesEqual(f1, f2)) {
+    return createFilesEqualMessage();
+  }
+  else {
+    return createFilesDifferentMessage();
+  }
 }
 
 /*}}}  */
-
 /*{{{  ATerm get_filename(int cid, char *directory, char *name, char *extension) */
 
 ATerm get_filename(int cid, char *directory, char *name, char *extension)
@@ -542,6 +459,14 @@ ATerm get_filename(int cid, char *directory, char *name, char *extension)
   sprintf(fileName, "%s%s%s%s", directory, SEP, name, extension);
 
   return ATmake("snd-value(filename(<str>))", fileName);
+}
+
+/*}}}  */
+/*{{{  void rec_terminate(int cid, ATerm arg) */
+
+void rec_terminate(int cid, ATerm arg)
+{
+  exit(0);
 }
 
 /*}}}  */
@@ -567,15 +492,6 @@ static void version(char *prg)
 {
   ATwarning("%s v%s\n", prg, myversion);
   exit(1);
-}
-
-/*}}}  */
-/*{{{  void rec_terminate(int cid, ATerm arg) */
-
-void rec_terminate(int cid, ATerm arg)
-{
-  /* FIXME: free <nr_paths> entries in <paths> */
-  exit(0);
 }
 
 /*}}}  */
