@@ -71,6 +71,8 @@ static char myversion[] = "0.1";
 
 ATerm unparse_asfix(int cid, ATerm t)
 {
+  ATerm result;
+
   int needed = AFsourceSize(t)+1; /* including '\0' */
   if(needed > size) {
     if(stout)
@@ -82,7 +84,10 @@ ATerm unparse_asfix(int cid, ATerm t)
   }
   stout[0] = '\0';
   AFsource(t, stout);
-  return ATmake("snd-value(unparsed-text(<str>))", stout);
+
+  result = ATmake("snd-value(unparsed-text(<str>))", stout);
+
+  return result;
 }
 
 void rec_terminate(int cid, ATerm t)
