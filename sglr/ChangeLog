@@ -5,6 +5,8 @@ $Id$
    information was not updated and thus in case a rejected tree
    was in an ambiguity cluster the position information got 
    out of sync during filtering.
+ * Bumped in to version 3.10.2.
+ * Regenerated one of the Casl tests.
 
 2003/08/01 (markvdb@cwi.nl)
  * Fine-tuned the way user-defined injections are treated.
