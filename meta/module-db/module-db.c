@@ -233,7 +233,7 @@ ATerm add_sdf2_module(int cid, char *moduleName, char *path, ATerm sdfTree,
 			   );
 
   PutValue(modules_db, modName, entry);
-  imports = SDFgetImports(sdfModule);
+  imports = SDF_getImports(sdfModule);
   unknowns = add_imports(modName, imports);
   import_graph = calc_import_graph();
 
@@ -306,7 +306,7 @@ ATerm update_sdf2_module(int cid, ATerm newSdfTree)
 
       chg_mods = modules_depend_on(modName, ATempty);
       update_syntax_status_of_modules(chg_mods); 
-      imports = SDFgetImports(sdfModule);
+      imports = SDF_getImports(sdfModule);
       unknowns = replace_imports(modName, imports);
       import_graph = calc_import_graph();
 
