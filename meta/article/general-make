@@ -7,11 +7,14 @@
 
 .ltx.dvi:
 	latex $*.ltx
-	-@fgrep -s 'LaTeX Warning: Citation' $*.log && bibtex $* && latex $*
-	-@fgrep -s 'Rerun to get cross-references right' $*.log && latex $*
+	-@fgrep -s 'LaTeX Warning: Citation' $*.log && bibtex $* && latex $*.ltx
+	-@fgrep -s 'Rerun to get cross-references right' $*.log && latex $*.ltx
 
 .tex.bbl:
 	bibtex $*
+
+.ltx.bbl:
+	bibtex $*.ltx
 
 .pic.tex:
 	gpic -t $*.pic > $*.tex
