@@ -71,9 +71,8 @@ in
 	    rec-msg(parse-ok(eqs(ModuleName))) .
 	    snd-msg(get-tree(EditorId)) .
             rec-msg(tree(Tree?)) .
-            snd-msg(check-asf(Tree)) .
-            rec-msg(messages(Msgs?)) .
-            snd-msg(display-asf-errors(Msgs)) .
+	    snd-msg(postprocess-semantics-hook(Tree)).
+	    rec-msg(postprocess-semantics-hook-result(Tree?)).
             snd-msg(update-eqs-tree-in-db(ModuleName, tree(Tree))) .
             rec-msg(eqs-updated) .
             snd-msg(clear-focus(EditorId))
