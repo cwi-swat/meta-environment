@@ -43,8 +43,6 @@ in
   rec-msg(ts-all-values(ANModules?)) .
   Open-Initial-Module("/users/jive/PROGRAMS/asenv/install/share/asdf/asdf-pt/","asdf/asdf") .
   Open-Initial-Module("/users/jive/PROGRAMS/asenv/install/share/asf-library/library","languages/asf/syntax/Equations") .
-/*  Open-Initial-Module("/users/jive/PROGRAMS/asenv/install/share/asf-library/library","languages/asf/syntax/Equation") .*/
-DebugTS("Initial SDF Trees", "sdf-tree") .
   snd-msg(ts-get-all-values("sdf-tree")) .
   rec-msg(ts-all-values(InitialModules?)) .
   snd-msg(ts-clear-table("import-relations")) .
@@ -117,8 +115,15 @@ DebugTS("Initial SDF Trees", "sdf-tree") .
     fi
   +
     rec-msg(notify-about-changed-modules(Modules?, asdf)) .
-    /* IMPLEMENT */
-    snd-msg(notify-about-changed-modules-done) 
+    if not-equal(Modules,[]) then
+      Module := first(Modules) .
+printf("Module = %s\n", Module).
+      Modules := next(Modules) .
+      snd-msg(ts-remove-value("asf-tree", Module)) 
+    fi *
+    if equal(Modules,[]) then
+      snd-msg(notify-about-changed-modules-done)
+    fi
   +
     rec-msg(save-asfsdf-text(Module?)) .
     SaveASFSDF(Module) .
@@ -565,6 +570,7 @@ process RemoveGeneratedValues(Module : str)  is
   snd-msg(ts-remove-value("sdf-tree", Module)) .
   snd-msg(ts-remove-value("sdf-text", Module)) .
   snd-msg(ts-remove-value("asf-text", Module)) .
+  snd-msg(ts-remove-value("asf-tree", Module)) .
   snd-msg(ts-remove-value("asdf-pt-text", Module)) .
   snd-msg(ts-remove-value("asdf-pt-tree", Module)) .
   snd-msg(ts-remove-value("asdf-parse-table", Module)) 
@@ -721,7 +727,8 @@ in
   StackPopString(Stack, Stack?, Ext?) .
   StackPopString(Stack, Stack?, Path?) .
   StackPopString(Stack, Stack?, ModuleName?) .
-  snd-msg(create-new-module(Path, ModuleName, asdf)) .     
+  snd-msg(create-new-module(Path, ModuleName, asdf)) . 
+  rec-msg(new-module-created(Path?, ModuleName?)) .
   ReturnSuccess(EditorId, Stack)	
 +
   rec-msg(generate-asfsdf, Stack?, EditorId?) .
