@@ -27,8 +27,6 @@ void init_AUX_Kernel_Sdf_Normalization3 ( ) {
 ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Kernel_Sdf_Normalization3_1 ( ATerm arg0 ) {
-{
-ATerm tmp [ 3 ] ;
 FUNC_ENTRY ( lf_AUX_Kernel_Sdf_Normalization3_1sym , ATmakeAppl ( lf_AUX_Kernel_Sdf_Normalization3_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
@@ -36,14 +34,7 @@ ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
-tmp [ 0 ] = ( * ef2 ) ( ( constant0 ? constant0 : ( constant0 = ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ) , ( * ef1 ) ( lf2 ( make_list ( atmp000 ) ) ) ) ;
-if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
-tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
-if ( check_sym ( tmp [ 1 ] , lf2sym ) ) {
-tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
-FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 2 ] ) ) ) ) ;
-}
-}
+FUNC_EXIT ( ( * ef2 ) ( ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) , ( * ef1 ) ( lf2 ( make_list ( atmp000 ) ) ) ) ) ;
 }
 }
 }
@@ -62,7 +53,6 @@ FUNC_EXIT_CONST ( constant0 , ( * ef1 ) ( lf2 ( make_list ( null ( ) ) ) ) ) ;
 }
 }
 FUNC_EXIT ( make_nf1 ( lf_AUX_Kernel_Sdf_Normalization3_1sym , arg0 ) ) ;
-}
 }
 ATerm lf2 ( ATerm arg0 ) {
 CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
