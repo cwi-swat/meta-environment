@@ -1,5 +1,10 @@
 # $Id$
 
+2003/05/20 (jurgenv@cwi.nl)
+ * To fix the immediate reduce (without first pressing 'Parse') bug,
+   the get-root button action now first pops the current module name from
+   the stack.
+
 2003/05/20 ({jurgenv,jong}@cwi.nl)
  * added a number of new functions to the in-output tool:
    - find-file: searches a file in a given number of paths
