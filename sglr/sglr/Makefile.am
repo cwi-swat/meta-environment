@@ -7,7 +7,7 @@ CLEANFILES		= sglr.tifs sglr.tif.[ch]
 
 INCLUDES		= -I$(top_srcdir)/libsglr \
 			-I$(PT_SUPPORT)/include \
-			-I$(TOOLBUS)/include \
+			-I$(TOOLBUSLIB)/include \
 			-I$(ATERM)/include
 
 data_DATA		= sglr.idef
@@ -18,6 +18,6 @@ bin_PROGRAMS		= sglr
 sglr_SOURCES		= sglr.tif.c sglr.tif.h sglr-main.c getopt.c getopt1.c
 sglr_LDADD		= -L$(top_builddir)/libsglr -lsglr \
 			-L$(PT_SUPPORT)/lib -lconversion -lmept -lasfix2 \
-			-L$(TOOLBUS)/lib -lATB \
+			-L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm \
 			$(SOCKLIBS)

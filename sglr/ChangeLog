@@ -1,5 +1,9 @@
 $Id$
 
+2001/11/25 (jong@cwi.nl)
+ * sglr pacakge now uses toolbuslib package
+ * extended functionality of program-check.m4 macros
+
 2001/11/13 (jong@cwi.nl)
  * Cleaned up ChangeLog
  * Released version 3.5

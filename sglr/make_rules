@@ -5,7 +5,7 @@ POD2TXT=pod2text
 POD2HTML=pod2html
 
 %.tif.c %.tif.h: %.tifs
-	${TOOLBUS}/bin/tifstoc -tool $* $<
+	PATH=$(TOOLBUS)/bin:$PATH tifstoc -tool $* $<
 
 # The output of idef2tif and toolbus is moved to $@ to make sure the
 # generated .tifs file exists in the current directory. The ToolBus and
@@ -13,13 +13,13 @@ POD2HTML=pod2html
 # the location the output. This does not work correct when using VPATH in
 # the Makefile.
 %.tifs: %.idef
-	${TOOLBUS}/bin/idef2tif $<
+	PATH=$(TOOLBUS)/bin:$${PATH} idef2tif $<
 	@if [ "a${VPATH}" != "a" ]; then \
 	   mv ${srcdir}/$@ $@ ;\
 	fi
 
 %.tifs: %.tb
-	${TOOLBUS}/bin/toolbus -gentifs $<
+	PATH=$(TOOLBUS)/bin:$${PATH} toolbus -gentifs $<
 	@if [ "a${VPATH}" != "a" ]; then \
 	   mv ${srcdir}/$@ $@ ;\
 	fi

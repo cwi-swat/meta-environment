@@ -4,7 +4,7 @@ include $(top_srcdir)/make_rules
 
 INCLUDES			= -I$(top_srcdir)/libsglr \
 				-I$(ATERM)/include \
-				-I$(TOOLBUS)/include \
+				-I$(TOOLBUSLIB)/include \
 				-I${PT_SUPPORT}/include
 
 bin_PROGRAMS			= dump-actions dump-gotos dump-priorities \
@@ -21,6 +21,6 @@ dump_productions_SOURCES	= dump-productions.c dump-skel.c dump-skel.h
 
 LDADD     = -L$(top_builddir)/libsglr -lsglr \
             -L$(PT_SUPPORT)/lib -lconversion -lmept -lasfix2 \
-            -L$(TOOLBUS)/lib -lATB \
+            -L$(TOOLBUSLIB)/lib -lATB \
             -L$(ATERM)/lib -lATerm \
             $(SOCKLIBS)
