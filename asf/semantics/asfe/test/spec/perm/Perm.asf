@@ -1,5 +1,0 @@
-equations
-
-  [1] swap(true Int Id) = true Id Int
-
-  [default-1] swap(Bool Int Id) = Bool Int Id

@@ -59,8 +59,8 @@ typedef struct equation_table
 
 PT_Tree RWprepareTerm(PT_Tree t);
 ASF_CondEquationList RWprepareEquations(ASF_CondEquationList eqsList);
-PT_Tree RWrestoreTerm(PT_Tree t);
-PT_Args RWrestoreArgs(PT_Args args);
+PT_Tree RWrestoreTerm(PT_Tree t, ATbool remove_layout);
+PT_Args RWrestoreArgs(PT_Args args, ATbool remove_layout);
 void RWflushEquations();
 PT_Args AFfilterLayout(PT_Args elems);
 PT_Tree AFremoveTermLayout(PT_Tree t);

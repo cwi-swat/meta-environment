@@ -1,1 +1,0 @@
-parsetree(appl(prod([cf(opt(layout)),cf(sort("PICO-NAT-CON")),cf(opt(layout))],sort("<START>"),no-attrs),[appl(prod([],cf(opt(layout)),no-attrs),[]),appl(prod([lex(sort("PICO-NAT-CON"))],cf(sort("PICO-NAT-CON")),no-attrs),[appl(list(iter-star(char-class([range(0,255)]))),[48,48,55])]),appl(prod([],cf(opt(layout)),no-attrs),[])]),0)

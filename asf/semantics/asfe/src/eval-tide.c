@@ -104,12 +104,12 @@ static ATermList varlist_from_env(ATerm environment)
     /*ATwarning("tuple=%t\n\n\n", tuple);*/
     if (ATgetArity(ATgetAFun((ATermAppl)tuple)) == 3) {
       PT_Args args = appendSlice(PT_makeArgsEmpty(), (Slice)tuple);
-      args = RWrestoreArgs(args);
+      args = RWrestoreArgs(args, ATfalse);
       value = PT_yieldArgs(args);
     } else {
       ATerm val = ATgetArgument(tuple, 1);
       PT_Tree tree = PT_TreeFromTerm(val);
-      tree = RWrestoreTerm(tree);
+      tree = RWrestoreTerm(tree, ATfalse);
       value = PT_yieldTree(tree);
     }
     list = ATinsert(list, ATmake("variable(<term>,<str>)", variable, value));
@@ -156,7 +156,7 @@ static TA_Expr eval_var(int pid, AFun fun, TA_ExprList args)
     ATerm name = ATgetArgument(variable, 0);
     if (ATisEqual(name, var)) {
       PT_Tree val = PT_makeTreeFromTerm(ATgetArgument(tuple, 1));
-      val = RWrestoreTerm(val);
+      val = RWrestoreTerm(val, ATfalse);
       return ATmake("<str>", PT_yieldTree(val));
     }
     list = ATgetNext(list);
@@ -239,7 +239,7 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
   if (value == NULL) {
     yield = "<uninitialized>";
   } else {
-    restored = RWrestoreTerm(value);
+    restored = RWrestoreTerm(value, ATfalse);
     yield = PT_yieldTree(restored);
   }
   

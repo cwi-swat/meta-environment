@@ -1,9 +1,0 @@
-equations
-  
-  [1] compose(Id, Int, Bool) = <Id, Int, Bool>
-
-  [2] get-id(<Id, Int, Bool>) = Id
-
-  [3] get-int(<Id, Int, Bool>) = Int
-
-  [4] get-bool(<Id, Int, Bool>) = Bool

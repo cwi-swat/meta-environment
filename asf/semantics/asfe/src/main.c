@@ -55,7 +55,7 @@
 /*}}}  */
 /*{{{  variables */
 
-static char myarguments[] = "bde:hi:o:w:tvV";
+static char myarguments[] = "bde:hi:lo:w:tvV";
 static char myname[] = "asfe";
 static char myversion[] = "0.3";
 
@@ -80,11 +80,11 @@ void usage(char *prg, ATbool is_err)
 	    "\t-e file         use the equations |file|\n"
 	    "\t-i filename     input from file (default stdin)\n"
 	    "\t-o filename     output to file (default stdout)\n"
-	    "\t-w (on | off)   toggle traversals (default %s)\n"
+	    "\t-l              replace all layout by a single space\n"
 	    "\t-v              verbose mode\n"
 	    "\t-V              reveal program version (i.e. %s)\n",
 	    prg, 
-	    traversals_on ? "on" : "off", myversion);
+	    myversion);
   exit(is_err ? 1 : 0);
 }
 
@@ -125,6 +125,7 @@ int main(int argc, char *argv[])
   char *eqsfile = "-";
   int bafmode = 1;
   ATbool use_tide = ATfalse;
+  ATbool remove_layout = ATfalse;
   char *name = "Standalone";
   int returncode = 0;
   ATerm eqs, term, result;
@@ -178,18 +179,8 @@ int main(int argc, char *argv[])
 	case 'v': runVerbose = ATtrue;             break;
 	case 'e': eqsfile = optarg;                break;
 	case 'i': input = optarg;                  break;
+        case 'l': remove_layout=ATtrue;            break;		  
 	case 'o': output = optarg;                 break;
-	case 'w':
-		  if (!strcmp(optarg, "on")) {
-		    traversals_on = ATtrue;
-		  }
-		  else if (!strcmp(optarg, "off")) {
-		    traversals_on = ATfalse;
-		  }
-		  else {
-		    usage(argv[0], ATtrue);
-		  }
-		  break;
 	case 'd': use_tide = ATtrue;		   break;
 	case 'V': version(argv[0]);                break;
 	case 'h': usage(argv[0], ATfalse);         break;
@@ -229,7 +220,8 @@ int main(int argc, char *argv[])
 
     /* Rewrite the term */
     result = evaluator(name, parseTree, eqsList,
-		       use_tide ? ATparse("on") : ATparse("off"));
+		       use_tide ? ATparse("on") : ATparse("off"), 
+		       remove_layout);
 
     /* If we have collected errors, pretty print them now */
     returncode = (RWgetError() == NULL) ? 0 : 1;

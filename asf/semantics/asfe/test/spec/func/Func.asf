@@ -1,7 +1,0 @@
-equations
-
-  [1] f(true Int) = Int
-
-  [default-2] f(Bool Int) = 0
-
-  [a] apply(Bool, Int, vf) = vf(Bool Int)

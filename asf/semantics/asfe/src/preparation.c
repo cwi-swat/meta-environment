@@ -731,6 +731,9 @@ static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data)
     if (ASF_isTreeAmbConstructorFunction(PTtoASF(tree))) {
       return ambConstructorToAmb(tree, data);
     }
+    else if ( *((ATbool*) data) == ATtrue && PT_isTreeLayout(tree)) {
+      return PT_makeTreeLayoutFromString(" ");
+    }
 
     args = PT_getTreeArgs(tree);
     args = PT_foreachTreeInArgs(args, restoreTerm, data);
@@ -744,17 +747,17 @@ static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data)
 /*}}}  */
 /*{{{  PT_Tree RWrestoreTerm(PT_Tree tree) */
 
-PT_Tree RWrestoreTerm(PT_Tree tree)
+PT_Tree RWrestoreTerm(PT_Tree tree, ATbool remove_layout)
 {
-  return restoreTerm(tree, NULL);
+  return restoreTerm(tree, &remove_layout);
 }
 
 /*}}}  */
 /*{{{  PT_Args RWrestoreArgs(PT_Args args) */
 
-PT_Args RWrestoreArgs(PT_Args args)
+PT_Args RWrestoreArgs(PT_Args args, ATbool remove_layout)
 {
-  return PT_foreachTreeInArgs(args, restoreTerm, NULL);
+  return PT_foreachTreeInArgs(args, restoreTerm, &remove_layout);
 }
 
 /*}}}  */

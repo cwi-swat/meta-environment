@@ -27,11 +27,6 @@
 #include "traversals.h"
 
 #include "traversals.h"
-#ifdef TRAVERSALS
-ATbool traversals_on = ATtrue;
-#else
-ATbool traversals_on = ATfalse;
-#endif
 
 #ifdef USE_TIDE
 #include "eval-tide.h"
@@ -164,7 +159,7 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
   eqsList = ASF_makeCondEquationListFromTerm(eqs);
   parseTree = PT_makeParseTreeFromTerm(trm);
 
-  result = evaluator(modname, parseTree, eqsList, tide);
+  result = evaluator(modname, parseTree, eqsList, tide, ATfalse);
 
   if (RWgetError() == NULL) {
     return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
@@ -220,7 +215,7 @@ ATerm RWgetError()
 /*{{{  ATerm evaluator(char *name, ATerm term) */
 
 ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
-                ATerm debug)
+                ATerm debug, ATbool remove_layout)
 {
   PT_Tree result;
   PT_Tree tree;
@@ -248,8 +243,15 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
 
   result = rewrite(tree);
 
-  result = RWrestoreTerm(result);
+  result = RWrestoreTerm(result, remove_layout);
   parseTree = PT_setParseTreeTree(parseTree, result);
+
+  if (remove_layout) { /* compatible with asc-support */
+    parseTree = PT_setParseTreeLayoutBeforeTree(parseTree,
+						PT_makeTreeLayoutEmpty());
+    parseTree = PT_setParseTreeLayoutAfterTree(parseTree,
+					       PT_makeTreeLayoutEmpty());
+  }
 
   MemoTableDestroy(memo_table);
 
@@ -1765,11 +1767,6 @@ static PT_Tree rewriteTraversalAppl(PT_Tree trm, ATerm env, int depth,
   Traversal traversal;
 
   assert(extra == NULL && "Nested traversal should have been reduced.");
-
-  if (!traversals_on) {
-    RWsetError("Traversal functions are not enabled", (ATerm) ATempty);
-    return trm;
-  }
 
   traversal = createTraversalPattern(trm);
 
