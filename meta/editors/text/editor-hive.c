@@ -228,7 +228,6 @@ void set_focus(int c, ATerm editorId, ATerm focus)
   TE_Process process = getEditorProcess(editorId);
 
   if (process != NULL) {
-    ATwarning("focus: %t\n", focus);
     sendToEditor(process, TE_makeActionSetFocus(focus));
   }
 }
