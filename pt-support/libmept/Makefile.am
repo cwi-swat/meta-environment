@@ -7,6 +7,6 @@ libmept_a_SOURCES 	= MEPT.c MEPT_dict.c MEPT-utils.c  \
                           posInfo.c reportAmbs.c PT2dot.c
                           
 
-#CFLAGS                  = -pg -Wall -O2 -DDISABLE_DYNAMIC_CHECKING
-CFLAGS                  = -g -Wall -Werror -O2 -DDISABLE_DYNAMIC_CHECKING
+#CFLAGS                 += -pg -DDISABLE_DYNAMIC_CHECKING
+CFLAGS                  +=  -DDISABLE_DYNAMIC_CHECKING
 INCLUDES                = -I${ATERM}/include

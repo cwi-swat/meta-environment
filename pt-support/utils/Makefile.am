@@ -5,7 +5,6 @@ EXTRA_DIST		= unparsePT.idef
 bin_PROGRAMS		= flattenPT unparsePT implodePT unparseProd \
                           addPosInfo ambtracker tree2dot
 
-CFLAGS			= -g -Wall -Werror -O2
 INCLUDES		= -I${top_srcdir}/libmept \
                         -I${top_srcdir}/libasfix2 \
                         -I${top_srcdir}/libconversion \
