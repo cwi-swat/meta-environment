@@ -21,8 +21,8 @@ exports
   context-free syntax
 
 %% Elementary values
-     Boolean                                	-> Elem  
-     Integer                                	-> Elem  
+     BoolCon                                	-> Elem  
+     NatCon                               	-> Elem  
      String				    	-> Elem  
      Area				    	-> Elem  
 
@@ -52,6 +52,10 @@ exports
      REXP "<" REXP                           	-> REXP {non-assoc}
      REXP ">=" REXP                          	-> REXP {non-assoc}
      REXP ">" REXP                           	-> REXP {non-assoc}
+
+     REXP "+" REXP				-> REXP {left}
+     REXP "-" REXP				-> REXP {left}
+     REXP "*" REXP				-> REXP {left}
 
      REXP "union" REXP                       	-> REXP {left}
      REXP "inter" REXP                       	-> REXP {left}
@@ -144,8 +148,13 @@ exports
     REXP "inter" REXP -> REXP		>
     REXP "union" REXP -> REXP		>
     REXP "\\" REXP -> REXP		>
-    "#" REXP -> REXP 			>    
+    "#" REXP -> REXP 			> 
 
+    REXP "*" REXP -> REXP 		>
+    {	   
+     	REXP "+" REXP -> REXP
+     	REXP "-" REXP -> REXP 
+    } 					> 
 
     {	REXP "in" REXP -> REXP
 	REXP "notin" REXP -> REXP  

@@ -103,59 +103,89 @@ assert "== 12" : {<1, {1,2,3}>, <2, {2,3,4}>} ==  {<2, {2,3,4}>, <1, {1,2,3}>}
 
 %% --- !=
 
+area A1 = area("f", 10, 3, 11, 7)
+area A2 = area("f", 10, 2, 11, 8)
+area A3 = area("f", 10, 4, 10, 7)
+area A4 = area("f", 10, 3, 10, 8)
+
 assert "!= 1" : 1 != 2
 assert "!= 2" : not(1 != 1)
 assert "!= 3" : "a" != "b"
 assert "!= 4" : not("a" != "a")
+assert "!= 5" :  A1 != A2
 
-assert "!= 5a": not(EMPTYBAG != EMPTYBAG)
-assert "!= 5b": EMPTYBAG != {1}
-assert "!= 5c": {1} != EMPTYBAG
+assert "!= 6": not(EMPTYBAG != EMPTYBAG)
+assert "!= 7": EMPTYBAG != {1}
+assert "!= 8": {1} != EMPTYBAG
 
-assert "!= 5d" : not({1} != {1})
-assert "!= 6" : {1, 2} != {1, 3}
-assert "!= 7" : {1, 2} != {3, 1}
-assert "!= 8" : {<1,2>} != {<1,3>}
-assert "!= 9" : {<1,2>, <3,4>} !=  {<1,2>, <3,5>}
-assert "!= 10" :{<1,2>, <3,4>} != {<3,5>, <1,2>}
+assert "!= 9" : not({1} != {1})
+assert "!= 10" : {1, 2} != {1, 3}
+assert "!= 11" : {1, 2} != {3, 1}
+assert "!= 12" : {<1,2>} != {<1,3>}
+assert "!= 13" : {<1,2>, <3,4>} !=  {<1,2>, <3,5>}
+assert "!= 14" :{<1,2>, <3,4>} != {<3,5>, <1,2>}
 
-assert "!= 11" : {<1, {1,2,3}>, <2, {2,3,5}>} !=  {<1, {1,2,3}>, <2, {2,3,4}>}
-assert "!= 12" : {<1, {1,2,3}>, <2, {2,3,4}>} !=  {<2, {2,3,5}>, <1, {1,2,3}>}
+assert "!= 15" : {<1, {1,2,3}>, <2, {2,3,5}>} !=  {<1, {1,2,3}>, <2, {2,3,4}>}
+assert "!= 16" : {<1, {1,2,3}>, <2, {2,3,4}>} !=  {<2, {2,3,5}>, <1, {1,2,3}>}
 
 bag[int] SmallBag = {1, 2, 3, 2, 4}
 bag[int] BigBag   = {5, 4, 3, 2, 1, 2}
 
 %% --- <=
 
-assert "<= 1": EMPTYBAG <= EMPTYBAG
-assert "<= 2": EMPTYBAG <= BigBag
-assert "<= 3": not(BigBag <= EMPTYBAG)
-assert "<= 4": SmallBag <= BigBag
-assert "<= 5": not(BigBag <= SmallBag)
+assert "<= 1" : 1 <= 2
+assert "<= 2" : 2 <= 2
+assert "<= 3" : A1 <= A1
+assert "<= 4" : A1 <= A2
+assert "<= 5" : A3 <= A4
+
+assert "<= 6": EMPTYBAG <= EMPTYBAG
+assert "<= 7": EMPTYBAG <= BigBag
+assert "<= 8": not(BigBag <= EMPTYBAG)
+assert "<= 9": SmallBag <= BigBag
+assert "<= 10": not(BigBag <= SmallBag)
 
 %% --- <
 
-assert "< 1": not(EMPTYBAG < EMPTYBAG)
-assert "< 2": EMPTYBAG < BigBag
-assert "< 3": not(BigBag < EMPTYBAG)
-assert "< 4": SmallBag < BigBag
-assert "< 5": not(BigBag < SmallBag)
+assert "< 1" : 1 < 2
+assert "< 2" : not 2 < 2
+assert "< 3" : not(A1 < A1)
+assert "< 4" : A1 < A2
+assert "< 5" : A3 < A4
+
+assert "< 6": not(EMPTYBAG < EMPTYBAG)
+assert "< 7": EMPTYBAG < BigBag
+assert "< 8": not(BigBag < EMPTYBAG)
+assert "< 9": SmallBag < BigBag
+assert "< 10": not(BigBag < SmallBag)
 
 %% --- >=
 
-assert ">= 1": EMPTYBAG >= EMPTYBAG
-assert ">= 2": not(EMPTYBAG >= BigBag)
-assert ">= 3": BigBag >= EMPTYBAG
-assert ">= 4": BigBag >= SmallBag
-assert ">= 5": not(SmallBag >= BigBag)
+assert ">= 1" : not(1 >= 2)
+assert ">= 2" : 2 >= 2
+assert ">= 3" : A1 >= A1
+assert ">= 4" : not(A1 >= A2)
+assert ">= 5" : not(A3 >= A4)
+
+assert ">= 6": EMPTYBAG >= EMPTYBAG
+assert ">= 7": not(EMPTYBAG >= BigBag)
+assert ">= 8": BigBag >= EMPTYBAG
+assert ">= 9": BigBag >= SmallBag
+assert ">= 10": not(SmallBag >= BigBag)
 
 %% --- >
 
-assert "> 1": not(EMPTYBAG > EMPTYBAG)
-assert "> 2": not(EMPTYBAG > BigBag)
-assert "> 3": BigBag > EMPTYBAG
-assert "> 4": BigBag > SmallBag
-assert "> 5": not(SmallBag >= BigBag)
+assert "> 1" : not(1 > 2)
+assert "> 2" : not(2 > 2)
+assert "> 3" : not(A1 > A1)
+assert "> 4" : not(A1 > A2)
+assert "> 5" : not(A3 > A4)
+
+assert "> 6": not(EMPTYBAG > EMPTYBAG)
+assert "> 7": not(EMPTYBAG > BigBag)
+assert "> 8": BigBag > EMPTYBAG
+assert "> 9": BigBag > SmallBag
+assert "> 10": not(SmallBag >= BigBag)
 
 %% --- union
 
@@ -215,7 +245,7 @@ assert "comp 1": EMPTYREL o EMPTYREL == EMPTYREL
 assert "comp 2":  {<1,10>,<2,20>} o EMPTYREL == EMPTYREL
 assert "comp 3":  EMPTYREL o {<10,100>, <20,200>} == EMPTYREL
 assert "comp 4":  {<1,10>,<2,20>} o {<10,100>, <20,200>} == {<1,100>, <2,200>}
-rel[int,int] tst ={<1,10>,<2,20>} o {<10,100>, <20,200>} 
+rel[int,int] tst ={<1,10>, <2,20>, <3,15>} o {<10,100>, <20,200>} 
 bool b =  {<1,10>,<2,20>} o {<10,100>, <20,200>} == {<1,100>, <2,200>}
 %% --- x
 

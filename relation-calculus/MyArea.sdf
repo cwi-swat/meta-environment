@@ -10,11 +10,11 @@ exports
   
   area(Literal, IntCon, IntCon, IntCon, IntCon) -> Area
   get-filename(Area)				-> String
-  get-beginline(Area)				-> Integer
-  get-begincol(Area)				-> Integer
+  get-beginline(Area)				-> NatCon
+  get-begincol(Area)				-> NatCon
 
-  get-endline(Area)				-> Integer
-  get-endcol(Area)				-> Integer
+  get-endline(Area)				-> NatCon
+  get-endcol(Area)				-> NatCon
 
   context-free syntax
   

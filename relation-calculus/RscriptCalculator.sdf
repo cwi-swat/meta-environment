@@ -22,6 +22,7 @@ exports
 	 "{" {GENERATOR ","}+ "::" REXP  "}"			-> REXP
  
         evalp(REXP, RSTORE)            				-> Boolean
+        evali(REXP, RSTORE)            				-> Integer
         evale(REXP, RSTORE)            				-> Elem
         evalt(REXP, RSTORE)            				-> Tuple
         evalb(REXP, RSTORE)            				-> Bag[[Elem]]
@@ -70,6 +71,7 @@ exports
 	min1(Bag[[Elem]])					-> Integer
 	min2(Bag[[Elem]], Integer)				-> Integer
 
+	Integer "==" Integer					-> Boolean	%% Should be  in Integers!
 
 hiddens
 %%  imports asf/syntax/Comments
@@ -110,8 +112,11 @@ hiddens
         "$Stat*" [0-9\']*              -> RSTAT*
         "$Stat+" [0-9\']*              -> RSTAT+
 
+        "$BoolCon" [0-9\']*            -> BoolCon
         "$Bool" [0-9\']*               -> Boolean
+        "$NatCon" [0-9\']*             -> NatCon
         "$Integer" [0-9\']*            -> Integer
+
         "$String" [0-9\']*             -> String
 
 	"$Etype" [0-9\']*              -> REXPTYPE
