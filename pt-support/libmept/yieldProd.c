@@ -74,6 +74,8 @@ static int lengthOfCharRanges(PT_CharRanges charRanges)
   return length;
 }
 
+static int lengthOfSymbols(PT_Symbols symbols);
+
 static int
 lengthOfSymbol(PT_Symbol symbol)
 {
@@ -87,6 +89,13 @@ lengthOfSymbol(PT_Symbol symbol)
   if (PT_isSymbolSort(symbol)) {
     char *str = PT_getSymbolString(symbol);
     return strlen(str);
+  }
+  if (PT_isSymbolEmpty(symbol)) {
+    return 3;
+  }
+  if (PT_isSymbolSeq(symbol)) {
+    PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
+    return lengthOfSymbols(newSymbols) + 2;
   }
   if (PT_isSymbolOpt(symbol)) {
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
@@ -278,6 +287,8 @@ static int yieldCharRanges(PT_CharRanges charRanges, int idx, char *buf, int buf
   return idx;
 }
 
+static int yieldSymbols(PT_Symbols symbols, int idx, char *buf, int bufSize);
+
 static int 
 yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
 {
@@ -309,6 +320,19 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
     }
 
     return idx; 
+  }
+  if (PT_isSymbolEmpty(symbol)) {
+    buf[idx++] = '(';
+    buf[idx++] = ' ';
+    buf[idx++] = ')';
+    return idx;
+  }
+  if (PT_isSymbolSeq(symbol)) {
+    PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
+    buf[idx++] = '(';
+    idx = yieldSymbols(newSymbols, idx, buf, bufSize);
+    buf[idx++] = ')';
+    return idx;
   }
   if (PT_isSymbolOpt(symbol)) {
     PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);

@@ -58,6 +58,10 @@
 
   [Symbol, lex, lex(<symbol(Symbol)>)],
 
+  [Symbol, empty, empty],
+
+  [Symbol, seq, seq(<symbols(Symbols)>)],
+
   [Symbol, opt, opt(<symbol(Symbol)>)], 
 
   [Symbol, alt, alt(<lhs(Symbol)>,<rhs(Symbol)>)], 

@@ -1,5 +1,5 @@
 /*
- * Generated at Fri May  4 17:14:11 2001
+ * Generated at Mon May  7 13:46:23 2001
  */
 
 #ifndef __MEPT_dict_H
@@ -25,6 +25,8 @@ extern ATerm PT_patternSymbolSort;
 extern ATerm PT_patternSymbolPair;
 extern ATerm PT_patternSymbolAlt;
 extern ATerm PT_patternSymbolOpt;
+extern ATerm PT_patternSymbolSeq;
+extern ATerm PT_patternSymbolEmpty;
 extern ATerm PT_patternSymbolLex;
 extern ATerm PT_patternSymbolCf;
 extern ATerm PT_patternSymbolLit;
