@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <aterm2.h>
 #include <AsFix.h>
+#include <AsFix2src.h>
 #include <AsFix-access.h>
 
 #include "preparation.h"
