@@ -37,6 +37,10 @@ AC_SUBST(INSTALL_PROG)
 AC_SUBST(INSTALL_DATA)
 AC_SUBST(UNINSTALL)
 
+dnl Our own version of libdir iwhose value is set dynamically
+AC_SUBST(INSTLIBDIR)
+INSTLIBDIR="$libdir"
+
 dnl Is ranlib needed on this system?
 AC_PROG_RANLIB
 AC_PATH_PROG(AR,ar,/usr/bin/ar)
@@ -164,6 +168,7 @@ AC_CONFIG_SUBDIRS(asc-support sglr)
 
 dnl Which files need updating?
 AC_OUTPUT(
+	t \
 	Makefile Makefile.skel meta \
 	asource/Makefile \
 	compiler/Makefile compiler/c-source/Makefile \
