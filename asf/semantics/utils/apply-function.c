@@ -1,0 +1,127 @@
+/*
+
+    SGLR - the Scannerless Generalized LR parser.
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                         The Netherlands.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+
+*/
+/*
+ * $Id$
+ */
+
+#include <stdio.h>
+#include <aterm1.h>
+#include <aterm2.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <AsFix.h>
+#include <AsFix-access.h>
+#include <AsFix2src.h>
+#include <deprecated.h>
+
+static char myname[]    = "apply-function";
+static char myversion[] = "1.1";
+static char myarguments[] = "qf:s:m:bhi:o:tV";
+
+
+ATerm ApplyFunction(ATerm term, char *function, char *module, char *sort, 
+		    ATbool quoted)
+{
+   return term;
+}
+
+/*
+    Usage: displays helpful usage information
+ */
+void usage(void)
+{
+    fprintf(stderr,
+	"\nApply-function encapsulates AsFix1 terms with a quoted or unquoted prefix function.\n\n"
+        "Usage: apply-function -qbh -f <name> -s <sort> -i <file> -o <file> -tV . . .\n"
+        "Options:\n"
+        "\t-q              quoted prefix notation\n"
+        "\t-b              binary output mode (default)\n"
+        "\t-h              display help information (usage)\n"
+	"\t-f name         name of prefix function\n"
+	"\t-s sort         result sort of function\n"
+	"\t-m module       module where function is defined\n"
+        "\t-i filename     input from file (default stdin)\n"
+        "\t-o filename     output to file (default stdout)\n"
+        "\t-t              text output mode\n"
+        "\t-V              reveal program version (i.e. %s)\n",
+        myversion);
+}
+
+int main (int argc, char **argv)
+{
+  int c; /* option character */
+  ATerm bottomOfStack;
+  ATerm t;
+  ATbool txtout = ATfalse;
+  char  *ATlibArgv[] = { "", "-silent"};
+  char   *input_file_name  = "-";
+  char   *output_file_name = "-";
+  char *function = "";
+  char *sort = "";
+  char *module = "";
+  ATbool quoted = ATfalse;
+ 
+  if(argc == 1) { /* no arguments */
+    usage();
+    exit(1);
+  }
+
+  while ((c = getopt(argc, argv, myarguments)) != EOF)
+    switch (c) {
+    case 'q':  quoted = ATtrue;              break;    
+    case 'h':  usage();                      exit(0);
+    case 'i':  input_file_name  = optarg;    break;
+    case 'o':  output_file_name = optarg;    break;
+    case 'f':  function = optarg;            break;  
+    case 's':  sort = optarg;                break;
+    case 'm':  module = optarg;              break;
+    case 'b':  txtout = ATfalse;             break;
+    case 't':  txtout = ATtrue;              break;
+    case 'V':  fprintf(stdout, "%s %s\n", myname, myversion);
+      exit(0);
+    default :  usage();                      exit(1);
+    }
+ 
+  ATinit(2, ATlibArgv, &bottomOfStack);    /* Initialize Aterm library */
+  
+  t = ATreadFromNamedFile(input_file_name);
+  if(!t) {
+    ATerror("%s: could not read term from input file %s\n", myname, input_file_name);
+  }
+
+  if(!function || !strcmp(function, "") || 
+     !sort || !strcmp(sort,"") ||
+     !module || !strcmp(module,"")) {
+    usage();
+    exit(1);
+  } else {
+    t = ApplyFunction(t, function, module, sort, quoted);
+  }
+
+  if(txtout) {
+    ATwriteToNamedTextFile(t, output_file_name);
+  } else {
+    ATwriteToNamedBinaryFile(t, output_file_name);
+  }
+
+  return 0;
+}
