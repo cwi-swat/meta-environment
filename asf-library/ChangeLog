@@ -1,4 +1,11 @@
-# $Id$
+$Id$
+
+Mon Feb 16 10:11:57 CET 2004 <jurgenv@cwi.nl>
+ * str-len renamed to length
+ * str-cmp renamed to <, <=, >= and >
+ * bytes-cmp renamed to <, <=, >=, >
+ * gave set operators relative priorities: \ > /\ > \/
+
 
 Thu Feb 12 14:24:05 CET 2004 <jurgenv@cwi.nl>
  * Sets are completely functional (finally). The syntax is:
