@@ -1,0 +1,78 @@
+definition
+module Main
+imports Lists
+
+module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n\r]	-> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r]
+module basic/BoolCon
+
+exports
+
+sorts BoolCon
+context-free syntax
+
+    "true"  -> BoolCon {cons("true")}
+    "false" -> BoolCon {cons("false")}
+
+hiddens
+context-free start-symbols
+  BoolCon
+module basic/Comments
+
+imports
+  basic/Whitespace
+
+exports
+  lexical syntax
+    "%%" ~[\n]* "\n"	-> LAYOUT
+    "%" ~[\%\n]+ "%"	-> LAYOUT
+  context-free restrictions
+    LAYOUT? -/- [\%]
+module basic/Booleans
+
+imports basic/BoolCon
+exports
+  sorts Boolean
+
+  context-free syntax
+    BoolCon                     -> Boolean {cons("constant")}
+    lhs:Boolean "|" rhs:Boolean -> Boolean {left, cons("or")}
+    lhs:Boolean "&" rhs:Boolean -> Boolean {left, cons("and")}
+    "not" "(" Boolean ")" 	-> Boolean {cons("not")}
+    "(" Boolean ")"       	-> Boolean {bracket, cons("bracket")}
+
+  context-free priorities
+    Boolean "&" Boolean -> Boolean >
+    Boolean "|" Boolean -> Boolean
+
+hiddens
+  context-free start-symbols Boolean
+
+  imports
+    basic/Comments
+  variables
+    "Bool"[0-9]* 	-> Boolean
+    "Bool-con"[0-9]* 	-> BoolCon
+
+
+module Lists
+
+imports basic/Booleans
+imports basic/Whitespace
+
+exports
+  context-free start-symbols BooleanFuncList BooleanFunc
+  sorts BooleanFuncList BooleanFunc
+  context-free syntax
+    "[" {BooleanFunc ","}+ "]" -> BooleanFuncList
+
+  context-free syntax
+    "f" "(" Boolean* ")" -> BooleanFunc
+    "B+" -> Boolean+
+    "B*" -> Boolean*
+
