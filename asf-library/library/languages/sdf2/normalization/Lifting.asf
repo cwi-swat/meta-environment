@@ -15,11 +15,11 @@ equations
    [0] sym2syntax(_A +) = (sym2syntax(_A) "+")
    [0] sym2syntax({_A _B}+) = ("{" sym2syntax(_A) sym2syntax(_B) "}" "+") 
    [0] sym2syntax({_A _B}*) = ("{" sym2syntax(_A) sym2syntax(_B) "}" "*") 
-   [0] sym2syntax(_A n+) = (sym2syntax(_A) literal("""c*""") "+")
-          when natcon(c*) := n         
-   [0] sym2syntax({_A _B} n+) = 
-        ("{" sym2syntax(_A) sym2syntax(_B) "}" literal("""c*""") "+")
-          when  natcon(c*) := n
+%%   [0] sym2syntax(_A n+) = (sym2syntax(_A) literal("""c*""") "+")
+%%          when natcon(c*) := n         
+%%   [0] sym2syntax({_A _B} n+) = 
+%%        ("{" sym2syntax(_A) sym2syntax(_B) "}" literal("""c*""") "+")
+%%          when  natcon(c*) := n
 
    [0] sym2syntax(( => _B))  = ("(" "=>" sym2syntax(_B) ")")
    [0] sym2syntax((_A 'a => _B)) = ( "(" sym2syntax(_A) 'a' "=>" _B' ")" )

@@ -118,8 +118,15 @@ equations
         p6 := {_A _B}+             -> {_A _B}*
         ====>
         r[[{_A _B}*]] = syntax p0 p1 p2 p3 p4 p5 p6
-                        priorities {left: p1 p2 p3 p4} > {p5 p6}
-                        priorities {right: p3 p4}
+%%                        priorities {left: p1 p2 p3 p4} > {p5 p6}
+%%                        priorities {right: p3 p4}
+                   priorities {p1 p2 p3 p4} > {p5 p6}
+                   priorities p3 <0>> p4 
+                   priorities p2 <2>> p4
+                   priorities p3 <2>> p2
+                   priorities p3 <2>> p1 
+                   priorities p1 <2>> p2
+                   priorities p1 <2>> p3
                                    r[[ _A _B ]]
    [0]
         r[[ {_A _B}+ ]] = r[[ {_A _B}* ]]
@@ -134,23 +141,23 @@ equations
 %% $\Sym{A}+$, by productions of the form
 %% $\Sym{A}\;\{\Sym{A}\}(n-1)+\to\{\Sym{A}\}n+$.
 
-   [0] _A 0+ = _A*
-   [0] _A 1+ = _A+
+%%   [0] _A 0+ = _A*
+%%   [0] _A 1+ = _A+
 
-   [0]
-        n >= 2 == true, n' := n - 1, p := _A _A n'+ -> _A n+
-        =================================================
-        r[[ _A n+]] = syntax p r[[ _A n'+ ]]
+%%   [0]
+%%        n >= 2 == true, n' := n - 1, p := _A _A n'+ -> _A n+
+%%        =================================================
+%%        r[[ _A n+]] = syntax p r[[ _A n'+ ]]
 
 %% Constrained iteration is defined similarly for lists with separators.
 
-   [0] {_A _B} 0+ = {_A _B}*
-   [0] {_A _B} 1+ = {_A _B}+
+%%   [0] {_A _B} 0+ = {_A _B}*
+%%   [0] {_A _B} 1+ = {_A _B}+
 
-   [0]
-        n >= 2 == true, n' := n-1, p := _A _B {_A _B}n'+ -> {_A _B}n+
-        ==========================================================
-        r[[ {_A _B}n+]] = syntax p r[[ {_A _B}n'+ ]]
+%%   [0]
+%%        n >= 2 == true, n' := n-1, p := _A _B {_A _B}n'+ -> {_A _B}n+
+%%        ==========================================================
+%%        r[[ {_A _B}n+]] = syntax p r[[ {_A _B}n'+ ]]
 
 %% \paragraph{Tuples}
 %%
@@ -198,14 +205,3 @@ equations
         p := ('a => _B) "(" 'a ")" -> _B
         =======================================
         r[[ ('a => _B) ]] = syntax p r[['a _B]]
-
-%% \paragraph{Strategies}
-%%
-%% The strategy symbols do not generate explicit syntax.
-
-
-%%  [0]
-%%        "(" ++ _A ++ "->" ++ _B ++ ")" -> (_A -> _B) = p
-%%        ================================================
-%%        r[[ (_A -> _B) ]] =  syntax p r[[ _A _B ]]
-
