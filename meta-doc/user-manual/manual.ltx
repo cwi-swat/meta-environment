@@ -2736,7 +2736,8 @@ different, but semantically equivalent) ways:
 
 
 \noindent where ${\tt C}_1$, ${\tt C}_2$, ...  are conditions which may be 
-either positive (and have  the form `{\tt $S$ = $T$}'), 
+either matching (and have the form`{\tt $S$ := $T$}'),
+positive (and have  the form `{\tt $S$ == $T$}'), 
 or negative (and have the form `{\tt $S$ != $T$}').
 
 The conditions of an equation are evaluated from left to right. Let,
@@ -2805,6 +2806,9 @@ Next, the rules are traversed one after the other.  The textual order of the
 rules is irrelevant.  Instead they are ordered according to their
 \emph{specificity}: more specific rules come before more general rules and
 \link{default equations}[ (see Section~\Ref)]{DefaultEquations} come last.  
+\emph{Independent of the specificity, a specification should always be
+confluent and terminating.}
+
 If the selected subterm and the left-hand side of a
 rule (more precisely: of the left-hand side of its conclusion) match, we say
 that a \emph{redex} has been found and the following happens. The conditions
