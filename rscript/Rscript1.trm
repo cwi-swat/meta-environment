@@ -11,13 +11,13 @@ rel[str,int] D1 = (D0 o PRED) \ DEFS
 
 rel[int,int] D4 = reachX({3}, "y" . DEFS, PRED)
 
-bool  reaches_root(rel[str,int] R) = 0 elem range(R)
+bool  reaches_root(rel[str,int] R) = 0 in range(R)
 
-rel[str,int]  UN = { <V, N> | <V, N> in USES, <ROOT, N> elem reachX({0}, V . DEFS, PRED) }
+rel[str,int]  UN = { <V, N> | <V, N> : USES, <ROOT, N> in reachX({0}, V . DEFS, PRED) }
 
 bool tst(int N) = true
 
-rel[str,int]  UN1 = { <V, N> | <V, N> in USES, <ROOT, N> elem carX(PRED, V .  DEFS)+ }
+rel[str,int]  UN1 = { <V, N> | <V, N> : USES, <ROOT, N> in carX(PRED, V .  DEFS)+ }
 
 <T1,T2> swap(<T2,T1> P) = <sec(P), fst(P)>
 
@@ -28,23 +28,23 @@ rel[int,int] Rel2     = {<1, 10>, <3, 30>}
 
 <str,int> P1 = swap(<0,"a">)
 
-rel[int,str] SRel1 = {swap(<V,N>) |<V,N> in Rel1  }
+rel[int,str] SRel1 = {swap(<V,N>) |<V,N> : Rel1  }
 
-rel[int,bag[int]] VERT = { <V, {1,2,3}> |  V in {1,2,3} }
+rel[int,bag[int]] VERT = { <V, {1,2,3}> |  V : {1,2,3} }
 
 
 bag[int] BBB = 2 . {<1,10>, <2, 20>, <3,30>}
 
-bag[str] Tst      = {X | X in Bag1  }
-rel[str,str] REL   = {<X, Y> | X in Bag1, Y in Bag2}
+bag[str] Tst      = {X | X : Bag1  }
+rel[str,str] REL   = {<X, Y> | X : Bag1, Y : Bag2}
 
-rel[X,Y] finv(rel[Y,X] REL) = {<Y, X> | <X, Y> in REL }
-bag[X] fdom(rel[X,Y] REL) = {X | <X, Y> in REL }
+rel[X,Y] finv(rel[Y,X] REL) = {<Y, X> | <X, Y> : REL }
+bag[X] fdom(rel[X,Y] REL) = {X | <X, Y> : REL }
 
-rel[X,Y] pair(bag[X] R1, bag[Y] R2) = { <X, Y> | X in R1, Y in R2 }
+rel[X,Y] pair(bag[X] R1, bag[Y] R2) = { <X, Y> | X : R1, Y : R2 }
 
 rel[A,C] comp(rel[A,B] R1, rel[B,C] R2) =
-    { <X, T> | <X, Y> in R1, <S, T> in R2, Y == S }
+    { <X, T> | <X, Y> : R1, <S, T> : R2, Y == S }
 
 rel[int,str] bag5     = inv(DEFS)
 bag[str] bag6     = fdom(DEFS)

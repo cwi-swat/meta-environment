@@ -42,7 +42,7 @@ $Error]>
 [i2s] rvar2str(rvar(Char*)) = strcon(""" Char* """)
 
 [cve-1] convert-errors([$Error+]) = convert-errors1([$Error+])
-[cve-1] convert-errors([]) =  list([listitem("Rscript is type correct!", [ "ShowSource" ], area("",0,0,0,0))])
+[cve-1] convert-errors([]) =  list([listitem("Rscript is type correct!", [ "ShowRscriptSource" ], area("",0,0,0,0))])
 
 
 [cve-1] convert-errors1([$Error*]) = list([$ListItem*])
@@ -51,20 +51,20 @@ $Error]>
 
 [cve-2] convert-errors1([]) = list([])
 
-[e2i-1] e2i($Exp cannot be typed)	= listitem("Expression cannot be typed", [ "ShowSource" ], get-area($Exp))
-[e2i-2] e2i($From cannot be typed) 	= listitem("From cannot be typed", [ "ShowSource" ], get-area($From))
-[e2i-3] e2i($Bag cannot be typed) 	= listitem("Bag cannot be typed", [ "ShowSource" ], get-area($Bag))
-[e2i-4] e2i($Rel cannot be typed) 	= listitem("Relation cannot be typed", [ "ShowSource" ], get-area($Rel))
-[e2i-5] e2i(Undeclared $Var) 		= listitem("Undeclared: " || rvar2str($Var), [ "ShowSource" ], get-area($Var))
-[e2i-6] e2i($Var redeclared) 		= listitem("Redeclared: " || rvar2str($Var), [ "ShowSource" ], get-area($Var))
+[e2i-1] e2i($Exp cannot be typed)	= listitem("Expression cannot be typed", [ "ShowRscriptSource" ], get-area($Exp))
+[e2i-2] e2i($From cannot be typed) 	= listitem("From cannot be typed", [ "ShowRscriptSource" ], get-area($From))
+[e2i-3] e2i($Bag cannot be typed) 	= listitem("Bag cannot be typed", [ "ShowRscriptSource" ], get-area($Bag))
+[e2i-4] e2i($Rel cannot be typed) 	= listitem("Relation cannot be typed", [ "ShowRscriptSource" ], get-area($Rel))
+[e2i-5] e2i(Undeclared $Var) 		= listitem("Undeclared: " || rvar2str($Var), [ "ShowRscriptSource" ], get-area($Var))
+[e2i-6] e2i($Var redeclared) 		= listitem("Redeclared: " || rvar2str($Var), [ "ShowRscriptSource" ], get-area($Var))
 [e2i-7] e2i(Incompatible argument types $Etype in $Exp) = 
-		listitem("Incompatible arguments of type " || t2s($Etype), [ "ShowSource" ], get-area($Exp))
+		listitem("Incompatible arguments of type " || t2s($Etype), [ "ShowRscriptSource" ], get-area($Exp))
 [e2i-8] e2i($Exp should have type $Etype)= 
-	listitem("Expression should have type " || t2s($Etype), [ "ShowSource" ], get-area($Exp))
-[e2i-9] e2i($Exp should be of type bag) = listitem("Expression should be of type bag", [ "ShowSource" ], get-area($Exp))
-[e2i-10] e2i($Exp should be of type rel) = listitem("Expression should be of type relation", [ "ShowSource" ], get-area($Exp))
+	listitem("Expression should have type " || t2s($Etype), [ "ShowRscriptSource" ], get-area($Exp))
+[e2i-9] e2i($Exp should be of type bag) = listitem("Expression should be of type bag", [ "ShowRscriptSource" ], get-area($Exp))
+[e2i-10] e2i($Exp should be of type rel) = listitem("Expression should be of type relation", [ "ShowRscriptSource" ], get-area($Exp))
 [e2i-11] e2i(No definition for $Var with argument $Etype) = 
-        listitem("No definition for " || rvar2str($Var) || " with argument " || t2s($Etype), [ "ShowSource" ], get-area($Var))
+        listitem("No definition for " || rvar2str($Var) || " with argument " || t2s($Etype), [ "ShowRscriptSource" ], get-area($Var))
 
 [t2s-1]	t2s(int) 			= "int"
 [t2s-2] t2s(bool) 			= "bool"
@@ -229,18 +229,31 @@ $Error]>
       ===========================================
       check(not $Exp, $Tenv) = <bool, $Tenv'>
 
-[check-elem1] 
-      $Exp = $Exp1 elem $Exp2,
+[check-in1] 
+      $Exp = $Exp1 in $Exp2,
       check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
       check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
-      compat($Exp, $Etype1 elem $Etype2, $Tenv'') = <$Etype3, $Tenv'''>
+      compat($Exp, $Etype1 in $Etype2, $Tenv'') = <$Etype3, $Tenv'''>
       ===========================================
       check($Exp, $Tenv) = <bool, $Tenv'''>
 
-[compat-elem1] 
-      compat($Exp, $Etype elem bag[$Etype], $Tenv) = <bool, $Tenv>
-[compat-elem2] 
-      compat($Exp, <$Etype1, $Etype2> elem rel[$Etype1,$Etype2], $Tenv) = <bool, $Tenv>
+[compat-in1] 
+      compat($Exp, $Etype in bag[$Etype], $Tenv) = <bool, $Tenv>
+[compat-2] 
+      compat($Exp, <$Etype1, $Etype2> in rel[$Etype1,$Etype2], $Tenv) = <bool, $Tenv>
+
+[check-notin1] 
+      $Exp = $Exp1 notin $Exp2,
+      check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
+      check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
+      compat($Exp, $Etype1 notin $Etype2, $Tenv'') = <$Etype3, $Tenv'''>
+      ===========================================
+      check($Exp, $Tenv) = <bool, $Tenv'''>
+
+[compat-notin1] 
+      compat($Exp, $Etype notin bag[$Etype], $Tenv) = <bool, $Tenv>
+[compat-notin2] 
+      compat($Exp, <$Etype1, $Etype2> notin rel[$Etype1,$Etype2], $Tenv) = <bool, $Tenv>
 
 [check-eq] 
       $Exp = $Exp1 == $Exp2,
@@ -252,6 +265,17 @@ $Error]>
 
 [compat-eq]
       compat($Exp, $Etype == $Etype, $Tenv) = <bool, $Tenv>
+
+[check-ne] 
+      $Exp = $Exp1 != $Exp2,
+      check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
+      check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
+      compat($Exp, $Etype1 != $Etype2, $Tenv'') = <$Etype3, $Tenv'''>
+      ===========================================
+      check($Exp, $Tenv) = <bool, $Tenv'''>
+
+[compat-ne]
+      compat($Exp, $Etype != $Etype, $Tenv) = <bool, $Tenv>
 
 [check-le] 
       $Exp = $Exp1 <= $Exp2, 
@@ -439,12 +463,12 @@ $Error]>
 [af1] check($Exp, $Tenv) = <$Etype, $Tenv'>,
       require-bag-type($Exp, $Var, $Etype, $Tenv') = $Tenv''
       ==========================================
-      add-from($Var in $Exp, $From*, $Tenv) = add-from($From*, $Tenv'')
+      add-from($Var : $Exp, $From*, $Tenv) = add-from($From*, $Tenv'')
 
 [af2] check($Exp, $Tenv) = <$Etype, $Tenv'>, 
       require-rel-type($Exp, $Var1, $Var2, $Etype, $Tenv') = $Tenv''
       ==========================================
-      add-from(<$Var1, $Var2> in $Exp, $From*, $Tenv) = add-from($From*, $Tenv'')
+      add-from(<$Var1, $Var2> : $Exp, $From*, $Tenv) = add-from($From*, $Tenv'')
 
 [af3] add-from( , $Tenv) = $Tenv
 
@@ -453,11 +477,11 @@ $Error]>
 
 [df1] delete($Tenv, $Var) = $Tenv'
       ==========================================
-      del-from($Var in $Exp, $From*, $Tenv) = del-from($From*, $Tenv')
+      del-from($Var : $Exp, $From*, $Tenv) = del-from($From*, $Tenv')
 
 [df2] delete($Tenv, $Var1) = $Tenv', delete($Tenv', $Var2) = $Tenv''
       ==========================================
-      del-from(<$Var1, $Var2> in $Exp, $From*, $Tenv) = del-from($From*, $Tenv'')
+      del-from(<$Var1, $Var2> : $Exp, $From*, $Tenv) = del-from($From*, $Tenv'')
 
 [df3] del-from( , $Tenv) = $Tenv
 
@@ -479,6 +503,24 @@ $Error]>
       del-from($From+, $Tenv''') = $Tenv''''
       ======================================
       check({$Exp2 | $From+, $Exp1 }, $Tenv) = <$Etype', $Tenv''''>
+
+%% --- Check Exists
+
+[check-exists1]
+	add-from($From, $Tenv) = $Tenv',
+	require-type($Test, bool, $Tenv') = $Tenv'',
+	del-from($From, $Tenv'') = $Tenv'''
+	=====================================
+	check(exists($From | $Test), $Tenv) = <bool, $Tenv'''>
+
+%% --- Check Forall
+
+[check-forall1]
+	add-from($From, $Tenv) = $Tenv',
+	require-type($Test, bool, $Tenv') = $Tenv'',
+	del-from($From, $Tenv'') = $Tenv'''
+	=====================================
+	check(forall($From | $Test), $Tenv) = <bool, $Tenv'''>
 
 %% --- Check function application
 

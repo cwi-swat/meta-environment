@@ -21,28 +21,28 @@ equations
 [car-1]  carrier({<E,E'>, Tuple*}) = union(union({E},{E'}), carrier({Tuple*}))
 [car-2]  carrier({}) = {}
 
-[domR-1] elem(E, {E*}) = false
+[domR-1] in(E, {E*}) = false
          ==================================================
          domR({Tuple*1, <E, E'>, Tuple*2}, {E*}) = domR({Tuple*1, Tuple*2}, {E*})
 
 [default-domR]
 	 domR({Tuple*}, {E*}) = {Tuple*}
 
-[domX-1] elem(E, {E*}) = true
+[domX-1] in(E, {E*}) = true
          ==================================================
          domX({Tuple*1, <E, E'>, Tuple*2}, {E*}) = domX({Tuple*1, Tuple*2}, {E*})
 
 [default-domX]
 	 domX({Tuple*}, {E*}) = {Tuple*}
 
-[ranR-1] elem(E', {E*}) = false
+[ranR-1] in(E', {E*}) = false
          ==================================================
          ranR({Tuple*1, <E, E'>, Tuple*2}, {E*}) = ranR({Tuple*1, Tuple*2}, {E*})
 
 [default-ranR]
 	 ranR({Tuple*}, {E*}) = {Tuple*}
 
-[ranX-1] elem(E', {E*}) = true
+[ranX-1] in(E', {E*}) = true
          ==================================================
          ranX({Tuple*1, <E, E'>, Tuple*2}, {E*}) = ranR({Tuple*1, Tuple*2}, {E*})
 
@@ -50,14 +50,14 @@ equations
 	 ranX({Tuple*}, {E*}) = {Tuple*}
 
 
-[carR-1] elem(E, {E*}) & elem(E', {E*}) = false
+[carR-1] in(E, {E*}) & in(E', {E*}) = false
          ==================================================
          carR({Tuple*1, <E, E'>, Tuple*2}, {E*}) = carR({Tuple*1, Tuple*2}, {E*})
 
 [default-carR]
 	 carR({Tuple*}, {E*}) = {Tuple*}
 
-[carX-1] elem(E, {E*}) |  elem(E', {E*}) = true
+[carX-1] in(E, {E*}) |  in(E', {E*}) = true
          ==================================================
          carX({Tuple*1, <E, E'>, Tuple*2}, {E*}) = carX({Tuple*1, Tuple*2}, {E*})
 

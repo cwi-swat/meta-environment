@@ -49,6 +49,8 @@ exports
    sorts OP
 
    context-free syntax
+
+	 "{" {FROM ","}+ "::" REXP ("," REXP)? "}"	-> REXP
  
         evalp(REXP, RSTORE)            -> Boolean
         evale(REXP, RSTORE)            -> Elem
@@ -59,10 +61,10 @@ exports
         apply "(" RVALUE OP RVALUE ")"   -> RVALUE
         apply "(" OP RVALUE ")"         -> RVALUE
 
-        "dominators"                   -> RVAR {prefer}
-
-        "elem"			       -> OP
+        "in"			       -> OP
+        "notin"			       -> OP
         "=="                           -> OP
+        "!="                           -> OP
         "<="                           -> OP
         "<"                            -> OP
         ">="                           -> OP
@@ -82,18 +84,11 @@ exports
 
         eval-iter2(RVAR, RVAR, Rel[[Elem]], RVALUE, REXP, RSTORE)	-> RVALUE
         eval-citer2(RVAR, RVAR, Rel[[Elem]], RVALUE, REXP, REXP, RSTORE)-> RVALUE
-
-%%        gen(RVAR, Bag[[Elem]], Bag[[Elem]], Boolean)       -> GEN
-%%        gen(RVAR, RVAR, Rel[[Elem]], Rel[[Elem]], Boolean)  -> GEN
-
-%%        "[" {GEN ","}* "]"                                -> GENS
-%%        "get_from" "(" {FROM ","}* "," RSTORE ")"         -> GENS
-%%        "has_more" "(" GENS ")"                           -> Boolean
-%%        "get_next" "(" GENS ")"                           -> GENS
-%%        "get_cur" "(" GENS "," RSTORE ")"                 -> RSTORE
-
-%%        valformer(GENS, RVALUE, REXP, RSTORE, REXP)        -> RVALUE
-	append(RVALUE, RVALUE)				-> RVALUE
+	append(RVALUE, RVALUE)						-> RVALUE
+	existsb(RVAR, Bag[[Elem]], REXP, RSTORE)				-> Boolean
+	existsr(RVAR, RVAR, Rel[[Elem]], REXP, RSTORE)				-> Boolean
+	forallb(RVAR, Bag[[Elem]], REXP, RSTORE)				-> Boolean
+	forallr(RVAR, Rel[[Elem]], REXP, RSTORE)				-> Boolean
 
 hiddens
 %%  imports asf/syntax/Comments
@@ -105,6 +100,7 @@ hiddens
 
         "$Var" [0-9\']*                -> RVAR
         "$Exp"  [0-9\']*               -> REXP
+        "$Test"  [0-9\']*               -> REXP
         "$Exp*"  [0-9\']*              -> { REXP ","}*
         "$Exp+"  [0-9\']*              -> { REXP ","}+
 
@@ -122,10 +118,6 @@ hiddens
         "$From*" [0-9\']*              -> {FROM ","}*
         "$From+" [0-9\']*              -> {FROM ","}+
 
-%%        "$Gen*" [0-9\']*               -> { GEN ","}*
-%%        "$Gen+" [0-9\']*               -> { GEN ","}+
-%%        "$Gens" [0-9\']*               -> GENS
-
         "$Script" [0-9\']*             -> RSCRIPT
 
         "$Stat" [0-9\']*               -> RSTAT
@@ -133,7 +125,7 @@ hiddens
 
         "$Bool" [0-9\']*               -> Boolean
         "$Integer" [0-9\']*            -> Integer
-
+        "$String" [0-9\']*           	-> String
 	"$Etype" [0-9\']*              -> REXPTYPE
 
      

@@ -80,12 +80,12 @@ equations
 [sz-1] size({}) = 0
 [sz-2] size({E, E*}) = 1 + size({E*})
 
-%% --- elem(E, Bag)
+%% --- in(E, Bag)
 
-[el-1]  elem(E, {E*1, E, E*2}) = true
+[in-1]  in(E, {E*1, E, E*2}) = true
 
-[default-el-2]
-	elem(E, {E*}) = false
+[default-in-2]
+	in(E, {E*}) = false
 
 %% if
 
