@@ -1,0 +1,16 @@
+#! /bin/sh
+
+echo '[afuns([[dummy,dummy]]),'
+echo ' terms('
+
+for i in $*; do 
+  echo "["
+  basename $i .pt
+  echo ","
+  __ATERM__/bin/trmcat $i
+  echo "]"
+  echo ","
+done
+  echo "[dummy,dummy]"
+
+echo ')]'

@@ -1,0 +1,20 @@
+
+
+EXTRA_DIST=$(wildcard *.pt)
+
+noinst_LIBRARIES=libtestTerms.a
+noinst_SCRIPTS=genTermsDict.sh
+
+noinst_HEADERS=terms_dict.h
+libtestTerms_a_SOURCES=terms_dict.c
+
+INCLUDES=-I$(ATERM)/include
+
+testTerms.c: terms.dict
+	$(ATERM)/bin/dicttoc -dict $< 
+
+terms.dict: genTermsDict.sh ${srcdir}/*.pt
+	./genTermsDict.sh ${srcdir}/*.pt > $@
+
+%.sh: %.sh.src Makefile
+	sed 's@__ATERM__@$(ATERM)@g' < $< > $@ && chmod +x $@	
