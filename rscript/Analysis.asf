@@ -6,32 +6,35 @@ equations
      ============================
      label(Program) = Program'
 
-[l2] label(Id := Exp, Int) = < [Int] Id := Exp, Int + 1>
+[l2] label(Stat, Int) = < [Int] Stat, Int+1 >
 
-[l3] label(if Exp then Stat*1 else Stat*2 fi, Int) =
-     < if [Int] Exp then Stat*1 else Stat*2 fi [Int+1], Int+2 >
+[l3] label(  , Int) = < [Int] skip, Int+1 >
 
-[l4] label(while Exp do Stat* od, Int) =
-     < while [Int] Exp do Stat* od [Int+1], Int + 2>
+%%[l2] label(Id := Exp, Int) = < [Int] Id := Exp, Int + 1>
+
+%%[l3] label(if Exp then Stat*1 else Stat*2 fi, Int) =
+%%     < if [Int] Exp then Stat*1 else Stat*2 fi [Int+1], Int+2 >
+
+%%[l4] label(while Exp do Stat* od, Int) =
+%%     < while [Int] Exp do Stat* od [Int+1], Int + 2>
 
 %% -- Construct the control flow graph
 
+[as1] add-succ(Rel, Rstore) = add(SUCC, Rel, Rstore)
+
+[as2] add-succ(Pair, Rstore) = add(SUCC, Pair, Rstore)
+
 [cf1] 
-      Rstore' = add(SUCC, {<Int1, get-first(Stat*)>, 
-                           <Int1, Int2>,
-                           <get-last(Stat*), Int1> }, 
-                   Rstore)
+      Rstore' = add-succ({<Int, get-first(Stat*)>}, Rstore),
+      Rstore''= add-last(Stat*, Int, Rstore'),
       ========================================================
-      controlflow(while [Int1] Exp do  Stat* od [Int2], Rstore) = Rstore'
+      controlflow([Int] while Exp do Stat* od, Rstore) = Rstore''
 
 [cf2]
-      Rstore' = add(SUCC, { <Int1, get-first(Stat*1)>,
-                            <get-last(Stat*1), Int2>,
-                            <Int1, get-first(Stat*2)>,
-                            <get-last(Stat*2), Int2> },
-                    Rstore)
+      Rstore' = add-succ({ <Int1, get-first(Stat*1)>,
+                           <Int1, get-first(Stat*2)> }, Rstore)
       ========================================================
-      controlflow(if [Int1] Exp then Stat*1 else Stat*2 fi [Int2], Rstore) = Rstore'
+      controlflow([Int1] if Exp then Stat*1 else Stat*2 fi, Rstore) = Rstore'
 
 [cf3] controlflow(Stat+, Rstore) = Rstore'
       ========================================================
@@ -39,12 +42,13 @@ equations
       add(SUCC, <get-last(Stat), get-first(Stat+)>, Rstore')
 
 [gf-1] get-first([Int] Stat; Stat*) = Int
-[gf-1] get-first(if [Int1] Exp then Stat*1 else Stat*2 fi [Int2]; Stat*) = Int1
-[gf-1] get-first(while [Int1] Exp do  Stat*1 od [Int2]; Stat*2) = Int1
 
-[gl-1] get-last(Stat*; [Int] Stat) = Int
-[gl-1] get-last(Stat*; if [Int1] Exp then Stat*1 else Stat*2 fi [Int2]) = Int2
-[gl-1] get-last(Stat*1; while [Int1] Exp do  Stat*2 od [Int2]) = Int2
+[gl-1] get-last(Stat*; [Int] Stat) = {Int}
+[gl-1] get-last(Stat*; [Int] if Exp then Stat*1 else Stat*2 fi) = get-last(Stat*1) union get-last(Stat*2)
+
+[al-1] get-last(Stat*) = Bag
+       ========================================================
+       add-last(Stat*, Int, Rstore) = add-succ(Bag x {Int}, Rstore)
 
 %% -- collect defines and uses
 
@@ -52,7 +56,16 @@ equations
     ==========================================================
     use-defs([Int] Id := Exp, Rstore) = add(DEFS, <Id, Int>, Rstore')
 
-[5] uses(Id, Rstore, Int) = add(USES, <Id, Int> , Rstore)
+[5] Rstore' = uses(Exp, Rstore, Int),
+    ==========================================================
+    use-defs([Int] if Exp then Stat*1 else Stat*2 fi, Rstore) = Rstore'
+
+[6] Rstore' = uses(Exp, Rstore, Int),
+    ==========================================================
+    use-defs([Int] while Exp do  Stat* od, Rstore) = Rstore'
+
+
+[7] uses(Id, Rstore, Int) = add(USES, <Id, Int> , Rstore)
 
 %% -- Analyze a program
 
