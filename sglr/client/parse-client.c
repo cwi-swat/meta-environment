@@ -25,6 +25,8 @@ char  *parse_table_name = NULL;
 char  *hostname         = NULL;
 char  *port             = NULL;
 char  *tool             = program_name;
+ATbool asfix1_mode      = ATfalse;
+
 
 size_t  FileSize(char *fnam)
 {
@@ -92,11 +94,19 @@ void rec_ack_event(int cid, ATerm t) {
     if(!(buf = ReadFile(input_file_name,&size)))
       exit(1);
 
-    ATBwriteTerm(cid,
-                 ATmake("snd-event(parsetext(<str>,<str>,<str>))",
-                        parse_table_name,
-			start_symbol?start_symbol:"",
-			buf));
+    if(asfix1_mode) {
+      ATBwriteTerm(cid,
+                   ATmake("snd-event(parsetext-asfix1(<str>,<str>,<str>))",
+                          parse_table_name,
+			  start_symbol?start_symbol:"",
+			  buf));
+    } else {
+      ATBwriteTerm(cid,
+                   ATmake("snd-event(parsetext(<str>,<str>,<str>))",
+                          parse_table_name,
+			  start_symbol?start_symbol:"",
+			  buf));
+    }
     free(buf);
   } else if(ATmatch(t,
                   "parsetext(<str>,<str>,<str>,parse-error(<term>))",
@@ -142,17 +152,19 @@ void handle_options (int argc, char **argv)
 {
   int c; /* option character */
 
-  while ((c = getopt(argc, argv, "hi:o:p:s:H:P:T:")) != EOF)
+  while ((c = getopt(argc, argv, "12hi:o:p:s:H:P:T:")) != EOF)
     switch (c) {
-      case 'h':   Usage(stdout, ATtrue);        exit(0);
-      case 'i':   input_file_name  = optarg;    break;
-      case 'o':   output_file_name = optarg;    break;
-      case 'p':   parse_table_name = optarg;    break;
-      case 's':   start_symbol     = optarg;    break;
-      case 'H':   hostname         = optarg;    break;
-      case 'P':   port             = optarg;    break;
-      case 'T':   tool             = optarg;    break;
-      default:  Usage(stderr, ATfalse);        exit(1);
+      case '1':   asfix1_mode = ATtrue;       break;
+      case '2':   asfix1_mode = ATfalse;      break;
+      case 'h':   Usage(stdout, ATtrue);      exit(0);
+      case 'i':   input_file_name  = optarg;  break;
+      case 'o':   output_file_name = optarg;  break;
+      case 'p':   parse_table_name = optarg;  break;
+      case 's':   start_symbol     = optarg;  break;
+      case 'H':   hostname         = optarg;  break;
+      case 'P':   port             = optarg;  break;
+      case 'T':   tool             = optarg;  break;
+      default:  Usage(stderr, ATfalse);       exit(1);
   }
   if(!input_file_name || !parse_table_name) {
     Usage(stderr, ATfalse);
@@ -166,7 +178,6 @@ int main (int argc, char **argv)
   ATerm bottomOfStack;
   ATerm t;
   char  *ATlibArgv[] = { "", "-silent"};
-
 
   handle_options(argc, argv);
 

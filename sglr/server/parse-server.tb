@@ -13,10 +13,21 @@ process Parser is
     T  : term
   in
     execute(sglr, P?) .
-    ( rec-msg(Id?, parse-string(L?, G?, S?)) .
+    (
+      rec-msg(Id?, parse-string(L?, G?, S?)) .
       snd-eval(P, parse-string(L, G, S)) .
       rec-value(P, T?) .
       snd-msg(Id, parse-result(T))
+    +
+      rec-msg(Id?, parse-string-as-asfix1(L?, G?, S?)) .
+      snd-eval(P, parse-string-as-asfix1(L, G, S)) .
+      (
+        rec-value(P, asfix1-parsetree(T?)) .
+        snd-msg(parse-result-asfix1(Id, parse-tree(T)))
+      +
+        rec-value(P, parse-error(Err?,T?)) .
+        snd-msg(parse-result-asfix1(Id, parse-error(Err,T)))
+      )
     +
       rec-msg(parse-file(L?, G?, FN?, Id?)) .
       snd-eval(P, parse-file(L, G, FN)) .
@@ -34,23 +45,6 @@ process Parser is
     )
     * rec-disconnect(P)
   endlet
-
-tool a2toa1 is { command = "a2toa1 -silent" }
-
-process AsFix2toAsFix1 is
-let
-  Id : term,
-  T  : term,
-  T1 : term,
-  A2toa1 : a2toa1
-in
-  execute(a2toa1, A2toa1?).
-  ( rec-msg(Id?,a2toa1(T?)).
-    snd-eval(A2toa1,trans(T)).
-    rec-value(A2toa1,T1?).
-    snd-msg(Id,converted(T1))
-  ) * delta
-endlet
 
 
 tool parse-client is { }
@@ -76,32 +70,25 @@ in
   snd-msg(R,open-language(LN,LT)) .
   rec-msg(R,language-available(L?)) .
   snd-ack-event(R, open-language(LN,LT)) .
-  ( rec-event(R, parsetext(LN?,TS?,S?)) .
+  (
+    rec-event(R, parsetext(LN?,TS?,S?)) .
     snd-msg(R, parse-string(LN,TS,S)) .
     (
-      ( rec-msg(R, parse-result(parsetree(T?,I?))) .
-        if equal(I,0) then
-          snd-msg(R,a2toa1(T)) .
-          rec-msg(R,converted(Tf?)) .
-          snd-ack-event(R, parsetext(LN, TS, S, Tf))
-        else
-          snd-ack-event(R, parsetext(LN, TS, S, parse-error(ambiguities(I))))
-        fi
-      )
-      +
-      ( rec-msg(R, parse-result(eof-error)) .
-        snd-ack-event(R, parsetext(LN, TS, S, parse-error(eof-error)))
-      )
-      +
-      ( rec-msg(R,
-                parse-result(parse-error([character(Ch?),
-                                          line(Li?),
-                                          col(Co?),
-                                          char(Char?)]))) .
-        snd-ack-event(R, parsetext(LN, TS, S,
-                         parse-error([character(Ch),line(Li),
-                                      col(Co),char(Char)])))
-      )
+      rec-msg(R, parse-result(parse-error(T?))) .
+      snd-ack-event(R, parsetext(LN, TS, S, parse-error(T)))
+    +
+      rec-msg(R, parse-result(parsetree(T?,I?))) .
+      snd-ack-event(R, parsetext(LN, TS, S, Tf))
+    )
+  +
+    rec-event(R, parsetext-asfix1(LN?,TS?,S?)) .
+    snd-msg(R, parse-string-as-asfix1(LN,TS,S)) .
+    (
+      rec-msg(R, parse-result(parse-error(T?))) .
+      snd-ack-event(R, parsetext(LN, TS, S, parse-error(T)))
+    +
+      rec-msg(R, parse-result(parsetree(T?,I?))) .
+      snd-ack-event(R, parsetex-asfix1t(LN, TS, S, Tf))
     )
   ) * rec-disconnect(R)
 endlet
