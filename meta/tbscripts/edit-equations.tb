@@ -1,0 +1,54 @@
+process Edit-equations(Module: str) is
+let
+  Id          : term,
+  T           : term,
+  Tid         : int,
+  Fn          : str,
+  TE          : text-edit,
+  Path        : str,
+  Eqs         : term,
+  Time        : term,
+  ErrMsg      : str,
+  Src         : str,
+  StartEditor : term
+in
+  Src := "" .
+  StartEditor := true .
+  Id := process-id .
+  snd-note(ui-status(stat(Id,"Opening equations editor..."))) .
+  snd-msg(get-eqs-path-from-db(Module)) .
+  rec-msg(path(Path?)) .
+  snd-msg(get-eqs-asfix(Module)) .
+  (
+    rec-msg(eqs(Eqs?)) .
+    snd-msg(pp(Eqs)) .
+    rec-msg(source(Src?))
+  +
+    rec-msg(eqs-unchanged(Eqs?)) .
+    snd-msg(pp(Eqs)) .
+    rec-msg(source(Src?))
+  +
+    rec-msg(no-eqs)
+  +
+    rec-msg(unavailable) .
+    snd-msg(open-eqs-text-file(Module)) .
+    (
+      rec-msg(opened-file(raw, Module, Src?, Path?, Time?))
+    +
+      rec-msg(error-opening(Module)) .
+      snd-msg(create-new-equations(Module)) .
+      (
+        rec-msg(new-equations-created(Module, Path?))
+      +
+        rec-msg(new-equations-not-created(ErrMsg?)) .
+	StartEditor := false .
+	snd-note(ui-status(errorf("Could not create empty equations: %s",
+				  [ErrMsg])))
+      )
+    )
+  ).
+  if equal(StartEditor, true) then
+    create(Editor(Module, Src, Path, Module, "eqs"), Tid?)
+  fi .
+  snd-note(ui-status(endstat(Id)))
+endlet
