@@ -3,3 +3,9 @@ Makefile
 .deps
 script2latex
 verbatim
+*.dvi
+*.ps
+*.aux
+*.log
+*.toc
+*.tex
