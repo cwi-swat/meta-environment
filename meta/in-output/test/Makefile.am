@@ -31,5 +31,6 @@ CLEANFILES = in-output-test
 
 % : %.sh.src Makefile
 	sed 's@__TOOLBUS__@$(TOOLBUS)@g;\
+             s@__TOP_SRCDIR__@$(top_srcdir)@g;\
 	     s@__DATADIR__@$(datadir)@g' < $< > $@ && \
 	chmod +x $@

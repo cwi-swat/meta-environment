@@ -19,7 +19,7 @@
 
     $Id$
 */
-#include "../in-output.idef"
+#include <in-output.idef>
 
 process Test is
   snd-msg(process-search-paths("meta.conf", ["."])) .
