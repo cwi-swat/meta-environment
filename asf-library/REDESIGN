@@ -1,0 +1,521 @@
+
+Restructuring of the ASF+SDF library
+====================================
+
+(1) Design new structure and conventions
+    (a) Global organization of the library
+    (b) Set up Documentation
+    (c) Set up Testing
+(2) Phase 1: programming languages and "pure" datatypes
+(3) Phase 2: design philosophy for side-effects
+(4) Phase 3: design and add data types with side-effects
+             (HashTables, FileIO, Messages, etc.)
+
+Below initial thoughts about the structure.
+
+
+Structure of the current Library
+===============================
+
+asf	syntax	Ambiguities
+		Comments
+		Equation
+		Equations
+		Lexicals
+		Placeholders
+		Variables
+
+	tools	Annotations
+		ATermAnnotations
+		Normalization
+		PosInfo
+		TestingFramework
+		ToolBus.sdf
+
+asfix	syntax	Annotations
+		Attributes
+		Literals
+		Parsetree
+		Symbol
+		Tree
+aterm	Aterms
+	IntCon
+	Layout
+	Literals
+	RealCon
+
+basic	Booleans	"true"  -> BoolCon
+			"false" -> BoolCon   
+			Boolean "|" Boolean 	-> Boolean {left}
+			Boolean "&" Boolean 	-> Boolean {left}
+			"not" "(" Boolean ")" 	-> Boolean
+	Integers	Natural "-/" Natural	-> Natural {left}
+			"(" Natural ")"       	-> Natural {bracket}
+			Natural               	-> Integer
+			"+" Natural           	-> Integer
+			"-" Natural           	-> Integer
+			Integer "+" Integer     -> Integer {left}
+			Integer "-" Integer     -> Integer {left}
+			Integer "*" Integer     -> Integer {left}
+			Integer ">" Integer     -> Boolean
+			Integer ">=" Integer    -> Boolean
+			Integer "<" Integer     -> Boolean
+			Integer "<=" Integer    -> Boolean
+			"(" Integer ")"       	-> Integer {bracket}
+
+	Strings		String "||" String      -> String {left}
+			remove-continuations(String) -> String
+
+	Whitespace
+
+containers
+	Counter		create-counter(CounterId) -> Integer
+			get-counter(CounterId)    -> Integer
+			set-counter(CounterId, Integer)    -> Integer
+			incr-counter(CounterId)   -> Integer
+			decr-counter(CounterId)   -> Integer
+			reset-counter(CounterId)  -> Integer
+
+	HashTable	lookup(HashTable[[Key,Value]], Key)       -> Value {built-in("hashtable-lookup")}
+			store(HashTable[[Key,Value]], Key, Value) -> HashTable[[Key,Value]] {built-in("hashtable-store")}
+			delete(HashTable[[Key,Value]], Key)       -> HashTable[[Key,Value]] {built-in("hashtable-delete")}
+	
+	List		length( List[[X]] )  -> Integer
+			head( List[[X]] )    -> X
+			tail( List[[X]] )    -> List[[X]]
+			elem( X, List[[X]] ) -> Boolean
+			empty(List[[X]])     -> Boolean
+			cons( X, List[[X]] ) -> List[[X]]
+			X ":" List[[X]]      -> List[[X]]
+
+	Set		... same as list interface ...
+	
+	Table		"not-in-table"			     -> Value   {constructor}
+			"new-table"			     -> Table[[Key,Value]]
+			lookup(Table[[Key,Value]],Key)       -> Value   
+			store(Table[[Key,Value]],Key,Value)  -> Table[[Key,Value]]
+			delete(Table[[Key,Value]],Key)       -> Table[[Key,Value]]
+			element(Table[[Key,Value]],Key)      -> Boolean
+			keys(Table[[Key,Value]])             -> List[[Key]]
+			values(Table[[Key,Value]])           -> List[[Value]]
+disambiguation
+	Basic		"amb" "(" {X ","}* ")" -> X
+
+	Filter		filter(Tree, (X => Boolean))          -> Tree {traversal(trafo,bottom-up)}
+			filter(X, (X => Boolean))             -> X {traversal(trafo,bottom-up)}
+
+	FilterEnv	filter(Tree, (X Env => Boolean), Env) -> Tree {traversal(trafo,bottom-up)}
+			filter(X, (X Env => Boolean), Env)    -> X {traversal(trafo,bottom-up)}
+
+functions
+	Apply
+	... 
+	ZipWith
+
+sdf2	normalization
+	projection
+	renaming
+	syntax
+
+strategies
+	Apply
+			"fail"				-> X {cons("fail")}    
+			some(Strategy,X)		-> X {built-in("strategy-some")}
+			all(Strategy,X)			-> X {built-in("strategy-all")}
+			one(Strategy,X)			-> X {built-in("strategy-one")}
+			choice(Strategy,Strategy,X)	-> X
+			sequence(Strategy,Strategy,X)   -> X
+			function((X=>X),X)		-> X
+			rule((X->X),X)			-> X
+	Library
+			try(Strategy)			-> Strategy
+			repeat(Strategy)		-> Strategy
+			bottomup(Strategy)		-> Strategy
+			topdown(Strategy)		-> Strategy
+			downup(Strategy)		-> Strategy
+			oncebu(Strategy)		-> Strategy
+			oncetd(Strategy)		-> Strategy
+			somebu(Strategy)		-> Strategy
+			sometd(Strategy)		-> Strategy
+		      somedownup(Strategy)		-> Strategy
+
+	Operators    "fail"				-> Strategy {cons("fail")}
+		      "id"				-> Strategy {cons("id")}
+		      "(" Strategy ")"			-> Strategy {bracket}
+		      Strategy ";" Strategy		-> Strategy {cons("seq"), right}
+		      Strategy "+" Strategy		-> Strategy {cons("choice"), right}
+		      Strategy "<+" Strategy		-> Strategy {cons("lchoice"), right}
+		      StrategyVar			-> Strategy {cons("var")}
+		       "rec" StrategyVar "(" Strategy ")" -> Strategy {cons("recursion")}
+
+		       "some" "(" Strategy ")"		-> Strategy {cons("some")}
+		       "one" "(" Strategy ")"		-> Strategy {cons("one")}
+		       "all" "(" Strategy ")"		-> Strategy {cons("all")}
+
+system	FileIO	 read-term-from-file(filename:String)       -> X
+		 write-term-to-file(filename:String,term:X) -> X
+
+	Shell	 shell(String) -> String
+
+
+Proposal for a new Library
+==========================
+
+(This duplicates/extends information in the STYLE-GUIDE)
+
+Conventions:
+
+- Library modules only introduce new syntax for describing values (e.g. list
+  notation).
+
+- All other functions use prefix syntax
+  Question: what do we do with Booleans, Integers, etc.?
+
+- Library modules do not export variables
+
+- Library modules do not export layout
+
+- Are names of datatypes singular or plural? We do not do this systematically.
+  Proposal: Since we already started with Booleans, Integers, etc. we should
+  use plural.
+
+- Naming of sorts?
+
+- Some standard names:
+  - size (and not length)
+  - elem (and not element)
+
+- Possibility: start all predicates with "is-", e.g. is-equal, is-elem, etc.
+
+- Each datatype D should define a conditional:
+       if Boolean then D else D fi -> D
+
+languages
+	asf	syntax	Ambiguities
+			Comments
+			Equation
+			Equations
+			Lexicals
+			Placeholders
+			Variables
+
+		examples
+
+		extensions
+			disambiguation
+				Basic		"amb" "(" {X ","}* ")" -> X
+
+				Filter		filter(Tree, (X => Boolean))          -> Tree {traversal(trafo,bottom-up)}
+						filter(X, (X => Boolean))             -> X {traversal(trafo,bottom-up)}
+
+				FilterEnv	filter(Tree, (X Env => Boolean), Env) -> Tree {traversal(trafo,bottom-up)}
+						filter(X, (X Env => Boolean), Env)    -> X {traversal(trafo,bottom-up)}
+
+			functions
+				Apply
+				... 
+				ZipWith
+
+			strategies
+				Apply
+					"fail"				-> X {cons("fail")}    
+					some(Strategy,X)		-> X {built-in("strategy-some")}
+					all(Strategy,X)			-> X {built-in("strategy-all")}
+					one(Strategy,X)			-> X {built-in("strategy-one")}
+					choice(Strategy,Strategy,X)	-> X
+					sequence(Strategy,Strategy,X)   -> X
+					function((X=>X),X)		-> X
+					rule((X->X),X)			-> X
+				Library
+					try(Strategy)			-> Strategy
+					repeat(Strategy)		-> Strategy
+					bottomup(Strategy)		-> Strategy
+					topdown(Strategy)		-> Strategy
+					downup(Strategy)		-> Strategy
+					oncebu(Strategy)		-> Strategy
+					oncetd(Strategy)		-> Strategy
+					somebu(Strategy)		-> Strategy
+					sometd(Strategy)		-> Strategy
+					somedownup(Strategy)		-> Strategy
+
+				Operators    
+					"fail"				-> Strategy {cons("fail")}
+					"id"				-> Strategy {cons("id")}
+					"(" Strategy ")"			-> Strategy {bracket}
+					Strategy ";" Strategy		-> Strategy {cons("seq"), right}
+					Strategy "+" Strategy		-> Strategy {cons("choice"), right}
+					Strategy "<+" Strategy		-> Strategy {cons("lchoice"), right}
+					StrategyVar			-> Strategy {cons("var")}
+					"rec" StrategyVar "(" Strategy ")" -> Strategy {cons("recursion")}
+
+					"some" "(" Strategy ")"		-> Strategy {cons("some")}
+					"one" "(" Strategy ")"		-> Strategy {cons("one")}
+					"all" "(" Strategy ")"		-> Strategy {cons("all")}
+			annotations
+				Annotations
+				ATermAnnotations
+		tools		
+			Normalization
+			PosInfo
+			TestingFramework
+			ToolBus.sdf
+
+	pico	syntax
+		examples
+		tools
+
+	sdf2	syntax
+		examples
+		tools	normalization
+			projection
+			renaming
+
+        java	syntax
+		examples
+		tools
+
+	pascal	syntax
+		examples
+		tools
+
+	clax	syntax
+		examples
+		tools
+
+	tscript	syntax
+		examples
+		tools
+
+        C	syntax
+		examples
+		tools
+	...
+
+demos
+* This directory gives direct, top-level, acces to examples and tools inn languages directory
+       pico
+       java
+       ...
+
+formats
+*better name?: term-formats, intermediate-formats, intermediate-languages, interface-languages
+
+	asfix	syntax	Annotations
+			Attributes
+			Literals
+			Parsetree
+			Symbol
+			Tree
+		tools	?
+
+	aterm	syntax	Aterms
+			IntCon
+			Layout
+			Literals
+			RealCon
+		tools	?
+
+*new	box	syntax
+*new		tools
+
+basic	Booleans	"true"  -> BoolCon
+			"false" -> BoolCon   
+			Boolean "|" Boolean 	-> Boolean {left}
+			Boolean "&" Boolean 	-> Boolean {left}
+			"not" "(" Boolean ")" 	-> Boolean
+	Integers	Natural "-/" Natural	-> Natural {left}
+			"(" Natural ")"       	-> Natural {bracket}
+			Natural               	-> Integer
+			"+" Natural           	-> Integer
+			"-" Natural           	-> Integer
+			Integer "+" Integer     -> Integer {left}
+			Integer "-" Integer     -> Integer {left}
+			Integer "*" Integer     -> Integer {left}
+			Integer ">" Integer     -> Boolean
+			Integer ">=" Integer    -> Boolean
+			Integer "<" Integer     -> Boolean
+			Integer "<=" Integer    -> Boolean
+			"(" Integer ")"       	-> Integer {bracket}
+
+*new			"if" Boolean "then" Integer "else" Integer "fi" -> Integer
+
+*new	Reals
+
+	Strings		String "||" String      -> String {left}
+*new			size(String)            -> Natural
+*new			"if" Boolean "then" String "else" String "fi" -> String
+*new			substring(String, Natural, Natural) -> String
+*substring serach?
+*relational operators?
+*other?
+			remove-continuations(String) -> String
+	Whitespace
+
+containers
+*repl	Counter
+*by	Counters	
+			create-counter(CounterId) -> Integer
+			get-counter(CounterId)    -> Integer
+			set-counter(CounterId, Integer)    -> Integer
+			incr-counter(CounterId)   -> Integer
+			decr-counter(CounterId)   -> Integer
+			reset-counter(CounterId)  -> Integer
+
+*repl	HashTable
+*by	HashTables
+			lookup(HashTable[[Key,Value]], Key)       -> Value {built-in("hashtable-lookup")}
+			store(HashTable[[Key,Value]], Key, Value) -> HashTable[[Key,Value]] {built-in("hashtable-store")}
+			delete(HashTable[[Key,Value]], Key)       -> HashTable[[Key,Value]] {built-in("hashtable-delete")}
+
+
+*repl	Table
+*by	Tables
+			"not-in-table"			     -> Value   {constructor}
+			"new-table"			     -> Table[[Key,Value]]
+			lookup(Table[[Key,Value]],Key)       -> Value   
+			store(Table[[Key,Value]],Key,Value)  -> Table[[Key,Value]]
+			delete(Table[[Key,Value]],Key)       -> Table[[Key,Value]]
+*repl			element(Table[[Key,Value]],Key)      -> Boolean
+*by			elem(Table[[Key,Value]],Key)         -> Boolean
+			keys(Table[[Key,Value]])             -> List[[Key]]
+			values(Table[[Key,Value]])           -> List[[Value]]
+*new?			getlist(HashTable[[Key,Value]])	     -> List[[Key # Value]]
+*new?			putlist(List[[Key # Value]])	     -> HashTable[[Key, Value]]
+
+*Discussion: there is a strong link between tables and relations (see below).
+* It would be nice to integrate both
+
+* We also need a table with scopes
+
+*new Queues?
+*new Stacks?
+*new BinaryTrees?
+*new BalancedTrees?	
+
+*repl	List
+*by	Lists		
+*replace		length( List[[X]] )  -> Integer
+*by			size( List[[X]] )   -> Integer
+			head( List[[X]] )    -> X
+			tail( List[[X]] )    -> List[[X]]
+			elem( X, List[[X]] ) -> Boolean
+			empty(List[[X]])     -> Boolean
+			cons( X, List[[X]] ) -> List[[X]]
+*new			concat(List[[X]], List[[X]]) -> List[[X]]
+*new?			reverse(List[[X]])   -> List[[X]]
+			X ":" List[[X]]      -> List[[X]]
+
+*repl   Bag	
+*by	Bags
+			"EmptyBag"                                -> Bag[[Elem]]
+
+			add(Elem, Bag[[Elem]])                    -> Bag[[Elem]]
+			del(Elem, Bag[[Elem]])                    -> Bag[[Elem]]
+
+			equal(Bag[[Elem]], Bag[[Elem]])           -> Boolean
+			subset(Bag[[Elem]], Bag[[Elem]])          -> Boolean
+			strict-subset(Bag[[Elem]], Bag[[Elem]])   -> Boolean
+			superset(Bag[[Elem]], Bag[[Elem]])        -> Boolean
+			strict-superset(Bag[[Elem]], Bag[[Elem]]) -> Boolean
+
+			union(Bag[[Elem]], Bag[[Elem]])           -> Bag[[Elem]]
+			inter(Bag[[Elem]],  Bag[[Elem]])          -> Bag[[Elem]]
+			diff(Bag[[Elem]], Bag[[Elem]])            -> Bag[[Elem]]
+
+			size(Bag[[Elem]])                         -> Integer
+			elem(Elem, Bag[[Elem]])                   -> Boolean
+
+			"if" Boolean "then" Bag[[Elem]] "else" Bag[[Elem]] "fi" 
+							          -> Bag[[Elem]]
+
+
+	Set		... same as Bag interface ...
+
+	Relation
+
+			"EmptyRel"                                -> Rel[[Elem]]
+
+			add(Elem, Bag[[Elem]])                    -> Bag[[Elem]]
+			del(Elem, Bag[[Elem]])                    -> Bag[[Elem]]
+
+			equal(Rel[[Elem]], Rel[[Elem]])           -> Boolean
+			subset(Rel[[Elem]], Rel[[Elem]])          -> Boolean
+			strict-subset(Rel[[Elem]], Rel[[Elem]])   -> Boolean
+			superset(Rel[[Elem]], Rel[[Elem]])        -> Boolean
+			strict-superset(Rel[[Elem]], Rel[[Elem]]) -> Boolean
+
+			union(Rel[[Elem]], Rel[[Elem]])           -> Rel[[Elem]]
+			inter(Rel[[Elem]], Rel[[Elem]])           -> Rel[[Elem]]
+			diff(Rel[[Elem]], Rel[[Elem]])            -> Rel[[Elem]]
+
+			compose(Rel[[Elem]], Rel[[Elem]])         -> Rel[[Elem]]
+    
+			product(Elem, Bag[[Elem]])                -> Rel[[Elem]]
+
+			product(Bag[[Elem]], Bag[[Elem]])         -> Rel[[Elem]]
+     
+			domain(Rel[[Elem]])                       -> Bag[[Elem]]
+			range(Rel[[Elem]])                        -> Bag[[Elem]]
+			carrier(Rel[[Elem]])                      -> Bag[[Elem]]
+
+			domR(Rel[[Elem]], Bag[[Elem]])            -> Rel[[Elem]]
+			ranR(Rel[[Elem]], Bag[[Elem]])            -> Rel[[Elem]]
+			carR(Rel[[Elem]], Bag[[Elem]])            -> Rel[[Elem]]
+
+			domX(Rel[[Elem]], Bag[[Elem]])            -> Rel[[Elem]]
+			ranX(Rel[[Elem]], Bag[[Elem]])            -> Rel[[Elem]]
+			carX(Rel[[Elem]], Bag[[Elem]])            -> Rel[[Elem]]
+
+			top(Rel[[Elem]])                          -> Bag[[Elem]]
+			bottom(Rel[[Elem]])                       -> Bag[[Elem]]
+
+			inv(Rel[[Elem]])                          -> Rel[[Elem]]
+			compl(Rel[[Elem]])                        -> Rel[[Elem]]
+
+			id(Bag[[Elem]])                          -> Rel[[Elem]]
+
+*syntax!		Rel[[Elem]] "." Elem                     -> Bag[[Elem]]
+*syntax!		Rel[[Elem]] "." Bag[[Elem]]              -> Bag[[Elem]]
+
+*syntax!		Elem "." Rel[[Elem]]                     -> Bag[[Elem]]
+*syntax!		Bag[[Elem]] "." Rel[[Elem]]              -> Bag[[Elem]]
+
+			size(Rel[[Elem]])                        -> Integer
+
+			closure(Rel[[Elem]], Rel[[Elem]], Rel[[Elem]]) -> Rel[[Elem]]
+
+*syntax!		Rel[[Elem]] "+"                          -> Rel[[Elem]]
+*syntax!		Rel[[Elem]] "*"                          -> Rel[[Elem]]
+
+			"if" Boolean "then" Rel[[Elem]] "else" Rel[[Elem]] "fi" -> Rel[[Elem]]
+	
+
+system	FileIO	 
+		 read-term-from-file(filename:String)	       -> X
+*new		 read-line-from-stdin()			       -> X (read line and parse as X)
+*new		 prompt-read-line-from-stdin(message:String)   -> X (print message on stderr, read line from stdin and parse as X)
+*new		 read-line-from-file(filename:String)	       -> X
+
+		 write-term-to-file(filename:String,term:X)    -> X
+*new		 append-term-to-file(filename:String,term:X)   -> X (file is created/reopened)
+*new		 write-error(message:String)		       -> ? (print message on stderr)
+
+		 
+
+*What do we need here?: open-file, close-file, exists-file, append-file, stdin, stdout, stderr, etc.
+
+*new	Messages
+*new		 info(message:String, term:X)		    -> X  (first "%" in message is replaced by text of term)
+*new		 warning(message:String, term:X)	    -> X
+*new		 error(message:String, term:X)		    -> X
+*new		 fatal(message:String, term:X)		    -> X
+
+*new		 debug(message:String, term:X)		    -> X
+*new		 log(message:String, term:X)		    -> X
+
+*new	Environment
+		name					    -> String
+		arguments				    -> List[[String]]
+		
+
+	Shell	 shell(String) -> String
