@@ -40,7 +40,8 @@ let
   Id : int,
   Total : int,
   Failed : int,
-  Tags : list
+  Tags : list,
+  Errors : list
 in
   (
     rec-msg(run-asf-tests(ModuleName?)) .
@@ -55,16 +56,22 @@ in
       snd-note(ui-status(endstat(Id))) .
       snd-note(ui-status(stat(Id, "Running tests"))) .
       snd-msg(run-tests(ModuleName, Equations, Tests)) .
-      rec-msg(test-results(Total?, Failed?, Tags?)) .
-      snd-note(ui-status(endstat(Id))) .
-      if equal(Failed, 0) then
-        snd-note(ui-status(
-          warningf("Test report: all %d tests succeeded\n", [Total])))
-      else 
-        snd-note(ui-status(
-          errorf("Test report: %d out of %d tests failed:\n %t\n", 
-                 [Failed, Total, Tags])))
-      fi
+      (
+        rec-msg(test-results(Total?, Failed?, Tags?)) .
+        snd-note(ui-status(endstat(Id))) .
+        if equal(Failed, 0) then
+          snd-note(ui-status(
+            warningf("Test report: all %d tests succeeded\n", [Total])))
+        else 
+          snd-note(ui-status(
+            errorf("Test report: %d out of %d tests failed:\n %t\n", 
+                   [Failed, Total, Tags])))
+        fi
+      +
+        rec-msg(rewrite-errors(Errors?)).
+        snd-note(ui-status(endstat(Id))) .
+        snd-msg(display-rewrite-errors(Errors))
+      )
     +  
       rec-msg(equations-incomplete) .
       snd-note(ui-status(endstat(Id))) .
