@@ -7,3 +7,4 @@ config.cache
 config.status
 Makefile
 toolbuslib-config
+config.h.in
