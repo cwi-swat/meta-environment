@@ -24,7 +24,8 @@ in
   rec-value(CMNG, search-paths(Paths?)) .
   snd-msg(process-search-paths(CONFIG_FILE, Paths)) .
   rec-msg(search-paths-processed(CONFIG_FILE)) .
-  snd-note(search-paths-processed)
+  snd-note(search-paths-processed) .
+  snd-terminate(CMNG, "done")
 endlet
 
 tool configmanager is { command = "configmanager" }
