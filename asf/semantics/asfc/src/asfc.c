@@ -20,6 +20,8 @@
 #include <limits.h>
 #include "compiler.tif.h"
 #include "support/support.h"
+/* For cpu time calculation */
+#include <time.h>
 
 extern ATerm pattern_asfix_id;
 extern ATerm pattern_asfix_term;
@@ -38,6 +40,13 @@ void init_patterns();
 
 void rec_terminate(int cid, ATerm t) 
 {
+  clock_t cputime;
+  float cpusecs;
+
+ /* read the cpu time up till now*/
+  cputime = clock();
+  cpusecs = (float) ((float) cputime / (float) CLOCKS_PER_SEC);
+  ATfprintf(stderr, "Compiler used %f seconds cpu time\n", cpusecs);
   exit(0);
 }
 
@@ -105,6 +114,11 @@ int main(int argc, char **argv)
 {
   int cid;
   ATerm bottomOfStack;
+  clock_t cputime;
+ 
+  /* See how much CPU time we use */
+  /* Set the clock to zero */
+  cputime = clock();
 
   ATBinit(argc, argv, &bottomOfStack);
   AFinit(argc, argv, &bottomOfStack);
