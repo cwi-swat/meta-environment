@@ -1,5 +1,12 @@
 # $Id$
 
+Wed Jan 26 11:10:55 CET 2005 <jurgenv@cwi.nl>
+ * YES! Threw away subs-eqs tool because Apigen now supports enough
+   about parameterized modules
+ * ASF syntax changed, no support for "=" conditions anymore
+ * Regenerated API for structured lexicals
+ * Removed lex-cons.c, this is implemented by the ASF normalizer now.
+
 Mon Oct 18 23:45:46 CEST 2004 <jurgenv@cwi.nl>
  * Merged 1.5 developments
 

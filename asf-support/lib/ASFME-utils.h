@@ -19,10 +19,13 @@ ASF_ASFConditionalEquationList ASF_makeASFConditionalEquationList(ATermList l);
 
 ASF_OptLayout ASF_makeLayoutEmpty();
 ASF_OptLayout ASF_makeLayoutNewline();
+ASF_OptLayout ASF_makeLayoutSpace();
 
 ASF_Tree ASF_LexicalConstructorTreeToLexicalTree(ASF_Tree constructor);
 
 ASF_ASFConditionalEquationList ASF_getASFModuleEquationList(ASF_ASFModule module);
 ASF_ASFTestEquationTestList ASF_getASFModuleTestList(ASF_ASFModule module);
+
+ASF_ASFTagId ASF_makeTagId(const char* str);
 
 #endif

@@ -10,8 +10,7 @@ include_HEADERS = \
 libASFME_a_SOURCES = \
 	ASFME.c \
 	ASFME_dict.c \
-	ASFME-utils.c \
-	lex-cons.c
+	ASFME-utils.c 
 
 INCLUDES = \
 	-I${ATERM}/include \
@@ -20,26 +19,20 @@ INCLUDES = \
 
 AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
 
-#ADT = /ufs/sen1/software/installed/apigen-bundle-1.5/linux/i386
-ADT = /ufs/jurgenv/glt/installed/apigen
+LIBRARY=../../asf-library/library
 
 Asf.label.def:
 	(echo "definition";\
-         cat ../../asf-library/library/languages/asf/syntax/*.sdf ) > $@
+         cat \
+	     ${LIBRARY}/languages/asf/syntax/*.sdf \
+	     ${LIBRARY}/basic/Whitespace.sdf \
+	     ${LIBRARY}/languages/sdf2/syntax/Character.sdf) > $@
 
-api: subst-eqs
-	${ADT}/bin/sdf2-to-adt -i Asf.label.def -o ASFME.raw
-	./subst-eqs ASFME.raw > ASFME.adt
-	echo "typedef ATerm ASF_Symbol;" >> ASFME.pro
-	${ADT}/bin/adt-to-c \
-		--input ASFME.adt \
-		--name ASFME \
-		--prologue ASFME.pro \
+api: Asf.label.def
+	sdf2-to-c \
+		--input Asf.label.def \
+		--output ASFME \
 		--prefix ASF_
-
-subst-eqs: subst-eqs.c
-	${COMPILE} -o $@ $<  -I${ADT}/include -I${ATERM}/include \
-                             -L${ATERM}/lib -lATerm -L${ADT}/lib -lADT
 
 api-clean:
 	${RM} \
@@ -48,7 +41,7 @@ api-clean:
 		ASFME.[ch] \
 		ASFME_dict.[ch] \
 		ASFME.dict \
-		ASFME.adt \
-		ASFME.pro \
-		ASFME.raw \
-		subst-eqs
+		ASFME.adt 
+
+asfc:
+	asfc -i ASF-Normalization.eqs -o ASF-Normalization.c -v
