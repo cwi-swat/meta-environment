@@ -10,7 +10,6 @@
 
 ATbool interpret_cons = ATfalse;
 ATbool remove_layout = ATfalse;
-ATbool lexical_to_string = ATtrue;
 ATbool remove_literals = ATfalse;
 ATbool remove_injections = ATfalse;
 ATbool remove_parsetree = ATfalse;
