@@ -5,6 +5,11 @@ module languages/c/syntax/CAfterPreprocessor
 imports languages/c/syntax/C
 imports languages/c/syntax/Whitespace
 
+hiddens
+
+context-free start-symbols
+	TranslationUnit
+
 exports
 
 context-free syntax
@@ -22,7 +27,7 @@ context-free syntax
 
 context-free syntax
 
-LineDirective -> ExternalDefinition
+LineDirective -> ExternalDeclaration
 LineDirective -> Statement
-LineDirective -> MemberDeclaration
+LineDirective -> StructDeclarator
 
