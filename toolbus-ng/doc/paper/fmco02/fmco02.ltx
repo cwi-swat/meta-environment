@@ -1184,16 +1184,24 @@ experimentation with the features mentioned in this paper.
 
 In this paper we have reflected on our experiences over the past years
 with the use of the \TB\ as a means to refactor a previously monolithic
-system: the \asdf\ Meta Environment. This real test case of the
-\TB\ has taught us some of its shortcomings: its data bottleneck in case
-very large data items are sent using pass-by-value, and has given rise
-to questions such as how best to deal with crashing tools.
+system: the \asdf\ Meta Environment. This real test case of the \TB\
+has taught us some of its shortcomings: its data bottleneck in case
+very large data items are sent using pass-by-value, maintenance issues
+related to undisciplined message passing and questions such as how to
+deal with exceptions caused by e.g. crashing tools.
 
-We have studied related ideas and solutions and are now in a situation
-where we have a new prototype of the \TB\ in Java, with a very open
-structure which allows for all sorts of experiments and case studies
-based on the experience we have with the existing \TB\ and the ideas
-presented in this paper.
+Some of the ideas we showed in this paper could be implemented by
+changing or extending the \Tscript{} (e.g. to implement a call-reply
+regime as discussed in \S\ref{Sec:message-patterns}), others will
+also require extending the \TB\ and the tool-adapters (e.g. to detect
+crashed tools in combination with exception handling as discussed in
+\S\ref{Sec:exceptions}).
+
+We have also studied some related ideas and frameworks and we are now
+in a position where we have a new prototype of the \TB\ in Java, with a
+very open structure which allows for all sorts of experiments and case
+studies based on the experience we have with the existing \TB\ and the
+ideas presented in this paper.
 
 \section*{Acknowledgments}
 
