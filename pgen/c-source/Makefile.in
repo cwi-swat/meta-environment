@@ -55,7 +55,7 @@ UNINSTALL	= @UNINSTALL@
 
 ATERM           = @ATERM@
 
-XINCLUDES       = -I$(ATERM)/include -I$(includedir)
+XINCLUDES       = -I$(ATERM)/include -I$(includedir) -I$(top_srcdir)/compiler/support
 XLIBS           = -L$(prefix)/lib $(SOCKLIBS)
 
 SPEC_SRCS=\
