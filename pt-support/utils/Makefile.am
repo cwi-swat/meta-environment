@@ -16,9 +16,6 @@ INCLUDES		= -I${top_srcdir}/libmept \
 
 pkgdata_DATA		= unparsePT.idef addPosInfo.idef apply-function.idef
 
-CLEANFILES		= unparsePT.tifs unparsePT.tif.[ch] \
-                          apply-function.tifs apply-function.tif.[ch]
-
 noinst_HEADERS		= unparsePT.tif.h apply-function.tif.h
 
 apply_function_SOURCES  = apply-function.tif.c apply-function.c
