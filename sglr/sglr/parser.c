@@ -252,11 +252,12 @@ ATerm SG_Parse(parse_table *ptable, int(*get_next_char)(void))
   do {
     if(SG_SHOWSTACK) SG_StacksToDotFile(active_stacks, text_length);
     current_token = SG_NexToken(get_next_char);
-    if(SG_DEBUG)
+    if(SG_DEBUG) {
       if(isgraph(current_token))
         ATfprintf(SGlog(), "Current token:  %c\n", current_token);
       else
         ATfprintf(SGlog(), "Current token:  \\%o\n", current_token);
+    }
     SG_ParseChar();
     SG_Shifter();
   } while (current_token != eof && active_stacks != NULL);
