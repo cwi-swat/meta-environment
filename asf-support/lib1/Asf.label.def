@@ -28,19 +28,57 @@ exports
     "[" "]"                         -> Tag {cons("empty")}
     "[" TagId "]"                   -> Tag {cons("not-empty")}
 
+module GEN-LexConsFuncs
 
-module GEN-Equations
-imports Equations
+%% This module defines the syntax for 'lexical constructor functions'
+%% for each sort in an ASF+SDF specification. So in reality, this module
+%% is generated (hence the name "GEN-*").
+
+imports Characters
 
 exports
   context-free syntax
-   
-  lhs:Term  "=" rhs:Term -> Equation
-  lhs:Term  "=" rhs:Term -> Condition {cons("positive")}
-  lhs:Term unequal:"!=" rhs:Term -> Condition {cons("negative")}
+
+%% FOR EACH Sort in ASF+SDF SPEC DO
+%%   Tree := Sort;
+%%   term := tolower(Sort);
+%%   ADD PRODUCTIONS {
+
+       function:term "(" chars:CHAR* ")" -> Tree {cons("lexical-constructor")}
+
+%%   }
+%% NEXT Sort
+
+  context-free syntax
+
+
+module GEN-Equations
+
+  %% This module defines the syntax for ASF equations and conditions for
+  %% each sort in an ASF+SDF specification. So in reality, this module is
+  %% generated (hence the name "GEN-*").
+
+imports GEN-LexConsFuncs Equations
+
+exports
+   context-free syntax
+
+%% FOR EACH Sort IN ASF+SDF SPEC DO
+%%   Tree := Sort;
+%%   ADD PRODUCTIONS {
+       lhs:Tree          "=" rhs:Tree -> Equation
+       lhs:Tree          "=" rhs:Tree -> Condition {cons("positive")}
+       lhs:Tree unequal:"!=" rhs:Tree -> Condition {cons("negative")}
+%%   }
+%% NEXT Sort
+   context-free syntax
 
 module Characters
 exports
   sorts CHAR
   lexical syntax
     [\"] value:~[\257] [\"]         -> CHAR {cons("default")}
+
+module Main
+  imports GEN-Equations
+

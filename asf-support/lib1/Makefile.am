@@ -20,4 +20,12 @@
 #
 # $Id$
 
-EXTRA_DIST=ASF.adt
+lib_LIBRARIES    = libASF.a
+include_HEADERS  = ASF.h ASF_dict.h ASF-utils.h
+libASF_a_SOURCES = ASF.c ASF_dict.c ASF-utils.c
+
+
+CFLAGS   = -g -Wall -O2
+INCLUDES = -I${ATERM}/include
+LDFLAGS  = -L${ATERM}/lib
+LDADD    = -lATerm

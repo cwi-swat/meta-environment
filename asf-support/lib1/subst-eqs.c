@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include <aterm2.h>
-#include <ADT-util.h>
+#include <ADT-utils.h>
 
 /*}}}  */
 
@@ -136,9 +136,17 @@ main(int argc, char *argv[])
     return 1;
   }
 
+   addSubstitution(
+    ATparse("prod(id(\"GEN-Equations\"),w(\"\"),[sort(\"Tree\"),w(\"\"),ql(\"=\"),w(\"\"),sort(\"Tree\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Equation\"),w(\"\"),no-attrs)"),
+    ATparse("prod(id(\"GEN-Equations\"),w(\"\"),[<lhs-symbol(Symbol)>,w(\"\"),ql(\"=\"),w(\"\"),<rhs-symbol(Symbol)>],w(\"\"),l(\"->\"),w(\"\"),sort(\"Equation\"),w(\"\"),no-attrs)"));
+
+ addSubstitution(
+    ATparse("prod(id(\"GEN-Equations\"),w(\"\"),[sort(\"Tree\"),w(\"\"),ql(\"=\"),w(\"\"),sort(\"Tree\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Condition\"),w(\"\"),no-attrs)"),
+    ATparse("prod(id(\"GEN-Equations\"),w(\"\"),[<lhs-symbol(Symbol)>,w(\"\"),ql(\"=\"),w(\"\"),<rhs-symbol(Symbol)>],w(\"\"),l(\"->\"),w(\"\"),sort(\"Condition\"),w(\"\"),no-attrs)"));
+
   addSubstitution(
     ATparse("prod(id(\"GEN-Equations\"),w(\"\"),[sort(\"Tree\"),w(\"\"),ql(\"!=\"),w(\"\"),sort(\"Tree\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Condition\"),w(\"\"),no-attrs)"),
-    ATparse("prod(id(\"GEN-Equations\"),w(\"\"),[<lhs(Tree)>,w(\"\"),ql(\"!=\"),w(\"\"),<rhs(Tree)>],w(\"\"),l(\"->\"),w(\"\"),sort(\"Condition\"),w(\"\"),no-attrs)"));
+    ATparse("prod(id(\"GEN-Equations\"),w(\"\"),[<lhs-symbol(Symbol)>,w(\"\"),ql(\"!=\"),w(\"\"),<rhs-symbol(Symbol)>],w(\"\"),l(\"->\"),w(\"\"),sort(\"Condition\"),w(\"\"),no-attrs)"));
 
   beforeSubst = ADTmakeEntriesFromTerm(contents);
   afterSubst  = ADTsubstitute(beforeSubst, substituteEntry, NULL);
