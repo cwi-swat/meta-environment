@@ -3,16 +3,13 @@
 
 <<tide.tb*>>=
 <<process DAP-CONNECT>>
-<<process TOOL-CONNECT>>
 <<process EVENT-RULES>>
-<<process TOOL>>
 <<process BROADCAST>>
-<<process MEMO>>
 <<process MASTER-CONTROL>>
 
 <<tool definitions>>
 
-toolbus(DAP-CONNECT, TOOL-CONNECT, MASTER-CONTROL, MEMO, BROADCAST)
+toolbus(DAP-CONNECT, MASTER-CONTROL, BROADCAST)
 @
 
 %}}}
