@@ -38,33 +38,17 @@ Installation instructions:
          UNIXish environment.
 
 
-  * Optional items
-
-    The following items provide (optional) extra functionality, or
-    enable alternative builds.
-
-    -- for the parser (sglr): the Boehm Garbage Collector, available
-       at <http://reality.sgi.com/employees/boehm_mti/gc.html>.
-       Make as appropriate for your system; install the resulting
-       `gc.a' as libgc.a in an appropriate place, typically the
-       Meta-Environment's lib directory and install `gc.h' in an
-       appropriate include directory (e.g. the Meta-Environment's
-       include directory).
-       With Boehm GC installed, sglr's `..-gc' compilation targets can
-       be used (read sglr/parser/Makefile.in if interested).  It should
-       be noted that even the term `experimental' is a euphemism at
-       best, when using it in reference to to BoehmGC versions of the
-       sglr parser.
-       Hence, strict disclaimers about operating heavy machinery and
-       controlling thermonuclear facilities and devices most certainly
-       apply here.
-
 * Prerequisites for testing
 
      In order to be able to test meta by executing
-		   make test
-		 you will need the JUnit Java Unit Testing framework. It is available
-		 from http://www.xprogramming.com/software.htm
+         $ make test
+     you will need the JUnit Java Unit Testing framework. It is available
+     from <http://www.xprogramming.com/software.htm>.
+     Note that some components have substantial memory requirements.
+     These may differ somewhat across machine architectures; for the
+     test target, experiences have shown a practical minimum of about
+     110-120MB, roughly.
+
 
 * Platform support
 
@@ -126,6 +110,9 @@ Installation instructions:
     for the sh family of shells, or alternatively (for csh-ish shells):
 
       % setenv PATH /path/to/meta/bin:${PATH}
+
+    PATH being set properly, the installation procedure proceeds
+    as follows:
 
       $ cd /path/to/meta
       $ cd toolbus
