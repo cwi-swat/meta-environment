@@ -8,18 +8,12 @@ imports MyPosInfo[ProcessName]
 
 exports
   context-free syntax
-    extractEvents(Tscript, RSTORE)
-    -> RSTORE {traversal(accu, top-down, break)}
-
-    extractEvents(ProcessDef, RSTORE)
-    -> RSTORE {traversal(accu, top-down, break)}
+    extractEvents(Tscript, RSTORE) -> RSTORE {traversal(accu, top-down, break)}
+    extractEvents(ProcessDef, RSTORE) -> RSTORE {traversal(accu, top-down, break)}
 
   context-free syntax
-    extractProcessEvents(ProcessBody, RSTORE, Area)
-    -> RSTORE {traversal(accu, top-down, break)}
-
-    extractProcessEvents(Atom, RSTORE, Area)
-    -> RSTORE {traversal(accu, top-down, break)}
+    extractProcessEvents(ProcessBody, RSTORE, Area) -> RSTORE {traversal(accu, top-down, break)}
+    extractProcessEvents(Atom, RSTORE, Area) -> RSTORE {traversal(accu, top-down, break)}
 
   context-free syntax
     addProcessEvent(AtomArgs, Area, RSTORE) -> RSTORE
@@ -36,4 +30,4 @@ exports
     "$ProcessSignature" -> ProcessSignature
     "$Rstore"[0-9]* -> RSTORE
     "$Tool" -> Var
-    "$Tuple"[0-9]* -> <Elem, Elem>
+    "$Tuple"[0-9]* -> Tuple

@@ -1,19 +1,27 @@
 module ToolBusOperations
 
-imports Tscript
 imports basic/Strings
+imports Tscript
 
-exports
-  context-free syntax
-    var2str(Var) -> String
-    processname2str(ProcessName) -> String
-    toolname2str(ToolName) -> String
-    sign2str(Term) -> String
-    term2str(Term) -> String
+imports utilities/IO[Atom]
+exports context-free syntax
+    toString(Atom) -> String
 
-hiddens
-  context-free syntax
-    terms2str({Term ","}*) -> String
+imports utilities/IO[AtomArgs]
+exports context-free syntax
+    toString(AtomArgs) -> String
+
+imports utilities/IO[ProcessName]
+exports context-free syntax
+    toString(ProcessName) -> String
+
+imports utilities/IO[ToolName]
+exports context-free syntax
+    toString(ToolName) -> String
+
+imports utilities/IO[Var]
+exports context-free syntax
+    toString(Var) -> String
 
 exports
   context-free syntax    
@@ -33,21 +41,21 @@ hiddens
 hiddens
   variables
     "$Atom"[0-9]* -> Atom
-    "$String" -> String
-    "$Int" -> Integer
-    "$Real" -> Real
+    "$AtomArgs" -> AtomArgs
     "$Bool" -> Boolean
-    "Char*"[0-9]* -> CHAR*
-    "$Term"[0-9]* -> Term
-    "$Terms"[0-9]* -> {Term ","}*
-    "$TermPlus"[0-9]* -> {Term ","}+
-    "$Var"[0-9]* -> Var
-    "$GenVar"[0-9]* -> GenVar
     "$FormalParam"[0-9]* -> FormalParam
     "$FormalParams"[0-9]* -> {FormalParam ","}*
-    "$VarDecl"[0-9]* -> VarDecl
-    "$VarDecls"[0-9]* -> {VarDecl ","}*
+    "$GenVar"[0-9]* -> GenVar
+    "$Id"[0-9]* -> Id
+    "$Int" -> Integer
     "$ProcessExpr"[0-9]* -> ProcessExpr    
     "$ProcessName"[0-9]* -> ProcessName    
-    "$Id"[0-9]* -> Id
-
+    "$Real" -> Real
+    "$String" -> String
+    "$Term"[0-9]* -> Term
+    "$TermPlus"[0-9]* -> {Term ","}+
+    "$Terms"[0-9]* -> {Term ","}*
+    "$ToolName"[0-9]* -> ProcessName    
+    "$Var"[0-9]* -> Var
+    "$VarDecl"[0-9]* -> VarDecl
+    "$VarDecls"[0-9]* -> {VarDecl ","}*

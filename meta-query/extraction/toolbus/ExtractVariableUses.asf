@@ -28,7 +28,7 @@ equations
 
 [add-variable-use-0]
   $VarId := get-area($Var),
-  $Tuple1 := <$VarId, var2str($Var)>,
+  $Tuple1 := <$VarId, toString($Var)>,
   $Rstore2 := add-tuple(VAR_USE, $Tuple1, $Rstore1),
   $Tuple2 := <$VarId, $ProcessNameId>,
   $Rstore3 := add-tuple(VAR_USE, $Tuple2, $Rstore2)

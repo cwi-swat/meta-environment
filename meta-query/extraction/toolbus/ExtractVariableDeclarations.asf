@@ -45,7 +45,7 @@ equations
 
 [add-variable-declaration-0]
   $VarId := get-area($Var),
-  $Tuple1 := <$VarId, var2str($Var)>,
+  $Tuple1 := <$VarId, toString($Var)>,
   $Rstore2 := add-tuple(VAR_DECL_NAME, $Tuple1, $Rstore1),
   $Tuple2 := <$VarId, term2str($Term)>,
   $Rstore3 := add-tuple(VAR_DECL_TYPE, $Tuple2, $Rstore2),
