@@ -1,174 +1,113 @@
-#    Meta-Environment - An environment for language prototyping.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum,
-#                        Amsterdam, The Netherlands.
-#
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or (at
-#    your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful, but
-#    WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-#    General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program; if not, write to the Free Software
-#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-#    USA
-#
-#
-# $Id$
+$Id$
 
-This is the README file for the ASF+SDF Meta-Environment distribution.
+ASF+SDF Meta-Environment
 
 
-Installation instructions:
+Installation Instructions
+=========================
 
+1) Required packages.
 
-  * Prerequisite tools
+   The ASF+SDF Meta-Environment requires the following packages:
 
-     To compile this distribution you will need the following items:
+   -GNU make, available from:
+       www.gnu.org
 
-     -- gmake (GNU make, from <http://www.gnu.org/software/make/>)
-     -- jdk (The Java Development Kit, from
-          <http://www.javasoft.com/products/jdk/>). Make sure you get
-         version 1.1 or higher.
-     -- wish (A user-interface system, part of Tcl/Tk, from
-          <http://dev.scriptics.com/software/>). Make sure you
-          get version 8.0.1 or higher.
-     -- graphviz (A graph visualization library from AT&T), from
-          <http://www.research.att.com/sw/tools/graphviz/>)
-     -- xemacs (A text editor for X-windows systems, available from
-          <http://www.xemacs.org/>). Make sure you get version 20.4 or
-          newer.  The Meta-Environment is untested with other versions
-          of xemacs, but may very well work. (Or may not...)
-     -- the common development utilities typically existent in a basic
-          UNIXish environment.
+   -AT&T Graphviz, available from:
+       www.research.att.com/sw/tools/graphviz/
 
+   -Xemacs, available from:
+       www.xemacs.org/
 
-  * Prerequisites for testing
+   -Tcl/Tk, available from:
+       dev.scriptics.com/software/
 
-     In order to be able to test meta by executing
-         $ make check
-     you will need the JUnit Java Unit Testing framework. It is available
-     from <http://www.xprogramming.com/software.htm>.
+   -The ATerm library, available from:
+       www.cwi.nl/projects/MetaEnv/
 
+   -The ToolBus, available from:
+       www.cwi.nl/projects/MetaEnv/
 
-  * Resource requirements
+   -The pt-support library, available from:
+       www.cwi.nl/projects/MetaEnv/
 
-     -- About 200 megabytes (depending somewhat on platform specifics)
-        of disk space is required to build the entire Meta-Environment
-        and its related tools.  An additional 40M (or so) is used upon
-        installation.
-     -- A minimum of about 96M of physical or virtual memory is required
-        to build the Meta-Environment.  Since some of the components
-        inherently have a non-negligable memory footprint, it is also
-        advisable to allow for a sensible minimum of physical memory
-        on machines on which the Meta-Environment is deployed.
-        As an indication of the bare minimum, the `check' target takes
-        of about 20-30 megabytes to to run.  Serious usage will involve
-        seriously more.
+   -The sdf-support library, available from:
+       www.cwi.nl/projects/MetaEnv/
 
+   -The asf-support library, available from:
+       www.cwi.nl/projects/MetaEnv/
 
-  * Platform support
+   -The Scannerless Generalized LR Parser (sglr), available from:
+       www.cwi.nl/projects/MetaEnv/
 
-     The Meta-Environment has been installed successfully on the
-     following platforms:
+   -The SDF2 parser generator, , available from:
+       www.cwi.nl/projects/MetaEnv/              
+   
+   -The ASF+SDF compiler runtime library, available from:
+       www.cwi.nl/projects/MetaEnv/
 
-     -- Sun Solaris/Sparc >= 2.5, Sun Solaris/iX86 >= 2.6
-     -- SGI IRIX/Mips >= 6.2
-     -- NetBSD/PowerPC, NetBSD/iX86 >= 1.4
-     -- Mac OS X Server/PPC >= 1.0
-     -- Mac OS X/PPC DP2, DP3
-     -- LinuxPPC/PowerPC >= 2.0, MkLinux/PowerPC 3.0, Linux/iX86 >= 2.0
+   Before building the ASF+SDF Meta-Environment, you should first install these
+   packages.
 
-     The Meta-Environment has been tried without success on the
-     following platforms:
+2) Configuring the ASF+SDF Meta-Environment.
 
-     -- Digital (`Compaq') Alpha & OSF1 v4.0 (`Compaq Tru64 Unix')
+   Assuming that the third party tools, aterm library, the toolbus, the support 
+   libraries, the runtime library, the parser generator, and sglr are 
+   installed in <xemacs>, <graphviz>, <tk>, <aterm>, <toolbus>, <pt-support>, 
+   <sdf-support>, <asf-support>, <asc-support>, <pgen>, and <sglr> 
+   respectively and that the ASF+SDF Meta-Environment should be installed in 
+   <meta> then the following command will configure the Meta-Environment 
+   accordingly:
 
+   ./configure --prefix=<meta> \
+               --with-xemacs=<xemacs> \
+               --with-graphviz=<graphviz> \
+               --with-tk=<tk> \
+               --with-aterm=<aterm> \
+               --with-toolbus=<toolbus> \
+               --with-pt-support=<pt-support> \
+               --with-sdf-support=<sdf-support> \
+               --with-asf-support=<asf-support> \
+               --with-asc-support=<asc-support> \
+               --with-sglr=<sglr> \
+               --with-pgen=<pgen>
 
-  * Dependencies
+   Note. Default behaviour of configure is that it will look for libraries
+         in <prefix>/lib and for executables in your search paths. So,
+         you do not need to specify the locations of all these packages
+         explicitly (as we did in the example above).
 
-    The Meta-Environment distribution depends on the aterm and toolbus
-    distributions which can be downloaded from the CWI web-site:
+   If you use gcc, pgen is built with "gcc -Wall -g -O2". If you prefer
+   different options use --with-cflags="<options>" when you run configure.
 
-       http://www.cwi.nl/projects/MetaEnv/aterm/
-       http://www.cwi.nl/projects/MetaEnv/toolbus/
+   ./configure --help gives a detailed list of configuration options.       
 
-    Before building the ASF+SDF Meta-Environment download and install
-    both distributions.  Please consult the web-site for installation
-    instructions.
+3) Building the ASF+SDF Meta-Environment.
 
-    To ease the compilation and installation process of the
-    Meta-Environment, we also offer a complete distribution (Meta
-    Completa), which bundles all required CWI software packages and
-    contains a strongly simplified installation. See the web-site
-    http://www.cwi.nl/projects/MetaEnv/ for more information.
+   Assuming that GNU make is called "gmake" on your system then the
+   following commands will build and install the ASF+SDF Meta-Environment:
 
+   gmake
+   gmake install
 
-  * Configuring and compiling: final installation
+4) Checking the ASF+SDF Meta-Environment.
 
-    Let's assume the `aterm' and `toolbus' directories are located
-    in the directory `/some/prefix', that graphviz is installed in
-    `/path/to/graphviz', and that you want to install the ASF+SDF
-    Meta-Enironment in `/some/prefix'. Further we assume that the
-    Meta-Environment sources are unpacked in `/meta/source/` and that
-    the `make' command is in fact GNU make (you may have to use `gmake'
-    or `gnumake', depending on your site's configuration).  Furthermore,
-    you should make sure that your java installation's setup is correct,
-    and that your CLASSPATH variable points to the Java classes that
-    came with your JDK.
+   The ASF+SDF Meta-Environment can be tested via:
 
-    Here is the basic set-up.  These commands are the minimal config
-    options for the Meta-Environment to compile.  Note that the order
-    of execution is significant.  This will install everything in the
-    directories /some/prefix/{bin,lib,include,classes,share,man}.
+   gmake check
 
-    Make sure that your PATH points to the above /some/prefix/bin
-    directory, for instance by typing:
+5) Bug reporting and support.
 
-      $ PATH=/some/prefix/bin:${PATH}; export PATH
+   Please report bugs via:
 
-    for the sh family of shells, or alternatively (for csh-ish shells):
+   http://www.cwi.nl/htbin/MetaEnv/meta-bugs
 
-      % setenv PATH /some/prefix/bin:${PATH}
+   This is the general bug reporting page of the ASF+SDF Meta-Environment.
 
-    PATH being set properly, the installation procedure proceeds
-    as follows:
+   Support can be obtained via:
 
-      $ cd /meta/source/meta-<version>
-      $ ./configure --prefix=/some/prefix \
-                    --with-toolbus=/some/prefix \
-                    --with-aterm=/some/prefix \
-                    --with-graphviz=/path/to/graphviz
-      $ make
-      $ make install
+   meta-support@cwi.nl
 
-    At this point, everything should be configured, compiled, and
-    installed.  Once you have added the path to the directory
-    /some/prefix/bin to your PATH (see above), you are all set up.
+6) Known bugs.
 
-    If you use gcc, meta is built with "gcc -Wall -g -O2". If you prefer
-    different options use --with-cflags="<options>" when you run configure.
-
-The Meta-Environment development team wishes you happy environmentaling;
-and may all your grammars be context free.
-
-
-
-
-
-
-                                   ``Per me si va nella citt`a dolente;
-                                     per me si van nell'eterno dolore;
-                                     per me si va tra la perduta gente.
-                                     Giustizia mosse il mio alto Fattore;
-                                     fecemi la divina Potestate,
-                                     la somma Sapienza e il primo Amore.
-                                     Dinanzi a me non fur cose create,
-                                     se non eterne, ed io eterno duro:
-                                     lasciate ogni speranza, voi ch'entrate.''
-
-                                               -- Dante Alighieri, `Inferno'
+   None.  
