@@ -22,6 +22,6 @@ hiddens
       "make-table" "(" SIG-ELEMS ")"                                            -> TABLE
       "add-rules" "(" RULES ";" TABLE ")"                                       -> TABLE
     variables
-      [_]TabEl[']*                                                              -> TABLE-ELEM
-      [_]TabEl[*][']*                                                           -> { TABLE-ELEM "," }*
-      [_]Table[']*                                                              -> TABLE
+      [_]TabEl[\']*                                                              -> TABLE-ELEM
+      [_]TabEl[*][\']*                                                           -> { TABLE-ELEM "," }*
+      [_]Table[\']*                                                              -> TABLE

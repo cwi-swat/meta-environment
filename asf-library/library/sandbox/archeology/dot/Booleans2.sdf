@@ -27,4 +27,4 @@ exports
     > Bool "/\\" Bool -> Bool
     > Bool "\\/" Bool -> Bool
   variables
-    b [0-9']*              -> Bool
+    b [0-9\']*              -> Bool

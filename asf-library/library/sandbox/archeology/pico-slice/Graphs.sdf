@@ -18,9 +18,9 @@ exports
         "IF" BOOL "THEN" NODES "ELSE" NODES "FI"        -> NODES
         "IF" BOOL "THEN" GRAPH "ELSE" GRAPH "FI"        -> GRAPH
     variables
-        Edge[']*                                        -> EDGE
-        Edge[*][']*                                     -> EDGE*
-        Node[*][']*                                     -> NODE*
-        Node[+][']*                                     -> NODE+
-        Node[']*                                        -> NODE
-        Label[']*                                       -> LABEL
+        Edge[\']*                                        -> EDGE
+        Edge[*][\']*                                     -> EDGE*
+        Node[*][\']*                                     -> NODE*
+        Node[+][\']*                                     -> NODE+
+        Node[\']*                                        -> NODE
+        Label[\']*                                       -> LABEL

@@ -20,5 +20,5 @@ exports
     NatCon                      -> Nat
     nan                         -> Nat
   variables
-    nc[0-9']*                   -> NatCon
-    n[0-9']*                    -> Nat
+    nc[0-9\']*                   -> NatCon
+    n[0-9\']*                    -> Nat

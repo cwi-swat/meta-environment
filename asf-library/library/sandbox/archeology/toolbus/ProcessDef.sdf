@@ -11,5 +11,5 @@ exports
     "process" ProcessName "(" {VarDecl ","}* ")" "is" ProcessExpr -> ProcessDef
     ProcessDef*         -> ProcessDefs
   variables
-    PDef[0-9']*         -> ProcessDef
-    PDefs[0-9']*        -> ProcessDef*
+    PDef[0-9\']*         -> ProcessDef
+    PDefs[0-9\']*        -> ProcessDef*

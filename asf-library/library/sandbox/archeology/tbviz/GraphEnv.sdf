@@ -33,10 +33,10 @@ exports
     var-Env    -> Type
 
   variables
-    genv[0-9']* -> Genv
-    type[0-9']* -> Type
-    pair[0-9']* -> Pair
-    "pair+"[0-9']* -> Pair+
-    "pair*"[0-9']* -> Pair*
-    table[0-9']* -> Table
-    "table*"[0-9']* -> Table*
+    genv[0-9\']* -> Genv
+    type[0-9\']* -> Type
+    pair[0-9\']* -> Pair
+    "pair+"[0-9\']* -> Pair+
+    "pair*"[0-9\']* -> Pair*
+    table[0-9\']* -> Table
+    "table*"[0-9\']* -> Table*

@@ -23,10 +23,10 @@ exports
 
 hiddens
   variables
-    s[0-9']*            -> DOT-REAL-CON
-    q[0-9']*            -> MANT-REAL-CON
-    c[0-9']*"*"         -> CHAR*
-    c[0-9']*"+"         -> CHAR+
-    c[0-9']*            -> CHAR
-    n[0-9']*            -> POS
-    z[0-9']*            -> NEG
+    s[0-9\']*            -> DOT-REAL-CON
+    q[0-9\']*            -> MANT-REAL-CON
+    c[0-9\']*"*"         -> CHAR*
+    c[0-9\']*"+"         -> CHAR+
+    c[0-9\']*            -> CHAR
+    n[0-9\']*            -> POS
+    z[0-9\']*            -> NEG

@@ -113,44 +113,44 @@ doc ":" String                                          -> Docu
 manual entry ":" Name                                   -> ToolDocu
 
 variables
-"_Spec-part"[']+ -> SEAL-spec-part
-"_Spec-parts"[']+ -> SEAL-spec-part+
-"_But"[']+      -> Button
-"_Menu"[']+     -> Menu
-"_Mentry"[']+   -> Menu-entry
-"_Tool"[']+     -> Active-tool
-"_Entry"[']+    -> Entry
-"_Entries"[']+  -> Entry+
-"_Cpart"[']+    -> Condition-part
-"_WC"[']+       -> While-condition
-"_Str"[']+      -> String
-"_Strs"[']+     -> String+
-"_Pattern"[']+  -> Pattern
-"_Vn"[']+       -> Variable-name
-"_Vns"[']+      -> Variable-name*
-"_Vnscomma"[']+ -> {Variable-name ","}*
-"_Sort"[']+     -> Sort
-"_Term"[']+     -> Term
-"_Text"[']+     -> Text
-"_Mod"[']+      -> Module
-"_Mods"[']+     -> Module*
-"_Func"[']+     -> Function-name
-"_Move"[']+     -> Focus-action
-"_Moves"[']+    -> {Focus-action ","}+
-"_Focus"[']+    -> Focus
-"_Focus-expr"[']+  -> Focus-expr
-"_FC-expr"[']+  -> Focus-cond-expr
-"_FC-exprs"[']+ -> {Focus-cond-expr ","}+
-"_Act"[']+      -> SEAL-action
-"_ActsSemi"[']+ -> {SEAL-action ";"}+
-"_ActsNone"[']+ -> SEAL-action*
-"_Function"[']+ -> SEAL-function
-"_Doc"[']+      -> Docu
-"_ToolDoc"[']+  -> ToolDocu
-"_C-A-pair"[']+ -> Condition-action-pair
-"_C-A-pairs"[']+ -> Condition-action-pair*
-"_Tool-CA-pair"[']+ -> Tool-CA-pair
-"_Tool-CA-pairs"[']+ -> Tool-CA-pair*
+"_Spec-part"[\']+ -> SEAL-spec-part
+"_Spec-parts"[\']+ -> SEAL-spec-part+
+"_But"[\']+      -> Button
+"_Menu"[\']+     -> Menu
+"_Mentry"[\']+   -> Menu-entry
+"_Tool"[\']+     -> Active-tool
+"_Entry"[\']+    -> Entry
+"_Entries"[\']+  -> Entry+
+"_Cpart"[\']+    -> Condition-part
+"_WC"[\']+       -> While-condition
+"_Str"[\']+      -> String
+"_Strs"[\']+     -> String+
+"_Pattern"[\']+  -> Pattern
+"_Vn"[\']+       -> Variable-name
+"_Vns"[\']+      -> Variable-name*
+"_Vnscomma"[\']+ -> {Variable-name ","}*
+"_Sort"[\']+     -> Sort
+"_Term"[\']+     -> Term
+"_Text"[\']+     -> Text
+"_Mod"[\']+      -> Module
+"_Mods"[\']+     -> Module*
+"_Func"[\']+     -> Function-name
+"_Move"[\']+     -> Focus-action
+"_Moves"[\']+    -> {Focus-action ","}+
+"_Focus"[\']+    -> Focus
+"_Focus-expr"[\']+  -> Focus-expr
+"_FC-expr"[\']+  -> Focus-cond-expr
+"_FC-exprs"[\']+ -> {Focus-cond-expr ","}+
+"_Act"[\']+      -> SEAL-action
+"_ActsSemi"[\']+ -> {SEAL-action ";"}+
+"_ActsNone"[\']+ -> SEAL-action*
+"_Function"[\']+ -> SEAL-function
+"_Doc"[\']+      -> Docu
+"_ToolDoc"[\']+  -> ToolDocu
+"_C-A-pair"[\']+ -> Condition-action-pair
+"_C-A-pairs"[\']+ -> Condition-action-pair*
+"_Tool-CA-pair"[\']+ -> Tool-CA-pair
+"_Tool-CA-pairs"[\']+ -> Tool-CA-pair*
 
 priorities
         Unix-filename "." focus -> Focus > Variable-name "." focus -> Focus

@@ -8,7 +8,7 @@ exports
 
   lexical syntax
     [a-zA-Z] [_A-Za-z0-9]*                              -> IDENT
-    "'" ~['\n]* "'"                                     -> STRING-PART
+    "\'" ~[\'\n]* "\'"                                     -> STRING-PART
     STRING-PART+                                        -> STRING
     DIGIT                                               -> LABEL
     DIGIT DIGIT                                         -> LABEL

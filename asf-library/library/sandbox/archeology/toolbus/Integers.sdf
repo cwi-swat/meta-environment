@@ -15,6 +15,6 @@ module Integers
 
          "(" INT ")"            -> INT {bracket}
       variables
-         Nat-con [0-9']*        -> NAT-CON
-         Nat [0-9']*            -> NAT
-         Int [0-9']*            -> INT
+         Nat-con [0-9\']*        -> NAT-CON
+         Nat [0-9\']*            -> NAT
+         Int [0-9\']*            -> INT

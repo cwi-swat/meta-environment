@@ -1,8 +1,0 @@
-module Asple-tc
-imports Asple Mode-environments
-  exports
-  context-free syntax
-        tc"[" PROGRAM "]"                -> BOOL   %%  {incremental}
-        tc"[" {DECL ";"}+"]"    in MENV  -> MENV   %%  {incremental}
-        tc"[" {STM ";"}+ "]" in MENV     -> BOOL   %% {incremental}
-        tc"[" EXP "]" in MENV            -> MODE   %%  {incremental}

@@ -1,9 +1,0 @@
-module Pico-Semantic-Entities-X
-module Pico-Semantic-Entities-X
-imports MetaNotation-X ActionNotation-X Layout
-   Pico-Abstract-Syntax-X
-  exports
-    context-free
-    syntax
-        value -> TERM
-        value -> SYMBOL

@@ -18,5 +18,5 @@ exports
        "<<" STRING ">>"                         -> LISP
 
 variables
-        [_]Dummy[']*            -> OUTPUT
-        [_]Str[']*              -> STRING
+        [_]Dummy[\']*            -> OUTPUT
+        [_]Str[\']*              -> STRING

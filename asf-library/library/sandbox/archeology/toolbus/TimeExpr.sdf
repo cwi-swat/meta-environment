@@ -14,4 +14,4 @@ exports
    Delay"("TERM-LIST")" TimeOut"("TERM-LIST")" -> TimeExpr
 
 variables
-  timeexpr[0-9']* -> TimeExpr
+  timeexpr[0-9\']* -> TimeExpr

@@ -4,14 +4,14 @@ module Variables
 exports
   sorts    VAR
   lexical syntax
-    [a-z][a-zA-Z0-9\-']*                 -> VAR
+    [a-z][a-zA-Z0-9\-\']*                 -> VAR
   context-free syntax
     or                                   -> VAR
     true                                 -> VAR
     false                                -> VAR
     prime "(" VAR ")"                    -> VAR
   variables
-    V[0-9']*                             -> VAR
+    V[0-9\']*                             -> VAR
 hiddens
   variables
     "ch+"                                -> CHAR+

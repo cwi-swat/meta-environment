@@ -1,5 +1,0 @@
-module Pico-Semantic-Entities-Y
-module Pico-Semantic-Entities-Y
-imports ActionNotation Layout exports context-free       
-                                      syntax             
-                                        Data -> Yielder

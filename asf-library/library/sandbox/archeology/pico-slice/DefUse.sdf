@@ -17,8 +17,8 @@ exports
         "DU-series" "(" L_SERIES "," TABLE ")"  -> TABLE
 
     variables
-        Id[*][']*                               -> ID*
-        Id[']*                                  -> ID
-        NatCon[']*                              -> NAT-CON
-        StrCon[']*                              -> STR-CON
-        Entry[*][']*                            -> ENTRY*
+        Id[*][\']*                               -> ID*
+        Id[\']*                                  -> ID
+        NatCon[\']*                              -> NAT-CON
+        StrCon[\']*                              -> STR-CON
+        Entry[*][\']*                            -> ENTRY*

@@ -32,13 +32,13 @@ exports
         "is-empty" "(" L_SERIES ")"                     -> BOOL
 
     variables
-        L_Program[']*                                   -> L_PROGRAM
-        L_Series[']*                                    -> L_SERIES
-        IdType[']*                                      -> ID-TYPE
-        IdType[*][']*                                   -> { ID-TYPE "," }*
+        L_Program[\']*                                   -> L_PROGRAM
+        L_Series[\']*                                    -> L_SERIES
+        IdType[\']*                                      -> ID-TYPE
+        IdType[*][\']*                                   -> { ID-TYPE "," }*
         Stat                                            -> STATEMENT
-        Stat[*][']*                                     -> { STATEMENT ";" }*
-        L_Stat[']*                                      -> L_STATEMENT
-        L_Stat[*][']*                                   -> { L_STATEMENT ";" }*
-        L_Stat[+][']*                                   -> { L_STATEMENT ";" }+
-        Ref[0-9']*                                      -> REF
+        Stat[*][\']*                                     -> { STATEMENT ";" }*
+        L_Stat[\']*                                      -> L_STATEMENT
+        L_Stat[*][\']*                                   -> { L_STATEMENT ";" }*
+        L_Stat[+][\']*                                   -> { L_STATEMENT ";" }+
+        Ref[0-9\']*                                      -> REF

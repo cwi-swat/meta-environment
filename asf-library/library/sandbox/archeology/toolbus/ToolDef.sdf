@@ -16,8 +16,8 @@ exports
     ToolAttribName "=" ToolAttribValue -> ToolAttrib
     ToolDef*            -> ToolDefs
   variables
-    TDef[0-9']*         -> ToolDef
-    TDefs[0-9']*        -> ToolDef*
-    TName[0-9']*        -> ToolName
-    TAttribName[0-9']*  -> ToolAttribName
-    TAttribValue[0-9']* -> ToolAttribValue
+    TDef[0-9\']*         -> ToolDef
+    TDefs[0-9\']*        -> ToolDef*
+    TName[0-9\']*        -> ToolName
+    TAttribName[0-9\']*  -> ToolAttribName
+    TAttribValue[0-9\']* -> ToolAttribValue

@@ -14,5 +14,5 @@ exports
     islabel(EXPR)                -> BOOL
 
   variables
-   [_]Labels[']*  -> ID*
+   [_]Labels[\']*  -> ID*
    [_]Labels"+"   -> ID+

@@ -22,11 +22,11 @@ context-free syntax
     val "(" LETTER ")"                                  -> INT
     Unix-filename "<" Unix-filename                     -> INT
 variables
-C[']+           -> CHAR
-Cs[']+          -> CHAR*
-Let[']+         -> LETTER
-"_Ufn"[']+      -> Unix-filename
-"_Ufns"[']+     -> Unix-filename*
-"_Name"[']+     -> Name
-"_Names"[']+    -> Name*
-"_Names-comma"[']+ -> {Name ","}*
+C[\']+           -> CHAR
+Cs[\']+          -> CHAR*
+Let[\']+         -> LETTER
+"_Ufn"[\']+      -> Unix-filename
+"_Ufns"[\']+     -> Unix-filename*
+"_Name"[\']+     -> Name
+"_Names"[\']+    -> Name*
+"_Names-comma"[\']+ -> {Name ","}*

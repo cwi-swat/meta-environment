@@ -14,7 +14,7 @@ exports
 
 
   variables
-    SDef[0-9']*         -> TscriptDef
-    SDefs[0-9']*        -> TscriptDef*
-    tscript[0-9']*      -> Tscript
-    pis[0-9']*          -> { ProcessInvocation "," }+
+    SDef[0-9\']*         -> TscriptDef
+    SDefs[0-9\']*        -> TscriptDef*
+    tscript[0-9\']*      -> Tscript
+    pis[0-9\']*          -> { ProcessInvocation "," }+

@@ -25,5 +25,5 @@ lookup-state "(" SE "," Name ")"        -> STATE
 lookup-state "(" SYMTAB "," Name ")"    -> STATE
 
 variables
-"_Sym-tab"[']+     -> SYMTAB
-"_Se"[']+          -> SE
+"_Sym-tab"[\']+     -> SYMTAB
+"_Se"[\']+          -> SE

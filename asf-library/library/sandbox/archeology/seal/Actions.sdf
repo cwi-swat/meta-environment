@@ -77,8 +77,8 @@ Variable-name of type ":" Var-type Use-or-def in actionnr ":" INT source ":" Uni
 source of Variable-name                                 -> Unix-filename
 
 variables
-"_Var"[']+      -> VARIABLE
-"_Vars"[']+     -> VARIABLE*
-"_Variables"[']+   -> VARIABLES
-"_Var-type"[']+    -> Var-type
-"_Use-or-def"[']+  -> Use-or-def
+"_Var"[\']+      -> VARIABLE
+"_Vars"[\']+     -> VARIABLE*
+"_Variables"[\']+   -> VARIABLES
+"_Var-type"[\']+    -> Var-type
+"_Use-or-def"[\']+  -> Use-or-def

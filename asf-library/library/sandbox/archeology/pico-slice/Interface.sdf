@@ -16,4 +16,4 @@ exports
 
         "makeslice"  "(" L_PROGRAM "," PATH ")" -> PROGRAM
     variables
-        Path[']*                                -> PATH
+        Path[\']*                                -> PATH

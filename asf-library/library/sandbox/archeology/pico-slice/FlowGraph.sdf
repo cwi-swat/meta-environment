@@ -18,5 +18,5 @@ exports
         get-ref "(" L_STATEMENT ")"                     -> REF
 
     variables
-        Ref[*][']*                                      -> REF*
-        Ref[+][']*                                      -> REF+
+        Ref[*][\']*                                      -> REF*
+        Ref[+][\']*                                      -> REF+

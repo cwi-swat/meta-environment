@@ -14,10 +14,10 @@ exports
 
  variables
     [_]C"*"                      -> TENV*
-    [_]D"*"[']*                  -> {VAR-DECL ";"}*
-    [_]D[']*                     -> VAR-DECL
-    [_]D"+"[']*                  -> {VAR-DECL ";"}+
-    [_]Tenv[']*                  -> TENV
+    [_]D"*"[\']*                  -> {VAR-DECL ";"}*
+    [_]D[\']*                     -> VAR-DECL
+    [_]D"+"[\']*                  -> {VAR-DECL ";"}+
+    [_]Tenv[\']*                  -> TENV
 
 hiddens
   context-free syntax

@@ -9,7 +9,7 @@ module Booleans
          not "(" BOOL ")"       -> BOOL
          "(" BOOL ")"           -> BOOL {bracket}
       variables
-         Bool [0-9']*           -> BOOL
+         Bool [0-9\']*           -> BOOL
 
    priorities
       "|" < "&"

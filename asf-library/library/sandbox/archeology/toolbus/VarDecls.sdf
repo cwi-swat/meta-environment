@@ -12,5 +12,5 @@ exports
     VAR ":" TERM "?"            -> VarDecl
     { VarDecl "," }*            -> VarDecls
   variables
-    VDecl[0-9']*        -> VarDecl
-    VDecls[0-9']*       -> { VarDecl "," }*
+    VDecl[0-9\']*        -> VarDecl
+    VDecls[0-9\']*       -> { VarDecl "," }*

@@ -3,7 +3,7 @@ module Lisp
 %% The module LISP
 %%
 %% The EQM knows about this module.
-%% DON'T EDIT, except when you want to add LispIds
+%% DON\'T EDIT, except when you want to add LispIds
 %% to the lexical (not context-free!) syntax.
 %%
 %%
@@ -46,6 +46,6 @@ context-free syntax
         LispString   -> LISP
 
         "(" LISP * ")" -> LISP
-%% And when you prefer them, they aren't prefered.
+%% And when you prefer them, they aren\'t prefered.
         "<<" Condition ">>" -> LISP
-         "'" LISP -> LISP
+         "\'" LISP -> LISP

@@ -23,7 +23,7 @@ connect-errors "(" STATE INT ERRORS* ")"        -> ERRORS
 "Error" in item ":" Name pair nr ":" INT        -> ERROR-HEAD
 
 variables
-"_Errors"[']+      -> ERRORS
-"_Error-head"[']+  -> ERROR-HEAD
-"_Error-tail"[']+  -> ERROR-TAIL
-"_Error-tails"[']+ -> ERROR-TAIL*
+"_Errors"[\']+      -> ERRORS
+"_Error-head"[\']+  -> ERROR-HEAD
+"_Error-tail"[\']+  -> ERROR-TAIL
+"_Error-tails"[\']+ -> ERROR-TAIL*

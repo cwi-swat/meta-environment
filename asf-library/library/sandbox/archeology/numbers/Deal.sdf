@@ -11,5 +11,5 @@ hiddens
 
 hiddens
   variables
-     r[0-9']*           -> REAL
-     x[0-9']*           -> INT
+     r[0-9\']*           -> REAL
+     x[0-9\']*           -> INT

@@ -27,7 +27,7 @@ hiddens
      INT "<" INT                -> BOOL
      "-" INT                    -> INT
   variables
-     Int[0-9']*            -> INT
+     Int[0-9\']*            -> INT
 
 hiddens
   context-free syntax
@@ -37,13 +37,13 @@ hiddens
     "bigpos?" "(" INT ")"       -> BOOL
 
   variables
-     Int[0-9']*          -> INT
-     [xy][0-9']*        -> INT
-     [z][0-9']*         ->  NEG
-     [n][0-9']*         -> POS
-     c[0-9']*           -> CHAR
-     c[0-9']*"+"        -> CHAR+
-     c[0-9']*"*"        -> CHAR*
+     Int[0-9\']*          -> INT
+     [xy][0-9\']*        -> INT
+     [z][0-9\']*         ->  NEG
+     [n][0-9\']*         -> POS
+     c[0-9\']*           -> CHAR
+     c[0-9\']*"+"        -> CHAR+
+     c[0-9\']*"*"        -> CHAR*
 
  priorities
   ";"

@@ -47,7 +47,7 @@ priorities
 
 hiddens
   variables
-     n[0-9']*        -> POS
-     z[0-9']*        -> NEG
-     [xy][0-9']*     -> INT
-     p[0-9']*        -> NAT
+     n[0-9\']*        -> POS
+     z[0-9\']*        -> NEG
+     [xy][0-9\']*     -> INT
+     p[0-9\']*        -> NAT

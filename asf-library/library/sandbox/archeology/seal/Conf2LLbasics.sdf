@@ -20,4 +20,4 @@ add-moves "(" {Focus-action ","}+ ")"           -> S_EXPR_LIST
 
 make-symbol "(" String ")"                      -> SYMBOL
 String                                          -> S_EXPR
-"'" Focus-action                                -> SYMBOL
+"\'" Focus-action                                -> SYMBOL

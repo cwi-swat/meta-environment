@@ -11,5 +11,5 @@ exports
     VAR-LIST "+" VAR-LIST                       -> VAR-LIST {left}
     member-of "?" "(" VAR "," VAR-LIST ")"      -> BOOL
   variables
-    V-list[0-9']*                               -> VAR-LIST
-    V[0-9']*"*"                                 -> {VAR ","}*
+    V-list[0-9\']*                               -> VAR-LIST
+    V[0-9\']*"*"                                 -> {VAR ","}*

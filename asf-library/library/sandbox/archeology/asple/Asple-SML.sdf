@@ -1,8 +1,0 @@
-module Asple-SML
-imports Asple-stat SML-syntax
-exports
- context-free syntax
-  cp "[" PROGRAM "]"            -> SML-PROGRAM
-  cp "[" {STM ";"}* "]"         -> SML-PROGRAM
-  cp "[" EXP "]"                -> SML-PROGRAM
-  cp "[" MODE "]"               -> SML-PROGRAM

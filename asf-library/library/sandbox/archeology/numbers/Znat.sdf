@@ -21,9 +21,9 @@ exports
 
 hiddens
   variables
-    c[0-9']*       -> CHAR
-    c[0-9']*"+"    -> CHAR+
-    D[0-9']*       -> DIGIT
-    D[0-9']*"+"    -> DIGIT+
-    D[0-9']*"*"    -> DIGIT*
-    z[0-9']*       -> ZNAT
+    c[0-9\']*       -> CHAR
+    c[0-9\']*"+"    -> CHAR+
+    D[0-9\']*       -> DIGIT
+    D[0-9\']*"+"    -> DIGIT+
+    D[0-9\']*"*"    -> DIGIT*
+    z[0-9\']*       -> ZNAT

@@ -13,6 +13,6 @@ exports
 
 
   variables
-    A[0-9']*            -> Atom
-    B[0-9']*            -> Atom
-    C[0-9']*            -> Atom
+    A[0-9\']*            -> Atom
+    B[0-9\']*            -> Atom
+    C[0-9\']*            -> Atom

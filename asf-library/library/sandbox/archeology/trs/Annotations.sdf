@@ -13,9 +13,9 @@ exports
     ANNOTATION*                             -> ANNOTATIONS
 
   variables
-    [_]Path[']*                             -> PATH
-    [_]Path[*][']*                          -> { PATH "," }*
-    [_]Path[+][']*                          -> { PATH "," }+
-    [_]Annot[']*                            -> ANNOTATION
-    [_]Annots[']*                           -> ANNOTATIONS
-    [_]Annot[*][']*                         -> ANNOTATION*
+    [_]Path[\']*                             -> PATH
+    [_]Path[*][\']*                          -> { PATH "," }*
+    [_]Path[+][\']*                          -> { PATH "," }+
+    [_]Annot[\']*                            -> ANNOTATION
+    [_]Annots[\']*                           -> ANNOTATIONS
+    [_]Annot[*][\']*                         -> ANNOTATION*

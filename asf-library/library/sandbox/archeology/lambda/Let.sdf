@@ -11,7 +11,7 @@ exports
     "expand" "(" L-EXP "," LET ")"	-> L-EXP
 
   variables
-    D[0-9']*"+"         -> DEF+
-    D[0-9']*"*"         -> DEF*
-    D[0-9']*            -> DEF
+    D[0-9\']*"+"         -> DEF+
+    D[0-9\']*"*"         -> DEF*
+    D[0-9\']*            -> DEF
     Let			-> LET

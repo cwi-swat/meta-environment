@@ -8,8 +8,8 @@ module Strings
         STR-CON                 -> STRING
         STRING "||" STRING      -> STRING {left}
      variables
-        Str-con [0-9']*         -> STR-CON
-        Str [0-9']*             -> STRING
+        Str-con [0-9\']*         -> STR-CON
+        Str [0-9\']*             -> STRING
    hiddens
       variables
         Chars [12]              -> CHAR*

@@ -22,4 +22,4 @@ hiddens
     get-stats(Table) -> DotStats
     single-stat(Table) -> DotStats
   variables
-    cs[0-9']*                     -> CHAR*
+    cs[0-9\']*                     -> CHAR*

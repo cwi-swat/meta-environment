@@ -8,7 +8,7 @@ module LL
 exports
   sorts SYMBOL COLON-SYMBOL
   lexical syntax
-        ~ [ \t\n#:\"\[\]{}'`()|;_,@\<\>] +         -> SYMBOL
+        ~ [ \t\n#:\"\[\]{}\'`()|;_,@\<\>] +         -> SYMBOL
         SYMBOL ":"                                 -> COLON-SYMBOL
 
   sorts S_EXPR S_EXPR_LIST PACK-SYMBOL
@@ -18,13 +18,13 @@ exports
         "#:data:" COLON-SYMBOL+                          -> PACK-SYMBOL
 
         "(" S_EXPR*  ")"                                -> S_EXPR
-        "'" S_EXPR                                      -> S_EXPR
+        "\'" S_EXPR                                      -> S_EXPR
         S_EXPR+                                         -> S_EXPR_LIST
         SYMBOL                                          -> S_EXPR
         PACK-SYMBOL SYMBOL                              -> S_EXPR
 
 variables
-"_S_expr"[']+   -> S_EXPR
-"_S_expr_list"[']+ -> S_EXPR+
-"_Sym"[']+      -> SYMBOL
-"_Syms"[']+     -> SYMBOL+
+"_S_expr"[\']+   -> S_EXPR
+"_S_expr_list"[\']+ -> S_EXPR+
+"_Sym"[\']+      -> SYMBOL
+"_Syms"[\']+     -> SYMBOL+

@@ -15,8 +15,8 @@ exports
     "(" L-EXP ")"                       -> L-EXP  { bracket }
 
   variables
-    E[0-9']*                            -> L-EXP
-    V[0-9']*"+"                         -> VAR+
+    E[0-9\']*                            -> L-EXP
+    V[0-9\']*"+"                         -> VAR+
 
 priorities
   { "lambda" VAR+ "." L-EXP  -> L-EXP }  <  { L-EXP L-EXP -> L-EXP }

@@ -1,7 +1,0 @@
-module SML-ds
-imports SML-syntax SML-states
-exports
-  context-free syntax
-   es "["SML-PROGRAM "]" with INPUT  -> OUTPUT
-   es "[" {COM ";"}*"]" in SML-STATE  -> SML-STATE
-   es "["  OPER VAL"," VAL "]"        -> VAL

@@ -29,5 +29,5 @@ exports
 
 hiddens
   variables
-    n[0-9']*    -> POS
-    z[0-9']*    -> NEG
+    n[0-9\']*    -> POS
+    z[0-9\']*    -> NEG

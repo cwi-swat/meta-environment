@@ -41,7 +41,7 @@ priorities
 
 hiddens
   variables
-    r[0-9']*            -> REAL
-    q[0-9']*            -> MANT-REAL-CON
-    s[0-9']*            -> DOT-REAL-CON
-    x[0-9']*            -> INT
+    r[0-9\']*            -> REAL
+    q[0-9\']*            -> MANT-REAL-CON
+    s[0-9\']*            -> DOT-REAL-CON
+    x[0-9\']*            -> INT

@@ -97,32 +97,32 @@ append-focus-actions "(" {Focus-action ","}* "," {Focus-action ","}* ")" -> Focu
 {Focus-action ","}*                                             -> Focus-actionS
 "(" Focus-actionS ")"                                           -> Focus-actionS {bracket}
 variables
-"_State"[']+       -> STATE
-"_States"[']+      -> {STATE ";"}+
-"_Type"[']+        -> TYPE
-"_Inst"[']+        -> INST
-"_Insts"[']+       -> INST*
-"_INSTS"[']+       -> INSTS*
-"_Acts-insts"[']+  -> ACTS-insts
-"_Cond-insts"[']+  -> COND-insts
-"_Inp-insts"[']+   -> INPUT-insts
-"_Outp-insts"[']+  -> OUTPUT-insts
-"_Sel-insts"[']+   -> SEL-insts
-"_Red-insts"[']+   -> RED-insts
-"_Asgn-insts"[']+  -> ASGN-insts
-"_Acts-mods"[']+   -> ACTS-mods
-"_Cond-mods"[']+   -> COND-mods
-"_MODS"[']+        -> MOD*
-"_MOD"[']+         -> MOD
-"_MODSs"[']+       -> MODS*
-"_MOVES"[']+       -> MOVE*
-"_MOVESs"[']+       -> MOVES*
-"_Inst-list"[']+   -> INST-LIST
-"_Vars-list"[']+   -> VARS-LIST
-"_Mods-list"[']+   -> MOD-LIST
-"_Moves-list"[']+  -> MOVES-LIST
-"_VARS"[']+        -> VAR*
-"_VARSs"[']+       -> VARS*
-"_Named-move"[']+   -> ACT-moves
-"_Named-moves"[']+   -> ACT-moves*
-"_Config-variables"[']+ -> VARIABLE*
+"_State"[\']+       -> STATE
+"_States"[\']+      -> {STATE ";"}+
+"_Type"[\']+        -> TYPE
+"_Inst"[\']+        -> INST
+"_Insts"[\']+       -> INST*
+"_INSTS"[\']+       -> INSTS*
+"_Acts-insts"[\']+  -> ACTS-insts
+"_Cond-insts"[\']+  -> COND-insts
+"_Inp-insts"[\']+   -> INPUT-insts
+"_Outp-insts"[\']+  -> OUTPUT-insts
+"_Sel-insts"[\']+   -> SEL-insts
+"_Red-insts"[\']+   -> RED-insts
+"_Asgn-insts"[\']+  -> ASGN-insts
+"_Acts-mods"[\']+   -> ACTS-mods
+"_Cond-mods"[\']+   -> COND-mods
+"_MODS"[\']+        -> MOD*
+"_MOD"[\']+         -> MOD
+"_MODSs"[\']+       -> MODS*
+"_MOVES"[\']+       -> MOVE*
+"_MOVESs"[\']+       -> MOVES*
+"_Inst-list"[\']+   -> INST-LIST
+"_Vars-list"[\']+   -> VARS-LIST
+"_Mods-list"[\']+   -> MOD-LIST
+"_Moves-list"[\']+  -> MOVES-LIST
+"_VARS"[\']+        -> VAR*
+"_VARSs"[\']+       -> VARS*
+"_Named-move"[\']+   -> ACT-moves
+"_Named-moves"[\']+   -> ACT-moves*
+"_Config-variables"[\']+ -> VARIABLE*

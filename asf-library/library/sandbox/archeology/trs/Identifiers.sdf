@@ -16,4 +16,4 @@ exports
         true 		-> ID
         false 		-> ID
     variables
-        [_]Id[']*       -> ID
+        [_]Id[\']*       -> ID

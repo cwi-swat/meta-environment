@@ -18,7 +18,7 @@ exports
     isproc"(" EXPR LPAR TYPE-LIST RPAR ")"   -> BOOL
     vararg"(" EXPR LPAR {EXPR ","}* RPAR ")" -> BOOL
   variables
-    [_]TypeList[']*              -> {TYPE ";"}*
-    [_]ProcType[']*              -> PROC-TYPE
-    [_]Vtype[']*                 -> VTYPE
-    [_]VtypeList[']*             -> {VTYPE ";"}*
+    [_]TypeList[\']*              -> {TYPE ";"}*
+    [_]ProcType[\']*              -> PROC-TYPE
+    [_]Vtype[\']*                 -> VTYPE
+    [_]VtypeList[\']*             -> {VTYPE ";"}*

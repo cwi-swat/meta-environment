@@ -28,12 +28,12 @@ exports
      > ProcessExpr "+" ProcessExpr -> ProcessExpr
 
   variables
-    PExpr[0-9']*        -> ProcessExpr
-    E[0-9']*            -> ProcessExpr
-    P[0-9']*            -> ProcessExpr
-    C[0-9']*            -> Atom
-    PInvoc[0-9']*       -> ProcessInvocation
-    PInvocs[0-9']*      -> { ProcessInvocation "," }*
-    PInvocs"+"[0-9']*   -> { ProcessInvocation "," }+
-    PName[0-9']*        -> ProcessName
-    Pnm[0-9']*          -> ProcessName
+    PExpr[0-9\']*        -> ProcessExpr
+    E[0-9\']*            -> ProcessExpr
+    P[0-9\']*            -> ProcessExpr
+    C[0-9\']*            -> Atom
+    PInvoc[0-9\']*       -> ProcessInvocation
+    PInvocs[0-9\']*      -> { ProcessInvocation "," }*
+    PInvocs"+"[0-9\']*   -> { ProcessInvocation "," }+
+    PName[0-9\']*        -> ProcessName
+    Pnm[0-9\']*          -> ProcessName

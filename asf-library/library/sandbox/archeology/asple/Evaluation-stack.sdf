@@ -1,8 +1,0 @@
-module Evaluation-stack
-imports Values 
-    exports
-        sorts EVSTACK
-        context-free syntax
-             stack "(" {VAL ","}* ")" -> EVSTACK
-        variables
-             Stack[1-9']* -> EVSTACK

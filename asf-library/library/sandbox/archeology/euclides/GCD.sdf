@@ -1,5 +1,5 @@
 module GCD
-%%  GCD; Euclides' Algorithm for Greatest Common Divisor
+%%  GCD; Euclides\' Algorithm for Greatest Common Divisor
 %%  (See also Klo91, Example 11.1)
 %%
 %%  -- Arie

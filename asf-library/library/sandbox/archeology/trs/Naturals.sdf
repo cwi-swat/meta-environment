@@ -12,8 +12,8 @@ exports
         "_succ" "(" NAT ")"     -> NAT
         "_pred" "(" NAT ")"     -> NAT
     variables
-        [_]Char[+][']*          -> CHAR+
-        [_]Char[']*             -> CHAR
-        [_]Nat[']*              -> NAT
-        [_]Nat[*][']*           -> NAT*
-        [_]Nat[+][']*           -> NAT+
+        [_]Char[+][\']*          -> CHAR+
+        [_]Char[\']*             -> CHAR
+        [_]Nat[\']*              -> NAT
+        [_]Nat[*][\']*           -> NAT*
+        [_]Nat[+][\']*           -> NAT+

@@ -6,4 +6,4 @@ hiddens
     "REAL-CON" LISP              -> REAL-CON
     "<<" REAL-CON ">>"           -> LISP
   variables
-    r[0-9']*    -> REAL-CON
+    r[0-9\']*    -> REAL-CON

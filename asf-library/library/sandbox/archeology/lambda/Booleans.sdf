@@ -13,7 +13,7 @@ exports
     "(" BOOL ")"  -> BOOL bracket
     "!" BOOL      -> BOOL
   variables
-    Bool [0-9']*  -> BOOL
+    Bool [0-9\']*  -> BOOL
 
    priorities
       "|" < "&"  <  "!"

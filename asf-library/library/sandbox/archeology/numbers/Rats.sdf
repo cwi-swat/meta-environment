@@ -33,9 +33,9 @@ hiddens
      un( RAT, RAT )             -> PAIR
 
   variables
-    q[0-9']*             -> RAT
-    n[0-9']*             -> POS
-    x[0-9']*             -> INT
+    q[0-9\']*             -> RAT
+    n[0-9\']*             -> POS
+    x[0-9\']*             -> INT
 
 
 

@@ -14,5 +14,5 @@ exports
       match "(" TERMS ";" TERMS ";" BINDINGS ")"        -> BINDINGS
       VAR "unbound" "in" BINDINGS                       -> BOOL
     variables
-      [_]Bin[*][']*                                     -> BINDING*
-      [_]Bins[']*                                       -> BINDINGS
+      [_]Bin[*][\']*                                     -> BINDING*
+      [_]Bins[\']*                                       -> BINDINGS

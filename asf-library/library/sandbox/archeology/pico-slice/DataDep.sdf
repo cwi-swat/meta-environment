@@ -19,5 +19,5 @@ exports
         Table                                           -> TABLE
         Defs                                            -> ID*
         Uses                                            -> ID*
-        Id[+][']*                                       -> ID+
+        Id[+][\']*                                       -> ID+
         N                                               -> NODE

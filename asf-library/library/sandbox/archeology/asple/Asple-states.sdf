@@ -1,9 +1,0 @@
-module Asple-states
-imports Value-environments IO
- exports
- sorts STATE
- context-free syntax
-   "<" VALENV "," INPUT "," OUTPUT ">"  -> STATE
-
-  variables
-         Stat[1-9']*    -> STATE

@@ -27,5 +27,5 @@ exports
      S [12]*              -> SERIES
      Stat                 -> STATEMENT
      Stat-list            -> {STATEMENT ";"}+
-     Exp [12']*           -> EXP
+     Exp [12\']*           -> EXP
      Type                 -> TYPE

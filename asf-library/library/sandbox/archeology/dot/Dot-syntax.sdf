@@ -70,9 +70,9 @@ exports
     "--"                                        -> EdgeOp
 
   variables
-    ds[0-9']*                           -> DotStat
-    "ds*"[0-9']*                        -> {DotStat ";"}*
-    dss[0-9']*                          -> DotStats
-    da[0-9']*                           -> DotAttr
-    "da*"[0-9']*                        -> DotAttr*
-    di[0-9']*                           -> DotId
+    ds[0-9\']*                           -> DotStat
+    "ds*"[0-9\']*                        -> {DotStat ";"}*
+    dss[0-9\']*                          -> DotStats
+    da[0-9\']*                           -> DotAttr
+    "da*"[0-9\']*                        -> DotAttr*
+    di[0-9\']*                           -> DotId

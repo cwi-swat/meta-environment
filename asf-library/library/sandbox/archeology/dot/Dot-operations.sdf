@@ -23,6 +23,6 @@ exports
 
 hiddens
   variables
-    ch[0-9']*           -> CHAR
-    "ch+"[0-9']*        -> CHAR+
-    "ch*"[0-9']*        -> CHAR*
+    ch[0-9\']*           -> CHAR
+    "ch+"[0-9\']*        -> CHAR+
+    "ch*"[0-9\']*        -> CHAR*

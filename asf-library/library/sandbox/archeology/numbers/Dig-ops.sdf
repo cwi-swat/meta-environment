@@ -27,8 +27,8 @@ exports
 
 hiddens
   variables
-     c[0-9']*           -> CHAR
-     c[0-9']*"+"        -> CHAR+
-     c[0-9']*"*"        -> CHAR*
-     x[0-9']*           -> INT
-     n[0-9']*           -> POS
+     c[0-9\']*           -> CHAR
+     c[0-9\']*"+"        -> CHAR+
+     c[0-9\']*"*"        -> CHAR*
+     x[0-9\']*           -> INT
+     n[0-9\']*           -> POS

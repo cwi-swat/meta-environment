@@ -20,4 +20,4 @@ exports
 
 hiddens
   variables
-     [xyz][']*                  -> NAT
+     [xyz][\']*                  -> NAT

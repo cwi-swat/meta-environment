@@ -9,5 +9,5 @@ exports
      pp(TERM) -> STRING
 hiddens
   variables
-     cs[0-9']*  -> CHAR*
-     c[0-9']* -> CHAR
+     cs[0-9\']*  -> CHAR*
+     c[0-9\']* -> CHAR

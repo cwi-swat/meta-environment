@@ -25,7 +25,7 @@ hiddens
     n [0-9]*       -> UNS-INT		uns-ints [0-9]* -> {UNS-INT ","} *
     c [0-9]*       -> CHAR              d [0-9]*        -> DIGIT
     x [0-9]*       -> CHAR *            y [0-9]*        -> CHAR +
-    Nat [0-9']*    -> NAT               Int [0-9']*     -> INT
+    Nat [0-9\']*    -> NAT               Int [0-9\']*     -> INT
 
 priorities
   {left: INT "+" INT -> INT, INT "-" INT -> INT }  <  "*"

@@ -38,23 +38,23 @@ exports
     "build-stack" "(" TERM ";" PATH ")"             -> TERMS
 
   variables
-    [_]Var[']*                              -> VAR
-    [_]Var[*][']*                               -> VAR*
-    [_]Term[']*                             -> TERM
+    [_]Var[\']*                              -> VAR
+    [_]Var[*][\']*                               -> VAR*
+    [_]Term[\']*                             -> TERM
     [_][LR]hs                               -> TERM
-    [_]SubTerm[']*                          -> TERM
-    [_]Result[']*                           -> TERM
-    [_]Term[+][']*                          -> { TERM "," }+
-    [_]Terms[']*                            -> TERMS
-    [_]Rule[']*                             -> RULE
-    [_]Rule[*][']*                          -> { RULE "," }*
-    [_]Tag[']*                              -> TAG
-    [_]Tag[*][']+                             -> TAG*
+    [_]SubTerm[\']*                          -> TERM
+    [_]Result[\']*                           -> TERM
+    [_]Term[+][\']*                          -> { TERM "," }+
+    [_]Terms[\']*                            -> TERMS
+    [_]Rule[\']*                             -> RULE
+    [_]Rule[*][\']*                          -> { RULE "," }*
+    [_]Tag[\']*                              -> TAG
+    [_]Tag[*][\']+                             -> TAG*
     [_]RRS                                  -> RR-SECTION
     [_]TS                                   -> TERM-SECTION
-    [_]Annot[']*                            -> ANNOTATION
-    [_]SigEl[*][']*                         -> { SIG-ELEM "," }*
-    [_]SigEl[+][']*                         -> { SIG-ELEM "," }+
-    [_]Term[*][']*                          -> { TERM "," }*
-    [_]SigEl[']*                            -> SIG-ELEM
+    [_]Annot[\']*                            -> ANNOTATION
+    [_]SigEl[*][\']*                         -> { SIG-ELEM "," }*
+    [_]SigEl[+][\']*                         -> { SIG-ELEM "," }+
+    [_]Term[*][\']*                          -> { TERM "," }*
+    [_]SigEl[\']*                            -> SIG-ELEM
     [_]SigS                                 -> SIG-SECTION

@@ -15,6 +15,6 @@ module B-syntax
          not BOOL       -> BOOL
          "(" BOOL ")"   -> BOOL { bracket }
       variables
-         "_Bool" [0-9']+   -> BOOL
+         "_Bool" [0-9\']+   -> BOOL
    priorities
       "|" < "&"
