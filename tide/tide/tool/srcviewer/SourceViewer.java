@@ -223,6 +223,10 @@ public class SourceViewer
 			viewer.cleanup();
 		}
 
+		process.removeDebugProcessListener(this);
+		process.removeProcessStatusChangeListener(this);
+		process.getAdapter().removeDebugAdapterListener(this);
+		
 		getManager().removeTool(this);
 	}
 

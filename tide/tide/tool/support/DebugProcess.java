@@ -101,7 +101,8 @@ public class DebugProcess {
 		while (iter.hasNext()) {
 			ProcessStatusChangeListener listener =
 				(ProcessStatusChangeListener) iter.next();
-			listener.processStatusChanged(this);
+			
+			  listener.processStatusChanged(this);
 		}
 	}
 
