@@ -11,6 +11,7 @@ public class Tif {
 
   public Tif(ATerm t) {
     setRepresentation(t);
+    initProcessList();
   }
   
   private void setRepresentation(ATerm t) {
@@ -42,10 +43,6 @@ public class Tif {
   }
 
   public Iterator fetchProcessIterator() {
-    if (processList == null) {
-      initProcessList();
-    }
-
     return processList.iterator();
   }
   
