@@ -1,42 +1,40 @@
 /*
-
-   Meta-Environment - An environment for language prototyping.
-   Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
-
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
    $Id$
 */
 process EditEquations(EditorId: term, ModuleName: str) is
 let
-  Path      : str,
-  Focus     : term,
-  Tree      : term,
-  ErrMsg    : str,
-  ErrorFoci : term,
-  Text      : str,
-  DirtyFoci : list,
+  Path           : str,
+  Focus          : term,
+  Tree           : term,
+  ErrMsg         : str,
+  StartSymbols   : term,  
+  ErrorFoci      : term,
+  Text           : str,
+  DirtyFoci      : list,
   ModifiedStatus : term,
-  Killed    : term
+  Killed         : term
 in
   Text := "" .
   subscribe(syntax-changed(ModuleName)) . 
   snd-msg(get-eqs-tree(ModuleName)) .
   (
     rec-msg(tree(Tree?)) .
-    snd-msg(initialize-structure-editor-with-tree(EditorId, Tree))
+    snd-msg(initialize-structure-editor-with-tree(EditorId, Tree)) .
+    snd-msg(set-parsetable(eqs(ModuleName))) .
+    (
+      rec-msg(parsetable-not-set(eqs(ModuleName))) .
+      snd-note(ui-status(errorf(
+        "Unable to open parse table for %s", [ModuleName])))
+    +
+      rec-msg(parsetable-set(eqs(ModuleName)))
+    ) .
+    snd-msg(get-top-symbols(eqs(ModuleName))) .
+    (
+      rec-msg(startsymbols(eqs(ModuleName), StartSymbols?))
+    +
+      rec-msg(language-not-open(eqs(ModuleName))).
+      StartSymbols := []
+    )
   +
     rec-msg(unavailable) .
     snd-msg(get-eqs-text(ModuleName)) .
@@ -55,10 +53,13 @@ in
 	  "Could not create empty equations: %s", [ErrMsg])))
       )
     ) .
-    snd-msg(initialize-structure-editor(EditorId, Text))
+    snd-msg(initialize-structure-editor(EditorId, Text)) .
+    StartSymbols := []
   ) .
   rec-msg(initial-focus(Focus?)) .
   snd-msg(set-focus(EditorId, Focus)) .
+  snd-msg(register-startsymbols(EditorId, StartSymbols)) .
+  rec-msg(startsymbols-registered) .
   Killed := false .
   (
     (

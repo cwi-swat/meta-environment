@@ -29,6 +29,7 @@ let
   Tree      : term,
   Time      : term,
   Modules   : term,
+  StartSymbols : term,   
   ErrorFoci : term,
   Text      : str,
   DirtyFoci : list,
@@ -57,6 +58,22 @@ in
     rec-msg(initial-focus(Focus?))
   ) .
   snd-msg(set-focus(EditorId, Focus)) .
+  snd-msg(open-sdf2-language) .
+  (
+    rec-msg(sdf2-language-not-opened) .
+    snd-note(ui-status(errorf("Unable to open parse table for Sdf2", [])))
+  +
+    rec-msg(sdf2-language-opened)
+  ) .
+  snd-msg(get-top-symbols(trm("Sdf2"))) .
+  (
+    rec-msg(startsymbols(trm("Sdf2"), StartSymbols?))
+  +
+    rec-msg(language-not-open(trm("Sdf2"))).
+    StartSymbols := []
+  ) .
+  snd-msg(register-startsymbols(EditorId, StartSymbols)) .
+  rec-msg(startsymbols-registered) .    
   Killed := false .
   (
     (  
@@ -68,24 +85,24 @@ in
       ) . 
       snd-msg(open-sdf2-language) .
       (
-	rec-msg(sdf2-language-not-opened) .
-	snd-note(ui-status(errorf("Unable to open parse table for Sdf2", [])))
+        rec-msg(sdf2-language-not-opened) .
+        snd-note(ui-status(errorf("Unable to open parse table for Sdf2", [])))
       +
-	rec-msg(sdf2-language-opened) .
-	snd-msg(parse-focusses(EditorId, trm("Sdf2"))) .
-	(
-	  rec-msg(parse-ok(trm("Sdf2"))) .
-	  snd-msg(get-tree(EditorId)) .
-	  rec-msg(tree(Tree?)) .
-	  snd-msg(update-module-in-db(Tree, "Sdf2")).
-	  rec-msg(extra-modules(Modules?)).
-	  snd-msg(open-modules(Modules)).
-	  rec-msg(finished-opening-modules) .
-	  snd-msg(clear-focus(EditorId))
-	+
-	  rec-msg(parse-failed(trm("Sdf2"), ErrorFoci?)) .
-	  snd-msg(set-focus(EditorId, ErrorFoci))
-	)
+        rec-msg(sdf2-language-opened) .
+        snd-msg(parse-focusses(EditorId, trm("Sdf2"))) .
+        (
+          rec-msg(parse-ok(trm("Sdf2"))) .
+          snd-msg(get-tree(EditorId)) .
+          rec-msg(tree(Tree?)) .
+          snd-msg(update-module-in-db(Tree, "Sdf2")).
+          rec-msg(extra-modules(Modules?)).
+          snd-msg(open-modules(Modules)).
+          rec-msg(finished-opening-modules) .
+          snd-msg(clear-focus(EditorId))
+        +
+          rec-msg(parse-failed(trm("Sdf2"), ErrorFoci?)) .
+          snd-msg(set-focus(EditorId, ErrorFoci))
+        )
       )
     ) *
     if equal(Killed, true) then
