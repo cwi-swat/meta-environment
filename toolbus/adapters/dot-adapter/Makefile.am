@@ -43,6 +43,7 @@ lex.yy.c : dot.l y.tab.h
 	$(top_builddir)/aterm/tifstoc -tool $* $<
 
 %.tifs: %.idef
-	${top_builddir}/toolbus/idef2tif $<
+	PATH=${top_builddir}/toolbus:${PATH} \
+		${top_builddir}/toolbus/idef2tif $<
 
 
