@@ -33,8 +33,10 @@ CLEANFILES   = normalize-sdf normalize-normalize-check
 normalizer_SOURCES = normalizer.c asf-interface.c asf-interface.h
 normalizer_LDADD   = -L$(top_srcdir)/c-source -lSdf2-Normalization \
                      -L$(top_srcdir)/c-lib -lnative \
-                     -L$(ASC)/lib -lasc-support \
-                     -L$(PT_SUPPORT)/libasfix-old/libasfix -lAsFix \
+                     -L$(ASC_SUPPORT)/lib -lasc-support \
+                     -L$(ASF_SUPPORT)/lib -lASF \
+                     -L$(SDF_SUPPORT)/lib -lSDF \
+                     -L$(PT_SUPPORT)/lib -lPT \
                      -L$(ATERM)/lib -lATB -lATerm \
                      $(SOCKLIBS)
 

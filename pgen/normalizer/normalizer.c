@@ -33,7 +33,9 @@
 #include <aterm1.h>
 
 #include "asf-interface.h"
-
+#include <PT.h>
+#include <SDF.h>
+#include <ASF.h>
 
 static char myarguments[] = "hi:m:o:V";
 static char* myname;
@@ -85,7 +87,10 @@ int main( int argc, char* argv[] )
    myname = argv[0];
         
    /* Initialize AsFix library functions ans ASF+SDF Compiler functions */
-   AFinit(argc, argv, &bottomOfStack);
+   ATinit(argc, argv, &bottomOfStack);
+   SDF_initSDFApi();
+   PT_initPTApi();
+   ASF_initASFApi();
    asc_init();
    
    /* parse command line options */

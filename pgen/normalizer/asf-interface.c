@@ -29,94 +29,52 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <aterm2.h>
-#include <AsFix.h>
-#include <AsFix2src.h>
-#include <AsFix-access.h>
-#include <AsFix-expand.h>
-#include <AsFix-init-patterns.h>
-#include <deprecated.h>
-#include <asc-support.h>
 
 #include "asf-interface.h"
+#include <SDF.h>
+#include <PT.h>
+#include <asc-apply.h>
+#include <asc-support.h>
 
 #define INITIAL_TABLE_SIZE 8191
 
-#define DB {fprintf(stderr, "%d-%s\n", __LINE__, __FILE__);}
-
-
-ATerm make_name_term(ATerm name)
+static PT_Tree addNormalizeFunction(char *str, PT_ParseTree parseTree)
 {
-  ATerm result = NULL;
-  char *text;
+  SDF_ModuleName sdfModuleName = SDF_makeModuleNameUnparameterized(
+                               SDF_makeModuleIdWord(str));
+  PT_Tree ptModuleName = PT_makeTreeFromTerm(
+                           SDF_makeTermFromModuleName(sdfModuleName));
+  PT_Tree newTree = NULL;
 
-  if(ATmatch(name,"<str>",&text)) {
-    result = ATmakeTerm(pattern_asfix_lex,
-                        text,
-                        ATparse("sort(\"ModuleId\")"));
-    result = ATmakeTerm(pattern_asfix_appl,
-                        ATparse("prod(id(\"Modular-Sdf-Syntax\"),w(\"\"),[sort(\"ModuleId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),no-attrs)"),
-                        ATparse("w(\"\")"),
-                        ATmakeList1(result));
-  }
-  return result;
-}
+  if (PT_isValidParseTree(parseTree)) {
+    PT_Tree ptSyntax = PT_getParseTreeTree(parseTree);
 
-ATerm add_name_norm_function(char *str, ATerm term)
-{
-  ATerm t[8], result, appl, nameterm, name;
-  ATerm t_name;
-  ATerm abbrevs;
-  ATerm term_open, term_comma, term_close, term_ws;
-
-  name = ATmake("<str>",str);
-  if(ATmatchTerm(term, pattern_asfix_term,
-                 &t[0], &t[1], &t[2], &t[3], &t[4], &t[5],
-                 &appl, &t[6], &t[7])) {
-
-    t_name = ATparse("l(\"normalize\")");
-    abbrevs = ATparse("abbreviations([])");
-    term_open = ATparse("l(\"(\")");
-    term_comma = ATparse("l(\",\")");
-    term_close = ATparse("l(\")\")");
-    term_ws = ATparse("w(\"\")");     
-    nameterm = make_name_term(name);
-
-    result = ATmakeTerm(pattern_asfix_appl,
-                        ATparse("prod(id(\"Sdf2-Normalization\"),w(\"\"),[ql(\"normalize\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ModuleName\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"SDF\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Grammar\"),w(\"\"),no-attrs)"), 
-                        term_ws,
-                        ATmakeList(11,t_name, term_ws,
-                                      term_open, term_ws,
-                                      nameterm, term_ws,
-                                      term_comma, term_ws,
-                                      appl, term_ws,
-                                      term_close));
-    return ATmakeTerm(pattern_asfix_term,
-                      ATparse("l(\"term\")"), term_ws,  
-                      ATparse("l(\"X\")"), term_ws,  
-                      ATparse("id(\"X\")"), term_ws,  
-                      result, term_ws,  abbrevs);
+    newTree = ASC_applyFunction("normalize",
+                                "Sdf2-Normalization",
+                                "Grammar",
+                                2,
+                                ptModuleName,
+                                ptSyntax);
   }
   else {
-    ATerror("not a legal term: %t\n", term);
-    return NULL;
+    ATerror("addRemoveVarsFunction: not a proper parse tree: %t\n",
+              (ATerm) parseTree);
+
+    return (PT_Tree) NULL;
   }
+
+  return newTree;
+
 }                                                       
 
 ATerm normalize(ATerm sdf2term, char* topModule )
 {
-   ATerm filename, modname, term, reduct, ksdf;
-
-   sdf2term = add_name_norm_function( topModule, AFexpandTerm( sdf2term ) );
+   PT_ParseTree parseTree = PT_makeParseTreeFromTerm(sdf2term);
+   PT_Tree tree = addNormalizeFunction(topModule,parseTree);
+   ATerm reduct = innermost(tree);
+   PT_ParseTree ksdf = toasfix(reduct); 
    
-   if(ATmatchTerm(sdf2term, pattern_asfix_term, NULL, NULL,
-                 &filename, NULL, &modname, NULL, &term, NULL, NULL)) {
-
-      reduct = innermost(term);
-      ksdf = toasfix(reduct, filename, modname); 
-   }
-   else
-      abort();
-   return ksdf;
+   return PT_makeTermFromParseTree(ksdf);
 }
 
 void asc_init()
