@@ -13,6 +13,7 @@ IDEF2TIF = $(TOOLBUS)/bin/idef2tif
 TIFSTOC = $(TOOLBUS)/bin/tifstoc
 
 INCLUDES = \
+	-I$(PT_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
 	-I$(ATERM)/include
 
