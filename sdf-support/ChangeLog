@@ -1,5 +1,9 @@
 $Id$
 
+2003/06/12 (markvdb@cwi.nl)
+ * Fixed a non-termination bug in the transitive closure calculation of
+   imports.
+
 2003/06/03 (markvdb@cs.vu.nl)
  * Added import removal functionality.
  * Prepared for renaming.
