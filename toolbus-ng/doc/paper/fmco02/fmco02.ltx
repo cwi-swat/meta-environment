@@ -25,7 +25,7 @@
 %%\newcommand{\note}[1]{{\bf Note}: {\it #1 }}
 
 
-%% REMOVE BEFORE SUBMISSION!!!
+%% Enable pagenumbering -- REMOVE BEFORE SUBMISSION!!!
 \pagestyle{plain}
 
 \title{ToolBus: The Next Generation}
@@ -930,7 +930,7 @@ defined in the remote interface is available to the clients.
 RMI programmers should be aware of the fact that any parameters, return
 values and exceptions that are not remote objects are passed by value.
 This makes it hard to understand when looking at a system of RMI objects
-precisely which method calls will result in a \emph{local} state change,
+exactly which method calls will result in a \emph{local} state change,
 and which will have \emph{global} effect.
 
 As an example of this, consider our address book example. If the
@@ -940,6 +940,10 @@ client-side invocations the \texttt{setAddress} method will cause a
 made \emph{serializable} and instances of this class are returned as
 the result of a query to the AddressBookService, then updates on these
 instances will have a \emph{local} state change only.
+
+Finally, before two RMI components can connect, the server side needs
+to register itself with an \texttt{rmiregistry}, after which the client
+needs to explicitly obtain a reference to the (remote) server object.
 
 %%Using the ToolBus communication primitives we can exactly specify which
 %%pattern of messages (communications) are allowed and in what order. The
