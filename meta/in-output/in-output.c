@@ -508,7 +508,8 @@ char *expand_path(const char *relative_path)
     /* get absolute path of relative dir */
     absolute_path = (char*) malloc(PATH_LEN * sizeof(char));
     if(absolute_path == NULL) {
-       return NULL;
+			ATerror("Out of memory in expand_path.\n");
+			return NULL;
     }
 
     absolute_path = getcwd(absolute_path, PATH_LEN);
