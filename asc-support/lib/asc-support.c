@@ -224,14 +224,14 @@ static ATerm call_unknown(PT_Production prod, ATermList args)
   
   if (PT_isProductionDefault(prod)) {
     arity = ATgetLength(args);
-    sym = ATmakeSymbol(escaped, arity, ATfalse);
+    sym = ATmakeAFun(escaped, arity, ATfalse);
     ATprotectAFun(sym);
     register_prod((ATerm) prod, (funcptr) NULL, sym);
     result = (ATerm) ATmakeApplList(sym, args); 
   }
   else {
     arity = 1;
-    sym = ATmakeSymbol(escaped, arity, ATfalse);
+    sym = ATmakeAFun(escaped, arity, ATfalse);
     ATprotectAFun(sym);
     register_prod((ATerm) prod, (funcptr) NULL, sym);
     result = (ATerm) ATmakeAppl1(sym, (ATerm) args);
