@@ -1,3 +1,5 @@
+application MyApp {
+
 type Player
 {
 }
@@ -55,4 +57,5 @@ type Type
 
   operations get {}
   operations set {}
+}
 }

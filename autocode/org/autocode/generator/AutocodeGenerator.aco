@@ -1,0 +1,5 @@
+
+generator java {
+  class := "org.autocode.generator.java.JavaGenerator"
+}
+

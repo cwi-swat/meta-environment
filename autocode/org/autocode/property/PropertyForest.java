@@ -34,6 +34,19 @@ public class PropertyForest
 
   //}}}
 
+  //{{{ public void merge(PropertyForest forest)
+
+  public void merge(PropertyForest forest)
+  {
+    Iterator iter = forest.tree.iterator();
+    while (iter.hasNext()) {
+      PropertyTree tree = (PropertyTree)iter.next();
+      addTree(tree);
+    }
+  }
+
+  //}}}
+
   //{{{ public String toString()
 
   public String toString()

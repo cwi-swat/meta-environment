@@ -34,6 +34,6 @@ mycheck:
 	mkdir -p ${top_builddir}/test/company/clients
 	${top_srcdir}/autocode-test \
 		--application server \
-		-D java.rootdir=${top_builddir}/test \
+		--define java.rootdir=${top_builddir}/test \
 		client.add
 

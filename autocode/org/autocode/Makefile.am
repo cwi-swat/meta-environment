@@ -1,1 +1,1 @@
-SUBDIRS = property
+SUBDIRS = property generator

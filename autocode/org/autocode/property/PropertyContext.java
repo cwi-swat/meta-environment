@@ -27,6 +27,15 @@ public class PropertyContext
   }
 
   //}}}
+  //{{{ public PropertyContext(PropertyContext context, key, value)
+
+  public PropertyContext(PropertyContext context, String key, String value)
+  {
+    this(context);
+    descend(key, value);
+  }
+
+  //}}}
 
   //{{{ public Set getValueSet(String key)
 

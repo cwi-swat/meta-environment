@@ -1,27 +1,7 @@
-package company.clients;
+application * {
+//{{{ enum Article
 
-//{{{ Possible basic and compound types
-
-/*
-  Basic types:
-    boolean,
-    integer,
-    real,
-    string,
-    enumeration { element, ... },
-    date
-
-  Compound types:
-    list { Type },
-    map  { KeyType, ValueType },
-    set  { Type }
-*/
-
-//}}}
-    
-//{{{ Aliases
-
-enum Article { pen, pencil, note-book }
+enum Article { elements := { pen, pencil, note-book } }
 
 //}}}
 //{{{ type Client
@@ -44,43 +24,31 @@ type Order
 }
 
 //}}}
+}
 
 // Properties
-//{{{ Explanation
-
-/*
-Section types:
-[application]
-reserved words: language, generator
-
-[application.type]
-
-[application.type.field]
-reserved words: operations
-
-Properties supported by all modules:
-operations
-*/
-
-//}}}
  
 //{{{ properties specific to application: server
 
-[server]
-generator = java
-folding = true
+application server {
+  generator := java
+  folding := true
 
-[server.*]
-access = private
+  type * {
+    access := private
+  }
 
-[server.Client]
-access = public
-operations = { constructors }
-implements = { Serializable, Runnable }
-throws = { java.io.IOException }
+  type Client {
+    access := public
+    operations := { constructors }
+    implements := { Serializable, Runnable }
+    throws := { "java.io.IOException" }
+  }
+}
 
-[server.Client.name]
-access = public
-static = true
+server.Client->field name {
+  access := public
+  static := true
+}
 
 //}}}
