@@ -1,15 +1,44 @@
 #include "meta.tb"
 #include "meta-studio.idef"
 
+process TermStoreActivation(Name : str) is
+let
+  TermStoreContents : term,
+  ErrorMessage : str
+in
+  snd-msg(io-exists-file(Name)) .
+  (
+    rec-msg(io-file-exists) .
+    snd-msg(io-read-term-file(Name)) .
+    (
+      rec-msg(io-file-contents(TermStoreContents?)) .
+      snd-msg(ts-load-snapshot(TermStoreContents)) .
+      rec-msg(ts-snapshot-loaded) .
+      printf("TermStore %s restored\n", Name)
+    +
+      rec-msg(io-error-reading(ErrorMessage?))
+    )
+  +
+    rec-msg(io-file-not-exists)
+  )
+endlet
+
 process MetaGUI is
 let
   ModuleName : str,
-  Pid : int
+  Pid : int,
+  TermStoreContents : term,
+  ErrorMessage : str
 in
   create(Ui, Pid?) .
   create(MetaCreator, Pid?) .
   rec-msg(creation-finished) .
-  if not-equal(MODULENAME,"") then
+  if not-equal(TERMSTORENAME, "") then
+    TermStoreActivation(TERMSTORENAME) 
+  else 
+    tau
+  fi .
+  if not-equal(MODULENAME, "") then
     snd-msg(open-modules([MODULENAME], sdf)) .
     rec-msg(finished-opening-modules)
   else
