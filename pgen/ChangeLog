@@ -1,0 +1,5 @@
+$Id$
+
+2000-0303 <mdejonge@cwi.nl>
+   * pgen is now a self-cotained component build and configured
+     using automake/autoconf
