@@ -4267,12 +4267,14 @@ stand-alone environments using the various components of the
 ASF+SDF Meta-Environment. It does not include building an
 environment based on the ToolBus.
 
-First we will describe a selection of components that are useful for
+First we will briefly introduce the underlying technology and
+architecture of the Meta-Environment. Secondly, we will describe 
+a selection of components that are useful for
 building stand-alone tools. \emph{Be aware that the information in the
 following pages is still very much in a state of flux.}
 Note that all components mentioned have a {\tt -h} options that 
 gives an overview of their command line options.
-Secondly, we will describe how these components can be combined
+Finally, we will describe how these components can be combined
 into stand-alone environments. We will describes various levels
 of integration. The first level is with UNIX pipes and files
 and the second level is invoking the various components from
@@ -4378,7 +4380,17 @@ modules, parse tables, user-defined terms, etc.
 \item {\bf ASF Interpreter}: executes specifiations by direct interpretation.
 \item {\bf Unparser generator}: generates prettyprinters.
 \end{itemize}
+
 \subsection{Components}
+In the previous section we have described the overall architecture and very
+briefly mentioned the main components of the Meta-Environment. In order to
+understand how to build stand-alone environments, it is necessary to 
+understand some of the "flow-of-control" and "data-flow" within the
+Meta-Environment. There are in fact two main scenarios:
+\begin{itemize}
+\item Parsing a term
+\item Reducing a term
+\end{itemize}
 
 \subsubsection{Parse Table Generation}
 
