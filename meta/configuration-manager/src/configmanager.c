@@ -100,8 +100,14 @@ void set_actions(int cid, char *contents)
   ATerm atButtons = ATreadFromString(contents);
   properties = MC_makePropertiesEmpty();
 
-  if (MC_isValidConfiguration(MC_ConfigurationFromTerm(atButtons))) {
-    properties = MC_getConfigurationList(MC_ConfigurationFromTerm(atButtons));
+  if (atButtons != NULL) {
+
+    if (MC_isValidConfiguration(MC_ConfigurationFromTerm(atButtons))) {
+      properties = MC_getConfigurationList(MC_ConfigurationFromTerm(atButtons));
+    }
+  }
+  else {
+    ATwarning("WARNING: ignored button file, it contains parse errors.\n");
   }
 }
 
