@@ -8,7 +8,7 @@ hiddens
         DecimalIntegerLiteral StringCharacter EscapeSequence 
         SingleCharacter UnicodeEscape
 exports
-  sorts Identifier Literal
+  sorts Identifier JavaLiteral
   lexical syntax
     "\\" [u]+ [0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F] -> UnicodeEscape
 
@@ -101,9 +101,9 @@ exports
     HexIntegerLiteral                   -> IntegerLiteral
     OctalIntegerLiteral                 -> IntegerLiteral
 
-    IntegerLiteral                      -> Literal
-    FloatingPointLiteral                -> Literal
-    BooleanLiteral                      -> Literal
-    CharacterLiteral                    -> Literal
-    StringLiteral                       -> Literal
-    NullLiteral                         -> Literal
+    IntegerLiteral                      -> JavaLiteral
+    FloatingPointLiteral                -> JavaLiteral
+    BooleanLiteral                      -> JavaLiteral
+    CharacterLiteral                    -> JavaLiteral
+    StringLiteral                       -> JavaLiteral
+    NullLiteral                         -> JavaLiteral

@@ -6,7 +6,7 @@
 
 module Expressions
 
-imports Types ClassDecl MethodDecl
+imports JavaTypes ClassDecl MethodDecl
 
 exports
   sorts Expression Expressions MethodInvocation 
@@ -32,7 +32,7 @@ exports
     PrimaryNoNewArray                   -> Primary
     ArrayCreationExpression             -> Primary
 
-    Literal                             -> PrimaryNoNewArray
+    JavaLiteral                             -> PrimaryNoNewArray
     "this"                              -> PrimaryNoNewArray
     "(" Expression ")"                  -> PrimaryNoNewArray
     ClassInstanceCreationExpression     -> PrimaryNoNewArray

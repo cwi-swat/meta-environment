@@ -2,7 +2,7 @@
 
 module ClassDecl
 
-imports ConstructorDecl FieldDecl Modifiers Types
+imports ConstructorDecl FieldDecl Modifiers JavaTypes
 
 exports
   sorts ClassBody ClassDeclaration Super SuperOpt Interfaces 
