@@ -43,6 +43,6 @@ evaluator_LDADD   = libeval.a \
                    -L$(ASFIXLIB) -lAsFix \
                    -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES          = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC) @TIDEDEF@ @TRAVERSALSDEF@ @LAYOUTDEF@
+INCLUDES          = ${TIDEINC} -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC) ${TIDEDEF} ${TRAVERSALSDEF} ${LAYOUTDEF}
 
 evaluator.o : evaluator.tif.h

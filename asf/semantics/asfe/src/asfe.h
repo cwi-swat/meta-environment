@@ -24,7 +24,6 @@
 
 ATermList sort_and_filter_on_ofs(ATerm name,ATerm firstofs,ATermList eqs);
 ATerm rewrite(ATerm trm, ATerm env, int depth);
-void rewrite_error(const char *message, ATerm subject);
 ATerm v_lookup_plain(ATerm env, ATerm var);
 ATermAppl v_lookup_list(ATerm env, ATerm var);
 ATbool v_is_bound(ATerm env, ATerm var);
@@ -38,29 +37,39 @@ void remove_equations(int cid, char *modname);
 ATerm interpret(int cid, char *modname, ATerm trm);
 ATbool no_new_vars(ATerm trm, ATerm env);
 ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
-									 ATermList conds,
-									 ATermList orgargs1, ATermList orgargs2, 
-									 ATerm lhs_posinfo, int depth);
+		   ATermList conds,
+		   ATermList orgargs1, ATermList orgargs2, 
+		   ATerm lhs_posinfo, int depth);
 ATerm args_matching(ATerm env, ATermList conds,
                     ATermList args1, ATermList args2,
-										ATerm lhs_posinfo, int depth);
+		    ATerm lhs_posinfo, int depth);
 ATbool compare_lists(ATermAppl tuple, ATermList list);
 ATermList compare_sub_lists(ATermAppl tuple, ATermList elems2);
 ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
                         ATermList elems1, ATermList elems2,
                         ATermList conds,
                         ATermList args1, ATermList args2,
-												ATerm lhs_posinfo, int depth);
+			ATerm lhs_posinfo, int depth);
 ATerm list_matching(ATerm sym,
                     ATerm env,ATermList elems1, ATermList elems2,
                     ATermList conds, ATermList args1, ATermList args2,
-										ATerm lhs_posinfo, int depth);
+		    ATerm lhs_posinfo, int depth);
 ATerm conds_satisfied(ATermList conds, ATerm env, int depth);
 ATerm apply_rule(ATerm trm, int depth);
 ATerm select_and_rewrite(ATerm trm, int depth);
 ATermList rewrite_args(ATermList args, ATerm env, int depth);
 ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env, int depth);
 ATerm rewrite(ATerm trm, ATerm env, int depth);
+
+/* Variables */
+extern ATbool run_verbose;
+extern ATerm equations_db;
+extern ATerm fail_env;
+extern ATerm posinfo;
+extern ATerm rewrite_error;
+extern ATerm tagCurrentRule;
+extern AFun list_var, plain_var;
+
 
 #define is_fail_env(env)	(ATisEqual(env,fail_env))
 /*#define v_lookup(env,var)	(ATdictGet(env,var))*/

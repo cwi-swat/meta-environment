@@ -34,8 +34,6 @@
 #include "evaluator.h"
 #include "traversals.h"
 
-extern AFun list_var;
-extern AFun fail_env;
 extern ATerm pattern_asfix_noattrs;
 extern ATerm pattern_asfix_attrs;
 extern ATerm pattern_asfix_prod;
