@@ -21,7 +21,6 @@ PT_ParseTree PT_annotateParseTreeWithLength(PT_ParseTree parse_tree);
 int     PT_getParseTreeLengthAnno(PT_ParseTree parse_tree);
 int     PT_getTreeLengthAnno(PT_Tree tree);
 PT_Tree PT_setTreeLengthAnno(PT_Tree tree, int length);
-int     PT_getParseTreeLengthAnno(PT_ParseTree parse_tree);
 PT_ParseTree PT_setParseTreeLengthAnno(PT_ParseTree parse_tree, int length);
 
 
