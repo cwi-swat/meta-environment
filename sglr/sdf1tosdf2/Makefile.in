@@ -39,14 +39,14 @@ include ${top_srcdir}/implicit-rules
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= sdf1tosdf2
 # All files in LIBFILES are installed in $(libdir)
-LIBFILES	= 
+LIBFILES	=
 # All files in INCLUDEFILES are installed in $(includedir)
-INCLUDEFILES	= 
+INCLUDEFILES	=
 # All files in DOCFILES are copied to $(docdir)
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= 
+CLEANFILES	=
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	= Makefile ${BINFILES} ${LIBFILES}
 

@@ -52,8 +52,8 @@ OBJ		= ${addsuffix .o,${PROG}}
 TIFS		= ${addsuffix .tif.c,${PROG}}
 
 BINFILES	= ${PROG}
-INCLUDEFILES	= 
-LIBFILES	= 
+INCLUDEFILES	=
+LIBFILES	=
 
 all:	${BINFILES}
 
@@ -67,7 +67,7 @@ install:	all
 	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
 	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
 
-uninstall:	
+uninstall:
 	@$(UNINSTALL) $(bindir) $(BINFILES)
 	@$(UNINSTALL) $(libdir) $(LIBFILES)
 	@$(UNINSTALL) $(includedir) $(INCLUDEFILES)
