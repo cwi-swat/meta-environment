@@ -127,7 +127,7 @@ do
       shift; OUTPUT=$1 ;;
 
     -p | --package)
-      shift; PACKAGE=$1 ;;
+      shift; PACKAGE="-p $1" ;;
 
     -t | --visitable)
       VISITABLEOPT='-t' ;;
@@ -189,7 +189,7 @@ ${CONCATADT} -o ${BASE}.adt ${BASE}.adt ${PKGDATA}/string.adt
 
 info "Generating java from ADT "
 ${ADTTOJAVA} ${FOLDINGOPT} ${JTOMOPT} ${VERBOSEOPT} ${VISITABLEOPT} \
-             -i ${BASE}.adt -o ${OUTPUT} -p ${PACKAGE} -n ${NAME}
+             -i ${BASE}.adt -o ${OUTPUT} ${PACKAGE} -n ${NAME}
 fi
 
 if [ ${GENBOTTOMSORT} -gt 0 ]; then
