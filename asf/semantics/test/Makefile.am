@@ -42,7 +42,7 @@ CODE=${srcdir}/c-code
 CLEANFILES = *.out *.c ${TEST_MODULES} *.sh
 
 TESTS = \
-	$(foreach f, ${TEST_MODULES}, $f.check.sh $f.asfe.sh ) \
+	$(foreach f, ${TEST_MODULES}, $f.check.sh $f.asfe.sh $f.asfc.sh ) \
 	$(foreach f, ${TEST_MODULES_ASFE_ONLY}, $f.check.sh $f.asfe.sh)
 
 %.check.sh:
