@@ -292,8 +292,8 @@ public class TBTerm {
           return BoolType;
         String fun = ((ATermAppl) t).getName();
         ATerm args[] = ((ATermAppl) t).getArgumentArray();
-//        if (args.length == 0)
-//          return t;
+        //        if (args.length == 0)
+        //          return t;
         ATerm vargs[] = new ATerm[args.length];
         for (int i = 0; i < args.length; i++) {
           vargs[i] = checkType(args[i], env);
@@ -317,7 +317,7 @@ public class TBTerm {
   }
 
   public static boolean checkCompatible(ATerm req, ATerm given) {
-    System.out.println("checkCompatible(" + req + ", " + given + ")");
+    //System.out.println("checkCompatible(" + req + ", " + given + ")");
     if (req.getType() != given.getType()) {
       return false;
     }
@@ -426,8 +426,6 @@ public class TBTerm {
           return t;
         String fun = ((ATermAppl) t).getName();
         ATerm args[] = ((ATermAppl) t).getArgumentArray();
-        if (args.length == 0)
-          return t;
         ATerm vargs[] = new ATerm[args.length];
         for (int i = 0; i < args.length; i++) {
           vargs[i] = eval(args[i], process);
@@ -565,9 +563,10 @@ public class TBTerm {
     switch (ta.getType()) {
       case ATerm.BLOB :
       case ATerm.INT :
-      case ATerm.PLACEHOLDER :
       case ATerm.REAL :
         return ta.equals(tb);
+        
+      case ATerm.PLACEHOLDER:
 
       case ATerm.APPL :
         if (tb.getType() != ATerm.APPL
@@ -600,8 +599,7 @@ public class TBTerm {
   }
 
   public static boolean mightMatch(ATerm ta, ATerm tb) {
-    System.out.println("mightMatch(" + ta + ", " + tb + ")");
-
+    //System.out.println("mightMatch(" + ta +", " + tb + ")");
     if (TBTerm.isVar(ta))
       return true;
 

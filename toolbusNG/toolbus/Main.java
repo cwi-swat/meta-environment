@@ -630,7 +630,8 @@ static void producerTest(){
     ToolBus T = new ToolBus();
 
     try {
-      T.parse("toolbus/parser/sieve.aterm");
+      T.parse("toolbus/parser/S.aterm");
+      T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}
     

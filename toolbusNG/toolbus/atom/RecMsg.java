@@ -14,8 +14,12 @@ public class RecMsg extends MsgAtom {
     super(msg);
   }
   
+   public RecMsg(ATerm msg, ATerm qual) {
+    super(msg, qual);
+  }
+  
   public ProcessExpression copy(){
-    return new RecMsg(getMsg());
+    return new RecMsg(getMsg(), getQual());
   }
  
 }

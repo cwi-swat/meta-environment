@@ -47,17 +47,17 @@ public class State {
   }
 
   public void findPartners(State set) {
-    System.out.println("StateElementSet.findpartners: " + elements + " / " + set);
+    //System.out.println("StateElementSet.findpartners: " + elements + " / " + set);
     for (Iterator ita = elements.iterator(); ita.hasNext();) {
       StateElement a = (StateElement) ita.next();
-      if(!(a instanceof MsgAtom)){
+      if (!(a instanceof MsgAtom)) {
         continue;
       }
       MsgAtom ca = (MsgAtom) a;
 
       for (Iterator itb = set.getElementsAsVector().iterator(); itb.hasNext();) {
         StateElement b = (StateElement) itb.next();
-        if(!(b instanceof MsgAtom)){
+        if (!(b instanceof MsgAtom)) {
           continue;
         }
         MsgAtom cb = (MsgAtom) b;
@@ -93,9 +93,9 @@ public class State {
     return elements.contains(a);
   }
 
-//  public State nextState(StateElement a) {
-//    return a.nextState();
-//  }
+  //  public State nextState(StateElement a) {
+  //    return a.nextState();
+  //  }
 
   public boolean execute() throws ToolBusException {
     int size = elements.size();
@@ -108,8 +108,9 @@ public class State {
 
       if (a.execute()) {
         ProcessInstance pa = a.getProcess();
-        System.out.println("--- " + pa.getProcessId() + " / " + a.toString() + " / " + pa.getEnv() + " / ");
-        //a.nextState();
+        if (ToolBus.isVerbose()) {
+          System.out.println("--- " + pa.getProcessId() + " / " + a.toString() + " / " + pa.getEnv() + " / ");
+        }
         return true;
       }
     }

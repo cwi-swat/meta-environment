@@ -39,7 +39,7 @@ exports
 
     {TBTerm ","}* 		-> TBTermList
 
-    "[" TBTermList "]" 		-> TBTerm  {cons("termlist")}
+    "[" TBTermList "]" 		-> TBTerm  %% {cons("termlist")}
 
 
  

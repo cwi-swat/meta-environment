@@ -3,5 +3,6 @@
     <classpathentry kind="src" path=""/>
     <classpathentry kind="var" path="JRE_LIB" rootpath="JRE_SRCROOT" sourcepath="JRE_SRC"/>
     <classpathentry kind="lib" path="lib/aterm-1.6.8.jar"/>
+    <classpathentry kind="lib" path="junit.jar" rootpath="" sourcepath="/home/paulk/download/junit3.7/src.jar"/>
     <classpathentry kind="output" path=""/>
 </classpath>
