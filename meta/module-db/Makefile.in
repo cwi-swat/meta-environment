@@ -57,7 +57,7 @@ XLIBS		= -L$(ATERM)/lib -lATerm-cc -lAsFix-cc -lATB-cc $(SOCKLIBS)
 CSRC		= module-db.c reshuffle.c
 CHDR		= module-db.tif.c module-db.tif.h module-db.h
 # All files in BINFILES are installed in $(bindir)
-BINFILES	= module-db
+BINFILES	= module-db genmakefile.sh
 # All files in LIBFILES are installed in $(libdir)
 LIBFILES	=
 # All files in INCLUDEFILES are installed in $(includedir)
