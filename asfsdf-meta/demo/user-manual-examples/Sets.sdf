@@ -14,3 +14,4 @@ exports
   variables
     "Elem"[0-9]*  -> Elem
     "Elem*"[0-9]* -> {Elem ","}*
+    "Elem+"[0-9]* -> {Elem ","}+
