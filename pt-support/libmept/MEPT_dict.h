@@ -1,5 +1,5 @@
 /*
- * Generated at Wed May  2 11:44:58 2001
+ * Generated at Thu May  3 15:19:36 2001
  */
 
 #ifndef __MEPT_dict_H
@@ -29,9 +29,19 @@ extern ATerm PT_patternSymbolCf;
 extern ATerm PT_patternSymbolLit;
 extern ATerm PT_patternArgsEmpty;
 extern ATerm PT_patternArgsList;
-extern ATerm PT_patternAttrTraverse;
-extern ATerm PT_patternAttrMemo;
-extern ATerm PT_patternAttrBracket;
+extern ATerm PT_patternATermTraverse;
+extern ATerm PT_patternATermConstructor;
+extern ATerm PT_patternATermAvoid;
+extern ATerm PT_patternATermPrefer;
+extern ATerm PT_patternATermReject;
+extern ATerm PT_patternATermMemo;
+extern ATerm PT_patternATermNonAssoc;
+extern ATerm PT_patternATermAssoc;
+extern ATerm PT_patternATermRight;
+extern ATerm PT_patternATermLeft;
+extern ATerm PT_patternATermBracket;
+extern ATerm PT_patternAttrAterm;
+extern ATerm PT_patternAttrId;
 extern ATerm PT_patternAttrCons;
 extern ATerm PT_patternAttrsSingle;
 extern ATerm PT_patternAttrsMany;

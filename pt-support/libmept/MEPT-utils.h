@@ -39,9 +39,7 @@ ATbool PT_isVarDefault(PT_Production arg);
 ATbool PT_isLexicalInjectionProd(PT_Production prod);
 ATbool PT_prodHasIterSepAsRhs(PT_Production prod);
 ATbool PT_prodHasIterAsRhs(PT_Production prod);
-/*
-ATbool PT_isProductionList(PT_Production prod);
-*/
+
 ATbool PT_isTreeApplList(PT_Tree tree);
 ATbool PT_isIterSepSymbol(PT_Symbol sym);
 ATbool PT_isIterSymbol(PT_Symbol sym);
@@ -103,6 +101,18 @@ typedef void* PT_AttrVisitorData;
 typedef PT_Attr (*PT_AttrVisitor)(PT_Attr attr, PT_AttrVisitorData data);
 PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
                                PT_AttrVisitorData data);
+
+PT_Attr PT_makeAttrBracket(void);
+PT_Attr PT_makeAttrLeft(void);
+PT_Attr PT_makeAttrRight(void);
+PT_Attr PT_makeAttrAssoc(void);
+PT_Attr PT_makeAttrNonAssoc(void);
+PT_Attr PT_makeAttrMemo(void);
+PT_Attr PT_makeAttrReject(void);
+PT_Attr PT_makeAttrPrefer(void);
+PT_Attr PT_makeAttrAvoid(void);
+PT_Attr PT_makeAttrConstructor(void);
+PT_Attr PT_makeAttrTraverse(void);
                                                           
 ATbool PT_hasProductionCertainAttr(PT_Production prod, PT_Attr attr);
 ATbool PT_hasProductionBracketAttr(PT_Production prod);

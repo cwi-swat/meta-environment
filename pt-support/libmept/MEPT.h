@@ -16,6 +16,7 @@ typedef struct _PT_Production *PT_Production;
 typedef struct _PT_Attributes *PT_Attributes;
 typedef struct _PT_Attrs *PT_Attrs;
 typedef struct _PT_Attr *PT_Attr;
+typedef struct _PT_ATerm *PT_ATerm;
 typedef struct _PT_Args *PT_Args;
 typedef struct _PT_Symbol *PT_Symbol;
 typedef struct _PT_Symbols *PT_Symbols;
@@ -40,6 +41,8 @@ PT_Attrs PT_makeAttrsFromTerm(ATerm t);
 ATerm PT_makeTermFromAttrs(PT_Attrs arg);
 PT_Attr PT_makeAttrFromTerm(ATerm t);
 ATerm PT_makeTermFromAttr(PT_Attr arg);
+PT_ATerm PT_makeATermFromTerm(ATerm t);
+ATerm PT_makeTermFromATerm(PT_ATerm arg);
 PT_Args PT_makeArgsFromTerm(ATerm t);
 ATerm PT_makeTermFromArgs(PT_Args arg);
 PT_Symbol PT_makeSymbolFromTerm(ATerm t);
@@ -67,9 +70,19 @@ PT_Attributes PT_makeAttributesAttrs(PT_Attrs attrs);
 PT_Attrs PT_makeAttrsMany(PT_Attr head, PT_Attrs tail);
 PT_Attrs PT_makeAttrsSingle(PT_Attr head);
 PT_Attr PT_makeAttrCons(char * string);
-PT_Attr PT_makeAttrBracket();
-PT_Attr PT_makeAttrMemo();
-PT_Attr PT_makeAttrTraverse();
+PT_Attr PT_makeAttrId(char * moduleName);
+PT_Attr PT_makeAttrAterm(PT_ATerm term);
+PT_ATerm PT_makeATermBracket();
+PT_ATerm PT_makeATermLeft();
+PT_ATerm PT_makeATermRight();
+PT_ATerm PT_makeATermAssoc();
+PT_ATerm PT_makeATermNonAssoc();
+PT_ATerm PT_makeATermMemo();
+PT_ATerm PT_makeATermReject();
+PT_ATerm PT_makeATermPrefer();
+PT_ATerm PT_makeATermAvoid();
+PT_ATerm PT_makeATermConstructor();
+PT_ATerm PT_makeATermTraverse();
 PT_Args PT_makeArgsList(PT_Tree head, PT_Args tail);
 PT_Args PT_makeArgsEmpty();
 PT_Symbol PT_makeSymbolLit(char * string);
@@ -101,6 +114,7 @@ ATbool PT_isEqualProduction(PT_Production arg0, PT_Production arg1);
 ATbool PT_isEqualAttributes(PT_Attributes arg0, PT_Attributes arg1);
 ATbool PT_isEqualAttrs(PT_Attrs arg0, PT_Attrs arg1);
 ATbool PT_isEqualAttr(PT_Attr arg0, PT_Attr arg1);
+ATbool PT_isEqualATerm(PT_ATerm arg0, PT_ATerm arg1);
 ATbool PT_isEqualArgs(PT_Args arg0, PT_Args arg1);
 ATbool PT_isEqualSymbol(PT_Symbol arg0, PT_Symbol arg1);
 ATbool PT_isEqualSymbols(PT_Symbols arg0, PT_Symbols arg1);
@@ -194,12 +208,33 @@ PT_Attrs PT_setAttrsTail(PT_Attrs arg, PT_Attrs tail);
 
 ATbool PT_isValidAttr(PT_Attr arg);
 ATbool PT_isAttrCons(PT_Attr arg);
-ATbool PT_isAttrBracket(PT_Attr arg);
-ATbool PT_isAttrMemo(PT_Attr arg);
-ATbool PT_isAttrTraverse(PT_Attr arg);
+ATbool PT_isAttrId(PT_Attr arg);
+ATbool PT_isAttrAterm(PT_Attr arg);
 ATbool PT_hasAttrString(PT_Attr arg);
 char * PT_getAttrString(PT_Attr arg);
 PT_Attr PT_setAttrString(PT_Attr arg, char * string);
+ATbool PT_hasAttrModuleName(PT_Attr arg);
+char * PT_getAttrModuleName(PT_Attr arg);
+PT_Attr PT_setAttrModuleName(PT_Attr arg, char * moduleName);
+ATbool PT_hasAttrTerm(PT_Attr arg);
+PT_ATerm PT_getAttrTerm(PT_Attr arg);
+PT_Attr PT_setAttrTerm(PT_Attr arg, PT_ATerm term);
+
+/*}}}  */
+/*{{{  PT_ATerm accessors */
+
+ATbool PT_isValidATerm(PT_ATerm arg);
+ATbool PT_isATermBracket(PT_ATerm arg);
+ATbool PT_isATermLeft(PT_ATerm arg);
+ATbool PT_isATermRight(PT_ATerm arg);
+ATbool PT_isATermAssoc(PT_ATerm arg);
+ATbool PT_isATermNonAssoc(PT_ATerm arg);
+ATbool PT_isATermMemo(PT_ATerm arg);
+ATbool PT_isATermReject(PT_ATerm arg);
+ATbool PT_isATermPrefer(PT_ATerm arg);
+ATbool PT_isATermAvoid(PT_ATerm arg);
+ATbool PT_isATermConstructor(PT_ATerm arg);
+ATbool PT_isATermTraverse(PT_ATerm arg);
 
 /*}}}  */
 /*{{{  PT_Args accessors */
@@ -300,7 +335,8 @@ PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT
 PT_Production PT_visitProduction(PT_Production arg, PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes));
 PT_Attributes PT_visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_Attrs));
 PT_Attrs PT_visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr));
-PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *));
+PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *), char * (*acceptModuleName)(char *), PT_ATerm (*acceptTerm)(PT_ATerm));
+PT_ATerm PT_visitATerm(PT_ATerm arg);
 PT_Args PT_visitArgs(PT_Args arg, PT_Tree (*acceptHead)(PT_Tree));
 PT_Symbol PT_visitSymbol(PT_Symbol arg, char * (*acceptString)(char *), PT_CharRanges (*acceptRanges)(PT_CharRanges));
 PT_Symbols PT_visitSymbols(PT_Symbols arg, PT_Symbol (*acceptHead)(PT_Symbol));

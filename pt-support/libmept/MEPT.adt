@@ -32,10 +32,22 @@
   [Attrs, many, [<head(Attr)>,<[tail(Attrs)]>]],
   [Attrs, single, [<head(Attr)>]], 
 
-  [Attr, cons, cons(<string(str)>)],
-  [Attr, bracket, atr("bracket")],
-  [Attr, memo, atr("memo")],
-  [Attr, traverse, traverse],
+  [Attr, cons       , cons(<string(str)>)   ],
+  [Attr, id         , id(<module-name(str)>)],
+  [Attr, aterm      , atr(<term(ATerm)>)    ],
+
+
+  [ATerm, bracket    , "bracket"        ],
+  [ATerm, left       , "left"           ],
+  [ATerm, right      , "right"          ],
+  [ATerm, assoc      , "assoc"          ],
+  [ATerm, non-assoc  , "non-assoc"      ],
+  [ATerm, memo       , "memo"           ],
+  [ATerm, reject     , "reject"         ],
+  [ATerm, prefer     , "prefer"         ],
+  [ATerm, avoid      , "avoid"          ],
+  [ATerm, constructor, "constructor"    ],
+  [ATerm, traverse   , "traverse"       ],
 
   [Args, list, [<head(Tree)>,<[tail(Args)]>]],
   [Args, empty, []],

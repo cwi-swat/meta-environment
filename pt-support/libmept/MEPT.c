@@ -10,6 +10,7 @@ typedef struct ATerm _PT_Production;
 typedef struct ATerm _PT_Attributes;
 typedef struct ATerm _PT_Attrs;
 typedef struct ATerm _PT_Attr;
+typedef struct ATerm _PT_ATerm;
 typedef struct ATerm _PT_Args;
 typedef struct ATerm _PT_Symbol;
 typedef struct ATerm _PT_Symbols;
@@ -120,6 +121,22 @@ PT_Attr PT_makeAttrFromTerm(ATerm t)
 /*{{{  ATerm PT_makeTermFromAttr(PT_Attr arg) */
 
 ATerm PT_makeTermFromAttr(PT_Attr arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  PT_ATerm PT_makeATermFromTerm(ATerm t) */
+
+PT_ATerm PT_makeATermFromTerm(ATerm t)
+{
+  return (PT_ATerm)t;
+}
+
+/*}}}  */
+/*{{{  ATerm PT_makeTermFromATerm(PT_ATerm arg) */
+
+ATerm PT_makeTermFromATerm(PT_ATerm arg)
 {
   return (ATerm)arg;
 }
@@ -313,27 +330,107 @@ PT_Attr PT_makeAttrCons(char * string)
 }
 
 /*}}}  */
-/*{{{  PT_Attr PT_makeAttrBracket() */
+/*{{{  PT_Attr PT_makeAttrId(char * moduleName) */
 
-PT_Attr PT_makeAttrBracket()
+PT_Attr PT_makeAttrId(char * moduleName)
 {
-  return (PT_Attr)ATmakeTerm(PT_patternAttrBracket);
+  return (PT_Attr)ATmakeTerm(PT_patternAttrId, moduleName);
 }
 
 /*}}}  */
-/*{{{  PT_Attr PT_makeAttrMemo() */
+/*{{{  PT_Attr PT_makeAttrAterm(PT_ATerm term) */
 
-PT_Attr PT_makeAttrMemo()
+PT_Attr PT_makeAttrAterm(PT_ATerm term)
 {
-  return (PT_Attr)ATmakeTerm(PT_patternAttrMemo);
+  return (PT_Attr)ATmakeTerm(PT_patternAttrAterm, term);
 }
 
 /*}}}  */
-/*{{{  PT_Attr PT_makeAttrTraverse() */
+/*{{{  PT_ATerm PT_makeATermBracket() */
 
-PT_Attr PT_makeAttrTraverse()
+PT_ATerm PT_makeATermBracket()
 {
-  return (PT_Attr)ATmakeTerm(PT_patternAttrTraverse);
+  return (PT_ATerm)ATmakeTerm(PT_patternATermBracket);
+}
+
+/*}}}  */
+/*{{{  PT_ATerm PT_makeATermLeft() */
+
+PT_ATerm PT_makeATermLeft()
+{
+  return (PT_ATerm)ATmakeTerm(PT_patternATermLeft);
+}
+
+/*}}}  */
+/*{{{  PT_ATerm PT_makeATermRight() */
+
+PT_ATerm PT_makeATermRight()
+{
+  return (PT_ATerm)ATmakeTerm(PT_patternATermRight);
+}
+
+/*}}}  */
+/*{{{  PT_ATerm PT_makeATermAssoc() */
+
+PT_ATerm PT_makeATermAssoc()
+{
+  return (PT_ATerm)ATmakeTerm(PT_patternATermAssoc);
+}
+
+/*}}}  */
+/*{{{  PT_ATerm PT_makeATermNonAssoc() */
+
+PT_ATerm PT_makeATermNonAssoc()
+{
+  return (PT_ATerm)ATmakeTerm(PT_patternATermNonAssoc);
+}
+
+/*}}}  */
+/*{{{  PT_ATerm PT_makeATermMemo() */
+
+PT_ATerm PT_makeATermMemo()
+{
+  return (PT_ATerm)ATmakeTerm(PT_patternATermMemo);
+}
+
+/*}}}  */
+/*{{{  PT_ATerm PT_makeATermReject() */
+
+PT_ATerm PT_makeATermReject()
+{
+  return (PT_ATerm)ATmakeTerm(PT_patternATermReject);
+}
+
+/*}}}  */
+/*{{{  PT_ATerm PT_makeATermPrefer() */
+
+PT_ATerm PT_makeATermPrefer()
+{
+  return (PT_ATerm)ATmakeTerm(PT_patternATermPrefer);
+}
+
+/*}}}  */
+/*{{{  PT_ATerm PT_makeATermAvoid() */
+
+PT_ATerm PT_makeATermAvoid()
+{
+  return (PT_ATerm)ATmakeTerm(PT_patternATermAvoid);
+}
+
+/*}}}  */
+/*{{{  PT_ATerm PT_makeATermConstructor() */
+
+PT_ATerm PT_makeATermConstructor()
+{
+  return (PT_ATerm)ATmakeTerm(PT_patternATermConstructor);
+}
+
+/*}}}  */
+/*{{{  PT_ATerm PT_makeATermTraverse() */
+
+PT_ATerm PT_makeATermTraverse()
+{
+  return (PT_ATerm)ATmakeTerm(PT_patternATermTraverse);
 }
 
 /*}}}  */
@@ -535,6 +632,11 @@ ATbool PT_isEqualAttrs(PT_Attrs arg0, PT_Attrs arg1)
 }
 
 ATbool PT_isEqualAttr(PT_Attr arg0, PT_Attr arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool PT_isEqualATerm(PT_ATerm arg0, PT_ATerm arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -1357,13 +1459,10 @@ ATbool PT_isValidAttr(PT_Attr arg)
   if (PT_isAttrCons(arg)) {
     return ATtrue;
   }
-  else if (PT_isAttrBracket(arg)) {
+  else if (PT_isAttrId(arg)) {
     return ATtrue;
   }
-  else if (PT_isAttrMemo(arg)) {
-    return ATtrue;
-  }
-  else if (PT_isAttrTraverse(arg)) {
+  else if (PT_isAttrAterm(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -1378,27 +1477,19 @@ ATbool PT_isAttrCons(PT_Attr arg)
 }
 
 /*}}}  */
-/*{{{  ATbool PT_isAttrBracket(PT_Attr arg) */
+/*{{{  ATbool PT_isAttrId(PT_Attr arg) */
 
-ATbool PT_isAttrBracket(PT_Attr arg)
+ATbool PT_isAttrId(PT_Attr arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternAttrBracket);
+  return ATmatchTerm((ATerm)arg, PT_patternAttrId, NULL);
 }
 
 /*}}}  */
-/*{{{  ATbool PT_isAttrMemo(PT_Attr arg) */
+/*{{{  ATbool PT_isAttrAterm(PT_Attr arg) */
 
-ATbool PT_isAttrMemo(PT_Attr arg)
+ATbool PT_isAttrAterm(PT_Attr arg)
 {
-  return ATmatchTerm((ATerm)arg, PT_patternAttrMemo);
-}
-
-/*}}}  */
-/*{{{  ATbool PT_isAttrTraverse(PT_Attr arg) */
-
-ATbool PT_isAttrTraverse(PT_Attr arg)
-{
-  return ATmatchTerm((ATerm)arg, PT_patternAttrTraverse);
+  return ATmatchTerm((ATerm)arg, PT_patternAttrAterm, NULL);
 }
 
 /*}}}  */
@@ -1436,6 +1527,213 @@ PT_Attr PT_setAttrString(PT_Attr arg, char * string)
 
   ATabort("Attr has no String: %t\n", arg);
   return (PT_Attr)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PT_hasAttrModuleName(PT_Attr arg) */
+
+ATbool PT_hasAttrModuleName(PT_Attr arg)
+{
+  if (PT_isAttrId(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char * PT_getAttrModuleName(PT_Attr arg) */
+
+char * PT_getAttrModuleName(PT_Attr arg)
+{
+  if (PT_isAttrId(arg)) {
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
+  }
+
+  ATabort("Attr has no ModuleName: %t\n", arg);
+  return (char *)NULL;
+}
+
+/*}}}  */
+/*{{{  PT_Attr PT_setAttrModuleName(PT_Attr arg, char * moduleName) */
+
+PT_Attr PT_setAttrModuleName(PT_Attr arg, char * moduleName)
+{
+  if (PT_isAttrId(arg)) {
+    return (PT_Attr)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(moduleName, 0, ATtrue)), 0);
+  }
+
+  ATabort("Attr has no ModuleName: %t\n", arg);
+  return (PT_Attr)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PT_hasAttrTerm(PT_Attr arg) */
+
+ATbool PT_hasAttrTerm(PT_Attr arg)
+{
+  if (PT_isAttrAterm(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PT_ATerm PT_getAttrTerm(PT_Attr arg) */
+
+PT_ATerm PT_getAttrTerm(PT_Attr arg)
+{
+  if (PT_isAttrAterm(arg)) {
+    return (PT_ATerm)ATgetArgument((ATermAppl)arg, 0);
+  }
+
+  ATabort("Attr has no Term: %t\n", arg);
+  return (PT_ATerm)NULL;
+}
+
+/*}}}  */
+/*{{{  PT_Attr PT_setAttrTerm(PT_Attr arg, PT_ATerm term) */
+
+PT_Attr PT_setAttrTerm(PT_Attr arg, PT_ATerm term)
+{
+  if (PT_isAttrAterm(arg)) {
+    return (PT_Attr)ATsetArgument((ATermAppl)arg, (ATerm)term, 0);
+  }
+
+  ATabort("Attr has no Term: %t\n", arg);
+  return (PT_Attr)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  PT_ATerm accessors */
+
+/*{{{  ATbool PT_isValidATerm(PT_ATerm arg) */
+
+ATbool PT_isValidATerm(PT_ATerm arg)
+{
+  if (PT_isATermBracket(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isATermLeft(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isATermRight(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isATermAssoc(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isATermNonAssoc(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isATermMemo(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isATermReject(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isATermPrefer(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isATermAvoid(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isATermConstructor(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isATermTraverse(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isATermBracket(PT_ATerm arg) */
+
+ATbool PT_isATermBracket(PT_ATerm arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternATermBracket);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isATermLeft(PT_ATerm arg) */
+
+ATbool PT_isATermLeft(PT_ATerm arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternATermLeft);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isATermRight(PT_ATerm arg) */
+
+ATbool PT_isATermRight(PT_ATerm arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternATermRight);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isATermAssoc(PT_ATerm arg) */
+
+ATbool PT_isATermAssoc(PT_ATerm arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternATermAssoc);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isATermNonAssoc(PT_ATerm arg) */
+
+ATbool PT_isATermNonAssoc(PT_ATerm arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternATermNonAssoc);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isATermMemo(PT_ATerm arg) */
+
+ATbool PT_isATermMemo(PT_ATerm arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternATermMemo);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isATermReject(PT_ATerm arg) */
+
+ATbool PT_isATermReject(PT_ATerm arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternATermReject);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isATermPrefer(PT_ATerm arg) */
+
+ATbool PT_isATermPrefer(PT_ATerm arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternATermPrefer);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isATermAvoid(PT_ATerm arg) */
+
+ATbool PT_isATermAvoid(PT_ATerm arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternATermAvoid);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isATermConstructor(PT_ATerm arg) */
+
+ATbool PT_isATermConstructor(PT_ATerm arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternATermConstructor);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isATermTraverse(PT_ATerm arg) */
+
+ATbool PT_isATermTraverse(PT_ATerm arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternATermTraverse);
 }
 
 /*}}}  */
@@ -2470,25 +2768,66 @@ PT_Attrs PT_visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr))
 }
 
 /*}}}  */
-/*{{{  PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *)) */
+/*{{{  PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *), char * (*acceptModuleName)(char *), PT_ATerm (*acceptTerm)(PT_ATerm)) */
 
-PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *))
+PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *), char * (*acceptModuleName)(char *), PT_ATerm (*acceptTerm)(PT_ATerm))
 {
   if (PT_isAttrCons(arg)) {
     return PT_makeAttrCons(
         acceptString ? acceptString(PT_getAttrString(arg)) : PT_getAttrString(arg));
   }
-  if (PT_isAttrBracket(arg)) {
-    return PT_makeAttrBracket();
+  if (PT_isAttrId(arg)) {
+    return PT_makeAttrId(
+        acceptModuleName ? acceptModuleName(PT_getAttrModuleName(arg)) : PT_getAttrModuleName(arg));
   }
-  if (PT_isAttrMemo(arg)) {
-    return PT_makeAttrMemo();
-  }
-  if (PT_isAttrTraverse(arg)) {
-    return PT_makeAttrTraverse();
+  if (PT_isAttrAterm(arg)) {
+    return PT_makeAttrAterm(
+        acceptTerm ? acceptTerm(PT_getAttrTerm(arg)) : PT_getAttrTerm(arg));
   }
   ATabort("not a Attr: %t\n", arg);
   return (PT_Attr)NULL;
+}
+
+/*}}}  */
+/*{{{  PT_ATerm PT_visitATerm(PT_ATerm arg) */
+
+PT_ATerm PT_visitATerm(PT_ATerm arg)
+{
+  if (PT_isATermBracket(arg)) {
+    return PT_makeATermBracket();
+  }
+  if (PT_isATermLeft(arg)) {
+    return PT_makeATermLeft();
+  }
+  if (PT_isATermRight(arg)) {
+    return PT_makeATermRight();
+  }
+  if (PT_isATermAssoc(arg)) {
+    return PT_makeATermAssoc();
+  }
+  if (PT_isATermNonAssoc(arg)) {
+    return PT_makeATermNonAssoc();
+  }
+  if (PT_isATermMemo(arg)) {
+    return PT_makeATermMemo();
+  }
+  if (PT_isATermReject(arg)) {
+    return PT_makeATermReject();
+  }
+  if (PT_isATermPrefer(arg)) {
+    return PT_makeATermPrefer();
+  }
+  if (PT_isATermAvoid(arg)) {
+    return PT_makeATermAvoid();
+  }
+  if (PT_isATermConstructor(arg)) {
+    return PT_makeATermConstructor();
+  }
+  if (PT_isATermTraverse(arg)) {
+    return PT_makeATermTraverse();
+  }
+  ATabort("not a ATerm: %t\n", arg);
+  return (PT_ATerm)NULL;
 }
 
 /*}}}  */

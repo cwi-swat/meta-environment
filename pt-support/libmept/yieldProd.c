@@ -144,9 +144,30 @@ lengthOfSymbols(PT_Symbols symbols)
   return length;
 }
 
+static int lengthOfAttr(PT_Attr attr)
+{
+   return strlen(ATwriteToString(PT_makeTermFromAttr(attr)));
+}
+
+static int lengthOfAttrs(PT_Attrs attrs)
+{
+  int length = 0;
+
+  while (PT_hasAttrsHead(attrs)) {
+    length += lengthOfAttr(PT_getAttrsHead(attrs)) + 2;
+    attrs = PT_getAttrsTail(attrs);
+  }
+
+  return length > 0 ? length - 2 : 0; 
+}
+
 static int
 lengthOfAttributes(PT_Attributes attrs)
 {
+  if (PT_hasAttributesAttrs(attrs)) {
+    return 2 + lengthOfAttrs(PT_getAttributesAttrs(attrs));
+  }
+  
   return 0;
 }
 
@@ -373,8 +394,44 @@ yieldSymbols(PT_Symbols symbols, int idx, char *buf, int bufSize)
 }
 
 static int 
+yieldAttr(PT_Attr attr, int idx, char *buf, int bufSize)
+{
+  char *str; 
+
+  str = ATwriteToString(PT_makeTermFromAttr(attr));
+
+  strcpy(buf+idx, str);
+  
+  return idx + strlen(str);
+}
+
+static int 
+yieldAttrs(PT_Attrs attrs, int idx, char *buf, int bufSize)
+{
+  assert(idx <= bufSize);
+
+  while (PT_hasAttrsHead(attrs)) {
+    idx = yieldAttr(PT_getAttrsHead(attrs), idx, buf, bufSize);
+    attrs = PT_getAttrsTail(attrs);
+    if (PT_hasAttrsHead(attrs)) {
+      buf[idx++] = ',';
+      buf[idx++] = ' ';
+    }
+  }
+   
+  assert(idx <= bufSize);
+  return idx;
+}
+
+static int 
 yieldAttributes(PT_Attributes attrs, int idx, char *buf, int bufSize)
 {
+  if (PT_hasAttributesAttrs(attrs)) {
+    buf[idx++] = '{';
+    idx = yieldAttrs(PT_getAttributesAttrs(attrs), idx, buf, bufSize);
+    buf[idx++] = '}';
+  }
+
   return idx;
 }
 

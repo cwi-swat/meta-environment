@@ -856,3 +856,60 @@ PT_Tree PT_getTreeBracketTree(PT_Tree tree)
   }
   return NULL;
 }
+
+PT_Attr PT_makeAttrBracket(void)
+{
+  return PT_makeAttrAterm(PT_makeATermBracket());
+}
+
+PT_Attr PT_makeAttrLeft(void)
+{
+  return PT_makeAttrAterm(PT_makeATermLeft());
+}
+
+PT_Attr PT_makeAttrRight(void)
+{
+  return PT_makeAttrAterm(PT_makeATermRight());
+}
+
+PT_Attr PT_makeAttrAssoc(void)
+{
+  return PT_makeAttrAterm(PT_makeATermAssoc());
+}
+
+PT_Attr PT_makeAttrNonAssoc(void)
+{
+  return PT_makeAttrAterm(PT_makeATermNonAssoc());
+}
+
+PT_Attr PT_makeAttrMemo(void)
+{
+  return PT_makeAttrAterm(PT_makeATermMemo());
+}
+
+PT_Attr PT_makeAttrReject(void)
+{
+  return PT_makeAttrAterm(PT_makeATermReject());
+}
+
+PT_Attr PT_makeAttrPrefer(void)
+{
+  return PT_makeAttrAterm(PT_makeATermPrefer());
+}
+
+PT_Attr PT_makeAttrAvoid(void)
+{
+  return PT_makeAttrAterm(PT_makeATermAvoid());
+}
+
+PT_Attr PT_makeAttrConstructor(void)
+{
+  return PT_makeAttrAterm(PT_makeATermConstructor());
+}
+
+PT_Attr PT_makeAttrTraverse(void)
+{
+  return PT_makeAttrAterm(PT_makeATermTraverse());
+}
+
+
