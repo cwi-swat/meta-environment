@@ -2,6 +2,7 @@ module languages/sdf2/normalization/Character-Class
 
 imports languages/sdf2/normalization/Character-Class-Membership
 hiddens
+  sorts CharRange CharRanges OptCharRanges
   context-free syntax
     "(/)"                          -> CharRange
     if(Boolean, CharClass, CharClass) -> CharClass %% {delaying2,delaying3}
