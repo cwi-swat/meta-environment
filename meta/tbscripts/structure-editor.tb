@@ -79,6 +79,16 @@ in
     snd-note(ui-status(endstat(Id))).
     snd-ack-event(TE,menu-event("Meta-Environment","Parse",Fid))
     +
+    rec-event(TE,menu-event("Meta-Environment","Reduce",Fid)).
+    if equal(Fl,[]) then
+      snd-note(ui-status(stat(Id,"Rewriting..."))).
+      snd-eval(SE,getTree(Fid)).
+      rec-value(SE,T1?).
+      snd-msg(rewrite(id(Language),T1)).
+      snd-note(ui-status(endstat(Id)))
+    fi.
+    snd-ack-event(TE,menu-event("Meta-Environment","Reduce",Fid))
+    +
     rec-event(TE,get-focus(Fid,I?)).
     snd-eval(SE,getFocus(Fid, I)).
     rec-value(SE,Foc?).
