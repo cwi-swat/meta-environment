@@ -28,31 +28,41 @@
 process Structure-editor(TE: text-edit, Fid: str, Text: str, 
                          Language: str, IsTerm: str) is
 let
-  Id: term, 
-  Fl: list, Foc: term, Loc: int, Str: str, FF: list,
-  I: int, T: term, Ch: int, Li: int, Co: int,
-  SdfTree : term,
-  EqsTree : term,
-  TrmTree : term,
+  Id             : term, 
+  Fl             : list, 
+  Foc            : term, 
+  Loc            : int, 
+  Str            : str, 
+  ErrorFocuses   : list,
+  DirtyFocuses   : list,
+  I              : int, 
+  T              : term, 
+  Ch             : int, 
+  Li             : int, 
+  Co             : int,
+  SdfTree        : term,
+  EqsTree        : term,
+  TrmTree        : term,
   NormalFormTree : term,
-  Char: term, 
-  Nonterminal: str, 
-  ErrList: list, Cycle: list, Src:str,
-  Fun: str, Args: list, 
-  Modules: list,
-  RewritingOK : term,
-  LangOK: term
+  Char           : term, 
+  Nonterminal    : str, 
+  ErrList        : list, 
+  Cycle          : list, 
+  Src            : str,
+  Fun            : str, 
+  Args           : list, 
+  Modules        : list,
+  LangOK         : term,
+  StartSymbols   : list
 in
   Id := process-id.
   subscribe(disconnected(<term>)).
   subscribe(syntax-changed(Language)).
   snd-note(ui-status(stat(Id,"Starting structure editor..."))).
   snd-msg(start-se) .
-  snd-msg(start-anno) .
   snd-msg(new-editor(Fid, Text)) .
-  rec-msg(focus-list(Fl?)) .
-  Foc := first(Fl).
-  snd-msg(TE,set-focus(Fid,Foc)).
+  rec-msg(initial-focus(Foc?)) .
+  snd-msg(TE, set-focus(Fid, Foc)) .
   snd-note(ui-status(endstat(Id))). 
   (
     ( 
@@ -64,8 +74,7 @@ in
       snd-msg(delete-chars(Fid, Loc)) .
       snd-ack-event(TE,delete(Fid,Loc))
     ) .
-    rec-msg(focus-list(Fl?)) .
-    Foc := first(Fl).
+    rec-msg(current-focus(Foc?)) .
     snd-msg(TE,set-focus(Fid, Foc))
     +
     rec-event(TE,menu-event("Meta-Environment", "Parse", Fid)) .
@@ -106,45 +115,54 @@ in
     fi.
     if equal(LangOK, true) then
 	snd-note(ui-status(stat(Id,"Parsing..."))).
-	FF := []. (
-	  if not-equal(Fl,[]) then
-	    Foc:= first(Fl).
-	    snd-msg(get-anno("focusstatus", Foc)) .
-	    rec-msg(annotation(T?)) .
-	    if equal(dirty,T) then
-	      snd-msg(TE,get-focus-text(Fid, Foc)).
-	      rec-msg(TE,focus-text(Fid, Str?)).
-	      snd-msg(Id,parse-string-as-asfix1(Language, Nonterminal, Str)).
+	snd-msg(get-top-symbols(Language)) .
+        (
+          rec-msg(startsymbols(Language, StartSymbols?))
+        +
+          rec-msg(language-not-open(Language)).
+          StartSymbols := []
+        ) .
+        snd-msg(register-startsymbols(Fid, StartSymbols)) .
+        rec-msg(startsymbols-registered) .
+	ErrorFocuses := [] .
+        snd-msg(get-dirty-focuses(Fid)) .
+        rec-msg(dirty-focuses(DirtyFocuses?)) .
+        (
+	  if not-equal(DirtyFocuses,[]) then
+	    Foc := first(DirtyFocuses).
+	    DirtyFocuses := next(DirtyFocuses).
+	    snd-msg(TE, get-focus-text(Fid, Foc)).
+	    rec-msg(TE, focus-text(Fid, Str?)).
+            snd-msg(get-focus-sort(Nonterminal, Foc)) .
+            rec-msg(focus-sort(Nonterminal?)) .
+	    snd-msg(Id, parse-string-as-asfix1(Language, Nonterminal, Str)).
+            (
+	      rec-msg(parse-result-asfix1(Id,parse-tree(T?))) .
+              snd-msg(replace-focus(Fid, Foc, T))
+	    +
               (
-		rec-msg(parse-result-asfix1(Id,parse-tree(T?))).
-		snd-msg(replace-focus(Fid, T)).
-		rec-msg(focus-list(Fl?))
-	      + (
-                  rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,plain))) 
-                +
-		  rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,eof)))
-                ).
-		snd-msg(set-error-focus(Fid,Foc,ErrList)).
-		FF := join(FF,Foc)
-	      + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,
-							   ambiguities(I?)))).
-		printf("Parse of %s returned %d ambiguities",Str,I).
+                rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,plain))) 
+              +
+		rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,eof)))
+              ) .
+              snd-msg(set-error-focus(Fid, Foc, ErrList)) .
+              ErrorFocuses := join(ErrorFocuses,Foc)
+	    + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,
+						   ambiguities(I?)))).
+              printf("Parse of %s returned %d ambiguities",Str,I).
 		printf("Term is: %t\n",T).
-		FF :=join(FF,Foc)
-	      + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,cycle(Cycle?)))).
+		ErrorFocuses :=join(ErrorFocuses,Foc)
+	    + rec-msg(parse-result-asfix1(Id,parse-error(ErrList?,cycle(Cycle?)))).
 		printf("Parse of %s returned a cycle\n",Str).
 		printf("Cycle is: %t\n",Cycle).
-		FF :=join(FF,Foc)
-	      )
-	    else 
-	      tau
-	    fi.
-	    snd-msg(next-focus(Fid)) .
-	    rec-msg(focus-list(Fl?))
+		ErrorFocuses :=join(ErrorFocuses,Foc)
+	    )
+	  else 
+	    tau
 	  fi
 	) *
-	if equal(Fl,[]) then
-	  if equal(FF,[]) then
+	if equal(DirtyFocuses,[]) then
+	  if equal(ErrorFocuses,[]) then
 	    /* All parses succeeded */
 	    if equal(IsTerm,"sdf") then
 	      snd-msg(get-tree(Fid)) .
@@ -166,9 +184,7 @@ in
 	    fi .
 	    snd-msg(TE,clear-focus(Fid))
 	  else
-	    /* Some parses were ambiguous */
-	    snd-msg(set-focus(Fid, FF)) .
-	    rec-msg(focus-list(Fl?))
+	    snd-msg(set-focus(Fid, ErrorFocuses))
 	  fi
 	fi.
 	/* Finished parsing operations */
@@ -185,23 +201,7 @@ in
 
     rec-event(TE,menu-event("Meta-Environment","Reduce",Fid)) .
     if equal(IsTerm, "term") then
-      if equal(FF,[]) then
-        if not-equal(Fl,[]) then
-	  Foc:= first(Fl).
-	  snd-msg(get-anno("focusstatus", Foc)) .
-	  rec-msg(annotation(T?)) .
-	  if equal(clean,T) then
-	    RewritingOK := true
-          else
-	    RewritingOK := false
-          fi
-        else
-          RewritingOK := true
-        fi
-      else
-        RewritingOK := false
-      fi.
-      if equal(RewritingOK, true) then
+      if equal(ErrorFocuses,[]) then
         snd-note(ui-status(stat(Id,"Rewriting..."))).
         snd-msg(get-tree(Fid)) .
         rec-msg(tree(TrmTree?)) .
@@ -228,8 +228,6 @@ in
     snd-msg(get-focus(Fid, I)) .
     rec-msg(focus(Foc?)) .
     snd-msg(TE,set-focus(Fid, Foc)) .
-    snd-msg(set-focus(Fid, Foc)) .
-    rec-msg(focus-list(Fl?)) .
     snd-ack-event(TE,get-focus(Fid,I))
     +
     rec-event(TE,menu-event("Meta-Environment","Show Tree", Fid)).
@@ -245,15 +243,13 @@ in
     */
     rec-event(TE,menu-event("Move", Str?, Fid)).
     snd-msg(move-focus(Fid, Str)) .
-    rec-msg(focus-list(Fl?)) .
-    Foc := first(Fl).
+    rec-msg(focus(Foc?)) .
     snd-msg(TE,set-focus(Fid,Foc)).
     snd-ack-event(TE,menu-event("Move",Str,Fid))
     +
     rec-note(syntax-changed(Language)).
     snd-msg(invalidate-tree(Fid)) .
-    rec-msg(focus-list(Fl?)) .
-    Foc := first(Fl).
+    rec-msg(focus(Foc?)) .
     snd-msg(TE,clear-focus(Fid)).
     snd-msg(TE,set-focus(Fid,Foc))
   ) *

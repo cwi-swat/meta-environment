@@ -46,7 +46,6 @@
 #include "process-eqs.tb"
 #include "save-module.tb" 
 #include "help.tb" 
-#include "anno.idef"
 #include "se.idef"
 #include "set-parsetable.tb"
 #include "sdf2-language.tb"
@@ -59,7 +58,7 @@
 #include "removevarsyntax.idef"
 
 toolbus(Parser, Unparser, Io, Ui, Edit-master, ModuleDB, 
-	ProcessEqs, Save-modules, Revert-module, File-creator, SE, Anno, 
+	ProcessEqs, Save-modules, Revert-module, File-creator, SE,
 	Set-parsetable, Open-Sdf2-Language, Evaluator, 
   Notify-about-changed-modules, Rewrite-Errors, Traversals,
   Asf-Syntax, AddEqSyn, RemoveVars, Open-modules, Compiler, PGen, 
