@@ -1,0 +1,14 @@
+Makefile.in
+Makefile
+genmakefile
+.deps
+meta-paths
+imports
+parse-file
+parse-sdf2
+ps-dot
+insert-license
+insert-header
+genamakefile
+parse-sdf2.1
+perform-test
