@@ -16,6 +16,8 @@ ATbool remove_injections = ATfalse;
 ATbool remove_parsetree = ATfalse;
 ATbool implode_lexicals = ATfalse;
 ATbool keep_annotations = ATtrue;
+ATbool interpret_alt = ATfalse;
+ATbool interpret_seq = ATfalse;
 
 static ATerm implodeTerm(PT_Tree t);
 static ATerm implodeLayout(PT_Tree t);
@@ -180,14 +182,37 @@ static ATerm implodeLiteral(PT_Tree tree)
 
 static ATerm implodeAlt(PT_Tree tree)
 {
-  ATwarning("WARNING: Alternatives not supported by implodePT\n");
+  PT_Production prod = PT_getTreeProd(tree);
+  PT_Symbol chosen = PT_getSymbolsHead(PT_getProductionLhs(prod));
+  PT_Symbol rhs = PT_getProductionRhs(prod);
+  ATerm child;
+  int index;
 
+  if (PT_isSymbolCf(rhs) || PT_isSymbolLex(rhs)) {
+    rhs = PT_getSymbolSymbol(rhs);
+  }
+  if (PT_isSymbolCf(chosen) || PT_isSymbolLex(chosen)) {
+    chosen = PT_getSymbolSymbol(chosen);
+  }
+
+  index = 1;
+  do {
+    if (PT_isEqualSymbol(chosen, PT_getSymbolLhs(rhs))) {
+      child = implodeTerm(PT_getArgsHead(PT_getTreeArgs(tree)));
+      return ATmake("alt(<int>,[<term>])", index, child);
+    }
+
+    rhs = PT_getSymbolRhs(rhs);
+    index++;
+  } while (PT_isSymbolAlt(rhs));
+
+  ATerror("implodeAlt: unexpected term");
   return PT_makeTermFromTree(tree);
 }
 
 static ATerm implodeSeq(PT_Tree tree)
 {
-  ATwarning("WARNING: Alternatives not supported by implodePT\n");
+  ATwarning("WARNING: Sequences not supported by implodePT\n");
 
   return PT_makeTermFromTree(tree);
 }
@@ -239,7 +264,7 @@ static ATerm implodeTerm(PT_Tree tree)
   else if (PT_isTreeListInjection(tree)) {
     result = implodeListInjection(tree);
   }
-  else if (PT_isTreeAlt(tree)) {
+  else if (interpret_alt && PT_isTreeAlt(tree)) {
     result = implodeAlt(tree);
   }
   else if (PT_isTreeSeq(tree)) {
