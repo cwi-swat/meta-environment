@@ -129,7 +129,7 @@ process Bidder(Bid : bidder) is
   endlet
 
 tool bidder(Name : str) is
-  { command = "wish-adapter -script bidder.tcl -script-args -name Name" }
+  { command = "wish-adapter -script bidder.tcl -script-args Name" }
 
 %% The complete auction is, finally, defined by the \TB\ configuration:
 

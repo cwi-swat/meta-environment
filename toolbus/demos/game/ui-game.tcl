@@ -13,6 +13,8 @@ set colorActive(playerC) PaleGreen
 
 proc mk-board {player n} {
   global colorActive thePlayer colorOccupied
+
+  set player [TCLstring $player]
   set thePlayer $player
   set f .board
   frame .board -background $colorOccupied($player) -borderwidth 5
@@ -41,6 +43,7 @@ proc mk-board {player n} {
 
 proc occupy {player row col} {
   global colorOccupied
+  set player [TCLstring $player]
   .board.$row.$col configure -state disabled -text "x" \
     -disabledforeground  $colorOccupied($player)\
     -background $colorOccupied($player)

@@ -1,8 +1,0 @@
-#!/bin/sh
-if test x$1 = x
-then
-  PORT=8998
-else
-  PORT=$1
-fi
-toolbus $2 $3 $4 -TB_PORT $PORT hearts.tb
