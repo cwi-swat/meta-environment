@@ -147,7 +147,7 @@ ATermList _getImports( char* path )
  * specified in the meta.conf-paths file metaPathFile.
  *
  */
-ATermList getImports( char* metaPathsFile, char* topModule, unsigned int options )
+ATermList getImports( char* metaPathsFile, char* topModule, ModuleOptions options )
 {
    meta_paths mp;
    char*  path;
