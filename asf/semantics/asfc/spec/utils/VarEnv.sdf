@@ -83,6 +83,11 @@ exports
     pn-lookup(FunId,{NamePair ","}*)                        -> FunId
 
 exports
+sorts MN-struct
+  context-free syntax
+    "(" Module "," NameTable ")" -> MN-struct
+
+exports
   context-free syntax
     is-delaying(FunId,{NamePair ","}*)       -> Bool
     is-memo(FunId,{NamePair ","}*)           -> Bool
