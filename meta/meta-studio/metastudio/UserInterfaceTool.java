@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Nov 26, 2004 9:44:36 AM
+// generation time: Nov 26, 2004 11:56:46 AM
 
 package metastudio;
 
@@ -17,12 +17,7 @@ abstract public class UserInterfaceTool
 
   //{{{  Patterns that are used to match against incoming terms
 
-  private ATerm PdisplayGraph0;
-  private ATerm PaddEvents0;
-  private ATerm PaddEvents1;
   private ATerm PinitializeUi0;
-  private ATerm PdisplayTreelist0;
-  private ATerm PrecAckEvent0;
   private ATerm PrecTerminate0;
 
   //}}}
@@ -45,11 +40,6 @@ abstract public class UserInterfaceTool
   private void initSigTable()
   {
     sigTable.put(factory.parse("rec-do(<user-interface>,initialize-ui(<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,display-graph(<str>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,display-treelist(<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,add-events(<term>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,add-events(<term>,<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-ack-event(<user-interface>,<term>)"), new Boolean(true));
     sigTable.put(factory.parse("rec-terminate(<user-interface>,<term>)"), new Boolean(true));
   }
 
@@ -59,12 +49,7 @@ abstract public class UserInterfaceTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
-    PdisplayGraph0 = factory.parse("rec-do(display-graph(<str>,<term>))");
-    PaddEvents0 = factory.parse("rec-do(add-events(<term>,<str>,<term>))");
-    PaddEvents1 = factory.parse("rec-do(add-events(<term>,<term>))");
     PinitializeUi0 = factory.parse("rec-do(initialize-ui(<str>))");
-    PdisplayTreelist0 = factory.parse("rec-do(display-treelist(<str>,<term>))");
-    PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
     PrecTerminate0 = factory.parse("rec-terminate(<term>)");
   }
 
@@ -77,34 +62,9 @@ abstract public class UserInterfaceTool
   {
     List result;
 
-    result = term.match(PdisplayGraph0);
-    if (result != null) {
-      displayGraph((String)result.get(0), (ATerm)result.get(1));
-      return null;
-    }
-    result = term.match(PaddEvents0);
-    if (result != null) {
-      addEvents((ATerm)result.get(0), (String)result.get(1), (ATerm)result.get(2));
-      return null;
-    }
-    result = term.match(PaddEvents1);
-    if (result != null) {
-      addEvents((ATerm)result.get(0), (ATerm)result.get(1));
-      return null;
-    }
     result = term.match(PinitializeUi0);
     if (result != null) {
       initializeUi((String)result.get(0));
-      return null;
-    }
-    result = term.match(PdisplayTreelist0);
-    if (result != null) {
-      displayTreelist((String)result.get(0), (ATerm)result.get(1));
-      return null;
-    }
-    result = term.match(PrecAckEvent0);
-    if (result != null) {
-      recAckEvent((ATerm)result.get(0));
       return null;
     }
     result = term.match(PrecTerminate0);

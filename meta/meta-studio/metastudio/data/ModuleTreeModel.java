@@ -13,7 +13,7 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
-import metastudio.components.ModuleSelectionListener;
+import metastudio.components.modulebrowser.ModuleSelectionListener;
 
 public class ModuleTreeModel extends AbstractModuleTreeModel implements TreeModel, Serializable {
 	private ModuleTreeNode root;

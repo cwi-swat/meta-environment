@@ -14,7 +14,7 @@ public class MessageTabs extends JPanel {
     private JTabbedPane messageTabs;
     private ATermFactory factory;
     
-    public MessageTabs(ATermFactory factory, MultiBridge bridge, String args[]) {
+    public MessageTabs(ATermFactory factory, String args[]) {
     	this.factory = factory;
     	setLayout(new BorderLayout());
         createMessageTabs(args);

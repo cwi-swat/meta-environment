@@ -1,6 +1,6 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: Nov 26, 2004 9:44:36 AM
+// generation time: Nov 26, 2004 11:56:46 AM
 
 package metastudio;
 
@@ -21,45 +21,6 @@ public class UserInterfaceBridge
 
   //}}}
 
-  //{{{  public void displayGraph(String s0, ATerm t1)
-
-  public void displayGraph(String s0, ATerm t1)
-  {
-    if (tool != null) {
-      tool.displayGraph(s0, t1);
-    }
-    else {
-      throw new UnsupportedOperationException("method `displayGraph' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void addEvents(ATerm t0, String s1, ATerm t2)
-
-  public void addEvents(ATerm t0, String s1, ATerm t2)
-  {
-    if (tool != null) {
-      tool.addEvents(t0, s1, t2);
-    }
-    else {
-      throw new UnsupportedOperationException("method `addEvents' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void addEvents(ATerm t0, ATerm t1)
-
-  public void addEvents(ATerm t0, ATerm t1)
-  {
-    if (tool != null) {
-      tool.addEvents(t0, t1);
-    }
-    else {
-      throw new UnsupportedOperationException("method `addEvents' not supported.");
-    }
-  }
-
-  //}}}
   //{{{  public void initializeUi(String s0)
 
   public void initializeUi(String s0)
@@ -69,32 +30,6 @@ public class UserInterfaceBridge
     }
     else {
       throw new UnsupportedOperationException("method `initializeUi' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void displayTreelist(String s0, ATerm t1)
-
-  public void displayTreelist(String s0, ATerm t1)
-  {
-    if (tool != null) {
-      tool.displayTreelist(s0, t1);
-    }
-    else {
-      throw new UnsupportedOperationException("method `displayTreelist' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void recAckEvent(ATerm t0)
-
-  public void recAckEvent(ATerm t0)
-  {
-    if (tool != null) {
-      tool.recAckEvent(t0);
-    }
-    else {
-      throw new UnsupportedOperationException("method `recAckEvent' not supported.");
     }
   }
 

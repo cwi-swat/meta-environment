@@ -11,6 +11,7 @@ SUBDIRS = \
 	dialogtool \
 	graphnodesizer \
 	treebrowser \
+	modulebrowser \
 	.
 
 CLASSPATH_ENV = CLASSPATH=${JAVAROOT}:${top_srcdir}/meta-studio:${EXTERNAL_JARS}
@@ -21,9 +22,4 @@ javadir = ${prefix}/classes/metastudio
 EXTRA_DIST = ${java_JAVA}
 
 java_JAVA = \
-	ModuleBrowser.java \
-	ModuleInfoPanel.java \
-	ModulePopupMenu.java \
-	ModuleSelectionListener.java \
-	ModuleTree.java \
 	TideControl.java 

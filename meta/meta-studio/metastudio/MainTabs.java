@@ -3,10 +3,11 @@ package metastudio;
 import java.io.IOException;
 
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import metastudio.components.ModuleBrowser;
 import metastudio.components.TideControl;
+import metastudio.components.modulebrowser.ModuleBrowser;
 import metastudio.components.treebrowser.TreeBrowser;
 import metastudio.data.graph.MetaGraphFactory;
 import tide.tool.support.DebugAdapter;
@@ -15,7 +16,7 @@ import tide.tool.support.DebugToolListener;
 import aterm.ATermFactory;
 import aterm.pure.PureFactory;
 
-public class MainTabs extends UserInterfacePanel {
+public class MainTabs extends JPanel {
     private static final String PARSE_TREE = "Parse tree";
 	private static final String MODULES = "Modules";
 	private static final String DEBUGGING = "Debugging";
@@ -23,8 +24,7 @@ public class MainTabs extends UserInterfacePanel {
 	private Thread tideControlThread;
 	private ATermFactory factory;
     
-    public MainTabs(ATermFactory factory, MultiBridge bridge, String[] args) {
-        super(factory, bridge);
+    public MainTabs(ATermFactory factory, String[] args) {
         this.factory = factory;
         createMainTabs(args);
         add(tabs);
@@ -38,16 +38,17 @@ public class MainTabs extends UserInterfacePanel {
     
     private JTabbedPane createMainTabs(String[] args) {
         tabs = new JTabbedPane();
-        ModuleBrowser moduleBrowser = new ModuleBrowser(getFactory(), getBridge(), args);
+        ModuleBrowser moduleBrowser = new ModuleBrowser(factory, args);
+        spawn(moduleBrowser, "module-browser");
+        
         TreeBrowser parseTreeBrowser = new TreeBrowser(new MetaGraphFactory((PureFactory) factory), args);
-       
         spawn(parseTreeBrowser, "tree-browser");
         
         addTab(tabs, MODULES, moduleBrowser);
         addTab(tabs, PARSE_TREE, parseTreeBrowser);
         
 		try {
-			TideControl tide = new TideControl(getFactory(), args);
+			TideControl tide = new TideControl(factory, args);
 			addTab(tabs, DEBUGGING, tide);
 			
 			tide.addDebugToolListener(new DebugToolListener() {

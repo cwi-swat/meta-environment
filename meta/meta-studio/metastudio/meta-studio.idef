@@ -2,24 +2,8 @@ tool user-interface is { command = "meta-studio" }
 
 process Ui is
 let
-  Arguments: list,
-  EventList: list,
   EnvironmentName: str,
-  Error: term,
-  Event: term,
-  Extension: str,
-  FileName: str,
-  Graph: term,
-  GraphId: str,
   Id: term,
-  List: list,
-  ModuleId: str,
-  Node: term,
-  On: term,
-  Path: str,
-  Str: str,
-  Title: str,
-  Type: term,
   UI: user-interface
 in
   Id := process-id
@@ -28,54 +12,10 @@ in
   . rec-msg(environment-name-hook-result(EnvironmentName?))
   . snd-do(UI, initialize-ui(EnvironmentName))
   .
-    (
-      rec-msg(ui-display-graph("import-graph", Graph?))
-      . snd-do(UI, display-graph("import-graph", Graph))
-    +
-      rec-msg(ui-display-treelist(Str?, List?))
-      . snd-do(UI, display-treelist(Str, List))
-    +
-      rec-event(UI,clear-all)
-      . snd-msg(clear-all)
-      . rec-msg(cleared-all)
-      . snd-ack-event(UI,clear-all)
-    +
-      rec-event(UI, get-events(Type?))
-      . snd-msg(cm-get-events(Type))
-      . rec-msg(cm-events(EventList?))
-      . snd-do(UI, add-events(Type, EventList))
-      . snd-ack-event(UI, get-events(Type))
-    +
-      rec-event(UI, get-events(Type?, ModuleId?))
-
-      . snd-msg(cm-get-events(Type))
-      . rec-msg(cm-events(EventList?))
-      . snd-do(UI, add-events(Type, EventList))
-
-      . snd-msg(cm-get-module-events(Type, ModuleId))
-      . rec-msg(cm-module-events(EventList?))
-      . snd-do(UI, add-events(Type, ModuleId, EventList))
-
-      . snd-ack-event(UI, get-events(Type, ModuleId))
-    +
-      rec-event(UI, button-selected(Type?, Event?))
-      . snd-msg(ui-button-selected(Type, Event))
-      . snd-ack-event(UI, button-selected(Type, Event))
-    +
-      rec-event(UI, button-selected(Type?, ModuleId?, Event?))
-      . snd-msg(ui-button-selected(Type, Event, ModuleId))
-      . snd-ack-event(UI, button-selected(Type, ModuleId, Event))
-    +
-      rec-event(UI, node-selected(GraphId?, Node?))
-      . snd-msg(ui-node-selected(GraphId, Node))
-      . snd-ack-event(UI, node-selected(GraphId, Node))
-    )
-    *
-    (
-      rec-event(UI, quit)
-    +
-      rec-disconnect(UI)
-    )
-    . shutdown("MetaStudio exiting\n")
-  
+  (
+    rec-event(UI, quit)
+  +
+    rec-disconnect(UI)
+  )
+  . shutdown("MetaStudio exiting\n")
 endlet

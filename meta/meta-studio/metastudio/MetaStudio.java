@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.UnknownHostException;
 import java.util.Properties;
 
 import javax.swing.JComponent;
@@ -17,7 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import metastudio.components.ModulePopupMenu;
 import metastudio.components.dialogtool.DialogTool;
 import metastudio.components.graphnodesizer.GraphNodeSizer;
 import metastudio.components.menubar.MenuBar;
@@ -25,11 +23,12 @@ import metastudio.components.statusbar.StatusBar;
 import metastudio.components.toolbar.ToolBar;
 import metastudio.data.graph.MetaGraphFactory;
 import metastudio.utils.Preferences;
+import aterm.ATerm;
 import aterm.pure.PureFactory;
 
-public class MetaStudio extends JFrame {
+public class MetaStudio extends JFrame implements UserInterfaceTif {
     private static PureFactory factory;
-    private MultiBridge bridge;
+    private UserInterfaceBridge bridge;
 
     public static final void main(String[] args) throws IOException {
         new MetaStudio(args);
@@ -46,7 +45,6 @@ public class MetaStudio extends JFrame {
 
     public MetaStudio(String[] args) throws IOException {
         factory = new PureFactory();
-        createToolBusBridge(args);
         
         initializeProperties();
         handleCloseRequests();
@@ -56,8 +54,11 @@ public class MetaStudio extends JFrame {
 
         makeStudioVisible();
         
-        // should be done after construction of all components
-        getBridge().run();
+        bridge = new UserInterfaceBridge(factory, this);
+        bridge.init(args);
+        bridge.connect();
+        bridge.setLockObject(getTreeLock());
+        bridge.run();
     }
     
     private void initializeProperties() throws IOException {
@@ -85,7 +86,7 @@ public class MetaStudio extends JFrame {
         DialogTool dialogTool = new DialogTool(this.getRootPane(), factory, args);
         spawn(dialogTool, "dialogtool");
         
-        new ModulePopupMenu(factory, getBridge());
+        
     }
     
     private void createContentPane(String[] args) {
@@ -122,7 +123,7 @@ public class MetaStudio extends JFrame {
         JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
 
-        container.add(new MessageTabs(factory, getBridge(), args), BorderLayout.CENTER);
+        container.add(new MessageTabs(factory, args), BorderLayout.CENTER);
 
         StatusBar bar = new StatusBar(factory, args);
         spawn(bar, "status-bar");
@@ -134,7 +135,7 @@ public class MetaStudio extends JFrame {
 
 
     private JSplitPane createMainPane(String[] args) {
-        JComponent tabs = new MainTabs(factory, getBridge(), args);
+        JComponent tabs = new MainTabs(factory,  args);
         JPanel panel = createMessageStatusPanel(args);
 
         JSplitPane mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabs, panel);
@@ -147,7 +148,7 @@ public class MetaStudio extends JFrame {
     
 
     private void postQuitEvent() {
-        getBridge().sendEvent(factory.parse("quit"));
+        bridge.sendEvent(factory.parse("quit"));
     }
 
     private void handleCloseRequests() {
@@ -158,25 +159,12 @@ public class MetaStudio extends JFrame {
         });
     }
 
-    private void createToolBusBridge(String[] args)
-        throws UnknownHostException, IOException {
-
-        setBridge(new MultiBridge(factory));
-        getBridge().init(args);
-        getBridge().connect();
-        getBridge().setLockObject(getTreeLock());
-    }
-
     public void initializeUi(String name) {
         setTitle(name);
         Preferences.setString("metastudio.name", name);
     }
 
-    private void setBridge(MultiBridge bridge) {
-        this.bridge = bridge;
-    }
-
-    private MultiBridge getBridge() {
-        return bridge;
-    }
+	public void recTerminate(ATerm t0) {
+		
+	}
 }
