@@ -25,12 +25,12 @@ COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $@.c -o $@ $(top_srcdi
 .SUFFIXES:
 .SUFFIXES: .c .o
 
-PROGRAMS	= TBmatch1 TermIO
+PROGRAMS	= TBmatch1 TermIO test-removesocket
 SCRIPTS		= if.tb msg.tb notes.tb bind.tb expr.tb types.tb garbage.tb
 ERROR_SCRIPTS	= expr-errors.tb tc-errors.tb scope.tb
 ERROR_OUTPUT    = expr-errors.tb.out tc-errors.tb.out scope.tb.out
 DISTFILES	= Makefile.in TBmatch1.c TermIO.c terms1.c terms2.c env1.c \
-		  ${SCRIPTS} ${ERROR_SCRIPTS} ${ERROR_OUTPUT} sieve.tb
+		  ${SCRIPTS} ${ERROR_SCRIPTS} ${ERROR_OUTPUT} sieve.tb test-removesocket
 
 all:    ${PROGRAMS}
 	@for TST in ${PROGRAMS} ; \

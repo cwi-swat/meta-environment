@@ -1,0 +1,13 @@
+#! /bin/sh
+
+testsocket () {
+	../src/toolbus -TB_PORT $1 msg.tb
+	if [ -r /var/tmp/$1 ]; then
+		echo "/var/tmp/$1 still exists" >&2 ; exit 1
+	else
+		echo "$1 succeeded" >&2
+	fi
+}
+
+testsocket 8999
+testsocket 6666
