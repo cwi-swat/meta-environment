@@ -49,7 +49,8 @@ let
   Char    : term,
   ErrList : list,
   Ambs    : list,
-  Cycle   : list
+  Cycle   : list,
+  AnonymousError : term
 in
   Id := process-id. 
   (
@@ -141,36 +142,14 @@ in
                   rec-msg(error-opening(Name?))
                 )
               + 
-                (
-                  rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
-                                                  ambiguities(I?, Ambs?)))).
-                  snd-note(ui-status(errorf(
-                           "Parse of %s returned %d ambiguities", 
-                           [Name2, I]))) 
-                +
-                  rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,
-                                                cycle(Cycle?)))).
-                  snd-note(ui-status(errorf(
-                           "Parse returned a cycle: %t",
-                           [Cycle])))
-                +
-                  rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,eof))). 
-                  snd-note(ui-status(errorf(
-                           "EOF unexpected while parsing %s", 
-                           [Name2])))
-                +
-                  rec-msg(parse-result-asfix1(Id?,
-                 	  parse-error([character(Ch?), line(Li?), 
-                                       col(Co?), char(Char?)],
-                                      plain))) .
-                  snd-note(ui-status(errorf(
-                        "Character %d unexpected in %s, line %d, column %d",
-                        [Ch, Name2, Li, Co])))
-                ).
+                rec-msg(parse-result-asfix1(Id?,parse-error(ErrList?,AnonymousError?))).
                 snd-msg(add-empty-module-to-db(Name2)).
-                rec-msg(empty-module-added)
-              ) 
-              +
+                rec-msg(empty-module-added).
+                snd-note(ui-status(errorf("Please fix syntax error in module %s.",
+                  [Name2]))).
+                snd-msg(edit-syntax(Name2))
+             )
+             +
              /* File would not open (unreadable, not exist, wrong path...) */
               rec-msg(error-opening(Str?)).
               snd-msg(cannot-open-module(Str)).
