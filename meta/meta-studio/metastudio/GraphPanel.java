@@ -78,6 +78,10 @@ public class GraphPanel extends JComponent implements Scrollable {
 
         setAutoscrolls(true);
 
+        addMouseMotionListener(makeMouseMotionListener());
+    }
+
+    private MouseMotionListener makeMouseMotionListener() {
         MouseMotionListener mouseMotionListener = new MouseMotionAdapter() {
             boolean dragging;
             int lastX;
@@ -127,9 +131,6 @@ public class GraphPanel extends JComponent implements Scrollable {
                         if (y < 0) {
                             y = 0;
                         }
-                        /* Rectangle r = new Rectangle(e.getX(), e.getY(), 1, 1);
-                        ((JComponent)e.getSource()).scrollRectToVisible(r);
-                        */
                         port.setViewPosition(new java.awt.Point(x, y));
                     }
                     lastX = absX;
@@ -137,8 +138,7 @@ public class GraphPanel extends JComponent implements Scrollable {
                 }
             }
         };
-        addMouseMotionListener(mouseMotionListener);
-
+        return mouseMotionListener;
     }
 
     public void setGraph(Graph graph) {
@@ -157,6 +157,7 @@ public class GraphPanel extends JComponent implements Scrollable {
         } else {
             calcBoundingBox();
             invalidate();
+
             getParent().validate();
         }
         repaint();
@@ -165,10 +166,6 @@ public class GraphPanel extends JComponent implements Scrollable {
     private void calcBoundingBox() {
         int max_x = 0;
         int max_y = 0;
-
-        Graphics g = getGraphics();
-        g.setFont(Preferences.getFont(PREF_NODE_FONT));
-        metrics = g.getFontMetrics();
 
         Attribute bbox = graph.getBoundingBox();
         Point max = bbox.getSecond();
@@ -185,27 +182,31 @@ public class GraphPanel extends JComponent implements Scrollable {
 
     public void paint(Graphics g) {
         g.setColor(getBackground());
-        //System.out.println("size = " + getSize());
+
         if (graph != null) {
-            Graphics2D g2d = (Graphics2D) g;
+            Graphics2D g2d = (Graphics2D) g.create();
+
             g2d.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.transform(transform);
 
             // Hack around 32k limit bug:
-            // Originally, this fillrect came before the transform (in screen coordinates),
+            // Originally, this fillrect came before the transform (in screen
+            // coordinates),
             // but calling fillRect with arguments above 32k triggers a bug.
             // by calling fillRect after transform we can use user coordinates.
-            // As we don't have a suitable limit handy, we just use an arbitrary
+            // As we don't have a suitable limit handy, we just use an
+            // arbitrary
             // large number below 32k so the whole background will be filled.
-            g.fillRect(0, 0, 32000, 32000);
+            g2d.fillRect(0, 0, 32000, 32000);
 
-            //Stroke stroke = g2d.getStroke();
-            //g2d.setStroke(new BasicStroke((float)1.5));
             setupColors();
+
             paintEdges(g2d);
             paintNodes(g2d);
+
+            g2d.dispose();
         }
     }
 
@@ -263,24 +264,22 @@ public class GraphPanel extends JComponent implements Scrollable {
 
         Color node_bg, node_fg, node_border;
 
-        if (selectedNode != null
-	    && selectedNode.getId().equals(node.getId())) {
+        if (selectedNode != null && selectedNode.getId().equals(node.getId())) {
             node_bg = nodeBGSelected;
             node_fg = nodeFGSelected;
             node_border = nodeBorderSelected;
-        } else if (hoveredNode != null
-		   && hoveredNode.getId().equals(node.getId())) {
+        } else if (hoveredNode != null && hoveredNode.getId().equals(node.getId())) {
             node_bg = nodeBGHovered;
             node_fg = nodeFGHovered;
             node_border = nodeBorderHovered;
-	} else {
-	    node_fg = nodeFG;
+        } else {
+            node_fg = nodeFG;
 
-	    Color borderColor = node.getColor();
-	    node_border = (borderColor == null ? nodeBorder : borderColor);
+            Color borderColor = node.getColor();
+            node_border = (borderColor == null ? nodeBorder : borderColor);
 
-	    Color fillColor = node.getFillColor();
-	    node_bg = (fillColor == null ? nodeBG : fillColor);
+            Color fillColor = node.getFillColor();
+            node_bg = (fillColor == null ? nodeBG : fillColor);
         }
 
         Shape shape = Graph.getNodeShape(node);

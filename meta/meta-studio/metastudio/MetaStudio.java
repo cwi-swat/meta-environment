@@ -8,7 +8,6 @@ import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -27,17 +26,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -272,7 +267,7 @@ public class MetaStudio
 
         createParsetreePanel();
         addGraphPanel(parseTreePanel, "parsetree");
-        mainTabs.insertTab("Parse tree", null, new JScrollPane(parseTreePanel), "Parse tree", mainTabs.getTabCount());
+        mainTabs.insertTab("Parse tree", null, parseTreePanel, "Parse tree", mainTabs.getTabCount());
         
         return tabs;
     }
@@ -327,7 +322,7 @@ public class MetaStudio
         createModuleGraph();
         addGraphPanel(importGraphPanel, "import");
         
-        return new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, new JScrollPane(importGraphPanel));
+        return new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, importGraphPanel);
     }
     
     private void createModuleGraph() {
@@ -339,13 +334,15 @@ public class MetaStudio
 
         graph = metaGraphFactory.makeGraph_Default(nodes, edges, attrs);
 
-        importGraphPanel = new ImportGraphPanel(moduleManager);
+        importGraphPanel = new ImportGraphPanel(factory, bridge, moduleManager);
 
-        importGraphPanel.addMouseListener(new MouseAdapter() {
+        importGraphPanel.getGraphPanel().addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
+                System.err.println("mousePressed");
                 checkModulePopup(e);
             }
             public void mouseReleased(MouseEvent e) {
+                System.err.println("mouseReleased");
                 checkModulePopup(e);
             }
         });
@@ -431,58 +428,12 @@ public class MetaStudio
         bridge.setLockObject(getTreeLock());
     }
 
-    //{{{ private Vector parseScales()
-
-    private Vector parseScales() {
-        String scaleList = Preferences.getString(Preferences.PREF_GRAPHPANE_SCALES);
-        Vector scales = new Vector();
-        StringTokenizer t = new StringTokenizer(scaleList, ",");
-        while (t.hasMoreTokens()) {
-            String scale = t.nextToken();
-            scales.add(scale);
-        }
-        return scales;
-    }
-
-    //}}}
-    //{{{ private JComboBox createScaleBox()
-
-    private JComboBox createScaleBox() {
-        final JComboBox scaleBox = new JComboBox(parseScales()) {
-            public Dimension getMaximumSize() {
-                return getPreferredSize();
-            }
-        };
-
-        scaleBox.setSelectedItem(
-            Preferences.getString(Preferences.PREF_GRAPHPANE_SCALES + ".default"));
-
-        ActionListener listener = new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                String value = scaleBox.getSelectedItem().toString();
-                // Strip off '%' sign
-                if (value.charAt(value.length() - 1) == '%') {
-                    value = value.substring(0, value.length() - 1);
-                }
-                int percentage = Integer.parseInt(value);
-                importGraphPanel.setScale(percentage);
-                parseTreePanel.setScale(percentage);
-            }
-        };
-
-        scaleBox.addActionListener(listener);
-
-        return scaleBox;
-    }
-
-    //}}}
-
-    private void addGraphPanel(GraphPanel panel, String id) {
+    private void addGraphPanel(ZoomableGraphPanel panel, String id) {
         graphPanels.put(id, panel);
     }
 
-    private GraphPanel getGraphPanel(String id) {
-        return (GraphPanel) graphPanels.get(id);
+    private ZoomableGraphPanel getGraphPanel(String id) {
+        return (ZoomableGraphPanel) graphPanels.get(id);
     }
 
     public void run() {
@@ -586,7 +537,7 @@ public class MetaStudio
         layoutGraph(importGraphPanel, graph);
     }
 
-    public void layoutGraph(GraphPanel graphPanel, Graph graph) {
+    public void layoutGraph(ZoomableGraphPanel graphPanel, Graph graph) {
         final FontMetrics metrics =
             graphPanel.getFontMetrics(Preferences.getFont(GraphPanel.PREF_NODE_FONT));
 
@@ -613,7 +564,7 @@ public class MetaStudio
 
     public void displayGraph(String id, ATerm graphTerm) {
         Graph graph = metaGraphFactory.GraphFromTerm(graphTerm);
-        GraphPanel panel = getGraphPanel(id);
+        ZoomableGraphPanel panel = getGraphPanel(id);
         layoutGraph(panel, graph);
     }
 
@@ -623,7 +574,7 @@ public class MetaStudio
             this.graph = graph;
         }
         System.err.println("id: " + id);
-        GraphPanel graphPanel = getGraphPanel(id);
+        ZoomableGraphPanel graphPanel = getGraphPanel(id);
         graphPanel.setGraph(graph);
         graphPanel.repaint();
         mainTabs.setSelectedIndex(graphPanel.getIndex());
@@ -654,7 +605,8 @@ public class MetaStudio
             if (e.getSource() == moduleTree) {
                 component = moduleTree;
                 currentModule = getCurrentModule();
-            } else if (e.getSource() == importGraphPanel) {
+            } else if (e.getSource() == importGraphPanel.getGraphPanel()) {
+                // TODO refactor
                 component = importGraphPanel;
                 Node node = importGraphPanel.getNodeAt(mouseX, mouseY);
 
@@ -723,8 +675,8 @@ public class MetaStudio
             buttons = buttons.getNext();
         }
 
-        toolBar.add(Box.createHorizontalGlue());
-        toolBar.add(createScaleBox());
+//        toolBar.add(Box.createHorizontalGlue());
+//        toolBar.add(createScaleBox());
     }
 
     public void buttonsFound(ATerm buttonType, String moduleName, ATerm buttons) {

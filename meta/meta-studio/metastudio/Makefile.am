@@ -30,6 +30,7 @@ java_JAVA = \
 	ExtensionFilter.java \
 	JPanelTool.java\
 	GraphPanel.java \
+	ZoomableGraphPanel.java \
 	ImportGraphPanel.java \
 	ListModel.java \
 	MetaStudio.java \
