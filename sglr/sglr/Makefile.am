@@ -16,6 +16,7 @@ sglr_LDADD        = -L${top_builddir}/libsglr -lsglr \
                     $(SOCKLIBS)
 
 sglr_prof_SOURCES = $(HDRS)
+sglr_prof_LDFLAGS = -pg
 sglr_prof_LDADD   = $(SRCS:.c=-prof.o) \
                     -L${top_builddir}/libsglr -lsglr-prof \
                     -L${top_builddir}/libtree2dot -ltree2dot-prof \
