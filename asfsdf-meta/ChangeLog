@@ -1,5 +1,9 @@
 /* $Id$ */
 
+2003/09/16 (jurgenv@cwi.nl)
+ * Changed location of ASF+SDF library, added dependency on new
+   asf-library package.
+
 Thu Jul 31 13:08:04 CEST 2003 <jong@cwi.nl>
  * version bumped to 1.4.1
  * now depending on meta 1.1
