@@ -209,7 +209,7 @@ and Appendix~\ref{AP:functions} summarizes all built-in functions.
 \begin{figure}[h]
 \begin{center}
 \vspace*{-1cm}
-\epsfig{figure=figs/pandora.ps,width=5cm}
+\epsfig{figure=figs/pandora.ps,width=8cm}
 \vspace*{0cm}
 \end{center}
 \end{figure}
@@ -432,6 +432,14 @@ relation as shown in Figure~\ref{FIG:calls}.  Such a visual inspection does
 analysis particularly suited for studying large systems.
 
 \chapter{The \rscript Language} \label{SEC:rscript-language}
+
+\begin{figure}[h]
+\begin{center}
+\vspace*{-1cm}
+\epsfig{figure=figs/signalpha-web.ps,width=5cm}
+\vspace*{0cm}
+\end{center}
+\end{figure}
 
 \rscript is based on \emph{binary relations} only and has no direct support
 for $n$-ary relations with labeled columns as usual in a general database
@@ -2751,10 +2759,18 @@ in Figure~\ref{FIG:slicing}(b).
 }
 
 \chapter{Installing and Running \rscript} \label{SEC:running-rscript}
+\begin{figure}[h]
+\begin{center}
+\vspace*{-1cm}
+\epsfig{figure=figs/plumber.ps,width=5cm}
+\vspace*{0cm}
+\end{center}
+\end{figure}
+
 
 \section{Installing \rscript}
 \rscript is available from \url{www.cwi.nl/projects/MetaEnv/...}
-as \texttt{relation-calculus-0.1.tar.gz}.
+as \texttt{relation-calculus-0.4.tar.gz}.
 
 It requires a recent version (e.g. 1.5) of the ASF+SDF
 Meta-Environment to run.
@@ -2765,13 +2781,13 @@ consists of the following steps:
 \begin{itemize}
 
 \item Extract all files from the distribution:
-  \texttt{tar xvf relation-calculus-0.1.tar.gz --gunzip}
+  \texttt{tar zxvf relation-calculus-0.4.tar.gz}
 This command uncompresses the distribution file, creates a subdirectory
-\texttt{relation-calculus-0.1} and places all directories and files
+\texttt{relation-calculus-0.4} and places all directories and files
 from the distribution in it.
 
 \item Change to the new directory:
-  \texttt{cd relation-calculus-0.1}
+  \texttt{cd relation-calculus-0.4}
 \item Configure the sources: \texttt{./configure}
 
 \item Build and install application: \texttt{make install}
