@@ -165,6 +165,7 @@ AC_OUTPUT(Makefile meta install-prog-sh install-data-sh \
 	a2toa1/Makefile \
 	sglr/src/Makefile \
 	pgen/c-source/Makefile \
+	pgen/c-files/Makefile \
 , chmod +x meta install-prog-sh install-data-sh; \
   chmod +x graph-browser/graph-browser editor/editor \
 )
