@@ -6,10 +6,10 @@ usage() {
    cat <<ENDCAT
 usage: $0
 
+All .eqs.tbl files and
+all .asf.baf files and
+all .eqs.baf files in the current directory will be removed.
 All .eqs files in the current directory will be moved to .asf files.
-All .eqs.tbl files in the current directory will be moved to .asf.tbl files.
-All .asf.baf files in the current directory will be moved to .eqs files.
-All .eqs.baf files in the current directory will be moved to .asf.baf files.
 
 NOTE: running this script in the same directory twice will have unwanted
       results!!
@@ -32,18 +32,12 @@ do
    esac
 done
 
+rm *.eqs.tbl
+rm *.asf.baf
+rm *.eqs.baf
+
 for i in *.eqs; do
   mv $i `basename $i .eqs`.asf
 done
 
-for i in *.asf.baf; do
-  mv $i `basename $i .asf.baf`.eqs
-done
 
-for i in *.eqs.baf; do
-  mv $i `basename $i .eqs.baf`.asf.baf
-done
-
-for i in *.eqs.tbl; do
-  mv $i `basename $i .eqs.tbl`.asf.tbl
-done
