@@ -777,17 +777,17 @@ void SG_AddPTPriorities(parse_table *pt, register ATermList prios)
           }
           break;
         case P_LEFT:
-					/* register left associative productions */
+	/* register left associative productions */
           if(ATisEqual(pr_num1, pr_num2)) {
             ATtablePut(SG_PT_ASSOCIATIVITIES(pt), (ATerm) pr_num1, 
-											 SG_LeftPrio_Symbol);
+                       SG_LeftPrio_Symbol);
           }
           break;
-			case P_RIGHT:
-					/* register right associative productions */
+        case P_RIGHT:
+	/* register right associative productions */
           if(ATisEqual(pr_num1, pr_num2)) {
             ATtablePut(SG_PT_ASSOCIATIVITIES(pt), (ATerm) pr_num1, 
-											 SG_RightPrio_Symbol);
+                       SG_RightPrio_Symbol);
           }
           break;
         default:

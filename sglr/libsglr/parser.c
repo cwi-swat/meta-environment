@@ -293,11 +293,8 @@ void SG_PostParse(void)
 {
   IF_STATISTICS(
     double ptm;
-    long allocated;
 
     ptm = SG_Timer();
-
-    SG_PageFlt(&sg_major, &sg_minor);
 
     fprintf(SG_log(), "Number of lines: %ld\n", (long) line);
     fprintf(SG_log(), "Maximum of %d parse branches reached at token ",
@@ -321,6 +318,14 @@ void SG_PostParse(void)
             SG_MaxNrAmb(SG_NR_ASK));
     fprintf(SG_log(), "Number of calls to Amb: %d\n",
             SG_AmbCalls(SG_NR_ASK));
+  );
+}
+
+void SG_PostParseResult(void)
+{
+  IF_STATISTICS(    
+    long allocated;
+
     if(SG_FILTER) {
       fprintf(SG_log(), "MultiSet Comparisons: total %d, successful %d\n",
               SG_MultiSetGtrCalls(SG_NR_ASK),
@@ -448,6 +453,9 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void))
   SG_PostParse();
 
   result = SG_ParseResult(sort);
+
+  SG_PostParseResult();
+
   SG_ParserCleanup();
 
   return result;

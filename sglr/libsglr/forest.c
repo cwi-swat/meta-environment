@@ -865,7 +865,18 @@ int SG_GetNrOfAvoids(parse_table *pt, MultiSet ms)
   }
   return avoidcount;
 }
-         
+   
+/*
+ * This filter is needed because it can happen that one tree
+ * contains "avoid"s and the other tree contains "prefer"s.
+ * As soon as this happens the MultiSets of both trees become
+ * symmetric. The filter "SG_FilterOnPreferAndAvoid" counts
+ * the number of prefers and avoids in both trees and tries
+ * to make a comparison between the two.
+ * 
+ *  t1 is prefer over t2 if 
+ *  !(#prefers in t1 < #prefers in t2 && #avoids in t1 > #avoids in t2)      
+ */
 
 ATbool SG_FilterOnPreferAndAvoid(parse_table *pt, MultiSet msM, MultiSet msN)
 {                                                            
@@ -1197,20 +1208,23 @@ static tree SG_Multiset_Filter(parse_table *pt, MultiSetTable mst,
     return NULL;
   }
  
-  if (SG_FilterOnPreferAndAvoid(pt, ms0, ms1)) {
-    IF_DEBUG(ATfprintf(SG_log(), "Eagerness Priority: %t > %t\n", l0, l1))
-    max = t0;
-  }
-
-  if (SG_FilterOnPreferAndAvoid(pt, ms1, ms0)) {
-    if (max) {
-      IF_DEBUG(fprintf(SG_log(),
-                       "Symmetric eagerness priority relation ignored\n"))
-      max = NULL;
+  if (SG_PT_HAS_PREFERS(pt) || SG_PT_HAS_AVOIDS(pt)) {
+    if (SG_FilterOnPreferAndAvoid(pt, ms0, ms1)) {
+      IF_DEBUG(ATfprintf(SG_log(), "Eagerness Priority: %t > %t\n", l0, l1))
+      max = t0;
     }
-    else { 
-      IF_DEBUG(ATfprintf(SG_log(), "Eager Priority: %t < %t\n", l0, l1))
-      max = t1;
+  
+    if (SG_FilterOnPreferAndAvoid(pt, ms1, ms0)) {
+      if (max) {
+        IF_DEBUG(ATfprintf(SG_log(),
+                           "Symmetric eagerness priority relation %t %t\n", 
+                           l0, l1))
+        max = NULL;
+      }
+      else { 
+        IF_DEBUG(ATfprintf(SG_log(), "Eagerness Priority: %t < %t\n", l0, l1))
+        max = t1;
+      }
     }
   }
   
@@ -1222,8 +1236,9 @@ static tree SG_Multiset_Filter(parse_table *pt, MultiSetTable mst,
 
     if (SG_MultiSetGtr(pt, ms1, ms0)) {
       if (max) {
-        IF_DEBUG(fprintf(SG_log(),
-                         "Symmetric multiset priority relation ignored\n"))
+        IF_DEBUG(ATfprintf(SG_log(),
+                           "Symmetric multiset priority relation %t %t\n", 
+                           l0, l1))
         max = NULL;
       }
       else { 
