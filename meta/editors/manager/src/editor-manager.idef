@@ -24,6 +24,16 @@ in
       snd-msg(existing-editor(Name, EditorId))
     )
   +
+    rec-msg(check-editor-id(Name?, ModuleName?)) .
+    snd-eval(EM, check-editor-id(Name, ModuleName)) .
+    (
+      rec-value(EM, existing-editor(EditorId?)) .
+      snd-msg(existing-editor(Name, EditorId))
+    +
+      rec-value(EM, non-existing-editor) .
+      snd-msg(non-existing-editor(Name))
+    )
+  +
     rec-msg(get-editor-name(EditorId?)) .
     snd-eval(EM, get-editor-name(EditorId)).
     rec-value(EM, editor-name(Name?)).

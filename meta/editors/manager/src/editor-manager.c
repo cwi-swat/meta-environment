@@ -227,6 +227,30 @@ ATerm get_editor_id(int conn, char *nameAsString, char *moduleAsString)
 }
 
 /*}}}  */
+/*{{{  ATerm check_editor_id(int conn, char *nameAsString, char *moduleAsString) */
+
+ATerm check_editor_id(int conn, char *nameAsString, char *moduleAsString)
+{
+  ATerm editor;
+  ATerm editorId;
+  ATerm nameAsTerm;
+
+  assert(nameAsString);
+
+  nameAsTerm = nameStringToTerm(nameAsString);
+  editor = getEditorByName(nameAsTerm);
+
+  if (editor != NULL) {
+    editorId = getEditorId(editor);
+    return sndValue(ATmake("existing-editor(<term>)", editorId));
+  }
+  else {
+    return sndValue(ATmake("non-existing-editor"));
+  }
+}
+
+/*}}}  */
+
 ATerm get_editor_name(int conn, ATerm editorId)
 {
   ATerm editor;
@@ -239,6 +263,7 @@ ATerm get_editor_name(int conn, ATerm editorId)
 
   return ATmake("snd-value(editor-name(<str>))", name);
 }
+
 /*{{{  void delete_editor(int conn, ATerm editorId) */
 
 void delete_editor(int conn, ATerm editorId)
