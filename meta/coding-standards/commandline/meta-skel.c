@@ -37,7 +37,7 @@ void usage(void)
             if(*ptr0 == ':')
                 i++;
         ptr1 = myargumentsexplained =
-            (char *) malloc(strlen(myarguments) + 8*i + 2);
+            (char *) malloc(strlen(myarguments) + 7*i + 2);
         for(ptr0 = myarguments; *ptr0; ptr0++)
             if(!*(ptr0+1) || *(ptr0+1) != ':') {
                 if(!hyphen++) {
@@ -50,7 +50,7 @@ void usage(void)
                 if(*(ptr1-1) != ' ')
                     *ptr1++ = ' ';
                 *ptr1++ = '-'; *ptr1++ = *ptr0++; *ptr1++ = ' ';
-                *ptr1++ = 'f'; *ptr1++ = 'i'; *ptr1++ = 'l'; *ptr1++ = 'e';
+                *ptr1++ = 'a'; *ptr1++ = 'r'; *ptr1++ = 'g';
             }
         *ptr1++ = '\0';
     }
