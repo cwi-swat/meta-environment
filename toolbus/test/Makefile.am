@@ -24,13 +24,13 @@ noinst_PROGRAMS = TBmatch1 TermIO
 EXTRA_DIST      = bind.tb expr-errors.tb expr.tb garbage.tb if.tb msg.tb \
                   notes.tb scope.tb tc-errors.tb tc.tb types.tb \
                   expr-errors.tb.out scope.tb.out tc-errors.tb.out \
-                  test-removesocket.src anno.tb test-annos.src read read.tb
+                  test-removesocket.src anno.tb test-annos.src read.src read.tb
 
 OK_TESTS        = if-ok msg-ok notes-ok bind-ok expr-ok types-ok garbage-ok 
 
 ERROR_TESTS     = expr-errors-fail tc-errors-fail scope-fail
 
-CLEANFILES      = $(OK_TESTS) $(ERROR_TESTS) test-removesocket test-annos
+CLEANFILES      = $(OK_TESTS) $(ERROR_TESTS) test-removesocket test-annos read
 
 LDADD           = -L../libtb -ltb
 INCLUDES        = -I$(top_srcdir)/libtb

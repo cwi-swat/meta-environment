@@ -18,6 +18,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 ------------------------------------------------------------------------------
+Date:   Tue Jan 30 22:35:49 MET 2001
+Version 0.15
+Author:  Merijn de Jonge
+./test: distribute read.src instead of read
+
 Date:   Tue Apr 18 15:27:26 CEST 2000
 Version 0.15
 Author: Pieter Olivier
