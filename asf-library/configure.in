@@ -31,7 +31,6 @@ AC_CONFIG_FILES([Makefile
    library/languages/sdf2/projection/Makefile
    library/languages/sdf2/renaming/Makefile
    library/languages/sdf2/pretty/Makefile
-   library/languages/sdf2/sdf-idioms/Makefile
    library/languages/pico/Makefile
    library/languages/pico/syntax/Makefile
    library/languages/pico/pretty/Makefile
