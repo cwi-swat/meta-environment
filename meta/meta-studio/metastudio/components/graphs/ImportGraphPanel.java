@@ -28,7 +28,7 @@ public class ImportGraphPanel extends ZoomableGraphPanel
 
 	public ImportGraphPanel(MetaGraphFactory factory, MultiBridge bridge,
 			final ModuleTreeModel moduleManager) {
-		super(factory, bridge, "import");
+		super(factory, bridge, "import-graph");
 		this.manager = moduleManager;
 
 		panel = getGraphPanel();

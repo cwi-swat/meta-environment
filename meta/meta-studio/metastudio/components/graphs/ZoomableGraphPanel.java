@@ -120,9 +120,8 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
 			setGraph(graph);
 			setVisible(true);
 			graphPanel.repaint();
+			fireValueChangedListener();
 		}
-
-		fireValueChangedListener();
 	}
 
 	public void renderGraph(String id, ATerm graphTerm) {
@@ -145,7 +144,7 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
 		graph = orderNodes(graph);
 		graph = sizeNodes(graph, sizer);
 
-		postEvent(getFactory().make("graph-rendered(<str>,<term>)", getId(),
+		postEvent(getFactory().make("rendered-graph(<str>,<term>)", getId(),
 				graph.toTerm()));
 	}
 

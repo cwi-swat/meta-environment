@@ -29,143 +29,142 @@ import metastudio.components.ToolBar;
 import metastudio.utils.Preferences;
 import aterm.pure.PureFactory;
 
-public class MetaStudio extends JFrame  {
-    private static PureFactory factory;
-    private MultiBridge bridge;
+public class MetaStudio extends JFrame {
+	private static PureFactory factory;
+	private MultiBridge bridge;
 
-    public static final void main(String[] args) throws IOException {
-        new MetaStudio(args);
-    }
+	public static final void main(String[] args) throws IOException {
+		new MetaStudio(args);
+	}
 
-    private MenuBar createMenuBar() {
-        MenuBar menuBar = new MenuBar(factory, getBridge(), this);
+	private MenuBar createMenuBar() {
+		MenuBar menuBar = new MenuBar(factory, getBridge(), this);
 
-        return menuBar;
-    }
+		return menuBar;
+	}
 
-    public MetaStudio(String[] args) throws IOException {
-        factory = new PureFactory();
-        createToolBusBridge(args);
-        
-        initializeProperties();
-        handleCloseRequests();
+	public MetaStudio(String[] args) throws IOException {
+		factory = new PureFactory();
+		createToolBusBridge(args);
 
-        createContentPane();
-        createPopupHandlers();
+		initializeProperties();
+		handleCloseRequests();
 
-        makeStudioVisible();
-        
-        // should be done after construction of all components
-        getBridge().run();
-    }
-    private void initializeProperties() throws IOException {
-        InputStream propertyStream =
-        getClass().getResourceAsStream("/META-INF/default.properties");
-        Properties properties = new Properties();
-        properties.load(propertyStream);
-        Preferences.initialize("MetaStudio Preferences", properties);
-        try {
-            File file = new File(System.getProperty("user.home"), ".metarc");
-            propertyStream = new FileInputStream(file);
-            Preferences.load(propertyStream);
-        } catch (IOException e) {
-            // do nothing
-        }
-    }
-    
-    private void createPopupHandlers() {
-        new QuestionDialog(factory, getBridge(), this.getRootPane());
-        new FileDialog(factory, getBridge());
-        new ModulePopupMenu(factory, getBridge());
-        new ChoiceDialog(factory, getBridge(), this.getRootPane());
-    }
-    
-    private void createContentPane() {
-        createMenuBar();
+		createContentPane();
+		createPopupHandlers();
 
-        Container content = getContentPane();
-        content.setLayout(new BorderLayout());
+		makeStudioVisible();
 
-        UserInterfacePanel toolbar = new ToolBar(factory, getBridge());
-        content.add(toolbar, BorderLayout.NORTH);
+		// should be done after construction of all components
+		getBridge().run();
+	}
+	private void initializeProperties() throws IOException {
+		InputStream propertyStream = getClass().getResourceAsStream(
+				"/META-INF/default.properties");
+		Properties properties = new Properties();
+		properties.load(propertyStream);
+		Preferences.initialize("MetaStudio Preferences", properties);
+		try {
+			File file = new File(System.getProperty("user.home"), ".metarc");
+			propertyStream = new FileInputStream(file);
+			Preferences.load(propertyStream);
+		} catch (IOException e) {
+			// do nothing
+		}
+	}
 
-        content.add(createMainPane(), BorderLayout.CENTER);
-    }
+	private void createPopupHandlers() {
+		new QuestionDialog(factory, getBridge(), this.getRootPane());
+		new FileDialog(factory, getBridge());
+		new ModulePopupMenu(factory, getBridge());
+		new ChoiceDialog(factory, getBridge(), this.getRootPane());
+	}
 
-    private void makeStudioVisible() {
-        Dimension screenSize = getToolkit().getScreenSize();
-        int width = 800;
-        int height = 600;
-        int x = (screenSize.width - width) / 2;
-        int y = (screenSize.height - height) / 2;
+	private void createContentPane() {
+		createMenuBar();
 
-        setTitle("Meta-Environment");
-        setSize(width, height);
-        setLocation(x, y);
+		Container content = getContentPane();
+		content.setLayout(new BorderLayout());
 
-        setVisible(true);
-    }
+		UserInterfacePanel toolbar = new ToolBar(factory, getBridge());
+		content.add(toolbar, BorderLayout.NORTH);
 
-    private JPanel createMessageStatusPanel() {
-        JPanel container = new JPanel();
-        container.setLayout(new BorderLayout());
+		content.add(createMainPane(), BorderLayout.CENTER);
+	}
 
-        container.add(new MessageTabs(factory, getBridge()), BorderLayout.CENTER);
+	private void makeStudioVisible() {
+		Dimension screenSize = getToolkit().getScreenSize();
+		int width = 800;
+		int height = 600;
+		int x = (screenSize.width - width) / 2;
+		int y = (screenSize.height - height) / 2;
 
-        StatusBar bar = new StatusBar(factory, getBridge());
-        getBridge().addToolComponent(bar);
-        container.add(bar, BorderLayout.SOUTH);
+		setTitle("Meta-Environment");
+		setSize(width, height);
+		setLocation(x, y);
 
-        return container;
-    }
+		setVisible(true);
+	}
 
+	private JPanel createMessageStatusPanel() {
+		JPanel container = new JPanel();
+		container.setLayout(new BorderLayout());
 
-    private JSplitPane createMainPane() {
-        JComponent tabs = new MainTabs(factory, getBridge());
-        JPanel panel = createMessageStatusPanel();
+		container.add(new MessageTabs(factory, getBridge()),
+				BorderLayout.CENTER);
 
-        JSplitPane mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabs, panel);
-        mainPanel.setResizeWeight(0.8);
-        mainPanel.setDividerLocation(0.8);
-        mainPanel.setOneTouchExpandable(true);
-        
-        return mainPanel;
-    }
-    
+		StatusBar bar = new StatusBar(factory, getBridge());
+		getBridge().addToolComponent(bar);
+		container.add(bar, BorderLayout.SOUTH);
 
-    private void postQuitEvent() {
-        getBridge().sendEvent(factory.parse("quit"));
-    }
+		return container;
+	}
 
-    private void handleCloseRequests() {
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent ev) {
-                postQuitEvent();
-            }
-        });
-    }
+	private JSplitPane createMainPane() {
+		JComponent tabs = new MainTabs(factory, getBridge());
+		JPanel panel = createMessageStatusPanel();
 
-    private void createToolBusBridge(String[] args)
-        throws UnknownHostException, IOException {
+		JSplitPane mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabs,
+				panel);
+		mainPanel.setResizeWeight(0.8);
+		mainPanel.setDividerLocation(0.8);
+		mainPanel.setOneTouchExpandable(true);
 
-        setBridge(new MultiBridge(factory));
-        getBridge().init(args);
-        getBridge().connect();
-        getBridge().setLockObject(getTreeLock());
-    }
+		return mainPanel;
+	}
 
-    public void initializeUi(String name) {
-        setTitle(name);
-        Preferences.setString("metastudio.name", name);
-    }
+	private void postQuitEvent() {
+		getBridge().sendEvent(factory.parse("quit"));
+	}
 
-    private void setBridge(MultiBridge bridge) {
-        this.bridge = bridge;
-    }
+	private void handleCloseRequests() {
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent ev) {
+				postQuitEvent();
+			}
+		});
+	}
 
-    private MultiBridge getBridge() {
-        return bridge;
-    }
+	private void createToolBusBridge(String[] args)
+			throws UnknownHostException, IOException {
 
-   
+		setBridge(new MultiBridge(factory));
+		getBridge().init(args);
+		getBridge().connect();
+		getBridge().setLockObject(getTreeLock());
+	}
+
+	public void initializeUi(String name) {
+		setTitle(name);
+		Preferences.setString("metastudio.name", name);
+	}
+
+	private void setBridge(MultiBridge bridge) {
+		this.bridge = bridge;
+	}
+
+	private MultiBridge getBridge() {
+		return bridge;
+	}
+
 }
