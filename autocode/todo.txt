@@ -1,0 +1,10 @@
+
+Typechecking issues
+-------------------
+Clashing property assignments on the same specificity levels.
+
+[*.client.*]
+operations := { get, set }
+
+[*.client.*]
+operations := { set }
