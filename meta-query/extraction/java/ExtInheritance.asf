@@ -30,24 +30,25 @@ equations
 
 [extractExtendsInterface-1]
   &InterfaceType = &Name,
-  &InterfaceId = get-area(&InterfaceType),
-  &Tuple = <&Area, &InterfaceId>,
+  &InterfaceName = name2str(&Name),
+  &Tuple = <&Area, &InterfaceName>,
   &Rstore2 = add-tuple(EXTENDS_INTERFACE, &Tuple, &Rstore1)
   ===>
   extractExtendsInterface(&InterfaceType, &Rstore1, &Area) = &Rstore2
 
 [extractExtendsClass-0]
   &Super = extends &ClassType,
-  &SuperId = get-area(&ClassType),  
-  &Tuple = <&Area, &SuperId>,
+  &Name = &ClassType,
+  &SuperName = name2str(&Name),  
+  &Tuple = <&Area, &SuperName>,
   &Rstore2 = add-tuple(EXTENDS_CLASS, &Tuple, &Rstore1)
   ===>
   extractExtendsClass(&Super, &Rstore1, &Area) = &Rstore2
 
 [extractImplements-0]
   &InterfaceType = &Name,
-  &InterfaceId = get-area(&InterfaceType),
-  &Tuple = <&Area, &InterfaceId>,
+  &InterfaceName = name2str(&Name),
+  &Tuple = <&Area, &InterfaceName>,
   &Rstore2 = add-tuple(IMPLEMENTS, &Tuple, &Rstore1)
   ===>
   extractImplements(&InterfaceType, &Rstore1, &Area) = &Rstore2

@@ -62,6 +62,7 @@ hiddens
     "&InterfaceBody" -> InterfaceBody
     "&InterfaceDeclaration" -> InterfaceDeclaration
     "&InterfaceId" -> Area
+    "&InterfaceName" -> String
     "&Interfaces" -> Interfaces?
     "&InterfaceType" -> InterfaceType
     "&InterfaceTypes" -> {InterfaceType ","}+
@@ -69,6 +70,6 @@ hiddens
     "&Name" -> Name
     "&Rstore"[0-9]* -> RSTORE
     "&Super" -> Super
+    "&SuperName" -> String
     "&SuperOpt" -> Super?
-    "&SuperId" -> Area
     "&Tuple"[0-9]* -> Elem # Elem

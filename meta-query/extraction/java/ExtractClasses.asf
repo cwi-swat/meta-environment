@@ -33,7 +33,7 @@ equations
   &ClassInstanceCreationExpression = new &ClassType ( &Expressions ),
   &ClassId = get-area(&ClassType),
   &Name = &ClassType,
-  &Tuple1 = <&ClassId, "anonymous" || name2str(&Name)>,
+  &Tuple1 = <&ClassId, "anonymous " || name2str(&Name)>,
   &Rstore2 = add-tuple(CLASS_DECL, &Tuple1, &Rstore1),
   &Tuple2 = <&ClassId, &Area>,
   &Rstore3 = add-tuple(CLASS_OCCURS, &Tuple2, &Rstore2)
