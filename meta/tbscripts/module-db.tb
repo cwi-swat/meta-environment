@@ -131,16 +131,24 @@ in
     .
     if equal(Name, ModuleId) then
       snd-msg(ts-get-str-value("sdf-text", Name))
-      . rec-msg(ts-value(LocalText?))
       .
-      if equal(SyntaxText, LocalText) then
-        SyntaxText := ""
-        . snd-msg(no-updating-needed)
-      else
-        MDB-InvalidateEntry(Name, SyntaxText, DependingModules?)
-        . SyntaxText := ""
-        . snd-msg(updating-succeeded(DependingModules))
-      fi
+      (
+        rec-msg(ts-value(LocalText?))
+	.
+	if equal(SyntaxText, LocalText) then
+	  SyntaxText := ""
+	  . snd-msg(no-updating-needed)
+	else
+	  MDB-InvalidateEntry(Name, SyntaxText, DependingModules?)
+	  . SyntaxText := ""
+	  . snd-msg(updating-succeeded(DependingModules))
+	fi
+      +
+        rec-msg(ts-no-value)
+	. MDB-InvalidateEntry(Name, SyntaxText, DependingModules?)
+	. SyntaxText := ""
+	. snd-msg(updating-succeeded(DependingModules))
+      )
     else
       snd-msg(error-opening(Name, name-inconsistent))
     fi
@@ -371,6 +379,7 @@ process MDB-InitializeModuleDb is
   . snd-msg(ts-add-table("asf-parse-table", "term"))
   . snd-msg(ts-add-table("term-parse-table", "term"))
   . snd-msg(ts-add-table("import-relations", "term"))
+  . snd-msg(ts-add-table("path-weak-modulename", "str"))
 
 process MDB-ClearModuleDb is
   snd-msg(ts-clear-table("extensions"))
@@ -384,6 +393,7 @@ process MDB-ClearModuleDb is
   . snd-msg(ts-clear-table("asf-parse-table"))
   . snd-msg(ts-clear-table("term-parse-table"))
   . snd-msg(ts-clear-table("import-relations"))
+  . snd-msg(ts-clear-table("path-weak-modulename"))
   . snd-msg(clear-module-db-hook)
   . rec-msg(module-db-hook-done)
 

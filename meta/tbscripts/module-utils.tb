@@ -177,7 +177,7 @@ in
         .
         (
           rec-msg(io-file-written)
-          . OpenModule(Path, Type)
+          . OpenModule(Path, Type, ModuleId)
         +
           rec-msg(io-file-not-written(Error?))
           . snd-note(ui-status(errorf("%s: %s", [Path, Error])))

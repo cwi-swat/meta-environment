@@ -306,6 +306,15 @@ in
       fi
     +
       rec-msg(ts-no-value)
+      . snd-msg(ts-get-str-value("path-weak-modulename", Path))
+      .
+      (
+        rec-msg(ts-value(ModuleId?))
+        . snd-msg(em-bind-session(Sid, ModuleId))
+        . rec-msg(em-session-bound(Sid, ModuleId))
+      +
+        rec-msg(ts-no-value)
+      )
     )
     .
     (
@@ -322,7 +331,7 @@ in
     . DeleteSession(Sid)
     .
     if and(HasText, not(HasStructure)) then
-      OpenSyntax(Path, sdf)
+      OpenSyntax(Path, sdf, ModuleId)
     else
       tau
     fi

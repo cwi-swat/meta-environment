@@ -45,12 +45,12 @@ in
   fi
 endlet
 
-process OpenModule(Path: str, Type: term) is
+process OpenModule(Path: str, Type: term, ModuleId: str) is
 let
   Modulename: str,
   Imports: list
 in
-  OpenSyntax(Path, Type)
+  OpenSyntax(Path, Type, ModuleId)
   . snd-msg(ts-get-str-value("path-modulename", Path))
   .
   (
@@ -86,7 +86,7 @@ in
         rec-msg(ts-contains-key)
       +
         rec-msg(ts-not-contains-key)
-        . OpenSyntax(Path, Type)
+        . OpenSyntax(Path, Type, ModuleId)
         . GetModuleImports(ModuleId, Imports?)
         . Todo := join(Imports, Todo)
       )
@@ -123,7 +123,7 @@ in
   fi
 endlet
 
-process OpenSyntax(Path: str, Type: term) is
+process OpenSyntax(Path: str, Type: term, ModuleName: str) is
 let
   Error: term,
   Id: int,
@@ -145,7 +145,7 @@ in
       rec-msg(parse-table(Type, ParseTable?))
       . snd-msg(syntax-top-sort-hook(Type))
       . rec-msg(syntax-top-sort-hook-result(sort(Sort?)))
-      . create(OpenSyntaxParseHandler(Path), Pid?)
+      . create(OpenSyntaxParseHandler(Path, ModuleName), Pid?)
       . ParseText(Pid, Text, ParseTable, Sort)
       .
       (
@@ -165,7 +165,7 @@ in
   . snd-note(ui-status(endstat(Id)))
 endlet
 
-process OpenSyntaxParseHandler(Path: str) is
+process OpenSyntaxParseHandler(Path: str, ModuleName: str) is
 let
   AnnotatedTree: term,
   Directory: str,
@@ -213,6 +213,7 @@ in
     . snd-msg(open-syntax-parse-handler-done(Pid, ModuleId))
   +
     rec-msg(parse-error(Pid, Error?))
+    . snd-msg(ts-put-str-value("path-weak-modulename", Path, ModuleName))
     . ParseErrorToSummary(Error, Path, Summary?)
     . snd-msg(ui-show-feedback-summary(Summary))
     . snd-msg(open-syntax-parse-handler-done(Pid))

@@ -690,7 +690,7 @@ in
     . StackPopString(Stack, Stack?, Directory?)
     . StackPopString(Stack, Stack?, Modulename?)
     . BuildPath(Directory, Modulename, Extension, Path?)
-    . OpenModule(Path, sdf)
+    . OpenModule(Path, sdf, Modulename)
     . ReturnSuccess(EditorId, Stack)
   +
     rec-msg(new-module, Stack?, EditorId?)
@@ -995,11 +995,13 @@ endlet
 process ParseSyntax(Sid: term, Type: term, ParseSucceeded: bool?) is
 let
   DependingModules: list,
+  Directory: str,
   Id: int,
   ModuleId: str,
   Modulename: str,
   NewModules: list,
   Nonterminal: term,
+  Path: str,
   Pid: int,
   Table: term,
   Text: str,
@@ -1018,6 +1020,10 @@ in
   .
   (
     rec-msg(parse-editor-ok(Sid))
+    . GetPath(Sid, Path?)
+    . snd-msg(io-get-path-directory(Path))
+    . rec-msg(io-directory(Path, Directory?))
+    . snd-msg(ts-put-str-value("module-path", Modulename, Directory))
     . ParseSucceeded := true
     . GetParsetree(Sid, Tree?)
     . snd-msg(unparse(Tree))
