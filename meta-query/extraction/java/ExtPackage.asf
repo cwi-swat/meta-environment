@@ -1,0 +1,12 @@
+equations
+
+[extractPackage-start]
+  extractPackage(&CompilationUnit) = extractPackage(&CompilationUnit, rstore())
+
+[extractPackage-0]
+  &PackageDeclaration = package &Name ;,
+  &PackageId = get-area(&PackageDeclaration),
+  &Tuple = <&PackageId, name2str(&Name)>,
+  &Rstore2 = add-tuple(PACKAGES, &Tuple, &Rstore1)
+  ===>
+  extractPackage(&PackageDeclaration, &Rstore1) = &Rstore2
