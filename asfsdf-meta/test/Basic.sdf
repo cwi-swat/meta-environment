@@ -1,4 +1,0 @@
-module Basic
-
-imports basic/Integers
-imports basic/Booleans

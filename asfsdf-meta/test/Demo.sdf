@@ -1,4 +1,0 @@
-module Demo
-
-imports languages/pico/interpreter/Pico-eval
-imports languages/pico/typechecker/Pico-typecheck

@@ -1,4 +1,4 @@
-SUBDIRS = meta-scripts src demo test
+SUBDIRS = meta-scripts src demo 
 
 ACLOCAL_FLAGS = -I .
 

@@ -1,7 +1,9 @@
 /* $Id$ */
 
-Wed Dec  1 09:54:14 CET 2004 <jurgenv@cwi.nl>
+Wed Dec  1 09:54:14 CET 2004 <{kooiker,jurgenv}@cwi.nl>
  * Bumped to 1.6
+ * Removed integration tests because they need an installed environment
+   to run them.
 
 Tue Nov 30 14:41:57 CET 2004 <kooiker@cwi.nl>
  * test/Makefile.am:
