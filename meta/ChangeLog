@@ -1,5 +1,9 @@
 # $Id$
 
+2002/05/17 (vandenbr@loria.fr)
+ * Restructured the ToolBus code a bit, introduced a separate 
+   process errors process.
+
 2002/05/16 (vandenbr@loria.fr)
  * Added a message action to buttons.
  * Added the sort name to parse action.
