@@ -1,0 +1,61 @@
+equations
+
+%% --- control flow of statement lists
+
+[cf1] <$Entry1, $Rel1, $Exit1> := cflow($Stat), 
+      <$Entry2, $Rel2, $Exit2> := cflow($Stat+)
+       ==========================================================
+       cflow($Stat ; $Stat+) = 
+       < $Entry1, 
+         $Rel1 union $Rel2 union ($Exit1 x $Entry2), 
+         $Exit2
+       >
+
+[cf2] cflow() = <{}, {}, {}>
+
+%% ---- control flow of individual statements
+
+[cf3]  <$Entry, $Rel, $Exit> := cflow($Stat*),
+       $Control := get-location($Exp)
+       =========================================================
+       cflow(while $Exp do $Stat* od) = 
+       < {$Control},
+         ({$Control} x $Entry) union $Rel union ($Exit x {$Control}),
+         {$Control}
+       >
+
+[cf4]  <$Entry1, $Rel1, $Exit1> := cflow($Stat*1), 
+       <$Entry2, $Rel2, $Exit2> := cflow($Stat*2),
+       $Control := get-location($Exp)
+       =========================================================
+       cflow(if $Exp then $Stat*1 else $Stat*2 fi) =
+       < {$Control},
+         ({$Control} x $Entry1) union ({$Control} x $Entry2) union  $Rel1 union $Rel2,
+         $Exit1 union $Exit2
+       > 
+
+[default-cf]
+	$Loc := get-location($Stat)
+       =========================================================
+        cflow($Stat) = < {$Loc}, {}, {$Loc} >
+
+%% ---- Variable definitions: <statement-location, name>
+
+[df1]  $Id := $Exp := $Stat
+       ========================================================== 
+       defs($Stat, $Rel) = $Rel union {<get-location($Stat), id2str($Id)>}
+
+%% ---- Variable occurrences <var-location, name>
+
+[us1]  $Id := $Exp
+       ========================================================== 
+       uses($Exp, $Rel) = $Rel union  {<get-location($Id), id2str($Id)>}
+
+%% ----- utilities
+
+[i2s] id2str(pico-id($Char*)) = strcon(""" $Char* """)
+
+
+
+
+

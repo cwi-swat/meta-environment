@@ -1,21 +1,19 @@
-type stat = loc
-type var = str
-type var-occ = loc
+		   type expr = loc
+		   type var  = loc
+		   type name = str
 
-stat ROOT
- 
-rel[stat,stat] PRED
-rel[stat,var] USES
-rel[stat,var] DEFS
-rel[var,var-occ] OCCURS
+		   expr ROOT
 
-rel[stat, var] UNINIT = 
-   { <S, V>| <stat S, var V> : USES, <ROOT, S> in reachX({ROOT}, DEFS[-,V], PRED)
-   }
+		   rel[expr,expr] PRED
+		   rel[expr,name] DEFS
+		   rel[var,name] USES
+		   bag[name] VARNAMES  = range(USES)
 
-rel[var, var-occ] UNINIT-OCC =
-   { <V, VO> | <stat S, var V> : UNINIT, var-occ VO : OCCURS[V], VO <= S }
 
-yield UNINIT-OCC
+		   rel[name, var] UNINIT =
+		   { <N, V>| name N : VARNAMES, 
+                             var V : USES[-,N],
+			     <ROOT, expr E> : reachX({ROOT}, DEFS[-,N], PRED),
+			     V <= E
+		}
 
-                         

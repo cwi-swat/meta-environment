@@ -1,29 +1,57 @@
 module PicoQuery
 
 imports RscriptCalculator
-%%imports PicoExtraction %% should be only convertl
+imports PicoFactExtraction
 imports basic/Errors
+
 exports
 
   start-symbols Summary
 
   context-free syntax
-	pico-query(RSCRIPT, RSTORE, StrCon) 	-> Summary
 
-      convert2summary(Elem)	        -> Summary
-    convert2errorlist(Elem)		-> {Error ","}*
-      convert2error(<String, Location>) -> Error
+     extractRelations(PROGRAM)			   -> RSTORE
+     pico-query(RSCRIPT, RSTORE, StrCon, StrCon)   -> Summary
 
+     uninit(PROGRAM)				   -> Summary
 
 hiddens
-  variables
-	"$Rstore" [0-9\']*  -> RSTORE
-	"$Script" [0-9\']*  -> RSCRIPT
-	"$StrCon" [0-9\']*  -> StrCon
-	"$Loc" [0-9\']*	    -> Location
-	"$Error*" [0-9\']*  -> {Error ","}*
-	"$Elem" [0-9\']*    -> Elem
-	"$Elem*" [0-9\']*   -> {Elem ","}*
+  context-free syntax
 
-	"$String" [0-9\']*  -> String
+     convert2summary(String, RVALUE)	        -> Summary
+     convert2errorlist(String, Elem)		-> {Error ","}*
+     convert2error(String, <String, Location>)	-> Error
+
+ hiddens
+  variables
+      "$Script" [0-9\']*	-> RSCRIPT
+
+      "$Rstore" [0-9\']*  	-> RSTORE
+      "$Entry" [0-9\']*		-> Bag[[Elem]]
+      "$Exit" [0-9\']*		-> Bag[[Elem]]
+      
+      "$Rel" [0-9\']*     	-> Bag[[Elem]]
+      "$Loc" [0-9\']*	 	-> Location
+      "$Start" [0-9\']*	 	-> Location
+      "$Control" [0-9\']* 	-> Location
+ 	
+      "$Decls" [0-9\']*         -> DECLS
+      "$Stat" [0-9\']*          -> STATEMENT
+      "$Stat*"[0-9\']*          -> {STATEMENT ";"}*
+      "$Stat+"[0-9\']*          -> {STATEMENT ";"}+
+      "$Exp" [0-9\']*           -> EXP
+      "$Id" [0-9\']*            -> PICO-ID
+      "$Program" [0-9\']*       -> PROGRAM
+
+      "$Char*" [0-9]*   	-> CHAR*
+      "$StrCon" [0-9\']*  	-> StrCon
+      "$Error*" [0-9\']*	-> {Error ","}*
+      "$Elem" [0-9\']*		-> Elem
+      "$Elem*" [0-9\']*		-> {Elem ","}*
+
+      "$String" [0-9\']*	-> String
+
+      "$Rval" [0-9\']*		-> RVALUE
+      "$Summary" [0-9\']*	-> Summary
+	
 
