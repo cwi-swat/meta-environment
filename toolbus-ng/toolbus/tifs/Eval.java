@@ -1,24 +1,37 @@
 package toolbus.tifs;
 
+import java.util.*;
+
 import aterm.*;
 
 public class Eval extends Communication {
-  private ATermAppl representation;
-    
   public Eval(ATerm t) {
-    setRepresentation(t);
+    super(t);
   }
-  
-  private void setRepresentation(ATerm t) {
-    this.representation = (ATermAppl) t;
-  }
-  
+
   public String getResultType() {
-    ATermAppl resultTerm = (ATermAppl) representation.getArgument(1);
+    ATermAppl resultTerm = (ATermAppl) getRepresentation().getArgument(1);
     return resultTerm.getAFun().getName();
   }
 
   public String toString() {
-    return "eval(...," + getResultType() + ")";
+    StringBuffer buf = new StringBuffer();
+    buf.append("eval(");
+    buf.append(getName());
+    Iterator iter = fetchArgumentIterator();
+    if (iter.hasNext()) {
+      buf.append('(');
+      while (iter.hasNext()) {
+        buf.append((String) iter.next());
+        if (iter.hasNext()) {
+          buf.append(',');
+        }
+      }
+      buf.append(')');
+    }
+    buf.append(',');
+    buf.append(getResultType());
+    buf.append(')');
+    return buf.toString();
   }
 }

@@ -8,10 +8,10 @@ tifs(
       [
         eval(timeofday, Time),
         eval(start-timing, int),
-        eval(elapsed(<int>), Time),
-        eval(stop-timing(<int>), Time),
-        do(set-alarm(<Time>,<String>)),
-        event(alarm(<String>))
+        eval(elapsed(int), Time),
+        eval(stop-timing(int), Time),
+        do(set-alarm(Time,String)),
+        event(alarm(String))
       ]
     )
   ]

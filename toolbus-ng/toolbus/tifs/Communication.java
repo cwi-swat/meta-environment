@@ -1,20 +1,45 @@
 package toolbus.tifs;
 
+import java.util.*;
+
+import aterm.*;
+
 abstract public class Communication {
-  private String name;
+  private ATermAppl representation;
+  private List argumentList;
   
-  public Communication() {
+  public Communication(ATerm t) {
+    setRepresentation(t);
   }
-  
-  public Communication(String name) {
-    setName(name);
+
+  private void setRepresentation(ATerm t) {
+    this.representation = (ATermAppl) t;
+  }
+
+  protected ATermAppl getRepresentation() {
+    return representation;
   }
   
   public String getName() {
-    return name;
+    ATermAppl resultTerm = (ATermAppl) representation.getArgument(0);
+    return resultTerm.getAFun().getName();
   }
 
-  private void setName(String name) {
-    this.name = name;
+  public Iterator fetchArgumentIterator() {
+    if (argumentList == null) {
+      initArgumentList();
+    }
+    return argumentList.iterator();
+  }
+
+  private void initArgumentList() {
+    argumentList = new LinkedList();
+    ATermAppl args = (ATermAppl) representation.getArgument(0);
+    int arity = args.getArity();
+    for (int i=0; i<arity; i++) {
+      ATermAppl arg = (ATermAppl) args.getArgument(i);
+      String typeName = arg.getAFun().getName();
+      argumentList.add(typeName);
+    }
   }
 }
