@@ -70,10 +70,8 @@ in
       rec-msg(sm-module-id(ModuleId?)) .
       snd-msg(sm-get-module-path(Path, ModuleId)) .
       rec-msg(sm-module-path(Path?)) .
-      snd-msg(io-get-filename(Path, ModuleId, ".sdf")) .
-      rec-msg(io-filename(FileName?)) .
-      snd-msg(add-posinfo-packed(FileName, SyntaxTree)) .
-      rec-msg(tree-with-pos-info(SyntaxTree?)) .
+      snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
+      MDB-AddModulePosInfo(ModuleId, SyntaxTree, SyntaxTree?) .
       snd-msg(ts-put-term-value("sdf-tree", ModuleId, SyntaxTree)) .
       snd-msg(sm-get-imported-module-names(SyntaxTree)) .
       rec-msg(sm-imported-module-names(Modules?)) 
@@ -83,7 +81,6 @@ in
     fi .
     snd-msg(ts-put-str-value("active-modules", ModuleId, Path)) .
     snd-msg(ts-put-str-value("sdf-text", ModuleId, SyntaxText)) .
-    snd-msg(ts-put-str-value("module-paths", ModuleId, Path)) .
     snd-msg(ts-filter-keys("active-modules", Modules)) .
     rec-msg(ts-keys(Modules?)) .
     snd-msg(adding-succeeded(Name, ModuleId, Path, Modules))
@@ -95,8 +92,9 @@ in
     snd-msg(sm-get-module-id(SyntaxTree)) .
     rec-msg(sm-module-id(ModuleId?)) .
     if equal(Name, ModuleId) then
-      snd-msg(ts-get-term-value("sdf-tree", Name)) .
-      rec-msg(ts-value(OldSyntaxTree?)) .
+      MDB-AddModulePosInfo(ModuleId, SyntaxTree, SyntaxTree?) .
+      snd-msg(ts-put-term-value("sdf-tree", Name, SyntaxTree)) .
+      snd-msg(ts-put-str-value("sdf-text", Name, SyntaxText)) .
       snd-msg(sm-get-imported-module-names(SyntaxTree)) .
       rec-msg(sm-imported-module-names(Modules?)) .
       snd-msg(ts-filter-keys("active-modules", Modules)) .
@@ -435,3 +433,16 @@ process MDB-InvalidateModule(Module : str) is
   snd-msg(ts-remove-value("asf-tree", Module)) .
   snd-msg(ts-remove-value("asf-parse-table", Module)) .
   snd-msg(ts-remove-value("term-parse-table", Module))
+
+process MDB-AddModulePosInfo(Module : str, In : term , Out : term?) is
+let
+  Path : str,
+  FileName : str
+in
+      snd-msg(ts-get-str-value("module-paths", Module)) .
+      rec-msg(ts-value(Path?)) .
+      snd-msg(io-get-filename(Path, Module, ".sdf")) .
+      rec-msg(io-filename(FileName?)) .
+      snd-msg(add-posinfo-packed(FileName, In)) .
+      rec-msg(tree-with-pos-info(Out?)) 
+endlet
