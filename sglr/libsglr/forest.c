@@ -801,15 +801,16 @@ ATbool SG_MultiSetGtr(parse_table *pt, MultiSet msM, MultiSet msN)
   ATermInt lx, ly;
   int x, y;
   int My, Ny, Mx, Nx;
-  ATbool result;
+  ATbool result, foundone;
   int size = MultiSetGetSize(msM); /* equal to the other one */
   
   IF_STATISTICS(SG_MultiSetGtrCalls(SG_NR_INC));
 
-  /*  For all y in M such that N(y) < M(y) ...  */
+  /*  For all y in M such that M(y) > N(y) ...  */
 
-  for (y = 0, result = ATfalse; y < size; y++) {
-    ATbool foundone;
+  result = ATtrue;
+  foundone = ATfalse;
+  for (y = 0; result && y < size; y++) {
 
     My = MultiSetGetCount(msM, y);
     if (My > 0) {
@@ -817,27 +818,22 @@ ATbool SG_MultiSetGtr(parse_table *pt, MultiSet msM, MultiSet msN)
 
       ly = SG_NR_TO_PROD(SG_GetATint(y, 0));
 
-      if (Ny < My) {
-        result = ATtrue;
-        foundone = ATfalse; 
+      if (My > Ny) {
 
         /*  ... there exists an x in N such that ( y >> x and M(x) < N(x) )  */
-        for (x = 0; !foundone && (x < size); x++) {
+        for (x = 0; result && (x < size); x++) {
           Nx = MultiSetGetCount(msN, x);  
           if (Nx > 0) {
             Mx = MultiSetGetCount(msM, x);  
       
             lx = SG_NR_TO_PROD(SG_GetATint(x, 0));
 
-            foundone = ( (Mx < Nx) &&
-                         (SG_GtrPriority(pt, ly, lx) || 
-                          SG_EagerPriority(pt, ly, lx))
-                       );
+            if (SG_GtrPriority(pt, ly, lx) ||
+                SG_EagerPriority(pt, ly, lx)) {
+              result = (Mx < Nx);
+              foundone = ATtrue;
+            }
           }
-        }
-        /*  No relation if we didn't find a satisfactory "witness" for y  */
-        if (!foundone) {
-          return ATfalse;
         }
       }
     }
@@ -852,7 +848,7 @@ ATbool SG_MultiSetGtr(parse_table *pt, MultiSet msM, MultiSet msN)
    there was something to check in the first place.  If not, there's
    no relation.
    */
-  return result;
+  return foundone && result;
 }
 
 ATbool SG_MultiSetEqual(MultiSet ms1, MultiSet ms2)
@@ -983,6 +979,11 @@ static tree SG_Multiset_Filter(parse_table *pt, MultiSetTable mst,
   }
  
   if (!SG_MultiSetEqual(ms0, ms1)) {
+
+/*
+ATwarning("t0 = %t\n", l0);
+ATwarning("t1 = %t\n", l1);
+*/
 
     if (SG_MultiSetGtr(pt, ms0, ms1)) {
       IF_DEBUG(ATfprintf(SG_log(), "Multiset Priority: %t > %t\n", l0, l1))
