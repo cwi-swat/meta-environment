@@ -28,7 +28,10 @@ toolbus="__TOOLBUS__/bin/toolbus \
            -I__PT_SUPPORT__/share \
            -I__TOP_SRCDIR__/tbscripts"
 
-set -x
+PATH=${PATH}:__PT_SUPPORT__/bin
+PATH=${PATH}:__TOP_BUILDDIR__/in-output
+PATH=${PATH}:__TOP_BUILDDIR__/module-db
+
 tests=0
 failed=0
 
