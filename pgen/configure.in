@@ -2,7 +2,7 @@ dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(pgen, 1.5)
+AM_INIT_AUTOMAKE(pgen, 1.6beta)
 
 ACLOCAL="${ACLOCAL} -I ."
 
@@ -108,6 +108,7 @@ dnl Which files need updating?
 AC_OUTPUT(
    Makefile
    src/Makefile 
+   pretty/Makefile 
    grammar/Makefile 
    sdf2stats/Makefile 
    sdf-checker/Makefile

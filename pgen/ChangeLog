@@ -1,5 +1,13 @@
 $Id$
 
+
+2002/09/26 (vinju@loria.fr)
+ * Bumped to 1.6beta
+ * Added a simple and fast AsFix pretty printer: pretty It reads in a 
+   parsed sdf definition and a parse tree and yield a new parse tree
+   where the layout is replaced according to the layout of the production
+   rules in the sdf definition.
+
 2002/07/24 (jurgenv@cwi.nl)
  * Release 1.5
 
