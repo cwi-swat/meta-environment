@@ -23,7 +23,7 @@
 
 #include <time.h>
 #include <string.h>
-#include "clock.tif.c"
+#include "clock.tif.h"
 
 ATerm readTime(int conn)
 {  time_t tloc;  

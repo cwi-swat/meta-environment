@@ -19,7 +19,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
-#include "log.tif.c"
+#include "log.tif.h"
 
 ATerm history = NULL;
 

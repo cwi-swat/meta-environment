@@ -1,4 +1,3 @@
-#
 #    ToolBus -- The ToolBus Application Architecture
 #    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
 #                             The  Netherlands.
@@ -16,37 +15,32 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-#
-noinst_PROGRAMS = clock log calc batch
+
 EXTRA_DIST      = calc.tb ui-calc.tcl
+CLEANFILES      = *.tif.[ch] calc.tifs
 
-clock_SOURCES   = clock.c
-clock_LDADD     = -L$(ATERM)/lib -lATerm -lATB
+noinst_PROGRAMS = clock log calc batch
 
-log_SOURCES     = log.c
-log_LDADD       = -L$(ATERM)/lib -lATerm -lATB
+clock_SOURCES   = clock.c clock.tif.c clock.tif.h
+clock_LDADD     = -L${top_builddir}/aterm -lATB \
+		-L$(ATERM)/lib -lATerm
 
-calc_SOURCES    = calc.c
-calc_LDADD      = -L$(ATERM)/lib -lATerm -lATB
+log_SOURCES     = log.c log.tif.c log.tif.h
+log_LDADD       = -L${top_builddir}/aterm -lATB \
+		-L$(ATERM)/lib -lATerm
 
-batch_SOURCES   = batch.c
-batch_LDADD     = -L$(ATERM)/lib -lATerm -lATB
+calc_SOURCES    = calc.c calc.tif.c calc.tif.h
+calc_LDADD      = -L${top_builddir}/aterm -lATB \
+		-L$(ATERM)/lib -lATerm
 
-INCLUDES        = -I$(ATERM)/include -I.
+batch_SOURCES   = batch.c batch.tif.c batch.tif.h
+batch_LDADD     = -L${top_builddir}/aterm -lATB \
+		-L$(ATERM)/lib -lATerm
 
-CLEANFILES      = clock.tif.c log.tif.c calc.tif.c batch.tif.c calc.tifs
+INCLUDES        = -I$(ATERM)/include
 
-clock.o : clock.tif.c
-log.o   : log.tif.c
-calc.o  : calc.tif.c
-batch.o : batch.tif.c 
-
-%.tif.c: calc.tifs
+%.tif.c %.tif.h: calc.tifs
 	${ATERM}/bin/tifstoc -tool $* $<
 
 %.tifs: %.tb
 	$(top_builddir)/toolbus/toolbus -gentifs $<
-	@if [ "a$(VPATH)" != "a" ]; then \
-	   mv ${srcdir}/$@ $@ ;\
-	fi
-
