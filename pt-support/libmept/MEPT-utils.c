@@ -1113,3 +1113,17 @@ PT_CharRanges PT_concatCharRanges(PT_CharRanges ranges1, PT_CharRanges ranges2)
 }
 
 /*}}}  */
+/*{{{  PT_ParseTree PT_makeParseTree(PT_Tree tree) */
+PT_ParseTree PT_makeParseTree(PT_Tree tree)
+{
+  PT_Production prod = PT_getTreeProd(tree);
+  PT_Symbol rhs = PT_getProductionRhs(prod);
+  PT_Symbols lhs = PT_makeSymbolsList(rhs, PT_makeSymbolsEmpty());
+ 
+  return PT_makeParseTreeTree(lhs,
+                              PT_makeTreeLayoutEmpty(),
+                              tree,
+                              PT_makeTreeLayoutEmpty(), 0);
+}
+
+/*}}}  */
