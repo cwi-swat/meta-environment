@@ -39,5 +39,5 @@ toolbus(META, Parser, Unparser, Io, ConfigManager, StandalonePtDumper,
         ModuleDB, File-creator, 
 	Set-parsetable, GetParseTable, Open-Sdf2-Language, 
 	Asf-Syntax, RemoveVars, Open-modules, PGen, DumpParseTable, 
-        StatusDisplay) 
+        Status-display) 
 
