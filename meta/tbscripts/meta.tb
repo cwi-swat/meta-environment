@@ -53,8 +53,9 @@
 #include "set-parsetable.tb"
 #include "sdf2-language.tb"
 #include "notification.tb"
+#include "rewrite-errors.tb"
 
 toolbus(Parser, Parsetrees, Unparser, Io, Ui, Edit-master, ModuleDB, 
 	ProcessEqs, Save-modules, Revert-module, File-creator, SE, Anno, 
 	Set-parsetable, Open-Sdf2-Language, Evaluator, 
-        Notify-about-changed-modules) 
+        Notify-about-changed-modules, Rewrite-Errors) 
