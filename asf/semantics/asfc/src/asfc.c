@@ -1,32 +1,4 @@
-/*
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
-                        The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/* A first version of the COMPILER in ToolBus C. 
-   This program is written by Mark van den Brand and
-   improved by Pieter Olivier.
-
-   The following functions are available:
-   void rec_terminate(ATerm t)
-   ATerm generate_code(char *modname, ATerm module)
-*/
+/* $Id$ */
 
 #include <assert.h>
 #include <atb-tool.h>
@@ -90,7 +62,7 @@ void rec_terminate(int cid, ATerm t)
   exit(0);
 }
 
-void set_output_dir(int cid, char *dirName)
+void set_output_dir(char *dirName)
 {
   int len = strlen(dirName) + 1;
 
@@ -270,13 +242,15 @@ void generateCode(char *modname, ATerm module)
 /*}}}  */
 
 ATerm compile_module(int cid, char *moduleName, 
-                     ATerm syntax, ATerm equations)
+                     ATerm syntax, ATerm equations, char *output_dir)
 {
   PT_ParseTree   pt;
   SDF_SDF        sdf;
   SDF_Definition definition;
   SDF_ModuleList moduleList;
   ASF_CondEquationList eqsList;
+
+  set_output_dir(output_dir);
 
   pt         = PT_makeParseTreeFromTerm(syntax);
   sdf        = SDF_makeSDFFromTerm(

@@ -1,51 +1,28 @@
-/*
+/* $Id$ */
 
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam,
-    The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-*/
-
-
-/*
- * $Id$
- */
 process Asfc is
 let
   COM           : asfc,
   OutputDir     : str,
   ModuleName    : str,
-  Tree          : term,
   Syntax        : term,
   Equations     : term 
 in
   /* Start the compiler */
-  execute(asfc, COM?) .
+  OutputDir := ".".
   (
-    rec-msg(compiler-output-dir(OutputDir?)).
-    snd-do(COM, set-output-dir(OutputDir))
+    rec-msg(compiler-output-dir(OutputDir?))
   +
     rec-msg(compile-module(ModuleName?, Syntax?, Equations?)) .
-    snd-eval(COM, compile-module(ModuleName, Syntax, Equations)) .
+    execute(asfc, COM?) .
+    snd-eval(COM, compile-module(ModuleName, Syntax, Equations, OutputDir)) .
     rec-value(COM, compilation-done) .
-    snd-msg(compilation-done(ModuleName))
+    snd-msg(compilation-done(ModuleName)).
+    snd-terminate(COM,"done").
+    Syntax := none.
+    Equations := none
   ) *
   delta
 endlet
 
-tool asfc is {
-  command = "asfc -print-gc-info -termtable 20"
-}
+tool asfc is { command = "asfc -print-gc-info -termtable 20" }

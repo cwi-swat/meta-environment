@@ -1,4 +1,5 @@
 #include "reshuffle.h"
+#include "chars.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -6,8 +7,7 @@
 static PT_Symbol     flattenSdfSymbol(SDF_Symbol sdfSymbol);
 static PT_Symbols    flattenSdfSymbols(SDF_Symbols sdfSymbols);
 static PT_Attributes flattenSdfAttributes(SDF_Attributes sdfAttributes);
-static PT_Attr flattenSdfAttribute(SDF_Attribute sdfAttribute);
-
+static PT_Attr       flattenSdfAttribute(SDF_Attribute sdfAttribute);
 
 PT_Production
 makeLexicalConstructorProd(SDF_Symbol symbol)
@@ -123,29 +123,6 @@ static PT_Symbols    flattenSdfSymbols(SDF_Symbols sdfSymbols)
   }
 
   return ptSymbols;
-}
-
-static char *unquotedStrDup(char *str)
-{
-  char *new;
-  int len;
-
-  if (strlen(str) > 0) {
-    new = strdup(str+1);
-    if (new == NULL) {
-      ATerror("Could not allocate memory to copy string\n");
-      return NULL;
-    }
-
-    len = strlen(new);
-    if (len > 0) {
-      new[len - 1] = '\0';
-    }
-    return new;
-  }
-  else {
-    return str;
-  }
 }
 
 static PT_Symbol     flattenSdfSymbol(SDF_Symbol sdfSymbol)

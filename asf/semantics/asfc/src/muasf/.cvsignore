@@ -1,0 +1,8 @@
+Makefile.in
+Makefile
+MuASF.adt
+MuASF.dict
+MuASF_dict.c
+MuASF_dict.h
+.deps
+

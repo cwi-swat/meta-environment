@@ -30,7 +30,7 @@ EXTRA_DIST       = asfc.idef asfc.tif.h asfc.tif.c reshuffle.h
 
 CLEANFILES       = asfc.tif.h asfc.tif.c asfc.tifs
 
-asfc_SOURCES = asfc.c reshuffle.c sdf2pt.c 
+asfc_SOURCES = asfc.c reshuffle.c sdf2pt.c chars.c
 asfc_LDADD   = asfc.tif.o \
                    -L$(top_builddir)/asfc/c-source  -lAsFix2C \
                    -L$(ASC_SUPPORT)/lib -lasc-support \
