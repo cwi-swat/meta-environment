@@ -20,9 +20,9 @@ imports basic/Comments
 sorts Bytes Byte
 
 lexical syntax
-	%% ~[] quoted because it should never be parsed as such
-        %% We just use lexical constructor functions to generate them
-	"~[]" -> Byte
+	%% ~[] -> Byte is changed to "dummy" -> Byte
+        %% This production is only used to construct Bytes, not parse them.
+	"dummy" -> Byte
 	Byte* -> Bytes
 
 context-free syntax
