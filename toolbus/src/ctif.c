@@ -522,7 +522,7 @@ Options are:\n\
                           toolbus -gentifs my_script.tb\n\
                       will generate the file my_script.tifs\n\
 -multi                generate multi-tool ready C code including cid refs.\n\
--newstyle             generate new style handlers, i.e. t_term * and Tmatch\n\
+-newstyle             generate new style handlers, i.e. aterm * and Tmatch\n\
 -backdoor             generate a backdoor in situations where not all\n\
                       functions are known\n\
 \n\
@@ -560,13 +560,13 @@ void main(int argc, char **argv)
     } else if(streq(argv[i], "-backdoor")) {
       backdoor = TBtrue;
     } else if(streq(argv[i], "-newstyle")) {
-      termptr = "t_term *";
+      termptr = "aterm *";
       Tmatch   = "Tmatch";
       TmatchSimple = "TmatchSimple";
       Tprintf = "Tprintf";
       firstel   = "t_list_first";
       nextel    = "t_list_next";
-      header_file  = "aterms.h";
+      header_file  = "aterm.h";
       placeholders = TBtrue;
       is_empty = "t_is_empty";
       multitools = TBtrue;
