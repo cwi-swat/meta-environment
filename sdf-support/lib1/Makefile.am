@@ -8,7 +8,7 @@ lib_LIBRARIES		= libSDF.a
 include_HEADERS		= SDF.h SDF_dict.h SDF-utils.h
 libSDF_a_SOURCES	= SDF.c SDF_dict.c ${UTILSRCS}
 
-UTILSRCS		= get-imports.c get-module-name.c grammar.c lexprod.c
+UTILSRCS		= get-imports.c get-module-name.c grammar.c lexprod.c sort.c
 
 EXTRA_DIST		= SDF.adt
 

@@ -4,7 +4,7 @@
 # $Id$
 #
 
-TESTS			= grammars
+TESTS			= grammars sorts
 
 noinst_PROGRAMS		= ${TESTS}
 CFLAGS			= -g -Wall -O2
@@ -13,3 +13,6 @@ LDLIBS			= -L.. -lSDF -L$(ATERMLIB) -lATerm
 
 grammars_SOURCES	= grammars.c
 grammars_LDADD		= $(LDLIBS)
+
+sorts_SOURCES		= sorts.c
+sorts_LDADD		= $(LDLIBS)

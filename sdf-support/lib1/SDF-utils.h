@@ -22,4 +22,6 @@ ATermList  SDFgetImports    (SDF_Module module);
 
 ATermList  SDFgetLexicalProductions(SDF_Module module);
 
+ATermList  SDFgetSorts(SDF_Module module);
+
 #endif /* _SDF_UTILS_H */
