@@ -691,12 +691,8 @@ proc NewModule { file } {
 
 # Get the module name...
     set mod [GetBasename $file ".sdf2"]
-# Create the file...
-    set fhdl [open $file "w"]
-    puts $fhdl [concat "module" $mod]
-    close $fhdl
 # ... and open it.
-    OpenModule $mod
+    GBevent [format "new-module(%s)" [ToId $mod]]
 }
 
 
