@@ -19,12 +19,9 @@ let
   ModuleId: str,
   Node: term,
   On: term,
-  Producer: str,
   Path: str,
   Question: str,
   Str: str,
-  Summary: term,
-  SummaryId: str,
   Title: str,
   Type: term,
   UI: user-interface
@@ -36,35 +33,6 @@ in
   . rec-msg(environment-name-hook-result(EnvironmentName?))
   . snd-do(UI, initialize-ui(EnvironmentName))
   .
-  (
-    (
-      rec-note(ui-status(error(Str?)))
-      . snd-do(UI, error(Str))
-    +
-      rec-note(ui-status(errorf(Str?, Arguments?)))
-      . snd-do(UI, errorf(Str, Arguments))
-    +
-      rec-note(ui-status(warning(Str?)))
-      . snd-do(UI, warning(Str))
-    +
-      rec-note(ui-status(warningf(Str?, Arguments?)))
-      . snd-do(UI, warningf(Str, Arguments))
-    +
-      rec-note(ui-status(message(Str?)))
-      . snd-do(UI, message(Str))
-    +
-      rec-note(ui-status(messagef(Str?, Arguments?)))
-      . snd-do(UI, messagef(Str, Arguments))
-    +
-      rec-msg(ui-show-feedback-summary(Summary?))
-      . snd-do(UI, show-feedback-summary(Summary))
-    +
-      rec-msg(ui-remove-feedback-summary(Producer?, SummaryId?))
-      . snd-do(UI, remove-feedback-summary(Producer, SummaryId))
-    )
-    *
-    delta
-  ||
     (
       rec-msg(ui-display-graph(GraphId?, Graph?))
       . snd-do(UI, display-graph(GraphId, Graph))
@@ -153,5 +121,5 @@ in
       rec-disconnect(UI)
     )
     . shutdown("MetaStudio exiting\n")
-  )
+  
 endlet

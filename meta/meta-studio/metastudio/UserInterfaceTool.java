@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 10:13:38 AM
+// generation time: Nov 25, 2004 11:14:27 AM
 
 package metastudio;
 
@@ -17,22 +17,14 @@ abstract public class UserInterfaceTool
 
   //{{{  Patterns that are used to match against incoming terms
 
-  private ATerm PdisplayTreelist0;
+  private ATerm PdisplayGraph0;
   private ATerm PshowListChoice0;
-  private ATerm PrenderGraph0;
-  private ATerm PshowFeedbackSummary0;
-  private ATerm Perrorf0;
-  private ATerm PinitializeUi0;
   private ATerm PaddEvents0;
   private ATerm PaddEvents1;
+  private ATerm PrenderGraph0;
+  private ATerm PinitializeUi0;
   private ATerm PclearHistory0;
-  private ATerm PdisplayGraph0;
-  private ATerm Perror0;
-  private ATerm PremoveFeedbackSummary0;
-  private ATerm Pwarning0;
-  private ATerm Pmessagef0;
-  private ATerm Pmessage0;
-  private ATerm Pwarningf0;
+  private ATerm PdisplayTreelist0;
   private ATerm PshowQuestionDialog0;
   private ATerm PshowFileDialog0;
   private ATerm PrecAckEvent0;
@@ -58,14 +50,6 @@ abstract public class UserInterfaceTool
   private void initSigTable()
   {
     sigTable.put(factory.parse("rec-do(<user-interface>,initialize-ui(<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,error(<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,errorf(<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,warning(<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,warningf(<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,message(<str>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,messagef(<str>,<list>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,show-feedback-summary(<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,remove-feedback-summary(<str>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,display-graph(<str>,<term>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,display-treelist(<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,render-graph(<str>,<term>))"), new Boolean(true));
@@ -85,22 +69,14 @@ abstract public class UserInterfaceTool
   // Initialize the patterns that are used to match against incoming terms
   private void initPatterns()
   {
-    PdisplayTreelist0 = factory.parse("rec-do(display-treelist(<str>,<term>))");
+    PdisplayGraph0 = factory.parse("rec-do(display-graph(<str>,<term>))");
     PshowListChoice0 = factory.parse("rec-do(show-list-choice(<str>,<str>,<term>))");
-    PrenderGraph0 = factory.parse("rec-do(render-graph(<str>,<term>))");
-    PshowFeedbackSummary0 = factory.parse("rec-do(show-feedback-summary(<term>))");
-    Perrorf0 = factory.parse("rec-do(errorf(<str>,<term>))");
-    PinitializeUi0 = factory.parse("rec-do(initialize-ui(<str>))");
     PaddEvents0 = factory.parse("rec-do(add-events(<term>,<str>,<term>))");
     PaddEvents1 = factory.parse("rec-do(add-events(<term>,<term>))");
+    PrenderGraph0 = factory.parse("rec-do(render-graph(<str>,<term>))");
+    PinitializeUi0 = factory.parse("rec-do(initialize-ui(<str>))");
     PclearHistory0 = factory.parse("rec-do(clear-history)");
-    PdisplayGraph0 = factory.parse("rec-do(display-graph(<str>,<term>))");
-    Perror0 = factory.parse("rec-do(error(<str>))");
-    PremoveFeedbackSummary0 = factory.parse("rec-do(remove-feedback-summary(<str>,<str>))");
-    Pwarning0 = factory.parse("rec-do(warning(<str>))");
-    Pmessagef0 = factory.parse("rec-do(messagef(<str>,<term>))");
-    Pmessage0 = factory.parse("rec-do(message(<str>))");
-    Pwarningf0 = factory.parse("rec-do(warningf(<str>,<term>))");
+    PdisplayTreelist0 = factory.parse("rec-do(display-treelist(<str>,<term>))");
     PshowQuestionDialog0 = factory.parse("rec-eval(show-question-dialog(<str>))");
     PshowFileDialog0 = factory.parse("rec-eval(show-file-dialog(<str>,<str>,<str>))");
     PrecAckEvent0 = factory.parse("rec-ack-event(<term>)");
@@ -116,34 +92,14 @@ abstract public class UserInterfaceTool
   {
     List result;
 
-    result = term.match(PdisplayTreelist0);
+    result = term.match(PdisplayGraph0);
     if (result != null) {
-      displayTreelist((String)result.get(0), (ATerm)result.get(1));
+      displayGraph((String)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PshowListChoice0);
     if (result != null) {
       showListChoice((String)result.get(0), (String)result.get(1), (ATerm)result.get(2));
-      return null;
-    }
-    result = term.match(PrenderGraph0);
-    if (result != null) {
-      renderGraph((String)result.get(0), (ATerm)result.get(1));
-      return null;
-    }
-    result = term.match(PshowFeedbackSummary0);
-    if (result != null) {
-      showFeedbackSummary((ATerm)result.get(0));
-      return null;
-    }
-    result = term.match(Perrorf0);
-    if (result != null) {
-      errorf((String)result.get(0), (ATerm)result.get(1));
-      return null;
-    }
-    result = term.match(PinitializeUi0);
-    if (result != null) {
-      initializeUi((String)result.get(0));
       return null;
     }
     result = term.match(PaddEvents0);
@@ -156,44 +112,24 @@ abstract public class UserInterfaceTool
       addEvents((ATerm)result.get(0), (ATerm)result.get(1));
       return null;
     }
+    result = term.match(PrenderGraph0);
+    if (result != null) {
+      renderGraph((String)result.get(0), (ATerm)result.get(1));
+      return null;
+    }
+    result = term.match(PinitializeUi0);
+    if (result != null) {
+      initializeUi((String)result.get(0));
+      return null;
+    }
     result = term.match(PclearHistory0);
     if (result != null) {
       clearHistory();
       return null;
     }
-    result = term.match(PdisplayGraph0);
+    result = term.match(PdisplayTreelist0);
     if (result != null) {
-      displayGraph((String)result.get(0), (ATerm)result.get(1));
-      return null;
-    }
-    result = term.match(Perror0);
-    if (result != null) {
-      error((String)result.get(0));
-      return null;
-    }
-    result = term.match(PremoveFeedbackSummary0);
-    if (result != null) {
-      removeFeedbackSummary((String)result.get(0), (String)result.get(1));
-      return null;
-    }
-    result = term.match(Pwarning0);
-    if (result != null) {
-      warning((String)result.get(0));
-      return null;
-    }
-    result = term.match(Pmessagef0);
-    if (result != null) {
-      messagef((String)result.get(0), (ATerm)result.get(1));
-      return null;
-    }
-    result = term.match(Pmessage0);
-    if (result != null) {
-      message((String)result.get(0));
-      return null;
-    }
-    result = term.match(Pwarningf0);
-    if (result != null) {
-      warningf((String)result.get(0), (ATerm)result.get(1));
+      displayTreelist((String)result.get(0), (ATerm)result.get(1));
       return null;
     }
     result = term.match(PshowQuestionDialog0);

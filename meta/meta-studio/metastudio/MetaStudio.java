@@ -111,7 +111,7 @@ public class MetaStudio extends JFrame {
         JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
 
-        container.add(new MessageTabs(factory, getBridge()), BorderLayout.CENTER);
+        container.add(new MessageTabs(factory, getBridge(), args), BorderLayout.CENTER);
 
         StatusBar bar = new StatusBar(factory, args);
         Thread barThread = new Thread(bar);

@@ -116,10 +116,6 @@ public abstract class UserInterfacePanel extends JPanel
 		// intentionally left empty
 	}
 
-	public void showFeedbackSummary(ATerm t0) {
-		// intentionally left empty
-	}
-	
 	public void moduleInfo(String s0, ATerm t1) {
 		// intentionally left empty
 	}
@@ -135,10 +131,6 @@ public abstract class UserInterfacePanel extends JPanel
 	}
 
 	public void showListChoice(String s0, String s1, ATerm t2) {
-		// intentionally left empty
-	}
-
-	public void removeFeedbackSummary(String producer, String summaryId) {
 		// intentionally left empty
 	}
 

@@ -60,60 +60,6 @@ public class MultiBridge extends UserInterfaceTool {
 		}
 	}
 
-	public void errorf(String format, ATerm args) {
-		Iterator iter = getToolComponents().iterator();
-
-		while (iter.hasNext()) {
-			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-			tif.errorf(format, args);
-		}
-	}
-
-	public void error(String message) {
-		Iterator iter = getToolComponents().iterator();
-
-		while (iter.hasNext()) {
-			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-			tif.error(message);
-		}
-	}
-
-	public void messagef(String format, ATerm args) {
-		Iterator iter = getToolComponents().iterator();
-
-		while (iter.hasNext()) {
-			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-			tif.messagef(format, args);
-		}
-	}
-
-	public void message(String message) {
-		Iterator iter = getToolComponents().iterator();
-
-		while (iter.hasNext()) {
-			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-			tif.message(message);
-		}
-	}
-
-	public void warningf(String format, ATerm args) {
-		Iterator iter = getToolComponents().iterator();
-
-		while (iter.hasNext()) {
-			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-			tif.warningf(format, args);
-		}
-	}
-
-	public void warning(String message) {
-		Iterator iter = getToolComponents().iterator();
-
-		while (iter.hasNext()) {
-			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-			tif.warning(message);
-		}
-	}
-
 	public void clearHistory() {
 		Iterator iter = getToolComponents().iterator();
 
@@ -170,24 +116,6 @@ public class MultiBridge extends UserInterfaceTool {
 		while (iter.hasNext()) {
 			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
 			tif.showListChoice(s0, s1, t1);
-		}
-	}
-
-	public void showFeedbackSummary(ATerm t0) {
-		Iterator iter = getToolComponents().iterator();
-
-		while (iter.hasNext()) {
-			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-			tif.showFeedbackSummary(t0);
-		}
-	}
-
-	public void removeFeedbackSummary(String producer, String summaryId) {
-		Iterator iter = getToolComponents().iterator();
-
-		while (iter.hasNext()) {
-			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-			tif.removeFeedbackSummary(producer, summaryId);
 		}
 	}
 

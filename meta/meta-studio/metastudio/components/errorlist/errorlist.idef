@@ -8,11 +8,9 @@ let
   SummaryId : str
 in
   rec-connect(T?)
-  . printf("errorlist active\n")
   . 
   (
       rec-msg(ui-show-feedback-summary(Summary?))
-      . printf("showing feedback!\n")
       . snd-do(T, show-feedback-summary(Summary))
     +
       rec-msg(ui-remove-feedback-summary(Producer?, SummaryId?))

@@ -1,6 +1,6 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: Nov 25, 2004 10:13:38 AM
+// generation time: Nov 25, 2004 11:14:27 AM
 
 package metastudio;
 
@@ -21,15 +21,15 @@ public class UserInterfaceBridge
 
   //}}}
 
-  //{{{  public void displayTreelist(String s0, ATerm t1)
+  //{{{  public void displayGraph(String s0, ATerm t1)
 
-  public void displayTreelist(String s0, ATerm t1)
+  public void displayGraph(String s0, ATerm t1)
   {
     if (tool != null) {
-      tool.displayTreelist(s0, t1);
+      tool.displayGraph(s0, t1);
     }
     else {
-      throw new UnsupportedOperationException("method `displayTreelist' not supported.");
+      throw new UnsupportedOperationException("method `displayGraph' not supported.");
     }
   }
 
@@ -43,58 +43,6 @@ public class UserInterfaceBridge
     }
     else {
       throw new UnsupportedOperationException("method `showListChoice' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void renderGraph(String s0, ATerm t1)
-
-  public void renderGraph(String s0, ATerm t1)
-  {
-    if (tool != null) {
-      tool.renderGraph(s0, t1);
-    }
-    else {
-      throw new UnsupportedOperationException("method `renderGraph' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void showFeedbackSummary(ATerm t0)
-
-  public void showFeedbackSummary(ATerm t0)
-  {
-    if (tool != null) {
-      tool.showFeedbackSummary(t0);
-    }
-    else {
-      throw new UnsupportedOperationException("method `showFeedbackSummary' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void errorf(String s0, ATerm t1)
-
-  public void errorf(String s0, ATerm t1)
-  {
-    if (tool != null) {
-      tool.errorf(s0, t1);
-    }
-    else {
-      throw new UnsupportedOperationException("method `errorf' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void initializeUi(String s0)
-
-  public void initializeUi(String s0)
-  {
-    if (tool != null) {
-      tool.initializeUi(s0);
-    }
-    else {
-      throw new UnsupportedOperationException("method `initializeUi' not supported.");
     }
   }
 
@@ -125,6 +73,32 @@ public class UserInterfaceBridge
   }
 
   //}}}
+  //{{{  public void renderGraph(String s0, ATerm t1)
+
+  public void renderGraph(String s0, ATerm t1)
+  {
+    if (tool != null) {
+      tool.renderGraph(s0, t1);
+    }
+    else {
+      throw new UnsupportedOperationException("method `renderGraph' not supported.");
+    }
+  }
+
+  //}}}
+  //{{{  public void initializeUi(String s0)
+
+  public void initializeUi(String s0)
+  {
+    if (tool != null) {
+      tool.initializeUi(s0);
+    }
+    else {
+      throw new UnsupportedOperationException("method `initializeUi' not supported.");
+    }
+  }
+
+  //}}}
   //{{{  public void clearHistory()
 
   public void clearHistory()
@@ -138,93 +112,15 @@ public class UserInterfaceBridge
   }
 
   //}}}
-  //{{{  public void displayGraph(String s0, ATerm t1)
+  //{{{  public void displayTreelist(String s0, ATerm t1)
 
-  public void displayGraph(String s0, ATerm t1)
+  public void displayTreelist(String s0, ATerm t1)
   {
     if (tool != null) {
-      tool.displayGraph(s0, t1);
+      tool.displayTreelist(s0, t1);
     }
     else {
-      throw new UnsupportedOperationException("method `displayGraph' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void error(String s0)
-
-  public void error(String s0)
-  {
-    if (tool != null) {
-      tool.error(s0);
-    }
-    else {
-      throw new UnsupportedOperationException("method `error' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void removeFeedbackSummary(String s0, String s1)
-
-  public void removeFeedbackSummary(String s0, String s1)
-  {
-    if (tool != null) {
-      tool.removeFeedbackSummary(s0, s1);
-    }
-    else {
-      throw new UnsupportedOperationException("method `removeFeedbackSummary' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void warning(String s0)
-
-  public void warning(String s0)
-  {
-    if (tool != null) {
-      tool.warning(s0);
-    }
-    else {
-      throw new UnsupportedOperationException("method `warning' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void messagef(String s0, ATerm t1)
-
-  public void messagef(String s0, ATerm t1)
-  {
-    if (tool != null) {
-      tool.messagef(s0, t1);
-    }
-    else {
-      throw new UnsupportedOperationException("method `messagef' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void message(String s0)
-
-  public void message(String s0)
-  {
-    if (tool != null) {
-      tool.message(s0);
-    }
-    else {
-      throw new UnsupportedOperationException("method `message' not supported.");
-    }
-  }
-
-  //}}}
-  //{{{  public void warningf(String s0, ATerm t1)
-
-  public void warningf(String s0, ATerm t1)
-  {
-    if (tool != null) {
-      tool.warningf(s0, t1);
-    }
-    else {
-      throw new UnsupportedOperationException("method `warningf' not supported.");
+      throw new UnsupportedOperationException("method `displayTreelist' not supported.");
     }
   }
 

@@ -55,9 +55,7 @@ public class ErrorList extends JPanel implements ErrorListTif, Runnable {
 		list.setCellRenderer(new ErrorListCellRenderer());
 		list.setBackground(Preferences.getColor("messagepane.background"));
 
-		JScrollPane pane = new JScrollPane(list);
-
-		add(pane);
+		add(new JScrollPane(list), BorderLayout.CENTER);
 
 		try {
 			bridge = new ErrorListBridge(factory, this);
@@ -65,7 +63,6 @@ public class ErrorList extends JPanel implements ErrorListTif, Runnable {
 			bridge.setLockObject(this);
 			bridge.connect("error-list", null, -1);
 		} catch (IOException e) {
-			remove(pane);
 			e.printStackTrace();
 		}
 	}
