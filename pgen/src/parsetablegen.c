@@ -36,7 +36,7 @@ static char *ptchars;
 static int ptsize = 0;
 
 static char myname[] = "parsetablegen";
-static char myversion[] = "1.4";
+static char myversion[] = "1.5";
 
 /*
     The argument vector: list of option letters, colons denote option
