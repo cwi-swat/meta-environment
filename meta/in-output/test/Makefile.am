@@ -22,15 +22,21 @@
 
 TESTS      = in-output-test
 
-EXTRA_DIST = in-output-test.sh.src Empty1.sdf Empty2.sdf.baf \
-             in-output-test-1.tb in-output-test-2.tb in-output-test-3.tb \
-             in-output-test-4.tb in-output-test-5.tb in-output-test-6.tb \
-             in-output-test-7.tb in-output-test-8.tb in-output-test-9.tb
+TBSCRIPTS =  in-output-test-1.tb.src in-output-test-2.tb.src \
+             in-output-test-3.tb.src in-output-test-4.tb.src \
+             in-output-test-5.tb.src in-output-test-6.tb.src \
+             in-output-test-7.tb.src in-output-test-8.tb.src \
+             in-output-test-9.tb.src
 
-CLEANFILES = in-output-test
+EXTRA_DIST = in-output-test.src Empty1.sdf Empty2.sdf.baf ${TBSCRIPTS}
 
-% : %.sh.src Makefile
+noinst_SCRIPTS = ${TBSCRIPTS:.src=}
+
+CLEANFILES = in-output-test ${TBSCRIPTS:.src=}
+
+% : %.src Makefile
 	sed 's@__TOOLBUS__@$(TOOLBUS)@g;\
              s@__TOP_SRCDIR__@$(top_srcdir)@g;\
+             s@__SRCDIR__@$(srcdir)@g;\
 	     s@__DATADIR__@$(datadir)@g' < $< > $@ && \
 	chmod +x $@
