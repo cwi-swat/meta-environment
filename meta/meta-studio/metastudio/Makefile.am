@@ -45,4 +45,8 @@ java_JAVA = \
 	UserInterfaceTool.java \
         MessageWindow.java \
 	MessageList.java \
-        ButtonAction.java
+        ButtonAction.java \
+        ModuleTreeModel.java \
+        TreeModelSupport.java \
+        TreeNode.java \
+        ModuleSelectionModel.java

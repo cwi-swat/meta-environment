@@ -8,11 +8,11 @@ public class ImportGraphPanel
   extends GraphPanel
   implements ModuleSelectionListener
 {
-  private ModuleManager moduleManager;
+  private ModuleTreeModel moduleManager;
 
   //{{{ public ImportGraphPanel(final ModuleManager moduleManager)
 
-  public ImportGraphPanel(final ModuleManager moduleManager)
+  public ImportGraphPanel(final ModuleTreeModel moduleManager)
   {
     super("import");
     this.moduleManager = moduleManager;
@@ -28,6 +28,7 @@ public class ImportGraphPanel
 	    if (node == null) {
 	      module = null;
 	    } else {
+		System.out.println("node.getName(): "+node.getName());
 	      module = moduleManager.getModule(node.getName());
 	    }
 	    moduleManager.selectModule(module);

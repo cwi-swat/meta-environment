@@ -29,11 +29,11 @@ public class ModuleStatusPanel
   private JList parents;
   private JList imports;
 
-  private ModuleManager moduleManager;
+  private ModuleTreeModel moduleManager;
 
   //{{{ public ModuleStatusPanel(ModuleManager moduleManager)
 
-  public ModuleStatusPanel(final ModuleManager moduleManager)
+  public ModuleStatusPanel(final ModuleTreeModel moduleManager)
   {
     this.moduleManager = moduleManager;
     moduleManager.addModuleSelectionListener(this);

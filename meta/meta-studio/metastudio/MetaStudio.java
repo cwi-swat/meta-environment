@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.tree.*;
 import javax.swing.text.*;
 
 import metastudio.graph.*;
@@ -46,7 +47,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   private JMenuBar menuBar;
   private JMenu fileMenu;
   private JToolBar toolBar;
-  private JList moduleList;
+  private JTree moduleTree;
   private JPopupMenu modulePopup;
   private JPopupMenu newModulePopup;
   private JComponent component;
@@ -91,7 +92,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   private Frame topFrame;
 
   private String currentModule;
-  private ModuleManager moduleManager;
+  private ModuleTreeModel moduleManager;
 
   private MessageList messageList;  // Message list
   private MessageWindow messageWindow;
@@ -116,7 +117,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     graphPanels = new HashMap();
     
     factory = new MetaGraphFactory();
-    moduleManager = new ModuleManager();
+    moduleManager = new ModuleTreeModel();
     statusMessages = new LinkedList();
 
     //{{{ Read preferences
@@ -154,23 +155,25 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
     //}}}
     //{{{ Create module list
+    moduleTree = new JTree(moduleManager);
+    moduleTree.setRootVisible(false);
+    moduleTree.setShowsRootHandles(true);
+    moduleTree.setExpandsSelectedPaths(true);
+    moduleTree.setSelectionModel(new ModuleSelectionModel());
 
-    moduleList = new JList();
-    moduleList.setModel(moduleManager.getListModel());
-    ListSelectionListener moduleListListener = new ListSelectionListener() {
-      public void valueChanged(ListSelectionEvent event) {
+    TreeSelectionListener moduleTreeListener = new TreeSelectionListener() {
+      public void valueChanged(TreeSelectionEvent event) {
         /*
         int index = event.getLastIndex();
         String selectedModule
-          = (String)moduleList.getModel().getElementAt(index);
+          = (String)moduleTree.getModel().getElementAt(index);
           */
-        String selectedModule = (String) moduleList.getSelectedValue();
-        moduleManager.selectModule(moduleManager.getModule(selectedModule));
+	  moduleManager.selectModule(moduleManager.getModule(getCurrentModule()));
       }
     };
-    moduleList.addListSelectionListener(moduleListListener);
+    moduleTree.addTreeSelectionListener(moduleTreeListener);
 
-    moduleList.addMouseListener(new MouseAdapter() {
+    moduleTree.addMouseListener(new MouseAdapter() {
       public void mousePressed(MouseEvent e) {
         checkModulePopup(e);
       }
@@ -179,10 +182,10 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       }
     });
 
-    JScrollPane listPane = new JScrollPane(moduleList);
+    JScrollPane listPane = new JScrollPane(moduleTree);
 
     color = Preferences.getColor(PREF_TREEPANE_BACKGROUND);
-    moduleList.setBackground(color);
+    moduleTree.setBackground(color);
 
     //}}}
     //{{{ Create actions
@@ -192,54 +195,54 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 			 Preferences.getIcon(PREF_TOOLBAR_NEW_MODULE + ".icon"),
 			 FILE_MENU_BUTTON_TYPE,
 			 (ATermList)factory.make("[\"New Module\"]"),
-			 moduleList, bridge, factory);
+			 moduleTree, bridge, factory);
     
     actionOpenModule =
 	new ButtonAction(Preferences.getString(PREF_TOOLBAR_OPEN_MODULE + ".text"),
 			 Preferences.getIcon(PREF_TOOLBAR_OPEN_MODULE + ".icon"),
 			 FILE_MENU_BUTTON_TYPE,
 			 (ATermList)factory.make("[\"Open Module\"]"),
-			 moduleList, bridge, factory);
+			 moduleTree, bridge, factory);
 
     actionOpenLibModule =
 	new ButtonAction(Preferences.getString(PREF_TOOLBAR_OPEN_LIB_MODULE + ".text"),
 			 Preferences.getIcon(PREF_TOOLBAR_OPEN_LIB_MODULE + ".icon"),
 			 FILE_MENU_BUTTON_TYPE,
 			 (ATermList)factory.make("[\"Open Library Module\"]"),
-			 moduleList, bridge, factory);
+			 moduleTree, bridge, factory);
     
     actionSaveAll =
 	new ButtonAction(Preferences.getString(PREF_TOOLBAR_SAVE_ALL + ".text"),
 			 Preferences.getIcon(PREF_TOOLBAR_SAVE_ALL + ".icon"),
 			 FILE_MENU_BUTTON_TYPE,
 			 (ATermList)factory.make("[\"Save All\"]"),
-			 moduleList, bridge, factory);
+			 moduleTree, bridge, factory);
 
     actionClearAll =
 	new ButtonAction(Preferences.getString(PREF_TOOLBAR_CLEAR_ALL + ".text"),
 			 Preferences.getIcon(PREF_TOOLBAR_CLEAR_ALL + ".icon"),
 			 FILE_MENU_BUTTON_TYPE,
 			 (ATermList)factory.make("[\"Close All\"]"),
-			 moduleList, bridge, factory);
+			 moduleTree, bridge, factory);
 
     actionRefreshButtons =
 	new ButtonAction(Preferences.getString(PREF_TOOLBAR_REFRESH_BUTTONS + ".text"),
 			 FILE_MENU_BUTTON_TYPE,
 			 (ATermList)factory.make("[\"Refresh Buttons\"]"),
-			 moduleList, bridge, factory);
+			 moduleTree, bridge, factory);
 
     actionClearHistory =
 	new ButtonAction(Preferences.getString(PREF_TOOLBAR_CLEAR_HISTORY + ".text"),
 			 FILE_MENU_BUTTON_TYPE,
 			 (ATermList)factory.make("[\"Clear History\"]"),
-			 moduleList, bridge, factory);
+			 moduleTree, bridge, factory);
 
     actionQuit =
 	new ButtonAction(Preferences.getString(PREF_TOOLBAR_QUIT + ".text"),
 			 Preferences.getIcon(PREF_TOOLBAR_QUIT + ".icon"),
 			 FILE_MENU_BUTTON_TYPE,
 			 (ATermList)factory.make("[\"Exit\"]"),
-			 moduleList, bridge, factory);
+			 moduleTree, bridge, factory);
 
 
     //}}}
@@ -287,18 +290,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     menuBar = new JMenuBar();
 
     fileMenu = new JMenu("File");
-    fileMenu.add(actionOpenModule).setIcon(null);
-    fileMenu.add(actionOpenLibModule).setIcon(null);
-    fileMenu.add(actionNewModule).setIcon(null);
-    fileMenu.addSeparator();
-    fileMenu.add(actionSaveAll).setIcon(null);
-    fileMenu.add(actionClearAll).setIcon(null);
-    fileMenu.addSeparator();
-    fileMenu.add(actionRefreshButtons).setIcon(null);
-    fileMenu.add(actionClearHistory).setIcon(null);
-    fileMenu.addSeparator();
-    fileMenu.add(actionQuit).setIcon(null);
-
+    bridge.postEvent(factory.make("get-buttons(<str>,<str>)", FILE_MENU_BUTTON_TYPE, "*"));
     menuBar.add(fileMenu);
     setJMenuBar(menuBar);
 
@@ -762,7 +754,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   //}}}
-  //{{{ private void setModules(ATermList moduleList)
+  //{{{ private void setModules(ATermList moduleTree)
 
   private void setModules(ATermList importList) {
     moduleManager.clearModules();
@@ -892,17 +884,18 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   //{{{ public void moduleSelected(Module module)
 
   public void moduleSelected(Module module) {
-    if (module == null) {
-      moduleList.clearSelection();
-    } else {
-      moduleList.setSelectedValue(module.getName(), true);
+      if (module == null) {
+	  moduleTree.clearSelection();
+      } else {
+	  TreePath path = moduleManager.makeTreePath(module.getName());
 
-      if (module.getState() == Module.STATE_NORMAL) {
-        bridge.postEvent(factory.make("get-module-info(<str>)", module.getName()));
+	  moduleTree.setSelectionPath(path);
+	  moduleTree.scrollPathToVisible(path);
+
+	  if (module.getState() == Module.STATE_NORMAL) {
+	      bridge.postEvent(factory.make("get-module-info(<str>)", module.getName()));
+	  }
       }
-    }
-
-    //System.out.println("MetaStudio: moduleSelected " + module.getName());
   }
 
   //}}}
@@ -948,9 +941,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       mouseX = e.getX();
       mouseY = e.getY();
 
-      if (e.getSource() == moduleList) {
-        component = moduleList;
-        currentModule = (String) moduleList.getSelectedValue();
+      if (e.getSource() == moduleTree) {
+        component = moduleTree;
+        currentModule = getCurrentModule();
       } else if (e.getSource() == importGraphPanel) {
         component = importGraphPanel;
         Node node = importGraphPanel.getNodeAt(mouseX, mouseY);
@@ -1008,7 +1001,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 	  newModulePopup.show(component, mouseX, mouseY);
       }
       else if(buttonType.equals(FILE_MENU_BUTTON_TYPE)) {
-      // addMenuItems(fileMenu, buttonType, moduleName, buttons, factory.makeList());
+	  addMenuItems(fileMenu, buttonType, moduleName, (ATermList)buttons, factory.makeList());
       }
   }
   //}}}
@@ -1026,7 +1019,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 	  if(buttonName.getLength() == 1) {
 	      menu.add(new ButtonAction(unquotedName.getName(),
 					buttonType, prefixButtonName.concat(buttonName),
-					moduleList, bridge, factory));
+					moduleTree, bridge, factory));
 	  }
 	  else {
 	      JMenu nextLevel = new JMenu(unquotedName.getName());
@@ -1068,7 +1061,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 	  if(buttonName.getLength() == 1) {
 	      menu.add(new ButtonAction(unquotedName.getName(),
 					buttonType, prefixButtonName.concat(buttonName),
-					moduleList, bridge, factory));
+					moduleTree, bridge, factory));
 	  }
 	  else {
 	      JMenu nextLevel = new JMenu(unquotedName.getName());
@@ -1212,5 +1205,18 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     bridge.postEvent(factory.make("debugging(<id>)", tideBox.isSelected() ? "on" : "off"));
   }
 
+  //}}}
+  //{{{ String getCurrentModule()
+
+    String getCurrentModule() {
+	TreePath path = moduleTree.getSelectionPath();
+	if (path != null) {
+	    TreeNode selectedModule = (TreeNode) path.getLastPathComponent();
+
+	    return selectedModule.getFullName();
+	}
+	
+	return null;
+    }
   //}}}
 }
