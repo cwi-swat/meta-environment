@@ -35,6 +35,10 @@ in
     rec-value(SM, imports(Imports?)) .
     snd-msg(sm-imports(Imports))
   +
+    rec-msg(sm-get-renamings(Module)) .
+    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
+    snd-msg(sm-renamings([]))
+  +  
     rec-msg(sm-get-all-depending-modules(Modules?, ModuleId?)) .
     snd-eval(SM, get-all-depending-modules(Modules, ModuleId)) .
     rec-value(SM, depending-modules(Depending?)) .
@@ -66,16 +70,20 @@ in
     ) 
   +
     rec-msg(sm-rename-import-in-module(Module?, From?, To?)) .
-    printf("not yet implemented") .
+    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
     snd-msg(sm-import-renamed-in-module(Module))
   +
     rec-msg(sm-remove-import-from-module(Module?, ModuleId?)) .
-    printf("not yet implemented") .
+    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
     snd-msg(sm-import-removed-from-module(Module))
   +
     rec-msg(sm-rename-module(Module?, ModuleId?)) .
-    printf("not yet implemented") .
+    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
     snd-msg(sm-module-renamed(Module))
+  +
+    rec-msg(sm-add-import(Module?, ModuleId?)) .
+    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
+    snd-msg(sm-added-import(Module))
   )
   *delta
 endlet
