@@ -1,6 +1,27 @@
 equations
 
 
+ [0] begin declare Decl*1, Id-type, Decl*2; Stat* end =
+       begin declare Decl*1, Decl*2; replace(Stat*, Id-type) end
+
+ [00] replace(Id := Exp, Id : Type) = type(Type) := replace(Exp, Id : Type)
+
+ [1] replace(Id     , Id : Type) = type(Type)
+ [2] replace(Nat-Con, Id : Type) = type(natural) 
+ [3] replace(Str-Con, Id : Type) = type(string)
+ 
+ [4] type(string) || type(string)  = type(string)
+ [5] type(natural) + type(natural) = type(natural)
+ [6] type(natural) - type(natural) = type(natural)
+ 
+ [7] Stat*1; if type(natural) then Stat*2 else Stat*3 fi ; Stat*4 
+       = Stat*1; Stat*2; Stat*3; Stat*4
+
+ [8] Stat*1; while type(natural) do Stat*2 od; Stat*3 
+       = Stat*1; Stat*2; Stat*3
+ 
+ [9] Stat*1; type(Type) := type(Type); Stat*2 
+       = Stat*1; Stat*2
 
 
 [1] replace(Id     , Id : Type) = type(Type)
