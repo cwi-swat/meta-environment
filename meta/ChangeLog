@@ -1,5 +1,13 @@
 # $Id$
 
+Wed Oct 20 15:12:01 CEST 2004 <kooiker@cwi.nl>
+ * editors/text/swing/metaedit:
+   - Merged Said's editor
+ * configuration-manager/src:
+   - Added metaconfig-config.src
+ * editors/text/common:
+   - Added texteditorapi-config.src
+
 Tue Oct 19 00:07:36 CEST 2004 <jurgenv@cwi.nl>
  * Merged in dependency on tide
 

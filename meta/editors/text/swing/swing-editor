@@ -1,5 +1,5 @@
 #! /bin/sh
 
-CLASSPATH=`aterm-java-config`:`toolbuslib-config`/classes:/tmp/src:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/build/error-support/lib/locationapi-0.2.1.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/build/meta/editors/text/common/texteditorapi-1.0.jar
+CLASSPATH=`/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/bin/aterm-java-config`:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/classes:`/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/bin/error-support-config`:`/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/bin/toolbus-java-adapter-config`:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/share/tide/tide.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/share/meta/texteditorapi-1.0.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install/share/meta/metaconfig-1.0.jar:/export/scratch1/kooiker/glt/asfsdf-meta/trunk/install//share/swing-editor.jar__
 
-java -classpath $CLASSPATH Main $* &
+java -classpath $CLASSPATH metaedit.Main $* &
