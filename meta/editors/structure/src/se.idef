@@ -78,8 +78,13 @@ in
   +
     rec-msg(get-focussed-tree(EditorId?)) .
     snd-eval(SE, get-focussed-tree(EditorId)) .
-    rec-value(SE, tree(Tree?)) .
-    snd-msg(tree(Tree))
+    ( 
+      rec-value(SE, parse-tree(Tree?)) .
+      snd-msg(tree(Tree))
+    +
+      rec-value(SE, no-parse-tree) .
+      snd-msg(no-tree)
+    )
   +
     rec-msg(get-focus-sort(Nonterminal?, Focus?)) .
     snd-eval(SE, get-focus-sort(Nonterminal, Focus)) .

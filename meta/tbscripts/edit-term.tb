@@ -155,7 +155,12 @@ let
 in
   Id := process-id .
   snd-msg(get-focussed-tree(EditorId)) .
-  rec-msg(tree(Tree?))
+  (
+    rec-msg(tree(Tree?))
+  +
+    rec-msg(no-tree) .
+    Tree := error-tree
+  )
 endlet
 
 process PlainReduceTerm(Tree: term, ModuleName: str, NormalForm: term?) is
@@ -219,6 +224,7 @@ let
   Stack      : list,
   Killed     : term,
   ActionTree : term,
+  EditorIden : term,
   STree      : term,
   RTree      : term,
   Trees      : list,
@@ -270,27 +276,21 @@ in
         snd-msg(get-dirty-focuses(EditorId)) .
         rec-msg(dirty-focuses(DirtyFoci?)) .
         if equal(DirtyFoci, []) then
-          snd-msg(get-tree(EditorId)) . 
-          rec-msg(tree(ActionTree?)) .
-          snd-msg(extra-button-action(ButtonName, ModuleName, ActionTree)) 
+          snd-msg(extra-button-action(ButtonName, ModuleName)) 
         else
           snd-msg(invalidate-tree(EditorId)) .
           ParseTerm(EditorId, ModuleName) .
 	  snd-msg(get-dirty-focuses(EditorId)) .
 	  rec-msg(dirty-focuses(DirtyFoci?)) . 
 	  if equal(DirtyFoci, []) then
-            snd-msg(get-tree(EditorId)) . 
-            rec-msg(tree(ActionTree?)) .
-            snd-msg(extra-button-action(ButtonName, ModuleName, ActionTree)) 
+            snd-msg(extra-button-action(ButtonName, ModuleName)) 
           else 
             tau
           fi
         fi
       +
         rec-msg(get-tree-action(NewModName?), Stack?) .
-        STree := first(Stack) .
-        Stack := next(Stack) .
-        GetTree(STree, RTree?) .
+        GetTree(EditorId, RTree?) .
         if not-equal(RTree, error-tree) then
           Stack := join(RTree, Stack) .
           snd-msg(stack(Stack))
@@ -299,9 +299,7 @@ in
         fi
       +
         rec-msg(get-focus-action(NewModName?), Stack?) .
-        STree := first(Stack) .
-        Stack := next(Stack) .
-        GetFocus(STree, RTree?) .
+        GetFocus(EditorId, RTree?) .
         if not-equal(RTree, error-tree) then
           Stack := join(RTree, Stack) .
           snd-msg(stack(Stack))
