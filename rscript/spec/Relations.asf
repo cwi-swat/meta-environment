@@ -70,7 +70,7 @@ equations
 [dom1-1]  is-empty-iter($BagIter) == false,
 	 <$Elem,$Elem+> := head($BagIter)
 	 =================================================
-	 domain1($BagIter) = union1($Elem, domain1(tail($BagIter)))
+	 domain1($BagIter) = insert($Elem, domain1(tail($BagIter)))
 
 [dom1-2]  is-empty-iter($BagIter) == true
 	 =================================================
@@ -83,7 +83,7 @@ equations
 [ran1-1]  is-empty-iter($BagIter) == false, 
 	 <$Elem,$Elem+> := head($BagIter)
 	 =================================================
-	 range1($BagIter) = union1(<$Elem+>, range1(tail($BagIter)))
+	 range1($BagIter) = insert(<$Elem+>, range1(tail($BagIter)))
 
 [ran1-2]  is-empty-iter($BagIter) == true
 	 =================================================
@@ -96,7 +96,7 @@ equations
 [car1-1] is-empty-iter($BagIter) == false,
 	 <$Elem, $Elem+> := head($BagIter)
 	 ==============================================
-	 carrier1($BagIter) = union1($Elem, union1(<$Elem+>, carrier1(tail($BagIter))))
+	 carrier1($BagIter) = insert($Elem, insert(<$Elem+>, carrier1(tail($BagIter))))
 
 [car1-2]	is-empty-iter($BagIter) == true
 	================================================

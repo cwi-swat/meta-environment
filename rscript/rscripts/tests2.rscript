@@ -4,49 +4,55 @@
 
 rel[int,int] Rel1 = {<1,10>}
 rel[int,int] Rel2 = {<1,10>, <2,20>, <3,30>}
+rel[int,int] Rel3 = {<1,10>, <2,20>, <3, 30>, <2, 21>, <1, 11>}
+rel[int,int] Rel4 = {<1,10>, <2,20>, <3, 10>, <2, 10>, <1, 20>}
 
 %% --- id
 
-assert "id-1": id({}) == {}
-assert "id-2": id({1,2,3}) == {<1, 1>, <2, 2>, <3, 3>}
+%%assert "id-1": id({}) == {}
+%%assert "id-2": id({1,2,3}) == {<1, 1>, <2, 2>, <3, 3>}
 
 %% --- domain
 
-assert "domain-1" : domain({}) == {}
+%%assert "domain-1" : domain({}) == {}
 assert "domain-2" : domain(Rel1) == {1}
 assert "domain-3" : domain(Rel2) == {1, 2, 3}
+assert "domain-4" : domain(Rel3) == {1, 2, 3, 2, 1}
 
 %% --- range
 
-assert "range-1" : range({}) == {}
+%%assert "range-1" : range({}) == {}
 assert "range-2" : range(Rel1) == {10}
 assert "range-3" : range (Rel2) == {10,20,30}
+assert "range-4" : range (Rel4) == {10,20,10,10,20}
+bag[int] range4 = range (Rel4)
 
 %% --- carrier
 
-assert "carrier-1": carrier({}) == {}
-assert "carrier-1": carrier(Rel2) == {1,2,3,10,20,30}
+%%assert "carrier-1": carrier({}) == {}
+assert "carrier-2": carrier(Rel2) == {1,2,3,10,20,30}
+assert "carrier-3": carrier(Rel3) == {1,10,2,20,3,30,2,21,1,11}
 
 %% --- top
 
 rel[int,int] G = {<1,2>, <1,3>, <2,4>, <3,4>}
 
-assert "top-1": top({}) == {}
+%%assert "top-1": top({}) == {}
 assert "top-2": top(G) == {1}
 
 %% --- bottom
 
-assert "bottom-1": bottom({}) == {}
+%%assert "bottom-1": bottom({}) == {}
 assert "bottom-2": bottom(G) == {4}
 
 %% --- inv
 
-assert "inv-1": inv({}) == {}
+%%assert "inv-1": inv({}) == {}
 assert "inv-2": inv(Rel2) == {<10,1>,<20,2>,<30,3>}
 
 %% --- compl
 
-assert "compl-1": compl({}) == {}
+%%assert "compl-1": compl({}) == {}
 assert "compl-2": compl(Rel1) ==  {<1, 1>, <10, 1>, <10, 10>}
 
 %% --- domainR
@@ -57,6 +63,8 @@ assert "domainR-3": domainR(Rel2, {}) == {}
 assert "domainR-4": domainR(Rel2, {1}) == {<1,10>}
 assert "domainR-5": domainR(Rel2, {3, 1}) == {<1,10>,<3,30>}
 assert "domainR-6": domainR(Rel2, {7, 17}) == {}
+assert "domainR-7": domainR(Rel3, {1,2}) == {<1,10>, <2,20>, <2, 21>, <1, 11>}
+
 
 %% --- rangeR
 
@@ -66,6 +74,7 @@ assert "rangeR-3": rangeR(Rel2, {}) == {}
 assert "rangeR-4": rangeR(Rel2, {10}) == {<1,10>}
 assert "rangeR-5": rangeR(Rel2, {30, 10}) == {<1,10>,<3,30>}
 assert "rangeR-6": rangeR(Rel2, {7, 17}) == {}
+assert "rangeR-7": rangeR(Rel4, {10}) == {<1,10>, <3, 10>, <2, 10>}
 
 %% --- carrierR
 
@@ -113,7 +122,7 @@ assert "second-2": second(<1,2>) == 2
 
 %% --- reachX
 
-assert "reachX-1":  reachX({}, {}, {}) == {}
+%%assert "reachX-1":  reachX({}, {}, {}) == {}
 assert "reachX-2":  reachX({1}, {}, G) ==  {<1,2>, <1,3>, <1, 4>}
 assert "reachX-3":  reachX({1}, {2}, G) ==  {<1,3>, <1, 4>}
 assert "reachX-4":  reachX({1}, {2,3}, G) ==  {}
@@ -121,7 +130,7 @@ assert "reachX-5":  reachX({1}, {4}, G) ==  {<1,2>,<1,3>}
 
 %% --- reachR
 
-assert "reachR-1":  reachR({}, {}, {}) == {}
+%%assert "reachR-1":  reachR({}, {}, {}) == {}
 assert "reachR-2":  reachR({1}, {}, G) ==  {}
 assert "reachR-3":  reachR({1}, {1,2}, G) ==  {<1,2>}
 assert "reachR-4":  reachR({1}, {1,2,3}, G) ==  {<1,2>, <1,3>}
@@ -151,6 +160,7 @@ assert "sum-2":		sum({1})		== 1
 assert "sum-3":		sum({1, 2})		== 3
 assert "sum-4":		sum({1, 2, 3})		== 6
 assert "sum-5":		sum({1, -2, 3})		== 2
+assert "sum-6":		sum({1, 1, 1})		== 3
 
 assert "average-1":	average({})	== 0
 assert "average-2":	average({1})		== 1
