@@ -1,5 +1,4 @@
-#include "ErrorAPI.h"
-#include "ParsedErrorAPI.h"
+#include "Error-utils.h"
 
 /*{{{  static PERR_StrCon ERR_liftStrCon(const char *str) */
 
@@ -38,39 +37,34 @@ PERR_Area ERR_liftArea(ERR_Area area)
   PERR_NatCon pLength;
   PERR_OptLayout e;
 
-  if (ERR_isAreaArea(area)) {
-    beginLine = ERR_getAreaBeginLine(area);
-    beginColumn = ERR_getAreaBeginColumn(area);
-    endLine = ERR_getAreaEndLine(area);
-    endColumn = ERR_getAreaEndColumn(area);
-    offset = ERR_getAreaOffset(area);
-    length = ERR_getAreaLength(area);
+  beginLine = ERR_getAreaBeginLine(area);
+  beginColumn = ERR_getAreaBeginColumn(area);
+  endLine = ERR_getAreaEndLine(area);
+  endColumn = ERR_getAreaEndColumn(area);
+  offset = ERR_getAreaOffset(area);
+  length = ERR_getAreaLength(area);
 
-    pBeginLine = ERR_liftNatCon(beginLine);
-    pBeginColumn = ERR_liftNatCon(beginColumn);
-    pEndLine = ERR_liftNatCon(endLine);
-    pEndColumn = ERR_liftNatCon(endColumn);
-    pOffset = ERR_liftNatCon(offset);
-    pLength = ERR_liftNatCon(length);
-    e = PERR_makeOptLayoutAbsent();
+  pBeginLine = ERR_liftNatCon(beginLine);
+  pBeginColumn = ERR_liftNatCon(beginColumn);
+  pEndLine = ERR_liftNatCon(endLine);
+  pEndColumn = ERR_liftNatCon(endColumn);
+  pOffset = ERR_liftNatCon(offset);
+  pLength = ERR_liftNatCon(length);
+  e = PERR_makeOptLayoutAbsent();
 
-    return PERR_makeAreaArea(e,e,
-			    pBeginLine,
-			    e,e,
-			    pBeginColumn,
-			    e,e,
-			    pEndLine,
-			    e,e,
-			    pEndColumn,
-			    e,e,
-			    pOffset,
-			    e,e,
-			    pLength,
-			    e);
-  }
-  else {
-    return PERR_makeAreaNoArea();
-  }
+  return PERR_makeAreaArea(e,e,
+			   pBeginLine,
+			   e,e,
+			   pBeginColumn,
+			   e,e,
+			   pEndLine,
+			   e,e,
+			   pEndColumn,
+			   e,e,
+			   pOffset,
+			   e,e,
+			   pLength,
+			   e);
 }
 
 /*}}}  */
@@ -78,29 +72,18 @@ PERR_Area ERR_liftArea(ERR_Area area)
 
 PERR_Location ERR_liftLocation(ERR_Location location)
 {
-  char *filename;
-  ERR_Area area;
-  PERR_StrCon pFilename;
-  PERR_Area pArea;
-  PERR_OptLayout e;
+  char *filename = ERR_getLocationFilename(location);
+  PERR_StrCon pFilename = ERR_liftStrCon(filename);
+  PERR_OptLayout e = PERR_makeOptLayoutAbsent();
 
-  if (ERR_isLocationLocation(location)) {
-    filename = ERR_getLocationFilename(location);
-    area = ERR_getLocationArea(location);
+  if (ERR_isLocationAreaInFile(location)) {
+    ERR_Area area = ERR_getLocationArea(location);
+    PERR_Area pArea = ERR_liftArea(area);
 
-    pFilename = ERR_liftStrCon(filename);
-    pArea = ERR_liftArea(area);
-    e = PERR_makeOptLayoutAbsent();
-
-    return PERR_makeLocationLocation(e,e,
-				     pFilename,
-				     e,e,
-				     pArea,
-				     e);
+    return PERR_makeLocationAreaInFile(e, e, pFilename, e, e, pArea, e);
   }
-  else {
-    return PERR_makeLocationNoLocation();
-  }
+ 
+  return PERR_makeLocationFile(e, e, pFilename, e);
 }
 
 /*}}}  */
@@ -108,23 +91,17 @@ PERR_Location ERR_liftLocation(ERR_Location location)
 
 PERR_Subject ERR_liftSubject(ERR_Subject subject)
 {
-  char *description;
-  ERR_Location location;
-  PERR_StrCon pDescription;
-  PERR_Location pLocation;
+  char *description = ERR_getSubjectDescription(subject);
+  PERR_StrCon pDescription = ERR_liftStrCon(description);
   PERR_OptLayout e = PERR_makeOptLayoutAbsent();
+  
+  if (ERR_isSubjectLocalized(subject)) {
+    ERR_Location location = ERR_getSubjectLocation(subject);
+    PERR_Location pLocation = ERR_liftLocation(location);
+    return PERR_makeSubjectLocalized(e, e, pDescription, e, e, pLocation, e);
+  }
 
-  description = ERR_getSubjectDescription(subject);
-  location = ERR_getSubjectLocation(subject);
-  
-  pDescription = ERR_liftStrCon(description);
-  pLocation = ERR_liftLocation(location);
-  
-  return PERR_makeSubjectSubject(e,e,
-				 pDescription,
-				 e,e,
-				 pLocation,
-				 e);
+  return PERR_makeSubjectSubject(e, e, pDescription, e);
 }
 
 /*}}}  */
@@ -135,64 +112,42 @@ PERR_SubjectList ERR_liftSubjects(ERR_SubjectList subjects)
   PERR_SubjectList pSubjects = PERR_makeSubjectListEmpty();
   PERR_OptLayout e = PERR_makeOptLayoutAbsent();
 
-  for ( ; !ERR_isSubjectListEmpty(subjects); 
-	subjects = ERR_getSubjectListTail(subjects)) {
-    ERR_Subject subject = ERR_getSubjectListHead(subjects);
-    PERR_Subject pSubject = ERR_liftSubject(subject);
-    pSubjects = PERR_makeSubjectListMany(pSubject,e,e,pSubjects);
+  while (!ERR_isSubjectListEmpty(subjects)) {
+    ERR_Subject cur = ERR_getSubjectListHead(subjects);
+    PERR_Subject pCur = ERR_liftSubject(cur);
+    pSubjects = PERR_makeSubjectListMany(pCur, e, e, pSubjects);
+    subjects = ERR_getSubjectListTail(subjects);
   }
 
   return pSubjects;
 }
 
 /*}}}  */
-/*{{{  PERR_Feedback ERR_liftFeedback(ERR_Feedback feedback) */
+/*{{{  PERR_Error ERR_liftError(ERR_Error error) */
 
-PERR_Feedback ERR_liftFeedback(ERR_Feedback feedback)
+PERR_Error ERR_liftError(ERR_Error error)
 {
-  char *description;
-  ERR_SubjectList subjects;
-  PERR_StrCon pDescription;
-  PERR_SubjectList pSubjects;
-  PERR_OptLayout e;
+  char *description = ERR_getErrorDescription(error);
+  PERR_StrCon pDescription = ERR_liftStrCon(description);
+  ERR_SubjectList subjects = ERR_getErrorList(error);
+  PERR_SubjectList pSubjects = ERR_liftSubjects(subjects);
+  PERR_OptLayout e = PERR_makeOptLayoutAbsent();
 
-  description = ERR_getFeedbackDescription(feedback);
-  subjects = ERR_getFeedbackList(feedback);
+  if (ERR_isErrorInfo(error)) {
+    return PERR_makeErrorInfo(e, e, pDescription, e, e, e, pSubjects, e, e);
+  }
+  else if (ERR_isErrorWarning(error)) {
+    return PERR_makeErrorWarning(e, e, pDescription, e, e, e, pSubjects, e, e);
+  }
+  else if (ERR_isErrorError(error)) {
+    return PERR_makeErrorError(e, e, pDescription, e, e, e, pSubjects, e, e);
+  }
+  else if (ERR_isErrorFatal(error)) {
+    return PERR_makeErrorFatal(e, e, pDescription, e, e, e, pSubjects, e, e);
+  }
 
-  pDescription = ERR_liftStrCon(description);
-  pSubjects = ERR_liftSubjects(subjects);
-  e = PERR_makeOptLayoutAbsent();
-
-  if (ERR_isFeedbackInfo(feedback)) {
-    return PERR_makeFeedbackInfo(e,e,
-				pDescription,
-				e,e,e,
-				pSubjects,
-				e,e);
-  }
-  else if (ERR_isFeedbackWarning(feedback)) {
-    return PERR_makeFeedbackWarning(e,e,
-				   pDescription,
-				   e,e,e,
-				   pSubjects,
-				   e,e);
-  }
-  else if (ERR_isFeedbackError(feedback)) {
-    return PERR_makeFeedbackError(e,e,
-				 pDescription,
-				 e,e,e,
-				 pSubjects,
-				 e,e);
-  }
-  else if (ERR_isFeedbackFatalError(feedback)) {
-    return PERR_makeFeedbackFatalError(e,e,
-				      pDescription,
-				      e,e,e,
-				      pSubjects,
-				      e,e);
-  }
-  else {
-    ATerror("unknown feedback type: %t\n", feedback);
-    return NULL;
-  }
+  ATerror("unknown error type: %t\n", error);
+  return NULL;
 }
+
+/*}}}  */

@@ -5,19 +5,18 @@
 
 #include "error-support.tif.h"
 
-#define NR_SIG_ENTRIES	11
+#define NR_SIG_ENTRIES	10
 
 static char *signature[NR_SIG_ENTRIES] = {
-  "rec-eval(<error-support>,convert-feedback(<term>))",
-  "rec-eval(<error-support>,get-feedback-producer(<term>))",
-  "rec-eval(<error-support>,get-feedback-identification(<term>))",
-  "rec-eval(<error-support>,get-feedback-subjects(<term>))",
-  "rec-eval(<error-support>,get-summary-first-feedback(<term>))",
-  "rec-eval(<error-support>,get-feedback-first-location(<term>))",
+  "rec-eval(<error-support>,lower-summary(<term>))",
+  "rec-eval(<error-support>,get-summary-producer(<term>))",
+  "rec-eval(<error-support>,get-summary-id(<term>))",
+  "rec-eval(<error-support>,get-summary-errors(<term>))",
+  "rec-eval(<error-support>,get-summary-first-error(<term>))",
+  "rec-eval(<error-support>,get-error-first-subject-location(<term>))",
   "rec-eval(<error-support>,get-location-filename(<term>))",
-  "rec-eval(<error-support>,get-location-offset(<term>))",
-  "rec-eval(<error-support>,get-first-error-description(<term>))",
-  "rec-do(<error-support>,display-feedback(<term>))",
+  "rec-eval(<error-support>,get-location-area-offset(<term>))",
+  "rec-do(<error-support>,display-summary(<term>))",
   "rec-terminate(<error-support>,<term>)",
 };
 
@@ -28,35 +27,32 @@ ATerm error_support_handler(int conn, ATerm term)
   /* We need some temporary variables during matching */
   ATerm t0;
 
-  if(ATmatch(term, "rec-eval(get-summary-first-feedback(<term>))", &t0)) {
-    return get_summary_first_feedback(conn, t0);
+  if(ATmatch(term, "rec-eval(get-summary-first-error(<term>))", &t0)) {
+    return get_summary_first_error(conn, t0);
   }
-  if(ATmatch(term, "rec-eval(get-feedback-first-location(<term>))", &t0)) {
-    return get_feedback_first_location(conn, t0);
+  if(ATmatch(term, "rec-eval(get-summary-errors(<term>))", &t0)) {
+    return get_summary_errors(conn, t0);
   }
-  if(ATmatch(term, "rec-eval(get-feedback-subjects(<term>))", &t0)) {
-    return get_feedback_subjects(conn, t0);
+  if(ATmatch(term, "rec-eval(get-error-first-subject-location(<term>))", &t0)) {
+    return get_error_first_subject_location(conn, t0);
+  }
+  if(ATmatch(term, "rec-eval(get-summary-id(<term>))", &t0)) {
+    return get_summary_id(conn, t0);
   }
   if(ATmatch(term, "rec-eval(get-location-filename(<term>))", &t0)) {
     return get_location_filename(conn, t0);
   }
-  if(ATmatch(term, "rec-eval(get-feedback-identification(<term>))", &t0)) {
-    return get_feedback_identification(conn, t0);
+  if(ATmatch(term, "rec-eval(get-summary-producer(<term>))", &t0)) {
+    return get_summary_producer(conn, t0);
   }
-  if(ATmatch(term, "rec-eval(get-location-offset(<term>))", &t0)) {
-    return get_location_offset(conn, t0);
+  if(ATmatch(term, "rec-eval(get-location-area-offset(<term>))", &t0)) {
+    return get_location_area_offset(conn, t0);
   }
-  if(ATmatch(term, "rec-eval(get-feedback-producer(<term>))", &t0)) {
-    return get_feedback_producer(conn, t0);
+  if(ATmatch(term, "rec-eval(lower-summary(<term>))", &t0)) {
+    return lower_summary(conn, t0);
   }
-  if(ATmatch(term, "rec-eval(get-first-error-description(<term>))", &t0)) {
-    return get_first_error_description(conn, t0);
-  }
-  if(ATmatch(term, "rec-eval(convert-feedback(<term>))", &t0)) {
-    return convert_feedback(conn, t0);
-  }
-  if(ATmatch(term, "rec-do(display-feedback(<term>))", &t0)) {
-    display_feedback(conn, t0);
+  if(ATmatch(term, "rec-do(display-summary(<term>))", &t0)) {
+    display_summary(conn, t0);
     return NULL;
   }
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {

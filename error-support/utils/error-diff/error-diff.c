@@ -1,14 +1,13 @@
-/*
- * $Id$
- */
+/* $Id$ */
 
-/*{{{  standard includes */
+/*{{{  includes */
 
 #include <stdio.h>
 #include <unistd.h>
-#include <ErrorAPI-utils.h>
 
 #include <aterm2.h>
+
+#include <Error-utils.h>
 
 /*}}}  */
 
@@ -34,8 +33,10 @@ void usage(void)
 
 /*}}}  */
 
+/*{{{  static ATbool ERR_subjectDiff(ERR_Subject subject1,  */
+
 static ATbool ERR_subjectDiff(ERR_Subject subject1, 
-                             ERR_Subject subject2)
+			      ERR_Subject subject2)
 {
   char *description1 = ERR_getSubjectDescription(subject1);
   char *description2 = ERR_getSubjectDescription(subject2);
@@ -51,15 +52,18 @@ static ATbool ERR_subjectDiff(ERR_Subject subject1,
   return ATfalse;
 }
 
+/*}}}  */
+/*{{{  static ATbool ERR_subjectListDiff(ERR_SubjectList subjectlist1,  */
+
 static ATbool ERR_subjectListDiff(ERR_SubjectList subjectlist1, 
                                   ERR_SubjectList subjectlist2)
 {
-  if (ERR_isSubjectListEmpty(subjectlist1) &&
-      ERR_isSubjectListEmpty(subjectlist2)) {
+  if (ERR_isSubjectListEmpty(subjectlist1)
+      && ERR_isSubjectListEmpty(subjectlist2)) {
     return ATtrue;
   }
-  else if (!ERR_isSubjectListEmpty(subjectlist1) &&
-           !ERR_isSubjectListEmpty(subjectlist2)) {
+  else if (!ERR_isSubjectListEmpty(subjectlist1)
+	   && !ERR_isSubjectListEmpty(subjectlist2)) {
     ERR_Subject subject1 = ERR_getSubjectListHead(subjectlist1);
     ERR_Subject subject2 = ERR_getSubjectListHead(subjectlist2);
 
@@ -73,35 +77,38 @@ static ATbool ERR_subjectListDiff(ERR_SubjectList subjectlist1,
   return ATfalse;
 }
 
-static ATbool ERR_feedbackDiff(ERR_Feedback feedback1, 
-                               ERR_Feedback feedback2)
+/*}}}  */
+/*{{{  static ATbool ERR_errorDiff(ERR_Error error1,  */
+
+static ATbool ERR_errorDiff(ERR_Error error1, 
+                               ERR_Error error2)
 {
-  char *description1 = ERR_getFeedbackDescription(feedback1);
-  char *description2 = ERR_getFeedbackDescription(feedback2);
+  char *description1 = ERR_getErrorDescription(error1);
+  char *description2 = ERR_getErrorDescription(error2);
 
-  ERR_SubjectList subjectlist1 = ERR_getFeedbackList(feedback1);
-  ERR_SubjectList subjectlist2 = ERR_getFeedbackList(feedback2);
+  ERR_SubjectList subjectlist1 = ERR_getErrorList(error1);
+  ERR_SubjectList subjectlist2 = ERR_getErrorList(error2);
 
-  if (ERR_isFeedbackInfo(feedback1) &&
-      ERR_isFeedbackInfo(feedback2)) {
+  if (ERR_isErrorInfo(error1)
+      && ERR_isErrorInfo(error2)) {
     if (strcmp(description1, description2) == 0) {
       return ERR_subjectListDiff(subjectlist1, subjectlist2);
     }
   }
-  else if (ERR_isFeedbackWarning(feedback1) &&
-           ERR_isFeedbackWarning(feedback2)) {
+  else if (ERR_isErrorWarning(error1)
+	   && ERR_isErrorWarning(error2)) {
     if (strcmp(description1, description2) == 0) {
       return ERR_subjectListDiff(subjectlist1, subjectlist2);
     }
   }
-  else if (ERR_isFeedbackError(feedback1) &&
-           ERR_isFeedbackError(feedback2)) {
+  else if (ERR_isErrorError(error1)
+	   && ERR_isErrorError(error2)) {
     if (strcmp(description1, description2) == 0) {
       return ERR_subjectListDiff(subjectlist1, subjectlist2);
     }
   }
-  else if (ERR_isFeedbackFatalError(feedback1) &&
-           ERR_isFeedbackFatalError(feedback2)) {
+  else if (ERR_isErrorFatal(error1)
+	   && ERR_isErrorFatal(error2)) {
     if (strcmp(description1, description2) == 0) {
       return ERR_subjectListDiff(subjectlist1, subjectlist2);
     }
@@ -109,27 +116,33 @@ static ATbool ERR_feedbackDiff(ERR_Feedback feedback1,
   return ATfalse;
 }
 
-static ATbool ERR_feedbackListDiff(ERR_FeedbackList feedbacklist1, 
-                                ERR_FeedbackList feedbacklist2)
+/*}}}  */
+/*{{{  static ATbool ERR_errorListDiff(ERR_ErrorList errorlist1,  */
+
+static ATbool ERR_errorListDiff(ERR_ErrorList errorlist1, 
+                                ERR_ErrorList errorlist2)
 {
-  if (ERR_isFeedbackListEmpty(feedbacklist1) &&
-      ERR_isFeedbackListEmpty(feedbacklist2)) {
+  if (ERR_isErrorListEmpty(errorlist1)
+      && ERR_isErrorListEmpty(errorlist2)) {
     return ATtrue;
   }
-  else if (!ERR_isFeedbackListEmpty(feedbacklist1) &&
-           !ERR_isFeedbackListEmpty(feedbacklist2)) {
-    ERR_Feedback feedback1 = ERR_getFeedbackListHead(feedbacklist1);
-    ERR_Feedback feedback2 = ERR_getFeedbackListHead(feedbacklist2);
+  else if (!ERR_isErrorListEmpty(errorlist1)
+	   && !ERR_isErrorListEmpty(errorlist2)) {
+    ERR_Error error1 = ERR_getErrorListHead(errorlist1);
+    ERR_Error error2 = ERR_getErrorListHead(errorlist2);
 
-    if (ERR_feedbackDiff(feedback1, feedback2)) {
-      feedbacklist1 = ERR_getFeedbackListTail(feedbacklist1);
-      feedbacklist2 = ERR_getFeedbackListTail(feedbacklist2);
+    if (ERR_errorDiff(error1, error2)) {
+      errorlist1 = ERR_getErrorListTail(errorlist1);
+      errorlist2 = ERR_getErrorListTail(errorlist2);
       
-      return ERR_feedbackListDiff(feedbacklist1, feedbacklist2);
+      return ERR_errorListDiff(errorlist1, errorlist2);
     }
   }
   return ATfalse;
 }
+
+/*}}}  */
+/*{{{  static ATbool ERR_summaryDiff(ERR_Summary sum1, ERR_Summary sum2) */
 
 static ATbool ERR_summaryDiff(ERR_Summary sum1, ERR_Summary sum2)
 {
@@ -137,16 +150,18 @@ static ATbool ERR_summaryDiff(ERR_Summary sum1, ERR_Summary sum2)
   char *producer2 = ERR_getSummaryProducer(sum2);
 
   if (strcmp(producer1, producer2) == 0) {
-    ERR_FeedbackList feedbacklist1 = ERR_getSummaryList(sum1);
-    ERR_FeedbackList feedbacklist2 = ERR_getSummaryList(sum2);
-    return ERR_feedbackListDiff(feedbacklist1, feedbacklist2);
+    ERR_ErrorList errorlist1 = ERR_getSummaryList(sum1);
+    ERR_ErrorList errorlist2 = ERR_getSummaryList(sum2);
+    return ERR_errorListDiff(errorlist1, errorlist2);
   }
   return ATfalse;
 }
 
-/*{{{  int main (int argc, char **argv) */
+/*}}}  */
 
-int main (int argc, char **argv)
+/*{{{  int main (int argc, char *argv[]) */
+
+int main (int argc, char *argv[])
 {
   int c;
   ATerm bottomOfStack;
@@ -166,7 +181,7 @@ int main (int argc, char **argv)
   }
 
   ATinit(argc, argv, &bottomOfStack);
-  ERR_initErrorApi();
+  initErrorApi();
 
   
   input1 = ATreadFromNamedFile(input_file_name1);
@@ -180,3 +195,5 @@ int main (int argc, char **argv)
     return 1;
   }
 }
+
+/*}}}  */

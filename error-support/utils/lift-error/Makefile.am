@@ -1,5 +1,6 @@
+# $Id$
 
-bin_PROGRAMS=lift-error
+bin_PROGRAMS = lift-error
 
 INCLUDES= \
 	-I${ATERM}/include\

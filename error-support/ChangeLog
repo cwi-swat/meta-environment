@@ -1,5 +1,12 @@
 $Id$
 
+Thu Mar 11 10:45:01 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Finished transition to new error api names
+
+Tue Mar  9 16:57:31 CET 2004 <{jong,kooiker}@cwi.nl>
+ * Re-implemented error-api due to changes in
+   basic/{Areas,Locations,Errors}.sdf
+
 Mon Mar  8 10:56:43 CET 2004 <{jong,kooiker}@cwi.nl>
  * generate "location-api" instead of "location-api-api" for various
    .[ch] files

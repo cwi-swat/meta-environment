@@ -8,75 +8,66 @@ process ErrorSupport is
 let
   Description : str,
   ES : error-support,
-  Feedback : term,
+  Error : term,
+  Errors : list,
   FileName : str,
-  Identification : str,
+  Id : str,
   Location : term,
-  NewFeedback : term,
   Offset : int,
   Producer : str,
-  Subjects : list,
   Summary : term
 in
   execute(error-support, ES?) .
   (
-    rec-msg(convert-feedback(Feedback?)) .
-    snd-eval(ES, convert-feedback(Feedback)) .
-    rec-value(ES, new-feedback(NewFeedback?)) .
-    snd-msg(converted-feedback(NewFeedback))
+    rec-msg(convert-feedback(Summary?)) .
+    snd-eval(ES, lower-summary(Summary)) .
+    rec-value(ES, lowered-summary(Summary?)) .
+    snd-msg(converted-feedback(Summary))
+
   +
-    rec-msg(get-feedback-producer(Feedback?)) .
-    snd-eval(ES, get-feedback-producer(Feedback)) .
+    rec-msg(get-feedback-producer(Summary?)) .
+    snd-eval(ES, get-summary-producer(Summary)) .
     rec-value(ES, producer(Producer?)) .
     snd-msg(producer(Producer))
   +
-    rec-msg(get-feedback-identification(Feedback?)) .
-    snd-eval(ES, get-feedback-identification(Feedback)) .
-    rec-value(ES, identification(Identification?)) .
-    snd-msg(identification(Identification))
+    rec-msg(get-feedback-identification(Summary?)) .
+    snd-eval(ES, get-summary-id(Summary)) .
+    rec-value(ES, id(Id?)) .
+    snd-msg(identification(Id))
   +
-    rec-msg(get-feedback-subjects(Feedback?)) .
-    snd-eval(ES, get-feedback-subjects(Feedback)) .
-    rec-value(ES, subjects(Subjects?)) .
-    snd-msg(subjects(Subjects))
+    rec-msg(get-feedback-subjects(Summary?)) .
+    snd-eval(ES, get-summary-errors(Summary)) .
+    rec-value(ES, errors(Errors?)) .
+    snd-msg(subjects(Errors))
   +
     rec-msg(get-summary-first-feedback(Summary?)) .
-    snd-eval(ES, get-summary-first-feedback(Summary)) .
-    rec-value(ES, first-feedback(Feedback?)) .
-    snd-msg(summary-first-feedback(Feedback))
+    snd-eval(ES, get-summary-first-error(Summary)) .
+    rec-value(ES, error(Error?)) .
+    snd-msg(summary-first-feedback(Error))
+
   +
-    rec-msg(get-feedback-first-location(Summary?)) .
-    snd-eval(ES, get-feedback-first-location(Summary)) .
-    rec-value(ES, first-location(Location?)) .
+    rec-msg(get-feedback-first-location(Error?)) .
+    snd-eval(ES, get-error-first-subject-location(Error)) .
+    rec-value(ES, location(Location?)) .
     snd-msg(feedback-first-location(Location))
   +
     rec-msg(get-location-filename(Location?)) .
     snd-eval(ES, get-location-filename(Location)) .
-    (
-      rec-value(ES, location-filename(FileName?)) .
-      snd-msg(location-filename(FileName))
-    +
-      rec-value(ES, no-location-filename) .
-      snd-msg(no-location-filename)
-    )
+    rec-value(ES, filename(FileName?)) .
+    snd-msg(location-filename(FileName))
   +
     rec-msg(get-location-offset(Location?)) .
-    snd-eval(ES, get-location-offset(Location)) .
+    snd-eval(ES, get-location-area-offset(Location)) .
     (
-      rec-value(ES, location-offset(Offset?)) .
+      rec-value(ES, offset(Offset?)) .
       snd-msg(location-offset(Offset))
     +
-      rec-value(ES, no-location-offset) .
+      rec-value(ES, no-offset) .
       snd-msg(no-location-offset)
     )
   +
-    rec-msg(get-error-description(Summary?)) .
-    snd-eval(ES, get-first-error-description(Summary)) .
-    rec-value(ES, error-description(Description?)) .
-    snd-msg(error-description(Description))
-  +
     rec-msg(display-feedback(Summary?)) .
-    snd-do(ES, display-feedback(Summary))
+    snd-do(ES, display-summary(Summary))
   ) * delta
 endlet
 

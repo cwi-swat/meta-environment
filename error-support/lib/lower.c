@@ -1,6 +1,4 @@
-#include "ErrorAPI.h"
-#include "ParsedErrorAPI.h"
-#include <stdlib.h>
+#include "Error-utils.h"
 
 /*{{{  static char *PERR_lowerStrCon(PERR_StrCon str) */
 
@@ -21,43 +19,30 @@ static int PERR_lowerNatCon(PERR_NatCon pNatcon)
 
 /*}}}  */
 
-/*{{{  PERR_Area ERR_lowerArea(ERR_Area area) */
+/*{{{  ERR_Area PERR_lowerArea(PERR_Area pArea) */
 
 ERR_Area PERR_lowerArea(PERR_Area pArea)
 {
-  int beginLine;
-  int beginColumn;
-  int endLine;
-  int endColumn;
-  int offset;
-  int length;
-  PERR_NatCon pBeginLine;
-  PERR_NatCon pBeginColumn;
-  PERR_NatCon pEndLine;
-  PERR_NatCon pEndColumn;
-  PERR_NatCon pOffset;
-  PERR_NatCon pLength;
+  PERR_NatCon pBeginLine = PERR_getAreaBeginLine(pArea);
+  int beginLine = PERR_lowerNatCon(pBeginLine);
 
-  if (PERR_isAreaArea(pArea)) {
-    pBeginLine = PERR_getAreaBeginLine(pArea);
-    pBeginColumn = PERR_getAreaBeginColumn(pArea);
-    pEndLine = PERR_getAreaEndLine(pArea);
-    pEndColumn = PERR_getAreaEndColumn(pArea);
-    pOffset = PERR_getAreaOffset(pArea);
-    pLength = PERR_getAreaLength(pArea);
+  PERR_NatCon pBeginColumn = PERR_getAreaBeginColumn(pArea);
+  int beginColumn = PERR_lowerNatCon(pBeginColumn);
 
-    beginLine = PERR_lowerNatCon(pBeginLine);
-    beginColumn = PERR_lowerNatCon(pBeginColumn);
-    endLine = PERR_lowerNatCon(pEndLine);
-    endColumn = PERR_lowerNatCon(pEndColumn);
-    offset = PERR_lowerNatCon(pOffset);
-    length = PERR_lowerNatCon(pLength);
+  PERR_NatCon pEndLine = PERR_getAreaEndLine(pArea);
+  int endLine = PERR_lowerNatCon(pEndLine);
 
-    return ERR_makeAreaArea(beginLine, beginColumn, endLine, endColumn, offset, length);
-  }
-  else {
-    return ERR_makeAreaNoArea();
-  }
+  PERR_NatCon pEndColumn = PERR_getAreaEndColumn(pArea);
+  int endColumn = PERR_lowerNatCon(pEndColumn);
+
+  PERR_NatCon pOffset = PERR_getAreaOffset(pArea);
+  int offset = PERR_lowerNatCon(pOffset);
+
+  PERR_NatCon pLength = PERR_getAreaLength(pArea);
+  int length = PERR_lowerNatCon(pLength);
+
+  return ERR_makeAreaArea(beginLine, beginColumn, endLine, endColumn,
+			  offset, length);
 }
 
 /*}}}  */
@@ -65,23 +50,17 @@ ERR_Area PERR_lowerArea(PERR_Area pArea)
 
 ERR_Location PERR_lowerLocation(PERR_Location pLocation)
 {
-  char *filename;
-  ERR_Area area;
-  PERR_StrCon pFilename;
-  PERR_Area pArea;
+  PERR_StrCon pFilename = PERR_getLocationFilename(pLocation);
+  char *filename = PERR_lowerStrCon(pFilename);
 
-  if (PERR_isLocationLocation(pLocation)) {
-    pFilename = PERR_getLocationFilename(pLocation);
-    pArea = PERR_getLocationArea(pLocation);
+  if (PERR_isLocationAreaInFile(pLocation)) {
+    PERR_Area pArea = PERR_getLocationArea(pLocation);
+    ERR_Area area = PERR_lowerArea(pArea);
 
-    filename = PERR_lowerStrCon(pFilename);
-    area = PERR_lowerArea(pArea);
-
-    return ERR_makeLocationLocation(filename, area);
+    return ERR_makeLocationAreaInFile(filename, area);
   }
-  else {
-    return ERR_makeLocationNoLocation();
-  }
+
+  return ERR_makeLocationFile(filename);
 }
 
 /*}}}  */
@@ -89,32 +68,29 @@ ERR_Location PERR_lowerLocation(PERR_Location pLocation)
 
 ERR_Subject PERR_lowerSubject(PERR_Subject pSubject)
 {
-  char *description;
-  ERR_Location location;
-  PERR_StrCon pDescription;
-  PERR_Location pLocation;
+  PERR_StrCon pDescription = PERR_getSubjectDescription(pSubject);
+  char *description = PERR_lowerStrCon(pDescription);
 
-  pDescription = PERR_getSubjectDescription(pSubject);
-  pLocation = PERR_getSubjectLocation(pSubject);
-  
-  description = PERR_lowerStrCon(pDescription);
-  location = PERR_lowerLocation(pLocation);
-  
-  return ERR_makeSubjectSubject(description, location);
+  if (PERR_isSubjectLocalized(pSubject)) {
+    PERR_Location pLocation = PERR_getSubjectLocation(pSubject);
+    ERR_Location location = PERR_lowerLocation(pLocation);
+    return ERR_makeSubjectLocalized(description, location);
+  }
+
+  return ERR_makeSubjectSubject(description);
 }
 
 /*}}}  */
-/*{{{  ERR_SubjectList PERR_lowerSubjects(PERR_SubjectList subjects) */
+/*{{{  ERR_SubjectList PERR_lowerSubjects(PERR_SubjectList pSubjects) */
 
 ERR_SubjectList PERR_lowerSubjects(PERR_SubjectList pSubjects)
 {
   ERR_SubjectList subjects = ERR_makeSubjectListEmpty();
 
-
   while (!PERR_isSubjectListEmpty(pSubjects)) { 
-    PERR_Subject pSubject = PERR_getSubjectListHead(pSubjects);
-    ERR_Subject subject = PERR_lowerSubject(pSubject);
-    subjects = ERR_makeSubjectListMany(subject, subjects);
+    PERR_Subject pCur = PERR_getSubjectListHead(pSubjects);
+    ERR_Subject cur = PERR_lowerSubject(pCur);
+    subjects = ERR_makeSubjectListMany(cur, subjects);
     if (PERR_hasSubjectListTail(pSubjects)) {
       pSubjects = PERR_getSubjectListTail(pSubjects);
     }
@@ -127,74 +103,71 @@ ERR_SubjectList PERR_lowerSubjects(PERR_SubjectList pSubjects)
 }
 
 /*}}}  */
-/*{{{  PERR_Feedback ERR_lowerFeedback(ERR_Feedback feedback) */
+/*{{{  ERR_Error PERR_lowerError(PERR_Error pError) */
 
-ERR_Feedback PERR_lowerFeedback(PERR_Feedback pFeedback)
+ERR_Error PERR_lowerError(PERR_Error pError)
 {
-  PERR_StrCon pDescription;
-  PERR_SubjectList pSubjects;
-  char *description;
-  ERR_SubjectList subjects;
+  PERR_StrCon pDescription = PERR_getErrorDescription(pError);
+  PERR_SubjectList pSubjects = PERR_getErrorList(pError);
+  char *description = PERR_lowerStrCon(pDescription);
+  ERR_SubjectList subjects = PERR_lowerSubjects(pSubjects);
 
-  pDescription = PERR_getFeedbackDescription(pFeedback);
-  pSubjects = PERR_getFeedbackList(pFeedback);
+  if (PERR_isErrorInfo(pError)) {
+    return ERR_makeErrorInfo(description, subjects);
+  }
+  else if (PERR_isErrorWarning(pError)) {
+    return ERR_makeErrorWarning(description, subjects);
+  }
+  else if (PERR_isErrorError(pError)) {
+    return ERR_makeErrorError(description, subjects);
+  }
+  else if (PERR_isErrorFatal(pError)) {
+    return ERR_makeErrorFatal(description, subjects);
+  }
 
-  description = PERR_lowerStrCon(pDescription);
-  subjects = PERR_lowerSubjects(pSubjects);
-
-  if (PERR_isFeedbackInfo(pFeedback)) {
-    return ERR_makeFeedbackInfo(description, subjects);
-  }
-  else if (PERR_isFeedbackWarning(pFeedback)) {
-    return ERR_makeFeedbackWarning(description, subjects);
-  }
-  else if (PERR_isFeedbackError(pFeedback)) {
-    return ERR_makeFeedbackError(description, subjects);
-  }
-  else if (PERR_isFeedbackFatalError(pFeedback)) {
-    return ERR_makeFeedbackFatalError(description, subjects);
-  }
-  else {
-    ATerror("unknown feedback type: %t\n", pFeedback);
-    return NULL;
-  }
+  ATerror("unknown error type: %t\n", pError);
+  return NULL;
 }
 
-/*{{{  ERR_FeedbackList PERR_lowerFeedbacks(PERR_FeedbackList pFeedbacks) */
+/*}}}  */
+/*{{{  ERR_ErrorList PERR_lowerErrors(PERR_ErrorList pErrors) */
 
-ERR_FeedbackList PERR_lowerFeedbacks(PERR_FeedbackList pFeedbacks)
+ERR_ErrorList PERR_lowerErrors(PERR_ErrorList pErrors)
 {
-  ERR_FeedbackList feedbacks = ERR_makeFeedbackListEmpty();
+  ERR_ErrorList errors = ERR_makeErrorListEmpty();
 
-
-  while (!PERR_isFeedbackListEmpty(pFeedbacks)) { 
-    PERR_Feedback pFeedback = PERR_getFeedbackListHead(pFeedbacks);
-    ERR_Feedback feedback = PERR_lowerFeedback(pFeedback);
-    feedbacks = ERR_makeFeedbackListMany(feedback, feedbacks);
-    if (PERR_hasFeedbackListTail(pFeedbacks)) {
-      pFeedbacks = PERR_getFeedbackListTail(pFeedbacks);
+  while (!PERR_isErrorListEmpty(pErrors)) { 
+    PERR_Error pError = PERR_getErrorListHead(pErrors);
+    ERR_Error error = PERR_lowerError(pError);
+    errors = ERR_makeErrorListMany(error, errors);
+    if (PERR_hasErrorListTail(pErrors)) {
+      pErrors = PERR_getErrorListTail(pErrors);
     }
     else {
       break;
     }
   }
 
-  return feedbacks;
+  return errors;
 }
 
 /*}}}  */
+/*{{{  ERR_Summary PERR_lowerSummary(PERR_Summary pSummary) */
 
 ERR_Summary PERR_lowerSummary(PERR_Summary pSummary)
 {
   PERR_StrCon pProducer = PERR_getSummaryProducer(pSummary);
   PERR_StrCon pId = PERR_getSummaryId(pSummary);
-  PERR_FeedbackList pFeedbackList = PERR_getSummaryList(pSummary);
-  char *producer, *id;
-  ERR_FeedbackList feedbackList;
+  PERR_ErrorList pErrorList = PERR_getSummaryList(pSummary);
+  char *producer;
+  char *id;
+  ERR_ErrorList errorList;
 
   producer = PERR_lowerStrCon(pProducer);
   id = PERR_lowerStrCon(pId);
-  feedbackList = PERR_lowerFeedbacks(pFeedbackList);
+  errorList = PERR_lowerErrors(pErrorList);
 
-  return ERR_makeSummaryFeedback(producer, id, feedbackList);
+  return ERR_makeSummarySummary(producer, id, errorList);
 }
+
+/*}}}  */

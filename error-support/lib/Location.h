@@ -21,11 +21,6 @@ typedef struct _LOC_Area *LOC_Area;
 
 /*}}}  */
 
-/*{{{  definition of bottom types */
-
-
-/*}}}  */
-
 void LOC_initLocationApi (void);
 
 /*{{{  protect functions */
@@ -60,15 +55,14 @@ ATerm LOC_AreaToTerm (LOC_Area arg);
 /*}}}  */
 /*{{{  constructors */
 
-LOC_Normal LOC_makeNormalNormal (char *string);
-LOC_Escaped LOC_makeEscapedEscaped (char *string);
-LOC_StrCon LOC_makeStrConStrCon (char *string);
-LOC_NatCon LOC_makeNatConNatCon (char *string);
-LOC_Location LOC_makeLocationLocation (char *filename, LOC_Area Area);
-LOC_Location LOC_makeLocationNoLocation ();
+LOC_Normal LOC_makeNormalNormal (const char *string);
+LOC_Escaped LOC_makeEscapedEscaped (const char *string);
+LOC_StrCon LOC_makeStrConStrCon (const char *string);
+LOC_NatCon LOC_makeNatConNatCon (const char *string);
+LOC_Location LOC_makeLocationFile (const char *filename);
+LOC_Location LOC_makeLocationAreaInFile (const char *filename, LOC_Area Area);
 LOC_Area LOC_makeAreaArea (int beginLine, int beginColumn, int endLine,
 			   int endColumn, int offset, int length);
-LOC_Area LOC_makeAreaNoArea ();
 
 /*}}}  */
 /*{{{  equality functions */
@@ -87,7 +81,7 @@ ATbool LOC_isValidNormal (LOC_Normal arg);
 inline ATbool LOC_isNormalNormal (LOC_Normal arg);
 ATbool LOC_hasNormalString (LOC_Normal arg);
 char *LOC_getNormalString (LOC_Normal arg);
-LOC_Normal LOC_setNormalString (LOC_Normal arg, char *string);
+LOC_Normal LOC_setNormalString (LOC_Normal arg, const char *string);
 
 /*}}}  */
 /*{{{  LOC_Escaped accessors */
@@ -96,7 +90,7 @@ ATbool LOC_isValidEscaped (LOC_Escaped arg);
 inline ATbool LOC_isEscapedEscaped (LOC_Escaped arg);
 ATbool LOC_hasEscapedString (LOC_Escaped arg);
 char *LOC_getEscapedString (LOC_Escaped arg);
-LOC_Escaped LOC_setEscapedString (LOC_Escaped arg, char *string);
+LOC_Escaped LOC_setEscapedString (LOC_Escaped arg, const char *string);
 
 /*}}}  */
 /*{{{  LOC_StrCon accessors */
@@ -105,7 +99,7 @@ ATbool LOC_isValidStrCon (LOC_StrCon arg);
 inline ATbool LOC_isStrConStrCon (LOC_StrCon arg);
 ATbool LOC_hasStrConString (LOC_StrCon arg);
 char *LOC_getStrConString (LOC_StrCon arg);
-LOC_StrCon LOC_setStrConString (LOC_StrCon arg, char *string);
+LOC_StrCon LOC_setStrConString (LOC_StrCon arg, const char *string);
 
 /*}}}  */
 /*{{{  LOC_NatCon accessors */
@@ -114,17 +108,17 @@ ATbool LOC_isValidNatCon (LOC_NatCon arg);
 inline ATbool LOC_isNatConNatCon (LOC_NatCon arg);
 ATbool LOC_hasNatConString (LOC_NatCon arg);
 char *LOC_getNatConString (LOC_NatCon arg);
-LOC_NatCon LOC_setNatConString (LOC_NatCon arg, char *string);
+LOC_NatCon LOC_setNatConString (LOC_NatCon arg, const char *string);
 
 /*}}}  */
 /*{{{  LOC_Location accessors */
 
 ATbool LOC_isValidLocation (LOC_Location arg);
-inline ATbool LOC_isLocationLocation (LOC_Location arg);
-inline ATbool LOC_isLocationNoLocation (LOC_Location arg);
+inline ATbool LOC_isLocationFile (LOC_Location arg);
+inline ATbool LOC_isLocationAreaInFile (LOC_Location arg);
 ATbool LOC_hasLocationFilename (LOC_Location arg);
 char *LOC_getLocationFilename (LOC_Location arg);
-LOC_Location LOC_setLocationFilename (LOC_Location arg, char *filename);
+LOC_Location LOC_setLocationFilename (LOC_Location arg, const char *filename);
 ATbool LOC_hasLocationArea (LOC_Location arg);
 LOC_Area LOC_getLocationArea (LOC_Location arg);
 LOC_Location LOC_setLocationArea (LOC_Location arg, LOC_Area Area);
@@ -134,7 +128,6 @@ LOC_Location LOC_setLocationArea (LOC_Location arg, LOC_Area Area);
 
 ATbool LOC_isValidArea (LOC_Area arg);
 inline ATbool LOC_isAreaArea (LOC_Area arg);
-inline ATbool LOC_isAreaNoArea (LOC_Area arg);
 ATbool LOC_hasAreaBeginLine (LOC_Area arg);
 int LOC_getAreaBeginLine (LOC_Area arg);
 LOC_Area LOC_setAreaBeginLine (LOC_Area arg, int beginLine);

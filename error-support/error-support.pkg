@@ -12,5 +12,5 @@ identification
 configuration interface
 
 requires
-  aterm		2.0.6
-  toolbuslib    0.5.1
+  aterm		2.1
+  toolbuslib    0.6

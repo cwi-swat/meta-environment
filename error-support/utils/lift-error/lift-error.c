@@ -1,12 +1,10 @@
-/*
- * $Id$
- */
+/* $Id$ */
 
-/*{{{  standard includes */
+/*{{{  includes */
 
 #include <stdio.h>
 #include <unistd.h>
-#include <ErrorAPI-utils.h>
+#include <Error-utils.h>
 
 #include <aterm2.h>
 
@@ -37,17 +35,17 @@ void usage(void)
 
 /*}}}  */
 
-/*{{{  int main (int argc, char **argv) */
+/*{{{  int main (int argc, char *argv[]) */
 
-int main (int argc, char **argv)
+int main (int argc, char *argv[])
 {
   int c; 
   ATerm bottomOfStack;
   ATerm input = NULL;
   ATerm output = NULL;
   ATbool textual = ATfalse;
-  char   *input_file_name  = "-";
-  char   *output_file_name = "-";
+  char *input_file_name = "-";
+  char *output_file_name = "-";
   
   while ((c = getopt(argc, argv, myarguments)) != EOF)
     switch (c) {
@@ -60,8 +58,8 @@ int main (int argc, char **argv)
       default :  usage();                      exit(1);
   }
 
-  ATinit(argc, argv, &bottomOfStack);    /* Initialize Aterm library */
-  ERR_initErrorApi();
+  ATinit(argc, argv, &bottomOfStack);
+  initErrorApi();
 
   input = ATreadFromNamedFile(input_file_name);
 
@@ -71,7 +69,7 @@ int main (int argc, char **argv)
     return 1;
   }
 
-  output = (ATerm) ERR_liftFeedback(ERR_FeedbackFromTerm(input));
+  output = (ATerm) ERR_liftError(ERR_ErrorFromTerm(input));
 
   if(output != NULL) {
     if (textual) {

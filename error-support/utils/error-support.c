@@ -6,11 +6,10 @@
 #include <string.h>
 
 #include <aterm2.h>
-#include "ErrorAPI-utils.h"
 
-#ifndef WITHOUT_TOOLBUS
+#include <Error-utils.h>
+
 #include "error-support.tif.h"
-#endif
 
 /*}}}  */
 /*{{{  variables */
@@ -58,28 +57,25 @@ void rec_terminate(int cid, ATerm t)
 
 /*}}}  */
 
-/*{{{  ATerm convert_feedback(int cid, ATerm t) */
+/*{{{  ATerm lower_summary(int cid, ATerm t) */
 
-ATerm convert_feedback(int cid, ATerm t)
+ATerm lower_summary(int cid, ATerm t)
 {
   PERR_Start startSummary = PERR_StartFromTerm(t);
 
   if (PERR_isStartSummary(startSummary)) {
     PERR_Summary pSummary = PERR_getStartTopSummary(startSummary);
+    t = ERR_SummaryToTerm(PERR_lowerSummary(pSummary));
+  }
 
-    return ATmake("snd-value(new-feedback(<term>))", 
-		  ERR_SummaryToTerm(PERR_lowerSummary(pSummary)));
-  }
-  else {
-    return ATmake("snd-value(new-feedback(<term>))", t);
-  }
+  return ATmake("snd-value(lowered-summary(<term>))", t);
 }
 
 /*}}}  */
 
-/*{{{  ATerm get_feedback_producer(int cid, ATerm t) */
+/*{{{  ATerm get_summary_producer(int cid, ATerm t) */
 
-ATerm get_feedback_producer(int cid, ATerm t)
+ATerm get_summary_producer(int cid, ATerm t)
 {
   ERR_Summary summary = ERR_SummaryFromTerm(t);
 
@@ -87,107 +83,94 @@ ATerm get_feedback_producer(int cid, ATerm t)
 }
 
 /*}}}  */
-/*{{{  ATerm get_feedback_identification(int cid, ATerm t) */
+/*{{{  ATerm get_summary_id(int cid, ATerm t) */
 
-ATerm get_feedback_identification(int cid, ATerm t)
+ATerm get_summary_id(int cid, ATerm t)
 {
   ERR_Summary summary = ERR_SummaryFromTerm(t);
 
-  return ATmake("snd-value(identification(<str>))", ERR_getSummaryId(summary));
+  return ATmake("snd-value(id(<str>))", ERR_getSummaryId(summary));
 }
 
 /*}}}  */
-/*{{{  ATerm get_feedback_subjects(int cid, ATerm t) */
+/*{{{  ATerm get_summary_errors(int cid, ATerm t) */
 
-ATerm get_feedback_subjects(int cid, ATerm t)
+ATerm get_summary_errors(int cid, ATerm t)
 {
   ERR_Summary summary = ERR_SummaryFromTerm(t);
 
-  return ATmake("snd-value(subjects(<term>))", ERR_FeedbackListToTerm(
-						ERR_getSummaryList(summary)));
+  return ATmake("snd-value(errors(<term>))",
+		ERR_ErrorListToTerm(ERR_getSummaryList(summary)));
 }
 
 /*}}}  */
-/*{{{  ATerm get_summary_first_feedback(int cid, ATerm t) */
+/*{{{  ATerm get_summary_first_error(int cid, ATerm t) */
 
-ATerm get_summary_first_feedback(int cid, ATerm t)
+ATerm get_summary_first_error(int cid, ATerm t)
 {
   ERR_Summary summary = ERR_SummaryFromTerm(t);
-  ERR_FeedbackList feedbacks = ERR_getSummaryList(summary);
-  ERR_Feedback feedback = ERR_getFeedbackListHead(feedbacks);
+  ERR_ErrorList errors = ERR_getSummaryList(summary);
+  ERR_Error error = ERR_getErrorListHead(errors);
 
-  return ATmake("snd-value(first-feedback(<term>))",
-		ERR_FeedbackToTerm(feedback));
+  return ATmake("snd-value(error(<term>))", ERR_ErrorToTerm(error));
 
 }
 
 /*}}}  */
-/*{{{  ATerm get_feedback_first_location(int cid, ATerm t) */
 
-ATerm get_feedback_first_location(int cid, ATerm t)
+/*{{{  ATerm get_error_first_subject_location(int cid, ATerm t) */
+
+ATerm get_error_first_subject_location(int cid, ATerm t)
 {
-  ERR_Feedback feedback = ERR_FeedbackFromTerm(t);
-  ERR_SubjectList subjects = ERR_getFeedbackList(feedback);
+  ERR_Error error = ERR_ErrorFromTerm(t);
+  ERR_SubjectList subjects = ERR_getErrorList(error);
   ERR_Subject subject = ERR_getSubjectListHead(subjects);
-  ERR_Location location = ERR_getSubjectLocation(subject);
 
-  return ATmake("snd-value(first-location(<term>))",
-                ERR_LocationToTerm(location));
-}
+  if (ERR_hasSubjectLocation(subject)) {
+    ERR_Location location = ERR_getSubjectLocation(subject);
 
-/*}}}  */
-/*{{{  ATerm get_first_error_description(int cid, ATerm t) */
-
-ATerm get_first_error_description(int cid, ATerm t)
-{
-  ERR_Summary summary = ERR_SummaryFromTerm(t);
-  ERR_FeedbackList feedbacks = ERR_getSummaryList(summary);
-  ERR_Feedback feedback = ERR_getFeedbackListHead(feedbacks);
-  ERR_SubjectList subjects = ERR_getFeedbackList(feedback);
-  ERR_Subject subject = ERR_getSubjectListHead(subjects);
-  char *description = ERR_getSubjectDescription(subject);
-
-  return ATmake("snd-value(error-description(<str>))", description);
-}
-
-/*}}}  */
-/*{{{  ATerm get_location_offset(int cid, ATerm t) */
-
-ATerm get_location_offset(int cid, ATerm t)
-{
-  ERR_Location location = ERR_LocationFromTerm(t);
-  if (ERR_hasLocationArea(location)) {
-    ERR_Area area = ERR_getLocationArea(location);
-    if (ERR_hasAreaOffset(area)) {
-      int offset = ERR_getAreaOffset(area);
-      return ATmake("snd-value(location-offset(<int>))", offset);
-    }
+    return ATmake("snd-value(location(<term>))", ERR_LocationToTerm(location));
   }
 
-  return ATmake("snd-value(no-location-offset)");
+  ATabort("error-support.c:get_error_first_subject_location: no location!\n");
+  return NULL;
 }
 
 /*}}}  */
-/*{{{  ATerm get_location_offset(int cid, ATerm t) */
+
+/*{{{  ATerm get_location_filename(int cid, ATerm t) */
 
 ATerm get_location_filename(int cid, ATerm t)
 {
   ERR_Location location = ERR_LocationFromTerm(t);
-  if (ERR_hasLocationFilename(location)) {
-    const char *filename = ERR_getLocationFilename(location);
-    return ATmake("snd-value(location-filename(<str>))", filename);
+  const char *filename = ERR_getLocationFilename(location);
+
+  return ATmake("snd-value(filename(<str>))", filename);
+}
+
+/*}}}  */
+/*{{{  ATerm get_location_area_offset(int cid, ATerm t) */
+
+ATerm get_location_area_offset(int cid, ATerm t)
+{
+  ERR_Location location = ERR_LocationFromTerm(t);
+  if (ERR_hasLocationArea(location)) {
+    ERR_Area area = ERR_getLocationArea(location);
+    int offset = ERR_getAreaOffset(area);
+
+    return ATmake("snd-value(offset(<int>))", offset);
   }
 
-  return ATmake("snd-value(no-location-filename)");
+  return ATmake("snd-value(no-offset)");
 }
 
 /*}}}  */
 
-/*{{{  void display_feedback(int cid, ATerm summary) */
+/*{{{  void display_summary(int cid, ATerm summary) */
 
-void display_feedback(int cid, ATerm summary)
+void display_summary(int cid, ATerm summary)
 {
-  ERR_displayFeedback(ERR_SummaryFromTerm(summary));
+  ERR_displaySummary(ERR_SummaryFromTerm(summary));
 }
 
 /*}}}  */
@@ -198,13 +181,12 @@ int main(int argc, char *argv[])
 {
   int c;
   ATerm bottomOfStack;
-
-  /*  Configuration items  */
-  char   *inputName = "-";
-  char   *outputName = "-";
+  char *inputName = "-";
+  char *outputName = "-";
   FILE *outputFile = NULL;
   ATbool proceed = ATtrue;
   ATbool verbose = ATfalse;
+
 #ifndef WITHOUT_TOOLBUS
   ATbool use_toolbus = ATfalse;
   int i;
@@ -216,8 +198,7 @@ int main(int argc, char *argv[])
   if (use_toolbus) {
     int cid;
     ATBinit(argc, argv, &bottomOfStack);
-    ERR_initErrorAPIApi();
-    PERR_initParsedErrorAPIApi();
+    initErrorApi();
     cid = ATBconnect(NULL, NULL, -1, error_support_handler);
     ATBeventloop();
   }
@@ -226,7 +207,7 @@ int main(int argc, char *argv[])
 
   {
     extern char *optarg;
-    extern int   optind;
+    extern int optind;
 
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
@@ -254,8 +235,7 @@ int main(int argc, char *argv[])
     argv += optind;
 
     ATinit(argc, argv, &bottomOfStack);
-    ERR_initErrorAPIApi();
-    PERR_initParsedErrorAPIApi();
+    initErrorApi();
 
     if (proceed) {
       ATerm term;
@@ -272,8 +252,8 @@ int main(int argc, char *argv[])
         ATerror("%s: parse error in input term.\n", myname);
       }
       else {
-        ERR_Feedback feedback = PERR_lowerFeedback(PERR_FeedbackFromTerm(term));
-        ATfprintf(outputFile, "%t", feedback);
+        ERR_Error error = PERR_lowerError(PERR_ErrorFromTerm(term));
+        ATfprintf(outputFile, "%t", error);
         fclose(outputFile);
      }
     }

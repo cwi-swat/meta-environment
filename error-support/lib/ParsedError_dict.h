@@ -1,5 +1,5 @@
-#ifndef __ParsedErrorAPI_dict_H
-#define __ParsedErrorAPI_dict_H
+#ifndef __ParsedError_dict_H
+#define __ParsedError_dict_H
 
 #include <aterm2.h>
 
@@ -54,32 +54,32 @@ extern ATerm PERR_patternStartNormal;
 extern ATerm PERR_patternStartEscaped;
 extern ATerm PERR_patternStartNatCon;
 extern ATerm PERR_patternStartSummary;
-extern ATerm PERR_patternStartFeedback;
+extern ATerm PERR_patternStartError;
 extern ATerm PERR_patternStartSubject;
 extern ATerm PERR_patternStartLocation;
 extern ATerm PERR_patternStartArea;
-extern ATerm PERR_patternAreaNoArea;
 extern ATerm PERR_patternAreaArea;
-extern ATerm PERR_patternLocationNoLocation;
-extern ATerm PERR_patternLocationLocation;
-extern ATerm PERR_patternSubjectSubject;
+extern ATerm PERR_patternLocationAreaInFile;
+extern ATerm PERR_patternLocationFile;
+extern ATerm PERR_patternErrorListMany;
+extern ATerm PERR_patternErrorListSingle;
+extern ATerm PERR_patternErrorListEmpty;
+extern ATerm PERR_patternSummarySummary;
 extern ATerm PERR_patternSubjectListMany;
 extern ATerm PERR_patternSubjectListSingle;
 extern ATerm PERR_patternSubjectListEmpty;
-extern ATerm PERR_patternFeedbackFatalError;
-extern ATerm PERR_patternFeedbackError;
-extern ATerm PERR_patternFeedbackWarning;
-extern ATerm PERR_patternFeedbackInfo;
-extern ATerm PERR_patternFeedbackListMany;
-extern ATerm PERR_patternFeedbackListSingle;
-extern ATerm PERR_patternFeedbackListEmpty;
-extern ATerm PERR_patternSummaryFeedback;
+extern ATerm PERR_patternErrorFatal;
+extern ATerm PERR_patternErrorError;
+extern ATerm PERR_patternErrorWarning;
+extern ATerm PERR_patternErrorInfo;
+extern ATerm PERR_patternSubjectLocalized;
+extern ATerm PERR_patternSubjectSubject;
 extern ATerm PERR_patternNatConDefault;
 extern ATerm PERR_patternStrConDefault;
 extern ATerm PERR_patternEscapedOctal;
 extern ATerm PERR_patternEscapedSpecialCharacter;
 extern ATerm PERR_patternNormalDefault;
 
-extern void init_ParsedErrorAPI_dict();
+extern void init_ParsedError_dict();
 
-#endif /* __ParsedErrorAPI_dict_H */
+#endif /* __ParsedError_dict_H */

@@ -23,11 +23,6 @@ typedef struct _PLOC_OptLayout *PLOC_OptLayout;
 
 /*}}}  */
 
-/*{{{  definition of bottom types */
-
-
-/*}}}  */
-
 void PLOC_initParsedLocationApi (void);
 
 /*{{{  protect functions */
@@ -68,19 +63,22 @@ ATerm PLOC_OptLayoutToTerm (PLOC_OptLayout arg);
 /*}}}  */
 /*{{{  constructors */
 
-PLOC_Normal PLOC_makeNormalDefault (char *string);
-PLOC_Escaped PLOC_makeEscapedSpecialCharacter (char *string);
-PLOC_Escaped PLOC_makeEscapedOctal (char *string);
-PLOC_StrCon PLOC_makeStrConDefault (char *string);
-PLOC_NatCon PLOC_makeNatConDefault (char *string);
-PLOC_Location PLOC_makeLocationLocation (PLOC_OptLayout wsAfterLocation,
-					 PLOC_OptLayout wsAfterParenOpen,
-					 PLOC_StrCon filename,
-					 PLOC_OptLayout wsAfterFilename,
-					 PLOC_OptLayout wsAfterComma,
-					 PLOC_Area Area,
-					 PLOC_OptLayout wsAfterArea);
-PLOC_Location PLOC_makeLocationNoLocation ();
+PLOC_Normal PLOC_makeNormalDefault (const char *string);
+PLOC_Escaped PLOC_makeEscapedSpecialCharacter (const char *string);
+PLOC_Escaped PLOC_makeEscapedOctal (const char *string);
+PLOC_StrCon PLOC_makeStrConDefault (const char *string);
+PLOC_NatCon PLOC_makeNatConDefault (const char *string);
+PLOC_Location PLOC_makeLocationFile (PLOC_OptLayout wsAfterFile,
+				     PLOC_OptLayout wsAfterParenOpen,
+				     PLOC_StrCon filename,
+				     PLOC_OptLayout wsAfterFilename);
+PLOC_Location PLOC_makeLocationAreaInFile (PLOC_OptLayout wsAfterAreaInFile,
+					   PLOC_OptLayout wsAfterParenOpen,
+					   PLOC_StrCon filename,
+					   PLOC_OptLayout wsAfterFilename,
+					   PLOC_OptLayout wsAfterComma,
+					   PLOC_Area Area,
+					   PLOC_OptLayout wsAfterArea);
 PLOC_Area PLOC_makeAreaArea (PLOC_OptLayout wsAfterArea,
 			     PLOC_OptLayout wsAfterParenOpen,
 			     PLOC_NatCon beginLine,
@@ -98,7 +96,6 @@ PLOC_Area PLOC_makeAreaArea (PLOC_OptLayout wsAfterArea,
 			     PLOC_OptLayout wsAfterOffset,
 			     PLOC_OptLayout wsAfterComma4, PLOC_NatCon length,
 			     PLOC_OptLayout wsAfterLength);
-PLOC_Area PLOC_makeAreaNoArea ();
 PLOC_Start PLOC_makeStartArea (PLOC_OptLayout wsBefore, PLOC_Area topArea,
 			       PLOC_OptLayout wsAfter, int ambCnt);
 PLOC_Start PLOC_makeStartLocation (PLOC_OptLayout wsBefore,
@@ -117,7 +114,7 @@ PLOC_Start PLOC_makeStartStrCon (PLOC_OptLayout wsBefore,
 				 PLOC_StrCon topStrCon,
 				 PLOC_OptLayout wsAfter, int ambCnt);
 PLOC_OptLayout PLOC_makeOptLayoutAbsent ();
-PLOC_OptLayout PLOC_makeOptLayoutPresent (char *string);
+PLOC_OptLayout PLOC_makeOptLayoutPresent (const char *string);
 
 /*}}}  */
 /*{{{  equality functions */
@@ -138,7 +135,7 @@ ATbool PLOC_isValidNormal (PLOC_Normal arg);
 inline ATbool PLOC_isNormalDefault (PLOC_Normal arg);
 ATbool PLOC_hasNormalString (PLOC_Normal arg);
 char *PLOC_getNormalString (PLOC_Normal arg);
-PLOC_Normal PLOC_setNormalString (PLOC_Normal arg, char *string);
+PLOC_Normal PLOC_setNormalString (PLOC_Normal arg, const char *string);
 
 /*}}}  */
 /*{{{  PLOC_Escaped accessors */
@@ -148,7 +145,7 @@ inline ATbool PLOC_isEscapedSpecialCharacter (PLOC_Escaped arg);
 inline ATbool PLOC_isEscapedOctal (PLOC_Escaped arg);
 ATbool PLOC_hasEscapedString (PLOC_Escaped arg);
 char *PLOC_getEscapedString (PLOC_Escaped arg);
-PLOC_Escaped PLOC_setEscapedString (PLOC_Escaped arg, char *string);
+PLOC_Escaped PLOC_setEscapedString (PLOC_Escaped arg, const char *string);
 
 /*}}}  */
 /*{{{  PLOC_StrCon accessors */
@@ -157,7 +154,7 @@ ATbool PLOC_isValidStrCon (PLOC_StrCon arg);
 inline ATbool PLOC_isStrConDefault (PLOC_StrCon arg);
 ATbool PLOC_hasStrConString (PLOC_StrCon arg);
 char *PLOC_getStrConString (PLOC_StrCon arg);
-PLOC_StrCon PLOC_setStrConString (PLOC_StrCon arg, char *string);
+PLOC_StrCon PLOC_setStrConString (PLOC_StrCon arg, const char *string);
 
 /*}}}  */
 /*{{{  PLOC_NatCon accessors */
@@ -166,19 +163,18 @@ ATbool PLOC_isValidNatCon (PLOC_NatCon arg);
 inline ATbool PLOC_isNatConDefault (PLOC_NatCon arg);
 ATbool PLOC_hasNatConString (PLOC_NatCon arg);
 char *PLOC_getNatConString (PLOC_NatCon arg);
-PLOC_NatCon PLOC_setNatConString (PLOC_NatCon arg, char *string);
+PLOC_NatCon PLOC_setNatConString (PLOC_NatCon arg, const char *string);
 
 /*}}}  */
 /*{{{  PLOC_Location accessors */
 
 ATbool PLOC_isValidLocation (PLOC_Location arg);
-inline ATbool PLOC_isLocationLocation (PLOC_Location arg);
-inline ATbool PLOC_isLocationNoLocation (PLOC_Location arg);
-ATbool PLOC_hasLocationWsAfterLocation (PLOC_Location arg);
-PLOC_OptLayout PLOC_getLocationWsAfterLocation (PLOC_Location arg);
-PLOC_Location PLOC_setLocationWsAfterLocation (PLOC_Location arg,
-					       PLOC_OptLayout
-					       wsAfterLocation);
+inline ATbool PLOC_isLocationFile (PLOC_Location arg);
+inline ATbool PLOC_isLocationAreaInFile (PLOC_Location arg);
+ATbool PLOC_hasLocationWsAfterFile (PLOC_Location arg);
+PLOC_OptLayout PLOC_getLocationWsAfterFile (PLOC_Location arg);
+PLOC_Location PLOC_setLocationWsAfterFile (PLOC_Location arg,
+					   PLOC_OptLayout wsAfterFile);
 ATbool PLOC_hasLocationWsAfterParenOpen (PLOC_Location arg);
 PLOC_OptLayout PLOC_getLocationWsAfterParenOpen (PLOC_Location arg);
 PLOC_Location PLOC_setLocationWsAfterParenOpen (PLOC_Location arg,
@@ -193,6 +189,11 @@ PLOC_OptLayout PLOC_getLocationWsAfterFilename (PLOC_Location arg);
 PLOC_Location PLOC_setLocationWsAfterFilename (PLOC_Location arg,
 					       PLOC_OptLayout
 					       wsAfterFilename);
+ATbool PLOC_hasLocationWsAfterAreaInFile (PLOC_Location arg);
+PLOC_OptLayout PLOC_getLocationWsAfterAreaInFile (PLOC_Location arg);
+PLOC_Location PLOC_setLocationWsAfterAreaInFile (PLOC_Location arg,
+						 PLOC_OptLayout
+						 wsAfterAreaInFile);
 ATbool PLOC_hasLocationWsAfterComma (PLOC_Location arg);
 PLOC_OptLayout PLOC_getLocationWsAfterComma (PLOC_Location arg);
 PLOC_Location PLOC_setLocationWsAfterComma (PLOC_Location arg,
@@ -210,7 +211,6 @@ PLOC_Location PLOC_setLocationWsAfterArea (PLOC_Location arg,
 
 ATbool PLOC_isValidArea (PLOC_Area arg);
 inline ATbool PLOC_isAreaArea (PLOC_Area arg);
-inline ATbool PLOC_isAreaNoArea (PLOC_Area arg);
 ATbool PLOC_hasAreaWsAfterArea (PLOC_Area arg);
 PLOC_OptLayout PLOC_getAreaWsAfterArea (PLOC_Area arg);
 PLOC_Area PLOC_setAreaWsAfterArea (PLOC_Area arg, PLOC_OptLayout wsAfterArea);
@@ -328,7 +328,8 @@ inline ATbool PLOC_isOptLayoutAbsent (PLOC_OptLayout arg);
 inline ATbool PLOC_isOptLayoutPresent (PLOC_OptLayout arg);
 ATbool PLOC_hasOptLayoutString (PLOC_OptLayout arg);
 char *PLOC_getOptLayoutString (PLOC_OptLayout arg);
-PLOC_OptLayout PLOC_setOptLayoutString (PLOC_OptLayout arg, char *string);
+PLOC_OptLayout PLOC_setOptLayoutString (PLOC_OptLayout arg,
+					const char *string);
 
 /*}}}  */
 /*{{{  sort visitors */
@@ -342,12 +343,14 @@ PLOC_StrCon PLOC_visitStrCon (PLOC_StrCon arg,
 PLOC_NatCon PLOC_visitNatCon (PLOC_NatCon arg,
 			      char *(*acceptString) (char *));
 PLOC_Location PLOC_visitLocation (PLOC_Location arg,
-				  PLOC_OptLayout (*acceptWsAfterLocation)
+				  PLOC_OptLayout (*acceptWsAfterFile)
 				  (PLOC_OptLayout),
 				  PLOC_OptLayout (*acceptWsAfterParenOpen)
 				  (PLOC_OptLayout),
 				  PLOC_StrCon (*acceptFilename) (PLOC_StrCon),
 				  PLOC_OptLayout (*acceptWsAfterFilename)
+				  (PLOC_OptLayout),
+				  PLOC_OptLayout (*acceptWsAfterAreaInFile)
 				  (PLOC_OptLayout),
 				  PLOC_OptLayout (*acceptWsAfterComma)
 				  (PLOC_OptLayout),

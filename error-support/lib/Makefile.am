@@ -11,17 +11,17 @@ include_HEADERS = \
 	Location_dict.h \
 	ParsedLocation.h \
 	ParsedLocation_dict.h \
-	ErrorAPI.h \
-	ErrorAPI_dict.h \
-	ParsedErrorAPI.h \
-	ParsedErrorAPI_dict.h \
-	ErrorAPI-utils.h
+	Error.h \
+	Error_dict.h \
+	ParsedError.h \
+	ParsedError_dict.h \
+	Error-utils.h
 
 libErrorAPI_a_SOURCES = \
-	ErrorAPI.c \
-	ErrorAPI_dict.c \
-	ParsedErrorAPI.c \
-	ParsedErrorAPI_dict.c \
+	Error.c \
+	Error_dict.c \
+	ParsedError.c \
+	ParsedError_dict.c \
 	init.c \
 	display.c \
 	lift.c \
@@ -36,16 +36,16 @@ libLocationAPI_a_SOURCES = \
 #CFLAGS += -DDISABLE_DYNAMIC_CHECKING
 INCLUDES = -I${ATERM}/include
 
-BASIC_MODULES = basic/StrCon basic/NatCon
-LOCATION_MODULES = basic/Locations
-FEEDBACK_MODULES = basic/Feedback
+BASIC_MODULES = StrCon NatCon
+LOCATION_MODULES = Locations Areas
+ERROR_MODULES = Errors
 
 api: error-api location-api
 
 ABS_ERROR_MODULES = \
 	$(foreach i, \
-	${BASIC_MODULES} ${FEEDBACK_MODULES} ${LOCATION_MODULES}, \
-	${top_srcdir}/../asf-library/library/$i.sdf)
+	${BASIC_MODULES} ${ERROR_MODULES} ${LOCATION_MODULES}, \
+	${top_srcdir}/../asf-library/library/basic/$i.sdf)
 
 MetaErrors.def: Makefile
 	@(echo "definition"; cat ${ABS_ERROR_MODULES}) > $@
@@ -53,12 +53,12 @@ MetaErrors.def: Makefile
 error-api: parsed-error-api imploded-error-api java-error-api
 
 parsed-error-api: MetaErrors.def Makefile  
-	sdf2-to-c --input $< --prefix PERR_ --output ParsedErrorAPI
-	indent ParsedErrorAPI.h
+	sdf2-to-c --input $< --prefix PERR_ --output ParsedError
+	indent ParsedError.h
 
 imploded-error-api: MetaErrors.def Makefile 
-	sdf2-to-c --imploded --input $< --prefix ERR_ --output ErrorAPI
-	indent ErrorAPI.h
+	sdf2-to-c --imploded --input $< --prefix ERR_ --output Error
+	indent Error.h
 
 java-error-api: MetaErrors.def Makefile
 	sdf2-to-java \
@@ -71,7 +71,7 @@ java-error-api: MetaErrors.def Makefile
 ABS_LOCATION_MODULES = \
 	$(foreach i, \
 	${BASIC_MODULES} ${LOCATION_MODULES}, \
-	${top_srcdir}/../asf-library/library/$i.sdf)
+	${top_srcdir}/../asf-library/library/basic/$i.sdf)
 
 Location.def: Makefile
 	@(echo "definition"; cat ${ABS_LOCATION_MODULES}) > $@
@@ -90,6 +90,6 @@ java-location-api: Location.def Makefile
 	sdf2-to-java \
 		--imploded \
 		--input $< \
-		--name location \
+		--name locationapi \
 		--output . \
 		--version ${VERSION}

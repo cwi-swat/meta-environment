@@ -1,9 +1,11 @@
-#include "ErrorAPI-utils.h"
-#include "ErrorAPI.h"
-#include "ParsedErrorAPI.h"
+#include "Error-utils.h"
 
-void ERR_initErrorApi() 
+/*{{{  void ERR_initErrorApi()  */
+
+void initErrorApi() 
 {
-  ERR_initErrorAPIApi();
-  PERR_initParsedErrorAPIApi();
+  ERR_initErrorApi();
+  PERR_initParsedErrorApi();
 }
+
+/*}}}  */

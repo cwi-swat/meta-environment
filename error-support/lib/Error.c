@@ -2,7 +2,7 @@
 
 #include <aterm2.h>
 #include <deprecated.h>
-#include "ErrorAPI.h"
+#include "Error.h"
 
 /*{{{  conversion functions */
 
@@ -48,21 +48,21 @@ typedef struct ATerm _ERR_Normal;
 typedef struct ATerm _ERR_Escaped;
 typedef struct ATerm _ERR_StrCon;
 typedef struct ATerm _ERR_NatCon;
-typedef struct ATerm _ERR_Summary;
-typedef struct ATerm _ERR_FeedbackList;
-typedef struct ATerm _ERR_Feedback;
-typedef struct ATerm _ERR_SubjectList;
 typedef struct ATerm _ERR_Subject;
+typedef struct ATerm _ERR_Error;
+typedef struct ATerm _ERR_SubjectList;
+typedef struct ATerm _ERR_Summary;
+typedef struct ATerm _ERR_ErrorList;
 typedef struct ATerm _ERR_Location;
 typedef struct ATerm _ERR_Area;
 
 /*}}}  */
 
-/*{{{  void ERR_initErrorAPIApi(void) */
+/*{{{  void ERR_initErrorApi(void) */
 
-void ERR_initErrorAPIApi(void)
+void ERR_initErrorApi(void)
 {
-  init_ErrorAPI_dict();
+  init_Error_dict();
 }
 
 /*}}}  */
@@ -89,17 +89,12 @@ void ERR_protectNatCon(ERR_NatCon *arg)
   ATprotect((ATerm*)((void*) arg));
 }
 
-void ERR_protectSummary(ERR_Summary *arg)
+void ERR_protectSubject(ERR_Subject *arg)
 {
   ATprotect((ATerm*)((void*) arg));
 }
 
-void ERR_protectFeedbackList(ERR_FeedbackList *arg)
-{
-  ATprotect((ATerm*)((void*) arg));
-}
-
-void ERR_protectFeedback(ERR_Feedback *arg)
+void ERR_protectError(ERR_Error *arg)
 {
   ATprotect((ATerm*)((void*) arg));
 }
@@ -109,7 +104,12 @@ void ERR_protectSubjectList(ERR_SubjectList *arg)
   ATprotect((ATerm*)((void*) arg));
 }
 
-void ERR_protectSubject(ERR_Subject *arg)
+void ERR_protectSummary(ERR_Summary *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
+void ERR_protectErrorList(ERR_ErrorList *arg)
 {
   ATprotect((ATerm*)((void*) arg));
 }
@@ -192,49 +192,33 @@ ATerm ERR_NatConToTerm(ERR_NatCon arg)
 }
 
 /*}}}  */
-/*{{{  ERR_Summary ERR_SummaryFromTerm(ATerm t) */
+/*{{{  ERR_Subject ERR_SubjectFromTerm(ATerm t) */
 
-ERR_Summary ERR_SummaryFromTerm(ATerm t)
+ERR_Subject ERR_SubjectFromTerm(ATerm t)
 {
-  return (ERR_Summary)t;
+  return (ERR_Subject)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ERR_SummaryToTerm(ERR_Summary arg) */
+/*{{{  ATerm ERR_SubjectToTerm(ERR_Subject arg) */
 
-ATerm ERR_SummaryToTerm(ERR_Summary arg)
-{
-  return (ATerm)arg;
-}
-
-/*}}}  */
-/*{{{  ERR_FeedbackList ERR_FeedbackListFromTerm(ATerm t) */
-
-ERR_FeedbackList ERR_FeedbackListFromTerm(ATerm t)
-{
-  return (ERR_FeedbackList)t;
-}
-
-/*}}}  */
-/*{{{  ATerm ERR_FeedbackListToTerm(ERR_FeedbackList arg) */
-
-ATerm ERR_FeedbackListToTerm(ERR_FeedbackList arg)
+ATerm ERR_SubjectToTerm(ERR_Subject arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  ERR_Feedback ERR_FeedbackFromTerm(ATerm t) */
+/*{{{  ERR_Error ERR_ErrorFromTerm(ATerm t) */
 
-ERR_Feedback ERR_FeedbackFromTerm(ATerm t)
+ERR_Error ERR_ErrorFromTerm(ATerm t)
 {
-  return (ERR_Feedback)t;
+  return (ERR_Error)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ERR_FeedbackToTerm(ERR_Feedback arg) */
+/*{{{  ATerm ERR_ErrorToTerm(ERR_Error arg) */
 
-ATerm ERR_FeedbackToTerm(ERR_Feedback arg)
+ATerm ERR_ErrorToTerm(ERR_Error arg)
 {
   return (ATerm)arg;
 }
@@ -256,17 +240,33 @@ ATerm ERR_SubjectListToTerm(ERR_SubjectList arg)
 }
 
 /*}}}  */
-/*{{{  ERR_Subject ERR_SubjectFromTerm(ATerm t) */
+/*{{{  ERR_Summary ERR_SummaryFromTerm(ATerm t) */
 
-ERR_Subject ERR_SubjectFromTerm(ATerm t)
+ERR_Summary ERR_SummaryFromTerm(ATerm t)
 {
-  return (ERR_Subject)t;
+  return (ERR_Summary)t;
 }
 
 /*}}}  */
-/*{{{  ATerm ERR_SubjectToTerm(ERR_Subject arg) */
+/*{{{  ATerm ERR_SummaryToTerm(ERR_Summary arg) */
 
-ATerm ERR_SubjectToTerm(ERR_Subject arg)
+ATerm ERR_SummaryToTerm(ERR_Summary arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  ERR_ErrorList ERR_ErrorListFromTerm(ATerm t) */
+
+ERR_ErrorList ERR_ErrorListFromTerm(ATerm t)
+{
+  return (ERR_ErrorList)t;
+}
+
+/*}}}  */
+/*{{{  ATerm ERR_ErrorListToTerm(ERR_ErrorList arg) */
+
+ATerm ERR_ErrorListToTerm(ERR_ErrorList arg)
 {
   return (ATerm)arg;
 }
@@ -308,42 +308,6 @@ ATerm ERR_AreaToTerm(ERR_Area arg)
 /*}}}  */
 /*{{{  list functions */
 
-int ERR_getFeedbackListLength (ERR_FeedbackList arg) {
-  return ATgetLength((ATermList) arg);
-}
-ERR_FeedbackList ERR_reverseFeedbackList(ERR_FeedbackList arg) {
-  return (ERR_FeedbackList) ATreverse((ATermList) arg);
-}
-ERR_FeedbackList ERR_appendFeedbackList(ERR_FeedbackList arg, ERR_Feedback elem) {
-  return (ERR_FeedbackList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
-}
-ERR_FeedbackList ERR_concatFeedbackList(ERR_FeedbackList arg0, ERR_FeedbackList arg1) {
-  return (ERR_FeedbackList) ATconcat((ATermList) arg0, (ATermList) arg1);
-}
-ERR_FeedbackList ERR_sliceFeedbackList(ERR_FeedbackList arg, int start, int end) {
-  return (ERR_FeedbackList) ATgetSlice((ATermList) arg, start, end);
-}
-ERR_Feedback ERR_getFeedbackListFeedbackAt(ERR_FeedbackList arg, int index) {
- return (ERR_Feedback)ATelementAt((ATermList) arg,index);
-}
-ERR_FeedbackList ERR_replaceFeedbackListFeedbackAt(ERR_FeedbackList arg, ERR_Feedback elem, int index) {
- return (ERR_FeedbackList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
-}
-ERR_FeedbackList ERR_makeFeedbackList2(ERR_Feedback elem1, ERR_Feedback elem2) {
-  return (ERR_FeedbackList) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
-}
-ERR_FeedbackList ERR_makeFeedbackList3(ERR_Feedback elem1, ERR_Feedback elem2, ERR_Feedback elem3) {
-  return (ERR_FeedbackList) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
-}
-ERR_FeedbackList ERR_makeFeedbackList4(ERR_Feedback elem1, ERR_Feedback elem2, ERR_Feedback elem3, ERR_Feedback elem4) {
-  return (ERR_FeedbackList) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
-}
-ERR_FeedbackList ERR_makeFeedbackList5(ERR_Feedback elem1, ERR_Feedback elem2, ERR_Feedback elem3, ERR_Feedback elem4, ERR_Feedback elem5) {
-  return (ERR_FeedbackList) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
-}
-ERR_FeedbackList ERR_makeFeedbackList6(ERR_Feedback elem1, ERR_Feedback elem2, ERR_Feedback elem3, ERR_Feedback elem4, ERR_Feedback elem5, ERR_Feedback elem6) {
-  return (ERR_FeedbackList) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
-}
 int ERR_getSubjectListLength (ERR_SubjectList arg) {
   return ATgetLength((ATermList) arg);
 }
@@ -380,103 +344,123 @@ ERR_SubjectList ERR_makeSubjectList5(ERR_Subject elem1, ERR_Subject elem2, ERR_S
 ERR_SubjectList ERR_makeSubjectList6(ERR_Subject elem1, ERR_Subject elem2, ERR_Subject elem3, ERR_Subject elem4, ERR_Subject elem5, ERR_Subject elem6) {
   return (ERR_SubjectList) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
 }
+int ERR_getErrorListLength (ERR_ErrorList arg) {
+  return ATgetLength((ATermList) arg);
+}
+ERR_ErrorList ERR_reverseErrorList(ERR_ErrorList arg) {
+  return (ERR_ErrorList) ATreverse((ATermList) arg);
+}
+ERR_ErrorList ERR_appendErrorList(ERR_ErrorList arg, ERR_Error elem) {
+  return (ERR_ErrorList) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
+}
+ERR_ErrorList ERR_concatErrorList(ERR_ErrorList arg0, ERR_ErrorList arg1) {
+  return (ERR_ErrorList) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+ERR_ErrorList ERR_sliceErrorList(ERR_ErrorList arg, int start, int end) {
+  return (ERR_ErrorList) ATgetSlice((ATermList) arg, start, end);
+}
+ERR_Error ERR_getErrorListErrorAt(ERR_ErrorList arg, int index) {
+ return (ERR_Error)ATelementAt((ATermList) arg,index);
+}
+ERR_ErrorList ERR_replaceErrorListErrorAt(ERR_ErrorList arg, ERR_Error elem, int index) {
+ return (ERR_ErrorList) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
+}
+ERR_ErrorList ERR_makeErrorList2(ERR_Error elem1, ERR_Error elem2) {
+  return (ERR_ErrorList) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+}
+ERR_ErrorList ERR_makeErrorList3(ERR_Error elem1, ERR_Error elem2, ERR_Error elem3) {
+  return (ERR_ErrorList) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+}
+ERR_ErrorList ERR_makeErrorList4(ERR_Error elem1, ERR_Error elem2, ERR_Error elem3, ERR_Error elem4) {
+  return (ERR_ErrorList) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+}
+ERR_ErrorList ERR_makeErrorList5(ERR_Error elem1, ERR_Error elem2, ERR_Error elem3, ERR_Error elem4, ERR_Error elem5) {
+  return (ERR_ErrorList) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+}
+ERR_ErrorList ERR_makeErrorList6(ERR_Error elem1, ERR_Error elem2, ERR_Error elem3, ERR_Error elem4, ERR_Error elem5, ERR_Error elem6) {
+  return (ERR_ErrorList) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+}
 
 /*}}}  */
 /*{{{  constructors */
 
-/*{{{  ERR_Normal ERR_makeNormalNormal(char* string) */
+/*{{{  ERR_Normal ERR_makeNormalNormal(const char* string) */
 
-ERR_Normal ERR_makeNormalNormal(char* string)
+ERR_Normal ERR_makeNormalNormal(const char* string)
 {
   return (ERR_Normal)(ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue));
 }
 
 /*}}}  */
-/*{{{  ERR_Escaped ERR_makeEscapedEscaped(char* string) */
+/*{{{  ERR_Escaped ERR_makeEscapedEscaped(const char* string) */
 
-ERR_Escaped ERR_makeEscapedEscaped(char* string)
+ERR_Escaped ERR_makeEscapedEscaped(const char* string)
 {
   return (ERR_Escaped)(ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue));
 }
 
 /*}}}  */
-/*{{{  ERR_StrCon ERR_makeStrConStrCon(char* string) */
+/*{{{  ERR_StrCon ERR_makeStrConStrCon(const char* string) */
 
-ERR_StrCon ERR_makeStrConStrCon(char* string)
+ERR_StrCon ERR_makeStrConStrCon(const char* string)
 {
   return (ERR_StrCon)(ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue));
 }
 
 /*}}}  */
-/*{{{  ERR_NatCon ERR_makeNatConNatCon(char* string) */
+/*{{{  ERR_NatCon ERR_makeNatConNatCon(const char* string) */
 
-ERR_NatCon ERR_makeNatConNatCon(char* string)
+ERR_NatCon ERR_makeNatConNatCon(const char* string)
 {
   return (ERR_NatCon)(ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue));
 }
 
 /*}}}  */
-/*{{{  ERR_Summary ERR_makeSummaryFeedback(char* producer, char* id, ERR_FeedbackList list) */
+/*{{{  ERR_Subject ERR_makeSubjectSubject(const char* description) */
 
-ERR_Summary ERR_makeSummaryFeedback(char* producer, char* id, ERR_FeedbackList list)
+ERR_Subject ERR_makeSubjectSubject(const char* description)
 {
-  return (ERR_Summary)(ATerm)ATmakeAppl3(ERR_afun0, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producer, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) list);
+  return (ERR_Subject)(ATerm)ATmakeAppl1(ERR_afun0, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)));
 }
 
 /*}}}  */
-/*{{{  ERR_FeedbackList ERR_makeFeedbackListEmpty() */
+/*{{{  ERR_Subject ERR_makeSubjectLocalized(const char* description, ERR_Location Location) */
 
-ERR_FeedbackList ERR_makeFeedbackListEmpty()
+ERR_Subject ERR_makeSubjectLocalized(const char* description, ERR_Location Location)
 {
-  return (ERR_FeedbackList)(ATerm)ATempty;
+  return (ERR_Subject)(ATerm)ATmakeAppl2(ERR_afun1, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) Location);
 }
 
 /*}}}  */
-/*{{{  ERR_FeedbackList ERR_makeFeedbackListSingle(ERR_Feedback head) */
+/*{{{  ERR_Error ERR_makeErrorInfo(const char* description, ERR_SubjectList list) */
 
-ERR_FeedbackList ERR_makeFeedbackListSingle(ERR_Feedback head)
+ERR_Error ERR_makeErrorInfo(const char* description, ERR_SubjectList list)
 {
-  return (ERR_FeedbackList)(ATerm)ATmakeList1((ATerm) head);
+  return (ERR_Error)(ATerm)ATmakeAppl2(ERR_afun2, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
 }
 
 /*}}}  */
-/*{{{  ERR_FeedbackList ERR_makeFeedbackListMany(ERR_Feedback head, ERR_FeedbackList tail) */
+/*{{{  ERR_Error ERR_makeErrorWarning(const char* description, ERR_SubjectList list) */
 
-ERR_FeedbackList ERR_makeFeedbackListMany(ERR_Feedback head, ERR_FeedbackList tail)
+ERR_Error ERR_makeErrorWarning(const char* description, ERR_SubjectList list)
 {
-  return (ERR_FeedbackList)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
+  return (ERR_Error)(ATerm)ATmakeAppl2(ERR_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
 }
 
 /*}}}  */
-/*{{{  ERR_Feedback ERR_makeFeedbackInfo(char* description, ERR_SubjectList list) */
+/*{{{  ERR_Error ERR_makeErrorError(const char* description, ERR_SubjectList list) */
 
-ERR_Feedback ERR_makeFeedbackInfo(char* description, ERR_SubjectList list)
+ERR_Error ERR_makeErrorError(const char* description, ERR_SubjectList list)
 {
-  return (ERR_Feedback)(ATerm)ATmakeAppl2(ERR_afun1, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
+  return (ERR_Error)(ATerm)ATmakeAppl2(ERR_afun4, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
 }
 
 /*}}}  */
-/*{{{  ERR_Feedback ERR_makeFeedbackWarning(char* description, ERR_SubjectList list) */
+/*{{{  ERR_Error ERR_makeErrorFatal(const char* description, ERR_SubjectList list) */
 
-ERR_Feedback ERR_makeFeedbackWarning(char* description, ERR_SubjectList list)
+ERR_Error ERR_makeErrorFatal(const char* description, ERR_SubjectList list)
 {
-  return (ERR_Feedback)(ATerm)ATmakeAppl2(ERR_afun2, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
-}
-
-/*}}}  */
-/*{{{  ERR_Feedback ERR_makeFeedbackError(char* description, ERR_SubjectList list) */
-
-ERR_Feedback ERR_makeFeedbackError(char* description, ERR_SubjectList list)
-{
-  return (ERR_Feedback)(ATerm)ATmakeAppl2(ERR_afun3, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
-}
-
-/*}}}  */
-/*{{{  ERR_Feedback ERR_makeFeedbackFatalError(char* description, ERR_SubjectList list) */
-
-ERR_Feedback ERR_makeFeedbackFatalError(char* description, ERR_SubjectList list)
-{
-  return (ERR_Feedback)(ATerm)ATmakeAppl2(ERR_afun4, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
+  return (ERR_Error)(ATerm)ATmakeAppl2(ERR_afun5, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) list);
 }
 
 /*}}}  */
@@ -504,27 +488,51 @@ ERR_SubjectList ERR_makeSubjectListMany(ERR_Subject head, ERR_SubjectList tail)
 }
 
 /*}}}  */
-/*{{{  ERR_Subject ERR_makeSubjectSubject(char* description, ERR_Location Location) */
+/*{{{  ERR_Summary ERR_makeSummarySummary(const char* producer, const char* id, ERR_ErrorList list) */
 
-ERR_Subject ERR_makeSubjectSubject(char* description, ERR_Location Location)
+ERR_Summary ERR_makeSummarySummary(const char* producer, const char* id, ERR_ErrorList list)
 {
-  return (ERR_Subject)(ATerm)ATmakeAppl2(ERR_afun5, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue)), (ATerm) Location);
+  return (ERR_Summary)(ATerm)ATmakeAppl3(ERR_afun6, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producer, 0, ATtrue)), (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue)), (ATerm) list);
 }
 
 /*}}}  */
-/*{{{  ERR_Location ERR_makeLocationLocation(char* filename, ERR_Area Area) */
+/*{{{  ERR_ErrorList ERR_makeErrorListEmpty() */
 
-ERR_Location ERR_makeLocationLocation(char* filename, ERR_Area Area)
+ERR_ErrorList ERR_makeErrorListEmpty()
 {
-  return (ERR_Location)(ATerm)ATmakeAppl2(ERR_afun6, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(filename, 0, ATtrue)), (ATerm) Area);
+  return (ERR_ErrorList)(ATerm)ATempty;
 }
 
 /*}}}  */
-/*{{{  ERR_Location ERR_makeLocationNoLocation() */
+/*{{{  ERR_ErrorList ERR_makeErrorListSingle(ERR_Error head) */
 
-ERR_Location ERR_makeLocationNoLocation()
+ERR_ErrorList ERR_makeErrorListSingle(ERR_Error head)
 {
-  return (ERR_Location)(ATerm)ATmakeAppl0(ERR_afun7);
+  return (ERR_ErrorList)(ATerm)ATmakeList1((ATerm) head);
+}
+
+/*}}}  */
+/*{{{  ERR_ErrorList ERR_makeErrorListMany(ERR_Error head, ERR_ErrorList tail) */
+
+ERR_ErrorList ERR_makeErrorListMany(ERR_Error head, ERR_ErrorList tail)
+{
+  return (ERR_ErrorList)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
+}
+
+/*}}}  */
+/*{{{  ERR_Location ERR_makeLocationFile(const char* filename) */
+
+ERR_Location ERR_makeLocationFile(const char* filename)
+{
+  return (ERR_Location)(ATerm)ATmakeAppl1(ERR_afun7, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(filename, 0, ATtrue)));
+}
+
+/*}}}  */
+/*{{{  ERR_Location ERR_makeLocationAreaInFile(const char* filename, ERR_Area Area) */
+
+ERR_Location ERR_makeLocationAreaInFile(const char* filename, ERR_Area Area)
+{
+  return (ERR_Location)(ATerm)ATmakeAppl2(ERR_afun8, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(filename, 0, ATtrue)), (ATerm) Area);
 }
 
 /*}}}  */
@@ -532,15 +540,7 @@ ERR_Location ERR_makeLocationNoLocation()
 
 ERR_Area ERR_makeAreaArea(int beginLine, int beginColumn, int endLine, int endColumn, int offset, int length)
 {
-  return (ERR_Area)(ATerm)ATmakeAppl6(ERR_afun8, (ATerm) (ATerm) ATmakeInt(beginLine), (ATerm) (ATerm) ATmakeInt(beginColumn), (ATerm) (ATerm) ATmakeInt(endLine), (ATerm) (ATerm) ATmakeInt(endColumn), (ATerm) (ATerm) ATmakeInt(offset), (ATerm) (ATerm) ATmakeInt(length));
-}
-
-/*}}}  */
-/*{{{  ERR_Area ERR_makeAreaNoArea() */
-
-ERR_Area ERR_makeAreaNoArea()
-{
-  return (ERR_Area)(ATerm)ATmakeAppl0(ERR_afun9);
+  return (ERR_Area)(ATerm)ATmakeAppl6(ERR_afun9, (ATerm) (ATerm) ATmakeInt(beginLine), (ATerm) (ATerm) ATmakeInt(beginColumn), (ATerm) (ATerm) ATmakeInt(endLine), (ATerm) (ATerm) ATmakeInt(endColumn), (ATerm) (ATerm) ATmakeInt(offset), (ATerm) (ATerm) ATmakeInt(length));
 }
 
 /*}}}  */
@@ -568,17 +568,12 @@ ATbool ERR_isEqualNatCon(ERR_NatCon arg0, ERR_NatCon arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool ERR_isEqualSummary(ERR_Summary arg0, ERR_Summary arg1)
+ATbool ERR_isEqualSubject(ERR_Subject arg0, ERR_Subject arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool ERR_isEqualFeedbackList(ERR_FeedbackList arg0, ERR_FeedbackList arg1)
-{
-  return ATisEqual((ATerm)arg0, (ATerm)arg1);
-}
-
-ATbool ERR_isEqualFeedback(ERR_Feedback arg0, ERR_Feedback arg1)
+ATbool ERR_isEqualError(ERR_Error arg0, ERR_Error arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -588,7 +583,12 @@ ATbool ERR_isEqualSubjectList(ERR_SubjectList arg0, ERR_SubjectList arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool ERR_isEqualSubject(ERR_Subject arg0, ERR_Subject arg1)
+ATbool ERR_isEqualSummary(ERR_Summary arg0, ERR_Summary arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool ERR_isEqualErrorList(ERR_ErrorList arg0, ERR_ErrorList arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -649,9 +649,9 @@ char* ERR_getNormalString(ERR_Normal arg)
 }
 
 /*}}}  */
-/*{{{  ERR_Normal ERR_setNormalString(ERR_Normal arg, char* string) */
+/*{{{  ERR_Normal ERR_setNormalString(ERR_Normal arg, const char* string) */
 
-ERR_Normal ERR_setNormalString(ERR_Normal arg, char* string)
+ERR_Normal ERR_setNormalString(ERR_Normal arg, const char* string)
 {
   if (ERR_isNormalNormal(arg)) {
     return (ERR_Normal)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue)));
@@ -709,9 +709,9 @@ char* ERR_getEscapedString(ERR_Escaped arg)
 }
 
 /*}}}  */
-/*{{{  ERR_Escaped ERR_setEscapedString(ERR_Escaped arg, char* string) */
+/*{{{  ERR_Escaped ERR_setEscapedString(ERR_Escaped arg, const char* string) */
 
-ERR_Escaped ERR_setEscapedString(ERR_Escaped arg, char* string)
+ERR_Escaped ERR_setEscapedString(ERR_Escaped arg, const char* string)
 {
   if (ERR_isEscapedEscaped(arg)) {
     return (ERR_Escaped)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue)));
@@ -769,9 +769,9 @@ char* ERR_getStrConString(ERR_StrCon arg)
 }
 
 /*}}}  */
-/*{{{  ERR_StrCon ERR_setStrConString(ERR_StrCon arg, char* string) */
+/*{{{  ERR_StrCon ERR_setStrConString(ERR_StrCon arg, const char* string) */
 
-ERR_StrCon ERR_setStrConString(ERR_StrCon arg, char* string)
+ERR_StrCon ERR_setStrConString(ERR_StrCon arg, const char* string)
 {
   if (ERR_isStrConStrCon(arg)) {
     return (ERR_StrCon)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue)));
@@ -829,9 +829,9 @@ char* ERR_getNatConString(ERR_NatCon arg)
 }
 
 /*}}}  */
-/*{{{  ERR_NatCon ERR_setNatConString(ERR_NatCon arg, char* string) */
+/*{{{  ERR_NatCon ERR_setNatConString(ERR_NatCon arg, const char* string) */
 
-ERR_NatCon ERR_setNatConString(ERR_NatCon arg, char* string)
+ERR_NatCon ERR_setNatConString(ERR_NatCon arg, const char* string)
 {
   if (ERR_isNatConNatCon(arg)) {
     return (ERR_NatCon)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(string, 0, ATtrue)));
@@ -844,318 +844,25 @@ ERR_NatCon ERR_setNatConString(ERR_NatCon arg, char* string)
 /*}}}  */
 
 /*}}}  */
-/*{{{  ERR_Summary accessors */
+/*{{{  ERR_Subject accessors */
 
-/*{{{  ATbool ERR_isValidSummary(ERR_Summary arg) */
+/*{{{  ATbool ERR_isValidSubject(ERR_Subject arg) */
 
-ATbool ERR_isValidSummary(ERR_Summary arg)
+ATbool ERR_isValidSubject(ERR_Subject arg)
 {
-  if (ERR_isSummaryFeedback(arg)) {
+  if (ERR_isSubjectSubject(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isSubjectLocalized(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  inline ATbool ERR_isSummaryFeedback(ERR_Summary arg) */
+/*{{{  inline ATbool ERR_isSubjectSubject(ERR_Subject arg) */
 
-inline ATbool ERR_isSummaryFeedback(ERR_Summary arg)
-{
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, ERR_patternSummaryFeedback, NULL, NULL, NULL));
-#endif
-  return ATtrue;
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasSummaryProducer(ERR_Summary arg) */
-
-ATbool ERR_hasSummaryProducer(ERR_Summary arg)
-{
-  if (ERR_isSummaryFeedback(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* ERR_getSummaryProducer(ERR_Summary arg) */
-
-char* ERR_getSummaryProducer(ERR_Summary arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
-}
-
-/*}}}  */
-/*{{{  ERR_Summary ERR_setSummaryProducer(ERR_Summary arg, char* producer) */
-
-ERR_Summary ERR_setSummaryProducer(ERR_Summary arg, char* producer)
-{
-  if (ERR_isSummaryFeedback(arg)) {
-    return (ERR_Summary)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producer, 0, ATtrue))), 0);
-  }
-
-  ATabort("Summary has no Producer: %t\n", arg);
-  return (ERR_Summary)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasSummaryId(ERR_Summary arg) */
-
-ATbool ERR_hasSummaryId(ERR_Summary arg)
-{
-  if (ERR_isSummaryFeedback(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  char* ERR_getSummaryId(ERR_Summary arg) */
-
-char* ERR_getSummaryId(ERR_Summary arg)
-{
-  
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
-}
-
-/*}}}  */
-/*{{{  ERR_Summary ERR_setSummaryId(ERR_Summary arg, char* id) */
-
-ERR_Summary ERR_setSummaryId(ERR_Summary arg, char* id)
-{
-  if (ERR_isSummaryFeedback(arg)) {
-    return (ERR_Summary)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue))), 1);
-  }
-
-  ATabort("Summary has no Id: %t\n", arg);
-  return (ERR_Summary)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasSummaryList(ERR_Summary arg) */
-
-ATbool ERR_hasSummaryList(ERR_Summary arg)
-{
-  if (ERR_isSummaryFeedback(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ERR_FeedbackList ERR_getSummaryList(ERR_Summary arg) */
-
-ERR_FeedbackList ERR_getSummaryList(ERR_Summary arg)
-{
-  
-    return (ERR_FeedbackList)ATgetArgument((ATermAppl)arg, 2);
-}
-
-/*}}}  */
-/*{{{  ERR_Summary ERR_setSummaryList(ERR_Summary arg, ERR_FeedbackList list) */
-
-ERR_Summary ERR_setSummaryList(ERR_Summary arg, ERR_FeedbackList list)
-{
-  if (ERR_isSummaryFeedback(arg)) {
-    return (ERR_Summary)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 2);
-  }
-
-  ATabort("Summary has no List: %t\n", arg);
-  return (ERR_Summary)NULL;
-}
-
-/*}}}  */
-
-/*}}}  */
-/*{{{  ERR_FeedbackList accessors */
-
-/*{{{  ATbool ERR_isValidFeedbackList(ERR_FeedbackList arg) */
-
-ATbool ERR_isValidFeedbackList(ERR_FeedbackList arg)
-{
-  if (ERR_isFeedbackListEmpty(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackListSingle(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  inline ATbool ERR_isFeedbackListEmpty(ERR_FeedbackList arg) */
-
-inline ATbool ERR_isFeedbackListEmpty(ERR_FeedbackList arg)
-{
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, ERR_patternFeedbackListEmpty));
-#endif
-  return ATtrue;
-}
-
-/*}}}  */
-/*{{{  inline ATbool ERR_isFeedbackListSingle(ERR_FeedbackList arg) */
-
-inline ATbool ERR_isFeedbackListSingle(ERR_FeedbackList arg)
-{
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackListSingle, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  inline ATbool ERR_isFeedbackListMany(ERR_FeedbackList arg) */
-
-inline ATbool ERR_isFeedbackListMany(ERR_FeedbackList arg)
-{
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackListMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasFeedbackListHead(ERR_FeedbackList arg) */
-
-ATbool ERR_hasFeedbackListHead(ERR_FeedbackList arg)
-{
-  if (ERR_isFeedbackListSingle(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ERR_Feedback ERR_getFeedbackListHead(ERR_FeedbackList arg) */
-
-ERR_Feedback ERR_getFeedbackListHead(ERR_FeedbackList arg)
-{
-  if (ERR_isFeedbackListSingle(arg)) {
-    return (ERR_Feedback)ATgetFirst((ATermList)arg);
-  }
-  else 
-    return (ERR_Feedback)ATgetFirst((ATermList)arg);
-}
-
-/*}}}  */
-/*{{{  ERR_FeedbackList ERR_setFeedbackListHead(ERR_FeedbackList arg, ERR_Feedback head) */
-
-ERR_FeedbackList ERR_setFeedbackListHead(ERR_FeedbackList arg, ERR_Feedback head)
-{
-  if (ERR_isFeedbackListSingle(arg)) {
-    return (ERR_FeedbackList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
-  }
-  else if (ERR_isFeedbackListMany(arg)) {
-    return (ERR_FeedbackList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
-  }
-
-  ATabort("FeedbackList has no Head: %t\n", arg);
-  return (ERR_FeedbackList)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasFeedbackListTail(ERR_FeedbackList arg) */
-
-ATbool ERR_hasFeedbackListTail(ERR_FeedbackList arg)
-{
-  if (ERR_isFeedbackListMany(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ERR_FeedbackList ERR_getFeedbackListTail(ERR_FeedbackList arg) */
-
-ERR_FeedbackList ERR_getFeedbackListTail(ERR_FeedbackList arg)
-{
-  
-    return (ERR_FeedbackList)ATgetNext((ATermList)arg);
-}
-
-/*}}}  */
-/*{{{  ERR_FeedbackList ERR_setFeedbackListTail(ERR_FeedbackList arg, ERR_FeedbackList tail) */
-
-ERR_FeedbackList ERR_setFeedbackListTail(ERR_FeedbackList arg, ERR_FeedbackList tail)
-{
-  if (ERR_isFeedbackListMany(arg)) {
-    return (ERR_FeedbackList)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
-  }
-
-  ATabort("FeedbackList has no Tail: %t\n", arg);
-  return (ERR_FeedbackList)NULL;
-}
-
-/*}}}  */
-
-/*}}}  */
-/*{{{  ERR_Feedback accessors */
-
-/*{{{  ATbool ERR_isValidFeedback(ERR_Feedback arg) */
-
-ATbool ERR_isValidFeedback(ERR_Feedback arg)
-{
-  if (ERR_isFeedbackInfo(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackWarning(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackError(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackFatalError(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  inline ATbool ERR_isFeedbackInfo(ERR_Feedback arg) */
-
-inline ATbool ERR_isFeedbackInfo(ERR_Feedback arg)
+inline ATbool ERR_isSubjectSubject(ERR_Subject arg)
 {
   {
     static ATerm last_arg = NULL;
@@ -1166,7 +873,7 @@ inline ATbool ERR_isFeedbackInfo(ERR_Feedback arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackInfo, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternSubjectSubject, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -1175,9 +882,9 @@ inline ATbool ERR_isFeedbackInfo(ERR_Feedback arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool ERR_isFeedbackWarning(ERR_Feedback arg) */
+/*{{{  inline ATbool ERR_isSubjectLocalized(ERR_Subject arg) */
 
-inline ATbool ERR_isFeedbackWarning(ERR_Feedback arg)
+inline ATbool ERR_isSubjectLocalized(ERR_Subject arg)
 {
   {
     static ATerm last_arg = NULL;
@@ -1188,7 +895,7 @@ inline ATbool ERR_isFeedbackWarning(ERR_Feedback arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackWarning, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternSubjectLocalized, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -1197,81 +904,25 @@ inline ATbool ERR_isFeedbackWarning(ERR_Feedback arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool ERR_isFeedbackError(ERR_Feedback arg) */
+/*{{{  ATbool ERR_hasSubjectDescription(ERR_Subject arg) */
 
-inline ATbool ERR_isFeedbackError(ERR_Feedback arg)
+ATbool ERR_hasSubjectDescription(ERR_Subject arg)
 {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackError, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  inline ATbool ERR_isFeedbackFatalError(ERR_Feedback arg) */
-
-inline ATbool ERR_isFeedbackFatalError(ERR_Feedback arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternFeedbackFatalError, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  ATbool ERR_hasFeedbackDescription(ERR_Feedback arg) */
-
-ATbool ERR_hasFeedbackDescription(ERR_Feedback arg)
-{
-  if (ERR_isFeedbackInfo(arg)) {
+  if (ERR_isSubjectSubject(arg)) {
     return ATtrue;
   }
-  else if (ERR_isFeedbackWarning(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackError(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackFatalError(arg)) {
+  else if (ERR_isSubjectLocalized(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  char* ERR_getFeedbackDescription(ERR_Feedback arg) */
+/*{{{  char* ERR_getSubjectDescription(ERR_Subject arg) */
 
-char* ERR_getFeedbackDescription(ERR_Feedback arg)
+char* ERR_getSubjectDescription(ERR_Subject arg)
 {
-  if (ERR_isFeedbackInfo(arg)) {
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
-  }
-  else if (ERR_isFeedbackWarning(arg)) {
-    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
-  }
-  else if (ERR_isFeedbackError(arg)) {
+  if (ERR_isSubjectSubject(arg)) {
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
   }
   else 
@@ -1279,59 +930,258 @@ char* ERR_getFeedbackDescription(ERR_Feedback arg)
 }
 
 /*}}}  */
-/*{{{  ERR_Feedback ERR_setFeedbackDescription(ERR_Feedback arg, char* description) */
+/*{{{  ERR_Subject ERR_setSubjectDescription(ERR_Subject arg, const char* description) */
 
-ERR_Feedback ERR_setFeedbackDescription(ERR_Feedback arg, char* description)
+ERR_Subject ERR_setSubjectDescription(ERR_Subject arg, const char* description)
 {
-  if (ERR_isFeedbackInfo(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 0);
+  if (ERR_isSubjectSubject(arg)) {
+    return (ERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 0);
   }
-  else if (ERR_isFeedbackWarning(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 0);
-  }
-  else if (ERR_isFeedbackError(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 0);
-  }
-  else if (ERR_isFeedbackFatalError(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 0);
+  else if (ERR_isSubjectLocalized(arg)) {
+    return (ERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 0);
   }
 
-  ATabort("Feedback has no Description: %t\n", arg);
-  return (ERR_Feedback)NULL;
+  ATabort("Subject has no Description: %t\n", arg);
+  return (ERR_Subject)NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool ERR_hasFeedbackList(ERR_Feedback arg) */
+/*{{{  ATbool ERR_hasSubjectLocation(ERR_Subject arg) */
 
-ATbool ERR_hasFeedbackList(ERR_Feedback arg)
+ATbool ERR_hasSubjectLocation(ERR_Subject arg)
 {
-  if (ERR_isFeedbackInfo(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackWarning(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackError(arg)) {
-    return ATtrue;
-  }
-  else if (ERR_isFeedbackFatalError(arg)) {
+  if (ERR_isSubjectLocalized(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  ERR_SubjectList ERR_getFeedbackList(ERR_Feedback arg) */
+/*{{{  ERR_Location ERR_getSubjectLocation(ERR_Subject arg) */
 
-ERR_SubjectList ERR_getFeedbackList(ERR_Feedback arg)
+ERR_Location ERR_getSubjectLocation(ERR_Subject arg)
 {
-  if (ERR_isFeedbackInfo(arg)) {
+  
+    return (ERR_Location)ATgetArgument((ATermAppl)arg, 1);
+}
+
+/*}}}  */
+/*{{{  ERR_Subject ERR_setSubjectLocation(ERR_Subject arg, ERR_Location Location) */
+
+ERR_Subject ERR_setSubjectLocation(ERR_Subject arg, ERR_Location Location)
+{
+  if (ERR_isSubjectLocalized(arg)) {
+    return (ERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) Location), 1);
+  }
+
+  ATabort("Subject has no Location: %t\n", arg);
+  return (ERR_Subject)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  ERR_Error accessors */
+
+/*{{{  ATbool ERR_isValidError(ERR_Error arg) */
+
+ATbool ERR_isValidError(ERR_Error arg)
+{
+  if (ERR_isErrorInfo(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isErrorWarning(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isErrorError(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isErrorFatal(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isErrorInfo(ERR_Error arg) */
+
+inline ATbool ERR_isErrorInfo(ERR_Error arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternErrorInfo, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isErrorWarning(ERR_Error arg) */
+
+inline ATbool ERR_isErrorWarning(ERR_Error arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternErrorWarning, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isErrorError(ERR_Error arg) */
+
+inline ATbool ERR_isErrorError(ERR_Error arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternErrorError, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isErrorFatal(ERR_Error arg) */
+
+inline ATbool ERR_isErrorFatal(ERR_Error arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternErrorFatal, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasErrorDescription(ERR_Error arg) */
+
+ATbool ERR_hasErrorDescription(ERR_Error arg)
+{
+  if (ERR_isErrorInfo(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isErrorWarning(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isErrorError(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isErrorFatal(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* ERR_getErrorDescription(ERR_Error arg) */
+
+char* ERR_getErrorDescription(ERR_Error arg)
+{
+  if (ERR_isErrorInfo(arg)) {
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+  }
+  else if (ERR_isErrorWarning(arg)) {
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+  }
+  else if (ERR_isErrorError(arg)) {
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+  }
+  else 
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  ERR_Error ERR_setErrorDescription(ERR_Error arg, const char* description) */
+
+ERR_Error ERR_setErrorDescription(ERR_Error arg, const char* description)
+{
+  if (ERR_isErrorInfo(arg)) {
+    return (ERR_Error)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 0);
+  }
+  else if (ERR_isErrorWarning(arg)) {
+    return (ERR_Error)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 0);
+  }
+  else if (ERR_isErrorError(arg)) {
+    return (ERR_Error)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 0);
+  }
+  else if (ERR_isErrorFatal(arg)) {
+    return (ERR_Error)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 0);
+  }
+
+  ATabort("Error has no Description: %t\n", arg);
+  return (ERR_Error)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasErrorList(ERR_Error arg) */
+
+ATbool ERR_hasErrorList(ERR_Error arg)
+{
+  if (ERR_isErrorInfo(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isErrorWarning(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isErrorError(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isErrorFatal(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ERR_SubjectList ERR_getErrorList(ERR_Error arg) */
+
+ERR_SubjectList ERR_getErrorList(ERR_Error arg)
+{
+  if (ERR_isErrorInfo(arg)) {
     return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 1);
   }
-  else if (ERR_isFeedbackWarning(arg)) {
+  else if (ERR_isErrorWarning(arg)) {
     return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 1);
   }
-  else if (ERR_isFeedbackError(arg)) {
+  else if (ERR_isErrorError(arg)) {
     return (ERR_SubjectList)ATgetArgument((ATermAppl)arg, 1);
   }
   else 
@@ -1339,25 +1189,25 @@ ERR_SubjectList ERR_getFeedbackList(ERR_Feedback arg)
 }
 
 /*}}}  */
-/*{{{  ERR_Feedback ERR_setFeedbackList(ERR_Feedback arg, ERR_SubjectList list) */
+/*{{{  ERR_Error ERR_setErrorList(ERR_Error arg, ERR_SubjectList list) */
 
-ERR_Feedback ERR_setFeedbackList(ERR_Feedback arg, ERR_SubjectList list)
+ERR_Error ERR_setErrorList(ERR_Error arg, ERR_SubjectList list)
 {
-  if (ERR_isFeedbackInfo(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 1);
+  if (ERR_isErrorInfo(arg)) {
+    return (ERR_Error)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 1);
   }
-  else if (ERR_isFeedbackWarning(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 1);
+  else if (ERR_isErrorWarning(arg)) {
+    return (ERR_Error)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 1);
   }
-  else if (ERR_isFeedbackError(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 1);
+  else if (ERR_isErrorError(arg)) {
+    return (ERR_Error)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 1);
   }
-  else if (ERR_isFeedbackFatalError(arg)) {
-    return (ERR_Feedback)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 1);
+  else if (ERR_isErrorFatal(arg)) {
+    return (ERR_Error)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 1);
   }
 
-  ATabort("Feedback has no List: %t\n", arg);
-  return (ERR_Feedback)NULL;
+  ATabort("Error has no List: %t\n", arg);
+  return (ERR_Error)NULL;
 }
 
 /*}}}  */
@@ -1524,94 +1374,288 @@ ERR_SubjectList ERR_setSubjectListTail(ERR_SubjectList arg, ERR_SubjectList tail
 /*}}}  */
 
 /*}}}  */
-/*{{{  ERR_Subject accessors */
+/*{{{  ERR_Summary accessors */
 
-/*{{{  ATbool ERR_isValidSubject(ERR_Subject arg) */
+/*{{{  ATbool ERR_isValidSummary(ERR_Summary arg) */
 
-ATbool ERR_isValidSubject(ERR_Subject arg)
+ATbool ERR_isValidSummary(ERR_Summary arg)
 {
-  if (ERR_isSubjectSubject(arg)) {
+  if (ERR_isSummarySummary(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  inline ATbool ERR_isSubjectSubject(ERR_Subject arg) */
+/*{{{  inline ATbool ERR_isSummarySummary(ERR_Summary arg) */
 
-inline ATbool ERR_isSubjectSubject(ERR_Subject arg)
+inline ATbool ERR_isSummarySummary(ERR_Summary arg)
 {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, ERR_patternSubjectSubject, NULL, NULL));
+  assert(ATmatchTerm((ATerm)arg, ERR_patternSummarySummary, NULL, NULL, NULL));
 #endif
   return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool ERR_hasSubjectDescription(ERR_Subject arg) */
+/*{{{  ATbool ERR_hasSummaryProducer(ERR_Summary arg) */
 
-ATbool ERR_hasSubjectDescription(ERR_Subject arg)
+ATbool ERR_hasSummaryProducer(ERR_Summary arg)
 {
-  if (ERR_isSubjectSubject(arg)) {
+  if (ERR_isSummarySummary(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  char* ERR_getSubjectDescription(ERR_Subject arg) */
+/*{{{  char* ERR_getSummaryProducer(ERR_Summary arg) */
 
-char* ERR_getSubjectDescription(ERR_Subject arg)
+char* ERR_getSummaryProducer(ERR_Summary arg)
 {
   
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  ERR_Subject ERR_setSubjectDescription(ERR_Subject arg, char* description) */
+/*{{{  ERR_Summary ERR_setSummaryProducer(ERR_Summary arg, const char* producer) */
 
-ERR_Subject ERR_setSubjectDescription(ERR_Subject arg, char* description)
+ERR_Summary ERR_setSummaryProducer(ERR_Summary arg, const char* producer)
 {
-  if (ERR_isSubjectSubject(arg)) {
-    return (ERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(description, 0, ATtrue))), 0);
+  if (ERR_isSummarySummary(arg)) {
+    return (ERR_Summary)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(producer, 0, ATtrue))), 0);
   }
 
-  ATabort("Subject has no Description: %t\n", arg);
-  return (ERR_Subject)NULL;
+  ATabort("Summary has no Producer: %t\n", arg);
+  return (ERR_Summary)NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool ERR_hasSubjectLocation(ERR_Subject arg) */
+/*{{{  ATbool ERR_hasSummaryId(ERR_Summary arg) */
 
-ATbool ERR_hasSubjectLocation(ERR_Subject arg)
+ATbool ERR_hasSummaryId(ERR_Summary arg)
 {
-  if (ERR_isSubjectSubject(arg)) {
+  if (ERR_isSummarySummary(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  ERR_Location ERR_getSubjectLocation(ERR_Subject arg) */
+/*{{{  char* ERR_getSummaryId(ERR_Summary arg) */
 
-ERR_Location ERR_getSubjectLocation(ERR_Subject arg)
+char* ERR_getSummaryId(ERR_Summary arg)
 {
   
-    return (ERR_Location)ATgetArgument((ATermAppl)arg, 1);
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 1)));
 }
 
 /*}}}  */
-/*{{{  ERR_Subject ERR_setSubjectLocation(ERR_Subject arg, ERR_Location Location) */
+/*{{{  ERR_Summary ERR_setSummaryId(ERR_Summary arg, const char* id) */
 
-ERR_Subject ERR_setSubjectLocation(ERR_Subject arg, ERR_Location Location)
+ERR_Summary ERR_setSummaryId(ERR_Summary arg, const char* id)
 {
-  if (ERR_isSubjectSubject(arg)) {
-    return (ERR_Subject)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) Location), 1);
+  if (ERR_isSummarySummary(arg)) {
+    return (ERR_Summary)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(id, 0, ATtrue))), 1);
   }
 
-  ATabort("Subject has no Location: %t\n", arg);
-  return (ERR_Subject)NULL;
+  ATabort("Summary has no Id: %t\n", arg);
+  return (ERR_Summary)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasSummaryList(ERR_Summary arg) */
+
+ATbool ERR_hasSummaryList(ERR_Summary arg)
+{
+  if (ERR_isSummarySummary(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ERR_ErrorList ERR_getSummaryList(ERR_Summary arg) */
+
+ERR_ErrorList ERR_getSummaryList(ERR_Summary arg)
+{
+  
+    return (ERR_ErrorList)ATgetArgument((ATermAppl)arg, 2);
+}
+
+/*}}}  */
+/*{{{  ERR_Summary ERR_setSummaryList(ERR_Summary arg, ERR_ErrorList list) */
+
+ERR_Summary ERR_setSummaryList(ERR_Summary arg, ERR_ErrorList list)
+{
+  if (ERR_isSummarySummary(arg)) {
+    return (ERR_Summary)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) list), 2);
+  }
+
+  ATabort("Summary has no List: %t\n", arg);
+  return (ERR_Summary)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  ERR_ErrorList accessors */
+
+/*{{{  ATbool ERR_isValidErrorList(ERR_ErrorList arg) */
+
+ATbool ERR_isValidErrorList(ERR_ErrorList arg)
+{
+  if (ERR_isErrorListEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isErrorListSingle(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isErrorListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isErrorListEmpty(ERR_ErrorList arg) */
+
+inline ATbool ERR_isErrorListEmpty(ERR_ErrorList arg)
+{
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ERR_patternErrorListEmpty));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isErrorListSingle(ERR_ErrorList arg) */
+
+inline ATbool ERR_isErrorListSingle(ERR_ErrorList arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternErrorListSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool ERR_isErrorListMany(ERR_ErrorList arg) */
+
+inline ATbool ERR_isErrorListMany(ERR_ErrorList arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternErrorListMany, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasErrorListHead(ERR_ErrorList arg) */
+
+ATbool ERR_hasErrorListHead(ERR_ErrorList arg)
+{
+  if (ERR_isErrorListSingle(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isErrorListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ERR_Error ERR_getErrorListHead(ERR_ErrorList arg) */
+
+ERR_Error ERR_getErrorListHead(ERR_ErrorList arg)
+{
+  if (ERR_isErrorListSingle(arg)) {
+    return (ERR_Error)ATgetFirst((ATermList)arg);
+  }
+  else 
+    return (ERR_Error)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  ERR_ErrorList ERR_setErrorListHead(ERR_ErrorList arg, ERR_Error head) */
+
+ERR_ErrorList ERR_setErrorListHead(ERR_ErrorList arg, ERR_Error head)
+{
+  if (ERR_isErrorListSingle(arg)) {
+    return (ERR_ErrorList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+  else if (ERR_isErrorListMany(arg)) {
+    return (ERR_ErrorList)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+
+  ATabort("ErrorList has no Head: %t\n", arg);
+  return (ERR_ErrorList)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool ERR_hasErrorListTail(ERR_ErrorList arg) */
+
+ATbool ERR_hasErrorListTail(ERR_ErrorList arg)
+{
+  if (ERR_isErrorListMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  ERR_ErrorList ERR_getErrorListTail(ERR_ErrorList arg) */
+
+ERR_ErrorList ERR_getErrorListTail(ERR_ErrorList arg)
+{
+  
+    return (ERR_ErrorList)ATgetNext((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  ERR_ErrorList ERR_setErrorListTail(ERR_ErrorList arg, ERR_ErrorList tail) */
+
+ERR_ErrorList ERR_setErrorListTail(ERR_ErrorList arg, ERR_ErrorList tail)
+{
+  if (ERR_isErrorListMany(arg)) {
+    return (ERR_ErrorList)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
+  }
+
+  ATabort("ErrorList has no Tail: %t\n", arg);
+  return (ERR_ErrorList)NULL;
 }
 
 /*}}}  */
@@ -1623,19 +1667,19 @@ ERR_Subject ERR_setSubjectLocation(ERR_Subject arg, ERR_Location Location)
 
 ATbool ERR_isValidLocation(ERR_Location arg)
 {
-  if (ERR_isLocationLocation(arg)) {
+  if (ERR_isLocationFile(arg)) {
     return ATtrue;
   }
-  else if (ERR_isLocationNoLocation(arg)) {
+  else if (ERR_isLocationAreaInFile(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  inline ATbool ERR_isLocationLocation(ERR_Location arg) */
+/*{{{  inline ATbool ERR_isLocationFile(ERR_Location arg) */
 
-inline ATbool ERR_isLocationLocation(ERR_Location arg)
+inline ATbool ERR_isLocationFile(ERR_Location arg)
 {
   {
     static ATerm last_arg = NULL;
@@ -1646,7 +1690,7 @@ inline ATbool ERR_isLocationLocation(ERR_Location arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternLocationLocation, NULL, NULL);
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternLocationFile, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -1655,9 +1699,9 @@ inline ATbool ERR_isLocationLocation(ERR_Location arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool ERR_isLocationNoLocation(ERR_Location arg) */
+/*{{{  inline ATbool ERR_isLocationAreaInFile(ERR_Location arg) */
 
-inline ATbool ERR_isLocationNoLocation(ERR_Location arg)
+inline ATbool ERR_isLocationAreaInFile(ERR_Location arg)
 {
   {
     static ATerm last_arg = NULL;
@@ -1668,7 +1712,7 @@ inline ATbool ERR_isLocationNoLocation(ERR_Location arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternLocationNoLocation);
+      last_result = ATmatchTerm((ATerm)arg, ERR_patternLocationAreaInFile, NULL, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -1681,7 +1725,10 @@ inline ATbool ERR_isLocationNoLocation(ERR_Location arg)
 
 ATbool ERR_hasLocationFilename(ERR_Location arg)
 {
-  if (ERR_isLocationLocation(arg)) {
+  if (ERR_isLocationFile(arg)) {
+    return ATtrue;
+  }
+  else if (ERR_isLocationAreaInFile(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -1692,16 +1739,22 @@ ATbool ERR_hasLocationFilename(ERR_Location arg)
 
 char* ERR_getLocationFilename(ERR_Location arg)
 {
-  
+  if (ERR_isLocationFile(arg)) {
+    return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
+  }
+  else 
     return (char*)ATgetName(ATgetAFun((ATermAppl) ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  ERR_Location ERR_setLocationFilename(ERR_Location arg, char* filename) */
+/*{{{  ERR_Location ERR_setLocationFilename(ERR_Location arg, const char* filename) */
 
-ERR_Location ERR_setLocationFilename(ERR_Location arg, char* filename)
+ERR_Location ERR_setLocationFilename(ERR_Location arg, const char* filename)
 {
-  if (ERR_isLocationLocation(arg)) {
+  if (ERR_isLocationFile(arg)) {
+    return (ERR_Location)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(filename, 0, ATtrue))), 0);
+  }
+  else if (ERR_isLocationAreaInFile(arg)) {
     return (ERR_Location)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) (ATerm) ATmakeAppl(ATmakeAFun(filename, 0, ATtrue))), 0);
   }
 
@@ -1714,7 +1767,7 @@ ERR_Location ERR_setLocationFilename(ERR_Location arg, char* filename)
 
 ATbool ERR_hasLocationArea(ERR_Location arg)
 {
-  if (ERR_isLocationLocation(arg)) {
+  if (ERR_isLocationAreaInFile(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -1734,7 +1787,7 @@ ERR_Area ERR_getLocationArea(ERR_Location arg)
 
 ERR_Location ERR_setLocationArea(ERR_Location arg, ERR_Area Area)
 {
-  if (ERR_isLocationLocation(arg)) {
+  if (ERR_isLocationAreaInFile(arg)) {
     return (ERR_Location)ATsetArgument((ATermAppl)arg, (ATerm)((ATerm) Area), 1);
   }
 
@@ -1754,9 +1807,6 @@ ATbool ERR_isValidArea(ERR_Area arg)
   if (ERR_isAreaArea(arg)) {
     return ATtrue;
   }
-  else if (ERR_isAreaNoArea(arg)) {
-    return ATtrue;
-  }
   return ATfalse;
 }
 
@@ -1765,43 +1815,11 @@ ATbool ERR_isValidArea(ERR_Area arg)
 
 inline ATbool ERR_isAreaArea(ERR_Area arg)
 {
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternAreaArea, NULL, NULL, NULL, NULL, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  inline ATbool ERR_isAreaNoArea(ERR_Area arg) */
-
-inline ATbool ERR_isAreaNoArea(ERR_Area arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, ERR_patternAreaNoArea);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, ERR_patternAreaArea, NULL, NULL, NULL, NULL, NULL, NULL));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -2059,68 +2077,50 @@ ERR_NatCon ERR_visitNatCon(ERR_NatCon arg, char* (*acceptString)(char*))
 }
 
 /*}}}  */
-/*{{{  ERR_Summary ERR_visitSummary(ERR_Summary arg, char* (*acceptProducer)(char*), char* (*acceptId)(char*), ERR_FeedbackList (*acceptList)(ERR_FeedbackList)) */
+/*{{{  ERR_Subject ERR_visitSubject(ERR_Subject arg, char* (*acceptDescription)(char*), ERR_Location (*acceptLocation)(ERR_Location)) */
 
-ERR_Summary ERR_visitSummary(ERR_Summary arg, char* (*acceptProducer)(char*), char* (*acceptId)(char*), ERR_FeedbackList (*acceptList)(ERR_FeedbackList))
+ERR_Subject ERR_visitSubject(ERR_Subject arg, char* (*acceptDescription)(char*), ERR_Location (*acceptLocation)(ERR_Location))
 {
-  if (ERR_isSummaryFeedback(arg)) {
-    return ERR_makeSummaryFeedback(
-        acceptProducer ? acceptProducer(ERR_getSummaryProducer(arg)) : ERR_getSummaryProducer(arg),
-        acceptId ? acceptId(ERR_getSummaryId(arg)) : ERR_getSummaryId(arg),
-        acceptList ? acceptList(ERR_getSummaryList(arg)) : ERR_getSummaryList(arg));
+  if (ERR_isSubjectSubject(arg)) {
+    return ERR_makeSubjectSubject(
+        acceptDescription ? acceptDescription(ERR_getSubjectDescription(arg)) : ERR_getSubjectDescription(arg));
   }
-  ATabort("not a Summary: %t\n", arg);
-  return (ERR_Summary)NULL;
+  if (ERR_isSubjectLocalized(arg)) {
+    return ERR_makeSubjectLocalized(
+        acceptDescription ? acceptDescription(ERR_getSubjectDescription(arg)) : ERR_getSubjectDescription(arg),
+        acceptLocation ? acceptLocation(ERR_getSubjectLocation(arg)) : ERR_getSubjectLocation(arg));
+  }
+  ATabort("not a Subject: %t\n", arg);
+  return (ERR_Subject)NULL;
 }
 
 /*}}}  */
-/*{{{  ERR_FeedbackList ERR_visitFeedbackList(ERR_FeedbackList arg, ERR_Feedback (*acceptHead)(ERR_Feedback)) */
+/*{{{  ERR_Error ERR_visitError(ERR_Error arg, char* (*acceptDescription)(char*), ERR_SubjectList (*acceptList)(ERR_SubjectList)) */
 
-ERR_FeedbackList ERR_visitFeedbackList(ERR_FeedbackList arg, ERR_Feedback (*acceptHead)(ERR_Feedback))
+ERR_Error ERR_visitError(ERR_Error arg, char* (*acceptDescription)(char*), ERR_SubjectList (*acceptList)(ERR_SubjectList))
 {
-  if (ERR_isFeedbackListEmpty(arg)) {
-    return ERR_makeFeedbackListEmpty();
+  if (ERR_isErrorInfo(arg)) {
+    return ERR_makeErrorInfo(
+        acceptDescription ? acceptDescription(ERR_getErrorDescription(arg)) : ERR_getErrorDescription(arg),
+        acceptList ? acceptList(ERR_getErrorList(arg)) : ERR_getErrorList(arg));
   }
-  if (ERR_isFeedbackListSingle(arg)) {
-    return ERR_makeFeedbackListSingle(
-        acceptHead ? acceptHead(ERR_getFeedbackListHead(arg)) : ERR_getFeedbackListHead(arg));
+  if (ERR_isErrorWarning(arg)) {
+    return ERR_makeErrorWarning(
+        acceptDescription ? acceptDescription(ERR_getErrorDescription(arg)) : ERR_getErrorDescription(arg),
+        acceptList ? acceptList(ERR_getErrorList(arg)) : ERR_getErrorList(arg));
   }
-  if (ERR_isFeedbackListMany(arg)) {
-    return ERR_makeFeedbackListMany(
-        acceptHead ? acceptHead(ERR_getFeedbackListHead(arg)) : ERR_getFeedbackListHead(arg),
-        ERR_visitFeedbackList(ERR_getFeedbackListTail(arg), acceptHead));
+  if (ERR_isErrorError(arg)) {
+    return ERR_makeErrorError(
+        acceptDescription ? acceptDescription(ERR_getErrorDescription(arg)) : ERR_getErrorDescription(arg),
+        acceptList ? acceptList(ERR_getErrorList(arg)) : ERR_getErrorList(arg));
   }
-  ATabort("not a FeedbackList: %t\n", arg);
-  return (ERR_FeedbackList)NULL;
-}
-
-/*}}}  */
-/*{{{  ERR_Feedback ERR_visitFeedback(ERR_Feedback arg, char* (*acceptDescription)(char*), ERR_SubjectList (*acceptList)(ERR_SubjectList)) */
-
-ERR_Feedback ERR_visitFeedback(ERR_Feedback arg, char* (*acceptDescription)(char*), ERR_SubjectList (*acceptList)(ERR_SubjectList))
-{
-  if (ERR_isFeedbackInfo(arg)) {
-    return ERR_makeFeedbackInfo(
-        acceptDescription ? acceptDescription(ERR_getFeedbackDescription(arg)) : ERR_getFeedbackDescription(arg),
-        acceptList ? acceptList(ERR_getFeedbackList(arg)) : ERR_getFeedbackList(arg));
+  if (ERR_isErrorFatal(arg)) {
+    return ERR_makeErrorFatal(
+        acceptDescription ? acceptDescription(ERR_getErrorDescription(arg)) : ERR_getErrorDescription(arg),
+        acceptList ? acceptList(ERR_getErrorList(arg)) : ERR_getErrorList(arg));
   }
-  if (ERR_isFeedbackWarning(arg)) {
-    return ERR_makeFeedbackWarning(
-        acceptDescription ? acceptDescription(ERR_getFeedbackDescription(arg)) : ERR_getFeedbackDescription(arg),
-        acceptList ? acceptList(ERR_getFeedbackList(arg)) : ERR_getFeedbackList(arg));
-  }
-  if (ERR_isFeedbackError(arg)) {
-    return ERR_makeFeedbackError(
-        acceptDescription ? acceptDescription(ERR_getFeedbackDescription(arg)) : ERR_getFeedbackDescription(arg),
-        acceptList ? acceptList(ERR_getFeedbackList(arg)) : ERR_getFeedbackList(arg));
-  }
-  if (ERR_isFeedbackFatalError(arg)) {
-    return ERR_makeFeedbackFatalError(
-        acceptDescription ? acceptDescription(ERR_getFeedbackDescription(arg)) : ERR_getFeedbackDescription(arg),
-        acceptList ? acceptList(ERR_getFeedbackList(arg)) : ERR_getFeedbackList(arg));
-  }
-  ATabort("not a Feedback: %t\n", arg);
-  return (ERR_Feedback)NULL;
+  ATabort("not a Error: %t\n", arg);
+  return (ERR_Error)NULL;
 }
 
 /*}}}  */
@@ -2145,17 +2145,39 @@ ERR_SubjectList ERR_visitSubjectList(ERR_SubjectList arg, ERR_Subject (*acceptHe
 }
 
 /*}}}  */
-/*{{{  ERR_Subject ERR_visitSubject(ERR_Subject arg, char* (*acceptDescription)(char*), ERR_Location (*acceptLocation)(ERR_Location)) */
+/*{{{  ERR_Summary ERR_visitSummary(ERR_Summary arg, char* (*acceptProducer)(char*), char* (*acceptId)(char*), ERR_ErrorList (*acceptList)(ERR_ErrorList)) */
 
-ERR_Subject ERR_visitSubject(ERR_Subject arg, char* (*acceptDescription)(char*), ERR_Location (*acceptLocation)(ERR_Location))
+ERR_Summary ERR_visitSummary(ERR_Summary arg, char* (*acceptProducer)(char*), char* (*acceptId)(char*), ERR_ErrorList (*acceptList)(ERR_ErrorList))
 {
-  if (ERR_isSubjectSubject(arg)) {
-    return ERR_makeSubjectSubject(
-        acceptDescription ? acceptDescription(ERR_getSubjectDescription(arg)) : ERR_getSubjectDescription(arg),
-        acceptLocation ? acceptLocation(ERR_getSubjectLocation(arg)) : ERR_getSubjectLocation(arg));
+  if (ERR_isSummarySummary(arg)) {
+    return ERR_makeSummarySummary(
+        acceptProducer ? acceptProducer(ERR_getSummaryProducer(arg)) : ERR_getSummaryProducer(arg),
+        acceptId ? acceptId(ERR_getSummaryId(arg)) : ERR_getSummaryId(arg),
+        acceptList ? acceptList(ERR_getSummaryList(arg)) : ERR_getSummaryList(arg));
   }
-  ATabort("not a Subject: %t\n", arg);
-  return (ERR_Subject)NULL;
+  ATabort("not a Summary: %t\n", arg);
+  return (ERR_Summary)NULL;
+}
+
+/*}}}  */
+/*{{{  ERR_ErrorList ERR_visitErrorList(ERR_ErrorList arg, ERR_Error (*acceptHead)(ERR_Error)) */
+
+ERR_ErrorList ERR_visitErrorList(ERR_ErrorList arg, ERR_Error (*acceptHead)(ERR_Error))
+{
+  if (ERR_isErrorListEmpty(arg)) {
+    return ERR_makeErrorListEmpty();
+  }
+  if (ERR_isErrorListSingle(arg)) {
+    return ERR_makeErrorListSingle(
+        acceptHead ? acceptHead(ERR_getErrorListHead(arg)) : ERR_getErrorListHead(arg));
+  }
+  if (ERR_isErrorListMany(arg)) {
+    return ERR_makeErrorListMany(
+        acceptHead ? acceptHead(ERR_getErrorListHead(arg)) : ERR_getErrorListHead(arg),
+        ERR_visitErrorList(ERR_getErrorListTail(arg), acceptHead));
+  }
+  ATabort("not a ErrorList: %t\n", arg);
+  return (ERR_ErrorList)NULL;
 }
 
 /*}}}  */
@@ -2163,13 +2185,14 @@ ERR_Subject ERR_visitSubject(ERR_Subject arg, char* (*acceptDescription)(char*),
 
 ERR_Location ERR_visitLocation(ERR_Location arg, char* (*acceptFilename)(char*), ERR_Area (*acceptArea)(ERR_Area))
 {
-  if (ERR_isLocationLocation(arg)) {
-    return ERR_makeLocationLocation(
+  if (ERR_isLocationFile(arg)) {
+    return ERR_makeLocationFile(
+        acceptFilename ? acceptFilename(ERR_getLocationFilename(arg)) : ERR_getLocationFilename(arg));
+  }
+  if (ERR_isLocationAreaInFile(arg)) {
+    return ERR_makeLocationAreaInFile(
         acceptFilename ? acceptFilename(ERR_getLocationFilename(arg)) : ERR_getLocationFilename(arg),
         acceptArea ? acceptArea(ERR_getLocationArea(arg)) : ERR_getLocationArea(arg));
-  }
-  if (ERR_isLocationNoLocation(arg)) {
-    return ERR_makeLocationNoLocation();
   }
   ATabort("not a Location: %t\n", arg);
   return (ERR_Location)NULL;
@@ -2188,9 +2211,6 @@ ERR_Area ERR_visitArea(ERR_Area arg, int (*acceptBeginLine)(int), int (*acceptBe
         acceptEndColumn ? acceptEndColumn(ERR_getAreaEndColumn(arg)) : ERR_getAreaEndColumn(arg),
         acceptOffset ? acceptOffset(ERR_getAreaOffset(arg)) : ERR_getAreaOffset(arg),
         acceptLength ? acceptLength(ERR_getAreaLength(arg)) : ERR_getAreaLength(arg));
-  }
-  if (ERR_isAreaNoArea(arg)) {
-    return ERR_makeAreaNoArea();
   }
   ATabort("not a Area: %t\n", arg);
   return (ERR_Area)NULL;
