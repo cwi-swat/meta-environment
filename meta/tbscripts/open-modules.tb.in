@@ -5,8 +5,8 @@
 process Open-modules(Eval: evaluator) is
 let
   Id      : term,
-  Name    : term,
-  Name2   : term,
+  Name    : str,
+  Name2   : str,
   Str     : str,
   Path    : str,
   Table   : str,

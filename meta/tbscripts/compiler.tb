@@ -7,7 +7,7 @@ let
   Id   : term,
   T    : term,
   T1   : term,
-  Name : term,
+  Name : str,
   M    : term,
   Mod  : term,
   Mods : list

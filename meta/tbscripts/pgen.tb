@@ -22,7 +22,7 @@ let
 in
   (
     Id := process-id .
-    rec-msg(generate-parsetable(id(Str?))) .
+    rec-msg(generate-parsetable(Str?)) .
     snd-note(ui-status(stat(Id,"Generating Parse Table..."))) .
     execute(pgen,PGEN?) .
     snd-msg(add-eqs-syntax(id(Str))) .
