@@ -19,29 +19,29 @@
 EXTRA_DIST      	= calc.tb ui-calc.tcl
 CLEANFILES      	= *.tif.[ch] calc.tifs
 
-INCLUDES		= -I${top_srcdir}/aterm \
+INCLUDES		= -I$(TOOLBUSLIB)/include \
 			-I$(ATERM)/include
 
 noinst_PROGRAMS		= clock log calc batch
 
 clock_SOURCES		= clock.tif.c clock.tif.h clock.c
-clock_LDADD		= -L${top_builddir}/aterm -lATB \
+clock_LDADD		= -L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm
 
 log_SOURCES     	= log.tif.c log.tif.h log.c
-log_LDADD       	= -L${top_builddir}/aterm -lATB \
+log_LDADD       	= -L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm
 
 calc_SOURCES		= calc.tif.c calc.tif.h calc.c
-calc_LDADD		= -L${top_builddir}/aterm -lATB \
+calc_LDADD		= -L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm
 
 batch_SOURCES   	= batch.tif.c batch.tif.h batch.c
-batch_LDADD     	= -L${top_builddir}/aterm -lATB \
+batch_LDADD     	= -L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm
 
 %.tif.c %.tif.h: calc.tifs
-	${top_builddir}/aterm/tifstoc -tool $* $<
+	$(top_builddir)/aterm/tifstoc -tool $* $<
 
 %.tifs: %.tb
 	$(top_builddir)/toolbus/toolbus -gentifs $<

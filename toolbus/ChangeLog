@@ -1,5 +1,9 @@
 $Id$
 
+2001/11/25 (mdejonge@cwi.nl)
+ * Libraries libtb, libATB extracted from ToolBus source tree and put in the
+   separate package toolbuslib.
+
 2001/11/16 (jong@cwi.nl)
  * patchlevel 0.21.1
  * sleep 1 second between issuing shutdown of emacs and exiting adapter

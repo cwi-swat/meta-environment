@@ -22,9 +22,9 @@ noinst_PROGRAMS = board
 EXTRA_DIST      = game.tb ui-game.tcl
 
 board_SOURCES   = board.c
-board_LDADD     = -L$(top_builddir)/libtb -ltb
+board_LDADD     = $(TOOLBUSLIB)/lib -ltb
 
-INCLUDES        = -I$(top_srcdir)/libtb -I.
+INCLUDES        = $(TOOLBUSLIB)/include -I.
 
 CLEANFILES      = board.tif.c game.tifs
 

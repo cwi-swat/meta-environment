@@ -25,19 +25,19 @@ bin_PROGRAMS        	= toolbus-adapter
 include_HEADERS		= toolbus-adapter.tbi
 
 INCLUDES            	= -DTBPROG="\"${prefix}/bin/toolbus\"" \
-			-I${top_srcdir}/libtb \
+			-I$(TOOLBUSLIB)/include \
 			-I${top_srcdir}/aterm \
 			-I$(ATERM)/include 
 
 toolbus_adapter_SOURCES = toolbus-adapter.tif.c toolbus-adapter.tif.h \
 			toolbus-adapter.c
 
-toolbus_adapter_LDADD   = -L${top_builddir}/libtb -ltb \
+toolbus_adapter_LDADD   = -L$(TOOLBUSLIB)/lib -ltb \
 			-L${top_builddir}/aterm -lATB \
 			-L$(ATERM)/lib -lATerm
 
 %.tif.c %.tif.h: %.tifs
-	${top_builddir}/aterm/tifstoc -tool $* $<
+	$(top_builddir)/aterm/tifstoc -tool $* $<
 
 %.tb: %.tbi
 	cp $< $@

@@ -1,5 +1,5 @@
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(toolbus, 0.21.1)
+AM_INIT_AUTOMAKE(toolbus, 0.22beta)
 
 ACLOCAL="${ACLOCAL} -I ."
 
@@ -61,6 +61,11 @@ dnl Require ATerm library
 AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
+
+dnl Require toolbuslib library
+AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
+   [  --with-toolbuslib=DIR        ToolBus library is in DIR])
+AC_SUBST(TOOLBUSLIB)
 
 dnl Which additional adapters to build?
 
@@ -197,7 +202,6 @@ AC_CHECK_LIB(m,atof,[LIBS="$LIBS -lm"])
 dnl add outputfiles as argument below
 AC_OUTPUT(
   Makefile
-  libtb/Makefile
   toolbus/Makefile
   aterm/Makefile
   adapters/Makefile

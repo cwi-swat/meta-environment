@@ -32,8 +32,8 @@ ERROR_TESTS     = expr-errors-fail tc-errors-fail scope-fail
 
 CLEANFILES      = $(OK_TESTS) $(ERROR_TESTS) test-removesocket test-annos read
 
-LDADD           = -L../libtb -ltb
-INCLUDES        = -I$(top_srcdir)/libtb
+LDADD           = -L$(TOOLBUSLIB)/lib -ltb
+INCLUDES        = -I$(TOOLBUSLIB)/include
 
 %-ok : %.tb
 	echo '$(top_builddir)/toolbus/toolbus -TB_PORT 9999 $< 2>/dev/null >/dev/null'  > $@

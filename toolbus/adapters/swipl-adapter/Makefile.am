@@ -24,7 +24,7 @@ EXTRA_DIST   = swipl-adapter.guide.tex swipl.c.nw test.pl test.tb tbswipl
 
 
 swipl_SOURCES = swipl.c
-swipl_LDADD   = $(SWIPL_LIBS) -L$(top_builddir)/libtb -ltb
+swipl_LDADD   = $(SWIPL_LIBS) -L$(TOOLBUSLIB)/lib -ltb
 
 
 SWIPL           = /home/olivierp/pl-2.7.8
@@ -34,7 +34,7 @@ SWIPL_INCLUDES  = -I$(SWIPL)/include
 SWIPL_LIBS      = -L$(SWIPL)/runtime/$(ARCH) -lpl -ldl \
                   -lelf -lreadline -ltermcap
 
-INCLUDES     = $(SWIPL_INCLUDES) -I$(top_srcdir)/libtb
+INCLUDES     = $(SWIPL_INCLUDES) -I $(TOOLBUSLIB)/include
 
 
 % %.tex : %.nw

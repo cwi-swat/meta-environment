@@ -28,13 +28,13 @@ EXTRA_DIST           = txt_dbg.c logger.tcl.src viewer.tcl.src \
 toolbus_SOURCES      = calls.c env.c interpreter.c  main.c match.c \
                        monitor.c procs.c server.c tools.c typecheck.c env.h \
                        interpreter.h match.h monitor.h script.h typecheck.h
-toolbus_LDADD        = lex.yy.o y.tab.o  -L../libtb -ltb
+toolbus_LDADD        = lex.yy.o y.tab.o  -L$(TOOLBUSLIB)/lib -ltb
 
 ctif_SOURCES         = ctif.c
-ctif_LDADD           = -L../libtb -ltb
+ctif_LDADD           = -L$(TOOLBUSLIB)/lib -ltb
 
 # txt_dbg_SOURCES    = txt_dbg.c
-# txt_dbg_LDADD      = -L../libtb -ltb
+# txt_dbg_LDADD      = -L$(TOOLBUSLIB)/lib -ltb
 
 CLEANFILES          += lex.yy.c y.tab.c y.tab.h idef2tif
 
@@ -44,7 +44,7 @@ TOOLBUS_DEFS         = -DCPP='"$(CPP)"' \
                        -DVIEWER_TCL=\"$(datadir)/viewer.tcl\" \
                        -DLOGGER_TCL=\"$(datadir)/logger.tcl\"
 
-INCLUDES            = -I$(top_srcdir)/libtb -I$(srcdir) -I. $(TOOLBUS_DEFS)
+INCLUDES            = -I$(TOOLBUSLIB)/include -I$(srcdir) -I. $(TOOLBUS_DEFS)
 
 %.tcl : %.tcl.src
 	sed 's#__WISH__#$(WISH)#g;' < $< > $@

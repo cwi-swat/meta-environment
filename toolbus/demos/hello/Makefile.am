@@ -18,7 +18,7 @@
 
 noinst_PROGRAMS		= hello hello-gen printer producer store
 
-INCLUDES		= -I${top_srcdir}/aterm \
+INCLUDES		= -I$(TOOLBUSLIB)/include \
 			-I$(ATERM)/include
 
 EXTRA_DIST		= hello1.tb hello2.tb hello3.tb hello.tcl hello.perl \
@@ -27,27 +27,27 @@ EXTRA_DIST		= hello1.tb hello2.tb hello3.tb hello.tcl hello.perl \
 			Hello.java HelloTool.java
 
 hello_SOURCES		= hello.c
-hello_LDADD		= -L${top_builddir}/aterm -lATB \
+hello_LDADD		= -L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm
 
 hello_gen_SOURCES	= hello-gen.c hello.tif.c hello.tif.h
-hello_gen_LDADD		= -L${top_builddir}/aterm -lATB \
+hello_gen_LDADD		= -L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm
 
 printer_SOURCES		= printer.c
-printer_LDADD		= -L${top_builddir}/aterm -lATB \
+printer_LDADD		= -L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm
 
 producer_SOURCES	= producer.c
-producer_LDADD		= -L${top_builddir}/aterm -lATB \
+producer_LDADD		= -L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm
 
 store_SOURCES		= store.c
-store_LDADD		= -L${top_builddir}/aterm -lATB \
+store_LDADD		= -L$(TOOLBUSLIB)/lib -lATB \
 			-L$(ATERM)/lib -lATerm
 
 %.tif.c %.tif.h: hello2.tifs
-	${top_builddir}/aterm/tifstoc -tool $* $<
+	$(top_builddir)/aterm/tifstoc -tool $* $<
 
 %.tifs: %.tb
 	${top_builddir}/toolbus/toolbus -gentifs $<
