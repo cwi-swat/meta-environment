@@ -68,9 +68,7 @@ to happen.
 
 =head1 NOTES
 
-In a different context altogether, B<tree2dot> runs as a C<ToolBus> client;
-its C<ToolBus> API is described in F<chickenwings.spicy>.
-
+In a different context altogether, B<tree2dot> runs as a C<ToolBus> client.
 
 =head1 AUTHOR
 

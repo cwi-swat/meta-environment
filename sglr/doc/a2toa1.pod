@@ -71,9 +71,7 @@ be represented in AsFix1.
 
 =head1 NOTES
 
-In a different context altogether, B<a2toa1> runs as a C<ToolBus> client;
-its C<ToolBus> API is described in F<resistance.futile>.
-
+In a different context altogether, B<a2toa1> runs as a C<ToolBus> client.
 
 =head1 AUTHOR
 

@@ -159,9 +159,7 @@ None.
 
 =head1 NOTES
 
-In a different context altogether, B<sglr> runs as a C<ToolBus> client;
-its C<ToolBus> API is described in F<whatwouldbrianboitanodo.qm>.
-
+In a different context altogether, B<sglr> runs as a C<ToolBus> client.
 
 =head1 AUTHOR
 
