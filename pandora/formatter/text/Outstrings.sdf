@@ -14,10 +14,18 @@ module Outstrings
       "string" "of" Integer String "chars" -> String
       deslash(String)                      -> String 
 
+  hiddens
     context-free syntax
-      deslash-chars(CHAR*) -> CHAR*
-hiddens
+      deslash-chars(ANYCHAR) -> ANYCHAR
 
+  hiddens
+    sorts ANYCHAR
+
+  hiddens
+    lexical syntax
+      [a]* -> ANYCHAR
+
+  hiddens
     variables
       "Ch"[0-9]*     -> CHAR
       "Char"[0-9]*   -> CHAR
