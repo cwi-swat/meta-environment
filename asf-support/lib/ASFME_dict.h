@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Oct  1 14:10:27 2001
+ * Generated at Mon Nov  5 11:53:26 2001
  */
 
 #ifndef __ASFME_dict_H
@@ -39,10 +39,6 @@ extern AFun ASF_afun28;
 extern AFun ASF_afun29;
 extern AFun ASF_afun30;
 extern AFun ASF_afun31;
-extern AFun ASF_afun32;
-extern AFun ASF_afun33;
-extern AFun ASF_afun34;
-extern AFun ASF_afun35;
 
 extern ATerm ASF_patternCHARLexToCf;
 extern ATerm ASF_patternTreeAmbsMany;
