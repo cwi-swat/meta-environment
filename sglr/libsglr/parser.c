@@ -337,8 +337,10 @@ void SG_PostParse(void)
             allocated);
   );
 
-  if(SG_SHOWSTACK)
+  if(SG_SHOWSTACK) {
     SG_StacksToDotFile(SG_NewStacks(accepting_stack), sg_tokens_read);
+		SG_StacksToDotFileFinalize(SG_StackDot());
+	}
 }
 
 void  SG_ParserCleanup(void)
@@ -395,8 +397,9 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void))
   SG_ParserPreparation();
 
   do {
-    if(SG_SHOWSTACK)
+    if(SG_SHOWSTACK) {
       SG_StacksToDotFile(active_stacks, sg_tokens_read);
+		}
 
     current_token = SG_NextToken(get_next_token);
 
@@ -419,6 +422,11 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void))
 	      )
 
     SG_Shifter();
+
+		if(SG_SHOWSTACK) {
+      SG_StacksToDotFileFinalize(SG_StackDot());
+		}
+
   } while (current_token != SG_EOF_Token && active_stacks);
 
   IF_VERBOSE( if (isatty(fileno(stderr))) fprintf(stderr, ".\n"); )
@@ -460,7 +468,7 @@ void SG_ParseToken(void)
       SG_Actor(st);
 
     if(SG_SHOWSTACK)
-      SG_LinksToDot(SG_StackDot(), st);
+			 SG_LinksToDot(SG_StackDot(), st); 
 
     if(!actives && !for_actor) {
       for_actor         = for_actor_delayed;
@@ -805,7 +813,10 @@ void SG_Shifter(void)
         new_active_stacks = SG_AddStack(st1, new_active_stacks);
       }
       l = SG_AddLink(st1, st0, (tree) t);
-      if(SG_SHOWSTACK) SG_LinksToDot(SG_StackDot(), st1);
+
+      if(SG_SHOWSTACK) 
+				 SG_LinksToDot(SG_StackDot(), st1); 
+
     } else IF_DEBUG(
       fprintf(SG_log(), "Shifter: skipping rejected stack with state %d\n",
               SG_GETSTATE(SG_ST_STATE(st0)))

@@ -270,10 +270,6 @@ void SG_PrintAttrs(FILE *dot,  ATerm attrs)
 					} else if(ATmatch(first,"id(<str>)", &str)) {
 						/* We don't print id's because they are not
 						 * inserted by the user 
-						 *
-						 * ATfprintf(dot,"id(");
-						 * ATfprintf(dot, str);
-						 * ATfprintf(dot,")");
 						 */
 					} else if(ATmatch(first, "traverse")) {
 						ATfprintf(dot, "traverse");
@@ -371,8 +367,11 @@ ATerm SG_TreeType(ATerm t)
   if (ATmatch(t, "amb([<list>])", &args))
     return SG_TreeType(ATgetFirst(args));
 
-  if(ATmatch(t, "appl(aprod(<int>),<list>)", NULL, NULL)
-     || ATmatch(t, "reject(aprod(<int>),<list>)", NULL, NULL)) {
+  if(ATmatch(t, "appl(aprod(<int>),<list>)", NULL, NULL) ||
+     ATmatch(t, "regular(aprod(<int>),<list>)",NULL,NULL) || 
+     ATmatch(t, "avoid(aprod(<int>),<list>)",NULL,NULL) || 
+		 ATmatch(t, "prefer(aprod(<int>),<list>)",NULL,NULL) || 
+		 ATmatch(t, "reject(aprod(<int>),<list>)", NULL, NULL)) {
     extern    parse_table *table;
 
     return SG_TreeType(
@@ -461,12 +460,12 @@ void SG_LinkToDot(FILE *dot, stack *st, st_link *l)
   ATfprintf(dot, "N%d [label=\"%d\" shape=box height=0.2, width=0.2]\n",
             (int) st, SG_ST_STATE(st));
   ATfprintf(dot, "N%d -> N%d [label=\"", (int) SG_LK_STACK(l), (int) st);
-  the_tree = (ATerm) SG_LK_TREE(l);
-  t = SG_TreeType(the_tree);
+	the_tree = (ATerm) (SG_LK_TREE(l));
+  t = SG_TreeType(the_tree); 
   if(ATgetType(the_tree) == AT_INT) {
     SG_PrintChar(dot, ATgetInt((ATermInt) t));
   } else {
-    ATfprintf(dot, "%s : ", SG_DotTermYield(the_tree));
+		ATfprintf(dot, "%d : ", SG_GetApplProdLabel((tree) the_tree)); 
     SG_PrintSymbol(dot, t);
   }
   ATfprintf(dot, "\"");
@@ -543,10 +542,15 @@ void SG_StacksToDotFile(stacks *sts, int sg_tokens_read)
             "edge [dir = back]\n"
             );
   SG_StacksToDot(SG_StackDotFP, sts);
-  ATfprintf(SG_StackDotFP, "}\n");
-  fclose(SG_StackDotFP);
 }
 
+void SG_StacksToDotFileFinalize(FILE *fp)
+{
+	if(fp) {
+		ATfprintf(fp, "}\n");
+		fclose(fp);
+	}
+}
 
 void SG_TermYieldToGrowBuf(sg_growbuf *gb, ATerm t)
 {
@@ -628,7 +632,7 @@ void SG_DotTermYieldToGrowBuf(sg_growbuf *gb, ATerm t)
             SG_AddCharToGrowBuf(gb, '|');
           }
         }
-      } else {
+			} else {
         ATerror("SG_DotTermYieldToGrowBuf: strange appl: %t\n", t);
       }
         break;

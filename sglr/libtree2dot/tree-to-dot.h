@@ -28,6 +28,7 @@
 void SGtreeToDotFile(char *prg, char *fnam, ATerm t, ATbool suppress, 
 										 ATbool print_prods);
 void SG_StacksToDotFile(stacks *, int);
+void SG_StacksToDotFileFinalize(FILE *);
 void SG_LinksToDot(FILE *, stack *);
 
 FILE  *SG_StackDot(void);
