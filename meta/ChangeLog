@@ -1,4 +1,7 @@
 # $Id$
+2003/06/23 (markvdb@cwi.nl)
+ * Fixed an unpack action in the structure editor.
+
 2003/06/23 (iversen@cwi.nl)
  * Changed module list panel in MetaStudio to a module tree panel.
 
