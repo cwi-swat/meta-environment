@@ -56,7 +56,8 @@ PT_Args PT_appendArgs(PT_Args args, PT_Tree arg)
                                       (ATerm)PT_makeTermFromTree(arg)));
 }
 
-PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor)
+PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor,
+                             PT_TreeVisitorData data)
 {
   ATermList store;
   PT_Args newArgs = PT_makeArgsEmpty();
@@ -67,7 +68,7 @@ PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor)
       newArgs = PT_getArgsTail(args)) {
     store = ATinsert(store,
                      PT_makeTermFromTree(
-                     visitor(PT_getArgsHead(args))));
+                     visitor(PT_getArgsHead(args),data)));
   }
 
   /* create new list */
