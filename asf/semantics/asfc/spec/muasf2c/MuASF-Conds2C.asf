@@ -294,6 +294,7 @@ equations
 
   [lcp2cs-2'4] is-var-term(Term) = true,
                is-star-var(Term) = true,
+               are-star-vars(Term+) = false,
                make-c-temp(Aint1) = Expression0,
                make-c-temp(succ(Aint1)) = Expression1,
                add-env(C-rule+1,((Term,slice(Expression0,Expression1)))) = C-rule+2,
@@ -311,7 +312,32 @@ equations
                  (Decl*1,Stat*3,Aint2)
 
   [lcp2cs-2'5] is-var-term(Term) = true,
+               is-star-var(Term) = true,
+               are-star-vars(Term+) = true,
+               make-c-temp(Aint1) = Expression0,
+               make-c-temp(succ(Aint1)) = Expression1,
+               add-env(C-rule+1,((Term,slice(Expression0,Expression1)))) = C-rule+2,
+               listcondspattern2cstats(true,Term+,C-rule+2,
+                                       Expression,Namepair*,succ(succ(Aint1))) =
+                 (Decl*1,Stat*1,Aint2),
+               Expression0 = Expression;
+               Expression1 = Expression;
+               while (ATtrue) { 
+                 Stat*1  ++
+                 if (not_empty_list(Expression)) {
+                   Expression1 = list_tail(Expression1);
+                   Expression = Expression1; }
+                 else {
+                   break;
+                 }} = Stat*3
+               =============
+               listcondspattern2cstats(Bool,Term,Term+,C-rule+1,
+                                       Expression,Namepair*,Aint1) =
+                 (Decl*1,Stat*3,Aint2)
+
+  [lcp2cs-2'6] is-var-term(Term) = true,
                is-plus-var(Term) = true,
+               are-star-vars(Term+) = false,
                make-c-temp(Aint1) = Expression0,
                make-c-temp(succ(Aint1)) = Expression1,
                add-env(C-rule+1,((Term,slice(Expression0,Expression1)))) = C-rule+2,
@@ -330,7 +356,33 @@ equations
                                        Expression,Namepair*,Aint1) =
                  (Decl*1,Stat*2,Aint2)
 
-  [lcp2cs-2'6] is-cons(Funid) = false,
+  [lcp2cs-2'7] is-var-term(Term) = true,
+               is-plus-var(Term) = true,
+               are-star-vars(Term+) = true,
+               make-c-temp(Aint1) = Expression0,
+               make-c-temp(succ(Aint1)) = Expression1,
+               add-env(C-rule+1,((Term,slice(Expression0,Expression1)))) = C-rule+2,
+               listcondspattern2cstats(true,Term+,C-rule+2,
+                                       Expression,Namepair*,succ(succ(Aint1))) =
+                 (Decl*1,Stat*1,Aint2),
+               Expression0 = Expression;
+               if (not_empty_list(Expression)) {
+                 Expression = list_tail(Expression);
+                 Expression1 = Expression;                 
+                 while (ATtrue) { 
+                   Stat*1  ++
+                   if (not_empty_list(Expression)) {
+                     Expression1 = list_tail(Expression1);
+                     Expression = Expression1; }
+                   else {
+                     break;
+                   }}} = Stat*2
+               ================
+               listcondspattern2cstats(Bool,Term,Term+,C-rule+1,
+                                       Expression,Namepair*,Aint1) =
+                 (Decl*1,Stat*2,Aint2)
+
+  [lcp2cs-2'8] is-cons(Funid) = false,
                make-c-temp(Aint1) = Expression2,
                make-c-expression(Funid,Expression2,Namepair*) = Ltest,
                listcondspattern2cstats(false,Term+,C-rule+,
@@ -346,7 +398,7 @@ equations
                                        C-rule+,Expression,Namepair*,Aint1) =
                  (Decl*,Stat*2,Aint2)
 
-  [lcp2cs-2'7] is-cons(Funid) = false,
+  [lcp2cs-2'9] is-cons(Funid) = false,
                make-c-temp(Aint1) = Expression2,
                make-c-expression(Funid,Expression2,Namepair*) = Ltest,
                listcondspattern2cstats(false,Term+,C-rule+,
@@ -361,27 +413,27 @@ equations
                                        C-rule+,Expression,Namepair*,Aint1) =
                  (Decl*,Stat*2,Aint2)
 
-  [lcp2cs-2'8] is-var-term(Term) = true,
-               is-star-var(Term) = true,
-               add-env(C-rule+1,((Term,Expression))) = C-rule+2,
-               conds2cstats(C-rule+2,Namepair*,Aint1)  = (Stat*1,Aint2)
-               ========================================================
-               listcondspattern2cstats(Bool,Term,C-rule+1,
-                                       Expression,Namepair*,Aint1) =
-                 (,Stat*1,Aint2)
-
-  [lcp2cs-2'9] is-var-term(Term) = true,
-               is-plus-var(Term) = true,
-               add-env(C-rule+1,((Term,Expression))) = C-rule+2,
-               conds2cstats(C-rule+2,
-                            Namepair*,Aint1) = (Stat*1,Aint2),
-               if (not_empty_list(Expression)) { Stat*1 } = Stat*2
-               ===================================================
-               listcondspattern2cstats(Bool,Term,C-rule+1,
-                                       Expression,Namepair*,Aint1) =
-                 (,Stat*2,Aint2)
-
   [lcp2cs-2'10] is-var-term(Term) = true,
+                is-star-var(Term) = true,
+                add-env(C-rule+1,((Term,Expression))) = C-rule+2,
+                conds2cstats(C-rule+2,Namepair*,Aint1)  = (Stat*1,Aint2)
+                ========================================================
+                listcondspattern2cstats(Bool,Term,C-rule+1,
+                                        Expression,Namepair*,Aint1) =
+                  (,Stat*1,Aint2)
+
+  [lcp2cs-2'11] is-var-term(Term) = true,
+                is-plus-var(Term) = true,
+                add-env(C-rule+1,((Term,Expression))) = C-rule+2,
+                conds2cstats(C-rule+2,
+                             Namepair*,Aint1) = (Stat*1,Aint2),
+                if (not_empty_list(Expression)) { Stat*1 } = Stat*2
+                ===================================================
+                listcondspattern2cstats(Bool,Term,C-rule+1,
+                                        Expression,Namepair*,Aint1) =
+                  (,Stat*2,Aint2)
+
+  [lcp2cs-2'12] is-var-term(Term) = true,
                 is-list-var-term(Term) = false,
                 make-c-temp(Aint1) = Expression2,
                 add-env(C-rule+1,((Term,Expression2))) = C-rule+2,
@@ -395,7 +447,7 @@ equations
                                         Expression,Namepair*,Aint1) =
                   (,Stat*2,Aint2)
 
-  [lcp2cs-2'11] Funid != null,
+  [lcp2cs-2'13] Funid != null,
                 make-c-temp(Aint1) = Expression2,
                 make-c-expression(Funid,Expression2,Namepair*) = Ltest,
                 conds2cstats(C-rule+,Namepair*,succ(Aint1)) = (Stat*1,Aint2),
@@ -407,7 +459,7 @@ equations
                 listcondspattern2cstats(Bool,Funid,C-rule+,Expression,Namepair*,Aint1) =
                   (,Stat*2,Aint2)
 
-  [lcp2cs-2'12] conds2cstats(C-rule+,Namepair*,Aint1) = (Stat*1,Aint2),
+  [lcp2cs-2'14] conds2cstats(C-rule+,Namepair*,Aint1) = (Stat*1,Aint2),
                 if (!not_empty_list(Expression)) {
                   Stat*1
                 } = Stat*2

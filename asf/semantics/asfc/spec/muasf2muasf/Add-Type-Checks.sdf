@@ -12,8 +12,8 @@ hiddens
 
 context-free syntax
 
-  atc(Module,NameTable) -> Module {traversal(trafo,top-down)}
-  atc(Rule,NameTable)   -> Rule   {traversal(trafo,top-down)}
+  atc(Module,NameTable) -> Module {traversal(trafo,top-down, break)}
+  atc(Rule,NameTable)   -> Rule   {traversal(trafo,top-down, break)}
 
 variables
 

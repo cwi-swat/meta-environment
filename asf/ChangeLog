@@ -1,3 +1,7 @@
+2003/06/11 (markvdb@cs.vu.nl)
+ * Fixed a bug report by Ernst-Jan Verhoeven. Double star list
+   variables resulted in wrong C code.
+
 2003/05/19 ({jong,markvdb}@cwi.nl)
  * Added explicit ATBpack and ATBunpack.
 

@@ -12,8 +12,8 @@ hiddens
 
 context-free syntax
 
-rt(Module) -> Module {traversal(trafo,bottom-up)}
-rt(Term)   -> Term   {traversal(trafo,bottom-up)}
+rt(Module) -> Module {traversal(trafo,bottom-up,continue)}
+rt(Term)   -> Term   {traversal(trafo,bottom-up,continue)}
 
 variables
 

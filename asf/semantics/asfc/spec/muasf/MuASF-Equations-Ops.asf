@@ -200,6 +200,21 @@ remove-returns-list(Funid) = Funid
 
   [default-ilvt-1'3] is-list-var-term(Term) = false
 
+  [asv-1'1] is-var-term(Term) = true,
+            is-star-var(Term) = true
+            ===>
+            are-star-vars(Term) = true
+
+  [asv-1'2] is-var-term(Term) = true,
+            is-star-var(Term) = true
+            ===>
+            are-star-vars(Term, Term+) = 
+              are-star-vars(Term+)
+
+  [default-asv-1'3] are-star-vars(Term+) = false
+
+  [default-asv-1'1] are-star-vars(Term) = false
+
   [ic-1'1] is-quoted-funid(funid(""" Char* """)) = true
 
   [default-ic-1'2] is-quoted-funid(Funid) = false

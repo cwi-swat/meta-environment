@@ -38,6 +38,7 @@ exports
     remove-returns-list(FunId)        -> FunId
     is-string-funid(FunId)            -> Bool
     is-list-var-term(Term)            -> Bool
+    are-star-vars({Term ","}+)        -> Bool
     is-var-term(Term)                 -> Bool
     is-boolean-term(Term)             -> Bool
     is-default-rule(Rule)             -> Bool

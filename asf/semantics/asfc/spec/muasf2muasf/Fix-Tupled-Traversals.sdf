@@ -12,10 +12,10 @@ hiddens
 
 context-free syntax
 
-ftt(Module) -> Module {traversal(trafo,top-down)}
-ftt(Rule)   -> Rule {traversal(trafo,top-down)}
-ftt(Term)   -> Term {traversal(trafo,top-down)}
-ftt(CondList) -> CondList {traversal(trafo,top-down)}
+ftt(Module) -> Module {traversal(trafo,top-down, break)}
+ftt(Rule)   -> Rule {traversal(trafo,top-down, break)}
+ftt(Term)   -> Term {traversal(trafo,top-down, break)}
+ftt(CondList) -> CondList {traversal(trafo,top-down, break)}
 
 variables
 

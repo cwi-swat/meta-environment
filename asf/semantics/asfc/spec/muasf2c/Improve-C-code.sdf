@@ -30,11 +30,4 @@ hiddens
     "Id"[0-9]*          -> Identifier
     "Stats*"[0-9\']*    -> Statement*
     "ICon"[0-9]*        -> Integer-constant
-    "Char*"[0-9]*       -> CHAR*            
-
-hiddens
-
-  %% We add this production to disambiguate C expression syntax from
-  %% Asf equations syntax in this module
- context-free syntax
-   "0" -> TagId {reject}
+    "Char*"[0-9]*       -> CHAR*   
