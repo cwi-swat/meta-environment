@@ -18,8 +18,15 @@ public class TBAddressBookService implements AddressBookTif
     addressByName = new HashMap();
   }
 
-  private AddressBookEntry getEntry(int id) {
-    return (AddressBookEntry) addressById.get(new Integer(id));
+  private IAddressBookEntry getEntry(int id) {
+    return (IAddressBookEntry) addressById.get(new Integer(id));
+  }
+
+  public ATerm createEntry() {
+    Integer id = new Integer(createUniqueID());
+    IAddressBookEntry entry = new AddressBookEntry();
+    addressById.put(id, entry);
+    return factory.make("snd-value(new-entry(<int>))", id);
   }
 
   public void deleteEntry(int id) {
@@ -27,7 +34,7 @@ public class TBAddressBookService implements AddressBookTif
   }
 
   public void setName(int id, String name) {
-    AddressBookEntry entry = getEntry(id);
+    IAddressBookEntry entry = getEntry(id);
     addressByName.remove(name);
     addressByName.put(name, new Integer(id));
     entry.setName(name);
@@ -44,13 +51,6 @@ public class TBAddressBookService implements AddressBookTif
     } else {
       return factory.make("snd-value(found(<int>))", id);
     }
-  }
-
-  public ATerm createEntry() {
-    Integer id = new Integer(createUniqueID());
-    AddressBookEntry entry = new AddressBookEntry();
-    addressById.put(id, entry);
-    return factory.make("snd-value(new-entry(<int>))", id);
   }
 
   public void recTerminate(ATerm t0) {}
