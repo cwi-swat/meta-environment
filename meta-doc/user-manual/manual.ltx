@@ -1617,52 +1617,18 @@ character code of $c_1$ is larger than that of $c_2$.
 
 By prefixing a character class with `{\tt \~{}}', it is complemented. Such a
 complemented character class accepts all characters not in the original class.
-
-All individual characters, except digits and letters,
-are {\em always} escaped with a backslash.
-See Figure \ref{CODE:charclasses} of some lexical definitions
-using character classes.
-
-\begin{figure}[!h]
-\begin{IncCode}
-\begin{boxedverbatim}
-lexical syntax
-    "\\" ~ []              -> AlphaNumericalEscChar
-
-    "\\" [01] [0-9] [0-9]  -> DecimalEscChar
-    "\\" "2" [0-4] [0-9]   -> DecimalEscChar
-    "\\" "2" "5" [0-5]     -> DecimalEscChar
-
-    AlphaNumericalEscChar  -> EscChar
-    DecimalEscChar         -> EscChar
-
-    ~ [\0-\31\"\\]         -> L-Char
-    [\t\n]                 -> L-Char
-    EscChar                -> L-Char
-\end{boxedverbatim}
-\end{IncCode}
-\caption{Lexical functions with character classes}\label{CODE:simplelex}
-\end{figure}         
-
- 
-\subsubsection{Escape Conventions}
+      
+\paragraph{Escape Conventions}
 
 Characters with a special meaning in \asfsdf\ may cause problems when they are
 needed as ordinary characters in the lexical syntax. The backslash character
-(`{\tt \\}') is used as escape character for the quoting of specialr
-characters. You
-should use `{\tt \\$c$}' whenever you need special character $c$ as ordinary character in
-the definition.
+(`{\tt \verb+\+\verb+\+}') is used as escape character for 
+the quoting of special characters. You
+should use `{\tt \verb+\+\verb+\+$c$}' whenever you need special 
+character $c$ as ordinary character in a definition.
 
-In character classes, the following characters are special and should be
-escaped: 
-
-\begin{itemize}
-\item {\tt [}: begin of character class 
-\item {\tt ]}: end of character class 
-\item {\tt -}: character range 
-\item \verb+\+: escape character
-\end{itemize}
+All individual characters, except digits and letters,
+are {\em always} escaped with a backslash.
 
 In literal strings, the following characters are special and should be
 escaped:
@@ -1682,12 +1648,45 @@ You may use the following abbreviations in literals and in character classes:
 
 \item \verb+\t+: horizontal tabulation 
 
-\item {\tt $ddd$}: a non-printable character with three digit (octal) code
-  $ddd$.
+\item {\tt $nr$}: a non-printable character with the decimal code $nr$.
 
 \end{itemize}
 
-\subsubsection{Repetitions}
+\paragraph{Character Class Operations}
+
+Besides the complementation operator for character classes there are
+also operators for:
+\begin{itemize}
+\item Difference between two character classes `{\tt /}'.
+\item Union of two character classes `{\tt  /\verb+\+}'.
+\item Intersection of two character classes `{\tt  \verb+\+/}'.
+\end{itemize}
+These three binary operators are left-associative.
+
+See Figure \ref{CODE:charclasses} of some lexical definitions
+using character classes.
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+lexical syntax
+    "\\" ~[]                 -> AlphaNumericalEscChar
+
+    "\\" [01] [0-9] [0-9]    -> DecimalEscChar
+    "\\" "2" [0-4] [0-9]     -> DecimalEscChar
+    "\\" "2" "5" [0-5]       -> DecimalEscChar
+
+    AlphaNumericalEscChar    -> EscChar
+    DecimalEscChar           -> EscChar
+
+    ~[\0-\31\"\\] \/ [\t\n]  -> L-Char
+    EscChar                  -> L-Char
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Lexical functions with character classes}\label{CODE:charclasses}
+\end{figure}   
+
+\subsubsection{Repetition Operators}
 
 It is common, that lexical tokens can only be described by patterns that
 exhibit a certain repetition. Two postfix operators are available for this
@@ -1702,6 +1701,54 @@ purpose:
   character class preceding the {\tt +}.
 
 \end{itemize}
+
+Figure \ref{CODE:repetition} shows the use of these repetition operators.
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+lexical syntax
+    [a-z]       -> Let
+    [a-z0-9]    -> NumLet
+
+    Let NumLet* -> Id
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Lexical functions with repetition operator}\label{CODE:repetition}
+\end{figure}   
+
+\subsubsection{Optional Operators}
+
+It is common, that lexical tokens can only be described by patterns that
+exhibit a certain repetition. Two postfix operators are available for this
+purpose:
+
+\begin{itemize}
+
+\item {\tt *}: indicates zero or more repetitions of the sort, literal or
+  character class preceding the {\tt *}. 
+
+\item {\tt +}: indicates one or more repetitions of the sort, literal or
+  character class preceding the {\tt +}.
+
+\end{itemize}
+
+Figure \ref{CODE:repetition} shows the use of these repetition operators.
+
+\begin{figure}[!h]
+\begin{IncCode}
+\begin{boxedverbatim}
+lexical syntax
+    [a-z]       -> Let
+    [a-z0-9]    -> NumLet
+
+    Let NumLet* -> Id
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Lexical functions with repetition operator}\label{CODE:repetition}
+\end{figure}   
+
+\subsubsection{Alternative Operators}
 
 \subsubsection{Literals}
 
