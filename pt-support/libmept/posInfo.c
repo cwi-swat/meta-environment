@@ -378,17 +378,15 @@ PT_Tree PT_findTreeAtOffset(PT_Tree tree, int offset)
     return NULL;
   }
 
-  if (!PT_hasTreeArgs(tree)) {
-    return tree;
-  }
-
-  args = PT_getTreeArgs(tree);
-  while (!PT_isArgsEmpty(args)) {
-    PT_Tree child = PT_findTreeAtOffset(PT_getArgsHead(args), offset);
-    if (child != NULL && !PT_isTreeFlatLexical(child)) {
-      return child;
+  if (PT_isTreeAppl(tree)) {
+    args = PT_getTreeArgs(tree);
+    while (!PT_isArgsEmpty(args)) {
+      PT_Tree child = PT_findTreeAtOffset(PT_getArgsHead(args), offset);
+      if (child != NULL && !PT_isTreeFlatLexical(child)) {
+	return child;
+      }
+      args = PT_getArgsTail(args);
     }
-    args = PT_getArgsTail(args);
   }
 
   return tree;

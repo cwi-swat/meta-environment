@@ -1,5 +1,10 @@
 $Id$
 
+Thu Jul  8 09:35:01 CEST 2004 <{jurgenv,kooiker}@cwi.nl>
+ * libmept/posInfo.c: 
+   - findTreeAtOffset does not go into ambiguity clusters because an arbitrary
+     choice has te be made otherwise
+
 Thu Jun 24 12:49:47 CEST 2004 <{jong,kooiker}@cwi.nl>
  * libmept/reportAmbs.c: add PT_findTopAmbiguity 
 
