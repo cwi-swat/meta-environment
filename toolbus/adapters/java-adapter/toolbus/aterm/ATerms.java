@@ -259,6 +259,20 @@ public class ATerms extends ATerm
   }
 
   //}
+  //{ public ATerms concat(ATerms rhs)
+
+  /** 
+    * Concatenate two ATerms and return the result.
+    */
+
+  public ATerms concat(ATerms rhs)
+  {
+    if(next == null)
+      return (ATerms)(new ATerms(first, rhs)).unique();
+    return (ATerms)(new ATerms(first, next.concat(rhs))).unique();
+  }
+
+  //}
 
   //{ public boolean match(ATerm trm, Vector subterms)
 

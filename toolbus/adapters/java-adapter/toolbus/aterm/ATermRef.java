@@ -5,11 +5,29 @@ import toolbus.util.PrintWriter;
 import toolbus.util.*;
 import java.io.*;
 
-abstract public class ATermRef
+abstract public class ATermRef implements Cloneable
 {
   abstract protected ATerm getATerm();
 
+  //{ public synchronized Object clone()
 
+  /**
+    * Clone an ATermRef.
+    */
+
+  public synchronized Object clone()
+  {
+    ATermRef copy = null;
+    try {
+      copy = (ATermRef)super.clone();
+      copy.getATerm().increaseRef();
+    } catch (CloneNotSupportedException e) {
+      System.err.println("huh? internal error!");
+    }
+    return copy;
+  }
+
+  //}
   //{ public boolean equals(Object obj)
 
   /**

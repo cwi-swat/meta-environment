@@ -176,19 +176,17 @@ public class ATermsRef extends ATermRef
   //}
   //{ public ATermsRef concat(ATermsRef rhs)
 
+  /**
+    * Concatenate two lists. Returns a new object that contains the
+    * concatenation of the two lists.
+    */
+
   public ATermsRef concat(ATermsRef rhs)
   {
     if(rhs == null)
-      return this;
-    if(t.getNext() == null)
-      update(t.getFirst(), rhs.getATerms());
-    else {
-      ATerm head = t.getFirst();
-      t = t.getNext();
-      update(head, concat(rhs).getATerms());
-    }
+      return (ATermsRef)clone();
 
-    return this;
+    return new ATermsRef(getATerms().concat(rhs.getATerms()));
   }
 
   //}
