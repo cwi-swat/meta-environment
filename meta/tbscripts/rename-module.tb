@@ -33,10 +33,10 @@ in
           SaveSdfModules(Changed). tau.
           SaveAsfSdfModule(RealNew). tau.
           RemoveModule(Old). tau
-        fi
-      fi
-    fi
-  fi.
+        else tau fi
+      else tau fi
+    else tau fi
+  else tau fi.
   HandleRenameModuleErrors(Old, RealNew, Status) . tau
 endlet
 
@@ -126,7 +126,7 @@ endlet
 
 process HandleRenameModuleErrors(Old : str, New : str, Status : term) is
   if not-equal(Status, success) then
-    snd-note(ui-status(errorf("Error during renaming of %s to %s: %t\n", 
+    snd-note(ui-status(errorf("Error during renaming of %s to %s: %s\n", 
                             [Old, New, Status])))
   else
     tau
