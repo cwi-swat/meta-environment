@@ -157,9 +157,9 @@ ATerm interpret(int cid, const char *modname, ATerm eqs, ATerm parseTable,
 }
 
 /*}}}  */
-/*{{{  ATerm run_tests(int cid, char *modname, ATerm eqs, ATerm tests) */
+/*{{{  ATerm run_tests(int cid, ATerm eqs, ATerm tests, ATerm tide) */
 
-ATerm run_tests(int cid, const char *modname, ATerm eqs, ATerm tests, ATerm tide)
+ATerm run_tests(int cid, ATerm eqs, ATerm tests, ATerm tide)
 {
   ASF_ASFConditionalEquationList eqsList;
   ASF_ASFTestEquationTestList testList;

@@ -1,7 +1,12 @@
 $Id$
 
 Wed Mar 23 15:15:07 CET 2005 <kooiker@cwi.nl>
- * semantics/asfe/src/asfe.idef:
+ * semantics/asfe/src/test-runner.c:
+   - prettyTag adds external location to error message, the location of the
+   tag is not available anymore after normalizing
+   - testOne returns error and location of error 
+   - runTests checks on error and passes location to prettyTag 
+ * semantics/asfe/src/asfe.{idef,c,tif.h,tif.c}:
    - Removed unused variable ModuleName in run-tests
  * semantics/asfe/src/reduction.c:
    - Removed check on injection in rewriteArgs
