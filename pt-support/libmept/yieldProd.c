@@ -150,6 +150,11 @@ lengthOfSymbol(PT_Symbol symbol)
     PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
     return lengthOfSymbols(newSymbols) + 4;
   }
+  if (PT_isSymbolFunc(symbol)) {
+    PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
+    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
+    return lengthOfSymbols(newSymbols) + lengthOfSymbol(newSymbol) + 6;
+  }
   if (PT_isSymbolCharClass(symbol)) {
     return lengthOfCharRanges(PT_getSymbolRanges(symbol)) + 2;
   }
@@ -462,6 +467,19 @@ yieldSymbol(PT_Symbol symbol, int idx, char *buf, int bufSize)
     idx = yieldSymbols(newSymbols, idx, buf, bufSize);
     buf[idx++] = '>';
     buf[idx++] = '>';
+    return idx;
+  }
+  if (PT_isSymbolFunc(symbol)) {
+    PT_Symbols newSymbols = PT_getSymbolSymbols(symbol);
+    PT_Symbol newSymbol = PT_getSymbolSymbol(symbol);
+    buf[idx++] = '(';
+    idx = yieldSymbols(newSymbols, idx, buf, bufSize);
+    buf[idx++] = ' ';
+    buf[idx++] = '=';
+    buf[idx++] = '>';
+    buf[idx++] = ' ';
+    idx = yieldSymbol(newSymbol, idx, buf, bufSize);
+    buf[idx++] = ')';
     return idx;
   }
   if (PT_isSymbolCharClass(symbol)) {

@@ -84,6 +84,8 @@
 
   [Symbol, perm, perm(<symbols(Symbols)>)],
 
+  [Symbol, func, func(<symbols(Symbols)>,<symbol(Symbol)>)],
+
   [Symbol, var-sym, varsym(<symbol(Symbol)>)],
 
   [Symbol, layout, layout],
