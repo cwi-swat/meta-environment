@@ -56,6 +56,18 @@ AC_ARG_WITH(asc-support,
 
 AC_SUBST(ASC_SUPPORT)
 
+dnl Handle --with-tide=... argument to configure
+AC_ARG_WITH(tide,
+   [  --with-tide             TIDE is in DIR],
+   TIDE=${withval}
+   TIDEDEF=-DUSE_TIDE
+   USE_TIDE=1,
+   USE_TIDE=0
+)
+AC_SUBST(TIDE)
+AC_SUBST(TIDEDEF)
+AC_SUBST(USE_TIDE)
+
 dnl Our own version of libdir whose value is set dynamically
 AC_SUBST(INSTLIBDIR)
 INSTLIBDIR="$libdir"
@@ -121,6 +133,10 @@ AC_OUTPUT(
    asfe/Makefile
    asfe/src/Makefile
    asfe/test/Makefile
+   asfe/test/eqs/Makefile
+   asfe/test/fail/Makefile
+   asfe/test/ref/Makefile
+   asfe/test/terms/Makefile
    test/Makefile
    utils/Makefile
 )

@@ -38,16 +38,16 @@ prepare_restore_SOURCES = \
 
 prepare_restore_LDADD = \
                   -L../src -leval \
-                  -L$(ASFIXLIB) -lAsFix \
-                  -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
+                  -L$(ASFIX)/lib -lAsFix \
+                  -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 equalModuloWhitespace_SOURCES = \
                   equalModuloWhitespace.c
 
 equalModuloWhitespace_LDADD   = \
                  -L../src -leval \
-                 -L$(ASFIXLIB) -lAsFix \
-                 -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
+                 -L$(ASFIX)/lib -lAsFix \
+                 -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
 whitespace_SOURCES = \
                  whitespace.c
@@ -58,13 +58,14 @@ whitespace.o: ../src/libeval.a
 
 whitespace_LDADD   = \
                  -L../src -leval \
-                 -L$(ASFIXLIB) -lAsFix \
-                 -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
+                 -L$(ASFIX)/lib -lAsFix \
+                 -L$(ATERM)/lib -lATB -lATerm $(SOCKLIBS)
 
-INCLUDES       = -I$(srcdir)/../src -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
+INCLUDES       = -I$(srcdir)/../src -I$(ASC)/include -I$(ASFIX)/include \
+                 -I$(ATERM)/include
 
 % : %.sh.src Makefile
-	sed 's@__TOOLBUS__@$(TOOLBUSBIN)/toolbus@g;\
+	sed 's@__TOOLBUS__@$(TOOLBUS)/bin/toolbus@g;\
 	     s@__DATADIR__@$(datadir)@g;\
 	     s@__SRCDIR__@$(srcdir)@g' < $< > $@ && \
 	chmod +x $@
