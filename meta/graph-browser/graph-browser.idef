@@ -106,14 +106,12 @@ in
     ) 
     +
     ( rec-event(UI, delete-module(ModName?)) .
-      snd-msg(close-module(ModName)) .
-      rec-msg(module-closed(ModName)) .
-      snd-msg(remove-module(ModName)) .
-      rec-msg(removed-module) .
+      snd-msg(delete-module(ModName)) .
+      rec-msg(module-deleted(ModName)) .
       snd-do(UI, delete-module(ModName)) .
       snd-ack-event(UI, delete-module(ModName))
     ) +
-    ( rec-msg(delete-module(ModName?)).
+    ( rec-msg(ui-delete-module(ModName?)).
       snd-do(UI, delete-module(ModName))
     ) +
     ( rec-event(UI,save-module(Str?)).
@@ -150,7 +148,7 @@ in
         snd-do(UI,module-info(ModName,[["sorry","not implemented"],
             ["example",""],["dir","%s"],["size","10kb"]]))
       +
-        rec-msg(no-module-ingo(ModName))
+        rec-msg(no-module-info(ModName))
       ) .
       snd-ack-event(UI,get-module-info(ModName))
     )
