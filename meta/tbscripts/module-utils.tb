@@ -123,27 +123,6 @@ in
   fi
 endlet  
 
-process FilterElement(Elem : term, List : list?) is
-let
-  OldList : list,
-  NewList : list,
-  Head : term
-
-in
-  OldList := List.
-  NewList := [].
-  if not(equal(OldList,[])) then
-    Head := first(OldList).
-    OldList := next(OldList).
-    if not(equal(Elem,Head)) then
-      NewList := join(Head, NewList)
-    else tau fi
-  fi *
-  if equal(OldList,[]) then 
-    List := NewList
-  fi
-endlet
-
 process DoRevertModule(ModuleName : str, Type : term) is
   if equal(Type, syntax-editor) then
     HardCloseModuleInDB(ModuleName).
