@@ -952,7 +952,7 @@ if test "${with_tcldot+set}" = set; then
   withval="$with_tcldot"
   TCLDOT=${withval}
 else
-  { echo "configure: error: \nPlease specify location of tcldot using --with-tcldot=/path/to/tcldot.so\nIf you are at CWI/UvA a good guess would be ~kuipers/lib/Tcldot" 1>&2; exit 1; }
+  { echo "configure: error: \nPlease specify location of tcldot using --with-tcldot=/path/to/tcldot.so\nIf you are at CWI/UvA a good guess would be ~gipe/petr/lib/Tcldot" 1>&2; exit 1; }
 
 fi
 

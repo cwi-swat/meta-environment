@@ -103,7 +103,7 @@ dnl Handle --with-tcldot=... argument to configure
 AC_ARG_WITH(tcldot,
 [  --with-tcldot 	location of tcldot library to use],
 TCLDOT=${withval},
-AC_MSG_ERROR(\nPlease specify location of tcldot using --with-tcldot=/path/to/tcldot.so\nIf you are at CWI/UvA a good guess would be ~kuipers/lib/Tcldot)
+AC_MSG_ERROR(\nPlease specify location of tcldot using --with-tcldot=/path/to/tcldot.so\nIf you are at CWI/UvA a good guess would be ~gipe/petr/lib/Tcldot)
 )
 AC_SUBST(TCLDOT)
 

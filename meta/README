@@ -19,6 +19,7 @@ To compile this distribution you will need the following tools:
       Move the directory lib/Tcldot to some convenient place. This is
       the only directory from the distribution that is used. Remember
       the location, you'll need it later.
+      (At CWI/UvA, it will be under ~gipe/petr/lib/Tcldot)
 
 
 As well as a full set of UNIX development utilities.
