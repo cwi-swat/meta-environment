@@ -51,12 +51,12 @@ in
     rec-msg(ts-get-all-keys(TableName?)).
     snd-eval(TS,get-all-keys(TableName)).
     rec-value(TS,result(Keys?)).
-    snd-msg(ts-all-keys(TableName,Keys))
+    snd-msg(ts-all-keys(Keys))
   +
     rec-msg(ts-get-all-values(TableName?)) .
     snd-eval(TS, get-all-values(TableName)) .
     rec-value(TS,result(Values?)) .
-    snd-msg(ts-all-values(TableName,Values))
+    snd-msg(ts-all-values(Values))
   +
     rec-msg(ts-remove-value-from-all-tables(Key?)).
     snd-do(TS,remove-value-from-all-tables(Key))
