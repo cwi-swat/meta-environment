@@ -1,5 +1,11 @@
 $Id$
 
+2001/09/27 (jurgenv@cwi.nl)
+ * Due to some changes in the pt-support package, sglr now emits different
+   parsetrees in both AsFix2 and AsFix2me. The changes are about the
+   attributes of a production. See the ChangeLog of pt-support for details.
+ * NOTE: the new parse tree format is not backward compatible.
+ 
 2001/09/21 (jurgenv@cwi.nl)
  * Added -u switch to dump-productions (unparses the productions).
 
