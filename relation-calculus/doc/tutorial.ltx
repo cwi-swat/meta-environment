@@ -1,0 +1,565 @@
+
+\documentclass[10pt]{article}
+\usepackage[english]{babel}
+\usepackage{url}
+\usepackage{times}
+\usepackage{xspace}
+\usepackage{supertabular}
+
+\newcommand{\rscript}[0]{\textsc{Rscript}\xspace}
+\title{A Tutorial Introduction to \rscript}
+\author{Paul Klint}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This short note documents the current state of the \rscript language.  It has
+been hastily written, and is incomplete. Apologies for that. Better something
+than nothing.
+\end{abstract}
+
+\section{Introduction}
+
+\rscript is a small scripting language based on the relational calculus that
+is intended for writing queries about software: from individual programs to
+complete software systems.
+
+\section{The \rscript language}
+An \rscript consists of a sequence of declarations for variables and/or
+functions. Usually, the value of one of these variables is what the writer of the
+script is interested in.
+
+The language has scalar types (Boolean, integer, string, node) and composite
+types (bag and relation). Expressions are constructed from bag formers, set
+formers, function invocations and operators. These are all described below.
+
+\section{Types and values}
+
+\subsection{Elementary types and values}
+
+\paragraph{Booleans}
+The Booleans are represented by the type {\tt bool} and have two values:
+{\tt true} and {\tt false}.
+
+\paragraph{Integers}
+The integer values are represented by the type {\tt int} and are written as
+usual, e.g., {\tt 0}, {\tt 1}, or {\tt 123}.
+
+\paragraph{Strings}
+The string values are represented by the type {\tt str} and consist
+of character sequences surrounded by double quotes. e.g., {\tt "a"} or
+{\tt "a\ long\ string"}.
+
+\paragraph{Nodes}
+Node values are represented by the type {\tt node} and serve as source text
+coordinates, they are written as in: {\tt area("/usr/paulk/myfile.c", 2, 3, 7,
+55)}.\footnote{Probably the name ``node'' is wrong and should be replaced by
+something like ``area'', ``text-area'', ``coordinates'', etc.}
+
+\subsection{Composite Types and Values}
+
+\paragraph{Bags}
+Bags are represented by the type {\tt bag[T]}, where {\tt T} is an arbitrary
+type. Examples are {\tt bag[int]} and {\tt bag[bag[str]]}.  Bags are denoted
+by {\tt \{ E1, E2, ..., En \}}, where the {\tt E}s are expressions that yield
+the desired element type. For example, {\tt \{1, 2, 3\}}, {\tt \{1, 2+3,
+5*9\}}, {\tt \{\{1, 2\}, \{3, 4\}\}}.
+
+\paragraph{Note} It is not at all clear that it is a good idea to allow these
+nested types. There are two reasons for this:
+\begin{itemize}
+\item When using a non-nested type, all built-in primitives are directly
+  usable; this may not be the case for a nested type. This is most important
+  for relations.
+
+\item Implementation considerations may dictate that we abstain from nested types.
+\end{itemize}
+\textbf{Advice: be reluctant with the use of nested types.}
+
+\begin{sloppypar}
+\paragraph{Relations}
+Relations are represented by the type {\tt rel[T1, T2]}, where {\tt T1} and
+{\tt T2} are arbitrary
+types. Examples are {\tt rel[int,str]} and {\tt rel[int,bag[str]]}.  Relations are denoted
+by {\tt \{<E11, E12>, <E21, E22>, ..., <En1, En2>\}}, where the {\tt E}$_ij$ are expressions that yield
+the desired element type. For example, {\tt \{<1, "a">, <2, "b",
+  <3,"c">\}}.
+\end{sloppypar}
+
+\section{Bag and relation formers}
+
+\paragraph{Generators}
+We will use the notion of a generator that enumerates all the values in a
+given bag or relation. A \emph{bag generator} has the form {\tt V in E}, where
+{\tt V} is a variable and {\tt E} is a bag-valued expression.  A
+\emph{relation generator} has the form {\tt <V1, V2> in E}, where {\tt V1} and
+{\tt V2} are variables and {\tt E} is a relation-valued expression.
+Generators introduce variables that may be used in the expression in which
+they occur.
+
+\paragraph{Bag formers}
+
+A bag former is an expression that yields a bag as value and has the form
+\begin{verbatim}
+{ E : G1, ..., Gn | P }
+\end{verbatim}
+where the {\tt G}$_i$ are generators. {\tt P} is a predicate.  Note that
+generators may use variables introduced by preceeding generators.  The
+predicate {\tt P} and the expression {\tt E} can use all the values introduced
+by the generators. The meaning of this construct is that the predicate is
+applied for all combinations of generated values and the value of {\tt E} is
+added to the bag when the predicate is true. Note that the value of {\tt E}
+may be a single value or a bag of values. In the former case the single value
+is added to the resulting bag. In the latter case, all the elements of the
+bag value are added to the resulting bag.
+
+\paragraph{Example}
+
+{\tt \{X : X in \{1, 2, 3, 4, 5\} | X >= 3\}} yields the bag {\tt \{3,4,5\}}.
+
+\paragraph{Relation formers}
+A relation former has the same syntax as a bag former with the additional
+constraint that the expression {\tt E} must either yield a tuple or a
+relation.
+
+\paragraph{Example}
+
+{\tt \{X : X in \{1, 2, 3\}, Y in \{2, 3, 4\} | X >= Y\}} yields the relation
+{\tt \{<2, 2>, <3, 2>, <3, 3>\}}.
+
+\section{Declarations}
+
+\paragraph{Variable declarations}
+A variable declaration has the form {\tt T V = E}, where {\tt T} is a type,
+{\tt V} is a variable name, and {\tt E} is an expression that should have type
+{\tt T}. The effect is that the value of expression {\tt E} is assigned to
+{\tt V} and can be used later on as {\tt V}'s values. Double declarations are
+not allowed.
+
+As a convenience, also declarations without an initialization expression are
+permitted and have the form {\tt T V}. They only introduce the variable {\tt
+V}.
+
+\paragraph{Function declarations}
+A function declaration has the form
+\begin{verbatim}
+T F(T1 V1, ..., Tn Vn) = E
+\end{verbatim}
+Here {\tt T} is the result type of the function and this should be equal to
+the type of the associated expression {\tt E}.  Each {\tt T}$_i$\ {\tt V}$_i$
+represents a formal parameter of the function. The formal parameters may occur
+in {\tt E} and get their value when {\tt F} is invoked from another
+expression.
+
+\paragraph{Where}
+Local variables can be introduced as follows:
+\begin{verbatim}
+E where T1 V1 = E1, ..., Tn Vn = En endwhere
+\end{verbatim}
+First the local variables {\tt V}$_i$ are bound to their respective values
+{\tt E}$_i$, and then the value of expression {\tt E} is yielded.
+
+\paragraph{Assert}
+An assert statement may occur everywhere where a declaration is allowed.  It
+has the form {\tt assert M: E}, where {\tt M} is a string that serves as a
+label for this assertion, and {\tt E} is a boolean-value expression.  During
+execution, a list of true and false assertions is maintained.  When the script
+is executed as \emph{testsuite} (see Section~\ref{running}) a summary of this
+information is shown to the user.
+
+\paragraph{Solvers}
+It is also possible to define mutually recursive variables by
+\begin{verbatim}
+solve {
+  V1 = E1,
+  ...
+  Vn = En
+}
+\end{verbatim}
+Here, the expressions {\tt E}$_i$ may refer to any of the variables {\tt
+  V}$_i$ (and to any variables declared earlier).  This set of equations is
+  solved by evaluating the expressions {\tt E}$_i$, assigning their value to
+  the corresponding variables {\tt V}$_i$, and repeated this as long as the
+  value of one of the variables was changed. This is typically used for
+  solving a set of dataflow equations. \footnote{Probably, the syntax of this
+  construct should more emphasize that it is a set of equations.}
+
+
+\section{Built-in operators}
+
+\tablehead{\hline}
+\tabletail{\hline}
+\begin{supertabular}{|p{3cm}|p{8.5cm}|} \hline
+
+bool \texttt{and} bool & yields true if both arguments have the value true and
+false otherwise\\ \hline
+
+bool \texttt{or} bool & yields true if either argument has the value true and
+                         false otherwise\\ \hline
+
+{\tt not} bool & yields true if its argument is false and true otherwise \\
+\hline
+
+any {\tt in} bag & yields true if the left argument occurs as element in the
+right argument and false otherwise \\ \hline
+
+any {\tt notin} bag & yields false if the left argument occurs as element in the
+right argument and true otherwise \\ \hline \hline
+
+
+tuple {\tt in} rel & yields true if the left argument occurs as element in the
+right argument and false otherwise \\ \hline
+
+tuple {\tt notin} rel & yields false if the left argument occurs as element in the
+right argument and true otherwise \\ \hline \hline
+
+bag {\tt ==} bag & yields true if both arguments are equal bags and false
+otherwise\\ \hline
+
+bag {\tt !=} bag & yields true if both arguments are unequal bags and false
+otherwise\\ \hline
+
+bag {\tt <=} bag & yields true if the left argument is a subset of the right argument
+and false otherwise\\ \hline
+
+bag {\tt <} bag & yields true if the left argument is a strict subset of the right argument
+and false otherwise\\ \hline
+
+bag {\tt >=} bag & yields true if the left argument is a superset of the right argument
+and false otherwise\\ \hline
+
+bag {\tt >} bag & yields true if the left argument is a strict superset of the right argument
+and false otherwise\\ \hline \hline
+
+rel {\tt ==} rel & yields true if both arguments are equal relations and false
+otherwise\\ \hline
+
+rel {\tt !=} rel & yields true if both arguments are unequal relations and false
+otherwise\\ \hline
+
+rel {\tt <=} rel & yields true if the left argument is a subset of the right argument
+and false otherwise\\ \hline
+
+rel {\tt <} rel & yields true if the left argument is a strict subset of the right argument
+and false otherwise\\ \hline
+
+rel {\tt >=} rel & yields true if the left argument is a superset of the right argument
+and false otherwise\\ \hline
+
+rel {\tt >} rel & yields true if the left argument is a strict superset of the right argument
+and false otherwise\\ \hline \hline
+
+int {\tt ==} int & yields true if both arguments are numerically equal and false
+otherwise\\ \hline
+
+int {\tt !=} int & yields true if both arguments are numerically unequal  and false
+otherwise\\ \hline
+
+int {\tt <=} int & yields true if the left argument is numerically less than
+or equal the right argument and false otherwise\\ \hline
+
+int {\tt <} int & yields true if the left argument is a numerically less than the right argument
+and false otherwise\\ \hline
+
+int {\tt >=} int & yields true if the left argument is numerically greater
+than or equal the right argument and false otherwise\\ \hline
+
+int {\tt >} int & yields true if the left argument is numerically greater than the right argument
+and false otherwise\\ \hline \hline
+
+bag {\tt union} bag & yields the bag resulting from the union of the two arguments
+ \\ \hline
+
+bag {\tt inter} bag & yields the bag resulting from the intersection of the two arguments
+ \\ \hline
+
+bag \verb+\+ bag & yields the bag resulting from the difference of the two arguments
+ \\ \hline \hline
+
+rel {\tt union} rel & yields the relation resulting from the union of the two arguments
+ \\ \hline
+
+rel {\tt inter} rel & yields the relation resulting from the intersection of the two arguments
+ \\ \hline
+
+rel \verb+\+ rel & yields the relation resulting from the difference of the two arguments
+ \\ \hline
+
+rel {\tt o} rel & yields the relation resulting from the composition of the two arguments
+ \\ \hline
+
+
+bag {\tt x} bag & yields the relation resulting from the carthesian product of the two arguments
+ \\ \hline
+
+rel {\tt +} & yields the relation resulting from the transitive closure of
+ the argument  \\ \hline
+
+rel {\tt *}  & yields the relation resulting from the reflexive transitive closure of
+ the argument  \\ \hline
+
+\end{supertabular}
+
+\section{Built-in functions}
+
+\tablehead{\hline}
+\tabletail{\hline}
+
+\begin{supertabular}{|p{4cm}|p{7.5cm}|} \hline
+
+{\tt id(} bag {\tt )} & yields the relation that results from transforming
+each element in the argument into a pair with that element as first and
+second element \\ \hline
+
+{\tt domain(} rel {\tt )} & yields the bag that results from taking
+the first element of each tuple in the argument \\ \hline
+
+{\tt range(} rel {\tt )} & yields the bag that results from taking
+the second element of each tuple in the argument \\ \hline
+
+{\tt carrier(} rel {\tt )} & yields the bag that results from taking
+the first and  second element of each tuple in the argument \\ \hline
+
+{\tt top(} rel {\tt )} &  yields the bag of all roots when the argument is
+viewed as a graph\\ \hline
+
+{\tt bottom(} rel {\tt )} &  yields the bag of all leaves when the argument is
+viewed as a graph\\ \hline
+
+{\tt inv(} rel {\tt )} &  yields the relation that is the inverse of the
+argument, i.e. the relation in which the elements of the tuples have been
+interchanged.\\ \hline
+
+{\tt compl(} rel {\tt )} &  yields the relation that is the complement of the
+argument, using the carrier set of that argument oas universe \\ \hline
+
+{\tt domainR(} rel, bag {\tt )} & yields a relation identical to the first
+ argument but only containing tuples whose first element is in the second
+ argument \\ \hline
+
+{\tt rangeR(} rel, bag {\tt )} & yields a relation identical to the first
+ argument but only containing tuples whose second element is in the second
+ argument \\ \hline
+
+{\tt carrierR(} rel, bag {\tt )} &  yields a relation identical to the first
+ argument but only containing tuples whose first and second element are in the second
+ argument \\ \hline
+
+{\tt domainX(} rel, bag {\tt )} & yields a relation identical to the first
+ argument but with all tuples removed whose first element is in the second
+ argument \\ \hline
+
+{\tt rangeX(} rel, bag {\tt )} & yields a relation identical to the first
+ argument but with all tuples removed whose second element is in the second
+ argument \\ \hline
+
+
+{\tt carrierX(} rel, bag {\tt )} &  yields a relation identical to the first
+ argument but with all tuples removed whose first or second element is in the second
+ argument \\ \hline
+
+{\tt first(} tuple {\tt )} &  yields the first element of the argument\\ \hline
+
+{\tt second(} tuple {\tt )} &  yields the second element of the argument\\ \hline
+
+{\tt reachR(} bag1, bag2, rel {\tt )} & yields the relation that describes
+which nodes can be reached from bag1 using the relation rel, such that only nodes in
+bag2 are used.
+
+\\ \hline
+
+{\tt reachX(} bag, bag, rel {\tt )} &  yields the relation that describes
+which nodes can be reached from bag1 using the relation rel, such that no nodes in
+bag2 are used. \\ \hline
+
+\end{supertabular}
+
+\section{Running a \rscript}
+Currently, the definition of \rscript resides in {\tt /ufs/paulk/research/RPA}
+but that will change soon. You can also checkout your own copy by means of
+{\tt cvs -d /ufs/paulk/cvsroot co RPA}.
+
+\paragraph{Running a script}
+\begin{itemize}
+\item Change to the above directory (better to your own copy!).
+\item Start the ASF+SDF Meta-Environment by the command {\tt meta}.
+\item Open the module {\tt Rscript.sdf}.
+\item Open your own term, using the Rscript module.
+\item Click the parse button in the {\tt Actions} menu of the editor:
+now we know whether there are syntax errors. If so, correct them.
+
+\item Click the {\tt Check Rscript} button in the {\tt Actions} menu: this will
+  perform a type check of your script. If there are type errors, correct them.
+
+\item Click the {\tt Exec Rscript} button to execute your script: a new
+editor pops up which shows all the variables at the end of the execution.
+\end{itemize}
+
+\paragraph{Running a Test suite} \label{running}
+Same as above but use {\tt Exec Rscript Testsuite} button instead of the {\tt
+Exec Rscript} button.  The effect is that the script is executed and that a
+summary is printed of {\tt assert} statement that succeeded or failed.
+
+\paragraph{Miscellaneous}
+The subdirectory {\tt rscripts} contains several sample scripts.  See {\tt
+test1.rscript} and {\tt tests2.rscript} for examples of the use of built-in
+operators and functions.
+
+\section{Pseudo definitions of some built-in operators and functions}
+
+It is interesting that most (but not all!) built-in operators and all
+functions can be defined in \rscript itself. They only serve convenience and
+efficiency.  The definitions marked with a dagger ($\dagger$) cannot be written
+as such since it is not possible to define operators in \rscript.  It is,
+however, allowed to write these polymorphic definitions where {\tt T1}, {\tt
+T2}, ... represent arbitrary types.
+
+\paragraph{$^\dagger$Composition: {\tt o}}
+
+\begin{verbatim}
+rel[T1,T3] o(rel[T1,T2] R1, rel[T2,T3] R2) =
+   {<v, y> : <v, w> in R1, <x, y> in R2 | w == x }
+\end{verbatim}
+
+\paragraph{$^\dagger$Carthesian product: {\tt x}}
+\begin{verbatim}
+rel[T1,T2] x(bag[T1] B1, bag[T2] B2) =
+   {<x, y> : x in B1, y in B2 }
+\end{verbatim}
+
+\paragraph{$^\dagger$ Left image: {\tt .}}
+\begin{verbatim}
+bag[T2] .(T1 E, rel[T1,T2] R) = { W : <V, W> in R | V == E }
+bag[T2] .(bag[T1] B, rel[T1,T2] R) = { W : <V, W> in R | V in B}
+\end{verbatim}
+
+\paragraph{$^\dagger$Right image: {\tt .}}
+\begin{verbatim}
+bag[T1] .(rel[T1,T2] R, T2 E) = { V : <V, W> in R | W == E }
+bag[T1] .(rel[T1,T2] R, bag[T2] B) = { V : <V, W> in R |  W in B }
+\end{verbatim}
+
+\paragraph{Identity: {\tt id}}
+\begin{verbatim}
+rel[T,T] id(bag[T] B) = { <X, X> : X in B }
+\end{verbatim}
+Example:
+\begin{verbatim}
+id({1,2,3}) = {<1,1>, <2,2>, <3,3>}
+\end{verbatim}
+
+\paragraph{Domain: {\tt domain}}
+\begin{verbatim}
+Def:	bag[T1] domain (rel[T1,T2] R) = { X : <X, Y> in R }
+\end{verbatim}
+Example:
+\begin{verbatim}
+domain({<1,10>, <2,20>}) = {1, 2}
+\end{verbatim}
+
+\paragraph{Range: {\tt range}}
+\begin{verbatim}
+bag[T2] range (rel[T1,T2] R) = { Y : <X, Y> in R }
+\end{verbatim}
+Example:
+\begin{verbatim}
+range({<1,10>, <2,20>}) = {10, 20}
+\end{verbatim}
+
+\paragraph{Carrier: {\tt carrier}}
+\begin{verbatim}
+bag[T]  carrier (rel[T,T] R) = domain(R) union range(R)
+\end{verbatim}
+Example:
+\begin{verbatim}
+carrier({<1,10>, <2,20>}) = {1, 10, 2, 20}
+\end{verbatim}
+
+\paragraph{Top: {\tt top}}
+\begin{verbatim}
+bag[T] top(rel{T, T] R) = domain(R) \ range(R)
+\end{verbatim}
+
+\paragraph{Bottom: {\tt bottom}}
+\begin{verbatim}
+bag[T] bottom(rel[T,T] R) = range(R) \ domain(R)
+\end{verbatim}
+
+\paragraph{Inverse: {\tt inv}}
+\begin{verbatim}
+rel[T2,T1] inv (rel[T1,T2] R) = { <Y, X> : <X, Y> in R }
+\end{verbatim}
+example:
+\begin{verbatim}
+inv({<1,10>, <2,20>}) = {<10,1>,<20,2>}
+\end{verbatim}
+
+\paragraph{Complement: {\tt compl}}
+\begin{verbatim}
+rel[T1, T2] compl(rel[T1,T2] R) = (domain(R) x range(R)) \ R
+\end{verbatim}
+
+\paragraph{Domain restriction: {\tt domainR}}
+\begin{verbatim}
+rel[T1,T2] domainR (rel[T1,T2] R, Bag[T1] B) = 
+   { <X, Y> : <X, Y> in R, X in B
+}
+\end{verbatim}
+
+\paragraph{Range Restriction: {\tt rangeR}}
+\begin{verbatim}
+rel[T1,T2] rangeR (rel[T1,T2] R, Bag[T2] B) =  
+   { <X, Y> : <X, Y> in R | Y in B
+}
+\end{verbatim}
+
+\paragraph{Carrier Restriction: {\tt carrierR}}
+\begin{verbatim}
+rel[T,T] carR (rel[T,2] R, Bag[T] B) =  
+   { <X, Y> : <X, Y> in R | X in B and Y  in B }
+\end{verbatim}
+
+\paragraph{Domain Exclusion: {\tt domainX}}
+\begin{verbatim}
+rel[T1,T2] domainX (rel[T1,T2] R, Bag[T1] B) = 
+   { <X, Y> : <X, Y> in R | X notin B }
+\end{verbatim}
+
+\paragraph{Range Exclusion: {\tt rangeX}}
+\begin{verbatim}
+rel[T1,T2] rangeX (rel[T1,T2] R, Bag[T2] B) = 
+	   { <X, Y> : <X, Y> in R | Y notin B }
+\end{verbatim}
+
+\paragraph{Carrier Exclusion: {\tt carrierX}}
+\begin{verbatim}
+rel[T,T] carX (rel[T,T] R, Bag[T] B) = 
+   { <X, Y> : <X, Y> in R | X notin B or Y notin B }
+\end{verbatim}
+
+\paragraph{First of Tuple: {\tt first}}
+\begin{verbatim}
+T1 first(<T1, T2> P) = T1
+\end{verbatim}
+
+\paragraph{Second of Tuple: {\tt second}}
+\begin{verbatim}
+T2 second(<T1, T2> P) = T2
+\end{verbatim}
+
+\paragraph{Reach Exclusion: {\tt reachX}}
+\begin{verbatim}
+rel[T,T] reachX( bag[T] S, bag[T] E, rel[T,T] R) =
+	       domainR(R, S) o carrierX(R, E)+
+\end{verbatim}
+
+\paragraph{Reach Restriction: {\tt reachR}}
+\begin{verbatim}
+rel[T,T] reachR( bag[T] S, bag[T] E, rel[T,T] R) =
+	       domainR(R, S) o carrierR(R, E)+
+\end{verbatim}
+
+\end{document}
