@@ -8,7 +8,7 @@ exports
 context-free syntax
 
 filter(Tree, (X => Boolean)) -> Tree {traversal(trafo,bottom-up)}
-filter(X, (X => Boolean)) -> X {traversal(trafo,bottom-up)}
+filter(X, (X => Boolean))    -> X {traversal(trafo,bottom-up)}
 
 hiddens
 
