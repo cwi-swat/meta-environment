@@ -933,7 +933,7 @@ a number of operations.
 \begin{center}
 \begin{Label}{FIG:tools2-menu}
 
-\T \includegraphics[width=5cm]{tools2-menu}
+\T \includegraphics[width=4cm]{tools2-menu}
 \W \htmlimage{tools2-menu.gif}
 \caption{Tools menu}
 
@@ -1094,7 +1094,7 @@ user can navigate in the tree.
 
 \T \includegraphics[width=1.2cm]{move-menu}
 \W \htmlimage{move-menu.gif}
-\caption{{\tt Move} menu (editor)}
+\caption{{\tt Move} menu (all editors)}
 
 \end{Label}
 \end{center}
@@ -1267,6 +1267,9 @@ There are various categories of messages in the \ASmetaenv.
 \item SDF type check errors.
 \item ASF type check errors.
 \end{enumerate}
+We will briefly discuss each of the error messages and indicate what is
+exactly wrong in the specification. Furthermore we will hint at how the
+error can be fixed.
 
 \subsection{Parse Errors}
 There are three different types of parse errors:
@@ -1287,8 +1290,8 @@ position where the first cycle is detected in the input and the message
 is {\tt Cycle: <list\_of\_production\_rules>} is printed.  
 A cycle is reported whenever
 the parser detects a non terminating chain of reductions.
-The {\tt <list\_of\_production\_rules>} shows all production rules
-on the cycle.
+All production rules on the cycle are shown as {\tt
+<list\_of\_production\_rules>}.
 
 \item An ambiguity, again in case of an editor the cursor is
 positioned at the position where the first ambiguity is detected in the
@@ -1300,34 +1303,75 @@ that are involved in the ambiguity.
 
 \end{enumerate}
 
-\subsection{SDF type check warnings}
+\subsection{Type check warnings for plain SDF}
+\label{SEC:plainSDFwarnings}
+The warnings and error for SDF are separated into 4 sections. First we will
+discuss the type check warnings and \link{errors}[ (see
+Section~\Ref)]{SEC:plainSDFerrors} for plain SDF. This variant of SDF is
+independent of ASF. Later we will discuss the \link{warnings}[ (see
+Section~\Ref)]{SEC:ASFSDFwarnings} and \link{errors}[ (see
+Section~\Ref)]{SEC:ASFSDFerrors} for SDF used in combination with ASF.
+In this case we need to be more strict and every SDF construct is supported
+by ASF.
+
+Warnings do not break the specification, but it is advisable to fix
+them anyway. Often they point out some not well-formed part in the
+specification.
+
 \begin{itemize}
-\item {\tt undeclared sorts}
-\item {\tt start-symbols in <ModuleName> not defined in any right-hand}
-\item {\tt sorts-without-production-definitions}
-\item {\tt double declared symbol}
-\item {\tt double declared start-symbol}
-\item {\tt aliased symbol already declared}
+\item {\tt undeclared sorts} This warning indicates that a sort is used
+which is not explicitly declared, or it is declared but in a hidden
+section.
+\item {\tt double declared sort} This warning points out that the sort is 
+already declared somewhere in this module, or in one of the imported
+modules.
+\item {\tt double declared start-symbol} 
+This warning indicates that 
+the start-symbol is previously defined as start-symbol as well. This can
+be in the current module or in one of the imported modules.
 \item {\tt illegal attribute: \{bracket, left, right, assoc, non-assoc\}}
+This warning is generated because the syntactic form the production rule
+and the attribute do not match. Given this mismatch the intended behaviour
+will not be effective. 
 \item {\tt used in priorities but undefined}
+This warning is generated whenever a production rule is used in a priority
+section which is not defined in this module or in one of the imported
+modules. It is possible that this production rule will be defined in
+one of the modules which imports this module. Normally, this indicates
+some typo.
 \item {\tt inconsistent rhs in priorities}
-\item {\tt constructor has already been used}
+This warning is caused by a production rule which has not the same
+right-hand side as the other production rules in the priority relation.
+Whenever this occurs the effect of the expressed priority relation will
+be ignored.  This check is performed modulo injections. 
 \item {\tt unknown constructor used in priorities}
+This warning indicates the use of a constructor which is not used in
+the corresponding set of production rules with the same right-hand side.
+This is a very weak check on consistent use of constructor information.
+\item {\tt sort CHAR used in production rule}
 \item {\tt deprecated tuple notation}
 \item {\tt deprecated unquoted symbol notation}
-\item {\tt sort CHAR used in production rule}
 \item {\tt deprecated non-plain sort definition}
+\item {\tt aliased symbol already declared} 
 \end{itemize}
 
 \subsection{Type check errors for plain \sdf}
+\label{SEC:plainSDFerrors}
 \begin{itemize}
 \item {\tt module not available}
+\item {\tt start-symbols in <ModuleName> not defined in any right-hand}
 \item {\tt literal in right-hand-side not allowed}
 \item {\tt only sort allowed in right-hand-side of lexical-function}
 \item {\tt double used label}
+\item {\tt constructor has already been used}
+The combination of right-hand symbol and the constructor information should
+be unique. This warning points this out. It is advisable not to ignore
+this warning. In fact, for the parser these double constructors are no
+problem, but there are tools based on SDF for which this is problematic.
 \end{itemize}
 
 \subsection{Type check warnings for \asfsdf}
+\label{SEC:ASFSDFwarnings}
 \begin{itemize}
 \item {\tt exported variables section}
 \item {\tt kernel syntax construction}
@@ -1336,6 +1380,7 @@ that are involved in the ambiguity.
 \end{itemize}
 
 \subsection{Type check errors for \asfsdf}
+\label{SEC:ASFSDFerrors}
 \begin{itemize}
 \item {\tt traversal attributes in non-prefix function}
 \item {\tt illegal traversal attribute}
@@ -1579,7 +1624,7 @@ The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.asf}.
 \begin{Label}{FIG:Bool-example.trm}
 
 \T \includegraphics[width=12cm]{Bool-example-trm}
-\W \htmlimage{Bool-example.trm.gif}
+\W \htmlimage{Bool-example-trm.gif}
 \caption{Term editor for {\tt Booleans} after entering `{\tt true \& false}'}
 
 \end{Label}
@@ -1629,7 +1674,7 @@ will be selected and becomes the focus.
 \begin{Label}{FIG:reduct.out}
 
 \T \includegraphics[width=12cm]{reduct-out}
-\W \htmlimage{reduct.out.gif}
+\W \htmlimage{reduct-out.gif}
 \caption{New term editor with normal form of `{\tt true \& false}'}
 
 \end{Label}

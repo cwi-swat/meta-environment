@@ -15,12 +15,12 @@ EXTRA_DIST = $(wildcard *.ltx) \
 MANUAL	= guided-tour.ltx
 
 PSJES = Bool-example-asf.ps Bool-example-sdf.ps Bool-example-trm.ps \
-	Bool-example-trm2.ps Bool-example-ambtrm.ps\
-	pico-syntax-term-actions-menu.ps \
+	Bool-example-trm2.ps Bool-example-ambtrm.ps \
+	pico-syntax-term-actions-menu.ps  Pico-menu.ps \
 	open-library.ps open-file.ps file-menu.ps export-menu.ps \
 	refactor-menu.ps select-window.ps \
 	meta-Bool-example.ps meta-Pico-syntax.ps \
-	meta-pico.ps \
+	meta-pico.ps meta-amb-parsetree.ps \
 	meta-parsetree.ps meta-start.ps module-menu.ps move-menu.ps \
 	reduct-out.ps viewer.ps newarch.eps new-file.ps \
 	cache-menu.ps open-termstore.ps save-termstore.ps \
