@@ -40,11 +40,11 @@ Usage: $PRG [options] [filename]
 
 Options:
   -i (--input)              filename  input from file (default: stdin)
-  -o (--output-parse-tree)  filename  output as parse-tree to filename
-  -s (--store)              filename  initial Rstore (default: empty)
+  -o (--output-parse-tree)  filename  output as parse-tree to filename (default: text to stdout)
+  -s (--store)              filename  initial Rstore (default: none)
   -c (--check-only)                   only check the Rscript, do not evaluate it
   -t (--testsuite)                    execute as test suite
-  -v (--verbose)                      verbose output (default:none)
+  -v (--verbose)                      verbose output (default:not verbose)
 
 Examples:
   $PRG query.rscript
