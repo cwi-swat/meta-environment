@@ -22,17 +22,14 @@
 pkgdata_DATA = Sdf2.baf
 
 EXTRA_DIST = Sdf2.sdf2 Sdf2.asfix
-CLEANFILES = Sdf2.baf Sdf2.asfix
+CLEANFILES = Sdf2.baf
 
 TABLEGEN=../src/parsetablegen
 
 %.baf : %.asfix
 	$(TABLEGEN) < $< > $@
 	
-Sdf2.asfix : Sdf2-bootstrap.tbl Sdf2.sdf2
+%.asfix : Sdf2-bootstrap.tbl %.sdf2
 	PATH=$(SGLR):$$PATH; export PATH ;\
 	sglr -p $(srcdir)/Sdf2-bootstrap.tbl -1 -i $(srcdir)/Sdf2.sdf2 -o $@
 
-% : %.src Makefile
-	sed 's@__SGLR__@$(SGLR)@g;s@__SRCDIR__@$(srcdir)@' < $< > $@ &&\
-	chmod +x $@

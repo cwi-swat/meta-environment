@@ -21,6 +21,7 @@ $Id$
 
 2001/02/01 (mdejonge@cwi.nl)
    * reconf and DEVELOPERS-INFO files are now also distributed
+   * improved generation of sdf2 parse table process in ./grammar
 
 2001/02/01 (jurgenv@cwi.nl)
    * regress-test moved to test directory
