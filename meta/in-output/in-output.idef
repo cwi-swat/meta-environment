@@ -24,7 +24,6 @@ let
   SyntaxExt  : str,
   RulesExt   : str,
   TermExt    : str,
-  Stack      : list,
   RealName   : str,
   EditorId   : term
 in
@@ -182,31 +181,6 @@ in
     +
       rec-value(IO, not-exists) .
       snd-msg(file-not-exists(Name))
-    )
-  +
-    rec-msg(save-tree(Name?, Path?), Stack?, EditorId?) .
-    Tree := first(Stack) .
-    Stack := next(Stack) .
-    FunSym := fun(Tree) .
-    if not-equal(FunSym, "str") then
-      snd-eval(IO, save-tree(Name, Path, Tree)) .
-      rec-value(IO, save-done(Name?))
-    else
-      Text := first(args(Tree)) .
-      snd-eval(IO, save-text-file(Path, Text)) .
-      rec-value(IO, save-done(Path))
-    fi .
-    snd-msg(stack(Stack), EditorId)
-  +
-    rec-msg(read-tree(Path?), Stack?, EditorId?) .
-    snd-eval(IO,open-file(Path)) .
-    (
-      rec-value(IO,opened-file(Name?,tree(Tree?),Path?,TimeStamp?)) .
-      Stack := join(Tree, Stack) .
-      snd-msg(stack(Stack), EditorId)
-    + 
-      rec-value(IO,error-opening(Path?)).
-      snd-msg(error-stack, EditorId)
     )
   +
     rec-msg(save-tree(Name?, Path?, Tree?)) .
