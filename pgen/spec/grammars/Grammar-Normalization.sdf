@@ -5,3 +5,7 @@ exports
   context-free syntax
     Grammar "<>" Grammar        -> Grammar-Grammar
     "<" Grammar "," Grammar ">" -> Grammar-Grammar
+hiddens
+  variables
+    "_G"[0-9\']* -> Grammar
+

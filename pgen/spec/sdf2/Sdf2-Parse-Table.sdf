@@ -2,7 +2,7 @@ module Sdf2-Parse-Table
 imports
         Sdf2-Normalization
 %%%     Parse-Table-PCC
-        Table-to-Dot
+%%%        Table-to-Dot
 exports
   sorts ParseTable OutputGrammar
   context-free syntax

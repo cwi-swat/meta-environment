@@ -5,36 +5,36 @@ equations
 %% \noindent
 %% Encoding productions and attributes.
 
-  [] aterm('a -> _A!)          = prod(atermlist('a), aterm(_A), aterm(!))
-  [] aterm( )                  = no-attrs
-  [] aterm({ attr* })          = attrs(atermlist(attr*))
-  [] atermlist(attr*)          = [ ] when {attr*} = {}
-  [] atermlist(attr)           = [aterm(attr)]
-  [] atermlist(attr+1, attr+2) = atermlist(attr+1) ++ atermlist(attr+2)
+  [0] aterm('a -> _A!)          = prod(atermlist('a), aterm(_A), aterm(!))
+  [0] aterm( )                  = no-attrs
+  [0] aterm({ attr* })          = attrs(atermlist(attr*))
+  [0] atermlist(attr*)          = [ ] when {attr*} = {}
+  [0] atermlist(attr)           = [aterm(attr)]
+  [0] atermlist(attr+1, attr+2) = atermlist(attr+1) ++ atermlist(attr+2)
 
 %% Decoding productions and attributes.
 
-  [] production(prod(Tl, T, T')) = symbols(Tl) -> symbol(T) attributes(T')
-  [] attributes(no-attrs)      =
-  [] attributes(attrs(Tl))     = attributes(Tl)
-  [] attributes([])            = {}
-  [] attributes([T])           = {attribute(T)}
-  [] attributes([T,Ts])        = {attribute(T)} ++ attributes([Ts])
+  [0] production(prod(Tl, T, T')) = symbols(Tl) -> symbol(T) attributes(T')
+  [0] attributes(no-attrs)      =
+  [0] attributes(attrs(Tl))     = attributes(Tl)
+  [0] attributes([])            = {}
+  [0] attributes([T])           = {attribute(T)}
+  [0] attributes([T,Ts])        = {attribute(T)} ++ attributes([Ts])
 
 %% where we have the requirement that
 
-  [] attribute(aterm(attr))    = attr
+  [0] attribute(aterm(attr))    = attr
 
 %% Encoding grammars and lists of productions.
 
-  [] aterm(syntax p*)   = syntax(atermlist(p*))
-  [] atermlist(p)       = [aterm(p)]
-  [] atermlist(p*)      = [] when p* =
-  [] atermlist(p+1 p+2) = atermlist(p+1) ++ atermlist(p+2)
+  [0] aterm(syntax p*)   = syntax(atermlist(p*))
+  [0] atermlist(p)       = [aterm(p)]
+  [0] atermlist(p*)      = [] when p* =
+  [0] atermlist(p+1 p+2) = atermlist(p+1) ++ atermlist(p+2)
 
 %% Decoding of grammars and lists of productions.
 
-  [] grammar(syntax(Tl)) = syntax productions(Tl)
-  [] productions([])     =
-  [] productions([T])    = production(T)
-  [] productions([T,Ts]) = production(T) ++ productions([Ts])
+  [0] grammar(syntax(Tl)) = syntax productions(Tl)
+  [0] productions([])     =
+  [0] productions([T])    = production(T)
+  [0] productions([T,Ts]) = production(T) ++ productions([Ts])

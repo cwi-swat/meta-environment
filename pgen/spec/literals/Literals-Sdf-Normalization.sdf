@@ -8,11 +8,17 @@ exports
     literals(SymbolSet)    -> Productions
     chars(Literal)         -> Symbols
     symbols({Symbol ","}*) -> Symbols
- variables
-    "c"[0-9\']*     -> CHAR
+hiddens
+  variables
+    "c"[0-9\']*   -> CHAR
     "c+"[0-9\']*  -> CHAR+
     "c*"[0-9\']*  -> CHAR*
-    "L"            -> Literal
-    "UQL"          -> UQLiteral
-    "'g"[0-9\']*    -> {Symbol ","}*
+    "L"           -> Literal
+    "UQL"         -> UQLiteral
+    "'g"[0-9\']*  -> {Symbol ","}*
     "'g+"[0-9\']* -> {Symbol ","}+
+    "_G"[0-9\']*        -> Grammar 
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc]"+"[0-9\']* -> Symbol+
+    "'"[abc][0-9\']*    -> Symbol* 
+    "!"[0-9\']*         -> Attributes

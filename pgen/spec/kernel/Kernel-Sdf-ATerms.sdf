@@ -16,3 +16,19 @@ exports
     attributes(ATerm)           -> Attributes
     attribute(ATerm)            -> Attribute
     productions(ATermList)      -> Productions
+
+hiddens
+  variables
+    "attr"[0-9\']*      -> Attribute
+    "attr""*"[0-9\']*   -> {Attribute ","}*
+    "attr""+"[0-9\']*   -> {Attribute ","}+
+    "!"[0-9\']*         -> Attributes
+    [p][0-9\']*         -> Production
+    [p]"*"[0-9\']*      -> Production*
+    [p]"+"[0-9\']*      -> Production+
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+ 
+    "Ts"  [0-9\']*    -> ATerms
+    "Tl"  [0-9\']*    -> ATermList
+    "T"   [0-9\']*    -> ATerm

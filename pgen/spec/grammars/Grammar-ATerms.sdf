@@ -4,3 +4,8 @@ exports
   context-free syntax
     aterm(Grammar) -> ATerm
     grammar(ATerm) -> Grammar
+
+hiddens
+  variables
+    "_G"[0-9\']*        -> Grammar
+    "T"   [0-9\']*    -> ATerm

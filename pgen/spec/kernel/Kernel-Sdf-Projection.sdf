@@ -23,3 +23,19 @@ hiddens
   context-free syntax
     "nm-P" "_" Symbol "(" Productions ")"        -> Productions
     "nm-P"(Grammar)                              -> Productions
+
+hiddens
+  variables
+    "attr"[0-9\']*      -> Attribute
+    "attr""*"[0-9\']*   -> {Attribute ","}*
+    "attr""+"[0-9\']*   -> {Attribute ","}+
+    "!"[0-9\']*         -> Attributes
+    [p][0-9\']*         -> Production
+    [p]"*"[0-9\']*      -> Production*
+    [p]"+"[0-9\']*      -> Production+
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+ 
+    "'u"[0-9\']*        -> SymbolSet 
+    "_G"[0-9\']*        -> Grammar
+

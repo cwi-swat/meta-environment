@@ -11,3 +11,9 @@ exports
     Character "<"  Character  -> Bool
     max(Character,Character)  -> Character
     min(Character,Character)  -> Character
+
+hiddens
+  variables
+    "c+"[0-9\']* -> CHAR+
+    "_c"[0-9\']* -> Character
+

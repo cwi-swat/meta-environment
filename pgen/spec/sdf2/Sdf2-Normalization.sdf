@@ -1,16 +1,12 @@
 module Sdf2-Normalization
 imports
-%%%     Sdf2-Syntax
         Sdf2-Projection
         Sdf2-Renaming
-%%%     Basic-Sdf-Normalization
         Modular-Sdf-Normalization
         Priority-Sdf-Normalization
         Regular-Sdf-Normalization
         Literals-Sdf-Normalization
-%%%     CC-Sdf-Normalization
         Sorts-Sdf-Normalization
-%%%     Sorts-Sdf-Projection
         Restrictions-Sdf-Normalization
         Alias-Sdf-Normalization
 exports
@@ -30,6 +26,18 @@ exports
     "<" Symbols "-CFr" ">"  -> Symbols
 hiddens
   variables
-    "L" -> Literal
-
+    "L"[0-9\']          -> Literal
+    "_G"[0-9\']*        -> Grammar 
+    "_"[ABC][0-9\']*    -> Symbol
+    "'"[abc][0-9\']*    -> Symbol*
+    "'"[abc]"+"[0-9\']* -> Symbol+ 
+    "_S"[0-9\']*        -> Sort
+    "d"[0-9\']*         -> Definition
+    "M"[0-9\']*         -> ModuleName
+    "cc"[0-9\']*        -> CharClass
+    "pr""*"[0-9\']*     -> {Priority ","}*
+    "pr""+"[0-9\']*   -> {Priority ","}+
+    [p]"*"[0-9\']*      -> Production*
+    [p][0-9\']*         -> Production
+  
 %%}

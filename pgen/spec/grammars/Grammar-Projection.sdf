@@ -2,4 +2,7 @@ module Grammar-Projection
 imports Grammar-Syntax Booleans
 exports
   context-free syntax
-    "if" Bool "then" Grammar "else" Grammar "fi" -> Grammar %% {delaying2,delaying3}
+    "if" Bool "then" Grammar "else" Grammar "fi" -> Grammar %% {delaying2,delaying3}  
+  variables
+    "_G"[0-9\']* -> Grammar
+

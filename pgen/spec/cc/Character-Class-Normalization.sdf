@@ -1,7 +1,6 @@
 module Character-Class-Normalization
 
-imports
-        Character-Class-Membership
+imports Character-Class-Membership
 hiddens
   context-free syntax
     "(/)"                          -> CharRange
@@ -23,7 +22,6 @@ hiddens
 
 hiddens
   context-free syntax
-
     CharRange "/" CharRange -> CharClass
 
 
@@ -34,3 +32,11 @@ exports
     CharClass "(=" CharClass -> Bool
     CharClass "==" CharClass -> Bool
     CharClass "<=" CharClass -> Bool
+
+hiddens
+  variables
+    "_c"[0-9\']*    -> Character
+    "cc"[0-9\']*    -> CharClass
+    "cr"[0-9\']*    -> CharRange
+    "cr""*"[0-9\']* -> OptCharRanges
+    "cr""+"[0-9\']* -> CharRanges

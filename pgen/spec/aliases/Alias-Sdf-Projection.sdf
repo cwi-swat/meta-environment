@@ -5,3 +5,10 @@ exports
     Aliases "++" Aliases -> Aliases {right}
     "Al"  (Grammar)      -> Aliases
     "~Al" (Grammar)      -> Grammar
+
+hiddens
+  variables
+    "_G"[0-9\']*        -> Grammar 
+    "al"[0-9\']*        -> Alias
+    "al*"[0-9\']*       -> Alias*
+    "al+"[0-9\']*       -> Alias+
