@@ -104,7 +104,7 @@
 
 static unsigned rewrite_steps = 0;
 
-ATbool run_verbose;
+ATbool run_verbose = ATfalse;
 
 static char myname[] = "evaluator";
 static char myversion[] = "0.1";
