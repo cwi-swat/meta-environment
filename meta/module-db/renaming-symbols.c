@@ -220,17 +220,14 @@ PT_Tree renameInTree(PT_Tree tree,
 
     newTree = PT_setTreeArgs(PT_setTreeProd(tree, newProd), newArgs);
 
-
-    /* Wrap new list variables in a proper list production */
-    if (PT_isVarDefault(newProd)) {
-      if ((PT_isIterSymbol(newRhs) || PT_isIterSepSymbol(newRhs)) && 
-	  !(PT_isIterSymbol(rhs) || PT_isIterSepSymbol(rhs))) {
-	PT_Production listProd = PT_makeProductionList(newRhs);
-	PT_Tree listTree = PT_makeTreeAppl(listProd,
-					   PT_makeArgsList(newTree,
-							   PT_makeArgsEmpty()));
-	newTree = listTree;
-      }
+    /* Wrap new lists in a proper list production */
+    if ((PT_isIterSymbol(newRhs) || PT_isIterSepSymbol(newRhs)) && 
+	!(PT_isIterSymbol(rhs) || PT_isIterSepSymbol(rhs))) {
+      PT_Production listProd = PT_makeProductionList(newRhs);
+      PT_Tree listTree = PT_makeTreeAppl(listProd,
+					 PT_makeArgsList(newTree,
+							 PT_makeArgsEmpty()));
+      newTree = listTree;
     }
 
     return newTree;
