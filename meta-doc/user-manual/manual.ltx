@@ -1722,7 +1722,15 @@ exports
 \index{attribute@attribute}
 The definition of a lexical or context-free functions may be followed by
 \emph{attributes} that define additional (syntactic or semantic) properties of
-that function.  The following syntax-related attributes exist:
+that function.  The attributes are written between curly brackets after the
+non-terminal in the right hand side. If a production rule has more than
+one attribute they are separated by commas.
+\begin{verbatim}
+context-free syntax
+   "{" {Attribute ","}* "}" -> Attributes {cons("attrs")}
+                            -> Attributes {cons("no-attrs")}
+\end{verbatim}
+The following syntax-related attributes exist:
 
 \begin{itemize}
 
@@ -1757,6 +1765,7 @@ syntactic ambiguity
   constructs
   (see  \link*{Preferring, Avoiding or Rejecting Parses}[Section~\Ref]{PreferAvoidReject}).
 
+
 \end{itemize}
 
 \noindent The remaining attributes define semantic properties of a function:
@@ -1783,7 +1792,17 @@ that greatly simply the specification of functions that have to visit
 (parts of) a term 
 (see \link*{Traversal Functions}[Section~\Ref]{Traversal}).
 
+\index{ATerm attribute@ATerm attribute}
+\item arbitrary ATerms may also be used as attributes. In the context-free
+syntax definition of the {\tt Attributes}, the ATerms {\tt cons("attrs")}
+and {\tt cons("no-attrs")} are used. The {\tt cons} attribute is used by
+other tools, such as ApiGen.
 \end{itemize}
+
+Not all combinations of attributes make sense. If one uses the attribute
+{\tt left} in combination with {\tt bracket}, {\tt right}, {\tt assoc}
+or {\tt non-assoc}, this will result in an error message. Furthermore,
+the combination of the traversal attributes is also very strict.
 
 \subsection{Priorities}
 \label{Priorities}
