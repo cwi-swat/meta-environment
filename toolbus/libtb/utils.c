@@ -617,7 +617,7 @@ term *TBreadTerm(FILE *f)
   return NULL;
 }
 
-long read_from_stdin()
+int read_from_stdin()
 {
   int c;
   char *ptr;
