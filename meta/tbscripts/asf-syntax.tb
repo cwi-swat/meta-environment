@@ -11,7 +11,7 @@ in
   (
     rec-msg(make-asf-syntax(eqs(ModuleName?), Syntax?)) .
     snd-msg(add-api-syntax(Syntax)).
-    rec-msg(extended-syntax(Syntax?)).
+    rec-msg(extended-syntax(Syntax?)). 
     snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
     rec-msg(extended-syntax(Syntax?)) .
     snd-msg(asf-syntax(Syntax))  
@@ -19,6 +19,8 @@ in
     rec-msg(make-asf-syntax(trm(ModuleName?), Syntax?)) .
     snd-msg(remove-var-syntax(ModuleName, Syntax)) .
     rec-msg(changed-syntax(Syntax?)) .
+    snd-msg(add-api-syntax(Syntax)).
+    rec-msg(extended-syntax(Syntax?)).
     snd-msg(asf-syntax(Syntax))  
   ) * delta
 endlet
