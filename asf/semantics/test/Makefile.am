@@ -46,6 +46,6 @@ TESTS = $(foreach f, ${TEST_MODULES}, $f.asfe.sh $f.asfc.sh)
 	@(echo 'set -e' ; \
          echo '${ASFC} -c -i ${EQS}/$*.eqs -n $* -o $*.c'; \
 	 echo 'for i in ${IN}/$*.*.pt; do ' ;\
-	 echo ' $* -i $$i -o `basename $$i`.asfc.out '; \
+	 echo ' ./$* -i $$i -o `basename $$i`.asfc.out '; \
          echo ' ${ATDIFF} `basename $$i`.asfc.out ${OUT}/`basename $$i` '; \
          echo 'done' ) > $@ && chmod +x $@
