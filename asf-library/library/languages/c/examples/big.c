@@ -350,7 +350,7 @@ ATunprotect(ATerm * term)
 /**
  * Protect an array
  */
-
+#ifdef JURGEN
 void ATprotectArray(ATerm *start, int size)
 {
   ProtEntry *entry;
@@ -381,6 +381,7 @@ void ATprotectArray(ATerm *start, int size)
   entry->start = start;
   entry->size  = size;
 }
+#endif
 
 /*}}}  */
 /*{{{  void ATunprotectArrray(ATerm *start) */
