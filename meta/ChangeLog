@@ -1,5 +1,9 @@
 # $Id$
 
+2003/06/19 ({jong,markvdb}@cwi.nl)
+ * Remove tbscripts/query.tb
+ * include QueryDisplay iso query-tool
+
 2003/06/18 (markvdb@cs.vu.nl)
  * Fixed the invalidation bug of editors.
  * Fixed the reverting module bug when closing an equation editor.
