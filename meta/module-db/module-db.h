@@ -24,8 +24,12 @@
 #include <string.h>
 #include <AsFix.h>
 #include "AsFix-access.h"
-#include "aterm2.h"
 #include "deprecated.h"
+
+#include <PT-utils.h>
+#include <SDF-utils.h>
+#include <ASF-utils.h>   
+#include "aterm2.h"
 #include <stdlib.h>
 #include <limits.h>
 #include <time.h>

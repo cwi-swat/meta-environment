@@ -28,9 +28,6 @@
 /*}}}  */
 /*{{{  includes */
 
-#include <stdlib.h>
-#include <PT.h>
-#include <SDF-utils.h>
 #include <assert.h>
 
 #include "module-db.h"
@@ -82,10 +79,14 @@ ATerm exists(int cid, char *modulename)
 
 ATerm get_all_equations(int cid, char *moduleName)
 {
-  ATerm mod, entry, eqsterm, name;
-  ATermList eqs, mods;
-  ATermList equations = ATempty;
+  ATerm mod, entry, eqsTerm, name;
+  ATermList mods;
+  ASF_CondEquationList asfEqsList;
+  ASF_CondEquationList newAsfEqsList = ASF_makeCondEquationListEmpty();
   ATerm result;
+  PT_ParseTree eqsParseTree;
+  PT_Tree eqsTree;
+  ASF_Equations asfEqs;
 
 /* calculate the transitive closure of the imported modules. */
   
@@ -93,23 +94,28 @@ ATerm get_all_equations(int cid, char *moduleName)
   if (complete_asf_specification(ATempty, name)) {
     mods = get_imported_modules(name);
 
-    equations = ATempty;
     while(!ATisEmpty(mods)) {
       mod = ATgetFirst(mods);
-      entry = GetValue(modules_db,mod);
-      eqsterm = ATelementAt((ATermList)entry, EQS_TREE_LOC);
-      eqs = AFTgetEqs(eqsterm);
-      if (!ATisEmpty(eqs) && !ATisEmpty(equations)) {
-        eqs = ATinsert(eqs, ATparse("w(\"\")"));
+      entry = GetValue(modules_db, mod);
+      eqsTerm = ATelementAt((ATermList)entry, EQS_TREE_LOC);
+
+      if (!ATisEqual(eqsTerm, ATparse("unavailable"))) {
+        eqsParseTree = PT_makeParseTreeFromTerm(eqsTerm);
+        eqsTree = PT_getParseTreeTree(eqsParseTree);
+        asfEqs = ASF_makeEquationsFromTerm(PT_makeTermFromTree(eqsTree));
+
+        if (ASF_isEquationsPresent(asfEqs)) {
+          asfEqsList = ASF_getEquationsList(asfEqs);
+          newAsfEqsList = ASF_concatCondEquationList(newAsfEqsList, asfEqsList);
+        }
       }
-      equations = ATconcat(equations, eqs); 
       mods = ATgetNext(mods);
     };
 
-    result = ATmake("[<list>]", equations);
+    result = ASF_makeTermFromCondEquationList(newAsfEqsList);
     return ATmake("snd-value(equations(<term>))", ATBpack(result));
-    /*return ATmake("snd-value(equations([<list>]))",equations);*/
-  } else {
+  }
+  else {
     return ATmake("snd-value(equations-incomplete)");
   }
 }
@@ -361,7 +367,8 @@ void add_tree_eqs_section(int cid, char *moduleName, char* path,
   atModuleName = ATmake("<str>", moduleName);
   atEqsText = ATmake("<str>", eqsText);
 
-  eqsTree = AFaddPosInfoToModule(path, eqsTree);
+  eqsTree = PT_makeTermFromParseTree(
+              PT_addParseTreePosInfo(path, PT_makeParseTreeFromTerm(eqsTree)));
 
   entry = GetValue(modules_db, atModuleName);
   entry = (ATerm)ATreplace((ATermList)entry,
@@ -449,8 +456,12 @@ ATerm update_eqs_tree(int cid, char *moduleName, ATerm newEqsTree)
 
   atPath = ATelementAt((ATermList)entry, PATH_EQS_LOC);
   if (ATmatch(atPath, "<str>", &path)) {
-    newEqsTree = AFaddPosInfoToModule(path, newEqsTree);
-  } else {
+    newEqsTree = PT_makeTermFromParseTree(
+                   PT_addParseTreePosInfo(
+                     path, 
+                     PT_makeParseTreeFromTerm(newEqsTree)));
+  }
+  else {
     ATwarning("No path for %s equations section\n", moduleName);
   }
 
@@ -460,7 +471,8 @@ ATerm update_eqs_tree(int cid, char *moduleName, ATerm newEqsTree)
     changedModules = modules_depend_on(atModuleName, ATempty);
     return ATmake("snd-value(changed-modules([<term>,<list>]))",
       atModuleName, changedModules);
-  } else {
+  }
+  else {
     return ATmake("snd-value(changed-modules([]))");
   }
 }
@@ -1143,10 +1155,11 @@ int main(int argc, char *argv[])
       }
   }
 
-  ATBinit(argc, argv,&bottomOfStack);
+  ATBinit(argc, argv, &bottomOfStack);
+  ATinit(argc, argv, &bottomOfStack);
   PT_initPTApi();
   SDF_initSDFApi();
-  AFinit(argc, argv, &bottomOfStack);
+  ASF_initASFApi();
 
 
   cid = ATBconnect(NULL, NULL, -1, module_db_handler);
