@@ -8,6 +8,8 @@
 #include "reduction.h"
 #include "errors.h"
 #include "pre-post.h"
+#include <asf-builtins.h>
+
 #ifdef USE_TIDE
 #include "debug.h"
 #endif
@@ -24,6 +26,9 @@ ASF_Tag tagCurrentRule = NULL;
 ATbool aborted = ATfalse;
 ATbool runVerbose = ATfalse;
 ATbool useTide = ATfalse;
+
+MemoTable memo_table = NULL;
+unsigned rewrite_steps = 0;
 
 /*{{{  ATerm evaluator(char *name, ATerm term) */
 
@@ -52,7 +57,17 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_CondEquationList eqs,
     ATwarning("rewriting...\n");
   }
 
+  if (memo_table == NULL) { 
+    memo_table = MemoTableCreate();
+  }
+
+  tagCurrentRule = (ASF_Tag) PT_makeTreeLit("*undefined*");
+  rewrite_steps = 0;
+  initBuiltins();
+  
   result = rewrite(tree);
+
+  MemoTableDestroy(memo_table);
 
   result = RWrestoreTerm(result, remove_layout);
   parseTree = PT_setParseTreeTree(parseTree, result);

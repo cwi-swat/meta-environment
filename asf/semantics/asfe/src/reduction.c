@@ -21,8 +21,6 @@
 #endif
 */
 
-static MemoTable memo_table = NULL;
-static unsigned rewrite_steps = 0;
 
 #define FAIL NULL
 
@@ -521,20 +519,9 @@ PT_Tree rewrite(PT_Tree trm)
 {
   PT_Tree reduct;
  
-  if (memo_table == NULL) { 
-    memo_table = MemoTableCreate();
-  }
-
-  tagCurrentRule = (ASF_Tag) PT_makeTreeLit("*undefined*");
-
-  rewrite_steps = 0;
-  initBuiltins();
-  
   reduct = rewriteRecursive(trm,(ATerm) ATempty, 0, NO_TRAVERSAL);
 
-  MemoTableDestroy(memo_table);
-
-  return reduct == FAIL ? trm : reduct;
+  return reduct;
 }
 
 /*}}}  */
@@ -576,7 +563,7 @@ PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra)
 {
   PT_Tree reduct = FAIL;
 
-  if (PT_isTreeLayout(trm) || PT_isTreeLexical(trm)) {
+  if (PT_isTreeLayout(trm)) {
     reduct = trm;
   }
   else if (PT_isTreeVar(trm) || PT_isTreeVarList(trm)) {
