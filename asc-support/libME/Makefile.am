@@ -23,11 +23,10 @@ include $(top_srcdir)/make_rules
 
 lib_LIBRARIES            = libasc-support-me.a
 
-include_HEADERS          = asc-support-me.h asc-apply-me.h asc-support2-me.h
+include_HEADERS          =  asc-apply-me.h 
 EXTRA_DIST               = rewriter.tb rewriter.tif.c rewriter.tif.h
 
-SRCS = asc-support-me.c asc-support-me.h asc-support2-me.h rewriter-me.c \
-       asc-apply-me.c asc-apply-me.h
+SRCS = asc-apply-me.c asc-apply-me.h
 
 ALLSRCS = $(SRCS) rewriter-me.tif.c 
 

@@ -1,21 +1,23 @@
 #include "asc-support2-me.h"
 
 PT_Tree
-ASC_applyFunctionToArgs(char *function, char* module, char* sort, PT_Args args)
+applyFunctionToArgs(char *function, char* module, char* sort, PT_Args args)
 {
-  PT_Tree   layoutTree   = PT_makeTreeLayout("");
-  PT_Symbol layoutSymbol = PT_makeSymbolEmptyLayout();
-  PT_Tree   commaTree   = PT_makeTreeUnquotedLiteral(",");
-  PT_Symbol commaSymbol = PT_makeSymbolQuotedLiteral(",");
-  PT_Tree   boTree   = PT_makeTreeUnquotedLiteral("(");
-  PT_Symbol boSymbol = PT_makeSymbolQuotedLiteral("(");
-  PT_Tree   bcTree   = PT_makeTreeUnquotedLiteral(")");
-  PT_Symbol bcSymbol = PT_makeSymbolQuotedLiteral(")");
-  PT_Tree   functionTree   = PT_makeTreeUnquotedLiteral(function);
-  PT_Symbol functionSymbol = PT_makeSymbolQuotedLiteral(function);
-  PT_Symbol rhs = PT_makeSymbolSort(sort);
+  PT_Tree   layoutTree   = PT_makeTreeLayoutEmpty();
+  PT_Symbol layoutSymbol = PT_makeOptLayoutSymbol();
+  PT_Tree   commaTree   = PT_makeTreeLit(",");
+  PT_Symbol commaSymbol = PT_makeSymbolLit(",");
+  PT_Tree   boTree   = PT_makeTreeLit("(");
+  PT_Symbol boSymbol = PT_makeSymbolLit("(");
+  PT_Tree   bcTree   = PT_makeTreeLit(")");
+  PT_Symbol bcSymbol = PT_makeSymbolLit(")");
+  PT_Tree   functionTree   = PT_makeTreeLit(function);
+  PT_Symbol functionSymbol = PT_makeSymbolLit(function);
+  PT_Symbol rhs = PT_makeSymbolCf(PT_makeSymbolSort(sort));
   PT_Production prod;
-  PT_Attributes attributes = PT_makeAttributesNoAttrs();
+  PT_Attributes attributes = PT_makeAttributesAttrs(
+                               PT_makeAttrsSingle(
+                                 PT_makeAttrId(module)));
 
   /* initialize with empty symbols and trees */
   PT_Args argList = PT_makeArgsEmpty();
@@ -40,7 +42,7 @@ ASC_applyFunctionToArgs(char *function, char* module, char* sort, PT_Args args)
     symbolList = PT_appendSymbols(symbolList, symbol);
 
     args = PT_getArgsTail(args);
-  } 
+  }
 
   /* append closing bracket to symbols and trees */
   argList = PT_appendArgs(argList, layoutTree);
@@ -62,11 +64,9 @@ ASC_applyFunctionToArgs(char *function, char* module, char* sort, PT_Args args)
   argList = PT_makeArgsList(functionTree, argList);
   symbolList = PT_makeSymbolsList(functionSymbol, symbolList);
 
-  prod = PT_makeProductionDefault(module, symbolList, rhs, attributes);
+  prod = PT_makeProductionDefault(symbolList, rhs, attributes);
 
   return PT_makeTreeAppl(prod, argList);
-
-
 }
 
 PT_Tree
