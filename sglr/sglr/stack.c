@@ -16,6 +16,7 @@
 
 #include "mem-alloc.h"
 #include "stack.h"
+#include "sglr.h"
 
 
 enum STATOP {CLR, DEC, INC, NOP};
@@ -73,7 +74,9 @@ st_link *SG_NewLink(tree t, stack *st) {
     res->tree = t;
     ATprotect(&(res->tree));
     res->stack = st;
+/*
     res->rejected = ATfalse;
+ */
   }
   return res;
 }
@@ -308,15 +311,14 @@ st_link *SG_FindDirectLink(stack *st0, stack *st1)
   node for the representation of stacks!)
 */
 
-#if 0
 void SG_MarkStackRejected(stack *st)
 {
-/*
-  SG_LK_REJECTED(l) = ATtrue;
- */
+  if(SG_DEBUG)
+    ATfprintf(SGlog(), "Marking stack with state %d as rejected\n", SG_ST_STATE(st));
   st->rejected = ATtrue;
 }
 
+#if 0
 void SG_MarkStackUnrejected(stack *st)
 {
 /*
@@ -324,7 +326,6 @@ void SG_MarkStackUnrejected(stack *st)
  */
   st->rejected = ATfalse;
 }
-#endif
 
 void SG_MarkLinkUnrejected(st_link *l)
 {
@@ -343,6 +344,7 @@ void SG_MarkLinkRejected(st_link *l)
            SG_ST_STATE(st), SG_ST_STATE(SG_LK_STACK(l)));
 */
 }
+#endif
 
 #ifdef DEBUG
 /*

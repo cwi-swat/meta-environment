@@ -30,7 +30,7 @@ void SG_PrintChar(FILE *dot, int c)
     break;
 
 /*
- * %%   J$ -- handle the next chars with extra care
+ * Treat the next chars with extra care
  */
   case '\\' : ATfprintf(dot, "\\\\");
     break;
@@ -282,7 +282,11 @@ void SG_LinkToDot(FILE *dot, stack *st, st_link *l)
     SG_PrintSymbol(dot, t);
   }
   ATfprintf(dot, "\"");
+#if 0
   if(SG_LK_REJECTED(l)) ATfprintf(dot, " style = dotted");
+#else
+  if(SG_Rejected(st)) ATfprintf(dot, " style = dotted");
+#endif
   ATfprintf(dot, "];\n");
 }
 

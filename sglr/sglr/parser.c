@@ -290,7 +290,7 @@ ATerm SG_Parse(parse_table *ptable, char *sort, int(*get_next_char)(void))
   do {
     if(SG_SHOWSTACK) SG_StacksToDotFile(active_stacks, sg_tokens_read);
     current_token = SG_NexToken(get_next_char);
-    if(SG_DEBUG || SG_SHOWSTAT) {
+    if(SG_DEBUG) {
       if(isprint(current_token))
         ATfprintf(SGlog(), "Token: '%c'\n", current_token);
       else
@@ -564,18 +564,19 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
         ATfprintf(SGlog(), "Ambiguity: Direct link %d -> %d%s\n",
                             SG_ST_STATE(st0), SG_ST_STATE(st1),
                             reject?" {reject}":"");
-      if (reject) {     /* Don't bother to represent rejects prods -- J$ */
+      if (reject) {     /*  J$: Don't bother to represingg reject prods  */
         if (SG_DEBUG)
           ATfprintf(SGlog(), "Rejecting %t\n", t);
         SG_PropagateReject(st1);
       } else {
 /*
   The existing stack may already be rejected; in this case, no amb-node
-  should be created, and the existing stack must be "unrejected".
+  should be created (and the existing stack may have to be "unrejected"?).
   However, if this stack was directly created by a reject
-  production, it may have to remain rejected.
+  production, it has to remain rejected.
  */
-        if(SG_Rejected(st1)) {
+        if(SG_Rejected(st1)) {  /*  J$:  Never seen this happen  */
+          ATfprintf(stderr, "Warning: zombie stack may require reanimation!\n");
 /* DISABLED for now -- experimental!
           SG_PropagateUnreject(st1);
  */
@@ -594,14 +595,13 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 
       /* First check if one of the children of |st1| was not rejected already */
       nl = SG_AddLink(st1, st0, t);
-      if (reject) {
+      if (reject) {    /*  J$:  Never seen this happen  */
         ATfprintf(stderr, "Warning: link state %d ==> state %d rejected in "
                           "presence of other links\n",
                   SG_ST_STATE(st1), SG_ST_STATE(st0));
+#if 0
         SG_MarkLinkRejected(nl);
-/*
-      SG_MarkStackRejected(st1);
-*/
+#endif
       }
       sts = active_stacks;
         while(sts != NULL) {
@@ -629,10 +629,10 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
     for_actor_delayed = SG_AddStack(st1, for_actor_delayed);
     if (reject) {
       if(SG_DEBUG)  ATfprintf(SGlog(), "Rejected [new]\n");
+#if 0
       SG_MarkLinkRejected(nl);
-/*
+#endif
       SG_MarkStackRejected(st1);
- */
     }
   }
 } /* reducer */
@@ -697,7 +697,7 @@ void SG_Shifter(void)
   if(SG_GC)
     SG_PurgeOldStacks(active_stacks, new_active_stacks, accepting_stack);
 
-  if((active_stacks = new_active_stacks) == NULL && (SG_SHOWSTAT || SG_DEBUG))
+  if((active_stacks = new_active_stacks) == NULL && SG_DEBUG)
       ATfprintf(SGlog(), "Shifter: no more stacks left\n");
 } /*  Shifter  */
 
@@ -737,7 +737,6 @@ void SG_PropagateReject(stack *st)
   if(st == NULL)
     return;
 
-  st->rejected = ATtrue;
   compost = SG_LK_TREE(head(SG_ST_LINKS(st)));
   cmpstid = (ATermInt) ATgetAnnotation(compost, SG_ApplLabel()),
   amb = SG_AmbTable(SG_AMBTBL_LOOKUP, cmpstid, NULL);
@@ -780,6 +779,15 @@ void SG_PropagateReject(stack *st)
     } /*  If no terms were left in the amb-cluster: reject & propagate  */
   }
 
+  /*  If we get here, either
+         - the stack's term wasn't part of an ambiguity cluster
+         - the stack's term was in an ambiguity cluster which is
+           wiped spotlessly clean by the removal of this term
+      In both cases, the reject needs to propagate, and this stack
+      must be marked rejected.
+   */
+  SG_MarkStackRejected(st);
+
   /*  Propagate for all this stack's kids  */
   if(st->kidcount > 0) {
     int  kididx;
@@ -788,7 +796,9 @@ void SG_PropagateReject(stack *st)
       if (SG_DEBUG)
         ATfprintf(SGlog(), "Reject: propagating (%d->%d)\n",
                   SG_ST_STATE(st), SG_ST_STATE(st->kids[kididx]));
+#if 0
       SG_MarkLinkRejected(head(SG_ST_LINKS(st)));
+#endif
       SG_PropagateReject(st->kids[kididx]);
     }
   }

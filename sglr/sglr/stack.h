@@ -68,7 +68,9 @@ typedef ATerm tree;
 typedef struct link {
   tree           tree;
   struct stack   *stack;
+/*
   ATbool         rejected;
+ */
 } st_link;
 
 typedef struct links {
@@ -130,9 +132,11 @@ stack *   SG_FindStack(state , stacks *);
 st_link  *SG_FindDirectLink(stack *, stack *);
 
 void     SG_MarkStackRejected(stack *);
+#if 0
 void     SG_MarkStackUnrejected(stack *);
 void     SG_MarkLinkRejected(st_link *);
 void     SG_MarkLinkUnrejected(st_link *);
+#endif
 ATbool   SG_Rejected(stack *);
 ATbool   SG_InStacks(stack *, stacks *, ATbool);
 ATbool   SG_SubStack(stack *, stack *);
