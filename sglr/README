@@ -1,0 +1,127 @@
+$Id$
+
+This is the README file for the SGLR distribution.
+
+
+Installation instructions:
+
+
+ * Prerequisite tools
+
+   To compile this distribution you will need the following items:
+
+    -- GNU make, from <http://www.gnu.org/software/make/make.html>
+    -- the common development utilities typically existent in a basic
+         UNIXish environment.
+
+
+  * Optional items
+
+    The following items provide (optional) extra functionality, or
+    enable alternative builds.
+
+    -- the Boehm Garbage Collector, available at
+       <http://reality.sgi.com/employees/boehm_mti/gc.html>.
+       Make as appropriate for your system; install the resulting `gc.a'
+       as libgc.a in an appropriate place and install `gc.h' in an
+       appropriate include directory.
+       With Boehm GC installed, sglr's `..-gc' compilation targets can
+       be used (read parser/Makefile.in if interested).  It should be
+       noted that even the term `experimental' is a euphemism at best,
+       when using it in reference to to BoehmGC versions of the sglr
+       parser.
+       Hence, strict disclaimers about operating heavy machinery and
+       controlling thermonuclear facilities and devices most certainly
+       apply here.
+
+
+* Platform support
+
+     The SGLR parser has been installed successfully on the following
+     platforms:
+
+     -- Sun Solaris/Sparc >= 2.5, Sun Solaris/iX86 >= 2.6
+     -- SGI IRIX/Mips >= 5.2
+     -- NetBSD/PowerPC, NetBSD/iX86 >= 1.4
+     -- Mac OS X Server/PowerPC >= 1.0, Mac OS X/PPC >= DP2
+     -- LinuxPPC/PowerPC >= 2.0, MkLinux/PowerPC 3.0, Linux/iX86 >= 2.0
+
+
+  * Dependencies
+
+    The SGLR distribution depends on some other distributions.  Using
+    CVS, you can get these distributions as follows (assuming you have
+    an account at CWI.  External distribution will be available at a
+    later stage):
+
+    -- cd to the directory just above sglr (sglr/..)
+    -- issue the following commands:
+         $ cvs -d gondel.cwi.nl:/ufs/gipe/CVS checkout aterm
+         $ cvs -d gondel.cwi.nl:/ufs/gipe/CVS checkout toolbus
+       (and, if you hadn't done so already)
+         $ cvs -d gondel.cwi.nl:/ufs/gipe/CVS checkout sglr
+
+    You should now have a directory containing the `aterm', `toolbus'
+    and `sglr' directories.  If so, then everything is set up for
+    configuration and compilation.
+
+
+  * Configuring and compiling: final installation
+
+    Let's assume the `aterm', `toolbus' and `sglr' directories are
+    all located in a directory `/some/path'.  We also assume that
+    the `make' command is in fact GNU make (you may have use `gmake' or
+    `gnumake', depending on your site's configuration).  Furthermore,
+    you should make sure that your java installation's setup is correct,
+    and that your CLASSPATH variable points to the Java classes that
+    came with your JDK.
+
+    Here is the basic set-up.  These commands are the minimal config
+    options for the Meta-Environment to compile.  Note that the order
+    of execution is significant.  This will install everything in the
+    directories /some/path/{bin,lib,include}.
+
+    Make sure that your PATH points to the above /path/to/meta/bin
+    directory, for instance by typing:
+
+      $ PATH=/some/path/bin:${PATH}; export PATH
+
+    for the sh family of shells, or alternatively (for csh-ish shells):
+
+      % setenv PATH /some/path/bin:${PATH}
+
+    If there are no configure files in the sub-directories: toolbus, aterm,
+    and new-met, please run autoconf to generate the configure file in each
+    of these sub-directories.
+
+    Then proceed as follows:
+
+      $ cd /some/path
+      $ cd toolbus
+      $ ./configure --prefix=/some/path --with-java
+      $ make install
+      $ cd ../aterm
+      $ autoconf
+      $ ./configure --prefix=/some/path
+      $ make install
+      $ cd ../sglr
+      $ ./configure --prefix=/some/path --with-toolbus=/some/path
+      $ make install
+
+    At this point, everything should be configured, compiled, and
+    installed.  Once you have added the path to the directory
+    /some/path/bin to your PATH (see above), you are all set up.
+
+
+    The SGLR developers wish you wads of parsing joy; and may all your
+    trees amply bear fruit.
+
+
+
+
+
+
+               ``I must Create a System, or be enslav'd by another Man's;
+                 I will not Reason and Compare: my business is to Create.''
+
+                           -- William Blake, `Jerusalem'
