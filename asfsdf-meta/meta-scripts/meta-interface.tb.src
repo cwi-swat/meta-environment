@@ -145,15 +145,33 @@ in
   ) * delta
 endlet
 
+process GetActions(Actions : str?) is
+let
+  ErrorMessage : str
+in
+  snd-msg(io-read-file("__ASFSDF_META__/standard.asfsdf.buttons")) .
+  (
+    rec-msg(io-file-contents(Actions?))
+  +
+    rec-msg(io-error-reading(ErrorMessage?)) .
+    Actions := "buttons([])"
+  )
+endlet
+
 process Meta-Interface is
 let
   Id : int,
   Module : str,
+  Actions : str,
   ModuleNames : list
 in
   Id := process-id.
   Create-Asf-Processes.
   (
+    rec-msg(actions-hook) .
+    GetActions(Actions?) .
+    snd-msg(actions-hook-result(Actions))
+  +
     rec-msg(environment-name-hook).
     snd-msg(environment-name-hook-result("ASF+SDF Meta-Environment"))
   +
