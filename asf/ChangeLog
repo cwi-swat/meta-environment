@@ -1,4 +1,7 @@
 
+2003/02/14 (jurgenv@cwi.nl)
+ * Fixed a minor bug in concat-asf
+
 2003/02/14 (jong@cwi.nl)
  * Fix some #include issues with strlen/strcmp
 
