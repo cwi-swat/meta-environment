@@ -156,7 +156,6 @@ in
      snd-ack-event(UI, compile-module(Str))
    ) +
    ( rec-event(UI, rename-module(Str?, Str1?, Path?)) .
-     printf("Str: %s Str1: %s Path %s\n", Str, Str1, Path).
      snd-msg(rename-module(Str, Str1, Path)) .
      snd-ack-event(UI, rename-module(Str, Str1, Path))
    ) +
