@@ -17,10 +17,10 @@ let
 in
   (
     (
-      rec-msg(generate-parsetable(Syntax?, eqs(Name?))) .
+      rec-msg(generate-parsetable(Syntax?, Name?, eqs)) .
       Extension := "eqs.tbl"
     +
-      rec-msg(generate-parsetable(Syntax?, trm(Name?))) .
+      rec-msg(generate-parsetable(Syntax?, Name?, trm)) .
       Extension := "trm.tbl"
     ) .
     execute(parsetablegen,GENTABLE?) .
