@@ -9,10 +9,10 @@ import java.util.List;
 import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.text.*;
-
 import aterm.*;
 
 /*}}}  */
@@ -181,7 +181,7 @@ public class MetaStudio
       {
 	public void actionPerformed(ActionEvent event)
 	{
-	  doOpenModule(true);
+	  doNewModule();
 	}
       };
 
@@ -193,7 +193,7 @@ public class MetaStudio
       {
 	public void actionPerformed(ActionEvent event)
 	{
-	  doOpenModule(false);
+	  doOpenModule();
 	}
       };
 
@@ -1043,51 +1043,114 @@ public class MetaStudio
 
   //}}}
 
-  //{{{ void doOpenModule(boolean isnew)
+  //{{{ File showFileBrowser(String label, File defaultFileName) 
 
-  void doOpenModule(boolean isnew)
+  File showFileBrowser(String label, File defaultFile) 
   {
     String extension = Preferences.getString("module.extension");
     String[] exts = { extension };
     String description = Preferences.getString("module.extension.description");
-    JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
+    JFileChooser chooser = 
+      new JFileChooser(System.getProperty("user.dir"));
     chooser.setFileFilter(new ExtensionFilter(exts, description));
-    String label;
-    if (isnew) {
-      label = Preferences.getString("text.new-module");
-    } else {
-      label = Preferences.getString("text.open-module");
-    }
+    chooser.setSelectedFile(defaultFile);
+
     int option = chooser.showDialog(this, label);
     if (option == JFileChooser.APPROVE_OPTION) {
-      File file = chooser.getSelectedFile();
-      if (file != null) {
-	String path = file.getPath();
-	String module = file.getName();
-	if (module.endsWith(extension)) {
-	  module = module.substring(0, module.length()-extension.length());
-	}
-	if (path.endsWith(extension)) {
-	  path = path.substring(0, path.length()-extension.length());
-	}
+      return chooser.getSelectedFile();
+    }
 
-	String func;
-	if (isnew) {
-	  func = "new-module";
-	} else {
-	  func = "open-module";
-	  // With open-module, extension needs to be present?
-	  path += extension;
-	}
+    return null;
+  }
 
-	ATerm event = factory.make(func + "(<str>,<str>)", path, module);
+  //}}}
 
-	bridge.postEvent(event);
-      }
+  //{{{ String getFileModule(File file)
+
+  String getFileModule(File file, String extension)
+  {
+    String module = file.getName();
+    if (module.endsWith(extension)) {
+      module = module.substring(0, module.length()-extension.length());
+    }
+
+    return module;
+  }
+  //{{{ String getFilePath(File file, String extension)
+
+  String getFilePath(File file, String extension)
+  {
+    String path = file.getPath();
+
+    if (path.endsWith(extension)) {
+      path = path.substring(0, path.length()-extension.length());
+    }
+
+    return path;
+  }
+
+  //}}}
+
+  //}}}
+
+  //{{{ void doNewModule()
+
+  void doNewModule()
+  {
+    File file = showFileBrowser(Preferences.getString("text.new-module"), null);
+
+    if (file != null) {
+      String extension = Preferences.getString("module.extension");
+      String module = getFileModule(file, extension);
+      String path = getFilePath(file, extension);
+
+      ATerm event = factory.make("new-module(<str>,<str>)", path, module);
+      bridge.postEvent(event);
     }
   }
 
   //}}}
+  //{{{ void doOpenModule()
+
+  void doOpenModule()
+  {
+    File file = showFileBrowser(Preferences.getString("text.open-module"), 
+				null);
+
+    if (file != null) {
+      String extension = Preferences.getString("module.extension");
+      String module = getFileModule(file, extension);
+      String path = getFilePath(file, extension);
+      path += extension;
+
+      ATerm event = factory.make("open-module(<str>,<str>)", path, module);
+      bridge.postEvent(event);
+    }
+  }
+
+  //}}}
+  //{{{ void doRenameModule(String oldModule)
+
+  void doRenameModule(String oldModule)
+  {
+    File oldFile = new File(oldModule);
+    File file = showFileBrowser(Preferences.getString("text.rename-module"),
+				new File(oldFile.getName()));
+
+    if (file != null) {
+      String extension = Preferences.getString("module.extension");
+      String module = getFileModule(file, extension);
+      String path = getFilePath(file, extension);
+      path += extension;
+
+      ATerm event = factory.make("rename-module(<str>,<str>,<str>)", oldModule,
+				 module, path);
+      bridge.postEvent(event);
+    }
+  }
+
+  //}}}
+
   //{{{ void doSaveAll()
 
   void doSaveAll()
@@ -1129,37 +1192,6 @@ public class MetaStudio
 
   //}}}
 
-  //{{{ void doRenameModule(String module)
-void doRenameModule(String old)
-  {
-    String extension = Preferences.getString("module.extension");
-    String[] exts = { extension };
-    String description = Preferences.getString("module.extension.description");
-    JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
-    chooser.setFileFilter(new ExtensionFilter(exts, description));
-    String label = Preferences.getString("text.rename-module");
-    int option = chooser.showDialog(this, label);
-    if (option == JFileChooser.APPROVE_OPTION) {
-      File file = chooser.getSelectedFile();
-      if (file != null) {
-	String path = file.getPath();
-	String module = file.getName();
-	if (module.endsWith(extension)) {
-	  module = module.substring(0, module.length()-extension.length());
-	}
-	if (path.endsWith(extension)) {
-	  path = path.substring(0, path.length()-extension.length());
-	}
-
-	ATerm event = factory.make("rename-module(<str>,<str>,<str>)", old,
-				   module, path);
-
-	bridge.postEvent(event);
-      }
-    }
-  }
-
-  //}}}
   //{{{ void doEditTerm(String module)
 
   void doEditTerm(String module)
