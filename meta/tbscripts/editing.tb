@@ -72,7 +72,8 @@ process EditText(Sid: term, Type: term, AlreadyExists: bool?) is
 let
   Events: list,
   Path: str,
-  ModuleId: str
+  ModuleId: str,
+  Categories: term
 in
   IsTextEditorRegistered(Sid, AlreadyExists?)
   .
@@ -85,12 +86,16 @@ in
     . snd-msg(cm-get-events(Type))
     . rec-msg(cm-events(Events?))
     . snd-msg(te-add-actions(Sid, Events))
+    . snd-msg(get-text-categories)
+    . rec-msg(text-categories(Categories?)) 
+    . snd-msg(te-register-text-categories(Sid, Categories))
   fi
 endlet
 
 process EditStructure(Sid: term, Tree: term) is
 let
-  Registered: bool
+  Registered: bool,
+  Slices: term
 in
   IsStructureEditorRegistered(Sid, Registered?)
   .
@@ -100,6 +105,9 @@ in
     snd-msg(em-register-editor(Sid, structure))
   fi
   . snd-msg(se-create(Sid, Tree))
+  . snd-msg(se-get-tree-slices(Sid))
+  . rec-msg(se-tree-slices(Sid, Slices?))
+  . snd-msg(te-highlight-slices(Sid, Slices))
 endlet
 
 process SynchronizeFocus(Sid: term) is
