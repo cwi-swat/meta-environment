@@ -1,5 +1,9 @@
 # $Id$
 
+2003/06/16 (iversen@cwi.nl)
+ * Made module opening and creation more generic 
+   to reduce the code duplication for ActionSdf. 
+
 2003/06/14 (iversen@cwi.nl)
  * Made ParseSyntax more generic in order to 
    reduce the code duplication for ActionSdf.
