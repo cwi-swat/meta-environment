@@ -3,6 +3,9 @@
 2003/07/18 (markvdb@cwi.nl)
  * Repaired the "bug" with opening a term editor for a file which
    was already opened for a different module.
+ * Fixed the irregularity in parsing within the syntax-editors.
+ * Fixed the irregularity when showing the focus after replacing 
+   the focussed subtree.
 
 2003/07/17 (markvdb@cwi.nl)
  * Repaired the Move-Down bug reported by Hayco.

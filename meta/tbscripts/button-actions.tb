@@ -988,6 +988,7 @@ in
     (
       rec-msg(io-file-written) . 
       snd-note(reload-file(EditorId, FileName)) .
+      snd-note(goto-focus(EditorId, Focus)) .
       snd-note(set-focus(EditorId, Focus))
     +
       rec-msg(io-file-not-written(ErrorMessage?)) .
