@@ -86,7 +86,6 @@ in
   subscribe(syntax-changed(ModuleName)) . 
   snd-msg(initialize-structure-editor(EditorId, Text)) .
   rec-msg(initial-focus(Focus?)) .
-  snd-msg(invalidate-tree(EditorId)) .
   snd-msg(set-focus(EditorId, Focus)) .
   (
     rec-note(syntax-changed(ModuleName)) .

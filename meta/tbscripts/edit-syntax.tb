@@ -31,7 +31,8 @@ let
   Modules   : term,
   ErrorFoci : term,
   Text      : str,
-  DirtyFoci : list
+  DirtyFoci : list,
+  ModifiedStatus : term
 in
   Text := "" .
   snd-msg(get-sdf2-asfix(ModuleName)).
@@ -86,12 +87,10 @@ in
   )
   *
   rec-msg(kill-editor(EditorId)).
-  snd-msg(get-dirty-focuses(EditorId)) .
-  rec-msg(dirty-focuses(DirtyFoci?)) .
+  snd-msg(get-modified-status(EditorId)) .
+  rec-msg(modified-status(EditorId, ModifiedStatus?)) .
   snd-msg(kill-editor-done(EditorId)).
-  if equal(DirtyFoci, []) then
-    tau    
-  else
+  if equal(ModifiedStatus, modified) then
 	  snd-note(ui-status(errorf("Dirty module %s is automatically reread from disk.",
        [ModuleName]))).
     snd-msg(close-module(ModuleName)).
@@ -99,6 +98,8 @@ in
     snd-msg(delete-module(ModuleName)).
     snd-msg(open-modules([ModuleName])).
     rec-msg(finished-opening-modules)
+  else
+    tau
   fi
   
 endlet
