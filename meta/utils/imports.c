@@ -79,7 +79,7 @@ int main( int argc, char* argv[] )
    char*     s;
    char      buffer[_POSIX_PATH_MAX];
    int       options;
-   char      c;
+   int      c;
    
    /* initialize variables */
    options = 0;
