@@ -102,7 +102,7 @@ in
   +
     rec-event(TE, menu-event("Actions", ButtonName?, Fid)) .
     snd-msg(extra-button-action(EditorId, ButtonName)) .
-    snd-ack-event(TE, menu-event("Term-Actions", ButtonName, Fid))
+    snd-ack-event(TE, menu-event("Actions", ButtonName, Fid))
   ) *
   (
     rec-disconnect(TE).
