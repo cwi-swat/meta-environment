@@ -46,7 +46,10 @@ static void make_main(const char *name, FILE *file)
 	    name, name, name);
   if (make_toolbus_tool) {
     ATfprintf(file,
-	      ", %s_handler);", name);
+	      "#ifdef TOOLBUS\n"
+	      "                          , %s_handler\n"
+	      "#endif\n"
+	      "                          );", name);
   }
   else {
     ATfprintf(file, ");");
