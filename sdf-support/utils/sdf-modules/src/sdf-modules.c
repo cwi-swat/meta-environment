@@ -54,6 +54,17 @@ ATerm get_all_imports(int cid, ATerm atModules, char* name)
 }
 
 /*}}}  */
+/*{{{  ATerm get_all_imports(int cid, ATerm atModules, char* name)  */
+
+ATerm get_imports(int cid, ATerm atModule)
+{
+  SDF_Module module = SDF_ModuleFromTerm(atModule);
+  ATermList imports = SDF_getImports(module);
+ 
+  return ATmake("snd-result(imports(<term>))", imports);
+}
+
+/*}}}  */
 
 /*{{{  ATerm get_all_depending_modules(int cid, ATerm atModules, char* name) */
 

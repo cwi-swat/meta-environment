@@ -30,6 +30,11 @@ in
     rec-value(SM, all-imports(Imports?)) .
     snd-msg(sm-all-imports(Imports))
   +
+    rec-msg(sm-get-imports(Module)) .
+    snd-eval(SM, get-imports(Module)) .
+    rec-value(SM, imports(Imports?)) .
+    snd-msg(sm-imports(Imports))
+  +
     rec-msg(sm-get-all-depending-modules(Modules?, ModuleId?)) .
     snd-eval(SM, get-all-depending-modules(Modules, ModuleId)) .
     rec-value(SM, depending-modules(Depending?)) .
@@ -54,10 +59,10 @@ in
     snd-eval(SM, is-valid-modulename-in-path(Path, ModuleId)) .
     (
       rec-value(SM, yes) .
-      snd-msg(modulename-is-valid)
+      snd-msg(sm-modulename-is-valid)
     +
       rec-value(SM, no) .
-      snd-msg(modulename-is-invalid)
+      snd-msg(sm-modulename-is-invalid)
     ) 
   +
     rec-msg(sm-rename-import-in-module(Module?, From?, To?)) .
