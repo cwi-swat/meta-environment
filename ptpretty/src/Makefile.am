@@ -14,6 +14,7 @@ bin_PROGRAMS = ptpretty
 noinst_HEADERS = pretty.h ptpretty.tif.h
 
 pkgdata_DATA = ptpretty.idef
+EXTRA_DIST = ptpretty.idef
 
 ptpretty_SOURCES = main.c pretty.c ptpretty.tif.c
 ptpretty_LDADD = \
