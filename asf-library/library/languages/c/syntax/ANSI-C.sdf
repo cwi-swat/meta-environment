@@ -1,5 +1,26 @@
 module languages/c/syntax/ANSI-C
 
+%% This grammar is constructed from ANSI-C standard
+%% URL: http://www.lysator.liu.se/c/ANSI-C-grammar-y.html
+%%
+%% - first a one-to-one translation from yacc to sdf
+%% - replaced terminal identifiers (RETURN) by literal symbols ("return")
+%% - renamed non-terminals from dash separated to CamelCase
+%% - imported lexical definition of C comments from the CPP grammar
+%% - then added follow restrictions on identifiers and some unary operators
+%% - fixed an ambiguity in the lexical syntax IS*? was produced, changed to IS*
+%%
+%% The grammar is intentionally left ambiguous and it should stay that way!
+%%
+%% Ambiguities:
+%% int a; /* is 'a' an identifier or a typename? */
+%% { int a; int *a; a = b } /* is int * a; a multiplication or a declaration? */
+%% (print)("hallo"); /* is (print) a cast to type print or a function call? */
+%%
+%% Each of the above ambiguities can be solved by a type analysis. If an 
+%% identifier is declared as a type using typedef, then it will be reserved
+%% and can not be a simple identifier anymore.
+
 exports
 
 sorts 
@@ -85,7 +106,7 @@ lexical syntax
 [a-fA-F0-9] -> H	
 [Ee] [\+\-]? D+ -> E	
 [fFlL] -> FS
-[uUlL]* -> IS
+[uUlL] -> IS
 
 lexical syntax
 
@@ -133,9 +154,9 @@ lexical restrictions
  Identifier -/- [0-9a-zA-Z\_] %% (L | D)
 
 lexical syntax
-[0] [xX] H+ IS?		-> Constant
-[0] D+ IS?		-> Constant
-D+ IS?		        -> Constant
+[0] [xX] H+ IS*		-> Constant
+[0] D+ IS*		-> Constant
+D+ IS*		        -> Constant
 [L]? [\'] ( ([\\]~[]) | ~[\\\'] )+ [\']	-> Constant
 
 D+ E FS?		-> Constant
@@ -200,6 +221,10 @@ context-free syntax
 	 | "!" 
          -> UnaryOperator
 
+context-free restrictions
+
+"&" -/- [\&]
+
 context-free syntax
 	 UnaryExpression -> CastExpression
 	 "(" TypeName ")" CastExpression -> CastExpression
@@ -260,6 +285,8 @@ context-free syntax
 	| "^="
 	| "|="
 	-> AssignmentOperator
+
+context-free syntax
 
 	AssignmentExpression -> Expression
 	Expression "," AssignmentExpression -> Expression
