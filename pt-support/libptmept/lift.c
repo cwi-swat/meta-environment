@@ -11,7 +11,7 @@ static void initEmptyLayout()
 {
   if (e == NULL) {
     e = PTPT_makeOptLayoutAbsent();
-    ATprotect((ATerm*) &e);
+    PTPT_protectOptLayout(&e);
   }
 }
 
