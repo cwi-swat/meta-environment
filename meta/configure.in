@@ -206,9 +206,15 @@ AC_OUTPUT(
 )
 
 dnl Handle subpackages...
-AC_CONFIG_PKG(asc-support)
-AC_CONFIG_PKG(sglr)
-AC_CONFIG_PKG(pgen, --with-asc-inc='\${top_builddir}/../asc-support'
-                    --with-asc-lib='\${top_builddir}/../asc-support'
-                    --with-sglr='\${top_builddir}/../sglr/sglr')
+AC_CONFIG_PKG(asfix)
+AC_CONFIG_PKG(asc-support, --with-asfix-inc='\${top_builddir}/../asfix/libasfix'
+                           --with-asfix-lib='\${top_builddir}/../asfix/libasfix')
+AC_CONFIG_PKG(sglr,        --with-asfix-inc='\${top_builddir}/../asfix/libasfix'
+                           --with-asfix-lib='\${top_builddir}/../asfix/libasfix')
+
+AC_CONFIG_PKG(pgen,        --with-asfix-inc='\${top_builddir}/../asfix/libasfix'
+                           --with-asfix-lib='\${top_builddir}/../asfix/libasfix'
+                           --with-asc-inc='\${top_builddir}/../asc-support'
+                           --with-asc-lib='\${top_builddir}/../asc-support'
+                           --with-sglr='\${top_builddir}/../sglr/sglr')
 
