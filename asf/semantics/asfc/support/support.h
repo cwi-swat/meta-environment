@@ -54,6 +54,8 @@ extern Symbol record_sym;
 #define FUNC_EXIT_CONST(constant,rhs) return ( constant ? constant : ( constant = rhs)) ;
 
 #endif
+
+#define ATermTable MemoTable *
 /*
 #define streq(a,b) (!strcmp((a),(b)))
 */
@@ -65,10 +67,27 @@ extern Symbol record_sym;
 #define check_sym(t,s) (ATgetSymbol((ATermAppl) t) == (s))
 
 /* Macros to access the database */
+#define MEMO_SIZE_CLASS 12
+#define DEFAULT_MEMO_TABLE_SIZE (1<<MEMO_SIZE_CLASS)
+#define DEFAULT_MEMO_QUEUE_SIZE ((DEFAULT_MEMO_TABLE_SIZE*2)/3)
+#define MEMO_TABLE_MASK (DEFAULT_MEMO_TABLE_SIZE-1)
+
+#define MAGIC_K	1999
+#define MEMO_HASH(t) ((unsigned int)(((unsigned int)t)>>2)*MAGIC_K ^ \
+											((t->header)>>8))
+
+#define get_result(table,in) (get_memo_result(table, in))
+#define put_result(table,in,out) (put_memo_result(table, in, out))
+#define get_table(db) (db)
+#define create_table(db,v) (db = create_memo_table(DEFAULT_MEMO_QUEUE_SIZE, \
+																									 DEFAULT_MEMO_TABLE_SIZE))
+
+/*
 #define get_result(db,k) (ATtableGet(db,k))
 #define put_result(db,k,v) (ATtablePut(db,k,v))
 #define get_table(db) (db)
 #define create_table(db,v) (db = ATtableCreate(500,75))
+*/
 
 #define tail_1(l) (t_list_next(l))
 #define tail_2(l) (t_list_next(tail_1(l)))
@@ -182,6 +201,28 @@ extern Symbol record_sym;
 #define or(t0,t1)     (ATisEqual(t0, c_true) ? c_true : t1)
 
 typedef ATerm (*funcptr)();
+
+typedef struct MemoEntry {
+	struct MemoEntry *next;
+	struct MemoEntry *prev;
+	struct MemoEntry *hnext;
+	unsigned int hnr;
+	ATerm  input;
+	ATerm  result;
+} MemoEntry;
+
+typedef struct MemoTable {
+	int queue_size;
+	int table_size;
+  MemoEntry  *queue;
+	MemoEntry  *first;
+	MemoEntry  *last;
+	MemoEntry **table;
+} MemoTable;
+
+extern ATerm get_memo_result(MemoTable *table, ATerm in);
+extern void put_memo_result(MemoTable *table, ATerm in, ATerm out);
+extern MemoTable *create_memo_table(int queue_size, int table_size);
 
 extern unsigned int rewrite_steps;
 

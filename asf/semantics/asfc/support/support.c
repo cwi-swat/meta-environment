@@ -155,6 +155,11 @@ void c_rehash(int newsize)
     }
   }
 
+  if(prod_table)
+    free(prod_table);
+  if(sym_table)
+    free(sym_table);
+
   prod_table = newprodtable;
   sym_table = newsymtable;
   table_size = newsize;
@@ -1235,6 +1240,143 @@ ATerm expand_to_asfix(ATerm mod, char *name)
 
   arg = AFexpandAsFixModule(mod);
   return make_compiler_term(name,arg);
+}
+
+/*}}}  */
+
+/*{{{  MemoTable *create_memo_table(int queue_size, int table_size) */
+
+/**
+	* Create a new memotable of the specified size.
+	*/
+
+MemoTable *create_memo_table(int queue_size, int table_size)
+{
+	int i;
+	MemoEntry *entry;
+	MemoTable *table;
+
+	/* Allocate enough space */
+	table = (MemoTable *)calloc(1, sizeof(MemoTable));
+	if(!table)
+		ATerror("could not allocate memo table.\n");
+
+	table->queue_size = queue_size;
+	table->table_size = table_size;
+
+	table->queue = (MemoEntry *)calloc(queue_size, sizeof(MemoEntry));
+	table->table = (MemoEntry **)calloc(table_size, sizeof(MemoEntry *));
+
+	if(!table->queue || !table->table)
+		ATerror("could not allocate queue and/or table of size: %d/%d\n",
+						queue_size, table_size);
+
+	/* Initialize the queue */
+	entry = &table->queue[0];
+	entry->next = &table->queue[1];
+	ATprotect(&entry->input);
+	ATprotect(&entry->result);
+	table->first = entry;
+	for(i=1; i<(queue_size-1); i++) {
+		MemoEntry *entry = &table->queue[i];
+		entry->next = &table->queue[i+1];
+		entry->prev = &table->queue[i-1];
+		ATprotect(&entry->input);
+		ATprotect(&entry->result);
+	}
+	entry = &table->queue[queue_size-1];
+	entry->prev = &table->queue[queue_size-2];
+	table->last = entry;
+	ATprotect(&entry->input);
+	ATprotect(&entry->result);
+
+	return table;
+}
+
+/*}}}  */
+/*{{{  ATerm get_memo_result(MemoTable *table, ATerm input) */
+
+/**
+	* Retrieve a memo result.
+	*/
+
+ATerm get_memo_result(MemoTable *table, ATerm input)
+{
+	MemoEntry *entry, *prev, *next;
+	unsigned int hnr;
+
+	hnr = MEMO_HASH(input);
+	hnr &= MEMO_TABLE_MASK;
+
+	entry = table->table[hnr];
+	while(entry && entry->input != input)
+		entry = entry->hnext;
+
+	if(entry) {
+		prev = entry->prev;
+		if(prev) {
+			/* Upgrade entry in the queue */
+			next = entry->next;
+			prev->next = next;
+			if(next)
+				next->prev = prev;
+			else
+				table->last = prev;
+
+			table->first->prev = entry;
+			entry->next = table->first;
+			entry->prev = NULL;
+			table->first = entry;
+		}
+		return entry->result;
+	}
+	return NULL;
+}
+
+/*}}}  */
+/*{{{  void put_memo_result(MemoTable *table, ATerm input, ATerm result) */
+
+/**
+	* Place a new entry in the memo table.
+	*/
+
+void put_memo_result(MemoTable *table, ATerm input, ATerm result)
+{
+	MemoEntry *entry, *cur, *prev;
+	unsigned int hnr;
+
+	hnr = MEMO_HASH(input);
+	hnr &= MEMO_TABLE_MASK;
+
+	/* Move entry to the start of the queue */
+	entry = table->last;
+	entry->prev->next = NULL;
+	table->last = entry->prev;
+	entry->prev = NULL;
+	entry->next = table->first;
+	table->first->prev = entry;
+	table->first = entry;
+
+	/* Remove entry from its old place in the hashtable */
+	if(entry->input) {
+		cur = table->table[entry->hnr];
+		prev = NULL;
+		while(cur && cur != entry) {
+			prev = cur;
+			cur = cur->hnext;
+		}
+
+		if(prev)
+			prev->hnext = cur->hnext;
+		else
+			table->table[cur->hnr] = cur->hnext;
+	}
+
+	entry->input = input;
+	entry->result = result;
+	entry->hnr = hnr;
+	entry->hnext = table->table[hnr];
+	table->table[hnr] = entry;
 }
 
 /*}}}  */
