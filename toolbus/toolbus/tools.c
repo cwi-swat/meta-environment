@@ -811,7 +811,9 @@ retry:
 	nelem = multi_read(ti_in(ti));
 	if(nelem == 0){
 	  ti_in(ti) = -1;
-	  err_warn("lost connection with %t\n", ti);
+	  if (TBverbose) {
+	    err_warn("lost connection with %t\n", ti);
+	  }
 	  /* <PO> was: goto retry; */
 	  *pti = ti;
 	  return 0;

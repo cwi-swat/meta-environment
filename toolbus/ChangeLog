@@ -1,7 +1,12 @@
 $Id$
 
+Tue Oct 14 09:51:09 CEST 2003 <jong@cwi.nl>
+ * toolbus/tools.c:
+   - only warn about lost connections if TBverbose is set. Closes #75.
+
 2003/09/30 <kooiker@cwi.nl>
- * toolbus/viewer.tcl.src: walk over existing array elements. Closes #4.
+ * toolbus/viewer.tcl.src:
+   - walk over existing array elements. Closes #4.
 
 Thu Sep 11 11:39:49 CEST 2003 <jong@cwi.nl>
  * adapters/gen-adapter:
