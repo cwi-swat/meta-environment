@@ -1,0 +1,41 @@
+#include "meta.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/status.tb"
+
+process StandaloneTermstoreDumper is
+let
+  ANModules : list,
+  ErrorMessage: str,
+  InitialModules : list,
+  Pid: int,
+  Temp : term,
+  Whitespace : list
+in
+  create(StatusDisplay, Pid?)
+  . create(MetaCreator, Pid?)
+  . rec-msg(creation-finished)
+  . InitializeTermStore(TERMSTORENAME)
+
+  . CreateASDFprocesses
+
+  /* Load initial modules */
+  . printf("Loading initial ASDF support modules from ")
+  . LoadTSFromFiles
+  .
+  if equal(SAVING, "true") then
+    printf("saving termstore\n")
+    . snd-msg(register-termstore-name("/users/fagidiot/asenv1.5/install/share/asdf/asdf-pt/asdf/initial.termstore"))
+    . rec-msg(termstore-name-registered)
+    . snd-msg(save-termstore)
+    .
+    (
+      rec-msg(saved)
+    +
+      rec-msg(not-saved(ErrorMessage?))
+    )
+  else
+    tau
+  fi
+  . shutdown("")
+endlet
+
+toolbus(StandaloneTermstoreDumper)

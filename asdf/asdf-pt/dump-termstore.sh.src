@@ -1,0 +1,6 @@
+#! /bin/sh
+
+/users/fagidiot/asenv1.5/install/bin/generic-meta -I /users/fagidiot/asenv1.5/install/share/asf \
+                          -I /users/fagidiot/asenv1.5/install/share/asfsdf-meta \
+                          -p /users/fagidiot/asenv1.5/install/bin \
+                          -S /users/fagidiot/asenv1.5/install/share/asdf/start-meta-termstore-dumper.tb $* 

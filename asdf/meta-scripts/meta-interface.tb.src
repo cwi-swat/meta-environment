@@ -81,8 +81,13 @@ process CheckSyntaxSpecification(ModuleName : str) is
 let
   Syntax    : term,
   ErrorMessage : str,
-  Feedback  : term
+  Feedback  : term,
+  Id : int
 in
+  Id := process-id .
+  snd-note(ui-status(statf(Id, 
+                           "Checking syntax definition: %s",
+                           [ModuleName]))) .
   snd-msg(get-all-syntax-definitions(ModuleName, eqs)) .
   (
     rec-msg(syntax(Syntax?)) .
@@ -92,7 +97,8 @@ in
     Syntax := no-tree
   +
     rec-msg(no-syntax(ErrorMessage?))
-  )
+  ) .
+  snd-note(ui-status(endstat(Id)))
 endlet
 
 process Preprocess-syntax is
@@ -290,12 +296,6 @@ in
   + 
     rec-msg(invalidate-other-tables-hook(Module?, sdf)) .
     snd-msg(other-tables-invalidated-hook)
-  +
-    rec-msg(pre-get-all-syntax-hook(ModuleNames?, eqs)) .
-    snd-msg(pre-get-all-syntax-hook-result(tablename("sdf-tree"))) 
-  +
-    rec-msg(pre-get-all-syntax-hook(ModuleNames?, sdf)) .
-    snd-msg(pre-get-all-syntax-hook-result(tablename("sdf-tree")))
   +
     rec-msg(add-initial-syntax-modules-hook(Modules?, sdf)) .
     snd-msg(initial-modules-added(Modules)) 

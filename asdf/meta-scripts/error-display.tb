@@ -7,21 +7,28 @@
  */
 process DisplayErrors is
 let
-  Message : str,
   Errors : list,
   Feedback : term,
   Producer : str,
   Identification : str,
-  ModuleName : str
+  ModuleName : str,
+  Summary : term
 in
   (
+    rec-msg(clear-rewrite-errors) .
+    snd-msg(ui-remove-feedback-summary("asfe", "all"))
+  +
     rec-msg(display-rewrite-errors(ModuleName?, Errors?)).
-    snd-note(remove-feedback-summary("asfe","all")) .
-    snd-note(show-feedback-summary(summary("asfe","all",Errors)))
+    snd-note(ui-remove-feedback-summary("asfe","all")) .
+    snd-msg(es-make-summary("asfe", "all", Errors)) .
+    rec-msg(es-summary(Summary?)) .
+    snd-note(ui-show-feedback-summary(summary("asfe","all",Errors)))
   +
     rec-msg(display-asf-errors(ModuleName?, Errors?)).
-    snd-note(remove-feedback-summary("asf-checker", ModuleName)) .
-    snd-note(show-feedback-summary(summary("asf-checker",ModuleName,Errors)))
+    snd-note(ui-remove-feedback-summary("asf-checker", ModuleName)) .
+    snd-msg(es-make-summary("asf-checker", ModuleName, Errors)) .
+    rec-msg(es-summary(Summary?)) .
+    snd-note(show-feedback-summary(Summary))
   +
     rec-msg(display-sdf-errors(Feedback?)) .
     snd-msg(convert-feedback(Feedback)) .
@@ -30,8 +37,7 @@ in
     rec-msg(producer(Producer?)) .
     snd-msg(get-feedback-identification(Feedback)) .
     rec-msg(identification(Identification?)) .
-    snd-note(remove-feedback-summary(Producer, Identification)) .
-    snd-note(show-feedback-summary(Feedback))
+    snd-note(refresh-feedback-summary(Feedback))
   ) * 
   delta
 endlet

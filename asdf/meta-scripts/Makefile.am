@@ -3,14 +3,18 @@
 TBSCRIPTS = \
 	meta-interface.tb \
 	error-display.tb \
-	asdf-modules.tb
+	asdf-modules.tb \
+	start-meta-termstore-dumper.tb \
+	meta.tb
 
 EXTRA_DIST = \
 	meta-interface.tb.src \
 	error-display.tb \
 	asdf-modules.tb \
 	standard.asdf.buttons \
-	standard.asdf.buttons.src
+	standard.asdf.buttons.src \
+	start-meta-termstore-dumper.tb \
+	meta.tb
 
 CLEANFILES = \
 	meta-interface.tb \

@@ -1,0 +1,100 @@
+/* meta-kernel */
+#include "/users/fagidiot/asenv1.5/install/share/meta/configuration-manager.idef"
+#include "/users/fagidiot/asenv1.5/install/share/meta/editor-hive.idef"
+#include "/users/fagidiot/asenv1.5/install/share/meta/editor-manager.idef"
+#include "/users/fagidiot/asenv1.5/install/share/meta/generic-adapter.idef" 
+#include "/users/fagidiot/asenv1.5/install/share/meta/graph-converter.idef"
+#include "/users/fagidiot/asenv1.5/install/share/meta/in-output.idef"
+#include "/users/fagidiot/asenv1.5/install/share/meta/layout-graph.idef"
+#include "/users/fagidiot/asenv1.5/install/share/meta/position-annotator.idef"
+#include "/users/fagidiot/asenv1.5/install/share/meta/sglr.idef"
+#include "/users/fagidiot/asenv1.5/install/share/meta/structure-editor.idef"
+#include "/users/fagidiot/asenv1.5/install/share/meta/unparser.idef"
+#include "/users/fagidiot/asenv1.5/install/share/meta/user-interface.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/kernel-configuration.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/user-configuration.tb"
+
+/* sdf-meta */
+#include "/users/fagidiot/asenv1.5/install/share/meta/parsetablegen.idef"
+#include "/users/fagidiot/asenv1.5/install/share/meta/sdf-import-graph.idef"
+#include "/users/fagidiot/asenv1.5/install/share/meta/graph-utils.tb"
+
+/* asf-sdf-meta */
+#include "/users/fagidiot/asenv1.5/install/share/meta/apply-function.idef"
+#include "/users/fagidiot/asenv1.5/install/share/meta/restorebrackets.idef"
+
+/* to be resolved */
+#include "/users/fagidiot/asenv1.5/install/share/meta/feedback.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/editing.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/restore-term-brackets.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/open-modules.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/module-db.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/module-utils.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/print-module.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/close-all.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/process-eqs.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/compile-module.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/save-module.tb" 
+#include "/users/fagidiot/asenv1.5/install/share/meta/get-parsetable.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/dump-parsetable.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/sdf2-language.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/parse-focuses.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/button-actions.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/dump-equations.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/dump-sdf-definition.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/pretty-print.tb"
+#include "/users/fagidiot/asenv1.5/install/share/meta/meta-interface.tb"
+
+process META is
+let 
+  Id : term,
+  Syntax : str,
+  Semantics : str,
+  Term : str,
+  Sort : term
+in
+  Id := process-id
+  . KernelConfiguration()
+  . UserConfiguration()
+  .
+  (
+    rec-msg(get-file-extensions) .
+    snd-msg(file-extensions-hook).
+    rec-msg(file-extensions-hook-result(Syntax?, Semantics?, Term?)).
+    snd-msg(set-file-extensions(syntax(Syntax), rules(Semantics), term(Term)))
+  +
+    rec-msg(get-rules-top-sort) .
+    snd-msg(semantics-top-sort-hook).
+    rec-msg(semantics-top-sort-hook-result(Sort?)).
+    snd-msg(set-rules-top-sort(Sort))
+  +
+    rec-msg(get-application-status) .
+    snd-msg(status(interactive)) 
+  ) * delta
+endlet
+
+process MetaCreator is
+let
+  Pid : int
+in
+  create(META, Pid?)
+  . create(MetaActions, Pid?)
+  . create(ButtonActionExecutor, Pid?)
+  . create(TermStoreName, Pid?)
+  . create(Compile-module, Pid?)
+  . create(DumpEquations, Pid?)
+  . create(DumpParseTable, Pid?)
+  . create(DumpSdfDefinition, Pid?)
+  . create(BuildParseTable, Pid?)
+  . create(Meta-Interface, Pid?)
+  . create(ModuleDB, Pid?)
+  . create(Open-Sdf2-Language, Pid?)
+  . create(PGen, Pid?)
+  . create(PrintModule, Pid?)
+  . create(RestoreBrackets, Pid?)
+  . create(RestoreTermBrackets, Pid?)
+  . create(Save-modules, Pid?)
+  . create(UserInterfaceHandler, Pid?)
+  . rec-msg(termstore-initialized) 
+  . snd-msg(creation-finished)
+endlet

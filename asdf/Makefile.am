@@ -1,4 +1,4 @@
-SUBDIRS = meta-scripts src asdf-pt
+SUBDIRS = meta-scripts src asdf-pt initialtermstore
 
 ACLOCAL_FLAGS = -I .
 

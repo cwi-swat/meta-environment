@@ -66,8 +66,6 @@ still working although start would be set to zero!?!
 - Popup: Export Eqs parsetable
 
 
-- Evaluation of Action Semantic
-
 - Documentation
 
 - Description of concrete syntax in the Action env.
@@ -79,39 +77,94 @@ still working although start would be set to zero!?!
 > Følgende problemer har jeg fundet (det er slet ikke sikkert der kan
 > gøres noget ved dem alle sammen):
 >
+> * "Export equations" virker ikke.
+>
+> * Undersøg hvilken functionalitet fra ASF+SDF MetaEnv der kan
+>   genbruges (fx. delete module, add import etc.)
 >
 > * Problemet med at hvis man parser men mangler en tom linie til sidst,
 >   så dør environmentet også.
 >
-> * Hvis man ændrer et modul sådan at det automatisk skal importere en
->   fil der ikke findes så virker andet parse ikke (fair enough), og
->   modulet mister alle sine imports i grafen. Modulet som ikke findes
->   skulle gerne vises i grafen, så man har mulighed for at klikke på
->   det og så oprette det (jvf. opførsel i Meta-Environment når man
->   importerer ikke eksiterende modul).
->
-> * Hvis et modul er importeret men ikke findes, så kan man ikke få en
->   menu frem der giver mulighed for at skabe modulet.
->
 > * Der skal stå Action Environment og ikke Meta-Environment i toppen af
 >   vinduet.
->
-> * "Export equations" virker ikke.
+>   build/meta/meta-studio/MetaStudio.java Should allso be added to
+>   the bridge thing.
 >
 > * Grafen opdateres ikke når et modul lukkes.
->
-> * Undersøg hvilken functionalitet fra ASF+SDF MetaEnv der kan
->   genbruges (fx. delete module, add import etc.)
 
-Fortolkeren kan ikke haandtere = korrekt.
 
 --------------------- Changes: --------------------
+Mon, Oct 25
+Note:
+- Looking into the termstore generation buisness.
+
+- /users/fagidiot/asenv1.5/install/share/meta/start-meta-eqs-dumper.tb,
+  line 13: process `OpenModules': too few actuals
+  ToolBus: execution stopped due to the above error(s)
+
+
+Wed, Oct 20
+Note:
+- asdf-modules.tb.src, button-actions.tb,
+  asdf/meta-scripts/error-display.tb, error-display.tb,
+  error-support.idef, asdf/meta-scripts/meta-interface.tb.src,
+  meta-interface.tb.src, module-db.tb, module-utils.tb,
+  open-modules.tb, parse-focuses.tb, position-annotator.idef,
+  process-eqs.tb, standard.asdf.buttons.src, start-meta-studio.tb:
+  Continued working on the integration.
+  Added a table module-type to open-module.tb, which saves the
+  type of each open module. Used in ASDF generate-asfsdf-for-modules
+  to distinguish.
+  Could be extended to the rules buisness.
+
+
+Tue, Oct 19
+Note:
+- asdf-modules.tb.src, button-actions.tb,
+  asdf/meta-scripts/error-display.tb, error-display.tb,
+  error-support.idef, asdf/meta-scripts/meta-interface.tb.src,
+  meta-interface.tb.src, module-db.tb, module-utils.tb,
+  open-modules.tb, parse-focuses.tb, position-annotator.idef,
+  process-eqs.tb, standard.asdf.buttons.src, start-meta-studio.tb:
+  Continued working on the integration.
+
+
+Mon, Oct 18
+Note:
+- asdf-modules.tb.src, button-actions.tb, open-modules,
+  start-meta-studio.tb, meta-interface.tb.src,
+  standard.asdf.buttons.src:
+  Extending ActionEnv to support ASF and SDF modules.
+  Implementing a rulebased opening scheme for module:
+  - It is allowed to import SDF modules from ASDF module
+  - It is NOT allowed to import ASDF modules from SDF module
+
+  - It there are modules with the same name and several types,
+    e.g. foo.asdf and foo.sdf, the ActionEnv is to prefer the module
+    of the same type as the one importing.
+
+  - When the user opens a module, and a module of the same name but a
+    different type is allready open, the user should be warned and the
+    action aborted leaving the ActionEnv in the state it was before
+    the action was initiated. - NOT implemented.
+
+
 
 Thu, Oct 14
 Note:
 - asdf-modules.tb.src: ASDFButtons, reduce and evaluate is know working.
 
 - asdf-modules.tb.src: EvalutateASDFTerm, some more comments.
+
+- standard-asdf-buttons.src: new-module-popup, it is now possible to
+  create a non existing module.
+
+- asdf-modules.tb.src: ASDFButtons, added tree editors.
+  ASDF editor for editing asdf specifications.
+  Term editor for editing programs in bas.
+  Action editor for editing actions in action notation.
+  Eval editor for displaying output of the evaluator.
+
 
 
 Wed, Oct 13
