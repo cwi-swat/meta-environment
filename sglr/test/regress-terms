@@ -7,10 +7,12 @@ Revision='$Revision$'
 ###
 
 verbose=0
+update=0
 
 cd `dirname $0`;
 mydir=`pwd`
 
+MV=mv
 RM=rm
 SGLR="../sglr/sglr"
 COMPARE="$mydir/trmdiff"
@@ -33,7 +35,7 @@ myversion=`echo $Revision| cut -d' ' -f2`
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="hvV"
+myarguments="hvUV"
 
 if [ $myarguments ] ; then
     myargsexplained=$myarguments
@@ -54,6 +56,7 @@ Usage: $myname$myargsexplained . . .
 Options:
     -h              display help information (usage)
     -v              verbose mode
+    -U              update outdated ".org" files
     -V              reveal program version (i.e. $myversion)
 E_O_USAGE
 }
@@ -80,6 +83,8 @@ do
             Usage; shift;;
         -v)
             verbose=1; shift;;
+        -U)
+            update=1; shift;;
         -V)
             Version; shift;;
         --)
@@ -139,17 +144,23 @@ do
         do
 		base=`basename $file`
 		dir=`dirname $file`
-		out=$dir/`basename $base .$ext`.asfix2
-		if [ ! -f $out.org ] ; then
+		asfile=`basename $base .$ext`.asfix2
+		org=$dir/$asfile.org
+		out=${TMPDIR:-/var/tmp}/$asfile
+		if [ ! -f $org ] ; then
 			Notify "No reference term for $base"
 			continue
 		fi
 		if $SGLR $VERBOSE -p $ptbl -i $file -o $out
 		then
-	                if $COMPARE $VERBOSE $out $out.org	> /dev/null
+	                if $COMPARE $VERBOSE $out $org	> /dev/null
 	                then
 				Notify "Regression test for valid term $base succeeded"
-		                ${RM} -f $out
+				if [ $update -eq 0 ] ; then
+		                	${RM} -f $out
+				else
+					${MV} $out $org
+				fi
 			else
 				Error "Regression test for valid term $base failed"
 	                fi
@@ -163,12 +174,18 @@ do
         do
 		base=`basename $file`
 		dir=`dirname $file`
-		out=$dir/`basename $base .$ext`.asfix2
+		asfile=`basename $base .$ext`.asfix2
+		org=$dir/$asfile.org
+		out=${TMPDIR:-/var/tmp}/$asfile
 		$SGLR $VERBOSE --cycle -p $ptbl -i $file -o $out	2>/dev/null
-	        if $COMPARE $VERBOSE $out $out.org		> /dev/null
+	        if $COMPARE $VERBOSE $out $org		> /dev/null
 	        then
 			Notify "Regression test for error term $base succeeded"
-		        ${RM} -f $out
+			if [ $update -eq 0 ] ; then
+	                	${RM} -f $out
+			else
+				${MV} $out $org
+			fi
 	        else
 			Error "Regression test for error term $base failed"
 	        fi
