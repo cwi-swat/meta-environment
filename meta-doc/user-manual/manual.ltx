@@ -2580,8 +2580,7 @@ of {\tt letter}. Without this restriction {\tt letter} would be recognized
 as the keyword {\tt let} followed by the variable  {\tt ter}.
 
 The context-free restriction forbids that a variable is directly
-followed by a letter. Note that this context-free restriction could also
-have been be formulated as a lexical restriction.
+followed by a letter. 
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -2665,6 +2664,80 @@ exports
 \end{IncCode}
 \caption{Definition of C++ comments}\label{CODE:c-comment}
 \end{figure}
+
+One frequently asked question is when to use lexical restrictions
+and when to use context-free restrictions. 
+The lexical restrictions on {\tt let} and {\tt in} in
+Figure \ref{CODE:functional}can not be defined context-free 
+because these keywords do not "live" at the lexical level.
+Is it possible to put a lexical restriction on {\tt Var}?
+Yes, but it will have no effect, because internally the
+lexical {\tt Var} is injected in the context-free {\tt Var}.
+In this example it may have been better to define a context-free
+restriction on the sort {\tt Term} because {\tt Var} is injected
+in {\tt Term}. The restrictions are {\em not} inherited via
+injections.
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module RestrictedExpressions
+
+imports Layout
+
+exports
+  sorts Expr
+
+  lexical syntax
+    [a-z]+ -> Expr
+
+  context-free syntax
+    Expr Expr    -> Expr {left}
+    "(" Expr ")" -> Expr {bracket}
+
+  context-free restrictions
+    Expr -/- [a-z]
+\end{boxedverbatim}
+\end{IncCode}
+\caption{Erroneous use of restrictions in the definition of simple expressions}\label{CODE:restrictedexpressions}
+\end{figure}   
+
+Figure \ref{CODE:restrictedexpressions} shows an erroneous use of
+context-free expressions, because it prevents the recognition of
+{\tt (abc)def}.
+
+\begin{figure}[tb]
+\begin{IncCode}
+\begin{boxedverbatim}
+module Water
+
+imports Layout
+
+exports
+  sorts Program
+
+  lexical syntax
+    ~[\ \n]+ -> Water {avoid}
+    context-free syntax
+      Water -> Word
+      Word* -> Program 
+    lexical restrictions
+      Water -/- ~[\ \n]
+    context-free restrictions
+      Water -/- ~[\ \n]
+    context-free restrictions
+      Word -/- ~[\ \n] 
+\end{boxedverbatim}
+\end{IncCode}
+\caption{The use of restrictions in the definition of island grammars}\label{CODE:islandgrammars}
+\end{figure}   
+
+Figure \ref{CODE:islandgrammars} shows the definition of three restrictions,
+all three restrictions are needed to ensure that neither {\tt Water}
+nor {\tt Word} are directly followed by no layout characters.
+This is again due to the injection from {\tt Water} in {\tt Word}.
+This has to do with the way the follow sets are calculated in
+the generated LR parse table, see \cite{ASU??, Vis96} for more details.
 
 \subsubsection{Preferring, avoiding or rejecting parses} 
 \label{PreferAvoidReject}
@@ -2872,18 +2945,12 @@ language definition in this example.
 \end{tabular}
 \end{center}
 
-\paragraph{Removing Trees using Priorities or {\tt prefer}/
-{\tt avoid} Attributes at the root}
+\paragraph{Removing Trees using {\tt prefer}/{\tt avoid} Attributes at the root}
 
 The priority declarations are used to eliminate trees 
 in three phases: 
 
 \begin{enumerate}
-  
-\item Trees containing direct conflicts (regarding priority) are eliminated.
-  Given the trees $T_1$ and $T_2$ tree $T_2$ is removed if for production rule
-  $p_1$ at the top of $T_1$ and production rule $p_2$ at the top of $T_2$
-  holds that $p_1 > p_2$.
   
 \item If there are trees of which the syntax rule at the top node has a {\tt
     prefer} attribute, all other trees are removed.
@@ -2894,33 +2961,15 @@ in three phases:
   
 \end{enumerate}
 
-\paragraph{Removing Trees containing Priorities or {\tt prefer}/
-{\tt avoid} Attributes}
+\paragraph{Removing Trees containing {\tt prefer}/{\tt avoid} Attributes}
 
-After removing all trees containing conflicts, more than one tree may still remain.
-To further reduce this set of remaining trees, the priority ordering `{\tt >}'
-on context-free functions including the {\tt prefer}/{\tt avoid}
-attributes is extended to a priority ordering `{\tt >>}' 
-on trees. 
+After removing all trees containing conflicts, more than one tree may 
+still remain.
+To further reduce this set of remaining trees, the number of
+context-free functions with {\tt prefer}/{\tt avoid}
+attributes is calculated and compared. 
 A tree in the set is then rejected if there is another tree in the set with
-higher priority. The relation $T_1$ {\tt >>} $T_2$ holds between two 
-trees $T_1$ and $T_2$ if
-
-\begin{itemize}
-
-\item $T_1$ is not equal to $T_2$;
- 
-\item $\forall y \in T_2$ such that $T_1(y) < T_2(y)$ (the number
-      of occurrences of $y$ is smaller in $T_1$ than in $T_2$) 
-      $\exists x \in T_1$ such that $y > x$ and $T_2(x) < T_1(x)$
-      ($y$ has a higher priority than $x$ and the number of 
-       occurrences of $x$ is smaller in $T_2$ than in $T_1$).
-
-      The production rules with a {\tt prefer} attribute are now considered
-      as production rules with higher priority than any other rules without this
-      attribute or with the {\tt avoid} attribute. The production rules
-      with an {\tt avoid} attribute have the lowest priority.
-\end{itemize}
+more {\tt prefer}s and less or equal {\tt avoid}s.
 
 \paragraph{Injection count}
 Finally, the number of injections in each of the resulting trees
@@ -2940,14 +2989,9 @@ exports
   context-free syntax
     E "sub" E         -> E {left}
     E "sup" E         -> E {left}
-    E "sub" E "sup" E -> E 
+    E "sub" E "sup" E -> E {prefer}
     "{" E "}"         -> E {bracket}
     "a"               -> E 
-
-  context-free priorities
-    E "sub" E "sup" E -> E > 
-    {left: E "sub" E -> E 
-           E :sup" E -> E}
 \end{boxedverbatim}
 \end{IncCode}
 \caption{Syntax definition of EQN expressions}\label{CODE:eqn-exprs}
@@ -2957,11 +3001,12 @@ exports
 
 The following example shows how the interaction (and resulting ambiguities)
 between general context-free functions and special case functions can be
-described using priorities. It concerns expressions for describing subscripts
+described using {\tt prefer} attribute. It concerns expressions for 
+describing subscripts
 and superscripts in the typesetting language EQN. The crucial point is that,
 for typesetting reasons, we want to treat a subscript followed by a
 superscript in a special way. Therefore, the special case `{\tt E sub E sup E
-  -> E}' is introduced, which has priority over a combination of the two
+  -> E}' is introduced, which is prefered over a combination of the two
 functions `{\tt E sub E -> E}' and `{\tt E sup E -> E}'.
 See, Figure \ref{CODE:eqn-exprs} for the \sdf\ definition.
 
