@@ -60,6 +60,12 @@ snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
   rec-value(Mdb, changed-modules(ChngMods?)).
   snd-msg(changed-modules(ChngMods))
 +
+/* Delete one module from the db */
+  rec-msg(close-module-in-db(Name?)).
+  snd-eval(Mdb, close-module(Name)).
+  rec-value(Mdb, changed-modules(ChngMods?)).
+  snd-msg(changed-modules(ChngMods))
++
 /* See if a module is in the db */
   rec-msg(is-module-in-db(Name?)).
   snd-eval(Mdb, exists(Name)).

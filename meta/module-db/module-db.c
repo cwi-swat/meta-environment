@@ -984,6 +984,39 @@ static ATermList delete_modulename_from_modules(ATermList mods,
 }
 
 /*}}}  */
+/*{{{  ATerm close_module(int cid, char *moduleName) */
+/* If a module is closed a list of depending modules
+ * should be calculated and returned.
+ */
+
+ATerm close_module(int cid, char *moduleName)
+{
+  ATerm name = ATmake("<str>",moduleName);
+  ATermList changedMods, tmp;
+
+  changedMods = modules_depend_on(name, ATempty);
+
+  /* remove the module itself from the list of changed modules */
+  for(tmp=ATempty; !ATisEmpty(changedMods); 
+      changedMods = ATgetNext(changedMods)) {
+    ATerm head = ATgetFirst(changedMods);
+    if (!ATisEqual(name, head)) {
+      tmp = ATinsert(tmp, head);
+    }
+  }
+  changedMods = tmp;
+
+  update_syntax_status_of_modules(changedMods); 
+
+  RemoveKey(modules_db,name);
+  RemoveKey(import_db,name);
+  RemoveKey(full_import_db,name);
+  reset_trans_db();
+
+  return ATmake("snd-value(changed-modules([<list>]))", changedMods);
+}
+
+/*}}}  */
 /*{{{  ATerm delete_module(int cid, char *moduleName) */
 /* If a module is delete a list of depending modules
  * should be calculated and returned.
@@ -1096,7 +1129,7 @@ static ATbool checkModuleNameWithPath(const char *moduleName, const char *path)
     if (moduleName[j] != path[i]) {
       return ATfalse;
     }
-    if (!isalnum(moduleName[j]) 
+    if (!isalnum((int)moduleName[j]) 
 	&& moduleName[j] != '-'
 	&& moduleName[j] != '_'
 	&& moduleName[j] != '/') {
@@ -1116,7 +1149,7 @@ static ATbool checkModuleName(const char *moduleName)
   int len = strlen(moduleName);
 
   for (i = 0; i < len; i++) {
-    if (!isalnum(moduleName[i]) 
+    if (!isalnum((int)moduleName[i]) 
         && moduleName[i] != '-'  
         && moduleName[i] != '_'
 	&& moduleName[i] != '/') {
