@@ -10,12 +10,9 @@ INCLUDES		= -I$(ASC_SUPPORT)/include \
 			-I$(ATERM)/include
 
 bin_PROGRAMS = removevarsyntax
-man_MANS     = removevarsyntax.1
 
 pkgdata_DATA    = removevarsyntax.idef
 
-EXTRA_DIST   = removevarsyntax.idef removevarsyntax.tif.c removevarsyntax.tif.h \
-               removevarsyntax.pod removevarsyntax.1
 
 removevarsyntax_SOURCES = removevarsyntax.c Remove-Var-Syntax.c
 removevarsyntax_LDADD   = removevarsyntax.tif.o \
@@ -28,6 +25,6 @@ removevarsyntax_LDADD   = removevarsyntax.tif.o \
 			$(SOCKLIBS)
 
 
-CLEANFILES = removevarsyntax.tifs removevarsyntax.1
+CLEANFILES = removevarsyntax.tifs 
 
 removevarsyntax.o : removevarsyntax.tif.h

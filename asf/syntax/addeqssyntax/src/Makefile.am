@@ -10,12 +10,10 @@ INCLUDES         = -I$(ASC_SUPPORT)/include \
                    -I$(ATERM)/include
 
 bin_PROGRAMS = addeqssyntax
-man_MANS     = addeqssyntax.1
 
 pkgdata_DATA    = addeqssyntax.idef
 
-EXTRA_DIST   = addeqssyntax.idef addeqssyntax.tif.c addeqssyntax.tif.h \
-	       addeqssyntax.pod addeqssyntax.1
+EXTRA_DIST   = addeqssyntax.idef addeqssyntax.tif.c addeqssyntax.tif.h 
 
 addeqssyntax_SOURCES = addeqssyntax.c Add-Eqs-Syntax.c
 addeqssyntax_LDADD   = addeqssyntax.tif.o \
@@ -27,7 +25,6 @@ addeqssyntax_LDADD   = addeqssyntax.tif.o \
                        -L$(ATERM)/lib -lATerm \
 			$(SOCKLIBS)
 
-
-CLEANFILES = addeqssyntax.tifs addeqssyntax.1
+CLEANFILES = addeqssyntax.tifs 
 
 addeqssyntax.o: addeqssyntax.tif.h
