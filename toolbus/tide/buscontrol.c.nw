@@ -83,7 +83,8 @@ static act_entry act_table[] =
 };
 
 char *inf_table[] =
-{ "search-paths",	NULL,
+{ "name",		NULL,
+  "search-paths",	NULL,
   "ports",		"[[exec-state,at], [always, after],"\
 			"[location, after], [process-creation, at],"\
 			"[process-destruction, at]]",
@@ -176,8 +177,6 @@ the execution state of a process.
 <<cbdap_change_exec_state>>=
 void cbdap_change_exec_state(int pid, int exec_state)
 {
-  fprintf(stderr, "cbdap_ces: %d, %d, %d\n", pid, exec_state,
-				dap_check_process_flags(0, pid, PUF_WAITING));
   switch(exec_state) {
     case ES_RUN:
     case ES_SINGLE_STEP:
@@ -197,13 +196,17 @@ feature is needed.
 <<cbdap_supply_info>>=
 term *cbdap_supply_info(char *key)
 {
+  static char buf[_POSIX_PATH_MAX];
   if(streq(key, "search-paths")) {
-    static char path[_POSIX_PATH_MAX];
-    getcwd(path, _POSIX_PATH_MAX);
+    getcwd(buf, _POSIX_PATH_MAX);
 
-    return TB_make("[[config, [<str>]], [source, [<str>]]]", path, path);
+    return TB_make("[[config, [<str>]], [source, [<str>]]]", buf, buf);
   }
-
+  if(streq(key, "name")) {
+    int port = TB_getPort(viewer);
+    sprintf(buf, "toolbus-%d", port);
+    return TB_make("<str>", buf);
+  }
   return NULL;
 }
 @
@@ -299,7 +302,6 @@ void update_process(int pid, term *env)
   term *var, *val;
   TBbool changed = TBfalse;
 
-  TBprintf(stderr, "update_process: %d, %t\n", pid, env);
   if(!dap_get_process(0, pid))
     return;
 
@@ -429,7 +431,7 @@ term *rec_monitor(int cid, term *T)
   int pid1, pid2;
   term *at_args, *at_coords, *env, *subs, *notes, *pe;
 
-  TBprintf(stderr, "monitor command received: %t\n", T);
+  /*TBprintf(stderr, "monitor command received: %t\n", T);*/
   if(TBmatch(T, "%f(%d,%f,%t,%t,%t,%t,%t,%d,%t)",
 	     &mon_point, &pid1, &at_fun, &at_args, &at_coords,
 	     &env, &subs, &notes, &pid2, &pe)) {
@@ -442,7 +444,6 @@ term *rec_monitor(int cid, term *T)
       return;
     }
       
-    fprintf(stderr, "setting PUF_WAITING of process: %d\n", pid1);
     dap_set_process_flags(0, pid1, PUF_WAITING);
 
     if(streq(at_fun, "create")) {
@@ -551,11 +552,9 @@ int main(int argc, char *argv[])
 {
   TB_init();
 
-  fprintf(stderr, "Opening initial connection for viewer\n");
   viewer = TB_parseArgs(argc, argv, viewer_handler, viewer_check_in_sign);
   TB_connect(viewer);
 
-  fprintf(stderr, "Opening second connection to debugging toolbus\n");
   control_bus = TB_newConnection("debug-adapter", NULL, 9500,
 	         debug_adapter_handler, debug_adapter_check_in_sign);
   TB_connect(control_bus);

@@ -7,11 +7,13 @@
 <<process BROADCAST>>
 <<process SOURCE-VIEWER>>
 <<process RULE-VIEWER>>
+<<process WATCHPOINT-VIEWER>>
 <<process MASTER-CONTROL>>
 
 <<tool definitions>>
 
-toolbus(DAP-CONNECT, MASTER-CONTROL, BROADCAST, SOURCE-VIEWER, RULE-VIEWER)
+toolbus(DAP-CONNECT, MASTER-CONTROL, BROADCAST, 
+	SOURCE-VIEWER, RULE-VIEWER, WATCHPOINT-VIEWER)
 @
 
 %}}}
@@ -27,6 +29,7 @@ tool debug-adapter is { }
 tool master-control is { command = "tcltk-adapter -script master-control.tcl" }
 tool source-viewer  is { command = "tcltk-adapter -script source-viewer.tcl" }
 tool rule-viewer  is { command = "tcltk-adapter -script rule-viewer.tcl" }
+tool watchpoint-viewer is { command = "tcltk-adapter -script watchpoint-viewer.tcl" }
 %%tool viewer is { command = "./buscontrol" }
 @
 
@@ -47,7 +50,7 @@ in
     rec-value(D, info(Info?)) .
     snd-eval(D, get-processes) .
     rec-value(D, processes(P?)) .
-    printf("%t info: %t, procs: %t\n", D, Info, P) .
+    %% printf("%t info: %t, procs: %t\n", D, Info, P) .
     snd-note(event(proc(D,all), dap-connected(Info,P))) .
     create(EVENT-RULES(D), Pid?)
     +
@@ -321,7 +324,8 @@ in
     snd-ack-event(R, create-rule(Type,D,P,Port,Cond,Acts,Life,Rid))
     +
     rec-event(R, modify-rule(Rid?,D?,P?,Port?,Cond?,Acts?,Life?)) .
-    snd-msg(proc(D,P),modify-rule(Rid,Cond,Acts,Life))
+    snd-msg(proc(D,P),modify-rule(Rid,Port,Cond,Acts,Life)) .
+    snd-ack-event(R, modify-rule(Rid,D,P,Port,Cond,Acts,Life))
     +
     rec-event(R, destroy-rule(D?,P?,Rid?)) .
     snd-msg(proc(D,P), destroy-rule(Rid)) .
@@ -331,6 +335,72 @@ endlet
 @
 
 %}}}
+%{{{ process WATCHPOINT-VIEWER
+
+<<process WATCHPOINT-VIEWER>>=
+process WATCHPOINT-VIEWER is
+let
+  V    : watchpoint-viewer,
+  D    : debug-adapter,
+  P    : term,
+  Info : list,
+  Port : term,
+  Cond : term,
+  Acts : term,
+  Life : term,
+  Rid  : int,
+  Exprs: list, %% A list of [expression, value] pairs
+  Type : term
+in
+  execute(watchpoint-viewer, V?) .
+  subscribe(event(<term>,dap-connected(<list>,<list>))) .
+  subscribe(event(<term>,dap-disconnected)) .
+  subscribe(event(<term>,rule-created(<int>,<term>,<term>,<term>,<term>))) .
+  subscribe(event(<term>,rule-modified(<int>,<term>,<term>,<term>,<term>))) .
+  subscribe(event(<term>,rule-destroyed(<int>))) .
+  subscribe(event(<term>,watchpoint(<int>,<list>))) .
+  snd-note(new-tool("Create watchpoint", V, view-watchpoint)) .
+  ( rec-msg(V, view-watchpoint, D?) .
+    snd-do(V, view-watchpoint(D))
+    +
+    rec-note(event(proc(D?,all), dap-connected(Info?,P?))) .
+    snd-do(V, dap-connected(D, Info, P))
+    +
+    rec-note(event(proc(D?,P?), dap-disconnected)) .
+    snd-do(V, dap-disconnected(D))
+    +
+    rec-note(event(proc(D?,P?), rule-created(Rid?,Port?,Cond?,Acts?,Life?))) .
+    snd-do(V, rule-created(D,P,Rid,Port,Cond,Acts,Life))
+    +
+    rec-note(event(proc(D?,P?), rule-modified(Rid?,Port?,Cond?,Acts?,Life?))) .
+    snd-do(V, rule-modified(D,P,Rid,Port,Cond,Acts,Life))
+    +
+    rec-note(event(proc(D?,P?), rule-destroyed(Rid?))) .
+    snd-do(V, rule-destroyed(D,P, Rid))
+    +
+    rec-note(event(proc(D?,P?), watchpoint(Rid?, Exprs?))) .
+    snd-do(V, watchpoint(D, P, Rid, Exprs))
+    +
+    rec-event(V, create-rule(Type?,D?,P?,Port?,Cond?,Acts?,Life?)) .
+    snd-msg(proc(D,P),create-rule(Port,Cond,Acts,Life)) .
+    rec-msg(proc(D,P), create-rule(Port, Cond, Acts, Life, Rid?)) .
+    printf("watchpoint viewer created rule: %d\n", Rid) .
+    snd-ack-event(V, create-rule(Type,D,P,Port,Cond,Acts,Life,Rid))
+    +
+    rec-event(V, modify-rule(Rid?,D?,P?,Port?,Cond?,Acts?,Life?)) .
+    snd-msg(proc(D,P),modify-rule(Rid,Port,Cond,Acts,Life)) .
+    snd-ack-event(V, modify-rule(Rid,D,P,Port,Cond,Acts,Life))
+    +
+    rec-event(V, destroy-rule(D?,P?,Rid?)) .
+    snd-msg(proc(D,P), destroy-rule(Rid)) .
+    snd-ack-event(V, destroy-rule(D,P,Rid))    
+  ) * delta
+endlet
+@
+
+%}}}
+
+
 
 
 

@@ -83,7 +83,6 @@ proc update-dap-list {daps} {
 
   set w .middle.daps.list.box
 
-  puts stderr "update-dap-list: $daps"
   set el ""
   set sel [$w curselection]
   if { $sel != "" } {
@@ -94,7 +93,7 @@ proc update-dap-list {daps} {
   set i 0
   set idx ""
   foreach dap $daps {
-    $w insert end $dap
+    $w insert end [tide-get-info $dap name]
     if { $dap == $el } {
       set idx $i
     }

@@ -15,7 +15,6 @@ proc rule-created { dap pids rid port cond acts life } {
   global Dap Rule
 
   set port [TCLport $port]
-  puts stderr "rule-created: $dap, $rid, $pids, $port, $cond, $acts"
 
   if { $rid != -1 && [lsearch $Dap($dap,rules) $rid] == -1 } {
     lappend Dap($dap,rules)  $rid
@@ -25,12 +24,13 @@ proc rule-created { dap pids rid port cond acts life } {
     set Rule($dap,$rid,life) $life
     set Rule($dap,$rid,pids) $pids
 
+    set Rule($dap,$rid,porttype) [lindex $port 0]
+    set Rule($dap,$rid,when) [lindex $port 1]
+
     tide-call rule-created $dap $rid $pids $port $cond $acts $life
   }
 }
 proc rule-destroyed { dap pid rid } {
-  puts stderr "rule-destroyed: $dap, $rid"
-
   tide-call rule-destroyed $dap $rid
 
   set idx [lsearch $Dap($dap,rules) $rid]
@@ -49,7 +49,7 @@ proc rule-modified { dap pids rid port cond acts life } {
   set port [TCLport $port]
   puts stderr "rule-modified: $dap, $rid, $pids, $port, $cond, $acts"
 
-  if { $rid != -1 && [lsearch $Dap($dap,rules) $rid] == -1 } {
+  if { $rid != -1 } {
     if { [lsearch $Dap($dap,rules) $rid] == -1 } {
       lappend Dap($dap,rules)  $rid
     }
@@ -66,13 +66,14 @@ proc rule-modified { dap pids rid port cond acts life } {
 proc watchpoint { dap pid rid exprs } {
   global Dap Rule
 
-  puts stderr "watchpoint: $dap, $pid, $rid, $exprs"
+  set Rule($dap,$rid,pid) $pid
+  set Rule($dap,$rid,exprs) $exprs
   tide-call watchpoint $dap $pid $rid $exprs
 }
 proc tide-create-rule { type dap pids port cond acts life } {
   set Acts \[$acts\]
   if { $cond == "" } {
-    set cond always
+    set cond true
   }
   if { $pids == "all" } {
     TBpost "create-rule($type,$dap,all,[TBport $port],$cond,$Acts,$life)"
@@ -88,7 +89,7 @@ proc tide-destroy-rule { dap rid } {
 proc tide-modify-rule { rid dap pids port cond acts life } {
   set Acts \[$acts\]
   if { $cond == "" } {
-    set cond always
+    set cond true
   }
   if { $pids == "all" } {
     TBpost "modify-rule($rid,$dap,all,[TBport $port],$cond,$Acts,$life)"

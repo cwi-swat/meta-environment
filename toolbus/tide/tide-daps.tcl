@@ -1,7 +1,7 @@
 proc dap-connected { dap info procs } {
   global Tide Daps Dap
 
-  puts stderr "dap-connected: $dap $procs"
+  # puts stderr "dap-connected: $dap $procs"
   set propagate 0
   if { [lsearch $Daps $dap] == -1 } {
       lappend Daps $dap
@@ -20,7 +20,7 @@ proc dap-connected { dap info procs } {
 
       if { [lsearch $Dap($dap,info) $class] == -1 } {
         lappend Dap($dap,info) $class
-        puts stderr "class: $class, options: $options"
+        # puts stderr "class: $class, options: $options"
         set Dap($dap,info,$class) $options
         switch $class {
           ports			{ analyze-port-info $dap $options }
@@ -71,7 +71,7 @@ proc analyze-action-info { dap acts } {
     set name  [TCLstring [lindex $action 0]]
     set arity [lindex $action 1]
     set doc   [TCLstring [lindex $action 2]]
-    puts stderr "action: $name, $arity, $doc"
+    # puts stderr "action: $name, $arity, $doc"
     lappend Dap($dap,acts) $name
     set Dap($dap,act$name,arity) $arity
     set Dap($dap,act$name,doc) $doc
@@ -103,7 +103,7 @@ proc analyze-exec-control-info { dap options } {
 proc dap-disconnected { dap } {
   global Daps Dap
 
-  puts stderr "dap-disconnected: $dap"
+  # puts stderr "dap-disconnected: $dap"
   
   # Call any tide-dap-disconnected* procs present
   tide-call dap-disconnected $dap
@@ -114,6 +114,16 @@ proc dap-disconnected { dap } {
     unset Dap($dap,info,$class)
   }
   unset Dap($dap,info)
+}
+proc tide-get-info { dap class } {
+  global Dap
+
+  if { [info exists Dap($dap,info,$class)] } {
+    return $Dap($dap,info,$class)
+  } else {
+    puts stderr "Warning: info class $class does not exist for dap $dap."
+    return ""
+  }
 }
 proc tide-get-search-paths { dap categorie } {
   global Dap

@@ -38,7 +38,8 @@ DISTFILES	= Makefile.in Guide.tex Intro.tex \
 		  psfig.tex \
 		  calc.fig calc-ui.eps auction.fig auction-bidder.eps \
 		  auction-master.eps \
-		  Guide.ps.gz
+		  Guide.ps.gz \
+		  classes
 
 all:    ${DOCUMENTS}
 
@@ -84,7 +85,7 @@ distclean: clean
 dist: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  ln $(srcdir)/$$file $(top_srcdir)/../$(PRODUCT)-$(VERSION)/doc 2> /dev/null \
-	  || cp $(srcdir)/$$file $(top_srcdir)/../$(PRODUCT)-$(VERSION)/doc; \
+	  || cp -r $(srcdir)/$$file $(top_srcdir)/../$(PRODUCT)-$(VERSION)/doc; \
 	done
 	mkdir $(top_srcdir)/../$(PRODUCT)-$(VERSION)/doc/adapters
 	mkdir $(top_srcdir)/../$(PRODUCT)-$(VERSION)/doc/src

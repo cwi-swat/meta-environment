@@ -65,12 +65,12 @@ act_entry default_act_table[] =
   { NULL,    0, NULL,         NULL, NULL }
 };
 
-#line 1200 "dap.c.nw"
+#line 1230 "dap.c.nw"
 static void post_event(int queue, term *event)
 {
   int i;
 
-  TBprintf(stderr, "posting event %t in queue %d\n", event, queue);
+  /*TBprintf(stderr, "posting event %t in queue %d\n", event, queue);*/
   TBevq_post(evq[queue], event);
   outstanding_events++;
   if(outstanding_events >= HIGH_WATER_MARK) {
@@ -90,7 +90,6 @@ TBbool eval_cpe_0(term_list *args, int pid, term **result, char **msg)
   process *p = dap_get_process(0, pid); 
 
   assert(!args);
-  fprintf(stderr, "eval_cpe_0: p=%d\n", pid);
   if(p->cpe.module)
     *result = TB_make("[location,<term>,<str>,<int>,<int>,<int>,<int>]", 
 	dap_when2term(p->cpe.when), p->cpe.module,
@@ -100,7 +99,7 @@ TBbool eval_cpe_0(term_list *args, int pid, term **result, char **msg)
 
   return TBtrue;  
 }
-#line 280 "dap.c.nw"
+#line 279 "dap.c.nw"
 TBbool eval_cpe_1(term_list *args, int pid, term **result, char **msg)
 {
   if(TBmatch(args, "[<int>]", &pid)) {
@@ -114,21 +113,21 @@ TBbool eval_cpe_1(term_list *args, int pid, term **result, char **msg)
 
   return TBfalse;
 }
-#line 299 "dap.c.nw"
+#line 298 "dap.c.nw"
 TBbool eval_always(term_list *args, int pid, term **result, char **msg)
 {
   *result = TB_make("1");
 
   return TBtrue;  
 }
-#line 311 "dap.c.nw"
+#line 310 "dap.c.nw"
 TBbool eval_exec_state(term_list *args, int pid, term **result, char **msg)
 {
   *result = dap_es2term(dap_get_exec_state(0, pid));
 
   return TBtrue;  
 }
-#line 323 "dap.c.nw"
+#line 322 "dap.c.nw"
 TBbool eval_process_name(term_list *args, int pid, term **result, char **msg)
 {
   *result = TB_make("<str>", dap_get_process_name(0, pid));
@@ -136,37 +135,37 @@ TBbool eval_process_name(term_list *args, int pid, term **result, char **msg)
   return TBtrue;  
 }
 
-#line 336 "dap.c.nw"
+#line 335 "dap.c.nw"
 TBbool exec_halt_0(term_list *args, int pid, term **result, char **msg)
 {
   dap_change_exec_state(pid, ES_STOP);
   return TBtrue;
 }
-#line 347 "dap.c.nw"
+#line 346 "dap.c.nw"
 TBbool exec_single_step_0(term_list *args, int pid, term **result, char **msg)
 {
   dap_change_exec_state(pid, ES_SINGLE_STEP);
   return TBtrue;
 }
-#line 358 "dap.c.nw"
+#line 357 "dap.c.nw"
 TBbool exec_step_over_0(term_list *args, int pid, term **result, char **msg)
 {
   dap_change_exec_state(pid, ES_STEP_OVER);
   return TBtrue;
 }
-#line 369 "dap.c.nw"
+#line 368 "dap.c.nw"
 TBbool exec_run_0(term_list *args, int pid, term **result, char **msg)
 {
   dap_change_exec_state(pid, ES_RUN);
   return TBtrue;
 }
-#line 380 "dap.c.nw"
+#line 379 "dap.c.nw"
 TBbool exec_run_until_parent_0(term_list *args, int pid, term **result, char **msg)
 {
   dap_change_exec_state(pid, ES_RUN_UNTIL_PARENT);
   return TBtrue;
 }
-#line 391 "dap.c.nw"
+#line 390 "dap.c.nw"
 TBbool exec_watch_1(term_list *args, int pid, term **result, char **msg)
 {
   process *p = dap_get_process(0, pid);
@@ -175,26 +174,24 @@ TBbool exec_watch_1(term_list *args, int pid, term **result, char **msg)
   if(!dap_evaluate(expr, pid, result, msg))
     return TBfalse;
 
-  TBprintf(stderr, "generating watchpoint, result = %t\n", *result);
-
   *result = TB_make("[<term>,<term>]", expr, *result);
   
   return TBtrue;
 }
-#line 1229 "dap.c.nw"
+#line 1259 "dap.c.nw"
 TBbool typecheck_expr(term *expr, int pid, term **at, char **msg)
 {
   /* This function is not implemented yet */
   return TBtrue;
 }
-#line 1245 "dap.c.nw"
+#line 1275 "dap.c.nw"
 TBbool typecheck_action(term *action, int pid, term **at, char **msg)
 {
   /* This function is not implemented yet */
   return TBtrue;
 }
 
-#line 416 "dap.c.nw"
+#line 413 "dap.c.nw"
 void dap_init(int cid, char **itable, function_table ftable, action_table atable)
 {
   int i;
@@ -215,7 +212,7 @@ void dap_init(int cid, char **itable, function_table ftable, action_table atable
     }
   }  
 }
-#line 466 "dap.c.nw"
+#line 463 "dap.c.nw"
 TBbool dap_evaluate(term *expr, int pid, term **result, char **msg);
 
 TBbool dap_evaluate_list(term_list *exprs, int pid, term **result, char **msg)
@@ -233,7 +230,7 @@ TBbool dap_evaluate_list(term_list *exprs, int pid, term **result, char **msg)
   *result = l;
   return TBtrue;
 }
-#line 491 "dap.c.nw"
+#line 488 "dap.c.nw"
 TBbool dap_evaluate_appl(term *appl, int pid, term **result, char **msg)
 {
   int i, arity;
@@ -243,16 +240,17 @@ TBbool dap_evaluate_appl(term *appl, int pid, term **result, char **msg)
   TB_match(appl, "<appl>", &func, &args);
   arity = list_length(args);
   
-  if(!dap_evaluate_list(args, pid, &args_eval, msg)) {
-    /* An error occured while evaluating the arguments */
-    *result = args_eval;
-    return TBfalse;
-  }
 
   /* Search for the appropriate function in the function table */
   for(i=0; func_table[i].name; i++) {
     if(streq(func_table[i].name, func) && 
        (func_table[i].arity == -1 || func_table[i].arity == arity)) {
+      /* Firste evaluate the arguments */
+      if(!dap_evaluate_list(args, pid, &args_eval, msg)) {
+        /* An error occured while evaluating the arguments */
+        *result = args_eval;
+        return TBfalse;
+      }
       return (func_table[i].eval)(args, pid, result, msg);
     }
   }
@@ -262,6 +260,12 @@ TBbool dap_evaluate_appl(term *appl, int pid, term **result, char **msg)
     if(streq(default_func_table[i].name, func) && 
        (default_func_table[i].arity == -1 || 
         default_func_table[i].arity == arity)) {
+      /* Firste evaluate the arguments */
+      if(!dap_evaluate_list(args, pid, &args_eval, msg)) {
+        /* An error occured while evaluating the arguments */
+        *result = args_eval;
+        return TBfalse;
+      }
       return (default_func_table[i].eval)(args, pid, result, msg);
     }
   }
@@ -271,7 +275,7 @@ TBbool dap_evaluate_appl(term *appl, int pid, term **result, char **msg)
   *result = appl;
   return TBfalse;
 }
-#line 450 "dap.c.nw"
+#line 447 "dap.c.nw"
 TBbool dap_evaluate(term *expr, int pid, term **result, char **msg)
 {
   switch(tkind(expr)) {
@@ -281,7 +285,7 @@ TBbool dap_evaluate(term *expr, int pid, term **result, char **msg)
   *result = expr;
   return TBtrue;
 }
-#line 561 "dap.c.nw"
+#line 565 "dap.c.nw"
 static TBbool dap_execute_list(term_list *actions, int pid, term **result, char **msg)
 {
   term_list *el, *l = NULL;
@@ -299,7 +303,7 @@ static TBbool dap_execute_list(term_list *actions, int pid, term **result, char 
   *result = l;
   return TBtrue;
 }
-#line 586 "dap.c.nw"
+#line 590 "dap.c.nw"
 static TBbool dap_execute_appl(term *appl, int pid, term **result, char **msg)
 {
   int i, arity;
@@ -337,7 +341,7 @@ static TBbool dap_execute_appl(term *appl, int pid, term **result, char **msg)
   *result = appl;
   return TBfalse;
 }
-#line 544 "dap.c.nw"
+#line 548 "dap.c.nw"
 TBbool dap_execute(term *action, int pid, term **result, char **msg)
 {
   switch(tkind(action)) {
@@ -348,7 +352,7 @@ TBbool dap_execute(term *action, int pid, term **result, char **msg)
   *msg = "illegal action";
   return TBfalse;
 }
-#line 633 "dap.c.nw"
+#line 637 "dap.c.nw"
 term *dap_get_info(int cid)
 {
   int i,j;
@@ -390,7 +394,7 @@ term *dap_get_info(int cid)
   }
   return info;
 }
-#line 1125 "dap.c.nw"
+#line 1155 "dap.c.nw"
 TBbool dap_change_exec_state(int pid, int new_state)
 {
   int old_state;
@@ -411,7 +415,7 @@ TBbool dap_change_exec_state(int pid, int new_state)
   }
   return TBfalse;
 }
-#line 1155 "dap.c.nw"
+#line 1185 "dap.c.nw"
 void dap_rec_ack_event(int cid, term *event)
 {
   int i;
@@ -435,7 +439,7 @@ void dap_rec_ack_event(int cid, term *event)
     }
   }
 }
-#line 1184 "dap.c.nw"
+#line 1214 "dap.c.nw"
 void dap_rec_terminate(int cid, term *arg)
 {
   if(cid != tide_cid) {
@@ -443,41 +447,7 @@ void dap_rec_terminate(int cid, term *arg)
   }
 }
 
-#line 680 "dap.c.nw"
-static void cond_trigger_rule(int pid, int rid, term *cond, term *acts);
-
-int dap_create_rule(term *procs, term *port, term *cond, 
-					term *acts, term *life)
-{
-  int pid, rid = -1;
-
-  if(TBmatch(life, "one-shot") && TBmatch(port, "[always,at]")) {
-    if(TBmatch(procs, "all")) {
-      int i;
-      for(i=0; i<MAX_PROCESSES; i++) {
-        if(dap_get_process(0, i))
-          cond_trigger_rule(i, rid, cond, acts);
-      }
-    } else {
-      while(procs) {
-        TB_match(list_first(procs), "<int>", &pid);
-        procs = list_next(procs);  
-        cond_trigger_rule(pid, rid, cond, acts);
-      }
-    }
-  } else {
-    rid = RID++;
-    dap_rule_created(0, rid, procs, port, cond, acts, life);
-  }
-  return rid;
-}
-#line 713 "dap.c.nw"
-void dap_destroy_rule(int rid)
-{
-  dap_rule_destroyed(0, rid);
-  post_event(EVQ_RULE_DESTROYED, TB_make("rule-destroyed(<int>)", rid));
-}
-#line 853 "dap.c.nw"
+#line 882 "dap.c.nw"
 TBbool check_function(char *pattern, term *tdata)
 {
   char *function;
@@ -493,7 +463,7 @@ TBbool check_function(char *pattern, term *tdata)
     return TBtrue;
   return TBfalse;
 }
-#line 874 "dap.c.nw"
+#line 903 "dap.c.nw"
 TBbool check_exception(char *pattern, term *tdata)
 {
   char *exception;
@@ -509,7 +479,7 @@ TBbool check_exception(char *pattern, term *tdata)
     return TBtrue;
   return TBfalse;
 }
-#line 895 "dap.c.nw"
+#line 924 "dap.c.nw"
 TBbool check_variable(char *pattern, term *tdata)
 {
   char *var;
@@ -525,7 +495,7 @@ TBbool check_variable(char *pattern, term *tdata)
     return TBtrue;
   return TBfalse;
 }
-#line 916 "dap.c.nw"
+#line 945 "dap.c.nw"
 TBbool check_location(struct location *loc, term *loc_data)
 {
   struct location loc2;
@@ -548,13 +518,14 @@ TBbool check_location(struct location *loc, term *loc_data)
       return TBtrue;
   }
 
-  fprintf(stderr, "check_location failed %s:%d.%d,%d.%d != %s:%d.%d,%d.%d\n",
+  /*fprintf(stderr, "check_location failed %s:%d.%d,%d.%d != %s:%d.%d,%d.%d\n",
 	loc->module, loc->start_line, loc->start_col, loc->end_line, loc->end_col,
 	loc2.module, loc2.start_line, loc2.start_col, loc2.end_line, loc2.end_col);
+  */
 
   return TBfalse;
 }
-#line 952 "dap.c.nw"
+#line 982 "dap.c.nw"
 TBbool check_pid(term *pids, int pid)
 {
   if(TBmatch(pids, "all"))
@@ -567,12 +538,12 @@ TBbool check_pid(term *pids, int pid)
   }
   return TBfalse;
 }
-#line 970 "dap.c.nw"
+#line 1000 "dap.c.nw"
 TBbool check_exec_state(int exec_state, term *tdata)
 {
   return (dap_term2es(list_first(tdata)) & exec_state);
 }
-#line 984 "dap.c.nw"
+#line 1014 "dap.c.nw"
 static int term_match(term *trm, term *template, term_list **args);
 
 static int list_match(term_list *l1, term_list *l2, term_list **args)
@@ -587,7 +558,7 @@ static int list_match(term_list *l1, term_list *l2, term_list **args)
   }
   return 1;
 }
-#line 1004 "dap.c.nw"
+#line 1034 "dap.c.nw"
 static int term_match(term *trm, term *template, term_list **args)
 {
   /* Here, we only perform a preorder search for placeholders */
@@ -597,50 +568,50 @@ static int term_match(term *trm, term *template, term_list **args)
     sym = fun_sym(placeholder_type(template));
     switch(sym) {
       
-#line 1044 "dap.c.nw"
+#line 1074 "dap.c.nw"
 case type_list:	if(!is_list(trm))
 		  return 0;
 case type_term:	*args = list_concat_term(*args, trm);
                 return 1;
-#line 1013 "dap.c.nw"
+#line 1043 "dap.c.nw"
       
-#line 1054 "dap.c.nw"
+#line 1084 "dap.c.nw"
 case type_bool:	if(!is_bool(trm))
 		  return 0;
 		*args = list_concat_term(*args, trm);
                 return 1;
-#line 1014 "dap.c.nw"
+#line 1044 "dap.c.nw"
       
-#line 1064 "dap.c.nw"
+#line 1094 "dap.c.nw"
 case type_int:	if(!is_int(trm))
 		  return 0;
 		*args = list_concat_term(*args, trm);
 		return 1;
-#line 1015 "dap.c.nw"
+#line 1045 "dap.c.nw"
       
-#line 1074 "dap.c.nw"
+#line 1104 "dap.c.nw"
 case type_real: if(!is_real(trm))
 		  return 0;
 		*args = list_concat_term(*args, trm);
 		return 1;
-#line 1016 "dap.c.nw"
+#line 1046 "dap.c.nw"
       
-#line 1084 "dap.c.nw"
+#line 1114 "dap.c.nw"
 case type_str:	if(!is_str(trm))
 		  return 0;
 		*args = list_concat_term(*args, trm);
 		break;
 		return 1;
-#line 1017 "dap.c.nw"
+#line 1047 "dap.c.nw"
       
-#line 1095 "dap.c.nw"
+#line 1125 "dap.c.nw"
 case type_bstr:	if(!is_bstr(trm))
 		  return 0;
 		*args = list_concat_term(*args, trm);
 		return 1;
-#line 1018 "dap.c.nw"
+#line 1048 "dap.c.nw"
       
-#line 1105 "dap.c.nw"
+#line 1135 "dap.c.nw"
 default:	if(streq(get_txt(sym), "appl")) {
 		  if(!is_appl(trm))
 		    return 0;
@@ -648,7 +619,7 @@ default:	if(streq(get_txt(sym), "appl")) {
 		  return 1;
 		}
 		return 0;
-#line 1019 "dap.c.nw"
+#line 1049 "dap.c.nw"
     }
     return 0;
   } else if(is_appl(template)) {
@@ -668,14 +639,14 @@ default:	if(streq(get_txt(sym), "appl")) {
   }
 }
 
-#line 811 "dap.c.nw"
+#line 840 "dap.c.nw"
 static void cond_trigger_rule(int pid, int rid, term *cond, term *acts)
 {
   term *res;
   char *msg;
   process *p;
 
-  TBprintf(stderr, "cond_trigger_rule: %t\n", cond);
+  /*TBprintf(stderr, "cond_trigger_rule: %t\n", cond);*/
   if(cond) {
     if(!dap_evaluate(cond, pid, &res, &msg)) {
       TBprintf(stderr, "evaluating condition failed: %t - %s\n", res, msg);
@@ -689,7 +660,7 @@ static void cond_trigger_rule(int pid, int rid, term *cond, term *acts)
       return;
   }
 
-  TBprintf(stderr, "triggering rule: %t\n", acts);
+  /*TBprintf(stderr, "triggering rule: %t\n", acts);*/
   p = dap_get_process(0, pid);
   p->ruleid = rid;
   res = NULL;
@@ -698,22 +669,71 @@ static void cond_trigger_rule(int pid, int rid, term *cond, term *acts)
 
 
   if(res) {
-    TBprintf(stderr, "posting result: %t\n", res);
+    /*TBprintf(stderr, "posting result: %t\n", res);*/
     post_event(EVQ_WATCHPOINT, 
 	TB_make("watchpoint([<int>],<int>,<term>)",
 	pid, p->ruleid, res));
   }
 }
-#line 742 "dap.c.nw"
+#line 786 "dap.c.nw"
+void dap_activate_rule(int pid, term *port, event_rule *rule)
+{
+  int   type  = dap_eventport(list_index(port, 1));
+  int   when  = dap_eventwhen(list_index(port, 2));
+  term *tdata = list_next(list_next(port));
+
+  /*TBprintf(stderr, "checking rule: %d (pids=%t)\n", rule->id, rule->pids);*/
+  if(check_pid(rule->pids, pid) && 
+     (when == rule->port.when || rule->port.when == WHEN_AT)) {
+    switch(type) {
+	case PORT_EXEC_STATE:	if(check_exec_state(rule->port.u.exec_state, tdata))
+				  cond_trigger_rule(pid, rule->id, rule->cond, rule->acts);
+				break;
+
+	case PORT_PROCESS_CREATION:
+	case PORT_PROCESS_DESTRUCTION:
+	case PORT_ALWAYS:	cond_trigger_rule(pid, rule->id, rule->cond, rule->acts);
+				break;
+
+        case PORT_LOCATION:	if(check_location(&rule->port.u.loc, tdata))
+				  cond_trigger_rule(pid, rule->id, rule->cond, rule->acts);
+				break;
+
+        case PORT_CALL:
+	case PORT_RETRY:
+	case PORT_FAIL:
+	case PORT_SUCCEED:	if(!check_function(rule->port.u.function, tdata))
+				  cond_trigger_rule(pid, rule->id, rule->cond, rule->acts);
+				break;
+
+	case PORT_EXCEPTION:	if(!check_exception(rule->port.u.exception, tdata))
+				  cond_trigger_rule(pid, rule->id, rule->cond, rule->acts);
+				break;
+	case PORT_VARIABLE:	if(!check_variable(rule->port.u.var, tdata))
+				  cond_trigger_rule(pid, rule->id, rule->cond, rule->acts);
+				break;
+	case PORT_RECEIVE:
+	case PORT_SEND:		if(term_match(list_first(tdata), rule->port.u.msg,
+					&dap_get_process(0, pid)->subterms))
+				  cond_trigger_rule(pid, rule->id, rule->cond, rule->acts);
+				break;
+	
+	default:	assert(0); /* illegal port type */
+    }
+  }
+}
+#line 754 "dap.c.nw"
 void dap_activate_rules(int pid, term *port)
 {
+  static TBbool firstloc = TBtrue;
+
   dap *mydap = dap_get(0);
   event_rule *cur;
   process *p = dap_get_process(0, pid);
   int   type  = dap_eventport(list_index(port, 1));
   int   when  = dap_eventwhen(list_index(port, 2));
-
   term *tdata = list_next(list_next(port));
+
 
   if(type == PORT_LOCATION) {
     if(TB_match(tdata, "[<str>,<int>,<int>,<int>,<int>]", &p->cpe.module,
@@ -721,48 +741,50 @@ void dap_activate_rules(int pid, term *port)
       p->cpe.when = when;
   }
 
-  TBprintf(stderr, "dap_activate_rules: %d, %t\n", pid, port);
+  if(type == PORT_EXEC_STATE)
+    dap_set_last_port(0, pid, port);
+ 
+  for(cur = mydap->ports[type]; cur; cur = cur->next)
+    dap_activate_rule(pid, port, cur);
+}
+#line 684 "dap.c.nw"
+static void cond_trigger_rule(int pid, int rid, term *cond, term *acts);
 
-  
-  for(cur = mydap->ports[type]; cur; cur = cur->next) {
-    TBprintf(stderr, "checking rule: %d (pids=%t)\n", cur->id, cur->pids);
-    if(check_pid(cur->pids, pid) && 
-       (when == cur->port.when || cur->port.when == WHEN_AT)) {
-      switch(type) {
-	case PORT_EXEC_STATE:	if(check_exec_state(cur->port.u.exec_state, tdata))
-				  cond_trigger_rule(pid, cur->id, cur->cond, cur->acts);
-				break;
+int dap_create_rule(term *procs, term *port, term *cond, 
+					term *acts, term *life)
+{
+  int i, pid, rid = -1;
 
-	case PORT_PROCESS_CREATION:
-	case PORT_PROCESS_DESTRUCTION:
-	case PORT_ALWAYS:	cond_trigger_rule(pid, cur->id, cur->cond, cur->acts);
-				break;
-
-        case PORT_LOCATION:	if(check_location(&cur->port.u.loc, tdata))
-				  cond_trigger_rule(pid, cur->id, cur->cond, cur->acts);
-				break;
-
-        case PORT_CALL:
-	case PORT_RETRY:
-	case PORT_FAIL:
-	case PORT_SUCCEED:	if(!check_function(cur->port.u.function, tdata))
-				  cond_trigger_rule(pid, cur->id, cur->cond, cur->acts);
-				break;
-
-	case PORT_EXCEPTION:	if(!check_exception(cur->port.u.exception, tdata))
-				  cond_trigger_rule(pid, cur->id, cur->cond, cur->acts);
-				break;
-	case PORT_VARIABLE:	if(!check_variable(cur->port.u.var, tdata))
-				  cond_trigger_rule(pid, cur->id, cur->cond, cur->acts);
-				break;
-	case PORT_RECEIVE:
-	case PORT_SEND:		if(term_match(list_first(tdata), cur->port.u.msg,
-					&dap_get_process(0, pid)->subterms))
-				  cond_trigger_rule(pid, cur->id, cur->cond, cur->acts);
-				break;
-	
-	default:	assert(0); /* illegal port type */
+  if(TBmatch(life, "one-shot") && TBmatch(port, "[always,at]")) {
+    if(TBmatch(procs, "all")) {
+      for(i=0; i<MAX_PROCESSES; i++) {
+        if(dap_get_process(0, i))
+          cond_trigger_rule(i, rid, cond, acts);
+      }
+    } else {
+      while(procs) {
+        TB_match(list_first(procs), "<int>", &pid);
+        procs = list_next(procs);  
+        cond_trigger_rule(pid, rid, cond, acts);
+      }
+    }
+  } else {
+    rid = RID++;
+    dap_rule_created(0, rid, procs, port, cond, acts, life);
+    for(i=0; i<MAX_PROCESSES; i++) {
+      if(dap_get_process(0, i)) {
+        term *port = dap_get_last_port(0, i);
+        event_rule *rule = dap_get_rule(0, rid);
+        if(port && dap_eventport(list_first(port)) == rule->port.type)
+          dap_activate_rule(0, port, rule);
       }
     }
   }
+  return rid;
+}
+#line 724 "dap.c.nw"
+void dap_destroy_rule(int rid)
+{
+  dap_rule_destroyed(0, rid);
+  post_event(EVQ_RULE_DESTROYED, TB_make("rule-destroyed(<int>)", rid));
 }

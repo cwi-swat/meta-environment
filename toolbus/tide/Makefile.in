@@ -61,11 +61,12 @@ TIDEMODS= dap.o dap-admin.o
 TCLMODS	= tide-modules.tcl tide-daps.tcl tide-processes.tcl \
 	tide-event-rules.tcl tide-cpe.tcl \
 	tide-exec-state.tcl tide-exec-control.tcl tide-current-port.tcl \
-	tide-ui-process-list.tcl
-GENCSRC	= buscontrol.c dap.c dap-admin.c dap.c
+	tide-ui-process-list.tcl tide-ui-rule-list.tcl
+GENCSRC	= buscontrol.c dap.c dap-admin.c
 GENCHDR	= viewer.tif.c debug-adapter.tif.c dap-admin.h dap.h
 GENTCL	= source-viewer.tcl process-viewer.tcl master-control.tcl \
-	rule-viewer.tcl watchpoint-viewer.tcl $(TCLMODS)
+	rule-viewer.tcl watchpoint-viewer.tcl \
+	$(TCLMODS)
 GENTEX	= buscontrol.c.tex \
 	source-viewer.tcl.tex process-viewer.tcl.tex master-control.tcl.tex \
 	tide.tb.tex rule-viewer.tcl.tex tide-modules.tcl.tex \

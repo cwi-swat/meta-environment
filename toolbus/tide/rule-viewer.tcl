@@ -34,27 +34,10 @@ proc create-rule-frame { dap w } {
   global Dap Viewer Rule
 
   frame $w -relief groove -borderwidth 2
-  label $w.label -text "Observation points:"
-  frame $w.list
-  listbox $w.list.box -width 18 -height 6 \
-		-xscrollcommand "$w.list.y set" \
-		-yscrollcommand "$w.x set"
-  bind $w.list.box <ButtonPress-1> "change-cur-rule $dap %x %y"
-  scrollbar $w.list.y -command "$w.list.box yview" -orient vert
-  scrollbar $w.x -command "$w.list.box xview" -orient hor
+  label $w.label -text "Event rules:"
 
-  pack $w.label -fill x
-  pack $w.list.box -side left -expand 1 -fill both
-  pack $w.list.y -side left -fill y
-  pack $w.list -side top -expand 1 -fill both
-  pack $w.x -side top -fill x
-
-  set Viewer($dap,wrules) $w.list.box
-
-  foreach rid $Dap($dap,rules) {
-    set text [format "%3d %s" $rid [lindex $Rule($dap,$rid,port) 0]]
-    $Viewer($dap,wrules) insert end $text
-  }
+  set rl [tide-create-rule-list $dap $dap $w]
+  pack $rl -side top -expand 1 -fill both
 
   frame $w.buttons
   button $w.buttons.create \
@@ -92,6 +75,7 @@ proc create-port-frame { dap w } {
 
   #  frame $w.when
   #  label $w.when.label -text "When:"
+    set Viewer($dap,port,when) "at"
     radiobutton $w.header.at -text "at" \
   	-variable Viewer($dap,port,when) \
   	-value "at" \
@@ -328,6 +312,7 @@ proc create-cond-frame { dap f } {
   frame $f.expr
 #  frame $f.expr.dummy -width 24
   entry $f.expr.e  -textvariable Viewer($dap,cond)
+  set Viewer($dap,cond) true
 
 #  pack $f.expr.dummy -side left
   pack $f.expr.e -side left -expand 1 -fill x
@@ -368,13 +353,11 @@ proc update-viewer { dap } {
     set Viewer($dap,when) $Rule($dap,$cur,when)
       set port $Rule($dap,$cur,port)
 
-      puts stderr "update port widgets: $port"
-
       set type [lindex $port 0]
       set when [lindex $port 1]
 
       set Viewer($dap,port) $type
-      set Viewer($port,when) $when
+      set Viewer($dap,port,when) $when
 
       switch $type {
          exec-state	{ set Viewer($dap,port,exec-state) [lindex $port 2] 
@@ -401,17 +384,15 @@ proc update-viewer { dap } {
       }
       set cond $Rule($dap,$cur,cond)
 
-      if { $cond == "always" } {
-        set Viewer($dap,cond) "always"
-      } else {
-        set Viewer($dap,cond) $cond
-      }
+      set Viewer($dap,cond) $cond
       set acts $Rule($dap,$cur,acts)
 
       $Viewer($dap,wacts) delete 1.0 end
       $Viewer($dap,wacts) insert 1.0 $acts  
     tide-ui-select-processes $dap $Rule($dap,$cur,pids)
   }
+  set Viewer($dap,changed) 0
+  set Viewer($dap,cur-rule) [tide-get-selected-rule $dap]
   update-buttons $dap
 }
 proc update-buttons { dap } {
@@ -428,34 +409,26 @@ proc update-buttons { dap } {
 proc get-port { dap } {
   global Viewer
 
-  set port $Viewer($dap,port)
-  set when $Viewer($dap,when)
+  set type $Viewer($dap,port)
+  set when $Viewer($dap,port,when)
   set data {}
 
-  set mod  $Viewer($dap,port,module)
-  if { $mod == {} } {
-    set mod ""
-  }
-
-  set line $Viewer($dap,port,line)
-  set col  $Viewer($dap,port,col)
-
-  switch $port {
-    exec-state		{ set data $Viewer($dap,port,exec-state) }
-    location		{ set data [list $Viewer($dap,port,module) \
+  switch $type {
+    exec-state		{ return [list $type $when $Viewer($dap,port,exec-state)] }
+    location		{ return [list $type $when $Viewer($dap,port,module) \
 			$Viewer($dap,port,start-line) $Viewer($dap,start-col)
 			$Viewer($dap,port,end-line)   $Viewer($dap,end-col)]
 			}
     call		-
     retry		-
     fail		-
-    succeed		{ set data $Viewer($dap,port,fp) }
-    variable		{ set data $Viewer($dap,port,variable) }
-    exception		{ set data $Viewer($dap,port,exception) }
-    send		{ set data $Viewer($dap,port,send) }
-    receive		{ set data $Viewer($dap,port,receive) }
+    succeed		{ return [list $type $when $Viewer($dap,port,fp)] }
+    variable		{ return [list $type $when $Viewer($dap,port,variable)] }
+    exception		{ return [list $type $when $Viewer($dap,port,exception)] }
+    send		{ return [list $type $when $Viewer($dap,port,send)] }
+    receive		{ return [list $type $when $Viewer($dap,port,receive)] }
+    always		{ return [list $type $when] }
   }
-  return $port
 }
 proc get-cond { dap } {
   global Viewer
@@ -474,35 +447,9 @@ proc get-selected-procs { dap } {
   return $Viewer($dap,pids)
 }
 proc get-selected-rule { dap } {
-  global Dap Viewer
-
-  if { $Dap($dap,viewer) } {
-    return [$Viewer($dap,wrules) curselection]
-  }
-  return ""
+  return [tide-get-selected-rule $dap]
 }
-proc clear-rule-selection { dap } {
-  global Dap Viewer
 
-  if { $Dap($dap,viewer) } {
-    $Viewer($dap,wrules) selection clear 0 end
-  }
-}
-proc change-cur-rule { dap x y } {
-  global Dap Viewer
-
-  set w $Viewer($dap,wrules)
-  set idx [$w nearest $y]
-  $w selection clear 0 end
-  $w selection set $idx
-
-  set rid [lindex $Dap($dap,rules) $idx]
-  if { $Viewer($dap,cur-rule) != $rid } {
-    set Viewer($dap,changed) 0
-    set Viewer($dap,cur-rule) $rid
-    update-viewer $dap
-  }
-}
 proc has-changed { dap } {
   global Viewer
 
@@ -512,6 +459,15 @@ proc has-changed { dap } {
   }
 }
 
+proc tide-rule-selected-bv { dap rid } {
+  global Viewer
+
+  if { $Viewer($dap,cur-rule) != $rid } {
+    set Viewer($dap,changed) 0
+    set Viewer($dap,cur-rule) $rid
+    update-viewer $dap
+  }
+}
 proc do-process-selected-bv { dap args } {
   # clear-rule-selection $dap  
 }
@@ -527,6 +483,7 @@ proc do-create-rule { dap } {
   }
 }
 proc do-modify-rule { dap } {
+ 
   set rid [get-selected-rule $dap]
   set procs [get-selected-procs $dap]
 
@@ -590,20 +547,23 @@ proc tide-rule-created-bv { dap rid pids port cond acts life } {
   global Dap Viewer
 
   if { $Dap($dap,viewer) } {
-    $Viewer($dap,wrules) insert end "[format "%3d: %s" $rid [lindex $port 0]]"    
     if { $Viewer($dap,cur-rule) == $rid } {
       update-viewer $dap
     }
   }  
 }
-proc tide-rule-destroyed-bv { P rid } {
+proc tide-rule-modified-bv { dap rid pids port cond acts life } {
+  global Viewer
+
+  if { $Viewer($dap,cur-rule) == $rid } {
+    update-viewer $dap
+  }
+}
+proc tide-rule-destroyed-bv { dap rid } {
   global Dap Viewer
 
   if { $Dap($dap,viewer) } {
-    set idx $Dap($dap,rules) $rid 
-    if { $idx != "" } {
-      $Viewer($dap,wrules) delete $idx $idx
-    }
+    # check on current rule is needed here!
   }
 }
 proc tide-current-port-bv { dap pids port } {
@@ -647,4 +607,5 @@ tide-init "Rule viewer" {
 	event-rules
 	current-port 
 	ui-process-list
+	ui-rule-list
 }

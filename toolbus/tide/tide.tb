@@ -1,4 +1,4 @@
-#line 38 "tide.tb.nw"
+#line 41 "tide.tb.nw"
 process DAP-CONNECT is
 let
   D    : debug-adapter,
@@ -11,7 +11,7 @@ in
     rec-value(D, info(Info?)) .
     snd-eval(D, get-processes) .
     rec-value(D, processes(P?)) .
-    printf("%t info: %t, procs: %t\n", D, Info, P) .
+    %% printf("%t info: %t, procs: %t\n", D, Info, P) .
     snd-note(event(proc(D,all), dap-connected(Info,P))) .
     create(EVENT-RULES(D), Pid?)
     +
@@ -19,7 +19,7 @@ in
     snd-note(event(proc(D,all),dap-disconnected))
   ) * delta
 endlet
-#line 99 "tide.tb.nw"
+#line 102 "tide.tb.nw"
 process EVENT-RULES(D:debug-adapter) is
 let
   P     : term,   %% list of process-id's, or `all' indicating all
@@ -55,7 +55,7 @@ in
     snd-ack-event(D, rule-destroyed(Rid))
    ) * delta
 endlet
-#line 144 "tide.tb.nw"
+#line 147 "tide.tb.nw"
 process BROADCAST is
 let
   From : term,
@@ -65,7 +65,7 @@ in
     snd-note(event(From, Ev))
   ) * delta
 endlet
-#line 201 "tide.tb.nw"
+#line 204 "tide.tb.nw"
 process SOURCE-VIEWER is
 let
   S : source-viewer,
@@ -129,7 +129,7 @@ in
     snd-ack-event(S, current-port(D,P,Port))
   ) * delta
 endlet
-#line 270 "tide.tb.nw"
+#line 273 "tide.tb.nw"
 process RULE-VIEWER is
 let
   R : rule-viewer,
@@ -184,14 +184,74 @@ in
     snd-ack-event(R, create-rule(Type,D,P,Port,Cond,Acts,Life,Rid))
     +
     rec-event(R, modify-rule(Rid?,D?,P?,Port?,Cond?,Acts?,Life?)) .
-    snd-msg(proc(D,P),modify-rule(Rid,Cond,Acts,Life))
+    snd-msg(proc(D,P),modify-rule(Rid,Port,Cond,Acts,Life)) .
+    snd-ack-event(R, modify-rule(Rid,D,P,Port,Cond,Acts,Life))
     +
     rec-event(R, destroy-rule(D?,P?,Rid?)) .
     snd-msg(proc(D,P), destroy-rule(Rid)) .
     snd-ack-event(R, destroy-rule(D,P,Rid))    
   ) * delta
 endlet
-#line 164 "tide.tb.nw"
+#line 341 "tide.tb.nw"
+process WATCHPOINT-VIEWER is
+let
+  V    : watchpoint-viewer,
+  D    : debug-adapter,
+  P    : term,
+  Info : list,
+  Port : term,
+  Cond : term,
+  Acts : term,
+  Life : term,
+  Rid  : int,
+  Exprs: list, %% A list of [expression, value] pairs
+  Type : term
+in
+  execute(watchpoint-viewer, V?) .
+  subscribe(event(<term>,dap-connected(<list>,<list>))) .
+  subscribe(event(<term>,dap-disconnected)) .
+  subscribe(event(<term>,rule-created(<int>,<term>,<term>,<term>,<term>))) .
+  subscribe(event(<term>,rule-modified(<int>,<term>,<term>,<term>,<term>))) .
+  subscribe(event(<term>,rule-destroyed(<int>))) .
+  subscribe(event(<term>,watchpoint(<int>,<list>))) .
+  snd-note(new-tool("Create watchpoint", V, view-watchpoint)) .
+  ( rec-msg(V, view-watchpoint, D?) .
+    snd-do(V, view-watchpoint(D))
+    +
+    rec-note(event(proc(D?,all), dap-connected(Info?,P?))) .
+    snd-do(V, dap-connected(D, Info, P))
+    +
+    rec-note(event(proc(D?,P?), dap-disconnected)) .
+    snd-do(V, dap-disconnected(D))
+    +
+    rec-note(event(proc(D?,P?), rule-created(Rid?,Port?,Cond?,Acts?,Life?))) .
+    snd-do(V, rule-created(D,P,Rid,Port,Cond,Acts,Life))
+    +
+    rec-note(event(proc(D?,P?), rule-modified(Rid?,Port?,Cond?,Acts?,Life?))) .
+    snd-do(V, rule-modified(D,P,Rid,Port,Cond,Acts,Life))
+    +
+    rec-note(event(proc(D?,P?), rule-destroyed(Rid?))) .
+    snd-do(V, rule-destroyed(D,P, Rid))
+    +
+    rec-note(event(proc(D?,P?), watchpoint(Rid?, Exprs?))) .
+    snd-do(V, watchpoint(D, P, Rid, Exprs))
+    +
+    rec-event(V, create-rule(Type?,D?,P?,Port?,Cond?,Acts?,Life?)) .
+    snd-msg(proc(D,P),create-rule(Port,Cond,Acts,Life)) .
+    rec-msg(proc(D,P), create-rule(Port, Cond, Acts, Life, Rid?)) .
+    printf("watchpoint viewer created rule: %d\n", Rid) .
+    snd-ack-event(V, create-rule(Type,D,P,Port,Cond,Acts,Life,Rid))
+    +
+    rec-event(V, modify-rule(Rid?,D?,P?,Port?,Cond?,Acts?,Life?)) .
+    snd-msg(proc(D,P),modify-rule(Rid,Port,Cond,Acts,Life)) .
+    snd-ack-event(V, modify-rule(Rid,D,P,Port,Cond,Acts,Life))
+    +
+    rec-event(V, destroy-rule(D?,P?,Rid?)) .
+    snd-msg(proc(D,P), destroy-rule(Rid)) .
+    snd-ack-event(V, destroy-rule(D,P,Rid))    
+  ) * delta
+endlet
+#line 167 "tide.tb.nw"
 process MASTER-CONTROL is
 let
   M     : master-control,
@@ -224,12 +284,14 @@ in
   shutdown("Thank you for using tide!\n")
 endlet
 
-#line 26 "tide.tb.nw"
+#line 28 "tide.tb.nw"
 tool debug-adapter is { }
 tool master-control is { command = "tcltk-adapter -script master-control.tcl" }
 tool source-viewer  is { command = "tcltk-adapter -script source-viewer.tcl" }
 tool rule-viewer  is { command = "tcltk-adapter -script rule-viewer.tcl" }
+tool watchpoint-viewer is { command = "tcltk-adapter -script watchpoint-viewer.tcl" }
 %%tool viewer is { command = "./buscontrol" }
 
-#line 14 "tide.tb.nw"
-toolbus(DAP-CONNECT, MASTER-CONTROL, BROADCAST, SOURCE-VIEWER, RULE-VIEWER)
+#line 15 "tide.tb.nw"
+toolbus(DAP-CONNECT, MASTER-CONTROL, BROADCAST, 
+	SOURCE-VIEWER, RULE-VIEWER, WATCHPOINT-VIEWER)

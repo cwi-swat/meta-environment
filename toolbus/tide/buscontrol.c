@@ -33,7 +33,8 @@ static act_entry act_table[] =
 };
 
 char *inf_table[] =
-{ "search-paths",	NULL,
+{ "name",		NULL,
+  "search-paths",	NULL,
   "ports",		"[[exec-state,at], [always, after],"\
 			"[location, after], [process-creation, at],"\
 			"[process-destruction, at]]",
@@ -44,25 +45,25 @@ char *inf_table[] =
   NULL,			NULL
 };
 
-#line 106 "buscontrol.c.nw"
+#line 107 "buscontrol.c.nw"
 void init()
 {
   dap_init(control_bus, inf_table, func_table, act_table);
-#line 115 "buscontrol.c.nw"
+#line 116 "buscontrol.c.nw"
   /* Initialize INIT process */
   dap_process_created(0, INIT_PID, "INIT", ES_STOP);
 }
-#line 127 "buscontrol.c.nw"
+#line 128 "buscontrol.c.nw"
 term_list *get_process_vars(int pid)
 {
   return (term_list *)dap_get_process_data(0, pid);
 }
-#line 140 "buscontrol.c.nw"
+#line 141 "buscontrol.c.nw"
 void set_process_vars(int pid, term_list *vars)
 {
   dap_set_process_data(0, pid, (void *)vars);
 }
-#line 281 "buscontrol.c.nw"
+#line 284 "buscontrol.c.nw"
 void continue_process(int pid)
 {
   if(dap_check_process_flags(0, pid, PUF_WAITING)){ 
@@ -70,21 +71,19 @@ void continue_process(int pid)
     dap_clear_process_flags(0, pid, PUF_WAITING);
   }
 }
-#line 152 "buscontrol.c.nw"
+#line 153 "buscontrol.c.nw"
 void cbdap_process_created(int dapid, int pid)
 {
   TBprotect((term_list **)&dap_get_process(dapid, pid)->udata);
 }
-#line 164 "buscontrol.c.nw"
+#line 165 "buscontrol.c.nw"
 void cbdap_process_destroyed(int dapid, int pid)
 {
   TBunprotect((term_list **)&dap_get_process(dapid, pid)->udata);
 }
-#line 177 "buscontrol.c.nw"
+#line 178 "buscontrol.c.nw"
 void cbdap_change_exec_state(int pid, int exec_state)
 {
-  fprintf(stderr, "cbdap_ces: %d, %d, %d\n", pid, exec_state,
-				dap_check_process_flags(0, pid, PUF_WAITING));
   switch(exec_state) {
     case ES_RUN:
     case ES_SINGLE_STEP:
@@ -93,20 +92,24 @@ void cbdap_change_exec_state(int pid, int exec_state)
 	break;
   }
 }
-#line 198 "buscontrol.c.nw"
+#line 197 "buscontrol.c.nw"
 term *cbdap_supply_info(char *key)
 {
+  static char buf[_POSIX_PATH_MAX];
   if(streq(key, "search-paths")) {
-    static char path[_POSIX_PATH_MAX];
-    getcwd(path, _POSIX_PATH_MAX);
+    getcwd(buf, _POSIX_PATH_MAX);
 
-    return TB_make("[[config, [<str>]], [source, [<str>]]]", path, path);
+    return TB_make("[[config, [<str>]], [source, [<str>]]]", buf, buf);
   }
-
+  if(streq(key, "name")) {
+    int port = TB_getPort(viewer);
+    sprintf(buf, "toolbus-%d", port);
+    return TB_make("<str>", buf);
+  }
   return NULL;
 }
 
-#line 216 "buscontrol.c.nw"
+#line 219 "buscontrol.c.nw"
 TBbool get_var_value(int pid, term *var, term **val)
 {
   term *vars, *cur_var;
@@ -133,7 +136,7 @@ TBbool get_var_value(int pid, term *var, term **val)
   /*TBprintf(stderr, "\tnot found!\n");*/
   return TBfalse;
 }
-#line 248 "buscontrol.c.nw"
+#line 251 "buscontrol.c.nw"
 void set_var_value(int pid, term *var, term *val)
 {
   /* A variable is identified by a term represention. */
@@ -159,13 +162,12 @@ void set_var_value(int pid, term *var, term *val)
   set_process_vars(pid, 
 	list_concat_term(get_process_vars(pid),mk_list2(var,val)));
 }
-#line 297 "buscontrol.c.nw"
+#line 300 "buscontrol.c.nw"
 void update_process(int pid, term *env)
 {
   term *var, *val;
   TBbool changed = TBfalse;
 
-  TBprintf(stderr, "update_process: %d, %t\n", pid, env);
   if(!dap_get_process(0, pid))
     return;
 
@@ -175,7 +177,7 @@ void update_process(int pid, term *env)
     env = list_next(env);    
   }
 }
-#line 318 "buscontrol.c.nw"
+#line 320 "buscontrol.c.nw"
 void create_process(int pid, term *args)
 {
   int new_pid;
@@ -200,12 +202,12 @@ void create_process(int pid, term *args)
   }  
 }
 
-#line 349 "buscontrol.c.nw"
+#line 351 "buscontrol.c.nw"
 term *get_info(int cid)
 {
   return TB_make("snd-value(info(<list>))", dap_get_info(cid));
 }
-#line 361 "buscontrol.c.nw"
+#line 363 "buscontrol.c.nw"
 term *get_processes(int cid)
 {
   int i;
@@ -218,7 +220,7 @@ term *get_processes(int cid)
   }
   return TB_make("snd-value(processes(<term>))", procs);
 }
-#line 381 "buscontrol.c.nw"
+#line 383 "buscontrol.c.nw"
 term *create_rule(int cid, term *procs, term *port, term *cond, term *acts, term *life)
 {
   int rid = dap_create_rule(procs, port, cond, acts, life);
@@ -226,19 +228,19 @@ term *create_rule(int cid, term *procs, term *port, term *cond, term *acts, term
 	"snd-value(create-rule(<term>,<term>,<term>,<term>,<term>,<int>))",
 	procs, port, cond, acts, life, rid);
 }
-#line 396 "buscontrol.c.nw"
+#line 398 "buscontrol.c.nw"
 void modify_rule(int cid, int rid, term *procs, term *port, 
 				term *cond, term *acts, term *life)
 {
   dap_rule_modified(0, rid, procs, port, cond, acts, life);
 }
-#line 409 "buscontrol.c.nw"
+#line 411 "buscontrol.c.nw"
 void destroy_rule(int cid, term *procs, int rid)
 {
   dap_destroy_rule(rid);
 }
 
-#line 495 "buscontrol.c.nw"
+#line 496 "buscontrol.c.nw"
 TBbool is_to_tool_comm(char *s)
 {
   return streq(s, "snd-eval") 
@@ -247,7 +249,7 @@ TBbool is_to_tool_comm(char *s)
          || streq(s, "snd-ack-event") 
          || streq(s, "snd-terminate");
 }
-#line 509 "buscontrol.c.nw"
+#line 510 "buscontrol.c.nw"
 TBbool is_from_tool_comm(char *s)
 {
   return streq(s, "rec-value") 
@@ -255,14 +257,14 @@ TBbool is_from_tool_comm(char *s)
          || streq(s, "rec-disconnect");
 }
 
-#line 426 "buscontrol.c.nw"
+#line 428 "buscontrol.c.nw"
 term *rec_monitor(int cid, term *T)
 {
   char *mon_point, *at_fun;
   int pid1, pid2;
   term *at_args, *at_coords, *env, *subs, *notes, *pe;
 
-  TBprintf(stderr, "monitor command received: %t\n", T);
+  /*TBprintf(stderr, "monitor command received: %t\n", T);*/
   if(TBmatch(T, "%f(%d,%f,%t,%t,%t,%t,%t,%d,%t)",
 	     &mon_point, &pid1, &at_fun, &at_args, &at_coords,
 	     &env, &subs, &notes, &pid2, &pe)) {
@@ -275,7 +277,6 @@ term *rec_monitor(int cid, term *T)
       return;
     }
       
-    fprintf(stderr, "setting PUF_WAITING of process: %d\n", pid1);
     dap_set_process_flags(0, pid1, PUF_WAITING);
 
     if(streq(at_fun, "create")) {
@@ -320,12 +321,12 @@ term *rec_monitor(int cid, term *T)
   }
   return NULL;
 }
-#line 525 "buscontrol.c.nw"
+#line 526 "buscontrol.c.nw"
 void rec_ack_event(int cid, term *ev)
 {
   dap_rec_ack_event(cid, ev);
 }
-#line 537 "buscontrol.c.nw"
+#line 538 "buscontrol.c.nw"
 void rec_terminate(int cid, term *arg)
 {
   TBprintf(stderr, "Received termination request: %t\n", arg);
@@ -333,16 +334,14 @@ void rec_terminate(int cid, term *arg)
   exit(0);
 }
 
-#line 550 "buscontrol.c.nw"
+#line 551 "buscontrol.c.nw"
 int main(int argc, char *argv[])
 {
   TB_init();
 
-  fprintf(stderr, "Opening initial connection for viewer\n");
   viewer = TB_parseArgs(argc, argv, viewer_handler, viewer_check_in_sign);
   TB_connect(viewer);
 
-  fprintf(stderr, "Opening second connection to debugging toolbus\n");
   control_bus = TB_newConnection("debug-adapter", NULL, 9500,
 	         debug_adapter_handler, debug_adapter_check_in_sign);
   TB_connect(control_bus);

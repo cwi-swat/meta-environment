@@ -1,6 +1,4 @@
 proc tide-init-processes { } {
-  puts stderr "tide-init-processes called"
-
   tide-init-modules { daps event-rules }
 }
 proc tide-dap-connected-processes { dap procs info } {
@@ -12,10 +10,13 @@ proc tide-dap-connected-processes { dap procs info } {
     set name [lindex $proc 1]
     process-created $dap $pid [TBstring $name]
   }
-  tide-create-rule pc $dap all {process-creation at} \
+
+  if { $Dap($dap,info,multi-process) } {
+    tide-create-rule pc $dap all {process-creation at} \
 				true watch(process-name) persistent
-  tide-create-rule pd $dap all {process-destruction at} \
+    tide-create-rule pd $dap all {process-destruction at} \
 				true watch(process-name) persistent
+  }
 }
 proc tide-dap-disconnected-processes { dap } {
   global Dap
@@ -50,8 +51,6 @@ proc process-created { dap pid Name } {
 }
 proc process-destroyed { dap pid } {
   global Dap Proc
-
-  puts stderr "proc destroyed: $dap, $pid"
 
   tide-call process-destroyed $dap $pid
 

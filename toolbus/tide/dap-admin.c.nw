@@ -56,7 +56,8 @@ void *data_get_user_data(int dapid, int pid);
 void  dap_set_process_flags(int dapid, int pid, int uflags);
 void  dap_clear_process_flags(int dapid, int pid, int uflags);
 unsigned  dap_check_process_flags(int dapid, int pid, int uflags);
-
+term *dap_get_last_port(int dapid, int pid);
+void  dap_set_last_port(int dapid, int pid, term *port);
 /* External callbacks, must be provided by the user */
 extern void cbdap_process_created(int dapid, int pid);
 extern void cbdap_process_destroyed(int dapid, int pid);
@@ -90,6 +91,7 @@ typedef struct process
   int hw_exec_state;		/* execution state when high water reached */
   int stop_level;		/* stop level for ES_STEP_OVER and RUN_UNTIL_PARENT */
   int ruleid;			/* current event rule id */
+  term *last_port;		/* The last port passed. */
   term_list *subterms;		/* subterms that matched with placeholders */
   unsigned uflags;		/* user flags */
   void *udata;			/* user data */
@@ -231,6 +233,8 @@ dap *daps[MAX_DAPS];
 <<dap_set_process_flags>>
 <<dap_clear_process_flags>>
 <<dap_check_process_flags>>
+<<dap_set_last_port>>
+<<dap_get_last_port>>
 @
 
 %}}}
@@ -592,7 +596,7 @@ void dap_rule_destroyed(int dapid, int rid)
 @
 
 %}}}
-%{{{ event_rule dap_get_rule(int dapid, int ruleid)
+%{{{ event_rule *dap_get_rule(int dapid, int ruleid)
 
 Retrieve a specific rule of a debug adapter.
 
@@ -751,14 +755,17 @@ void dap_process_created(int dapid, int pid, char *name, int exec_state)
   p->cpe.when	    = WHEN_AT;
   p->exec_state = exec_state;
   p->ruleid = -1;
+  p->last_port = NULL;
   p->subterms = NULL;
 
+  TBprotect(&p->last_port);
   TBprotect(&p->subterms);
 
   p->uflags = 0;
   p->udata = NULL;
   d->procs[pid] = p;
 
+  dap_set_last_port(0, pid, TB_make("[exec-state,at,<term>]", dap_es2term(exec_state)));
   cbdap_process_created(dapid, pid);
 }
 @
@@ -932,6 +939,26 @@ This function can be used to check if some of these flags are set.
 unsigned  dap_check_process_flags(int dapid, int pid, int uflags)
 {
   return dap_get_process(dapid, pid)->uflags & uflags;
+}
+@
+
+%}}}
+%{{{ void  dap_set_last_port(int dapid, int pid, term *port)
+
+<<dap_set_last_port>>=
+void  dap_set_last_port(int dapid, int pid, term *port)
+{
+  dap_get_process(dapid, pid)->last_port = port;  
+}
+@
+
+%}}}
+%{{{ term *dap_get_last_port(int dapid, int pid)
+
+<<dap_get_last_port>>=
+term *dap_get_last_port(int dapid, int pid)
+{
+  return dap_get_process(dapid, pid)->last_port;
 }
 @
 

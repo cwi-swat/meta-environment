@@ -1,37 +1,390 @@
 
 %{{{ process-viewer.tcl
 
-This tcl script controls the process-viewer tool.
-
+The process viewer can maintain one proces-viewer window for every
+multi-process debug-adapter.
 <<process-viewer.tcl>>=
-<<rec-ack-event>>
-<<rec-terminate>>
+#!/usr/local/bin/wish -f
 
-wm withdraw .
+# ToolBus interface functions
+<<tide-dap-connected-pv>>
+<<tide-dap-disconnected-pv>>
+<<tide-process-created-pv>>
+<<tide-process-destroyed-pv>>
+<<tide-exec-state-pv>>
+<<view-processes>>
+# end of TB interface functions
+
+<<create-viewer>>
+<<add-internal-process>>
+<<add-external-process>>
+
+<<bitmaps>>
+<<geometry>>
+<<colors>>
+
+set tool_index 0
+
+tide-init "Process viewer" {
+  daps
+  processes
+  event-rules
+  exec-state
+}
+@
+
+%{{{ bitmaps
+
+<<bitmaps>>=
+set bitmaps $TB_LIBDIR/bitmaps
+set ES(unknown)		$bitmaps/unknown.xbm
+set ES(stop)		$bitmaps/stop.xbm
+set ES(run)		$bitmaps/run.xbm
+set ES(single-step)	$bitmaps/single-step.xbm
+set ES(step-over)	$bitmaps/step-over.xbm
+
+set IMG(unknown)	[image create bitmap -file $bitmaps/unknown.xbm]
+set IMG(stop)		[image create bitmap -file $bitmaps/stop.xbm]
+set IMG(run)		[image create bitmap -file $bitmaps/run.xbm]
+set IMG(single-step)	[image create bitmap -file $bitmaps/single-step.xbm]
+set IMG(step-over)	[image create bitmap -file $bitmaps/step-over.xbm]
+@
+
+%}}}
+%{{{ geometry
+
+<<geometry>>=
+set defgeom(xp0)    20;   # x coordinate of process 0
+set defgeom(rp)     15;   # radius of a process
+set defgeom(dx)     60;   # horizontal distance between columns
+set defgeom(dy)     60;   # vertical distance between rows
+set defgeom(maxcol) 10;   # max number of processes per row
+set defgeom(nrow)    1;   # current number of rows
+set defgeom(ybase) 160;
+set defgeom(tbase) 230;   # y coordinate of connection line for tool communication
+set defgeom(busbase) [expr (1 + $defgeom(nrow)) * $defgeom(dy)]
+
+set geomels { xp0 rp dx dy maxcol nrow ybase tbase }
+@
+
+%}}}
+%{{{ colors
+
+<<colors>>=
+set defcolor(inactive-proc)	DarkSlateGray4
+set defcolor(active-proc)	DarkSlateGray2 
+set defcolor(inactive-tool)	PaleVioletRed4
+set defcolor(active-tool)	PaleVioletRed1
+set colorels { inactive-proc active-proc inactive-tool active-tool }
 @
 
 %}}}
 
-%{{{ proc rec-ack-event { event }
+%}}}
 
-Handle event acknowledgements.
+%{{{ proc tide-dap-connected-pv { dap procs info }
 
-<<rec-ack-event>>=
-proc rec-ack-event { event } {
-  puts stderr "process-viewer: rec-ack-event $event"
+<<tide-dap-connected-pv>>=
+proc tide-dap-connected-pv { dap procs info } { 
 }
 @
 
 %}}}
-%{{{ proc rec-terminate { arg }
+%{{{ proc tide-dap-disconnected-pv { dap }
 
-A termination request has been received by the process-viewer.
-Just exit the application.
+This procedure is called when a debug-adapter was disconnected.
+Any viewer for this dap is destroyed, and all processes controled
+by this debug-adapter are removed from the other viewers.
 
-<<rec-terminate>>=
-proc rec-terminate { arg } {
-  exit
+<<tide-dap-disconnected-pv>>=
+proc tide-dap-disconnected-pv { dap } {
+  global Viewer
+
+  if { [info exists Viewer($dap,win)] } {
+    destroy $Viewer($dap,win)
+    unset Viewer($dap,win)
+    unset Viewer($dap,wprocs)
+    unset Msg($dap)
+    # etc.
+
+    set idx [lsearch $Viewers $dap]
+    set Viewers [lreplace $Viewers $idx $idx]
+  }
+  foreach proc $Dap($dap,pids) {
+    tide-process-destroyed $dap $proc
+  }
 }
 @
 
 %}}}
+%{{{ proc tide-process-created-pv { dap proc name }
+
+React when a process is created.
+
+<<tide-process-created-pv>>=
+proc tide-process-created-pv { dap proc name } {
+  global Viewer Viewers
+
+  if { [info exists $Viewer($dap,win)] } {
+    # Internal processes must start with an uppercase letter!
+    if { [string match {[A-Z]*} $name } {
+       add-internal-process $dap $proc $name
+    } else {
+       add-external-process $dap $proc $name
+    }
+  }
+}
+@
+
+%}}}
+%{{{ proc tide-process-destroyed-pv { dap proc }
+
+React when a process is destroyed.
+
+<<tide-process-destroyed-pv>>=
+proc tide-process-destroyed-pv { dap proc } {
+}
+@
+
+%}}}
+%{{{ proc tide-exec-state-pv { dap pids es }
+
+<<tide-exec-state-pv>>=
+proc tide-exec-state-pv { dap pids es } {
+
+}
+@
+
+%}}}
+
+%{{{ proc view-processes { dap }
+
+View all processes associated with {\tt dap}.
+If the dap refers to a multi-process debug-adapter, it deserves
+its own viewer. If this viewer already exists, it is raised.
+Otherwise a new viewer is created.
+
+When it is a single-process debug-adapter, all viewers in
+which it occurs are raised.
+
+<<view-processes>>=
+proc view-processes { dap } {
+  global Viewer Viewers
+
+  if { [tide-get-info $dap multi-process] == "true" } {
+    if { [info exists Viewer($dap,win)] } {
+      raise $Viewer($dap,win)
+    } else {
+      create-viewer $dap
+    }
+  } else {
+    foreach connection [tide-get-info $dap connections] {
+      foreach viewerdap $Viewers {
+        if { [tide-get-info $viewerdap name] == $connection } {
+          raise $Viewer($viewerdap,win)
+        }
+      }
+    } 
+  }
+}
+@
+
+%}}}
+%{{{ proc create-viewer { dap }
+
+<<create-viewer>>=
+proc create-viewer { dap } {
+  global Viewer Viewers
+
+  lappend Viewers $dap
+  set w .v$dap
+  set Viewer($dap,win) $w
+
+  toplevel $w
+  wm positionfrom $w program
+  wm sizefrom $w program
+  wm title $w "Process Viewer: [tide-get-info $dap name]"
+  wm maxsize $w 1152 900
+  wm geometry $w 450x400
+  
+  <<menu frame>>
+  <<toolbar frame>>
+  <<process frame>>
+  <<status frame>>
+
+  <<geometry init>>
+  <<color init>>
+}
+@
+
+%{{{ menu frame
+
+<<menu frame>>=
+  #frame $w.menu
+  #pack $w.menu -fill x
+@
+
+%}}}
+%{{{ toolbar frame
+
+<<toolbar frame>>=
+  #frame $w.toolbar -borderwidth 2 -relief groove
+  #pack $w.toolbar -fill x
+@
+
+%}}}
+%{{{ process frame
+
+The process frame contains a canvas and two scrollbars.
+In the canvas, a graph depicting the processes is displayed.
+
+<<process frame>>=
+  frame $w.process -borderwidth 2 -relief groove
+  frame $w.process.f
+  canvas $w.process.f.c \
+	-xscrollcommand "$w.process.x set" \
+	-yscrollcommand "$w.process.f.y set"
+
+  scrollbar $w.process.f.y -orient vert -command "$w.process.f.c yview"
+  scrollbar $w.process.x -orient hor -command "$w.process.f.c xview"
+
+  pack $w.process.f.c -side left -expand 1 -fill both
+  pack $w.process.f.y -side left -fill y
+  pack $w.process.f -side top -expand 1 -fill both
+  pack $w.process.x -side top -fill x
+  pack $w.process -side top -expand 1 -fill both
+
+  set Viewer($dap,wprocs) $w.process.f.c
+@
+
+%}}}
+%{{{ status frame
+
+The status frame displays important status information for the user.
+
+<<status frame>>=
+  frame $w.status -borderwidth 2 -relief groove
+  label $w.status.msg -texvariable Msg($dap)
+  set Msg($dap) "A new process viewer for [tide-get-info $dap name]"
+
+  pack $w.status.msg -side left -expand 1 -fill x
+  pack $w.status -side top -fill x
+@
+
+%}}}
+%{{{ geometry init
+
+<<geometry init>>=
+  global geomels defgeom
+
+  foreach el $geomels {
+    set Viewer($dap,geom,$el) $defgeom($el)
+  }
+@
+
+%}}}
+%{{{ color init
+
+<<color init>>=
+  global colorels defcolor
+
+  foreach el $colorels {
+    set Viewer($dap,color,$el) $defcolor($el)
+  }
+@
+
+%}}}
+
+%}}}
+
+%{{{ proc add-internal-process { dap proc name }
+
+Add a process that is internal to a debug-adapter.
+
+<<add-internal-process>>=
+<<row>>
+<<col>>
+
+proc add-internal-process { dap proc name } {
+  global Viewer
+
+  set c $Viewer($dap,win)
+
+  set x [expr $Viewer($dap,geom,xp0) + $Viewer($dap,geom,dx) +
+		[col $dap $proc]*$Viewer($dap,geom,dx)]
+  set y [expr [row $dap $proc]*$Viewer($dap,geom,dy)]
+  set rp $Viewer($dap,geom,rp)
+
+  $c create oval [expr $x-$rp] [expr $y-$rp] [expr $x+$rp] [expr $y+$rp] \
+	-outline Black -width 2 -fill $Viewer($dap,color,inactive-proc) \
+	-tags "proc$proc proc"
+  # Bindings go here
+  # bind proc$proc <Button> "gotoAtom ..."
+  # bind proc$proc <Double-Button> "addProcVars ..."
+ 
+  set bname [string range $name 0 5]
+  $c create text $x [expr $y-$rp-10] -text $bname -tags "pname$proc"
+  #$c bind proc$proc <Enter> ""
+  #$c bind proc$proc <Leave> ""
+
+  set Viewer($dap,$proc,xpcon) $x
+  set Viewer($dap,$proc,ypcon) $y
+
+  if { [row $proc] > $Viewer($dap,geom,nrow) } {
+    set Viewer($dap,geom,nrow) [row $proc]
+    extend_viewer $dap
+  }
+}
+@
+
+<<row>>=
+proc row { dap index } {
+  return [expr $index % $Viewer($dap,geom,maxcol)]
+}
+@
+
+<<col>>=
+proc col { dap index } {
+  return [expr round(floor($index / $Viewer($dap,geom,maxcol)))]
+}
+@
+
+%}}}
+%{{{ proc add-external-process { dap proc name }
+
+Add a process that is external to a debug-adapter.
+In is equivalent to a ToolBus tool.
+
+<<add-external-process>>=
+proc add-external-process { dap proc name } {
+  global tool_index
+
+  set c $Viewer($dap,wprocs)
+
+  set xt0 [expr $Viewer($dap,geom,xp0)-($Viewer($dap,geom,xp0)/2)]
+  set index $tool_index
+  incr tool_index
+ 
+  set x [expr $xt0+$index*$Viewer($dap,geom,dx)]
+  set y $Viewer($dap,geom,tbase)
+  set rp $Viewer($dap,geom,rp)
+
+  $c create rectangle [expr $x-$rp] [expr $y-$rp] [expr $x+$rp] [expr $y+$rp]\
+	-outline Black -width 2 -fill $Viewer($dap,color,inactive-tool) \
+	-tags "tool$proc tool"
+
+  # $c bind tool$index <Button-1> "addToolBreak $c $index"
+
+  $c create text $x [expr $y+$rp+10] -text $name -tags "tname$proc"
+  $c create line $x [expr $y-$rp] $x $Viewer($dap,busbase) -width 1.5 \
+	-tags "tline$proc"
+
+  set Viewer($dap,$proc,xtcon) $x
+  if { $index > $Viewer($dap,ntool) } {
+    set Viewer($dap,ntool) $index
+  }
+}
+@
+
+%}}}
+

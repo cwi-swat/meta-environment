@@ -21,6 +21,7 @@ CLEAN		= @CLEAN@
 MODULES		= 
 SUBDIRS		= @SUBDIRS@
 XTRADIRS	= @XTRADIRS@
+ALLDIRS		= src test tide adapters demos doc www
 DISTFILES	= Makefile.in README INSTALL CONTRIBUTORS install-sh mkinstalldirs \
 		  configure.in configure CHANGES.txt
 
@@ -59,7 +60,7 @@ dist: $(DISTFILES)
 	  ln $(srcdir)/$$file ../$(PRODUCT)-$(VERSION) 2> /dev/null \
 	  || cp $(srcdir)/$$file ../$(PRODUCT)-$(VERSION); \
 	done
-	@for subdir in $(SUBDIRS); do \
+	@for subdir in $(ALLDIRS); do \
 	  echo Making $@ in $$subdir; \
 	  mkdir ../$(PRODUCT)-$(VERSION)/$$subdir; \
 	  chmod 777 ../$(PRODUCT)-$(VERSION)/$$subdir; \

@@ -1,9 +1,9 @@
-#line 200 "dap-admin.c.nw"
+#line 202 "dap-admin.c.nw"
 #include "dap-admin.h"
 
 dap *daps[MAX_DAPS];
 
-#line 243 "dap-admin.c.nw"
+#line 247 "dap-admin.c.nw"
 void dap_admin_init()
 {
   int i;
@@ -11,7 +11,7 @@ void dap_admin_init()
   for(i=0; i<MAX_DAPS; i++)
     daps[i] = NULL;
 }
-#line 258 "dap-admin.c.nw"
+#line 262 "dap-admin.c.nw"
 void dap_new(int dapid, term_list *info)
 {
   int i;
@@ -35,7 +35,7 @@ void dap_new(int dapid, term_list *info)
   if(info)
     daps[dapid]->info = info;
 }
-#line 289 "dap-admin.c.nw"
+#line 293 "dap-admin.c.nw"
 void dap_delete(int dapid)
 {
   int i;
@@ -51,12 +51,12 @@ void dap_delete(int dapid)
   }
   TBunprotect(&daps[dapid]->info);
 }
-#line 312 "dap-admin.c.nw"
+#line 316 "dap-admin.c.nw"
 dap *dap_get(int dapid)
 {
   return daps[dapid];
 }
-#line 324 "dap-admin.c.nw"
+#line 328 "dap-admin.c.nw"
 int dap_id(term *d)
 {
   int dapid;
@@ -68,7 +68,7 @@ int dap_id(term *d)
   return dapid;
 }
 
-#line 341 "dap-admin.c.nw"
+#line 345 "dap-admin.c.nw"
 void dap_rule_created(int dapid, int rid, term_list *procs, 
 		term *port, term *cond, term *acts, term *lifetime)
 {
@@ -77,7 +77,7 @@ void dap_rule_created(int dapid, int rid, term_list *procs,
   assert(daps[dapid]);
   assert(!daps[dapid]->rules[rid]);
   
-#line 367 "dap-admin.c.nw"
+#line 371 "dap-admin.c.nw"
   daps[dapid]->rules[rid] = (event_rule *)malloc(sizeof(event_rule));
   rule = daps[dapid]->rules[rid];
   if(!rule) {
@@ -91,7 +91,7 @@ void dap_rule_created(int dapid, int rid, term_list *procs,
   TBprotect(&rule->pids);
   TBprotect(&rule->cond);
   TBprotect(&rule->acts);
-#line 349 "dap-admin.c.nw"
+#line 353 "dap-admin.c.nw"
   assert(rule);
 
   rule->pids = procs;
@@ -100,7 +100,7 @@ void dap_rule_created(int dapid, int rid, term_list *procs,
   rule->lifetime = dap_eventlife(lifetime);
 
   
-#line 390 "dap-admin.c.nw"
+#line 394 "dap-admin.c.nw"
 {
   term *type = list_index(port, 1);
   term *when = list_index(port, 2);
@@ -137,19 +137,19 @@ void dap_rule_created(int dapid, int rid, term_list *procs,
 	break;
   }
 }
-#line 357 "dap-admin.c.nw"
+#line 361 "dap-admin.c.nw"
   
-#line 432 "dap-admin.c.nw"
+#line 436 "dap-admin.c.nw"
   if(TBmatch(lifetime, "one-shot"))
     rule->lifetime = ONE_SHOT;
   else
     rule->lifetime = PERSISTENT;
 
-#line 359 "dap-admin.c.nw"
+#line 363 "dap-admin.c.nw"
   rule->next = daps[dapid]->ports[rule->port.type];
   daps[dapid]->ports[rule->port.type] = rule;
 }
-#line 446 "dap-admin.c.nw"
+#line 450 "dap-admin.c.nw"
 void dap_rule_modified(int dapid, int rid, term_list *procs, 
 		term *port, term *cond, term *acts, term *lifetime)
 {
@@ -165,7 +165,7 @@ void dap_rule_modified(int dapid, int rid, term_list *procs,
   rule->lifetime = dap_eventlife(lifetime);
 
   
-#line 472 "dap-admin.c.nw"
+#line 476 "dap-admin.c.nw"
   switch(rule->port.type) {
     case PORT_LOCATION:	if(rule->port.u.loc.module)
 			  free(rule->port.u.loc.module);
@@ -183,9 +183,9 @@ void dap_rule_modified(int dapid, int rid, term_list *procs,
     case PORT_RECEIVE:	TBunprotect(&rule->port.u.msg);
 			break;
   }
-#line 461 "dap-admin.c.nw"
+#line 465 "dap-admin.c.nw"
   
-#line 499 "dap-admin.c.nw"
+#line 503 "dap-admin.c.nw"
 {
   term *type = list_index(port, 1);
   term *when = list_index(port, 2);
@@ -222,19 +222,19 @@ void dap_rule_modified(int dapid, int rid, term_list *procs,
 	break;
   }
 }
-#line 462 "dap-admin.c.nw"
+#line 466 "dap-admin.c.nw"
   
-#line 541 "dap-admin.c.nw"
+#line 545 "dap-admin.c.nw"
   if(TBmatch(lifetime, "one-shot"))
     rule->lifetime = ONE_SHOT;
   else
     rule->lifetime = PERSISTENT;
 
-#line 464 "dap-admin.c.nw"
+#line 468 "dap-admin.c.nw"
   rule->next = daps[dapid]->ports[rule->port.type];
   daps[dapid]->ports[rule->port.type] = rule;
 }
-#line 555 "dap-admin.c.nw"
+#line 559 "dap-admin.c.nw"
 void dap_rule_destroyed(int dapid, int rid)
 {
   event_rule *prev = NULL, *cur, *rule = daps[dapid]->rules[rid];
@@ -272,12 +272,12 @@ void dap_rule_destroyed(int dapid, int rid)
 			break;
   }
 }
-#line 600 "dap-admin.c.nw"
+#line 604 "dap-admin.c.nw"
 event_rule *dap_get_rule(int dapid, int ruleid)
 {
   return daps[dapid]->rules[ruleid];
 }
-#line 612 "dap-admin.c.nw"
+#line 616 "dap-admin.c.nw"
 int dap_eventport(term *type)
 {
   if(TBmatch(type, "exec-state")) {
@@ -311,7 +311,7 @@ int dap_eventport(term *type)
     exit(1);
   }
 }
-#line 651 "dap-admin.c.nw"
+#line 655 "dap-admin.c.nw"
 int dap_eventwhen(term *when)
 {
   if(TBmatch(when, "at"))
@@ -324,7 +324,7 @@ int dap_eventwhen(term *when)
   TBprintf(stderr, "illegal activation moment: %t\n", when);
   return WHEN_AT;
 }
-#line 669 "dap-admin.c.nw"
+#line 673 "dap-admin.c.nw"
 term *dap_when2term(int when)
 {
   switch(when) {
@@ -335,7 +335,7 @@ term *dap_when2term(int when)
   assert(0);
   return NULL;
 }
-#line 687 "dap-admin.c.nw"
+#line 691 "dap-admin.c.nw"
 int dap_eventlife(term *life)
 {
   if(TBmatch(life, "one-shot"))
@@ -345,7 +345,7 @@ int dap_eventlife(term *life)
 
   return PERSISTENT;  
 }
-#line 704 "dap-admin.c.nw"
+#line 708 "dap-admin.c.nw"
 void dap_eventlocation(term_list *loc_data, location *l)
 {
   if(TB_match(loc_data, "[<str>,<int>,<int>,<int>,<int>]",
@@ -360,7 +360,7 @@ void dap_eventlocation(term_list *loc_data, location *l)
   return;
 }
 
-#line 726 "dap-admin.c.nw"
+#line 730 "dap-admin.c.nw"
 void dap_process_created(int dapid, int pid, char *name, int exec_state)
 {
   dap *d = daps[dapid];
@@ -389,17 +389,20 @@ void dap_process_created(int dapid, int pid, char *name, int exec_state)
   p->cpe.when	    = WHEN_AT;
   p->exec_state = exec_state;
   p->ruleid = -1;
+  p->last_port = NULL;
   p->subterms = NULL;
 
+  TBprotect(&p->last_port);
   TBprotect(&p->subterms);
 
   p->uflags = 0;
   p->udata = NULL;
   d->procs[pid] = p;
 
+  dap_set_last_port(0, pid, TB_make("[exec-state,at,<term>]", dap_es2term(exec_state)));
   cbdap_process_created(dapid, pid);
 }
-#line 772 "dap-admin.c.nw"
+#line 779 "dap-admin.c.nw"
 void dap_process_destroyed(int dapid, int pid)
 {
   assert(daps[dapid]);
@@ -412,13 +415,13 @@ void dap_process_destroyed(int dapid, int pid)
   free(daps[dapid]->procs[pid]);
   daps[dapid]->procs[pid] = NULL;
 }
-#line 790 "dap-admin.c.nw"
+#line 797 "dap-admin.c.nw"
 process *dap_get_process(int dapid, int pid)
 {
   assert(daps[dapid]);
   return daps[dapid]->procs[pid];  
 }
-#line 803 "dap-admin.c.nw"
+#line 810 "dap-admin.c.nw"
 int dap_term2es(term *t)
 {
   if(TBmatch(t, "stop"))
@@ -438,7 +441,7 @@ int dap_term2es(term *t)
   TBprintf(stderr, "illegal exec-control: %t, stop assumed\n", t);
   return ES_STOP;
 }
-#line 830 "dap-admin.c.nw"
+#line 837 "dap-admin.c.nw"
 term *dap_es2term(int es)
 {
   switch(es) {
@@ -450,44 +453,54 @@ term *dap_es2term(int es)
   }
   return TBmake("unknown");
 }
-#line 847 "dap-admin.c.nw"
+#line 854 "dap-admin.c.nw"
 int dap_get_stop_level(int dapid, int pid)
 {
   return dap_get_process(dapid, pid)->stop_level;
 }
-#line 857 "dap-admin.c.nw"
+#line 864 "dap-admin.c.nw"
 int dap_get_exec_state(int dapid, int pid)
 {
   return dap_get_process(dapid, pid)->exec_state;
 }
-#line 867 "dap-admin.c.nw"
+#line 874 "dap-admin.c.nw"
 char *dap_get_process_name(int dapid, int pid)
 {
   return dap_get_process(dapid, pid)->name;
 }
 
-#line 893 "dap-admin.c.nw"
+#line 900 "dap-admin.c.nw"
 void *dap_get_process_data(int dapid, int pid)
 {
   return dap_get_process(dapid, pid)->udata;
 }
-#line 881 "dap-admin.c.nw"
+#line 888 "dap-admin.c.nw"
 void  dap_set_process_data(int dapid, int pid, void *udata)
 {
   dap_get_process(dapid, pid)->udata = udata;
 }
-#line 906 "dap-admin.c.nw"
+#line 913 "dap-admin.c.nw"
 void  dap_set_process_flags(int dapid, int pid, int uflags)
 {
   dap_get_process(dapid, pid)->uflags |= uflags;
 }
-#line 919 "dap-admin.c.nw"
+#line 926 "dap-admin.c.nw"
 void  dap_clear_process_flags(int dapid, int pid, int uflags)
 {
   dap_get_process(dapid, pid)->uflags &= ~uflags;
 }
-#line 932 "dap-admin.c.nw"
+#line 939 "dap-admin.c.nw"
 unsigned  dap_check_process_flags(int dapid, int pid, int uflags)
 {
   return dap_get_process(dapid, pid)->uflags & uflags;
+}
+#line 949 "dap-admin.c.nw"
+void  dap_set_last_port(int dapid, int pid, term *port)
+{
+  dap_get_process(dapid, pid)->last_port = port;  
+}
+#line 959 "dap-admin.c.nw"
+term *dap_get_last_port(int dapid, int pid)
+{
+  return dap_get_process(dapid, pid)->last_port;
 }

@@ -1,5 +1,5 @@
 #!/bin/sh
-prefix=/home/olivierp/ToolBus
+prefix=/home/olivierp/Research/ToolBus
 exec_prefix=${prefix}
 libdir=$exec_prefix/lib
 cd $libdir/tide

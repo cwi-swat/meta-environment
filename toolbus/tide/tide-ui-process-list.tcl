@@ -87,7 +87,6 @@ proc tide-ui-select-processes { dap pids } {
 proc tide-process-created-process-list { dap pid name } {
   global Viewer Proc ES
 
-  puts stderr "process-created: $dap $pid $name"
   set Viewer($dap,$pid,mapped) 0
   set Viewer($dap,$pid,selected) 1
   pl-draw-process-list $dap
@@ -95,7 +94,7 @@ proc tide-process-created-process-list { dap pid name } {
 proc tide-process-destroyed-process-list { dap pid } {
   global Viewer Dap
 
-  if { [info exists $Viewer($dap,wprocs) } {
+  if { [info exists $Viewer($dap,wprocs)] } {
     $Viewer($dap,wprocs) delete entry $pid
   }
 }
@@ -115,7 +114,7 @@ proc tide-current-port-process-list { dap pids port } {
 proc tide-exec-state-process-list { dap pids state } {
   global Dap Viewer IMG
 
-  if { [info exists Viewer($dap,wprocess-list)] } {
+  if { [info exists Viewer($dap,wprocs)] } {
     if { $Dap($dap,info,multi-process) } {
       foreach pid $pids {
         pl-update-process $dap $pid
@@ -123,8 +122,6 @@ proc tide-exec-state-process-list { dap pids state } {
     } else {
       $Viewer($dap,wstate) configure -image $IMG($state)
     }
-  } else {
-    puts stderr "Viewer($dap,wprocess-list) does not exist"
   }
 }
 
@@ -132,7 +129,6 @@ proc tide-exec-state-process-list { dap pids state } {
 proc pl-draw-process-list { dap } {
   global Dap Proc Viewer IMG
 
-  puts stderr "pl-draw-process-list: $Dap($dap,pids)"
   # First, we clean up all existing items
   if { [info exists Viewer($dap,wprocs)] } {
     foreach pid $Dap($dap,pids) {

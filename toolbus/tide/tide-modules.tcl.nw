@@ -199,6 +199,7 @@ This module handles all events related to tide debugging adapters.
 <<tide-daps.tcl>>=
 <<dap-connected>>
 <<dap-disconnected>>
+<<tide-get-info>>
 <<tide-get-search-paths>>
 
 <<dap variables>>
@@ -223,7 +224,7 @@ this procedure is called.
 proc dap-connected { dap info procs } {
   global Tide Daps Dap
 
-  puts stderr "dap-connected: $dap $procs"
+  # puts stderr "dap-connected: $dap $procs"
   set propagate 0
   if { [lsearch $Daps $dap] == -1 } {
     <<initialize dap>>
@@ -271,7 +272,7 @@ debug adapter.
 
     if { [lsearch $Dap($dap,info) $class] == -1 } {
       lappend Dap($dap,info) $class
-      puts stderr "class: $class, options: $options"
+      # puts stderr "class: $class, options: $options"
       set Dap($dap,info,$class) $options
       switch $class {
         ports			{ analyze-port-info $dap $options }
@@ -329,7 +330,7 @@ proc analyze-action-info { dap acts } {
     set name  [TCLstring [lindex $action 0]]
     set arity [lindex $action 1]
     set doc   [TCLstring [lindex $action 2]]
-    puts stderr "action: $name, $arity, $doc"
+    # puts stderr "action: $name, $arity, $doc"
     lappend Dap($dap,acts) $name
     set Dap($dap,act$name,arity) $arity
     set Dap($dap,act$name,doc) $doc
@@ -383,7 +384,7 @@ A debugging adapter is disconnected.
 proc dap-disconnected { dap } {
   global Daps Dap
 
-  puts stderr "dap-disconnected: $dap"
+  # puts stderr "dap-disconnected: $dap"
   
   # Call any tide-dap-disconnected* procs present
   tide-call dap-disconnected $dap
@@ -394,6 +395,24 @@ proc dap-disconnected { dap } {
     unset Dap($dap,info,$class)
   }
   unset Dap($dap,info)
+}
+@
+
+%}}}
+%{{{ proc tide-get-info { dap class }
+
+Retrieve the information found in a specific class.
+
+<<tide-get-info>>=
+proc tide-get-info { dap class } {
+  global Dap
+
+  if { [info exists Dap($dap,info,$class)] } {
+    return $Dap($dap,info,$class)
+  } else {
+    puts stderr "Warning: info class $class does not exist for dap $dap."
+    return ""
+  }
 }
 @
 
@@ -437,8 +456,6 @@ Make sure all necessary modules are loaded.
 
 <<tide-init-processes>>=
 proc tide-init-processes { } {
-  puts stderr "tide-init-processes called"
-
   tide-init-modules { daps event-rules }
 }
 @
@@ -458,10 +475,13 @@ proc tide-dap-connected-processes { dap procs info } {
     set name [lindex $proc 1]
     process-created $dap $pid [TBstring $name]
   }
-  tide-create-rule pc $dap all {process-creation at} \
+
+  if { $Dap($dap,info,multi-process) } {
+    tide-create-rule pc $dap all {process-creation at} \
 				true watch(process-name) persistent
-  tide-create-rule pd $dap all {process-destruction at} \
+    tide-create-rule pd $dap all {process-destruction at} \
 				true watch(process-name) persistent
+  }
 }
 @
 
@@ -528,8 +548,6 @@ A process has been destroyed, remove all traces of it.
 <<process-destroyed>>=
 proc process-destroyed { dap pid } {
   global Dap Proc
-
-  puts stderr "proc destroyed: $dap, $pid"
 
   tide-call process-destroyed $dap $pid
 
@@ -639,7 +657,6 @@ proc rule-created { dap pids rid port cond acts life } {
   global Dap Rule
 
   set port [TCLport $port]
-  puts stderr "rule-created: $dap, $rid, $pids, $port, $cond, $acts"
 
   if { $rid != -1 && [lsearch $Dap($dap,rules) $rid] == -1 } {
     lappend Dap($dap,rules)  $rid
@@ -648,6 +665,9 @@ proc rule-created { dap pids rid port cond acts life } {
     set Rule($dap,$rid,acts) $acts
     set Rule($dap,$rid,life) $life
     set Rule($dap,$rid,pids) $pids
+
+    set Rule($dap,$rid,porttype) [lindex $port 0]
+    set Rule($dap,$rid,when) [lindex $port 1]
 
     tide-call rule-created $dap $rid $pids $port $cond $acts $life
   }
@@ -666,7 +686,7 @@ proc rule-modified { dap pids rid port cond acts life } {
   set port [TCLport $port]
   puts stderr "rule-modified: $dap, $rid, $pids, $port, $cond, $acts"
 
-  if { $rid != -1 && [lsearch $Dap($dap,rules) $rid] == -1 } {
+  if { $rid != -1 } {
     if { [lsearch $Dap($dap,rules) $rid] == -1 } {
       lappend Dap($dap,rules)  $rid
     }
@@ -689,8 +709,6 @@ A event-rule was cleared.
 
 <<rule-destroyed>>=
 proc rule-destroyed { dap pid rid } {
-  puts stderr "rule-destroyed: $dap, $rid"
-
   tide-call rule-destroyed $dap $rid
 
   set idx [lsearch $Dap($dap,rules) $rid]
@@ -712,7 +730,8 @@ proc rule-destroyed { dap pid rid } {
 proc watchpoint { dap pid rid exprs } {
   global Dap Rule
 
-  puts stderr "watchpoint: $dap, $pid, $rid, $exprs"
+  set Rule($dap,$rid,pid) $pid
+  set Rule($dap,$rid,exprs) $exprs
   tide-call watchpoint $dap $pid $rid $exprs
 }
 @
@@ -727,7 +746,7 @@ Set a event-rule.
 proc tide-create-rule { type dap pids port cond acts life } {
   set Acts \[$acts\]
   if { $cond == "" } {
-    set cond always
+    set cond true
   }
   if { $pids == "all" } {
     TBpost "create-rule($type,$dap,all,[TBport $port],$cond,$Acts,$life)"
@@ -748,7 +767,7 @@ Modify an event-rule.
 proc tide-modify-rule { rid dap pids port cond acts life } {
   set Acts \[$acts\]
   if { $cond == "" } {
-    set cond always
+    set cond true
   }
   if { $pids == "all" } {
     TBpost "modify-rule($rid,$dap,all,[TBport $port],$cond,$Acts,$life)"
@@ -1329,7 +1348,6 @@ The process-create callback.
 proc tide-process-created-process-list { dap pid name } {
   global Viewer Proc ES
 
-  puts stderr "process-created: $dap $pid $name"
   set Viewer($dap,$pid,mapped) 0
   set Viewer($dap,$pid,selected) 1
   pl-draw-process-list $dap
@@ -1345,7 +1363,7 @@ Process destruction callback.
 proc tide-process-destroyed-process-list { dap pid } {
   global Viewer Dap
 
-  if { [info exists $Viewer($dap,wprocs) } {
+  if { [info exists $Viewer($dap,wprocs)] } {
     $Viewer($dap,wprocs) delete entry $pid
   }
 }
@@ -1381,7 +1399,7 @@ Exec status change callback.
 proc tide-exec-state-process-list { dap pids state } {
   global Dap Viewer IMG
 
-  if { [info exists Viewer($dap,wprocess-list)] } {
+  if { [info exists Viewer($dap,wprocs)] } {
     if { $Dap($dap,info,multi-process) } {
       foreach pid $pids {
         pl-update-process $dap $pid
@@ -1389,8 +1407,6 @@ proc tide-exec-state-process-list { dap pids state } {
     } else {
       $Viewer($dap,wstate) configure -image $IMG($state)
     }
-  } else {
-    puts stderr "Viewer($dap,wprocess-list) does not exist"
   }
 }
 @
@@ -1405,7 +1421,6 @@ Draw the complete list of processes.
 proc pl-draw-process-list { dap } {
   global Dap Proc Viewer IMG
 
-  puts stderr "pl-draw-process-list: $Dap($dap,pids)"
   # First, we clean up all existing items
   if { [info exists Viewer($dap,wprocs)] } {
     foreach pid $Dap($dap,pids) {
@@ -1560,6 +1575,247 @@ proc pl-do-exec-control-button { dap class elem } {
   global Viewer Dap
 
   tide-exec-control $dap $Viewer($dap,pids) $elem
+}
+@
+
+%}}}
+
+%}}}
+%{{{ module tide-ui-rule-list
+
+<<tide-ui-rule-list.tcl>>=
+<<tide-init-ui-rule-list>>
+<<tide-create-rule-list>>
+<<tide-destroy-rule-list>>
+
+<<tide-dap-connected-rl>>
+<<tide-dap-disconnected-rl>>
+<<tide-rule-created-rl>>
+<<tide-rule-modified-rl>>
+<<tide-rule-destroyed-rl>>
+
+<<tide-get-selected-rule>>
+<<tide-clear-rule-selection>>
+<<change-selected-rule>>
+@
+
+%{{{ proc tide-init-ui-rule-list { }
+
+Initialize the rule-list module.
+
+<<tide-init-ui-rule-list>>=
+proc tide-init-ui-rule-list { } {
+  tide-init-modules { daps event-rules }
+}
+@
+
+%}}}
+%{{{ proc tide-create-rule-list { dap id parent }
+
+Create a new rule-list window.
+
+<<tide-create-rule-list>>=
+proc tide-create-rule-list { dap id parent } {
+  global Dap Rule RuleList
+
+  set w $parent.rl$id
+  set RuleList($id,dap) $dap
+  set RuleList($id,win) $w
+
+  lappend Dap($dap,rule-lists) $id
+
+  frame $w
+  listbox $w.list \
+	-width 18 -height 6 \
+	-yscrollcommand "$w.y set" \
+	-exportselection 0 \
+	-selectmode single
+
+  bind $w.list <ButtonPress-1> "change-selected-rule $dap %x %y"
+  scrollbar $w.y \
+	-command "$w.list yview" \
+	-orient vert
+
+  pack $w.list -side left -expand 1 -fill both
+  pack $w.y    -side left -fill y
+
+  set RuleList($id,wrules) $w.list
+
+  foreach rid $Dap($dap,rules) {
+    $RuleList($id,wrules) insert end "$rid: [lindex $Rule($dap,$rid,port) 0]"
+    lappend RuleList($id,rules) $rid
+  }
+  
+  return $w
+}
+@
+
+%}}}
+%{{{ proc tide-destroy-rule-list { id }
+
+Destroy a rule-list.
+
+<<tide-destroy-rule-list>>=
+proc tide-destroy-rule-list { id } {
+  global Dap RuleList
+
+  set dap $RuleList($id,dap)
+
+  destroy $RuleList($id,win)
+  unset RuleList($id,win)
+  unset RuleList($id,dap)
+  unset RuleList($id,wrules)
+
+  set idx [lsearch $Dap($dap,rule-lists) $id]
+  set Dap($dap,rule-lists) [lreplace $Dap($dap,rule-lists) $idx $idx]
+}
+@
+
+%}}}
+
+%{{{ proc tide-dap-connected-rl { dap info procs }
+
+A new dap was connected. The list of rule-lists is initially empty.
+
+<<tide-dap-connected-rl>>=
+proc tide-dap-connected-rl { dap info procs } {
+  global Dap
+
+  set Dap($dap,rule-lists) {}
+}
+@
+
+%}}}
+%{{{ proc tide-dap-disconnected-rl { dap info procs }
+
+When a dap is disconnected, we unset all dap related variables.
+
+<<tide-dap-disconnected-rl>>=
+proc tide-dap-disconnected-rl { dap info procs } {
+  global Dap
+
+  unset Dap($dap,rule-lists)
+}
+@
+
+%}}}
+%{{{ proc tide-rule-created-rl { dap rid pids port cond acts life }
+
+A new rule was created. Insert it in every viewer of this particular
+debug adapter.
+
+<<tide-rule-created-rl>>=
+proc tide-rule-created-rl { dap rid pids port cond acts life } {
+  global Dap RuleList
+
+  foreach id $Dap($dap,rule-lists) {
+    lappend RuleList($id,rules) $rid
+    set idx [lsearch $RuleList($id,rules) $rid]
+    set w $RuleList($id,wrules)
+    $w insert $idx "$rid: [lindex $port 0]"
+  }
+}
+@
+
+%}}}
+%{{{ proc tide-rule-modified-rl { dap rid pids port cond acts life }
+
+A rule was modified. Maybe its appearence has changed?
+
+<<tide-rule-modified-rl>>=
+proc tide-rule-modified-rl { dap rid pids port cond acts life } {
+  global Dap RuleList
+
+  puts stderr "tide-rule-modified-rl: $dap $rid $pids $port"
+  foreach id $Dap($dap,rule-lists) {
+    set idx [lsearch $RuleList($dap,rules) $rid]
+    if { $idx != -1 } {
+      set w $RuleList($id,wrules)
+      set sel [$w curselection]
+      $w delete $idx
+      $w insert $idx "$rid: [lindex $port 0]"
+      $w selection clear 0 end
+      $w selection set $sel
+    }
+  }
+}
+@
+
+%}}}
+%{{{ proc tide-rule-destroyed-rl { dap rid }
+
+A rule was destroyed. Remove it from every viewer that contains it.
+
+<<tide-rule-destroyed-rl>>=
+proc tide-rule-destroyed-rl { dap rid } {
+  global Dap RuleList
+
+  foreach id $Dap($dap,rule-lists) {
+    set idx [lsearch $RuleList($dap,rules) $rid]
+    if { $idx != -1 } {
+      set w $RuleList($id,wrules)
+      $w delete $idx
+    }
+  }
+}
+@
+
+%}}}
+
+%{{{ proc tide-get-selected-rule { id }
+
+Return the currently selected rule in a rule-list. Return {\tt ""}
+when no rule was selected.
+
+<<tide-get-selected-rule>>=
+proc tide-get-selected-rule { id } {
+  global RuleList Dap
+
+  set w $RuleList($id,wrules)
+  set sel [$w curselection]
+
+  if { $sel == "" } {
+    return ""
+  }
+  return [lindex $Dap($RuleList($id,dap),rules) $sel]
+}
+@
+
+%}}}
+%{{{ proc tide-clear-rule-selection { id }
+
+Clear the current rule selection.
+
+<<tide-clear-rule-selection>>=
+proc tide-clear-rule-selection { id } {
+  global RuleList Dap
+
+  set w $RuleList($id,wrules)
+
+  $w selection clear 0 end
+}
+@
+
+%}}}
+
+%{{{ proc change-selected-rule { dap x y }
+
+The user selected a new rule.
+Change the current rule to reflect the selection in the
+rules listbox.
+
+<<change-selected-rule>>=
+proc change-selected-rule { id x y } {
+  global Dap RuleList
+
+  set dap $RuleList($id,dap)
+  set w $RuleList($id,wrules)
+  set idx [$w nearest $y]
+  $w selection clear 0 end
+  $w selection set $idx
+
+  set cur [lindex $RuleList($id,rules) $idx]
+  tide-call rule-selected $id $cur
 }
 @
 

@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT
 
 PRODUCT=ToolBus
-VERSION=0.10.2
+VERSION=0.11
 DEMOS="auction calc edit game hello ttt wave"
 SWIPL_DEMOS="swipl-ttt"
 PERL_DEMOS="perl"
@@ -82,7 +82,7 @@ AC_ARG_WITH(gel,
 [  --with-gel              use GeL for interfacing with ASF+SDF system],
 if test ${withval} = "yes"
 then
-   GELDIR="$(top_srcdir)/../gel"
+   GELDIR="$(top_srcdir)/.."
    ADAPTERS="${ADAPTERS} asf+sdf-adapter"
    DEMOS="${DEMOS} ${GEL_DEMOS}"
 else
@@ -102,7 +102,7 @@ AC_ARG_WITH(epic,
 [  --with-epic		enable EPic support],
 if test ${withval} = "yes"
 then
-  EPDIR="$(top_srcdir)/../EP"
+  EPDIR="$(top_srcdir)/.."
   ADAPTERS="${ADAPTERS} arm-adapter"
   DEMOS="${DEMOS} ${EPIC_DEMOS}"
 else
@@ -183,6 +183,20 @@ then
 fi,
 )
 AC_SUBST(TBSWIPL)
+
+AC_ARG_WITH(java,
+[  --with-java=<classdir>	include java support (java-adapter)],
+echo "Make sure javac and java are in your path and your CLASSPATH"
+echo "variable is pointing to the right locations."
+ADAPTERS="${ADAPTERS} java-adapter"
+if test ${withval} = "yes"
+then
+  classdir=${HOME}/classes
+else
+  classdir=${withval}
+fi,
+)
+AC_SUBST(classdir) 
 
 AC_SUBST(SUBDIRS)
 AC_SUBST(XTRADIRS)
@@ -265,5 +279,11 @@ AC_OUTPUT(Makefile src/Makefile tide/Makefile tide/tide doc/Makefile \
 	adapters/asf+sdf-adapter/Makefile \
 	adapters/gen-adapter/Makefile \
 	adapters/arm-adapter/Makefile adapters/arm-adapter/arm-resident \
-	www/Makefile \
+	adapters/java-adapter/Makefile \
+	adapters/java-adapter/toolbus/aterm/Makefile \
+	adapters/java-adapter/toolbus/util/Makefile \
+	adapters/java-adapter/toolbus/tool/Makefile \
+	adapters/java-adapter/toolbus/tide/Makefile \
+	www/Makefile, \
+mkdir doc/adapters
 	) 

@@ -10,7 +10,7 @@
 
 #define PUF_START	1
 
-#line 183 "dap-admin.c.nw"
+#line 185 "dap-admin.c.nw"
 #define ES_UNKNOWN		0
 #define ES_STOP			0x0001
 #define ES_RUN			0x0002
@@ -20,7 +20,7 @@
 #define ES_HIGH_WATER		0x0020
 
 #define ES_ALL			0x003F
-#line 155 "dap-admin.c.nw"
+#line 157 "dap-admin.c.nw"
 #define PORT_EXEC_STATE		0
 #define PORT_ALWAYS		1
 #define PORT_LOCATION		2
@@ -43,7 +43,7 @@
 #define ONE_SHOT	0
 #define PERSISTENT	1
 
-#line 120 "dap-admin.c.nw"
+#line 122 "dap-admin.c.nw"
 typedef struct location
 {
   char *module;
@@ -53,7 +53,7 @@ typedef struct location
   int end_col;
   int when;
 } location;
-#line 135 "dap-admin.c.nw"
+#line 137 "dap-admin.c.nw"
 typedef struct port
 {
   int type;
@@ -67,7 +67,7 @@ typedef struct port
     term *msg;
   } u;
 } port;
-#line 103 "dap-admin.c.nw"
+#line 105 "dap-admin.c.nw"
 typedef struct event_rule
 { 
   struct event_rule *next;
@@ -78,7 +78,7 @@ typedef struct event_rule
   term_list *acts;
   int lifetime;
 } event_rule;
-#line 84 "dap-admin.c.nw"
+#line 85 "dap-admin.c.nw"
 typedef struct process
 {
   int pid;			/* process id of this process */
@@ -88,11 +88,12 @@ typedef struct process
   int hw_exec_state;		/* execution state when high water reached */
   int stop_level;		/* stop level for ES_STEP_OVER and RUN_UNTIL_PARENT */
   int ruleid;			/* current event rule id */
+  term *last_port;		/* The last port passed. */
   term_list *subterms;		/* subterms that matched with placeholders */
   unsigned uflags;		/* user flags */
   void *udata;			/* user data */
 } process;
-#line 70 "dap-admin.c.nw"
+#line 71 "dap-admin.c.nw"
 typedef struct dap
 {
   int id;
@@ -137,7 +138,8 @@ void *data_get_user_data(int dapid, int pid);
 void  dap_set_process_flags(int dapid, int pid, int uflags);
 void  dap_clear_process_flags(int dapid, int pid, int uflags);
 unsigned  dap_check_process_flags(int dapid, int pid, int uflags);
-
+term *dap_get_last_port(int dapid, int pid);
+void  dap_set_last_port(int dapid, int pid, term *port);
 /* External callbacks, must be provided by the user */
 extern void cbdap_process_created(int dapid, int pid);
 extern void cbdap_process_destroyed(int dapid, int pid);
