@@ -1,35 +1,23 @@
 module languages/modula-3/syntax/Layout
 
+imports languages/modula-3/syntax/Pragma
+
 exports
 
 lexical syntax
 	[\ \t\n] -> LAYOUT
-
 	[\*] -> CAsterisk
-	[\*] -> PAsterisk
-	"(*" ( CAsterisk | ~[\*] )* "*)" -> Comment
-	"<*" ( PAsterisk | ~[\*] )* "*>" -> Pragma
+	"(*" CommentContents* "*)" -> Comment
+	"(*" | "*)" -> CommentContents {reject}
+	Comment -> NestedComment
 	Comment -> LAYOUT
-	Pragma -> LAYOUT
+aliases
+	(~[\*]|CAsterisk|NestedComment) -> CommentContents
 
-
-%% This disallows nested comments (which are allowed in Modula-3,
-%% but unfortunately we have to count for this.
 lexical restrictions
 	CAsterisk -/- [\)]
-	PAsterisk -/- [\>]
-
 
 context-free restrictions
 	LAYOUT? -/- [\ \t\n]
-	LAYOUT? -/- [\<].[\*]
 	LAYOUT? -/- [\(].[\*]
-
-
-
-hiddens
-sorts Comment Pragma CAsterisk PAsterisk
-
-
-
 
