@@ -373,6 +373,8 @@ public class ATermApplImpl extends ATermImpl
 
   static boolean needsQuotes(String fn)
   {
+    //Added fn.length() == 0 test. If the string is the empty string,
+    //it definitely needs quotes --Tobias
     if(fn.length() == 0 || Character.isLetter(fn.charAt(0)) || fn.charAt(0) == '_') {
       for(int i=1; i<fn.length(); i++) {
 	char c = fn.charAt(i);
