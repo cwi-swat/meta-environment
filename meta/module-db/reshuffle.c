@@ -18,6 +18,11 @@ void initialize_output_path(ATerm name)
   top_module = name;
   if( getenv( "COMPILER_OUTPUT" ) != NULL )
      output_path = getenv( "COMPILER_OUTPUT" );
+  else {
+    if( getenv( "TMPDIR" ) != NULL )
+       output_path = getenv( "TMPDIR" );
+    ATfprintf(stderr,"COMPILER_OUTPUT not set, using %s\n", output_path);
+  }
 }
 
 void change_compile_db(ATermTable new_db)
@@ -383,10 +388,9 @@ void gen_makefile(ATerm name)
       }
       fclose( output );
 
-
-      sprintf( buf, "cd %s ; %s/genmakefile.sh %s >Makefile", output_path, BINDIR, text );
+      sprintf(buf, "cd %s ; %s/genmakefile.sh %s", output_path, BINDIR, text );
       ATfprintf(stderr,"Executing: %s\n", buf );
-      system( buf );
+      system(buf );
     }
   }
   else
