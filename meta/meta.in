@@ -10,7 +10,7 @@ datadir=@datadir@
 classdir=@prefix@/classes
 toolbus=@TOOLBUSBIN@/toolbus
 
-PATH="$PATH:$bindir"; export PATH
+PATH="${bindir}:${PATH}"; export PATH
 CLASSPATH=${classdir}:${CLASSPATH}; export CLASSPATH
 
 ###
