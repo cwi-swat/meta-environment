@@ -33,6 +33,7 @@ MAKE		= gmake
 DEFS		= @DEFS@ ${XDEFS}
 INCLUDES	= @INCLUDES@ ${XINCLUDES}
 LIBS		= @LIBS@ ${XLIBS}
+LIBSPROF	= @LIBS@ ${XLIBSPROF}
 SOCKLIBS	= @SOCKLIBS@
 
 INSTALL		= @INSTALL@
@@ -49,12 +50,16 @@ XCPPFLAGS	=
 XINCLUDES	= -I$(ATERM)/include
 XLIBS		= -L${libdir} -L. -lsglr -la2toa1 -lgc         \
                   -lATerm-${CC} -lAsFix-${CC} -lATB-${CC}
+XLIBSPROF	= -L${libdir} -L. -lsglr-prof -la2toa1 -lgc         \
+                  -lATerm-prof -lAsFix-prof -lATB-prof
 
-
-SGLRLIBS        = libsglr.a
+SGLRLIB         = libsglr.a
+SGLRLIBPROF     = libsglr-prof.a
+SGLRLIBS        = ${SGLRLIB} ${SGLRLIBPROF}
 SGLRINC         = sglr.h
 LIBSRC          = sglr-interface.c parse-table.c parser.c forest.c stack.c tree-to-dot.c
 LIBOBJ          = $(patsubst %.c,%.o,$(LIBSRC))
+LIBOBJPROF      = $(patsubst %.c,%-prof.o,$(LIBSRC))
 
 PROGS           = sglr
 GETOPTC         = getopt.c getopt1.c
@@ -94,6 +99,9 @@ clean:
 
 %.c:	%.h
 
+%-prof.o:	%.c
+	$(CC) $(CFLAGSPROF) $(INCLUDES) -c $< -o $@
+
 %.o:	%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $<
 
@@ -105,6 +113,12 @@ clean:
 
 
 # Specific dependencies
+
+libsglr-prof.a:  ${LIBOBJPROF}
+	$(AR) $(AR_FLAGS) $@ $(LIBOBJPROF)
+
+sglr-prof: ${GETOPTOBJ} ${OBJ} ${SGLRLIBPROF}
+	${CC} ${LDFLAGS} ${OBJ} ${GETOPTOBJ} $(LIBSPROF) -o $@
 
 libsglr.a:  ${LIBOBJ}
 	$(AR) $(AR_FLAGS) $@ $(LIBOBJ)
