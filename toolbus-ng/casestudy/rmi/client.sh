@@ -1,3 +1,3 @@
 #! /bin/sh
 
-java RemoteClient $@
+java -classpath ../.. casestudy.rmi.RemoteClient $@

@@ -14,11 +14,10 @@ RemoteClient.class: AddressBook.java RemoteClient.java
 AddressBookServer.class: AddressBookImpl.java AddressBookServer.java
 
 AddressBookImpl_Stub.class: AddressBookImpl.java
-	rmic -v1.2 AddressBookImpl
-
+	rmic -v1.2 -d ../.. -classpath ../.. casestudy.rmi.AddressBookImpl
 
 clean:
 	rm -f $(CLASSES)
 
 %.class: %.java
-	javac $<
+	javac -d ../.. -classpath ../.. $<
