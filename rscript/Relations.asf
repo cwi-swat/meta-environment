@@ -12,6 +12,8 @@ equations
 
 [ir1]	is-rel(bag($C, $Bag1, <$Elem1, $Elem2>, $Bag2)) = true
 
+%%[ir1]	is-rel({<$Elem1, $Elem2>, $Elem*}) = true
+
 [default-ir]
 	is-rel($Bag) = false
 
@@ -322,16 +324,56 @@ equations
 	 ==================================================
 	 id($BagIter) = empty-bag
 
-[cl-1] 	closure($Rel, $Rel1, $Rel1) = $Rel1
+%% ---- closure
 
-[cl-2] 	equal($Rel1, $Rel2) = false
-       	=========================================
-       	closure($Rel, $Rel1, $Rel2) = closure($Rel, $Rel2, union($Rel2, compose($Rel2, $Rel)))
+%%[cl-1] equal($Rel1, $Rel2) = false
+%%       =========================================
+%%       closure($Rel, $Rel1, $Rel2) = closure($Rel, $Rel2, union($Rel2, compose($Rel2, $Rel)))
+
+%%[default-cl]
+%%	closure($Rel, $Rel1, $Rel2) = $Rel1
+
+[cl-1]	equal($Rel1, $Rel2) = false,
+	$Rel2' = closure1(mk-iterator($Rel2), $Rel, $Rel2) 
+	==============================================	
+	closure($Rel, $Rel1, $Rel2) = closure($Rel, $Rel2, $Rel2')
 
 [default-cl]
-	closure($Rel, $Rel1, $Rel2) = $Rel1
+	closure($Rel, $Rel1, $Rel2) = $Rel2
+
+[cl1-1]	is-empty-iter($BagIter) = false,
+	head($BagIter) = <$Elem1, $Elem1'>,
+	$Rel2' = closure-comp(mk-iterator($Rel1), $Elem1, $Elem1', $Rel2)
+	==============================================================
+	closure1($BagIter, $Rel1, $Rel2) = closure1(tail($BagIter), $Rel1, $Rel2')
+
+[cl1-2]	is-empty-iter($BagIter) = true
+	==============================================================
+	closure1($BagIter, $Rel1, $Rel2) = $Rel2
+
+[cc-1]	is-empty-iter($BagIter) = false,
+	head($BagIter) = <$Elem2, $Elem2'>,
+	$Elem1' = $Elem2
+	=======================================================
+	closure-comp($BagIter, $Elem1, $Elem1', $Bag) = 
+	closure-comp(tail($BagIter), $Elem1, $Elem1', union1(<$Elem1, $Elem2'>, $Bag))
+
+[cc-2]	is-empty-iter($BagIter) = false,
+	head($BagIter) = <$Elem2, $Elem2'>,
+	$Elem1' != $Elem2
+	=======================================================
+	closure-comp($BagIter, $Elem1, $Elem1', $Bag) = 
+	closure-comp(tail($BagIter), $Elem1, $Elem1', $Bag)
+
+[cc-3] 	is-empty-iter($BagIter) = true
+	=============================================
+	closure-comp($BagIter, $Elem1, $Elem1', $Bag) = $Bag
+
+%% ---- trans-closure
 
 [tcl-1]  trans-closure($Rel) = closure($Rel, empty-bag, $Rel)
+
+%% ---- rtrans-closure
 
 [rtcl-1] rtrans-closure($Rel) = union(trans-closure($Rel), id(carrier($Rel)))
 

@@ -13,6 +13,11 @@ equations
 [default-del]
 	delete($Elem, $Bag) = $Bag
 
+
+%% ---- mk-iterator
+
+[mki]	mk-iterator($Bag) = $Bag
+
 %% ---- is-empty-iter
 
 [is-ei1]

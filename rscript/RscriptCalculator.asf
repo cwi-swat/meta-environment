@@ -10,13 +10,6 @@
 	=============================================================
 	<$Exp1, $Exp2, $Exps1> = <$Exp1, <$Exp2, $Exp', $Exps2>>
 
-%% ---- Equality on elements
-
-%%[ee1]	equal-elem($Elem, $Elem)		= true
-%%[ee2]	equal-elem($Bag1, $Bag2)		= equal($Bag1, $Bag2)
-%%[default-ee] 
-%%	equal-elem($Elem, $Elem') 		= false
-
 %% ---- Equality on RVALUEs
 
 [er1]	equal-rval($Bag1, $Bag2) = equal($Bag1, $Bag2)

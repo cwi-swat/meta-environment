@@ -59,6 +59,8 @@ hiddens
 
   context-free syntax
      closure(Bag[[Elem]],Bag[[Elem]], Bag[[Elem]])	-> Bag[[Elem]]
+     closure1(BagIterator[[Elem]],Bag[[Elem]], Bag[[Elem]])	-> Bag[[Elem]]
+     closure-comp(BagIterator[[Elem]],Elem, Elem, Bag[[Elem]])	-> Bag[[Elem]]
 
      compose(BagIterator[[Elem]], Bag[[Elem]])		-> Bag[[Elem]]	%%RRR
 

@@ -162,7 +162,7 @@ $Error]>
      	check-const(<$Elem1, $Elem2>, $Tenv) = <<$Etype1, $Etype2>, $Tenv''>
 
 [check-const-bag1]
-      check-const($Bag, $Tenv) = check-const-bag-or-rel($Bag, $Tenv)
+      check-const($Bag, $Tenv) = check-const-bag-or-rel(mk-iterator($Bag), $Tenv)
 
 %%[check-const-br1]
 %%      	is-tuple($Elem) = false,
