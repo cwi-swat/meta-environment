@@ -443,7 +443,7 @@ ATerm SG_Result(char *sort)
   } else
     return ATmake("parse-error([character(<int>), line(<int>),"
                   "col(<int>), char(<int>)])",
-                  current_token, line, col-1, sg_tokens_read);
+                  current_token, line, col, sg_tokens_read);
 }
 
 /*
@@ -653,9 +653,6 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
     }
     /*  Reject?  */
     if (reject) {
-      ATfprintf(stderr, "Warning: stack %d rejected in presence of "
-                        "other links (linked to stack %d)\n",
-                SG_ST_STATE(st0), SG_ST_STATE(st1));
       if(SG_DEBUG)
         ATfprintf(SGlog(), "Warning: stack %d rejected in presence of "
                            "other links (linked to stack %d)\n",

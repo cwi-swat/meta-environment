@@ -145,12 +145,14 @@ ATerm SGopenLanguage(char *prgname, int conn, char *L, char *FN)
 
   SG_Validate("SGopenLanguage");
   if (SG_VERBOSE && (FN != NULL))
-    ATfprintf(stderr, "%s: reading parse table %s\n", prgname, FN);
-  input_file = SGopenFile(prgname, "parse table not specified", FN);
-  if (SG_DEBUG)
-    ATfprintf(SGlog(), "Reading parse table for language %s\n", L);
-  table = SG_BuildParseTable(ATreadFromFile(input_file));
-  SGcloseFile(input_file);
+    ATfprintf(stderr, "%s: opening parse table %s\n", prgname, FN);
+  if((table = SG_LookupParseTable(L, ATtrue)) == NULL) {
+    input_file = SGopenFile(prgname, "parse table not specified", FN);
+    if (SG_DEBUG)
+      ATfprintf(SGlog(), "Reading parse table for language %s\n", L);
+    table = SG_BuildParseTable(ATreadFromFile(input_file));
+    SGcloseFile(input_file);
+  }
   if (table == NULL)
     return ATmake("snd-value(open-language-failed(<str>,<str>))", L, FN);
   else {
