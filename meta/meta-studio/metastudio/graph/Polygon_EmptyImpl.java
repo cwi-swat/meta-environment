@@ -9,7 +9,7 @@ extends Polygon
   protected void initHashCode(aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] i_args) {
   	super.initHashCode(annos, fun, i_args);
   }
-  Polygon_EmptyImpl(MetaGraphFactory factory) {
+  protected Polygon_EmptyImpl(MetaGraphFactory factory) {
     super(factory);
   }
   public shared.SharedObject duplicate() {

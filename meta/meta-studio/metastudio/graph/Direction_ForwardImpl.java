@@ -9,7 +9,7 @@ extends Direction
   protected void initHashCode(aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] i_args) {
   	super.initHashCode(annos, fun, i_args);
   }
-  Direction_ForwardImpl(MetaGraphFactory factory) {
+  protected Direction_ForwardImpl(MetaGraphFactory factory) {
     super(factory);
   }
   public shared.SharedObject duplicate() {

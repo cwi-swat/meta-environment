@@ -9,7 +9,7 @@ extends Node
   protected void initHashCode(aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] i_args) {
   	super.initHashCode(annos, fun, i_args);
   }
-  Node_DefaultImpl(MetaGraphFactory factory) {
+  protected Node_DefaultImpl(MetaGraphFactory factory) {
     super(factory);
   }
   private static int index_id = 0;

@@ -9,7 +9,7 @@ extends Attribute
   protected void initHashCode(aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] i_args) {
   	super.initHashCode(annos, fun, i_args);
   }
-  Attribute_SizeImpl(MetaGraphFactory factory) {
+  protected Attribute_SizeImpl(MetaGraphFactory factory) {
     super(factory);
   }
   private static int index_width = 0;
@@ -51,24 +51,24 @@ extends Attribute
     return true;
   }
 
-  public Integer getWidth()
+  public int getWidth()
   {
-   return new Integer(((aterm.ATermInt) this.getArgument(index_width)).getInt());
+   return ((aterm.ATermInt) this.getArgument(index_width)).getInt();
   }
 
-  public Attribute setWidth(Integer _width)
+  public Attribute setWidth(int _width)
   {
-    return (Attribute) super.setArgument(getFactory().makeInt(_width.intValue()), index_width);
+    return (Attribute) super.setArgument(getFactory().makeInt(_width), index_width);
   }
 
-  public Integer getHeight()
+  public int getHeight()
   {
-   return new Integer(((aterm.ATermInt) this.getArgument(index_height)).getInt());
+   return ((aterm.ATermInt) this.getArgument(index_height)).getInt();
   }
 
-  public Attribute setHeight(Integer _height)
+  public Attribute setHeight(int _height)
   {
-    return (Attribute) super.setArgument(getFactory().makeInt(_height.intValue()), index_height);
+    return (Attribute) super.setArgument(getFactory().makeInt(_height), index_height);
   }
 
   public aterm.ATermAppl setArgument(aterm.ATerm arg, int i) {

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 abstract public class EdgeListImpl extends MetaGraphConstructor
 {
-  EdgeListImpl(MetaGraphFactory factory) {
+  protected EdgeListImpl(MetaGraphFactory factory) {
      super(factory);
   }
   protected void init(int hashCode, aterm.ATermList annos, aterm.AFun fun,	aterm.ATerm[] args) {

@@ -6,7 +6,7 @@ import java.io.IOException;
 
 abstract public class NodeIdImpl extends MetaGraphConstructor
 {
-  NodeIdImpl(MetaGraphFactory factory) {
+  protected NodeIdImpl(MetaGraphFactory factory) {
      super(factory);
   }
   protected void init(int hashCode, aterm.ATermList annos, aterm.AFun fun,	aterm.ATerm[] args) {

@@ -9,7 +9,7 @@ extends Shape
   protected void initHashCode(aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] i_args) {
   	super.initHashCode(annos, fun, i_args);
   }
-  Shape_HexagonImpl(MetaGraphFactory factory) {
+  protected Shape_HexagonImpl(MetaGraphFactory factory) {
     super(factory);
   }
   public shared.SharedObject duplicate() {

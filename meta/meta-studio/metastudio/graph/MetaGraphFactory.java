@@ -306,7 +306,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Graph tmp = makeGraph_Default(NodeListFromTerm( (aterm.ATerm) children.get(0)), EdgeListFromTerm( (aterm.ATerm) children.get(1)), AttributeListFromTerm( (aterm.ATerm) children.get(2)));
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -339,7 +338,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       NodeList tmp = makeNodeList_Empty();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -369,7 +367,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       NodeList tmp = makeNodeList_Multi(NodeFromTerm( (aterm.ATerm) children.get(0)), NodeListFromTerm( (aterm.ATerm) children.get(1)));
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -401,7 +398,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Node tmp = makeNode_Default(NodeIdFromTerm( (aterm.ATerm) children.get(0)), AttributeListFromTerm( (aterm.ATerm) children.get(1)));
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -433,7 +429,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       NodeId tmp = makeNodeId_Default((String) children.get(0));
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -464,7 +459,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       AttributeList tmp = makeAttributeList_Empty();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -494,7 +488,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       AttributeList tmp = makeAttributeList_Multi(AttributeFromTerm( (aterm.ATerm) children.get(0)), AttributeListFromTerm( (aterm.ATerm) children.get(1)));
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -526,7 +519,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Attribute tmp = makeAttribute_Label((String) children.get(0));
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -557,7 +549,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Attribute tmp = makeAttribute_Shape(ShapeFromTerm( (aterm.ATerm) children.get(0)));
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -577,8 +568,8 @@ public class MetaGraphFactory extends PureFactory
     }
   }
 
-  public Attribute_Location makeAttribute_Location(Integer _x, Integer _y) {
-    aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_x.intValue()), makeInt(_y.intValue())};
+  public Attribute_Location makeAttribute_Location(int _x, int _y) {
+    aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_x), makeInt(_y)};
     return makeAttribute_Location( funAttribute_Location, args, empty);
   }
 
@@ -587,8 +578,7 @@ public class MetaGraphFactory extends PureFactory
     java.util.List children = trm.match(patternAttribute_Location);
 
     if (children != null) {
-      Attribute tmp = makeAttribute_Location((Integer) children.get(0), (Integer) children.get(1));
-      tmp.setTerm(trm);
+      Attribute tmp = makeAttribute_Location(((Integer) children.get(0)).intValue(), ((Integer) children.get(1)).intValue());
       return tmp;
     }
     else {
@@ -609,8 +599,8 @@ public class MetaGraphFactory extends PureFactory
     }
   }
 
-  public Attribute_Size makeAttribute_Size(Integer _width, Integer _height) {
-    aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_width.intValue()), makeInt(_height.intValue())};
+  public Attribute_Size makeAttribute_Size(int _width, int _height) {
+    aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_width), makeInt(_height)};
     return makeAttribute_Size( funAttribute_Size, args, empty);
   }
 
@@ -619,8 +609,7 @@ public class MetaGraphFactory extends PureFactory
     java.util.List children = trm.match(patternAttribute_Size);
 
     if (children != null) {
-      Attribute tmp = makeAttribute_Size((Integer) children.get(0), (Integer) children.get(1));
-      tmp.setTerm(trm);
+      Attribute tmp = makeAttribute_Size(((Integer) children.get(0)).intValue(), ((Integer) children.get(1)).intValue());
       return tmp;
     }
     else {
@@ -652,7 +641,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Attribute tmp = makeAttribute_CurvePoints(PolygonFromTerm( (aterm.ATerm) children.get(0)));
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -683,7 +671,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Attribute tmp = makeAttribute_BoundingBox(PointFromTerm( (aterm.ATerm) children.get(0)), PointFromTerm( (aterm.ATerm) children.get(1)));
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -715,7 +702,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Attribute tmp = makeAttribute_Direction(DirectionFromTerm( (aterm.ATerm) children.get(0)));
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -746,7 +732,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Attribute tmp = makeAttribute_Info((String) children.get(0), (aterm.ATerm) children.get(1));
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -778,7 +763,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Shape tmp = makeShape_Plaintext();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -808,7 +792,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Shape tmp = makeShape_Ellipse();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -838,7 +821,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Shape tmp = makeShape_Circle();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -868,7 +850,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Shape tmp = makeShape_Egg();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -898,7 +879,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Shape tmp = makeShape_Triangle();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -928,7 +908,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Shape tmp = makeShape_Box();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -958,7 +937,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Shape tmp = makeShape_Diamond();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -988,7 +966,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Shape tmp = makeShape_Trapezium();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -1018,7 +995,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Shape tmp = makeShape_Parallelogram();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -1048,7 +1024,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Shape tmp = makeShape_House();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -1078,7 +1053,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Shape tmp = makeShape_Hexagon();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -1108,7 +1082,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Shape tmp = makeShape_Octagon();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -1138,7 +1111,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Direction tmp = makeDirection_Forward();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -1168,7 +1140,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Direction tmp = makeDirection_Back();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -1198,7 +1169,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Direction tmp = makeDirection_Both();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -1228,7 +1198,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Direction tmp = makeDirection_None();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -1258,7 +1227,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       EdgeList tmp = makeEdgeList_Empty();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -1288,7 +1256,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       EdgeList tmp = makeEdgeList_Multi(EdgeFromTerm( (aterm.ATerm) children.get(0)), EdgeListFromTerm( (aterm.ATerm) children.get(1)));
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -1320,7 +1287,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Edge tmp = makeEdge_Default(NodeIdFromTerm( (aterm.ATerm) children.get(0)), NodeIdFromTerm( (aterm.ATerm) children.get(1)), AttributeListFromTerm( (aterm.ATerm) children.get(2)));
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -1353,7 +1319,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Polygon tmp = makePolygon_Empty();
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -1383,7 +1348,6 @@ public class MetaGraphFactory extends PureFactory
 
     if (children != null) {
       Polygon tmp = makePolygon_Multi(PointFromTerm( (aterm.ATerm) children.get(0)), PolygonFromTerm( (aterm.ATerm) children.get(1)));
-      tmp.setTerm(trm);
       return tmp;
     }
     else {
@@ -1404,8 +1368,8 @@ public class MetaGraphFactory extends PureFactory
     }
   }
 
-  public Point_Default makePoint_Default(Integer _x, Integer _y) {
-    aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_x.intValue()), makeInt(_y.intValue())};
+  public Point_Default makePoint_Default(int _x, int _y) {
+    aterm.ATerm[] args = new aterm.ATerm[] {makeInt(_x), makeInt(_y)};
     return makePoint_Default( funPoint_Default, args, empty);
   }
 
@@ -1414,8 +1378,7 @@ public class MetaGraphFactory extends PureFactory
     java.util.List children = trm.match(patternPoint_Default);
 
     if (children != null) {
-      Point tmp = makePoint_Default((Integer) children.get(0), (Integer) children.get(1));
-      tmp.setTerm(trm);
+      Point tmp = makePoint_Default(((Integer) children.get(0)).intValue(), ((Integer) children.get(1)).intValue());
       return tmp;
     }
     else {

@@ -9,7 +9,7 @@ extends AttributeList
   protected void initHashCode(aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] i_args) {
   	super.initHashCode(annos, fun, i_args);
   }
-  AttributeList_EmptyImpl(MetaGraphFactory factory) {
+  protected AttributeList_EmptyImpl(MetaGraphFactory factory) {
     super(factory);
   }
   public shared.SharedObject duplicate() {

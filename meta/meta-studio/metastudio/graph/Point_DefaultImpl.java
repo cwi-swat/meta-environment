@@ -9,7 +9,7 @@ extends Point
   protected void initHashCode(aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] i_args) {
   	super.initHashCode(annos, fun, i_args);
   }
-  Point_DefaultImpl(MetaGraphFactory factory) {
+  protected Point_DefaultImpl(MetaGraphFactory factory) {
     super(factory);
   }
   private static int index_x = 0;
@@ -51,24 +51,24 @@ extends Point
     return true;
   }
 
-  public Integer getX()
+  public int getX()
   {
-   return new Integer(((aterm.ATermInt) this.getArgument(index_x)).getInt());
+   return ((aterm.ATermInt) this.getArgument(index_x)).getInt();
   }
 
-  public Point setX(Integer _x)
+  public Point setX(int _x)
   {
-    return (Point) super.setArgument(getFactory().makeInt(_x.intValue()), index_x);
+    return (Point) super.setArgument(getFactory().makeInt(_x), index_x);
   }
 
-  public Integer getY()
+  public int getY()
   {
-   return new Integer(((aterm.ATermInt) this.getArgument(index_y)).getInt());
+   return ((aterm.ATermInt) this.getArgument(index_y)).getInt();
   }
 
-  public Point setY(Integer _y)
+  public Point setY(int _y)
   {
-    return (Point) super.setArgument(getFactory().makeInt(_y.intValue()), index_y);
+    return (Point) super.setArgument(getFactory().makeInt(_y), index_y);
   }
 
   public aterm.ATermAppl setArgument(aterm.ATerm arg, int i) {

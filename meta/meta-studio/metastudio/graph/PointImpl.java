@@ -6,7 +6,7 @@ import java.io.IOException;
 
 abstract public class PointImpl extends MetaGraphConstructor
 {
-  PointImpl(MetaGraphFactory factory) {
+  protected PointImpl(MetaGraphFactory factory) {
      super(factory);
   }
   protected void init(int hashCode, aterm.ATermList annos, aterm.AFun fun,	aterm.ATerm[] args) {
@@ -38,22 +38,22 @@ abstract public class PointImpl extends MetaGraphConstructor
     return false;
   }
 
-  public Integer getX()
+  public int getX()
   {
      throw new RuntimeException("This Point has no X");
   }
 
-  public Point setX(Integer _x)
+  public Point setX(int _x)
   {
      throw new RuntimeException("This Point has no X");
   }
 
-  public Integer getY()
+  public int getY()
   {
      throw new RuntimeException("This Point has no Y");
   }
 
-  public Point setY(Integer _y)
+  public Point setY(int _y)
   {
      throw new RuntimeException("This Point has no Y");
   }

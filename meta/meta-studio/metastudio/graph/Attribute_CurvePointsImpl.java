@@ -9,7 +9,7 @@ extends Attribute
   protected void initHashCode(aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] i_args) {
   	super.initHashCode(annos, fun, i_args);
   }
-  Attribute_CurvePointsImpl(MetaGraphFactory factory) {
+  protected Attribute_CurvePointsImpl(MetaGraphFactory factory) {
     super(factory);
   }
   private static int index_points = 0;

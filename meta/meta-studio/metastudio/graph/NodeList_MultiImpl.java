@@ -9,7 +9,7 @@ extends NodeList
   protected void initHashCode(aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] i_args) {
   	super.initHashCode(annos, fun, i_args);
   }
-  NodeList_MultiImpl(MetaGraphFactory factory) {
+  protected NodeList_MultiImpl(MetaGraphFactory factory) {
     super(factory);
   }
   private static int index_head = 0;

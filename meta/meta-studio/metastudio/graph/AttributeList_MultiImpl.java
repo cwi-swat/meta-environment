@@ -9,7 +9,7 @@ extends AttributeList
   protected void initHashCode(aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] i_args) {
   	super.initHashCode(annos, fun, i_args);
   }
-  AttributeList_MultiImpl(MetaGraphFactory factory) {
+  protected AttributeList_MultiImpl(MetaGraphFactory factory) {
     super(factory);
   }
   private static int index_head = 0;

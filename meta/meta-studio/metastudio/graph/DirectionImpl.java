@@ -6,7 +6,7 @@ import java.io.IOException;
 
 abstract public class DirectionImpl extends MetaGraphConstructor
 {
-  DirectionImpl(MetaGraphFactory factory) {
+  protected DirectionImpl(MetaGraphFactory factory) {
      super(factory);
   }
   protected void init(int hashCode, aterm.ATermList annos, aterm.AFun fun,	aterm.ATerm[] args) {

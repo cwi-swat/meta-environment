@@ -6,7 +6,7 @@ import java.io.IOException;
 
 abstract public class AttributeImpl extends MetaGraphConstructor
 {
-  AttributeImpl(MetaGraphFactory factory) {
+  protected AttributeImpl(MetaGraphFactory factory) {
      super(factory);
   }
   protected void init(int hashCode, aterm.ATermList annos, aterm.AFun fun,	aterm.ATerm[] args) {
@@ -143,42 +143,42 @@ abstract public class AttributeImpl extends MetaGraphConstructor
      throw new RuntimeException("This Attribute has no Shape");
   }
 
-  public Integer getX()
+  public int getX()
   {
      throw new RuntimeException("This Attribute has no X");
   }
 
-  public Attribute setX(Integer _x)
+  public Attribute setX(int _x)
   {
      throw new RuntimeException("This Attribute has no X");
   }
 
-  public Integer getY()
+  public int getY()
   {
      throw new RuntimeException("This Attribute has no Y");
   }
 
-  public Attribute setY(Integer _y)
+  public Attribute setY(int _y)
   {
      throw new RuntimeException("This Attribute has no Y");
   }
 
-  public Integer getWidth()
+  public int getWidth()
   {
      throw new RuntimeException("This Attribute has no Width");
   }
 
-  public Attribute setWidth(Integer _width)
+  public Attribute setWidth(int _width)
   {
      throw new RuntimeException("This Attribute has no Width");
   }
 
-  public Integer getHeight()
+  public int getHeight()
   {
      throw new RuntimeException("This Attribute has no Height");
   }
 
-  public Attribute setHeight(Integer _height)
+  public Attribute setHeight(int _height)
   {
      throw new RuntimeException("This Attribute has no Height");
   }

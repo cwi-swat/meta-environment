@@ -9,7 +9,7 @@ extends EdgeList
   protected void initHashCode(aterm.ATermList annos, aterm.AFun fun, aterm.ATerm[] i_args) {
   	super.initHashCode(annos, fun, i_args);
   }
-  EdgeList_EmptyImpl(MetaGraphFactory factory) {
+  protected EdgeList_EmptyImpl(MetaGraphFactory factory) {
     super(factory);
   }
   public shared.SharedObject duplicate() {

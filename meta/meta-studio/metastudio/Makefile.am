@@ -41,10 +41,10 @@ java_JAVA = \
 	UserInterfaceBridge.java \
 	UserInterfaceTif.java \
 	UserInterfaceTool.java \
-        MessageWindow.java \
+	MessageWindow.java \
 	MessageList.java \
-        ButtonAction.java \
-        ModuleTreeModel.java \
-        TreeModelSupport.java \
-        TreeNode.java \
-        ModuleSelectionModel.java
+	ButtonAction.java \
+	ModuleTreeModel.java \
+	TreeModelSupport.java \
+	TreeNode.java \
+	ModuleSelectionModel.java

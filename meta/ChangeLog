@@ -1,5 +1,9 @@
 # $Id$
 
+2003/08/19 ({jurgenv,jong}@cwi.nl)
+ * regenerated graph API because apigen now supports builtin int and doubles
+ * Makefile.am of graph API was corrected too.
+
 Tue Aug 19 09:42:51 CEST 2003 <jong@cwi.nl>
  * editors/text/{vim,emacs,xemacs}/Makefile.am:
    add $(SOCKLIBS) during linking (needed on SunOS)

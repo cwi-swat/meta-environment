@@ -4,12 +4,14 @@ MetaGraphAPI0=\
 Graph.java GraphImpl.java\
 Graph_DefaultImpl.java Graph_Default.java\
 NodeList.java NodeListImpl.java\
+NodeList_EmptyImpl.java NodeList_Empty.java\
 NodeList_MultiImpl.java NodeList_Multi.java\
 Node.java NodeImpl.java\
 Node_DefaultImpl.java Node_Default.java\
 NodeId.java NodeIdImpl.java\
 NodeId_DefaultImpl.java NodeId_Default.java\
 AttributeList.java AttributeListImpl.java\
+AttributeList_EmptyImpl.java AttributeList_Empty.java\
 AttributeList_MultiImpl.java AttributeList_Multi.java\
 Attribute.java AttributeImpl.java\
 Attribute_LabelImpl.java Attribute_Label.java\
@@ -39,10 +41,12 @@ Direction_BackImpl.java Direction_Back.java\
 Direction_BothImpl.java Direction_Both.java\
 Direction_NoneImpl.java Direction_None.java\
 EdgeList.java EdgeListImpl.java\
+EdgeList_EmptyImpl.java EdgeList_Empty.java\
 EdgeList_MultiImpl.java EdgeList_Multi.java\
 Edge.java EdgeImpl.java\
 Edge_DefaultImpl.java Edge_Default.java\
 Polygon.java PolygonImpl.java\
+Polygon_EmptyImpl.java Polygon_Empty.java\
 Polygon_MultiImpl.java Polygon_Multi.java\
 Point.java PointImpl.java\
 Point_DefaultImpl.java Point_Default.java
