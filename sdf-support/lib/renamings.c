@@ -242,6 +242,8 @@ static SDF_Import replaceParametersInImport(SDF_Import import,
 }
 
 /*}}}  */
+/*{{{  SDF_ImportList SDF_replaceParametersInImportList(SDF_ImportList importList, */
+
 SDF_ImportList SDF_replaceParametersInImportList(SDF_ImportList importList,
 					     SDF_Symbols formalParams,
                                              SDF_Symbols actualParams)
@@ -264,6 +266,8 @@ SDF_ImportList SDF_replaceParametersInImportList(SDF_ImportList importList,
   }
   return importList;
 }
+
+/*}}}  */
 
 /*{{{  SDF_ImportList SDF_renameParametersInImportList(SDF_ModuleName moduleName, */
 
