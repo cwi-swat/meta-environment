@@ -1,24 +1,3 @@
-%%
-%%    MEPT -- The Meta-Environment Parse Tree library 
-%%
-%%    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam,
-%%    The Netherlands.
-%%
-%%    This program is free software; you can redistribute it and/or modify
-%%    it under the terms of the GNU General Public License as published by
-%%    the Free Software Foundation; either version 2 of the License, or
-%%    (at your option) any later version.
-%%
-%%    This program is distributed in the hope that it will be useful,
-%%    but WITHOUT ANY WARRANTY; without even the implied warranty of
-%%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%%    GNU General Public License for more details.
-%%
-%%    You should have received a copy of the GNU General Public License
-%%    along with this program; if not, write to the Free Software
-%%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-%%
-
 \documentclass[a4paper,twoside]{article}
 
 \usepackage{verbatim}
@@ -168,10 +147,138 @@ we want.
 
 \subsection{Production rule nodes}
 
-We will now describe the \asfix/\asfixme\ representation of production
-rules, but before we dive into the details we have to explain some
+The most important type of nodes in the parse trees is the application.
+The application node has two arguments, the first argument is either 
+a production rule and the second argument is an (empty) list of arguments,
+or a list symbol and the second argument is an (empty) list of elements.
+In this section we will discuss the production rules in more detail,
+in Section \ref{listnodes} we will discuss the list symbols in more detail.
+
+Production rules consist of three parts:
+\begin{itemize}
+\item left-hand side,
+\item right-hand side, and
+\item attributes.
+\end{itemize}
+The node representation for production rules is {\tt prod(<term>,<term>,<term>)}.
+The left-hand side consists of a list of symbols, whereas the right-hand
+side is a single symbol.
+
+We will now describe the \asfix/\asfixme\ representation of these symbols,
+but before we dive into the details we have to explain some
 \sdf2 and \kernelsdf\ details in order to understand the various
-categories of nodes that are used ot represent the production rules.
+categories of nodes that are used to represent symbols.
+
+\subsubsection{Lexical and context-free syntax in \sdf2}
+\sdf2 or \sdf\ stands for Syntax Definition Formalism, it allows the
+definition of the concrete syntax of some (programming) language,
+details on \sdf\ can be found in~\cite{HKR89} and on \sdf2\ in~cite{Vis97}.
+We will restrict ourselves to the way lexical and context-free syntax
+is defined using \sdf2.
+
+The elementary building block of \sdf\ syntax rules is the ``symbol''.  It is
+comparable to terminals and non-terminals in other grammar definition
+formalisms. The elementary symbols are:
+
+\begin{itemize}
+\item \emph{sort}: corresponds to a non-terminal, e.g., {\tt Bool}.  Sort
+  names always start with a capital letter and may be followed by letters
+  and/or digits.  Hyphens (``{\tt -}'') may be embedded in a sort name.
+
+\item \emph{literal}: corresponds to a terminal, e.g.,  {\tt true} or  {\tt
+    "\&"}.
+
+\item \emph{character class}: corresponds to a set of characters,
+e.g., {\tt [a-z]}.
+\end{itemize}
+
+Starting with the elementary symbols, more complex symbols can be constructed
+by way of operators that we will discuss now.
+
+\begin{description}
+\item{Option}
+
+The postfix option operator {\tt ?} describes an optional part in a syntax
+rule. For instance, {\tt ElsePart?}  defines zero or exactly one occurrence of
+{\tt ElsePart}.
+
+\item{Sequence} 
+
+The sequence operator {\tt (...)} describes the grouping of two or more
+symbols, e.g., {\tt (Bool "\&")}.  Sequences are mostly used to group symbols
+together to form a more complex symbol using one of the available operators,
+e.g., {\tt (Bool "\&")*}.  The empty sequence is represented as {\tt ()}.
+
+\item{Repetition}
+
+Repetition operators express that a symbol should occur several times.  In
+this way it is possible to construct flat lists and therefore we usually refer
+to repetitions as \emph{lists}.
+
+Repetition operators come in two flavors, with and without separators.
+Furthermore, it is possible to express the minimal number of repetitions of
+the symbol: at least zero times ({\tt *}), at least one time ({\tt +}), or at
+least $n$ times ({\tt n+}). Examples are:
+
+\begin{itemize}
+
+\item {\tt Bool*} (a list of zero or more {\tt Bool}s).
+
+\item {\tt \{Bool ","\}+} (a list of one or more {\tt Bool}s separated by comma's).
+
+\item {\tt Bool3+} (a list of at least 3 {\tt Bool}s).
+
+\end{itemize}
+
+\item{Alternative}
+
+The alternative operator {\tt |} expresses the choice between two symbols,
+e.g., {\tt true | false} represents that either a {\tt true} symbol or a {\tt
+  false} symbol may occur here.  
+
+\item{Tuple}
+
+The tuple operator {\tt \#} describes the grouping of a sequence of symbols of
+a fixed length into a tuple. The notation for tuples is {\tt < , , >}, i.e., a
+comma-separated list of elements enclosed in angle brackets.
+
+\item{Permutation}
+
+The permutation operator {\tt <<...>>} describes an arbitrary permutation of
+a given sequence of symbols.  For example, {\tt <<Bool Int Id>>} represents a
+permutation of the symbols {\tt Bool}, {\tt Int}, and {\tt Id}. 
+
+\item{Set}
+
+The set operator {\tt Set[...]} is an abbreviation for defining a set of
+elements of a given symbol.  For example, {\tt Set[Int]} abbreviates the
+definition {\tt "\{" \{Int ","\}* "\}"}. 
+
+\item{Function}
+
+The function operator {\tt (...=>...)} allows the definition of function
+types. Left of {\tt =>} zero or more symbols may occur, right of {\tt =>}
+exactly one symbol may occur.  For example, {\tt (Bool Int) => Int} represents
+a function with two argument (of types {\tt Bool} and {\tt Int}, respectively)
+and a result type {\tt Int}.
+\end{description}
+
+For each of these symbol types a corresponding node type exists:
+{\tt empty} (empty sequence), {\tt seq} (non-empty sequence),
+{\tt alt} (alternative), {\tt opt} (optional), {\tt pair} (tuple),
+{\tt iter-plus}, {\tt iter-star}, {\tt iter-plus-sep}, {\tt iter-star-sep},
+{\tt iter-n}, {\tt iter-sep-n} (various list symbols),
+{\tt perm} (permutation), {\tt set}, and {\tt func} (function).
+
+For the basic symbol types (sort, literal, and character classes), we
+have, respectively, {\tt sort}, {\tt lit}, and {\tt char-class}.
+
+
+
+\subsubsection{\kernelsdf}
+
+\subsection{List nodes}\label{listnodes}
+
 \section{Library interface}
 \label{ptlib}
 
