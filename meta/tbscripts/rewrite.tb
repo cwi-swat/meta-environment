@@ -18,14 +18,7 @@ in
     snd-msg(retrieve-eqs(Mod)).
     rec-msg(finished-retrieval).
     snd-eval(Eval, interpret(Mod,Term)).
-    rec-value(Eval,result(NF?)).
-    create(Editor(id("Normal Form"),"\"\"","",Id),Tid?).
-    rec-msg(Id,editortool(TE?)).
-/* This is identical to the bit in edit-module.tb. So it should probably be a different process. To be done. */
-    snd-msg(pp-module(NF)).
-    rec-msg(module-source(Src?)).
-    snd-do(TE,inserttext(Src)
-)
+    rec-value(Eval,result(NF?))
   ) * 
   delta
 endlet
