@@ -62,9 +62,6 @@ getTreeSort(PT_Tree tree)
     PT_Production prod = PT_getTreeProd(tree);
     return PT_getProductionRhs(prod);
   }
-  else if (PT_isTreeList(tree)) {
-    return PT_getTreeSymbol(tree);
-  }
   else if (PT_isTreeChar(tree)) {
     int ch = PT_getTreeCharacter(tree);
 
@@ -296,7 +293,6 @@ PT_Tree updateTreeTerm(PT_Tree tree, SE_Steps steps, PT_Tree sub_tree)
 ATbool isBasicLeafNode(PT_Tree tree)
 {
   return !PT_isTreeAppl(tree) && 
-         !PT_isTreeList(tree) && 
          !PT_isTreeFlatLayout(tree);
 }
 
