@@ -25,7 +25,7 @@ context-free syntax
   "indivisibly"		-> PrefixAction
   "unfold"		-> Action
   "unfolding"		-> PrefixAction
-  "throw"		-> Action	{prefer}
+  "throw"		-> Action
   "catch"		-> InfixAction
   "err"			-> Action
   "and-catch"		-> InfixAction
@@ -61,7 +61,7 @@ context-free syntax
 
 	Action InfixAction Action	-> Action {left}
 	
-	Action	-> Data
+	Action	-> Data {avoid}
 
 context-free priorities
 
@@ -123,6 +123,13 @@ context-free priorities
   {PrefixDataOp Yielder		-> Yielder}
   >
   {Yielder InfixDataOp Yielder	-> Yielder}
+
+context-free priorities
+
+  {"check" Yielder     -> Action
+   "give" Yielder      -> Action}
+  >
+  {Action Yielder      -> Action}
 
 
 %%%%%%%%

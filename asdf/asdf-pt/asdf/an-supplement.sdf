@@ -9,19 +9,24 @@ sorts
 context-free syntax
 
   Literal Constructor		-> Action {avoid}
+  Variable			-> Data {avoid}
 
 lexical syntax
 
   [a-z]+	-> Sort {avoid}
   
-  [a-z]+	-> PrefixDataOp {avoid}
+  [a-z\-]+	-> Data {avoid}
 
-  [a-z]+	-> Data {avoid}
+  [a-z\-]+	-> PrefixDataOp {avoid}
 
-  "throw"	-> UQLiteral {reject}
+  [A-Z][a-z]*	-> Variable
 
 context-free priorities
 
   { Action Yielder	-> Action }
   >
   {Literal Constructor	-> Action }
+
+context-free restrictions
+
+  Data -/- [a-z\-]
