@@ -241,8 +241,9 @@ ATerm SGopenLanguage(char *prgname, int conn, char *L, char *FN)
   IF_VERBOSE(
     if(FN) ATwarning("%s: opening parse table %s\n", prgname, SG_SAFE_STRING(FN))
   );
-  if(!(table = SG_LookupParseTable(L)))
+  if(!(table = SG_LookupParseTable(L))) {
     table = SG_AddParseTable(prgname, L, FN);
+  }
 
   return SG_TermToToolbus(ATmake(table ?  "language-opened(<str>,<str>)"
                                        :  "language-not-opened(<str>,<str>)",

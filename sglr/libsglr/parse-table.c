@@ -853,7 +853,7 @@ parse_table *SG_AddParseTable(char *prgname, char *L, char *FN)
   parse_table *pt = NULL;
 
   SG_InitPTGlobals();
-  if((input_file = SGopenFile(prgname, "parse table not specified", FN)) == NULL) {
+  if(!(input_file = SGopenFile(prgname, "parse table not specified", FN))) {
     return NULL;
   }
 
@@ -1010,8 +1010,9 @@ void SG_ClearParseTable(char *L)
   /*  Locate L in parse table database  */
   for (i = 0; i < last_table && strcmp(L, tables[i].name); i++);
   if (i >= MAX_TABLES) {
-    ATwarning("no table for %s amongst the %d stored\n",
-              L, MAX_TABLES);
+    IF_VERBOSE(
+      ATwarning("no table for %s to remove\n", L)
+    );
     return;
   }
 
@@ -1058,9 +1059,6 @@ parse_table *SG_LookupParseTable(char *L)
 
   IF_DEBUG(fprintf(SGlog(), "Table for %s not amongst the %d stored\n",
                    SG_SAFE_STRING(L), MAX_TABLES));
-  IF_VERBOSE(
-    ATwarning("table for %s not amongst the %d stored\n", SG_SAFE_STRING(L), MAX_TABLES)
-  );
   
   return NULL;
 }
