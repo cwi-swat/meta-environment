@@ -1610,7 +1610,7 @@ static tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
         t = (tree)ATsetArgument((ATermAppl) t, (ATerm) newargs, 1);
       }
       else {
-        t = (tree)NULL;
+        return NULL;
       }
     }
   break;
@@ -1628,7 +1628,7 @@ static tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
         newtail = (ATermList)SG_FilterTreeRecursive(pt, mst, 
                                                     (tree)tail, ATfalse);
         if (!newtail) {
-          newtail = ATempty;
+          return NULL;
         }
       }
     
@@ -1639,14 +1639,16 @@ static tree SG_FilterTreeRecursive(parse_table *pt, MultiSetTable mst,
           t = (tree)ATinsert(newtail, (ATerm)newarg); 
         }
       }
+      else {
+        return NULL;
+      }
     }
   break;
   default:
   break;
   }
 
-  t = SG_Associativity_Priority_Filter(pt, t);
-  return t;
+  return SG_Associativity_Priority_Filter(pt, t);
 }
 
 
@@ -1654,6 +1656,7 @@ tree SG_FilterTree(parse_table *pt, tree t)
 {
    MultiSetTable mst = NULL;
    int nrAmbs;
+   tree newT;
 
    /* We only cache multisets for ambiguity clusters
     * so we create a table with at most 
@@ -1668,7 +1671,7 @@ tree SG_FilterTree(parse_table *pt, tree t)
      mst = MultiSetTableCreate(nrAmbs);
    }
 
-   t = SG_FilterTreeRecursive(pt, mst, t, ATfalse);
+   newT = SG_FilterTreeRecursive(pt, mst, t, ATfalse);
    
    IF_VERBOSE(
       /* print 100% bar, the rest was solved by caching ambclusters */
@@ -1682,7 +1685,7 @@ tree SG_FilterTree(parse_table *pt, tree t)
      MultiSetTableDestroy(mst);
    }
    ATtableDestroy(resolvedtable);
-   return t; 
+   return newT; 
 }
 
 /*

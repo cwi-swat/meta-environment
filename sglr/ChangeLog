@@ -1,5 +1,8 @@
 $Id$
 
+2001/04/07 (markvdb@cwi.nl)
+  * Propagation of NULL trees was not correctly handled.
+
 2001/06/27 (markvdb@cwi.nl)
   * Repaired a bug detected by Peter Mosses with respect to priorities,
     implemented what is described in Section 4.5.1 (Priority Conflicts) in
