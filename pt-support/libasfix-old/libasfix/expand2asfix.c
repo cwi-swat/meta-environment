@@ -2810,9 +2810,10 @@ ATerm AFexpandAsFixTopTerm(ATerm term)
 ATerm AFexpandAsFixModule(ATerm mod)
 {
   ATerm lit, w[4], id, equations, sections;
+  ATerm lexfuncs, cffuncs, eqs;
   ATerm args;
 
-  if(ATmatchTerm(mod,pattern_asfix_module,
+  if (ATmatchTerm(mod,pattern_asfix_module,
                  &lit,&w[0],&id,&w[1],&sections,&w[2],&equations,&w[3],NULL)) {
     args = make_aterm_aterms_to_aterms_appl(
              AFexpandAsFixLiteral(lit),
@@ -2833,6 +2834,19 @@ ATerm AFexpandAsFixModule(ATerm mod)
                              make_aterm_to_aterms_appl(
                                make_empty_abbreviations())))))))));
     return make_afun_aterms_to_aterm_appl(term_module_appl, args);
+  }
+  else if (ATmatch(mod, "[<term>,<term>,<term>,<term>]", 
+                          &id, &lexfuncs, &cffuncs, &eqs)) {
+    return make_atermlist_to_aterm_appl(
+             make_aterms_to_atermlist_appl(
+               make_aterm_aterms_to_aterms_appl(
+                 AFexpandAsFixId(id),
+                 make_aterm_aterms_to_aterms_appl(
+                   AFexpandAsFixProdlist(lexfuncs),
+                   make_aterm_aterms_to_aterms_appl(
+                     AFexpandAsFixProdlist(cffuncs),
+                     make_aterm_to_aterms_appl(
+                       AFexpandAsFixEquationlist(eqs)))))));
   }
   else {
     ATprintf("AFexpandAsFixModule entered with %t\n",mod);
