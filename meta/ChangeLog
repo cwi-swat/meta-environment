@@ -20,6 +20,11 @@
 #
 # $Id$
 
+2000/7/26 (markvdb@cwi.nl)
+   * changed .sdf2 extension standard into .sdf
+   * compilation of prefix functions enabled
+   * improved efficiency of parsetable generator
+
 2000/7/18 (markvdb@cwi.nl)
    * fixed bug where old parsetable was reused.
    * avoid attribute added to prefix functions
