@@ -3,17 +3,17 @@ module Pico-compile
 imports Pico-syntax AssemblyLanguage NextLabel 
   
 exports
-  sorts Instrs Instrs # Label
   context-free syntax
-    trp( PROGRAM )                  -> Instrs
+    trp( PROGRAM ) -> Instrs
   
 hiddens
+  sorts {Instr ";"}+ # Label
   context-free syntax
-    trd(DECLS)                    -> Instrs
-    trits({ID-TYPE  ","}*)        -> Instrs 
-    trs({STATEMENT ";"}*, Label)  -> Instrs # Label 
-    trst(STATEMENT, Label)        -> Instrs # Label 
-    tre(EXP)                      -> Instr
+    trd(DECLS)                    -> {Instr ";"}+
+    trits({ID-TYPE  ","}*)        -> {Instr ";"}+ 
+    trs({STATEMENT ";"}*, Label)  -> {Instr ";"}+ # Label 
+    trst(STATEMENT, Label)        -> {Instr ";"}+ # Label 
+    tre(EXP)                      -> {Instr ";"}+
 
 hiddens
   variables
@@ -29,5 +29,5 @@ hiddens
     "Str-con"[0-9\']* -> StrCon
     "Str"[0-9\']*     -> String
 
-    "Instr*"[0-9\']*  -> Instrs
+    "Instr*"[0-9\']*  -> {Instr ";"}+
     "Label" [0-9\']*  -> Label

@@ -23,5 +23,6 @@ exports
     "gofalse" Label   -> Instr
     "noop"            -> Instr
 
-   aliases
-     {Instr ";"}+     -> Instrs 
+  sorts Instrs
+  context-free syntax
+    {Instr ";"}+ -> Instrs 

@@ -2,13 +2,13 @@ equations
 
 [Tr1]  trd(Decls) = Instr*1,
        trs(Series, x) = <Instr*2, Label>
-       ======================================
+       =================================
        trp(begin Decls Series end) = Instr*1; Instr*2
 
 [Tr2]  trd(declare Id-type*;) = trits(Id-type*)
  
 [Tr3a] trits(Id:natural, Id-type*) = 
-       dclnat Id; 
+       dclnat Id;
        trits(Id-type*)
  
 [Tr3b] trits(Id:string, Id-type*) = 
@@ -19,9 +19,9 @@ equations
 
 [Tr4a] trst(Stat, Label) = <Instr*1, Label'>, 
        trs(Stat*, Label') = <Instr*2, Label''>
-       ========================================================= 
+       =======================================
        trs(Stat ; Stat*, Label) = 
-       < Instr*1 ; 
+       < Instr*1;
          Instr*2
        , 
          Label'' >
@@ -29,9 +29,9 @@ equations
 [Tr4b] trs( , Label) = <noop, Label>
 
 [Tr5a] tre(Exp) = Instr*
-       ========================================================= 
+       ================= 
        trst(Id := Exp, Label) = 
-       < lvalue Id; 
+       < lvalue Id;
          Instr*; 
          assign
        , 
