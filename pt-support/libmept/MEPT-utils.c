@@ -495,14 +495,11 @@ PT_ParseTree PT_annotateParseTreeWithLength(PT_ParseTree parse_tree)
 {
   int length;
 
-  PT_Tree tree = PT_getParseTreeTree(parse_tree);
+  PT_Tree tree = PT_getParseTreeTop(parse_tree);
   tree = PT_annotateTreeWithLength(tree);
-  parse_tree = PT_setParseTreeTree(parse_tree, tree);
+  parse_tree = PT_setParseTreeTop(parse_tree, tree);
 
   length = PT_getTreeLengthAnno(tree);
-
-  length += strlen(PT_yieldTree(PT_getParseTreeLayoutBeforeTree(parse_tree)));
-  length += strlen(PT_yieldTree(PT_getParseTreeLayoutAfterTree(parse_tree)));
 
   parse_tree = PT_setParseTreeLengthAnno(parse_tree, length);
 
