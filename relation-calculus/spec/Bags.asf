@@ -6,20 +6,6 @@ equations
 
 [ins1]	insert($Elem, {$Elem*}) = {$Elem, $Elem*}
 
-%%[ins1]	elem-greater($Elem', $Elem) = true
-%%	============================================
-%%	insert($Elem, {$Elem*1, $Elem', $Elem*2}) = {$Elem*1, $Elem, $Elem', $Elem*2}
-
-[default-ins]
-	insert($Elem, {$Elem*}) = {$Elem*, $Elem}
-
-%%%%% --- equality 
-
-%%%[eq1]	elem-equal($Elem,$Elem) = true
-
-%%%[default-eq2]	
-%%%	elem-equal($Elem1,$Elem2) = false
-
 %% --- delete($Elem, $Bag)
 
 [del1]	delete($Elem, {$Elem*1, $Elem, $Elem*2}) = {$Elem*1, $Elem*2}	%% sb elem-equal
@@ -175,14 +161,10 @@ equations
 
 %% --- in($Elem, $Bag)
 
-[in-1]  %%elem-equal($Elem1, $Elem2) = true		%% Should be elem-equal, but this
+[in-1]  %%elem-equal($Elem1, $Elem2) = true			%% Should be elem-equal, but this
 	$Elem1 == $Elem2					%% is much too expensive
 	============================================
 	in($Elem1, {$Elem*1, $Elem2, $Elem*2}) = true
-
-%%[in-1]	elem-greater-equal($Elem', $Elem) = true
-%%	============================================
-%%	in($Elem, {$Elem*1, $Elem', $Elem*2}) = elem-equal($Elem, $Elem')
 
 [default-in-2]
 	in($Elem, {$Elem*}) = false

@@ -5,7 +5,8 @@ imports basic/Booleans
 imports basic/Integers
 imports utilities/TermCompare[Elem]
 
-  sorts Bag[[Elem]] Color BagIterator[[Elem]]
+%%  sorts Bag[[Elem]] Color BagIterator[[Elem]]
+    sorts Color
 
 context-free syntax
 	elem-equal(Elem, Elem)					-> Boolean
@@ -23,7 +24,7 @@ context-free syntax
    	bag(Color, Bag[[Elem]], Elem, Bag[[Elem]])		-> Bag[[Elem]]
 
 	iterator(Elem, Bag[[Elem]])				-> BagIterator[[Elem]]
-	empty-iterator						-> BagIterator[[Elem]]
+	"empty-iterator"					-> BagIterator[[Elem]]
 	is-empty-iter(BagIterator[[Elem]])			-> Boolean
 
    	head(BagIterator[[Elem]])				-> Elem 

@@ -23,8 +23,8 @@ context-free syntax
    head(BagIterator[[Elem]])			-> Elem
    tail(BagIterator[[Elem]])			-> BagIterator[[Elem]]
 
-   insert(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
-   delete(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
+   insert(Elem, Bag[[Elem]])                    -> Bag[[Elem]]
+   delete(Elem, Bag[[Elem]])                    -> Bag[[Elem]]
 
    sort(Bag[[Elem]])				-> Bag[[Elem]]
    merge(Bag[[Elem]], Bag[[Elem]])		-> Bag[[Elem]]
