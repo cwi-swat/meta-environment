@@ -20,6 +20,10 @@
 # $Id$
 #
 
+2000-11-08 <mdejonge@cwi.nl>
+   * Bug fix: cc was used for compiling libAsFix.a not $(CC) which might be
+     gcc depending on local configuration.
+
 2000-11-08 <jurgenv@cwi.nl>
    * Increased version number from 0.2.1 to 0.2.2
    * New functionality for handling productions added
