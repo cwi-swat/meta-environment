@@ -1,0 +1,4 @@
+equations
+
+[init] tide-connect(Name,X) = tide-connect(Name,get-location(X))
+[step] tide-step(X) = tide-step(get-location(X))

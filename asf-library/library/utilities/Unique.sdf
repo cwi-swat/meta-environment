@@ -1,0 +1,14 @@
+module utilities/Unique
+
+imports basic/StrCon
+exports
+
+%% This function returns a new StrCon every time it 
+%% is called, starting from "0", to "1", etc.
+
+context-free syntax
+  "next-id" -> StrCon {built-in("next-id")}
+
+hiddens
+  imports basic/Whitespace
+

@@ -39,6 +39,7 @@ AC_CONFIG_FILES([Makefile
    library/languages/pico/compiler/Makefile
    library/languages/pico/typechecker/Makefile
    library/languages/pico/examples/Makefile
+   library/languages/pico/debugger/Makefile
    library/languages/box/Makefile
    library/languages/box/syntax/Makefile
    library/languages/box/utilities/Makefile

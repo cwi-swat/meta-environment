@@ -28,8 +28,10 @@ equations
 %% are found in `Sdf2-Normalization'.
 
   [0]
-        s* := proj_M(d), <_i*1, _G1> := gra[[d]]( , Hid(s*)), <_i*2, _G2> := gra[[d]](_i*1, Exp(s*))
-        =========================================================================================
+        s* := proj_M(d),
+        <_i*1, _G1> := gra[[d]]( , Hid(s*)), 
+        <_i*2, _G2> := gra[[d]](_i*1, Exp(s*))
+        ====>
         m[[d]]( M ) = _G2 hide(M, _G1)
 
 %% The function \fun{hide} marks all productions in the hiddens part of

@@ -1,0 +1,40 @@
+equations
+
+[Ev1]   tide-connect("PICO", Decls) == true,
+        tide-step(Decls) == true,
+        Venv := dvs(Series, evd(Decls)),
+        tide-disconnect("PICO") == true
+        =====================================================
+        dvp(begin Decls Series end) = Venv
+
+[Ev4a]  tide-step(Stat) == true,
+        Venv' := dvst(Stat, Venv), 
+        Venv'' := dvs(Stat*, Venv')
+        =====================================================
+        dvs(Stat ; Stat*, Venv) =  Venv''
+
+[Ev4b]  dvs( , Venv) = Venv
+
+[Ev5a]  dvst(Id := Exp, Venv) = store(Venv, Id, eve(Exp, Venv))
+
+[Ev5b]  tide-step(Exp) == true,
+        eve(Exp, Venv) != 0
+        ====================================================
+        dvst(if Exp then Series1 else Series2 fi, Venv) = dvs(Series1, Venv)
+
+[Ev5c]  tide-step(Exp) == true,
+        eve(Exp, Venv) == 0
+        ====================================================
+        dvst(if Exp then Series1 else Series2 fi, Venv) = dvs(Series2, Venv)
+
+[Ev5d]  tide-step(Exp) == true,
+        eve(Exp, Venv) == 0
+        ==========================================
+        dvst(while Exp do Series od, Venv) =  Venv
+
+[Ev5e]  tide-step(Exp) == true,
+        eve(Exp, Venv) != 0,  
+        Venv' := dvs(Series, Venv)
+        ================================================
+        dvst(while Exp do Series od, Venv) =
+                           dvst(while Exp do Series od, Venv')

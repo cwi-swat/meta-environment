@@ -1,9 +1,24 @@
 equations
 
 %% \noindent
+%% Checking whether a renaming already exists.
+
+
+  [in-1'1] 'R (- ['r*1 'R 'r*2] = true
+  [default-in-1'1] 'R (- 'r = false
+
 %% Concatenation of renamings.
 
-  [0] ['r*1] ++ ['r*2] = ['r*1 'r*2]
+  [0] [] ++ ['r*2] = ['r*2]
+
+  [0] 'R (- ['r*2] == true
+      ====>
+      ['R 'r*1] ++ ['r*2] = ['r*1] ++ ['r*2]
+
+  [0] 'R (- ['r*2] == false,
+      ['r*3] := ['r*1] ++ ['r*2]
+      ====>
+      ['R 'r*1] ++ ['r*2] = ['R 'r*3]
 
 %% Looking up the renaming of a symbol in a list of renamings.
 

@@ -8,5 +8,11 @@ equations
 %% $\rho_2$ at the end of the list of renamings.
 
   [0] ([]) 'r             = 'r
-  [0] ([_A => _B 'r*]) 'r = [_A => (_B)'r] ++ (['r*])'r
+  [0] %% _A => _B (- 'r == false
+      %% ====>
+      ([_A => _B 'r*]) 'r = [_A => (_B)'r] ++ (['r*])'r
+ %% [0] _A => _B (- 'r == true
+ %%     ====>
+ %%     ([_A => _B 'r*]) 'r = (['r*])'r
   [0] ([p => p'  'r*]) 'r = [p  => (p')'r] ++ (['r*])'r
+

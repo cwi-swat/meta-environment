@@ -1,0 +1,11 @@
+module utilities/Tide
+
+imports basic/Locations
+imports basic/Booleans 
+imports basic/StrCon
+
+exports
+  context-free syntax
+    "tide-connect"(StrCon,Location) -> Boolean {built-in("tide-connect")}
+    "tide-disconnect"(StrCon)       -> Boolean {built-in("tide-disconnect")}
+    "tide-step"(Location)           -> Boolean {built-in("tide-step")}
