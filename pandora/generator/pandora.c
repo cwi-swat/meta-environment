@@ -118,7 +118,9 @@ static BOX_Box treeToBox(PT_Tree tree)
     return BOX_makeBoxString(strcon); 
   }
   else if (PT_isTreeLayout(tree)) {
-    BOX_StrCon strcon = BOX_makeStrConDefault(PT_yieldTree(tree));
+    char *yield = PT_yieldTree(tree);
+    char *quoted = quoteString(yield);
+    BOX_StrCon strcon = BOX_makeStrConDefault(quoted);
     return BOX_makeBoxString(strcon);
   }
   else if (PT_isTreeAppl(tree)) {
@@ -140,7 +142,8 @@ static BOX_Box treeToBox(PT_Tree tree)
       PT_Tree head = PT_getArgsHead(args);
       BOX_Box prettyHead = treeToBox(head);
       
-      if (isNonTerminal(head)) {
+      if (isNonTerminal(head) 
+          && isIndentedType(PT_getTreeProd(tree))) {
         prettyHead = BOX_makeBoxI(optLayout, 
 				  soptions, 
 				  optLayout, 

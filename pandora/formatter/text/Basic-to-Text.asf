@@ -116,7 +116,8 @@ equations
              Frame2 := set lmargin in Frame1
              ==============================
              place HV so*1 [B+1 B] with Frame1 and Struct and 'C =
-               hvplace B+2 h Hs v Vs i Is with Frame2 and Struct
+%%               hvplace B+2 h Hs v Vs i Is with Frame2 and Struct
+               hvplace B+2 h Hs v Vs i 0 with Frame2 and Struct
 
   [BtT2'14]  Hs := set hs value given so* and Frame1,
              Vs := set vs value given so* and Frame1,
@@ -124,7 +125,8 @@ equations
              Frame2 := set lmargin in Frame1
              ==============================
              place HV so* [B+ B] Point with Frame1 and Struct and 'C =
-               hvplace B+ B h Hs v Vs i Is with Frame2 and Struct
+%%               hvplace B+ B h Hs v Vs i Is with Frame2 and Struct
+               hvplace B+ B h Hs v Vs i 0 with Frame2 and Struct
 
 %% The equations \ref{Eq:BtT2'15} through \ref{Eq:BtT2'18} deal with the box operator {\sf HOV}.
 %% The auxilary function {\tt hovplace \_ with \_ and \_} takes care of placing a
