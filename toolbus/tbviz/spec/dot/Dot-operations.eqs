@@ -16,6 +16,7 @@ equations
 [ds-comp0]      ++ ds*; = ds*;
 [ds-comp1]      ds*; ++ = ds*;
 [ds-comp2]      ds*1; ++ ds*2; = ds*1; ds*2;
+[ds-comp3]      ++ =
 
 [node0]         node(natcon(ch+)) = Node_ ++ dotid(ch+)
 [graph0]        graph(natcon(ch+)) = Graph_ ++ dotid(ch+)
