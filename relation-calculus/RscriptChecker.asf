@@ -403,6 +403,13 @@ $Error]>
 [xxx] compat($Exp, rel[$Etype1,$Etype2] . bag[$Etype2], $Tenv)         = <bag[$Etype1], $Tenv>
 [xxx] compat($Exp, $Etype1              . rel[$Etype1,$Etype2], $Tenv) = <bag[$Etype2], $Tenv>
 [xxx] compat($Exp, bag[$Etype1]         . rel[$Etype1,$Etype2], $Tenv) = <bag[$Etype2], $Tenv>
+
+[xxx] 	$Exp = $Exp1 [ $Exp2 ],
+      	check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
+      	check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
+      	compat($Exp, $Etype2 . $Etype1, $Tenv'') = <$Etype3, $Tenv'''>
+      	===========================================
+	check($Exp, $Tenv) = <$Etype3, $Tenv'''>
  
 [c03] $Exp = $Exp1 +,
       check($Exp1, $Tenv) = <$Etype, $Tenv'>,
@@ -463,12 +470,12 @@ $Error]>
 [af1] check($Exp, $Tenv) = <$Etype, $Tenv'>,
       require-bag-type($Exp, $Var, $Etype, $Tenv') = $Tenv''
       ==========================================
-      add-from($Var : $Exp, $From*, $Tenv) = add-from($From*, $Tenv'')
+      add-from($Var in $Exp, $From*, $Tenv) = add-from($From*, $Tenv'')
 
 [af2] check($Exp, $Tenv) = <$Etype, $Tenv'>, 
       require-rel-type($Exp, $Var1, $Var2, $Etype, $Tenv') = $Tenv''
       ==========================================
-      add-from(<$Var1, $Var2> : $Exp, $From*, $Tenv) = add-from($From*, $Tenv'')
+      add-from(<$Var1, $Var2> in $Exp, $From*, $Tenv) = add-from($From*, $Tenv'')
 
 [af3] add-from( , $Tenv) = $Tenv
 
@@ -477,11 +484,11 @@ $Error]>
 
 [df1] delete($Tenv, $Var) = $Tenv'
       ==========================================
-      del-from($Var : $Exp, $From*, $Tenv) = del-from($From*, $Tenv')
+      del-from($Var in $Exp, $From*, $Tenv) = del-from($From*, $Tenv')
 
 [df2] delete($Tenv, $Var1) = $Tenv', delete($Tenv', $Var2) = $Tenv''
       ==========================================
-      del-from(<$Var1, $Var2> : $Exp, $From*, $Tenv) = del-from($From*, $Tenv'')
+      del-from(<$Var1, $Var2> in $Exp, $From*, $Tenv) = del-from($From*, $Tenv'')
 
 [df3] del-from( , $Tenv) = $Tenv
 
@@ -493,7 +500,7 @@ $Error]>
       container-type($Etype) = bag[$Etype]
 
 [check-valueformer]
-	check({$Exp | $From+ }, $Tenv) = check({$Exp | $From+, true}, $Tenv)
+	check({$Exp : $From+ }, $Tenv) = check({$Exp : $From+ |  true}, $Tenv)
 
 [check-valueformer3] 
       add-from($From+, $Tenv) = $Tenv',
@@ -502,7 +509,7 @@ $Error]>
       container-type($Etype) = $Etype',
       del-from($From+, $Tenv''') = $Tenv''''
       ======================================
-      check({$Exp2 | $From+, $Exp1 }, $Tenv) = <$Etype', $Tenv''''>
+      check({$Exp2 : $From+ | $Exp1 }, $Tenv) = <$Etype', $Tenv''''>
 
 %% --- Check Exists
 

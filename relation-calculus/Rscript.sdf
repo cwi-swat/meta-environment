@@ -4,7 +4,8 @@ imports basic/Booleans basic/Integers basic/Strings
 imports MyArea
 
 exports
-%%sorts Elem would be reasonable :-)
+%%sorts Elem would be reasonable :-) but gives double declaration error
+
   sorts ElemType RSCRIPT RSTAT RVAR DCLRVAR FROM REXP REXPTYPE EQU
 
   imports Relations[Elem]
@@ -29,15 +30,15 @@ exports
      Rel[[Elem]]                           	-> Elem  
      Elem # Elem                              	-> Elem 
 
-     Elem                                    	-> REXP 
+     Elem                                    	-> REXP
      RVAR                                    	-> REXP
      REXP # REXP			     	-> REXP {avoid}
      "{" {REXP ","}* "}"                     	-> REXP {avoid}
 
-%% Operators
+%% Binary Operators
      REXP "and" REXP                         	-> REXP {left}
      REXP "or" REXP                          	-> REXP {left}
-     "not" REXP                              	-> REXP
+
      REXP "in" REXP			     	-> REXP {non-assoc}
      REXP "notin" REXP			     	-> REXP {non-assoc}
 
@@ -54,10 +55,16 @@ exports
      REXP "o" REXP                           	-> REXP {left}
      REXP "x" REXP                           	-> REXP {left}
      REXP "." REXP                           	-> REXP {left}
+
+%% Unary Operators
+
      REXP "+"                                	-> REXP
      REXP "*"                                	-> REXP
-
+     "not" REXP                              	-> REXP
      "#" REXP			    	     	-> REXP
+
+%% Image operator
+     REXP "[" REXP "]"				-> REXP
 
 %% Types
 
@@ -70,10 +77,15 @@ exports
 
 %% Bag and relation formers
 
-    "{" REXP "|" {FROM ","}+ ("," REXP)? "}"	-> REXP
+%% old:    "{" REXP "|" {FROM ","}+ ("," REXP)? "}"	-> REXP
 
-     RVAR ":" REXP                           	-> FROM
-     "<" RVAR "," RVAR ">" ":" REXP            	-> FROM
+    "{" REXP ":" {FROM ","}+ ("|" REXP)? "}"	-> REXP
+
+%% old:     RVAR ":" REXP                           	-> FROM
+%% old:    "<" RVAR "," RVAR ">" ":" REXP            	-> FROM
+
+     RVAR "in" REXP                           	-> FROM
+     "<" RVAR "," RVAR ">" "in" REXP           	-> FROM
 
 %% quantifiers
 
@@ -104,29 +116,35 @@ exports
 
   context-free priorities
 
-    { REXP "+" -> REXP
-       REXP "*" -> REXP} >
+    {	REXP "+" -> REXP
+       	REXP "*" -> REXP
+    }					>
+    REXP "[" REXP "]"	-> REXP 	>
 
-     REXP "o" REXP -> REXP>
-     REXP "x" REXP -> REXP >
-     REXP "." REXP -> REXP >
-     REXP "inter" REXP -> REXP >
-     REXP "union" REXP -> REXP >
-     REXP "\\" REXP -> REXP >
+    REXP "o" REXP -> REXP		>
+    REXP "x" REXP -> REXP		>
+    REXP "." REXP -> REXP		>
+    REXP "inter" REXP -> REXP		>
+    REXP "union" REXP -> REXP		>
+    REXP "\\" REXP -> REXP		>
+    "#" REXP -> REXP 			>    
 
-     "#" REXP -> REXP >
-    
 
-     {	REXP "in" REXP -> REXP
-	REXP "in" REXP -> REXP  
+    {	REXP "in" REXP -> REXP
+	REXP "notin" REXP -> REXP  
 	REXP "<=" REXP -> REXP 
-       REXP "<" REXP -> REXP
-       REXP ">=" REXP -> REXP
-       REXP ">" REXP -> REXP
-       REXP "!=" REXP -> REXP  
-      REXP "==" REXP -> REXP  
-     }   
+       	REXP "<" REXP -> REXP
+       	REXP ">=" REXP -> REXP
+       	REXP ">" REXP -> REXP
+       	REXP "!=" REXP -> REXP  
+      	REXP "==" REXP -> REXP  
+    }   				>
+    REXP "and" REXP -> REXP 		>
+    REXP "or" REXP -> REXP 		>
+    "not" REXP -> REXP
+ 
 
      
+
 
      

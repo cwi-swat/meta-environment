@@ -1,16 +1,29 @@
 
 
-eval-rscript(
+bag[int] BE
 
-rel[int,int] M =  {<1,2>, <2,3>, <3,4>}
+bag[int] B1 = {1,2,3}
+bag[int] B2 = {3, 4, 5}
 
-int I = 0
+bag[int] T1 = 7 union B1
+bag[int] T2 = B1 union 7
+bag[int] T3 = BE union B1
+bag[int] T4 = B1 union BE
+bag[int] T5 = BE union BE
+bag[int] T6 = B1 union B2
 
-rel[int,int] T = M
+rel[int,int] RE
 
-solve (
-	T = T union (T o M)
-)
+rel[int,int] R1 = {<1,10>, <2,20>, <3,30>}
+rel[int,int] R2 = {<3,30>, <4,40>, <5,50>}
+
+rel[int,int] T7 = <7,70> union R1
+rel[int,int] T8 = R1 union <7,70>
+rel[int,int] T9 = RE union R2
+rel[int,int] T10 = R1 union RE
+rel[int,int] T11 = RE union RE
 
 
-)
+
+
+
