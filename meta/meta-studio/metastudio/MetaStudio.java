@@ -121,6 +121,7 @@ public class MetaStudio
 
     private LinkedList panels;
     private HistoryPanel historyPanel;
+    private MessageList messageList;
 
     public static final void main(String[] args) throws IOException {
         MetaStudio studio = new MetaStudio(args);
@@ -219,10 +220,6 @@ public class MetaStudio
         setVisible(true);
     }
 
-    private MessageList createMessageWindow() throws IOException {
-        return new MessageList(factory, bridge);
-    }
-
     private void createParsetreePanel() {
         parseTreePanel = new ParseTreePanel(bridge, metaGraphFactory);
     }
@@ -305,19 +302,18 @@ public class MetaStudio
 
     private JTabbedPane createMessageTabs() {
         JTabbedPane messageTabs = new JTabbedPane();
-        MessageList messageList;
-        feedbackList = new FeedbackList(factory, bridge);
-        historyPanel = new HistoryPanel(factory, bridge);
         
-        try {
-            messageList = createMessageWindow();
-            messageTabs.insertTab("history",null,historyPanel,"Execution history and error messages",0);
-            messageTabs.insertTab("messages",null,messageList,"Message list",1);
-            messageTabs.insertTab("errors",null,feedbackList,"Clickable error messages",2);
-        } catch (IOException e) {
-            e.printStackTrace();
-            postQuitEvent();
-        }
+        historyPanel = new HistoryPanel(factory, bridge);
+        panels.add(feedbackList);
+        messageTabs.insertTab("history",null,historyPanel,"Execution history and error messages",0);
+        
+        messageList = new MessageList(factory, bridge);
+        panels.add(messageList);
+        messageTabs.insertTab("messages",null,messageList,"Message list",1);
+        
+        feedbackList = new FeedbackList(factory, bridge);
+        panels.add(feedbackList);
+        messageTabs.insertTab("errors",null,feedbackList,"Clickable error messages",2);
         
         return messageTabs;
     }
