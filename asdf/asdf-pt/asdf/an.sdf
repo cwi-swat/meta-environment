@@ -97,7 +97,6 @@ context-free priorities
   >
   {Yielder InfixDataOp Yielder  -> Yielder}
 
-
 context-free priorities
 
   {"(" Yielder ")"	-> Yielder}
@@ -211,7 +210,7 @@ context-free priorities
 
   { PrefixAction Action         -> Action }
   >
-  { Action InfixAction Action   -> Action }
+  { Action InfixAction Action   -> Action {left, prefer}}
 
 
 %% data/Data.sdf
@@ -266,7 +265,7 @@ lexical syntax
 
   "disj-union"          -> PrefixDataOp
   "binding"             -> PrefixDataOp
-  "bound"               -> PrefixDataOp {avoid}
+  "bound"               -> PrefixDataOp 
   "overriding"          -> PrefixDataOp
  
 %% types/Atomic

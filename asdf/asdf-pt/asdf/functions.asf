@@ -93,28 +93,3 @@ equations
 			      get-fun-defs($AS*, defs($FD*))
 
 [get-fun-2] get-fun-defs($FD, defs($FD*)) = defs($FD, $FD*)
-
-[get-using-1] get-using($AT) = get-using($AT,data)
-
-[get-using-2] get-using(using $TY1, $TY2) = $TY1
-
-[get-using-3] get-using(giving $TY1, $TY2) = $TY2
-
-[get-using-4] get-using(raising $TY1, $TY2) = $TY2
-
-[get-giving-1] get-giving($AT) = get-giving($AT, empty)
-
-[get-giving-2] get-giving(giving $TY1, $TY2) = $TY1
-
-[get-giving-3] get-giving(using $TY1, $TY2) = $TY2
-
-[get-giving-4] get-giving(raising $TY1, $TY2) = $TY2
-
-[get-raising-1] get-raising($AT) = get-raising($AT, empty)
-
-[get-raising-2] get-raising(raising $TY1, $TY2) = $TY1
-
-[get-raising-3] get-raising(giving $TY1, $TY2) = $TY2
-
-[get-raising-4] get-raising(using $TY1, $TY2) = $TY2
-

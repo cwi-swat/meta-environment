@@ -25,7 +25,7 @@ lexical syntax
 
   [A-Z][a-z0-9]*[\*\+]?	-> Variable
 
-  "n"		-> Type {rejec}
+  "n"		-> Type {reject}
   "the"		-> PrefixDataOp {reject}
 
 context-free priorities
@@ -40,6 +40,16 @@ lexical restrictions
   UserDefType -/- [a-z\-]
   UserDefPrefixDataOp -/- [a-z\-]
   Variable -/- [a-z0-9\*\+]  
+
+  InfixAction -/- [a-z]
+  PrefixAction -/- [a-z]
+  Action -/- [a-z]
+
+context-free restrictions
+
+  InfixAction -/- [a-z]
+  PrefixAction -/- [a-z]
+  Action -/- [a-z]
 
 %%%%%%%%%%
 % Reject %
