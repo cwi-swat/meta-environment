@@ -37,7 +37,8 @@ all clean distclean install uninstall:
 		cd .. ; \
 	done
 
-docs:
+doc::
+	(cd adapters; ${MAKE} $@)
 	(cd doc; ${MAKE})
 
 demos::
