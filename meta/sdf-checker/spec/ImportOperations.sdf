@@ -11,30 +11,15 @@ exports
 
     "imports" "(" Import* ")"         -> ImportsSet
 
-  context-free syntax
-    get-exported-import-relations(Definition, ImportRelations) 
-                                            -> ImportRelations 
-hiddens
-  context-free syntax
-    get-exported-import-relations1(Definition, ImportRelations) 
-                                            -> ImportRelations {traverse(accu)}
-    get-exported-import-relations1(Module, ImportRelations) 
-                                            -> ImportRelations {traverse(accu)}
-
 hiddens
   context-free syntax
     get-exported-imports(Module, ImportsSet)     -> ImportsSet {traverse(accu)}
     get-exported-imports(ImpSection, ImportsSet) -> ImportsSet {traverse(accu)}
     get-exported-imports(Section, ImportsSet)    -> ImportsSet {traverse(accu)}
-
-exports
-  context-free syntax
-    get-hidden-import-relations(Definition, ImportRelations) 
-                                            -> ImportRelations {traverse(accu)}
-    get-hidden-imports(Module, ImportsSet)  -> ImportsSet {traverse(accu)}
-                     
+                
 hiddens
   context-free syntax
+    get-hidden-imports(Module, ImportsSet)  -> ImportsSet {traverse(accu)}
     get-hidden-imports(ImpSection, ImportsSet) -> ImportsSet {traverse(accu)}
     get-hidden-imports(Section, ImportsSet)    -> ImportsSet {traverse(accu)}
 
@@ -46,7 +31,7 @@ exports
 
 exports
   context-free syntax
-    expand-imports(ImportsSet, Grammar, Definition) -> Grammar
+    get-all-imports(Module) -> ImportsSet
 
 hiddens
   variables

@@ -1,18 +1,23 @@
 module  Sdf-Checker
 
-imports ImportRelations Messages
+imports Sdf-Type-Environment
 exports
   context-free syntax
-    get-declared-symbols(Module, SymbolsSet)  	-> SymbolsSet {traverse(accu)}
+    get-exported-declared-symbols(Module, SymbolsSet)  -> SymbolsSet {traverse(accu)}
+    get-exported-declared-symbols(Section, SymbolsSet) -> SymbolsSet {traverse(accu)}
+    get-hidden-declared-symbols(Module, SymbolsSet)    -> SymbolsSet {traverse(accu)}
+    get-hidden-declared-symbols(Section, SymbolsSet)   -> SymbolsSet {traverse(accu)}
+    get-declared-symbols(Section, SymbolsSet)  	-> SymbolsSet {traverse(accu)}
     get-declared-symbols(Grammar, SymbolsSet)  	-> SymbolsSet {traverse(accu)}
     get-used-symbols(Module, SymbolsSet)	-> SymbolsSet {traverse(accu)}
     get-used-symbols(Symbol, SymbolsSet)	-> SymbolsSet {traverse(accu)}
     get-defined-symbols(Module, SymbolsSet)  	-> SymbolsSet {traverse(accu)}
     get-defined-symbols(Production, SymbolsSet) -> SymbolsSet {traverse(accu)}
 
-    check-module(Module, Definition, Messages)	    -> Messages
-    check-modules(Definition, Definition, Messages) -> Messages		
-    check-definition(Definition)		    -> Messages
+    check-module(Module, Definition, Info-Msg-Tuple)	  -> Info-Msg-Tuple
+    check-modules(Definition, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
+    check-imports(ImportsSet, Definition, Info-Msg-Tuple) -> Info-Msg-Tuple
+    check-definition(Definition)		          -> Messages
 
 
 
@@ -28,7 +33,16 @@ exports
     "$Symbol*" [0-9]*      		-> Symbol*
     "$Symbol"  [0-9]*      		-> Symbol
     "$Symbols"                          -> Symbols
+    "SymbolsSet"[0-9]*      -> SymbolsSet
 
-    "$Msg" [0-9\']*                     -> Message
-    "$Msg*" [0-9\']*                   	-> Message*
-    "$Msgs" [0-9\']*                    -> Messages
+    "Import*"[0-9]*         -> Import*
+    "ImportsSet"[0-9]*      -> ImportsSet
+
+    "$Grammar"[0-9]*        -> Grammar
+
+    "$Msg"[0-9]*            -> Message
+    "$Msg*"[0-9]*           -> Message*
+    "$Msgs"[0-9]*           -> Messages
+    
+    "InfoMsgTuple"[0-9]*    -> Info-Msg-Tuple
+    "ModuleInfoTable"[0-9]* -> Module-Info-Table
