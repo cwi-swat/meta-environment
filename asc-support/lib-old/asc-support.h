@@ -23,6 +23,11 @@
 #define ASC_SUPPORT_H
 
 #include <aterm2.h> 
+#include <PT-utils.h>
+#include <ASF-utils.h>
+
+#define ASFtoPT(tree) (PT_makeTreeFromTerm(ASF_makeTermFromTree(tree)))
+#define PTtoASF(tree) (ASF_makeTreeFromTerm(PT_makeTermFromTree(tree)))
 
 #define INITIAL_TABLE_SIZE 8191
 #define MAX_LOAD 75
@@ -76,8 +81,8 @@ extern Symbol record_sym;
 #endif
 
 #ifdef WIN32
-	#include <string.h>
-	#define streq(a,b) (!strcmp((a),(b)))
+#include <string.h>
+#define streq(a,b) (!strcmp((a),(b)))
 #endif
 
 #define is_char(t,c) (ATgetType(t) == AT_INT && ATgetInt((ATermInt) t) == (c))
@@ -215,21 +220,12 @@ extern void print_memo_table_sizes();
 #define is_single_element(l) (ATgetType(l) == AT_LIST && \
                               (!ATisEmpty((ATermList)l) && \
                               ATisEmpty(ATgetNext((ATermList)l))))
-
-/*
-#define t()           (c_true)
-#define f()           (c_false)
-#define or(t0,t1)     (ATisEqual(t0, c_true) ? c_true : t1)
-*/
+#define slice_length(l1,l2) (ATgetLength(l1) - ATgetLength(l2))
 
 typedef ATerm (*funcptr)();
 
 extern unsigned int rewrite_steps;
 
-/*
-extern ATerm c_false;
-extern ATerm c_true;
-*/
 extern ATerm char_table[];
 
 extern Symbol sym_quote0;
@@ -258,10 +254,6 @@ extern void register_all();
 extern void resolve_all();
 extern void init_all();
 
-/* experimental traversal/analyze functions */
-extern ATerm traverse(Symbol func, int argc, int traverse_arg, ...);
-extern ATerm analyze(Symbol func, Symbol synthesizer, ATerm start, int argc, int traverse_arg, ...);
-
-extern ATerm innermost(ATerm );
-extern ATerm toasfix(ATerm, ATerm, ATerm );
+extern ATerm innermost(PT_Tree tree);
+extern PT_ParseTree toasfix(ATerm tree);
 #endif  /* ASC_SUPPORT_H */

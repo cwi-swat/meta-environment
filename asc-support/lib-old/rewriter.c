@@ -18,115 +18,56 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
-/**
-  * Library support for rewriting terms.
-  *
-  * Pieter Olivier
-  * Thu Aug 14 11:36:34 MET DST 1997
-  */
-
-/*{{{  includes */
-
 #ifndef WIN32
-	/* These files can not be included in Windows NT*/
-	#include <atb-tool.h>
-	#include "rewriter.tif.h"
+/* These files can not be included in Windows NT*/
+#include <atb-tool.h>
+#include "rewriter.tif.h"
 #else
-	#include <stdlib.h>	/* used for exit(0) */
+#include <stdlib.h>	/* used for exit(0) */
 #endif
 
 #include <stdio.h>
 #include <assert.h>
 #include <ctype.h>
 
-#include <AsFix.h>
-#include <AsFix-expand.h>
-#include <AsFix-init-patterns.h>
-
 #include <aterm2.h>
-#include <deprecated.h>
-
 #include "asc-support.h"
-
-/*}}}  */
-
-/*{{{  globals */
 
 static char *name; 
 
-extern ATerm pattern_asfix_term;
-
-ATerm innermost(ATerm t);
-ATerm toasfix(ATerm t, ATerm f, ATerm n);
-void init_patterns();
-void c_rehash(int newsize);
-
-/*}}}  */
-/*{{{  ATerm *get_name(int cid) */
+extern void init_patterns();
 
 ATerm get_name(int cid)
 {
   return ATmake("snd-value(name(<str>))", name);
 }
 
-/*}}}  */
-/*{{{  ATerm *reduce(int cid, ATerm *t) */
 
 ATerm reduce(int cid, ATerm t)
 {
-  ATerm reduct, asfix = NULL, file, modname, trm;
+  ATerm reduct;
+  PT_ParseTree pt;
+  PT_ParseTree asfix = NULL;
+  PT_Tree trm;
 
-ATfprintf(stderr,"reducing entered\n");
-  t = AFexpandTerm(t);
-  if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
-                &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
+  pt = PT_makeParseTreeFromTerm(t);
+
+  if (PT_isValidParseTree(pt)) {
+    trm = PT_getParseTreeTree(pt);
     reduct = innermost(trm);
-    asfix = toasfix(reduct, file, modname);
-  } else
+    asfix = toasfix(reduct);
+  } else {
     ATerror("not an asfix term: %t\n", t);
-ATfprintf(stderr,"reducing finished\n");
-  return ATmake("snd-value(reduct(<term>))", asfix);
+  }
+  
+  return ATmake("snd-value(reduct(<term>))", PT_makeTermFromParseTree(asfix));
 }
-
-/*}}}  */
-/*{{{  ATerm reduce_and_asource(int cid, ATerm t, char *name, char *ext) */
-ATerm reduce_and_asource(int cid, ATerm t, char *name, char *ext)
-{
-  FILE *file;
-  char full[1024];
-  ATerm reduct, asfix = NULL, filename, modname, trm; 
-
-ATfprintf(stderr,"reducing entered\n");
-  t = AFexpandTerm(t);
-  if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
-                 &filename, NULL, &modname, NULL, &trm, NULL, NULL)) {
-    reduct = innermost(trm);
-    asfix = toasfix(reduct, filename, modname);
-  } else
-    ATerror("not an asfix term: %t\n", t);
-
-ATfprintf(stderr,"reducing finished\n");
-  strcpy(full, name);
-  strcat(full, ".");
-  strcat(full, ext);
-  file = fopen(full, "w");
-  if (!file) 
-    ATerror("asource: Could not open %s\n", full);
-  AFsourceToFile(asfix, file); 
-  fclose(file);
-  return ATmake("snd-value(reduction-finished(<str>))",full);
-}
-
-/*}}}  */
-/*{{{  void rec_terminate(int cid) */
 
 void rec_terminate(int cid, ATerm arg)
 {
   exit(0);
 }
 
-/*}}}  */
-/*{{{  void usage(char *prg) */
 
 /**
  * Print usage information and exit
@@ -143,16 +84,17 @@ void usage(char *prg)
   exit(1);
 }
 
-/*}}}  */
-/*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
 {
-  ATerm t, trm, reduct, asfix, file, modname;
+  ATerm bottomOfStack;
+  PT_ParseTree pt;
+  PT_ParseTree asfix;
+  PT_Tree trm;
+  ATerm t, reduct;
   ATbool printstats = ATfalse, use_toolbus = ATfalse,
          run_verbose = ATfalse;
   int i, cid;
-  ATerm bottomOfStack;
   name = argv[0];
 
   for(i=1; i<argc; i++) {
@@ -170,18 +112,15 @@ int main(int argc, char *argv[])
   }
  
   if(use_toolbus) {
-  	#ifndef WIN32 /* Code with Toolbus calls, non Windows */
-  		ATBinit(argc, argv, &bottomOfStack);  /* Initialize the Aterm library */
-  		cid = ATBconnect(NULL, NULL, -1, rewriter_handler);
-  	#else
-  		fprintf(stderr, "asource: Toolbus cannot be used in Windows.\n");
-  	#endif
+    ATBinit(argc, argv, &bottomOfStack);  /* Initialize the Aterm library */
+    cid = ATBconnect(NULL, NULL, -1, rewriter_handler);
   }
 
-  AFinit(argc, argv, &bottomOfStack);
+  ATinit(argc, argv, &bottomOfStack);
+  PT_initPTApi();
+  ASF_initASFApi();
 
   init_patterns();
-  AFinitAsFixPatterns();
 
   c_rehash(INITIAL_TABLE_SIZE);
   register_all();
@@ -189,29 +128,34 @@ int main(int argc, char *argv[])
   init_all();
 
   if(use_toolbus) {
-  	#ifndef WIN32 /* Code with Toolbus calls, non Windows */
-  		ATBeventloop();
-  	#endif
+    ATBeventloop();
   } 
   else {
     t = ATreadFromFile(stdin);
-    t = AFexpandTerm(t);
+    pt = PT_makeParseTreeFromTerm(t);
 
-    if(ATmatchTerm(t, pattern_asfix_term, NULL, NULL,
-                 &file, NULL, &modname, NULL, &trm, NULL, NULL)) {
-      if(run_verbose) ATfprintf(stderr,"Reducing ...\n");
+    if (PT_isValidParseTree(pt)) {
+      trm = PT_getParseTreeTree(pt);
+      
+      if(run_verbose) {
+	ATfprintf(stderr,"Reducing ...\n");
+      }
+      
       reduct = innermost(trm);
-      if(run_verbose) ATfprintf(stderr,"Reducing finished.\n");
-      asfix = toasfix(reduct, file, modname);
-      ATwriteToBinaryFile(asfix,stdout);
-      /*ATwriteToTextFile(asfix,stdout);*/
+      
+      if(run_verbose) {
+	ATfprintf(stderr,"Reducing finished.\n");
+      }
+
+      asfix = toasfix(reduct);
+
+      ATwriteToBinaryFile(PT_makeTermFromParseTree(asfix),stdout);
     }
-    else { /* Alex added {} after 'else' for readability */
+    else { 
       ATfprintf(stderr, "not an asfix term: %t\n", t);
     }
   }
   return 0;
 }
 
-/*}}}  */
 

@@ -26,28 +26,22 @@
   * $Id$
   */
 
-/*{{{  includes */
 
 #include <stdio.h>
 #include <assert.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include <AsFix.h>
-#include <AsFix2src.h>
-#include <aterm-macs.h>
 #include <aterm2.h>
-
-#include <deprecated.h>
+#include <PT-utils.h>
 
 #include "asc-support.h"
 
 #ifndef streq
-#  define streq(s,t)    (!(strcmp(s,t)))
+#define streq(s,t)    (!(strcmp(s,t)))
 #endif
 
-/*}}}  */
-/*{{{  defines */
 
 #define MAX_STORE 10240
 #define MAGIC_HASH_CONST_APPL 3001
@@ -57,9 +51,6 @@
 #define HASH_SYM(sym, size) (((unsigned)(((int)(sym))>>2)) % (size))
 
 #define MAX_MEMO_TABLES 1024
-
-/*}}}  */
-/*{{{  types needed for registering and resolving */
 
 /*
  *      MuASF function names. 
@@ -74,8 +65,6 @@ typedef struct bucket
   Symbol sym;
 } bucket;
 
-/*}}}  */
-/*{{{  global variables */
 
 /* This term_store is used for temporary storage of
  * list elements, e.g. used in slice.
@@ -103,11 +92,6 @@ ATermTable prof_table = NULL;
 Symbol record_sym = -1;
 #endif
 
-/* This can be removed after regression testing (15-2-2000)!
-ATerm c_true = NULL;
-ATerm c_false = NULL;
-*/
-
 /* A table to convert characters to ATermInts. 
  */
 ATerm char_table[256] = {NULL};
@@ -129,75 +113,34 @@ Symbol sym_quote6;
 Symbol sym_quote7;
 Symbol make_listsym;
 
+ATerm pattern_listtype;
+ATerm pattern_listtype_sep;
+
 /* These symbols are used in combination with lists
  * "conssym" should be removed in the near future! 
  */
 Symbol concsym;
 Symbol conssym;
 
-/* These patterns should be declared in a separate 
- * AsFix library.
- */
-static ATerm pattern_asfix_term               = NULL;
-static ATerm pattern_asfix_appl               = NULL;
-static ATerm pattern_asfix_prod               = NULL;
-static ATerm pattern_asfix_list               = NULL;
-static ATerm pattern_asfix_lex                = NULL;
-static ATerm pattern_asfix_l                  = NULL;
-static ATerm pattern_asfix_ql                 = NULL;
-static ATerm pattern_asfix_ws                 = NULL;
-static ATerm pattern_asfix_sort               = NULL;
-static ATerm pattern_listtype                 = NULL;
-static ATerm pattern_listtype_sep             = NULL;
-static ATerm pattern_char                     = NULL;
-static ATerm pattern_lexical_constructor      = NULL;
-static ATerm pattern_term_lexical_constructor = NULL;
-static ATerm pattern_caller_id                = NULL;
-static ATerm ws                               = NULL;
-static ATerm spws                             = NULL;
-
-/* The following symbol is used in innermost to check
-   whether a term is an appl or a lexical. */
-static Symbol symbol_asfix_lex;
-
-/* Function symbols associated with the priority handling.
- */
-AFun afun_non_assoc_prio = 0;
-AFun afun_gtr_prio = 0;
-AFun afun_left_prio = 0;
-AFun afun_right_prio = 0;
-AFun afun_assoc_prio = 0;
-
 /* Declarations of static functions. */
-static ATermList innermost_list(ATermList l);
+static ATermList innermost_list(PT_Args args);
 static funcptr basic_lookup_func(ATerm prod);
-static ATerm call(ATerm prod, ATermList args);
-static ATerm make_list_type(ATerm type, ATermList args);
-static ATermList innermost_list(ATermList l);
-static ATerm term_to_asfix(ATerm t, ATerm sort);
-static ATerm make_asfix_list(ATermList l, char *sort);
-static ATerm make_asfix_list_sep(ATermList l, char *sort, char *sep);
+static ATerm call(PT_Production prod, ATermList args);
+static ATerm make_list_type(PT_Symbol type, ATermList args);
+static ATermList innermost_list(PT_Args args);
+static ATerm innermost_lexical(PT_Tree lex);
+static PT_Tree term_to_asfix(ATerm t, PT_Symbol sort);
+static PT_Tree make_asfix_list(ATermList l, char *sort);
+static PT_Tree make_asfix_list_sep(ATermList l, char *sort, char *sep);
 static int get_list_length(ATermList chars);
-static ATermList terms_to_asfix(ATermList a, ATermAppl t, ATerm sort);
+static PT_Args terms_to_asfix(PT_Symbols a, ATermAppl t, PT_Symbol sort);
+static ATbool isLexicalConstructorProd(PT_Production prod);
+static void stringToLower(char *str);
 
 /* Variables needed when counting memo table size */
 static int nr_memo_tables = 0;
 static ATermTable *memo_tables[MAX_MEMO_TABLES];
 static char *memo_table_names[MAX_MEMO_TABLES];
-
-
-
-/* Local macros */
-
-/* slice_length computes the number of elements in a slice that
- * starts with the node l1, and ends JUST BEFORE the node specified
- * with l2.
- */
-#define slice_length(l1,l2) (ATgetLength(l1) - ATgetLength(l2))
-
-/*}}}  */
-
-/*{{{  void c_rehash(int newsize) */
 
 /**
   * Create a new (larger?) hash table for register and 
@@ -249,9 +192,7 @@ void c_rehash(int newsize)
   table_size = newsize;
 }
 
-/*}}}  */
 
-/*{{{  unsigned in calc_hash(ATerm prod) */
 
 #ifdef NO_SHARING
 /*
@@ -298,9 +239,7 @@ unsigned int calc_hash(ATerm t)
 }
 #endif
 
-/*}}}  */
 
-/*{{{  void register_prod(ATerm prod, funcptr func, Symbol sym) */
 
 void register_prod(ATerm prod, funcptr func, Symbol sym)
 {
@@ -345,12 +284,10 @@ void register_prod(ATerm prod, funcptr func, Symbol sym)
    * the gc.
    */
   b->prod = prod;
-  ATprotect(&b->prod);
+  ATprotect((ATerm*)&(b->prod));
   b->func = func;
   b->sym  = sym;
 }
-
-/*}}}  */
 
 /* The following functions are used to convert from symbols
  * to function pointers or from prods to function pointers.
@@ -358,7 +295,6 @@ void register_prod(ATerm prod, funcptr func, Symbol sym)
  * converting back a normal form to AsFix.
  */
 
-/*{{{  funcptr lookup_func_given_sym(Symbol sym)) */
 
 funcptr lookup_func_given_sym(Symbol sym)
 {
@@ -377,8 +313,6 @@ funcptr lookup_func_given_sym(Symbol sym)
   ATabort("unknown symbol: %s\n", ATgetName(sym));
   return (funcptr) NULL; /* silence the compiler, we never get here. */
 }
-/*}}}  */
-/*{{{  static funcptr basic_lookup_func(ATerm prod) */
 
 /* Changed this function to static 15-02-2000, await regression test */
 static funcptr basic_lookup_func(ATerm prod)
@@ -403,8 +337,6 @@ static funcptr basic_lookup_func(ATerm prod)
 
   return (funcptr) NULL;
 }
-/*}}}  */
-/*{{{  funcptr lookup_func(ATerm prod) */
 
 funcptr lookup_func(ATerm prod)
 {
@@ -415,8 +347,6 @@ funcptr lookup_func(ATerm prod)
   }
   else return f;
 }
-/*}}}  */
-/*{{{  Symbol lookup_sym(ATerm prod) */
 
 Symbol lookup_sym(ATerm prod)
 {
@@ -441,8 +371,6 @@ Symbol lookup_sym(ATerm prod)
   return (Symbol) 0; /* silence the compiler, we never get here. */
 }
 
-/*}}}  */
-/*{{{  ATerm lookup_prod(Symbol sym) */
 
 ATerm lookup_prod(Symbol sym)
 {
@@ -461,8 +389,6 @@ ATerm lookup_prod(Symbol sym)
   ATabort("unknown symbol: %s\n", ATgetName(sym));
   return (ATerm) NULL; /* silence the compiler, we never get here. */
 }
-/*}}}  */
-/*{{{  ATermList string2list(char *s) */
 
 /**
   * Translate a string to a list of integers (characters)
@@ -479,8 +405,6 @@ ATermList string2list(char *s)
 
   return result;
 }
-/*}}}  */
-/*{{{  static Aterm call(ATerm prod, ATermList args) */
 
 /* This function is used in innermost to call a c function for
  * a given AsFix production. Note that the arguments are in normal form
@@ -491,13 +415,18 @@ ATermList string2list(char *s)
  * ATermList form to a c function call and to lookup the actual funcptr.
  */
 
-static ATerm call(ATerm prod, ATermList args)
+static ATerm call(PT_Production prod, ATermList args)
 {
-  funcptr func = lookup_func(prod);
   ATermList list;
   ATerm arg[33];
-
   int idx = 0;
+  funcptr func = basic_lookup_func(PT_makeTermFromProduction(prod));
+
+  if (func == NULL) {
+    ATabort("unknown function: %t\n", prod);
+    return (ATerm) NULL; 
+  }
+
   list = args;
   while(!ATisEmpty(list)) {
     arg[idx++] = ATgetFirst(list);
@@ -624,8 +553,6 @@ static ATerm call(ATerm prod, ATermList args)
   return NULL;
 }
 
-/*}}}  */
-/*{{{  static ATerm make_list_type(ATerm type, ATerm args) */
 
 /* This function is also used by innermost. It maps the AsFix representation
  * of a list to the C runtime representation of lists. The arguments are
@@ -635,31 +562,27 @@ static ATerm call(ATerm prod, ATermList args)
  * 
  */
 
-static ATerm make_list_type(ATerm type, ATermList args)
+static ATerm make_list_type(PT_Symbol type, ATermList args)
 {
-  ATerm listsort, listsep;
-  ATermList iterargs;
   char *sort, *sep;
   char symbol_buf[256];
   Symbol sym;
 
   /* The list has no separator. */
-  if(ATmatchTerm(type, pattern_iter, &listsort, NULL, NULL)) {
-    ATmatchTerm(listsort, pattern_asfix_sort, &sort);
+  if (PT_isSymbolIterStar(type) || PT_isSymbolIterPlus(type)) {
+    sort = strdup(PT_getSymbolString(PT_getSymbolSymbol(type)));
     sprintf(symbol_buf, "listtype(sort(\"%s\"))", sort);
     sym = ATmakeSymbol(symbol_buf, 1, ATtrue);
-    
+    free(sort); 
     return (ATerm) ATmakeApplList(sym, ATmakeList1((ATerm)args));
 
   } /* Or the list has a separator defined. */
-  else if(ATmatchTerm(type, pattern_itersep, &iterargs)) {
-    listsort = ATelementAt(iterargs, 2);
-    listsep  = ATelementAt(iterargs, 4);
-    ATmatchTerm(listsort, pattern_asfix_sort, &sort);
-    ATmatchTerm(listsep, pattern_asfix_ql, &sep);
+  else if(PT_isSymbolIterStarSep(type) || PT_isSymbolIterStarSep(type)) {
+    sort = strdup(PT_getSymbolString(PT_getSymbolSymbol(type)));
+    sep  = PT_getSymbolSeparator(type);
     sprintf(symbol_buf, "listtype(sort(\"%s\"),ql(\"%s\"))", sort, sep);
     sym = ATmakeSymbol(symbol_buf, 1, ATtrue);
-    
+    free(sort); 
     return (ATerm) ATmakeApplList(sym, ATmakeList1((ATerm)args));
   }
   else {
@@ -667,9 +590,7 @@ static ATerm make_list_type(ATerm type, ATermList args)
     return (ATerm) NULL; /* silence the compiler */
   }
 }
-/*}}}  */
 
-/*{{{  void reg_memo_table(ATermTable *db, char *name) */
 
 void reg_memo_table(ATermTable *db, char *name)
 {
@@ -679,8 +600,6 @@ void reg_memo_table(ATermTable *db, char *name)
   nr_memo_tables++;
 }
 
-/*}}}  */
-/*{{{  void print_memo_table_sizes() */
 
 void print_memo_table_sizes()
 {
@@ -690,8 +609,8 @@ void print_memo_table_sizes()
   for (i=0; i<nr_memo_tables; i++) {
     keys = ATtableKeys(*memo_tables[i]);
     values = ATtableValues(*memo_tables[i]);
-    nr_key_nodes = AT_calcUniqueSubterms(keys);
-    nr_value_nodes = AT_calcUniqueSubterms(values);
+    nr_key_nodes = ATcalcUniqueSubterms((ATerm) keys);
+    nr_value_nodes = ATcalcUniqueSubterms((ATerm) values);
 
     fprintf(stderr, "table %s has %d elements, %d + %d = %d unique nodes.\n",
 	    memo_table_names[i], ATgetLength(keys), 
@@ -699,9 +618,35 @@ void print_memo_table_sizes()
   }
 }
 
-/*}}}  */
 
-/*{{{  ATerm innermost( ATerm t) */
+static ATerm innermost_lexical(PT_Tree lex)
+{
+  PT_Symbol sort;
+  PT_Production prod;
+  char *name;
+  ATermList lexlist;
+  ATerm listterm;
+ 
+  sort = PT_getTreeSymbol(lex);
+  
+  name = strdup(PT_getSymbolString(sort));
+  if (name == NULL) {
+    ATerror("innermost_lexical: could not allocate memory for sortname\n");
+  }
+
+  stringToLower(name);
+
+  lexlist = string2list(PT_getTreeString(lex));
+   
+  prod = (PT_Production) ASF_makeProductionLexicalConstructor(name, 
+			   (ASF_Symbol) sort);
+
+  free(name);
+  
+  listterm = ATmake("\"listtype(sort(\\\"CHAR\\\"))\"([<list>])", lexlist);
+
+  return call(prod, ATmakeList1(listterm));
+}
 
 /* This function is the core of the innermost reduction strategy. Given the
  * AsFIx representation of a term to be reduced the c functions for rewriting
@@ -709,99 +654,54 @@ void print_memo_table_sizes()
  * of C to implement the innermost strategy.
  */
 
-ATerm innermost(ATerm t)
+ATerm innermost(PT_Tree tree)
 {
-  ATerm prod, sort, list, result = NULL, listterm;
-  ATermList newargs, args, lexlist;
-  funcptr f;
-  char *lex;
+  ATerm result = NULL;
 
-  if(ATgetType(t) == AT_APPL) {
-    ATermAppl appl = (ATermAppl)t;
-    Symbol sym = ATgetSymbol(appl);
-    
-    /* Either it is a function appl. */
-    if(sym == symbol_asfix_appl) {
-      prod = ATgetArgument(appl, 0);
-      args = (ATermList)ATgetArgument(appl, 2);
+  if (PT_isTreeAppl(tree)) {
+    PT_Production prod = PT_getTreeProd(tree);
+    PT_Args args = PT_getTreeArgs(tree);
 
-      /* Bracket functions have no runtime semantics */
-      if(AFisBracketCfFunc(prod))
-      	result = innermost(ATelementAt(args, 2));
-      else
-        result = call(prod, innermost_list(args));
-
-    } /* Or it is a lexical constructor */ 
-    else if(sym == symbol_asfix_lex) {
-      lex = ATgetName(ATgetSymbol((ATermAppl)ATgetArgument(appl, 0)));
-      sort = ATgetArgument(appl, 1);
-
-      lexlist = string2list(lex);
-      listterm = ATmake("[\"listtype(sort(\\\"CHAR\\\"))\"([<list>])]", lexlist);
-
-      /* This conversion is needed to be able to access the equations with a 
-       * lexical constructor function as outmost function symbol in the left hand side.
-       *
-       * The following code takes care of the distinction between "module-asfix" 
-       * and "term-asfix" in case of "module-asfix" the lexical is converted
-       * into a caller function otherwise it is a term_caller. The difference
-       * between these two is the module name: "caller" versus "GEN-LexConsFuncs".
-       *
-       * If there is no lexical constructor function defined for the "module-asfix"
-       * representation then we are processing "term-asfix" and the appropriate
-       * lexical constructor function is then called.
-       * 
-       * Of course this code should be adapted as soon as we do not need to
-       * support the "module-asfix" anymore.
-       */
-      prod = make_caller_prod(sort);
-      f = basic_lookup_func(prod);
-      if(f) {
-        result = call(prod, (ATermList)listterm);
-      }
-      else {
-        prod = make_term_caller_prod(sort);
-        result = call(prod, (ATermList)listterm);
-      }
-    
-    } /* Or it is a list, for list no "call" is needed. Only the elements of the
-       * list need to be normalized.
-       */ 
-    else if(sym == symbol_asfix_list) {
-      list = ATgetArgument(appl, 0);
-      args = (ATermList)ATgetArgument(appl, 2);
-      newargs = innermost_list(args);
-      result = make_list_type(list, newargs);
+    if (PT_hasProductionBracketAttr(prod)) {
+      result = innermost(PT_getArgsArgumentAt(args, 2));    
+    } 
+    else {
+      result = call(prod, innermost_list(args));
     }
+  }
+  else if (PT_isTreeLexical(tree)) {
+    result = innermost_lexical(tree);
+  }
+  else if (PT_isTreeList(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
+    result = make_list_type(PT_getTreeIter(tree), innermost_list(args));
   }
 
   return result;
 }
 
-/*}}}  */
-/*{{{  static ATerm innermost_list(ATermList l) */
 
-/* The function inntermost_list takes care of the normalization
+/* The function innermost_list takes care of the normalization
  * of the elements of a list (of arguments) with respect to the innermost
  * reduction strategy. Here we use the "call-by-value" mechanism
  * of C to implement the innermost strategy.
  */
 
-static ATermList innermost_list(ATermList l)
+static ATermList innermost_list(PT_Args args)
 {
   ATermList result = ATempty;
-  int length = ATgetLength(l);
+  int length = PT_getArgsLength(args);
   ATerm el;
  
   /* When a list is shorter than 16 elements, we assume that
      it is not worth it to malloc a buffer. We use ATreverse
      to restore the correct list order. */
   if(length < 16) {
-    while(!ATisEmpty(l)) {
-      el = innermost(ATgetFirst(l));
+    while(PT_hasArgsHead(args)) {
+      el = innermost(PT_getArgsHead(args));
       if(el)  
 	result = ATinsert(result, el); 
-      l = ATgetNext(l);
+      args = PT_getArgsTail(args);
     }
     return ATreverse(result);
   } else {
@@ -813,19 +713,21 @@ static ATermList innermost_list(ATermList l)
      */
     int idx = 0;
     ATerm *elems = (ATerm *)malloc(sizeof(ATerm)*length);
-    if(!elems)
+    if(!elems) {
       ATabort("innermost_list: no room for %d elements.\n", length);
+    }
 
-    while(!ATisEmpty(l)) {
-      elems[idx++] = ATgetFirst(l);
-      l = ATgetNext(l);
+    while(PT_hasArgsHead(args)) {
+      elems[idx++] = PT_makeTermFromTree(PT_getArgsHead(args));
+      args = PT_getArgsTail(args);
     }
     assert(idx == length);
 
     for(--idx; idx>=0; idx--) {
-      el = innermost(elems[idx]);
-      if(el)
+      el = innermost(PT_makeTreeFromTerm(elems[idx]));
+      if(el) {
 	result = ATinsert(result, el);
+      }
     }
 		
     free(elems);
@@ -833,203 +735,7 @@ static ATermList innermost_list(ATermList l)
   }
 }
 
-/*}}}  */
 
-/*{{{  ATerm traverse(Symbol func, int argc, int traverse_arg, ...) */
-
-/*
- * The traverse function descends outermostly into the argument indicated by traverse_arg,
- * calling func on every node. The other arguments carry information that is used by func.
- */
-
-static ATerm ltraverse(Symbol func, int traverse_arg, ATermList args);
-
-ATerm traverse(Symbol func, int argc, int traverse_arg, ...)
-{
-  ATerm result;
-  va_list args;
-  ATerm arg;
-  ATermList arglist = ATempty;
-  int i;
-
-  va_start(args, traverse_arg);
-
-  /* We convert the arglist to an ATermList */
-  for(i = argc, arg = va_arg(args, ATerm); i != 0; arg = va_arg(args, ATerm), i--) 
-    arglist = ATinsert(arglist, arg);
-      
-  /* ATinsert does it backwardly, so reverse the list (optimizable!) */
-  arglist = ATreverse(arglist);
-
-  /* Now we call the function that does the work for us */
-  result = ltraverse(func, traverse_arg, arglist);
-
-  va_end(args);
-
-  return result;
-}
-
-ATerm ltraverse(Symbol func, int traverse_arg, ATermList args)
-{
-  ATerm t;
-  ATerm result;
-  
-  /* Retrieve the to be traversed term from the argument list */
-  t = ATelementAt(args, traverse_arg);
-  
-  switch(ATgetType(t)) {
-  case AT_APPL:
-    {
-      /* First we try the func on the current term */
-      ATerm funcprod = lookup_prod(func);
-      result = call(funcprod, args);
-      
-      /* If there was no match, then the func will be around the term as a normal form,
-       * so we need to remove it and then search deeper in the tree
-       */
-      if(check_sym(result, func)) {
-	ATermList kids;
-	Symbol sym;
-	ATerm prod;
-	
-	result = ATgetArgument(result,traverse_arg);
-
-	/* Recurse down to the kids */
-	kids = ATgetArguments((ATermAppl) result);
-	args = ATreplace(args, (ATerm) kids, traverse_arg);
-	kids = (ATermList) ltraverse(func, traverse_arg, args);
-	
-	/* Create a new normal form by calling the current production */
-	sym = (Symbol) ATgetAFun((ATermAppl) result);
-	prod = lookup_prod(sym);
-
-	return call(prod, kids);
-      } else {
-	/* Otherwise we will have found a match, and the recursion stops */
-	return result;
-      }
-    }
-    break;
-  case AT_LIST:
-    {
-      ATermList list = (ATermList) t;
-      ATermList newlist = ATempty;
-
-      /* We recursively call descend on each element and recreate the list */
-      for(;!ATisEmpty(list); list = ATgetNext(list)) {
-	args = ATreplace(args, ATgetFirst(list), traverse_arg);
-	newlist = ATinsert(newlist, ltraverse(func, traverse_arg, args));
-      }
-
-      /* ATreverse can be optimized using the term_buffer */
-      return (ATerm) ATreverse(newlist);
-    }
-    break;
-  default:
-    break;
-  }
-
-  return t;
-}
-
-/* Analyze does the same as traverse, but not returning the original sorts, but an
- * different sort containing accumulated information. The analyze does an outermost search
- * for a match of the function 'func'. All results are propagated upwardly, combining
- * the results of recursive calls using the synthesizer in a left associative way.
- */
-static ATerm lanalyze(Symbol func, Symbol synthesizer, ATerm start, int traverse_arg, ATermList args);
-
-ATerm analyze(Symbol func, Symbol synthesizer, ATerm start, int argc, int traverse_arg, ...)
-{
-  ATerm result;
-  va_list args;
-  ATerm arg;
-  ATermList arglist = ATempty;
-  int i;
-
-  va_start(args, traverse_arg);
-
-  /* We convert the arglist to an ATermList */
-  for(i = argc, arg = va_arg(args, ATerm); i != 0; arg = va_arg(args, ATerm), i--) 
-    arglist = ATinsert(arglist, arg);
-      
-  /* ATinsert does it backwardly, so reverse the list (optimizable!) */
-  arglist = ATreverse(arglist);
-
-  /* Now we call the function that does the work for us */
-  result = lanalyze(func, synthesizer, start, traverse_arg, arglist);
-
-  va_end(args);
-
-  return result;
-}
-
-static ATerm lanalyze(Symbol func, Symbol synthesizer, ATerm start, int traverse_arg, ATermList args)
-{
-  ATerm t;
-  ATerm result;
-  
-  /* Retrieve the to be traversed term from the argument list */
-  t = ATelementAt(args, traverse_arg);
-  
-  switch(ATgetType(t)) {
-  case AT_APPL:
-    {
-      /* First we try the func on the current term */
-      ATerm funcprod = lookup_prod(func);
-      result = call(funcprod, args);
-      
-      /* If there was no match, then the func will be around the term as a normal form,
-       * so we need to remove it and then search deeper in the tree
-       */
-      if(check_sym(result, func)) {
-	ATermList kids;
-	
-	result = ATgetArgument(result,traverse_arg);
-
-	/* Recurse down to the kids */
-	kids = ATgetArguments((ATermAppl) result);
-	args = ATreplace(args, (ATerm) kids, traverse_arg);
-	return lanalyze(func, synthesizer, start, traverse_arg, args);
-	
-      } else {
-	/* Otherwise we will have found a match, and the recursion stops */
-	return result;
-      }
-    }
-    break;
-  case AT_LIST:
-    {
-      ATermList list = (ATermList) t;
-      ATermList synthargs;
-      ATerm synthprod = lookup_prod(synthesizer);
-
-      /* We recursively call lanalyse on all elements of the list.
-       * The results are combined in a leftmost manner using a call to
-       * the synthesizer. Note that the leftmost manner is somewhat arbitrary.
-       * We might implement a more general algorithm in the future.
-       */
-      for(result = start;!ATisEmpty(list); list = ATgetNext(list)) {
-	args = ATreplace(args, ATgetFirst(list), traverse_arg);
-	synthargs = ATmakeList2(result, lanalyze(func, synthesizer, start, traverse_arg, args));
-	result = call(synthprod, synthargs);
-      }
-
-      return result;
-    }
-    break;
-  default:
-    /* A term with no kids, must be a literal so return the default value */
-    return start;
-    break;
-  }
-
-  return t; 
-}
-
-/*}}}  */
-
-/*{{{  ATerm unquote(ATerm t) */
 
 /* Code to unqoute delayed reduction of terms, in order to implement
  * the outermost strategy. This algorithm is known to be 'not optimal'.
@@ -1090,14 +796,12 @@ ATerm unquote(ATerm t)
   return t;
 }
 
-/*}}}  */
 
 /* The following set of functions take care of the "translation" back from
  * the C/MuASF representation of terms to the AsFix representation.
  * This conversion back is only needed when the normal form is obtained.
  */
 
-/*{{{  static ATerm make_asfix_list( ATermList l, char *sort) */
 
 /* A list is converted back into an AsFix list. 
    The elements of the list are recursively converted to AsFix.
@@ -1105,64 +809,59 @@ ATerm unquote(ATerm t)
    recursive nature of this function.
  */
 
-static ATerm make_asfix_list(ATermList l, char *sort)
+static PT_Tree make_asfix_list(ATermList l, char *sort)
 {
-  ATerm listsort = ATmakeTerm(pattern_asfix_sort, sort);
-  ATerm iter = ATmakeTerm(pattern_iter_star, listsort, ws);
-  ATermList list = ATempty;
-  ATerm tmp;
+  PT_Symbol listsort = PT_makeSymbolSort(sort);
+  PT_Symbol iter = PT_makeSymbolIterStar(listsort);
+  PT_Args list = PT_makeArgsEmpty();
+  PT_Tree tmp;
+  PT_Tree newline = PT_makeTreeLayout("\n");
 
   int i, len = ATgetLength(l);
   if(len > 0) {
     tmp = term_to_asfix(ATelementAt(l, len-1), listsort);
-    list = ATinsert(list, tmp);
+    list = PT_makeArgsList(tmp,list);
     for(i = len-2; i >= 0; i--) {
-      list = ATinsert(list, ws);
+      list = PT_makeArgsList(newline, list);
       tmp = term_to_asfix(ATelementAt(l, i), listsort);
-      list = ATinsert(list, tmp);
+      list = PT_makeArgsList(tmp,list);
     }
   }
-  return ATmakeTerm(pattern_asfix_list, iter, ws, list);  
+  return PT_makeTreeList(iter, list);  
 }
 
-/*}}}  */
-/*{{{  static ATerm make_asfix_list_sep( ATermList l, sort,sep) */
 
 /* The same as the previous function, but now with a separated list.
  */
 
-static ATerm make_asfix_list_sep(ATermList l, char *sort, char *sep)
+static PT_Tree make_asfix_list_sep(ATermList l, char *sort, char *sep)
 {
-  ATerm accolopen = ATmake("l(\"{\")");
-  ATerm accolclose = ATmake("l(\"}\")");
-  ATerm qsep = ATmake("ql(<str>)", sep);
-  ATerm listsep = ATmake("sep(<str>)", sep);
-  ATermList list = ATempty;
-  ATerm tmp;
+  PT_Args list = PT_makeArgsEmpty();
+  PT_Tree tmp;
   int i;
 
-  ATerm listsort = ATmakeTerm(pattern_asfix_sort, sort);
-  ATerm iter = ATmakeTerm(pattern_itersep_star, accolopen, ws, listsort, ws,
-			  qsep, ws, accolclose, ws);
+  PT_Symbol listsort = PT_makeSymbolSort(sort);
+  PT_Symbol iter = PT_makeSymbolIterStarSep(listsort,sep);
+  PT_Tree   tsep = PT_makeTreeSeparator(sep);
+  PT_Tree   space = PT_makeTreeLayout(" ");
+  PT_Tree   newline = PT_makeTreeLayout("\n");
 
   int len = ATgetLength(l);
   if(len > 0) {
     tmp = term_to_asfix(ATelementAt(l, len-1), listsort);
-    list = ATinsert(list, tmp);
+    list = PT_makeArgsList(tmp, list);
     for(i = len-2; i >= 0; i--) {
-      list = ATinsert(list, spws);
-      list = ATinsert(list, listsep);
-      list = ATinsert(list, ws);
+      list = PT_makeArgsList(space, list);
+      list = PT_makeArgsList(tsep, list);
+      list = PT_makeArgsList(newline, list);
       tmp = term_to_asfix(ATelementAt(l, i), listsort);
-      list = ATinsert(list, tmp);
+      list = PT_makeArgsList(tmp,list);
     }
   }
 
-  return ATmakeTerm(pattern_asfix_list, iter, ws, list);  
+  return PT_makeTreeList(iter, list);  
 }
 
-/*}}}  */
-/*{{{  static int get_list_length(ATermList chars) */
 
 /*
  * Calculates the length of a list of characters. 
@@ -1174,48 +873,35 @@ static ATerm make_asfix_list_sep(ATermList l, char *sort, char *sep)
 static int get_list_length(ATermList chars)
 {
   return ATgetLength(chars);
-  /* <PO> To be removed after unit test.
-     21-2-2000
-    int len = 0;
-  while(!ATisEmpty(chars)) {
-    ATerm el = ATgetFirst(chars);
-    chars = ATgetNext(chars);
-    if(t_is_asfix_list(el))
-      len += get_list_length((ATermList) el);
-    else
-      len++;
-  }
-  return len;
-  */
 }
 
-/*}}}  */
-/*{{{  static char *get_chars_from_list(char *buf, ATermList chars) */
 
 static char *get_chars_from_list(char *buf, ATermList chars)
 {
-
   while(!ATisEmpty(chars)) {
     ATerm el = ATgetFirst(chars);
     chars = ATgetNext(chars);
-    /* <PO> To be removed after unit test.
-       21-2-2000
-       if(t_is_asfix_list(el))
-      buf = get_chars_from_list(buf,(ATermList) el);
-    else
-    */
     *buf++ = (char)ATgetInt((ATermInt) el);
   }
   return buf;
 }
 
-/*}}}  */
-/*{{{  static ATerm make_asfix_lex(ATermList chars, ATerm sort) */
+static ATbool isLexicalConstructorProd(PT_Production prod)
+{
+  ASF_Production lexicalProd = ASF_makeProductionFromTerm(
+			        PT_makeTermFromProduction(prod));
 
-static ATerm make_asfix_lex(ATermList chars, ATerm sort)
+  if (ASF_isValidProduction(lexicalProd)) {
+    return ASF_isProductionLexicalConstructor(lexicalProd);
+  }
+
+  return ATfalse;  
+}
+
+static PT_Tree make_asfix_lex(ATermList chars, PT_Symbol sort)
 {
   char *buf, *end;
-  ATerm result;
+  PT_Tree result;
   int len = get_list_length(chars);
 
   buf = malloc(len+1);
@@ -1225,220 +911,84 @@ static ATerm make_asfix_lex(ATermList chars, ATerm sort)
   }
   end = get_chars_from_list(buf, chars);
   *end = '\0';
-  result = ATmakeTerm(pattern_asfix_lex, buf, sort);
+  result = PT_makeTreeLexical(buf, sort);
   free(buf);
   return result;
 }
 
-/*}}}  */
 
-/*{{{  ATerm toasfix(ATerm t, ATerm f, ATerm n) */
 
 /* The top function for converting back
  */
 
-ATerm toasfix(ATerm term, ATerm filename, ATerm termname)
+PT_ParseTree toasfix(ATerm term)
 { 
-  return ATmake("term(l(\"term\"),w(\" \"),<term>,w(\"\"),<term>," \
-	        "w(\"\\n\"),<term>,w(\"\\n\"),abbreviations([]))",
-                filename, termname, term_to_asfix(term, NULL));
+  return PT_makeParseTreeTree("",term_to_asfix(term,NULL),"");
 }
 
-/*}}}  */
-
-/* A number of function to calculate whether there are conflicts
- * between production rules. If there are conflicts brackets
- * should be added. This functionality should move to a separate
- * tool in the near future.
- */
 
 
-/* This is commented out because it doesn't work and apparently is 
- *  never used -- Tobias
- */
-
-#ifdef CNF
-/*{{{  static ATbool cnf(ATerm prod1, int iptr, int len, ATerm prod2) */
-
-static ATbool cnf(ATerm prod1, int iptr, int len, ATerm prod2)
+static PT_Tree term_to_asfix(ATerm tree, PT_Symbol sort)
 {
-  ATerm priorel, entry;
-
-  if(iptr == 0) {
-    if(len > 1) {
-      priorel = (ATerm)ATmakeAppl2(afun_right_prio, prod1, prod2);
-      entry = ATtableGet(priority_table,priorel);
-      if(entry)
-        return ATtrue;
-      else {
-        priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prod1, prod2);
-        entry = ATtableGet(priority_table,priorel);
-        if(entry)
-          return ATtrue;
-        else {
-          priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio, prod1, prod2);
-          entry = ATtableGet(priority_table,priorel);
-          if(entry)
-            return ATtrue;
-          else
-            return ATfalse;
-        }
-      }
-    }
-    else {
-      priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prod1, prod2);
-      entry = ATtableGet(priority_table,priorel);
-      if(entry)
-        return ATtrue;
-      else
-        return ATfalse;
-    }
-  }
-  else {
-    if(len > 1) {
-      priorel = (ATerm)ATmakeAppl2(afun_left_prio, prod1, prod2);
-      entry = ATtableGet(priority_table,priorel);
-      if(entry)
-        return ATtrue;
-      else {
-        priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prod1, prod2);
-        entry = ATtableGet(priority_table,priorel);
-        if(entry)
-          return ATtrue;
-        else {
-          priorel = (ATerm)ATmakeAppl2(afun_assoc_prio, prod1, prod2);
-          entry = ATtableGet(priority_table,priorel);
-          if(entry)
-            return ATtrue;
-          else {
-            priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio, prod1, prod2);
-            entry = ATtableGet(priority_table,priorel);
-            if(entry)
-              return ATtrue;
-            else
-              return ATfalse;
-          }
-        }
-      }
-    }
-    else {
-      priorel = (ATerm)ATmakeAppl2(afun_gtr_prio, prod1, prod2);
-      entry = ATtableGet(priority_table,priorel);
-      if(entry)
-        return ATtrue;
-      else
-        return ATfalse;
-    }
-  }
-}
-
-/*}}}  */
-/*{{{  static ATermList conflict_on_args(ATerm prod, ATermList args) */
-
-static ATerm add_brackets(ATerm appl);
-
-static ATermList conflict_on_args(ATerm prod, ATermList args)
-{
-  ATerm prod2, ws;
-  ATermList args2, result = ATempty;
-  int i, len = ATgetLength(args);
-
-  for(i=len-1; i>=0; i--) {
-    ATerm tmp = ATelementAt(args,i);
-    if(ATmatchTerm(tmp, pattern_asfix_appl, &prod2, &ws, &args2)) {
-      if(cnf(prod, i, len, prod2))
-        tmp = add_brackets(tmp);
-      result = ATinsert(result, tmp);
-    }
-    else {
-      result = ATinsert(result, tmp);
-    }
-  }
-
-  return result;
-}
-#endif
-
-/*}}}  */
-/*{{{  static ATerm term_to_asfix( ATerm t) */
-
-static ATerm term_to_asfix(ATerm t, ATerm sort)
-{
-  ATerm result = NULL;
-  ATerm prod, modname, lexsort;
-  ATermList formalargs, actualargs;
+  PT_Tree result = NULL;
+  PT_Symbol lexsort;
+  ATerm prod;
+  PT_Production ptProd;
+  PT_Symbols formalargs;
+  PT_Args actualargs;
   char *listsort, *sep;
 
-  if(ATgetType(t) == AT_APPL) {
-    ATermAppl appl;
-    Symbol sym;
-    prod = lookup_prod(ATgetSymbol((ATermAppl)t));
+  if(ATgetType(tree) == AT_APPL) {
+    prod = lookup_prod(ATgetSymbol((ATermAppl)tree));
     if(!prod) {
       ATabort("unknown production symbol: %s\n",
-              ATgetName(ATgetSymbol((ATermAppl) t)));
+              ATgetName(ATgetSymbol((ATermAppl) tree)));
     }
-    assert(ATgetType(prod) == AT_APPL);
-    appl = (ATermAppl)prod;
-    sym = ATgetSymbol(appl);
-   
-    /* Lexical constructors need not be restored in the resulting
-     * AsFix representation of a term. This is the alternative
-     * for "module-asfix" the next "elsif" is for "term-asfix".
-     */
-    if(ATmatchTerm(prod, pattern_lexical_constructor, NULL, &lexsort)) {
-      return term_to_asfix(ATgetArgument((ATermAppl) t, 0), lexsort);
-    } 
-    else if(ATmatchTerm(prod, pattern_term_lexical_constructor, 
-                        NULL, &lexsort)) {
-      return term_to_asfix(ATgetArgument((ATermAppl) t,0), lexsort);
-    } 
-    /* An ordinary production rule is processed. 
-     */
-    else if(sym == symbol_prod) {
-      modname = ATgetArgument(appl, 0);
-      formalargs = (ATermList)ATgetArgument(appl, 2);
-      sort = ATgetArgument(appl, 6);
-      actualargs = terms_to_asfix(formalargs, (ATermAppl)t, sort);
 
-      /* This check obsolete! */
-      /* 
-	 if(ATisEqual(modname, pattern_caller_id)) 
-	 result = ATgetFirst(actualargs);
-	 else 
-      */
-      result = ATmakeTerm(pattern_asfix_appl, prod, ws, actualargs);
-    } 
-    /* We are converting a list without separators back to AsFix.
-     * Lists without separators may be lists of characters which need
-     * a special treatment.
-     */
+    ptProd = PT_makeProductionFromTerm(prod);
+    if (PT_isValidProduction(ptProd)) {
+      if (isLexicalConstructorProd(ptProd)) {
+        lexsort = PT_getProductionRhs(ptProd);
+        return term_to_asfix(ATgetArgument((ATermAppl) tree, 0), lexsort);
+      } 
+      else {
+      /* An ordinary production rule is processed. 
+       */
+	formalargs = PT_getProductionLhs(ptProd);
+	sort = PT_getProductionRhs(ptProd);
+	actualargs = terms_to_asfix(formalargs, (ATermAppl)tree, sort);
+
+	result = PT_makeTreeAppl(ptProd,actualargs);
+      }
+    }
     else if(ATmatchTerm(prod, pattern_listtype, &listsort)) {
       if(streq(listsort, "CHAR")) {
-      	result = make_asfix_lex((ATermList)ATgetArgument((ATermAppl) t,0),
+        result = make_asfix_lex((ATermList)ATgetArgument((ATermAppl) tree,0),
                                 sort);
       }
       else {
-      	result = make_asfix_list((ATermList)ATgetArgument((ATermAppl) t,0),
+        result = make_asfix_list((ATermList)ATgetArgument((ATermAppl) tree,0),
                                  listsort);
       }
-    } 
+    }
     /* Conversion of list with separators to AsFix.
      */
-    else if(ATmatchTerm(prod, pattern_listtype_sep, &listsort, &sep))
-      result = make_asfix_list_sep((ATermList) ATgetArgument((ATermAppl) t,0), 
+    else if(ATmatchTerm(prod, pattern_listtype_sep, &listsort, &sep)) {
+      result = make_asfix_list_sep((ATermList) 
+                                     ATgetArgument((ATermAppl) tree,0),
                                    listsort, sep);
-    else 
+    }
+    else {
       ATabort("cannot handle production: %t\n", prod);
+    }
   }
   else {
-    ATabort("cannot handle term type: %t\n", t);
+    ATabort("cannot handle term type: %d\n", ATgetType(tree));
   }
 
   return result;
 }
 
-/*}}}  */
-/*{{{  static void deslash(char *str, char *buf) */
 
 /*
  * Remove one level of escaping from a string.
@@ -1466,9 +1016,14 @@ void deslash(char *str, char *buf)
   *buf++ = '\0';
 }
 
-/*}}}  */
+static void stringToLower(char *str)
+{
+  int len = strlen(str);
 
-/*{{{  static ATermList terms_to_asfix( ATermList args, ATermAppl appl, sort) */
+  while(--len >= 0) {
+    str[len] = tolower(str[len]);
+  }
+}
 
 /*
  * Translate a list of C/MuASF terms back to AsFix. Starting at the end of
@@ -1482,39 +1037,41 @@ void deslash(char *str, char *buf)
  *    into an AsFix term.
  */
 
-static ATermList terms_to_asfix(ATermList args, ATermAppl appl, ATerm sort) 
+static PT_Args terms_to_asfix(PT_Symbols args, ATermAppl appl, PT_Symbol sort) 
 {
-  ATermList result = ATempty;
+  PT_Args result = PT_makeArgsEmpty();
   int arity = ATgetArity(ATgetSymbol(appl));
-  int i, j = arity-1, len = ATgetLength(args);
-  ATerm tmp2;
-  char *str;
-
+  int i, j = arity-1, len = PT_getSymbolsLength(args);
+  
   for(i=len-1; i>=0; i--) {
-    ATerm tmp = ATelementAt(args,i);
-    if(ATmatchTerm(tmp, pattern_asfix_ws, NULL)) {
-      result = ATinsert(result, spws);
-    } 
-    else if(ATmatchTerm(tmp,pattern_asfix_ql, &str)) {
-      deslash(str, conversionbuf);
-      tmp2 = ATmakeTerm(pattern_asfix_l, conversionbuf);
-      result = ATinsert(result, tmp2);
+    PT_Symbol tmp = PT_getSymbolsSymbolAt(args,i);
+
+    if (PT_isSymbolEmptyLayout(tmp)) {
+        result = PT_makeArgsList(PT_makeTreeLayout(" "), result);
     }
-    else if(ATmatchTerm(tmp, pattern_asfix_l, &str)) {
-      result = ATinsert(result, tmp);
+    else if(PT_isSymbolQuotedLiteral(tmp)) {
+      char *str = strdup(PT_getSymbolString(tmp));
+      deslash(str, conversionbuf);
+      result = PT_makeArgsList(
+	         PT_makeTreeUnquotedLiteral(conversionbuf), result);
+      free(str);
     } 
-    else {
-      ATerm tmp2, tmp3 = ATgetArgument(appl, j);
+    else if(PT_isSymbolUnquotedLiteral(tmp)) {
+      char *str = strdup(PT_getSymbolString(tmp));
+      result = PT_makeArgsList(PT_makeTreeUnquotedLiteral(str),result);
+      free(str);
+    }
+    else { 
+      PT_Tree tmp2;
+      ATerm tmp3 = ATgetArgument(appl, j);
       tmp2 = term_to_asfix(tmp3, sort);
-      result = ATinsert(result, tmp2);
+      result = PT_makeArgsList(tmp2,result);
       j--;
     }
   }
 
   return result;
 }
-/*}}}  */
-/*{{{  void write_memo_profile() */
 
 /*
  * Write memo profiling info to the file "memo.prof"
@@ -1547,8 +1104,6 @@ void write_memo_profile()
 }
 #endif
 
-/*}}}  */
-/*{{{  void init_patterns() */
 
 /* Part of the initialization code in this function should
  * move to the AsFix library. Constants used during rewriting
@@ -1559,59 +1114,14 @@ void init_patterns()
 {
   int i;
 
-  ATprotect(&pattern_asfix_term);
-  ATprotect(&pattern_asfix_appl);
-  ATprotect(&pattern_asfix_prod);
-  ATprotect(&pattern_asfix_list);
-  ATprotect(&pattern_asfix_lex);
-  ATprotect(&pattern_asfix_l);
-  ATprotect(&pattern_asfix_ql);
-  ATprotect(&pattern_asfix_ws);
-  ATprotect(&pattern_asfix_sort);
-  ATprotect(&pattern_listtype);
-  ATprotect(&pattern_listtype_sep);
-  ATprotect(&pattern_char);
-  ATprotect(&pattern_lexical_constructor);
-  ATprotect(&pattern_term_lexical_constructor);
-  ATprotect(&pattern_caller_id);
-
-  symbol_asfix_lex  = ATmakeSymbol("lex", 2, ATfalse);
-  ATprotectSymbol(symbol_asfix_lex);
-
-  pattern_asfix_term = ATparse("term(<term>,<term>,<term>," \
-			       "<term>,<term>,<term>,<term>,<term>,<term>)");
-  pattern_asfix_appl = ATparse("appl(<term>,<term>,[<list>])");
-  pattern_asfix_prod = ATparse("prod(<term>,<term>,<term>,<term>," \
-			       "<term>,<term>,<term>,<term>,<term>)");
-  pattern_asfix_list = ATparse("list(<term>,<term>,[<list>])");
-  pattern_asfix_lex  = ATparse("lex(<str>,<term>)");
-  pattern_asfix_l    = ATparse("l(<str>)");
-  pattern_asfix_ql   = ATparse("ql(<str>)");
-  pattern_asfix_ws   = ATparse("w(<str>)");
-  pattern_asfix_sort = ATparse("sort(<str>)");
-  pattern_listtype   = ATparse("listtype(sort(<str>))");
-  pattern_listtype_sep = ATparse("listtype(sort(<str>),ql(<str>))");
-  pattern_char       = ATparse("\"CHAR\"");
-  pattern_lexical_constructor = ATparse(
-					"prod(id(\"caller\"),w(\"\"),[l(<str>),w(\"\"),ql(\"(\"),w(\"\")," \
-					"iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")]," \
-					"w(\"\"),l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)");
-  pattern_term_lexical_constructor = ATparse(
-					     "prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(<str>),w(\"\"),ql(\"(\")," \
-					     "w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")]," \
-					     "w(\"\"),l(\"->\"),w(\"\"),<term>,w(\"\"),no-attrs)");
-  pattern_caller_id   = ATparse("id(\"caller\")");
-
-  ATprotect(&ws);
-  ws = ATparse("w(\"\\n\")");
-  ATprotect(&spws);
-  spws = ATparse("w(\" \")");
- 
   /* make characters */
   for(i=0; i<256; i++) {
     ATprotect(&char_table[i]);
     char_table[i] = (ATerm) ATmakeInt(i);
   }
+
+  ATprotect(&pattern_listtype);
+  ATprotect(&pattern_listtype_sep);
 
   sym_quote0 = ATmakeSymbol("quote", 1, ATfalse);
   ATprotectSymbol(sym_quote0);
@@ -1636,16 +1146,9 @@ void init_patterns()
   conssym = ATmakeSymbol("cons", 2, ATfalse);
   ATprotectSymbol(conssym);
 
-  afun_left_prio = ATmakeAFun("left-prio", 2, ATfalse);
-  ATprotectAFun(afun_left_prio);
-  afun_right_prio = ATmakeAFun("right-prio", 2, ATfalse);
-  ATprotectAFun(afun_right_prio);
-  afun_assoc_prio = ATmakeAFun("assoc-prio", 2, ATfalse);
-  ATprotectAFun(afun_assoc_prio);
-  afun_non_assoc_prio = ATmakeAFun("non-assoc-prio", 2, ATfalse);
-  ATprotectAFun(afun_non_assoc_prio);
-  afun_gtr_prio = ATmakeAFun("gtr-prio", 2, ATfalse);
-  ATprotectAFun(afun_gtr_prio);
+  /* muASF list patterns */
+  pattern_listtype   = ATparse("listtype(sort(<str>))");
+  pattern_listtype_sep = ATparse("listtype(sort(<str>),ql(<str>))");
 
 #ifdef MEMO_PROFILING
   prof_table = ATtableCreate(2048, 80);
@@ -1656,9 +1159,7 @@ void init_patterns()
 #endif
 
 }
-/*}}}  */
 
-/*{{{  ATerm slice(ATerm l1, ATerm l2) */
 
 /* Constructs the slice of a list starting at index "l1" and ending JUST BEFORE 
  * index "l2". If the slice fits into the term_store a fast way of
@@ -1698,8 +1199,6 @@ ATerm slice(ATerm l1, ATerm l2)
   return (ATerm)result;
 }
 
-/*}}}  */
-/*{{{  ATerm make_list(ATerm t) */
 
 /* Transforms a term into a list. If the term is already a list this
  * list is returned.
@@ -1714,5 +1213,3 @@ ATerm make_list(ATerm t)
     return singleton(t);
   }
 }
-
-/*}}}  */
