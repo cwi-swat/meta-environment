@@ -41,10 +41,10 @@ parsetablegen.o : parsetablegen.tif.h
 sdf-help.o : parsetablegen.tif.h
 
 %.tifs: %.idef
-    @PATH=${TOOLBUS}/bin:${PATH} idef2tif $<
-    @if [ "a${VPATH}" != "a" ]; then \
-       mv ${srcdir}/$@ $@ ;\
-    fi
+	@PATH=${TOOLBUS}/bin:${PATH} idef2tif $<
+	@if [ "a${VPATH}" != "a" ]; then \
+		mv ${srcdir}/$@ $@ ;\
+	fi
 
 # we create one sdf2table that uses source tree binaries and data 
 # this is needed for testing
