@@ -114,7 +114,6 @@ in
 	    if equal(IsTerm,"sdf") then
 	      snd-eval(SE,getTree(Fid)).
 	      rec-value(SE,T1?).
-              printf("The tree: %t\n", T1).
 	      snd-msg(update-module-in-db(T1,Language)).
 	      rec-msg(extra-modules(Modules?)).
 	      snd-msg(open-modules(Modules)).
