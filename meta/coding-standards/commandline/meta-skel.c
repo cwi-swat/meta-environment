@@ -57,7 +57,7 @@ void usage(void)
         "\t-v              verbose mode\n"
         "\t-V              reveal program version (i.e. %s)\n",
         myname, myversion);
-				exit(1);
+    exit(1);
 }
 
 void version(void)
@@ -73,7 +73,6 @@ int main(int argc, char **argv)
     char *output = "-";
     int bafmode=1;
     int verbose=0;
-    int proceed=1;
 
     extern char *optarg;
     extern int   optind;
@@ -93,23 +92,19 @@ int main(int argc, char **argv)
      */
         while ((c = getopt(argc, argv, myarguments)) != -1) {
             switch (c) {
-                case 'b':  bafmode = 1;                            break;
-                case 't':  bafmode = 0;                            break;
-                case 'v':  verbose = 1;                            break;
-                case 'i':  input=optarg;                           break;
-                case 'o':  output=optarg;                          break;
-                case 'V':  version(); proceed=0;                   break;
+                case 'b':  bafmode = 1;      break;
+                case 't':  bafmode = 0;      break;
+                case 'v':  verbose = 1;      break;
+                case 'i':  input=optarg;     break;
+                case 'o':  output=optarg;    break;
+                case 'V':  version();        break;
 
-                case 'h':
-                default:   usage(); proceed=0;                     break;
+                case 'h':  /* drop intended */
+                default:   usage();          break;
             }
         }
         argc -= optind;
         argv += optind;
-
-        if(proceed) {
-          /*  . . .  */
-        }
     }
 
     return 0;
