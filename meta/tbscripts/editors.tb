@@ -160,8 +160,8 @@ in
     TermEditorCreator(ModuleName, FileName, none)
   +
     rec-msg(no-extension-modulename(Extension)) .
-    snd-note(ui-status(errorf("Extension %s is not registered",
-                       [Extension]))) .
+    snd-note(ui-status(errorf("Extension %s is not registered. Please edit your meta.buttons. For example: configuration([extension(\"MyModuleName\",\"%s\")])",
+                       [Extension, Extension]))) .
     snd-msg(editor-opened("", no-editor))
   )
 endlet
