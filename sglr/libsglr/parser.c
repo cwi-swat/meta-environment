@@ -1095,7 +1095,7 @@ void SG_PrintStatusBar(char *subject, long part, long whole)
   factor = (long double) part / (long double) whole;
 
 
-  fprintf(stderr,"\r%s [%-30.*s] %c %ld/%ld (%3d%%)",
+  fprintf(stderr,"\r%-20s [%-30.*s] %c %ld/%ld (%3d%%)",
                  subject,
                  (int) ((double) 30 * factor),
                  bar,
