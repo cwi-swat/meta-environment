@@ -25,12 +25,6 @@ do
    esac
 done
 
-if [ "$#" -ne 1 ]
-then
-   usage
-   exit 1
-fi
-
 for i in *.sdf2; do
   mv $i `basename $i .sdf2`.sdf
 done
