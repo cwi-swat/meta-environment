@@ -352,11 +352,17 @@ void  SG_ParserCleanup(void)
 {
   long allocated;
 
+  if (SG_GC) {
+    SG_CollectOldStacks(old_active_stacks, sg_tokens_read % GC_CYCLE, 
+			NULL, accepting_stack);
+  }
+
 #if !defined(HAVE_BOEHMGC)
   if(SG_GC)
     if(accepting_stack)
       SG_ClearStack(accepting_stack);
 #endif
+
   active_stacks   = NULL;
   accepting_stack = NULL;
   SG_AmbTable(SG_AMBTBL_CLEAR, NULL, NULL);
@@ -835,8 +841,8 @@ void SG_Shifter(void)
     IF_STATISTICS(SG_MaxAllocStats());
 #endif
     if(SG_GC) {
-      old_active_stacks[sg_tokens_read % GC_CYCLE] = active_stacks;
-      if ((sg_tokens_read % GC_CYCLE) == (GC_CYCLE-1)) {
+      old_active_stacks[(sg_tokens_read-1) % GC_CYCLE] = active_stacks;
+      if (((sg_tokens_read-1) % GC_CYCLE) == (GC_CYCLE-1)) {
 	SG_CollectOldStacks(old_active_stacks, GC_CYCLE, new_active_stacks, accepting_stack);
       }
     }
