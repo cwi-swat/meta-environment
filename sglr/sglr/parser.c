@@ -27,6 +27,11 @@
 #include "forest.h"
 #include "tree-to-dot.h"
 
+#ifndef DONT_USE_BOEHMGC
+  #include <gc.h>
+  #define malloc(n)  GC_malloc(n)
+#endif
+
 /*
    The following flags determine how much progress information is
    provided.
@@ -257,7 +262,7 @@ term *parse(parse_table *ptable, int(*get_next_char)(void))
     if(gc) TBcollect();
   } while (current_token != eof && active_stacks != NULL);
 
-  if(show_stack) stack_to_dotfile(accepting_stack);
+  if(show_stack) stacks_to_dotfile(new_stacks(accepting_stack));
 
   return result();
 }

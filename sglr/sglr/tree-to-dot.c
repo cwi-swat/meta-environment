@@ -344,13 +344,3 @@ void stacks_to_dotfile(stacks *sts)
   fprintf(stack_dot, "}\n");
   fclose(stack_dot);
 }
-
-
-void stack_to_dotfile(stack *st)
-{
-  stacks *sts;
-
-  sts = new_stacks(st);
-  stacks_to_dotfile(sts);
-  free(sts);
-}

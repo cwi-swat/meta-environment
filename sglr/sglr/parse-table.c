@@ -21,6 +21,13 @@
 #include "parse-table.h"
 #include "bool.h"
 
+#ifndef DONT_USE_BOEHMGC
+  #include <gc.h>
+  #define malloc(n)  GC_malloc(n)
+  #define free(n)    ;
+#endif
+
+
 extern int   verboseflag;
 extern int   debugflag;
 extern int   show_statistics;

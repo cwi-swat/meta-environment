@@ -18,6 +18,14 @@
 #include "stack.h"
 #include "parser.h"
 
+/*
+ * For some reason, the Boehm GC does not work yet on stacks/links...
+ */
+#ifndef DONT_USE_BOEHMGC
+  #include <gc.h>
+//  #define malloc(n)  GC_malloc(n)
+#endif
+
 
 stack *new_stack(state s, stack *ancestor) {
   stack *res;

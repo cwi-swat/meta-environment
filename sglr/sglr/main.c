@@ -43,7 +43,7 @@ char *dotoutput = "";
 int   generate_dot = FALSE;
 int   show_stack = FALSE;
 char *stack_dotoutput = "";
-int   gc = TRUE;
+int   gc = FALSE;
 int   standalone=TRUE;
 
 
