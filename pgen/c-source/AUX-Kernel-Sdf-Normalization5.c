@@ -39,78 +39,78 @@ void init_AUX_Kernel_Sdf_Normalization5 ( ) {
 }
 ATerm lf_AUX_Kernel_Sdf_Normalization5_1 ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 14 ] ;
-FUNC_ENTRY ( lf_AUX_Kernel_Sdf_Normalization5_1sym , ATmakeAppl ( lf_AUX_Kernel_Sdf_Normalization5_1sym , arg0 , arg1 ) ) ;
-{
-ATerm ltmp [ 2 ] ;
-lbl_lf_AUX_Kernel_Sdf_Normalization5_1 : ltmp [ 0 ] = arg0 ;
-ltmp [ 1 ] = arg1 ;
-if ( check_sym ( ltmp [ 1 ] , ef1sym ) ) {
-{
-ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf2sym ) ) {
-{
-ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( not_empty_list ( atmp100 ) ) {
-tmp [ 0 ] = list_head ( atmp100 ) ;
-tmp [ 1 ] = list_tail ( atmp100 ) ;
-if ( check_sym ( ltmp [ 0 ] , ef2sym ) ) {
-tmp [ 2 ] = arg_0 ( ltmp [ 0 ] ) ;
-tmp [ 3 ] = arg_1 ( ltmp [ 0 ] ) ;
-tmp [ 4 ] = arg_2 ( ltmp [ 0 ] ) ;
-if ( check_sym ( tmp [ 2 ] , ef3sym ) ) {
-tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ;
-if ( check_sym ( tmp [ 5 ] , lf3sym ) ) {
-tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
-if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
-tmp [ 7 ] = arg_0 ( tmp [ 0 ] ) ;
-tmp [ 8 ] = arg_1 ( tmp [ 0 ] ) ;
-tmp [ 9 ] = arg_2 ( tmp [ 0 ] ) ;
-if ( check_sym ( tmp [ 7 ] , ef3sym ) ) {
-tmp [ 10 ] = arg_0 ( tmp [ 7 ] ) ;
-if ( check_sym ( tmp [ 10 ] , lf3sym ) ) {
-tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ;
-if ( term_equal ( tmp [ 6 ] , tmp [ 11 ] ) ) {
-if ( term_equal ( tmp [ 3 ] , tmp [ 8 ] ) ) {
-tmp [ 12 ] = ( * ef4 ) ( tmp [ 4 ] , tmp [ 9 ] ) ;
-tmp [ 13 ] = ( * ef2 ) ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 6 ] ) ) ) , tmp [ 3 ] , tmp [ 12 ] ) ;
-arg0 = tmp [ 13 ] ;
-arg1 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
-goto lbl_lf_AUX_Kernel_Sdf_Normalization5_1 ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-else {
-FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( ltmp [ 0 ] ) ) ) ) ;
-}
-}
-}
-}
-}
-if ( check_sym ( ltmp [ 1 ] , ef1sym ) ) {
-{
-ATerm atmp10 = arg_0 ( arg1 ) ;
-if ( check_sym ( atmp10 , lf2sym ) ) {
-{
-ATerm atmp100 = arg_0 ( atmp10 ) ;
-if ( not_empty_list ( atmp100 ) ) {
-tmp [ 0 ] = list_head ( atmp100 ) ;
-tmp [ 1 ] = list_tail ( atmp100 ) ;
-arg1 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
-goto lbl_lf_AUX_Kernel_Sdf_Normalization5_1 ;
-}
-}
-}
-}
-}
-FUNC_EXIT ( make_nf2 ( lf_AUX_Kernel_Sdf_Normalization5_1sym , ltmp [ 0 ] , ltmp [ 1 ] ) ) ;
-}
+ ATerm tmp [ 14 ] ;
+ FUNC_ENTRY ( lf_AUX_Kernel_Sdf_Normalization5_1sym , ATmakeAppl ( lf_AUX_Kernel_Sdf_Normalization5_1sym , arg0 , arg1 ) ) ;
+ {
+  ATerm ltmp [ 2 ] ;
+  lbl_lf_AUX_Kernel_Sdf_Normalization5_1 : ltmp [ 0 ] = arg0 ;
+  ltmp [ 1 ] = arg1 ;
+  if ( check_sym ( ltmp [ 1 ] , ef1sym ) ) {
+  {
+   ATerm atmp10 = arg_0 ( arg1 ) ;
+   if ( check_sym ( atmp10 , lf2sym ) ) {
+   {
+    ATerm atmp100 = arg_0 ( atmp10 ) ;
+    if ( not_empty_list ( atmp100 ) ) {
+     tmp [ 0 ] = list_head ( atmp100 ) ;
+     tmp [ 1 ] = list_tail ( atmp100 ) ;
+     if ( check_sym ( ltmp [ 0 ] , ef2sym ) ) {
+      tmp [ 2 ] = arg_0 ( ltmp [ 0 ] ) ;
+      tmp [ 3 ] = arg_1 ( ltmp [ 0 ] ) ;
+      tmp [ 4 ] = arg_2 ( ltmp [ 0 ] ) ;
+      if ( check_sym ( tmp [ 2 ] , ef3sym ) ) {
+       tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ;
+       if ( check_sym ( tmp [ 5 ] , lf3sym ) ) {
+        tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;
+        if ( check_sym ( tmp [ 0 ] , ef2sym ) ) {
+         tmp [ 7 ] = arg_0 ( tmp [ 0 ] ) ;
+         tmp [ 8 ] = arg_1 ( tmp [ 0 ] ) ;
+         tmp [ 9 ] = arg_2 ( tmp [ 0 ] ) ;
+         if ( check_sym ( tmp [ 7 ] , ef3sym ) ) {
+          tmp [ 10 ] = arg_0 ( tmp [ 7 ] ) ;
+          if ( check_sym ( tmp [ 10 ] , lf3sym ) ) {
+           tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ;
+           if ( term_equal ( tmp [ 6 ] , tmp [ 11 ] ) ) {
+            if ( term_equal ( tmp [ 3 ] , tmp [ 8 ] ) ) {
+             tmp [ 12 ] = ( * ef4 ) ( tmp [ 4 ] , tmp [ 9 ] ) ;
+             tmp [ 13 ] = ( * ef2 ) ( ( * ef3 ) ( lf3 ( make_list ( tmp [ 6 ] ) ) ) , tmp [ 3 ] , tmp [ 12 ] ) ;
+             arg0 = tmp [ 13 ] ;
+             arg1 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+             goto lbl_lf_AUX_Kernel_Sdf_Normalization5_1 ;
+           }
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+   else {
+    FUNC_EXIT ( ( * ef1 ) ( lf2 ( make_list ( ltmp [ 0 ] ) ) ) ) ;
+   }
+  }
+  }
+ }
+ }
+ if ( check_sym ( ltmp [ 1 ] , ef1sym ) ) {
+ {
+  ATerm atmp10 = arg_0 ( arg1 ) ;
+  if ( check_sym ( atmp10 , lf2sym ) ) {
+  {
+   ATerm atmp100 = arg_0 ( atmp10 ) ;
+   if ( not_empty_list ( atmp100 ) ) {
+    tmp [ 0 ] = list_head ( atmp100 ) ;
+    tmp [ 1 ] = list_tail ( atmp100 ) ;
+    arg1 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+    goto lbl_lf_AUX_Kernel_Sdf_Normalization5_1 ;
+   }
+  }
+  }
+ }
+ }
+ FUNC_EXIT ( make_nf2 ( lf_AUX_Kernel_Sdf_Normalization5_1sym , ltmp [ 0 ] , ltmp [ 1 ] ) ) ;
+ }
 }
 }
 ATerm lf2 ( ATerm arg0 ) {
