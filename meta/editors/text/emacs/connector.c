@@ -18,7 +18,7 @@
 #include <connector.h>
 #include <TextEditor.h>
 #include <EditorData.h>
-#include <ErrorAPI-utils.h>
+#include <Location.h>
 
 /*}}}  */
 /*{{{  defines */
@@ -276,12 +276,12 @@ static void setFocus(int write_to_editor_fd, TE_Action edAction)
 static void setFocusAtLocation(int write_to_editor_fd, TE_Action edAction)
 {
   ATerm locationTerm = TE_getActionErrorLocation(edAction);
-  ERR_Location location = ERR_LocationFromTerm(locationTerm);
-  ERR_Area area = ERR_getLocationArea(location);
+  LOC_Location location = LOC_LocationFromTerm(locationTerm);
+  LOC_Area area = LOC_getLocationArea(location);
 
-  if (ERR_isAreaArea(area)) {
-    int start = ERR_getAreaOffset(area) + 1;
-    int length = ERR_getAreaLength(area);
+  if (LOC_isAreaArea(area)) {
+    int start = LOC_getAreaOffset(area) + 1;
+    int length = LOC_getAreaLength(area);
     char buf[BUFSIZ];
 
     sprintf(buf, "(set-focus %d %d)", start, start+length);
@@ -366,7 +366,7 @@ int main(int argc, char *argv[])
   int write_to_hive_fd = -1;
 
   ATBinit(argc, argv, &bottomOfStack);
-  ERR_initErrorApi();
+  LOC_initLocationApi();
   TE_initTextEditorApi();
   SE_initEditorDataApi();
 

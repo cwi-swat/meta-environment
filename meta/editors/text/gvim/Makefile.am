@@ -31,7 +31,7 @@ gvim_connector_LDADD = \
 	$(COMMONLIB) \
 	-L$(top_builddir)/editors/structure/src \
 	-L$(TOOLBUSLIB)/lib \
-        -L$(ERROR_SUPPORT)/lib -lErrorAPI \
+        -L$(ERROR_SUPPORT)/lib -lLocationAPI \
 	-L$(ATERM)/lib \
 	-lStructure \
 	-lATB \

@@ -2,7 +2,7 @@
 
 SCRIPT = gnu-emacs.el
 
-# AM_CFLAGS = -Werror
+#AM_CFLAGS = -Werror
 
 INCLUDES = \
 	-I$(top_srcdir)/editors/text/common \
@@ -29,7 +29,7 @@ emacs_connector_LDADD = \
 	$(COMMONLIB) \
 	-L$(top_builddir)/editors/structure/src -lStructure \
 	-L$(TOOLBUSLIB)/lib -lATB \
-        -L$(ERROR_SUPPORT)/lib -lErrorAPI \
+        -L$(ERROR_SUPPORT)/lib -lLocationAPI \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
 
