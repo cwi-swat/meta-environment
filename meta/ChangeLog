@@ -1,5 +1,9 @@
 # $Id$
 
+2003/05/15 ({jurgenv,markvdb}@cwi.nl)
+ * Created a generic term-store tool
+ * Some features are turned off for the moment (module refactorings)
+
 2003/05/14 (markvdb@cwi.nl)
  * Intermediate version of new module-db.
 
