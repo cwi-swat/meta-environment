@@ -2,6 +2,12 @@
 
 lib_LIBRARIES=libmerrors.a
 
+include_HEADERS=\
+	Errors.h\
+	Errors_dict.h\
+	ParsedErrors.h\
+	ParsedErrors_dict.h
+
 libmerrors_a_SOURCES = \
 	Errors.c \
 	Errors_dict.c\

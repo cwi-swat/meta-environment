@@ -9,3 +9,4 @@ config.cache
 config.status
 *-*.pkg
 autom*.cache
+meta-errors-*.tar.gz

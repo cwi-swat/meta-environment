@@ -8,3 +8,7 @@ $Id$
      - a reusable error description mechanism for ASF+SDF specifications
  * Started with generated of imploded api and parse-tree api versions of
    meta-error in lib subdirectory
+ * Generation of libraries is completely manual: missing bottom-sorts
+   NatCon and String are not generated in the parsed api (manual editing
+   of ParsedErrors.h solved this problem temporarily).
+
