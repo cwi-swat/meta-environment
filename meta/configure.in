@@ -151,14 +151,14 @@ if test ${GHN_FOUND} = no; then
   AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
 fi
 
+AC_SUBST(SOCKLIBS)
+
 LIBS=$NOSOCKLIBS
+
 AC_CHECK_LIB(dl, dlopen)
 
 dnl Checks for header files.
 AC_CHECK_HEADER(getopt.h)
-
-AC_SUBST(SOCKLIBS)
-
 
 dnl Which files need updating?
 AC_OUTPUT(
