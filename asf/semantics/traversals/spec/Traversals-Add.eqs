@@ -1,0 +1,24 @@
+equations
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Exported functionality
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+[ap-0] add_productions(Module, Productions) = add_to_module(Module, Productions)
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% add productions to hiddens section of a module
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%
+
+[atm-0] Productions != 
+        =====================================================================	
+        add_to_module(module ModuleName ImpSection* Section*, Productions) = 
+module ModuleName 
+  ImpSection* 
+  Section*
+	hiddens 
+    context-free syntax 
+      Productions
+
+[atm-1] add_to_module(Module,) = Module

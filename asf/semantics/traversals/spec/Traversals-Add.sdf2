@@ -1,0 +1,13 @@
+module Traversals-Add
+
+imports Traversals-Utils
+
+exports
+	context-free syntax
+		"add_productions" "(" Module "," Productions ")" -> Module
+
+hiddens
+	context-free syntax
+		"add_to_module" "(" Module "," Productions ")" -> Module	
+
+	

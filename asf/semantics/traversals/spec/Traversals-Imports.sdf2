@@ -1,0 +1,36 @@
+module Traversals-Imports
+	imports Traversals-Utils
+
+exports
+	context-free syntax
+		"find_imports" "(" Definition "," Module ")" -> Imports
+
+hiddens
+	sorts ImportSet
+	context-free syntax
+		"find_set" "(" Definition "," ImportSet ")" -> ImportSet
+		"find_set_imports" "(" Definition "," ImportSet "," ImportSet ")" -> ImportSet
+		"find_set_import_definition" "(" Definition "," Import "," ImportSet ")" -> ImportSet
+		"find_set_import_module" "(" Module "," Import "," ImportSet ")" -> ImportSet
+ 	
+	context-free syntax
+		"exported_imports_of" "(" Module ")" -> Imports
+		"exported_imports_of_impsections" "(" ImpSection*")" -> Imports
+		"exported_imports_of_sections" "(" Section* ")" -> Imports
+		"exported_imports_of_section" "(" Section ")" -> Imports
+		"exported_imports_of_grammar" "(" Grammar ")" -> Imports
+		
+	context-free syntax
+		"all_imports_of" "(" Module ")" -> Imports
+		"all_imports_of_impsections" "(" ImpSection*")" -> Imports
+		"all_imports_of_sections" "(" Section* ")" -> Imports
+		"all_imports_of_section" "(" Section ")" -> Imports
+		"all_imports_of_grammar" "(" Grammar ")" -> Imports
+
+	context-free syntax
+		"[" Import* "]" -> ImportSet
+		"add" Import "to" ImportSet -> ImportSet
+		"add" ImportSet "to" ImportSet -> ImportSet
+    
+	variables
+		"ImportSet" [0-9]* -> ImportSet

@@ -1,0 +1,48 @@
+module Traversals-Utils
+
+
+imports Sdf2
+
+exports
+	
+	variables
+	
+	"ModuleName" [0-9]* -> ModuleName
+	"ImpSection" [0-9]* -> ImpSection
+	"ImpSection*" [0-9]* -> ImpSection*
+	"Module" [0-9]* -> Module
+  "Module*" [0-9]* -> Module*
+
+	"Import" [0-9]* -> Import
+	"Import*" [0-9]* -> Import*	
+	"Import+" [0-9]* -> Import+	
+	"Imports" [0-9]* -> Imports
+
+	"Section" [0-9]* -> Section
+	"Section*" [0-9]* -> Section*
+
+	"Production" [0-9]* -> Production
+	"Production*" [0-9]* -> Production*
+	"Productions" [0-9]* -> Productions
+	"TraversalProductions" [0-9]* -> Productions
+	"TraversalProduction*" [0-9]* -> Production*
+	"TraversalProduction" [0-9]* -> Production
+	"NormalProductions" [0-9]* -> Productions
+	"NormalProduction*" [0-9]* -> Production*
+	"NormalProduction" [0-9]* -> Production
+
+	"Symbol" [0-9]* -> Symbol
+	"Symbol*" [0-9]* -> Symbol*
+  "Symbols" [0-9]* -> Symbols
+
+  "Grammar" [0-9]* -> Grammar
+
+  "Attributes" [0-9]* -> Attributes
+	"Attribute*" [0-9]* -> {Attribute ","}*
+  "Literal" [0-9]* -> Literal
+  "Literal*" [0-9]* -> Literal*
+
+	"Sort" [0-9]* -> Sort
+
+	"Sdf" [0-9]* -> SDF
+	"Definition" [0-9]* -> Definition

@@ -1,0 +1,79 @@
+equations
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Exported functionality
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+[mps-0] make_productions(NormalProductions, TraversalProductions) = 
+					make_traversals(NormalProductions, TraversalProductions)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Making productions for each traversal production
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+[mts-0] make_traversals(NormalProductions, ) = 
+
+[mts-1] make_traversal(NormalProductions, TraversalProduction) = Production*1,
+				make_traversals(NormalProductions, TraversalProduction*) = Production*2
+				========================================================================
+				make_traversals(NormalProductions, TraversalProduction TraversalProduction*) =
+					Production*1 
+          Production*2 
+
+%% We create productions by calculating the set of reachable sorts starting with
+%% the topsort in the traversal production. Then we create a production for each
+%% sort in this set. The assumption is that the first sort is always the argument
+%% to be traversed. In case of an analyzing traversal, the second sort in the production
+%% is the accumulator.
+
+
+%% Sort preserving traversals first:
+
+[mt-0]  TraversalProduction = Symbol*1 Sort Symbol*2 -> Sort Attributes,
+				close_sorts_set(NormalProductions,[Sort]) = SymbolSet,
+				create_productions(TraversalProduction, SymbolSet) = Productions
+				============================================================================
+				make_traversal(NormalProductions, TraversalProduction) = Productions
+
+%% Analyzer transformations 
+
+[mt-1]	TraversalProduction = Symbol*1 Sort1 Symbol*2 Sort2 Symbol*3 -> Sort2 Attributes,
+				close_sorts_set(NormalProductions, [Sort1]) = SymbolSet,
+				create_productions(TraversalProduction, SymbolSet) = Productions
+				====================================================================================
+				make_traversal(NormalProductions, TraversalProduction) = Productions
+
+%% default to prevent divergence in case of a typo
+[default-mt] make_traversal(NormalProductions, TraversalProduction) = 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Actual creation of productions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+[cps-0] create_productions(TraversalProduction, []) =
+
+[cps-1] create_production(TraversalProduction, Symbol) = Production,
+				create_productions(TraversalProduction, [Symbol*]) = Production*
+				===============================================================
+				create_productions(TraversalProduction, [ Symbol Symbol* ]) = 
+				Production
+        Production*
+
+%% Create a sort preserving transformation:
+
+[cp-0] create_production(Literal "(" Symbol1 "," Symbol* ")" -> Symbol1 Attributes, Symbol) = 
+					Literal "(" Symbol "," Symbol* ")" -> Symbol Attributes
+
+[cp-1] create_production(Literal "(" Symbol1 ")" -> Symbol1 Attributes, Symbol) =
+          Literal "(" Symbol ")" -> Symbol Attributes
+
+%% Create an analyze 
+
+[cp-2] create_production( Literal "(" Symbol1 "," Symbol2 "," Symbol* ")" -> Symbol2 Attributes, Symbol) = 
+					Literal "(" Symbol "," Symbol2 "," Symbol* ")" -> Symbol2 Attributes								 
+
+[cp-3] create_production( Literal "(" Symbol1 "," Symbol2 ")" -> Symbol2 Attributes, Symbol) = 
+					Literal "(" Symbol "," Symbol2 ")" -> Symbol2 Attributes	
+
+%% Only prefix format traversals are allowed currently
+[defaukt-cp] create_production( Production, Symbol ) = 
