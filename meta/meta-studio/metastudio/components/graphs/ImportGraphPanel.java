@@ -65,13 +65,13 @@ public class ImportGraphPanel
                 if (node == null) {
                     module = null;
                 } else {
-                    module = moduleManager.getModule(node.getLabel());
+                    module = moduleManager.getModule(node.getId().getId());
                     if (event.isPopupTrigger()
                         || SwingUtilities.isRightMouseButton(event)) {
                         postEvent(
                             getFactory().make(
                                 "get-buttons(module-popup,<str>)",
-                                node.getLabel()));
+                                node.getId().getId()));
                     }
 
                 }
