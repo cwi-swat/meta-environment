@@ -17,7 +17,7 @@
 
 #include <stdio.h>
 
-void main(void)
+int main(void)
 {
   int c;
 
@@ -29,6 +29,6 @@ void main(void)
       fprintf(stdout, "%c", c);
   }
   fprintf(stdout, "\\end{verbatim}\n");
-  exit(0);
+  return 0;
 }
 

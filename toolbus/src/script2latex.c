@@ -19,9 +19,21 @@ int is_comment(char *line)
   return (strlen(line) >= 2) && (line[0] == '%') && (line[1] == '%');
 }
 
+char *safer_gets(char *s, int l)
+{
+  s = fgets(s, l, stdin);
+  if(s) {
+    int lastpos = strlen(s)-1;
+
+    if(s[lastpos] == '\n')
+      s[lastpos] = '\0';
+  }
+  return s;
+}
+
 int main(int argc, char *argv[])
 {
-  char line[256];
+  char line[PATH_MAX];
   int strip = 0;
   int first = 1;
 
@@ -34,7 +46,7 @@ int main(int argc, char *argv[])
       usage();
   }
 
-  while(gets(line)){
+  while(safer_gets(line, PATH_MAX)){
     if(is_comment(line)){
       if(!strip){
 	if(!first){
@@ -47,7 +59,7 @@ int main(int argc, char *argv[])
 	printf("%s\n", &line[2]);
       }
      
-      while(gets(line)){
+      while(safer_gets(line, PATH_MAX)){
 	if(line[0] == '\0')
 	  printf("\n");
 	else if(is_comment(line)){
