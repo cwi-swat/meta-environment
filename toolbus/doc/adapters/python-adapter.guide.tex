@@ -1,25 +1,70 @@
 
-\section{\label{ToolInPython}Writing tools in Python}
+\section{\label{ToolsInPython}Writing tools in Python}
 
-The {\tt python-adapter} is used to write \TB\ tools in Python.
-First we will discuss the python-adapter command line options, and
-the interface to your python script,
-then we will present the \TB\ related functions that can be called
-from your python script, and we will finish by giving a small example
-script.
+You can write \TB\ tools in Python using a \TB -aware Python interpreter.
+How to build such a \TB -aware Python interpreter is explained in
+Section \ref{build-python}. Section \ref{using-python} explains how
+to connect your python scripts that are executed by a \TB -aware
+Python interpreter to the \TB.
 
-\subsection{\label{python-adapter}{\tt python-adapter}}
+\subsection{\label{build-python}Building a \TB -aware Python interpreter.}
 
-\paragraph{Synopsis.} Execute a Pyhton program as a tool.
+Before adding \TB\ support to Python, you first have to retrieve and
+install Python, version 1.3. 
+If you need more information about Python or more
+specific information about installing Python, you can visit the
+\emp{Python home page} at {\tt http://www.python.org/}. In this document
+we assume you have succesfully installed python and are only interested
+in adding \TB\ support.
 
-\paragraph{Example.} {\tt python-adapter -module example.py}
+The first thing to do, is to copy the file 
+{\tt adapters/python-adapter/TBmodule.c}, located in this \TB\ distribution
+to the Python {\tt Modules} directory:
+\begin{verbatim}
+cp ToolBus/python-adapter/TBmodule.c Python-1.3/Modules
+\end{verbatim}
+Now you have to add the two lines to the file {\tt Setup} 
+in the Python {\tt Modules} directory.
+If you have enabled the {\tt tkinter} module in the {\tt Setup} file,
+these lines are:
+\begin{verbatim}
+TBBASE=<your ToolBus location>
+TB TBmodule.c -I$(TBBASE)/include -I/home/olivierp/include $(TBBASE)/lib/libtb.a
+\end{verbatim}
+If you do not have the {\tt tkinter} module enabled in the {\tt Setup} file,
+you have to add the following two lines instead:
+\begin{verbatim}
+TBBASE=<your ToolBus location>
+TB TBmodule.c -DNO_TK -I$(TBBASE)/include TBBASE)/lib/libtb.a
+\end{verbatim}
+Now type {\tt make} and keep your fingers crossed. If all goes well,
+a new \TB -aware python interpreter will be build, which you can install
+using the command {\tt make install}.
+
+The script {\tt python-adapter}, located in
+{\tt adapters/python-adapter}, is used by your \TB\ scripts to start
+the \TB -aware python interpreter with the right arguments. This
+script is automatically moved to the \TB\ {\tt bin} directory during
+the ToolBus installation.
+
+\subsection{\label{using-python}Using the \TB -aware python interpreter}
+
+\paragraph{Synopsis.} Start a python script as a tool.
+
+\paragraph{Example.} {\tt python-adapter -script hello.py}
 
 \paragraph{Specific arguments.}
 \begin{itemize}
-\item {\tt -script}: The Python script/module to be executed.
-\item {\tt -script-args}: The arguments for the Python script to be executed.
-	These arguments are available to the Python script through the
-        variable {\tt TB.argv}.
+\item {\tt -program $Name$}: Use $Name$ rather than {\tt python} as the
+(\TB -aware) python interpreter.
+\item {\tt -trace-calls}: Trace the calls made by the python-adapter.
+      a list of function calls is printed to {\tt stderr}.
+\item {\tt -script $Script$}: Execute the python script $Script$.
+\item {\tt -arg $Arg$}: Pass the argument $Arg$ as a command line option
+to the python interpreter. This option can be repeated multiple times.
+\item {\tt -script-args $Arg1, Arg2, ...$}: This must be the last option.
+The arguments $Arg1, Arg2, ...$ are passed to the python script in the
+variable $TB.argv$.
 \end{itemize}
 
 \paragraph{Communication.} \hspace{-0.3cm}\footnote{Communication is described
@@ -27,103 +72,167 @@ from the point of view of the \TB, i.e., {\tt snd-} and {\tt rec-}
 mean, respectively, send by \TB\ and receive by \TB.}
 
 \begin{itemize}
-\item {\tt snd-do($Tid$, $Fun$($A_1$, ..., $A_n$))}: perform the Python function call
-{\tt $Fun$ $A_1$  ... $A_n$}. Here $Tid$ is a tool identifier
+\item {\tt snd-do($Tid$, $Fun$($A_1$, ..., $A_n$))}: perform the Python
+function call
+{\tt $Fun$($cid$,$A_1$, ..., $A_n$)}. Here $Tid$ is a tool identifier
 (as produced by {\tt execute} or {\tt rec-connect}) for an instance of the {\tt
-python-adapter}.
-\item {\tt snd-eval($Tid$, $Fun$($A_1$, ..., $A_n$))}: perform the Python function call
-{\tt $Fun$ $A_1$  ... $A_n$}. Here $Tid$ is a tool identifier 
-(as produced by {\tt execute} or {\tt rec-connect}) for an instance of the {\tt python-adapter}.
+python-adapter}, and $cid$ is the connection id for this tool instance 
+as returned by {\tt TB.parseArgs} or {\tt TB.newConnection}.
+\item {\tt snd-eval($Tid$, $Fun$($A_1$, ..., $A_n$))}: perform the Python
+function call
+{\tt $Fun$($Tid$, $A_1$, ..., $A_n$}. $Tid$ and $cid$ as above.
 Note that the function {\tt $Fun$} must send an anser back to the
-ToolBus (using {\tt TBsend "snd-eval(...)"}).
+ToolBus using {\tt return TB.make("snd-value(...)", ...)}.
 \item {\tt rec-value($Tid$,$Res$)}: the return value for a previous evaluation request.
-\item {\tt rec-event($Tid$, $A_1$, ..., $A_n$)}: event generated by Python.
+\item {\tt rec-event($Tid$, $A_1$, ..., $A_n$)}: event generated by python.
 \item {\tt snd-ack-event($Tid$, $A_1$)}: acknowledgement of
-a previously generated event.
-\item {\tt snd-terminate($Tid$, $A_1$)}: terminate execution of python-adapter.
-\item {\bf The monitor commands are not implemented yet! ***}
-	\txttt{snd-monitor(\emph{Trm})}: in this case the Python
-  function \txttt{monitor\_atom \{\emph{ProcId} \emph{AtFun},
-    \emph{Src} \emph{Blino} \emph{Bpos} \emph{Elino} \emph{Epos}\}}
-  is called where \emph{ProcId} is the process-id of the process to
-  which this atom belongs, \emph{AtFun} is the action function name of
-  the atom (printf, tau, snd-do, snd-eval, rec-msg etc.), \emph{Src} the
-  source file where the atom is defined, \emph{Blino} the number of
-  the line where the atom starts, \emph{Bpos} the column of the
-  line where the atom starts, \emph{Elino} the number of the line
-  where the atom ends and \emph{Epos} is the column of the line where
-  the atom ends (this information can be used for example for
-  highlightning a piece of source code). 
-  After calling this function the term is further analyzed,
-  possibly resulting in (several) other Python function
-  calls. The following situations are considered:
-  \begin{itemize}
-  \item \emph{process creation}:
-    \txttt{create\_proc \{\emph{ProcId} \emph{ProcName}\}} is
-    called.
-  \item \emph{tool creation}: \txttt{create\_tool \{\emph{ToolId}
-      \emph{ToolName}\}} is called.
-  \item \emph{process to tool communication}:
-    \txttt{proc\_tool\_comm \{\emph{ToolId} \emph{ProcId}\}} is
-    called.
-  \item \emph{tool to process communication}:
-    \txttt{tool\_proc\_comm \{\emph{ProcId} \emph{ToolId}\}} is
-    called.
-  \item \emph{process to process communication}:
-    \txttt{proc\_proc\_comm \{\emph{ProcId1} \emph{ProcId2}\}} is
-    called.
-  \item \emph{update the value of a variable in a process}:
-    \txttt{update\_var \{\emph{ProcId} \emph{VarName}
-      \emph{NewValue}\}} is called.
-  \item \emph{update the list of subscribtions of a process}:
-    \txttt{update\_subs \{\emph{ProcId} \emph{Subs}\}} is called.
-  \item \emph{update the list of notes of a process}:
-    \txttt{update\_notes \{\emph{ProcId} \emph{Notes}\}} is called.
-  \end{itemize}
+a previously generated event. Perform the Python function call
+{\tt rec\_ack\_event($cid$, $A_1$)}.
+\item {\tt snd-terminate($Tid$, $A_1$)}: terminate execution of the
+python tool. Perform the Python function call
+{\tt rec\_terminate($cid$, $A_1$)}.
 \end{itemize}
 
-\noindent The command {\tt python} is executed once, an initial Python script
-is read, and all further requests are directed to this incarnation
-of {\tt python}. A small set of Python procedures is available to interact
-with the \TB\ (see below).
 
 \subsection{\label{Python-functions}Predefined Python functions}
-The following Python functions are predefined in the module {\tt TB},
-and can be used freely in a Python script executed by the Python adapter:
+The following Python functions are predefined and can be used freely in Python
+scripts executed by a \TB -aware Python interpreter.
+
 \begin{itemize}
-\item {\tt TB.TBstring($Str$)\/}: converts a Python string to a \TB\ string by
-surrounding it with double quotes and escaping double quotes occurring
-inside $Str$.
 
-\item {\tt TB.PYstring($Str$)\/}: converts a \TB\ string into  a Python string
-by removing surrounding double quotes.
+\item {\tt TB.parseArgs($Args$, $Module$)}:  Parse the commandline
+      options in $Args$, and create a new tool instance. $Module$ is
+      the Python module associated with this tool, for instance
+      \verb@ "__main__"@. The tool is not yet connected to the \TB, until
+      {\tt TB.connect} is called. This function returns the new tool
+      instance id, or raises an exception.
 
-\item {\tt TB.error($Msg$)\/}: constructs an error message that can be sent
-to the \TB.
+\item {\tt TB.newConnection($Tool$, $Host$, $Port$, $Module$)}: An alternate
+      way to create a new tool instance. $Tool$, $Host$, and $Module$ are
+      strings, $Port$ is an integer. $Host$ can also be {\tt None}, in which
+      case the local host is always used. This function returns the new
+      tool instance id, or raises an exception.
 
-\item {\tt TB.send($Trm$)\/}: send $Trm$ back to the \TB. For now, $Trm$ must
-be a Python string. Later we will implement a special class {\tt TBterm}.
+\item {\tt TB.connect($Cid$)}: Create the actual connection with the \TB,
+      or raise an exception.
 
-\item {\tt TB.event($Event$)\/}: send event $Event$ to the \TB. For now, $Trm$ must
-be a Python string. Later we will implement a special class {\tt TBterm}.
+\item {\tt TB.eventloop()}: Start the ToolBus eventloop. Please do not use
+      this function when you use the {\tt Tkinter} module. If you use
+      {\tt Tkinter}, use {\tt TB.enableTk} in combination with the
+      {\tt Tkinter} eventloop.
 
-\item {\tt TB.enable\_tk()\/}: enable the Python/Tk code. 
-This function must be called in the initialization phase of your
-application, to make sure that both Tk and \TB\ events are handled properly.
+\item {\tt TB.enableTk()}: Instruct the {\tt TB} module to register
+      its callback functions with {\tt Tkinter}, so the {\tt Tkinter}
+      eventloop can be used instead of the \TB\ eventloop.
+
+\item {\tt TB.send($cid$, $Term$)}: Send a term to the ToolBus. $Term$ must
+      be a Python term object.
+
+\item {\tt TB.make($Fmt$, ...)}: Build a new \emp{term} object. You can use
+      the following format directives in $Fmt$:
+      \begin{itemize}
+      \item {\tt <bool>}: Build a boolean term. This directive consumes
+	one Python object from the argument list. If this object happens
+	to be {\tt None}, the created term is {\tt false}, else the created
+	term is {\tt true}.
+      \item {\tt <int>}: Build an integer term. This directive consumes
+	one Python integer object from the argument list.
+      \item {\tt <str>}: Build a string term. This directive consumes one
+	Python string object from the argument list.
+      \item {\tt <bstr>}: Build a binary string term. 
+        This directive consumes one Python string object from the argument 
+        list.
+      \item {\tt <real>}: Build a real term. This directive consumes one
+	Python float object from the argument list.
+      \item {\tt <appl>}: Build a term application. This directive consumes
+	two arguments: a string defining the function symbol, and a Python list
+	of terms giving the arguments.
+      \item {\tt <list>}: Build a list of terms. This directive consumes
+	one argument: a Python list of terms.
+      \item {\tt <term>}: Build a term. This directive consumes one
+        argument: a Python term object.
+      \end{itemize}
 
 \end{itemize}
 
-paragraph{Note.} The complete python-adapter is written in native Python.
-This means that the Python interpreter does not have to be modified
-to connect it to the \TB.
+\subsection{\label{term-methods}Methods of the class {\tt term}}
 
+The module {\tt TB} introduces a new Python class called {\tt term}.
+This class supports the following methods:
 
-\subsection{\label{Ex-hello.py}The hello example in Python/Tk: {\tt hello.py}}
+\begin{itemize}
+\item {\tt $Term$.kind()}: Returns the type of the term. This type is
+      represented by one of the following strings:
+      \begin{itemize}
+	\item {\tt bool}
+	\item {\tt int}
+	\item {\tt real}
+	\item {\tt str}
+	\item {\tt bstr}
+	\item {\tt bstr}
+	\item {\tt appl}
+	\item {\tt list}
+      \end{itemize}
+\item Value retrieval functions. Strictly speaking, these are not
+      functions, but rather 'context sensitive attributes'. These
+      attributes are only valid when the term is of the appropriate type.
+      \begin{itemize}
+	\item {\tt $Term$.bool}: $Term$ must be a boolean. Returns 1 if the
+	      term is {\tt true}, {\tt None} otherwise.
+	\item {\tt $Term$.int}: $Term$ must be a integer. Returns a Python
+	      integer object representing the same value.
+	\item {\tt $Term$.real}: $Term$ must be a real. Returns a Python
+	      float object representing the same value.
+	\item {\tt $Term$.str}: $Term$ must be a string. Returns a Python
+	      string object representing the same string.
+	\item {\tt $Term$.bstr}: $Term$ must be a binary string. Returns
+	      a Python string object representing the same string.
+	\item {\tt $Term$.appl}: $Term$ must be a application. Returns a
+	      tuple containing the function symbol as a string and the
+	      arguments as a Python list of terms.
+	\item {\tt $Term$.list}: $Term$ must be a list. Returns a
+	      Python list of terms.
+      \end{itemize}
+\item {\tt $Term$.simplify()}: Maps the term onto a native Python object.
+      For instance, a term of type {\tt <str>} is translated into a Python
+      string object. 
+\item {\tt $T$.match($Fmt$)}: Check if a term matches with a certain string.
+      The string $Fmt$ is first parsed into a term and then the two terms
+      are matched. The function returns {\tt None} when the two terms do not
+      match. When the two terms do match, a list is returned that contains
+      the subterms of $T$ matching with the placeholders of $Fmt$.
+\item {\tt $T$.matchTerm($Fmt$)}: As {\tt $T$.match}, but $Fmt$ is now a
+      term containing placeholders, and does not have to be parsed before
+      matching.
+\end{itemize}
+
+\subsection{term example}
+\begin{verbatim}
+Python 1.3 (Jun  6 1996)  [GCC 2.6.3]
+Copyright 1991-1995 Stichting Mathematisch Centrum, Amsterdam
+>>> import TB
+>>> T = TB.make("[1,2,3]")
+>>> print T
+<term, [1,2,3]>
+>>> print T.list
+[<term, 1>, <term, 2>, <term, 3>]
+>>> L = T.match("[<int>,2,<term>]")
+>>> print L
+[1, <term, 3>]
+>>> print L[1].str
+Traceback (innermost last):
+  File "<stdin>", line 1, in ?
+TB.error: term is not of type str
+>>> print L[1].int
+3
+\end{verbatim}
+
+\subsection{\label{Ex-hello.py}The hello example in Python: {\tt hello.py}}
 
 Writing the hello tool in Python requires two steps:
 \begin{itemize}
 \item Write the required Python code {\tt hello.py}. 
-The result is shown in Figure~\ref{fig:hello.py}.
+      The result is shown in Figure~\ref{fig:hello.py}.
 \item Replace {\tt hello}'s tool definition in {\tt hello2.tb} by:
 \begin{verbatim}
       tool hello is {command = "python-adapter -script hello.py"}

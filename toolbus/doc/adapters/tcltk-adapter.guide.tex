@@ -51,43 +51,43 @@ ToolBus (using {\tt TBsend "snd-eval(...)"}).
 \item {\tt snd-ack-event($Tid$, $A_1$)}: acknowledgement of
 a previously generated event.
 \item {\tt snd-terminate($Tid$, $A_1$)}: terminate execution of wish-adapter.
-\item \txttt{snd-monitor(\emph{Trm})}: in this case the Tcl
-  function \txttt{monitor\_atom \{\emph{ProcId} \emph{AtFun},
-    \emph{Src} \emph{Blino} \emph{Bpos} \emph{Elino} \emph{Epos}\}}
-  is called where \emph{ProcId} is the process-id of the process to
-  which this atom belongs, \emph{AtFun} is the action function name of
-  the atom (printf, tau, snd-do, snd-eval, rec-msg etc.), \emph{Src} the
-  source file where the atom is defined, \emph{Blino} the number of
-  the line where the atom starts, \emph{Bpos} the column of the
-  line where the atom starts, \emph{Elino} the number of the line
-  where the atom ends and \emph{Epos} is the column of the line where
+\item \txttt{snd-monitor(\emp{Trm})}: in this case the Tcl
+  function \txttt{monitor\_atom \{\emp{ProcId} \emp{AtFun},
+    \emp{Src} \emp{Blino} \emp{Bpos} \emp{Elino} \emp{Epos}\}}
+  is called where \emp{ProcId} is the process-id of the process to
+  which this atom belongs, \emp{AtFun} is the action function name of
+  the atom (printf, tau, snd-do, snd-eval, rec-msg etc.), \emp{Src} the
+  source file where the atom is defined, \emp{Blino} the number of
+  the line where the atom starts, \emp{Bpos} the column of the
+  line where the atom starts, \emp{Elino} the number of the line
+  where the atom ends and \emp{Epos} is the column of the line where
   the atom ends (this information can be used for example for
   highlightning a piece of source code). 
   After calling this function the term is further analyzed,
   possibly resulting in (several) other Tcl function
   calls. The following situations are considered:
   \begin{itemize}
-  \item \emph{process creation}:
-    \txttt{create\_proc \{\emph{ProcId} \emph{ProcName}\}} is
+  \item \emp{process creation}:
+    \txttt{create\_proc \{\emp{ProcId} \emp{ProcName}\}} is
     called.
-  \item \emph{tool creation}: \txttt{create\_tool \{\emph{ToolId}
-      \emph{ToolName}\}} is called.
-  \item \emph{process to tool communication}:
-    \txttt{proc\_tool\_comm \{\emph{ToolId} \emph{ProcId}\}} is
+  \item \emp{tool creation}: \txttt{create\_tool \{\emp{ToolId}
+      \emp{ToolName}\}} is called.
+  \item \emp{process to tool communication}:
+    \txttt{proc\_tool\_comm \{\emp{ToolId} \emp{ProcId}\}} is
     called.
-  \item \emph{tool to process communication}:
-    \txttt{tool\_proc\_comm \{\emph{ProcId} \emph{ToolId}\}} is
+  \item \emp{tool to process communication}:
+    \txttt{tool\_proc\_comm \{\emp{ProcId} \emp{ToolId}\}} is
     called.
-  \item \emph{process to process communication}:
-    \txttt{proc\_proc\_comm \{\emph{ProcId1} \emph{ProcId2}\}} is
+  \item \emp{process to process communication}:
+    \txttt{proc\_proc\_comm \{\emp{ProcId1} \emp{ProcId2}\}} is
     called.
-  \item \emph{update the value of a variable in a process}:
-    \txttt{update\_var \{\emph{ProcId} \emph{VarName}
-      \emph{NewValue}\}} is called.
-  \item \emph{update the list of subscribtions of a process}:
-    \txttt{update\_subs \{\emph{ProcId} \emph{Subs}\}} is called.
-  \item \emph{update the list of notes of a process}:
-    \txttt{update\_notes \{\emph{ProcId} \emph{Notes}\}} is called.
+  \item \emp{update the value of a variable in a process}:
+    \txttt{update\_var \{\emp{ProcId} \emp{VarName}
+      \emp{NewValue}\}} is called.
+  \item \emp{update the list of subscribtions of a process}:
+    \txttt{update\_subs \{\emp{ProcId} \emp{Subs}\}} is called.
+  \item \emp{update the list of notes of a process}:
+    \txttt{update\_notes \{\emp{ProcId} \emp{Notes}\}} is called.
   \end{itemize}
 \end{itemize}
 

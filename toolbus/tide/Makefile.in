@@ -78,19 +78,24 @@ BITMAPS	= run-until-parent.xbm run.xbm single-step.xbm step-over.xbm step.xbm \
 DISTFILES = $(NWSRC) $(GENCSRC) $(GENCHDR) $(GENTCL) $(GENTEX) \
 	$(DIRS) tide.in slave-example.tb tide.tb tide.h Makefile.in
 
-.SUFFIXES:
-.SUFFIXES: .c.nw .c .h .o .tcl.nw .tcl .tex .tb .tifs
-
 all:  $(LIBFILES) $(PROGS) $(GENSRC) $(TCLMODS) $(GENTCL)
 
 # Implicit dependencies
-.tcl.nw.tcl:
+%.tcl: %.tcl.nw
 	$(NOWEB) $<
 	touch $*.tcl $*.tcl.tex
 
-.c.nw.c:
+%.tcl.tex: %.tcl.nw
+	$(NOWEB) $<
+	touch $*.tcl.tex
+
+%.c: %.c.nw
 	$(NOWEB) $<
 	touch $*.h $@ $@.tex
+
+%.c.tex: %.c.nw
+	$(NOWEB) $<
+	touch $@.tex
 
 .c.nw.h:
 	$(NOWEB) $<
@@ -103,6 +108,10 @@ all:  $(LIBFILES) $(PROGS) $(GENSRC) $(TCLMODS) $(GENTCL)
 tide.tb: tide.tb.nw
 	$(NOWEB) tide.tb.nw
 	touch tide.tb tide.tb.tex
+
+tide.tb.tex: tide.tb.nw
+	$(NOWEB) tide.tb.nw
+	touch tide.tb.tex
 
 .tb.tifs:
 	$(TOOLBUS) -gentifs $<
@@ -142,7 +151,7 @@ rule-viewer.tcl: rule-viewer.tcl.nw
 watchpoint-viewer.tcl: watchpoint-viewer.tcl.nw
 process-viewer.tcl: process-viewer.tcl.nw
 master-control.tcl: master-control.tcl.nw
-buscontrol.c: buscontrol.c.nw
+buscontrol.c buscontrol.c.tex: buscontrol.c.nw
 dap.c: dap.c.nw
 dap.h: dap.c.nw
 dap-admin.c: dap-admin.c.nw
