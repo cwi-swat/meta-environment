@@ -400,7 +400,7 @@ ATermList string2list(char *s)
   ATermList result = ATempty;
 
   for(i=strlen(s)-1; i>=0; i--) {
-    result = ATinsert(result,make_char((int)((unsigned char)s[i])));
+    result = ATinsert(result, make_char((int)((unsigned char)s[i])));
   }
 
   return result;
@@ -1110,7 +1110,7 @@ void write_memo_profile()
  * are initialized here.
  */
 
-void init_patterns()
+void ASC_initRunTime(int tableSize)
 {
   int i;
 
@@ -1158,6 +1158,10 @@ void init_patterns()
   atexit(write_memo_profile);
 #endif
 
+  PT_initPTApi();
+  ASF_initASFApi();
+
+  c_rehash(tableSize);
 }
 
 

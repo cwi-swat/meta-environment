@@ -35,8 +35,6 @@
 
 static char *name; 
 
-extern void init_patterns();
-
 ATerm get_name(int cid)
 {
   return ATmake("snd-value(name(<str>))", name);
@@ -117,12 +115,8 @@ int main(int argc, char *argv[])
   }
 
   ATinit(argc, argv, &bottomOfStack);
-  PT_initPTApi();
-  ASF_initASFApi();
+  ASC_initRunTime(INITIAL_TABLE_SIZE);
 
-  init_patterns();
-
-  c_rehash(INITIAL_TABLE_SIZE);
   register_all();
   resolve_all();
   init_all();

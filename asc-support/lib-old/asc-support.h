@@ -256,4 +256,6 @@ extern void init_all();
 
 extern ATerm innermost(PT_Tree tree);
 extern PT_ParseTree toasfix(ATerm tree);
+void ASC_initRunTime(int tableSize);
+
 #endif  /* ASC_SUPPORT_H */
