@@ -236,19 +236,24 @@ let
   Sids: list
 in
   snd-msg(em-get-sessions-by-modulename(ModuleId))
-  . rec-msg(em-sessions(ModuleId, Sids?))
   .
   (
-    if not-equal(Sids, []) then
-      Sid := first(Sids)
-      . DeleteSession(Sid)
-      . Sids := next(Sids)
+    rec-msg(em-sessions(ModuleId, Sids?))
+    .
+    (
+      if not-equal(Sids, []) then
+	Sid := first(Sids)
+	. DeleteSession(Sid)
+	. Sids := next(Sids)
+      fi
+    )
+    *
+    if equal(Sids, []) then
+      tau
     fi
+  +
+    rec-msg(em-no-such-session(Sid))
   )
-  *
-  if equal(Sids, []) then
-    tau
-  fi
 endlet
 
 process GetSyntaxTree(ModuleId: str, Tree: term?, Available: bool?) is
