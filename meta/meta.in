@@ -20,11 +20,12 @@ CLASSPATH=${classdir}:${CLASSPATH}; export CLASSPATH
 myname=`basename $0`
 myversion=`echo $Revision| cut -d' ' -f2`
 verbose=0
+xargs=""
 
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="bc:hi:o:tvV"
+myarguments="bc:dhi:o:tT:vV"
 
 if [ $myarguments ] ; then
    arg2explanation='s/\(.:\)/ -\1 /g; s/ \([^-:]\)/ -\1/g; s/:/ file/g';
@@ -38,10 +39,12 @@ Usage: $myname$myargsexplained . . .
 Options:
     -b              [ignored]
     -c dir          specifies compiler output directory
+    -d              run in debug mode (with viewer)
     -h              display help information (usage)
     -i file         [ignored]
     -o file         [ignored]
     -t              [ignored]
+    -T <port>       specifies TB_PORT for toolbus
     -v              verbose mode
     -V              reveal program version (i.e. $myversion)
 E_O_USAGE
@@ -63,7 +66,6 @@ set -- $args
 # Argument interpretation...
 while [ $#  -gt 0 ]
 do
-myarguments="bc:hi:o:tvV"
     case "$1"
     in
         -b)
@@ -76,6 +78,8 @@ myarguments="bc:hi:o:tvV"
 		else
 			echo "$myname: Ignoring invalid COMPILER_OUTPUT \`$1'"
 		fi ;;
+        -d)
+		xargs="$xargs -viewer" ;;
         -h)
 		Usage ;;
         -i)
@@ -84,6 +88,8 @@ myarguments="bc:hi:o:tvV"
 		shift ;;
         -t)
 		;;
+        -T)
+		shift; xargs="$xargs -TB_PORT $1" ;;
         -v)
 		verbose=1 ;;
 	-V)
@@ -91,7 +97,7 @@ myarguments="bc:hi:o:tvV"
 	--)
 		;;
 	*)
-		echo Invalid $1 ; Usage ;;
+		;;
     esac
     shift
 done
