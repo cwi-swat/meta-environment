@@ -1,5 +1,9 @@
 $Id$
 
+Thu Mar 11 18:42:34 CET 2004 <jurgenv@cwi.nl>
+* -ltb library from the toolbuslib package is deprecated and was only used 
+   inside of the toolbus package. So I moved it into the toolbus package.
+
 Thu Mar  4 13:15:02 CET 2004 <{paulk,jurgenv}@cwi.nl>
  * Fixed a nice bug in toolbuslib: uninitialized field of a struct
    for symbols.

@@ -1,4 +1,4 @@
-SUBDIRS = libtb aterm
+SUBDIRS = aterm
 
 ACLOCAL_FLAGS = -I .
 
