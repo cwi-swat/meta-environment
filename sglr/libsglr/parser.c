@@ -36,6 +36,7 @@
 #include <a2toa1.h>
 #endif
 #include <tree-to-dot.h>
+#include <sg_growbuf.h>
 
 #include "parser.h"
 #include "forest.h"
@@ -43,6 +44,7 @@
 #include "sglr.h"
 #include "sglr-strings.h"
 #include "rsrc-usage.h"
+
 
 /*
  A shift pair is a pair of a state and a stack and is used to indicate
@@ -805,46 +807,32 @@ void SG_Shifter(void)
 char *SG_ProdSort(production t)
 {
   char          *sort = NULL;
-  char           listtype = '\0';
-  static char   *sortcopy = NULL;
-  static size_t  sortcopysize = 0;
 
-  if(ATmatch((ATerm) t, "prod([<term>,cf(sort(<str>)),<term>],sort(\"<START>\"),no-attrs)",
-             NULL, &sort, NULL, NULL, NULL)) {
-    return sort;
-  }
-  if(ATmatch((ATerm) t, "prod([sort(<str>)],sort(\"<START>\"),<term>)",
-             &sort, NULL)) {
-    return sort;
+	if(ATmatch((ATerm) t, "prod(<term>,sort(\"<START>\"),<term>)", &t, NULL)) {
+		ATermList list = (ATermList) t;
+		ATerm elt, symbol;
+		static sg_growbuf *gb = NULL;
+
+		if(!gb) {
+			gb = SG_Create_GrowBuf(32, 16, sizeof(char));
+		} else {
+			gb = SG_Reset_GrowBuf(gb);
+		}
+
+		for(;!sort && !ATisEmpty(list); list = ATgetNext(list)) {
+			elt = ATgetFirst(list);
+
+			if(!ATmatch(elt, "cf(opt(layout))",elt)
+		  &&  ATmatch(elt, "cf(<term>)", &symbol)) {
+				SG_AddStringToGrowBuf(gb, SG_PrintSymbolToString(symbol));
+			}
+		}
+
+    SG_AddToGrowBuf(gb,"\0",1); /* Don't forget null termination */
+		sort = SG_GetGrowBufContent(gb);
   }
 
-  if(ATmatch((ATerm) t, "prod([<list>],cf(<term>),<term>)",  NULL, &t, NULL)
-     || ATmatch((ATerm) t, "prod([<list>],lex(<term>),<term>)", NULL, &t, NULL)) {
-    if(ATmatch((ATerm) t, "sort(<str>)", &sort)) {
-      return sort;
-    } else if(ATmatch((ATerm) t, "iter(sort(<str>))", &sort)) {
-      listtype = '+';
-    } else if(ATmatch((ATerm) t, "iter-star(sort(<str>))", &sort)) {
-      listtype = '*';
-    }
-    if(listtype && sort) {
-      size_t slen;
-
-      slen = strlen(sort)+1;    /*  need to store an extra character  */
-      if(slen > sortcopysize) {
-        sortcopy = sortcopy ? SG_Malloc(slen, sizeof(char))
-        : SG_Realloc(sortcopy, slen, sizeof(char));
-        sortcopysize = slen;
-      }
-      if(sortcopy) {
-        strcpy(sortcopy, sort);
-        sortcopy[slen-1] = listtype;
-        sortcopy[slen]   = '\0';
-        return sortcopy;
-      }
-    }
-  }
-  return SG_SAFE_STRING(sort);
+	return SG_SAFE_STRING(sort);
 }
 
 char *SG_ApplSort(tree t)
