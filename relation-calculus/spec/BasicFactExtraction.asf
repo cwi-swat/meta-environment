@@ -1,0 +1,55 @@
+equations
+
+[main]
+extract-basic-facts(X) = extract-facts(lift-to-tree(X), rstore())
+
+[appl-with-cons]
+extract-facts(appl(prod([Symbol*],cf(sort(qliteral(Char*))),Attributes),
+                   [Tree*])
+                {ATerm*1,[pos-info,ATerm],ATerm*2}, RSTORE) = RSTORE'
+when
+  Location := posinfo-to-location(ATerm),
+  RSTORE2 := add-elem(TREES,Location, RSTORE),
+  RSTORE3 := add-tuple(TREETYPES,<Location,strcon(Char*)>, RSTORE2),
+  RSTORE4 := add-constructor(Location, ATerm*1, ATerm*2, RSTORE3),
+  RSTORE5 := add-children(Location, Tree*, RSTORE4),
+  RSTORE' := RSTORE5
+
+[list-with-cons]
+extract-facts(appl(list(Symbol),[Tree*])
+                {ATerm*1,[pos-info,ATerm],ATerm*2}, RSTORE) = RSTORE'
+when
+  Location := posinfo-to-location(ATerm),
+  RSTORE2 := add-elem(LISTS, Location, RSTORE),
+  RSTORE3 := add-children(Location, Tree*, RSTORE2),
+  RSTORE' := RSTORE3
+
+equations
+
+[children-empty]
+add-children(Location, , RSTORE) = RSTORE
+
+[children-many-with-posinfo]
+add-children(Location, Tree {ATerm*1,[pos-info,ATerm],ATerm*2}, Tree*, RSTORE)=
+add-children(Location, Tree*, RSTORE')
+when
+  RSTORE' :=  
+   add-tuple(CHILDREN,<Location, posinfo-to-location(ATerm)>,RSTORE)
+
+[default-many-no-posinfo]
+add-children(Location, Tree, Tree*, RSTORE) =
+add-children(Location, Tree*, RSTORE)
+
+equations
+
+[cons]
+add-constructor(Location, ATerm*1,cons(qliteral(Char*)),ATerm*2, RSTORE) =
+  add-tuple(TREECONSTRUCTORS,<Location, strcon(Char*)>, RSTORE)
+
+[default-no-cons]
+add-constructor(Location, ATerm*, RSTORE) = RSTORE 
+
+equations
+
+[] posinfo-to-location(area-in-file(qliteral(Char*),area(N1,N2,N3,N4,N5,N6)))=
+     area-in-file(strcon(Char*),area(N1,N2,N3,N4,N5,N6))
