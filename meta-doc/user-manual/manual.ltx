@@ -400,7 +400,7 @@ system was already shown.
 After loading a specification it may look like Figure~\ref{FIG:meta-pico}.
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{FIG:meta-pico} to see how teh main window looks like after loading
+Click \link{here}[]{FIG:meta-pico} to see how the main window looks like after loading
 a specification.
 \end{ifhtml}
 The main window consists of the following parts:
@@ -544,14 +544,20 @@ Section \link{Button Pane}[]{ButtonPane}.
   \caption{\label{FIG:printer-setup} Dialog for printer setup}
 \end{figure}
 
-The {\tt File} menu is used for creating, opening, saving and printing
-specifications as well as for quitting the \ASmetaenv.  It is shown in
-Figure \ref{FIG:file-menu}.
+The \link{{\tt File} menu}[]{FIG:file-menu} 
+is used for creating, opening, saving and printing
+specifications as well as for quitting the \ASmetaenv.  
+\begin{iftex}
+It is shown in Figure \ref{FIG:file-menu}.
+\end{iftex}
 
-{\tt New} and {\tt Open} are used for creating
+\link{{\tt New} and {\tt Open}}[]{FIG:open-file}
+are used for creating
 a new module and opening an existing one, respectively.
+\begin{iftex}
 In all these cases a dialog window appears as shown in
 Figure~\ref{FIG:open-file}.
+\end{iftex}
 
 {\tt Save All} save all modules that have been opened so far.
 {\tt Clear All} removes all modules that have been opened so far from the
@@ -561,10 +567,14 @@ Meta-Environment (using {\tt Quit}, see below) and starting a new
 version of the Meta-Environment using the {\tt meta} command.
 
 {\tt Export} allows the export of the import pane in various graphical
-formats.  {\tt Print Setup} allows the customization of the command
-used for printing.  Its dialog window is shown in
-Figure~\ref{FIG:printer-setup}.  {\tt Print} prints the current import
-pane.
+formats.  \link{{\tt Print Setup}}[]{FIG:printer-setup}
+allows the customization of the command
+used for printing.  
+\begin{iftex}
+Its dialog window is shown in
+Figure~\ref{FIG:printer-setup}.  
+\end{iftex}
+{\tt Print} prints the current import pane.
 
 {\tt Quit} ends the execution of the \ASmetaenv.
 
@@ -612,8 +622,11 @@ this menu is disabled.
 
 \subsection{The Graph Menu} \label{GraphMenu}
 
-The {\tt Graph} menu is used for setting options for the display of the graph
-in the import pane.  It is shown in Figure \ref{FIG:graph-menu}.
+The \link{{\tt Graph} menu}[]{FIG:graph-menu} is used for 
+setting options for the display of the graph in the import pane.  
+\begin{iftex}
+It is shown in Figure \ref{FIG:graph-menu}.
+\end{iftex}
 
 
 {\tt View All} enlarges the import pane to enable the display of the whole
@@ -646,7 +659,9 @@ will only be shown when the loading of the specification is complete.
   \caption{\label{FIG:debug-menu}{\tt Debug}  menu (main window)}
 \end{figure}
 
-The {\tt Debug} menu is shown in Figure~\ref{FIG:debug-menu} and contains the
+The \link{{\tt Debug} menu}[ is shown in
+Figure~\ref{FIG:debug-menu}]{FIG:debug-menu} 
+and contains the
 single check box {\tt Diagnostic messages}.  When enabled, diagnostic
 messages will be displayed.  Otherwise the systems runs silently.
 
@@ -664,7 +679,8 @@ messages will be displayed.  Otherwise the systems runs silently.
   \caption{\label{FIG:help-menu}{\tt Help}  menu (main window)}
 \end{figure}
 
-The {\tt Help} menu is shown in Figure~\ref{FIG:help-menu}.
+The \link{{\tt Help} menu}[ is shown in
+Figure~\ref{FIG:help-menu}]{FIG:help-menu}.
 the features discussed in this section are all a very experimental.
 
 {\tt About Meta-Environment} and {\tt About Graph Browser}
@@ -996,11 +1012,11 @@ displayed in a new term window.
 
 The rewriting process is further described in Section
 \begin{iftex}
-\ref{Equations}
+\ref{Equations}.
 \end{iftex}
 \begin{ifhtml}
-\link{Equations}[]{Equations} 
-\end{ifhtml}.
+\link{Equations}[]{Equations}.
+\end{ifhtml}
 
 \section{Guided Tour} \label{GuidedTour}
 
@@ -2203,6 +2219,7 @@ functions
 \end{iftex}
 \begin{ifhtml}
 (Section \link{Lexical Functions}[]{LexicalFunctions}).
+\end{ifhtml}
 When a string is matched by both a
 LAYOUT function and by other non-LAYOUT functions, then the interpretation as
 layout symbol is ignored. {\tt LAYOUT} is typically used for defining layout
@@ -2844,21 +2861,22 @@ in Figure \ref{CODE:simple-cf}.
 
 Context-free syntax often requires the description of
 the repetition of a syntactic notion or of list structures (with or without
-separators) containing a syntactic notion. The repetition operator
-described in Section~\ref{RepetitionOperator} can be used for this
-purpose.
+separators) containing a syntactic notion. The 
+\link{repetition operator}[
+described in Section~\ref{RepetitionOperator}]{RepetitionOperator}
+can be used for this purpose.
 
 Lists may be used in both the left-hand side and right-hand side of a
-context-free function as well as in the right-hand side of a variable
-declaration 
+context-free function as well as in the right-hand side of a 
+\link{variable declaration}[ (see Section~\ref{Variables})]{Variables}.
+
 \begin{iftex}
-(see Section~\ref{Variables}). 
+Figure \ref{CODE:pascal-ids} shows 
 \end{iftex}
 \begin{ifhtml}
-(see Section \link{Variables}[]{Variables}). 
+Click \link{here}[]{CODE:pascal-ids} for an example of
 \end{ifhtml}
-
-Figure \ref{CODE:pascal-ids} shows how lists can be used to define 
+how lists can be used to define 
 the syntax of a list of identifiers (occurring in a declaration
 in a Pascal-like language).
 
@@ -2911,8 +2929,13 @@ Chain functions do not appear in the abstract syntax but correspond to a
 If {\tt SORT-A} is a subsort of {\tt SORT-B} then in the abstract syntax
 tree a tree of sort {\tt SORT-A} can be put wherever a tree of
 sort {\tt SORT-B} is required.
-In Figure~\ref{CODE:inj-exp} the symbols {\tt NAT} and {\tt VAR}
-are injected in {\tt EXP}.
+\begin{iftex}
+In Figure~\ref{CODE:inj-exp} 
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:inj-exp} for an example of how 
+\end{ifhtml}
+the symbols {\tt NAT} and {\tt VAR} are injected in {\tt EXP}.
 
 \begin{figure}
 \begin{IncCode}
@@ -2953,8 +2976,15 @@ grammars. There are a number of issues to take in consideration
 when using this operators. 
 
 \paragraph{Definition of lists}
-In Figure~\ref{CODE:lists-usage} two different
-lists are defined, {\tt LIST1} represents a list of naturals separated
+
+\begin{iftex}
+In Figure~\ref{CODE:lists-usage} two different lists are defined, 
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:lists-usage} for an example of the
+definition of two different lists, 
+\end{ifhtml}
+{\tt LIST1} represents a list of naturals separated
 by commas whereas {\tt LIST2} represents a list of naturals terminated
 by commas.
 
@@ -2982,7 +3012,14 @@ exports
 \paragraph{Alternative alternatives}
 The choice between two symbols can be defined in two different ways: by two
 separate syntax rules or by a single syntax rule using an alternative
-operator. See Figure~\ref{CODE:alternative-alternatives} for an example.
+operator. 
+\begin{iftex}
+See Figure~\ref{CODE:alternative-alternatives}
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:alternative-alternatives}
+\end{ifhtml}
+for an example.
 
 The definition of the binary operators {\tt "|"} and {\tt "\&"} can
 be made more concise as shown by {\tt Bool2}, however, it is now
@@ -3023,8 +3060,14 @@ exports
 sorts}
 
 The combination of lists and optionals or empty producing sorts leads to
-cycles in the parse tree. See Figure \ref{CODE:listcycle} for an example
-of such a specification.
+cycles in the parse tree. 
+\begin{iftex}
+See Figure \ref{CODE:listcycle} 
+\end{iftex}
+\begin{ifhtml}
+Click \link{here}[]{CODE:listcycle}
+\end{ifhtml}
+for an example of such a specification.
 
 \begin{figure}
 \begin{IncCode}
