@@ -248,6 +248,12 @@ in
     ParseEquations(EditorId,NewModName).
     ReturnSuccess(EditorId,Stack)
     +
+    rec-msg(unparse, Stack?, EditorId?) .
+    StackPopTerm(Stack,Stack?,STree?) .
+    UnParseTerm(STree, String?) .
+    StackPushString(Stack, Stack?, String) .
+    ReturnSuccess(EditorId,Stack)
+    +
     rec-msg(get-root, Stack?, EditorId?) .
     StackPopString(Stack, Stack?, ModuleName?) .
     GetTree(EditorId, ModuleName, RTree?) .
@@ -472,9 +478,8 @@ in
         ReturnSuccess(EditorId,Stack)        
       +
         rec-msg(show-list, Stack?, EditorId?) .
-        StackPopTerm(Stack, Stack?, STree?) .
-        SList := first(args(STree)) .
-	snd-msg(update-list-view(SList)) .
+        StackPopString(Stack, Stack?, Text?) .
+	snd-msg(update-list-view(Text)) .
         ReturnSuccess(EditorId,Stack)        
       +
         rec-msg(save-tree, Stack?, EditorId?) .
@@ -737,6 +742,10 @@ in
   snd-msg(display-graph("parsetree", Graph)).
   snd-note(ui-status(endstat(Id)))
 endlet
+
+process UnParseTerm(Tree : term, Text : str?) is
+  snd-msg(unparse(Tree)) .
+  rec-msg(unparsed-text(Text?))
 
 process ParseTerm(EditorId: term, ModuleName: str) is
 let
