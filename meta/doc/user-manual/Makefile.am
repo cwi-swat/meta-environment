@@ -3,7 +3,7 @@ include ${top_srcdir}/doc/general-make
 
 MANUAL		= manual.ltx
 
-EXTRA_DIST	= $(MANUAL)
+EXTRA_DIST	= $(MANUAL) manual.ps
 CLEANFILES	= manual.{aux,bbl,blg,dvi,ilg,ind,idx,log,ps,toc}
 
 all:

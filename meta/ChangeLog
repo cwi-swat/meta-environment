@@ -1,5 +1,9 @@
 # $Id$
 
+2001/05/22 (jong@cwi.nl)
+ * version 0.3.3
+ * user-manual.ps and exercises.ps are now included in the distribution.
+
 2001/05/21 (markvdb@cwi.nl)
  * Fixed a bug in module-db, equations of module of which the syntax
    was changed were not made unavailable.

@@ -2,7 +2,8 @@ include ${top_srcdir}/doc/general-make
 
 EXERCISES	= exercises.ltx pico.ltx
 
-EXTRA_DIST	= $(EXERCISES)
+EXTRA_DIST	= $(EXERCISES) exercises.ps
+
 CLEANFILES	= exercises.{aux,dvi,log,ps}
 
 all:
