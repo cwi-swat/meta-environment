@@ -33,11 +33,11 @@ public class TifToJava {
     if (!outputBaseDir.equals("")) {
       outputDirName = outputBaseDir + File.separatorChar + outputDirName;
     }
+    
     File outputDir = new File(outputDirName);
     outputDir.mkdirs();
     
-    String processName = process.getName();
-    String fileName = processName + ".java";
+    String fileName = process.getName() + ".java";
     PrintStream out;
     try {
       File outputFile = new File(outputDir, fileName);
@@ -52,19 +52,23 @@ public class TifToJava {
     
     out.println("package " + packageName + ";");
     out.println();
+    
     out.println("public interface " + process.getName());
     out.println('{');
     Iterator iter = process.fetchCommunicationIterator();
     while (iter.hasNext()) {
       Communication comm = (Communication) iter.next();
-      generateCommunication(comm, out);
+      out.print("  ");
+      out.println(generateCommunication(comm));
     }
     out.println('}');
+    out.close();
   }
 
-  private String makeJavaMethodName(String commName) {
+  // Convert dash-separated communication-name to javaMethodName
+  private String communicationToMethodName(String communicationName) {
     StringBuffer buf = new StringBuffer();
-    StringTokenizer tokenizer = new StringTokenizer(commName, "-");
+    StringTokenizer tokenizer = new StringTokenizer(communicationName, "-");
     if (tokenizer.hasMoreTokens()) {
       buf.append(tokenizer.nextToken());
     }
@@ -74,27 +78,29 @@ public class TifToJava {
     return buf.toString();
   }
 
-  public void generateCommunication(Communication comm, PrintStream out) {
-    String commName = comm.getName();
-    String methodName = makeJavaMethodName(commName);
-    out.print("  public ");
-    out.print(comm.getResultType());
-    out.print(' ');
-    out.print(methodName);
-    out.print('(');
+  public String generateCommunication(Communication comm) {
+    StringBuffer buf = new StringBuffer();
+    buf.append("public ");
+    buf.append(comm.getResultType());
+    buf.append(' ');
+    buf.append(communicationToMethodName(comm.getName()));
+    buf.append('(');
     Iterator iter = comm.fetchArgumentIterator();
     int argCount = 0;
     while (iter.hasNext()) {
       String type = (String) iter.next();
-      out.print(type);
-      out.print(' ');
-      out.print("arg");
-      out.print(argCount++);
+      buf.append(type);
+      buf.append(' ');
+      buf.append("arg");
+      buf.append(argCount++);
       if (iter.hasNext()) {
-        out.print(", ");
+        buf.append(", ");
       }
     } 
-    out.println(");");
+    buf.append(')');
+    buf.append(';');
+    
+    return buf.toString();
   }
 
   private static boolean isCommandLineSwitch(String arg, String shortName, String longName) {
