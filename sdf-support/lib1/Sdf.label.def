@@ -235,10 +235,10 @@ module Label-Sdf-Syntax
 imports Kernel-Sdf-Syntax Literals-Sdf-Syntax ATerms
 exports
   context-free syntax
-    label:Literal ":" Symbol   -> Symbol				{cons("label")}
-    "cons" "(" ATerm ")" -> Attribute				{cons("cons")}
-    "constructor"        -> Attribute				{cons("constructor")}
-    "memo"               -> Attribute				{cons("memo")}
+    label:Literal ":" Symbol   -> Symbol	{cons("label")}
+    "cons" "(" term:ATerm ")"  -> Attribute	{cons("cons")}
+    "constructor"              -> Attribute	{cons("constructor")}
+    "memo"                     -> Attribute	{cons("memo")}
 
 module Restrictions-Sdf-Syntax
 imports CC-Sdf-Syntax
@@ -359,22 +359,22 @@ imports Literals IntCon RealCon
 exports
   sorts ATerms ATermList ACon AFun ATerm Ann
   context-free syntax
-    ATerm                     -> ATerms			{cons("aterm")}
-    head:ATerm "," tail:ATerms          -> ATerms	{cons("cons")}
-    "[" "]"                   -> ATermList		{cons("empty")}
-    "[" ATerms "]"            -> ATermList		{cons("not-empty")}
-    IntCon                    -> ACon			{cons("int")}
-    RealCon                   -> ACon			{cons("real")}
-    Literal                   -> AFun			
-    ACon                      -> ATerm			{cons("constant")}
-    ATermList                 -> ATerm			{cons("list")}
-    AFun                      -> ATerm			{cons("fun")}
-    AFun "(" args:ATerms ")"       -> ATerm		{cons("appl")}
-    "{" ATerms "}"            -> Ann			{cons("annotation")}
-    ACon                 Ann  -> ATerm			{cons("annotated-constant")}
-    ATermList            Ann  -> ATerm			{cons("annotated-list")}
-    AFun                 Ann  -> ATerm			{cons("annotated-fun")}
-    AFun "(" args:ATerms ")"  Ann  -> ATerm		{cons("annotated-appl")}
+    term:ATerm                        -> ATerms    {cons("aterm")}
+    head:ATerm "," tail:ATerms        -> ATerms    {cons("cons")}
+    "[" "]"                           -> ATermList {cons("empty")}
+    "[" ATerms "]"                    -> ATermList {cons("not-empty")}
+    IntCon                            -> ACon      {cons("int")}
+    RealCon                           -> ACon      {cons("real")}
+    Literal                           -> AFun			
+    ACon                              -> ATerm     {cons("constant")}
+    list:ATermList                    -> ATerm     {cons("list")}
+    fun:AFun                          -> ATerm     {cons("fun")}
+    fun:AFun "(" args:ATerms ")"      -> ATerm     {cons("appl")}
+    "{" ATerms "}"                    -> Ann       {cons("annotation")}
+    ACon Ann                          -> ATerm     {cons("annotated-constant")}
+    list:ATermList Ann                -> ATerm     {cons("annotated-list")}
+    fun:AFun Ann                      -> ATerm     {cons("annotated-fun")}
+    fun:AFun "(" args:ATerms ")" Ann  -> ATerm     {cons("annotated-appl")}
 
 module Layout
 exports

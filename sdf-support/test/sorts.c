@@ -12,7 +12,7 @@ testSorts(void)
   SDF_Module  module;
   SDF_Symbol  symbol;
   SDF_Sort    sort;
-  SDF_Lexical lex;
+  char       *lex;
 
   contents = ATreadFromNamedFile(TEST_GRAMMAR_FILE);
   assert(contents != NULL);
@@ -27,7 +27,7 @@ testSorts(void)
   sort   = SDF_getSymbolSort(symbol);
   lex    = SDF_getSortLex(sort);
 
-  assert(ATisEqual(lex, ATparse("\"PICO-BOOL\"")));
+  assert(strcmp(lex, "PICO-BOOL") == 0);
 
   return 0;
 }

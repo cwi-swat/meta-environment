@@ -1,3 +1,6 @@
+2001/02/20 (markvdb@cwi.nl)
+ * labels added to ATerm and ATermList.
+ * Code adapted because of <str> introduction.
 
 2001/02/20 (jong@cwi.nl)
  * Added Sdf.label.def to lib/

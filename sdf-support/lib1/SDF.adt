@@ -236,7 +236,7 @@ w (
 
 "ws-after-lexical" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -249,10 +249,10 @@ w (
 
 "ws-after-priorities" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-priorities ( 
+Priorities ( 
 
 Priorities ) > ] ) ]
 , 
@@ -351,7 +351,7 @@ w (
 
 "ws-after-context-free" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -364,10 +364,10 @@ w (
 
 "ws-after-priorities" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-priorities ( 
+Priorities ( 
 
 Priorities ) > ] ) ]
 , 
@@ -466,7 +466,7 @@ w (
 
 "ws-after-lexical" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -479,10 +479,10 @@ w (
 
 "ws-after-restrictions" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-restrictions ( 
+Restrictions ( 
 
 Restrictions ) > ] ) ]
 , 
@@ -581,7 +581,7 @@ w (
 
 "ws-after-context-free" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -594,10 +594,10 @@ w (
 
 "ws-after-restrictions" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-restrictions ( 
+Restrictions ( 
 
 Restrictions ) > ] ) ]
 , 
@@ -686,10 +686,10 @@ w (
 
 "ws-after-definition" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-definition ( 
+Definition ( 
 
 Definition ) > ] ) ]
 , 
@@ -830,7 +830,7 @@ w (
 
 "ws-after-{" ( 
 
-Layout ) > )
+str ) > )
 , 
 list ( 
 
@@ -896,7 +896,7 @@ w (
 < 
 ws-after-list ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -949,19 +949,21 @@ w (
 < 
 ws-after-first ( 
 
-Layout ) > )
+str ) > )
 , 
+sep ( 
+
 < 
 sep ( 
 
-Separator ) >
+str ) > )
 , 
 w ( 
 
 < 
 ws-after-sep ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 
@@ -1127,16 +1129,16 @@ w (
 [ 
 
 < 
-symbols ( 
+Symbols ( 
 
 Symbols ) >
 , 
 w ( 
 
 < 
-ws-after-symbols ( 
+ws-after-Symbols ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -1149,7 +1151,7 @@ w (
 
 "ws-after-->" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 result ( 
@@ -1161,10 +1163,10 @@ w (
 < 
 ws-after-result ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-attributes ( 
+Attributes ( 
 
 Attributes ) > ] ) ]
 , 
@@ -1319,7 +1321,7 @@ w (
 < 
 ws-after-first ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 
@@ -1414,10 +1416,10 @@ w (
 
 "ws-after-syntax" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-productions ( 
+Productions ( 
 
 Productions ) > ] ) ]
 , 
@@ -1516,7 +1518,7 @@ w (
 
 "ws-after-lexical" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -1529,10 +1531,10 @@ w (
 
 "ws-after-syntax" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-productions ( 
+Productions ( 
 
 Productions ) > ] ) ]
 , 
@@ -1631,7 +1633,7 @@ w (
 
 "ws-after-context-free" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -1644,10 +1646,10 @@ w (
 
 "ws-after-syntax" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-productions ( 
+Productions ( 
 
 Productions ) > ] ) ]
 , 
@@ -1736,10 +1738,10 @@ w (
 
 "ws-after-variables" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-productions ( 
+Productions ( 
 
 Productions ) > ] ) ]
 , 
@@ -1838,7 +1840,7 @@ w (
 
 "ws-after-lexical" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -1851,10 +1853,10 @@ w (
 
 "ws-after-variables" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-productions ( 
+Productions ( 
 
 Productions ) > ] ) ]
 , 
@@ -1963,19 +1965,19 @@ w (
 
 "ws-after-<" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-symbol ( 
+Symbol ( 
 
 Symbol ) >
 , 
 w ( 
 
 < 
-ws-after-symbol ( 
+ws-after-Symbol ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -1988,7 +1990,7 @@ w (
 
 "ws-after--CF" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -2100,19 +2102,19 @@ w (
 
 "ws-after-<" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-symbol ( 
+Symbol ( 
 
 Symbol ) >
 , 
 w ( 
 
 < 
-ws-after-symbol ( 
+ws-after-Symbol ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -2125,7 +2127,7 @@ w (
 
 "ws-after--LEX" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -2237,19 +2239,19 @@ w (
 
 "ws-after-<" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-symbol ( 
+Symbol ( 
 
 Symbol ) >
 , 
 w ( 
 
 < 
-ws-after-symbol ( 
+ws-after-Symbol ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -2262,7 +2264,7 @@ w (
 
 "ws-after--VAR" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -2350,7 +2352,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -2369,7 +2371,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -2388,7 +2390,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -2407,7 +2409,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -2565,7 +2567,7 @@ w (
 < 
 ws-after-first ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 
@@ -2692,19 +2694,19 @@ w (
 
 "ws-after-module" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-moduleName ( 
+ModuleName ( 
 
 ModuleName ) >
 , 
 w ( 
 
 < 
-ws-after-moduleName ( 
+ws-after-ModuleName ( 
 
-Layout ) > )
+str ) > )
 , 
 list ( 
 
@@ -2740,10 +2742,10 @@ w (
 < 
 ws-after-list ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-sections ( 
+Sections ( 
 
 Sections ) > ] ) ]
 , 
@@ -2793,7 +2795,7 @@ w (
 < 
 ws-after-first ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 
@@ -2888,10 +2890,10 @@ w (
 
 "ws-after-exports" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-grammar ( 
+Grammar ( 
 
 Grammar ) > ] ) ]
 , 
@@ -2980,10 +2982,10 @@ w (
 
 "ws-after-hiddens" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-grammar ( 
+Grammar ( 
 
 Grammar ) > ] ) ]
 , 
@@ -3138,7 +3140,7 @@ w (
 < 
 ws-after-first ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 
@@ -3213,7 +3215,7 @@ w (
 [ 
 
 < 
-moduleId ( 
+ModuleId ( 
 
 ModuleId ) > ] ) ]
 , 
@@ -3312,16 +3314,16 @@ w (
 [ 
 
 < 
-moduleId ( 
+ModuleId ( 
 
 ModuleId ) >
 , 
 w ( 
 
 < 
-ws-after-moduleId ( 
+ws-after-ModuleId ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -3334,7 +3336,7 @@ w (
 
 "ws-after-[" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 params ( 
@@ -3346,7 +3348,7 @@ w (
 < 
 ws-after-params ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -3458,7 +3460,7 @@ w (
 
 "ws-after-id" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -3471,19 +3473,19 @@ w (
 
 "ws-after-(" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-moduleName ( 
+ModuleName ( 
 
 ModuleName ) >
 , 
 w ( 
 
 < 
-ws-after-moduleName ( 
+ws-after-ModuleName ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -3575,7 +3577,7 @@ w (
 
 "ws-after-imports" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 list ( 
@@ -3647,7 +3649,7 @@ w (
 [ 
 
 < 
-impSection ( 
+ImpSection ( 
 
 ImpSection ) > ] ) ]
 , 
@@ -3802,7 +3804,7 @@ w (
 < 
 ws-after-first ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 
@@ -3877,7 +3879,7 @@ w (
 [ 
 
 < 
-moduleName ( 
+ModuleName ( 
 
 ModuleName ) > ] ) ]
 , 
@@ -3956,19 +3958,19 @@ w (
 [ 
 
 < 
-moduleName ( 
+ModuleName ( 
 
 ModuleName ) >
 , 
 w ( 
 
 < 
-ws-after-moduleName ( 
+ws-after-ModuleName ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-renamings ( 
+Renamings ( 
 
 Renamings ) > ] ) ]
 , 
@@ -4095,19 +4097,19 @@ w (
 
 "ws-after-(" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-import ( 
+Import ( 
 
 Import ) >
 , 
 w ( 
 
 < 
-ws-after-import ( 
+ws-after-Import ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -4199,7 +4201,7 @@ w (
 
 "ws-after-(" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -4323,7 +4325,7 @@ w (
 
 "ws-after-(" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 head ( 
@@ -4335,7 +4337,7 @@ w (
 < 
 ws-after-head ( 
 
-Layout ) > )
+str ) > )
 , 
 list ( 
 
@@ -4371,7 +4373,7 @@ w (
 < 
 ws-after-tail ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -4413,7 +4415,7 @@ w (
 < 
 ws-after-first ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 
@@ -4498,16 +4500,16 @@ w (
 [ 
 
 < 
-symbol ( 
+Symbol ( 
 
 Symbol ) >
 , 
 w ( 
 
 < 
-ws-after-symbol ( 
+ws-after-Symbol ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -4589,16 +4591,16 @@ w (
 [ 
 
 < 
-symbol ( 
+Symbol ( 
 
 Symbol ) >
 , 
 w ( 
 
 < 
-ws-after-symbol ( 
+ws-after-Symbol ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -4680,16 +4682,16 @@ w (
 [ 
 
 < 
-symbol ( 
+Symbol ( 
 
 Symbol ) >
 , 
 w ( 
 
 < 
-ws-after-symbol ( 
+ws-after-Symbol ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -4811,19 +4813,19 @@ w (
 
 "ws-after-{" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-symbol ( 
+Symbol ( 
 
 Symbol ) >
 , 
 w ( 
 
 < 
-ws-after-symbol ( 
+ws-after-Symbol ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 sep ( 
@@ -4835,7 +4837,7 @@ w (
 < 
 ws-after-sep ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -4848,7 +4850,7 @@ w (
 
 "ws-after-}" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -4970,19 +4972,19 @@ w (
 
 "ws-after-{" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-symbol ( 
+Symbol ( 
 
 Symbol ) >
 , 
 w ( 
 
 < 
-ws-after-symbol ( 
+ws-after-Symbol ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 sep ( 
@@ -4994,7 +4996,7 @@ w (
 < 
 ws-after-sep ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -5007,7 +5009,7 @@ w (
 
 "ws-after-}" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -5099,16 +5101,16 @@ w (
 [ 
 
 < 
-symbol ( 
+Symbol ( 
 
 Symbol ) >
 , 
 w ( 
 
 < 
-ws-after-symbol ( 
+ws-after-Symbol ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 n ( 
@@ -5120,7 +5122,7 @@ w (
 < 
 ws-after-n ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -5252,19 +5254,19 @@ w (
 
 "ws-after-{" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-symbol ( 
+Symbol ( 
 
 Symbol ) >
 , 
 w ( 
 
 < 
-ws-after-symbol ( 
+ws-after-Symbol ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 sep ( 
@@ -5276,7 +5278,7 @@ w (
 < 
 ws-after-sep ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -5289,7 +5291,7 @@ w (
 
 "ws-after-}" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 n ( 
@@ -5301,7 +5303,7 @@ w (
 < 
 ws-after-n ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -5413,7 +5415,7 @@ w (
 
 "ws-after-Set" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -5426,19 +5428,19 @@ w (
 
 "ws-after-[" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-symbol ( 
+Symbol ( 
 
 Symbol ) >
 , 
 w ( 
 
 < 
-ws-after-symbol ( 
+ws-after-Symbol ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -5567,7 +5569,7 @@ w (
 < 
 ws-after-left ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -5580,7 +5582,7 @@ w (
 
 "ws-after-#" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 right ( 
@@ -5702,7 +5704,7 @@ w (
 
 "ws-after-(" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 arguments ( 
@@ -5714,7 +5716,7 @@ w (
 < 
 ws-after-arguments ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -5727,7 +5729,7 @@ w (
 
 "ws-after-=>" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 results ( 
@@ -5739,7 +5741,7 @@ w (
 < 
 ws-after-results ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -5868,7 +5870,7 @@ w (
 < 
 ws-after-left ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -5881,7 +5883,7 @@ w (
 
 "ws-after-|" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 right ( 
@@ -5983,19 +5985,19 @@ w (
 
 "ws-after-<<" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-symbols ( 
+Symbols ( 
 
 Symbols ) >
 , 
 w ( 
 
 < 
-ws-after-symbols ( 
+ws-after-Symbols ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -6412,7 +6414,7 @@ w (
 [ 
 
 < 
-associativity ( 
+Associativity ( 
 
 Associativity ) > ] ) ]
 , 
@@ -6481,7 +6483,7 @@ w (
 [ 
 
 < 
-production ( 
+Production ( 
 
 Production ) > ] ) ]
 , 
@@ -6580,19 +6582,19 @@ w (
 
 "ws-after-{" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-productions ( 
+Productions ( 
 
 Productions ) >
 , 
 w ( 
 
 < 
-ws-after-productions ( 
+ws-after-Productions ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -6714,19 +6716,19 @@ w (
 
 "ws-after-{" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-associativity ( 
+Associativity ( 
 
 Associativity ) >
 , 
 w ( 
 
 < 
-ws-after-associativity ( 
+ws-after-Associativity ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -6739,19 +6741,19 @@ w (
 
 "ws-after-:" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-productions ( 
+Productions ( 
 
 Productions ) >
 , 
 w ( 
 
 < 
-ws-after-productions ( 
+ws-after-Productions ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -6958,19 +6960,21 @@ w (
 < 
 ws-after-first ( 
 
-Layout ) > )
+str ) > )
 , 
+sep ( 
+
 < 
 sep ( 
 
-Separator ) >
+str ) > )
 , 
 w ( 
 
 < 
 ws-after-sep ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 
@@ -7074,19 +7078,19 @@ w (
 < 
 ws-after-left ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-associativity ( 
+Associativity ( 
 
 Associativity ) >
 , 
 w ( 
 
 < 
-ws-after-associativity ( 
+ws-after-Associativity ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 right ( 
@@ -7304,19 +7308,21 @@ w (
 < 
 ws-after-first ( 
 
-Layout ) > )
+str ) > )
 , 
+sep ( 
+
 < 
 sep ( 
 
-Separator ) >
+str ) > )
 , 
 w ( 
 
 < 
 ws-after-sep ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 
@@ -7411,10 +7417,10 @@ w (
 
 "ws-after-priorities" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-priorities ( 
+Priorities ( 
 
 Priorities ) > ] ) ]
 , 
@@ -7483,7 +7489,7 @@ w (
 [ 
 
 < 
-charClass ( 
+CharClass ( 
 
 CharClass ) > ] ) ]
 , 
@@ -7499,7 +7505,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -7518,7 +7524,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -7590,7 +7596,7 @@ w (
 [ 
 
 < 
-sort ( 
+Sort ( 
 
 Sort ) > ] ) ]
 , 
@@ -7679,10 +7685,10 @@ w (
 
 "ws-after-sorts" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-symbols ( 
+Symbols ( 
 
 Symbols ) > ] ) ]
 , 
@@ -7698,7 +7704,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -7717,7 +7723,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -7789,7 +7795,7 @@ w (
 [ 
 
 < 
-uQLiteral ( 
+UQLiteral ( 
 
 UQLiteral ) > ] ) ]
 , 
@@ -7858,7 +7864,7 @@ w (
 [ 
 
 < 
-literal ( 
+Literal ( 
 
 Literal ) > ] ) ]
 , 
@@ -8038,7 +8044,7 @@ w (
 < 
 ws-after-function-symbol ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -8051,7 +8057,7 @@ w (
 
 "ws-after-(" ( 
 
-Layout ) > )
+str ) > )
 , 
 list ( 
 
@@ -8117,7 +8123,7 @@ w (
 < 
 ws-after-arguments ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -8130,7 +8136,7 @@ w (
 
 "ws-after-)" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -8143,7 +8149,7 @@ w (
 
 "ws-after-->" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 result ( 
@@ -8155,10 +8161,10 @@ w (
 < 
 ws-after-result ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-attributes ( 
+Attributes ( 
 
 Attributes ) > ] ) ]
 , 
@@ -8208,19 +8214,21 @@ w (
 < 
 ws-after-first ( 
 
-Layout ) > )
+str ) > )
 , 
+sep ( 
+
 < 
 sep ( 
 
-Separator ) >
+str ) > )
 , 
 w ( 
 
 < 
 ws-after-sep ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 
@@ -8324,7 +8332,7 @@ w (
 < 
 ws-after-label ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -8337,10 +8345,10 @@ w (
 
 "ws-after-:" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-symbol ( 
+Symbol ( 
 
 Symbol ) > ] ) ]
 , 
@@ -8449,7 +8457,7 @@ w (
 
 "ws-after-cons" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -8462,19 +8470,19 @@ w (
 
 "ws-after-(" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-aTerm ( 
+term ( 
 
 ATerm ) >
 , 
 w ( 
 
 < 
-ws-after-aTerm ( 
+ws-after-term ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -8684,7 +8692,7 @@ w (
 [ 
 
 < 
-charClass ( 
+CharClass ( 
 
 CharClass ) > ] ) ]
 , 
@@ -8782,7 +8790,7 @@ w (
 < 
 ws-after-head ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -8795,7 +8803,7 @@ w (
 
 "ws-after-." ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 tail ( 
@@ -8867,7 +8875,7 @@ w (
 [ 
 
 < 
-lookahead ( 
+Lookahead ( 
 
 Lookahead ) > ] ) ]
 , 
@@ -8993,7 +9001,7 @@ w (
 < 
 ws-after-left ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -9006,7 +9014,7 @@ w (
 
 "ws-after-|" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 right ( 
@@ -9136,19 +9144,19 @@ w (
 
 "ws-after-(" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-lookaheads ( 
+Lookaheads ( 
 
 Lookaheads ) >
 , 
 w ( 
 
 < 
-ws-after-lookaheads ( 
+ws-after-Lookaheads ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -9292,7 +9300,7 @@ w (
 
 "ws-after-[[" ( 
 
-Layout ) > )
+str ) > )
 , 
 list ( 
 
@@ -9358,7 +9366,7 @@ w (
 < 
 ws-after-list ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -9411,19 +9419,21 @@ w (
 < 
 ws-after-first ( 
 
-Layout ) > )
+str ) > )
 , 
+sep ( 
+
 < 
 sep ( 
 
-Separator ) >
+str ) > )
 , 
 w ( 
 
 < 
 ws-after-sep ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 
@@ -9518,16 +9528,16 @@ w (
 [ 
 
 < 
-symbols ( 
+Symbols ( 
 
 Symbols ) >
 , 
 w ( 
 
 < 
-ws-after-symbols ( 
+ws-after-Symbols ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -9540,10 +9550,10 @@ w (
 
 "ws-after--/-" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-lookaheads ( 
+Lookaheads ( 
 
 Lookaheads ) > ] ) ]
 , 
@@ -9698,7 +9708,7 @@ w (
 < 
 ws-after-first ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 
@@ -9793,10 +9803,10 @@ w (
 
 "ws-after-restrictions" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-restrictions ( 
+Restrictions ( 
 
 Restrictions ) > ] ) ]
 , 
@@ -10092,10 +10102,10 @@ w (
 
 "ws-after-aliases" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-aliases ( 
+Aliases ( 
 
 Aliases ) > ] ) ]
 , 
@@ -10184,16 +10194,16 @@ w (
 [ 
 
 < 
-symbol ( 
+Symbol ( 
 
 Symbol ) >
 , 
 w ( 
 
 < 
-ws-after-symbol ( 
+ws-after-Symbol ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -10205,7 +10215,7 @@ w (
 < 
 ws-after-arrow ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 alias ( 
@@ -10363,7 +10373,7 @@ w (
 < 
 ws-after-first ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 
@@ -10496,19 +10506,19 @@ w (
 
 "ws-after-(" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-symbol ( 
+Symbol ( 
 
 Symbol ) >
 , 
 w ( 
 
 < 
-ws-after-symbol ( 
+ws-after-Symbol ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -10666,7 +10676,7 @@ w (
 < 
 ws-after-first ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 
@@ -10857,7 +10867,7 @@ w (
 < 
 ws-after-left ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 right ( 
@@ -10987,19 +10997,19 @@ w (
 
 "ws-after-(" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-grammar ( 
+Grammar ( 
 
 Grammar ) >
 , 
 w ( 
 
 < 
-ws-after-grammar ( 
+ws-after-Grammar ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -11113,7 +11123,7 @@ w (
 
 "ws-after-[" ( 
 
-Layout ) > )
+str ) > )
 , 
 list ( 
 
@@ -11149,7 +11159,7 @@ w (
 < 
 ws-after-list ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -11202,7 +11212,7 @@ w (
 < 
 ws-after-first ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 
@@ -11306,7 +11316,7 @@ w (
 < 
 ws-after-from ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -11319,7 +11329,7 @@ w (
 
 "ws-after-=>" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 to ( 
@@ -11420,7 +11430,7 @@ w (
 < 
 ws-after-from ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -11433,7 +11443,7 @@ w (
 
 "ws-after-=>" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 to ( 
@@ -11452,7 +11462,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -11524,7 +11534,7 @@ w (
 [ 
 
 < 
-natCon ( 
+NatCon ( 
 
 NatCon ) > ] ) ]
 , 
@@ -11612,10 +11622,10 @@ w (
 < 
 ws-after-pos ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-natCon ( 
+NatCon ( 
 
 NatCon ) > ] ) ]
 , 
@@ -11703,10 +11713,10 @@ w (
 < 
 ws-after-neg ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-natCon ( 
+NatCon ( 
 
 NatCon ) > ] ) ]
 , 
@@ -11775,7 +11785,7 @@ w (
 [ 
 
 < 
-character ( 
+Character ( 
 
 Character ) > ] ) ]
 , 
@@ -11873,7 +11883,7 @@ w (
 < 
 ws-after-start ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -11886,7 +11896,7 @@ w (
 
 "ws-after--" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 end ( 
@@ -11958,7 +11968,7 @@ w (
 [ 
 
 < 
-charRange ( 
+CharRange ( 
 
 CharRange ) > ] ) ]
 , 
@@ -12094,7 +12104,7 @@ w (
 < 
 ws-after-left ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 right ( 
@@ -12224,19 +12234,19 @@ w (
 
 "ws-after-(" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-charRanges ( 
+CharRanges ( 
 
 CharRanges ) >
 , 
 w ( 
 
 < 
-ws-after-charRanges ( 
+ws-after-CharRanges ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -12369,7 +12379,7 @@ w (
 [ 
 
 < 
-charRanges ( 
+CharRanges ( 
 
 CharRanges ) > ] ) ]
 , 
@@ -12468,19 +12478,19 @@ w (
 
 "ws-after-[" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-optCharRanges ( 
+OptCharRanges ( 
 
 OptCharRanges ) >
 , 
 w ( 
 
 < 
-ws-after-optCharRanges ( 
+ws-after-OptCharRanges ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -12572,10 +12582,10 @@ w (
 
 "ws-after-~" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-charClass ( 
+CharClass ( 
 
 CharClass ) > ] ) ]
 , 
@@ -12721,7 +12731,7 @@ w (
 < 
 ws-after-left ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -12734,7 +12744,7 @@ w (
 
 "ws-after-/" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 right ( 
@@ -12883,7 +12893,7 @@ w (
 < 
 ws-after-left ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -12896,7 +12906,7 @@ w (
 
 "ws-after-/\\" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 right ( 
@@ -13025,7 +13035,7 @@ w (
 < 
 ws-after-left ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -13038,7 +13048,7 @@ w (
 
 "ws-after-\\/" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 right ( 
@@ -13168,19 +13178,19 @@ w (
 
 "ws-after-(" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-charClass ( 
+CharClass ( 
 
 CharClass ) >
 , 
 w ( 
 
 < 
-ws-after-charClass ( 
+ws-after-CharClass ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -13199,7 +13209,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -13218,7 +13228,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -13237,7 +13247,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -13256,7 +13266,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -13275,7 +13285,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -13294,7 +13304,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -13313,7 +13323,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -13332,7 +13342,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -13351,7 +13361,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -13423,7 +13433,7 @@ w (
 [ 
 
 < 
-aTerm ( 
+term ( 
 
 ATerm ) > ] ) ]
 , 
@@ -13521,7 +13531,7 @@ w (
 < 
 ws-after-head ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -13534,7 +13544,7 @@ w (
 
 "ws-after-," ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 tail ( 
@@ -13626,7 +13636,7 @@ w (
 
 "ws-after-[" ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -13728,19 +13738,19 @@ w (
 
 "ws-after-[" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-aTerms ( 
+ATerms ( 
 
 ATerms ) >
 , 
 w ( 
 
 < 
-ws-after-aTerms ( 
+ws-after-ATerms ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -13812,7 +13822,7 @@ w (
 [ 
 
 < 
-intCon ( 
+IntCon ( 
 
 IntCon ) > ] ) ]
 , 
@@ -13881,7 +13891,7 @@ w (
 [ 
 
 < 
-realCon ( 
+RealCon ( 
 
 RealCon ) > ] ) ]
 , 
@@ -13950,7 +13960,7 @@ w (
 [ 
 
 < 
-literal ( 
+Literal ( 
 
 Literal ) > ] ) ]
 , 
@@ -14019,7 +14029,7 @@ w (
 [ 
 
 < 
-aCon ( 
+ACon ( 
 
 ACon ) > ] ) ]
 , 
@@ -14088,7 +14098,7 @@ w (
 [ 
 
 < 
-aTermList ( 
+list ( 
 
 ATermList ) > ] ) ]
 , 
@@ -14157,7 +14167,7 @@ w (
 [ 
 
 < 
-aFun ( 
+fun ( 
 
 AFun ) > ] ) ]
 , 
@@ -14256,16 +14266,16 @@ w (
 [ 
 
 < 
-aFun ( 
+fun ( 
 
 AFun ) >
 , 
 w ( 
 
 < 
-ws-after-aFun ( 
+ws-after-fun ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -14278,7 +14288,7 @@ w (
 
 "ws-after-(" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 args ( 
@@ -14290,7 +14300,7 @@ w (
 < 
 ws-after-args ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -14392,19 +14402,19 @@ w (
 
 "ws-after-{" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-aTerms ( 
+ATerms ( 
 
 ATerms ) >
 , 
 w ( 
 
 < 
-ws-after-aTerms ( 
+ws-after-ATerms ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -14486,19 +14496,19 @@ w (
 [ 
 
 < 
-aCon ( 
+ACon ( 
 
 ACon ) >
 , 
 w ( 
 
 < 
-ws-after-aCon ( 
+ws-after-ACon ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-ann ( 
+Ann ( 
 
 Ann ) > ] ) ]
 , 
@@ -14577,19 +14587,19 @@ w (
 [ 
 
 < 
-aTermList ( 
+list ( 
 
 ATermList ) >
 , 
 w ( 
 
 < 
-ws-after-aTermList ( 
+ws-after-list ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-ann ( 
+Ann ( 
 
 Ann ) > ] ) ]
 , 
@@ -14668,19 +14678,19 @@ w (
 [ 
 
 < 
-aFun ( 
+fun ( 
 
 AFun ) >
 , 
 w ( 
 
 < 
-ws-after-aFun ( 
+ws-after-fun ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-ann ( 
+Ann ( 
 
 Ann ) > ] ) ]
 , 
@@ -14789,16 +14799,16 @@ w (
 [ 
 
 < 
-aFun ( 
+fun ( 
 
 AFun ) >
 , 
 w ( 
 
 < 
-ws-after-aFun ( 
+ws-after-fun ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -14811,7 +14821,7 @@ w (
 
 "ws-after-(" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
 args ( 
@@ -14823,7 +14833,7 @@ w (
 < 
 ws-after-args ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -14836,10 +14846,10 @@ w (
 
 "ws-after-)" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-ann ( 
+Ann ( 
 
 Ann ) > ] ) ]
 , 
@@ -14855,7 +14865,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -14935,7 +14945,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -14954,7 +14964,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -14973,7 +14983,7 @@ lex (
 < 
 lex ( 
 
-Lexical ) >
+str ) >
 , 
 sort ( 
 
@@ -15045,7 +15055,7 @@ w (
 [ 
 
 < 
-numChar ( 
+NumChar ( 
 
 NumChar ) > ] ) ]
 , 
@@ -15114,7 +15124,7 @@ w (
 [ 
 
 < 
-shortChar ( 
+ShortChar ( 
 
 ShortChar ) > ] ) ]
 , 
@@ -15341,10 +15351,10 @@ w (
 
 "ws-after-e" ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-intCon ( 
+IntCon ( 
 
 IntCon ) > ] ) ]
 , 
@@ -15504,16 +15514,16 @@ w (
 [ 
 
 < 
-intCon ( 
+IntCon ( 
 
 IntCon ) >
 , 
 w ( 
 
 < 
-ws-after-intCon ( 
+ws-after-IntCon ( 
 
-Layout ) > )
+str ) > )
 , 
 l ( 
 
@@ -15526,21 +15536,21 @@ w (
 
 "ws-after-." ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-natCon ( 
+NatCon ( 
 
 NatCon ) >
 , 
 w ( 
 
 < 
-ws-after-natCon ( 
+ws-after-NatCon ( 
 
-Layout ) > )
+str ) > )
 , 
 < 
-optExp ( 
+OptExp ( 
 
 OptExp ) > ] ) ] ]

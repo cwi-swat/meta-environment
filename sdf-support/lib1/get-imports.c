@@ -13,9 +13,9 @@ getImpsectionImports(SDF_ImpSection impsection)
     SDF_Import     import  = SDF_getImportListHead(importslist);
     SDF_ModuleName modname = SDF_getImportModuleName(import);
     SDF_ModuleId   modid   = SDF_getModuleNameModuleId(modname);
-    SDF_Lexical    lex     = SDF_getModuleIdLex(modid);
+    char          *lex     = SDF_getModuleIdLex(modid);
 
-    modules = ATinsert(modules, lex);
+    modules = ATinsert(modules, ATmake("<str>", lex));
 
     if (SDF_isImportListSingle(importslist)) {
       break;
