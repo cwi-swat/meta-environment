@@ -1,0 +1,33 @@
+/* $Id$
+*/
+
+process Focus(TE: text-edit) is
+let
+  T  : term,
+  T1 : term,
+  T2 : term,
+  Str: str,
+  St : int,
+  Ln : int,
+  I  : int
+in  
+( rec-msg(TE, set-focus(focus(T?,sort(Str?),area(start(St?),length(Ln?))))).
+  snd-do(TE,tb-unhighlight).
+  snd-do(TE,tb-highlight(St,Ln)).
+  snd-do(TE,tb-set-focus(Str))
+  +
+  rec-msg(TE, clear-focus).
+  snd-do(TE,tb-unhighlight).
+  snd-do(TE,tb-set-focus("None"))
+  +
+  rec-event(TE,get-focus(I?)).
+  snd-msg(TE,get-focus(I)).
+  snd-ack-event(TE,get-focus(I))
+  +
+  rec-msg(TE,get-focus-text(focus(T1?,T2?,area(start(St?),length(Ln?))))).
+  snd-eval(TE,tb-get-text(St,Ln)).
+  rec-value(TE,Str?).
+  snd-msg(TE,focus-text(Str))
+) *
+delta
+endlet

@@ -1,108 +1,23 @@
-/*
-   text-edit.tb
-*/
+/* $Id$ */
+
+tool text-edit is {
+  command = "editor"
+}
 
 
-
-process Text-edit is
+process Editor(Name: term, Text: str, Filename: str, Id: term) is
 let
-	TE: text-edit,
-	Id: str,
-	Id2:str,
-	L : str,
-	Str: str,
-	Win: str,
-	T: term,
-	T1: term,
-	T2: term,
-	Ch: int,
-	Li: int,
-	Co: int,
-	Lst: list,
-	Tslst: list,
-	Flst: list,
-	Clst: list
+TE  : text-edit,
+Tid : int,
+L   : str
 in
-	subscribe(language-available(<str>)).
-	execute(text-edit, TE?) . 
-	(
-		rec-event(TE,parse-string(L?,Str?,Id?)).
-		snd-do(TE,disable-parse(Id)).
-		snd-msg(parse-string(L,Str,Id)).
-		(
-			rec-msg(parse-result(Id,parsetree(T1?,T2?))).
-			snd-do(TE,setfstatus(Id,"Parsing succeeded, %d ambiguities", T2))
-			+
-			rec-msg(parse-result(Id,eof-error)).
-			snd-do(TE,setstatus(Id,"End of file unexpected"))
-			+
-			rec-msg(parse-result(Id,parse-error([character(Ch?),line(Li?),col(Co?)]))).
-			snd-do(TE,setfstatus(Id,"Character %c unexpected",Ch)).
-			snd-do(TE,setcursor(Id,Li,Co))
-			+
-			rec-event(TE,stop-parsing).
-			snd-msg(stop-parsing)
-
-
-		).
-		snd-do(TE,enable-parse(Id)).
-		snd-ack-event(TE,parse-string(L,Str,Id))
-		+
-		rec-note(language-available(L?)).
-		snd-do(TE,registerlang(L))
-		+
-		rec-msg(text,view-mod(T?)).
-		snd-msg(ts-mod(T)).
-		snd-eval(TE,new-window).
-		rec-value(TE,Win?).
-		rec-msg(reg-cols(Clst?)).
-		snd-do(TE,reg-local-cols(Win,Clst)).
-		rec-msg(reg-fnts(Flst?)).
-		snd-do(TE,reg-local-fnts(Win,Flst)).
-		rec-msg(display-ts(Tslst?)).
-		snd-do(TE,display-ts(Win,Tslst))
-		/*snd-ack-event(TE,ts-string(Str))*/
-		+
-		rec-disconnect(TE?).
-		execute(text-edit,TE?)
-        ) * 
-	rec-event(TE,do-shutdown).
-	shutdown("Editor terminated")
-endlet
-
-process Source is
-let
-	TS: ts-asource,
-	T: term,
-	Str: str,
-	Clst: list,
-	Flst: list,
-	Tslst: list
-in
-	execute(ts-asource,TS?).
-	(	rec-msg(ts-mod(T?)).
-		snd-eval(TS,conssource(T)).
-		rec-value(TS,display([colours(Clst?),fonts(Flst?),src(Tslst?)])).
-		snd-msg(reg-cols(Clst)).
-		snd-msg(reg-fnts(Flst)).
-		snd-msg(display-ts(Tslst))
-	) *
-	delta
-endlet
-
-#ifdef MAIN
-process Main is
-let Id: int
-in
-	create(Text-edit,Id?).
-	create(Source,Id?)
-endlet
-#endif
-
-tool text-edit is {command = "editor"}
-
-tool ts-asource is {command = "ts-asource"}
-
-#ifdef MAIN
-toolbus(Main)
-#endif
+  execute(text-edit, TE?) . 
+  snd-do(TE,tb-init(Name,Text,Filename)).
+  snd-msg(Id,editortool(TE)).
+  create(Structure-editor(TE, Text), Tid?).
+  create(Focus(TE), Tid?). (
+    rec-note(language-available(L?)).
+    snd-do(TE,registerlang(L))
+  ) *
+  rec-note(disconnected(TE))
+endlet    

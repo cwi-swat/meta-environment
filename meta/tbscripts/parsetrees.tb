@@ -1,0 +1,49 @@
+/* $Id$
+ */
+
+tool evaluator is {
+  command = "evaluator"
+}
+tool import-db is {
+  command = "import-db"
+}
+tool tree-db is {
+  command = "tree-db"
+}
+
+process Parsetrees is 
+let
+Eval: evaluator,
+Idb : import-db,
+Tdb : tree-db,
+Id : term,
+Tid: int,
+Mod: term,
+Tmp: term
+in
+  /* Start up tools and initialize */
+  execute(evaluator, Eval?).
+  snd-do(Eval, create-equations-db).
+  execute(import-db, Idb?).
+  snd-do(Idb, create-import-db).
+  execute(tree-db, Tdb?).
+  snd-do(Tdb, create-module-db).
+  /* Start all controlling processes */
+  create(Retrieve-eqs(Eval,Idb,Tdb), Tid?).
+  create(Open-modules(Eval,Idb,Tdb),Tid?).
+  create(Rewrite(Eval,Idb,Tdb), Tid?)
+/*  create(Close-modules(Eval,Idb,Tdb), Tid?)*/
+endlet
+/*
+    rec-msg(Id?, rewrite-over(Mod?)).
+    create(Open-module(Mod), Tid?). (
+      rec-msg(opened-module(Mod)).
+      snd-msg(Id, go-ahead-rewrite(Eval))
+      +
+      rec-msg(failed-opening-module(Mod)).
+      snd-msg(Id, cancel-rewrite)
+    )
+  ) *
+  delta
+endlet
+*/

@@ -1,0 +1,21 @@
+/* $Id$
+ */
+
+process Close-modules(Eval: evaluator, Idb: import-db, Tdb: tree-db) is
+let
+Str: str,
+Id: term
+in
+  Id := process-id. (
+    rec-msg(close-module(Str?)).
+    snd-note(ui-status(stat(Id,"Deleting ..."))).
+    snd-eval(Tdb, delete(Str)).
+    rec-value(Tdb, deleted(Str)).
+    snd-eval(Idb, delete-imports(id(Str))).
+    rec-value(Idb, deleted(Str)).
+    snd-do(Eval, clear-equations-db).
+    snd-note(ui-status(endstat(Id))).
+    snd-msg(closed-module(Str))
+  ) *
+  delta
+endlet

@@ -1,0 +1,85 @@
+/* $Id$ */
+
+tool se is {
+  command = "java-adapter -class SeTool"
+}
+
+process Structure-editor(TE: text-edit, Text: str) is
+let
+Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
+L: str, I: int, T: term, T1: term, Ch: int, Li: int, Co: int, Char: term
+in
+  Id := process-id.
+  execute(se, SE?).
+  snd-eval(SE, newEditor(Text)).
+  rec-value(SE,Fl?).
+  Foc := first(Fl).
+  snd-msg(TE,set-focus(Foc)). ( ( 
+      rec-event(TE,insert(Loc?,Str?)).
+      snd-eval(SE,insertChars(Loc,Str)).
+      snd-ack-event(TE,insert(Loc,Str))
+      +
+      rec-event(TE,delete(Loc?)).
+      snd-eval(SE,deleteChars(Loc)).
+      snd-ack-event(TE,delete(Loc))
+    ).
+    rec-value(SE,Fl?).
+    Foc := first(Fl).
+    snd-msg(TE,set-focus(Foc))
+    +
+    rec-msg(event,parse).
+    FF := []. (
+      if not-equal(Fl,[]) then
+        Foc:= first(Fl).
+        snd-msg(TE,get-focus-text(Foc)).
+        rec-msg(TE,focus-text(Str?)).
+        snd-msg(Id,parse-string(L,Str)).(( 
+            rec-msg(Id,parse-result(parsetree(T?,I?))).
+            if equal(I,0) then
+              snd-msg(Id,a2toa1(T)).
+              rec-msg(Id,converted(T1?)).
+              printf("Replacement term: %t\n",T1).
+              snd-eval(SE,replaceFocus(T1)).
+              rec-value(SE,Fl?)
+            else
+              printf("Parse of %s returned %d ambiguities",Str,I).
+              FF :=join(FF,Foc)
+            fi
+          ) 
+          + ( 
+            rec-msg(Id, parse-result(eof-error)).
+            printf("EOF unexpected while parsing %s\n",Str).
+            FF := join(FF,Foc)
+          )
+          + ( 
+            rec-msg(Id, parse-result(parse-error([character(Ch?),line(Li?),col(Co?),char(Char?)]))).
+            printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co).
+            FF := join(FF,Foc)
+          )
+        ).
+        snd-eval(SE,nextFocus).
+        rec-value(SE,Fl?)
+      fi
+    ) *
+    if equal(Fl,[]) then
+      if equal(FF,[]) then
+        /* All parses succeeded */
+        snd-msg(TE,clear-focus)
+      else
+        /* Some parses were ambiguous */
+        snd-eval(SE,setFocus(FF)).
+        rec-value(SE,Fl?).
+        Foc := first(Fl).
+        snd-msg(TE,set-focus(Foc))
+      fi
+    fi.
+    /* Finished parsing operations */
+    snd-ack-event(TE,parse)
+    +
+    rec-msg(TE,get-focus(I?)).
+    snd-eval(SE,getFocus(I)).
+    rec-value(SE,focus(Foc?)).
+    snd-msg(TE,set-focus(focus(Foc)))
+  ) *
+  delta
+endlet

@@ -1,0 +1,24 @@
+/* $Id$ */
+
+tool pp is {
+  command = "ts-asource"
+}
+
+process Prettyprinter is
+let
+  PP: pp,
+  T: term,
+  Str: str,
+  Src: term,
+  Clst: list,
+  Flst: list,
+  Tslst: list
+in
+  execute(pp,PP?).
+  (  rec-msg(pp-module(T?)).
+    snd-eval(PP,conssource(T)).
+    rec-value(PP,display(Src?)).
+    snd-msg(module-source(Src))
+  ) *
+  delta
+endlet

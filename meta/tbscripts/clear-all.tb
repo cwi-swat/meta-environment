@@ -1,0 +1,18 @@
+/* $Id$
+ */
+
+process Clear-all(Eval: evaluator, Idb: import-db, Tdb: tree-db) is
+let
+Id: term
+in
+  Id := process-id. (
+    rec-msg(clear-all).
+    snd-note(ui-status(stat(Id,"Clearing ..."))).
+    snd-do(Tdb, clear-module-db).
+    snd-do(Idb,clear-import-db).
+    snd-do(Eval, clear-equations-db).
+    snd-msg(cleared-all).
+    snd-note(ui-status(endstat(Id)))
+  ) *
+  delta
+endlet

@@ -1,0 +1,56 @@
+process Edit-term(Mod: term, Term: term) is
+let
+Tid: int,
+Id    : term,
+Rewr  : int,
+Str   : str,
+Name  : term,
+T     : term,
+Text:   str,
+Fn    : str,
+TE: text-edit,
+Clst: list, Flst: list, Tslst: list
+in
+  Id := process-id.
+  snd-note(ui-status(stat(Id,"Opening term editor"))).
+  snd-msg(Id,open-file(Term)).
+  ( rec-msg(Id,opened-file(asfix,Name?,T?,Fn?)).
+/* This is to dissappear. Currently, editing a term is synonym for 
+ * rewriting a term, since we do not have an editor. In a later stage
+ * the Rewrite process should be created by the editor/user.
+ */
+    snd-msg(rewrite(Mod,T)).
+/* Again, a hack: Same as in rewrite and edit-module: */
+    create(Editor(Term,"\"\"",Fn,Id),Tid?).
+    rec-msg(Id, editortool(TE?)).
+    snd-msg(pp-module(T)).
+    rec-msg(module-source([colours(Clst?),fonts(Flst?),src(Tslst?)])).
+    snd-do(TE,reg-local-cols(Clst)).
+    snd-do(TE,reg-local-fnts(Flst)).
+    snd-do(TE,display-ts(Tslst)).
+    snd-note(ui-status(endstat(Id)))
+    + (
+      rec-msg(opened-file(ascii,Name?,Text?)).
+      /* args are: type(=term), Name, Term, Filename, Id of this process */
+      create(Editor(Name,Text,Fn,Id), Tid?)
+      +
+      rec-msg(error-opening(Str?)).
+      snd-note(ui-status(stat(Id,"Creating new term"))).
+      create(Editor(Name,"",Fn,Id),Tid?).
+      snd-note(ui-status(endstat(Id)))
+    ).
+    rec-msg(Id,editortool(TE?)).
+/* Send term specific stuff to text-editor */
+    snd-do(TE,tb-set-button("Reduce",reduce)). (
+      rec-event(TE,reduce).
+      snd-msg(TE,bring-up-to-date). (
+        rec-msg(TE,parsetree(T?)).
+        snd-msg(rewrite(Mod,T))
+        +
+        rec-msg(TE,cancel-parsing)
+      ) 
+    ) *
+    rec-disconnect(TE).
+    snd-note(disconnected(TE))
+  )
+endlet

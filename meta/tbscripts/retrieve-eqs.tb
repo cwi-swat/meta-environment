@@ -1,0 +1,24 @@
+/* $Id$
+ */
+
+process Retrieve-eqs(Eval: evaluator, Idb: import-db, Tdb: tree-db) is
+let
+Id    : term,
+Mod: term,
+Mods: list,
+Eqs: list
+in
+  Id := process-id. (
+    rec-msg(retrieve-eqs(Mod?)).
+    snd-note(ui-status(stat(Id,"Retrieving equations"))).
+    snd-eval(Idb,get-all-imported-modules(Mod)).
+    rec-value(Idb,all-imports(Mods?)).
+    snd-eval(Tdb,get-equations(Mods)).
+    rec-value(Tdb,equations(Eqs?)).
+    snd-eval(Eval,add-equations(Mod,Eqs)).
+    rec-value(Eval,equ-added(Mod)).
+    snd-msg(finished-retrieval).
+    snd-note(ui-status(endstat(Id)))
+  ) *
+  delta
+endlet
