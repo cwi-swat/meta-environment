@@ -6,9 +6,13 @@
 
 include $(top_srcdir)/make_rules
 
-EXTRA_DIST = sdf2-to-adt.sh.src sdf2-to-java.sh.src CHARLIST.java.template
+EXTRA_DIST = sdf2-to-adt.sh.src sdf2-to-java.sh.src CHARLIST.java.template \
+	     CHARLIST_String.java.template
 
-pkgdata_DATA= CHARLIST.java.template
+pkgdata_DATA= CHARLIST.java.template \
+	      CHARLIST_String.java.template \
+	      CHARLIST.t.template
+
 
 bin_SCRIPTS		= sdf2-to-adt sdf2-to-java
 

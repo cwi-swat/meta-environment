@@ -72,6 +72,7 @@ VERBOSE=0
 IMPLODEDOPT=""
 CONSOPT='-e'
 JTOMOPT=""
+JTOM=0
 FOLDINGOPT=""
 VISITABLEOPT=""
 GENBOTTOMSORT=1
@@ -113,7 +114,8 @@ do
       VISITABLEOPT='-t' ;;
 
     -j | --jtom)
-      JTOMOPT='-j' ;;
+      JTOMOPT='-j'
+      JTOM=1 ;;
 
     -I | --imploded)
       IMPLODEDOPT='-I'
@@ -153,7 +155,6 @@ err() {
 
 # }}}
 # {{{  generate Java from SDF
-
 info "Generating Java code in ${OUTPUT}/${PACKAGE} from ${INPUT}:"
 
 info " generating ADT "
@@ -165,9 +166,17 @@ if [ ${GENBOTTOMSORT} -gt 0 ]; then
   info " generating API for bottom sorts"
   sed "s@__PACKAGE__@${PACKAGE}@g" < ${PKGDATA}/CHARLIST.java.template > \
     ${OUTPUT}/${PACKAGE}/CHARLIST.java
+  sed "s@__PACKAGE__@${PACKAGE}@g" < ${PKGDATA}/CHARLIST_String.java.template > \
+      ${OUTPUT}/${PACKAGE}/CHARLIST_String.java
 fi
 
 info " generating java from ADT "
 ${ADTTOJAVA} ${FOLDINGOPT} ${JTOMOPT} ${VERBOSEOPT} ${VISITABLEOPT} \
              -i ${BASE}.adt -o ${OUTPUT} -p ${PACKAGE} 
+
+if [ ${JTOM} -gt 0 ]; then
+  info "adding CHARLIST to Tom signature file"
+  cat ${PKGDATA}/CHARLIST.t.template >> ${OUTPUT}/${PACKAGE}/${BASE}.t
+fi
+
 # }}}

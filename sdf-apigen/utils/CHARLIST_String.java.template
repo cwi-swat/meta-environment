@@ -1,0 +1,79 @@
+package __PACKAGE__;
+
+import aterm.*;
+
+public class CHARLIST_String extends CHARLIST
+{
+  static private ATermFactory factory;
+  private String _string = null;
+
+  static public void initialize(aterm.ATermFactory f)
+  {
+    factory = f;
+  }
+  
+  static public CHARLIST fromTerm(aterm.ATerm trm) 
+  {
+    if (trm.getType() == trm.LIST) {
+      return new CHARLIST_String(convertCharsToString((ATermList) trm));
+    }
+
+    return null;
+  }
+
+  public boolean isString() {
+    return true;
+  }
+
+  public boolean hasString() {
+    return true;
+  }
+
+  public CHARLIST_String (String str)
+  {
+    this.term = convertStringToChars(str);
+    this._string = str;
+  }
+
+  public String getString()
+  {
+    if (this._string == null) {
+      this._string = convertCharsToString(this.term);
+      return this._string;
+    }
+    else {
+      return this._string;
+    }
+  }
+
+  public CHARLIST setString(String str) {
+    return new CHARLIST_String(str);
+  }
+
+  private static String convertCharsToString(ATermList list) {
+    byte[] bytes = new byte[list.getLength()];
+    
+    /* TODO: deal with escaping issues */
+    for (int i = 0; !list.isEmpty(); i++)  {
+      aterm.ATermInt head = (aterm.ATermInt) list.getFirst();
+      byte b = (byte) head.getInt();
+      bytes[i] = b;
+      list = list.getNext();
+    }
+
+    return new String(bytes);
+  }
+  
+  private static ATermList convertStringToChars(String str)
+  {
+    byte[] bytes = str.getBytes();
+    ATermList list = factory.makeList();
+    
+    /* TODO: deal with escaping issues */
+    for(int i = bytes.length - 1; i >= 0; i--) {
+      list = list.insert(factory.makeInt(bytes[i]));
+    }
+    
+    return list;
+  }
+}
