@@ -22,6 +22,10 @@
 top_builddir=..
 srcdir=.
 
+# This test should be finished within 25 seconds. The bug we found on netbsd
+# hangs and cannot be escaped by the shutdown primitive.
+ulimit -t 25
+
 TERM="f(a,b)"
 (echo "$TERM" | ${top_builddir}/toolbus/toolbus ${srcdir}/read.tb) > test.out 2>&1
 fgrep "result:$TERM" test.out > /dev/null 2>&1

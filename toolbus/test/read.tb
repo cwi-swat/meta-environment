@@ -7,7 +7,7 @@ in
   (
     printf("term: %t\n", T)
     +
-    shutdown("Test is hanging! abort\n") delay(15)
+    shutdown("Test is hanging! abort\n") delay(5)
   )
 endlet
 
