@@ -288,7 +288,7 @@ static void clearFocus(int write_to_editor_fd)
 
 static void registerTextCategories(int write_to_editor_fd, TE_Action action)
 {
-  /* no implementation */
+  
 }
 
 /*}}}  */
@@ -304,6 +304,9 @@ static void highlightSlices(int write_to_editor_fd, TE_Action action)
     LOC_Slice slice = LOC_SliceFromTerm(ATgetFirst(slices));
     LOC_AreaAreas areas = LOC_getSliceAreas(slice);
 
+    /* a hack: for now we do not have a definition of what colors
+     * to use etc, so lets just try to make AlphanumericLiterals bold.
+     */
     if (strcmp(LOC_getSliceId(slice), "AlphanumericLiterals")) {
       continue;
     }
