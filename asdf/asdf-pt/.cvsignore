@@ -1,2 +1,3 @@
+*.trm
 Makefile
 Makefile.in

@@ -8,17 +8,17 @@ equations
 
 [tca-then] 
 
-      AR[nor=$TY2, exc=$TY3, $END1] := typecheck-action($A1, $TY1, $EN),
+      AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
       $TY2 != empty,
-      AR[nor=$TY4, exc=$TY5, $END2] := typecheck-action($A2, $TY2, $EN),
+      AR[nor=$TY4, exc=$TY5, $ANS2] := typecheck-action($A2, $TY2, $EN),
       $TY6 := unify($TY3, $TY5, get-subtypes($EN))
       ==========================================================
       typecheck-action($A1 then $A2, $TY1, $EN) = 
-			AR[nor=$TY4, exc=$TY6, $END1 answerOr $END2] 
+			AR[nor=$TY4, exc=$TY6, $ANS1 answerOr $ANS2] 
 
 [tca-then] 
 
-      AR[nor=$TY2, exc=$TY3, $END1] := typecheck-action($A1, $TY1, $EN),
+      AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
       $TY2 != empty,
       $ER+ := typecheck-action($A2, $TY2, $EN)
       ==========================================
@@ -26,9 +26,9 @@ equations
 
 [tca-then] 
 
-      AR[nor=empty, exc=$TY2, $END1] := typecheck-action($A1, $TY1, $EN)
+      AR[nor=empty, exc=$TY2, $ANS1] := typecheck-action($A1, $TY1, $EN)
       ====================================================================
-      typecheck-action($A1 then $A2, $TY1, $EN) = AR[nor=empty, exc=$TY2, $END1] 
+      typecheck-action($A1 then $A2, $TY1, $EN) = AR[nor=empty, exc=$TY2, $ANS1] 
 
 
 [tca-then] 
@@ -40,13 +40,13 @@ equations
 
 [tca-and-then] 
 
-      AR[nor=$TY2, exc=$TY3, $END1] := typecheck-action($A1, $TY1, $EN),
-      AR[nor=$TY4, exc=$TY5, $END2] := typecheck-action($A2, $TY1, $EN),
+      AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
+      AR[nor=$TY4, exc=$TY5, $ANS2] := typecheck-action($A2, $TY1, $EN),
       $TY6 := type-concat($TY2, $TY4),
       $TY7 := unify($TY3, $TY5, get-subtypes($EN))
       =====================================================
       typecheck-action($A1 and-then $A2, $TY1, $EN) = 
-		   AR[nor=$TY6, exc=$TY7, $END1 answerOr $END2] 
+		   AR[nor=$TY6, exc=$TY7, $ANS1 answerOr $ANS2] 
 
 [tca-and-then] 
 
@@ -63,7 +63,7 @@ equations
 [tca-and] typecheck-action($A1 and $A2, $TY1, $EN) = 
 	  typecheck-action($A1 and-then $A2, $TY1, $EN)
 
-[tca-provide] 
+[tca-result] 
 
       $TY2 := typecheck-data($D, $EN)  
       ================================================================
@@ -93,17 +93,17 @@ equations
 
 [tca-catch] 
 
-    AR[nor=$TY2, exc=$TY3, $END1] := typecheck-action($A1, $TY1, $EN),
+    AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
     $TY3 != empty, 
-    AR[nor=$TY4, exc=$TY5, $END2] := typecheck-action($A2, $TY3, $EN),
+    AR[nor=$TY4, exc=$TY5, $ANS2] := typecheck-action($A2, $TY3, $EN),
     $TY6 := unify($TY2, $TY4, get-subtypes($EN)),
-    $END3 := $END1 answerOr $END2
+    $ANS3 := $ANS1 answerOr $ANS2
     ===================================================================
-    typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY5, $END3] 
+    typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY5, $ANS3] 
 
 [tca-catch] 
 
-    AR[nor=$TY2, exc=$TY3, $END1] := typecheck-action($A1, $TY1, $EN),
+    AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
     $TY3 != empty, 
     $ER+ := typecheck-action($A2, $TY3, $EN)
     ===================================================
@@ -118,23 +118,23 @@ equations
 
 [tca-catch] 
 
-    AR[nor=$TY2, exc=empty, $END1] := typecheck-action($A1, $TY1, $EN)
+    AR[nor=$TY2, exc=empty, $ANS1] := typecheck-action($A1, $TY1, $EN)
     ===================================================================
-    typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY2, exc=empty,$END1] 
+    typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY2, exc=empty,$ANS1] 
        
 
 [default-tca-catch] 
 
-    AR[nor=$TY2, exc=$TY3, $END1] := typecheck-action($A1, $TY1, $EN),
-    AR[nor=$TY4, exc=$TY5, $END2] := typecheck-action($A2, (), $EN),
+    AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
+    AR[nor=$TY4, exc=$TY5, $ANS2] := typecheck-action($A2, (), $EN),
     $TY6 := unify($TY2, $TY4, get-subtypes($EN)),
-    $END3 := $END1 answerOr $END2
+    $ANS3 := $ANS1 answerOr $ANS2
     ===================================================================
-    typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY5, $END3] 
+    typecheck-action($A1 catch $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY5, $ANS3] 
 
 [default-tca-catch] 
 
-    AR[nor=$TY2, exc=$TY3, $END1] := typecheck-action($A1, $TY1, $EN),
+    AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
     $ER+ := typecheck-action($A2, (), $EN)
     ==========================================================
     typecheck-action($A1 catch $A2, $TY1, $EN) = $ER+
@@ -145,7 +145,7 @@ equations
 
 [tca-maybe-1] 
 
-  AR[nor=$TY1, exc=$TY2, $END] := typecheck-action($A, $TY, $EN),
+  AR[nor=$TY1, exc=$TY2, $ANS] := typecheck-action($A, $TY, $EN),
   $TY2 != empty
   ==================================================
   typecheck-action(maybe $A, $TY, $EN) = AR[nor=$TY1, exc=empty, yes]
@@ -153,9 +153,9 @@ equations
 
 [tca-maybe-2] 
 
-  AR[nor=$TY1, exc=empty, $END] := typecheck-action($A, $TY, $EN)
+  AR[nor=$TY1, exc=empty, $ANS] := typecheck-action($A, $TY, $EN)
   ==================================================
-  typecheck-action(maybe $A, $TY, $EN) = AR[nor=$TY1, exc=empty, $END]
+  typecheck-action(maybe $A, $TY, $EN) = AR[nor=$TY1, exc=empty, $ANS]
 
 [tca-maybe-3] 
 
@@ -167,16 +167,16 @@ equations
 [tca-else] 
 
 
-    AR[nor=$TY2, exc=$TY3, $END1] := typecheck-action($A1, $TY1, $EN),
-    AR[nor=$TY4, exc=$TY5, $END2] := typecheck-action($A2, $TY1, $EN),
+    AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
+    AR[nor=$TY4, exc=$TY5, $ANS2] := typecheck-action($A2, $TY1, $EN),
     $TY6 := unify($TY2, $TY4, get-subtypes($EN)),
     $TY7 := unify($TY3, $TY5, get-subtypes($EN))
     ==================================================================
-    typecheck-action($A1 else $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY7, $END2]
+    typecheck-action($A1 else $A2, $TY1, $EN) = AR[nor=$TY6, exc=$TY7, $ANS2]
 
 [tca-else] 
 
-    AR[nor=$TY2, exc=$TY3, $END1] := typecheck-action($A1, $TY1, $EN),
+    AR[nor=$TY2, exc=$TY3, $ANS1] := typecheck-action($A1, $TY1, $EN),
     $ER+ := typecheck-action($A2, $TY1, $EN)
     ==================================================
     typecheck-action($A1 else $A2, $TY1, $EN) = $ER+
@@ -200,10 +200,10 @@ equations
 
 [tca-recursively] 
 
-    AR[nor=$TY1, exc=$TY2, $END] := typecheck-action($A, $TY, $EN),
+    AR[nor=$TY1, exc=$TY2, $ANS] := typecheck-action($A, $TY, $EN),
     subtype-of($TY1, bindings, get-subtypes($EN)) == yes
     =====================================================================
-    typecheck-action(recursively $A, $TY, $EN) = AR[nor=$TY1, exc=$TY2, $END]
+    typecheck-action(recursively $A, $TY, $EN) = AR[nor=$TY1, exc=$TY2, $ANS]
 
 [default-tca-recursively] 
 
@@ -211,27 +211,35 @@ equations
     =====================================================================
     typecheck-action(recursively $A, $TY, $EN) = $ER+
 
-[tca-give-current-bindings] 
+[tca-copy-bindings] 
 
     typecheck-action(copy-bindings, $TY, $EN) = AR[nor=bindings, exc=empty, no]
 
-[tca-scope] 
+[tca-scope-1] 
 
-    AR[nor=bindings, exc=$TY2, $END1] := typecheck-action($A1, $TY1, $EN),
-    AR[nor=$TY3, exc=$TY4, $END2] := typecheck-action($A2, $TY1, $EN),
+    AR[nor=$TY1, exc=$TY2, $ANS1] := typecheck-action($A1, $TY, $EN),
+    AR[nor=$TY3, exc=$TY4, $ANS2] := typecheck-action($A2, $TY, $EN),
+    subtype-of($TY1, bindings, get-subtypes($EN)) == yes,
     $TY5 := unify($TY2, $TY4, get-subtypes($EN)),
-    $END3 := $END1 answerOr $END2
+    $ANS3 := $ANS1 answerOr $ANS2
     ===================================================================
-    typecheck-action($A1 scope $A2, $TY1, $EN) = AR[nor=$TY3, exc=$TY5, $END3]
+    typecheck-action($A1 scope $A2, $TY, $EN) = AR[nor=$TY3, exc=$TY5, $ANS3]
 
-[tca-hence] 
+[tca-scope-2] 
 
-    AR[nor=bindings, exc=$TY2, $END1] := typecheck-action($A1, $TY1, $EN),
+    AR[nor=$TY1, exc=$TY2, $ANS1] := typecheck-action($A1, $TY, $EN),
+    subtype-of($TY1, bindings, get-subtypes($EN)) == yes,
     $ER+ := typecheck-action($A2, $TY1, $EN)
     ====================================================
-    typecheck-action($A1 scope $A2, $TY1, $EN) = $ER+
+    typecheck-action($A1 scope $A2, $TY, $EN) = $ER+
 
-[tca-hence] 
+[tca-scope-2] 
+
+    AR[nor=empty, exc=$TY2, $ANS1] := typecheck-action($A1, $TY, $EN)
+    ====================================================
+    typecheck-action($A1 scope $A2, $TY, $EN) = AR[nor=empty, exc=$TY2, $ANS1]
+
+[tca-scope-3] 
 
     $ER+ := typecheck-action($A1, $TY1, $EN)
     ===========================================
@@ -240,10 +248,9 @@ equations
 
 [tca-enact] 	  
 
-    subtype-of($TY, action[using () giving data raising data], 
-					  get-subtypes($EN))  == yes
+    subtype-of($TY, action, get-subtypes($EN))  == yes
     ================================================================
-    typecheck-action(enact, $TY, $EN) = AR[nor=data, exc=data, no] 
+    typecheck-action(enact, $TY, $EN) = AR[nor=data, exc=data, yes] 
 
 
 [default-enact] 
@@ -269,8 +276,7 @@ equations
 
 [tca-close]
 	
-    subtype-of($TY1,action[using data giving empty raising empty],
-  					     get-subtypes($EN))  == yes
+    subtype-of($TY1, action, get-subtypes($EN))  == yes
     ===================================================================
     typecheck-action(close, $TY1, $EN) = AR[nor=$TY1, exc=empty, no]
 
@@ -300,7 +306,7 @@ equations
 
     subtype-of($TY, (cell, storable), get-subtypes($EN)) == yes 
     ============================================================
-    typecheck-action(update, $TY, $EN) = AR[nor=(), exc=empty, no]
+    typecheck-action(update, $TY, $EN) = AR[nor=(), exc=(), no]
 
 [default-update] 
 
@@ -310,7 +316,7 @@ equations
         [localized("Update expects a cell and a storable", get-location($A))])
 
 
-[tca-14] typecheck-action(inspect, cell($TY), $EN) = AR[nor=$TY, exc=empty, no]
+[tca-14] typecheck-action(inspect, cell($TY), $EN) = AR[nor=$TY, exc=(), no]
 
 [tca-14] 
 
