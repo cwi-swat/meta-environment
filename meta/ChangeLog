@@ -20,6 +20,11 @@
 #
 # $Id$
 
+2000/8/23 ({jong,olivierp}@cwi.nl)
+   * Fixed genamakefile.sh.src to also generate executable 
+   * Fixed bug in genamakefile.sh that caused corrupt 
+     Makefile.am's to be generated
+
 2000/7/31 ({jong,olivierp}@cwi.nl)
    * Replaced obsolete -at-symboltable option in sglr-main.c with
      -at-afuntable
