@@ -1,15 +1,16 @@
 package metastudio;
 
 import java.awt.Color;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.BoxLayout;
-import javax.swing.JComboBox;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
+import javax.swing.JButton;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
@@ -19,14 +20,12 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
     private static final String NO_MODULE_NAME = "No module";
 
     private TitledBorder border;
-    private JComboBox importsBox;
-    private JComboBox importedByBox;
     
-    private JMenuBar importsMenu;
-    private JMenuBar importedByMenu;
-
     private List imports;
     private List importedBy;
+
+    private JButton importedByMenu;
+    private JButton importsMenu;
 
     public ModuleStatusPanel(
         ATermFactory factory,
@@ -34,48 +33,52 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
         final ModuleTreeModel moduleManager) {
         super(factory, bridge);
 
-        imports = new LinkedList();
-        importedBy = new LinkedList();
-
         border = new TitledBorder(new LineBorder(Color.black), NO_MODULE_NAME);
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new GridLayout());
         setBorder(border);
 
-        importsBox = new JComboBox();
-        importsBox.setToolTipText("imports");
-        importsBox.setModel(new ComboBoxModel(imports));
-        importsBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String selected = (String) importsBox.getSelectedItem();
-                if (selected != null) {
-                    moduleManager.selectModule(selected);
-                }
-            }
-        });
-        add(importsBox);
+        imports = new LinkedList();
+        importsMenu = makeModuleSelectionMenu("imports",imports,moduleManager);
+        add(importsMenu);
+        
+        importedBy = new LinkedList();
+        importedByMenu = makeModuleSelectionMenu("imported by", importedBy, moduleManager);
+        add(importedByMenu);
 
-        importedByBox = new JComboBox();
-        importedByBox.setToolTipText("imported by");
-        importedByBox.setModel(new ComboBoxModel(importedBy));
-        importedByBox.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String selected = (String) importedByBox.getSelectedItem();
-                if (selected != null) {
-                    moduleManager.selectModule(selected);
-                }
-            }
-        });
-        add(importedByBox);
-
-//        importsMenu = new JMenuBar();
-//        importsMenu.setName("imports");
-//        add(importsMenu);
-//        
-//        importedByMenu = new JMenuBar();
-//        importedByMenu.setName("imported by");
-//        add(importedByMenu);
+        clearInfo();
         
         moduleManager.addModuleSelectionListener(this);
+    }
+    
+    private JButton makeModuleSelectionMenu(String title, final List modules, final ModuleTreeModel manager) {
+        final JButton menu = new JButton(title);
+        menu.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                showModuleSelectionPopup(menu, modules, manager);
+            }
+        });
+        return menu;
+    }
+
+    protected void showModuleSelectionPopup(JButton menu, List modules, final ModuleTreeModel manager) {
+        JPopupMenu popup = new JPopupMenu();
+        addItems(popup, modules, manager);
+        popup.show(menu,0,menu.getHeight());
+    }
+
+    private void addItems(JPopupMenu pop, List imports2, final ModuleTreeModel manager ) {
+        Iterator iter = imports2.iterator();
+        
+        while (iter.hasNext()) {
+            final String itemName = (String) iter.next();
+            JMenuItem item = new JMenuItem(itemName);
+            item.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    manager.selectModule(itemName);
+                }
+            });
+            pop.add(item);
+        }
     }
 
     public void moduleSelected(Module module) {
@@ -87,31 +90,35 @@ public class ModuleStatusPanel extends JPanelTool implements ModuleSelectionList
     }
 
     private void clearInfo() {
-        border.setTitle(NO_MODULE_NAME);
-
         imports.clear();
         importedBy.clear();
-        
-        repaint();
+
+        setTitle(NO_MODULE_NAME);
+        importsMenu.setText("no imports");
+        importedByMenu.setText("not imported");
     }
 
-    private void updateInfo(Module module) {
-        border.setTitle(module.getName());
 
+    private void updateInfo(Module module) {
         imports.clear();
         List children = module.getChildren();
         if (children != null) {
             imports.addAll(children);
         }
-        importsBox.setSelectedItem(null);
 
         importedBy.clear();
         List parents = module.getParents();
         if (parents != null) {
             importedBy.addAll(parents);
         }
-        importedByBox.setSelectedItem(null);
         
+        setTitle(module.getName());
+    }
+    
+    private void setTitle(String title) {
+        border.setTitle(title);
+        importsMenu.setText(imports.size() + " import" + (imports.size() > 1 ? "s" : ""));
+        importedByMenu.setText("imported by " + importedBy.size());
         repaint();
     }
 }
