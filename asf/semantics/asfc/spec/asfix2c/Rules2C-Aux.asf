@@ -623,11 +623,13 @@ equations
   [mc-3'2] make-if-then-else(f,Ltest,Stat*1,) = make-if-then-else(!Ltest,Stat*1)
 
   [mc-3'3] remove-c-brackets(Stat*1) = Stat*3,
+           Stat*2 != ,
            remove-c-brackets(Stat*2) = Stat*4
            ==================================
            make-if-then-else(t,Ltest,Stat*1,Stat*2) = if(Ltest) {Stat*3} else {Stat*4}
 
   [mc-3'4] remove-c-brackets(Stat*1) = Stat*3,
+           Stat*2 != ,
            remove-c-brackets(Stat*2) = Stat*4
            ==================================
            make-if-then-else(f,Ltest,Stat*1,Stat*2) = if(!Ltest) {Stat*3} else {Stat*4}

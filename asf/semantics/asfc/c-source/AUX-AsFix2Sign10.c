@@ -28,10 +28,6 @@ static Symbol ef4sym ;
 static funcptr ef4 ;
 static Symbol ef5sym ;
 static funcptr ef5 ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
-static Symbol ef6sym ;
-static funcptr ef6 ;
 static Symbol ef8sym ;
 static funcptr ef8 ;
 static Symbol ef9sym ;
@@ -52,6 +48,10 @@ static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
 static Symbol ef20sym ;
 static funcptr ef20 ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
+static Symbol ef6sym ;
+static funcptr ef6 ;
 static Symbol ef13sym ;
 static funcptr ef13 ;
 static Symbol ef7sym ;
@@ -196,6 +196,7 @@ FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( tmp [ 21 ] ) ) ) , tmp [ 1
 }
 }
 }
+if ( term_equal ( ( * ef3 ) ( arg1 ) , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
 ( tmp [ 0 ] = ( * ef13 ) ( arg1 ) ) ;
 ( tmp [ 1 ] = ( * ef7 ) ( arg1 , lf3 ( make_list ( ( * ef14 ) ( ) ) ) ) ) ;
 ( tmp [ 2 ] = ( * ef15 ) ( tmp [ 1 ] ) ) ;
@@ -208,6 +209,7 @@ if ( check_sym ( tmp [ 5 ] , ef17sym ) ) {
 ( tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ) ;
 ( tmp [ 7 ] = arg_1 ( tmp [ 5 ] ) ) ;
 FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( lf2 ( make_list ( ( * ef20 ) ( tmp [ 6 ] ) ) ) ) , tmp [ 7 ] ) ) ;
+}
 }
 }
 }

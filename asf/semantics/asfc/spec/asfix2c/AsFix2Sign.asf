@@ -131,18 +131,18 @@ equations
                term-lexfunc2sign(LexFunc,Sortlist,Nametable)
 
   [lf2e-2'2] is-term-production(LexFunc) = false,
-             LexFunc[sym] = Symbol,
-             includes-sortname(Symbol,Sortlist) = true
+             LexFunc[sym] = $Symbol,
+             includes-sortname($Symbol,Sortlist) = true
              =========================================
              lexfunc2sign(LexFunc,Sortlist,Nametable) = (,Sortlist,Nametable)
 
 %% The definition for a lexical function consists of lexical constructor
 %% function definition and the function definition for the CHAR-list itself.
   [lf2e-2'3] is-term-production(LexFunc) = false,
-             LexFunc[sym] = Symbol,
-             includes-sortname(Symbol,{Lexsort*}) = false,
-             Symbol = sort($L),
-             sort2id(Symbol) = Funid1,
+             LexFunc[sym] = $Symbol,
+             includes-sortname($Symbol,{Lexsort*}) = false,
+             $Symbol = sort($L),
+             sort2id($Symbol) = Funid1,
              make-caller-func($L) = Funid3,
              nt-lookup("{sort(\"CHAR\")}",Nametable1) =
                (Funid4,Nametable2),
@@ -151,7 +151,7 @@ equations
              ============================
              lexfunc2sign(LexFunc,{Lexsort*},Nametable1) =
                ("{sort(\"CHAR\")}"( _ );
-                Funid5( _ ),{Lexsort*;Symbol},Nametable3)
+                Funid5( _ ),{Lexsort*;$Symbol},Nametable3)
 
   [cf2e-1'2] cffuncs2sign(Aname,[],Nametable) = (,Nametable)
 
@@ -182,7 +182,8 @@ equations
 
 %% Functions without arguments, so-called constants, need not
 %% an argument list.
-  [default-cf2e-2'3] cffunc2id(CfFunc) = Funid1,
+  [default-cf2e-2'3] is-term-production(CfFunc) = false,
+                     cffunc2id(CfFunc) = Funid1,
                      CfFunc[attrs] = Attr,
                      attrs2terms(Attr) = Term*,
                      nt-lookup(Funid1,Term*,Nametable1) = (Funid2,Nametable2)
@@ -206,21 +207,21 @@ equations
              ==================
              cfelem2args(sort($L),Nametable) = (,Varid,Nametable)
 
-  [cf2a-2'2] get-cons(Symbol) = iter-sep,
+  [cf2a-2'2] get-cons($Symbol) = iter-sep,
              gen-var(1) = Varid,
-             iter2id(Symbol) = Funid1,
+             iter2id($Symbol) = Funid1,
              nt-lookup(Funid1,Nametable1) = (Funid2,Nametable2),
              make-funcdef(Funid1,Varid) = Funcdef
              ====================================
-             cfelem2args(Symbol,Nametable1) = (Funcdef,Varid,Nametable2)
+             cfelem2args($Symbol,Nametable1) = (Funcdef,Varid,Nametable2)
 
-  [cf2a-2'3] get-cons(Symbol) = iter,
+  [cf2a-2'3] get-cons($Symbol) = iter,
              gen-var(1) = Varid,
-             iter2id(Symbol) = Funid1,
+             iter2id($Symbol) = Funid1,
              nt-lookup(Funid1,Nametable1) = (Funid2,Nametable2),
              make-funcdef(Funid1,Varid) = Funcdef
              ====================================
-             cfelem2args(Symbol,Nametable1) = (Funcdef,Varid,Nametable2)
+             cfelem2args($Symbol,Nametable1) = (Funcdef,Varid,Nametable2)
 
   [default-cf2a-2'4] cfelem2args(CfElem,Nametable) = (,,Nametable)
 

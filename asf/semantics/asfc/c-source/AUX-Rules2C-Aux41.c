@@ -24,8 +24,6 @@
 #include  "asc-support.h"
 static Symbol lf_AUX_Rules2C_Aux41_1sym ;
 static ATerm lf_AUX_Rules2C_Aux41_1 ( ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
 static Symbol ef4sym ;
 static funcptr ef4 ;
 static Symbol ef1sym ;
@@ -50,6 +48,8 @@ static Symbol ef10sym ;
 static funcptr ef10 ;
 static Symbol ef11sym ;
 static funcptr ef11 ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
 static Symbol ef12sym ;
 static funcptr ef12 ;
 void register_AUX_Rules2C_Aux41 ( ) {
@@ -120,13 +120,17 @@ if ( is_single_element ( atmp0000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp0000 ) ) ;
 if ( term_equal ( tmp [ 0 ] , make_char ( 102 ) ) ) {
 ( tmp [ 1 ] = ( * ef12 ) ( arg2 ) ) ;
+if ( ! term_equal ( arg3 , ( * ef3 ) ( ) ) ) {
 ( tmp [ 2 ] = ( * ef12 ) ( arg3 ) ) ;
 FUNC_EXIT ( ( * ef7 ) ( ( * ef8 ) ( lf3 ( make_list ( ( * ef9 ) ( ( * ef5 ) ( ( * ef6 ) ( ) , arg1 ) , ( * ef10 ) ( ( * ef11 ) ( ) , tmp [ 1 ] ) , ( * ef10 ) ( ( * ef11 ) ( ) , tmp [ 2 ] ) ) ) ) ) ) ) ;
 }
+}
 if ( term_equal ( tmp [ 0 ] , make_char ( 116 ) ) ) {
 ( tmp [ 1 ] = ( * ef12 ) ( arg2 ) ) ;
+if ( ! term_equal ( arg3 , ( * ef3 ) ( ) ) ) {
 ( tmp [ 2 ] = ( * ef12 ) ( arg3 ) ) ;
 FUNC_EXIT ( ( * ef7 ) ( ( * ef8 ) ( lf3 ( make_list ( ( * ef9 ) ( arg1 , ( * ef10 ) ( ( * ef11 ) ( ) , tmp [ 1 ] ) , ( * ef10 ) ( ( * ef11 ) ( ) , tmp [ 2 ] ) ) ) ) ) ) ) ;
+}
 }
 }
 }
