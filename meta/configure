@@ -1459,6 +1459,10 @@ trap 'rm -fr `echo "Makefile meta install-prog-sh install-data-sh \
 	sglr/src/Makefile \
 	pgen/c-source/Makefile \
 	pgen/c-files/Makefile \
+	utils/Makefile \
+	utils/gen-table \
+	utils/parse-sdf2 \
+	utils/sdf2table \
 " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -1574,6 +1578,10 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile meta install-prog-sh install-data-sh \
 	sglr/src/Makefile \
 	pgen/c-source/Makefile \
 	pgen/c-files/Makefile \
+	utils/Makefile \
+	utils/gen-table \
+	utils/parse-sdf2 \
+	utils/sdf2table \
 "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

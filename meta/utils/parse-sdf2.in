@@ -1,0 +1,69 @@
+#!/bin/sh
+# $Id$
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+bindir=${exec_prefix}/bin
+libdir=${exec_prefix}/lib
+
+PATH="$PATH:$bindir"
+
+A2TOA1="a2toa1 -silent"
+CONVERT=0
+TABLE=$libdir/Sdf2.baf
+PARSE="sglr -p $TABLE"
+OPTS="-v"
+
+case $#
+in
+	0)
+		$PARSE - ;;
+	*)
+		while [ $# -gt 0 ]	# Handle command line options
+		do
+			case $1
+			in
+				-)
+					Files="$Files $1" ;;
+				-1)
+					CONVERT=1 ;;
+				-2)
+					CONVERT=0 ;;
+				-o)
+					NAMEDOUTPUT=$2; shift
+					OPTS="$OPTS $1 $NAMEDOUTPUT" ;;
+				-d*|-l*|-v*)
+					OPTS="$OPTS $1" ;;
+				-*)
+					echo Unknown option ignored: $1 ;;
+				*)
+					Files="$Files $1" ;;
+			esac
+			shift
+		done
+		for f in $Files
+		do
+			dir=`dirname $f`
+			base=`basename $f .sdf`
+			base=`basename $f .sdf2`
+			dot="$dir/$base.dot"
+			out2=${NAMEDOUTPUT:-"$dir/$base.asfix2"}
+			if $PARSE -i $f -o $out2 $OPTS
+			then
+				if [ $CONVERT -eq 1 ]
+			        then
+				        out1=${NAMEDOUTPUT:-"$dir/$base.asfix2"}
+					if [ $out2 = $out1 ]
+					then	# Move away $out2
+						mv $out2 $out2.tmp
+						out2=$out2.tmp
+					fi
+				        $A2TOA1 < $out2 > $out1
+					rm -f $out2
+			        fi
+			else
+				echo "Parse error!"		>&2
+				exit 1
+			fi
+		done ;;
+esac

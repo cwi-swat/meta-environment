@@ -2,7 +2,14 @@
 # Implicit Makefile rules
 
 .SUFFIXES:
-.SUFFIXES: .c .h .c.nw .h.nw .c.tex .h.tex .o .tcl .tcl.nw .tcl.tex
+.SUFFIXES:	.c .h .c.nw .h.nw .c.tex .h.tex .o .tcl .tcl.nw .tcl.tex \
+		.tar .tar.gz
+
+.tar.tar.gz:
+	@gzip -9 $<
+
+%.uue:
+	@uuencode $* $* > $@
 
 .tcl.nw.tcl:
 	@if test x$(NOTANGLE) != x ; then \
