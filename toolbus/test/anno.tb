@@ -1,0 +1,21 @@
+
+process ANNOTEST is
+let
+  T : term,
+  T2 : term
+in
+  read("please enter an annotated term with function symbol f: ", T?) .
+  snd-msg(anno(T)) .
+  rec-msg(anno(T2?)) .
+  printf("result:%t,%t\n", T, T2)
+endlet
+
+process ANNOBOUNCE is
+let 
+  T : term
+in 
+  rec-msg(anno(f(T?))) .
+  snd-msg(anno(f(T)))
+endlet
+
+toolbus(ANNOTEST, ANNOBOUNCE)
