@@ -691,6 +691,28 @@ proc ParseEquations { modlist } {
 
 
 #--
+# NewModule(M)
+#-
+# generates the toolbus event to request addition of a new module
+# and destroys the widget $w.
+#--
+proc NewModule { file } {
+    global opening
+
+    set opening 1
+
+# Get the module name...
+    set mod [GetBasename $file ".sdf2"]
+# Create the file...
+    set fhdl [open $file "w"]
+    puts $fhdl [concat "module" $mod]
+    close $fhdl
+# ... and open it.
+    OpenModule $mod
+}
+
+
+#--
 # OpenModule(M)
 #-
 # generates the toolbus event to request addition of a module
@@ -870,11 +892,10 @@ proc NewModuleWidget {} {
       {{SDF2}   {.sdf2}        }
       {{Any}    *              }
   }
-  set mod [GetBasename [tk_getSaveFile -filetypes $types \
-                                       -title "New SDF Module..."] \
-                        ".sdf2"]
-  if [ expr [ string length $mod ] > 0 ] {
-    NewModule $mod
+  set file [tk_getSaveFile -filetypes $types -title "New SDF Module..."]
+
+  if [ expr [ string length $file ] > 0 ] {
+    NewModule $file
   }
 }
 
@@ -1060,7 +1081,7 @@ proc define-menu-bar {} {
     menubutton .menu.file -text "File" -underline 0 -menu .menu.file.menu
     set m .menu.file.menu
     menu $m -tearoff 0
-    $m add command -label "New" -state disabled -underline 0 -command {NewModuleWidget}
+    $m add command -label "New"  -underline 0 -command {NewModuleWidget}
     $m add command -label "Open..." -underline 0 -command {OpenModuleWidget}
     $m add command -label "Save" -underline 0 -command {SaveAll}
     $m add separator
@@ -1296,6 +1317,7 @@ proc define-modlist-popup {} {
 proc define-canvas-popup {} {
     set m .canvas-popup
     menu $m -tearoff 0
+    $m add command -label "New..." -command "NewModuleWidget"
     $m add command -label "Open..." -command "OpenModuleWidget"
 }
 
