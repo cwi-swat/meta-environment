@@ -1,0 +1,332 @@
+/* $Id$ */
+
+/*{{{  process FindModuleFilename(Modulename: str, Type: term, Filename: str?) */
+
+process FindModuleFilename(Modulename: str, Type: term, Filename: str?) is
+let
+  Extension: str,
+  Path: str
+in
+  snd-msg(get-path-from-db(Modulename))
+  . rec-msg(path(Path?))
+  . snd-msg(file-extension-hook(Type))
+  . rec-msg(file-extension-hook-result(Extension?))
+  . snd-msg(io-get-filename(Path, Modulename, Extension))
+  . rec-msg(io-filename(Filename?))
+endlet
+
+/*}}}  */
+
+/*{{{  process AssertModuleSanity(Sid: term, Modulename: str) */
+
+process AssertModuleSanity(Sid: term, Modulename: str) is
+let
+  CurrentModulename: str
+in
+  GetModulename(Sid, CurrentModulename?)
+  . if not(equal(CurrentModulename, Modulename)) then
+    Error("Term is already being edited over module: %s", [Modulename])
+  else tau fi
+endlet
+
+/*}}}  */
+/*{{{  process GetFilename(Sid: term, Filename: str?) */
+
+process GetFilename(Sid: term, Filename: str?) is
+  snd-msg(em-get-filename(Sid))
+  . rec-msg(em-filename(Sid, Filename?))
+
+/*}}}  */
+/*{{{  process GetModulename(Sid: term, Modulename: str?) */
+
+process GetModulename(Sid: term, Modulename: str?) is
+  snd-msg(em-get-modulename(Sid))
+  . rec-msg(em-modulename(Sid, Modulename?))
+
+/*}}}  */
+
+/*{{{  process Edit(Filename: str, Modulename: str, Sid: term?) */
+
+process Edit(Filename: str, Modulename: str, Sid: term?) is
+  snd-msg(em-get-session(Filename, Modulename))
+  . rec-msg(em-session(Filename, Modulename, Sid?))
+
+/*}}}  */
+/*{{{  process EditText(Sid: term, Type: term) */
+
+process EditText(Sid: term, Type: term) is
+let
+  Actions: list,
+  Filename: str,
+  Modulename: str
+in
+  snd-msg(em-is-editor-registered(Sid, text))
+  .
+  (
+    rec-msg(em-editor-not-registered(Sid, text))
+    . snd-msg(em-register-editor(Sid, text))
+    . GetModulename(Sid, Modulename?)
+    . snd-msg(get-auxiliary-buttons(Type, Modulename))
+    . rec-msg(button-list(Modulename, Actions?))
+    . GetFilename(Sid, Filename?)
+    . snd-msg(te-edit-text(Sid, EDITOR, Filename, Actions))
+    /*. snd-msg(te-set-actions(Sid, Actions))*/
+  +
+    rec-msg(em-editor-registered(Sid, text))
+    . snd-msg(te-editor-to-front(Sid))
+  )
+endlet
+
+/*}}}  */
+/*{{{  process EditStructure(Sid: term) */
+
+process EditStructure(Sid: term) is
+let
+  Modulename: str,
+  Tree: term
+in
+  snd-msg(em-is-editor-registered(Sid, structure))
+  .
+  (
+    rec-msg(em-editor-not-registered(Sid, structure))
+    . GetModulename(Sid, Modulename?)
+    . snd-msg(get-syntax-tree(Modulename))
+    .
+    (
+      rec-msg(syntax(Tree?))
+      . snd-msg(em-register-editor(Sid, structure))
+      . snd-msg(se-create(Sid, Tree))
+    +
+      rec-msg(unavailable)
+      . printf("EditStructure: no tree available for %s\n", Modulename)
+    )
+  +
+    rec-msg(em-editor-registered(Sid, structure))
+    . printf("EditStructure: already editing\n")
+  )
+endlet
+
+/*}}}  */
+
+/*{{{  process MenuSelected(Sid: term, EditorType: term) */
+
+process MenuSelected(Sid: term, EditorType: term) is
+let
+  Action: term,
+  Args: list,
+  Modulename: str
+in
+  rec-msg(te-menu-event(Sid, Action?))
+  . Args := []
+  . GetModulename(Sid, Modulename?)
+  . printf("Action: %t, EditorType: %t, Modulename: %s, Sid: %t\n",
+  Action, EditorType, Modulename, Sid)
+  . snd-msg(extra-button-action(Action, Args, EditorType, Modulename, Sid))
+endlet
+
+/*}}}  */
+/*{{{  process MouseClicked(Sid: term) */
+
+process MouseClicked(Sid: term) is
+let
+  Focus: term,
+  Offset: int,
+  Sortname: str
+in
+    rec-msg(te-mouse-click-at-offset(Sid, Offset?))
+    . snd-msg(em-is-editor-registered(Sid, structure))
+    .
+    (
+      rec-msg(em-editor-registered(Sid, structure))
+      . snd-msg(se-set-cursor-at-offset(Sid, Offset))
+      . snd-msg(se-get-focus-at-cursor(Sid))
+      . rec-msg(se-focus-at-cursor(Sid, Focus?))
+      . snd-msg(se-get-sort-at-cursor(Sid))
+      . rec-msg(se-sort-at-cursor(Sid, Sortname?))
+      . snd-msg(te-set-focus(Sid, Focus, Sortname))
+    +
+      rec-msg(em-editor-not-registered(Sid, structure))
+      . printf("mouse click ignored, no structure editor\n")
+    )
+endlet
+
+/*}}}  */
+/*{{{  process TextChanged(Sid: term) */
+
+process TextChanged(Sid: term) is
+  rec-msg(te-contents-changed(Sid))
+  . snd-msg(em-is-editor-registered(Sid, structure))
+  .
+  (
+    rec-msg(em-editor-registered(Sid, structure))
+    . snd-msg(em-unregister-editor(Sid, structure))
+    . snd-msg(se-delete(Sid))
+    . snd-msg(te-clear-focus(Sid))
+    . snd-msg(te-display-message(Sid,
+      "Editor contents have changed, focus is unavailable until next parse."))
+  +
+    rec-msg(em-editor-not-registered(Sid, structure))
+  )
+
+  /*}}}  */
+
+/*{{{  process EditorDisconnected(Sid: term) */
+
+process EditorDisconnected(Sid: term) is
+  (
+    rec-msg(te-text-editor-disconnected(Sid))
+  +
+    rec-msg(kill-editor(Sid))
+  )
+
+/*}}}  */
+
+/*{{{  process DeleteTextEditor(Sid: term) */
+
+process DeleteTextEditor(Sid: term) is
+  snd-msg(em-is-editor-registered(Sid, text))
+  . printf("DeleteTextEditor: %t\n", Sid)
+  .
+  (
+    rec-msg(em-editor-registered(Sid, text))
+  . printf("DeleteTextEditor: %t registered\n", Sid)
+    . snd-msg(te-kill-text-editor(Sid))
+    . snd-msg(em-unregister-editor(Sid, text))
+  +
+    rec-msg(em-editor-not-registered(Sid, text))
+  . printf("DeleteTextEditor: %t unregistered\n", Sid)
+  )
+
+/*}}}  */
+/*{{{  process DeleteStructureEditor(Sid: term) */
+
+process DeleteStructureEditor(Sid: term) is
+  snd-msg(em-is-editor-registered(Sid, structure))
+  .
+  (
+    rec-msg(em-editor-registered(Sid, structure))
+    . snd-msg(se-delete(Sid))
+    . snd-msg(em-unregister-editor(Sid, structure))
+  +
+    rec-msg(em-editor-not-registered(Sid, structure))
+  )
+
+/*}}}  */
+/*{{{  process DeleteSession(Sid: term) */
+
+process DeleteSession(Sid: term) is
+  printf("DeleteSession: %t\n", Sid) .
+  DeleteTextEditor(Sid)
+  . DeleteStructureEditor(Sid)
+  . snd-msg(em-delete-session(Sid))
+
+/*}}}  */
+/*{{{  process DeleteSessions(Modulename: str) */
+
+process DeleteSessions(Modulename: str) is
+let
+  Sid: term,
+  Sids: list
+in
+  snd-msg(em-get-session-ids(Modulename))
+  . rec-msg(em-session-ids(Modulename, Sids?))
+  . printf("session ids: %t\n", Sids)
+  .
+  (
+    if not-equal(Sids, []) then
+      Sid := first(Sids)
+      . DeleteSession(Sid)
+      . Sids := next(Sids)
+    fi
+  ) *
+  if equal(Sids, []) then
+    tau
+  fi
+endlet
+
+/*}}}  */
+
+/*{{{  process GetPendingChanges(Sid: term, HasChanges: bool?) */
+
+process GetPendingChanges(Sid: term, HasChanges: bool?) is
+  snd-msg(em-is-editor-registered(Sid, structure))
+  .
+  (
+    rec-msg(em-editor-registered(Sid, structure))
+    . HasChanges := false
+  +
+    rec-msg(em-editor-not-registered(Sid, structure))
+    . snd-msg(em-is-editor-registered(Sid, text))
+    .
+    (
+      rec-msg(em-editor-registered(Sid, text))
+      . HasChanges := true
+    +
+      rec-msg(em-editor-not-registered(Sid, text))
+      . HasChanges := false
+    )
+  )
+
+/*}}}  */
+
+/*{{{  process CommitPendingChanges(Modulename: str, HasChanges: bool) */
+
+process CommitPendingChanges(Modulename: str, HasChanges: bool) is
+  if equal(HasChanges, true) then
+    snd-msg(revert-module(Modulename))
+    . rec-msg(module-reverted(Modulename))
+  else tau fi
+
+/*}}}  */
+
+/*{{{  process EditSyntax(Modulename: str) */
+
+process EditSyntax(Modulename: str) is
+let
+  EditorType: term,
+  Filename: str,
+  HasChanges: bool,
+  Sid: term,
+  Tree: term
+in
+  EditorType := syntax-editor
+  . FindModuleFilename(Modulename, sdf, Filename?)
+  . Edit(Filename, Modulename, Sid?)
+  . AssertModuleSanity(Sid, Modulename)
+  . EditText(Sid, EditorType)
+  . EditStructure(Sid)
+  .
+  (
+    MenuSelected(Sid, EditorType)
+  +
+    MouseClicked(Sid)
+  +
+    TextChanged(Sid)
+  +
+    rec-msg(replace-focus(Sid, Tree?))
+    . EditStructure(Sid)
+  )
+  *
+  EditorDisconnected(Sid)
+  . GetPendingChanges(Sid, HasChanges?)
+  . DeleteSession(Sid)
+  . CommitPendingChanges(Modulename, HasChanges)
+endlet
+
+/*}}}  */
+
+/*{{{  process EditorCreator */
+
+process EditorCreator is
+let
+  Modulename: str,
+  Pid: int
+in
+  (
+    rec-msg(edit-syntax(Modulename?))
+    . create(EditSyntax(Modulename), Pid?)
+  )
+  * delta
+endlet
+
+/*}}}  */

@@ -12,7 +12,8 @@ let
   Offset: int,
   ParseTree: term,
   SE: structure-editor,
-  Sort: str
+  Sort: str,
+  Tree: term
 in
   execute(structure-editor, SE?)
   .
@@ -28,6 +29,11 @@ in
   +
     rec-msg(se-set-cursor-at-offset(EditorId?, Offset?))
     . snd-do(SE, set-cursor-at-offset(EditorId, Offset))
+  +
+    rec-msg(se-get-cursor(EditorId?))
+    . snd-eval(SE, get-cursor(EditorId))
+    . rec-value(SE, cursor(Tree?))
+    . snd-msg(se-cursor(EditorId, Tree))
   +
     rec-msg(se-get-focus-at-cursor(EditorId?))
     . snd-eval(SE, get-focus-at-cursor(EditorId))

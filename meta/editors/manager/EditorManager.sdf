@@ -7,7 +7,7 @@ imports basic/Whitespace
 exports
   sorts Sid
   context-free syntax
-    id:NatCon -> Sid
+    "sid" "(" id:NatCon ")" -> Sid
 
   sorts EditorType
   context-free syntax

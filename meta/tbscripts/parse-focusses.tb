@@ -1,33 +1,15 @@
 /* $Id$ */       
 
-process GetText(EditorId: term, Text: str?, Focus: term?, Status: term?) is
-  let
-    DirtyFoci: list
-  in 
-    snd-msg(se-get-dirty-focuses(EditorId)) .
-    rec-msg(se-dirty-focuses(DirtyFoci?)) .
-    if not-equal(DirtyFoci, []) then
-      Focus := first(DirtyFoci) .
-      DirtyFoci := next(DirtyFoci) .
-      snd-msg(te-get-focus-text(EditorId, Focus)) .
-      (
-        rec-msg(te-focus-text(EditorId, Text?)) .
-        Status := parse-needed
-        +
-        rec-note(delete-editor(EditorId)) .
-        Text := "" .
-        Status := no-parse-needed
-      )
-    else
-      Text := "" .
-      Status := no-parse-needed
-    fi
-  endlet
+/*{{{  process GetText(EditorId: term, Text: str?) */
+
+process GetText(EditorId: term, Text: str?) is
+  snd-msg(te-get-contents(EditorId))
+  . rec-msg(te-contents(EditorId, Text?))
+
+/*}}}  */
 
 process ParseFocusses is
   let
-    Id: term,
-    Focus: term,
     Text: str,
     Type: term,
     ModuleName: str,
@@ -36,11 +18,11 @@ process ParseFocusses is
     Tree: term,
     Errors: term,
     Status: term,
-    FileName: str,
+    Filename: str,
     Checking : term
   in 
-    Id := process-id .
     (
+      /* parse contents of <EditorId> over language <ModuleName> */
       rec-msg(parse-focusses(EditorId?, ModuleName?, Type?)) .
       subscribe(delete-editor(EditorId)) .
       if equal(Type, eqs) then
@@ -58,20 +40,24 @@ process ParseFocusses is
           rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
         fi
       fi .
-      GetText(EditorId, Text?, Focus?, Status?) .
-      if equal(Status, parse-needed) then
-        UpdateTextInModuleDb(Type, ModuleName, Text) .
-        snd-msg(get-editor-filename(EditorId)) .
-        rec-msg(editor-filename(FileName?)) .
-        ParseString(ModuleName, FileName, Type, Checking, Nonterminal, Text, 
-                    Tree?, Errors?) .
-        HandleParseErrors(ModuleName, EditorId, Focus, Errors) .
-        ProcessTree(ModuleName, EditorId, Focus, Tree, Errors) .
-        Tree := no-tree
-      else
-        snd-msg(parse-ok(ModuleName))
-      fi .
-      unsubscribe(delete-editor(EditorId))
+      snd-msg(em-is-editor-registered(EditorId, structure))
+      .
+      (
+        rec-msg(em-editor-registered(EditorId, structure))
+        . snd-msg(parse-ok(ModuleName))
+      +
+        rec-msg(em-editor-not-registered(EditorId, structure))
+	. GetText(EditorId, Text?)
+        . UpdateTextInModuleDb(Type, ModuleName, Text)
+        . snd-msg(em-get-filename(EditorId))
+        . rec-msg(em-filename(EditorId, Filename?))
+        . ParseString(ModuleName, Filename, Type, Checking, Nonterminal, Text, 
+                    Tree?, Errors?)
+        . HandleParseErrors(ModuleName, EditorId, Errors)
+        . ProcessTree(ModuleName, EditorId, Tree, Errors)
+        . Tree := no-tree
+      )
+      . unsubscribe(delete-editor(EditorId))
     ) *
     delta
   endlet

@@ -10,6 +10,7 @@
 
 /* Prototypes for functions called from the event handler */
 void set_cursor_at_offset(int conn, ATerm, int);
+ATerm get_cursor(int conn, ATerm);
 void delete_editor(int conn, ATerm);
 ATerm get_focus_at_cursor(int conn, ATerm);
 void update_editor(int conn, ATerm, ATerm);

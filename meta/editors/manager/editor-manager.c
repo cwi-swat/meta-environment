@@ -174,7 +174,7 @@ void register_editor(int cid, ATerm sid, ATerm editorType)
       }
       types = EM_getEditorTypeListTail(types);
     }
-    types = EM_makeEditorTypeListMany(type, types);
+    types = EM_makeEditorTypeListMany(type, EM_getSessionList(session));
     putSession(EM_setSessionList(session, types));
   }
 }
@@ -197,6 +197,7 @@ ATerm is_editor_registered(int cid, ATerm sid, ATerm editorType)
       if (EM_isEqualEditorType(cur, type)) {
 	return sndValue(ATmake("editor-registered"));
       }
+      types = EM_getEditorTypeListTail(types);
     }
     return sndValue(ATmake("editor-not-registered"));
   }
@@ -220,7 +221,7 @@ void unregister_editor(int cid, ATerm sid, ATerm editorType)
     while (!EM_isEditorTypeListEmpty(types)) {
       EM_EditorType cur = EM_getEditorTypeListHead(types);
       if (!EM_isEqualEditorType(cur, type)) {
-	stripped = EM_makeEditorTypeListMany(type, stripped);
+	stripped = EM_makeEditorTypeListMany(cur, stripped);
       }
       types = EM_getEditorTypeListTail(types);
     }
@@ -250,9 +251,10 @@ ATerm get_session_ids(int cid, const char *modulename)
       EM_Sid sid = EM_getSessionId(session);
       result = ATinsert(result, EM_SidToTerm(sid));
     }
+    sessionList = ATgetNext(sessionList);
   }
 
-  return sndValue(ATmake("session-ids(<list>)", result));
+  return sndValue(ATmake("session-ids(<term>)", result));
 }
 
 /*}}}  */
@@ -290,6 +292,7 @@ int main(int argc, char *argv[])
   int cid;
 
   ATBinit(argc, argv, &bottomOfStack);
+  EM_initEditorManagerApi();
 
   sessions = ATtableCreate(INITIAL_TABLE_SIZE, TABLE_RESIZE_PERCENTAGE);
 

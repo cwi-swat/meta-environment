@@ -22,7 +22,7 @@
 #include "feedback.tb"
 #include "abort.tb"
 #include "parse-utils.tb"
-#include "editors.tb"
+#include "editing.tb"
 #include "restore-term-brackets.tb"
 #include "open-modules.tb"
 #include "file-creator.tb"

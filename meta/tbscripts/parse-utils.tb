@@ -46,18 +46,18 @@ in
 endlet
 
 process ProcessTree(ModuleName : str, EditorId : term, 
-		    Focus : term, Tree : term, ParseError : term) is
+		    Tree : term, ParseError : term) is
 let
-  FileName : str,
-  FunSym   : str,
-  NewTree  : term
+  FileName: str,
+  FunSym: str,
+  AnnotatedTree: term
 in
   if not-equal(Tree, error-tree) then
-    snd-msg(get-editor-filename(EditorId)) .
-    rec-msg(editor-filename(FileName?)) .
+    snd-msg(em-get-filename(EditorId)) .
+    rec-msg(em-filename(EditorId, FileName?)) .
     snd-msg(add-posinfo-packed(FileName, Tree)) .
-    rec-msg(tree-with-pos-info(NewTree?)) .
-    snd-msg(replace-focus(EditorId, Focus, NewTree)) .
+    rec-msg(tree-with-pos-info(AnnotatedTree?)) .
+    snd-msg(replace-focus(EditorId, AnnotatedTree)) .
     FunSym := fun(ParseError) .
     if equal(FunSym, "no-errors") then
       snd-msg(parse-ok(ModuleName))
@@ -78,7 +78,7 @@ process ProcessParseError(ParseError: term) is
   fi
 
 process HandleParseErrors(ModuleName: str, EditorId: term,
-			  Focus: term, ErrorSummary: term) is
+			  ErrorSummary: term) is
   if equal(fun(ErrorSummary), "no-errors") then
     tau
   else
@@ -92,5 +92,5 @@ process HandleParseErrors(ModuleName: str, EditorId: term,
       printf("HandleParseErrors: ErrorSummary = %t\n\n", ErrorSummary) .
       ShowSummary(ErrorSummary)
     fi .
-    snd-msg(parse-failed(ModuleName, Focus))
+    snd-msg(parse-failed(ModuleName))
   fi

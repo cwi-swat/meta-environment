@@ -9,7 +9,7 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-void get_contents(int conn, ATerm, ATerm);
+void get_contents(int conn, ATerm);
 void clear_focus(int conn, ATerm);
 void write_contents(int conn, ATerm);
 void display_message(int conn, ATerm, const char *);

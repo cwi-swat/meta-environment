@@ -63,9 +63,11 @@ let
   Tree : term,
   FileName : str,
   Path : str,
-  Extension : str
+  Extension : str,
+  EditorId: term
 in
-  Tree := none.
+  Tree := none .
+  EditorId := no-editor .
   snd-msg(get-path-from-db(ModuleName)) .
   (
     rec-msg(path(Path?)) .
@@ -79,13 +81,13 @@ in
     rec-msg(file-extension-hook-result(Extension?)) .
     snd-msg(io-get-filename(Path, ModuleName, Extension)) .
     rec-msg(io-filename(FileName?)) .
-    CreateEditor(syntax-editor, ModuleName, FileName, Tree)
+    CreateEditor(syntax-editor, ModuleName, FileName, Tree, EditorId?)
   +
     rec-msg(no-path) .
     snd-note(ui-status(errorf("Internal error: could not find path to %s",
-                       [ModuleName]))) .
-    snd-msg(editor-opened(ModuleName, no-editor))
-  )
+                       [ModuleName])))
+  ) .
+  snd-msg(editor-opened(ModuleName, EditorId))
 endlet
 
 process EquationsEditorCreator (ModuleName : str) is
@@ -94,9 +96,11 @@ let
   FileName : str,
   Path : str,
   Time : int,
-  Extension : str
+  Extension : str,
+  EditorId: term
 in
   Tree := none .
+  EditorId := no-editor .
   snd-msg(get-path-from-db(ModuleName)) .
   (
     rec-msg(path(Path?)) .
@@ -110,67 +114,76 @@ in
     rec-msg(file-extension-hook-result(Extension?)) .
     snd-msg(io-get-filename(Path, ModuleName, Extension)) .
     rec-msg(io-filename(FileName?)) .
-    CreateEditor(equations-editor, ModuleName, FileName, Tree)
+    CreateEditor(equations-editor, ModuleName, FileName, Tree, EditorId?)
   +
     rec-msg(no-path) .
     snd-note(ui-status(errorf("Internal error: could not find path to %s",
-                       [ModuleName]))) .
-    snd-msg(editor-opened(ModuleName, no-editor))
-  )
+                       [ModuleName])))
+  ) .
+  snd-msg(editor-opened(ModuleName, EditorId))
 endlet
 
 process ExtensionBasedTermEditorCreator (FileName : str) is
 let
   Extension : str,
-  ModuleName : str
+  ModuleName : str,
+  Tree: term,
+  EditorId: term
 in
+  Tree := none .
+  ModuleName := "" .
+  EditorId := no-editor .
   snd-msg(io-get-extension(FileName)) .
   rec-msg(io-extension(FileName, Extension?)) .
   snd-msg(get-extension-modulename(Extension)) .
   (
     rec-msg(extension-modulename(Extension, ModuleName?)) .
-    TermEditorCreator(ModuleName, FileName, none)
+    CreateEditor(term-editor, ModuleName, FileName, Tree, EditorId?)
   +
     rec-msg(no-extension-modulename(Extension)) .
     snd-note(ui-status(errorf("Extension %s is not registered. Please edit your meta.buttons. For example: configuration([extension(\"MyModuleName\",\"%s\")])",
-                       [Extension, Extension]))) .
-    snd-msg(editor-opened("", no-editor))
-  )
+                       [Extension, Extension])))
+  ) .
+  snd-msg(editor-opened(ModuleName, EditorId))
 endlet
 
 process TermEditorCreator(ModuleName: str, FileName: str, Tree: term) is
-  CreateEditor(term-editor, ModuleName, FileName, Tree)
+let
+  EditorId: term
+in
+  CreateEditor(term-editor, ModuleName, FileName, Tree, EditorId?) .
+  snd-msg(editor-opened(ModuleName, EditorId))
+endlet
 
 process CreateEditor(Type : term,
                      ModuleName : str, 
                      FileName : str, 
-		     Tree : term) is
+		     Tree : term,
+		     EditorId: term?) is
 let
-  EditorId : term,
   ButtonList : list,
   Pid : int,
   CurrentModuleName : str
 in
+  snd-msg(get-editor-id(FileName, ModuleName)) .
+  (
+    rec-msg(new-editor(EditorId?)) .
+    snd-msg(se-create(EditorId, Tree)) .
+    create(EditorActionsLoop(EditorId, Type, ModuleName, Tree), Pid?) .
     snd-msg(get-auxiliary-buttons(Type, ModuleName)) .
     rec-msg(button-list(ModuleName, ButtonList?)).
-    snd-msg(get-editor-id(FileName, ModuleName)) .
-    (
-      rec-msg(new-editor(EditorId?)) .
-      snd-msg(se-create(EditorId, Tree)) .
-      create(EditorActionsLoop(EditorId, Type, ModuleName, Tree), Pid?) .
-      snd-msg(te-edit-text(EditorId, EDITOR, FileName, ButtonList))
-    +
-      rec-msg(existing-editor(EditorId?)) .
-      snd-msg(get-editor-module-name(EditorId)) .
-      rec-msg(editor-module-name(EditorId, CurrentModuleName?)) .
-      if equal(CurrentModuleName, ModuleName) then
-	snd-msg(te-editor-to-front(EditorId))
-      else
-	Error("Term %s is already being edited for a different module",
-	      [FileName])
-      fi
-    ) .
-    snd-msg(editor-opened(ModuleName, EditorId))
+    snd-msg(te-edit-text(EditorId, EDITOR, FileName, ButtonList))
+  +
+    rec-msg(existing-editor(EditorId?)) .
+    snd-msg(get-editor-module-name(EditorId)) .
+    rec-msg(editor-module-name(EditorId, CurrentModuleName?)) .
+    if equal(CurrentModuleName, ModuleName) then
+      snd-msg(te-editor-to-front(EditorId))
+    else
+      Error("Term %s is already being edited for a different module",
+	    [FileName])
+    fi
+  )
 endlet
 
 process CloseEditor(ModuleName : str, FileName : str) is
@@ -218,7 +231,8 @@ in
     if equal(EditorsSynchronized, true)
     then
       snd-msg(te-clear-focus(EditorId)) .
-      snd-msg(te-display-message(EditorId, "Editor contents have changed, focus is unavailable until next parse.")) .
+      snd-msg(te-display-message(EditorId,
+      "Editor contents have changed, focus is unavailable until next parse.")) .
       EditorsSynchronized := false
     else
       tau
@@ -241,34 +255,20 @@ in
     fi
   +
     rec-note(syntax-changed(ModuleName)) .
-    InvalidateDependendEditor(EditorId, Type) .
     EditorsSynchronized := false
   ) *
   rec-note(delete-editor(EditorId)) 
 endlet
 
-process InvalidateDependendEditor(EditorId : term, Type : term) is
-  if not(equal(Type, syntax-editor)) then
-    InvalidateEditor(EditorId)
-  else
-    tau
-  fi
-
-process InvalidateEditor(EditorId : term) is
-let
-  Focus : term
-in
-  snd-msg(se-invalidate-tree(EditorId)) .
-  rec-msg(se-invalidation-done(EditorId,Focus?))
-endlet
-
-process KillEditor(EditorId : term, Type : term, ModuleName : str, EditorsSynchronized : bool) is
+process KillEditor(EditorId: term,
+                   Type: term,
+		   ModuleName: str,
+		   EditorsSynchronized: bool) is
   snd-note(delete-editor(EditorId)) .
-  if or(equal(Type, syntax-editor), 
-        equal(Type, equations-editor)) then
-    KillModuleEditor(EditorId, ModuleName, Type, EditorsSynchronized) 
+  if equal(Type, syntax-editor) then
+    KillModuleEditor(EditorId, ModuleName, EditorsSynchronized) 
   else	
-    if not(equal(Type, term-editor)) then
+    if not(or(equal(Type, term-editor), equal(Type, equations-editor))) then
       snd-msg(kill-editor-unknown-type-hook(EditorId, Type, ModuleName)) .
       rec-msg(kill-editor-unknown-type-hook-result)
     else
@@ -277,19 +277,19 @@ process KillEditor(EditorId : term, Type : term, ModuleName : str, EditorsSynchr
   fi.
   snd-msg(se-delete-structure-editor(EditorId)) 
 
-process KillModuleEditor(EditorId : term, ModuleName : str, Type : term, EditorsSynchronized : bool) is
+process KillModuleEditor(EditorId : term, Modulename : str, EditorsSynchronized : bool) is
   if equal(EditorsSynchronized, false)
   then
-    snd-msg(revert-module(ModuleName, Type)) .
-    rec-msg(module-reverted(ModuleName))
+    snd-msg(revert-module(Modulename))
+    . rec-msg(module-reverted(Modulename))
   else
     tau
   fi
 
 process KillEditorsForModule(ModuleName: str) is
 let
-  EditorId   : term,
-  EditorList : list
+  EditorId: term,
+  EditorList: list
 in
   snd-msg(get-editors-by-module(ModuleName)) .
   rec-msg(editors-by-module(EditorList?)) .

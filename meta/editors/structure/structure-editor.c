@@ -277,6 +277,22 @@ void set_cursor_at_offset(int cid, ATerm editorId, int offset)
 }
 
 /*}}}  */
+/*{{{  ATerm get_cursor(int cid, ATerm editorId) */
+
+ATerm get_cursor(int cid, ATerm editorId)
+{
+  SE_StructureEditor editor = getEditor(editorId);
+
+  if (editor != NULL && SE_hasStructureEditorCursor(editor)) {
+    SE_Tree cursor = SE_getStructureEditorCursor(editor);
+    return ATmake("snd-value(cursor(<term>))", cursor);
+  }
+
+  ATwarning("get_cursor: cannot get cursor for: %t\n", editorId);
+  return NULL;
+}
+
+/*}}}  */
 /*{{{  ATerm get_focus_at_cursor(int cid, ATerm editorId) */
 
 ATerm get_focus_at_cursor(int cid, ATerm editorId)

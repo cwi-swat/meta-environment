@@ -55,24 +55,24 @@ ATerm TE_PipeToTerm(TE_Pipe arg);
 /*}}}  */
 /*{{{  constructors */
 
-TE_Action TE_makeActionToFront();
-TE_Action TE_makeActionWriteContents();
-TE_Action TE_makeActionRereadContents();
+TE_Action TE_makeActionToFront(void);
+TE_Action TE_makeActionWriteContents(void);
+TE_Action TE_makeActionRereadContents(void);
+TE_Action TE_makeActionGetContents(void);
 TE_Action TE_makeActionDisplayMessage(const char* message);
 TE_Action TE_makeActionSetCursorAtOffset(int offset);
 TE_Action TE_makeActionSetFocusAtArea(ATerm area);
-TE_Action TE_makeActionClearFocus();
+TE_Action TE_makeActionClearFocus(void);
 TE_Action TE_makeActionSetFocus(ATerm focus, const char* sort);
-TE_Action TE_makeActionGetContents(ATerm focus);
 TE_Action TE_makeActionSetActions(TE_ActionList actions);
-TE_ActionList TE_makeActionListEmpty();
+TE_ActionList TE_makeActionListEmpty(void);
 TE_ActionList TE_makeActionListMulti(TE_Menu head, TE_ActionList tail);
 TE_Menu TE_makeMenuDefault(const char* main, const char* sub);
 TE_Menu TE_makeMenuShortcut(const char* main, const char* sub, const char* shortcut);
 TE_Event TE_makeEventMenu(TE_Menu menu);
 TE_Event TE_makeEventMouse(int location);
 TE_Event TE_makeEventContents(const char* text);
-TE_Event TE_makeEventModified();
+TE_Event TE_makeEventModified(void);
 TE_Process TE_makeProcessDefault(TE_Pipe toChild, TE_Pipe fromChild);
 TE_Pipe TE_makePipeDefault(int read, int write);
 
@@ -93,12 +93,12 @@ ATbool TE_isValidAction(TE_Action arg);
 inline ATbool TE_isActionToFront(TE_Action arg);
 inline ATbool TE_isActionWriteContents(TE_Action arg);
 inline ATbool TE_isActionRereadContents(TE_Action arg);
+inline ATbool TE_isActionGetContents(TE_Action arg);
 inline ATbool TE_isActionDisplayMessage(TE_Action arg);
 inline ATbool TE_isActionSetCursorAtOffset(TE_Action arg);
 inline ATbool TE_isActionSetFocusAtArea(TE_Action arg);
 inline ATbool TE_isActionClearFocus(TE_Action arg);
 inline ATbool TE_isActionSetFocus(TE_Action arg);
-inline ATbool TE_isActionGetContents(TE_Action arg);
 inline ATbool TE_isActionSetActions(TE_Action arg);
 ATbool TE_hasActionMessage(TE_Action arg);
 char* TE_getActionMessage(TE_Action arg);

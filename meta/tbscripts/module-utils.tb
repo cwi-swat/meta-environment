@@ -40,10 +40,10 @@ in
     DoUnimportModule(ModuleName1, ModuleName2).
     snd-note(ui-status(endstat(Id)))
   +
-    rec-msg(revert-module(ModuleName1?, Type?)).
-    snd-note(ui-status(statf(Id, "Reverting %s",[ModuleName1]))).
-    DoRevertModule(ModuleName1, Type).
-    snd-note(ui-status(endstat(Id)))
+    rec-msg(revert-module(ModuleName1?))
+    . snd-note(ui-status(statf(Id, "Reverting %s",[ModuleName1])))
+    . RevertModule(ModuleName1)
+    . snd-note(ui-status(endstat(Id)))
   +
     rec-msg(close-module(ModuleName1?, Option1?)).
     snd-note(ui-status(statf(Id, 
@@ -123,15 +123,11 @@ in
   fi
 endlet  
 
-process DoRevertModule(ModuleName : str, Type : term) is
-  if equal(Type, syntax-editor) then
-    CloseModuleInDBandInvalidateDependingModules(ModuleName).
-    snd-msg(open-modules([ModuleName], sdf)) .
-    rec-msg(finished-opening-modules).
-    snd-msg(module-reverted(ModuleName))
-  else
-    tau
-  fi
+process RevertModule(Modulename : str) is
+  CloseModuleInDBandInvalidateDependingModules(Modulename)
+  . snd-msg(open-modules([Modulename], sdf))
+  . rec-msg(finished-opening-modules)
+  . snd-msg(module-reverted(Modulename))
 
 process DoDeleteModule(ModuleName : str) is
 let
@@ -151,7 +147,7 @@ in
     +
       rec-msg(no-path)
     ) .
-    DeleteEditors(ModuleName).
+    DeleteSessions(ModuleName).
     snd-msg(delete-module-from-db(ModuleName)) .
     rec-msg(changed-modules(Changed?)) .
     SaveSdfModules(Changed).
@@ -177,7 +173,7 @@ in
   if equal(Status, success) then
     CheckExistence(RealNew, RealPath, Status?).
     if equal(Status, success) then
-      DeleteEditors(Old). 
+      DeleteSessions(Old). 
       if equal(Status, success) then
         RenameModuleInDB(Old, RealNew, RealPath, Changed?) .
         SaveSdfModules(Changed).
@@ -293,7 +289,7 @@ process HardCloseModuleInDB(ModuleName : str) is
 let
   Changed : list
 in
-  DeleteEditors(ModuleName).
+  DeleteSessions(ModuleName).
   snd-msg(close-module-in-db(ModuleName)).
   rec-msg(changed-modules(Changed?)) /*.
   snd-msg(notify-about-changed-modules(Changed, sdf)) .
@@ -356,31 +352,30 @@ in
   )
 endlet
 
-process DeleteEditorAndInvalidateDependingModules(Module : str) is
+process DeleteEditorAndInvalidateDependingModules(Modulename: str) is
 let
-  Depending : list,
-  Mod : str
+  Depending: list
 in
-  snd-msg(delete-editors-for-module(Module)) .
-  snd-msg(get-all-depending-modules(Module)) .
-  rec-msg(all-depending-modules(Depending?)) .
-  MDB-InvalidateModules(Depending, sdf) .
-  snd-msg(notify-about-changed-modules(Depending, sdf)) .
-  rec-msg(notify-about-changed-modules-done)
+  DeleteSessions(Modulename)
+  . snd-msg(get-all-depending-modules(Modulename))
+  . rec-msg(all-depending-modules(Depending?))
+  . MDB-InvalidateModules(Depending, sdf)
+  . snd-msg(notify-about-changed-modules(Depending, sdf))
+  . rec-msg(notify-about-changed-modules-done)
 endlet
 
-process DeleteEditors(Module : str) is
+process DeleteEditorsForModulename(Modulename: str) is
 let
   Depending : list,
   Mod : str
 in
-  snd-msg(delete-editors-for-module(Module)).
-  snd-msg(get-all-depending-modules(Module)) .
-  rec-msg(all-depending-modules(Depending?)).
-  if not-equal(Depending, []) then
-    Mod := first(Depending) .
-    snd-msg(delete-editors-for-module(Mod)) .
-    Depending := next(Depending)
+  DeleteSessions(Modulename)
+  . snd-msg(get-all-depending-modules(Modulename))
+  . rec-msg(all-depending-modules(Depending?))
+  . if not-equal(Depending, []) then
+    Mod := first(Depending)
+    . DeleteSessions(Mod)
+    . Depending := next(Depending)
   fi * 
   if equal(Depending, []) then
     tau

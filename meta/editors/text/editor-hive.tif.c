@@ -13,7 +13,7 @@ static char *signature[NR_SIG_ENTRIES] = {
   "rec-do(<editor-hive>,reread-contents(<term>))",
   "rec-do(<editor-hive>,set-focus(<term>,<term>,<str>))",
   "rec-do(<editor-hive>,write-contents(<term>))",
-  "rec-do(<editor-hive>,get-contents(<term>,<term>))",
+  "rec-do(<editor-hive>,get-contents(<term>))",
   "rec-do(<editor-hive>,clear-focus(<term>))",
   "rec-do(<editor-hive>,display-message(<term>,<str>))",
   "rec-do(<editor-hive>,set-cursor-at-offset(<term>,<int>))",
@@ -33,8 +33,8 @@ ATerm editor_hive_handler(int conn, ATerm term)
   char *s0, *s1;
   ATerm t0, t1;
 
-  if(ATmatch(term, "rec-do(get-contents(<term>,<term>))", &t0, &t1)) {
-    get_contents(conn, t0, t1);
+  if(ATmatch(term, "rec-do(get-contents(<term>))", &t0)) {
+    get_contents(conn, t0);
     return NULL;
   }
   if(ATmatch(term, "rec-do(clear-focus(<term>))", &t0)) {

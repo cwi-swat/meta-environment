@@ -9,7 +9,7 @@ TBSCRIPTS = \
   dump-equations.tb \
   dump-parsetable.tb \
   dump-sdf-definition.tb \
-  editors.tb \
+  editing.tb \
   file-creator.tb \
   get-parsetable.tb \
   meta.tb \

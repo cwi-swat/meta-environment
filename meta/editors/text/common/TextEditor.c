@@ -202,27 +202,35 @@ ATerm TE_PipeToTerm(TE_Pipe arg)
 /*}}}  */
 /*{{{  constructors */
 
-/*{{{  TE_Action TE_makeActionToFront() */
+/*{{{  TE_Action TE_makeActionToFront(void) */
 
-TE_Action TE_makeActionToFront()
+TE_Action TE_makeActionToFront(void)
 {
   return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun1));
 }
 
 /*}}}  */
-/*{{{  TE_Action TE_makeActionWriteContents() */
+/*{{{  TE_Action TE_makeActionWriteContents(void) */
 
-TE_Action TE_makeActionWriteContents()
+TE_Action TE_makeActionWriteContents(void)
 {
   return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun2));
 }
 
 /*}}}  */
-/*{{{  TE_Action TE_makeActionRereadContents() */
+/*{{{  TE_Action TE_makeActionRereadContents(void) */
 
-TE_Action TE_makeActionRereadContents()
+TE_Action TE_makeActionRereadContents(void)
 {
   return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun3));
+}
+
+/*}}}  */
+/*{{{  TE_Action TE_makeActionGetContents(void) */
+
+TE_Action TE_makeActionGetContents(void)
+{
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun4));
 }
 
 /*}}}  */
@@ -230,7 +238,7 @@ TE_Action TE_makeActionRereadContents()
 
 TE_Action TE_makeActionDisplayMessage(const char* message)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun4, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(message, 0, ATtrue))));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun5, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(message, 0, ATtrue))));
 }
 
 /*}}}  */
@@ -238,7 +246,7 @@ TE_Action TE_makeActionDisplayMessage(const char* message)
 
 TE_Action TE_makeActionSetCursorAtOffset(int offset)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun5, (ATerm) (ATerm) ATmakeInt(offset)));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun6, (ATerm) (ATerm) ATmakeInt(offset)));
 }
 
 /*}}}  */
@@ -246,15 +254,15 @@ TE_Action TE_makeActionSetCursorAtOffset(int offset)
 
 TE_Action TE_makeActionSetFocusAtArea(ATerm area)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun6, (ATerm) area));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun7, (ATerm) area));
 }
 
 /*}}}  */
-/*{{{  TE_Action TE_makeActionClearFocus() */
+/*{{{  TE_Action TE_makeActionClearFocus(void) */
 
-TE_Action TE_makeActionClearFocus()
+TE_Action TE_makeActionClearFocus(void)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun7));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl0(TE_afun8));
 }
 
 /*}}}  */
@@ -262,15 +270,7 @@ TE_Action TE_makeActionClearFocus()
 
 TE_Action TE_makeActionSetFocus(ATerm focus, const char* sort)
 {
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl2(TE_afun8, (ATerm) focus, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sort, 0, ATtrue))));
-}
-
-/*}}}  */
-/*{{{  TE_Action TE_makeActionGetContents(ATerm focus) */
-
-TE_Action TE_makeActionGetContents(ATerm focus)
-{
-  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl1(TE_afun9, (ATerm) focus));
+  return (TE_Action)(ATerm)ATmakeAppl1(TE_afun0, (ATerm)ATmakeAppl2(TE_afun9, (ATerm) focus, (ATerm) (ATerm) ATmakeAppl(ATmakeAFun(sort, 0, ATtrue))));
 }
 
 /*}}}  */
@@ -282,9 +282,9 @@ TE_Action TE_makeActionSetActions(TE_ActionList actions)
 }
 
 /*}}}  */
-/*{{{  TE_ActionList TE_makeActionListEmpty() */
+/*{{{  TE_ActionList TE_makeActionListEmpty(void) */
 
-TE_ActionList TE_makeActionListEmpty()
+TE_ActionList TE_makeActionListEmpty(void)
 {
   return (TE_ActionList)(ATerm)ATempty;
 }
@@ -338,9 +338,9 @@ TE_Event TE_makeEventContents(const char* text)
 }
 
 /*}}}  */
-/*{{{  TE_Event TE_makeEventModified() */
+/*{{{  TE_Event TE_makeEventModified(void) */
 
-TE_Event TE_makeEventModified()
+TE_Event TE_makeEventModified(void)
 {
   return (TE_Event)(ATerm)ATmakeAppl0(TE_afun16);
 }
@@ -412,6 +412,9 @@ ATbool TE_isValidAction(TE_Action arg)
   else if (TE_isActionRereadContents(arg)) {
     return ATtrue;
   }
+  else if (TE_isActionGetContents(arg)) {
+    return ATtrue;
+  }
   else if (TE_isActionDisplayMessage(arg)) {
     return ATtrue;
   }
@@ -425,9 +428,6 @@ ATbool TE_isValidAction(TE_Action arg)
     return ATtrue;
   }
   else if (TE_isActionSetFocus(arg)) {
-    return ATtrue;
-  }
-  else if (TE_isActionGetContents(arg)) {
     return ATtrue;
   }
   else if (TE_isActionSetActions(arg)) {
@@ -495,6 +495,28 @@ inline ATbool TE_isActionRereadContents(TE_Action arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, TE_patternActionRereadContents);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool TE_isActionGetContents(TE_Action arg) */
+
+inline ATbool TE_isActionGetContents(TE_Action arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, TE_patternActionGetContents);
       last_gc = ATgetGCCount();
     }
 
@@ -605,28 +627,6 @@ inline ATbool TE_isActionSetFocus(TE_Action arg)
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, TE_patternActionSetFocus, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  inline ATbool TE_isActionGetContents(TE_Action arg) */
-
-inline ATbool TE_isActionGetContents(TE_Action arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, TE_patternActionGetContents, NULL);
       last_gc = ATgetGCCount();
     }
 
@@ -763,9 +763,6 @@ ATbool TE_hasActionFocus(TE_Action arg)
   if (TE_isActionSetFocus(arg)) {
     return ATtrue;
   }
-  else if (TE_isActionGetContents(arg)) {
-    return ATtrue;
-  }
   return ATfalse;
 }
 
@@ -774,10 +771,7 @@ ATbool TE_hasActionFocus(TE_Action arg)
 
 ATerm TE_getActionFocus(TE_Action arg)
 {
-  if (TE_isActionSetFocus(arg)) {
-    return (ATerm)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0);
-  }
-  else 
+  
     return (ATerm)ATgetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), 0);
 }
 
@@ -787,9 +781,6 @@ ATerm TE_getActionFocus(TE_Action arg)
 TE_Action TE_setActionFocus(TE_Action arg, ATerm focus)
 {
   if (TE_isActionSetFocus(arg)) {
-    return (TE_Action)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) focus), 0), 0);
-  }
-  else if (TE_isActionGetContents(arg)) {
     return (TE_Action)ATsetArgument((ATermAppl)arg, (ATerm)ATsetArgument((ATermAppl)ATgetArgument((ATermAppl)arg, 0), (ATerm)((ATerm) focus), 0), 0);
   }
 
@@ -1571,6 +1562,9 @@ TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acc
   if (TE_isActionRereadContents(arg)) {
     return TE_makeActionRereadContents();
   }
+  if (TE_isActionGetContents(arg)) {
+    return TE_makeActionGetContents();
+  }
   if (TE_isActionDisplayMessage(arg)) {
     return TE_makeActionDisplayMessage(
         acceptMessage ? acceptMessage(TE_getActionMessage(arg)) : TE_getActionMessage(arg));
@@ -1590,10 +1584,6 @@ TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acc
     return TE_makeActionSetFocus(
         acceptFocus ? acceptFocus(TE_getActionFocus(arg)) : TE_getActionFocus(arg),
         acceptSort ? acceptSort(TE_getActionSort(arg)) : TE_getActionSort(arg));
-  }
-  if (TE_isActionGetContents(arg)) {
-    return TE_makeActionGetContents(
-        acceptFocus ? acceptFocus(TE_getActionFocus(arg)) : TE_getActionFocus(arg));
   }
   if (TE_isActionSetActions(arg)) {
     return TE_makeActionSetActions(

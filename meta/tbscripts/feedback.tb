@@ -20,8 +20,6 @@ in
   snd-msg(get-location-filename(Location)) .
   rec-msg(location-filename(FileName?)) .
   snd-msg(edit-general(FileName)) .
-  rec-msg(editor-opened(ModuleName?, EditorId?)) .
-  /* TODO: ModuleName unused, to be removed in editor-opened */
   snd-msg(has-location-area(Location)) .
   (
     rec-msg(location-has-area(Location)) .

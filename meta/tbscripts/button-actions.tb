@@ -280,8 +280,7 @@ in
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(parse-syntax-action, Stack?, EditorId?).
-    StackPopString(Stack,Stack?,ModuleName?) .
-    ParseSyntax(EditorId,ModuleName,sdf).
+    ParseSyntax(EditorId, sdf).
     ReturnSuccess(EditorId,Stack)
     +
     rec-msg(parse-equations-action, Stack?, EditorId?).
@@ -312,12 +311,8 @@ in
       +
         rec-msg(get-focus, Stack?, EditorId?) .
         GetFocus(EditorId, RTree?) .
-        if not-equal(RTree, error-tree) then
-          StackPushTerm(Stack,Stack?,RTree) .
-          ReturnSuccess(EditorId,Stack)
-        else
-          ReturnAbort(EditorId,Stack)
-        fi
+        StackPushTerm(Stack,Stack?,RTree) .
+        ReturnSuccess(EditorId,Stack)
       +
         rec-msg(get-focus-location, Stack?, EditorId?) .
 	snd-msg(se-get-focus-location(EditorId)) .
@@ -386,14 +381,8 @@ in
           (
             rec-msg(existing-editor(EditorId2?)).
             GetFocus(EditorId2, RTree?) .
-            if not-equal(RTree, error-tree) then
-              StackPushTerm(Stack,Stack?,RTree) .
-              ReturnSuccess(EditorId,Stack)
-            else
-              snd-note(ui-status(messagef("please set a focus %s", 
-                                          [FilePath]))) .
-              ReturnAbort(EditorId,Stack)
-            fi
+            StackPushTerm(Stack,Stack?,RTree) .
+            ReturnSuccess(EditorId,Stack)
           +
             rec-msg(non-existing-editor(FilePath?)).
             snd-note(ui-status(messagef("editor for %s not active", 
@@ -423,12 +412,14 @@ in
         fi .    
         ReturnSuccess(EditorId,Stack)
       +
+#if 0
 	rec-msg(close-editor, Stack?, EditorId?) .
         StackPopString(Stack,Stack?,ModuleName?) .
         StackPopString(Stack,Stack?,FileName?) .
 	CloseEditor(ModuleName, FileName) .
 	ReturnSuccess(EditorId, Stack)
       +
+#endif
         rec-msg(debug-print-stack, Stack?, EditorId?) .
 	StackPopString(Stack, Stack?, ErrorMessage?) .
 	printf("%s: %t\n", ErrorMessage, Stack) .
@@ -507,15 +498,10 @@ in
       +
         rec-msg(push-active-module, Stack?, EditorId?) .
         subscribe(delete-editor(EditorId)) .
-        snd-msg(get-editor-module-name(EditorId)) .
-        (
-          rec-msg(editor-module-name(EditorId, ModuleName?)) .
-          StackPushString(Stack, Stack?, ModuleName) .
-          ReturnSuccess(EditorId, Stack)
-        +
-          rec-note(delete-editor(EditorId)) .
-          ReturnFailed(EditorId, Stack)
-        )
+        snd-msg(em-get-modulename(EditorId)) .
+	rec-msg(em-modulename(EditorId, ModuleName?)) .
+	StackPushString(Stack, Stack?, ModuleName) .
+	ReturnSuccess(EditorId, Stack)
       +
         rec-msg(push-modulename(String?), Stack?, EditorId?) .
         StackPushString(Stack,Stack?,String) .
@@ -629,7 +615,6 @@ in
         else
           StackPopString(Stack,Stack?,ModuleName?) .
 	  snd-msg(edit-syntax(ModuleName)) .
-	  rec-msg(editor-opened(ModuleName,EditorId2?)) .
 	  ReturnSuccess(EditorId, Stack)
 	fi   
       +
@@ -640,7 +625,6 @@ in
         else
           StackPopString(Stack,Stack?,ModuleName?) .
 	  snd-msg(edit-equations(ModuleName)) .
-          rec-msg(editor-opened(ModuleName,EditorId2?)) .
 	  ReturnSuccess(EditorId, Stack)
 	fi   
       +
@@ -655,15 +639,16 @@ in
 	  ReturnSuccess(EditorId, Stack)	
 	fi   
       + 
-	rec-msg(revert-module, Stack?, EditorId?) .
-	StackIsEmpty(Stack, Empty?) .
+	rec-msg(revert-module, Stack?, EditorId?)
+	. StackIsEmpty(Stack, Empty?)
+	.
 	if equal(Empty, true) then
 	  ReturnSuccess(EditorId, Stack)
         else
-          StackPopString(Stack, Stack?, ModuleName?) .
-          snd-msg(revert-module(ModuleName, syntax-editor)) .           
-          rec-msg(module-reverted(ModuleName)) .
-	  ReturnSuccess(EditorId, Stack)	
+          StackPopString(Stack, Stack?, ModuleName?)
+          . snd-msg(revert-module(ModuleName))
+          . rec-msg(module-reverted(ModuleName))
+	  . ReturnSuccess(EditorId, Stack)	
         fi
       + 
 	rec-msg(close-module(Mode?), Stack?, EditorId?) .
@@ -740,12 +725,10 @@ in
 	StackIsEmpty(Stack, Empty?) .
 	if equal(Empty, true) then
 	  snd-msg(edit-general(FileName)) .
-	  rec-msg(editor-opened(ModuleName?, EditorId2?)) .
 	  ReturnSuccess(EditorId, Stack)
         else
           StackPopString(Stack,Stack?,ModuleName?) .
           snd-msg(edit-term-file(ModuleName, FileName)) .
-          rec-msg(editor-opened(ModuleName, EditorId2?)).
 	  ReturnSuccess(EditorId, Stack)	
         fi
       +
@@ -980,18 +963,13 @@ process UnParseTerm(Tree : term, Text : str?) is
   rec-msg(unparsed-text(Text?))
 
 process ParseTerm(EditorId: term, ModuleName: str) is
-let
-  Focus  : term
-in
-  InvalidateEditor(EditorId).
   snd-msg(parse-focusses(EditorId, ModuleName, trm)) .
   (
     rec-msg(parse-ok(ModuleName)) .
     snd-msg(te-clear-focus(EditorId))
   +
-    rec-msg(parse-failed(ModuleName, Focus?))
+    rec-msg(parse-failed(ModuleName))
   )
-endlet
 
 process GetTextFromFile(FileName: str, Text: str?) is
 let
@@ -1020,71 +998,69 @@ in
   ParseString(ModuleName, Path, trm, true, Nonterminal, Text, Tree?, ParseError?)
 endlet
  
-process ParseSyntax(EditorId : term, ModuleName : str, Type : term) is
+process ParseSyntax(Sid: term, Type: term) is
 let
-  Tree             : term,
-  Text             : str,
-  Focus            : term,
-  NewModules       : list,
+  Tree : term,
+  Text : str,
+  Modulename: str, /* name of module whose syntax is to be parsed */
+  NewModules : list,
   DependingModules : list,
-  ModuleId	   : str
+  ModuleId : str /* module to be parsed over */
 in
-  InvalidateEditor(EditorId).
+  snd-msg(em-get-modulename(Sid))
+  . rec-msg(em-modulename(Sid, Modulename?))
+  .
+  snd-msg(notify-about-changed-modules([Modulename], Type)) .
+  rec-msg(notify-about-changed-modules-done) .
   snd-msg(get-module-id-hook(Type)) .
   rec-msg(get-module-id-hook-result(ModuleId?)) .
-  snd-msg(notify-about-changed-modules([ModuleName], Type)) .
-  rec-msg(notify-about-changed-modules-done) .
-  snd-msg(parse-focusses(EditorId, ModuleId, sdf)) .
+  snd-msg(parse-focusses(Sid, ModuleId, Type)) .
   (
     rec-msg(parse-ok(ModuleId)) .
-    snd-msg(se-get-tree(EditorId)) .
+    snd-msg(se-get-tree(Sid)) .
     (
       rec-msg(se-tree(Tree?)) .
       snd-msg(unparse(Tree)) .
       rec-msg(unparsed-text(Text?)) .
-      snd-msg(update-module-text-in-db(ModuleName, Text, Tree, Type)) .
+      snd-msg(update-module-text-in-db(Modulename, Text, Tree, Type)) .
       (
 	rec-msg(no-updating-needed) .
-        snd-note(te-clear-focus(EditorId))
+        snd-note(te-clear-focus(Sid))
       +
         rec-msg(updating-succeeded(DependingModules?)).
-        snd-msg(update-module-in-db(ModuleName, Tree, Type)) .
+        snd-msg(update-module-in-db(Modulename, Tree, Type)) .
 	(
           rec-msg(updating-succeeded(NewModules?)).
 	  snd-msg(notify-about-changed-modules(DependingModules, Type)) .
 	  rec-msg(notify-about-changed-modules-done) .
           snd-msg(open-modules(NewModules, Type)).
           rec-msg(finished-opening-modules) .
-          snd-msg(te-clear-focus(EditorId))
+          snd-msg(te-clear-focus(Sid))
         +
-          rec-msg(error-opening(ModuleName, name-inconsistent)).
-          snd-msg(invalidate-sdf-in-db(ModuleName)).
-          InvalidateEditor(EditorId).
+          rec-msg(error-opening(Modulename, name-inconsistent)).
+          snd-msg(invalidate-sdf-in-db(Modulename)).
           snd-note(ui-status(
-            errorf("Changing the name of %s is not permitted.",[ModuleName])))
+            errorf("Changing the name of %s is not permitted.",[Modulename])))
         )
       +
-        rec-msg(error-opening(ModuleName, name-inconsistent)) .
-	snd-msg(invalidate-sdf-in-db(ModuleName)).
-	InvalidateEditor(EditorId).
+        rec-msg(error-opening(Modulename, name-inconsistent)) .
+	snd-msg(invalidate-sdf-in-db(Modulename)).
         snd-note(ui-status(
-          errorf("Changing the name of %s is not permitted.",[ModuleName])))
+          errorf("Changing the name of %s is not permitted.",[Modulename])))
       )
     +
       rec-msg(se-no-tree)
     )
   +
-    rec-msg(parse-failed(ModuleId, Focus?)) .
-    snd-msg(invalidate-sdf-in-db(ModuleName))
+    rec-msg(parse-failed(ModuleId)) .
+    snd-msg(invalidate-sdf-in-db(Modulename))
   ) 
 endlet
 
 process ParseEquations(EditorId : term, ModuleName : str) is
 let
-  Tree : term,
-  Focus : term
+  Tree : term
 in
-  InvalidateEditor(EditorId).
   snd-msg(parse-focusses(EditorId, ModuleName, eqs)) .
   (
     rec-msg(parse-ok(ModuleName)) .
@@ -1100,7 +1076,7 @@ in
       rec-msg(se-no-tree)
     )
   +
-    rec-msg(parse-failed(ModuleName, Focus?))
+    rec-msg(parse-failed(ModuleName))
   )
 endlet
 
@@ -1145,14 +1121,9 @@ in
 endlet
 
 
-process GetFocus(EditorId: term, Tree: term?) is
-  snd-msg(se-get-focussed-tree(EditorId)) .
-  (
-    rec-msg(se-tree(Tree?))
-  +
-    rec-msg(se-no-tree) .
-    Tree := error-tree
-  )
+process GetFocus(Sid: term, Tree: term?) is
+  snd-msg(se-get-cursor(Sid))
+  . rec-msg(se-cursor(Sid, Tree?))
 
 process ReplaceFocus(EditorId: term, Tree: term) is
 let
@@ -1239,8 +1210,7 @@ in
     snd-msg(io-write-text-file(FileName,[Text])) .
     (
       rec-msg(io-file-written) .
-      snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree)) .
-      rec-msg(editor-opened(ModuleName, EditorId?))
+      snd-msg(edit-term-file-with-tree(ModuleName, FileName, Tree))
     +
       rec-msg(io-file-not-written(ErrorMessage?)) .
       snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))
@@ -1257,8 +1227,7 @@ in
   snd-msg(io-write-text-file(FileName,[Text])) .
   (
     rec-msg(io-file-written) .
-    snd-msg(edit-term-file(ModuleName, FileName)) .
-    rec-msg(editor-opened(ModuleName, EditorId?))
+    snd-msg(edit-term-file(ModuleName, FileName))
   +
     rec-msg(io-file-not-written(ErrorMessage?)) .
     snd-note(ui-status(errorf("%s: %s",[FileName, ErrorMessage])))

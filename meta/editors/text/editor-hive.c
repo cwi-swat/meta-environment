@@ -10,10 +10,9 @@
 #include <aterm2.h>
 
 #include <TextEditor.h>
+#include <external-startup.h>
 
 #include "editor-hive.tif.h"
-#include "editor-hive.h"
-#include "external-startup.h"
 
 /*}}}  */
 /*{{{  defines */
@@ -188,14 +187,14 @@ static void sendToToolBus(int tb_fd, ATerm event)
 
 /*}}}  */
 
-/*{{{  void get_contents(int c, ATerm editorId, ATerm focus) */
+/*{{{  void get_contents(int c, ATerm editorId) */
 
-void get_contents(int c, ATerm editorId, ATerm focus)
+void get_contents(int c, ATerm editorId)
 {
   TE_Process process = getEditorProcess(editorId);
 
   if (process != NULL) {
-    sendToEditor(process, TE_makeActionGetContents(focus));
+    sendToEditor(process, TE_makeActionGetContents());
   }
 }
 
