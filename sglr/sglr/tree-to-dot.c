@@ -239,7 +239,7 @@ void SGtreeToDotFile(char *prg, char *file, ATerm t, ATbool suppress)
 
   prev_char_parent = NULL;
 
-  ATfprintf(dot, "strict digraph ParseTree {\n"
+  ATfprintf(dot, "digraph ParseTree {\n"
                  "\tordering=out;\n"
                  "\tedge[dir=none];\n\n");
   SG_TreeToDot(dot, t, 0, NULL, suppress);
@@ -334,7 +334,7 @@ void SG_StacksToDotFile(stacks *sts, int sg_tokens_read)
 
   prev_char_parent = NULL;
 
-  ATfprintf(SG_StackDotFP, "strict digraph ParseTree { \n"
+  ATfprintf(SG_StackDotFP, "digraph ParseStack { \n"
             "rankdir = LR; \n"
             "edge [dir = back]; \n"
            );
