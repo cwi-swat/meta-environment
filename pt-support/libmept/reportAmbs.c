@@ -112,7 +112,7 @@ static ERR_SubjectList getAmbiguities(char *path,
       if (ambStringCnt + strlen(str) + 1 <= 1024) {
         if (ambStringCnt > 0) {
           strcpy(ambString + ambStringCnt, ";");
-          ambStringCnt = ambStringCnt + 1;
+          ambStringCnt++;
         }
         strcpy(ambString + ambStringCnt, str);
         ambStringCnt = ambStringCnt + strlen(str);
