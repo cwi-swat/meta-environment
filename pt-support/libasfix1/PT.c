@@ -344,6 +344,78 @@ PT_Attr PT_makeAttrMemo()
 }
 
 /*}}}  */
+/*{{{  PT_Attr PT_makeAttrReject() */
+
+PT_Attr PT_makeAttrReject()
+{
+  return (PT_Attr)ATmakeTerm(PT_patternAttrReject);
+}
+
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrPrefer() */
+
+PT_Attr PT_makeAttrPrefer()
+{
+  return (PT_Attr)ATmakeTerm(PT_patternAttrPrefer);
+}
+
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrAvoid() */
+
+PT_Attr PT_makeAttrAvoid()
+{
+  return (PT_Attr)ATmakeTerm(PT_patternAttrAvoid);
+}
+
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrConstructor() */
+
+PT_Attr PT_makeAttrConstructor()
+{
+  return (PT_Attr)ATmakeTerm(PT_patternAttrConstructor);
+}
+
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrId(char * moduleName) */
+
+PT_Attr PT_makeAttrId(char * moduleName)
+{
+  return (PT_Attr)ATmakeTerm(PT_patternAttrId, moduleName);
+}
+
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrLeft() */
+
+PT_Attr PT_makeAttrLeft()
+{
+  return (PT_Attr)ATmakeTerm(PT_patternAttrLeft);
+}
+
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrRight() */
+
+PT_Attr PT_makeAttrRight()
+{
+  return (PT_Attr)ATmakeTerm(PT_patternAttrRight);
+}
+
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrAssoc() */
+
+PT_Attr PT_makeAttrAssoc()
+{
+  return (PT_Attr)ATmakeTerm(PT_patternAttrAssoc);
+}
+
+/*}}}  */
+/*{{{  PT_Attr PT_makeAttrNonAssoc() */
+
+PT_Attr PT_makeAttrNonAssoc()
+{
+  return (PT_Attr)ATmakeTerm(PT_patternAttrNonAssoc);
+}
+
+/*}}}  */
 /*{{{  PT_Symbol PT_makeSymbolIterStar(PT_Symbol symbol) */
 
 PT_Symbol PT_makeSymbolIterStar(PT_Symbol symbol)
@@ -1414,6 +1486,33 @@ ATbool PT_isValidAttr(PT_Attr arg)
   else if (PT_isAttrMemo(arg)) {
     return ATtrue;
   }
+  else if (PT_isAttrReject(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isAttrPrefer(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isAttrAvoid(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isAttrConstructor(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isAttrId(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isAttrLeft(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isAttrRight(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isAttrAssoc(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isAttrNonAssoc(arg)) {
+    return ATtrue;
+  }
   return ATfalse;
 }
 
@@ -1450,6 +1549,78 @@ ATbool PT_isAttrMemo(PT_Attr arg)
 }
 
 /*}}}  */
+/*{{{  ATbool PT_isAttrReject(PT_Attr arg) */
+
+ATbool PT_isAttrReject(PT_Attr arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternAttrReject);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isAttrPrefer(PT_Attr arg) */
+
+ATbool PT_isAttrPrefer(PT_Attr arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternAttrPrefer);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isAttrAvoid(PT_Attr arg) */
+
+ATbool PT_isAttrAvoid(PT_Attr arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternAttrAvoid);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isAttrConstructor(PT_Attr arg) */
+
+ATbool PT_isAttrConstructor(PT_Attr arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternAttrConstructor);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isAttrId(PT_Attr arg) */
+
+ATbool PT_isAttrId(PT_Attr arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternAttrId, NULL);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isAttrLeft(PT_Attr arg) */
+
+ATbool PT_isAttrLeft(PT_Attr arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternAttrLeft);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isAttrRight(PT_Attr arg) */
+
+ATbool PT_isAttrRight(PT_Attr arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternAttrRight);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isAttrAssoc(PT_Attr arg) */
+
+ATbool PT_isAttrAssoc(PT_Attr arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternAttrAssoc);
+}
+
+/*}}}  */
+/*{{{  ATbool PT_isAttrNonAssoc(PT_Attr arg) */
+
+ATbool PT_isAttrNonAssoc(PT_Attr arg)
+{
+  return ATmatchTerm((ATerm)arg, PT_patternAttrNonAssoc);
+}
+
+/*}}}  */
 /*{{{  ATbool PT_hasAttrString(PT_Attr arg) */
 
 ATbool PT_hasAttrString(PT_Attr arg)
@@ -1483,6 +1654,43 @@ PT_Attr PT_setAttrString(PT_Attr arg, char * string)
   }
 
   ATabort("Attr has no String: %t\n", arg);
+  return (PT_Attr)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PT_hasAttrModuleName(PT_Attr arg) */
+
+ATbool PT_hasAttrModuleName(PT_Attr arg)
+{
+  if (PT_isAttrId(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char * PT_getAttrModuleName(PT_Attr arg) */
+
+char * PT_getAttrModuleName(PT_Attr arg)
+{
+  if (PT_isAttrId(arg)) {
+    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
+  }
+
+  ATabort("Attr has no ModuleName: %t\n", arg);
+  return (char *)NULL;
+}
+
+/*}}}  */
+/*{{{  PT_Attr PT_setAttrModuleName(PT_Attr arg, char * moduleName) */
+
+PT_Attr PT_setAttrModuleName(PT_Attr arg, char * moduleName)
+{
+  if (PT_isAttrId(arg)) {
+    return (PT_Attr)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(moduleName, 0, ATtrue)), 0);
+  }
+
+  ATabort("Attr has no ModuleName: %t\n", arg);
   return (PT_Attr)NULL;
 }
 
@@ -2095,9 +2303,9 @@ PT_Attrs PT_visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr))
 }
 
 /*}}}  */
-/*{{{  PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *)) */
+/*{{{  PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *), char * (*acceptModuleName)(char *)) */
 
-PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *))
+PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *), char * (*acceptModuleName)(char *))
 {
   if (PT_isAttrCons(arg)) {
     return PT_makeAttrCons(
@@ -2111,6 +2319,34 @@ PT_Attr PT_visitAttr(PT_Attr arg, char * (*acceptString)(char *))
   }
   if (PT_isAttrMemo(arg)) {
     return PT_makeAttrMemo();
+  }
+  if (PT_isAttrReject(arg)) {
+    return PT_makeAttrReject();
+  }
+  if (PT_isAttrPrefer(arg)) {
+    return PT_makeAttrPrefer();
+  }
+  if (PT_isAttrAvoid(arg)) {
+    return PT_makeAttrAvoid();
+  }
+  if (PT_isAttrConstructor(arg)) {
+    return PT_makeAttrConstructor();
+  }
+  if (PT_isAttrId(arg)) {
+    return PT_makeAttrId(
+        acceptModuleName ? acceptModuleName(PT_getAttrModuleName(arg)) : PT_getAttrModuleName(arg));
+  }
+  if (PT_isAttrLeft(arg)) {
+    return PT_makeAttrLeft();
+  }
+  if (PT_isAttrRight(arg)) {
+    return PT_makeAttrRight();
+  }
+  if (PT_isAttrAssoc(arg)) {
+    return PT_makeAttrAssoc();
+  }
+  if (PT_isAttrNonAssoc(arg)) {
+    return PT_makeAttrNonAssoc();
   }
   ATabort("not a Attr: %t\n", arg);
   return (PT_Attr)NULL;

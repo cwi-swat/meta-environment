@@ -176,6 +176,14 @@ PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols symbols, int index)
 
 /*}}}  */
 
+PT_Symbols PT_appendSymbols(PT_Symbols symbols, PT_Symbol symbol)
+{
+  return PT_makeSymbolsFromTerm(
+           (ATerm)ATappend((ATermList)PT_makeTermFromSymbols(symbols),
+                           PT_makeTermFromSymbol(symbol)));
+
+}
+
 /*{{{  PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor, */
 
 PT_Attrs PT_foreachAttrInAttrs(PT_Attrs attrs, PT_AttrVisitor visitor,
@@ -472,16 +480,3 @@ PT_Tree PT_setTreeLengthAnno(PT_Tree tree, int length)
 }
 
 /*}}}  */
-
-
-/*{{{  PT_ParseTree PT_addParseTreePosInfo(char *pathInfo, PT_ParseTree tree) */
-
-PT_ParseTree PT_addParseTreePosInfo(char *pathInfo, PT_ParseTree tree)
-{
-  ATwarning("***warning*** PT_addPosInfoToParseTree not yet implemented.\n");
-
-  return tree;
-}
-
-/*}}}  */
-

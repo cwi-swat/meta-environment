@@ -38,6 +38,7 @@ PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols,
                                      PT_SymbolVisitorData data);
 int     PT_getSymbolsLength(PT_Symbols symbols);
 PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols args, int index);
+PT_Symbols PT_appendSymbols(PT_Symbols symbols, PT_Symbol symbol);
 
 typedef void* PT_AttrVisitorData;
 typedef PT_Attr (*PT_AttrVisitor)(PT_Attr attr, PT_AttrVisitorData data);

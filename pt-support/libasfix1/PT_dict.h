@@ -1,5 +1,5 @@
 /*
- * Generated at Mon Feb 19 15:42:44 2001
+ * Generated at Wed Mar  7 15:48:55 2001
  */
 
 #ifndef __PT_dict_H
@@ -20,6 +20,15 @@ extern ATerm PT_patternSymbolIterPlusSep;
 extern ATerm PT_patternSymbolIterStarSep;
 extern ATerm PT_patternSymbolIterPlus;
 extern ATerm PT_patternSymbolIterStar;
+extern ATerm PT_patternAttrNonAssoc;
+extern ATerm PT_patternAttrAssoc;
+extern ATerm PT_patternAttrRight;
+extern ATerm PT_patternAttrLeft;
+extern ATerm PT_patternAttrId;
+extern ATerm PT_patternAttrConstructor;
+extern ATerm PT_patternAttrAvoid;
+extern ATerm PT_patternAttrPrefer;
+extern ATerm PT_patternAttrReject;
 extern ATerm PT_patternAttrMemo;
 extern ATerm PT_patternAttrTraverse;
 extern ATerm PT_patternAttrBracket;

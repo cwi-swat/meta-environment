@@ -52,7 +52,16 @@
   [Attr, bracket, l("bracket")],
   [Attr, traverse, l("traverse")],
   [Attr, memo, l("memo")], 
-  
+  [Attr, reject, l("reject")],
+  [Attr, prefer, l("prefer")],
+  [Attr, avoid, l("avoid")],
+  [Attr, constructor, l("constructor")],
+  [Attr, id, id(<module-name(str)>)],
+  [Attr, left, l("left")],
+  [Attr, right, l("right")],
+  [Attr, assoc, l("assoc")],
+  [Attr, non-assoc, l("non-assoc")],
+   
   [Symbol, iter-star, iter(<symbol(Symbol)>,
                     w(""),
                     l("*")
