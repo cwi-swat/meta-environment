@@ -105,6 +105,7 @@ equations
              rem-lists-from-simple-rule(false,Rule,Aint1) =
                (Funcdef*1;Funcdef*2,Rule*3,Aint3)
 
+%% Fixed point computation
   [rlsr-1'3] is-special-rule(Rule1) = false,
              normalize-list-in-rule(Rule1) = Rule2,
              Rule1 != Rule2,

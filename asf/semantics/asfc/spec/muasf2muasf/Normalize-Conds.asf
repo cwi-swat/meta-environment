@@ -48,30 +48,16 @@ equations
            normalize-cond(Term1 =: Term2,Aint) = (,Term1 =: Term2,Aint)
 
   [nc-2'3] is-list-funid(Funid) = false,
-           normalize-terms(Term+1,Aint1) = (Term+2,,Aint2)
+           normalize-terms(Term+1,Aint1) = (Term+2,Cond*,Aint2)
            ====================================================
            normalize-cond(Term1 =: Funid(Term+1),Aint1) =
-             (,Term1 =: Funid(Term+2),Aint2)
-
-  [nc-2'4] is-list-funid(Funid) = false,
-           normalize-terms(Term+1,Aint1) = (Term+2,Cond+1,Aint2),
-           normalize-conds(Cond+1, Aint2) = (,Cond+2, Aint3)
-           =================================================
-           normalize-cond(Term1 =: Funid(Term+1),Aint1) =
-             (,Term1 =: Funid(Term+2) & Cond+2, Aint3)
+             (,Term1 =: Funid(Term+2) & Cond*,Aint2)
 
   [nc-2'5] is-list-funid(Funid) = true,
-           normalize-list-args(Term+1,Aint1) = (Term+2,,Aint2)
+           normalize-list-args(Term+1,Aint1) = (Term+2,Cond*,Aint2)
            ===================================================
            normalize-cond(Term1 =: Funid(Term+1),Aint1) =
-              (,Term1 =: Funid(Term+2),Aint2)
-
-  [nc-2'6] is-list-funid(Funid) = true,
-           normalize-list-args(Term+1,Aint1) = (Term+2,Cond+1,Aint2),
-           normalize-conds(Cond+1, Aint2) = (,Cond+2, Aint3)
-           =================================================
-           normalize-cond(Term1 =: Funid(Term+1),Aint1) =
-              (,Term1 =: Funid(Term+2) & Cond+2,Aint3)
+              (,Term1 =: Funid(Term+2) & Cond* ,Aint2)
 
   [default-nc-2'7] normalize-cond(Term1 =: Term2,Aint) = (,Term1 =: Term2,Aint)
 
@@ -141,7 +127,14 @@ equations
              =========================
              normalize-list-in-cond(Term1 =: Term2,Aint) = (,Term1 =: Term2,Aint)
 
-  [nlic-2'2] normalize-list-in-terms(Term+1,Aint1) = (Term+2,Cond*,Aint2)
+  [nlic-2'2] is-list-funid(Funid) = false,
+             normalize-list-in-terms(Term+1,Aint1) = (Term+2,Cond*,Aint2)
+             ============================================================
+             normalize-list-in-cond(Term1 =: Funid(Term+1),Aint1) =
+               (,Term1 =: Funid(Term+2) & Cond*,Aint2)
+
+  [nlic-2'4] is-list-funid(Funid) = true,
+             normalize-list-args(Term+1,Aint1) = (Term+2,Cond*,Aint2)
              ============================================================
              normalize-list-in-cond(Term1 =: Funid(Term+1),Aint1) =
                (,Term1 =: Funid(Term+2) & Cond*,Aint2)
