@@ -1,5 +1,10 @@
 /* $Id$ */
 
+Mon Jan 10 18:05:30 CET 2005 <markvdb@cwi.nl>
+ * Added first version of action interpreter
+   Modified files:
+   - meta-scripts/standard.asfsdf.buttons.src
+
 Wed Dec  1 09:54:14 CET 2004 <{kooiker,jurgenv}@cwi.nl>
  * Bumped to 1.6
  * Removed integration tests because they need an installed environment
