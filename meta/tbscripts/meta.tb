@@ -33,7 +33,6 @@
 /* sdf-meta */
 #include "parsetablegen.idef"
 #include "sdf-import-graph.idef"
-#include "graph-utils.tb"
 
 /* asf-sdf-meta */
 #include "apply-function.idef"
@@ -55,7 +54,6 @@
 #include "dump-parsetable.tb"
 #include "sdf2-language.tb"
 #include "parse-focuses.tb"
-#include "button-actions.tb"
 #include "dump-equations.tb"
 #include "dump-sdf-definition.tb"
 #include "pretty-print.tb"
@@ -94,8 +92,6 @@ let
   Pid : int
 in
   create(META, Pid?)
-  . create(MetaActions, Pid?)
-  . create(ButtonActionExecutor, Pid?)
   . create(TermStoreName, Pid?)
   . create(Compile-module, Pid?)
   . create(DumpEquations, Pid?)

@@ -1,12 +1,19 @@
 # $Id$
 
 Tue Nov 30 14:39:34 CET 2004 <kooiker@cwi.nl>
- * tbscripts/commandline-handler.tb:
-   - Handles ui-messages in commandline runs
- * tbscripts/Makefile.am
-   - Added commandline-handler.tb
+ * tbscripts/{meta,start-meta-studio}.tb:
+   - Moved GUI specific process creates from meta.tb to start-meta-studio.tb.
+     Commandline meta environment does not depend on gui related stuff
+     anymore.
+ * tbscripts/{button-actions,open-modules}.tb:
+   - Moved LocateFile process from button-actions.tb to open-module.tb in
+     which other file utilities already exist
+ * tbscripts/standalone-errorlist.tb:
+   - Handles feedback in commandline runs
+ * tbscripts/Makefile.am:
+   - Added standalone-errorlist.tb
  * tbscripts/start-meta-eqs-dumper.tb:
-   - Add creation of CommandLineHandler 
+   - Add creation of StandaloneErrorList
 
 Mon Nov 29 11:38:48 CET 2004 <{jurgenv,kooiker,jong}@cwi.nl>
  * Graph layout algorithm fixed such that arrows point in the

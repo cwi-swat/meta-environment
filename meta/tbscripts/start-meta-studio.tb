@@ -1,3 +1,5 @@
+#include "button-actions.tb"
+#include "graph-utils.tb"
 #include "meta.tb"
 #include "meta-studio.idef"
 
@@ -6,6 +8,8 @@ let
   Pid: int
 in
   create(Ui, Pid?)
+  . create(ButtonActionExecutor, Pid?)
+  . create(MetaActions, Pid?)
   . create(MetaCreator, Pid?)
   . rec-msg(creation-finished)
   . snd-msg(post-initialization-hook)

@@ -4,7 +4,6 @@
 TBSCRIPTS = \
   button-actions.tb \
   close-all.tb \
-  commandline-handler.tb \
   compile-module.tb \
   dump-equations.tb \
   dump-parsetable.tb \
@@ -23,6 +22,7 @@ TBSCRIPTS = \
   process-eqs.tb \
   restore-term-brackets.tb \
   save-module.tb \
+  standalone-errorlist.tb \
   start-meta-eqs-dumper.tb \
   start-meta-equations-editor.tb \
   start-meta-pt-dumper.tb \

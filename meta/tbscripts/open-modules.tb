@@ -1,3 +1,47 @@
+process LocateFile(ModuleId: str, Type: term, Path: str?) is
+let
+  Extension: str,
+  Directory: str,
+  Directories: list,
+  ExtraModules : list
+in
+  snd-msg(get-module-paths)
+  . rec-msg(module-paths(Directories?))
+  /* Motivation for the extra-mod-path-hook
+     We need to be able to locate files outside the current directory and
+     the asf-library. Furthermore we must avoid collision with files
+     created by the user. */
+  . snd-msg(extra-mod-path-hook)
+  . rec-msg(extra-mod-path-hook-result(ExtraModules?))
+  .
+  if not-equal(ExtraModules, []) then
+    Directories := ExtraModules
+  else
+    tau
+  fi
+
+
+  . snd-msg(file-extension-hook(Type))
+  . rec-msg(file-extension-hook-result(Extension?))
+  . snd-msg(io-find-file(Directories, ModuleId, Extension))
+  .
+  (
+    rec-msg(io-file-not-found)
+    . Path := ""
+  +
+    rec-msg(io-file-found(Directories?))
+    . Directory := first(Directories)
+    . Directories := next(Directories)
+    .
+    if not-equal(Directories, []) then
+      DealWithMultipleOccurrences(Directory, ModuleId, Extension, Directories)
+    else
+      tau
+    fi
+    . BuildPath(Directory, ModuleId, Extension, Path?)
+  )
+endlet
+
 process BuildPath(Directory: str, Filename: str, Extension: str, Path: str?) is
   snd-msg(io-get-filename(Directory, Filename, Extension))
   . rec-msg(io-filename(Path?))

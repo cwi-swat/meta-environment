@@ -1,6 +1,6 @@
 #include "meta.tb"
 #include "status.tb"
-#include "commandline-handler.tb"
+#include "standalone-errorlist.tb"
 
 process StandaloneEqsDumper is
 let
@@ -9,7 +9,7 @@ let
 in
   create(StatusDisplay, Pid?)
   . create(MetaCreator, Pid?)
-  . create(CommandLineHandler, Pid?)
+  . create(StandaloneErrorList, Pid?)
   . rec-msg(creation-finished)
   . InitializeTermStore(TERMSTORENAME)
   . OpenModules([MODULENAME], sdf)

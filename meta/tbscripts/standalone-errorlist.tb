@@ -1,22 +1,14 @@
-process CommandLineHandler is
+process StandaloneErrorList is
 let
-  Graph : term,
-  GraphPanelId : str,
-  Lst : list,
   Producer : str,
-  Str : str,
   Summary : term,
   SummaryId : str
 in
   (
     rec-msg(ui-remove-feedback-summary(Producer?, SummaryId?))
   +
-    rec-msg(ui-display-treelist(Str?, Lst?))
-  +
     rec-msg(ui-show-feedback-summary(Summary?))
     . snd-msg(display-feedback(Summary))
-  +
-    rec-msg(ui-render-graph(GraphPanelId?, Graph?))
   )
   *
   delta
