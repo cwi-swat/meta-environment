@@ -1,5 +1,8 @@
 # $Id$
 
+2003/12/23 (jurgenv@cwi.nl)
+ * added dependency on error-support
+
 Mon Dec  8 15:11:54 CET 2003 <jong@cwi.nl>
  * syntax/asfsdf-checker/spec/*.asf: upgraded condition syntax
 
