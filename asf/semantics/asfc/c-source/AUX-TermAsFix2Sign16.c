@@ -25,14 +25,16 @@ static Symbol ef10sym ;
 static funcptr ef10 ;
 static Symbol ef11sym ;
 static funcptr ef11 ;
-static Symbol ef12sym ;
-static funcptr ef12 ;
 static Symbol ef14sym ;
 static funcptr ef14 ;
-static Symbol lf2sym ;
-static ATerm lf2 ( ATerm arg1 ) ;
 static Symbol ef15sym ;
 static funcptr ef15 ;
+static Symbol ef16sym ;
+static funcptr ef16 ;
+static Symbol ef12sym ;
+static funcptr ef12 ;
+static Symbol lf2sym ;
+static ATerm lf2 ( ATerm arg1 ) ;
 void register_AUX_TermAsFix2Sign16 ( ) {
 lf_AUX_TermAsFix2Sign16_1sym = ATmakeSymbol ( "prod(id(\"TermAsFix2Sign\"),w(\"\"),[ql(\"literal2id\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"
  , 1 , ATtrue ) ;
@@ -73,6 +75,8 @@ ef14 = lookup_func ( ATreadFromString ( "prod(id(\"MuLiterals\"),w(\"\"),[sort(\
 ef14sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuLiterals\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
 ef15 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
 ef15sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
+ef16 = lookup_func ( ATreadFromString ( "prod(id(\"Literals\"),w(\"\"),[l(\"escape\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Literal\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)" ) ) ;
+ef16sym = lookup_sym ( ATreadFromString ( "prod(id(\"Literals\"),w(\"\"),[l(\"escape\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Literal\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
 void init_AUX_TermAsFix2Sign16 ( ) {
@@ -80,7 +84,7 @@ ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_TermAsFix2Sign16_1 ( ATerm arg0 ) {
 {
-ATerm tmp [ 24 ] ;
+ATerm tmp [ 29 ] ;
 FUNC_ENTRY ( lf_AUX_TermAsFix2Sign16_1sym , ATmakeAppl ( lf_AUX_TermAsFix2Sign16_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
@@ -241,7 +245,24 @@ if ( term_equal ( list_head ( tmp [ 22 ] ) , make_char ( 108 ) ) ) {
 ( tmp [ 23 ] = list_tail ( tmp [ 22 ] ) ) ;
 if ( is_single_element ( tmp [ 23 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 23 ] ) , make_char ( 34 ) ) ) {
-FUNC_EXIT ( ( * ef14 ) ( ( * ef14 ) ( ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 7 , char_table [ 34 ] , char_table [ 113 ] , char_table [ 108 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 34 ] ) ) ) , ( * ef15 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 10 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) , ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 5 , char_table [ 34 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 34 ] ) ) ) ) ) ;
+( tmp [ 24 ] = ( * ef16 ) ( ( * ef12 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 10 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 24 ] , ef12sym ) ) {
+( tmp [ 25 ] = arg_0 ( tmp [ 24 ] ) ) ;
+if ( check_sym ( tmp [ 25 ] , lf2sym ) ) {
+( tmp [ 26 ] = arg_0 ( tmp [ 25 ] ) ) ;
+if ( not_empty_list ( tmp [ 26 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 26 ] ) , make_char ( 34 ) ) ) {
+( tmp [ 27 ] = list_tail ( tmp [ 26 ] ) ) ;
+if ( not_empty_list ( tmp [ 27 ] ) ) {
+( tmp [ 28 ] = list_prefix ( tmp [ 27 ] ) ) ;
+if ( term_equal ( list_last ( tmp [ 27 ] ) , make_char ( 34 ) ) ) {
+FUNC_EXIT ( ( * ef14 ) ( ( * ef14 ) ( ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 7 , char_table [ 34 ] , char_table [ 113 ] , char_table [ 108 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 34 ] ) ) ) , ( * ef15 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 28 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) , ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 5 , char_table [ 34 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 34 ] ) ) ) ) ) ;
+}
+}
+}
+}
+}
+}
 }
 }
 }
@@ -283,7 +304,24 @@ if ( term_equal ( list_head ( tmp [ 20 ] ) , make_char ( 108 ) ) ) {
 ( tmp [ 21 ] = list_tail ( tmp [ 20 ] ) ) ;
 if ( is_single_element ( tmp [ 21 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 21 ] ) , make_char ( 34 ) ) ) {
-FUNC_EXIT ( ( * ef14 ) ( ( * ef14 ) ( ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 7 , char_table [ 34 ] , char_table [ 113 ] , char_table [ 108 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 34 ] ) ) ) , ( * ef15 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 10 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) , ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 5 , char_table [ 34 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 34 ] ) ) ) ) ) ;
+( tmp [ 22 ] = ( * ef16 ) ( ( * ef12 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 10 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 22 ] , ef12sym ) ) {
+( tmp [ 23 ] = arg_0 ( tmp [ 22 ] ) ) ;
+if ( check_sym ( tmp [ 23 ] , lf2sym ) ) {
+( tmp [ 24 ] = arg_0 ( tmp [ 23 ] ) ) ;
+if ( not_empty_list ( tmp [ 24 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 24 ] ) , make_char ( 34 ) ) ) {
+( tmp [ 25 ] = list_tail ( tmp [ 24 ] ) ) ;
+if ( not_empty_list ( tmp [ 25 ] ) ) {
+( tmp [ 26 ] = list_prefix ( tmp [ 25 ] ) ) ;
+if ( term_equal ( list_last ( tmp [ 25 ] ) , make_char ( 34 ) ) ) {
+FUNC_EXIT ( ( * ef14 ) ( ( * ef14 ) ( ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 7 , char_table [ 34 ] , char_table [ 113 ] , char_table [ 108 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 34 ] ) ) ) , ( * ef15 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 26 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) , ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 5 , char_table [ 34 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 34 ] ) ) ) ) ) ;
+}
+}
+}
+}
+}
+}
 }
 }
 }
@@ -416,44 +454,6 @@ if ( term_equal ( tmp [ 4 ] , make_char ( 34 ) ) ) {
 {
 if ( not_empty_list ( tmp [ 5 ] ) ) {
 ( tmp [ 6 ] = list_head ( tmp [ 5 ] ) ) ;
-if ( term_equal ( tmp [ 6 ] , make_char ( 76 ) ) ) {
-( tmp [ 7 ] = list_tail ( tmp [ 5 ] ) ) ;
-if ( not_empty_list ( tmp [ 7 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 7 ] ) , make_char ( 105 ) ) ) {
-( tmp [ 8 ] = list_tail ( tmp [ 7 ] ) ) ;
-if ( not_empty_list ( tmp [ 8 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 8 ] ) , make_char ( 116 ) ) ) {
-( tmp [ 9 ] = list_tail ( tmp [ 8 ] ) ) ;
-if ( not_empty_list ( tmp [ 9 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 9 ] ) , make_char ( 101 ) ) ) {
-( tmp [ 10 ] = list_tail ( tmp [ 9 ] ) ) ;
-if ( not_empty_list ( tmp [ 10 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 10 ] ) , make_char ( 114 ) ) ) {
-( tmp [ 11 ] = list_tail ( tmp [ 10 ] ) ) ;
-if ( not_empty_list ( tmp [ 11 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 11 ] ) , make_char ( 97 ) ) ) {
-( tmp [ 12 ] = list_tail ( tmp [ 11 ] ) ) ;
-if ( not_empty_list ( tmp [ 12 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 12 ] ) , make_char ( 108 ) ) ) {
-( tmp [ 13 ] = list_tail ( tmp [ 12 ] ) ) ;
-if ( is_single_element ( tmp [ 13 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 13 ] ) , make_char ( 34 ) ) ) {
-FUNC_EXIT ( ( * ef14 ) ( ( * ef14 ) ( ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 4 , char_table [ 34 ] , char_table [ 108 ] , char_table [ 40 ] , char_table [ 34 ] ) ) ) , ( * ef15 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) , ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 41 ] , char_table [ 34 ] ) ) ) ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
 if ( term_equal ( tmp [ 6 ] , make_char ( 85 ) ) ) {
 ( tmp [ 7 ] = list_tail ( tmp [ 5 ] ) ) ;
 if ( not_empty_list ( tmp [ 7 ] ) ) {
@@ -482,7 +482,79 @@ if ( term_equal ( list_head ( tmp [ 14 ] ) , make_char ( 108 ) ) ) {
 ( tmp [ 15 ] = list_tail ( tmp [ 14 ] ) ) ;
 if ( is_single_element ( tmp [ 15 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 15 ] ) , make_char ( 34 ) ) ) {
-FUNC_EXIT ( ( * ef14 ) ( ( * ef14 ) ( ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 7 , char_table [ 34 ] , char_table [ 113 ] , char_table [ 108 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 34 ] ) ) ) , ( * ef15 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) , ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 5 , char_table [ 34 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 34 ] ) ) ) ) ) ;
+( tmp [ 16 ] = ( * ef16 ) ( ( * ef12 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 16 ] , ef12sym ) ) {
+( tmp [ 17 ] = arg_0 ( tmp [ 16 ] ) ) ;
+if ( check_sym ( tmp [ 17 ] , lf2sym ) ) {
+( tmp [ 18 ] = arg_0 ( tmp [ 17 ] ) ) ;
+if ( not_empty_list ( tmp [ 18 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 18 ] ) , make_char ( 34 ) ) ) {
+( tmp [ 19 ] = list_tail ( tmp [ 18 ] ) ) ;
+if ( not_empty_list ( tmp [ 19 ] ) ) {
+( tmp [ 20 ] = list_prefix ( tmp [ 19 ] ) ) ;
+if ( term_equal ( list_last ( tmp [ 19 ] ) , make_char ( 34 ) ) ) {
+FUNC_EXIT ( ( * ef14 ) ( ( * ef14 ) ( ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 7 , char_table [ 34 ] , char_table [ 113 ] , char_table [ 108 ] , char_table [ 40 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 34 ] ) ) ) , ( * ef15 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 20 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) , ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 5 , char_table [ 34 ] , char_table [ 92 ] , char_table [ 34 ] , char_table [ 41 ] , char_table [ 34 ] ) ) ) ) ) ;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+if ( term_equal ( tmp [ 6 ] , make_char ( 76 ) ) ) {
+( tmp [ 7 ] = list_tail ( tmp [ 5 ] ) ) ;
+if ( not_empty_list ( tmp [ 7 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 7 ] ) , make_char ( 105 ) ) ) {
+( tmp [ 8 ] = list_tail ( tmp [ 7 ] ) ) ;
+if ( not_empty_list ( tmp [ 8 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 8 ] ) , make_char ( 116 ) ) ) {
+( tmp [ 9 ] = list_tail ( tmp [ 8 ] ) ) ;
+if ( not_empty_list ( tmp [ 9 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 9 ] ) , make_char ( 101 ) ) ) {
+( tmp [ 10 ] = list_tail ( tmp [ 9 ] ) ) ;
+if ( not_empty_list ( tmp [ 10 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 10 ] ) , make_char ( 114 ) ) ) {
+( tmp [ 11 ] = list_tail ( tmp [ 10 ] ) ) ;
+if ( not_empty_list ( tmp [ 11 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 11 ] ) , make_char ( 97 ) ) ) {
+( tmp [ 12 ] = list_tail ( tmp [ 11 ] ) ) ;
+if ( not_empty_list ( tmp [ 12 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 12 ] ) , make_char ( 108 ) ) ) {
+( tmp [ 13 ] = list_tail ( tmp [ 12 ] ) ) ;
+if ( is_single_element ( tmp [ 13 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 13 ] ) , make_char ( 34 ) ) ) {
+( tmp [ 14 ] = ( * ef16 ) ( ( * ef12 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 2 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) ) ;
+if ( check_sym ( tmp [ 14 ] , ef12sym ) ) {
+( tmp [ 15 ] = arg_0 ( tmp [ 14 ] ) ) ;
+if ( check_sym ( tmp [ 15 ] , lf2sym ) ) {
+( tmp [ 16 ] = arg_0 ( tmp [ 15 ] ) ) ;
+if ( not_empty_list ( tmp [ 16 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 16 ] ) , make_char ( 34 ) ) ) {
+( tmp [ 17 ] = list_tail ( tmp [ 16 ] ) ) ;
+if ( not_empty_list ( tmp [ 17 ] ) ) {
+( tmp [ 18 ] = list_prefix ( tmp [ 17 ] ) ) ;
+if ( term_equal ( list_last ( tmp [ 17 ] ) , make_char ( 34 ) ) ) {
+FUNC_EXIT ( ( * ef14 ) ( ( * ef14 ) ( ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 4 , char_table [ 34 ] , char_table [ 108 ] , char_table [ 40 ] , char_table [ 34 ] ) ) ) , ( * ef15 ) ( lf2 ( cons ( make_list_char ( 34 ) , cons ( make_list ( tmp [ 18 ] ) , make_list ( make_char ( 34 ) ) ) ) ) ) ) , ( * ef15 ) ( lf2 ( ( ATerm ) ATmakeList ( 3 , char_table [ 34 ] , char_table [ 41 ] , char_table [ 34 ] ) ) ) ) ) ;
+}
+}
 }
 }
 }
