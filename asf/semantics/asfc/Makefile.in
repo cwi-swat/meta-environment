@@ -57,7 +57,7 @@ XLIBS		= -L$(ATERM)/lib -ltoolbus -lasfix -laterm-dbg \
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
 CSRC		= compiler.c expander.c asfixprinter.c asfix-trans.c init-patterns.c
-CHDR		= compiler.tif.c
+CHDR		= compiler.tif.c compiler.tif.h
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= compiler 
 # All files in LIBFILES are installed in $(libdir)
@@ -68,7 +68,7 @@ INCLUDEFILES	=
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= compiler compiler.tif.c 
+CLEANFILES	= compiler compiler.tif.c compiler.tif.h
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	=
 
@@ -80,14 +80,16 @@ all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
 
-compiler.tif.c: $(top_srcdir)/toolbus/meta.tifs
-	$(TOOLBUS)/bin/ctif -newstyle -tool compiler -tifs $(top_srcdir)/toolbus/meta.tifs
+compiler.tif.h: $(top_srcdir)/toolbus/meta.tifs
+	$(TOOLBUS)/bin/ctif -split -newstyle -tool compiler -tifs $(top_srcdir)/toolbus/meta.tifs
 
-compiler: compiler.o asfixprinter.o expander.o asfix-trans.o init-patterns.o \
+compiler.tif.c: compiler.tif.h
+
+compiler: compiler.o compiler.tif.o asfixprinter.o expander.o asfix-trans.o init-patterns.o \
 	support/support.o
 	cd support; $(MAKE)
 	cd c-source; $(MAKE) libasfix2c.a
-	$(CC) -o compiler compiler.o asfixprinter.o init-patterns.o \
+	$(CC) -o compiler compiler.o compiler.tif.o asfixprinter.o init-patterns.o \
 	 expander.o asfix-trans.o $(COMPMODS) $(LIBS)
 
 ##########################################################

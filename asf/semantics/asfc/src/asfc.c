@@ -19,7 +19,7 @@
 #include <abbrevs.h>
 #include <sys/times.h>
 #include <limits.h>
-#include "compiler.tif.c"
+#include "compiler.tif.h"
 #include "support/support.h"
 
 extern aterm *pattern_asfix_iter;
