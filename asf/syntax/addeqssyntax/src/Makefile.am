@@ -17,7 +17,7 @@ data_DATA    = addeqssyntax.idef
 EXTRA_DIST   = addeqssyntax.idef addeqssyntax.tif.c addeqssyntax.tif.h \
 	       addeqssyntax.pod
 
-addeqssyntax_SOURCES = addeqssyntax.c AddEqsSyntax.c
+addeqssyntax_SOURCES = addeqssyntax.c Add-Eqs-Syntax.c
 addeqssyntax_LDADD   = addeqssyntax.tif.o \
                        -L$(ASC_SUPPORT)/lib -lasc-support-me \
                        -L$(SDF_SUPPORT)/lib -lSDFME \

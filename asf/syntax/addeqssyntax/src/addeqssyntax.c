@@ -33,9 +33,9 @@ static char myarguments[] = "m:hi:o:vV";
 void init_patterns();
 void c_rehash(int newsize);
 
-extern void register_Add045Eqs045Syntax();
-extern void resolve_Add045Eqs045Syntax();
-extern void init_Add045Eqs045Syntax();
+extern void register_Add_Eqs_Syntax();
+extern void resolve_Add_Eqs_Syntax();
+extern void init_Add_Eqs_Syntax();
 
 /*}}}  */
 /*{{{  ATerm *get_name(int cid) */
@@ -151,9 +151,9 @@ int main(int argc, char *argv[])
 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
 
-  register_Add045Eqs045Syntax();
-  resolve_Add045Eqs045Syntax();
-  init_Add045Eqs045Syntax();
+  register_Add_Eqs_Syntax();
+  resolve_Add_Eqs_Syntax();
+  init_Add_Eqs_Syntax();
 
   if(toolbus_mode) {
     #ifndef WIN32 /* Code with Toolbus calls, non Windows */
