@@ -289,7 +289,12 @@ in
     UnParseTerm(STree, String?) .
     StackPushString(Stack, Stack?, String) .
     ReturnSuccess(EditorId,Stack)
-    +
+  +
+    rec-msg(get-focus, Stack?, EditorId?) .
+    GetFocus(EditorId, RTree?) .
+    StackPushTerm(Stack,Stack?,RTree) .
+    ReturnSuccess(EditorId,Stack)
+  +
     rec-msg(get-root, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
     . GetTree(EditorId, Modulename, RTree?, Available?)
@@ -301,24 +306,24 @@ in
     else
       ReturnAbort(EditorId, Stack)
     fi
+  +
+    rec-msg(get-parsetree, Stack?, EditorId?)
+    . GetParsetree(EditorId, RTree?)
+    . StackPushTerm(Stack, Stack?, RTree)
+    . ReturnSuccess(EditorId, Stack)
+  +
+    rec-msg(add-posinfo, Stack?, EditorId?)
+    . StackPopTerm(Stack, Stack?, STree?)
+    . GetFilename(EditorId, Filename?)
+    . AnnotateTree(STree, Filename, RTree?)
+    . StackPushTerm(Stack, Stack?, RTree)
+    . ReturnSuccess(EditorId, Stack)
+  +
+    rec-msg(set-root, Stack?, EditorId?)
+    . StackPopTerm(Stack, Stack?, STree?)
+    . ReplaceFocus(EditorId, STree)
+    . ReturnSuccess(EditorId,Stack)
     +
-      rec-msg(add-posinfo, Stack?, EditorId?)
-      . StackPopTerm(Stack, Stack?, STree?)
-      . GetFilename(EditorId, Filename?)
-      . AnnotateTree(STree, Filename, RTree?)
-      . StackPushTerm(Stack, Stack?, RTree)
-      . ReturnSuccess(EditorId, Stack)
-    +
-      rec-msg(set-root, Stack?, EditorId?)
-      . StackPopTerm(Stack, Stack?, STree?)
-      . ReplaceFocus(EditorId, STree)
-      . ReturnSuccess(EditorId,Stack)
-    +
-        rec-msg(get-focus, Stack?, EditorId?) .
-        GetFocus(EditorId, RTree?) .
-        StackPushTerm(Stack,Stack?,RTree) .
-        ReturnSuccess(EditorId,Stack)
-      +
         rec-msg(get-focus-location, Stack?, EditorId?) .
 	snd-msg(se-get-focus-location(EditorId)) .
 	rec-msg(se-focus-location(EditorId, PosInfo?)) .
@@ -1039,7 +1044,6 @@ let
   Tree: term
 in
   Id := process-id
-  . printf("ParseSyntax\n")
   . snd-msg(em-get-modulename(Sid))
   . rec-msg(em-modulename(Sid, Modulename?))
   . snd-note(ui-status(statf(Id, "Parsing syntax of %s", [Modulename])))
@@ -1052,8 +1056,7 @@ in
   .
   (
     rec-msg(parse-editor-ok(Sid)) .
-    snd-msg(se-get-parse-tree(Sid)) .
-    rec-msg(se-parse-tree(Sid, Tree?)) .
+    GetParsetree(Sid, Tree?) .
     snd-msg(unparse(Tree)) .
     rec-msg(unparsed-text(Text?)) .
     snd-msg(update-module-text-in-db(Modulename, Text, Tree, Type)) .
@@ -1150,8 +1153,7 @@ in
   .
   if equal(Registered, true)
   then
-    snd-msg(se-get-parse-tree(Sid))
-    . rec-msg(se-parse-tree(Sid, Tree?))
+    GetParsetree(Sid, Tree?)
     . Available := true
   else
     Available := false
@@ -1164,6 +1166,10 @@ process GetFocus(Sid: term, Tree: term?) is
   snd-msg(se-get-cursor(Sid))
   . rec-msg(se-cursor(Sid, Tree?))
 
+process GetParsetree(Sid: term, Parsetree: term?) is
+  snd-msg(se-get-parse-tree(Sid))
+  . rec-msg(se-parse-tree(Sid, Parsetree?))
+
 process ReplaceFocus(Sid: term, Tree: term) is
 let
   Text: str,
@@ -1172,7 +1178,6 @@ let
 in
   snd-msg(unparse(Tree))
   . rec-msg(unparsed-text(Text?))
-  . printf("Text: [%s]\n", Text)
   . GetFilename(Sid, Filename?)
   . snd-msg(io-write-text-file(Filename, [Text]))
   .
