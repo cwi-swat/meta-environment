@@ -4,6 +4,7 @@ imports Layout
 
 exports
 
+sorts NAT
 lexical syntax
   [0-9]+ -> NAT
 

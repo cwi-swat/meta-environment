@@ -1,7 +1,7 @@
 module Tree
 imports Tree-syntax
 exports
-sorts NAT* TREE # NAT*
+sorts NAT* <TREE, NAT*>
 
 context-free syntax
 
@@ -17,11 +17,11 @@ context-free syntax
   td-stop-ac(TREE,NAT*) -> NAT* {traversal(top-down, accu, break)}
   td-cont-ac(TREE,NAT*) -> NAT* {traversal(top-down, accu, continue)}
 
-  bu-stop-actr(TREE,NAT*) -> TREE # NAT* {traversal(bottom-up, accu, trafo, break)}
-  bu-cont-actr(TREE,NAT*) -> TREE # NAT* {traversal(bottom-up, accu, trafo, continue)}
+  bu-stop-actr(TREE,NAT*) -> <TREE, NAT*> {traversal(bottom-up, accu, trafo, break)}
+  bu-cont-actr(TREE,NAT*) -> <TREE, NAT*> {traversal(bottom-up, accu, trafo, continue)}
 
-  td-stop-actr(TREE,NAT*) -> TREE # NAT* {traversal(top-down, accu, trafo, break)}
-  td-cont-actr(TREE,NAT*) -> TREE # NAT* {traversal(top-down, accu, trafo, continue)}
+  td-stop-actr(TREE,NAT*) -> <TREE, NAT*> {traversal(top-down, accu, trafo, break)}
+  td-cont-actr(TREE,NAT*) -> <TREE, NAT*> {traversal(top-down, accu, trafo, continue)}
 
 variables
 
