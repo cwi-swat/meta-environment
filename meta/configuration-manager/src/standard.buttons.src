@@ -196,8 +196,11 @@ buttons([
 	   description(studio-toolbar, icon("Exit", "exit.gif"))],
 	  [ask-question("Do you want to save the term store (to disk)?"),
 	   dup,
+	   dup,
 	   push-term(yes),
 	   if-equal([save-all,
 		     exit], 
-		    [exit])])
+		    [push-term(no),
+                     if-equal([exit],
+                              [])])])
 ])
