@@ -91,5 +91,6 @@ AC_OUTPUT(
   Makefile
   lib/Makefile
   libME/Makefile
+  utils/Makefile
   test/Makefile
 )
