@@ -16,8 +16,11 @@ in
   G := "" .
   snd-note(ui-status(stat(Id,"Starting structure editor..."))).
   execute(se, SE?).
+printf("newEditor is being started\n").
   snd-eval(SE, newEditor(Fid, Text)).
+printf("newEditor waiting\n").
   rec-value(SE,Fl?).
+printf("newEditor is started\n").
   Foc := first(Fl).
   snd-msg(TE,set-focus(Fid,Foc)).
   snd-note(ui-status(endstat(Id))). ( ( 
@@ -88,7 +91,7 @@ in
       rec-msg(result(T2?)).
       snd-msg(pp(T2)).
       rec-msg(source(Src?)).
-      printf("Normal form is %s\n", Src).
+      printf("\nNormal form is:\n%s", Src).
       snd-note(ui-status(endstat(Id)))
     fi.
     snd-ack-event(TE,menu-event("Meta-Environment","Reduce",Fid))

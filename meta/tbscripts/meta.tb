@@ -13,6 +13,7 @@
 #include "open-modules.tb"
 #include "retrieve-eqs.tb"
 #include "close-modules.tb"
+#include "revert-module.tb"
 #include "ui.tb"
 #include "status-display.tb"
 #include "edit-module.tb"
@@ -23,6 +24,6 @@
 #include "addeqsyn.tb"
 #include "module-db.idef"
 #include "process-eqs.tb"
-#include "save-module.tb"
+#include "save-module.tb" 
 
-toolbus(Parser,Parsetrees,Prettyprinter,Io,Ui,Edit-master,ModuleDB,ProcessEqs,Save-modules)
+toolbus(Parser,Parsetrees,Prettyprinter,Io,Ui,Edit-master,ModuleDB,ProcessEqs,Save-modules,Revert-module) 

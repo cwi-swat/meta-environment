@@ -3,13 +3,14 @@
 
 process Close-modules(Eval: evaluator) is
 let
-Str: term,
-Id: term
+  Str : term,
+  Id  : term
 in
   Id := process-id. (
     rec-msg(close-module(Str?)).
     snd-note(ui-status(stat(Id,"Deleting ..."))).
     snd-msg(delete-module(Str)).
+    rec-msg(done).
 /*    snd-do(Eval, clear-equations-db).*/
     snd-note(ui-status(endstat(Id))).
     snd-msg(closed-module(Str))

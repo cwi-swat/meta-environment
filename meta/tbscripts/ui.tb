@@ -41,7 +41,7 @@ in
       + rec-msg(ui,cannot-open-module(ModName?)).
 	snd-note(ui-status(errorf("cannot open module \"%s\"",[ModName])))
       ) *
-      rec-msg(ui,finished-opening-modules).
+      rec-msg(finished-opening-modules).
       snd-do(UI,finished-opening-modules(Str)).
       snd-ack-event(UI, open-module(Str))
     ) +
@@ -60,8 +60,9 @@ in
       create(Edit-module(ModName),EM?).
       snd-ack-event(UI,edit-module(id(ModName)))
     ) +
-    ( rec-event(UI,revert-module(id(ModName?))).            /* Not yet implemented */ 
-      snd-note(ui-status(errorf("TB: not implemented: revert-module(%s)",[ModName]))).
+    ( rec-event(UI,revert-module(id(ModName?))).
+      snd-msg(revert-module(ModName)).           
+      rec-msg(reverted-module(ModName?)).
       snd-ack-event(UI,revert-module(id(ModName)))
     ) +
     ( rec-event(UI,get-module-info(Str?)).          /* Not yet implemented */ 
