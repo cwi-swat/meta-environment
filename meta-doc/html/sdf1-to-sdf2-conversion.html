@@ -73,7 +73,12 @@ The lexical disambiguation rules in Sdf1 are:
 <li>Prefer literals.
 <li>Prefer variables. 
 </ul>
-For more details we refer to the Sdf reference manual.
+For more details on these lexical disambiguation rules 
+we refer to the Sdf reference manual.
+
+We will discuss how the most crucial lexical disambiguation rules
+can be defined in Sdf2, but first we will give an example of
+how the layout defined in Sdf2.
 
 <h3>Example Definition of Layout</h3>
 
@@ -88,7 +93,89 @@ exports
   context-free restrictions
     LAYOUT? -/- [\ \t\n]
 </pre>
+<p>Besides the extra back-slash before the space symbol in the character class
+the main difference is the extra section "context-free restrictions".
+The purpose of this extra section is to force the parser to go on with
+recognizing layout as long as possible. The question mark behind "LAYOUT"
+is a new feature of Sdf2 and represents optional LAYOUT. 
+Even if there is an empty recognizing non-terminal between two optional
+layouts.
 
+<p>Note that the 
+use of these new features may prove to be problematic in combination
+with complilation and interpretation.
+
+<h3>Definition of "Prefer Longest Match per Sort"</h3>
+
+The prefer longest match rules forces the scanner to go on with
+recognizing a lexical token as long as possible. 
+Given the definition of identifiers as
+<pre>
+exports
+  sorts Id
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9\_]* -> Id
+</pre>
+The lexical token "Program" can be recognized in several ways, but by
+the prefer longest match rule only one interpretation is possible.
+
+<p>This longest match rule is enforced in Sdf2 as follows:
+<pre>
+exports
+  sorts Id
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9\_]* -> Id
+
+  lexical restrictions
+    <Id -CF> -/- [a-zA-Z0-9\_]
+</pre>
+The keyword "lexical" for "restrictions" is optional, the definition can
+also be written down as follows:
+<pre>
+exports
+  sorts Id
+  lexical syntax
+    [a-zA-Z][a-zA-Z0-9\_]* -> Id
+
+  context-free restrictions
+    Id -/- [a-zA-Z0-9\_]
+</pre>
+When discussing the prefer keywords disambiguation rule we will come
+back to the prefer longest match rule.
+
+<h3>Definition of "Prefer Keywords or Literals"</h3>
+
+The prefer keyword or literal rules forces the scanner to recognize 
+strings which can be recognized both as keywords or as lexical
+tokens like ``Identifiers'' as keywords.
+
+<p>To enforce this in Sdf2 we have to use the ``reject''-mechanism.
+Suppose we have the following context-free grammar rule
+<pre>
+exports
+  context-free syntax
+    "if" Bool "then" Series "else" Series "fi" -> Statement
+</pre>
+Than there is an overlap between these keywords and the ``Id'' definition
+above. This problem is solved as follows in Sdf2:
+<pre>
+exports
+  context-free syntax
+    "if" Bool "then" Series "else" Series "fi" -> Statement
+  context-free syntax
+    "if"   -> Id {reject}
+    "then" -> Id {reject}
+    "else" -> Id {reject}
+    "fi"   -> Id {reject}
+</pre>
+In order to enforce that a list of characters like ``ifIdentifier'' is
+recognized as two separate Ids it may be wise to add also the following
+restrictions section:
+<pre>
+   restrictions
+     "if" "then" "else" "fi" -/- [a-zA-Z0-9\_]
+</pre>
+This forces the parser not to stop after the "if" but to go on.
 
     <hr>
     <address><a href="mailto:Mark.van.den.Brand@cwi.nl">Mark van den Brand</a></address>
