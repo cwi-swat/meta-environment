@@ -1,8 +1,10 @@
 # $Id$
 
+SUBDIRS = implodePT
+
 EXTRA_DIST		= unparsePT.idef
 
-bin_PROGRAMS		= flattenPT unparsePT implodePT unparseProd \
+bin_PROGRAMS		= flattenPT unparsePT unparseProd \
                           addPosInfo ambtracker tree2dot apply-function
 
 INCLUDES		= -I${top_srcdir}/libmept \
@@ -39,10 +41,6 @@ unparsePT_LDADD		= -L../libmept -lmept \
 
 unparseProd_SOURCES	= unparseProd-main.c
 unparseProd_LDADD	= -L../libmept -lmept \
-			-L${ATERM}/lib -lATerm
-
-implodePT_SOURCES	= implodePT-main.c
-implodePT_LDADD		= -L../libmept -lmept \
 			-L${ATERM}/lib -lATerm
 
 ambtracker_SOURCES      = ambtracker-main.c
