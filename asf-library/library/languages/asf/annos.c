@@ -4,6 +4,10 @@
 #include <MEPT-utils.h>
 #include <aterm2.h>
 
+/* note that by using AsFix trees as keys the storing and retrieval
+ * of ATerm annotations depends on whitespace!
+ */
+
 PT_Tree set_anno(ATerm builtin, PT_Tree input)
 {
   PT_Tree term = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
