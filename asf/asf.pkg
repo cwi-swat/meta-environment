@@ -2,8 +2,8 @@ package
 identification
    name=__PACKAGE__
    version=__VERSION__
-   location=http://www.cwi.nl/projects/MetaEnv/asf
-   info=http://www.cwi.nl/projects/MetaEnv/asf
+   location=http://www.cwi.nl/projects/MetaEnv/__PACKAGE__
+   info=http://www.cwi.nl/projects/MetaEnv/__PACKAGE__
    description='This package contains the implementation of the rewriting
                 language ASF. ASF rewrites terms in user-defined syntax. It
                 can be used to define the semantics of (domain-specific) 
