@@ -462,10 +462,12 @@ static PT_Tree transformBox(PT_Tree tree)
   while (!PT_isArgsEmpty(args)) {
     PT_Tree arg = PT_getArgsHead(args);
 
-    if (PT_isTreeFlatLexical(arg) || PT_isTreeLayout(arg) || PT_isTreeLit(arg)) {
+    if (PT_isTreeLayout(arg) || PT_isTreeLit(arg)) {
+      ATwarning("%s -> TODO: Fix me!\n", __FILE__);
       boxArgs = PT_appendArgs(boxArgs, arg);
     }
     else if (PT_isTreeAppl(arg)) {
+      ATwarning("%s -> TODO: Fix me!\n", __FILE__);
       if (hasProductionToBoxAttribute(PT_getTreeProd(arg))) {
         BOX_Box boxArg = processTree(arg);
         boxArgs = PT_appendArgs(boxArgs, PT_TreeFromTerm(BOX_BoxToTerm(boxArg)));
