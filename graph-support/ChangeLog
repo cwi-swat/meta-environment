@@ -1,5 +1,8 @@
 $Id$
 
+2003/06/26 (jurgenv@cwi.nl)
+ * Added package definition file
+
 2003/06/27 (markvdb@cwi.nl)
  * Extended the graph format with a generic info container (key,value).
  * Position information, if any, is now stored in the parsetree graph

@@ -1,0 +1,19 @@
+package 
+identification
+   name=graph-support
+   version=0.1beta
+   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   info=http://www.cwi.nl/projects/MetaEnv/graph-support
+   description='The Graph support library for the Meta-Environment, contains
+                visualization tools and graph manipulation tools'
+
+
+   keywords=meta-environment, asfix, parsetree, graphs
+
+configuration interface
+
+requires
+  aterm		2.0.1
+  pt-support    0.12beta
+  toolbuslib	0.4
+  graphviz      1.5
