@@ -3,6 +3,8 @@
  * Put syntax related tools in syntax subdirectory and semantics related
    tools in semantics directory to create a better overview in this 
    large package.
+ * Incorporated asf-library package in this package. 
+ * Moved builtins code from library to semantics.
 
 2002/10/09 (vinju@loria.fr)
  * Added dependency on meta package

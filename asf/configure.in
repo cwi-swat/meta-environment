@@ -147,6 +147,9 @@ AC_OUTPUT(
    syntax/asfsdf-checker/Makefile
    syntax/asfsdf-checker/spec/Makefile
    semantics/Makefile
+   semantics/builtins/Makefile
+   semantics/builtins/lib/Makefile
+   semantics/builtins/utils/Makefile
    semantics/asfc/Makefile
    semantics/asfc/src/Makefile
    semantics/asfc/src/muasf/Makefile
