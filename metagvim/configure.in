@@ -1,0 +1,61 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(configure.in)
+AM_INIT_AUTOMAKE(metagvim, 0.1)
+
+dnl Let aclocal use macros in ./config directory
+ACLOCAL="${ACLOCAL} -I ./config"
+
+AC_REQUIRE([AC_PROG_CC])
+AC_PROG_CC
+
+dnl Handle cflags option
+AC_ARG_WITH(cflags,
+   [  --with-cflags=CFLAGS    standard options of c compiler],
+   CFLAGS=${withval},
+   if test "a${GCC}" = "ayes"; then
+     CFLAGS="-Wall -g -O2"
+   fi;
+)
+AC_SUBST(CFLAGS)
+
+dnl Require ATerm library
+AC_PACKAGE_REQUIRE(aterm, baffle,
+   [  --with-aterm=DIR        ATerm-library is in DIR])
+AC_SUBST(ATERM)
+
+dnl Require ToolBus library
+AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
+   [  --with-toolbuslib=DIR      ToolBus library is in DIR])
+AC_SUBST(TOOLBUSLIB)
+
+AM_PROG_LIBTOOL
+AC_SUBST(LIBTOOL)
+
+dnl Determine which libraries to use for programs using sockets
+NOSOCKLIBS=$LIBS
+dnl first, the socket functions
+SOCKET_FOUND=no
+SOCKLIBS=
+AC_CHECK_LIB(sun,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsun"])
+if test ${SOCKET_FOUND} = no; then
+  AC_CHECK_LIB(socket, socket,[SOCKET_FOUND=yes;SOCKLIBS="-lsocket"])
+  if test ${SOCKET_FOUND} = no; then
+    AC_CHECK_LIB(bsd,socket,[SOCKET_FOUND=yes;SOCKLIBS="-lbsd";DEFS="$DEFS -D_BSD=43"])
+  fi
+fi
+
+dnl then gethostname
+GHN_FOUND=no
+AC_CHECK_LIB(sun,gethostname,[GHN_FOUND=yes])
+if test ${GHN_FOUND} = no; then
+  AC_CHECK_LIB(nsl,gethostname,[GHN_FOUND=yes;SOCKLIBS="$SOCKLIBS -lnsl"])
+fi
+
+AC_SUBST(SOCKLIBS)
+
+LIBS=$NOSOCKLIBS
+
+dnl Which files need updating?
+AC_OUTPUT(
+  Makefile
+)

@@ -1,0 +1,41 @@
+let meta_dlso = "__LIBDIR__/libmeta_gvim.so"
+
+func! AddMetaMenu(vim_fd, menu, item)
+  " build encoding of menu-item (e.g. 17#META-JONG-1142#Move#Up)
+  let cmd = a:vim_fd
+  let cmd = cmd . '#' . v:servername
+  let cmd = cmd . '#' . a:menu
+  let cmd = cmd . '#' . a:item
+  let cmd = '"' . cmd . '"'
+
+  " build call to add menu entry
+  let menu = ':silent amenu <silent> ' . a:menu . '.' . a:item . ' '
+
+  " add menu, binding menu-item to callback using encoded menu-item
+  exe menu . ':silent call libcallnr(meta_dlso, "send", ' . cmd . ')<CR>'
+endfunc
+
+" Update current location
+func! SetLocation()
+  let pos=line2byte(".") + col(".") - 1
+  let desc=g:tb_pipe . '#' . v:servername . '#' . pos
+  call libcallnr(g:meta_dlso, "send", desc)
+endfunc
+
+func! Parse()
+  let desc=g:tb_pipe . '#' . v:servername . '#Meta-Environment#Parse'
+  call libcallnr(g:meta_dlso, "send", desc)
+endfunc
+
+func! SetModified()
+  let desc=g:tb_pipe . '#' . v:servername . '#_modified'
+  call libcallnr(g:meta_dlso, "send", desc)
+endfunc
+
+" Remap <CTRL-]> to update focus around current location
+map <silent> <C-]> :call SetLocation()<CR>
+
+" Map <CTRL-p> to invoke parser
+map <C-p> :call Parse()<CR>
+
+autocmd BufWritePost * :call SetModified()

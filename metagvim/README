@@ -1,0 +1,2 @@
+Due to problems with libtool, the gvim support was factored out of the
+main Meta Environment Distribution.
