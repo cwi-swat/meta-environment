@@ -1,3 +1,5 @@
+/*{{{  header */
+
 /*
 
     ToolBus -- The ToolBus Application Architecture
@@ -19,15 +21,32 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
 */
+
+/*}}}  */
+
+/*{{{  includes */
+
 #include "board.tif.c"
+
+/*}}}  */
+/*{{{  defines */
 
 #define MAXSQUARE 16
 
+/*}}}  */
+/*{{{  typedefs */
+
 typedef enum player {empty, playerA, playerB} player;
 
-char *board[MAXSQUARE][MAXSQUARE];
+/*}}}  */
+/*{{{  variables */
 
+char *board[MAXSQUARE][MAXSQUARE];
 int max = MAXSQUARE;
+
+/*}}}  */
+
+/*{{{  void init_board() */
 
 void init_board()
 {
@@ -37,10 +56,16 @@ void init_board()
       board[i][j] = NULL;
 }
 
+/*}}}  */
+/*{{{  void rec_terminate(term *trm) */
+
 void rec_terminate(term *trm)
 {
   exit(0);
 }
+
+/*}}}  */
+/*{{{  term *push(char *p, int row, int col) */
 
 term *push(char *p, int row, int col)
 {
@@ -50,7 +75,11 @@ term *push(char *p, int row, int col)
   return TBmake("snd-value(ok)");
 }
 
-void main(int argc, char *argv[])
+/*}}}  */
+
+/*{{{  int main(int argc, char *argv[]) */
+
+int main(int argc, char *argv[])
 {
   int i = 0;
 
@@ -63,4 +92,8 @@ void main(int argc, char *argv[])
   }
   TBinit("board", argc, argv, board_handler, board_check_in_sign);
   TBeventloop();
+
+  return 0;
 }
+
+/*}}}  */
