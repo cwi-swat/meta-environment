@@ -353,7 +353,10 @@ SE_Editor newEditorGivenText(char *text)
 {
   PT_Tree tree = PT_makeTreeLit(text);
   PT_Symbol sort = PT_makeSymbolCf(PT_makeSymbolSort(SORT_UNPARSED));
-  PT_Symbols symbols = PT_makeSymbolsList(sort, PT_makeSymbolsEmpty());
+  PT_Symbols symbols = PT_makeSymbolsList(PT_makeOptLayoutSymbol(),
+                        PT_makeSymbolsList(sort,
+                        PT_makeSymbolsList(PT_makeOptLayoutSymbol(),
+					   PT_makeSymbolsEmpty())));
   PT_ParseTree parse_tree = PT_makeParseTreeTree(symbols, 
                               PT_makeTreeLayoutEmpty(),
                               tree,
