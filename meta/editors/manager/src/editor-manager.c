@@ -217,7 +217,7 @@ static char* makeFileName(char *path, char* extension)
 
 /*}}}  */
 
-/*{{{  ATerm get_editor_id(int conn, char *nameAsString, char *moduleAsString) */
+/*{{{  ATerm get_editor_id(int conn, char *pathAsString,  */
 
 ATerm get_editor_id(int conn, char *pathAsString, 
 		    char* extensionAsString,
@@ -240,14 +240,16 @@ ATerm get_editor_id(int conn, char *pathAsString,
 
     if (editor != NULL) {
       editorId = getEditorId(editor);
-      return sndValue(ATmake("existing-editor(<term>)", editorId));
+      return sndValue(ATmake("existing-editor(<str>,<term>)", nameAsString,
+			     editorId));
     }
 
     editorId = getUniqueId();
     moduleAsTerm = moduleStringToTerm(moduleAsString);
     addEditor(newEditor(editorId, nameAsTerm, moduleAsTerm));
 
-    return sndValue(ATmake("new-editor(<term>)", editorId));
+    return sndValue(ATmake("new-editor(<str>,<term>)", nameAsString,
+			   editorId));
   }
   else {
     ATabort("Out of memory");
