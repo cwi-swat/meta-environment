@@ -17,12 +17,12 @@ import metastudio.data.graph.Graph;
 import metastudio.data.graph.Node;
 import aterm.ATerm;
 
-public class NodePanel extends JPanel {
+public class NodeBox extends JPanel {
     private final Node node;
     private LineBorder line;
     private static final int BOX_BORDER_THICKNESS = 8;
 
-    public NodePanel(final MultiBridge bridge, Node node) {
+    public NodeBox(final MultiBridge bridge, Node node) {
         this.node = node;
         int orientation;
         int thickness;

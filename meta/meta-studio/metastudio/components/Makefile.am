@@ -22,5 +22,6 @@ ToolBar.java\
 MenuBar.java\
 ModulePopupMenu.java\
 ModuleTree.java\
-ModuleBrowser.java
+ModuleBrowser.java\
+ParseTreeBrowser.java
 

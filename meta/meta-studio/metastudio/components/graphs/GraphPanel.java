@@ -514,7 +514,7 @@ public class GraphPanel extends JComponent implements Scrollable {
         }
         repaint();
     }
-
+    
     public Rectangle getNodeRectangle(Node node) {
         float[] coords =
             {

@@ -11,5 +11,5 @@ ImportGraphPanel.java \
 ParseTreePanel.java \
 ZoomableGraphPanel.java\
 NodeSizer.java\
-HierarchyBox.java\
-NodePanel.java
+BoxTree.java \
+NodeBox.java

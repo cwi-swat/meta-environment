@@ -20,11 +20,11 @@ import aterm.ATerm;
 import aterm.ATermFactory;
 import aterm.pure.PureFactory;
 
-public class HierarchyBox extends ToolComponent {
+public class BoxTree extends ToolComponent {
     private MetaGraphFactory factory;
     private JPanel rootPanel;
 
-    public HierarchyBox(ATermFactory factory, MultiBridge bridge) {
+    public BoxTree(ATermFactory factory, MultiBridge bridge) {
         super(factory, bridge);
         this.factory = new MetaGraphFactory((PureFactory) factory);
 
@@ -71,7 +71,7 @@ public class HierarchyBox extends ToolComponent {
         else if (children.size() == 1) {
             return buildHierarchy(graph, (Node) children.get(0));
         } else {
-            NodePanel box = new NodePanel(getBridge(), node);
+            NodeBox box = new NodeBox(getBridge(), node);
             Iterator iter = children.iterator();
 
             while (iter.hasNext()) {

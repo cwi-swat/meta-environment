@@ -29,8 +29,7 @@ import metastudio.components.QuestionDialog;
 import metastudio.components.StatusBar;
 import metastudio.components.ToolBar;
 import metastudio.components.ToolComponent;
-import metastudio.components.graphs.ParseTreePanel;
-import metastudio.components.graphs.HierarchyBox;
+import metastudio.components.ParseTreeBrowser;
 import metastudio.utils.Preferences;
 import aterm.pure.PureFactory;
 
@@ -147,15 +146,9 @@ public class MetaStudio extends JFrame  {
         JTabbedPane tabs = new JTabbedPane();
 
         addTab(tabs, "Modules", new ModuleBrowser(factory, getBridge()));
-        addTab(tabs, "Parse tree", createParseTreeTab());
+        addTab(tabs, "Parse tree", new ParseTreeBrowser(factory, getBridge()));
         
         return tabs;
-    }
-    
-    private JComponent createParseTreeTab() {
-        return new JSplitPane(JSplitPane.VERTICAL_SPLIT, 
-                new ParseTreePanel(factory, getBridge()),
-                new HierarchyBox(factory, getBridge()));
     }
     
     private void addTab(JTabbedPane tabs, String title, JComponent tool) {
