@@ -36,7 +36,6 @@ exports
     cecontains(Term,C-env)                   -> Bool
     make-c-temp(IntCon)                      -> Primary-expression
     make-call-id(FunId)                      -> Primary-expression
-    make-c-name(FunId)                       -> Identifier
     make-id-name(Identifier)                 -> FunId
     is-char(FunId)                           -> Bool
     translate-char(FunId)                    -> Expression

@@ -2,7 +2,7 @@
 %% translate the \asfix\ representation of context-free functions
 %% into \muasf\ names.
 
-imports AsFixPrint MuASF C-Basics
+imports AsFixPrint MuASF-Equations-Ops
 
 exports
   context-free syntax
@@ -18,6 +18,9 @@ exports
     "avar2muvar" "(" ATerm ")"      -> Var
     "upper2lower" "(" Literal ")"   -> Literal
     "literal2id" "(" Literal ")"    -> FunId
+
+  context-free syntax
+    "make-muasf-name" "(" FunId ")" -> FunId
 
 hiddens
   context-free syntax

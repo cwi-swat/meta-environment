@@ -1,10 +1,10 @@
 %%  MuASF-Rules2C
 
-imports MuASF-Conds2C RenameVars Improve-C-code Transform-Constructors
+imports RenameVars Improve-C-code Transform-Constructors Locate-Constants
 
 exports
   context-free syntax
-    rulesopt2cfuncs({FuncDef ";"}*,RulesOpt,NameTable)  -> FT-tuple
+    rulesopt2cfuncs(ModId, {FuncDef ";"}*,RulesOpt,NameTable)  -> FT-tuple
     sigargs2cstats(FunId,{SigArg ","}*)                 -> Statement-list-opt
     funargs2cstats(FunId,Argument-expression-list,IntCon) -> SlI-tuple
 

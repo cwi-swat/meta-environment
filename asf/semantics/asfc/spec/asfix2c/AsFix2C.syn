@@ -12,3 +12,9 @@ imports AsFix2muASF-C MuASF2C MuASF2MuASF
 exports
   context-free syntax
     asfix2c(ATerm) -> CProgram
+
+hiddens
+  variables
+    Char[0-9]*       -> CHAR
+    Char[\*][0-9]*   -> CHAR*
+    Char[\+][0-9]*   -> CHAR+

@@ -20,8 +20,8 @@ exports
     is-list-elem-list-elem-list(Term) -> Bool
     is-list-elem-list-list(Term)      -> Bool
     is-list-list-elem-list(Term)      -> Bool
-%%%    is-list-elem-list(Term)           -> Bool
-%%%    is-list-list(Term)                -> Bool
+
+
     contains-lhs-pattern(FunId,Term)  -> Bool
     contains-rhs-pattern(FunId,Term)  -> Bool
 

@@ -14,15 +14,14 @@ equations
 %% generated which only returns the normal form.
 
   [ma2c-2'1] signopt2cfuncs(Modid,Signopt,Nametable) = (Funcdef*1,Decl*1),
-             rulesopt2cfuncs(Funcdef*1,Rulesopt,Nametable) = (Funcdef*2,Decl*2),
-             funcdefs2cfuncs(Funcdef*2) = Decl*3,
-             locate-constants-in-decls(Modid,Decl*2 ++ Decl*3) = Decl*4
-             ==========================================================
-             muASF2C-internal(module Modid
+             rulesopt2cfuncs(Modid, Funcdef*1,Rulesopt,Nametable) = (Funcdef*2,Decl*2),
+             funcdefs2cfuncs(Funcdef*2) = Decl*3
+             ===========================================================
+             muASF2C-internal(Modid, module Modid2
                               Signopt
                               Rulesopt,Nametable) =
                #include "asc-support.h"
-               Decl*1 ++ Decl*4 %%++ Decl*3
+               Decl*1 ++ Decl*2 ++ Decl*3
 
   [fds2cf-1'1] funcdefs2cfuncs() =
 

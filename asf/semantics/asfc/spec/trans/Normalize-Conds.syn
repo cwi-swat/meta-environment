@@ -1,6 +1,6 @@
 %%  Normalize-Conds
 
-imports Check-List-Pats
+imports MuASF-Equations-Ops
 
 exports
   context-free syntax

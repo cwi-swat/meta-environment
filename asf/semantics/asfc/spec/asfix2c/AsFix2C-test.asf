@@ -6,8 +6,10 @@ equations
             make-left-linear(Module2) = Module3,
             remove-list-matching(Module3) = Module4,
             normalize-conditions(Module4) = Module5,
-            muASF2C-internal(Module5,Nametable) = Cprogram
-            =====================================
+            Module5 = module modid(Char*1) Signopt Rulesopt,
+            make-muasf-name(funid(Char*1)) = funid(Char*2),
+            muASF2C-internal(modid(Char*2),Module5,Nametable) = Cprogram
+            ============================================================
             asfix2c(Amodule1) = Cprogram
 
   [a2c-2'1] expand-module(Amodule1) = Amodule2,

@@ -1,6 +1,6 @@
 %%  TermAsFix2Sign
 
-imports AsFix2muASFnames TermAsFixAccess MuASF-Equations-Ops
+imports TermAsFixAccess VarEnv
 
 exports
   sorts FNT-tuple

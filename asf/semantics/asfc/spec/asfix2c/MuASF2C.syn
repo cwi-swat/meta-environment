@@ -1,11 +1,11 @@
 %%  MuASF2C
 
-imports MuASF-Sign2C Locate-Constants %%Make-Left-Linear
+imports MuASF-Sign2C  MuASF-Rules2C
 
 exports
   context-free syntax
 %%    muASF2C(Module)                    -> CProgram
-    muASF2C-internal(Module,NameTable) -> CProgram
+    muASF2C-internal(ModId,Module,NameTable) -> CProgram
 
 hiddens
   context-free syntax
@@ -24,6 +24,4 @@ hiddens
 
 hiddens
   variables
-    Char[0-9]*       -> CHAR
-    Char[\*][0-9]*   -> CHAR*
-    Char[\+][0-9]*   -> CHAR+
+    "Char*"[0-9]* -> CHAR*

@@ -5,7 +5,7 @@
 %% into explicit default rules in \muasf.
 module AsFix2muASF-C
 
-imports TermAsFix2muASF AsFix2Sign-C
+imports TermAsFix2muASF 
 
 exports
   sorts MN-struct

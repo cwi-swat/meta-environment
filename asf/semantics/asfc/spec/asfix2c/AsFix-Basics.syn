@@ -8,7 +8,7 @@
 %% A predicate to check whether an equation
 %% is a default equation.
 
-imports AsFixPrint MuASF %%AsFix2muASFnames
+imports AsFix2muASFnames
 
 exports
   sorts SortList

@@ -1,6 +1,6 @@
 %%  Locate-Constants
 
-imports MuASF-Rules2C
+imports MuASF-Conds2C
 
 exports
   context-free syntax

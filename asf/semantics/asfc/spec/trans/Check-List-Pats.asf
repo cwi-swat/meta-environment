@@ -175,9 +175,7 @@ equations
 %% is checked. If it satisfies the ``set'' pattern,
 %% the entire rule is a ``set'' like rule.
 
-%%%  [isr-1'1] is-like-rule("lookup",Rule) = true
-%%%            ==================================
-%%%            is-special-rule(Rule) = true
+
 
   [isr-1'2] is-like-rule("set",Rule) = true
             ===============================
@@ -237,10 +235,7 @@ equations
             contains-lhs-pattern("set",Funid(Term)) =
               is-list-elem-list-elem-list(Term)
 
-%%%  [csp-1'1] is-list-funid(Funid) = true
-%%%            ===========================
-%%%            contains-lhs-pattern("lookup",Funid(Term)) =
-%%%              is-list-elem-list(Term)
+
 
   [csp-1'2] is-list-funid(Funid2) = false
             =============================
@@ -259,15 +254,7 @@ equations
             ===================================
             contains-rhs-pattern("set",Funid(Term)) = true
 
-%%%  [csp-1'1] is-list-funid(Funid) = true,
-%%%            is-list-elem-list(Term) = true
-%%%            ==============================
-%%%            contains-rhs-pattern("lookup",Funid(Term)) = true
 
-%%%  [csp-1'1] is-list-funid(Funid) = true,
-%%%            is-list-list(Term) = true
-%%%            =========================
-%%%            contains-rhs-pattern(lookup,Funid(Term)) = true
 
   [csp-1'2] is-list-funid(Funid2) = false
             =============================
@@ -310,19 +297,3 @@ equations
                                                cons(Term3,Term4)))) = true
 
   [default-illel-1'2] is-list-list-elem-list(Term) = false
-
-%%%  [ilel-1'1] is-list-var-term(Term1) = true,
-%%%             is-list-var-term(Term2) = false,
-%%%             is-list-var-term(Term3) = true
-%%%             ==============================
-%%%             is-list-elem-list(cons(Term1,
-%%%                                    cons(Term2,Term3))) = true
-
-%%%  [default-ilel-1'2] is-list-elem-list(Term) = false
-
-%%%  [ill-1'1] is-list-var-term(Term1) = true,
-%%%            is-list-var-term(Term3) = true
-%%%            ==============================
-%%%            is-list-list(cons(Term1,Term2)) = true
-
-%%%  [default-ill-1'2] is-list-list(Term) = false

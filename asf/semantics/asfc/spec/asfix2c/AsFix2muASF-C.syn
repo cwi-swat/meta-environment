@@ -4,7 +4,7 @@
 %% The only the default equations are translated
 %% into explicit default rules in \muasf.
 
-imports TermAsFix2muASF AsFix2Sign-C
+imports TermAsFix2muASF
 
 exports
   sorts MN-struct

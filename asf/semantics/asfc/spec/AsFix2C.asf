@@ -1,6 +1,9 @@
 equations
 
   [a2c-1'1] asfix2muasf(Amodule) = (Module1,Nametable),
-            muasf2muasf(Module1) = Module2
-            ==============================
-            asfix2c(Amodule) =  muASF2C-internal(Module2,Nametable)
+            muasf2muasf(Module1) = module modid(Char*1) Signopt Rulesopt,
+            make-muasf-name(funid(Char*1)) = funid(Char*2)
+            ==============================================
+            asfix2c(Amodule) =  muASF2C-internal(modid(Char*2),
+                                                 module modid(Char*1) Signopt Rulesopt,
+                                                 Nametable)

@@ -3,7 +3,7 @@
 %% into \muasf\ names.
 module AsFix2muASFnames
 
-imports AsFixPrint C-Basics %%MuASF-SingleSorted MuASF-ManySorted
+imports AsFixPrint MuASF-Equations-Ops
 
 exports
   context-free syntax
@@ -19,6 +19,9 @@ exports
     "avar2muvar" "(" ATerm ")"      -> Var
     "upper2lower" "(" Literal ")"   -> Literal
     "literal2id" "(" Literal ")"    -> FunId
+
+  context-free syntax
+    "make-muasf-name" "(" FunId ")" -> FunId
 
 hiddens
   context-free syntax

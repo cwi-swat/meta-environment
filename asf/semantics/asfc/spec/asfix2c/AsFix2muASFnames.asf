@@ -151,11 +151,11 @@ equations
 
   [i2mn] get-org-modname(id(literal(""" Char* """)){[module-name,Symbol]}) = Symbol
 
-  [mn2lf] make-c-name(funid(Char*1)) = identifier(Char*2)
+  [mn2lf] make-muasf-name(funid(Char*1)) = funid(Char*2)
           ===============================================
           modname2lf(id(literal(""" Char*1 """))) = funid("l""f""_"Char*2"_")
 
-  [mn2lf] make-c-name(funid(Char*1)) = identifier(Char*2)
+  [mn2lf] make-muasf-name(funid(Char*1)) = funid(Char*2)
           ===============================================
           modname2lf(id(literal(""" Char*1 """)){Symbol}) = funid("l""f""_"Char*2"_")
 
@@ -169,3 +169,19 @@ equations
                "ql(\")\")],w(\"\")," ++
                "l(\"->\"),w(\"\")," ++
                "sort(\"" ++ literal2id(Literal1) ++ "\"),w(\"\"),no-attrs)"
+
+
+  [mcn-1'1] make-muasf-name(funid("-")) = funid("_")
+
+  [mcn-1'2] funid(Char) != funid("-")
+            =========================
+            make-muasf-name(funid(Char)) = funid(Char)
+
+  [mcn-1'3] make-muasf-name(funid(Char*1)) = funid(Char*2)
+            ===============================================
+            make-muasf-name(funid("-" Char*1)) = funid("_" Char*2)
+
+  [mcn-1'4] funid(Char) != funid("-"),
+            make-muasf-name(funid(Char*1)) = funid(Char*2)
+            ===============================================
+            make-muasf-name(funid(Char Char*1)) = funid(Char Char*2)

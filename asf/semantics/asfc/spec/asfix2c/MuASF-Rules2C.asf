@@ -1,11 +1,14 @@
 equations
 
-  [ro2c-1'1] rulesopt2cfuncs(Funcdef*,,Nametable) = (Funcdef*,)
+  [ro2c-1'1] rulesopt2cfuncs(Modid,Funcdef*,,Nametable) = (Funcdef*,)
 
-  [ro2c-1'2] rulesopt2cfuncs(Funcdef*,rules ,Nametable) = (Funcdef*,)
+  [ro2c-1'2] rulesopt2cfuncs(Modid,Funcdef*,rules ,Nametable) = (Funcdef*,)
 
-  [ro2c-1'3] rulesopt2cfuncs(Funcdef*,rules Rule+,(Namepair*,Funid,Aint1,Aint2)) =
-               asfrules2cfuncs(Funcdef*,Rule+,Namepair*)
+  [ro2c-1'3] asfrules2cfuncs(Funcdef*,Rule+,Namepair*) = (Funcdef*2,Decl*1),
+             locate-constants-in-decls(Modid,Decl*1 ) = Decl*2
+             ===============================================================
+             rulesopt2cfuncs(Modid,Funcdef*,rules Rule+,(Namepair*,Funid,Aint1,Aint2)) =
+               (Funcdef*2, Decl*2)
 
 %% If a function occurs as outermost function symbol, it can not
 %% be a constructor function.

@@ -13,3 +13,4 @@ exports
 hiddens
   variables
     Cprogram[0-9]* -> CProgram
+    "Char*"[0-9]* -> CHAR*
