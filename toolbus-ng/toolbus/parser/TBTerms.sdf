@@ -1,0 +1,44 @@
+module TBTerms
+
+imports Integers 
+
+imports asf/Comments
+
+exports
+
+  sorts Id Vname  TBTerm TBTermList Var GenVar
+  sorts String  L-Char EscChar
+
+  lexical syntax
+    [a-z] [A-Za-z0-9\-]* 	-> Id
+    "\\" ~[] 			-> EscChar {avoid}
+    ~[\0-\31\"\\] \/ [\t\n] 	-> L-Char
+    EscChar 			-> L-Char
+    "\"" L-Char* "\"" 		-> String
+    [A-Z] [a-zA-Z0-9]* 		-> Vname
+
+  lexical restrictions
+    Id -/- [A-Za-z0-9\-]
+
+  context-free syntax
+    Int 			-> TBTerm
+    Real			-> TBTerm
+    String 			-> TBTerm 
+    Vname 			-> Var
+
+    Var 			-> GenVar  {cons("var")}
+    Var "?" 			-> GenVar  {cons("resvar")}
+    GenVar 			-> TBTerm
+
+    "<" TBTerm ">" 		-> TBTerm  {cons("placeholder")}
+
+    Id 				-> TBTerm  %% {cons("Id")}
+
+    Id "(" TBTermList ")" 	-> TBTerm  {cons("appl")}
+
+    {TBTerm ","}* 		-> TBTermList
+
+    "[" TBTermList "]" 		-> TBTerm  {cons("termlist")}
+
+
+ 

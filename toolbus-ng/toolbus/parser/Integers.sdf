@@ -1,0 +1,20 @@
+module Integers
+exports
+  imports asf/Comments
+
+  sorts NatCon Nat Int Real
+
+  lexical syntax
+    [0-9]+ 		-> NatCon
+
+  lexical restrictions
+    NatCon -/- [0-9]
+
+  context-free syntax
+    NatCon		-> Nat 	{cons("natcon")}
+    Int "." NatCon 	-> Real {cons("real")}
+    "(" Nat ")" 	-> Nat  {bracket}
+    Nat 		-> Int
+    "+" Nat 		-> Int  {cons("posint")}
+    "-" Nat 		-> Int  {cons("negint")}
+    "(" Int ")" 	-> Int  {bracket}

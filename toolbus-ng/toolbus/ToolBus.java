@@ -3,6 +3,7 @@
  */
 
 package toolbus;
+import java.io.IOException;
 import java.util.*;
 import java.util.Vector;
 
@@ -37,6 +38,26 @@ public class ToolBus {
   
   public static boolean nextBoolean(){
     return rand.nextBoolean();
+  }
+  
+  public void parse(String filename)throws ToolBusException {
+    ATerm interm;
+    try {
+      interm = factory.readFromFile(filename);
+    } catch (IOException e) {
+      throw new ToolBusException(e.getMessage());
+    }
+    
+    if(interm.getType() != ATerm.APPL || ((ATermAppl) interm).getName()!= "Tscript" || interm.getChildCount() != 2){
+      throw new ToolBusException("ill-formed tree");
+    }
+    
+    ATermList decls = (ATermList) interm.getChildAt(0);
+    ATermList calls = (ATermList) interm.getChildAt(1);
+    
+    System.out.print("decls = " + decls);
+    System.out.println("calls = " + calls);
+      
   }
 
   public void addProcessDefinition(ProcessDefinition PD) throws ToolBusException {

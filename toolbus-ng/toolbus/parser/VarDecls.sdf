@@ -1,0 +1,10 @@
+module VarDecls
+imports TBTerms
+
+exports
+  sorts VarDecl VarDecls
+
+  context-free syntax
+    Var ":" TBTerm 	-> VarDecl 	{cons("vardecl")}
+    Var ":" TBTerm "?" 	-> VarDecl 	{cons("resvardecl")}
+    {VarDecl ","}* 	-> VarDecls

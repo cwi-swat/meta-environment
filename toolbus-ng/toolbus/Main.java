@@ -28,8 +28,9 @@ public class Main {
     //NestedIterTest();
      //DisruptTest();
     //MergeTest();
-    SieveTest();
+    //SieveTest();
     //producerTest();
+    ParseTest();
     //ToolTest();
   }
   
@@ -622,6 +623,15 @@ static void producerTest(){
     
     T.execute();
   } catch (ToolBusException e) { System.out.println(e.getMessage()); }
+  }
+  
+  static void ParseTest(){
+    
+    ToolBus T = new ToolBus();
+    try {
+      T.parse("toolbus/parser/sieve.aterm");
+    } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}
+    
   }
   
   

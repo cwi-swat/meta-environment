@@ -1,0 +1,9 @@
+module Tscript
+imports ProcessDef
+
+exports
+  sorts Tscript ToolBusConfig
+
+  context-free syntax
+    "toolbus" "(" {ProcessCall ","}+ ")" -> ToolBusConfig
+    ProcessDef*  ToolBusConfig		 -> Tscript {cons("Tscript")}
