@@ -144,7 +144,7 @@ in
    ) +
    ( rec-event(UI, compile-module(Str?, OutputDir?)).
      snd-msg(compile-module(Str, OutputDir)).
-     rec-msg(compile-done).
+     rec-msg(compilation-ready(Str)).
      snd-ack-event(UI, compile-module(Str, OutputDir))
    ) +
    ( rec-event(UI, dump-equations(Str?)).

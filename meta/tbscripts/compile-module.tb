@@ -27,28 +27,36 @@ process Compile-module is
 let
   ModuleName    : str,
   OutputDir     : str,
-  AuxModuleName : str,
-  AuxModuleTree : term,
-  Id            : term
+  Id            : term,
+  Syntax        : term,
+  Equations     : term 
 in
     Id := process-id.
     (
       rec-msg(compile-module(ModuleName?, OutputDir?)) .
       snd-note(ui-status(statf(Id, "Compiling %s", [ModuleName]))).
-      snd-msg(process-eqs(ModuleName)) .
-      rec-msg(eqs-processed(ModuleName)) .
-      snd-msg(compiler-output-dir(OutputDir)).
-      snd-msg(reshuffle-module(ModuleName, OutputDir)) .
+      snd-msg(get-all-sdf2-definitions(trm(ModuleName))) .
       (
-        rec-msg(new-aux-module(AuxModuleName?, AuxModuleTree?)) .
-        snd-note(ui-status(statf(Id, "Generating %s/%s.c",[OutputDir, AuxModuleName]))).
-        snd-msg(generate-code(AuxModuleName, AuxModuleTree)) .
-        rec-msg(generate-code-done(AuxModuleName)).
-        snd-note(ui-status(endstat(Id)))
-      ) *
-      rec-msg(reshuffle-done) .
-      snd-msg(compile-done).
-      snd-note(ui-status(endstat(Id)))
+        rec-msg(syntax(Syntax?)) .
+        snd-msg(process-eqs(ModuleName)) .
+        rec-msg(eqs-processed(ModuleName)) .
+        snd-msg(get-all-equations(ModuleName)) .
+        (
+          rec-msg(all-equations(Equations?)) .
+          snd-msg(compiler-output-dir(OutputDir)) .
+          snd-msg(compile-module(ModuleName, Syntax, Equations)) .
+          rec-msg(compilation-done(ModuleName))
+        +
+          rec-msg(equations-incomplete) .
+          snd-note(ui-status(errorf("Equations incomplete for %s",
+                                    [ModuleName])))
+        )
+      +
+        rec-msg(no-syntax) .
+        snd-note(ui-status(errorf("Syntax incomplete for %s", [ModuleName])))
+      ) .
+      snd-msg(compilation-ready(ModuleName)) .
+      snd-note(ui-status(endstat(Id))) 
     )*
     delta
 
