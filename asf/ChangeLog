@@ -1,4 +1,6 @@
-
+2003/04/29 (markvdb@cwi.nl)
+ * Fixed the annoying bug wrt unnecessary warnings in case of parameters.
+ 
 2003/02/14 (jurgenv@cwi.nl)
  * Fixed a minor bug in asf-operations, renaming in modules that have no 
    "equations" keyword failed and resulted in an abort.
