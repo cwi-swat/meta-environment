@@ -1,6 +1,7 @@
 
     SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
+    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,130 +19,66 @@
 
 $Id$
 
-This is the README file for the SGLR distribution.
+SGLR Scannerless Generalized LR parser
 
 
-Installation instructions:
+Installation Instructions
+=========================
 
+1) Required packages.
 
- * Prerequisite tools
+   -GNU make, available from:
+      www.gnu.org
 
-   To compile this distribution you will need the following items:
+   -The ATerm library, available from:
+      www.cwi.nl/projects/MetaEnv/
 
-    -- GNU make, from <http://www.gnu.org/software/make/make.html>
-    -- the common development utilities typically existent in a basic
-         UNIXish environment.
+   -The pt-support library, available from:
+      www.cwi.nl/projects/MetaEnv/
+ 
+   Before building SGLR, you should first install these packages.       
 
+2) Configuring SGLR.
 
-  * Optional items
+   Assuming that the aterm library and  the pt-support library
+   are installed in <aterm> and <pt-support> respectively and 
+   that SGLR should be installed in <sglr> then the following 
+   command will configure sglr accordingly:
 
-    The following items provide (optional) extra functionality, or
-    enable alternative builds.
+   ./configure --prefix=<sglr> --with-aterm=<aterm> \
+               --with-pt-support=<pt-support> 
 
-    -- the Boehm Garbage Collector, available at
-       <http://reality.sgi.com/employees/boehm_mti/gc.html>.
-       Make as appropriate for your system; install the resulting `gc.a'
-       as libgc.a in an appropriate place and install `gc.h' in an
-       appropriate include directory.
-       With Boehm GC installed, sglr's `..-gc' compilation targets can
-       be used (read parser/Makefile.in if interested).  It should be
-       noted that even the term `experimental' is a euphemism at best,
-       when using it in reference to to BoehmGC versions of the sglr
-       parser.
-       Hence, strict disclaimers about operating heavy machinery and
-       controlling thermonuclear facilities and devices most certainly
-       apply here.
+   If you use gcc, sglr is built with "gcc -Wall -g -O2". If you prefer
+   different options use --with-cflags="<options>" when you run configure.
 
+   ./configure --help gives a detailed list of configuration options.
 
-* Platform support
+3) Building SGLR.
 
-     The SGLR parser has been installed successfully on the following
-     platforms:
+   Assuming that GNU make is called "gmake" on your system then the
+   following commands will build and install SGLR:
 
-     -- Sun Solaris/Sparc >= 2.5, Sun Solaris/iX86 >= 2.6
-     -- SGI IRIX/Mips >= 5.2
-     -- NetBSD/PowerPC, NetBSD/iX86 >= 1.4
-     -- Mac OS X Server/PowerPC >= 1.0, Mac OS X/PPC >= DP2
-     -- LinuxPPC/PowerPC >= 2.0, MkLinux/PowerPC 3.0, Linux/iX86 >= 2.0
+   gmake
+   gmake install 
 
+4) Checking SGLR.
 
-  * Dependencies
+   SGLR can be tested via:
 
-    The SGLR distribution depends on some other distributions.  Using
-    CVS, you can get these distributions as follows (assuming you have
-    an account at CWI.  External distribution will be available at a
-    later stage):
+   gmake check
 
-    -- cd to the directory just above sglr (sglr/..)
-    -- issue the following commands:
-         $ cvs -d gondel.cwi.nl:/ufs/gipe/CVS checkout aterm
-         $ cvs -d gondel.cwi.nl:/ufs/gipe/CVS checkout toolbus
-       (and, if you hadn't done so already)
-         $ cvs -d gondel.cwi.nl:/ufs/gipe/CVS checkout sglr
+5) Bug reporting and support.
 
-    You should now have a directory containing the `aterm', `toolbus'
-    and `sglr' directories.  If so, then everything is set up for
-    configuration and compilation.
+   Please report bugs via:
 
+   http://www.cwi.nl/htbin/MetaEnv/meta-bugs
 
-  * Configuring and compiling: final installation
+   This is the general bug reporting page of the ASF+SDF Meta-Environment.
 
-    Let's assume the `aterm', `toolbus' and `sglr' directories are
-    all located in a directory `/some/path'.  We also assume that
-    the `make' command is in fact GNU make (you may have use `gmake' or
-    `gnumake', depending on your site's configuration).  Furthermore,
-    you should make sure that your java installation's setup is correct,
-    and that your CLASSPATH variable points to the Java classes that
-    came with your JDK.
+   Support can be obtained via:
 
-    Here is the basic set-up.  These commands are the minimal config
-    options for the Meta-Environment to compile.  Note that the order
-    of execution is significant.  This will install everything in the
-    directories /some/path/{bin,lib,include}.
+   meta-support@cwi.nl
 
-    Make sure that your PATH points to the above /path/to/meta/bin
-    directory, for instance by typing:
+6) Known bugs.
 
-      $ PATH=/some/path/bin:${PATH}; export PATH
-
-    for the sh family of shells, or alternatively (for csh-ish shells):
-
-      % setenv PATH /some/path/bin:${PATH}
-
-    If there are no configure files in the sub-directories: toolbus, aterm,
-    and new-met, please run autoconf to generate the configure file in each
-    of these sub-directories.
-
-    Then proceed as follows:
-
-      $ cd /some/path
-      $ cd toolbus
-      $ ./configure --prefix=/some/path --with-java
-      $ make install
-      $ cd ../aterm
-      $ autoconf
-      $ ./configure --prefix=/some/path
-      $ make install
-      $ cd ../sglr
-      $ ./configure --prefix=/some/path --with-toolbus=/some/path
-      $ make install
-
-    At this point, everything should be configured, compiled, and
-    installed.  Once you have added the path to the directory
-    /some/path/bin to your PATH (see above), you are all set up.
-
-    If you use gcc, sglr is built with "gcc -Wall -g -O2". If you prefer
-    different options use --with-cflags="<options>" when you run configure.
-
-    The SGLR developers wish you wads of parsing joy; and may all your
-    trees amply bear fruit.
-
-
-
-
-
-
-               ``I must Create a System, or be enslav'd by another Man's;
-                 I will not Reason and Compare: my business is to Create.''
-
-                           -- William Blake, `Jerusalem'
+   None.
