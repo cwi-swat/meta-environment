@@ -1,0 +1,168 @@
+%%%H%
+%%%H% $Id$
+%%%H%
+%%%H% This file is part of the specification
+%%%H%    "A data-flow high abstraction language"
+%%%H%
+%%%H% Copyright (c) Leon Moonen, 1996, 1997
+%%%H%
+%%%H% Programming Research Group, University of Amsterdam
+%%%H% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%H% mail:leon@fwi.uva.nl http://adam.fwi.uva.nl/~leon/
+%%%H%
+equations
+
+%% \ifundef{ShowNatEquations}
+%% Equations for naturals omitted.
+%% \else
+
+[leading-zero]  natcon("0" c+) = natcon(c+)
+
+%% Successor and predecessor
+
+[succ0]  succ(n) = n+1
+[pred0]  pred(n) = n-1
+
+%% Addition
+
+[add1]  0 + n = n
+[add2]  n + 0 = n
+
+%% Addition of single digit natural numbers
+
+[add3]   1 + 1 = 2     [add4]   1 + 2 = 3     [add5]   1 + 3 = 4
+[add6]   1 + 4 = 5     [add7]   1 + 5 = 6     [add8]   1 + 6 = 7
+[add9]   1 + 7 = 8     [add10]  1 + 8 = 9     [add11]  1 + 9 = 10
+[add12]  2 + 1 = 3     [add13]  2 + 2 = 4     [add14]  2 + 3 = 5
+[add15]  2 + 4 = 6     [add16]  2 + 5 = 7     [add17]  2 + 6 = 8
+[add18]  2 + 7 = 9     [add19]  2 + 8 = 10    [add20]  2 + 9 = 11
+[add21]  3 + 1 = 4     [add22]  3 + 2 = 5     [add23]  3 + 3 = 6
+[add24]  3 + 4 = 7     [add25]  3 + 5 = 8     [add26]  3 + 6 = 9
+[add27]  3 + 7 = 10    [add28]  3 + 8 = 11    [add29]  3 + 9 = 12
+[add30]  4 + 1 = 5     [add31]  4 + 2 = 6     [add32]  4 + 3 = 7
+[add33]  4 + 4 = 8     [add34]  4 + 5 = 9     [add35]  4 + 6 = 10
+[add36]  4 + 7 = 11    [add37]  4 + 8 = 12    [add38]  4 + 9 = 13
+[add39]  5 + 1 = 6     [add40]  5 + 2 = 7     [add41]  5 + 3 = 8
+[add42]  5 + 4 = 9     [add43]  5 + 5 = 10    [add44]  5 + 6 = 11
+[add45]  5 + 7 = 12    [add46]  5 + 8 = 13    [add47]  5 + 9 = 14
+[add48]  6 + 1 = 7     [add49]  6 + 2 = 8     [add50]  6 + 3 = 9
+[add51]  6 + 4 = 10    [add52]  6 + 5 = 11    [add53]  6 + 6 = 12
+[add54]  6 + 7 = 13    [add55]  6 + 8 = 14    [add56]  6 + 9 = 15
+[add57]  7 + 1 = 8     [add58]  7 + 2 = 9     [add59]  7 + 3 = 10
+[add60]  7 + 4 = 11    [add61]  7 + 5 = 12    [add62]  7 + 6 = 13
+[add63]  7 + 7 = 14    [add64]  7 + 8 = 15    [add65]  7 + 9 = 16
+[add66]  8 + 1 = 9     [add67]  8 + 2 = 10    [add68]  8 + 3 = 11
+[add69]  8 + 4 = 12    [add70]  8 + 5 = 13    [add71]  8 + 6 = 14
+[add72]  8 + 7 = 15    [add73]  8 + 8 = 16    [add74]  8 + 9 = 17
+[add75]  9 + 1 = 10    [add76]  9 + 2 = 11    [add77]  9 + 3 = 12
+[add78]  9 + 4 = 13    [add79]  9 + 5 = 14    [add80]  9 + 6 = 15
+[add81]  9 + 7 = 16    [add82]  9 + 8 = 17    [add83]  9 + 9 = 18
+
+%% Addition of multiple digit natural numbers
+
+[add84] natcon(c1)  + natcon(c2)                   = natcon(c* c),
+        natcon(c+1) + natcon(c+2) + natcon("0" c*) = natcon(c+)
+        ========================================================
+        natcon(c+1 c1) + natcon(c+2 c2) = natcon(c+ c)
+
+[add85]   natcon(c1) + natcon(c2) = natcon(c* c),
+        natcon ("0" c*1) + natcon(c+2) + natcon("0" c*) = natcon(c+)
+        ========================================================
+        natcon(c*1 c1) + natcon(c+2 c2) = natcon(c+ c)
+
+[add86] natcon(c1) + natcon(c2) = natcon(c* c),
+        natcon (c+1) + natcon("0" c*2) + natcon("0" c*) = natcon(c+)
+        ========================================================
+        natcon(c+1 c1) + natcon(c*2 c2) = natcon(c+ c)
+
+%% Cut off subtraction
+
+[cos1]  natcon(c) -// natcon(c) = 0
+[cos2]  natcon(c) -// 0         = natcon(c)
+
+%% Cut off subtraction for single digit natural numbers
+
+[cos3]   2 -// 1 = 1
+[cos4]   3 -// 1 = 2     [cos5]   3 -// 2 = 1
+[cos6]   4 -// 1 = 3     [cos7]   4 -// 2 = 2     [cos8]   4 -// 3 = 1
+[cos9]   5 -// 1 = 4     [cos10]  5 -// 2 = 3     [cos11]  5 -// 3 = 2
+[cos12]  5 -// 4 = 1
+[cos13]  6 -// 1 = 5     [cos14]  6 -// 2 = 4     [cos15]  6 -// 3 = 3
+[cos16]  6 -// 4 = 2     [cos17]  6 -// 5 = 1
+[cos18]  7 -// 1 = 6     [cos19]  7 -// 2 = 5     [cos20]  7 -// 3 = 4
+[cos21]  7 -// 4 = 3     [cos22]  7 -// 5 = 2     [cos23]  7 -// 6 = 1
+[cos24]  8 -// 1 = 7     [cos25]  8 -// 2 = 6     [cos26]  8 -// 3 = 5
+[cos27]  8 -// 4 = 4     [cos28]  8 -// 5 = 3     [cos29]  8 -// 6 = 2
+[cos30]  8 -// 7 = 1
+[cos31]  9 -// 1 = 8     [cos32]  9 -// 2 = 7     [cos33]  9 -// 3 = 6
+[cos34]  9 -// 4 = 5     [cos35]  9 -// 5 = 4     [cos36]  9 -// 6 = 3
+[cos37]  9 -// 7 = 2     [cos38]  9 -// 8 = 1
+[cos39]  10 -// 1 = 9    [cos40]  10 -// 2 = 8    [cos41]  10 -// 3 = 7
+[cos42]  10 -// 4 = 6    [cos43]  10 -// 5 = 5    [cos44]  10 -// 6 = 4
+[cos45]  10 -// 7 = 3    [cos46]  10 -// 8 = 2    [cos47]  10 -// 9 = 1
+
+%% Greater than
+
+[gt1]   natcon(c1) -// natcon(c2) = natcon(c), natcon(c) != 0
+        =====================================================
+        gt(natcon(c1), natcon(c2)) = true
+
+[gt2]   gt(natcon(c+1 c1), natcon(c2)) = true
+
+[gt3]   gt(natcon(c+ c1), natcon(c+ c2)) = gt(natcon(c1), natcon(c2))
+
+[gt4]   gt(natcon(c+1), natcon(c+2)) = true
+        =========================================
+        gt(natcon(c+1 c1), natcon(c+2 c2)) = true
+
+[default-gt5]     gt(nc1,nc2) = false
+
+%% Partial substraction
+
+[ps1]   nc >- 0 = nc
+
+[ps2]   natcon(c1) >- natcon(c2) = natcon(c1) -// natcon(c2)
+
+[ps3]   natcon(c1)  -// natcon(c2)    = natcon(c3),
+        natcon (c+1) >- natcon("0" c*2) = natcon(c+)
+        ==================================================
+        natcon(c+1 c1) >- natcon(c*2 c2) = natcon(c+ c3)
+
+[ps4]   natcon(c2) -// natcon(c1) = natcon(c3),
+        10 -// natcon(c3) = natcon(c),
+        natcon ("0" c*2) + 1 = nc,
+        natcon(c+1) >- nc = natcon(c+)
+        ===============================================
+        natcon(c+1 c1) >- natcon(c*2 c2) = natcon(c+ c)
+
+%% Subtraction of naturals
+
+[sub1]  nc1 - nc2 = nc1 >- nc2    when nc1 >= nc2 = true
+[sub2]  nc1 - nc2 = nan           when nc1 >= nc2 != true
+
+%% Multiplication of naturals
+
+[mul1]  nc * 0 = 0
+[mul2]  nc * 1 = nc
+
+[mul3]  gt(natcon(c), 1) = true
+        =======================================
+        nc * natcon(c) = nc + nc * (natcon(c) - 1)
+
+[mul4]  natcon(c+1) * natcon(c+2) = natcon(c+)
+        ======================================================================
+        natcon(c+1) * natcon(c+2 c) = natcon(c+ "0") + natcon(c+1) * natcon(c)
+
+
+%% Relational operators
+
+[gt0]    nc1 > nc2 = gt(nc1, nc2)
+
+[geq1]  nc1 >= nc2 = true               when nc1 = nc2
+[geq2]  nc1 >= nc2 = nc1 > nc2          when nc1 != nc2
+
+[leq]   nc1 <= nc2 = ~ ( nc1 < nc2 )
+
+[lt]    nc1 <  nc2 = ~ ( nc1 <= nc2 )
+
+%%\fi

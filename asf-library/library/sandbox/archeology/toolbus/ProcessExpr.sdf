@@ -1,0 +1,38 @@
+%%  ProcessExpr
+
+imports Atom VarDecls TimeExpr
+
+exports
+  sorts ProcessExpr
+  context-free syntax
+    Atom                        -> ProcessExpr
+    Atom TimeExpr               -> ProcessExpr
+    "create" "(" ProcessName "(" {TERM ","}* ")""," GEN-VAR ")"  -> ProcessInvocation
+    "create" "(" ProcessName "," GEN-VAR ")"   -> ProcessInvocation
+    ProcessName             -> ProcessInvocation
+    ProcessName "(" {TERM ","}* ")"-> ProcessInvocation
+    ProcessInvocation                   -> ProcessExpr
+    ProcessExpr "." ProcessExpr -> ProcessExpr {left}
+    ProcessExpr "+" ProcessExpr -> ProcessExpr {left}
+    ProcessExpr "*" ProcessExpr -> ProcessExpr {left}
+    ProcessExpr "||" ProcessExpr-> ProcessExpr {left}
+    "(" ProcessExpr ")"         -> ProcessExpr {bracket}
+    "let" VarDecls "in" ProcessExpr "endlet" -> ProcessExpr
+    "if" TERM "then" ProcessExpr "fi" -> ProcessExpr
+    "if" TERM "then" ProcessExpr "else" ProcessExpr "fi" -> ProcessExpr
+  priorities
+        ProcessExpr "." ProcessExpr -> ProcessExpr
+        > ProcessExpr "*" ProcessExpr -> ProcessExpr
+        > ProcessExpr "||" ProcessExpr -> ProcessExpr
+     > ProcessExpr "+" ProcessExpr -> ProcessExpr
+
+  variables
+    PExpr[0-9']*        -> ProcessExpr
+    E[0-9']*            -> ProcessExpr
+    P[0-9']*            -> ProcessExpr
+    C[0-9']*            -> Atom
+    PInvoc[0-9']*       -> ProcessInvocation
+    PInvocs[0-9']*      -> { ProcessInvocation "," }*
+    PInvocs"+"[0-9']*   -> { ProcessInvocation "," }+
+    PName[0-9']*        -> ProcessName
+    Pnm[0-9']*          -> ProcessName

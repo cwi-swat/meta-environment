@@ -1,0 +1,14 @@
+   imports Layout
+   exports
+     sorts STR-CON STRING
+     lexical syntax
+        "\"" ~[\"\n]* "\""      -> STR-CON
+     context-free syntax
+        STR-CON                 -> STRING
+        STRING "||" STRING      -> STRING {left}
+     variables
+        Str-con [0-9']*         -> STR-CON
+        Str [0-9']*             -> STRING
+   hiddens
+      variables
+        Chars [12]              -> CHAR*

@@ -1,0 +1,16 @@
+%%  TimeExpr
+
+imports Terms
+
+exports
+  sorts TimeExpr Delay TimeOut
+  context-free syntax
+   delay       -> Delay
+   abs-delay   -> Delay
+   timeout     -> TimeOut
+   abs-timeout -> TimeOut
+   Delay"("TERM-LIST")" -> TimeExpr
+   Delay"("TERM-LIST")" TimeOut"("TERM-LIST")" -> TimeExpr
+
+variables
+  timeexpr[0-9']* -> TimeExpr

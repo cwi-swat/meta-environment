@@ -1,0 +1,28 @@
+
+equations
+
+%% navigate: traverse labeled program to node of slice criterion.
+
+    [Na1]  navigate(begin Decls L_Series end, dwn(nxt(Path))) =
+             navigate(L_Series, Path)
+
+    [Na2]  navigate(L_Stat; L_Stat*, dwn(empty())) = L_Stat
+
+    [Na3]  navigate(L_Stat; L_Stat+, dwn(nxt(Path))) =
+             navigate(L_Stat+, dwn(Path))
+
+    [Na4]  navigate(Ref while Exp do L_Series od; L_Stat*, dwn(dwn(nxt(Path)))) =
+             navigate(L_Series, Path)
+
+    [Na5]  navigate(Ref if Exp then L_Series else L_Series' fi; L_Stat*,
+                    dwn(dwn(nxt(dwn(Path))))) =
+             navigate(L_Series, dwn(Path))
+
+    [Na6]  navigate(Ref if Exp then L_Series else L_Series' fi; L_Stat*,
+                    dwn(dwn(nxt(nxt(dwn(Path)))))) =
+             navigate(L_Series', dwn(Path))
+
+%% makeslice : construct slice of program w.r.t. node at given path.
+
+    [MS1]  makeslice(L_Program, Path) =
+             slice(L_Program, get-ref(navigate(L_Program, Path)))

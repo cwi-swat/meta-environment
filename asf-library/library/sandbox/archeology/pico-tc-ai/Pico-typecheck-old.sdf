@@ -1,0 +1,10 @@
+%%  Pico-typecheck-old
+
+imports Type-environments
+exports
+   context-free syntax
+       tc PROGRAM            -> BOOL
+       "[" DECLS "]"         -> TENV
+       TENV SERIES       -> BOOL
+       TENV "." EXP          -> TYPE
+       compatible(TYPE,TYPE) -> BOOL

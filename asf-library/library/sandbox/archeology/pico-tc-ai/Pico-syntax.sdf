@@ -1,0 +1,30 @@
+imports Layout Identifiers Integers Strings Booleans
+exports
+  sorts PROGRAM DECLS ID-TYPE SERIES STATEMENT EXP TYPE
+  context-free syntax
+     begin DECLS SERIES end               -> PROGRAM
+     declare {ID-TYPE  ","}* ";"          -> DECLS
+     ID ":" TYPE                          -> ID-TYPE
+     { STATEMENT ";" }*                   -> SERIES
+     ID ":=" EXP                          -> STATEMENT
+     if EXP then SERIES else SERIES fi    -> STATEMENT
+     while EXP do SERIES od               -> STATEMENT
+
+     EXP "+" EXP                          -> EXP { left }
+     EXP "-" EXP                          -> EXP { left }
+     EXP "||" EXP                         -> EXP { left }
+     ID                                   -> EXP
+     NAT-CON                              -> EXP
+     STR-CON                              -> EXP
+     "(" EXP ")"                          -> EXP { bracket }
+
+     natural                       -> TYPE
+     string                        -> TYPE
+  variables
+     D                    -> DECLS
+     Id-type-list         -> { ID-TYPE "," }*
+     S [12]*              -> SERIES
+     Stat                 -> STATEMENT
+     Stat-list            -> {STATEMENT ";"}+
+     Exp [12']*           -> EXP
+     Type                 -> TYPE

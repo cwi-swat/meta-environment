@@ -1,0 +1,56 @@
+\MODULEBEGIN{Pico-typecheck-new}
+\IMPORTS{\LEX{Type-environments}}
+\EXPORTSBEGIN{}
+\CFGBEGIN{}
+\CFGFUN{\LEX{tc} \ULEX{PROGRAM}}{\ULEX{BOOL}}{}
+ \CFGFUN{\QLEX{$[$} \ULEX{DECLS} \QLEX{$]$}}{\ULEX{TENV}}{}
+ \CFGFUN{\ULEX{TENV} \ULEX{SERIES}}{\ULEX{BOOL}}{}
+ \CFGFUN{\ULEX{TENV} \QLEX{$.$} \ULEX{EXP}}{\ULEX{TYPE}}{}
+ \\
+\CFGFUN{\ULEX{EXP} \QLEX{$:=$} \ULEX{EXP}}{\ULEX{STATEMENT}}{}
+ \CFGFUN{\ULEX{STATEMENT}}{\ULEX{BOOL}}{}
+ \CFGFUN{\ULEX{TYPE}}{\ULEX{EXP}}{}
+\CFGEND{}
+\EXPORTSEND{}
+\EQUATIONSBEGIN{}
+\EQU{\LEX{$[$}\LEX{Tc1}\LEX{$]$}}{\LEX{tc}~\penalty+5\LEX{begin}~\penalty+10\VAR{\LEX{D}}{}~\penalty+10\VAR{\LEX{S}}{}~\penalty+10\LEX{end}}{\LEX{$[$}\VAR{\LEX{D}}{}\LEX{$]$}~\penalty+5\VAR{\LEX{S}}{}}
+\\
+\CEQU{\LEX{$[$}\LEX{Tc2}\LEX{$]$}}%
+{\COND{\LEX{$[$}\LEX{declare}~\penalty+10\VAR{\LEX{Id}}{}~\penalty+20\LEX{$:$}~\penalty+20\VAR{\LEX{Type}}{},\VAR{\LEX{Id-type-list}}{}\LEX{$;$}\LEX{$]$}}{\LEX{$[$}\VAR{\LEX{Id}}{}~\penalty+15\LEX{$:$}~\penalty+15\VAR{\LEX{Type}}{},\VAR{\LEX{Pair-list}}{}\LEX{$]$}}}{{\COND{\LEX{$[$}\LEX{declare}~\penalty+10\VAR{\LEX{Id-type-list}}{}\LEX{$;$}\LEX{$]$}}{\LEX{$[$}\VAR{\LEX{Pair-list}}{}\LEX{$]$}}}}%
+\EQU{\LEX{$[$}\LEX{Tc3}\LEX{$]$}}{\LEX{$[$}\LEX{declare}~\penalty+10\LEX{$;$}\LEX{$]$}}{\LEX{$[$}\LEX{$]$}}
+\\
+\EQU{\LEX{$[$}\LEX{Tc4}\LEX{$]$}}{\VAR{\LEX{Tenv}}{}~\penalty+5\VAR{\LEX{Stat}}{};\VAR{\LEX{Stat-list}}{}}{\VAR{\LEX{Tenv}}{}~\penalty+10\VAR{\LEX{Stat}}{}~\penalty+5\LEX{\&}~\penalty+5\VAR{\LEX{Tenv}}{}~\penalty+10\VAR{\LEX{Stat-list}}{}}
+\\
+\EQU{\LEX{$[$}\LEX{Tc5}\LEX{$]$}}{\VAR{\LEX{Tenv}}{}~\penalty+5}{\CON{true}}
+\\
+\EQU{\LEX{$[$}\LEX{Tc6}\LEX{$]$}}{\VAR{\LEX{Tenv}}{}~\penalty+5\VAR{\LEX{Exp}}{}~\penalty+15\LEX{$:=$}~\penalty+15\VAR{\LEX{Exp}}{$\,'$}}{\VAR{\LEX{Tenv}}{}~\penalty+10\LEX{$.$}~\penalty+10\VAR{\LEX{Exp}}{}~\penalty+5\LEX{$:=$}~\penalty+5\VAR{\LEX{Tenv}}{}~\penalty+10\LEX{$.$}~\penalty+10\VAR{\LEX{Exp}}{$\,'$}}
+\\
+\BIGEQU{\LEX{$[$}\LEX{Tc7}\LEX{$]$}}{\VAR{\LEX{Tenv}}{}~\penalty+5\LEX{if}~\penalty+15\VAR{\LEX{Exp}}{}~\penalty+15\LEX{then}~\penalty+15\IVAR{\LEX{S}}{1}{}~\penalty+15\LEX{else}~\penalty+15\IVAR{\LEX{S}}{2}{}~\penalty+15\LEX{fi}}{\LEX{if}~\penalty+15\VAR{\LEX{Tenv}}{}~\penalty+20\LEX{$.$}~\penalty+20\VAR{\LEX{Exp}}{}~\penalty+15\LEX{then}~\penalty+15~\penalty+15\LEX{else}~\penalty+15~\penalty+15\LEX{fi}~\penalty+10\LEX{\&}~\penalty+10\VAR{\LEX{Tenv}}{}~\penalty+15\IVAR{\LEX{S}}{1}{}~\penalty+5\LEX{\&}~\penalty+5\VAR{\LEX{Tenv}}{}~\penalty+10\IVAR{\LEX{S}}{2}{}}
+\\
+\EQU{\LEX{$[$}\LEX{Tc8}\LEX{$]$}}{\VAR{\LEX{Tenv}}{}~\penalty+5\LEX{while}~\penalty+15\VAR{\LEX{Exp}}{}~\penalty+15\LEX{do}~\penalty+15\VAR{\LEX{S}}{}~\penalty+15\LEX{od}}{\LEX{while}~\penalty+10\VAR{\LEX{Tenv}}{}~\penalty+15\LEX{$.$}~\penalty+15\VAR{\LEX{Exp}}{}~\penalty+10\LEX{do}~\penalty+10~\penalty+10\LEX{od}~\penalty+5\LEX{\&}~\penalty+5\VAR{\LEX{Tenv}}{}~\penalty+10\VAR{\LEX{S}}{}}
+\\
+\EQU{\LEX{$[$}\LEX{Tc9a}\LEX{$]$}}{\VAR{\LEX{Tenv}}{}~\penalty+5\LEX{$.$}~\penalty+5\VAR{\LEX{Id}}{}}{\LEX{lookup}~\penalty+5\VAR{\LEX{Id}}{}~\penalty+5\LEX{in}~\penalty+5\VAR{\LEX{Tenv}}{}}
+\EQU{\LEX{$[$}\LEX{Tc9b}\LEX{$]$}}{\VAR{\LEX{Tenv}}{}~\penalty+5\LEX{$.$}~\penalty+5\VAR{\LEX{Type}}{}}{\VAR{\LEX{Type}}{}}
+\\
+\EQU{\LEX{$[$}\LEX{Tc10}\LEX{$]$}}{\VAR{\LEX{Nat-con}}{}}{\CON{natural}}
+\EQU{\LEX{$[$}\LEX{Tc11}\LEX{$]$}}{\VAR{\LEX{Str-con}}{}}{\CON{string}}
+\\
+\EQU{\LEX{$[$}\LEX{Tc12}\LEX{$]$}}{\VAR{\LEX{Tenv}}{}~\penalty+5\LEX{$.$}~\penalty+5\IVAR{\LEX{Exp}}{1}{}~\penalty+10\LEX{$+$}~\penalty+10\IVAR{\LEX{Exp}}{2}{}}{\VAR{\LEX{Tenv}}{}~\penalty+10\LEX{$.$}~\penalty+10\IVAR{\LEX{Exp}}{1}{}~\penalty+5\LEX{$+$}~\penalty+5\VAR{\LEX{Tenv}}{}~\penalty+10\LEX{$.$}~\penalty+10\IVAR{\LEX{Exp}}{2}{}}
+\\
+\EQU{\LEX{$[$}\LEX{Tc13}\LEX{$]$}}{\VAR{\LEX{Tenv}}{}~\penalty+5\LEX{$.$}~\penalty+5\IVAR{\LEX{Exp}}{1}{}~\penalty+10\LEX{$-$}~\penalty+10\IVAR{\LEX{Exp}}{2}{}}{\VAR{\LEX{Tenv}}{}~\penalty+10\LEX{$.$}~\penalty+10\IVAR{\LEX{Exp}}{1}{}~\penalty+5\LEX{$-$}~\penalty+5\VAR{\LEX{Tenv}}{}~\penalty+10\LEX{$.$}~\penalty+10\IVAR{\LEX{Exp}}{2}{}}
+\\
+\EQU{\LEX{$[$}\LEX{Tc14}\LEX{$]$}}{\VAR{\LEX{Tenv}}{}~\penalty+5\LEX{$.$}~\penalty+5\IVAR{\LEX{Exp}}{1}{}~\penalty+10\LEX{$||$}~\penalty+10\IVAR{\LEX{Exp}}{2}{}}{\VAR{\LEX{Tenv}}{}~\penalty+10\LEX{$.$}~\penalty+10\IVAR{\LEX{Exp}}{1}{}~\penalty+5\LEX{$||$}~\penalty+5\VAR{\LEX{Tenv}}{}~\penalty+10\LEX{$.$}~\penalty+10\IVAR{\LEX{Exp}}{2}{}}
+\\
+\EQU{\LEX{$[$}\LEX{Tc15}\LEX{$]$}}{\CON{natural}~\penalty+5\LEX{$+$}~\penalty+5\CON{natural}}{\CON{natural}}
+\EQU{\LEX{$[$}\LEX{Tc16}\LEX{$]$}}{\CON{natural}~\penalty+5\LEX{$-$}~\penalty+5\CON{natural}}{\CON{natural}}
+\EQU{\LEX{$[$}\LEX{Tc17}\LEX{$]$}}{\CON{string}~\penalty+5\LEX{$||$}~\penalty+5\CON{string}}{\CON{string}}
+\\
+\EQU{\LEX{$[$}\LEX{Tc18}\LEX{$]$}}{\CON{natural}~\penalty+5\LEX{$:=$}~\penalty+5\CON{natural}}{\CON{true}}
+\EQU{\LEX{$[$}\LEX{Tc19}\LEX{$]$}}{\CON{string}~\penalty+5\LEX{$:=$}~\penalty+5\CON{string}}{\CON{true}}
+\EQU{\LEX{$[$}\LEX{Tc20}\LEX{$]$}}{\LEX{if}~\penalty+5\CON{natural}~\penalty+5\LEX{then}~\penalty+5~\penalty+5\LEX{else}~\penalty+5~\penalty+5\LEX{fi}}{\CON{true}}
+\EQU{\LEX{$[$}\LEX{Tc21}\LEX{$]$}}{\LEX{while}~\penalty+5\CON{natural}~\penalty+5\LEX{do}~\penalty+5~\penalty+5\LEX{od}}{\CON{true}}
+\\
+\CEQU{\LEX{$[$}\LEX{Ext}\LEX{$]$}}%
+{\COND{\VAR{\LEX{Id}}{}~\penalty+5\LEX{$:=$}~\penalty+5\VAR{\LEX{Exp}}{}}{\VAR{\LEX{Exp}}{$\,'$}~\penalty+5\LEX{$:=$}~\penalty+5\VAR{\LEX{Exp}}{}}}{{\COND{\VAR{\LEX{Exp}}{$\,'$}}{\VAR{\LEX{Id}}{}}}}%
+\EQUATIONSEND{}
+\MODULEEND{}

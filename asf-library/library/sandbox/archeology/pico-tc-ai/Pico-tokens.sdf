@@ -1,0 +1,16 @@
+%%  Pico-tokens
+
+exports
+  sorts AOP SOP IF THEN ELSE FI WHILE DO OD ASGN
+  context-free syntax
+    "+"   -> AOP
+    "-"   -> AOP
+    "||"  -> SOP
+    if    -> IF
+    then  -> THEN
+    else  -> ELSE
+    fi    -> FI
+    while -> WHILE
+    do    -> DO
+    od    -> OD
+    ":="  -> ASGN

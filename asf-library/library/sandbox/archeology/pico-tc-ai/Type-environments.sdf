@@ -1,0 +1,10 @@
+   imports Identifiers Pico-syntax-new %% Pico-syntax 
+   exports
+     sorts TENV PAIR
+     context-free syntax
+        ID ":" TYPE            -> PAIR
+        "[" {PAIR ","}* "]"    -> TENV
+        lookup ID in TENV      -> TYPE
+     variables
+        Pair-list              -> {PAIR ","}*
+        Tenv                   -> TENV

@@ -1,0 +1,43 @@
+%%  Pico-label
+
+imports
+    Pico-syntax Lisp
+
+exports
+    sorts
+        L_PROGRAM L_SERIES L_STATEMENT REF
+    context-free syntax
+        begin DECLS L_SERIES end                        -> L_PROGRAM
+        { L_STATEMENT ";" }*                            -> L_SERIES
+        REF ID ":=" EXP                                 -> L_STATEMENT
+        REF if EXP then L_SERIES else L_SERIES fi       -> L_STATEMENT
+        REF while EXP do L_SERIES od                    -> L_STATEMENT
+
+        label "(" PROGRAM ")"                           -> L_PROGRAM
+        label "(" SERIES ")"                            -> L_SERIES
+        label "(" STATEMENT ")"                         -> L_STATEMENT
+
+        unlabel "(" L_PROGRAM ")"                       -> PROGRAM
+        unlabel "(" L_SERIES ")"                        -> SERIES
+        unlabel "(" L_STATEMENT ")"                     -> STATEMENT
+
+        ID                                              -> REF
+        newlabel "(" ")"                                -> REF
+        "LISP" LISP                                     -> REF
+        "REF" LISP                                      -> REF
+        "<<" REF ">>"                                   -> LISP
+
+        "IF" BOOL "THEN" L_SERIES "ELSE" L_SERIES "FI"  -> L_SERIES
+        "is-empty" "(" L_SERIES ")"                     -> BOOL
+
+    variables
+        L_Program[']*                                   -> L_PROGRAM
+        L_Series[']*                                    -> L_SERIES
+        IdType[']*                                      -> ID-TYPE
+        IdType[*][']*                                   -> { ID-TYPE "," }*
+        Stat                                            -> STATEMENT
+        Stat[*][']*                                     -> { STATEMENT ";" }*
+        L_Stat[']*                                      -> L_STATEMENT
+        L_Stat[*][']*                                   -> { L_STATEMENT ";" }*
+        L_Stat[+][']*                                   -> { L_STATEMENT ";" }+
+        Ref[0-9']*                                      -> REF

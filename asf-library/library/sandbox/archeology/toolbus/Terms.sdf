@@ -1,0 +1,44 @@
+imports Integers Booleans
+exports
+  sorts ID VNAME STRING TERM TERM-LIST VAR GEN-VAR
+
+  lexical syntax
+     %%  [ \t\n]                             -> LAYOUT
+        "%%" ~[\n]*                        -> LAYOUT
+        [a-z][A-Za-z0-9\-]*                -> ID
+        ~[\"]                              -> InString
+        "\\\""                             -> InString
+        "\"" InString* "\""                   -> STRING
+        [A-Z][a-zA-Z0-9]*                     -> VNAME
+  context-free syntax
+
+        BOOL                            -> TERM
+        INT                             -> TERM
+        REAL                            -> TERM
+        STRING                          -> TERM
+
+        VNAME                           -> VAR
+
+
+        VAR                             -> GEN-VAR
+        VAR "?"                         -> GEN-VAR
+        GEN-VAR                         -> TERM
+        "<" TERM ">"                    -> TERM
+        ID                              -> TERM
+        ID "(" TERM-LIST ")"            -> TERM
+        {TERM ","}*                     -> TERM-LIST
+        "[" TERM-LIST "]"               -> TERM
+
+
+  variables
+        T [0-9']*               -> TERM
+        Ts [0-9']*              -> {TERM ","}+
+        OptTs [0-9']*           -> {TERM ","}*
+        Vname [0-9']*           -> VNAME
+        Var [0-9']*             -> VAR
+        Vars [0-9']*            -> {VAR ","}*
+        GenVar [0-9']*          -> GEN-VAR
+        GenVars [0-9']*         -> {GEN-VAR ","}*
+        Id [0-9']*              -> ID
+        Int                     -> INT
+        String [0-9']*          -> STRING

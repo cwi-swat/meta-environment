@@ -1,0 +1,21 @@
+%%  FlowGraph
+
+imports
+    Pico-label Graphs
+
+exports
+    sorts
+        REFS
+    context-free syntax
+        REF                                             -> NODE
+        "cfg"                                           -> LABEL
+
+        fg  "(" L_PROGRAM ")"                           -> GRAPH
+        fgs "(" L_SERIES "," EDGE* ")"                  -> GRAPH
+        exits "(" L_SERIES ")"                          -> NODES
+        entries "(" L_SERIES ")"                        -> NODES
+        get-ref "(" L_STATEMENT ")"                     -> REF
+
+    variables
+        Ref[*][']*                                      -> REF*
+        Ref[+][']*                                      -> REF+

@@ -1,0 +1,23 @@
+equations
+[x] string(""" cs """) ++ string(""" cs' """) = string(""" cs cs' """)
+
+[x] pp([]) =  "[]"
+[x] pp([OptTs]) = string(""" "[" c cs "]" """)
+    ====================================
+    pp([T,OptTs]) = "[" ++ pp(T) ++ "," ++ string(""" c cs """) ++ "]"
+[x] pp([OptTs]) = string(""" "[" "]" """)
+    ====================================
+    pp([T,OptTs]) = "[" ++ pp(T) ++ "]"
+[x] pp([OptTs]) = string(""" "[" cs "]" """)
+    ========================================
+    pp(Id(OptTs)) = pp(Id) ++ "(" ++ string(""" cs """) ++ ")"
+[x] pp(id(cs)) = string(""" cs """)
+[x] pp(<T>) = "<" ++ pp(T) ++ ">"
+[x] pp(vname(cs)) = string(""" cs """)
+[x] pp(vname(cs)?) = string(""" cs """) ++ "?"
+[x] pp(true) = "true"
+[x] pp(false) = "false"
+[x] pp(nat-con(cs)) = string(""" cs """)
+[x] pp(+Nat) = "+" ++ pp(Nat)
+[x] pp(Int.Nat-con) = pp(Int) ++ "." ++ pp(Nat-con)
+[x] pp(string(""" cs """)) = string(""" "\" """ cs "\" """ """)

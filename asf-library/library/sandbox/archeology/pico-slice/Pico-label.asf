@@ -1,0 +1,43 @@
+
+equations
+
+%% label all statements of a Pico program
+
+    [lab1]  label(begin Decls Series end) = begin Decls label(Series) end
+    [lab2]  label() =
+    [lab3]  label(Stat*) = L_Stat*
+            =========================================
+            label(Stat; Stat*) = label(Stat); L_Stat*
+    [lab4]  label( Id := Exp ) = newlabel() Id := Exp
+    [lab5]  label( while Exp do Series od) =
+              newlabel() while Exp do label(Series) od
+    [lab6]  label( if Exp then Series else Series' fi) =
+              newlabel() if Exp then label(Series) else label(Series') fi
+
+%% remove all labels from a labeled Pico program
+
+    [unl1]  unlabel(begin Decls L_Series end) = begin Decls unlabel(L_Series) end
+    [unl2]  unlabel() =
+    [unl3]  unlabel(L_Stat*) = Stat*
+            =================================================
+            unlabel(L_Stat; L_Stat*) = unlabel(L_Stat); Stat*
+    [unl4]  unlabel(Ref Id := Exp) = Id := Exp
+    [unl5]  unlabel(Ref while Exp do L_Series od) = while Exp do unlabel(L_Series) od
+    [unl6]  unlabel(Ref if Exp then L_Series else L_Series' fi) =
+              if Exp then unlabel(L_Series) else unlabel(L_Series') fi
+
+
+%% Let LeLisp generate a new label
+
+    [Newl]  newlabel() = REF (convert-to-lexical << ref01 >> (gensym))
+
+
+%% IF-THEN-ELSE for sort L_SERIES
+
+    [IF1] IF true  THEN L_Series ELSE L_Series' FI = L_Series
+    [IF2] IF false THEN L_Series ELSE L_Series' FI = L_Series'
+
+%% Predicate is-empty for sort L_SERIES
+
+    [ii1] is-empty( ) = true
+    [ii2] is-empty(L_Stat+) = false

@@ -1,0 +1,29 @@
+%%%H%
+%%%H% $Id$
+%%%H%
+%%%H% This file is part of the specification
+%%%H%    "A data-flow high abstraction language"
+%%%H%
+%%%H% Copyright (c) Leon Moonen, 1996, 1997
+%%%H%
+%%%H% Programming Research Group, University of Amsterdam
+%%%H% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%H% mail:leon@fwi.uva.nl http://adam.fwi.uva.nl/~leon/
+%%%H%
+%% \MODULENAME
+imports Layout
+exports
+  sorts Bool
+  context-free syntax
+    true                   -> Bool
+    false                  -> Bool
+    Bool "\\/" Bool        -> Bool {left}
+    Bool "/\\" Bool        -> Bool {left}
+    "~" Bool               -> Bool
+    "(" Bool ")"           -> Bool {bracket}
+  priorities
+      "~" Bool -> Bool
+    > Bool "/\\" Bool -> Bool
+    > Bool "\\/" Bool -> Bool
+  variables
+    b [0-9']*              -> Bool

@@ -1,0 +1,39 @@
+\catcode`@=11
+\expandafter\ifx\csname graph\endcsname\relax \alloc@4\box\chardef\insc@unt\graph\fi
+\expandafter\ifx\csname graphtemp\endcsname\relax \alloc@1\dimen\dimendef\insc@unt\graphtemp\fi
+\catcode`@=12
+\setbox\graph=\vtop{%
+  \vbox to0pt{\hbox{%
+    \special{pn 8}%
+    \special{pa 0 700}%
+    \special{pa 0 500}%
+    \special{pa 200 500}%
+    \special{pa 200 700}%
+    \special{pa 0 700}%
+    \special{ip}%
+    \graphtemp=.6ex \advance\graphtemp by 0.6in
+    \rlap{\kern 0.1in\lower\graphtemp\hbox to 0pt{\hss \specvariable{Nat-con}\hss}}%
+    \special{pa 1300 700}%
+    \special{pa 1300 500}%
+    \special{pa 1500 500}%
+    \special{pa 1500 700}%
+    \special{pa 1300 700}%
+    \special{ip}%
+    \graphtemp=.6ex \advance\graphtemp by 0.6in
+    \rlap{\kern 1.4in\lower\graphtemp\hbox to 0pt{\hss natural\hss}}%
+    \graphtemp=.6ex \advance\graphtemp by 0.6in
+    \rlap{\kern 0.8in\lower\graphtemp\hbox to 0pt{\hss \reductionarrow\hss}}%
+    \special{pa 1300 500}%
+    \special{pa 801 0}%
+    \special{pa 202 499}%
+    \special{sp -0.05}%
+    \special{sh 1}%
+    \special{pa 200 500}%
+    \special{pa 261 417}%
+    \special{pa 293 455}%
+    \special{pa 200 500}%
+    \special{fp}%
+    \kern 1.5in
+  }\vss}%
+  \kern 0.7in
+}

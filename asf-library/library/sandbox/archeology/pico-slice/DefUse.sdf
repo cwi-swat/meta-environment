@@ -1,0 +1,23 @@
+%%  DefUse
+
+imports
+    FlowGraph
+exports
+    sorts
+        ENTRY TABLE ID-LIST
+    context-free syntax
+        NODE "(" ID-LIST "," ID-LIST ")"        -> ENTRY
+        ENTRY*                                  -> TABLE
+        ID*                                     -> ID-LIST
+
+        vars "(" EXP ")"                        -> ID-LIST
+
+        "DU" "(" L_PROGRAM ")"                  -> TABLE
+        "DU-series" "(" L_SERIES "," TABLE ")"  -> TABLE
+
+    variables
+        Id[*][']*                               -> ID*
+        Id[']*                                  -> ID
+        NatCon[']*                              -> NAT-CON
+        StrCon[']*                              -> STR-CON
+        Entry[*][']*                            -> ENTRY*

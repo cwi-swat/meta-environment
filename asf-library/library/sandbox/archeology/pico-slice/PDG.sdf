@@ -1,0 +1,7 @@
+%%  PDG
+
+imports
+    DataDep
+exports
+    context-free syntax
+        "PDG" "(" L_PROGRAM ")"           -> GRAPH

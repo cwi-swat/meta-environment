@@ -1,0 +1,22 @@
+%%  ToolDef
+
+imports Terms
+
+exports
+  sorts ToolDef ToolDefs ToolName
+        ToolAttrib ToolAttribName ToolAttribValue
+  lexical syntax
+    [a-z][a-zA-Z0-9\-]*    -> ToolName
+    [a-z][a-zA-Z\-]*    -> ToolAttribName
+    STRING              -> ToolAttribValue
+  context-free syntax
+    "tool" ToolName "is" "{" ToolAttrib* "}" -> ToolDef
+    "tool" ToolName "(" VarDecls ")" "is" "{" ToolAttrib* "}" -> ToolDef
+    ToolAttribName "=" ToolAttribValue -> ToolAttrib
+    ToolDef*            -> ToolDefs
+  variables
+    TDef[0-9']*         -> ToolDef
+    TDefs[0-9']*        -> ToolDef*
+    TName[0-9']*        -> ToolName
+    TAttribName[0-9']*  -> ToolAttribName
+    TAttribValue[0-9']* -> ToolAttribValue

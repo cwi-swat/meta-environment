@@ -1,0 +1,454 @@
+\section{An Introduction}
+
+Interactive programming environments can be generated from
+formal language specifications. An algebraic specification
+formalism can be used for generating such programming
+environments since term rewriting can be used to execute
+these specifications. Thus, given a specification for a
+programming language, many customised tools for this
+language can be generated.
+
+In this paper we discuss the specification of static semantics
+(type-checking) for a programming language. We concentrate
+on discussing a specification style that appears to 
+benefit not only modularization of type-checker specification,
+but also can be used to generate an {\em error reporting} tool.
+The specification style advocates concise and abstract
+specifications. A significant advantage of this style of
+specification over the ``classical'' specification styles
+is that the specification of error propagation need not be knitted 
+explicitly as part of the type-checker specification 
+and can be handled in a modular manner.
+
+We use Pico, a simple language of while-programs, to illustrate
+our specification style. Since Pico is a very small language,
+we are able to discuss the specification style and its effects in detail.
+A program in Pico consists of declarations followed by statements. 
+The syntax and a brief description of Pico is in the appendix.
+A straight-forward specification of a Pico type-checker
+using \asdf\ can be found in Chapter~9 of \cite{BHK89},
+which concentrates on keeping the specification
+simple and thus does not specify the handling of error cases. 
+Thus, type-checking a program results in {\tt true} if the program
+is valid and {\tt false} otherwise.
+
+This specification also concentrates on
+avoiding any specification over ``non-standard'' values.
+{\em Non-standard} values are introduced when a new function,
+that is not total, is defined over an existing sort.
+In an initial algebra semantics,
+the definition of a non total function introduces new elements
+for the ``undefined cases'' (in a partial algebra sense).
+These additional elements, are known as ``non-standard values''.
+Here we rewrite the specification of a type-checker for Pico
+so that the non-standard values serve as error messages.
+We call these {\em structured errors}, since the components of
+these errors form a structure that could be separately
+analyzed by an error-handling module\footnote{
+Note that ``partial algebras'' and ``error algebras'' which
+attempt to make clean initial algebra semantics, by putting
+non-standard values in one equivalence class and allow error
+propagation (error algebras) will not be useful for specifying
+a type-checker in a natural manner, since knowing that type-check
+failed without knowing why and where is not interesting for
+a programmer.}.
+
+% \begin{verbatim}
+% Arie: This is related to 1) Partial Algebras (Riechel? 87) and
+% 2) Error Algebras (Goguen 77). Both attempt to make "clean"
+% initial algebra semantics, by putting the non-standard elements
+% in one equivalence class (and allow for error propagation in the
+% error algebras).
+% \end{verbatim}
+
+\input{asdf}
+
+\section{\label{PicoTcOld}Style for identifying errors}
+
+Specifying a type-checker for Pico was done using a table
+for type-environments (Sort TENV, see Appendix~\ref{PICOSYN}) 
+for keeping track of types associated with
+identifiers through declarations. The type-checking was
+specified as shown below. The function {\tt tc} returns
+a BOOL result. Checking the statement series using the
+type-environment results in BOOL, and checking if two types
+are same results in BOOL. Extracting the type of an expression
+using the type-environment results in TYPE (either {\tt natural}
+or {\tt string}).
+
+\input{Pico-typecheck-old}
+
+Let us consider the equations [Tc1a] and [Tc1b] in the specification
+above. The equation [Tc1a] specifies that type-checking
+a program is ``true'' if type-checking the statements using
+the type-environment obtained from the declarations results in ``true''.
+However, equation [Tc1b] specifies that if type-checking statements 
+is {\em not} ``true'', then the result is ``false''.
+Equations such as [Tc1b] are solely used in initial algebra
+specifications to avoid the so-called non-standard values.
+In this case, the goal was that the result of type-checking
+be the standard values of sort BOOL (``true'' or ``false'').
+
+The problem with this specification is that generating
+error messages (which was ignored in the above specification)
+requires modification of the specification to handle the
+alternate cases and to keep track of errors (and error propagation).
+
+In a specification of a type-checker, it is desirable to specify 
+only the cases for which the program is considered valid and 
+somehow from this the error cases be identified.
+One approach is to use partial algebra semantics, which
+gives ``run-time'' errors, say by identifying the non-standard
+values as ``undefined''. This approach however is not what is
+desired for type-checking a program, since like in the 
+above case a program either checks as ``true'' or else
+``false'' or ``undefined''. 
+% \begin{verbatim}
+% Arie: Interesting -- the reason why one would not want to put all
+% non-standard elements in one equivalence class.
+% \end{verbatim}
+These three result values do not provide the desired information.
+While type-checking a program,
+we want to know {\em what} went wrong (i.e., why it did
+not type-check as ``true'') and {\em where} it went wrong.
+Let us first concentrate on extracting the ``why'' information
+and then discuss how the ``where'' information can be extracted. 
+
+Our first observation is that, if one avoids using conditions
+in the equations then the normal form will not be either ``true'' or 
+nothing (nothing: term is already in normal form),
+thus the effect of [Tc1b] disappears. 
+Avoiding conditions of [Tc1a] and [Tc1b] merges these
+equations to [Tc1]:
+
+\begin{tabbing}
+mmm\=\kill\pushtabs\\*[-8.5pt]
+mmmm\= \=mmmmmmmmmmmmmmmm\= \=mmmmmmmmmmmmmmmm\= \=\kill
+\EQU{\LEX{$[$}\LEX{Tc1}\LEX{$]$}}{\LEX{tc}~\penalty+5\LEX{begin}~\penalty+10\VAR
+{\LEX{D}}{}~\penalty+10\VAR{\LEX{S}}{}~\penalty+10\LEX{end}}{\LEX{$[$}\VAR{\LEX{
+D}}{}\LEX{$]$}~\penalty+5\VAR{\LEX{S}}{}}
+\poptabs
+\end{tabbing}
+
+Thus avoiding conditions results
+in the reduction of the term to something ``smaller'', although it
+may not be ``true''. Observing equation [Tc4] above suggests
+that the condition could be avoided if Booleans provided for
+an operation where ``true'' is the identity.
+Thus we could use the conjunction operation ``\&'' and rewrite
+the equation:
+
+\begin{tabbing}
+mmm\=\kill\pushtabs\\*[-8.5pt]
+mmmm\= \=mmmmmmmmmmmmmmmm\= \=mmmmmmmmmmmmmmmm\= \=\kill
+\EQU{\LEX{$[$}\LEX{Tc4}\LEX{$]$}}{\VAR{\LEX{Tenv}}{}~\penalty+5\VAR{\LEX{Stat}}{
+};\VAR{\LEX{Stat-list}}{}}{\VAR{\LEX{Tenv}}{}~\penalty+10\VAR{\LEX{Stat}
+}{}~\penalty+5\LEX{\&}~\penalty+5\VAR{\LEX{Tenv}}{}~\penalty+10\VAR{\LEX{Stat-list}}{}}
+\poptabs
+\end{tabbing}
+
+The next step is to eliminate conditions in equations [Tc6] --- [Tc8]. 
+This requires distribution of the type-environment over
+the components of a statement, which results in transforming
+the statements to an abstract representation (see equations
+[Tc18] --- [Tc21] below).
+It is then simple to identify the correct abstract statements.
+We could thus {\em inject}\footnote{The \asdf\ formalism
+  provides the facility to {\em inject} one sort into another.
+  This can be simulated in other formalisms by introducing
+  explicit {\em injection functions}.
+} statements as non-standard values
+of Booleans, which means that the type in-correct statements will be 
+non-standard values of sort Booleans.
+% \begin{verbatim}
+% Arie: Related to order-sorted algebra.
+% \end{verbatim}
+
+The need for the compatible predicate (discussion in \cite{BHK89})
+in the specification above is basically to avoid accidentally equating
+the ``undeclared variable'' cases as type correct.
+However, this accident is naturally avoided here since the
+abstract representations are explicitly identified are correct.
+
+Note that we are distributing type-environments
+over the components of expressions, the result of which
+should be sort TYPE.  Thus we need to inject TYPEs into EXPs. 
+Also, we can keep the specification simple by generalizing
+the assignment statement to EXP := EXP.
+This extension to syntax is only available in type-check modules 
+and does not affect the syntax of the language Pico.
+
+The following specification evaluates the type correct
+statements to ``true'', evaluates the expressions
+over their abstract values and avoids the use of 
+conditions.
+When the tc function is applied to a program,
+it either evaluates to true (indicating that the program
+is checked as type correct) or it reduces to a normal
+form which is a conjunction of type incorrect statements
+in their abstract form (all expressions in them are
+also reduced to their normal form).
+
+\input{Pico-typecheck-new}
+
+The basic techniques that are identifiable in the above specification,
+in order to conform to our suggested style, are to:
+\begin{itemize}
+\item Avoid conditions in the equations.
+\item Distribute the type-environment over statements (equations [Tc4]--[Tc8]).
+\item Distribute the type-environment over expressions ([Tc12]--[Tc14]).
+\item Evaluate the expressions at abstract (type) level ([Tc15]--[Tc17]).
+\item Identify the abstract type-correct statements ([Tc18]--[Tc21]).
+\item Transform to extended syntax when needed (equation [Ext]).
+%Arie: [Ext] is rather cryptic.
+\item Change the constants to their abstract representation ([Tc10] and [Tc11]).
+\end{itemize}
+
+The equations [Tc15]--[Tc21]
+%, along with equations [Tc10] and [Tc11]
+are the crux of this style of specification. The other equations
+help transform the source program into its abstract form. The
+equations [Tc15]--[Tc21] then identify the type-correct
+constructs, while anything that is not reducible by these
+equations become {\em structured error} messages.
+
+Thus for the program in the appendix, the result of applying
+the tc function is:
+
+\begin{verbatim}
+natural := natural - string
+\end{verbatim}
+
+This structured error message indicates the following:\\
+(1) the program has a type error (did not evaluate to true)
+(2) the error is in an assignment statement
+(3) the type of the left side of the assignment is incompatible
+    with the right side
+and (4) the right argument for a subtraction operation has string operand.
+
+This error information can easily be further processed by
+a separate module which takes the normal form as input
+and issues human readable error messages. For the structured error
+above, all or some of the 4 reasons can be used to generate 
+human readable error messages.
+Generation of such messages in the classical style of
+specification (module Pico-typecheck-old) would involve
+considerable modification to the equations and is non-trivial
+to specify type-checking so that errors can be specified
+as a nice modular extension.
+
+The obvious lack of information in the above message, 
+however, is an indication for where in the source
+program the errors are located. 
+It is mandatory to have information on location of errors in a large program.
+Generation of this information
+is often done by keeping track of line numbers in the input program.
+We claim that this information can be automatically
+generated by a programming environment generator and
+discuss how this is done currently in the \asdf\ system
+in Section~\ref{IERR}.
+
+In \cite{DT92}, there is an illustration as to  how this
+style of specification also allows type-checking
+over effectively incomplete programs. Incomplete
+programs can be written in the \asdf\ system
+using meta-variables in the input term.
+
+In the next section we illustrate an example of 
+using such a technique in a non-toy Pascal
+like language called \clax, with a snapshot 
+while using origin tracking in the \asdf\ system
+to locate a type-error.
+
+%\input{origins}
+
+\section{\label{ORIGIN}Origin Tracking}
+
+Origin tracking is a generic technique for relating parts
+of intermediate terms, which occur during term rewriting, to parts
+of the initial term. For a detailed description of origin tracking
+and its applications, the reader is referred to \cite{DKT92}.
+In the ASF+SDF system \cite{Kli93}, algebraic specifications
+are executed as term rewriting systems. Consequently, origin tracking 
+can be applied to the specification defined in this document. 
+In this section, we illustrate how origin tracking is used in
+determining the source positions of errors found by the type-checker.
+
+In Section~\ref{PicoTcOld}, we suggested a alternate way
+of specifying the type-checker for Pico.
+The picture below demonstrates the effectiveness of this style 
+for a non-toy, Pascal relative, language \clax.
+
+\vspace{0.5 cm}
+\input{psfig}
+\centerline{\psfig{figure=snapshot.ps,width=14cm}}
+%\newpage
+
+The function ``errors \_'' --- which uses the result of ``tc \_'',
+is applied to the program in the window. 
+The result of which could be either ``no-errors'' or a list of errors.
+These error messages, albeit useful, provide no information
+regarding the specific constructs of the program that
+caused it or the position where it originated.
+
+Maintaining the relation between the program
+construct that caused the error and the error message, could
+lead to unwieldy specifications and demand a lot of additional
+work on specification/implementation of the type-checker.
+Origin tracking automatically maintains certain forms of
+relations between the source and result that we can
+exploit here. 
+Origin tracking in the system provides one with the ability 
+to identify the culprit program
+constructs by clicking on the desired error and requesting
+the system to show its origin. 
+
+
+\section{\label{IERR}On identifying error location}
+
+% ***Discussion of Nat-con = natural ****
+The new type-checker specification discussed in
+Section~\ref{PicoTcOld} also has information on error locations, which can
+be harnessed by a helpful system as shown in Section~\ref{ORIGIN}. 
+
+To simply explain the idea of automating the process of
+error location identification, we will consider a simple
+origin tracking mechanism and modify our 
+specification so that enough origins can be tracked
+to determine complete information on where the errors
+are located.
+
+We consider equation [Tc13] from Pico-typecheck-old specification
+for our discussion.
+
+\begin{tabbing}
+mmm\=\kill\pushtabs\\*[-8.5pt]
+mmmm\= \=mmmmmmmmmmmmmmmm\= \=mmmmmmmmmmmmmmmm\= \=\kill
+\EQU{\LEX{$[$}\LEX{Tc13}\LEX{$]$}}{\VAR{\LEX{Tenv}}{}~\penalty+5\LEX{$.$
+}~\penalty+5\VAR{\LEX{Nat-con}}{}}{\CON{natural}}
+\poptabs
+\end{tabbing}
+
+If we look at this equation for relationships between the
+left hand side and right hand side, we can hardly see any
+other than the obvious one indicated by the $=$ symbol.
+
+\input{tc13a}
+\centerline{\box\graph}
+
+\smallskip
+
+Since the possible terms which match the left side are
+not program terms (Pico syntax terms), there would be no (transitive)
+relation from the reduct to any program term.
+
+Now let use consider the following equations instead of [Tc13]
+in the module Pico-typecheck-old. Equations [Tc9b] and [Tc10]
+are from module Pico-typecheck-new.
+
+\begin{tabbing}
+mmm\=\kill\pushtabs\\*[-8.5pt]
+mmmm\= \=mmmmmmmmmmmmmmmm\= \=mmmmmmmmmmmmmmmm\= \=\kill
+\EQU{\LEX{$[$}\LEX{Tc9b}\LEX{$]$}}{\VAR{\LEX{Tenv}}{}~\penalty+5\LEX{$.$
+}~\penalty+5\VAR{\LEX{Type}}{}}{\VAR{\LEX{Type}}{}}
+\\
+\EQU{\LEX{$[$}\LEX{Tc10}\LEX{$]$}}{\VAR{\LEX{Nat-con}}{}}{\CON{natural}}
+\poptabs
+\end{tabbing}
+
+The equation [Tc9b] suggests not only a relationship
+indicated by the $=$ symbol, but also one about the variable {\em Type};
+the variable {\em Type} on left-hand side and right-hand side are same.
+
+\input{tc9b}
+\centerline{\box\graph}
+
+\smallskip
+
+Thus, when this rule is used to rewrite a term,
+the reduct term could be related to its redex in two ways.
+First as in the previous case, would not lead to relating
+the reduct to a source program sub-term for our specification, 
+but another that could potentially be useful! 
+In our case {\tt natural} and {\tt string} are two
+words that can be found in program source. The second
+relation could thus help the system in tracking the reduct to a part
+of the source program.
+
+% \begin{verbatim}
+% Arie: The following should be provided by an adaptation of the
+% origin notion rather than by an adaptation of the language/specification.
+% \end{verbatim}
+Next we can consider the case of constants of type {natural}
+that equation [Tc13] was used for. 
+
+\input{tc10}
+\centerline{\box\graph}
+
+\smallskip
+
+It is now easy to observe
+that the necessary relation between a constant %of type 
+and its reduct the word {\tt natural} 
+(type name in our case) exists as desired.
+Handling the constants like this (equations [Tc10] and [Tc11]
+of module Pico-typecheck-new) seems to
+provide enough information to the system to show
+the error location information automatically if a constant is involved 
+in causing the error message. 
+
+Another situation that is, vaguely, similar to the case of 
+constants is the syntax constructs of the program themselves ---
+e.g., the need to know which ``{\tt :=}'' or ``{\tt -}''
+in the source program appeared in error message discussed earlier.
+The current specification of the module Pico-syntax
+abstracts away such tokens, i.e., the origin relation
+for equation [Tc13] in Pico-typecheck-new is (no
+relations for the {\tt -} token):
+
+\input{tc13b}
+\centerline{\box\graph}
+
+\smallskip
+
+An immediate result of this is that the syntax could be
+defined slightly differently so that the rest comes for free.
+The following modification to syntax, effectively re-does
+the implicit structure of operations and statements without
+asking for changes in the specification of the type-checker.
+Thus using the Pico-syntax-new module below, with origin
+tracking provides us enough of the location information for 
+tracking the origin of 
+error message (See Section~\ref{ORIGIN} for how the system is used).
+
+\newpage
+
+\input{Pico-tokens}
+\input{Pico-syntax-new}
+
+\newpage
+The origin relations for equation [Tc13] now become:
+
+\input{tc13token}
+\centerline{\box\graph}
+
+\smallskip
+
+Rest of the  specification is not altered in any manner but
+some of the concrete syntax is converted to abstract
+syntax for the program constructs, which can now be
+handled by the origin-tracking mechanism to indicate
+the location of the error.
+
+We note that it is undesirable to force this {\em tokenization} 
+on the specifier. But on the brighter side, we also observed
+that such tokenization does not call for modification
+of rest of the specification. Thus, tokenization can be
+automatically performed by the system and the specifier
+need not know about it.
+
+Alternative methods to get an effect similar to that of
+tokenization are of interest. A notion of {\em decreasing
+origins} discussed in \cite{V93.horig} appears to provide
+origin information needed for the cases of interest here.
+

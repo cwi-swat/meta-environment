@@ -1,0 +1,32 @@
+equations
+
+%% vars: determine the set of variables which occur in an expression.
+
+    [Vars1] vars(Id) = Id
+    [Vars2] vars(NatCon) =
+    [Vars3] vars(StrCon) =
+    [Vars4] vars(Exp) = Id*, vars(Exp') = Id*' =====> vars(Exp+Exp') = Id* Id*'
+    [Vars5] vars(Exp) = Id*, vars(Exp') = Id*' =====> vars(Exp-Exp') = Id* Id*'
+    [Vars6] vars(Exp) = Id*, vars(Exp') = Id*' =====> vars(Exp||Exp') = Id* Id*'
+    [Idlis] Id* Id Id*' Id Id*'' = Id* Id Id*' Id*''
+
+%% DU/DU-series: compute a Def/Use table for a labeled Pico program.
+
+    [DU1]  DU(begin Decls L_Series end) =
+             DU-series(L_Series, start(,) stop(,) )
+
+    [DU2]  DU-series(Ref Id := Exp; L_Stat*, Entry*) =
+             DU-series(L_Stat*, Entry* Ref(Id, vars(Exp)))
+
+    [DU3]  Entry*'  = DU-series(L_Series, ),
+           Entry*'' = DU-series(L_Series', )
+           ============================================================
+           DU-series(Ref if Exp then L_Series else L_Series' fi; L_Stat*, Entry*) =
+             DU-series(L_Stat*, Entry* Ref( , vars(Exp)) Entry*' Entry*'')
+
+    [DU4]  Entry*' = DU-series(L_Series, )
+           ============================================================
+           DU-series(Ref while Exp do L_Series od; L_Stat*, Entry*) =
+             DU-series(L_Stat*, Entry* Ref( , vars(Exp)) Entry*')
+
+    [DU5]  DU-series( , Entry*) = Entry*

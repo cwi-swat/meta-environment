@@ -1,0 +1,13 @@
+%%  Slice
+
+imports
+    PDG
+exports
+    context-free syntax
+        "slice-nodes" "(" L_PROGRAM "," NODE ")"                -> NODES
+        reaches "(" EDGE* "," NODES "," NODES ")"               -> NODES
+        slice "(" L_PROGRAM "," NODE ")"                        -> PROGRAM
+        "find-reduced-program" "(" L_PROGRAM "," NODES ")"      -> L_PROGRAM
+        "find-series" "(" L_SERIES "," NODES ")"                -> L_SERIES
+        "vars" "(" L_SERIES ")"                                 -> ID-LIST
+        "find-decls" "(" DECLS "," ID-LIST ")"                  -> DECLS

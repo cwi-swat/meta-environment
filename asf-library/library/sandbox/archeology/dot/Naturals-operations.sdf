@@ -1,0 +1,42 @@
+%%%H%
+%%%H% $Id$
+%%%H%
+%%%H% This file is part of the specification
+%%%H%    "A data-flow high abstraction language"
+%%%H%
+%%%H% Copyright (c) Leon Moonen, 1996, 1997
+%%%H%
+%%%H% Programming Research Group, University of Amsterdam
+%%%H% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%H% mail:leon@fwi.uva.nl http://adam.fwi.uva.nl/~leon/
+%%%H%
+
+imports Naturals-syntax Booleans2
+exports
+  context-free syntax
+    succ "(" Nat ")"       -> Nat
+    pred "(" Nat ")"       -> Nat
+    Nat "+" Nat            -> Nat {left}
+    Nat "-" Nat            -> Nat {left}
+    Nat "*" Nat            -> Nat {left}
+    "(" Nat ")"            -> Nat {bracket}
+
+    Nat ">" Nat            -> Bool
+    Nat ">=" Nat           -> Bool
+    Nat "<" Nat            -> Bool
+    Nat "<=" Nat           -> Bool
+  priorities
+    Nat "*" Nat -> Nat
+  > { left: Nat "+" Nat -> Nat,
+            Nat "-" Nat -> Nat  }
+
+hiddens
+  context-free syntax
+    NatCon "-//" NatCon          -> NatCon
+    NatCon ">-"  NatCon          -> NatCon
+    "(" NatCon ")"               -> NatCon {bracket}
+    gt "(" NatCon "," NatCon ")" -> Bool
+  variables
+    "c"  [0-9]*            -> CHAR
+    "c*" [0-9]*            -> CHAR*
+    "c+" [0-9]*            -> CHAR+

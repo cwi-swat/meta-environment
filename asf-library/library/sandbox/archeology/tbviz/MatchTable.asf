@@ -1,0 +1,85 @@
+equations
+
+[x] match-env(genv,type1,type2) =
+      match(get-table(type1,genv), get-table(type2,genv))
+
+[x] match(type( ),table) =
+[x] match(type(pair pair*), table) =
+      match(pair,table) ++ match(type(pair*),table)
+
+[x] match(pair, type( )) =
+[x] match(pair, type(pair' pair*)) = match(pair, pair') ++ match(pair, type(pair*))
+
+%% This is the matching of broadcast or synchronous messages
+[x] mgm([Ts1], [Ts2]) = T,
+    T != fail,
+    T = [Ts3]
+    =======================
+    match([Pnm1, Ts1], [Pnm2, Ts2]) = pn2ni(Pnm1) -> pn2ni(Pnm2) [label=tl2di(Ts3)] ;
+
+[x] mgm([Ts1], [Ts2]) = T,
+    T = fail
+    =======================
+    match([Pnm1, Ts1], [Pnm2, Ts2]) =
+
+%% This is the matching of create messages, for now we just look at the
+%% number of arguments of the process. If the create and the process definition
+%% have the same number of arguments, they match.
+[x] match-args(OptTs, VDecls) = true
+    ================================
+    match([Pnm, Pnm', OptTs], [Pnm'; VDecls]) = pn2ni(Pnm) -> pn2ni(Pnm') [label=tl2di(OptTs)] ;
+[default-x] match([Pnm1,Pnm2,OptTs],[Pnm3;VDecls]) =
+
+[x] match-args( , ) = true
+[x] match-args(T, OptTs, VDecl, VDecls) = match-args(OptTs,VDecls)
+[default-x] match-args(OptTs, VDecls) = false
+
+[x] pn2ni(processname(cs1 "-" cs2)) = dotid(cs1 "_" cs2)
+[default-x] pn2ni(processname(cs)) = dotid(cs)
+
+[x] id2ni(id(cs1 "-" cs2)) = dotid(cs1 "_" cs2)
+[default-x] id2ni(id(cs)) = dotid(cs)
+
+[x] mgm(T,  T) = T
+[x] mgm([OptTs1],[OptTs2]) = [Ts]
+    =============================
+    mgm(Id(OptTs1), Id(OptTs2)) = Id(Ts)
+[x] mgm(T1,T2) = T3,
+    OptTs1 !=  ,
+    mgm([OptTs1],[OptTs2]) = [OptTs3]
+    ===================
+    mgm([T1,OptTs1],[T2,OptTs2]) = [T3, OptTs3]
+[x] mgm([T1],[T2])= [mgm(T1,T2)]
+[x] mgm(T, GenVar) = GenVar
+[x] mgm(GenVar, T) = GenVar
+[default-x] mgm(T1,T2) = fail
+
+[x] Ts, fail, OptTs = fail
+[x] fail, Ts = fail
+[x] Id(fail) = fail
+[x] [fail] = fail
+
+[x] tool-comms(genv, type) = get-stats(get-table(type,genv))
+
+%% Only the toolname (first argument) and the outermost function symbol
+%% are used for the graph
+[x] T'' = Id(OptTs')
+    ============
+    get-stats(type([Pnm,T',T'',OptTs] pair*)) =
+      single-stat(type([Pnm,T',Id])) ++ get-stats(type(pair*))
+[default-x] get-stats(type([Pnm,T',T'',OptTs] pair*)) =
+      single-stat(type([Pnm,T',T''])) ++ get-stats(type(pair*))
+[x] get-stats(type()) =
+
+[x] single-stat(rec-Event([Pnm,Id,Ts])) =
+      id2ni(Id) -> pn2ni(Pnm) [label = tl2di(Ts)]; id2ni(Id) [shape = box ];
+[x] single-stat(rec-Value([Pnm,Id,Ts])) =
+      id2ni(Id) -> pn2ni(Pnm) [label = tl2di(Ts)]; id2ni(Id) [shape = box ];
+[x] single-stat(snd-Eval([Pnm,Id,Ts])) =
+      pn2ni(Pnm) -> id2ni(Id) [label = tl2di(Ts)]; id2ni(Id) [shape = box ];
+[x] single-stat(snd-Do([Pnm,Id,Ts])) =
+      pn2ni(Pnm) -> id2ni(Id) [label = tl2di(Ts)]; id2ni(Id) [shape = box ];
+
+[x] pp([OptTs]) = string(""" "[" cs "]" """)
+    ========================================
+    tl2di(OptTs) = dotid(""" cs """)

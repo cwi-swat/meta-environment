@@ -1,0 +1,14 @@
+%%  Process
+
+imports <Id>
+
+exports
+  sorts <Id>
+  lexical syntax
+    <LexicalFunction+>
+  context-free syntax
+    <CfFunction+>
+
+hiddens
+  variables
+    <Variable+>

@@ -1,0 +1,25 @@
+%%  Graphs
+
+imports
+    Layout Booleans
+exports
+    sorts
+        NODE NODES LABEL EDGE GRAPH
+    context-free syntax
+        LABEL ":" NODE "->" NODE                        -> EDGE
+        EDGE*                                           -> GRAPH
+        "mk-list" "(" LABEL "," NODES "," NODES ")"     -> GRAPH
+        NODE*                                           -> NODES
+        succ "(" NODE "," GRAPH ")"                     -> NODES
+        succ "(" NODE "," GRAPH "," NODES ")"           -> NODES
+        pred "(" NODE "," GRAPH ")"                     -> NODES
+        pred "(" NODE "," GRAPH "," NODES ")"           -> NODES
+        "IF" BOOL "THEN" NODES "ELSE" NODES "FI"        -> NODES
+        "IF" BOOL "THEN" GRAPH "ELSE" GRAPH "FI"        -> GRAPH
+    variables
+        Edge[']*                                        -> EDGE
+        Edge[*][']*                                     -> EDGE*
+        Node[*][']*                                     -> NODE*
+        Node[+][']*                                     -> NODE+
+        Node[']*                                        -> NODE
+        Label[']*                                       -> LABEL

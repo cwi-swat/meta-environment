@@ -1,0 +1,68 @@
+equations
+
+%% dd: compute the dataflow dependences in a labeled Pico program.
+
+    [DD1]  FlowGraph = fg(L_Program),
+           Entry*    = DU(L_Program)
+           ===================================================
+           dd(L_Program) = dd-all(Entry*, FlowGraph, Entry*, )
+
+%% dd-all: compute the flow-dependences for all nodes, using a worklist algorithm.
+
+    [DD2]  dd-node(Id, Node, Node, succ(Node, FlowGraph),
+                   FlowGraph, Table, Edge* ) = Edge*',
+           dd-all(Entry*, FlowGraph, Table, Edge*') = Edge*''
+           ================================================================
+           dd-all(Node(Id, Uses) Entry*, FlowGraph, Table, Edge*) = Edge*''
+
+    [DD3]  dd-all(Node(Id, Uses) Entry*, FlowGraph, Table, Edge*) = Edge*',
+           dd-all(Node(Id+, Uses) Entry*, FlowGraph, Table, Edge*) = Edge*''
+           ==========================================================================
+           dd-all(Node(Id Id+, Uses) Entry*, FlowGraph, Table, Edge*) = Edge* Edge*''
+
+    [DD4]  dd-all(Node(  , Uses) Entry*, FlowGraph, Table, Edge*) =
+             dd-all( Entry*, FlowGraph, Table, Edge*)
+
+    [DD4]  dd-all( , FlowGraph, Table, Edge*) = Edge*
+
+%% dd-node: visit one node, add flowgraph-successors to worklist,
+%%          add dataflow-edge if DU-chain exists.
+
+    [DN1]  nmem(Node, Node*) = false,
+           Node*'' = IF imem(Id, Defs) THEN ELSE succ(Node, FlowGraph) FI,
+           Edge*'  = IF imem(Id, Uses) THEN mk-list(flow, N, Node) ELSE FI
+           =======================================================================================
+           dd-node(Id, N, Node*, Node Node*', FlowGraph,
+                   Entry* Node(Defs, Uses) Entry*', Edge*) =
+
+                   dd-node(Id, N, Node* Node, Node*' Node*'', FlowGraph,
+                           Entry* Node(Defs, Uses) Entry*', Edge* Edge*')
+
+    [DN2]  nmem(Node, Node*) = true,
+           Edge*'  = IF imem(Id, Uses) THEN mk-list(flow, N, Node) ELSE FI
+           ===========================================================================
+           dd-node(Id, N, Node*, Node Node*', FlowGraph,
+                   Entry* Node(Defs, Uses) Entry*', Edge*) =
+
+             dd-node(Id, N, Node*, Node*', FlowGraph, Entry* Node(Defs, Uses) Entry*',
+                     Edge* Edge*')
+
+
+    [DN3]  dd-node(Id, Node, Node*, , FlowGraph, Table, Edge*) = Edge*
+
+
+%% nmem: member function on list* of NODE
+
+    [Mem1] nmem(Node, Node Node*) = true
+    [Mem2] nmem(Node, ) = false
+    [Mem3] Node != Node'
+           ===========================================
+           nmem(Node, Node' Node*) = nmem(Node, Node*)
+
+%% imem: member function on list* of ID
+
+    [imem1] imem(Id, Id Id*) = true
+    [imem2] imem(Id, ) = false
+    [imem3] Id != Id'
+            =================================
+            imem(Id, Id' Id*) = imem(Id, Id*)

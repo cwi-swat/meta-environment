@@ -1,0 +1,116 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentstyle[verbatimfiles,11pt,a4]{article}
+
+\input{/ufs/gipe/src/ct/centaur/sources/ASDF/tolatex/ASF+SDF.tex}
+\input{nodes}
+\input{macros.tex}
+\setlength{\textwidth}{15cm}
+\setlength{\oddsidemargin}{0.46cm}
+\setlength{\evensidemargin}{0.46cm}
+\begin{document}
+\bibliographystyle{alpha}
+\title{\bf Type-checking revisited: Modular Error-handling}
+\author{{\em T.B. Dinesh}, \\
+        CWI, \\
+        P.O. Box 4079, 1009 AB Amsterdam, The Netherlands\\
+        e-mail: {\tt dinesh@cwi.nl}}
+\maketitle
+%
+%\input{abstract}
+
+
+\begin{abstract}
+
+We study alternative ways in which the declarative
+knowledge available in algebraic specifications of type-checkers
+for a language, can be utilized in generated programming environments.
+Algebraic specification formalisms are often based
+on initial algebra semantics, in which it is easy to
+introduce the so called {\em non-standard values}.
+Using an {\em abstract-interpretation} style in such a
+setting yields natural and concise type-checking specifications.
+A separate module can then process the output
+of such a type-checker to generate human-readable messages.
+
+We use the type-checker specification of a toy language (Pico)
+to illustrate the utility of the suggested style. 
+We then discuss how this style facilitates {\em origin-tracking},
+available in the \asdf\ system, to 
+automatically identify the source of errors in a Pico program.
+
+\end{abstract}
+
+\input{pico-intro}
+%\input{concl}	
+
+\section{Concluding Remarks}
+
+The style of type--checking in this document concentrates on specifying
+only the necessary information, while still providing reasonably good
+error messages. 
+The style used makes use of the so called non-standard values of an
+initial algebra specification to generate errors.
+The result of type--checking is to effectively
+form a conjunction of the abstract meanings of statements of the
+language. All type correct statements evaluate to ``true'' while
+an incorrect statement reduces to a structured error. 
+This structured error can be used by a separate module
+to generate human readble error messages.
+Together with origin tracking, this provides 
+information on the location of error in the source program automatically. 
+
+%This is a typical example of how the specification
+%style and the system can help process the declarative
+%knowledge available in algebraic specification.
+
+% This study also shows that the ASF+SDF meta-environment is
+% a useful tool, which can be used to generate sophisticated programming
+% environments and many necessary tools automatically.
+% In particular, syntax-directed program construction, rapid prototyping,
+% origin-tracking and effective source-level program analysis techniques
+% such as visualization are available.
+
+$$$$
+{\bf Acknowledgements:} I would like to thank Arie van Deursen
+for many discussions. Arie van Deursen and Susan Uskudarli
+provided comments and constructive help with the drafts of the paper. 
+
+%\bibliography{/ufs/gipe/lib/tex/bib,/ufs/gipe/spec/clax/doc/bib,bib}
+\bibliography{bib,/ufs/gipe/lib/tex/bib}
+
+\newpage
+\appendix
+
+\section{Pico Language}
+\label{PICOSYN}
+
+A Pico program consists of declarations followed by statements 
+and is defined in Chapter~9 of \cite{BHK89}.
+All variables are declared to be either of type natural or
+of type string. Statements may be assignment statements,
+if-statements and while-statements.
+Expressions may be a single identifier, addition or subtraction
+of natural numbers, or concatenation of strings.
+
+The imported modules define the lexicals identifiers,
+constants for natural numbers and strings used in the language.
+
+The variables defined in this module are used in the
+equations of modules that import Pico-syntax 
+(e.g., Pico-typecheck modules).
+
+\input{Pico-syntax}
+
+\newpage
+
+Example Pico program:
+
+\verbatimfile{small.pico}
+
+Specifying a type-checker for Pico was done using a table
+for type-environments TENV, similar to list representation used below:
+
+\input{Type-environments}
+
+\end{document}

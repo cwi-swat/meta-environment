@@ -1,0 +1,18 @@
+%%  Interface
+
+imports
+    Slice
+exports
+    sorts
+        PATH
+    context-free syntax
+        empty "(" ")"                           -> PATH
+        nxt "(" PATH ")"                        -> PATH
+        dwn "(" PATH ")"                        -> PATH
+
+        navigate "(" L_PROGRAM "," PATH ")"     -> L_STATEMENT
+        navigate "(" L_SERIES "," PATH ")"      -> L_STATEMENT
+
+        "makeslice"  "(" L_PROGRAM "," PATH ")" -> PROGRAM
+    variables
+        Path[']*                                -> PATH

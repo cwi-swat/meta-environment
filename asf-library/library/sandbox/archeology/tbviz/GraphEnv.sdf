@@ -1,0 +1,41 @@
+%%  GraphEnv
+
+imports Tscript
+
+exports
+  sorts Genv Type Table Pair
+  context-free syntax
+    build-env(Genv, Tscript)                   -> Genv
+    build-env(Genv, ProcessDef)                -> Genv
+    build-env(Genv, ProcessName, ProcessExpr)  -> Genv
+    insert(Pair, Type, Genv)                   -> Genv
+    new-env                                    -> Genv
+    get-table(Type, Genv)                      -> Table
+    replace-table(Table, Genv)                 -> Genv
+    lookup-type(VAR, ProcessName, Genv)       -> TERM
+    "[" ProcessName "," TERM-LIST "]"          -> Pair
+    "[" ProcessName "," ProcessName "," TERM-LIST "]" -> Pair
+    "[" ProcessName ";" VarDecls "]"           -> Pair
+    Type "(" Pair* ")"   -> Table
+    Table "++" Genv  -> Genv
+    Table*     -> Genv
+    snd-Syn    -> Type
+    rec-Syn    -> Type
+    snd-Broad  -> Type
+    rec-Broad  -> Type
+    snd-Create -> Type
+    rec-Create -> Type
+    rec-Event  -> Type
+    rec-Value  -> Type
+    snd-Eval   -> Type
+    snd-Do     -> Type
+    var-Env    -> Type
+
+  variables
+    genv[0-9']* -> Genv
+    type[0-9']* -> Type
+    pair[0-9']* -> Pair
+    "pair+"[0-9']* -> Pair+
+    "pair*"[0-9']* -> Pair*
+    table[0-9']* -> Table
+    "table*"[0-9']* -> Table*

@@ -1,0 +1,21 @@
+\MODULEBEGIN{Type-environments}
+\IMPORTS{\LEX{Identifiers} \LEX{Pico-syntax}}
+\EXPORTSBEGIN{}
+\SORTS{\ULEX{TENV} \ULEX{PAIR}}
+ \CFGBEGIN{}
+\CFGFUN{\ULEX{ID} \QLEX{$:$} \ULEX{TYPE}}{\ULEX{PAIR}}{}
+ \CFGFUN{\QLEX{$[$} \{\ULEX{PAIR} \QLEX{$,$}\}\LEX{$*$} \QLEX{$]$}}{\ULEX{TENV}}{}
+ \CFGFUN{\LEX{lookup} \ULEX{ID} \LEX{in} \ULEX{TENV}}{\ULEX{TYPE}}{}
+\CFGEND{}
+ \VARIABLESBEGIN{}
+\VARDECL{\LEX{Pair-list}}{\{\ULEX{PAIR} \QLEX{$,$}\}\LEX{$*$}}
+ \VARDECL{\LEX{Tenv}}{\ULEX{TENV}}
+\VARIABLESEND{}
+\EXPORTSEND{}
+\EQUATIONSBEGIN{}
+\EQU{\LEX{$[$}\LEX{T1a}\LEX{$]$}}{\LEX{lookup}~\penalty+5\VAR{\LEX{Id}}{}~\penalty+5\LEX{in}~\penalty+5\LEX{$[$}\VAR{\LEX{Id}}{}~\penalty+20\LEX{$:$}~\penalty+20\VAR{\LEX{Type}}{},\VAR{\LEX{Pair-list}}{}\LEX{$]$}}{\VAR{\LEX{Type}}{}}
+\\
+\CEQU{\LEX{$[$}\LEX{T1b}\LEX{$]$}}%
+{\COND{\LEX{lookup}~\penalty+5\VAR{\LEX{Id}}{}~\penalty+5\LEX{in}~\penalty+5\LEX{$[$}\VAR{\LEX{Id}}{$\,'$}~\penalty+20\LEX{$:$}~\penalty+20\VAR{\LEX{Type}}{},\VAR{\LEX{Pair-list}}{}\LEX{$]$}}{\LEX{lookup}~\penalty+5\VAR{\LEX{Id}}{}~\penalty+5\LEX{in}~\penalty+5\LEX{$[$}\VAR{\LEX{Pair-list}}{}\LEX{$]$}}}{{\NCOND{\VAR{\LEX{Id}}{}}{\VAR{\LEX{Id}}{$\,'$}}}}%
+\EQUATIONSEND{}
+\MODULEEND{}

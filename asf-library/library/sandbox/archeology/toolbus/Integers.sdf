@@ -1,0 +1,19 @@
+   imports Layout
+   exports
+      sorts NAT-CON NAT INT REAL
+      lexical syntax
+         [0-9]+                 -> NAT-CON
+      context-free syntax
+         NAT-CON                -> NAT
+         INT "." NAT-CON    -> REAL
+
+         "(" NAT ")"            -> NAT {bracket}
+         NAT                    -> INT
+         "+" NAT                -> INT
+         "-" NAT                -> INT
+
+         "(" INT ")"            -> INT {bracket}
+      variables
+         Nat-con [0-9']*        -> NAT-CON
+         Nat [0-9']*            -> NAT
+         Int [0-9']*            -> INT

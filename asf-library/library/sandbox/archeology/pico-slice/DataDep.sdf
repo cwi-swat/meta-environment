@@ -1,0 +1,22 @@
+%%  DataDep
+
+imports
+    ControlDep
+exports
+    context-free syntax
+        dd "(" L_PROGRAM ")"                                    -> GRAPH
+        "dd-node" "(" ID "," NODE "," NODES "," NODES ","
+                      GRAPH "," TABLE "," GRAPH ")"             -> GRAPH
+        "dd-all" "(" ENTRY* ","  GRAPH "," TABLE "," GRAPH ")"  -> GRAPH
+        flow                                                                              -> LABEL
+
+        nmem "(" NODE "," NODE* ")"                             -> BOOL
+        imem "(" ID "," ID* ")"                                 -> BOOL
+
+    variables
+        FlowGraph                                       -> GRAPH
+        Table                                           -> TABLE
+        Defs                                            -> ID*
+        Uses                                            -> ID*
+        Id[+][']*                                       -> ID+
+        N                                               -> NODE

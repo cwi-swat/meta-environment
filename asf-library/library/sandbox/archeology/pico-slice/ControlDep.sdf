@@ -1,0 +1,15 @@
+%%  ControlDep
+
+imports
+    DefUse
+
+exports
+
+    context-free syntax
+        "control-true"                  -> LABEL
+        "control-false"                 -> LABEL
+        "entry"                         -> REF
+        "cd" "(" L_PROGRAM ")"          -> GRAPH
+        "cd" "(" L_SERIES ")"           -> GRAPH
+        "all-refs" "(" L_SERIES ")"     -> NODES
+        "all-nn-refs" "(" L_SERIES ")"  -> NODES

@@ -1,0 +1,19 @@
+%%  Tscript
+
+imports ProcessDef ToolDef
+
+exports
+  sorts Tscript TscriptDef
+  lexical syntax
+    <LexicalFunction+>
+  context-free syntax
+    ToolDef             -> TscriptDef
+    ProcessDef          -> TscriptDef
+    TscriptDef* "toolbus" "(" { ProcessInvocation "," }+ ")" -> Tscript
+
+
+  variables
+    SDef[0-9']*         -> TscriptDef
+    SDefs[0-9']*        -> TscriptDef*
+    tscript[0-9']*      -> Tscript
+    pis[0-9']*          -> { ProcessInvocation "," }+

@@ -1,0 +1,16 @@
+%%%H%
+%%%H% $Id$
+%%%H%
+%%%H% This file is part of the specification
+%%%H%    "A data-flow high abstraction language"
+%%%H%
+%%%H% Copyright (c) Leon Moonen, 1996, 1997
+%%%H%
+%%%H% Programming Research Group, University of Amsterdam
+%%%H% Kruislaan 403, 1098 SJ Amsterdam, The Netherlands.
+%%%H% mail:leon@fwi.uva.nl http://adam.fwi.uva.nl/~leon/
+%%%H%
+equations
+%% The usual boolean laws apply:
+[disj1] true  \/ b = true  [conj1] true  /\ b = b       [neg1] ~false = true
+[disj2] false \/ b = b     [conj2] false /\ b = false   [neg2] ~true  = false

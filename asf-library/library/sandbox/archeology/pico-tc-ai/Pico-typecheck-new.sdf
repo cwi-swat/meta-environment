@@ -1,0 +1,15 @@
+%%  Pico-typecheck-new
+
+imports Type-environments
+exports
+   context-free syntax
+       tc PROGRAM            -> BOOL
+       "[" DECLS "]"         -> TENV
+       TENV SERIES           -> BOOL
+       TENV "." EXP          -> TYPE
+
+       EXP ":=" EXP          -> STATEMENT
+       STATEMENT             -> BOOL
+       TYPE                  -> EXP
+%% priorities
+%%    ID ":=" EXP -> STATEMENT < EXP ":=" EXP -> STATEMENT
