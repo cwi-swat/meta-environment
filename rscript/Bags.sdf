@@ -8,6 +8,8 @@ imports basic/Integers
 
 context-free syntax
    elem-equal(Elem, Elem)			-> Boolean
+   elem-greater(Elem, Elem)			-> Boolean
+   elem-greater-equal(Elem, Elem)		-> Boolean
 
 context-free syntax
    "{" {Elem ","}* "}"                   	-> Bag[[Elem]] {constructor}
@@ -21,6 +23,10 @@ context-free syntax
 
    insert(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
    delete(Elem, Bag[[Elem]])                    	-> Bag[[Elem]]
+
+   sort(Bag[[Elem]])				-> Bag[[Elem]]
+   merge(Bag[[Elem]], Bag[[Elem]])		-> Bag[[Elem]]
+   divide(Boolean, Bag[[Elem]])			-> <Bag[[Elem]], Bag[[Elem]]>
 
    equal(Bag[[Elem]], Bag[[Elem]])           	-> Boolean
    subset(Bag[[Elem]], Bag[[Elem]])          	-> Boolean
@@ -45,6 +51,8 @@ hiddens
 
   variables
     "$Bag" [0-9\']*           -> Bag[[Elem]]
+    "$BagIter" [0-9\']*       -> BagIterator[[Elem]]
     "$Elem" [0-9\']*          -> Elem
     "$Elem*" [0-9\']*         -> { Elem ","}*
     "$Elem+" [0-9\']*         -> { Elem ","}+
+    "$Bool" [0-9\']*          -> Boolean
