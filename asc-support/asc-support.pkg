@@ -2,7 +2,7 @@ package
 identification
    name=__PACKAGE__
    version=__VERSION__
-   location=http://www.cwi.nl/projects/MetaEnv/daily-dist
+   location=http://www.cwi.nl/projects/MetaEnv/asc-support
    info=http://www.cwi.nl/projects/MetaEnv/asc-support
    description='The library libasc-support is a runtime library which is
                 required to build stand-alone executables from
