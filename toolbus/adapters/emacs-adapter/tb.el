@@ -9,7 +9,7 @@
   (setq lenspec len)
 )
 ; min-msg-size is from ../../src/utils.c
-(defun set_minmsgsize (len)
+(defun set-minmsgsize (len)
   "Sets the minimal length of a term to be sent to the ToolBus"
   (setq min-msg-size len)
 )
@@ -30,6 +30,11 @@
 			   nil
 			   nil))
 
+(defun TBstring (str)
+  "Escape strings following ToolBus conventions"
+  (interactive "s")
+  (concat "\"" (replace-in-string (replace-in-string (replace-in-string str "\n" "\\\\n") "\t" "\\\\t") "\"" "\\\\\"") "\"")
+)
 ;Aux functions
 (defun num-to-lenspec (num)
   (truncate-string-to-width 
