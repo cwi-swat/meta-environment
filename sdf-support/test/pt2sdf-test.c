@@ -35,11 +35,12 @@ static int testPT2SDF(void)
 
   assert(PT_isTreeAppl(tree));
   ptProduction = PT_getTreeProd(tree);
-ATwarning("ptProduction: %t\n", ptProduction);
+  assert(PT_isValidProduction(ptProduction));
+  /*ATwarning("ptProduction: %t\n", ptProduction);*/
 
   sdfProduction = PTProductionToSDFProduction(ptProduction);
-ATwarning("sdfProduction: %t\n", sdfProduction);
   assert(SDF_isValidProduction(sdfProduction));
+  /*ATwarning("sdfProduction: %t\n", sdfProduction);*/
 
   return 0;
 }
