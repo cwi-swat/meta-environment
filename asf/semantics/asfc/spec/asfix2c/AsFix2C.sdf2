@@ -32,6 +32,10 @@ exports
     "asfix2c" "(" ATerm ")" -> CProgram
 
 hiddens
+  context-free syntax
+    "asfix2muasf1" "(" ATerm ")" -> Module
+
+hiddens
   variables
     "Char"[0-9]*    -> CHAR
     "Char*"[0-9]*   -> CHAR*
