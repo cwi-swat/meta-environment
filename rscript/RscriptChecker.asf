@@ -36,7 +36,7 @@ equations
 [to1]	type-of($Integer) = int 
 [to2]	type-of($Boolean) = bool
 [to3]	type-of($String)  = str
-[to4]	type-of($Area)    = node
+[to4]	type-of($Area)    = area
 
 %% --- Equality on types: ==
 
@@ -99,7 +99,7 @@ $Error]>
 
 [e2i-1] e2i($Exp cannot be typed)	= listitem("Expression cannot be typed", get-area($Exp))
 [e2i-2] e2i($Stat cannot be typed)	= listitem("Statement cannot be typed", get-area($Stat))
-[e2i-3] e2i($From cannot be typed) 	= listitem("From cannot be typed", get-area($From))
+[e2i-3] e2i($Gen cannot be typed) 	= listitem("Gen cannot be typed", get-area($Gen))
 [e2i-4] e2i($Bag cannot be typed) 	= listitem("Bag cannot be typed", get-area($Bag))
 [e2i-5] e2i($Rel cannot be typed) 	= listitem("Relation cannot be typed", get-area($Rel))
 [e2i-6] e2i(Undeclared $Var) 		= listitem("Undeclared: " || rvar2str($Var), get-area($Var))
@@ -116,7 +116,7 @@ $Error]>
 [t2s-1]	t2s(int) 			= "int"
 [t2s-2] t2s(bool) 			= "bool"
 [t2s-3] t2s(str) 			= "str"
-[t2s-4] t2s(node) 			= "node"
+[t2s-4] t2s(area) 			= "area"
 [t2s-5] t2s(undefined) 			= "undefined"
 [t2s-6] t2s(< $Etype1, $Etype2 >)	= "<" || t2s($Etype1) || "," || t2s($Etype2) || ">"
 [t2s-7] t2s(bag[$Etype])		= "bag[" || t2s($Etype) || "]"
@@ -156,7 +156,7 @@ $Error]>
 [check-const-str]
       check-const($String, $Tenv) = <type-of($String), $Tenv>
 
-[check-const-node]
+[check-const-area]
       check-const($Area, $Tenv) = <type-of($Area), $Tenv>
 
 [check-const-tuple1] 
@@ -273,7 +273,7 @@ $Error]>
       $Exp = $Exp1 implies $Exp2,
       check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
       check($Exp2, $Tenv') = <$Etype2, $Tenv''>,
-      compat($Exp, $Etype1 or $Etype2, $Tenv'') = <$Etype3, $Tenv'''>
+      compat($Exp, $Etype1 implies $Etype2, $Tenv'') = <$Etype3, $Tenv'''>
       ===========================================
       check($Exp, $Tenv) = <bool, $Tenv'''>
 
@@ -378,15 +378,15 @@ $Error]>
       compat($Exp, $Etype > $Etype, $Tenv) = <bool, $Tenv>
 
 [xxx] compat1($Exp, bag[$Etype], 		bag[$Etype], $Tenv) 		= <bag[$Etype], $Tenv>
-[xxx] compat1($Exp, bag[$Etype], 		$Etype, $Tenv) 			= <bag[$Etype], $Tenv>
-[xxx] compat1($Exp, $Etype, 			bag[$Etype], $Tenv) 		= <bag[$Etype], $Tenv>
+%%[xxx] compat1($Exp, bag[$Etype], 		$Etype, $Tenv) 			= <bag[$Etype], $Tenv>
+%%[xxx] compat1($Exp, $Etype, 			bag[$Etype], $Tenv) 		= <bag[$Etype], $Tenv>
 [xxx] compat1($Exp, rel[$Etype1,$Etype2],	rel[$Etype1,$Etype2], $Tenv) 	= <rel[$Etype1,$Etype2], $Tenv>
-[xxx] compat1($Exp, <$Etype1,$Etype2>,		rel[$Etype1,$Etype2], $Tenv) 	= <rel[$Etype1,$Etype2], $Tenv>
-[xxx] compat1($Exp, rel[$Etype1,$Etype2],	<$Etype1,$Etype2>, $Tenv)    	= <rel[$Etype1,$Etype2], $Tenv>
-[xxx] compat1($Exp, <$Etype1,$Etype2>,		<$Etype1,$Etype2>, $Tenv)    	= <rel[$Etype1,$Etype2], $Tenv>
+%%[xxx] compat1($Exp, <$Etype1,$Etype2>,		rel[$Etype1,$Etype2], $Tenv) 	= <rel[$Etype1,$Etype2], $Tenv>
+%%[xxx] compat1($Exp, rel[$Etype1,$Etype2],	<$Etype1,$Etype2>, $Tenv)    	= <rel[$Etype1,$Etype2], $Tenv>
+%%[xxx] compat1($Exp, <$Etype1,$Etype2>,		<$Etype1,$Etype2>, $Tenv)    	= <rel[$Etype1,$Etype2], $Tenv>
 [xxx] compat1($Exp, rel[$Etype1,$Etype2],	bag[<$Etype1,$Etype2>], $Tenv)	= <rel[$Etype1,$Etype2], $Tenv>
 [xxx] compat1($Exp, bag[<$Etype1,$Etype2>],	rel[$Etype1,$Etype2], $Tenv)    = <rel[$Etype1,$Etype2], $Tenv>
-[xxx]compat1($Exp, $Etype,			$Etype, $Tenv)              	= <bag[$Etype], $Tenv> when is-simple-type($Etype) = true
+%%[xxx]compat1($Exp, $Etype,			$Etype, $Tenv)              	= <bag[$Etype], $Tenv> when is-simple-type($Etype) = true
 [default-xxx]
 	compat1($Exp, $Etype1, $Etype2, $Tenv) = <undefined, $Tenv + Incompatible argument types  [$Etype1, $Etype2] in $Exp>  
 
@@ -421,9 +421,9 @@ $Error]>
       check($Exp, $Tenv) = <$Etype3, $Tenv'''>
 
 [xxx] compat($Exp, rel[$Etype1,$Etype2] o rel[$Etype2,$Etype3], $Tenv) = <rel[$Etype1,$Etype3], $Tenv>
-[xxx] compat($Exp, rel[$Etype1,$Etype2] o <$Etype2,$Etype3>, $Tenv) = <rel[$Etype1,$Etype3], $Tenv>
-[xxx] compat($Exp, <$Etype1,$Etype2> o rel[$Etype2,$Etype3], $Tenv) = <rel[$Etype1,$Etype3], $Tenv>
-[xxx] compat($Exp, <$Etype1,$Etype2> o <$Etype2,$Etype3>, $Tenv) = <rel[$Etype1,$Etype3], $Tenv>
+%%[xxx] compat($Exp, rel[$Etype1,$Etype2] o <$Etype2,$Etype3>, $Tenv) = <rel[$Etype1,$Etype3], $Tenv>
+%%[xxx] compat($Exp, <$Etype1,$Etype2> o rel[$Etype2,$Etype3], $Tenv) = <rel[$Etype1,$Etype3], $Tenv>
+%%[xxx] compat($Exp, <$Etype1,$Etype2> o <$Etype2,$Etype3>, $Tenv) = <rel[$Etype1,$Etype3], $Tenv>
 [xxx] compat($Exp, rel[$Etype1,$Etype2] o bag[<$Etype2,$Etype3>], $Tenv) = <rel[$Etype1,$Etype3], $Tenv>
 [xxx] compat($Exp, bag[<$Etype1,$Etype2>] o rel[$Etype2,$Etype3], $Tenv) = <rel[$Etype1,$Etype3], $Tenv>
 
@@ -435,9 +435,9 @@ $Error]>
       check($Exp, $Tenv) = <$Etype3, $Tenv'''>
 
 [xxx] compat($Exp, bag[$Etype1] x bag[$Etype2], $Tenv) = <rel[$Etype1,$Etype2], $Tenv>
-[xxx] compat($Exp, $Etype1 x bag[$Etype2], $Tenv) = <rel[$Etype1,$Etype2], $Tenv> when is-simple-type($Etype1) = true
-[xxx] compat($Exp, bag[$Etype1] x $Etype2, $Tenv) = <rel[$Etype1,$Etype2], $Tenv> when is-simple-type($Etype2) = true
-[xxx] compat($Exp, $Etype1 x $Etype2, $Tenv) = <rel[$Etype1,$Etype2], $Tenv> when is-simple-type($Etype1) = true, is-simple-type($Etype2) = true
+%%[xxx] compat($Exp, $Etype1 x bag[$Etype2], $Tenv) = <rel[$Etype1,$Etype2], $Tenv> when is-simple-type($Etype1) = true
+%%[xxx] compat($Exp, bag[$Etype1] x $Etype2, $Tenv) = <rel[$Etype1,$Etype2], $Tenv> when is-simple-type($Etype2) = true
+%%[xxx] compat($Exp, $Etype1 x $Etype2, $Tenv) = <rel[$Etype1,$Etype2], $Tenv> when is-simple-type($Etype1) = true, is-simple-type($Etype2) = true
 
 [c03] $Exp = $Exp1 . $Exp2,
       check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
@@ -543,41 +543,41 @@ $Error]>
 [af1] 	check($Exp, $Tenv) = <$Etype, $Tenv'>,
       	require-bag-type($Exp, $Var, $Etype, $Tenv') = $Tenv''
       	==========================================
-      	add-from($Var : $Exp, $From*, $Tenv) = add-from($From*, $Tenv'')
+      	add-generators($Var : $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
 [af2] 	check($Exp, $Tenv) = <$Etype, $Tenv'>, 
       	require-rel-type($Exp, $Var1, $Var2, $Etype, $Tenv') = $Tenv''
       	==========================================
-      	add-from(<$Var1, $Var2> : $Exp, $From*, $Tenv) = add-from($From*, $Tenv'')
+      	add-generators(<$Var1, $Var2> : $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
 [af3] 	check($Exp, $Tenv) = <$Etype, $Tenv'>, 
       	require-nrel-type($Exp, $Var1, $Var2, $Var+, $Etype, $Tenv') = $Tenv''	
       	==========================================
-      	add-from(<$Var1, $Var2, $Var+> : $Exp, $From*, $Tenv) = add-from($From*, $Tenv'')
+      	add-generators(<$Var1, $Var2, $Var+> : $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
 [af2] 	require-type($Exp, bool, $Tenv) = $Tenv'
       	==========================================
-      	add-from($Exp, $From*, $Tenv) = add-from($From*, $Tenv')
+      	add-generators($Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv')
 
 [af1] 	check($Exp, $Tenv) = <$Etype, $Tenv'>, 
 	store($Tenv', $Var, $Etype) = $Tenv''
       	==========================================
-      	add-from($Var <- $Exp, $From*, $Tenv) = add-from($From*, $Tenv'')
+      	add-generators($Var <- $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
 [af1] 	check($Exp, $Tenv) = <<$Etype1, $Etype2>, $Tenv'>, 
 	store-nvar($Var1, $Var2, <$Etype1, $Etype2>, $Tenv') = $Tenv''
       	==========================================
-      	add-from(<$Var1, $Var2> <- $Exp, $From*, $Tenv) = add-from($From*, $Tenv'')
+      	add-generators(<$Var1, $Var2> <- $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
 [af1] 	check($Exp, $Tenv) = <<$Etype1, $Etype2>, $Tenv'>, 
 	store-nvar($Var1, $Var2, $Var+,<$Etype1, $Etype2>, $Tenv') = $Tenv''
       	==========================================
-      	add-from(<$Var1, $Var2, $Var+> <- $Exp, $From*, $Tenv) = add-from($From*, $Tenv'')
+      	add-generators(<$Var1, $Var2, $Var+> <- $Exp, $Gen*, $Tenv) = add-generators($Gen*, $Tenv'')
 
-[af3] 	add-from( , $Tenv) = $Tenv
+[af3] 	add-generators( , $Tenv) = $Tenv
 
 [default-af]
-      	add-from($From, $From*, $Tenv) = $Tenv + $From cannot be typed
+      	add-generators($Gen, $Gen*, $Tenv) = $Tenv + $Gen cannot be typed
 
 %% -- Assign to list of variables
 
@@ -602,31 +602,31 @@ $Error]>
 
 [df1] 	delete-nvar($Var, $Tenv) = $Tenv'
       	==========================================
-      	del-from($Var : $Exp, $From*, $Tenv) = del-from($From*, $Tenv')
+      	del-generators($Var : $Exp, $Gen*, $Tenv) = del-generators($Gen*, $Tenv')
 
 [df2] 	delete-nvar($Var1, $Var2, $Tenv) = $Tenv'
       	==========================================
-      	del-from(<$Var1, $Var2> : $Exp, $From*, $Tenv) = del-from($From*, $Tenv')
+      	del-generators(<$Var1, $Var2> : $Exp, $Gen*, $Tenv) = del-generators($Gen*, $Tenv')
 
 [df3]	delete-nvar($Var1, $Var2, $Var+, $Tenv) = $Tenv'
       	==========================================
-      	del-from(<$Var1, $Var2, $Var+> : $Exp, $From*, $Tenv) = del-from($From*, $Tenv')
+      	del-generators(<$Var1, $Var2, $Var+> : $Exp, $Gen*, $Tenv) = del-generators($Gen*, $Tenv')
 
-[df4]	del-from($Exp, $From*, $Tenv) = del-from($From*, $Tenv)
+[df4]	del-generators($Exp, $Gen*, $Tenv) = del-generators($Gen*, $Tenv)
 
 [df5]	delete($Tenv, $Var) = $Tenv'
 	=================================================================
-	del-from($Var <- $Exp, $From*, $Tenv) = del-from($From*, $Tenv')
+	del-generators($Var <- $Exp, $Gen*, $Tenv) = del-generators($Gen*, $Tenv')
 
 [df6]	delete-nvar($Var1, $Var2, $Tenv) = $Tenv'
 	=================================================================
-	del-from(<$Var1, $Var2> <- $Exp, $From*, $Tenv) = del-from($From*, $Tenv')
+	del-generators(<$Var1, $Var2> <- $Exp, $Gen*, $Tenv) = del-generators($Gen*, $Tenv')
 
 [df7]	delete-nvar($Var1, $Var2, $Var+, $Tenv) = $Tenv'
 	=================================================================
-	del-from(<$Var1, $Var2, $Var+> <- $Exp, $From*, $Tenv) = del-from($From*, $Tenv')
+	del-generators(<$Var1, $Var2, $Var+> <- $Exp, $Gen*, $Tenv) = del-generators($Gen*, $Tenv')
 
-[df8] 	del-from( , $Tenv) = $Tenv
+[df8] 	del-generators( , $Tenv) = $Tenv
 
 [cit1] 	container-iter-type(<$Etype1,$Etype2>) = rel[$Etype1, $Etype2]
 [cit2] 	container-iter-type(rel[$Etype1,$Etype2]) = rel[$Etype1, $Etype2]
@@ -636,30 +636,30 @@ $Error]>
       	container-iter-type($Etype) = bag[$Etype]
 
 [check-valueformer3] 
-      	add-from($From+, $Tenv) = $Tenv',
+      	add-generators($Gen+, $Tenv) = $Tenv',
       	check($Exp, $Tenv') = <$Etype, $Tenv''>,
       	container-iter-type($Etype) = $Etype',
-      	del-from($From+, $Tenv'') = $Tenv'''
+      	del-generators($Gen+, $Tenv'') = $Tenv'''
       	======================================
-      	check({ $Exp | $From+ }, $Tenv) = <$Etype', $Tenv'''>
+      	check({ $Exp | $Gen+ }, $Tenv) = <$Etype', $Tenv'''>
 
 %% --- Check Exists
 
 [check-exists1]
-	add-from($From, $Tenv) = $Tenv',
+	add-generators($SimpleGen, $Tenv) = $Tenv',
 	require-type($Test, bool, $Tenv') = $Tenv'',
-	del-from($From, $Tenv'') = $Tenv'''
+	del-generators($SimpleGen, $Tenv'') = $Tenv'''
 	=====================================
-	check(exists($From | $Test), $Tenv) = <bool, $Tenv'''>
+	check(exists($SimpleGen | $Test), $Tenv) = <bool, $Tenv'''>
 
 %% --- Check Forall
 
 [check-forall1]
-	add-from($From, $Tenv) = $Tenv',
+	add-generators($SimpleGen, $Tenv) = $Tenv',
 	require-type($Test, bool, $Tenv') = $Tenv'',
-	del-from($From, $Tenv'') = $Tenv'''
+	del-generators($SimpleGen, $Tenv'') = $Tenv'''
 	=====================================
-	check(forall($From | $Test), $Tenv) = <bool, $Tenv'''>
+	check(forall($SimpleGen | $Test), $Tenv) = <bool, $Tenv'''>
 
 %% --- Check function application
 

@@ -24,7 +24,7 @@ rel[str,str] OUT = {}
 
 solve {
 
-	IN =   {B x OUT[P] | B : BLOCKS, P : PRED-OF[B]},
-	OUT =  {B x (GEN[B] union (IN[B] \ KILL[B])) | B : BLOCKS }
+	IN =   {{B} x OUT[P] | B : BLOCKS, P : PRED-OF[B]},
+	OUT =  {{B} x (GEN[B] union (IN[B] \ KILL[B])) | B : BLOCKS }
 }
 

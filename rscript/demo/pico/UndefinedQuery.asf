@@ -13,16 +13,16 @@ equations
 
 [qs-1] queries($Rstore) =
        eval-rscript(
-        node ROOT
-        rel[node,node] PRED
-        rel[<node,str>,node] USE_OCCURS
-        rel[<node,str>,node] DEF_OCCURS
-        rel[node,str] USES
-        rel[node,str] DEFS
+        area ROOT
+        rel[area,area] PRED
+        rel[<area,str>,area] USE_OCCURS
+        rel[<area,str>,area] DEF_OCCURS
+        rel[area,str] USES
+        rel[area,str] DEFS
 
-        rel[str,node] occurrences(<node,str> S) = sec(S) x (S . USE_OCCURS)
+        rel[str,area] occurrences(<area,str> S) = sec(S) x (S . USE_OCCURS)
 
-        rel[str,node] UNDEF = { occurrences(<N,V>): <N, V> in USES | <ROOT, N> elem carX(PRED, DEFS . V)+ |
+        rel[str,area] UNDEF = { occurrences(<N,V>): <N, V> in USES | <ROOT, N> elem carX(PRED, DEFS . V)+ |
                            occurrences(<N,V>)}
 
 ,

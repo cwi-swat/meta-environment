@@ -37,7 +37,7 @@ describes direct calls between procedures, the USE relation that
 relates statements with the variables that are used in the statements,
 and the PRED relation that relates a statement with its predecessors
 in the control flow graph.  The extraction phase is outside the scope
-of \rscript, may be implemented using \asfsdf.
+of \rscript but may, for instance, be implemented using \asfsdf.
 
 \item[Enrich:] Derive additional information from the relations
 extracted from the source text. For instance, use CALLS to compute
@@ -93,8 +93,8 @@ coordinates, they are written as in: {\tt area("/usr/paulk/myfile.c", 2, 3, 7,
 
 \paragraph{Tuples}
 
-Tuples are represented by the type {\tt <T1, T2>}, where {\tt T1} and
-{\tt T2} are arbitrary types. An example is {\tt <int, str>}.
+Tuples are represented by the type {\tt <$T_1$, $T_2$>}, where $T_1$ and
+$T_2$ are arbitrary types. An example is {\tt <int, str>}.
 
 \rscript directly supports tuples consisting of two elements (also
 know as \emph{pairs}).  For convenience, n-ary tuples are allowed, but
@@ -103,10 +103,10 @@ they are translated to a nested pair.  For instance, the type {\tt
 and the value {\tt <1, 2, 3, 4>} corresponds to {\tt <1, <2, <3, 4>>>}.
 
 \paragraph{Bags}
-Bags are represented by the type {\tt bag[T]}, where {\tt T} is an
+Bags are represented by the type {\tt bag[$T$]}, where $T$ is an
 arbitrary type. Examples are {\tt bag[int]}, {{\tt bag[<int,int>]} and
-{\tt bag[bag[str]]}.  Bags are denoted by {\tt \{ E1, E2, ..., En \}},
-where the {\tt E}s are expressions that yield the desired element
+{\tt bag[bag[str]]}.  Bags are denoted by {\tt \{ $E_1$, $E_2$, ..., $E_n$ \}},
+where the $E_i$ ($1 <= i <= n$) are expressions that yield the desired element
 type. For example, {\tt \{1, 2, 3\}}, {\tt \{<1,10>, <2,20>,
 <3,30>\}}, and {\tt \{\{"a", "b"\}, \{"c", "d"\}\}}.
 
@@ -114,32 +114,32 @@ type. For example, {\tt \{1, 2, 3\}}, {\tt \{<1,10>, <2,20>,
 Bags are nothing more than bags of tuples, but since they are used so often
 we provide some shorthand notation for them.
 
-Relations are represented by the type {\tt rel[T1, T2]}, where {\tt
-T1} and {\tt T2} are arbitrary types; it is a shorthand for {\tt
-bag[<T1, T2>]}.  Examples are {\tt rel[int,str]} and {\tt
-rel[int,bag[str]]}.  Relations are denoted by {\tt \{<E11, E12>, <E21,
-E22>, ..., <En1, En2>\}}, where the {\tt E}$_ij$ are expressions that
-yield the desired element type. For example, {\tt \{<1, "a">, <2, "b",
+Relations are represented by the type {\tt rel[$T_1$, T$_2$]}, where {\tt
+$T_1$} and {\tt $T_2$} are arbitrary types; it is a shorthand for {\tt
+bag[<$T_1$, $T_2$>]}.  Examples are {\tt rel[int,str]} and {\tt
+rel[int,bag[str]]}.  Relations are denoted by {\tt \{<$E_{11}$, $E_{12}$>, <$E_{21}$,
+$E_{22}$>, ..., <$E_{n1}$, $E_{n2}$>\}}, where the $E_{ij}$ are expressions that
+yield the desired element type. For example, {\tt \{<1, "a">, <2, "b">,
 <3,"c">\}}.
 
-N-ary relations are represented by the type  {\tt rel[T1, T2, ..., Tn]}
-which is, not surprisingly, a shorthand for  {\tt bag[<T1, T2, ..., Tn>]}
+Not surprisingly, $n$-ary relations are represented by the type {\tt rel[$T_1$, $T_2$, ..., $T_n$]}
+which is  a shorthand for  {\tt bag[<$T_1$, $T_2$, ..., $T_n$>]}
 
 \section{Comprehensions}
 
 We will use the familiar notation
-\begin{verbatim}
-  { Exp | Gen1, ..., Genn }
-\end{verbatim}
+\begin{quote}
+  {\tt \{ $E$ | $G_1$, ..., $G_n$ \}}
+\end{quote}
 to denote the construction of a bag consisting of the union of
-successive values of the expression {\tt Exp}.  The values and the
-generated bag are determined by {\tt Exp} and the \emph{generators}
-{\tt Gen1, ..., Genn}.  {\tt Exp} is computed for all possible
+successive values of the expression $E$.  The values and the
+generated bag are determined by $E$ and the \emph{generators}
+$G_1 ,..., G_n$.  $E$ is computed for all possible
 combinations of values produced by the generators.
 
 Each generator may introduce new variables
 that can be used in subsequent generators as well as in the expression
-{\tt Exp}.  A generator can use the variables introduced by preceeding
+$E$.  A generator can use the variables introduced by preceeding
 generators.  Generators may enumerate all the values in a bag or
 relation, they may perform a test, or they may assign a value to
 variables.
@@ -151,14 +151,14 @@ Enumerators generate all the values in a given bag or relation.
 They come in two flavours: 
 
 \begin{itemize}
-\item {\tt V : Exp}: the elements of the bag or relation that results from the evaluation
-of {\tt Exp} are enumerated and subsequently assigned to the new variable {\tt V}.
+\item {\tt $V$~:~$E$}: the elements of the bag or relation that results from the evaluation
+of expression $E$ are enumerated and subsequently assigned to the new variable $V$.
 
 
-\item {\tt <V1, ..., Vn> : Exp}: the elements of the bag or relation
-that results from the evaluation of {\tt Exp} are enumerated. The
-elements of the resulting n-tuple are subsequently assigned to the
-new variables {\tt V1, ..., Vn}.
+\item {\tt <$V_1$,~...,~$V_n$>~:~$E$}: the elements of the bag or relation
+that results from the evaluation of expression $E$ are enumerated. The
+elements of the resulting $n$-tuple are subsequently assigned to the
+new variables $V_1 ,..., V_n$.
 
 \end{itemize}
 
@@ -176,11 +176,10 @@ Assignment assigns a value to one or more variables and comes in two forms:
 
 \begin{itemize}
 
-\item \item {\tt V : Exp}: assigns the value of {\tt Exp} to the new variable {\tt V}.
+\item {\tt $V$ <- $E$}: assigns the value of expression $E$ to the new variable $V$.
 
-\item {\tt <V1, ..., Vn> : Exp}: assigns the elements of the n-tuple
-resulting from the evaluation of {\tt Exp} to the new variables {\tt
-V1, ..., Vn}.
+\item {\tt <$V_1$, ..., $V_n$> : $E$}: assigns the elements of the $n$-tuple
+resulting from the evaluation of expression $E$ to the new variables $V_1 ,..., V_n$.
 
 \end{itemize}
 
@@ -495,30 +494,30 @@ T2}, ... represent arbitrary types.
 
 \begin{verbatim}
 rel[T1,T3] o(rel[T1,T2] R1, rel[T2,T3] R2) =
-   {<v, y> : <v, w> in R1, <x, y> in R2 | w == x }
+   {<v, y> | <v, w> : R1, <x, y> :  R2, w == x }
 \end{verbatim}
 
 \paragraph{$^\dagger$Carthesian product: {\tt x}}
 \begin{verbatim}
 rel[T1,T2] x(bag[T1] B1, bag[T2] B2) =
-   {<x, y> : x in B1, y in B2 }
+   {<x, y> | x : B1, y : B2 }
 \end{verbatim}
 
 \paragraph{$^\dagger$ Left image: {\tt .}}
 \begin{verbatim}
-bag[T2] .(T1 E, rel[T1,T2] R) = { W : <V, W> in R | V == E }
-bag[T2] .(bag[T1] B, rel[T1,T2] R) = { W : <V, W> in R | V in B}
+bag[T2] .(T1 E, rel[T1,T2] R) = { W | <V, W> : R, V == E }
+bag[T2] .(bag[T1] B, rel[T1,T2] R) = { W | <V, W> : R, V in B}
 \end{verbatim}
 
 \paragraph{$^\dagger$Right image: {\tt .}}
 \begin{verbatim}
-bag[T1] .(rel[T1,T2] R, T2 E) = { V : <V, W> in R | W == E }
-bag[T1] .(rel[T1,T2] R, bag[T2] B) = { V : <V, W> in R |  W in B }
+bag[T1] .(rel[T1,T2] R, T2 E) = { V | <V, W> : R, W == E }
+bag[T1] .(rel[T1,T2] R, bag[T2] B) = { V | <V, W> : R, W in B }
 \end{verbatim}
 
 \paragraph{Identity: {\tt id}}
 \begin{verbatim}
-rel[T,T] id(bag[T] B) = { <X, X> : X in B }
+rel[T,T] id(bag[T] B) = { <X, X> | X in B }
 \end{verbatim}
 Example:
 \begin{verbatim}
@@ -527,7 +526,7 @@ id({1,2,3}) = {<1,1>, <2,2>, <3,3>}
 
 \paragraph{Domain: {\tt domain}}
 \begin{verbatim}
-Def:	bag[T1] domain (rel[T1,T2] R) = { X : <X, Y> in R }
+Def:	bag[T1] domain (rel[T1,T2] R) = { X | <X, Y> : R }
 \end{verbatim}
 Example:
 \begin{verbatim}
@@ -536,7 +535,7 @@ domain({<1,10>, <2,20>}) = {1, 2}
 
 \paragraph{Range: {\tt range}}
 \begin{verbatim}
-bag[T2] range (rel[T1,T2] R) = { Y : <X, Y> in R }
+bag[T2] range (rel[T1,T2] R) = { Y | <X, Y> : R }
 \end{verbatim}
 Example:
 \begin{verbatim}
@@ -564,7 +563,7 @@ bag[T] bottom(rel[T,T] R) = range(R) \ domain(R)
 
 \paragraph{Inverse: {\tt inv}}
 \begin{verbatim}
-rel[T2,T1] inv (rel[T1,T2] R) = { <Y, X> : <X, Y> in R }
+rel[T2,T1] inv (rel[T1,T2] R) = { <Y, X> | <X, Y> : R }
 \end{verbatim}
 example:
 \begin{verbatim}
@@ -579,39 +578,37 @@ rel[T1, T2] compl(rel[T1,T2] R) = (domain(R) x range(R)) \ R
 \paragraph{Domain restriction: {\tt domainR}}
 \begin{verbatim}
 rel[T1,T2] domainR (rel[T1,T2] R, Bag[T1] B) = 
-   { <X, Y> : <X, Y> in R, X in B
-}
+   { <X, Y> | <X, Y> : R, X in B }
 \end{verbatim}
 
 \paragraph{Range Restriction: {\tt rangeR}}
 \begin{verbatim}
 rel[T1,T2] rangeR (rel[T1,T2] R, Bag[T2] B) =  
-   { <X, Y> : <X, Y> in R | Y in B
-}
+   { <X, Y> | <X, Y> : R, Y in B }
 \end{verbatim}
 
 \paragraph{Carrier Restriction: {\tt carrierR}}
 \begin{verbatim}
 rel[T,T] carR (rel[T,2] R, Bag[T] B) =  
-   { <X, Y> : <X, Y> in R | X in B and Y  in B }
+   { <X, Y> | <X, Y> : R, X in B and Y in B }
 \end{verbatim}
 
 \paragraph{Domain Exclusion: {\tt domainX}}
 \begin{verbatim}
 rel[T1,T2] domainX (rel[T1,T2] R, Bag[T1] B) = 
-   { <X, Y> : <X, Y> in R | X notin B }
+   { <X, Y> | <X, Y> : R, X notin B }
 \end{verbatim}
 
 \paragraph{Range Exclusion: {\tt rangeX}}
 \begin{verbatim}
 rel[T1,T2] rangeX (rel[T1,T2] R, Bag[T2] B) = 
-	   { <X, Y> : <X, Y> in R | Y notin B }
+	   { <X, Y> | <X, Y> : R, Y notin B }
 \end{verbatim}
 
 \paragraph{Carrier Exclusion: {\tt carrierX}}
 \begin{verbatim}
 rel[T,T] carX (rel[T,T] R, Bag[T] B) = 
-   { <X, Y> : <X, Y> in R | X notin B or Y notin B }
+   { <X, Y> | <X, Y> : R, X notin B or Y notin B }
 \end{verbatim}
 
 \paragraph{First of Tuple: {\tt first}}
@@ -635,5 +632,24 @@ rel[T,T] reachX( bag[T] S, bag[T] E, rel[T,T] R) =
 rel[T,T] reachR( bag[T] S, bag[T] E, rel[T,T] R) =
 	       domainR(R, S) o carrierR(R, E)+
 \end{verbatim}
+
+\section{Differences with previous versions}
+\rscript is in under active development and several (incompatible)  changes
+have been made in the last few weeks. Here is an indicative list.
+
+\begin{itemize}
+
+\item The syntax of comprehension has been changed. Old
+\begin{verbatim}
+  { <X, Y> : <X, Y> in R | X in B and Y  in B }
+\end{verbatim}
+New:
+\begin{verbatim}
+  { <X, Y> | <X, Y> : R, X in B and Y in B }
+\end{verbatim}
+
+\item The type {\tt node} has been renamed into {\tt area}
+
+\end{itemize}
 
 \end{document}

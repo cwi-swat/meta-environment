@@ -1,4 +1,4 @@
-eval-rscript(
+
 int ROOT = 0 
 
 rel[str,int] DEFS  = {<"x", 1>, <"z", 3>, <"x", 4>, <"y", 5>}
@@ -68,5 +68,3 @@ rel[str,str] C2 = (Bag1 x Bag2)+
 rel[int,int] C3 = PRED *
 
 int mysize(bag[int] B) = # B
-
-)
