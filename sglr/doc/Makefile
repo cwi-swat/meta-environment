@@ -4,7 +4,7 @@
 CENTER="Meta-Environment Documentation"
 RELEASE="1.0"
 
-target=sglr tree2dot
+target=a2toa1 sglr tree2dot
 files=	${addsuffix .7,${target}} ${addsuffix .txt,${target}} \
 	${addsuffix .html,${target}} ${addsuffix .bok,${target}}
 

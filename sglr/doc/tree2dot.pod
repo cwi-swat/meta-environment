@@ -4,7 +4,7 @@ TREE2DOT - Parse Trees to DOT converter
 
 =head1 SYNOPSIS
 
-B<tree2dot>[-B<x>] [-B<i> I<file>] [-B<o> I<file>] [-B<D> I<file>]
+B<tree2dot>  [-B<btvVx>] [-B<D> I<file>] [-B<i> I<file>] [-B<o> I<file>]
 
 =head1 DESCRIPTION
 
@@ -14,17 +14,25 @@ A number of options can be supplied; these are as follows:
 
 =over 4
 
-=item -B<D> I<file>, -B<o> I<file>
+=item -B<b>, -B<t>,  -B<v>
 
-Write dot output to F<file>.  By default, output goes to stdout.
+Present for compatibilty reasons only; ignored.
+
+=item -B<h>
+
+Displays concise usage information.
 
 =item -B<i> I<file>
 
 Read parse forest from F<file>; by default, input is read from stdin.
 
-=item -B<h>
+=item -B<D> I<file>, -B<o> I<file>
 
-Displays concise usage information.
+Write dot output to F<file>.  By default, output goes to stdout.
+
+=item -B<V>
+
+Reveal program version.
 
 =item -B<x>
 
