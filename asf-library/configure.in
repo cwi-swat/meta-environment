@@ -30,7 +30,4 @@ AC_OUTPUT(
    library/languages/sdf2/renaming/Makefile
    library/languages/pico/Makefile
    library/languages/pico/syntax/Makefile
-   library/languages/pico/interpreter/Makefile
-   library/languages/pico/typechecker/Makefile
-   library/languages/pico/compiler/Makefile
 )
