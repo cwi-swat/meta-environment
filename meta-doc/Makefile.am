@@ -10,7 +10,7 @@ doc_DATA = asf+sdf-user-manual.ps
 
 
 asf+sdf-user-manual.ps:
-	( cd user-manual; gmake )
+	( cd user-manual; ${MAKE} )
 	cp user-manual/manual.ps asf+sdf-user-manual.ps
 
 
