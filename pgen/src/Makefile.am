@@ -1,3 +1,4 @@
+include $(top_srcdir)/make_rules
 
 TESTS		= test-chars
 
@@ -35,9 +36,6 @@ test_chars_SOURCES	= test-chars.c characters.c pgen-symbol.c
 test_chars_LDADD	= -L$(ATERM)/lib -lATerm \
                         $(SOCKLIBS)
 
-#CFLAGS += -pg
-#CFLAGS += -DDMALLOC -DDEBUG_ALLOC -I/ufs/olivierp/include
-
 parsetablegen_SOURCES = $(SRCS) $(HDRS)
 parsetablegen_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                         -L$(SDF_SUPPORT)/lib -lSDFME \
@@ -46,26 +44,9 @@ parsetablegen_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                         -L$(TOOLBUSLIB)/lib -lATB \
                         -L$(ATERM)/lib -lATerm \
                         $(SOCKLIBS)
-# -L/ufs/olivierp/lib -ldmalloc \
 
-CLEANFILES	= parsetablegen.tifs \
-                  sdf2table sdf2table.1 \
+CLEANFILES	= sdf2table sdf2table.1 \
 		  sdf2table.test 
-
-%.tif.c %.tif.h: %.tifs
-	PATH=$(TOOLBUS)/bin:$${PATH} tifstoc -tool $* $<
-
-%.tifs: %.idef
-	PATH=$(TOOLBUS)/bin:$${PATH} idef2tif $<
-	@if [ "a${VPATH}" != "a" ]; then \
-		mv ${srcdir}/$@ $@ ;\
-	fi
-
-POD2MAN	= pod2man
-CENTER	= "Meta-Environment Documentation"
-
-%.1: %.pod
-	-$(POD2MAN) --center=${CENTER} --release=${VERSION} --section=1 $< > $@
 
 # we create one sdf2table that uses source tree binaries and data 
 # this is needed for testing

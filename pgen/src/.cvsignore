@@ -1,9 +1,7 @@
 Makefile.in
 Makefile
 .deps
-parsetablegen.tifs
-parsetablegen.tif.h
-parsetablegen.tif.c
+*.tifs
 parsetablegen
 sdf2table
 gen-table
