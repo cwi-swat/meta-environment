@@ -108,7 +108,8 @@ void usage(void)
 {
     fprintf(stderr,
 	"\nApply-function encapsulates AsFix1 terms with a quoted or unquoted prefix function.\n\n"
-        "Usage: apply-function -qdbh -f <name> -s <sort> -i <file> -o <file> -tV . . .\n"
+        "Usage: apply-function -qdbh -f <name> -s <sort> -m <modulename>\n"
+        "                      -i <file> -o <file> -tV . . .\n"
         "Options:\n"
         "\t-q              unquoted prefix notation\n"
         "\t-b              binary output mode (default)\n"
