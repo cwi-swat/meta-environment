@@ -14,37 +14,21 @@ imports utilities/PosInfo[Bag[[Elem]]]
 
 imports Rstore
 
-exports
-    sorts ERROR ERRORS TENV DCLRVARS  
+%% External interface
 
+exports
     context-free start-symbols Summary 
-    context-free start-symbols TENV <REXPTYPE, TENV> <Boolean, Table[[RVAR,REXPTYPE]]>
+    context-free syntax
+	check-rscript(RSCRIPT)					-> Summary
+	check-rscript-with-rstore(RSCRIPT, RSTORE)		-> Summary
+	is-type-correct(Summary)				-> Boolean
+
+%% Error handling
+
+hiddens
+    sorts ERROR ERRORS
 
     context-free syntax
-
-	type-of(Elem)                  				-> ElemType
-	element-type(REXPTYPE, TENV)				-> REXPTYPE
-
-        "undefined-type"                       			-> REXPTYPE
-	field(Integer)						-> REXPTYPE
-	"<" { DCLRVAR ","}* ">"					-> REXPTYPE
-        "fun" {REXPTYPE ","}* "to" REXPTYPE			-> REXPTYPE
-        "[" {REXPTYPE ","}* "]"                 		-> REXPTYPE
-	"empty-set-type"					-> REXPTYPE
-	cover-empty(REXPTYPE)					-> REXPTYPE
-
-	first(REXPTYPE, TENV)					-> REXPTYPE
-	second(REXPTYPE, TENV)					-> REXPTYPE
-
-	is-tuple(Elem)						-> Boolean
-	is-rel-type(REXPTYPE)					-> Boolean
-	is-set-type(REXPTYPE)					-> Boolean
-
-	norm(REXPTYPE, TENV)					-> REXPTYPE
-	well-formed-type(REXPTYPE, TENV)			-> TENV
-	equal-type(REXPTYPE, REXPTYPE, TENV)			-> Boolean
-	get-tuple-type(REXPTYPE)				-> REXPTYPE
-
 	RSTAT "cannot be typed" 				-> ERROR
 	REXP "cannot be typed" 					-> ERROR
 
@@ -55,7 +39,6 @@ exports
 	RVAR "not initialized in Rstore"			-> ERROR
 	RVAR "conflicting initialization in Rscript and in Rstore"		
 								-> ERROR
-
         "Incompatible argument types" REXPTYPE "in" REXP        -> ERROR
         REXP "should have type" REXPTYPE          		-> ERROR
         REXP "should be of type set"         			-> ERROR
@@ -66,15 +49,22 @@ exports
 	"Field name" RVAR "used at different record positions"	-> ERROR
 	REXPTYPE "should be set or rel type"			-> ERROR
 
-        "errors" "[" {ERROR ";"} * "]"                		-> ERRORS {prefer}
+       "errors" "[" {ERROR ";"} * "]"                		-> ERRORS {prefer}
 
-	t2s(REXPTYPE)						-> StrCon
-	tl2sl({REXPTYPE ","}*)					-> StrCon
 	e2i(ERROR)						-> Error
 	convert-errors(ERRORS)                    		-> Summary
 	convert-errors1(ERRORS)                    		-> {Error ","}*
         rvar2str(RVAR)		 	        		-> StrCon
- 
+
+%% Type environments
+
+hiddens
+    sorts TENV
+
+    context-free start-symbols TENV <REXPTYPE, TENV> <Boolean, Table[[RVAR,REXPTYPE]]>
+
+    context-free syntax
+
 	<Table[[RVAR,REXPTYPE]], ERRORS> 			-> TENV {prefer}
 
 	TENV "+" ERROR						-> TENV
@@ -87,15 +77,47 @@ exports
 	store(TENV, RVAR, REXPTYPE)				-> TENV
 	delete(TENV, RVAR)					-> TENV
 
+	"built-ins"						-> Table[[RVAR,REXPTYPE]]
+
+%% Type extensions and type utilities
+
+hiddens
+    context-free syntax
+        "undefined-type"                       			-> REXPTYPE
+	 "<" {DCLRVAR ","}* ">"					-> REXPTYPE
+        "fun" {REXPTYPE ","}* "to" REXPTYPE			-> REXPTYPE
+        "[" {REXPTYPE ","}* "]"                 		-> REXPTYPE
+	"empty-set-type"					-> REXPTYPE
+
+	type-of(Elem)                  				-> ElemType
+	element-type(REXPTYPE, TENV)				-> REXPTYPE
+	field(Integer)						-> REXPTYPE
+	cover-empty(REXPTYPE)					-> REXPTYPE
+	first(REXPTYPE, TENV)					-> REXPTYPE
+	second(REXPTYPE, TENV)					-> REXPTYPE
+
+	is-tuple(Elem)						-> Boolean
+	is-rel-type(REXPTYPE)					-> Boolean
+	is-set-type(REXPTYPE)					-> Boolean
+
+	norm(REXPTYPE, TENV)					-> REXPTYPE
+	well-formed-type(REXPTYPE, TENV)			-> TENV
+	equal-type(REXPTYPE, REXPTYPE, TENV)			-> Boolean
+	get-tuple-type(REXPTYPE)				-> REXPTYPE
+
+        match-types(REXPTYPE, REXPTYPE, Table[[RVAR,REXPTYPE]], TENV)	-> <Boolean, Table[[RVAR,REXPTYPE]]>
+        substitute(REXPTYPE,  Table[[RVAR,REXPTYPE]], TENV) 	-> <REXPTYPE, TENV>
+
+	t2s(REXPTYPE)						-> StrCon
+	tl2sl({REXPTYPE ","}*)					-> StrCon
+
+hiddens
+    sorts  DCLRVARS  
+
+    context-free syntax
 	match-targets({TARGET ","}*, REXPTYPE, TENV)		-> TENV
 	delete-targets({TARGET ","}*, TENV)			-> TENV
 
-	"built-ins"						-> Table[[RVAR,REXPTYPE]]
-
-	check-rscript(RSCRIPT)					-> Summary
-	check-rscript-with-rstore(RSCRIPT, RSTORE)		-> Summary
-
-	is-type-correct(Summary)				-> Boolean
         check-rscript(RSTAT*, TENV)				-> TENV
 	check-rstore(RSTAT*, RSTORE, TENV)			-> TENV
 	check(REXP, TENV) 					-> <REXPTYPE, TENV>
@@ -146,9 +168,6 @@ exports
         collect-actuals({REXP ","}*, TENV)        		-> <REXPTYPE, TENV>
 
         find-result-type(RVAR, REXPTYPE, TENV)   		-> <REXPTYPE, TENV>
-
-        match-types(REXPTYPE, REXPTYPE, Table[[RVAR,REXPTYPE]], TENV)	-> <Boolean, Table[[RVAR,REXPTYPE]]>
-        substitute(REXPTYPE,  Table[[RVAR,REXPTYPE]], TENV) 	-> <REXPTYPE, TENV>
 
 hiddens
     imports basic/Comments
