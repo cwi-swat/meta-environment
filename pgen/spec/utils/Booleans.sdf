@@ -11,10 +11,11 @@ exports
     Bool "\\/" Bool                        -> Bool {assoc}
     "(" Bool ")"                           -> Bool {bracket}
     "if" Bool "then" Bool "else" Bool "fi" -> Bool
-context-free  priorities
+  context-free  priorities
     "~"  Bool       -> Bool >
     Bool "/\\" Bool -> Bool >
     Bool "(+)" Bool -> Bool >
     Bool "\\/" Bool -> Bool
+hiddens
   variables
     "Bool" [0-9\']* -> Bool

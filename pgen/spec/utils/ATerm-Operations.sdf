@@ -25,9 +25,9 @@ exports
     "(" ATerm ")"                            -> ATerm {bracket}
     "(" ATerms ")"                           -> ATerms {bracket}
     "(" ATermList ")"                        -> ATermList {bracket}
-context-free  priorities
-    ATerm "," ATerms -> ATerms
-  > ATerms "++a" ATerms -> ATerms
+  context-free  priorities
+      ATerm "," ATerms -> ATerms
+    > ATerms "++a" ATerms -> ATerms
 
 exports
   context-free syntax
@@ -41,11 +41,10 @@ exports
     yes(ATerm)                               -> Bool
     yes                                      -> AFun
     comp                                     -> AFun
+hiddens
   variables
     "Pred" [0-9\']* -> ATerm
     "Fun"  [0-9\']* -> ATerm
-hiddens
-  variables
     "Args" [0-9\']* -> ATerms
 
 
@@ -57,4 +56,16 @@ exports
     ATerm "@" ATermList       -> ATerm
     set-ann(ATerm, ATermList) -> ATerm
     has-ann(ATerm)            -> Bool
+
+hiddens
+  variables
+    "Ts"  [0-9\']*    -> ATerms
+    "Tl"  [0-9\']*    -> ATermList
+    "ACon"[0-9\']*    -> ACon
+    "AFun"[0-9\']*    -> AFun
+    "T"   [0-9\']*    -> ATerm
+    "Ann" [0-9\']*    -> Ann 
+    "L"   [0-9\']*    -> Literal
+    [z][0-9\']*       -> IntCon
+    "RealCon"[0-9\']* -> RealCon
 

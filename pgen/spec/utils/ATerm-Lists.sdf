@@ -47,4 +47,15 @@ exports
     foldlf                           -> AFun
     foldr-zip(ATerm, ATerm, ATerm, ATermList, ATermList) -> ATerm
     foldr-zipf                       -> AFun
+
+
 %%}
+
+hiddens
+  variables
+    "Ts"  [0-9\']*    -> ATerms
+    "Tl"  [0-9\']*    -> ATermList
+    "T"   [0-9\']*    -> ATerm
+    [n][0-9\']*       -> NatCon
+    "Pred" [0-9\']*   -> ATerm
+    "Fun"  [0-9\']*   -> ATerm
