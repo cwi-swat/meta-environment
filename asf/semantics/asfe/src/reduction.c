@@ -58,8 +58,6 @@ static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra);
 /* Reduction functionality */
 /*{{{  static ATerm try(PT_Tree trm, equation_entry *entry, int depth) */
 
-/*{{{  static ATerm try(PT_Tree trm, equation_entry *entry, int depth) */
-
 static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
 {
   ATerm env = fail_env;
@@ -91,8 +89,6 @@ static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
 }
 
 /*}}}  */
-
-/*}}}  */
 /*{{{  static ATermList reduce(PT_Tree trm, int depth) */
 
 static PT_Tree reduce(PT_Tree trm, int depth)
@@ -103,6 +99,10 @@ static PT_Tree reduce(PT_Tree trm, int depth)
   ATerm env = (ATerm) ATempty;
   equation_entry *entry = NULL;
   int i, tries;
+
+  if (!PT_hasTreeProd(trm)) {
+    return trm;
+  }
 
   top_ofs = PT_getTreeProd(trm);
   first_arg = getFirstArgument(trm);
@@ -578,7 +578,6 @@ PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra)
     reduct = rewriteVariableAppl(trm, env, depth, extra);
   }
   else if (PT_hasTreeArgs(trm)) {
-
     /* first the kids */    
     reduct = rewriteArgs(trm, env, depth, extra);
 

@@ -364,8 +364,8 @@ equation_entry *find_equation(equation_entry * from, PT_Production top_ofs,
     ATwarning("looking for equation with ofs: %s\n",
 	      PT_yieldProduction(top_ofs));
     if (first_ofs) {
-    ATwarning("................and first ofs: %s\n",
-	      PT_yieldProduction(first_ofs));
+      ATwarning("................and first ofs: %s\n",
+		PT_yieldProduction(first_ofs));
     }
   }
 
