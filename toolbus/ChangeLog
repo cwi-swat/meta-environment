@@ -1,5 +1,10 @@
 $Id$
 
+2003-06-10 <kooiker@cwi.nl>
+ * Debugger stops running at breakpoints.
+ * Breakpoints possible in more than one toolbus script (now recording
+   process and linenumber, was linenumber only)
+
 2003-03-30 <jurgenv@cwi.nl>
  * Multiple toolbus(...) declarations allowed from now on
 
