@@ -1,5 +1,9 @@
 $Id$
 
+2003/10/01 (markvdb@cwi.nl)
+ * Regenerated from a dump from Sdf2 in the library with constructor
+   and labels.
+
 2003/09/26 ({jurgenv,jong}@cwi.nl)
  * Refactored implementation of get-new-modulename in sdf-modules tool and
    fixed a compiler warning in it.
