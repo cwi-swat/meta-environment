@@ -42,16 +42,21 @@ process GeneralEditorCreator (ModuleName : str, FullFileName : str) is
 let
   Path : str,
   FileName : str,
-  Extension : str
+  Extension : str,
+  AskedExtension : str
 in
-  snd-msg(decons-file-name(FullFileName, ".sdf")) .
+  snd-msg(file-extension-hook(sdf)) .
+  rec-msg(file-extension-hook-result(AskedExtension?)) .
+  snd-msg(decons-file-name(FullFileName, AskedExtension)) .
   rec-msg(decons-file-name-result(Path?, FileName?, Extension?)) .
-  if equal(Extension, ".sdf") then
+  if equal(Extension, AskedExtension) then
     SyntaxEditorCreator(ModuleName)
   else
-    snd-msg(decons-file-name(FullFileName, ".asf")) .
+    snd-msg(file-extension-hook(asf)) .
+    rec-msg(file-extension-hook-result(AskedExtension?)) .
+    snd-msg(decons-file-name(FullFileName, AskedExtension)) .
     rec-msg(decons-file-name-result(Path?, FileName?, Extension?)) .
-    if equal(Extension, ".asf") then
+    if equal(Extension, AskedExtension) then
       EquationsEditorCreator(ModuleName)
     else
       TermEditorCreator(ModuleName, FullFileName, none)
