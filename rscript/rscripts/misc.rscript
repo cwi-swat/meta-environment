@@ -18,9 +18,9 @@ rel[str,int]  UN = { <V, N> : <V, N> in USES | <ROOT, N> in reachX({0}, V . DEFS
 
 bool tst(int N) = true
 
-rel[str,int]  UN1 = { <V, N> : <V, N> in USES |  <ROOT, N> in carX(PRED, V .  DEFS)+ }
+rel[str,int]  UN1 = { <V, N> : <V, N> in USES |  <ROOT, N> in carrierX(PRED, V .  DEFS)+ }
 
-<T1,T2> swap(<T2,T1> P) = <sec(P), fst(P)>
+<T1,T2> swap(<T2,T1> P) = <second(P), first(P)>
 
 bag[str] Bag1     = {"a", "b", "c"}
 bag[str] Bag2     = {"d", "e", "f"}
