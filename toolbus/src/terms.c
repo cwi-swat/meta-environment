@@ -34,7 +34,7 @@ static int nfree;                   /* number of free terms */
    to be followed.
 */
 
-#define NROOT 100                   /* max. # of roots */
+#define NROOT 4096                   /* max. # of roots */
 static int nroot = 0;               /* number of roots in use */
 static term **mark_roots[NROOT];    /* array of roots */
 #define NMARK 4096                   /* max. size of mark stack */
@@ -100,7 +100,7 @@ void TBprotect(term **pt)
   if(nroot < NROOT)
     mark_roots[nroot++] = pt;
   else
-    err_fatal("Too many mark_roots");
+    err_fatal("Too many mark_roots (%d)", NROOT);
 }
 
 void TBunprotect(term **pt)
