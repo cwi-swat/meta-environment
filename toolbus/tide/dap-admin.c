@@ -70,7 +70,7 @@ int dap_id(term *d)
 
 #line 357 "dap-admin.c.nw"
 void dap_rule_created(int dapid, int rid, term_list *procs, 
-		term *port, term *cond, term *acts, term *lifetime)
+		term *the_port, term *cond, term *acts, term *lifetime)
 {
   event_rule *rule;
 
@@ -102,37 +102,37 @@ void dap_rule_created(int dapid, int rid, term_list *procs,
   
 #line 406 "dap-admin.c.nw"
 {
-  term *type = list_index(port, 1);
-  term *when = list_index(port, 2);
+  term *type = list_index(the_port, 1);
+  term *when = list_index(the_port, 2);
 
   rule->port.when = dap_eventwhen(when);
   rule->port.type = dap_eventport(type);
   switch(rule->port.type) {  
     case PORT_EXEC_STATE:
 			rule->port.u.exec_state = 
-					dap_term2es(list_index(port, 3));
+					dap_term2es(list_index(the_port, 3));
 			break;
-    case PORT_LOCATION:	dap_eventlocation(list_next(list_next(port)),
+    case PORT_LOCATION:	dap_eventlocation(list_next(list_next(the_port)),
 				&rule->port.u.loc);
 			break;
     case PORT_CALL:
     case PORT_FAIL:
     case PORT_RETRY:
     case PORT_SUCCEED:	
-	rule->port.u.function = strdup(str_val(list_index(port, 3)));
+	rule->port.u.function = strdup(str_val(list_index(the_port, 3)));
 	break;
 
     case PORT_EXCEPTION:
-	rule->port.u.exception = strdup(str_val(list_index(port, 3)));
+	rule->port.u.exception = strdup(str_val(list_index(the_port, 3)));
 	break;
 
     case PORT_VARIABLE:
-	rule->port.u.var = strdup(str_val(list_index(port, 3)));
+	rule->port.u.var = strdup(str_val(list_index(the_port, 3)));
 	break;
 
     case PORT_SEND:
     case PORT_RECEIVE:
-	rule->port.u.msg = list_index(port, 3);
+	rule->port.u.msg = list_index(the_port, 3);
 	TBprotect(&rule->port.u.msg);
 	break;
   }
@@ -151,7 +151,7 @@ void dap_rule_created(int dapid, int rid, term_list *procs,
 }
 #line 462 "dap-admin.c.nw"
 void dap_rule_modified(int dapid, int rid, term_list *procs, 
-		term *port, term *cond, term *acts, term *lifetime)
+		term *the_port, term *cond, term *acts, term *lifetime)
 {
   event_rule *rule;
 
@@ -187,37 +187,37 @@ void dap_rule_modified(int dapid, int rid, term_list *procs,
   
 #line 515 "dap-admin.c.nw"
 {
-  term *type = list_index(port, 1);
-  term *when = list_index(port, 2);
+  term *type = list_index(the_port, 1);
+  term *when = list_index(the_port, 2);
 
   rule->port.when = dap_eventwhen(when);
   rule->port.type = dap_eventport(type);
   switch(rule->port.type) {  
     case PORT_EXEC_STATE:
 			rule->port.u.exec_state = 
-					dap_term2es(list_index(port, 3));
+					dap_term2es(list_index(the_port, 3));
 			break;
-    case PORT_LOCATION:	dap_eventlocation(list_next(list_next(port)),
+    case PORT_LOCATION:	dap_eventlocation(list_next(list_next(the_port)),
 				&rule->port.u.loc);
 			break;
     case PORT_CALL:
     case PORT_FAIL:
     case PORT_RETRY:
     case PORT_SUCCEED:	
-	rule->port.u.function = strdup(str_val(list_index(port, 3)));
+	rule->port.u.function = strdup(str_val(list_index(the_port, 3)));
 	break;
 
     case PORT_EXCEPTION:
-	rule->port.u.exception = strdup(str_val(list_index(port, 3)));
+	rule->port.u.exception = strdup(str_val(list_index(the_port, 3)));
 	break;
 
     case PORT_VARIABLE:
-	rule->port.u.var = strdup(str_val(list_index(port, 3)));
+	rule->port.u.var = strdup(str_val(list_index(the_port, 3)));
 	break;
 
     case PORT_SEND:
     case PORT_RECEIVE:
-	rule->port.u.msg = list_index(port, 3);
+	rule->port.u.msg = list_index(the_port, 3);
 	TBprotect(&rule->port.u.msg);
 	break;
   }

@@ -212,22 +212,22 @@ term_list *clean_vars_list(term_list *l)
   return r;
 }
 #line 360 "buscontrol.c.nw"
-void update_process(int pid, term *env)
+void update_process(int pid, term *the_env)
 {
-  term *var, *val;
+  term *the_var, *val;
   TBbool changed = TBfalse;
 
   if(!dap_get_process(0, pid))
     return;
 
-  while(env) {
-    var = list_first(env);
-    set_var_value(pid, list_first(var), list_first(list_next(var)));
-    env = list_next(env);    
+  while(the_env) {
+    the_var = list_first(the_env);
+    set_var_value(pid, list_first(the_var), list_first(list_next(the_var)));
+    the_env = list_next(the_env);    
   }
 }
 #line 380 "buscontrol.c.nw"
-void create_process(int pid, term *args)
+void create_process(int pid, term *the_args)
 {
   int new_pid;
   term *pid_trm, *dummy;
@@ -236,15 +236,15 @@ void create_process(int pid, term *args)
   /* The pid is stored in the variable indicated by the second
      argument of creating process */
   pid_trm = NULL;
-  /*TBprintf(stderr, "create_process: args = %t\n", args);*/
-  get_var_value(pid,  first(next(args)), &pid_trm);
+  /*TBprintf(stderr, "create_process: args = %t\n", the_args);*/
+  get_var_value(pid,  first(next(the_args)), &pid_trm);
   if(pid_trm) {
     TB_match(pid_trm, "<int>", &new_pid);
-    TB_match(first(args), "<appl>", &name, &dummy);
+    TB_match(first(the_args), "<appl>", &name, &dummy);
     dap_process_created(0, new_pid, name, dap_get_new_exec_state(0, pid));
     dap_activate_rules(new_pid, TB_make("[process-creation,at]"));
   } else {
-    TBprintf(stderr, "cannot find pid of created process: %t", args);
+    TBprintf(stderr, "cannot find pid of created process: %t", the_args);
   }  
 }
 #line 406 "buscontrol.c.nw"
@@ -299,18 +299,18 @@ term *exec_actions(int cid, term *procs, term *acts)
   return TB_make("snd-value(exec-result(error(<str>)))", msg);
 }
 #line 470 "buscontrol.c.nw"
-term *create_rule(int cid, term *procs, term *port, term *cond, term *acts, term *life)
+term *create_rule(int cid, term *procs, term *the_port, term *cond, term *acts, term *life)
 {
-  int rid = dap_create_rule(procs, port, cond, acts, life);
+  int rid = dap_create_rule(procs, the_port, cond, acts, life);
   return TB_make(
 	"snd-value(create-rule(<term>,<term>,<term>,<term>,<term>,<int>))",
-	procs, port, cond, acts, life, rid);
+	procs, the_port, cond, acts, life, rid);
 }
 #line 504 "buscontrol.c.nw"
-void modify_rule(int cid, int rid, term *procs, term *port, 
+void modify_rule(int cid, int rid, term *procs, term *the_port, 
 				term *cond, term *acts, term *life)
 {
-  dap_rule_modified(0, rid, procs, port, cond, acts, life);
+  dap_rule_modified(0, rid, procs, the_port, cond, acts, life);
 }
 #line 517 "buscontrol.c.nw"
 void destroy_rule(int cid, term *procs, int rid)

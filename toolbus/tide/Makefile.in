@@ -128,6 +128,7 @@ buscontrol: buscontrol.o
 
 libtide.a: $(TIDEMODS)
 	ar cr libtide.a $(TIDEMODS)
+	${RANLIB} libtide.a
 
 # Calculate C dependencies
 depend: $(GENCSRC)
@@ -220,6 +221,7 @@ install: $(LIBFILES) $(TIDEFILES) $(PROGS) $(INCFILES)
 	done
 	for file in $(LIBFILES); do \
 	  $(INSTALL) $$file $(libdir); \
+          $(RANLIB) $(libdir)/$$file; \
 	done
 	for file in $(TIDEFILES); do \
 	  $(INSTALL) $$file $(tidedir); \

@@ -773,16 +773,16 @@ void dap_activate_rule(int pid, term *the_port, event_rule *rule)
   }
 }
 #line 834 "dap.c.nw"
-void dap_activate_rules(int pid, term *port)
+void dap_activate_rules(int pid, term *the_port)
 {
   static TBbool firstloc = TBtrue;
 
   dap *mydap = dap_get(0);
   event_rule *cur;
   process *p = dap_get_process(0, pid);
-  int   type  = dap_eventport(list_index(port, 1));
-  int   when  = dap_eventwhen(list_index(port, 2));
-  term *tdata = list_next(list_next(port));
+  int   type  = dap_eventport(list_index(the_port, 1));
+  int   when  = dap_eventwhen(list_index(the_port, 2));
+  term *tdata = list_next(list_next(the_port));
 
 
   if(type == PORT_LOCATION) {
@@ -792,7 +792,7 @@ void dap_activate_rules(int pid, term *port)
   }
 
   if(type == PORT_EXEC_STATE)
-    dap_set_last_port(0, pid, port);
+    dap_set_last_port(0, pid, the_port);
 
   if(type == PORT_SEND || type == PORT_RECEIVE) {
     dap_set_last_msg(0, pid, list_first(tdata));
@@ -800,11 +800,10 @@ void dap_activate_rules(int pid, term *port)
   }
  
   for(cur = mydap->ports[type]; cur; cur = cur->next)
-    dap_activate_rule(pid, port, cur);
+    dap_activate_rule(pid, the_port, cur);
 }
 #line 761 "dap.c.nw"
 static void cond_trigger_rule(int pid, int rid, term *cond, term *acts);
-
 int dap_create_rule(term *procs, term *the_port, term *cond, 
 					term *acts, term *life)
 {
@@ -832,7 +831,6 @@ int dap_create_rule(term *procs, term *the_port, term *cond,
         event_rule *the_rule = dap_get_rule(0, rid);
 
         if(the_port &&
-
            dap_eventport(list_first(the_port)) == the_rule->port.type)
           dap_activate_rule(0, the_port, the_rule);
       }
