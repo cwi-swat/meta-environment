@@ -15,7 +15,7 @@
   "The variable that holds partial messages from the ToolBus, while waiting
 for the rest of the msg"
   )
-(defvar debug t
+(defvar debug ()
   "If set to t (debug-out string) produces debug output. If set to () not"
   )
 
@@ -102,7 +102,6 @@ is the adapter process, STRING is the string to be processed"
 
 (defun TBsend (term)
   "TBsend send an arbitrary term to the ToolBus"
-  (send-string-to-terminal "In TBsend\n")
   (let ((fullmsg (set-min-msg-size 
 		  (concat (num-to-lenspec 
 			   (+ lenspec
