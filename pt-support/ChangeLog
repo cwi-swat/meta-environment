@@ -1,3 +1,7 @@
+2001/11/25 (mdejonge@cwi.nl)
+ * package now uses toolbuslib package
+ * extended functionality of program-check.m4 macros
+
 2001/11/23 (jurgenv@cwi.nl)
   * Fixed a bug in the flattener from AsFix2 to AsFix2ME. Nested lists 
     like {{A ";"}* ","}* were flattened to {A ","}* lists by mistake. 

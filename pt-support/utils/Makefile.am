@@ -9,7 +9,7 @@ INCLUDES		= -I${top_srcdir}/libmept \
                         -I${top_srcdir}/libasfix2 \
                         -I${top_srcdir}/libconversion \
 			-I${ATERM}/include \
-			-I${TOOLBUS}/include
+			-I${TOOLBUSLIB}/include
 
 data_DATA		= unparsePT.idef
 
@@ -33,7 +33,7 @@ flattenPT_LDADD		= -L../libconversion -lconversion \
 
 unparsePT_SOURCES	= unparsePT.tif.c unparsePT-main.c
 unparsePT_LDADD		= -L../libmept -lmept \
-			-L${TOOLBUS}/lib -lATB \
+			-L${TOOLBUSLIB}/lib -lATB \
 			-L${ATERM}/lib -lATerm \
 			${SOCKLIBS}
 
@@ -54,10 +54,10 @@ tree2dot_LDADD          = -L../libmept -lmept \
                           -L${ATERM}/lib -lATerm
 
 %.tif.c %.tif.h: %.tifs
-	$(TOOLBUS)/bin/tifstoc -tool $* $<
+	PATH=$(TOOLBUS)/bin:$${PATH} tifstoc -tool $* $<
 
 %.tifs: %.idef
-	$(TOOLBUS)/bin/idef2tif $<
+	PATH=$(TOOLBUS)/bin:$${PATH} idef2tif $<
 	@if [ "a${VPATH}" != "a" ]; then \
 		mv ${srcdir}/$@ $@ ;\
 	fi
