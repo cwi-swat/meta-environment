@@ -53,5 +53,6 @@ dnl Which files need updating?
 AC_OUTPUT(
   Makefile
   libME/Makefile
+  libME/tb/Makefile
   utils/Makefile
 )

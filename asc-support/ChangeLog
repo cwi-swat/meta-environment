@@ -1,5 +1,9 @@
 $Id$
 
+2002/01/08 (jurgenv@cwi.nl)
+ * Created libtb-asc-support.a, this can be linked with compiled
+   specifications that are connected to the ToolBus.
+
 2002/09/14 (vinju@loria.fr, vandenbr@loria.fr)
  * Bumped to 1.6beta
  * Fixed a serious bug with traversal functions in asc-support. 
