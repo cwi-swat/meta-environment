@@ -1,5 +1,8 @@
 $Id$
 
+2003/06/26 (jurgenv@cwi.nl)
+ * Added package definition file
+
 2003/05/19 ({markvdb,jong}@cwi.nl)
  * Added explicit ATBpack and ATBunpack.
 
