@@ -115,7 +115,7 @@ static int get_porttype(ATerm port)
 	if(strcmp(name, "exception") == 0)
 		return PORT_EXCEPTION;
 
-	ATabort("uknown port: %t\n", port);
+	ATabort("unknown port: %t\n", port);
 	return -1;
 }
 
@@ -127,8 +127,10 @@ void disable_rule(int conn, char *pid, ATerm owner, int rid)
 {
 	int porttype, last, i;
 
-	if (!rules[rid].enabled)
+	if (!rules[rid].enabled) {
 		ATwarning("** Warning, disabling already disabled rule: %d\n", rid);
+		return;
+	}
 
 	rules[rid].enabled = ATfalse;
 	porttype = rules[rid].porttype;
@@ -212,7 +214,7 @@ ATerm create_rule(int conn, char *pid, ATerm owner, ATerm type,
 	ATprotect(&rules[rid].cond);
 	ATprotect(&rules[rid].act);
 	
-	enable_rule(conn, pid, owner, rid);
+	/* enable_rule(conn, pid, owner, rid); */
 
 	return ATmake("snd-value(rule-created(<str>,<term>,<int>,"
 								"<term>,<term>,<term>,<term>))",
@@ -238,11 +240,11 @@ void delete_rule(int conn, char *pid, ATerm owner, int rid)
 		}
 	}
 
-	ATunprotect(&rules[rid].owner);
-	ATunprotect(&rules[rid].type);
-	ATunprotect(&rules[rid].port);
-	ATunprotect(&rules[rid].cond);
 	ATunprotect(&rules[rid].act);
+	ATunprotect(&rules[rid].cond);
+	ATunprotect(&rules[rid].port);
+	ATunprotect(&rules[rid].type);
+	ATunprotect(&rules[rid].owner);
 
 	rules[rid].owner = NULL;
 	rules[rid].type  = NULL;
@@ -297,6 +299,8 @@ static void generate_watchpoint(int rid, ATerm watchpoint)
 
 static ATerm eval_expr(ATerm expr)
 {
+	ATerm eval;
+
 	if (ATgetType(expr) == AT_LIST) {
 		ATermList list   = (ATermList) expr;
 		ATermList result = ATempty;
@@ -340,6 +344,15 @@ static ATerm eval_expr(ATerm expr)
 			return ATparse("running");
 		else
 			return ATparse("stopped");
+	}
+	
+	if (ATmatch(expr, "eval(<term>)", &eval)) {
+		char tcl_script[BUFSIZ];
+		sprintf(tcl_script, "expr %s", ATgetName(ATgetAFun((ATermAppl)eval)));
+		if (Tcl_Eval(tide_interp, tcl_script) == TCL_OK)
+			return ATmake("value(<str>)", Tcl_GetStringResult(tide_interp));
+		else
+			return ATmake("error(<str>)", Tcl_GetStringResult(tide_interp));
 	}
 	
 	return ATmake("unknown-expression(<term>)", expr);
@@ -386,53 +399,55 @@ ATerm evaluate(int conn, char *pid, ATerm expr)
 
 /*{{{  int Tcl_TBtide(ClientData data, Tcl_Interp *interp, argc, argv[]) */
 
+/*
+	Sample code to determine stackdepth in Tcl.
+  case ES_STEP_OVER:
+  	Tcl_Eval(interp, "info level");
+	level = atoi(interp->result);
+	if(level <= dap_get_stop_level(0, 0))
+		dap_change_exec_state(0, ES_STOP);
+	break;
+*/
+
 int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 {
-  ATerm port;
+	ATerm port;
 
-  if(argc != 3) {
-    interp->result = "TBtide expects 3 arguments";
-    return TCL_ERROR;
-  }
+	if(argc != 3) {
+		/* DEPRECATED: interp->result = "TBtide expects 3 arguments"; */
+		Tcl_SetResult(interp, "TBtide expects 3 arguments", TCL_STATIC);
+		return TCL_ERROR;
+	}
   
-  fprintf(stderr, "argv[0]: %s\n", argv[0]);
-  fprintf(stderr, "argv[1]: %s\n", argv[1]);
-  fprintf(stderr, "argv[2]: %s\n", argv[2]);
+	fprintf(stderr, "argv[0]: %s\n", argv[0]);
+	fprintf(stderr, "argv[1]: %s\n", argv[1]);
+	fprintf(stderr, "argv[2]: %s\n", argv[2]);
 
-  port = ATparse(argv[1]);
+	port = ATparse(argv[1]);
   
-  if (ATgetType(port) != AT_LIST)
-	  ATwarning("Illegal port: %t\n", port);
-  else {
-	  int porttype = get_porttype(ATgetFirst((ATermList)port));
+	if (ATgetType(port) != AT_LIST)
+		ATwarning("Illegal port: %t\n", port);
+	else {
+		int porttype = get_porttype(ATgetFirst((ATermList)port));
 
-	  if(porttrace)
-		ATprintf("port: %t\n", port);
+		if(porttrace)
+			ATprintf("port: %t\n", port);
 	  
-	  if (porttype == PORT_LOCATION) {
-		  ATerm info_elt = ATelementAt((ATermList)port, 2);
-		  strcpy(cpe.filename, ATgetName(ATgetAFun((ATermAppl)info_elt)));
-		  info_elt = ATelementAt((ATermList)port, 3);
-		  cpe.start_line = ATgetInt((ATermInt)info_elt);
-		  info_elt = ATelementAt((ATermList)port, 4);
-		  cpe.start_col = ATgetInt((ATermInt)info_elt);
-		  info_elt = ATelementAt((ATermList)port, 5);
-		  cpe.end_line = ATgetInt((ATermInt)info_elt);
-		  info_elt = ATelementAt((ATermList)port, 6);
-		  cpe.end_col = ATgetInt((ATermInt)info_elt);
-	  }
-
-	  if(use_tide) {
-		/*
-		  case ES_STEP_OVER:	Tcl_Eval(interp, "info level");
-					level = atoi(interp->result);
-					if(level <= dap_get_stop_level(0, 0))
-					  dap_change_exec_state(0, ES_STOP);
-					break;
-		}*/
-
+		if (porttype == PORT_LOCATION) {
+			ATerm info_elt = ATelementAt((ATermList)port, 2);
+			strcpy(cpe.filename, ATgetName(ATgetAFun((ATermAppl)info_elt)));
+			info_elt = ATelementAt((ATermList)port, 3);
+			cpe.start_line = ATgetInt((ATermInt)info_elt);
+			info_elt = ATelementAt((ATermList)port, 4);
+			cpe.start_col = ATgetInt((ATermInt)info_elt);
+			info_elt = ATelementAt((ATermList)port, 5);
+			cpe.end_line = ATgetInt((ATermInt)info_elt);
+			info_elt = ATelementAt((ATermList)port, 6);
+			cpe.end_col = ATgetInt((ATermInt)info_elt);
+		}
+	  
+		if(use_tide) {
 			activate_rules(porttype);
-			
 			activate_rules(PORT_STEP);
 			
 			if (state == STATE_STOPPED)
@@ -443,12 +458,12 @@ int Tcl_TBtide(ClientData data, Tcl_Interp *interp, int argc, char *argv[])
 					ATBhandleOne(tide_cid);
 				activate_rules(PORT_STARTED);
 			}
-	  }
-  }
+		}
+	}
 
-  if(strlen(argv[2]) != 0) {
+	if(strlen(argv[2]) != 0) {
 		fprintf(stderr, "executing: %s\n", argv[2]);
-    return Tcl_Eval(interp, argv[2]);
+		return Tcl_Eval(interp, argv[2]);
 	}
 
 	return TCL_OK;
