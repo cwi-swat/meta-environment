@@ -1,0 +1,9 @@
+equations
+
+  [] make-pair(x,y)  = [x,y]
+  [] first([x,y])    = x
+ 
+  [] second([x,y])   = y
+ 
+  [] is-pair([x,y])    = true
+  [default] is-pair(p) = false
