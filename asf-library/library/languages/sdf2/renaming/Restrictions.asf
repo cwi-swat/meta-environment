@@ -1,0 +1,9 @@
+%%%% $Id$
+
+equations
+
+%% \noindent
+%% Renaming restrictions.
+  [0] (restrictions restr*) 'r = restrictions (restr*)'r
+  [0] (restr*)'r               = when restr* =
+  [0] ('a -/- las restr*1)'r    = ('a)*'r -/- las restr*2 when restr*2 = (restr*1)'r  %% cc replaced by las on 26-01-2000

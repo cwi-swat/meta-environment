@@ -1,0 +1,24 @@
+%%%% $Id$
+
+equations
+
+%% Renaming symbols in regular expressions.
+
+   [0] [()] 'r          = ()
+   [0] [(_A 'a+)] 'r    = (_B 'b+) when (_A 'a+)* 'r = _B 'b+
+   [0] [_A?] 'r         = (_A) 'r ?
+   [0] [_A+] 'r         = (_A) 'r +
+   [0] [_A*] 'r         = (_A) 'r *
+   [0] [{_A _B}+] 'r    = {(_A)'r (_B)'r}+
+   [0] [{_A _B}*] 'r    = {(_A)'r (_B)'r}*
+   [0] [_A n+] 'r       = (_A) 'r n+
+   [0] [{_A _B}n+] 'r   = {(_A)'r (_B)'r}n+
+   [0] [Set[_A]] 'r     = Set[(_A) 'r]
+   [0] [_A # _B] 'r     = (_A) 'r # (_B) 'r
+   [0] [('a => _B)] 'r  = (('a)*'r => (_B) 'r)
+   [0] [_A | _B] 'r     = (_A) 'r | (_B) 'r
+
+   [r-1] [(_A -> _B)] 'r = ((_A) 'r -> (_B) 'r)
+
+
+%%%

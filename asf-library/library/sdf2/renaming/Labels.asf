@@ -1,0 +1,6 @@
+equations
+
+%% \noindent
+%% Renaming of aliases.
+
+  [0] (L:_A)'r = L:(_A)'r
