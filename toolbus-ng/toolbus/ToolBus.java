@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.*;
 
 import toolbus.parser.*;
-import toolbus.parser.TscriptParser;
+import toolbus.parser.TScriptParser;
 import toolbus.process.*;
 
 import aterm.*;
@@ -22,7 +22,7 @@ public class ToolBus {
   private ATermFactory factory;
   private Vector processes;
   private Vector procdefs;
-  private TscriptParser parser;
+  private TScriptParser parser;
   private PrintWriter out;
 
   private static String sglr = "/home/paulk/bin/sglr";
@@ -45,7 +45,7 @@ public class ToolBus {
     } catch (IOException e) {
       System.err.println(e.getMessage());
     }
-    parser = new TscriptParser(new ExternalParser(sglr, parseTable, implodePT));
+    parser = new TScriptParser(new ExternalParser(sglr, parseTable, implodePT));
   }
 
   /**

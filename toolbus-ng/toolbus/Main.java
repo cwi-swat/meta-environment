@@ -24,9 +24,9 @@ public class Main {
     //NestedIterTest();
      //DisruptTest();
     //MergeTest();
-    //ParseTest();
+    ParseTest();
     //SndAndRecTest();
-    ToolTest();
+    //ToolTest();
   }
  
   
@@ -355,16 +355,25 @@ static void producerTest(){
       try {
         ProcessDefinition P1 =
         new ProcessDefinition("P1",
-        new MsgPair(false, true,  aterms.make("msg1"),
+        new MsgPair(false, false,  aterms.make("msg1"),
            new Print ((ATermList) aterms.make("[a,b,c]")),
-           "Disrupt",
+           "Sequence",
            new Alternative(new SndMsg(aterms.make("msg1reply")),
                 new SndMsg(aterms.make("msg2reply")))
            ));
-           
+       ProcessDefinition P2 =
+         new ProcessDefinition("P2",
+            new MsgPair(true, false, aterms.make("msg1"),
+            new Tau(),
+            "Sequence",
+            new RecMsg(aterms.make("msg1reply")))
+           );
+        
            T.setVerbose(true);
            T.addProcessDefinition(P1);
            T.addProcess("P1");
+           T.addProcessDefinition(P2);
+           T.addProcess("P2");
            T.execute();
       } catch (ToolBusException e) {
         e.printStackTrace();
