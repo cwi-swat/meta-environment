@@ -7,15 +7,24 @@ module Text
 imports basic/Comments
         basic/Strings
         NewLine
+
 exports
-  sorts Text BText
+  sorts TextBlock
   context-free syntax
-    String* -> Text {constructor} 
+    String* -> TextBlock {constructor}  
+
+  sorts Text
+  context-free syntax
+    {TextBlock ","}* -> Text {constructor} 
+
+  sorts BText
+  context-free syntax
     Bytes*  -> BText {constructor} 
 
   context-free syntax
-    text2btext(String*)  -> Bytes*
-    string2bytes(String) -> Bytes
+    text2btext({TextBlock ","}*) -> Bytes*
+    strings2bytes(String*)       -> Bytes*
+    string2bytes(String)         -> Bytes
 
   context-free syntax
       Bytes "||" Bytes -> Bytes {right}
@@ -25,6 +34,8 @@ hiddens
   variables
     "string" -> String
     "string*" -> String*
+    "textblock" -> String* 
+    "textblock*" -> {TextBlock ","}*
     "bytes"   -> Bytes
 
     "Char+"[0-9]*  -> CHAR+

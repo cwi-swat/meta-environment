@@ -8,7 +8,10 @@ equations
   [BtT1'0]   Text := text(B)
              ===>
              box2text(B) = text2btext(Text)
-%%  [BtT1'0]   box2text(B,Int) = string2bytes(text(B,Int))
+
+  [BtT1'0]   Text := text(B,Int)
+             ===>
+             box2text(B,Int) = text2btext(Text)
 
   [BtT1'1]   text() = ""
 
@@ -44,7 +47,7 @@ equations
   [BtT2'2]   Y1 != Y2
              ========
              place String with (X1,Y1) & Defs and Text1 && (X2,Y2) and 'C =
-               place String with (X1,Y1) & Defs and Text1 "" && (0,Y2 + 1) and 'C
+               place String with (X1,Y1) & Defs and startNewLine(Text1) && (0,Y2 + 1) and 'C
 
   [BtT2'3]   Text2 :=
                add to last line (Text1,
@@ -56,7 +59,7 @@ equations
   [BtT2'4]   Y1 != Y2
              ========
              place String Point with (X1,Y1) & Defs and Text1 && (X2,Y2) and 'C =
-               place String Point with (X1,Y1) & Defs and Text1 "" && (0,Y2 + 1) and 'C
+               place String Point with (X1,Y1) & Defs and startNewLine(Text1) && (0,Y2 + 1) and 'C
 
 %% The equations \ref{Eq:BtT2'5} through \ref{Eq:BtT2'7} deal with the box operator {\sf H}.
 %% The space between two boxes is calculated only once. The auxilary
@@ -284,8 +287,23 @@ equations
 %%%  [default-BtT8'2] dplace B with Frame and Struct and 'C =
 %%%                     place "*** unprintable box expression ***" with Frame and Struct and 'C
 
-  [BtT9'1]   String3 := String1 || String2
-             ====>
-             add to last line (String1, String2) = String3
+  [BtT9'1]   add to last line (TextBlock String1, String2) = TextBlock String1 || String2
 
-  [BtT9'2]   add to last line (Text String1, String2) = Text String1 || String2
+  [BtT9'2]   add to last line (Text, TextBlock String1, String2) = Text, TextBlock String1 || String2
+
+  [snl-1'1] lengthTextBlock(TextBlock String) == 100
+            ===>
+            startNewLine(TextBlock String) = TextBlock String, ""
+
+  [default-snl-1'2] startNewLine(TextBlock String) = TextBlock String ""
+
+  [snl-1'3] lengthTextBlock(TextBlock String) == 100
+            ===>
+            startNewLine(Text, TextBlock String) = Text, TextBlock String, ""
+
+  [default-snl-1'4] startNewLine(Text, TextBlock String) = Text, TextBlock String ""
+
+  [ltb-1'1] lengthTextBlock() = 0
+
+  [ltb-1'1] lengthTextBlock(String TextBlock) = 1 + lengthTextBlock(TextBlock)
+

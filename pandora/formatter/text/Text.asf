@@ -2,7 +2,14 @@ equations
 
   [c-1] text2btext() =
 
-  [c-2] text2btext(string string*) = string2bytes(string) text2btext(string*)
+  [c-2] text2btext(textblock, textblock*) = 
+          strings2bytes(textblock) text2btext(textblock*)
+
+  [c-2] strings2bytes() = 
+
+  [c-2] strings2bytes(string string*) = 
+          string2bytes(string) strings2bytes(string*)
+
   [c-3] bytes := string-to-bytes(string)
         ===>
         string2bytes(string) = bytes || newlinechar
