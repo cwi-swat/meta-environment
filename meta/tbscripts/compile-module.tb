@@ -7,13 +7,11 @@ let
   ModuleName    : str,
   OutputFile    : str,
   ErrorMsg      : str,
-  Progress      : str,
   Id            : term,
   Syntax        : term,
   Equations     : term 
 in
     Id := process-id.
-    subscribe(asfc-progress(<term>)).
     (
       rec-msg(compile-module(ModuleName?)) .
       snd-note(ui-status(statf(Id, "Compiling %s", [ModuleName]))).
@@ -22,17 +20,11 @@ in
       snd-msg(get-all-equations(ModuleName)) .
       (
         rec-msg(all-equations(Equations?)) .
-        snd-msg(compile-module(ModuleName, Equations)) .
-        (
-          rec-note(asfc-progress(Progress?)).
-          snd-note(ui-status(endstat(Id))).
-          snd-note(ui-status(statf(Id,"Compiling %s - %s", 
-                                   [ModuleName, Progress])))
-        )*
-        rec-msg(compilation-done(ModuleName))
+	snd-msg(compile-semantics-hook(ModuleName, Equations)).
+	rec-msg(compile-semantics-hook-done(ModuleName))
       +
         rec-msg(equations-incomplete) .
-        snd-note(ui-status(errorf("Equations incomplete for %s",
+        snd-note(ui-status(errorf("Specification incomplete for %s",
                                   [ModuleName])))
       ) .
       snd-msg(compilation-ready(ModuleName)) .

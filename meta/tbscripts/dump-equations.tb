@@ -19,7 +19,7 @@ in
     +
       rec-msg(dump-equations(ModuleName?, FileName?))
     ) .
-    snd-note(ui-status(statf(Id, "Dumping equations for %s",[ModuleName]))).
+    snd-note(ui-status(statf(Id, "Dumping specification for %s",[ModuleName]))).
     snd-msg(process-eqs(ModuleName)).
     rec-msg(eqs-processed(ModuleName)).
     snd-msg(get-all-equations(ModuleName)).
@@ -30,12 +30,12 @@ in
         rec-msg(create-equations-dump-file-done(ModuleName))
         +
         rec-msg(create-equations-dump-file-failed(ModuleName, Text?)).
-        snd-note(ui-status(errorf("Dumping of equations for %s failed: %s", 
+        snd-note(ui-status(errorf("Dumping of specification for %s failed: %s", 
                  ModuleName, Text)))
       )
       +
       rec-msg(equations-incomplete) .
-      snd-note(ui-status(errorf("Equations incomplete for %s", [ModuleName])))
+      snd-note(ui-status(errorf("Specification incomplete for %s", [ModuleName])))
     ) .
     snd-msg(equations-dumped) .
     snd-note(ui-status(endstat(Id)))

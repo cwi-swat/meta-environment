@@ -282,18 +282,8 @@ in
   (
     rec-msg(all-equations(Equations?)) .
     snd-note(ui-status(endstat(Id))).
- 
-    snd-note(ui-status(stat(Id, "Rewriting"))) .
-    snd-msg(rewrite(ModuleName, Equations, Tree)) .
-    (
-      rec-msg(rewrite-result(NormalForm?)) .
-      RestoreBracketsInTree(NormalForm, ModuleName, NormalForm?)
-    +
-      rec-msg(rewrite-errors(ErrList?)) .
-      NormalForm := error-tree .
-      snd-msg(display-rewrite-errors(ErrList))
-    ) .
-    snd-note(ui-status(endstat(Id)))
+    snd-msg(interpret-term-hook(ModuleName, Equations, Tree)).
+    rec-msg(interpret-term-hook-result(NormalForm?))
   +
     rec-msg(equations-incomplete) .
     NormalForm := error-tree .
@@ -302,21 +292,6 @@ in
   )
 endlet
 
-process RestoreBracketsInTree(Tree : term, ModuleName : str, NewTree : term?) is
-let
-  Table : term,
-  Path : str
-in
-  snd-msg(get-parsetable(trm(ModuleName))).
-  (
-    rec-msg(parse-table(Table?, Path?)) .
-    snd-msg(restore-brackets(Tree, Table)) .
-    rec-msg(brackets-restored(NewTree?)) 
-  +
-    rec-msg(no-parse-table) .
-    NewTree := error-tree
-  )
-endlet
 
 process ActivateEditorWithTree(Tree: term, ModuleName: str, FileName: str) is
 let

@@ -9,7 +9,7 @@
 #include "addeqssyntax.idef"
 #include "addapisyntax.idef"
 #include "removevarsyntax.idef"
-#include "compile-module.tb"
+#include "error-display.tb"
 
 process Create-Asf-Processes is
 let Pid : int in
@@ -21,16 +21,24 @@ let Pid : int in
   create(AddAPISyn, Pid?).
   create(RemoveVars, Pid?).
   create(Asfc, Pid?).
-  create(Compile-module, Pid?)
+  create(DisplayErrors, Pid?)
 endlet
 
 process Semantics-Interface is
 let
+  Id : int,
   Syntax : term, 
   Semantics  : term,
   ModuleName : str,
-  Msgs : list
+  Msgs : list,
+  Tree : term,
+  NormalForm : term,
+  Errors: list,
+  Text : str,
+  Progress : str
 in
+  Id := process-id.
+  subscribe(asfc-progress(<term>)).
   Create-Asf-Processes.
   (
     rec-msg(postprocess-semantics-hook(Semantics?)).
@@ -55,5 +63,37 @@ in
     snd-msg(add-api-syntax(Syntax)).
     rec-msg(extended-syntax(Syntax?)).
     snd-msg(preprocess-syntax-hook-result(trm(ModuleName), Syntax))
+  +
+    rec-msg(interpret-term-hook(ModuleName?, Semantics?, Tree?)).
+    snd-note(ui-status(stat(Id, "Rewriting"))) .
+    snd-msg(rewrite(ModuleName, Semantics, Tree)).
+    (
+      rec-msg(rewrite-result(NormalForm?)).
+      snd-msg(restore-term-brackets(ModuleName, NormalForm)).
+      rec-msg(restore-term-brackets-result(ModuleName, NormalForm?))
+    +
+      rec-msg(rewrite-text(Text?)) .
+      NormalForm := quote(str(Text))
+    +
+      rec-msg(rewrite-errors(Errors?)).
+      snd-msg(display-rewrite-errors(Errors)).
+      NormalForm := error-tree
+    ).
+    snd-note(ui-status(endstat(Id))).
+    snd-msg(interpret-term-hook-result(NormalForm))
+  +
+    rec-msg(compile-semantics-hook(ModuleName?, Semantics?)).
+    snd-msg(compile-module(ModuleName, Semantics)) .
+    (
+      rec-note(asfc-progress(Progress?)).
+      snd-note(ui-status(endstat(Id))).
+      snd-note(ui-status(statf(Id,"Compiling %s - %s",
+                              [ModuleName, Progress])))
+    )*
+    rec-msg(compilation-done(ModuleName)).
+    snd-note(ui-status(endstat(Id))).
+    snd-msg(compile-semantics-hook-done(ModuleName))
+
   ) * delta
 endlet
+
