@@ -57,9 +57,12 @@ void SG_PrintSymbol(FILE *dot, ATerm t)
   else if (ATmatch(t, "lit(<str>)", &name)) {
     int n;
 
+ATfprintf(stderr, "lit: %s\n", name);
+
     ATfprintf(dot, "\\\"");
     for(n = 0; name[n] != '\0'; n++)
       switch (name[n]) {
+        case '\n': ATfprintf(dot, "\\\\n"); break;
         case '\\': ATfprintf(dot, "\\\\"); break;
         case '"' : ATfprintf(dot, "\\\""); break;
         default  : ATfprintf(dot, "%c", name[n]);
