@@ -83,7 +83,7 @@ static void displayMessages(ATermList errorList)
 
 ATerm check_asf(int cid, ATerm term)
 {
-  ATermList errorList = checkAsf(term);    
+  ATermList errorList = checkAsf(ATBunpack(term));    
 
   return ATmake("snd-value(messages(<term>))", errorList);
 }

@@ -14,7 +14,6 @@
 #include <MEPT-utils.h>
 #include <SDFME-utils.h>
 
-/*{{{  globals */
 
 static char *name;
 
@@ -39,6 +38,8 @@ extern void resolve_AsfSdf_Checker();
 extern void init_AsfSdf_Checker();
 
 
+/*{{{  static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree) */
+
 static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree)
 {
   PT_Tree newTree = NULL;
@@ -55,6 +56,8 @@ static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree)
 
   return newTree;
 }
+
+/*}}}  */
 
 static ATerm checkSdf(ATerm term)
 {
@@ -109,7 +112,7 @@ static void displayMessages(ATerm term)
 
 ATerm check_asfsdf(int cid, ATerm term)
 {
-  ATerm  output = checkSdf(term);
+  ATerm  output = checkSdf(ATBunpack(term));
   ATermList errorList = processMessages(output);
 
   return ATmake("snd-value(messages(<term>))", errorList);

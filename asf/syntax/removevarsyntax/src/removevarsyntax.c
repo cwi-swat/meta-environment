@@ -87,7 +87,7 @@ static ATerm removeVarSyntax(char *name, ATerm term)
 
 ATerm remove_var_syntax(int cid, char *name, ATerm term)
 {
-  ATerm  output = removeVarSyntax(name, term);
+  ATerm  output = removeVarSyntax(name, ATBunpack(term));
 
   return ATmake("snd-value(changed-syntax(<term>))", ATBpack(output));
 }

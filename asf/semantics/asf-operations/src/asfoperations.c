@@ -31,7 +31,7 @@ static char myarguments[] = "hV";
  
 ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm eqsPTree)
 {
-  ASF_Start start = ASF_StartFromTerm(eqsPTree);
+  ASF_Start start = ASF_StartFromTerm(ATBunpack(eqsPTree));
   ASF_CondEquationList asfEqsList = ASF_makeCondEquationListEmpty();
   SDF_Renamings renamings = SDF_makeRenamingsFromTerm(atRenamings);
   ASF_Equations asfEqs = ASF_getStartTopEquations(start);
@@ -58,7 +58,7 @@ ATerm extract_equations(int cid, ATerm modules)
   eqsList = ASF_makeCondEquationListEmpty();
 
   for(;!ATisEmpty(list); list = ATgetNext(list)) {
-    ATerm head = ATgetFirst(list);
+    ATerm head = ATBunpack(ATgetFirst(list));
     ASF_Equations eqs = ASF_getStartTopEquations(ASF_StartFromTerm(head));
    
     if (ASF_hasEquationsList(eqs)) {

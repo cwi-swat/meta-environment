@@ -86,7 +86,7 @@ static ATerm addEqsSyntax(char *name, ATerm term)
 
 ATerm add_eqs_syntax(int cid, char *name, ATerm term)
 {
-  ATerm  output = addEqsSyntax(name, term);
+  ATerm  output = addEqsSyntax(name, ATBunpack(term));
 
   return ATmake("snd-value(extended-syntax(<term>))", ATBpack(output));
 }

@@ -128,6 +128,7 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
   }
 
   /*ATfprintf(stderr, "equations: %t\n", eqs);*/
+  eqs = ATBunpack(eqs);
   eqsList = ASF_makeCondEquationListFromTerm(eqs);
   parseTree = PT_makeParseTreeFromTerm(trm);
 

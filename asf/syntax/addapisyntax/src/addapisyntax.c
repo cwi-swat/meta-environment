@@ -90,7 +90,7 @@ static ATerm addAPISyntax(ATerm term)
 
 ATerm add_api_syntax(int cid, ATerm term)
 {
-  ATerm  output = addAPISyntax(term);
+  ATerm  output = addAPISyntax(ATBunpack(term));
 
   return ATmake("snd-value(extended-syntax(<term>))", ATBpack(output));
 }

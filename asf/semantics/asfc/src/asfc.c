@@ -221,7 +221,7 @@ ATerm compile_module(int cid, char *moduleName, ATerm equations)
 
   sprintf(output, "%s.c", moduleName);
 
-  result = compile(moduleName, equations, output);
+  result = compile(moduleName, ATBunpack(equations), output);
 
   return ATmake("snd-value(compilation-done)");
 }                              
