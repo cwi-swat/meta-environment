@@ -10,25 +10,25 @@ exports
 
 hiddens
   context-free syntax
-    generateModule(Definition, Definition)
-      -> Definition {traversal(accu, top-down, break)}
+    generateModule(Module*, Module*)
+      -> Module* {traversal(accu, top-down, break)}
 
-    generateModule(Module, Definition)
-      -> Definition {traversal(accu, top-down, break)}
-
-  context-free syntax
-    getProductions(Module, Productions) 
-      -> Productions {traversal(accu, top-down, break)}
-
-    getProductions(Grammar, Productions) 
-      -> Productions {traversal(accu, top-down, break)}    
+    generateModule(Module, Module*)
+      -> Module* {traversal(accu, top-down, break)}
 
   context-free syntax
-    generateProductions(Productions, Productions) 
-      -> Productions {traversal(accu, top-down, break)}
+    getProductions(Module, Production*) 
+      -> Production* {traversal(accu, top-down, break)}
 
-    generateProductions(Production, Productions) 
-      -> Productions {traversal(accu, top-down, break)}
+    getProductions(Grammar, Production*) 
+      -> Production* {traversal(accu, top-down, break)}    
+
+  context-free syntax
+    generateProductions(Production*, Production*) 
+      -> Production* {traversal(accu, top-down, break)}
+
+    generateProductions(Production, Production*) 
+      -> Production* {traversal(accu, top-down, break)}
 
   context-free syntax
     addBrackets(Symbol) -> Symbol
@@ -46,7 +46,6 @@ hiddens
     "$Char"[0-9]* -> CHAR
     "$Char+"[0-9]* -> CHAR+
     "$Char*"[0-9]* -> CHAR*
-    "$Definition"[0-9]* -> Definition
     "$Grammar"[0-9]* -> Grammar
     "$ImpSection"[0-9]* -> ImpSection
     "$ImpSection*"[0-9]* -> ImpSection*
@@ -55,7 +54,6 @@ hiddens
     "$Module*"[0-9]* -> Module*
     "$ModuleName"[0-9]* -> ModuleName
     "$Production"[0-9]* -> Production
-    "$Productions"[0-9]* -> Productions
     "$Production*"[0-9]* -> Production*
     "$Section"[0-9]* -> Section
     "$Sections"[0-9]* -> Sections

@@ -1,42 +1,42 @@
 equations
 
 [ppSDFGenerator-start]
-  ppSDFGenerator($Definition) = generateModule($Definition, )
+  ppSDFGenerator($Module*) = generateModule($Module*, )
 
 [generateModule-0]
-  module $ModuleName $ImpSection* $Sections := $Module,
+  module $ModuleName $ImpSection* $Sections := $Module0,
   $ImpSection := imports $ModuleName languages/box/syntax/box,
-  $Grammar := context-free syntax getProductions($Module, ),
+  $Grammar := context-free syntax getProductions($Module0, ),
   $Section := exports $Grammar,
-  $Module := module makePPModuleName($ModuleName) $ImpSection $Section
+  $Module1 := module makePPModuleName($ModuleName) $ImpSection $Section
   ===>
-  generateModule($Module, $Module*) = $Module* $Module
+  generateModule($Module0, $Module*) = $Module* $Module1
 
 [getProductions-0]
-  context-free syntax $Productions := $Grammar
+  context-free syntax $Production*1 := $Grammar
   ===>
-  getProductions($Grammar, $Production*) 
-    = generateProductions($Productions, $Production*)
+  getProductions($Grammar, $Production*0) 
+    = generateProductions($Production*1, $Production*0)
 
 [getProductions-1]
-  lexical syntax $Productions := $Grammar
+  lexical syntax $Production*1 := $Grammar
   ===>
-  getProductions($Grammar, $Production*) 
-    = generateProductions($Productions, $Production*)
+  getProductions($Grammar, $Production*0) 
+    = generateProductions($Production*1, $Production*0)
 
 [generateProductions-0]
-  $Symbols -> $Symbol1 $Attributes := $Production,
+  $Symbols -> $Symbol1 $Attributes := $Production0,
   $Symbol2 := makePPSymbol($Symbol1),
-  $Production := $Symbol2 addBrackets($Symbol1) -> Box
+  $Production1 := $Symbol2 addBrackets($Symbol1) -> Box
   ===>
-  generateProductions($Production, $Production*) = $Production* $Production
+  generateProductions($Production0, $Production*) = $Production* $Production1
 
 [generateProductions-1]
-  $Literal ( $Symbol* ) -> $Symbol1 $Attributes := $Production,
+  $Literal ( $Symbol* ) -> $Symbol1 $Attributes := $Production0,
   $Symbol2 := makePPSymbol($Symbol1),
-  $Production := $Symbol2 addBrackets($Symbol1) -> Box
+  $Production1 := $Symbol2 addBrackets($Symbol1) -> Box
   ===>
-  generateProductions($Production, $Production*) = $Production* $Production
+  generateProductions($Production0, $Production*) = $Production* $Production1
 
 [makePPSymbol-0]
   bytes(bytes($Char+)) := unparse-to-bytes($Symbol),
