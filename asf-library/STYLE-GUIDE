@@ -19,10 +19,22 @@ Formatting
 * sort names should be in CamelCase: BoolCon
 * module names should be with dashes: Pico-Booleans
 * constructor names should be lowercase with dashes: cons("add-op")
+* builtin names have the same formatting rules like cons names
 * variables should look like:
     "Boolean"[0-9\']* -> Boolean
     "Boolean*"[0-9\']* -> Boolean*
     "Boolean,*"[0-9\']* -> {Boolean ","}*
+
+Built-ins
+---------
+
+* builtins are activated by a special production attribute:
+   context-free syntax
+     warning(Message) -> Message {built-in("warning")}
+* for each builtin there should be a file <builtin>.c in the same 
+  directory as the sdf module it is defined in. This file contains at 
+  least the function definition:
+     PT_Tree <builtin>(ATerm builtin, PT_Tree input) { ... }
 
 Files
 -----

@@ -1,0 +1,10 @@
+module aterm/TestBuiltins[Message]
+
+imports basic/Whitespace
+
+exports
+
+context-free syntax
+
+  warning(Message) -> Message {built-in("message")}
+

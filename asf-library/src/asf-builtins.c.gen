@@ -12,7 +12,7 @@ cat  << END_OF_FILE
 #include <stdlib.h>
 #include <assert.h>
 #include <MEPT.h>
-#include "builtins.h"
+#include "asf-builtins.h"
 
 static ATbool initialized = ATfalse;
 
@@ -32,7 +32,7 @@ void initBuiltins(void)
 /* Naive implementation: just do strcmp's until we find the correct
  * function. Idea: use asc-support or similar hashtable implementation.
  */
-PT_Tree forwardBuiltin(ATerm builtin, PT_Production prod, PT_Args args)
+PT_Tree forwardBuiltin(ATerm builtin, PT_Tree input)
 {
   AFun afun;
   char *name = NULL;
@@ -45,9 +45,9 @@ PT_Tree forwardBuiltin(ATerm builtin, PT_Production prod, PT_Args args)
   name = ATgetName(afun);
 
 `
-for b in \${BUILTINS}; do
+for b in \${BUILTIN_NAMES}; do
   echo "  if (!strcmp(name, \"${b}\")) {"
-  echo "    result = builtin_${b}(builtin, prod, args);"
+  echo "    result = ${b}(builtin, input);"
   echo "  }"
 done
 `

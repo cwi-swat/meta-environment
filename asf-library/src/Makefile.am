@@ -1,13 +1,16 @@
+include ${top_srcdir}/templates/make_rules
 
+include_HEADERS=asf-builtins.h
+lib_LIBRARIES=libasf-builtins.a
 
-lib_LIBRARIES = libasf-builtins.a
+libasf_builtins_a_SOURCES=asf-builtins.c
 
-libasf_builtins_a_SOURCES := builtins.c
+CLEANFILES+=${include_HEADERS} ${libasf_builtins_a_SOURCES}
 
-CLEANFILES+=builtins.c builtins.h
+INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include
 
 %.c: %.c.gen
-	chmod +x $< && ./$< ${top_srcdir}/src/LIB > $@
+	chmod +x $< && ./$< ${LIBROOT} > $@
 
 %.h : %.h.gen
-	chmod +x $< && ./$< ${top_srcdir}/src/LIB > $@
+	chmod +x $< && ./$< ${LIBROOT} > $@

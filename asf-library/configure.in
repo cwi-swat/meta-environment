@@ -8,6 +8,14 @@ dnl Let aclocal use macros in ./config directory
 ACLOCAL="${ACLOCAL} -I ./ac-macros"
 
 dnl Package switches.
+AC_PACKAGE_REQUIRE(aterm, baffle,
+   [  --with-aterm=DIR        ATerm-library is in DIR])
+AC_SUBST(ATERM)
+
+AC_PACKAGE_REQUIRE(pt-support, unparsePT,
+   [  --with-pt-support=DIR   pt-support is in DIR])
+AC_SUBST(PT_SUPPORT)
+
 
 AC_PROG_CC
 AC_PROG_INSTALL
