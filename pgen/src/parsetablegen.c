@@ -18,9 +18,10 @@ static char *name;
 
 ATbool run_verbose;
 ATbool statisticsMode = ATfalse;
+ATbool normalizationMode = ATfalse;
 
 static char myname[] = "parsetablegen";
-static char myversion[] = "2.4";
+static char myversion[] = "3.0";
 
 /*
     The argument vector: list of option letters, colons denote option
@@ -28,7 +29,7 @@ static char myversion[] = "2.4";
     explanation.
  */
 
-static char myarguments[] = "bchi:lm:o:tvV";
+static char myarguments[] = "bchi:lm:no:tvV";
 
 /*}}}  */
 /*{{{  external functions */
@@ -102,6 +103,10 @@ static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
   IF_STATISTICS(fprintf(PT_log(), 
                 "Normalization to Kernel-Sdf took %.6fs\n", PT_Timer())); 
 
+  if (normalizationMode) {
+    return PT_ParseTreeToTerm(ksdf);
+  }
+
   init_table_gen();
   nr_of_states = 0;
   nr_of_actions = 0;
@@ -112,7 +117,6 @@ static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
   max_nr_items = 0;
 
   if (ksdf)  {
-/*ATwarning("ksdf: %t\n", ksdf);*/
     pt = generate_parse_table(ksdf);
   }
   destroy_table_gen();       
@@ -154,6 +158,7 @@ static void usage(void)
         "\t-i filename     input from file (default stdin)\n"
         "\t-l              display statistic information\n"
         "\t-m modulename   name of top module (default Main)\n"
+        "\t-n              only normalization of grammar\n"
         "\t-o filename     output to file (default stdout)\n"
         "\t-t              output terms in plaintext format\n"
         "\t-v              verbose mode\n"
@@ -225,6 +230,7 @@ int main(int argc, char *argv[])
         case 'i':  input=optarg;                           break;
         case 'l':  statisticsMode = ATtrue;                break;
         case 'm':  moduleName=optarg;                      break;
+        case 'n':  normalizationMode=ATtrue;               break;
         case 'o':  output=optarg;                          break;
         case 't':  bafMode = 0;                            break;
         case 'v':  run_verbose = ATtrue;                   break;
@@ -265,10 +271,12 @@ int main(int argc, char *argv[])
         pt = normalize_and_generate_table(moduleName, term);
       }
 
-      if (!strcmp(output, "") || !strcmp(output, "-"))
+      if (!strcmp(output, "") || !strcmp(output, "-")) {
         iofile = stdout;
-      else if (!(iofile = fopen(output, "w")))
+      }
+      else if (!(iofile = fopen(output, "w"))) {
         ATerror("%s: cannot open %s\n", myname, output);
+      }
 
       if (bafMode) {
         ATwriteToBinaryFile(pt, iofile);
