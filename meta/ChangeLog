@@ -1,5 +1,15 @@
 # $Id$
 
+2003/04/25 (jurgenv@cwi.nl)
+ * Refactored button-actions to use StackPush/Pop operations
+ * Fixed a bug in the structure editor, ViewTree on the root of a term
+   caused a core dump.
+
+2003/04/24 (jurgenv@cwi.nl)
+ * All scripts related to the implementation of the button language
+   are now located in a single button-actions.tb script. This script needs
+   more refactoring
+
 2003/04/24 (markvdb@cwi.nl)
  * ViewTree added and Meta-Environment renamed to Term-Actions.
 
