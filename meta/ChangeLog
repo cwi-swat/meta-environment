@@ -1,7 +1,10 @@
 # $Id$
 
 2003/05/27 (markvdb@cwi.nl)
- * Imports are filter against the contents of the term-store.
+ * Imports are filtered against the contents of the term-store.
+
+2003/05/27 ({jong,jurgenv}@cwi.nl)
+ * fixed a lot of stupid bugs in in-output (unneeded free calls for example)
 
 2003/05/26 ({markvdb,jurgenv}@cwi.nl)
  * In-output idef messages are all prefix with "io-"
