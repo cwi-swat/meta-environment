@@ -197,7 +197,12 @@ void CC_addRange(CC_Class *cc, int start, int end)
 {
   int c;
 
-  assert(start >= 0 && start < CC_BITS && end >= start && end < CC_BITS);
+  assert(0 <= start && start <= end);
+
+  if (start >= CC_BITS || end >= CC_BITS) {
+    ATerror("Character range %d-%d outside Latin-1 set, bailing out!\n",
+	    start, end);
+  }
 
   for (c=start; c<=end; c++) {
     int index = c/BITS_PER_LONG;

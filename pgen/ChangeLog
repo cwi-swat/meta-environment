@@ -1,5 +1,9 @@
 $Id$
 
+2001/08/22 (jong@cwi.nl)
+ * Upgraded assertion that char-ranges fall within Latin-1 set to proper
+   error message.
+
 2001/08/08 ({jong,olivierp}@cwi.nl)
  * Fixed some serious memory leaks
  * Fixed int hnr problems (should be unsigned)
