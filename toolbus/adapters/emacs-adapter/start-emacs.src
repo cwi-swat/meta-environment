@@ -34,6 +34,6 @@ tb_src=${datadir}/tb.el
 
 # Emacs ignores everything left to a double slash '//' in a path name.
 # Therefore we replace double occurences of '/' by a single slash.
-tb_src=`echo tb_src=${datadir}/tb.el | sed 's@//@/@g'`
+tb_src=`echo ${datadir}/tb.el | sed 's@//@/@g'`
 
 xemacs -load ${tb_src} -eval "(TBinit \"$*\")"
