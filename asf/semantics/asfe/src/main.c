@@ -1,26 +1,6 @@
 /*{{{  file header */
 
 /*
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/*
   $Id$
  */
 
@@ -144,7 +124,7 @@ int main(int argc, char *argv[])
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
   ASF_initASFMEApi();
-ATsetChecking(ATtrue);
+
   equations_db = ATdictCreate();
   ATprotect(&equations_db);
 
@@ -257,15 +237,19 @@ ATsetChecking(ATtrue);
     }
 
     /* Communicate the reduct out of here */
-    if (!strcmp(output, "") || !strcmp(output, "-"))
+    if (!strcmp(output, "") || !strcmp(output, "-")) {
       iofile = stdout;
-    else if (!(iofile = fopen(output, "wb")))
+    }
+    else if (!(iofile = fopen(output, "wb"))) {
       ATerror("%s: cannot open %s\n", myname, output);
+    }
 
-    if (bafmode)
+    if (bafmode) {
       ATwriteToBinaryFile(result, iofile);
-    else
+    }
+    else {
       ATwriteToTextFile(result, iofile);
+    }
 
     fclose(iofile);
   }
