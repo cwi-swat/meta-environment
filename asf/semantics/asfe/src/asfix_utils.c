@@ -125,7 +125,7 @@ ATbool isEqualModuloWhitespace(ATerm asfix1, ATerm asfix2)
 			/* different or not handled types of asfix terms are not equal by definition */
 			
 			if(asfix_is_whitespace(asfix1) || asfix_is_whitespace(asfix2)) {
-				ATabort("Internal error. Normal term compared with whitespace.\n");
+				ATabort("Internal error. Normal term compared with whitespace in %t\n", asource(tagCurrentRule));
 			}
 			
 			return ATfalse;
@@ -158,17 +158,15 @@ ATermList skipWhitespace(ATermList list)
 {
 	ATerm elem;
 
-	/*	assert(asfix_is_whitespace(ATgetFirst(list)) || 
-			asfix_is_list_sep(ATgetFirst(list))); */
-
 	if(!ATisEmpty(list)) {
 		for(elem = ATgetFirst(list); !ATisEmpty(list) && 
 					(asfix_is_whitespace(elem) || asfix_is_list_sep(elem));
 				list = ATgetNext(list), elem = ATgetFirst(list));
 	}
 
-	assert(ATisEmpty(list) || (!asfix_is_whitespace(ATgetFirst(list)) && 
-				 !asfix_is_list_sep(ATgetFirst(list))));
+	assert(ATisEmpty(list) || 
+				 (!asfix_is_whitespace(ATgetFirst(list)) && 
+					!asfix_is_list_sep(ATgetFirst(list))));
 
 	return list;
 }
@@ -186,7 +184,10 @@ ATermList skipToEndOfWhitespace(ATermList list)
 				prev = list, list = ATgetNext(list), elem = ATgetFirst(list));
 	}
 
-	assert(ATisEmpty(list) || asfix_is_whitespace(ATgetFirst(prev)) || asfix_is_list_sep(ATgetFirst(prev)));
+	assert(ATisEmpty(list) || 
+				 asfix_is_whitespace(ATgetFirst(prev)) || 
+				 asfix_is_list_sep(ATgetFirst(prev)));
+	
 	return prev;
 }
 

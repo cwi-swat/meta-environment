@@ -1178,6 +1178,7 @@ ATermList rewrite_args(ATermList args, ATerm env, int depth)
       arg = ATgetFirst(args);
       if(asfix_is_appl(arg) || asfix_is_var(arg) ||
          asfix_is_list(arg) || asfix_is_lex(arg)) {
+
 				newarg_table[i] = rewrite(arg, env, depth+1);
 			} else {
         newarg_table[i] = arg;
@@ -1286,7 +1287,9 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
     args = (ATermList) asfix_get_appl_args(trm);
     newargs = rewrite_args(args, env, depth);
     if(asfix_is_bracket_func(trm)) {
-      newtrm = ATgetFirst(ATgetNext(newargs));
+      newtrm = ATgetFirst(keep_layout ? 
+													skipWhitespace(ATgetNext(newargs)) :
+													ATgetNext(newargs));
       rewtrm = newtrm;
 
 #ifdef TRAVERSALS
@@ -1306,12 +1309,15 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
 		} else {
 			newtrm = (ATerm) asfix_put_appl_args(trm,newargs);
 			rewtrm = select_and_rewrite(newtrm,depth);
+
 		}
 
 	} else if(asfix_is_var(trm)) {
 		rewtrm = v_lookup_plain(env, trm);
-		if(!rewtrm)
+
+		if(!rewtrm) {
 			rewtrm = trm;
+		}
 	} else if(asfix_is_list(trm)) {
 		elems = (ATermList) asfix_get_list_elems(trm);
 		sym = asfix_get_list_sym(trm);
@@ -1324,6 +1330,7 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
   else {
     rewtrm = trm;
   }
+
   return rewtrm;
 }
 
