@@ -388,7 +388,7 @@ in
           ReturnAbort(EditorId,Stack)
         )
       +
-        rec-msg(push-modulename, Stack?, EditorId?) .
+        rec-msg(push-active-module, Stack?, EditorId?) .
         subscribe(delete-editor(EditorId)) .
         snd-msg(get-editor-modulename(EditorId)) .
         (
@@ -399,6 +399,10 @@ in
           rec-note(delete-editor(EditorId)) .
           ReturnFailed(EditorId, Stack)
         )
+      +
+        rec-msg(push-modulename(String?), Stack?, EditorId?) .
+        StackPushString(Stack,Stack?,String) .
+        ReturnSuccess(EditorId,Stack)
       +
         rec-msg(push-filename(FileName?), Stack?, EditorId?) .
         StackPushFile(Stack,Stack?,FileName) .
