@@ -1,6 +1,9 @@
 # $Id$
 
-Thu Jan  4 10:50:12 CET 2005 <kooiker@cwi.nl>
+Thu Jan  4 10:50:12 CET 2005 <{markvdb,kooiker}@cwi.nl>
+ * in-output/src/main.c:
+   - Readded normalizeFileName for Cygwin purposes
+   - get_path_directory returns UNIX style path
  * editors/text/swing/metaedit/toolbus/editor-swing.idef:
    - Added te-register-text-categories and te-highlight-slices
 
