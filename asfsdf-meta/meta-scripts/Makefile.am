@@ -6,8 +6,9 @@ EXTRA_DIST    = meta-interface.tb.src error-display.tb
 
 pkgdata_DATA     = $(TBSCRIPTS) 
 
-bin_SCRIPTS = meta
-EXTRA_DIST = meta.sh.src
+bin_SCRIPTS = meta pt-dump eqs-dump
+EXTRA_DIST = meta.sh.src pt-dump.sh.src eqs-dump.sh.src
+
 
 % : %.sh.src Makefile
 	sed 's@__ASF__@${prefix}@g;\

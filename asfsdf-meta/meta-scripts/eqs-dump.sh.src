@@ -1,0 +1,3 @@
+#! /bin/sh
+
+__META__/bin/generic-meta -I __ASF__/share/asf -E $* 
