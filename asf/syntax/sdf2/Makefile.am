@@ -20,12 +20,12 @@
 #
 # $Id$
 
-data_DATA  = Sdf2.baf Sdf2.sdf2
+#data_DATA  = Sdf2.baf Sdf2.sdf2
 
-CLEANFILES = Sdf2.baf Sdf2.sdf2
+#CLEANFILES = Sdf2.baf Sdf2.sdf2
 
-Sdf2.baf : ../../pgen/grammar/Sdf2.baf
-	cp $< $@
+#Sdf2.baf : ../../pgen/grammar/Sdf2.baf
+#	cp $< $@
 
-Sdf2.sdf2 : ../../pgen/grammar/Sdf2.sdf2
-	cp $< $@
+#Sdf2.sdf2 : ../../pgen/grammar/Sdf2.sdf2
+#	cp $< $@
