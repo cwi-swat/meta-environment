@@ -11,6 +11,7 @@ import toolbus.parser.TscriptParser;
 import toolbus.process.*;
 
 import aterm.*;
+import aterm.pure.PureFactory;
 
 public class ToolBus {
 
@@ -27,8 +28,9 @@ public class ToolBus {
   private static boolean verbose = false;
 
   public ToolBus(PrintWriter out) {
+    TBTerm.init();
+    factory = TBTerm.factory;
     this.out = out;
-    this.factory = TBTerm.factory;
     processes = new Vector();
     procdefs = new Vector();
     try {

@@ -11,10 +11,11 @@ import aterm.*;
 import aterm.pure.PureFactory;
 
 public class Main {
-  private static PureFactory aterms = new PureFactory();
+  private static ATermFactory aterms = new PureFactory();
 
   public static void main(String[] args) {
-    TBTerm.init(aterms);
+    TBTerm.init();
+    aterms = TBTerm.factory;
     
     //atomTest();
     //TauTest();

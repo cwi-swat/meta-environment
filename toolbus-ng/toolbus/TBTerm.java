@@ -8,6 +8,7 @@ import java.util.Hashtable;
 import toolbus.process.ProcessInstance;
 
 import aterm.*;
+import aterm.pure.PureFactory;
 
 class FunctionDescriptor {
   private String name;
@@ -137,6 +138,10 @@ public class TBTerm {
   public static final int Mod = 15;
 
   public static final int processId = 16;
+  
+  public static void init(){
+    factory = new PureFactory();
+  }
 
   public static void init(ATermFactory fact) {
     factory = fact;
