@@ -162,7 +162,7 @@ equations
 [alr2cs]  
 make-c-rules(Rule+) = C-rule+,
 make-c-temp(0) = Expression,
-Stat*1 = (tmp[0] = arg0);,
+Expression = arg0; = Stat*1,
 listpatterns2cstats(C-rule+,Expression,Namepair*,succ(0)) = (Stat*,Aint)
 ===>
 asflistrules2cstats(Rule+,Namepair*) = (Stat*1 ++  Stat*,Aint)
