@@ -1,7 +1,7 @@
 package 
 identification
-   name=toolbuslib
-   version=0.4
+   name=__PACKAGE__
+   version=__VERSION__
    location=http://www.cwi.nl/projects/MetaEnv/daily-dist
    info=http://www.cwi.nl/projects/MetaEnv/toolbuslib
    description='The toolbuslib is a package that contains libraries to

@@ -11,4 +11,8 @@ CLEANFILES = toolbuslib-config
 	sed 's@__PREFIX__@$(prefix)@g' < $< > $@ && \
 	chmod +x $@
 
+noinst_SCRIPTS = ${PACKAGE}-${VERSION}.pkg
 
+${PACKAGE}-${VERSION}.pkg: ${PACKAGE}.pkg Makefile
+	sed 's#__VERSION__#${VERSION}#g;\
+             s#__PACKAGE__#${PACKAGE}#g' < $< > $@
