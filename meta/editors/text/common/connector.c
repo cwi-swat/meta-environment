@@ -18,6 +18,11 @@
 #include "connector.h"
 
 /*}}}  */
+/*{{{  defines */
+
+#define MODIFIED "modified"
+
+/*}}}  */
 
 /*{{{  structs */
 
@@ -56,7 +61,7 @@ static void handleEditorInput(int write_to_hive_fd, const char *input)
     int loc = atoi(input);
     event = TE_makeEventMouse(loc);
   }
-  else if (strcmp(input, "modified") == 0) {
+  else if (strncmp(input, MODIFIED, strlen(MODIFIED)) == 0) {
     event = TE_makeEventModified();
   }
   else {
