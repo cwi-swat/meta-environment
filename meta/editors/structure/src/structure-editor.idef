@@ -29,12 +29,11 @@ let
 in 
   execute(structure-editor, SE?) .
   (
-    rec-msg(se-initialize-structure-editor(EditorId?, Text?, Tree?)) .
-    if equal(Tree, none) then
-      snd-do(SE, new-editor-given-text(EditorId, Text)) 
-    else 
-      snd-do(SE, new-editor-given-tree(EditorId, Tree)) 
-    fi
+    rec-msg(se-set-text(EditorId?, Text?)) .
+    snd-do(SE, new-editor-given-text(EditorId, Text)) 
+  +
+    rec-msg(se-set-tree(EditorId?, Tree?)) .
+    snd-do(SE, new-editor-given-tree(EditorId, Tree)) 
   +
     rec-msg(se-replace-focus(EditorId?, Focus?, Tree?)) .
     snd-do(SE, replace-focus(EditorId, Focus, Tree))
@@ -58,7 +57,7 @@ in
     snd-eval(SE, set-focus(EditorId, Location)) .
     rec-value(SE, focus(Focus?)) .  
     /* TODO: remove reference to Text Editor internals */
-    snd-msg(te-set-focus(EditorId, Focus)) 
+    snd-msg(se-focus-at-location(EditorId, Focus)) 
   +
     rec-msg(se-get-tree(EditorId?)) .
     snd-eval(SE, get-parse-tree(EditorId)) .
@@ -124,15 +123,6 @@ in
   +
     rec-msg(se-delete-structure-editor(EditorId?)).
     snd-do(SE, remove-tree(EditorId)) 
-  +
-    /* TODO: remove reference to Text Editor internals */
-    rec-msg(te-editor-contents-changed(EditorId?)) .
-    snd-do(SE, modify(EditorId))
-  +
-    rec-msg(se-is-editor-modified(EditorId?)) .
-    snd-eval(SE, is-editor-modified(EditorId)) .
-    rec-value(SE, editor-modified(Modified?)) .
-    snd-msg(se-editor-modified(EditorId, Modified))
   ) *
   delta
 endlet

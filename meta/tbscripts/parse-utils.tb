@@ -62,8 +62,7 @@ in
     rec-msg(editor-filename(FileName?)) .
     snd-msg(add-posinfo-packed(FileName, Tree)) .
     rec-msg(tree-with-pos-info(NewTree?)) .
-    snd-msg(se-replace-focus(EditorId, Focus, NewTree)) .
-    NewTree := no-tree .
+    snd-msg(replace-focus(EditorId, Focus, NewTree)) .
     FunSym := fun(ParseError) .
     if equal(FunSym, "no-errors") then
       snd-msg(parse-ok(ModuleName))
@@ -77,7 +76,7 @@ endlet
 
 process ProcessParseError(Path : str, ParseError: term) is
 let
-  FunSym       : str
+  FunSym : str
 in
   FunSym := fun(ParseError) .
   snd-note(remove-feedback-summary("sglr", Path)) .
@@ -92,7 +91,8 @@ process PrepareParseErrorForEditor(ModuleName : str, EditorId : term,
 			           Focus : term, ParseError : term) is
 let
   Location : term,
-  FunSym   : str,
+  FunSym : str,
+  Offset : int,
   FileName : str
 in
   FunSym := fun(ParseError) .
@@ -106,8 +106,15 @@ in
     if not-equal(FunSym, "no-errors") then
       snd-msg(get-error-location(ParseError)) .
       rec-msg(error-location(Location?)) .
-      snd-msg(te-set-cursor-at-location(EditorId, Location)) .
-      snd-msg(te-display-message(EditorId, "Parse error near cursor")) .
+      snd-msg(get-location-offset(Location)) .
+      (
+	rec-msg(location-offset(Offset?)) .
+	snd-msg(te-set-cursor-at-offset(EditorId, Offset)) .
+	snd-msg(te-display-message(EditorId, "Parse error near cursor"))
+      +
+	rec-msg(no-location-offset) .
+	snd-msg(te-display-message(EditorId, "Parse error at unknown location"))
+      ) .
       snd-note(show-feedback-summary(ParseError)) .
       snd-msg(parse-failed(ModuleName, Focus))
     else

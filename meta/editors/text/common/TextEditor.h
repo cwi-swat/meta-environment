@@ -3,6 +3,8 @@
 
 /*{{{  includes */
 
+#include <stdlib.h>
+#include <string.h>
 #include <aterm1.h>
 #include "TextEditor_dict.h"
 
@@ -19,8 +21,23 @@ typedef struct _TE_Pipe *TE_Pipe;
 
 /*}}}  */
 
+/*{{{  definition of bottom types */
+
+
+/*}}}  */
+
 void TE_initTextEditorApi(void);
 
+/*{{{  protect functions */
+
+void TE_protectAction(TE_Action *arg);
+void TE_protectActionList(TE_ActionList *arg);
+void TE_protectMenu(TE_Menu *arg);
+void TE_protectEvent(TE_Event *arg);
+void TE_protectProcess(TE_Process *arg);
+void TE_protectPipe(TE_Pipe *arg);
+
+/*}}}  */
 /*{{{  term conversion functions */
 
 TE_Action TE_ActionFromTerm(ATerm t);
@@ -47,8 +64,7 @@ TE_Action TE_makeActionToFront();
 TE_Action TE_makeActionWriteContents();
 TE_Action TE_makeActionRereadContents();
 TE_Action TE_makeActionDisplayMessage(char* message);
-TE_Action TE_makeActionSetCursorAtFocus(ATerm focus);
-TE_Action TE_makeActionSetCursorAtLocation(ATerm errorLocation);
+TE_Action TE_makeActionSetCursorAtOffset(int offset);
 TE_Action TE_makeActionSetFocusAtLocation(ATerm errorLocation);
 TE_Action TE_makeActionClearFocus();
 TE_Action TE_makeActionSetFocus(ATerm focus);
@@ -83,8 +99,7 @@ inline ATbool TE_isActionToFront(TE_Action arg);
 inline ATbool TE_isActionWriteContents(TE_Action arg);
 inline ATbool TE_isActionRereadContents(TE_Action arg);
 inline ATbool TE_isActionDisplayMessage(TE_Action arg);
-inline ATbool TE_isActionSetCursorAtFocus(TE_Action arg);
-inline ATbool TE_isActionSetCursorAtLocation(TE_Action arg);
+inline ATbool TE_isActionSetCursorAtOffset(TE_Action arg);
 inline ATbool TE_isActionSetFocusAtLocation(TE_Action arg);
 inline ATbool TE_isActionClearFocus(TE_Action arg);
 inline ATbool TE_isActionSetFocus(TE_Action arg);
@@ -93,12 +108,15 @@ inline ATbool TE_isActionSetActions(TE_Action arg);
 ATbool TE_hasActionMessage(TE_Action arg);
 char* TE_getActionMessage(TE_Action arg);
 TE_Action TE_setActionMessage(TE_Action arg, char* message);
-ATbool TE_hasActionFocus(TE_Action arg);
-ATerm TE_getActionFocus(TE_Action arg);
-TE_Action TE_setActionFocus(TE_Action arg, ATerm focus);
+ATbool TE_hasActionOffset(TE_Action arg);
+int TE_getActionOffset(TE_Action arg);
+TE_Action TE_setActionOffset(TE_Action arg, int offset);
 ATbool TE_hasActionErrorLocation(TE_Action arg);
 ATerm TE_getActionErrorLocation(TE_Action arg);
 TE_Action TE_setActionErrorLocation(TE_Action arg, ATerm errorLocation);
+ATbool TE_hasActionFocus(TE_Action arg);
+ATerm TE_getActionFocus(TE_Action arg);
+TE_Action TE_setActionFocus(TE_Action arg, ATerm focus);
 ATbool TE_hasActionActions(TE_Action arg);
 TE_ActionList TE_getActionActions(TE_Action arg);
 TE_Action TE_setActionActions(TE_Action arg, TE_ActionList actions);
@@ -177,7 +195,7 @@ TE_Pipe TE_setPipeWrite(TE_Pipe arg, int write);
 /*}}}  */
 /*{{{  sort visitors */
 
-TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), ATerm (*acceptFocus)(ATerm), ATerm (*acceptErrorLocation)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList));
+TE_Action TE_visitAction(TE_Action arg, char* (*acceptMessage)(char*), int (*acceptOffset)(int), ATerm (*acceptErrorLocation)(ATerm), ATerm (*acceptFocus)(ATerm), TE_ActionList (*acceptActions)(TE_ActionList));
 TE_ActionList TE_visitActionList(TE_ActionList arg, TE_Menu (*acceptHead)(TE_Menu));
 TE_Menu TE_visitMenu(TE_Menu arg, char* (*acceptMain)(char*), char* (*acceptSub)(char*), char* (*acceptShortcut)(char*));
 TE_Event TE_visitEvent(TE_Event arg, TE_Menu (*acceptMenu)(TE_Menu), int (*acceptLocation)(int), char* (*acceptText)(char*));

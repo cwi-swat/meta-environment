@@ -1,7 +1,3 @@
-/*
- * Generated at Mon Jan 26 14:42:57 2004
- */
-
 #ifndef __TextEditor_dict_H
 #define __TextEditor_dict_H
 
@@ -19,7 +15,6 @@ extern AFun TE_afun10;
 extern AFun TE_afun4;
 extern AFun TE_afun13;
 extern AFun TE_afun14;
-extern AFun TE_afun19;
 extern AFun TE_afun2;
 extern AFun TE_afun7;
 extern AFun TE_afun12;
@@ -43,8 +38,7 @@ extern ATerm TE_patternActionGetContents;
 extern ATerm TE_patternActionSetFocus;
 extern ATerm TE_patternActionClearFocus;
 extern ATerm TE_patternActionSetFocusAtLocation;
-extern ATerm TE_patternActionSetCursorAtLocation;
-extern ATerm TE_patternActionSetCursorAtFocus;
+extern ATerm TE_patternActionSetCursorAtOffset;
 extern ATerm TE_patternActionDisplayMessage;
 extern ATerm TE_patternActionRereadContents;
 extern ATerm TE_patternActionWriteContents;

@@ -236,26 +236,14 @@ void display_message(int c, ATerm editorId, const char *message)
 }
 
 /*}}}  */
-/*{{{  void set_cursor_at_focus(int c, ATerm editorId, ATerm focus) */
+/*{{{  void set_cursor_at_offset(int c, ATerm editorId, int offset) */
 
-void set_cursor_at_focus(int c, ATerm editorId, ATerm focus)
+void set_cursor_at_offset(int c, ATerm editorId, int offset)
 {
   TE_Process process = getEditorProcess(editorId);
 
   if (process != NULL) {
-    sendToEditor(process, TE_makeActionSetCursorAtFocus(focus));
-  }
-}
-
-/*}}}  */
-/*{{{  void set_cursor_at_location(int c, ATerm editorId, ATerm location) */
-
-void set_cursor_at_location(int c, ATerm editorId, ATerm location)
-{
-  TE_Process process = getEditorProcess(editorId);
-
-  if (process != NULL) {
-    sendToEditor(process, TE_makeActionSetCursorAtLocation(location));
+    sendToEditor(process, TE_makeActionSetCursorAtOffset(offset));
   }
 }
 

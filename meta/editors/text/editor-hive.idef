@@ -14,9 +14,9 @@ let
   FocusText : str,
   Hive : editor-hive,
   Location : term,
+  Offset : int,
   MenuEvent : term,
-  Message : str,
-  MouseEvent : int
+  Message : str
 in
 #ifdef ECLIPSE
   rec-connect(Hive?)
@@ -49,11 +49,8 @@ in
     rec-msg(te-display-message(EditorId?, Message?))
     . snd-do(Hive, display-message(EditorId, Message))
   +
-    rec-msg(te-set-cursor-at-focus(EditorId?, Focus?))
-    . snd-do(Hive, set-cursor-at-focus(EditorId, Focus))
-  +
-    rec-msg(te-set-cursor-at-location(EditorId?, Location?))
-    . snd-do(Hive, set-cursor-at-location(EditorId, Location))
+    rec-msg(te-set-cursor-at-offset(EditorId?, Offset?))
+    . snd-do(Hive, set-cursor-at-offset(EditorId, Offset))
   +
     rec-msg(te-set-focus-at-location(EditorId?, Location?))
     . snd-do(Hive, set-focus-at-location(EditorId, Location))
@@ -66,14 +63,11 @@ in
   +
     rec-event(Hive, contents-changed(EditorId?))
     . snd-ack-event(Hive, contents-changed(EditorId))
-    /*. printf("contents-changed(%t)\n", EditorId)*/
-    . snd-msg(te-editor-contents-changed(EditorId))
+    . snd-msg(te-contents-changed(EditorId))
   +
-    rec-event(Hive, mouse-event(EditorId?, MouseEvent?))
-    . snd-ack-event(Hive, mouse-event(EditorId, MouseEvent))
-    /*. printf("set-location(%t, %t)\n", EditorId, MouseEvent)*/
-    /* TODO: remove reference to Structure Editor internals */
-    . snd-msg(se-set-location(EditorId, MouseEvent))
+    rec-event(Hive, mouse-event(EditorId?, Offset?))
+    . snd-ack-event(Hive, mouse-event(EditorId, Offset))
+    . snd-msg(te-mouse-click-at-offset(EditorId, Offset))
   +
     rec-event(Hive, menu-event(EditorId?, MenuEvent?))
     . snd-ack-event(Hive, menu-event(EditorId, MenuEvent))

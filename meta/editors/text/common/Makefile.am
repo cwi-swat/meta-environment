@@ -1,6 +1,6 @@
 # $Id$
 
-#CFLAGS += -Werror
+#AM_CFLAGS = -Werror
 
 INCLUDES = \
 	-I$(ATERM)/include \
@@ -27,5 +27,5 @@ libTextEditor_a_SOURCES = \
 
 api: TextEditor.adt
 	upgrade-adt -i $< -o $<.upgraded
-	adt-to-c --prefix TE_ --input $<.upgraded --output TextEditor
+	adt-to-c --prefix TE_ -n TextEditor --input $<.upgraded
 	rm -f $<.upgraded

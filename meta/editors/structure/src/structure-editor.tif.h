@@ -9,23 +9,20 @@
 #include <atb-tool.h>
 
 /* Prototypes for functions called from the event handler */
-ATerm get_focussed_tree(int conn, ATerm);
-ATerm get_parse_tree(int conn, ATerm);
-ATerm replace_focussed_tree(int conn, ATerm, ATerm);
 ATerm set_focus(int conn, ATerm, int);
-ATerm check_tree_sort(int conn, const char *, ATerm);
+ATerm get_parse_tree(int conn, ATerm);
 ATerm invalidate_tree(int conn, ATerm);
-ATerm get_focus_sort(int conn, ATerm);
+ATerm get_focussed_tree(int conn, ATerm);
 ATerm move_focus(int conn, ATerm, ATerm);
-ATerm get_focus_location(int conn, ATerm);
+ATerm replace_focussed_tree(int conn, ATerm, ATerm);
 ATerm move_focus_to_root(int conn, ATerm);
-ATerm get_dirty_focuses(int conn, ATerm);
+ATerm check_tree_sort(int conn, const char *, ATerm);
 void replace_focus(int conn, ATerm, ATerm, ATerm);
-void remove_tree(int conn, ATerm);
+ATerm get_focus_location(int conn, ATerm);
 void new_editor_given_tree(int conn, ATerm, ATerm);
-void modify(int conn, ATerm);
+ATerm get_dirty_focuses(int conn, ATerm);
 void new_editor_given_text(int conn, ATerm, const char *);
-ATerm is_editor_modified(int conn, ATerm);
+void remove_tree(int conn, ATerm);
 void rec_terminate(int conn, ATerm);
 extern ATerm structure_editor_handler(int conn, ATerm term);
 extern ATerm structure_editor_checker(int conn, ATerm sigs);

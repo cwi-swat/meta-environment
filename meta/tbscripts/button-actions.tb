@@ -504,11 +504,11 @@ in
       +
         rec-msg(push-active-module, Stack?, EditorId?) .
         subscribe(delete-editor(EditorId)) .
-        snd-msg(get-editor-modulename(EditorId)) .
+        snd-msg(get-editor-module-name(EditorId)) .
         (
-          rec-msg(editor-modulename(EditorId,ModuleName?)) .
-          StackPushString(Stack,Stack?,ModuleName) .
-          ReturnSuccess(EditorId,Stack)
+          rec-msg(editor-module-name(EditorId, ModuleName?)) .
+          StackPushString(Stack, Stack?, ModuleName) .
+          ReturnSuccess(EditorId, Stack)
         +
           rec-note(delete-editor(EditorId)) .
           ReturnFailed(EditorId, Stack)

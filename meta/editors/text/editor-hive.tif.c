@@ -5,7 +5,7 @@
 
 #include "editor-hive.tif.h"
 
-#define NR_SIG_ENTRIES	15
+#define NR_SIG_ENTRIES	14
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-do(<editor-hive>,edit-file(<term>,<str>,<str>))",
@@ -16,8 +16,7 @@ static char *signature[NR_SIG_ENTRIES] = {
   "rec-do(<editor-hive>,get-contents(<term>,<term>))",
   "rec-do(<editor-hive>,clear-focus(<term>))",
   "rec-do(<editor-hive>,display-message(<term>,<str>))",
-  "rec-do(<editor-hive>,set-cursor-at-focus(<term>,<term>))",
-  "rec-do(<editor-hive>,set-cursor-at-location(<term>,<term>))",
+  "rec-do(<editor-hive>,set-cursor-at-offset(<term>,<int>))",
   "rec-do(<editor-hive>,set-focus-at-location(<term>,<term>))",
   "rec-do(<editor-hive>,editor-to-front(<term>))",
   "rec-do(<editor-hive>,kill-editor(<term>))",
@@ -30,35 +29,32 @@ ATerm editor_hive_handler(int conn, ATerm term)
 {
   ATerm in, out;
   /* We need some temporary variables during matching */
+  int i0;
   char *s0, *s1;
   ATerm t0, t1;
 
-  if(ATmatch(term, "rec-do(clear-focus(<term>))", &t0)) {
-    clear_focus(conn, t0);
-    return NULL;
-  }
   if(ATmatch(term, "rec-do(get-contents(<term>,<term>))", &t0, &t1)) {
     get_contents(conn, t0, t1);
     return NULL;
   }
-  if(ATmatch(term, "rec-do(display-message(<term>,<str>))", &t0, &s0)) {
-    display_message(conn, t0, s0);
+  if(ATmatch(term, "rec-do(clear-focus(<term>))", &t0)) {
+    clear_focus(conn, t0);
     return NULL;
   }
   if(ATmatch(term, "rec-do(write-contents(<term>))", &t0)) {
     write_contents(conn, t0);
     return NULL;
   }
-  if(ATmatch(term, "rec-do(set-cursor-at-focus(<term>,<term>))", &t0, &t1)) {
-    set_cursor_at_focus(conn, t0, t1);
+  if(ATmatch(term, "rec-do(display-message(<term>,<str>))", &t0, &s0)) {
+    display_message(conn, t0, s0);
     return NULL;
   }
   if(ATmatch(term, "rec-do(set-focus(<term>,<term>))", &t0, &t1)) {
     set_focus(conn, t0, t1);
     return NULL;
   }
-  if(ATmatch(term, "rec-do(set-cursor-at-location(<term>,<term>))", &t0, &t1)) {
-    set_cursor_at_location(conn, t0, t1);
+  if(ATmatch(term, "rec-do(set-cursor-at-offset(<term>,<int>))", &t0, &i0)) {
+    set_cursor_at_offset(conn, t0, i0);
     return NULL;
   }
   if(ATmatch(term, "rec-do(reread-contents(<term>))", &t0)) {

@@ -91,9 +91,9 @@ static ATerm getEditorName(ATerm editor)
 }
 
 /*}}}  */
-/*{{{  static ATerm getModule(ATerm editor) */
+/*{{{  static ATerm getEditorModule(ATerm editor) */
 
-static ATerm getModule(ATerm editor)
+static ATerm getEditorModule(ATerm editor)
 {
   assert(editor);
 
@@ -163,7 +163,7 @@ static ATermList getEditorsByModule(ATerm module)
 
   while (!ATisEmpty(list)) {
     ATerm entry = ATgetFirst(list);
-    if (ATisEqual(getModule(entry), module)) {
+    if (ATisEqual(getEditorModule(entry), module)) {
       result = ATinsert(result, getEditorId(entry));
     }
     list = ATgetNext(list);
@@ -287,7 +287,7 @@ ATerm get_module_name(int conn, ATerm editorId)
   editor = getEditorById(editorId);
 
   if (editor != NULL) {
-    nameTerm = getEditorName(editor);
+    nameTerm = getEditorModule(editor);
     ATmatch(nameTerm,"module(<str>)", &name);  
     return ATmake("snd-value(module-name(<str>))", name);
   }

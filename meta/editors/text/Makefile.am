@@ -1,12 +1,12 @@
 # $Id$
 
-SUBDIRS = common . gvim emacs xemacs
+include ${top_srcdir}/make_rules
+
+SUBDIRS = common . gvim emacs
 
 #AM_CFLAGS = -Werror
 
 CLEANFILES = \
-	editor-hive.tif.c \
-	editor-hive.tif.h \
 	editor-hive.tifs
 
 IDEF2TIF = $(TOOLBUS)/bin/idef2tif
@@ -26,6 +26,8 @@ pkgdata_DATA = editor-hive.idef
 
 bin_PROGRAMS = editor-hive
 
+noinst_HEADERS = editor-hive.tif.h
+
 editor_hive_SOURCES = \
 	editor-hive.c \
 	editor-hive.h \
@@ -36,9 +38,3 @@ editor_hive_LDADD = \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS) -ldl
-
-%.tifs: %.idef
-	$(IDEF2TIF) $<
-
-editor-hive.tif.c editor-hive.tif.h: editor-hive.tifs
-	$(TIFSTOC) -tool editor-hive $<

@@ -367,39 +367,22 @@ static void displayMessage(int write_to_editor_fd, TE_Action edAction)
 }
 
 /*}}}  */
-/*{{{  static void gotoCursorAtLocation(int write_to_editor_fd, int location) */
+/*{{{  static void gotoCursorAtOffset(int write_to_editor_fd, int offset) */
 
-static void gotoCursorAtLocation(int write_to_editor_fd, int location)
+static void gotoCursorAtOffset(int write_to_editor_fd, int offset)
 {
   char cmd[BUFSIZ];
-  sprintf(cmd, ":goto %d", location);
+  sprintf(cmd, ":goto %d", offset);
   sendToVim(cmd);
 }
 
 /*}}}  */
-/*{{{  static void setCursorAtFocus(int write_to_editor_fd, TE_Action edAction) */
+/*{{{  static void setCursorAtOffset(int write_to_editor_fd, TE_Action edAction) */
 
-static void setCursorAtFocus(int write_to_editor_fd, TE_Action edAction)
+static void setCursorAtOffset(int write_to_editor_fd, TE_Action edAction)
 {
-  ATerm focusTerm = TE_getActionFocus(edAction);
-  SE_Focus focus = SE_FocusFromTerm(focusTerm);
-  SE_Area area = SE_getFocusArea(focus);
-
-  gotoCursorAtLocation(write_to_editor_fd, SE_getAreaStart(area)+1);
-}
-
-/*}}}  */
-/*{{{  static void setCursorAtLocation(int write_to_editor_fd, TE_Action edAction) */
-
-static void setCursorAtLocation(int write_to_editor_fd, TE_Action edAction)
-{
-  ATerm locationTerm = TE_getActionFocus(edAction);
-  ERR_Location location = ERR_LocationFromTerm(locationTerm);
-  ERR_Area area = ERR_getLocationArea(location);
-
-  if (ERR_hasAreaOffset(area)) {
-    gotoCursorAtLocation(write_to_editor_fd, ERR_getAreaOffset(area)+1);
-  }
+  int offset = TE_getActionOffset(edAction);
+  gotoCursorAtOffset(write_to_editor_fd, offset);
 }
 
 /*}}}  */
@@ -443,10 +426,9 @@ int main(int argc, char *argv[])
 			      writeContents,
 			      rereadContents,
 			      displayMessage,
-			      setCursorAtFocus,
 			      setActions,
 			      setFocus,
-			      setCursorAtLocation,
+			      setCursorAtOffset,
 			      setFocusAtLocation,
 			      getContents);
 

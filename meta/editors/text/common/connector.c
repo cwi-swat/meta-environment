@@ -34,10 +34,9 @@ struct _TextEditor
   write_contents_t writeContents;
   reread_contents_t rereadContents;
   display_message_t displayMessage;
-  set_cursor_at_focus_t setCursorAtFocus;
   set_actions_t setActions;
   set_focus_t setFocus;
-  set_cursor_at_location_t setCursorAtLocation;
+  set_cursor_at_offset_t setCursorAtOffset;
   set_focus_at_location_t setFocusAtLocation;
   get_contents_t getContents;
 };
@@ -98,17 +97,14 @@ static void handleHiveInput(TextEditor editor,
   else if (TE_isActionDisplayMessage(action)) {
     editor->displayMessage(write_to_editor_fd, action);
   }
-  else if (TE_isActionSetCursorAtFocus(action)) {
-    editor->setCursorAtFocus(write_to_editor_fd, action);
-  }
   else if (TE_isActionSetActions(action)) {
     editor->setActions(write_to_editor_fd, action);
   }
   else if (TE_isActionSetFocus(action)) {
     editor->setFocus(write_to_editor_fd, action);
   }
-  else if (TE_isActionSetCursorAtLocation(action)) {
-    editor->setCursorAtLocation(write_to_editor_fd, action);
+  else if (TE_isActionSetCursorAtOffset(action)) {
+    editor->setCursorAtOffset(write_to_editor_fd, action);
   }
   else if (TE_isActionSetFocusAtLocation(action)) {
     editor->setFocusAtLocation(write_to_editor_fd, action);
@@ -128,10 +124,9 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
 			  write_contents_t writeContents,
 			  reread_contents_t rereadContents,
 			  display_message_t displayMessage,
-			  set_cursor_at_focus_t setCursorAtFocus,
 			  set_actions_t setActions,
 			  set_focus_t setFocus,
-			  set_cursor_at_location_t setCursorAtLocation,
+			  set_cursor_at_offset_t setCursorAtOffset,
                           set_focus_at_location_t setFocusAtLocation,
 			  get_contents_t getContents)
 {
@@ -155,17 +150,14 @@ TextEditor initTextEditor(hive_closed_t hiveClosed,
   assert(displayMessage != NULL);
   textEditorImpl->displayMessage = displayMessage;
 
-  assert(setCursorAtFocus != NULL);
-  textEditorImpl->setCursorAtFocus = setCursorAtFocus;
-
   assert(setActions != NULL);
   textEditorImpl->setActions = setActions;
 
   assert(setFocus != NULL);
   textEditorImpl->setFocus = setFocus;
 
-  assert(setCursorAtLocation != NULL);
-  textEditorImpl->setCursorAtLocation = setCursorAtLocation;
+  assert(setCursorAtOffset != NULL);
+  textEditorImpl->setCursorAtOffset = setCursorAtOffset;
 
   assert(setFocusAtLocation != NULL);
   textEditorImpl->setFocusAtLocation = setFocusAtLocation;

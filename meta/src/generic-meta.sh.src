@@ -18,7 +18,7 @@ editor=__DEFAULT_EDITOR__
 myversion=__VERSION__
 
 PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
-${error_support}/bin:${graph_support}/bin:${toolbus}/bin:${xemacs}/bin:\
+${error_support}/bin:${graph_support}/bin:${toolbus}/bin:\
 ${sdf_support}/bin:${pandora}/bin:${PATH}"; 
 export PATH
 
@@ -47,7 +47,7 @@ Options:
     -C file         specifies the configuration file to be processed
     -I dir          location of extra toolbus scripts
     -d              run in debug mode (with viewer)
-    -e <editor>     select one of gnu-emacs, gvim, or xemacs
+    -e <editor>     select one of gnu-emacs, or gvim
     -g <gui>        select one of swing or eclipse
     -h              display help information (usage)
     -i <file>       input file works only for the term-editor
