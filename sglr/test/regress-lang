@@ -50,6 +50,6 @@ do
         for stx in *.sdf2 ; do
 	        RegressGenTable $stx
         done
-	rm -f *.asfix*
+	rm -f *.asfix[12]
 	cd ..
 done
