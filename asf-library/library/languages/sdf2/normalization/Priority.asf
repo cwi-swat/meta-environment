@@ -134,7 +134,11 @@ equations
   [0] assoc[[_G]]         = assoc[[ P(_G) ]]
   [0] assoc[[]]           =
   [0] assoc[[p+1 p+2]]    = assoc[[p+1]] ++ assoc[[p+2]]
-  [0] assoc[[p]]          = p as p  when 'a -> _A {attr*1, as, attr*2} := p
+  [0] assoc[[p]]          = p <0>> p  when 'a -> _A {attr*1, right, attr*2} := p
+  [0] assoc[[p]]          = p <2>> p  when 'a -> _A {attr*1, left, attr*2} := p
+  [0] assoc[[p]]          = p <2>> p  when 'a -> _A {attr*1, assoc, attr*2} := p
+  [0] assoc[[p]]          = p <0,2>> p  when 'a -> _A {attr*1, non-assoc, attr*2} := p
+%%  [0] assoc[[p]]          = p as p  when 'a -> _A {attr*1, as, attr*2} := p
   [default-0] assoc[[p]]  =
 
 %% The function \fun{syntax} derives from a priorities declaration the list of all
