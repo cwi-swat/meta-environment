@@ -21,15 +21,14 @@
     $Id$
 
 */
-#include "evaluator.idef"
 
 process Test is 
 let
-  List : list,
+  List : term,
   Eval : evaluator
 in
-  execute(evaluator, Eval?) .
   List := [] .
+  execute(evaluator, Eval?) .
   snd-do(Eval, add-equations("Test", List)) .
   snd-eval(Eval, equations-available("Test")) .
   (  
@@ -39,5 +38,7 @@ in
   ) .
   shutdown("") delay(sec(2))
 endlet
+
+tool evaluator is {command="evaluator"}
 
 toolbus(Test)

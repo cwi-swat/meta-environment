@@ -34,7 +34,7 @@ call_toolbus () {
   if [ $toolbus_exit != 0 ]; then
     echo "Failed: " $script ": " ${result}
     failed=`expr $failed + 1`
-  elif echo $result | grep -i failed >/dev/null ; then
+  elif echo $result | grep -i -e failed -e warning >/dev/null ; then
     echo "Failed: " $script ": " ${result}
     failed=`expr $failed + 1`
   else

@@ -20,11 +20,10 @@
 
     $Id$
 */
-#include "evaluator.idef"
 
 process Test is 
 let
-  List : list,
+  List : term,
   Eval : evaluator
 in
   execute(evaluator, Eval?) .
@@ -38,5 +37,7 @@ in
   ) .
   shutdown("") delay(sec(2))
 endlet
+
+tool evaluator is {command="evaluator"}
 
 toolbus(Test)
