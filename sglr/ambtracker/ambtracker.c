@@ -139,6 +139,8 @@ int main (int argc, char **argv)
     ATerror("%s: could not read term from input file %s\n", myname, input_file_name);
   }
 
+  PT_initMEPTApi();
+
   SG_InitPTGlobals();
   t = SG_AmbTracker(t);
 
