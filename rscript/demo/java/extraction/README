@@ -1,0 +1,29 @@
+1. Extract facts from a given source package, e.g.
+
+	 extract-java /home/paulk/software/source/sources/CH/ifa/draw
+
+   This command creates a local directory called `rstore'.
+   For each file F.java it creates a new file rstore/F.java.rstore.pt
+
+   This is an rstore that contains the facts extracted from that file.
+   The extension .pt indicates that the restore is in binary 
+   parse tree format, recognized by the tools we use.
+
+   If you want to inspect the contents of such a generated file do
+
+	 unparsePT -i rstore/F.java.rstore.pt
+
+   and this will give you the extracted data as text.
+
+2. Merge the resulting rstores, e.g.
+
+	 merge-rstores rstore/*.pt
+
+   The result is a combined Rstore called `result.rstore.pt'
+
+   If you prefer, you can name the output file yourself
+   (e.g. hotdraw.rstore.pt) and set the verbose option to see what is
+   going on:
+	 merge-rstores -v -o hotdraw.rstore.pt rstore/*.pt
+
+3. (to be continued)

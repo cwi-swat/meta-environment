@@ -2,6 +2,6 @@ include $(top_srcdir)/make_rules
 
 bin_SCRIPTS	= rviz
 
-SOURCES		= rviz.tcl.src
+EXTRA_DIST	= rviz.tcl.src
 
 CLEANFILES	= rviz

@@ -1,6 +1,6 @@
 # ---- General Make rules
 
-SUFFIXES       = .asf .sdf .eqs .rscript .rstore .pt .tbl .sh .src
+SUFFIXES       = .asf .sdf .eqs .rscript .rstore .pt .tbl .sh .src .conf .buttons
 
 # ---- Generate term parse table from SDF module
 

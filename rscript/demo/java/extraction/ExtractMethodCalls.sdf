@@ -2,11 +2,11 @@ module ExtractMethodCalls
 
 imports Rstore
 imports JavaOperations
-imports MyPosInfo[ClassDeclaration]
-imports MyPosInfo[ClassType]
-imports MyPosInfo[CompilationUnit]
-imports MyPosInfo[ExplicitConstructorInvocation]
-imports MyPosInfo[Identifier]
+imports utilities/PosInfo[ClassDeclaration]
+imports utilities/PosInfo[ClassType]
+imports utilities/PosInfo[CompilationUnit]
+imports utilities/PosInfo[ExplicitConstructorInvocation]
+imports utilities/PosInfo[Identifier]
 
 exports
   context-free syntax
@@ -14,49 +14,49 @@ exports
 
 hiddens
   context-free syntax
-    extractMethodCalls(CompilationUnit, RSTORE, Area)
+    extractMethodCalls(CompilationUnit, RSTORE, Location)
       -> RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
-    extractMethodCalls(ClassDeclaration, RSTORE, Area)
+    extractMethodCalls(ClassDeclaration, RSTORE, Location)
       -> RSTORE {traversal(accu, top-down, break)}
 
-    extractMethodCalls(ClassBody, RSTORE, Area)
-      -> RSTORE {traversal(accu, top-down, break)}
-
-hiddens
-  context-free syntax
-    extractMethodCalls(MethodDeclaration, RSTORE, Area)
-      -> RSTORE {traversal(accu, top-down, break)}
-
-    extractMethodCalls(MethodBody, RSTORE, Area)
+    extractMethodCalls(ClassBody, RSTORE, Location)
       -> RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
-    extractMethodCalls(MethodInvocation, RSTORE, Area)
+    extractMethodCalls(MethodDeclaration, RSTORE, Location)
       -> RSTORE {traversal(accu, top-down, break)}
 
-    extractMethodCalls(ExplicitConstructorInvocation, RSTORE, Area)
+    extractMethodCalls(MethodBody, RSTORE, Location)
       -> RSTORE {traversal(accu, top-down, break)}
 
 hiddens
   context-free syntax
-    addMethodCall(Identifier, {Identifier "."}+, Area, RSTORE) -> RSTORE
+    extractMethodCalls(MethodInvocation, RSTORE, Location)
+      -> RSTORE {traversal(accu, top-down, break)}
 
-    addSuperCall(Area, Area, RSTORE) -> RSTORE
+    extractMethodCalls(ExplicitConstructorInvocation, RSTORE, Location)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    addMethodCall(Identifier, {Identifier "."}+, Location, RSTORE) -> RSTORE
+
+    addSuperCall(Location, Location, RSTORE) -> RSTORE
 
 hiddens
   variables
-    "&Area" -> Area
+    "&Loc" -> Location
     "&ClassBody" -> ClassBody
     "&ClassDeclaration" -> ClassDeclaration
-    "&ClassId" -> Area
+    "&ClassId" -> Location
     "&CompilationUnit" -> CompilationUnit
     "&Expressions" -> {Expression ","}*
     "&ExplicitConstructorInvocation" -> ExplicitConstructorInvocation
-    "&ExplicitConstructorInvocationId" -> Area
+    "&ExplicitConstructorInvocationId" -> Location
     "&FormalParameters" -> {FormalParameter ","}*
     "&Identifier" -> Identifier
     "&Interfaces" -> Interfaces?
@@ -65,7 +65,7 @@ hiddens
     "&MethodDeclaration" -> MethodDeclaration
     "&MethodDeclarator" -> MethodDeclarator
     "&MethodHeader" -> MethodHeader
-    "&MethodId" -> Area
+    "&MethodId" -> Location
     "&MethodInvocation" -> MethodInvocation
     "&MethodRes" -> MethodRes
     "&Modifiers" -> Modifier*
@@ -75,4 +75,4 @@ hiddens
     "&Throws" -> Throws?
     "&Tuple"[0-9]* -> Tuple
     "&Var" -> Identifier
-    "&VarId" -> Area
+    "&VarId" -> Location

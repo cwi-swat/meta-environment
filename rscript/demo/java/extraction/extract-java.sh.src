@@ -10,8 +10,8 @@ bindir=__BINDIR__
 datadir=__DATADIR__
 
 PRG=`basename $0`
-JAVA_PARSE_TABLE=${datadir}/Java.trm.tbl
-JAVA_ANALYSIS=${datadir}/JavaAnalysis.eqs
+JAVA_PARSE_TABLE=${datadir}/demo/java/Java.trm.tbl
+JAVA_ANALYSIS=${datadir}/demo/java/extraction/JavaAnalysis.eqs
 
 # }}}
 
@@ -21,7 +21,7 @@ usage() {
 cat << ENDCAT >&2
 Usage: $PRG dirname
 
-Options:
+Options: none
 
 Examples:
   $PRG JHotDraw5.2-sources
@@ -31,14 +31,13 @@ ENDCAT
 
 # }}}
 
-SOURCE_DIR=$1
+if test $# -eq 1 -a -d $1
+then
 
-find $SOURCE_DIR -name "*.java" -a -exec extract-relations -e $JAVA_ANALYSIS -s CompilationUnit -p $JAVA_PARSE_TABLE \{\} \;
+    SOURCE_DIR=$1
 
-
-
-#for d in $SUBDIRS
-#do
-#	echo $d
-#	extract-relations -e $JAVA_ANALYSIS -s CompilationUnit -t $JAVA_PARSE_TABLE $SOURCE/$d/*.java
-#done
+    find $SOURCE_DIR -name "*.java" -a -exec extract-relations -e $JAVA_ANALYSIS -s CompilationUnit -p $JAVA_PARSE_TABLE \{\} \;
+else
+    usage
+    exit 1
+fi
