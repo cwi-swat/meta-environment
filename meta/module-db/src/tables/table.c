@@ -30,6 +30,11 @@ void removeValue(Table table, ATerm key)
   ATtableRemove((ATermTable) table, key);
 }
 
+ATbool containsKey(Table table, ATerm key)
+{
+  return (getValue(table, key) != NULL);
+}
+
 ATermList getAllKeys(Table table)
 {
   return ATtableKeys((ATermTable)table);

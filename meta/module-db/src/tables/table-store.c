@@ -100,6 +100,12 @@ Table getTable(char *name)
   }
 }
 
+void clearTable(char *name)
+{
+  removeTable(name);
+  addTable(name);
+}
+
 void removeFromAllTables(ATerm key)
 {
   int i;

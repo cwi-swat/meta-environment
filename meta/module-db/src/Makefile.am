@@ -2,6 +2,8 @@
 
 include $(top_srcdir)/make_rules
 
+SUBDIRS = tables
+
 bin_PROGRAMS		= term-base
 pkgdata_DATA		= term-base.idef
 

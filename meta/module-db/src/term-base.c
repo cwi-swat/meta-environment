@@ -6,7 +6,6 @@
 int main(int argc, char *argv[])
 {
   ATerm bottom;
-  Table table;
 
   ATinit(argc,argv,&bottom);
 

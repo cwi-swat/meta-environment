@@ -7,6 +7,7 @@ void  initTableStore();
 void  addTable(char *name);
 void  removeTable(char *name);
 Table getTable(char *name);
+void  clearTable(char *name);
 
 void  removeFromAllTables(ATerm key);
 
