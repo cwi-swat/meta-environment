@@ -9,9 +9,10 @@ exports
     [\\] [0-7] [0-7]? [0-7]?   -> Octal
 
   lexical syntax
-    "." [0-9]+ ( [eE] "-"? [0-9]+ )? [fFlL]?        -> FLOATINGconstant
-    [0-9]+ "." [0-9]* ( [eE] "-"? [0-9]+ )? [fFlL]? -> FLOATINGconstant
-    [0-9]+ [eE] "-"? [0-9]+ [fFlL]?                 -> FLOATINGconstant
+    [fFlLuU]*                                          -> SizeSuffix
+    "." [0-9]+ ( [eE] "-"? [0-9]+ )? SizeSuffix        -> FLOATINGconstant
+    [0-9]+ "." [0-9]* ( [eE] "-"? [0-9]+ )? SizeSuffix -> FLOATINGconstant
+    [0-9]+ [eE] "-"? [0-9]+ SizeSuffix                 -> FLOATINGconstant
     [0-9]+                                          -> INTEGERconstant
     [L]? "'" Char "'"                               -> CHARACTERconstant
     ~[\\\'\n]                                       -> Char
@@ -20,7 +21,7 @@ exports
     [\\] [x] [0-9A-E] [0-9A-E]                      -> Char
 
   lexical syntax
-    "0" [xX] [0-9]+ -> HEXconstant
+    "0" [xX] [0-9A-F]+ -> HEXconstant
 
   lexical restrictions
     INTEGERconstant HEXconstant FLOATINGconstant -/- [0-9]

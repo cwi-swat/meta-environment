@@ -7,7 +7,7 @@ exports
  
 
   context-free syntax
-    IdentifierDeclarator -> Declarator
+%%    IdentifierDeclarator -> Declarator
     TypedefDeclarator    -> Declarator
 
   context-free syntax
@@ -46,7 +46,7 @@ exports
 
   context-free syntax
     UnaryAbstractDeclarator      -> AbstractDeclarator
-    PostfixAbstractDeclarator    -> AbstractDeclarator
+    PostfixAbstractDeclarator -> AbstractDeclarator
     PostfixingAbstractDeclarator -> AbstractDeclarator
 
   context-free syntax

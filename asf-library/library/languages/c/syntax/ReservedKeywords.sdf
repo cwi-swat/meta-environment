@@ -4,37 +4,36 @@ imports languages/c/syntax/Identifiers
 exports
   context-free syntax
     "auto"      |
-    "double"    |
-    "int"       |
-    "struct"    |
     "break"     |
-    "else"      |
-    "long"      |
-    "switch"    |
     "case"      |
-    "enum"      |
-    "register"  |
-    "typedef"   |
     "char"      |
-    "extern"    |
-    "return"    |
-    "exit"      |
-    "union"     |
     "const"     |
-    "float"     |
-    "short"     |
-    "unsigned"  |
     "continue"  |
-    "for"       |
-    "signed"    |
-    "void"      |
     "default"   |
-    "goto"      |
-    "sizeof"    |
-    "volatile"  |
     "do"        |
+    "double"    |
+    "else"      |
+    "enum"      |
+    "extern"    |
+    "float"     |
+    "for"       |
+    "goto"      |
     "if"        |
+    "int"       |
+    "long"      |
+    "register"  |
+    "return"    |
+    "short"     |
+    "signed"    |
+    "sizeof"    |
     "static"    |
+    "struct"    |
+    "switch"    |
+    "typedef"   |
+    "union"     |
+    "unsigned"  |
+    "void"      |
+    "volatile"  |
     "while"    -> Identifier {reject}
 
 lexical restrictions

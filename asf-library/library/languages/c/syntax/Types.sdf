@@ -29,7 +29,6 @@ exports
   context-free syntax
     BasicTypeSpecifier   -> TypeSpecifier
     SueTypeSpecifier     -> TypeSpecifier
-    TypedefTypeSpecifier -> TypeSpecifier
 
   context-free syntax
     StorageClass                                  -> DeclarationQualifierList
@@ -70,7 +69,7 @@ exports
     SueTypeSpecifier TypeQualifier       -> SueTypeSpecifier 
 
   context-free syntax
-    TypedefTypeSpecifier StorageClass                -> TypedefDeclarationSpecifier 
+    BasicTypeSpecifier StorageClass                  -> TypedefDeclarationSpecifier 
     DeclarationQualifierList TypedefName             -> TypedefDeclarationSpecifier 
     TypedefDeclarationSpecifier DeclarationQualifier -> TypedefDeclarationSpecifier 
 
@@ -183,5 +182,5 @@ exports
     "{" {Initializer ","}+ ","? "}" -> Initializer 
     Expression                      -> Initializer
 
-hiddens
+exports
   sorts  Initializer InitializerOpt TypeName TypeSpecifier ParameterDeclaration DeclarationQualifierList ParameterTypedefDeclarator DeclarationSpecifier ParameterList EnumeratorValue Enumerator EnumSpecifier BitFieldSize BitFieldSizeOpt MemberIdentifierDeclarator MemberDeclarator MemberDeclaration MemberDeclarationList UnionSpecifier StructSpecifier ElaboratedTypeName BasicTypeName StorageClass TypedefTypeSpecifier TypeQualifier TypedefDeclarationSpecifier DeclarationQualifier SueTypeSpecifier SueDeclarationSpecifier BasicTypeSpecifier BasicDeclarationSpecifier DeclaringList DefaultDeclaringList Declaration 

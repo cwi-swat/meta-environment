@@ -78,7 +78,6 @@ Expression "++" | "--"                    -> Expression } >
 "sizeof" "(" TypeName ")"          -> Expression 
 "&" | "*" | "+" | "-" | "~" | "!" Expression -> Expression } >
 
-"(" TypeName ")" Expression -> Expression >
 Expression "*" | "/" | "%" Expression -> Expression {left} >
 Expression "+" |  "-" Expression -> Expression {left} >
 Expression "<<" | ">>" Expression -> Expression {left} >
@@ -95,9 +94,18 @@ Expression  "="  | "*="  | "/="  |
 		 "<<=" | ">>=" | "&="  |
 		 "^="  | "|="  Expression -> Expression {left}
 
+context-free priorities
+"(" TypeName ")" Expression -> Expression >
+Expression "*" | "/" | "%" Expression -> Expression {left}
+
+context-free priorities
+
+{"++" | "--" | "sizeof"  Expression -> Expression 
+"sizeof" "(" TypeName ")"          -> Expression }  >
+"(" TypeName ")" Expression -> Expression 
 
 context-free priorities
 
   Expression BracketedExpressionList -> Expression >
-  "(" CommaExpressionOpt ")" -> Expression
+  "(" CommaExpressionOpt ")" -> Expression 
 
