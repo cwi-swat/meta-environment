@@ -53,8 +53,6 @@ static int getInjectionDepth(PT_Tree eqOrCond)
     lhs = (PT_Tree) ASF_getConditionLhs((ASF_Condition) eqOrCond);
   }
   else {
-    ATerror("getInjectionDepth: expected condition or equation, got: %t\n",
-	    eqOrCond);
     return DEPTH_UNDEFINED;
   }
 
@@ -90,7 +88,7 @@ static PT_Tree filterEquationOrCondition(PT_Tree eqOrCond)
     }
 
     /* Compare the depth of each tree to the depth of the others.
-     * Trees with smaller depths are replaced by NULL.
+     * Trees with bigger depths are replaced by NULL.
      */
 
     for (i = 0; i < count; i++) {
@@ -142,13 +140,16 @@ static PT_Tree filterEquationOrCondition(PT_Tree eqOrCond)
 
 static ASF_Conditions filterConditions(ASF_Conditions conds)
 {
-  ASF_ConditionList condlist = ASF_getConditionsList(conds);
-  int count = ASF_getConditionListLength(condlist);
+  ASF_ConditionList condlist;
+  int count;
   ASF_Condition* buffer = NULL;
   ASF_ConditionList new;
   int i;
 
   CHECK_AMB(conds);
+  
+  condlist = ASF_getConditionsList(conds);
+  count = ASF_getConditionListLength(condlist);
 
   buffer = (ASF_Condition*) calloc(count, sizeof(ASF_Condition));
 
@@ -218,12 +219,14 @@ static ASF_CondEquation filterCondEquation(ASF_CondEquation condeq)
 static ASF_CondEquationList 
 filterCondEquationList(ASF_CondEquationList condeqslist)
 {
-  int count = ASF_getCondEquationListLength(condeqslist);
+  int count;
   ASF_CondEquation* buffer = NULL;
   ASF_CondEquationList new;
   int i;
 
   CHECK_AMB(condeqslist);
+  
+  count = ASF_getCondEquationListLength(condeqslist);
 
   if (ASF_isCondEquationListEmpty(condeqslist)) {
     return condeqslist;

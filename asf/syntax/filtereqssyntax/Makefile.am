@@ -6,6 +6,8 @@ bin_PROGRAMS = filtereqssyntax filtereqssyntaxtool
 
 noinst_HEADERS  = filtereqssyntaxtool.tif.h filtereqssyntax.h
 
+data_DATA = filtereqssyntaxtool.idef
+
 GENERIC_SOURCES = filtereqssyntax.c
 GENERIC_LDADD   = -L${ASF_SUPPORT}/lib -lASFME \
                   -L${PT_SUPPORT}/lib -lmept \
