@@ -221,9 +221,11 @@ which is then pushed onto the stack.
 is one of the terms {\tt yes}, {\tt no}, or {\tt cancel}.
 }
 
-\action{$T$}{check-sort($SortName$)}{$T$}
-{Check that term $T$ is of sort $SortName$. If the top sort of $T$ is
-not the sort $SortName$ the button script is aborted.
+\action{$T_1, $SortName$}{check-sort}{$T_1, T_2$}
+{Check that term $T_1$ is of sort $SortName$. If the top sort of $T_1$ is
+the sort $SortName$ the tree $T_1$ is pushed on the stack and the tree
+{\tt true}. If they are not equal the tree $T_1$ is also pushed together
+with the tree {\tt false}.
 }
 
 \action{$FileName$, $ModName$}{close-editor}{}
