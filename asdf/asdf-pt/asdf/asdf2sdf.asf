@@ -181,7 +181,7 @@ Sort sort("I""n""f""i""x"$CH+1) Sort -> sort($CH+1)
   [default-trhs-5] $transform-requires-rhs(Sort, Sort1 uqliteral($CH+) Sort2) = 
 Sort1 qliteral("""$CH+""") Sort2	-> Sort
 
-  [td-1] $transform-decons(uqliteral($CH+) : Sort, LCS*) = 
+  [td-1] $transform-decons(uqliteral($CH+) : ASA, LCS*) = 
 qliteral("""$CH+""")	-> PrefixDataOp
 $transform-decons(LCS*)
 
