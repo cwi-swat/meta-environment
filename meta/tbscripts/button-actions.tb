@@ -1,8 +1,13 @@
-/* This file contains the implementations of the
- * primitive instructions of the button language.
- * It needs to be refactored, but at least now all
- * 'Stack' operations of the button language interpreter
- * are located here.
+/* This file contains the implementation of a small stack language.
+ *
+ * The stack operations are retrieved from the configuration manager,
+ * then for each primitive Meta-Environment operation in the button
+ * language there is a handler. Arguments are popped of the stack before
+ * calling Meta-Environment functionality, the result is sometimes pushed
+ * back on the stack. 
+ *
+ * The interpreter stops when all actions are performed or an error has
+ * occurred.
  */
 
 process ButtonActionReceiver is
