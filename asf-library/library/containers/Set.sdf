@@ -10,6 +10,8 @@ exports
 
     elem(X, Set[[X]])      -> Boolean
 
+    common(Set[[X]], Set[[X]])	-> Set[[X]]
+
 
 
 hiddens
@@ -18,5 +20,7 @@ hiddens
   variables
     "X"[0-9]*  -> X
     "X*"[0-9]* -> {X ","}*
+
+    "Set"[0-9]* -> Set[[X]]
 
 
