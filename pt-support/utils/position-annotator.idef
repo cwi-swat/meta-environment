@@ -48,8 +48,14 @@ in
     rec-msg(pa-get-origin(Tree?))
     . execute(position-annotator, PA?)
     . snd-eval(PA, get-origin(Tree))
-    . rec-value(PA, origin(Location?))
-    . snd-msg(pa-origin(Location))
+    .
+    (
+      rec-value(PA, origin(Location?))
+      . snd-msg(pa-origin(Location))
+    +
+      rec-value(PA, no-origin)
+      . snd-msg(pa-no-origin)
+    )
   ) *
   delta
 endlet

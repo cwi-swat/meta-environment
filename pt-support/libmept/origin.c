@@ -48,9 +48,13 @@ LOC_Location PT_getTreeOrigin(PT_Tree tree)
 
   term = PT_TreeToTerm(tree);
   origin = ATgetAnnotation(term, ORIGIN);
-  assert(origin != NULL);
 
-  return LOC_LocationFromTerm(origin);
+  if (origin == NULL) {
+    return NULL;
+  }
+  else {
+    return LOC_LocationFromTerm(origin);
+  }
 }
 
 /*}}}  */

@@ -77,7 +77,12 @@ ATerm get_origin(int cid, ATerm t)
   PT_Tree tree = PT_TreeFromTerm(ATBunpack(t));
   LOC_Location origin = PT_getTreeOrigin(tree);
 
-  return ATmake("snd-value(origin(<term>))", LOC_LocationToTerm(origin));
+  if (origin == NULL) {
+    return ATmake("snd-value(no-origin)");
+  }
+  else {
+    return ATmake("snd-value(origin(<term>))", LOC_LocationToTerm(origin));
+  }
 }
 
 /*}}}  */

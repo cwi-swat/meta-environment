@@ -1,6 +1,7 @@
 $Id$
 
-Mon Apr 19 11:08:21 CEST 2004 <>
+Mon Apr 19 11:08:21 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * origins: account for the fact that there is no origin
  * libmept/posInfo.c: PT_containsAreaOffset count start upto and including end
 
 Fri Apr 16 15:40:14 CEST 2004 <kooiker@cwi.nl>
