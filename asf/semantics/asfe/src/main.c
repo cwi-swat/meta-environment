@@ -198,7 +198,7 @@ int main(int argc, char *argv[])
     }
 
     /* Get the equations from file */
-    if (!(iofile = fopen(eqsfile, "r"))) {
+    if (!(iofile = fopen(eqsfile, "rb"))) {
       ATerror("%s: cannot open %s\n", myname, eqsfile);
     }
 
@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
     /* Get the term from file */
     if (!strcmp(input, "") || !strcmp(input, "-")) {
       iofile = stdin;
-    } else if (!(iofile = fopen(input, "r"))) {
+    } else if (!(iofile = fopen(input, "rb"))) {
       ATerror("%s: cannot open %s\n", myname, input);
     }
 
@@ -264,7 +264,7 @@ int main(int argc, char *argv[])
     /* Communicate the reduct out of here */
     if (!strcmp(output, "") || !strcmp(output, "-"))
       iofile = stdout;
-    else if (!(iofile = fopen(output, "w")))
+    else if (!(iofile = fopen(output, "wb")))
       ATerror("%s: cannot open %s\n", myname, output);
 
     if (bafmode)
