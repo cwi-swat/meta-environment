@@ -33,7 +33,7 @@ equations
 
 %% --- Type of element
 
-[to1]	type-of($NatCon) = int 
+[to1]	type-of($Integer) = int 
 [to2]	type-of($BoolCon) = bool
 [to3]	type-of($String)  = str
 [to4]	type-of($Area)    = area
@@ -147,7 +147,7 @@ $Error]>
       check-const($BoolCon, $Tenv) = <type-of($BoolCon), $Tenv>
 
 [check-const-int] 
-      check-const($NatCon, $Tenv) = <type-of($NatCon), $Tenv>
+      check-const($Integer, $Tenv) = <type-of($Integer), $Tenv>
 
 [check-const-str]
       check-const($String, $Tenv) = <type-of($String), $Tenv>
@@ -361,6 +361,11 @@ $Error]>
 	
 [check-mul1]
  	$Exp = $Exp1 * $Exp2
+      	===========================================
+      	check($Exp, $Tenv) = check-int($Exp, $Exp1, $Exp2, $Tenv)
+
+[check-div1]
+ 	$Exp = $Exp1 / $Exp2
       	===========================================
       	check($Exp, $Tenv) = check-int($Exp, $Exp1, $Exp2, $Tenv)
 
@@ -921,6 +926,7 @@ $Error]>
 		<endcol,	fun [ area ]				to int >,
 
 		<sum,		fun [ bag[int] ]			to int >,
+		<average,	fun [ bag[int] ]			to int >,
 		<max,		fun [ bag[int] ]			to int >,
 		<min,		fun [ bag[int] ]			to int >
 

@@ -14,7 +14,7 @@ imports Rstore
 
 exports
     sorts ERROR ERRORS REXPTYPE # TENV TENV DCLRVARS  
-          Boolean #  Table[[RVAR,REXPTYPE]] {REXPTYPE ","}+
+          Boolean # Table[[RVAR,REXPTYPE]] {REXPTYPE ","}+
 
     context-free syntax
 
