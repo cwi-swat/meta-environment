@@ -126,7 +126,8 @@ in
       snd-msg(initialize-structure-editor(EditorId, Text, Tree)) .
       rec-msg(initial-focus(Focus?)) .
       create(EditorActionsLoop(EditorId, Type, ModuleName), Pid?) .
-      create(TextEditor(EditorId, FileName, ButtonList), Pid?) .
+      create(TextEditor, Pid?) .
+      snd-msg(edit-text(EditorId, FileName, ButtonList)) .
       rec-msg(text-editor-initialized(EditorId)) .
       snd-msg(editor-opened(ModuleName, EditorId))
     +

@@ -1,5 +1,11 @@
 # $Id$
 
+Tue May 13 13:16:20 CEST 2003 <jong@cwi.nl>
+ * fix tbscripts/editors.tb and editors/text/text-editor.idef: 
+   process TextEditor no longer has any parameters, making it abide
+   by our coding standard for the idef of a tool. Instead the parameters
+   are passed by a message: edit-text(EditorId, FileName, ButtonList)
+
 Mon May 12 14:13:14 CEST 2003 ({jong,kooiker}@cwi.nl)
  * Fixed bug: LAYOUT-GRAPH process was only started #if METASTUDIO was
    defined, but this #define had been deemed "dead code" earlier

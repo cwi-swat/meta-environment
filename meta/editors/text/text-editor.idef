@@ -4,20 +4,20 @@ tool text-editor is {
   command = EDITOR
 }
 
-process TextEditor(EditorId: term, FileName : str, ButtonList : list) is
+process TextEditor is
 let
-  TE         : text-editor,
-  Path       : term,
-  Sort       : term,
-  Dirty      : int,
-  Fid        : str,
-  Location   : int,
-  SortName   : str,
-  Direction  : str,
-  StartPos   : int,
-  Length     : int,
-  FocusText  : str,
-  Focus      : term,
+  TE : text-editor,
+  Path : term,
+  Sort : term,
+  Dirty : int,
+  Fid : str,
+  Location : int,
+  SortName : str,
+  Direction : str,
+  StartPos : int,
+  Length : int,
+  FocusText : str,
+  Focus : term,
   QueryList : list,
   QueryName : str,
   ActionName : str,
@@ -25,8 +25,11 @@ let
   ButtonItem : str,
   ButtonMenu : str,
   ButtonWalker : list,
-  FileName2  : str
+  ButtonList : list,
+  FileName  : str,
+  EditorId : term
 in
+  rec-msg(edit-text(EditorId?, FileName?, ButtonList?)) .
   execute(text-editor, TE?) .
   snd-eval(TE, edit-file(FileName)) .
   rec-value(TE, file-id(Fid?)) .
@@ -83,8 +86,8 @@ in
     rec-note(move-editor-to-front(EditorId)) .
     snd-do(TE, move-editor-to-front(Fid))
   +
-    rec-note(reload-file(EditorId, FileName2?)) .
-    snd-do(TE, reload-file(FileName2))
+    rec-note(reload-file(EditorId, FileName?)) .
+    snd-do(TE, reload-file(FileName))
   +
     rec-event(TE, set-current-location(Fid, Location?)) .
     snd-msg(set-current-location(EditorId, Location)) .
