@@ -1224,9 +1224,13 @@ is_valid_parse_table(ATermList visited, ATerm module,
 
 
   entry = MDB_EntryFromTerm(GetValue(modules_db, module));
-  syntax = MDB_getEntrySdfTree(entry);
 
-  if (entry == NULL && ATisEqual(module, MDB_NONE)) {
+  if (entry == NULL) {
+    return ATfalse;
+  }
+
+  syntax = MDB_getEntrySdfTree(entry);
+  if (ATisEqual(syntax, MDB_NONE)) {
     return ATfalse;
   }
 
@@ -1246,9 +1250,12 @@ is_valid_parse_table(ATermList visited, ATerm module,
       first = ATgetFirst(imports);
 
       entry = MDB_EntryFromTerm(GetValue(modules_db, first));
-      syntax = MDB_getEntrySdfTree(entry);
+      if (entry == NULL)  {
+	return ATfalse;
+      }
 
-      if (entry == NULL || ATisEqual(syntax, MDB_NONE))  {
+      syntax = MDB_getEntrySdfTree(entry);
+      if (ATisEqual(syntax, MDB_NONE))  {
 	return ATfalse;
       }
 
