@@ -34,7 +34,7 @@ in
     rec-msg(initial-focus(Focus?)) .
     snd-msg(initialization-done(EditorId)) 
   ) .
-  snd-msg(set-focus(EditorId, Focus)) .
+  /*snd-msg(set-focus(EditorId, Focus)) .*/
   Killed := false .
   (
     (  

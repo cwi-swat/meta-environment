@@ -26,8 +26,8 @@ in
 	snd-msg(get-sdf2-asfix(ModuleName)) .
 	(
 	  rec-msg(syntax(Module?)) .
-	  snd-msg(query("FindSortDefinition", Module, Focus)) .
-	  rec-msg(result("FindSortDefinition", Term?)) .
+	  snd-msg(query("FindProduction", Module, Focus)) .
+	  rec-msg(result("FindProduction", Term?)) .
           FunSym := fun(Term) .
 	  if equal(FunSym, "found") then
 	    /*printf("Spawning editor for module %s\n", ModuleName) .*/

@@ -1,5 +1,13 @@
 # $Id$
 
+Wed Feb 26 10:38:59 CET 2003 <jong@cwi.nl>
+ * edit-syntax.tb: remove set-focus that unconditionally tries to set
+   the focus on the entire file. This interferes with tools (e.g. the
+   query tool) that need to set the focus on a different portion of
+   the term.
+ * query-tool.tb: send query("FindProduction",..) not "FindSortDefinition"
+   when asked to find a production.
+
 Tue Feb 25 13:27:30 CET 2003 <jong@cwi.nl>
  * refactoring: ApiGen generated sources only in metastudio.graph now
  * cleanup: use ApiGen generated (auto)make support

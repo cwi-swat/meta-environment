@@ -81,12 +81,20 @@ ATerm findProduction(ATerm atModule, ATerm atTree)
 
 /*}}}  */
 
-/*{{{  ATerm query(int cid, ATerm atModule, ATerm atTree) */
+/*{{{  ATerm query(int cid, char *type, ATerm atModule, ATerm atTree) */
 
 ATerm query(int cid, char *type, ATerm atModule, ATerm atTree)
 {
-  /*return findSortDefinition(atModule, atTree);*/
-  return findProduction(atModule, atTree);
+  if (strcmp(type, "symbol") == 0) {
+    return findSortDefinition(atModule, atTree);
+  }
+  
+  if (strcmp(type, "production") == 0) {
+    return findProduction(atModule, atTree);
+  }
+
+  ATabort("query-tool.c: unknown query: %s\n", type);
+  return NULL;
 }
 
 /*}}}  */

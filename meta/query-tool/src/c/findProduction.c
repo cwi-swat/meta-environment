@@ -29,12 +29,6 @@ static ATbool symbolListsMatch(SDF_SymbolList s1, SDF_SymbolList s2)
     if (SDF_isEqualSymbol(SDF_removeSymbolAnnotations(symbol1), symbol2)) {
       equalLists = ATtrue;
     }
-/*
-    else if (SDF_isSymbolLit(symbol1) &&
-	     SDF_isSymbolLit(symbol2)) {
-      equalLists = ATtrue;
-    }
-*/
     else {
       equalLists = ATfalse;
     }
