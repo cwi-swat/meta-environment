@@ -92,6 +92,7 @@ in
     snd-msg(saved-asfsdf-module(Module))
   +
     rec-msg(save-termstore) .
+    snd-note(ui-status(statf(Id,"Saving term-store",[]))) .
     snd-msg(ts-get-snapshot) .
     rec-msg(ts-snapshot(Snapshot?)) .
     snd-msg(io-write-packed-term-file("meta.termstore", Snapshot)) .
@@ -101,7 +102,8 @@ in
     +
       rec-msg(io-file-not-written(ErrorMessage?)) .
       snd-msg(not-saved(ErrorMessage))
-    )
+    ) .
+    snd-note(ui-status(endstat(Id)))
   )*
   delta
 endlet
