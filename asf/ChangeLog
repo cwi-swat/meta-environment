@@ -1,3 +1,8 @@
+2001/05/04 (markvdb@cwi.nl)
+  * asc-support.h replaced by asc-support2.h in order to make
+    recompilation of generated code independent of changes in
+    libMEPT.
+
 2001/04/27 (markvdb@cwi.nl)
   * Adapted asfe to support AsFix2ME to its full extent.
 

@@ -47,8 +47,7 @@
 
 
 #include <SDF-utils.h>  
-#include <asc-support.h>
-#include <asc-apply.h>
+#include <asc-support2.h>
 
 #include "asfc.tif.h"
 

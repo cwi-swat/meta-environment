@@ -38,10 +38,8 @@
 #include <ctype.h>
 #include <unistd.h>   
 
-#include <asc-support.h>
-#include <asc-apply.h>
+#include <asc-support2.h>
 #include <SDF.h>
-#include <PT.h>
 
 /*{{{  globals */
 
