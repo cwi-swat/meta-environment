@@ -23,7 +23,7 @@ myversion=`echo $Revision| cut -d' ' -f2`
 # The argument vector: list of option letters, colons denote option
 # arguments.  See Usage function, immediately below, for option
 # explanation.
-myarguments="hi:lo:psvV"
+myarguments="bhi:lo:pstvV"
 
 if [ $myarguments ] ; then
     myargsexplained=$myarguments
@@ -42,12 +42,14 @@ Usage() {
 cat << E_O_USAGE >&2
 Usage: $myname$myargsexplained . . .
 Options:
+    -b              [ignored]
     -h              display help information (usage)
     -i _file_       input from _file_ (default: all file arguments)
     -l              Landscape mode, A4-sized canvas
     -o _file_       output to _file_ (default: _inputfile_.ps)
     -p              Portrait mode, A4-sized canvas with printer margins
     -s              Portrait mode, A4-sized canvas
+    -t              [ignored]
     -v              verbose mode
     -V              reveal program version (i.e. $myversion)
 E_O_USAGE
@@ -72,8 +74,10 @@ while [ $#  -gt 0 ]
 do
     case "$1"
     in
+	-b)
+	    ;;
         -h)
-            Usage ;;
+            Usage ; exit 0 ;;
         -i)
             shift; Files="$Files $1" ;;
         -l)
@@ -84,10 +88,12 @@ do
 	    EXTRAS="$EXTRAS -Gpage=8,11.8 -Gmargin=.25,.25" ;;
         -s)
 	    EXTRAS="$EXTRAS -Gsize=8,11.8" ;;
+	-t)
+	    ;;
         -v)
             verbose=1 ;;
         -V)
-            Version ;;
+            Version ; exit 0 ;;
         --)
             ;;
     # Add additional command line options here...

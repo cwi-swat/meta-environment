@@ -1,4 +1,4 @@
-#! @SHELL@
+#! /bin/sh
 # $Id$
 Revision='$Revision$'
 
@@ -103,7 +103,7 @@ do
         -i)
 	    Files="$2 $Files"; shift ;;
         -h)
-            Usage ;;
+            Usage ; exit 0 ;;
         -n)
 	    XOPTS="$XOPTS $1" ;;
         -o)
@@ -115,11 +115,11 @@ do
 	    shift ;;
 	-t)
 	    bafmode=0 ;;
-        -v*)
+        -v)
             verbose=1
 	    XOPTS="$XOPTS $1" ;;
         -V)
-            Version ;;
+            Version ; exit 0 ;;
         -x)
             XOPTS="$XOPTS $1" ;;
         --)
