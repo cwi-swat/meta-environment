@@ -50,11 +50,11 @@ XLIBS           = -L$(ATERM)/lib -lATerm-cc -lAsFix-cc
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
-CSRC            = msm-paths.c msm-utils.c imports.c module-utils.c
-CHDR            = msm-utils.h module-utils.h libutil.h
+CSRC            = meta-paths.c meta-utils.c imports.c module-utils.c
+CHDR            = meta-utils.h module-utils.h libutil.h
 #All files in BINFILES are installed in $(bindir)
 # Ordering is important here: the toolbus dir. should come first
-BINFILES	= gen-table parse-sdf2 sdf2table idef2tif msm-paths imports
+BINFILES	= gen-table parse-sdf2 sdf2table idef2tif meta-paths imports
 LIBFILES	= Sdf2.baf 
 INCLUDEFILES	=
 
@@ -83,20 +83,20 @@ all:	${BINFILES} ${LIBFILES}
 %-prof.o: %.c
 	gcc -Wall -pedantic -pg $(INCLUDES) -c -o $@ $<
 
-libutils-cc.a: msm-utils-cc.o module-utils-cc.o
-	$(AR) cr $@ msm-utils-cc.o module-utils-cc.o
+libutils-cc.a: meta-utils-cc.o module-utils-cc.o
+	$(AR) cr $@ meta-utils-cc.o module-utils-cc.o
 
-libutils-gcc.a: msm-utils-gcc.o module-utils-gcc.o
-	$(AR) cr $@ msm-utils-gcc.o module-utils-gcc.o
+libutils-gcc.a: meta-utils-gcc.o module-utils-gcc.o
+	$(AR) cr $@ meta-utils-gcc.o module-utils-gcc.o
 
-libutils-dbg.a: msm-utils-dbg.o module-utils-dbg.o
-	$(AR) cr $@ msm-utils-dbg.o module-utils-dbg.o
+libutils-dbg.a: meta-utils-dbg.o module-utils-dbg.o
+	$(AR) cr $@ meta-utils-dbg.o module-utils-dbg.o
 
-libutils-prof.a: msm-utils-prof.o module-utils-prof.o
-	$(AR) cr $@ msm-utils-prof.o module-utils-prof.o
+libutils-prof.a: meta-utils-prof.o module-utils-prof.o
+	$(AR) cr $@ meta-utils-prof.o module-utils-prof.o
 
-msm-paths: msm-paths-cc.o libutils-cc.a
-	cc -o $@ msm-paths-cc.o libutils-cc.a
+meta-paths: meta-paths-cc.o libutils-cc.a
+	cc -o $@ meta-paths-cc.o libutils-cc.a
 
 imports: imports-cc.o libutils-cc.a
 	cc -o $@ imports-cc.o libutils-cc.a $(LIBS)
