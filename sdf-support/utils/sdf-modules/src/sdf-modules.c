@@ -188,6 +188,9 @@ ATerm get_new_module_name(int cid, ATerm searchPaths, char *path, char* id)
     /* skip trailing slashes */
     for (i = strlen(chosenPath); i < strlen(path), path[i] == '/'; i++);
 
+    /* The modulename is what's left of the path concatenated before
+     * the module id
+     */
     strcpy(chosenId,path+i);
     strcat(chosenId,id);
 
