@@ -15,15 +15,15 @@ void call_c_compiler(const char* binary, const char* name, const char* source)
          COMPILER " " OPTIMIZE_FLAGS " "
 	 " %s "
 	 "-o %s "
-	 "%s "
-	 "-I" ASC_SUPPORT "/include "
-	 "-I" PT_SUPPORT "/include "
-	 "-I" ATERM "/include "
-	 "-L" ASC_SUPPORT "/lib" " -lasc-support-me "
-	 "-L" PT_SUPPORT "/lib" " -lmept "
-	 "-L" ATERM "/lib" " -lATerm "
-	 "-DMAIN_%s"
-	 "%s",
+	 "%s \\\n"
+	 "  -I" ASC_SUPPORT "/include \\\n"
+	 "  -I" PT_SUPPORT "/include \\\n"
+	 "  -I" ATERM "/include \\\n"
+	 "  -L" ASC_SUPPORT "/lib" " -lasc-support-me \\\n"
+	 "  -L" PT_SUPPORT "/lib" " -lmept \\\n"
+	 "  -L" ATERM "/lib" " -lATerm \\\n"
+	 "  -DMAIN_%s"
+	 "%s\n",
 	 run_verbose ? "-Wall" : "",
 	 binary, 
 	 source,
