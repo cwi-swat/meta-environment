@@ -60,6 +60,8 @@ ATerm select_and_rewrite(ATerm trm, int depth);
 ATermList rewrite_args(ATermList args, ATerm env, int depth);
 ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env, int depth);
 ATerm rewrite(ATerm trm, ATerm env, int depth);
+ATerm RWgetError();
+void  RWclearError();
 
 /* Variables */
 extern ATbool run_verbose;

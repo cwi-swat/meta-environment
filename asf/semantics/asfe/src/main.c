@@ -125,8 +125,8 @@ int main(int argc, char *argv[])
   plain_var = ATmakeAFun("*plain-var*", 2, ATtrue);
   ATprotectAFun(plain_var);
 
-  rewrite_error = NULL;
-  ATprotect(&rewrite_error);
+  RWclearError();
+
   ATprotect(&tagCurrentRule);
 
   if(toolbus_mode) {
@@ -210,15 +210,15 @@ int main(int argc, char *argv[])
     result = asfix_put_term(term,newaterm);
 
     /* If we have collected errors, pretty print them now */
-    returncode = rewrite_error == NULL ? 0 : 1;
+    returncode = (RWgetError() == NULL) ? 0 : 1;
 
-    if (rewrite_error != NULL) {
+    if (RWgetError() != NULL) {
       ATerm message, tag, subject;
       char *messageText = NULL, *tagText = NULL, *subjectText = NULL;
       ATermList error;
 								
       /* The errors are tuples containing a message and a subject */
-      error = (ATermList) rewrite_error;
+      error = (ATermList) RWgetError();
       message = ATgetFirst(error);
       tag = ATgetFirst(ATgetNext(error));
       subject = ATgetFirst(ATgetNext(ATgetNext(error)));

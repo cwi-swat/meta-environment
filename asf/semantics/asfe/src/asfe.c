@@ -168,30 +168,39 @@ void rec_terminate(int cid, ATerm t)
 }
 
 /*}}}  */
-/*{{{  void set_rewrite_error(const char *message, ATerm subject) */
+/*{{{  void RWclearError() */
 
-void set_rewrite_error(const char *message, ATerm subject)
+void RWclearError()
+{
+  static ATbool is_protected = ATfalse;
+
+  if (!is_protected) {
+    is_protected = ATtrue;
+    rewrite_error = NULL;
+    ATprotect(&rewrite_error);
+  }
+
+  rewrite_error = NULL;
+}
+
+/*}}}  */
+/*{{{  void RWsetError(const char *message, ATerm subject) */
+
+void RWsetError(const char *message, ATerm subject)
 {
   if (rewrite_error == NULL) {
+    RWclearError(); /* Protect rewrite_error if necessary */
     rewrite_error = ATmake("[<str>,<term>,<term>])", 
 			    message, tagCurrentRule, subject);
   }
+}
 
-#if 0
-  ATermList temp;
+/*}}}  */
+/*{{{  ATerm RWgetError() */
 
-  if (ATisEmpty(rewrite_error)) {
-    
-  }
-  /* add the error if it is new */
-  for(temp = rewrite_error;!ATisEmpty(temp) && !ATisEqual(error, ATgetFirst(temp));
-      temp = ATgetNext(temp));
-
-  if(ATisEmpty(temp)) {
-    rewrite_error = ATinsert(rewrite_error, error);
-  }
-	 
-#endif
+ATerm RWgetError()
+{
+  return rewrite_error;
 }
 
 /*}}}  */
@@ -472,7 +481,7 @@ ATerm interpret(int cid, char *modname, ATerm trm)
   realtrm = RWprepareTerm(atrm);
 
   rewrite_steps = 0;
-  rewrite_error = NULL;
+  RWclearError();
   tagCurrentRule = NULL;
 
   select_equations(modname);
@@ -503,10 +512,10 @@ ATerm interpret(int cid, char *modname, ATerm trm)
   }
 #endif
 	
-  if (rewrite_error == NULL) {
+  if (RWgetError() == NULL) {
     return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
   } else {
-    return ATmake("snd-value(rewrite-errors([<term>]))", rewrite_error);
+    return ATmake("snd-value(rewrite-errors([<term>]))", RWgetError());
   }
 }
 
@@ -1064,7 +1073,7 @@ ATerm conds_satisfied(ATermList conds, ATerm env, int depth)
 				NULL, depth);
         }
         else {
-	  set_rewrite_error("Both sides of condition introduce new variables.", 
+	  RWsetError("Both sides of condition introduce new variables.", 
 			    cond);
           newenv = fail_env; 
 	  if(run_verbose) { 
@@ -1075,7 +1084,7 @@ ATerm conds_satisfied(ATermList conds, ATerm env, int depth)
     }
     else {
       if(!no_new_vars(lhs,newenv) || !no_new_vars(rhs,newenv)) {
-        set_rewrite_error("Negative condition introduces new variables.",cond);
+        RWsetError("Negative condition introduces new variables.",cond);
         newenv = fail_env; 
 	if(run_verbose) { 
 	  ATwarning("*** fail_env on line %d\n", __LINE__); 
@@ -1304,7 +1313,7 @@ ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env, int depth)
       if(asfix_is_list_var(elem)) {
 	newelem_table[i] = (ATerm)v_lookup_list(env, elem);
 	if (newelem_table[i] == NULL) {
-	  set_rewrite_error("variable not initialized", elem);
+	  RWsetError("variable not initialized", elem);
 	  return NULL;
 	}
       } else {
@@ -1359,7 +1368,7 @@ ATerm rewrite(ATerm trm, ATerm env, int depth)
 
   if (depth > MAX_DEPTH) {   
     sprintf(error_buf, "maximum stack depth (%d) exceeded.", MAX_DEPTH);
-    set_rewrite_error(error_buf, (ATerm)ATempty);
+    RWsetError(error_buf, (ATerm)ATempty);
     return trm;
   }
 
