@@ -43,7 +43,7 @@ in
     rec-msg(move-focus(EditorId?, Move?)) .
     snd-eval(SE, move-focus(EditorId, Move)) .
     rec-value(SE, focus(Focus?)) .
-    snd-msg(set-focus(EditorId, Focus))
+    snd-note(set-focus(EditorId, Focus))
   +
     rec-msg(invalidate-tree(EditorId?)) .
     snd-eval(SE, invalidate-tree(EditorId)) .
@@ -57,12 +57,12 @@ in
     rec-msg(set-current-location(EditorId?, Location?)) .
     snd-eval(SE, set-focus(EditorId, Location)) .
     rec-value(SE, focus(Focus?)) .  
-    snd-msg(set-focus(EditorId, Focus)) 
+    snd-note(set-focus(EditorId, Focus)) 
   +
     rec-msg(set-focus-at-posinfo(EditorId?, PosInfo?)) .
     snd-eval(SE, get-focus-at-posinfo(EditorId, PosInfo)) .
     rec-value(SE, focus(Focus?)) .  
-    snd-msg(set-focus(EditorId, Focus)) 
+    snd-note(set-focus(EditorId, Focus)) 
   +
     rec-msg(get-tree(EditorId?)) .
     snd-eval(SE, get-parse-tree(EditorId)) .

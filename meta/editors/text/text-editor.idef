@@ -55,28 +55,38 @@ in
   snd-do(TE, tb-add-menu-item("Move", "Right")) .
   snd-do(TE, tb-add-menu-item("Move", "Up")) .
   snd-do(TE, tb-add-menu-item("Move", "Down")) .
+  /* We receive only 'notes' never messages because this tool can
+   * dissappear during anything due to user interaction.
+   */
+  subscribe(set-focus(EditorId,<term>)).
+  subscribe(clear-focus(EditorId)).
+  subscribe(get-focus-text(EditorId,<term>)).
+  subscribe(display-error(EditorId,<int>)) .
+  subscribe(move-editor-to-front(EditorId)) .
+  subscribe(reload-file(EditorId)) .
+  subscribe(kill-text-editor(EditorId)) .
   (
-    rec-msg(set-focus(EditorId,
+    rec-note(set-focus(EditorId,
       focus(Path?, SortName?, area(StartPos?, Length?),Dirty?))) .
     snd-do(TE, tb-set-focus(Fid, SortName, StartPos, Length))
   +
-    rec-msg(clear-focus(EditorId)) .
+    rec-note(clear-focus(EditorId)) .
     snd-do(TE, tb-unset-focus(Fid))
   +
-    rec-msg(get-focus-text(EditorId,
+    rec-note(get-focus-text(EditorId,
       focus(Path?, Sort?, area(StartPos?,Length?),Dirty?))) .
     snd-eval(TE, tb-get-focus-text(Fid, StartPos, Length)) .
     rec-value(TE, focus-text(Fid, FocusText?)) .
     snd-msg(focus-text(EditorId, FocusText))
   +
-    rec-msg(display-error(EditorId, StartPos?)) .
+    rec-note(display-error(EditorId, StartPos?)) .
     snd-do(TE, tb-set-char-pos(Fid, StartPos)).
     snd-do(TE, tb-set-msg("Parse error near cursor"))
   +
-    rec-msg(move-editor-to-front(EditorId)) .
+    rec-note(move-editor-to-front(EditorId)) .
     snd-do(TE, move-editor-to-front(Fid))
   +
-    rec-msg(reload-file(EditorId, FileName2?)) .
+    rec-note(reload-file(EditorId, FileName2?)) .
     snd-do(TE, reload-file(FileName2))
   +
     rec-event(TE, set-current-location(Fid, Location?)) .
@@ -103,7 +113,7 @@ in
     rec-disconnect(TE).
     snd-msg(text-editor-disconnected(EditorId)) 
   +
-    rec-msg(kill-text-editor(EditorId)) .
+    rec-note(kill-text-editor(EditorId)) .
     snd-terminate(TE, "You have been zapped!") .
     snd-msg(text-editor-killed(EditorId))
   )
