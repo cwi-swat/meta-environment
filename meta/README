@@ -127,7 +127,7 @@ Installation instructions:
       $ make install
       $ cd ../aterm
       $ ./reconf
-      $ ./configure --prefix=/path/to/meta
+      $ ./configure --prefix=/path/to/meta --with-gcc --with-dbg
       $ make install
       $ cd ../new-meta
       $ ./reconf
