@@ -405,11 +405,12 @@ equations
   [rifin-3] restore-ignored-funids-in-nf(,,Namepair*) = 
 
   [rifia-1] is-ignored-funid(Funid) = true,
-            lookup-ignored-funid(Funid,Namepair*) = funid(Char+),
+            lookup-ignored-funid(Funid,Namepair*) = Funid2,
+            make-call-id(Funid2) = Post,
             restore-ignored-funids-in-arg(Expression, Term, Namepair*) = Expression2
             =====
             restore-ignored-funids-in-arg(Expression, Funid(Term), Namepair*) =
-              identifier(Char+)(Expression2) 
+              Post(Expression2) 
 
   [default-rifia] restore-ignored-funids-in-arg(Expression, Term, Namepair*) = 
                     Expression

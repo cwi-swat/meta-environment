@@ -375,9 +375,10 @@ equations
            transform-call(Post,Funid,Namepair*,ActualArg+1) =
              Post(ActualArg+2)
 
+  %% We assume that only unary function symbols are ignored here:
   [mp-1'5] is-ignored-funid(Funid) = true
            =================================
-           transform-call(Post, Funid, Namepair*, ActualArg*) = ActualArg*
+           transform-call(Post, Funid, Namepair*, ActualArg) = ActualArg
 
   [pa-1'1] delay-args(Int,,ActualArg*,Namepair*) = ActualArg*
 

@@ -86,3 +86,4 @@ hiddens
     "Expression+"[0-9]* -> { Expression ","}+
     "Expression"[0-9]* -> Expression
     "MakeSelectStat"[0-9]* -> MakeSelectStat
+    "Identifier"[0-9]* -> Identifier
