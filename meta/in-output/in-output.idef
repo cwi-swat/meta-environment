@@ -12,17 +12,6 @@ let
 in
   execute(in-output,IO?).
   (
-/*    rec-msg(Id?,locate-parse-table-file(Name?)).
-    snd-eval(IO,locate-parse-table-file(Name)).
-    (
-      rec-value(IO,located-parse-table-file(Name?,Path?,timestamp(TS?))).
-      snd-msg(Id,located-parse-table-file(Name,Path,timestamp(TS)))
-      +
-      rec-value(IO,unavailable-parse-table(Name?)).
-      snd-msg(Id,error-locating(Name))
-    )
-  +
-*/
     rec-msg(get-table-timestamp(Name?)).
     snd-eval(IO,get-timestamp(Name,".tbl")).
     rec-value(IO,timestamp(TS?)).
@@ -56,6 +45,17 @@ in
     +
       rec-value(IO, not-exists) .
       snd-msg(sdf2-module-not-exists(Name))
+    )
+  +
+    %% Create a (new) empty sdf2 module
+    rec-msg(create-empty-sdf2-module(Name?)) .
+    snd-eval(IO, create-empty-sdf2-module(Name)) .
+    (
+      rec-value(IO, creation-succeeded) .
+      snd-msg(module-created(Name))
+    +
+      rec-value(IO, creation-failed(Text?)) .
+      snd-msg(module-creation-failed(Name, Text))
     )
   +
     %% Name represents the module-name (without extension)
@@ -114,4 +114,3 @@ endlet
 
 
 tool in-output is { command = "in-output" }
-

@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
+#include <errno.h>
+#include <string.h>
 #include <aterm2.h>
 #include <atb-tool.h>
 
@@ -14,6 +16,17 @@
 
 #define PATH_LEN _POSIX_PATH_MAX
 #define MAX_PATHS 256
+
+/* Macro's for sdf2 file extensions */
+#define SDF2_TXT_EXT	".sdf2"
+#define SDF2_BAF_EXT	".sdf2.baf"
+
+/* Macro's for equation extensions */
+#define EQS_TXT_EXT	".eqs"
+#define EQS_BAF_EXT	".eqs.baf"
+
+/* Macro for parse table extension */
+#define TBL_EXT		".tbl"
 
 /* This is a hack, due to JS */
 #include <sys/stat.h>
@@ -136,8 +149,10 @@ char *find_newest_in_path(char *name)
       newestname = newestnamebuf;
     }
   }
-  if(newestname)
-    ATfprintf(stderr, "Found %s\n", newestname);
+
+  if(newestname && run_verbose) {
+    ATwarning("Found %s\n", newestname);
+  }
 
   return newestname;
 }
@@ -204,35 +219,6 @@ ATerm read_raw_from_named_file(char *fn, char *n)
   return t;
 }
 
-/*ATerm locate_parse_table_file(int cid, char *name)
-{
-  char  *full, newesttbl[PATH_LEN], newestbaf[PATH_LEN], *newest;
-
-  sprintf(newesttbl, "%s%s", name, ".tbl");
-  sprintf(newestbaf, "%s%s", name, ".baf");
-
-  if((full = find_newest_in_path(newesttbl)))
-    strcpy(newesttbl, full);
-  else
-    newesttbl[0] = '\0';
-  if((full = find_newest_in_path(newestbaf)))
-    strcpy(newestbaf, full);
-  else
-    newestbaf[0] = '\0';
-
-  if(!newesttbl[0] && !newestbaf[0]) {
-    return ATmake("snd-value(unavailable-parse-table(<str>))", name);
-  }
-  newest = newerfile(newesttbl, newestbaf) ? newesttbl : newestbaf;
-  return ATmake("snd-value(located-parse-table-file(<str>,<str>,"
-                "timestamp(<int>)))",
-                 name, newest, filetime(newest));
-}
-*/
-/*ATerm get_table_timestamp(char *tbl) {
-    return get_timestamp(tbl, ".tbl");
-}
-*/
 ATerm get_timestamp(int cid, char *name, char *ext) {
     char file[PATH_LEN];
   
@@ -267,17 +253,44 @@ ATerm open_old_asfix_file(int cid, char *name)
  */
 ATerm exists_sdf2_module(int cid, char *moduleName)
 {
-  char   rawFileName[PATH_LEN] = {'\0'};
+  char   txtFileName[PATH_LEN] = {'\0'};
   char   bafFileName[PATH_LEN] = {'\0'};
 
-  sprintf(rawFileName, "%s%s", moduleName, ".sdf2");
-  sprintf(bafFileName, "%s%s", moduleName, ".sdf2.baf");
+  sprintf(txtFileName, "%s%s", moduleName, SDF2_TXT_EXT);
+  sprintf(bafFileName, "%s%s", moduleName, SDF2_BAF_EXT);
 
-  if (fileexists(rawFileName) || fileexists(bafFileName)) {
+  if (fileexists(txtFileName) || fileexists(bafFileName)) {
       return ATmake("snd-value(exists)");
   } else {
       return ATmake("snd-value(not-exists)");
   }
+}
+
+/*
+ * Create a (new) empty sdf2 module.
+ */
+ATerm create_empty_sdf2_module(int cid, char *moduleName)
+{
+    FILE *f;
+    char txtFileName[PATH_LEN] = {'\0'};
+
+    /* Build sdf2-text-filename from moduleName */
+    sprintf(txtFileName, "%s%s", moduleName, SDF2_TXT_EXT);
+
+    if (!(f = fopen(txtFileName, "w"))) {
+	char *errmsg = strerror(errno);
+	if (run_verbose) {
+	    ATwarning("create_empty_sdf2_module: %s\n", errmsg);
+	}
+	return ATmake("snd-value(creation-failed(%s))", errmsg);
+    }
+
+    /* Insert proper sdf2 syntax. */
+    fprintf(f, "module %s\n", moduleName);
+
+    fclose(f);
+    
+    return ATmake("snd-value(creation-succeeded)");
 }
 
 ATerm open_sdf2_file(int cid, char *name)
@@ -289,12 +302,12 @@ ATerm open_sdf2_file(int cid, char *name)
   ATerm  t;
 
   if(asfix_status == 1) {
-    ATfprintf(stderr,"cannot mix asfix modes\n");
+    ATwarning("cannot mix asfix modes\n");
     return open_error(name);
   }
 
-  sprintf(newestraw, "%s%s", name, ".sdf2");
-  sprintf(newestbaf, "%s%s", name, ".sdf2.baf");
+  sprintf(newestraw, "%s%s", name, SDF2_TXT_EXT);
+  sprintf(newestbaf, "%s%s", name, SDF2_BAF_EXT);
 
   if((full = find_newest_in_path(newestraw)))
     strcpy(newestraw, full);
@@ -322,7 +335,7 @@ ATerm open_eqs_asfix_file(int cid, char *name)
   char *full, fullname[PATH_LEN];
   ATerm t;
 
-  sprintf(fullname, "%s%s", name, ".eqs.baf");
+  sprintf(fullname, "%s%s", name, EQS_BAF_EXT);
 
   if((full = find_newest_in_path(fullname))) {
     t = read_term_from_named_file(full, name, ATfalse);
@@ -337,7 +350,7 @@ ATerm open_eqs_text_file(int cid, char *name)
   char  *full, fullname[PATH_LEN];
   ATerm t;
 
-  sprintf(fullname, "%s%s", name, ".eqs");
+  sprintf(fullname, "%s%s", name, EQS_TXT_EXT);
 
   if((full = find_newest_in_path(fullname))) {
     t = read_raw_from_named_file(full, name);
@@ -352,7 +365,7 @@ ATerm read_parse_table(int cid, char *name)
 {
   char *full, fullname[PATH_LEN];
 
-  sprintf(fullname, "%s%s", name, ".tbl");
+  sprintf(fullname, "%s%s", name, TBL_EXT);
 
   if((full = find_newest_in_path(fullname)))
      return ATmake("snd-value(table-on-disk(<str>,timestamp(<int>)))",
@@ -468,4 +481,3 @@ int main(int argc, char *argv[])
   }
   return 0;
 }
-
