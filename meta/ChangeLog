@@ -1,5 +1,9 @@
 # $Id$
 
+2003/06/14 (iversen@cwi.nl)
+ * Made ParseSyntax more generic in order to 
+   reduce the code duplication for ActionSdf.
+
 2003/06/13 ({markvdb, iversen}@cwi.nl)
  * Made various processes more generic in order to
    reduce the code duplication for ActionSdf.
