@@ -1,1 +1,1 @@
-include ../../library/make_rules
+include ${top_srcdir}/library/make_rules

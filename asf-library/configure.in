@@ -16,6 +16,8 @@ AC_CONFIG_FILES([Makefile
    library/languages/Makefile
    library/languages/cpp/Makefile
    library/languages/cpp/syntax/Makefile
+   library/languages/c/Makefile
+   library/languages/c/syntax/Makefile
    library/languages/asfix/Makefile
    library/languages/asfix/syntax/Makefile
    library/languages/asf/Makefile
@@ -29,6 +31,7 @@ AC_CONFIG_FILES([Makefile
    library/languages/sdf2/projection/Makefile
    library/languages/sdf2/renaming/Makefile
    library/languages/sdf2/pretty/Makefile
+   library/languages/sdf2/sdf-idioms/Makefile
    library/languages/pico/Makefile
    library/languages/pico/syntax/Makefile
    library/languages/pico/pretty/Makefile

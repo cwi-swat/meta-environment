@@ -6,6 +6,8 @@ SUBDIRS=\
 	aterm\
 	casl\
 	cpp\
+	c\
 	pico\
 	sdf2\
-	box
+	box \
+	sdf-idioms
