@@ -3,8 +3,6 @@
 include make_rules
 
 lib_LIBRARIES            = libasc-support.a
-#noinstall_LIBRARIES	 = libasc-support-cc.a libasc-support-gcc.a \
-#			   libasc-support-dbg.a libasc-support-prof.a 
 
 include_HEADERS          = asc-support.h
 EXTRA_DIST               = rewriter.tb
@@ -14,19 +12,6 @@ ALLSRCS = asc-support.c asc-support.h rewriter.c rewriter.tif.c
 
 libasc_support_a_SOURCES = $(SRCS)
 libasc_support_a_LIBADD  = rewriter.tif.o
-
-libasc_support_gcc_a_SOURCES = 
-libasc_support_gcc_a_LIBADD = $(ALLSRCS:.c=-gcc.o)
-
-libasc_support_cc_a_SOURCES = 
-libasc_support_cc_a_LIBADD = $(ALLSRCS:.c=-cc.o)
-
-libasc_support_dbg_a_SOURCES = 
-libasc_support_dbg_a_LIBADD = $(ALLSRCS:.c=-dbg.o)
-
-libasc_support_prof_a_SOURCES = 
-libasc_support_prof_a_LIBADD = $(ALLSRCS:.c=-prof.o)
-
 
 BUILT_SOURCES            = rewriter.tif.c rewriter.tif.h
 
