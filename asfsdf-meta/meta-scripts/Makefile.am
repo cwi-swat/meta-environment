@@ -2,11 +2,13 @@
 
 TBSCRIPTS = \
 	meta-interface.tb \
-	error-display.tb
+	error-display.tb \
+	asfsdfapigen.tb
 
 EXTRA_DIST = \
 	meta-interface.tb.src \
 	error-display.tb \
+	asfsdfapigen.tb \
 	standard.asfsdf.buttons \
 	standard.asfsdf.buttons.src
 

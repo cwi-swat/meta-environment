@@ -1,0 +1,82 @@
+#include <ASFSDFApigen.idef>
+
+process ASFSDFApigenAction is
+let
+  ModuleName : str,
+  SyntaxTree : term,
+  NewFileName : str,
+  NewModuleName : str,
+  NewPath : str,
+  NewSyntaxTree : term,
+  NewSyntaxText : str,
+  NewEquationsTree : term,
+  NewEquationsText : str ,
+  Rewriter : str,
+  FullPath : str,
+  ErrorMessage : str,
+  Ext : str,
+  SdfExt : str,
+  AsfExt : str,
+  SearchPaths : list
+in
+  Rewriter := "ASFSDFApigen" .
+  snd-msg(file-extension-hook(sdf)) .
+  rec-msg(file-extension-hook-result(SdfExt?)) .
+  snd-msg(file-extension-hook(asf)) .
+  rec-msg(file-extension-hook-result(AsfExt?)) .
+  (
+    rec-msg(asfsdfapigen(ModuleName?, NewPath?)) .
+    snd-msg(io-decons-file-name(NewPath, SdfExt)) .
+    rec-msg(io-decons-file-name-result(NewPath?, NewModuleName?, Ext?)) .
+    snd-msg(get-search-paths) .
+    rec-msg(search-paths(SearchPaths?)) .
+    snd-msg(sm-get-new-module-name(SearchPaths, NewPath, NewModuleName)) .
+    (
+      rec-msg(sm-new-module-name(NewPath?, NewModuleName?)) .
+      snd-msg(get-sdf2-asfix(ModuleName)) .
+      (
+	rec-msg(syntax(SyntaxTree?)) .
+	snd-msg(apply-rewrite(Rewriter, "generate-syntax", "Module", 
+			      [SyntaxTree, NewModuleName])) .
+	rec-msg(normalform(Rewriter, NewSyntaxTree?)) .
+	snd-msg(unparse(NewSyntaxTree)) .
+	rec-msg(unparsed-text(NewSyntaxText?)) .
+	snd-msg(io-get-filename(NewPath, NewModuleName, SdfExt)) .
+	rec-msg(io-filename(FullPath?)) .
+	snd-msg(io-write-text-file(FullPath, [NewSyntaxText])) .
+	(
+	  rec-msg(io-file-written) .
+	  snd-msg(apply-rewrite(Rewriter, "generate-equations", "Skeleton", 
+				[SyntaxTree])) .
+	  rec-msg(normalform(Rewriter, NewEquationsTree?)) .
+	  snd-msg(unparse(NewEquationsTree)) .
+	  rec-msg(unparsed-text(NewEquationsText?)) .
+	  snd-msg(io-get-filename(NewPath, NewModuleName, AsfExt)) .
+	  rec-msg(io-filename(FullPath?)) .
+	  snd-msg(io-write-text-file(FullPath, [NewEquationsText])) .
+	  (
+	    rec-msg(io-file-written)  .
+	    snd-msg(open-initial-module(NewPath, NewModuleName, SdfExt)) 
+	  +
+	    rec-msg(io-file-not-written(ErrorMessage?)) .
+	    snd-note(ui-status(errorf("Generating module failed: %s",[ErrorMessage])))
+	  )
+	+
+	  rec-msg(io-file-not-written(ErrorMessage?)) .
+	  snd-note(ui-status(errorf("Generating module failed: %s",[ErrorMessage])))
+	)
+      +
+	rec-msg(unavailable) .
+	snd-note(ui-status(error("Generating module failed.")))
+      ) 
+    +
+      rec-msg(sm-new-module-name-inconsistent) .
+        snd-note(ui-status(errorf(
+            "Module %s in %s is inconsistent with search paths",
+	            [NewModuleName,NewPath])))
+    ) .
+    snd-msg(asfsdfapigen-done)
+  ) * delta
+endlet
+
+toolbus(ASFSDFApigenAction)
