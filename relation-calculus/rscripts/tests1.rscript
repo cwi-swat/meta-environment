@@ -1,4 +1,4 @@
-
+%%eval-rscript-testsuite(
 %% Test suite for built-in operators
 
 int ONE = 1
@@ -215,7 +215,8 @@ assert "comp 1": EMPTYREL o EMPTYREL == EMPTYREL
 assert "comp 2":  {<1,10>,<2,20>} o EMPTYREL == EMPTYREL
 assert "comp 3":  EMPTYREL o {<10,100>, <20,200>} == EMPTYREL
 assert "comp 4":  {<1,10>,<2,20>} o {<10,100>, <20,200>} == {<1,100>, <2,200>}
-
+rel[int,int] tst ={<1,10>,<2,20>} o {<10,100>, <20,200>} 
+bool b =  {<1,10>,<2,20>} o {<10,100>, <20,200>} == {<1,100>, <2,200>}
 %% --- x
 
 assert "product 1": EMPTYBAG x Bag1 == EMPTYREL
@@ -331,3 +332,4 @@ assert "Advanced value former 3":
 	{<X,S> | X : {10,20}, <P, Q, R, S> <- <1,2,3,4>} == {<10,4>, <20,4>}
  
 
+%%)

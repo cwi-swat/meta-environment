@@ -49,9 +49,17 @@
 	===============================================================
 	eval-rscript($Stat*) = filter($Rstore, $Bag)
 
+%% ---- Eval a complete Rscript with given Rstore
+
+[ERS2]	$Rstore' = assign(YIELD, {}, $Rstore),
+	$Rstore'' = eval-rstats($Stat*, $Rstore'),
+	$Bag = value(YIELD, $Rstore'')
+	===============================================================
+	eval-rscript-with-rstore($Stat*, $Rstore) = filter($Rstore'', $Bag)
+
 %% ---- Eval complete script and yield value of a variable
 
-[ERS2]	$Elem =  value($Var, eval-rstats($Stat*, $Rstore))
+[ERS3]	$Elem =  value($Var, eval-rstats($Stat*, $Rstore))
 	===================================================
 	eval-rscript($Stat*, $Var, $Rstore) = $Elem
 

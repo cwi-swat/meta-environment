@@ -1,0 +1,294 @@
+\documentclass[10pt]{article}
+\usepackage{a4wide}
+\usepackage[english]{babel}
+\usepackage{url}
+\usepackage{times}
+\usepackage{xspace}
+\usepackage{alltt}
+\usepackage{supertabular}
+\usepackage{epsfig}
+
+\newcommand{\rscript}[0]{\textsc{Rscript}\xspace}
+\newcommand{\asfsdf}[0]{\textsc{Asf+Sdf}\xspace}
+\newcommand{\note}[1]{{\bf Note:} \emph{#1}}
+
+\newcommand{\action}[4]{\item {\tt [#1]} $\rightarrow$ {\tt #2}  $\rightarrow$
+    [#3] \\ #4}
+
+\title{An Overview of Button Actions}
+\author{}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+\note{Explain what button actions are and what they are good for.}
+
+\section{The button actions}
+
+We will use the format{\tt [$I_1$,...,$I_n$] button-action [$O_1$,...,$O_m$]}
+to describe the effect of each button action on the stack. The action
+has as input the values  $I_1$,...,$I_n$ (with $I_n$ on top of the stack)
+and as output the values $O_1$,...,$O_m$ (with $O_m$ on top of the stack).
+Both the input and the output of an action may be empty.
+
+\begin{itemize}
+\action{}{activate($Command$)}{}{Execute the shell command $Command$.}
+
+\action{$Tree$, $FileName$, $ModName$}{activate-editor}{}
+{Activate an editor for a term over module $ModName$, given a $Tree$ and
+a $FileName$.
+}
+
+\action{$T_1$, ..., $T_{N}$}{apply($FuncName$, $SortName$, $N$)}{$T$}
+{constructs a function application $T$ with function name $FuncName$,
+ result sort $SortName$ and $N$ arguments (on the stack)
+}
+
+\action{$Tree$}{activate-given-tree($Command$)}{?}
+{Execute $Command$ (a shell command) with $Tree$ as string input.}
+
+\action{}{ask-question($String$)}{$T$}
+{Ask a question $String$ to the user with as answer the term $T$.
+\note{Wat voor type is die term?}}
+
+\action{$T$}{check-sort($SortName$)}{$T$}
+{Check that term $T$ is of sort $SortName$.}
+
+\action{}{clear-all}{}
+{Close all modules that are currently open.}
+
+\action{}{clear-history-list}{}
+{Clear the current history list.}
+
+\action{$FileName$, $ModName$}{close-editor}{}
+{Close the editor for the term over module $ModName$ that has been saved as $FileName$.}
+
+\action{$ModName$}{close-module}{}
+{?? Close the editors for module $ModName$.}
+
+\action{$ModName$}{compile-module}{}
+{Compile module $ModName$.}
+
+\action{$ModName$, $NewModName$, $Path$, $Extension$}{copy-module}{}
+{Copy module $ModName$ to $NewModName$.}
+
+\action{$ModName$}{create-module}{}
+{Create a new module $ModName$ in the current directory. \note{Verschil met
+  {\tt new-module}?}}
+
+\action{$ModName$}{delete-module}{}
+{Delete module $ModName$. \note{Wat betekent dat precies?}}
+
+\action{$ModName$}{dump-module}{}
+{?}
+
+\action{$ModName$}{dump-equations}{}
+{Dump the equations of module $ModName$. \note{formaat}}
+
+\action{$ModName$}{dump-eqs-parse-table}{}
+{Dump a parse table for the equations of module $ModName$.\note{formaat}}
+
+\action{$ModName$}{dump-parse-table}{}
+{Dump a parse table for terms over module $ModName$.}
+
+\action{$T$}{dup}{$T$, $T$}
+{Duplicates the top element on the stack.}
+
+\action{$ModName$}{edit-syntax}{}
+{Open an editor for the syntax section of module $ModName$.}
+
+\action{$ModName$}{edit-equations}{}
+{Open en editor for the equations section of module $ModName$.}
+
+\action{$ModName$, $FileName$}{edit-term}{}
+{Open an editor, using the syntax rules in $ModName$, of the term residing
+in file $FileName$.}
+
+\action{$T_{in}$}{execute-action($Executable$)}{$T_{out}$}
+{Execute the compiled specification $Executable$ with input term $T_{in}$ 
+and result $T_{out}$.}
+
+\action{}{exit}{}
+{Shutdown the whole Meta-Environment.}
+
+\action{}{exists($FileName$)}{}
+{Check that the file $FileName$ exists (in the current directory or as
+  absolute path name)
+and abort otherwise.}
+
+\action{$F$($T_1$,...,$T_N$)}{get-argument(NrOfArgs)}{?}
+{
+
+}
+
+\action{}{get-focus}{$T$}
+{Get the term $T$ that corresponds to the current focus.}
+
+\action{$Path$}{get-other-focus($ModName$)}{?}
+
+\action{$ModuleName$}{get-root}{$T$}
+{Get the whole term $T$ in the current editor as a term over module $ModuleName$.}
+
+if-equal
+
+\action{}{locate($FileName$)}{}
+{Locate the file $FileName$ using the current search path. Abort if $FileName$
+  is not found.}
+
+\action{$ModuleName$, $ImportedModName$, $Path$, $Extension$}{import-module}{}
+{Add an import relation from module $ModuleName$ to  $ImportedModName$.}
+
+\action{}{message($String$)}{}
+{Display the message $String$ on the status line of the user interface.}
+
+\action{}{move-down}{}
+{Move the focus in the current editor down, i.e. to the first child of the
+  current focus.}
+
+\action{}{move-left}{}
+{Move the focus in the current editor to the left.}
+
+\action{}{move-right}{}
+{Move the focus in the current editor to the right.}
+
+\action{}{move-up}{}
+{Move the focus in the current editor up.}
+
+\action{$ModName$, $Path$, $Extension$}{new-module}{}
+{Create a new module $ModName$, with file name extension $Extension$ in
+  directory $Path$.}
+
+\action{$ModName$, $Path$, $Extension$}{open-module}{}
+{Open the module with name $ModName$ and file name extension $Extension$ in
+  directory $Path$.}
+
+\action{$StringOrPath$}{parse($ModName$,$SortName$)}{$T$}
+{Parse $StringOrPath$ using the grammar in module $ModName$ and expect
+$SortName$ as resulting sort. \note{Explain $StringOrPath$}
+}
+
+\action{$ModuleName$}{parse-action}{}
+{Parse the text in the current editor using the syntax defined in $ModuleName$.}
+
+\action{$ModuleName$}{parse-syntax-action}{}
+{Parse the syntax section of module $ModuleName$.}
+
+\action{$ModuleName$}{parse-equations-action}{}
+{Parse the equations section of module $ModuleName$.}
+
+\action{$T$}{pop}{}
+{Removes the top element from the stack.}
+
+\action{$ModName$}{print-module}{}
+{Print module $ModName$.}
+
+\action{}{prompt-for-file($String$, $Path$, $Extension$)}{$FileName$}
+{Ask the user for a file name $FileName$ using $String$ as the name of the
+  dialog and $Extension$ as the required file name extension.}
+
+\action{}{push-editor-name}{$FileName$}
+{Get the file name $FileName$ corresponding to the current editor.}
+
+\action{$T_{unpacked}$}{pack-tree}{$T_{packed}$}
+{Replace the unpacked tree $T_{unpacked}$ by the packed (i.e. compressed) tree $T_{packed}$.}
+
+\action{}{push-active-module}{$ModName$}
+{Get the module name $ModName$ corresponding associated with the current editor.}
+
+\action{}{push-filename($FileName$)}{$FileName$}
+{Push the file name $FileName$ on the stack.}
+
+\action{}{push-integer($Integer$)}{$Integer$}
+{Push the integer $Integer$ on the stack.}
+
+\action{}{push-modulename($ModName$)}{$ModName$}
+{Push the module name $ModName$ on the stack.}
+
+\action{}{push-string($String$)}{$String$}
+{Push the string $String$ on the stack.}
+
+
+\action{}{push-term($T$)}{$T$}
+{Push the term $T$ on the stack.}
+
+\action{}{query($String$)}{}
+{Evaluate query $String$.}
+
+\action{}{read-term-store}{}
+{Close all currently open modules and read the term store.}
+
+\action{$FileName$}{read-tree}{$T$}
+{Read term $T$ from file $FileName$.}
+
+\action{}{receive}{$T$}
+{Receive term $T$.}
+
+\action{$T_{in}$, $ModName$}{reduce}{$T_{out}$}
+{Reduce $T_{in}$ using the equations in module $ModName$ with normal form $T_{out}$.}
+
+\action{}{refresh-buttons}{}
+{Read button definitions from {\tt meta.buttons}.}
+
+\action{$ModName$, $NewModName$, $Path$, $Extension$}{rename-module}{}
+{Rename module $ModName$ into $NewModName$.}
+
+\action{$ModName$}{revert-module}{}
+{?}
+
+\action{$T_{in}$}{rewrite($Executable$)}{$T_{out}$}
+{}
+
+\action{}{save-term-store}{}
+{Save the current term store.}
+
+\action{$T$}{send}{}
+{Send term $T$.}
+
+\action{$T$}{set-root}{}
+{Replace the term in the current editor by term $T$.}
+
+\action{$T$}{set-focus}{}
+{Replace the term corresponding to the current focus by $T$.}
+
+
+
+\action{$ModName$, $T$}{show-tree}{}
+{???Display a graphical view of term $T$ over module $ModName$.}
+
+\action{$ModName$,$T$}{show-area}{?}
+{?}
+
+\action{$ModName$,$Text$}{show-list}{}
+{?? Add $Text$ to the current (error) list viewer.}
+
+
+\action{$String$, $fileName$}{save-text}{}
+{Save string $String$ as file $FileName$.}
+
+\action{$T$, $FileName$}{save-tree}{}
+{Save term $T$ as file $FileName$.}
+
+\action{$FileName$}{split-file-name($Extension$)}{$FileName$, $Path$,
+  $Extension$}
+{Split the file name $FileName$ in ...}
+
+\action{$ModuleName$, $ImportedModName$, $Path$, $Extension$}{unimport-module}{}
+{Delete an import relation from module $ModuleName$ to  $ImportedModName$.}
+
+
+\action{$T_{packed}$}{unpack-tree}{$T_{unpacked}$}
+{Replace the packed tree (i.e. compressed) $T_{packed}$ by the unpacked tree $T_{unpacked}$.}
+
+\action{$T$}{unparse}{$S$}
+{Unparse the term $T$ with as result the string $S$.}
+
+\end{itemize}
+
+
+\end{document}
+
+
+

@@ -9,6 +9,7 @@ exports
 %% Main evaluation functions for Rscripts
 
         eval-rscript(RSCRIPT)                 			-> RSTORE
+	eval-rscript-with-rstore(RSCRIPT,RSTORE)		-> RSTORE
         eval-rscript(RSCRIPT, RVAR, RSTORE)   			-> Elem
 
 %% should be hidden
