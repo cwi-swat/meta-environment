@@ -11,44 +11,68 @@
 
 /* This is a hack, due to JS */
 #include <sys/stat.h>
-size_t  FileSize(char *fnam)
-{
-        struct stat     statbuf;
 
-        if(stat(fnam, &statbuf) < 0) {
-                fprintf(stderr, "could not stat() %s\n", fnam);
-                return(-1);
-        }
-        return(statbuf.st_size);
+int fileexists(const char *fname)
+{
+  struct stat st;
+  return stat(fname,&st)!=EOF;
 }
-/* This too :-) */
+
+time_t filetime(const char *fname)
+{
+  struct stat st;
+  return stat(fname,&st)!=EOF ? st.st_mtime : -1L;
+}
+
+size_t filesize(const char *s)
+{
+  struct stat st;
+  return (stat((char*)s,&st)!=EOF) ? st.st_size : -1L;
+}
+
+int fileisregular(const char *s)
+{
+  struct stat st;
+  return (stat((char*)s,&st)!=EOF) ? S_ISREG(st.st_mode) : 0;
+}
+
+int fileisreadable(const char *s)
+{
+  FILE *fd;
+  return fileisregular(s) && (fd = fopen(s, "r")) && fclose(fd);
+}
+
+int newerfile(const char *s1, const char *s2)
+{
+  return filetime(s1) > filetime(s2);
+}
+
 /*
- * JS
- * Initially, this was designed to read arbitraty buffers
- * So it returned an allocated, filled buffer as well
- * as a size_t indication of its length
- * The fragment below assumes is modified to read an
- * arbitraty file with no NULL characters in it into
- * a buffer, which is then NULL-terminated
- * The resulting output is a properly terminated C string
+ * JS: Initially, this was designed to read arbitraty buffers.
+ * So it returned an allocated, filled buffer as well as a size_t
+ * indication of its length.
+ * The fragment below assumes is modified to read an arbitraty
+ * file with no NULL characters in it into a buffer, which is then
+ * NULL-terminated.
+ * The resulting output is a properly terminated C string.
  */
 
-char *SlurpFile(char *fnam, size_t *size)
+char *slurpfile(char *fnam, size_t *size)
 {
         char *buf;
         FILE *fd;
 
-        *size = FileSize(fnam);
+        *size = filesize(fnam);
         if((fd = fopen(fnam, "r")) == NULL) {
-                fprintf(stderr, "could not fopen() %s\n", fnam);
+                fprintf(stderr, "could not open %s\n", fnam);
                 *size = 0;
-                return(NULL);
+                return NULL;
         }
         if((buf = (char *)malloc(*size + 1)) == NULL ) {
                 fprintf(stderr, "could not allocate %i bytes for %s\n", *size + 1, fnam);
                 fclose(fd);
                 *size = 0;
-                return(buf);
+                return NULL;
         }
         if(fread(buf, 1, *size, fd) != *size) {
                 fprintf(stderr, "could not fread() %i bytes %s\n", *size, fnam);
@@ -58,347 +82,219 @@ char *SlurpFile(char *fnam, size_t *size)
         }
         fclose(fd);
 	buf[*size] = '\0';	/* Terminate the string :-( */
-/*	fprintf(stderr, "file: %s, Size: %i\n", fnam, *size);	*/
-        return(buf);
+        return buf ;
 }
 
-int nr_paths = 0;
+ATbool path_length_exceeded(int l, char *p, char *f)
+{
+  if(l <= PATH_LEN)
+    return ATfalse;
+
+  ATfprintf(stderr, "warning: path too long, ignored: %s/%s\n", p, f);
+  return ATtrue;
+}
+
+int  nr_paths = 0;
 char paths[MAX_PATHS][PATH_LEN];
-int asfix_status = 0;
+int  asfix_status = 0;
+
+char *find_newest_in_path(char *name)
+{
+  int    i;
+  char   thisname[PATH_LEN], *newestname = NULL;
+  time_t newesttime = 0L, thistime;
+
+  for(i=0; i<nr_paths; i++) {
+    if(path_length_exceeded(strlen(paths[i])+strlen(name)+1, paths[i], name))
+      continue;
+    sprintf(thisname, "%s/%s", paths[i], name);
+    if((thistime = filetime(thisname)) > newesttime) {
+      newesttime = thistime;
+      newestname = thisname;
+    }
+  }
+  return newestname;
+}
+
+ATerm open_error(char *n)
+{
+  return ATmake("snd-value(error-opening(<str>))", n);
+}
+
+ATerm read_term_from_named_file(char *fn, char *n)
+{
+  ATerm t;
+
+  if(!(t = ATreadFromNamedFile(fn))) {
+    ATfprintf(stderr, "error reading from %s\n", fn);
+    return open_error(n);
+  }
+  ATfprintf(stderr, "read term from %s\n", fn);
+  return ATmake("snd-value(opened-file(<str>,<term>,<str>))", n, t, fn);
+}
+
+ATerm write_term_to_named_file(ATerm t, char *fn, char *n)
+{
+  FILE   *fd;
+
+  if(!(fd = fopen(fn, "w"))) {
+    ATfprintf(stderr,"cannot write to %s\n",fn);
+   } else {
+    ATfprintf(stderr, "writing file %s\n", fn);
+    ATwriteToBinaryFile(t,fd);
+    fclose(fd);
+  }
+  return ATmake("snd-value(save-done(<str>))", n);
+}
+
+ATerm read_raw_from_named_file(char *fn, char *n)
+{
+  ATerm t;
+  char   *buf;
+  size_t size;
+
+  if (!(buf = slurpfile(fn, &size))) {
+    ATfprintf(stderr, "error reading %s\n", fn);
+    t = open_error(n);
+  } else {
+    ATfprintf(stderr, "raw read from %s\n", fn);
+    t = ATmake("snd-value(opened-file(<str>,<str>,<str>))",
+               n, buf, fn);
+    free(buf);
+  }
+  return t;
+}
 
 ATerm open_old_asfix_file(int cid, char *name)
 {
-  int i;
-  char full[PATH_LEN];
-  FILE *f;
   ATerm t;
+  char  *fullname,namext[PATH_LEN];
 
-  ATfprintf(stderr, "pre-parsed file %s.asfix\n", name);
-  if (asfix_status != 2) {
-    for(i=0; i<nr_paths; i++) {
-      strcpy(full, paths[i]); 
-      if(strlen(full) + strlen(name) + 8 > PATH_LEN) {
-        fprintf(stderr, "warning: path to long, ignored: %s+%s\n", full, name);
-        continue;
-      }
-      strcat(full, "/");
-      strcat(full, name);
-      strcat(full, ".asfix");
-      f = fopen(full, "r");
-      if(f) {
-        t = ATreadFromTextFile(f);
-        if(!t) {
-          ATfprintf(stderr, "could not be read\n");
-          fclose(f);
-        } else {
-          ATfprintf(stderr, "was found in: %s\n",paths[i]);
-          fclose(f);
-          asfix_status = 1;
-          return ATmake("snd-value(opened-file(<str>,<term>,<str>))",
-                        name,t,paths[i]);
-        }
-      } 
-    }
-    ATfprintf(stderr,"could not be found\n");
-    return ATmake("snd-value(error-opening(<str>))", name);
-  } else {
-    return ATmake("snd-value(error-opening(<str>))", name);
+  if (asfix_status == 2) {
+    ATfprintf(stderr,"cannot mix asfix modes\n");
+    return open_error(name);
   }
+
+  sprintf(namext, "%s%s", name, ".asfix");
+  ATfprintf(stderr, "pre-parsed file %s\n", namext);
+  if(!(fullname = find_newest_in_path(namext))) {
+    t = open_error(name);
+  } else {
+    t = read_term_from_named_file(fullname, name);
+    if(ATmatch(t, "snd-value(opened-file(<list>))", NULL))
+      asfix_status = 1;
+  }
+  return t;
 }
 
 ATerm open_sdf2_file(int cid, char *name)
 {
-  int i;
-  char full[PATH_LEN];
-  ATerm t;
-  char *buf;
-  size_t size;
-  FILE *f;
+  char   *full;
+  char   newestbaf[PATH_LEN] = {'\0'};
+  char   newestraw[PATH_LEN] = {'\0'};
+  ATbool newest_is_binary = ATfalse;
+  ATerm  t;
 
-ATfprintf(stderr, "pre-parsed file %s.sdf2.baf\n", name);
-  if (asfix_status != 1) {
-    for(i=0; i<nr_paths; i++) {
-      strcpy(full, paths[i]);
-      if(strlen(full) + strlen(name) + 12 > PATH_LEN) {
-        fprintf(stderr, "warning: path to long, ignored: %s+%s\n", full, name);
-        continue;
-      }
-      strcat(full, "/");
-      strcat(full, name);
-      strcat(full, ".sdf2.baf");
-      f = fopen(full, "r");
-      if(f) {
-        t = ATreadFromBinaryFile(f);
-        if(!t) {
-          ATfprintf(stderr, "could not be read\n");
-          fclose(f);
-        } else {
-          ATfprintf(stderr, "was found in: %s\n",paths[i]);
-          fclose(f);
-          asfix_status = 2;
-          return ATmake("snd-value(opened-asfix-file(<str>,<term>,<str>))",
-                        name,t,paths[i]);
-        }
-      } 
-    }
+  if(asfix_status == 1) {
+    ATfprintf(stderr,"cannot mix asfix modes\n");
+    return open_error(name);
+  }
 
-    /* JS  Try raw format if no pre-parsed version was found */
-    for(i=0; i<nr_paths; i++) {
-      strcpy(full, paths[i]);
-      if(strlen(full) + strlen(name) + 8 > PATH_LEN) {
-        fprintf(stderr, "warning: path to long, ignored: %s+%s\n", full, name);
-        continue;
-      }
-      strcat(full, "/");
-      strcat(full, name);
-      strcat(full, ".sdf2");
-      fprintf(stderr, "trying file %s\n", full);
-      buf = SlurpFile(full, &size);
-      if (buf != NULL) {
-  	t = ATmake("<str>", buf);
-   	free(buf);
-        ATfprintf(stderr, "was found in: %s\n",paths[i]);
-        asfix_status = 2;
-	return ATmake("snd-value(opened-file(<str>,<term>,<str>))",
-                      name, t, paths[i]);
-      }
-    }
-    ATfprintf(stderr,"File could not be found\n");
-    return ATmake("snd-value(error-opening(<str>))", name);
+  sprintf(newestraw, "%s%s", name, ".sdf2");
+  sprintf(newestbaf, "%s%s", name, ".sdf2.baf");
+  ATfprintf(stderr, "looking for {%s,%s}\n", newestraw, newestbaf);
+
+  if((full = find_newest_in_path(newestraw)))
+    strcpy(newestraw, full);
+  if((full = find_newest_in_path(newestbaf)))
+    strcpy(newestbaf, full);
+  newest_is_binary = newerfile(newestbaf, newestraw);
+
+  if(!newestraw[0] && !newestbaf[0]) {
+    ATfprintf(stderr,"requested file not found in path\n");
+    return open_error(name);
   }
-  else {
-    return ATmake("snd-value(error-opening(<str>))", name);
+  if(newest_is_binary) {
+    t = read_term_from_named_file(newestbaf, name);
+  } else {
+    t = read_raw_from_named_file(newestraw, name);
   }
+  if(ATmatch(t, "snd-value(opened-file(<list>))", NULL))
+    asfix_status = 2;
+
+  return t;
 }
 
 ATerm open_eqs2_asfix_file(int cid, char *name)
 {
-  int i;
-  char full[PATH_LEN];
-  ATerm t; 
-  FILE *f;
+  char *full, fullname[PATH_LEN];
+  ATerm t;
 
-ATfprintf(stderr, "pre-parsed file %s.eqs2.baf\n", name);
-  for(i=0; i<nr_paths; i++) {
-    strcpy(full, paths[i]);
-    if(strlen(full) + strlen(name) + 8 > PATH_LEN) {
-      fprintf(stderr, "warning: path to long, ignored: %s+%s\n", full, name);
-      continue;
-    }
-    strcat(full, "/");
-    strcat(full, name);
-    strcat(full, ".eqs2.baf");
-    f = fopen(full, "r");
-    if(f) {
-      t = ATreadFromBinaryFile(f);
-      if(!t) {
-        ATfprintf(stderr, "could not be read\n");
-        fclose(f);
-      }else {
-        ATfprintf(stderr, "was found in: %s\n",paths[i]);
-        fclose(f);
-        return ATmake("snd-value(opened-asfix-file(<str>,<term>,<str>))",
-                      name,t,paths[i]);
-      }
-    } 
-  } 
-  ATfprintf(stderr,"File could not be found\n");
-  return ATmake("snd-value(error-opening(<str>))", name);
+  sprintf(fullname, "%s%s", name, ".eqs2.baf");
+  ATfprintf(stderr, "pre-parsed file %s\n", fullname);
+
+  if((full = find_newest_in_path(name))) {
+    t = read_term_from_named_file(full, name);
+  } else {
+    t = open_error(name);
+  }
+  return t;
 }
-
-
 
 ATerm open_eqs2_text_file(int cid, char *name)
 {
-  int i;
-  char full[PATH_LEN];
+  char  *full;
   ATerm t;
-  char *buf;
-  size_t size; 
 
-  /* JS  Try raw format if no pre-parsed version was found */
-  for(i=0; i<nr_paths; i++) {
-    strcpy(full, paths[i]);
-    if(strlen(full) + strlen(name) + 8 > PATH_LEN) {
-      fprintf(stderr, "warning: path to long, ignored: %s+%s\n", full, name);
-      continue;
-    }
-    strcat(full, "/");
-    strcat(full, name);
-    strcat(full, ".eqs2");
-    fprintf(stderr, "trying file %s\n", full);
-    buf = SlurpFile(full, &size);
-    if (buf != NULL) {
-	t = ATmake("<str>", buf);
- 	free(buf);
-        ATfprintf(stderr, "was found in: %s\n",paths[i]);
-	return ATmake("snd-value(opened-file(<str>,<term>,<str>))",
-                      name, t, paths[i]);
-    }
+  if((full = find_newest_in_path(name))) {
+    t = read_raw_from_named_file(full, name);
+  } else {
+    ATfprintf(stderr,"file %s could not be found\n", name);
+    t = open_error(name);
   }
-  ATfprintf(stderr,"File could not be found\n");
-  return ATmake("snd-value(error-opening(<str>))", name);
+  return t;
 }
 
 ATerm read_parse_table(int cid, char *name)
 {
-  int i;
-  char full[PATH_LEN];
-  FILE *f;
+  char *full, fullname[PATH_LEN];
 
-  for(i=0; i<nr_paths; i++) {
-    strcpy(full, paths[i]);
-    if(strlen(full) + strlen(name) + 8 > PATH_LEN) {
-      fprintf(stderr, "warning: path to long, ignored: %s+%s\n", full, name);
-      continue;
-    }
-    strcat(full, "/");
-    strcat(full, name);
-    strcat(full, ".tbl");
-    f = fopen(full, "r");
-    if(f) {
-      fclose(f);
-      return ATmake("snd-value(table-on-disk(<str>))",full);
-    }
-  }
-  return ATmake("snd-value(error-opening(<str>))", name);
+  sprintf(fullname, "%s%s", name, ".tbl");
+
+  if((full = find_newest_in_path(fullname)) && fileisreadable(full))
+     return ATmake("snd-value(table-on-disk(<str>))", full);
+
+  return open_error(name);
 }
 
 ATerm open_trm_file(int cid, char *name)
 {
-  int i;
-  char full[PATH_LEN];
+  char *full;
   ATerm t;
-  char *buf;
-  size_t size;
 
-  
-  /* JS  Try raw format if no pre-parsed version was found */
-  for(i=0; i<nr_paths; i++) {
-    strcpy(full, paths[i]);
-    if(strlen(full) + strlen(name) + 8 > PATH_LEN) {
-      fprintf(stderr, "warning: path to long, ignored: %s+%s\n", full, name);
-      continue;
-    }
-    strcat(full, "/");
-    strcat(full, name);
-    fprintf(stderr, "trying file %s\n", full);
-    buf = SlurpFile(full, &size);
-    if (buf != NULL) {
-	t = ATmake("<str>", buf);
- 	free(buf);
-        ATfprintf(stderr, "was found in: %s\n",paths[i]);
-	return ATmake("snd-value(opened-file(<str>,<term>,<str>,<str>))",
-                      name, t, paths[i],full);
-    }
+  if((full = find_newest_in_path(name))) {
+    t = read_raw_from_named_file(full, name);
+  } else {
+    ATfprintf(stderr,"file %s could not be found\n", name);
+    t = open_error(name);
   }
-  ATfprintf(stderr,"File could not be found\n");
-  strcpy(full,"./");
-  strcat(full,name);
-  return ATmake("snd-value(error-opening(<str>,<str>))", name, full);
+  return t;
 }
 
-ATerm open_file(int cid, char *name)
+ATerm save_sdf2_asfix(int cid, char *name, char *fn, ATerm syntax)
 {
-  int i;
   char full[PATH_LEN];
-  FILE *f;
-  ATerm t;
-  char *buf;
-  size_t size;
 
-  ATfprintf(stderr, "pre-parsed file %s.sdf2.asfix\n", name);
-  for(i=0; i<nr_paths; i++) {
-    strcpy(full, paths[i]);
-    if(strlen(full) + strlen(name) + 12 > PATH_LEN) {
-      fprintf(stderr, "warning: path to long, ignored: %s+%s\n", full, name);
-      continue;
-    }
-    strcat(full, "/");
-    strcat(full, name);
-    strcat(full, ".sdf2.asfix");
-    f = fopen(full, "r");
-    if(f) {
-      t = ATreadFromTextFile(f);
-      if(!t) {
-        ATfprintf(stderr, "could not be read\n");
-        fclose(f);
-      }else {
-        ATfprintf(stderr, "was found in: %s\n",paths[i]);
-        fclose(f);
-        return ATmake("snd-value(opened-file(<str>,<str>,<term>,<str>))",
-                      "asfix",name,t,full);
-      }
-    } 
-  }
-  /* JS  Try raw format if no pre-parsed version was found */
-  for(i=0; i<nr_paths; i++) {
-    strcpy(full, paths[i]);
-    if(strlen(full) + strlen(name) > PATH_LEN) {
-      fprintf(stderr, "warning: path to long, ignored: %s+%s\n", full, name);
-      continue;
-    }
-    strcat(full, "/");
-    strcat(full, name);
-    strcat(full, ".sdf2");
-    fprintf(stderr, "trying file %s\n", full);
-    buf = SlurpFile(full, &size);
-    if (buf != NULL) {
-	t = ATmake("<str>", buf);
- 	free(buf);
-	fprintf(stderr, "ok!\n");
-	return ATmake("snd-value(opened-file(<str>,<str>,<term>,<str>))",
-                      "raw",name, t,full);
-    }
-  }
-  ATfprintf(stderr,"File could not be found\n");
-  return ATmake("snd-value(error-opening(<str>))", name);
+  sprintf(full, "%s%s", fn, ".baf");
+  return write_term_to_named_file(syntax, full, name);
 }
 
-ATerm save_sdf2_asfix(int cid, char *name, char *path, ATerm syntax)
+ATerm save_eqs2_asfix(int cid, char *name, char *fn, ATerm eqs)
 {
   char full[PATH_LEN];
-  FILE *output;
 
-  strcpy(full, path);
-  /*
-  strcat(full, "/");
-  strcat(full, name);
-  strcat(full, ".sdf2.baf");
-  */
-  strcat(full, ".baf");
-  ATfprintf(stderr, "writing file %s\n", full);
-  output = fopen(full,"w");
-  if(!output)
-    ATfprintf(stderr,"Cannot open file %s\n",full);
-  else {
-    ATwriteToBinaryFile(syntax,output);
-    fclose(output);
-  }
-  return ATmake("snd-value(save-done(<str>))", name);
-}
-
-ATerm save_eqs2_asfix(int cid, char *name, char *path, ATerm eqs)
-{
-  char full[PATH_LEN];
-  FILE *output;
-
-  strcpy(full, path);
-  /*
-  strcat(full, "/");
-  strcat(full, name);
-  strcat(full, ".eqs2.baf");
-  */
-  strcat(full, ".baf"); 
-  ATfprintf(stderr, "writing file %s\n", full);
-  output = fopen(full,"w");
-  if(!output)
-    ATfprintf(stderr,"Cannot open file %s\n",full);
-  else {
-    ATwriteToBinaryFile(eqs,output);
-    fclose(output);
-  }
-  return ATmake("snd-value(save-done(<str>))", name);
+  sprintf(full, "%s%s", fn, ".baf");
+  return write_term_to_named_file(eqs, full, name);
 }
 
 void rec_terminate(int cid, ATerm arg)
@@ -406,30 +302,39 @@ void rec_terminate(int cid, ATerm arg)
   exit(0);
 }
 
-int main(int argc, char **argv)
+void read_conf(char *cfg)
 {
-  int cid, i=0;
-  ATerm bottomOfStack;
+  FILE *fd;
 
-  FILE *f = fopen("meta.conf", "r");
-  if(f) {
-    while(fgets(paths[nr_paths], PATH_LEN, f))
-      if(strlen(paths[nr_paths]) > 0 && paths[nr_paths][0] != '#') {
-        /* Remove trailing cr */
+  if(!(fd = fopen(cfg, "r"))) {
+    ATfprintf(stderr, "warning: cannot open config %s\n", cfg);
+    paths[nr_paths][0]   = '.';
+    paths[nr_paths++][1] = '\0';
+    return;
+  }
+  while(fgets(paths[nr_paths], PATH_LEN, fd)) {
+    if(*paths[nr_paths]) {
+      if(*paths[nr_paths] != '#'){
         paths[nr_paths][strlen(paths[nr_paths])-1] = '\0';
         nr_paths++;
-      }
-  } else {
-    paths[nr_paths][0] = '.';
-    paths[nr_paths][1] = '\0';
-    nr_paths++;
-    ATfprintf(stderr, "warning: cannot open meta.conf file\n");
+      } else
+        *paths[nr_paths] = '\0';
+    }
   }
+  fclose(fd);
+}
+
+int main(int argc, char **argv)
+{
+  int   cid, i=0;
+  ATerm bottomOfStack;
+
+  read_conf("meta.conf");
   for(i=0; i<nr_paths; i++)
-    ATfprintf(stderr, "path %d = %s\n", i, paths[i]);
+    ATfprintf(stderr, "path[%d] = %s\n", i, paths[i]);
 
   ATBinit(argc, argv, &bottomOfStack);
-  cid = ATBconnect(NULL, NULL, -1, in_output_handler); 
+  cid = ATBconnect(NULL, NULL, -1, in_output_handler);
   ATBeventloop();
 
   return 0;
