@@ -1678,7 +1678,9 @@ rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth,
       newelems = appendElem(listProd, newelems, elem);
     }
 
-    assert(!PT_isTreeVar(elem) && "should be a closed term");
+    if(PT_isTreeVar(elem)) { /* uninitalized variable */
+      return elems;
+    }
     
     elems = PT_getArgsTail(elems);
   }
@@ -1702,7 +1704,7 @@ static PT_Tree rewriteVariableAppl(PT_Tree var, ATerm env, int depth,void *extra
 
   if (!value) {
     RWsetError("Uninitialized variable.",(ATerm) var);
-    return NULL;
+    return var;
   }
 
   return value;
