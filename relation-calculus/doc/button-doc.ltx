@@ -234,14 +234,14 @@ with the tree {\tt false}.}
 \action{$T$}{dup}{$T$, $T$}
 {Duplicates the top element on the stack.}
 
-\action{$T_{in}$}{execute-action($Executable \mbox{\tt -t}$)}{$T_{out}$}
+\action{$T_{in}$}{execute-action($Executable \mbox{\tt ~-t}$)}{$T_{out}$}
 {Execute the compiled specification $Executable$ with input term $T_{in}$ 
-and result $T_{out}$. The {\tt -t} is essential because this {\tt execute-action}
+and result $T_{out}$. The {\tt -t} is essential because {\tt execute-action}
 uses the {\tt gen-adapter} of the ToolBus and is not robust against baf
 encoded terms, the {\tt -t} option ensures that the normal form is not
-encoded as baf. Therefore it is also necessary to ensure that the
+encoded as baf but as plain text. Therefore it is also necessary to ensure that the
 input term is also not baf encoded.
-A correct sequences of actions is thus:
+A correct sequence of actions is thus:
 {\tt ..., unpack-tree, execute-action("Pico-typecheck -t"), ...}
 }
 
@@ -278,6 +278,10 @@ take 2 different routes in the action script.
 \action{}{message($String$)}{}
 {Display the message $String$ on the status line of the user interface.}
 
+\action{$T_{unpacked}$}{pack-tree}{$T_{packed}$}
+{Replace the unpacked tree $T_{unpacked}$ by the packed (i.e. compressed) tree $T_{packed}$.
+}
+
 \action{$StringOrPath$}{parse($ModName$,$SortName$)}{$T$}
 {Parse $StringOrPath$ using the grammar in module $ModName$ and expect
 $SortName$ as resulting sort. If the top of the stack is a plain string
@@ -296,10 +300,6 @@ dialog and $Extension$ as the required file name extension.
 
 \action{}{push-editor-name}{$FileName$}
 {Get the file name $FileName$ corresponding to the current editor.
-}
-
-\action{$T_{unpacked}$}{pack-tree}{$T_{packed}$}
-{Replace the unpacked tree $T_{unpacked}$ by the packed (i.e. compressed) tree $T_{packed}$.
 }
 
 \action{}{push-active-module}{$ModName$}
@@ -346,23 +346,28 @@ form $T_{out}$ as result tree.
 is in fact a compiled ASF+SDF specification.
 }
 
+
+\action{$String$, $fileName$}{save-text}{}
+{Save string $String$ as file $FileName$.
+}
+
+\action{$T$, $FileName$}{save-tree}{}
+{Save term $T$ as file $FileName$.
+}
+
 \action{$T$}{send}{}
 {Send term $T$. Used in combination with {\tt receive} in order
 to establish synchronous communication between 2 editors.
-}
-
-\action{$T$}{set-root}{}
-{Replace the term in the current editor by term $T$.
 }
 
 \action{$T$}{set-focus}{}
 {Replace the term corresponding to the current focus by $T$.
 }
 
-\action{$ModName$, $T$}{show-tree}{}
-{Gives a graphical view of term $T$ over module $ModName$ in the tree panel
-of the user-interface.
+\action{$T$}{set-root}{}
+{Replace the term in the current editor by term $T$.
 }
+
 
 \action{$ModName$,$T$}{show-area}{}
 {The term $T$ represents position information in some file. The position
@@ -374,14 +379,11 @@ is activated and then the focus is set at the given coordinates.
 \action{$ModName$,$Text$}{show-list}{}
 {Add $Text$ to the current (error) list viewer.}
 
-
-\action{$String$, $fileName$}{save-text}{}
-{Save string $String$ as file $FileName$.
+\action{$ModName$, $T$}{show-tree}{}
+{Gives a graphical view of term $T$ over module $ModName$ in the tree panel
+of the user-interface.
 }
 
-\action{$T$, $FileName$}{save-tree}{}
-{Save term $T$ as file $FileName$.
-}
 
 \action{$FileName$}{split-file-name($Extension$)}{$FileName$, $Path$,
   $Extension$
