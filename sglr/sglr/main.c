@@ -29,7 +29,6 @@
 
 char *version_string = "$Revision$";
 char *program_name   = "sglr";
-int   output_old_asfix;
 int   debugflag;
 int   verboseflag;
 FILE *log = NULL;
@@ -212,8 +211,8 @@ usage(FILE *stream, int long_message)
 struct option longopts[] =
 {
   {"abbreviate",  no_argument,       &abbreviation_flag, FALSE},
-  {"asfix1",      no_argument,       &output_old_asfix,  TRUE},
-  {"asfix2",      no_argument,       &output_old_asfix,  FALSE},
+  {"asfix1",      no_argument,       NULL,               TRUE},
+  {"asfix2",      no_argument,       NULL,               FALSE},
   {"debug",       no_argument,       &debugflag,         TRUE},
   {"dot",         no_argument,       NULL,               'D'},
   {"suppress",    no_argument,       NULL,               'l'},
@@ -240,7 +239,6 @@ void
 handle_options (int argc, char **argv)
 {
   int c; /* option character */
-  output_old_asfix = FALSE;
   verboseflag = FALSE;
   debugflag   = FALSE;
   while ((c = getopt_long(argc, argv,
@@ -248,8 +246,9 @@ handle_options (int argc, char **argv)
 	 != EOF)
     switch (c) {
     case 0:   break;
-    case '1': output_old_asfix = TRUE;  break;
-    case '2': output_old_asfix = FALSE; break;
+    case '1': fprintf(stderr,"%s: AsFix1 output not supported currently\n", program_name);
+               break;
+    case '2': break;
     case '?': usage(stderr, TRUE); exit(0);
     case 'a': abbreviation_flag = TRUE; break;
     case 'D': dotoutput = optarg; generate_dot = TRUE; break;
@@ -421,22 +420,18 @@ void
 term_to_file(term *t, char *FN)
 {
   FILE *output_file;
-  if (write_output)
-    {
+  if (write_output) {
       if (strcmp(FN, "") == 0 || strcmp(FN, "-") == 0) output_file = stdout;
-      else if ((output_file = fopen(FN, "w")) == NULL)
-	{
+      else if ((output_file = fopen(FN, "w")) == NULL) {
 	  fprintf(stderr, "%s: cannot create %s\n", program_name, FN);
 	  exit(1);
-	}
+      }
       if (verboseflag)
 	fprintf(stdout, "%s: writing parse tree to %s\n", program_name, FN);
-      if(output_old_asfix != TRUE)
-        TBprintf(output_file, "%t\n", t);
-      else
-        TBprintf(output_file, "%t\n", trans(t, standalone));
-    }
+      TBprintf(output_file, "%t\n", t);
+  }
 }
+
 /*
   \paragraph{Open Log}
 */

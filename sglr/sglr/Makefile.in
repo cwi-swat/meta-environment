@@ -46,7 +46,7 @@ XLIBS		= -L$(TOOLBUS)/lib $(SOCKLIBS) -ltb
 PROGS           = sglr
 CSRC            = main.c getopt.c getopt1.c parse-table.c parser.c \
                   forest.c stack.c longest_match.c tree-to-dot.c
-OBJ             = $(subst .c,.o,$(CSRC)) ../../a2toa1/a2toa1.o
+OBJ             = $(subst .c,.o,$(CSRC))
 
 all:	$(PROGS)
 
