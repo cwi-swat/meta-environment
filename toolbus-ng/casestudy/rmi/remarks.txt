@@ -83,6 +83,7 @@ DATA TRANSFER
 [PASS BY REFERENCE]
 * Remote objects are passed by reference. A reference to a remote object is actually a reference
   to a stub, which is a client-side proxy for the remote object.
+  
   A class is made into a "remote object" by splitting it into an interface that extends Remote
   (see the AddressBook interface) and an implementation (as per the AddressBookImpl). Each instance
   is then required to be registered to the rmi-registry, either because the implementation extends
@@ -93,3 +94,19 @@ DATA TRANSFER
   2. by parameter passing/return value: public Address getAddress(String name); will return a reference
      to a remote instance of the implementation of the Address interface.
      
+  public interface Address extends java.rmi.Remote {
+    public String getStreet() throws RemoteException;
+    public int getNumber() throws RemoteException;
+  }
+  
+  public class AddressImpl extends java.rmi.UnicastRemoteObject {
+    private String street;
+    private int number;
+    public Address(String street, int number) throws RemoteException {
+      super();
+      this.street = street;
+      this.number = number
+    }
+	public String getStreet() { return street;}
+    public int getNumber() { return number;}
+  }
