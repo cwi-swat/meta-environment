@@ -12,7 +12,7 @@ Pieter Olivier, University of Amsterdam, olivierp@wins.uva.nl<BR>
 
 <H2>Introduction</H2>
 We are currently designing and implementing a modular and extensible
-system for designing languages specifications in the
+system for designing language specifications in the
 <A HREF="http://www.springer.co.uk/ewic/workshops/ASFSDF97/">
 Asf+Sdf specification formalism</A>, and automatically generating
 programming environments from these specifications.
@@ -34,7 +34,7 @@ applications.
 
 <P>
 We will start by presenting some of the applications we have in mind,
-and we will discuss in detail the functionality these application should offer
+and we will discuss in detail the functionality these application should offer.
 We will present the basic architecture that is used to build these 
 applications.
 We will describe the individual components and their interaction in
@@ -49,10 +49,10 @@ interactively generate programming environments for these languages.
 Such a generated environment can consist of a completely interactive
 program development environment consisting of a structure editor,
 typechecker, interpreter and compiler, or it can be more batch oriented
-providing tools to do large scale program transformations or code analyzing.
-The old Asf+Sdf Meta-Environment has been develop based on languages like Pico 
-and Pascal.
-However, the application domain of the Meta-Environment is enlarged to a more 
+providing tools to do large scale program transformations or code analysis.
+The old Asf+Sdf Meta-Environment has been developed based on languages 
+like Pico and Mini-ML (our favorite toy languages), and Pascal.
+However, the application domain of the Meta-Environment is enlarging to a more 
 general
 field. Although the applications are still language oriented. The 
 Meta-Environment is currently
@@ -60,7 +60,7 @@ intensively used in the field of re-engineering and it has to deal with huge
 grammars like
 COBOL and huge amounts of code to be analyzed and processed. Furthermore, 
 applications
-like program transformation systems, like for Prolog, are developed with 
+like program transformation systems, for instance Prolog, are developed with 
 Asf+Sdf as well.
 Such a system demands other functionality and features, such as flexibility of 
 transformation
@@ -85,7 +85,7 @@ of the
 functionality that this Meta-Enviroment has to offer</A>.
 We also present a number of <A HREF="scenarios/scenarios.html">scenarios</A>.
 
-<P> Although the name of the Meta-Environment suggests otherwise, it must be 
+<P> It must be 
 possible to
 parameterize the Meta-Environment with a language definition. In this way we 
 will be able
@@ -93,7 +93,7 @@ to redesign Asf+Sdf in the (near) future and add language features like higher
 order
 functionality, monads, parametrized modules, etc.
 
-<H3>Basic programming environment</H3>
+<H3>Basic interactive programming environment</H3>
 The most typical of generated environments is a so called 'basic 
 programming environment' containing a syntax directed editor, a parser,
 a typechecker and an interpreter. The user of such an enviroment can
@@ -101,23 +101,22 @@ type in programs in the syntax directed editor, use the typechecker
 to check the type correctness of the programs, and the interpreter
 to run the program and see the results.
 
-<H3>Standalone tools</H3>
-Not only complete environments can be generated, but also simple
-standalone tools. For instance, it should be possible to generate
-a complete programming environment for a new language, but it should
-also be possible to use just the compiler to compile programs in a
-batch oriented manner.
+<H3>Batch oriented tools</H3>
+It should also be possible to use generated components in a
+batch oriented fashion. For instance, a compiler that is part of
+a generated interactive environment should also be available as
+a standalone tool so large amounts of source code can be
+compiled automatically in a batch oriented fashion.
 
 <H3>Extensibility</H3>
-Not all behaviour of the generated enviroments can be specified
+Not all behaviour of the generated environments can be specified
 accurately and concisely using the Asf+Sdf formalism. Especially
 user interface extensions and interactions with components outside
 the Asf+Sdf Meta-Environment are difficult, if not impossible to
 express. This means that the generated environments should not be
 final and closed, but rather open and extensible. Important in this
-respect is that modifications done by the user should be kept
-intact when the environment is regenerated so the user does not
-need to redo the changes over and over again.
+respect is that extensions and modifications made by the user should be
+preserved when the environment is regenerated.
 
 </BODY>
 </HTML>

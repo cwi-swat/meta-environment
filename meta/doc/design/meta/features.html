@@ -46,9 +46,9 @@ The control tool must provide the following functionality:
 <LI> Quit the Meta-environment.
 <LI> Inspect and change the list of search-paths in which the Meta-environment
      searches for new modules.
-<LI> Create both new module editor and term editor instances.
+<LI> Create new module and term editors.
 <LI> Show a list of currently active module editors and term editors,
-     and enable the user to activate (bring them to the front), and
+     and enable the user to activate (bring them to the front) and
      remove them.
 </UL>
 
@@ -89,7 +89,7 @@ The structure editor must provide the following functionality:
      to 'text editing mode' by starting to type text.
 <LI> To switch from 'text editing mode' to 'structure editing mode',
      the text in the editor must be parsed.
-<LI> When editing a term, the user must be able to reduce the term 
+<LI> When editing a term, the user must be able to rewrite the term 
      currently in the editor.
 </UL>
 
@@ -103,23 +103,20 @@ of different terms.
 
 <H2>Parser Generator</H2>
 
-Given the syntax definition of a language spread over the Asf+Sdf modules
+Given the syntax definition of a language (as defined in the SDF parts of the
+modules in a specification),
 a parse table must be generated for parsing the equations in the modules
 and terms.
-A parse table interpreter (just parser) uses this table to parse
+A parse table interpreter (or simply stated: a parser) uses this table to parse
 terms and equations.
-
-The parser generator should provide the following functionality:
-<UL>
-<LI> Given a list of Sdf modules a parse table must be generated.
-<LI> The generated parse tables are not stored by the parser generator.
-</UL>
+The parser generator should be able to generate this parse table given a list
+of Sdf modules.
 
 <H3>Extensibility</H3>
 The parse table should contain information indicating which transitions
 in the table are valid for a specific module. So, for an entire
 specification only one parse table is needed, the modular structure of
-the specification is coded in the parse table.
+the specification is thus coded in the parse table.
 
 <H2>Parser</H2>
 The parser must provide the following basic functionality:

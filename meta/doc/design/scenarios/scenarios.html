@@ -31,15 +31,15 @@ Sofar, we have developed scenarios for the following tasks:
 <H2>Scenario for Parsing Terms</H2>
 </A>
 
-Case: a user wants to parse a unparsed term over a certain module.
-We assume that at least this module and all modules imported by this
-module are in the module database.
+Case: a user wants to parse a term over a certain module.
+We assume that at least this module and all modules imported by it
+are in the module database.
 
 <OL>
 <LI> After indication by the user, the <EM>term editor</EM>
 generates a parse request.
-This parse request contains the complete text of this term,
-a unique identification of the term, and the name of
+This parse request contains the complete text of the term,
+a unique identification for it (URL?), and the name of
 the module over which the text has to be parsed.
 <LI> The <EM>parser</EM> intercepts this request and check if it
 already has a parse table for this module.
