@@ -113,15 +113,20 @@
 \begin{ifhtml}
 \begin{center}
 This document is also available as both 
-\xlink{postscript}{http://www.cwi.nl/projects/MetaEnv/meta/doc/manual.ps.gz}
-and \xlink{pdf}{http://www.cwi.nl/projects/MetaEnv/meta/doc/manual.pdf}
+\xlink{postscript}{http://www.cwi.nl/projects/MetaEnv/meta/doc/guided-tour.ps.gz}
+and \xlink{pdf}{http://www.cwi.nl/projects/MetaEnv/meta/doc/guided-tour.pdf}
 documents.
 \end{center}
 \end{ifhtml}
 
 \begin{abstract}
-This is a preliminary user manual for the \ASmetaenv\ Release 1.
-This is work under construction.
+This is the guided tour for the \ASmetaenv\ Release 1.4.
+
+The purpose of this document is to give a brief introduction in using the 
+\ASmetaenv. Details on writing \asfsdf\ specifications are not discussed
+in this guided tour, but in the \asfsdf\ user manual.
+
+This is guided tour is under permanent construction.
 
 \end{abstract}
 
@@ -140,7 +145,9 @@ Some images $\copyright$ 2001-2002 \xlink{www.arttoday.com}{http://www.arttoday.
 \section*{Update with respect to previous version}
 
 \begin{itemize}
-\item Introduced the new user interface.
+\item Separated the guided tour and the \asfsdf\ user manual.
+\item Synchronized the screen dumps with the newest version of the
+\ASmetaenv\ (version 1.4).
 \end{itemize}
 
 \section{Overview}
@@ -288,15 +295,10 @@ system.  Topics that will be addressed include:
 
 \begin{itemize}
 \item The formalism \asfsdf. 
-We only give a \link{quick introduction to \asfsdf}[ (Section~\Ref)]{ASF+SDF}.
 
 \item The architecture and implementation of the system.
-We only give a brief sketch of the underlying 
-\link{technology and architecture of the \ASmetaenv}
-[ (Section~\Ref)]{SEC:TechnologyandArchitecture}.
 
 \item The stand-alone usage of various parts of the system.
-We only describe the \link{usage of the most important components}[ (Section~\Ref)]{SEC:Components}.
 \end{itemize}
 
 \subsection{Downloading the \ASmetaenv}
@@ -313,10 +315,7 @@ You can download the \ASmetaenv\ from the following location:
 
 There are many publications about the \ASmetaenv\ itself, about the
 implementation techniques used, and about applications.
-Also see the overview of
-\link{architecture and implementation techniques}[ (Section~\Ref)]{SEC:TechnologyandArchitecture}. 
-We give here a brief
-overview of selected publications:
+We give here a brief overview of selected publications:
 
 \begin{description}
 
@@ -378,7 +377,10 @@ result,
 \end{figure}
 
 The {\tt meta} command has the following options, which may come in handy
-later on. As a novice user, you may want to skip the remainder of this section
+later on. Note, the {\tt meta} command delegates the actual invocation of
+the \ASmetaenv\ to the command {\tt generic-meta}, this means that a number
+of option described below are not relevant for {\tt meta}.
+As a novice user, you may want to skip the remainder of this section
 and continue with the description of the 
 \link{Main Window}[ (Section~\Ref)]{MainWindow}.
 
@@ -387,15 +389,38 @@ and continue with the description of the
 \item {\tt -C \emph{file}} specifies the configuration file to be used,
 in the default case the configuration file {\tt meta.conf} is used.
 
+\item {\tt -I \emph{dir}} specifies the location of extra ToolBus scripts.
+
 \item {\tt -d} starts the \ASmetaenv\ in debug mode. As a result,
 an interactive viewer will be started that 
 allows the study of the internal behaviour of the system,
 the so-called \link{``ToolBus viewer''}[. This viewer is shown in Figure~\Ref]{FIG:viewer}.
 
-\item {\tt -h } shows help information for the {\tt meta} command.
+\item {\tt -e} use the \xlink{\xemacs}{http://www.xemacs.org} editor, this
+is the default editor.
+
+\item {\tt -g} use the \xlink{gvim}{http://www.vim.org/} editor, the
+support for this editor is in an experimental stage and will not be
+discussed in this guided tour.
+
+\item {\tt -h} shows help information for the {\tt meta} command.
 
 \item {\tt -m \emph{modulename}} starts the Meta-Environment and the
 module with the name \emph{modulename} is automatically opened.
+
+\item {\tt -o \emph{file}} this option only works for the command line
+tools when dumping parse tables or equations.
+
+\item {\tt -p \emph{path}} adds a new search path to the list of search
+paths obtained from {\tt meta.conf} in the Meta-Environment.
+
+\item {\tt -r \emph{file}} uses the given file as {\tt term-store}. The
+term-store is normally saved under the name of {\tt meta.termstore}.
+
+\item {\tt -s} saves the term-store to disk, this option only works for the
+command line tools when dumping parse tables or equations.
+
+\item {\tt -S \emph{file}} executes the given tb-script \emph{file}.
 
 \item {\tt -t \emph{int}}  the Meta-Environment will abort after \emph{int}
 seconds.
@@ -447,9 +472,18 @@ The main window consists of the following parts:
 \item At the top of the window is a menu bar that contains the following menu:
   \begin{itemize}
 
-   \item {\tt File}: for opening and creating of a module, opening a
-    library module, saving and closing a specification, 
-    refreshing of buttons as well as for leaving the \ASmetaenv.
+   \item {\tt File}: for 
+    \begin{itemize}
+      \item opening a library module, 
+      \item opening an existing module,
+      \item creating of a new module, 
+      \item reading a saved term store,
+      \item saving the current term store,
+      \item closing a specification, 
+      \item clearing the message panel (history of error messages), 
+      \item refreshing of buttons, and
+      \item leaving the \ASmetaenv.
+     \end{itemize}
     The {\tt File} menu is described in  \link*{File Menu}[Section~\Ref]{FileMenu}.
     
 
@@ -458,16 +492,15 @@ The main window consists of the following parts:
 \item Below {\tt File} a list of icons is shown:
   \begin{itemize}
  
+   \item {\tt Open Library Module} (the nicely wrapped box) for opening a
+         library module.
    \item {\tt New Module} (the empty page) for creating a new module.
    \item {\tt Open Module} (the non-empty page) for opening an existing
          module.
-   \item {\tt Open Library Module} (the nicely wrapped box) for opening a
-         library module.
-   \item {\tt Save All} (the diskette) for saving the specification.
-   \item {\tt Close All} (the eraser) for closing a specification.
+   \item {\tt Save Term Store} (the diskette) for saving the internal term store.
+   \item {\tt Clear History} (the eraser) for clearing the message panel.
    \item {\tt Exit} (the open door) for exiting the \ASmetaenv.
-   \item The bug with the magnifying glass for activating the debugger.
-   \item {\tt 100\%} for scaling the import graph.
+   \item {\tt 100\%} for scaling both the import graph and parse tree.
   \end{itemize}
   These icons are described in 
   \link*{Button Pane}[Section~\Ref]{ButtonPane}.
@@ -541,10 +574,24 @@ specifications as well as for quitting the \ASmetaenv.
 \end{center}
 \end{figure}
 
+{\tt Open Library Module} is used for opening a predefined 
+\asfsdf\ module. A \link{dialog window}[, see
+Figure~\Ref)]{FIG:open-library} appears.
+%%, see \link{\asfsdf\ library modules}[ Section~\Ref]{SEC:library-modules}.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:open-library}
+\T \includegraphics[width=8cm]{open-library}
+\W \htmlimage{open-library.gif}
+\caption{Dialog for opening a library module ({\tt File} menu)}
+\end{Label}
+\end{center}
+\end{figure}
+
 {\tt New Module} and {\tt Open Module} are used for creating
 a new module and opening an existing one, respectively.
-In both cases a dialog window appears as shown 
-\link{dialog window}[ (Figure~\Ref)]{FIG:open-file} appears.
+In both cases a \link{dialog window}[ (Figure~\Ref)]{FIG:open-file} appears.
 
 \begin{figure}
 \begin{center}
@@ -556,7 +603,15 @@ In both cases a dialog window appears as shown
 \end{center}
 \end{figure}
 
-{\tt Save All} saves all modules, this means the entire specification. 
+{\tt Read Term Store} reads a previously saved term store and
+replaces/initializes the term store. It can
+only read the term store with the name {\tt meta.termstore}.
+
+{\tt Save Term Store} saves the internal term store to disk. All
+information available in the interal term store is saved to disk,
+among others, generated parse tables, parsed equations, derived
+import relations. Using the term store when (re-)starting the system leads
+to a speed up because saved parse tables, etc.\ need not be regenerated.
 
 {\tt Close All} removes all modules from the
 Meta-Environment. If modules have been modified, you are explicitly
@@ -568,14 +623,16 @@ version of the Meta-Environment using the {\tt meta} command.
 contains a description of which buttons have to be added to which
 term-editors.
 
-{\tt Exit} ends the execution of the \ASmetaenv.
+{\tt Exit} ends the execution of the \ASmetaenv, before exiting the user is
+explicitly asked whether he/she wants to save the term store.
 
 \subsection{The Panes of the Main Window}
 
 The two panes below the icons of the main window give two, alternative,
 views on the \asfsdf\ specification that has been loaded into the
-Meta-Environment.  In the rightmost pane you see the import graph, in the
-left-most pane you see a list of modules.  Using one of these views, 
+Meta-Environment.  In the rightmost pane (\link{Import Pane}[]{ImportPane}) 
+you see the import graph, in the
+left-most pane (\link{Module Pane}[]{ModulePane}) you see the module tree.  Using one of these views, 
 the same set of operations is available via a pop up menu.
 
 \subsubsection{The Import Pane}
@@ -632,39 +689,32 @@ The import pane is particularly useful when you want to understand the
 overall structure of a specification but it may become unwieldy for
 very large specifications. For large specifications the module pane
 may give you quicker access to the modules in the specification.
-It presents a vertical, scrollable, list of the names of all the modules in
-the specification.
+It presents a vertical, scrollable, tree like view of 
+all the modules in the specification.
 
-The main purpose of the module pane is to select one or more modules from
+The main purpose of the module pane is to select a module from
 the specification on which an operation from the 
 \link{button pane}[ (Section~\Ref)]{ButtonPane}
 is to be performed.  One module is selected
-by clicking on the corresponding module name in the module pane.  More
-than one module can be selected by clicking on a module name, keeping
-the mouse button down and and then dragging the mouse to the last
-desired module name.
+by clicking on the corresponding module name in the module pane.  
 
 After making the selection, an operation can be performed on all the
-selected modules by pushing a button from the button pane.  For
+selected module by pushing a button from the button pane.  For
 instance, pushing the {\tt Edit Syntax} button will create editors for
 the syntax of all the selected modules.
 
 \subsubsection{The Module Menu}
 \label{ButtonPane}
 
-First, one module can be selected via the import pane or the
-module pane. Next, one of the following operations can be applied to
-them.
+First, a module can be selected via the import or module pane. 
+Next, one of the following operations can be applied to it.
 
-{\tt Edit Syntax}, {\tt Edit Equations},
-and {\tt Edit Term ...} activate (structure) editors for
-editing syntax, equations, or terms, respectively, for the selected module(s).
+{\tt Edit Syntax}, {\tt Edit Equations}, and {\tt Edit Term} 
+activate (structure) editors for editing syntax, equations, 
+or terms, respectively.
 
-{\tt Save Module} saves the tree representation of the 
-syntax definition and the equations section of the selected module(s).
-
-{\tt Revert Module} removes the selected module and re-opens the removed module, 
-the effect is that modifications made to these modules are discarded.
+{\tt Revert Module} removes the selected module and re-opens the removed module
+from disk, the effect is that modifications made to these modules are discarded.
 
 {\tt Close Module} this action removes a module from the specification.
 This action has only effect of the module is not imported by other modules.
@@ -675,7 +725,6 @@ close all imported modules as well. This can be done via
 \begin{figure}
 \begin{center}
 \begin{Label}{FIG:select-window}
-
 \T \includegraphics[width=8cm]{select-window}
 \W \htmlimage{select-window.gif}
 \caption{Select an Option window}
@@ -684,6 +733,47 @@ close all imported modules as well. This can be done via
 \end{center}
 \end{figure}
 
+\paragraph{Export}
+
+The {\tt Export} menu opens a new \link{menu}[ (see
+Figure~\Ref)]{FIG:export-menu} in order to perform
+a number of export operations.
+
+\begin{figure}
+\begin{center}
+\begin{Label}{FIG:export-menu}
+
+\T \includegraphics[width=5cm]{export-menu}
+\W \htmlimage{export-menu.gif}
+\caption{Export menu}
+
+\end{Label}
+\end{center}
+\end{figure}
+
+The {\tt Dump Module} entry enables you to save the text of both \sdf\ and
+\asf\ to disk.
+
+The {\tt Dump Equations} entry allows you to dump the equation of the selected
+module and all its imports. This feature is needed in order to 
+run the evaluator in a stand-alone way, or to compile the specification
+on the command line. 
+
+The {\tt Dump Term ParseTable} entry allows you to dump the parse table of the selected module and
+all its imports in order to parse terms. This functionality is needed in
+order to use the parser in a stand-alone way.
+
+The {\tt Dump Equations ParseTable} entry allows you to dump the parse 
+table of the selected module and
+all its imports in order to parse the equations text of module. This
+functionality is only needed for debugging purposes.
+
+The {\tt Compile Module} entry allows you to invoke the \asfsdf-compiler to generate C code.  
+
+The {\tt Print Module} entry allows you to print the text represention
+of both syntax and the equation part together in one file.
+
+\paragraph{Refactor}
 {\tt Refactor} opens another 
 \link{menu}[ (see Figure~\Ref)]{FIG:refactor-menu} in order to refactor the specification.
 
@@ -700,36 +790,20 @@ close all imported modules as well. This can be done via
 \end{figure}
 The {\tt Copy...} entry in the refactor menu allows you to make a copy of
 a module.
+
 The {\tt Delete...} entry allows you to delete a module, not only in the
 import pane but also on disk! The import sections of the modules importing
 the deleted module are updated as well.
+
 The {\tt Rename...} allows you to rename a module and the renaming is also
 performed in the import sections of the modules importing the renamed
 module.
+
 The {\tt Add Import...} allows you to create a new import relation between 
 2 modules.
+
 The {\tt Remove Import...} allows you to cancel an import relation between
 2 modules.
-All this functionality allows you to restructure your specification in a
-less tedious way.
-
-{\tt Compile Module} invokes the \asfsdf-compiler to generate C code.  
-\link{Compiling Specifications}[ Section~\Ref]{compiling-specs} 
-gives more details on the compilation of \asfsdf\ specifications.
-
-{\tt Dump Equations} dumps the equation of the selected
-module and all its imports. This feature is needed in order to 
-\link{run the evaluator in a stand-alone way}[, see
-Section~\Ref]{SEC:interpretationgofterms}, or to compile the specification
-on the command line. 
-
-{\tt Dump ParseTable} dumps the parse table of the selected module and
-all its imports in order to parse terms. This functionality is needed in
-order to 
-\link{use the parser in a stand-alone way}[, see Section~\Ref]{SEC:parsingofterms}.
-
-{\tt Print Module} prints the syntax and the equation part
-together in one file.
 
 \section{Editing Specifications}
 
@@ -738,23 +812,24 @@ based on \xemacs, so some familiarity with this editor is assumed.
 See \xlink{xemacs.org}{http://www.xemacs.org/Documentation/index.html}
 for documentation on \xemacs.
 
-The various pull-down menus {\tt Meta-Environment}, {\tt Term-Actions},
+The various pull-down menus {\tt Actions}, {\tt Actions},
 and {\tt Move} have been added to the standard user-interface of \xemacs, 
 depending on the editor type:
 
 \begin{itemize}
-\item The {\tt Meta-Environment} menu, which is only available for
-syntax and equation editors, contains a 
-\link{single button}[ (Figure~\Ref)]{FIG:meta-env-menu1} 
-{\tt Parse} for applying the \asfsdf\ parser to the complete text buffer.
+\item The {\tt Action} menu, for syntax and equation editors, contains two 
+\link{buttons}[ (Figure~\Ref)]{FIG:meta-env-menu1} 
+{\tt Parse} for applying the \asfsdf\ parser to the complete text buffer
+and {\tt ViewTree} for displaying the parse tree of the focus in the
+\link{parse tree panel}[ (Figure~\Ref)]{FIG:parsetree-panel}.
 
 \begin{figure}
 \begin{center}
 \begin{Label}{FIG:meta-env-menu1}
 
-\T \includegraphics[width=1.2cm]{meta-env-menu1}
+\T \includegraphics[width=2.4cm]{meta-env-menu1}
 \W \htmlimage{meta-env-menu1.gif}
-\caption{{\tt Meta-Environment} menu (editor)}
+\caption{{\tt Actions} menu (editor)}
 
 \end{Label}
 \end{center}
@@ -778,7 +853,7 @@ user can navigate in the tree.
 \end{center}
 \end{figure}
 
-\item The term editors have the {\tt Term-Actions} menu which contains
+\item The term editors have the {\tt Actions} menu which contains
 at least \link{three buttons}[ (Figure~\Ref)]{FIG:meta-env-menu2}: 
 {\tt Parse}, {\tt Reduce}, and {\tt ViewTree}. 
 
@@ -788,17 +863,15 @@ at least \link{three buttons}[ (Figure~\Ref)]{FIG:meta-env-menu2}:
 \item[{\tt ViewTree}] displays the parse tree structure of the focus in
 the {\tt parsetree} pane.
 \end{description}
-These 3 buttons are the standard buttons in the {\tt Term-Actions} menu,
-however it is possible that the {\tt Term-Actions} contains more
-\link{user-defined buttons}[, see Section~Ref]{SEC:button-scripts}.
+These 3 buttons are the standard buttons in the {\tt Actions} menu.
 
 \begin{figure}
 \begin{center}
 \begin{Label}{FIG:meta-env-menu2}
 
-\T \includegraphics[width=1.6cm]{meta-env-menu2}
+\T \includegraphics[width=2.4cm]{meta-env-menu2}
 \W \htmlimage{meta-env-menu2.gif}
-\caption{{\tt Term-Actions} menu (term editor)}
+\caption{{\tt Actions} menu (term editor)}
 
 \end{Label}
 \end{center}
@@ -823,7 +896,7 @@ call the \emph{focus} and the message ``{\tt Focus symbol: <SORT>}'' appears
 in the status line at the bottom of the main window, where {\tt <SORT>}
 will be the non-terminal/sort of the focus.
 
-Via the entry {\tt Parse} in the {\tt Meta-Environment} menu of the
+Via the entry {\tt Parse} in the {\tt Actions} menu of the
 editor, the parser can be activated.  The parser is finished when the
 status line in the main window displays {\tt Idle} again.
 
@@ -843,7 +916,7 @@ in the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane} or
 in the \link{Module Pane}[ (Section~\Ref)]{ModulePane}.
 An example is shown  \link*{here}[ in Figure \Ref]{FIG:Bool-example.asf}.
 
-The entry {\tt Parse} in the {\tt Meta-Environment} menu of the editor 
+The entry {\tt Parse} in the {\tt Actions} menu of the editor 
 activates the parser for the
 equations. It is possible that in order to parse the equations, a
 parse table must be generated. This is visible through the status
@@ -858,13 +931,13 @@ in the pop-menu in the \link{Import Pane}[ (Section~\Ref)]{ImportPane} or
 in the \link{Module Pane}[ (Section~\Ref)]{ModulePane}.
 An example is shown  \link{here}[ in Figure~\Ref]{FIG:Bool-example.trm}.
 
-The entry {\tt Parse} in the {\tt Term-Actions} menu of the editor 
+The entry {\tt Parse} in the {\tt Actions} menu of the editor 
 activate the parser for this
 term. It is possible that in order to parse the term, a parse table
 must be generated. This is visible through the status message {\tt
 Generating parsetable <ModuleName>}.
 
-The entry {\tt Reduce} in the {\tt Term-Actions} menu of the
+The entry {\tt Reduce} in the {\tt Actions} menu of the
 editor activates the evaluator\footnote{We will also use interpreter,
 rewriter, or reducer instead of evaluator, and equivalently we use 
 interpreting, rewriting, reducing, or evaluating of a term, respectively}. 
@@ -876,19 +949,19 @@ with this set of equations.
 When you have created a term (using a \link{term editor}[, see
 Section~\Ref]{EditingTerms}), 
 you can reduce it (by selecting the {\tt Reduce} entry from 
-the {\tt Term-Actions} menu of the term editor).  
+the {\tt Actions} menu of the term editor).  
 As a result, rewrite rules will be applied until a normal
 form is reached (a term for which no applicable rule can be
 found). This normal form is the result of the execution and is
 displayed in a new term window.
 
-The entry {\tt ViewTree} in the {\tt Term-Actions} menu of the term editor
+The entry {\tt ViewTree} in the {\tt Actions} menu of the term editor
 displays the parse tree of the focus, if any. The parse tree will be shown
-in the \link{{\tt parsetree} panel}[, see Figure~\Ref]{FIG:meta-parsetree}.
+in the \link{{\tt parsetree} panel}[, see Figure~\Ref]{FIG:parsetree-panel}.
 
 \begin{figure}[t]
 \begin{center}
-\begin{Label}{FIG:meta-parsetree}
+\begin{Label}{FIG:parsetree-panel}
 \T \includegraphics[width=12cm]{meta-parsetree}
 \W \htmlimage{meta-parsetree.gif}
 
@@ -1064,7 +1137,7 @@ The \asfsdf\ features used in this specification are explained in
   side of the main window.  An editor will appear containing the syntax part
   of the {\tt Booleans} specification: the \sdf\ section.  This editor is
   a version of the standard text editor Emacs extended with the menus 
- {\tt Meta-Environment} and {\tt Move}.
+ {\tt Actions} and {\tt Move}.
 The result is shown  \link*{below}[ in Figure~\Ref]{FIG:Bool-example.sdf}.
 
 \begin{figure}
@@ -1124,7 +1197,7 @@ The result is shown \link*{below}[ in Figure~\Ref]{FIG:Bool-example.trm}.
 \end{center}
 \end{figure}
 
-\item From menu {\tt Term-Actions} click the {\tt Parse} button.  The text
+\item From menu {\tt Actions} click the {\tt Parse} button.  The text
   in the focus is now being parsed.
 
 
@@ -1159,7 +1232,7 @@ will be selected and becomes the focus.
 \begin{itemize}
   
 \item Reduce the term in the term-editor by clicking the {\tt Reduce} button
-  in the {\tt Term-Actions} menu of the editor.  The result will appear in
+  in the {\tt Actions} menu of the editor.  The result will appear in
   a new \link{term editor window}[ (Figure~\Ref)]{FIG:reduct.out}.
 
 \begin{figure}
@@ -1183,7 +1256,7 @@ will be selected and becomes the focus.
 \item Edit the term `{\tt true \& false}' such that the new term will be
   syntactically incorrect. For instance, type `{\tt true \& wrong}'. Force a
   parse of the term by selecting the {\tt Parse} button of the 
-  {\tt Term-Actions} menu.
+  {\tt Actions} menu.
   
   In the status line at the bottom of the edit window a message appears
   `{\tt Parse error near cursor}' and the cursor will be positioned in
@@ -1413,10 +1486,10 @@ selecting {\tt Quit} from the \link{{\tt File} menu}[ (Section~\Ref)]{FileMenu}.
   button pane. A dialog window pops up and type `{\tt fac.pico}' as name of
   the term.
 
-\item Press the {\tt Parse} button in the {\tt Meta-Environment} menu of the
+\item Press the {\tt Parse} button in the {\tt Actions} menu of the
   editor. As a result, {\tt fac.pico} is parsed.
 
-\item Press the {\tt Reduce} button in the {\tt Meta-Environment} menu of the
+\item Press the {\tt Reduce} button in the {\tt Actions} menu of the
   editor.
 
 \end{itemize}

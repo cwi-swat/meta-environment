@@ -1,437 +1,287 @@
-%!PS-Adobe-2.0 EPSF-2.0
-%%Title: /export/ufs1/markvdb/Research/new-meta/doc/user-manual/move-menu.ps
-%%Creator: XV Version 3.10a  Rev: 12/29/94 (PNG patch 1.2)  -  by John Bradley
-%%BoundingBox: -10 469 36 553
+%!PS-Adobe-3.0
+%%Creator: GIMP PostScript file plugin V 1.12 by Peter Kirchgessner
+%%Title: /ufs/markvdb/Research/meta-doc/guided-tour/move-menu.ps
+%%CreationDate: Fri Jul 18 13:22:26 2003
+%%DocumentData: Clean7Bit
+%%LanguageLevel: 2
 %%Pages: 1
-%%DocumentFonts:
+%%BoundingBox: 14 14 60 66
 %%EndComments
+%%BeginProlog
+% Use own dictionary to avoid conflicts
+10 dict begin
 %%EndProlog
-
 %%Page: 1 1
-
-% remember original state
-/origstate save def
-
-% build a temporary dictionary
-20 dict begin
-
-% define string to hold a scanline's worth of data
-/pix 138 string def
-
-% define space for color conversions
-/grays 46 string def  % space for gray scale line
-/npixls 0 def
-/rgbindx 0 def
-
-% lower left corner
--10 469 translate
-
-% size of image (on paper, in 1/72inch coords)
-46.00800 84.02400 scale
-
-% define 'colorimage' if it isn't defined
-%   ('colortogray' and 'mergeprocs' come from xwd2ps
-%     via xgrab)
-/colorimage where   % do we know about 'colorimage'?
-  { pop }           % yes: pop off the 'dict' returned
-  {                 % no:  define one
-    /colortogray {  % define an RGB->I function
-      /rgbdata exch store    % call input 'rgbdata'
-      rgbdata length 3 idiv
-      /npixls exch store
-      /rgbindx 0 store
-      0 1 npixls 1 sub {
-        grays exch
-        rgbdata rgbindx       get 20 mul    % Red
-        rgbdata rgbindx 1 add get 32 mul    % Green
-        rgbdata rgbindx 2 add get 12 mul    % Blue
-        add add 64 idiv      % I = .5G + .31R + .18B
-        put
-        /rgbindx rgbindx 3 add store
-      } for
-      grays 0 npixls getinterval
-    } bind def
-
-    % Utility procedure for colorimage operator.
-    % This procedure takes two procedures off the
-    % stack and merges them into a single procedure.
-
-    /mergeprocs { % def
-      dup length
-      3 -1 roll
-      dup
-      length
-      dup
-      5 1 roll
-      3 -1 roll
-      add
-      array cvx
-      dup
-      3 -1 roll
-      0 exch
-      putinterval
-      dup
-      4 2 roll
-      putinterval
-    } bind def
-
-    /colorimage { % def
-      pop pop     % remove 'false 3' operands
-      {colortogray} mergeprocs
-      image
-    } bind def
-  } ifelse          % end of 'false' case
-
-
-
-46 84 8			% dimensions of data
-[46 0 0 -84 0 84]		% mapping matrix
-{currentfile pix readhexstring pop}
-false 3 colorimage
-
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8787c78
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8
-f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8f80000f80000
-f80000c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8f80000f80000c8ccc8
-c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8f80000f80000f80000f80000c8ccc8c8ccc8f80000f80000f80000f80000
-c8ccc8f80000f80000f80000f80000c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8
-c8ccc8f80000f80000c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8f80000f80000c8ccc8
-c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8
-c8ccc8f80000f80000c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8f80000f80000c8ccc8
-c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8
-c8ccc8f80000f80000f80000f80000f80000f80000c8ccc8c8ccc8f80000f80000c8ccc8
-c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8
-c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8f80000f80000c8ccc8
-c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8
-c8ccc8f80000f80000c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8f80000f80000c8ccc8
-c8ccc8c8ccc8f80000f80000c8ccc8f80000c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8f80000f80000f80000f80000f80000
-f80000c8ccc8f80000f80000f80000f80000c8ccc8c8ccc8c8ccc8f80000f80000c8ccc8
-c8ccc8c8ccc8c8ccc8f80000f80000c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8f8f8f8787c78787c78787c78787c78787c78787c78787c78787c78
-787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78
-787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78
-787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78
-f8f8f8f8f8f8f8f8f8787c78787c78787c78787c78787c78787c78787c78787c78787c78
-787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78
-787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78
-787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48484c48484c48484c48
-484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8484c48484c48
-c8ccc8484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48484c48484c48
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8484c48484c48c8ccc8484c48484c48c8ccc8484c48484c48484c48
-c8ccc8484c48484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48484c48484c48484c48
-484c48c8ccc8c8ccc8484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48
-c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8484c48
-484c48c8ccc8c8ccc8484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48
-c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48
-c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8484c48484c48c8ccc8484c48484c48c8ccc8484c48484c48484c48
-c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8
-484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8484c48484c48
-c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8484c48484c48
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48484c48484c48c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8484c48484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8484c48
-484c48c8ccc8c8ccc8484c48484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48484c48484c48
-484c48c8ccc8c8ccc8484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48484c48484c48484c48
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8484c48
-484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8c8ccc8484c48484c48484c48484c48c8ccc8c8ccc8484c48484c48
-c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8484c48484c48c8ccc8
-484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8484c48484c48
-c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8484c48484c48484c48
-c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8484c48
-484c48c8ccc8484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8
-c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8484c48
-484c48c8ccc8484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8
-c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8484c48
-484c48c8ccc8484c48484c48c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8
-c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8484c48
-484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8
-c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48484c48484c48484c48
-c8ccc8c8ccc8c8ccc8c8ccc8484c48484c48484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8
-484c48484c48c8ccc8c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8484c48484c48c8ccc8
-c8ccc8484c48484c48c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8
-c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8c8ccc8787c78787c78
-f8f8f8f8f8f8787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78
-787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78
-787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78
-787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78
-f8f8f8787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78
-787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78
-787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78
-787c78787c78787c78787c78787c78787c78787c78787c78787c78787c78
-
+% Translate for offset
+14.173228 14.173228 translate
+% Translate to begin of first scanline
+0.000000 51.567253 translate
+45.354331 -51.567253 scale
+% Image geometry
+73 83 8
+% Transformation matrix
+[ 73 0 0 83 0 0 ]
+% Strings to hold RGB-samples per scanline
+/rstr 73 string def
+/gstr 73 string def
+/bstr 73 string def
+{currentfile /ASCII85Decode filter /RunLengthDecode filter rstr readstring pop}
+{currentfile /ASCII85Decode filter /RunLengthDecode filter gstr readstring pop}
+{currentfile /ASCII85Decode filter /RunLengthDecode filter bstr readstring pop}
+true 3
+%%BeginData:         6752 ASCII Bytes
+colorimage
+\9!0~>
+\8d$~>
+\9!0~>
+!->^NJ,~>
+!-,RLJ,~>
+!->^NJ,~>
+!->^NJ,~>
+!-,RLJ,~>
+!->^NJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=q<%YVm,n3G!9X4[kiMl'J,~>
+!-.u;q<%YVm,n3G!9X4[kiMl%J,~>
+!-A,=q<%YVm,n3G!9X4[kiMl'J,~>
+!-A,=q<%YVmcOKKr9!qXkiMl'J,~>
+!-.u;q<%YVmcOKKr9!qXkiMl%J,~>
+!-A,=q<%YVmcOKKr9!qXkiMl'J,~>
+!-A,=q<%YVq<%PSrT<tWs5s1Yl/hu(J,~>
+!-.u;q<%YVq<%PSrT<tWs5s1Yl/hu&J,~>
+!-A,=q<%YVq<%PSrT<tWs5s1Yl/hu(J,~>
+!-A,=q<%YVqr[hWroX1[roX1[r9!qXkiMl'J,~>
+!-.u;q<%YVqr[hWroX1[roX1[r9!qXkiMl%J,~>
+!-A,=q<%YVqr[hWroX1[roX1[r9!qXkiMl'J,~>
+!-A,=q<%YVqr[hWroX1[roX1[r9!qXkiMl'J,~>
+!-.u;q<%YVqr[hWroX1[roX1[r9!qXkiMl%J,~>
+!-A,=q<%YVqr[hWroX1[roX1[r9!qXkiMl'J,~>
+!-A,=q<%YVqr[VQroX1[r9!qXkiMl'J,~>
+!-.u;q<%YVqr[VQroX1[r9!qXkiMl%J,~>
+!-A,=q<%YVqr[VQroX1[r9!qXkiMl'J,~>
+!-A,=q<%YVqr[hWpu_PUr9!qXkiMl'J,~>
+!-.u;q<%YVqr[hWpu_PUr9!qXkiMl%J,~>
+!-A,=q<%YVqr[hWpu_PUr9!qXkiMl'J,~>
+!-A,=q<%YVqr[hWroX1[roX1[r9!qX!p0I_lfJ2*J,~>
+!-.u;q<%YVqr[hWroX1[roX1[r9!qX!p0I_lfJ2(J,~>
+!-A,=q<%YVqr[hWroX1[roX1[r9!qX!p0I_lfJ2*J,~>
+!-A,=q<%GPs5s1Yr9!tYqW@bWl/hu(J,~>
+!-.u;q<%GPs5s1Yr9!tYqW@bWl/hu&J,~>
+!-A,=q<%GPs5s1Yr9!tYqW@bWl/hu(J,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=r9!YPcfP4cJ,~>
+!-.u;r9!YPcfP4aJ,~>
+!-A,=r9!YPcfP4cJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=q<%GPrT=(Zo]H,QpZDGToB$%2J,~>
+!-.u;q<%GPrT=(Zo]H,QpZDGToB$%0J,~>
+!-A,=q<%GPrT=(Zo]H,QpZDGToB$%2J,~>
+!-A,=q<%YVr9!tYn)jTLpZDGToB$%2J,~>
+!-.u;q<%YVr9!tYn)jTLpZDGToB$%0J,~>
+!-A,=q<%YVr9!tYn)jTLpZDGToB$%2J,~>
+!-A,=q<%YVr9!tYs5s:\roX1[s5s:\s5s:\s5s:\roX(Xo]?.3J,~>
+!-.u;q<%YVr9!tYs5s:\roX1[s5s:\s5s:\s5s:\roX(Xo]?.1J,~>
+!-A,=q<%YVr9!tYs5s:\roX1[s5s:\s5s:\s5s:\roX(Xo]?.3J,~>
+!-A,=q<%YVr9!tYs5s:\!9X4[!9X1Zs5s4Z!9X7\rT=(ZoB$%2J,~>
+!-.u;q<%YVr9!tYs5s:\!9X4[!9X1Zs5s4Z!9X7\rT=(ZoB$%0J,~>
+!-A,=q<%YVr9!tYs5s:\!9X4[!9X1Zs5s4Z!9X7\rT=(ZoB$%2J,~>
+!-A,=q<%GPrT=(Z!9X4[roX1[s5s:\roX1[rT=(ZoB$%2J,~>
+!-.u;q<%GPrT=(Z!9X4[roX1[s5s:\roX1[rT=(ZoB$%0J,~>
+!-A,=q<%GPrT=(Z!9X4[roX1[s5s:\roX1[rT=(ZoB$%2J,~>
+!-A,=q<%YVroX1[rT=(Z!9X4[roX1[s5s:\roX1[rT=(ZoB$%2J,~>
+!-.u;q<%YVroX1[rT=(Z!9X4[roX1[s5s:\roX1[rT=(ZoB$%0J,~>
+!-A,=q<%YVroX1[rT=(Z!9X4[roX1[s5s:\roX1[rT=(ZoB$%2J,~>
+!-A,=q<%YVr9!tYs5s:\!9X4[roX1[s5s:\roX1[rT=(ZoB$%2J,~>
+!-.u;q<%YVr9!tYs5s:\!9X4[roX1[s5s:\roX1[rT=(ZoB$%0J,~>
+!-A,=q<%YVr9!tYs5s:\!9X4[roX1[s5s:\roX1[rT=(ZoB$%2J,~>
+!-A,=q<%YVr9!tYs5s:\!9X4[!9X1Zs5s:\roX1[rT=(Z!p0I_p>u@5J,~>
+!-.u;q<%YVr9!tYs5s:\!9X4[!9X1Zs5s:\roX1[rT=(Z!p0I_p>u@3J,~>
+!-A,=q<%YVr9!tYs5s:\!9X4[!9X1Zs5s:\roX1[rT=(Z!p0I_p>u@5J,~>
+!-A,=q<%YVr9!tYs5s:\roX1[s5s:\s5s:\roX1[r9!tYo]?.3J,~>
+!-.u;q<%YVr9!tYs5s:\roX1[s5s:\s5s:\roX1[r9!tYo]?.1J,~>
+!-A,=q<%YVr9!tYs5s:\roX1[s5s:\s5s:\roX1[r9!tYo]?.3J,~>
+!-A,=iTC+>iT:,uJ,~>
+!-.u;iTC+>iT:,sJ,~>
+!-A,=iTC+>iT:,uJ,~>
+!-A,=r9!MLrT=%YroX1[iT:,uJ,~>
+!-.u;r9!MLrT=%YroX1[iT:,sJ,~>
+!-A,=r9!MLrT=%YroX1[iT:,uJ,~>
+!-A,=k2uO@hrXosJ,~>
+!-.u;k2uO@hrXoqJ,~>
+!-A,=k2uO@hrXosJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=q<%YVr9!tYdH1FeJ,~>
+!-.u;q<%YVr9!tYdH1FcJ,~>
+!-A,=q<%YVr9!tYdH1FeJ,~>
+!-A,=q<%YVr9!tYdH1FeJ,~>
+!-.u;q<%YVr9!tYdH1FcJ,~>
+!-A,=q<%YVr9!tYdH1FeJ,~>
+!-A,=q<%YVr9!tYs5s:\!9X4[gZAKoJ,~>
+!-.u;q<%YVr9!tYs5s:\!9X4[gZAKmJ,~>
+!-A,=q<%YVr9!tYs5s:\!9X4[gZAKoJ,~>
+!-A,=q<%YVr9!tYs5s7[s5s:\gu\TpJ,~>
+!-.u;q<%YVr9!tYs5s7[s5s:\gu\TnJ,~>
+!-A,=q<%YVr9!tYs5s7[s5s:\gu\TpJ,~>
+!-A,=q<%YVr9!tYs5s:\roX1[gu\TpJ,~>
+!-.u;q<%YVr9!tYs5s:\roX1[gu\TnJ,~>
+!-A,=q<%YVr9!tYs5s:\roX1[gu\TpJ,~>
+!-A,=q<%YVr9!tYs5s:\roX1[gu\TpJ,~>
+!-.u;q<%YVr9!tYs5s:\roX1[gu\TnJ,~>
+!-A,=q<%YVr9!tYs5s:\roX1[gu\TpJ,~>
+!-A,=q<%YVr9!tYs5s:\roX1[gu\TpJ,~>
+!-.u;q<%YVr9!tYs5s:\roX1[gu\TnJ,~>
+!-A,=q<%YVr9!tYs5s:\roX1[gu\TpJ,~>
+!-A,=pu_MT!9X7\rT=%Ys5s:\gu\TpJ,~>
+!-.u;pu_MT!9X7\rT=%Ys5s:\gu\TnJ,~>
+!-A,=pu_MT!9X7\rT=%Ys5s:\gu\TpJ,~>
+!-A,=pu_APrT=(Z!9X4[gZAKoJ,~>
+!-.u;pu_APrT=(Z!9X4[gZAKmJ,~>
+!-A,=pu_APrT=(Z!9X4[gZAKoJ,~>
+!-A,=m,n9If&csjJ,~>
+!-.u;m,n9If&cshJ,~>
+!-A,=m,n9If&csjJ,~>
+!-A,=r9!DIf&csjJ,~>
+!-.u;r9!DIf&cshJ,~>
+!-A,=r9!DIf&csjJ,~>
+!-A,=m,n9If&csjJ,~>
+!-.u;m,n9If&cshJ,~>
+!-A,=m,n9If&csjJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=q<%JQcK5+bJ,~>
+!-.u;q<%JQcK5+`J,~>
+!-A,=q<%JQcK5+bJ,~>
+!-A,=q<%YVroX1[cfP4cJ,~>
+!-.u;q<%YVroX1[cfP4aJ,~>
+!-A,=q<%YVroX1[cfP4cJ,~>
+!-A,=q<%YVr9!tYroX%WroX1[roX.ZroX1[s5s:\!9X4[puVR7J,~>
+!-.u;q<%YVr9!tYroX%WroX1[roX.ZroX1[s5s:\!9X4[puVR5J,~>
+!-A,=q<%YVr9!tYroX%WroX1[roX.ZroX1[s5s:\!9X4[puVR7J,~>
+!-A,=q<%YVr9!tYs5s:\roX1[s5s:\roX.ZroX1[s5s7[s5s:\q;q[8J,~>
+!-.u;q<%YVr9!tYs5s:\roX1[s5s:\roX.ZroX1[s5s7[s5s:\q;q[6J,~>
+!-A,=q<%YVr9!tYs5s:\roX1[s5s:\roX.ZroX1[s5s7[s5s:\q;q[8J,~>
+!-A,=q<%YVr9!tYs5s:\roX1[roX.Z!9X4[!9X7\rT=(ZroX1[q;q[8J,~>
+!-.u;q<%YVr9!tYs5s:\roX1[roX.Z!9X4[!9X7\rT=(ZroX1[q;q[6J,~>
+!-A,=q<%YVr9!tYs5s:\roX1[roX.Z!9X4[!9X7\rT=(ZroX1[q;q[8J,~>
+!-A,=q<%YVr9!tYs5s:\roX1[roX.Z!9X4[!9X7\rT=(ZroX1[q;q[8J,~>
+!-.u;q<%YVr9!tYs5s:\roX1[roX.Z!9X4[!9X7\rT=(ZroX1[q;q[6J,~>
+!-A,=q<%YVr9!tYs5s:\roX1[roX.Z!9X4[!9X7\rT=(ZroX1[q;q[8J,~>
+!-A,=q<%YVr9!tYs5s:\roX1[roX.Z!9X4[!9X7\rT=(ZroX1[q;q[8J,~>
+!-.u;q<%YVr9!tYs5s:\roX1[roX.Z!9X4[!9X7\rT=(ZroX1[q;q[6J,~>
+!-A,=q<%YVr9!tYs5s:\roX1[roX.Z!9X4[!9X7\rT=(ZroX1[q;q[8J,~>
+!-A,=q<%YVroX1[rT=(ZroX1[r9!tYrT=(Zr9!tYroX1[q;q[8J,~>
+!-.u;q<%YVroX1[rT=(ZroX1[r9!tYrT=(Zr9!tYroX1[q;q[6J,~>
+!-A,=q<%YVroX1[rT=(ZroX1[r9!tYrT=(Zr9!tYroX1[q;q[8J,~>
+!-A,=q<%JQqr[_Tqr[kXrT=(Zr9!tYroX1[q;q[8J,~>
+!-.u;q<%JQqr[_Tqr[kXrT=(Zr9!tYroX1[q;q[6J,~>
+!-A,=q<%JQqr[_Tqr[kXrT=(Zr9!tYroX1[q;q[8J,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=r9!MLe)gXgJ,~>
+!-.u;r9!MLe)gXeJ,~>
+!-A,=r9!MLe)gXgJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+!-A,=^?,ERJ,~>
+!-.u;^?,EPJ,~>
+!-A,=^?,ERJ,~>
+%%EndData
 showpage
-
-% stop using temporary dictionary
-end
-
-% restore original state
-origstate restore
-
 %%Trailer
+end
+%%EOF

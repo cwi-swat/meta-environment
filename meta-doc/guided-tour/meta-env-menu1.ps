@@ -1,241 +1,176 @@
-%!PS-Adobe-2.0 EPSF-2.0
-%%Title: /ufs/markvdb/Research/meta/doc/user-manual/meta-env-menu1.ps
-%%Creator: XV Version 3.10a  Rev: 12/29/94 (PNG patch 1.2)  -  by John Bradley
-%%BoundingBox: 95 512 152 540
+%!PS-Adobe-3.0
+%%Creator: GIMP PostScript file plugin V 1.12 by Peter Kirchgessner
+%%Title: /ufs/markvdb/Research/meta-doc/guided-tour/meta-env-menu1.ps
+%%CreationDate: Fri Jul 18 13:06:55 2003
+%%DocumentData: Clean7Bit
+%%LanguageLevel: 2
 %%Pages: 1
-%%DocumentFonts:
+%%BoundingBox: 14 14 83 56
 %%EndComments
+%%BeginProlog
+% Use own dictionary to avoid conflicts
+10 dict begin
 %%EndProlog
-
 %%Page: 1 1
-
-% remember original state
-/origstate save def
-
-% build a temporary dictionary
-20 dict begin
-
-% define string to hold a scanline's worth of data
-/pix 171 string def
-
-% define space for color conversions
-/grays 57 string def  % space for gray scale line
-/npixls 0 def
-/rgbindx 0 def
-
-% lower left corner
-95 512 translate
-
-% size of image (on paper, in 1/72inch coords)
-57.02400 28.00800 scale
-
-% define 'colorimage' if it isn't defined
-%   ('colortogray' and 'mergeprocs' come from xwd2ps
-%     via xgrab)
-/colorimage where   % do we know about 'colorimage'?
-  { pop }           % yes: pop off the 'dict' returned
-  {                 % no:  define one
-    /colortogray {  % define an RGB->I function
-      /rgbdata exch store    % call input 'rgbdata'
-      rgbdata length 3 idiv
-      /npixls exch store
-      /rgbindx 0 store
-      0 1 npixls 1 sub {
-        grays exch
-        rgbdata rgbindx       get 20 mul    % Red
-        rgbdata rgbindx 1 add get 32 mul    % Green
-        rgbdata rgbindx 2 add get 12 mul    % Blue
-        add add 64 idiv      % I = .5G + .31R + .18B
-        put
-        /rgbindx rgbindx 3 add store
-      } for
-      grays 0 npixls getinterval
-    } bind def
-
-    % Utility procedure for colorimage operator.
-    % This procedure takes two procedures off the
-    % stack and merges them into a single procedure.
-
-    /mergeprocs { % def
-      dup length
-      3 -1 roll
-      dup
-      length
-      dup
-      5 1 roll
-      3 -1 roll
-      add
-      array cvx
-      dup
-      3 -1 roll
-      0 exch
-      putinterval
-      dup
-      4 2 roll
-      putinterval
-    } bind def
-
-    /colorimage { % def
-      pop pop     % remove 'false 3' operands
-      {colortogray} mergeprocs
-      image
-    } bind def
-  } ifelse          % end of 'false' case
-
-
-
-57 28 8			% dimensions of data
-[57 0 0 -28 0 28]		% mapping matrix
-{currentfile pix readhexstring pop}
-false 3 colorimage
-
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f57a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f57a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5
-f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f5f57a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5cccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5cccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5cccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5ccccccccccccccccccff0000ff0000ff0000ff0000ff0000
-ff0000ff0000cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5ccccccccccccccccccff0000ff0000ff0000ff0000ff0000
-ff0000ff0000ff0000cccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5ccccccccccccccccccff0000ff0000cccccccccccccccccc
-ccccccff0000ff0000ff0000cccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5ccccccccccccccccccff0000ff0000cccccccccccccccccc
-ccccccccccccff0000ff0000ccccccccccccccccccff0000ff0000ff0000ff0000ff0000
-ccccccccccccccccccff0000ff0000ccccccff0000ff0000ccccccccccccff0000ff0000
-ff0000ff0000ff0000ccccccccccccccccccccccccccccccff0000ff0000ff0000ff0000
-cccccccccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5ccccccccccccccccccff0000ff0000cccccccccccccccccc
-ccccccccccccff0000ff0000ccccccccccccff0000ff0000ff0000ff0000ff0000ff0000
-ff0000ccccccccccccff0000ff0000ff0000ff0000ff0000ccccccff0000ff0000ff0000
-ff0000ff0000ff0000ff0000ccccccccccccccccccff0000ff0000ff0000ff0000ff0000
-ff0000cccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5ccccccccccccccccccff0000ff0000cccccccccccccccccc
-ccccccff0000ff0000ff0000ccccccccccccff0000ff0000ccccccccccccccccccff0000
-ff0000ccccccccccccff0000ff0000ff0000ccccccccccccccccccff0000ff0000cccccc
-ccccccccccccff0000ff0000ccccccccccccff0000ff0000cccccccccccccccccccccccc
-ff0000ff0000cccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5ccccccccccccccccccff0000ff0000ff0000ff0000ff0000
-ff0000ff0000ff0000ccccccccccccccccccccccccccccccccccccccccccff0000ff0000
-ff0000ccccccccccccff0000ff0000ccccccccccccccccccccccccff0000ff0000ff0000
-ff0000ccccccccccccccccccccccccccccccff0000ff0000ff0000ff0000ff0000ff0000
-ff0000ff0000cccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5ccccccccccccccccccff0000ff0000ff0000ff0000ff0000
-ff0000ff0000ccccccccccccccccccccccccccccccff0000ff0000ff0000ff0000ff0000
-ff0000ccccccccccccff0000ff0000ccccccccccccccccccccccccccccccff0000ff0000
-ff0000ff0000ff0000ccccccccccccccccccff0000ff0000ff0000ff0000ff0000ff0000
-ff0000ff0000cccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5ccccccccccccccccccff0000ff0000cccccccccccccccccc
-ccccccccccccccccccccccccccccccccccccff0000ff0000ff0000ccccccccccccff0000
-ff0000ccccccccccccff0000ff0000cccccccccccccccccccccccccccccccccccccccccc
-ccccccff0000ff0000ff0000ccccccccccccff0000ff0000cccccccccccccccccccccccc
-cccccccccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5ccccccccccccccccccff0000ff0000cccccccccccccccccc
-ccccccccccccccccccccccccccccccccccccff0000ff0000ccccccccccccccccccff0000
-ff0000ccccccccccccff0000ff0000ccccccccccccccccccccccccff0000ff0000cccccc
-ccccccccccccff0000ff0000ccccccccccccff0000ff0000ff0000ccccccccccccff0000
-ff0000ff0000cccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5ccccccccccccccccccff0000ff0000cccccccccccccccccc
-ccccccccccccccccccccccccccccccccccccff0000ff0000ff0000ff0000ff0000ff0000
-ff0000ccccccccccccff0000ff0000ccccccccccccccccccccccccff0000ff0000ff0000
-ff0000ff0000ff0000ff0000ccccccccccccccccccff0000ff0000ff0000ff0000ff0000
-ff0000cccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5ccccccccccccccccccff0000ff0000cccccccccccccccccc
-ccccccccccccccccccccccccccccccccccccccccccff0000ff0000ff0000ccccccff0000
-ff0000ff0000ccccccff0000ff0000ccccccccccccccccccccccccccccccff0000ff0000
-ff0000ff0000ff0000ccccccccccccccccccccccccccccccff0000ff0000ff0000ff0000
-cccccccccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5cccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5cccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5cccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5cccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f5cccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-cccccccccccccccccccccccccccccc7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f5f5f5f57a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f5f5f5f57a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f5f5f5f57a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-f5f5f57a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a7a
-
+% Translate for offset
+14.173228 14.173228 translate
+% Translate to begin of first scanline
+0.000000 41.560120 translate
+68.343309 -41.560120 scale
+% Image geometry
+74 45 8
+% Transformation matrix
+[ 74 0 0 45 0 0 ]
+% Strings to hold RGB-samples per scanline
+/rstr 74 string def
+/gstr 74 string def
+/bstr 74 string def
+{currentfile /ASCII85Decode filter /RunLengthDecode filter rstr readstring pop}
+{currentfile /ASCII85Decode filter /RunLengthDecode filter gstr readstring pop}
+{currentfile /ASCII85Decode filter /RunLengthDecode filter bstr readstring pop}
+true 3
+%%BeginData:         3971 ASCII Bytes
+colorimage
+[r['~>
+[rHo~>
+[r['~>
+!->[MJ,~>
+!-,OKJ,~>
+!->[MJ,~>
+!->[MJ,~>
+!-,OKJ,~>
+!->[MJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>r9!hUaQ<J\J,~>
+!-/#<r9!hUaQ<JZJ,~>
+!-A/>r9!hUaQ<J\J,~>
+!-A/>r9""ZrT=+[alWS]J,~>
+!-/#<r9""ZrT=+[alWS[J,~>
+!-A/>r9""ZrT=+[alWS]J,~>
+!-A/>r9""ZrT=+[!9X4[s5s:\"6KR`k5>;Zk555>joC<i~>
+!-/#<r9""ZrT=+[!9X4[s5s:\"6KR`k5>;Zk555>joC6g~>
+!-A/>r9""ZrT=+[!9X4[s5s:\"6KR`k5>;Zk555>joC<i~>
+!-A/>r9""ZrT=%Ys5s=]!9X(Ws5s=]!9X7\s5s=]jQ6H#J,~>
+!-/#<r9""ZrT=%Ys5s=]!9X(Ws5s=]!9X7\s5s=]jQ6H!J,~>
+!-A/>r9""ZrT=%Ys5s=]!9X(Ws5s=]!9X7\s5s=]jQ6H#J,~>
+!-A/>r9!hUr9""Z!9X4[s5s:\rT=(Zs5s=]jQ6H#J,~>
+!-/#<r9!hUr9""Z!9X4[s5s:\rT=(Zs5s=]jQ6H!J,~>
+!-A/>r9!hUr9""Z!9X4[s5s:\rT=(Zs5s=]jQ6H#J,~>
+!-A/>r9""ZqW@\U!9X7\r9!tYs5s.XjQ6H#J,~>
+!-/#<r9""ZqW@\U!9X7\r9!tYs5s.XjQ6H!J,~>
+!-A/>r9""ZqW@\U!9X7\r9!tYs5s.XjQ6H#J,~>
+!-A/>r9""Zqr[nYs5s=]!9X7\qr[kX!9X7\i8t#tJ,~>
+!-/#<r9""Zqr[nYs5s=]!9X7\qr[kX!9X7\i8t#rJ,~>
+!-A/>r9""Zqr[nYs5s=]!9X7\qr[kX!9X7\i8t#tJ,~>
+!-A/>r9""Zqr[nYs5s=]!9X7\roX4\s5s=]!9X7\s5s=]jQ6H#J,~>
+!-/#<r9""Zqr[nYs5s=]!9X7\roX4\s5s=]!9X7\s5s=]jQ6H!J,~>
+!-A/>r9""Zqr[nYs5s=]!9X7\roX4\s5s=]!9X7\s5s=]jQ6H#J,~>
+!-A/>r9""ZqW@bW!9X1ZrT=%YroX+Yj5p?"J,~>
+!-/#<r9""ZqW@bW!9X1ZrT=%YroX+Yj5p>uJ,~>
+!-A/>r9""ZqW@bW!9X1ZrT=%YroX+Yj5p?"J,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>roWqTalWS]J,~>
+!-/#<roWqTalWS[J,~>
+!-A/>roWqTalWS]J,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>rT=+[r9!qXm,n*DkiMl'J,~>
+!-/#<rT=+[r9!qXm,n*DkiMl%J,~>
+!-A/>rT=+[r9!qXm,n*DkiMl'J,~>
+!-A/>rT=+[r9""ZkN;dEjlQQ$J,~>
+!-/#<rT=+[r9""ZkN;dEjlQQ"J,~>
+!-A/>rT=+[r9""ZkN;dEjlQQ$J,~>
+!-A/>r9""Zs5s:\"Qf[ak2uUBroX4\s5s=]s5s=]r9""ZroX4\s5s=]!9X4[roX+YqrRm:J,~>
+!-/#<r9""Zs5s:\"Qf[ak2uUBroX4\s5s=]s5s=]r9""ZroX4\s5s=]!9X4[roX+YqrRm8J,~>
+!-A/>r9""Zs5s:\"Qf[ak2uUBroX4\s5s=]s5s=]r9""ZroX4\s5s=]!9X4[roX+YqrRm:J,~>
+!-A/>r9""Zs5s:\#Nc!djo>DDk5G>fjo>DDjo>DDjo>DZk5PG\k4o#Wk5PD]k5GA\k5PGZjoC<i~>
+!-/#<r9""Zs5s:\#Nc!djo>DDk5G>fjo>DDjo>DDjo>DZk5PG\k4o#Wk5PD]k5GA\k5PGZjoC6g~>
+!-A/>r9""Zs5s:\#Nc!djo>DDk5G>fjo>DDjo>DDjo>DZk5PG\k4o#Wk5PD]k5GA\k5PGZjoC<i~>
+!-A/>r9""Zs5s:\#Nc!djo>DDk5GA\k5PDbjo>DD!!)oYrrE&\r;cl[rrE)]rr<&]rW)u\rrDuZ
+!/l@~>
+!-/#<r9""Zs5s:\#Nc!djo>DDk5GA\k5PDbjo>DD!!)oYrrE&\r;cl[rrE)]rr<&]rW)u\rrDuZ
+!/Z4~>
+!-A/>r9""Zs5s:\#Nc!djo>DDk5GA\k5PDbjo>DD!!)oYrrE&\r;cl[rrE)]rr<&]rW)u\rrDuZ
+!/l@~>
+!-A/>qrS1bk2lXDk2lXDk5#)Xk5PDbjo>DD!!)oYrrE&\rrE#[qZ$WYq>gHU!/l@~>
+!-/#<qrS1bk2lXDk2lXDk5#)Xk5PDbjo>DD!!)oYrrE&\rrE#[qZ$WYq>gHU!/Z4~>
+!-A/>qrS1bk2lXDk2lXDk5#)Xk5PDbjo>DD!!)oYrrE&\rrE#[qZ$WYq>gHU!/l@~>
+!-A/>qr[eVs5s=]!p0I_qW@eX"m,dbjo>DYk5PG\k5PG[k5PGZk5GAUjoC<i~>
+!-/#<qr[eVs5s=]!p0I_qW@eX"m,dbjo>DYk5PG\k5PG[k5PGZk5GAUjoC6g~>
+!-A/>qr[eVs5s=]!p0I_qW@eX"m,dbjo>DYk5PG\k5PG[k5PGZk5GAUjoC<i~>
+!-A/>qW@eXrT=+["Qf[ak2uXCroX4\s5s=]qW@eXroX4\rT=+[s5s=]!9X7\s5s=]r8n!;J,~>
+!-/#<qW@eXrT=+["Qf[ak2uXCroX4\s5s=]qW@eXroX4\rT=+[s5s=]!9X7\s5s=]r8n!9J,~>
+!-A/>qW@eXrT=+["Qf[ak2uXCroX4\s5s=]qW@eXroX4\rT=+[s5s=]!9X7\s5s=]r8n!;J,~>
+!-A/>qW@eXrT=+[s5s7[r9""Zs5s=]qW@eXroX4\r9!qXroX+YqrRm:J,~>
+!-/#<qW@eXrT=+[s5s7[r9""Zs5s=]qW@eXroX4\r9!qXroX+YqrRm8J,~>
+!-A/>qW@eXrT=+[s5s7[r9""Zs5s=]qW@eXroX4\r9!qXroX+YqrRm:J,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>roWqTalWS]J,~>
+!-/#<roWqTalWS[J,~>
+!-A/>roWqTalWS]J,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]]K3PJ,~>
+!-/#<]]K3NJ,~>
+!-A/>]]K3PJ,~>
+!-A/>]8M1~>
+!-/#<]8;%~>
+!-A/>]8M1~>
+!d"DA\r2(~>
+!ce8?\qtq~>
+!d"DA\r2(~>
+%%EndData
 showpage
-
-% stop using temporary dictionary
-end
-
-% restore original state
-origstate restore
-
 %%Trailer
+end
+%%EOF
