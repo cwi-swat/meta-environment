@@ -2,11 +2,35 @@
   $Id$
 */       
 
+process GetText (EditorId : term, Text : str?, Focus : term?, Status : term?) is
+let
+  DirtyFoci    : list
+in
+  snd-msg(get-dirty-focuses(EditorId)) .
+  rec-msg(dirty-focuses(DirtyFoci?)) . 
+  if not-equal(DirtyFoci, []) then
+    Focus := first(DirtyFoci).
+    DirtyFoci := next(DirtyFoci).
+    snd-note(get-focus-text(EditorId, Focus)).
+    (
+      rec-msg(focus-text(EditorId, Text?)) .
+      Status := parse-needed 
+    +
+      /* If the editor suddenly dissappears were done */
+      rec-note(delete-editor(EditorId)) .
+      Text := "" .
+      Status := no-parse-needed
+    )
+  else
+    Text := "" .
+    Status := no-parse-needed
+  fi
+endlet
+
 process ParseFocusses is
 let
   Id           : term,
   Focus        : term,
-  DirtyFoci    : list,
   Text         : str,
   Type         : str,
   ModuleName   : str,
@@ -14,7 +38,8 @@ let
   Nonterminal  : str,
   Tree         : term,
   Errors       : term,
-  ModuleId     : term
+  ModuleId     : term,
+  Status       : term
 in                     
   Id := process-id .     
   (
@@ -28,24 +53,13 @@ in
     else
       Nonterminal := ""
     fi . 
-    snd-msg(get-dirty-focuses(EditorId)) .
-    rec-msg(dirty-focuses(DirtyFoci?)) . 
-    if not-equal(DirtyFoci, []) then
-      Focus := first(DirtyFoci).
-      DirtyFoci := next(DirtyFoci).
-      snd-note(get-focus-text(EditorId, Focus)).
-      (
-        rec-msg(focus-text(EditorId, Text?)).
-        UpdateTextInModuleDb(Type, ModuleName, Text).
-        ParseString(ModuleId, Nonterminal, Text, Tree?, Errors?) .
-        PrepareParseErrorForEditor(ModuleId, EditorId, Focus, Errors) .
-        ProcessTree(ModuleId, EditorId, Focus, Tree) .
-	Tree := no-tree
-      +
-        /* If the editor suddenly dissappears were done */
-        rec-note(delete-editor(EditorId)) .
-        snd-msg(parse-ok(ModuleId))
-      )
+    GetText(EditorId, Text?, Focus?, Status?) .
+    if equal(Status, parse-needed) then
+      UpdateTextInModuleDb(Type, ModuleName, Text).
+      ParseString(ModuleId, Nonterminal, Text, Tree?, Errors?) .
+      PrepareParseErrorForEditor(ModuleId, EditorId, Focus, Errors) .
+      ProcessTree(ModuleId, EditorId, Focus, Tree) .
+      Tree := no-tree
     else
       snd-msg(parse-ok(ModuleId))
     fi .
