@@ -2,10 +2,13 @@
 
 process ProcessEqsTree(Module : str, Tree : term) is
 let
-  NewTree : term
+  NewTree : term,
+  FileName : str,
+  Path : str
 in
   if not-equal(Tree, error-tree) then
-    snd-msg(postprocess-semantics-hook(Module, Tree)) .
+    MDB-AddEquationsPosInfo(Module, Tree, NewTree?) .
+    snd-msg(postprocess-semantics-hook(Module, NewTree)) .
     rec-msg(postprocess-semantics-hook-result(Module, NewTree?)) .
     snd-msg(update-eqs-tree-in-db(Module, tree(NewTree))) .
     NewTree := no-tree .

@@ -716,6 +716,12 @@ process MDB-InvalidateModule(Module : str, Type : term) is
   rec-msg(other-tables-invalidated-hook)
 
 process MDB-AddModulePosInfo(Module : str, In : term , Out : term?) is
+  MDB-AddPosInfo(Module, sdf, In, Out?)
+
+process MDB-AddEquationsPosInfo(Module : str, In : term , Out : term?) is
+  MDB-AddPosInfo(Module, asf, In, Out?)
+
+process MDB-AddPosInfo(Module : str, Type : term, In : term , Out : term?) is
 let
   Path : str,
   FileName : str,
@@ -723,7 +729,7 @@ let
 in
   snd-msg(ts-get-str-value("module-paths", Module)) .
   rec-msg(ts-value(Path?)) .
-  snd-msg(file-extension-hook(sdf)) .
+  snd-msg(file-extension-hook(Type)) .
   rec-msg(file-extension-hook-result(Extension?)) .
   snd-msg(io-get-filename(Path, Module, Extension)) .
   rec-msg(io-filename(FileName?)) .
