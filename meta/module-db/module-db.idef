@@ -141,6 +141,15 @@ snd-do(Mdb, set-file-extensions(SyntaxExt, RulesExt, TermExt)) .
     snd-msg(add-import-not-done(OldName))
   )
 +
+  rec-msg(remove-import-in-db(OldName?, NewName?, Path?)).
+  snd-eval(Mdb, remove-import(OldName, NewName, Path)).
+  (
+    rec-value(Mdb, imports(changed-modules(Modules?),
+                           import-graph(ActualMods?, Pairs?))) .
+    snd-note(import-graph(ActualMods, Pairs)) .
+    snd-msg(remove-import-done(OldName, Modules))
+  )
++
   rec-msg(copy-module-in-db(OldName?, NewName?, Path?)) .
   snd-eval(Mdb, copy-module(OldName, NewName, Path)) .
   (

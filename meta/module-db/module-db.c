@@ -1261,6 +1261,62 @@ ATerm add_import(int cid, char *modName, char *importedModName,
 }
 
 /*}}}  */
+/*{{{  ATerm add_import(int cid, char *oldModuleName, char *newModuleName, */
+
+ATerm remove_import(int cid, char *modName, char *importedModName, char *path)
+		  
+{
+  ATerm oldSdfTree, newSdfTree, import_graph;
+  ATerm moduleName = ATmake("<str>", modName);
+  ATerm importedModuleName;
+  SDF_ModuleId sdfImport;
+  ATermList changedMods;
+  MDB_Entry entry;
+  PT_ParseTree oldParseTree, newParseTree;
+  PT_Tree oldTree, newTree;
+  SDF_Module oldSdfModule, newSdfModule;
+  ATermList unknowns, imports;
+  SDF_ImportList fullImports;
+
+  strip_syntax_ext(importedModName);
+
+  importedModuleName = ATmake("<str>", importedModName);
+  sdfImport = SDFmakeModuleId(importedModName);
+
+  entry = MDB_EntryFromTerm(GetValue(modules_db, moduleName));
+  if (entry) {
+    oldSdfTree   = MDB_getEntrySdfTree(entry);
+    oldParseTree = PT_makeParseTreeFromTerm(oldSdfTree);
+    oldTree      = PT_getParseTreeTree(oldParseTree);
+    oldSdfModule = SDF_makeModuleFromTerm(PT_makeTermFromTree(oldTree));
+    newSdfModule = delete_modulename_from_module(oldSdfModule, sdfImport);
+    newTree      = PT_makeTreeFromTerm(SDF_makeTermFromModule(newSdfModule));
+    newParseTree = PT_setParseTreeTree(oldParseTree, newTree);
+    newSdfTree   = PT_makeTermFromParseTree(newParseTree);
+
+    entry = MDB_setEntrySdfTree(entry, newSdfTree);
+    entry = MDB_setEntryAsfTable(entry, MDB_NONE);
+    entry = MDB_setEntryTrmTable(entry, MDB_NONE);
+    entry = MDB_setEntryAsfTree(entry, MDB_NONE);
+
+    PutValue(modules_db, moduleName, MDB_EntryToTerm(entry));
+
+    imports = SDF_getImports(newSdfModule);
+    fullImports = SDF_getModuleImportsList(newSdfModule);
+    unknowns = replace_imports(moduleName, imports, fullImports);
+
+    reset_trans_db();
+  }
+
+  changedMods = ATinsert(modules_depend_on(moduleName,ATempty), 
+			 moduleName);
+
+  import_graph = calc_import_graph();
+  return ATmake("snd-value(imports(changed-modules([<list>]),<term>))",
+                changedMods, import_graph);
+}
+
+/*}}}  */
 /*{{{  static ATermList select_unknowns(ATermList mods) */
 
 static ATermList select_unknowns(ATermList mods)

@@ -20,6 +20,9 @@ in
   +
     rec-msg(close-module(OldModuleName?)) .
     DoDeleteModule(OldModuleName)
+  +
+    rec-msg(unimport-module(OldModuleName?, NewModuleName?, NewPath?)).
+    DoUnimportModule(OldModuleName, NewModuleName, NewPath)
   ) *
   delta
 endlet
@@ -102,6 +105,25 @@ in
   else tau fi
 endlet
 
+process DoUnimportModule(Mod : str, Import : str, Path : str) is
+let
+  Status : term,
+  Changed : list,
+  RealImport : str
+in
+  Status := success.
+  GetRealModuleName(Import, Path, Status?, RealImport?).
+  if equal(Status, success) then
+    Status := success.
+    RemoveImportInDB(Mod, RealImport, Path, Status?, Changed?).
+    if equal(Status, success) then
+      SaveSdfModules(Changed).
+      SaveAsfSdfModule(Mod)
+    else tau fi
+  else tau fi
+endlet
+
+
 process GetRealModuleName(Name : str, Path : str, Status : term?,
                           RealName : str?)
 is
@@ -175,6 +197,16 @@ is
     Status := import-not-done
   )
 
+process RemoveImportInDB(Mod : str, Import : str, Path : str, Status :term?,
+                         Changed : list?)
+is
+  snd-msg(remove-import-in-db(Mod, Import, Path)) .
+  (
+    rec-msg(remove-import-done(Mod, Changed?))
+  +
+    rec-msg(remove-import-not-done(Mod)).
+    Status := remove-import-not-done
+  )
 
 process CheckExistence(New : str, Status : term?) is
     snd-msg(is-module-in-db(New)) .
