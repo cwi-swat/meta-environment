@@ -27,7 +27,7 @@
 
 extern ATermTable modules_db;
 
-static ATermTable compile_db;
+static ATermList compiled_modules;
 static ATermList modules_to_process; 
 static ATbool compiling  = ATfalse;
 static ATbool reshuffling  = ATfalse;
@@ -148,23 +148,6 @@ static ATermList AFTgetEquationsFunc(ATerm func,ATermList mods)
   return equations;
 }
 
-static void AFTaddSection(ATerm module, ATerm section)
-{
-  ATerm newmodule = GetValue(compile_db,module);
-  ATermList sections = AFgetModuleSections(newmodule);
-  if(!ATisEmpty(sections)) {
-    sections = ATconcat(sections,
-                        ATmakeList2(pattern_asfix_nlws,
-                                    section));
-    newmodule = AFputModuleSections(newmodule,sections);
-  }
-  else
-    newmodule = AFputModuleSections(newmodule,ATmakeList1(section));
-  PutValue(compile_db,module,newmodule);
-}
-
-/*{{{  ATerm unique_new_name(ATerm name) */
-
 static ATerm unique_new_name(ATerm name)
 {
   char *text, *newtext;
@@ -175,12 +158,13 @@ static ATerm unique_new_name(ATerm name)
     newtext = malloc(strlen(text)+16);
     sprintf(newtext,"AUX-%s%d",text,n);
     newname = ATmake("<str>",newtext);
-    while(GetValue(compile_db,newname)) {
+    while (ATindexOf(compiled_modules, newname, 0) >= 0) {
       n++;
       sprintf(newtext,"AUX-%s%d",text,n);
       newname = ATmake("<str>",newtext);
     }
     free(newtext);
+    compiled_modules = ATinsert(compiled_modules, newname);
     return newname;
   }
   else {
@@ -189,34 +173,21 @@ static ATerm unique_new_name(ATerm name)
   }
 }
 
-/*}}}  */          
-
-static ATerm AFTcreateNewModule(ATerm modname)
+static ATerm createNewModuleName(ATerm modname)
 { 
-  ATerm module_name_with_id, extmodname;
-  ATerm orig_mod_name_with_id;
+  return unique_new_name(modname);
+}
 
-  ATerm newmodule = AFinitModule();
-  ATerm newmodname = unique_new_name(modname);
-  
-  module_name_with_id = AFTmakeId(newmodname);
-  orig_mod_name_with_id = AFTmakeId(modname);
+static ATerm extendModuleName(ATerm modname, ATerm newModuleName)
+{ 
+  ATerm module_name_with_id = AFTmakeId(newModuleName);
+  ATerm orig_mod_name_with_id = AFTmakeId(modname);
 
-  extmodname = ATsetAnnotation(module_name_with_id,
+  return ATsetAnnotation(module_name_with_id,
                                ATparse("module-name"),orig_mod_name_with_id);
-  newmodule = AFputModuleName(newmodule,extmodname);
-  PutValue(compile_db,newmodname,newmodule);
-  return newmodname;
 }
 
-static void AFTaddEquations(ATerm module, ATermList eqs)
-{
-  ATerm newmodule = GetValue(compile_db,module);
-  newmodule = AFputModuleEqs(newmodule,eqs);
-  PutValue(compile_db,module,newmodule);
-}
-
-static void AFTwriteAsfixFile(int cid,ATerm modname)
+static void AFTwriteAsfixFile(int cid, ATerm modName, ATermList auxModule)
 {
   char *text, *fname;
   char *path;
@@ -225,20 +196,20 @@ static void AFTwriteAsfixFile(int cid,ATerm modname)
   ATerm oldmod, element;
   ATbool write;
 
-  ATerm amod = GetValue(compile_db,modname);
-
-  if(ATmatch(modname,"<str>",&text)) {
+  if (ATmatch(modName,"<str>", &text)) {
     /* Check whether the C file exists. */
     path = get_output_dir();
     len = strlen(path) + 1 + strlen(text) + strlen(".c");
     fname = malloc(len + 1);
-    if(!fname)
+    if (!fname) {
       ATerror("Not enough memory\n");
+    }
     sprintf(fname, "%s/%s.c", path, text);
     input = fopen(fname,"r");
     if(!input) {
       write = ATtrue;
-    } else {
+    } 
+    else {
       write = ATfalse;
 /* Only close input if we actually opened it. Linux fclose crashes on
    closing NULL
@@ -249,67 +220,69 @@ static void AFTwriteAsfixFile(int cid,ATerm modname)
 
     len = strlen(path) + 1 + strlen(text) + strlen(".asfix");
     fname = malloc(len + 1);
-    if(!fname)
+    if (!fname) {
       ATerror("Not enough memory\n");
+    }
     sprintf(fname, "%s/%s.asfix", path, text);
     /* Check whether it is necessary to generate new C code
      * because of a modified AsFix file. */
     input = fopen(fname,"r");
     if(input) {
       oldmod = ATreadFromFile(input);
-      if(!write)
-        write = !ATisEqual(oldmod,amod);
+      if(!write) {
+        write = !ATisEqual(oldmod,auxModule);
+      }
       fclose(input);
     }
-    else
+    else {
       write = ATtrue;
+    }
     if(write) {
       output = fopen(fname,"w");
       if(!output)
-        ATwarning("Cannot open file %s\n",fname);
+        ATwarning("Cannot open file %s\n", fname);
       else {
-        ATfprintf(output,"%t",amod);
+        ATfprintf(output,"%t", auxModule);
         ATfprintf(output, "\n");
         fclose(output);
       }
       /* write full path name instead of only module name */
-      element = ATmake("snd-event(new-aux-module(<str>,<term>))", text, amod);
-      if(!compiling) {
+      element = ATmake("snd-event(new-aux-module(<str>,<term>))", 
+                       text, auxModule);
+      if (!compiling) {
         compiling = ATtrue;
-        ATBwriteTerm(cid,element);
+        ATBwriteTerm(cid, element);
       }
-      else
+      else {
         modules_to_process = ATappend(modules_to_process,element);
+      }
     }
     free(fname);
   }
-  else
-    ATerror("Illegal module name %t\n", modname);
+  else {
+    ATerror("Illegal module name %t\n", modName);
+  }
 }
 
 /* This function uses the sorts to determine whether there are equations
  * for the lexical functions.
  */
-static void AFTreshuffleLexicalConstructorFunctions(int cid,
-                                             ATerm modname, ATerm newmod,
-                                             ATermList orgmods)
+static ATermList 
+AFTreshuffleLexicalConstructorFunctions(int cid,
+                                        ATerm modname,
+                                        ATermList orgmods)
 {
-  ATerm entry, prod, amod, sort, newsection, newsubsection, newmodname;
-  ATermList sorts, funcs, eqs;
+  ATerm entry, prod, amod, sort, newmodname, extmodname;
+  ATermList sorts, funcs, eqs, newAuxModule, newLexFuncs = ATempty;
 
-  entry = GetValue(modules_db,modname);
+  entry = GetValue(modules_db, modname);
   amod = ATelementAt((ATermList)entry, SYN_LOC);
   sorts = AFTgetSorts(amod); 
   sorts = asfix_filter_layout(sorts);
-  while(!ATisEmpty(sorts)) {
+  while (!ATisEmpty(sorts)) {
     sort = ATgetFirst(sorts);
     funcs = AFTgetLexFuncsSort(sort,orgmods);
-    if(!ATisEmpty(funcs)) {
-      newsubsection = AFinitLexicalSyntaxSection();
-      newsubsection = AFputSectionArgs(newsubsection,funcs);
-      newsection = AFinitExportSection();
-      newsection = AFputSectionArgs(newsection,
-                                    ATmakeList1(newsubsection));
+    if (!ATisEmpty(funcs)) {
       prod = AFTmakeCallerProd(sort);
       eqs = AFTgetEquationsFunc(prod,orgmods);
       if(!ATisEmpty(eqs)) {
@@ -317,20 +290,31 @@ static void AFTreshuffleLexicalConstructorFunctions(int cid,
  * So, a new module has to be created containing these lexical functions
  * and the corresponding equations.
  */
-        newmodname = AFTcreateNewModule(modname);
-        AFTaddSection(newmodname,newsection);
-        AFTaddEquations(newmodname,eqs);
-        AFTwriteAsfixFile(cid,newmodname);
+        newmodname = createNewModuleName(modname);
+        extmodname = extendModuleName(modname, newmodname);
+        newAuxModule = ATmakeList4(extmodname, 
+                                   (ATerm)funcs, 
+                                   (ATerm)ATempty,
+                                   (ATerm)eqs);
+        AFTwriteAsfixFile(cid, newmodname, newAuxModule);
       }
-      else
+      else {
 /* There are no equations for the lexical constructor of sort SORT.
  * So, this function is to be added to the module containing no
  * equations.
  */
-        AFTaddSection(newmod,newsection);
+        if (!ATisEmpty(newLexFuncs)) {
+          newLexFuncs = ATconcat(newLexFuncs,
+                                 ATinsert(funcs, pattern_asfix_nlws));
+        }
+        else {
+          newLexFuncs = funcs;
+        }
+      }
     }
     sorts = ATgetNext(sorts);
   }
+  return newLexFuncs;
 }
 
 /*{{{  static void gen_makefile(ATerm name) */
@@ -342,7 +326,7 @@ static void gen_makefile(ATerm name)
   char buf[1024];
   FILE *output;
   ATerm module;
-  ATermList modules = ATtableKeys(compile_db);  
+  ATermList modules = compiled_modules;  
 
   if(ATmatch(name,"<str>",&text)) {
     path = get_output_dir();
@@ -371,46 +355,60 @@ static void gen_makefile(ATerm name)
 
 void AFTreshuffleModules(int cid, ATermList mods)
 {
-  ATerm entry, mod, id_mod, newmod, newmodname, oldamod, cffunc, flatcffunc;
-  ATermList cffuncs, eqs, orgmods;
-  ATerm newsubsection, newsection;
+  ATerm entry, mod, id_mod, newmod, extmod, newmodname, extmodname, oldamod, 
+        cffunc, flatcffunc;
+  ATermList cffuncs, eqs, orgmods, newAuxModule;
+  ATermList lexFuncs, newCfFuncs = ATempty;
 
+  ATprotect((ATerm *)&compiled_modules); 
+  compiled_modules = ATempty;
   ATprotect((ATerm *)&modules_to_process); 
-  compile_db = CreateValueStore(500,75);
+
   orgmods = mods;
   reshuffling = ATtrue;
   while(!ATisEmpty(mods)) {
     mod = ATgetFirst(mods);
-    newmod = AFTcreateNewModule(mod);
-    AFTreshuffleLexicalConstructorFunctions(cid,mod,newmod,orgmods);
+    newmod = createNewModuleName(mod);
+    extmod = extendModuleName(mod, newmod);
+    newCfFuncs = ATempty;
+    lexFuncs = AFTreshuffleLexicalConstructorFunctions(cid, mod, orgmods);
     entry = GetValue(modules_db,mod);
     oldamod = ATelementAt((ATermList)entry, SYN_LOC);
     cffuncs = AFTgetCFFunctions(oldamod);
     cffuncs = asfix_filter_layout(cffuncs);
-    while(!ATisEmpty(cffuncs)) {
+    while (!ATisEmpty(cffuncs)) {
       cffunc = ATgetFirst(cffuncs);
-      newsubsection = AFinitContextFreeSyntaxSection();
-      newsubsection = AFputSectionArgs(newsubsection,
-                                       ATmakeList1(cffunc));
-      newsection = AFinitExportSection();
-      newsection = AFputSectionArgs(newsection,
-                                    ATmakeList1(newsubsection));
       id_mod = AFTmakeId(mod);
       flatcffunc = AFTflattenSdf2Prod(id_mod,cffunc);
       eqs = AFTgetEquationsFunc(flatcffunc,orgmods);
-      if(!ATisEmpty(eqs)) {
-        newmodname = AFTcreateNewModule(mod);
-        AFTaddSection(newmodname,newsection);
-        AFTaddEquations(newmodname,eqs);
-        AFTwriteAsfixFile(cid,newmodname);
-      } else {
-        AFTaddSection(newmod,newsection);
+      if (!ATisEmpty(eqs)) {
+        newmodname = createNewModuleName(mod);
+        extmodname = extendModuleName(mod, newmodname);
+        newAuxModule = ATmakeList4(extmodname, 
+                                   (ATerm)ATempty, 
+                                   (ATerm)ATmakeList1(cffunc),
+                                   (ATerm)eqs);
+        AFTwriteAsfixFile(cid, newmodname, newAuxModule);
+      }
+      else {
+        if (!ATisEmpty(newCfFuncs)) {
+          newCfFuncs = ATconcat(newCfFuncs,
+                                ATmakeList2(pattern_asfix_nlws, cffunc));
+        }
+        else {
+          newCfFuncs = ATmakeList1(cffunc);
+        }
       }
       cffuncs = ATgetNext(cffuncs);
     }
-    AFTwriteAsfixFile(cid,newmod);
-    while(ATBpeekOne(cid))
+    newAuxModule = ATmakeList4(extmod, 
+                               (ATerm)lexFuncs, 
+                               (ATerm)newCfFuncs,
+                               (ATerm)ATempty);
+    AFTwriteAsfixFile(cid, newmod, newAuxModule);
+    while(ATBpeekOne(cid)) {
       ATBhandleOne(cid);
+    }
     mods = ATgetNext(mods);
   }
   reshuffling = ATfalse;

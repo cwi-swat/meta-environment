@@ -1160,6 +1160,7 @@ int main(int argc, char *argv[])
   PT_initPTApi();
   SDF_initSDFApi();
   ASF_initASFApi();
+  AFinit(argc, argv, &bottomOfStack);
 
 
   cid = ATBconnect(NULL, NULL, -1, module_db_handler);

@@ -22,9 +22,11 @@
 */
 #include <atb-tool.h>
 #include <string.h>
+
 #include <AsFix.h>
 #include "AsFix-access.h"
 #include "deprecated.h"
+
 
 #include <PT-utils.h>
 #include <SDF-utils.h>
@@ -64,6 +66,7 @@ ATermList get_imported_modules(ATerm name);
 
 #define Mtrue (ATerm)ATmakeInt(1)
 #define Mfalse (ATerm)ATmakeInt(0)
+
 void AFinitAsFixPatterns();
 
 extern ATerm pattern_asfix_module;
@@ -85,3 +88,4 @@ extern ATerm pattern_asfix_appl;
 extern ATerm pattern_asfix_list;
 extern ATerm pattern_asfix_lex;
 extern ATerm pattern_asfix_id;
+
