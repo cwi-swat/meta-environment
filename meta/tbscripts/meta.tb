@@ -22,7 +22,6 @@
 #include "in-output.idef"
 #include "open-modules.tb"
 #include "file-creator.tb"
-#include "revert-module.tb"
 #include "module-utils.tb"
 #include "print-module.tb"
 #include "ui.tb"
