@@ -2,4 +2,4 @@
 
 SUBDIRS		= libME utils
 
-EXTRA_DIST	= make_rules reconf program-check.m4
+EXTRA_DIST	= program-check.m4
