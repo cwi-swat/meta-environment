@@ -22,7 +22,7 @@
 
 include ${top_srcdir}/make_rules
 
-SUBDIRS     = config compiler asfix2c-compiler editors graph-browser \
+SUBDIRS     = config editors graph-browser \
               in-output module-db utils tbscripts demo doc  \
               configuration-manager
 

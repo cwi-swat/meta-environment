@@ -25,6 +25,7 @@ aterm=__ATERM__
 asfix=__ASFIX__
 sglr=__SGLR__
 pgen=__PGEN__
+asf=__ASF__
 evaluator=__EVALUATOR__
 toolbus=__TOOLBUS__
 xemacs=__XEMACS__
@@ -34,7 +35,7 @@ prefix=__PREFIX__
 wish=__WISH__
 
 PATH="${prefix}/bin:${aterm}/bin:${asfix}/bin:${sglr}/bin:${pgen}/bin:\
-      ${evaluator}/bin:${toolbus}/bin}:${xemacs}/bin:${PATH}"; 
+      ${asf}/bin:${evaluator}/bin:${toolbus}/bin}:${xemacs}/bin:${PATH}"; 
 export PATH
 
 TCLLIBPATH=${graphviz}/lib; export TCLLIBPATH
@@ -161,4 +162,5 @@ toolbus $xargs ${toolbusdefs} \
    -I${prefix}/share -I${aterm}/share -I${asfix}/share \
    -I${sglr}/share -I${pgen}/share\
    -I${evaluator}/share \
+   -I${asf}/share \
    ${prefix}/share/meta.tb

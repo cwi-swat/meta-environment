@@ -73,6 +73,11 @@ AC_PACKAGE_REQUIRE(evaluator, evaluator,
    [  --with-evaluator=DIR    evaluator is in DIR])
 AC_SUBST(EVALUATOR)
 
+dnl Require asf package
+AC_PACKAGE_REQUIRE(asf, addeqssyntax,
+   [ --with-asf=DIR           asf is in DIR])
+AC_SUBST(ASF)
+
 ASC_SUPPORT='${prefix}'
 dnl Handle --with-asc-support=... argument to configure
 AC_ARG_WITH(asc-support,
@@ -164,11 +169,6 @@ dnl Which files need updating?
 AC_OUTPUT(
    Makefile
    config/Makefile
-   compiler/Makefile
-   compiler/c-source/Makefile
-   compiler/test/Makefile
-   compiler/test/terms/Makefile
-   asfix2c-compiler/Makefile
    graph-browser/Makefile
    graph-browser/graph-browser.tcl
    in-output/Makefile

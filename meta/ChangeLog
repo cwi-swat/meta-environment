@@ -20,6 +20,9 @@
 #
 # $Id$
 
+2001/02/02 (jurgenv@cwi.nl)
+   * Removed compiler and old asfix2c compiler to asf component.
+
 2001/02/01 (mdejonge@cwi.nl)
    * Simplified configure.in by using (meta env specific) m4 macros
    * Improved configuration macros in ./config
