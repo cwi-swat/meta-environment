@@ -153,7 +153,13 @@ ATerm get_all_values(int conn, char *table)
 
 ATerm get_values(int conn, char *table, ATerm keys)
 {
-  return RESULT((ATerm) TS_getValues(table, (ATermList) keys));
+  ATermList values = TS_getValues(table, (ATermList) keys);
+  if (values != NULL) {
+    return RESULT(values);
+  }
+  else {
+    return NO_RESULT;
+  }
 }
 
 /*}}}  */

@@ -125,7 +125,7 @@ in
     fi 
   +
     rec-msg(invalidate-sdf-in-db(Name?)) .
-    snd-msg(ts-remove-value("sdf-tree", Name))
+    MDB-InvalidateEntry(Name, "", DependingModules?)
   +
     rec-msg(update-module-in-db(Name?, SyntaxTree?, sdf)) .
     snd-msg(sm-get-module-id(SyntaxTree)) .
@@ -158,13 +158,8 @@ in
         SyntaxText := "" .
         snd-msg(no-updating-needed)
       else
-        snd-msg(ts-put-str-value("sdf-text", Name, SyntaxText)) .
-        snd-msg(ts-remove-value("sdf-tree", Name)) .
-        snd-msg(ts-put-term-value("import-relations", Name, [])) .
+        MDB-InvalidateEntry(Name, SyntaxText, DependingModules?) .
         SyntaxText := "" .
-        MDB-GetAllDependingModules(Name, DependingModules?) .
-        MDB-InvalidateModule(Name, sdf) .
-        MDB-InvalidateModules(DependingModules, sdf) .
         snd-msg(updating-succeeded(DependingModules))
       fi
     else
@@ -312,9 +307,14 @@ in
   +
     rec-msg(get-modules(ModuleNames?)) .
     snd-msg(ts-get-values("sdf-tree", ModuleNames)) .
-    rec-msg(ts-values(Modules?)) .
-    snd-msg(modules(Modules)) .
-    Modules := []
+    (
+      rec-msg(ts-values(Modules?)) .
+      snd-msg(modules(Modules)) .
+      Modules := []
+    +
+      rec-msg(ts-no-values) .
+      snd-msg(no-modules)
+    )
   +
     rec-msg(get-all-sdf2-definitions(Name?, Type?)) .
     MDB-GetAllImportedModuleNames(Name, ModuleNames?) .
@@ -322,15 +322,20 @@ in
     (
        rec-msg(pre-get-all-sdf2-hook-result(success)) .
        snd-msg(ts-get-values("sdf-tree", ModuleNames)) .
-       rec-msg(ts-values(Modules?)) .
-       snd-msg(sm-make-sdf-definition(Modules)) .
-       Modules := [] .
        (
-         rec-msg(sm-sdf-definition(Syntax?)) .
-         snd-msg(syntax(Syntax)) .
-         Syntax := no-tree
+         rec-msg(ts-values(Modules?)) .
+         snd-msg(sm-make-sdf-definition(Modules)) .
+         Modules := [] .
+         (
+           rec-msg(sm-sdf-definition(Syntax?)) .
+           snd-msg(syntax(Syntax)) .
+           Syntax := no-tree
+         +
+           rec-msg(sm-no-sdf-definition) .
+           snd-msg(no-syntax("syntax incomplete"))
+         )
        +
-         rec-msg(sm-no-sdf-definition) .
+         rec-msg(ts-no-values) .
          snd-msg(no-syntax("syntax incomplete"))
        )
      +
@@ -752,3 +757,11 @@ in
     ModuleName := FileName
   )
 endlet
+
+process MDB-InvalidateEntry(Name : str, Text : str, DependingModules : list?) is
+  snd-msg(ts-put-str-value("sdf-text", Name, Text)) .
+  snd-msg(ts-remove-value("sdf-tree", Name)) .
+  snd-msg(ts-put-term-value("import-relations", Name, [])) .
+  MDB-GetAllDependingModules(Name, DependingModules?) .
+  MDB-InvalidateModule(Name, sdf) .
+  MDB-InvalidateModules(DependingModules, sdf)

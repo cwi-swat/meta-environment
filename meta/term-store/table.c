@@ -82,6 +82,9 @@ ATermList T_getValues(Table table, ATermList keys)
     if (value != NULL) {
       values = ATinsert(values, value);
     }
+    else {
+      return NULL;
+    }
   }
 
   return values;
