@@ -1,3 +1,6 @@
+2001/12/14 (jurgenv@cwi.nl)
+ * Added experimental support for accumulating transformers to the compiler.
+
 2001/12/13 (jurgenv@cwi.nl)
  * Added support for traversal functions in the input term of a spec.
  * Added some test files for this.
