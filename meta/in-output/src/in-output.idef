@@ -109,4 +109,4 @@ in
   delta
 endlet
 
-tool in-output is { command = "memprof in-output" }
+tool in-output is { command = "in-output" }
