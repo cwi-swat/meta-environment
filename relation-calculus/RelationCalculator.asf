@@ -10,8 +10,8 @@
 %% Get value of type Elem/Bag/Rel of variable
 
 [EV1]   E   = value(Var, Store) ===>  elm-value(Var, Store) = E
-[BV1]   Bag = value(Var, Store) ===>  bag-value(Var, Store) = Bag
-[RV1]   Rel = value(Var, Store) ===>  rel-value(Var, Store) = Rel
+[BV1]   #Bag = value(Var, Store) ===>  bag-value(Var, Store) = #Bag
+[RV1]   #Rel = value(Var, Store) ===>  rel-value(Var, Store) = #Rel
 
 %% Assign value to variable
 
@@ -30,14 +30,14 @@
 
 %% Extend a relation
 
-[ER1]  extend-rel(Var, Rel, [<Var, Val>, VPair*]) = [<Var, apply(Rel union Val)>, VPair*]
+[ER1]  extend-rel(Var, #Rel, [<Var, Val>, VPair*]) = [<Var, apply(#Rel union Val)>, VPair*]
 
 [ER2]  Var != Var', 
-       [VPair*'] = extend-rel(Var, Rel, [VPair*])
+       [VPair*'] = extend-rel(Var, #Rel, [VPair*])
        ===============================================================
-       extend-rel(Var, Rel, [<Var', Val>, VPair*]) = [<Var', Val>, VPair*']
+       extend-rel(Var, #Rel, [<Var', Val>, VPair*]) = [<Var', Val>, VPair*']
 
-[ER3]  extend-rel(Var, Rel, []) = [< Var, Rel >]
+[ER3]  extend-rel(Var, #Rel, []) = [< Var, #Rel >]
 
 %%---- if on VALUEs
 
@@ -56,11 +56,11 @@
 
 [EVE]  E = evalx(Exp, Store)       ===> evale(Exp, Store) = E
 
-[EVB1] Bag = evalx(Exp, Store)     ===> evalb(Exp, Store) = Bag
+[EVB1] #Bag = evalx(Exp, Store)     ===> evalb(Exp, Store) = #Bag
 
 [EVB2] *empty* = evalx(Exp, Store) ===> evalb(Exp, Store) = {}
 
-[EVR1] Rel = evalx(Exp, Store)     ===> evalr(Exp, Store) = Rel
+[EVR1] #Rel = evalx(Exp, Store)     ===> evalr(Exp, Store) = #Rel
 
 [EVR1] *empty* = evalx(Exp, Store) ===> evalr(Exp, Store) = {}
 
@@ -73,13 +73,15 @@
 
 %% ---- Eval statements
 
-[S1]  eval-rscript(def Var = Exp, Store) = assign(Var, evalx(Exp, Store), Store)
+[S1]  eval-rscript(Etype Var, Store) = Store
 
-[S2]  eval-rscript(fun Var1(Var2) = Exp, Store) = assign(Var1, <Var2, Exp>, Store)
+[S2]  eval-rscript(Etype Var = Exp, Store) = assign(Var, evalx(Exp, Store), Store)
 
-[S3]  eval-rscript(fun Var1(Var2, Var3) = Exp, Store) = assign(Var1, <Var2, Var3, Exp>, Store)
+[S3]  eval-rscript(Etype1 Var1(Etype2 Var2) = Exp, Store) = assign(Var1, <Var2, Exp>, Store)
 
-[S4]  eval-rscript(fun Var1(Var2, Var3, Var4) = Exp, Store) = assign(Var1, <Var2, Var3, Var4, Exp>, Store)
+[S4]  eval-rscript(Etype1 Var1(Etype2 Var2, Etype3 Var3) = Exp, Store) = assign(Var1, <Var2, Var3, Exp>, Store)
+
+[S5]  eval-rscript(Etype1 Var1(Etype2 Var2, Etype3 Var3, Etype4 Var4) = Exp, Store) = assign(Var1, <Var2, Var3, Var4, Exp>, Store)
 
 
 %% ---- The main evaluation function evalx
@@ -98,31 +100,36 @@
 
 %% ---- Eval other predicates
 
+[EL1] evalx(Exp1 elem Exp2, Store) = apply(evalx(Exp1, Store) elem evalx(Exp2, Store))
+
+[EL2]  apply(E elem #Bag) = elem(E, #Bag)
+[EL3]  apply(<E1, E2> elem #Rel) = elem(<E1, E2>, #Rel)
+
 [EQ1]  evalx(Exp1 == Exp2, Store) = apply(evalx(Exp1, Store) == evalx(Exp2, Store))
 
-[EQ2]  apply(Bag1 == Bag2) = Bag1 == Bag2
-[EQ3]  apply(Rel1 == Rel2) = Rel1 == Rel2
+[EQ2]  apply(#Bag1 == #Bag2) = equal(#Bag1, #Bag2)
+[EQ3]  apply(#Rel1 == #Rel2) = equal(#Rel1, #Rel2)
 [EQ4]  apply(E1   == E2)   = equal(E1, E2)
 
 [LE1]  evalx(Exp1 <= Exp2, Store) = apply(evalx(Exp1, Store) <= evalx(Exp2, Store))
 
-[LE2]  apply(Bag1 <= Bag2) = Bag1 <= Bag2
-[LE3]  apply(Rel1 <= Rel2) = Rel1 <= Rel2
+[LE2]  apply(#Bag1 <= #Bag2) = subset(#Bag1, #Bag2)
+[LE3]  apply(#Rel1 <= #Rel2) = subset(#Rel1,  #Rel2)
 
 [LT1]  evalx(Exp1 < Exp2, Store) = apply(evalx(Exp1, Store) < evalx(Exp2, Store))
 
-[LT2]  apply(Bag1 < Bag2) = Bag1 < Bag2
-[LT3]  apply(Rel1 < Rel2) = Rel1 < Rel2
+[LT2]  apply(#Bag1 < #Bag2) = strict-subset(#Bag1, #Bag2)
+[LT3]  apply(#Rel1 < #Rel2) = strict-subset(#Rel1,  #Rel2)
 
 [GE1]  evalx(Exp1 >= Exp2, Store) = apply(evalx(Exp1, Store) >= evalx(Exp2, Store))
 
-[GE2]  apply(Bag1 >= Bag2) = Bag1 >= Bag2
-[GE3]  apply(Rel1 >= Rel2) = Rel1 >= Rel2
+[GE2]  apply(#Bag1 >= #Bag2) = superset(#Bag1,  #Bag2)
+[GE3]  apply(#Rel1 >= #Rel2) = superset(#Rel1, #Rel2)
 
 [GT1]  evalx(Exp1 > Exp2, Store) = apply(evalx(Exp1, Store) > evalx(Exp2, Store))
 
-[GT2]  apply(Bag1 > Bag2) = Bag1 > Bag2
-[GT3]  apply(Rel1 > Rel2) = Rel1 > Rel2
+[GT2]  apply(#Bag1 > #Bag2) = strict-superset(#Bag1, #Bag2)
+[GT3]  apply(#Rel1 > #Rel2) = strict-superset(#Rel1, #Rel2)
 
 %% ---- Eval Elements
 
@@ -141,7 +148,7 @@
 
 %% ---- Eval bags
 
-[EB1]  evalx('Bag, Store) = Bag
+[EB1]  evalx('#Bag, Store) = #Bag
 
 [EB2]  E = evale(Exp, Store), {E+} = evalb({Exp+}, Store)
        ===================================================
@@ -153,7 +160,7 @@
 
 %% ---- Eval relations
 
-[ER1] evalx('Rel, Store)  = Rel
+[ER1] evalx('#Rel, Store)  = #Rel
 
 [ER2] E1 = evale(Exp1, Store), E2 = evale(Exp2, Store),
       evalr({Texp+}, Store) = {Tuple+}
@@ -170,66 +177,70 @@
        ====================================================
        evalx(Exp1 union Exp2, Store) = apply(Val1 union Val2)
 
-[UN2]  apply(Bag1 union Bag2)   = union(Bag1, Bag2)
-[UN3]  apply(*empty* union Bag) = Bag 
-[UN4]  apply(Bag union *empty*) = Bag
+[UN2]  apply(#Bag1 union #Bag2)   = union(#Bag1, #Bag2)
+[UN3]  apply(*empty* union #Bag) = #Bag 
+[UN4]  apply(#Bag union *empty*) = #Bag
 [UN5]  apply(E union *empty*)   = E
 [UN6]  apply(*empty* union E)   = E
 [UN7]  apply(E1 union E2)       = union({E1}, {E2})
-[UN8]  apply(E union Bag)       = union({E}, Bag)
-[UN9]  apply(Bag union E)       = union(Bag, {E})
+[UN8]  apply(E union #Bag)       = union({E}, #Bag)
+[UN9]  apply(#Bag union E)       = union(#Bag, {E})
 
-[UN10] apply(Rel1 union Rel2)     = union(Rel1, Rel2)
-[UN11] apply(*empty* union Rel)   = Rel
-[UN12] apply(Rel union *empty*)   = Rel
+[UN10] apply(#Rel1 union #Rel2)     = union(#Rel1, #Rel2)
+[UN11] apply(*empty* union #Rel)   = #Rel
+[UN12] apply(#Rel union *empty*)   = #Rel
 [UN13] apply(Tuple union *empty*) = Tuple
 [UN14] apply(*empty* union Tuple) = Tuple
 [UN15] apply(Tuple1 union Tuple2) = union({Tuple1}, {Tuple2})
-[UN16] apply(Tuple union Rel)     = union({Tuple}, Rel)
-[UN17] apply(Rel union Tuple)     = union(Rel, {Tuple})
+[UN16] apply(Tuple union #Rel)     = union({Tuple}, #Rel)
+[UN17] apply(#Rel union Tuple)     = union(#Rel, {Tuple})
 
 [IN1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
        ====================================================
        evalx(Exp1 inter Exp2, Store) = apply(Val1 inter Val2)
 
-[IN2]  apply(Bag1 inter Bag2) = inter(Bag1, Bag2)
-[IN3]  apply(Rel1 inter Rel2) = inter(Rel1,  Rel2)
+[IN2]  apply(#Bag1 inter #Bag2) = inter(#Bag1, #Bag2)
+[IN3]  apply(#Rel1 inter #Rel2) = inter(#Rel1,  #Rel2)
 
 [DF1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
        ====================================================
        evalx(Exp1 \  Exp2, Store) = apply(Val1 \ Val2)
 
-[DF2]  apply(Bag1 \ Bag2) = diff(Bag1, Bag2)
-[DF3]  apply(Rel1 \ Rel2) = diff(Rel1, Rel2)
+[DF2]  apply(#Bag1 \ #Bag2) = diff(#Bag1, #Bag2)
+[DF3]  apply(#Rel1 \ #Rel2) = diff(#Rel1, #Rel2)
 
 [CM1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
        ====================================================
        evalx(Exp1 o  Exp2, Store) = apply(Val1 o Val2)
 
-[CM2]  apply(Rel1 o Rel2) = compose(Rel1, Rel2)
+[CM2]  apply(#Rel1 o #Rel2) = compose(#Rel1, #Rel2)
 
 [CP1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
        ====================================================
        evalx(Exp1 x  Exp2, Store) = apply(Val1 x Val2)
 
-[CP2]  apply(Bag1 x Bag2) = product(Bag1, Bag2)
+[CP2]  apply(#Bag1 x #Bag2) = product(#Bag1, #Bag2)
+[CP3]  apply(E x #Bag)     = product({E}, #Bag)
+[CP4]  apply(#Bag x E)     = product(#Bag, {E})
+[CP5]  apply(E1 x E2)     = product({E1}, {E2})
+
 
 [PJ1]  Val1 = evalx(Exp1, Store), Val2 = evalx(Exp2, Store)
        ====================================================
        evalx(Exp1 .  Exp2, Store) = apply(Val1 . Val2)
 
-[PJ2]  apply(Rel . E)   = Rel . E
-[PJ3]  apply(Rel . Bag) = Rel . Bag
-[PJ4]  apply(E . Rel)   = E . Rel
-[PJ5]  apply(Bag . Rel) = Bag . Rel
+[PJ2]  apply(#Rel . E)   = #Rel . E
+[PJ3]  apply(#Rel . #Bag) = #Rel . #Bag
+[PJ4]  apply(E . #Rel)   = E . #Rel
+[PJ5]  apply(#Bag . #Rel) = #Bag . #Rel
 
-[TC1] Rel = evalr(Exp, Store)
+[TC1] #Rel = evalr(Exp, Store)
       ===================================================
-      evalx(Exp +, Store) = Rel +
+      evalx(Exp +, Store) = #Rel +
 
-[TC2] Rel = evalr(Exp, Store)
+[TC2] #Rel = evalr(Exp, Store)
        ===================================================
-       evalx(Exp *, Store) = Rel *
+       evalx(Exp *, Store) = #Rel *
 
 %% ---- Eval bag and relation formers
 
@@ -243,15 +254,15 @@
 
 %% ---- Auxiliary functions for bag and relation formers
 
-[GF1]  Bag = evalb(Exp, Store),
+[GF1]  #Bag = evalb(Exp, Store),
        get_from(From*, Store) = [Gen*]
        ==================================================
-       get_from(Var in Exp, From*, Store) = [gen(Var, Bag, Bag, true), Gen*]
+       get_from(Var in Exp, From*, Store) = [gen(Var, #Bag, #Bag, true), Gen*]
 
-[GF2]  Rel = evalr(Exp, Store),
+[GF2]  #Rel = evalr(Exp, Store),
        get_from(From*, Store) = [Gen*]
        ==================================================
-       get_from(<Var1, Var2> in Exp, From*, Store) = [gen(Var1, Var2, Rel, Rel, true), Gen*]
+       get_from(<Var1, Var2> in Exp, From*, Store) = [gen(Var1, Var2, #Rel, #Rel, true), Gen*]
 
 [GF3] get_from( , Store) = []
 
@@ -272,26 +283,26 @@
          valformer(Gens', Val, Exp1, Store, Exp2)
        fi
 
-[HM1]  has_more([gen(Var, Bag1, Bag2, Bool), Gen*]) = Bool | has_more([Gen*])
+[HM1]  has_more([gen(Var, #Bag1, #Bag2, Bool), Gen*]) = Bool | has_more([Gen*])
 
-[HM2]  has_more([gen(Var1, Var2, Rel1, Rel2, Bool), Gen*]) =  Bool | has_more([Gen*])
+[HM2]  has_more([gen(Var1, Var2, #Rel1, #Rel2, Bool), Gen*]) =  Bool | has_more([Gen*])
 
 [default-HM] 
       has_more([Gen*]) = false
 
 [GN1] get_next([Gen*]) = [Gen*']
       ====================================================
-      get_next([gen(Var, {E}, Bag, Bool), Gen*]) = [gen(Var, Bag, Bag, false), Gen*']
+      get_next([gen(Var, {E}, #Bag, Bool), Gen*]) = [gen(Var, #Bag, #Bag, false), Gen*']
 
-[GN2] get_next([gen(Var, {E, E+}, Bag, Bool), Gen*]) = [gen(Var, {E+}, Bag, true), Gen*]
+[GN2] get_next([gen(Var, {E, E+}, #Bag, Bool), Gen*]) = [gen(Var, {E+}, #Bag, true), Gen*]
 
 [GN3] get_next([Gen*]) = [Gen*']
       ====================================================
-      get_next([gen(Var1, Var2, {Tuple}, Rel, Bool), Gen*]) =
-      [gen(Var1, Var2, Rel, Rel,false), Gen*']
+      get_next([gen(Var1, Var2, {Tuple}, #Rel, Bool), Gen*]) =
+      [gen(Var1, Var2, #Rel, #Rel,false), Gen*']
 
-[GN4] get_next([gen(Var1, Var2, {Tuple, Tuple+}, Rel, Bool), Gen*]) =
-      [gen(Var1, Var2, {Tuple+}, Rel, true), Gen*]
+[GN4] get_next([gen(Var1, Var2, {Tuple, Tuple+}, #Rel, Bool), Gen*]) =
+      [gen(Var1, Var2, {Tuple+}, #Rel, true), Gen*]
 
 [GN5] get_next([]) = []
 
@@ -299,14 +310,14 @@
 
 [GC2] Store' = assign(Var, E, Store)
       ====================================================
-      get_cur([gen(Var, {E, E*}, Bag, Bool), Gen*], Store) = get_cur([Gen*], Store')
+      get_cur([gen(Var, {E, E*}, #Bag, Bool), Gen*], Store) = get_cur([Gen*], Store')
 
-[GC3] get_cur([gen(Var1, Var2, {}, Rel, Bool), Gen*], Store) = get_cur([Gen*], Store)
+[GC3] get_cur([gen(Var1, Var2, {}, #Rel, Bool), Gen*], Store) = get_cur([Gen*], Store)
 
 [GC4] Store' = assign(Var1, E1, Store),
       Store'' = assign(Var2, E2, Store')
       ====================================================
-      get_cur([gen(Var1, Var2, {<E1, E2>, Tuple*}, Rel, Bool), Gen*], Store) =
+      get_cur([gen(Var1, Var2, {<E1, E2>, Tuple*}, #Rel, Bool), Gen*], Store) =
       get_cur([Gen*], Store'')
 
 [GC5] get_cur([], Store) = Store
@@ -322,37 +333,37 @@
         ====================================================
 	evalx(Var1(Exp1), Store) = evalx(Exp2, Store')
 
-[Fid]   Bag  = evalb(Exp, Store)
+[Fid]   #Bag  = evalb(Exp, Store)
         ====================================================
-        evalx(id(Exp), Store) = id(Bag)
+        evalx(id(Exp), Store) = id(#Bag)
 
-[Fdom]  Rel = evalr(Exp, Store)
+[Fdom]  #Rel = evalr(Exp, Store)
         ====================================================
-        evalx(domain(Exp), Store) = domain(Rel)
+        evalx(domain(Exp), Store) = domain(#Rel)
 
-[Fran]  Rel = evalr(Exp, Store)
+[Fran]  #Rel = evalr(Exp, Store)
         ====================================================
-        evalx(range(Exp), Store) = range(Rel)
+        evalx(range(Exp), Store) = range(#Rel)
 
-[Fcar]  Rel = evalr(Exp, Store)
+[Fcar]  #Rel = evalr(Exp, Store)
         ====================================================
-        evalx(carrier(Exp), Store) = carrier(Rel)
+        evalx(carrier(Exp), Store) = carrier(#Rel)
    
-[Ftop]  Rel = evalr(Exp, Store)
+[Ftop]  #Rel = evalr(Exp, Store)
         ====================================================
-        evalx(top(Exp), Store) = top(Rel)
+        evalx(top(Exp), Store) = top(#Rel)
 
-[Fbot]  Rel = evalr(Exp, Store)
+[Fbot]  #Rel = evalr(Exp, Store)
         ====================================================
-        evalx(bottom(Exp), Store) = bottom(Rel)
+        evalx(bottom(Exp), Store) = bottom(#Rel)
 
-[Finv]  Rel = evalr(Exp, Store)
+[Finv]  #Rel = evalr(Exp, Store)
         ===================================================
-        evalx(inv(Exp), Store) = inv(Rel)
+        evalx(inv(Exp), Store) = inv(#Rel)
 
-[Fcmp]  Rel = evalr(Exp, Store)
+[Fcmp]  #Rel = evalr(Exp, Store)
         ===================================================
-        evalx(compl(Exp), Store) = compl(Rel)
+        evalx(compl(Exp), Store) = compl(#Rel)
 
 %% ---- FUN ( EXP , EXP )  -> EXP
 
@@ -366,41 +377,35 @@
         ==================================================
 	evalx(Var(Exp1, Exp2), Store) = evalx(Exp3, Store'')
 
-%%      fun domR(REL, Bag) = { <$x, $y> in REL | $x in Bag | {<$x, $y}>}
+%%      fun domR(REL, #Bag) = { <$x, $y> in REL | $x in #Bag | {<$x, $y}>}
 
-[RdomR] Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
+[RdomR] #Rel = evalr(Exp1, Store), #Bag = evalb(Exp2, Store)
         ===================================================
-        evalx(domR(Exp1, Exp2), Store) = domR(Rel, Bag)
+        evalx(domR(Exp1, Exp2), Store) = domR(#Rel, #Bag)
 
-[FranR] Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
+[FranR] #Rel = evalr(Exp1, Store), #Bag = evalb(Exp2, Store)
         ===================================================
-        evalx(ranR(Exp1, Exp2), Store) = ranR(Rel, Bag)
+        evalx(ranR(Exp1, Exp2), Store) = ranR(#Rel, #Bag)
 
-[FcarR] Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
+[FcarR] #Rel = evalr(Exp1, Store), #Bag = evalb(Exp2, Store)
         ====================================================
-        evalx(carR(Exp1, Exp2), Store) = carR(Rel, Bag)
+        evalx(carR(Exp1, Exp2), Store) = carR(#Rel, #Bag)
 
-[FdomX] Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
+[FdomX] #Rel = evalr(Exp1, Store), #Bag = evalb(Exp2, Store)
         ====================================================
-        evalx(domX(Exp1, Exp2), Store) = domX(Rel, Bag)
+        evalx(domX(Exp1, Exp2), Store) = domX(#Rel, #Bag)
 
-[FranX] Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
+[FranX] #Rel = evalr(Exp1, Store), #Bag = evalb(Exp2, Store)
         ====================================================
-        evalx(ranX(Exp1, Exp2), Store) = ranX(Rel, Bag)
+        evalx(ranX(Exp1, Exp2), Store) = ranX(#Rel, #Bag)
 
-[FcarX] Rel = evalr(Exp1, Store), Bag = evalb(Exp2, Store)
+[FcarX] #Rel = evalr(Exp1, Store), #Bag = evalb(Exp2, Store)
         ====================================================
-        evalx(carX(Exp1, Exp2), Store) = carX(Rel, Bag)
+        evalx(carX(Exp1, Exp2), Store) = carX(#Rel, #Bag)
 
-[Felm1]  E = evale(Exp1, Store), Bag = evalb(Exp2, Store)
-        ====================================================
-        evalx(elem(Exp1, Exp2), Store) = elem(E, Bag)
-
-%% Note elem(Tuple, Rel)
-
-[Fcls1] Bag = evalb(Exp1, Store),  Rel = evalr(Exp2, Store)
+[Fcls1] #Bag = evalb(Exp1, Store),  #Rel = evalr(Exp2, Store)
         ==================================================== 
-        evalx(closure(Exp1, Exp2), Store) =  closure(Bag, Rel)
+        evalx(closure(Exp1, Exp2), Store) =  closure(#Bag, #Rel)
 
 %% ---- FUN ( EXP , EXP , EXP)  -> EXP
 
@@ -416,12 +421,12 @@
         ==================================================
 	evalx(Var(Exp1, Exp2, Exp3), Store) = evalx(Exp4, Store''')
 
-[Fdms]  Rel1 = evalr(Exp1, Store),
-        Rel2 = evalr(Exp2, Store),
-        Rel3 = evalr(Exp3, Store)
+[Fdms]  #Rel1 = evalr(Exp1, Store),
+        #Rel2 = evalr(Exp2, Store),
+        #Rel3 = evalr(Exp3, Store)
         ================================================= 
         evalx(dominators(Exp1, Exp2, Exp3), Store) =
-        dominators(Rel1, Rel2, Rel3)
+        dominators(#Rel1, #Rel2, #Rel3)
 
 
 

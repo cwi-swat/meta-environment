@@ -3,15 +3,21 @@ equations
 [an-1] extractRelations(Program) = Rstore,
        undefined-query(Rstore) = Rstore'
        =========================================================
-       undefinedVars(Program) = convertl(rel-value(UNDEF, Rstore'))
+       undefinedVars(Program) = convertl(rel-value(UNINIT, Rstore'))
 
 
 [uq-1] undefined-query(Rstore) =
        eval-rscript(
-      	def PRED   = inv(SUCC)
-        fun reaches_root(R) = elem(ROOT, range(R))
-        fun get_stat(N) =  domR(OCCURS, {N})
-        def UNDEF = { <V, N> in USES | reaches_root(dominators(get_stat(N), DEFS, PRED)) },
+        node ROOT
+        rel[node,node] PRED
+        rel[node,node] CONTAINS
+        rel[node,id] USES
+        rel[node,id] DEFS
+
+        bag[node] get_stat(node N) = CONTAINS . N
+        rel[node,id] UNINIT = { <N, V> in USES | (ROOT x get_stat(N)) <= carX(PRED, DEFS . V)+ }
+
+,
         Rstore
        )
 

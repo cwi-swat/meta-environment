@@ -8,13 +8,16 @@ imports MyPosInfo[PICO-ID]
 imports ListItems
 
 exports
-  sorts NodeId Item
+  sorts NodeId Item ItemType
 
   context-free syntax
      Area		-> NodeId
      PICO-ID | NodeId   -> Item
+     "id"               -> ItemType {prefer}
+     "node"             -> ItemType {prefer}
 
-imports RelationCalculator[Item]
+imports RelationCalculator[Item ItemType]
+imports RelationChecker[Item ItemType]
 
 exports
   context-free syntax
@@ -22,7 +25,7 @@ exports
       get-first({STATEMENT ";"}*)                  -> NodeId
       get-last({STATEMENT ";"}*)                   -> Bag[[Item]]
 
-      add-succ(Rel[[Item]], RSTORE)                -> RSTORE
+      add-pred(Rel[[Item]], RSTORE)                -> RSTORE
       add-last({STATEMENT ";"}*, NodeId, RSTORE)   -> RSTORE
 
       extract(PROGRAM, RSTORE)                     -> RSTORE {traversal(accu, bottom-up, continue)}
@@ -34,7 +37,7 @@ exports
       extractRelations(PROGRAM)                    -> RSTORE
 
       convertl(Rel[[Item]])                        -> List
-      convert(PICO-ID # Area)                      -> ListItem
+      convert(Area # PICO-ID)                      -> ListItem
       id2str(PICO-ID)		 	           -> String
       rootNode					   -> Area
 
