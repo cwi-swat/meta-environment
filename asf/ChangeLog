@@ -1,4 +1,10 @@
 2001/11/21 (jurgen@cwi.nl)
+ * Fixed a bug in the compiler. Functions with list arguments were not
+   compiled correctly, resulting in core dumps.
+ * Bootstrapped compiler and regenerated addeqssyntax.
+ * Bumped version of asfc to 2.2
+
+2001/11/21 (jurgen@cwi.nl)
  * Bumped to 1.2.1
  * Fixed a (part of a) serious bug in the list matching code of asfe concerning 
    list separators.
