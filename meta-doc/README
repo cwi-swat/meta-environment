@@ -1,4 +1,9 @@
 
 This package contains the user-manual of the ASF+SDF Meta-Environment. 
 
-The distributed package only contains the postscript version. 
+The distributed package only contains the postscript files of the manual.
+
+DEVELOPERS:
+
+Just type the following to generate Makefile's:
+  ./reconf ; ./configure
