@@ -4,23 +4,21 @@
 
 process StandaloneEqsDumper is
 let
-  Id         : term,
-  ModuleName : str
+  ModuleName : str,
+  Equations  : term
 in
-  Id := process-id.
   subscribe(search-paths-processed) .
 
   rec-note(search-paths-processed) .
   snd-msg(open-modules([MODULENAME])) .
   rec-msg(finished-opening-modules) .
-  snd-msg(dump-equations(MODULENAME, OUTFILENAME)) .
-  rec-msg(equations-dumped) .
-  if equal(SAVING,"true") then
-    snd-msg(save-all) .
-    rec-msg(saved)
-  else
-    tau
-  fi .
+  snd-msg(get-all-equations(MODULENAME)) .
+  (
+    rec-msg(all-equations(Equations?)) .
+    WriteEquations(OUTFILENAME, "", Equations) 
+  +
+    rec-msg(equations-incomplete) .
+    printf("Specification incomplete for %s\n", MODULENAME)
+  ) .
   shutdown("")
-
 endlet   

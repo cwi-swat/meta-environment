@@ -2,44 +2,37 @@
   $Id$
  */
 
+process WriteEquations(Path : str, Extension : str, Equations : term) is
+let
+  Message : str
+in
+  snd-msg(write-term-file(Path, ".eqs", Equations)) .
+  (
+    rec-msg(file-written)
+  +
+    rec-msg(file-not-written(Message?))
+  )
+endlet
+
 process DumpEquations is
 let
-  Id         : term,
-  ModuleName : str,
-  FileName   : str,
-  Equations  : term,
-  Text       : str
+  ModuleName   : str,
+  Equations    : term,
+  Path         : str
 in
-  Id := process-id.
-
   (
+    rec-msg(dump-equations(ModuleName?)) .
+    snd-msg(get-path-from-db(ModuleName)) .
+    rec-msg(path(Path?)) .
+    snd-msg(get-all-equations(ModuleName)) .
     (
-      rec-msg(dump-equations(ModuleName?)) .
-      FileName := ""
-    +
-      rec-msg(dump-equations(ModuleName?, FileName?))
-    ) .
-    snd-note(ui-status(statf(Id, "Dumping specification for %s",[ModuleName]))).
-    snd-msg(process-eqs(ModuleName)).
-    rec-msg(eqs-processed(ModuleName)).
-    snd-msg(get-all-equations(ModuleName)).
-    (
-      rec-msg(all-equations(Equations?)).
-      snd-msg(create-equations-dump-file(ModuleName, FileName, Equations)).
-      (
-        rec-msg(create-equations-dump-file-done(ModuleName))
-        +
-        rec-msg(create-equations-dump-file-failed(ModuleName, Text?)).
-        snd-note(ui-status(errorf("Dumping of specification for %s failed: %s", 
-                 ModuleName, Text)))
-      )
+      rec-msg(all-equations(Equations?)) .
+      WriteEquations(Path, ".eqs", Equations)
       +
       rec-msg(equations-incomplete) .
       snd-note(ui-status(errorf("Specification incomplete for %s", [ModuleName])))
     ) .
-    snd-msg(equations-dumped) .
-    snd-note(ui-status(endstat(Id)))
-
+    snd-msg(equations-dumped)
   ) * delta
 
 endlet

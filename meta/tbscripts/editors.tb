@@ -44,7 +44,7 @@ let
 in
   Tree := none.
   Text := "".
-  snd-msg(get-sdf2-path-from-db(ModuleName)) .
+  snd-msg(get-path-from-db(ModuleName)) .
   rec-msg(path(FileName?)) .
   snd-msg(get-sdf2-asfix(ModuleName)).
   (

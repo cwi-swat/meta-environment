@@ -766,8 +766,6 @@ in
   snd-msg(open-modules([ModuleName])) .
   rec-msg(finished-opening-modules) .
   snd-note(ui-status(stat(Id, "Retrieving equations"))) .
-  snd-msg(process-eqs(ModuleName)) .
-  rec-msg(eqs-processed(ModuleName)) .
   snd-msg(get-all-equations(ModuleName)) .
   (
     rec-msg(all-equations(Equations?)) .

@@ -29,7 +29,7 @@ in
       +
         rec-msg(file-not-exists) .
         snd-msg(write-text-file(Path, ".sdf", 
-	                        ["module ", ModuleName])) .
+	                        ["module ", ModuleName, "\n"])) .
         (
           rec-msg(file-written) .
 	  snd-msg(open-initial-module(Path, ModuleName))

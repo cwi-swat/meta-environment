@@ -15,8 +15,6 @@ in
     (
       rec-msg(compile-module(ModuleName?)) .
       snd-note(ui-status(statf(Id, "Compiling %s", [ModuleName]))).
-      snd-msg(process-eqs(ModuleName)) .
-      rec-msg(eqs-processed(ModuleName)) .
       snd-msg(get-all-equations(ModuleName)) .
       (
         rec-msg(all-equations(Equations?)) .

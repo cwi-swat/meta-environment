@@ -127,6 +127,8 @@ let
 in
   (
     rec-msg(get-all-equations(ModuleName?)) .
+    snd-msg(process-eqs(ModuleName)) .
+    rec-msg(eqs-processed(ModuleName)) .
     snd-msg(all-equations-available(ModuleName)) .
     (
       rec-msg(equations-available) .
