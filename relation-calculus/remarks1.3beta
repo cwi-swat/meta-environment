@@ -1,0 +1,54 @@
+Ha Mark en Jurgen,
+
+De nieuwe versie doet het prima. Hieronder enkele
+punten die ik de afgelopen dagen tegen ben gekomen.
+
+
+(0) Installatie ging prima. Ik werd echter twee keer onderuit gehaald
+    doordat oude geinstalleerde files (in share, classes, e.d.)
+    interfereerden met de nieuwe installatie.
+
+(1) Hoe kies je tussen de tk browser en meta studio?
+
+(2) Bij parse error verschijnt heel kort onderin de Emacs status
+    balk "Parse error" maar dat wordt direct vervangen door
+    "Focus symbol: none"
+
+   Ik vind overigens (heeft niet specifiek met deze versie te maken)
+   dat je soms werkelijk geen enkele clue hebt wat de
+   syntax fout is. Wat kunnen we daar aan doen?
+
+(3) De foutmelding bij syntax fout in module:
+
+   "Character 93 expected in Analysis, line 3, column 1"
+
+   (a) Graag 93 vervangen door het character zelf.
+   (b) Graag Analysis vervangen door Analysis.asf
+
+(4) De melding: "Equations incomplete for Analysis"
+    (a) Graag Analysis.asf
+
+(5) Bij parsen van Analysis1.trm over module Analysis
+    zegt de ambiguiteiten message:
+    "Parse of Analyis returned 1 ambiguities"
+    Beter zou zijn:
+    "Parse of Analysis1.trm returned 1 ambiguities"
+
+    Ik zwijg verder over ambiguity versus ambiguities :-)
+
+(6) De foutmeldingen bij traversal functions zijn ZEER
+    onbehulpzaam: wat er ook staat je krijgt "illegal attribute"
+    Ik zou willen pleiten voor een aantal gevallen:
+
+    - accu or trafo missing
+    - bottom-up or top-down missing
+    - break or continue missing
+    - function has incorrect type for this kind of traversal
+
+(7) Voor parameter soorten krijg ik de (overbodige?) warning:
+
+    - sorts-without-production-definitions ( Bags , symbols ( Elem ) )
+
+(8) ViewTree button doet helemaal niks als de tekst syntaxfout bevat.
+    Misschien een melding geven: 
+    "Cannot view tree of Analysis1.trm (contains syntax erors)"
