@@ -24,7 +24,7 @@ variables
  "Table"[0-9\']* -> Table
 
 hiddens
-  imports asf/Comments
+  imports asf/syntax/Comments
   
 variables
 

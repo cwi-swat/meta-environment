@@ -3,7 +3,7 @@ module strategies/Operators[X]
 imports basic/Whitespace
 imports basic/Booleans
 
-hiddens imports asf/Comments
+hiddens imports asf/syntax/Comments
 
 exports sorts Strategy
 

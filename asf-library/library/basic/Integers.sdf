@@ -29,7 +29,7 @@ exports
            Integer "-" Integer -> Integer}
 
 hiddens
-  imports asf/Comments
+  imports asf/syntax/Comments
    
   context-free syntax
     gt "(" Natural "," Natural ")" -> Boolean

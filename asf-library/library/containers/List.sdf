@@ -27,7 +27,7 @@ imports
 hiddens
   imports
     basic/Integers
-    asf/Comments
+    asf/syntax/Comments
     basic/Whitespace
   variables
     "X"[0-9\']*		-> X
