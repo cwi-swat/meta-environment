@@ -1,4 +1,4 @@
-#line 43 "tide.tb.nw"
+#line 42 "tide.tb.nw"
 process DAP-CONNECT is
 let
   D    : debug-adapter,
@@ -19,7 +19,7 @@ in
     snd-note(event(proc(D,all),dap-disconnected))
   ) * delta
 endlet
-#line 105 "tide.tb.nw"
+#line 104 "tide.tb.nw"
 process DEBUG-ADAPTER(D:debug-adapter) is
 let
   P     : term,   %% list of process-id's, or `all' indicating all
@@ -76,7 +76,7 @@ in
     snd-ack-event(D, disconnected(Callsign))
    ) * delta
 endlet
-#line 171 "tide.tb.nw"
+#line 170 "tide.tb.nw"
 process BROADCAST is
 let
   From : term,
@@ -86,7 +86,7 @@ in
     snd-note(event(From, Ev))
   ) * delta
 endlet
-#line 261 "tide.tb.nw"
+#line 260 "tide.tb.nw"
 process SOURCE-VIEWER is
 let
   S : source-viewer,
@@ -179,7 +179,7 @@ in
     snd-ack-event(S, ask-watchpoint(D,P,Port,Type))
   ) * delta
 endlet
-#line 497 "tide.tb.nw"
+#line 496 "tide.tb.nw"
 process PROCESS-VIEWER is
 let
   V : process-viewer,
@@ -252,7 +252,7 @@ in
   snd-ack-event(V, tide-shutdown) .
   shutdown("Thank you for using tide!\n")
 endlet
-#line 427 "tide.tb.nw"
+#line 426 "tide.tb.nw"
 process WATCHPOINT-VIEWER is
 let
   V    : watchpoint-viewer,
@@ -318,12 +318,11 @@ endlet
 tool debug-adapter is { }
 tool source-viewer  is 
 	{ command = "java-adapter -class toolbus.tide.SourceViewerTool" }
-#tool rule-viewer  is { command = "tcltk-adapter -script rule-viewer.tcl" }
+%%tool rule-viewer  is { command = "tcltk-adapter -script rule-viewer.tcl" }
 tool watchpoint-viewer is 
 	{ command = "java-adapter -class toolbus.tide.WatchpointViewerTool" }
 tool process-viewer is
 	{ command = "java-adapter -class toolbus.tide.ProcessViewerTool" }
-%%tool viewer is { command = "./buscontrol" }
 
 #line 14 "tide.tb.nw"
 toolbus(DAP-CONNECT, BROADCAST, 

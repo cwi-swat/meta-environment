@@ -81,6 +81,8 @@ static int connect_unix_socket(int port)
   int attempts = 0;
 
   while(1) {
+    int result;
+
     sprintf (name, "/usr/tmp/%d", port);
     if((sock = socket(AF_UNIX,SOCK_STREAM,0)) < 0)
       err_sys_fatal("cannot open socket");
@@ -96,7 +98,9 @@ static int connect_unix_socket(int port)
     /* Connect to the server. */
     if(TBverbose)
       TBmsg("connecting to address %s\n", name);
-    if(connect(sock, (struct sockaddr *) &usin,sizeof(usin)) < 0) {
+    result = connect(sock, (struct sockaddr *) &usin,sizeof(usin));
+    if(result < 0) {
+      fprintf(stderr, "connect failed: %d\n", result);
       close(sock);
       if(attempts > 1000)
         err_sys_fatal("cannot connect, giving up"); 

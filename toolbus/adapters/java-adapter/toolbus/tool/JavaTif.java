@@ -165,8 +165,10 @@ class TifGenerator
     throws IOException
   {
     PrintWriter out = new PrintWriter(new FileOutputStream(javaclass + ".java"));
+    System.out.println("generating header");
     genHeader(pkg, javaclass, out);
 
+    System.out.println("generating sig table");
     genSigTable(out);
     genPatternAttribs(out);
  
