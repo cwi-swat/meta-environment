@@ -1,5 +1,8 @@
 $Id$
 
+2004/02/03 (markvdb@cwi.nl)
+ * Added display functionality.
+
 Mon Feb  2 16:40:44 CET 2004 <{jong,kooiker}@cwi.nl>
  * Fix Makefile.am's to get distcheck working
 
