@@ -17,7 +17,7 @@ ATerm debug_adapter_handler(int conn, ATerm term);
 /* tide functions */
 typedef TA_Expr (*TA_Function)(int pid, AFun fun, TA_ExprList args);
 
-void TA_connect();
+void TA_connect(int port);
 ATbool TA_isConnected();
 void TA_registerFunction(AFun name, TA_Function func);
 void TA_disconnect(ATbool close);

@@ -229,12 +229,12 @@ TA_Expr eval_start_level(int pid, AFun fun, TA_ExprList args)
 
 /*{{{  void TA_connect() */
 
-void TA_connect()
+void TA_connect(int port)
 {
   int pid;
 
-  tide_cid = ATBconnect("debug-adapter", NULL, TIDE_PORT,
-			debug_adapter_handler);
+  tide_cid = ATBconnect("debug-adapter", NULL, port, debug_adapter_handler);
+
   if (tide_cid < 0) {
     ATerror("could not connect to tide.\n");
   }
