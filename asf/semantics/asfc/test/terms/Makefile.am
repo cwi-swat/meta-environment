@@ -9,7 +9,8 @@ SPECS = LexConcat     \
         Perm \
         OutermostList \
         Set \
-        Tuple
+        Tuple \
+        ReturnsList
            
 EQS = $(SPECS:=.eqs)
 
