@@ -1,0 +1,36 @@
+equations
+
+[get-sig-0] get-signatures($ASM) = get-sigs($ASM, sigs())
+
+[get-sig-1] 
+
+  get-sigs(module $MN $IS* $AS*, sigs($FS*)) = 
+				 get-sigs($AS*, sigs($FS*))
+
+[get-sig-2] get-sigs($FS, sigs($FS*)) = sigs($FS, $FS*)
+
+[join-sigs-1] join-signatures(sigs($FS*1), sigs($FS*2)) = 
+					    sigs($FS*1, $FS*2)
+
+[get-fun-0] get-function-defs($ASM) = get-fun-defs($ASM, defs())
+
+[get-fun-1] 
+
+  get-fun-defs(module $MN $IS* $AS*, defs($FD*)) = 
+			      get-fun-defs($AS*, defs($FD*))
+
+[get-fun-2] get-fun-defs($FD, defs($FD*)) = defs($FD, $FD*)
+
+[get-fun-name-1] get-fun-name($LT : $SO -> $FR) = $LT
+
+[get-using-1] get-using($LT : $SO -> $SFR1* & using $TY & $SFR2*) = $TY
+
+[default-get-using-1] get-using($LT : $SO -> $FR) = data
+
+[get-giving-1] get-giving($LT : $SO -> $SFR1* & giving $TY & $SFR2*) = $TY
+
+[default-get-giving-1] get-giving($LT : $SO -> $FR) = empty
+
+[get-raising-1] get-raising($LT : $SO -> $SFR1* & raising $TY & $SFR2*) = $TY
+
+[default-get-raising-1] get-raising($LT : $SO -> $FR) = empty

@@ -1,0 +1,17 @@
+module type-check/an-to-kernel
+
+imports
+
+  asdf/an
+  type-check/Layout
+
+hiddens variables
+
+  "$Y"[0-9]?             -> Yielder
+  "$Y"[0-9]?"+"          -> {Yielder ","}+
+  "$DOP"[0-9]?           -> PrefixDataOp
+  "$DOI"[0-9]?           -> InfixDataOp
+  "$DO"[0-9]?           -> DataOp
+  "$D"[0-9]?           -> Data
+  "$A"[0-9]?             -> Action
+ 

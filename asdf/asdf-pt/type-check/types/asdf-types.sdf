@@ -1,0 +1,24 @@
+module type-check/types/asdf-types
+
+imports
+
+  type-check/types/Composed
+  type-check/types/Tuple
+
+exports
+
+context-free syntax
+
+  AtomicType	-> Type
+
+lexical syntax
+
+  [a-z\-]+	-> AtomicType
+
+context-free restrictions
+
+  AtomicType -/- [a-z\-]
+
+
+
+

@@ -1,0 +1,55 @@
+module asdf/functions
+
+imports
+
+  type-check/Layout
+  asdf/asdf-sem-sec
+
+exports
+
+sorts
+
+  FunctionDefs
+
+context-free syntax
+
+  get-signatures(AS-Module)	-> Signatures
+
+  get-sigs(AS-Module, Signatures)	-> Signatures {traversal(accu, break, top-down)}
+  get-sigs(AS-Section*, Signatures)	-> Signatures {traversal(accu, break, top-down)}
+  get-sigs(AS-FunctionSig, Signatures)	-> Signatures {traversal(accu, break, top-down)}
+
+  join-signatures(Signatures, Signatures)  -> Signatures
+
+  get-function-defs(AS-Module)	     -> FunctionDefs
+
+  get-fun-defs(AS-Module, FunctionDefs)	-> FunctionDefs {traversal(accu, break, top-down)}
+  get-fun-defs(AS-Section*, FunctionDefs)	-> FunctionDefs {traversal(accu, break, top-down)}
+  get-fun-defs(AS-FunctionDef, FunctionDefs)	-> FunctionDefs {traversal(accu, break, top-down)}
+
+  lookup-signature(SignatureEnv, ActionType, Literal) 
+		-> ActionType {traversal(accu, break, bottom-up)}
+  lookup-signature(FunctionSignature, ActionType, Literal) 
+		-> ActionType {traversal(accu, break, bottom-up)}
+
+  get-fun-name(AS-FunctionSig)	-> Literal
+  get-using(AS-FunctionSig)	-> Type
+  get-giving(AS-FunctionSig)	-> Type
+  get-raising(AS-FunctionSig)	-> Type
+
+hiddens variables
+
+  "$ASM"		-> AS-Module
+  "$MN"			-> ModuleName
+  "$IS*"		-> ImpSection*
+  "$AS*"		-> AS-Section*
+  "$FS*"[0-9]?		-> {AS-FunctionSig ","}*
+  "$FS"			-> AS-FunctionSig
+  "$FD*"		-> {AS-FunctionDef ","}*
+  "$FD"			-> AS-FunctionDef
+  "$LT"[0-9]?		-> Literal
+  "$SO"[0-9]?		-> Sort
+  "$FR"[0-9]?		-> FunResult
+  "$SFR"[0-9]?"*"	-> { SingleFunResult "&" }*
+  "$TY"[0-9]?		-> Type
+

@@ -1,0 +1,42 @@
+equations
+
+[give-1] $DO := $Y
+	 ==================
+	 give $Y = give $DO 
+
+[give-2] give $D  = result $D
+
+[give-4] give $DOP $Y  = give $Y then give $DOP
+
+[give-5] give $Y1 $DOI $Y2  = (give $Y1 and give $Y2) then give $DOI
+
+[give-6] give ($Y1, $Y2, $Y+)  = give $Y1 and give ($Y2, $Y+)
+
+[give-7] give ($Y1, $Y2)  = give $Y1 and give $Y2
+
+[action-1]  $A $Y  = give $Y then $A
+
+[check-1] check $Y = check $DO when $DO := $Y
+
+[check-2] check $DOP $Y  = copy and (give $Y then check $DOP then skip)
+
+[give-5] check $Y1 $DOI $Y2  = copy and ((give $Y1 and give $Y2) then 
+				       check $DOI then skip)
+
+[bound-to-1] bound-to $Y = bound (current-bindings, $Y)
+
+[bind-1] bind = give binding
+
+[current-bindings-1] give current-bindings = copy-bindings
+
+[furthermore-1] furthermore $A = copy-bindings and $A then give overriding
+
+[before-1] $A1 before $A2 = (copy-bindings and $A1) 
+			    then (give #2 and (give overriding scope $A2)) 
+                          then give overriding
+
+
+[stored-at-1] give stored-at $Y = give $Y then inspect
+
+[closure-1] give closure $Y = give $Y then close
+
