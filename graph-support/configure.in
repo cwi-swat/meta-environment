@@ -32,6 +32,15 @@ AC_SUBST(ATERM)
 
 
 dnl }}}
+dnl {{{  error-support
+
+dnl Require error-support package
+AC_PACKAGE_REQUIRE(error-support, error-support-config,
+   [  --with-error-support=DIR   error-support is in DIR])
+AC_SUBST(ERROR_SUPPORT)
+
+
+dnl }}}
 dnl {{{  pt-support
 
 dnl Require pt-support package

@@ -1,5 +1,8 @@
 $Id$
 
+2003/01/13 (jurgenv@cwi.nl)
+ * Added dependency on error-support package
+
 Wed Oct  8 16:14:39 CEST 2003 <{jong,jurgenv}@cwi.nl>
  * Added support for color, fillcolor and style attributes. Closes: #64
  * utils/tree2graph: arbitrary colors used to draw attention to ambiguities.
