@@ -98,6 +98,15 @@ AC_ARG_WITH(toolbus-inc,
 TOOLBUSINC=${withval},TOOLBUSINC=${TOOLBUS}/include)
 AC_SUBST(TOOLBUSINC)
 
+dnl Handle --with-tide=... argument to configure
+AC_ARG_WITH(tide,
+[  --with-tide		TIDE is in DIR],
+TIDE=${withval}
+TIDEDEF=-DUSE_TIDE,
+)
+AC_SUBST(TIDE)
+AC_SUBST(TIDEDEF)
+
 dnl Handle --with-graphviz=... argument to configure
 AC_ARG_WITH(graphviz,
    [  --with-graphviz=DIR     graphviz package is in DIR],
