@@ -41,9 +41,10 @@ public class FeedbackList extends UserInterfacePanel {
         list.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 FeedbackItem item = (FeedbackItem) list.getSelectedValue();
-                Feedback feedback = item.getFeedback();
 
-                if (feedback != null && !feedback.getList().isEmpty()) {
+                if (item != null) {
+                    Feedback feedback = item.getFeedback();
+                    if (!feedback.getList().isEmpty())
                     postEvent(
                         getFactory().make(
                             "feedback-selected(<term>)",
@@ -94,19 +95,19 @@ public class FeedbackList extends UserInterfacePanel {
 
     private FeedbackItem makeAnonymousWarning(String msg) {
         return new FeedbackItem(
-                ANONYMOUS_ORIGIN,
-                ANONYMOUS_ORIGIN,
-                getErrorFactory().makeFeedback_Warning(
-            msg,
-            getErrorFactory().makeSubjectList()));
+            ANONYMOUS_ORIGIN,
+            ANONYMOUS_ORIGIN,
+            getErrorFactory().makeFeedback_Warning(
+                msg,
+                getErrorFactory().makeSubjectList()));
     }
     private FeedbackItem makeAnonymousInfo(String msg) {
         return new FeedbackItem(
-                ANONYMOUS_ORIGIN,
-                ANONYMOUS_ORIGIN,
-                getErrorFactory().makeFeedback_Info(
-            msg,
-            getErrorFactory().makeSubjectList()));
+            ANONYMOUS_ORIGIN,
+            ANONYMOUS_ORIGIN,
+            getErrorFactory().makeFeedback_Info(
+                msg,
+                getErrorFactory().makeSubjectList()));
     }
 
     public void errorf(String format, ATerm args) {
@@ -146,7 +147,7 @@ public class FeedbackList extends UserInterfacePanel {
                 removed.add(item);
             }
         }
-        
+
         data.removeAll(removed);
         repaint();
     }
