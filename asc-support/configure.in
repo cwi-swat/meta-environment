@@ -26,9 +26,9 @@ AC_PACKAGE_REQUIRE(aterm, baffle,
 AC_SUBST(ATERM)
 
 dnl Require Tide
-AC_PACKAGE_REQUIRE(tide, tide,
-   [  --with-tide=DIR        Tide is in DIR])
-AC_SUBST(TIDE)
+AC_PACKAGE_REQUIRE(tide-support, tide-support-config,
+   [  --with-tide-support=DIR        Tide-support is in DIR])
+AC_SUBST(TIDE_SUPPORT)
 
 dnl Require error-support library
 AC_PACKAGE_REQUIRE(error-support, error-support-config,

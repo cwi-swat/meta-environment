@@ -19,6 +19,10 @@ getFormals() {
   type=$2
   index=0
 
+  if test ${arity} -ne 0; then
+    printf ", "
+  fi
+
   while test ${index} -lt ${arity}; do
     printf "${type} arg${index}"
     index=`expr ${index} + 1`
@@ -44,9 +48,9 @@ for b in ${BUILTIN_NAMES}; do
   name=`getName ${b}`
   arity=`getArity ${b}`
   formals=`getFormals ${arity} PT_Tree`
-  echo "PT_Tree ASFE_${name}(PT_Symbol type, ${formals});" | sed 's@-@_@g'
+  echo "PT_Tree ASFE_${name}(PT_Symbol type ${formals});" | sed 's@-@_@g'
   formals=`getFormals ${arity} ATerm`
-  echo "PT_Tree ASC_${name}(ATerm type, ${formals});" | sed 's@-@_@g'
+  echo "PT_Tree ASC_${name}(ATerm type ${formals});" | sed 's@-@_@g'
   echo
 done
 

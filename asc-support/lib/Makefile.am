@@ -22,7 +22,8 @@ BUILTIN_NAMES_ARITY=\
 	write-bytes-to-file_2\
 	tide-connect_2\
 	tide-disconnect_1\
-	tide-step_1
+	tide-step_1\
+	next-id_0
 
 BUILTIN_SOURCEFILES=\
 	builtin-common.c \
@@ -32,14 +33,15 @@ BUILTIN_SOURCEFILES=\
 	builtin-lifting.c \
 	builtin-implode.c \
 	builtin-io.c \
-	builtin-tide.c
+	builtin-tide.c \
+	builtin-unique.c
 
 # The names of the modules that need to be included in a generated lib
 LIBRARY_MODULES=\
 	basic/Booleans \
 	basic/StrCon \
-   basic/BoolCon \
-   basic/NatCon \
+	basic/BoolCon \
+	basic/NatCon \
 	basic/BytesCon \
 	basic/Errors \
 	basic/Locations \
@@ -84,9 +86,8 @@ INCLUDES = \
 	-I$(ERROR_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
 	-I$(SGLR)/include \
-	-I$(TIDE)/include \
+	-I$(TIDE_SUPPORT)/include \
 	-I$(ATERM)/include
-	-I$(TIDE)/lib-c
 
 TESTS=builtin-link-test
 
@@ -102,7 +103,7 @@ builtin_link_test_SOURCES=builtin-link-test.c
 builtin_link_test_LDADD = \
 	-L. -lasc-support-me \
 	-L${SGLR}/lib -lsglr \
-	-L${TIDE}/lib -ltide-adapter \
+	-L${TIDE_SUPPORT}/lib -ltide-adapter \
 	-L${ASF_SUPPORT}/lib -lASFME \
 	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
 	-L${TOOLBUSLIB}/lib -lATB  \

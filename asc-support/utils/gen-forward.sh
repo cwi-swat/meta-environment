@@ -17,6 +17,10 @@ getActuals() {
   arity=$1
   index=0
 
+  if test ${arity} -ne 0; then
+    printf ", "
+  fi
+
   while test ${index} -lt ${arity}; do
     printf "arg${index}"
     index=`expr ${index} + 1`
@@ -96,7 +100,7 @@ for b in \${BUILTIN_NAMES}; do
     index=\`expr ${index} + 1\`
   done
  
-  echo "    result = ASFE_${name}(type, ${actuals});" | sed 's@-@_@g'
+  echo "    result = ASFE_${name}(type ${actuals});" | sed 's@-@_@g'
   echo "  }"
 done
 `
