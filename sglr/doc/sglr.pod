@@ -129,7 +129,7 @@ Returns an error on unsuccesful parses.
 
 =head1 SEE ALSO
 
-L<tree2dot>, L<dot>, L<sdf2table>
+L<sdf2table>
 
 =head1 REFERENCES
 
