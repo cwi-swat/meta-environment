@@ -1,36 +1,65 @@
 equations
 
-[rem1] $Nat1 > $Nat2 = true ===> remainder($Nat1, $Nat2) = remainder($Nat1 -/ $Nat2, $Nat2)
+[rem1]
+  $Nat1 > $Nat2 == true
+  ===>
+  remainder($Nat1, $Nat2) = remainder($Nat1 -/ $Nat2, $Nat2)
 
-[default-rem] remainder($Nat1, $Nat2) = $Nat1
-
-
-[ndiv1]	      ndiv($Nat, $Nat) = 1
-
-[ndiv2]	      $Nat1 > $Nat2 = true, 
-	      $Nat =  1 + ndiv($Nat1 -/ $Nat2, $Nat2)
-	      ========================================================
-	      ndiv($Nat1, $Nat2) = $Nat
-
-[ndiv3]	      $Nat1 < $Nat2 = true ===> ndiv($Nat1, $Nat2) = 0
+[default-rem]
+  remainder($Nat1, $Nat2) = $Nat1
 
 
-[idiv1]	      (- $Nat1) / $Nat2 = - ndiv($Nat1, $Nat2)
 
-[idiv1]	      $Nat1 / (- $Nat2) = - ndiv($Nat1, $Nat2)
+[ndiv1] ndiv($Nat, $Nat) = 1
 
-[idiv1]	      (- $Nat1) / (- $Nat2) = ndiv($Nat1, $Nat2)
+[ndiv2]
+  $Nat1 > $Nat2 == true, 
+  $Nat :=  1 + ndiv($Nat1 -/ $Nat2, $Nat2)
+  ===>
+  ndiv($Nat1, $Nat2) = $Nat
 
-[idiv]	      $Nat1 / $Nat2 = ndiv($Nat1, $Nat2)
+[ndiv3]
+  $Nat1 < $Nat2 == true
+  ===>
+  ndiv($Nat1, $Nat2) = 0
 
-[max1]	      $Int1 > $Int2 = true ===> max($Int1, $Int2) = $Int1
+
+
+[idiv1]
+  (- $Nat1) / $Nat2 = - ndiv($Nat1, $Nat2)
+
+[idiv1]
+  $Nat1 / (- $Nat2) = - ndiv($Nat1, $Nat2)
+
+[idiv1]
+  (- $Nat1) / (- $Nat2) = ndiv($Nat1, $Nat2)
+
+[idiv]
+  $Nat1 / $Nat2 = ndiv($Nat1, $Nat2)
+
+
+
+[max1]
+  $Int1 > $Int2 == true
+  ===>
+  max($Int1, $Int2) = $Int1
 
 [default-max] max($Int1, $Int2) = $Int2
 
-[min1]	      $Int1 < $Int2 = true ===> min($Int1, $Int2) = $Int1
 
-[default-min] min($Int1, $Int2) = $Int2
 
-[eqi1]	$Int == $Int = true
+[min1]
+  $Int1 < $Int2 == true
+  ===>
+  min($Int1, $Int2) = $Int1
+
+[default-min]
+  min($Int1, $Int2) = $Int2
+
+
+
+[eqi1]
+  $Int == $Int = true
+
 [default-eqi]
-	$Int1 == $Int2 = false
+  $Int1 == $Int2 = false
