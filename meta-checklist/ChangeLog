@@ -1,0 +1,10 @@
+
+
+2003/07/07	<jurgenv@cwi.nl>
+	* Started repository for specifications that can be used for
+	  interactively testing the Meta-Environment
+	* Added a README to explain what the goal of this repository is
+	* Started a Wiki page at that contains descriptions of the tests:
+    http://homepages.cwi.nl/htbin/leon/wiki/wiki?MetaEnvironmentTestCheckList
+          (shouldn't this actually be located in this repository?)
+	* Added the pico specification as the first test case

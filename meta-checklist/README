@@ -1,0 +1,26 @@
+Dear Meta developers,
+
+This repository contains specifications for INTERACTIVELY testing
+features of the Meta-Environment. The checklist for interactively 
+testing it is located at:
+
+http://homepages.cwi.nl/htbin/leon/wiki/wiki?MetaEnvironmentTestCheckList
+
+Directions of use:
+ - Please add a subdirectory for every separate specification that somehow
+   adds a new challenge to the test suite. 
+ - If the challenge can also be expressed as a new module in an existing
+   specification (say the pico specification), please do so. The smaller
+   the amount of specifications here, the better.
+ - Add descriptions of tests and the expected results to the above Wiki page.
+ - Test specifications may be (and should be) updated to the latest syntax
+   of ASF+SDF, button language etc. 
+ - Please take care never to change a specification as a workaround for a bug 
+   in the system and commit this change to this repository.
+ - Keep the ChangeLog up-to-date
+
+Best regards,
+
+Jurgen Vinju
+
+jurgenv@cwi.nl

@@ -1,0 +1,8 @@
+module Value-environments
+
+imports Pico-Identifiers Pico-Values containers/Table[PICO-ID VALUE]
+    
+exports
+  sorts VENV 
+  aliases
+    Table[[PICO-ID, VALUE]] -> VENV
