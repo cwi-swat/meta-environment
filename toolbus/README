@@ -1,8 +1,27 @@
 
+    ToolBus -- The ToolBus Application Architecture
+    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
+                             The  Netherlands.
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+
+
 			The ToolBus interpreter
                         =======================
 
-		     Version 0.9.17 (June 1996)
+		     Version 0.13 (April 2000)
                      -------------------------------
 
 
@@ -30,21 +49,25 @@ Programming'' for a detailed list of differences).
 Table of contents of distribution
 ---------------------------------
 
+        AUTHORS		A list of toolbus developers
+	COPYING		GNU GENERAL PUBLIC LICENSE
 	README		This file
 	INSTALL		Information file describing the installation procedure.
-	DIFFERENCES	Differences with previous versions of the ToolBus
-	CHANGES		A log of changes
+        NEWS            Information about new features
+	ChangeLog	A log of changes
 	configure	Configuration program (shell script)
 	configure.in	Template for configure file
 	Makefile.in	Template for the toplevel makefile
-	src		Sources of the ToolBus interpreter
-	test		Test programs
+	Makefile.am	Template for Makefile.in
 	adapters	Adapters for connecting Unix programs to the ToolBus
 	demos		Demonstration programs
-	doc		Documentation (Guide to ToolBus Programming)
-	bin		Empty directory where binaries can be installed
-	lib		Empty directory where library files can be installed
-	include		Empty directory where include files can be installed
+	doc		Documentation (including Guide to ToolBus Programming)
+	libtb		Sources of ToolBus library (libtb.a)
+        missing         Installation utility
+	mkinstalldirs	Installation utility
+	tbviz		Sources of ToolBus Visualization tool
+	test		Test programs
+	toolbus		Sources of ToolBus program
 
 Installation steps
 ------------------
@@ -57,84 +80,53 @@ Installation steps
     generates Makefiles in this directory tree. For more information about
     the configuration procedure see the file INSTALL.
 
-    By default, all software will be installed in the current directory. You can
-    change this to some other directory, say ``/usr/local'', by
+    By default, all software will be installed in /usr/local. You can
+    change this to some other directory, say ``/opt/toolbus'', by
     calling configure as follows:
 
-	./configure --prefix=/usr/local
+	./configure --prefix=/opt/toolbus
 
-    [If you also have the GEL package (Graph Exchange Language) and want to
-    compile some GEL-related programs in this distribution, type (probably
-    adding a --prefix argument as just described):
+    If you want to build additional adapters, specify them during
+    configuration. For example, to build the 0 adapter use to following
+    command:
+    
+       ./configure --with-java
+    
+    Also, if you don't want some adapters to be build, specify them
+    during configuration. For example:
+    
+       ./configure --without-emacs
+    
+    The command 
+       ./configure --help
+    
+    gives a list of the available adapters and whether they are compiled by
+    default (you can deselect them using the --without-... option), or not
+    (you should select them using --with-...)
 
-	./configure --with-gel
+(2a) Compile the sources by typing:
 
-    It is assumed that GEL resides at the same level in the file hierarchy,
-    i.e. in a brother/sister directory of the current one. If GEL resides at
-    another location, say ``my-absolute-gel-dir'', then type
+	gmake
 
-	./configure --with-gel=my-absolute-geldir
-
-    Note 1: make sure that the GEL directory is on your search path, since
-    	the programs gel2b and gel2a are used by some of the GEL-related
-	programs in this distribution.
-    Note 2: GEL is currently only supported on a very experimental basis.
-    ]
-
-(2) Compile the sources by typing:
-
-	make
-
-    This will compile the sources in `src' and `adapters' and it will
-    compile and run test programs in `test'. It will also format the
-    documentation in `doc'.
+    This will compile the sources in `libtb', `toolbus', `demos', and
+    `adapters'.
+    
+(2b) Run
+        gmake check
+    
+     To run some test programs in the test directory.
 
 (3) If the previous went well type
 
-	make install
+	gmake install
 
     to install the software
 
-(4) Generate the documentation by typing:
+(4) Add `prefix/bin' to your PATH.
 
-	make doc
+(5) Report strange behavior to me (Paul.Klint@cwi.nl or paulk@wins.uva.nl)
 
-(5) If one of the previous steps generates errors go back to step (1) and 
-    do one of the following:
-    (a) The configure file has been generated by the utility ``autoconf''
-    utility (see INSTALL). You may need to modify configure.in
-    to reflect features of your system.
-    (b) As a last resort, you can manually edit the generated Makefiles
-    to reflect features of your system.
-
-(6) I suggest that you include an absolute path name in your
-    search path (shell variable PATH) that corresponds to the
-    "bin" directory where the ToolBus binaries have been installed.
-    [If you used ``with-gel'' configuration option, include the GeL
-    directory in your search path as well.]
-    This will make it easier to run the demos. If, in addition, you
-    want to run the demo's simultaneously on more than one
-    host machine, then you should also include absolute path
-    names for each demo directory in your search path.
-
-(7) To compile all demos type
-
-	make demos
-
-    It is also possible to go to a specific demo and compile it,
-    for instance,
-
-	cd demos/calc
-	make
-
-    will compile the ``calc'' demo.
-
-(8) Then change directory to one of the demos and run it.
-    For details see below.
-
-(9) Report strange behaviour to me (Paul.Klint@cwi.nl or paulk@fwi.uva.nl)
-
-(10) Also report ideas, suggestions, etc.
+(6) Also report ideas, suggestions, etc.
 
 Enjoy!
 
@@ -264,7 +256,7 @@ Hello
 -----
 
 Contains all versions of the ``hello'' example as described
-in ``A Guide to ToolBus Programmaing''.
+in ``A Guide to ToolBus Programming''.
 
 Other demo's
 ------------
