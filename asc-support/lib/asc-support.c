@@ -634,10 +634,24 @@ ATerm call_kids_trafo(funcptr trav, ATerm arg0, ATermList extra_args)
     args = ATgetArguments((ATermAppl) arg0);
     assert(ATgetLength(args) < 33);
 
-    for(idx = 0, list = args;!ATisEmpty(list); list = ATgetNext(list)) {
-      arg[idx++] = call_using_list(trav, ATinsert(extra_args,ATgetFirst(list)));
-    }
+    for(idx = 0, list = args;!ATisEmpty(list); list = ATgetNext(list), idx++) {
+      arg[idx] = ATgetFirst(list);
 
+      switch(ATgetType(arg[idx])) {
+	case AT_APPL:
+	  arg[idx] = call_using_list(trav, ATinsert(extra_args,arg[idx]));
+	  break;
+	case AT_LIST:
+	  assert(idx == 0 && "a list production has only 1 child (a list)");
+	  arg[idx] = (ATerm) call_kids_trafo_list(trav, (ATermList) arg[idx],
+						  extra_args);
+	  break;
+	default:
+	  ATerror("Unexpected term type %d in call_kids_trafo\n");
+	  return NULL;
+      }
+    }
+    
     sym = get_sym(arg0);
     func = lookup_func_given_sym(sym);
 
@@ -671,10 +685,22 @@ ATerm call_kids_accu(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args)
     args = ATgetArguments((ATermAppl) arg0);
     assert(ATgetLength(args) < 33);
 
-    for(idx = 0, list = args;!ATisEmpty(list); list = ATgetNext(list)) {
-      arg1 = call_using_list(trav, 
-			     ATinsert(
-			       ATinsert(extra_args, arg1),ATgetFirst(list)));
+    for(idx=0, list = args;!ATisEmpty(list); list = ATgetNext(list), idx++) {
+      ATerm head = ATgetFirst(list);
+
+      switch(ATgetType(head)) {
+	case AT_APPL:
+	  arg1 = call_using_list(trav, 
+				 ATinsert(ATinsert(extra_args, arg1),head));
+	  break;
+	case AT_LIST:
+	  assert(idx == 0 && "a list production has only 1 child (a list)");
+	  arg1 = call_kids_accu_list(trav, (ATermList) head, arg1, extra_args);
+	  break;
+	default:
+	  ATerror("Unexpected term type %d in call_kids_accu\n");
+	  return NULL;
+      }
     }
   }
   else if (type == AT_LIST) {
@@ -704,12 +730,25 @@ ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1,
     args = ATgetArguments((ATermAppl) arg0);
     assert(ATgetLength(args) < 33);
 
-    for(idx = 0, list = args;!ATisEmpty(list); list = ATgetNext(list)) {
-      tuple = call_using_list(trav, 
-			     ATinsert(
-			       ATinsert(extra_args, arg1),ATgetFirst(list)));
+    for(idx = 0, list = args;!ATisEmpty(list); list = ATgetNext(list), idx++) {
+      arg[idx] = ATgetFirst(list);
 
-      arg[idx++] = ATgetArgument((ATermAppl) tuple, 0);
+      switch(ATgetType(arg[idx])) {
+	case AT_APPL:
+	  tuple = call_using_list(trav, ATinsert(
+				 ATinsert(extra_args, arg1),arg[idx]));
+	  break;
+	case AT_LIST:
+	  assert(idx == 0 && "a list production has only 1 child (a list)");
+	  tuple = call_kids_accutrafo_list(trav, (ATermList) arg[idx], arg1,
+					   extra_args);
+	  break;
+	default:
+	  ATerror("Unexpected term type %d in call_kids_accutrafo\n");
+	  return NULL;
+      }
+
+      arg[idx] = ATgetArgument((ATermAppl) tuple, 0);
       arg1 = ATgetArgument((ATermAppl) tuple, 1);
     }
 
@@ -819,9 +858,7 @@ void ASC_initRunTime(int tableSize)
 
 PT_ParseTree toasfix(ATerm term)
 {
-  PT_Tree tree;
-  PT_Symbol symbol;
-  PT_Symbols symbols;
+  PT_Tree tree = yieldTree(term);
 
   tree = yieldTree(term);  
 
