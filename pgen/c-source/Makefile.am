@@ -39,7 +39,7 @@ SPEC_SRCS1=\
    AUX-Goto-Earley6.c AUX-Modular-Sdf-Normalization9.c\
    AUX-Vertices7.c AUX-Action-Earley3.c AUX-Character-Class-Syntax5.c\
    AUX-Follow-Earley1.c AUX-Follow-Earley2.c AUX-Symbols-Projection3.c\
-   AUX-Symbols-Projection4.c AUX-Symbols-Projection5.c\
+   AUX-Symbols-Projection4.c \
    AUX-Symbols-Projection2.c AUX-Priority-Conflict2.c AUX-ATerms2.c\
    AUX-Symbols-Projection1.c AUX-Priority-Conflict1.c AUX-Earley-Graphs2.c\
    AUX-Earley-Graphs3.c AUX-CC-Sdf-ATerms1.c AUX-Sorts-Sdf-ATerms1.c\
