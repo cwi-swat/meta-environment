@@ -2,12 +2,14 @@
 
 include ${top_srcdir}/make_rules
 
-INCLUDES	= -I$(ASC_SUPPORT)/include \
-		-I$(PT_SUPPORT)/include \
-		-I$(ASF_SUPPORT)/include \
-		-I$(ERROR_SUPPORT)/include \
-		-I$(TOOLBUSLIB)/include \
-		-I$(ATERM)/include
+INCLUDES = \
+	-I$(ASC_SUPPORT)/include \
+	-I$(SGLR)/include \
+	-I$(PT_SUPPORT)/include \
+	-I$(ASF_SUPPORT)/include \
+	-I$(ERROR_SUPPORT)/include \
+	-I$(TOOLBUSLIB)/include \
+	-I$(ATERM)/include
 
 AM_CFLAGS = -DASF_MAIN
 bin_PROGRAMS = ActionScriptChecker
