@@ -13,7 +13,6 @@
 #include <MEPT-utils.h>
 /*}}}  */
 
-/*{{{  structures */
 
 typedef struct PositionSymbolTuple_tag {
   int pos;
@@ -24,14 +23,6 @@ typedef struct PositionTreeTuple_tag {
   int pos;
   PT_Tree tree;
 } PositionTreeTuple;
-
-
-/*}}}  */
-/*{{{  externals */
-
-extern ATbool run_verbose;
-
-/*}}}  */
 
 /*{{{  PT_Symbol getSymbol(PT_Symbol symbol, PT_SymbolVisitorData data) */
 

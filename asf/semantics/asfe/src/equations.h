@@ -55,21 +55,11 @@ typedef struct equation_table
 } equation_table;
 
 
-PT_Tree RWprepareTerm(PT_Tree t, ATbool allow_ambs);
-ASF_CondEquationList RWprepareEquations(ASF_CondEquationList eqsList,
-					ATbool mark_new_layout);
-PT_Tree RWrestoreTerm(PT_Tree t, ATbool remove_layout);
-PT_Args RWrestoreArgs(PT_Args args, ATbool remove_layout);
-void RWflushEquations();
-PT_Args AFfilterLayout(PT_Args elems);
-PT_Tree AFremoveTermLayout(PT_Tree t);
-
 equation_entry *find_equation(equation_entry *prev, PT_Production top_ofs, 
                               PT_Production first_ofs);
-void select_equations(char *module);
 void enter_equations(char *module, ASF_CondEquationList eqs);
-ATbool find_module(char *module);
 void delete_equations(char *module);
+void select_equations(char *module);
 
 extern equation_table *equations;
 

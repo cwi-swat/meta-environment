@@ -49,7 +49,7 @@ static PT_Tree rewriteTraversalBottomUp(PT_Tree trm, ATerm env, int depth,
 					Traversal *traversal);
 static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth, 
 				       Traversal *traversal);
-
+static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra);
 /*}}}  */
 
 /* Reduction functionality */
@@ -533,9 +533,9 @@ PT_Tree rewrite(PT_Tree trm)
 }
 
 /*}}}  */
-/*{{{  PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra) */
+/*{{{  static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra) */
 
-PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra)
+static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra)
 {
   PT_Tree reduct;
   equation_entry *entry = currentRule;

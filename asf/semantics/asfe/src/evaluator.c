@@ -7,6 +7,7 @@
 #include "evaluator.h"
 #include "reduction.h"
 #include "errors.h"
+#include "pre-post.h"
 #ifdef USE_TIDE
 #include "debug.h"
 #endif

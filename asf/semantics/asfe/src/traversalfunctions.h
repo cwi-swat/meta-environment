@@ -7,6 +7,14 @@
 #include <aterm2.h>
 #include <MEPT-utils.h>
 
+/* these are argument numbers is asfix appls */
+#define ACCUMULATED_ARG_POS    8
+#define ACCUMULATED_SYMBOL_POS 8
+#define TRAVERSED_ARG_POS      4 
+#define TRAVERSED_SYMBOL_POS   4
+#define TUPLE_FIRST_POS        2
+#define TUPLE_SECOND_POS       6
+
 extern ATbool traversals_on;
 
 typedef enum { UNDEFINED_TYPE = 0, TRANSFORMER = 1, ACCUMULATOR = 2,
@@ -29,13 +37,6 @@ typedef struct Traversal_tag {
 	PT_Args        args;
 } Traversal;
 
-/* these are argument numbers is asfix appls */
-#define ACCUMULATED_ARG_POS    8
-#define ACCUMULATED_SYMBOL_POS 8
-#define TRAVERSED_ARG_POS      4 
-#define TRAVERSED_SYMBOL_POS   4
-#define TUPLE_FIRST_POS        2
-#define TUPLE_SECOND_POS       6
 
 #define NO_TRAVERSAL NULL
 

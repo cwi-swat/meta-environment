@@ -26,6 +26,7 @@
 #include "debug.h"
 #include "equations.h"
 #include "environment.h"
+#include "pre-post.h"
 
 #ifdef USE_TIDE
 #include <tide-adapter.h>
