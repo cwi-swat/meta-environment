@@ -9,11 +9,6 @@ let
 in
   execute(asfoperations, AO?) .
   (
-    rec-msg(rename(Renamings?, Equations?)) .
-    snd-eval(AO, rename-in-equations(Renamings, Equations)) .
-    rec-value(AO, equations(Equations?)) .
-    snd-msg(equations(Equations))
-  +
     rec-msg(extract-equations(Equations?)).
     snd-eval(AO, extract-equations(Equations)).
     rec-value(AO, extract-equations-result(Equations?)).

@@ -27,27 +27,6 @@ static char myversion[] = "0.0";
 static char myarguments[] = "hV";
 
 /*}}}  */
-/*{{{  ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm eqsPTree) */
- 
-ATerm rename_in_equations(int cid, ATerm atRenamings, ATerm eqsPTree)
-{
-  ASF_Start start = ASF_StartFromTerm(ATBunpack(eqsPTree));
-  ASF_CondEquationList asfEqsList = ASF_makeCondEquationListEmpty();
-  SDF_Renamings renamings = SDF_makeRenamingsFromTerm(atRenamings);
-  ASF_Equations asfEqs = ASF_getStartTopEquations(start);
-
-  if (ASF_isEquationsPresent(asfEqs)) {
-    asfEqsList = ASF_getEquationsList(asfEqs);
-    asfEqsList = doRenamingsInEquations(asfEqsList, renamings);
-    asfEqs = ASF_setEquationsList(asfEqs, asfEqsList);
-  }
- 
-  return ATmake("snd-value(equations(<term>))",
-                ATBpack(ASF_StartToTerm(ASF_setStartTopEquations(start,
-								 asfEqs))));
-}
- 
-/*}}}  */ 
 /*{{{  ATerm extract_equations(int cid, ATerm modules) */
 
 ATerm extract_equations(int cid, ATerm modules)
