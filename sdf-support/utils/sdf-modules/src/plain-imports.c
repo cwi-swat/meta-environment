@@ -55,9 +55,11 @@ static ATermList getTransitiveImports(ATerm id)
     module = ATgetFirst(todo);
     todo = ATgetNext(todo);
 
-    imports = (ATermList) ATtableGet(importsTable, module);
-    if (imports != NULL) {
-      todo = merge(imports, todo);
+    if (!isElem(module, result)) {
+      imports = (ATermList) ATtableGet(importsTable, module);
+      if (imports != NULL) {
+        todo = merge(imports, todo);
+      }
     }
 
     result = merge(ATmakeList1(module), result);
