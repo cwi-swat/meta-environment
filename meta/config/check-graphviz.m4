@@ -27,8 +27,9 @@ AC_DEFUN(META_GRAPHVIZ_VERSION,
    dnl 1) get full version: "dot version gviz1.5.1 (09-29-99)"
    dnl 2) extract version part: "gviz1.5.1"
    dnl 3) remove gviz prefix: "1.5.1"
-   dot_version_string=`${GRAPHVIZ} -V 2>/dev/null`
-   if test "a${dot_version_string}" = "a"; then
+
+   dot_version_string=`${GRAPHVIZ}/bin/dot -V 2>&1`
+   if test $? -ne 0; then
       AC_ERROR( [ No dot program available or other error.] )
    fi
 
@@ -49,9 +50,9 @@ AC_DEFUN(META_CHECK_GRAPHVIZ,
                       dot, 
                       [  --with-graphviz=DIR     graphviz package is in DIR])
 
-   META_GRAPHVIZ_VERSION
-
    GRAPHVIZ=`dirname \`dirname ${GRAPHVIZ}\``
+
+   META_GRAPHVIZ_VERSION
 
    dnl Try to find tcldot library
    f=`echo ${GRAPHVIZ}/lib/Tcldot/Tcldot.so.*`
