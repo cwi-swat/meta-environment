@@ -20,6 +20,9 @@
 #
 # $Id$
 
+2000/4/26 (markvdb@cwi.nl)
+   * Code added for dealing with {<symbol>}<nr>+ and {<symbol> <symbol>}<nr>+
+     Sdf2 constructions.
 2000/4/25 (markvdb@cwi.nl)
    * Memory leak in parsetablegen fixed.   
 
