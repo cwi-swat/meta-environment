@@ -1,0 +1,103 @@
+\section{Getting acquainted with the \ASmetaenv{}}
+
+\begin{itemize}
+
+\item Copy the Pico-Booleans specification from \texttt{TODO: dir} and
+start the \ASmetaenv{}:
+\begin{verbatim}
+ > cp -r /path/to/meta-env/demo/pico .
+ > cd pico
+ > meta
+\end{verbatim}
+
+\item Open the Pico-Booleans specification and have a look at the syntax
+and equations by selecting the \texttt{Edit Syntax} and \texttt{Edit
+Equations} options from the popup-menu. The popup-menu can be activated
+by clicking on the Pico-Booleans rectangle in the graph-browser.
+
+\item Create a new term by selecting the \texttt{New Term} option from
+the Pico-Booleans popup-menu.
+
+\item Enter the following term over the Pico-Booleans specification:
+\begin{verbatim}
+  true & false
+\end{verbatim}
+
+\item Parse this term by selecting the \texttt{Parse} option from the
+\texttt{Meta-Environment} menu (in the editor).
+
+\item Click on \texttt{true} in the editor and observe the focus that is
+now placed around the term. Also note that the sort (\texttt{PICO-BOOL})
+is displayed in the bottom status area of the editor.
+
+\item Reduce the term \texttt{true \& false} by selecting the
+\texttt{Reduce} option from the menu. Inspect that the result is
+indeed what you expected it to be, and close the reduct-window.
+
+\item Change the subterm \texttt{false} into \texttt{true} and select
+\texttt{Reduce} again. There is no need to explicitly \texttt{Parse}
+first as this is implied when you choose \texttt{Reduce}.
+
+\end{itemize}
+
+\section{Extending the Booleans}
+
+\begin{itemize}
+
+\item Extend the syntax of Pico-Booleans by adding a syntax rule for
+the logical implication ($\Rightarrow$).
+
+\item Re-parse the syntax (\texttt{MetaEnvironment|Parse}).
+
+\item Inspect the rule you just entered, observing the focus and the
+sorts displayed at the bottom of the editor.
+
+\item Open the Pico-Booleans equations (if you haven't done so already).
+
+\item Add the equations (semantic rules) for the $\Rightarrow$ operator.
+
+\item Parse the equations.
+
+\item Open a term-editor (graph-browser: \texttt{New Term}) over the
+Pico-Booleans and test the $\Rightarrow$ semantics by entering and
+reducing several terms.
+
+\end{itemize}
+
+\section{The Pico programming language}
+
+\subsection{The Pico definition}
+\begin{itemize}
+\item Open the Pico-syntax specification.
+\item Open the term \texttt{fac.pico}. This is a pico program which computes the factorial.
+\item Press \texttt{Parse} and click around in the term to get acquainted with the structure of a pico program.
+\item Also have a look at the Pico-syntax syntax definition.
+\item Open the Pico-typecheck module. This module defines a typechecker for pico programs. 
+\item Test the typechecker by opening the term \texttt{factc.trm} and reducing it.
+\item Open the Pico-eval module. This module defines an interpreter for Pico  programs.
+\item Test this specification by reducing the term \texttt{facev.trm}.
+
+\end{itemize}
+
+\subsection{Optional \texttt{else} branches}
+\begin{itemize}
+\item Adapt the syntax definition of Pico such that a conditional statement can  be either an \texttt{if-then-fi} or an \texttt{if-then-else-fi}. Note that there are several ways to do this. Choose one you like.
+\item You have now broken the typechecker and the interpreter. After you have figured out why they are broken, fix them. Don't forget, each time you adapt an equation you must \texttt{Parse} to effectuate the changes.
+\end{itemize}
+
+\subsection{A new basic type for Pico}
+\begin{itemize}
+\item Notice how Pico has only two basic types: \texttt{natural} and \texttt{string}. Add syntax for a new type: \texttt{boolean}.
+\item Extend the Pico expression syntax (sort \texttt{EXP}) with Boolean constants (\texttt{PICO-BOOL-CON}) and four operations: \texttt{\&} , \texttt{|}, \texttt{==} and \texttt{!=}.
+\item Extend the typechecker to cope with these kind of expressions. The operations \texttt{\&} and \texttt{|} only accept \texttt{boolean} operands. The \texttt{==} and \texttt{!=} operators should enforce that both operands are of \emph{equal} type. By doing this you are \emph{overloading} these two Pico operators for the three basic types.
+\item Extend the interpreter to cope with these kind of expressions.
+\end{itemize}
+
+The Pico typechecker currently enforces that the type of the conditional expression is \texttt{natural}. You have just added the Pico type \texttt{boolean}. Let's change the conditional to use booleans instead of naturals. 
+
+\subsection{Boolean conditional expressions}
+
+\begin{itemize}
+\item Change the typechecker such that type \texttt{boolean} is expected in the \texttt{if-then-fi} and the \texttt{if-then-else-fi}.
+\item Change the evaluator such that the \texttt{then} branch is chosen when the expression evaluates to \texttt{true} and the (optional) \texttt{else} branch otherwise.
+\end{itemize}
