@@ -1,0 +1,152 @@
+
+<HTML>
+<HEAD>
+<TITLE>ToolBus description</TITLE>
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>The ToolBus</H1>
+
+<P>
+The ToolBus is a software application architecture developed at
+the University of Amsterdam by J.A. Bergstra and P. Klint\cite{BK95.toolbus}.
+The ToolBus utilizes a scripting language based on process 
+algebra\cite{BW90} to
+describe the communication between software tools. A ToolBus \emph{script}
+describes a number of processes that can communicate with each other and
+with tools living outside the ToolBus.
+A language-dependent adapter that translates between the internal
+ToolBus data format and the data format used by the individual tools
+makes it possible to write every tool in the language best suitable
+for the task(s) it has to perform.
+
+<P>
+<IMG SRC="toolbus.gif">
+
+<P>
+The following sections give an overview of the most important ToolBus
+features. There is also a more complete overview of the ToolBus
+primitives.
+
+<HR>
+<P ALIGN=CENTER><STRONG>Communication inside the ToolBus</STRONG></P>
+There are two mechanisms available for processes in the ToolBus to
+communicate with each other, message passing and selective broadcasting.
+A process can synchronously send a <EM>message</EM> using the 
+<CODE>snd-msg</CODE> 
+primitive which must be received by another process using the
+<CODE>rec-msg</CODE>
+primitive. A process can send a <EM>note</EM> using 
+<CODE>snd-note</CODE> to all processes that have subscribed, 
+using <CODE>subscribe</CODE>,
+to that particular note type. The receiving processes read notes 
+asynchronously using <CODE>rec-note</CODE>, at low priority. 
+Transmitting notes amounts to <EM>asynchronous selective broadcasting</EM>.
+
+<HR>
+<P ALIGN=CENTER><STRONG>Communication between ToolBus and tools</STRONG></P>
+A ToolBus process can initiate communication with a tool by sending a 
+message to a tool using <CODE>snd-do</CODE>, or <CODE>snd-eval</CODE>
+ when an answer is expected. 
+A tool can initiate communication by sending an <EM>event</EM>
+to the ToolBus. A ToolBus process receives this event using
+using the <CODE>rec-event</CODE> primitive and must acknowledge the event 
+using the <CODE>snd-ack-event</CODE> primitive.
+
+The execution and termination of the tools attached to the ToolBus, as well
+as their connection/disconnection can be controlled explicitly by appropriate
+primitives (See Section \ref{tb-primitives}).
+
+<HR>
+<P ALIGN=CENTER><STRONG>Process composition</STRONG></P>
+More complex processes can be created using process composition operators
+for <EM>choice</EM> (<CODE>+</CODE> operator), <EM>sequential composition</EM>
+(<CODE>.</CODE> operator), 
+<EM>parallel composition</EM> (<CODE>||</CODE>} operator),
+<EM>iteration</EM> (<CODE>*</CODE> operator) and 
+<EM>guarded (conditional) execution</EM>
+(the <CODE>if/then/fi</CODE> operator). The <EM>process creation</EM>
+primitive <CODE>create</CODE> can be used to create new processes.
+
+<HR>
+<P ALIGN=CENTER><STRONG>Types and variables</STRONG></P>
+All terms within the ToolBus are <EM>typed</EM>. 
+The ToolBus defines a number of
+basic types for booleans, integers, reals, strings, and binary strings. Complex
+types can be formed using a list constructor or function application. The type
+term is a supertype of all other types. The <CODE>let/in/endlet</CODE> 
+construction makes it possible to declare variables.
+
+<HR>
+<H2>A small example</H2>
+
+To familiarize the reader with the syntax and semantics of ToolBus scripts,
+this section contains a small example.
+This example also familiarizes the reader with the use of noweb to
+present code fragments. Noweb is a system for literate programming
+as described in \cite{Knuth:CJ-27-2-97}, 
+and is used to keep this document consistent
+with the actual system.
+
+In this example, a ToolBus script is presented that connects two tools, 
+a calculator tool
+that calculates expressions and a user interface tool that asks the
+user for expressions and presents the result of calculating that expression.
+
+This ToolBus script contains two processes, a <CODE>UI</CODE> process that
+handles user interface events and a <CODE>CALC</CODE> process communicating 
+with the calculator tool. 
+
+<PRE>
+process UI is
+let
+  UI : ui,
+  E : str,
+  V : str
+in
+  execute(ui, UI?) .
+  ( rec-event(UI, expr(E?)) .
+    snd-msg(calc, expr(E)) .
+    rec-msg(calc, expr(E, V?)) .
+    snd-ack-event(UI, expr(E, V))
+  ) * 
+  rec-event(UI, quit) .
+  snd-ack-event(UI, quit) .
+  shutdown("Goodbye!")
+endlet
+
+
+process CALC is
+let
+  Calc : calc,
+  E : str,
+  V : str
+in
+  execute(calc, Calc?) .
+  ( rec-msg(calc, expr(E?)) .
+    snd-eval(Calc, expr(E)) .
+    rec-value(Calc, expr(E, V?)) .
+    snd-msg(calc, expr(E, V))
+  ) * delta
+endlet
+</PRE>
+
+Tool declarations make it possible for the ToolBus to find and execute
+tools. A tool declaration introduces a new type, that can later be
+used to declare tool identifier variables of that type.
+In our example script, two tools are defined:
+<UL>
+<LI>The <CODE>ui</CODE> tool, that implements the user interface.
+<LI>The <CODE>calc</CODE> tool, that implements the calculator.
+</UL>
+<PRE>
+tool ui is { command = "wish-adapter -script ui.tcl" }
+tool calc is { command = "calc" }
+</PRE>
+
+Finally, the ToolBus configuration primitive 
+<CODE>toolbus(UI,CALC)</CODE> starts the two processes in parallel.
+<PRE>
+toolbus(UI,CALC)
+</PRE>
+

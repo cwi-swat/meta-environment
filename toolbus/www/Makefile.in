@@ -25,13 +25,14 @@ CLEAN		= @CLEAN@
 .SUFFIXES:
 .SUFFIXES: .c .o
 
-DISTFILES	= Makefile.in index.html
+DISTFILES	= Makefile.in index.html toolbus.gif toolbus.html apps.html
 
 all:
 
 clean:
 
 install:
+	ln -s ../tide/help tide
 
 distclean: clean
 	rm -f Makefile

@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>A taxonomy of debugger features</title>
+
+</head>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<H1>A Taxonomy of debugger features</H1>
+
+<P>
+First we define some basic notions, that will be used
+in the features described later.
+<UL>
+	<LI>Expressions:
+	<UL>
+		<LI>Constants
+		<LI>Variable values
+		<LI>Function calls
+		<LI>Complex expressions
+	</UL>
+	<LI>Variables:
+	<UL>
+		<LI>Scoped variables
+	</UL>
+	<LI>Source position format:
+	<UL>
+		<LI>Line
+		<LI>Line/column pair
+		<LI>Line/column area
+		<LI>Instruction source text
+	</UL>
+	A multithreaded environment often results in a set of
+	positions, instead of a single position.
+	<LI>Observation ports:
+	<UL>
+		<LI>Continuous
+		<LI>Source line
+		<LI>Source match
+		<LI>Call
+		<LI>Exit
+		<LI>Redo
+		<LI>Fail
+		<LI>Unify
+		<LI>Exception
+	</UL>
+	<LI>Observation conditions:
+	<UL>
+		<LI>Variable change
+		<LI>Pass count
+		<LI>Expressions
+	</UL>
+</UL>
+
+<P>
+The actual features follow here. They closely depend on the notions
+defined above.
+
+<UL>
+	<LI>Source tracking:
+	<UL>
+		<LI>Visualization moment:
+		<UL>
+			<LI>On halt
+			<LI>Observation ports
+			<LI>Observation conditions
+		</UL>
+		<LI>Source position format
+	</UL>
+
+	<LI>Breakpoints:
+	<UL>
+		<LI>Observation ports
+		<LI>Observation conditions
+	</UL>
+		
+	<LI>Watchpoints:
+	<UL>
+		<LI>Observation ports
+		<LI>Observation conditions
+		<LI>Visualization objects:
+		<UL>
+			<LI>Variable values
+			<LI>Expressions
+		</UL>
+	</UL>
+
+	<LI>Execution control:
+	<UL>
+		<LI>Single step
+		<LI>Step over
+		<LI>Run
+		<LI>Run until parent frame
+		<LI>Change current point of execution (at observation port)
+	</UL>
+
+	<LI>State changes:
+	<UL>
+		<LI>Variable assignment (with expressions)
+		<LI>Call functions with side effects
+	</UL>
+
+	<LI>Stack trace:
+	<UL>
+		<LI>Source position
+		<LI>Local variables
+	</UL>
+</UL>
+
+
+In the future, I also want to create a taxonomy of profiler features.
+<UL>
+	<LI>Observation points
+	<LI>Count
+	<LI>Time
+</UL>
+
+</body>
+</html>
