@@ -206,7 +206,7 @@ ATerm lookup_prod(Symbol sym)
   return (ATerm) NULL; /* silence the compiler, we never get here. */
 }
 /*}}}  */
-/*{{{  ATerm lookup_prod(Symbol sym) */
+/*{{{  funcptr lookup_func_given_sym(Symbol sym) */
 
 funcptr lookup_func_given_sym(Symbol sym)
 {
