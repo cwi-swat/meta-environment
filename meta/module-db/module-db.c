@@ -28,6 +28,9 @@ extern ATerm modules_to_process;
 #define eqs_updated_loc 5
 #define table_loc 6
 
+static ATerm Mtrue;
+static ATerm Mfalse;
+
 void rec_terminate(int cid, ATerm t) 
 {
   exit(0);
@@ -138,22 +141,33 @@ ATerm add_module(int cid, ATerm asfix)
 }
 
 /* The Sdf2 variant */
-ATerm add_sdf2_module(int cid, char* path, ATerm asfix)
+ATerm add_sdf2_module(int cid, char* path, ATerm asfix,char* changed)
 {
   ATerm t[8]; 
   ATerm modname, appl, entry;
   ATermList imports, unknowns;
+  ATerm status;
+  char   newpath[1024] = {'\0'};
+ 
+  if(!strcmp(changed,"changed")) {
+    sprintf(newpath,"%s%s", path, ".baf");
+    status = Mtrue;
+  }
+  else {
+    sprintf(newpath,"%s", path);
+    status = Mfalse;
+  } 
 
   if(ATmatchTerm(asfix,pattern_asfix_term,
                  &t[0], &t[1], &t[2], &t[3], &t[4], &t[5], 
                  &appl, &t[6], &t[7])) {
     modname = get_module_name(appl);
-    entry = (ATerm) ATmakeList(7,ATmake("<str>",path),
+    entry = (ATerm) ATmakeList(7,ATmake("<str>",newpath),
                                  asfix,
-                                 (ATerm) ATtrue,
+                                 status,
                                  ATparse("unavailable"),
                                  ATparse("unavailable"),
-                                 (ATerm) ATtrue,
+                                 Mtrue,
                                  ATparse("unavailable"));
     PutValue(new_modules_db, modname, entry); 
     imports = get_import_section_sdf2(appl); 
@@ -167,9 +181,21 @@ ATerm add_sdf2_module(int cid, char* path, ATerm asfix)
   }
 }
 
-ATerm add_eqs_module(int cid, ATerm modname, char* path, ATerm eqs)
+ATerm add_eqs_module(int cid, ATerm modname, char* path, 
+                              ATerm eqs, char* changed)
 {
   ATerm entry;
+  ATerm status;
+  char   newpath[1024] = {'\0'};
+ 
+  if(!strcmp(changed,"changed")) {
+    sprintf(newpath,"%s%s", path, ".baf");
+    status = Mtrue;
+  }
+  else {
+    sprintf(newpath,"%s", path); 
+    status = Mfalse;
+  }
 
   entry = GetValue(new_modules_db, modname);
   if(!ATisEqual(eqs,ATparse("error")) &
@@ -182,8 +208,11 @@ ATerm add_eqs_module(int cid, ATerm modname, char* path, ATerm eqs)
  
   }
   entry = (ATerm)ATreplace((ATermList)entry, 
-                           ATmake("<str>",path), 
+                           ATmake("<str>",newpath), 
                            path_eqs_loc);
+  entry = (ATerm)ATreplace((ATermList)entry, 
+                           status, 
+                           eqs_updated_loc);
   entry = (ATerm)ATreplace((ATermList)entry, eqs, eqs_loc);
   PutValue(new_modules_db, modname, entry); 
   return ATmake("snd-value(done)");
@@ -249,26 +278,39 @@ ATerm get_eqs2_path(int cid, ATerm modname)
 ATerm get_sdf2_asfix(int cid, ATerm modname)
 {
   ATerm entry, asfix;
+  ATerm status;
 
   entry = GetValue(new_modules_db, modname);
-  asfix = ATelementAt((ATermList)entry, syn_loc);
-  return ATmake("snd-value(syntax(<term>))", asfix);
+  status = ATelementAt((ATermList)entry, syn_updated_loc);
+  if(ATisEqual(status,Mtrue)) {
+    asfix = ATelementAt((ATermList)entry, syn_loc);
+    return ATmake("snd-value(syntax(<term>))", asfix);
+  }
+  else 
+    return ATmake("snd-value(syntax-unchanged)");
 }
 
 ATerm get_eqs_asfix(int cid, ATerm modname)
 {
   ATerm entry, asfix;
+  ATerm status;
 
   entry = GetValue(new_modules_db, modname);
-  asfix = ATelementAt((ATermList)entry, eqs_loc);
-  if(ATisEqual(asfix,ATparse("unavailable")))
-    return ATmake("snd-value(no-eqs)");
-  else if(ATisEqual(asfix,ATparse("error")))
-    return ATmake("snd-value(no-eqs)");
-  else if(ATisEqual(asfix,ATparse("no-equations")))
-    return ATmake("snd-value(no-eqs)");
-  else
-    return ATmake("snd-value(eqs(<term>))", asfix);
+  status = ATelementAt((ATermList)entry, eqs_updated_loc);
+  if(ATisEqual(status,Mtrue)) {
+    entry = GetValue(new_modules_db, modname);
+    asfix = ATelementAt((ATermList)entry, eqs_loc);
+    if(ATisEqual(asfix,ATparse("unavailable")))
+      return ATmake("snd-value(no-eqs)");
+    else if(ATisEqual(asfix,ATparse("error")))
+      return ATmake("snd-value(no-eqs)");
+    else if(ATisEqual(asfix,ATparse("no-equations")))
+      return ATmake("snd-value(no-eqs)");
+    else
+      return ATmake("snd-value(eqs(<term>))", asfix);
+  }
+  else 
+    return ATmake("snd-value(eqs-unchanged)");
 }
 
 ATerm get_parse_table(int cid, ATerm modname)
@@ -818,6 +860,11 @@ int main(int argc, char **argv)
   AFinit(argc, argv, &bottomOfStack);
   cid = ATBconnect(NULL, NULL, -1, module_db_handler);  
 
+  Mtrue = ATparse("true");
+  ATprotect(&Mtrue);
+  Mfalse = ATparse("false");
+  ATprotect(&Mfalse);
+ 
   ATprotect(&modules_to_process);
 
   ATBeventloop();

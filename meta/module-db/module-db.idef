@@ -13,7 +13,8 @@ Name      : term,
 Mdb       : module-db,
 Modules   : list,
 Equations : list,
-Pairs     : list
+Pairs     : list,
+Status    : str
 in
 
 /* First, execute the module db */
@@ -78,8 +79,8 @@ snd-do(Mdb, create-module-db).
 +
 /* Path is the directory in which the file containing Module lives.
    Module is the parsed SDF2 representation in Asfix1 */
-  rec-msg(add-sdf2-module-to-db(Path?,Module?)).
-  snd-eval(Mdb,add-sdf2-module(Path,Module)).
+  rec-msg(add-sdf2-module-to-db(Path?,Module?,Status?)).
+  snd-eval(Mdb,add-sdf2-module(Path,Module,Status)).
   rec-value(Mdb,imports(Name?,need-modules(Modules?))).
   snd-msg(need-modules(Modules)).
 /* If a new module is added, we tell the world the new import relations */
@@ -95,8 +96,8 @@ snd-do(Mdb, create-module-db).
   snd-msg(eqs-for-modules(Modules))
 +
 /* Add the equations to the database for the given module name */
-  rec-msg(add-eqs-to-db(Module?,Path?,Eqs?)).
-  snd-eval(Mdb,add-eqs-module(Module,Path,Eqs)).
+  rec-msg(add-eqs-to-db(Module?,Path?,Eqs?,Status?)).
+  snd-eval(Mdb,add-eqs-module(Module,Path,Eqs,Status)).
   rec-value(Mdb,done).
   snd-msg(done)
 +
@@ -155,13 +156,21 @@ snd-do(Mdb, create-module-db).
 +
   rec-msg(get-sdf2-asfix(Module?)).
   snd-eval(Mdb, get-sdf2-asfix(Module)).
-  rec-value(Mdb, syntax(Syntax?)).
-  snd-msg(syntax(Syntax))
+  (
+    rec-value(Mdb, syntax(Syntax?)).
+    snd-msg(syntax(Syntax))
+  +
+    rec-value(Mdb, syntax-unchanged).
+    snd-msg(syntax-unchanged)
+  )
 +
   rec-msg(get-eqs-asfix(Module?)).
   snd-eval(Mdb, get-eqs-asfix(Module)).
   ( rec-value(Mdb, eqs(Eqs?)).
     snd-msg(eqs(Eqs))
+  +
+    rec-value(Mdb, eqs-unchanged).
+    snd-msg(eqs-unchanged)
   +
     rec-value(Mdb, no-eqs).
     snd-msg(no-eqs)
