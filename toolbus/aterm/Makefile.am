@@ -1,8 +1,5 @@
 # $Id$
 
-SUBDIRS			= . @JAVA@
-DIST_SUBDIRS		= . java
-
 EXTRA_DIST		= tblog-interface.tb tblog.dict
 
 ATINC			= $(ATERM)/include

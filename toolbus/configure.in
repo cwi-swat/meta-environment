@@ -66,9 +66,7 @@ dnl Which additional adapters to build?
 
 AC_ARG_WITH(java,
    [  --with-java             include java support for adapters],
-   JAVA=java
    JAVA_ADAPTER=java-adapter)
-AC_SUBST(JAVA)
 AC_SUBST(JAVA_ADAPTER)
 
 AC_ARG_WITH(tcltk,
@@ -202,14 +200,13 @@ AC_OUTPUT(
   libtb/Makefile
   toolbus/Makefile
   aterm/Makefile
-  aterm/java/Makefile
-  aterm/java/toolbus/Makefile
-  aterm/java/toolbus/tifstojava
   adapters/Makefile
   adapters/wish-adapter/Makefile
   adapters/tcltk-adapter/Makefile
   adapters/perl-adapter/Makefile
   adapters/java-adapter/Makefile
+  adapters/java-adapter/toolbus/Makefile
+  adapters/java-adapter/toolbus/tifstojava
   adapters/gen-adapter/Makefile
   adapters/toolbus-adapter/Makefile
   adapters/emacs-adapter/Makefile
@@ -224,5 +221,5 @@ AC_OUTPUT(
   demos/hello/Makefile
   demos/wave/Makefile
   test/Makefile,
-  chmod +x aterm/java/toolbus/tifstojava
+  chmod +x adapters/java-adapter/toolbus/tifstojava
 ) 

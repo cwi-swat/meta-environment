@@ -9,7 +9,7 @@ EXTRA_DIST	= test.tb test.tifs example.tb example.tifs
 java_JAVA	= Tool.java AbstractTool.java TestTool.java JavaTif.java \
 		Testing.java Example.java
 
-JAVAROOT	= ${top_builddir}/aterm/java/
+JAVAROOT	= ${top_builddir}/adapters/java-adapter/
 
 # This is some kind of hack to make sure that generated Java files are
 # generated before compiling all other java files but that it will
@@ -22,16 +22,16 @@ noinst_SCRIPTS	= ${TESTCLASSES} ${EXAMPLECLASSES}
 
 bin_SCRIPTS	= tifstojava
 
-CLASSPATH_ENV	= CLASSPATH=${top_srcdir}/aterm/java:${ATERM}/classes
+CLASSPATH_ENV	= CLASSPATH=${top_srcdir}/adapters/java-adapter:${ATERM}/classes
 
 ${EXAMPLECLASSES}: example.tifs JavaTif.class
 	$(CLASSPATH_ENV) \
-	${top_srcdir}/aterm/java/toolbus/tifstojava \
+	${top_srcdir}/adapters/java-adapter/toolbus/tifstojava \
 	-tifs example.tifs -tool example -package toolbus
 
 ${TESTCLASSES}: test.tifs JavaTif.class
 	$(CLASSPATH_ENV) \
-	${top_srcdir}/aterm/java/toolbus/tifstojava \
+	${top_srcdir}/adapters/java-adapter/toolbus/tifstojava \
 	-tifs test.tifs -tool testing -package toolbus
 
 test.tifs: test.tb

@@ -19,6 +19,9 @@
 
 ------------------------------------------------------------------------------
 
+2001/08/30 (jong@cwi.nl)
+ * Moved java-adapter from aterm/java/... to adapters/java-adapter
+
 2001/08/29 (jong@cwi.nl)
  * Reinstated support for java-adapter which got wiped out mysteriously.
 
