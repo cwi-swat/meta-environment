@@ -27,7 +27,7 @@ let
   Amount: int,
   Ambs: list
 in
-  snd-msg(open-language("Ambi","../../sglr/regress-test/tables/Ambi.tbl")).
+  snd-msg(open-language("Ambi","./AmbiLanguage.baf")).
   rec-msg(language-opened("Ambi")).
   snd-msg("aap", parse-string-as-asfix1("Ambi","","a")).
  (
