@@ -1,0 +1,44 @@
+Some statistics for the meta ToolBus scripts
+
+.idef	22 files	1666 LOC
+.tb	33 files	2848 LOC
+
+Total	55 files	4515 LOC
+
+process definitions	104
+tool definitions	27
+
+.			4343
++			341
+*			243
+||			3
+
+snd-msg			555
+rec-msg			541
+snd-note		100
+rec-note		24
+subscribe		12
+unsubscribe		0
+no-note			0
+
+delta			49
+tau			44
+
+snd-do			121
+snd-eval		102
+rec-value		139
+rec-event		56
+snd-ack-event		54 (bug?)
+
+let			223
+
+create			58
+execute			31
+snd-terminate		14
+shutdown		4
+rec-disconnect		6
+
+#define			3
+#ifdef			3
+#include		90
+
