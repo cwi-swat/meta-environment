@@ -25,6 +25,6 @@ pt-support 1.3
 
 sglr 3.12
 
-aterm PARSE_ERROR_IN_PACKAGE_DEF
+aterm 2.3
 
 toolbuslib 0.6
