@@ -1,5 +1,8 @@
 $Id$
 
+Thu Feb  3 10:00:57 CET 2005 <jurgenv@cwi.nl>
+ * Added ATerm pretty printer
+
 Tue Feb  1 17:52:09 CET 2005 <jurgenv@cwi.nl>
  * ASF-Normalization specifications now rewrites annotated specifications
    (with pos-info), INSTEAD of removing all annotations.
