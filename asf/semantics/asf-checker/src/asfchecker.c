@@ -12,6 +12,7 @@
 
 #include <MEPT-utils.h>
 #include <ASFME-utils.h>
+#include <ErrorAPI-utils.h>
 
 #include "equationChecker.h"
 
@@ -29,7 +30,7 @@ static char myarguments[] = "hi:vV";
 
 /*{{{  static ATermList checkAsf(ATerm term) */
 
-static ATermList checkAsf(ATerm term)
+static ERR_FeedbackList checkAsf(ATerm term)
 {
   if (ATgetType(term) == AT_LIST) {
     ASF_ASFConditionalEquationList rules = ASF_makeASFConditionalEquationListFromTerm(term);
@@ -43,13 +44,13 @@ static ATermList checkAsf(ATerm term)
       ASF_ASFConditionalEquationList rules = ASF_getASFModuleEquationList(module);
       ASF_ASFTestEquationTestList tests = ASF_getASFModuleTestList(module);
 
-      return ATconcat(checkEquations(rules), checkTests(tests));
+      return ERR_concatFeedbackList(checkEquations(rules), checkTests(tests));
     }
     else if (ambs == 1) {
-      return ATmakeList1(ATmake("[<str>]","Equations contain one ambiguity!"));
+      return ERR_makeFeedbackListSingle(makeMessage("Equations contain one ambiguity!", NULL, NULL));
     }
     else {
-      return ATmakeList1(ATmake("[<str>]","Equations contain ambiguities!"));
+      return ERR_makeFeedbackListSingle(makeMessage("Equations contain ambiguitites!", NULL, NULL));
     }
   }
 }
@@ -58,23 +59,11 @@ static ATermList checkAsf(ATerm term)
 
 /*{{{  static void displayMessages(ATermList errorList) */
 
-static void displayMessages(ATermList errorList)
+static void displayMessages(ERR_FeedbackList errorList)
 {
-  char *errorStr, *textTag, *textTree;
-  ATerm tag, tree;
-
-  while (!ATisEmpty(errorList)) {
-    ATerm error = ATgetFirst(errorList);
-    if (ATmatch(error, "[<str>,<term>,<term>]", &errorStr, &tag, &tree)) {
-      textTag = strdup(PT_yieldTree(PT_makeTreeFromTerm(tag)));
-      textTree = strdup(PT_yieldTree(PT_makeTreeFromTerm(tree)));
-      ATwarning("Equation %s %s: %s\n", textTag, errorStr, textTree);
-    }
-    else if (ATmatch(error, "[<str>]", &errorStr)) {
-      ATwarning("%s\n", errorStr);
-    }
-
-    errorList = ATgetNext(errorList);
+  while (!ERR_isFeedbackListEmpty(errorList)) {
+    ERR_Feedback fb = ERR_getFeedbackListHead(errorList);
+    ATwarning("%s\n", ERR_getFeedbackDescription(fb));
   }
 }
 
@@ -84,9 +73,9 @@ static void displayMessages(ATermList errorList)
 
 ATerm check_asf(int cid, ATerm term)
 {
-  ATermList errorList = checkAsf(ATBunpack(term));    
+  ERR_FeedbackList errorList = checkAsf(ATBunpack(term));    
 
-  return ATmake("snd-value(messages(<term>))", errorList);
+  return ATmake("snd-value(messages(<term>))", (ATerm) errorList);
 }
 
 /*}}}  */
@@ -128,7 +117,7 @@ static void version(void)
 int main(int argc, char *argv[])
 {
   ATerm rules = NULL; 
-  ATermList msgs = ATempty;
+  ERR_FeedbackList msgs = ERR_makeFeedbackListEmpty();
   char *input = "-";
   int cid;
   int c, toolbus_mode = 0;
@@ -144,6 +133,7 @@ int main(int argc, char *argv[])
   PT_initMEPTApi();
   /*SDF_initSDFMEApi();*/
   ASF_initASFMEApi();
+  ERR_initErrorApi();
 
   if (toolbus_mode) {
     #ifndef WIN32 /* Code with Toolbus calls, non Windows */
