@@ -1,5 +1,4 @@
 
-toolbus(ApplyFunc)
 
 process ApplyFunc is
 let
@@ -39,3 +38,5 @@ in
 endlet
 
 tool apply-function is { command = "apply-function" }  
+
+toolbus(ApplyFunc)

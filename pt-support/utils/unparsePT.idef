@@ -1,4 +1,3 @@
-toolbus(Unparser)
 
 process Unparser is
 let
@@ -18,3 +17,4 @@ in
 endlet
 
 tool unparsePT is { command = "unparsePT" }  
+toolbus(Unparser)

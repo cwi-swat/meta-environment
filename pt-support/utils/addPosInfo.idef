@@ -1,7 +1,6 @@
 
 tool addPosInfo is { command = "addPosInfo" }  
 
-toolbus(AddPosInfo)
 
 process AddPosInfo is
 let
@@ -19,3 +18,4 @@ in
   delta
 endlet
 
+toolbus(AddPosInfo)
