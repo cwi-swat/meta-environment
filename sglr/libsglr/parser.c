@@ -403,9 +403,12 @@ forest SG_Parse(parse_table *ptable, char *sort, int(*get_next_token)(void))
              SG_PrintToken(SG_log(), current_token);
              fprintf(SG_log(), "\n");
              )
-      SG_ParseToken();
+    IF_VERBOSE(fprintf(stderr, "\rParsing  %6d", sg_tokens_read))
+    SG_ParseToken();
+    IF_VERBOSE(fprintf(stderr, "\rShifting %6d", sg_tokens_read))
     SG_Shifter();
   } while (current_token != SG_EOF_Token && active_stacks);
+  IF_VERBOSE(fprintf(stderr, ".\n"))
 
   /*  Core parsing done!  */
   SG_PostParse();
