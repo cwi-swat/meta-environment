@@ -20,7 +20,7 @@ context-free syntax
 sorts BytesResult
 context-free syntax
 
-  "bytes" "(" Bytes ")" -> BytesResult {cons("success")}
+  "bytes" "(" value:Bytes ")" -> BytesResult {cons("success")}
   "bytes-error" "(" Feedback ")" -> BytesResult {cons("failure")}
 
 sorts WriteResult
