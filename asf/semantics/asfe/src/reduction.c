@@ -393,7 +393,11 @@ static PT_Tree rewriteAPIAppl(PT_Tree tree, ATerm env, int depth, void*extra)
 
   result = interpretAPICall(tree);
 
-  return result;
+  if (result == tree) {
+    return tree;
+  }
+  
+  return rewriteInnermost(result, env, depth + 1, NO_TRAVERSAL);
 }
 
 /*}}}  */
