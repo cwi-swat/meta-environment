@@ -58,36 +58,33 @@ PROG		= dump-actions dump-gotos dump-priorities dump-productions
 OBJ		= ${addsuffix .o,${PROG}}
 SRC		= dump-parse-table.c
 
-all:	${PROG}
+BINFILES	= ${PROG}
+INCLUDEFILES	=
+LIBFILES	=
+
+all:	${BINFILES}
+
+libs:	${LIBFILES}
 
 .SILENT:	depend
 
-install:	bininstall
-	@true
+# install target (install binaries, include files, and libraries)
+install: all
+	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
 
-incinstall:	${DUMPINCLUDES}
-	@for INC in ${DUMPINCLUDES};	\
-	do \
-		${INSTALL_DATA} ${INSTALL} ${includedir} $$INC; \
-	done
-
-libinstall:	${DUMPLIBS}
-	@for LIB in ${DUMPLIBS};	\
-	do \
-		${INSTALL_DATA} ${INSTALL} ${libdir} $$LIB; \
-	done
-
-bininstall:	${PROG}
-	@for PROG in ${PROG};	\
-	do \
-		${INSTALL_PROG} ${INSTALL} ${bindir} $$PROG; \
-	done
+# uninstall target (remove all files installed by 'install' target)
+uninstall:
+	@$(UNINSTALL) $(bindir) $(BINFILES)
+	UNINSTALL) $(libdir) $(LIBFILES)
+	@$(UNINSTALL) $(includedir) $(INCLUDEFILES)
 
 distclean realclean spotless:	clean
-	rm -f	depend Makefile ${DUMPLIBS}
+	rm -f	depend Makefile ${LIBFILES}
 
 clean:
-	rm -f	core ${PROG} ${OBJ}
+	rm -f	core ${BINFILES} ${OBJ}
 
 
 dump-actions dump-gotos	\

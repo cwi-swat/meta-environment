@@ -58,41 +58,38 @@ XLIBS		= -ltree2dot -lsglr -la2toa1 ${addsuffix -${CC},${ATLIBS}}
 
 LIBSRC          = tree-to-dot.c
 LIBOBJ		= ${patsubst %.c,%.o,${LIBSRC}}
+
+PROG		= tree2dot
+MAIN		= ${PROG}-main.c
 OBJ		= ${patsubst %.c,%.o,${MAIN}}
 
-MAIN		= ${PROG}-main.c
-PROG            = tree2dot
-LIB		= libtree2dot.a
+BINFILES	= ${PROG}
+INCLUDEFILES	=
+LIBFILES	= libtree2dot.a
 
-all:	${PROG}
+all:	${BINFILES}
+
+libs:	${LIBFILES}
 
 .SILENT:	depend
 
-install:	libinstall bininstall
+# install target (install binaries, include files, and libraries)
+install: all
+	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
 
-incinstall:	${INC}
-	@for INC in ${INC};	\
-	do \
-		${INSTALL_DATA} ${INSTALL} ${includedir} $$INC; \
-	done
-
-libinstall:	${LIB}
-	@for LIB in ${LIB};	\
-	do \
-		${INSTALL_DATA} ${INSTALL} ${libdir} $$LIB; \
-	done
-
-bininstall:	${PROG}
-	@for PROG in ${PROG};	\
-	do \
-		${INSTALL_PROG} ${INSTALL} ${bindir} $$PROG; \
-	done
+# uninstall target (remove all files installed by 'install' target)
+uninstall:
+	@$(UNINSTALL) $(bindir) $(BINFILES)
+	@$(UNINSTALL) $(libdir) $(LIBFILES)
+	@$(UNINSTALL) $(includedir) $(INCLUDEFILES)
 
 distclean realclean spotless:	clean
 	rm -f	Makefile
 
 clean:
-	rm -f	core depend ${PROG} ${OBJ} ${LIBOBJ} ${LIB}
+	rm -f	core depend ${PROG} ${OBJ} ${LIBOBJ} ${LIBFILES}
 
 # Generic rules
 
@@ -105,7 +102,7 @@ clean:
 libtree2dot.a:  ${LIBOBJ}
 	${AR} ${AR_FLAGS} $@ ${LIBOBJ}
 
-tree2dot:	${LIB} ${OBJ}
+tree2dot:	${LIBFILES} ${OBJ}
 	${CC} ${LDFLAGS} ${OBJ} ${LIBS} -o $@
 
 # ObTribute to Larry Wall

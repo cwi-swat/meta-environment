@@ -53,31 +53,26 @@ SRC		= ${addsuffix .c,${PROG}}
 OBJ		= ${addsuffix .o,${PROG}}
 TIFS		= ${addsuffix .tif.c,${PROG}}
 
-all:	${PROG}
-	@true
+BINFILES	= ${PROG}
+INCLUDEFILES	= 
+LIBFILES	= 
+
+all:	${BINFILES}
+
+libs:	${LIBFILES}
 
 .SILENT:	depend
 
-install:	bininstall
-	@true
+install:	all
+	@$(INSTALL_PROG) $(INSTALL) $(bindir) $(BINFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(libdir) $(LIBFILES)
+	@$(INSTALL_DATA) $(INSTALL) $(includedir) $(INCLUDEFILES)
 
-incinstall:	${INCLUDES}
-	@for INC in ${DUMPINCLUDES};	\
-	do \
-		${INSTALL_DATA} ${INSTALL} ${includedir} $$INC; \
-	done
+uninstall:	
+	@$(UNINSTALL) $(bindir) $(BINFILES)
+	@$(UNINSTALL) $(libdir) $(LIBFILES)
+	@$(UNINSTALL) $(includedir) $(INCLUDEFILES)
 
-libinstall:	${LIBS}
-	@for LIB in ${DUMPLIBS};	\
-	do \
-		${INSTALL_DATA} ${INSTALL} ${libdir} $$LIB; \
-	done
-
-bininstall:	${PROG}
-	@for PROG in ${PROG};	\
-	do \
-		${INSTALL_PROG} ${INSTALL} ${bindir} $$PROG; \
-	done
 
 distclean realclean spotless:	clean
 	rm -f	${PROG}.tifs ${PROG}.tif.[ch] depend Makefile
