@@ -205,7 +205,6 @@ int main(int argc, char *argv[])
   ATsetChecking(ATtrue);
 
   if (toolbus_mode) {
-    use_c_compiler = ATfalse;
     ATBinit(argc, argv, &bottom);  
     ATBconnect(NULL, NULL, -1, asfc_handler);
     ATBeventloop();
