@@ -1,3 +1,9 @@
+2003/01/22 (jurgenv@cwi.nl)
+ * Bumped to 0.4 and released immediately due to release of Meta-Environment
+   and synchronization with aterm-java and shared-objects versions of
+   jarfiles.
+ * Changed license to LGPL
+
 2002/12/09 (jurgenv@cwi.nl)
  * Changed version numbers of aterm-java and shared-objects jarfiles
 
