@@ -515,7 +515,10 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
   PT_Tree result;
   PT_Args args, newargs;
 
-  if (ASF_isTreeLexicalConstructor(PTtoASF(tree))) {
+  extern ATerm ASF_patternTreeLexicalConstructor;
+  if (ATmatchTerm(PT_makeTermFromTree(tree), ASF_patternTreeLexicalConstructor, 
+		  NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
+  /* <PO> was: if (ASF_isTreeLexicalConstructor(PTtoASF(tree))) {*/
     result = tree;
   }
   else if (PT_isTreeLexical(tree)) {
@@ -578,8 +581,6 @@ static PT_Production makeLexToCfProd(PT_Symbol symbol)
 
 PT_Tree listToLexical(PT_Tree lexappl)
 {
-  char *newlexstr;
-  int charListLength, i;
   ASF_Tree tree = PTtoASF(lexappl);
   ASF_CHARList charList;
   PT_Symbol symbol;
@@ -594,14 +595,7 @@ PT_Tree listToLexical(PT_Tree lexappl)
   symbol = PT_getSymbolSymbol((PT_Symbol) ASF_getTreeSymbol(tree));
 
   charList = ASF_getTreeList(tree);
-  charListLength = ASF_getCHARListLength(charList);
   
-  newlexstr = (char*) malloc(charListLength + 1);
-  if (newlexstr == NULL) {
-    ATerror("listToLexical: memory request failure\n");
-  }
-
-  i = 0; 
   while(ASF_hasCHARListHead(charList)) {
     ASF_CHAR ch = ASF_getCHARListHead(charList);
     if (ASF_isCHARLexToCf(ch)) {
@@ -617,7 +611,6 @@ PT_Tree listToLexical(PT_Tree lexappl)
       break;
     } 
   }
-  newlexstr[i] = '\0';
     
   newTree = PT_makeTreeFlatLexical(newCharList);
   newTree = PT_makeTreeAppl(makeLexToCfProd(symbol), 
@@ -638,7 +631,11 @@ static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data)
   PT_Args args;
 
   if (PT_isTreeAppl(tree)) {
-    if (ASF_isTreeLexicalConstructor(PTtoASF(tree))) {
+    extern ATerm ASF_patternTreeLexicalConstructor;
+    if (ATmatchTerm(PT_makeTermFromTree(tree),
+		    ASF_patternTreeLexicalConstructor,
+		    NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
+    /* <PO> Was: if (ASF_isTreeLexicalConstructor(PTtoASF(tree))) { */
       return listToLexical(tree);
     }
 

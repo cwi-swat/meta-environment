@@ -43,10 +43,15 @@
 
 ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2)
 {
+  /*
   asfix1 = PT_makeTreeFromTerm(
 	     ATremoveAllAnnotations(PT_makeTermFromTree(asfix1)));
   asfix2 = PT_makeTreeFromTerm(
 	     ATremoveAllAnnotations(PT_makeTermFromTree(asfix2)));
+   */
+
+  asfix1 = PT_makeTreeFromTerm(ATremoveAnnotations(PT_makeTermFromTree(asfix1)));
+  asfix2 = PT_makeTreeFromTerm(ATremoveAnnotations(PT_makeTermFromTree(asfix2)));
 
   if (!PT_isEqualTree(asfix1, asfix2)) {
     if (PT_isTreeAppl(asfix1) && PT_isTreeAppl(asfix2)) {
@@ -134,22 +139,13 @@ PT_Args skipWhitespace(PT_Args list)
   PT_Tree elem;
 
   if (PT_hasArgsHead(list)) {
-    elem = PT_getArgsHead(list); 
-
-    while (PT_isTreeLayout(elem)) {
-       if (PT_hasArgsTail(list)) {
-         list = PT_getArgsTail(list);
-         if (PT_hasArgsHead(list)) {
-           elem = PT_getArgsHead(list); 
-         }
-       } 
-       else {
-         break;
-       }
+    elem = PT_getArgsHead(list);
+    if (PT_isTreeLayout(elem)) {
+      list = PT_getArgsTail(list);
     }
   }
 
-  assert(PT_isArgsEmpty(list) || !PT_isTreeLayout(PT_getArgsHead(list)));
+  pedantic_assert(PT_isArgsEmpty(list) || !PT_isTreeLayout(PT_getArgsHead(list)));
 
   return list;
 }
@@ -159,7 +155,7 @@ PT_Args skipToEndOfWhitespace(PT_Args list)
   PT_Tree elem;
   PT_Args prev = list;
 
-  assert(PT_isTreeLayout(PT_getArgsHead(list)));
+  pedantic_assert(PT_isTreeLayout(PT_getArgsHead(list)));
 
   if (!PT_isArgsEmpty(list)) {
     for (elem = PT_getArgsHead(list); 
@@ -167,8 +163,7 @@ PT_Args skipToEndOfWhitespace(PT_Args list)
 	 prev = list, list = PT_getArgsTail(list), elem = PT_getArgsHead(list));
   }
 
-  assert(PT_isArgsEmpty(list) ||
-	 PT_isTreeLayout(PT_getArgsHead(prev)));
+  pedantic_assert(PT_isArgsEmpty(list) || PT_isTreeLayout(PT_getArgsHead(prev)));
 
   return prev;
 }

@@ -34,6 +34,11 @@
 
 #include <MEPT-utils.h>
 
+#ifdef PEDANTIC_CHECKING
+#define pedantic_assert(c) assert(c)
+#else
+#define pedantic_assert(c)
+#endif
 
 #define isAsFixEqual(t1,t2) (isEqualModuloWhitespace(t1,t2))
 

@@ -349,7 +349,6 @@ appendSlice(PT_Args list, Slice slice)
 }
 
 
-
 /* Functions to be called by the ToolBus:
    - ``exists'' checks whether the equations for a certain module are
      available.
@@ -523,7 +522,6 @@ argMatching(ATerm env,
 	    PT_Args orgargs1, PT_Args orgargs2,
             ATerm lhs_posinfo, int depth)
 {
-  PT_Production listProd;
   PT_Production prod1, prod2;
   PT_Args args1, args2;
   PT_Args elems1, elems2;
@@ -535,77 +533,80 @@ argMatching(ATerm env,
               yieldTree(arg2));
   }
 
-  if (PT_isTreeApplList(arg1) && PT_isTreeApplList(arg2)) {
-    listProd = PT_getTreeProd(arg1);
-    elems1 = PT_getTreeArgs(arg1);
-    elems2 = PT_getTreeArgs(arg2);
-
-    newenv = listMatching(newenv, listProd, elems1, elems2,
-			  conds, orgargs1, orgargs2, 
-                          lhs_posinfo, depth);
-  }
-  else if (PT_isTreeAppl(arg1) && PT_isTreeAppl(arg2)) {
+  if (PT_isTreeAppl(arg1)) {
+    pedantic_assert(PT_isTreeAppl(arg2));
     prod1 = PT_getTreeProd(arg1);
-    prod2 = PT_getTreeProd(arg2);
 
-    if (PT_isOptLayoutProd(prod1) &&
-        PT_isOptLayoutProd(prod2)) {
+    if (PT_isOptLayoutProd(prod1)) {
+      pedantic_assert(PT_isOptLayoutProd(PT_getTreeProd(arg2)));
       return argsMatching(newenv, conds, orgargs1, orgargs2,
 			  lhs_posinfo, depth);
     }
-    else if (PT_isEqualProduction(prod1, prod2)) {
+
+    if (PT_isProductionList(prod1)) {
+      pedantic_assert(PT_isProductionList(PT_getTreeProd(arg2)));
+
+      elems1 = PT_getTreeArgs(arg1);
+      elems2 = PT_getTreeArgs(arg2);
+  
+      return listMatching(newenv, prod1, elems1, elems2,
+			  conds, orgargs1, orgargs2, 
+			  lhs_posinfo, depth);
+    }
+
+    prod2 = PT_getTreeProd(arg2);
+    if (PT_isEqualProduction(prod1, prod2)) {
       args1 = PT_getTreeArgs(arg1);
       args2 = PT_getTreeArgs(arg2);
-      args1 = PT_concatArgs(args1, orgargs1);
-      args2 = PT_concatArgs(args2, orgargs2);
 
-      newenv = (ATerm) argsMatching(newenv, conds, args1, args2,
-				    lhs_posinfo, depth);
+      newenv = (ATerm) argsMatching(newenv, NULL, args1, args2, lhs_posinfo, depth);
+      if (newenv == fail_env) {
+	if (runVerbose) {
+	  ATwarning("*** fail_env on line %d\n", __LINE__);
+	}
+	return fail_env;
+      }
+      return (ATerm) argsMatching(newenv, conds, orgargs1, orgargs2,
+				  lhs_posinfo, depth);
     }
-    else if (PT_isVarDefault(prod1)) {
+
+    if (PT_isVarDefault(prod1)) {
       PT_Symbol rhs = PT_getProductionRhs(prod1);
       PT_Tree trm = getVariableValue(newenv, arg1, rhs);
       if (trm) {
-        if (isAsFixEqual(arg2, trm)) {
-	  newenv = argsMatching(newenv, conds, orgargs1, orgargs2,
-			        lhs_posinfo, depth);
-        }
-        else {
-	  newenv = fail_env;
+	if (isAsFixEqual(arg2, trm)) {
+	  return argsMatching(newenv, conds, orgargs1, orgargs2,
+			      lhs_posinfo, depth);
+	}
+	else {
 	  if (runVerbose) {
 	    ATwarning("*** fail_env on line %d\n", __LINE__);
 	  }
-        }
+	  return fail_env;
+	}
       }
       else {
-        newenv = putVariableValue(newenv, arg1, arg2);
-        newenv = argsMatching(newenv, conds, orgargs1, orgargs2,
-			      lhs_posinfo, depth);
+	newenv = putVariableValue(newenv, arg1, arg2);
+	return argsMatching(newenv, conds, orgargs1, orgargs2,
+			    lhs_posinfo, depth);
       }
     }
-    else {
-      return fail_env;
-      if (runVerbose) {
-        ATwarning("*** fail_env on line %d\n", __LINE__);
-      }
-    }
-  }
-  else { /* terms are not any of the above, and not equal */
-      /* we didn't test for equality if rewriting with ws, so do it now */
-      /* NOTE: is this still necessary? */
-    if (isEqualModuloWhitespace(arg1, arg2)) {
-      return argsMatching(newenv, conds, orgargs1, orgargs2,
-                          lhs_posinfo, depth);
-    }
-    else {
-      newenv = fail_env;
-      if (runVerbose) {
-        ATwarning("*** fail_env on line %d\n", __LINE__);
-      }
-    }
-  }   
 
-  return newenv;
+    if (runVerbose) {
+      ATwarning("*** fail_env on line %d\n", __LINE__);
+    }
+    return fail_env;
+  }
+
+  if (PT_isEqualTree(PT_removeTreeAnnotations(arg1),
+		     PT_removeTreeAnnotations(arg2))) {
+    return argsMatching(newenv, conds, orgargs1, orgargs2, lhs_posinfo, depth);
+  }
+
+  if (runVerbose) {
+    ATwarning("*** fail_env on line %d\n", __LINE__);
+  }
+  return fail_env;
 }
 
 
@@ -702,8 +703,8 @@ compareSubLists(Slice slice, PT_Args elems2)
     first = skipWhitespace(first);
     elems2 = skipWhitespace(elems2);
 
-    assert(isValidSlice(first, last));
-    assert(isValidList(elems2));
+    pedantic_assert(isValidSlice(first, last));
+    pedantic_assert(isValidList(elems2));
 
   while (!PT_isEqualArgs(first, last) && match) {
       first = skipWhitespace(first);
@@ -725,7 +726,7 @@ compareSubLists(Slice slice, PT_Args elems2)
   }
 
   if (match) {
-    assert(isValidList(elems2));
+    pedantic_assert(isValidList(elems2));
     return elems2;
   }
   else {
@@ -768,7 +769,7 @@ subListMatching(ATerm env, PT_Tree elem,
 
     /* Make sure we begin at a regular element */
     elems2 = skipWhitespace(elems2);
-    assert(isValidList(elems2));
+    pedantic_assert(isValidList(elems2));
 
   /* If the star variable didn't match or we have a plus variable
    * we continue matching with increasing length while possible.
@@ -779,7 +780,7 @@ subListMatching(ATerm env, PT_Tree elem,
 	 is_fail_env(subenv);
 	 /* add an element to the slice */
 	 last = PT_getArgsTail(skipWhitespace(last))) {
-      assert(isValidSlice(elems2, last));
+      pedantic_assert(isValidSlice(elems2, last));
       newenv = putListVariableValue(env, elem, elems2, last);
       subenv =
 	listMatching(newenv, listProd, elems1, last,
@@ -828,13 +829,13 @@ lastListElementMatching(ATerm env, PT_Tree elem1,
       }
       else {
         elems2 = skipWhitespace(elems2);
-        assert(isValidList(elems2));
+        pedantic_assert(isValidList(elems2));
 
         if (PT_hasArgsHead(elems2)) {
           elem2 = PT_getArgsHead(elems2);
         }
     
-        assert(isValidSlice(elems2, PT_makeArgsEmpty()));
+        pedantic_assert(isValidSlice(elems2, PT_makeArgsEmpty()));
         newenv =
           putListVariableValue(env, elem1, elems2, PT_makeArgsEmpty());
         newenv =
@@ -885,17 +886,17 @@ isListSeparator(PT_Tree elem, PT_Production listProd)
     if (PT_isTreeAppl(elem)) {
       prod = PT_getTreeProd(elem);
       symbol = PT_getSymbolSymbol(PT_getProductionRhs(prod));
+      return PT_isEqualSymbol(separator, symbol);
     }
     else {
-      assert(PT_isTreeLit(elem));
+      pedantic_assert(PT_isTreeLit(elem));
       str = PT_getTreeString(elem);
-      symbol = PT_makeSymbolLit(str);
+      if (PT_isSymbolLit(separator)) {
+	return strcmp(str, PT_getSymbolString(separator)) == 0;
+      }
     }
-    return PT_isEqualSymbol(separator, symbol);
   }
-  else {
-    return ATfalse;
-  }
+  return ATfalse;
 }
 
 static ATerm
@@ -908,8 +909,10 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
 {
   PT_Tree elem2 = NULL;
   ATerm newenv;
+  /* <MB>
   PT_Tree newarg1, newarg2;
   PT_Args newargs1, newargs2;
+   */
 
   if (runVerbose) {
     ATwarning("%t:matching next element: %t\ngiven %t\n and %s\n\n\n",
@@ -943,16 +946,29 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
     }
   }
   else if (isListSeparator(elem1, listProd)) {
+    /* <PO>
     elems2 = skipWhitespace(elems2);
-    assert(isValidList(elems2));
+    pedantic_assert(isValidList(elems2));
+     */
     if (PT_hasArgsHead(elems2)) {
       elem2 = PT_getArgsHead(elems2);
 
       if (isListSeparator(elem2, listProd)) {
 
         elems2 = skipWhitespace(PT_getArgsTail(elems2));
-        assert(isValidList(elems2));
+        pedantic_assert(isValidList(elems2));
       
+	newenv = argMatching(env, elem1, elem2, NULL,
+			     PT_makeArgsEmpty(), PT_makeArgsEmpty(),
+			     lhs_posinfo, depth);
+	if (newenv == fail_env) {
+	  return fail_env;
+	}
+
+	return listMatching(newenv, listProd, elems1, elems2, conds,
+			    args1, args2, lhs_posinfo, depth);
+
+	/* <MB>
         newarg1 = PT_makeTreeAppl(listProd, elems1);
         newarg2 = PT_makeTreeAppl(listProd, elems2);
         newargs1 = PT_makeArgsList(newarg1, args1);
@@ -961,6 +977,7 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
         newenv = argMatching(env, elem1, elem2, conds, 
                              newargs1, newargs2, 
                              lhs_posinfo, depth);
+	 */
       }
       else {
         elems1 = skipWhitespace(PT_getArgsTail(elems1)); 
@@ -977,13 +994,15 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
     }
   }
   else {  /* elem1 is not a list variable and not a separator */
+    /* <PO>
     elems2 = skipWhitespace(elems2);
-    assert(isValidList(elems2));
+    pedantic_assert(isValidList(elems2));
+     */
     if (PT_hasArgsHead(elems2)) {
       elem2 = PT_getArgsHead(elems2);
 
       elems2 = skipWhitespace(PT_getArgsTail(elems2)); 
-      assert(isValidList(elems2));
+      pedantic_assert(isValidList(elems2));
 
       if (isListSeparator(elem2, listProd)) {
         newenv = listMatching(env, listProd, elems1, elems2, conds,
@@ -991,6 +1010,16 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
                               lhs_posinfo, depth);
       }
       else {
+	newenv = argMatching(env, elem1, elem2, NULL,
+			     PT_makeArgsEmpty(), PT_makeArgsEmpty(),
+			     lhs_posinfo, depth);
+	if (newenv == fail_env) {
+	  return fail_env;
+	}
+
+	return listMatching(newenv, listProd, elems1, elems2, conds,
+			    args1, args2, lhs_posinfo, depth);
+	/* <MB>
         newarg1 = PT_makeTreeAppl(listProd, elems1);
         newarg2 = PT_makeTreeAppl(listProd, elems2);
         newargs1 = PT_makeArgsList(newarg1, args1);
@@ -999,6 +1028,7 @@ nextListElementMatching(ATerm env, PT_Tree elem1,
         newenv = argMatching(env, elem1, elem2, conds, 
                              newargs1, newargs2, 
                              lhs_posinfo, depth);
+	 */
       }
     }
     else {
@@ -1022,9 +1052,9 @@ listMatching(ATerm env, PT_Production listProd,
   ATerm newenv;
 
   elems1 = skipWhitespace(elems1);
-  assert(isValidList(elems1));
+  pedantic_assert(isValidList(elems1));
   elems2 = skipWhitespace(elems2);
-  assert(isValidList(elems2));
+  pedantic_assert(isValidList(elems2));
 
   if (runVerbose) {
     ATwarning("%t:matching elements: %t\nwith\n%t given %s\n\n\n",
@@ -1100,12 +1130,13 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 
     if (ASF_isConditionPositive(cond)) {
       if (no_new_vars(lhs, newenv)) {
-	TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
+	TIDE_STEP(PT_getTreeAnnotation(lhs, posinfo), newenv, depth);
 	lhstrm = rewriteInnermost(lhs, newenv, depth + 1, NO_TRAVERSAL);
-	TIDE_STEP(ATgetAnnotation(rhs, posinfo), newenv, depth);
+	TIDE_STEP(PT_getTreeAnnotation(rhs, posinfo), newenv, depth);
 	if (no_new_vars(rhs, newenv)) {
 	  rhstrm = rewriteInnermost(rhs, newenv, depth + 1, NO_TRAVERSAL);
-	  TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
+	  TIDE_STEP(ATgetAnnotation(ASF_makeTermFromCondition(cond), posinfo),
+		    newenv, depth);
 	  if (isAsFixEqual(lhstrm, rhstrm)) {
 	    newenv = condsSatisfied(conds, newenv, depth);
 	  }
@@ -1117,7 +1148,8 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 	  }
 	}
 	else {
-	  TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
+	  TIDE_STEP(ATgetAnnotation(ASF_makeTermFromCondition(cond), posinfo),
+		    newenv, depth);
 	  newenv =
 	    argMatching(newenv, rhs, lhstrm, conds,
 			PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
@@ -1125,11 +1157,12 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 	}
       }
       else {
-	TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
-	TIDE_STEP(ATgetAnnotation(rhs, posinfo), newenv, depth);
+	TIDE_STEP(PT_getTreeAnnotation(lhs, posinfo), newenv, depth);
+	TIDE_STEP(PT_getTreeAnnotation(rhs, posinfo), newenv, depth);
 	if (no_new_vars(rhs, newenv)) {
 	  rhstrm = rewriteInnermost(rhs, newenv, depth + 1, NO_TRAVERSAL);
-	  TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
+	  TIDE_STEP(ATgetAnnotation(ASF_makeTermFromCondition(cond), posinfo),
+		    newenv, depth);
 	  newenv =
 	    argMatching(newenv, lhs, rhstrm, conds,
 			PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
@@ -1156,11 +1189,12 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 	}
       }
       else {
-	TIDE_STEP(ATgetAnnotation(lhs, posinfo), newenv, depth);
+	TIDE_STEP(PT_getTreeAnnotation(lhs, posinfo), newenv, depth);
 	lhstrm = rewriteInnermost(lhs, newenv, depth + 1, NO_TRAVERSAL);
-	TIDE_STEP(ATgetAnnotation(rhs, posinfo), newenv, depth);
+	TIDE_STEP(PT_getTreeAnnotation(rhs, posinfo), newenv, depth);
 	rhstrm = rewriteInnermost(rhs, newenv, depth + 1, NO_TRAVERSAL);
-	TIDE_STEP(ATgetAnnotation(cond, posinfo), newenv, depth);
+	TIDE_STEP(ATgetAnnotation(ASF_makeTermFromCondition(cond), posinfo),
+		  newenv, depth);
 	if (isAsFixEqual(lhstrm, rhstrm)) {
 	  newenv = fail_env;
 	  if (runVerbose) {
@@ -1237,7 +1271,7 @@ apply_rule(PT_Tree trm, int depth)
         tagCurrentRule = entry->tag;
 
         if (!is_fail_env(env)) {
-	  TIDE_STEP(ATgetAnnotation(entry->rhs, posinfo), env, depth);
+	  TIDE_STEP(PT_getTreeAnnotation(entry->rhs, posinfo), env, depth);
 	  if (runVerbose) {
 	    ATwarning("Equation %s was successful.\n", 
                       PT_yieldTree((PT_Tree)entry->tag));
@@ -1276,7 +1310,7 @@ apply_rule(PT_Tree trm, int depth)
     tagCurrentRule = entry->tag;
 
     if (!is_fail_env(env)) {
-      TIDE_STEP(ATgetAnnotation(entry->rhs, posinfo), env, depth);
+      TIDE_STEP(PT_getTreeAnnotation(entry->rhs, posinfo), env, depth);
       if (runVerbose) {
 	ATwarning("Equation: %s was successful.\n", 
                   PT_yieldTree((PT_Tree)entry->tag));
@@ -1404,7 +1438,7 @@ concatElems(PT_Production listProd, PT_Args elems, PT_Args newElems)
       }
     }
   }
-  assert(isValidList(newList));
+  pedantic_assert(isValidList(newList));
   return newList;
 }
 
@@ -1429,7 +1463,7 @@ rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth,
   PT_Tree elem, newelem;
   PT_Args newelems = PT_makeArgsEmpty();
 
-  assert(isValidList(elems));
+  pedantic_assert(isValidList(elems));
 
   while (PT_hasArgsHead(elems)) {
     elem = PT_getArgsHead(elems);
@@ -1442,7 +1476,7 @@ rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth,
       }
       else {
         newelems = appendSlice(newelems, tuple);
-        assert(isValidList(newelems));
+        pedantic_assert(isValidList(newelems));
       }
     }
     else {
@@ -1450,7 +1484,7 @@ rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth,
       if (PT_isTreeApplList(newelem)) {
         PT_Args elemArgs = PT_getTreeArgs(newelem);
 	newelems = concatElems(listProd, newelems, elemArgs);
-        assert(isValidList(newelems));
+        pedantic_assert(isValidList(newelems));
       }
       else {
 	newelems = appendElem(listProd, newelems, newelem);
@@ -1459,7 +1493,7 @@ rewriteElems(PT_Production listProd, PT_Args elems, ATerm env, int depth,
     elems = PT_getArgsTail(elems);
   }
   newelems = skipWhitespace(newelems);
-  assert(isValidList(newelems));
+  pedantic_assert(isValidList(newelems));
   return newelems;
 }
 
@@ -1508,7 +1542,7 @@ rewriteInnermost(PT_Tree trm, ATerm env, int depth, Traversal *traversal)
 
     newelems = rewriteElems(listProd, elems, env, depth, NO_TRAVERSAL);
     if (newelems) {
-      assert(isValidList(newelems));
+      pedantic_assert(isValidList(newelems));
       rewtrm = selectAndRewrite(PT_setTreeArgs(trm, newelems), depth);
     }
     else {
@@ -1619,7 +1653,7 @@ rewriteTraversal(PT_Tree trm, ATerm env, int depth, Traversal * traversal)
     newelems = rewriteElems(listProd, elems, env, depth, traversal);
 
     if (newelems) {
-      assert(isValidList(newelems));
+      pedantic_assert(isValidList(newelems));
       rewtrm = selectAndRewrite(PT_setTreeArgs(trm, newelems), depth);
     }
     else {
