@@ -1,32 +1,3 @@
-/*{{{  Copyright notice */
-
-/*
-
-   Meta-Environment - An environment for language prototyping.
-   Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
-   The Netherlands. 
-
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
- */
-/*
-   $Id$
- */
-
-
-/*}}}  */
 /*{{{  includes */
 
 #include <ctype.h>
@@ -120,6 +91,23 @@ size_t filesize(const char *s)
 {
   struct stat st;
   return (stat((char*)s,&st)!=EOF) ? st.st_size : -1L;
+}
+
+/*}}}  */
+/*{{{  ATbool fileequal(const char *f1, const char *f2) */
+
+ATbool fileequal(const char *f1, const char *f2)
+{
+  struct stat st1;
+  struct stat st2;
+
+  if (stat(f1, &st1) == 0 && stat(f2, &st2) == 0) {
+    return st1.st_ino == st2.st_ino;
+  }
+  else {
+    perror("stat");
+    return ATfalse;
+  }
 }
 
 /*}}}  */
@@ -230,10 +218,10 @@ char *find_in_path(char *target)
 
     /* Check if this file exists */
     if (fileexists(thisname)) {
-      if (found) {
-	ATwarning("warning: found multiple matches for %s\n", target);
-	ATwarning("         using first entry in path: %s\n", filename);
-	ATwarning("         offending match: %s\n", thisname);
+      if (found && !fileequal(thisname, filename)) {
+	ATwarning(" warning: found multiple matches for %s\n", target);
+	ATwarning("   using: %s\n", filename);
+	ATwarning("    peer: %s\n", thisname);
       }
       else {
 	found = ATtrue;
