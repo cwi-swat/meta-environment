@@ -99,6 +99,15 @@ in
       snd-msg(no-focus)
     )
   +
+    rec-msg(get-focus-location(EditorId?)) .
+    snd-eval(SE, get-focus-location(EditorId)) .
+    (
+      rec-value(SE, focus-location(Location?)) .
+      snd-msg(focus-location(EditorId, Location))
+    +
+      rec-value(SE, no-focus-location(EditorId))
+    )
+  +
     rec-msg(get-dirty-focuses(EditorId?)) .
     snd-eval(SE, get-dirty-focuses(EditorId)) .
     (

@@ -393,6 +393,32 @@ ATerm get_focus_sort(int cid, ATerm editorId)
 }
 
 /*}}}  */
+/*{{{  ATerm get_focus_sort(int cid, ATerm editorId) */
+
+ATerm get_focus_location(int cid, ATerm editorId)
+{
+  SE_Editor editor = getEditor(editorId);
+
+  if (editor != NULL) {
+    SE_Focus focus = SE_getEditorFocus(editor); 
+
+    if (!SE_isFocusRoot(focus)) {
+      PT_Tree tree = getFocussedTree(editor, focus);
+     
+      if (tree != NULL) {
+	ERR_Location location = PT_getTreeLocation(tree);
+
+	if (location != NULL) {
+	  return ATmake("snd-value(focus-location(<term>))", location);
+	}
+      }
+    }
+  }
+
+  return ATmake("snd-value(no-focus-location)");
+}
+
+/*}}}  */
 /*{{{  ATerm check_tree_sort(int cid, char *nonterminal, ATerm t) */
  
 ATerm check_tree_sort(int cid, char *nonterminal, ATerm t)
