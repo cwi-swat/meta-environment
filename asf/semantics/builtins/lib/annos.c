@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <MEPT-utils.h>
+#include <PTMEPT-utils.h>
 #include <aterm2.h>
 
 /* note that by using AsFix trees as keys the storing and retrieval
@@ -32,4 +33,21 @@ PT_Tree get_anno(ATerm builtin, PT_Tree input)
   }
 
   return input;
+}
+
+PT_Tree get_term_anno(ATerm builtin, PT_Tree input) 
+{
+  PT_Tree term = PT_getArgsArgumentAt(PT_getTreeArgs(input),4);
+  PT_Tree key = PT_getArgsArgumentAt(PT_getTreeArgs(input),8);
+  PT_Tree value = NULL;
+
+  value = (PT_Tree) PTPT_explodeATerm(
+		     PT_getTreeAnnotation(term, PT_TreeToTerm(key)));
+
+  if (value != NULL) {
+    return value;
+  }
+
+  return input;
+
 }
