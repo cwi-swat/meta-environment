@@ -1,6 +1,9 @@
-2000/02/08 (jong@cwi.nl)
+2001/04/23 (markvdb@cwi.nl)
+  * Added ASF support based on AsFix2ME.
+
+2001/02/08 (jong@cwi.nl)
   * inserted several brainstorm-results for asf-apigen-library into lib/
   * added subst-eqs.c (aka "asf-hack-prod" ;-)
 
-2000/02/07 (jurgenv@cwi.nl)
+2001/02/07 (jurgenv@cwi.nl)
   * initial version of asf-support

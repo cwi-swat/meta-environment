@@ -20,6 +20,6 @@
 #
 # $Id$
 
-SUBDIRS		= lib 
+SUBDIRS		= lib libME
 
 EXTRA_DIST	= make_rules reconf program-check.m4
