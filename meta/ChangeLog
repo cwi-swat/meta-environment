@@ -1,5 +1,8 @@
 # $Id$
 
+2002/10/03 (vandenbr@loria.fr)
+ * Renamed the fixed button "FocusToDot" to "ViewTree".
+
 2002/10/02 (vandenbr@loria.fr)
  * Hardwired file extensions removed.
  
