@@ -95,11 +95,11 @@ equations
       || symbol2str($Symbol2) 
 
   [symbol2str-tuple-new]
-    symbol2str(<$Symbol1, $Symbol2>) = 
+    symbol2str(<$Symbol, $Symbolplus>) = 
       strcon(""" "<" """)
-      || symbol2str($Symbol1) 
+      || symbol2str($Symbol) 
       || strcon(""" "," """)
-      || symbol2str($Symbol2)
+      || symbolssep2str($Symbolplus)
       || strcon(""" ">" """)
 
   [symbol2str-tuple]

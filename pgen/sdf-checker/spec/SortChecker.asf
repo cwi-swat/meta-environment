@@ -191,7 +191,7 @@ equations
         $String2 := symbols2str($Symbol*5),
         $String3 := "undeclared sorts in " || $String1,
         $String4 := symbols2str($Symbol*6),
-        $String5 := "undeclared start-symbols in " || $String1,
+        $String5 := "start-symbols in " || $String1 || " not defined in any right-hand",
 
         $Msgs6 := get-messages(InfoMsgTuple1),
         $Msgs7 := $Msgs6, 
