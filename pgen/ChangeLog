@@ -5,8 +5,20 @@ Mon May 17 11:34:26 CEST 2004 <markvdb, jurgenv@cwi.nl>
  * Added the arg-gtr-prio in order to be more selective
    in priority definitions.
 
+Fri May 14 11:55:56 CEST 2004 <jurgenv@cwi.nl>
+ * Bumped to 2.2
+
+Wed May 12 14:09:17 CEST 2004
+ * Fixed bug 297, message wrt to use of CHAR were not clickable.
+
+Thu May  6 21:09:33 CEST 2004 <markvdb@cwi.nl>
+ * Fixed the sdf2table wrt the SdfChecker.
+
 Tue May  4 13:23:03 CEST 2004 <markvdb@cwi.nl>
  * Improved the clickable error messages and solved bug 295.
+
+Fri May  7 11:22:40 CEST 2004 <jurgenv@cwi.nl>
+ * Bumped to 2.1 because 2.0 was released before
 
 Mon May  3 16:28:32 CEST 2004 <markvdb@cwi.nl>
  * Introduced clickable error message.

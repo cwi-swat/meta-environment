@@ -11,6 +11,7 @@ TOPSORT=SDF
 PARSER="__SGLR__/bin/sglr -m -s ${TOPSORT} -p ${SDF2TBL}"
 GENERATOR="${bindir}/parsetablegen"
 CHECKER="${bindir}/sdfchecker"
+ADDPOSINFO="__PT_SUPPORT__/bin/addPosInfo"
 
 modulename="-";
 
@@ -153,12 +154,14 @@ fi
 for f in $Files
 do
 	if [ "$f" = "-" ] ; then
-                af1name=${TMPDIR:-/var/tmp}/stdin.$$.asfix1
+                af1name=${TMPDIR:-/var/tmp}/stdin.$$.asfix
+                afposname=${TMPDIR:-/var/tmp}/stdin.$$.pos.asfix
 		tblname=${output:-"-"}
 	else
 		base=`GetBaseName $f .sdf .sdf2 .SDF .SDF2 .Sdf .Sdf2`
 		dir=`dirname $f`
-                af1name=${TMPDIR:-/var/tmp}/$base.$$.asfix1
+                af1name=${TMPDIR:-/var/tmp}/$base.$$.asfix
+                afposname=${TMPDIR:-/var/tmp}/$base.$$.pos.asfix
 		tblname=${output:-$dir/$base.tbl}
 	fi
 	Notify "Parsing $f..."
@@ -167,7 +170,8 @@ do
 	        if [ $checker -gt 0 ] ;
 		then
 		        Notify "Checking definition: $f"
-		        $CHECKER -i $af1name
+		        $ADDPOSINFO -i $af1name -o $afposname -p $f
+		        $CHECKER -i $afposname
                 fi
 
 	        Notify "Generating parse table ..."

@@ -13,6 +13,7 @@
 #include <asc-support2-me.h>
 #include <MEPT-utils.h>
 #include <SDFME-utils.h>
+#include <Error-utils.h>
 
 
 static char *name;
@@ -20,7 +21,7 @@ static char *name;
 ATbool run_verbose;
 
 static char myname[] = "sdfchecker";
-static char myversion[] = "0.0";
+static char myversion[] = "1.0";
 
 /*
  *     The argument vector: list of option letters, colons denote option
@@ -45,7 +46,7 @@ static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree)
   if (PT_isValidParseTree(parseTree)) {
     PT_Tree ptSyntax = PT_getParseTreeTree(parseTree);
 
-    newTree = PT_applyFunctionToTree("check-sdf", "Messages", 1, ptSyntax);
+    newTree = PT_applyFunctionToTree("check-sdf", "Summary", 1, ptSyntax);
   }
   else {
     ATerror("addSdfCheckerFunction: not a proper parse tree: %t\n",
@@ -57,61 +58,33 @@ static PT_Tree addSdfCheckerFunction(PT_ParseTree parseTree)
 
 static ATerm checkSdf(ATerm term)
 {
-  PT_ParseTree parseTree = PT_ParseTreeFromTerm(term);
-  PT_Tree ptApplied      = addSdfCheckerFunction(parseTree);
-  ATerm reduct           = innermost(ptApplied);
-  PT_ParseTree asfix     = toasfix(reduct);
+  PT_ParseTree parseTree;
+  PT_Tree ptApplied;
+  ATerm reduct;
+  PT_ParseTree asfix;
+
+  setKeepAnnotations(ATtrue);
+  parseTree = PT_makeParseTreeFromTerm(term);
+  ptApplied = addSdfCheckerFunction(parseTree);
+  reduct    = innermost(ptApplied);
+  asfix     = toasfix(reduct);
 
   return PT_ParseTreeToTerm(asfix);
 }
 
-static ATermList processMessages(ATerm term)
-{
-  ATermList resultMsgs = ATempty;
-  ATerm newMsg;
-
-  PT_ParseTree parseTree = PT_ParseTreeFromTerm(term);
-
-  if (PT_isValidParseTree(parseTree)) {
-    PT_Tree ptMsgs = PT_getParseTreeTree(parseTree);
-    PT_Args msgsArgs = PT_getTreeArgs(ptMsgs);
-    PT_Tree msgs = PT_getArgsArgumentAt(msgsArgs, 2);
-    if (PT_isTreeApplList(msgs)) {
-      PT_Args msgsList = PT_getTreeArgs(msgs);
-
-      while (PT_hasArgsHead(msgsList)) {
-	PT_Tree msg = PT_getArgsHead(msgsList);
-        if (!PT_isTreeLayout(msg)) {
-          newMsg = ATmake("<str>", PT_yieldTree(msg));
-	  resultMsgs = ATappend(resultMsgs, newMsg);
-        }
-	msgsList = PT_getArgsTail(msgsList);
-      }
-    }
-  }
-  return resultMsgs;
-}
-
 static void displayMessages(ATerm term)
 {
-  char *errorStr;
-
-  ATermList errorList = processMessages(term);
-  while (!ATisEmpty(errorList)) {
-    ATerm error = ATgetFirst(errorList);
-    if (ATmatch(error, "<str>", &errorStr)) {
-      ATwarning("%s\n", errorStr);
-    }
-    errorList = ATgetNext(errorList);
-  }
+  PERR_Start pStart = PERR_StartFromTerm(term);
+  PERR_Summary pSummary = PERR_getStartTopSummary(pStart);
+  ERR_Summary summary = PERR_lowerSummary(pSummary);
+  ERR_displaySummary(summary);
 }
 
 ATerm check_sdf(int cid, ATerm term)
 {
   ATerm  output = checkSdf(ATBunpack(term));
-  ATermList errorList = processMessages(output);
 
-  return ATmake("snd-value(messages(<term>))", errorList);
+  return ATmake("snd-value(feedback(<term>))", output);
 }
 
 void rec_terminate(int cid, ATerm arg)
@@ -152,6 +125,7 @@ int main(int argc, char *argv[])
 
   ATinit(argc, argv, &bottomOfStack);
   SDF_initSDFMEApi();
+  initErrorApi();
 
   ASC_initRunTime(INITIAL_TABLE_SIZE);
 
@@ -165,7 +139,7 @@ int main(int argc, char *argv[])
       cid = ATBconnect(NULL, NULL, -1, sdfchecker_handler);
       ATBeventloop();
     #else
-      ATwarning("removevarsyntax: Toolbus cannot be used in Windows.\n");
+      ATwarning("sdfchecker: Toolbus cannot be used in Windows.\n");
     #endif
   }
   else {

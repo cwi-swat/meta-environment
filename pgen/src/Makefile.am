@@ -60,6 +60,7 @@ CLEANFILES = \
 	sed 's@__BINDIR__@$(top_builddir)/src@g;\
              s@__ACTIVATE__@0@g;\
              s@__SGLR__@$(SGLR)@g;\
+             s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
              s@__DATADIR__@$(top_srcdir)/grammar@g;' < $< > $@ && \
 	chmod +x $@
 
@@ -68,6 +69,7 @@ CLEANFILES = \
 	sed 's@__BINDIR__@$(bindir)@g;\
              s@__ACTIVATE__@1@g;\
              s@__SGLR__@$(SGLR)@g;\
+             s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
              s@__DATADIR__@$(pkgdatadir)@g;' < $< > $@ && \
 	chmod +x $@
 

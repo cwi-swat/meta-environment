@@ -1,6 +1,7 @@
 module SortChecker
 
 imports Sdf-Type-Environment
+imports utilities/PosInfo[Sort]
 imports utilities/PosInfo[Symbol]
 imports utilities/PosInfo[Alias]
 

@@ -9,7 +9,8 @@ INCLUDES = \
 	-I$(ASF_SUPPORT)/include \
 	-I$(ERROR_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
-	-I$(ATERM)/include
+	-I$(ATERM)/include \
+	-DASF_WITH_ANNOS
 
 bin_PROGRAMS = sdfchecker
 
