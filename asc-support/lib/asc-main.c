@@ -54,7 +54,9 @@ void usage(char *prg)
 int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[], 
 		     void (*register_all)(), 
 		     void (*resolve_all)(),
-		     void (*init_all)()
+		     void (*init_all)(),
+		     char* tableBaf,
+		     size_t tableSize
 #ifdef TOOLBUS
 		     , ATBhandler handler
 #endif
@@ -83,10 +85,19 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
   PT_initMEPTApi();
   ASF_initASFMEApi();
   ASC_initRunTime(INITIAL_TABLE_SIZE);
+  PT_initAsFix2Api();
+
 
   register_all();
   resolve_all();
   init_all();
+
+  if (tableBaf != NULL) {
+    ATerm parseTable = ATreadFromBinaryString(tableBaf, tableSize);
+    if (parseTable != NULL) {
+      setParseTable(parseTable);
+    }
+  }
 
 #ifdef TOOLBUS
   /*  Check whether we're a ToolBus process  */

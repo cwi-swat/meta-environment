@@ -290,7 +290,9 @@ extern ATerm correct_tuple(ATerm arg, ATerm rhs);
 int asc_support_main(ATerm *bottom, int argc, char *argv[],
                      void (*register_all)(void),
                      void (*resolve_all)(void),
-                     void (*init_all)(void)
+                     void (*init_all)(void),
+		     char *tableBaf,
+		     size_t tableSize
 #ifdef TOOLBUS
 		     , ATBhandler handler
 #endif
