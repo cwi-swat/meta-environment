@@ -11,8 +11,7 @@ exports
 hiddens
    imports basic/Comments
 
-   sorts Instr %%Integer # Integer # Instr
-         %%Integer # Integer # Instr # Bag[[Elem]]
+   sorts Instr
 
    context-free syntax
 	"null"						-> Instr
