@@ -62,6 +62,7 @@ Installation instructions:
     -- SGI mips & IRIX >= 6.2
     -- IBM/Motorola PowerPC & Linux >= 2.0, MkLinux 3.0
     -- Intel iX86 & Linux >= 2.0
+    -- Intel iX86 & Solaris >= 2.6
 
     The new-meta environment has been tried without success on
     the following platforms:
