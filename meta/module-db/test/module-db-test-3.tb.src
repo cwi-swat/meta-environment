@@ -10,7 +10,7 @@ let
   Path     : str,
   Time     : term
 in
-  snd-msg(process-search-paths("meta.conf", ["__SRCDIR__"])) .
+  snd-msg(process-search-paths("meta.conf", ["__BUILDDIR__"])) .
   rec-msg(search-paths-processed("meta.conf")) .
   snd-msg(open-file("Pico-Booleans")) .
   (
@@ -21,7 +21,7 @@ in
   +
     shutdown("module-db-test-3a FAILED! (timeout)\n") delay(sec(5))
   ).
-  snd-msg(open-asf-file("Pico-Booleans", "__SRCDIR__/Pico-Booleans.sdf")) .
+  snd-msg(open-asf-file("Pico-Booleans", "__BUILDDIR__/Pico-Booleans.sdf")) .
   (
     rec-msg(opened-file("Pico-Booleans", tree(EqsTree?), Path?, Time?)) .
     snd-msg(unparse(EqsTree)) .

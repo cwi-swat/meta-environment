@@ -6,7 +6,7 @@ let
   Amount: int,
   Ambs: list
 in
-  snd-msg(open-language("Ambi","__SRCDIR__/AmbiLanguage.baf")).
+  snd-msg(open-language("Ambi","__BUILDDIR__/AmbiLanguage.baf")).
   rec-msg(language-opened("Ambi")).
   snd-msg("aap", parse-string-as-asfix1("Ambi","","a")).
  (
