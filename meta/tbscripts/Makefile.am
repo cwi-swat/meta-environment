@@ -1,5 +1,6 @@
 # $Id$
 
+# Alphabetical list of ToolBus scripts
 TBSCRIPTS = \
   abort.tb \
   clear-all.tb \
@@ -32,7 +33,10 @@ TBSCRIPTS = \
   standalone-status-display.tb \
   ui.tb
   
-GENERATED_TBSCRIPTS = sdf2-language.tb help.tb
+# Alphabetical list of Generated ToolBus scripts
+GENERATED_TBSCRIPTS = \
+  help.tb \
+  sdf2-language.tb
 
 EXTRA_DIST = $(TBSCRIPTS) $(GENERATED_TBSCRIPTS:.tb=.tb.src)
 
