@@ -122,7 +122,7 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
   parseTree = PT_makeParseTreeFromTerm(trm);
 
   result = evaluator(modname, parseTree, eqsList, debug, ATfalse, ATfalse,
-		     ATfalse);
+		     ATtrue);
 
   if (RWgetError() == NULL) {
     return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
