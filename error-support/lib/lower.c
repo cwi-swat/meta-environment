@@ -148,7 +148,7 @@ ERR_ErrorList PERR_lowerErrors(PERR_ErrorList pErrors)
     }
   }
 
-  return errors;
+  return ERR_reverseErrorList(errors);
 }
 
 /*}}}  */

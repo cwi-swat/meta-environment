@@ -151,3 +151,44 @@ PERR_Error ERR_liftError(ERR_Error error)
 }
 
 /*}}}  */
+
+/*{{{  static PERR_ErrorList ERR_liftErrorList(ERR_ErrorList errors)  */
+
+static PERR_ErrorList ERR_liftErrorList(ERR_ErrorList errors) 
+{
+  PERR_OptLayout e = PERR_makeOptLayoutAbsent();
+  PERR_ErrorList result = PERR_makeErrorListEmpty();
+
+  for (;!ERR_isErrorListEmpty(errors); errors = ERR_getErrorListTail(errors)) {
+    ERR_Error head = ERR_getErrorListHead(errors);
+    PERR_Error pHead = ERR_liftError(head);
+
+    result = PERR_makeErrorListMany(pHead, e, e, result);
+  }
+
+  return PERR_reverseErrorList(result);
+}
+
+/*}}}  */
+/*{{{  PERR_Summary ERR_liftSummary(ERR_Summary summary)  */
+
+PERR_Summary ERR_liftSummary(ERR_Summary summary) 
+{
+  PERR_OptLayout e = PERR_makeOptLayoutAbsent();
+  const char *producer = ERR_getSummaryProducer(summary);
+  const char *id = ERR_getSummaryId(summary);
+  ERR_ErrorList errors = ERR_getSummaryList(summary);
+  PERR_StrCon pProducer = ERR_liftStrCon(producer);
+  PERR_StrCon pId = ERR_liftStrCon(id);
+  PERR_ErrorList pErrors = ERR_liftErrorList(errors);
+
+  return PERR_makeSummarySummary(e, e,
+				 pProducer,
+				 e, e,
+				 pId,
+				 e, e, e,
+				 pErrors,
+				 e, e);
+}
+
+/*}}}  */

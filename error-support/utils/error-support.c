@@ -244,7 +244,7 @@ ATerm get_summary_errors(int cid, ATerm t)
 
 ATerm lower_summary(int cid, ATerm t)
 {
-  PERR_Start startSummary = PERR_StartFromTerm(t);
+  PERR_Start startSummary = PERR_StartFromTerm(ATBunpack(t));
 
   if (PERR_isStartSummary(startSummary)) {
     PERR_Summary pSummary = PERR_getStartTopSummary(startSummary);

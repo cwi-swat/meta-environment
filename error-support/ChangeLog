@@ -1,5 +1,9 @@
 $Id$
 
+Mon May  3 18:58:48 CEST 2004 <jurgenv@cwi.nl>
+ * added liftSummary
+ * fixed a bug: lowering reversed the set of errors
+
 Mon Apr  5 10:49:03 CEST 2004 <{jong,kooiker}@cwi.nl>
  * add add_filename_in_error
  * add make_summary

@@ -11,6 +11,7 @@ PERR_Location ERR_liftLocation(ERR_Location location);
 PERR_Subject ERR_liftSubject(ERR_Subject subject);
 PERR_SubjectList ERR_liftSubjectList(ERR_SubjectList subjects);
 PERR_Error ERR_liftError(ERR_Error error);
+PERR_Summary ERR_liftSummary(ERR_Summary summary);
 
 ERR_Area PERR_lowerArea(PERR_Area area);
 ERR_Location PERR_lowerLocation(PERR_Location location);
