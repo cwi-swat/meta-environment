@@ -107,9 +107,15 @@ set MODULESTYLE box
 #----------------------------------------------------------------------
 # global variables (bweghh!)
 #----------------------------------------------------------------------
-global saveFill fileName printCommand g c statuslist
+global saveFill fileName printCommand g c statuslist 
 
-#counter for window id's
+# animation of loading of modules
+set animate 1
+
+# toggle during opening of modules (to turn of animation)
+set opening 0
+
+# counter for window id's
 set windowcnt 1
 
 # message in the status window
@@ -188,8 +194,8 @@ proc add-module { mod } {
 #---
 # snd-do(delete-module(Mod))
 #-
-# Adds the named module. 
-# Modules are added only once. 
+# "Deletes" the named module i.e. turns it into shadowstyle
+# and deletes all edges that start in that module. 
 # The proc update-graph is performed afterwards. 
 #---
 proc delete-module { mod } { 
@@ -244,20 +250,35 @@ proc add-imports { implist } {
 
 
 #---
+# snd-do(finished-opening-modules)
+#-
+# notifies finishing of opening of modules (to turn on/off animation)
+#---
+proc finished-opening-modules {} {
+    global opening
+
+    set opening 0
+    update-graph
+}
+
+
+#---
 # snd-do(update-graph)
 #-
 # redraws the canvas based on the internal TclDot graph-structure
 #---
-proc update-graph {} {  
-    global g c
+proc update-graph {} {
+    global g c opening animate
 
-    $c delete all
-    $g layout .b.h .a.v
-    eval [$g render]   
-    set bbox [$c bbox all]  
-    if {$bbox == {}} { set bbox {0 0 0 0} }
-    $c configure -scrollregion $bbox 
-    UpdateModuleList $g
+    if {$animate || !$opening} {
+	$c delete all
+	$g layout .b.h .a.v
+	eval [$g render]   
+	set bbox [$c bbox all]  
+	if {$bbox == {}} { set bbox {0 0 0 0} }
+	$c configure -scrollregion $bbox 
+	UpdateModuleList $g
+    }
 }
 
 
@@ -510,6 +531,16 @@ proc GBvalue { value } {
 
 
 #--
+# GBin(s)
+#-
+# prints diagnostics on stderr
+#--
+proc GBin { s } {
+    GBmsg "incoming: $s"
+}
+
+
+#--
 # GBmsg(msg)
 #-
 # prints diagnostics on stderr
@@ -517,16 +548,6 @@ proc GBvalue { value } {
 proc GBmsg { msg } {
     global DIAG
     if {$DIAG} {puts stderr "GB: $msg"}
-}
-
-
-#--
-# GBin(s)
-#-
-# prints diagnostics on stderr
-#--
-proc GBin { s } {
-    GBmsg "incoming: $s"
 }
 
 
@@ -610,15 +631,7 @@ proc RevertModules { modlist } {
 proc DeleteModules { modlist graph } {
     foreach mod $modlist {
         GBpost [format "delete-module(%s)" [ToId $mod]]
-#
-# don't delete the modules this is done using delete-node
-#
-#        [$graph findnode $mod] delete
     }
-#
-# update isn't neccessary anymore
-#
-#    update-graph
 }
 
 
@@ -641,6 +654,9 @@ proc CompileModules { modlist } {
 # and destroys the widget $w.
 #--
 proc AddModule { mod } {
+    global opening
+
+    set opening 1
     GBevent [format "add-module(%s)" [ToId $mod]]
 }
 
@@ -964,6 +980,7 @@ proc define-menu-bar {} {
     set m .menu.window.menu
     menu $m
     $m add command -label "View all" -underline 0 -command {ViewAll}
+    $m add check -label "Animate loading" -underline 0 -variable animate
     
     menubutton .menu.help -text "Help" -underline 0 -menu .menu.help.menu
     menu .menu.help.menu
