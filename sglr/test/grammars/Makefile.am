@@ -18,5 +18,5 @@
 #
 # $Id$
 
-EXTRA_DIST=Ambi.sdf2 Casl.sdf2 Cyclops.sdf2 Flat.sdf2 Isle.sdf2 Pico.sdf2 \
-	   Risla.sdf2 SimpleCobol.sdf2 Prefix.sdf2
+EXTRA_DIST=Ambi.sdf Casl.sdf Cyclops.sdf Flat.sdf Isle.sdf Pico.sdf \
+	   Risla.sdf SimpleCobol.sdf Prefix.sdf
