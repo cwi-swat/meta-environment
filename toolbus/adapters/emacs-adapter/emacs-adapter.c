@@ -197,7 +197,7 @@ term *handle_input_from_toolbus(term *e) {
 
 void exec_cmd(void) {
   int old_stdin, old_stdout, fd_to_cmd, r, status;
-  printf("Args are: %s\n", cmd_buf);
+  /*  printf("Args are: %s\n", cmd_buf);*/
   gnuc_func = cmd_buf;
   
   old_stdin = dup(0);
