@@ -19,4 +19,4 @@
 #
 # $Id$
 
-SUBDIRS = c-source spec src
+SUBDIRS = c-source spec src test
