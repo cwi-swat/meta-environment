@@ -26,7 +26,6 @@
 #define SG_AMBIGUOUS_TREE_AFUN "ambiguous-tree"
 #define SG_PARSEERROR_AFUN   "parse-error"
 #define SG_EOF_AFUN          "eof"
-#define SG_PLAIN_AFUN        "plain"
 #define SG_CYCLE_AFUN        "cycle"
 #define SG_AMBIGUITY_AFUN    "ambiguity"
 #define SG_TOO_MANY_AMBS_AFUN    "too_many_ambiguities"

@@ -1029,26 +1029,26 @@ static forest SG_ParseError(char *path, ATermList cycle, int excess_ambs, ATerm 
   ERR_Subject subject;
   ERR_Feedback error;
   ERR_Location posinfo;
-  char *description;
+  char description[1024];
 
   SG_ERROR_ON();
 
   if (!ATisEmpty(cycle)) {
-    description = "cycle";
+    sprintf(description, "cycle");
   }
   else if (excess_ambs) {
     if (ambtrak) {
-      description = "ambiguity";
+      sprintf(description, "ambiguity");
     }
     else {
-      description = "too-many-ambiguities";
+      sprintf(description, "too-many-ambiguities");
     }
   }
   else if (current_token == SG_GETTOKEN(SG_EOF_Token)) {
-    description = "eof";
+    sprintf(description, "eof unexpected");
   }
   else {
-    description = "plain";
+    sprintf(description, "character %c unexpected", current_token);
   }
 
   if (excess_ambs && ambtrak) {

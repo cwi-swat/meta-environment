@@ -329,7 +329,6 @@ int SG_Batch (int argc, char **argv)
     return 2;
   }
 
-ATwarning("parse result is %t\n", parse_tree);
   if (!SGisParseTree(parse_tree)) {
     ERR_Summary summary = ERR_SummaryFromTerm(parse_tree);
     ERR_Feedback feedback = ERR_getFeedbackListHead(
