@@ -140,6 +140,24 @@ ASF_CondEquationList getEquations(SDF_Import import)
       asfEqs = ASF_makeEquationsFromTerm(PT_makeTermFromTree(eqsTree));
       if (ASF_isEquationsPresent(asfEqs)) {
         asfEqsList = ASF_getEquationsList(asfEqs);
+
+        if (SDF_isImportRenamedModule(import)) {
+          SDF_Renamings renamings = SDF_getImportRenamings(import);
+
+          asfEqsList = renameSymbolsInEquations(asfEqsList, renamings);
+        }
+
+        if (SDF_isModuleNameParameterized(moduleName)) {
+          SDF_Symbols actualParams = SDF_getModuleNameParams(moduleName);
+
+          sdfTerm = MDB_getEntrySdfTree(entry);
+          sdfTree = PT_getParseTreeTree(PT_makeParseTreeFromTerm(sdfTerm));
+
+          asfEqsList = renameParametersInEquations(sdfTree, 
+                                                   asfEqsList, 
+                                                   actualParams);
+        }
+
         newAsfEqsList = ASF_unionCondEquationList(newAsfEqsList, asfEqsList);
       }
     }
@@ -164,23 +182,6 @@ ASF_CondEquationList getEquations(SDF_Import import)
       }
     }
 
-    if (SDF_isImportRenamedModule(import)) {
-      SDF_Renamings renamings = SDF_getImportRenamings(import);
-
-      newAsfEqsList = renameSymbolsInEquations(newAsfEqsList, renamings);
-    }
-
-    if (SDF_isModuleNameParameterized(moduleName)) {
-      SDF_Symbols actualParams = SDF_getModuleNameParams(moduleName);
-
-      sdfTerm = MDB_getEntrySdfTree(entry);
-      sdfTree = PT_getParseTreeTree(PT_makeParseTreeFromTerm(sdfTerm));
-
-      newAsfEqsList = renameParametersInEquations(sdfTree, 
-                                                  newAsfEqsList, 
-                                                  actualParams);
-
-    }
     eqs = ASF_makeTermFromCondEquationList(newAsfEqsList);
 
     PutValue(eqs_db, atImport, eqs);

@@ -2,10 +2,6 @@
 #include "renaming-symbols.h"
 
 static
-PT_Tree renameProdInTree(PT_Tree tree,
-                         PT_Production formalParam,
-                         PT_Production actualParam);
-static
 PT_Tree renameInTree(PT_Tree tree,
                      PT_Symbol formalParam,
                      PT_Symbol actualParam);
@@ -95,27 +91,6 @@ ATwarning("symbol = %t, formalParam = %t, actualParam = %t\n",
 }
 
 /*}}}  */
-/*{{{  PT_Args renameProdInArgs(PT_Args trees, */
-
-static
-PT_Args renameProdInArgs(PT_Args trees,
-                         PT_Production formalParam,
-                         PT_Production actualParam)
-{
-  if (PT_isArgsEmpty(trees)) {
-    return trees;
-  }
-  else {
-    PT_Tree head = PT_getArgsHead(trees);
-    PT_Args tail = PT_getArgsTail(trees);
-   
-    PT_Tree newHead = renameProdInTree(head, formalParam, actualParam);
-    PT_Args newTail = renameProdInArgs(tail, formalParam, actualParam);
-    return PT_setArgsHead(PT_setArgsTail(trees, newTail), newHead);
-  }
-}
-
-/*}}}  */
 /*{{{  PT_Args renameInArgs(PT_Args trees, */
 
 static
@@ -162,40 +137,6 @@ PT_Production renameInProduction(PT_Production prod,
     PT_Symbol newRhs = renameInSymbol(rhs, formalParam, actualParam);
 
     return PT_setProductionRhs(prod, newRhs);
-  }
-}
-
-/*}}}  */
-/*{{{  PT_Tree renameProdInTree(PT_Tree tree, */
-
-static
-PT_Tree renameProdInTree(PT_Tree tree,
-                         PT_Production formalParam,
-                         PT_Production actualParam)
-{
-  if (PT_isTreeAppl(tree)) {
-    PT_Production prod = PT_getTreeProd(tree);
-    PT_Args       args = PT_getTreeArgs(tree);
-  
-    PT_Args    newArgs = renameProdInArgs(args, formalParam, actualParam);
-    PT_Symbols lhsProd = PT_getProductionLhs(prod);
-    PT_Symbol  rhsProd = PT_getProductionRhs(prod);
-    PT_Symbols lhsFPar = PT_getProductionLhs(formalParam);
-    PT_Symbol  rhsFPar = PT_getProductionRhs(formalParam);
-ATwarning("lhsProd =%t\nlhsParam = %t\n", lhsProd, lhsFPar);
-ATwarning("rhsProd =%t\nrhsParam = %t\n", rhsProd, rhsFPar);
-    if (PT_isEqualSymbols(lhsProd, lhsFPar) &&
-        PT_isEqualSymbol(rhsProd, rhsFPar)) {
-      PT_Symbols lhsAPar = PT_getProductionLhs(actualParam);
-      PT_Symbol rhsAPar = PT_getProductionRhs(actualParam);
-      PT_Production newProd = PT_setProductionLhs(PT_setProductionRhs(prod, rhsAPar), lhsAPar);
-ATwarning("prod =%t\nformalParam = %t\n", prod, formalParam);
-      return PT_setTreeArgs(PT_setTreeProd(tree, newProd), newArgs);
-    }
-    return PT_setTreeArgs(tree, newArgs);
-  }
-  else {
-    return tree;
   }
 }
 
@@ -247,36 +188,6 @@ PT_Tree renameInTree(PT_Tree tree,
   else {
     return tree;
   }
-}
-
-/*}}}  */
-/*{{{  ASF_CondEquationList replaceProductionInEquations(ASF_CondEquationList eqsList, */
-
-static
-ASF_CondEquationList replaceProductionInEquations(ASF_CondEquationList eqsList,
-                                                  PT_Production formalParam,
-                                                  PT_Production actualParam)
-{
-  if (ASF_hasCondEquationListHead(eqsList)) {
-    ASF_CondEquation eq = ASF_getCondEquationListHead(eqsList);
-    ASF_CondEquation newEq = ASF_makeCondEquationFromTerm(
-                               PT_makeTermFromTree(
-                                 renameProdInTree(
-                                   PT_makeTreeFromTerm(
-                                     ASF_makeTermFromCondEquation(eq)), 
-                                   formalParam, actualParam)));
-
-    eqsList = ASF_setCondEquationListHead(eqsList, newEq);
-  }
-  if (ASF_hasCondEquationListTail(eqsList)) {
-    ASF_CondEquationList tail = ASF_getCondEquationListTail(eqsList);
-    ASF_CondEquationList newTail = replaceProductionInEquations(tail,
-                                                                formalParam,
-                                                                actualParam);
-
-    eqsList = ASF_setCondEquationListTail(eqsList, newTail);
-  }
-  return eqsList;
 }
 
 /*}}}  */
@@ -368,6 +279,7 @@ ASF_CondEquationList renameParametersInEquations(PT_Tree sdfTree,
                    PT_makeTermFromTree(sdfTree)));
   if (SDF_isModuleNameParameterized(moduleName)) {
     SDF_Symbols formalParams = SDF_getModuleNameParams(moduleName);
+
     return replaceParametersInEquations(asfTree, formalParams, actualParams);
   }
   else {
@@ -570,6 +482,7 @@ SDF_ImportList renameParametersInImportList(SDF_ModuleName moduleName,
                                SDF_getModuleModuleName(
                                  SDF_makeModuleFromTerm(
                                    PT_makeTermFromTree(sdfTree))));
+
   return replaceParametersInImportList(importList, formalParams, actualParams);
 }
 
