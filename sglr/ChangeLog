@@ -1,5 +1,8 @@
 $Id$
 
+2001/10/31 ({jurgenv,markvdb}@cwi.nl)
+  * Fixed a bug with respect to storing filtered ambiguity clusters.
+   
 2001/10/30 (mdejonge@cwi.nl)
   * Makefile.am: added program-check.m4 to EXTRA_DIST variable
   * Makefile.am: removed ACLOCAL_AMFLAGS

@@ -20,7 +20,9 @@
 
 extern long sg_nr_rejects;
 
+/*
 ATermTable resolvedtable = NULL;
+*/
 
 int SG_InjectionFilterSucceeded(int mode)
 {
@@ -1407,6 +1409,9 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
                           SG_ClustersVisited(SG_NR_INC), SGnrAmb(SG_NR_ASK));
       )
 
+/* This code has become obsolete, but when processing ambiguity
+ * clusters in a different way (Hayco/Pieters approach) this
+ * may be reactivated.
       newt = (tree)ATtableGet(resolvedtable, (ATerm)t);
       if (!newt) {
         newt = SG_FilterAmbs(pt, ambs, pos);
@@ -1418,6 +1423,14 @@ static tree SG_FilterTreeRecursive(parse_table *pt, tree t, size_t *pos,
         }
       }
       t = newt;
+ */
+      newt = SG_FilterAmbs(pt, ambs, pos);
+      if (newt) {
+        t = newt;
+      }
+      else {
+        return NULL;
+      }
     }
     else {
       if (SG_FILTER_REJECT && SG_PT_HAS_REJECTS(pt)) {
@@ -1490,7 +1503,9 @@ tree SG_FilterTree(parse_table *pt, tree t)
     * #(ambiguity nodes) elements.
     */
 
+/*
    resolvedtable = ATtableCreate(2048, 75);
+*/
    nrAmbs = SGnrAmb(SG_NR_ASK);
    IF_VERBOSE(SG_ClustersVisited(SG_NR_ZERO));
 
@@ -1503,8 +1518,9 @@ tree SG_FilterTree(parse_table *pt, tree t)
       SG_PrintDotAndNewLine();
       )
 
-
+/*
    ATtableDestroy(resolvedtable);
+*/
    return newT; 
 }
 
