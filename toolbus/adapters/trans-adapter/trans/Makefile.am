@@ -10,11 +10,11 @@ CLASSPATH_ENV = CLASSPATH=${JAVAADAPTER}:${JAVAROOT}:${EXTERNAL_JARS}
 
 java_JAVA =  \
 	Adapter.java \
-	Connection1.java \
-	Connection2.java \
-	Tb1Bridge.java \
-	Tb1Tif.java \
-	Tb1Tool.java \
-	Tb2Bridge.java \
-	Tb2Tif.java \
-	Tb2Tool.java
+	DelegateBridge.java \
+	DelegateConnection.java \
+	DelegateTif.java \
+	DelegateTool.java \
+	MaskeradeBridge.java \
+	MaskeradeConnection.java \
+	MaskeradeTif.java \
+	MaskeradeTool.java

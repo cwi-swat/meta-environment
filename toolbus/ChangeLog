@@ -1,5 +1,9 @@
 $Id$
 
+Mon Jun 30 10:03:16 CEST 2003 <jong@cwi.nl>
+ * adapters/trans:
+   - fix Taeke's renaming of java files in Makefile.am
+
 2003-06-27 <{jong,kooiker}@cwi.nl>
  * adapters/java-adapter/AbstractTool.java:
    - fixed missing initialization of port (now set to -1)
