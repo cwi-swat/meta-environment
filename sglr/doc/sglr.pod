@@ -4,7 +4,7 @@ SGLR - the Scannerless Generalized LR parser
 
 =head1 SYNOPSIS
 
-B<sglr> -B<p> file [-B<12?bcdghlnPstvV>] [-B<f>[adeirp]] [-B<i> I<file>] [-B<o> I<file>] [-B<s> I<sort>] [-B<S> I<file>]
+B<sglr> -B<p> file [-B<2?bcdhlmnPstvV>] [-B<f>[adeirp]] [-B<i> I<file>] [-B<o> I<file>] [-B<s> I<sort>]
 
 =head1 DESCRIPTION
 
@@ -16,11 +16,9 @@ A number of options can be supplied; these are as follows:
 
 =over 4
 
-=item -B<1>, -B<2>
+=item -B<2>
 
-Choose between AsFix1 (B<1>) and AsFix2 (B<2>) output formats.  Note
-that AsFix1 can contain parse forests consisting of a single parse tree
-only.  The default is to write AsFix2.
+Generate AsFix2 output format.  
 
 =item -B<b>, -B<t>
 
@@ -72,6 +70,10 @@ Toggles statistics mode (off by default).  Produces some run-time
 statistics in F<sglr-stats.txt>, including time and - on platforms
 on which these can be obtained - memory usage data.
 
+=item -B<m>
+
+Generate AsFix2ME output format.  This is the default format.
+
 =item -B<n>
 
 Toggles the contruction of the parse tree (on by default).  
@@ -91,14 +93,9 @@ be quite expensive in terms of time- ane memory usage.
 
 Only parse trees that have I<sort> at their root are accepted.
 
-=item -B<S> I<file>
-
-Trace the parser's progress (i.e. the history of parse stack creation)
-in a series of dot files.
-
 =item -B<v>
 
-Toggles chatty (verbose) operation.
+Toggles verbose operation.
 
 =item -B<V>
 
@@ -116,8 +113,8 @@ the grammar corresponding to the specified parse table.
 
     $ sglr -h
     Usage:
-            sglr    -p file [-12?bcdfghlnPtvV] [-i file] [-o file] \
-                    [-s sort] [-S file]
+      sglr    -p file [-2?bcdhlmnPtvV] [-f[adeirp]] [-i file] [-o file] \
+              [-s sort]
     [. . .]
     $ sglr -vp Test.tbl -i MyCode.cod -o Output.File -l
     sglr: logging to sglr-stats.txt
@@ -132,7 +129,7 @@ Returns an error on unsuccesful parses.
 
 =head1 SEE ALSO
 
-L<a2toa1>, L<tree2dot>, L<dot>, L<ParseTable-Generator>
+L<tree2dot>, L<dot>, L<sdf2table>
 
 =head1 REFERENCES
 
@@ -151,14 +148,10 @@ L<a2toa1>, L<tree2dot>, L<dot>, L<ParseTable-Generator>
 =for text
 	GraphViz: <http://www.research.att.com/sw/tools/graphviz/>
 
-=head1 KNOWN BUGS
-
-None.
-
 =head1 NOTES
 
 In a different context altogether, B<sglr> runs as a C<ToolBus> client.
 
-=head1 AUTHOR
+=head1 MAINTAINER
 
-Jeroen Scheerder <S<js@cwi.nl>>
+Mark van den Brand <S<Mark.van.den.Brand@cwi.nl>>
