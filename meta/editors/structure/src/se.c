@@ -377,7 +377,7 @@ ATerm replace_focussed_tree(int cid, ATerm editorId, ATerm t)
   }
 
   focus = SE_getEditorFocus(editor);
-  parse_tree = PT_makeParseTreeFromTerm(t);
+  parse_tree = PT_makeParseTreeFromTerm(ATBunpack(t));
   tree =  PT_getParseTreeTree(parse_tree);
 
   if (SE_isFocusNotEmpty(focus)) {
