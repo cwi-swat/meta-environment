@@ -26,7 +26,7 @@ the set of equations.  Finally, the \asfix\ representation of the term
 is sent to the interpreter.
 
 When the interpreter receives a set of equations it performs some
-simple transformations to it, for instance, removal of unnecessary
+simple transformations to it, for instance, unnecessary layout is removed,
 layout and lexicals are transformed into lists of characters.  The
 interpreter stores the ons in a hash table to have fast access to them
 during rewriting.
@@ -35,7 +35,7 @@ The term to be rewritten is also slightly modified.  Unnecessary
 layout is removed as well as the transformation of the lexicals.
 After rewriting the result term is again modified, layout is inserted
 and the lists of characters are translated into lexicals.  This term
-is sent to the \TB\ to be display in an editor.
+is sent to the \TB\ to be displayed in an editor.
 
 The interpreter does not remove the equations after rewriting.  These
 equations are removed only when one of the modules in the

@@ -37,7 +37,7 @@ structure in the text editor (the text) can be translated to the data
 structure in the structure editor (the parse tree), and vice
 versa. If a string $\alpha$ is a syntactically correct string in the
 language $L$, and we have a parser $\Pi_L$ over this language and a pretty printer $pp$
-then $pp(\Pi_L(\alpha)) = \alpha$. If $t$ the parse tree that results
+then $pp(\Pi_L(\alpha)) = \alpha$. If $t$ is the parse tree that results
 from $\Pi_L(\alpha)$ then also $\Pi_L(pp(t)) = t$.
 
 \subsection{External behaviour}\label{externaleditor}
@@ -63,7 +63,7 @@ character).
  x := 10 ;
  while x > 0 do x := x - \underline{2} \end{codebox}
 Now suppose we want to edit the stop condition of the while loop, such
-that the loop terminates when x is greater than 2. In \gse the focus
+that the loop terminates when x is greater than 2. In \gse\ the focus
 would then look like this:
 \begin{codebox}
  x := 10 ;
