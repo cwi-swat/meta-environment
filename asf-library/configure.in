@@ -35,6 +35,7 @@ AC_OUTPUT(
 	lib/asf/tools/Makefile 
 	lib/basic/Makefile 
 	lib/containers/Makefile 
+	lib/disambiguation/Makefile 
 	lib/functions/Makefile 
 	lib/strategies/Makefile 
 	lib/aterm/Makefile 
