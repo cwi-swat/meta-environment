@@ -20,17 +20,22 @@ dnl $Id$
 dnl Author Merijn de Jonge (mdejonge@cwi.nl)
 
 dnl Check for version of wish. 
+
+dnl Check version of tk package by cunsulting tkConfig.sh and set WISH
+dnl variable to full path to wish program $1/bin/wish/<tkversion>
 AC_DEFUN(META_WISH_VERSION_CHECK,
 [
-   dnl See if we found a valid verion of wish; version 8.0 or above
-   wish_version=`echo 'puts "$tk_version" ; exit;' | $1 2>/dev/null`
-   if test "a${wish_version}" = "a"; then
+   dnl See if we found a valid version of wish; version 8.0 or 
+   dnl above is required
+   tk_version=`eval . $1/lib/tkConfig.sh ; echo ${TK_VERSION} 2>/dev/null`
+   if test "a${tk_version}" = "a"; then
       AC_ERROR( [ No wish program available or other error. ] )
    fi
 
-   dnl Check for correct version (>= 8.00)
-   case ${wish_version} in
+   dnl Check for correct version (>= 8.0)
+   case ${tk_version} in
       [[0-7]].* )
-         AC_ERROR( [ Wish version >= 8.X required (found $wish_version) ] ) ;;
+         AC_ERROR( [ Wish version >= 8.X required (found $tk_version) ] ) ;;
    esac
+   WISH=$1/bin/wish${tk_version}
 ])
