@@ -1,0 +1,9 @@
+module utilities/Unparsing[Sort]
+
+imports basic/Bytes
+
+exports
+
+context-free syntax
+
+  unparse(Sort) -> Bytes {built-in("unparse")}
