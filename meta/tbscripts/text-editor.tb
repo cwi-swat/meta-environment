@@ -50,7 +50,7 @@ in
     snd-eval(TE, edit-file(FileName))
   +
     rec-msg(set-text(OurId, Text?)) .
-    snd-eval(TE, edit-text("reduce.out", Text))
+    snd-eval(TE, edit-text("*reduct*", Text))
   ) .
   rec-value(TE, file-id(Fid?)) .
   snd-msg(text-editor-id(OurId, Fid)) .
@@ -111,6 +111,7 @@ in
     snd-msg(move-focus(Fid, Direction)) .
     snd-ack-event(TE, menu-event("Move", Direction, Fid))
   ) *
-  rec-disconnect(TE)
+  rec-disconnect(TE).
+  snd-msg(text-editor-disconnected(Fid))
 )
 endlet

@@ -67,6 +67,9 @@ in
     snd-msg(set-text(Id, Text)) .
     rec-msg(text-editor-id(Id, EditorId?)) .
     create(EditTerm(EditorId, ModuleName, Text), Id?)
+  +
+    rec-msg(text-editor-disconnected(EditorId?)).
+    snd-msg(remove-tree(EditorId))
   )
   * delta
 endlet
