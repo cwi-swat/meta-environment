@@ -4,25 +4,17 @@ POD2MAN=pod2man
 POD2TXT=pod2text
 POD2HTML=pod2html
 
-%.tif.c %.tif.h: %.tifs
-	PATH=$(TOOLBUS)/bin:$${PATH} tifstoc -tool $* $<
+IDEF=${TOOLBUS}/bin/idef2tif
+TIFS=${TOOLBUS}/bin/tifstoc
 
-# The output of idef2tif and toolbus is moved to $@ to make sure the
-# generated .tifs file exists in the current directory. The ToolBus and
-# idef2tif by default use the dirname of its file name argument to determine
-# the location the output. This does not work correct when using VPATH in
-# the Makefile.
-%.tifs: %.idef
-	PATH=$(TOOLBUS)/bin:$${PATH} idef2tif $<
-	@if [ "a${VPATH}" != "a" ]; then \
-	   mv ${srcdir}/$@ $@ ;\
-	fi
+tif:
+	for i in `ls *.idef`; do \
+	  ${IDEF} $$i; \
+	  ${TIFS} `basename $$i .idef` `basename $$i .idef`.tifs ;\
+	done
 
-%.tifs: %.tb
-	PATH=$(TOOLBUS)/bin:$${PATH} toolbus -gentifs $<
-	@if [ "a${VPATH}" != "a" ]; then \
-	   mv ${srcdir}/$@ $@ ;\
-	fi
+tif-clean:
+	rm -f *.tifs *.tif.[ch]
 
 # Generic rules for the generation of documentation from POD files
 
