@@ -998,7 +998,21 @@ ATermList SG_CurrentPosInfo(void)
 
 }
 
-ATermList SG_GetFirstAmbiguityPosInfo(ATerm ambtrack)
+static ATerm SG_ReverseAmbiguities(ATerm ambtrack)
+{
+  ATermList ambiguities;
+  int nrOfAmbs;
+
+  if (ATmatch(ambtrack, "ambiguities(<int>,[<list>])",
+	      &nrOfAmbs, &ambiguities)) {
+    ambiguities = ATreverse(ambiguities);
+    return ATmake("ambiguities(<int>,[<list>])", nrOfAmbs, ambiguities);
+  } 
+
+  return NULL;   
+}
+
+static ATermList SG_GetFirstAmbiguityPosInfo(ATerm ambtrack)
 {
   ATermList ambiguities;
   ATerm first;
@@ -1041,9 +1055,13 @@ forest SG_ParseError(ATermList cycle, int excess_ambs, ATerm ambtrak)
     errcode = ATmakeAppl0(SG_Plain_Error_AFun); 
   }
 
-  posinfo = excess_ambs && ambtrak ?
-	                  (ATerm) SG_GetFirstAmbiguityPosInfo(ambtrak) : 
-                          (ATerm) SG_CurrentPosInfo();
+  if (excess_ambs && ambtrak) {
+    ambtrak = SG_ReverseAmbiguities(ambtrak);
+    posinfo = (ATerm) SG_GetFirstAmbiguityPosInfo(ambtrak);
+  }
+  else {
+    posinfo = (ATerm) SG_CurrentPosInfo();
+  }
 
   return (forest) ATmakeAppl2(SG_ParseError_AFun, posinfo, (ATerm) errcode);
 }
@@ -1054,6 +1072,7 @@ forest SG_AmbiguousParse(tree t, ATerm ambtrak)
  
   SG_ERROR_ON();
 
+  ambtrak = SG_ReverseAmbiguities(ambtrak);
   posinfo = (ATerm) SG_GetFirstAmbiguityPosInfo(ambtrak);
  
   return (forest) ATmakeAppl3(SG_AmbiguousTree_AFun, (ATerm)t, posinfo, ambtrak);
