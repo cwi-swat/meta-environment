@@ -60,6 +60,7 @@ typedef struct link {
   tree          tree;
   struct stack  *stack;
   ATbool        rejected;
+  ATbool        freed;
 } st_link;
 
 typedef struct links {
@@ -74,6 +75,7 @@ typedef struct stack {
   st_links      *links;
   ATbool        rejected;
   ATbool        protected;
+  ATbool        freed;
 } stack;
 
 typedef struct stacks {
