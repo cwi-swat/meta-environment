@@ -1,5 +1,10 @@
 $Id$
 
+Fri Feb 27 16:18:19 CET 2004 <{jong,kooiker}@cwi.nl>
+ * lib/... generate separate Location library from the same sources
+   as the Error API.
+ * lib/lift.c: fix calls to makeNatConDefault and makeStrConDefault
+
 2004/02/17 (markvdb@cwi.nl)
  * Added error-diff functionality.
 
