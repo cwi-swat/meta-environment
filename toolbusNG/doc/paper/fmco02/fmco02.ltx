@@ -299,6 +299,10 @@ even know about each others existence.
 The primitives that can be used in Tscripts are listed in
 Table~\ref{Tab:Tscript-features}. 
 
+\section{An example}
+
+\note{The adress book}
+
 \section{Application to the \asdf\ Meta-Environment}
 
 \begin{figure}
@@ -397,24 +401,67 @@ aware that at the top level all process run concurrently and that
 \spec{||} is only used for explicit concurrency inside a process. The
 level of concurrence is therefore circa 100.
 
-
-
-
 \section{Issues in a Next-Generation \TB}
 
+The \TB\ has been used in various applications of which the
+Meta-Environment is by far the largests. Some of the questions
+posed by our users and ourselves are:
+
+\begin{itemize}
+
+\item I find it difficult to see which messages are requests and
+  which are replies; can you provide support this?
+  See \S\ref{Sec:message-patterns}.
+
+\item If a tool crashes, what is the best way to describe the recovery
+  in the Tscript?
+  See \S\ref{Sec:exceptions}.
+
+\item I have huge data values that are exchanged between tools and the
+  \TB becomes a data bottleneck; can you improve this?
+  See \S\ref{Sec:value-ref}.
+
+\item The \TB and tools are running as separate tasks of the operating
+  systems. Would it not be more efficient to run \TB\ and tools in
+  single task? See \S\ref{Sec-status}.
+
+\end{itemize}
+
+
 \subsection{Undisciplined Message Patterns}
+  \label{Sec:message-patterns}
 
-\begin{figure}
-\epsfig{figure=figs/rpc.eps,width=\textwidth}
-\vspace*{-10cm}
-\caption{XXX}
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/rpc.eps,height=12cm}
+\end{center}
+\vspace*{-7cm}
+\caption{\label{Fig:rpc}Communication pattern for remote procedure call}
 \end{figure}
 
-\begin{figure}
-\epsfig{figure=figs/msg.eps,width=\textwidth}
-\vspace*{-10cm}
-\caption{XXX}
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/msg.eps,height=12cm}
+\end{center}
+\vspace*{-7cm}
+\caption{\label{Fig:message}Communication pattern for general messages}
 \end{figure}
+
+The classical pattern of a remote procedure call is shown in
+Figure~\ref{Fig:rpc}: a caller performs a call to a callee. During the
+call the caller suspends execution and the callee executes until he
+has computed a reply. At that point in time, the caller continues its
+execution.
+
+Compare this simple situation with general message communication as
+shown in Figure~\ref{Fig:message}: the caller continues execution
+after sending a message msg1 to Callee1 and may even send a message
+msg2 to Callee2.  At a certain point in time Callee2 may send message
+msg3 back to Caller. In this case, the three parties involved
+continue their execution while messages are being exchanged and
+there is no obvious pairing of calls and replies.
+
+
 
 \begin{verbatim}
 call/reply regime has to be encoded in messages
@@ -452,7 +499,7 @@ snd-msg (eval(E))
 \end{verbatim}
 
 
-\subsection{Exception Handling}
+\subsection{Exception Handling} \label{Sec:exceptions}
 
 \begin{verbatim}
 Java-style execption handling does not work
@@ -465,7 +512,7 @@ Error propagation: open issue
 \end{verbatim}
 
 
-\subsection{Call-by-value versus Call-by-reference}
+\subsection{Call-by-value versus Call-by-reference} \label{Sec:value-ref}
 
 \begin{figure}
 \epsfig{figure=figs/refs.eps,width=\textwidth}
@@ -520,7 +567,7 @@ Ad hoc data channel
 \caption{XXX}
 \end{figure}
 
-\section{Current Status}
+\section{Current Status} \label{Sec-status}
 
 \begin{verbatim}
 Current ToolBus
