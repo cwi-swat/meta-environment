@@ -1,4 +1,3 @@
-
 %% Test suite for built-in operators
 
 int ONE = 1
@@ -508,3 +507,5 @@ type BagType = bag[int]
 BagType BT1 = {1,2,3}
 
 assert "type, 22": BT1 == {1,2,3}
+
+

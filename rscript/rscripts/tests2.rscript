@@ -1,4 +1,3 @@
-
 %%
 %% Test all built-in functions
 %%
@@ -170,9 +169,17 @@ assert "min-4":		min({3, 2, 1})		== 1
 assert "min-5":		min({3, -2, 1})		== -2
 assert "min-6":		min({1, 2, 1, 2})	== 1
 
-rel[int,int] AGraph = { <1,2>, <2,3>, <2,4> }
+rel[int,int] Tree = { <1,2>, <2,3>, <2,4> }
+rel[int,int] Diamond = { <1,2>, <2,3>, <2,4>, <3,5>, <4,5> }
+rel[int,int] Circle = { <1,2>, <2,3>, <3,1> }
 
-assert "paths-1": 	all-paths-from(AGraph, {1}) ==
+assert "paths-1": 	all-paths-from(Tree, {1}) ==
 	{{<1, 2>, <2, 3>}, {<1, 2>, <2, 4>}, {<1, 2>}, {}}
 
-assert "paths-2": 	all-paths-from(AGraph, {4}) ==  {{}}
+assert "paths-2": 	all-paths-from(Tree, {4}) ==  {{}}
+
+assert "paths-3":	all-paths-from(Diamond, {1}) ==
+	{{<1,2>,<2,3>,<3,5>}, {<1,2>,<2,4>,<4,5>},
+	 {<1,2>,<2,3>}, {<1,2>, <2,4>}, {<1, 2>}, {}}
+
+
