@@ -3,3 +3,6 @@ Makefile
 meta
 eqs-dump
 pt-dump
+asf-editor
+sdf-editor
+term-editor
