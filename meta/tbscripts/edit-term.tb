@@ -75,11 +75,15 @@ let
   Focus      : term,
   DirtyFoci  : term,
   ErrList    : list
-in 
+in
+  subscribe(syntax-changed(ModuleName)) . 
   snd-msg(initialize-structure-editor(EditorId, Text)) .
   rec-msg(initial-focus(Focus?)) .
   snd-msg(set-focus(EditorId, Focus)) .
   (
+    rec-note(syntax-changed(ModuleName)) .
+    snd-msg(invalidate-tree(EditorId))
+  +
     rec-msg(parse-focus(EditorId)) .
     ParseTerm(EditorId, ModuleName)
   +

@@ -72,7 +72,7 @@ in
         rec-msg(parse-ok("Sdf2")) .
         snd-msg(get-tree(EditorId)) .
         rec-msg(tree(Tree?)) .
-        snd-msg(update-module-in-db(Tree, ModuleName)).
+        snd-msg(update-module-in-db(Tree, "Sdf2")).
         rec-msg(extra-modules(Modules?)).
         snd-msg(open-modules(Modules)).
         rec-msg(finished-opening-modules) .
