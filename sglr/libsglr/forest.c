@@ -1,25 +1,4 @@
 /*
-
-    SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
-                        The Netherlands.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/*
  $Id$
  */
 
@@ -1455,16 +1434,18 @@ static tree SG_Priority_Filter(parse_table *pt, tree t, label prodl)
         tree amb = (tree) ATgetFirst(ambs);
         tree injAmb = SG_Jump_Over_Injections(pt, amb);
 
-        proda = SG_GetApplProdLabel(injAmb);
-        l1 = SG_GetATint(proda, 0);
-
-        if (!SG_GtrPriority(pt, l0, l1)) {
-          newambs = ATinsert(newambs, (ATerm) amb);
-        }
-        else {
-          IF_DEBUG(ATfprintf(SG_log(),
-                             "Higher priority node %d removed.\n",
-                             prodl));
+        if (ATgetType(injAmb) == AT_APPL) {
+          proda = SG_GetApplProdLabel(injAmb);
+          l1 = SG_GetATint(proda, 0);
+  
+          if (!SG_GtrPriority(pt, l0, l1)) {
+            newambs = ATinsert(newambs, (ATerm) amb);
+          }
+          else {
+            IF_DEBUG(ATfprintf(SG_log(),
+                               "Higher priority node %d removed.\n",
+                               prodl));
+          }
         }
       }
       if (!ATisEmpty(newambs)) {
