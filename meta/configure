@@ -1729,21 +1729,17 @@ ac_given_srcdir=$srcdir
 trap 'rm -fr `echo "Makefile Makefile.skel meta \
 	asource/Makefile \
 	compiler/Makefile compiler/c-source/Makefile \
-	compiler/support-muasf/Makefile \
 	editor/Makefile editor/editor \
 	evaluator/Makefile \
 	graph-browser/Makefile graph-browser/graph-browser \
 	in-output/Makefile \
 	module-db/Makefile \
-	pgen/c-source/Makefile pgen/c-files/Makefile \
-	pgen/fastgen/Makefile pgen/addeqs/c-source/Makefile \
-	pgen/addeqs/addeqs/Makefile \
 	stred/nl/cwi/gipe/stred/Makefile \
 	toolbus/Makefile toolbus/edit-module.tb \
 	toolbus/open-modules.tb toolbus/revert-module.tb \
 	toolbus/help.tb \
         utils/Makefile utils/genmakefile.sh utils/gen-table \
-        utils/idef2tif utils/normalize-sdf utils/parse-sdf2  utils/parse-file \
+        utils/normalize-sdf utils/parse-sdf2  utils/parse-file \
         utils/ps-dot utils/sdf2table \
   " | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
@@ -1850,21 +1846,17 @@ cat >> $CONFIG_STATUS <<EOF
 CONFIG_FILES=\${CONFIG_FILES-"Makefile Makefile.skel meta \
 	asource/Makefile \
 	compiler/Makefile compiler/c-source/Makefile \
-	compiler/support-muasf/Makefile \
 	editor/Makefile editor/editor \
 	evaluator/Makefile \
 	graph-browser/Makefile graph-browser/graph-browser \
 	in-output/Makefile \
 	module-db/Makefile \
-	pgen/c-source/Makefile pgen/c-files/Makefile \
-	pgen/fastgen/Makefile pgen/addeqs/c-source/Makefile \
-	pgen/addeqs/addeqs/Makefile \
 	stred/nl/cwi/gipe/stred/Makefile \
 	toolbus/Makefile toolbus/edit-module.tb \
 	toolbus/open-modules.tb toolbus/revert-module.tb \
 	toolbus/help.tb \
         utils/Makefile utils/genmakefile.sh utils/gen-table \
-        utils/idef2tif utils/normalize-sdf utils/parse-sdf2  utils/parse-file \
+        utils/normalize-sdf utils/parse-sdf2  utils/parse-file \
         utils/ps-dot utils/sdf2table \
   "}
 EOF
@@ -1927,7 +1919,7 @@ EOF
 cat >> $CONFIG_STATUS <<\EOF
 chmod +x meta install-prog-sh install-data-sh; \
     chmod +x graph-browser/graph-browser editor/editor; \
-    chmod +x utils/gen-table utils/idef2tif utils/normalize-sdf \
+    chmod +x utils/gen-table utils/normalize-sdf \
              utils/parse-sdf2 utils/ps-dot utils/sdf2table 
 
 exit 0

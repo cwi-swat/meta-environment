@@ -171,7 +171,6 @@ AC_OUTPUT(
 	Makefile Makefile.skel meta \
 	asource/Makefile \
 	compiler/Makefile compiler/c-source/Makefile \
-	compiler/support-muasf/Makefile \
 	editor/Makefile editor/editor \
 	evaluator/Makefile \
 	graph-browser/Makefile graph-browser/graph-browser \
