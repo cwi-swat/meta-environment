@@ -1,4 +1,11 @@
 
+2001/11/07 (jurgenv@cwi.nl)
+ * Fixed a bug in the compiler. More than one rewrite rules DIRECTLY over a 
+   list were not handled correctly and resulted in runtime core dumps.
+ * Added support for transformers that visit a list to the compiler.
+ * NOTE: transformers and accumulators are now fully supported by the
+   compiler.
+
 2001/11/06 (jurgenv@cwi.nl)
  * Traversal functions in the compiler: 
    - added support for traversal functions with a single variable as the first
