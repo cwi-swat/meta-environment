@@ -17,9 +17,18 @@ equations
   sdf-to-asfix2me-adt(definition $Module*, $ConsOption) = $ADT3,
   merge-adts($ADT2, $ADT3) = $ADT4,
   start-sorts-to-asfix2me-adt($Module) = $ADT5,
-  merge-adts($ADT4, $ADT5) = $ADT6
+  merge-adts($ADT4, $ADT5) = $ADT6,
+  merge-adts($ADT6, layout-adt) = $ADT7
   ===>
-  sdf-to-asfix2me-adt(definition $Module $Module*, $ConsOption) = $ADT6
+  sdf-to-asfix2me-adt(definition $Module $Module*, $ConsOption) = $ADT7
+
+[make-layout-adt]
+  layout-adt = 
+   [ [OptLayout, Absent, appl(prod([],cf(opt(layout)),no-attrs),[])],
+     [OptLayout, Present, appl(prod([cf(layout)],cf(opt(layout)),no-attrs),
+                          <chars(CHARLIST)>)]
+   ]
+
 
 [equ-sdf-to-adt-module]
   sdf-to-asfix2me-adt($Module, $ConsOption) = 
@@ -124,21 +133,22 @@ equations
 [equ-lexical-to-adt-LAYOUT]
   lexical-to-adt($ModName, $Symbol* -> LAYOUT $Attributes, $ConsOption) =
 
+[equ-lexical-to-adt-reject]
+  lexical-to-adt($ModName, $Symbol* -> $Sort { $Attr*1, reject, $Attr*2 }, 
+    $ConsOption) =
+
 [default-lexical-to-adt]
   $Attributes = { $Attr*1, cons(at-literal(""" $Char* """)), $Attr*2 },
   $AltId = afun($Char*),
   $TypeId  = sort-to-afun($Sort),
-%%  $AFProd  = 
-%%    build-asfix-prod(lex, $ModName, $Symbol*, $Sort, $Attributes, $ConsOption),
   $AFSort    = sort-to-lit($Sort),
   $FieldType = sort-to-afun($Sort),
   $AFAttrs   = build-asfix-attrs($Attributes, $ConsOption)
   ===>
   lexical-to-adt($ModName, $Symbol* -> $Sort $Attributes, $ConsOption) = 
-%%    [ $TypeId, $AltId, appl($AFProd,<lex(Lexical)>) ],
-    [ $TypeId, lex-to-cf, 
+    [ $TypeId, $AltId, 
       appl(prod([lex(sort($AFSort))],cf(sort($AFSort)),no-attrs),
-           [<lex(Lexical)>])]
+       [appl(list(iter-star(char-class([range(0,255)]))),<chars(CHARLIST)>)]) ]
 
 [equ-build-list-entries-empty]
   build-list-entries() =
@@ -158,7 +168,7 @@ equations
      [$ListType, empty,  []],
      [$ListType, single, [<head($ElemType)>]],
      [$ListType, many,   [<head($ElemType)>,
-                          <ws-after-first(Layout)>,
+                          <ws-after-first(OptLayout)>,
                           <[tail($ListType)]>]]
 
 [equ-build-list-entries-iter-plus]
@@ -169,7 +179,7 @@ equations
   build-list-entries($Label : $Sort +) = 
      [$ListType, single, [<head($ElemType)>]],
      [$ListType, many,   [<head($ElemType)>,
-                          <ws-after-first(Layout)>,
+                          <ws-after-first(OptLayout)>,
                           <[tail($ListType)]>]]
 
 [equ-build-list-entries-iter-sep-star]
@@ -181,9 +191,9 @@ equations
      [$ListType, empty,[]],
      [$ListType, single, [<head($ElemType)>]],
      [$ListType, many,[<head($ElemType)>,
-                       <ws-after-first(Layout)>,
+                       <ws-after-first(OptLayout)>,
                        lit(<sep(str)>),
-                       <ws-after-sep(Layout)>,
+                       <ws-after-sep(OptLayout)>,
                        <[tail($ListType)]>]]
 
 [equ-build-list-entries-iter-sep-plus]
@@ -194,9 +204,9 @@ equations
   build-list-entries($Label : { $Sort $Sep } +) = 
      [$ListType, single, [<head($ElemType)>]],     
      [$ListType, many,[<head($ElemType)>,
-                       <ws-after-first(Layout)>,
+                       <ws-after-first(OptLayout)>,
                        lit(<sep(str)>),
-                       <ws-after-sep(Layout)>,
+                       <ws-after-sep(OptLayout)>,
                        <[tail($ListType)]>]]
 
 [default-equ-build-list-entries]
@@ -229,7 +239,7 @@ equations
       parsetree(appl(prod(
                      [cf(opt(layout)),cf(sort($FieldType)),cf(opt(layout))],
                        sort("<START>"), no-attrs),
-             [<ws-before(Layout)>,<$FieldId($FieldType)>,<ws-after(Layout)>]),
+             [<ws-before(OptLayout)>,<$FieldId($FieldType)>,<ws-after(OptLayout)>]),
                               <amb-cnt(int)>)], $Entries]
 
 

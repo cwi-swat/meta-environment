@@ -1,4 +1,12 @@
 
+2002/11/04 (vinju@loria.fr)
+ * Added support for lexicals and layout to sdf2-to-adt. They are no longer
+   user defined 'bottom-sorts' in a generated SDF2 api. Instead there is
+   a bottom sort CHARLIST, which is instantiated by a template
+ * Added a script sdf2-to-java that wraps sdf2-to-adt and adt-to-java and
+   the generation of a special class (the bottom-sort CHARLIST).
+ * Bumped to 1.4beta
+
 2002/10/07 (vinju@loria.fr)
  * Changed the name of the field that gets the tree out of the start pattern.
    The name is now 'top-<type>' to disambiguate in case of multiple start

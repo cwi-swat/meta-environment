@@ -6,9 +6,11 @@
 
 include $(top_srcdir)/make_rules
 
-EXTRA_DIST = sdf2-to-adt.sh.src
+EXTRA_DIST = sdf2-to-adt.sh.src CHARLIST.java.template
 
-bin_SCRIPTS		= sdf2-to-adt 
+pkgdata_DATA= CHARLIST.java.template
+
+bin_SCRIPTS		= sdf2-to-adt sdf2-to-java
 
 % : %.sh.src Makefile
 	sed 's@__APIGEN__@${APIGEN}@g;\

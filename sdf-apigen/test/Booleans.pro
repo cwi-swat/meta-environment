@@ -1,4 +1,3 @@
-#include <MEPT.h>
+#include <aterm2.h>
 
-typedef PT_Tree SDFLayout;
-typedef PT_Tree SDFLexical;
+typedef ATermList SDFCHARLIST;

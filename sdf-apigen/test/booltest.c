@@ -9,7 +9,7 @@ static void testBooleans(SDFBoolList l)
 {
   SDFBool b, left, right, bool[2];
   SDFBoolElems elems;
-  SDFLayout layout;
+  SDFOptLayout layout;
   SDFBool true;
 
   true = SDFmakeBoolTrue();

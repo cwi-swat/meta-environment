@@ -126,7 +126,7 @@ equations
   build-asfix-appl-arg($Label:$Symbol) = $AFArg,
   build-asfix-appl-args($Symbol+) = $AFArgs,
   afun-concat(ws after sdflit-to-afun($Label)) = $FieldId,
-  <$FieldId(Layout)> = $FieldWs
+  <$FieldId(OptLayout)> = $FieldWs
   ===>
   build-asfix-appl-args($Label:$Symbol $Symbol+) = 
     $AFArg, $FieldWs, $AFArgs
@@ -135,7 +135,7 @@ equations
   build-asfix-appl-arg($Literal) = $AFArg,
   build-asfix-appl-args($Symbol+) = $AFArgs,
   afun-concat(ws after sdflit-to-lit($Literal)) = $FieldId,
-  <$FieldId(Layout)> = $FieldWs
+  <$FieldId(OptLayout)> = $FieldWs
   ===>
   build-asfix-appl-args($Literal $Symbol+) = $AFArg, $FieldWs, $AFArgs
 

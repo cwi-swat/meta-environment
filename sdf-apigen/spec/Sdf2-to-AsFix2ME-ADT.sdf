@@ -16,6 +16,10 @@ context-free syntax
 start-sorts-to-asfix2me-adt(Module) -> ATerm
 
 hiddens
+context-free syntax
+  layout-adt -> ATerm
+
+hiddens
 
 context-free syntax
 
