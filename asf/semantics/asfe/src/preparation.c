@@ -707,6 +707,11 @@ static PT_Tree ambConstructorToAmb(PT_Tree tree, PT_TreeVisitorData data)
 
   ambs = PT_makeArgsEmpty();
 
+  if (ATisEmpty(args)) {
+    RWsetError("Empty ambiguity cluster encountered", (ATerm) PT_makeTreeLit(""));
+    return tree;
+  }
+
   while (PT_hasArgsHead(args)) {
     PT_Tree arg;
     PT_Tree amb;
