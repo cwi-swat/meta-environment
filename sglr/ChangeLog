@@ -18,6 +18,10 @@
 
 $Id$
 
+2000/7/11 (mdejonge@cwi.nl)
+   * Bug fixed in regress-test/grammars/Makfile.am which caused make dist
+     to fail
+
 2000/6/28 (js@cwi.nl)
    * Cycles are reported with expanded productions rather than production
      numbers
