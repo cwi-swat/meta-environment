@@ -30,6 +30,10 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
 
   rhs = PT_getProductionRhs(prod);
 
+  if (PT_isSymbolLex(rhs) || PT_isSymbolCf(rhs)) {
+    rhs = PT_getSymbolSymbol(rhs);
+  }
+
   if (PT_hasSymbolSeparator(rhs)) {
     sepSym = PT_getSymbolSeparator(rhs);
     assert(PT_isSymbolLit(sepSym));
@@ -43,11 +47,10 @@ static PT_Tree listToTree(PT_Production prod, ATermList elems)
     args = PT_makeArgsList(termToTree(ATgetFirst(elems)), args); 
     if (sepTree != NULL && !ATisEmpty(ATgetNext(elems))) {
       args = PT_makeArgsList(sepTree, args);
-      args = PT_makeArgsList(layout, args);
     }
   } 
 
-  return PT_makeTreeAppl(prod, args);
+  return PT_makeTreeAppl(prod, (PT_Args) ATreverse((ATermList)args));
 }
 
 /*}}}  */

@@ -290,5 +290,3 @@ ATerm lookup_prod(Symbol sym)
 }
 
 /*}}}  */
-
-
