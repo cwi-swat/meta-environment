@@ -102,7 +102,7 @@ in
     snd-msg(text-editor-disconnected(EditorId))
   +
     rec-msg(delete-text-editor(EditorId)) .
-    snd-terminate(TE, "You have been killed!")
+    snd-do(TE, tb-shutdown)
   ) .
   (
     rec-msg(set-focus(EditorId, Focus?))

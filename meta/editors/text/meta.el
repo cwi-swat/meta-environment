@@ -206,6 +206,7 @@ point."
     res)
 )
 
-
-
-
+(defun tb-shutdown ()
+  (save-buffers-kill-emacs)
+  ()
+)
