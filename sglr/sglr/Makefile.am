@@ -10,7 +10,7 @@ INCLUDES		= -I$(top_srcdir)/libsglr \
 			-I$(TOOLBUSLIB)/include \
 			-I$(ATERM)/include
 
-data_DATA		= sglr.idef
+pkgdata_DATA		= sglr.idef
 noinst_HEADERS		= getopt.h
 
 bin_PROGRAMS		= sglr 

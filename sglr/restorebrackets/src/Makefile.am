@@ -11,7 +11,7 @@ INCLUDES		= -I$(top_srcdir)/libsglr \
 			-I$(SGLR)/include \
 			-I$(ATERM)/include
 
-data_DATA		= restorebrackets.idef
+pkgdata_DATA		= restorebrackets.idef
 
 bin_PROGRAMS		= restorebrackets 
 
