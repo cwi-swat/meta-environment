@@ -4,7 +4,7 @@ TREE2DOT - Parse Trees to DOT converter
 
 =head1 SYNOPSIS
 
-B<tree2dot> [-B<btvVx>] [-B<D> I<file>] [-B<i> I<file>] [-B<o> I<file>]
+B<tree2dot> [-B<btvVxp>] [-B<D> I<file>] [-B<i> I<file>] [-B<o> I<file>]
 
 =head1 DESCRIPTION
 
@@ -39,6 +39,11 @@ Reveal program version.
 Excludes lexical subtrees.  By default, the full, unabbreviated parse
 forest is entirely rendered; pruning out the lexical detail can
 substantially reduce the size of the resulting graph.
+
+=item -B<p>
+
+Prints entire productions in the nodes of a parse tree instead of the 
+result sort. 
 
 =back
 

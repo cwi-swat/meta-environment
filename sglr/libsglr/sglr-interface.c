@@ -91,8 +91,6 @@ void SGshowMode()
   ATfprintf(stderr, "OUTPUT:      %s\n", SG_OUTPUT?"y":"n");
   ATfprintf(stderr, "ASFIX1:      %s\n", SG_ASFIX1?"y":"n");
   ATfprintf(stderr, "BINARY:      %s\n", SG_BINARY?"y":"n");
-  ATfprintf(stderr, "DOTOUT:      %s\n", SG_DOTOUT?"y":"n");
-  ATfprintf(stderr, "NOLEX:       %s\n", SG_NOLEX?"y":"n");
   ATfprintf(stderr, "SHOWSTACK:   %s\n", SG_SHOWSTACK?"y":"n");
   ATfprintf(stderr, "FILTER:      %s\n", SG_FILTER?"y":"n");
   ATfprintf(stderr, "STARTSYMBOL: %s\n", SG_STARTSYMBOL?"y":"n");

@@ -48,7 +48,7 @@ static char myversion[] = "1.0";
     explanation.
  */
 
-static char myarguments[] = "bD:hi:o:tvVxy";
+static char myarguments[] = "bD:hi:o:tvVxp";
 
 
 /*
@@ -97,7 +97,7 @@ void usage(void)
         "\t-v              ignored\n"
         "\t-V              reveal program version (i.e. %s)\n"
         "\t-x              suppress lexicals               (default: off)\n"
-				"\t-y              print productions as nodes      (default: off)\n",
+				"\t-p              print productions as nodes      (default: off)\n",
         myname, myargumentsexplained, myversion);
 }
 
@@ -120,7 +120,7 @@ int main (int argc, char **argv)
       case 'o':
       case 'D':  output_file_name = optarg;    break;
       case 'x':  suppress_lex = !suppress_lex; break;
-  		case 'y':  print_prods = !print_prods;   break;
+  		case 'p':  print_prods = !print_prods;   break;
 
       case 'b':
       case 't':

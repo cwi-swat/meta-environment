@@ -144,8 +144,8 @@ void SG_Usage(FILE *stream, ATbool long_message)
 #if !defined(HAVE_BOEHMGC)
   "g"
 #endif
-  "hlnPtvVxy] [-i file] [-o file] \\"
-  "\n\t\t[-D file] [-s sort] [-S file]\n";
+  "hlnPtvV] [-i file] [-o file] \\"
+  "\n\t\t[-s sort] [-S file]\n";
 
   ATfprintf(stream, usage, program_name);
   if(long_message) {
@@ -158,7 +158,6 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-b       : use Binary AsFix (BAF) output format [%s]\n"
               "\t-c       : toggle cycle detection               [%s]\n"
               "\t-d       : toggle debug mode                    [%s]\n"
-              "\t-D file  : generate dot output for parse tree   [%s]\n"
               "\t-f       : toggle filtering                     [%s]\n"
 #if !defined(HAVE_BOEHMGC)
               "\t-g       : perform garbage collection           [%s]\n"
@@ -174,9 +173,7 @@ void SG_Usage(FILE *stream, ATbool long_message)
               "\t-S file  : trace stack history in dot |file|s   [%s]\n"
               "\t-t       : use PlainText AsFix output format    [%s]\n"
               "\t-v       : toggle verbose mode                  [%s]\n"
-              "\t-V       : reveal program version (i.e. %s)\n"
-              "\t-x       : toggle inclusion of lexicals in dot  [%s]\n"
-              "\t-y       : toggle printing of productions in dot[%s]\n",
+              "\t-V       : reveal program version (i.e. %s)\n",
 #if !defined(NO_A2TOA1)
               DEFAULTMODE(asfix1flag), DEFAULTMODE(!asfix1flag),
 #endif
@@ -214,7 +211,6 @@ struct option longopts[] =
   {"asfix2",        no_argument,       &asfix1flag,        ATfalse},
 #endif
   {"debug",         no_argument,       &debugflag,         ATtrue},
-  {"dot",           required_argument, NULL,               'D'},
   {"no-filter",     no_argument,       &filterflag,        ATfalse},
   {"cycle-detect",  no_argument,       &cycleflag,         ATtrue},
 #if !defined(HAVE_BOEHMGC)
@@ -233,8 +229,6 @@ struct option longopts[] =
   {"text-output",   no_argument,       &binaryflag,        ATfalse},
   {"verbose",       no_argument,       &verboseflag,       ATtrue},
   {"version",       no_argument,       NULL,               'V'},
-  {"suppress",      no_argument,       &supplexflag,       'x'},
-  {"printprods",    no_argument,       &printprodsflag,    'y'},
   {0, 0, 0, 0}
 };
 
@@ -255,11 +249,11 @@ void handle_options (int argc, char **argv)
 #ifndef NO_A2TOA1
                           "12"
 #endif
-                          "?bcdD:f"
+                          "?bcdf"
 #if !defined(HAVE_BOEHMGC)
                           "g"
 #endif
-                          "hi:lno:p:Ps:S:tvVxy",
+                          "hi:lno:p:Ps:S:tvV",
                           longopts, NULL))
          != EOF) {
     switch (c) {
@@ -272,7 +266,6 @@ void handle_options (int argc, char **argv)
       case 'b':   binaryflag       = ATtrue;              break;
       case 'c':   cycleflag        = !cycleflag;          break;
       case 'd':   debugflag        = !debugflag;          break;
-      case 'D':   dotoutput        = optarg;              break;
       case 'f':   filterflag       = !filterflag;         break;
 #if !defined(HAVE_BOEHMGC)
       case 'g':   gcflag           = ATfalse;             break;
@@ -290,8 +283,6 @@ void handle_options (int argc, char **argv)
       case 't':   binaryflag       = ATfalse;             break;
       case 'v':   verboseflag      = !verboseflag;        break;
       case 'V':   show_version     = ATtrue;              break;
-      case 'x':   supplexflag      = ATtrue;              break;
-   		case 'y':   printprodsflag   = ATtrue;              break;                   
       default:    SG_Usage(stderr, ATfalse);              exit(1);
     }
   }
@@ -319,9 +310,6 @@ ATbool set_global_options(void)
   if(asfix1flag)     SG_ASFIX1_ON();
 #endif
   if(binaryflag)     SG_BINARY_ON();
-  if(dotoutput)      SG_DOTOUT_ON();
-  if(supplexflag)    SG_NOLEX_ON();
-	if(printprodsflag) SG_PRINTPRODS_ON();
 #if !defined(HAVE_BOEHMGC)
   if(gcflag)         SG_GC_ON();
 #endif
@@ -420,27 +408,18 @@ int SG_Batch (int argc, char **argv)
     return 1;
   }
 
-  if(SG_DOTOUT) {
-    if(SG_ASFIX1) {
-      ATwarning("%s: cannot create dot output from AsFix1 parse tree\n",
-                program_name);
-    } else {
-      SGtreeToDotFile(program_name, dotoutput, parse_tree, SG_NOLEX, SG_PRINTPRODS);
-    }
-  }
-
   IF_VERBOSE(
     int  nrambs;
     char *sort;
 
-    nrambs = SG_OUTPUT||SG_DOTOUT ?
+    nrambs = SG_OUTPUT  ?
     SGnrAmb(SG_NR_ASK)
                                   : SG_MaxNrAmb(SG_NR_ASK);
     sort   = SGsort(SG_GET, NULL);
     ATwarning("%s: %s parsed %s as sort %s, %s %d ambiguit%s\n",
               program_name, parse_table_name, input_file_name,
               sort ? sort : "[undetermined]",
-              SG_OUTPUT||SG_DOTOUT||!SG_MaxNrAmb(SG_NR_ASK) ?
+              SG_OUTPUT||!SG_MaxNrAmb(SG_NR_ASK) ?
               "exactly"
                                                             : "at most",
               nrambs, (nrambs==1)?"y":"ies");
