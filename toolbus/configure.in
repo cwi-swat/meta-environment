@@ -21,6 +21,8 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT(Makefile.in)
 AM_INIT_AUTOMAKE(toolbus, 0.15)
 
+ACLOCAL="${ACLOCAL} -I ."
+
 dnl Which compiler to use?
 AC_REQUIRE([AC_PROG_CC])
 AC_PROG_CC
@@ -75,10 +77,9 @@ AC_SUBST(TIDEDEF)
 AC_SUBST(TIDE)
 AC_SUBST(TIDEINC)
 
-AC_ARG_WITH(aterm,
-   [  --with-aterm            designate location of aterm library stuff],
-      ATERM=${withval},
-      ATERM=${prefix})
+dnl Require ATerm library
+AC_PACKAGE_REQUIRE(aterm, baffle,
+   [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
 dnl Which additional adapters to build?
