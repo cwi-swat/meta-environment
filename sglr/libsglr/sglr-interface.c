@@ -1,7 +1,7 @@
 /*
 
     SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -440,7 +440,7 @@ ATerm SGparseFile(char *prgname, int conn, char *L, char *G, char *FN)
   }
   the_in_buf_end = the_in_buf_cur = the_in_buf_start;
   the_in_buf_end += ntok;
-  
+
   IF_VERBOSE(ATwarning("%s: parsing file %s (%d tokens)\n", prgname, FN, ntok));
   ret = SG_Parse(pt, G?(*G?G:0):NULL, SG_GetChar);
   SG_Free(the_in_buf_start);

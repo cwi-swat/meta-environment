@@ -1,7 +1,7 @@
 /*
 
     SGLR - the Scannerless Generalized LR parser.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -397,13 +397,15 @@ void SG_AddClassesToActionTable(parse_table *pt, state s, ATermList classes,
   }
 #ifndef NO_EAGERNESS
   /*  Check if there is preference information in this parse table  */
-  for(; !ATisEmpty(acts); acts = ATgetNext(acts)) {
-    act = ATgetFirst(acts);
-    if(SG_ActionKind(act) == REDUCE) {
-      if(SG_EagerAction(act)) {
-        pt->has_prefers = ATtrue;
-      } else if(SG_UneagerAction(act)) {
-        pt->has_avoids = ATtrue;
+ if(!pt->has_prefers && !pt->has_avoids) {
+    for(; !ATisEmpty(acts); acts = ATgetNext(acts)) {
+      act = ATgetFirst(acts);
+      if(SG_ActionKind(act) == REDUCE) {
+        if(SG_EagerAction(act)) {
+          pt->has_prefers = ATtrue;
+        } else if(SG_UneagerAction(act)) {
+          pt->has_avoids = ATtrue;
+        }
       }
     }
   }
@@ -1093,6 +1095,6 @@ parse_table *SG_LookupParseTable(char *L)
 
   IF_DEBUG(fprintf(SGlog(), "Table for %s not amongst the %d stored\n",
                    SG_SAFE_STRING(L), MAX_TABLES));
-  
+
   return NULL;
 }
