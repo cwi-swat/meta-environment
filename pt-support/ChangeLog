@@ -1,5 +1,8 @@
 $Id$
 
+2003/06/18 ({jong,markvdb}@cwi.nl)
+ * Added explicit ATBpack to parsetrees.
+
 2003/05/27 (jurgenv@cwi.nl)
  * renamed addPosInfo message to add-posinfo
  * extended addPosInfo tool with add-posinfo-to-depth

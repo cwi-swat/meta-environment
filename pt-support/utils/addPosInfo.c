@@ -18,7 +18,7 @@ static char version[] = "1.3";
 ATerm add_posinfo(int cid, char* path, ATerm t)
 {
   PT_ParseTree result = PT_addParseTreePosInfoSome(path, 
-						   (PT_ParseTree) t, 
+						   (PT_ParseTree) ATBunpack(t), 
 						   -1, ATfalse, ATfalse);
 
   return ATmake("snd-value(tree-with-pos-info(<term>))", (ATerm) result);
@@ -29,9 +29,10 @@ ATerm add_posinfo(int cid, char* path, ATerm t)
 
 ATerm add_posinfo_packed(int cid, char* path, ATerm t)
 {
-  PT_ParseTree result = PT_addParseTreePosInfoSome(path, 
-						   (PT_ParseTree) t, 
-						   -1, ATfalse, ATfalse);
+  PT_ParseTree result 
+    = PT_addParseTreePosInfoSome(path, 
+				 (PT_ParseTree) ATBunpack(t), 
+				 -1, ATfalse, ATfalse);
 
   return ATmake("snd-value(tree-with-pos-info(<term>))", ATBpack((ATerm) result));
 }
@@ -42,7 +43,7 @@ ATerm add_posinfo_packed(int cid, char* path, ATerm t)
 ATerm add_posinfo_to_depth(int cid, char* path, ATerm t, int depth)
 {
   PT_ParseTree result = PT_addParseTreePosInfoSome(path, 
-						   (PT_ParseTree) t, 
+						   (PT_ParseTree) ATBunpack(t), 
 						   depth, ATfalse, ATfalse);
 
   return ATmake("snd-value(tree-with-pos-info(<term>))", ATBpack((ATerm) result));
