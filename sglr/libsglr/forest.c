@@ -936,9 +936,46 @@ ATbool SG_MultiSetEqual(multiset M1, multiset M2, ATermList k1, ATermList k2)
   return ATtableIsEqual(M1, M2, k1, k2);
 }
 
-int SG_CountInjections(parse_table *pt, multiset ms, register ATermList keys)
+ATbool SG_HasPreferredProds(tree t)
 {
-  int ret = 0;
+  switch(ATgetType(t)) {
+    case AT_APPL:
+      {
+        AFun fun;
+
+        fun = ATgetAFun(t);
+        if(ATisEqual(fun, SG_Eager_AFun)) {
+          return ATtrue;
+        }
+        /*  Preferred subtrees in trees that are to be avoided don't count  */
+        if(ATisEqual(fun, SG_Uneager_AFun)
+        || ATisEqual(fun, SG_Reject_AFun)) {
+          return ATfalse;
+        }
+        /*
+            Tree t may be an ambiguity cluster.  Even if it is,
+            inspection of a single subtree suffices: by filtering,
+            either all trees in the ambiguity node have been built using
+            a preferred rule, or they have all been built without.
+         */
+        return SG_HasPreferredProds((forest) ATgetArgument((ATermAppl) t, 1));
+      }
+    case AT_LIST:
+      for(; !ATisEmpty((ATermList) t); t = (tree) ATgetNext((ATermList) t)) {
+        if(SG_HasPreferredProds((tree) ATgetFirst((ATermList) t))) {
+          return ATtrue;
+        }
+      }
+      return ATfalse;
+    case AT_INT:
+    default:
+      return ATfalse;
+  }
+}
+
+size_t SG_CountInjections(parse_table *pt, multiset ms, register ATermList keys)
+{
+  size_t ret = 0;
   ATermInt  key;
 
   if(!keys)
@@ -1001,6 +1038,35 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
   if(!SG_FILTER)
     return NULL;
 
+  {
+    /*
+       One of the trees might have been constructed by a preferred
+       bit of the syntax...
+   */
+#ifdef DOPREFCOUNT
+    size_t num_prefs0 = 0, num_prefs1 = 0;
+
+    num_prefs0 = SG_CountPreferredProds(t0);
+    num_prefs1 = SG_CountPreferredProds(t1);
+    if((num_prefs0 > 0) && (num_prefs1 == 0))
+      return t0;
+    if((num_prefs1 > 0) && (num_prefs0 == 0))
+      return t1;
+#else
+    ATbool has_prefs0 = ATfalse, has_prefs1 = ATfalse;
+
+    has_prefs0 = SG_HasPreferredProds(t0);
+    has_prefs1 = SG_HasPreferredProds(t1);
+    if(has_prefs0 && !has_prefs1) {
+      IF_DEBUG(ATfprintf(SGlog(), "Implicit Preference Priority: %t > %t\n", l0, l1))
+      return t0;
+    } else if(has_prefs1 && !has_prefs0) {
+      IF_DEBUG(ATfprintf(SGlog(), "Implicit Preference Priority: %t < %t\n", l0, l1))
+      return t1;
+    }
+#endif
+  }
+
   /*  Don't filter START symbols when start symbol subselection is on  */
   if(SG_STARTSYMBOL && SG_StartInjection(pt, ATgetInt(l0)))
     return (tree) NULL;
@@ -1039,11 +1105,11 @@ tree SG_Filter(parse_table *pt, tree t0, tree t1, multiset m0, ATermList k0)
   if(max) {
     IF_STATISTICS(SG_MultiSetFilterSucceeded(SG_NR_INC));
   } else {
-    int in0, in1;
+    size_t in0 = 0, in1 = 0;
 
 #ifdef KEEPINJECTCOUNT
     in0 = SG_GetInjections(t0);
-    in1 =SG_GetInjections(t1);
+    in1 = SG_GetInjections(t1);
 #else
     in0 = SG_CountInjections(pt, m0, k0);
     in1 = SG_CountInjections(pt, m1, k1);
