@@ -1,6 +1,10 @@
 # $Id$
 
 2003/07/01 (jurgenv@cwi.nl)
+ * First version of the reading and writing of the snapshot
+   of the term-store.
+
+2003/07/01 (jurgenv@cwi.nl)
  * Added ATBpack to get-parsetree of structure editor
 
 2003/06/27 (jurgenv@cwi.nl)
