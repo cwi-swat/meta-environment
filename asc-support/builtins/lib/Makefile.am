@@ -39,7 +39,7 @@ libasf_builtins_a_SOURCES=\
 # To check whether we implemented all the builtins mentioned we
 # generate a program that calls all builtins and try to compile and link 
 # it:
-noinst_PROGRAMS=link-test
+check_PROGRAMS=link-test
 link_test_SOURCES=link-test.c
 link_test_LDADD=\
 	-L. -lasf-builtins\

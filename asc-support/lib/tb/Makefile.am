@@ -20,6 +20,7 @@ CLEANFILES+=tb-*.c
 # Default include directories
 INCLUDES   = -DTOOLBUS  \
              -I${top_srcdir}/lib \
+             -I${top_srcdir}/builtins/lib \
              -I$(PT_SUPPORT)/include \
              -I$(ASF_SUPPORT)/include \
              -I$(TOOLBUSLIB)/include \
