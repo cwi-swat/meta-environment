@@ -29,11 +29,11 @@ verbose=0
 
 cd `dirname $0`;
 mydir=`pwd`
-
+echo $mydir
 MV=mv
 RM=rm
 COMPARE="$mydir/trmdiff"
-SDF2TABLE=sdf2table
+SDF2TABLE="$mydir/../../pgen/src/sdf2table"
 
 reference=$mydir/tables
 dirs="first grammars"
