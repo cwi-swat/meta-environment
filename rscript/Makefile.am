@@ -1,6 +1,5 @@
-# $Id$
-
-SUBDIRS		= spec util doc demo rscripts
+#SUBDIRS		= spec util doc demo rscripts vis
+SUBDIRS		= util
 
 EXTRA_DIST=$(wildcard *.pkg)
 

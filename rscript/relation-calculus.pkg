@@ -2,8 +2,8 @@ package
 identification
    name=__PACKAGE__
    version=__VERSION__
-   location=http://www.cwi.nl/projects/MetaEnv/meta-errors
-   info=http://www.cwi.nl/projects/MetaEnv/meta-errors
+   location=http://www.cwi.nl/projects/MetaEnv/relation-calculus
+   info=http://www.cwi.nl/projects/MetaEnv/relation-calculus
    description='A calculator for relational expressions'
 
 

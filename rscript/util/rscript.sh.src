@@ -9,16 +9,16 @@
 set -e
 
 # {{{  variables
-PREFIX=/home/paulk/research/relation-calculus
+prefix=__PREFIX__
 PRG=`basename $0`
 VERBOSE=
 CHECK_ONLY=
-EVALUATOR=$PREFIX/RscriptCalculator
-PARSE_TABLE=$PREFIX/Rscript.trm.tbl
+EVALUATOR=${prefix}/RscriptCalculator
+PARSE_TABLE=${prefix}/Rscript.trm.tbl
 THE_RSCRIPT=
 OUTPUT=./result.rstore
 RSTORE=
-TYPE_CHECKER="asfe -e $PREFIX/RscriptChecker.eqs"
+TYPE_CHECKER="asfe -e ${prefix}/RscriptChecker.eqs"
 OUTPUT_TYPE_CHECKER=checker.feedback
 TYPE_CHECKING_OK="Rscript is type correct!"
 

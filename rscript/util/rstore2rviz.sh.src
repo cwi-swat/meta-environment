@@ -1,0 +1,77 @@
+#! /bin/sh
+
+# rscript2rviz -- convert an Rstore to the visualization format Rviz
+
+set -e
+
+# {{{  variables
+prefix=__PREFIX__
+bindir=__BINDIR__
+PRG=`basename $0`
+VERBOSE=
+OUTPUT=./result.rviz
+RSTORE=${bindir}/Rstore
+INPUT_RSTORE=
+
+
+# }}}
+
+# {{{  usage
+
+usage() {
+cat << ENDCAT >&2
+Usage: $PRG [options]
+
+Options:
+  -i (--input)        filename	input from file (default: stdin)
+  -o (--output)       filename	output to file (default: result.rviz)
+  -v (--verbose)                verbose output (default:none)
+
+Example:
+  $PROG -i query.rstore -o query.rviz
+
+ENDCAT
+}
+
+# }}}
+
+# {{{ export2rviz
+
+export2rviz() {
+      ${RSTORE} ${VERBOSE} -f "export-rviz" \
+	  -i ${INPUT_RSTORE} -r RVIZ \
+	  | unparsePT \
+	  | tr ";" "\\n" > ${OUTPUT}
+}
+
+# }}}
+
+if [ $# -eq 0 ]; then
+  usage
+  exit 1
+fi
+
+while [ $# -gt 0 ]
+do
+  case "$1" in
+    -o | --output)
+      shift; OUTPUT=$1 ;;
+    -p | --parse-table)
+      shift; PARSE_TABLE=$1 ;;
+    -i | --input)
+      shift; INPUT_RSTORE=$1 ;;
+    -v | --verbose)
+      VERBOSE=-v ;;
+    *)
+      usage; exit 1 ;;
+  esac
+  shift
+done
+
+export2rviz
+
+
+
+
+
+

@@ -48,13 +48,13 @@ dnl }}}
 dnl {{{  Which files need updating?
 AC_OUTPUT(
   Makefile
-  doc/Makefile
-  spec/Makefile
-  utils/Makefile
-  vis/Makefile
-  demo/Makfile
-  demo/pico/Makefile
-  demo/java/Makefile
+dnl  doc/Makefile
+dnl  spec/Makefile
+  util/Makefile
+dnl  vis/Makefile
+dnl  demo/Makfile
+dnl  demo/pico/Makefile
+dnl  demo/java/Makefile
 )
 
 dnl }}}
