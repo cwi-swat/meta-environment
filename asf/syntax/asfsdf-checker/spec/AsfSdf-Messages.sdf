@@ -7,4 +7,5 @@ exports
     kernel-syntax-construction(ModuleId, Literal)                    -> Message
     not-supported-symbol(ModuleId, Symbol)                           -> Message
     illegal-traversal-attribute(ModuleId, Attribute)                 -> Message
+    charclasses-not-allowed-in-context-free-syntax(ModuleId, Symbol) -> Message
 

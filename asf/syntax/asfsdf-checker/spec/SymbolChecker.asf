@@ -7,6 +7,12 @@ equations
            check-symbols(Module, Msgs) = 
              check-symbols(Module, Msgs, $ModuleId)
 
+  [cs-2'1] check-symbols(Prod*, Msgs1, $ModuleId) = Msgs2,
+           check-charclass-list-symbols(Prod*, Msgs2, $ModuleId) = Msgs3
+           =============================================================
+           check-symbols(context-free syntax Prod*, Msgs1, $ModuleId) =
+             Msgs3
+
   [cs-2'1] is-literal-symbol($Symbol2) = false
            ===================================
            check-symbols({$Symbol1 $Symbol2}+, Msgs, $ModuleId) =
@@ -47,9 +53,38 @@ equations
            check-symbols({$Symbol1 $Symbol2}NatCon+, Msgs, $ModuleId) =
               Msgs + not-supported-symbol($ModuleId, {$Symbol1 $Symbol2}NatCon+)
 
+  [cs-4'1] is-charclass-symbol($Symbol) = true
+           ===================================
+           check-charclass-list-symbols($Symbol+, Msgs, $ModuleId) =
+              Msgs + charclasses-not-allowed-in-context-free-syntax($ModuleId, $Symbol+)
+
+  [cs-4'2] is-charclass-symbol($Symbol) = true
+           ===================================
+           check-charclass-list-symbols($Symbol*, Msgs, $ModuleId) =
+              Msgs + charclasses-not-allowed-in-context-free-syntax($ModuleId, $Symbol*)
+
+  [cs-4'3] is-charclass-symbol($Symbol1) = true
+           ====================================
+           check-charclass-list-symbols({$Symbol1 $Symbol2}+, Msgs, $ModuleId) =
+              Msgs + charclasses-not-allowed-in-context-free-syntax($ModuleId, {$Symbol1 $Symbol2}+)
+
+  [cs-4'4] is-charclass-symbol($Symbol1) = true
+           ====================================
+           check-charclass-list-symbols({$Symbol1 $Symbol2}*, Msgs, $ModuleId) =
+              Msgs + charclasses-not-allowed-in-context-free-syntax($ModuleId, {$Symbol1 $Symbol2}*)
+
+  [cs-4'5] is-charclass-symbol($Symbol1) = true
+           ===============================
+           check-charclass-list-symbols({$Symbol1 $Symbol2}NatCon+, Msgs, $ModuleId) =
+              Msgs + charclasses-not-allowed-in-context-free-syntax($ModuleId, {$Symbol1 $Symbol2}NatCon+)
+
   [ils-1'1] is-literal-symbol($Literal) = true
 
   [default-ils-1'2] is-literal-symbol($Symbol) = false
+
+  [iccs-1'1] is-charclass-symbol(CC) = true
+
+  [default-iccs-1'2] is-charclass-symbol($Symbol) = false
 
   [ils-2'1] is-list-symbol({$Symbol1 $Symbol2}+) = true
 

@@ -8,15 +8,22 @@ exports
 
 hiddens
   context-free syntax
-    check-symbols(Definition, Messages)       -> Messages {traversal(accu, top-down)}
-    check-symbols(Module, Messages)           -> Messages {traversal(accu, top-down)}
-    check-symbols(Module, Messages, ModuleId) -> Messages {traversal(accu, top-down)}
-    check-symbols(Symbol, Messages, ModuleId) -> Messages {traversal(accu, top-down)}
+    check-symbols(Definition, Messages)            -> Messages {traversal(accu, top-down)}
+    check-symbols(Module, Messages)                -> Messages {traversal(accu, top-down)}
+    check-symbols(Module, Messages, ModuleId)      -> Messages {traversal(accu, top-down)}
+    check-symbols(Grammar, Messages, ModuleId)     -> Messages {traversal(accu, top-down)}
+    check-symbols(Production*, Messages, ModuleId) -> Messages {traversal(accu, top-down)}
+    check-symbols(Symbol, Messages, ModuleId)      -> Messages {traversal(accu, top-down)}
+
+  context-free syntax
+    check-charclass-list-symbols(Production*, Messages, ModuleId) -> Messages {traversal(accu, top-down)}
+    check-charclass-list-symbols(Symbol, Messages, ModuleId)      -> Messages {traversal(accu, top-down)}
 
 hiddens
   context-free syntax
-    is-literal-symbol(Symbol) -> Bool
-    is-list-symbol(Symbol)    -> Bool
+    is-literal-symbol(Symbol)   -> Bool
+    is-list-symbol(Symbol)      -> Bool
+    is-charclass-symbol(Symbol) -> Bool
 
 hiddens
   variables
@@ -27,4 +34,6 @@ hiddens
     "$Symbol"[0-9]*    -> Symbol
     "$Literal"[0-9]*   -> Literal
     "NatCon"[0-9]*     -> NatCon
+    "Prod*"[0-9]*      -> Production*
+    "CC"[0-9]*         -> CharClass
     
