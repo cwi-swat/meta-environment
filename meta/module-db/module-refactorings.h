@@ -1,5 +1,7 @@
 #ifndef RENAMING_IMPORTS_H
 #define RENAMING_IMPORTS_H
+#include <SDFME.h>
+#include <MEPT.h>
 
 SDF_ImportList renameParametersInImportList(SDF_ModuleName moduleName,
                                             PT_Tree sdfTree,

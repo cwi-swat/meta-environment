@@ -1,5 +1,5 @@
-#include "module-db.h"
-#include "renaming-imports.h"
+#include "module-refactorings.h"
+#include <SDFME-utils.h>
 
 /*{{{  static SDF_ImportList rename_modulename_in_importlist( */
 

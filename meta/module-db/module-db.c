@@ -6,7 +6,7 @@
 #include <assert.h>
 
 #include "module-db.h"
-#include "renaming-imports.h"
+#include "module-refactorings.h"
 #include "MDB.h"
 
 /*}}}  */
