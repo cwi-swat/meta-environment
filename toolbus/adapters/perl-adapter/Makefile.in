@@ -76,13 +76,13 @@ install: $(PROGRAMS) $(LIBFILES)
 	for file in $(PROGRAMS); do\
 	  $(INSTALL) $$file $(bindir); \
 	done
+	for file in $(LIBFILES); do\
+	  $(INSTALL) $$file $(libdir); \
+	done
 
 doc:	$(SRCDOC) $(DOC)
 	for file in $(DOC); do\
 	  $(INSTALL) $$file $(docdir)/adapters; \
-	done
-	for file in $(LIBFILES); do\
-	  $(INSTALL) $$file $(libdir); \
 	done
 
 uninstall:
