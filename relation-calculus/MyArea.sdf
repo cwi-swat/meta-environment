@@ -1,6 +1,7 @@
 module MyArea
 
-imports aterm/Literals aterm/IntCon basic/Strings
+imports aterm/Literals aterm/IntCon 
+    basic/Strings basic/Integers
 
 exports
   sorts Area
@@ -21,14 +22,9 @@ exports
   context-free syntax
   
   lit2str(Literal)				-> String
-  intcon2natcon(IntCon)				-> NatCon
 
 hiddens
   variables
-
-        "$IntCon" [0-9\']*            		-> IntCon
-        "$Integer" [0-9\']*            		-> Integer
+        "$NatCon" [0-9\']*            		-> NatCon
         "$Literal" [0-9\']*             	-> Literal
-        "$String" [0-9\']*             		-> String
-  
 	"Char*" [0-9\']* 			-> CHAR*
