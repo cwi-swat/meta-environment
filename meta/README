@@ -59,9 +59,7 @@ Installation instructions:
 
     -- cd to the directory just above new-meta (new-meta/..)
     -- issue the following commands: 
-         $ cvs -d heijnst.cwi.nl:/ufs/gipe/CVS-repository checkout gel
          $ cvs -d heijnst.cwi.nl:/ufs/gipe/CVS-repository checkout toolbus
-         $ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout aterm-lib
          $ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout aterm
        (and, if you hadn't done so already)
          $ cvs -d adam.wins.uva.nl:/home/gipe/CVS checkout new-meta

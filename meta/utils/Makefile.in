@@ -24,7 +24,6 @@ DEFS            = @DEFS@ ${XDEFS}
 INCLUDES        = @INCLUDES@ ${XINCLUDES}
 LIBS            = @LIBS@ ${XLIBS}
 SOCKLIBS        = @SOCKLIBS@
-GELLIBS         = @GELLIBS@
 
 INSTALL		= @INSTALL@
 INSTALL_DATA	= @INSTALL_DATA@
@@ -33,8 +32,6 @@ UNINSTALL	= @UNINSTALL@
 
 AR              = @AR@
 
-GEL             = @GEL@
-EPIC            = @EPIC@
 ATERM           = @ATERM@
 TOOLBUS         = @TOOLBUS@
 
