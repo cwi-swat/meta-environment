@@ -298,12 +298,17 @@ public class MetaStudio
 
 		modulePopup.add(new AbstractAction("Delete Module") {
 			public void actionPerformed(ActionEvent event) {
-				Object[] values = moduleList.getSelectedValues();
-				for (int i = 0; i < values.length; i++) {
-					bridge.postEvent(
-						factory.make("delete-module(<str>)", (String) values[i]));
-				}
-			}
+        int choice = JOptionPane.showConfirmDialog(graphPane, 
+        "Are you sure you want delete this module (from disk)?");
+        
+        if (choice == 0) {
+				  Object[] values = moduleList.getSelectedValues();
+				  for (int i = 0; i < values.length; i++) {
+					  bridge.postEvent(
+						  factory.make("delete-module(<str>)", (String) values[i]));
+				   }
+          }
+			  }
 		});
 
 		modulePopup.add(new AbstractAction("Rename Module") {
