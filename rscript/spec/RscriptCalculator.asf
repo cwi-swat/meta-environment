@@ -23,7 +23,7 @@
 	===============================================================
 	eval-rscript($Stat*) = filter($Rstore, $Bag)
 
-%% ---- Eval a complete Rscript and return value of specific variable
+%% ---- Eval a complete Rscript and return value of specific variable (as string)
 
 [ERS1]	$Rstore := eval-rstats($Stat*, rstore(<YIELD, bag[str], empty-bag>)),
 	$Var := str2rvar($StrCon),
@@ -31,21 +31,36 @@
 	===============================================================
 	eval-rscript-and-yield($Stat*, $StrCon) = $Elem
 
+
+%% ---- Eval a complete Rscript and return value of specific variable
+
+[ERS2]	$Rstore := eval-rstats($Stat*, rstore(<YIELD, bag[str], empty-bag>)),
+	$Elem := value($Var, $Rstore)
+	===============================================================
+	eval-rscript-and-yield($Stat*, $Var) = $Elem
+
 %% ---- Eval a complete Rscript with given Rstore
 
-[ERS2]	$Rstore' := assign-when-undef(YIELD, bag[str], empty-bag, $Rstore),
+[ERS3]	$Rstore' := assign-when-undef(YIELD, bag[str], empty-bag, $Rstore),
 	$Rstore'' := eval-rstats($Stat*, $Rstore'),
 	$Bag := value(YIELD, $Rstore'')
 	===============================================================
 	eval-rscript-with-rstore($Stat*, $Rstore) = filter($Rstore'', $Bag)
 
-%% ---- Eval complete script with given Rstore and yield value of a variable
+%% ---- Eval complete script with given Rstore and yield value of a variable (as string constant
 
-[ERS3]	$Rstore' := assign-when-undef(YIELD, bag[str], empty-bag, $Rstore),
+[ERS4]	$Rstore' := assign-when-undef(YIELD, bag[str], empty-bag, $Rstore),
 	$Var := str2rvar($StrCon),
 	$Elem :=  value($Var, eval-rstats($Stat*, $Rstore'))
 	===================================================
 	eval-rscript-with-rstore-and-yield($Stat*, $Rstore, $StrCon) = $Elem
+
+%% ---- Eval complete script with given Rstore and yield value of a variable
+
+[ERS5]	$Rstore' := assign-when-undef(YIELD, bag[str], empty-bag, $Rstore),
+	$Elem :=  value($Var, eval-rstats($Stat*, $Rstore'))
+	===================================================
+	eval-rscript-with-rstore-and-yield($Stat*, $Rstore, $Var) = $Elem
 
 %% ---- Eval statements
 

@@ -5,20 +5,23 @@ imports basic/Integers
 imports utilities/PosInfo[STATEMENT]
 imports utilities/PosInfo[EXP]
 imports utilities/PosInfo[PICO-ID]
-
 imports basic/Errors
 
 exports
    imports Rstore
 
- context-free syntax
-      extractRelations(PROGRAM)         -> RSTORE
-      convert2summary(Elem)	        -> Summary
+   context-free syntax
+      uninit(PROGRAM)			-> Summary
+      id2str(PICO-ID)		 	-> String
+
+   context-free start-symbols
+	<Bag[[Elem]], Rel[[Elem]], Bag[[Elem]]>
+	Summary
 
 hiddens
-  context-free syntax
-      cflown({ STATEMENT ";"}*)	        -> Rel[[Elem]]
-      cflow(STATEMENT)	        	-> Rel[[Elem]]
+  context-free syntax 
+
+      cflow({ STATEMENT ";"}*)	        -> <Bag[[Elem]], Rel[[Elem]], Bag[[Elem]]>
 
       uses(PROGRAM, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,continue)}
       uses(EXP, Rel[[Elem]])	        -> Rel[[Elem]] {traversal(accu,top-down,continue)}
@@ -26,29 +29,21 @@ hiddens
       defs(PROGRAM, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,break)}
       defs(STATEMENT, Rel[[Elem]])	-> Rel[[Elem]] {traversal(accu,top-down,break)}
 
-
-      convert2errorlist(Elem)		-> {Error ","}*
-      convert2error(<String, Location>) -> Error
-      id2str(PICO-ID)		 	-> String
+      convert2summary(String, Elem)	        -> Summary
+      convert2errorlist(String, Elem)		-> {Error ","}*
+      convert2error(String, <String, Location>) -> Error
 
  hiddens
 %%  imports asf/syntax/Comments
 
   variables
       "$Rstore" [0-9\']*  	-> RSTORE
+      "$Entry" [0-9\']*		-> Bag[[Elem]]
+      "$Exit" [0-9\']*		-> Bag[[Elem]]
       
       "$Rel" [0-9\']*     	-> Bag[[Elem]]
-      "$Bag" [0-9\']*     	-> Bag[[Elem]]
       "$Loc" [0-9\']*	 	-> Location
-      "$Elem" [0-9\']*   	-> Elem
-      "$Elem*" [0-9\']*  	-> {Elem ","}*
-
-      "$Error*" [0-9\']*	-> {Error ","}*
-      "$Char*" [0-9]*   	-> CHAR*
-      "$String" [0-9\']*	-> String
-      "$StrCon" [0-9\']*	-> StrCon
-
-	
+ 	
       "$Decls" [0-9\']*         -> DECLS
       "$Stat" [0-9\']*          -> STATEMENT
       "$Stat*"[0-9\']*          -> {STATEMENT ";"}*
@@ -56,3 +51,11 @@ hiddens
       "$Exp" [0-9\']*           -> EXP
       "$Id" [0-9\']*            -> PICO-ID
       "$Program" [0-9\']*       -> PROGRAM
+
+      "$Char*" [0-9]*   	-> CHAR*
+	"$StrCon" [0-9\']*  -> StrCon
+      "$Error*" [0-9\']*	-> {Error ","}*
+      "$Elem" [0-9\']*		-> Elem
+      "$Elem*" [0-9\']*		-> {Elem ","}*
+
+      "$String" [0-9\']*	-> String

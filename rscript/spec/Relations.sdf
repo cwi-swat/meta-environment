@@ -20,6 +20,8 @@ exports
     
      product(Elem, Bag[[Elem]])				-> Rel[[Elem]]	%%EBR
      product(Bag[[Elem]], Bag[[Elem]])			-> Rel[[Elem]]	%%BBR
+
+     Bag[[Elem]] "x" Bag[[Elem]]			-> Rel[[Elem]]
      
      domain(Rel[[Elem]])				-> Bag[[Elem]]	%%RB
      range(Rel[[Elem]])					-> Bag[[Elem]]	%%RB

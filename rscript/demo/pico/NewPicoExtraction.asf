@@ -2,59 +2,98 @@ equations
 
 %% --- control flow of statement lists
 
-[cfn1] $Rel1 := cflow($Stat), $Rel2 := cflown($Stat*)
+[cf1] <$Entry1, $Rel1, $Exit1> := cflow($Stat), 
+      <$Entry2, $Rel2, $Exit2> := cflow($Stat+)
        ==========================================================
-       cflown($Stat ; $Stat*) = 
-       [| $Rel1 union $Rel2 union bottom($Rel1) x top($Rel2) |]
+       cflow($Stat ; $Stat+) = 
+       < $Entry1, 
+         $Rel1 union $Rel2 union ($Exit1 x $Entry2), 
+         $Exit2
+       >
 
-[cfn2] cflown() = {}
+[cf2] cflow() = <{}, {}, {}>
 
 %% ---- control flow of individual statements
 
-[cf1]  $Rel := cflown($Stat*)
+[cf3]  <$Entry, $Rel, $Exit> := cflow($Stat*),
+       $Loc := get-location($Exp)
        =========================================================
        cflow(while $Exp do $Stat* od) = 
-       [| $Rel union bottom($Rel) x {get-location($Exp)} union {get-location($Exp)} x top($Rel) |]
+       < {$Loc},
+         ({$Loc} x $Entry) union $Rel union ($Exit x {$Loc}),
+         {$Loc}
+       >
 
-[cf2]  $Rel1 := cflown($Stat*1), $Rel2 := cflown($Stat*2)
-       ==========================================================
-       cflow(if $Exp then $Stat*1 else $Stat*2 fi) = 
-       [| $Rel1 union $Rel2 union {get-location($Exp)} x top($Rel1) union {get-location($Exp)} x top($Rel2) |]
+[cf4]  <$Entry1, $Rel1, $Exit1> := cflow($Stat*1), 
+       <$Entry2, $Rel2, $Exit2> := cflow($Stat*2),
+       $Loc := get-location($Exp)
+       =========================================================
+       cflow(if $Exp then $Stat*1 else $Stat*2 fi) =
+       < {$Loc},
+         ({$Loc} x $Entry1) union ({$Loc} x $Entry2) union  $Rel1 union $Rel2,
+         $Exit1 union $Exit2
+       > 
 
 [default-cf]
-       cflow($Stat) = id({get-location($Stat)})
+	$Loc := get-location($Stat)
+       =========================================================
+        cflow($Stat) = < {$Loc}, {}, {$Loc} >
 
-%% ---- use/def computation
+%% ---- Variable definitions: <statement-location, name>
 
 [df1]  $Id := $Exp := $Stat
        ========================================================== 
-       defs($Stat, $Rel) = [| $Rel union {<id2str($Id), get-location($Stat)>} |]
+       defs($Stat, $Rel) = $Rel union {<get-location($Stat), id2str($Id)>}
+
+%% ---- Variable occurrences <var-location, name>
 
 [us1]  $Id := $Exp
        ========================================================== 
-       uses($Exp, $Rel) = [| $Rel union  {<id2str($Id), get-location($Id)>} |]
+       uses($Exp, $Rel) = $Rel union  {<get-location($Id), id2str($Id)>}
 
+%% ----
 
-[er-1] $Loc :=  area-in-file("", area(0,0,0,0,0,0)),
-       begin Decls $Stat+ end := $Program
+[er-1] $Loc := area-in-file("", area(0,0,0,0,0,0)),
+       begin $Decls $Stat+ end := $Program,
+       <$Entry, $Rel, $Exit> := cflow($Stat+),
+       $Rel1 := $Rel union ({$Loc} x $Entry),
+       $Rel2 := [| type expr = loc
+		   type var  = loc
+		   type name = str
+
+		   expr ROOT = $Loc
+
+		   rel[expr,expr] PRED = $Rel1
+		   rel[expr,name] DEFS = defs($Program, {})
+		   rel[var,name] USES  = uses($Program, {})
+		   bag[name] VARNAMES  = range(USES)
+
+		   rel[name, var] UNINIT =
+		   { <N, V>| name N : VARNAMES, 
+                             var V : USES[-,N], 
+			     <ROOT, expr E> : reachX({ROOT}, DEFS[-,N], PRED),
+			     V <= E
+		   }
+                |] yield UNINIT
        ==========================================================
-       extractRelations($Program) = 
-       rstore()[| loc ROOT = $Loc
-		  rel[loc,loc] PRED = cflown($Stat+)
-		  rel[loc,str] USES = uses($Program, {})
-		  rel[str,loc] DEFS = defs($Program, {})
-       |]
+       uninit($Program) = convert2summary("Uninitialized variable", $Rel2)
 
 %% ----- utilities
 
 [i2s] id2str(pico-id($Char*)) = strcon(""" $Char* """)
 
-[cvt-1] convert2error(<$StrCon, $Loc>) = error("Uninitialized variable", [localized($StrCon, $Loc)])
 
-[cvt-2] convert2errorlist({<$String, $Loc>, $Elem*}) = 
-	convert2error(<$String, $Loc>),  convert2errorlist({$Elem*})
+[cvt-1] convert2error($StrCon1, <$StrCon2, $Loc>) = error($StrCon1, [localized($StrCon2, $Loc)])
 
-[cvt-3] convert2errorlist({}) = 
+[cvt-2] convert2errorlist($StrCon, {<$String, $Loc>, $Elem*}) = 
+	convert2error($StrCon, <$String, $Loc>),  convert2errorlist($StrCon, {$Elem*})
 
-[cvt-4]	convert2summary($Elem) = summary("PicoQuery", "PicoQuery", [convert2errorlist($Elem)])
+[cvt-3] convert2errorlist($StrCon, {}) = 
+
+[cvt-4]	convert2summary($StrCon, $Elem) = 
+        summary("PicoQuery", "PicoQuery", [convert2errorlist($StrCon, $Elem)])
+
+
+%%[pq1] pico-query($Script, $Rstore, $StrCon) =
+%%      convert2summary(eval-rscript-with-rstore-and-yield($Script, $Rstore, $StrCon))
 

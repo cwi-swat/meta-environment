@@ -139,6 +139,8 @@ equations
        ==============================
        union({$Elem, $Elem*1}, {$Elem*2}) = insert($Elem, {$Elem*3})
 
+[iun-1] $Bag1 union $Bag2 = union($Bag1, $Bag2)
+
 %% --- diff($Bag1, $Bag2)
 
 [df-1] diff({$Elem*1, $Elem, $Elem*2}, {$Elem*3, $Elem, $Elem*4}) = diff({$Elem*1, $Elem*2}, {$Elem*3, $Elem*4})

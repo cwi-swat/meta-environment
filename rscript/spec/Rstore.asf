@@ -64,9 +64,18 @@ equations
 
 [ATS33]	add-tuples($Var, $Rel, rstore()) = rstore(< $Var, undefined, $Rel >)
 
-%% ---- Execute statement on given Rstore
+%% ---- Execute Rscript for given Rstore
 
-[EX1]   $Rstore[| $Stat* |] = eval-rstats($Stat*, $Rstore)
+%%[EX1]   $Rstore[| $Stat* |] = eval-rstats($Stat*, $Rstore)
+
+%% ---- Execute Rscript for empty Rstore
+
+[EX2]   [| $Stat* |] = eval-rstats($Stat*, rstore())
+
+%% ---- Execute Rscript for empty Rstore and yield value of a var
+
+[EX3]   [| $Stat* |] yield $Var = eval-rscript-and-yield($Stat*, $Var)
+
 
 %% ---- Execute given Rexp
 

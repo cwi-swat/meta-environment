@@ -1,8 +1,8 @@
 module PicoQuery
 
 imports RscriptCalculator
-imports PicoExtraction %% should be only convertl
-
+%%imports PicoExtraction %% should be only convertl
+imports basic/Errors
 exports
 
   start-symbols Summary
@@ -10,8 +10,20 @@ exports
   context-free syntax
 	pico-query(RSCRIPT, RSTORE, StrCon) 	-> Summary
 
+      convert2summary(Elem)	        -> Summary
+    convert2errorlist(Elem)		-> {Error ","}*
+      convert2error(<String, Location>) -> Error
+
+
 hiddens
   variables
 	"$Rstore" [0-9\']*  -> RSTORE
 	"$Script" [0-9\']*  -> RSCRIPT
 	"$StrCon" [0-9\']*  -> StrCon
+	"$Loc" [0-9\']*	    -> Location
+	"$Error*" [0-9\']*  -> {Error ","}*
+	"$Elem" [0-9\']*    -> Elem
+	"$Elem*" [0-9\']*   -> {Elem ","}*
+
+	"$String" [0-9\']*  -> String
+

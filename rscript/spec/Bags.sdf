@@ -6,7 +6,6 @@ imports basic/Integers
 
 context-free start-symbols
    Bag[[Elem]]
-%%   BagIterator[[Elem]]
 
 context-free syntax
    elem-equal(Elem, Elem)			-> Boolean
@@ -49,6 +48,11 @@ context-free syntax
 
    "if" Boolean "then" Bag[[Elem]] "else" Bag[[Elem]] "fi" 
                                            	-> Bag[[Elem]]
+
+   Bag[[Elem]] "union" Bag[[Elem]]              -> Bag[[Elem]] {left}
+
+   "(" Bag[[Elem]] ")"				-> Bag[[Elem]] {bracket}
+   
 
 hiddens
   imports basic/Comments

@@ -65,6 +65,8 @@ equations
 	================================================
 	product1($BagIter, $Bag) = empty-bag
 
+[iprod] $Bag1 x $Bag2 = product($Bag1, $Bag2)
+
 %% ----	domain
 
 [dom-0]	 domain($Bag) = domain1(mk-iterator($Bag))
