@@ -74,6 +74,8 @@ char *PT_yieldSymbolVisualVariables(PT_Symbol symbol);
 ATerm PT_reportTreeAmbiguities(const char *path, PT_Tree tree);
 ATerm PT_reportParseTreeAmbiguities(const char *path, PT_ParseTree parsetree);
 
+PT_Tree PT_findTopAmbiguity(PT_Tree tree);
+
 void PT_initAsFix2Api();
 PT_ParseTree flattenPT(PT_ParseTree tree);
 PT_Tree flattenTree(PT_Tree tree);

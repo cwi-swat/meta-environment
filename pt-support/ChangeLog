@@ -1,5 +1,8 @@
 $Id$
 
+Thu Jun 24 12:49:47 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * libmept/reportAmbs.c: add PT_findTopAmbiguity 
+
 Sun Jun  6 09:20:48 CEST 2004 <jurgenv@cwi.nl>
  * Changed flattening of variables. The old flattened variables were 
    inconsistent, the number of arguments of the resulting production did

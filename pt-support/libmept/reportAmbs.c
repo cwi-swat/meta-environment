@@ -1,11 +1,11 @@
-
 /*{{{  includes */
 
-#include <MEPT-utils.h>
-#include <Error-utils.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+
+#include <MEPT-utils.h>
+#include <Error-utils.h>
 
 /*}}}  */
 
@@ -19,7 +19,7 @@ typedef struct PT_Amb_Position_Tag {
 
 /*}}}  */
 
-/*{{{  static ATermList getAmbiguities(PT_Tree tree, PT_Amb_Position *current) */
+/*{{{  static ERR_SubjectList getAmbiguities(const char *path, */
 
 static ERR_SubjectList getAmbiguities(const char *path,
                                       PT_Tree tree, 
@@ -122,7 +122,11 @@ static ERR_SubjectList getAmbiguities(const char *path,
     ambArea = ERR_makeAreaArea(here.line, here.col,
 			       current->line, current->col,
                                here.offset, (current->offset - here.offset));
-    ambLocation = ERR_makeLocationAreaInFile(path, ambArea);
+    if (path != NULL) {
+      ambLocation = ERR_makeLocationAreaInFile(path, ambArea);
+    } else {
+      ambLocation = ERR_makeLocationArea(ambArea);
+    }
     ambSubject = ERR_makeSubjectLocalized(ambString, ambLocation);
 
     ambSubjects = ERR_appendSubjectList(ambSubjects, ambSubject);
@@ -159,6 +163,33 @@ ATerm PT_reportTreeAmbiguities(const char *path, PT_Tree tree)
 ATerm PT_reportParseTreeAmbiguities(const char *path, PT_ParseTree parsetree)
 {
   return PT_reportTreeAmbiguities(path, PT_getParseTreeTop(parsetree));
+}
+
+/*}}}  */
+
+/*{{{  PT_Tree PT_findTopAmbiguity(PT_Tree tree) */
+
+PT_Tree PT_findTopAmbiguity(PT_Tree tree)
+{
+  assert(tree != NULL);
+
+  if (PT_isTreeAmb(tree)) {
+    return tree;
+  }
+  else if (PT_isTreeAppl(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
+
+    while (!PT_isArgsEmpty(args)) {
+      PT_Tree head = PT_getArgsHead(args);
+      PT_Tree amb = PT_findTopAmbiguity(head);
+      if (amb != NULL) {
+	return amb;
+      }
+      args = PT_getArgsTail(args);
+    }
+  }
+
+  return NULL;
 }
 
 /*}}}  */
