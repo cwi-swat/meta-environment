@@ -4,27 +4,29 @@ module basic/Strings
 %% backslashes
 
 hiddens 
-  sorts Escaped Normal Contents
+  sorts Escaped Normal
 
 exports
   sorts StrCon String
   lexical syntax
-    ~[\0-\31\"\\\n]                  -> Normal
-    "\\n" | "\\t" |  "\\\"" | "\\\\" -> Escaped
-    (Normal | Escaped)*              -> Contents
-    "\"" {Contents "\\\n"}+ "\""     -> StrCon
+    ~[\0-\31\"\\\n]                         -> Normal
+    "\\n" | "\\t" |  "\\\"" | "\\\\"        -> Escaped
+    "\"" {Contents "\\\n"}+ "\"" -> StrCon
+
+  aliases
+    (Normal | Escaped)* -> Contents
 
   context-free syntax
     StrCon             -> String {constructor}
     String "||" String -> String {left}
     remove-continuations(String) -> String
 
-  variables
-    "Str-con" [0-9\']* -> StrCon
-    "Str" [0-9\']*     -> String
-
 hiddens
   imports
     basic/Whitespace
   variables
     "Chars" [0-9]* -> CHAR*
+
+  variables
+    "Str-con" [0-9\']* -> StrCon
+    "Str" [0-9\']*     -> String
