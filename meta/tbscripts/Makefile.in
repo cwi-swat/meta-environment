@@ -89,7 +89,7 @@ all: meta.tifs $(BINFILES) $(LIBFILES) $(DATAFILES) $(INCLUDEFILES)
 test: module-test
     
 module-test: all
-	@cd test; ./module-test
+	@cd test; make test
 
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
