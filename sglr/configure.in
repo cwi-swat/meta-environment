@@ -88,6 +88,8 @@ AC_OUTPUT(
    Makefile
    doc/Makefile
    dump/Makefile
+   restorebrackets/Makefile
+   restorebrackets/src/Makefile
    libsglr/Makefile
    sglr/Makefile
    test/Makefile
