@@ -120,8 +120,8 @@ in
     snd-msg(add-import-done(OldName))
   +
     rec-msg(remove-import-in-db(OldName?, NewName?, Path?)).
-    printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
-    snd-msg(remove-import-not-done)
+    MDB-RemoveImportFromModules(NewName, [OldName]) .
+    snd-msg(remove-import-done)
   +
     rec-msg(copy-module-in-db(OldName?, NewName?, Path?)) .
     printf("not yet implemented in %s at %d\n", __FILE__, __LINE__) .
