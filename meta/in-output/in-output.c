@@ -134,7 +134,7 @@ ATerm open_error(char *n)
 
 ATerm read_term_from_named_file(char *fn, char *n, ATbool oldstyle)
 {
-  ATerm t;
+  ATerm       t;
   static char pn[PATH_LEN];
 
   if(!(t = ATreadFromNamedFile(fn))) {
@@ -142,13 +142,15 @@ ATerm read_term_from_named_file(char *fn, char *n, ATbool oldstyle)
     return open_error(n);
   }
   if(oldstyle)
-    return ATmake("snd-value(opened-file(<str>,<str>,<term>,<str>))",
-                  "asfix", n, t, fn);
+    return ATmake("snd-value(opened-file(asfix,<str>,<term>,<str>,"
+                  "timestamp(<int>)))",
+                  n, t, fn, filetime(fn));
   else {
     strncpy(pn,fn,strlen(fn)-4);
     pn[strlen(fn)-4] = '\0';
-    return ATmake("snd-value(opened-file(<str>,<str>,<term>,<str>))",
-                  "baf", n, t, pn);
+    return ATmake("snd-value(opened-file(baf,<str>,<term>,<str>,"
+                  "timestamp(<int>)))",
+                  n, t, pn, filetime(fn));
   }
 }
 
@@ -179,8 +181,9 @@ ATerm read_raw_from_named_file(char *fn, char *n)
     t = open_error(n);
   } else {
     ATfprintf(stderr, "raw read from %s\n", fn);
-    t = ATmake("snd-value(opened-file(\"raw\",<str>,<str>,<str>))",
-               n, buf, fn);
+    t = ATmake("snd-value(opened-file(raw,<str>,<str>,<str>,"
+               "timestamp(<int>)))",
+               n, buf, fn, filetime(fn));
     free(buf);
   }
   return t;
@@ -188,7 +191,7 @@ ATerm read_raw_from_named_file(char *fn, char *n)
 
 ATerm locate_parse_table_file(int cid, char *name)
 {
-  char  *full, newesttbl[PATH_LEN], newestbaf[PATH_LEN];
+  char  *full, newesttbl[PATH_LEN], newestbaf[PATH_LEN], *newest;
 
   sprintf(newesttbl, "%s%s", name, ".tbl");
   sprintf(newestbaf, "%s%s", name, ".baf");
@@ -205,8 +208,10 @@ ATerm locate_parse_table_file(int cid, char *name)
   if(!newesttbl[0] && !newestbaf[0]) {
     return ATmake("snd-value(unavailable-parse-table(<str>))", name);
   }
-  return ATmake("snd-value(located-parse-table-file(<str>,<str>))", name,
-                newerfile(newesttbl, newestbaf) ? newesttbl : newestbaf);
+  newest = newerfile(newesttbl, newestbaf) ? newesttbl : newestbaf;
+  return ATmake("snd-value(located-parse-table-file(<str>,<str>,"
+                "timestamp(<int>)))",
+                 name, newest, filetime(newest));
 }
 
 ATerm open_old_asfix_file(int cid, char *name)
@@ -304,7 +309,8 @@ ATerm read_parse_table(int cid, char *name)
   sprintf(fullname, "%s%s", name, ".tbl");
 
   if((full = find_newest_in_path(fullname)))
-     return ATmake("snd-value(table-on-disk(<str>))", full);
+     return ATmake("snd-value(table-on-disk(<str>,timestamp(<int>)))",
+                   full, filetime(full));
 
   return open_error(name);
 }
