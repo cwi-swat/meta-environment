@@ -1,5 +1,9 @@
 $Id$
 
+2003/10/08 (markvdb@cwi.nl)
+ * Bumped into version 2.0
+ * Adapted package dependency.
+
 2003/10/07 (markvdb@cwi.nl)
  * Added "tuple" (<A,B>) besides A#B, but the latter is mapped to
    pt-tuple instead of pt-pair.

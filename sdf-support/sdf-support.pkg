@@ -11,5 +11,5 @@ configuration interface
 
 requires
   aterm		2.0.2
-  pt-support	0.12
+  pt-support	1.0
   toolbuslib	0.5
