@@ -20,7 +20,7 @@
 #include "addapisyntax.idef"
 #include "removevarsyntax.idef"
 #include "configmanager.idef"
-#include "textual-error-display.tb"
+#include "error-display.tb"
 #include "standalone-pt-dumper.tb"
 #include "standalone-status-display.tb"
 

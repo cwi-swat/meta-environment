@@ -38,7 +38,7 @@
 #include "sdf2-language.tb"
 #include "parse-focusses.tb"
 #include "notification.tb"
-#include "rewrite-errors.tb"
+#include "error-display.tb"
 #include "parsetablegen.idef"
 #include "asf-syntax.tb"
 #include "addeqssyntax.idef"

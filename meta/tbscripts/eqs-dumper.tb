@@ -20,7 +20,7 @@
 #include "addeqssyntax.idef"
 #include "addapisyntax.idef"
 #include "configmanager.idef"
-#include "textual-error-display.tb"
+#include "error-display.tb"
 #include "standalone-eqs-dumper.tb"
 #include "standalone-status-display.tb"
 
