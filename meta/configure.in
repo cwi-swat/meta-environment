@@ -145,6 +145,7 @@ AC_OUTPUT(
    in-output/Makefile
    in-output/src/Makefile
    term-store/Makefile
+   term-store/snapshot/Makefile
    editors/Makefile
    editors/manager/Makefile
    editors/manager/src/Makefile

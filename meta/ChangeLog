@@ -1,5 +1,8 @@
 # $Id$
 
+2003/06/27 (jurgenv@cwi.nl)
+ * Added a library for creating snapshots of the term-store
+
 2003/06/27 ({jurgenv,markvdb}@cwi.nl)
  * When illegal modulenames are supplied by the '-m' option the 
    environment deals with it correctly now. Only the error messages
