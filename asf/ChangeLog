@@ -1,6 +1,8 @@
 $Id$
 
 Wed Mar 23 15:15:07 CET 2005 <kooiker@cwi.nl>
+ * semantics/asfe/src/asfe.idef:
+   - Removed unused variable ModuleName in run-tests
  * semantics/asfe/src/reduction.c:
    - Removed check on injection in rewriteArgs
 

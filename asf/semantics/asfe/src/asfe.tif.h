@@ -10,7 +10,7 @@
 
 /* Prototypes for functions called from the event handler */
 ATerm interpret(int conn, const char *, ATerm, ATerm, ATerm, ATerm);
-ATerm run_tests(int conn, const char *, ATerm, ATerm, ATerm);
+ATerm run_tests(int conn, ATerm, ATerm, ATerm);
 void rec_terminate(int conn, ATerm);
 extern ATerm asfe_handler(int conn, ATerm term);
 extern ATerm asfe_checker(int conn, ATerm sigs);

@@ -9,7 +9,7 @@
 
 static char *signature[NR_SIG_ENTRIES] = {
   "rec-eval(<asfe>,interpret(<str>,<term>,<term>,<term>,<term>))",
-  "rec-eval(<asfe>,run-tests(<str>,<term>,<term>,<term>))",
+  "rec-eval(<asfe>,run-tests(<term>,<term>,<term>))",
   "rec-terminate(<asfe>,<term>)",
 };
 
@@ -24,8 +24,8 @@ ATerm asfe_handler(int conn, ATerm term)
   if(ATmatch(term, "rec-eval(interpret(<str>,<term>,<term>,<term>,<term>))", &s0, &t0, &t1, &t2, &t3)) {
     return interpret(conn, s0, t0, t1, t2, t3);
   }
-  if(ATmatch(term, "rec-eval(run-tests(<str>,<term>,<term>,<term>))", &s0, &t0, &t1, &t2)) {
-    return run_tests(conn, s0, t0, t1, t2);
+  if(ATmatch(term, "rec-eval(run-tests(<term>,<term>,<term>))", &t0, &t1, &t2)) {
+    return run_tests(conn, t0, t1, t2);
   }
   if(ATmatch(term, "rec-terminate(<term>)", &t0)) {
     rec_terminate(conn, t0);
