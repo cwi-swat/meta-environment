@@ -4,7 +4,8 @@ exports
 
 context-free syntax
 
-  (B => C) ";" (A => B) -> (A => C) {left}
+  (B => C) "." (A => B) -> (A => C) {left}
+  seq -> ((B => C) (A => B) => (A => C))
 
 hiddens
 

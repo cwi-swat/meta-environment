@@ -1,3 +1,5 @@
 equations
 
-[] f ; g ( A ) = f ( g ( A ) )
+[] f . g = seq ( f g )
+
+[] seq ( f g ) ( A ) = f ( g ( A ) ) 

@@ -5,6 +5,7 @@ exports
 context-free syntax
 
 (A => B) "$" A -> B
+"app" -> ((A => B) A => B)
 
 hiddens
 
