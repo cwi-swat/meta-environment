@@ -30,6 +30,10 @@ void RWclearError()
 
 void RWsetError(const char *message, ATerm subject)
 {
+  if (tagCurrentRule == NULL) {
+    tagCurrentRule = (ASF_Tag) PT_makeTreeLit("*undefined*");
+  }
+
   if (rewriteError == NULL) {
     RWclearError();		
     rewriteError = ATmake("[<str>,<term>,<term>])",
@@ -50,6 +54,8 @@ ATerm RWgetError()
 
 /*}}}  */
       
+/*{{{  void printErrors(void) */
+
 void printErrors(void)
 {
   ATerm message, tag, subject;
@@ -83,3 +89,5 @@ void printErrors(void)
   free(tagText);
   free(subjectText);
 }
+
+/*}}}  */
