@@ -2,6 +2,9 @@
 
 Mon May 24 10:42:55 CEST 2004 <{jurgenv,sgmcorne}@cwi.nl>
  * Bumped version to 1.0
+ * Extracted MainFrame from TideControl in order to make basic Tide
+   components reusable without a JFrame
+
 
 Sat May 22 11:52:04 CEST 2004 <jurgenv@cwi.nl>
  * Brought tide up-to-date with format of locations and areas in 
