@@ -1,21 +1,24 @@
 /* $Id$ */
 
-tool text-edit is {
-  command = "editor"
-}
-
-
 process Editor(Name: term, Text: str, Filename: str, Id: term) is
 let
 TE  : text-edit,
 Tid : int,
-L   : str
+L   : str,
+Fid: str
 in
-  execute(text-edit, TE?) . 
-  snd-do(TE,tb-init(Name,Text,Filename)).
-  snd-msg(Id,editortool(TE)).
-  create(Structure-editor(TE, "\"\""), Tid?).
-  create(Focus(TE), Tid?). (
+/* Changed concept. No longer one editor executable per window. This was 
+   never a good idea. Now, for each window an Editor process is created.
+   The editor binary is executed from the Edit-master process, which knows
+   about its tool id. 
+*/
+  snd-msg(get-editor-tool-id).
+  rec-msg(editor-tool-id(TE?)).
+  snd-eval(TE,tb-init(Filename)).
+  rec-value(TE,file-id(Fid?)).
+  snd-msg(Id,editortool(TE, Fid)).
+  create(Structure-editor(TE, Fid, Text), Tid?).
+  create(Focus(TE, Fid), Tid?). (
     rec-note(language-available(L?)).
     snd-do(TE,registerlang(L))
   ) *
