@@ -127,21 +127,24 @@ yieldTreeRecursive(PT_Tree tree, ATbool visualAmbs, int idx, char *buf, int bufS
 	switch(lit[i+1]) {
 	  case 'n':
 	    buf[idx] = '\n';
+	    i++;
 	    break;
 	  case 't':
 	    buf[idx] = '\t';
+	    i++;
 	    break;
 	  case ' ':
 	    buf[idx] = ' ';
+	    i++;
 	    break;
 	  case '`':
 	    buf[idx] = '`';
+	    i++;
 	    break;
 	  default:
 	    buf[idx] = lit[i];
 	}
 
-	i++;
       }
       else {
 	buf[idx] = lit[i];

@@ -1,5 +1,6 @@
 
-
+2002/10/03 (vandenbr@loria.fr)
+ * Removed a very subtle off by one bug in combination with '\\'.
 
 2002/09/26 (vinju@loria.fr)
  * Commented out an assert in yieldPT (fixme). The assert fails when really
