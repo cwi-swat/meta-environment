@@ -995,6 +995,8 @@ parse_table *SG_BuildParseTable(ATermAppl t)
   }
 
   IF_STATISTICS(
+    fprintf(SG_log(), "%scludes rejects\n",
+      SG_PT_HAS_REJECTS(pt)?"In":"Ex");
     fprintf(SG_log(), "%scludes priorities\n",
       SG_PT_HAS_PRIORITIES(pt)?"In":"Ex");
     fprintf(SG_log(), "%scludes prefer actions\n",

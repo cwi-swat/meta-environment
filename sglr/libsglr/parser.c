@@ -640,7 +640,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 #endif
     nl  = SG_AddLink(st1, st0, t);
     /*
-     Add the reject stack to the active stacks too;
+     Add eventual reject stacks to the active stacks too;
      a stack might converge with it, later on
      */
     active_stacks = SG_AddStack(st1, active_stacks);
@@ -771,7 +771,7 @@ void SG_Shifter(void)
     s   = SG_SP_STATE(sg_shift_pairs[i]);
     st0 = SG_SP_STACK(sg_shift_pairs[i]);
 
-    if(!SG_Rejected(st0)) {
+    if(!SG_PT_HAS_REJECTS(table) || !SG_Rejected(st0)) {
       if(!(st1 = SG_FindStack(s, new_active_stacks))) {
 #ifndef DEBUG
         st1 = SG_NewStack(s, ATtrue);
