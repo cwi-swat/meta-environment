@@ -12,6 +12,14 @@
 
 void DoDump(parse_table *pt, int requested);
 
+void usage(char *prg)
+{
+  fprintf(stderr, "usage: %s [parse-table [state]]\n", prg);
+  fprintf(stderr, "note that no -at-xxx options can be used, "
+	  "except -at-help :-(\n");
+  exit(1);
+}
+
 int main (int argc, char **argv)
 {
   ATerm       bottomOfStack;
@@ -21,7 +29,11 @@ int main (int argc, char **argv)
   parse_table *pt;
   int         requested = -1;
 
-  ATinit(2, ATlibArgv, &bottomOfStack);     /* Initialize Aterm library */
+  if(strcmp(argv[1], "-h") == 0) {
+    usage(argv[0]);
+  }
+
+  ATinit(argc, argv, &bottomOfStack);     /* Initialize Aterm library */
   switch(argc) {
     case 1:
       pt_name = "-";

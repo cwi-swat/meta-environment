@@ -1,0 +1,30 @@
+#! /bin/sh
+
+usage () { 
+	echo "Usage: $1 <program-under-test>"
+	exit 1
+}
+	
+if [ $# != 1 ]; then
+  usage $0
+fi
+
+if [ $1 = "-h" ]; then 
+  usage $0
+fi
+
+output=`$1 -h 2>&1`
+result=$?
+
+if [ $result != 1 ]; then
+	echo "$1 -h returned $result result"
+	exit 1
+fi
+
+if echo $output | grep -iq usage; then
+	exit 0
+else
+  echo "$1 -h does not return \"usage\"";
+  exit 1
+fi
+
