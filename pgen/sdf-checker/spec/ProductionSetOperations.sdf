@@ -1,6 +1,6 @@
 module ProductionSetOperations
 
-imports basic/Booleans sdf2/syntax/Sdf2
+imports basic/Booleans languages/sdf2/syntax/Sdf2
 
 exports 
   sorts ProductionsSet

@@ -6,57 +6,57 @@ equations
   [ca-1'2] get-module-name(Module) = $ModuleId
            ====================================
            check-attributes(Module, Msgs) = 
-             check-attributes(Module, Msgs, $ModuleId)
+             check-attributes2(Module, Msgs, $ModuleId)
 
   [ca-2'1] is-bracket-definition($Symbol* -> $Symbol) = false
            =================================================
-           check-attributes($Symbol* -> $Symbol {Attr*1, bracket, Attr*2},
-                            Msgs, $ModuleId) = 
+           check-attributes2($Symbol* -> $Symbol {Attr*1, bracket, Attr*2},
+                             Msgs, $ModuleId) = 
              Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, bracket, Attr*2})
 
-  [ca-2'2] check-attributes($Literal ( $Symbol,* ) -> $Symbol {Attr*1, bracket, Attr*2},
+  [ca-2'2] check-attributes2($Literal ( $Symbol,* ) -> $Symbol {Attr*1, bracket, Attr*2},
                             Msgs, $ModuleId) = 
              Msgs + 
              illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, bracket, Attr*2})
 
   [ca-2'2] is-binary-definition($Symbol* -> $Symbol) = false
            =================================================
-           check-attributes($Symbol* -> $Symbol {Attr*1, left, Attr*2},
-                            Msgs, $ModuleId) = 
+           check-attributes2($Symbol* -> $Symbol {Attr*1, left, Attr*2},
+                             Msgs, $ModuleId) = 
              Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, left, Attr*2})
 
-  [ca-2'3] check-attributes($Literal ( $Symbol,* ) -> $Symbol {Attr*1, left, Attr*2},
+  [ca-2'3] check-attributes2($Literal ( $Symbol,* ) -> $Symbol {Attr*1, left, Attr*2},
                             Msgs, $ModuleId) = 
              Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, left, Attr*2})
 
   [ca-2'4] is-binary-definition($Symbol* -> $Symbol) = false
            =================================================
-           check-attributes($Symbol* -> $Symbol {Attr*1, assoc, Attr*2},
-                            Msgs, $ModuleId) = 
+           check-attributes2($Symbol* -> $Symbol {Attr*1, assoc, Attr*2},
+                             Msgs, $ModuleId) = 
              Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, assoc, Attr*2})
 
-  [ca-2'5] check-attributes($Literal ( $Symbol,* ) -> $Symbol {Attr*1, assoc, Attr*2},
+  [ca-2'5] check-attributes2($Literal ( $Symbol,* ) -> $Symbol {Attr*1, assoc, Attr*2},
                             Msgs, $ModuleId) = 
              Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, assoc, Attr*2})
 
   [ca-2'6] is-binary-definition($Symbol* -> $Symbol) = false
            =================================================
-           check-attributes($Symbol* -> $Symbol {Attr*1, right, Attr*2},
+           check-attributes2($Symbol* -> $Symbol {Attr*1, right, Attr*2},
                             Msgs, $ModuleId) = 
              Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, right, Attr*2})
 
 
-  [ca-2'7] check-attributes($Literal ( $Symbol,* ) -> $Symbol {Attr*1, right, Attr*2},
+  [ca-2'7] check-attributes2($Literal ( $Symbol,* ) -> $Symbol {Attr*1, right, Attr*2},
                             Msgs, $ModuleId) = 
              Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, right, Attr*2})
 
   [ca-2'8] is-binary-definition($Symbol* -> $Symbol) = false
            =================================================
-           check-attributes($Symbol* -> $Symbol {Attr*1, non-assoc, Attr*2},
+           check-attributes2($Symbol* -> $Symbol {Attr*1, non-assoc, Attr*2},
                             Msgs, $ModuleId) = 
              Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, non-assoc, Attr*2})
 
-  [ca-2'9] check-attributes($Literal ( $Symbol,* ) -> $Symbol {Attr*1, non-assoc, Attr*2},
+  [ca-2'9] check-attributes2($Literal ( $Symbol,* ) -> $Symbol {Attr*1, non-assoc, Attr*2},
                             Msgs, $ModuleId) = 
              Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, non-assoc, Attr*2})
 

@@ -20,13 +20,13 @@ hiddens
   context-free syntax
     check-labels(Definition, Messages)            -> Messages {traversal(accu, break, top-down)}
     check-labels(Module, Messages)                -> Messages {traversal(accu, break, top-down)}
-    check-labels(Module, Messages, ModuleId)      -> Messages {traversal(accu, break, top-down)}
-    check-labels(Production, Messages, ModuleId)  -> Messages {traversal(accu, break, top-down)}
-    check-labels(Symbol*, Labels-Msgs-Tuple, 
-                 ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, break, top-down)}
-    check-labels({Symbol ","}*, Labels-Msgs-Tuple, 
-                 ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, break, top-down)}
-    check-labels(Symbol, Labels-Msgs-Tuple, 
+    check-labels2(Module, Messages, ModuleId)      -> Messages {traversal(accu, break, top-down)}
+    check-labels2(Production, Messages, ModuleId)  -> Messages {traversal(accu, break, top-down)}
+    check-labels3(Symbol*, Labels-Msgs-Tuple, 
+                  ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, break, top-down)}
+    check-labels3({Symbol ","}*, Labels-Msgs-Tuple, 
+                  ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, break, top-down)}
+    check-labels3(Symbol, Labels-Msgs-Tuple, 
                  ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, break, top-down)}
 
 hiddens

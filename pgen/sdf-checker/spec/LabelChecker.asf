@@ -3,31 +3,31 @@ equations
   [cs-1'1] check-labels(Definition) = check-labels(Definition, {})
 
   [cs-1'2] check-labels(Module, Msgs) = 
-             check-labels(Module, Msgs, get-module-name(Module))
+             check-labels2(Module, Msgs, get-module-name(Module))
 
-  [cl-1'3] check-labels(Symbol*, [labels(), Msgs1], 
+  [cl-1'3] check-labels3(Symbol*, [labels(), Msgs1], 
                         $ModuleId, Symbol* -> $Symbol Attrs) = 
              [LabelsSet, Msgs2]
            ====================
-           check-labels(Symbol* -> $Symbol Attrs, 
+           check-labels2(Symbol* -> $Symbol Attrs, 
                         Msgs1, $ModuleId) = Msgs2
 
-  [cl-1'3] check-labels(Symbol,*, [labels(), Msgs1], 
-                        $ModuleId, $Literal(Symbol,*) -> $Symbol Attrs) = 
+  [cl-1'3] check-labels3(Symbol,*, [labels(), Msgs1], 
+                         $ModuleId, $Literal(Symbol,*) -> $Symbol Attrs) = 
              [LabelsSet, Msgs2]
            ====================
-           check-labels($Literal(Symbol,*) -> $Symbol Attrs, 
-                        Msgs1, $ModuleId) = Msgs2
+           check-labels2($Literal(Symbol,*) -> $Symbol Attrs, 
+                         Msgs1, $ModuleId) = Msgs2
 
   [cl-1'4] contains($Literal, LabelsSet) = true
            ====================================
-           check-labels($Literal:$Symbol, [LabelsSet, Msgs], $ModuleId, Prod) =
+           check-labels3($Literal:$Symbol, [LabelsSet, Msgs], $ModuleId, Prod) =
              [LabelsSet, 
               Msgs + double-used-label($ModuleId, $Literal, Prod)]
 
   [cl-1'4] contains($Literal, LabelsSet) = false
            =====================================
-           check-labels($Literal:$Symbol, [LabelsSet, Msgs], $ModuleId, Prod) =
+           check-labels3($Literal:$Symbol, [LabelsSet, Msgs], $ModuleId, Prod) =
              [$Literal ++ LabelsSet, Msgs]
              
 

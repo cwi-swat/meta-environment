@@ -21,14 +21,14 @@ hiddens
     get-constructor-symbol-pairs(Production,
                                  Constructors-Msg-Tuple,
                                  ModuleId) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
-    get-constructor-symbol-pairs(Attributes,
-                                 Constructors-Msg-Tuple,
-                                 ModuleId, Symbol,
-                                 Production) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
-    get-constructor-symbol-pairs(Attribute,
-                                 Constructors-Msg-Tuple,
-                                 ModuleId, Symbol,
-                                 Production) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
+    get-constructor-symbol-pairs2(Attributes,
+                                  Constructors-Msg-Tuple,
+                                  ModuleId, Symbol,
+                                  Production) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
+    get-constructor-symbol-pairs2(Attribute,
+                                  Constructors-Msg-Tuple,
+                                  ModuleId, Symbol,
+                                  Production) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
 
   context-free syntax
     check-constructor-in-priorities({Group ">"}+,
@@ -37,14 +37,14 @@ hiddens
     check-constructor-in-priorities(Production,
                                     Constructors-Msg-Tuple,
                                     ModuleId) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
-    check-constructor-in-priorities(Attributes,
-                                    Constructors-Msg-Tuple,
-                                    ModuleId, Symbol,
-                                    Production) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
-    check-constructor-in-priorities(Attribute,
-                                    Constructors-Msg-Tuple,
-                                    ModuleId, Symbol,
-                                    Production) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
+    check-constructor-in-priorities2(Attributes,
+                                     Constructors-Msg-Tuple,
+                                     ModuleId, Symbol,
+                                     Production) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
+    check-constructor-in-priorities2(Attribute,
+                                     Constructors-Msg-Tuple,
+                                     ModuleId, Symbol,
+                                     Production) -> Constructors-Msg-Tuple {traversal(accu, break, top-down)}
 
 hiddens
   variables

@@ -10,8 +10,8 @@ hiddens
   context-free syntax
     check-attributes(Definition, Messages)           -> Messages {traversal(accu, break, top-down)}
     check-attributes(Module, Messages)               -> Messages {traversal(accu, break, top-down)}
-    check-attributes(Module, Messages, ModuleId)     -> Messages {traversal(accu, break, top-down)}
-    check-attributes(Production, Messages, ModuleId) -> Messages {traversal(accu, break, top-down)}
+    check-attributes2(Module, Messages, ModuleId)     -> Messages {traversal(accu, break, top-down)}
+    check-attributes2(Production, Messages, ModuleId) -> Messages {traversal(accu, break, top-down)}
 
   context-free syntax
     is-binary-definition(Production)       -> Boolean
