@@ -281,7 +281,7 @@ ATbool PT_isTreeSeq(PT_Tree tree)
     rhs = PT_getSymbolSymbol(rhs);
   }
 
-  if (PT_isSymbolAlt(rhs)) {
+  if (PT_isSymbolSeq(rhs)) {
     return ATtrue;
   }
 
