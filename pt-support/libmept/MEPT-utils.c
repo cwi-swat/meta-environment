@@ -1231,6 +1231,7 @@ ATbool PT_hasProductionConstructorAttr(PT_Production prod)
 /*}}}  */       
 /*{{{  PT_Attrs PT_reverseAttrs(PT_Attrs attrs) */
 
+PT_Attrs PT_reverseAttrs(PT_Attrs attrs)
 {
   return PT_makeAttrsFromTerm(
            (ATerm)ATreverse(
