@@ -56,7 +56,7 @@ in
       )
     fi *
     if equal(Modules, []) then
-      Invalidate-Dirty-ParseTables(RealModules).
+      Invalidate-Dirty-ParseTables(RealModules).tau.
       snd-msg(finished-opening-modules)
     fi.
     snd-note(ui-status(endstat(Id)))

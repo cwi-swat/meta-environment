@@ -1,72 +1,131 @@
-/*
-  $Id$
- */
+/* $Id$ */
+
 process RenameModule is
-let 
-  Id            : term,
-  Modules       : list,
+let
+  Id : int,
   OldModuleName : str,
-  Module        : str,
   NewModuleName : str,
-  Name          : str,
-  Tree          : term,
-  Text          : str,
-  Path          : str,
-  Time          : int
-in 
-  Id := process-id. 
+  NewPath : str
+in
+  Id := process-id.
   (
-    rec-msg(rename-module(OldModuleName?, NewModuleName?)) .
-    snd-note(ui-status(statf(Id, "Renaming %s",[OldModuleName]))) .
-    snd-msg(is-module-in-db(NewModuleName)) .
-    (
-      rec-msg(exists-in-module-db(NewModuleName)) .
-      snd-note(ui-status(errorf("Module %s already exists in DataBase",
-                                [NewModuleName])))
-    +
-      rec-msg(not-exists-in-module-db(NewModuleName)) .
-      snd-msg(exists-syntax-module(NewModuleName)) .
-      (
-        rec-msg(syntax-module-exists(NewModuleName)) .
-        snd-note(ui-status(errorf("Module %s exists on disk",
-                                  [NewModuleName])))
-      +
-        rec-msg(syntax-module-not-exists(NewModuleName)) .
-        snd-msg(delete-editors-for-module(OldModuleName)) .
-        snd-msg(get-all-depending-modules(OldModuleName)) .
-        rec-msg(all-depending-modules(Modules?)) .
-        (
-          if not-equal(Modules, []) then
-            Module := first(Modules) .
-            snd-msg(delete-editors-for-module(Module)) .
-            Modules := next(Modules)
-          fi
-        ) * if equal(Modules, []) then
-          tau
-        fi .
-        snd-msg(rename-module-in-db(OldModuleName, NewModuleName)) .
-        ( 
-          rec-msg(renaming-done(OldModuleName, Modules?)) .
-          (
-            if not-equal(Modules, []) then
-              Module := first(Modules) .
-              snd-msg(save-sdf-module(Module)) .
-              rec-msg(saved-sdf-module(Module)) .
-              Modules := next(Modules)
-            fi
-          ) * if equal(Modules, []) then
-            tau
-          fi .
-          snd-msg(save-asfsdf-module(NewModuleName)) .
-          rec-msg(saved-asfsdf-module(NewModuleName)) .
-          snd-msg(remove-module(OldModuleName)) .
-          rec-msg(removed-module)
-        +
-          rec-msg(renaming-not-done(OldModuleName))
-        )
-      )
-    ) .
-    snd-note(ui-status(endstat(Id)))
+    rec-msg(rename-module(OldModuleName?, NewModuleName?, NewPath?)) .
+    DoRenameModule(OldModuleName, NewModuleName, NewPath)
   ) *
   delta
 endlet
+
+process DoRenameModule(Old : str, New : str, Path : str) is
+let
+  Status : term,
+  Changed : list,
+  RealNew : str
+in
+  Status := success.
+  GetRealModuleName(New, Path, Status?, RealNew?).
+  if equal(Status, success) then
+    CheckExistence(RealNew, Status?).
+    if equal(Status, success) then
+      DeleteEditors(Old).
+      if equal(Status, success) then
+        RenameModuleInDB(Old, RealNew, Status?, Changed?).
+        if equal(Status, success) then 
+          SaveSdfModules(Changed).
+          SaveAsfSdfModule(RealNew).
+          RemoveModule(Old) 
+        fi
+      fi
+    fi
+  fi.
+  HandleRenameModuleErrors(Old, RealNew, Status)
+endlet
+
+process GetRealModuleName(Name : str, Path : str, Status : term?,
+                          RealName : str?)
+is
+let
+  ErrMsg : str
+in
+  snd-msg(compute-module-name(Path, Name)).
+  (
+    rec-msg(module-name-not-computed(ErrMsg?)).
+    Status := module-name-not-computed
+  + 
+    rec-msg(computed-module-name(RealName?))
+  )
+endlet
+
+process SaveSdfModules(Modules : list) is
+let
+  Runner : list,
+  Module : str
+in
+  Runner := Modules.
+  if not-equal(Runner, []) then
+    Module := first(Runner) .
+    snd-msg(save-sdf-module(Module)) .
+    rec-msg(saved-sdf-module(Module)) .
+    Runner := next(Runner)
+  fi * 
+  if equal(Runner, []) then
+    tau
+  fi
+endlet
+
+process SaveAsfSdfModule(Module : str) is
+   snd-msg(save-asfsdf-module(Module)) .
+   rec-msg(saved-asfsdf-module(Module))
+
+process RemoveModule(Module : str) is
+  snd-msg(remove-module(Module)) .
+  rec-msg(removed-module)
+
+process RenameModuleInDB(Old : str, New : str, Status : term?, Changed : list?)
+is
+  snd-msg(rename-module-in-db(Old, New)) .
+  (
+    rec-msg(renaming-done(Old, Changed?)) 
+  + 
+    rec-msg(renaming-not-done(Old)).
+    Status := module-not-changed
+  )
+
+process CheckExistence(New : str, Status : term?) is
+    snd-msg(is-module-in-db(New)) .
+    (
+      rec-msg(exists-in-module-db(New)).
+      Status := module-exists-in-db
+    +
+      rec-msg(not-exists-in-module-db(New))
+    ).
+    snd-msg(exists-syntax-module(New)) .
+    (
+      rec-msg(syntax-module-exists(New)) .
+      Status := module-exists-on-disk
+      +
+      rec-msg(syntax-module-not-exists(New))
+    )
+
+process DeleteEditors(Module : str) is
+let
+  Depending : list,
+  Mod : str
+in
+  snd-msg(delete-editors-for-module(Module)).
+  snd-msg(get-all-depending-modules(Module)) .
+  rec-msg(all-depending-modules(Depending?)).
+  if not-equal(Depending, []) then
+    Mod := first(Depending) .
+    snd-msg(delete-editors-for-module(Mod)) .
+    Depending := next(Depending)
+  fi * 
+  if equal(Depending, []) then
+    tau
+  fi 
+endlet
+
+process HandleRenameModuleErrors(Old : str, New : str, Status : term) is
+  if not-equal(Status, success) then
+    snd-note(ui-status(errorf("Error during renaming of %s to %s: %t\n", 
+                            [Old, New, Status])))
+  fi
