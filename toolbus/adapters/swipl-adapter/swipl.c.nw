@@ -76,16 +76,16 @@ term *prolog_handler(int cid, term *t)
 
   /*TBprintf(stdout, "prolog_handler called: %d,%t\n", cid, t);*/
   if(TB_match(t, "rec-do(<appl>)", &func, &args)) {
-    call_prolog(cid, func, args);
+    call_prolog(cid, func, args, TBfalse);
   } else if(TB_match(t, "rec-eval(<appl>)", &func, &args)) {
-    result = TB_make("snd-value(<term>)", call_prolog(cid, func, args));
+    result = TB_make("snd-value(<term>)", call_prolog(cid, func, args,TBtrue));
   } else if(TB_match(t, "rec-ack-event(<term>)", &arg)) {
-    call_prolog(cid, "rec_ack_event", mk_list1(arg));
+    call_prolog(cid, "rec_ack_event", mk_list1(arg), TBfalse);
   } else if(TB_match(t, "rec-monitor(<appl>)", 
-		TB_make("[<str>, <list>]", &func, &args))) {
-    call_prolog(cid, "rec_monitor", args);
+		TB_make("[<str>, <list>]", &func, &args, TBfalse))) {
+    call_prolog(cid, "rec_monitor", args, TBfalse);
   } else if(TB_match(t, "rec-terminate(<term>)", &arg)) {
-    call_prolog(cid, "rec_terminate", mk_list1(arg));
+    call_prolog(cid, "rec_terminate", mk_list1(arg), TBfalse);
   } else {
     TBprintf(stderr, "warning: cannot handle term: %t\n", t);
   }
@@ -98,25 +98,38 @@ term *prolog_handler(int cid, term *t)
 %{{{ call_prolog
 
 <<call_prolog>>=
-term *call_prolog(int cid, char *func, term_list *args)
+term *call_prolog(int cid, char *func, term_list *args, TBbool expect_result)
 {
   term_t t;
   term *trm;
 
   /*TBprintf(stdout, "call_prolog: %d,%s,%t\n", cid, func, args);*/
 
-  hyphens2underscores(func, buf);  
-  trm = TB_make("<appl>", buf, mk_list(TB_make("<int>", cid), args));
+  hyphens2underscores(func, buf); 
+  args = mk_list(TB_make("<int>", cid), args);
+  if(expect_result)
+    args = mk_list(mk_var("Result", "", NULL), args);
+
+  trm = TB_make("<appl>", buf, args);
   t = PL_new_term_ref();
   tb_to_pl(trm, t);
+
+  /*pl_print(stdout, t);*/
+
   if(PL_call(t, NULL)) {
-    if(pl_to_tb(t, &trm)) {
-      /* Drop the 'CID' argument */
-      TB_match(trm, "<appl>", &func, &args);
-      return TB_make("<appl>", func, next(args));
+    if(expect_result && pl_to_tb(t, &trm)) {
+      /* Get the result argument, it is the first argument of trm. */
+      if(!TB_match(trm, "<appl>", &func, &args)) {
+        TBprintf(stderr, "illegal result from prolog: %t\n", trm);
+        exit(1);
+      }
+      /*TBprintf(stdout, "result of Prolog call: %t\n", first(args));*/
+      return first(args);
     }
-    TBprintf(stderr, "couldn't translate prolog term into ToolBus term:\n");
-    pl_print(stderr, t);
+    if(expect_result) {
+      TBprintf(stderr, "couldn't translate prolog term into ToolBus term:\n");
+      pl_print(stderr, t);
+    }
   } else {
     TBprintf(stdout, "call %s(%l) failed\n", func, args);
   }

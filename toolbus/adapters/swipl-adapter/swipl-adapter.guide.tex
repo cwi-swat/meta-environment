@@ -96,10 +96,9 @@ python-adapter}, and $cid$ is the connection id for this tools as returned
 by {\tt tb\_new\_connection}.
 \item {\tt snd-eval($Tid$, $Fun$($A_1$, ..., $A_n$))}: perform the Prolog
 query
-{\tt $Fun$($cid$, $A_1$, ..., $A_n$}. $Tid$ and $cid$ as above.
-If the query succeeds, any uninstantiated variables in $A_1$ to $A_n$ are
-replaced with their (first) solution, and the complete term is returned
-using {\tt rec-value($Tid$, $Fun$($A_1$, ..., $A_n$}.
+{\tt $Fun$($Result$,$Cid$, $A_1$, ..., $A_n$}. $Tid$ and $cid$ as above.
+If the query succeeds, {\tt rec-value($Tid$, $Result$)} is returned
+to the ToolBus, with $Result$ the first value of Result.
 If the query fails, the term {\tt rec-value($Tid$, no)}
 is returned.
 \item {\tt rec-value($Tid$,$Res$)}: the return value for a previous evaluation request.

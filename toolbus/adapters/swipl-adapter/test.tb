@@ -6,8 +6,8 @@ let
 in
   execute(testpl, T?) .
   printf("testpl executed: %t\n", T) .
-  snd-eval(T, just-a-test(X?)) .
-  rec-value(T, just-a-test(X?)) .
+  snd-eval(T, just-a-test) .
+  rec-value(T, jat(X?)) .
   printf("got back: %t\n", X) .
   snd-do(T, gen-event(123)) .
   rec-event(T, evt(X?)) .

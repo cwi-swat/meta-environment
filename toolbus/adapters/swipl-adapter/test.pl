@@ -6,7 +6,8 @@ abc(c).
 
 xyz(abc(a),abc(c)).
 
-just_a_test(CID, 'Hello world!') :- print('just_a_test: '), print(CID), print('\n').
+just_a_test(Result, CID) :- Result = jat('Hello world!'),
+	 print('just_a_test: '), print(CID), print('\n').
 rec_terminate(CID,X) :- print(CID), print('\n'), print(X), print('\n'), halt.
 
 gen_event(CID, Ev) :- print(['sending event: ',Ev,'\n']), tb_send(CID, snd_event(evt(Ev))).
