@@ -1,7 +1,8 @@
 /*
 
     PGEN - the SDF2 parse table generator.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,68 +28,37 @@ extern ATermTable priority_table;
 ATbool pgen_cnf(ATermInt prodnr1, int iptr, int len, ATermInt prodnr2)
 {
   ATerm priorel, entry;
+  ATbool result;
+
+/*
+ATwarning("Prodnr1 = %t with pos %d and length %d and prodnr2 = %t yields ", 
+          prodnr1, iptr, len, prodnr2);
+*/
 
   if(iptr == 0) {
     if(len > 1) {
       priorel = (ATerm)ATmakeAppl2(afun_right_prio,
                                    (ATerm)prodnr1, (ATerm)prodnr2);
       entry = ATtableGet(priority_table,priorel);
-      if(entry)
-        return ATtrue;
+      if (entry) {
+        result = ATtrue;
+      }
       else {
         priorel = (ATerm)ATmakeAppl2(afun_gtr_prio,
                                      (ATerm)prodnr1, (ATerm)prodnr2);
         entry = ATtableGet(priority_table,priorel);
-        if(entry)
-          return ATtrue;
+        if (entry) {
+          result = ATtrue;
+        }
         else {
           priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio,
                                        (ATerm)prodnr1, (ATerm)prodnr2);
           entry = ATtableGet(priority_table,priorel);
-          if(entry)
-            return ATtrue;
-          else
-            return ATfalse;
-        }
-      }
-    }
-    else {
-      priorel = (ATerm)ATmakeAppl2(afun_gtr_prio,
-                                   (ATerm)prodnr1, (ATerm)prodnr2);
-      entry = ATtableGet(priority_table,priorel);
-      if(entry)
-        return ATtrue;
-      else
-        return ATfalse;
-    }
-  }
-  else {
-    if(len > 1) {
-      priorel = (ATerm)ATmakeAppl2(afun_left_prio,
-                                   (ATerm)prodnr1, (ATerm)prodnr2);
-      entry = ATtableGet(priority_table,priorel);
-      if(entry)
-        return ATtrue;
-      else {
-        priorel = (ATerm)ATmakeAppl2(afun_gtr_prio,
-                                     (ATerm)prodnr1, (ATerm)prodnr2);
-        entry = ATtableGet(priority_table,priorel);
-        if(entry)
-          return ATtrue;
-        else {
-          priorel = (ATerm)ATmakeAppl2(afun_assoc_prio,
-                                       (ATerm)prodnr1, (ATerm)prodnr2);
-          entry = ATtableGet(priority_table,priorel);
-          if(entry)
-            return ATtrue;
+          if(entry) {
+            result = ATtrue;
+          }
           else {
-            priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio,
-                                         (ATerm)prodnr1, (ATerm)prodnr2);
-            entry = ATtableGet(priority_table,priorel);
-            if(entry)
-              return ATtrue;
-            else
-              return ATfalse;
+            result = ATfalse;
           }
         }
       }
@@ -98,11 +68,58 @@ ATbool pgen_cnf(ATermInt prodnr1, int iptr, int len, ATermInt prodnr2)
                                    (ATerm)prodnr1, (ATerm)prodnr2);
       entry = ATtableGet(priority_table,priorel);
       if(entry)
-        return ATtrue;
+        result = ATtrue;
       else
-        return ATfalse;
+        result = ATfalse;
     }
   }
+  else {
+    if(len > 1) {
+      priorel = (ATerm)ATmakeAppl2(afun_left_prio,
+                                   (ATerm)prodnr1, (ATerm)prodnr2);
+      entry = ATtableGet(priority_table,priorel);
+      if(entry)
+        result = ATtrue;
+      else {
+        priorel = (ATerm)ATmakeAppl2(afun_gtr_prio,
+                                     (ATerm)prodnr1, (ATerm)prodnr2);
+        entry = ATtableGet(priority_table,priorel);
+        if(entry)
+          result = ATtrue;
+        else {
+          priorel = (ATerm)ATmakeAppl2(afun_assoc_prio,
+                                       (ATerm)prodnr1, (ATerm)prodnr2);
+          entry = ATtableGet(priority_table,priorel);
+          if(entry)
+            result = ATtrue;
+          else {
+            priorel = (ATerm)ATmakeAppl2(afun_non_assoc_prio,
+                                         (ATerm)prodnr1, (ATerm)prodnr2);
+            entry = ATtableGet(priority_table,priorel);
+            if(entry)
+              result = ATtrue;
+            else
+              result = ATfalse;
+          }
+        }
+      }
+    }
+    else {
+      priorel = (ATerm)ATmakeAppl2(afun_gtr_prio,
+                                   (ATerm)prodnr1, (ATerm)prodnr2);
+      entry = ATtableGet(priority_table,priorel);
+      if(entry)
+        result = ATtrue;
+      else
+        result = ATfalse;
+    }
+  }
+
+/*
+  ATwarning("%d\n", result);
+*/
+
+  return result;
 }
 
 /*}}} */

@@ -1,7 +1,8 @@
 /*
 
     PGEN - the SDF2 parse table generator.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+                        The Netherlands. 
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -242,7 +243,7 @@ void calc_follow_table2()
         follow(prod, ATmakeInt(ip), 0);
     }
   }
-  ATtableDestroy(first_table);
+
   for(ip=MIN_PROD;ip<MAX_PROD;ip++) {
     ATermList followset;
     prod = nr_prod_table[ip];
@@ -391,35 +392,37 @@ static void closure_dependencies()
 	/*}}}  */
 	/*{{{  Initially, put all prods in the queue */
 
-	for(prodid=MIN_PROD; prodid<MAX_PROD; prodid++) {
-		queue[end++] = prodid;
-		in_queue[prodid] = ATtrue;
-	}
+  for(prodid=MIN_PROD; prodid<MAX_PROD; prodid++) {
+  	queue[end++] = prodid;
+  	in_queue[prodid] = ATtrue;
+  }
 
-	/*}}}  */
+  /*}}}  */
 	
-	while(start != end) {
-		prodid = queue[start];
-		in_queue[prodid] = ATfalse;
-		start = (start+1)%MAX_PROD;
+  while(start != end) {
+  	prodid = queue[start];
+  	in_queue[prodid] = ATfalse;
+  	start = (start+1)%MAX_PROD;
 
-		depends = dependencies[prodid];
-		while(!ATisEmpty(depends)) {
-			int child = ATgetInt((ATermInt)ATgetFirst(depends));
-			depends = ATgetNext(depends);
+  	depends = dependencies[prodid];
+  	while(!ATisEmpty(depends)) {
+  		int child = ATgetInt((ATermInt)ATgetFirst(depends));
+  		depends = ATgetNext(depends);
 			
-			closure = ATunion(depend_closure[child], depend_closure[prodid]);
-			if(ATgetLength(closure) > ATgetLength(depend_closure[child])) {
-				depend_closure[child] = closure;
-				if(!in_queue[child]) {
-					in_queue[child] = ATtrue;
-					queue[end] = child;
-					end = (end+1)%MAX_PROD;
-					assert(end != start);
-				}
-			}
-		}
-	}
+  		closure = ATunion(depend_closure[child], depend_closure[prodid]);
+  		if(ATgetLength(closure) > ATgetLength(depend_closure[child])) {
+  			depend_closure[child] = closure;
+  			if(!in_queue[child]) {
+  				in_queue[child] = ATtrue;
+  				queue[end] = child;
+  				end = (end+1)%MAX_PROD;
+  				assert(end != start);
+  			}
+  		}
+  	}
+  }
+  free(queue);
+  free(in_queue);   
 }
 
 /*}}}  */
@@ -570,7 +573,9 @@ static void union_follow_sets()
 
 void calc_follow_table()
 {
-  /*int i;*/
+/*
+  int i;
+*/
 
   init_dependencies();	
 

@@ -260,43 +260,48 @@ ATermList shift_prod(ATerm *items, ATerm *symbols, ATerm label)
   ATermList symbols1, newvertex = ATempty;
 
 /*
-ATwarning("Shifting %d elems\n", ATgetLength(itemset));
 ATwarning("Label = %t\n", label);
 */
+
   prod2 = nr_prod_table[ATgetInt((ATermInt)label)];
   symbol1  = GET_ARG(prod2, 1);
 
   cur = symbols;
   while(1) {
     symbol2 = *cur;
-    if(!symbol2)
-	break;
-	if(ATisEqual(symbol1, symbol2)) {
-		int index = cur-symbols;
-		item = items[index];
-		prod1   = GET_ARG(item, 0);
-		prodnr  = GET_INT_ARG(item, 1);
-		ptr     = GET_INT_ARG(item, 2);
-		
-		symbols1 = GET_LIST_ARG(prod1, 0);
-		len = ATgetLength(symbols1);
-		iptr = ATgetInt(ptr);
-		if(len > 0 && iptr < len) {
-			if(!pgen_cnf(prodnr,iptr,len,(ATermInt)label)) {
-				++iptr;
-				symbol3 = ATelementAt(symbols1,iptr);
-				if(!symbol3)
-					symbol3 = empty_set;
-				newitem = (ATerm)ATmakeAppl4(afun_item, prod1, 
-																		 (ATerm)prodnr,
-																		 (ATerm)ATmakeInt(iptr),
-																		 (ATerm)symbol3);
-				newvertex = insert_item(newvertex,newitem);
-			}
-		}
-	}
-	cur++;
+    if (!symbol2) {
+      break;
+    }
+    if (ATisEqual(symbol1, symbol2)) {
+      int index = cur-symbols;
+      item = items[index];
+      prod1   = GET_ARG(item, 0);
+      prodnr  = GET_INT_ARG(item, 1);
+      ptr     = GET_INT_ARG(item, 2);
+    	
+      symbols1 = GET_LIST_ARG(prod1, 0);
+      len = ATgetLength(symbols1);
+      iptr = ATgetInt(ptr);
+      if (len > 0 && iptr < len) {
+    	if (!pgen_cnf(prodnr,iptr,len,(ATermInt)label)) {
+          ++iptr;
+          symbol3 = ATelementAt(symbols1,iptr);
+          if (!symbol3) {
+            symbol3 = empty_set;
+          }
+          newitem = (ATerm)ATmakeAppl4(afun_item, prod1,
+                                       (ATerm)prodnr,
+                                       (ATerm)ATmakeInt(iptr),
+                                       (ATerm)symbol3);
+          newvertex = insert_item(newvertex,newitem);
+        }
+      }
+    }
+    cur++;
   }
+/*
+ATwarning("Newvertex = %t\n", newvertex);
+*/
   return newvertex;
 }
 
@@ -486,10 +491,12 @@ void vertex(int statenr)
 
   vertex = (ATermList)ATtableGet(nr_state_pairs,(ATerm)ATmakeInt(statenr));
   if(vertex) {
+
 /*
 ATwarning("Processing state %d\n", statenr);
 ATwarning("Vertex is %t\n", vertex);
 */
+
 
     newvertex = closure(vertex);
 
@@ -504,9 +511,11 @@ ATwarning("Labelset calculated %t\n", labelset);
 */
 
     gotoset = gotos(newvertex,labelset);
+
 /*
 ATwarning("Gotoset = %t\n", gotoset);
 */
+
     actions(vertex, newvertex, gotoset);
 
 /*

@@ -59,6 +59,7 @@ ATerm innermost(ATerm t);
 ATerm toasfix(ATerm t, ATerm f, ATerm n);        
 ATerm generate_parse_table(ATerm g);
 void init_table_gen();
+void destroy_table_gen();
 
 /*}}}  */
 /*{{{  ATerm *get_name(int cid) */
@@ -231,26 +232,22 @@ ATerm normalize_and_generate_table(ATerm sdf2term)
 {
   ATerm pt = NULL, filename, modname, term, reduct, ksdf;
 
-  if(ATmatchTerm(sdf2term, pattern_asfix_term, NULL, NULL,
+  if (ATmatchTerm(sdf2term, pattern_asfix_term, NULL, NULL,
                  &filename, NULL, &modname, NULL, &term, NULL, NULL)) {
     reduct = innermost(term);
-
-/*
-    ATwarning("Reduction finished\n");
-*/
 
     ksdf = toasfix(reduct, filename, modname); 
 
     if(run_verbose) 
       ATwarning("Normalization finished\n");
 
-    /*print_memo_table_sizes();*/
-
     init_table_gen();
     nr_of_states = 0;
 
-    if(ksdf) 
+    if (ksdf)  {
       pt = generate_parse_table(ksdf);
+    }
+    destroy_table_gen();       
   }
  
   return pt;

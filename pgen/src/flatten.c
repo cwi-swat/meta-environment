@@ -27,9 +27,16 @@
 char *unquote_str2(char *s)
 {
   int len = strlen(s), i, j;
-  char *rs = (char *)malloc(len);
-  if(!rs)
-    ATerror("Run out of memory!\n");
+  static char *rs = NULL;
+  static int   rs_size = 0;
+
+  if (len > rs_size) {
+    rs = (char *)realloc(rs, len);
+    if(!rs) {
+      ATerror("Run out of memory!\n");
+    }
+    rs_size = len;
+  }                 
 
   if(s[0] == '\"' && s[len-1] == '\"') {
     j = 0;

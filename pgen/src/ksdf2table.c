@@ -163,6 +163,24 @@ void init_table_gen()
 }
 
 /*}}}  */
+/*{{{  void destroy_table_gen() */
+
+void destroy_table_gen()
+{
+  ATtableDestroy(prod_nr_pairs);
+  ATtableDestroy(nr_spec_attr_pairs);
+  ATtableDestroy(priority_table);
+  ATtableDestroy(symbol_lookaheads_table);
+  ATtableDestroy(rhs_prods_pairs);
+  ATtableDestroy(first_table);
+  ATtableDestroy(state_nr_pairs);
+  ATtableDestroy(nr_state_pairs);
+  ATtableDestroy(state_gotos_pairs);
+  ATtableDestroy(state_actions_pairs);
+  ATsosDestroy(state_sos);
+}      
+
+/*}}}  */
 /*{{{  void sort_on_rhs_symbol(ATerm prod,ATerm prodnr) */
 
 /**
