@@ -2,11 +2,9 @@
  * $Id$
  * (C) 1999, Merijn de jonge (mdejonge@wins.uva.nl)
  * 
- * msm-paths: Locate files using search path defined in msm-paths file
- * 
  */
-#ifndef _msm_paths_h
-#define _msm_paths_h
+#ifndef _msm_utils_h
+#define _msm_utils_h
 
 /* Hard limit of number of entries allowed in msm_paths file */
 #define MAX_MSM_PATHS_ENTRIES 100

@@ -1,3 +1,8 @@
+/*  
+ * $Id$
+ * (C) 1999, Merijn de jonge (mdejonge@wins.uva.nl)
+ * 
+ */
 #ifndef _module_utils_h
 #define _module_utils_h
 
