@@ -11,7 +11,7 @@ void call_c_compiler(const char* binary, const char* name, const char* source)
   char sourcefiles[1024];
 
   if (make_toolbus_tool) {
-    sprintf(sourcefiles, "%s %s.tif.c", source, name);
+    sprintf(sourcefiles, "%s tool%s.tif.c", source, name);
   }
   else {
     sprintf(sourcefiles, "%s", source);

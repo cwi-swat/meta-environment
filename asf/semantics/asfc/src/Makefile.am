@@ -9,7 +9,7 @@ pkgdata_DATA     = asfc.idef
 
 EXTRA_DIST       = asfc.idef
 
-#CFLAGS		= -DNO_SHARING
+CFLAGS		= -Wall -Wno-unused -O0
 
 asfc_SOURCES = asfc.tif.c \
                asfc.c \

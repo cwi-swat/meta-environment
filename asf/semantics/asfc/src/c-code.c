@@ -31,7 +31,7 @@ static void make_main(const char *name, FILE *file)
     ATfprintf(file,
 	      "#ifdef TOOLBUS\n"
 	      "#include <tb-asc-client.h>\n"
-	      "#include <%s.tif.h>\n"
+	      "#include <tool%s.tif.h>\n"
 	      "#endif\n", name);
   }
 
@@ -47,7 +47,7 @@ static void make_main(const char *name, FILE *file)
   if (make_toolbus_tool) {
     ATfprintf(file,
 	      "#ifdef TOOLBUS\n"
-	      "                          , %s_handler\n"
+	      "                          , tool%s_handler\n"
 	      "#endif\n"
 	      "                          );", name);
   }

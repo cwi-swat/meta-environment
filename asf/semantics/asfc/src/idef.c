@@ -37,7 +37,7 @@ void make_idef_script(char *name)
 	    "    +\n"
 	    "      rec-msg(apply-rewrite(\"%s\", Function?, Sort?, Args?)).\n"
 	    "      execute(tool%s, %sTool?) .\n"
-	    "      snd-eval(%sTool, apply(Function,Sort,Args))\n"
+	    "      snd-eval(%sTool, apply-rewrite(Function,Sort,Args))\n"
 	    "    ).\n"
 	    "    rec-value(%sTool, normalform(Term?)) .\n"
             "    snd-terminate(%sTool,\"done\").\n"
@@ -64,7 +64,7 @@ void idef2c(char *name) {
     ATwarning("%s\n",commandline);
   }
   system(commandline);
-  sprintf(commandline,TIFSTOC " -tool %s %s.tifs", name, name);
+  sprintf(commandline,TIFSTOC " -tool tool%s %s.tifs", name, name);
   if (run_verbose) {
     ATwarning("%s\n",commandline);
   }
