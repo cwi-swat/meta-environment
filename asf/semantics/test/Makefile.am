@@ -18,7 +18,8 @@ TEST_MODULES=Bracket \
              SetAndElem \
              Traversal-Typecheck \
              Tuple \
-             Combination-Typecheck
+             Combination-Typecheck \
+             Pico-Xml
 
 ASFC=${top_builddir}/asfc/src/asfc
 ASFE=${top_builddir}/asfe/src/asfe
