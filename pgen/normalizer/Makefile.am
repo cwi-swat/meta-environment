@@ -31,8 +31,8 @@ EXTRA_DIST   = normalize-sdf.sh.src normalize-normalize-check.sh.src \
 CLEANFILES   = normalize-sdf normalize-normalize-check
 
 normalizer_SOURCES = normalizer.c asf-interface.c asf-interface.h
-normalizer_LDADD   = -L$(top_srcdir)/c-source -lSdf2-Normalization \
-                     -L$(top_srcdir)/c-lib -lnative \
+normalizer_LDADD   = -L$(top_builddir)/c-source -lSdf2-Normalization \
+                     -L$(top_builddir)/c-lib -lnative \
                      -L$(ASC_SUPPORT)/lib -lasc-support \
                      -L$(ASF_SUPPORT)/lib -lASF \
                      -L$(SDF_SUPPORT)/lib -lSDF \
