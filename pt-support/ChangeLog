@@ -1,5 +1,8 @@
 $Id$
 
+Mon Apr  5 10:52:55 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * assert valid parsetree in PT_addParseTreePosInfoToDepth
+
 Wed Mar 24 10:31:40 CET 2004 <{jong,kooiker}@cwi.nl>
  * libmept/{posInfo,MEPT-utils}.c:
    - add PT_findArgsWithLocation
