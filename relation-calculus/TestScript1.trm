@@ -18,7 +18,7 @@
 %%def USES    = '{<s3, y>, <s3, x>, <s5, z>}
 %%def PRED    = '{<s0, s1>,<s1, s2>, <s2, s3>, <s2, s4>, <s3, s5>, <s4, s5>}
 
-%%def  REL1    = {<$u, $x> in USES | $u == 'x }
+%%def  REL1    = {<$u, $x> in USES | $x == 'x }
 
 %%def  Bag1    =  {$u in '{a, b, c} | true | {$u}}
 
@@ -33,6 +33,6 @@
 
 %%fun f(Bag)   = id(Bag)
 
-%%def Bag3      = f(Bag1)
+%%def Bag4      = f(Bag1)
 %%)
 
