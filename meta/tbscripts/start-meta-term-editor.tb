@@ -10,6 +10,7 @@ let
 in
   create(StatusDisplay, Pid?) .
   create(MetaCreator, Pid?) .
+  rec-msg(creation-finished) .
   subscribe(delete-editor(<term>)) .
   snd-msg(open-modules([MODULENAME], sdf)) .
   rec-msg(finished-opening-modules) .

@@ -111,4 +111,5 @@ in
 #ifdef TIMEOUT
   . create(AbortMetaEnvironment, Pid?)
 #endif
+  . snd-msg(creation-finished)
 endlet

@@ -8,6 +8,7 @@ let
 in
   create(Ui, Pid?) .
   create(MetaCreator, Pid?) .
+  rec-msg(creation-finished) .
   if not-equal(MODULENAME,"") then
     snd-msg(open-modules([MODULENAME], sdf)) .
     rec-msg(finished-opening-modules)
