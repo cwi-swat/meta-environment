@@ -129,8 +129,7 @@ static Graph printNode(char *name,
   attrList = makeAttributeListMulti(shapeAttr, attrList);
 
   if (posInfo) {
-    ATerm messageInfo = ATmake("element-selected(menu([<str>]),<str>,<term>)", 
-                               "Show Source", name, posInfo);
+    ATerm messageInfo = ATmake("node-info(<str>,<term>)", name, posInfo);
     messageAttr = makeAttributeInfo("message", messageInfo);
     attrList = makeAttributeListMulti(messageAttr, attrList);
   }
