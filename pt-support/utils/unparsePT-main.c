@@ -27,6 +27,9 @@ static char myarguments[] = "ahi:o:vV";
 void usage(void)
 {
   fprintf(stderr,
+	  "Yields the string that the input parse tree derives, \n"
+	  "including each an every whitespace character.\n"
+	  "This is *not* a pretty-printer, just an unparser.\n\n" 
 	  "Usage: %s [%s]\n"
 	  "Options:\n"
 	  "\t-a              visualize ambiguity clusters\n"
