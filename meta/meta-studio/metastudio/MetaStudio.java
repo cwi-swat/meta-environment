@@ -338,11 +338,9 @@ public class MetaStudio
 
         importGraphPanel.getGraphPanel().addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                System.err.println("mousePressed");
                 checkModulePopup(e);
             }
             public void mouseReleased(MouseEvent e) {
-                System.err.println("mouseReleased");
                 checkModulePopup(e);
             }
         });
