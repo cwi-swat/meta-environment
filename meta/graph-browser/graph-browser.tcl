@@ -1,6 +1,7 @@
 #
 #    Meta-Environment - An environment for language prototyping.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+#    The Netherlands. 
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -849,6 +850,13 @@ proc AddUniqueEdge { graph from to } {
 #-
 # generates the toolbus event to start/stop the online help facility.
 #--
+
+proc JitterBug {on} {
+  if { $on } {
+    GBevent [format "jitterbug-wanted"]
+  }
+}
+
 proc OnlineHelp {on} { 
   if { $on } {
     GBevent [format "online-help"]
@@ -1052,6 +1060,8 @@ proc define-menu-bar {} {
         -command {Help $help_mouse left c}
     $m add check -label "Online Help" -underline 10 -variable openhelp \
         -command {OnlineHelp $openhelp}
+    $m add check -label "JitterBug Activated" -underline 0 -variable openJitterBug \
+        -command {JitterBug $openJitterBug}
 
     menubutton .menu.debug -text "Debug" -underline 0 -menu .menu.debug.menu
     set m .menu.debug.menu
