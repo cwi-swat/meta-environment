@@ -32,6 +32,3 @@ exports
     "$Msg" [0-9\']*                     -> Message
     "$Msg*" [0-9\']*                   	-> Message*
     "$Msgs" [0-9\']*                    -> Messages
-
-
- 

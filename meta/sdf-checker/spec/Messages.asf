@@ -1,6 +1,8 @@
 equations
 
-  [msg-1] {$Msg*} + $Msg = {$Msg* $Msg}
+  [msg-1] {$Msg*} + $Msg = 
+{$Msg* 
+ $Msg}
   [msg-2] {$Msg*} + none = {$Msg*}
 
   [msg-3] undeclared($ModuleName, symbols()) = none
