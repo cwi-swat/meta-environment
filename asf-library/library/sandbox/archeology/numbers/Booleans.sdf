@@ -15,7 +15,7 @@ exports
   variables
     Bool [0-9\']*  -> BOOL
 
-   priorities
+context-free   priorities
       BOOL "or" BOOL -> BOOL
        <
       BOOL "and" BOOL -> BOOL

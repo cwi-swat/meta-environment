@@ -40,7 +40,7 @@ hiddens
 
 
 exports
-  priorities
+context-free  priorities
    {left: RAT "+" RAT -> RAT, RAT "-" RAT -> RAT}
    <
    {left: RAT "*" RAT -> RAT, RAT "/" RAT -> RAT}

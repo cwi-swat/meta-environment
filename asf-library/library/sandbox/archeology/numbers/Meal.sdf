@@ -11,7 +11,7 @@ exports
     EREAL "/" EREAL             -> EREAL
     "(" EREAL ")"               -> EREAL   {bracket}
     precision                   -> INT
- priorities
+context-free priorities
    {left: EREAL "+" EREAL -> EREAL, EREAL "-" EREAL -> EREAL}
    <
    {left: EREAL "*" EREAL -> EREAL, EREAL "/" EREAL -> EREAL }

@@ -1,3 +1,7 @@
+2003/04/15 (jurgenv@cwi.nl)
+  * Added a number of very old specifications to the sandbox (unreleased
+    specifications). Partially converted them to new ASF+SDF syntax.
+    
 2003/04/01 (markvdb@cwi.nl)
   * Set no longer re-use the List module. 
   * Square brackets are replaced by curly brackets.

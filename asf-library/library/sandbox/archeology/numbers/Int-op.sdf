@@ -36,7 +36,7 @@ exports
     INT "/" INT "\\"            -> DIVID
 
 
-priorities
+context-freepriorities
    {left: INT "+" INT -> INT, INT "-" INT -> INT, INT "-/" INT -> INT }
    <
    {left: INT "*" INT -> INT, "div", "mod"}

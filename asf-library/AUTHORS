@@ -20,11 +20,8 @@
 The following people have contributed to the ASF Library:
 
 	Joost Visser	   (Joost.Visser@cwi.nl)
-          - basic, containers
 	Jurgen Vinju 	   (Jurgen.Vinju@cwi.nl)
-          - basic, functions, system, sdf2, aterm 
         Mark van den Brand (vandenbr@loria.fr)
-          - basic, sdf2, aterm
 
 Various modules in the library have been created by adopting and
 adapting modules from existing applications or libraries. These 

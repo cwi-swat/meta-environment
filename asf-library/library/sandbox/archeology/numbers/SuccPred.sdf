@@ -20,7 +20,7 @@ exports
     "P" INT                     -> INT
     "-" INT                     -> INT
 
-  priorities
+ context-free  priorities
     { "-" INT -> INT }
     <
     { "P" INT -> INT, "S" INT -> INT }

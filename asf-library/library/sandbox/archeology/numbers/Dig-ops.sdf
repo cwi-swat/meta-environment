@@ -16,7 +16,7 @@ exports
     "S" INT                     -> INT
     "(" INT ")"                 -> INT  {bracket}
 
-  priorities
+context-free  priorities
     INT ";" INT -> INT
     <
     { "-" INT -> INT }
