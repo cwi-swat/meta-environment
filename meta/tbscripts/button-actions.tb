@@ -49,7 +49,6 @@ in
   (
     if not-equal(ButtonActions, []) then
       ButtonAction := first(ButtonActions) .
-      printf("executing %t\n", ButtonAction) .
       ButtonActions := next(ButtonActions) .
       FunName := fun(ButtonAction) .
       if equal(FunName, "if-equal") then
@@ -68,8 +67,6 @@ in
             errorf("An error occurred while processing the action: %t",
                    [ButtonAction])))
         )
-      +
-        printf("failed to execute action %t\n", ButtonAction) delay(sec(10))
       fi
     fi
   )*
@@ -445,13 +442,9 @@ in
         rec-msg(show-area(NewModName?), Stack?, EditorId?) .
         StackPopString(Stack,Stack?,FileName?).
         snd-msg(edit-term-file(NewModName, FileName)) .
-        printf("here0\n") .
         rec-msg(editor-opened(NewModName, EditorId2?)).
-        printf("here1\n").
         ParseTerm(EditorId2, NewModName) .
-        printf("here2\n").
         snd-msg(set-focus-at-posinfo(EditorId2, STree)) .    
-        printf("here3\n").
         ReturnSuccess(EditorId,Stack)        
       +
         rec-msg(show-list, Stack?, EditorId?) .
@@ -549,7 +542,6 @@ in
   +
     rec-msg(parse-failed(trm(ModuleName), Focus?))
   )
-  . printf("ParseTerm finished\n")
 endlet
 
 process GetTextFromFile(FileName: str, Text: str?) is
