@@ -7,7 +7,6 @@ let
   T      : term,
   Tid    : int,
   Fn     : str,
-  Mname  : str,
   TE     : text-edit,
   Path   : str,
   Syntax : term,
@@ -31,9 +30,9 @@ in
     rec-msg(unavailable).
     snd-msg(Id, open-file(Module)).
     (
-      rec-msg(Id, opened-file(raw,Mname?,Src?,Path?,Time?))
+      rec-msg(Id, opened-file(raw,Module,Src?,Path?,Time?))
     +
-      rec-msg(Id, error-opening(Path?)).
+      rec-msg(Id, error-opening(Module)).
       Src := ""
     )
   ).
@@ -53,7 +52,6 @@ let
   Path   : str,
   Eqs    : term,
   Time   : term,
-  Mname  : str,
   Src    : str
 in
   Id := process-id.
@@ -78,9 +76,9 @@ in
     rec-msg(unavailable).
     snd-msg(Id, open-eqs-text-file(Module)).
     (
-      rec-msg(Id, opened-file(raw,Mname?,Src?,Path?,Time?))
+      rec-msg(Id, opened-file(raw,Module,Src?,Path?,Time?))
     +
-      rec-msg(Id, error-opening(Path?)).
+      rec-msg(Id, error-opening(Module)).
       Src := ""
     )
   ).
