@@ -582,10 +582,11 @@ static ATerm call_kids_accu_list(funcptr trav, ATermList args,
 }
 
 /*}}}  */
-/*{{{  static ATermList call_kids_accu_list(funcptr trav, ATermList args,  */
+/*{{{  static ATerm call_kids_accutrafo_list(funcptr trav, ATermList args,  */
 
-static ATerm call_kids_accutrafo_list(funcptr trav, ATermList args, 
-	  	                 ATerm accu, ATermList extra_args)
+static ATerm call_kids_accutrafo_list(funcptr trav, Symbol tuplesym,
+				      ATermList args, ATerm accu, 
+				      ATermList extra_args)
 {
   ATerm tuple;
   ATermList result = ATempty;
@@ -606,7 +607,7 @@ static ATerm call_kids_accutrafo_list(funcptr trav, ATermList args,
 
   result = ATreverse(result);
 
-  return ATmake("tuple(<term>,<term>)",result,accu);
+  return (ATerm) ATmakeAppl2(tuplesym, (ATerm) result,accu);
 }
 
 /*}}}  */
@@ -679,9 +680,10 @@ ATerm call_kids_accu(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args)
 }
 
 /*}}}  */
-/*{{{  ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args) */
+/*{{{  ATerm call_kids_accutrafo(funcptr trav, Symbol tuple, ATerm arg0, ATerm arg1,  */
 
-ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args)
+ATerm call_kids_accutrafo(funcptr trav, Symbol tuplesym, ATerm arg0,
+			  ATerm arg1, ATermList extra_args)
 {
   int type = ATgetType(arg0);
 
@@ -717,11 +719,11 @@ ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_
     }
   }
   else if (type == AT_LIST) {
-     return call_kids_accutrafo_list(trav, (ATermList) arg0, arg1, extra_args);
+     return call_kids_accutrafo_list(trav, tuplesym, (ATermList) arg0, arg1, 
+				     extra_args);
   }
 
-  /* FIX ME, Symbol of tuple is unknown ;-(  */
-  return ATmake("tuple(<term>,<term>)",arg0,arg1);
+  return (ATerm) ATmakeAppl2(tuplesym, arg0,arg1);
 }
 
 /*}}}  */

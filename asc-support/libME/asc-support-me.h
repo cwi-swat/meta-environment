@@ -75,6 +75,8 @@ extern Symbol record_sym;
 #define check_sort(t,sort) (ATisEqual(get_sort(t),sort))
 #define remove_list(t) (ATgetArgument((ATermAppl) t,0))
 #define parse_sort(s)  (ATparse(s))
+#define tuple_first(t) (ATgetArgument((ATermAppl) t,0))
+#define tuple_second(t) (ATgetArgument((ATermAppl) t,1))
 /*}}}  */
 
   /*{{{  memo functionality */
