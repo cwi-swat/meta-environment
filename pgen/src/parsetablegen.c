@@ -34,7 +34,7 @@ ATbool generationMode = ATfalse;
 ATbool normalizationMode = ATfalse;
 
 static char myname[] = "parsetablegen";
-static char myversion[] = "3.0";
+static char myversion[] = "3.1";
 
 /*
     The argument vector: list of option letters, colons denote option

@@ -1,5 +1,9 @@
 $Id$
 
+2001/10/01 (jurgenv@cwi.nl)
+ * Bumped version of parsetablegen to 3.1
+ * Bumped version of sdf2table to 1.11
+
 2001/09/27 (jurgenv@cwi.nl)
  * Made some important changes in the SDF grammar:
      - added:   ATerm                      -> Attribute 
