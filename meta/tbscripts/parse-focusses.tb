@@ -47,13 +47,12 @@ in
       snd-msg(get-rules-top-sort) .
       rec-msg(set-rules-top-sort(sort(Nonterminal?)))
     else
-      Nonterminal := ""
-    fi .
-    if equal(Type, sdf) then
-      snd-msg(syntax-top-sort-hook(sdf)) .
-      rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?))) 
-    else
-      Nonterminal := ""
+      if equal(Type, sdf) then
+	snd-msg(syntax-top-sort-hook(sdf)) .
+	rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?))) 
+      else
+	Nonterminal := ""
+      fi
     fi .
     GetText(EditorId, Text?, Focus?, Status?) .
     if equal(Status, parse-needed) then
