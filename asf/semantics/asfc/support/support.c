@@ -658,7 +658,7 @@ static aterm_list *terms_to_asfix(arena *ar, aterm_list *args,
 
   for(i=len-1; i>=0; i--) {
     aterm *tmp = TlistIndex(args,i);
-    if(Tmatch(tmp,"w(<str>)",NULL)) {
+    if(TmatchTerm(tmp, pattern_asfix_ws, NULL)) {
       result = TmkList(ar, tmp, result);
     } else if(TmatchTerm(tmp,pattern_asfix_ql,&str)) {
       aterm *tmp2 = TmakeTerm(ar,pattern_asfix_l,str);
