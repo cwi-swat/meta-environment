@@ -27,12 +27,12 @@ static ATerm lf_AUX_Symbol_Sets1_1 ( ATerm arg1 ) ;
 static Symbol lf_AUX_Symbol_Sets1_2sym ;
 static ATerm lf_AUX_Symbol_Sets1_2 ( ATerm arg1 ) ;
 void register_AUX_Symbol_Sets1 ( ) {
-lf_AUX_Symbol_Sets1_1sym = ATmakeSymbol ( "prod(id(\"Symbol-Sets\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),no-attrs)"
+lf_AUX_Symbol_Sets1_1sym = ATmakeSymbol ( "prod(id(\"Symbol-Sets\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"constructor\")],w(\"\"),l(\"}\")))"
  , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Symbol_Sets1_1sym ) ;
 lf_AUX_Symbol_Sets1_2sym = ATmakeSymbol ( "prod(id(\"Symbol-Sets\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"bracket\")],w(\"\"),l(\"}\")))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Symbol_Sets1_2sym ) ;
-register_prod ( ATparse ( "prod(id(\"Symbol-Sets\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),no-attrs)" ) , lf_AUX_Symbol_Sets1_1 , lf_AUX_Symbol_Sets1_1sym ) ;
+register_prod ( ATparse ( "prod(id(\"Symbol-Sets\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"constructor\")],w(\"\"),l(\"}\")))" ) , lf_AUX_Symbol_Sets1_1 , lf_AUX_Symbol_Sets1_1sym ) ;
 register_prod ( ATparse ( "prod(id(\"Symbol-Sets\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"bracket\")],w(\"\"),l(\"}\")))" ) , lf_AUX_Symbol_Sets1_2 , lf_AUX_Symbol_Sets1_2sym ) ;
 }
 void resolve_AUX_Symbol_Sets1 ( ) {

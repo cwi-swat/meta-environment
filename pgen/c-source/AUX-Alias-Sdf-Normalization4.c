@@ -58,8 +58,8 @@ register_prod ( ATparse ( "listtype(sort(\"Symbol\"))" ) , lf3 , lf3sym ) ;
 void resolve_AUX_Alias_Sdf_Normalization4 ( ) {
 ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Alias-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Alias\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Aliases\"),w(\"\"),no-attrs)" ) ) ;
 ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Alias-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Alias\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Aliases\"),w(\"\"),no-attrs)" ) ) ;
-ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Symbol-Sets\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),no-attrs)" ) ) ;
-ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Symbol-Sets\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),no-attrs)" ) ) ;
+ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Symbol-Sets\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"constructor\")],w(\"\"),l(\"}\")))" ) ) ;
+ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Symbol-Sets\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SymbolSet\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"constructor\")],w(\"\"),l(\"}\")))" ) ) ;
 ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Symbols\"),w(\"\"),[iter(sort(\"Symbol\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbols\"),w(\"\"),no-attrs)" ) ) ;
 ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Symbols\"),w(\"\"),[iter(sort(\"Symbol\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbols\"),w(\"\"),no-attrs)" ) ) ;
 ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Alias-Sdf-Syntax\"),w(\"\"),[sort(\"Symbol\"),w(\"\"),ql(\"->\"),w(\"\"),sort(\"Symbol\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Alias\"),w(\"\"),no-attrs)" ) ) ;
@@ -84,7 +84,7 @@ if ( check_sym ( atmp00 , lf2sym ) ) {
 {
 ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( term_equal ( make_nf1 ( ef1sym , lf2 ( make_list ( atmp000 ) ) ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant1 , ( * ef2 ) ( make_nf1 ( ef3sym , lf3 ( make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , make_nf1 ( ef2sym , make_nf1 ( ef3sym , lf3 ( make_list ( null ( ) ) ) ) ) ) ;
 }
 if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
@@ -92,7 +92,7 @@ if ( not_empty_list ( atmp000 ) ) {
 if ( check_sym ( tmp [ 0 ] , ef4sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ) ;
-FUNC_EXIT ( ( * ef5 ) ( ( * ef2 ) ( make_nf1 ( ef3sym , lf3 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 3 ] ) ) ) ) ) , lf_AUX_Alias_Sdf_Normalization4_1_recursive ( make_list ( tmp [ 1 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef5 ) ( make_nf1 ( ef2sym , make_nf1 ( ef3sym , lf3 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 3 ] ) ) ) ) ) , lf_AUX_Alias_Sdf_Normalization4_1_recursive ( make_list ( tmp [ 1 ] ) ) ) ) ;
 }
 }
 }
@@ -111,7 +111,7 @@ ATerm atmp00 = arg0 ;
 {
 ATerm atmp000 = atmp00 ;
 if ( term_equal ( make_nf1 ( ef1sym , lf2 ( make_list ( atmp000 ) ) ) , ( constant0 ? constant0 : ( constant0 = make_nf1 ( ef1sym , lf2 ( make_list ( null ( ) ) ) ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant1 , ( * ef2 ) ( make_nf1 ( ef3sym , lf3 ( make_list ( null ( ) ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , make_nf1 ( ef2sym , make_nf1 ( ef3sym , lf3 ( make_list ( null ( ) ) ) ) ) ) ;
 }
 if ( not_empty_list ( atmp000 ) ) {
 ( tmp [ 0 ] = list_head ( atmp000 ) ) ;
@@ -119,7 +119,7 @@ if ( not_empty_list ( atmp000 ) ) {
 if ( check_sym ( tmp [ 0 ] , ef4sym ) ) {
 ( tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ) ;
 ( tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ) ;
-FUNC_EXIT ( ( * ef5 ) ( ( * ef2 ) ( make_nf1 ( ef3sym , lf3 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 3 ] ) ) ) ) ) , lf_AUX_Alias_Sdf_Normalization4_1_recursive ( make_list ( tmp [ 1 ] ) ) ) ) ;
+FUNC_EXIT ( ( * ef5 ) ( make_nf1 ( ef2sym , make_nf1 ( ef3sym , lf3 ( cons ( make_list ( tmp [ 2 ] ) , make_list ( tmp [ 3 ] ) ) ) ) ) , lf_AUX_Alias_Sdf_Normalization4_1_recursive ( make_list ( tmp [ 1 ] ) ) ) ) ;
 }
 }
 }

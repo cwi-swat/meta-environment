@@ -19,10 +19,21 @@
 
 $Id$
 
+2001/01/05 (markvdb@cwi.nl)
+   * Bumped version of parsetablegen to 2.2.
+   * Added constructor annotations to relevant function in normalization spec.
+   * Added a tool to derive some statistics on the original Sdf2 definition.
+
+2000/12/20 (markvdb@cwi.nl)
+   * Bumped version to 0.7
+   * Removed -sf options from scripts.
+   * Added statistics calculation.
+   * Added -l option to scripts.
+
 2000/12/14 (markvdb@cwi.nl)
    * Removed the actual parse table generation via the compiled specification.
    * Normalization function moved to other module (Sdf2-Normalization).
-   * Bumped version to 2.0.
+   * Bumped version of parsetablegen to 2.1.
 
 2000/11/08 (markvdb@cwi.nl)
    * Bumped version to 0.6
