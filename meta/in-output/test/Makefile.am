@@ -23,10 +23,9 @@
 TESTS      = in-output-test
 
 EXTRA_DIST = in-output-test.sh.src Empty1.sdf Empty2.sdf.baf \
-             in-output-test-1.tb in-output-test-10.tb in-output-test-2.tb \
-             in-output-test-3.tb in-output-test-4.tb in-output-test-5.tb \
-             in-output-test-6.tb in-output-test-7.tb in-output-test-8.tb \
-             in-output-test-9.tb
+             in-output-test-1.tb in-output-test-2.tb in-output-test-3.tb \
+             in-output-test-4.tb in-output-test-5.tb in-output-test-6.tb \
+             in-output-test-7.tb in-output-test-8.tb in-output-test-9.tb
 
 CLEANFILES = in-output-test
 
