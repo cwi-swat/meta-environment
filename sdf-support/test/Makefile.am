@@ -10,7 +10,7 @@ EXTRA_DIST = Booleans.pt Layout.pt BoolTerm.pt
 
 noinst_PROGRAMS = ${TESTS}
 
-CFLAGS = -g -Wall -O2
+AM_CFLAGS = -g -Wall -O2
 
 INCLUDES = \
 	-I${top_srcdir}/lib \
