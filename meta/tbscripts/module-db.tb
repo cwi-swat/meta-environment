@@ -91,7 +91,7 @@ in
     rec-msg(invalidate-sdf-in-db(Name?)) .
     snd-msg(ts-remove-value("sdf-tree", Name))
   +
-    rec-msg(update-module-in-db(Name?, SyntaxText?, SyntaxTree?)).
+    rec-msg(update-module-in-db(Name?, SyntaxText?, SyntaxTree?, sdf)).
     snd-msg(sm-get-module-id(SyntaxTree)) .
     rec-msg(sm-module-id(ModuleId?)) .
     if equal(Name, ModuleId) then
