@@ -34,7 +34,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 	private JToolBar toolBar;
 	private Map menuMap;
 	private JTree moduleTree;
-	private JPopupMenu popupMenu;
+//	private JPopupMenu popupMenu;
 	private JComponent component;
 
 	private int mouseX;
@@ -127,7 +127,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 		handleCloseRequests();
 
 		moduleManager.addModuleSelectionListener(this);
-		popupMenu = createPopupMenu();
+//		popupMenu = createPopupMenu();
 		createContentPane();
 		createMessageList();
 
@@ -805,7 +805,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 		} else if (buttonType.equals(ACTION_TOOLBAR)) {
 			addToolBarActions((ATermList) buttons);
 		} else {
-			popupMenu.removeAll();
+			JPopupMenu popupMenu = createPopupMenu();
 			addPopupMenuItems(popupMenu, buttonType, moduleName, (ATermList) buttons, factory.makeList());
 			popupMenu.show(component, mouseX, mouseY);
 		}
