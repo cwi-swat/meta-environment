@@ -11,17 +11,27 @@ let
 in
   ( 
     rec-msg(add-posinfo(Path?, Tree?)).
-    execute(addPosInfo, API?).
-    snd-eval(API, add-posinfo(Path, Tree)).
-    rec-value(API, tree-with-pos-info(Tree?)).
-    snd-msg(tree-with-pos-info(Tree)).
-    snd-terminate(API,"")
+    execute(addPosInfo, API?) .
+    snd-eval(API, add-posinfo(Path, Tree)) .
+    rec-value(API, tree-with-pos-info(Tree?)) .
+    snd-msg(tree-with-pos-info(Tree)) .
+    Tree := no-tree .
+    snd-terminate(API,"") 
+  +
+    rec-msg(add-posinfo-packed(Path?, Tree?)).
+    execute(addPosInfo, API?) .
+    snd-eval(API, add-posinfo-packed(Path, Tree)) .
+    rec-value(API, tree-with-pos-info(Tree?)) .
+    snd-msg(tree-with-pos-info(Tree)) .
+    Tree := no-tree .
+    snd-terminate(API,"") 
   +
     rec-msg(add-posinfo-to-depth(Path?, Tree?, Depth?)).
     execute(addPosInfo, API?).
     snd-eval(API, add-posinfo-to-depth(Path, Tree, Depth)).
     rec-value(API, tree-with-pos-info(Tree?)).
     snd-msg(tree-with-pos-info(Tree)).
+    Tree := no-tree .
     snd-terminate(API,"")
   ) *
   delta
