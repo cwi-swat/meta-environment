@@ -1,0 +1,60 @@
+equations
+
+[IT-1] IT(id,&SDF0,&Focus0)=&SDF0
+
+[IT-2] IT(fail,&SDF0,&Focus0)=undefined
+
+[IT-3] IT(reset,&SDF0,&Focus0)=reset(&SDF0,&Focus0)
+
+[IT-4-1] &Focus0=modules &ModuleFocus0 sorts &SortFocus0,
+	&SDF1=add(&SDF0,&ModuleFocus0,pre(&Module0))
+	==================================================
+	IT(add &Module0,&SDF0,&Focus0)=&SDF1
+
+[IT-4-2] &Production0=IY(&ProductionYielder0,&SDF0,&Focus0),
+	&Focus1=last(&SDF0,&Focus0,&Focus0),
+	&SDF1=add(&SDF0,&Focus1,&Production0)
+	==================================================
+	IT(add &ProductionYielder0,&SDF0,&Focus0)=&SDF1
+
+[IT-5] &Production0=IY(&ProductionYielder0,&SDF0,&Focus0),
+	&SDF1=sub(&SDF0,&Focus0,&Production0)
+	==================================================
+	IT(sub &ProductionYielder0,&SDF0,&Focus0)=&SDF1
+
+[IT-6] &SDF1=substitute(&SDF0,&Focus0,&Sort0,&Sort1)
+	===================================================
+	IT(substitute &Sort0 by &Sort1,&SDF0,&Focus0)=&SDF1
+
+[IT-7] &Symbols0=IY(&SymbolsYielder0,&SDF0,&Focus0),
+	&Symbols1=removeLinebreaks(&Symbols0),
+	&Symbols2=IY(&SymbolsYielder1,&SDF0,&Focus0),
+	&SDF1=replace(&SDF0,&Focus0,&Symbols1,&Symbols2)
+	====================================================================
+	IT(replace &SymbolsYielder0 by &SymbolsYielder1,&SDF0,&Focus0)=&SDF1
+
+[IT-8] defined(&SDF0,&ModuleName0)=false,
+	&Focus0=modules &ModuleFocus0 sorts &SortFocus0,
+	&Module0=module &ModuleName0
+		 imports
+		 exports
+		  sorts
+		  context-free syntax,
+	&SDF1=add(&SDF0,&ModuleFocus0,&Module0)
+	=====================================================
+	IT(introduce module &ModuleName0,&SDF0,&Focus0)=&SDF1
+
+[IT-9] defined(&SDF0,&ModuleName0)=true,
+	&SDF1=reset(&SDF0,&ModuleName0)
+	==================================================
+	IT(delete module &ModuleName0,&SDF0,&Focus0)=&SDF1
+
+[IT-10] defined(&SDF0,&ModuleName0)=true,
+	defined(&SDF0,&ModuleName1)=false,
+	&SDF1=substitute(&SDF0,&ModuleName0,&ModuleName1)
+	==================================================================
+	IT(rename module &ModuleName0 to &ModuleName1,&SDF0,&Focus0)=&SDF1
+
+[default-IT-11]	IT(&Trafo0,&SDF0,&Focus0)=undefined
+
+

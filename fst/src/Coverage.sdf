@@ -1,0 +1,11 @@
+module Coverage
+
+imports Yielders Equivalence
+
+exports
+
+  sorts Bool
+
+  context-free syntax
+
+   "covers" "(" Symbols "," Symbols ")" -> Bool

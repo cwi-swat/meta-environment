@@ -1,0 +1,25 @@
+module Move
+
+imports Combinators
+
+exports
+
+  sorts Trafo
+
+  context-free syntax
+
+  "move" FocusYielder "behind" FocusYielder -> Trafo
+  "move" FocusYielder "to" ModuleFocusYielder -> Trafo
+
+  "move" ModuleFocusYielder "behind" FocusYielder -> Trafo {reject}
+  "move" FocusYielder "behind" ModuleFocusYielder -> Trafo {reject}
+  "move" ModuleFocusYielder "to" ModuleFocusYielder -> Trafo {reject}
+ 
+hiddens
+
+  context-free syntax
+
+   "move" "(" SDF ","  Focus ","  Focus ")" -> SDF 
+   "move" "(" SDF "," ModuleFocus "," ModuleName+ ")" -> SDF 
+   "getModule" "(" SDF "," ModuleName ")" -> Module
+ 

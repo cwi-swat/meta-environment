@@ -1,0 +1,20 @@
+module DePermutation
+
+imports Combinators
+
+exports
+
+sorts Trafo SDF Modul Production Symbol 
+
+context-free syntax
+
+	"depermutate" -> Trafo
+
+hiddens
+
+context-free syntax
+
+	"depermutate" "(" SDF "," Focus ")" -> SDF {traverse}
+	"depermutate" "(" Module "," Focus ")" -> Module {traverse}
+	"depermutate" "(" Production "," Focus ")" -> Production {traverse}
+	"depermutate" "(" Symbol "," Focus ")" -> Symbol {traverse}

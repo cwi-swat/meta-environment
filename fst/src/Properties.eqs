@@ -1,0 +1,91 @@
+equations
+
+[fresh-1] fresh(&SDF0,&Sort0)=fresh(&SDF0,true,&Sort0)
+
+[fresh-2] fresh(&Sort0,true,&Sort0)=false
+
+[defined-1] &Sort+0=&Sort0 &Sort+1,
+	     defined(&SDF0,&Sort0)=true,
+	     defined(&SDF0,&Sort+1)=true
+	     =================================
+	     defined(&SDF0,&Sort+0)=true
+
+[default-defined-2] defined(&SDF0,&Sort+0)=false
+
+[defined-3] defined(&SDF0,&Sort0)=defined(&SDF0,false,&Sort0)
+
+[defined-4] defined( &Symbols0 -> &Sort0 &Attributes0,false,&Sort0)=true
+
+[used-1] used(&SDF0,&Sort0)=used(&SDF0,false,&Sort0)
+
+[used-2] used(&Symbols0,&Sort0)=used(&Symbols0,false,&Sort0)
+
+[used-3] used(&Symbols0 -> &Sort0 &Attributes0,false,&Sort1)=
+	 used(&Symbols0,false,&Sort1)
+
+[used-4] used(&Sort0,false,&Sort0)=true
+
+[fresh-3] fresh(&SDF0,&ModuleName0)=fresh(&SDF0,true,&ModuleName0)
+
+[fresh-4] fresh(&ModuleName0,true,&ModuleName0)=false
+
+[empty-1] empty(&SDF0,&ModuleName0)=empty(&SDF0,true,&ModuleName0)
+
+[empty-2] &Module0=module &ModuleName1 &ImpSection*0 &Sections0,
+	  &ModuleName1!=&ModuleName0 
+	  ======================================================
+	  empty(&Module0,&Bool0,&ModuleName0)=&Bool0
+
+[empty-3] empty(&Production0,true,&ModuleName0)=false
+
+[defined-1] defined(&SDF0,&ModuleName0)=defined(&SDF0,false,&ModuleName0)
+
+[defined-2] &ModuleName+0=&ModuleName0 &ModuleName+1,
+	    defined(&SDF0,false,&ModuleName0)=true,
+	    defined(&SDF0,&ModuleName+1)=true
+	    =========================================
+	    defined(&SDF0,&ModuleName+0)=true
+
+[defined-3] &Module0=module &ModuleName0 &ImpSection*0 &Sections0
+	    =====================================================
+	    defined(&Module0,false,&ModuleName0)=true
+
+
+[defining-1] definingSorts(&SDF0,&ModuleName0,&Sorts0)=
+	     definingSorts(&SDF0,false,&ModuleName0,&Sorts0)
+
+[defining-2]  &ModuleName+0=&ModuleName0 &ModuleName+1,
+	      definingSorts(&SDF0,false,&ModuleName0,&Sorts0)=true,
+	      definingSorts(&SDF0,&ModuleName+1,&Sorts0)=true
+	      =====================================================
+	      definingSorts(&SDF0,&ModuleName+0,&Sorts0)=true
+
+[default-defining-3] definingSorts(&SDF0,&ModuleName+0,&Sorts0)=false
+
+[defining-4] &Module0=module &ModuleName1 &ImpSection*0 &Sections0,
+	     &ModuleName1!=&ModuleName0 
+	     ==========================================================
+	     definingSorts(&Module0,&Bool0,&ModuleName0,&Sorts0)=&Bool0
+
+[defining-5] &Production0= &Symbols0 -> &Sort0 &Attributes0,
+	     &Sorts0=&Sort*0 &Sort0 &Sort*1
+	     ===========================================================
+	     definingSorts(&Production0,false,&ModuleName0,&Sorts0)=true
+
+[using-1] usingSorts(&SDF0,&ModuleName0,&Sorts0)=
+	  usingSorts(&SDF0,false,&ModuleName0,&Sorts0)
+ 
+[using-2] &Module0=module &ModuleName1 &ImpSection*0 &Sections0,
+	  &ModuleName1!=&ModuleName0 
+	  ==========================================================
+	  usingSorts(&Module0,&Bool0,&ModuleName0,&Sorts0)=&Bool0
+
+[using-3] &Production0= &Symbols0 -> &Sort0 &Attributes0,
+	  usingSorts(&Symbols0,false,&ModuleName0,&Sorts0)=true
+	  ========================================================
+	  usingSorts(&Production0,false,&ModuleName0,&Sorts0)=true
+
+[using-4] &Sorts0=&Sort*0 &Sort0 &Sort*1
+	  ==================================================
+	  usingSorts(&Sort0,false,&ModuleName0,&Sorts0)=true
+

@@ -1,0 +1,98 @@
+equations
+
+[IY-1] focusedRules( &SDF0,modules all sorts &Sort0)=&Production0,
+       &Production0=&Symbols0 -> &Sort0 &Attributes0
+       ===========================================================
+       IY(definition of &Sort0, &SDF0,&Focus0)=&Symbols0
+
+[default-IY-2] IY(&SymbolsYielder0, &SDF0,&Focus0)=undefined
+
+[IY-3] &Symbols1=IY(&SymbolsYielder0,&SDF0,&Focus0),
+       &Symbols1!=undefined,
+       << &Symbols1 >>=&Symbol0
+       ===========================================================
+       IY(permutation of &SymbolsYielder0, &SDF0,&Focus0)=&Symbol0
+
+[IY-4] IY(&Symbols0, &SDF0,&Focus0)=&Symbols0
+
+[IY-5] match(&SDF0,&Focus0,&Pattern+0)=: &Symbols0 :
+       =============================================
+       IY(&Pattern+0, &SDF0,&Focus0)=&Symbols0
+
+[IY-6] &ProductionYielder0=&SymbolsYielder0 -> &Sort0 &Attributes0 ,
+       &Symbols0=IY(&SymbolsYielder0,&SDF0,&Focus0),
+       &Production0=&Symbols0 -> &Sort0 &Attributes0
+       =============================================================
+       IY(&ProductionYielder0, &SDF0,&Focus0)=&Production0
+
+[default-IY-7] IY(&ProductionYielder0, &SDF0,&Focus0)=undefined
+
+[IY-8]  &Sort1=SortBefore(&SDF0,&Sort0)
+	========================================
+	IY(sort before sort &Sort0,&SDF0)=&Sort1
+
+[IY-9]	&Focus0=IY(&FocusYielder0,&SDF0),
+	&Sort1=reachableSorts(&SDF0,&Focus0)
+	===================================================
+	IY(sort reachable from &FocusYielder0,&SDF0)=&Sort1
+
+[IY-10]	&Focus0=IY(&FocusYielder0,&SDF0),
+	&Sort+1=reachableSorts(&SDF0,&Focus0)
+	=====================================================
+	IY(sorts reachable from &FocusYielder0,&SDF0)=&Sort+1
+
+[IY-11] IY(all sorts,&SDF0)=all
+
+[IY-12] IY(sort &Sort0,&SDF0)=&Sort0
+
+[IY-13] &Sort+0=&Sort0 &Sort+1
+	===============================
+	IY(sorts &Sort+0,&SDF0)=&Sort+0
+
+[default-IY-14] IY(&SortFocusYielder0,&SDF0)=undefined
+
+[IY-15] &ModuleName0=ModuleBefore(&SDF0,&ModuleName0 )
+	========================================================
+	IY(module before module &ModuleName0,&SDF0)=&ModuleName0
+
+[IY-16] &ModuleName0=definingModules(&SDF0,&Sort0)
+	====================================================
+	IY(module defining sort &Sort0,&SDF0)= &ModuleName0
+
+[IY-17] &ModuleName+0=definingModules(&SDF0,&Sort0),
+	&ModuleName+0=&ModuleName0 &ModuleName+1
+	====================================================
+	IY(modules defining sort &Sort0,&SDF0)=&ModuleName+0
+
+[IY-18] IY(module &ModuleName0 ,&SDF0)=&ModuleName0
+
+[IY-19] &ModuleName+0=&ModuleName0 &ModuleName+1
+	=============================================
+	IY(modules &ModuleName+0,&SDF0)=&ModuleName+0
+
+[IY-20] IY(all modules,&SDF0)=all
+
+[default-IY-21] IY(&ModuleFocusYielder0,&SDF0)=undefined
+
+[IY-22] &SortFocus0=IY(&SortFocusYielder0,&SDF0),
+	&SortFocus0!=undefined,
+	&ModuleFocus0=IY(&ModuleFocusYielder0,&SDF0),
+	&ModuleFocus0!=undefined
+	=====================================================
+	IY(&SortFocusYielder0 in &ModuleFocusYielder0,&SDF0)=
+	modules &ModuleFocus0 sorts &SortFocus0
+
+[IY-23] &SortFocusYielder0=&FocusYielder0,
+	&SortFocus0=IY(&SortFocusYielder0,&SDF0),
+	&SortFocus0!=undefined
+	======================================================
+	IY(&FocusYielder0,&SDF0)=modules all sorts &SortFocus0
+
+[IY-24] &ModuleFocusYielder0=&FocusYielder0,
+	&ModuleFocus0=IY(&ModuleFocusYielder0,&SDF0),
+	&ModuleFocus0!=undefined
+	======================================================
+	IY(&FocusYielder0,&SDF0)=modules &ModuleFocus0 sorts all
+
+[default-IY-25] IY(&FocusYielder0,&SDF0)=undefined
+

@@ -1,0 +1,13 @@
+module Sub
+
+imports Auxiliary
+
+exports
+
+  sorts SDF
+
+  context-free syntax
+
+ "sub" "(" SDF  "," Focus "," Production ")" -> SDF {traverse}
+ "sub" "(" Module  "," Focus "," Production ")" -> Module {traverse}
+ "sub" "(" Productions  "," Focus "," Production ")" -> Productions {traverse}

@@ -1,0 +1,19 @@
+module DeYACCify
+
+imports Combinators
+
+exports
+
+ sorts SDF Trafo
+
+ context-free syntax
+
+  "deYACCify" -> Trafo
+
+hiddens
+
+ context-free syntax
+
+  "deYACC" "(" SDF "," Sort+ ")" -> SDF
+
+  "tryReset" "("SDF "," Sort ")" -> SDF

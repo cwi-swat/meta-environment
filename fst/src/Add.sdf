@@ -1,0 +1,24 @@
+module Add
+
+imports Auxiliary
+
+exports
+
+ sorts SDF
+
+ context-free syntax
+  
+  "add" "(" SDF "," Focus "," Production+ ")" -> SDF 
+  "add" "(" SDF "," ModuleFocus "," Module ")" -> SDF
+
+hiddens
+
+ context-free syntax
+
+  "insert" "(" SDF "," Focus "," Production ")" ->SDF 
+  "insert" "(" Modules "," Focus "," Production ")" ->Modules {traverse}
+  "insert" "(" Sections "," Focus "," Production ")" ->Sections {traverse}
+  "insert" "(" Grammar "," Focus "," Production ")" ->Grammar {traverse}
+  "insert" "(" Productions "," Focus "," Production ")" ->Productions {traverse}
+  "insert" "(" Modules "," ModuleFocus "," Module ")" -> Modules
+  

@@ -1,0 +1,79 @@
+equations
+
+[IC-1] IC(fresh sort &Sort0, &SDF0)=fresh(&SDF0,&Sort0)
+
+[IC-2] IC(defined sort &Sort0, &SDF0)=defined(&SDF0,&Sort0)
+
+[IC-3] used(&SDF0,&Sort0)=true,
+       defined(&SDF0,&Sort0)=false
+       ==================================
+       IC(bottom sort &Sort0, &SDF0)=true
+
+[default-IC-4] IC(bottom sort &Sort0, &SDF0)=false
+
+[IC-5] &Symbols2=IY(&SymbolsYielder0,&SDF0,modules all sorts all),
+       &Symbols3=IY(&SymbolsYielder1,&SDF0,modules all sorts all),
+       covers(&Symbols2, &Symbols3)=true
+       ===========================================================
+       IC( &SymbolsYielder0 covers &SymbolsYielder1, &SDF0)=true
+
+[default-IC-6] &Sort0=IY(&SymbolsYielder0,&SDF0,modules all sorts all),
+	       &Symbols3=IY(&SymbolsYielder1,&SDF0,modules all sorts all),
+	       &Productions0=focusedRules(&SDF0,modules all sorts &Sort0),
+	       &Productions0=&Production*0 &Production0 &Production*1,
+	       &Production0=&Symbols2 ->&Sort0 &Attributes0,
+	       covers(&Symbols2, &Symbols3)=true
+	       ===============================================================
+	       IC( &SymbolsYielder0 covers &SymbolsYielder1, &SDF0)=true
+
+[default-IC-7] &Sort0=IY(&SymbolsYielder1,&SDF0,modules all sorts all),
+	       &Symbols2=IY(&SymbolsYielder0,&SDF0,modules all sorts all),
+	       &Symbols3=IY(definition of &Sort0,&SDF0,modules all sorts all),
+	       covers(&Symbols2, &Symbols3)=true
+	       =======================================================
+	       IC( &SymbolsYielder0 covers &SymbolsYielder1, &SDF0)=true
+
+[default-IC-8] &Sort0=IY(&SymbolsYielder0,&SDF0,modules all sorts all),
+	       &Sort1=IY(&SymbolsYielder1,&SDF0,modules all sorts all),
+	       &Symbols2=IY(definition of &Sort0,&SDF0,modules all sorts all),
+	       &Symbols3=IY(definition of &Sort1,&SDF0,modules all sorts all),
+	       covers(&Symbols2, &Symbols3)=true
+	       =======================================================
+	       IC( &SymbolsYielder0 covers &SymbolsYielder1, &SDF0)=true
+
+[default-IC-9] IC( &SymbolsYielder0 covers &SymbolsYielder1, &SDF0)=false
+
+[IC-10] &Symbols2=IY(&SymbolsYielder0,&SDF0,modules all sorts all),
+        &Symbols3=IY(&SymbolsYielder1,&SDF0,modules all sorts all),
+        equiv(&Symbols2, &Symbols3)=true
+        ===========================================================
+        IC( &SymbolsYielder0 equiv &SymbolsYielder1, &SDF0)=true
+
+[default-IC-11] &Sort0=IY(&SymbolsYielder0,&SDF0,modules all sorts all),
+	        &Symbols3=IY(&SymbolsYielder1,&SDF0,modules all sorts all),
+	        &Symbols2=IY(definition of &Sort0,&SDF0,modules all sorts all),
+		equiv(&Symbols2, &Symbols3)=true
+	        =======================================================
+	        IC( &SymbolsYielder0 equiv &SymbolsYielder1, &SDF0)=true
+
+[default-IC-12] IC( &SymbolsYielder0 equiv &SymbolsYielder1, &SDF0)=false
+
+[IC-13] IC(fresh module &ModuleName0, &SDF0)=fresh(&SDF0,&ModuleName0)
+
+[IC-14] IC(defined module &ModuleName0, &SDF0)= defined(&SDF0,&ModuleName0)
+
+[IC-15]	IC(empty module &ModuleName0, &SDF0)=empty(&SDF0,&ModuleName0)
+
+[IC-16] IC(module &ModuleName0 using sorts &Sort+0, &SDF0)=
+	usingSorts(&SDF0,&ModuleName0,&Sort+0)
+
+[IC-17] IC( module &ModuleName0 defining sorts &Sort+0, &SDF0)=
+	definingSorts(&SDF0,&ModuleName0,&Sort+0)
+
+[IC-18] IC(&Cond0,&SDF0)=false
+	=========================
+	IC(not &Cond0,&SDF0)=true
+
+[IC-19] IC(&Cond0,&SDF0)=true
+	==========================
+	IC(not &Cond0,&SDF0)=false

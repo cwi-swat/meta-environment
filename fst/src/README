@@ -1,0 +1,12 @@
+To recreate the framework from scratch do:
+
+make clean
+meta
+  Open module Framework.sdf
+  Right click on Framework and select dump equations
+  Press the save button from the file menu.
+
+NOTE: Make sure you press the save button from the file menu, not
+      the one you get by right clicking on the graph and not the
+      one on the button panel to the right of the graph.
+

@@ -1,0 +1,27 @@
+module Conditions
+
+imports Coverage Equivalence Yielders 
+
+exports
+
+  sorts Cond Bool
+
+  context-free syntax
+ 
+  "fresh" "sort" Sort -> Cond
+  "bottom" "sort" Sort -> Cond
+  "defined" "sort" Sort -> Cond
+  "fresh" "module" ModuleName -> Cond
+  "defined" "module" ModuleName -> Cond
+  "empty" "module" ModuleName -> Cond
+  "module" ModuleName "using" "sorts" Sort+ -> Cond
+  "module" ModuleName "defining" "sorts" Sort+ -> Cond
+  SymbolsYielder "covers" SymbolsYielder -> Cond
+  SymbolsYielder "equiv" SymbolsYielder -> Cond
+  "not" Cond -> Cond
+
+  "IC" "(" Cond "," SDF ")" -> Bool
+
+  variables
+
+  "&Cond"[0-9]+ -> Cond 

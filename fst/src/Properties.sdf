@@ -1,0 +1,54 @@
+module Properties
+
+imports Extended-SDF2-Grammar Bool
+
+exports
+
+  sorts Bool
+
+  context-free syntax
+
+  "fresh" "(" SDF "," Sort ")" -> Bool 
+  "defined" "(" SDF "," Sort+ ")" -> Bool
+  "used" "(" SDF "," Sort ")" -> Bool 
+  "used" "(" Symbols "," Sort ")" -> Bool 
+  "fresh" "(" SDF "," ModuleName ")" -> Bool 
+  "empty" "("  SDF "," ModuleName ")" -> Bool
+  "defined" "(" SDF "," ModuleName+ ")" -> Bool
+  "definingSorts" "(" SDF ","  ModuleName+ "," Sorts ")" -> Bool
+  "usingSorts" "(" SDF "," ModuleName "," Sorts ")" -> Bool 
+
+hiddens
+
+  context-free syntax
+
+  "fresh" "(" SDF ","  Bool "," Sort ")" -> Bool {traverse}
+  "fresh" "(" Sort ","  Bool "," Sort ")" -> Bool {traverse}
+
+  "defined" "(" SDF ","  Bool "," Sort ")" -> Bool {traverse}
+  "defined" "(" Production ","  Bool "," Sort ")" -> Bool {traverse}
+
+  "used" "(" SDF ","  Bool "," Sort ")" -> Bool {traverse}
+  "used" "(" Production ","  Bool "," Sort ")" -> Bool {traverse}
+  "used" "(" Symbols ","  Bool "," Sort ")" -> Bool {traverse}
+  "used" "(" Sort ","  Bool "," Sort ")" -> Bool {traverse}
+
+  "fresh" "(" SDF ","  Bool "," ModuleName ")" -> Bool {traverse}
+  "fresh" "(" ModuleName ","  Bool "," ModuleName ")" -> Bool {traverse}
+
+  "empty" "("  SDF ","  Bool "," ModuleName ")" -> Bool {traverse}
+  "empty" "("  Module ","  Bool "," ModuleName ")" -> Bool {traverse}
+  "empty" "("  Production ","  Bool "," ModuleName ")" -> Bool {traverse}
+
+  "defined" "(" SDF ","  Bool "," ModuleName ")" -> Bool {traverse}
+  "defined" "(" Module ","  Bool "," ModuleName ")" -> Bool {traverse}
+  
+  "definingSorts" "(" SDF ","  Bool "," ModuleName "," Sorts ")" -> Bool {traverse}
+  "definingSorts" "(" Module ","  Bool "," ModuleName "," Sorts ")" -> Bool {traverse}
+  "definingSorts" "(" Production ","  Bool "," ModuleName "," Sorts ")" -> Bool {traverse}
+
+  "usingSorts" "(" SDF ","  Bool "," ModuleName "," Sorts ")" -> Bool {traverse}
+  "usingSorts" "(" Module ","  Bool "," ModuleName "," Sorts ")" -> Bool {traverse}
+  "usingSorts" "(" Production ","  Bool "," ModuleName "," Sorts ")" -> Bool {traverse}
+   "usingSorts" "(" Symbols ","  Bool "," ModuleName "," Sorts ")" -> Bool {traverse}
+  "usingSorts" "(" Sort ","  Bool "," ModuleName "," Sorts ")" -> Bool {traverse}

@@ -1,0 +1,10 @@
+equations
+
+[del-1] delete &SymbolsYielder0 = 
+	guard not &SymbolsYielder0 covers ; 
+	replace &SymbolsYielder0 by  effectively
+
+[over-1] override &Sort0 by &SymbolsYielder0 = 
+	 focus on sort before sort &Sort0 do (
+	  reject &Sort0; 
+	  resolve &Sort0 as &SymbolsYielder0 )

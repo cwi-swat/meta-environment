@@ -1,0 +1,13 @@
+module Replace
+
+imports Auxiliary
+
+exports
+
+ context-free syntax
+ 
+  "replace" "(" SDF "," Focus "," Symbols "," Symbols ")" -> SDF {traverse}
+  "replace" "(" Module "," Focus "," Symbols "," Symbols ")" -> Module {traverse}
+  "replace" "(" Production "," Focus "," Symbols "," Symbols ")" -> Production {traverse}
+  "replace" "(" Symbols "," Focus "," Symbols "," Symbols ")" -> Symbols {traverse}
+  "replace" "(" Symbol "," Focus "," Symbols "," Symbols ")" -> Symbol {traverse}

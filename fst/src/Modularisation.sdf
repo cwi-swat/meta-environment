@@ -1,0 +1,13 @@
+module Modularisation
+
+imports Combinators
+
+exports
+
+ sorts Trafo
+
+ context-free syntax
+
+ "reject" "module" ModuleName -> Trafo
+ "eliminate" "module" ModuleName -> Trafo
+ 

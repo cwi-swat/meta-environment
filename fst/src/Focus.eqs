@@ -1,0 +1,35 @@
+equations
+
+[focused-1] focused(&ModuleName0,modules all sorts &SortFocus0)=true
+
+[focused-2] &ModuleName+0=&ModuleName*0 &ModuleName0 &ModuleName*1
+	    ==================================================================
+	    focused(&ModuleName0,modules &ModuleName+0 sorts &SortFocus0)=true
+
+[default-focus-3] focused(&ModuleName0,&Focus0)=false
+
+[focused-4] focused(&Sort0,modules &ModuleFocus0 sorts all)=true
+
+[focused-5] &Sort+0=&Sort*0 &Sort0 &Sort*1
+	    ==================================================================
+	    focused(&Sort0,modules &ModuleFocus0 sorts &Sort+0)=true
+
+[default-focus-6] focused(&Sort0,&Focus0)=false
+
+[wd-1] welldefined(&SDF0 ,modules all sorts all)=true
+
+[wd-2]	defined(&SDF0,&ModuleName+0)=true
+	=========================================================
+	welldefined(&SDF0,modules &ModuleName+0 sorts all)=true
+
+[wd-3] 	defined(&SDF0,&Sort+0)=true
+	=========================================================
+	welldefined(&SDF0,modules all sorts &Sort+0)=true
+
+[wd-4]	defined(&SDF0,&ModuleName+0)=true,
+	defined(&SDF0,&Sort+0)=true,
+	definingSorts(&SDF0,&ModuleName+0,&Sort+0)=true
+	============================================================
+	welldefined(&SDF0,modules &ModuleName+0 sorts &Sort+0)=true
+
+[default-wd-5] welldefined(&SDF0 ,&Focus0)=false

@@ -1,0 +1,94 @@
+equations
+
+[newSort-1] &Literal0=literal(c1 s2 c2),
+	    "-"=literal(c1 c3 c2),
+	    &Literal1=literal(c1 c3 s2 c2),
+	    &Sort1=freshSort(&SDF0,&Sort0, &Literal1,0)
+	    ===========================================
+	    newSort(&SDF0,&Sort0,&Literal0)=&Sort1
+
+[default-newSort-2] &Literal0 = literal(c1 s2 c2),
+		    &Sort0 = sort(s2),
+		    freshSort(&SDF0,&Sort0 , "", 0 )=&Sort2
+		    =========================================
+		    newSort(&SDF0,&Symbol0, &Literal0)=&Sort2
+
+[default-concat-1]  &Sort0 = sort(s1),
+		    &Nat0 = natcon(s3),
+		    "-"=literal(c1 c3 c2),
+		    &Literal0 = literal(c1 s2 c2)
+		    =====================================================
+		    concat(&Sort0, &Literal0, &Nat0 ) = sort(s1 s2 c3 s3)
+
+[concat-2]  &Sort0 = sort(s1),
+	    &Literal0 = literal(c1 s2 c2)
+	    ===========================================
+	    concat(&Sort0, &Literal0, 0 ) = sort(s1 s2)
+
+[default-concat-3]  &Sort0 = sort(s1),
+		    "-"=literal(c1 c3 c2),
+		    &Nat0 = natcon(s3)
+		    ===========================================
+		    concat(&Sort0, "", &Nat0 ) = sort(s1 c3 s3)
+
+[concat-4] concat(&Sort0, "", 0 ) = &Sort0
+
+[freshSort-1] concat(&Sort0, &Literal0, &Nat0 )=&Sort1,
+	      fresh(&SDF0,&Sort1)=true
+	      =================================================
+	      freshSort(&SDF0,&Sort0, &Literal0, &Nat0 )=&Sort1
+
+[default-freshSort-2] freshSort(&SDF0,&Sort0, &Literal0, &Nat0+1 )=&Sort2
+		      ===================================================
+		      freshSort(&SDF0,&Sort0, &Literal0, &Nat0 )=&Sort2
+
+%% calculating
+
+   [1] natcon("0" y) = natcon(y)
+
+%% -- addition --
+   [2]    0 + &Nat0 = &Nat0
+   [3]    &Nat0 + 0 = &Nat0
+   [4]    1 + 1 = 2     [5]    1 + 2 = 3     [6]    1 + 3 = 4
+   [7]    1 + 4 = 5     [8]    1 + 5 = 6     [9]    1 + 6 = 7
+   [10]   1 + 7 = 8     [11]   1 + 8 = 9     [12]   1 + 9 = 10
+   [13]   2 + 1 = 3     [14]   2 + 2 = 4     [15]   2 + 3 = 5
+   [16]   2 + 4 = 6     [17]   2 + 5 = 7     [18]   2 + 6 = 8
+   [19]   2 + 7 = 9     [20]   2 + 8 = 10    [21]   2 + 9 = 11
+   [22]   3 + 1 = 4     [23]   3 + 2 = 5     [24]   3 + 3 = 6
+   [25]   3 + 4 = 7     [26]   3 + 5 = 8     [27]   3 + 6 = 9
+   [28]   3 + 7 = 10    [29]   3 + 8 = 11    [30]   3 + 9 = 12
+   [31]   4 + 1 = 5     [32]   4 + 2 = 6     [33]   4 + 3 = 7
+   [34]   4 + 4 = 8     [35]   4 + 5 = 9     [36]   4 + 6 = 10
+   [37]   4 + 7 = 11    [38]   4 + 8 = 12    [39]   4 + 9 = 13
+   [40]   5 + 1 = 6     [41]   5 + 2 = 7     [42]   5 + 3 = 8
+   [43]   5 + 4 = 9     [44]   5 + 5 = 10    [45]   5 + 6 = 11
+   [46]   5 + 7 = 12    [47]   5 + 8 = 13    [48]   5 + 9 = 14
+   [49]   6 + 1 = 7     [50]   6 + 2 = 8     [51]   6 + 3 = 9
+   [52]   6 + 4 = 10    [53]   6 + 5 = 11    [54]   6 + 6 = 12
+   [55]   6 + 7 = 13    [56]   6 + 8 = 14    [57]   6 + 9 = 15
+   [58]   7 + 1 = 8     [59]   7 + 2 = 9     [60]   7 + 3 = 10
+   [61]   7 + 4 = 11    [62]   7 + 5 = 12    [63]   7 + 6 = 13
+   [64]   7 + 7 = 14    [65]   7 + 8 = 15    [66]   7 + 9 = 16
+   [67]   8 + 1 = 9     [68]   8 + 2 = 10    [69]   8 + 3 = 11
+   [70]   8 + 4 = 12    [71]   8 + 5 = 13    [72]   8 + 6 = 14
+   [73]   8 + 7 = 15    [74]   8 + 8 = 16    [75]   8 + 9 = 17
+   [76]   9 + 1 = 10    [77]   9 + 2 = 11    [78]   9 + 3 = 12
+   [79]   9 + 4 = 13    [80]   9 + 5 = 14    [81]   9 + 6 = 15
+   [82]   9 + 7 = 16    [83]   9 + 8 = 17    [84]   9 + 9 = 18
+
+   [85a]  natcon(c1) + natcon(c2) = natcon(x c),
+          natcon (y1) + natcon(y2) + natcon("0" x) = natcon(y)
+          ========================================================
+          natcon(y1 c1) + natcon(y2 c2) = natcon(y c)
+
+   [85b]  natcon(c1) + natcon(c2) = natcon(x c),
+          natcon ("0" x1) + natcon(y2) + natcon("0" x) = natcon(y)
+          ========================================================
+          natcon(x1 c1) + natcon(y2 c2) = natcon(y c)
+
+   [85c]  natcon(c1) + natcon(c2) = natcon(x c),
+          natcon (y1) + natcon("0" x2) + natcon("0" x) = natcon(y)
+          ========================================================
+          natcon(y1 c1) + natcon(x2 c2) = natcon(y c)
+

@@ -1,0 +1,61 @@
+module Matching
+
+imports Focus 
+
+exports sorts Symbols Pattern ESymbol ESymbols
+
+context-free syntax
+
+  ":" Symbols ":" -> ESymbol
+  ESymbol* -> ESymbols
+
+  Symbol -> Pattern {avoid}
+  "." -> Pattern
+  "_" -> Pattern
+  "..." -> Pattern
+  "(" Pattern ")" -> Pattern {avoid}
+  "(" Pattern Pattern+ ")" -> Pattern {avoid}
+  Pattern"?" -> Pattern {avoid}
+  Pattern"+" -> Pattern {avoid}
+  Pattern"*" -> Pattern {avoid}
+  Pattern "|" Pattern -> Pattern {right,avoid}
+  "{" Pattern Pattern"}""+" -> Pattern  {avoid}
+  "{" Pattern Pattern"}""*" -> Pattern  {avoid}
+  Pattern "//" -> Pattern {avoid}
+  "//"  Pattern -> Pattern {avoid}
+  Error -> Symbols
+
+  "match" "(" SDF "," Focus "," Pattern+ ")" -> ESymbols
+
+  context-free priorities
+  
+    Pattern "//" -> Pattern >
+    "//" Pattern -> Pattern > 
+   {Pattern "?"               -> Pattern
+    Pattern "*"                -> Pattern
+    Pattern "+"                -> Pattern } >
+    Pattern "|" Pattern         -> Pattern 
+   ,
+   "..." -> Pattern > "." -> Pattern
+  
+variables
+
+  "&Pattern"[0-9]+ -> Pattern
+  "&Pattern+"[0-9]+ -> Pattern+ 
+  "&ESymbol"[0-9]+ -> ESymbol
+  "&ESymbol*"[0-9]+ -> ESymbol*
+  "&ESymbol+"[0-9]+ -> ESymbol+
+  "&ESymbols"[0-9]+ -> ESymbols
+
+hiddens
+
+context-free syntax
+
+  "matchSymbols" "(" Symbols "," Pattern+ ")" -> Symbols
+  "tryMatch" "(" ESymbols "," Symbols "," Pattern+ ")" -> ESymbols
+  "allMatches" "(" SDF "," ESymbols "," Focus  "," Pattern+ ")" -> ESymbols {traverse}
+  "allMatches" "(" Module "," ESymbols "," Focus  "," Pattern+ ")" -> ESymbols {traverse}
+  "allMatches" "(" Production "," ESymbols "," Focus  "," Pattern+ ")" -> ESymbols {traverse}
+  "allMatches" "(" Symbols "," ESymbols "," Focus  "," Pattern+ ")" -> ESymbols {traverse}
+  "allMatches" "(" Symbol "," ESymbols "," Focus  "," Pattern+ ")" -> ESymbols {traverse}
+

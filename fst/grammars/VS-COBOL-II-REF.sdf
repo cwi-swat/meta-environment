@@ -1,0 +1,774 @@
+definition 
+
+module Syntax imports IdentificationDivision EnvironmentDivision DataDivision ProcedureDivision Names exports
+
+   sorts Cobol-source-program Nested-cobol-source-program
+
+context-free syntax
+
+"IDENTIFICATION" | "ID" "DIVISION" "." Program-id-cobol-source-program Identification-division-content? ("ENVIRONMENT" "DIVISION" "." Environment-division-content)? ("DATA" "DIVISION" "." Data-division-content)? Procedure-division? (Nested-cobol-source-program* "END" "PROGRAM" Program-name ".")? -> Cobol-source-program 
+
+"IDENTIFICATION" | "ID" "DIVISION" "." Program-id-nested-cobol-source-program Identification-division-content? ("ENVIRONMENT" "DIVISION" "." Environment-division-content)? ("DATA" "DIVISION" "." Data-division-content)? Procedure-division? Nested-cobol-source-program* "END" "PROGRAM" Program-name "." -> Nested-cobol-source-program 
+
+module IdentificationDivision imports Names Lexical-Sorts exports
+		  sorts Identification-division-content Program-id-cobol-source-program Program-id-nested-cobol-source-program
+
+context-free syntax
+
+<< ("AUTHOR" "."? Comment-entry*) ? ("INSTALLATION" "."? Comment-entry*) ? ("DATE-WRITTEN" "."? Comment-entry*) ? ("DATE-COMPILED" "."? Comment-entry*) ? ("SECURITY" "."? Comment-entry*) ? >> -> Identification-division-content 
+
+"PROGRAM-ID" "."? Program-name 
+    ("IS"? "INITIAL" "PROGRAM"?)? "."? -> Program-id-cobol-source-program 
+
+"PROGRAM-ID" "."? Program-name
+  ("IS"? ("COMMON" "INITIAL"?) | ("INITIAL" "COMMON"?) "PROGRAM"?)? "."? -> Program-id-nested-cobol-source-program 
+
+module EnvironmentDivision imports InputOutputSection ConfigurationSection exports
+		  sorts Environment-division-content
+
+context-free syntax
+
+Configuration-section? Input-output-section? -> Environment-division-content 
+
+module InputOutputSection imports DataReference Names Lexical-Sorts exports
+		  sorts Input-output-section File-control-paragraph File-control-entry Select-clause Assign-clause Reserve-clause Padding-character-clause Record-delimiter-clause Password-clause File-status-clause Relative-key-clause Record-key-clause Alternate-record-key-clause I-o-control-paragraph Qsam-or-sam-i-o-control-entries Vsam-i-o-control-entries Sort-merge-i-o-control-entries
+
+context-free syntax
+
+"INPUT-OUTPUT" "SECTION" "." File-control-paragraph? I-o-control-paragraph? -> Input-output-section 
+
+"FILE-CONTROL" "." File-control-entry* -> File-control-paragraph 
+
+Select-clause Assign-clause << Reserve-clause? (("ORGANIZATION" "IS"?)? "SEQUENTIAL")? Padding-character-clause? Record-delimiter-clause? ("ACCESS" "MODE"? "IS"? "SEQUENTIAL")? Password-clause? File-status-clause? >> "." -> File-control-entry 
+
+Select-clause Assign-clause << Reserve-clause? (("ORGANIZATION" "IS"?)? "RELATIVE") ("ACCESS" "MODE"? "IS"? ("SEQUENTIAL" Relative-key-clause?) | ("RANDOM" | "DYNAMIC" Relative-key-clause))? Password-clause? File-status-clause? >> "." -> File-control-entry 
+
+Select-clause Assign-clause << Reserve-clause? (("ORGANIZATION" "IS"?)? "INDEXED") ("ACCESS" "MODE"? "IS"? "SEQUENTIAL" | "RANDOM" | "DYNAMIC")? Record-key-clause Password-clause? Alternate-record-key-clause* File-status-clause? >> "." -> File-control-entry 
+
+"SELECT" "OPTIONAL"? File-name -> Select-clause 
+
+"ASSIGN" "TO"? (Assignment-name | Literal)+ -> Assign-clause 
+
+"RESERVE" Integer ("AREA"|"AREAS")? -> Reserve-clause 
+
+"PADDING" "CHARACTER"? "IS"? Qualified-data-name | Literal -> Padding-character-clause 
+
+"RECORD" "DELIMITER" "IS"? "STANDARD-1" | Assignment-name -> Record-delimiter-clause 
+
+"PASSWORD" "IS"? Data-name -> Password-clause 
+
+"FILE"? "STATUS" "IS"? Qualified-data-name Qualified-data-name? -> File-status-clause 
+
+"RELATIVE" "KEY"? "IS"? Qualified-data-name -> Relative-key-clause 
+
+"RECORD" "KEY"? "IS"? Qualified-data-name -> Record-key-clause 
+
+"ALTERNATE" "RECORD"? "KEY"? "IS"? Qualified-data-name Password-clause? ("WITH"? "DUPLICATES")? -> Alternate-record-key-clause 
+
+"I-O-CONTROL" "." ((Qsam-or-sam-i-o-control-entries | Vsam-i-o-control-entries)+ ".")? (Sort-merge-i-o-control-entries ".")? -> I-o-control-paragraph 
+
+("RERUN" "ON" Assignment-name | File-name "EVERY"? (Integer "RECORDS") | ("END" "OF"? "REEL" | "UNIT") "OF"? File-name) | ("SAME" "RECORD"? "AREA"? "FOR"? File-name File-name+) | ("MULTIPLE" "FILE" "TAPE"? "CONTAINS"? (File-name ("POSITION" Integer)?)+) | ("APPLY" "WRITE-ONLY" "ON"? File-name+) -> Qsam-or-sam-i-o-control-entries 
+
+("RERUN" "ON" Assignment-name | File-name "EVERY"? Integer "RECORDS" "OF"? File-name) | ("SAME" "RECORD"? "AREA"? "FOR"? File-name File-name+) -> Vsam-i-o-control-entries 
+
+("RERUN" "ON" Assignment-name)? ("SAME" "RECORD" | "SORT" | "SORT-MERGE" "AREA"? "FOR"? File-name File-name+)+ -> Sort-merge-i-o-control-entries 
+
+module ConfigurationSection imports Conditions Names Lexical-Sorts exports
+		  sorts Configuration-section Configuration-section-paragraphs Source-computer-paragraph Object-computer-paragraph Object-computer-paragraph-sequence-phrase Special-names-paragraph Special-names-paragraph-status-phrase Special-names-paragraph-clauses Alphabet-clause Symbolic-characters-clause Class-clause Currency-sign-clause Decimal-point-clause
+
+context-free syntax
+
+"CONFIGURATION" "SECTION" "." Configuration-section-paragraphs -> Configuration-section 
+
+Source-computer-paragraph? Object-computer-paragraph? Special-names-paragraph? -> Configuration-section-paragraphs 
+
+"SOURCE-COMPUTER" "."
+    (Computer-name ("WITH"? "DEBUGGING" "MODE")? ".")? -> Source-computer-paragraph 
+
+"OBJECT-COMPUTER" "."
+    (Computer-name ("MEMORY" "SIZE"? Integer "WORDS" | "CHARACTERS" | "MODULES")? Object-computer-paragraph-sequence-phrase ".")? -> Object-computer-paragraph 
+
+("PROGRAM"? "COLLATING"? "SEQUENCE" "IS"? Alphabet-name)? ("SEGMENT-LIMIT" "IS"? Priority-number)? -> Object-computer-paragraph-sequence-phrase 
+
+"SPECIAL-NAMES" "." ((Environment-name "IS"? Mnemonic-name) | (Environment-name ("IS"? Mnemonic-name Special-names-paragraph-status-phrase?) | Special-names-paragraph-status-phrase))* Special-names-paragraph-clauses "."? -> Special-names-paragraph 
+
+("ON" "STATUS"? "IS"? Condition ("OFF" "STATUS"? "IS"? Condition)?) | ("OFF" "STATUS"? "IS"? Condition ("ON" "STATUS"? "IS"? Condition)?) -> Special-names-paragraph-status-phrase 
+
+<< Alphabet-clause* Symbolic-characters-clause* Class-clause* Currency-sign-clause? Decimal-point-clause? >> -> Special-names-paragraph-clauses 
+
+"ALPHABET" Alphabet-name "IS"? 
+  "STANDARD-1" | 
+  "STANDARD-2" |
+  "NATIVE" |
+  "EBCDIC" |
+  (Literal (("THROUGH" | "THRU" Literal) | ("ALSO" Literal)+)?)+ -> Alphabet-clause 
+
+"SYMBOLIC" "CHARACTERS"? 
+  (Symbolic-character+ ("ARE"|"IS")? Integer+)+ 
+  ("IN" Alphabet-name)? -> Symbolic-characters-clause 
+
+"CLASS" Class-name "IS"? (Literal ("THROUGH" | "THRU" Literal)?)+ -> Class-clause 
+
+"CURRENCY" "SIGN"? "IS"? Literal -> Currency-sign-clause 
+
+"DECIMAL-POINT" "IS"? "COMMA" -> Decimal-point-clause 
+
+module DataDivision imports FileAndSortDescriptionEntry DataDescriptionEntry exports
+		  sorts Data-division-content Record-description-entry Data-item-description-entry
+
+context-free syntax
+
+("FILE" "SECTION" "." (File-and-sort-description-entry Record-description-entry+)*)? ("WORKING-STORAGE" "SECTION" "." (Record-description-entry | Data-item-description-entry)*)? ("LINKAGE" "SECTION" "." (Record-description-entry | Data-item-description-entry)*)? -> Data-division-content 
+
+Data-description-entry -> Record-description-entry 
+
+Data-description-entry -> Data-item-description-entry 
+
+module FileAndSortDescriptionEntry imports DataDescriptionEntry DataReference Names Lexical-Sorts exports
+		  sorts File-and-sort-description-entry File-and-sort-description-entry-clauses Block-contains-clause Record-clause Record-varying-phrase Label-records-clause Value-of-clause Data-records-clause Linage-clause Linage-footing-phrase Recording-mode-clause Mode Code-set-clause
+
+context-free syntax
+
+"FD" |"SD" File-name File-and-sort-description-entry-clauses "." -> File-and-sort-description-entry 
+
+<< External-clause? Global-clause? Block-contains-clause? Record-clause? Label-records-clause? Value-of-clause? Data-records-clause? Linage-clause? Recording-mode-clause? Code-set-clause? >> -> File-and-sort-description-entry-clauses 
+
+"BLOCK" "CONTAINS"? (Integer | Zero "TO")? Integer | Zero ("CHARACTERS"|"RECORDS")? -> Block-contains-clause 
+
+"RECORD"
+ ("CONTAINS"? Integer | Zero "CHARACTERS"?)
+ | ("CONTAINS"? Integer | Zero "TO" Integer | Zero "CHARACTERS"?)
+ | (Record-varying-phrase ("DEPENDING" "ON"? Data-name)?) -> Record-clause 
+
+"IS"? "VARYING" "IN"? "SIZE"? ("FROM"? Integer)? ("TO" Integer)? "CHARACTERS"? -> Record-varying-phrase 
+
+"LABEL"
+  ("RECORD" "IS"?) | ("RECORDS" "ARE"?)
+  "STANDARD" | "OMITTED" | Data-name+ -> Label-records-clause 
+
+"VALUE" "OF" (System-name "IS"? Qualified-data-name | Literal)+ -> Value-of-clause 
+
+"DATA" ("RECORD" "IS"?) | ("RECORDS" "ARE"?) Data-name+ -> Data-records-clause 
+
+"LINAGE"
+  "IS"? Data-name | Integer
+  "LINES"? Linage-footing-phrase -> Linage-clause 
+
+("WITH"? "FOOTING" "AT"? Data-name | Integer)? ("LINES"? "AT"? "TOP" Data-name | Integer)? ("LINES"? "AT"? "BOTTOM" Data-name | Integer)? -> Linage-footing-phrase 
+
+"RECORDING" "MODE"? "IS"? Mode -> Recording-mode-clause 
+
+"F" | "V" | "U" | "S" -> Mode 
+
+"CODE-SET" "IS"? Alphabet-name -> Code-set-clause 
+
+module DataDescriptionEntry imports DataReference Names Lexical-Sorts exports
+		  sorts Data-description-entry Data-description-entry-clauses Redefines-clause Blank-when-zero-clause External-clause Global-clause Justified-clause Occurs-clause Picture-clause Sign-clause Synchronized-clause Usage-clause Data-value-clause Renames-clause Condition-value-clause
+
+context-free syntax
+
+Level-number (Data-name | "FILLER")? Data-description-entry-clauses "." -> Data-description-entry 
+
+"66" Data-name Renames-clause "." -> Data-description-entry 
+
+"88" Condition-name Condition-value-clause "." -> Data-description-entry 
+
+<< Redefines-clause? Blank-when-zero-clause? External-clause? Global-clause? Justified-clause? Occurs-clause? Picture-clause? Sign-clause? Synchronized-clause? Usage-clause? Data-value-clause? >> -> Data-description-entry-clauses 
+
+"REDEFINES" Data-name -> Redefines-clause 
+
+"BLANK" "WHEN"? "ZERO" | "ZEROS" | "ZEROES" -> Blank-when-zero-clause 
+
+"IS"? "EXTERNAL" -> External-clause 
+
+"IS"? "GLOBAL" -> Global-clause 
+
+"JUSTIFIED" | "JUST" "RIGHT"? -> Justified-clause 
+
+"OCCURS" Integer "TIMES"? ("ASCENDING" | "DESCENDING" "KEY"? "IS"? Qualified-data-name+)* ("INDEXED" "BY"? Index-name+)? -> Occurs-clause 
+
+"OCCURS" (Integer|Zero "TO")? Integer "TIMES"? "DEPENDING"
+    "ON"? Qualified-data-name ("ASCENDING" | "DESCENDING" "KEY"? "IS"? Qualified-data-name+)* ("INDEXED" "BY"? Index-name+)? -> Occurs-clause 
+
+"PICTURE" | "PIC" "IS"? Picture-string -> Picture-clause 
+
+("SIGN" "IS"?)? "LEADING" | "TRAILING" ("SEPARATE" "CHARACTER"?)? -> Sign-clause 
+
+"SYNCHRONIZED" | "SYNC" ("LEFT" | "RIGHT")? -> Synchronized-clause 
+
+("USAGE" "IS"?)? "BINARY" | "COMP" | "COMP-1" | "COMP-2" | "COMP-3" | "COMP-4" | "COMPUTATIONAL" | "COMPUTATIONAL-1" | "COMPUTATIONAL-2" | "COMPUTATIONAL-3" | "COMPUTATIONAL-4" | "DISPLAY" | "DISPLAY-1" | "INDEX" | "PACKED-DECIMAL" | "POINTER" -> Usage-clause 
+
+"VALUE" "IS"? Literal -> Data-value-clause 
+
+"RENAMES" Qualified-data-name ("THROUGH"|"THRU" Qualified-data-name)? -> Renames-clause 
+
+("VALUE" "IS"?) | ("VALUES" "ARE"?)
+  (Literal ("THROUGH"|"THRU" Literal)?)+ -> Condition-value-clause 
+
+module ProcedureDivision imports Statements Names Lexical-Sorts exports
+		  sorts Procedure-division Section-header Paragraphs Sentence Paragraph Altered-goto Sections
+
+context-free syntax
+
+"PROCEDURE" "DIVISION" ("USING" Data-name+)? "."
+    ("DECLARATIVES" "." (Section-header "." Use-statement "." Paragraphs)+ "END" "DECLARATIVES" ".")? Sections -> Procedure-division 
+
+"PROCEDURE" "DIVISION" ("USING" Data-name+)? "." Paragraphs -> Procedure-division 
+
+Section-name "SECTION" Priority-number? -> Section-header 
+
+Sentence* Paragraph* -> Paragraphs 
+
+Statement-list "." -> Sentence 
+
+Paragraph-name "." Sentence* -> Paragraph 
+
+Altered-goto -> Paragraph 
+
+Paragraph-name "." "GO" "TO"? "." -> Altered-goto 
+
+Paragraphs (Section-header "." Paragraphs)* -> Sections 
+
+module Statements imports Conditions DataReference ArithmeticExpressions Names Lexical-Sorts exports
+		  sorts Statement Compiler-directing-statement Accept-statement Add-statement Statement-list Alter-statement Call-statement Cancel-statement Close-statement Compute-statement Continue-statement Delete-statement Display-statement Divide-statement Entry-statement Evaluate-statement Evaluate-phrase Exit-statement Exit-program-statement Goback-statement Go-to-statement If-statement Initialize-statement Inspect-statement Before-after-phrase Merge-statement Move-statement Multiply-statement Open-statement Perform-statement Perform-varying-phrase Perform-after-phrase Perform-until-phrase Read-statement Release-statement Return-statement Rewrite-statement Search-statement Set-statement Sort-statement Start-statement Stop-statement String-statement Subtract-statement Unstring-statement Write-statement Write-statement-phrase Basis-statement Cbl-process-statement Control-cbl-statement Copy-statement Copy-operand Delete-compiler-directing-statement Eject-statement Enter-statement Insert-statement Ready-or-reset-trace-statement Replace-statement Service-label-statement Service-reload-statement Skip1-2-3-statement Title-statement Use-statement
+
+context-free syntax
+
+Accept-statement
+  | Add-statement
+  | Alter-statement
+  | Call-statement
+  | Cancel-statement
+  | Close-statement
+  | Compute-statement
+  | Continue-statement
+  | Delete-statement
+  | Display-statement
+  | Divide-statement
+  | Entry-statement
+  | Evaluate-statement 
+  | Exit-statement
+  | Exit-program-statement
+  | Goback-statement
+  | Go-to-statement
+  | If-statement
+  | Initialize-statement
+  | Inspect-statement
+  | Merge-statement
+  | Move-statement
+  | Multiply-statement
+  | Open-statement
+  | Perform-statement 
+  | Read-statement
+  | Release-statement 
+  | Return-statement
+  | Rewrite-statement
+  | Search-statement
+  | Set-statement
+  | Sort-statement
+  | Start-statement
+  | Stop-statement
+  | String-statement
+  | Subtract-statement
+  | Unstring-statement
+  | Write-statement -> Statement 
+
+Basis-statement
+  | Cbl-process-statement
+  | Control-cbl-statement
+  | Copy-statement
+  | Delete-compiler-directing-statement
+  | Eject-statement
+  | Enter-statement
+  | Insert-statement
+  | Ready-or-reset-trace-statement 
+  | Replace-statement
+  | Service-label-statement 
+  | Service-reload-statement
+  | Skip1-2-3-statement
+  | Title-statement
+  | Use-statement -> Compiler-directing-statement 
+
+"ACCEPT" Identifier ("FROM" Mnemonic-name | Environment-name)? -> Accept-statement 
+
+"ACCEPT" Identifier "FROM" "DATE" | "DAY" | "DAY-OF-WEEK" | "TIME" -> Accept-statement 
+
+"ADD" (Identifier | Literal)+ "TO" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-ADD"? -> Add-statement 
+
+"ADD" (Identifier | Literal)+ "TO"? Identifier | Literal
+    "GIVING" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-ADD"? -> Add-statement 
+
+"ADD" "CORRESPONDING" | "CORR" Identifier "TO" Identifier
+    "ROUNDED"? ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-ADD"? -> Add-statement 
+
+Statement+ -> Statement-list 
+
+"ALTER"
+    (Procedure-name "TO" ("PROCEED" "TO")? Procedure-name)+ -> Alter-statement 
+
+"CALL" Identifier | Literal
+    ("USING" ((("BY"? "REFERENCE")? (Identifier | ("ADDRESS" "OF" Identifier) | File-name)+) | ("BY"? "CONTENT" ((("LENGTH" "OF")? Identifier) | ("ADDRESS" "OF" Identifier) | Literal)+))+)? ("ON"? "OVERFLOW" Statement-list)? "END-CALL"? -> Call-statement 
+
+"CALL" Identifier | Literal
+    ("USING" ((("BY"? "REFERENCE")? (Identifier | ("ADDRESS" "OF" Identifier) | File-name)+) | ("BY"? "CONTENT" ((("LENGTH" "OF")? Identifier) | ("ADDRESS" "OF" Identifier) | Literal)+))+)? ("ON"? "EXCEPTION" Statement-list)? ("NOT" "ON"? "EXCEPTION" Statement-list)? "END-CALL"? -> Call-statement 
+
+"CANCEL" (Identifier | Literal)+ -> Cancel-statement 
+
+"CLOSE"
+    (File-name (("REEL" | "UNIT" (("FOR"? "REMOVAL") | ("WITH"? "NO" "REWIND"))?) | ("WITH"? ("NO" "REWIND") | "LOCK"))?)+ -> Close-statement 
+
+"CLOSE" (File-name ("WITH"? "LOCK")?)+ -> Close-statement 
+
+"COMPUTE" (Identifier "ROUNDED"?)+ "=" | "EQUAL"
+    Arithmetic-expression
+    ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-COMPUTE"? -> Compute-statement 
+
+"CONTINUE" -> Continue-statement 
+
+"DELETE" File-name "RECORD"? ("INVALID" "KEY"? Statement-list)? ("NOT" "INVALID" "KEY"? Statement-list)? "END-DELETE"? -> Delete-statement 
+
+"DISPLAY" (Identifier | Literal)+ ("UPON" Mnemonic-name | Environment-name)? ("WITH"? "NO" "ADVANCING")? -> Display-statement 
+
+"DIVIDE" Identifier | Literal "INTO" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-DIVIDE"? -> Divide-statement 
+
+"DIVIDE" Identifier | Literal "INTO" Identifier | Literal
+    "GIVING" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-DIVIDE"? -> Divide-statement 
+
+"DIVIDE" Identifier | Literal "BY" Identifier | Literal
+    "GIVING" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-DIVIDE"? -> Divide-statement 
+
+"DIVIDE" Identifier | Literal "INTO" Identifier | Literal
+    "GIVING" Identifier "ROUNDED"? "REMAINDER" Identifier
+    ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-DIVIDE"? -> Divide-statement 
+
+"DIVIDE" Identifier | Literal "BY" Identifier | Literal
+    "GIVING" Identifier "ROUNDED"? "REMAINDER" Identifier
+    ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-DIVIDE"? -> Divide-statement 
+
+"ENTRY" Literal ("USING" Data-name+)? -> Entry-statement 
+
+"EVALUATE" Identifier | Literal | Arithmetic-expression | Condition | "TRUE" | "FALSE" ("ALSO" Identifier | Literal | Arithmetic-expression | Condition | "TRUE" | "FALSE")* (("WHEN" Evaluate-phrase ("ALSO" Evaluate-phrase)*)+ Statement-list)+ ("WHEN" "OTHER" Statement-list)? "END-EVALUATE"? -> Evaluate-statement 
+
+"ANY" | Condition | "TRUE" | "FALSE" | ("NOT"? Identifier | Literal | Arithmetic-expression ("THROUGH" | "THRU" Identifier | Literal | Arithmetic-expression)?) -> Evaluate-phrase 
+
+"EXIT" -> Exit-statement 
+
+"EXIT" "PROGRAM" -> Exit-program-statement 
+
+"GOBACK" -> Goback-statement 
+
+"GO" "TO"? Procedure-name -> Go-to-statement 
+
+"GO" "TO"? "MORE-LABELS" -> Go-to-statement 
+
+"GO" "TO"? Procedure-name+ "DEPENDING" "ON"? Identifier -> Go-to-statement 
+
+"IF" Condition "THEN"? Statement-list | ("NEXT" "SENTENCE")
+    ("ELSE" Statement-list | ("NEXT" "SENTENCE"))? "END-IF"? -> If-statement 
+
+"INITIALIZE" Identifier+ ("REPLACING" ("ALPHABETIC" | "ALPHANUMERIC" | "NUMERIC" | "ALPHANUMERIC-EDITED" | "NUMERIC-EDITED" | "DBCS" | "EGCS" "DATA"? "BY" Identifier | Literal)+)? -> Initialize-statement 
+
+"INSPECT" Identifier "TALLYING"
+    (Identifier "FOR" (("CHARACTERS" Before-after-phrase*) | ("ALL" | "LEADING" (Identifier | Literal Before-after-phrase*)+))+)+ -> Inspect-statement 
+
+"INSPECT" Identifier "CONVERTING" Identifier | Literal "TO"
+    Identifier | Literal Before-after-phrase* -> Inspect-statement 
+
+"INSPECT" Identifier "TALLYING"
+    (Identifier "FOR" (("CHARACTERS" Before-after-phrase*) | ("ALL" | "LEADING" (Identifier | Literal Before-after-phrase*)+))+)+ "REPLACING"
+    (("CHARACTERS" "BY" Identifier | Literal Before-after-phrase*) | ("ALL" | "LEADING" | "FIRST" (Identifier | Literal "BY" Identifier | Literal Before-after-phrase*)+))+ -> Inspect-statement 
+
+"INSPECT" Identifier "REPLACING"
+    (("CHARACTERS" "BY" Identifier | Literal Before-after-phrase*) | ("ALL" | "LEADING" | "FIRST" (Identifier | Literal "BY" Identifier | Literal Before-after-phrase*)+))+ -> Inspect-statement 
+
+"BEFORE" | "AFTER" "INITIAL"? Identifier | Literal -> Before-after-phrase 
+
+"MERGE" File-name ("ON"? "ASCENDING" | "DESCENDING" "KEY"? Qualified-data-name+)+ ("COLLATING"? "SEQUENCE" "IS"? Alphabet-name)? "USING" File-name File-name+ ("OUTPUT" "PROCEDURE" "IS"? Procedure-name ("THROUGH" | "THRU" Procedure-name)?) | ("GIVING" File-name+) -> Merge-statement 
+
+"MOVE" Identifier | Literal "TO" Identifier+ -> Move-statement 
+
+"MOVE" "CORRESPONDING" | "CORR" Identifier "TO" Identifier+ -> Move-statement 
+
+"MULTIPLY" Identifier | Literal "BY" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-MULTIPLY"? -> Multiply-statement 
+
+"MULTIPLY" Identifier | Literal "BY" Identifier | Literal
+    "GIVING" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-MULTIPLY"? -> Multiply-statement 
+
+"OPEN" (("INPUT" (File-name ("REVERSED" | ("WITH"? "NO" "REWIND"))?)+) | ("OUTPUT" (File-name ("WITH"? "NO" "REWIND")?)+) | ("I-O" File-name+) | ("EXTEND" File-name+))+ -> Open-statement 
+
+"OPEN" (("INPUT" File-name+) | ("OUTPUT" File-name+) | ("I-O" File-name+) | ("EXTEND" File-name+))+ -> Open-statement 
+
+"PERFORM"
+    (Procedure-name ("THROUGH" | "THRU" Procedure-name)?) | (Statement-list "END-PERFORM") -> Perform-statement 
+
+"PERFORM" (Procedure-name ("THROUGH" | "THRU" Procedure-name)? Perform-varying-phrase Perform-after-phrase) | (Perform-varying-phrase Statement-list "END-PERFORM") -> Perform-statement 
+
+"PERFORM" (Procedure-name ("THROUGH" | "THRU" Procedure-name)? Identifier | Integer "TIMES") | (Identifier | Integer "TIMES" Statement-list "END-PERFORM") -> Perform-statement 
+
+"PERFORM"
+    (Procedure-name ("THROUGH" | "THRU" Procedure-name)? Perform-until-phrase) | (Perform-until-phrase Statement-list "END-PERFORM") -> Perform-statement 
+
+("WITH"? "TEST" "BEFORE" | "AFTER")? "VARYING" Identifier | Index-name "FROM" Identifier | Index-name | Literal "BY" Identifier | Literal "UNTIL"
+    Condition -> Perform-varying-phrase 
+
+("AFTER" Identifier | Index-name "FROM" Identifier | Index-name | Literal "BY" Identifier | Literal "UNTIL" Condition)* -> Perform-after-phrase 
+
+("WITH"? "TEST" "BEFORE" | "AFTER")? "UNTIL" Condition -> Perform-until-phrase 
+
+"READ" File-name "NEXT"? "RECORD"? ("INTO" Identifier)? ("AT"? "END" Statement-list)? ("NOT" "AT"? "END" Statement-list)? "END-READ"? -> Read-statement 
+
+"READ" File-name "RECORD"? ("INTO" Identifier)? ("KEY" "IS"? Qualified-data-name)? ("INVALID" "KEY"? Statement-list)? ("NOT" "INVALID" "KEY"? Statement-list)? "END-READ"? -> Read-statement 
+
+"RELEASE" Record-name ("FROM" Identifier)? -> Release-statement 
+
+"RETURN" File-name "RECORD"? ("INTO" Identifier)? "AT"? "END" Statement-list ("NOT" "AT"? "END" Statement-list)? "END-RETURN"? -> Return-statement 
+
+"REWRITE" Record-name ("FROM" Identifier)? ("INVALID" "KEY"? Statement-list)? ("NOT" "INVALID" "KEY"? Statement-list)? "END-REWRITE"? -> Rewrite-statement 
+
+"SEARCH" Identifier ("VARYING" Identifier | Index-name)? ("AT"? "END" Statement-list)? ("WHEN" Condition Statement-list | ("NEXT" "SENTENCE"))+ "END-SEARCH"? -> Search-statement 
+
+"SEARCH" "ALL" Identifier ("AT"? "END" Statement-list)? "WHEN" (Qualified-data-name "IS"? ("EQUAL" "TO"?) | "=" Identifier | Literal | Arithmetic-expression) | Condition-name-reference
+    ("AND" (Qualified-data-name "IS"? ("EQUAL" "TO"?) | "=" Identifier | Literal | Arithmetic-expression) | Condition-name-reference)* Statement-list | ("NEXT" "SENTENCE") "END-SEARCH"? -> Search-statement 
+
+"SET" (Index-name | Identifier)+ "TO" Index-name | Identifier | Integer -> Set-statement 
+
+"SET" Index-name+ ("UP" "BY") | ("DOWN" "BY") Identifier | Integer -> Set-statement 
+
+"SET" (Mnemonic-name+ "TO" "ON" | "OFF")+ -> Set-statement 
+
+"SET" Condition-name-reference+ "TO" "TRUE" -> Set-statement 
+
+"SET" (Identifier | ("ADDRESS" "OF" Identifier))+ "TO" Identifier | ("ADDRESS" "OF" Identifier) | "NULL" | "NULLS" -> Set-statement 
+
+"SORT" File-name ("ON"? "ASCENDING" | "DESCENDING" "KEY"? Qualified-data-name+)+ ("WITH"? "DUPLICATES" "IN"? "ORDER"?)? ("COLLATING"? "SEQUENCE" "IS"? Alphabet-name)? ("USING" File-name+) | ("INPUT" "PROCEDURE" "IS"? Procedure-name ("THROUGH" | "THRU" Procedure-name)?)
+    ("GIVING" File-name+) | ("OUTPUT" "PROCEDURE" "IS"? Procedure-name ("THROUGH" | "THRU" Procedure-name)?) -> Sort-statement 
+
+"START" File-name
+    ("KEY" "IS"? ("EQUAL" "TO"?) | "=" | ("GREATER" "THAN"?) | ">" | ("NOT" "LESS" "THAN"?) | ("NOT" "<") | ("GREATER" "THAN"? "OR" "EQUAL" "TO"?) | ">=" Qualified-data-name)? ("INVALID" "KEY"? Statement-list)? ("NOT" "INVALID" "KEY"? Statement-list)? "END-START"? -> Start-statement 
+
+"STOP" "RUN" | Literal -> Stop-statement 
+
+"STRING"
+    ((Identifier | Literal)+ "DELIMITED" "BY"? Identifier | Literal | "SIZE")+ "INTO" Identifier ("WITH"? "POINTER" Identifier)? ("ON"? "OVERFLOW" Statement-list)? ("NOT" "ON"? "OVERFLOW" Statement-list)? "END-STRING"? -> String-statement 
+
+"SUBTRACT" (Identifier | Literal)+ "FROM"
+    (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-SUBTRACT"? -> Subtract-statement 
+
+"SUBTRACT" (Identifier | Literal)+ "FROM" Identifier | Literal
+    "GIVING" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-SUBTRACT"? -> Subtract-statement 
+
+"SUBTRACT" "CORRESPONDING" | "CORR" Identifier "FROM"
+    Identifier "ROUNDED"? ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-SUBTRACT"? -> Subtract-statement 
+
+"UNSTRING" Identifier
+    ("DELIMITED" "BY"? "ALL"? Identifier | Literal ("OR" "ALL"? Identifier | Literal)*)? "INTO"
+    (Identifier ("DELIMITER" "IN"? Identifier)? ("COUNT" "IN"? Identifier)?)+ ("WITH"? "POINTER" Identifier)? ("TALLYING" "IN"? Identifier)? ("ON"? "OVERFLOW" Statement-list)? ("NOT" "ON"? "OVERFLOW" Statement-list)? "END-UNSTRING"? -> Unstring-statement 
+
+"WRITE" Record-name ("FROM" Identifier)? (("BEFORE" | "AFTER" "ADVANCING"? (Identifier | Integer ("LINE" | "LINES")?) | Mnemonic-name | "PAGE")? Write-statement-phrase) | (("INVALID" "KEY"? Statement-list)? ("NOT" "INVALID" "KEY"? Statement-list)?) "END-WRITE"? -> Write-statement 
+
+"WRITE" Record-name ("FROM" Identifier)? ("INVALID" "KEY"? Statement-list)? ("NOT" "INVALID" "KEY"? Statement-list)? "END-WRITE"? -> Write-statement 
+
+"WRITE" Record-name ("FROM" Identifier)? "END-WRITE"? -> Write-statement 
+
+("AT"? "END-OF-PAGE" | "EOP" Statement-list)? ("NOT" "AT"? "END-OF-PAGE" | "EOP" Statement-list)? -> Write-statement-phrase 
+
+Sequence-number? "BASIS" Basis-name | Literal -> Basis-statement 
+
+"CBL" | "PROCESS" Options-list? -> Cbl-process-statement 
+
+"*CONTROL" | "*CBL" ("SOURCE" | "NOSOURCE" | "LIST" | "NOLIST" | "MAP" | "NOMAP")+ "."? -> Control-cbl-statement 
+
+"COPY" Text-name | Literal ("OF" | "IN" Library-name | Literal)? "SUPPRESS"? ("REPLACING" (Copy-operand "BY" Copy-operand)+)? "." -> Copy-statement 
+
+Quoted-pseudo-text | Identifier | Literal | Cobol-word -> Copy-operand 
+
+Sequence-number? "DELETE" Sequence-number-field -> Delete-compiler-directing-statement 
+
+"EJECT" "."? -> Eject-statement 
+
+"ENTER" Language-name Routine-name? "." -> Enter-statement 
+
+Sequence-number? "INSERT" Sequence-number-field -> Insert-statement 
+
+"READY" | "RESET" "TRACE" "." -> Ready-or-reset-trace-statement 
+
+"REPLACE" (Quoted-pseudo-text "BY" Quoted-pseudo-text)+ "." -> Replace-statement 
+
+"REPLACE" "OFF" "." -> Replace-statement 
+
+"SERVICE" "LABEL" -> Service-label-statement 
+
+"SERVICE" "RELOAD" Identifier -> Service-reload-statement 
+
+"SKIP1" | "SKIP2" | "SKIP3" "."? -> Skip1-2-3-statement 
+
+"TITLE" Literal "."? -> Title-statement 
+
+"USE" "GLOBAL"? "AFTER" "STANDARD"? "EXCEPTION" | "ERROR" "PROCEDURE"
+    "ON"? File-name+ | "INPUT" | "OUTPUT" | "I-O" | "EXTEND" -> Use-statement 
+
+"USE" "GLOBAL"? "AFTER" "STANDARD"? ("BEGINNING" | "ENDING")? ("FILE" | "REEL" | "UNIT")? "LABEL" "PROCEDURE" "ON"? File-name+ | "INPUT" | "OUTPUT" | "I-O" | "EXTEND" -> Use-statement 
+
+"USE" "FOR"? "DEGUGGING" "ON"? Procedure-name+ | ("ALL" "PROCEDURES") -> Use-statement 
+
+module Conditions imports DataReference ArithmeticExpressions Names exports
+		  sorts Condition Combinable-condition Simple-condition Class-condition Condition-name-condition Relation-condition Relational-operator Sign-condition Switch-status-condition Combined-conditions Negated-simple-conditions Abbreviated-combined-relation-conditions Abbreviation-rest Abbreviation-leaf
+
+context-free syntax
+
+Combinable-condition
+ | Combined-conditions -> Condition 
+
+Simple-condition 
+ | Negated-simple-conditions 
+ | Abbreviated-combined-relation-conditions -> Combinable-condition 
+
+Class-condition
+ | Condition-name-condition
+ | Relation-condition
+ | Sign-condition
+ | Switch-status-condition 
+ | ("(" Condition ")") -> Simple-condition 
+
+Identifier "IS"? "NOT"? "NUMERIC" | "ALPHABETIC" | "ALPHABETIC-LOWER" | "ALPHABETIC-UPPER" | Class-name | "DBCS" | "KANJI" -> Class-condition 
+
+Condition-name-reference -> Condition-name-condition 
+
+Arithmetic-expression Relational-operator Arithmetic-expression -> Relation-condition 
+
+"IS"? ("NOT"? ("GREATER" "THAN"?)
+    | ">"
+    | ("LESS" "THAN"?)
+    | "<" 
+    | ("EQUAL" "TO"?)
+    | "=")
+  | ("GREATER" "THAN"? "OR" "EQUAL" "TO"?)
+  | ">="
+  | ("LESS" "THAN"? "OR" "EQUAL" "TO"?)
+  | ("<" "=") -> Relational-operator 
+
+Arithmetic-expression "IS"? "NOT"? "POSITIVE" | "NEGATIVE" | "ZERO" -> Sign-condition 
+
+Condition-name-reference -> Switch-status-condition 
+
+Combinable-condition ("AND" | "OR" Combinable-condition)+ -> Combined-conditions 
+
+"NOT" Combinable-condition -> Negated-simple-conditions 
+
+Relation-condition Abbreviation-rest -> Abbreviated-combined-relation-conditions 
+
+Arithmetic-expression Relational-operator
+ "(" "NOT"? Arithmetic-expression Abbreviation-rest ")" -> Abbreviated-combined-relation-conditions 
+
+Arithmetic-expression 
+ "(" Relational-operator Arithmetic-expression Abbreviation-rest ")" -> Abbreviated-combined-relation-conditions 
+
+("AND"|"OR" Relational-operator? Abbreviation-leaf)+ -> Abbreviation-rest 
+
+Arithmetic-expression
+  | ("(" Arithmetic-expression Abbreviation-rest ")") -> Abbreviation-leaf 
+
+module DataReference imports ArithmeticExpressions Names Lexical-Sorts exports
+		  sorts Procedure-name Identifier Condition-name-reference Subscript Qualified-data-name Leftmost-character-position Length
+
+context-free syntax
+
+Paragraph-name ("IN" | "OF" Section-name)? -> Procedure-name 
+
+Section-name -> Procedure-name 
+
+Qualified-data-name ("(" Subscript ")")* ("(" Leftmost-character-position ":" Length? ")")? -> Identifier 
+
+"LINAGE-COUNTER" ("IN" | "OF" File-name)? -> Identifier 
+
+Condition-name ("IN" | "OF" Data-name)* ("IN" | "OF" File-name)? ("(" Subscript ")")* -> Condition-name-reference 
+
+Condition-name ("IN" | "OF" Mnemonic-name)* -> Condition-name-reference 
+
+( Integer
+   | (Qualified-data-name ("+"|"-" Integer)?)
+   | (Index-name ("+"|"-" Integer)?)
+   )+ -> Subscript 
+
+Data-name ("IN"|"OF" Data-name)* ("IN"|"OF" File-name)? -> Qualified-data-name 
+
+Special-register -> Qualified-data-name 
+
+Arithmetic-expression -> Leftmost-character-position 
+
+Arithmetic-expression -> Length 
+
+module ArithmeticExpressions imports DataReference Names exports
+		  sorts Arithmetic-expression Times-div Power Basis
+
+context-free syntax
+
+Times-div ("+" | "-" Times-div)* -> Arithmetic-expression 
+
+Power ("*" | "/" Power)* -> Times-div 
+
+( "+" | "-" )? Basis ("**" Basis)* -> Power 
+
+Identifier
+ | Literal
+ | ("(" Arithmetic-expression ")") -> Basis 
+
+module Names imports DataReference Lexical-Sorts exports
+		  sorts Alphabet-name Class-name Condition-name Data-name File-name Index-name Mnemonic-name Record-name Routine-name Symbolic-character Library-name Program-name Text-name Paragraph-name Section-name Computer-name Language-name Environment-name Assignment-name Basis-name Figurative-constant Literal Special-register
+
+context-free syntax
+
+Alphabetic-user-defined-word -> Alphabet-name 
+
+Alphabetic-user-defined-word -> Class-name 
+
+Alphabetic-user-defined-word -> Condition-name 
+
+Alphabetic-user-defined-word -> Data-name 
+
+Alphabetic-user-defined-word -> File-name 
+
+Alphabetic-user-defined-word -> Index-name 
+
+Alphabetic-user-defined-word -> Mnemonic-name 
+
+Qualified-data-name -> Record-name 
+
+Alphabetic-user-defined-word -> Routine-name 
+
+Alphabetic-user-defined-word -> Symbolic-character 
+
+User-defined-word -> Library-name 
+
+User-defined-word -> Program-name 
+
+User-defined-word -> Text-name 
+
+User-defined-word -> Paragraph-name 
+
+User-defined-word -> Section-name 
+
+System-name -> Computer-name 
+
+System-name -> Language-name 
+
+System-name -> Environment-name 
+
+System-name -> Assignment-name 
+
+Program-name -> Basis-name 
+
+"ZERO" | "ZEROS" | "ZEROES"
+   | "SPACE" | "SPACES"
+   | "HIGH-VALUE" | "HIGH-VALUES" 
+   | "LOW-VALUE" | "LOW-VALUES"
+   | "QUOTE" | "QUOTES"
+   | ( "ALL" Literal )
+   | "NULL" | "NULLS" -> Figurative-constant 
+
+Nonnumeric
+   | Numeric
+   | Dbcs
+   | Figurative-constant -> Literal 
+
+( "ADDRESS" "OF" Data-name )
+ | "DEBUG-ITEM"
+ | ( "LENGTH" "OF" Identifier )
+ | "RETURN-CODE"
+ | "SHIFT-OUT"
+ | "SHIFT-IN"
+ | "SORT-CONTROL" 
+ | "SORT-CORE-SIZE"
+ | "SORT-FILE-SIZE"
+ | "SORT-MESSAGE"
+ | "SORT-MODE-SIZE"
+ | "SORT-RETURN"
+ | "TALLY"
+ | "WHEN-COMPILED" -> Special-register 
+
+module Lexical-Sorts exports
+
+   sorts Comment-entry Options-list Sequence-number Sequence-number-field System-name User-defined-word Alphabetic-user-defined-word Cobol-word Integer Level-number Nonnumeric Numeric Picture-string Currency Picchrs Repeat Punct Priority-number Quoted-pseudo-text Zero Dot
+
+lexical syntax
+     -> Comment-entry 
+
+ -> Options-list 
+
+ -> Sequence-number 
+
+ -> Sequence-number-field 
+
+Cobol-word -> System-name 
+
+Cobol-word -> User-defined-word 
+
+[0-9\-]* [A-Za-z] [A-Za-z0-9\-]* -> Alphabetic-user-defined-word 
+
+[A-Za-z0-9]+ ([\-]+ [A-Za-z0-9]+)* -> Cobol-word 
+
+[0]* [1-9] [0-9]* -> Integer 
+
+[0]? [1-9] -> Level-number 
+
+[1-4] [0-9] -> Level-number 
+
+"66" -> Level-number 
+
+"77" -> Level-number 
+
+"88" -> Level-number 
+
+[\"] (~[\"] | ([\"] [\"]))* [\"] -> Nonnumeric 
+
+[\'] (~[\'] | ([\'] [\']))* [\'] -> Nonnumeric 
+
+[\+\-]? (([0-9]* [\.\,] [0-9]+) | [0-9]+) -> Numeric 
+
+Currency? (Picchrs Repeat?)+ (Punct (Picchrs Repeat?)+)* -> Picture-string 
+
+~[0-9ABCDPRSVXZa-z\*\+\-\/\,\.\;\(\)\=\'\"\ \n] -> Currency 
+
+([ABEGPSVXZabegpsvxz90\+\-\*\$] | "CR" | "DB")+ -> Picchrs 
+
+"(" [0-9]+ ")" -> Repeat 
+
+[\/\,\.\:] -> Punct 
+
+[0-9] [0-9]? -> Priority-number 
+
+"==" ~[\=]* "==" -> Quoted-pseudo-text 
+
+[0]+ -> Zero 
+
+". " -> Dot 
+
+".\n" -> Dot 
+
+lexical restrictions
+    Alphabetic-user-defined-word  -/- [A-Za-z0-9\-]
+    Cobol-word                    -/- [A-Za-z0-9\-]
+    Integer                       -/- [0-9]
+    Numeric                       -/- [0-9]
+    Picchrs                       -/- [ABCDEGPSVXZabegpsvxz90\+\-\*\$]
+    Zero                          -/- [0]
+
+module Layout exports
+
+   lexical syntax
+    "%" ~[\n]* [\n]    -> LAYOUT
+    [\ \t\n]           -> LAYOUT
+    ", "               -> LAYOUT
+    ",\n"              -> LAYOUT
+
+    "SKIP1"             -> LAYOUT
+    "SKIP2"             -> LAYOUT
+    "SKIP3"             -> LAYOUT
+    "EJECT"             -> LAYOUT
+
+   
+
+context-free restrictions
+    LAYOUT? -/- [\,\ \t\n\%]
+
+module Main imports Layout Lexical-Sorts Syntax 

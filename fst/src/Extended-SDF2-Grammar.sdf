@@ -1,0 +1,74 @@
+module Extended-SDF2-Grammar
+
+imports Main
+
+exports
+
+sorts Sorts Literals Modules ModuleNames Error Production SDF
+
+context-free syntax
+
+  Sort* -> Sorts
+  Literal* -> Literals
+  Module* -> Modules
+  ModuleName* -> ModuleNames
+  ImpSection* -> ImpSections
+  "undefined" -> Error
+  Error -> Production
+  Error -> SDF
+
+  "//" Symbol -> Symbol
+  Symbol "//" -> Symbol {prefer}
+
+  "removeLinebreaks" "(" SDF ")" -> SDF {traverse}
+  "removeLinebreaks" "(" Symbols ")" -> Symbols {traverse}
+  "removeLinebreaks" "(" Symbol ")" -> Symbol {traverse}
+
+context-free priorities
+
+     Symbol "//" -> Symbol >
+     "//" Symbol -> Symbol >
+    {Symbol "?"               -> Symbol
+    Symbol "*"                -> Symbol
+    Symbol "+"                -> Symbol
+    Symbol NatCon "+"         -> Symbol} >
+    Symbol "#" Symbol         -> Symbol  >
+    Symbol "|" Symbol         -> Symbol 
+
+variables
+
+  "&SDF" [0-9]+ -> SDF
+  "&Definition" [0-9]+ -> Definition
+  "&Module" [0-9]+ -> Module
+  "&Module*" [0-9]+ -> Module*
+  "&Modules"[0-9]+ -> Modules
+  "&ModuleName" [0-9]+ -> ModuleName
+  "&ModuleName+" [0-9]+ -> ModuleName+
+  "&ModuleName*" [0-9]+ -> ModuleName*
+  "&ModuleNames" [0-9]+ -> ModuleNames
+  "&ImpSection*" [0-9]+ -> ImpSection*
+  "&ImpSections" [0-9]+ -> ImpSections
+  "&ImpSection" [0-9]+ -> ImpSection
+  "&Imports" [0-9]+ -> Imports
+  "&Import" [0-9]+ -> Import
+  "&Import*" [0-9]+ -> Import*
+  "&Sections" [0-9]+ -> Sections
+  "&Grammar"  [0-9]+ -> Grammar
+  "&Production"  [0-9]+ -> Production
+  "&Production*"  [0-9]+ -> Production*
+  "&Production+"  [0-9]+ -> Production+
+  "&Productions"  [0-9]+ -> Productions
+  "&Sort" [0-9]+ -> Sort 
+  "&Sort?" [0-9]+ -> Sort? 
+  "&Sort+" [0-9]+ -> Sort+
+  "&Sort*" [0-9]+ -> Sort*
+  "&Sorts" [0-9]+ -> Sorts
+  "&Literal" [0-9]+ -> Literal 
+  "&Literal*" [0-9]+ -> Literal*
+  "&Literals" [0-9]+ -> Literals
+  "&Symbol" [0-9]+ -> Symbol
+  "&Symbol+" [0-9]+ -> Symbol+
+  "&Symbols" [0-9]+ -> Symbols
+  "&Symbol*" [0-9]+ -> Symbol*
+  "&Attributes" [0-9]+ -> Attributes
+  

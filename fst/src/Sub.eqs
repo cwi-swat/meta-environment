@@ -1,0 +1,15 @@
+equations
+
+[sub-1] &Module0= module &ModuleName0 &ImpSection*0 &Sections0,
+	focused(&ModuleName0,&Focus0)=false
+	========================================================
+	sub(&Module0, &Focus0 , &Production0)=&Module0
+
+[sub-2] &Productions0=&Production*0 &Production1 &Production*1,
+	&Production0=&Symbols0 -> &Sort0 &Attributes0,
+	&Production1=&Symbols1 -> &Sort0 &Attributes0,
+	removeLinebreaks(&Symbols0)=removeLinebreaks(&Symbols1),
+	&Productions1=&Production*0 &Production*1
+	=======================================================
+        sub(&Productions0,&Focus0,&Production0)=&Productions1
+

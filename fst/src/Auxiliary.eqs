@@ -1,0 +1,307 @@
+equations
+
+[SortBefore-1] &Sort1=before(&SDF0,,&Sort0)
+	       ===============================
+	       SortBefore(&SDF0,&Sort0)=&Sort1
+
+[default-SortBefore-2] SortBefore(&SDF0,&Sort0)=&Sort0
+
+[before-1] &Productions0=&Production*0 &Production0 &Production1 &Production*2,
+	   &Production0=&Symbols0 -> &Sort1 &Attributes0,
+	   &Production1=&Symbols1 -> &Sort0 &Attributes1,
+	   &Sort0!=&Sort1
+	   ====================================================================
+	   before(&Productions0, ,&Sort0)=&Sort1
+
+[definedSorts-1] definedSorts(&SDF0,&Focus0)= definedSorts(&SDF0,,&Focus0)
+
+[definedS-1] &Module0= module &ModuleName0 &ImpSection*0 &Sections0,
+	     focused(&ModuleName0,&Focus0)=false
+	     =============================================================
+	     definedSorts(&Module0,&Sorts0,&Focus0)=&Sorts0
+
+[definedS-2] &Production0=&Symbols1 -> &Sort0 &Attributes0,
+ 	     focused(&Sort0,&Focus0)=false
+	     ==================================================
+	     definedSorts(&Production0,&Sorts0,&Focus0)=&Sorts0
+
+[default-definedS-3] &Production0=&Symbols1 -> &Sort0 &Attributes0,
+	 	     &Sorts0=&Sort*1 &Sort0 &Sort*2		
+		     ==================================================
+		     definedSorts(&Production0,&Sorts0,&Focus0)=&Sorts0
+
+[default-definedS-4] &Production0=&Symbols1 -> &Sort0 &Attributes0,
+	 	     &Sorts0=&Sort*1,
+		     &Sorts1=&Sort*1 &Sort0
+		     ==================================================
+		     definedSorts(&Production0,&Sorts0,&Focus0)=&Sorts1
+
+[usedSorts-1] usedSorts(&SDF0,&Focus0)= usedSorts(&SDF0,,&Focus0)
+
+[usedS-1] &Module0= module &ModuleName0 &ImpSection*0 &Sections0,
+	  focused(&ModuleName0,&Focus0)=false
+	  =======================================================
+	  usedSorts(&Module0,&Sorts0,&Focus0)=&Sorts0
+
+[usedS-2] &Production0=&Symbols1 -> &Sort0 &Attributes0,
+ 	  focused(&Sort0,&Focus0)=false
+	  ===============================================
+	  usedSorts(&Production0,&Sorts0,&Focus0)=&Sorts0
+
+[default-usedS-3] &Production0=&Symbols0 -> &Sort0 &Attributes0,
+		  &Sorts1=usedSorts(&Symbols0,&Sorts0,&Focus0)
+		  ===============================================
+		  usedSorts(&Production0,&Sorts0,&Focus0)=&Sorts1
+
+[usedS-4] &Sorts0=&Sort*1 &Sort0 &Sort*2
+	  =========================================
+	  usedSorts(&Sort0,&Sorts0,&Focus0)=&Sorts0
+
+[default-usedS-5] &Sorts0=&Sort*1,
+		  &Sorts1=&Sort*1 &Sort0
+		  =========================================
+		  usedSorts(&Sort0,&Sorts0,&Focus0)=&Sorts1
+
+[reachableSorts-1] reachableSorts(&SDF0,&Focus0)=
+		   reachable(&SDF0,,&Focus0,&SDF0)
+
+[reachable-1] &Module0= module &ModuleName0 &ImpSection*0 &Sections0,
+	      focused(&ModuleName0,&Focus0)=false
+	      =======================================================
+	      reachable(&Module0,&Sorts0,&Focus0,&SDF0)=&Sorts0
+
+[reachable-2] &Production0=&Symbols0 -> &Sort0 &Attributes0,
+	      focused(&Sort0,&Focus0)=false
+	      =====================================================
+	      reachable(&Production0,&Sorts0,&Focus0,&SDF0)=&Sorts0
+
+[default-reachable-3] &Production0=&Symbols0 -> &Sort0 &Attributes0,
+		      &Sorts1=reachable(&Symbols0,&Sorts0,&Focus0,&SDF0)
+		      =====================================================
+		      reachable(&Production0,&Sorts0,&Focus0,&SDF0)=&Sorts1
+
+[reachable-4] &Sorts0=&Sort*0 &Sort0 &Sort*1
+	      ===============================================
+	      reachable(&Sort0,&Sorts0,&Focus0,&SDF0)=&Sorts0
+
+[default-reachable-5] &Sorts0=&Sort*0,
+		      &Sorts1=&Sort*0 &Sort0,
+		      &Sorts2=reachable(&SDF0,
+			                &Sorts1,
+					modules all sorts &Sort0,
+					&SDF0)
+		      ===============================================
+		      reachable(&Sort0,&Sorts0,&Focus0,&SDF0)=&Sorts2
+
+[top-1]
+
+&Focus0=modules all sorts all,
+&Focus1=modules all sorts &Sort0
+==================================================================
+topSorts( &SDF0,&Sort0)=difference(usedSorts(&SDF0,&Focus0),
+				   reachableSorts(&SDF0,&Focus1))
+
+
+[focusedRules-1] focusedRules(&SDF0,&Focus0)=rulesS(&SDF0, ,&Focus0)
+
+[rulesS-1] &Focus0=modules &ModuleFocus0 sorts &Sort0 &Sort+0,
+	   &Focus1=modules &ModuleFocus0 sorts &Sort0,
+	   &Focus2=modules &ModuleFocus0 sorts &Sort+0,
+	   &Productions1=rulesM(&SDF0,&Productions0,&Focus1),
+	   &Productions2=rulesS(&SDF0,&Productions1,&Focus2)
+	   ===================================================
+	   rulesS(&SDF0,&Productions0,&Focus0)=&Productions2
+
+[default-rulesS-2] &Productions1=rulesM(&SDF0,&Productions0,&Focus0)
+		   =================================================
+		   rulesS(&SDF0,&Productions0,&Focus0)=&Productions1
+
+[rulesM-1] &Focus0=modules &ModuleName0 &ModuleName+0 sorts &SortFocus0,
+	   &Focus1=modules &ModuleName0 sorts &SortFocus0,
+	   &Focus2=modules &ModuleName+0 sorts &SortFocus0,
+	   &Productions1=rules(&SDF0,&Productions0,&Focus1),
+	   &Productions2=rulesM(&SDF0,&Productions1,&Focus2)
+	   =============================================================
+	   rulesM(&SDF0,&Productions0,&Focus0)=&Productions2
+
+[default-rulesM-2] &Productions1=rules(&SDF0,&Productions0,&Focus0)
+		   =================================================
+		   rulesM(&SDF0,&Productions0,&Focus0)=&Productions1
+
+[rules-2] &Module0= module &ModuleName0 &ImpSection*0 &Sections0,
+	  focused(&ModuleName0,&Focus0)=false
+	  =======================================================
+	  rules(&Module0,&Productions0,&Focus0)=&Productions0
+
+[rules-3] &Focus0= modules &ModuleFocus0 sorts all,
+	  &Productions0=&Production*0,
+	  &Productions1=&Production*1,
+	  &Productions2=&Production*1 &Production*0
+	  =========================================================
+	  rules(&Productions0,&Productions1,&Focus0)= &Productions2
+
+[rules-4] &Production0=&Symbols1 -> &Sort0 &Attributes0,
+	  focused(&Sort0,&Focus0)=true,
+	  &Productions1=&Production*1,
+	  &Productions2=&Production*1 &Production0
+	  =======================================================
+	  rules(&Production0,&Productions1,&Focus0)=&Productions2
+
+[ModuleBefore-1] &Modules0=&Module*0,
+	 	 &Modules0=&Module*1 &Module0 &Module1 &Module*2,
+	 	 &Module0=module &ModuleName0 &ImpSection*0 &Sections0,
+	 	 &Module1=module &ModuleName1 &ImpSection*1 &Sections1,
+	 	 &ModuleName0!=&ModuleName1
+	 	 ============================================================
+	 	 ModuleBefore(definition &Module*0,&ModuleName0)=&ModuleName1
+
+[definingModules-1] definingModules(&SDF0,&Sorts0)=
+		    definingModules(&SDF0, ,&Sorts0)
+
+[definingM-1] &Module0=module &ModuleName0 &ImpSection*0 &Sections0,
+	      &ModuleNames0=&ModuleName*0 &ModuleName0 &ModuleName*1
+	      ===============================================================
+	      definingModules(&Module0, &ModuleNames0, &Sorts0)=&ModuleNames0
+
+[default-definingM-2] &Module0=module &ModuleName0 &ImpSection*0 &Sections0,
+	 	      &ModuleName*0=&ModuleNames0,
+	 	      &ModuleName*1=definingModules(&Sections0,
+						    &ModuleName0,
+						    &Sorts0),
+	 	      &ModuleNames1=&ModuleName*0 &ModuleName*1
+	 	      ======================================================
+	 	      definingModules(&Module0, &ModuleNames0, &Sorts0)=
+		      &ModuleNames1
+
+[definingM-3] &Productions0=&Production*0 &Production0 &Production*1,
+	      &Production0=&Symbols0 -> &Sort0 &Attributes0,
+	      &Sorts0=&Sort*0 &Sort0 &Sort*1
+	      =======================================================
+	      definingModules(&Productions0, &ModuleName0, &Sorts0)=
+	      &ModuleName0
+
+[definingM-4] &Sections0=
+	      =======================================================
+	      definingModules(&Sections0, &ModuleName0, &Sorts0)=
+	      
+
+[default-definingM-5] definingModules(&Productions0, &ModuleName0, &Sorts0)=
+
+[bracket-1] bracket( )=()
+
+[bracket-2] bracket(&Symbol0)=&Symbol0
+
+[bracket-3] bracket(&Symbol0 &Symbol+0)=(&Symbol0 &Symbol+0)
+
+[unbracket-1] unbracket [()]=
+
+[unbracket-2] unbracket [(&Symbol0)]=&Symbol0
+
+[unbracket-3] unbracket [(&Symbol0 &Symbol+0)]=&Symbol0 &Symbol+0
+
+[default-unbracket-4] unbracket [&Symbol0]=&Symbol0
+
+[last-1]
+
+&Module0=module &ModuleName0 &ImpSection*0 &Sections0,
+focused(&ModuleName0,&Focus1)=false
+======================================================
+last(&Module0,&Focus0,&Focus1)=&Focus0
+
+[last-2]
+
+&Production0=&Symbols0 -> &Sort0 &Attributes0,
+focused(&Sort0,&Focus1)=true,
+&Focus1=modules &ModuleFocus0 sorts &SortFocus0,
+&Focus2=modules &ModuleFocus0 sorts &Sort0
+======================================================
+last(&Production0,&Focus0,&Focus1)=&Focus2
+
+[pre-1] pre(sorts &Symbols0)=sorts 
+
+[pre-2] &Sections1=pre(&Sections0),
+	reservedModuleName(&ModuleName0)=false
+	==================================================
+	pre(module &ModuleName0 &ImpSection*0 &Sections0)=
+	module &ModuleName0 &Sections1
+
+[post-1] &Module0=module &ModuleName0 &ImpSection*0 &Sections0,
+	 reservedModuleName(&ModuleName0)=false,
+	 &Sorts1=usedSorts(&SDF0,modules &ModuleName0 sorts all),
+	 &ModuleNames0=definingModules(&SDF0,&ModuleName0,&Sorts1),
+	 &ModuleNames0=&ModuleName0 &ModuleName+0,
+	 &Imports0=convert(&ModuleName+0),
+	 &Sorts2=definedSorts(&SDF0,modules &ModuleName0 sorts all),
+	 &Sections1=post(&Sections0,&Sorts2,&SDF0),
+	 &Module1=module &ModuleName0 imports &Imports0 &Sections1
+	 ===========================================================
+	 post(&Module0,&Sorts0,&SDF0)=&Module1
+
+[default-post-2] &Module0=module &ModuleName0 &ImpSection*0 &Sections0,
+		 reservedModuleName(&ModuleName0)=false,
+		 &Sorts2=definedSorts(&SDF0,modules &ModuleName0 sorts all),
+		 &Sections1=post(&Sections0,&Sorts2,&SDF0),
+		 &Module1=module &ModuleName0 &Sections1
+		 ===========================================================
+		 post(&Module0,&Sorts0,&SDF0)=&Module1
+
+[default-post-3] &Module0=module &ModuleName0 &ImpSection*0 &Sections0,
+		 reservedModuleName(&ModuleName0)=true,
+		 &Sections1=post(&Sections0,,&SDF0),
+		 &Module1=module &ModuleName0 &ImpSection*0 &Sections1
+		 ===========================================================
+		 post(&Module0,&Sorts0,&SDF0)=&Module1
+
+[post-3] &Symbols0=convert(&Sorts0)
+	 ==========================================
+	 post(sorts ,&Sorts0,&SDF0)=sorts &Symbols0 
+
+[post-4] post(context-free syntax &Productions0 ,&Sorts0,&SDF0)=
+
+context-free syntax
+
+&Productions0
+
+[convert-1] convert(&ModuleName0)=&ModuleName0
+
+[convert-2] &Import*0=convert(&ModuleName+0)
+	    ==========================================================
+	    convert(&ModuleName0 &ModuleName+0)=&ModuleName0 &Import*0
+
+[convert2-1] &Symbol*0= ,
+	     &Sort*0= 
+	     =============================
+	     convert(&Sort*0 )=&Symbol*0 
+
+[convert2-2] &Symbol*0=convert(&Sort*0)
+	    =========================================
+	    convert(&Sort0 &Sort*0)=&Sort0 &Symbol*0
+
+
+[resMN-1] 
+
+&ModuleName*0 &ModuleName0 &ModuleName*1=Main Disambiguation
+==================================================================
+reservedModuleName(&ModuleName0)=true
+
+[default-resMN-2] 
+
+reservedModuleName(&ModuleName0)=false
+
+[diff-1]
+
+difference( ,&Sorts0)=
+
+[diff-2]
+
+&Sorts0=&Sort*1 &Sort0 &Sort*2
+=========================================================
+difference(&Sort0 &Sort*0 ,&Sorts0)=difference(&Sort*0,&Sorts0)
+
+[default-diff-2]
+
+&Sort*1=difference(&Sort*0,&Sorts0),
+&Sorts1=&Sort0 &Sort*1
+===========================================
+difference(&Sort0 &Sort*0 ,&Sorts0)=&Sorts1 
+

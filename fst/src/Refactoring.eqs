@@ -1,0 +1,57 @@
+equations
+
+[ren-1] rename &Sort0 to &Sort1 = 
+	guard fresh sort &Sort1 ; 
+	substitute &Sort0 by &Sort1 effectively; 
+	guard fresh sort &Sort0
+
+[fold-1] &Symbols1=IY(&SymbolsYielder0,&SDF0,&Focus0)
+	 ====================================================
+	 IT(fold &SymbolsYielder0 to &Sort0,&SDF0,&Focus0) = 
+	 IT(guard fresh sort &Sort0 ;
+	    replace &Symbols1 by &Sort0 effectively ;
+	    add &Symbols1 -> &Sort0,
+	 &SDF0,&Focus0)
+
+[unfold-1] unfold &Sort0 = 
+	   replace &Sort0 by definition of &Sort0 effectively
+
+[intro-1] introduce &Sort0 as &SymbolsYielder0 =
+	  guard fresh sort &Sort0; 
+	  add &SymbolsYielder0 -> &Sort0 effectively
+
+[elim-1] eliminate &Sort0 =
+	 guard defined sort &Sort0;
+	 focus on sort &Sort0 do reset;
+	 guard fresh sort &Sort0
+
+[elim-2] eliminate module &ModuleName0= 
+	 guard not empty module &ModuleName0;
+	 delete module &ModuleName0 
+
+[r-uni-1] equate &Sort0 to &Sort1 = 
+	  guard definition of &Sort0 equiv definition of &Sort1;
+	  focus on sort &Sort0 do reset;
+	  substitute &Sort0 by &Sort1 effectively;
+	  guard fresh sort &Sort0
+
+[simpl-1] simplify &SymbolsYielder0 to &SymbolsYielder1 = 
+	  guard &SymbolsYielder1 equiv &SymbolsYielder0; 
+	  replace &SymbolsYielder0 by &SymbolsYielder1 effectively
+
+[dis-1] disambiguate &SymbolsYielder0 in &Sort0=
+	sub &SymbolsYielder0 -> &Sort0 effectively;
+	guard &Sort0 covers &SymbolsYielder0
+
+[rml] IT(remove line breaks,&SDF0,&Focus0)=removeLinebreaks(&SDF0)
+
+[min-1]
+
+&Sort+0=topSorts(&SDF0,&Sort0),
+&Focus1=modules all sorts &Sort+0
+=============================================================
+IT(minimalize &Sort0, &SDF0,&Focus0)=IT(reset,&SDF0,&Focus1)
+
+[default-min-2]
+
+IT(minimalize &Sort0, &SDF0,&Focus0)=IT(id,&SDF0,&Focus0)

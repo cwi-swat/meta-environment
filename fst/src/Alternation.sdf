@@ -1,0 +1,23 @@
+module Alternation
+
+imports Combinators
+
+exports
+
+sorts Trafo
+
+context-free syntax
+
+  "alternate" -> Trafo
+  "dealternate" -> Trafo
+  "split" SymbolsYielder "in" ProductionYielder -> Trafo
+
+hiddens
+
+context-free syntax
+
+  "alternate" "(" SDF "," Sort+ "," ModuleFocus ")" -> SDF
+  "dealternate" "(" SDF "," Sort+ "," ModuleFocus ")" -> SDF
+  "or" "(" Production+ ")" -> Symbol
+  "deor" "(" SDF "," Symbol "," Sort "," ModuleFocus ")" -> SDF
+  "update" "(" SDF "," Production+ "," Symbol "," ModuleFocus ")" -> SDF

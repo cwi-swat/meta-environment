@@ -1,0 +1,111 @@
+equations
+
+[apply-1] &SDF1=pre(&SDF0),
+	  &SDF2=IT(&Trafo0, &SDF1, modules all sorts all),
+	  &SDF3=post(&SDF2,,&SDF2)
+	  ================================================
+	  apply &Trafo0 at &SDF0=&SDF3
+
+[pre-1] pre(sorts &Symbols0)=sorts 
+
+[pre-2] &Sections1=pre(&Sections0)
+	==================================================
+	pre(module &ModuleName0 &ImpSection*0 &Sections0)=
+	module &ModuleName0 &Sections1
+
+[post-1] &Module0=module &ModuleName0 &ImpSection*0 &Sections0,
+	 &Sorts1=usedSorts(&SDF0,modules &ModuleName0 sorts all),
+	 &ModuleNames0=definingModules(&SDF0,&ModuleName0,&Sorts1),
+	 &ModuleNames0=&ModuleName0 &ModuleName+0,
+	 &Imports0=convert(&ModuleName+0),
+	 &Sorts2=definedSorts(&SDF0,modules &ModuleName0 sorts all),
+	 &Sections1=post(&Sections0,&Sorts2,&SDF0),
+	 &Module1=module &ModuleName0 imports &Imports0 &Sections1
+	 ===========================================================
+	 post(&Module0,&Sorts0,&SDF0)=&Module1
+
+[default-post-2] &Module0=module &ModuleName0 &ImpSection*0 &Sections0,
+		 &Sorts2=definedSorts(&SDF0,modules &ModuleName0 sorts all),
+		 &Sections1=post(&Sections0,&Sorts2,&SDF0),
+		 &Module1=module &ModuleName0 &Sections1
+		 ===========================================================
+		 post(&Module0,&Sorts0,&SDF0)=&Module1
+
+[post-3] &Symbols0=convert(&Sorts0)
+	 ==========================================
+	 post(sorts ,&Sorts0,&SDF0)=sorts &Symbols0 
+
+[post-4] post(context-free syntax &Productions0 ,&Sorts0,&SDF0)=
+
+context-free syntax
+
+&Productions0
+
+[convert-1] convert(&ModuleName0)=&ModuleName0
+
+[convert-2] &Import*0=convert(&ModuleName+0)
+	    ==========================================================
+	    convert(&ModuleName0 &ModuleName+0)=&ModuleName0 &Import*0
+
+[convert2-1] &Symbol*0= ,
+	     &Sort*0= 
+	     =============================
+	     convert(&Sort*0 )=&Symbol*0 
+
+[convert2-2] &Symbol*0=convert(&Sort*0)
+	    =========================================
+	    convert(&Sort0 &Sort*0)=&Sort0 &Symbol*0
+
+[pp-0]	&SDF0=definition &Module*0,
+	&Modules0=&Module*0,
+	&Module*1=pp(&Modules0),
+	&SDF1=definition
+
+&Module*1
+	===========================
+	pp(&SDF0)=&SDF1
+
+[pp-1]  &Modules0=&Module0 &Module*1,
+	&Module*2=pp(&Module*1),
+	pp(&Module0)=&Module1,
+	&Modules2=&Module1
+
+&Module*2
+	========================
+	pp(&Modules0)=&Modules2
+
+[pp-2]  &Productions0=&Production0 &Production*1,
+	&Production0=&Symbols0 -> &Sort0 &Attributes0,
+	&Production1=pp(&Symbols0) -> &Sort0 &Attributes0,
+	 &Production*1=&Productions1,
+	pp(&Productions1)=&Production*2
+	========================
+	 pp(&Productions0)=&Production1 
+
+&Production*2 
+
+[pp-3]  &Grammar2=pp(&Grammar0),
+	&Grammar3=pp(&Grammar1)
+	========================
+	 pp(&Grammar0 &Grammar1)=&Grammar2
+
+&Grammar3
+
+[pp-4]  &Symbol0=&Symbol1 //,
+	&Symbol2=pp(&Symbol1)
+	========================
+	pp(&Symbol0)=&Symbol2
+
+[pp-5]  &Symbol0=// &Symbol1,
+	&Symbol2=pp(&Symbol1)
+	========================
+	pp(&Symbol0)=&Symbol2
+
+[pp-6]  &Productions1=pp(&Productions0)
+	===============================
+	pp(context-free syntax &Productions0)=context-free syntax
+
+&Productions1
+
+
+

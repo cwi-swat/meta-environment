@@ -1,0 +1,13 @@
+equations
+
+[min-1]
+
+topSorts(&SDF0,&Focus0,&Sort0)=&Sorts0,
+&Sorts0=&Sort+0
+==================================================
+IT(minimize &Sort0,&SDF0,&Focus0)=
+IT(focus on sorts &Sorts0 do reject,&SDF0,&Focus0)
+
+[default-min-2]
+
+IT(minimize,&SDF0,&Focus0)=&SDF0

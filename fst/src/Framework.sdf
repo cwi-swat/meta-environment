@@ -1,0 +1,21 @@
+module Framework
+
+imports ZigZag Refactoring Construction Destruction  
+
+exports
+
+ sorts SDF
+
+ context-free syntax
+
+ "apply" Trafo "at" SDF -> SDF 
+
+ "pp" "("SDF ")" -> SDF {traverse}
+ "pp" "("Modules ")" -> Modules {traverse}
+ "pp" "("Module ")" -> Module {traverse}
+ "pp" "("Grammar ")" -> Grammar {traverse}
+ "pp" "("Productions ")" -> Productions {traverse}
+ "pp" "("Symbols ")" -> Symbols {traverse}
+ "pp" "("Symbol ")" -> Symbol {traverse}
+
+

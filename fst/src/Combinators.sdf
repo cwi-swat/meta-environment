@@ -1,0 +1,23 @@
+module Combinators
+
+imports  Conditions Primitives 
+
+exports
+
+  sorts Trafo Bool
+
+  context-free syntax
+ 
+  Trafo ";" Trafo -> Trafo {right}
+  "focus" "on" FocusYielder "do" Trafo -> Trafo
+  "if" Cond "then" Trafo "else" Trafo -> Trafo
+  "(" Trafo ")" -> Trafo {bracket}
+  Trafo "effectively" -> Trafo
+ 
+  "guard" Cond -> Trafo
+  
+  context-free priorities
+
+  Trafo "effectively" -> Trafo >
+  "focus" "on" FocusYielder "do" Trafo -> Trafo >
+  Trafo ";" Trafo -> Trafo

@@ -1,0 +1,2092 @@
+definition 
+
+module Syntax imports IdentificationDivision EnvironmentDivision DataDivision ProcedureDivision Names exports
+
+   sorts Cobol-source-program Nested-cobol-source-program
+
+context-free syntax
+
+"IDENTIFICATION" | "ID" "DIVISION" "." Program-id-cobol-source-program Identification-division-content? ("ENVIRONMENT" "DIVISION" "." Environment-division-content)? ("DATA" "DIVISION" "." Data-division-content)? Procedure-division? (Nested-cobol-source-program* "END" "PROGRAM" Program-name ".")? -> Cobol-source-program 
+
+"IDENTIFICATION" | "ID" "DIVISION" "." Program-id-nested-cobol-source-program Identification-division-content? ("ENVIRONMENT" "DIVISION" "." Environment-division-content)? ("DATA" "DIVISION" "." Data-division-content)? Procedure-division? Nested-cobol-source-program* "END" "PROGRAM" Program-name "." -> Nested-cobol-source-program 
+
+module IdentificationDivision imports Names Lexical-Sorts exports
+		  sorts Identification-division-content Program-id-cobol-source-program Program-id-nested-cobol-source-program
+
+context-free syntax
+
+(("AUTHOR" "."? Comment-entry*) | ("INSTALLATION" "."? Comment-entry* ) | ("DATE-WRITTEN" "."? Comment-entry*) | ("DATE-COMPILED" "."? Comment-entry* ) | ("SECURITY" "."? Comment-entry* ) | ("REMARKS" "."? Comment-entry* ))* -> Identification-division-content 
+
+"PROGRAM-ID" "."? Program-name 
+    ("IS"? "INITIAL" "PROGRAM"?)? "."? -> Program-id-cobol-source-program 
+
+"PROGRAM-ID" "."? Program-name
+  ("IS"? ("COMMON" "INITIAL"?) | ("INITIAL" "COMMON"?) "PROGRAM"?)? "."? -> Program-id-nested-cobol-source-program 
+
+module EnvironmentDivision imports InputOutputSection ConfigurationSection exports
+		  sorts Environment-division-content
+
+context-free syntax
+
+Configuration-section? Input-output-section? -> Environment-division-content 
+
+module InputOutputSection imports DataReference Names Lexical-Sorts exports
+		  sorts Input-output-section File-control-paragraph File-control-entry Select-clause Assign-clause Reserve-clause Padding-character-clause Record-delimiter-clause Password-clause File-status-clause Relative-key-clause Record-key-clause Alternate-record-key-clause I-o-control-paragraph Qsam-or-sam-or-vsam-i-o-control-entries Sort-merge-i-o-control-entries
+
+context-free syntax
+
+"INPUT-OUTPUT" "SECTION" "." File-control-paragraph? I-o-control-paragraph? -> Input-output-section 
+
+"FILE-CONTROL" "." File-control-entry* -> File-control-paragraph 
+
+Select-clause Assign-clause (Reserve-clause | (("ORGANIZATION" "IS"?)? "SEQUENTIAL") | Padding-character-clause | Record-delimiter-clause | ("ACCESS" "MODE"? "IS"? "SEQUENTIAL") | Password-clause | File-status-clause)* "." -> File-control-entry 
+
+Select-clause Assign-clause (Reserve-clause | (("ORGANIZATION" "IS"?)? "RELATIVE") | ("ACCESS" "MODE"? "IS"? ("SEQUENTIAL" Relative-key-clause?) | ("RANDOM" | "DYNAMIC" Relative-key-clause)) | Password-clause | File-status-clause)* "." -> File-control-entry 
+
+Select-clause Assign-clause (Reserve-clause | (("ORGANIZATION" "IS"?)? "INDEXED") | ("ACCESS" "MODE"? "IS"? "SEQUENTIAL" | "RANDOM" | "DYNAMIC") | Record-key-clause | Password-clause | Alternate-record-key-clause | File-status-clause)* "." -> File-control-entry 
+
+"SELECT" "OPTIONAL"? File-name -> Select-clause 
+
+"ASSIGN" "TO"? (Assignment-name | Literal)+ -> Assign-clause 
+
+"RESERVE" Integer ("AREA"|"AREAS")? -> Reserve-clause 
+
+"PADDING" "CHARACTER"? "IS"? Qualified-data-name | Literal -> Padding-character-clause 
+
+"RECORD" "DELIMITER" "IS"? "STANDARD-1" | Assignment-name -> Record-delimiter-clause 
+
+"PASSWORD" "IS"? Data-name -> Password-clause 
+
+"FILE"? "STATUS" "IS"? Qualified-data-name Qualified-data-name? -> File-status-clause 
+
+"RELATIVE" "KEY"? "IS"? Qualified-data-name -> Relative-key-clause 
+
+"RECORD" "KEY"? "IS"? Qualified-data-name -> Record-key-clause 
+
+"ALTERNATE" "RECORD"? "KEY"? "IS"? Qualified-data-name Password-clause? ("WITH"? "DUPLICATES")? -> Alternate-record-key-clause 
+
+"I-O-CONTROL" "." (Qsam-or-sam-or-vsam-i-o-control-entries+ ".")? (Sort-merge-i-o-control-entries ".")? -> I-o-control-paragraph 
+
+("RERUN" "ON" Assignment-name | File-name "EVERY"? (Integer "RECORDS") | ("END" "OF"? "REEL" | "UNIT") "OF"? File-name) | ("SAME" "RECORD"? "AREA"? "FOR"? File-name File-name+) | ("MULTIPLE" "FILE" "TAPE"? "CONTAINS"? (File-name ("POSITION" Integer)?)+) | ("APPLY" "WRITE-ONLY" "ON"? File-name+) -> Qsam-or-sam-or-vsam-i-o-control-entries 
+
+("RERUN" "ON" Assignment-name)? ("SAME" "RECORD" | "SORT" | "SORT-MERGE" "AREA"? "FOR"? File-name File-name+)+ -> Sort-merge-i-o-control-entries 
+
+module ConfigurationSection imports Conditions Names Lexical-Sorts exports
+		  sorts Configuration-section Configuration-section-paragraphs Source-computer-paragraph Object-computer-paragraph Object-computer-paragraph-sequence-phrase Special-names-paragraph Special-names-paragraph-status-phrase Special-names-paragraph-clauses Alphabet-clause Symbolic-characters-clause Class-clause Currency-sign-clause Decimal-point-clause
+
+context-free syntax
+
+"CONFIGURATION" "SECTION" "." Configuration-section-paragraphs -> Configuration-section 
+
+(Source-computer-paragraph | Object-computer-paragraph | Special-names-paragraph)* -> Configuration-section-paragraphs 
+
+"SOURCE-COMPUTER" "."
+    (Computer-name ("WITH"? "DEBUGGING" "MODE")? ".")? -> Source-computer-paragraph 
+
+"OBJECT-COMPUTER" "."
+    (Computer-name ("MEMORY" "SIZE"? Integer "WORDS" | "CHARACTERS" | "MODULES")? Object-computer-paragraph-sequence-phrase ".")? -> Object-computer-paragraph 
+
+("PROGRAM"? "COLLATING"? "SEQUENCE" "IS"? Alphabet-name)? ("SEGMENT-LIMIT" "IS"? Priority-number)? -> Object-computer-paragraph-sequence-phrase 
+
+"SPECIAL-NAMES" "." (Environment-name ("IS"? Mnemonic-name Special-names-paragraph-status-phrase?) | 
+	Special-names-paragraph-status-phrase)* Special-names-paragraph-clauses "."? -> Special-names-paragraph 
+
+("ON" "STATUS"? "IS"? Condition ("OFF" "STATUS"? "IS"? Condition)?) | ("OFF" "STATUS"? "IS"? Condition ("ON" "STATUS"? "IS"? Condition)?) -> Special-names-paragraph-status-phrase 
+
+(Alphabet-clause | Symbolic-characters-clause | Class-clause | Currency-sign-clause | Decimal-point-clause)* -> Special-names-paragraph-clauses 
+
+"ALPHABET" Alphabet-name "IS"? 
+  "STANDARD-1" | 
+  "STANDARD-2" |
+  "NATIVE" |
+  "EBCDIC" |
+  (Literal (("THROUGH" | "THRU" Literal) | ("ALSO" Literal)+)?)+ -> Alphabet-clause 
+
+"SYMBOLIC" "CHARACTERS"? 
+  (Symbolic-character+ ("ARE"|"IS")? Integer+)+ 
+  ("IN" Alphabet-name)? -> Symbolic-characters-clause 
+
+"CLASS" Class-name "IS"? (Literal ("THROUGH" | "THRU" Literal)?)+ -> Class-clause 
+
+"CURRENCY" "SIGN"? "IS"? Literal -> Currency-sign-clause 
+
+"DECIMAL-POINT" "IS"? "COMMA" -> Decimal-point-clause 
+
+module DataDivision imports FileAndSortDescriptionEntry DataDescriptionEntry exports
+		  sorts Data-division-content
+
+context-free syntax
+
+("FILE" "SECTION" "." (File-and-sort-description-entry Data-description-entry+)*)? ("WORKING-STORAGE" "SECTION" "." Data-description-entry*)? ("LINKAGE" "SECTION" "." Data-description-entry*)? -> Data-division-content 
+
+module FileAndSortDescriptionEntry imports DataDescriptionEntry DataReference Names Lexical-Sorts exports
+		  sorts File-and-sort-description-entry File-and-sort-description-entry-clauses Block-contains-clause Record-clause Record-varying-phrase Label-records-clause Value-of-clause Data-records-clause Linage-clause Linage-footing-phrase Recording-mode-clause Mode Code-set-clause
+
+context-free syntax
+
+"FD" |"SD" File-name File-and-sort-description-entry-clauses "." -> File-and-sort-description-entry 
+
+(External-clause | Global-clause | Block-contains-clause | Record-clause | Label-records-clause | Value-of-clause | Data-records-clause | Linage-clause | Recording-mode-clause | Code-set-clause)* -> File-and-sort-description-entry-clauses 
+
+"BLOCK" "CONTAINS"? (Integer | Zero "TO")? Integer | Zero ("CHARACTERS"|"RECORDS" | "RECORD")? -> Block-contains-clause 
+
+"RECORD"
+ ("CONTAINS"? Integer | Zero "CHARACTERS"?)
+ | ("CONTAINS"? Integer | Zero "TO" Integer | Zero "CHARACTERS"?)
+ | (Record-varying-phrase ("DEPENDING" "ON"? Data-name)?) -> Record-clause 
+
+"IS"? "VARYING" "IN"? "SIZE"? ("FROM"? Integer)? ("TO" Integer)? "CHARACTERS"? -> Record-varying-phrase 
+
+"LABEL" ("RECORD" "IS"?) | ("RECORDS" "ARE"?) | ("RECORDS" "IS") | ("RECORD" "ARE") "STANDARD" | "OMITTED" | Data-name+ -> Label-records-clause 
+
+"VALUE" "OF" (System-name "IS"? Qualified-data-name | Literal)+ -> Value-of-clause 
+
+"DATA" ("RECORD" "IS"?) | ("RECORDS" "ARE"?) | ("RECORDS" "IS") | ("RECORD" "ARE") Data-name+ -> Data-records-clause 
+
+"LINAGE"
+  "IS"? Data-name | Integer
+  "LINES"? Linage-footing-phrase -> Linage-clause 
+
+("WITH"? "FOOTING" "AT"? Data-name | Integer)? ("LINES"? "AT"? "TOP" Data-name | Integer)? ("LINES"? "AT"? "BOTTOM" Data-name | Integer)? -> Linage-footing-phrase 
+
+"RECORDING" "MODE"? "IS"? Mode -> Recording-mode-clause 
+
+"F" | "V" | "U" | "S" -> Mode 
+
+"CODE-SET" "IS"? Alphabet-name -> Code-set-clause 
+
+module DataDescriptionEntry imports Statements DataReference Names Lexical-Sorts exports
+		  sorts Data-description-entry Data-description-entry-clauses Redefines-clause Blank-when-zero-clause External-clause Global-clause Justified-clause Occurs-clause Picture-clause Sign-clause Synchronized-clause Usage-clause Data-value-clause Renames-clause Condition-value-clause
+
+context-free syntax
+
+Level-number (Data-name | "FILLER")? Data-description-entry-clauses "."? -> Data-description-entry 
+
+"66" Data-name Renames-clause "."? -> Data-description-entry 
+
+"88" Condition-name Condition-value-clause "."? -> Data-description-entry 
+
+Copy-statement -> Data-description-entry 
+
+(Redefines-clause | Blank-when-zero-clause | External-clause | Global-clause | Justified-clause | Occurs-clause | Picture-clause | Sign-clause | Synchronized-clause | Usage-clause | Data-value-clause)* -> Data-description-entry-clauses 
+
+"REDEFINES" Data-name -> Redefines-clause 
+
+"BLANK" "WHEN"? "ZERO" | "ZEROS" | "ZEROES" -> Blank-when-zero-clause 
+
+"IS"? "EXTERNAL" -> External-clause 
+
+"IS"? "GLOBAL" -> Global-clause 
+
+"JUSTIFIED" | "JUST" "RIGHT"? -> Justified-clause 
+
+"OCCURS" Integer "TIMES"? ("ASCENDING" | "DESCENDING" "KEY"? "IS"? Qualified-data-name+)* ("INDEXED" "BY"? Index-name+)? -> Occurs-clause 
+
+"OCCURS" (Integer|Zero "TO")? Integer "TIMES"? "DEPENDING"
+    "ON"? Qualified-data-name ("ASCENDING" | "DESCENDING" "KEY"? "IS"? Qualified-data-name+)* ("INDEXED" "BY"? Index-name+)? -> Occurs-clause 
+
+"PICTURE" | "PIC" "IS"? Picture-string -> Picture-clause 
+
+("SIGN" "IS"?)? "LEADING" | "TRAILING" ("SEPARATE" "CHARACTER"?)? -> Sign-clause 
+
+"SYNCHRONIZED" | "SYNC" ("LEFT" | "RIGHT")? -> Synchronized-clause 
+
+("USAGE" "IS"?)? "BINARY" | "COMP" | "COMP-1" | "COMP-2" | "COMP-3" | "COMP-4" | "COMPUTATIONAL" | "COMPUTATIONAL-1" | "COMPUTATIONAL-2" | "COMPUTATIONAL-3" | "COMPUTATIONAL-4" | "DISPLAY" | "DISPLAY-1" | "INDEX" | "PACKED-DECIMAL" | "POINTER" -> Usage-clause 
+
+"VALUE" "IS"? Literal -> Data-value-clause 
+
+"RENAMES" Qualified-data-name ("THROUGH"|"THRU" Qualified-data-name)? -> Renames-clause 
+
+("VALUE" "IS"?) | ("VALUES" "ARE"?) | ("VALUE" "ARE") (Literal ("THROUGH"|"THRU" Literal)?)+ -> Condition-value-clause 
+
+module ProcedureDivision imports Statements Names Lexical-Sorts exports
+		  sorts Procedure-division Using-phrase Section-header Paragraphs Sentence Paragraph Altered-goto Sections
+
+context-free syntax
+
+"PROCEDURE" "DIVISION" Using-phrase ("DECLARATIVES" "." (Section-header "." Use-statement "." Paragraphs)+ "END" "DECLARATIVES" ".")? Sections -> Procedure-division 
+
+("USING" Data-name+)? "." -> Using-phrase 
+
+("USING" Data-name*)? Copy-statement -> Using-phrase 
+
+Section-name "SECTION" Priority-number? -> Section-header 
+
+Sentence* Paragraph* -> Paragraphs 
+
+Statement-list "."+ -> Sentence 
+
+Statement-list? Copy-statement -> Sentence 
+
+Paragraph-name "." Sentence* -> Paragraph 
+
+Altered-goto -> Paragraph 
+
+Paragraph-name "." "GO" "TO"? "." -> Altered-goto 
+
+Paragraphs (Section-header "." Paragraphs)* -> Sections 
+
+module Statements imports Conditions DataReference ArithmeticExpressions Names Lexical-Sorts Disambiguation exports
+		  sorts Statement Compiler-directing-statement Accept-statement Add-statement Statement-list Alter-statement Call-statement Call-rest-phrase Call-exception-phrase Call-overflow-phrase Cancel-statement Close-statement Compute-statement Continue-statement Delete-statement Display-statement Divide-statement Entry-statement Evaluate-statement Evaluate-phrase Exit-statement Exit-program-statement Goback-statement Go-to-statement If-statement Initialize-statement Inspect-statement Before-after-phrase Merge-statement Move-statement Multiply-statement Open-statement Perform-statement Perform-varying-phrase Perform-after-phrase Perform-until-phrase Read-statement Release-statement Return-statement Rewrite-statement Search-statement Set-statement Sort-statement Start-statement Stop-statement String-statement Subtract-statement Unstring-statement Write-statement Write-statement-phrase Basis-statement Cbl-process-statement Control-cbl-statement Copy-statement Copy-operand Delete-compiler-directing-statement Eject-statement Enter-statement Insert-statement Ready-or-reset-trace-statement Replace-statement Service-label-statement Service-reload-statement Skip1-2-3-statement Title-statement Use-statement
+
+context-free syntax
+
+Accept-statement
+  | Add-statement
+  | Alter-statement
+  | Call-statement
+  | Cancel-statement
+  | Close-statement
+  | Compute-statement
+  | Continue-statement
+  | Delete-statement
+  | Display-statement
+  | Divide-statement
+  | Entry-statement
+  | Evaluate-statement 
+  | Exit-statement
+  | Exit-program-statement
+  | Goback-statement
+  | Go-to-statement
+  | If-statement
+  | Initialize-statement
+  | Inspect-statement
+  | Merge-statement
+  | Move-statement
+  | Multiply-statement
+  | Open-statement
+  | Perform-statement 
+  | Read-statement
+  | Release-statement 
+  | Return-statement
+  | Rewrite-statement
+  | Search-statement
+  | Set-statement
+  | Sort-statement
+  | Start-statement
+  | Stop-statement
+  | String-statement
+  | Subtract-statement
+  | Unstring-statement
+  | Write-statement -> Statement 
+
+Basis-statement
+  | Cbl-process-statement
+  | Control-cbl-statement
+  | Copy-statement
+  | Delete-compiler-directing-statement
+  | Eject-statement
+  | Enter-statement
+  | Insert-statement
+  | Ready-or-reset-trace-statement 
+  | Replace-statement
+  | Service-label-statement 
+  | Service-reload-statement
+  | Skip1-2-3-statement
+  | Title-statement
+  | Use-statement -> Compiler-directing-statement 
+
+"ACCEPT" Identifier ("FROM" Mnemonic-name | Environment-name)? -> Accept-statement 
+
+"ACCEPT" Identifier "FROM" "DATE" | "DAY" | "DAY-OF-WEEK" | "TIME" -> Accept-statement 
+
+"ADD" (Identifier | Literal)+ "TO" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-ADD"? -> Add-statement 
+
+"ADD" (Identifier | Literal)+ "TO"? Identifier | Literal
+    "GIVING" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-ADD"? -> Add-statement 
+
+"ADD" "CORRESPONDING" | "CORR" Identifier "TO" Identifier
+    "ROUNDED"? ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-ADD"? -> Add-statement 
+
+Statement+ -> Statement-list 
+
+"ALTER"
+    (Procedure-name "TO" ("PROCEED" "TO")? Procedure-name)+ -> Alter-statement 
+
+"CALL" Identifier | Literal
+    ("USING" ((("BY"? "REFERENCE")? Identifier | ("ADDRESS" "OF" Identifier)) | ("BY"? "CONTENT" ((("LENGTH" "OF")? Identifier) | ("ADDRESS" "OF" Identifier) | Literal)+))+)? Call-rest-phrase "END-CALL"? -> Call-statement 
+
+"CALL" Identifier | Literal
+    ("USING" ((("BY"? "REFERENCE")? Identifier | ("ADDRESS" "OF" Identifier)) | ("BY"? "CONTENT" ((("LENGTH" "OF")? Identifier) | ("ADDRESS" "OF" Identifier) | Literal)+))+)? Call-rest-phrase "END-CALL"? -> Call-statement 
+
+Call-overflow-phrase -> Call-rest-phrase 
+
+Call-exception-phrase -> Call-rest-phrase 
+
+("ON"? "EXCEPTION" Statement-list)?("NOT" "ON"? "EXCEPTION" Statement-list)? -> Call-exception-phrase 
+
+("ON"? "OVERFLOW" Statement-list)? -> Call-overflow-phrase 
+
+"CANCEL" (Identifier | Literal)+ -> Cancel-statement 
+
+"CLOSE"
+    (File-name (("REEL" | "UNIT" (("FOR"? "REMOVAL") | ("WITH"? "NO" "REWIND"))?) | ("WITH"? ("NO" "REWIND") | "LOCK"))?)+ -> Close-statement 
+
+"COMPUTE" (Identifier "ROUNDED"?)+ "=" | "EQUAL"
+    Arithmetic-expression
+    ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-COMPUTE"? -> Compute-statement 
+
+"CONTINUE" -> Continue-statement 
+
+"DELETE" File-name "RECORD"? ("INVALID" "KEY"? Statement-list)? ("NOT" "INVALID" "KEY"? Statement-list)? "END-DELETE"? -> Delete-statement 
+
+"DISPLAY" (Identifier | Literal)+ ("UPON" Mnemonic-name | Environment-name)? ("WITH"? "NO" "ADVANCING")? -> Display-statement 
+
+"DIVIDE" Identifier | Literal "INTO" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-DIVIDE"? -> Divide-statement 
+
+"DIVIDE" Identifier | Literal "INTO" Identifier | Literal
+    "GIVING" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-DIVIDE"? -> Divide-statement 
+
+"DIVIDE" Identifier | Literal "BY" Identifier | Literal
+    "GIVING" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-DIVIDE"? -> Divide-statement 
+
+"DIVIDE" Identifier | Literal "INTO" Identifier | Literal
+    "GIVING" Identifier "ROUNDED"? "REMAINDER" Identifier
+    ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-DIVIDE"? -> Divide-statement 
+
+"DIVIDE" Identifier | Literal "BY" Identifier | Literal
+    "GIVING" Identifier "ROUNDED"? "REMAINDER" Identifier
+    ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-DIVIDE"? -> Divide-statement 
+
+"ENTRY" Literal ("USING" Data-name+)? -> Entry-statement 
+
+"EVALUATE" Identifier | Literal | Arithmetic-expression | Condition | "TRUE" | "FALSE" ("ALSO" Identifier | Literal | Arithmetic-expression | Condition | "TRUE" | "FALSE")* (("WHEN" Evaluate-phrase ("ALSO" Evaluate-phrase)*)+ Statement-list)+ ("WHEN" "OTHER" Statement-list)? "END-EVALUATE"? -> Evaluate-statement 
+
+"ANY" | Condition | "TRUE" | "FALSE" | ("NOT"? Identifier | Literal | Arithmetic-expression ("THROUGH" | "THRU" Identifier | Literal | Arithmetic-expression)?) -> Evaluate-phrase 
+
+"EXIT" -> Exit-statement 
+
+"EXIT" "PROGRAM" -> Exit-program-statement 
+
+"GOBACK" -> Goback-statement 
+
+"GO" "TO"? Procedure-name -> Go-to-statement 
+
+"GO" "TO"? "MORE-LABELS" -> Go-to-statement 
+
+"GO" "TO"? Procedure-name+ "DEPENDING" "ON"? Identifier -> Go-to-statement 
+
+"IF" Condition "THEN"? Statement-list | ("NEXT" "SENTENCE")
+    ("ELSE" Statement-list | ("NEXT" "SENTENCE"))? "END-IF"? -> If-statement 
+
+"INITIALIZE" Identifier+ ("REPLACING" ("ALPHABETIC" | "ALPHANUMERIC" | "NUMERIC" | "ALPHANUMERIC-EDITED" | "NUMERIC-EDITED" | "DBCS" | "EGCS" "DATA"? "BY" Identifier | Literal)+)? -> Initialize-statement 
+
+"INSPECT" Identifier "TALLYING"
+    (Identifier "FOR" (("CHARACTERS" Before-after-phrase*) | ("ALL" | "LEADING" (Identifier | Literal Before-after-phrase*)+))+)+ -> Inspect-statement 
+
+"INSPECT" Identifier "CONVERTING" Identifier | Literal "TO"
+    Identifier | Literal Before-after-phrase* -> Inspect-statement 
+
+"INSPECT" Identifier "TALLYING"
+    (Identifier "FOR" (("CHARACTERS" Before-after-phrase*) | ("ALL" | "LEADING" (Identifier | Literal Before-after-phrase*)+))+)+ "REPLACING"
+    (("CHARACTERS" "BY" Identifier | Literal Before-after-phrase*) | ("ALL" | "LEADING" | "FIRST" (Identifier | Literal "BY" Identifier | Literal Before-after-phrase*)+))+ -> Inspect-statement 
+
+"INSPECT" Identifier "REPLACING"
+    (("CHARACTERS" "BY" Identifier | Literal Before-after-phrase*) | ("ALL" | "LEADING" | "FIRST" (Identifier | Literal "BY" Identifier | Literal Before-after-phrase*)+))+ -> Inspect-statement 
+
+"BEFORE" | "AFTER" "INITIAL"? Identifier | Literal -> Before-after-phrase 
+
+"MERGE" File-name ("ON"? "ASCENDING" | "DESCENDING" "KEY"? Qualified-data-name+)+ ("COLLATING"? "SEQUENCE" "IS"? Alphabet-name)? "USING" File-name File-name+ ("OUTPUT" "PROCEDURE" "IS"? Procedure-name ("THROUGH" | "THRU" Procedure-name)?) | ("GIVING" File-name+) -> Merge-statement 
+
+"MOVE" Identifier | Literal "TO" Identifier+ -> Move-statement 
+
+"MOVE" "CORRESPONDING" | "CORR" Identifier "TO" Identifier+ -> Move-statement 
+
+"MULTIPLY" Identifier | Literal "BY" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-MULTIPLY"? -> Multiply-statement 
+
+"MULTIPLY" Identifier | Literal "BY" Identifier | Literal
+    "GIVING" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-MULTIPLY"? -> Multiply-statement 
+
+"OPEN" (("INPUT" (File-name ("REVERSED" | ("WITH"? "NO" "REWIND"))?)+) | ("OUTPUT" (File-name ("WITH"? "NO" "REWIND")?)+) | ("I-O" File-name+) | ("EXTEND" File-name+))+ -> Open-statement 
+
+"PERFORM"
+    (Procedure-name ("THROUGH" | "THRU" Procedure-name)?) | (Statement-list "END-PERFORM") -> Perform-statement 
+
+"PERFORM" (Procedure-name ("THROUGH" | "THRU" Procedure-name)? Perform-varying-phrase Perform-after-phrase) | (Perform-varying-phrase Statement-list "END-PERFORM") -> Perform-statement 
+
+"PERFORM" (Procedure-name ("THROUGH" | "THRU" Procedure-name)? Identifier | Integer "TIMES") | (Identifier | Integer "TIMES" Statement-list "END-PERFORM") -> Perform-statement 
+
+"PERFORM"
+    (Procedure-name ("THROUGH" | "THRU" Procedure-name)? Perform-until-phrase) | (Perform-until-phrase Statement-list "END-PERFORM") -> Perform-statement 
+
+("WITH"? "TEST" "BEFORE" | "AFTER")? "VARYING" Identifier "FROM" Identifier | Literal "BY" Identifier | Literal "UNTIL"
+    Condition -> Perform-varying-phrase 
+
+("AFTER" Identifier "FROM" Identifier | Literal "BY" Identifier | Literal "UNTIL" Condition)* -> Perform-after-phrase 
+
+("WITH"? "TEST" "BEFORE" | "AFTER")? "UNTIL" Condition -> Perform-until-phrase 
+
+"READ" File-name "NEXT"? "RECORD"? ("INTO" Identifier)? ("AT"? "END" Statement-list)? ("NOT" "AT"? "END" Statement-list)? "END-READ"? -> Read-statement 
+
+"READ" File-name "RECORD"? ("INTO" Identifier)? ("KEY" "IS"? Qualified-data-name)? ("INVALID" "KEY"? Statement-list)? ("NOT" "INVALID" "KEY"? Statement-list)? "END-READ"? -> Read-statement 
+
+"RELEASE" Record-name ("FROM" Identifier)? -> Release-statement 
+
+"RETURN" File-name "RECORD"? ("INTO" Identifier)? "AT"? "END" Statement-list ("NOT" "AT"? "END" Statement-list)? "END-RETURN"? -> Return-statement 
+
+"REWRITE" Record-name ("FROM" Identifier)? ("INVALID" "KEY"? Statement-list)? ("NOT" "INVALID" "KEY"? Statement-list)? "END-REWRITE"? -> Rewrite-statement 
+
+"SEARCH" Identifier ("VARYING" Identifier)? ("AT"? "END" Statement-list)? ("WHEN" Condition Statement-list | ("NEXT" "SENTENCE"))+ "END-SEARCH"? -> Search-statement 
+
+"SEARCH" "ALL" Identifier ("AT"? "END" Statement-list)? "WHEN" (Identifier "IS"? ("EQUAL" "TO"?) | "=" Identifier | Literal | Arithmetic-expression) | Condition-name-reference
+    ("AND" (Identifier "IS"? ("EQUAL" "TO"?) | "=" Identifier | Literal | Arithmetic-expression) | Condition-name-reference)* Statement-list | ("NEXT" "SENTENCE") "END-SEARCH"? -> Search-statement 
+
+"SET" Identifier+ "TO" Identifier | Integer -> Set-statement 
+
+"SET" Index-name+ ("UP" "BY") | ("DOWN" "BY") Identifier | Integer -> Set-statement 
+
+"SET" (Mnemonic-name+ "TO" "ON" | "OFF")+ -> Set-statement 
+
+"SET" Condition-name-reference+ "TO" "TRUE" -> Set-statement 
+
+"SET" (Identifier | ("ADDRESS" "OF" Identifier))+ "TO" Identifier | ("ADDRESS" "OF" Identifier) | "NULL" | "NULLS" -> Set-statement 
+
+"SORT" File-name ("ON"? "ASCENDING" | "DESCENDING" ("KEY" "IS"?)? Qualified-data-name+)+ ("WITH"? "DUPLICATES" "IN"? "ORDER"?)? ("COLLATING"? "SEQUENCE" "IS"? Alphabet-name)? ("USING" File-name+) | ("INPUT" "PROCEDURE" "IS"? Procedure-name ("THROUGH" | "THRU" Procedure-name)?)
+    ("GIVING" File-name+) | ("OUTPUT" "PROCEDURE" "IS"? Procedure-name ("THROUGH" | "THRU" Procedure-name)?) -> Sort-statement 
+
+"START" File-name
+    ("KEY" "IS"? ("EQUAL" "TO"?) | "=" | ("GREATER" "THAN"?) | ">" | ("NOT" "LESS" "THAN"?) | ("NOT" "<") | ("GREATER" "THAN"? "OR" "EQUAL" "TO"?) | ">=" Qualified-data-name)? ("INVALID" "KEY"? Statement-list)? ("NOT" "INVALID" "KEY"? Statement-list)? "END-START"? -> Start-statement 
+
+"STOP" "RUN" | Literal -> Stop-statement 
+
+"STRING"
+    ((Identifier | Literal)+ "DELIMITED" "BY"? Identifier | Literal | "SIZE")+ "INTO" Identifier ("WITH"? "POINTER" Identifier)? ("ON"? "OVERFLOW" Statement-list)? ("NOT" "ON"? "OVERFLOW" Statement-list)? "END-STRING"? -> String-statement 
+
+"SUBTRACT" (Identifier | Literal)+ "FROM"
+    (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-SUBTRACT"? -> Subtract-statement 
+
+"SUBTRACT" (Identifier | Literal)+ "FROM" Identifier | Literal
+    "GIVING" (Identifier "ROUNDED"?)+ ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-SUBTRACT"? -> Subtract-statement 
+
+"SUBTRACT" "CORRESPONDING" | "CORR" Identifier "FROM"
+    Identifier "ROUNDED"? ("ON"? "SIZE" "ERROR" Statement-list)? ("NOT" "ON"? "SIZE" "ERROR" Statement-list)? "END-SUBTRACT"? -> Subtract-statement 
+
+"UNSTRING" Identifier
+    ("DELIMITED" "BY"? "ALL"? Identifier | Literal ("OR" "ALL"? Identifier | Literal)*)? "INTO"
+    (Identifier ("DELIMITER" "IN"? Identifier)? ("COUNT" "IN"? Identifier)?)+ ("WITH"? "POINTER" Identifier)? ("TALLYING" "IN"? Identifier)? ("ON"? "OVERFLOW" Statement-list)? ("NOT" "ON"? "OVERFLOW" Statement-list)? "END-UNSTRING"? -> Unstring-statement 
+
+"WRITE" Record-name ("FROM" Identifier)? (("BEFORE" | "AFTER" "ADVANCING"? (Identifier | Integer ("LINE" | "LINES")?) | Mnemonic-name | "PAGE")? Write-statement-phrase) | (("INVALID" "KEY"? Statement-list)? ("NOT" "INVALID" "KEY"? Statement-list)?) "END-WRITE"? -> Write-statement 
+
+"WRITE" Record-name ("FROM" Identifier)? ("INVALID" "KEY"? Statement-list)? ("NOT" "INVALID" "KEY"? Statement-list)? "END-WRITE"? -> Write-statement 
+
+("AT"? "END-OF-PAGE" | "EOP" Statement-list)? ("NOT" "AT"? "END-OF-PAGE" | "EOP" Statement-list)? -> Write-statement-phrase 
+
+Sequence-number? "BASIS" Basis-name | Literal -> Basis-statement 
+
+"CBL" | "PROCESS" Options-list? -> Cbl-process-statement 
+
+"*CONTROL" | "*CBL" ("SOURCE" | "NOSOURCE" | "LIST" | "NOLIST" | "MAP" | "NOMAP")+ "."? -> Control-cbl-statement 
+
+"COPY" Text-name | Literal ("OF" | "IN" Library-name | Literal)? "SUPPRESS"? ("REPLACING" (Copy-operand "BY" Copy-operand)+)? "." -> Copy-statement 
+
+Quoted-pseudo-text | Identifier | Literal | Cobol-word -> Copy-operand 
+
+Sequence-number? "DELETE" Sequence-number-field -> Delete-compiler-directing-statement 
+
+"EJECT" "."? -> Eject-statement 
+
+"ENTER" Language-name Routine-name? "." -> Enter-statement 
+
+Sequence-number? "INSERT" Sequence-number-field -> Insert-statement 
+
+"READY" | "RESET" "TRACE" "." -> Ready-or-reset-trace-statement 
+
+"REPLACE" (Quoted-pseudo-text "BY" Quoted-pseudo-text)+ "." -> Replace-statement 
+
+"REPLACE" "OFF" "." -> Replace-statement 
+
+"SERVICE" "LABEL" -> Service-label-statement 
+
+"SERVICE" "RELOAD" Identifier -> Service-reload-statement 
+
+"SKIP1" | "SKIP2" | "SKIP3" "."? -> Skip1-2-3-statement 
+
+"TITLE" Literal "."? -> Title-statement 
+
+"USE" "GLOBAL"? "AFTER" "STANDARD"? "EXCEPTION" | "ERROR" "PROCEDURE"
+    "ON"? File-name+ | "INPUT" | "OUTPUT" | "I-O" | "EXTEND" -> Use-statement 
+
+"USE" "GLOBAL"? "AFTER" "STANDARD"? ("BEGINNING" | "ENDING")? ("FILE" | "REEL" | "UNIT")? "LABEL" "PROCEDURE" "ON"? File-name+ | "INPUT" | "OUTPUT" | "I-O" | "EXTEND" -> Use-statement 
+
+"USE" "FOR"? "DEGUGGING" "ON"? Procedure-name+ | ("ALL" "PROCEDURES") -> Use-statement 
+
+module Conditions imports DataReference ArithmeticExpressions Names exports
+		  sorts Condition Combinable-condition Simple-condition Condition-name-or-switch-status-condition Class-condition Relation-condition Relational-operator Sign-condition Combined-conditions Negated-simple-conditions Abbreviated-combined-relation-conditions Abbreviation-rest Abbreviation-leaf
+
+context-free syntax
+
+Combinable-condition
+ | Combined-conditions -> Condition 
+
+Simple-condition 
+ | Negated-simple-conditions 
+ | Abbreviated-combined-relation-conditions -> Combinable-condition 
+
+Class-condition | Relation-condition | Sign-condition | Condition-name-or-switch-status-condition | ("(" Condition ")") -> Simple-condition 
+
+Condition-name-reference -> Condition-name-or-switch-status-condition 
+
+Identifier ("IS"? "NOT"?) | ( "NOT" "IS") "NUMERIC" | "ALPHABETIC" | "ALPHABETIC-LOWER" | "ALPHABETIC-UPPER" | Class-name | "DBCS" | "KANJI" -> Class-condition 
+
+Arithmetic-expression Relational-operator Arithmetic-expression -> Relation-condition 
+
+"IS"? ("NOT"? ("GREATER" "THAN" | "THEN"?)
+    | ">"
+    | ("LESS" "THAN" | "THEN"?)
+    | "<" 
+    | ("EQUAL" "TO"?)
+    | "=")
+  | ("GREATER" "THAN" | "THEN"? "OR" "EQUAL" "TO"?)
+  | ">="
+  | ("LESS" "THAN" | "THEN"? "OR" "EQUAL" "TO"?)
+  | ("<" "=") -> Relational-operator 
+
+Arithmetic-expression ("IS"? "NOT"?) | ("NOT" "IS") "POSITIVE" | "NEGATIVE" | "ZERO" | "ZEROES" | "ZEROS" -> Sign-condition 
+
+Combinable-condition ("AND" | "OR" Combinable-condition)+ -> Combined-conditions 
+
+"NOT" Combinable-condition -> Negated-simple-conditions 
+
+Relation-condition Abbreviation-rest -> Abbreviated-combined-relation-conditions 
+
+Arithmetic-expression Relational-operator
+ "(" "NOT"? Arithmetic-expression Abbreviation-rest ")" -> Abbreviated-combined-relation-conditions 
+
+Arithmetic-expression 
+ "(" Relational-operator Arithmetic-expression Abbreviation-rest ")" -> Abbreviated-combined-relation-conditions 
+
+("AND"|"OR" Relational-operator? Abbreviation-leaf)+ -> Abbreviation-rest 
+
+Arithmetic-expression
+  | ("(" Arithmetic-expression Abbreviation-rest ")") -> Abbreviation-leaf 
+
+module DataReference imports ArithmeticExpressions Names Lexical-Sorts exports
+		  sorts Procedure-name Identifier Condition-name-reference Subscript Qualified-data-name Leftmost-character-position Length
+
+context-free syntax
+
+Paragraph-or-section-name ("IN" | "OF" Section-name)? -> Procedure-name 
+
+Qualified-data-name ("(" Subscript ")")* ("(" Leftmost-character-position ":" Length? ")")? -> Identifier 
+
+"LINAGE-COUNTER" ("IN" | "OF" File-name)? -> Identifier 
+
+Condition-name ("IN" | "OF" Data-or-file-or-mnemonic-name)* ("(" Subscript ")")* -> Condition-name-reference 
+
+( Integer | Literal
+   | (Qualified-data-name ("+"|"-" Integer)?)
+   )+ -> Subscript 
+
+Data-name ("IN" | "OF" Data-or-file-name)* -> Qualified-data-name 
+
+Special-register -> Qualified-data-name 
+
+Arithmetic-expression -> Leftmost-character-position 
+
+Arithmetic-expression -> Length 
+
+module ArithmeticExpressions imports DataReference Names exports
+		  sorts Arithmetic-expression Times-div Power Basis
+
+context-free syntax
+
+Times-div ("+" | "-" Times-div)* -> Arithmetic-expression 
+
+Power ("*" | "/" Power)* -> Times-div 
+
+( "+" | "-" )? Basis ("**" Basis)* -> Power 
+
+Identifier
+ | Literal
+ | ("(" Arithmetic-expression ")") -> Basis 
+
+module Names imports DataReference Lexical-Sorts Disambiguation exports
+		  sorts Alphabet-name Class-name Condition-name Data-name File-name Data-or-file-name Index-name Mnemonic-name Data-or-file-or-mnemonic-name Record-name Routine-name Symbolic-character Library-name Program-name Text-name Paragraph-name Section-name Paragraph-or-section-name Computer-name Language-name Environment-name Assignment-name Basis-name Figurative-constant Literal Special-register
+
+context-free syntax
+
+Alphabetic-user-defined-word -> Alphabet-name 
+
+Alphabetic-user-defined-word -> Class-name 
+
+Alphabetic-user-defined-word -> Condition-name 
+
+Alphabetic-user-defined-word -> Data-name 
+
+Alphabetic-user-defined-word -> File-name 
+
+Alphabetic-user-defined-word -> Data-or-file-name 
+
+Alphabetic-user-defined-word -> Index-name 
+
+Alphabetic-user-defined-word -> Mnemonic-name 
+
+Alphabetic-user-defined-word -> Data-or-file-or-mnemonic-name 
+
+Qualified-data-name -> Record-name 
+
+Alphabetic-user-defined-word -> Routine-name 
+
+Alphabetic-user-defined-word -> Symbolic-character 
+
+User-defined-word -> Library-name 
+
+User-defined-word -> Program-name 
+
+User-defined-word -> Text-name 
+
+User-defined-word -> Paragraph-name 
+
+User-defined-word -> Section-name 
+
+User-defined-word -> Paragraph-or-section-name 
+
+System-name -> Computer-name 
+
+System-name -> Language-name 
+
+System-name -> Environment-name 
+
+System-name -> Assignment-name 
+
+Program-name -> Basis-name 
+
+"ZERO" | "ZEROS" | "ZEROES"
+   | "SPACE" | "SPACES"
+   | "HIGH-VALUE" | "HIGH-VALUES" 
+   | "LOW-VALUE" | "LOW-VALUES"
+   | "QUOTE" | "QUOTES"
+   | ("ALL" Literal)
+   | "NULL" | "NULLS" -> Figurative-constant 
+
+Nonnumeric
+   | Numeric
+   | Dbcs
+   | Figurative-constant -> Literal 
+
+("ADDRESS" "OF" Data-name)
+ | "DEBUG-ITEM"
+ | ("LENGTH" "OF" Identifier)
+ | "RETURN-CODE"
+ | "SHIFT-OUT"
+ | "SHIFT-IN"
+ | "SORT-CONTROL" 
+ | "SORT-CORE-SIZE"
+ | "SORT-FILE-SIZE"
+ | "SORT-MESSAGE"
+ | "SORT-MODE-SIZE"
+ | "SORT-RETURN"
+ | "TALLY"
+ | "WHEN-COMPILED" -> Special-register 
+
+module Lexical-Sorts imports Disambiguation exports
+
+   sorts Comment-entry Options-list Sequence-number Sequence-number-field System-name User-defined-word Alphabetic-user-defined-word Cobol-word Integer Level-number Nonnumeric Numeric Picture-string Currency Picchrs Repeat Punct Priority-number Quoted-pseudo-text Zero Dot
+
+lexical syntax
+     -> Comment-entry 
+
+ -> Options-list 
+
+ -> Sequence-number 
+
+ -> Sequence-number-field 
+
+Cobol-word -> System-name 
+
+Cobol-word -> User-defined-word 
+
+[0-9\-]* [A-Za-z] [A-Za-z0-9\-]* -> Alphabetic-user-defined-word 
+
+[A-Za-z0-9]+ ([\-]+ [A-Za-z0-9]+)* -> Cobol-word 
+
+[0]* [1-9] [0-9]* -> Integer 
+
+[0]? [1-9] -> Level-number 
+
+[1-4] [0-9] -> Level-number 
+
+"66" -> Level-number 
+
+"77" -> Level-number 
+
+"88" -> Level-number 
+
+[\"] (~[\"] | ([\"] [\"]))* [\"] -> Nonnumeric 
+
+[\'] (~[\'] | ([\'] [\']))* [\'] -> Nonnumeric 
+
+[\+\-]? (([0-9]* [\.\,] [0-9]+) | [0-9]+) -> Numeric 
+
+Currency? (Picchrs Repeat?)+ (Punct (Picchrs Repeat?)+)* -> Picture-string 
+
+~[0-9ABCDPRSVXZa-z\*\+\-\/\,\.\;\(\)\=\'\"\ \n] -> Currency 
+
+([ABEGPSVXZabegpsvxz90\+\-\*\$] | "CR" | "DB")+ -> Picchrs 
+
+"(" [0-9]+ ")" -> Repeat 
+
+[\/\,\.\:] -> Punct 
+
+[0-9] [0-9]? -> Priority-number 
+
+"==" ~[\=]* "==" -> Quoted-pseudo-text 
+
+[0]+ -> Zero 
+
+". " -> Dot 
+
+".\n" -> Dot 
+
+lexical restrictions
+    Alphabetic-user-defined-word  -/- [A-Za-z0-9\-]
+    Cobol-word                    -/- [A-Za-z0-9\-]
+    Integer                       -/- [0-9]
+    Numeric                       -/- [0-9]
+    Picchrs                       -/- [ABCDEGPSVXZabegpsvxz90\+\-\*\$]
+    Zero                          -/- [0]
+
+module Layout exports
+
+   lexical syntax
+    "%" ~[\n]* [\n]    -> LAYOUT
+    [\ \t\n]           -> LAYOUT
+    ", "               -> LAYOUT
+    ",\n"              -> LAYOUT
+
+    "SKIP1"             -> LAYOUT
+    "SKIP2"             -> LAYOUT
+    "SKIP3"             -> LAYOUT
+    "EJECT"             -> LAYOUT
+
+   
+
+context-free restrictions
+    LAYOUT? -/- [\,\ \t\n\%]
+
+module Main imports Layout Lexical-Sorts Disambiguation Syntax 
+
+module Disambiguation imports Syntax exports 
+    
+  sorts 
+
+context-free syntax
+
+"-" -> Cobol-word {reject}
+
+"66" -> Cobol-word {reject}
+
+"88" -> Cobol-word {reject}
+
+"ACCEPT" -> Cobol-word {reject}
+
+"ACCESS" -> Cobol-word {reject}
+
+"ADD" -> Cobol-word {reject}
+
+"ADDRESS" -> Cobol-word {reject}
+
+"ADVANCING" -> Cobol-word {reject}
+
+"AFTER" -> Cobol-word {reject}
+
+"ALL" -> Cobol-word {reject}
+
+"ALPHABET" -> Cobol-word {reject}
+
+"ALPHABETIC" -> Cobol-word {reject}
+
+"ALPHABETIC-LOWER" -> Cobol-word {reject}
+
+"ALPHABETIC-UPPER" -> Cobol-word {reject}
+
+"ALPHANUMERIC" -> Cobol-word {reject}
+
+"ALPHANUMERIC-EDITED" -> Cobol-word {reject}
+
+"ALSO" -> Cobol-word {reject}
+
+"ALTER" -> Cobol-word {reject}
+
+"ALTERNATE" -> Cobol-word {reject}
+
+"AND" -> Cobol-word {reject}
+
+"ANY" -> Cobol-word {reject}
+
+"APPLY" -> Cobol-word {reject}
+
+"ARE" -> Cobol-word {reject}
+
+"AREA" -> Cobol-word {reject}
+
+"AREAS" -> Cobol-word {reject}
+
+"ASCENDING" -> Cobol-word {reject}
+
+"ASSIGN" -> Cobol-word {reject}
+
+"AT" -> Cobol-word {reject}
+
+"AUTHOR" -> Cobol-word {reject}
+
+"BEFORE" -> Cobol-word {reject}
+
+"BEGINNING" -> Cobol-word {reject}
+
+"BINARY" -> Cobol-word {reject}
+
+"BLANK" -> Cobol-word {reject}
+
+"BLOCK" -> Cobol-word {reject}
+
+"BOTTOM" -> Cobol-word {reject}
+
+"BY" -> Cobol-word {reject}
+
+"CALL" -> Cobol-word {reject}
+
+"CANCEL" -> Cobol-word {reject}
+
+"CHARACTER" -> Cobol-word {reject}
+
+"CHARACTERS" -> Cobol-word {reject}
+
+"CLASS" -> Cobol-word {reject}
+
+"CLOSE" -> Cobol-word {reject}
+
+"CODE-SET" -> Cobol-word {reject}
+
+"COLLATING" -> Cobol-word {reject}
+
+"COMMA" -> Cobol-word {reject}
+
+"COMMON" -> Cobol-word {reject}
+
+"COMP" -> Cobol-word {reject}
+
+"COMP-1" -> Cobol-word {reject}
+
+"COMP-2" -> Cobol-word {reject}
+
+"COMP-3" -> Cobol-word {reject}
+
+"COMP-4" -> Cobol-word {reject}
+
+"COMPUTATIONAL" -> Cobol-word {reject}
+
+"COMPUTATIONAL-1" -> Cobol-word {reject}
+
+"COMPUTATIONAL-2" -> Cobol-word {reject}
+
+"COMPUTATIONAL-3" -> Cobol-word {reject}
+
+"COMPUTATIONAL-4" -> Cobol-word {reject}
+
+"COMPUTE" -> Cobol-word {reject}
+
+"CONFIGURATION" -> Cobol-word {reject}
+
+"CONTAINS" -> Cobol-word {reject}
+
+"CONTENT" -> Cobol-word {reject}
+
+"CONTINUE" -> Cobol-word {reject}
+
+"CONVERTING" -> Cobol-word {reject}
+
+"COPY" -> Cobol-word {reject}
+
+"CORR" -> Cobol-word {reject}
+
+"CORRESPONDING" -> Cobol-word {reject}
+
+"COUNT" -> Cobol-word {reject}
+
+"CURRENCY" -> Cobol-word {reject}
+
+"DATA" -> Cobol-word {reject}
+
+"DATE" -> Cobol-word {reject}
+
+"DATE-COMPILED" -> Cobol-word {reject}
+
+"DATE-WRITTEN" -> Cobol-word {reject}
+
+"DAY" -> Cobol-word {reject}
+
+"DAY-OF-WEEK" -> Cobol-word {reject}
+
+"DBCS" -> Cobol-word {reject}
+
+"DEBUG-ITEM" -> Cobol-word {reject}
+
+"DEBUGGING" -> Cobol-word {reject}
+
+"DECIMAL-POINT" -> Cobol-word {reject}
+
+"DECLARATIVES" -> Cobol-word {reject}
+
+"DEGUGGING" -> Cobol-word {reject}
+
+"DELETE" -> Cobol-word {reject}
+
+"DELIMITED" -> Cobol-word {reject}
+
+"DELIMITER" -> Cobol-word {reject}
+
+"DEPENDING" -> Cobol-word {reject}
+
+"DESCENDING" -> Cobol-word {reject}
+
+"DISPLAY" -> Cobol-word {reject}
+
+"DISPLAY-1" -> Cobol-word {reject}
+
+"DIVIDE" -> Cobol-word {reject}
+
+"DIVISION" -> Cobol-word {reject}
+
+"DOWN" -> Cobol-word {reject}
+
+"DUPLICATES" -> Cobol-word {reject}
+
+"DYNAMIC" -> Cobol-word {reject}
+
+"EBCDIC" -> Cobol-word {reject}
+
+"EGCS" -> Cobol-word {reject}
+
+"ELSE" -> Cobol-word {reject}
+
+"END" -> Cobol-word {reject}
+
+"END-ADD" -> Cobol-word {reject}
+
+"END-CALL" -> Cobol-word {reject}
+
+"END-COMPUTE" -> Cobol-word {reject}
+
+"END-DELETE" -> Cobol-word {reject}
+
+"END-DIVIDE" -> Cobol-word {reject}
+
+"END-EVALUATE" -> Cobol-word {reject}
+
+"END-IF" -> Cobol-word {reject}
+
+"END-MULTIPLY" -> Cobol-word {reject}
+
+"END-OF-PAGE" -> Cobol-word {reject}
+
+"END-PERFORM" -> Cobol-word {reject}
+
+"END-READ" -> Cobol-word {reject}
+
+"END-RETURN" -> Cobol-word {reject}
+
+"END-REWRITE" -> Cobol-word {reject}
+
+"END-SEARCH" -> Cobol-word {reject}
+
+"END-START" -> Cobol-word {reject}
+
+"END-STRING" -> Cobol-word {reject}
+
+"END-SUBTRACT" -> Cobol-word {reject}
+
+"END-UNSTRING" -> Cobol-word {reject}
+
+"END-WRITE" -> Cobol-word {reject}
+
+"ENDING" -> Cobol-word {reject}
+
+"ENTRY" -> Cobol-word {reject}
+
+"ENVIRONMENT" -> Cobol-word {reject}
+
+"EOP" -> Cobol-word {reject}
+
+"EQUAL" -> Cobol-word {reject}
+
+"ERROR" -> Cobol-word {reject}
+
+"EVALUATE" -> Cobol-word {reject}
+
+"EVERY" -> Cobol-word {reject}
+
+"EXCEPTION" -> Cobol-word {reject}
+
+"EXIT" -> Cobol-word {reject}
+
+"EXTEND" -> Cobol-word {reject}
+
+"EXTERNAL" -> Cobol-word {reject}
+
+"F" -> Cobol-word {reject}
+
+"FALSE" -> Cobol-word {reject}
+
+"FD" -> Cobol-word {reject}
+
+"FILE" -> Cobol-word {reject}
+
+"FILE-CONTROL" -> Cobol-word {reject}
+
+"FILLER" -> Cobol-word {reject}
+
+"FIRST" -> Cobol-word {reject}
+
+"FOOTING" -> Cobol-word {reject}
+
+"FOR" -> Cobol-word {reject}
+
+"FROM" -> Cobol-word {reject}
+
+"GIVING" -> Cobol-word {reject}
+
+"GLOBAL" -> Cobol-word {reject}
+
+"GO" -> Cobol-word {reject}
+
+"GOBACK" -> Cobol-word {reject}
+
+"GREATER" -> Cobol-word {reject}
+
+"HIGH-VALUE" -> Cobol-word {reject}
+
+"HIGH-VALUES" -> Cobol-word {reject}
+
+"I-O" -> Cobol-word {reject}
+
+"I-O-CONTROL" -> Cobol-word {reject}
+
+"ID" -> Cobol-word {reject}
+
+"IDENTIFICATION" -> Cobol-word {reject}
+
+"IF" -> Cobol-word {reject}
+
+"IN" -> Cobol-word {reject}
+
+"INDEX" -> Cobol-word {reject}
+
+"INDEXED" -> Cobol-word {reject}
+
+"INITIAL" -> Cobol-word {reject}
+
+"INITIALIZE" -> Cobol-word {reject}
+
+"INPUT" -> Cobol-word {reject}
+
+"INPUT-OUTPUT" -> Cobol-word {reject}
+
+"INSPECT" -> Cobol-word {reject}
+
+"INSTALLATION" -> Cobol-word {reject}
+
+"INTO" -> Cobol-word {reject}
+
+"INVALID" -> Cobol-word {reject}
+
+"IS" -> Cobol-word {reject}
+
+"JUST" -> Cobol-word {reject}
+
+"JUSTIFIED" -> Cobol-word {reject}
+
+"KANJI" -> Cobol-word {reject}
+
+"KEY" -> Cobol-word {reject}
+
+"LABEL" -> Cobol-word {reject}
+
+"LEADING" -> Cobol-word {reject}
+
+"LEFT" -> Cobol-word {reject}
+
+"LENGTH" -> Cobol-word {reject}
+
+"LESS" -> Cobol-word {reject}
+
+"LINAGE" -> Cobol-word {reject}
+
+"LINAGE-COUNTER" -> Cobol-word {reject}
+
+"LINE" -> Cobol-word {reject}
+
+"LINES" -> Cobol-word {reject}
+
+"LINKAGE" -> Cobol-word {reject}
+
+"LOCK" -> Cobol-word {reject}
+
+"LOW-VALUE" -> Cobol-word {reject}
+
+"LOW-VALUES" -> Cobol-word {reject}
+
+"MEMORY" -> Cobol-word {reject}
+
+"MERGE" -> Cobol-word {reject}
+
+"MODE" -> Cobol-word {reject}
+
+"MODULES" -> Cobol-word {reject}
+
+"MORE-LABELS" -> Cobol-word {reject}
+
+"MOVE" -> Cobol-word {reject}
+
+"MULTIPLE" -> Cobol-word {reject}
+
+"MULTIPLY" -> Cobol-word {reject}
+
+"NATIVE" -> Cobol-word {reject}
+
+"NEGATIVE" -> Cobol-word {reject}
+
+"NEXT" -> Cobol-word {reject}
+
+"NO" -> Cobol-word {reject}
+
+"NOT" -> Cobol-word {reject}
+
+"NULL" -> Cobol-word {reject}
+
+"NULLS" -> Cobol-word {reject}
+
+"NUMERIC" -> Cobol-word {reject}
+
+"NUMERIC-EDITED" -> Cobol-word {reject}
+
+"OBJECT-COMPUTER" -> Cobol-word {reject}
+
+"OCCURS" -> Cobol-word {reject}
+
+"OF" -> Cobol-word {reject}
+
+"OFF" -> Cobol-word {reject}
+
+"OMITTED" -> Cobol-word {reject}
+
+"ON" -> Cobol-word {reject}
+
+"OPEN" -> Cobol-word {reject}
+
+"OPTIONAL" -> Cobol-word {reject}
+
+"OR" -> Cobol-word {reject}
+
+"ORDER" -> Cobol-word {reject}
+
+"ORGANIZATION" -> Cobol-word {reject}
+
+"OTHER" -> Cobol-word {reject}
+
+"OUTPUT" -> Cobol-word {reject}
+
+"OVERFLOW" -> Cobol-word {reject}
+
+"PACKED-DECIMAL" -> Cobol-word {reject}
+
+"PADDING" -> Cobol-word {reject}
+
+"PAGE" -> Cobol-word {reject}
+
+"PASSWORD" -> Cobol-word {reject}
+
+"PERFORM" -> Cobol-word {reject}
+
+"PIC" -> Cobol-word {reject}
+
+"PICTURE" -> Cobol-word {reject}
+
+"POINTER" -> Cobol-word {reject}
+
+"POSITION" -> Cobol-word {reject}
+
+"POSITIVE" -> Cobol-word {reject}
+
+"PROCEDURE" -> Cobol-word {reject}
+
+"PROCEDURES" -> Cobol-word {reject}
+
+"PROCEED" -> Cobol-word {reject}
+
+"PROGRAM" -> Cobol-word {reject}
+
+"PROGRAM-ID" -> Cobol-word {reject}
+
+"QUOTE" -> Cobol-word {reject}
+
+"QUOTES" -> Cobol-word {reject}
+
+"RANDOM" -> Cobol-word {reject}
+
+"READ" -> Cobol-word {reject}
+
+"RECORD" -> Cobol-word {reject}
+
+"RECORDING" -> Cobol-word {reject}
+
+"RECORDS" -> Cobol-word {reject}
+
+"REDEFINES" -> Cobol-word {reject}
+
+"REEL" -> Cobol-word {reject}
+
+"REFERENCE" -> Cobol-word {reject}
+
+"RELATIVE" -> Cobol-word {reject}
+
+"RELEASE" -> Cobol-word {reject}
+
+"REMAINDER" -> Cobol-word {reject}
+
+"REMARKS" -> Cobol-word {reject}
+
+"REMOVAL" -> Cobol-word {reject}
+
+"RENAMES" -> Cobol-word {reject}
+
+"REPLACING" -> Cobol-word {reject}
+
+"RERUN" -> Cobol-word {reject}
+
+"RESERVE" -> Cobol-word {reject}
+
+"RETURN" -> Cobol-word {reject}
+
+"RETURN-CODE" -> Cobol-word {reject}
+
+"REVERSED" -> Cobol-word {reject}
+
+"REWIND" -> Cobol-word {reject}
+
+"REWRITE" -> Cobol-word {reject}
+
+"RIGHT" -> Cobol-word {reject}
+
+"ROUNDED" -> Cobol-word {reject}
+
+"RUN" -> Cobol-word {reject}
+
+"S" -> Cobol-word {reject}
+
+"SAME" -> Cobol-word {reject}
+
+"SD" -> Cobol-word {reject}
+
+"SEARCH" -> Cobol-word {reject}
+
+"SECTION" -> Cobol-word {reject}
+
+"SECURITY" -> Cobol-word {reject}
+
+"SEGMENT-LIMIT" -> Cobol-word {reject}
+
+"SELECT" -> Cobol-word {reject}
+
+"SENTENCE" -> Cobol-word {reject}
+
+"SEPARATE" -> Cobol-word {reject}
+
+"SEQUENCE" -> Cobol-word {reject}
+
+"SEQUENTIAL" -> Cobol-word {reject}
+
+"SET" -> Cobol-word {reject}
+
+"SHIFT-IN" -> Cobol-word {reject}
+
+"SHIFT-OUT" -> Cobol-word {reject}
+
+"SIGN" -> Cobol-word {reject}
+
+"SIZE" -> Cobol-word {reject}
+
+"SORT" -> Cobol-word {reject}
+
+"SORT-CONTROL" -> Cobol-word {reject}
+
+"SORT-CORE-SIZE" -> Cobol-word {reject}
+
+"SORT-FILE-SIZE" -> Cobol-word {reject}
+
+"SORT-MERGE" -> Cobol-word {reject}
+
+"SORT-MESSAGE" -> Cobol-word {reject}
+
+"SORT-MODE-SIZE" -> Cobol-word {reject}
+
+"SORT-RETURN" -> Cobol-word {reject}
+
+"SOURCE-COMPUTER" -> Cobol-word {reject}
+
+"SPACE" -> Cobol-word {reject}
+
+"SPACES" -> Cobol-word {reject}
+
+"SPECIAL-NAMES" -> Cobol-word {reject}
+
+"STANDARD" -> Cobol-word {reject}
+
+"STANDARD-1" -> Cobol-word {reject}
+
+"STANDARD-2" -> Cobol-word {reject}
+
+"START" -> Cobol-word {reject}
+
+"STATUS" -> Cobol-word {reject}
+
+"STOP" -> Cobol-word {reject}
+
+"STRING" -> Cobol-word {reject}
+
+"SUBTRACT" -> Cobol-word {reject}
+
+"SUPPRESS" -> Cobol-word {reject}
+
+"SYMBOLIC" -> Cobol-word {reject}
+
+"SYNC" -> Cobol-word {reject}
+
+"SYNCHRONIZED" -> Cobol-word {reject}
+
+"TALLY" -> Cobol-word {reject}
+
+"TALLYING" -> Cobol-word {reject}
+
+"TAPE" -> Cobol-word {reject}
+
+"TEST" -> Cobol-word {reject}
+
+"THAN" -> Cobol-word {reject}
+
+"THEN" -> Cobol-word {reject}
+
+"THROUGH" -> Cobol-word {reject}
+
+"THRU" -> Cobol-word {reject}
+
+"TIME" -> Cobol-word {reject}
+
+"TIMES" -> Cobol-word {reject}
+
+"TO" -> Cobol-word {reject}
+
+"TOP" -> Cobol-word {reject}
+
+"TRAILING" -> Cobol-word {reject}
+
+"TRUE" -> Cobol-word {reject}
+
+"U" -> Cobol-word {reject}
+
+"UNIT" -> Cobol-word {reject}
+
+"UNSTRING" -> Cobol-word {reject}
+
+"UNTIL" -> Cobol-word {reject}
+
+"UP" -> Cobol-word {reject}
+
+"UPON" -> Cobol-word {reject}
+
+"USAGE" -> Cobol-word {reject}
+
+"USE" -> Cobol-word {reject}
+
+"USING" -> Cobol-word {reject}
+
+"V" -> Cobol-word {reject}
+
+"VALUE" -> Cobol-word {reject}
+
+"VALUES" -> Cobol-word {reject}
+
+"VARYING" -> Cobol-word {reject}
+
+"WHEN" -> Cobol-word {reject}
+
+"WHEN-COMPILED" -> Cobol-word {reject}
+
+"WITH" -> Cobol-word {reject}
+
+"WORDS" -> Cobol-word {reject}
+
+"WORKING-STORAGE" -> Cobol-word {reject}
+
+"WRITE" -> Cobol-word {reject}
+
+"WRITE-ONLY" -> Cobol-word {reject}
+
+"ZERO" -> Cobol-word {reject}
+
+"ZEROES" -> Cobol-word {reject}
+
+"ZEROS" -> Cobol-word {reject}
+
+"-" -> Alphabetic-user-defined-word {reject}
+
+"66" -> Alphabetic-user-defined-word {reject}
+
+"88" -> Alphabetic-user-defined-word {reject}
+
+"ACCEPT" -> Alphabetic-user-defined-word {reject}
+
+"ACCESS" -> Alphabetic-user-defined-word {reject}
+
+"ADD" -> Alphabetic-user-defined-word {reject}
+
+"ADDRESS" -> Alphabetic-user-defined-word {reject}
+
+"ADVANCING" -> Alphabetic-user-defined-word {reject}
+
+"AFTER" -> Alphabetic-user-defined-word {reject}
+
+"ALL" -> Alphabetic-user-defined-word {reject}
+
+"ALPHABET" -> Alphabetic-user-defined-word {reject}
+
+"ALPHABETIC" -> Alphabetic-user-defined-word {reject}
+
+"ALPHABETIC-LOWER" -> Alphabetic-user-defined-word {reject}
+
+"ALPHABETIC-UPPER" -> Alphabetic-user-defined-word {reject}
+
+"ALPHANUMERIC" -> Alphabetic-user-defined-word {reject}
+
+"ALPHANUMERIC-EDITED" -> Alphabetic-user-defined-word {reject}
+
+"ALSO" -> Alphabetic-user-defined-word {reject}
+
+"ALTER" -> Alphabetic-user-defined-word {reject}
+
+"ALTERNATE" -> Alphabetic-user-defined-word {reject}
+
+"AND" -> Alphabetic-user-defined-word {reject}
+
+"ANY" -> Alphabetic-user-defined-word {reject}
+
+"APPLY" -> Alphabetic-user-defined-word {reject}
+
+"ARE" -> Alphabetic-user-defined-word {reject}
+
+"AREA" -> Alphabetic-user-defined-word {reject}
+
+"AREAS" -> Alphabetic-user-defined-word {reject}
+
+"ASCENDING" -> Alphabetic-user-defined-word {reject}
+
+"ASSIGN" -> Alphabetic-user-defined-word {reject}
+
+"AT" -> Alphabetic-user-defined-word {reject}
+
+"AUTHOR" -> Alphabetic-user-defined-word {reject}
+
+"BEFORE" -> Alphabetic-user-defined-word {reject}
+
+"BEGINNING" -> Alphabetic-user-defined-word {reject}
+
+"BINARY" -> Alphabetic-user-defined-word {reject}
+
+"BLANK" -> Alphabetic-user-defined-word {reject}
+
+"BLOCK" -> Alphabetic-user-defined-word {reject}
+
+"BOTTOM" -> Alphabetic-user-defined-word {reject}
+
+"BY" -> Alphabetic-user-defined-word {reject}
+
+"CALL" -> Alphabetic-user-defined-word {reject}
+
+"CANCEL" -> Alphabetic-user-defined-word {reject}
+
+"CHARACTER" -> Alphabetic-user-defined-word {reject}
+
+"CHARACTERS" -> Alphabetic-user-defined-word {reject}
+
+"CLASS" -> Alphabetic-user-defined-word {reject}
+
+"CLOSE" -> Alphabetic-user-defined-word {reject}
+
+"CODE-SET" -> Alphabetic-user-defined-word {reject}
+
+"COLLATING" -> Alphabetic-user-defined-word {reject}
+
+"COMMA" -> Alphabetic-user-defined-word {reject}
+
+"COMMON" -> Alphabetic-user-defined-word {reject}
+
+"COMP" -> Alphabetic-user-defined-word {reject}
+
+"COMP-1" -> Alphabetic-user-defined-word {reject}
+
+"COMP-2" -> Alphabetic-user-defined-word {reject}
+
+"COMP-3" -> Alphabetic-user-defined-word {reject}
+
+"COMP-4" -> Alphabetic-user-defined-word {reject}
+
+"COMPUTATIONAL" -> Alphabetic-user-defined-word {reject}
+
+"COMPUTATIONAL-1" -> Alphabetic-user-defined-word {reject}
+
+"COMPUTATIONAL-2" -> Alphabetic-user-defined-word {reject}
+
+"COMPUTATIONAL-3" -> Alphabetic-user-defined-word {reject}
+
+"COMPUTATIONAL-4" -> Alphabetic-user-defined-word {reject}
+
+"COMPUTE" -> Alphabetic-user-defined-word {reject}
+
+"CONFIGURATION" -> Alphabetic-user-defined-word {reject}
+
+"CONTAINS" -> Alphabetic-user-defined-word {reject}
+
+"CONTENT" -> Alphabetic-user-defined-word {reject}
+
+"CONTINUE" -> Alphabetic-user-defined-word {reject}
+
+"CONVERTING" -> Alphabetic-user-defined-word {reject}
+
+"COPY" -> Alphabetic-user-defined-word {reject}
+
+"CORR" -> Alphabetic-user-defined-word {reject}
+
+"CORRESPONDING" -> Alphabetic-user-defined-word {reject}
+
+"COUNT" -> Alphabetic-user-defined-word {reject}
+
+"CURRENCY" -> Alphabetic-user-defined-word {reject}
+
+"DATA" -> Alphabetic-user-defined-word {reject}
+
+"DATE" -> Alphabetic-user-defined-word {reject}
+
+"DATE-COMPILED" -> Alphabetic-user-defined-word {reject}
+
+"DATE-WRITTEN" -> Alphabetic-user-defined-word {reject}
+
+"DAY" -> Alphabetic-user-defined-word {reject}
+
+"DAY-OF-WEEK" -> Alphabetic-user-defined-word {reject}
+
+"DBCS" -> Alphabetic-user-defined-word {reject}
+
+"DEBUG-ITEM" -> Alphabetic-user-defined-word {reject}
+
+"DEBUGGING" -> Alphabetic-user-defined-word {reject}
+
+"DECIMAL-POINT" -> Alphabetic-user-defined-word {reject}
+
+"DECLARATIVES" -> Alphabetic-user-defined-word {reject}
+
+"DEGUGGING" -> Alphabetic-user-defined-word {reject}
+
+"DELETE" -> Alphabetic-user-defined-word {reject}
+
+"DELIMITED" -> Alphabetic-user-defined-word {reject}
+
+"DELIMITER" -> Alphabetic-user-defined-word {reject}
+
+"DEPENDING" -> Alphabetic-user-defined-word {reject}
+
+"DESCENDING" -> Alphabetic-user-defined-word {reject}
+
+"DISPLAY" -> Alphabetic-user-defined-word {reject}
+
+"DISPLAY-1" -> Alphabetic-user-defined-word {reject}
+
+"DIVIDE" -> Alphabetic-user-defined-word {reject}
+
+"DIVISION" -> Alphabetic-user-defined-word {reject}
+
+"DOWN" -> Alphabetic-user-defined-word {reject}
+
+"DUPLICATES" -> Alphabetic-user-defined-word {reject}
+
+"DYNAMIC" -> Alphabetic-user-defined-word {reject}
+
+"EBCDIC" -> Alphabetic-user-defined-word {reject}
+
+"EGCS" -> Alphabetic-user-defined-word {reject}
+
+"ELSE" -> Alphabetic-user-defined-word {reject}
+
+"END" -> Alphabetic-user-defined-word {reject}
+
+"END-ADD" -> Alphabetic-user-defined-word {reject}
+
+"END-CALL" -> Alphabetic-user-defined-word {reject}
+
+"END-COMPUTE" -> Alphabetic-user-defined-word {reject}
+
+"END-DELETE" -> Alphabetic-user-defined-word {reject}
+
+"END-DIVIDE" -> Alphabetic-user-defined-word {reject}
+
+"END-EVALUATE" -> Alphabetic-user-defined-word {reject}
+
+"END-IF" -> Alphabetic-user-defined-word {reject}
+
+"END-MULTIPLY" -> Alphabetic-user-defined-word {reject}
+
+"END-OF-PAGE" -> Alphabetic-user-defined-word {reject}
+
+"END-PERFORM" -> Alphabetic-user-defined-word {reject}
+
+"END-READ" -> Alphabetic-user-defined-word {reject}
+
+"END-RETURN" -> Alphabetic-user-defined-word {reject}
+
+"END-REWRITE" -> Alphabetic-user-defined-word {reject}
+
+"END-SEARCH" -> Alphabetic-user-defined-word {reject}
+
+"END-START" -> Alphabetic-user-defined-word {reject}
+
+"END-STRING" -> Alphabetic-user-defined-word {reject}
+
+"END-SUBTRACT" -> Alphabetic-user-defined-word {reject}
+
+"END-UNSTRING" -> Alphabetic-user-defined-word {reject}
+
+"END-WRITE" -> Alphabetic-user-defined-word {reject}
+
+"ENDING" -> Alphabetic-user-defined-word {reject}
+
+"ENTRY" -> Alphabetic-user-defined-word {reject}
+
+"ENVIRONMENT" -> Alphabetic-user-defined-word {reject}
+
+"EOP" -> Alphabetic-user-defined-word {reject}
+
+"EQUAL" -> Alphabetic-user-defined-word {reject}
+
+"ERROR" -> Alphabetic-user-defined-word {reject}
+
+"EVALUATE" -> Alphabetic-user-defined-word {reject}
+
+"EVERY" -> Alphabetic-user-defined-word {reject}
+
+"EXCEPTION" -> Alphabetic-user-defined-word {reject}
+
+"EXIT" -> Alphabetic-user-defined-word {reject}
+
+"EXTEND" -> Alphabetic-user-defined-word {reject}
+
+"EXTERNAL" -> Alphabetic-user-defined-word {reject}
+
+"F" -> Alphabetic-user-defined-word {reject}
+
+"FALSE" -> Alphabetic-user-defined-word {reject}
+
+"FD" -> Alphabetic-user-defined-word {reject}
+
+"FILE" -> Alphabetic-user-defined-word {reject}
+
+"FILE-CONTROL" -> Alphabetic-user-defined-word {reject}
+
+"FILLER" -> Alphabetic-user-defined-word {reject}
+
+"FIRST" -> Alphabetic-user-defined-word {reject}
+
+"FOOTING" -> Alphabetic-user-defined-word {reject}
+
+"FOR" -> Alphabetic-user-defined-word {reject}
+
+"FROM" -> Alphabetic-user-defined-word {reject}
+
+"GIVING" -> Alphabetic-user-defined-word {reject}
+
+"GLOBAL" -> Alphabetic-user-defined-word {reject}
+
+"GO" -> Alphabetic-user-defined-word {reject}
+
+"GOBACK" -> Alphabetic-user-defined-word {reject}
+
+"GREATER" -> Alphabetic-user-defined-word {reject}
+
+"HIGH-VALUE" -> Alphabetic-user-defined-word {reject}
+
+"HIGH-VALUES" -> Alphabetic-user-defined-word {reject}
+
+"I-O" -> Alphabetic-user-defined-word {reject}
+
+"I-O-CONTROL" -> Alphabetic-user-defined-word {reject}
+
+"ID" -> Alphabetic-user-defined-word {reject}
+
+"IDENTIFICATION" -> Alphabetic-user-defined-word {reject}
+
+"IF" -> Alphabetic-user-defined-word {reject}
+
+"IN" -> Alphabetic-user-defined-word {reject}
+
+"INDEX" -> Alphabetic-user-defined-word {reject}
+
+"INDEXED" -> Alphabetic-user-defined-word {reject}
+
+"INITIAL" -> Alphabetic-user-defined-word {reject}
+
+"INITIALIZE" -> Alphabetic-user-defined-word {reject}
+
+"INPUT" -> Alphabetic-user-defined-word {reject}
+
+"INPUT-OUTPUT" -> Alphabetic-user-defined-word {reject}
+
+"INSPECT" -> Alphabetic-user-defined-word {reject}
+
+"INSTALLATION" -> Alphabetic-user-defined-word {reject}
+
+"INTO" -> Alphabetic-user-defined-word {reject}
+
+"INVALID" -> Alphabetic-user-defined-word {reject}
+
+"IS" -> Alphabetic-user-defined-word {reject}
+
+"JUST" -> Alphabetic-user-defined-word {reject}
+
+"JUSTIFIED" -> Alphabetic-user-defined-word {reject}
+
+"KANJI" -> Alphabetic-user-defined-word {reject}
+
+"KEY" -> Alphabetic-user-defined-word {reject}
+
+"LABEL" -> Alphabetic-user-defined-word {reject}
+
+"LEADING" -> Alphabetic-user-defined-word {reject}
+
+"LEFT" -> Alphabetic-user-defined-word {reject}
+
+"LENGTH" -> Alphabetic-user-defined-word {reject}
+
+"LESS" -> Alphabetic-user-defined-word {reject}
+
+"LINAGE" -> Alphabetic-user-defined-word {reject}
+
+"LINAGE-COUNTER" -> Alphabetic-user-defined-word {reject}
+
+"LINE" -> Alphabetic-user-defined-word {reject}
+
+"LINES" -> Alphabetic-user-defined-word {reject}
+
+"LINKAGE" -> Alphabetic-user-defined-word {reject}
+
+"LOCK" -> Alphabetic-user-defined-word {reject}
+
+"LOW-VALUE" -> Alphabetic-user-defined-word {reject}
+
+"LOW-VALUES" -> Alphabetic-user-defined-word {reject}
+
+"MEMORY" -> Alphabetic-user-defined-word {reject}
+
+"MERGE" -> Alphabetic-user-defined-word {reject}
+
+"MODE" -> Alphabetic-user-defined-word {reject}
+
+"MODULES" -> Alphabetic-user-defined-word {reject}
+
+"MORE-LABELS" -> Alphabetic-user-defined-word {reject}
+
+"MOVE" -> Alphabetic-user-defined-word {reject}
+
+"MULTIPLE" -> Alphabetic-user-defined-word {reject}
+
+"MULTIPLY" -> Alphabetic-user-defined-word {reject}
+
+"NATIVE" -> Alphabetic-user-defined-word {reject}
+
+"NEGATIVE" -> Alphabetic-user-defined-word {reject}
+
+"NEXT" -> Alphabetic-user-defined-word {reject}
+
+"NO" -> Alphabetic-user-defined-word {reject}
+
+"NOT" -> Alphabetic-user-defined-word {reject}
+
+"NULL" -> Alphabetic-user-defined-word {reject}
+
+"NULLS" -> Alphabetic-user-defined-word {reject}
+
+"NUMERIC" -> Alphabetic-user-defined-word {reject}
+
+"NUMERIC-EDITED" -> Alphabetic-user-defined-word {reject}
+
+"OBJECT-COMPUTER" -> Alphabetic-user-defined-word {reject}
+
+"OCCURS" -> Alphabetic-user-defined-word {reject}
+
+"OF" -> Alphabetic-user-defined-word {reject}
+
+"OFF" -> Alphabetic-user-defined-word {reject}
+
+"OMITTED" -> Alphabetic-user-defined-word {reject}
+
+"ON" -> Alphabetic-user-defined-word {reject}
+
+"OPEN" -> Alphabetic-user-defined-word {reject}
+
+"OPTIONAL" -> Alphabetic-user-defined-word {reject}
+
+"OR" -> Alphabetic-user-defined-word {reject}
+
+"ORDER" -> Alphabetic-user-defined-word {reject}
+
+"ORGANIZATION" -> Alphabetic-user-defined-word {reject}
+
+"OTHER" -> Alphabetic-user-defined-word {reject}
+
+"OUTPUT" -> Alphabetic-user-defined-word {reject}
+
+"OVERFLOW" -> Alphabetic-user-defined-word {reject}
+
+"PACKED-DECIMAL" -> Alphabetic-user-defined-word {reject}
+
+"PADDING" -> Alphabetic-user-defined-word {reject}
+
+"PAGE" -> Alphabetic-user-defined-word {reject}
+
+"PASSWORD" -> Alphabetic-user-defined-word {reject}
+
+"PERFORM" -> Alphabetic-user-defined-word {reject}
+
+"PIC" -> Alphabetic-user-defined-word {reject}
+
+"PICTURE" -> Alphabetic-user-defined-word {reject}
+
+"POINTER" -> Alphabetic-user-defined-word {reject}
+
+"POSITION" -> Alphabetic-user-defined-word {reject}
+
+"POSITIVE" -> Alphabetic-user-defined-word {reject}
+
+"PROCEDURE" -> Alphabetic-user-defined-word {reject}
+
+"PROCEDURES" -> Alphabetic-user-defined-word {reject}
+
+"PROCEED" -> Alphabetic-user-defined-word {reject}
+
+"PROGRAM" -> Alphabetic-user-defined-word {reject}
+
+"PROGRAM-ID" -> Alphabetic-user-defined-word {reject}
+
+"QUOTE" -> Alphabetic-user-defined-word {reject}
+
+"QUOTES" -> Alphabetic-user-defined-word {reject}
+
+"RANDOM" -> Alphabetic-user-defined-word {reject}
+
+"READ" -> Alphabetic-user-defined-word {reject}
+
+"RECORD" -> Alphabetic-user-defined-word {reject}
+
+"RECORDING" -> Alphabetic-user-defined-word {reject}
+
+"RECORDS" -> Alphabetic-user-defined-word {reject}
+
+"REDEFINES" -> Alphabetic-user-defined-word {reject}
+
+"REEL" -> Alphabetic-user-defined-word {reject}
+
+"REFERENCE" -> Alphabetic-user-defined-word {reject}
+
+"RELATIVE" -> Alphabetic-user-defined-word {reject}
+
+"RELEASE" -> Alphabetic-user-defined-word {reject}
+
+"REMAINDER" -> Alphabetic-user-defined-word {reject}
+
+"REMARKS" -> Alphabetic-user-defined-word {reject}
+
+"REMOVAL" -> Alphabetic-user-defined-word {reject}
+
+"RENAMES" -> Alphabetic-user-defined-word {reject}
+
+"REPLACING" -> Alphabetic-user-defined-word {reject}
+
+"RERUN" -> Alphabetic-user-defined-word {reject}
+
+"RESERVE" -> Alphabetic-user-defined-word {reject}
+
+"RETURN" -> Alphabetic-user-defined-word {reject}
+
+"RETURN-CODE" -> Alphabetic-user-defined-word {reject}
+
+"REVERSED" -> Alphabetic-user-defined-word {reject}
+
+"REWIND" -> Alphabetic-user-defined-word {reject}
+
+"REWRITE" -> Alphabetic-user-defined-word {reject}
+
+"RIGHT" -> Alphabetic-user-defined-word {reject}
+
+"ROUNDED" -> Alphabetic-user-defined-word {reject}
+
+"RUN" -> Alphabetic-user-defined-word {reject}
+
+"S" -> Alphabetic-user-defined-word {reject}
+
+"SAME" -> Alphabetic-user-defined-word {reject}
+
+"SD" -> Alphabetic-user-defined-word {reject}
+
+"SEARCH" -> Alphabetic-user-defined-word {reject}
+
+"SECTION" -> Alphabetic-user-defined-word {reject}
+
+"SECURITY" -> Alphabetic-user-defined-word {reject}
+
+"SEGMENT-LIMIT" -> Alphabetic-user-defined-word {reject}
+
+"SELECT" -> Alphabetic-user-defined-word {reject}
+
+"SENTENCE" -> Alphabetic-user-defined-word {reject}
+
+"SEPARATE" -> Alphabetic-user-defined-word {reject}
+
+"SEQUENCE" -> Alphabetic-user-defined-word {reject}
+
+"SEQUENTIAL" -> Alphabetic-user-defined-word {reject}
+
+"SET" -> Alphabetic-user-defined-word {reject}
+
+"SHIFT-IN" -> Alphabetic-user-defined-word {reject}
+
+"SHIFT-OUT" -> Alphabetic-user-defined-word {reject}
+
+"SIGN" -> Alphabetic-user-defined-word {reject}
+
+"SIZE" -> Alphabetic-user-defined-word {reject}
+
+"SORT" -> Alphabetic-user-defined-word {reject}
+
+"SORT-CONTROL" -> Alphabetic-user-defined-word {reject}
+
+"SORT-CORE-SIZE" -> Alphabetic-user-defined-word {reject}
+
+"SORT-FILE-SIZE" -> Alphabetic-user-defined-word {reject}
+
+"SORT-MERGE" -> Alphabetic-user-defined-word {reject}
+
+"SORT-MESSAGE" -> Alphabetic-user-defined-word {reject}
+
+"SORT-MODE-SIZE" -> Alphabetic-user-defined-word {reject}
+
+"SORT-RETURN" -> Alphabetic-user-defined-word {reject}
+
+"SOURCE-COMPUTER" -> Alphabetic-user-defined-word {reject}
+
+"SPACE" -> Alphabetic-user-defined-word {reject}
+
+"SPACES" -> Alphabetic-user-defined-word {reject}
+
+"SPECIAL-NAMES" -> Alphabetic-user-defined-word {reject}
+
+"STANDARD" -> Alphabetic-user-defined-word {reject}
+
+"STANDARD-1" -> Alphabetic-user-defined-word {reject}
+
+"STANDARD-2" -> Alphabetic-user-defined-word {reject}
+
+"START" -> Alphabetic-user-defined-word {reject}
+
+"STATUS" -> Alphabetic-user-defined-word {reject}
+
+"STOP" -> Alphabetic-user-defined-word {reject}
+
+"STRING" -> Alphabetic-user-defined-word {reject}
+
+"SUBTRACT" -> Alphabetic-user-defined-word {reject}
+
+"SUPPRESS" -> Alphabetic-user-defined-word {reject}
+
+"SYMBOLIC" -> Alphabetic-user-defined-word {reject}
+
+"SYNC" -> Alphabetic-user-defined-word {reject}
+
+"SYNCHRONIZED" -> Alphabetic-user-defined-word {reject}
+
+"TALLY" -> Alphabetic-user-defined-word {reject}
+
+"TALLYING" -> Alphabetic-user-defined-word {reject}
+
+"TAPE" -> Alphabetic-user-defined-word {reject}
+
+"TEST" -> Alphabetic-user-defined-word {reject}
+
+"THAN" -> Alphabetic-user-defined-word {reject}
+
+"THEN" -> Alphabetic-user-defined-word {reject}
+
+"THROUGH" -> Alphabetic-user-defined-word {reject}
+
+"THRU" -> Alphabetic-user-defined-word {reject}
+
+"TIME" -> Alphabetic-user-defined-word {reject}
+
+"TIMES" -> Alphabetic-user-defined-word {reject}
+
+"TO" -> Alphabetic-user-defined-word {reject}
+
+"TOP" -> Alphabetic-user-defined-word {reject}
+
+"TRAILING" -> Alphabetic-user-defined-word {reject}
+
+"TRUE" -> Alphabetic-user-defined-word {reject}
+
+"U" -> Alphabetic-user-defined-word {reject}
+
+"UNIT" -> Alphabetic-user-defined-word {reject}
+
+"UNSTRING" -> Alphabetic-user-defined-word {reject}
+
+"UNTIL" -> Alphabetic-user-defined-word {reject}
+
+"UP" -> Alphabetic-user-defined-word {reject}
+
+"UPON" -> Alphabetic-user-defined-word {reject}
+
+"USAGE" -> Alphabetic-user-defined-word {reject}
+
+"USE" -> Alphabetic-user-defined-word {reject}
+
+"USING" -> Alphabetic-user-defined-word {reject}
+
+"V" -> Alphabetic-user-defined-word {reject}
+
+"VALUE" -> Alphabetic-user-defined-word {reject}
+
+"VALUES" -> Alphabetic-user-defined-word {reject}
+
+"VARYING" -> Alphabetic-user-defined-word {reject}
+
+"WHEN" -> Alphabetic-user-defined-word {reject}
+
+"WHEN-COMPILED" -> Alphabetic-user-defined-word {reject}
+
+"WITH" -> Alphabetic-user-defined-word {reject}
+
+"WORDS" -> Alphabetic-user-defined-word {reject}
+
+"WORKING-STORAGE" -> Alphabetic-user-defined-word {reject}
+
+"WRITE" -> Alphabetic-user-defined-word {reject}
+
+"WRITE-ONLY" -> Alphabetic-user-defined-word {reject}
+
+"ZERO" -> Alphabetic-user-defined-word {reject}
+
+"ZEROES" -> Alphabetic-user-defined-word {reject}
+
+"ZEROS" -> Alphabetic-user-defined-word {reject}
+
+context-free priorities
+
+    Call-overflow-phrase  -> Call-rest-phrase >
+    Call-exception-phrase -> Call-rest-phrase
+
+ 

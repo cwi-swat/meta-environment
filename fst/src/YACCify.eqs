@@ -1,0 +1,116 @@
+equations
+
+[IT-1] IT(YACCify,&SDF0,&Focus0)=YACCify(&SDF0,&Focus0)
+
+[YACC-1] &Sort+0=definedSorts(&SDF0,&Focus0),
+	 &SDF1=YACCifySorts(&SDF0,&Sort+0),
+	 match(&SDF1,&Focus0,_)=&ESymbol+0,
+	 YACCifyList(&SDF1,&Focus0,&ESymbol+0)=&SDF2
+	 ========================================
+	 YACCify( &SDF0,&Focus0)=&SDF2
+
+[default-YACC-2] &Sort+0=definedSorts(&SDF0,&Focus0),
+	 	 &SDF1=YACCifySorts(&SDF0,&Sort+0)
+		 ========================================
+		 YACCify( &SDF0,&Focus0)=&SDF1
+
+[default-YACC-3] YACCify( &SDF0,&Focus0)=undefined
+
+[YACC-4] &SDF1=YACCifySorts(&SDF0,&Sort0),
+	 &SDF2=YACCifySorts(&SDF1,&Sort+0)
+	 ===================================
+	 YACCifySorts(&SDF0,&Sort0 &Sort+0)=&SDF2
+
+[YACC-5] &Focus0=modules all sorts &Sort0,
+	 &Production0=focusedRules(&SDF0,&Focus0),
+	 &Production0=&Symbol0? -> &Sort0 &Attributes0,
+	 &SDF1=replace(&SDF0,&Focus0,&Symbol0?,),
+	 &SDF2=add(&SDF1,&Focus0,&Symbol0 -> &Sort0)
+	 ==============================================
+	 YACCifySorts( &SDF0,&Sort0)=&SDF2
+
+[YACC-6] &Focus0=modules all sorts &Sort0,
+	 &Production0=focusedRules(&SDF0,&Focus0),
+	 &Production0=&Symbol0+ -> &Sort0 &Attributes0, 
+	 &SDF1=replace(&SDF0,&Focus0,&Symbol0+, &Symbol0),
+	 &SDF2=add(&SDF1,&Focus0,&Symbol0 &Sort0-> &Sort0)
+	 =================================================
+	 YACCifySorts( &SDF0,&Sort0)=&SDF2
+
+[YACC-7] &Focus0=modules all sorts &Sort0,
+	 &Production0=focusedRules(&SDF0,&Focus0),
+	 &Production0=&Symbol0* -> &Sort0 &Attributes0, 
+	 &Focus0=modules all sorts &Sort0,
+	 &SDF1=replace(&SDF0,&Focus0,&Symbol0*,),
+	 &SDF2=add(&SDF1,&Focus0,&Symbol0 &Sort0-> &Sort0)
+	 ==========================================================
+	 YACCifySorts( &SDF0, &Sort0)=&SDF2
+
+[YACC-8] &Focus0=modules all sorts &Sort0,
+	 &Production0=focusedRules(&SDF0,&Focus0),
+	 &Production0={&Symbol0 &Symbol1}+ -> &Sort0 &Attributes0, 
+	 &Sort1=newSort(&SDF0,&Sort0,"Rest"),
+	 &SDF1=replace(&SDF0,&Focus0,{&Symbol0 &Symbol1}+,&Symbol0 &Sort1),
+	 &SDF2=add(&SDF1,&Focus0,-> &Sort1 &Symbol1 &Symbol0 &Sort1-> &Sort1)
+	 ====================================================================
+	 YACCifySorts( &SDF0,&Sort0)=&SDF2
+
+[YACC-9] &Focus0=modules all sorts &Sort0,
+	 &Production0=focusedRules(&SDF0,&Focus0),
+	 &Production0={&Symbol0 &Symbol1}* -> &Sort0 &Attributes0, 
+	 &Sort1=newSort(&SDF0,&Sort0,"Rest"),
+	 &SDF1=replace(&SDF0,&Focus0,{&Symbol0 &Symbol1}*,),
+	 &SDF2=add(&SDF1,
+		   &Focus0,
+		   &Symbol0 &Sort1 -> &Sort0
+		    -> &Sort1
+		   &Symbol1 &Symbol0 &Sort1-> Sort1)
+	 ==========================================================
+	 YACCifySorts( &SDF0,&Sort0)=&SDF2
+
+[default-YACC-10]  YACCifySorts( &SDF0,&Sort+0)=&SDF0
+
+[YACC-11] &ESymbol0=: &Symbol0 ? :,
+	  &Sort0=newSort(&SDF0,&Symbol0,"Optional"),
+	  &SDF1=replace(&SDF0,&Focus0,&Symbol0 ?,&Sort0),
+	  &SDF2=add(&SDF1,&Focus0,&Symbol0 ? -> &Sort0),
+	  &SDF3=YACCifySorts(&SDF2,&Sort0)
+	  ===============================================
+	  YACCifyList(&SDF0,&Focus0,&ESymbol0)=&SDF3
+
+[YACC-12] &ESymbol0=: &Symbol0 + :,
+	  &Sort0=newSort(&SDF0,&Symbol0,"PlusList"),
+	  &SDF1=replace(&SDF0,&Focus0,&Symbol0 +,&Sort0),
+	  &SDF2=add(&SDF1,&Focus0,&Symbol0 + -> &Sort0),
+	  &SDF3=YACCifySorts(&SDF2,&Sort0)
+	  ===============================================
+	  YACCifyList(&SDF0,&Focus0,&ESymbol0)=&SDF3
+
+[YACC-13] &ESymbol0=: &Symbol0 * :,
+	  &Sort0=newSort(&SDF0,&Symbol0,"StarList"),
+	  &SDF1=replace(&SDF0,&Focus0,&Symbol0 *,&Sort0),
+	  &SDF2=add(&SDF1,&Focus0,&Symbol0 * -> &Sort0),
+	  &SDF3=YACCifySorts(&SDF2,&Sort0)
+	  ===============================================
+	  YACCifyList(&SDF0,&Focus0,&ESymbol0)=&SDF3
+
+[YACC-14] &ESymbol0=: {&Symbol0 &Symbol1}+ :,
+	  &Sort0=newSort(&SDF0,&Symbol0,"SeparatedPlusList"),
+	  &SDF1=replace(&SDF0,&Focus0,{&Symbol0 &Symbol1}+,&Sort0),
+	  &SDF2=add(&SDF1,&Focus0,{&Symbol0 &Symbol1}+ -> &Sort0),
+	  &SDF3=YACCifySorts(&SDF2,&Sort0)
+	  =========================================================
+	  YACCifyList(&SDF0,&Focus0,&ESymbol0)=&SDF3
+
+[YACC-15] &ESymbol0=: {&Symbol0 &Symbol1}* :,
+	  &Sort0=newSort(&SDF0,&Symbol0,"SeparatedStarList"),
+	  &SDF1=replace(&SDF0,&Focus0,{&Symbol0 &Symbol1}*,&Sort0),
+	  &SDF2=add(&SDF1,&Focus0,{&Symbol0 &Symbol1}* -> &Sort0),
+	  &SDF3=YACCifySorts(&SDF2,&Sort0)
+	  =========================================================
+	  YACCifyList(&SDF0,&Focus0,&ESymbol0)=&SDF3
+
+[YACC-16] &SDF1=YACCifyList(&SDF0,&Focus0,&ESymbol0),
+	  &SDF2=YACCifyList(&SDF1,&Focus0,&ESymbol+0)
+	  =====================================================
+	  YACCifyList(&SDF0,&Focus0,&ESymbol0 &ESymbol+0)=&SDF2

@@ -1,0 +1,15 @@
+module Substitute
+
+imports Auxiliary
+
+exports
+
+  context-free syntax
+
+  "substitute" "(" SDF "," Focus "," Sort "," Sort ")" -> SDF {traverse}
+  "substitute" "(" Module "," Focus "," Sort "," Sort ")" -> Module {traverse}
+  "substitute" "(" Production "," Focus "," Sort "," Sort ")" -> Production {traverse}
+  "substitute" "(" Sort "," Focus "," Sort "," Sort ")" -> Sort {traverse}
+
+  "substitute" "(" SDF "," ModuleName "," ModuleName ")" -> SDF {traverse}
+  "substitute" "(" ModuleName "," ModuleName "," ModuleName ")" -> ModuleName {traverse}
