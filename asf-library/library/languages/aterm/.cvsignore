@@ -1,7 +1,10 @@
 Makefile.in
 Makefile
-*.eqs
+*.sdf.baf
+*.asf.baf
 *.trm.tbl
+*.eqs
 .deps
-link-test
 link-test.c
+link-test
+
