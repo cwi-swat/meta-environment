@@ -57,7 +57,11 @@ AFun       SG_AprodAFun(void);
 AFun       SG_AmbAFun(void);
 
 void       SG_Amb(parse_table *, ATermAppl, ATermAppl);
+
+enum  SG_CYCLEMODE { SG_CYCLE_ENCOUNTERED, SG_CYCLE_RESET } ;
+ATbool     SG_CycleEncountered(int Mode);
 ATermList  SG_CyclicTerm(ATerm t);
+
 ATermAppl  SG_ExpandApplNode(parse_table * pt, ATermAppl t,
                              ATbool recurse, ATbool doambs);
 ATerm      SG_YieldPT(parse_table *pt, ATerm t);

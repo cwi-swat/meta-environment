@@ -15,6 +15,7 @@
 #include <stdlib.h>
 
 #include "mem-alloc.h"
+#include "forest.h"
 #include "stack.h"
 #include "sglr.h"
 
@@ -84,6 +85,15 @@ st_link *SG_NewLink(tree t, stack *st) {
 st_link *SG_AddLink(stack *frm, stack *to, tree t)
 {
   st_link *link;
+
+  if(SG_SubStack(frm, to)) {
+    SG_CycleEncountered(SG_CYCLE_ENCOUNTERED);
+    if(SG_DEBUG)
+      ATfprintf(SGlog(),"Refusing cyclic parse stack creation "
+                        "(%d is already a substack of %d)\n",
+                frm, to);
+    return NULL;
+  }
 
   if((link = SG_NewLink(t, to))) {
     frm->links = SG_AddLinks(link, frm->links);
@@ -255,13 +265,38 @@ ATbool SG_InStacks(stack *st1, stacks *sts, ATbool deep)
     st0 = SG_HEAD(sts);
     sts = SG_TAIL(sts);
     if(st1 == st0) return ATtrue;
+#if !defined(DETECT_CYCLIC_STACKS)
+    if(deep && SG_SubStack(st1, st0)) {
+#else
     if(deep && SG_SubStack(st1, st0, ATempty)) {
+#endif
       return ATtrue;
     }
   }
   return ATfalse;
 }
 
+#if !defined(DETECT_CYCLIC_STACKS)
+ATbool SG_SubStack(stack *st1, stack *st0)
+{
+  st_link *l;
+  st_links *ls;
+
+  if(st1 == st0)
+    return ATtrue;
+  if(!st0 || !st1)
+    return ATfalse;
+
+  ls = SG_ST_LINKS(st0);
+  for (; ls; ls = SG_TAIL(ls)) {
+    l = SG_HEAD(ls);
+    if (SG_SubStack(st1, SG_LK_STACK(l))) {
+      return ATtrue;
+    }
+  }
+  return ATfalse;
+}
+#else  /*   Catching cyclic stacks...  */
 ATbool SG_SubStack(stack *st1, stack *st0, ATermList visited)
 {
   st_link *l;
@@ -291,7 +326,7 @@ ATbool SG_SubStack(stack *st1, stack *st0, ATermList visited)
   }
   return ATfalse;
 }
-
+#endif
 
 /*
    Find a stack with a state |s| in a list of stacks.

@@ -132,6 +132,13 @@ ATerm     CycleStart = NULL;
 ATbool    CycleShown;
 ATermList Cycle;
 
+
+/*
+
+  Managing Cyclic Syntax...
+
+ */
+
 void SG_ShowCycle(ATerm CurrTerm, ATerm CycleStart)
 {
   ATermList ambs;
@@ -185,13 +192,6 @@ void SG_ShowCycle(ATerm CurrTerm, ATerm CycleStart)
       break;
   }
 }
-
-#ifdef TABLE_INSTEAD_OF_MARKS
-  ATermTable MarkTable;
-  #define SG_IS_MARKED(t)	ATtableGet(MarkTable, t)
-  #define SG_MARK(t)		ATtablePut(MarkTable, t, SG_ApplAFun())
-  #define SG_UNMARK(t)		ATtableRemove(MarkTable, t)
-#endif
 
 void SG_TermIsCyclic(ATerm t)
 {
@@ -248,16 +248,32 @@ void SG_TermIsCyclic(ATerm t)
   SG_UNMARK(t);
 }
 
+ATbool SG_CycleEncountered(int Mode)
+{
+  static ATbool CycleEncountered = ATfalse;
 
-ATermList SG_CyclicTerm(ATerm t) {
-#ifdef TABLE_INSTEAD_OF_MARKS
-  MarkTable = ATtableCreate(4096, 75);
-#endif
+  switch(Mode) {
+    case SG_CYCLE_ENCOUNTERED:
+      CycleEncountered = ATtrue;
+      break;
+    case SG_CYCLE_RESET:
+      if(CycleEncountered) {
+        CycleEncountered = ATfalse;
+        return ATtrue;
+      }
+      break;
+  }
+  return CycleEncountered;
+}
+
+
+ATermList SG_CyclicTerm(ATerm t)
+{
+  if(!SG_CycleEncountered(SG_CYCLE_RESET))
+    return ATempty;
+
   CycleStart = NULL;
   SG_TermIsCyclic(t);
-#ifdef TABLE_INSTEAD_OF_MARKS
-  ATtableDestroy(MarkTable);
-#endif
   SG_ShowCycle(NULL, CycleStart);
 
   return(CycleStart?ATreverse(Cycle):ATempty);

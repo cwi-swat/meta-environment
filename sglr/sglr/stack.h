@@ -135,12 +135,11 @@ void     SG_MarkStackRejected(stack *);
 ATbool   SG_Rejected(stack *);
 ATbool   SG_DeeplyRejected(stack *);
 ATbool   SG_InStacks(stack *, stacks *, ATbool);
-ATbool   SG_SubStack(stack *, stack *, ATermList);
 
-#if 0
-void     SG_MarkStackUnrejected(stack *);
-void     SG_MarkLinkRejected(st_link *);
-void     SG_MarkLinkUnrejected(st_link *);
+#if !defined(DETECT_CYCLIC_STACKS)
+  ATbool   SG_SubStack(stack *, stack *);
+#else
+  ATbool   SG_SubStack(stack *, stack *, ATermList);
 #endif
 
 #endif  /* _STACK_H_ */
