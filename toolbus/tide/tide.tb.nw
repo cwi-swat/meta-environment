@@ -6,11 +6,12 @@
 <<process EVENT-RULES>>
 <<process BROADCAST>>
 <<process SOURCE-VIEWER>>
+<<process RULE-VIEWER>>
 <<process MASTER-CONTROL>>
 
 <<tool definitions>>
 
-toolbus(DAP-CONNECT, MASTER-CONTROL, BROADCAST, SOURCE-VIEWER)
+toolbus(DAP-CONNECT, MASTER-CONTROL, BROADCAST, SOURCE-VIEWER, RULE-VIEWER)
 @
 
 %}}}
@@ -25,6 +26,7 @@ In this section, we define the tools used in this ToolBus script.
 tool debug-adapter is { }
 tool master-control is { command = "tcltk-adapter -script master-control.tcl" }
 tool source-viewer  is { command = "tcltk-adapter -script source-viewer.tcl" }
+tool rule-viewer  is { command = "tcltk-adapter -script rule-viewer.tcl" }
 %%tool viewer is { command = "./buscontrol" }
 @
 
@@ -248,6 +250,56 @@ in
     rec-event(S, current-port(D?,P?,Port?)) .
     snd-note(event(proc(D,P),current-port(Port))) .
     snd-ack-event(S, current-port(D,P,Port))
+  ) * delta
+endlet
+@
+
+%}}}
+%{{{ process RULE-VIEWER
+
+<<process RULE-VIEWER>>=
+process RULE-VIEWER is
+let
+  R : rule-viewer,
+  D : debug-adapter,
+  P : term,
+  Info : list,
+  Port : term,
+  Cond : term,
+  Acts : term,
+  Life : term,
+  Rid  : int,
+  Type : term
+in
+  execute(rule-viewer, R?) .
+  subscribe(event(<term>,dap-connected(<list>,<list>))) .
+  subscribe(event(<term>,dap-disconnected)) .
+  subscribe(event(<term>,rule-created(<term>,<term>,<term>,<term>,<int>))) .
+  subscribe(event(<term>,rule-destroyed(<int>))) .
+  snd-note(new-tool("Rule viewer", R, view-rules)) .
+  ( rec-msg(R, view-rules, D?) .
+    snd-do(R, view-rules(D))
+    +
+    rec-note(event(proc(D?,all), dap-connected(Info?,P?))) .
+    snd-do(R, dap-connected(D, Info, P))
+    +
+    rec-note(event(proc(D?,P?), dap-disconnected)) .
+    snd-do(R, dap-disconnected(D))
+    +
+    rec-note(event(proc(D?,P?), rule-created(Port?,Cond?,Acts?,Life?,Rid?))) .
+    snd-do(R, rule-created(D,P,Rid,Port,Cond,Acts,Life))
+    +
+    rec-note(event(proc(D?,P?), rule-destroyed(Rid?))) .
+    snd-do(R, rule-destroyed(D,P, Rid))
+    +
+    rec-event(R, create-rule(Type?,D?,P?,Port?,Cond?,Acts?,Life?)) .
+    snd-msg(proc(D,P),create-rule(Port,Cond,Acts,Life)) .
+    rec-msg(proc(D,P), create-rule(Port, Cond, Acts, Life, Rid?)) .
+    snd-ack-event(R, create-rule(Type,D,P,Port,Cond,Acts,Life,Rid))
+    +
+    rec-event(R, destroy-rule(D?,P?,Rid?)) .
+    snd-msg(proc(D,P), destroy-rule(Rid)) .
+    snd-ack-event(R, destroy-rule(D,P,Rid))    
   ) * delta
 endlet
 @

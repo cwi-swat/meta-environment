@@ -395,7 +395,7 @@ and read detailed port information when necessary.
 			rule->port.u.exec_state = 
 					dap_term2es(list_index(port, 3));
 			break;
-    case PORT_LOCATION:	dap_eventlocation(list_next(list_next(list_next(port))),
+    case PORT_LOCATION:	dap_eventlocation(list_next(list_next(port)),
 				&rule->port.u.loc);
 			break;
     case PORT_CALL:
@@ -589,18 +589,11 @@ Analyze location data and fill the location structure {\tt l}.
 <<dap_eventlocation>>=
 void dap_eventlocation(term_list *loc_data, location *l)
 {
-  if(TB_match(loc_data, "[lcp,<str>,<int>,<int>,<int>,<int>]",
+  if(TB_match(loc_data, "[<str>,<int>,<int>,<int>,<int>]",
 		&l->module,
 		&l->start_line, &l->start_col, &l->end_line, &l->end_col))
     return;
 
-  if(TB_match(loc_data, "[lc,<str>,<int>,<int>]", 
-	&l->module, &l->start_line, &l->start_col)) {
-    l->end_line = l->start_line;
-    l->end_col = l->start_col;
-    return;
-  }
-   
   TBprintf(stderr, "Illegal location data: %t\n", loc_data);
   l->module = NULL;
   l->start_line = -1;

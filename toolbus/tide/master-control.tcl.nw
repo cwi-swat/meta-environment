@@ -235,9 +235,9 @@ proc new-tool { Name tool event } {
   set Tools [lsort $Tools]
   set i 0
   foreach tool $Tools {
-    button $w.button$i -text $tool -command "do-activate \{$name\}"
+    button $w.button$i -text $tool -command "do-activate \{$tool\}"
     pack $w.button$i -fill x
-    set Tool($name,button) $w.button$i
+    set Tool($tool,button) $w.button$i
     incr i
   }
   update-tool-status

@@ -922,7 +922,7 @@ TBbool check_location(struct location *loc, term *loc_data)
       start_before_end = TBtrue;
     if(loc->end_line > loc2.start_line || 
        (loc->end_line == loc2.start_line && 
-		(loc->end_col > loc2.start_col || loc->end_col == -1)))
+		(loc->end_col >= loc2.start_col || loc->end_col == -1)))
       end_after_start = TBtrue;
 
     if(start_before_end && end_after_start)

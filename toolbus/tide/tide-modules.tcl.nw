@@ -300,6 +300,10 @@ proc analyze-port-info { dap options } {
   set Dap($dap,port,retry)	0
   set Dap($dap,port,fail)	0
   set Dap($dap,port,succeed)	0
+  set Dap($dap,port,variable)	0
+  set Dap($dap,port,exception)	0
+  set Dap($dap,port,send)	0
+  set Dap($dap,port,receive)	0
   set Dap($dap,port,process-creation)	 0
   set Dap($dap,port,process-destruction) 0
 
@@ -359,6 +363,7 @@ proc analyze-exec-control-info { dap options } {
   set Dap($dap,ec,single-step)	0
   set Dap($dap,ec,step-over)	0
   set Dap($dap,ec,run)		0
+  set Dap($dap,ec,run-until-parent) 0
   set Dap($dap,ec,stop)		0
 
   foreach ec $options {
@@ -786,8 +791,7 @@ Unset any dap-related variables.
 proc tide-dap-disconnected { dap } {
   global Dap
 
-  unset Dap($dap,cpe-wid)
-  unset Dap($dap,cpe-pid)
+  unset Dap($dap,cpe-rid)
 }
 @
 
@@ -1113,7 +1117,7 @@ Change the current port in the system.
 <<tide-change-current-port>>=
 proc tide-change-current-port { dap pids port } {
   if { $pids == "all" } {
-    TBpost "current-port(proc($dap,all),[TBport $port])"
+    TBpost "current-port($dap,all,[TBport $port])"
   } else {
     TBpost "current-port($dap,[TBlist $pids],[TBport $port])"
   }
