@@ -1,6 +1,10 @@
 2003/02/13 (jurgenv@cwi.nl)
  * The directories of the installed ASF+SDF library are no longer
    write-protected automatically.
+ * ASF extended with new builtins that can generate ToolBus events from
+   within a specification. This can be used to connect other tools to
+   a specification or to let a specification influence the Meta-Environment 
+   at run-time
    
 2003/02/12 (markvdb@cs.vu.nl)
  * Improved the asfchecker with respect to ambiguities.
