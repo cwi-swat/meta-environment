@@ -7,7 +7,6 @@
 #include <MEPT-utils.h>
 #include <asfix2.h>
 #include <conversion.h>
-#include <tree-to-dot.h>
 
 #ifndef WIN32
 #include <atb-tool.h>
