@@ -21,4 +21,5 @@ libasc_support_me_a_SOURCES = asc-support.c \
 # Default include directories
 INCLUDES   = -I$(PT_SUPPORT)/include \
              -I$(ASF_SUPPORT)/include \
-             -I$(ATERM)/include
+             -I$(ATERM)/include \
+	     -I$(top_srcdir)/builtins/lib

@@ -858,6 +858,7 @@ void ASC_initRunTime(int tableSize)
 #endif
 
   PT_initMEPTApi();
+  initBuiltins();
 
   c_rehash(tableSize);
 }

@@ -26,6 +26,7 @@ static ATbool initialized = ATfalse;
 void initBuiltins(void)
 {
   CO_initLibraryApi();
+  PTPT_initPTMEPTApi();
   initialized = ATtrue;
 
   return;
