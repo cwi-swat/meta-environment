@@ -44,11 +44,12 @@ void make_idef_script(char *name)
             "  ) *\n"
             "  delta\n"
             "endlet\n\n" 
-            "tool tool%s is { command = \"%s\" }\n",
+            "tool tool%s is { command = \"%s\" }\n"
+	    "toolbus(%s)",
     name, name, name, name, name,
     name, name, name, name, name,
     name, name, name, name, name,
-    name );
+    name, name );
 
     fclose(fp);
   }

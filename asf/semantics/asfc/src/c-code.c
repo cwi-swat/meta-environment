@@ -56,7 +56,7 @@ static void make_main(const char *name, ATbool parseTable, FILE *file)
 
   if (make_toolbus_tool) {
     ATfprintf(file,
-	      "#ifdef TOOLBUS\n"
+	      "\n#ifdef TOOLBUS\n"
 	      ", tool%s_handler\n"
 	      "#endif\n"
 	      ");", name);
