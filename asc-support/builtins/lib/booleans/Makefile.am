@@ -3,6 +3,8 @@
 
 EXTRA_DIST = Booleans.def
 
+noinst_HEADERS = Booleans.h Booleans_dict.h 
+
 # Developers only:
 api: Booleans.def
 	sdf2-to-c -i $< -P B_ -o Booleans
