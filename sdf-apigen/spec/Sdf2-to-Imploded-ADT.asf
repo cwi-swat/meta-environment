@@ -189,7 +189,7 @@ equations
   $FieldId := sdflit-to-afun($Label),
   $FieldType := sort-to-afun($Sort),
   $Sort != NatCon,
-  $Sort != String
+  $Sort != StrCon
   ===>
   build-imploded-arg($Label:$Sort) = <$FieldId($FieldType)>
 
@@ -201,7 +201,7 @@ equations
 [equ-build-imploded-arg-NatCon]
   $FieldId := sdflit-to-afun($Label)
   ===>
-  build-imploded-arg($Label:String) = <$FieldId(str)>
+  build-imploded-arg($Label:StrCon) = <$FieldId(str)>
 
 [equ-build-imploded-arg-iter-star]
   $FieldId := sdflit-to-afun($Label),

@@ -6460,13 +6460,13 @@ if ( not_empty_list ( tmp [ 2 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 2 ] ) , make_char ( 114 ) ) ) {
 ( tmp [ 3 ] = list_tail ( tmp [ 2 ] ) ) ;
 if ( not_empty_list ( tmp [ 3 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 105 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 67 ) ) ) {
 ( tmp [ 4 ] = list_tail ( tmp [ 3 ] ) ) ;
 if ( not_empty_list ( tmp [ 4 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 4 ] ) , make_char ( 110 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 4 ] ) , make_char ( 111 ) ) ) {
 ( tmp [ 5 ] = list_tail ( tmp [ 4 ] ) ) ;
 if ( is_single_element ( tmp [ 5 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 103 ) ) ) {
+if ( term_equal ( list_head ( tmp [ 5 ] ) , make_char ( 110 ) ) ) {
 ( tmp [ 6 ] = lf_11 ( atmp00 ) ) ;
 FUNC_EXIT ( lf_list_10 ( make_list ( make_nf1 ( lf_9sym , make_nf2 ( lf_8sym , tmp [ 6 ] , make_nf1 ( lf_list_7sym , make_list ( make_nf1 ( lf_6sym , make_nf1 ( lf_22sym , make_nf1 ( lf_21sym , make_nf1 ( lf_20sym , make_nf1 ( lf_list_18sym , ( ATerm ) ATmakeList ( 3 , char_table [ 115 ] , char_table [ 116 ] , char_table [ 114 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ;
 }
@@ -6519,7 +6519,7 @@ ATerm atmp010 = arg_0 ( atmp01 ) ;
 ( tmp [ 0 ] = lf_11 ( atmp00 ) ) ;
 ( tmp [ 1 ] = lf_12 ( atmp010 ) ) ;
 if ( ! term_equal ( atmp010 , make_nf1 ( lf_19sym , make_nf1 ( lf_list_18sym , cons ( make_list ( make_char ( 78 ) ) , cons ( make_list ( make_char ( 97 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 67 ) ) , cons ( make_list ( make_char ( 111 ) ) , make_list ( make_char ( 110 ) ) ) ) ) ) ) ) ) ) ) {
-if ( ! term_equal ( atmp010 , make_nf1 ( lf_19sym , make_nf1 ( lf_list_18sym , cons ( make_list ( make_char ( 83 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 114 ) ) , cons ( make_list ( make_char ( 105 ) ) , cons ( make_list ( make_char ( 110 ) ) , make_list ( make_char ( 103 ) ) ) ) ) ) ) ) ) ) ) {
+if ( ! term_equal ( atmp010 , make_nf1 ( lf_19sym , make_nf1 ( lf_list_18sym , cons ( make_list ( make_char ( 83 ) ) , cons ( make_list ( make_char ( 116 ) ) , cons ( make_list ( make_char ( 114 ) ) , cons ( make_list ( make_char ( 67 ) ) , cons ( make_list ( make_char ( 111 ) ) , make_list ( make_char ( 110 ) ) ) ) ) ) ) ) ) ) ) {
 FUNC_EXIT ( lf_list_10 ( make_list ( make_nf1 ( lf_9sym , make_nf2 ( lf_8sym , tmp [ 0 ] , make_nf1 ( lf_list_7sym , make_list ( make_nf1 ( lf_6sym , tmp [ 1 ] ) ) ) ) ) ) ) ) ;
 }
 }
