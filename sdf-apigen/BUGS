@@ -1,0 +1,3 @@
+
+* A module should start with lexical syntax and end with context-free
+  syntax section otherwise sdf2-to-adt does not generate entries.
