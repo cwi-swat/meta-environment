@@ -188,9 +188,10 @@ if test ${GETHOSTNAME_FOUND} = no; then
 fi
 
 dnl Of course, the latest version of wish is not always called "wish". :-(
-dnl If we can't find something called wish8.1 or wish8.0, we'll assume
-dnl that "wish" is at version 8 or higher.
-AC_PATH_PROGS(WISH,wish8.1 wish8.0 wish, /usr/local/bin/wish)
+dnl If we can't find something called wish 8.3, wish8.2 or wish8.1, we'll
+dnl assume that "wish" is at version 8 or higher.
+
+AC_PATH_PROGS(WISH,wish8.3 wish8.2 wish8.1 wish, /usr/local/bin/wish)
 
 dnl Where is perl5?
 AC_PATH_PROGS(PERL,perl5 perl, /usr/bin/perl)
