@@ -68,7 +68,7 @@ public class FeedbackList extends UserInterfacePanel {
     }
 
     public void showFeedbackSummary(ATerm t0) {
-        Summary summary = new Factory((PureFactory) getFactory()).SummaryFromTerm(t0);
+        Summary summary = factory.SummaryFromTerm(t0);
         setFeedbackList(summary);
     }
 

@@ -20,7 +20,7 @@ public class FeedbackListModel extends ListModel {
           FeedbackItem head = (FeedbackItem) iter.next();
           Feedback headFeedback = head.getFeedback();
             
-          if (feedback.isEqual(headFeedback)) {
+          if (feedback.equals(headFeedback)) {
              head.addIdentification(producer, summary);
              return;
           }
