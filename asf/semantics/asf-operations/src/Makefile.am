@@ -18,7 +18,7 @@ noinst_HEADERS 	= renaming-symbols.h asfoperations.tif.h
 
 asfoperations_SOURCES = asfoperations.c renaming-symbols.c asfoperations.tif.c
 asfoperations_LDADD   = -L$(ASF_SUPPORT)/lib -lASFME \
-                       -L$(SDF_SUPPORT)/lib -lSDFME \
+                       -L$(SDF_SUPPORT)/lib -lSDFME -lSDF2PT \
                        -L$(PT_SUPPORT)/lib -lmept \
                        -L$(TOOLBUSLIB)/lib -lATB \
                        -L$(ATERM)/lib -lATerm \

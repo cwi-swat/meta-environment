@@ -1,6 +1,7 @@
 #include <string.h> 
 #include <MEPT-utils.h>
 #include <SDFME-utils.h>
+#include <SDF2PT.h>
 #include <ASFME-utils.h>
 
 #include "renaming-symbols.h"
