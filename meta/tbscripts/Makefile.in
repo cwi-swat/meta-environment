@@ -88,7 +88,7 @@ DATAFILES	= meta.tb editor.tb clear-all.tb \
 		  addeqsyn.tb edit-master.tb process-eqs.tb save-module.tb \
 	          evaluator.tb open-modules.tb notification.tb \
 		  edit-module.tb edit-equations.tb revert-module.tb \
-	          anno.tb se.tb set-parsetable.tb ${DATAGEN}
+	          anno.tb se.tb set-parsetable.tb rewrite-errors.tb ${DATAGEN}
 
 DATASRC		= help.tb.in sdf2-language.tb.in
 
