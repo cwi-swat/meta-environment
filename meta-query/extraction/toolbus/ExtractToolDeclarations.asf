@@ -1,0 +1,20 @@
+equations
+
+[extract-tool-declarations-0]
+  $ToolDef = tool $ToolName is { $ToolAttribs },
+  addToolDeclaration($Rstore1, $ToolName) = $Rstore2
+  ===>
+  extractToolDeclarations($ToolDef, $Rstore1) = $Rstore2
+
+[extract-tool-declarations-1]
+  $ToolDef = tool $ToolName ( $VarDecls ) is { $ToolAttribs },
+  addToolDeclaration($Rstore1, $ToolName) = $Rstore2
+  ===>
+  extractToolDeclarations($ToolDef, $Rstore1) = $Rstore2
+
+[add-tool-declaration]
+  $ToolNameId = get-area($ToolName),
+  $Tuple1 = <$ToolNameId, toolname2str($ToolName)>,
+  add-tuple(PROCESS_CREATION, $Tuple1, $Rstore1) = $Rstore2
+  ===>
+  addToolDeclaration($Rstore1, $ToolName) = $Rstore2

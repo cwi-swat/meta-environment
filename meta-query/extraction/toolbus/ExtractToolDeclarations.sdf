@@ -1,0 +1,27 @@
+module ExtractToolDeclarations
+
+imports Rstore
+imports Tscript
+imports ToolBusOperations
+imports MyPosInfo[ToolName]
+
+exports
+  context-free syntax
+    extractToolDeclarations(Tscript, RSTORE)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+    extractToolDeclarations(ToolDef, RSTORE)
+      -> RSTORE {traversal(accu, top-down, break)}
+
+hiddens
+  context-free syntax
+    addToolDeclaration(RSTORE, ToolName) -> RSTORE
+
+  variables
+    "$Rstore"[0-9]* -> RSTORE
+    "$ToolAttribs" -> ToolAttrib*
+    "$ToolDef" -> ToolDef
+    "$ToolName" -> ToolName
+    "$ToolNameId" -> Area
+    "$Tuple"[0-9]* -> Elem # Elem
+    "$VarDecls" -> VarDecls
