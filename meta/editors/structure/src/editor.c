@@ -351,7 +351,7 @@ SE_Editor newEditorGivenTree(PT_ParseTree parse_tree,
 /*}}}  */
 /*{{{  SE_Editor newEditorGivenText(char *text) */
 
-SE_Editor newEditorGivenText(char *text)
+SE_Editor newEditorGivenText(const char *text)
 {
   PT_Tree tree = PT_makeTreeLit(text);
   PT_Symbol sort = PT_makeSymbolCf(PT_makeSymbolSort(SORT_UNPARSED));

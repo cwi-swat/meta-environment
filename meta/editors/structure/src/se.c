@@ -61,9 +61,9 @@ void rec_terminate(int cid, ATerm t)
 
 /*}}}  */
 
-/*{{{  void new_editor_given_text(int cid, ATerm editorId, char *text) */
+/*{{{  void new_editor_given_text(int cid, ATerm editorId, const char *text) */
 
-void new_editor_given_text(int cid, ATerm editorId, char *text)
+void new_editor_given_text(int cid, ATerm editorId, const char *text)
 {
   SE_Editor editor = newEditorGivenText(text);
 
@@ -422,7 +422,7 @@ ATerm get_focus_location(int cid, ATerm editorId)
 /*}}}  */
 /*{{{  ATerm check_tree_sort(int cid, char *nonterminal, ATerm t) */
  
-ATerm check_tree_sort(int cid, char *nonterminal, ATerm t)
+ATerm check_tree_sort(int cid, const char *nonterminal, ATerm t)
 {
   char *sort;
   PT_ParseTree parse_tree = PT_makeParseTreeFromTerm(ATBunpack(t));

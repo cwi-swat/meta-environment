@@ -21,7 +21,7 @@ SE_Editor moveFocusToTop(SE_Editor editor);
 SE_Focus getFocusAt(SE_Editor editor, PT_ParseTree parse_tree, int location);
 
 SE_Editor newEditorGivenTree(PT_ParseTree parse_tree, char *sort, ATbool dirty);
-SE_Editor newEditorGivenText(char *text);
+SE_Editor newEditorGivenText(const char *text);
 SE_Editor newEditorGivenLength(int length);
 
 PT_Tree getFocussedTree(SE_Editor editor, SE_Focus focus);
