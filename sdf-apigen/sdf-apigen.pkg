@@ -24,6 +24,6 @@ requires
    sdf-support  1.1beta
    asf-support  1.1beta
    asc-support  1.6
-   apigen       1.7beta
+   apigen       1.8
 
 
