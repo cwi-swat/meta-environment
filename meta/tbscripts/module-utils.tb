@@ -43,7 +43,6 @@ in
   if equal(Recursive,recursive) then
     DoRecursiveCloseModule(ModuleName, Status?)
   else 
-    printf ("closing %s\n", ModuleName).
     SoftCloseModuleInDB(ModuleName, Status?).
     if equal(Status,success) then
       CloseModuleInUI(ModuleName)
@@ -56,16 +55,59 @@ endlet
 
 process DoRecursiveCloseModule(ModuleName : str, Status : term?) is
 let
-  Imports : list
+  Imports : list,
+  MoreImports : list,
+  NotClosed : list,
+  Import : str
 in
   Status := success.
-  snd-msg(get-all-imported-modules(ModuleName)).
-  rec-msg(all-modules(Imports?)).
+  snd-msg(get-imported-modules(ModuleName)).
+  rec-msg(imported-modules(Imports?)).
   SoftCloseModuleInDB(ModuleName, Status?).
   if equal(Status, success) then
     CloseModuleInUI(ModuleName).
-    printf ("recursive closing is not implemented yet!\n")
+    NotClosed := [].
+    if not(equal(Imports, [])) then
+      Import := first(Imports).
+      Imports := next(Imports).
+      FilterElement(Import, Imports?).
+      snd-msg(get-imported-modules(Import)).
+      rec-msg(imported-modules(MoreImports?)).
+      SoftCloseModuleInDB(Import, Status?).
+      if equal(Status,success) then
+        CloseModuleInUI(Import).
+        /* continue only if closing succeeded */
+        Imports := join(Imports, MoreImports)
+      else 
+        NotClosed := join(Import, NotClosed)
+      fi
+    fi*
+    if equal(Imports,[]) then 
+      /* only give error if top module could not be closed */
+      Status := success 
+    fi
   else tau fi
+endlet
+
+process FilterElement(Elem : term, List : list?) is
+let
+  OldList : list,
+  NewList : list,
+  Head : term
+
+in
+  OldList := List.
+  NewList := [].
+  if not(equal(OldList,[])) then
+    Head := first(OldList).
+    OldList := next(OldList).
+    if not(equal(Elem,Head)) then
+      NewList := join(Head, NewList)
+    else tau fi
+  fi *
+  if equal(OldList,[]) then 
+    List := NewList
+  fi
 endlet
 
 process DoRevertModule(ModuleName : str) is
@@ -219,7 +261,6 @@ in
   snd-msg(get-all-depending-modules(ModuleName)).
   rec-msg(all-depending-modules(Depending?)).
   if equal(Depending,[]) then
-    printf("depending: %t\n", Depending).
     HardCloseModuleInDB(ModuleName).
     Status := success
   else
