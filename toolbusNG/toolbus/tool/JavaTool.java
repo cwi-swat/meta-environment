@@ -194,18 +194,18 @@ public class JavaTool implements ToolInstance {
     while (!sigs.isEmpty()) {
       ATermAppl sig = (ATermAppl) sigs.getFirst();
       sigs = sigs.getNext();
-      if (sig.getName().equals("toolbus.atom.Eval")) {
+      if (sig.getName().equals("Eval")) {
         ATerm call = sig.getArguments().getFirst();
         String name = ((ATermAppl) call).getName();
         ATermList args = ((ATermAppl) call).getArguments();
         methodtable.put(name, findMethod(name, args, false));
       }
-      if (sig.getName().equals("toolbus.atom.AckEvent")) {
+      if (sig.getName().equals("AckEvent")) {
         String name = "ackEvent";
         ATermList args = TBTerm.factory.makeList(TBTerm.TermPlaceholder);
         methodtable.put(name, findMethod(name, args, true));
       }
-      if (sig.getName().equals("toolbus.atom.Terminate")) {
+      if (sig.getName().equals("Terminate")) {
         String name = terminate;
         ATermList args = TBTerm.factory.makeList(TBTerm.StrPlaceholder);
         methodtable.put(name, findMethod(name, args, true));

@@ -180,6 +180,17 @@ public class ToolBus {
     procdefs.add(PD);
   }
   
+  
+   /**
+   * Add a process (with actuals) and attached tool name.
+   */
+
+  public ProcessInstance addProcess(String name, ATermList actuals, String toolname) throws ToolBusException {
+    ProcessInstance P = new ProcessInstance(this, name, actuals, toolname);
+    processes.add(P);
+    return P;
+  }
+  
   /**
    * Add a process (with actuals).
    */
@@ -204,6 +215,12 @@ public class ToolBus {
 
   public ProcessInstance addProcess(ProcessCall call) throws ToolBusException {
     ProcessInstance P = new ProcessInstance(this, call);
+    processes.add(P);
+    return P;
+  }
+  
+  public ProcessInstance addProcess(ProcessCall call, String toolName) throws ToolBusException {
+    ProcessInstance P = new ProcessInstance(this, call, toolName);
     processes.add(P);
     return P;
   }
