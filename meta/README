@@ -14,12 +14,14 @@ To compile this distribution you will need the following tools:
  -- wish (A user-interface system, part of Tcl/Tk, from 
       <http://www.tclconsortium.org/resources/download.html>) Make sure you
       get version 8.0 or higher.
+ -- tcldot (A graph visualization library from AT&T. Part of their graphviz
+      package, from <http://www.research.att.com/sw/tools/graphviz/>)
+      Move the directory lib/Tcldot to some convenient place. This is
+      the only directory from the distribution that is used. Remember
+      the location, you'll need it later.
+
 
 As well as a full set of UNIX development utilities.
-
-Platform specific notes:
-  On IRIX 6.3 you will need gcc to compile. cc will crash during linking of 
-  certain executables.
 
 The Meta-Environment distribution depends on three other distributions. 
 Using CVS, you can get these distributions as follows:
@@ -50,17 +52,12 @@ $ ./configure
 $ gmake install
 $ cd ..
 $ cd new-meta
-$ ./config
+$ ./config --with-tcldot=/path/to/directory/Tcldot (see above)
 $ gmake install
 $ cd ..
 
 
 After compilation:
-To run the distribution you will need the following tools:
- -- tcldot (A graph visualization library from AT&T. Part of their graphviz
-      package, from <http://www.research.att.com/sw/tools/graphviz/>)
-      You will need to set the variable TCLLIBPATH to the directory containing 
-      the file Tcldot.so.x.x (where x.x is the version number)
 
 If you now add the path to the directory new-meta/../bin to your PATH, you 
 are al set up.
