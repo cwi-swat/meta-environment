@@ -1138,6 +1138,7 @@ proc define-menu-bar {} {
         .menu.window {left} .menu.debug {left} .menu.help {right}
 
     tk_menuBar .menu.file .menu.specification .menu.window .menu.help
+    focus .menu
 }
 
 proc define-modules-frame {} {
@@ -1354,3 +1355,4 @@ bind $c <ButtonPress-2> "$c scan mark %x %y"
 bind $c <B2-Motion> "$c scan dragto %x %y"
 
 bind .modules.list <ButtonPress-3> "tk_popup .modlist-popup %X %Y"
+
