@@ -1,5 +1,8 @@
 # $Id$
 
+2002/04/03 (jurgenv@cwi.nl)
+ * Added support for lexical variables in sdf-checker
+
 2002/01/03 ({jong,jurgenv}@cwi.nl)
  * Activated gvim support under --enable-gvim
  * libtool is checked only if gvim is enabled.
