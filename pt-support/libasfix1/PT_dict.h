@@ -1,5 +1,5 @@
 /*
- * Generated at Tue Feb 13 15:32:14 2001
+ * Generated at Wed Feb 14 14:01:19 2001
  */
 
 #ifndef __PT_dict_H
@@ -8,17 +8,24 @@
 #include <aterm2.h>
 
 
+extern ATerm PT_patternSymbolsEmpty;
+extern ATerm PT_patternSymbolsList;
 extern ATerm PT_patternArgsEmpty;
-extern ATerm PT_patternArgsDefault;
+extern ATerm PT_patternArgsList;
 extern ATerm PT_patternLayoutDefault;
 extern ATerm PT_patternSeparatorDefault;
 extern ATerm PT_patternLexicalDefault;
 extern ATerm PT_patternQLiteralDefault;
 extern ATerm PT_patternLiteralDefault;
+extern ATerm PT_patternSymbolQuotedLiteral;
+extern ATerm PT_patternSymbolUnquotedLiteral;
+extern ATerm PT_patternSymbolSort;
+extern ATerm PT_patternSymbolEmptyLayout;
 extern ATerm PT_patternSymbolIterPlusSep;
 extern ATerm PT_patternSymbolIterStarSep;
 extern ATerm PT_patternSymbolIterPlus;
 extern ATerm PT_patternSymbolIterStar;
+extern ATerm PT_patternAttrsNoAttrs;
 extern ATerm PT_patternProductionDefault;
 extern ATerm PT_patternVarDefault;
 extern ATerm PT_patternTreeSeparator;

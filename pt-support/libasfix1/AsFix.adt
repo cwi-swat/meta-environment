@@ -44,6 +44,8 @@
                        <attrs(Attrs)>
                       )
   ],
+
+  [Attrs, no-attrs, no-attrs],
   
   [Symbol, iter-star, iter(<symbol(Symbol)>,
                     w(""),
@@ -63,7 +65,8 @@
                            w(""),
                            l("}"),
                            w(""),
-                           l("*"))],
+                           l("*"))
+  ],
   [Symbol, iter-plus-sep, iter-sep(l("{"),
                            w(""),
                            <symbol(Symbol)>,
@@ -72,14 +75,24 @@
                            w(""),
                            l("}"),
                            w(""),
-                           l("+"))],
+                           l("+"))
+  ],
 
- [Literal, default, l(<chars(String)>)],
- [QLiteral, default, ql(<chars(String)>)],
- [Lexical, default, lex(<chars(String)>,<symbol(Symbol)>)],  
- [Separator, default, sep(<chars(String)>)],
- [Layout, default, w(<chars(String)>)], 
+  [Symbol, empty-layout, w("")],
 
- [Args, default, [<head(Tree)>,<[tail(Args)]>]],
- [Args, empty, [ ]]
+  [Symbol, sort, sort(<string(String)>)],
+  [Symbol, unquoted-literal, <literal(Literal)>],
+  [Symbol, quoted-literal, <qliteral(QLiteral)>],
+
+  [Literal, default, l(<string(String)>)],
+  [QLiteral, default, ql(<string(String)>)],
+  [Lexical, default, lex(<string(String)>,<symbol(Symbol)>)],  
+  [Separator, default, sep(<string(String)>)],
+  [Layout, default, w(<string(String)>)], 
+
+  [Args, list, [<head(Tree)>,<[tail(Args)]>]],
+  [Args, empty, [ ]],
+
+  [Symbols, list, [<head(Symbol)>,<[tail(Symbols)]>]],
+  [Symbols, empty, [ ]] 
 ]

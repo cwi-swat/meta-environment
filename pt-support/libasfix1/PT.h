@@ -11,8 +11,6 @@
 /*{{{  prologue */
 
 typedef ATerm PT_String;
-typedef ATerm PT_Symbols;
-typedef ATerm PT_Attrs;
 
 /*}}}  */
 /*{{{  typedefs */
@@ -22,6 +20,7 @@ typedef struct _PT_ModuleName *PT_ModuleName;
 typedef struct _PT_Tree *PT_Tree;
 typedef struct _PT_Var *PT_Var;
 typedef struct _PT_Production *PT_Production;
+typedef struct _PT_Attrs *PT_Attrs;
 typedef struct _PT_Symbol *PT_Symbol;
 typedef struct _PT_Literal *PT_Literal;
 typedef struct _PT_QLiteral *PT_QLiteral;
@@ -29,6 +28,7 @@ typedef struct _PT_Lexical *PT_Lexical;
 typedef struct _PT_Separator *PT_Separator;
 typedef struct _PT_Layout *PT_Layout;
 typedef struct _PT_Args *PT_Args;
+typedef struct _PT_Symbols *PT_Symbols;
 
 /*}}}  */
 
@@ -44,6 +44,8 @@ PT_Var PT_makeVarFromTerm(ATerm t);
 ATerm PT_makeTermFromVar(PT_Var arg);
 PT_Production PT_makeProductionFromTerm(ATerm t);
 ATerm PT_makeTermFromProduction(PT_Production arg);
+PT_Attrs PT_makeAttrsFromTerm(ATerm t);
+ATerm PT_makeTermFromAttrs(PT_Attrs arg);
 PT_Symbol PT_makeSymbolFromTerm(ATerm t);
 ATerm PT_makeTermFromSymbol(PT_Symbol arg);
 PT_Literal PT_makeLiteralFromTerm(ATerm t);
@@ -58,6 +60,8 @@ PT_Layout PT_makeLayoutFromTerm(ATerm t);
 ATerm PT_makeTermFromLayout(PT_Layout arg);
 PT_Args PT_makeArgsFromTerm(ATerm t);
 ATerm PT_makeTermFromArgs(PT_Args arg);
+PT_Symbols PT_makeSymbolsFromTerm(ATerm t);
+ATerm PT_makeTermFromSymbols(PT_Symbols arg);
 
 PT_ParseTree PT_makeParseTreeTree(PT_Layout layoutBeforeTree, PT_Tree tree, PT_Layout layoutAfterTree);
 PT_ModuleName PT_makeModuleNameDefault(PT_String id);
@@ -71,17 +75,24 @@ PT_Tree PT_makeTreeQuotedLiteral(PT_QLiteral qliteral);
 PT_Tree PT_makeTreeSeparator(PT_Separator separator);
 PT_Var PT_makeVarDefault(PT_String name, PT_Symbol symbol);
 PT_Production PT_makeProductionDefault(PT_String moduleName, PT_Symbols lhs, PT_Symbol rhs, PT_Attrs attrs);
+PT_Attrs PT_makeAttrsNoAttrs();
 PT_Symbol PT_makeSymbolIterStar(PT_Symbol symbol);
 PT_Symbol PT_makeSymbolIterPlus(PT_Symbol symbol);
 PT_Symbol PT_makeSymbolIterStarSep(PT_Symbol symbol, PT_Separator separator);
 PT_Symbol PT_makeSymbolIterPlusSep(PT_Symbol symbol, PT_Separator separator);
-PT_Literal PT_makeLiteralDefault(PT_String chars);
-PT_QLiteral PT_makeQLiteralDefault(PT_String chars);
-PT_Lexical PT_makeLexicalDefault(PT_String chars, PT_Symbol symbol);
-PT_Separator PT_makeSeparatorDefault(PT_String chars);
-PT_Layout PT_makeLayoutDefault(PT_String chars);
-PT_Args PT_makeArgsDefault(PT_Tree head, PT_Args tail);
+PT_Symbol PT_makeSymbolEmptyLayout();
+PT_Symbol PT_makeSymbolSort(PT_String string);
+PT_Symbol PT_makeSymbolUnquotedLiteral(PT_Literal literal);
+PT_Symbol PT_makeSymbolQuotedLiteral(PT_QLiteral qliteral);
+PT_Literal PT_makeLiteralDefault(PT_String string);
+PT_QLiteral PT_makeQLiteralDefault(PT_String string);
+PT_Lexical PT_makeLexicalDefault(PT_String string, PT_Symbol symbol);
+PT_Separator PT_makeSeparatorDefault(PT_String string);
+PT_Layout PT_makeLayoutDefault(PT_String string);
+PT_Args PT_makeArgsList(PT_Tree head, PT_Args tail);
 PT_Args PT_makeArgsEmpty();
+PT_Symbols PT_makeSymbolsList(PT_Symbol head, PT_Symbols tail);
+PT_Symbols PT_makeSymbolsEmpty();
 
 /*{{{  equality functions */
 
@@ -90,6 +101,7 @@ ATbool PT_isEqualModuleName(PT_ModuleName arg0, PT_ModuleName arg1);
 ATbool PT_isEqualTree(PT_Tree arg0, PT_Tree arg1);
 ATbool PT_isEqualVar(PT_Var arg0, PT_Var arg1);
 ATbool PT_isEqualProduction(PT_Production arg0, PT_Production arg1);
+ATbool PT_isEqualAttrs(PT_Attrs arg0, PT_Attrs arg1);
 ATbool PT_isEqualSymbol(PT_Symbol arg0, PT_Symbol arg1);
 ATbool PT_isEqualLiteral(PT_Literal arg0, PT_Literal arg1);
 ATbool PT_isEqualQLiteral(PT_QLiteral arg0, PT_QLiteral arg1);
@@ -97,6 +109,7 @@ ATbool PT_isEqualLexical(PT_Lexical arg0, PT_Lexical arg1);
 ATbool PT_isEqualSeparator(PT_Separator arg0, PT_Separator arg1);
 ATbool PT_isEqualLayout(PT_Layout arg0, PT_Layout arg1);
 ATbool PT_isEqualArgs(PT_Args arg0, PT_Args arg1);
+ATbool PT_isEqualSymbols(PT_Symbols arg0, PT_Symbols arg1);
 
 /*}}}  */
 /*{{{  PT_ParseTree accessor prototypes */
@@ -193,6 +206,12 @@ PT_String PT_getProductionModuleName(PT_Production arg);
 PT_Production PT_setProductionModuleName(PT_Production arg, PT_String moduleName);
 
 /*}}}  */
+/*{{{  PT_Attrs accessor prototypes */
+
+ATbool PT_isValidAttrs(PT_Attrs arg);
+ATbool PT_isAttrsNoAttrs(PT_Attrs arg);
+
+/*}}}  */
 /*{{{  PT_Symbol accessor prototypes */
 
 ATbool PT_isValidSymbol(PT_Symbol arg);
@@ -200,66 +219,79 @@ ATbool PT_isSymbolIterStar(PT_Symbol arg);
 ATbool PT_isSymbolIterPlus(PT_Symbol arg);
 ATbool PT_isSymbolIterStarSep(PT_Symbol arg);
 ATbool PT_isSymbolIterPlusSep(PT_Symbol arg);
+ATbool PT_isSymbolEmptyLayout(PT_Symbol arg);
+ATbool PT_isSymbolSort(PT_Symbol arg);
+ATbool PT_isSymbolUnquotedLiteral(PT_Symbol arg);
+ATbool PT_isSymbolQuotedLiteral(PT_Symbol arg);
 ATbool PT_hasSymbolSeparator(PT_Symbol arg);
 PT_Separator PT_getSymbolSeparator(PT_Symbol arg);
 PT_Symbol PT_setSymbolSeparator(PT_Symbol arg, PT_Separator separator);
+ATbool PT_hasSymbolString(PT_Symbol arg);
+PT_String PT_getSymbolString(PT_Symbol arg);
+PT_Symbol PT_setSymbolString(PT_Symbol arg, PT_String string);
 ATbool PT_hasSymbolSymbol(PT_Symbol arg);
 PT_Symbol PT_getSymbolSymbol(PT_Symbol arg);
 PT_Symbol PT_setSymbolSymbol(PT_Symbol arg, PT_Symbol symbol);
+ATbool PT_hasSymbolLiteral(PT_Symbol arg);
+PT_Literal PT_getSymbolLiteral(PT_Symbol arg);
+PT_Symbol PT_setSymbolLiteral(PT_Symbol arg, PT_Literal literal);
+ATbool PT_hasSymbolQliteral(PT_Symbol arg);
+PT_QLiteral PT_getSymbolQliteral(PT_Symbol arg);
+PT_Symbol PT_setSymbolQliteral(PT_Symbol arg, PT_QLiteral qliteral);
 
 /*}}}  */
 /*{{{  PT_Literal accessor prototypes */
 
 ATbool PT_isValidLiteral(PT_Literal arg);
 ATbool PT_isLiteralDefault(PT_Literal arg);
-ATbool PT_hasLiteralChars(PT_Literal arg);
-PT_String PT_getLiteralChars(PT_Literal arg);
-PT_Literal PT_setLiteralChars(PT_Literal arg, PT_String chars);
+ATbool PT_hasLiteralString(PT_Literal arg);
+PT_String PT_getLiteralString(PT_Literal arg);
+PT_Literal PT_setLiteralString(PT_Literal arg, PT_String string);
 
 /*}}}  */
 /*{{{  PT_QLiteral accessor prototypes */
 
 ATbool PT_isValidQLiteral(PT_QLiteral arg);
 ATbool PT_isQLiteralDefault(PT_QLiteral arg);
-ATbool PT_hasQLiteralChars(PT_QLiteral arg);
-PT_String PT_getQLiteralChars(PT_QLiteral arg);
-PT_QLiteral PT_setQLiteralChars(PT_QLiteral arg, PT_String chars);
+ATbool PT_hasQLiteralString(PT_QLiteral arg);
+PT_String PT_getQLiteralString(PT_QLiteral arg);
+PT_QLiteral PT_setQLiteralString(PT_QLiteral arg, PT_String string);
 
 /*}}}  */
 /*{{{  PT_Lexical accessor prototypes */
 
 ATbool PT_isValidLexical(PT_Lexical arg);
 ATbool PT_isLexicalDefault(PT_Lexical arg);
+ATbool PT_hasLexicalString(PT_Lexical arg);
+PT_String PT_getLexicalString(PT_Lexical arg);
+PT_Lexical PT_setLexicalString(PT_Lexical arg, PT_String string);
 ATbool PT_hasLexicalSymbol(PT_Lexical arg);
 PT_Symbol PT_getLexicalSymbol(PT_Lexical arg);
 PT_Lexical PT_setLexicalSymbol(PT_Lexical arg, PT_Symbol symbol);
-ATbool PT_hasLexicalChars(PT_Lexical arg);
-PT_String PT_getLexicalChars(PT_Lexical arg);
-PT_Lexical PT_setLexicalChars(PT_Lexical arg, PT_String chars);
 
 /*}}}  */
 /*{{{  PT_Separator accessor prototypes */
 
 ATbool PT_isValidSeparator(PT_Separator arg);
 ATbool PT_isSeparatorDefault(PT_Separator arg);
-ATbool PT_hasSeparatorChars(PT_Separator arg);
-PT_String PT_getSeparatorChars(PT_Separator arg);
-PT_Separator PT_setSeparatorChars(PT_Separator arg, PT_String chars);
+ATbool PT_hasSeparatorString(PT_Separator arg);
+PT_String PT_getSeparatorString(PT_Separator arg);
+PT_Separator PT_setSeparatorString(PT_Separator arg, PT_String string);
 
 /*}}}  */
 /*{{{  PT_Layout accessor prototypes */
 
 ATbool PT_isValidLayout(PT_Layout arg);
 ATbool PT_isLayoutDefault(PT_Layout arg);
-ATbool PT_hasLayoutChars(PT_Layout arg);
-PT_String PT_getLayoutChars(PT_Layout arg);
-PT_Layout PT_setLayoutChars(PT_Layout arg, PT_String chars);
+ATbool PT_hasLayoutString(PT_Layout arg);
+PT_String PT_getLayoutString(PT_Layout arg);
+PT_Layout PT_setLayoutString(PT_Layout arg, PT_String string);
 
 /*}}}  */
 /*{{{  PT_Args accessor prototypes */
 
 ATbool PT_isValidArgs(PT_Args arg);
-ATbool PT_isArgsDefault(PT_Args arg);
+ATbool PT_isArgsList(PT_Args arg);
 ATbool PT_isArgsEmpty(PT_Args arg);
 ATbool PT_hasArgsTail(PT_Args arg);
 PT_Args PT_getArgsTail(PT_Args arg);
@@ -267,6 +299,19 @@ PT_Args PT_setArgsTail(PT_Args arg, PT_Args tail);
 ATbool PT_hasArgsHead(PT_Args arg);
 PT_Tree PT_getArgsHead(PT_Args arg);
 PT_Args PT_setArgsHead(PT_Args arg, PT_Tree head);
+
+/*}}}  */
+/*{{{  PT_Symbols accessor prototypes */
+
+ATbool PT_isValidSymbols(PT_Symbols arg);
+ATbool PT_isSymbolsList(PT_Symbols arg);
+ATbool PT_isSymbolsEmpty(PT_Symbols arg);
+ATbool PT_hasSymbolsTail(PT_Symbols arg);
+PT_Symbols PT_getSymbolsTail(PT_Symbols arg);
+PT_Symbols PT_setSymbolsTail(PT_Symbols arg, PT_Symbols tail);
+ATbool PT_hasSymbolsHead(PT_Symbols arg);
+PT_Symbol PT_getSymbolsHead(PT_Symbols arg);
+PT_Symbols PT_setSymbolsHead(PT_Symbols arg, PT_Symbol head);
 
 /*}}}  */
 
