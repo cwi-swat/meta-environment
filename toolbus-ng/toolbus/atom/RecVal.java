@@ -27,7 +27,7 @@ public class RecVal extends ToolAtom {
     MatchResult mr = ti.getValueFromTool(getToolarg(), getEnv());
     if (mr.matches()) {
       mr.getLeft().update(getEnv());
-      return true;
+      return nextState();
     } else
       return false;
   }

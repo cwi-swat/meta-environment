@@ -24,7 +24,7 @@ public class Assign extends Atom {
     return new Assign(var.value,  exp.value);
   }
 
-  public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
+  public void compile(ProcessInstance P, State follow) throws ToolBusException {
     super.compile(P, follow);
 
     if (!TBTerm.isVar(var.value))
@@ -43,6 +43,6 @@ public class Assign extends Atom {
     Environment e = this.getEnv();
 
     e.putVar(var.value, TBTerm.eval(exp.value, e));
-    return true;
+    return nextState();
   }
 }

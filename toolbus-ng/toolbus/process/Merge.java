@@ -1,102 +1,100 @@
 package toolbus.process;
 
+import java.util.*;
 import java.util.Stack;
 
 import toolbus.ToolBusException;
-import toolbus.atom.*;
-import toolbus.atom.AtomSet;
+import toolbus.atom.State;
 
 /**
  * @author paulk, Aug 7, 2002
  */
-public class Merge implements ProcessExpression, ProcessState {
+public class Merge implements ProcessExpression, StateElement {
+  
+  private static Random rand = new Random();
   private ProcessExpression expansion;
   private ProcessExpression left;
   private ProcessExpression right;
 
-  private AtomSet first;
-  private AtomSet follow;
+  private State first;
+  private State follow;
 
-  private ProcessState leftState;
-  private ProcessState rightState;
-  private boolean side = true;
+  private State state[];
+  private static final int LEFT = 0;
+  private static final int RIGHT = 1;
+ 
+  private State startState;
+  private ProcessInstance processInstance;
 
   public Merge(ProcessExpression left, ProcessExpression right) {
     this.left = left;
     this.right = right;
+    startState = new State();
+    startState.add(this);
   }
 
   public void expand(ProcessInstance P, Stack calls) throws ToolBusException {
+    processInstance = P;
     left.expand(P, calls);
     right.expand(P, calls);
     first = left.getFirst().union(right.getFirst());
   }
 
-  public void compile(ProcessInstance processInstance, AtomSet followSet) throws ToolBusException {
+  public void compile(ProcessInstance processInstance, State followSet) throws ToolBusException {
     left.compile(processInstance, followSet);
     right.compile(processInstance, followSet);
     this.follow = followSet;
-    leftState = left.getFirst();
-    rightState = right.getFirst();
+    state = new State[] { left.getFirst(), right.getFirst()};
   }
 
   public ProcessExpression copy() {
     return new Merge(left, right);
   }
 
-  public AtomSet getFirst() {
+  public State getFirst() {
     return first;
   }
-  
-  public ProcessState getStartState(){
-    return this;
+
+  public State getStartState() {
+    return startState;
   }
 
-  public AtomSet getFollow() {
+  public State getFollow() {
     return follow;
   }
 
-  public AtomSet getAtoms() {
+  public State getAtoms() {
     return left.getAtoms().union(right.getAtoms());
   }
 
-  // The ProcesState interface
+  // Implementation of the StateElement interface
 
-  public boolean contains(Atom a) {
-    return leftState.contains(a) || rightState.contains(a);
+  public boolean contains(StateElement a) {
+    return state[LEFT].contains(a) || state[RIGHT].contains(a);
   }
 
-  public ProcessState nextState(Atom a) {
-    if (leftState.contains(a)) {
-      leftState = leftState.nextState(a);
-      return this;
-    } else if (rightState.contains(a)) {
-      rightState = rightState.nextState(a);
-      return this;
-    } else {
-      System.out.println("*** Merge.nextState: " + a + " not in prefix");
-      return null;
-    }
+  public ProcessInstance getProcess() {
+    return processInstance;
   }
 
   public boolean execute() throws ToolBusException {
-    if (side) {
-      side = !side;
-      if (leftState.execute()) {
-        return true;
-      } else if (rightState.execute()) {
-        return true;
-      } else
-        return false;
+    int l, r;
+    if(rand.nextBoolean()){
+      l = LEFT; r = RIGHT;
     } else {
-      side = !side;
-      if (rightState.execute()) {
-        return true;
-      } else if (leftState.execute()) {
-        return true;
-      } else
-        return false;
+      l = RIGHT; r = LEFT;
     }
+
+    if (state[l].execute()) {
+      state[l] = processInstance.getCurrentState();
+      processInstance.setCurrentState(startState);
+      return true;
+    } else if (state[r].execute()) {
+      state[r] = processInstance.getCurrentState();
+      processInstance.setCurrentState(startState);
+      return true;
+    } else
+      return false;
   }
 
 }

@@ -44,7 +44,7 @@ abstract class ToolAtom extends Atom {
       return (ATermAppl) trm;
   }
 
-  public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
+  public void compile(ProcessInstance P, State follow) throws ToolBusException {
     super.compile(P, follow);
 
     TB = getProcess().getToolBus();

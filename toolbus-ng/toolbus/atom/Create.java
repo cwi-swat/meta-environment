@@ -23,7 +23,7 @@ public class Create extends Atom {
     return new Create(pcall.value, rvar.value);
   }
 
-  public void compile(ProcessInstance P, AtomSet follow) throws ToolBusException {
+  public void compile(ProcessInstance P, State follow) throws ToolBusException {
     super.compile(P, follow);
  
     if (pcall.value.getType() != ATerm.APPL)
@@ -44,7 +44,7 @@ public class Create extends Atom {
     ProcessInstance P = TB.addProcess(name, evargs);
 
     getEnv().putVar(rvar.value, P.getProcessId());
-    return true;
+    return nextState();
 
   }
 }

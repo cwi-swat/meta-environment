@@ -5,14 +5,14 @@ package toolbus.process;
 import java.util.Stack;
 
 import toolbus.ToolBusException;
-import toolbus.atom.AtomSet;
+import toolbus.atom.State;
 
 public interface ProcessExpression {
   public void expand(ProcessInstance processInstance, Stack calls) throws ToolBusException;
-  public void compile(ProcessInstance processInstance, AtomSet followSet) throws ToolBusException;
+  public void compile(ProcessInstance processInstance, State followSet) throws ToolBusException;
   public ProcessExpression copy();
-  public AtomSet getFirst();
-  public AtomSet getFollow();
-  public AtomSet getAtoms();
-  public ProcessState getStartState();
+  public State getFirst();
+  public State getFollow();
+  public State getAtoms();
+  public State getStartState();
 }
