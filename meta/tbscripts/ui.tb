@@ -76,6 +76,8 @@ in
     ( rec-event(UI, delete-module(ModName?)) .
       snd-msg(close-module(ModName)) .
       rec-msg(module-closed(ModName)) .
+      snd-msg(remove-module(ModName)) .
+      rec-msg(removed-module) .
       snd-do(UI, delete-module(ModName)) .
       snd-ack-event(UI, delete-module(ModName))
     ) +
