@@ -75,7 +75,7 @@ ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Restrictions_Sdf_Syntax4_2 ( ATerm arg0 ) {
 {
-ATerm tmp [ 17 ] ;
+ATerm tmp [ 15 ] ;
 FUNC_ENTRY ( lf_AUX_Restrictions_Sdf_Syntax4_2sym , ATmakeAppl ( lf_AUX_Restrictions_Sdf_Syntax4_2sym , arg0 ) ) ;
 {
 ATerm ltmp [ 1 ] ;
@@ -164,19 +164,8 @@ if ( check_sym ( atmp0010 , ef1sym ) ) {
 ( tmp [ 6 ] = arg_0 ( atmp0010 ) ) ;
 if ( check_sym ( atmp001110 , ef1sym ) ) {
 ( tmp [ 7 ] = arg_0 ( atmp001110 ) ) ;
-( tmp [ 8 ] = lf_AUX_Restrictions_Sdf_Syntax4_2 ( lf_AUX_Restrictions_Sdf_Syntax4_1 ( cons ( make_list ( atmp0010 ) , tmp [ 0 ] ) ) ) ) ;
-if ( check_sym ( tmp [ 8 ] , lf_AUX_Restrictions_Sdf_Syntax4_2sym ) ) {
-( tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ) ;
-if ( check_sym ( tmp [ 9 ] , lf_AUX_Restrictions_Sdf_Syntax4_1sym ) ) {
-( tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ) ;
-if ( not_empty_list ( tmp [ 10 ] ) ) {
-( tmp [ 11 ] = list_head ( tmp [ 10 ] ) ) ;
-( tmp [ 10 ] = list_tail ( tmp [ 10 ] ) ) ;
-( tmp [ 12 ] = lf_AUX_Restrictions_Sdf_Syntax4_2 ( lf_AUX_Restrictions_Sdf_Syntax4_1 ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( tmp [ 11 ] ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 10 ] ) ) ) ) ) ) ;
-FUNC_EXIT ( tmp [ 12 ] ) ;
-}
-}
-}
+( arg0 = lf_AUX_Restrictions_Sdf_Syntax4_1 ( cons ( slice ( atmp000 [ 0 ] , atmp000 [ 1 ] ) , cons ( make_list ( ( * ef1 ) ( ( * ef5 ) ( tmp [ 6 ] , tmp [ 7 ] ) ) ) , cons ( slice ( atmp00110 [ 0 ] , atmp00110 [ 1 ] ) , tmp [ 0 ] ) ) ) ) ) ;
+goto lbl_lf_AUX_Restrictions_Sdf_Syntax4_2 ;
 }
 }
 ( atmp00110 [ 1 ] = list_tail ( atmp00110 [ 1 ] ) ) ;
@@ -200,13 +189,13 @@ while ( not_empty_list ( tmp [ 0 ] ) ) {
 ( atmp00110 = list_head ( tmp [ 0 ] ) ) ;
 ( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
 if ( check_sym ( atmp000 , ef1sym ) ) {
-( tmp [ 13 ] = arg_0 ( atmp000 ) ) ;
+( tmp [ 11 ] = arg_0 ( atmp000 ) ) ;
 if ( check_sym ( atmp00110 , ef4sym ) ) {
-( tmp [ 14 ] = arg_0 ( atmp00110 ) ) ;
-( tmp [ 15 ] = arg_1 ( atmp00110 ) ) ;
-( tmp [ 16 ] = ( * ef7 ) ( tmp [ 13 ] , tmp [ 14 ] ) ) ;
-if ( ! term_equal ( tmp [ 16 ] , ( * ef2 ) ( ( * ef3 ) ( ) ) ) ) {
-( arg0 = lf_AUX_Restrictions_Sdf_Syntax4_1 ( cons ( make_list ( ( * ef1 ) ( tmp [ 13 ] ) ) , cons ( slice ( atmp0010 [ 0 ] , atmp0010 [ 1 ] ) , cons ( make_list ( ( * ef4 ) ( ( * ef6 ) ( tmp [ 14 ] , tmp [ 16 ] ) , tmp [ 15 ] ) ) , tmp [ 0 ] ) ) ) ) ) ;
+( tmp [ 12 ] = arg_0 ( atmp00110 ) ) ;
+( tmp [ 13 ] = arg_1 ( atmp00110 ) ) ;
+( tmp [ 14 ] = ( * ef7 ) ( tmp [ 11 ] , tmp [ 12 ] ) ) ;
+if ( ! term_equal ( tmp [ 14 ] , ( * ef2 ) ( ( * ef3 ) ( ) ) ) ) {
+( arg0 = lf_AUX_Restrictions_Sdf_Syntax4_1 ( cons ( make_list ( ( * ef1 ) ( tmp [ 11 ] ) ) , cons ( slice ( atmp0010 [ 0 ] , atmp0010 [ 1 ] ) , cons ( make_list ( ( * ef4 ) ( ( * ef6 ) ( tmp [ 12 ] , tmp [ 14 ] ) , tmp [ 13 ] ) ) , tmp [ 0 ] ) ) ) ) ) ;
 goto lbl_lf_AUX_Restrictions_Sdf_Syntax4_2 ;
 }
 }
