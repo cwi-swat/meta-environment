@@ -130,7 +130,7 @@ FloatingPointConstant 			-> Expression
 StringConstant 				-> Expression
 "(" Expression ")" 			-> Expression {bracket}
 Expression "["	Expression "]"	 	-> Expression
-Expression "(" {Expression ","}* ")"	-> Expression
+Expression "("  Expression? ")"		-> Expression
 Expression "." Identifier 		-> Expression 
 Expression "->" Identifier 		-> Expression
 Expression "++" 			-> Expression
@@ -199,7 +199,11 @@ Expression "|=" Expression 	-> Expression {right}
 
 context-free syntax
 
-Expression "," Expression 	-> Expression {left}
+{Expression ","}+	 	-> Expression
+
+context-free priorities %% preventing cycle
+Expression        -> {Expression ","}+ >
+{Expression ","}+ -> Expression
 
 context-free priorities
 {
@@ -217,7 +221,7 @@ Expression "!=" Expression 	-> Expression {left}
 }
 
 context-free priorities
-Expression "(" {Expression ","}* ")"	-> Expression <0>
+Expression "(" Expression? ")"	-> Expression <0>
 >
 {
 "++" Expression 			-> Expression
@@ -229,7 +233,9 @@ Expression "(" {Expression ","}* ")"	-> Expression <0>
 "~" Expression 				-> Expression
 "!" Expression 				-> Expression
 "sizeof" Expression 	  		-> Expression
-} 
+}
+
+
 
 context-free priorities
 Expression "["	Expression "]"	 	-> Expression <0> 
@@ -301,13 +307,44 @@ Expression "&=" Expression -> Expression {right}
 Expression "^=" Expression -> Expression {right}
 Expression "|=" Expression -> Expression {right}
 }
-
 >
-Expression "," Expression -> Expression {left}
+{Expression ","}+ -> Expression {left}
 
 context-free priorities
-Expression "," Expression -> Expression {left} >
+
+context-free priorities
+{ left:
+Expression "<" Expression -> Expression {left}
+Expression ">" Expression -> Expression {left}
+Expression "<=" Expression -> Expression {left}
+Expression ">=" Expression -> Expression {left}
+Expression "==" Expression -> Expression {left}
+Expression "!=" Expression -> Expression {left}
+} 
+> Expression "&" Expression -> Expression {left}
+> Expression "^" Expression -> Expression {left}
+> Expression "|" Expression -> Expression {left}
+> Expression "&&" Expression -> Expression {left}
+> Expression "||" Expression -> Expression {left}
+>
 Expression "?" Expression ":" Expression -> Expression 
+
+context-free priorities
+Expression "?" Expression ":" Expression -> Expression <0,4> >
+{right:
+Expression "=" Expression -> Expression {right}
+Expression "*=" Expression -> Expression {right}
+Expression "/=" Expression -> Expression {right}
+Expression "%=" Expression -> Expression {right}
+Expression "+=" Expression -> Expression {right}
+Expression "-=" Expression -> Expression {right}
+Expression "<<=" Expression -> Expression {right}
+Expression ">>=" Expression -> Expression {right}
+Expression "&=" Expression -> Expression {right}
+Expression "^=" Expression -> Expression {right}
+Expression "|=" Expression -> Expression {right}
+}
+
 
 context-free priorities
 Expression "?" Expression ":" Expression -> Expression <0> >

@@ -1,45 +1,13 @@
 module languages/c/syntax/Simplified-C-Preprocessor
 
-%% This grammar describes COMMON USAGE of C preprocessor
-%% statements as they are embedded in the C language.
 
 imports languages/c/syntax/Simplified-C
+imports languages/c/syntax/Generic-Preprocessor
+	[Identifier Expression StringConstant Declaration+ Declaration]
+imports languages/c/syntax/Generic-Preprocessor
+	[Identifier Expression StringConstant Statement+ Statement]
 
 hiddens
 context-free start-symbols
 	TranslationUnit
 
-exports
-
-sorts Filename
-
-lexical syntax
-
-~[\"\'\<\>]+ -> Filename
-
-context-free syntax
-
-"#" "include" "\"" Filename "\""  -> Preprocessor
-"#" "include" "<" Filename ">"    -> Preprocessor
-
-"#" "ifdef" Identifier	-> Preprocessor
-"#" "ifndef" Identifier	-> Preprocessor
-"#" "if" Expression	-> Preprocessor
-"#" "else"		-> Preprocessor
-"#" "elif" Expression	-> Preprocessor
-"#" "endif"		-> Preprocessor
-
-"#" "define" Identifier Expression 	-> Preprocessor
-"#" "define" Identifier "(" {Expression ","}+ ")" Expression 
-					-> Preprocessor {prefer}
-"#" "undef" Expression			-> Preprocessor
-"#" "line" Expression Filename? 	-> Preprocessor
-"#" "error" Expression?			-> Preprocessor
-"#" "pragma" Expression?		-> Preprocessor
-
-StringConstant StringConstant 		-> StringConstant {right}
-
-context-free syntax
-
-Preprocessor -> Declaration
-Preprocessor -> Statement

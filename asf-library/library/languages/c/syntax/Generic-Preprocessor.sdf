@@ -1,0 +1,37 @@
+module languages/c/syntax/Generic-Preprocessor[
+	Identifier Expression String Body Result
+]
+
+exports
+
+sorts Filename IfPart ElifPart ElsePart
+
+lexical syntax
+
+~[\'\"\<\>]+ -> Filename
+
+context-free syntax
+
+String String -> String {left}
+
+context-free syntax
+
+IfPart Body ElifPart* ElsePart? "#" "endif" -> Result
+
+"#" "if" Expression 	-> IfPart
+"#" "ifdef" Identifier 	-> IfPart
+"#" "ifndef" Identifier -> IfPart
+
+"#" "elif" Expression Body -> ElifPart
+"#" "else" Body		-> ElsePart
+
+context-free syntax
+
+"#" "include" "\"" Filename "\""  			-> Result
+"#" "include" "<" Filename ">"    			-> Result
+"#" "define" Identifier Expression 			-> Result
+"#" "define" Identifier "(" Expression ")" Expression 	-> Result
+"#" "undef" Expression					-> Result
+"#" "line" Expression Filename? 			-> Result
+"#" "error" Expression?					-> Result
+"#" "pragma" Expression?				-> Result
