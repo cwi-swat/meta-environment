@@ -1,5 +1,9 @@
 module languages/c/syntax/Generic-Preprocessor[
-	Identifier Expression String Body Result
+	Identifier
+	Expression
+	String
+	Body
+	Result
 ]
 
 exports
@@ -18,14 +22,14 @@ String Identifier -> String
 
 context-free syntax
 
-IfPart Body ElifPart* ElsePart? "#" "endif" -> Result
+IfPart Body ElifPart[[Body]]* ElsePart[[Body]]? "#" "endif" -> Result
 
 "#" "if" Expression 	-> IfPart
 "#" "ifdef" Identifier 	-> IfPart
 "#" "ifndef" Identifier -> IfPart
 
-"#" "elif" Expression Body -> ElifPart
-"#" "else" Body		-> ElsePart
+"#" "elif" Expression Body -> ElifPart[[Body]]
+"#" "else" Body		-> ElsePart[[Body]]
 
 context-free syntax
 

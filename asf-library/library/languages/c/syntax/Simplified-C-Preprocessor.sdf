@@ -2,11 +2,22 @@ module languages/c/syntax/Simplified-C-Preprocessor
 
 
 imports languages/c/syntax/Simplified-C
-imports languages/c/syntax/Generic-Preprocessor
-	[Identifier Expression StringConstant 
-	ExternalDeclaration+ ExternalDeclaration]
-imports languages/c/syntax/Generic-Preprocessor
-	[Identifier Expression StringConstant Statement+ Statement]
+
+imports languages/c/syntax/Generic-Preprocessor[
+	Identifier
+	Expression
+	StringConstant 
+	ExternalDeclaration+
+	ExternalDeclaration
+]
+
+imports languages/c/syntax/Generic-Preprocessor[
+	Identifier
+	Expression
+	StringConstant
+	Statement+
+	Statement
+]
 
 hiddens
 context-free start-symbols
