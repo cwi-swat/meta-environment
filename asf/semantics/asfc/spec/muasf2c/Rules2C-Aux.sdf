@@ -31,8 +31,7 @@ exports
 
 exports
   context-free syntax
-    select-on-ofs(FunId,{Rule ";"}*)                   -> RuleListPair
-    select-on-defaults({Rule ";"}*)                    -> RuleListPair
+
     select-on-ofs-first-arg({C-Rule ";"}*)             -> C-RuleListPair
     select-on-ofs-first-arg(FunId,{C-Rule ";"}*)       -> C-RuleListTriple
     select-on-same-list-pat({C-Rule ";"}*)             -> C-RuleListPair

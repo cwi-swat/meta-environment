@@ -8,7 +8,7 @@ exports
     "\\" ~ []             -> EscChar
     "\\" [01] [0-7] [0-7] -> EscChar
 
-    ~ [\000-\037\"\\]     -> QChar
+    ~ [\000-\031\"\\]     -> QChar
     EscChar               -> QChar
 
     [a-z][\-\_A-Za-z0-9\']* -> FunId  {avoid} %% identifiers start with lowercase

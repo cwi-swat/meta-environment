@@ -52,6 +52,10 @@ exports
     make-list-args({Term ","}*)  -> Term
 
   context-free syntax
+    select-on-ofs(FunId,{Rule ";"}*)                   -> RuleListPair
+    select-on-defaults({Rule ";"}*)                    -> RuleListPair
+
+  context-free syntax
     make-default-rule(Rule)                 -> Rule
     make-conditional-rule({Cond "&"}*,Rule) -> Rule
     make-rule(Bool,Term,Term)               -> Rule
