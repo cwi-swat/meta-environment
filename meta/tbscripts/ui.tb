@@ -98,7 +98,7 @@ in
       snd-do(UI, delete-module(ModName)) .
       snd-ack-event(UI, delete-module(ModName))
     ) +
-    ( rec-msg(delete-module(ModName)).
+    ( rec-msg(delete-module(ModName?)).
       snd-do(UI, delete-module(ModName))
     ) +
     ( rec-event(UI,save-module(Str?)).

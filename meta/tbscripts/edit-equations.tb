@@ -98,11 +98,13 @@ in
   if equal(DirtyFoci, []) then
     tau    
   else
-   	snd-note(ui-status(errorf("Equations of %s are dirty. Please reopen the module.",
+   	snd-note(ui-status(errorf("Equations of %s are dirty. Module is reread from disk.",
        [ModuleName]))).
     snd-msg(close-module(ModuleName)).
     rec-msg(module-closed(ModuleName)).
-    snd-msg(delete-module(ModuleName))
+    snd-msg(delete-module(ModuleName)).
+    snd-msg(open-modules([ModuleName])).
+    rec-msg(finished-opening-modules)
   fi
 
 
