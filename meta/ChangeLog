@@ -1,6 +1,10 @@
 # $Id$
 
 Tue Feb 17 11:01:31 CET 2004 <jong@cwi.nl>
+ * editors/text/gvim/{connector.c,meta.vim.src}:
+   - explicit synchronization with hive during writing of contents
+     fixes anomalities during "autosave".
+   - refactor several reusable pieces of vim script into functions.
  * editors/text/{common,emax,gvim}/connector.[ch]:
    - refactored "getContents" into the common core. Both editors now
    really use the *same* code to read the contents of the file.
