@@ -22,6 +22,25 @@
 
 #include  "parser.h"
 
+/*
+    The following #defines are TEMPORARY, until there's a true
+    interface (sort of) to access the internal `mark' bit in aterms
+    we're abusing here
+*/
+
+/* Taken from @ATERMDIST@/aterm/encoding.h */
+#define MASK_MARK         (1<<1)
+#define IS_MARKED(h)      ((h) &   MASK_MARK)
+#define SET_MARK(h)       ((h) |=  MASK_MARK)
+#define CLR_MARK(h)       ((h) &= ~MASK_MARK)
+
+#define SG_IS_MARKED(t)     IS_MARKED(t->header)
+#define SG_MARK(t)   	    SET_MARK(t->header)
+#define SG_UNMARK(t)        CLR_MARK(t->header)
+/*   End of TEMPORARY hack */
+
+
+
 #define SG_APPLLABEL    "#"
 #define SG_REJECTLABEL  "X"
 
@@ -32,23 +51,25 @@ enum SG_AmbTblKind { SG_AMBTBL_INIT, SG_AMBTBL_CLEAR, SG_AMBTBL_ADD,
 enum SG_ApplIDAction { SG_APPLID_ZERO, SG_APPLID_INC };
 
 ATermList SG_AmbTable(int Mode, ATermInt key, ATermList value);
-int   SG_MaxNrAmb(int Mode);
-AFun  SG_ApplAFun(void);
-AFun  SG_AprodAFun(void);
-AFun  SG_AmbAFun(void);
+int       SG_MaxNrAmb(int Mode);
+AFun      SG_ApplAFun(void);
+AFun      SG_AprodAFun(void);
+AFun      SG_AmbAFun(void);
 
-void  SG_Amb(parse_table *, ATermAppl, ATermAppl);
+void      SG_Amb(parse_table *, ATermAppl, ATermAppl);
+ATermList SG_CyclicTerm(ATerm t);
 ATermAppl SG_ExpandApplNode(parse_table * pt, ATermAppl t, ATbool recurse);
-ATerm SG_YieldPT(parse_table *pt, ATerm t);
-int   SG_ApplID(int Action);
-ATerm SG_ApplLabel(void);
-ATerm SG_AprodlLabel(void);
-ATerm SG_RejectLabel(void);
-ATerm SG_Apply(parse_table *, label, ATermList, ATbool);
-ATerm SG_TreeType(ATerm);
-ATermInt SG_GetProdLabel(ATermAppl aprod);
+ATerm     SG_YieldPT(parse_table *pt, ATerm t);
+int       SG_ApplID(int Action);
+ATerm     SG_ApplLabel(void);
+ATerm     SG_AprodlLabel(void);
+ATerm     SG_RejectLabel(void);
+ATerm     SG_Apply(parse_table *, label, ATermList, ATbool);
+ATerm     SG_TreeType(ATerm);
+ATermInt  SG_GetApplProdLabel(ATermAppl applprod);
+ATermInt  SG_GetProdLabel(ATermAppl aprod);
 
-ATerm SG_TermYield(ATerm);
-ATerm SG_DotTermYield(ATerm);
+ATerm     SG_TermYield(ATerm);
+ATerm     SG_DotTermYield(ATerm);
 
 #endif  /* _FOREST_H_ */

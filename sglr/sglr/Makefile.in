@@ -80,6 +80,7 @@ CLIENT		= parse-client
 CLIENTC		= ${addsuffix .c,${CLIENT}}
 TIFS		= sglr.tif.c parse-client.tif.c
 DUMP		= dump-actions dump-gotos dump-priorities dump-productions
+DUMPOBJ		= ${addsuffix .o,${DUMP}}
 DUMPC		= dump-parse-table.c
 PROGS           = ${PROG} sglr-a2toa1 sglr-gc sglr-a2toa1-gc sglr-prof
 PUREPROGS       = ${addsuffix .pure,${PROG}}
@@ -126,7 +127,7 @@ clean:
 	rm -f	${PROGS}
 	rm -f	${PUREPROGS}
 	rm -f	${SGLRLIBS}
-	rm -f	${OBJ} ${OBJA2TOA1}
+	rm -f	${OBJ} ${OBJA2TOA1} ${DUMPOBJ}
 	rm -f	${LIBOBJ}
 	rm -f	${LIBOBJA2TOA1}
 	rm -f	${LIBOBJGC}
@@ -161,6 +162,11 @@ clean:
 
 
 # Specific dependencies
+
+dump-actions.o dump-gotos.o 	\
+dump-priorities.o dump-productions.o:	${DUMPC}
+	${CC}	${CFLAGS} ${INCLUDES}	\
+		-DPTPART=${subst dump-,,${basename $@}} -c $< -o $@
 
 libsglr.a:  ${LIBOBJ}
 	${AR} ${AR_FLAGS} $@ ${LIBOBJ}
@@ -197,11 +203,17 @@ sglr-prof: ${GETOPTOBJ} ${OBJ} ${SGLRLIBPROF} sglr.tif.c
 parse-client: ${GETOPTOBJ} parse-client.o parse-client.tif.c
 	${CC} ${LDFLAGS} $@.o ${GETOPTOBJ} ${LIBS} -o $@
 
-dump-actions dump-priorities	\
-dump-gotos dump-productions:	${DUMPC} ${SGLRLIB}
-	${CC}	${CFLAGS} ${INCLUDES} ${LDFLAGS}	\
-		${DUMPC} -DPTPART=${subst dump-,,$@}	\
-		${SGLRLIB} ${LIBS} -o $@	
+dump-actions:	dump-actions.o ${SGLRLIB}
+	${CC}	${LDFLAGS} $@.o ${SGLRLIB} ${LIBS} -o $@	
+
+dump-gotos:	dump-gotos.o ${SGLRLIB}
+	${CC}	${LDFLAGS} $@.o ${SGLRLIB} ${LIBS} -o $@	
+
+dump-priorities:	dump-priorities.o ${SGLRLIB}
+	${CC}	${LDFLAGS} $@.o ${SGLRLIB} ${LIBS} -o $@	
+
+dump-productions:	dump-productions.o ${SGLRLIB}
+	${CC}	${LDFLAGS} $@.o ${SGLRLIB} ${LIBS} -o $@	
 
 # ObTribute to Larry Wall
 love:

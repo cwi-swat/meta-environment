@@ -139,30 +139,12 @@ void SG_PrintSymbol(FILE *dot, ATerm t)
     ATerror("SG_PrintSymbol: strange symbol %t\n", t);
 }
 
-
-/*
-    The following #defines are TEMPORARY, until there's a true
-    interface (sort of) to access the internal `mark' bit in aterms
-    we're abusing here
-*/
-/* Taken from @ATERMDIST@/aterm/encoding.h */
-#define MASK_MARK         (1<<1)
-#define IS_MARKED(h)      ((h) & MASK_MARK)
-#define SET_MARK(h)       ((h) |= MASK_MARK)
-#define CLR_MARK(h)       ((h) &= ~MASK_MARK)
-
-#define SG_IS_PRINTED(t)     IS_MARKED(t->header)
-#define SG_MARK_PRINTED(t)   SET_MARK(t->header)
-#define SG_MARK_UNPRINTED(t) CLR_MARK(t->header)
-/*   End of TEMPORARY hack */
-
-
 void SG_ApplNode(FILE *dot, ATerm t, ATerm fun, int n)
 {
   ATerm args, res, attrs;
 
-  if (SG_IS_PRINTED(t)) return;
-  SG_MARK_PRINTED(t);
+  if (SG_IS_MARKED(t)) return;
+  SG_MARK(t);
 
   if (ATmatch(fun, "prod([<list>], <term>, <term>)", &args, &res, &attrs)) {
     ATfprintf(dot, "\tN%d [label=\"", (int)t);
@@ -222,7 +204,7 @@ void SG_TreeToDot(FILE *dot, ATerm t, int child, ATerm parent,
     prev_char_parent = parent;
     prev_char = c;
   }
-  if (SG_IS_PRINTED(t)) return;
+  if (SG_IS_MARKED(t)) return;
 
   if (ATmatch(t, "appl(<term>,[<list>])", &fun, &args)) {
     if(!suppress_lexicals || !SG_IsLexical(fun)) {

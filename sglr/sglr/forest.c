@@ -159,6 +159,140 @@ ATerm SG_Apply(parse_table *pt, label l, ATermList ts, ATbool reject)
                         (ATerm) ATmakeInt(SG_ApplID(SG_APPLID_INC)));
 }
 
+
+ATerm     CycleStart = NULL;
+ATbool    CycleShown;
+ATermList Cycle;
+
+void SG_ShowCycle(ATerm CurrTerm, ATerm CycleStart)
+{
+  ATermList ambs;
+  ATermInt  idx;
+  AFun      fun;
+
+  if(CycleShown)
+    return;
+
+  if(ATisEqual(CurrTerm,CycleStart)) {
+    CycleShown = ATtrue;
+    return;
+  }
+
+  if(CurrTerm == NULL) {
+    Cycle      = ATempty;
+    CycleShown = ATfalse;
+    CurrTerm   = CycleStart;
+  }
+
+  switch(ATgetType(CurrTerm)) {
+    case AT_APPL:
+
+      fun  = ATgetAFun((ATermAppl) CurrTerm);
+      if(fun == SG_ApplAFun()) {
+        Cycle = ATinsert(Cycle, (ATerm) SG_GetApplProdLabel((ATermAppl) CurrTerm));
+//        ATfprintf(stderr, "Cycle: aprod[%t]\n", SG_GetApplProdLabel((ATermAppl) CurrTerm));
+      } else if (fun == SG_AprodAFun()) {
+        Cycle = ATinsert(Cycle, (ATerm) SG_GetProdLabel((ATermAppl) CurrTerm));
+//        ATfprintf(stderr, "Cycle: prod[%t]\n", SG_GetProdLabel((ATermAppl) CurrTerm));
+      }
+
+      idx  = (ATermInt) ATgetAnnotation((ATerm) CurrTerm, SG_ApplLabel());
+      /*  Ambiguity cluster?  */
+      if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL))) {
+        /*  No ambiguity  */
+        SG_ShowCycle(ATgetArgument((ATermAppl) CurrTerm, 1), CycleStart);
+      } else {
+        /*  Encountered an ambiguity cluster  */
+        SG_ShowCycle((ATerm) ambs, CycleStart);
+      }
+      break;
+    case AT_LIST:
+      if(!ATisEmpty((ATermList) CurrTerm)) {
+        SG_ShowCycle(      ATgetFirst((ATermList) CurrTerm), CycleStart);
+        SG_ShowCycle((ATerm)ATgetNext((ATermList) CurrTerm), CycleStart);
+      }
+    default:
+      break;
+  }
+}
+
+#ifdef TABLE_INSTEAD_OF_MARKS
+  ATermTable MarkTable;
+  #define SG_IS_MARKED(t)	(ATtableGet(MarkTable, t) != NULL)
+  #define SG_MARK(t)		ATtablePut(MarkTable, t, SG_ApplAFun())
+  #define SG_UNMARK(t)		ATtableRemove(MarkTable, t)
+#endif
+
+void SG_TermIsCyclic(ATerm t, long depth)
+{
+  ATermList ambs;
+  ATermInt  idx;
+
+  if(CycleStart)
+    return;
+
+  if(SG_IS_MARKED(t)) {                     /*  Cycle detected  */
+if(SG_DEBUG) fprintf(stderr, "%*s %s-%d: CYCLE\n", depth, "", SG_IS_MARKED(t)?"M":"U", t);
+    CycleStart = t;
+    return;
+  } else {
+    SG_MARK(t);
+  }
+
+if(SG_DEBUG) fprintf(stderr, "%*.*s> %d\n", depth, depth, "", t);
+
+  switch(ATgetType(t)) {
+    case AT_APPL:
+
+if(SG_DEBUG) fprintf(stderr, "%*s %s-%d: %d", depth, "", SG_IS_MARKED(t)?"M":"U", t,
+        ATgetInt(SG_GetApplProdLabel((ATermAppl) t)));
+
+      idx  = (ATermInt) ATgetAnnotation((ATerm) t, SG_ApplLabel());
+      /*  Ambiguity cluster?  */
+      if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL))) {
+        /*  No ambiguity  */
+if(SG_DEBUG) fprintf(stderr, "\n");
+        SG_TermIsCyclic(ATgetArgument((ATermAppl) t, 1), depth+1);
+      } else {
+        /*  Encountered an ambiguity cluster  */
+if(SG_DEBUG) fprintf(stderr, " (amb)\n");
+         SG_TermIsCyclic((ATerm) ambs, depth+1);
+      }
+      break;
+
+    case AT_LIST:
+      if(!ATisEmpty((ATermList) t)) {
+        SG_TermIsCyclic(      ATgetFirst((ATermList) t), depth+1);
+        SG_TermIsCyclic((ATerm)ATgetNext((ATermList) t), depth+1);
+      }
+      break;
+
+    default:
+      break;
+  }
+
+  SG_UNMARK(t);
+if(SG_DEBUG) fprintf(stderr, "%*.*s< %d\n", depth, depth, "", t);
+}
+
+
+ATermList SG_CyclicTerm(ATerm t) {
+#ifdef TABLE_INSTEAD_OF_MARKS
+  MarkTable = ATtableCreate(4096, 75);
+#endif
+  CycleStart = NULL;
+  SG_TermIsCyclic(t, 0L);
+#ifdef TABLE_INSTEAD_OF_MARKS
+  ATtableDestroy(MarkTable);
+#endif
+  SG_ShowCycle(NULL, CycleStart);
+//  ATfprintf(stderr, "cycle: %t\n", ATreverse(Cycle));
+
+  return(CycleStart?ATreverse(Cycle):ATempty);
+}
+
+
+
 ATermAppl SG_ExpandApplNode(parse_table *pt, ATermAppl t, ATbool recurse)
 {
   ATermList ambs, trms;
@@ -178,13 +312,13 @@ ATermAppl SG_ExpandApplNode(parse_table *pt, ATermAppl t, ATbool recurse)
   idx  = (ATermInt) ATgetAnnotation((ATerm) t, SG_ApplLabel());
 
   /*  Are we encountering an ambiguity cluster?  */
-  if(!(idx && !ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL)))) {
+  if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL))) {
+    /*  No ambiguity  */
     if(SG_ABBREV && !recurse)
       return t;
     t = (ATermAppl) ATgetFirst(args);
     if(!SG_ABBREV)
       t = SG_ExpandApplNode(pt, t, ATfalse);
-    /*  No ambiguity  */
     if(recurse)
       return ATmakeAppl2(SG_ApplAFun(), (ATerm) t,
                          SG_YieldPT(pt, ATelementAt(args, 1)));

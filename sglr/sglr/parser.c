@@ -395,12 +395,19 @@ char *SGsort(int Mode, ATerm t)
 
 ATerm SG_Result(char *sort)
 {
-  ATbool was_abbrev;
+  ATbool    was_abbrev;
+  ATermList cycle;
 
   if (accepting_stack != NULL) {
     ATerm forest;
 
     forest = SG_LK_TREE(SG_HEAD(SG_ST_LINKS(accepting_stack)));
+
+   if(!ATisEmpty(cycle = SG_CyclicTerm(forest)))
+     return ATmake("parse-error([character(<int>), line(<int>),"
+                   "col(<int>), char(<int>)],cycle(<term>))",
+                   current_token, line, col, sg_tokens_read, cycle);
+
 
 // ATfprintf(stderr, "Unexpanded Forest: %t\n", forest);
 
