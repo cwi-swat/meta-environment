@@ -10,7 +10,7 @@ import metastudio.graph.Node;
 public class ParseTreePanel extends GraphPanel {
     private UserInterfaceBridge bridge;
     
-    public ParseTreePanel(UserInterfaceBridge br, MetaGraphFactory fac) {
+    public ParseTreePanel(MetaGraphFactory fac, UserInterfaceBridge br) {
         super("parsetree");
         bridge = br;
         MouseListener listener = new MouseAdapter() {

@@ -97,10 +97,6 @@ public class MetaStudio
     private int mouseX;
     private int mouseY;
 
-   
-    
-  
-
     private JTabbedPane graphTabs;
 
     private Graph graph;
@@ -165,12 +161,11 @@ public class MetaStudio
         graphPanels = new HashMap();
 
         factory = new PureFactory();
-        
+
         panels = new LinkedList();
-        
+
         metaGraphFactory = new MetaGraphFactory(factory);
         moduleManager = new ModuleTreeModel();
-
 
         initializeProperties();
         initializeATermPatterns(); // TODO: apification
@@ -221,7 +216,7 @@ public class MetaStudio
     }
 
     private void createParsetreePanel() {
-        parseTreePanel = new ParseTreePanel(bridge, metaGraphFactory);
+        parseTreePanel = new ParseTreePanel(metaGraphFactory, bridge);
     }
 
     private JSplitPane createMainPanel() {
@@ -234,24 +229,29 @@ public class MetaStudio
         return mainPanel;
     }
 
-    private JPanel createMessageStatusPanel()
-    {
+    private JPanel createMessageStatusPanel() {
         JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
         container.add(createMessageTabs(), BorderLayout.CENTER);
-        
+
+        if (historyPanel == null) {
+            historyPanel = new HistoryPanel(factory, bridge);
+            panels.add(historyPanel);
+        }
+
         StatusBar bar = new StatusBar(factory, bridge, historyPanel);
         panels.add(bar);
         container.add(bar, BorderLayout.SOUTH);
-        
+
         return container;
     }
-    
+
     private JSplitPane createRightPane() {
         graphTabs = createGraphTabs();
-        
+        JPanel panel = createMessageStatusPanel();
+
         JSplitPane rightPanel =
-            new JSplitPane(JSplitPane.VERTICAL_SPLIT, graphTabs, createMessageStatusPanel());
+            new JSplitPane(JSplitPane.VERTICAL_SPLIT, graphTabs, panel);
         rightPanel.setResizeWeight(RIGHTPANEL_DIVIDER_LOCATION);
         rightPanel.setDividerLocation(RIGHTPANEL_DIVIDER_LOCATION);
         return rightPanel;
@@ -276,13 +276,13 @@ public class MetaStudio
         JTabbedPane tabs = new JTabbedPane();
 
         graphTabs = tabs;
-        
+
         createModuleGraph();
         addGraphPanel(importGraphPanel, "Import graph");
 
         createParsetreePanel();
         addGraphPanel(parseTreePanel, "Parsetree graph");
-        
+
         return tabs;
     }
 
@@ -302,29 +302,27 @@ public class MetaStudio
 
     private JTabbedPane createMessageTabs() {
         JTabbedPane messageTabs = new JTabbedPane();
-        
-        historyPanel = new HistoryPanel(factory, bridge);
-        panels.add(feedbackList);
-        messageTabs.insertTab("history",null,historyPanel,"Execution history and error messages",0);
-        
+
+        if (historyPanel == null) {
+            historyPanel = new HistoryPanel(factory, bridge);
+            panels.add(historyPanel);
+        }
+        messageTabs.insertTab("history", null, historyPanel, "Execution history", 0);
+
         messageList = new MessageList(factory, bridge);
         panels.add(messageList);
-        messageTabs.insertTab("messages",null,messageList,"Message list",1);
-        
+        messageTabs.insertTab("messages", null, messageList, "Message list", 1);
+
         feedbackList = new FeedbackList(factory, bridge);
         panels.add(feedbackList);
-        messageTabs.insertTab("errors",null,feedbackList,"Clickable error messages",2);
-        
+        messageTabs.insertTab("errors", null, feedbackList, "Clickable messages", 2);
+
         return messageTabs;
     }
-    
+
     private void postQuitEvent() {
         bridge.sendEvent(factory.parse("quit"));
     }
-
-   
-
-    
 
     private void createModuleStatusPanel() {
         Color color;
@@ -332,8 +330,6 @@ public class MetaStudio
         color = Preferences.getColor(Preferences.PREF_STATUSPANE_BACKGROUND);
         moduleStatus.setBackground(color);
     }
-
-    
 
     private void createModuleGraph() {
         Color color;
@@ -493,8 +489,6 @@ public class MetaStudio
         return (GraphPanel) graphPanels.get(id);
     }
 
-   
-
     public void run() {
         layoutGraph(importGraphPanel, graph);
     }
@@ -528,13 +522,6 @@ public class MetaStudio
         moduleStatus.setModuleInfo(module, entries);
     }
 
-    
-
-    
-
-    
-
-    
     public void initializeUi(String name) {
         setTitle(name);
         Preferences.setString("metastudio.name", name);
@@ -661,15 +648,6 @@ public class MetaStudio
         }
     }
 
-    
-
-    public void recAckEvent(ATerm event) {
-    }
-
-    public void recTerminate(ATerm t0) {
-        System.exit(0);
-    }
-
     void checkModulePopup(MouseEvent e) {
         if (e.isPopupTrigger()) {
             Module module;
@@ -719,7 +697,7 @@ public class MetaStudio
         String label = ((ATermAppl) action.getArgument(0)).getName();
         // TODO: apification
         String name = ((ATermAppl) action.getArgument(1)).getName(); // TODO:
-																	 // apification
+        // apification
         String path = "/images/" + name; // TODO: externalize string?
         URL url = path.getClass().getResource(path);
         if (url == null) {
@@ -854,7 +832,7 @@ public class MetaStudio
     }
 
     // TODO: change algorithm, do it in two parts: first find tree structure,
-	// then
+    // then
     // build the menus
 
     // The next two methods (addPopupMenuItems, addMenuItems) are exactly the
@@ -891,7 +869,7 @@ public class MetaStudio
                 ATermList subMenu = factory.makeList(apifyMe);
 
                 // collect a list of buttons that are in the same
-				// 'menuNamePrefix'
+                // 'menuNamePrefix'
                 for (; !buttonRunner.isEmpty(); buttonRunner = buttonRunner.getNext()) {
                     ATerm cur = buttonRunner.getFirst();
                     ATermList curList = (ATermList) ((ATermAppl) cur).getArgument(0);
@@ -951,7 +929,7 @@ public class MetaStudio
                 ATermList subMenu = factory.makeList((ATerm) buttonList.getNext());
 
                 // collect a list of buttons that are in the same
-				// 'menuNamePrefix'
+                // 'menuNamePrefix'
                 while (!buttonRunner.isEmpty()) {
                     ATerm cur = buttonRunner.getFirst();
                     ATermList curList = (ATermList) ((ATermAppl) cur).getArgument(0);
@@ -1051,7 +1029,6 @@ public class MetaStudio
         return factory.make("snd-value(answer(cancel))");
     }
 
-    
     void toggleTide() {
         bridge.postEvent(
             factory.make("debugging(<id>)", tideBox.isSelected() ? "on" : "off"));
@@ -1071,7 +1048,7 @@ public class MetaStudio
 
     public void addStatus(ATerm id, String message) {
         Iterator iter = panels.iterator();
-        
+
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             tif.addStatus(id, message);
@@ -1080,7 +1057,7 @@ public class MetaStudio
 
     public void addStatusf(ATerm id, String format, ATerm args) {
         Iterator iter = panels.iterator();
-        
+
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             tif.addStatusf(id, format, args);
@@ -1089,34 +1066,34 @@ public class MetaStudio
 
     public void endStatus(ATerm id) {
         Iterator iter = panels.iterator();
-        
+
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             tif.endStatus(id);
         }
     }
-    
+
     public void displayFeedbackSummary(ATerm t0) {
         Iterator iter = panels.iterator();
-        
+
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             tif.displayFeedbackSummary(t0);
         }
     }
-    
+
     public void updateList(String moduleName, String actions) {
         Iterator iter = panels.iterator();
-        
+
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             tif.updateList(moduleName, actions);
         }
     }
-    
+
     public void errorf(String format, ATerm args) {
         Iterator iter = panels.iterator();
-        
+
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             tif.errorf(format, args);
@@ -1125,7 +1102,7 @@ public class MetaStudio
 
     public void error(String message) {
         Iterator iter = panels.iterator();
-        
+
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             tif.error(message);
@@ -1134,7 +1111,7 @@ public class MetaStudio
 
     public void messagef(String format, ATerm args) {
         Iterator iter = panels.iterator();
-        
+
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             tif.messagef(format, args);
@@ -1143,7 +1120,7 @@ public class MetaStudio
 
     public void message(String message) {
         Iterator iter = panels.iterator();
-        
+
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             tif.message(message);
@@ -1152,7 +1129,7 @@ public class MetaStudio
 
     public void warningf(String format, ATerm args) {
         Iterator iter = panels.iterator();
-        
+
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             tif.warningf(format, args);
@@ -1161,19 +1138,26 @@ public class MetaStudio
 
     public void warning(String message) {
         Iterator iter = panels.iterator();
-        
+
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             tif.warning(message);
         }
     }
-    
+
     public void clearHistory() {
         Iterator iter = panels.iterator();
-        
+
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             tif.clearHistory();
         }
+    }
+
+    public void recAckEvent(ATerm event) {
+    }
+
+    public void recTerminate(ATerm t0) {
+        System.exit(0);
     }
 }
