@@ -1,5 +1,9 @@
 # $Id$
 
+2003/07/15 (markvdb@cwi.nl)
+ * Button/action registration changed.
+ * Number of buttons/actions moved to ASF+SDF package.
+
 2003/07/14 ({jurgenv,markvdb}@cwi.nl)
  * Added graph attributes to the graph format (updated MetaStudio)
  * Dot bounding box information used to calculate size of canvas
