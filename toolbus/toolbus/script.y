@@ -72,7 +72,7 @@ char *TBtmpname(char *name, char *suf)
    to a file `name.tb.c' and use that as input for cpp.
 */
 
-#define CMD_MAX 1024
+#define CMD_MAX 10240
 #define PP_LINE_MAX 1024
 
 TBbool parse_script(char *name, int argc, char **argv)
