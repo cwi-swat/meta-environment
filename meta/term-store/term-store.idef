@@ -122,6 +122,7 @@ in
     . snd-eval(TS, load-snapshot(Snapshot))
     . rec-value(TS, result(snapshot-loaded))
     . snd-msg(ts-snapshot-loaded)
+    . snd-note(ts-table-updated("import-relations"))
   )
   *
   delta

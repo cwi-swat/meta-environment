@@ -59,13 +59,6 @@ in
   fi
 endlet
 
-process StackIsEmpty(Stack: list, Empty: term?) is
-  if equal(Stack, []) then
-    Empty := true
-  else
-    Empty := false
-  fi
-
 process StackPopTerm(Stack: list, NewStack: list?, Top: term?) is
   Top := first(Stack)
   . NewStack := next(Stack)
