@@ -1,0 +1,16 @@
+equations
+
+  [production2str-plain]
+    production2str($Symbol* -> $Symbol $Attributes) =
+      symbols2str($Symbol*) 
+      || strcon(""" "-"">" """)
+      || symbol2str($Symbol) 
+
+  [production2str-prefix]
+    production2str($Literal($Symbolstar) -> $Symbol $Attributes) =
+      literal2str($Literal)  
+      || strcon(""" "(" """)
+      symbolssep2str($Symbolstar)  
+      || strcon(""" ")" """)
+      || strcon(""" "-"">" """)
+      || symbol2str($Symbol) 

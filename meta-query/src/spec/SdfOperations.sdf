@@ -1,0 +1,22 @@
+module SdfOperations
+
+imports basic/Strings
+imports Sdf
+
+exports
+  context-free syntax
+    production2str(Production)    -> String
+    symbols2str(Symbol*)          -> String
+    symbolssep2str({Symbol ","}*) -> String
+    symbol2str(Symbol)            -> String
+    literal2str(Literal)          -> String
+
+hiddens
+  variables
+    "$Char*"[0-9]*		-> CHAR*
+    "$Attributes"[0-9]*         -> Attributes
+    "$Symbol"[0-9]*		-> Symbol
+    "$Symbol*"[0-9]*		-> Symbol*
+    "$Symbol+"[0-9]*		-> Symbol+
+    "$Symbolstar"[0-9]*		-> {Symbol ","}*
+    "$Symbolplus"[0-9]*		-> {Symbol ","}+
