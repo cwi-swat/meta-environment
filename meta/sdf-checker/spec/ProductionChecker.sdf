@@ -12,6 +12,8 @@ hiddens
     get-hidden-cf-prods(Module, ProductionsSet)    -> ProductionsSet {traversal(accu, top-down)}
     get-hidden-cf-prods(Section, ProductionsSet)   -> ProductionsSet {traversal(accu, top-down)}
     get-cf-prods(Grammar, ProductionsSet)          -> ProductionsSet {traversal(accu, top-down)}
+    get-prods(Production*, ProductionsSet)         -> ProductionsSet {traversal(accu, top-down)}
+    get-prods(Production, ProductionsSet)          -> ProductionsSet {traversal(accu, top-down)}
     get-prods-in-prios(Module, ProductionsSet)     -> ProductionsSet {traversal(accu, top-down)}
     get-prods-in-prios(Grammar, ProductionsSet)    -> ProductionsSet {traversal(accu, top-down)}
     get-prods-in-prios(Priorities, ProductionsSet) -> ProductionsSet {traversal(accu, top-down)}

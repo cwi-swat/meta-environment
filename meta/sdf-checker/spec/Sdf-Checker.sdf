@@ -1,7 +1,7 @@
 module  Sdf-Checker
 
 imports AttributeChecker SortChecker SymbolChecker ProductionChecker
-        KernelSyntaxChecker
+        KernelSyntaxChecker RemoveLabels
 exports
   context-free syntax
     check-sdf(SDF) -> Messages

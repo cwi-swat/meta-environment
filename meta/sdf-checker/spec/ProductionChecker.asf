@@ -6,8 +6,15 @@ equations
   [ghp-1'1] get-hidden-cf-prods(exports Grammar, ProductionsSet) =
               get-cf-prods(Grammar, ProductionsSet)
 
-  [gp-1'1] get-cf-prods(context-free syntax Prod*1, productions(Prod*2)) =
-             productions(Prod*1 Prod*2)
+  [gp-1'1] get-cf-prods(context-free syntax Prod*, ProductionsSet) =
+              get-prods(Prod*, ProductionsSet)
+
+  [gp-2'1] get-prods(Symbol* -> Symbol Attrs, productions(Prod*2)) =
+             productions(Symbol* -> Symbol Prod*2)
+
+  [gp-2'1] get-prods($Literal ( Symbol,* ) -> Symbol Attrs, 
+                     productions(Prod*2)) =
+             productions($Literal ( Symbol,* ) -> Symbol Prod*2)
 
   [gpp-1'1] get-prods-in-prios(lexical syntax Prod*, 
                                ProductionsSet) = ProductionsSet
@@ -22,8 +29,12 @@ equations
                                ProductionsSet) =
               get-prods-in-prios(Priorities, ProductionsSet)
 
-  [gpp-1'1] get-prods-in-prios(Prod, productions(Prod*)) =
-              productions(Prod Prod*)
+  [gpp-1'1] get-prods-in-prios(Symbol* -> Symbol Attrs, productions(Prod*)) =
+              productions(Symbol* -> Symbol Prod*)
+
+  [gpp-1'1] get-prods-in-prios($Literal ( Symbol,* ) -> Symbol Attrs,
+                               productions(Prod*)) =
+              productions($Literal ( Symbol,* ) -> Symbol Prod*)
 	
   [cm1] get-module-name(Module) = ModuleName,
         get-exported-cf-prods(Module, productions()) = productions(Prod*1),

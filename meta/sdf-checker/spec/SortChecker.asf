@@ -11,9 +11,19 @@ equations
   [tc3] get-declared-symbols(sorts $Symbol*1, symbols($Symbol*2)) =
        	  symbols($Symbol*1 $Symbol*2)
   
-  [tc2] get-used-symbols($Sort, symbols($Symbol*)) = symbols($Sort $Symbol*)
+  [tc2] get-used-symbols(CHAR, SymbolsSet) = SymbolsSet
+  
+  [tc2] $Sort != CHAR
+        =============
+        get-used-symbols($Sort, symbols($Symbol*)) = symbols($Sort $Symbol*)
 
-  [tc3] get-defined-symbols($Symbols -> $Symbol $Attributes, 
+  [tc3] get-defined-symbols(variables Prod*, SymbolsSet) = SymbolsSet
+
+  [tc4] get-defined-symbols($Symbols -> $Symbol $Attributes, 
+                            symbols($Symbol*)) =
+	  symbols($Symbol $Symbol*)
+
+  [tc5] get-defined-symbols($Literal ( $Symbol,* ) -> $Symbol $Attributes, 
                             symbols($Symbol*)) =
 	  symbols($Symbol $Symbol*)
 

@@ -1,11 +1,12 @@
 equations
 
-  [cd1] check-sorts-and-prods(Definition) = Msgs1,
-        check-attributes(Definition) = Msgs2,
-        check-symbols(Definition) = Msgs3,
-        check-for-kernel-syntax(Definition) = Msgs4
+  [cd1] remove-labels(Definition1) = Definition2,
+        check-sorts-and-prods(Definition2) = Msgs1,
+        check-attributes(Definition2) = Msgs2,
+        check-symbols(Definition2) = Msgs3,
+        check-for-kernel-syntax(Definition2) = Msgs4
         ===========================================
-        check-sdf(definition Definition) =
+        check-sdf(definition Definition1) =
           Msgs1 ++ Msgs2 ++ Msgs3 ++ Msgs4
  
   [cms1] check-module(Module, Definition, InfoMsgTuple1) = InfoMsgTuple2

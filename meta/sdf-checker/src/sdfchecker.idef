@@ -7,13 +7,12 @@ let
   Syntax : term,
   SC     : sdfchecker
 in
+  execute(sdfchecker, SC?) .
   (
     rec-msg(check-sdf(Syntax?)) .
-    execute(sdfchecker, SC?) .
     snd-eval(SC, check-sdf(Syntax)) .
     rec-value(SC, messages(Msgs?)) .
     snd-msg(messages(Msgs)) .
-    snd-terminate(SC, "done") .
     Syntax := none
   )*
   delta

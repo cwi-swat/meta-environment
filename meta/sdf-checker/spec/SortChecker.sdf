@@ -17,6 +17,7 @@ hiddens
     get-used-symbols(Module, SymbolsSet)	-> SymbolsSet {traversal(accu, top-down)}
     get-used-symbols(Symbol, SymbolsSet)	-> SymbolsSet {traversal(accu, top-down)}
     get-defined-symbols(Module, SymbolsSet)  	-> SymbolsSet {traversal(accu, top-down)}
+    get-defined-symbols(Grammar, SymbolsSet)    -> SymbolsSet {traversal(accu, top-down)}
     get-defined-symbols(Production, SymbolsSet) -> SymbolsSet {traversal(accu, top-down)}
 
 hiddens
@@ -30,12 +31,16 @@ hiddens
 
     "$Sort"[0-9]*      	-> Sort
     "$Symbol*"[0-9]*    -> Symbol*
+    "$Symbol,*"[0-9]*   -> {Symbol ","}*
     "$Symbol"[0-9]*     -> Symbol
     "$Symbols"[0-9]*    -> Symbols
     "SymbolsSet"[0-9]*  -> SymbolsSet
+    "$Literal"[0-9]*    -> Literal
 
     "Import*"[0-9]*         -> Import*
     "ImportsSet"[0-9]*      -> ImportsSet
+  
+    "Prod*"[0-9]*           -> Production*
 
     "$Grammar"[0-9]*        -> Grammar
 
