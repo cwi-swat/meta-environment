@@ -84,7 +84,7 @@ in
   (
     rec-msg(preprocess-syntax-hook(ModuleName?, eqs, Syntax?)).
     snd-msg(check-asfsdf(Syntax)) .
-    rec-msg(messages(Feedback?)) .
+    rec-msg(feedback(Feedback?)) .
     snd-msg(display-sdf-errors(Feedback)) .
     snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
     rec-msg(extended-syntax(Syntax?)) .
