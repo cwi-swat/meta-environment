@@ -20,6 +20,13 @@
 #
 # $Id$
 
+2000/6/23 (js@cwi.nl)
+   *  Fixed a tiny bug in sglr's handling of follow restrictions
+      of levels deeper than 1
+   *  Added the Follower language, and both an offending and a
+      non-offending input term w.r.t. the follow-restrictions
+   *  Bumped version to 2.34
+
 2000/6/20 (jong@cwi.nl)
    * In-output warns when it encounters unresolvable entries in searchpath.
    * In-output warns when more than one match for a given module is found.
