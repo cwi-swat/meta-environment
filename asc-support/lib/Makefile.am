@@ -85,6 +85,8 @@ GENLNKTST=${UTILS}/gen-link-test.sh
 
 CLEANFILES+=builtin-forward.c asc-builtins.h builtin-link-test.c
 
+BUILT_SOURCES=builtin-forward.c asc-builtins.h builtin-link-test.c
+
 builtin-forward.c: asc-builtins.h ${BUILTIN_SOURCEFILES} Makefile
 	${GENFWD} "${BUILTIN_NAMES_ARITY}" > $@
 
