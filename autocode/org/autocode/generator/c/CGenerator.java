@@ -163,14 +163,6 @@ public class CGenerator
   }
 
   //}}}
-  //{{{ protected void emitSource()
-
-  protected void emitSource()
-  {
-    emitIncludes(compilationUnit.fetchSourceIncludeIterator());
-  }
-
-  //}}}
 
   //{{{ protected void emitIncludes(Iterator includes)
 
@@ -237,6 +229,58 @@ public class CGenerator
       }
     }
     print(")");
+  }
+
+  //}}}
+
+  //{{{ protected void emitSource()
+
+  protected void emitSource()
+  {
+    emitIncludes(compilationUnit.fetchSourceIncludeIterator());
+    println();
+    emitStructs();
+  }
+
+  //}}}
+  //{{{ protected void emitStructs()
+
+  protected void emitStructs()
+  {
+    Iterator iter = compilationUnit.fetchStructIterator();
+    while (iter.hasNext()) {
+      Struct structure = (Struct)iter.next();
+      emitStruct(structure);
+    }
+  }
+
+  //}}}
+  //{{{ protected void emitStruct(Struct structure)
+
+  protected void emitStruct(Struct structure)
+  {
+    String typeName = structure.getName();
+    String structName = structName(typeName);
+    foldOpen("struct " + structName);
+    println("struct " + structName);
+    println("{");
+    Iterator iter = structure.fetchFieldIterator();
+    indentLevel++;
+    while (iter.hasNext()) {
+      Field field = (Field)iter.next();
+      emitField(field);
+    }
+    indentLevel--;
+    println("}");
+    foldClose();
+  }
+
+  //}}}
+  //{{{ protected void emitField(Field field)
+
+  protected void emitField(Field field)
+  {
+    println(field.getType() + " " + field.getName() + ";");
   }
 
   //}}}

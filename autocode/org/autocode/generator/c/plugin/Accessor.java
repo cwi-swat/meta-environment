@@ -36,7 +36,7 @@ public class Accessor
       unit.putStruct(structName, structure);
     }
 
-    if (structure.containsFieldValue(field)) {
+    if (!structure.containsFieldValue(field)) {
       structure.addField(field);
     }
   }

@@ -1,5 +1,8 @@
 $Id$
 
+Fri Mar  8 17:01:38 CET 2002 <olivierp>
+ * Added generation of structs and fields in structs
+
 Sun Mar  3 16:35:48 CET 2002 <jong,olivierp>
  * Added operations in JavaGenerator: fetch-iterator, get, put, ...
  * C generator now generates typedefs and function decls
