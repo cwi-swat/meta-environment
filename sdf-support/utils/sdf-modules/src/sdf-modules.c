@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <aterm2.h>
 #include <atb-tool.h>
+#include <ctype.h>
 
 #include <SDFME-utils.h>
 #include "sdf-modules.tif.h"
@@ -155,6 +156,33 @@ ATerm get_import_graph(int cid, ATerm atModules)
   }
 
   return ATmake("snd-result(import-graph(<term>,<term>))", nodes, edges);
+}
+
+/*}}}  */
+
+/*{{{  ATerm is_valid_modulename_in_path(int cid, char* path, char *moduleName) */
+
+ATerm is_valid_modulename_in_path(int cid, char* path, char *moduleName)
+{
+  int i,j;
+  int pathlen = strlen(path);
+  int namelen = strlen(moduleName);
+  ATerm no = ATmake("snd-result(no)");
+  ATerm yes = ATmake("snd-result(yes)");
+ 
+  for(i=pathlen - 1, j=namelen - 1; i >= 0 && j >= 0; i--, j--) {
+    if (moduleName[j] != path[i]) {
+      return no;
+    }
+    if (!isalnum((int)moduleName[j])
+        && moduleName[j] != '-'
+        && moduleName[j] != '_'
+        && moduleName[j] != '/') {
+      return no;
+    }
+  }
+ 
+  return yes;
 }
 
 /*}}}  */

@@ -10,18 +10,18 @@ let
  Import : term,
  Renamings : term,
  Module : term,
- Id : str,
  Depending : list,
  Definition : term,
  Nodes : list,
- Edges : list
+ Edges : list,
+ Path : str
 in
   execute(sdf-modules, SM?) .
   (
     rec-msg(sm-get-module-id(Module?)) .
     snd-eval(SM, get-module-id(Module)) .
-    rec-value(SM, module-id(Id?)) .
-    snd-msg(module-id(Id))
+    rec-value(SM, module-id(ModuleId?)) .
+    snd-msg(module-id(ModuleId))
   +
     rec-msg(sm-get-all-imports(Modules?, ModuleId?)) .
     snd-eval(SM, get-all-imports(Modules, ModuleId)) .
@@ -47,6 +47,16 @@ in
     snd-eval(SM, get-import-graph(Modules)) .
     rec-value(SM, import-graph(Nodes?,Edges?)) .
     snd-msg(sm-import-graph(Nodes, Edges))
+  +
+    rec-msg(sm-is-valid-modulename-in-path(Path?, ModuleId?)) .
+    snd-eval(SM, is-valid-modulename-in-path(Path, ModuleId)) .
+    (
+      rec-value(SM, yes) .
+      snd-msg(modulename-is-valid)
+    +
+      rec-value(SM, no) .
+      snd-msg(modulename-is-invalid)
+    )  
   )
   *delta
 endlet
