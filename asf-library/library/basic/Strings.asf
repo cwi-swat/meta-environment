@@ -1,16 +1,37 @@
-  equations
-     [S1]   strcon(""" Chars1 """) || strcon(""" Chars2 """) =
-                strcon(""" Chars1 Chars2 """)
+equations
+     
+[S1]   
+strcon(""" Chars1 """) || strcon(""" Chars2 """) =
+strcon(""" Chars1 Chars2 """)
 
- [] remove-continuations(strcon(""" Chars1 "\""
+[] 
+remove-continuations(strcon(""" Chars1 "\""
 " Chars2 """)) =
-     remove-continuations(strcon(""" Chars1 Chars2 """))
+remove-continuations(strcon(""" Chars1 Chars2 """))
  
- [default] remove-continuations(Str) = Str
+[default] 
+remove-continuations(Str) = Str
+
+[ln]	
+length(Str) = num-of-bytes(string-to-bytes(remove-continuations(Str)))
+
+[cmp]
+Str1 < Str2 =
+string-to-bytes(remove-continuations(Str1)) <
+string-to-bytes(remove-continuations(Str2))
+
+[cmp]
+Str1 <= Str2 =
+string-to-bytes(remove-continuations(Str1)) <=
+string-to-bytes(remove-continuations(Str2))
 
 
-[ln]	str-len(Str) = num-of-bytes(string-to-bytes(remove-continuations(Str)))
+[cmp]
+Str1 >= Str2 =
+string-to-bytes(remove-continuations(Str1)) >=
+string-to-bytes(remove-continuations(Str2))
 
-[cmp]	str-cmp(Str1,Str2) =
-		ascii-compare(string-to-bytes(remove-continuations(Str1)),
-			string-to-bytes(remove-continuations(Str2)))
+[cmp]
+Str1 > Str2 =
+string-to-bytes(remove-continuations(Str1)) >
+string-to-bytes(remove-continuations(Str2))

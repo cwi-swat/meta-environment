@@ -21,12 +21,16 @@ exports
     StrCon             -> String {constructor}
     String "||" String -> String {left}
     "(" String ")"     -> String {bracket}
+   
+    String "<"  String  -> Boolean
+    String "<=" String  -> Boolean
+    String ">"  String  -> Boolean
+    String ">=" String  -> Boolean
 
   context-free syntax
     remove-continuations(String) -> String
 
-    str-len(String)         -> Integer
-    str-cmp(String,String) -> Integer
+    length(String)         -> Integer
 
 hiddens
   imports
