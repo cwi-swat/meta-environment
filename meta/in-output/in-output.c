@@ -593,16 +593,17 @@ char* normalize_filename(const char *path)
   prefix[i] = '\0';
 
   newprefix = expand_path(prefix);
-  newpath = (char*) malloc(strlen(newprefix) + (len - i));
-
-  strcpy(newpath,newprefix);
-  newpath[strlen(newpath)] = '/';
-  strcpy(newpath+strlen(newprefix)+1,path+i+1);
+  if (newprefix != NULL) {
+    newpath = (char*) malloc(strlen(newprefix) + (len - i));
+  
+    strcpy(newpath,newprefix);
+    newpath[strlen(newpath)] = '/';
+    strcpy(newpath+strlen(newprefix)+1,path+i+1);
+  }
 
   free(prefix);
-  free(newprefix);
 
-  return(newpath);
+  return newpath;
 }
 
 /*{{{  ATerm open_file(int cid, char *path) */
