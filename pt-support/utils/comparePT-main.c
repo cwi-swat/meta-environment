@@ -30,11 +30,11 @@ int main(int argc, char *argv[])
   ATinit(argc, argv, &bottomOfStack);
   PT_initMEPTApi();
 
-  if (argc != 2) {
+  if (argc != 3) {
     usage(argv[0]);
   }
 
-  for (i=1; i <= argc; i++) {
+  for (i=1; i < argc; i++) {
     if (strcmp(argv[i], "-h") == 0) {
       usage(argv[0]);
     } 
@@ -60,7 +60,8 @@ int main(int argc, char *argv[])
     }
   }
   
-  result = PT_compareTree(PT_TreeFromTerm(t1), PT_TreeFromTerm(t2));
+  result = PT_compareTree(PT_getParseTreeTop(PT_TreeFromTerm(t1)), 
+			  PT_getParseTreeTop(PT_TreeFromTerm(t2)));
 
   if (result < 0) {
     return -1;
