@@ -95,20 +95,24 @@ char *slurpfile(char *fnam, size_t *size)
 
         *size = filesize(fnam);
         if((fd = fopen(fnam, "r")) == NULL) {
-                fprintf(stderr, "could not open %s\n", fnam);
+                /* fprintf(stderr, "could not open %s\n", fnam); */
                 *size = 0;
                 return NULL;
         }
         if((buf = (char *)malloc(*size + 1)) == NULL ) {
+                /*
                 fprintf(stderr, "could not allocate %i bytes for %s\n",
                         (int) *size+1, fnam);
+                */
                 fclose(fd);
                 *size = 0;
                 return NULL;
         }
         if(fread(buf, 1, *size, fd) != *size) {
+                /*
                 fprintf(stderr, "could not fread() %i bytes %s\n",
                         (int) *size, fnam);
+                */
                 free(buf);
                 *size = 0;
                 buf = NULL;
@@ -123,7 +127,7 @@ ATbool path_length_exceeded(int l, char *p, char *f)
   if(l <= PATH_LEN)
     return ATfalse;
 
-  ATfprintf(stderr, "warning: path too long, ignored: %s/%s\n", p, f);
+  ATwarning("warning: path too long, ignored: %s/%s\n", p, f);
   return ATtrue;
 }
 
@@ -168,17 +172,19 @@ ATerm read_term_from_named_file(char *fn, char *n, ATbool oldstyle)
   static char pn[PATH_LEN];
 
   if(!(t = ATreadFromNamedFile(fn))) {
-    ATfprintf(stderr, "error reading %s\n", fn);
+    if (run_verbose) {
+      ATwarning("error reading %s\n", fn);
+    }
     return open_error(n);
   }
-  if(oldstyle)
+  if (oldstyle)
     return ATmake("snd-value(opened-file(asfix,<str>,<term>,<str>,"
                   "timestamp(<int>)))",
                   n, t, fn, filetime(fn));
   else {
     strncpy(pn,fn,strlen(fn)-4);
     pn[strlen(fn)-4] = '\0';
-    return ATmake("snd-value(opened-file(baf,<str>,<term>,<str>,"
+    return ATmake("snd-value(opened-file(<str>,tree(<term>),<str>,"
                   "timestamp(<int>)))",
                   n, t, pn, filetime(fn));
   }
@@ -207,13 +213,15 @@ ATerm read_raw_from_named_file(char *fn, char *n)
   size_t size;
 
   if (!(buf = slurpfile(fn, &size))) {
-    ATfprintf(stderr, "error reading %s\n", fn);
+    if (run_verbose) {
+      ATwarning("error reading %s\n", fn);
+    }
     t = open_error(n);
   } else {
     if(run_verbose) {
-      ATwarning("raw read from %s\n", fn);
+      ATwarning("reading %s (ascii)\n", fn);
     }
-    t = ATmake("snd-value(opened-file(raw,<str>,<str>,<str>,"
+    t = ATmake("snd-value(opened-file(<str>,text(<str>),<str>,"
                "timestamp(<int>)))",
                n, buf, fn, filetime(fn));
     free(buf);
@@ -337,7 +345,7 @@ ATerm create_empty_eqs_section(int cid, char *moduleName)
     return ATmake("snd-value(creation-succeeded(<str>))", txtFileName);
 }
 
-ATerm open_sdf2_file(int cid, char *name)
+ATerm open_asdf2_file(int cid, char *name, ATerm type)
 {
   char   *full;
   char   newestbaf[PATH_LEN] = {'\0'};
@@ -345,13 +353,18 @@ ATerm open_sdf2_file(int cid, char *name)
   ATbool newest_is_binary = ATfalse;
   ATerm  t;
 
-  if(asfix_status == 1) {
-    ATwarning("cannot mix asfix modes\n");
-    return open_error(name);
-  }
+  if(ATmatch(type, "sdf2")) {
+    if(asfix_status == 1) {
+      ATwarning("cannot mix asfix modes\n");
+      return open_error(name);
+    }
 
-  sprintf(newestraw, "%s%s", name, SDF2_TXT_EXT);
-  sprintf(newestbaf, "%s%s", name, SDF2_BAF_EXT);
+    sprintf(newestraw, "%s%s", name, SDF2_TXT_EXT);
+    sprintf(newestbaf, "%s%s", name, SDF2_BAF_EXT);
+  } else {
+    sprintf(newestbaf, "%s%s", name, EQS_BAF_EXT);
+    sprintf(newestraw, "%s%s", name, EQS_TXT_EXT);
+  }
 
   if((full = find_newest_in_path(newestraw)))
     strcpy(newestraw, full);
@@ -360,7 +373,7 @@ ATerm open_sdf2_file(int cid, char *name)
   newest_is_binary = newerfile(newestbaf, newestraw);
 
   if(!newestraw[0] && !newestbaf[0]) {
-    ATfprintf(stderr,"%s(.sdf2|.sdf2.baf) not found in path\n", name);
+    ATwarning("%s(.sdf2|.sdf2.baf) not found in path\n", name);
     return open_error(name);
   }
   if(newest_is_binary) {
@@ -368,27 +381,13 @@ ATerm open_sdf2_file(int cid, char *name)
   } else {
     t = read_raw_from_named_file(newestraw, name);
   }
-  if(ATmatch(t, "snd-value(opened-file(<list>))", NULL))
-    asfix_status = 2;
 
-  return t;
-}
-
-ATerm open_eqs_asfix_file(int cid, char *name)
-{
-  char *full, fullname[PATH_LEN];
-  ATerm t;
-
-  sprintf(fullname, "%s%s", name, EQS_BAF_EXT);
-
-  if((full = find_newest_in_path(fullname))) {
-    t = read_term_from_named_file(full, name, ATfalse);
-  } else {
-    if(run_verbose) {
-      ATwarning("no such file: %s\n", fullname);
+  if(ATmatch(type, "sdf2")) {
+    if(ATmatch(t, "snd-value(opened-file(<list>))", NULL)) {
+      asfix_status = 2;
     }
-    t = open_error(name);
   }
+
   return t;
 }
 
@@ -431,7 +430,9 @@ ATerm open_trm_file(int cid, char *name)
   if((full = find_newest_in_path(name))) {
     t = read_raw_from_named_file(full, name);
   } else {
-    ATfprintf(stderr,"no such file: %s\n", name);
+    if (run_verbose) {
+      ATwarning("unable to read: %s\n", name);
+    }
     t = open_error(name);
   }
   return t;

@@ -1,40 +1,46 @@
+/*
+ * $Id$
+ */
+
 process Io is
 let
-  IO       : in-output,
-  Id       : term,
-  Asfix    : term,
-  Name     : str,
-  Dir      : str,
-  Path     : str,
-  T        : term,
-  Text     : str,
-  FileName : str,
-  TS       : int
+  IO        : in-output,
+  Asfix     : term,
+  Name      : str,
+  Dir       : str,
+  Path      : str,
+  T         : term,
+  Text      : str,
+  EqsTree   : term,
+  EqsText   : str,
+  FileName  : str,
+  Contents  : term,
+  TimeStamp : term
 in
   execute(in-output,IO?).
   (
     rec-msg(get-table-timestamp(Name?)).
     snd-eval(IO,get-timestamp(Name,".tbl")).
-    rec-value(IO,timestamp(TS?)).
-    snd-msg(table-timestamp(timestamp(TS)))
+    rec-value(IO, TimeStamp?) .
+    snd-msg(table-timestamp(TimeStamp))
     +
-    rec-msg(Id?,read-parse-table(Name?)).
+    rec-msg(read-parse-table(Name?)).
     snd-eval(IO,read-parse-table(Name)).
     (
-      rec-value(IO,table-on-disk(Text?,timestamp(TS?))).
-      snd-msg(Id,table-on-disk(Text,timestamp(TS)))
+      rec-value(IO,table-on-disk(Text?,TimeStamp)).
+      snd-msg(table-on-disk(Text,TimeStamp))
     +
       rec-value(IO,error-opening(Name?)).
-      snd-msg(Id,no-table-on-disk)
+      snd-msg(no-table-on-disk)
     )
   +
-    rec-msg(Id?,open-trm-file(Name?)).
+    rec-msg(open-trm-file(Name?)).
     snd-eval(IO,open-trm-file(Name)).
-    ( rec-value(IO,opened-file(raw,Name,Text?,Path?,timestamp(TS?))).
-      snd-msg(Id,opened-file(raw,Name,Text,Path,timestamp(TS)))
+    ( rec-value(IO,opened-file(Name,Contents?,Path?,TimeStamp?)).
+      snd-msg(opened-file(Name,Contents,Path,TimeStamp))
       +
       rec-value(IO,error-opening(Name?)).
-      snd-msg(Id, error-opening(Name))
+      snd-msg(error-opening(Name))
     )
   +
     %% Check if a sdf2 module exists.
@@ -82,41 +88,41 @@ in
     )
   +
     %% Name represents the module-name (without extension)
-    rec-msg(Id?,open-file(Name?)).
+    rec-msg(open-file(Name?)).
     snd-eval(IO, open-old-asfix-file(Name)).
     (
-      rec-value(IO,opened-file(asfix,Name?,T?,Path?,timestamp(TS?))).
-      snd-msg(Id,opened-file(asfix,Name,T,Path,timestamp(TS)))
+      rec-value(IO,opened-file(asfix,Name?,T?,Path?,TimeStamp?)).
+      snd-msg(opened-file(asfix,Name,T,Path,TimeStamp))
     +
       rec-value(IO,error-opening(Name?)).
-      snd-eval(IO,open-sdf2-file(Name)).
+      snd-eval(IO,open-asdf2-file(Name, sdf2)).
       (
-        rec-value(IO,opened-file(raw,Name?,Text?,Path?,timestamp(TS?))).
-        snd-msg(Id,opened-file(raw,Name,Text,Path,timestamp(TS)))
+        rec-value(IO,opened-file(Name?,Contents?,Path?,TimeStamp?)).
+        snd-msg(opened-file(Name,Contents,Path,TimeStamp))
         + 
-        rec-value(IO,opened-file(baf,Name?,T?,Path?,timestamp(TS?))).
-        snd-msg(Id,opened-file(baf,Name,T,Path,timestamp(TS)))
+        rec-value(IO,opened-file(Name?,Contents?,Path?,TimeStamp?)).
+        snd-msg(opened-file(Name,Contents,Path,TimeStamp))
         +
         rec-value(IO,error-opening(Name?)).
-        snd-msg(Id, error-opening(Name))
+        snd-msg(error-opening(Name))
       )
     )
   +
-    rec-msg(Id?,open-eqs-asfix-file(Name?)).
-    snd-eval(IO,open-eqs-asfix-file(Name)).
+    rec-msg(open-eqs-file(Name?)).
+    snd-eval(IO,open-asdf2-file(Name, eqs)).
     (
-      rec-value(IO,opened-file(baf,Name?,T?,Path?,timestamp(TS?))).
-      snd-msg(Id,opened-file(baf,Name,T,Path,timestamp(TS)))
-      +
-      rec-value(IO,error-opening(Name?)).
-      snd-msg(Id, error-opening(Name))
+      rec-value(IO, opened-file(Name, Contents?, Path?, TimeStamp?)) .
+      snd-msg(opened-file(Name, Contents, Path, TimeStamp)) 
+    +
+      rec-value(IO, error-opening(Name)).
+      snd-msg(error-opening(Name))
     )
   +
     rec-msg(open-eqs-text-file(Name?)).
     snd-eval(IO,open-eqs-text-file(Name)).
     (
-      rec-value(IO,opened-file(raw,Name,Text?,Path?,timestamp(TS?))).
-      snd-msg(opened-file(raw,Name,Text,Path,timestamp(TS))) 
+      rec-value(IO,opened-file(Name,text(EqsText?),Path?,TimeStamp?)).
+      snd-msg(opened-file(Name,EqsText,Path,TimeStamp)) 
       +
       rec-value(IO,error-opening(Name)).
       snd-msg(error-opening(Name))
@@ -134,6 +140,5 @@ in
   )*
   delta
 endlet
-
 
 tool in-output is { command = "in-output" }

@@ -1,0 +1,27 @@
+#include "../in-output.idef"
+
+process Test is
+let
+  SdfText : str,
+  SdfTree : term,
+  Path    : str,
+  Time    : term,
+  Msg     : str
+in
+  snd-msg(open-file("Empty2")) .
+  (
+    rec-msg(opened-file("Empty2", tree(SdfTree?), Path?, Time?))
+  +
+    (
+      rec-msg(opened-file("Empty2", text(SdfText?), Path?, Time?))
+    +
+      rec-msg(error-opening("Empty2"))
+    ) .
+    printf("in-output-test-10 FAILED!\n")
+  +
+    shutdown("test-10 FAILED! (timeout)\n") delay(sec(5))
+  ) .
+  shutdown("") delay(sec(2))
+endlet
+
+toolbus(Test, Io)
