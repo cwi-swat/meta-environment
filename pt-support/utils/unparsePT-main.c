@@ -6,10 +6,12 @@
 #include <string.h>
 
 #include <aterm2.h>
-#include <atb-tool.h>
 #include <MEPT-utils.h>
 
+#ifndef WITHOUT_TOOLBUS
+#include <atb-tool.h>
 #include "unparsePT.tif.h"
+#endif
 
 /*}}}  */
 
@@ -79,23 +81,27 @@ int main(int argc, char *argv[])
   char   *inputName = "-";
   char   *outputName = "-";
   FILE *outputFile = NULL; 
-  ATbool use_toolbus = ATfalse;
   ATbool proceed = ATtrue;
   ATbool verbose = ATfalse;
   ATbool visualAmbs = ATfalse;
-  int i, cid;
+#ifndef WITHOUT_TOOLBUS
+  ATbool use_toolbus = ATfalse;
+  int i;
 
   for (i=1; !use_toolbus && i < argc; i++) {
     use_toolbus = !strcmp(argv[i], "-TB_TOOL_NAME");
   }
 
   if (use_toolbus) {
+    int cid;
     ATBinit(argc, argv, &bottomOfStack);
     PT_initMEPTApi();
     cid = ATBconnect(NULL, NULL, -1, unparsePT_handler);
     ATBeventloop();
   }
-  else {
+  else
+#endif
+  {
     extern char *optarg;
     extern int   optind;
 
