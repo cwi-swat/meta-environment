@@ -33,4 +33,4 @@ hiddens
     "add" ImportSet "to" ImportSet -> ImportSet
     
   variables
-    "ImportSet" [0-9]* -> ImportSet
+    "$ImportSet" [0-9]* -> ImportSet
