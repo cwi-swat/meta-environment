@@ -1,3 +1,6 @@
+2001/05/07 (markvdb@cwi.nl)
+ * Add "empty", "seq", "func", "perm", and "iter-(sep-)n" symbol.
+
 2001/05/04 (markvdb@cwi.nl)
  * Added "pair" symbol.
  * Predicate added to see whether a node is a list of characters.
