@@ -18,7 +18,7 @@ exports
 
     "<" arguments:{NatCon ","}+ ">" -> ArgumentIndicator {cons("default")}
 
-    Group ArgumentIndicator               -> Group {non-assoc}
+    Group ArgumentIndicator               -> Group {non-assoc,cons("with-arguments")}
 
     Production                            -> Group  {cons("simple-group")}
     "{" Productions "}"                   -> Group  {cons("prods-group")}

@@ -13,6 +13,11 @@ exports
     min(Character,Character)  -> Character
 
 hiddens
+  context-free start-symbols
+	Character
+	Boolean
+	NatCon
+
   variables
     "_c"[0-9\']* -> Character
 
