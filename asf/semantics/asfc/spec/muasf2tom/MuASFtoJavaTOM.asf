@@ -1,7 +1,6 @@
 equations
 
 [] 
-muasf2javatom(Module) = Bytes
+muasf2javatom(Module) = wrap-rules(TomDefinition, strcon(c*))
 when module modid(c*) SignatureOpt RulesOpt := Module,
-     TomDefinition := muasf2tom(Module),
-     Bytes := wrap-rules(TomDefinition,strcon(c*))
+     TomDefinition := muasf2tom(Module)

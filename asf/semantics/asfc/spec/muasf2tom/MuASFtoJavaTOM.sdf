@@ -6,7 +6,7 @@ exports
 
 context-free syntax
 
-muasf2javatom(Module) -> Bytes
+muasf2javatom(Module) -> Wrapper
 
 hiddens
 

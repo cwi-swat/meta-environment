@@ -11,12 +11,17 @@ context-free start-symbols
 
 context-free syntax
 
-TomRuleSection* -> TomSpecification
-"%rule" "{" TomRule* "}" -> TomRuleSection
+TomRuleSection
+* -> TomSpecification
 
-Term "->" Term -> TomRule
+"%rule" "{" 
+  TomRule
+* 
+"}" -> TomRuleSection
+
+"default:"? Term "->" Term -> TomRule
 
 context-free syntax
 
-FunId "(" ")" -> Term {cons("func-no-arguments")}
+FunId"("")" -> Term {cons("func-no-arguments")}
 "_"           -> Term {cons("anonymous-variable")}
