@@ -33,7 +33,7 @@ EXTRA_DIST   = removevarsyntax.idef removevarsyntax.tif.c removevarsyntax.tif.h 
 
 removevarsyntax_SOURCES = removevarsyntax.c
 removevarsyntax_LDADD   = removevarsyntax.tif.o \
-                       -L$(top_builddir)/asf/removevars/c-source \
+                       -L$(top_builddir)/utils/removevars/c-source \
                        -lRemove-Var-Syntax \
                        -L$(ASC_SUPPORT)/lib -lasc-support \
                        -L$(ASFIX)/lib -lAsFix \
