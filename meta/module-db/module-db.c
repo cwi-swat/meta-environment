@@ -286,9 +286,12 @@ ATerm update_sdf2_module(int cid, ATerm asfix)
          ATerror("no path available for %t\n", asfix);
          return NULL; /* Silence the compiler */
       }
-    } else
-       return ATmake("snd-value(imports(<str>,need-modules([<list>]),irels([<list>])))",
-                     module_string,ATempty,ATempty);
+    } 
+    else {
+      irels = calc_import_relations(modname);
+      return ATmake("snd-value(imports(<str>,need-modules([<list>]),irels([<list>])))",
+                    module_string,ATempty,irels);
+      }
   }
   else {
     ATerror("not an asfix module: %t\n", asfix);
