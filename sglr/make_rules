@@ -4,8 +4,8 @@ POD2MAN=pod2man
 POD2TXT=pod2text
 POD2HTML=pod2html
 
-IDEF=${TOOLBUS}/bin/idef2tif
-TIFS=${TOOLBUS}/bin/tifstoc
+IDEF=idef2tif
+TIFS=tifstoc
 
 tif:
 	for i in `ls *.idef`; do \
