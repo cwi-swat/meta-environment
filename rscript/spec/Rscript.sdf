@@ -9,7 +9,7 @@ exports
   imports RscriptElem basic/Comments
 
   lexical syntax
-     [A-Za-z][A-Za-z0-9\_\-]*             	-> RVAR {avoid}
+     [A-Za-z][A-Za-z0-9\_\-]*             	-> RVAR
       "comment" ~[]* "endcomment"		-> LAYOUT
 
      "and" | "or" | "implies" | "in" | "notin" |
@@ -21,6 +21,9 @@ exports
 
   context-free restrictions
      RVAR -/- [A-Za-z0-9\_\-]
+
+  start-symbols 
+     RSCRIPT
 
   context-free syntax
 
