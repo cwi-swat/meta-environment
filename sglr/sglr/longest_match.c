@@ -44,9 +44,9 @@ tree_width(term *t)
    else if(TBmatch(t, "amb([%l])", &args))
      {
        if(args != NULL)
-	 return tree_width(list_first(args));
+         return tree_width(list_first(args));
        else
-	 return 0;
+         return 0;
      }
    else
      {
@@ -74,15 +74,15 @@ print_tree_yield(FILE *F, term *t)
   else if(TBmatch(t, "appl(%t,[%l])", &prod, &args))
     {
       while(args)
-	{
-	  print_tree_yield(F, list_first(args));
-	  args = list_next(args);
-	}
+        {
+          print_tree_yield(F, list_first(args));
+          args = list_next(args);
+        }
     }
   else if(TBmatch(t, "amb([%l])", &args))
     {
       if(args != NULL)
-	print_tree_yield(F, list_first(args));
+        print_tree_yield(F, list_first(args));
     }
   else
     {
@@ -137,39 +137,39 @@ token_stream_next(token_stream *ts)
     {
       stack = STACK(ts);
       while(stack)
-	{
-	  t = list_first(stack);
-	  stack = list_next(stack);
+        {
+          t = list_first(stack);
+          stack = list_next(stack);
 
-	  /* TBprintf(stdout, "\nfinding tokens in \n%t\n", t); */
+          /* TBprintf(stdout, "\nfinding tokens in \n%t\n", t); */
 
-	  if(TBmatch(t, "appl(%t,[%l])", &prod, &args))
-	    {
-	      if(is_token(prod))
-		{
-		  tok = TBmake("token(%t,%d)", t, tree_width(t));
-		  FIRST(ts) = list_concat_term(FIRST(ts),tok);
-		  STACK(ts) = stack;
-		  return tok;
-		}
-	      else
-		{
-		  stack = list_append(args, stack);
-		}
-	    }
-	  else if(TBmatch(t, "%d", &c))
-	    {
-	      tok = TBmake("token(%t,1)", t);
-	      FIRST(ts) = list_join(FIRST(ts),tok);
-	      STACK(ts) = stack;
-	      return tok;
-	    }
-	  else
-	    {
-	      TBprintf(stderr, "get_tokens: funny tree: %t\n\n", t);
-	      exit(1);
-	    }
-	}
+          if(TBmatch(t, "appl(%t,[%l])", &prod, &args))
+            {
+              if(is_token(prod))
+                {
+                  tok = TBmake("token(%t,%d)", t, tree_width(t));
+                  FIRST(ts) = list_concat_term(FIRST(ts),tok);
+                  STACK(ts) = stack;
+                  return tok;
+                }
+              else
+                {
+                  stack = list_append(args, stack);
+                }
+            }
+          else if(TBmatch(t, "%d", &c))
+            {
+              tok = TBmake("token(%t,1)", t);
+              FIRST(ts) = list_join(FIRST(ts),tok);
+              STACK(ts) = stack;
+              return tok;
+            }
+          else
+            {
+              TBprintf(stderr, "get_tokens: funny tree: %t\n\n", t);
+              exit(1);
+            }
+        }
       return NULL; /* no more tokens */
     }
   else
@@ -198,24 +198,24 @@ get_tokens(term *t)
   if(TBmatch(t, "appl(%t,[%l])", &prod, &args))
     {
       if(TBmatch(prod, "prod([lex(%t)],cf(%t),%t)", &fargs, &res, &attrs))
-	{
-	  return TBmake("[token(%t,%d)]", t, tree_width(t));
-	}
+        {
+          return TBmake("[token(%t,%d)]", t, tree_width(t));
+        }
       else if(TBmatch(prod, "prod([%l],sort(\"LAYOUT\"),%t)",
-		      &fargs, &attrs))
-	{
-	  return TBmake("[token(%t,%d)]", t, tree_width(t));
-	}
+                      &fargs, &attrs))
+        {
+          return TBmake("[token(%t,%d)]", t, tree_width(t));
+        }
       else if(TBmatch(prod, "prod([%l],%s,%t)",
-		      &fargs, &name, &attrs))
-	{
-	  return TBmake("[token(%t,%d)]", t, tree_width(t));
-	}
+                      &fargs, &name, &attrs))
+        {
+          return TBmake("[token(%t,%d)]", t, tree_width(t));
+        }
       else while(args)
-	{
-	  tokens = list_join(tokens, get_tokens(list_first(args)));
-	  args = list_next(args);
-	}
+        {
+          tokens = list_join(tokens, get_tokens(list_first(args)));
+          args = list_next(args);
+        }
       return tokens;
     }
   else if(TBmatch(t, "%d", &c))
@@ -258,39 +258,39 @@ lm_comp(token_stream *ts1, token_stream *ts2)
   while((resolved == 0) && tok1 && tok2)
     {
       if (debugflag)
-	{
-	  TBprintf(log, "comparing tokens \"");
-	  print_tree_yield(log, TOK_TREE(tok1));
-	  TBprintf(log, "\" and \"");
-	  print_tree_yield(log, TOK_TREE(tok2));
-	  TBprintf(log, "\" = ");
-	}
+        {
+          TBprintf(log, "comparing tokens \"");
+          print_tree_yield(log, TOK_TREE(tok1));
+          TBprintf(log, "\" and \"");
+          print_tree_yield(log, TOK_TREE(tok2));
+          TBprintf(log, "\" = ");
+        }
 
       k1 = TOK_LEN(tok1);
       k2 = TOK_LEN(tok2);
       if(k1 > k2)
-	{
-	  /* |t1| has longer match than |t2|; continue with next term */
-	  /* TBprintf(stderr, "Current larger than next\n"); */
-	  resolved = -1;
-	}
+        {
+          /* |t1| has longer match than |t2|; continue with next term */
+          /* TBprintf(stderr, "Current larger than next\n"); */
+          resolved = -1;
+        }
       else if(k2 > k1)
-	{
-	  /* |t2| has longer match than all previous terms */
-	  /* TBprintf(stderr, "Next larger than current\n"); */
-	  resolved = 1; /* continue comparing |t1| with next term */
-	}
+        {
+          /* |t2| has longer match than all previous terms */
+          /* TBprintf(stderr, "Next larger than current\n"); */
+          resolved = 1; /* continue comparing |t1| with next term */
+        }
       else
-	{
-	  /* tokens have equal length until now; compare rest of
-	     token streams */
-	  tok1 = token_stream_next(ts1);
-	  tok2 = token_stream_next(ts2);
-	}
+        {
+          /* tokens have equal length until now; compare rest of
+             token streams */
+          tok1 = token_stream_next(ts1);
+          tok2 = token_stream_next(ts2);
+        }
       if (debugflag)
-	{
-	  TBprintf(log, "%d\n", resolved);
-	}
+        {
+          TBprintf(log, "%d\n", resolved);
+        }
     }
   return resolved;
 }
@@ -335,18 +335,18 @@ longest_match(term_list *trms)
      switch(lm_comp(ts1, ts2))
        {
        case -1:
-	 /* |t1| is larger than |t2|; continue with other terms */
-	 break;
+         /* |t1| is larger than |t2|; continue with other terms */
+         break;
        case 0:
-	 /* |t1| and |t2| are equal; join and continue comparing with |t1| */
-	 res_trms = mk_list(t1, res_trms);
-	 break;
+         /* |t1| and |t2| are equal; join and continue comparing with |t1| */
+         res_trms = mk_list(t1, res_trms);
+         break;
        case 1:
-	 /* |t2| is larger than |t1|; continue with |t2| as |t1| */
-	 t1  = t2;
-	 ts1 = ts2;
-	 res_trms = mk_list(t1, NULL);
-	 break;
+         /* |t2| is larger than |t1|; continue with |t2| as |t1| */
+         t1  = t2;
+         ts1 = ts2;
+         res_trms = mk_list(t1, NULL);
+         break;
        }
      reset_token_stream(ts1);
    }
@@ -400,7 +400,7 @@ lm_filter(term *t)
     {
       if(i == 0) return t;
       else
-	return TBmake("parsetree(%t,%d)", lm_filter(args), 0);
+        return TBmake("parsetree(%t,%d)", lm_filter(args), 0);
     }
 /* Should never get here! */
   TBprintf(stderr, "error: unexpected term %t\n", t);

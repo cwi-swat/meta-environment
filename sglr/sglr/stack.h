@@ -57,7 +57,7 @@ typedef term st_links;
 \end{verbatim}
 */
 #define pop(hd, lst) ((lst)? (hd) = first(lst), \
-		      (lst) = next(lst), TRUE : FALSE)
+                      (lst) = next(lst), TRUE : FALSE)
 
 /*
    Check whether a stack is contained in a list of stacks.
@@ -68,5 +68,6 @@ st_link *find_direct_link(stack *, stack *);
 void mark_stack_rejected(stack *, st_link *);
 void mark_link_rejected1(stack *, st_link *);
 void mark_link_rejected2(stack *, st_link *);
+bool  some_rejected(stack *);
 bool  rejected(stack *);
 bool in_stacks(stack *, stacks *);

@@ -22,9 +22,9 @@
 #include "getopt.h"
 #include "bool.h"
 #include "parse-table.h"
-#include "parser.h"
 #include "sglr.tif.c"
 #include "stack.h"
+#include "parser.h"
 #include "tree-to-dot.h"
 
 char *version_string = "$Revision$";
@@ -46,7 +46,6 @@ char *stack_dotoutput = "";
 int   gc = TRUE;
 int   standalone=TRUE;
 
-term	*trans(term *, int);
 
 void batch (int argc, char **argv);
 bool called_from_toolbus(int argc, char **argv);
@@ -65,8 +64,7 @@ FILE *open_log(char *FN);
    on the command line.
 
 */
-int
-main (int argc, char **argv)
+int main (int argc, char **argv)
 {
   if (called_from_toolbus(argc, argv)) {
     standalone = FALSE;
@@ -78,12 +76,12 @@ main (int argc, char **argv)
   }
   return(0);
 }
+
 /*
   If the program is called from the ToolBus, the option
   |-TB_TOOL_NAME| is always present.
 */
-bool
-called_from_toolbus(int argc, char **argv)
+bool called_from_toolbus(int argc, char **argv)
 {
   int i;
   for (i = 0; i < argc; i++)
@@ -91,6 +89,7 @@ called_from_toolbus(int argc, char **argv)
       return TRUE;
   return FALSE;
 }
+
 /*
   \subsection{Batch Mode}
 
@@ -100,8 +99,7 @@ called_from_toolbus(int argc, char **argv)
   command line options, which are parsed by |handle_options|.
 
 */
-void
-batch (int argc, char **argv)
+void batch (int argc, char **argv)
 {
   term *parse_tree = NULL, *tree;
   int c, line, col, length;
@@ -117,20 +115,20 @@ batch (int argc, char **argv)
   term_to_file(parse_tree, output_file_name);
 
   if (TBmatch(parse_tree,
-	      "parse-error([character(%d), line(%d), col(%d), char(%d)])",
-	      &c, &line, &col, &length)) {
+               "parse-error([character(%d), line(%d), col(%d), char(%d)])",
+               &c, &line, &col, &length)) {
     if (c == 0)
       fprintf(stderr,
-	      "(%s) %s: error: end of file unexpected\n",
-	      parse_table_name, input_file_name);
+              "(%s) %s: error: end of file unexpected\n",
+              parse_table_name, input_file_name);
     else
       fprintf(stderr,
-	      "(%s) %s: error at line %d, col %d : character `%c' unexpected\n",
-	      parse_table_name, input_file_name, line, col, c);
+              "(%s) %s: error at line %d, col %d : character `%c' unexpected\n",
+              parse_table_name, input_file_name, line, col, c);
     exit(1);
   } else if (! TBmatch(parse_tree, "parsetree(%t, %d)", &tree, &c)) {
       fprintf(stderr,
-	      "%s: error: result of successful parse is not a parse tree\n"
+              "%s: error: result of successful parse is not a parse tree\n"
               "\t(this should never happen)\n", input_file_name);
       exit(1);
   }
@@ -143,6 +141,7 @@ batch (int argc, char **argv)
 
   exit(0);
 }
+
 /*
   \paragraph{Usage}
 
@@ -161,19 +160,18 @@ batch (int argc, char **argv)
   \item |-l]       : suppress lexical information in dot output
   \item |-v|       : verbose mode
   \item |-V|       : print version information
-  \item |-a|       : abbreviate productions in parse trees
+  \item |-a|       : do not abbreviate productions in parse trees
   \item |-s|       : write show statistics to log file
   \item |-S|       : show stacks as dot files
   \item |-D [file]| : draw tree as graph.
   \end{itemize}
 */
-void
-usage(FILE *stream, int long_message)
+void usage(FILE *stream, int long_message)
 {
   if( !long_message )
     fprintf (stream,
-	     "Usage: %s -p file [-i file] [-o file] [-12adDghlnsSvV?]\n",
-	     program_name);
+             "Usage: %s -p file [-i file] [-o file] [-12adDghlnsSvV?]\n",
+             program_name);
   else {
     fprintf
 (stream,
@@ -181,7 +179,7 @@ usage(FILE *stream, int long_message)
  "\n"
  "\t-1      : use AsFix1 output format\n"
  "\t-2      : use AsFix2 output format (default)\n"
- "\t-a      : abbreviate productions in parse trees\n"
+ "\t-a      : do not abbreviate productions in parse trees\n"
  "\t-d      : debugging mode\n"
  "\t-D file : generate dot output for parse tree\n"
  "\t-g      : no garbage collect\n"
@@ -196,9 +194,10 @@ usage(FILE *stream, int long_message)
  "\t-v      : verbose mode\n"
  "\t-V      : print version information\n"
  "\t-?      : print version information\n"
-	     , program_name);
+             , program_name);
   }
 }
+
 /*
   \paragraph{Option Parsing}
 
@@ -229,21 +228,21 @@ struct option longopts[] =
   {"version",     no_argument,       NULL,               'V'},
   {0, 0, 0, 0}
 };
+
 /*
   The actual parsing is done by the function |getopt_long|, which
   returns an option character for each option. The string declares the
   short names of the options. A colon indicates a required argument
   for an option.
 */
-void
-handle_options (int argc, char **argv)
+void handle_options (int argc, char **argv)
 {
   int c; /* option character */
   verboseflag = FALSE;
   debugflag   = FALSE;
   while ((c = getopt_long(argc, argv,
-			  "12?adD:ghi:lno:p:sS:vV", longopts, NULL))
-	 != EOF)
+                          "12?adD:ghi:lno:p:sS:vV", longopts, NULL))
+         != EOF)
     switch (c) {
     case 0:   break;
     case '1': fprintf(stderr,"%s: AsFix1 output not supported currently\n", program_name);
@@ -294,8 +293,7 @@ handle_options (int argc, char **argv)
 
 */
 
-void
-rec_terminate(term *t)
+void rec_terminate(term *t)
 {
   exit(0);
 }
@@ -306,49 +304,46 @@ rec_terminate(term *t)
   The function |open_file| tries to open a named file for reading and
   gives an appropriate error message if this fails.
 */
-FILE *
-open_file(char *std_error, char *FN)
+FILE *open_file(char *std_error, char *FN)
 {
   FILE *file;
-  if (FN == NULL || strcmp(FN, "") == 0 || strcmp(FN, "-") == 0)
-    {
+
+  if (FN == NULL || strcmp(FN, "") == 0 || strcmp(FN, "-") == 0) {
       if (std_error == NULL) return stdin;
       fprintf(stderr, "%s: %s\n", program_name, std_error);
       usage(stderr, FALSE);
       exit(1);
-    }
-  else if ((file = fopen(FN, "r")) == NULL)
-    {
+  } else if ((file = fopen(FN, "r")) == NULL) {
       fprintf(stderr, "%s: cannot open %s\n", program_name, FN);
       usage(stderr, FALSE);
       exit(1);
-    }
-  else
+  } else
     return file;
 }
+
 /*
   \paragraph{Open Language}
 
   The function |open_language| initializes the parse table for language |L|
   from the file |FN|.
 */
-term *
-open_language(char *L, char *FN)
+term *open_language(char *L, char *FN)
 {
   FILE *input_file;
   parse_table *table;
+
   if (verboseflag && FN != NULL)
     fprintf(stdout, "%s: reading parse table %s\n", program_name, FN);
   input_file = open_file("parse table not specified", FN);
   table = build_parse_table(TBreadTerm(input_file));
   if (table == NULL)
     return TBmake("snd-value(open-language-failed(%s,%s))", L, FN);
-  else
-    {
+  else {
       save_parse_table(L, table);
       return TBmake("snd-value(language-opened(%s,%s))", L, FN);
-    }
+  }
 }
+
 /*
    \paragraph{Parse String}
 
@@ -362,25 +357,24 @@ open_language(char *L, char *FN)
 static char *the_text;
 int text_index;
 
-int
-getchar_from_string(void)
+int getchar_from_string(void)
 {
   if (the_text[text_index] == '\0') return EOF;
   return the_text[text_index++];
 }
+
 /*
   Because the string passed to |parse_string| might be a string that was
   contained in a term we have to save it from being garbage collected.
   This is done now by making a duplicate of it, which is not efficient
   and clean.
 */
-term *
-parse_string(char *L, char *S)
+term *parse_string(char *L, char *S)
 {
   the_text = strdup(S);
   text_index = 0;
   return TBmake("snd-value(%t)",
-		parse(lookup_parse_table(L), getchar_from_string));
+                parse(lookup_parse_table(L), getchar_from_string));
 }
 /*
    \paragraph{Parse File}
@@ -393,41 +387,40 @@ parse_string(char *L, char *S)
 */
 FILE *input_file;
 
-int
-getchar_from_input(void)
+int getchar_from_input(void)
 {
   return getc(input_file);
 }
+
 /*
   If no filename is specified (|FN| is |""|), standard input
   is used.
 */
-term *
-parse_file(char *L, char *FN)
+term *parse_file(char *L, char *FN)
 {
   input_file = open_file(NULL, FN);
   if (verboseflag)
     fprintf(stdout, "%s: parsing file %s\n", program_name, FN);
   return parse(lookup_parse_table(L), getchar_from_input);
 }
+
 /*
   \paragraph{Term to File}
 
   Opening a file for writing and writing a term to it.
 
 */
-void
-term_to_file(term *t, char *FN)
+void term_to_file(term *t, char *FN)
 {
   FILE *output_file;
   if (write_output) {
       if (strcmp(FN, "") == 0 || strcmp(FN, "-") == 0) output_file = stdout;
       else if ((output_file = fopen(FN, "w")) == NULL) {
-	  fprintf(stderr, "%s: cannot create %s\n", program_name, FN);
-	  exit(1);
+          fprintf(stderr, "%s: cannot create %s\n", program_name, FN);
+          exit(1);
       }
       if (verboseflag)
-	fprintf(stdout, "%s: writing parse tree to %s\n", program_name, FN);
+        fprintf(stdout, "%s: writing parse tree to %s\n", program_name, FN);
       TBprintf(output_file, "%t\n", t);
   }
 }
@@ -435,8 +428,7 @@ term_to_file(term *t, char *FN)
 /*
   \paragraph{Open Log}
 */
-FILE *
-open_log(char *FN)
+FILE *open_log(char *FN)
 {
   FILE *fp;
 
