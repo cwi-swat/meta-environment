@@ -1,5 +1,6 @@
 
 package toolbus.tide;
+import toolbus.util.*;
 import toolbus.tool.*;
 import toolbus.aterm.*;
 import java.util.*;
@@ -34,8 +35,7 @@ public class ProcessViewer extends Frame
   private ProcessPanel processPanel;
   private AdapterPanel adapterPanel;
   private SelectionPanel selectionPanel;
-  private Label msg1;
-  private Label msg2;
+  private Label msg;
 
   private ProcessViewerMenuBar menuBar;
   private GridBagLayout layout;
@@ -108,7 +108,7 @@ public class ProcessViewer extends Frame
     // Calculate the geometry of the process-viewer main window
     rows = 7;
     columns = 8;
-    int width = columns*ProcessCanvas.CEL_WIDTH+176;
+    int width = columns*ProcessCanvas.CEL_WIDTH+180;
     int height = 4*ProcessCanvas.CEL_HEIGHT+140;
 
     adapterGrid = new DapPicture[columns][rows];
@@ -131,17 +131,14 @@ public class ProcessViewer extends Frame
     Scrollbar vertical = new Scrollbar(Scrollbar.VERTICAL);
     viewingArea = new ProcessCanvas(this, horizontal, vertical);
     FancyPanel dummy = new FancyPanel();
-    msg1 = new Label("message 1");
-    msg2 = new Label("message 2");
+    msg = new Label("");
     Color msgcol = new Color(220,220,220);
-    msg1.setBackground(msgcol);
-    msg2.setBackground(msgcol);
+    msg.setBackground(msgcol);
 
     Panel dummy2 = new Panel();
     dummy2.setLayout(new GridLayout(3,1));
     dummy2.add(horizontal);
-    dummy2.add(msg1);
-    dummy2.add(msg2);
+    dummy2.add(msg);
 
     add(processPanel);
     add(adapterPanel);
@@ -244,7 +241,12 @@ public class ProcessViewer extends Frame
     Rectangle r = dap.getGeometry();
     boolean found = false;
 
-    for(int j = pid == ANON_DAPID ? 0 : 1; j<r.height && !found; j++) {
+    int j = 1;
+    // The top line is reserved for anonymous processes
+    if(dapid == ANON_DAPID)
+      j = 0;
+
+    for(; j<r.height && !found; j++) {
       for(int i=0; i<r.width && !found; i++) {
 	if(processGrid[r.x+i][r.y+j] == null && 
 	   (adapterGrid[r.x+i][r.y+j] == dap || 
@@ -252,7 +254,6 @@ public class ProcessViewer extends Frame
 	  // Found a free grid point
 	  processGrid[r.x+i][r.y+j] = process;
 	  process.move(r.x+i, r.y+j);
-	  viewingArea.paintProcess(r.x+i, r.y+j);
 	  viewingArea.repaint();
 	  processes[dapid].put(new Integer(pid), process);
 	  found = true;
@@ -327,12 +328,15 @@ public class ProcessViewer extends Frame
 
   public void send(int dapid, int pid, ATermRef dest, ATermRef msg)
   {
-    System.out.println("send, dest = " + dest);
     ProcessPicture from = getProcess(dapid, pid);
     ProcessPicture to = getProcess(dest);
-    if(from != null && to != null)
-      viewingArea.addCommunication(from, to, msg);
-    viewingArea.repaint();
+    if(from != null && to != null) {
+      MsgPicture message = new MsgPicture(from, to, msg);
+      from.setSending(message);
+      viewingArea.repaint();
+      if(from == currentProcess || to == currentProcess)
+	updateMsgInfo();
+    }
   }
 
   //}
@@ -347,9 +351,13 @@ public class ProcessViewer extends Frame
     ProcessPicture from = getProcess(source);
     ProcessPicture to = getProcess(dapid, pid);
 
-    if(from != null && to != null)
-      viewingArea.addCommunication(from, to, msg);
-    viewingArea.repaint();
+    if(from != null && to != null) {
+      MsgPicture message = new MsgPicture(from, to, msg);
+      to.setReceiving(message);
+      viewingArea.repaint();
+      if(from == currentProcess || to == currentProcess)
+	updateMsgInfo();
+    }
   }
 
   //}
@@ -631,8 +639,44 @@ public class ProcessViewer extends Frame
     selectionPanel.update(procs, running);
 
     //}
+    updateMsgInfo();
     menuBar.updateStatus(currentProcess != null, 
 			 currentAdapter != null, procs != 0);
+  }
+
+  //}
+  //{ public void updateMsgInfo()
+
+  /**
+   * Update the information about messages.
+   */
+  public void updateMsgInfo()
+  {
+    // display message info
+    String msg = null;
+    if(currentProcess != null) {
+      MsgPicture m = currentProcess.getSending();
+      if(m != null)
+	msg = m.getMsg().toString();
+      else {
+	m = currentProcess.getReceiving();
+	if(m != null)
+	  msg = m.getMsg().toString();
+      }
+    }
+    setMsg(null);
+  }
+
+  //}
+  //{ public void setMsg(String msg)
+
+  /**
+   * Display a message at the bottom of the screen.
+   */
+
+  public void setMsg(String message)
+  {
+    msg.setText(message == null ? "" : message);
   }
 
   //}
@@ -864,8 +908,8 @@ class ProcessCanvas extends Canvas
     int rows = viewer.getRows();
     int cols = viewer.getColumns();
 
-    vertical.setValues(vertical.getValue(), cellh, 0, rows);
-    horizontal.setValues(horizontal.getValue(), cellw, 0, cols);
+    vertical.setValues(vertical.getValue(), cellh, 0, rows-cellh);
+    horizontal.setValues(horizontal.getValue(), cellw, 0, cols-cellw);
 
     // We dont want to see the area outside the grid.
     orgX = -Math.max(0, Math.min(cols-cellw, horizontal.getValue()));
@@ -908,7 +952,7 @@ class ProcessCanvas extends Canvas
     paintMessages();
     g.drawImage(backgroundImage, orgX*CEL_WIDTH, orgY*CEL_HEIGHT, null);
 
-    w = size().width-1;
+    /*    w = size().width-1;
     h = size().height-1;
     int x=0;
     int y=0;
@@ -918,6 +962,7 @@ class ProcessCanvas extends Canvas
       w -= 2;
       h -= 2;
     }
+    */
   }
 
   //}
@@ -982,6 +1027,9 @@ class ProcessCanvas extends Canvas
 	  MsgPicture msg = viewer.processAt(i,j).getSending();
 	  if(msg != null)
 	    paintMsg(g, msg);
+	  msg = viewer.processAt(i,j).getReceiving();
+	  if(msg != null)
+	    paintMsg(g, msg);
 	}
       }
     }
@@ -1023,13 +1071,11 @@ class ProcessCanvas extends Canvas
       // Now check if the cel is occupied.
       if(viewer.processAt(cellx,celly) != null && 
 	 viewer.processAt(cellx,celly).hit(x, y)) {
-	if(evt.controlDown()) {
-	  // message info
-	} else if(evt.shiftDown()) {
+	if(evt.shiftDown()) {
 	  // Manipulate the selection
 	  selected = viewer.processAt(cellx, celly).isSelected();
 	  viewer.selectProcess(cellx, celly, !selected);
-	} else {
+	} else if(!evt.controlDown()) {
 	  ProcessPicture old = viewer.getCurrentProcess();
 	  if(old != null && old == viewer.processAt(cellx, celly))
 	    viewer.clearCurrentProcess();
@@ -1122,10 +1168,10 @@ class ProcessCanvas extends Canvas
     ProcessPicture from = msg.getSender();
     ProcessPicture to = msg.getReceiver();
 
-    int gx1 = from.getColumn();
-    int gy1 = from.getRow();
-    int gx2 = to.getColumn();
-    int gy2 = to.getRow();
+    int gx1 = to.getColumn();
+    int gy1 = to.getRow();
+    int gx2 = from.getColumn();
+    int gy2 = from.getRow();
 
     int x, y, x1, y1, x2, y2;
 
@@ -1196,7 +1242,7 @@ class ProcessCanvas extends Canvas
     // Destination anchor
     px = CEL_XOFF+gx2*CEL_WIDTH+4;
     py = CEL_YOFF+gy2*CEL_HEIGHT+(CEL_HEIGHT-CEL_WIDTH)/2 + 8;
-    if(gx2 >= gx1) {
+    if(gx2 > gx1) {
       // Anchor west
       g.drawLine(px, py+ph/2, x2, py+ph/2);
       g.drawLine(px, py+ph/2+1, x2, py+ph/2+1);
@@ -1204,8 +1250,8 @@ class ProcessCanvas extends Canvas
       g.drawLine(x2+1, py+ph/2, x2+1, y2);
     } else {
       // Anchor east
-      g.drawLine(px+pw, py+ph/2, x2, py+ph/2);
-      g.drawLine(px+pw, py+ph/2+1, x2, py+ph/2+1);
+      g.drawLine(px+pw-1, py+ph/2, x2, py+ph/2);
+      g.drawLine(px+pw-1, py+ph/2+1, x2, py+ph/2+1);
       g.drawLine(x2, py+ph/2, x2, y2);
       g.drawLine(x2+1, py+ph/2, x2+1, y2);
     }
@@ -1225,9 +1271,6 @@ class ProcessCanvas extends Canvas
 
   public void addCommunication(ProcessPicture from, ProcessPicture to, ATermRef msg)
   {
-    MsgPicture message = new MsgPicture(from, to, msg);
-    from.setSending(message);
-    to.setReceiving(message);
   }
 
   //}
@@ -1588,7 +1631,12 @@ class ProcessPicture extends DebugProcess
 
   public void setSending(MsgPicture msg)
   {
-    clearCommunication();
+    if(sending != null && sending.getReceiver() != msg.getReceiver())
+      sending.getReceiver().receiving = null;
+    if(receiving != null) {
+      receiving.getSender().sending = null;
+      receiving = null;
+    }
     sending = msg;
   }
 
@@ -1601,7 +1649,12 @@ class ProcessPicture extends DebugProcess
 
   public void setReceiving(MsgPicture msg)
   {
-    clearCommunication();
+    if(receiving != null && receiving.getSender() != msg.getSender())
+      receiving.getSender().sending = null;
+    if(sending != null) {
+      sending.getReceiver().receiving = null;
+      sending = null;
+    }
     receiving = msg;
   }
 
@@ -1685,56 +1738,6 @@ class MsgPicture
 
 //}
 
-//{ class FancyPanel
-
-/**
-  * A FancyPanel is a Panel with a nice 3D border.
-  */
-
-class FancyPanel extends Panel
-{
-  //{ public void paint(Graphics g)
-
-  /**
-    * Paint the 3D border around a FancyPanel.
-    */
-
-  public void paint(Graphics g)
-  {
-    Insets insets = this.insets();
-    int x=0, y=0;
-    int w = size().width-1;
-    int h = size().height-1;
-
-    g.setColor(getBackground());
-    for(int i=0; i<2; i++) {
-      g.draw3DRect(x++, y++, w, h,true);
-      w -= 2;
-      h -= 2;
-    }
-  }
-
-  //}
-  //{ public Insets insets()
-
-  /**
-    * Allocate space for the fancy borders.
-    */
-
-  public Insets insets()
-  {
-    Insets insets = super.insets();
-    insets.bottom += 2;
-    insets.left += 2;
-    insets.top += 2;
-    insets.right += 2;
-    return insets;
-  }
-
-  //}
-}
-
-//}
 //{ class ProcessPanel
 
 /**
@@ -1788,7 +1791,7 @@ class ProcessPanel extends FancyPanel
     layout.setConstraints(statePanel, c);
 
     Panel choicePanel = new Panel();
-    choicePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+    choicePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
     mode = new Choice();
     mode.addItem("single-step");
     mode.addItem("step-over");
@@ -1912,7 +1915,7 @@ class AdapterPanel extends FancyPanel
     layout.setConstraints(statePanel, c);
 
     Panel modePanel = new Panel();
-    modePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+    modePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
     mode = new Choice();
     mode.addItem("single-step");
     mode.addItem("step-over");
@@ -2025,7 +2028,7 @@ class SelectionPanel extends FancyPanel
     layout.setConstraints(titleLabel, c);
 
     Panel statePanel = new Panel();
-    statePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+    statePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 0));
     state = new Label("0 procs, 0 running");
     statePanel.add(state);
     add(statePanel);
@@ -2033,7 +2036,7 @@ class SelectionPanel extends FancyPanel
     layout.setConstraints(statePanel, c);
 
     Panel modePanel = new Panel();
-    modePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+    modePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 3, 3));
     mode = new Choice();
     mode.addItem("single-step");
     mode.addItem("step-over");

@@ -31,7 +31,7 @@ do
 				;;
 		-details)	DETAILS=$2; shift;shift
 				;;
-		-java-args)	shift; SCRIPTARGS="assert(tb_args('$@'))" ;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift
+		-java-args)	shift; SCRIPTARGS="-args $@" ;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift;shift
 				;;
 		-*)		$echo "unknown option: $1"
 				$echo "$usage" >&2
@@ -42,5 +42,5 @@ do
 done
 
 #echo "exec: $PROGRAM $ARGS $CLASS $NAME $TBHOST $PORT $TID $VERBOSE $TRACE"
-$PROGRAM $ARGS $CLASS $NAME $TBHOST $PORT $TID $VERBOSE $TRACE
+$PROGRAM $ARGS $CLASS $NAME $TBHOST $PORT $TID $VERBOSE $TRACE $SCRIPTARGS
 

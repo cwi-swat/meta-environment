@@ -267,13 +267,15 @@ class TifGenerator
     out.println("  private void initSigTable()");
     out.println("  {");
     ATermsRef sigs = tifs;
+    out.println("    try {");
     while(sigs != null) {
       ATermRef sig = sigs.getFirst();
       sigs = sigs.getNext();
-      out.print("    try { sigTable.put(ATermParser.makeSimple(\"");
+      out.print("      sigTable.put(ATermParser.makeSimple(\"");
       sig.print(out);
-      out.println("\"), new Boolean(true)); } catch (ParseError e) { }");
+      out.println("\"), new Boolean(true));");
     }
+    out.println("    } catch (ParseError e) { }");
     out.println("  }\n");
   }
 

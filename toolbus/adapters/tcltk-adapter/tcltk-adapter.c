@@ -342,8 +342,8 @@ void tcl_tide_handler(ClientData data, int mask)
 #line 987 "tcltk-adapter.c.nw"
 void tide_event_loop()
 {
-  while(use_tide && (dap_get_exec_state(0, 0) == ES_STOP || 
-        dap_get_exec_state(0, 0) == ES_HIGH_WATER)) {
+  while(use_tide && (dap_get_exec_state(0, 0) == ES_STOP)) {
+ // <PO> was:       dap_get_exec_state(0, 0) == ES_HIGH_WATER)) {
     TB_handle_one(tide_cid);
   }
 }

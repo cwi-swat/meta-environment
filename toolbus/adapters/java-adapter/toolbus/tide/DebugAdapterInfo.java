@@ -93,19 +93,6 @@ public class DebugAdapterInfo
 
   //}
 
-  //{ public int getId()
-
-  /**
-   * Retrieve the id of this adapter. The id is an integer that uniquely
-   * identifies a debug adapter.
-   */
-
-  public int getId()
-  {
-    return id;
-  }
-
-  //}
   //{ DebugProcess[] getProcessArray(ATermRef procs)
 
   /**
@@ -120,10 +107,11 @@ public class DebugAdapterInfo
     switch(procs.getType()) {
       case ATerm.APPL:
 	// must be 'all'
-	result = new DebugProcess[processes.size()];
-	Enumeration e = processes.elements();
-	for(int i=0; e.hasMoreElements(); i++)
-	  result[i] = (DebugProcess)e.nextElement();
+	result = null;
+	//result = new DebugProcess[processes.size()];
+	//Enumeration e = processes.elements();
+	//for(int i=0; e.hasMoreElements(); i++)
+	//result[i] = (DebugProcess)e.nextElement();
 	break;
 
       case ATerm.LIST:
@@ -147,6 +135,19 @@ public class DebugAdapterInfo
 						  procs.toString());
     }
     return result;
+  }
+
+  //}
+  //{ public int getId()
+
+  /**
+   * Retrieve the id of this adapter. The id is an integer that uniquely
+   * identifies a debug adapter.
+   */
+
+  public int getId()
+  {
+    return id;
   }
 
   //}
@@ -300,3 +301,4 @@ public class DebugAdapterInfo
 
   //}
 }
+

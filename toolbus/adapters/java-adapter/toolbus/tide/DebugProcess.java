@@ -92,7 +92,7 @@ class DebugProcess
   }
 
   //}
-  //{ public DebugProcess(int pid, String name)
+  //{ public DebugProcess(int dapid, int pid, String name)
 
   /**
    * Construct a new process.

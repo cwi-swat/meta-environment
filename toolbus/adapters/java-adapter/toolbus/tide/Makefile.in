@@ -36,7 +36,8 @@ SOURCE		= DebugPort.java LocationPort.java ExecStatePort.java \
 TOOLSOURCE	= ProcessViewerTif.java ProcessViewerTool.java \
 		ProcessViewer.java \
 		DebugAdapterTif.java DebugAdapterTool.java \
-		JavaDebugger.java
+		JavaDebugger.java SourceViewerTif.java SourceViewerTool.java \
+		DebugProcessGroup.java
 CLASSES		= DebugPort.class LocationPort.class ExecStatePort.class \
 		ExceptionPort.class ProcessCreationPort.class \
 		ProcessDestructionPort.class SendPort.class ReceivePort.class\
@@ -47,11 +48,16 @@ CLASSES		= DebugPort.class LocationPort.class ExecStatePort.class \
 TOOLCLASSES	= ProcessViewerTif.class ProcessViewerTool.class \
 		ProcessViewer.class ProcessCanvas.class DapPicture.class \
 		MsgPicture.class \
-		ProcessPicture.class FancyPanel.class ProcessPanel.class \
+		ProcessPicture.class ProcessPanel.class \
 		AdapterPanel.class SelectionPanel.class \
 		ProcessViewerMenuBar.class ToolMenuItem.class \
 		DebugAdapterTif.class DebugAdapterTool.class \
-		JavaDebugger.class
+		JavaDebugger.class SourceViewerTif.class \
+		SourceViewerTool.class SourceViewer.class TextBrowser.class \
+		TextBrowserCanvas.class \
+		DebugProcessGroup.class DebugProcessGroupAll.class \
+		DebugProcessGroupNone.class DebugProcessGroupOne.class \
+		DebugProcessGroupList.class
 PROGRAMS	=
 
 JAVATIF		= java -classpath $(top_srcdir)/adapters/java-adapter:$$CLASSPATH toolbus.tool.JavaTif
@@ -69,6 +75,10 @@ DebugAdapterTif.java: $(top_srcdir)/tide/tide.tifs
 	$(JAVATIF) -package toolbus.tide -class DebugAdapterTif \
 		-tool debug-adapter -tifs $(top_srcdir)/tide/tide.tifs
 
+SourceViewerTif.java: $(top_srcdir)/tide/tide.tifs
+	$(JAVATIF) -package toolbus.tide -class SourceViewerTif  \
+		-tool source-viewer -tifs $(top_srcdir)/tide/tide.tifs
+
 # The rules below this line are general rules and are based on the
 # defines listed above. You probably won't have to change them.
 
@@ -76,7 +86,7 @@ clean:
 	${CLEAN} ${CLASSES}
 
 distclean: clean
-	${CLEAN} Makefile.in
+	${CLEAN} Makefile
 
 dist: $(DISTFILES)
 	@for file in $(DISTFILES); do \

@@ -140,6 +140,22 @@ abstract public class DebugPort
 	result = new ExecStatePort(Data.getFirst(), when);
 	break;
 
+      case PROCESS_CREATION:
+	result = new ProcessCreationPort();
+	break;
+
+      case PROCESS_DESTRUCTION:
+	result = new ProcessDestructionPort();
+	break;
+
+      case SEND:
+	result = new SendPort(when, Data.getFirst());
+	break;
+
+      case RECEIVE:
+	result = new ReceivePort(when, Data.getFirst());
+	break;
+
       default:
 	throw new IllegalArgumentException("illegal port type: " + port.toString());
     }

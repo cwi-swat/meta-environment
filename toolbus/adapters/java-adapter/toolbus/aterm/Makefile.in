@@ -55,7 +55,7 @@ clean:
 	${CLEAN} ${CLASSES}
 
 distclean: clean
-	${CLEAN} Makefile.in
+	${CLEAN} Makefile
 
 dist: $(DISTFILES)
 	@for file in $(DISTFILES); do \

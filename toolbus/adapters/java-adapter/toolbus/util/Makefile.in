@@ -26,10 +26,12 @@ DISTFILES	= Makefile.in $(SOURCE)
 INSTALLDIR	= ${top_srcdir}/../${PRODUCT}-${VERSION}/adapters/java-adapter
 COMPONENT	= toolbus/util
 
-SOURCE		= $(JDK11SOURCE) SimpleHashtable.java SimpleHashtableEntry.java
+SOURCE		= $(JDK11SOURCE) SimpleHashtable.java \
+		SimpleHashtableEntry.java FancyPanel.java
 JDK11SOURCE	= Writer.java PrintWriter.java CharArrayWriter.java
 CLASSES		= $(JDK11CLASSES) SimpleHashtable.class \
-		SimpleHashtableEntry.class SimpleHashtableEnumerator.class
+		SimpleHashtableEntry.class SimpleHashtableEnumerator.class \
+		FancyPanel.class
 JDK11CLASSES	= Writer.class PrintWriter.class CharArrayWriter.class
 
 all:	${CLASSES}
@@ -44,7 +46,7 @@ clean:
 	${CLEAN} ${CLASSES}
 
 distclean: clean
-	${CLEAN} Makefile.in
+	${CLEAN}
 
 dist: $(DISTFILES)
 	@for file in $(DISTFILES); do \

@@ -56,7 +56,26 @@ public class DebugRule
    * Construct a new DebugRule object.
    */
 
-  public DebugRule(DebugProcess[] procs, DebugPort p, ATermRef cond, ATermsRef acts, int lifetime)
+  public DebugRule(DebugProcess[] procs, DebugPort p, ATermRef cond, 
+		   ATermsRef acts, int lifetime)
+  {
+    processes = procs;
+    port = p;
+    condition = cond;
+    actions = acts;
+    this.lifetime = lifetime;
+    id = idCount++;
+  }
+
+  //}
+  //{ public DebugRule(int rid, DebugProcess[] procs, DebugPort p, ATermRef cond, ATermsRef acts, int lifetime)
+
+  /**
+   * Construct a new DebugRule object.
+   */
+
+  public DebugRule(int rid, DebugProcess[] procs, DebugPort p, ATermRef cond, 
+		   ATermsRef acts, int lifetime)
   {
     processes = procs;
     port = p;

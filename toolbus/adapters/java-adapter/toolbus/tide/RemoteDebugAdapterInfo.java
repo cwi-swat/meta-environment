@@ -1,4 +1,5 @@
 package toolbus.tide;
+import java.util.*;
 import toolbus.aterm.*;
 import toolbus.tool.*;
 
@@ -11,6 +12,9 @@ public class RemoteDebugAdapterInfo extends DebugAdapterInfo
 {
   // The ToolBus tool that holds the ToolBus connection
   Tool tool;
+
+  // Process groups
+  Vector groups;
 
   // Some useful patterns
   ATermPattern patternExecActions;
@@ -60,6 +64,9 @@ public class RemoteDebugAdapterInfo extends DebugAdapterInfo
     } catch (ParseError e) {
       throw new IllegalArgumentException("internal parse error");
     }
+    groups = new Vector();
+    groups.addElement(DebugProcessGroup.newGroupAll(this));
+    groups.addElement(DebugProcessGroup.newGroupNone(this));
   }
 
   //}
@@ -106,4 +113,18 @@ public class RemoteDebugAdapterInfo extends DebugAdapterInfo
   }
 
   //}
+
+  //{ public Enumeration getGroups()
+
+  /**
+   * Get all the process groups of this adapter.
+   */
+
+  public Enumeration getGroups()
+  {
+    return groups.elements();
+  }
+
+  //}
 }
+
