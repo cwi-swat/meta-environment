@@ -17,7 +17,6 @@ asfc_SOURCES = asfc.tif.c \
                c-code.c \
                asf2muasf.c \
                lex-cons.c \
-               traversals.c \
                muasf2c.c \
                c-compiler.c \
                Compiler.c
@@ -26,7 +25,6 @@ noinst_HEADERS = chars.h \
                  c-code.h \
                  asf2muasf.h \
                  lex-cons.h \
-                 traversals.h \
                  asfc.tif.h \
                  muasf2c.h \
                  c-compiler.h
@@ -41,6 +39,7 @@ asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
 
 DEFINES = -DASC_SUPPORT=\"$(ASC_SUPPORT)\" \
           -DPT_SUPPORT=\"$(PT_SUPPORT)\"   \
+          -DASF_SUPPORT=\"$(ASF_SUPPORT)\"   \
           -DATERM=\"$(ATERM)\"
 
 INCLUDES  = $(DEFINES) \

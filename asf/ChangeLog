@@ -1,3 +1,11 @@
+2001/12/13 (jurgenv@cwi.nl)
+ * Added support for traversal functions in the input term of a spec.
+ * Added some test files for this.
+ * Moved traversal function handling functionality from asfc to asc-support.
+ * Bumped asfc version to 2.3
+ * Bumped package version to 1.2.2beta
+
+
 2001/12/06 (jurgenv@cwi.nl)
  * Fixed a bug in accumulating transformers. Results of such traversal
    functions had incorrect types and could not be used in conditions.

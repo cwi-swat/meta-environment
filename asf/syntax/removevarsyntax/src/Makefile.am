@@ -21,6 +21,7 @@ removevarsyntax_SOURCES = removevarsyntax.c Remove-Var-Syntax.c
 removevarsyntax_LDADD   = removevarsyntax.tif.o \
                        -L$(ASC_SUPPORT)/lib -lasc-support-me \
                        -L$(SDF_SUPPORT)/lib -lSDFME \
+                       -L$(ASF_SUPPORT)/lib -lASFME \
                        -L$(PT_SUPPORT)/lib -lmept \
                        -L$(TOOLBUSLIB)/lib -lATB \
                        -L$(ATERM)/lib -lATerm \

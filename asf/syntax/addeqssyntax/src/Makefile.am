@@ -21,6 +21,7 @@ addeqssyntax_SOURCES = addeqssyntax.c Add-Eqs-Syntax.c
 addeqssyntax_LDADD   = addeqssyntax.tif.o \
                        -L$(ASC_SUPPORT)/lib -lasc-support-me \
                        -L$(SDF_SUPPORT)/lib -lSDFME \
+                       -L$(ASF_SUPPORT)/lib -lASFME \
                        -L$(PT_SUPPORT)/lib -lmept \
                        -L$(TOOLBUSLIB)/lib -lATB \
                        -L$(ATERM)/lib -lATerm \

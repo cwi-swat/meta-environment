@@ -12,6 +12,8 @@
 #include <aterm2.h>
 #include <MEPT-utils.h>
 #include <ASFME-utils.h>
+#include <asc-support-me.h>
+#include <asc-traversals.h>
 #include <MuASF.h>
 
 
@@ -21,7 +23,6 @@
 #include "asf2muasf.h"
 #include "chars.h"
 #include "lex-cons.h"
-#include "traversals.h"
 
 /*}}}  */
 
@@ -624,7 +625,7 @@ static MA_Term treeToTerm(PT_Tree tree, ATermIndexedSet funcdefs,
   else if (ASF_isTreeTraversalFunction((ASF_Tree) tree)) {
     PT_Tree converted;
     ATbool returnsList = prodReturnsList(PT_getTreeProd(tree));
-    converted = transformTraversalFunction(tree);
+    converted = ASC_transformTraversalFunction(tree);
     result = applTreeToTerm(converted, funcdefs, layout, returnsList);
   }
   else if (PT_isTreeVar(tree)) {
