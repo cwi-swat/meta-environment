@@ -1,5 +1,7 @@
 package metastudio.graph;
 
+import aterm.*;
+
 abstract public class Node
 extends NodeImpl
 {
@@ -75,6 +77,37 @@ extends NodeImpl
 
   //}}}
 
+  private Attribute_Info getInfoAttribute()
+  {
+    AttributeList attrs = getAttributes();
+    while (!attrs.isEmpty()) {
+      Attribute attr = attrs.getHead();
+      if (attr.isInfo()) {
+	return (Attribute_Info)attr;
+      }
+      attrs = attrs.getTail();
+    }
+
+    return null;
+  }
+
+  private Node setInfoAttribute(Attribute_Info infoAttr)
+  {
+    MetaGraphFactory factory = (MetaGraphFactory)getFactory();
+    AttributeList result = factory.makeAttributeList_Empty();
+    AttributeList attrs = getAttributes();
+    while (!attrs.isEmpty()) {
+      Attribute attr = attrs.getHead();
+      if (!attr.isInfo()) {
+	result = factory.makeAttributeList_Multi(attr, result);
+      }
+      attrs = attrs.getTail();
+    }
+
+    result = factory.makeAttributeList_Multi(infoAttr, result);
+    return setAttributes(result);
+  }
+
   //{{{ public int getX()
 
   public int getX()
@@ -144,5 +177,20 @@ extends NodeImpl
   }
 
   //}}}
+
+  public boolean hasInfo()
+  {
+    return getInfoAttribute() != null;
+  }
+
+  public ATerm getInfo() 
+  {
+    Attribute_Info attr = getInfoAttribute();
+    if (attr != null) {
+      return attr.getValue();
+    }
+
+    return null;
+  }
 
 }
