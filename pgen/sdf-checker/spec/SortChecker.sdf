@@ -94,6 +94,9 @@ hiddens
   context-free syntax
     add-symbol(Symbol, Symbols-Msg-Tuple, ModuleId, SymbolPairsSet) -> Symbols-Msg-Tuple
 
+  context-free syntax
+    check-symbol(Symbol, Symbols-Msg-Tuple, ModuleId) -> Symbols-Msg-Tuple
+
 hiddens
   variables
     "$Attributes"[0-9]* -> Attributes

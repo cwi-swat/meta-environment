@@ -14,8 +14,16 @@ equations
   [tc3] get-declared-symbols(sorts $Symbol*1, SymbolsMsgs, $ModuleId, SymbolPairsSet) =
        	  get-declared-symbol($Symbol*1, SymbolsMsgs, $ModuleId, SymbolPairsSet)
 
-  [tc4] get-declared-symbol($Symbol, SymbolsMsgs, $ModuleId, SymbolPairsSet) =
-          add-symbol($Symbol, SymbolsMsgs, $ModuleId, SymbolPairsSet)
+  [tc4] SymbolsMsgs2 := check-symbol($Symbol, SymbolsMsgs1, $ModuleId)
+        ==============================================================
+        get-declared-symbol($Symbol, SymbolsMsgs1, $ModuleId, SymbolPairsSet) =
+          add-symbol($Symbol, SymbolsMsgs2, $ModuleId, SymbolPairsSet)
+
+  [cs-1'1] check-symbol($Sort, SymbolsMsgs, $ModuleId) = SymbolsMsgs
+
+  [default-cs-1'2] check-symbol($Symbol, [SymbolPairsSet, $Msgs], $ModuleId) =
+                     [SymbolPairsSet,
+                      $Msgs + deprecated-non-plain-sort-definition($ModuleId, $Symbol)]
 
   [as-1'1] contains($Symbol, SymbolPairsSet2) == true,
            contains($ModuleId, $Symbol, SymbolPairsSet2) == true,
