@@ -4,7 +4,7 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import java.awt.event.*;
 
-import metastudio.graph.*;
+import metastudio.data.graph.*;
 import aterm.*;
 
 class ButtonAction extends AbstractAction

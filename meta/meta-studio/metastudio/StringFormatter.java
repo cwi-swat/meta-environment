@@ -4,7 +4,7 @@ import aterm.ATermAppl;
 import aterm.ATermList;
 
 public class StringFormatter {
-    static String format(String format, ATermList args) {
+    public static String format(String format, ATermList args) {
         int index;
         String prefix = "";
         String postfix = format;

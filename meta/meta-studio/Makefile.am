@@ -18,6 +18,6 @@ JARFILES = \
 	 ${JARIMAGES} \
 	${JARCLASSES}
 
-meta-studio.jar: ${top_builddir}/meta-studio/metastudio/classjava.stamp ${top_builddir}/meta-studio/metastudio/graph/classjava.stamp
+meta-studio.jar: ${top_builddir}/meta-studio/metastudio/classjava.stamp 
 	FILES="${JARFILES}"; \
 	jar cf meta-studio.jar $$FILES

@@ -53,12 +53,26 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import metastudio.graph.AttributeList;
-import metastudio.graph.EdgeList;
-import metastudio.graph.Graph;
-import metastudio.graph.MetaGraphFactory;
-import metastudio.graph.Node;
-import metastudio.graph.NodeList;
+import metastudio.components.FeedbackList;
+import metastudio.components.HistoryPanel;
+import metastudio.components.MessageList;
+import metastudio.components.ModuleSelectionListener;
+import metastudio.components.ModuleStatusPanel;
+import metastudio.components.StatusBar;
+import metastudio.components.graphs.GraphPanel;
+import metastudio.components.graphs.ImportGraphPanel;
+import metastudio.components.graphs.NodeSizer;
+import metastudio.components.graphs.ParseTreePanel;
+import metastudio.components.graphs.ZoomableGraphPanel;
+import metastudio.data.Module;
+import metastudio.data.ModuleSelectionModel;
+import metastudio.data.ModuleTreeModel;
+import metastudio.data.graph.AttributeList;
+import metastudio.data.graph.EdgeList;
+import metastudio.data.graph.Graph;
+import metastudio.data.graph.MetaGraphFactory;
+import metastudio.data.graph.Node;
+import metastudio.data.graph.NodeList;
 import aterm.ATerm;
 import aterm.ATermAppl;
 import aterm.ATermList;
@@ -67,7 +81,7 @@ import aterm.pure.PureFactory;
 public class MetaStudio
     extends JFrame
     implements UserInterfaceTif, Runnable, ModuleSelectionListener {
-    // TODO: move preference constants to Preferences class
+
     private static final double RIGHTPANEL_DIVIDER_LOCATION = 0.8;
 
     private static ATerm ACTION_MENUBAR;

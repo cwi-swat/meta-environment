@@ -1,5 +1,24 @@
 # $Id$
 
+2003/12/19 <jurgenv@cwi.nl>
+ * MetaStudio revised towards an object oriented design:
+ 	- module browsing components (tree, graph and module stats) grouped into
+ 	  one single Tab.
+ 	- module status redesigned. Contains now: the selected module name, an
+ 	  imports menu and an imported by menu.
+ 	- graph panels have an individual zooming capacity using a slidebar.
+ 	- zooming keeps the current selected node always in view
+ 	- zooming below 100% introduces Tooltips over hovered nodes
+ 	- refactored MetaStudio to extract GUI components into classes:
+ 	  HistoryPanel, StatusBar, etc.
+ 	- added a new component: FeedbackList for dealing with the new error api.
+ 	- added a dependency on the error-support package
+ 	- introduced ToolComponent, a JPanel that can act as a ToolBus tool. 
+ 	  It implements the complete UserInterfaceTif interface to do that. 
+ 	  All (most) components of the MetaStudio should extend this abstract class.
+ 	- introduced a package hierarchy below metastudio: "components" for GUI
+ 	  components, "data" for data representation.
+ 	
 Mon Dec  8 14:12:18 CET 2003 <{jong,jurgenv,kooiker}@cwi.nl>
  * editors/text/gvim/{connector.c,meta.vim.src}:
    - explicitly synchronise gvim-connector and gvim instance between

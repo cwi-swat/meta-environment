@@ -1,0 +1,7 @@
+Makefile.in
+Makefile
+*.class
+classjava.stamp
+files.lst
+meta-studio.tifs
+
