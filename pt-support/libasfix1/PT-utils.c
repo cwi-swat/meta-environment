@@ -56,6 +56,29 @@ PT_Args PT_appendArgs(PT_Args args, PT_Tree arg)
                                       (ATerm)PT_makeTermFromTree(arg)));
 }
 
+PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor)
+{
+  ATermList store;
+  PT_Args newArgs = PT_makeArgsEmpty();
+
+  /* apply func to each element */
+  for (store = ATempty;
+      PT_hasArgsHead(args);
+      newArgs = PT_getArgsTail(args)) {
+    store = ATinsert(store,
+                     PT_makeTermFromTree(
+                     visitor(PT_getArgsHead(args))));
+  }
+
+  /* create new list */
+  for (; !ATisEmpty(store); store = ATgetNext(store)) {
+    PT_Tree newTree = PT_makeTreeFromTerm(ATgetFirst(store));
+    newArgs = PT_makeArgsList(newTree,newArgs);
+  }
+
+  return newArgs;
+}
+
 PT_Tree PT_removeTreeAnnotations(PT_Tree arg)
 {
   ATerm atArg = PT_makeTermFromTree(arg);
