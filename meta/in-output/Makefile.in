@@ -54,8 +54,9 @@ XINCLUDES	= -I$(ATERMINC)
 XLIBS		= -L$(ATERMLIB) -lATerm-dbg -lAsFix-dbg -lATB-dbg $(SOCKLIBS)
 
 # Other variables
-# CSRC/CHDR are used to calculate dependencies.
-CSRC		= in-output.c in-output.tif.c
+# CSRC/CHDR are used to calculate dependencies
+SRC		= in-output.c
+CSRC		= in-output.tif.c ${SRC}
 CHDR		= in-output.tif.h
 OBJ             = $(subst .c,.o,$(CSRC))
 # All files in BINFILES are installed in $(bindir)
@@ -70,9 +71,9 @@ LOCALINCLUDES   = in-output.tif.h
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= depend in-output in-output.tif.c in-output.tif.h
+CLEANFILES	= ${BINFILES} *.o *~ 
 # DISTCLEANFILES are removed by 'make distclean'
-DISTCLEANFILES	=
+DISTCLEANFILES	= depend Makefile in-output.tif.c in-output.tif.h
 
 # The all target must be defined:
 all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
@@ -86,7 +87,7 @@ all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 %.tifs: %.idef
 	${top_srcdir}/utils/idef2tif $<
 
-in-output: depend ${OBJ} ${LIBFILES} 
+in-output: ${OBJ} ${LIBFILES} 
 	$(CC) -o $@ ${OBJ} $(LIBS)
 
 %.o:	%.c	$(INCLUDEFILES)
@@ -115,17 +116,17 @@ doc: $(DOCFILES)
 
 # clean target (remove all easily build components and temporary files)
 clean:
-	rm -f *.o *~ $(CLEANFILES)
+	rm -f $(CLEANFILES)
 
 # distclean target (also remove any files created by 'configure')
 distclean: clean
-	rm Makefile $(DISTCLEANFILES)
+	rm -f $(DISTCLEANFILES)
 
 # distclean target
 
 # Updating of included dependencies (CC needs to be gcc!)
-depend: $(CSRC) $(CHDR)
-	@${MAKEDEPEND} ${INCLUDES} $(CSRC) > $@
+depend: $(SRC)
+	-@${MAKEDEPEND} ${INCLUDES} $(CSRC) > $@
 
 -include depend
 

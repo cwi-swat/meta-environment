@@ -69,9 +69,9 @@ LOCALINCLUDES   = module-db.tif.h
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= depend module-db module-db.tif.c module-db.tif.h
+CLEANFILES	= module-db
 # DISTCLEANFILES are removed by 'make distclean'
-DISTCLEANFILES	=
+DISTCLEANFILES	= depend Makefile module-db.tif.c module-db.tif.h
 
 # The all target must be defined:
 all: depend $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
@@ -118,12 +118,12 @@ clean:
 
 # distclean target (also remove any files created by 'configure')
 distclean: clean
-	rm Makefile $(DISTCLEANFILES)
+	rm $(DISTCLEANFILES)
 
 # distclean target
 
 # Updating of included dependencies (CC needs to be gcc!)
 depend: $(CSRC) $(CHDR)
-	@${MAKEDEPEND} $(INCLUDES) $(CSRC) > $@
+	-@${MAKEDEPEND} $(INCLUDES) $(CSRC) > $@
 
 -include depend

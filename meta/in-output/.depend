@@ -1,1 +1,0 @@
-in-output.o: in-output.c in-output.tif.c

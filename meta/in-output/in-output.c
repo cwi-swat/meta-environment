@@ -361,7 +361,7 @@ void read_conf(char *cfg)
       if(*paths[nr_paths] != '#'){
         int len = strlen(paths[nr_paths])-1;
 
-        while(isspace(paths[nr_paths][len]))
+        while(isspace((int) paths[nr_paths][len]))
           paths[nr_paths][len--] = '\0';
         nr_paths++;
       } else

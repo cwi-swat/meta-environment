@@ -26,7 +26,7 @@ UNINSTALL	= @UNINSTALL@
 
 # Ordering is important here: the toolbus dir. should come first
 SUBDIRS		= toolbus editor evaluator graph-browser \
-		  in-output module-db compiler stred asource \
+		  in-output module-db asc-support compiler stred asource \
 		  sglr pgen utils
 
 .SILENT:
