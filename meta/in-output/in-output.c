@@ -48,7 +48,7 @@ int newerfile(const char *s1, const char *s2)
 }
 
 /*
- * JS: Initially, this was designed to read arbitraty buffers.
+ * JS: Initially, this was designed to read arbitrary buffers.
  * So it returned an allocated, filled buffer as well as a size_t
  * indication of its length.
  * The fragment below assumes is modified to read an arbitraty
@@ -116,7 +116,6 @@ char *find_newest_in_path(char *name)
       newestname = newestnamebuf;
     }
   }
-ATfprintf(stderr,"(%s) found %s\n", name, newestname?newestname:"NULL");
   return newestname;
 }
 
@@ -130,10 +129,9 @@ ATerm read_term_from_named_file(char *fn, char *n, ATbool oldstyle)
   ATerm t;
 
   if(!(t = ATreadFromNamedFile(fn))) {
-    ATfprintf(stderr, "error reading from %s\n", fn);
+    ATfprintf(stderr, "error reading %s\n", fn);
     return open_error(n);
   }
-  ATfprintf(stderr, "read term from %s\n", fn);
   return ATmake("snd-value(opened-file(<str>,<str>,<term>,<str>))",
                 oldstyle?"asfix":"baf", n, t, fn);
 }
@@ -143,7 +141,7 @@ ATerm write_term_to_named_file(ATerm t, char *fn, char *n)
   FILE   *fd;
 
   if(!(fd = fopen(fn, "w"))) {
-    ATfprintf(stderr,"cannot write to %s\n",fn);
+    ATfprintf(stderr,"%s: cannot create\n",fn);
    } else {
     ATfprintf(stderr, "writing file %s\n", fn);
     ATwriteToBinaryFile(t,fd);
@@ -170,6 +168,29 @@ ATerm read_raw_from_named_file(char *fn, char *n)
   return t;
 }
 
+ATerm locate_parse_table_file(int cid, char *name)
+{
+  char  *full, newesttbl[PATH_LEN], newestbaf[PATH_LEN];
+
+  sprintf(newesttbl, "%s%s", name, ".tbl");
+  sprintf(newestbaf, "%s%s", name, ".baf");
+
+  if((full = find_newest_in_path(newesttbl)))
+    strcpy(newesttbl, full);
+  else
+    newesttbl[0] = '\0';
+  if((full = find_newest_in_path(newestbaf)))
+    strcpy(newestbaf, full);
+  else
+    newestbaf[0] = '\0';
+
+  if(!newesttbl[0] && !newestbaf[0]) {
+    return ATmake("snd-value(unavailable-parse-table(<str>))", name);
+  }
+  return ATmake("snd-value(located-parse-table-file(<str>,<str>))", name,
+                newerfile(newesttbl, newestbaf) ? newesttbl : newestbaf);
+}
+
 ATerm open_old_asfix_file(int cid, char *name)
 {
   ATerm t;
@@ -180,7 +201,6 @@ ATerm open_old_asfix_file(int cid, char *name)
   }
 
   sprintf(namext, "%s%s", name, ".asfix");
-  ATfprintf(stderr, "pre-parsed file %s\n", namext);
   if(!(fullname = find_newest_in_path(namext))) {
     t = open_error(name);
   } else {
@@ -206,7 +226,6 @@ ATerm open_sdf2_file(int cid, char *name)
 
   sprintf(newestraw, "%s%s", name, ".sdf2");
   sprintf(newestbaf, "%s%s", name, ".sdf2.baf");
-  ATfprintf(stderr, "looking for {%s,%s}\n", newestraw, newestbaf);
 
   if((full = find_newest_in_path(newestraw)))
     strcpy(newestraw, full);
@@ -215,7 +234,7 @@ ATerm open_sdf2_file(int cid, char *name)
   newest_is_binary = newerfile(newestbaf, newestraw);
 
   if(!newestraw[0] && !newestbaf[0]) {
-    ATfprintf(stderr,"requested file not found in path\n");
+    ATfprintf(stderr,"%s(.sdf2|.sdf2.baf) not found in path\n", name);
     return open_error(name);
   }
   if(newest_is_binary) {
@@ -235,7 +254,6 @@ ATerm open_eqs2_asfix_file(int cid, char *name)
   ATerm t;
 
   sprintf(fullname, "%s%s", name, ".eqs2.baf");
-  ATfprintf(stderr, "pre-parsed file %s\n", fullname);
 
   if((full = find_newest_in_path(fullname))) {
     t = read_term_from_named_file(full, name, ATfalse);
@@ -251,12 +269,11 @@ ATerm open_eqs2_text_file(int cid, char *name)
   ATerm t;
 
   sprintf(fullname, "%s%s", name, ".eqs2");
-  ATfprintf(stderr, "pre-parsed file %s\n", fullname);
 
   if((full = find_newest_in_path(fullname))) {
     t = read_raw_from_named_file(full, name);
   } else {
-    ATfprintf(stderr,"file %s could not be found\n", name);
+    ATfprintf(stderr,"no such file: %s.eqs2\n", name);
     t = open_error(name);
   }
   return t;
@@ -282,7 +299,7 @@ ATerm open_trm_file(int cid, char *name)
   if((full = find_newest_in_path(name))) {
     t = read_raw_from_named_file(full, name);
   } else {
-    ATfprintf(stderr,"file %s could not be found\n", name);
+    ATfprintf(stderr,"no such file: %s\n", name);
     t = open_error(name);
   }
   return t;
@@ -308,7 +325,7 @@ void read_conf(char *cfg)
   FILE *fd;
 
   if(!(fd = fopen(cfg, "r"))) {
-    ATfprintf(stderr, "warning: cannot open config %s\n", cfg);
+    ATfprintf(stderr, "warning: cannot no %s, using default config\n", cfg);
     paths[nr_paths][0]   = '.';
     paths[nr_paths++][1] = '\0';
     return;

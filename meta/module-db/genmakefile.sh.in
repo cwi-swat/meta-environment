@@ -1,4 +1,4 @@
-#!/bin/sh
+#! @SHELL@
 #
 # $Id$
 #   Date: 3/19/1998
@@ -8,7 +8,7 @@
 # the C code corresponding to a compiled specification.
 #
 # usage:
-#    genmakefile <target>
+#    genmakefile.sh <target>
 #
 # where <target> is the name of the desired stand-alone executable program.
 #
@@ -24,7 +24,7 @@
 #
 #
 # You might want to change to following variables below:
-# 
+#
 #   DEBUG_CC_FLAGS: compiler flags to store debugging information in object files
 #   DEBUG_LD_FLAGS: optional flags for linking with debugging information
 # PROFILE_CC_FLAGS: compiler flags to store profile information in object files
@@ -48,10 +48,10 @@ PROFILE_LD_FLAGS=-pg
 ## No changes below
 
 # display usage message
-usage() 
+usage()
 {
    cat<<ENDCAT
-$0 
+$0
    generates on standard output a Makefile for the compilation of the
    C code corresponding to a compiled specification.
 
@@ -73,7 +73,7 @@ fi
 if [ $1 = "-h" -o $1 = "-help" ]
 then
    usage
-   exit 0 
+   exit 0
 fi
 
 if [ ! -r $1.module-list ]
@@ -82,14 +82,14 @@ then
    exit 1
 fi
 
-cat <<ENDCAT 
+cat <<ENDCAT
 # Makefile for target "$1" generated automatically on `date`
 #
 
 LOCALLIBS=-lsupport -lATB -lAsFix -lATerm
 
 # Default compiler to use
-CC=gcc
+CC=@CC@
 
 # DEBUG-LIBS:     libraries containing debugging information
 # DEBUG-CC-FLAGS: compiler flags to store debugging information in object files
@@ -142,7 +142,12 @@ STD-OBJS=\$(SRCS:.c=-\$(CC).o)
 DEBUG-OBJS=\$(SRCS:.c=-dbg.o)
 PROFILE-OBJS=\$(SRCS:.c=-prof.o)
 
-# Make rules 
+# Make rules
+
+all:	$1
+
+install:	all
+
 %-\$(CC).o: %.c
 	\$(CC) \$(FLAGS-\$(CC)) \$(STD-CC-FLAGS) \$(DEFS) \$(INCLUDES) -c $< -o \$@
 
@@ -164,7 +169,6 @@ $1-prof : \$(PROFILE-OBJS)
 debug:  $1-debug
 
 profile: $1-prof
-
 
 init.c: \$(SPEC_SRCS)
 	@(echo "/*GENERATED AUTOMATICALLY, DO NOT MODIFY */" ;\\

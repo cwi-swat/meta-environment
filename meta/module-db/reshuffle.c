@@ -255,7 +255,7 @@ void write_asfix_file(int cid,ATerm modname)
     /* Check whether the C file exists. */
     len = strlen(output_path) + 1 + strlen(text) + strlen(".c");
     fname = malloc(len + 1);
-    if(!fname) 
+    if(!fname)
       ATerror("Not enough memory\n");
     sprintf(fname, "%s/%s.c", output_path, text);
     input = fopen(fname,"r");
@@ -272,7 +272,7 @@ void write_asfix_file(int cid,ATerm modname)
 
     len = strlen(output_path) + 1 + strlen(text) + strlen(".asfix");
     fname = malloc(len + 1);
-    if(!fname) 
+    if(!fname)
       ATerror("Not enough memory\n");
     sprintf(fname, "%s/%s.asfix", output_path, text);
     /* Check whether it is necessary to generate new C code
@@ -290,7 +290,7 @@ void write_asfix_file(int cid,ATerm modname)
       output = fopen(fname,"w");
       if(!output)
         ATfprintf(stderr,"Cannot open file %s\n",fname);
-      else {   
+      else {
         ATfprintf(output,"%t",amod);
         ATfprintf(output, "\n");
         fclose(output);
@@ -308,7 +308,7 @@ void write_asfix_file(int cid,ATerm modname)
     }
     free(fname);
   }
-  else 
+  else
     ATerror("Illegal module name %t\n", modname);
 }
 
@@ -382,8 +382,8 @@ void gen_makefile(ATerm name)
         modules = ATgetNext(modules);
       }
       fclose( output );
-       
-        
+
+
       sprintf( buf, "cd %s ; %s/genmakefile.sh %s >Makefile", output_path, BINDIR, text );
       ATfprintf(stderr,"Executing: %s\n", buf );
       system( buf );
