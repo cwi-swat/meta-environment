@@ -1,1 +1,1 @@
-SUBDIRS=asf basic containers sdf aterm system sdf2
+SUBDIRS=asf basic containers aterm system sdf2

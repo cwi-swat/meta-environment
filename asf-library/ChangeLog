@@ -1,3 +1,9 @@
+2001/05/17 ({jurgenv,markvdb}@cwi.nl)
+  * Added sdf2 syntax
+  * Refactored sdf2 syntax
+  * Moved ATerm syntax from sdf2 syntax to own toplevel library
+  * Added read-term-from-file and write-term-to-file to system library
+
 2001/05/15 (jurgenv@cwi.nl)
   * Baffiles and tables are also installed (after sdf files such that
     timestamps are correct.
