@@ -838,18 +838,22 @@ ATbool PT_hasProductionCertainAttr(PT_Production prod, PT_Attr attr)
   PT_Attrs attrs;
   PT_BoolAttrTuple data;
 
-  if (PT_isAttributesNoAttrs(attributes)) {
-    return ATfalse;
+  if (PT_isProductionDefault(prod)) {
+    if (PT_isAttributesNoAttrs(attributes)) {
+      return ATfalse;
+    }
+
+    attrs = PT_getAttributesAttrs(attributes);
+
+    data.bool = ATfalse;
+    data.attr = attr;
+
+    PT_foreachAttrInAttrs(attrs, PT_matchAttr, (PT_AttrVisitorData)&data);    
+
+    return data.bool;
   }
 
-  attrs = PT_getAttributesAttrs(attributes);
-
-  data.bool = ATfalse;
-  data.attr = attr;
-
-  PT_foreachAttrInAttrs(attrs, PT_matchAttr, (PT_AttrVisitorData)&data);    
-
-  return data.bool;
+  return ATfalse;
 }
 
 /*}}}  */
