@@ -22,7 +22,7 @@ CLEAN		= @CLEAN@
 MODULES		= 
 SUBDIRS		= @SUBDIRS@
 XTRADIRS	= @XTRADIRS@
-ALLDIRS		= src test tide adapters demos doc www
+ALLDIRS		= src scripts test tide adapters demos doc www
 DISTFILES	= Makefile.in README INSTALL CONTRIBUTORS install-sh mkinstalldirs \
 		  configure.in configure CHANGES.txt
 
