@@ -1,3 +1,6 @@
+2000/03/08 (jurgenv@cwi.nl)
+  * addeqssyntax and removevarsyntax based on PT and SDF libraries
+
 2000/03/02 (jurgenv@cwi.nl)
   * asfe keeps all ATerm annotations during rewriting
   * added one term for Pico-typecheck to test which contains pos-info
