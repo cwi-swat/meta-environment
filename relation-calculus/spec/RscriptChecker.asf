@@ -194,6 +194,13 @@ $Error]>
 
 [cve-2] convert-errors1(errors[]) = 
 
+
+%% --- is-type-correct
+
+[itc-1] is-type-correct(summary("RscriptChecker", "Rscript", [info("Rscript is type correct!", [])])) = true
+[default-itc]
+	is-type-correct($Summary) = false
+
 [e2i-1] e2i($Exp cannot be typed)	= error("Expression cannot be typed", [localized("expr", get-location($Exp))])
 [e2i-2] e2i($Stat cannot be typed)	= error("Statement cannot be typed", [localized("stat", get-location($Stat))])
 [e2i-3] e2i($Gen cannot be typed) 	= error("Generator cannot be typed", [localized("generator", get-location($Gen))])

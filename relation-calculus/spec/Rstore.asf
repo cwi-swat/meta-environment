@@ -70,11 +70,19 @@ equations
 
 %% ---- Execute Rscript for empty Rstore
 
-[EX2]   [| $Stat* |] = eval-rstats($Stat*, rstore())
+
+[EX]
+	[| $Stat* |] = eval-rstats($Stat*, rstore())
 
 %% ---- Execute Rscript for empty Rstore and yield value of a var
 
-[EX3]   [| $Stat* |] yield $Var = eval-rscript-and-yield($Stat*, $Var)
+[EX2]   $Summary := check-rscript($Stat*),
+	is-type-correct($Summary) == false
+	===============================================================
+	[| $Stat* |] yield $Var = $Summary
+
+[default-EX3]   
+	[| $Stat* |] yield $Var = eval-rscript-and-yield($Stat*, $Var)
 
 
 %% ---- Execute given Rexp

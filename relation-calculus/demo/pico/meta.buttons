@@ -58,6 +58,25 @@ button("Pico-syntax",
 
 
 	   )
+           ]),
+
+ button("Pico-syntax",
+ 	  [description(term-editor, menu(["Pico", "NEW Unitialized Vars"]))],
+          [
+	    push-active-module,
+	    get-root,
+	    push-string("PROGRAM"),
+	    check-sort,
+	    push-term(true),
+	    if-equal([
+			 apply("uninit", "Summary", 3),
+			 push-modulename("NewPicoExtraction"),
+			 reduce,
+			 convert-feedback,
+			 show-feedback],
+		     [ message("Not a Pico program") ]
+
+	   )
            ])
 
 ])
