@@ -213,7 +213,7 @@ endlet
 
 process KillEditor(EditorId : term, Type : str, ModuleName : str) is
   snd-note(delete-editor(EditorId)) .
-  if not(equal(type, "term")) then
+  if not(equal(Type, "term")) then
     KillModuleEditor(EditorId, ModuleName)
   else
     tau
