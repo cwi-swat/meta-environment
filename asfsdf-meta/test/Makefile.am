@@ -2,7 +2,7 @@ EXTRA_DIST = $(wildcard *.sdf *.asf) meta.conf.src
 
 TESTS = Basic.dump.sh Demo.dump.sh
 
-bin_SCRIPTS = meta.conf
+noinst_SCRIPTS = meta.conf
 
 GENMETA=${META}/bin/generic-meta -I ${ASF}/share/asf -p ${ASF}/bin \
 	-I ${top_builddir}/meta-scripts -I ${top_srcdir}/meta-scripts
