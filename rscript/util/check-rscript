@@ -1,4 +1,0 @@
-time (echo "check-rscript("
-cat $1
-echo ")"
-) | sglr -p RscriptChecker.trm.tbl | addPosInfo -p $1 | RscriptChecker | unparsePT -v

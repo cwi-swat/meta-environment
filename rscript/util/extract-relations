@@ -8,6 +8,7 @@ PRG=`basename $0`
 OUTPUT_DIR=./rstore
 TOP_SORT=
 INPUT_FILES=
+EXTRACTION_FUNCTION=extractRelations
 
 # }}}
 
@@ -19,13 +20,16 @@ Usage: $PRG [options] <input-files>
 
 Parameters:
 
-  -d | --output-dir <dir>  specify output directory (default: $OUTPUT_DIR)
-  -e | --equations <file>  specify extraction equations
-  -s | --sort <sort>       specify top sort during parsing
-  -t | --table <file>      specify parse table for input files
+  -d | --output-dir <dir>   specify output directory (default: $OUTPUT_DIR)
+  -e | --equations <file>   specify extraction equations (default: none)
+  -s | --sort <sort>        specify top sort for parsing input files (default: none)
+  -f | --function <name>    specificy the extraction function to be applied (default: extractRelations)
+  -p | --parse-table <file> specify parse table for input files (default: none)
+
+  -t | --table <file>       specify parse table for input files (DEPRECATED)
 
 Example:
-  $PRG -e TBExtraction.eqs -s Tscript -t Tscript.trm.tbl tbscripts/*.tb
+  $PRG -e TBExtraction.eqs -s Tscript -p Tscript.trm.tbl tbscripts/*.tb
 
 ENDCAT
 }
@@ -60,7 +64,7 @@ addposinfo() {
 
 extract() {
   echo -n "Rewriting $1 .."
-  apply-function -f "extractRelations" -s "RSTORE" -i $1.pos \
+  apply-function -f $EXTRACTION_FUNCTION -s "RSTORE" -i $1.pos \
     | asfe -e ${EQUATIONS} -o ${OUTPUT_DIR}/`basename $1`.rstore
   echo " done."
 }
@@ -96,11 +100,16 @@ do
       shift; OUTPUT_DIR=$1 ;;
     -e | --equations)
       shift; EQUATIONS=$1 ;;
+    -f | --function)
+      shift; EXTRACTION_FUNCTION=$1 ;;
     -h | --help)
       usage; exit 0 ;;
     -s | --sort)
       shift; TOP_SORT=$1 ;;
+    -p | --parse-table)
+      shift; PARSE_TABLE=$1 ;;
     -t | --table)
+      echo Deprecated option $1. Use -p or --parse-table
       shift; PARSE_TABLE=$1 ;;
     *)
       add_input_file $1 ;;
