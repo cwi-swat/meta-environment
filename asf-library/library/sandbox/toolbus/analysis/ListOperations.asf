@@ -1,7 +1,7 @@
 equations
 
   [cvt-1] convert($String1, <$Area, $String2>) = 
-            listitem($String1 || $String2, [ "ShowSource" ], $Area)
+            listitem($String1 || $String2, $Area)
 
   [cvtl-1] convertl({$Tuple*}) = list([$ListItem*])
            ===>
