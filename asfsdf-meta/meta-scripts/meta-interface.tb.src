@@ -206,7 +206,7 @@ in
     snd-msg(syntax-top-sort-hook-result(sort("Module")))
   +
     rec-msg(semantics-top-sort-hook).
-    snd-msg(semantics-top-sort-hook-result(sort("Equations")))
+    snd-msg(semantics-top-sort-hook-result(sort("ASF-Equations")))
   + 
     rec-msg(invalidate-other-tables-hook(Module?, sdf)) .
     snd-msg(other-tables-invalidated-hook)
