@@ -33,7 +33,7 @@ buttons([
          [get-root,
           push-modulename,
           reduce,
-          push-filename,
+          push-filename("reduct.out"),
           push-modulename,
           edit-given-filename
          ]),
