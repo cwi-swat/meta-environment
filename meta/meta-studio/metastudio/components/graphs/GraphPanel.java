@@ -604,4 +604,20 @@ public class GraphPanel extends JComponent implements Scrollable {
         return toolTipEnabled;
     }
 
+    public int getZoomToFitFactor(Rectangle bounds) {
+        Attribute bb = graph.getBoundingBox();
+        Point max = bb.getSecond();
+        int height = max.getY();
+        int width = max.getX();
+        double boundsWidth = bounds.getWidth();
+        double boundsHeight = bounds.getHeight();
+        
+        double widthFactor = boundsWidth / width;
+        double heightFactor = boundsHeight / height;
+        
+        double factor = Math.min(widthFactor, heightFactor);
+        
+        return (int) (factor * 100);
+    }
+
 }

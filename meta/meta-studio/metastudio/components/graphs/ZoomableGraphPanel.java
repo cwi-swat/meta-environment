@@ -1,16 +1,21 @@
 package metastudio.components.graphs;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FontMetrics;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JViewport;
 import javax.swing.SwingConstants;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.MouseInputAdapter;
 
 import metastudio.MultiBridge;
 import metastudio.UserInterfacePanel;
@@ -30,6 +35,7 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
     private JSlider slider;
     private MetaGraphFactory factory;
     private JViewport view;
+    private JPanel zoomToFit;
 
     public ZoomableGraphPanel(
         MetaGraphFactory factory,
@@ -54,7 +60,27 @@ public class ZoomableGraphPanel extends UserInterfacePanel {
         view.addMouseWheelListener(wheel);
 
         add(scrolledPane, BorderLayout.CENTER);
-        add(slider, BorderLayout.WEST);
+        
+        JPanel sliderPanel = new JPanel();
+        sliderPanel.setLayout(new BorderLayout());
+        
+        sliderPanel.add(slider, BorderLayout.CENTER);
+        
+        zoomToFit = new JPanel();
+        zoomToFit.setBorder(new LineBorder(Color.black));
+        zoomToFit.setAlignmentY(slider.getAlignmentY());
+        zoomToFit.setBackground(Preferences.getColor("graph.background"));
+        zoomToFit.addMouseListener(new MouseInputAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                int scale = graphPanel.getZoomToFitFactor(view.getVisibleRect());
+                slider.setValue(Math.min(scale, SLIDER_MAXIMUM));
+            }
+        });
+        zoomToFit.setToolTipText("Zoom to fit");
+        sliderPanel.add(zoomToFit, BorderLayout.SOUTH);
+        
+        add(sliderPanel, BorderLayout.WEST);
+        
 
         scrolledPane.getViewport().addMouseWheelListener(wheel);
         graphPanel.setScale(Preferences.getInteger("graph.scale.default"));
