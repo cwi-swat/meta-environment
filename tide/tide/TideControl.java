@@ -25,6 +25,7 @@ import tide.tool.ruleinspector.RuleInspectorFactory;
 import tide.tool.srcviewer.SourceViewerFactory;
 import tide.tool.stackviewer.StackViewerFactory;
 import tide.tool.support.DebugTool;
+import tide.tool.support.DebugToolListener;
 import tide.tool.support.Expr;
 import tide.tool.support.Port;
 import aterm.ATerm;
@@ -73,9 +74,11 @@ public class TideControl
 		connectDebugTool(args);
 
 		Thread thread = new Thread(tool);
+		thread.setName("DebugTool");
 		thread.start();
 
 		thread = new Thread(bridge);
+		thread.setName("TideControlBridge");
 		thread.start();
 	}
 
@@ -180,5 +183,9 @@ public class TideControl
 	
 	public void postEvent(ATerm term) {
 		getBridge().postEvent(term);
+	}
+	
+	public void addDebugToolListener(DebugToolListener l) {
+		tool.addDebugToolListener(l);
 	}
 }

@@ -52,8 +52,7 @@ public class ToolManager
     try {
       preferences.loadPreferences();
     } catch (IOException e) {
-      System.err.println("Warning: could not load preferences: "
-			 + e.getMessage());
+        // Preferences could not be loaded because ~/.tiderc does not exist probably
     }
   }
 
