@@ -1,0 +1,32 @@
+/*
+  $Id$
+ */
+
+/* Rewrite-Errors parses a list of errors coming from the Evaluator,
+ * uses the unparser and displays them.
+ */
+process DisplayErrors is
+let
+  Error : list,
+  Message : str,
+  Subject : term,
+  SubjectText : str,
+  Errors : list,
+  ErrorsText : str,
+  Tag : term,
+  TagText : str
+in
+  (
+    rec-msg(display-sdf-errors(Errors?)).
+    if not-equal(Errors,[]) then
+      Message := first(Errors) .
+      Errors := next(Errors) .
+      printf("%s\n", Message)
+    fi *
+    if equal(Errors,[]) then
+      tau
+    fi
+  ) * 
+  delta
+endlet
+
