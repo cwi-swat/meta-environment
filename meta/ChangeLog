@@ -1,6 +1,11 @@
 # $Id$
 
 2003/09/22 <markvdb@cwi.nl>
+ * in io_find_file the found files should be reported in order of
+   the search paths as it used to be. Otherwise the library will get
+   precedence over user-defined modules which is unwanted behaviour.
+
+2003/09/22 <markvdb@cwi.nl>
  * First version of action/button script checker.
 
 2003/09/18 <markvdb@cwi.nl>
