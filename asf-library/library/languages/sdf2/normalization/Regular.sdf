@@ -8,7 +8,6 @@ exports
     "r[[" Grammar "]]"             -> Grammar
     "r[[" Symbols "]]"             -> Grammar
     alt(Symbol, Symbol)            -> Grammar
-    tup(Symbol)                    -> Symbols
     tups({Symbol ","}+)            -> Symbols
 
 hiddens
