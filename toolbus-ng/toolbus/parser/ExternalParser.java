@@ -46,8 +46,8 @@ public class ExternalParser {
    * Construct an ExternalParser method by fully specifying the commands for
    * the parse, implode, and conversion phases.
    */
-  public ExternalParser(String parseCommand, String implodeCommand) {
-    this.parseCommand = parseCommand;
+  public ExternalParser(String parseCommand, String parseTable, String implodeCommand) {
+    this.parseCommand = parseCommand + " -p " + parseTable;
     this.implodeCommand = implodeCommand + " " + implodeOptions;
   }
 
@@ -153,8 +153,7 @@ public class ExternalParser {
       if (files.length > 0)
         fail("delete: directory not empty: " + filename);
     }
-    boolean success = f.delete();
-    if (f.delete())
+    if (!f.delete())
       fail("delete: deletion failed: " + filename);
   }
 

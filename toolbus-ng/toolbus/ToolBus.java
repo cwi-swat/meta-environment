@@ -20,7 +20,10 @@ public class ToolBus {
   private Vector procdefs;
   private TscriptParser parser;
   private PrintWriter out;
-  
+
+  private static String sglr = "/home/paulk/bin/sglr";
+  private static String parseTable = "/home/paulk/eclipse/workspace/toolbusNG/toolbus/parser/Tscript.trm.tbl";
+  private static String implodePT = "/home/paulk/bin/implodePT";
   private static boolean verbose = false;
 
   public ToolBus(PrintWriter out) {
@@ -28,18 +31,51 @@ public class ToolBus {
     this.factory = TBTerm.factory;
     processes = new Vector();
     procdefs = new Vector();
- 
-    parser = new TscriptParser(new ExternalParser(
-      "/home/paulk/bin/sglr -p  /home/paulk/eclipse/workspace/toolbusNG/toolbus/parser/Tscript.trm.tbl",
-       "/home/paulk/bin/implodePT"));
+    try {
+      loadProperties();
+    } catch (IOException e) {
+      System.err.println(e.getMessage());
+    }
+    parser = new TscriptParser(new ExternalParser(sglr, parseTable, implodePT));
   }
-  
-  public ToolBus(){
+
+  public ToolBus() {
     this(new PrintWriter(System.out));
   }
-  
-  public ToolBus(StringWriter out){
+
+  public ToolBus(StringWriter out) {
     this(new PrintWriter(out));
+  }
+
+  public static String getPropertyFile() {
+    String stdName = "toolbus.props";
+    String user = System.getProperty("user.name");
+    File f;
+    String fname;
+    fname = user + "-" + stdName;
+    System.out.println(fname);
+
+    f = new File(fname);
+    if (f.exists()) {
+      return fname;
+    }
+    fname = stdName;
+    f = new File(fname);
+    if (f.exists()) {
+      return fname;
+    }
+    return null;
+  }
+
+  public static void loadProperties() throws IOException {
+    Properties props = new Properties();
+    String pname = getPropertyFile();
+    if (pname != null) {
+      props.load(ClassLoader.getSystemResourceAsStream(pname));
+      sglr = props.getProperty("sglr.path", sglr);
+      parseTable = props.getProperty("parsetable.path", parseTable);
+      implodePT = props.getProperty("implodePT.path", implodePT);
+    }
   }
 
   public ATermFactory getFactory() {
@@ -49,16 +85,16 @@ public class ToolBus {
   public Vector getProcesses() {
     return processes;
   }
-  
-  public static void setVerbose(boolean b){
+
+  public static void setVerbose(boolean b) {
     verbose = b;
   }
-  
-  public static boolean isVerbose(){
+
+  public static boolean isVerbose() {
     return verbose;
   }
-  
-  public PrintWriter getPrintWriter(){
+
+  public PrintWriter getPrintWriter() {
     return out;
   }
 
@@ -69,7 +105,7 @@ public class ToolBus {
   public static boolean nextBoolean() {
     return rand.nextBoolean();
   }
-  
+
   public void parse(String filename) throws ToolBusException {
     parser.parse(this, filename);
   }
@@ -93,7 +129,7 @@ public class ToolBus {
   public ProcessInstance addProcess(String name) throws ToolBusException {
     return addProcess(name, (ATermList) factory.make("[]"));
   }
-  
+
   public ProcessInstance addProcess(ProcessCall call) throws ToolBusException {
     ProcessInstance P = new ProcessInstance(this, call);
     processes.add(P);
