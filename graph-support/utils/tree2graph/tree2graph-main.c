@@ -38,6 +38,9 @@ static char myarguments[] = "bchi:lmo:ptV";
 void usage(void)
 {
   fprintf(stderr,
+	  "Converts a parse tree to a graph term. For every application of \n"
+	  "a production a node is created and for every character or literal \n"
+	  "a leaf is created.\n\n"
           "Usage: %s [%s]\n"
           "Options:\n"
           "\t-b              save graph in binary format\n"
