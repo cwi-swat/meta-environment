@@ -1218,7 +1218,7 @@ void SG_PrintStatusBar(char *subject, long part, long whole)
 	    subject,
 	    step,
 	    bar,
-	    part != whole ? daisy[step & 0x11] : ' ',
+	    part != whole ? daisy[step & 0x03] : ' ',
 	    part,
 	    whole,
 	    (int)((part*100)/whole));
