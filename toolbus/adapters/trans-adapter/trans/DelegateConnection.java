@@ -27,14 +27,6 @@ public class DelegateConnection implements DelegateTif {
 		this.factory = factory;
 		bridge = new DelegateBridge(factory, this);
 
-		args = new String[6];
-		args[0] = "-TB_HOST_NAME";
-		args[1] = "localhost";
-		args[2] = "-TB_PORT";
-		args[3] = "9000";
-		args[4] = "-TB_TOOL_NAME";
-		args[5] = "tb2";
-
 		bridge.init(args);
 		bridge.connect();
 		
