@@ -634,7 +634,7 @@ PT_Tree PT_makeTreeLayoutFromString(const char *str)
   PT_Args args = PT_makeArgsEmpty();
   int i;
 
-  for (i = strlen(str); i >= 0; i--) {
+  for (i = strlen(str) -1; i >= 0; i--) {
     args = PT_makeArgsList(PT_makeTreeChar((int) str[i]), args);
   }
 
@@ -873,7 +873,7 @@ PT_Tree PT_makeTreeFlatLexicalFromString(const char *str)
   PT_Args args = PT_makeArgsEmpty();
   int i;
 
-  for (i = strlen(str); i >= 0; i--) {
+  for (i = strlen(str) - 1; i >= 0; i--) {
     args = PT_makeArgsList(PT_makeTreeChar((int) str[i]), args);
   }
 
