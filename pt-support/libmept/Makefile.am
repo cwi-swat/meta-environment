@@ -8,5 +8,8 @@ libmept_a_SOURCES 	= MEPT.c MEPT_dict.c MEPT-utils.c  \
                           
 
 #CFLAGS                 += -pg -DDISABLE_DYNAMIC_CHECKING
-CFLAGS                  +=  -DDISABLE_DYNAMIC_CHECKING
+#CFLAGS                  += -DDISABLE_DYNAMIC_CHECKING
+#CFLAGS                  += -DNO_SHARING -DDISABLE_DYNAMIC_CHECKING
+#CFLAGS                  += -pg -DNO_SHARING -DDISABLE_DYNAMIC_CHECKING
+CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
 INCLUDES                = -I${ATERM}/include
