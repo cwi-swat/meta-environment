@@ -1,5 +1,7 @@
 #ifndef PREFIX_FUNCTIONS_H
 #define PREFIX_FUNCTIONS_H
+
+#include "Library.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -8,8 +10,6 @@
 #include <MEPT-utils.h>
 #include <asc-muasf2pt.h>
 
-/* Very common term and tree manipulations */
-PT_Tree CO_getFunctionArgument(PT_Tree function, int i);
-ATerm CO_unquoteAppl(ATerm appl); 
+CO_StrCon CO_makeStrCon(const char* str);
 
 #endif

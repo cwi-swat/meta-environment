@@ -11,6 +11,7 @@
 /*{{{  meta includes */
 
 #include <MEPT-utils.h>
+#include <ASFME-utils.h>
 
 /*}}}  */
 /*{{{  local includes */
@@ -136,6 +137,18 @@ static void destroyTermStore(void)
 
 /*}}}  */
 
+/*{{{  static PT_Tree restoreLiteral(PT_Symbol symbol) */
+
+static PT_Tree restoreLiteral(PT_Symbol symbol)
+{
+  PT_Tree result;
+
+  /* TODO: fix this incomplete implementation (escapes) */
+  result = PT_makeTreeLit(PT_getSymbolString(symbol));
+  return result;
+}
+
+/*}}}  */
 /*{{{  static PT_Tree listToTree(PT_Production prod, ATermList elems) */
 
 static PT_Tree listToTree(PT_Production prod, ATermList elems)
@@ -215,22 +228,29 @@ static PT_Args termsToArgs(PT_Symbols args, ATermAppl appl)
     PT_Symbol symbol = PT_getSymbolsSymbolAt(args,i);
     PT_Tree tree = NULL;
 
+
     if (PT_isOptLayoutSymbol(symbol)) {
       tree = defaultLayout;
     }
-    else if(PT_isSymbolLit(symbol)) {
-      char *str = PT_getSymbolString(symbol);
-      tree = PT_makeTreeLit(str);
-      assert(tree != NULL);
-    } 
+    else if (PT_isSymbolLit(symbol)) {
+      tree = restoreLiteral(symbol);
+    }
     else { 
-      assert(j >= 0 && j < arity);
+      /*assert(j >= 0 && j < arity && "not enough arguments, or too much");*/
+      if (j < 0 || j >= arity) {
+	ATwarning("assert failed, not enough arguments, or too much");
+	ATwarning("\tj: %d\n\tarity: %d\n\tsymbols: %t\n\tappl: %t\n\n", 
+		  j, arity, args, appl);
+      }
+
       arg = ATgetArgument(appl, j--);
       tree = termToTree(arg);
       assert(tree != NULL);
     }
 
-    result = PT_makeArgsMany(tree ,result);
+    if (tree != NULL) {
+      result = PT_makeArgsMany(tree ,result);
+    }
   }
 
   return result;
@@ -317,7 +337,7 @@ PT_Tree muASFToTreeWithLayout(ATerm tree, PT_Tree layout)
 
 PT_Tree muASFToTree(ATerm tree) 
 {
-  return muASFToTreeWithLayout(tree, PT_makeTreeLayoutFromString(" "));
+  return muASFToTreeWithLayout(tree, (PT_Tree) ASF_makeLayoutSpace());
 }
 
 /*}}}  */

@@ -10,3 +10,8 @@ config.h.in
 config.log
 config.status
 configure
+INSTALL
+install-sh
+missing
+mkinstalldirs
+depcomp

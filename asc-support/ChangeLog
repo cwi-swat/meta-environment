@@ -1,5 +1,24 @@
 $Id$
 
+Fri Jan 21 11:22:04 CET 2005 <jurgenv@cwi.nl>
+ * Compiled specifications DO NOT REWRITE TRAVERSAL FUNCTIONS when
+   they occur in an input term. The reason is for bootstrapping, 
+   traversal functions that occur in the left-hand sides of equations
+   should not dissappear. Another solution to prevent this is preferable
+   of course.
+ * Functions that return lists are treated differently now. There used to 
+   be a dynamic flattening necessary, not anymore. So "remove_list" has
+   been removed from the run-time library.
+ * Extended maximum number of argument to a function to 55.
+ * muasf2pt: TODO: check completeness of the retrieval of literal trees!
+ * lifting and lowering builtins share a cache. The cache that lift builds
+   is used for lowering.
+  
+Mon Dec 27 18:14:42 CET 2004 <jurgenv@cwi.nl>
+ * Regenerated library API's
+ * Many small changes to get structured lexicals online. Most changes are
+   a result of changed API's.
+
 Fri Nov 19 15:49:10 CET 2004 <jurgenv@cwi.nl>
  * Merged developments of 1.5 to trunk
 

@@ -1,4 +1,12 @@
 definition
+module basic/Whitespace
+
+exports
+  lexical syntax
+    [\ \t\n\r]	-> LAYOUT {cons("whitespace")}
+
+  context-free restrictions
+    LAYOUT? -/- [\ \t\n\r]
 module basic/Booleans
 
 imports basic/BoolCon
@@ -29,17 +37,22 @@ module basic/StrCon
 
 exports
 
-sorts StrCon Normal Escaped
-
+sorts StrCon StrChar
 
 lexical syntax
-    ~[\0-\31\"\\\n] -> Normal {cons("default")}
+    "\\n"                      -> StrChar {cons("newline")}
+    "\\t"                      -> StrChar {cons("tab")}
+    "\\\""                     -> StrChar {cons("quote")}
+    "\\\\"                     -> StrChar {cons("backslash")}
+    "\\" a:[0-7]b:[0-7]c:[0-7] -> StrChar {cons("octal")}
+    ~[\0-\31\"\\\n]            -> StrChar {cons("normal")}
 
-    "\\n" | "\\t" |  "\\\"" | "\\\\" -> Escaped {cons("special-character")}
-    "\\" [0-7][0-7][0-7]             -> Escaped {cons("octal")}
+    [\"] line:StrChar* [\"]    -> StrCon {cons("default")}
 
-    "\"" (Normal | Escaped)* ("\\\n" (Normal | Escaped)*)* "\"" 
-       -> StrCon {cons("default")}
+hiddens
+ context-free start-symbols
+	StrCon
+
 module basic/BoolCon
 
 exports
@@ -76,16 +89,27 @@ module basic/BytesCon
 exports 
   sorts Bytes Byte
 
-%% It is essential to hide this the following syntax,
-%% since ~[] is ambiguous with all languages
 
-hiddens 
+%% exports
+
+  %% The following production mimick what lexical constructor
+  %% functions would have been generated when the syntax of Bytes
+  %% was not hidden...
+%%  context-free syntax
+%%   bytes(CHARS[[Byte]]*) -> CHARS[[Bytes]] {char-classes([]),cons("bytes"), lexical-constructor}
+%%   CHARS[[Bytes]]        -> Bytes
+%%
+%%
+%%   byte(CHAR) -> CHARS[[Byte]] 
+%%     {char-classes([char-class([range(0,255)])]),
+%%      cons("byte"),lexical-constructor}
+%%   CHARS[[Byte]] -> Byte
+
+hiddens
   lexical syntax
     ~[]   -> Byte  {cons("byte")}
     Byte* -> Bytes {cons("bytes")}
 
-context-free start-symbols
-  Bytes
 module basic/Errors
 
 imports basic/Locations
@@ -137,6 +161,8 @@ context-free syntax
 
   "file" "(" filename:StrCon ")" -> Location {cons("file")}
 
+  a:"area" "(" Area ")" -> Location {cons("area")}
+
   "area-in-file" "(" filename:StrCon "," Area ")"
     -> Location {cons("area-in-file")}
 module basic/Areas
@@ -156,6 +182,8 @@ context-free syntax
     offset:NatCon ","
     length:NatCon ")"
   -> Area {cons("area")}
+
+
 module basic/ReadWriteCon
 
 imports basic/BytesCon

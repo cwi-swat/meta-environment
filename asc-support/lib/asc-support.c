@@ -153,22 +153,17 @@ ATerm innermost(PT_Tree tree)
     if (PT_hasProductionBracketAttr(prod)) {
       result = innermost(PT_getArgsArgumentAt(args, 2));    
     }
-    else if (ASF_isTreeTraversalFunction((ASF_Tree) tree)) {
-      PT_Production origProd = PT_getTreeProd(tree);
-      PT_Production prod;
-      PT_Args args;
-
-      tree = ASC_transformTraversalFunction(tree);
-      prod = PT_getTreeProd(tree);
-      args = PT_getTreeArgs(tree);
-
-      result = call(prod, innermost_list(args));
-
-      if (ATgetAFun((ATermAppl) result) == tuplesym) {
-       result = correct_tuple(result, (ATerm) PT_getProductionRhs(origProd));
-      }       
-    }
     else {
+      if (ASF_isTreeTraversalFunction((ASF_Tree) tree)) {
+	ATwarning("Warning: traversal functions are not activated in input term\n");
+      }
+
+      if (PT_isTreeApplList(tree) 
+	  && PT_prodHasIterSepAsRhs(PT_getTreeProd(tree))) {
+	/* remove separators */
+	args = PT_removeArgsLiterals(args);
+      }
+
       result = call(prod, innermost_list(args));
     }
   } else if (PT_isTreeAmb(tree)) {
@@ -205,8 +200,15 @@ static ATermList innermost_list(PT_Args args)
   if(length < 16) {
     while(PT_hasArgsHead(args)) {
       el = innermost(PT_getArgsHead(args));
-      if(el)  
-	result = ATinsert(result, el); 
+      if(el) {
+	if (ATgetType(el) == AT_LIST) {
+	  /* happens only when a function returns a list directly */
+	    result = ATconcat(result, ATreverse((ATermList) el));
+	}
+	else {
+	    result = ATinsert(result, el); 
+	}
+      }
       args = PT_getArgsTail(args);
     }
     return ATreverse(result);
@@ -231,8 +233,14 @@ static ATermList innermost_list(PT_Args args)
 
     for(--idx; idx>=0; idx--) {
       el = innermost(PT_TreeFromTerm(elems[idx]));
-      if(el) {
-	result = ATinsert(result, el);
+      if (el) {
+	if (ATgetType(el) == AT_LIST) {
+	  /* happens only when a function returns a list directly */
+	  result = ATconcat(result, ATreverse((ATermList) el));
+	}
+	else {
+	  result = ATinsert(result, el);
+	}
       }
     }
 		
@@ -391,6 +399,132 @@ static ATerm call_using_array(funcptr func, ATerm *arg, int arity)
 			  arg[18],arg[19],arg[20],arg[21],arg[22],arg[23],
 			  arg[24],arg[25],arg[26],arg[27],arg[28],arg[29],
 			  arg[30],arg[31],arg[32]);
+  case 34: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33]);
+  case 35: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34]);
+  case 36: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34],arg[35]);
+  case 37: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34],arg[35],arg[36]
+			 );
+  case 38: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34],arg[35],arg[36],
+			  arg[37]);
+  case 39: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34],arg[35],arg[36],
+			  arg[37],arg[38]);
+  case 40: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34],arg[35],arg[36],
+			  arg[37],arg[38],arg[39]);
+  case 41: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34],arg[35],arg[36],
+			  arg[37],arg[38],arg[39],arg[40]);
+  case 42: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34],arg[35],arg[36],
+			  arg[37],arg[38],arg[39],arg[40],arg[41]);
+  case 43: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34],arg[35],arg[36],
+			  arg[37],arg[38],arg[39],arg[40],arg[41],arg[42]
+			 );
+  case 44: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34],arg[35],arg[36],
+			  arg[37],arg[38],arg[39],arg[40],arg[41],arg[42],
+			  arg[43]);
+  case 45: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34],arg[35],arg[36],
+			  arg[37],arg[38],arg[39],arg[40],arg[41],arg[42],
+			  arg[43],arg[44]);
+  case 46: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34],arg[35],arg[36],
+			  arg[37],arg[38],arg[39],arg[40],arg[41],arg[42],
+			  arg[43],arg[44],arg[45]);
+  case 47: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34],arg[35],arg[36],
+			  arg[37],arg[38],arg[39],arg[40],arg[41],arg[42],
+			  arg[43],arg[44],arg[45],arg[46]);
+  case 48: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34],arg[35],arg[36],
+			  arg[37],arg[38],arg[39],arg[40],arg[41],arg[42],
+			  arg[43],arg[44],arg[45],arg[46],arg[47]);
+  case 49: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34],arg[35],arg[36],
+			  arg[37],arg[38],arg[39],arg[40],arg[41],arg[42],
+			  arg[43],arg[44],arg[45],arg[46],arg[47],arg[48]
+			 );
+  case 50: return (*func)(arg[0],arg[1],arg[2],arg[3],arg[4],arg[5],arg[6],
+			  arg[7],arg[8],arg[9],arg[10],arg[11],arg[12],
+			  arg[13],arg[14],arg[15],arg[16],arg[17],arg[18],
+			  arg[19],arg[20],arg[21],arg[22],arg[23],arg[24],
+			  arg[25],arg[26],arg[27],arg[28],arg[29],arg[30],
+			  arg[31],arg[32],arg[33],arg[34],arg[35],arg[36],
+			  arg[37],arg[38],arg[39],arg[40],arg[41],arg[42],
+			  arg[43],arg[44],arg[45],arg[46],arg[47],arg[48],
+			  arg[49]);
   default:
     ATabort("too many arguments: %d\n", arity);
   }
@@ -403,13 +537,14 @@ static ATerm call_using_array(funcptr func, ATerm *arg, int arity)
 static ATerm call_using_list(funcptr func, ATermList args)
 {
   ATermList list = args;
-  ATerm arg[33];
+  ATerm arg[55];
   int idx = 0;
 
   while(!ATisEmpty(list)) {
     arg[idx++] = ATgetFirst(list);
     list = ATgetNext(list);
   }
+
 
   return call_using_array(func, arg, ATgetLength(args));
 }
@@ -419,7 +554,7 @@ static ATerm call_using_list(funcptr func, ATermList args)
 /* This function is used in innermost to call a c function for
  * a given AsFix production. Note that the arguments are in normal form
  * because of the innermost reduction strategy. Apparently there is
- * an upper limit on the number of arguments of a production (32)!
+ * an upper limit on the number of arguments of a production (55)!
  *
  * The functionality of this function is to convert the argument list in
  * ATermList form to a c function call and to lookup the actual funcptr.
@@ -445,6 +580,27 @@ static ATerm call(PT_Production prod, ATermList args)
 }
 
 
+
+/*}}}  */
+
+/*{{{  ATerm callLiteralConstructor(PT_Symbol symbol)  */
+
+ATerm callLiteralConstructor(PT_Symbol symbol) 
+{
+  PT_Production fake = PT_makeProductionDefault(PT_makeSymbolsEmpty(),
+						symbol,
+						PT_makeAttributesNoAttrs());
+
+  if (basic_lookup_func((ATerm) fake) == NULL) {
+    /* TODO: fix this incomplete function */
+    PT_Tree tree = PT_makeTreeLit(PT_getSymbolString(symbol));
+    ATwarning("new tree: %t\n", tree);
+    return innermost(tree);
+  }
+  else {
+    return call(fake, ATempty);
+  }
+}
 
 /*}}}  */
 
@@ -579,10 +735,15 @@ static ATermList call_kids_trafo_list(funcptr trav, ATermList args,
   ATerm el;
 
   for (; !ATisEmpty(args); args = ATgetNext(args)) {
-    el = call_using_list(trav,ATinsert(extra_args,ATgetFirst(args)));
+    el = call_using_list(trav, ATinsert(extra_args, ATgetFirst(args)));
     
     if (el) {
-      result = ATinsert(result, el);
+      if (ATgetType(el) == AT_LIST) {
+	result = ATconcat(result, ATreverse((ATermList) el));
+      }
+      else {
+	result = ATinsert(result, el);
+      }
     }
   }
 
@@ -657,11 +818,17 @@ ATerm call_kids_trafo(funcptr trav, ATerm arg0, ATermList extra_args)
       switch(ATgetType(arg[idx])) {
 	case AT_APPL:
 	  arg[idx] = call_using_list(trav, ATinsert(extra_args,arg[idx]));
+
+	  if (ATgetType(arg[idx]) == AT_LIST) {
+	    ATwarning("Zie je wel!\n"); 
+	  }
 	  break;
 	case AT_LIST:
 	  assert(idx == 0 && "a list production has only 1 child (a list)");
 	  arg[idx] = (ATerm) call_kids_trafo_list(trav, (ATermList) arg[idx],
-						  extra_args);
+					  extra_args);
+	  break;
+	case AT_INT:
 	  break;
 	default:
 	  ATerror("Unexpected term type %d in call_kids_trafo\n", ATgetType(arg[idx]));
@@ -717,6 +884,8 @@ ATerm call_kids_accu(funcptr trav, ATerm arg0, ATerm arg1, ATermList extra_args)
 	  assert(idx == 0 && "a list production has only 1 child (a list)");
 	  arg1 = call_kids_accu_list(trav, (ATermList) head, arg1, extra_args);
 	  break;
+	case AT_INT:
+	  break;
 	default:
 	  ATerror("Unexpected term type %d in call_kids_accu\n", ATgetType(head));
 	  return NULL;
@@ -763,6 +932,9 @@ ATerm call_kids_accutrafo(funcptr trav, ATerm arg0, ATerm arg1,
 	  assert(idx == 0 && "a list production has only 1 child (a list)");
 	  tuple = call_kids_accutrafo_list(trav, (ATermList) arg[idx], arg1,
 					   extra_args);
+	  break;
+	case AT_INT:
+	  tuple = (ATerm) ATmakeAppl2(tuplesym , arg[idx],arg1);
 	  break;
 	default:
 	  ATerror("Unexpected term type %d in call_kids_accutrafo\n", ATgetType(arg[idx]));
@@ -932,6 +1104,8 @@ ATerm call_kids_trafo_with_fail(funcptr trav, ATerm arg0, ATermList extra_args)
 	  arg[idx] = (ATerm) call_kids_trafo_list_with_fail(trav, 
 							    (ATermList)arg[idx],
 							    extra_args);
+	  break;
+	case AT_INT:
 	  break;
 	default:
 	  ATerror("Unexpected term type %d in call_kids_trafo\n", ATgetType(arg[idx]));
@@ -1198,6 +1372,7 @@ void ASC_initRunTime(int tableSize)
 #endif
 
   PT_initMEPTApi();
+  ASF_initASFMEApi();
   initBuiltins();
 
   c_rehash(tableSize);
@@ -1209,10 +1384,20 @@ void ASC_initRunTime(int tableSize)
 PT_ParseTree toasfix(ATerm term)
 {
   PT_Tree tree;
+  PT_ParseTree pt;
 
   tree = muASFToTree(term);
 
-  return PT_makeValidParseTreeFromTree(tree);
+  pt = PT_makeValidParseTreeFromTree(tree);
+
+  /* we replace the outermost layout by nothing here, to
+   * make the regression tests work for now. 
+   * TODO: throw away this code and regenerate the tests
+   */
+  pt = PT_setParseTreeLayoutBeforeTree(pt, (PT_Tree) ASF_makeLayoutSpace());
+  pt = PT_setParseTreeLayoutAfterTree(pt, (PT_Tree) ASF_makeLayoutSpace());
+
+  return pt;
 }
 
 /*}}}  */

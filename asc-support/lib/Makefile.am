@@ -27,7 +27,6 @@ BUILTIN_NAMES_ARITY=\
 
 BUILTIN_SOURCEFILES=\
 	builtin-common.c \
-	builtin-common.h \
 	builtin-annos.c \
 	builtin-term-compare.c \
 	builtin-lifting.c \
@@ -38,6 +37,7 @@ BUILTIN_SOURCEFILES=\
 
 # The names of the modules that need to be included in a generated lib
 LIBRARY_MODULES=\
+	basic/Whitespace \
 	basic/Booleans \
 	basic/StrCon \
 	basic/BoolCon \
@@ -57,7 +57,9 @@ include_HEADERS = \
 	asc-support2-me.h  \
 	asc-traversals.h \
 	asc-builtins.h \
-	asc-client.h
+	asc-client.h \	
+	asc-muasf2pt.h \
+	builtin-common.h
 
 libasc_support_me_a_SOURCES = \
 	asc-builtins.h \
@@ -73,6 +75,7 @@ libasc_support_me_a_SOURCES = \
 	asc-client.c\
 	asc-tide.c\
 	builtin-forward.c\
+	builtin-common.c \
 	Library.c\
 	Library.h\
 	Library_dict.c\

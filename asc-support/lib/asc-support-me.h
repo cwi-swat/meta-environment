@@ -10,6 +10,8 @@
 #define INITIAL_TABLE_SIZE 8191
 #define MAX_LOAD 75
 
+#define remove_list(t) (make_list(ATgetArgument((ATermAppl) t,0)))
+
 /*{{{  profiling */
 
 #define PROF(var)
@@ -54,7 +56,7 @@ extern Symbol record_sym;
 #define CONS_ENTRY(sym,appl)
 #define CONS_EXIT(rhs) return rhs
 #define CONS_EXIT_CONST(constant,rhs) return ( constant ? constant : ( constant = rhs)) ;
-#define FUNC_ENTRY(sym,appl)
+#define FUNC_ENTRY(sym,appl) 
 #define FUNC_EXIT(rhs) return rhs;
 #define FUNC_EXIT_CONST(constant,rhs) return ( constant ? constant : ( constant = rhs)) ;
 
@@ -81,7 +83,6 @@ extern Symbol record_sym;
 #define get_sym(t) ATgetSymbol((ATermAppl) t)
 #define check_sym(t,s) (get_sym(t) == (s))
 #define check_sort(t,sort) (ATisEqual(get_sort(t),sort))
-#define remove_list(t) (make_list(ATgetArgument((ATermAppl) t,0)))
 #define parse_sort(s)  (ATparse(s))
 
 #define accutrafo_tuple_first(t)    (ATgetArgument((ATermAppl) t,0))
@@ -171,6 +172,37 @@ ATerm lookup_prod(Symbol sym);
 #define arg_17(t)  (ATgetArgument(t,17))
 #define arg_18(t)  (ATgetArgument(t,18))
 #define arg_19(t)  (ATgetArgument(t,19))
+#define arg_20(t) (ATgetArgument(t,20))
+#define arg_21(t) (ATgetArgument(t,21))
+#define arg_22(t) (ATgetArgument(t,22))
+#define arg_23(t) (ATgetArgument(t,23))
+#define arg_24(t) (ATgetArgument(t,24))
+#define arg_25(t) (ATgetArgument(t,25))
+#define arg_26(t) (ATgetArgument(t,26))
+#define arg_27(t) (ATgetArgument(t,27))
+#define arg_28(t) (ATgetArgument(t,28))
+#define arg_29(t) (ATgetArgument(t,29))
+#define arg_30(t) (ATgetArgument(t,30))
+#define arg_31(t) (ATgetArgument(t,31))
+#define arg_32(t) (ATgetArgument(t,32))
+#define arg_33(t) (ATgetArgument(t,33))
+#define arg_34(t) (ATgetArgument(t,34))
+#define arg_35(t) (ATgetArgument(t,35))
+#define arg_36(t) (ATgetArgument(t,36))
+#define arg_37(t) (ATgetArgument(t,37))
+#define arg_38(t) (ATgetArgument(t,38))
+#define arg_39(t) (ATgetArgument(t,39))
+#define arg_40(t) (ATgetArgument(t,40))
+#define arg_41(t) (ATgetArgument(t,41))
+#define arg_42(t) (ATgetArgument(t,42))
+#define arg_43(t) (ATgetArgument(t,43))
+#define arg_44(t) (ATgetArgument(t,44))
+#define arg_45(t) (ATgetArgument(t,45))
+#define arg_46(t) (ATgetArgument(t,46))
+#define arg_47(t) (ATgetArgument(t,47))
+#define arg_48(t) (ATgetArgument(t,48))
+#define arg_49(t) (ATgetArgument(t,49))
+#define arg_50(t) (ATgetArgument(t,50))
 
 
 /*}}}  */
@@ -213,8 +245,24 @@ ATerm lookup_prod(Symbol sym);
 #define make_nf30(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29))
 #define make_nf31(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30))
 #define make_nf32(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31) (ATerm)(ATmakeAppl((Symbol)s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31))
-
-
+#define make_nf33(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32))
+#define make_nf34(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33))
+#define make_nf35(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34))
+#define make_nf36(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35))
+#define make_nf37(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36))
+#define make_nf38(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37))
+#define make_nf39(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38))
+#define make_nf40(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39))
+#define make_nf41(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40))
+#define make_nf42(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41))
+#define make_nf43(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42))
+#define make_nf44(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43))
+#define make_nf45(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44))
+#define make_nf46(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44,t45) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44,t45))
+#define make_nf47(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44,t45,t46) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44,t45,t46))
+#define make_nf48(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44,t45,t46,t47) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44,t45,t46,t47))
+#define make_nf49(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44,t45,t46,t47,t48) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44,t45,t46,t47,t48))
+#define make_nf50(s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44,t45,t46,t47,t48,t49) (ATerm)(ATmakeAppl((Symbol) s,t0,t1,t2,t3,t4,t5,t6,t7,t8,t9,t10,t11,t12,t13,t14,t15,t16,t17,t18,t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30,t31,t32,t33,t34,t35,t36,t37,t38,t39,t40,t41,t42,t43,t44,t45,t46,t47,t48,t49))
 /*}}}  */
 /*{{{  quote */
 
@@ -307,6 +355,8 @@ int asc_support_main(ATerm *bottom, int argc, char *argv[],
 
 /*}}}  */
 
+
+ATerm callLiteralConstructor(PT_Symbol symbol);
 ATerm innermost(PT_Tree tree);
 ATerm getParseTable();
 void setParseTable(ATerm tbl);

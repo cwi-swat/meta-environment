@@ -15,7 +15,9 @@ static char* escape(const char* str, const char* escaped_chars)
 {
   int i,j,e;
   int len = strlen(str);
-  char *escaped = (char*) malloc(2 * len * sizeof(char) + 3);
+
+  /*char *escaped = (char*) malloc(2 * len * sizeof(char) + 3);*/
+  char *escaped = calloc(10000, 1);
 
   if (escaped == NULL) {
     ATerror("escape: could not allocate enough memory for escaping:\n%s\n",str);
@@ -49,7 +51,7 @@ static char* escape(const char* str, const char* escaped_chars)
 char* prodToEscapedString(PT_Production prod)
 {
     char *strProd = ATwriteToString((ATerm) prod);
-      return escape(strProd,"\"\\");
+    return escape(strProd,"\"\\");
 }
 
 /*}}}  */

@@ -1,5 +1,7 @@
 #include <PTMEPT-utils.h>
 #include "builtin-common.h"
+#include <assert.h>
+#include <MEPT-utils.h>
 
 /* note that by using AsFix trees as keys the storing and retrieval
  * of ATerm annotations depends on whitespace!

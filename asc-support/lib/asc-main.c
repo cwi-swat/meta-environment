@@ -16,6 +16,7 @@
 
 #include "asc-support2-me.h"
 #include "Library.h"
+#include "builtin-common.h"
 
 /*}}}  */
 /*{{{  globals */
@@ -87,7 +88,6 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
   ASC_initRunTime(INITIAL_TABLE_SIZE);
   PT_initAsFix2Api();
 
-
   register_all();
   resolve_all();
   init_all();
@@ -140,7 +140,7 @@ int asc_support_main(ATerm *bottomOfStack, int argc, char *argv[],
 	snprintf(buf, MAX_STRINGARGUMENT_LENGTH, "\"%s\"", argv[++i]);
 	assert(nInputs <= MAX_ARGS);
 	inputs[nInputs] = (ATerm) CO_makeStartStrCon(layout,
-					     CO_makeStrConDefault(buf),
+					     CO_makeStrCon(buf),
 					     layout, 0);
 	nInputs++;
       } 

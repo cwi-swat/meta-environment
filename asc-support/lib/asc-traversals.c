@@ -155,11 +155,11 @@ PT_Tree ASC_transformTraversalFunction(PT_Tree tree)
   }
   else if (type == COMBINATION) {
     PT_Symbol rhs = PT_getSymbolSymbol(PT_getProductionRhs(prod));
-    PT_Symbol accu = PT_getSymbolRhs(rhs);
+    PT_Symbols accu = PT_getSymbolRest(rhs);
     prod = PT_setProductionRhs(prod, PT_makeSymbolCf(
                                      PT_makeSymbolTuple(
                                      PT_makeSymbolSort(GEN_TRAVERSED_SORT),
-                                     PT_makeSymbolsSingle(accu))));
+                                     accu)));
   }
   return PT_setTreeProd(tree, prod);
 }

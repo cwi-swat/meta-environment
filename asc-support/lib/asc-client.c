@@ -3,6 +3,7 @@
 #include <asc-support2-me.h>
 #include <MEPT-utils.h>
 #include "Library.h"
+#include "builtin-common.h"
 
 ATerm rec_terminate(int cid, char* message)
 {
@@ -25,7 +26,7 @@ ATerm apply_rewrite(int cid, char* function, char* sort,ATermList args)
     PT_Tree arg;
 
     if (ATisQuoted(ATgetAFun((ATermAppl) head))) {
-      arg = (PT_Tree) CO_makeStrConDefault(ATwriteToString(head));
+      arg = (PT_Tree) CO_makeStrCon(ATgetName(ATgetAFun((ATermAppl) head)));
     }
     else {
       arg = PT_getParseTreeTree((PT_ParseTree) head);
