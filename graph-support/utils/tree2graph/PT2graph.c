@@ -29,7 +29,7 @@ static int nr_of_nodes;
 #define XOR(p,q) ((!p && q) || (!q && p))
 /*}}}  */
 
-/*{{{  char* escape(const char* str, const char* escaped_chars, ATbool quoted) */
+/*{{{  char* escape(const char* str) */
 
 char* escape(const char* str)
 {
@@ -167,7 +167,7 @@ static Graph printNode(const char *name,
   sprintf(str, "N%d", parentNr);
   parentId = makeNodeIdDefault(str);
    
-  nameAttr = makeAttributeLabel(escape(contents));
+  nameAttr = makeAttributeLabel(contents);
   attrList = makeAttributeListMulti(nameAttr, attrList);
   
   shapeAttr = makeAttributeShape(shape);
@@ -286,7 +286,8 @@ static Graph treeToGraph(const char *name, Graph graph, PT_Tree tree, int parent
       char ch[2] = { '\0', '\0'};
       ch[0] = PT_getTreeCharacter(tree);
 
-      graph = printNode(name, graph, makeShapeEllipse(), parent,key,ch,"character", posInfoArea);
+      graph = printNode(name, graph, makeShapeEllipse(), parent,key,
+			escape(ch),"character", posInfoArea);
     }
 
     /*}}}  */
