@@ -1,4 +1,4 @@
-.SUFFIXES: .pic .ltx .dvi .bbl .ind .idx .xwd .ps .tex .fig
+SUFFIXES= .pic .ltx .dvi .bbl .ind .idx .xwd .ps .tex .fig
 
 %.bbl: %.ltx
 	bibtex $*

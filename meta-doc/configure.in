@@ -1,8 +1,10 @@
 dnl $Id$
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(configure.in)
+AC_INIT
+AC_CONFIG_SRCDIR([configure.in])
 AM_INIT_AUTOMAKE(meta-doc, 0.1beta)
+AC_PREREQ(2.59)
 
 ACLOCAL="${ACLOCAL} -I ."
 
@@ -21,10 +23,10 @@ AM_CONDITIONAL(BUILD_MANUAL, test x$build_manual = xtrue)
 
 
 dnl {{{  Which files need updating?
-AC_OUTPUT(
-  Makefile
+AC_CONFIG_FILES([Makefile
   guided-tour/Makefile
   user-manual/Makefile
-)
+])
+AC_OUTPUT
 
 dnl }}}
