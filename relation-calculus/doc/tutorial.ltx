@@ -1264,6 +1264,21 @@ second element.
 \end{itemize}
 }
 
+\functiona{Bag with unique elements}{unique}
+\begin{exam}
+\begin{verbatim}
+bag[&T] unique(bag[&T] B) = primitive
+\end{verbatim}
+\end{exam}
+{Yields the bag (actually the set) that results from removing all duplicate
+  elements from {\tt B}.
+}
+{Example: 
+\begin{itemize}
+\item \verb@unique({1,2,1,3,2})@ yields \verb@{1,2,3}@.
+\end{itemize}
+}
+
 \functiona{Inverse of a Relation}{inv}
 \begin{exam}
 \begin{verbatim}
@@ -1514,7 +1529,7 @@ rel[&T,&T] carrierX (rel[&T,&T] R, Bag[&T] B) =
 \functiona {Top of a Relation}{top}
 \begin{exam}
 \begin{verbatim}
-bag[&T] top(rel[&T, &T] R) = domain(R) \ range(R)
+bag[&T] top(rel[&T, &T] R) = unique(domain(R)) \ range(R)
 \end{verbatim}
 \end{exam}
 {Yields the bag of all roots when the relation {\tt R} is
@@ -1529,7 +1544,7 @@ viewed as a graph. Note that the domain and range type of {\tt R} should be the 
 \functiona{Bottom of a Relation}{bottom}
 \begin{exam}
 \begin{verbatim}
-bag[&T] bottom(rel[&T,&T] R) = range(R) \ domain(R)
+bag[&T] bottom(rel[&T,&T] R) = unique(range(R)) \ domain(R)
 \end{verbatim}
 \end{exam}
 {Yields the bag of all leaves when the relation {\tt R} is
@@ -1687,7 +1702,7 @@ int max(bag[int] B) = primitive
 \functiona{Minimum of a Bag of Integers}{min}
 \begin{exam}
 \begin{verbatim}
-int min(bag[int] B) = priimtive
+int min(bag[int] B) = primitive
 \end{verbatim}
 \end{exam}
 {Yields the smallest integer in bag {\tt B}.}
@@ -2981,6 +2996,7 @@ Taeke Kooiker, Tijs van der Storm.
 {\tt second}      & Second element of a tuple & \ref{BI:second} \\
 {\tt sum}         & Sum of a bag of integers & \ref{BI:sum} \\
 {\tt top}         & Top of a relation & \ref{BI:top} \\
+{\tt unique}      & Bag with unique elements & \ref{BI:unique}\\
 
 \end{supertabular}
 \end{center}

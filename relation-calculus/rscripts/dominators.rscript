@@ -41,7 +41,7 @@ rel[str,str] PRED ={
 <"L", "H">
 }
 
-bag[str] VERTICES = carrier(PRED)
+bag[str] VERTICES = unique(carrier(PRED))
 
 rel[str,bag[str]] DOMINATES =
    { <V,  VERTICES \ {V, ROOT} \ range(reachX({ROOT}, {V}, PRED))> |  str V : VERTICES}
