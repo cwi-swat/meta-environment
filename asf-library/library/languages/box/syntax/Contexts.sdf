@@ -6,8 +6,3 @@ exports
   context-free syntax
     "H"  -> Context
     "V"  -> Context
-
-hiddens
-  variables
-    "'C"[0-9]* -> Context
-%%%

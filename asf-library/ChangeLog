@@ -1,5 +1,9 @@
 $Id$
 
+Tue Feb 17 11:47:52 CET 2004 <kooiker@cwi.nl>
+ * library/languages/box/syntax/Contexts.sdf:
+   - removed unused variable
+
 Mon Feb 16 10:11:57 CET 2004 <jurgenv@cwi.nl>
  * str-len renamed to length
  * str-cmp renamed to <, <=, >= and >
