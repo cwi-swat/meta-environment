@@ -1,3 +1,6 @@
+2003/11/03 (storm@cwi.nl)
+  * Added implode function.
+
 2003/10/16 (jurgenv@cwi.nl)
   * Added tests to basic/Booleans,Integers,Strings
 
