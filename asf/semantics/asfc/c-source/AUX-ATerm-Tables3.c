@@ -45,16 +45,14 @@ ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AT
 ef9 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Lists\"),w(\"\"),[l(\"rest\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)" ) ) ;
 ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Lists\"),w(\"\"),[l(\"rest\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_ATerm_Tables3 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerm_Tables3_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 6 ] ;
 FUNC_ENTRY ( lf_AUX_ATerm_Tables3_1sym , ATmakeAppl ( lf_AUX_ATerm_Tables3_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ( * ef3 ) ( ) ) ) ;
+lbl_lf_AUX_ATerm_Tables3_1 : if ( check_sym ( arg0 , ef1sym ) ) {
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( ) ) ) ;
 }
 if ( check_sym ( arg0 , ef4sym ) ) {
 {
@@ -81,7 +79,9 @@ FUNC_EXIT ( tmp [ 5 ] ) ;
 if ( check_sym ( arg0 , ef4sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-FUNC_EXIT ( lf_AUX_ATerm_Tables3_1 ( ( * ef9 ) ( arg0 ) , arg1 ) ) ;
+arg0 = ( * ef9 ) ( arg0 ) ;
+arg1 = arg1 ;
+goto lbl_lf_AUX_ATerm_Tables3_1 ;
 }
 }
 FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Tables3_1sym , arg0 , arg1 ) ) ;

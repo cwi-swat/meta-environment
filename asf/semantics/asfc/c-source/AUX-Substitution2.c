@@ -71,7 +71,7 @@ ATerm lf_AUX_Substitution2_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 7 ] ;
 FUNC_ENTRY ( lf_AUX_Substitution2_1sym , ATmakeAppl ( lf_AUX_Substitution2_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , ef1sym ) ) {
+lbl_lf_AUX_Substitution2_1 : if ( check_sym ( arg1 , ef1sym ) ) {
 FUNC_EXIT ( ( * ef2 ) ( arg0 ) ) ;
 }
 tmp [ 0 ] = ( * ef10 ) ( arg1 ) ;
@@ -94,7 +94,9 @@ FUNC_EXIT ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( tmp [ 6 ] ) , ( * ef6 ) ( tmp [ 
 }
 }
 }
-FUNC_EXIT ( lf_AUX_Substitution2_1 ( arg0 , ( * ef9 ) ( arg1 ) ) ) ;
+arg0 = arg0 ;
+arg1 = ( * ef9 ) ( arg1 ) ;
+goto lbl_lf_AUX_Substitution2_1 ;
 FUNC_EXIT ( make_nf2 ( lf_AUX_Substitution2_1sym , arg0 , arg1 ) ) ;
 }
 }

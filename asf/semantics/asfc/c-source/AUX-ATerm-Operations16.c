@@ -105,13 +105,11 @@ ef23sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerms\"),w(\"\"),[sort(\"A
 ef24 = lookup_func ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\"),[sort(\"ATerms\"),w(\"\"),ql(\"++a\"),w(\"\"),sort(\"ATerms\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerms\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
 ef24sym = lookup_sym ( ATreadFromString ( "prod(id(\"ATerm-Operations\"),w(\"\"),[sort(\"ATerms\"),w(\"\"),ql(\"++a\"),w(\"\"),sort(\"ATerms\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerms\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_ATerm_Operations16 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ATerm_Operations16_1 ( ATerm arg0 , ATerm arg1 ) {
 FUNC_ENTRY ( lf_AUX_ATerm_Operations16_1sym , ATmakeAppl ( lf_AUX_ATerm_Operations16_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_ATerm_Operations16_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
@@ -269,7 +267,7 @@ if ( check_sym ( atmp00 , ef21sym ) ) {
 if ( check_sym ( arg1 , ef3sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
-FUNC_EXIT_CONST ( constant0 , ( * ef22 ) ( ) ) ;
+FUNC_EXIT ( ( * ef22 ) ( ) ) ;
 }
 }
 }
@@ -288,7 +286,9 @@ if ( check_sym ( arg0 , ef23sym ) ) {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
 ATerm atmp01 = arg_1 ( arg0 ) ;
-FUNC_EXIT ( lf_AUX_ATerm_Operations16_1 ( ( * ef1 ) ( atmp00 ) , ( * ef24 ) ( atmp01 , arg1 ) ) ) ;
+arg0 = ( * ef1 ) ( atmp00 ) ;
+arg1 = ( * ef24 ) ( atmp01 , arg1 ) ;
+goto lbl_lf_AUX_ATerm_Operations16_1 ;
 }
 }
 }

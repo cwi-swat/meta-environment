@@ -140,19 +140,13 @@ ef23sym = lookup_sym ( ATreadFromString ( "prod(id(\"ANumerals\"),w(\"\"),[l(\"g
 ef24 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Conds2C\"),w(\"\"),[l(\"listconds2cstats\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"C-Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),l(\",\"),w(\"\"),sort(\"Expression\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SlI-tuple\"),w(\"\"),no-attrs)" ) ) ;
 ef24sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Conds2C\"),w(\"\"),[l(\"listconds2cstats\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"C-Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),l(\",\"),w(\"\"),sort(\"Expression\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SlI-tuple\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
-static ATerm constant2 = NULL ;
 void init_AUX_MuASF_Conds2C5 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
-ATprotect ( & constant2 ) ;
 }
 ATerm lf_AUX_MuASF_Conds2C5_3 ( ATerm arg0 , ATerm arg1 , ATerm arg2 , ATerm arg3 , ATerm arg4 ) {
 {
 ATerm tmp [ 39 ] ;
 FUNC_ENTRY ( lf_AUX_MuASF_Conds2C5_3sym , ATmakeAppl ( lf_AUX_MuASF_Conds2C5_3sym , arg0 , arg1 , arg2 , arg3 , arg4 ) ) ;
-if ( check_sym ( arg0 , lf_AUX_MuASF_Conds2C5_1sym ) ) {
+lbl_lf_AUX_MuASF_Conds2C5_3 : if ( check_sym ( arg0 , lf_AUX_MuASF_Conds2C5_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( arg1 , lf_AUX_MuASF_Conds2C5_1sym ) ) {
@@ -198,9 +192,9 @@ tmp [ 16 ] = arg_0 ( tmp [ 15 ] ) ;
 {
 if ( not_empty_list ( tmp [ 16 ] ) ) {
 tmp [ 17 ] = ( * ef15 ) ( tmp [ 14 ] ) ;
-if ( term_equal ( tmp [ 17 ] , ( constant0 ? constant0 : ( constant0 = ( * ef16 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 17 ] , ( * ef16 ) ( ) ) ) {
 tmp [ 18 ] = ( * ef17 ) ( tmp [ 14 ] , arg4 , lf_AUX_MuASF_Conds2C5_2 ( make_list ( atmp20 ) ) ) ;
-tmp [ 19 ] = ( * ef18 ) ( lf7 ( make_list ( tmp [ 16 ] ) ) , arg4 , arg3 , ( constant1 ? constant1 : ( constant1 = ( * ef19 ) ( ( * ef20 ) ( lf8 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ;
+tmp [ 19 ] = ( * ef18 ) ( lf7 ( make_list ( tmp [ 16 ] ) ) , arg4 , arg3 , ( * ef19 ) ( ( * ef20 ) ( lf8 ( make_list ( make_char ( 48 ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 19 ] , ef21sym ) ) {
 tmp [ 20 ] = arg_0 ( tmp [ 19 ] ) ;
 tmp [ 21 ] = arg_1 ( tmp [ 19 ] ) ;
@@ -238,7 +232,7 @@ FUNC_EXIT ( ( * ef13 ) ( ( * ef14 ) ( tmp [ 34 ] , tmp [ 36 ] ) , tmp [ 38 ] ) )
 }
 }
 }
-if ( term_equal ( tmp [ 17 ] , ( constant2 ? constant2 : ( constant2 = ( * ef5 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 17 ] , ( * ef5 ) ( ) ) ) {
 tmp [ 18 ] = ( * ef6 ) ( ( * ef2 ) ( lf4 ( make_list ( tmp [ 8 ] ) ) , lf5 ( cons ( make_list ( ( * ef3 ) ( tmp [ 12 ] , ( * ef12 ) ( tmp [ 14 ] , lf7 ( make_list ( tmp [ 16 ] ) ) ) ) ) , make_list ( tmp [ 11 ] ) ) ) , tmp [ 4 ] , tmp [ 5 ] , tmp [ 6 ] , tmp [ 7 ] ) , lf_AUX_MuASF_Conds2C5_1 ( make_list ( tmp [ 1 ] ) ) ) ;
 if ( check_sym ( tmp [ 18 ] , ef7sym ) ) {
 tmp [ 19 ] = arg_0 ( tmp [ 18 ] ) ;
@@ -268,7 +262,7 @@ FUNC_EXIT ( ( * ef13 ) ( ( * ef14 ) ( tmp [ 24 ] , tmp [ 27 ] ) , tmp [ 29 ] ) )
 }
 }
 }
-if ( term_equal ( ( * ef4 ) ( tmp [ 13 ] ) , ( constant2 ? constant2 : ( constant2 = ( * ef5 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef4 ) ( tmp [ 13 ] ) , ( * ef5 ) ( ) ) ) {
 tmp [ 14 ] = ( * ef6 ) ( ( * ef2 ) ( lf4 ( make_list ( tmp [ 8 ] ) ) , lf5 ( cons ( make_list ( ( * ef3 ) ( tmp [ 12 ] , tmp [ 13 ] ) ) , make_list ( tmp [ 11 ] ) ) ) , tmp [ 4 ] , tmp [ 5 ] , tmp [ 6 ] , tmp [ 7 ] ) , lf_AUX_MuASF_Conds2C5_1 ( make_list ( tmp [ 1 ] ) ) ) ;
 if ( check_sym ( tmp [ 14 ] , ef7sym ) ) {
 tmp [ 15 ] = arg_0 ( tmp [ 14 ] ) ;
@@ -282,7 +276,12 @@ if ( check_sym ( tmp [ 19 ] , ef11sym ) ) {
 tmp [ 20 ] = arg_0 ( tmp [ 19 ] ) ;
 if ( check_sym ( tmp [ 20 ] , lf_AUX_MuASF_Conds2C5_1sym ) ) {
 tmp [ 21 ] = arg_0 ( tmp [ 20 ] ) ;
-FUNC_EXIT ( lf_AUX_MuASF_Conds2C5_3 ( lf_AUX_MuASF_Conds2C5_1 ( make_list ( tmp [ 18 ] ) ) , lf_AUX_MuASF_Conds2C5_1 ( cons ( make_list ( atmp10 ) , make_list ( tmp [ 21 ] ) ) ) , lf_AUX_MuASF_Conds2C5_2 ( make_list ( atmp20 ) ) , arg3 , arg4 ) ) ;
+arg0 = lf_AUX_MuASF_Conds2C5_1 ( make_list ( tmp [ 18 ] ) ) ;
+arg1 = lf_AUX_MuASF_Conds2C5_1 ( cons ( make_list ( atmp10 ) , make_list ( tmp [ 21 ] ) ) ) ;
+arg2 = lf_AUX_MuASF_Conds2C5_2 ( make_list ( atmp20 ) ) ;
+arg3 = arg3 ;
+arg4 = arg4 ;
+goto lbl_lf_AUX_MuASF_Conds2C5_3 ;
 }
 }
 }

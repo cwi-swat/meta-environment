@@ -43,14 +43,17 @@ ATerm lf_AUX_ATerm_Lists19_1 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 1 ] ;
 FUNC_ENTRY ( lf_AUX_ATerm_Lists19_1sym , ATmakeAppl ( lf_AUX_ATerm_Lists19_1sym , arg0 , arg1 , arg2 ) ) ;
-if ( check_sym ( arg2 , ef1sym ) ) {
+lbl_lf_AUX_ATerm_Lists19_1 : if ( check_sym ( arg2 , ef1sym ) ) {
 FUNC_EXIT ( arg1 ) ;
 }
 if ( check_sym ( arg2 , ef2sym ) ) {
 {
 ATerm atmp20 = arg_0 ( arg2 ) ;
 tmp [ 0 ] = ( * ef4 ) ( arg0 , ( * ef5 ) ( arg1 , ( * ef6 ) ( ( * ef7 ) ( arg2 ) ) ) ) ;
-FUNC_EXIT ( lf_AUX_ATerm_Lists19_1 ( arg0 , tmp [ 0 ] , ( * ef3 ) ( arg2 ) ) ) ;
+arg0 = arg0 ;
+arg1 = tmp [ 0 ] ;
+arg2 = ( * ef3 ) ( arg2 ) ;
+goto lbl_lf_AUX_ATerm_Lists19_1 ;
 }
 }
 FUNC_EXIT ( make_nf3 ( lf_AUX_ATerm_Lists19_1sym , arg0 , arg1 , arg2 ) ) ;

@@ -43,7 +43,7 @@ ATerm lf_AUX_ATerm_Tables2_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 6 ] ;
 FUNC_ENTRY ( lf_AUX_ATerm_Tables2_1sym , ATmakeAppl ( lf_AUX_ATerm_Tables2_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_ATerm_Tables2_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 FUNC_EXIT ( arg1 ) ;
 }
 if ( check_sym ( arg0 , ef2sym ) ) {
@@ -71,7 +71,9 @@ FUNC_EXIT ( tmp [ 5 ] ) ;
 if ( check_sym ( arg0 , ef2sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
-FUNC_EXIT ( lf_AUX_ATerm_Tables2_1 ( ( * ef7 ) ( arg0 ) , arg1 ) ) ;
+arg0 = ( * ef7 ) ( arg0 ) ;
+arg1 = arg1 ;
+goto lbl_lf_AUX_ATerm_Tables2_1 ;
 }
 }
 FUNC_EXIT ( make_nf2 ( lf_AUX_ATerm_Tables2_1sym , arg0 , arg1 ) ) ;

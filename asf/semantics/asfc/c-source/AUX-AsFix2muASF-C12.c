@@ -33,7 +33,7 @@ ATerm lf_AUX_AsFix2muASF_C12_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 13 ] ;
 FUNC_ENTRY ( lf_AUX_AsFix2muASF_C12_2sym , ATmakeAppl ( lf_AUX_AsFix2muASF_C12_2sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , lf_AUX_AsFix2muASF_C12_1sym ) ) {
+lbl_lf_AUX_AsFix2muASF_C12_2 : if ( check_sym ( arg0 , lf_AUX_AsFix2muASF_C12_1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( arg1 , lf_AUX_AsFix2muASF_C12_1sym ) ) {
@@ -72,7 +72,9 @@ tmp [ 10 ] = list_head ( tmp [ 6 ] ) ;
 tmp [ 11 ] = list_tail ( tmp [ 6 ] ) ;
 if ( is_single_element ( tmp [ 11 ] ) ) {
 tmp [ 12 ] = list_head ( tmp [ 11 ] ) ;
-FUNC_EXIT ( lf_AUX_AsFix2muASF_C12_2 ( lf_AUX_AsFix2muASF_C12_1 ( make_list ( tmp [ 10 ] ) ) , lf_AUX_AsFix2muASF_C12_1 ( make_list ( ( * ef1 ) ( ( * ef2 ) ( lf3 ( ( ATerm ) ATmakeList ( 4 , char_table [ 99 ] , char_table [ 111 ] , char_table [ 110 ] , char_table [ 115 ] ) ) ) , lf_AUX_AsFix2muASF_C12_1 ( cons ( make_list ( tmp [ 12 ] ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ) ) ;
+arg0 = lf_AUX_AsFix2muASF_C12_1 ( make_list ( tmp [ 10 ] ) ) ;
+arg1 = lf_AUX_AsFix2muASF_C12_1 ( make_list ( ( * ef1 ) ( ( * ef2 ) ( lf3 ( cons ( make_list ( make_char ( 99 ) ) , cons ( make_list ( make_char ( 111 ) ) , cons ( make_list ( make_char ( 110 ) ) , make_list ( make_char ( 115 ) ) ) ) ) ) ) , lf_AUX_AsFix2muASF_C12_1 ( cons ( make_list ( tmp [ 12 ] ) , make_list ( tmp [ 1 ] ) ) ) ) ) ) ;
+goto lbl_lf_AUX_AsFix2muASF_C12_2 ;
 }
 }
 }

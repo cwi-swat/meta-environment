@@ -44,17 +44,13 @@ ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid
 ef5 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_VarEnv24 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_VarEnv24_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 38 ] ;
 FUNC_ENTRY ( lf_AUX_VarEnv24_2sym , ATmakeAppl ( lf_AUX_VarEnv24_2sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , lf_AUX_VarEnv24_1sym ) ) {
+lbl_lf_AUX_VarEnv24_2 : if ( check_sym ( arg1 , lf_AUX_VarEnv24_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( not_empty_list ( atmp10 ) ) {
@@ -138,7 +134,7 @@ if ( is_single_element ( tmp [ 31 ] ) ) {
 tmp [ 32 ] = list_head ( tmp [ 31 ] ) ;
 if ( term_equal ( tmp [ 32 ] , make_char ( 114 ) ) ) {
 if ( term_equal ( arg0 , tmp [ 3 ] ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef5 ) ( ) ) ;
+FUNC_EXIT ( ( * ef5 ) ( ) ) ;
 }
 if ( check_sym ( arg0 , ef4sym ) ) {
 tmp [ 33 ] = arg_0 ( arg0 ) ;
@@ -152,7 +148,7 @@ if ( not_empty_list ( tmp [ 36 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 36 ] ) , make_char ( 95 ) ) ) {
 tmp [ 37 ] = list_tail ( tmp [ 36 ] ) ;
 if ( term_equal ( ( * ef4 ) ( lf4 ( make_list ( tmp [ 34 ] ) ) ) , ( * ef4 ) ( lf4 ( make_list ( tmp [ 37 ] ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef5 ) ( ) ) ;
+FUNC_EXIT ( ( * ef5 ) ( ) ) ;
 }
 }
 }
@@ -209,7 +205,7 @@ tmp [ 5 ] = tmp [ 7 ] ;
 }
 }
 else {
-FUNC_EXIT_CONST ( constant1 , ( * ef1 ) ( ) ) ;
+FUNC_EXIT ( ( * ef1 ) ( ) ) ;
 }
 }
 }
@@ -225,7 +221,9 @@ tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
 tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf3sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
-FUNC_EXIT ( lf_AUX_VarEnv24_2 ( arg0 , lf_AUX_VarEnv24_1 ( make_list ( tmp [ 1 ] ) ) ) ) ;
+arg0 = arg0 ;
+arg1 = lf_AUX_VarEnv24_1 ( make_list ( tmp [ 1 ] ) ) ;
+goto lbl_lf_AUX_VarEnv24_2 ;
 }
 }
 }

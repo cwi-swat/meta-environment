@@ -44,16 +44,14 @@ ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"fals
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_Check_List_Pats12 ( ) {
 ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Check_List_Pats12_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 5 ] ;
 FUNC_ENTRY ( lf_AUX_Check_List_Pats12_1sym , ATmakeAppl ( lf_AUX_Check_List_Pats12_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Check_List_Pats12_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
@@ -83,9 +81,9 @@ if ( is_single_element ( tmp [ 3 ] ) ) {
 if ( term_equal ( list_head ( tmp [ 3 ] ) , make_char ( 34 ) ) ) {
 if ( is_single_element ( atmp110 ) ) {
 tmp [ 4 ] = list_head ( atmp110 ) ;
-if ( term_equal ( ( * ef4 ) ( atmp10 ) , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
-if ( term_equal ( ( * ef5 ) ( tmp [ 4 ] ) , ( constant0 ? constant0 : ( constant0 = ( * ef3 ) ( ) ) ) ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
+if ( term_equal ( ( * ef4 ) ( atmp10 ) , ( * ef3 ) ( ) ) ) {
+if ( term_equal ( ( * ef5 ) ( tmp [ 4 ] ) , ( * ef3 ) ( ) ) ) {
+FUNC_EXIT ( ( * ef3 ) ( ) ) ;
 }
 }
 }
@@ -118,8 +116,10 @@ if ( check_sym ( atmp11 , lf3sym ) ) {
 ATerm atmp110 = arg_0 ( atmp11 ) ;
 if ( is_single_element ( atmp110 ) ) {
 tmp [ 0 ] = list_head ( atmp110 ) ;
-if ( term_equal ( ( * ef4 ) ( atmp10 ) , ( constant1 ? constant1 : ( constant1 = ( * ef6 ) ( ) ) ) ) ) {
-FUNC_EXIT ( lf_AUX_Check_List_Pats12_1 ( arg0 , tmp [ 0 ] ) ) ;
+if ( term_equal ( ( * ef4 ) ( atmp10 ) , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
+arg0 = arg0 ;
+arg1 = tmp [ 0 ] ;
+goto lbl_lf_AUX_Check_List_Pats12_1 ;
 }
 }
 }
@@ -127,7 +127,7 @@ FUNC_EXIT ( lf_AUX_Check_List_Pats12_1 ( arg0 , tmp [ 0 ] ) ) ;
 }
 }
 }
-FUNC_EXIT_CONST ( constant1 , ( * ef6 ) ( ) ) ;
+FUNC_EXIT_CONST ( constant0 , ( * ef6 ) ( ) ) ;
 FUNC_EXIT ( make_nf2 ( lf_AUX_Check_List_Pats12_1sym , arg0 , arg1 ) ) ;
 }
 }

@@ -1,22 +1,20 @@
 #include  "support.h"
 static Symbol lf_AUX_Locate_Constants2_1sym ;
 static ATerm lf_AUX_Locate_Constants2_1 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef3sym ;
-static funcptr ef3 ;
 static Symbol ef4sym ;
 static funcptr ef4 ;
 static Symbol ef5sym ;
 static funcptr ef5 ;
-static Symbol lf2sym ;
-static ATerm lf2 ( ATerm arg1 ) ;
+static Symbol lf3sym ;
+static ATerm lf3 ( ATerm arg1 ) ;
 static Symbol ef6sym ;
 static funcptr ef6 ;
 static Symbol ef7sym ;
 static funcptr ef7 ;
 static Symbol ef8sym ;
 static funcptr ef8 ;
-static Symbol lf3sym ;
-static ATerm lf3 ( ATerm arg1 ) ;
+static Symbol lf4sym ;
+static ATerm lf4 ( ATerm arg1 ) ;
 static Symbol ef9sym ;
 static funcptr ef9 ;
 static Symbol ef1sym ;
@@ -33,43 +31,50 @@ static Symbol ef14sym ;
 static funcptr ef14 ;
 static Symbol ef15sym ;
 static funcptr ef15 ;
-static Symbol lf5sym ;
-static ATerm lf5 ( ATerm arg1 ) ;
+static Symbol lf6sym ;
+static ATerm lf6 ( ATerm arg1 ) ;
 static Symbol ef16sym ;
 static funcptr ef16 ;
 static Symbol ef17sym ;
 static funcptr ef17 ;
 static Symbol ef18sym ;
 static funcptr ef18 ;
-static Symbol lf4sym ;
-static ATerm lf4 ( ATerm arg1 ) ;
+static Symbol lf5sym ;
+static ATerm lf5 ( ATerm arg1 ) ;
 static Symbol ef2sym ;
 static funcptr ef2 ;
+static Symbol ef3sym ;
+static funcptr ef3 ;
+static Symbol lf2sym ;
+static ATerm lf2 ( ATerm arg1 ) ;
 void register_AUX_Locate_Constants2 ( ) {
 lf_AUX_Locate_Constants2_1sym = ATmakeSymbol ( "prod(id(\"Locate-Constants\"),w(\"\"),[l(\"locate-constants-in-decls\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ModId\"),w(\"\"),l(\",\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)"
  , 2 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_Locate_Constants2_1sym ) ;
-lf2sym = ATmakeSymbol ( "listtype(sort(\"Type-specifier\"))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf2sym ) ;
-lf3sym = ATmakeSymbol ( "listtype(sort(\"Parameter-declaration\"),ql(\",\"))" , 1 , ATtrue ) ;
+lf3sym = ATmakeSymbol ( "listtype(sort(\"Type-specifier\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf3sym ) ;
-lf5sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
-ATprotectSymbol ( lf5sym ) ;
-lf4sym = ATmakeSymbol ( "listtype(sort(\"CE-pair\"),ql(\",\"))" , 1 , ATtrue ) ;
+lf4sym = ATmakeSymbol ( "listtype(sort(\"Parameter-declaration\"),ql(\",\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf4sym ) ;
+lf6sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf6sym ) ;
+lf5sym = ATmakeSymbol ( "listtype(sort(\"CE-pair\"),ql(\",\"))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf5sym ) ;
+lf2sym = ATmakeSymbol ( "listtype(sort(\"Declaration\"))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf2sym ) ;
 register_prod ( ATparse ( "prod(id(\"Locate-Constants\"),w(\"\"),[l(\"locate-constants-in-decls\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ModId\"),w(\"\"),l(\",\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)" ) , lf_AUX_Locate_Constants2_1 , lf_AUX_Locate_Constants2_1sym ) ;
-register_prod ( ATparse ( "listtype(sort(\"Type-specifier\"))" ) , lf2 , lf2sym ) ;
-register_prod ( ATparse ( "listtype(sort(\"Parameter-declaration\"),ql(\",\"))" ) , lf3 , lf3sym ) ;
-register_prod ( ATparse ( "listtype(sort(\"CE-pair\"),ql(\",\"))" ) , lf4 , lf4sym ) ;
-register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf5 , lf5sym ) ;
+register_prod ( ATparse ( "listtype(sort(\"Declaration\"))" ) , lf2 , lf2sym ) ;
+register_prod ( ATparse ( "listtype(sort(\"Type-specifier\"))" ) , lf3 , lf3sym ) ;
+register_prod ( ATparse ( "listtype(sort(\"Parameter-declaration\"),ql(\",\"))" ) , lf4 , lf4sym ) ;
+register_prod ( ATparse ( "listtype(sort(\"CE-pair\"),ql(\",\"))" ) , lf5 , lf5sym ) ;
+register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf6 , lf6sym ) ;
 }
 void resolve_AUX_Locate_Constants2 ( ) {
 ef1 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)" ) ) ;
 ef1sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)" ) ) ;
 ef2 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-list\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)" ) ) ;
 ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-list\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),no-attrs)" ) ) ;
-ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list\"),w(\"\"),no-attrs)" ) ) ;
-ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list\"),w(\"\"),no-attrs)" ) ) ;
+ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[iter(sort(\"Declaration\"),w(\"\"),l(\"+\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list\"),w(\"\"),no-attrs)" ) ) ;
+ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[iter(sort(\"Declaration\"),w(\"\"),l(\"+\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-list\"),w(\"\"),no-attrs)" ) ) ;
 ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-specifiers\"),w(\"\"),sort(\"Declarator\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration\"),w(\"\"),no-attrs)" ) ) ;
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Declaration-specifiers\"),w(\"\"),sort(\"Declarator\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration\"),w(\"\"),no-attrs)" ) ) ;
 ef5 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[iter(sort(\"Type-specifier\"),w(\"\"),l(\"+\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Declaration-specifiers\"),w(\"\"),no-attrs)" ) ) ;
@@ -107,27 +112,55 @@ ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Locate_Constants2_1 ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 8 ] ;
+ATerm tmp [ 12 ] ;
 FUNC_ENTRY ( lf_AUX_Locate_Constants2_1sym , ATmakeAppl ( lf_AUX_Locate_Constants2_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 tmp [ 0 ] = ( * ef11 ) ( arg0 ) ;
-FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( ( * ef4 ) ( ( * ef5 ) ( lf2 ( make_list ( ( * ef6 ) ( ) ) ) ) , ( * ef7 ) ( tmp [ 0 ] , ( * ef8 ) ( lf3 ( make_list ( null ( ) ) ) ) ) , ( * ef9 ) ( arg1 , ( * ef10 ) ( ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( ( * ef4 ) ( ( * ef5 ) ( lf3 ( make_list ( ( * ef6 ) ( ) ) ) ) , ( * ef7 ) ( tmp [ 0 ] , ( * ef8 ) ( lf4 ( make_list ( null ( ) ) ) ) ) , ( * ef9 ) ( arg1 , ( * ef10 ) ( ) ) ) ) ) ) ) ) ;
 }
 if ( check_sym ( arg1 , ef2sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
+if ( check_sym ( atmp10 , ef3sym ) ) {
+{
+ATerm atmp100 = arg_0 ( atmp10 ) ;
+if ( check_sym ( atmp100 , lf2sym ) ) {
+{
+ATerm atmp1000 = arg_0 ( atmp100 ) ;
+if ( not_empty_list ( atmp1000 ) ) {
 tmp [ 0 ] = ( * ef11 ) ( arg0 ) ;
-tmp [ 1 ] = ( * ef13 ) ( atmp10 , ( constant0 ? constant0 : ( constant0 = ( * ef14 ) ( lf4 ( make_list ( null ( ) ) ) , ( * ef15 ) ( ( * ef16 ) ( lf5 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ;
+tmp [ 1 ] = ( * ef13 ) ( ( * ef3 ) ( lf2 ( make_list ( atmp1000 ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef14 ) ( lf5 ( make_list ( null ( ) ) ) , ( * ef15 ) ( ( * ef16 ) ( lf6 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ) ) ;
 if ( check_sym ( tmp [ 1 ] , ef17sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 1 ] ) ;
 tmp [ 3 ] = arg_1 ( tmp [ 1 ] ) ;
 tmp [ 4 ] = arg_2 ( tmp [ 1 ] ) ;
-if ( check_sym ( tmp [ 2 ] , lf4sym ) ) {
+if ( check_sym ( tmp [ 2 ] , lf5sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 2 ] ) ;
-tmp [ 6 ] = ( * ef18 ) ( arg0 , lf4 ( make_list ( tmp [ 5 ] ) ) ) ;
-if ( check_sym ( tmp [ 6 ] , ef2sym ) ) {
+if ( check_sym ( tmp [ 3 ] , ef3sym ) ) {
+tmp [ 6 ] = arg_0 ( tmp [ 3 ] ) ;
+if ( check_sym ( tmp [ 6 ] , lf2sym ) ) {
 tmp [ 7 ] = arg_0 ( tmp [ 6 ] ) ;
-FUNC_EXIT ( ( * ef12 ) ( ( * ef2 ) ( tmp [ 7 ] ) , ( * ef2 ) ( tmp [ 3 ] ) ) ) ;
+if ( not_empty_list ( tmp [ 7 ] ) ) {
+tmp [ 8 ] = ( * ef18 ) ( arg0 , lf5 ( make_list ( tmp [ 5 ] ) ) ) ;
+if ( check_sym ( tmp [ 8 ] , ef2sym ) ) {
+tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ;
+if ( check_sym ( tmp [ 9 ] , ef3sym ) ) {
+tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ;
+if ( check_sym ( tmp [ 10 ] , lf2sym ) ) {
+tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ;
+if ( not_empty_list ( tmp [ 11 ] ) ) {
+FUNC_EXIT ( ( * ef12 ) ( ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 11 ] ) ) ) ) , ( * ef2 ) ( ( * ef3 ) ( lf2 ( make_list ( tmp [ 7 ] ) ) ) ) ) ) ;
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
 }
 }
 }
@@ -136,20 +169,24 @@ FUNC_EXIT ( ( * ef12 ) ( ( * ef2 ) ( tmp [ 7 ] ) , ( * ef2 ) ( tmp [ 3 ] ) ) ) ;
 FUNC_EXIT ( make_nf2 ( lf_AUX_Locate_Constants2_1sym , arg0 , arg1 ) ) ;
 }
 }
-ATerm lf4 ( ATerm arg0 ) {
-CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
+ATerm lf2 ( ATerm arg0 ) {
+CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 ATerm lf5 ( ATerm arg0 ) {
 CONS_ENTRY ( lf5sym , ATmakeAppl ( lf5sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf5sym , arg0 ) ) ;
 }
+ATerm lf6 ( ATerm arg0 ) {
+CONS_ENTRY ( lf6sym , ATmakeAppl ( lf6sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf6sym , arg0 ) ) ;
+}
+ATerm lf4 ( ATerm arg0 ) {
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
+}
 ATerm lf3 ( ATerm arg0 ) {
 CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
-}
-ATerm lf2 ( ATerm arg0 ) {
-CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
-CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 }
 

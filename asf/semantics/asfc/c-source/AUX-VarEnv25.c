@@ -46,7 +46,7 @@ ATerm lf_AUX_VarEnv25_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 34 ] ;
 FUNC_ENTRY ( lf_AUX_VarEnv25_2sym , ATmakeAppl ( lf_AUX_VarEnv25_2sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , lf_AUX_VarEnv25_1sym ) ) {
+lbl_lf_AUX_VarEnv25_2 : if ( check_sym ( arg1 , lf_AUX_VarEnv25_1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( not_empty_list ( atmp10 ) ) {
@@ -198,7 +198,9 @@ tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
 tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ;
 if ( check_sym ( tmp [ 4 ] , lf3sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
-FUNC_EXIT ( lf_AUX_VarEnv25_2 ( arg0 , lf_AUX_VarEnv25_1 ( make_list ( tmp [ 1 ] ) ) ) ) ;
+arg0 = arg0 ;
+arg1 = lf_AUX_VarEnv25_1 ( make_list ( tmp [ 1 ] ) ) ;
+goto lbl_lf_AUX_VarEnv25_2 ;
 }
 }
 }

@@ -84,7 +84,7 @@ ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_ParseTrees21_1 ( ATerm arg0 ) {
 FUNC_ENTRY ( lf_AUX_ParseTrees21_1sym , ATmakeAppl ( lf_AUX_ParseTrees21_1sym , arg0 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_ParseTrees21_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
@@ -103,7 +103,8 @@ ATerm atmp01 = arg_1 ( arg0 ) ;
 if ( check_sym ( atmp01 , ef4sym ) ) {
 {
 ATerm atmp010 = arg_0 ( atmp01 ) ;
-FUNC_EXIT ( lf_AUX_ParseTrees21_1 ( atmp010 ) ) ;
+arg0 = atmp010 ;
+goto lbl_lf_AUX_ParseTrees21_1 ;
 }
 }
 }
@@ -129,7 +130,8 @@ ATerm atmp000 = arg_0 ( atmp00 ) ;
 if ( check_sym ( atmp000 , ef4sym ) ) {
 {
 ATerm atmp0000 = arg_0 ( atmp000 ) ;
-FUNC_EXIT ( lf_AUX_ParseTrees21_1 ( atmp0000 ) ) ;
+arg0 = atmp0000 ;
+goto lbl_lf_AUX_ParseTrees21_1 ;
 }
 }
 }

@@ -46,17 +46,13 @@ ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Signs\"),w(\"\"),[l(\"
 ef8 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-Signs\"),w(\"\"),[l(\"remove-ssfuncdef\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),l(\",\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),no-attrs)" ) ) ;
 ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"MuASF-Signs\"),w(\"\"),[l(\"remove-ssfuncdef\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),l(\",\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FuncDefList\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_MuASF_Signs2 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_MuASF_Signs2_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 13 ] ;
 FUNC_ENTRY ( lf_AUX_MuASF_Signs2_1sym , ATmakeAppl ( lf_AUX_MuASF_Signs2_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_MuASF_Signs2_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , lf2sym ) ) {
@@ -72,16 +68,18 @@ if ( not_empty_list ( atmp000 ) ) {
 tmp [ 0 ] = list_head ( atmp000 ) ;
 tmp [ 1 ] = list_tail ( atmp000 ) ;
 tmp [ 2 ] = ( * ef2 ) ( tmp [ 0 ] ) ;
-if ( term_equal ( tmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 2 ] , ( * ef6 ) ( ) ) ) {
 tmp [ 3 ] = ( * ef5 ) ( tmp [ 0 ] , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) ;
-if ( term_equal ( tmp [ 3 ] , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
-FUNC_EXIT ( lf_AUX_MuASF_Signs2_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) ) ;
+if ( term_equal ( tmp [ 3 ] , ( * ef3 ) ( ) ) ) {
+arg0 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+arg1 = ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ;
+goto lbl_lf_AUX_MuASF_Signs2_1 ;
 }
-tmp [ 4 ] = ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ;
+tmp [ 4 ] = ( * ef6 ) ( ) ;
 if ( term_equal ( tmp [ 3 ] , tmp [ 4 ] ) ) {
 tmp [ 5 ] = ( * ef7 ) ( tmp [ 0 ] ) ;
 tmp [ 6 ] = ( * ef5 ) ( tmp [ 5 ] , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) ;
-if ( term_equal ( tmp [ 6 ] , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 6 ] , ( * ef6 ) ( ) ) ) {
 tmp [ 7 ] = lf_AUX_MuASF_Signs2_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) ;
 if ( check_sym ( tmp [ 7 ] , ef1sym ) ) {
 tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ;
@@ -91,7 +89,7 @@ FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [
 }
 }
 }
-if ( term_equal ( tmp [ 6 ] , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 6 ] , ( * ef3 ) ( ) ) ) {
 tmp [ 7 ] = ( * ef8 ) ( tmp [ 5 ] , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) ;
 if ( check_sym ( tmp [ 7 ] , ef1sym ) ) {
 tmp [ 8 ] = arg_0 ( tmp [ 7 ] ) ;
@@ -110,21 +108,25 @@ FUNC_EXIT ( ( * ef1 ) ( lf2 ( cons ( make_list ( tmp [ 0 ] ) , make_list ( tmp [
 }
 }
 }
-tmp [ 3 ] = ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ;
+tmp [ 3 ] = ( * ef3 ) ( ) ;
 if ( term_equal ( tmp [ 2 ] , tmp [ 3 ] ) ) {
 tmp [ 4 ] = ( * ef4 ) ( tmp [ 0 ] ) ;
 tmp [ 5 ] = ( * ef5 ) ( tmp [ 4 ] , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) ;
-if ( term_equal ( tmp [ 5 ] , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
-FUNC_EXIT ( lf_AUX_MuASF_Signs2_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) ) ;
+if ( term_equal ( tmp [ 5 ] , ( * ef3 ) ( ) ) ) {
+arg0 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+arg1 = ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ;
+goto lbl_lf_AUX_MuASF_Signs2_1 ;
 }
-if ( term_equal ( tmp [ 5 ] , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
-if ( term_equal ( ( * ef5 ) ( tmp [ 0 ] , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) , ( constant1 ? constant1 : ( constant1 = ( * ef3 ) ( ) ) ) ) ) {
-FUNC_EXIT ( lf_AUX_MuASF_Signs2_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) ) ;
+if ( term_equal ( tmp [ 5 ] , ( * ef6 ) ( ) ) ) {
+if ( term_equal ( ( * ef5 ) ( tmp [ 0 ] , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) , ( * ef3 ) ( ) ) ) {
+arg0 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+arg1 = ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ;
+goto lbl_lf_AUX_MuASF_Signs2_1 ;
 }
 }
-if ( term_equal ( ( * ef5 ) ( tmp [ 0 ] , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef5 ) ( tmp [ 0 ] , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) , ( * ef6 ) ( ) ) ) {
 tmp [ 4 ] = ( * ef4 ) ( tmp [ 0 ] ) ;
-if ( term_equal ( ( * ef5 ) ( tmp [ 4 ] , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef6 ) ( ) ) ) ) ) {
+if ( term_equal ( ( * ef5 ) ( tmp [ 4 ] , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) , ( * ef6 ) ( ) ) ) {
 tmp [ 5 ] = lf_AUX_MuASF_Signs2_1 ( ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) , ( * ef1 ) ( lf2 ( make_list ( atmp100 ) ) ) ) ;
 if ( check_sym ( tmp [ 5 ] , ef1sym ) ) {
 tmp [ 6 ] = arg_0 ( tmp [ 5 ] ) ;

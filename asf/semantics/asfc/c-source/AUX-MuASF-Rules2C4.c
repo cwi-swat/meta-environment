@@ -15,6 +15,8 @@ static Symbol ef6sym ;
 static funcptr ef6 ;
 static Symbol ef7sym ;
 static funcptr ef7 ;
+static Symbol lf4sym ;
+static ATerm lf4 ( ATerm arg1 ) ;
 static Symbol ef8sym ;
 static funcptr ef8 ;
 static Symbol ef2sym ;
@@ -37,6 +39,8 @@ void register_AUX_MuASF_Rules2C4 ( ) {
 lf_AUX_MuASF_Rules2C4_1sym = ATmakeSymbol ( "prod(id(\"MuASF-Rules2C\"),w(\"\"),[l(\"funargs2cstats\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),l(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SlI-tuple\"),w(\"\"),no-attrs)"
  , 3 , ATtrue ) ;
 ATprotectSymbol ( lf_AUX_MuASF_Rules2C4_1sym ) ;
+lf4sym = ATmakeSymbol ( "listtype(sort(\"Statement\"))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf4sym ) ;
 lf3sym = ATmakeSymbol ( "listtype(sort(\"Expression\"),ql(\",\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf3sym ) ;
 lf2sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
@@ -44,6 +48,7 @@ ATprotectSymbol ( lf2sym ) ;
 register_prod ( ATparse ( "prod(id(\"MuASF-Rules2C\"),w(\"\"),[l(\"funargs2cstats\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),l(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SlI-tuple\"),w(\"\"),no-attrs)" ) , lf_AUX_MuASF_Rules2C4_1 , lf_AUX_MuASF_Rules2C4_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf2 , lf2sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"Expression\"),ql(\",\"))" ) , lf3 , lf3sym ) ;
+register_prod ( ATparse ( "listtype(sort(\"Statement\"))" ) , lf4 , lf4sym ) ;
 }
 void resolve_AUX_MuASF_Rules2C4 ( ) {
 ef1 = lookup_func ( ATreadFromString ( "prod(id(\"caller\"),w(\"\"),[l(\"funid\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)" ) ) ;
@@ -58,8 +63,8 @@ ef5 = lookup_func ( ATreadFromString ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"(
 ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"IntCon\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"SlI-tuple\"),w(\"\"),no-attrs)" ) ) ;
 ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement-list\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" ) ) ;
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement-list\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" ) ) ;
-ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)" ) ) ;
-ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)" ) ) ;
+ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[iter(sort(\"Statement\"),w(\"\"),l(\"+\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)" ) ) ;
+ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[iter(sort(\"Statement\"),w(\"\"),l(\"+\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)" ) ) ;
 ef8 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Expression\"),w(\"\"),ql(\";\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)" ) ) ;
 ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Expression\"),w(\"\"),ql(\";\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)" ) ) ;
 ef9 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Cast-expression\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Expression\"),w(\"\"),no-attrs)" ) ) ;
@@ -123,7 +128,7 @@ ATerm atmp2000 = arg_0 ( atmp200 ) ;
 if ( ! not_empty_list ( atmp100 ) ) {
 if ( is_single_element ( atmp2000 ) ) {
 if ( term_equal ( list_head ( atmp2000 ) , make_char ( 48 ) ) ) {
-FUNC_EXIT ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ( * ef11 ) ( ( * ef12 ) ( ( * ef13 ) ( lf2 ( ( ATerm ) ATmakeList ( 9 , char_table [ 70 ] , char_table [ 85 ] , char_table [ 78 ] , char_table [ 67 ] , char_table [ 95 ] , char_table [ 69 ] , char_table [ 88 ] , char_table [ 73 ] , char_table [ 84 ] ) ) ) ) , ( * ef2 ) ( lf3 ( make_list ( ( * ef9 ) ( ( * ef10 ) ( ( * ef11 ) ( ( * ef12 ) ( ( * ef13 ) ( lf2 ( ( ATerm ) ATmakeList ( 8 , char_table [ 109 ] , char_table [ 97 ] , char_table [ 107 ] , char_table [ 101 ] , char_table [ 95 ] , char_table [ 110 ] , char_table [ 102 ] , char_table [ 48 ] ) ) ) ) , ( * ef2 ) ( lf3 ( make_list ( ( * ef9 ) ( ( * ef10 ) ( ( * ef12 ) ( ( * ef13 ) ( lf2 ( cons ( make_list ( atmp000 ) , ( ATerm ) ATmakeList ( 3 , char_table [ 115 ] , char_table [ 121 ] , char_table [ 109 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef3 ) ( ( * ef4 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef5 ) ( ( * ef6 ) ( ( * ef7 ) ( lf4 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ( * ef11 ) ( ( * ef12 ) ( ( * ef13 ) ( lf2 ( ( ATerm ) ATmakeList ( 9 , char_table [ 70 ] , char_table [ 85 ] , char_table [ 78 ] , char_table [ 67 ] , char_table [ 95 ] , char_table [ 69 ] , char_table [ 88 ] , char_table [ 73 ] , char_table [ 84 ] ) ) ) ) , ( * ef2 ) ( lf3 ( make_list ( ( * ef9 ) ( ( * ef10 ) ( ( * ef11 ) ( ( * ef12 ) ( ( * ef13 ) ( lf2 ( ( ATerm ) ATmakeList ( 8 , char_table [ 109 ] , char_table [ 97 ] , char_table [ 107 ] , char_table [ 101 ] , char_table [ 95 ] , char_table [ 110 ] , char_table [ 102 ] , char_table [ 48 ] ) ) ) ) , ( * ef2 ) ( lf3 ( make_list ( ( * ef9 ) ( ( * ef10 ) ( ( * ef12 ) ( ( * ef13 ) ( lf2 ( cons ( make_list ( atmp000 ) , ( ATerm ) ATmakeList ( 3 , char_table [ 115 ] , char_table [ 121 ] , char_table [ 109 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef3 ) ( ( * ef4 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -147,7 +152,7 @@ if ( check_sym ( atmp200 , lf2sym ) ) {
 {
 ATerm atmp2000 = arg_0 ( atmp200 ) ;
 tmp [ 0 ] = ( * ef14 ) ( ( * ef2 ) ( lf3 ( make_list ( ( * ef9 ) ( ( * ef10 ) ( ( * ef12 ) ( ( * ef13 ) ( lf2 ( cons ( make_list ( atmp000 ) , ( constant0 ? constant0 : ( constant0 = cons ( make_list ( make_char ( 115 ) ) , cons ( make_list ( make_char ( 121 ) ) , make_list ( make_char ( 109 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , arg1 ) ;
-tmp [ 1 ] = ( * ef6 ) ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ( * ef11 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef12 ) ( ( * ef13 ) ( lf2 ( cons ( make_list ( make_char ( 70 ) ) , cons ( make_list ( make_char ( 85 ) ) , cons ( make_list ( make_char ( 78 ) ) , cons ( make_list ( make_char ( 67 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 69 ) ) , cons ( make_list ( make_char ( 88 ) ) , cons ( make_list ( make_char ( 73 ) ) , make_list ( make_char ( 84 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef2 ) ( lf3 ( make_list ( ( * ef9 ) ( ( * ef10 ) ( ( * ef11 ) ( ( * ef12 ) ( ( * ef13 ) ( lf2 ( cons ( ( constant2 ? constant2 : ( constant2 = make_list ( make_char ( 109 ) ) ) ) , cons ( ( constant3 ? constant3 : ( constant3 = make_list ( make_char ( 97 ) ) ) ) , cons ( ( constant4 ? constant4 : ( constant4 = make_list ( make_char ( 107 ) ) ) ) , cons ( ( constant5 ? constant5 : ( constant5 = make_list ( make_char ( 101 ) ) ) ) , cons ( ( constant6 ? constant6 : ( constant6 = make_list ( make_char ( 95 ) ) ) ) , cons ( ( constant7 ? constant7 : ( constant7 = make_list ( make_char ( 110 ) ) ) ) , cons ( ( constant8 ? constant8 : ( constant8 = make_list ( make_char ( 102 ) ) ) ) , make_list ( atmp2000 ) ) ) ) ) ) ) ) ) ) ) , tmp [ 0 ] ) ) ) ) ) ) ) ) ) ) ) ) ;
+tmp [ 1 ] = ( * ef6 ) ( ( * ef7 ) ( lf4 ( make_list ( ( * ef8 ) ( ( * ef9 ) ( ( * ef10 ) ( ( * ef11 ) ( ( constant1 ? constant1 : ( constant1 = ( * ef12 ) ( ( * ef13 ) ( lf2 ( cons ( make_list ( make_char ( 70 ) ) , cons ( make_list ( make_char ( 85 ) ) , cons ( make_list ( make_char ( 78 ) ) , cons ( make_list ( make_char ( 67 ) ) , cons ( make_list ( make_char ( 95 ) ) , cons ( make_list ( make_char ( 69 ) ) , cons ( make_list ( make_char ( 88 ) ) , cons ( make_list ( make_char ( 73 ) ) , make_list ( make_char ( 84 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) , ( * ef2 ) ( lf3 ( make_list ( ( * ef9 ) ( ( * ef10 ) ( ( * ef11 ) ( ( * ef12 ) ( ( * ef13 ) ( lf2 ( cons ( ( constant2 ? constant2 : ( constant2 = make_list ( make_char ( 109 ) ) ) ) , cons ( ( constant3 ? constant3 : ( constant3 = make_list ( make_char ( 97 ) ) ) ) , cons ( ( constant4 ? constant4 : ( constant4 = make_list ( make_char ( 107 ) ) ) ) , cons ( ( constant5 ? constant5 : ( constant5 = make_list ( make_char ( 101 ) ) ) ) , cons ( ( constant6 ? constant6 : ( constant6 = make_list ( make_char ( 95 ) ) ) ) , cons ( ( constant7 ? constant7 : ( constant7 = make_list ( make_char ( 110 ) ) ) ) , cons ( ( constant8 ? constant8 : ( constant8 = make_list ( make_char ( 102 ) ) ) ) , make_list ( atmp2000 ) ) ) ) ) ) ) ) ) ) ) , tmp [ 0 ] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ;
 FUNC_EXIT ( ( * ef5 ) ( tmp [ 1 ] , ( * ef3 ) ( ( * ef4 ) ( lf2 ( make_list ( make_char ( 48 ) ) ) ) ) ) ) ;
 }
 }
@@ -169,5 +174,9 @@ CONS_EXIT ( make_nf1 ( lf2sym , arg0 ) ) ;
 ATerm lf3 ( ATerm arg0 ) {
 CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
 CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
+}
+ATerm lf4 ( ATerm arg0 ) {
+CONS_ENTRY ( lf4sym , ATmakeAppl ( lf4sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf4sym , arg0 ) ) ;
 }
 

@@ -73,7 +73,7 @@ ATerm lf_AUX_ParseTrees13_2 ( ATerm arg0 , ATerm arg1 , ATerm arg2 ) {
 {
 ATerm tmp [ 4 ] ;
 FUNC_ENTRY ( lf_AUX_ParseTrees13_2sym , ATmakeAppl ( lf_AUX_ParseTrees13_2sym , arg0 , arg1 , arg2 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_ParseTrees13_2 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
@@ -127,7 +127,10 @@ if ( not_empty_list ( atmp10 ) ) {
 tmp [ 0 ] = list_head ( atmp10 ) ;
 tmp [ 1 ] = list_tail ( atmp10 ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-FUNC_EXIT ( lf_AUX_ParseTrees13_2 ( arg0 , lf_AUX_ParseTrees13_1 ( make_list ( tmp [ 0 ] ) ) , lf_AUX_ParseTrees13_2 ( ( * ef12 ) ( arg0 , lf_AUX_ParseTrees13_1 ( make_list ( tmp [ 0 ] ) ) ) , lf_AUX_ParseTrees13_1 ( make_list ( tmp [ 1 ] ) ) , arg2 ) ) ) ;
+arg0 = arg0 ;
+arg1 = lf_AUX_ParseTrees13_1 ( make_list ( tmp [ 0 ] ) ) ;
+arg2 = lf_AUX_ParseTrees13_2 ( ( * ef12 ) ( arg0 , lf_AUX_ParseTrees13_1 ( make_list ( tmp [ 0 ] ) ) ) , lf_AUX_ParseTrees13_1 ( make_list ( tmp [ 1 ] ) ) , arg2 ) ;
+goto lbl_lf_AUX_ParseTrees13_2 ;
 }
 }
 }

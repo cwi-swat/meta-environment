@@ -37,15 +37,13 @@ ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"IntCon\"),w(\"\"),[ql(\"-\")
 ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Basic-Integers\"),w(\"\"),[sort(\"Int\"),w(\"\"),ql(\"+\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
 ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Basic-Integers\"),w(\"\"),[sort(\"Int\"),w(\"\"),ql(\"+\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))" ) ) ;
 }
-static ATerm constant0 = NULL ;
 void init_AUX_Integers2 ( ) {
-ATprotect ( & constant0 ) ;
 }
 ATerm lf_AUX_Integers2_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 3 ] ;
 FUNC_ENTRY ( lf_AUX_Integers2_1sym , ATmakeAppl ( lf_AUX_Integers2_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Integers2_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
@@ -58,7 +56,7 @@ if ( check_sym ( atmp10 , ef2sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
 tmp [ 0 ] = ( * ef4 ) ( atmp000 , atmp100 ) ;
-if ( term_equal ( tmp [ 0 ] , ( constant0 ? constant0 : ( constant0 = ( * ef5 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 0 ] , ( * ef5 ) ( ) ) ) {
 FUNC_EXIT ( ( * ef1 ) ( ( * ef2 ) ( ( * ef3 ) ( atmp000 , atmp100 ) ) ) ) ;
 }
 else {
@@ -105,7 +103,9 @@ ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , ef6sym ) ) {
 {
 ATerm atmp100 = arg_0 ( atmp10 ) ;
-FUNC_EXIT ( lf_AUX_Integers2_1 ( ( * ef1 ) ( ( * ef2 ) ( atmp100 ) ) , ( * ef1 ) ( ( * ef2 ) ( atmp000 ) ) ) ) ;
+arg0 = ( * ef1 ) ( ( * ef2 ) ( atmp100 ) ) ;
+arg1 = ( * ef1 ) ( ( * ef2 ) ( atmp000 ) ) ;
+goto lbl_lf_AUX_Integers2_1 ;
 }
 }
 }

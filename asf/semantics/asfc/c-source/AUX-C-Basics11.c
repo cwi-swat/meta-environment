@@ -30,17 +30,13 @@ ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\
 ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_C_Basics11 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_C_Basics11_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 4 ] ;
 FUNC_ENTRY ( lf_AUX_C_Basics11_1sym , ATmakeAppl ( lf_AUX_C_Basics11_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , ef1sym ) ) {
+lbl_lf_AUX_C_Basics11_1 : if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
@@ -55,17 +51,19 @@ if ( check_sym ( tmp [ 0 ] , ef3sym ) ) {
 tmp [ 2 ] = arg_0 ( tmp [ 0 ] ) ;
 tmp [ 3 ] = arg_1 ( tmp [ 0 ] ) ;
 if ( ! term_equal ( arg0 , tmp [ 2 ] ) ) {
-FUNC_EXIT ( lf_AUX_C_Basics11_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+arg0 = arg0 ;
+arg1 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+goto lbl_lf_AUX_C_Basics11_1 ;
 }
 else {
-FUNC_EXIT_CONST ( constant0 , ( * ef4 ) ( ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( ) ) ;
 }
 }
 }
 }
 }
 else {
-FUNC_EXIT_CONST ( constant1 , ( * ef2 ) ( ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( ) ) ;
 }
 }
 }

@@ -26,17 +26,13 @@ ef2sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"fa
 ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_MuASF_Signs3 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_MuASF_Signs3_1 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 2 ] ;
 FUNC_ENTRY ( lf_AUX_MuASF_Signs3_1sym , ATmakeAppl ( lf_AUX_MuASF_Signs3_1sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg1 , ef1sym ) ) {
+lbl_lf_AUX_MuASF_Signs3_1 : if ( check_sym ( arg1 , ef1sym ) ) {
 {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( check_sym ( atmp10 , lf2sym ) ) {
@@ -47,15 +43,17 @@ tmp [ 0 ] = list_head ( atmp100 ) ;
 {
 tmp [ 1 ] = list_tail ( atmp100 ) ;
 if ( ! term_equal ( arg0 , tmp [ 0 ] ) ) {
-FUNC_EXIT ( lf_AUX_MuASF_Signs3_1 ( arg0 , ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ) ) ;
+arg0 = arg0 ;
+arg1 = ( * ef1 ) ( lf2 ( make_list ( tmp [ 1 ] ) ) ) ;
+goto lbl_lf_AUX_MuASF_Signs3_1 ;
 }
 else {
-FUNC_EXIT_CONST ( constant0 , ( * ef3 ) ( ) ) ;
+FUNC_EXIT ( ( * ef3 ) ( ) ) ;
 }
 }
 }
 else {
-FUNC_EXIT_CONST ( constant1 , ( * ef2 ) ( ) ) ;
+FUNC_EXIT ( ( * ef2 ) ( ) ) ;
 }
 }
 }

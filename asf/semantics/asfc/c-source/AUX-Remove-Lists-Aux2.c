@@ -39,17 +39,13 @@ ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"fa
 ef5 = lookup_func ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)" ) ) ;
 }
-static ATerm constant0 = NULL ;
-static ATerm constant1 = NULL ;
 void init_AUX_Remove_Lists_Aux2 ( ) {
-ATprotect ( & constant0 ) ;
-ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Remove_Lists_Aux2_1 ( ATerm arg0 ) {
 {
 ATerm tmp [ 11 ] ;
 FUNC_ENTRY ( lf_AUX_Remove_Lists_Aux2_1sym , ATmakeAppl ( lf_AUX_Remove_Lists_Aux2_1sym , arg0 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_Remove_Lists_Aux2_1 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 if ( check_sym ( atmp00 , ef2sym ) ) {
@@ -89,11 +85,12 @@ tmp [ 8 ] = list_tail ( atmp010 ) ;
 if ( is_single_element ( tmp [ 8 ] ) ) {
 tmp [ 9 ] = list_head ( tmp [ 8 ] ) ;
 tmp [ 10 ] = ( * ef3 ) ( tmp [ 9 ] ) ;
-if ( term_equal ( tmp [ 10 ] , ( constant0 ? constant0 : ( constant0 = ( * ef4 ) ( ) ) ) ) ) {
+if ( term_equal ( tmp [ 10 ] , ( * ef4 ) ( ) ) ) {
 FUNC_EXIT ( tmp [ 9 ] ) ;
 }
-if ( term_equal ( tmp [ 10 ] , ( constant1 ? constant1 : ( constant1 = ( * ef5 ) ( ) ) ) ) ) {
-FUNC_EXIT ( lf_AUX_Remove_Lists_Aux2_1 ( tmp [ 9 ] ) ) ;
+if ( term_equal ( tmp [ 10 ] , ( * ef5 ) ( ) ) ) {
+arg0 = tmp [ 9 ] ;
+goto lbl_lf_AUX_Remove_Lists_Aux2_1 ;
 }
 }
 }

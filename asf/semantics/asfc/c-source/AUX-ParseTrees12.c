@@ -40,7 +40,7 @@ ATerm lf_AUX_ParseTrees12_2 ( ATerm arg0 , ATerm arg1 ) {
 {
 ATerm tmp [ 4 ] ;
 FUNC_ENTRY ( lf_AUX_ParseTrees12_2sym , ATmakeAppl ( lf_AUX_ParseTrees12_2sym , arg0 , arg1 ) ) ;
-if ( check_sym ( arg0 , ef1sym ) ) {
+lbl_lf_AUX_ParseTrees12_2 : if ( check_sym ( arg0 , ef1sym ) ) {
 {
 ATerm atmp00 = arg_0 ( arg0 ) ;
 {
@@ -74,7 +74,9 @@ if ( check_sym ( arg1 , lf_AUX_ParseTrees12_1sym ) ) {
 ATerm atmp10 = arg_0 ( arg1 ) ;
 if ( is_single_element ( atmp10 ) ) {
 tmp [ 0 ] = list_head ( atmp10 ) ;
-FUNC_EXIT ( lf_AUX_ParseTrees12_2 ( ( * ef1 ) ( atmp00 , atmp01 ) , lf_AUX_ParseTrees12_1 ( make_list ( tmp [ 0 ] ) ) ) ) ;
+arg0 = ( * ef1 ) ( atmp00 , atmp01 ) ;
+arg1 = lf_AUX_ParseTrees12_1 ( make_list ( tmp [ 0 ] ) ) ;
+goto lbl_lf_AUX_ParseTrees12_2 ;
 }
 }
 }
@@ -89,7 +91,9 @@ if ( not_empty_list ( atmp10 ) ) {
 tmp [ 0 ] = list_head ( atmp10 ) ;
 tmp [ 1 ] = list_tail ( atmp10 ) ;
 if ( not_empty_list ( tmp [ 1 ] ) ) {
-FUNC_EXIT ( lf_AUX_ParseTrees12_2 ( lf_AUX_ParseTrees12_2 ( arg0 , lf_AUX_ParseTrees12_1 ( make_list ( tmp [ 0 ] ) ) ) , lf_AUX_ParseTrees12_1 ( make_list ( tmp [ 1 ] ) ) ) ) ;
+arg0 = lf_AUX_ParseTrees12_2 ( arg0 , lf_AUX_ParseTrees12_1 ( make_list ( tmp [ 0 ] ) ) ) ;
+arg1 = lf_AUX_ParseTrees12_1 ( make_list ( tmp [ 1 ] ) ) ;
+goto lbl_lf_AUX_ParseTrees12_2 ;
 }
 }
 }

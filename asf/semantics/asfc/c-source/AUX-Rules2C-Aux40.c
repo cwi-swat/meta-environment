@@ -15,6 +15,8 @@ static Symbol ef7sym ;
 static funcptr ef7 ;
 static Symbol ef8sym ;
 static funcptr ef8 ;
+static Symbol lf3sym ;
+static ATerm lf3 ( ATerm arg1 ) ;
 static Symbol ef9sym ;
 static funcptr ef9 ;
 static Symbol ef5sym ;
@@ -33,8 +35,11 @@ lf_AUX_Rules2C_Aux40_1sym = ATmakeSymbol ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[l(
 ATprotectSymbol ( lf_AUX_Rules2C_Aux40_1sym ) ;
 lf2sym = ATmakeSymbol ( "listtype(sort(\"CHAR\"))" , 1 , ATtrue ) ;
 ATprotectSymbol ( lf2sym ) ;
+lf3sym = ATmakeSymbol ( "listtype(sort(\"Statement\"))" , 1 , ATtrue ) ;
+ATprotectSymbol ( lf3sym ) ;
 register_prod ( ATparse ( "prod(id(\"Rules2C-Aux\"),w(\"\"),[l(\"make-if-then-else\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\",\"),w(\"\"),sort(\"Expression\"),w(\"\"),l(\",\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),l(\",\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" ) , lf_AUX_Rules2C_Aux40_1 , lf_AUX_Rules2C_Aux40_1sym ) ;
 register_prod ( ATparse ( "listtype(sort(\"CHAR\"))" ) , lf2 , lf2sym ) ;
+register_prod ( ATparse ( "listtype(sort(\"Statement\"))" ) , lf3 , lf3sym ) ;
 }
 void resolve_AUX_Rules2C_Aux40 ( ) {
 ef1 = lookup_func ( ATreadFromString ( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)" ) ) ;
@@ -51,8 +56,8 @@ ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[ql(\"!\")],
 ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[ql(\"!\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Unary-operator\"),w(\"\"),no-attrs)" ) ) ;
 ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement-list\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" ) ) ;
 ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement-list\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),no-attrs)" ) ) ;
-ef8 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)" ) ) ;
-ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)" ) ) ;
+ef8 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[iter(sort(\"Statement\"),w(\"\"),l(\"+\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)" ) ) ;
+ef8sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[iter(sort(\"Statement\"),w(\"\"),l(\"+\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement-list\"),w(\"\"),no-attrs)" ) ) ;
 ef9 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[l(\"if\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Statement\"),w(\"\"),l(\"else\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)" ) ) ;
 ef9sym = lookup_sym ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[l(\"if\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\"),w(\"\"),sort(\"Statement\"),w(\"\"),l(\"else\"),w(\"\"),sort(\"Statement\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)" ) ) ;
 ef10 = lookup_func ( ATreadFromString ( "prod(id(\"Pure-C\"),w(\"\"),[ql(\"{\"),w(\"\"),sort(\"Declaration-list-opt\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\"}\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Statement\"),w(\"\"),no-attrs)" ) ) ;
@@ -93,12 +98,12 @@ tmp [ 0 ] = list_head ( atmp0000 ) ;
 if ( term_equal ( tmp [ 0 ] , make_char ( 102 ) ) ) {
 tmp [ 1 ] = ( * ef12 ) ( arg2 ) ;
 tmp [ 2 ] = ( * ef12 ) ( arg3 ) ;
-FUNC_EXIT ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( ( * ef5 ) ( ( * ef6 ) ( ) , arg1 ) , ( * ef10 ) ( ( * ef11 ) ( ) , tmp [ 1 ] ) , ( * ef10 ) ( ( * ef11 ) ( ) , tmp [ 2 ] ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef7 ) ( ( * ef8 ) ( lf3 ( make_list ( ( * ef9 ) ( ( * ef5 ) ( ( * ef6 ) ( ) , arg1 ) , ( * ef10 ) ( ( * ef11 ) ( ) , tmp [ 1 ] ) , ( * ef10 ) ( ( * ef11 ) ( ) , tmp [ 2 ] ) ) ) ) ) ) ) ;
 }
 if ( term_equal ( tmp [ 0 ] , make_char ( 116 ) ) ) {
 tmp [ 1 ] = ( * ef12 ) ( arg2 ) ;
 tmp [ 2 ] = ( * ef12 ) ( arg3 ) ;
-FUNC_EXIT ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( arg1 , ( * ef10 ) ( ( * ef11 ) ( ) , tmp [ 1 ] ) , ( * ef10 ) ( ( * ef11 ) ( ) , tmp [ 2 ] ) ) ) ) ) ;
+FUNC_EXIT ( ( * ef7 ) ( ( * ef8 ) ( lf3 ( make_list ( ( * ef9 ) ( arg1 , ( * ef10 ) ( ( * ef11 ) ( ) , tmp [ 1 ] ) , ( * ef10 ) ( ( * ef11 ) ( ) , tmp [ 2 ] ) ) ) ) ) ) ) ;
 }
 }
 }
@@ -109,6 +114,10 @@ FUNC_EXIT ( ( * ef7 ) ( ( * ef8 ) ( ( * ef9 ) ( arg1 , ( * ef10 ) ( ( * ef11 ) (
 }
 FUNC_EXIT ( make_nf4 ( lf_AUX_Rules2C_Aux40_1sym , arg0 , arg1 , arg2 , arg3 ) ) ;
 }
+}
+ATerm lf3 ( ATerm arg0 ) {
+CONS_ENTRY ( lf3sym , ATmakeAppl ( lf3sym , arg0 ) ) ;
+CONS_EXIT ( make_nf1 ( lf3sym , arg0 ) ) ;
 }
 ATerm lf2 ( ATerm arg0 ) {
 CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
