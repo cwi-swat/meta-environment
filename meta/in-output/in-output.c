@@ -501,6 +501,24 @@ ATerm create_empty_syntax_module(int cid, char *path, char *moduleName)
 }
 
 /*}}}  */
+/*{{{  ATerm compute_module_name(int cid, char *path, char *moduleName) */
+
+ATerm compute_module_name(int cid, char *path, char *moduleName)
+{
+  char *compoundName = NULL;
+  ATerm result;
+
+  /* Build syntax-text-filename from moduleName */
+  compoundName = create_compound_module_name(path, moduleName);
+
+  result = ATmake("snd-value(computed-module-name(<str>))", compoundName);
+
+  free(compoundName);
+
+  return result;
+}
+
+/*}}}  */
 
 
 /*{{{  ATerm exists_rules_section(int cid, char *moduleName) */
