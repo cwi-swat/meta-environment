@@ -2,6 +2,7 @@
 
 Meta-Conventions - New-Meta Tool Programming Conventions
 
+
 =head1 DESCRIPTION
 
 This document describes some conventions pertaining to the commandline
@@ -15,7 +16,8 @@ Filenames are:
 =over
 
 =item * Standard in- and output; these are referenced on all systems
-    using the dash sign, `F<->'.
+    using the dash sign, `F<->', which may have to be interpreted
+    explicitly.
 
 =item * Names in accordance to local filesystem conventions;
     Examples:
@@ -27,8 +29,8 @@ Filenames are:
 =back
 
 =head2 Command Line Parameter Conventions
-    The following parameters must be supported by tools in the
-    Meta-Environment:
+
+The following parameters must be supported by tools in the Meta-Environment:
 
 =over
 
@@ -71,6 +73,7 @@ conformance to this convention exist:
 Actually putting the skeletal code to good use will require some
 attention.
 
+
 =head1 RESTRICTIONS
 
 The `long option' convention, in which options are written as two hyphens
@@ -78,6 +81,7 @@ followed by a descriptive phrase that can be abbreviated as long as
 uniqueness is guaranteed, is not supported.  The reason for this is that
 this is implementation-specific to the GNU implementation of the core
 command-line handling routine C<getopt>.
+
 
 =head1 AUTHOR
 

@@ -8,7 +8,7 @@
 # help texts
 #----------------------------------------------------------------------
 
-set toolname "Graph Browser"
+set toolname "Meta-Environment"
 set metaname "NewMeta"
 
 set help_meta "$metaname

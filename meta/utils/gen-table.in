@@ -1,4 +1,4 @@
-#! @SHELL@
+#! /bin/sh
 # $Id$
 
 prefix=@prefix@
@@ -11,11 +11,9 @@ PATH="$PATH:$bindir"
 TMP=/tmp/`basename $0`.$$	# Junk files
 trap "rm -f $TMP*" 0 1 2 15	# Clean up afterwards
 
-PGEN="${bindir}/ParseTable-Generator -silent"
-TABLEGEN="${bindir}/ksdf2table"
+PGEN="${bindir}/parsetablegen -silent"
 A2TOA1="${bindir}/a2toa1 -silent"
 ASOURCE="${bindir}/asource -silent"
-ADDPTFUNC="${bindir}/add-pt-func -silent"
 TRM2BAF="${bindir}/trm2baf"
 EXTENSIONS=".sdf .sdf2"
 
@@ -49,12 +47,11 @@ done
 
 case $FASTGEN in
 	0)
-		# Slow generation: skip ksdf2table
-		TABLEGEN="cat -u" ;;
+		# Slow generation
+		TABLEGEN="${PGEN} -s" ;;
 	*)
 		# Fast generation: ksdf2table handles *everything*
-		ADDPTFUNC="cat -u"
-		PGEN="cat -u" ;;
+		TABLEGEN="${PGEN}" ;;
 esac
 
 for f in $Files
@@ -93,35 +90,16 @@ do
 		file=`basename $file $ext`
 	done
 
-	Notify "Adding parse-table function and generating parse table for $f..."
-	if [ $FASTGEN -eq 0 ] ; then
-		out=$TMP.asrc
-	else
-		out=$dir/$file.tbl
-	fi
+	Notify "Generating parse table for $f..."
+	out=$dir/$file.tbl
 	err=$dir/$file.pgen.err
-	if $ADDPTFUNC < $f | $PGEN | $TABLEGEN > $out 2> $err
+	if $TABLEGEN < $f > $out 2> $err
 	then
 		rm -f $err
 	else
 		if [ -f $out -a ! -s $out ]; then rm -f $out; fi
 		echo "TableGen: error (see $err)"
 		exit 2
-	fi
-
-	if [ $FASTGEN -eq 0 ] ; then
-	        Notify "Running asource..."
-	        in=$out
-	        out=$dir/$file.tbl
-	        err=$dir/$file.asource.err
-	        if $ASOURCE $TERMTABLE < $in 2> $err | $TRM2BAF > $out  2>> $err
-	        then
-		        rm -f $err
-	        else
-		        if [ -f $out -a ! -s $out ]; then rm -f $out; fi
-		        echo "asource: error (see $err)"
-		        exit 3
-	        fi
 	fi
 
 	Notify "Parse table (trm format):"
