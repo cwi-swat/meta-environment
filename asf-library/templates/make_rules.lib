@@ -12,10 +12,9 @@ EXTRA_DIST = $(MODULES) $(PREPARED) $(BUILTIN_SRC)
 install-data-hook: make-dir install-modules install-prepared make-read-only
 
 make-dir:
-	if test -d $(DESTDIR)$(libpackagedir); then \
+	@if test -d $(DESTDIR)$(libpackagedir); then \
+           echo " chmod u+w $(DESTDIR)$(libpackagedir)"; \
            chmod u+w $(DESTDIR)$(libpackagedir); \
-        else \
-          echo ""; \
         fi
 	$(mkinstalldirs) $(DESTDIR)$(libpackagedir)
 
