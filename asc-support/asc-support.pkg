@@ -13,7 +13,9 @@ configuration interface
 
 requires
   aterm		2.0.2
+  error-support 0.1
   toolbuslib    0.5.1
   pt-support	1.0
   asf-support	1.2
   sglr		3.10.2
+  meta-errors 	0.1

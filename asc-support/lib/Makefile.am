@@ -32,7 +32,7 @@ BUILTIN_SOURCEFILES=\
 	builtin-io.c
 
 #The names of the modules that need to be included in a generated lib
-LIBRARY_MODULES=basic/Booleans utilities/Measure utilities/ParseResults
+LIBRARY_MODULES=basic/Booleans utilities/Measure utilities/IOResults
 
 lib_LIBRARIES = libasc-support-me.a 
 
@@ -58,7 +58,6 @@ libasc_support_me_a_SOURCES = \
 	Library.h\
 	Library_dict.c\
 	Library_dict.h\
-	Library_bottom.c\
 	${BUILTIN_SOURCEFILES} 
 
 # Default include directories
@@ -85,6 +84,7 @@ builtin_link_test_LDADD=\
 	-L${ASF_SUPPORT}/lib -lASFME \
 	-L${PT_SUPPORT}/lib -lmept -lPTMEPT \
 	-L${TOOLBUSLIB}/lib -lATB  \
+	-L${ERROR_SUPPORT}/lib -lErrorAPI \
 	-L${ATERM}/lib -lATerm \
 	${SOCKLIBS}
 
@@ -111,7 +111,7 @@ api: Library.def
 	sdf2-to-c -i $< -P CO_ -o Library
 
 api-clean:
-	rm -f Library.[ch] Library_dict.* Library.adt Library_bottom.c
+	rm -f Library.[ch] Library_dict.* Library.adt 
 
 LIBRARYLIST=\
 $(foreach i,${LIBRARY_MODULES},${top_srcdir}/../asf-library/library/$i.sdf)

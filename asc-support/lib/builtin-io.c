@@ -5,6 +5,8 @@
 #include <Library.h>
 #include <sys/stat.h>
 #include <aterm2.h>
+#include <ErrorAPI-utils.h>
+#include <errno.h>
 
 static PT_Tree write_bytes_to_file(PT_Tree input, PT_Tree bytes);
 static PT_Tree unparse_to_bytes(PT_Tree tree);
@@ -15,6 +17,51 @@ static PT_Tree unparse_to_bytes(PT_Tree tree);
 #define COLUMN 2
 #define OFFSET 3
 #define getErrorInfo(error, info) (ATgetInt((ATermInt) ATgetArgument((ATermAppl) ATelementAt((ATermList) ATgetArgument((ATermAppl) (error),0),info),0))) 
+
+/*}}}  */
+
+/*{{{  static char* getFilename(PT_Tree str)  */
+
+static char* getFilename(PT_Tree str) 
+{
+  ATerm aterm = ATparse(PT_yieldTree(str));
+  return ATgetName(ATgetAFun((ATermAppl) aterm));
+}
+
+/*}}}  */
+
+/*{{{  static PERR_Feedback makeGeneralError(char *producer, char *msg) */
+
+static CO_Feedback makeGeneralError(char *producer, char *msg)
+{
+  ERR_Feedback feedback = ERR_makeFeedbackError(producer,
+						msg,
+						ERR_makeSubjectListEmpty());
+
+  return (CO_Feedback) ERR_liftFeedback(feedback);
+}
+
+/*}}}  */
+/*{{{  static CO_Feedback makeParseErrorFeedback(char *producer, char *file,  */
+
+static CO_Feedback makeParseError(char *producer, char *file, ATerm error)
+{
+  int line = getErrorInfo(error, LINE);
+  int col = getErrorInfo(error, COLUMN);
+  int offset = getErrorInfo(error, OFFSET);
+  ERR_Subject subject;
+  ERR_Area area;
+  ERR_Location location;
+  ERR_Feedback feedback;
+  
+  area = ERR_makeAreaArea(line, col, line, col, offset, offset);
+  location = ERR_makeLocationLocation(file, area);
+  subject = ERR_makeSubjectSubject("cursor", location);
+  feedback = ERR_makeFeedbackError(producer, "parse-error",
+				   ERR_makeSubjectListSingle(subject));
+
+  return (CO_Feedback) ERR_liftFeedback(feedback);
+}
 
 /*}}}  */
 
@@ -60,14 +107,15 @@ static ATbool initParser(char *toolname, ATerm language)
 }
 
 /*}}}  */
-/*{{{  static PT_Tree parse_result(ATerm result) */
+/*{{{  static PT_Tree parse_result(char *builtin, char *file, ATerm result) */
 
-static PT_Tree parse_result(ATerm result)
+static PT_Tree parse_result(char *builtin, char *file, ATerm result)
 {
   CO_OptLayout l = CO_makeOptLayoutAbsent();
 
   if (result == NULL) {
-    return (PT_Tree) CO_makeParseResultNoValidResult();
+    return (PT_Tree) CO_makeParseResultFailure(l,l,
+	       makeGeneralError(builtin, "unknown error during parsing"),l);
   }
 
   if (SGisParseTree(result)) {
@@ -96,7 +144,7 @@ static PT_Tree parse_result(ATerm result)
 
 	if (PT_isSymbolSort(symbol)) {
 	  return (PT_Tree)
-	    CO_makeParseResultTree(PT_getSymbolString(symbol),
+	    CO_makeParseResultSuccess(PT_getSymbolString(symbol),
 					l, l,
 					(CO_Bytes) unparse_to_bytes(before),
 					l, l,
@@ -108,31 +156,20 @@ static PT_Tree parse_result(ATerm result)
 					l);
 	}
       }
-
-      return (PT_Tree) CO_makeParseResultNoValidResult();
     }
-    else {
-      return (PT_Tree) CO_makeParseResultNoValidResult();
+    {
+      CO_Feedback error = (CO_Feedback) ERR_makeFeedbackError(builtin,
+		    "result is not a context-free parse tree",
+		     ERR_makeSubjectListEmpty());
+      return (PT_Tree) CO_makeParseResultFailure(l,l, error,l);
     }
   }
   else if (SGisParseError(result)) {
-      int line = getErrorInfo(result, LINE);
-      int col = getErrorInfo(result, COLUMN);
-      int offset = getErrorInfo(result, OFFSET);
-
-      return (PT_Tree) CO_makeParseResultError(l,l,
-				     (CO_NatCon) make_natcon(line),
-				     l,l,
-				     (CO_NatCon) make_natcon(col),
-				     l,l,
-				     (CO_NatCon) make_natcon(offset),
-				     l);
-  }
-  else {
-    return (PT_Tree) CO_makeParseResultNoValidResult();
+    return (PT_Tree) makeParseError(builtin, file, result);
   }
 
-  return (PT_Tree) CO_makeParseResultNoValidResult();
+  return (PT_Tree) 
+    makeGeneralError(builtin, "completely unexpected output from parser");
 }
 
 /*}}}  */
@@ -141,15 +178,16 @@ static PT_Tree parse_result(ATerm result)
 
 static PT_Tree parse_file(PT_Tree file)
 {
-  char  toolname[] = "parse-file-builtin";
+  char  toolname[] = "parse-file";
   ATerm language = ATmake("<str>", toolname);
 
   if (initParser(toolname, language)) {
-    ATerm result = SGparseFile(toolname, language, NULL, PT_yieldTree(file));
-    return parse_result(result);
+    char *filename = getFilename(file);
+    ATerm result = SGparseFile(toolname, language, NULL, filename);
+    return parse_result(toolname, filename, result);
   }
 
-  return (PT_Tree) CO_makeParseResultNoParsetable();
+  return (PT_Tree) makeGeneralError(toolname, "no parsetable available");
 }
 
 /*}}}  */
@@ -183,10 +221,10 @@ static PT_Tree parse_bytes(PT_Tree bytes)
 
   if (initParser(toolname, language)) {
     ATerm result = SGparseString(language, NULL, PT_yieldTree(bytes)); 
-    return parse_result(result);
+    return parse_result(toolname, "anonymous", result);
   }
 
-  return (PT_Tree) CO_makeParseResultNoParsetable();
+  return (PT_Tree) makeGeneralError(toolname, "no parsetable available");
 }
 
 /*}}}  */
@@ -245,8 +283,7 @@ PT_Tree ASC_unparse_to_bytes(ATerm input)
 static PT_Tree unparse_to_file(PT_Tree file, PT_Tree tree)
 {
   PT_Tree bytes = unparse_to_bytes(tree);
-  write_bytes_to_file(file, bytes);
-  return tree;
+  return write_bytes_to_file(file, bytes);
 }
 
 /*}}}  */
@@ -280,11 +317,11 @@ static PT_Tree read_term_from_file(PT_Tree file_arg)
   char *filestr = NULL;
   ATerm term;
 
-  filestr = PT_yieldTree(file_arg);
+  filestr = getFilename(file_arg);
 
   term = ATreadFromNamedFile(filestr);
 
-  return parse_result(term);
+  return parse_result("read-term-from-file", filestr, term);
 }
 
 /*}}}  */
@@ -321,10 +358,18 @@ static PT_Tree write_term_to_file(PT_Tree file_arg, PT_Tree tree_arg)
 {
   PT_ParseTree pt = PT_makeValidParseTreeFromTree(tree_arg);
   char *filestr = NULL;
+  CO_OptLayout l = CO_makeOptLayoutAbsent();
 
-  filestr = PT_yieldTree(file_arg);
+  filestr = getFilename(file_arg);
 
-  ATwriteToNamedTextFile(PT_ParseTreeToTerm(pt), filestr);
+  if (ATwriteToNamedTextFile(PT_ParseTreeToTerm(pt), filestr)) {
+    return (PT_Tree) CO_makeWriteResultSuccess();
+  }
+  else {
+    return (PT_Tree) CO_makeWriteResultFailure(l,l,
+			       makeGeneralError("write-term-to-file",
+						(char*) sys_errlist[errno]));
+  }
 
   return tree_arg;
 }
@@ -398,16 +443,21 @@ static char *readFileContents(char *fnam)
 
 static PT_Tree read_bytes_from_file(PT_Tree input)
 {
-  char *filename = PT_yieldTree(input);
+  char *filename = getFilename(input);
   char *buf = NULL;
+  CO_OptLayout l = CO_makeOptLayoutAbsent();
 
   buf = readFileContents(filename);
 
   if (buf != NULL) {
-    return make_bytes(buf);
+    return (PT_Tree) 
+      CO_makeBytesResultSuccess(l,l,(CO_Bytes) make_bytes(buf),l);
   }
 
-  return make_bytes("");
+  return (PT_Tree) 
+    CO_makeBytesResultFailure(l,l,makeGeneralError("read-bytes-from-file",
+						   (char*)sys_errlist[errno]),
+			      l);
 }
 
 /*}}}  */
@@ -436,7 +486,7 @@ PT_Tree ASC_read_bytes_from_file(ATerm afile_arg)
 
 static PT_Tree write_bytes_to_file(PT_Tree input, PT_Tree bytes)
 {
-  char *filename = PT_yieldTree(input);
+  char *filename = getFilename(input);
   FILE *fp = NULL;
 
   fp = fopen(filename, "wb");
@@ -446,11 +496,12 @@ static PT_Tree write_bytes_to_file(PT_Tree input, PT_Tree bytes)
     fclose(fp);
   }
   else {
-    perror("write-bytes-to-file");
-    ATabort("builtin failed");
+    return (PT_Tree) 
+      CO_makeWriteResultFailure("write-bytes-to-file",
+				(char*) sys_errlist[errno]);
   } 
 
-  return bytes;
+  return (PT_Tree) CO_makeWriteResultSuccess();
 }
 
 /*}}}  */

@@ -6,7 +6,6 @@ include_HEADERS = tb-asc-client.h
 
 COPIED =\
 	tb-Library.c\
-	tb-Library_bottom.c\
 	tb-Library_dict.c\
 	tb-asc-main.c\
 	tb-asc-muasf2pt.c\

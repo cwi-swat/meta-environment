@@ -26,6 +26,11 @@ AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
+dnl Require error-support library
+AC_PACKAGE_REQUIRE(error-support, error-support-config,
+   [  --with-error-support=DIR  error-support is in DIR])
+AC_SUBST(ERROR_SUPPORT)
+
 dnl Require pt-support package
 AC_PACKAGE_REQUIRE(pt-support, unparsePT,
    [  --with-pt-support=DIR   pt-support is in DIR])
