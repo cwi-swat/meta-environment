@@ -13,7 +13,7 @@
 #include <tb-tool.h>
 
 #include "support.h"
-#include "rewriter.tif.c"
+#include "rewriter.tif.h"
 
 FATAL_ERROR
 

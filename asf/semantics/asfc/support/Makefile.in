@@ -57,18 +57,18 @@ XLIBS		= -L$(ATERM)/lib -ltoolbus -lasfix -laterm-dbg \
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
 CSRC		= support.c rewriter.c
-CHDR		= rewriter.tif.c
+CHDR		= rewriter.tif.c rewriter.tif.h
 # All files in BINFILES are installed in $(bindir)
 BINFILES	= 
 # All files in LIBFILES are installed in $(libdir)
-LIBFILES	= support.o rewriter.o
+LIBFILES	= support.o rewriter.o rewriter.tif.o
 # All files in INCLUDEFILES are installed in $(includedir)
-INCLUDEFILES	= support.h
+INCLUDEFILES	= support.h rewriter.tif.h
 # All files in DOCFILES are copied to $(docdir)
 DOCFILES	=
 
 # CLEANFILES are removed by 'make clean'
-CLEANFILES	= rewriter.tif.c
+CLEANFILES	= rewriter.tif.c rewriter.tif.h
 # DISTCLEANFILES are removed by 'make distclean'
 DISTCLEANFILES	=
 
@@ -78,8 +78,10 @@ all: $(BINFILES) $(LIBFILES) $(INCLUDEFILES)
 # Explicit rules
 # example: 'mytest.c: mytest.c.nw'
 
-rewriter.tif.c: rewriter.tifs
-	$(TOOLBUS)/bin/ctif -newstyle -tool rewriter -tifs rewriter.tifs
+rewriter.tif.h: rewriter.tifs
+	$(TOOLBUS)/bin/ctif -split -newstyle -tool rewriter -tifs rewriter.tifs
+
+rewriter.tif.c: rewriter.tif.h
 
 rewriter.tifs: rewriter.tb
 	$(TOOLBUS)/bin/toolbus -gentifs rewriter.tb

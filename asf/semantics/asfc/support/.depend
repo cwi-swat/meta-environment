@@ -1,0 +1,2 @@
+support.o: support.c support.h
+rewriter.o: rewriter.c support.h rewriter.tif.h
