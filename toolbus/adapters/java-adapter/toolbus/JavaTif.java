@@ -181,7 +181,7 @@ public class JavaTif
 	    AFun oldfun = appl.getAFun();
 	    AFun newfun = factory.makeAFun(oldfun.getName(), oldfun.getArity()-1,
 					   oldfun.isQuoted());
-	    appl = factory.makeAppl(newfun, appl.getArguments().getNext());
+	    appl = factory.makeApplList(newfun, appl.getArguments().getNext());
 	    appl = normalize(appl);
 	    SpecOrderVector v = (SpecOrderVector)otherEvents.get(appl.getName());
 	    if (v == null) {
@@ -615,7 +615,7 @@ public class JavaTif
 	args = factory.makeList(newargs[i], args);
       }
     }
-    return factory.makeAppl(appl.getAFun(), args);    
+    return factory.makeApplList(appl.getAFun(), args);    
   }
 
   //}}}

@@ -21,8 +21,7 @@ EXAMPLECLASSES	= ExampleTif.java ExampleTool.java ExampleBridge.java
 noinst_SCRIPTS	= ${TESTCLASSES} ${EXAMPLECLASSES}
 
 bin_SCRIPTS	= tifstojava
-
-CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${ATERM}/classes
+CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${JAVA_ATERM}/classes
 
 JAVATIFCLASSES = \
 	Tool.class \
