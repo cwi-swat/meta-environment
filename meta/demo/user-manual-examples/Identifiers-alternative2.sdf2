@@ -3,9 +3,10 @@ module Identifiers-alternative2
 imports Layout
 
 exports
+  sorts UCLetter LCLetter Digit
   lexical syntax
-    [A-Z]    -> UcLet
-    [a-z]*   -> ScLets
-    [0-9]*   -> Digs
+    [A-Z]   -> UCLetter
+    [a-z]   -> LCLetter
+    [0-9]   -> Digit
 
-    (UcLet ScLets) | (UcLet UcLet*) | (UcLet Digs) -> Id
+    (UcLetter LCLetter*) | (UCLetter UCLetter*) | (UCLetter Digit*) -> Id
