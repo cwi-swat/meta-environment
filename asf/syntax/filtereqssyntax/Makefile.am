@@ -22,5 +22,5 @@ filtereqssyntax_LDADD   = ${GENERIC_LDADD}
 filtereqssyntaxtool_SOURCES = filtereqssyntaxtool.tif.c \
                               tool.c \
                               ${GENERIC_SOURCES}
-filtereqssyntaxtool_LDADD = -L{TOOLBUS}/lib -lATB \
+filtereqssyntaxtool_LDADD = -L${TOOLBUS}/lib -lATB \
                             ${GENERIC_LDADD}
