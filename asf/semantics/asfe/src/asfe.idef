@@ -9,7 +9,11 @@ let
   NormalForm : term,
   ErrorList  : list,
   Id         : term,
-  Tide       : term
+  Tide       : term,
+  EventName    : term,
+  EventTree    : term,
+  EventResult  : term,
+  EventString: str
 in
   Id := process-id .
   Tide := off .
@@ -19,6 +23,13 @@ in
     rec-msg(rewrite(ModuleName?, Equations?, Term?)) .
     execute(asfe, Eval?) .
     snd-eval(Eval, interpret(ModuleName, Equations, Term, Tide)) .
+    (
+      rec-event(Eval, event(EventName?,EventTree?,EventString?)).
+      snd-msg(rewrite-event(ModuleName,EventName,EventTree,EventString)).
+      rec-msg(rewrite-event-result(ModuleName, EventName, EventResult?)).
+      snd-ack-event(Eval,event-result(EventName,EventResult))
+      rec-event(Eval, term-event(EventName, EventTree))
+    ) *
     (
       rec-value(Eval, rewrite-result(NormalForm?)) .
       snd-msg(rewrite-result(NormalForm))

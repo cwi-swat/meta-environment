@@ -1,11 +1,4 @@
-/*{{{  file header */
-
-/*
-  $Id$
- */
-
-
-/*}}}  */
+/* $Id$ */
 
 /*{{{  includes */
 
@@ -40,6 +33,8 @@ static char myarguments[] = "abde:hi:lmo:w:tvV";
 static char myname[] = "asfe";
 static char myversion[] = "0.6";
 
+/* global tool id for ToolBus purposes */
+int toolbus_id = -1;
 
 /*}}}  */
 
@@ -99,6 +94,14 @@ void rec_terminate(int cid, ATerm t)
 }
 
 /*}}}  */
+/*{{{  void rec_ack_event(int cid, ATerm t) */
+
+void rec_ack_event(int cid, ATerm t)
+{
+  /* do nothing */
+}
+
+/*}}}  */
 /*{{{  ATerm interpret(int cid, char *modname, ATerm trm, ATerm tide) */
 
 ATerm interpret(int cid, char *modname, ATerm eqs, ATerm trm, ATerm tide)
@@ -146,7 +149,6 @@ int main(int argc, char *argv[])
   struct tms start, rewriting;
   clock_t user, system;
 #endif
-  int cid;
   int c, toolbus_mode = 0;
   char *input = "-";
   char *output = "-";
@@ -178,7 +180,7 @@ int main(int argc, char *argv[])
   if (toolbus_mode) {
 #ifndef WIN32			/* Code with Toolbus calls, non Windows */
     ATBinit(argc, argv, &bottomOfStack);
-    cid = ATBconnect(NULL, NULL, -1, asfe_handler);
+    toolbus_id = ATBconnect(NULL, NULL, -1, asfe_handler);
     ATBeventloop();
 #else
     ATwarning("asfe: Toolbus cannot be used in Windows.\n");
