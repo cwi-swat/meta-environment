@@ -85,10 +85,8 @@ ATfprintf(stderr,"reducing finished\n");
   strcat(full, ".");
   strcat(full, ext);
   file = fopen(full, "w");
-  if (!file) {
-    ATfprintf(stderr, "asource: Could not open %s\n", full);
-    exit(1);
-  }
+  if (!file) 
+    ATerror("asource: Could not open %s\n", full);
   AFsourceToFile(asfix, file); 
   fclose(file);
   return ATmake("snd-value(reduction-finished(<str>))",full);

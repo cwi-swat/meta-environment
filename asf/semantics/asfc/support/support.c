@@ -768,7 +768,7 @@ static ATerm make_asfix_lex(ATermList chars, ATerm sort)
   buf = malloc(len+1);
   if(!buf) {
     ATerror("out of memory trying to allocate lex of %d chars\n", len);
-    exit(1);
+	return NULL;
   }
   end = get_chars_from_list(buf, chars);
   *end = '\0';
