@@ -45,7 +45,7 @@ asfe_LDADD = \
 	-L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI -lLocationAPI \
-	-L$(ATERM)/lib -lATerm \
+	-L$(ATERM)/lib -lATerm-dbg \
 	-L$(TIDE_SUPPORT)/lib -ltide-adapter \
 	$(SOCKLIBS)
 

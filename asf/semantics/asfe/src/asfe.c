@@ -13,6 +13,7 @@
 #include <PTMEPT.h>
 #include <ASFME.h>
 #include <Error.h>
+#include <Location.h>
 #include <asc-support-me.h>
 
 #include "asfe.tif.h"
@@ -236,8 +237,10 @@ int main(int argc, char *argv[])
   signal(SIGUSR1, abort_handler);
 
   ATinit(argc, argv, &bottomOfStack);
+  ATsetChecking(ATtrue);
   PT_initMEPTApi();
   ERR_initErrorApi();
+  LOC_initLocationApi();
   PTPT_initPTMEPTApi();
   ASF_initASFMEApi();
 
