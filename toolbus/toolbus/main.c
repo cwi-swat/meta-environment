@@ -149,7 +149,7 @@ static void debug_handler(int sig)
 	continue;
       }
     }
-    print_process(ProcInst);
+    print_process_snd_msgs_only(ProcInst);
   }
 }
 
