@@ -28,8 +28,8 @@ bin_PROGRAMS	  = apply-function
 
 bin_SCRIPTS	  = genmakefile genamakefile
 
-pkgdata_DATA  = genmakefile.proto
-EXTRA_DIST	  = genamakefile.sh.src
+pkgdata_DATA      = genmakefile.proto
+EXTRA_DIST	  = genamakefile.sh.src genmakefile.proto
 
 apply_function_SOURCES	= apply-function.c
 apply_function_LDADD	= -L$(ASC_SUPPORT)/lib -lasc-support \
