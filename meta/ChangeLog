@@ -5,6 +5,7 @@
    a parameter which is also a parameter of the surrounding
    module, the renaming has to be renamed in a consistent
    way.
+ * Fixed a number of error messages.
 
 2003/01/08 (markvdb@cs.vu.nl)
  * Return full imports when asking for the equations when dealing

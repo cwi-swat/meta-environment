@@ -58,7 +58,7 @@ in
   snd-msg(get-focus-sort(SortName, Focus)) .
   rec-msg(focus-sort(SortName?)) .
   ParseText(Text, ModuleName, SortName, Tree?, Error?) .
-  ProcessParseError(ModuleName, Error)
+  ProcessParseError(ModuleName, Error, "trm")
 endlet
 
 process GetTextFromFile(FileName: str, Text: str?) is
@@ -177,7 +177,7 @@ in
   snd-msg(check-tree-sort(Sort, Tree)) .
   ( 
     rec-msg(wrong-sort(TreeSort?)) .
-    snd-note(ui-status(errorf("top sort %s of tree does not match %s", 
+    snd-note(ui-status(errorf("Top sort %s of tree does not match %s", 
                               [TreeSort, Sort]))) .
     RTree := error-tree
   +
@@ -208,7 +208,7 @@ in
     rec-msg(equations-incomplete) .
     NormalForm := error-tree .
     snd-note(ui-status(endstat(Id))) .
-    snd-note(ui-status(errorf("Equations incomplete for %s", [ModuleName])))
+    snd-note(ui-status(errorf("Equations incomplete for %s.asf", [ModuleName])))
   )
 endlet
 
@@ -404,12 +404,12 @@ in
 	  FilePath := first(args(STree)) .
 	  GetTextFromFile(FilePath, String?) .
           ParseText(String, NewModName, SortName, RTree?, Error?) .
-	  ProcessParseError(NewModName, Error)
+	  ProcessParseError(NewModName, Error, "trm")
 	else 
 	  if equal(FunSym, "str") then
 	    String := first(args(STree)) .
 	    ParseText(String, NewModName, SortName, RTree?, Error?) .
-	    ProcessParseError(NewModName, Error)
+	    ProcessParseError(NewModName, Error, "trm")
 	  else
 	    RTree := error-tree
 	  fi

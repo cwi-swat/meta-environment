@@ -47,7 +47,7 @@ in
 	ModuleId := quote(eqs(Module)) .
 	ParseString(ModuleId, 
 		    Nonterminal, EqsText, ParseTree?, Errors?) .
-	ProcessParseError(Module, Errors) .
+	ProcessParseError(Module, Errors, "asf") .
 	ProcessEqsTree(Module, ParseTree)
       +
         rec-msg(no-eqs-text(Module))
