@@ -608,6 +608,25 @@ proc DeleteModules { modlist } {
 
 
 #--
+# CloseModules(ML)
+#-
+# generates the toolbus event to delete modules ML.
+#--
+proc CloseModules { modlist } {
+  set confirm [tkMessageBox -message "Do you want to close the imported modules recursively?" -type yesno]
+
+    if {$confirm == "yes"} {
+      set option "recursive"
+    } else {
+      set option "top"
+    }
+    
+    foreach mod $modlist {
+      GBpost [format "close-module(%s, $option)" [ToId $mod]]
+    }
+}
+
+#--
 # CompileModules(ML)
 #-
 # generates the toolbus event to request compilation of modules ML
@@ -1376,6 +1395,8 @@ proc define-module-popup {} {
         -command {RevertModules [GetObjectName $c]}
     $m add command -label "Delete Module" \
         -command {DeleteModules [GetObjectName $c]}
+    $m add command -label "Close Module" \
+        -command {CloseModules [GetObjectName $c]}
     $m add command -label "Rename Module" \
         -command {RenameModuleWidget [GetObjectName $c]}
     $m add command -label "Copy Module" \
@@ -1424,6 +1445,8 @@ proc define-modlist-popup {} {
         -command {RevertModules [SelectedModules]}
     $m add command -label "Delete Module" \
         -command {DeleteModules [SelectedModules]}
+    $m add command -label "Close Module" \
+        -command {CloseModules [SelectedModules]}
     $m add command -label "Rename Module..." \
         -command {RenameModuleWidget [SelectedModules]}
     $m add command -label "Copy Module..." \
