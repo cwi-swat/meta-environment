@@ -15,7 +15,6 @@
 #include "file-creator.tb"
 #include "module-utils.tb"
 #include "print-module.tb"
-#include "ui.tb"
 #include "clear-all.tb"
 #include "process-eqs.tb"
 #include "compile-module.tb"
@@ -35,6 +34,7 @@
 #include "meta-interface.tb"
 
 /* Tool interfaces */
+#include "meta-studio.idef"
 #include "sglr.idef"
 #include "layoutgraph.idef"
 #include "unparsePT.idef"
