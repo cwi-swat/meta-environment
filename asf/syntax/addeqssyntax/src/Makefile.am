@@ -20,6 +20,8 @@
 
 include ${top_srcdir}/make_rules
 
+INCLUDES         = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
+
 bin_PROGRAMS = addeqssyntax
 man_MANS     = addeqssyntax.1
 
@@ -28,7 +30,7 @@ EXTRA_DIST   = addeqssyntax.idef addeqssyntax.tif.c addeqssyntax.tif.h \
 
 addeqssyntax_SOURCES = addeqssyntax.c
 addeqssyntax_LDADD   = addeqssyntax.tif.o \
-                       -L$(top_builddir)/addeqs/c-source -lAdd-Eqs-Syntax \
+                       -L$(top_builddir)/asf-syntax/addeqs/c-source -lAdd-Eqs-Syntax \
                        -L$(ASCLIB) -lasc-support \
                        -L$(ASFIXLIB) -lAsFix \
                        -L$(ATERMLIB) -lATB -lATerm $(SOCKLIBS)
