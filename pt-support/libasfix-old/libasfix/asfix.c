@@ -357,22 +357,14 @@ ATbool AFisBracketCfFunc(ATerm prod)
 
 ATbool AFisMemoCfFunc(ATerm prod)
 {
-  ATerm attrs;
+  ATerm attrs = AFgetProdAttrs(prod);
+  
+  if(!AFisEmptyAttrs(attrs)) {
+    ATermList list  = (ATermList) AFgetAttrsList(attrs);
 
-  if(ATmatchTerm(prod,pattern_prod,
-		 NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,&attrs)) {
-
-    if(ATmatchTerm(attrs,pattern_noattrs)) {
-	return ATfalse;
-    } else {
-      ATermList list;
-		
-      if(ATmatchTerm(attrs,pattern_attrs,NULL,NULL,&list,NULL,NULL)) {
-        for(;!ATisEmpty(list);list = ATgetNext(list)) {
-          if(ATmatch(ATgetFirst(list),"l(\"memo\")")) {
-            return ATtrue;
-	  }
-        }
+    for(;!ATisEmpty(list);list = ATgetNext(list)) {
+      if(ATmatch(ATgetFirst(list),"l(\"memo\")")) {
+        return ATtrue;
       }
     }
   }
@@ -382,26 +374,19 @@ ATbool AFisMemoCfFunc(ATerm prod)
 
 ATbool AFisTraverseCfFunc(ATerm prod)
 {
-  ATerm attrs;
+  ATerm attrs = AFgetProdAttrs(prod);
+ 
 
-  if(ATmatchTerm(prod,pattern_prod,
-                 NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,&attrs)) {
+  if(!AFisEmptyAttrs(attrs)) {
+    ATermList list = (ATermList) AFgetAttrsList(attrs);
 
-    if(ATmatchTerm(attrs,pattern_noattrs)) {
-        return ATfalse;
-    } else {
-      ATermList list;
-
-      if(ATmatchTerm(attrs,pattern_attrs,NULL,NULL,&list,NULL,NULL)) {
-        for(;!ATisEmpty(list);list = ATgetNext(list)) {
-          if(ATmatch(ATgetFirst(list),"l(\"traverse\")")) {
-            return ATtrue;
-          }
-        }
+    for(;!ATisEmpty(list);list = ATgetNext(list)) {
+      if(ATmatch(ATgetFirst(list),"l(\"traverse\")")) {
+        return ATtrue;
       }
     }
   }
-
+  
   return ATfalse;
 }
 
@@ -754,19 +739,6 @@ ATerm AFinitLexicalSyntaxSection()
 
   return ATmake("lexical-syntax(<term>,<term>,[<list>])",
                syntax, nlsp, elist);
-}
-
-ATerm AFgetProdSort(ATerm prod)
-{
-  ATerm sort;
-
-  if(ATmatchTerm(prod,pattern_prod,
-                 NULL,NULL,NULL,NULL,NULL,NULL,&sort,NULL,NULL))
-    return sort;
-  else {
-    ATerror("Not a prod %t\n", prod);
-    return NULL; /* Silence the compiler */
-  }
 }
 
 ATerm AFmakeProd(ATerm mname, ATermList args, ATerm sort, ATerm attrs)

@@ -841,4 +841,16 @@ all layout terms from {\tt l}.}
 
 #define asfix_filter_layout(l) (ATfilter(l, AFnotLayout))
 
+/* macros for extracting information from prods */
+#define AFgetProdAttrs(p) (ATgetArgument((ATermAppl) (p), 8))
+#define AFgetProdSymbols(p) (ATgetArgument((ATermAppl) (p), 2)) 
+#define AFgetProdSymbol(p) (ATgetArgument((ATermAppl) (p), 6))
+#define AFgetProdSort(p) (AFgetProdSymbol(p))
+#define AFisEmptyAttrs(attrs) (ATmatch((attrs),"no-attrs"))
+#define AFgetAttrsList(attrs) (ATgetArgument((ATermAppl) (attrs), 2))
+
+/* macros for changing prods */
+#define AFsetProdSymbols(p,s) ((ATerm) ATsetArgument((ATermAppl) (p), (ATerm) (s), 2))
+#define AFsetProdSymbol(p,s) ((ATerm) ATsetArgument((ATermAppl) (p), (s), 6))
+
 #endif
