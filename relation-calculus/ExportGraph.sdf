@@ -8,8 +8,6 @@ exports
 hiddens
    imports asf/syntax/Comments
 
-   imports containers/Table[Elem Integer]
-
    sorts Instr Integer # Integer # Instr
          Integer # Integer # Instr # Bag[[Elem]]
 

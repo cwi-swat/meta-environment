@@ -3,46 +3,57 @@ buttons([
         [description(term-editor, menu(["Rscript", "Check"]))],
         [push-active-module,
          get-root,
-         check-sort("RSCRIPT"),
-         apply("check-rscript", "List", 1),
-         push-modulename("RscriptChecker"),
-         reduce,
-         unparse,
-         push-active-module,
-         show-list
+	 push-string("RSCRIPT"),
+	 check-sort,
+	 push-term(true),
+	 if-equal([
+         	apply("check-rscript", "List", 1),
+         	push-modulename("RscriptChecker"),
+         	reduce,
+         	unparse,
+         	push-active-module,
+         	show-list],
+		[ message("Not an Rscript")
+		]
+         )
         ]),
 
 button("Rscript",
           [description(term-editor, menu(["Rscript","Run"]))],
           [push-active-module,
            get-root,
-           check-sort("RSCRIPT"),
-           apply("check-rscript", "List", 1),
-           push-modulename("RscriptChecker"),
-           reduce,
-	   dup,
-           push-string("[listitem(\"Rscript is type correct!\", area(\"\",0,0,0,0))]"),
-           parse("RscriptChecker", "List"),
-           if-equal([push-active-module,
-                     get-root,
-		     check-sort("RSCRIPT"),
-		     apply("eval-rscript", "RSTORE", 1),
-		     exists("RscriptCalculator"),
-		     unpack-tree,
-		     execute-action("RscriptCalculator -t"),
-                     push-filename("RscriptCalculator.results"),
-                     push-modulename("Rstore"),
-                     close-editor,
-                     push-filename("RscriptCalculator.results"),
-                     push-modulename("Rstore"),
-                     activate-editor],
+           push-string("RSCRIPT"),
+	   check-sort,
+	   push-term(true),
+	   if-equal([
+           	      	apply("check-rscript", "List", 1),
+           		push-modulename("RscriptChecker"),
+           		reduce,
+	   		dup,
+           		push-string("[listitem(\"Rscript is type correct!\", area(\"\",0,0,0,0))]"),
+           		parse("RscriptChecker", "List"),
+           		if-equal([	push-active-module,
+                     			get-root,
+		     			check-sort("RSCRIPT"),
+		     			apply("eval-rscript", "RSTORE", 1),
+		     			exists("RscriptCalculator"),
+		     			unpack-tree,
+		     			execute-action("RscriptCalculator -t"),
+                     			push-filename("RscriptCalculator.results"),
+                     			push-modulename("Rstore"),
+                     			close-editor,
+                     			push-filename("RscriptCalculator.results"),
+                     			push-modulename("Rstore"),
+                     			activate-editor],
 
-                    [message("Rscript contains type error(s)"),
-		     unparse,
-		     push-active-module,
-		     show-list
-                    ]
-           )
+                    		[	message("Rscript contains type error(s)"),
+		     			unparse,
+		     			push-active-module,
+		     			show-list
+                    		])
+		],
+		[	message("Not an Rscript")
+		])
            ]
        ),
 
@@ -95,7 +106,7 @@ button("Rscript",
        ),
 
  button("Rscript",
-	  [description(term-editor, menu(["Rscript", "Run (interpreted)"]))],
+	  [description(term-editor, menu(["Rscript", "Run interpreted"]))],
           [push-active-module,
            get-root,
            check-sort("RSCRIPT"),
@@ -108,7 +119,7 @@ button("Rscript",
            ]),
 
  button("Rscript",
-	  [description(term-editor, menu(["Rscript", "TestSuite (interpreted)"]))],
+	  [description(term-editor, menu(["Rscript", "TestSuite interpreted"]))],
           [push-active-module,
            get-root,
            check-sort("RSCRIPT"),
@@ -136,7 +147,7 @@ button("Rscript",
 	   reduce,
 	   unparse,
 	   push-filename("Graph.graph"),
-	   save-tree
+	   save-text
 	   ])
 
 

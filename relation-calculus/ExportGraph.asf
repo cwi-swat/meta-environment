@@ -27,23 +27,28 @@ equations
 	=====================================================
 	export-graph($Elem) = mkGraph($Instr)
 
-[mkBN1]	$String = "true"
+[mkBoolNode1]	
+	$String = "true"
 	=====================================================
 	mkBoolNode(true, $N) = <$N, $N+1, node(mkNodeId($N), [label($String),shape(triangle)])>
 
-[mkBN2]	$String = "false"
+[mkBoolNode2]
+		$String = "false"
 	=====================================================	
 	mkBoolNode(false, $N) = <$N, $N+1, node(mkNodeId($N), [label($String),shape(triangle)])>
 
-[mkSN]	$String = strcon(""" "\" """ $Char* "\" """ """)
+[mkStringNode1]	
+	$String = strcon(""" "\" """ $Char* "\" """ """)
 	=====================================================
 	mkStringNode(strcon(""" $Char* """), $N) = <$N, $N+1, node(mkNodeId($N), [label($String),shape(box)])>
 
-[mkIN]	$String = strcon(""" $Char* """)
+[mkIntegerNode1]
+	$String = strcon(""" $Char* """)
 	=====================================================
 	mkIntegerNode(natcon($Char*), $N) = <$N, $N+1, node(mkNodeId($N), [label($String),shape(circle)])>
 
-[mkArea] mkAreaNode($Area, $N) =
+[mkAreaNode1] 
+	mkAreaNode($Area, $N) =
 	 	<$N, $N+1, node(mkNodeId($N), [label("area"),shape(parallelogram)])>
 
 [gen-bool]
@@ -58,16 +63,14 @@ equations
 [gen-area]
 	gen($Area, $N) 		= mkAreaNode($Area, $N)
 
-%%[xx]	gen($Tuple, $N) = <$N1, $N1', $Instr>,
-%%	gen({$Elem*}, $N1') = <$N2, $N2', $Instr'>
-%%	===========================================
-%%	gen({$Tuple, $Elem*}, $N) = <-1, $N2', $Instr ++ $Instr'>
+[gen-relation1]
+	gen({$Tuple, $Elem*}, $N) = gen-rel({$Tuple, $Elem*}, $N)
 
-[xx]	gen({$Tuple, $Elem*}, $N) = gen-rel({$Tuple, $Elem*}, $N)
+[gen-bag-1]	
+	gen({$Elem, $Elem*}, $N) = gen-bag({$Elem, $Elem*}, $N)
 
-[xx]	gen({$Elem, $Elem*}, $N) = gen-bag({$Elem, $Elem*}, $N)
-
-[xx] 	gen({}, $N) = <$N, $N, null>
+[gen-empty] 	
+	gen({}, $N) = <$N, $N, null>
 
 [gen-bag-1]
 	gen-bag1($Bag, $N, $N+1) = <$N1, $N1', $Instr>
@@ -82,9 +85,6 @@ equations
 	<$N, $N2', $Instr1 ++ $Instr2 ++ edge(mkNodeId($N), mkNodeId($N1),[direction(none)])>
 [gen-bag1-2]
 	gen-bag1({}, $N, $N') = <$N, $N', null>
-
-
-
 
 
 [gen-rel-1]
