@@ -34,6 +34,7 @@
   \htmlonly{\HlxSection{-5}{}*{\indexname}\label{hlxindex}}%
   \texorhtml{\IfFileExists{manual.ind}{\input{manual.ind}}}{\htmlprintindex}}
 
+%{{{ Macros
 \htmlpanelfield{Contents}{hlxcontents}
 \htmlpanelfield{Index}{hlxindex}
 
@@ -137,18 +138,18 @@ Some images $\copyright$ 2001-2002 \xlink{www.arttoday.com}{http://www.arttoday.
 \W\htmlmenu{0}
 
 %}}}
+%{{{ Update
 
-%{{{ Overview
-
-%---- [ OVERVIEW ]---- 
-
-\section*{Update with respect to previous version}
+section*{Update with respect to previous version}
 
 \begin{itemize}
 \item Separated the guided tour and the \asfsdf\ user manual.
 \item Synchronized the screen dumps with the newest version of the
 \ASmetaenv\ (version 1.4).
 \end{itemize}
+
+%}}}
+%{{{ Overview
 
 \section{Overview}
 \label{overview} 
@@ -356,6 +357,9 @@ We give here a brief overview of selected publications:
 Peter D. Mosses, Albert Hofkamp, Akim Demaille, Jurgen Vinju.
 
 
+%}}}
+%{{{ Starting the System
+
 \section{Starting the System}
 \label{StartingMeta}
 
@@ -457,6 +461,10 @@ path `{\tt .}', i.e., only the current directory will be searched.
 \end{Label}
 \end{center}
 \end{figure}
+
+
+%}}}
+%{{{ The Main Window
 
 \section{The Main Window}
 \label{MainWindow}
@@ -804,6 +812,10 @@ The {\tt Add Import...} allows you to create a new import relation between
 The {\tt Remove Import...} allows you to cancel an import relation between
 2 modules.
 
+
+%}}}
+%{{{ Editing Specifications
+
 \section{Editing Specifications}
 
 The editors used to create and modify specifications and terms are
@@ -968,6 +980,98 @@ in the \link{{\tt parsetree} panel}[, see Figure~\Ref]{FIG:parsetree-panel}.
 \end{Label}
 \end{center}
 \end{figure}
+
+
+%}}}
+%{{{ Error Messages
+
+\section{Error Messages}
+\label{SEC:ErrorMessages}
+
+Two categories of messages can be distinguished in the \ASmetaenv.
+\begin{enumerate}
+\item Parse errors.
+\item Type check warnings.
+\end{enumerate}
+
+\subsection{Parse Errors}
+There are three different types of parse errors:
+\begin{enumerate}
+\item A real syntax error, which is reported by pinpointing the exact
+location in the file and the message {\tt Parse error near cursor} in case
+of an editor or in the message pane an error message similar to 
+{\tt Character <n> unexpected in <filename>, line <n>, column <n>}.
+This means that the parser detected a syntax error in the text to be parsed
+and can not proceed its parsing process.
+A variant of the syntax error message is: {\tt EOF unexpected while parsing
+<filename>}.
+
+\item A cycle error, in case of an editor the cursor is positioned at the
+position where the first cycle is detected in the input and the message is {\tt
+Parse returned a cycle: <cycle>} is printed.  A cycle is reported whenever
+the parser detects a non terminating chain of reductions.
+
+\item An ambiguity error, again in case of an editor the cursor is
+positioned at the position where the first ambiguity is detected in the
+input and the message {\tt Parse of <filename> returned <n> ambiguity/ies}
+is printed. An ambiguity is reported whenever the parser was able to
+recognized a (part of) the input sentence in different ways.
+
+\end{enumerate}
+
+\subsection{Type Check Warnings}
+
+Type check warnings for plain \sdf.
+\begin{itemize}
+\item {\tt module-not-available}
+\item {\tt undeclared-symbols}
+\item {\tt sorts-without-production-definitions}
+\item {\tt double-declared-symbol}
+\item {\tt aliased-symbol-already-declared}
+\item {\tt illegal-attribute}
+\item {\tt used-in-priorities-but-undefined}
+\item {\tt inconsistent-rhs-in-priorities}
+\item {\tt double-used-label}
+\item {\tt constructor-has-already-been-used}
+\item {\tt unknown-constructor-used-in-priorities}
+\end{itemize}
+
+Type check warnings for \asfsdf.
+\begin{itemize}
+\item {\tt kernel-syntax-construction}
+\item {\tt not-supported-symbol}
+\item {\tt illegal-traversal-attribute}
+\item {\tt traversal-attributes-in-non-prefix-function}
+\item {\tt missing-bottom-up-or-top-down-attribute}
+\item {\tt missing-break-or-continue-attribute}
+\item {\tt missing-trafo-and-or-accu-attribute}
+\item {\tt inconsistent-traversal-attributes}
+\item {\tt trafo-should-return-traversed-type}
+\item {\tt accu-should-return-accumulated-type}
+\item {\tt accutrafo-should-return-tuple-of-correct-types}
+\item {\tt inconsistent-arguments-of-traversal-productions}
+\item {\tt charclasses-not-allowed-in-context-free-syntax}
+\item {\tt production-renamings-not-supported}
+\end{itemize}
+
+Type check warning for \asf.
+
+\begin{itemize}
+\item {\tt uninstantiated variable occurrence}
+\item {\tt negative condition introduces variable(s)}
+\item {\tt uninstantiated variables in both sides of condition}
+\item {\tt strange condition encountered}
+\item {\tt Equations contain ambiguity/ies}
+\end{itemize}
+
+\subsection{General Messages}
+{\tt Equations incomplete for <modulename>}.
+{\tt Unable to open parse table for <modulename>}.
+
+
+
+%}}}
+%{{{ Guided Tour
 
 \section{Guided Tour}
 \label{GuidedTour}
@@ -1669,11 +1773,50 @@ Identifiers of type `{\tt natural}' get value `{\tt 0}', Identifiers of type
 Equations {\tt [Ev4a]} and {\tt [Ev4b]} specify the evaluation of a, possibly
 empty, list of statements. Equations {\tt [Ev5a]} through {\tt [Ev5e]}
 specify how the three kinds of statements are
-evaluated using the information from the type-environment. Evaluating
+evaluated using the information from the value-environment. Evaluating
 statements means updating the value-environment.
 
 The rest of the equations deal with the evaluation of expressions. Evaluating
 an expression results in a value.
+
+\subsubsection{Module Pico-compile}
+
+\begin{itemize}
+
+\item Open an editor for the syntax of {\tt Pico-compile}.
+
+\end{itemize}
+
+The functions `{\tt trp}' and variants are defined for compiling Pico into
+a stack machine based assembler.
+The result of evaluation is a list of assembler instructions.
+
+\begin{itemize}
+
+\item Open an editor for the equations of {\tt Pico-compile}.
+
+\end{itemize}
+
+The equations define how a program is compiled. Equation {\tt [Tr1]}
+says that the compilation of a program is the compilation of the {\tt
+Decls} concatenated with the instructions resulted from the compilation
+of the {\tt Series}.
+
+Equations {\tt [Tr2]} thorugh {\tt [Tr3c]}  specify how the translation of
+the declarations is performed.
+Identifiers {\tt Id} of type `{\tt natural}' result in the instruction {\tt
+dclnat Id}, Identifiers of type `{\tt string}' result in the instruction
+{\tt dclstr Id}.
+
+Equations {\tt [Tr4a]} and {\tt [Tr4b]} specify the compilation of a, possibly
+empty, list of statements. Equations {\tt [Tr5a]} through {\tt [Tr5e]}
+specify how the three kinds of statements are translated. During the
+translation process a variable {\tt Label} is used which contains the last
+used label and which is updated via the function {\tt nextlabel}. The
+labels are used to direct the flow of control in case of the conditional
+and while loop.
+
+The rest of the equations deal with the translation of expressions.
 
 \bibliographystyle{plain}
 \bibliography{manual}
