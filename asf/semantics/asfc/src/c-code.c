@@ -12,7 +12,7 @@ static void make_header(FILE *file, const char* compiler_version)
 static void make_main(const char *name, FILE *file)
 {
   ATfprintf(file,
-	    "#ifdef MAIN_%s                                           \n"
+	    "#ifdef ASF_MAIN                                           \n"
 	    "int main(int argc, char *argv[])                         \n"
 	    "{                                                        \n"
 	    "  return asc_support_main(argc, argv,                    \n"
@@ -21,7 +21,7 @@ static void make_main(const char *name, FILE *file)
 	    "                          init_%s);                      \n"
 	    "}                                                        \n"
 	    "#endif                                                   \n\n",
-	    name, name, name, name); 
+	    name, name, name); 
 }
 
 void ToC_code(const char *name, PT_ParseTree ptCcode, FILE *file, 

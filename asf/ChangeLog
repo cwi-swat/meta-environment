@@ -1,3 +1,6 @@
+2001/08/07 (mdejonge@cwi.nl)
+ * asfc/src/c-code.c: Changed -DMAIN_<module-name> to -DASF_MAIN
+
 2001/07/20 (jurgenv@cwi.nl)
  * Added rewriting of ambiguity clusters; addeqssyntax generates
    "amb({Symbol ","}+) -> Symbol" and asfe lifts ambiguity clusters
