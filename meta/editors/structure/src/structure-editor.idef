@@ -1,6 +1,6 @@
 /* $Id$ */
 
-tool se is {
+tool structure-editor is {
   command = "se"
 }
 
@@ -18,7 +18,7 @@ let
   Focuses : list,
   FocusList : list,
   Location : int,
-  SE : se,
+  SE : structure-editor,
   Text : str,
   Move : term,
   Nonterminal : str,
@@ -27,7 +27,7 @@ let
   Msg : term,
   PosInfo : term
 in 
-  execute(se, SE?) .
+  execute(structure-editor, SE?) .
   (
     rec-msg(initialize-structure-editor(EditorId?, Text?, Tree?)) .
     if equal(Tree, none) then
