@@ -24,6 +24,10 @@
   * Fixed a bug with respect initializing structure editors with
     start symbols when tree is already parsed.
 
+2001/04/11 (jurgenv@cwi.nl)
+  * Debugged cut&paste operations in the structure editor.
+  * Adapted structure editor to support AsFix2Me structured lexicals and lists.
+
 2001/05/04 (markvdb@cwi.nl)
   * Enabled the compilation of specifications.
   * Various bug fixes in structure editor.
