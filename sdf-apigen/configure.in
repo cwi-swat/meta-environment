@@ -92,7 +92,7 @@ AC_SUBST(PTBIN)
 dnl }}}
 dnl {{{ Handle --with-toolbuslib
  
-AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-support,
+AC_PACKAGE_REQUIRE(toolbuslib, toolbuslib-config,
       [  --with-toolbuslib=DIR   Toolbuslib is in DIR])
 AC_SUBST(TOOLBUSLIB)
  
