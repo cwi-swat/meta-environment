@@ -895,13 +895,30 @@ receivers have retrieved their copy.  Adding expiration times to values
 or reference counting at the \TB\ level may solve this problem.
 
 
-\subsubsection{Case study: Java RMI and CORBA}
+\subsection{Case studies: Java RMI, RMI over IIOP and Java IDL}
 
 Given our needs and desires for a next generation ToolBus, it is
-interesting to see what solutions have been applied in similar projects.
-The Java Remote Method Invocation (RMI) is one such project. It is
-similar in that it connects different tools, possibly running on different
-machines. It is also different from the ToolBus setting, because it is
+interesting to see what other solutions are applied in similar projects.
+In this section, we briefly look at three related mechanisms:
+
+\begin{itemize}
+
+\item Java Remote Method Invocation (RMI) which connects distributed
+objects written in Java;
+
+\item Java RMI over Internet Inter-ORB Protocol (IIOP) which is like
+RMI, but uses IIOP as the underlying protocol;
+
+\item Java IDL which connects Java implementations of CORBA interfaces.
+
+\end{itemize}
+
+
+\subsubsection{Java RMI}
+
+Java Remote Method Invocation is similar to the ToolBus architecture
+in the sense that it connects different tools, possibly running on
+different machines. It differs from the ToolBus setting because it is
 strictly Java based: only components written in Java can communicate via
 RMI. In this section we have a closer look at RMI details in relation
 to our ToolBus needs.
@@ -972,19 +989,29 @@ RMI offers security-related support using \texttt{SecurityManagers}.
 
 \end{itemize}
 
+\subsubsection{Java RMI over IIOP}
+
+
+\subsubsection{Java IDL}
+
 Apart from Java RMI, which is optimized for connecting components
 that are all written in Java, there is also a connection from Java to
-CORBA\cite{XXX}. Using this bridge, it becomes possible to let Java
-components communicate with CORBA objects written in any language that
-has Interface Definition Language (IDL) mappings.
+CORBA\cite{XXX} using Java Interface Definition Language (IDL). This
+alternative to Java RMI is for Java programmers who want to program in
+the Java programming language, based on interfaces defined in the CORBA
+Interface Definition Language.
 
-Instead of writing a Java interface as is done in RMI, in CORBA the
-programmer writes the definition in IDL: a special purpose, interface
-language used as the base for CORBA implementations. This IDL definition
-is then used to generate the necessary \emph{stubs} (client side proxies
-to delegate method invocations to the server) and \emph{skeletons},
-\emph{holder} and \emph{helper} classes (server side classes that hide
-low-level CORBA details) which can be extended.
+Using this bridge, it becomes possible to let Java components communicate
+with CORBA objects written in any language that has Interface Definition
+Language (IDL) mappings.
+
+Instead of writing a Java interface as is done in RMI, in Java IDL the
+definition is written in IDL: a special purpose interface language used
+as the base for CORBA implementations. This IDL definition is then used
+to generate the necessary \emph{stubs} (client side proxies to delegate
+method invocations to the server) and \emph{skeletons}, \emph{holder}
+and \emph{helper} classes (server side classes that hide low-level
+CORBA details).
 
 \medskip
 \begin{figure}
