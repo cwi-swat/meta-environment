@@ -6,6 +6,8 @@
 #include <dlfcn.h>
 #include <errno.h>
 #include <assert.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #include <aterm2.h>
 
@@ -65,7 +67,7 @@ static void executeEditor(const char *library,
     startup(filename, read_from_hive_fd, write_to_hive_fd);
   }
   else {
-    char *error = dlerror();
+    const char *error = dlerror();
     if (error != NULL) {
       fprintf(stderr, "%s in %s\n", error, library);
     }
@@ -158,9 +160,15 @@ static void removeEditorProcess(ATerm id)
   TE_Process process = getEditorProcess(id);
 
   if (process != NULL) {
-    close(TE_getPipeWrite(TE_getProcessToChild(process)));
-    close(TE_getPipeRead(TE_getProcessFromChild(process)));
+    if (close(TE_getPipeWrite(TE_getProcessToChild(process))) == -1) {
+      perror("editor-hive:close:write-to-child");
+    }
+    if (close(TE_getPipeRead(TE_getProcessFromChild(process))) == -1) {
+      perror("editor-hive:close:read-from-child");
+    }
     ATtableRemove(editorsById, id);
+
+    waitpid(-1, NULL, 0);
   }
 }
 
