@@ -1,5 +1,9 @@
 # $Id$
 
+2002/09/26 (markvdb@cs.vu.nl)
+ * First step in refactoring the code of the module-database with
+   respect to renaming and parameterization.
+
 2002/09/25 (markvdb@cs.vu.nl)
  * Fixed a bug in the parameter handling.
  * '-m' option added to meta script in order to enable the user to give
