@@ -44,10 +44,9 @@ equations
         get-traversal-strategy(Funid2) = bottom-up,
         get-traversal-type(Funid2) = accutrafo,
         make-traversal-expression(Funid2,ActualArg*,Aint) = Expression,
-        traversal-result-argument(Funid2) = Expression2,
-        Stat+ = (Expression2 = Expression); 
-               (arg0 = accutrafo_tuple_first(Expression2));
-               (arg1 = accutrafo_tuple_second(Expression2));
+        Stat+ = (arg0 = Expression); 
+               (arg1 = accutrafo_tuple_second(arg0));
+               (arg0 = accutrafo_tuple_first(arg0));
         ===>
         make-traversal-stats(Funid,ActualArg*,Aint) = Stat+
 
