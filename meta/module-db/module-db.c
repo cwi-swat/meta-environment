@@ -20,16 +20,13 @@ ATermTable modules_db;
 ATermTable new_modules_db;
 ATermTable import_db;
 ATermTable trans_db;
-extern ATermTable compile_db;
-extern ATerm modules_to_process;
 
-#define path_syn_loc 0
-#define syn_loc 1
-#define syn_updated_loc 2
-#define path_eqs_loc 3
-#define eqs_loc 4
-#define eqs_updated_loc 5
-#define table_loc 6
+/* Declaration for the reshuffling phase. */
+ATermList modules_to_process;
+ATbool compiling = ATfalse;
+ATbool reshuffling = ATfalse;
+ATerm top_module;
+ATermTable compile_db;
 
 static ATerm Mtrue;
 static ATerm Mfalse;
@@ -83,12 +80,8 @@ ATerm get_new_equations(int cid, ATerm mods)
     mod = ATgetFirst((ATermList) mods);
     entry = GetValue(new_modules_db,mod);
     eqsterm = ATelementAt((ATermList)entry, eqs_loc);
-    if(!ATisEqual(eqsterm,ATparse("unavailable")) &
-       !ATisEqual(eqsterm,ATparse("error")) &
-       !ATisEqual(eqsterm,ATparse("no-equations"))) {
-      eqs = AFTgetEqs(eqsterm);
-      equations = ATconcat(equations, eqs);
-    }
+    eqs = AFTgetEqs(eqsterm);
+    equations = ATconcat(equations, eqs); 
     mods = (ATerm) ATgetNext((ATermList) mods);
   };
 
@@ -434,7 +427,7 @@ ATbool complete_sdf2_specification(ATermList visited, ATerm module)
       return result;
     }
     else {
-      ATfprintf(stderr,"%t is missing\n",module);
+      ATfprintf(stderr,"Sdf2: %t is missing\n",module);
       return ATfalse;
     }
   }
@@ -651,7 +644,7 @@ ATermList get_import_section_sdf2(ATerm module)
 
 ATerm make_main_module(ATerm mainname)
 {
-  ATerm result,result1,result2,result3;
+  ATerm result = NULL,result1,result2,result3;
   char *text;
 
   result1 = ATmakeTerm(pattern_asfix_list,
@@ -716,7 +709,7 @@ ATerm make_main_module(ATerm mainname)
 
 ATerm make_name_term(ATerm name)
 {
-  ATerm result;
+  ATerm result = NULL;
   char *text;
 
   if(ATmatchTerm(name,pattern_asfix_id,&text)) {
@@ -802,7 +795,7 @@ ATerm retrieve_syntax(int cid, ATerm name)
   }
   else {
     ATfprintf(stderr,
-              "Specification is incomplete, cannot generate parse table\n");
+              "Specification is incomplete, can not generate parse table\n");
     return ATmake("snd-value(syntax(done)))");
   }
 }
@@ -847,6 +840,161 @@ ATerm add_pgen_func(int cid, ATerm name, ATerm syntax)
   }
 }
 
+/* Basic reshuffling functionality */
+char *output_path = ".";
+
+void initialize_output_path(ATerm name)
+{
+  top_module = name;
+  if( getenv( "COMPILER_OUTPUT" ) != NULL )
+     output_path = getenv( "COMPILER_OUTPUT" );
+  else {
+    if( getenv( "TMPDIR" ) != NULL )
+       output_path = getenv( "TMPDIR" );
+    ATfprintf(stderr,"COMPILER_OUTPUT not set, using %s\n", output_path);
+  }
+}
+
+ATerm unique_new_name(ATerm name)
+{
+  char *text, *newtext;
+  ATerm newname;
+  int n = 1;
+
+  if(ATmatchTerm(name,pattern_asfix_id,&text)) {
+    newtext = malloc(strlen(text)+16);
+    sprintf(newtext,"AUX-%s%d",text,n);
+    newname = ATmakeTerm(pattern_asfix_id,newtext);
+    while(GetValue(compile_db,newname)) {
+      n++;
+      sprintf(newtext,"AUX-%s%d",text,n);
+      newname = ATmakeTerm(pattern_asfix_id,newtext);
+    }
+    free(newtext);
+    return newname;
+  }
+  else {
+    ATerror("illegal name %t\n", name);
+    return NULL; /* silence the compiler */
+  }
+}
+
+void gen_makefile(ATerm name)
+{
+  char *text, *mtext;
+  char buf[1024];
+  FILE *output;
+  ATerm module;
+  ATermList modules = ATtableKeys(compile_db);
+
+  if(ATmatchTerm(name,pattern_asfix_id,&text)) {
+
+    sprintf(buf, "%s/%s.module-list", output_path, text);
+    ATfprintf(stderr,"Writing: %s\n", buf);
+    output = fopen(buf,"w");
+    if(!output)
+      ATfprintf(stderr,"Cannot open file %s\n",buf);
+    else {
+      fprintf( output, "# Generated automatically, please do not edit.\n" );
+      while (!ATisEmpty(modules)) {
+        module = ATgetFirst(modules);
+        if(ATmatchTerm(module,pattern_asfix_id,&mtext)) {
+          ATfprintf(output,"%s.c\n", mtext);
+        }
+        modules = ATgetNext(modules);
+      }
+      fclose( output );
+
+      sprintf(buf, "cd %s; %s/genmakefile.sh %s", output_path, BINDIR, text );
+      ATfprintf(stderr,"Executing: %s\n", buf );
+      system(buf );
+    }
+  }
+  else
+    ATerror("illegal name %t\n", name);
+}
+
+void process_next_module(int cid)
+{
+  ATerm event;
+
+  if(!ATisEmpty(modules_to_process)) {
+    compiling = ATtrue;
+    event = ATgetFirst(modules_to_process);
+    modules_to_process = ATgetNext(modules_to_process);
+    ATBwriteTerm(cid,event);
+  }
+  else {
+    compiling = ATfalse;
+    if(!reshuffling) {
+      gen_makefile(top_module);
+      ATfprintf(stderr,"Compilation completed\n");
+      ATBwriteTerm(cid,ATmake("snd-event(done)"));
+    }
+  }
+}
+
+void rec_ack_event(int cid, ATerm term)
+{
+  ATerm name, mod;
+
+  if(ATmatch(term,"generate-code(<term>,<term>)",&name,&mod)) {
+    process_next_module(cid);
+  }
+  else if(ATmatch(term,"done")) {
+    compiling = ATfalse;
+  }
+  else
+    exit(1);
+}
+
+void AFTreshuffleModules(int cid, ATermList mods);
+void AFreshuffleModules(int cid, ATermList mods);
+
+void compile_module(int cid, ATerm mod)
+{
+  ATermList imports;
+
+  if(GetValue(new_modules_db, mod)) {
+    /* We are working with the term asfix representation. */
+    if(complete_sdf2_specification(ATempty,mod)) {
+      ATfprintf(stderr,"Reshuffling ... \n");
+      initialize_output_path(mod);
+      modules_to_process = ATempty;
+      imports = get_imported_modules(mod);
+ATfprintf(stderr,"Imported modules are %t\n", imports);
+      AFTreshuffleModules(cid,imports);
+      ATfprintf(stderr,"Finished reshuffling\n");
+    }
+    else {
+      ATfprintf(stderr,
+                "Specification is incomplete and can not be compiled!\n");
+      ATBwriteTerm(cid,ATmake("snd-event(done)"));
+    }
+  }
+  else if(GetValue(modules_db, mod)) {
+    /* We are working with the module asfix representation. */
+    if(complete_specification(ATempty,mod)) {
+      ATfprintf(stderr,"Reshuffling ... \n");
+      initialize_output_path(mod);
+      modules_to_process = ATempty;
+      imports = get_imported_modules(mod);
+      AFreshuffleModules(cid,imports);
+      ATfprintf(stderr,"Finished reshuffling\n");
+    }
+    else {
+      ATfprintf(stderr,
+                "Specification is incomplete and can not be compiled!\n");
+      ATBwriteTerm(cid,ATmake("snd-event(done)"));
+    } 
+  }
+  else {
+    ATfprintf(stderr,
+              "Module %t not in module databases!\n", mod);
+    ATBwriteTerm(cid,ATmake("snd-event(done)"));
+  } 
+}
+
 /* Main program */
 int main(int argc, char **argv)
 {
@@ -862,7 +1010,7 @@ int main(int argc, char **argv)
   Mfalse = ATparse("false");
   ATprotect(&Mfalse);
 
-  ATprotect(&modules_to_process);
+  ATprotect((ATerm *)&modules_to_process);
 
   ATBeventloop();
 

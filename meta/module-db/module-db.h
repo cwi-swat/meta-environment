@@ -14,6 +14,14 @@
 #define RemoveKey(db,k) (ATtableRemove(db,k))
 #define CreateValueStore(i1,i2) (ATtableCreate(i1,i2))
 
+#define path_syn_loc 0    /* Location to store the path to the syntax file. */
+#define syn_loc 1         /* Baf file of the syntax file. */
+#define syn_updated_loc 2 /* Is the syntax changed? */
+#define path_eqs_loc 3    /* Location to store the path to the equations. */
+#define eqs_loc 4         /* Baf file of the equations. */
+#define eqs_updated_loc 5 /* Are the equations changed? */
+#define table_loc 6       /* Location to store the path to the parse-table. */
+
 void AFinitAsFixPatterns();
 
 extern ATerm pattern_asfix_module;
