@@ -850,13 +850,39 @@ static tree SG_Jump_Over_Injections(parse_table *pt, tree t)
   if (ATgetType(t) == AT_APPL &&
       ATgetAFun(t) != SG_Amb_AFun) {
     label prod = SG_GetApplProdLabel(t);
-      
+        
+    while (SG_ProdIsInjection(pt, prod)) {
+      ATermList injSons = (ATermList)ATgetArgument((ATerm)t, 1);
+      t = (tree)ATgetFirst(injSons);
+  
+      if (ATgetType(t) == AT_APPL &&
+          ATgetAFun(t) != SG_Amb_AFun) {
+        prod = SG_GetApplProdLabel(t);
+      }
+      else {
+        return t;
+      }
+    }
+  }
+  return t;
+}
+
+static tree SG_Jump_Over_Injections_Modulo_Eagerness(parse_table *pt, tree t)
+{
+  if (ATgetType(t) == AT_APPL &&
+      ATgetAFun(t) != SG_Amb_AFun &&
+      SG_ProdType_Tree(t) != SG_PT_EAGER &&
+      SG_ProdType_Tree(t) != SG_PT_UNEAGER) {
+    label prod = SG_GetApplProdLabel(t);
+
     while (SG_ProdIsInjection(pt, prod)) {
       ATermList injSons = (ATermList)ATgetArgument((ATerm)t, 1);
       t = (tree)ATgetFirst(injSons);
 
       if (ATgetType(t) == AT_APPL &&
-          ATgetAFun(t) != SG_Amb_AFun) {
+          ATgetAFun(t) != SG_Amb_AFun &&
+          SG_ProdType_Tree(t) != SG_PT_EAGER &&
+          SG_ProdType_Tree(t) != SG_PT_UNEAGER) {
         prod = SG_GetApplProdLabel(t);
       }
       else {
@@ -880,22 +906,11 @@ static ATbool SG_MoreEager(int prodtype0, int prodtype1)
 
 static ATbool SG_EagerPriority_Tree(parse_table *pt, tree t0, tree t1)
 {
-  tree newt0 = SG_Jump_Over_Injections(pt, t0);
-  tree newt1 = SG_Jump_Over_Injections(pt, t1);
+  tree newt0 = SG_Jump_Over_Injections_Modulo_Eagerness(pt, t0);
+  tree newt1 = SG_Jump_Over_Injections_Modulo_Eagerness(pt, t1);
+
   if (SG_MoreEager(SG_ProdType_Tree(t0), SG_ProdType_Tree(t1))) {
     return ATtrue;
-  }
-  if (ATgetType(newt0) == AT_APPL &&
-      ATgetAFun(newt0) != SG_Amb_AFun) {
-    if (SG_MoreEager(SG_ProdType_Tree(newt0), SG_ProdType_Tree(t1))) {
-      return ATtrue;
-    }
-  }
-  if (ATgetType(newt1) == AT_APPL &&
-      ATgetAFun(newt1) != SG_Amb_AFun) {
-    if (SG_MoreEager(SG_ProdType_Tree(t0), SG_ProdType_Tree(newt1))) {
-      return ATtrue;
-    }
   }
   if (ATgetType(newt0) == AT_APPL &&
       ATgetAFun(newt0) != SG_Amb_AFun &&
