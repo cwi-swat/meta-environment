@@ -1,0 +1,37 @@
+%%
+%% Test all built-in functions
+
+rel[int,int] Rel1 = {<1,10>}
+rel[int,int] Rel2 = {<1,10>, <2,20>, <3,30>}
+
+bag[int] EMPTYBAG = {}
+rel[int,int] EMPTYREL = {}
+
+%% A -- id
+
+bool A01 = id(EMPTYBAG) == EMPTYREL
+bool A02 = id({1,2,3}) == {<1, 1>, <2, 2>, <3, 3>}
+
+%% B -- domain
+
+bool B01 = domain(EMPTYREL) == EMPTYBAG
+bool B02 = domain(Rel1) == {1}
+bool B03 = domain(Rel2) ==  {1, 2, 3}
+
+%% C -- range
+%% D -- carrier
+%% E -- top
+%% F -- bottom
+%% G -- inv
+%% H -- compl
+%% I -- domR
+%% J -- ranR
+%% K -- carR
+%% L -- domX
+%% M -- ranX
+%% N -- carX
+%% O -- fst
+%% P -- sec
+%% Q -- reachX
+%% R -- reachR
+
