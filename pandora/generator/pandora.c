@@ -287,6 +287,41 @@ static BOX_Box layoutToBox(PT_Tree tree)
 }
 
 /*}}}  */
+/*{{{  static BOX_Box listToBox(PT_Tree tree) */
+
+static BOX_Box listToBox(PT_Tree tree)
+{
+  PT_Production production = PT_getTreeProd(tree);
+  PT_Symbol symbol = PT_getProductionRhs(production);
+
+  if (PT_isArgsEmpty(PT_getTreeArgs(tree)))
+  {
+    BOX_BoxList boxlist = BOX_makeBoxListEmpty();
+    BOX_OptLayout optLayout = BOX_makeOptLayoutAbsent();
+    BOX_SpaceOptionOptions soptions = BOX_makeSpaceOptionOptionsEmpty(); 
+
+    return BOX_makeBoxH(optLayout,
+			soptions,
+			optLayout,
+			optLayout,
+			boxlist,
+			optLayout);
+  }
+
+  symbol = PT_getSymbolSymbol(symbol);
+  if (PT_isSymbolIterStarSep(symbol) || PT_isSymbolIterPlusSep(symbol))
+  {
+    
+    
+    return applToBox(tree);
+  }
+  else
+  {
+    return applToBox(tree);
+  }
+}
+
+/*}}}  */
 /*{{{  static BOX_Box applToBox(PT_Tree tree) */
 
 static BOX_Box applToBox(PT_Tree tree)
@@ -314,11 +349,15 @@ static BOX_Box treeToBox(PT_Tree tree)
   else if (PT_isTreeLayout(tree)) {
     return layoutToBox(tree);
   }
+  else if (PT_isProductionList(PT_getTreeProd(tree)))
+  {
+    return listToBox(tree); 
+  }
   else if (PT_isTreeAppl(tree)) {
     return applToBox(tree);
   } 
   else {
-    ATwarning("+- Unhandled parsetree type: %t\n", tree);
+    ATwarning("Unhandled parsetree type: %t\n", tree);
     return NULL;
   }
 }

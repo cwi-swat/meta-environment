@@ -1,9 +1,16 @@
 # $Id$
 
+Wed Feb 11 16:18:46 CET 2004 <kooiker@cwi.nl>
+ * generator/pandora.c:
+   - empty lists result in empty H box 
+
 Tue Feb 10 20:45:32 CET 2004 <kooiker@cwi.nl>
  * generator/pandora.c:
    - if number of symbols at lhs of a production is more or equal to 3 it
      might be a indented type production
+
+Wed Feb 11 16:18:29 CET 2004 <kooiker@cwi.nl>
+ * 
 
 Tue Feb 10 15:27:49 CET 2004 <m336@cwi.nl>
  * upgrade auto* to: autoconf 2.59, automake 1.7.9, libtool 1.5.2
