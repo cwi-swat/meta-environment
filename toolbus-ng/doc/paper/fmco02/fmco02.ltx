@@ -301,79 +301,75 @@ Table~\ref{Tab:Tscript-features}.
 
 \section{An example}
 
-In this example, an \emph{AddressBookEntry} contains the following
-elements:
+To demonstrate the use of some of the ToolBus script primitives,
+we describe how a sample application could be implemented using
+the ToolBus. For this example, we consider the construction of an
+\emph{Address Book Service}.
+
+Entries in our \emph{AddressBookEntry} contain the following elements:
 
 \begin{description}
-%%\item[id] a unique \emph{id} (used for internal reference);
-  \item[name] a string representing the \emph{name} of the entry;
-  \item[address] a string representing the \emph{address} of the entry.
+  \item[id] a unique \emph{id} (used for internal reference);
+  \item[name] the \emph{name} of the person living at this address;
+  \item[address] the \emph{address} of the person.
 \end{description}
-
-In Java, we implement the \emph{AddressBookEntry} as follows:
-\begin{footnotesize}
-\verbatiminput{AddressBookEntry.java}
-\end{footnotesize}
-
-The \emph{AddressBookService} has the following interface:
-
-\begin{footnotesize}
-\begin{verbatim}
-public interface IAddressBookService {
-  public int createEntry();
-  public void deleteEntry(int id);
-  public void setName(int id, String name);
-  public void setAddress(int id, String address);
-}
-\end{verbatim}
-\end{footnotesize}
 
 \begin{footnotesize}
 \verbatiminput{AddressBookService.java}
 \end{footnotesize}
 
-Given the following use cases of our \emph{address book service}:
+Our \emph{address book service} will deal with the following use cases:
 
 \begin{description}
   \item[create] a new entry in the addressbook database;
-  \item[update] an existing entry in the database;
-  \item[delete] an existing entry from the database.
+  \item[delete] an existing entry from the database;
+  \item[search] for an entry in the database;
+  \item[update] an existing entry in the database.
 \end{description}
 
-The desired behaviour of these use cases can now easily be described in
-a number of ToolBus processes: one for each use case and one to describe
-their interaction and the startup procedure of the service:
+Each of these use cases can be described as a ToolBus process which,
+together with a process that explains how these use cases interact,
+form the ToolBus script describing our \emph{Address Book Service}.
 
+\subsection{The \texttt{MAIN} process}
+
+The \texttt{MAIN} process tells the ToolBus that an instance of our
+\texttt{address-book} tool is to be executed, followed by a loop
+which invokes \emph{one of} the \texttt{CREATE}, \texttt{UPDATE} or
+\texttt{DELETE} processes each iteration. This construction, using the
+\texttt{+} operator ensures that at this level, the sub-processes can
+be regarded atomically: e.g. no \texttt{DELETE} will happen during an
+\texttt{UPDATE}.
+
+\begin{footnotesize}
 \begin{verbatim}
-process ADDRESS-BOOK is
+process MAIN is
 let ABTool : address-book
 in
-  execute(address-book, ABTool?) . (
-    CREATE(ABTool) + UPDATE(ABTool) + DELETE(ABTool)
+  execute(address-book, ABTool?) .
+  (
+    CREATE(ABTool) + DELETE(ABTool) + SEARCH(ABTool) + UPDATE(ABTool)
   ) * delta
 endlet
 \end{verbatim}
-
-The process \texttt{ADDRESS-BOOK} tells the ToolBus that an instance
-of our \texttt{address-book} tool is to be executed, followed by a
-loop which invokes \emph{one of} the \texttt{CREATE}, \texttt{UPDATE}
-or \texttt{DELETE} processes each iteration. This construction, using
-the \texttt{+} operator ensures that at this level, the sub-processes
-can be regarded atomically: e.g. no \texttt{DELETE} will happen during
-an \texttt{UPDATE}.
+\end{footnotesize}
 
 The operating system level details of starting the tool are defined in
-a separate section:
+a separate section (one for each tool if multiple tools are involved):
+
+\begin{footnotesize}
 \begin{verbatim}
   tool address-book is {
     command = "java-adapter -class TBAddressBookService"
   }
 \end{verbatim}
+\end{footnotesize}
 
 In this case, the we tell the ToolBus that our tool is written
 in Java, and that the main class to be started is called
 \texttt{TBAddressBookService}.
 
+\subsection{The \texttt{CREATE} process}
 The \emph{creation} of a new addressbook entry can be described as
 a ToolBus process as follows:
 
@@ -395,6 +391,7 @@ to the tool, so it can update its state. In this case, our tool yields
 a unique id for reference to the new entry, which is returned as the
 result of the creation message.
 
+\subsection{The \texttt{DELETE} process}
 The \texttt{DELETE} process is defined in a similar way, except there is
 no result value, which is demonstrated by the fact that a \texttt{snd-do}
 is used to communicate with the tool, as opposed to the \texttt{snd-eval},
@@ -412,7 +409,41 @@ endlet
 \end{verbatim}
 \end{footnotesize}
 
-The \texttt{UPDATE} process is somewhat more interesting. It shows
+\subsection{The \texttt{SEARCH} process}
+
+In our example, the \texttt{SEARCH} process implements but a single query:
+finding an addressbook entry by name. It shows how different results from
+a tool-evaluation request can be processed in much the same way that
+different messages are handled. Upon receiving a \texttt{find-by-name}
+message from another process, this request is delegated to the
+tool. Depending on whether or not the entry exists in the database,
+the tool replies with a \texttt{found} or a \texttt{not-found} message,
+respectively. This result is then propagated to the process that sent
+the initial \texttt{find-by-name} message.
+
+\begin{footnotesize}
+\begin{verbatim}
+process SEARCH(AB : address-book) is
+let
+  Aid : int,
+  Name : str
+in
+  rec-msg(find-by-name(Name?)) .
+  snd-eval(AB, find-by-name(Name)) .
+  (
+    rec-value(AB, found(Aid?)) .
+    snd-msg(found(Aid))
+  +
+    rec-value(AB, not-found) .
+    snd-msg(not-found)
+  )
+endlet
+\end{verbatim}
+\end{footnotesize}
+
+\subsection{The \texttt{UPDATE} process}
+
+The \texttt{UPDATE} process is even more interesting. It shows
 that each update of an address entry is \emph{guarded}. A process
 wanting to update an entry first has to announce this fact by sending
 an \texttt{update-address} message, before it can do one or more
@@ -431,8 +462,7 @@ process UPDATE(AB : address-book) is
 let
   AID : int,
   Name : str,
-  Address : str,
-  Zip : str
+  Address : str
 in
   rec-msg(update-address(AID?)) .
   ( rec-msg(set-name(Name?)) .
@@ -442,6 +472,37 @@ in
   ) *
   rec-msg(update-address-done(AID))
 endlet
+\end{verbatim}
+\end{footnotesize}
+
+\texttt{TODO} where shall we put this? We don't need a Java implementation
+here .. move to Appendix? move to Case Study section?
+
+\begin{footnotesize}
+\begin{verbatim}
+public class AddressBookEntry {
+  private String name;
+  public void setName(String name) { this.name = name; }
+  public String getName() { return name; }
+
+  private String address;
+  public void setAddress(String address) { this.address = address; }
+  public String getAddress() { return address; }
+}
+\end{verbatim}
+\end{footnotesize}
+
+The \emph{AddressBookService} has the following interface:
+
+\begin{footnotesize}
+\begin{verbatim}
+public interface IAddressBookService {
+  public int createEntry();
+  public void deleteEntry(int id);
+  public int findByName(String name);
+  public void setName(int id, String name);
+  public void setAddress(int id, String address);
+}
 \end{verbatim}
 \end{footnotesize}
 

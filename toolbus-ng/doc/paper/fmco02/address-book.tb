@@ -35,8 +35,7 @@ process UPDATE(AB : address-book) is
 let
   AID : int,
   Name : str,
-  Address : str,
-  Zip : str
+  Address : str
 in
   rec-msg(update-address(AID?)) .
   ( rec-msg(set-name(Name?)) .
@@ -85,7 +84,8 @@ in
     printf("%s found: id=%t\n", Name, AID)
   + rec-msg(not-found) .
     printf("%s not found!\n", Name)
-  )
+  ) .
+  shutdown("")
 endlet
 
 toolbus(MAIN, CLIENT)
