@@ -2,6 +2,8 @@
 
 include $(top_srcdir)/make_rules
 
+CFLAGS			= -Wall -Werror -g -O2
+
 EXTRA_DIST		= editor-manager.idef
 
 INCLUDES		= -I$(ATERM)/include \

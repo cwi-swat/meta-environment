@@ -2,6 +2,8 @@
 
 include $(top_srcdir)/make_rules
 
+CFLAGS			= -Wall -Werror -g -O2
+
 bin_PROGRAMS		= in-output
 data_DATA		= in-output.idef
 

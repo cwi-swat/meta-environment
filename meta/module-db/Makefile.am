@@ -2,6 +2,8 @@
 
 include $(top_srcdir)/make_rules
 
+CFLAGS			= -Wall -Werror -g -O2
+
 bin_PROGRAMS		= module-db
 data_DATA		= module-db.idef
 
