@@ -16,6 +16,7 @@ public class AddressBookImpl extends UnicastRemoteObject implements AddressBook 
     address.setNumber(7);
 
     addressMap.put("john", address);
+    addressMap.put("guest", address);
   }
 
   public void add(String name, Address address) throws RemoteException {
