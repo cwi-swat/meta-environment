@@ -8,5 +8,5 @@ pkgdata_DATA     = $(TBSCRIPTS)
 
 %.tb : %.tb.src Makefile
 	sed 's@__ASF__@${ASF}@g;\
-	     s@__ASF_LIBRARY__@${ASF_LIBRARY}/share/asf-library@g;\
+	     s@__ASF_LIBRARY__@${ASF_LIBRARY}@g;\
 	     s@__META__@${META}@' < $< > $@
