@@ -150,7 +150,8 @@ endlet
 process Meta-Interface is
 let
   Id : int,
-  Module : str
+  Module : str,
+  ModuleNames : list
 in
   Id := process-id.
   Create-Asf-Processes.
@@ -187,6 +188,9 @@ in
   + 
     rec-msg(invalidate-other-tables-hook(Module, sdf)) .
     snd-msg(other-tables-invalidated-hook)
+  +
+    rec-msg(pre-get-all-sdf2-hook(ModuleNames?)) .
+    snd-msg(pre-get-all-sdf2-hook-result(success)) 
   ) * delta
 endlet
 
