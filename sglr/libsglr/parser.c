@@ -811,6 +811,10 @@ char *SG_ProdSort(production t)
              NULL, &sort, NULL, NULL, NULL)) {
     return sort;
   }
+  if(ATmatch((ATerm) t, "prod([sort(<str>)],sort(\"<START>\"),<term>)",
+             &sort, NULL)) {
+    return sort;
+  }
 
   if(ATmatch((ATerm) t, "prod([<list>],cf(<term>),<term>)",  NULL, &t, NULL)
      || ATmatch((ATerm) t, "prod([<list>],lex(<term>),<term>)", NULL, &t, NULL)) {
