@@ -22,6 +22,12 @@
  * Fixed a very strange bug: the type of updateList in the idef and the
    studio differed. Now reading in a string that is converted to an ATerm
    by calling factory.parse. 
+ * Loading the term-store does not print error messages about existing tables 
+   anymore.
+   - If the user adds a table that already exists, the error message is
+     still printed
+   - An error message is printed in all cases where a table is added with
+     the same name as an existing table, but a different type
 
 2003/07/01 (markvdb@cwi.nl)
  * First version of the reading and writing of the snapshot
