@@ -4,7 +4,6 @@ import toolbus.TBTerm;
 import toolbus.ToolBus;
 import toolbus.ToolBusException;
 import toolbus.process.ProcessInstance;
-import toolbus.tool.DeletedToolDefinition;
 import toolbus.tool.ToolInstance;
 
 import aterm.AFun;
