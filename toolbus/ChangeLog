@@ -19,6 +19,11 @@
 
 ------------------------------------------------------------------------------
 
+Date:   Mon Jul 30 10:35:41 MEST 2001 (Merijn)
+- Bumped version to 0.20 because version 0.19 was released on Jul 18 (not 0.18)
+- Added EXTRA_DIST variable to Makefile.am to alsoi distribute
+  program-check.m4, reconf, and DEVELOPERS_INFO files.
+
 Date:   Tue Jul 17 10:24:44 CEST 2001
 - 0.18 released, version bumped to 0.19
 
