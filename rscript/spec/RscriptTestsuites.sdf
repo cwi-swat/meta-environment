@@ -3,6 +3,7 @@ module RscriptTestsuites
 imports RscriptCalculator
 
 exports
+   context-free start-symbols TESTREPORT
    sorts TESTREPORT
 
   context-free syntax
@@ -27,3 +28,4 @@ hiddens
        "$Exp"  [0-9\']*               -> REXP
        "$String" [0-9\']*             -> String
        "$Stat*" [0-9\']*              -> RSTAT*
+       "$Rscript" [0-9\']*            -> RSCRIPT

@@ -474,9 +474,10 @@ of character sequences surrounded by double quotes. e.g., {\tt "a"} or
 
 \paragraph{Locations}
 Location values are represented by the type {\tt loc} and serve as
-source text coordinates, they are always generated automatically but
-can be written as {\tt area-in-file("/usr/paulk/myfile.c", area(2, 3, 7,
-55))}.
+text coordinates in a specific source file. They should \emph{always} be generated automatically but
+for the curious here is an example how they look like: {\tt
+  area-in-file("/home/paulk/example.pico", area(6, 17, 6, 18, 131, 1))}.
+
 
 \section{Tuples, Sets and Relations}
 
@@ -486,7 +487,14 @@ Tuples are represented by the type {\tt <$T_1$, $T_2$>}, where $T_1$ and
 $T_2$ are arbitrary types. An example of a tuple type is {\tt <int, str>}.
 \rscript directly supports tuples consisting of two elements (also
 know as \emph{pairs}).  For convenience, $n$-ary tuples are also allowed, but
-there are some restrictions on their use, see the paragraph {\bf Relations} below. 
+there are some restrictions on their use, see the paragraph {\bf Relations}
+below.
+Examples are:
+\begin{itemize}
+\item \verb@<1, 2>@ is of type {\tt <int, int>},
+\item \verb@<1, 2, 3>@ is of type {\tt <int, int, int>},
+\item \verb@<1, "a", 3>@ is of type {\tt <int, str, int>},
+\end{itemize}
 
 \paragraph{Sets}
 Sets are represented by the type {\tt set[$T$]}, where $T$ is an arbitrary
@@ -497,8 +505,9 @@ where the $E_i$ ($1 \leq i \leq n$) are expressions that yield the desired eleme
 type. For example, 
 \begin{itemize}
 \item \verb@{1, 2, 3}@ is of type {\tt set[int]},
-\item \verb@{<1,10>, <2,20>, <3,30>\}@ is of type {\tt set[<int,int>]}, and 
-\item \verb@{{"a", "b"}, {"c", "d"}}@ is of type {\tt set[set[str]]}.
+\item \verb@{<1,10>, <2,20>, <3,30>}@ is of type {\tt set[<int,int>]},
+\item \verb@{<"a",10>, <"b",20>, <"c",30>}@ is of type {\tt set[<str,int>]}, and 
+\item \verb@{{"a", "b"}, {"c", "d", "e"}}@ is of type {\tt set[set[str]]}.
 \end{itemize}
 
 \paragraph{Relations}
@@ -517,6 +526,15 @@ rel[$T_1$, $T_2$, ..., $T_n$]} which is a shorthand for {\tt set[<$T_1$,
 $T_2$, ..., $T_n$>]}.  Most built-in operators and functions require binary
 relations as arguments.  It is, however, perfectly possible to use $n$-ary
 relations as values, or as arguments or results of functions.
+Examples are:
+\begin{itemize}
+\item \verb@{<1,10>, <2,20>, <3,30>}@ is of type {\tt rel[int,int]} (yes
+  indeed, you saw this same example before and then we gave  {\tt
+  set[<int,int>]} as its type; remember that these types are interchangeable.),
+\item \verb@{<"a",10>, <"b",20>, <"c",30>}@ is of type {\tt rel[str,int]}, and 
+\item \verb@{{"a", 1, "b"}, {"c", 2, "d"}}@ is of type {\tt rel[str,int,str]}.
+\end{itemize}
+
 
 \subsection{User-defined Types and Values}
 
@@ -606,21 +624,36 @@ Enumerators generate all the values in a given set or relation.
 They come in two flavors: 
 
 \begin{itemize}
-\item {\tt $T$ $V$ : $E$}: the elements of the set $S$ (of type {\tt set[$T$]})
+\item {\tt $T$ $V$~:~$E$}: the elements of the set $S$ (of type {\tt set[$T$]})
   that results from the evaluation
-of expression $E$ are enumerated and subsequently assigned to the new variable $V$ of type $T$.
-
-\item {\tt <$R_1$,~...,~$R_n$>~:~$E$}: the elements of the set $S$ (of type
-{\tt set[<$T'_1$,...,$T'_n$>]}, where $T'_i$ is determined by the type of each
-target $R_i$, see below) that results from the evaluation of expression $E$
-are enumerated. The $i$-the element ($i=1,...,n$) of the resulting $n$-tuple
-is subsequently combined with each target $R_i$ as follows:
+of expression $E$ are enumerated and subsequently assigned to the new variable
+  $V$ of type $T$.
+Examples are: 
 \begin{itemize}
-  \item If $R_i$ is a variable declaration of the form $T_i$ $V_i$, then the $i$-th element is assigned to $V_i$.
-  \item If $R_i$ is an arbitrary expression $E_i$, then the value of
+\item \verb@int N : {1, 2, 3, 4, 5}@,
+\item \verb@str K : KEYWORDS@, where {\tt KEYWORDS} should evaluate to a value of
+  type {\tt set[str]}.
+\end{itemize}
+
+\item {\tt <$D_1$,~...,~$D_n$>~:~$E$}: the elements of the relation $R$ (of type
+{\tt rel[<$T'_1$,...,$T'_n$]}, where $T'_i$ is determined by the type of each
+target $D_i$, see below) that results from the evaluation of expression $E$
+are enumerated. The $i$-the element ($i=1,...,n$) of the resulting $n$-tuple
+is subsequently combined with each target $D_i$ as follows:
+\begin{itemize}
+  \item If $D_i$ is a variable declaration of the form $T_i$ $V_i$, then the $i$-th element is assigned to $V_i$.
+  \item If $D_i$ is an arbitrary expression $E_i$, then the value of
    the $i$-th element should be equal to the value of $E_i$. If they
    are unequal, computation continues with enumerating the next
-   element of the bag or relation $S$.
+   tuple in the  relation $R$.
+\end{itemize}
+Examples are:
+\begin{itemize}
+\item \verb@<str K, int N> : <"a",10>, <"b",20>, <"c",30>}@<
+\item \verb@<str K, int N> : FREQUENCIES@, where {\tt FREQUENCIES} should
+  evaluate to a value of
+\item \verb@<str K, 10> : FREQUENCIES@, will only generate pairs with {\tt 10}
+  as second element.
 \end{itemize}
   
 \end{itemize}
@@ -630,7 +663,16 @@ A test is a boolean-valued expression. If the evaluation yields {\tt true}
 this indicates that the current combination of generated values up to this test
 is still as desired and execution continues with subsequent generators.  If
 the evaluation yields {\tt false} this indicates that the current combination
-of values is undesired, and that another combination should be tried.
+of values is undesired, and that another combination should be
+tried. Examples:
+
+\begin{itemize}
+\item \verb@N >= 3@ test that {\tt N} has a value greater than or equal {\tt 3}.
+\item \verb@S == "coffee"@ test that {\tt S} is equal to the string {\tt
+"coffee"}.
+\end{itemize}
+In both examples, the variable should have been introduced by a generator that
+occurs earlier in the enclosing comprehension.
 
 \paragraph{Assignment}
 Assignments assign a value to one or more variables and also come in two flavors:
@@ -655,21 +697,23 @@ resulting from the evaluation of expression $E$ with each $T_i$ as follows:
 
 \subsection{Examples of Comprehensions}
 
-\paragraph{Example}
+\begin{itemize}
 
-\verb@{X | int X : {1, 2, 3, 4, 5},  X >= 3}@ yields the set \verb@{3,4,5}@.
+\item \verb@{X | int X : {1, 2, 3, 4, 5},  X >= 3}@ yields the set \verb@{3,4,5}@.
 
-\paragraph{Example}
-
-\verb@{<X, Y> | int X :{1, 2, 3}, int Y :{2, 3, 4}, X >= Y}@ yields the relation
+\item \verb@{<X, Y> | int X :{1, 2, 3}, int Y :{2, 3, 4}, X >= Y}@ yields the
+  relation
+\newline
 \verb@{<2, 2>, <3, 2>, <3, 3>}@.
 
-\paragraph{Example}
-\verb@{<Y, X> | <int X, int Y> :{<1,10>, <2,20>}}@ yields the inverse of
+
+\item \verb@{<Y, X> | <int X, int Y> :{<1,10>, <2,20>}}@ yields the inverse of
 the given relation: \verb@{<10,1>, <20,2>}@.
 
-\paragraph{Example}
-\verb@{X, X * X | X : {1, 2, 3, 4, 5},  X >= 3}@ yields the set \verb@{3,4,5,9,16,25}@.
+\item 
+\verb@{X, X * X | X : {1, 2, 3, 4, 5},  X >= 3}@ yields the set
+\verb@{3,4,5,9,16,25}@.
+\end{itemize}
 
 \section{Declarations} \label{SEC:Declarations}
 
@@ -682,19 +726,18 @@ where $T$ is a type,
 $V$ is a variable name, and $T$ is an expression that should have type
 $T$. The effect is that the value of expression $E$ is assigned to
 $V$ and can be used later on as $V$'s value. Double declarations are
-not allowed.
-
-As a convenience, also declarations without an initialization expression are
+not allowed. As a convenience, also declarations without an initialization expression are
 permitted and have the form 
 \begin{exam}
 {\tt $T$ $V$} 
 \end{exam}
-and only introduce the variable $V$.
+and only introduce the variable $V$. Examples:
 
-\paragraph{Example} \verb@int max = 100@ declares the integer variable
+\begin{itemize}
+\item \verb@int max = 100@ declares the integer variable
 {\tt max} with value {\tt 100}.
 
-\paragraph{Example} The definition
+\item The definition
 \begin{exam}
 \begin{verbatim}
 rel[str,int] day = {<"mon", 1>, <"tue", 2>, <"wed",3>, 
@@ -702,6 +745,7 @@ rel[str,int] day = {<"mon", 1>, <"tue", 2>, <"wed",3>,
 \end{verbatim}
 \end{exam}
 declares the variable {\tt day}, a relation that maps strings to integers.
+\end{itemize}
 
 \subsection{Local Variable Declarations}
 Local variables can be introduced as follows:
@@ -721,23 +765,27 @@ Here $T$ is the result type of the function and this should be equal to the
 type of the associated expression $E$.  Each $T_i$ $V_i$ represents a typed
 formal parameter of the function. The formal parameters may occur in $E$ and
 get their value when $F$ is invoked from another expression.
+Example:
 
-\paragraph{Example} The function declaration
+\begin{itemize}
+\item The function declaration
 \begin{exam}\begin{verbatim}
 rel[int, int] invert(rel[int,int] R) = {<Y, X> | <int X, int Y> : R }
 \end{verbatim}
 \end{exam}
 yields the inverse of the argument relation {\tt R}. For instance,
 \verb@invert({<1,10>, <2,20>})@ yields \verb@{<10,1>, <20,2>}@.
+\end{itemize}
 
 \paragraph{Parameterized types in function declarations}
 The types that occur in function declarations may also contain
 \emph{type variables} that are written as {\tt \&} followed by an identifier.
  In this way functions can be defined for arbitrary
-types.
+types. Examples:
 
-\begin{sloppypar}
-\paragraph{Example} The declaration
+\begin{itemize}
+
+\item The declaration
 \begin{exam}\begin{verbatim}
 rel[&T2, &T1] invert2(rel[&T1,&T2] R) = {<Y, X> | <&T1 X, &T2 Y> : R }
 \end{verbatim}
@@ -750,9 +798,9 @@ and
 \item \verb@invert2({<"mon", 1>, <"tue", 2>})@
 yields \verb@{<1, "mon">, <2, "tue">}@.
 \end{itemize}
-\end{sloppypar}
 
-\paragraph{Example} The function
+
+\item The function
 \begin{exam}\begin{verbatim}
 <&T2, &T1> swap(&T1 A, &T2 B) = <B, A>
 \end{verbatim}
@@ -761,6 +809,7 @@ can be used to swap the elements of pairs of arbitrary types.  For instance,
 \begin{itemize}
 \item \verb@swap(<1, 2>)@ yields \verb@<2,1>@ and 
 \item \verb@swap(<"wed", 3>)@ yields \verb@<3, "wed">@.
+\end{itemize}
 \end{itemize}
 
 \section{Assertions}
@@ -774,13 +823,14 @@ label for this assertion, and $E$ is a boolean-value expression.  During
 execution, a list of true and false assertions is maintained.  When the script
 is executed as a \emph{test suite} (see Section~\ref{running}) a summary of this
 information is shown to the user. When the script is executed in the standard
-fashion, the assert statement has no affect.
+fashion, the assert statement has no affect. Example:
 
-\paragraph{Example}
-\begin{exam}\begin{verbatim}
+\begin{itemize}
+\item \begin{exam}\begin{verbatim}
 assert "Equality on Sets 1": {1, 2, 3, 1} == {3, 2, 1, 1}
 \end{verbatim}
 \end{exam}
+\end{itemize}
 
 \section{Equations}
 It is also possible to define mutually dependent sets of equations:
@@ -806,10 +856,12 @@ The expressions $E_i$ may refer to any of the variables
   solved by evaluating the expressions $E_i$, assigning their value to
   the corresponding variables $V_i$, and repeating this as long as the
   value of one of the variables was changed. This is typically used for
-  solving a set of dataflow equations.
+  solving a set of dataflow equations. Example:
 
-\paragraph{Example}
-Equations can be used to define the transitive closure of a relation.
+\begin{itemize}
+\item 
+Although transitive closure is proivided as a built-in operator, we can use
+equations to define the transitive closure of a relation.
 Recall that \[R+ = R \cup (R \circ R) \cup (R \circ R \circ R) \cup ... .\]
 This can be expressed as follows.
 
@@ -831,6 +883,7 @@ The resulting value of {\tt T} is as expected:
  {<1,2>, <2,3>, <3,4>, <1, 3>, <2, 4>, <1, 4>}
 \end{verbatim}
 \end{exam}
+\end{itemize}
 
 
 \chapter{Built-in Operators} \label{SEC:operators}
@@ -853,7 +906,7 @@ arithmetic operators ({\tt +}, {\tt -}, {\tt *}, and {\tt /}) and
 comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt >=}).
 \item Operations on strings (Section~\ref{BO:str}):
 comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt >=}).
-\item operations on locations (Section~\ref{BO:loc}).
+\item Operations on locations (Section~\ref{BO:loc}).
 comparison operators ({\tt ==}, {\tt !=}, {\tt <}, {\tt <=}, {\tt >}, and {\tt >=}).
 \item Operations on sets or relations (Section~\ref{BO:set-or-rel}):
 membership tests ({\tt in}, {\tt notin}),
@@ -973,22 +1026,19 @@ and {\tt false} otherwise\\ \hline
 \end{tabular}
 
 \paragraph{Examples}
-In the following examples the offset and length part of an area are set to
+In the following examples the offset and length part of a location are set to
 {\tt 0}; they are not used when determining the outcome of the comparison operators.
 
 \begin{itemize}
 
- \item {\tt area-in-file(``f'', area(11, 1, 11, 9, 0, 0))  < area-in-file("f",
- area(10, 2, 12, 8, 0, 0))} yields {\tt
- true}.
+ \item {\tt area-in-file("f", area(11, 1, 11, 9, 0, 0)) <} \newline 
+{\tt area-in-file("f", area(10, 2, 12, 8, 0, 0))} yields {\tt true}.
 
- \item {\tt area-in-file("f", area(10, 3, 11, 7, 0,0))  < area-in-file("f",
- area(10, 2, 11, 8, 0, 0))} yields {\tt
- true}.
+ \item {\tt area-in-file("f", area(10, 3, 11, 7, 0,0))  <} \newline 
+{\tt area-in-file("f", area(10, 2, 11, 8, 0, 0))} yields {\tt true}.
 
- \item {\tt area-in-file("f", area(10, 3, 11, 7, 0, 0))  < area-in-file("g",
- area(10, 3, 11, 7, 0, 0))} yields {\tt
- false}.
+ \item {\tt area-in-file("f", area(10, 3, 11, 7, 0, 0))  <} \newline
+{\tt area-in-file("g", area(10, 3, 11, 7, 0, 0))} yields {\tt false}.
 
 \end{itemize}
 
@@ -1055,18 +1105,18 @@ and {\tt false} otherwise\\ \hline
 
 \begin{tabular}{|p{3.3cm}|p{10.7cm}|} \hline
 \emph{set}$_1$ {\tt union} \emph{set}$_2$ & yields the set resulting from the union of the two arguments.
-The number of occurrences of each element in the result is the {\bf maximum} of the number of occurrences of that element
-in \emph{set}$_1$  and \emph{set}$_2$.
+%%The number of occurrences of each element in the result is the {\bf maximum} of the number of occurrences of that element
+%%in \emph{set}$_1$  and \emph{set}$_2$.
  \\ \hline
 
 \emph{set}$_1$ {\tt inter} \emph{set}$_2$ & yields the set resulting from the intersection of the two arguments.
-The number of occurrences of each element in the result is the {\bf minimum} of the number of occurrences of that element
-in \emph{set}$_1$  and \emph{set}$_2$.
+%%The number of occurrences of each element in the result is the {\bf minimum} of the number of occurrences of that element
+%%in \emph{set}$_1$  and \emph{set}$_2$.
  \\ \hline
 
 \emph{set}$_1$ \verb+\+ \emph{set}$_2$ & yields the set resulting from the difference of the two arguments.
-The number of occurrences of each element in the result is the {\bf difference} of the number of occurrences of that element
-in \emph{set}$_1$  and \emph{set}$_2$.
+%%The number of occurrences of each element in the result is the {\bf difference} of the number of occurrences of that element
+%%in \emph{set}$_1$  and \emph{set}$_2$.
  \\ \hline
 
 \end{tabular}
@@ -1076,13 +1126,13 @@ in \emph{set}$_1$  and \emph{set}$_2$.
 \begin{itemize}
 \item \verb@{1, 2, 3} union {4, 5, 6}@ yields \verb@{1, 2, 3, 4, 5, 6}@.
 \item \verb@{1, 2, 3} union {1, 2, 3}@ yields  \verb@{1, 2, 3}@.
-\item \verb@{1, 1, 2, 3} union {4, 4, 5, 6}@ yields \verb@{1, 1, 2, 3, 4, 4, 5, 6}@.
+\item \verb@{1, 2, 3} union {4, 5, 6}@ yields \verb@{1, 2, 3, 4, 5, 6}@.
 
 \item \verb@{1, 2, 3} inter {4, 5, 6}@ yields \verb@{ }@.
-\item \verb@{1, 1, 2, 3} inter {1, 2, 3}@ yields  \verb@{1, 2, 3}@.
+\item \verb@{1, 2, 3} inter {1, 2, 3}@ yields  \verb@{1, 2, 3}@.
 
-\item \verb@{1, 1, 2, 3}  \ {1, 2, 3}@ yields  \verb@{1}@.
-\item \verb@{1, 1, 2, 3}  \ {4, 4, 5, 6}@ yields \verb@{1, 1, 2, 3}@.
+\item \verb@{1, 2, 3, 4}  \ {1, 2, 3}@ yields  \verb@{4}@.
+\item \verb@{1, 2, 3}  \ {4, 5, 6}@ yields \verb@{1, 2, 3}@.
 
 \end{itemize}
 
@@ -1284,7 +1334,7 @@ the leaf elements ({\tt bottom}),
 reachability with restriction ({\tt reachR}), and
 reachability with exclusion ({\tt reachX}).
 
-\item Functions on Locations (Section~\ref{locations}):
+\item Functions on locations (Section~\ref{locations}):
 file name ({\tt filename}),
 beginning line ({\tt beginline}),
 first column ({\tt begincol}),
@@ -1336,14 +1386,15 @@ second element.
 \end{itemize}
 }
 
-\functiona{Set with unique elements}{unique}
+\functiona{Deprecated: Set with unique elements}{unique}
 \begin{exam}
 \begin{verbatim}
 set[&T] unique(set[&T] S) = primitive
 \end{verbatim}
 \end{exam}
 {Yields the set (actually the set) that results from removing all duplicate
-  elements from {\tt S}. \note{Obsolete}
+  elements from {\tt S}. This function stems from previous versions when we used bags instead of sets.
+It now acts as the identity function and is deprecated.
 }
 {Example: 
 \begin{itemize}
@@ -1731,6 +1782,13 @@ int endcol(loc A) = primitive
 }
 %%----
 \section{Functions on Sets of Integers} \label{sets-of-integers}
+The functions in this section operate on sets of integers.
+Some functions (i.e., {\tt sum-domain}, {\tt sum-range}, {\tt average-domain},
+{\tt average-range}) exist to solve the problem that we can only provide sets
+of integers and cannot model bags that may contain repeated occurrences of the
+same integer. For some calculations it is important to include these
+repetitions in the calculation (e.g., computing the average length of class methods
+given a relation from methods names to number of lines in the method.)
 %%----
 \functiona{Sum of a Set of Integers}{sum}
 \begin{exam}
@@ -1745,6 +1803,36 @@ int sum(set[int] S) = primitive
 \end{itemize}
 }
 %%----
+\functiona{Sum of First Elements of Tuples in a Relation}{sum-domain}
+\begin{exam}
+\begin{verbatim}
+int sum-domain(rel[int,&T] R) = primitive
+\end{verbatim}
+\end{exam}
+{Yields the sum of the integers that appear in the first element of the tuples of {\tt R}.}
+{Example:
+\begin{itemize}
+\item \verb@sum-domain({<1,"a">, <2,"b">, <1,"c">})@ yields {\tt 4}.
+\end{itemize}
+Be aware that
+\verb@sum(domain({<1,"a">, <2,"b"">, <1, "c">}))@ would be equal to {\tt 3}
+because the function {\tt domain} creates a \emph{set} (as
+opposed to a bag) and its result would thus contain only one occurence of {\tt 1}.
+}
+%%----
+\functiona{Sum of Second Elements of Tuples in a Relation}{sum-range}
+\begin{exam}
+\begin{verbatim}
+int sum-range(set[int] S) = primitive
+\end{verbatim}
+\end{exam}
+{Yields the sum of the integers that appear in the second element of the tuples of {\tt R}.}
+{Example:
+\begin{itemize}
+\item \verb@sum-range({<"a",1>, <"b",2>, <"c",1>})@ yields {\tt 4}.
+\end{itemize}
+}
+%%---- *********************************************** average-domain en average-range
 \functiona{Average of a Set of Integers}{average}
 \begin{exam}
 \begin{verbatim}
@@ -1755,6 +1843,32 @@ int average(set[int] S) = sum(S)/(#S)
 {Example:
 \begin{itemize}
 \item \verb@average({1, 2, 3})@ yields {\tt 3}.
+\end{itemize}
+}
+%%----
+\functiona{Average of First Elements of Tuples in a Relation}{average-domain}
+\begin{exam}
+\begin{verbatim}
+int average-domain(rel[int,&T] R) = sum-domain(R)/(#R)
+\end{verbatim}
+\end{exam}
+{Yields the average of the integers that appear in the first element of the tuples of {\tt R}.}
+{Example:
+\begin{itemize}
+\item \verb@average({<1,"a">, <2,"b">, <3,"c">})@ yields {\tt 2}.
+\end{itemize}
+}
+%%----
+\functiona{Average of Second Elements of Tuples in a Relation}{average-range}
+\begin{exam}
+\begin{verbatim}
+int average(rel[&T,int] R) = sum-range(R)/(#R)
+\end{verbatim}
+\end{exam}
+{Yields the average of the integers that appear in the second element of the tuples of {\tt R}.}
+{Example:
+\begin{itemize}
+\item \verb@average({<"a",1>, <"b",2>, <"c",3>})@ yields {\tt 2}.
 \end{itemize}
 }
 %%----
@@ -1819,7 +1933,7 @@ components of the system and to define a {\tt PartOf} relation between procedure
 components.
 
 \begin{exam}\begin{verbatim}
-rel[proc,proc] Calls2 = {<"main", "a">, <"main", "b">, <"a", "b">, 
+rel[proc,proc] Calls = {<"main", "a">, <"main", "b">, <"a", "b">, 
                          <"a", "c">, <"a", "d">, <"b", "d">}
 
 set[comp] Components = {"Appl", "DB", "Lib"}
@@ -1844,7 +1958,7 @@ rel[comp,comp] lift(rel[proc,proc] aCalls,  rel[proc,comp] aPartOf) =
 \noindent In our example, the lifted call relation between components is obtained by
 
 \begin{exam}\begin{verbatim}
-rel[comp,comp] ComponentCalls = lift(Calls2, PartOf, Components)
+rel[comp,comp] ComponentCalls = lift(Calls2, PartOf)
 \end{verbatim}
 \end{exam}
 and has as value:
@@ -2128,10 +2242,11 @@ Of course, the actual relations are now represented differently.
 For instance,  the {\tt USES} relation may now look like \note{update example}
 \begin{exam}
 \begin{verbatim}
-{ < location("/home/paulk/pico1.trm", area(11, 2, 11, 8)), "z">, 
-  < location("/home/paulk/pico1.trm", area(6, 2, 10, 4)), "q">, 
-  < location("/home/paulk/pico1.trm", area(7, 8, 7, 18)), "x">, 
-  < location("/home/paulk/pico1.trm", area(7, 8, 7, 18)), "y"> }
+{ <area-in-file("/home/paulk/example.pico", area(5, 5, 5, 6,106, 1)), "q">, 
+  <area-in-file("/home/paulk/example.pico", area(6, 13, 6, 14, 127, 1)), "y">, 
+  <area-in-file("/home/paulk/example.pico", area(6, 17, 6, 18, 131, 1)), "x">, 
+  <area-in-file("/home/paulk/example.pico", area(10, 7, 10, 8,168, 1)), "z">
+} 
 \end{verbatim}
 \end{exam}
 
@@ -2159,7 +2274,7 @@ rel[var, var-occ] UNINIT-OCC =
 \end{verbatim}
 \end{exam}
 Here we consider all tuples {\tt <S, V>} in {\tt UNINIT} and all occurrences of variable {\tt V}.
-Those variable occurrences that are contained in {\tt S} (using a comparison of locations)
+Those variable occurrences that are contained in {\tt S} (using a comparison on locations)
 are included in the result.
 
 \section{McCabe Cyclomatic Complexity}
@@ -2980,62 +3095,63 @@ Jurgen Vinju.
 \tablehead{\hline}
 \tabletail{\hline} 
 {\bf Operator} & {\bf Description} & {\bf Section} \\ \hline \hline
-{\tt and} & Boolean and & \ref{BO:bool}\\
-{\tt implies} & Boolean implication & \ref{BO:bool}\\
-{\tt in}    & Membership test on sets/relations& \ref{BO:set-or-rel}\\
-{\tt inter} & Intersection of sets/relations& \ref{BO:set-or-rel}\\
-{\tt not} & Boolean negation & \ref{BO:bool}\\
-{\tt notin} & Non-membership test on sets/relations& \ref{BO:set-or-rel}\\
-{\tt or} & Boolean or & \ref{BO:bool}\\
-{\tt union} & Union of sets/relations& \ref{BO:set-or-rel}\\
-{\tt ==}  & Equality of integers & \ref{BO:int}\\
-{\tt ==}  & Equality of areas & \ref{BO:loc}\\
-{\tt ==}  & Equality of sets/relations & \ref{BO:set-or-rel}\\
+{\tt and}      & Boolean and & \ref{BO:bool}\\
+{\tt implies}  & Boolean implication & \ref{BO:bool}\\
+{\tt in}       & Membership test on sets/relations& \ref{BO:set-or-rel}\\
+{\tt inter}    & Intersection of sets/relations& \ref{BO:set-or-rel}\\
+{\tt not}      & Boolean negation & \ref{BO:bool}\\
+{\tt notin}    & Non-membership test on sets/relations& \ref{BO:set-or-rel}\\
+{\tt or}       & Boolean or & \ref{BO:bool}\\
+{\tt union}    & Union of sets/relations& \ref{BO:set-or-rel}\\
+{\tt ==}       & Equality of integers & \ref{BO:int}\\
+{\tt ==}       & Equality of strings & \ref{BO:str}\\
+{\tt ==}       & Equality of locations & \ref{BO:loc}\\
+{\tt ==}       & Equality of sets/relations & \ref{BO:set-or-rel}\\
 
-{\tt !=}  & Inequality of integers & \ref{BO:int}\\
-{\tt !=}  & Inequality of strings & \ref{BO:str}\\
-{\tt !=}  & Inequality of areas & \ref{BO:loc}\\
-{\tt !=}  & Inequality of sets/relations & \ref{BO:set-or-rel}\\
+{\tt !=}       & Inequality of integers & \ref{BO:int}\\
+{\tt !=}       & Inequality of strings & \ref{BO:str}\\
+{\tt !=}       & Inequality of locations & \ref{BO:loc}\\
+{\tt !=}       & Inequality of sets/relations & \ref{BO:set-or-rel}\\
 
-{\tt <=}  & Less than or equal of integers & \ref{BO:int}\\
-{\tt <=}  & Less than or equal of strings & \ref{BO:str}\\
-{\tt <=}  & Textual inclusion of areas & \ref{BO:loc}\\
-{\tt <=}  & Subset of sets/relations & \ref{BO:set-or-rel}\\
+{\tt <=}       & Less than or equal of integers & \ref{BO:int}\\
+{\tt <=}       & Less than or equal of strings & \ref{BO:str}\\
+{\tt <=}       & Textual inclusion of locations & \ref{BO:loc}\\
+{\tt <=}       & Subset of sets/relations & \ref{BO:set-or-rel}\\
 
-{\tt <}  & Less than of integers & \ref{BO:int}\\
-{\tt <}  & Less than of strings & \ref{BO:str}\\
-{\tt <}  & Strict textual inclusion of areas & \ref{BO:loc}\\
-{\tt <}  & Strict subset of sets/relations & \ref{BO:set-or-rel}\\
+{\tt <}        & Less than of integers & \ref{BO:int}\\
+{\tt <}        & Less than of strings & \ref{BO:str}\\
+{\tt <}        & Strict textual inclusion of locations & \ref{BO:loc}\\
+{\tt <}        & Strict subset of sets/relations & \ref{BO:set-or-rel}\\
 
-{\tt >=}  & Greater than or equal of integers & \ref{BO:int}\\
-{\tt >=}  & Greater than or equal of strings & \ref{BO:str}\\
-{\tt >=}  & Textual containment of areas & \ref{BO:loc}\\
-{\tt >=}  & Superset of sets/relations & \ref{BO:set-or-rel}\\
+{\tt >=}       & Greater than or equal of integers & \ref{BO:int}\\
+{\tt >=}       & Greater than or equal of strings & \ref{BO:str}\\
+{\tt >=}       & Textual containment of locations & \ref{BO:loc}\\
+{\tt >=}       & Superset of sets/relations & \ref{BO:set-or-rel}\\
 
-{\tt >}  & Greater than of integers & \ref{BO:int}\\
-{\tt >}  & Greater than of strings & \ref{BO:str}\\
-{\tt >}  & Strict textual containment of areas & \ref{BO:loc}\\
-{\tt >}  & Strict superset of sets/relations & \ref{BO:set-or-rel}\\
+{\tt >}        & Greater than of integers & \ref{BO:int}\\
+{\tt >}        & Greater than of strings & \ref{BO:str}\\
+{\tt >}        & Strict textual containment of locations & \ref{BO:loc}\\
+{\tt >}        & Strict superset of sets/relations & \ref{BO:set-or-rel}\\
 
-{\tt +}  & Addition of integers & \ref{BO:int}\\
-{\tt -}  & Subtraction of integers & \ref{BO:int}\\
-{\tt *}  & Multiplication of integers & \ref{BO:int}\\
-{\tt /}  & Division of integers & \ref{BO:int}\\
+{\tt +}        & Addition of integers & \ref{BO:int}\\
+{\tt -}        & Subtraction of integers & \ref{BO:int}\\
+{\tt *}        & Multiplication of integers & \ref{BO:int}\\
+{\tt /}        & Division of integers & \ref{BO:int}\\
 
-\verb+\+   & Difference of sets/relations & \ref{BO:set-or-rel}\\
+\verb+\+       & Difference of sets/relations & \ref{BO:set-or-rel}\\
 
-{\tt o}    & Composition of relations  & \ref{BO:relations}\\
-{\tt x}    & Carthesian product of sets & \ref{BO:relations}\\
+{\tt o}        & Composition of relations  & \ref{BO:relations}\\
+{\tt x}        & Carthesian product of sets & \ref{BO:relations}\\
 
-\verb@#@   & Number of elements of set & \ref{BO:misc}\\
-\verb@#@   & Number of tuples of relation & \ref{BO:misc}\\
+\verb@#@       & Number of elements of set & \ref{BO:misc}\\
+\verb@#@       & Number of tuples of relation & \ref{BO:misc}\\
 
 {\tt [-, ]}    & Left image of relation & \ref{BO:relations}\\
 {\tt [  ,-]}   & Right image of relation & \ref{BO:relations}\\
 {\tt [ ]}      & Right image of relation & \ref{BO:relations}\\
 
-{\tt +}    & Transitive closure of a relation  & \ref{BO:relations}\\
-{\tt *}    & Reflexive transitive closure of a relation  & \ref{BO:relations}\\ \hline
+{\tt +}        & Transitive closure of a relation  & \ref{BO:relations}\\
+{\tt *}        & Reflexive transitive closure of a relation  & \ref{BO:relations}\\ \hline
 
 \end{supertabular}
 \end{center}
@@ -3049,42 +3165,46 @@ Jurgen Vinju.
 \begin{center}
 \begin{supertabular}{|l|l|c|}
 
-{\bf Function}    & {\bf Description}   & {\bf Section} \\ \hline \hline
+{\bf Function}         & {\bf Description}   & {\bf Section} \\ \hline \hline
 
-{\tt average}     & Average of a set of integers & \ref{BI:average} \\
-{\tt begincol}    & First column of an area & \ref{BI:begincol}\\
-{\tt beginline}   & Beginning line of an area & \ref{BI:beginline}\\
-{\tt bottom}      & Bottom of a relation & \ref{BI:bottom} \\
-{\tt carrier}     & Carrier of a relation & \ref{BI:carrier} \\
-{\tt carrierR}    & Carrier restriction of a relation & \ref{BI:carrierR} \\
-{\tt carrierX}    & Carrier exclusion of a relation & \ref{BI:carrierX} \\
+{\tt average}          & Average of a set of integers & \ref{BI:average} \\
+{\tt average-domain}   & Average of first elements of tuples in relation & \ref{BI:average-domain} \\
+{\tt average-range}    & Average of second elements of tuples in relation & \ref{BI:average-range} \\
+{\tt begincol}         & First column of a location & \ref{BI:begincol}\\
+{\tt beginline}        & Beginning line of a location & \ref{BI:beginline}\\
+{\tt bottom}           & Bottom of a relation & \ref{BI:bottom} \\
+{\tt carrier}          & Carrier of a relation & \ref{BI:carrier} \\
+{\tt carrierR}         & Carrier restriction of a relation & \ref{BI:carrierR} \\
+{\tt carrierX}         & Carrier exclusion of a relation & \ref{BI:carrierX} \\
 
-{\tt compl}       & Complement of a relation & \ref{BI:compl} \\
-{\tt endcol}      & Last column of an area & \ref{BI:endcol}\\
-{\tt endline}     & Ending line of an area & \ref{BI:endline}\\
-{\tt filename}    & File name of an area & \ref{BI:filename}\\
-{\tt first}       & First element of a tuple & \ref{BI:first} \\
-{\tt id}          & Identity relation & \ref{BI:id} \\
-{\tt inv}         & Inverse of a relation & \ref{BI:inv} \\
+{\tt compl}            & Complement of a relation & \ref{BI:compl} \\
+{\tt endcol}           & Last column of a location & \ref{BI:endcol}\\
+{\tt endline}          & Ending line of a location & \ref{BI:endline}\\
+{\tt filename}         & File name of a location & \ref{BI:filename}\\
+{\tt first}            & First element of a tuple & \ref{BI:first} \\
+{\tt id}               & Identity relation & \ref{BI:id} \\
+{\tt inv}              & Inverse of a relation & \ref{BI:inv} \\
 
-{\tt domain}      & Domain of a relation & \ref{BI:domain} \\
-{\tt domainR}     & Domain restriction of a relation & \ref{BI:domainR} \\
-{\tt domainX}     & Domain exclusion of a relation & \ref{BI:domainX} \\
-{\tt min}         & Minimum of a set of integers & \ref{BI:max} \\
-{\tt max}         & Maximum of a set of integers & \ref{BI:max} \\
-{\tt power0}      & Powerset of a set & \ref{BI:power0} \\
-{\tt power1}      & Powerset of a set & \ref{BI:power1} \\
+{\tt domain}           & Domain of a relation & \ref{BI:domain} \\
+{\tt domainR}          & Domain restriction of a relation & \ref{BI:domainR} \\
+{\tt domainX}          & Domain exclusion of a relation & \ref{BI:domainX} \\
+{\tt min}              & Minimum of a set of integers & \ref{BI:max} \\
+{\tt max}              & Maximum of a set of integers & \ref{BI:max} \\
+{\tt power0}           & Powerset of a set & \ref{BI:power0} \\
+{\tt power1}           & Powerset of a set & \ref{BI:power1} \\
 
-{\tt range}       & Range of a relation  & \ref{BI:range} \\
-{\tt rangeR}      & Range restriction of a relation & \ref{BI:rangeR} \\
-{\tt rangeX}      & Range exclusion of a relation & \ref{BI:rangeX} \\
-{\tt reachR}      & Reachability with restriction & \ref{BI:reachR} \\
-{\tt reachX}      & Reachability with exclusion& \ref{BI:reachX} \\
+{\tt range}            & Range of a relation  & \ref{BI:range} \\
+{\tt rangeR}           & Range restriction of a relation & \ref{BI:rangeR} \\
+{\tt rangeX}           & Range exclusion of a relation & \ref{BI:rangeX} \\
+{\tt reachR}           & Reachability with restriction & \ref{BI:reachR} \\
+{\tt reachX}           & Reachability with exclusion& \ref{BI:reachX} \\
 
-{\tt second}      & Second element of a tuple & \ref{BI:second} \\
-{\tt sum}         & Sum of a set of integers & \ref{BI:sum} \\
-{\tt top}         & Top of a relation & \ref{BI:top} \\
-{\tt unique}      & Set with unique elements & \ref{BI:unique}\\
+{\tt second}           & Second element of a tuple & \ref{BI:second} \\
+{\tt sum}              & Sum of a set of integers & \ref{BI:sum} \\
+{\tt sum-domain}       & Sum of first elements of tuples in relation & \ref{BI:sum-domain} \\
+{\tt sum-range}        & Sum of a first elements of tuples in relation & \ref{BI:sum-range} \\
+{\tt top}              & Top of a relation & \ref{BI:top} \\
+{\tt unique}           & Deprecated: Set with unique elements & \ref{BI:unique}\\
 
 \end{supertabular}
 \end{center}

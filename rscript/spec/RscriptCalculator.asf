@@ -754,12 +754,39 @@ evalx($Exp, $Rstore), $Rstore)
 	======================================
 	sumx($BagIter, $Integer) = $Integer
 
-%%[default-sumx]
-%%	sumx({$Elem, $Elem*}, $Integer2) = sumx({$Elem*}, $Integer2)
-
 [sum1]	$Bag := evalx($Exp, $Rstore)
 	========================================
 	evalx(sum($Exp), $Rstore) = sumx(mk-iterator($Bag), 0)
+
+%% ---- sum-domain
+
+[sumdx1] is-empty-iter($BagIter) == false,
+	<$Integer1,$Elem> := head($BagIter)
+	=======================================	
+	sum-domainx($BagIter, $Integer2) = sum-domainx(tail($BagIter), $Integer1 + $Integer2)
+
+[sumdx2]	is-empty-iter($BagIter) == true
+	======================================
+	sum-domainx($BagIter, $Integer) = $Integer
+
+[sumd1]	$Bag := evalx($Exp, $Rstore)
+	========================================
+	evalx(sum-domain($Exp), $Rstore) = sum-domainx(mk-iterator($Bag), 0)
+
+%% ---- sum-range
+
+[sumdx1] is-empty-iter($BagIter) == false,
+	<$Elem,$Integer1> := head($BagIter)
+	=======================================	
+	sum-rangex($BagIter, $Integer2) = sum-rangex(tail($BagIter), $Integer1 + $Integer2)
+
+[sumdx2]	is-empty-iter($BagIter) == true
+	======================================
+	sum-rangex($BagIter, $Integer) = $Integer
+
+[sumd1]	$Bag := evalx($Exp, $Rstore)
+	========================================
+	evalx(sum-range($Exp), $Rstore) = sum-rangex(mk-iterator($Bag), 0)
 
 %%% --- average
 
@@ -772,6 +799,27 @@ evalx($Exp, $Rstore), $Rstore)
 
 [default-avg2]	evalx(average($Exp), $Rstore) = 0
 
+%%% --- average-domain
+
+[avgd1] $Bag := evalx($Exp, $Rstore),
+	$Integer1 := sum-domainx(mk-iterator($Bag), 0),
+	$Integer2 := size($Bag),
+	$Integer2 > 0 == true
+	========================================
+	evalx(average-domain($Exp), $Rstore) = $Integer1 / $Integer2
+
+[default-avgd]	evalx(average-domain($Exp), $Rstore) = 0
+
+%%% --- average-range
+
+[avgr1]	$Bag := evalx($Exp, $Rstore),
+	$Integer1 := sum-rangex(mk-iterator($Bag), 0),
+	$Integer2 := size($Bag),
+	$Integer2 > 0 == true
+	========================================
+	evalx(average-range($Exp), $Rstore) = $Integer1 / $Integer2
+
+[default-avgr]	evalx(average-range($Exp), $Rstore) = 0
 
 %% ---- max
 
