@@ -718,9 +718,9 @@ static ATermList compress_gotos(ATermList goto_list)
 /*}}}  */
 #endif
 
-/*{{{  ATerm generate_parse_table(ATerm t) */
+/*{{{  ATerm generate_parse_table(int version_nr, ATerm t) */
 
-ATerm generate_parse_table(PT_ParseTree g)
+ATerm generate_parse_table(int version_nr, PT_ParseTree g)
 {
   int i, nr_actions = 0, nr_gotos = 0;
   ATerm labelsection, priosection, vnr, vertex, state;
@@ -783,7 +783,8 @@ ATerm generate_parse_table(PT_ParseTree g)
     IF_STATISTICS(fprintf(PT_log (), "Maximum number of actions per state is %d\n", max_nr_actions));
     IF_STATISTICS(fprintf(PT_log (), "Average number of actions per state is %d\n", (nr_of_actions/nr_of_states)));
 
-    return ATmake("parse-table(<term>,<term>,states([<list>]),priorities(<term>))",
+    return ATmake("parse-table(<term>,<term>,<term>,states([<list>]),priorities(<term>))",
+                  ATmakeInt(version_nr),
                   initial_state,labelsection,statelist,priosection);
   }
   else {

@@ -1,5 +1,8 @@
 $Id$
 
+2001/11/07 (markvdb@cwi.nl)
+  * Version number introduced in the parse table format.
+
 2001/11/05 ({jurgenv,markvdb}@cwi.nl)
  * Removed module identifiers from productions:
    - adapted the normalization specification.

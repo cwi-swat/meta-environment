@@ -34,7 +34,9 @@ ATbool generationMode = ATfalse;
 ATbool normalizationMode = ATfalse;
 
 static char myname[] = "parsetablegen";
-static char myversion[] = "3.1";
+static char myversion[] = "4.0";
+
+int version_nr = 4;
 
 /*
     The argument vector: list of option letters, colons denote option
@@ -145,7 +147,7 @@ static ATerm normalize_and_generate_table(char *name, PT_ParseTree sdf2term)
   max_nr_items = 0;
 
   if (ksdf)  {
-    pt = generate_parse_table(ksdf);
+    pt = generate_parse_table(version_nr, ksdf);
   }
   destroy_table_gen();       
 
