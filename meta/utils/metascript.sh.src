@@ -1,0 +1,125 @@
+#! /bin/sh
+
+name=`basename $0`
+myversion=0.1
+
+ASOURCE=__PT_SUPPORT__/bin/unparsePT
+SGLR=__SGLR__/bin/sglr
+
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $name [options]
+Options:
+	-h	: display usage information
+	-o file	: output shell script
+	-p file	: parse table
+	-r file : reducer
+	-P str  : parser options
+	-R str  : reducer options
+	-V	: reveal program version (i.e. $myversion)
+E_O_USAGE
+}
+
+Version() {
+  echo "$name v$myversion" >&2
+}
+
+input="-"
+output="-"
+
+myarguments="ho:p:P:r:R:vV"
+
+
+args=`getopt $myarguments $* 2> /dev/null`
+if test $? != 0
+then
+        Usage
+        exit 2
+fi
+
+set -- $args
+
+reducer=cat
+parsetable=""
+parser_options=""
+reducer_options=""
+
+# Argument interpretation...
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in
+        -h)
+            Usage ; exit 0 ;;
+	-o)
+	    shift; output=$1 ;;
+	-p) 
+	    shift; parsetable=$1;;
+	-P) 
+	    shift; parser_options=$1;;
+        -r)
+	    shift; reducer=$1;;
+	-R) 
+	    shift; reducer_options=$1;;
+        -V)
+            Version ; exit 0 ;;
+    esac
+    shift
+done
+
+cat << E_O_SCRIPT > ${output}
+#! /bin/sh
+
+name=${output}
+myversion=0.0
+
+Usage() {
+cat << E_O_USAGE >&2
+Usage: \$name [options]
+Options:
+	-h	: display usage information
+	-i file	: input file
+	-o file	: output file
+	-V	: reveal program version (i.e. \$myversion)
+E_O_USAGE
+}
+
+Version() {
+  echo "\$name v\$myversion" >&2
+}
+
+input="-"
+output="-"
+
+myarguments="hi:o:V"
+
+args=\`getopt \$myarguments \$* 2> /dev/null\`
+if test \$? != 0
+then
+        Usage
+        exit 2
+fi
+
+set -- \$args
+
+# Argument interpretation...
+while [ \$#  -gt 0 ]
+do
+    case "\$1"
+    in
+        -h)
+            Usage ; exit 0 ;;
+	-i)
+	    shift; input=\$1 ;;
+	-o)
+	    shift; output=\$1 ;;
+        -V)
+            Version ; exit 0 ;;
+    esac
+    shift
+done
+
+${SGLR} ${parser_options} -p ${parsetable} -i \${input} | \\
+${reducer} ${reducer_options} | \\
+${ASOURCE} -o \${output}
+E_O_SCRIPT

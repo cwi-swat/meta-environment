@@ -3,7 +3,7 @@
 include ${top_srcdir}/make_rules
 
 bin_PROGRAMS       = meta-paths imports
-bin_SCRIPTS        = ps-dot sdf2stats 
+bin_SCRIPTS        = ps-dot sdf2stats metascript
 
 data_DATA          = lang.types
 
@@ -35,6 +35,7 @@ INCLUDES           = -I$(SDF_SUPPORT)/include \
 	     s@__DATADIR__@$(datadir)@g;\
 	     s@__PT_SUPPORT__@$(PT_SUPPORT)@g;\
 	     s@__PGEN__@$(PGEN)@g;\
+	     s@__SGLR__@$(SGLR)@g;\
 	     s@__BINFILES__@$(bin_PROGRAMS) $(bin_SCRIPTS)@g;\
 	     s@__VERSION__@$(VERSION)@g;\
 	     s@__PERL__@$(PERL)@g' < $< > $@ && \
