@@ -5,12 +5,13 @@ prefix=@prefix@
 exec_prefix=@exec_prefix@
 bindir=@bindir@
 libdir=@libdir@
+datadir=@datadir@
 
 PATH="$PATH:$bindir"
 
 A2TOA1="${bindir}/a2toa1 -silent"
 CONVERT=0
-TABLE="${libdir}/Sdf2.baf"
+TABLE="${datadir}/Sdf2.baf"
 PARSE="${bindir}/sglr -p $TABLE"
 OPTS="-v"
 
