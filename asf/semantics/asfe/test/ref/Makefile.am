@@ -33,3 +33,4 @@ EXTRA_DIST = Pico-Integers.1.ref.afme \
              Collect.1.ref.afme \
              Bracket.1.ref.afme \
              Memo-Pico-typecheck.1.ref.afme \
+             Combination-Typecheck.1.ref.afme
