@@ -1,5 +1,9 @@
 $Id$
 
+Fri Mar 12 17:13:32 CET 2004 <markvdb@cwi.nl>
+ * Fixed bug 197, ambtracker returned NULL if there are
+   no ambiguities.
+
 Wed Mar 10 09:06:33 CET 2004 <kooiker@cwi.nl>
  * Use new error-api 
 
