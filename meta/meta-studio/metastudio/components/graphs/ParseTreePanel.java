@@ -12,7 +12,7 @@ public class ParseTreePanel extends ZoomableGraphPanel {
     private GraphPanel panel;
     
     public ParseTreePanel(MetaGraphFactory factory, final UserInterfaceBridge bridge) {
-        super(factory.getPureFactory(),bridge,"parsetree");
+        super(factory, bridge,"parsetree");
         this.panel = getGraphPanel();
         
         MouseListener listener = new MouseAdapter() {

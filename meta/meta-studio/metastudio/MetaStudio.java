@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FontMetrics;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -23,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
+
 import metastudio.components.FeedbackList;
 import metastudio.components.FileDialog;
 import metastudio.components.HistoryPanel;
@@ -35,34 +35,21 @@ import metastudio.components.QuestionDialog;
 import metastudio.components.StatusBar;
 import metastudio.components.ToolBar;
 import metastudio.components.ToolComponent;
-import metastudio.components.graphs.GraphPanel;
 import metastudio.components.graphs.ImportGraphPanel;
-import metastudio.components.graphs.NodeSizer;
 import metastudio.components.graphs.ParseTreePanel;
 import metastudio.components.graphs.ZoomableGraphPanel;
-import metastudio.data.Module;
 import metastudio.data.ModuleTreeModel;
-import metastudio.data.graph.AttributeList;
-import metastudio.data.graph.EdgeList;
-import metastudio.data.graph.Graph;
 import metastudio.data.graph.MetaGraphFactory;
-import metastudio.data.graph.Node;
-import metastudio.data.graph.NodeList;
 import metastudio.utils.Preferences;
-
 import aterm.ATerm;
-import aterm.ATermAppl;
-import aterm.ATermList;
 import aterm.pure.PureFactory;
 
 public class MetaStudio
     extends JFrame
     implements UserInterfaceTif, Runnable {
 
-    private static final double RIGHTPANEL_DIVIDER_LOCATION = 0.8;
-
-    public static PureFactory factory;
-    public static MetaGraphFactory metaGraphFactory;
+    private static PureFactory factory;
+    private static MetaGraphFactory metaGraphFactory;
 
     private UserInterfaceBridge bridge;
 
@@ -70,7 +57,6 @@ public class MetaStudio
 
     private JTabbedPane mainTabs;
 
-    private Graph graph;
     private ImportGraphPanel importGraphPanel;
     private ParseTreePanel parseTreePanel;
     private FeedbackList feedbackList;
@@ -168,6 +154,7 @@ public class MetaStudio
     private JPanel createMessageStatusPanel() {
         JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
+        
         container.add(createMessageTabs(), BorderLayout.CENTER);
 
         if (historyPanel == null) {
@@ -183,12 +170,12 @@ public class MetaStudio
     }
 
     private JSplitPane createMainPane() {
-        mainTabs = createGraphTabs();
+        mainTabs = createMainTabs();
         JPanel panel = createMessageStatusPanel();
 
         JSplitPane mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, mainTabs, panel);
-        mainPanel.setResizeWeight(RIGHTPANEL_DIVIDER_LOCATION);
-        mainPanel.setDividerLocation(RIGHTPANEL_DIVIDER_LOCATION);
+        mainPanel.setResizeWeight(0.8);
+        mainPanel.setDividerLocation(0.8);
         return mainPanel;
     }
 
@@ -205,7 +192,7 @@ public class MetaStudio
         return leftPanel;
     }
 
-    private JTabbedPane createGraphTabs() {
+    private JTabbedPane createMainTabs() {
         JTabbedPane tabs = new JTabbedPane();
 
         mainTabs = tabs;
@@ -286,20 +273,13 @@ public class MetaStudio
     private void createModuleGraph() {
         Color color;
 
-        NodeList nodes = metaGraphFactory.makeNodeList_Empty();
-        EdgeList edges = metaGraphFactory.makeEdgeList_Empty();
-        AttributeList attrs = metaGraphFactory.makeAttributeList_Empty();
-
-        graph = metaGraphFactory.makeGraph_Default(nodes, edges, attrs);
-
-        importGraphPanel = new ImportGraphPanel(factory, bridge, moduleManager);
+        importGraphPanel = new ImportGraphPanel(metaGraphFactory, bridge, moduleManager);
 
         color = Preferences.getColor(Preferences.PREF_GRAPHPANE_BACKGROUND);
         importGraphPanel.setBackground(color);
     }
 
     private void handleCloseRequests() {
-
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent ev) {
                 postQuitEvent();
@@ -318,14 +298,10 @@ public class MetaStudio
 
     private void addGraphPanel(ZoomableGraphPanel panel, String id) {
         graphPanels.put(id, panel);
-    }
-
-    private ZoomableGraphPanel getGraphPanel(String id) {
-        return (ZoomableGraphPanel) graphPanels.get(id);
+        addToolComponent(panel);
     }
 
     public void run() {
-        layoutGraph(importGraphPanel, graph);
     }
 
     public void initializeUi(String name) {
@@ -333,120 +309,44 @@ public class MetaStudio
         Preferences.setString("metastudio.name", name);
     }
 
-    private Module addModule(String name) {
-        Module module = moduleManager.getModule(name);
-        if (module == null) {
-            module = new Module(name);
-            moduleManager.addModule(module);
-        }
-
-        return module;
-    }
-
-    private void setModules(ATermList importList) {
-        moduleManager.clearModules();
-
-        while (!importList.isEmpty()) {
-            ATermList importPair = (ATermList) importList.getFirst();
-            importList = importList.getNext();
-            ATermAppl moduleTerm = (ATermAppl) importPair.getFirst();
-            String name = moduleTerm.getName();
-            addModule(name);
-        }
-    }
-
-    private void setImports(ATermList importList) {
-
-        while (!importList.isEmpty()) {
-            ATermList importPair = (ATermList) importList.getFirst();
-            importList = importList.getNext();
-
-            ATermAppl fromTerm = (ATermAppl) importPair.getFirst();
-            String from = fromTerm.getName();
-            Module moduleFrom = moduleManager.getModule(from);
-            if (moduleFrom == null) {
-                moduleFrom = addModule(from);
-                moduleFrom.setState(Module.STATE_NEW);
-            }
-
-            ATermList imports = (ATermList) importPair.elementAt(1);
-
-            while (!imports.isEmpty()) {
-                ATermAppl toTerm = (ATermAppl) imports.getFirst();
-                imports = imports.getNext();
-
-                String to = toTerm.getName();
-                Module moduleTo = moduleManager.getModule(to);
-                if (moduleTo == null) {
-                    moduleTo = addModule(to);
-                    moduleTo.setState(Module.STATE_NEW);
-                }
-
-                moduleFrom.addChild(to);
-                moduleTo.addParent(from);
-            }
-        }
-    }
-
     public void newGraph(ATerm importRelations) {
-        setModules((ATermList) importRelations);
-        setImports((ATermList) importRelations);
+        Iterator iter = getToolComponents().iterator();
 
-        graph = Graph.fromImportList(metaGraphFactory, (ATermList) importRelations);
-        layoutGraph(importGraphPanel, graph);
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.newGraph(importRelations);
+        }
     }
 
-    public void layoutGraph(ZoomableGraphPanel graphPanel, Graph graph) {
-        final FontMetrics metrics =
-            graphPanel.getFontMetrics(Preferences.getFont(GraphPanel.PREF_NODE_FONT));
-
-        NodeSizer sizer = new NodeSizer() {
-            public int getWidth(Node node) {
-                return metrics.stringWidth(node.getLabel())
-                    + Preferences.getInteger(Preferences.PREF_NODE_BORDER_WIDTH) * 2;
-            }
-            public int getHeight(Node node) {
-                return metrics.getHeight()
-                    + Preferences.getInteger(Preferences.PREF_NODE_BORDER_HEIGHT) * 2;
-            }
-        };
-
-        graph = graph.orderNodes();
-        graph = graph.sizeNodes(sizer);
-
-        bridge.postEvent(
-            factory.make(
-                "layout-graph(<str>,<term>)",
-                graphPanel.getId(),
-                graph.toTerm()));
-    }
 
     public void displayGraph(String id, ATerm graphTerm) {
-        Graph graph = metaGraphFactory.GraphFromTerm(graphTerm);
-        ZoomableGraphPanel panel = getGraphPanel(id);
-        layoutGraph(panel, graph);
+        Iterator iter = getToolComponents().iterator();
+
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.displayGraph(id, graphTerm);
+        }
     }
 
     public void graphLayouted(String id, ATerm graphTerm) {
-        Graph graph = metaGraphFactory.GraphFromTerm(graphTerm);
-        if (id.equals(importGraphPanel.getId())) {
-            this.graph = graph;
+        Iterator iter = getToolComponents().iterator();
+
+        while (iter.hasNext()) {
+            UserInterfaceTif tif = (UserInterfaceTif) iter.next();
+            tif.graphLayouted(id, graphTerm);
         }
-        ZoomableGraphPanel graphPanel = getGraphPanel(id);
-        graphPanel.setGraph(graph);
-        graphPanel.repaint();
-        mainTabs.setSelectedIndex(graphPanel.getIndex());
     }
     
     public void buttonsFound(ATerm buttonType, String moduleName, ATerm buttons) {
         Iterator iter = getToolComponents().iterator();
-        System.err.println("buttonsFound for " + buttonType);
+
         while (iter.hasNext()) {
             UserInterfaceTif tif = (UserInterfaceTif) iter.next();
             tif.buttonsFound(buttonType, moduleName, buttons);
         }
     }
 
+    
     public void addStatus(ATerm id, String message) {
         Iterator iter = getToolComponents().iterator();
 
