@@ -65,7 +65,7 @@ ATerm unparse_asfix(int cid, ATerm t)
 {
   char *text = NULL;
 
-  text = PT_yieldAny(t);
+  text = PT_yieldAny(ATBunpack(t));
 
   return ATmake("snd-value(unparsed-text(<str>))", text);
 }
