@@ -36,7 +36,9 @@ typedef struct _growbuf {
 
 sg_growbuf *SG_Create_GrowBuf(size_t initialnmemb, size_t chunknmemb, size_t size);
 sg_growbuf *SG_Reset_GrowBuf(sg_growbuf *buf);
+void        SG_Delete_GrowBuf(sg_growbuf *buf);
 sg_growbuf *SG_AddToGrowBuf(sg_growbuf *buf, void *data, size_t nmembs);
+sg_growbuf *SG_AddCharToGrowBuf(sg_growbuf *buf, char c);
 sg_growbuf *SG_AddStringToGrowBuf(sg_growbuf *buf, char *str);
 void *SG_GetGrowBufContent(sg_growbuf *buf);
 size_t SG_GetGrowBufUsed(sg_growbuf *buf);

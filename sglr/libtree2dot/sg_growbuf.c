@@ -58,6 +58,16 @@ sg_growbuf *SG_Reset_GrowBuf(sg_growbuf *buf)
   return buf;
 }
 
+void SG_Delete_GrowBuf(sg_growbuf *buf)
+{
+  if(buf) {
+    if(buf->data) {
+      SG_Free(buf->data);
+    }
+    SG_Free(buf);
+  }
+}
+
 sg_growbuf *SG_AddToGrowBuf(sg_growbuf *buf, void *data, size_t nmembs)
 {
   size_t growth = 0;
@@ -79,10 +89,19 @@ sg_growbuf *SG_AddToGrowBuf(sg_growbuf *buf, void *data, size_t nmembs)
   return buf;
 }
 
+sg_growbuf *SG_AddCharToGrowBuf(sg_growbuf *buf, char c)
+{
+  char s[1];
+
+  s[0] = c;
+  return SG_AddToGrowBuf(buf, s, 1);
+}
+
 sg_growbuf *SG_AddStringToGrowBuf(sg_growbuf *buf, char *str)
 {
   return SG_AddToGrowBuf(buf, str, strlen(str));
 }
+
 
 void *SG_GetGrowBufContent(sg_growbuf *buf)
 {

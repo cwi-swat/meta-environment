@@ -85,7 +85,7 @@ sg_growbuf *SG_PrintSymbolToGrowBuf(sg_growbuf *gb, ATerm t, ATbool escaped)
   ATerm     arg, arg2;
   ATermList args;
   int  c1, c2;
-  
+
   if (ATmatch(t, "layout")) {
     SG_AddStringToGrowBuf(gb, "L");
   } else if (ATmatch(t, "sort(<str>)", &name)) {
@@ -204,7 +204,7 @@ sg_growbuf *SG_PrintSymbolToGrowBuf(sg_growbuf *gb, ATerm t, ATbool escaped)
 }
 
 
-char *SG_PrintSymbolToString(ATerm t, ATbool escaped) 
+char *SG_PrintSymbolToString(ATerm t, ATbool escaped)
 {
   static sg_growbuf *gb = NULL;
   char  *symbstr = NULL;
@@ -218,7 +218,7 @@ char *SG_PrintSymbolToString(ATerm t, ATbool escaped)
   SG_PrintSymbolToGrowBuf(gb, t, escaped);
   SG_AddToGrowBuf(gb, "\0", 1);    /*  Null string termination  */
   symbstr = strdup(SG_GetGrowBufContent(gb));
-  	
+
   if(!symbstr) {
     ATerror("error allocating string duplicate\n");
     return NULL;
@@ -227,7 +227,7 @@ char *SG_PrintSymbolToString(ATerm t, ATbool escaped)
   return symbstr;
 }
 
-void SG_PrintSymbol(FILE *dot, ATerm t) 
+void SG_PrintSymbol(FILE *dot, ATerm t)
 {
   static sg_growbuf *gb = NULL;
 
@@ -236,7 +236,7 @@ void SG_PrintSymbol(FILE *dot, ATerm t)
   } else {
     gb = SG_Reset_GrowBuf(gb);
   }
-  	
+
   SG_WriteGrowBuf(dot, SG_PrintSymbolToGrowBuf(gb, t, ATtrue));
 }
 
@@ -484,84 +484,51 @@ void SG_StacksToDotFile(stacks *sts, int sg_tokens_read)
   fclose(SG_StackDotFP);
 }
 
-#define TYA_TMPCHUNK 64
-#define TYA_INIT     0
-#define TYA_INQUIRE  1
-#define TYA_ADD      2
 
-char *SG_TYAuxBuf(int Mode, char c) {
-  static char   *tmp = NULL;
-  static size_t  tmpsize = 0;
-  static int    index = 0;
-
-  switch(Mode) {
-    case TYA_INIT:
-      if(!tmp) {
-        tmp = (char *) SG_Malloc(1, TYA_TMPCHUNK);
-        if(!tmp) {
-          ATfprintf(stderr, "memory allocation error\n");
-          exit(1);
-        } else
-          tmpsize = TYA_TMPCHUNK;
-      }
-      tmp[0] = index = 0;
-      break;
-    case TYA_INQUIRE:
-      break;
-    case TYA_ADD:
-      if((index+2) > tmpsize) {
-        tmp = (char *)SG_Realloc(tmp, tmpsize + TYA_TMPCHUNK, sizeof(char));
-        if(!tmp) {
-          ATfprintf(stderr, "memory reallocation error\n");
-          exit(1);
-        } else
-          tmpsize += TYA_TMPCHUNK;
-      }
-      tmp[index++] = c;
-      tmp[index] = 0;
-      break;
-  }
-  return tmp;
-}
-
-void SG_TYAux(ATerm t)
+void SG_TermYieldToGrowBuf(sg_growbuf *gb, ATerm t)
 {
   if (ATisEmpty((ATermList) t))
     return;
 
   switch(ATgetType(t)) {
     case AT_INT:
-      SG_TYAuxBuf(TYA_ADD, ATgetInt((ATermInt) t));
+      SG_AddCharToGrowBuf(gb, ATgetInt((ATermInt) t));
       break;
     case AT_APPL:
-      SG_TYAux(ATelementAt(ATgetArguments((ATermAppl) t), 1));
+      SG_TermYieldToGrowBuf(gb, ATelementAt(ATgetArguments((ATermAppl) t), 1));
       break;
     case AT_LIST:
-      SG_TYAux(ATgetFirst((ATermList) t));
-      SG_TYAux((ATerm) ATgetNext((ATermList) t));
+      SG_TermYieldToGrowBuf(gb,         ATgetFirst((ATermList) t));
+      SG_TermYieldToGrowBuf(gb, (ATerm) ATgetNext((ATermList) t));
       break;
     default:
-      ATerror("SG_TYAux: strange term: %t\n", t);
+      ATerror("SG_TermYieldToGrowBuf: strange term: %t\n", t);
       break;
   }
 }
 
 ATerm SG_TermYield(ATermAppl t)
 {
-  SG_TYAuxBuf(TYA_INIT, 0);         /* Initialize (hidden) buffer */
-  SG_TYAux((ATerm) t);              /* Yield to (hidden) buffer   */
-  /* Collect & return buffer    */
-  return ATmake("<str>", SG_TYAuxBuf(TYA_INQUIRE, 0));
+  static sg_growbuf *gb = NULL;
+
+  if(!gb) {
+	gb = SG_Create_GrowBuf(32, 16, sizeof(char));
+  } else {
+    gb = SG_Reset_GrowBuf(gb);
+  }
+  SG_TermYieldToGrowBuf(gb, (ATerm) t);
+
+  return ATmake("<str>", SG_GetGrowBufContent(SG_AddToGrowBuf(gb, "\0", 1)));
 }
 
 #define AFunIs(f, s, ar, q) (ATisQuoted(f)==q && ATgetArity(f)==ar     \
                              && !strcmp(s, ATgetName(f)))
 
-void SG_DotTermYieldAux(ATerm t)
+void SG_DotTermYieldToGrowBuf(sg_growbuf *gb, ATerm t)
 {
   AFun      fun;
   ATermList args;
-  int c;
+  int  c;
 
   if (ATisEmpty((ATermList) t))
     return;
@@ -570,12 +537,10 @@ void SG_DotTermYieldAux(ATerm t)
     case AT_INT:
       switch(c = ATgetInt((ATermInt) t)) {
         case '\n':
-          SG_TYAuxBuf(TYA_ADD, '\\');
-          SG_TYAuxBuf(TYA_ADD, '\\');
-          SG_TYAuxBuf(TYA_ADD, 'n');
+          SG_AddStringToGrowBuf(gb, "\\\\n");
           break;
         default:
-          SG_TYAuxBuf(TYA_ADD, c);
+          SG_AddCharToGrowBuf(gb, c);
           break;
       }
       break;
@@ -585,40 +550,45 @@ void SG_DotTermYieldAux(ATerm t)
          || AFunIs(fun, "reject", 2, ATfalse)) {
         args = (ATermList) ATelementAt(ATgetArguments((ATermAppl) t), 1);
         if(ATgetLength(args) > 1) {
-          SG_TYAuxBuf(TYA_ADD, '[');
-          SG_DotTermYieldAux((ATerm) args);
-          SG_TYAuxBuf(TYA_ADD, ']');
+          SG_AddCharToGrowBuf(gb, '[');
+          SG_DotTermYieldToGrowBuf(gb, (ATerm) args);
+          SG_AddCharToGrowBuf(gb, ']');
         } else {
-          SG_DotTermYieldAux((ATerm) args);
+          SG_DotTermYieldToGrowBuf(gb, (ATerm) args);
         }
       } else if(AFunIs(fun, "amb", 1, ATfalse)) {
         args = ATgetArguments((ATermAppl) t);
         while(!ATisEmpty(args)) {
-          SG_DotTermYieldAux(ATgetFirst(args));
+          SG_DotTermYieldToGrowBuf(gb, ATgetFirst(args));
           args = ATgetNext(args);
           if(!ATisEmpty(args)) {
-            SG_TYAuxBuf(TYA_ADD, '|');
+            SG_AddCharToGrowBuf(gb, '|');
           }
         }
       } else {
-        ATerror("SG_DotTermYieldAux: strange appl: %t\n", t);
+        ATerror("SG_DotTermYieldToGrowBuf: strange appl: %t\n", t);
       }
         break;
     case AT_LIST:
-      SG_DotTermYieldAux(ATgetFirst((ATermList) t));
-      SG_DotTermYieldAux((ATerm) ATgetNext((ATermList) t));
+      SG_DotTermYieldToGrowBuf(gb, ATgetFirst((ATermList) t));
+      SG_DotTermYieldToGrowBuf(gb, (ATerm) ATgetNext((ATermList) t));
       break;
     default:
-      ATerror("SG_DotTermYieldAux: strange term: %t\n", t);
+      ATerror("SG_DotTermYieldToGrowBuf: strange term: %t\n", t);
       break;
   }
 }
 
 ATerm SG_DotTermYield(ATerm t)
 {
-  SG_TYAuxBuf(TYA_INIT, 0);         /* Initialize (hidden) buffer */
-  SG_DotTermYieldAux(t);            /* Yield to (hidden) buffer   */
+  static sg_growbuf *gb = NULL;
 
-  /* Collect & return buffer    */
-  return ATmake("<str>", SG_TYAuxBuf(TYA_INQUIRE, 0));
+  if(!gb) {
+	gb = SG_Create_GrowBuf(32, 16, sizeof(char));
+  } else {
+    gb = SG_Reset_GrowBuf(gb);
+  }
+  SG_DotTermYieldToGrowBuf(gb, (ATerm) t);
+
+  return ATmake("<str>", SG_GetGrowBufContent(SG_AddToGrowBuf(gb, "\0", 1)));
 }
