@@ -17,14 +17,14 @@ import aterm.ATermFactory;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class Connection1 implements Tb1Tif {
+public class MaskeradeConnection implements MaskeradeTif {
 	private ATermFactory factory;
-	private Tb1Bridge bridge1;
-	private Connection2 con2;
+	private MaskeradeBridge bridge;
+	private DelegateConnection delegateConnection;
 
-	public Connection1(String[] args, ATermFactory factory) throws IOException {
+	public MaskeradeConnection(String[] args, ATermFactory factory) throws IOException {
 		this.factory = factory;
-		bridge1 = new Tb1Bridge(factory, this);
+		bridge = new MaskeradeBridge(factory, this);
 
 //		args = new String[6];
 //		args[0] = "-TB_HOST_NAME";
@@ -34,26 +34,26 @@ public class Connection1 implements Tb1Tif {
 //		args[4] = "-TB_TOOL_NAME";
 //		args[5] = "tb1";
 
-		bridge1.init(args);
-		bridge1.connect();
+		bridge.init(args);
+		bridge.connect();
 
-		Thread t1 = new Thread(bridge1, "Tb1");
+		Thread t1 = new Thread(bridge, "Maskerade");
 		t1.start();
 	}
 
-	public void Connection2(Connection2 con2) {
-		this.con2 = con2;
+	public void setDelegate(DelegateConnection delegateConnection) {
+		this.delegateConnection = delegateConnection;
 	}
 
 	public void sendTerm(ATerm term) {
 		try {
-			bridge1.sendTerm(term);
+			bridge.sendTerm(term);
 		} catch (Exception e) {
 		}
 	}
 
-	public void postEventCon2(ATerm term) {
-		con2.postEvent(term);
+	public void postDelegateEvent(ATerm term) {
+		delegateConnection.postEvent(term);
 	}
 
 	public void recTerminate(ATerm t0) {

@@ -10,19 +10,25 @@ in
   rec-connect(T?) .
   (
     (
-      rec-event(T, count1tb1(Count?)) .
-      snd-ack-event(T, count1tb1(Count)) .
+      rec-event(T, count1(Count?)) .
+      snd-ack-event(T, count1(Count)) .
       Count := add(Count, 1) .
-      snd-do(T, count1tb1(Count)) .
+      snd-do(T, count1(Count)) .
       printf("TB2 number 1: %d\n", Count)
     ) * delta 
     ||
     (
-      rec-event(T, count2tb1(Count2?)) .
-      snd-ack-event(T, count2tb1(Count2)) .
+      rec-event(T, count2(Count2?)) .
+      snd-ack-event(T, count2(Count2)) .
       Count2 := add(Count2, 1) .
-      snd-do(T, count2tb1(Count2)) .  
+      snd-do(T, count2(Count2)) .  
       printf("TB2 number 2: %d\n", Count2)
+    ) * delta
+    ||
+    (
+      rec-event(T, printcount(Count?)) .
+      snd-ack-event(T, printcount(Count)) .
+      printf("TB2 number 1: %d\n", Count)
     ) * delta
   )
 endlet

@@ -12,15 +12,19 @@ in
   Count2 := 0 .
   (
     (
-      snd-eval(T, count1tb1(Count)) .
-      rec-value(T, count1tb1(Count?)) .
+      snd-eval(T, count1(Count)) .
+      rec-value(T, count1(Count?)) .
       printf("TB1 number 1: %d\n", Count)
     ) * delta 
     ||
     (
-      snd-eval(T, count2tb1(Count2)) .
-      rec-value(T, count2tb1(Count2?)) .
+      snd-eval(T, count2(Count2)) .
+      rec-value(T, count2(Count2?)) .
       printf("TB1 number 2: %d\n", Count2)
+    ) * delta
+    ||
+    (
+      snd-do(T, printcount(Count)) 
     ) * delta
   )
 endlet

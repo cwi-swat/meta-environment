@@ -18,14 +18,14 @@ import aterm.ATermFactory;
  * To change the template for this generated type comment go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-public class Connection2 implements Tb2Tif {
+public class DelegateConnection implements DelegateTif {
 	private ATermFactory factory;
-	private Tb2Bridge bridge2;
-	private Connection1 con1;
+	private DelegateBridge bridge;
+	private MaskeradeConnection maskeradeConnection;
 
-	public Connection2(String[] args, ATermFactory factory) throws IOException {
+	public DelegateConnection(String[] args, ATermFactory factory) throws IOException {
 		this.factory = factory;
-		bridge2 = new Tb2Bridge(factory, this);
+		bridge = new DelegateBridge(factory, this);
 
 //		args = new String[6];
 //		args[0] = "-TB_HOST_NAME";
@@ -35,15 +35,15 @@ public class Connection2 implements Tb2Tif {
 //		args[4] = "-TB_TOOL_NAME";
 //		args[5] = "tb2";
 
-		bridge2.init(args);
-		bridge2.connect();
+		bridge.init(args);
+		bridge.connect();
 		
-		Thread t2 = new Thread(bridge2, "Tb2");
+		Thread t2 = new Thread(bridge, "Delegate");
 		t2.start();
 	}
 	
-	public void Connection1(Connection1 con1) {
-		this.con1 = con1;
+	public void setMaskerade(MaskeradeConnection maskeradeConnection) {
+		this.maskeradeConnection = maskeradeConnection;
 	}
 	
 	public void postEvent(ATerm term) {
@@ -59,13 +59,13 @@ public class Connection2 implements Tb2Tif {
 		}
 		
 		if (result != null) {
-			bridge2.postEvent((ATerm)result.get(0));
+			bridge.postEvent((ATerm)result.get(0));
 		} else {
 			throw new RuntimeException("term not in input signature: " + term);
 		}
 	}
 	
-	public void postEventCon1(ATerm term) {
+	public void postMaskeradeEvent(ATerm term) {
 		ATerm fun;
 		List result;
 		
@@ -73,7 +73,7 @@ public class Connection2 implements Tb2Tif {
 		result = term.match(fun);
 		
 		if (result != null) {
-			con1.sendTerm(factory.make("snd-value(" + (ATerm)result.get(0) + ")"));
+			maskeradeConnection.sendTerm(factory.make("snd-value(" + (ATerm)result.get(0) + ")"));
 		}
 	}
 

@@ -1,21 +1,20 @@
-package trans;
-
-// Java tool interface class Tb1Tool
+// Java tool interface class Tb2Tool
 // This file is generated automatically, please do not edit!
-// generation time: Jun 26, 2003 4:27:06 PM
+// generation time: Jun 26, 2003 4:12:04 PM
 
+package trans;
 import aterm.*;
 import toolbus.*;
 
-abstract public class Tb1Tool extends AbstractTool implements Tb1Tif {
+abstract public class DelegateTool extends AbstractTool implements DelegateTif {
 	// Mimic the constructor from the AbstractTool class
-	protected Tb1Tool(ATermFactory factory) {
+	protected DelegateTool(ATermFactory factory) {
 		super(factory);
 	}
 
 	// The generic handler calls the specific handlers
 	public ATerm handler(ATerm term) {
-		postEventCon2(term);
+		postMaskeradeEvent(term);
 		return null;		
 	}
 

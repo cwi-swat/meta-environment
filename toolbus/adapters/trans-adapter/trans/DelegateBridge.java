@@ -5,17 +5,17 @@
 package trans;
 import aterm.*;
 
-public class Tb2Bridge extends Tb2Tool {
-	private Tb2Tif tool;
+public class DelegateBridge extends DelegateTool {
+	private DelegateTif tool;
 
-	public Tb2Bridge(ATermFactory factory, Tb2Tif tool) {
+	public DelegateBridge(ATermFactory factory, DelegateTif tool) {
 		super(factory);
 		this.tool = tool;
 	}
 
-	public void postEventCon1(ATerm term) {
+	public void postMaskeradeEvent(ATerm term) {
 		if (tool != null) {
-			tool.postEventCon1(term);
+			tool.postMaskeradeEvent(term);
 		} else {
 			throw new UnsupportedOperationException("method `postEventCon1' not supported.");
 		}

@@ -5,8 +5,8 @@
 package trans;
 import aterm.*;
 
-public interface Tb2Tif {
-	public void postEventCon1(ATerm t0);	
+public interface DelegateTif {
+	public void postMaskeradeEvent(ATerm t0);	
 	public void recAckEvent(ATerm t0);
 	public void recTerminate(ATerm t0);
 }
