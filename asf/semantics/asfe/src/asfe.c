@@ -108,8 +108,7 @@ static ATerm lastListElementMatching(ATerm env, PT_Tree elem1, PT_Args elems2,
 static ATerm nextListElementMatching(ATerm env, PT_Tree elem1, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
 static ATerm listMatching(ATerm env, PT_Production listProd, PT_Args elems1, PT_Args elems2, ASF_ConditionList conds, PT_Args args1, PT_Args args2, ATerm lhs_posinfo, int depth);
 static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth);
-static ATermList apply_rule(PT_Tree trm, int depth, equation_entry **equ);
-static PT_Tree selectAndRewrite(PT_Tree trm, int depth);
+static PT_Tree reduce(PT_Tree trm, int depth);
 static PT_Tree rewrite(PT_Tree trm);
 static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void *extra);
 static PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra);
@@ -1262,26 +1261,60 @@ static ATerm condsSatisfied(ASF_ConditionList conds, ATerm env, int depth)
 /*}}}  */
 
 /* Reduction functionality */
-/*{{{  static ATermList apply_rule(PT_Tree trm, int depth) */
+/*{{{  static ATerm try(PT_Tree trm, equation_entry *entry, int depth) */
 
-/* The function ``apply_rule'' tries to rewrite a term
-   given a list of equations. As long as there is no
-   success a new equation is tried. The arguments of
-   the term and the arguments of the left hand side of
-   the equation are matched.
-*/
+static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
+{
+  ATerm env = fail_env;
 
-static ATermList apply_rule(PT_Tree trm, int depth, equation_entry **equation)
+  if (runVerbose) {
+    ATwarning("Trying equation: %s\n", PT_yieldTree((PT_Tree)entry->tag));
+  }
+
+  tagCurrentRule = entry->tag;
+  currentRule = entry;
+
+  env = argMatching((ATerm) ATempty, entry->lhs, trm, entry->conds,
+		    PT_makeArgsEmpty(), PT_makeArgsEmpty(),
+		    PT_getTreeAnnotation(entry->lhs, posinfo), depth);
+
+
+  tagCurrentRule = entry->tag;
+  currentRule = entry;
+
+
+  if (!is_fail_env(env)) {
+    if (runVerbose) {
+      ATwarning("Equation %s was successful.\n", 
+		PT_yieldTree((PT_Tree)entry->tag));
+    }
+
+    TIDE_STEP(PT_getTreeAnnotation(entry->rhs, posinfo), env, depth);
+    rewrite_steps++;
+  }
+  else {
+    if (runVerbose) {
+      ATwarning("Equation %s failed.\n", PT_yieldTree((PT_Tree)entry->tag));
+    }
+  }
+
+  return env;
+}
+
+/*}}}  */
+/*{{{  static ATermList reduce(PT_Tree trm, int depth) */
+
+static PT_Tree reduce(PT_Tree trm, int depth)
 {
   PT_Production top_ofs, first_ofs;
-  PT_Args termargs, equargs, tmpargs;
-  ATerm env;
-  ASF_ConditionList conds;
+  PT_Args termargs, tmpargs;
+  ATerm env = (ATerm) ATempty;
   equation_entry *entry = NULL;
 
   top_ofs = PT_getTreeProd(trm);
   termargs = PT_getTreeArgs(trm);
 
+  /* first try equations with guarded first arguments */
   tmpargs = termargs;
   while (PT_hasArgsHead(tmpargs) &&
 	 (PT_isTreeLit(PT_getArgsHead(tmpargs)) ||
@@ -1295,123 +1328,24 @@ static ATermList apply_rule(PT_Tree trm, int depth, equation_entry **equation)
       first_ofs = PT_getTreeProd(PT_getArgsHead(tmpargs));
 
       while ((entry = find_equation(entry, top_ofs, first_ofs))) {
-        if (runVerbose) {
-	  ATwarning("Trying equation: %s\n", PT_yieldTree((PT_Tree)entry->tag));
-        }
-
-        tagCurrentRule = entry->tag;
-	currentRule = entry;
-
-        conds = entry->conds;
-        equargs = PT_getTreeArgs(entry->lhs);
-        if (PT_isProductionList(top_ofs)) {
-          env = listMatching((ATerm) ATempty, top_ofs, equargs, termargs,
-                             conds, PT_makeArgsEmpty(),  PT_makeArgsEmpty(), 
-                             PT_getTreeAnnotation(entry->lhs, posinfo), 
-			     depth); 
-        }
-        else {
-          env = argsMatching((ATerm) ATempty, conds, equargs, termargs,
-	   		     PT_getTreeAnnotation(entry->lhs, posinfo), 
-			     depth);
-        }
-
-        tagCurrentRule = entry->tag;
-	currentRule = entry;
-
-        if (!is_fail_env(env)) {
-	  TIDE_STEP(PT_getTreeAnnotation(entry->rhs, posinfo), env, depth);
-	  if (runVerbose) {
-	    ATwarning("Equation %s was successful.\n", 
-                      PT_yieldTree((PT_Tree)entry->tag));
-	  }
-
-	  rewrite_steps++;
-	  *equation = entry;
-	  return make_cenv(entry->rhs, env);
-        }
-        else if (runVerbose) {
-	  ATwarning("Equation %s failed.\n", PT_yieldTree((PT_Tree)entry->tag));
-        }
+	env = try(trm, entry, depth);
+  
+	if (!is_fail_env(env)) {
+	  return rewriteRecursive(entry->rhs, env, depth + 1, NULL);
+	}
       }
     }
   }
 
+  /* then try equations with variables as first arguments */
   while ((entry = find_equation(entry, top_ofs, (PT_Production) NULL))) {
-    if (runVerbose) {
-      ATwarning("Trying equation: %s.\n", PT_yieldTree((PT_Tree) entry->tag));
-    }
-
-    tagCurrentRule = entry->tag;
-    currentRule = entry;
-
-    conds = entry->conds;
-    equargs = PT_getTreeArgs(entry->lhs);
-
-    if (PT_isProductionList(top_ofs)) {
-      env = listMatching((ATerm) ATempty, top_ofs, equargs, termargs,
-			 conds, PT_makeArgsEmpty(),  PT_makeArgsEmpty(), 
-			 PT_getTreeAnnotation(entry->lhs, posinfo), depth); 
-    }
-    else {
-      env = argsMatching((ATerm) ATempty, conds, equargs, termargs,
-			 PT_getTreeAnnotation(entry->lhs, posinfo), depth);
-    }
-
-    tagCurrentRule = entry->tag;
-    currentRule = entry;
+    env = try(trm, entry, depth);
 
     if (!is_fail_env(env)) {
-      TIDE_STEP(PT_getTreeAnnotation(entry->rhs, posinfo), env, depth);
-      if (runVerbose) {
-	ATwarning("Equation: %s was successful.\n", 
-                  PT_yieldTree((PT_Tree)entry->tag));
-      }
-
-      rewrite_steps++;
-      *equation = entry;
-      return make_cenv(entry->rhs, env);
-    }
-    else if (runVerbose) {
-      ATwarning("Equation %s failed.\n", PT_yieldTree((PT_Tree)entry->tag));
+      return rewriteRecursive(entry->rhs, env, depth + 1, NULL);
     }
   }
 
-  *equation = NULL;
-  return make_cenv(trm, fail_env);
-}
-
-/*}}}  */
-/*{{{  static PT_Tree selectAndRewrite(PT_Tree trm, int depth) */
-
-/* The function ``select_and_rewrite'' selects the
-   the set of rewrite rules from the active rules and
-   tries to rewrite the term via the function ``apply_rule''.
-*/
-
-static PT_Tree selectAndRewrite(PT_Tree trm, int depth)
-{
-  PT_Tree newtrm;
-  ATermList complexenv;
-  ATerm env;
-  equation_entry *equation;
-  ASF_Tag savedTag = tagCurrentRule;
-
-  complexenv = apply_rule(trm, depth, &equation);
-  env = get_env(complexenv);
-
-  if (!is_fail_env(env)) {
-    newtrm = get_term(complexenv);
-
-    /* construct the right hand side */
-    trm = rewriteRecursive(newtrm, env, depth + 1, NULL);
-
-    assert(equation);
-    tagCurrentRule = equation->tag;
-    TIDE_STEP(equation->posinfo_equals, env, depth);
-  }
-
-  tagCurrentRule = savedTag;
   return trm;
 }
 
@@ -1785,7 +1719,7 @@ static PT_Tree rewriteListAppl(PT_Tree list, ATerm env, int depth, void *extra)
   }
 
   pedantic_assert(isValidList(newelems));
-  reduct = selectAndRewrite(PT_setTreeArgs(list, newelems), depth);
+  reduct = reduce(PT_setTreeArgs(list, newelems), depth);
 
   if (PT_isEqualTree(reduct,list)) {
     reduct = FAIL;
@@ -1814,7 +1748,7 @@ static PT_Tree rewriteNormalAppl(PT_Tree appl, ATerm env, int depth,
     }
   }
 
-  reduct = selectAndRewrite(appl, depth);
+  reduct = reduce(appl, depth);
 
   if (PT_isEqualTree(appl, reduct)) {
     reduct = FAIL;
