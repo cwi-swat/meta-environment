@@ -140,17 +140,17 @@ in
     ) +
     ( rec-event(UI, edit-module(ModName?)) .
       snd-msg(edit-syntax(ModName)) .
-      rec-msg(edit-syntax(ModName, EditorId?)) .
+      rec-msg(editor-opened(ModName)) .
       snd-ack-event(UI, edit-module(ModName))
     ) +
     ( rec-event(UI, edit-eqs-module(ModName?)).
       snd-msg(edit-equations(ModName)) .
-      rec-msg(edit-equations(ModName, EditorId?)) .
+      rec-msg(editor-opened(ModName)) .
       snd-ack-event(UI, edit-eqs-module(ModName))
     ) +
    ( rec-event(UI, edit-term(ModName?, FileName?)).
      snd-msg(edit-term-file(ModName, FileName)) .
-     rec-msg(edit-term-file(ModName, EditorId?)) .
+     rec-msg(editor-opened(ModName)) .
      snd-ack-event(UI, edit-term(ModName, FileName))
    ) +
     ( rec-event(UI, revert-module(ModName?)) .
