@@ -1,13 +1,77 @@
 equations
 
-[remvar-0]
-  remove-variable($Var, ) = 
+[ruvs-0]
+  remove-unused-variables($Tscript, {}) = $Tscript
 
-[remvar-1]
-  remove-variable($Var, $Var : $Term, $VarDecls) = $VarDecls
-
-[default-remvar]
-  $Var != $Var2,
-  remove-variable($Var, $VarDecls) = $VarDecls2
+[ruvs-1]
+  remove-unused-variable($Tscript, $Area) = $Tscript2,
+  remove-unused-variables($Tscript2, {$Elems}) = $Tscript3
   ===>
-  remove-variable($Var, $Var2 : $Term, $VarDecls) = $Var2 : $Term, $VarDecls2
+  remove-unused-variables($Tscript, {<$String1, <$Area, $String2>>, $Elems})
+  = $Tscript3
+
+[ruvs-2]
+  ruv-tscript-defs($TscriptDefs, $Area) = $TscriptDefs2
+  ===>
+  remove-unused-variable($TscriptDefs, $Area) = $TscriptDefs2
+
+[ruv-tscript-defs-0]
+  ruv-tscript-defs(, $Area) =
+
+[ruv-tscript-defs-1]
+  ruv-tscript-def($TscriptDef, $Area) = $TscriptDef2,
+  remove-unused-variable($TscriptDefs, $Area) = $TscriptDefs2
+  ===>
+  ruv-tscript-defs($TscriptDef $TscriptDefs, $Area) = $TscriptDef2 $TscriptDefs2
+
+[ruvp-0]
+  get-variable-declarations($ProcessDef) = $VarDecls,
+  ruv-var-decls($VarDecls, $Area) = $VarDecls2,
+  set-variable-declarations($ProcessDef, $VarDecls2) = $ProcessDef2
+  ===>
+  ruv-tscript-def($ProcessDef, $Area) = $ProcessDef2
+
+[default-ruvp]
+  ruv-tscript-def($TscriptDef, $Area) = $TscriptDef
+
+[gvd-0]
+  get-process-body($ProcessDef) = $ProcessBody,
+  get-variable-declarations($ProcessBody) = $VarDecls
+  ===>
+  get-variable-declarations($ProcessDef) = $VarDecls
+
+[svd-0]
+  get-process-body($ProcessDef) = $ProcessBody,
+  set-variable-declarations($ProcessBody, $VarDecls) = $ProcessBody2,
+  set-process-body($ProcessDef, $ProcessBody2) = $ProcessDef2
+  ===>
+  set-variable-declarations($ProcessDef, $VarDecls) = $ProcessDef2
+
+[gpb-0]
+  get-process-body(process $ProcessSignature is $ProcessBody) = $ProcessBody
+
+[spb-0]
+  set-process-body(process $ProcessSignature is $ProcessBody, $ProcessBody2)
+  = process $ProcessSignature is $ProcessBody2
+
+[gvdb-0]
+  get-variable-declarations(let $VarDecls in $ProcessExpr endlet) = $VarDecls
+
+[default-gvb]
+  get-variable-declarations($ProcessBody) =
+
+[svdb-0]
+  set-variable-declarations(let $VarDecls in $ProcessExpr endlet, $VarDecls2)
+  = let $VarDecls2 in $ProcessExpr endlet
+
+[ruvv-0]
+  ruv-var-decls(, $Area) =
+
+[ruvv-1]
+  get-area($Var) = $Area
+  ===>
+  ruv-var-decls($VarDecls1, $Var : $Term, $VarDecls2, $Area)
+  = $VarDecls1, $VarDecls2
+
+[get-area-0]
+  get-area(<$String1, <$Area, $String2>>) = $Area

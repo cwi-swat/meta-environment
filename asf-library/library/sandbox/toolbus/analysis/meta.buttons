@@ -11,6 +11,24 @@ buttons([
           push-active-module,
           show-list
          ]),
+  button(
+    "Tscript",
+    [description(term-editor, menu(["ToolBus", "Remove unused variables"]))],
+    [
+      push-active-module,
+      get-root,
+      check-sort("Tscript"),
+      push-filename("unused-variables.trm"),
+      read-tree,
+      check-sort("Elem"),
+      apply("remove-unused-variables", "Tscript", 2),
+      push-modulename("Refactoring"),
+      reduce,
+      push-filename("result.tb"),
+      push-active-module,
+      activate-editor
+    ]
+  ),
   button("Tscript",
          [description(term-editor, menu(["ToolBus", 
                                          "Show Results as HTML"]))],
@@ -42,7 +60,7 @@ buttons([
          [push-filename("all.rscript"),
           parse("Rscript", "RSCRIPT"),
 
-          push-string("\"ALL_MESSAGES\""),
+          push-string("\"UNUSED_VARS\""),
           parse("basic/Strings", "String"),
 
           push-filename("extracted-relations.trm"),

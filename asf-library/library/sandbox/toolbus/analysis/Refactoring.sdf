@@ -1,12 +1,53 @@
 module Refactoring
 
-imports VarDecls
+imports Rstore
+imports Tscript
+imports MyPosInfo[Var]
+
+imports basic/Strings
 
 exports
   context-free syntax
-    "remove-variable" "(" Var "," {VarDecl ","}* ")" -> {VarDecl ","}*
+    remove-unused-variables(Tscript, Elem) -> Tscript
+    remove-unused-variable(Tscript, Area) -> Tscript
+
+hiddens
+  context-free syntax
+    ruv-tscript-defs(TscriptDef*, Area) -> TscriptDef*
+    ruv-tscript-def(TscriptDef, Area) -> TscriptDef
+    ruv-process-def(ProcessDef, Area) -> ProcessDef
+    ruv-var-decls(VarDecls, Area) -> VarDecls
+
+hiddens
+  context-free syntax
+    get-variable-declarations(ProcessDef) -> VarDecls
+    set-variable-declarations(ProcessDef, VarDecls) -> ProcessDef
+
+    get-variable-declarations(ProcessBody) -> VarDecls
+    set-variable-declarations(ProcessBody, VarDecls) -> ProcessBody
+
+hiddens
+  context-free syntax
+    get-process-body(ProcessDef) -> ProcessBody
+    set-process-body(ProcessDef, ProcessBody) -> ProcessDef
+
+hiddens
+  context-free syntax
+    get-area(Elem) -> Area
 
 variables
-  "$Var"[0-9]* -> Var
+  "$Area" -> Area
+  "$Elem"[0-9]* -> Elem
+  "$Elems"[0-9]* -> {Elem ","}*
+  "$ProcessBody"[0-9]* -> ProcessBody
+  "$ProcessDef"[0-9]* -> ProcessDef
+  "$ProcessExpr"[0-9]* -> ProcessExpr
+  "$ProcessSignature"[0-9]* -> ProcessSignature
+  "$String"[0-9]* -> String
   "$Term" -> Term
+  "$Tscript"[0-9]* -> Tscript
+  "$TscriptDef"[0-9]* -> TscriptDef
+  "$TscriptDefs"[0-9]* -> TscriptDef*
+  "$Var"[0-9]* -> Var
+  "$VarDecl"[0-9]* -> VarDecl
   "$VarDecls"[0-9]* -> {VarDecl ","}*
