@@ -92,14 +92,6 @@ in
     snd-msg(set-modified(EditorId)) .
     snd-ack-event(TE, modified(Fid))
   +
-    rec-event(TE, menu-event("Meta-Environment", "Parse", Fid?)) .
-    snd-msg(parse-buffer(EditorId)) .
-    snd-ack-event(TE, menu-event("Meta-Environment", "Parse", Fid))
-  +
-    rec-event(TE, menu-event("Meta-Environment", "Reduce", Fid)) .
-    snd-msg(reduce(EditorId)) .
-    snd-ack-event(TE, menu-event("Meta-Environment", "Reduce", Fid))
-  +
     rec-event(TE, menu-event("Move", Direction?, Fid)) .
     snd-msg(move-focus(EditorId, Direction)) .
     snd-ack-event(TE, menu-event("Move", Direction, Fid))
@@ -108,7 +100,7 @@ in
     snd-msg(execute-query(EditorId, ActionName)) .
     snd-ack-event(TE, menu-event("Queries", ActionName, Fid))
   +
-    rec-event(TE, menu-event("Term-Actions", ButtonName?, Fid)) .
+    rec-event(TE, menu-event("Actions", ButtonName?, Fid)) .
     snd-msg(extra-button-action(EditorId, ButtonName)) .
     snd-ack-event(TE, menu-event("Term-Actions", ButtonName, Fid))
   ) *
