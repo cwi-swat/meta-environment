@@ -297,7 +297,8 @@ assert "Bag former 18": { X | X : {{1,2,3},{10,20,30},{100,200,300}} } ==
 %% --- Relation former
 
 assert "Rel former 1":  { EMPTYREL | X : {1,2,3}} == EMPTYREL
-assert "Rel former 2":  { <X,Y> | <X,Y> : EMPTYREL} == EMPTYREL
+assert "Rel former 2a":  { <X,Y> | <X,Y> : EMPTYREL} == EMPTYREL
+assert "Rel former 2b":  { <X,Y> | X : EMPTYBAG, Y : EMPTYBAG} == EMPTYREL
 
 assert "Rel former 3":  { Rel1 | X : {1,2,3}} == Rel1
 

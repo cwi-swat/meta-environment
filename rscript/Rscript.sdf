@@ -7,7 +7,7 @@ exports
 %%sorts Elem would be reasonable :-) but gives double declaration error
 
   sorts ElemType RSCRIPT RSTAT RVAR DCLRVAR SIMPLE-GENERATOR GENERATOR 
-	REXP REXPTYPE EQU DESTINATION {REXP ","}+
+	REXP REXPTYPE EQU DESTINATION {REXP ","}+ INITVAR
 
   imports Relations[Elem]
 
@@ -85,14 +85,12 @@ exports
 
 %% Let expressions
 
-     REXP "where" RSTAT+ "endwhere"		-> REXP
+     REXP "where" RSTAT+ "end" "where"		-> REXP
 
 %% Functions
 
      RVAR "(" {REXP ","}* ")"                 	-> REXP {avoid}
      "(" REXP ")"                             	-> REXP {bracket}
-
-
 
 %% Types
 
@@ -111,16 +109,23 @@ exports
 
      DCLRVAR				      	-> RSTAT
 
-     DCLRVAR "=" REXP                         	-> RSTAT
+     DCLRVAR "=" REXP                         	-> INITVAR
+     DCLRVAR "init" REXP 			-> INITVAR
+     INITVAR					-> RSTAT
 
      DCLRVAR  "(" { DCLRVAR ","}* ")" "=" REXP	-> RSTAT
 
      "assert" String ":"  REXP			-> RSTAT
 
+     "yield" RVAR				-> RSTAT
+
 %% Highly experimental sets of equations
      RVAR "=" REXP				-> EQU
 
-     "solve" ("(" Integer ")")? "{" { EQU  "," }+ "}" -> RSTAT
+     "equations" ("(" "limit" Integer ")")?
+	"initial" INITVAR+
+        "satisfy"  EQU+
+     "end" "equations"				 -> RSTAT
 
 %% Complete Rscript
 

@@ -18,17 +18,18 @@ where
 	rel[int,<str,int>] KILL = 
  	   {<S1, <V2,S2>> | <V1,S1> : DEF, <V2,S2> : DEF, V1 == V2,  S1 != S2}
 
-	rel[int,<str,int>] IN = {}
-
-	rel[int,<str,int>] OUT = GEN
-
 	%% The set of mutually recursive dataflow equations that has to be solved:
 
-	solve {
-       		IN =  {{S} x OUT[P] | S : STATEMENT, P : PRED-OF[S]},
+	equations 
+	   initial
+		rel[int,<str,int>] IN init {}
+
+		rel[int,<str,int>] OUT init GEN
+	   satisfy
+       		IN =  {{S} x OUT[P] | S : STATEMENT, P : PRED-OF[S]}
         	OUT = {{S} x (GEN[S] union (IN[S] \ KILL[S])) | S : STATEMENT }
-	}
-endwhere
+	end equations
+end where
 
 %% Find all the statements that are dominated by each statement
 

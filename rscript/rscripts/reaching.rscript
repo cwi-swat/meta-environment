@@ -1,30 +1,62 @@
 
 %% Reaching definitions, example ASU, p626
 
-rel[str,str] PRED = { <"B1", "B2">, <"B2",  "B3">, <"B2", "B4">, <"B3", "B4">, <"B4", "B2">}
+rel[int,int] PRED = { <1,2>, <2,3>, <3,4>, <4,5>, <5,6>, <5,7>, <6,7>, <7,4>}
 
-rel[str,str] PRED-OF = inv(PRED)
+rel[int, str] DEFS = { <1, "i">, <2, "j">, <3, "a">, <4, "i">, <5, "j">, <6, "a">, <7, "i">}
+rel[int, str] USES = { <1, "m">, <2, "n">, <3, "u1">, <4, "i">, <5, "j">, <6, "u2">, <7, "u3">}
 
-rel[str,str] GEN = { 
-<"B1", "d1">, <"B1", "d2">, <"B1", "d3">,
-<"B2", "d4">, <"B2", "d5">,
-<"B3", "d6">,
-<"B4", "d7"> }
+rel[int, <int, str>] DEF =   {<S, <S, V>> | <S, V> : DEFS}
+rel[int, <int, str>] USE =   {<S, <S, V>> | <S, V> : USES}
 
-rel[str,str] KILL = {
-<"B1", "d4">, <"B1", "d5">, <"B1", "d6">, <"B1", "d7">,
-<"B2", "d1">, <"B2", "d2">, <"B2", "d7">,
-<"B3", "d3">,
-<"B4", "d1">, <"B4", "d4"> }
+rel[int, <int, str>] KILL = {<S1, <S2, V2>> |  <S1, V1> : DEFS, <S2, V2> : DEFS, V1 == V2, S1 != S2}
 
-bag[str] BLOCKS = carrier(PRED)
+assert "kill": KILL ==  {<1, <4, "i">>, <1, <7, "i">>, <2, <5, "j">>, <3, <6, "a">>, 
+                         <4, <1, "i">>, <4, <7, "i">>, <5, <2, "j">>, <6, <3, "a">>, 
+                         <7, <1, "i">>, <7, <4, "i">>}
 
-rel[str,str] IN = {}
-rel[str,str] OUT = {}
+bag[int] STATEMENTS = carrier(PRED)
+rel[int,int] PRED-OF = inv(PRED)
 
-solve {
+%% Reaching definitions
 
-	IN =   {{B} x OUT[P] | B : BLOCKS, P : PRED-OF[B]},
-	OUT =  {{B} x (GEN[B] union (IN[B] \ KILL[B])) | B : BLOCKS }
-}
+equations
+  initial
+	rel[int,<int,str>] IN init {}
+	rel[int,<int,str>] OUT init DEF
+  satisfy
+	IN  =  {{S} x OUT[P] | S : STATEMENTS, P : PRED-OF[S]}
+	OUT =  {{S} x (DEF[S] union (IN[S] \ KILL[S])) | S : STATEMENTS }
+end equations
+
+assert "IN": IN ==  {<2, <1, "i">>, <3, <2, "j">>, <3, <1, "i">>, <4, <3, "a">>, 
+                     <4, <2, "j">>, <4, <1, "i">>, <4, <7, "i">>, <4, <5, "j">>, 
+                     <4, <6, "a">>, <5, <4, "i">>, <5, <3, "a">>, <5, <2, "j">>, 
+                     <5, <5, "j">>, <5, <6, "a">>, <6, <5, "j">>, <6, <4, "i">>, 
+                     <6, <3, "a">>, <6, <6, "a">>, <7, <5, "j">>, <7, <4, "i">>, 
+                     <7, <3, "a">>, <7, <6, "a">>}
+
+assert "OUT": OUT == {<1, <1, "i">>, <2, <2, "j">>, <2, <1, "i">>, <3, <3, "a">>,
+                      <3, <2, "j">>, <3, <1, "i">>, <4, <4, "i">>, <4, <3, "a">>,
+                      <4, <2, "j">>, <4, <5, "j">>, <4, <6, "a">>, <5, <5, "j">>,
+                      <5, <4, "i">>, <5, <3, "a">>, <5, <6, "a">>, <6, <6, "a">>,
+                      <6, <5, "j">>, <6, <4, "i">>, <7, <7, "i">>, <7, <5, "j">>,
+                      <7, <3, "a">>, <7, <6, "a">>}
+
+%% Live variables
+
+equations
+  initial
+	rel[int,<int,str>] LIN init {}
+	rel[int,<int,str>] LOUT init DEF
+  satisfy
+	LIN  =  {{S} x (USE[S] union (LOUT[S] \ DEF[S])) | S : STATEMENTS }
+	LOUT =  {{S} x LIN[S] | S : STATEMENTS, P : PRED[S] }
+end equations
+
+assert "LIN": LIN == {<1, <1, "m">>, <2, <2, "n">>, <3, <3, "u1">>, <4, <4, "i">>, 
+                      <5, <5, "j">>, <6, <6, "u2">>, <7, <7, "u3">>}
+
+assert "LOUT": LOUT ==  {<1, <1, "m">>, <2, <2, "n">>, <3, <3, "u1">>, 
+                         <4, <4, "i">>, <5, <5, "j">>, <6, <6, "u2">>, <7, <7, "u3">>}
 

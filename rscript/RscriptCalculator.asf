@@ -44,7 +44,10 @@
 
 %% ---- Eval a complete Rscript
 
-[ERS1]	eval-rscript($Stat*) = eval-rstats($Stat*, rstore())
+[ERS1]	$Rstore = eval-rstats($Stat*, rstore(<YIELD, {}>)),
+	$Bag = value(YIELD, $Rstore)
+	===============================================================
+	eval-rscript($Stat*) = filter($Rstore, $Bag)
 
 %% ---- Eval complete script and yield value of a variable
 
@@ -69,26 +72,48 @@
 						= assign-when-undef($Var, {}, $Rstore)
 [S7]	eval-rstat($Etype $Var, $Rstore)	= $Rstore
 
-[S8]	eval-rstat($Etype $Var = $Exp, $Rstore) = assign($Var, evalx($Exp, $Rstore), $Rstore)
+[S8]	eval-rstat($Etype $Var = $Exp, $Rstore)    = assign($Var, evalx($Exp, $Rstore), $Rstore)
+[S8]	eval-rstat($Etype $Var init $Exp, $Rstore) = assign($Var, evalx($Exp, $Rstore), $Rstore)
 
 [S9]	eval-rstat($Etype1 $Var1($DclRvar+) = $Exp, $Rstore) 
 						= assign($Var1, <extract-rvars($DclRvar+), $Exp>, $Rstore)
 [default-assert]	
 	eval-rstat(assert $String : $Exp, $Rstore) = $Rstore
 
+[S10]	$Elem =  value($Var, $Rstore)
+	=======================================================
+	eval-rstat(yield $Var, $Rstore) = add-elem(YIELD, rvar2str($Var), $Rstore)
+
+%% ---- Variable initialization in solve statement
+
+[eiv]	$Rstore' =  assign($Var, evalx($Exp, $Rstore), $Rstore)
+	========================================================
+	eval-initvar($Etype $Var init $Exp $InitVar*, $Rstore) =
+	eval-initvar($InitVar*, $Rstore')
+
+[eiv2]	eval-initvar( , $Rstore) = $Rstore
+	
 %% --- Solve Sets of equations
 
-[SL1]	eval-rstat(solve {$Var1 = $Exp1}, $Rstore) = 
-	solve1(1000, $Var1, $Exp1, $Rstore)
+[SL1]	eval-initvar( $InitVar+, $Rstore) = $Rstore'
+	=======================================================
+	eval-rstat(equations initial $InitVar+ satisfy $Var1 = $Exp1 end equations, $Rstore) = 
+	solve1(1000, $Var1, $Exp1, $Rstore')
 
-[SL2]	eval-rstat(solve($Integer) {$Var1 = $Exp1}, $Rstore) = 
-	solve1($Integer, $Var1, $Exp1, $Rstore)
+[SL2]	eval-initvar( $InitVar+, $Rstore) = $Rstore'
+	=======================================================	
+	eval-rstat(equations (limit $Integer) initial $InitVar+ satisfy $Var1 = $Exp1 end equations, $Rstore) = 
+	solve1($Integer, $Var1, $Exp1, $Rstore')
 
-[SL3]	eval-rstat(solve {$Var1 = $Exp1, $Var2 = $Exp2}, $Rstore) = 
-	solve2(1000, $Var1, $Exp1, $Var2, $Exp2, $Rstore)
+[SL3]	eval-initvar( $InitVar+, $Rstore) = $Rstore'
+	=======================================================	
+	eval-rstat(equations initial  $InitVar+ satisfy $Var1 = $Exp1 $Var2 = $Exp2 end equations, $Rstore) = 
+	solve2(1000, $Var1, $Exp1, $Var2, $Exp2, $Rstore')
 
-[SL4]	eval-rstat(solve($Integer){$Var1 = $Exp1, $Var2 = $Exp2}, $Rstore) = 
-	solve2($Integer, $Var1, $Exp1, $Var2, $Exp2, $Rstore)
+[SL4]	eval-initvar( $InitVar+, $Rstore) = $Rstore'
+	=======================================================	
+	eval-rstat(equations (limit $Integer) initial $InitVar+ satisfy $Var1 = $Exp1 $Var2 = $Exp2 end equations, $Rstore) = 
+	solve2($Integer, $Var1, $Exp1, $Var2, $Exp2, $Rstore')
 
 [SL1-1]	$Integer > 0 = true,
 	$Val1 = value($Var1, $Rstore),
@@ -415,10 +440,15 @@
 	===================================================
 	evalx(second($Exp), $Rstore) = $Elem2
 
-[Fpower]	
+[Fpower0]	
 	$Bag  = evalb($Exp, $Rstore)
 	====================================================
-	evalx(power($Exp), $Rstore) = power($Bag)
+	evalx(power0($Exp), $Rstore) = power0($Bag)
+
+[Fpower1]	
+	$Bag  = evalb($Exp, $Rstore)
+	====================================================
+	evalx(power1($Exp), $Rstore) = power1($Bag)
 	
 [RdomR]	$Rel = evalr($Exp1, $Rstore), $Bag = evalb($Exp2, $Rstore)
 	===================================================
@@ -465,12 +495,14 @@
 
 [ae2]	add-element($Elem, {}) = {}
 
-[pw1]	power({$Elem*}) = $Bag1,
+[pw01]	power0({$Elem*}) = $Bag1,
 	add-element($Elem, $Bag1) = $Bag2
 	====================================================
-	power({$Elem, $Elem*}) = union($Bag1, $Bag2)
+	power0({$Elem, $Elem*}) = union($Bag1, $Bag2)
 
-[pw2]	power({}) = {{}}
+[pw02]	power0({}) = {{}}
+
+[pw11]	power1($Bag) = diff(power0($Bag), {{}})
 
 [fn]	evalx(filename($Exp), $Rstore)	=  get-filename(evala($Exp, $Rstore))
 

@@ -80,6 +80,8 @@ exports
         require-type(REXP, REXPTYPE, TENV) 			-> TENV
         require-type2(REXP, REXPTYPE, REXP, REXPTYPE, TENV) 	-> TENV
 
+	check-eqs(INITVAR*, EQU*, TENV)				-> TENV
+
 	
 	require-and-store-bag-type(REXP, RVAR, REXPTYPE, TENV) 	-> TENV
 	require-and-store-rel-type(REXP, RVAR, RVAR, REXPTYPE, TENV) 	-> TENV
@@ -185,4 +187,14 @@ hiddens
      "$Gen+" [0-9\']*   	-> {GENERATOR ","}+
 
       "$ListItem*" [0-9\']*	-> {ListItem ","}*
+
+      "$InitVar" [0-9\']*	-> INITVAR
+      "$InitVar*" [0-9\']*	-> INITVAR*
+      "$InitVar+" [0-9\']*	-> INITVAR+
+
+      "$Eq" [0-9\']*		-> EQU
+      "$Eq*" [0-9\']*		-> EQU*
+      "$Eq+" [0-9\']*		-> EQU+
+
+  
 	
