@@ -1,6 +1,7 @@
 module Type-environments
 
-imports Pico-Identifiers Types
+imports Check-types
+imports Pico-Identifiers 
 
 exports
   sorts TENV PAIR
@@ -12,6 +13,7 @@ exports
     "lookup" "(" PICO-ID "," TENV ")"           -> TYPE
     "add-to" "(" PICO-ID "," TYPE "," TENV ")"  -> TENV
   variables
+    "Type" [0-9\']*  -> TYPE
     "Pair" [0-9\']*  -> PAIR
     "Pair*" [0-9\']* -> {PAIR ","}*
     "Tenv" [0-9\']*  -> TENV
