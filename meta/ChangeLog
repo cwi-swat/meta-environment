@@ -6,6 +6,9 @@ Tue Feb 17 15:21:17 CET 2004 <kooiker@cwi.nl>
    - add DEFAULT_ZOOM_FACTOR = 100 to scale to 100% by default
 
 Tue Feb 17 11:01:31 CET 2004 <jong@cwi.nl>
+ * editors/text/emacs/{connector.c,gnu-emacs.el}:
+   - explicit synchronization with hive during writing of contents
+     fixes anomalities during "autosave".
  * editors/text/gvim/{connector.c,meta.vim.src}:
    - explicit synchronization with hive during writing of contents
      fixes anomalities during "autosave".
@@ -13,6 +16,8 @@ Tue Feb 17 11:01:31 CET 2004 <jong@cwi.nl>
  * editors/text/{common,emax,gvim}/connector.[ch]:
    - refactored "getContents" into the common core. Both editors now
    really use the *same* code to read the contents of the file.
+   - refactored "protocol_expect" from gvim to common core + rename
+   to protocolExpect.
 
 Mon Feb 16 15:07:46 CET 2004 <{jong,jurgenv}@cwi.nl>
  * tbscripts/feedback.tb: refactored and reimplemented (in error-support)
