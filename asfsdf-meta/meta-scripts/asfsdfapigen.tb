@@ -19,7 +19,8 @@ let
   Ext : str,
   SdfExt : str,
   AsfExt : str,
-  SearchPaths : list
+  SearchPaths : list,
+  Feedback : term
 in
   Rewriter := "ASFSDFApigen" .
   snd-msg(file-extension-hook(sdf)) .
@@ -41,6 +42,12 @@ in
 	snd-msg(apply-rewrite(Rewriter, "generate-syntax", "Module", 
 			      [SyntaxTree, NewModuleName])) .
 	rec-msg(normalform(Rewriter, NewSyntaxTree?)) .
+	snd-msg(pretty-print(NewSyntaxTree)) .
+	(
+	  rec-msg(pretty-print-result(NewSyntaxTree?)) 
+        +
+	  rec-msg(pretty-print-error(Feedback?))
+        ) .
 	snd-msg(unparse(NewSyntaxTree)) .
 	rec-msg(unparsed-text(NewSyntaxText?)) .
 	snd-msg(io-get-filename(NewPath, NewModuleName, SdfExt)) .
@@ -51,6 +58,12 @@ in
 	  snd-msg(apply-rewrite(Rewriter, "generate-equations", "Skeleton", 
 				[SyntaxTree])) .
 	  rec-msg(normalform(Rewriter, NewEquationsTree?)) .
+	  snd-msg(pretty-print(NewEquationsTree)) .
+	  (
+	    rec-msg(pretty-print-result(NewEquationsTree?)) 
+	  +
+	    rec-msg(pretty-print-error(Feedback?))
+	  ) .
 	  snd-msg(unparse(NewEquationsTree)) .
 	  rec-msg(unparsed-text(NewEquationsText?)) .
 	  snd-msg(io-get-filename(NewPath, NewModuleName, AsfExt)) .
