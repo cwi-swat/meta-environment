@@ -142,6 +142,14 @@ public class Module
   }
 
   //}}}
+  //{{{ public Object[] fetchChildrenArray()
+
+  public Object[] fetchChildrenArray()
+  {
+    return _child.toArray();
+  }
+
+  //}}}
 
   //{{{ public String toString()
 

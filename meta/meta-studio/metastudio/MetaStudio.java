@@ -223,7 +223,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       }
     });
 
-    modulePopup.add(new AbstractAction("Edit Syntax") {
+    modulePopup.add(new AbstractAction(Preferences.getString("text.edit-syntax")) {
       public void actionPerformed(ActionEvent event) {
         Object[] values = moduleList.getSelectedValues();
         for (int i = 0; i < values.length; i++) {
@@ -232,7 +232,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       }
     });
 
-    modulePopup.add(new AbstractAction("Edit Equations") {
+    modulePopup.add(new AbstractAction(Preferences.getString("text.edit-equations")) {
       public void actionPerformed(ActionEvent event) {
         Object[] values = moduleList.getSelectedValues();
         for (int i = 0; i < values.length; i++) {
@@ -241,7 +241,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       }
     });
 
-    modulePopup.add(new AbstractAction("Edit Term") {
+    modulePopup.add(new AbstractAction(Preferences.getString("text.edit-term") + "...") {
       public void actionPerformed(ActionEvent event) {
         Object[] values = moduleList.getSelectedValues();
         for (int i = 0; i < values.length; i++) {
@@ -252,7 +252,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
     modulePopup.addSeparator();
 
-    modulePopup.add(new AbstractAction("Save Module") {
+    modulePopup.add(new AbstractAction(Preferences.getString("text.save-module")) {
       public void actionPerformed(ActionEvent event) {
         Object[] values = moduleList.getSelectedValues();
         for (int i = 0; i < values.length; i++) {
@@ -261,7 +261,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       }
     });
 
-    modulePopup.add(new AbstractAction("Revert Module") {
+    modulePopup.add(new AbstractAction(Preferences.getString("text.revert-module")) {
       public void actionPerformed(ActionEvent event) {
         Object[] values = moduleList.getSelectedValues();
         for (int i = 0; i < values.length; i++) {
@@ -270,20 +270,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       }
     });
 
-    modulePopup.add(new AbstractAction("Delete Module") {
-      public void actionPerformed(ActionEvent event) {
-        int choice = JOptionPane.showConfirmDialog(topFrame, "Are you sure you want delete this module (from disk)?");
-
-        if (choice == 0) {
-          Object[] values = moduleList.getSelectedValues();
-          for (int i = 0; i < values.length; i++) {
-            bridge.postEvent(factory.make("delete-module(<str>)", (String) values[i]));
-          }
-        }
-      }
-    });
-
-    modulePopup.add(new AbstractAction("Close Module") {
+    modulePopup.add(new AbstractAction(Preferences.getString("text.close-module") + "...") {
       public void actionPerformed(ActionEvent event) {
         String option;
         int choice = JOptionPane.showConfirmDialog(topFrame, "Do you want to recursively close the imported modules?");
@@ -308,16 +295,9 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       }
     });
 
-    modulePopup.add(new AbstractAction("Rename Module") {
-      public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          doRenameModule((String) values[i]);
-        }
-      }
-    });
+    JMenu refactorMenu = new JMenu(Preferences.getString("text.refactor"));
 
-    modulePopup.add(new AbstractAction("Copy Module") {
+    refactorMenu.add(new AbstractAction(Preferences.getString("text.copy-module") + "...") {
       public void actionPerformed(ActionEvent event) {
         Object[] values = moduleList.getSelectedValues();
         for (int i = 0; i < values.length; i++) {
@@ -326,27 +306,50 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       }
     });
 
-    modulePopup.add(new AbstractAction("Import Module") {
+    refactorMenu.add(new AbstractAction(Preferences.getString("text.delete-module") + "...") {
       public void actionPerformed(ActionEvent event) {
-        Object[] values = moduleList.getSelectedValues();
-        for (int i = 0; i < values.length; i++) {
-          doImportModule((String) values[i]);
+        int choice = JOptionPane.showConfirmDialog(topFrame, "Are you sure you want delete this module (from disk)?");
+
+        if (choice == 0) {
+          Object[] values = moduleList.getSelectedValues();
+          for (int i = 0; i < values.length; i++) {
+            bridge.postEvent(factory.make("delete-module(<str>)", (String) values[i]));
+          }
         }
       }
     });
 
-    modulePopup.add(new AbstractAction("UnImport Module") {
+    refactorMenu.add(new AbstractAction(Preferences.getString("text.rename") + "...") {
       public void actionPerformed(ActionEvent event) {
         Object[] values = moduleList.getSelectedValues();
         for (int i = 0; i < values.length; i++) {
-          doUnimportModule((String) values[i]);
+          doRenameModule((String) values[i]);
         }
       }
     });
+
+    refactorMenu.add(new AbstractAction(Preferences.getString("text.add-import") + "...") {
+      public void actionPerformed(ActionEvent event) {
+        Object[] values = moduleList.getSelectedValues();
+        for (int i = 0; i < values.length; i++) {
+          doAddImport((String) values[i]);
+        }
+      }
+    });
+
+    refactorMenu.add(new AbstractAction(Preferences.getString("text.remove-import") + "...") {
+      public void actionPerformed(ActionEvent event) {
+        Object[] values = moduleList.getSelectedValues();
+        for (int i = 0; i < values.length; i++) {
+          doRemoveImport((String) values[i]);
+        }
+      }
+    });
+    modulePopup.add(refactorMenu);
 
     modulePopup.addSeparator();
 
-    modulePopup.add(new AbstractAction("Compile Module") {
+    modulePopup.add(new AbstractAction(Preferences.getString("text.compile-module")) {
       public void actionPerformed(ActionEvent event) {
         Object[] values = moduleList.getSelectedValues();
         for (int i = 0; i < values.length; i++) {
@@ -355,7 +358,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       }
     });
 
-    modulePopup.add(new AbstractAction("Dump Equations") {
+    modulePopup.add(new AbstractAction(Preferences.getString("text.dump-equations")) {
       public void actionPerformed(ActionEvent event) {
         Object[] values = moduleList.getSelectedValues();
         for (int i = 0; i < values.length; i++) {
@@ -364,7 +367,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
       }
     });
 
-    modulePopup.add(new AbstractAction("Dump Parse Table") {
+    modulePopup.add(new AbstractAction(Preferences.getString("text.dump-parsetable")) {
       public void actionPerformed(ActionEvent event) {
         Object[] values = moduleList.getSelectedValues();
         for (int i = 0; i < values.length; i++) {
@@ -375,7 +378,7 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
     modulePopup.addSeparator();
 
-    modulePopup.add(new AbstractAction("Print Module") {
+    modulePopup.add(new AbstractAction(Preferences.getString("text.print-module")) {
       public void actionPerformed(ActionEvent event) {
         Object[] values = moduleList.getSelectedValues();
         for (int i = 0; i < values.length; i++) {
@@ -667,6 +670,8 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   //}}}
   
+  //{{{ private void addGraphPanel(GraphPanel panel, String toolTip)
+
   private void addGraphPanel(GraphPanel panel, String toolTip)
   {
     int index = graphPanels.size();
@@ -674,6 +679,8 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     graphPanels.put(panel.getId(), panel);
     graphPane.insertTab(panel.getId(), null, new JScrollPane(panel), toolTip, index);
   }
+
+  //}}}
 
   //{{{ private GraphPanel getGraphPanel(String id)
 
@@ -1113,14 +1120,14 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   //}}}
 
-  //{{{ File showFileBrowser(String label, File location) 
+  //{{{ private File showFileBrowser(String label, String location, String extension, String desc)
 
-  File showFileBrowser(String label, String location) {
-    String extension = Preferences.getString("module.extension");
-    String[] exts = { extension };
-    String description = Preferences.getString("module.extension.description");
+  private File showFileBrowser(String label, String location, String extension, String desc)
+  {
     JFileChooser chooser = new JFileChooser(location);
-    chooser.setFileFilter(new ExtensionFilter(exts, description));
+    String[] exts = { extension };
+    ExtensionFilter filter = new ExtensionFilter(exts, desc);
+    chooser.setFileFilter(filter);
 
     int option = chooser.showDialog(this, label);
     if (option == JFileChooser.APPROVE_OPTION) {
@@ -1128,6 +1135,26 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
     }
 
     return null;
+  }
+
+  //}}}
+  //{{{ private File showModuleBrowser(String label, String location)
+
+  private File showModuleBrowser(String label, String location)
+  {
+    String extension = Preferences.getString("module.extension");
+    String description = Preferences.getString("module.extension.description");
+    return showFileBrowser(label, location, extension, description);
+  }
+
+  //}}}
+  //{{{ private File showTermBrowser()
+
+  private File showTermBrowser(String label, String location)
+  {
+    String extension = Preferences.getString("term.extension");
+    String description = Preferences.getString("term.extension.description");
+    return showFileBrowser(label, location, extension, description);
   }
 
   //}}}
@@ -1142,6 +1169,8 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
     return module;
   }
+
+  //}}}
   //{{{ String getFilePath(File file, String extension)
 
   String getFilePath(File file, String extension) {
@@ -1156,13 +1185,13 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   //}}}
 
-  //}}}
-
   //{{{ void doNewModule()
 
   void doNewModule() {
-    File file = showFileBrowser(Preferences.getString("text.new-module"), System.getProperty("user.dir"));
+    String label = Preferences.getString("text.new-module");
+    String location = System.getProperty("user.dir");
 
+    File file = showModuleBrowser(label, location);
     if (file != null) {
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
@@ -1177,8 +1206,10 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   //{{{ void doOpenModule()
 
   void doOpenModule() {
-    File file = showFileBrowser(Preferences.getString("text.open-module"), System.getProperty("user.dir"));
+    String label = Preferences.getString("text.open-module");
+    String location = System.getProperty("user.dir");
 
+    File file = showModuleBrowser(label, location);
     if (file != null) {
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
@@ -1194,8 +1225,10 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   //{{{ void doOpenLibModule()
 
   void doOpenLibModule() {
-    File file = showFileBrowser(Preferences.getString("text.open-lib-module"), Preferences.getString("library.dir"));
+    String label = Preferences.getString("text.open-lib-module");
+    String location = Preferences.getString("library.dir");
 
+    File file = showModuleBrowser(label, location);
     if (file != null) {
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
@@ -1211,9 +1244,10 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   //{{{ void doRenameModule(String oldModule)
 
   void doRenameModule(String oldModule) {
-    //File oldFile = new File(oldModule);
-    File file = showFileBrowser(Preferences.getString("text.rename-module"), System.getProperty("user.dir"));
+    String label = Preferences.getString("text.rename");
+    String location = System.getProperty("user.dir");
 
+    File file = showModuleBrowser(label, location);
     if (file != null) {
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
@@ -1228,9 +1262,10 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   //{{{ void doCopyModule(String oldModule)
 
   void doCopyModule(String oldModule) {
-    //File oldFile = new File(oldModule);
-    File file = showFileBrowser(Preferences.getString("text.copy-module"), System.getProperty("user.dir"));
+    String label = Preferences.getString("text.copy-module");
+    String location = System.getProperty("user.dir");
 
+    File file = showModuleBrowser(label, location);
     if (file != null) {
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
@@ -1242,12 +1277,15 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   //}}}
-  //{{{ void doImportModule(String oldModule)
 
-  void doImportModule(String oldModule) {
-    //File oldFile = new File(oldModule);
-    File file = showFileBrowser(Preferences.getString("text.import-module"), System.getProperty("user.dir"));
+  //{{{ void doAddImport(String oldModule)
 
+  void doAddImport(String oldModule)
+  {
+    String label = Preferences.getString("text.add-import");
+    String location = System.getProperty("user.dir");
+
+    File file = showModuleBrowser(label, location);
     if (file != null) {
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
@@ -1259,12 +1297,25 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
   }
 
   //}}}
-  //{{{ void doImportModule(String oldModule)
+  //{{{ void doRemoveImport(String oldModule)
 
-  void doUnimportModule(String oldModule) {
-    //File oldFile = new File(oldModule);
-    File file = showFileBrowser(Preferences.getString("text.import-module"), System.getProperty("user.dir"));
+  void doRemoveImport(String oldModule)
+  {
+    String label = Preferences.getString("text.remove-import");
+    String location = System.getProperty("user.dir");
 
+    /*
+    System.out.println("oldModule: " + oldModule);
+    Module cur = moduleManager.getModule(oldModule);
+    JComboBox imports = new JComboBox(cur.fetchChildrenArray());
+    JFrame frame = new JFrame("Remove Import");
+    frame.getContentPane().add(imports);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.pack();
+    frame.setVisible(true);
+    */
+
+    File file = showModuleBrowser(label, location);
     if (file != null) {
       String extension = Preferences.getString("module.extension");
       String module = getFileModule(file, extension);
@@ -1277,6 +1328,19 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   //}}}
 
+  //{{{ void doEditTerm(String module)
+
+  void doEditTerm(String module) {
+    String label = Preferences.getString("text.edit-term");
+    String location = System.getProperty("user.dir");
+
+    File file = showTermBrowser(label, location);
+    if (file != null) {
+      bridge.postEvent(factory.make("edit-term(<str>,<str>)", module, file.getAbsolutePath()));
+    }
+  }
+
+  //}}}
   //{{{ void doSaveAll()
 
   void doSaveAll() {
@@ -1313,25 +1377,6 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
 
   void toggleTide() {
     bridge.postEvent(factory.make("debugging(<id>)", tideBox.isSelected() ? "on" : "off"));
-  }
-
-  //}}}
-
-  //{{{ void doEditTerm(String module)
-
-  void doEditTerm(String module) {
-    JFileChooser chooser = new JFileChooser(System.getProperty("user.dir"));
-    chooser.setFileFilter(
-      new ExtensionFilter(
-        new String[] { Preferences.getString("term.extension")},
-        Preferences.getString("term.extension.description")));
-    int option = chooser.showOpenDialog(this);
-    if (option == JFileChooser.APPROVE_OPTION) {
-      File file = chooser.getSelectedFile();
-      if (file != null) {
-        bridge.postEvent(factory.make("edit-term(<str>,<str>)", module, file.getAbsolutePath()));
-      }
-    }
   }
 
   //}}}

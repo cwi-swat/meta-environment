@@ -1,6 +1,9 @@
 # $Id$
 
 Wed Feb 26 10:38:59 CET 2003 <jong@cwi.nl>
+ * MetaStudio.java: cleanup in file actions. Improved consistency,
+   added missing default-properties, refactored fileBrowser code,
+   introduced "refactor" popup submenu, and some misc. improvements.
  * edit-syntax.tb: remove set-focus that unconditionally tries to set
    the focus on the entire file. This interferes with tools (e.g. the
    query tool) that need to set the focus on a different portion of
