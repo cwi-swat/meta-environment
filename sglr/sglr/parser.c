@@ -306,19 +306,24 @@ ATerm SG_Result(void)
   if (accepting_stack != NULL) {
     ATerm yielded;
 
+    if(!SG_OUTPUT)
+      return(ATmake("parsetree(suppressed,<int>)", SGnrAmb(SG_NRAMB_ASK)));
+
     yielded = SG_YieldPT(SG_LK_TREE(head(SG_ST_LINKS(accepting_stack))));
 
 #ifdef HAVE_A2TOA1
-    if(SG_ASFIX1) return a2toa1(yielded);
-    else
+    if(SG_ASFIX1)
+      return a2toa1(yielded);
 #endif
-      return ATmake("parsetree(<term>,<int>)", yielded, SGnrAmb(SG_NRAMB_ASK));
-  } else
-    return ATmake("parse-error([character(<int>), line(<int>),"
-                  "col(<int>), char(<int>)])",
-                  current_token, line, col, text_length);
 
+    return ATmake("parsetree(<term>,<int>)", yielded, SGnrAmb(SG_NRAMB_ASK));
+  }
+
+  return ATmake("parse-error([character(<int>), line(<int>),"
+                "col(<int>), char(<int>)])",
+                current_token, line, col, text_length);
 }
+
 /*
    \paragraph{Parse Character}
 

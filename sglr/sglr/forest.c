@@ -110,6 +110,15 @@ ATerm SG_Apply(parse_table *pt, label l, ATermList ts)
 
 ATerm SG_YieldPT(ATerm t)
 {
+  if(SGnrAmb(SG_NRAMB_ASK) == 0)
+    return t;
+
+  SGnrAmb(SG_NRAMB_ZERO);
+  return SG_YieldAmbPT(t);
+}
+
+ATerm SG_YieldAmbPT(ATerm t)
+{
   ATerm     ret, t2;
   ATermList args, l;
   AFun      fun;
@@ -125,11 +134,14 @@ ATerm SG_YieldPT(ATerm t)
         if (!idx) ATfprintf(stderr, "Not annotated: %t\n", t);
 */
         /*  Are we indeed encountering an ambiguity cluster?  */
-        if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL)))
+        if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL))) {
+          /*  No ambiguity  */
           ret = (ATerm)ATmakeAppl2(SG_ApplAfun(),
                                    SG_YieldPT(ATgetFirst(args)),
                                    SG_YieldPT(ATelementAt(args, 1)));
-        else {
+        } else {
+          /*  Ambiguous node  */
+          SGnrAmb(SG_NRAMB_INC);
           ambs = (ATermList) ATgetFirst((ATermList)ambs);
           ret  = (ATerm)ATmake("amb(<list>)",
                                (ATermList)SG_YieldPT((ATerm) ambs));

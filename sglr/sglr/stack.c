@@ -118,9 +118,64 @@ st_links *SG_AddLinks(st_link *l, st_links *ls)
   classic two `mark' and `sweep' passes.
  */
 
-#define SG_GC_CHUNK   64          /*  Stays typically below +- 32  */
 enum SG_GC_OPS {SG_GC_ADD, SG_GC_CLR};
 #define SG_GC_Sweep()   SG_StackCleanupList(SG_GC_CLR, NULL);
+
+stacks *SG_PurgeOldStacks(stacks *old, stacks *new, stack *accept)
+{
+  SG_MarkStacks(old, new, accept);
+  SG_GC_Sweep();
+  return new;
+}
+
+/*
+  Garbage collection: unprotect (mark) phase.
+
+  The old list of stacks is traversed, stacks not reoccurring in
+  either the new list of stacks or the accepting stack are marked
+  for deletion.
+
+  Also, the old list of stacks itself (which is obsoleted here)
+  is deallocated.
+ */
+
+void SG_MarkStacks(stacks *old, stacks *new, stack *accept)
+{
+  stacks *sts;
+
+  if(accept != NULL)                    /*  Add the sacred accepting stack  */
+    new = SG_AddStack(accept, new);
+
+  while(old) {
+    sts = old;
+    SG_MarkStack(head(sts), NULL, new);
+    old = tail(old);
+    SG_free(sts);
+  }
+}
+
+void SG_MarkStack(stack *st, st_link *unprotector, stacks *sts)
+{
+  if(st && st->protected               /*  Done if already unprotected */
+   && !SG_InStacks(st, sts, ATtrue)) { /*  or in a living stack        */
+     st_links *lks = SG_ST_LINKS(st);
+
+      SG_StackCleanupList(SG_GC_ADD, st);
+      st->protected   = ATfalse;
+
+     /*  The stacks descendants might also have been obsoleted         */
+     for (; lks != NULL; lks = tail(lks)) {
+       st_link *lk = head(lks);
+
+       SG_MarkStack(SG_LK_STACK(lk), lk, sts);
+     }
+   }
+}
+
+
+/*  Garbage collection: deallocation (sweep) phase  */
+
+#define SG_GC_CHUNK   64          /*  Stays typically below +- 32  */
 
 void SG_StackCleanupList(int Mode, stack *st)
 {
@@ -157,58 +212,11 @@ void SG_StackCleanupList(int Mode, stack *st)
   }
 }
 
-stacks *SG_PurgeOldStacks(stacks *old, stacks *new, stack *accept)
-{
-  SG_MarkStacks(old, new, accept);
-  SG_GC_Sweep();
-  return new;
-}
-
-/*
-  Garbage collection: unprotect (mark) phase
- */
-
-void SG_MarkStacks(stacks *old, stacks *new, stack *accept)
-{
-  if(accept != NULL)                    /*  Add the sacred accepting stack  */
-    new = SG_AddStack(accept, new);
-
-  while(old) {
-    SG_MarkStack(head(old), NULL, new);
-    old = tail(old);
-  }
-}
-
-void SG_MarkStack(stack *st, st_link *unprotector, stacks *sts)
-{
-  if(st && st->protected               /*  Done if already unprotected */
-   && !SG_InStacks(st, sts, ATtrue)) { /*  or in a living stack        */
-     st_links *lks = SG_ST_LINKS(st);
-
-      SG_StackCleanupList(SG_GC_ADD, st);
-      st->protected   = ATfalse;
-
-     /*  The stacks descendants might also have been obsoleted         */
-     for (; lks != NULL; lks = tail(lks)) {
-       st_link *lk = head(lks);
-
-       SG_MarkStack(SG_LK_STACK(lk), lk, sts);
-     }
-   }
-}
-
 void SG_DeleteStack(stack *st)
 {
   st_links *lks = SG_ST_LINKS(st), *curlks;
   st_link  *lk;
 
-#if 0
-  for (; lks != NULL; lks = tail(lks)) {
-    lk = head(lks);
-    ATunprotect(&(lk->tree));
-    SG_free(lk);
-  }
-#endif
   while(lks != NULL) {
     lk = head(lks);
     ATunprotect(&(lk->tree));

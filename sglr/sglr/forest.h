@@ -29,6 +29,7 @@ int   SG_ApplID(int Action);
 ATerm SG_Apply(parse_table *, label, ATermList);
 ATerm SG_TreeType(ATerm);
 ATerm SG_TermYield(ATerm);
+ATerm SG_YieldAmbPT(ATerm t);
 
 ATerm SG_DotTermYield(ATerm);
 

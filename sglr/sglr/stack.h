@@ -108,8 +108,7 @@ st_links *SG_AddLinks(st_link *l, st_links *ls);
 stacks *SG_PurgeOldStacks(stacks *old, stacks *new, stack *accept);
 void    SG_MarkStacks(stacks *old, stacks *new, stack *accept);
 void    SG_MarkStack(stack *st, st_link *guerilla, stacks *new);
-void    SG_DisposeUnusedStacks(stacks *sts);
-void    SG_DisposeUnusedStack(stack *st, st_link *guerilla);
+void    SG_StackCleanupList(int Mode, stack *st);
 
 void      SG_DeleteStack(stack *st);
 
