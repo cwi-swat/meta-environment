@@ -1,7 +1,7 @@
 package
 identification
-  name=tide
-  version=0.3a
+  name=__PACKAGE__
+  version=__VERSION__
   location=http://www.cwi.nl/~mdejonge/downloads
   info=mailto:Pieter.Olivier@cwi.nl
   description='TIDE: ToolBus Integrated Debugging Envrironment, a generic
