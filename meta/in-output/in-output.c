@@ -3,6 +3,7 @@
  */
 
 #include <ctype.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -16,6 +17,18 @@
 
 /* This is a hack, due to JS */
 #include <sys/stat.h>
+
+ATbool run_verbose = ATfalse;
+
+static char myversion[] = "0.1";
+
+/*
+    The argument vector: list of option letters, colons denote option
+    arguments.  See usage function, immediately below, for option
+    explanation.
+ */
+
+static char myarguments[] = "hvV";
 
 int fileexists(const char *fname)
 {
@@ -382,7 +395,7 @@ void read_conf(char *cfg)
   FILE *fd;
 
   if(!(fd = fopen(cfg, "r"))) {
-    ATfprintf(stderr, "warning: no %s, using default config\n", cfg);
+    if(run_verbose) ATwarning("warning: no %s, using default config\n", cfg);
     paths[nr_paths][0]   = '.';
     paths[nr_paths++][1] = '\0';
     return;
@@ -404,30 +417,55 @@ void read_conf(char *cfg)
 
 void usage(char *prg)
 {
-  fprintf(stderr, "usage: %s [aterm-options] [toolbus-options]\n", prg);
-  fprintf(stderr, "use '%s -at-help' to get more options.\n", prg);
-  fprintf(stderr, "This program can only be used as a ToolBus tool!\n");
+  ATwarning(
+        "Usage: %s [options]\n"
+        "Options:\n"
+        "\t-h              display help information (usage)\n"
+        "\t-v              verbose mode\n"
+        "\t-V              reveal program version (i.e. %s)\n",
+        prg, myversion);
   exit(1);
 }
 
-int main(int argc, char **argv)
+void version(char *prg)
 {
-  int   cid, i=0;
+   ATwarning("%s v%s\n", prg, myversion);
+   exit(1);
+}
+
+int main(int argc, char *argv[])
+{
+  int   c, cid, i=0, toolbus_mode = 0;
   ATerm bottomOfStack;
 
-  if(strcmp(argv[1], "-h") == 0) {
-    usage(argv[0]);
+  /* Check whether we're a ToolBus process */
+  for(c=1; !toolbus_mode && c<argc; c++) {
+    toolbus_mode = !strcmp(argv[c], "-TB_TOOL_NAME");
   }
-
-  read_conf("meta.conf");
-  for(i=0; i<nr_paths; i++) {
-    ATfprintf(stderr, "path[%d] = %s\n", i, paths[i]);
+  
+  if(toolbus_mode) {
+    read_conf("meta.conf");
+    if(run_verbose) {
+      for(i=0; i<nr_paths; i++) {
+        ATwarning("path[%d] = %s\n", i, paths[i]);
+      }  
+    }
+    
+    ATBinit(argc, argv, &bottomOfStack);
+    cid = ATBconnect(NULL, NULL, -1, in_output_handler);
+    ATBeventloop();
   }
+  else {
+    while ((c = getopt(argc, argv, myarguments)) != -1) {
+      switch (c) {
+        case 'v':  run_verbose = ATtrue;                   break;
+        case 'V':  version(argv[0]);                       break;
 
-  ATBinit(argc, argv, &bottomOfStack);
-  cid = ATBconnect(NULL, NULL, -1, in_output_handler);
-  ATBeventloop();
-
+        case 'h':
+        default:   usage(argv[0]);                         break;
+      }
+    }
+  }
   return 0;
 }
 
