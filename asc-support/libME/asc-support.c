@@ -799,6 +799,7 @@ void ASC_initRunTime(int tableSize)
   make_listsym = ATmakeSymbol("make_list", 1, ATfalse);
   ATprotectSymbol(make_listsym);
   tuplesym = ATmakeSymbol("tuple", 2, ATfalse);
+  ATprotectSymbol(tuplesym);
 
 #ifdef MEMO_PROFILING
   prof_table = ATtableCreate(2048, 80);
@@ -867,6 +868,7 @@ ATerm correct_tuple(ATerm arg, ATerm rhs)
   PT_Production prod;
   ATermList args = ATgetArguments((ATermAppl) arg);
 
+
   assert(PT_isSymbolCf(rhsSymbol) && "Only context-free tuples allowed");
 
   rhsSymbol = PT_getSymbolSymbol(rhsSymbol);
@@ -889,7 +891,6 @@ ATerm correct_tuple(ATerm arg, ATerm rhs)
 
   prod = PT_makeProductionDefault(lhs,PT_makeSymbolCf(rhsSymbol),
 				  PT_makeAttributesNoAttrs());
-	  
   return call(prod, args);
 }
 
