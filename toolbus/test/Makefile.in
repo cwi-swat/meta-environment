@@ -55,7 +55,7 @@ all:    ${PROGRAMS}
 	done ;\
 	rm -f tmp
 clean:
-	${CLEAN} batch.out ${PROGRAMS}
+	${CLEAN} batch.out TBmatch1 TermIO
 
 distclean: clean
 	rm -f Makefile
