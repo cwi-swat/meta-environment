@@ -22,13 +22,6 @@ dnl Process this file with autoconf to produce a configure script.
 AC_INIT(Makefile.in)
 AM_INIT_AUTOMAKE(asc-support, 0.2)
 
-dnl Default locations of used components
-AC_PATH_PROG(TOOLBUS, toolbus, no)
-if test "${TOOLBUS}" = "no"; then
-	TOOLBUS='${prefix}'
-else
-	TOOLBUS=`dirname \`dirname ${TOOLBUS}\``
-fi
 
 AC_PATH_PROG(ATERM, tifstoc, no)
 if test "${ATERM}" = "no"; then
@@ -79,6 +72,19 @@ AC_ARG_WITH(toolbus-bin,
    [  --with-toolbus-bin=DIR  ToolBus executables are in DIR],
    TOOLBUSBIN=${withval},TOOLBUSBIN=${TOOLBUS}/bin)
 AC_SUBST(TOOLBUSBIN)
+
+if test "a${TOOLBUS}" = "a"; then
+ dnl Default locations of used components
+ AC_PATH_PROG(TOOLBUS, toolbus, no)
+ if test "${TOOLBUS}" = "no"; then
+  echo "Warning: toolbus not found. You might need it when developing libasc-support." >&2
+  TOOLBUS=
+  TOOLBUSBUN=
+ else
+  TOOLBUSBIN=`dirname ${TOOLBUS}`
+  TOOLBUS=`dirname ${TOOLBUSBIN}`
+ fi
+fi
 
 dnl Determine which libraries to use for programs using sockets
 NOSOCKLIBS=$LIBS

@@ -23,7 +23,8 @@ include make_rules
 lib_LIBRARIES            = libasc-support.a
 
 include_HEADERS          = asc-support.h
-EXTRA_DIST               = rewriter.tb make_rules
+EXTRA_DIST               = rewriter.tb make_rules \
+                           rewriter.tif.c rewriter.tif.h # rewriter.tifs
 
 SRCS = asc-support.c asc-support.h rewriter.c
 ALLSRCS = asc-support.c asc-support.h rewriter.c rewriter.tif.c
@@ -34,8 +35,6 @@ libasc_support_a_LIBADD  = rewriter.tif.o
 # Default include directories
 INCLUDES   = -I. -I$(ATERMINC)
 
-CLEANFILES = rewriter.tif.c rewriter.tif.h
-
 rewriter.o: rewriter.tif.h
 
 # The output of toolbus is moved to $@ to make sure the generated
@@ -44,7 +43,7 @@ rewriter.o: rewriter.tif.h
 # location the output. This does not work correct when using VPATH in
 # the Makefile.
 %.tifs: %.tb
-	$(TOOLBUSBIN)/toolbus -gentifs $<
+	PATH=$(TOOLBUSBIN):$(PATH) toolbus -gentifs $<
 	@if [ "a${VPATH}" != "a" ]; then \
 	   mv ${srcdir}/$@ $@ ;\
 	fi

@@ -18,11 +18,15 @@
 
 $Id$
 
-2000-0306 <mdejogne@cwi.nl>
+2000/3/31 (mdejonge @cwi.nl)
+   * The toolbus is no longer required during the build process of
+     libasc-support.a
+
+2000/03/06 (mdejogne@cwi.nl)
    * By default generate lib-asc-support.a, lib-asc-support-cc.a,
      lib-asc-support-cc.a, lib-asc-support-dbg.a, and
      lib-asc-support-prof.a.
 
-2000-0303 <mdejonge@cwi.nl>
+2000/03/03 (mdejonge@cwi.nl)
    * Asf+Sdf compiler support library is now a self-cotained
      component built and configured using automake/autoconf
