@@ -60,12 +60,12 @@ exports
 
         "errors" "[" {ERROR ";"} * "]"                		-> ERRORS {prefer}
 
-	t2s(REXPTYPE)						-> String
-	tl2sl({REXPTYPE ","}*)					-> String
+	t2s(REXPTYPE)						-> StrCon
+	tl2sl({REXPTYPE ","}*)					-> StrCon
 	e2i(ERROR)						-> Feedback
 	 convert-errors(ERRORS)                    		-> Summary
-	 convert-errors1(ERRORS)                    		-> Summary
-         rvar2str(RVAR)		 	        		-> String
+	 convert-errors1(ERRORS)                    		-> {Feedback ","}*
+         rvar2str(RVAR)		 	        		-> StrCon
  
 	<Table[[RVAR,REXPTYPE]], ERRORS> 			-> TENV {prefer}
 
@@ -181,6 +181,7 @@ hiddens
      "$Integer" [0-9\']*    	-> Integer
      "$Loc" [0-9\']*    	-> Location
      "$String" [0-9\']*    	-> String
+     "$StrCon" [0-9\']*    	-> StrCon
 
      "$Var" [0-9\']*       	-> RVAR
      "$Var*" [0-9\']*       	-> {RVAR ","}*
@@ -207,7 +208,7 @@ hiddens
      "$Gen*" [0-9\']*   	-> {GENERATOR ","}*
      "$Gen+" [0-9\']*   	-> {GENERATOR ","}+
 
-      "$ListItem*" [0-9\']*	-> {ListItem ","}*
+      "$Feedback*" [0-9\']*	-> {Feedback ","}*
 
       "$InitVar" [0-9\']*	-> INITVAR
       "$InitVar*" [0-9\']*	-> INITVAR*

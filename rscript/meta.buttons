@@ -10,12 +10,12 @@ configuration([
 	 check-sort,
 	 push-term(true),
 	 if-equal([
-         	apply("check-rscript", "List", 1),
+         	apply("check-rscript", "Summary", 1),
          	push-modulename("RscriptChecker"),
          	reduce,
-         	unparse,
-         	push-active-module,
-         	show-list],
+ 
+
+         	display-feedback],
 		[ message("Not an Rscript")
 		]
          )
