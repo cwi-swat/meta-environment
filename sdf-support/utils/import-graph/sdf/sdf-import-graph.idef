@@ -5,7 +5,8 @@ tool sdf-import-graph is {
 process SdfImportGraph is
 let
   Graph: term,
-  ImportRelation: list
+  ImportRelation: list,
+  SIG: sdf-import-graph
 in
   execute(sdf-import-graph, SIG?)
   .
