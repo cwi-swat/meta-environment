@@ -64,7 +64,7 @@ static ATerm checkSdf(ATerm term)
   PT_ParseTree asfix;
 
   setKeepAnnotations(ATtrue);
-  parseTree = PT_makeParseTreeFromTerm(term);
+  parseTree = PT_ParseTreeFromTerm(term);
   ptApplied = addSdfCheckerFunction(parseTree);
   reduct    = innermost(ptApplied);
   asfix     = toasfix(reduct);
