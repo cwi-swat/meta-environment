@@ -1,6 +1,6 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -273,10 +273,25 @@ equations
 
   [default-iai-1'2] is-memo-attr-prod(Prod) = false
 
+  [iai-1'1] is-traverse-attr-prod(prod(id("Label-Sdf-Syntax"),w(""),[ql("traverse")],
+                                 w(""),l("->"),w(""),sort("Attribute"),w(""),no-attrs)) = true
+
+  [default-iai-1'2] is-traverse-attr-prod(Prod) = false
+
   [iai-1'1] is-reject-attr-prod(prod(id("Restrictions-Sdf-Syntax"),w(""),[ql("reject")],
                                  w(""),l("->"),w(""),sort("Attribute"),w(""),no-attrs)) = true
 
   [default-iai-1'2] is-reject-attr-prod(Prod) = false
+
+  [iai-1'1] is-prefer-attr-prod(prod(id("Restrictions-Sdf-Syntax"),w(""),[ql("prefer")],
+                                 w(""),l("->"),w(""),sort("Attribute"),w(""),no-attrs)) = true
+
+  [default-iai-1'2] is-prefer-attr-prod(Prod) = false
+
+  [iai-1'1] is-avoid-attr-prod(prod(id("Restrictions-Sdf-Syntax"),w(""),[ql("avoid")],
+                                 w(""),l("->"),w(""),sort("Attribute"),w(""),no-attrs)) = true
+
+  [default-iai-1'2] is-avoid-attr-prod(Prod) = false
 
   [iai-1'1] is-associativity-attr-prod(prod(id("Priority-Sdf-Syntax"),
                                        w(""),[sort("Associativity")],w(""),l("->"),w(""),sort("Attribute"),

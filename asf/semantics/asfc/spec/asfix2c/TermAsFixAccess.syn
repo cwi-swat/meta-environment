@@ -1,6 +1,6 @@
 %%
 %%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
 %%
 %%    This program is free software; you can redistribute it and/or modify
 %%    it under the terms of the GNU General Public License as published by
@@ -58,7 +58,10 @@ exports
    "is-bracket-attr-prod" "(" ATerm ")"       -> Bool
    "is-constructor-attr-prod" "(" ATerm ")"   -> Bool
    "is-memo-attr-prod" "(" ATerm ")"          -> Bool
+   "is-traverse-attr-prod" "(" ATerm ")"      -> Bool
    "is-reject-attr-prod" "(" ATerm ")"        -> Bool
+   "is-prefer-attr-prod" "(" ATerm ")"        -> Bool
+   "is-avoid-attr-prod" "(" ATerm ")"         -> Bool
    "is-associativity-attr-prod" "(" ATerm ")" -> Bool
    "is-left-assoc-prod" "(" ATerm ")"         -> Bool
    "is-right-assoc-prod" "(" ATerm ")"        -> Bool

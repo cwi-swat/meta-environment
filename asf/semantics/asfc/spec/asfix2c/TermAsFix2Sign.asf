@@ -193,9 +193,21 @@ equations
              ==============================
              attr2id(appl(Prod,Ws,Attr)) = "l(\"memo\")"
 
-  [ap2i-1'4] is-reject-attr-prod(Prod) = true
+  [ap2i-1'4] is-traverse-attr-prod(Prod) = true
+             ==================================
+             attr2id(appl(Prod,Ws,Attr)) = "l(\"traverse\")"
+
+  [ap2i-1'5] is-reject-attr-prod(Prod) = true
              ================================
              attr2id(appl(Prod,Ws,Attr)) = "l(\"reject\")"
+
+  [ap2i-1'6] is-prefer-attr-prod(Prod) = true
+             ================================
+             attr2id(appl(Prod,Ws,Attr)) = "l(\"prefer\")"
+
+  [ap2i-1'7] is-avoid-attr-prod(Prod) = true
+             ===============================
+             attr2id(appl(Prod,Ws,Attr)) = "l(\"avoid\")"
 
   [ap2i-1'5] is-associativity-attr-prod(Prod) = true,
              associativity-attr2id(Attr) = Funid
@@ -303,9 +315,21 @@ equations
              ==============================
              term-attr2term(appl(Prod,Ws,Attr)) = funid("m""e""m""o")
 
+  [ta2t-3'3] is-traverse-attr-prod(Prod) = true
+             ==============================
+             term-attr2term(appl(Prod,Ws,Attr)) = funid("t""r""a""v""e""r""s""e")
+
   [ta2t-3'4] is-reject-attr-prod(Prod) = true
              ================================
              term-attr2term(appl(Prod,Ws,Attr)) = funid("r""e""j""e""c""t")
+
+  [ta2t-3'4] is-prefer-attr-prod(Prod) = true
+             ================================
+             term-attr2term(appl(Prod,Ws,Attr)) = funid("p""r""e""f""e""r")
+
+  [ta2t-3'4] is-avoid-attr-prod(Prod) = true
+             ================================
+             term-attr2term(appl(Prod,Ws,Attr)) = funid("a""v""o""i""d")
 
   [ta2t-3'5] is-associativity-attr-prod(Prod1) = true,
              Attr1 = appl(Prod2,Ws2,Attr2),
