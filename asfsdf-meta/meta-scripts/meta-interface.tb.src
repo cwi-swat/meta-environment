@@ -39,9 +39,6 @@ let
   ModuleName : str,
   Id : int,
   Pid : int,
-  Total : int,
-  Failed : int,
-  Tags : list,
   Errors : list,
   Summary: term
 in
@@ -105,8 +102,7 @@ process Preprocess-syntax is
 let
   Syntax     : term, 
   Checking   : term, 
-  ModuleName : str,
-  Feedback   : term
+  ModuleName : str
 in
   (
     rec-msg(pre-preprocess-syntax-hook(ModuleName?)).
@@ -248,7 +244,6 @@ let
   Id : int,
   Pid : int,
   Module : str,
-  Actions : str,
   ModuleNames : list,
   Modules : list
 in

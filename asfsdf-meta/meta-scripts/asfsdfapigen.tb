@@ -55,7 +55,7 @@ in
 	rec-msg(unparsed-text(NewSyntaxText?)) .
 	snd-msg(io-get-filename(Directory, Filename, SdfExt)) .
 	rec-msg(io-filename(FullPath?)) .
-	snd-msg(io-write-text-file(FullPath, [WarningBanner,NewSyntaxText])) .
+	snd-msg(io-write-text-list(FullPath, [WarningBanner,NewSyntaxText])) .
 	(
 	  rec-msg(io-file-written) .
 	  snd-msg(apply-rewrite(Rewriter, "generate-equations", "Skeleton", 
@@ -71,7 +71,7 @@ in
 	  rec-msg(unparsed-text(NewEquationsText?)) .
 	  snd-msg(io-get-filename(Directory, Filename, AsfExt)) .
 	  rec-msg(io-filename(FullPath?)) .
-	  snd-msg(io-write-text-file(FullPath, [NewEquationsText])) .
+	  snd-msg(io-write-text-list(FullPath, [NewEquationsText])) .
 	  (
 	    rec-msg(io-file-written)  .
 	    snd-msg(open-initial-module(Directory, Filename, SdfExt)) 

@@ -5,7 +5,6 @@
  */
 process DisplayErrors is
 let
-  Message : str,
   Errors : list,
   Feedback : term,
   Producer : str,

@@ -1,5 +1,8 @@
 /* $Id$ */
 
+Fri Jul  9 14:31:48 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * removed 97 unused variables as reported by our relation calculus script
+
 Wed Jun 30 10:25:20 CEST 2004 <M336@cwi.nl>
  * test/Makefile.am: disable tests because they need this package to be
    installed before they can test.
