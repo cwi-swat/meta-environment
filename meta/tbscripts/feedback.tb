@@ -13,7 +13,6 @@ process ShowFeedbackLocation(Feedback : term) is
 let
   Subjects : list
 in
-printf("Feedback = %t\n", Feedback). 
   Subjects := first(next(args(Feedback))) .
   ShowSubjectLocation(first(Subjects))
 endlet
