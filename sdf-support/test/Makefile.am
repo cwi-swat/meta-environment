@@ -16,3 +16,5 @@ grammars_LDADD		= $(LDLIBS)
 
 sorts_SOURCES		= sorts.c
 sorts_LDADD		= $(LDLIBS)
+
+EXTRA_DIST             = Booleans.pt Layout.pt

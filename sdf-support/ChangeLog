@@ -1,3 +1,6 @@
+2001/02/27 (jurgenv@cwi.nl)
+ * added test parsetrees to distribution
+
 2001/02/20 (markvdb@cwi.nl)
  * labels added to ATerm and ATermList.
  * Code adapted because of <str> introduction.
