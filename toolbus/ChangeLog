@@ -1,5 +1,9 @@
 $Id$
 
+2003/07/02 <jurgenv@cwi.nl>
+ * Bumped to version 0.3 and release
+
+2003/06/26 <jurgenv@cwi.nl>
 Tue Jul  1 14:38:00 CEST 2003 <jong@cwi.nl>
  * aterm:
    - added first version of 'merge-tifs' which merges two tifs files.
