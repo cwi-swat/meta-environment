@@ -1728,7 +1728,7 @@ comma-separated list of elements enclosed in angle brackets.  For example,
 {\tt Bool \# Int \# Id} describes a tuple with three elements consisting of a
 {\tt Bool}, an {\tt Int} and an {\tt Id} (in that order).  For instance, {\tt
   <true, 3, x>} is a valid example of such a tuple.  The tuple operator is
-right associative and binds less strong than the alternative operator.
+right associative and binds weaker than the alternative operator.
 
 \subsubsection{Permutation} \label{PermutationOperator}
 
@@ -2132,9 +2132,9 @@ these alternatives explicitly in a single left-hand side or to list
 alternative parts inside a left-hand side.  This is precisely the role of the
 alternative operator described in Section~\ref{AlternativeOperator}.
 
-The example  in Figure \ref{CODE:alternative1} shows how this operator can be used.
-It describes identifiers starting
-with a upper-case letter followed by one of the following:
+The example  in Figure \ref{CODE:alternative1} shows how this operator
+can be used.  It describes identifiers starting with an upper-case letter
+followed by one of the following:
 \begin{itemize}
 \item  zero or more lower-case letters, 
 
@@ -2338,7 +2338,7 @@ exports
 
 
 An equivalent conventional BNF grammar (and not considering lexical syntax) 
-of the grammar of Figure \ref{CODE:simple-cf} is presented in Figure
+of the grammar of Figure~\ref{CODE:simple-cf} is presented in Figure
 \ref{CODE:simple-bnf}.
 
 \begin{figure}[tb]
@@ -2354,7 +2354,7 @@ of the grammar of Figure \ref{CODE:simple-cf} is presented in Figure
 When a literal in a context-free function consists only of lower-case letters
 and digits and is not a keyword of \asfsdf, it need not be surrounded with
 quotes. You may therefore write `{\tt move to COORD -> CMND}' instead of the
-definition given above.
+definition given in Figure~\ref{CODE:simple-cf}.
 
 \subsubsection{Lists}
 
@@ -2366,7 +2366,7 @@ purpose.
 
 Lists may be used in both the left-hand side and right-hand side of a
 context-free function as well as in the right-hand side of a variable
-declaration (see Section \ref{Variables}).
+declaration (see Section~\ref{Variables}).
 
 Figure \ref{CODE:pascal-ids} shows how lists can be used to define 
 the syntax of a list of identifiers (occurring in a declaration
@@ -2880,7 +2880,7 @@ exports
 \end{figure}
 
 The last example is shown in Figure~\ref{CODE:c-comment} and illustrates the
-use of restrictions to extend the previous layout definition with C++-style
+use of restrictions to extend the previous layout definition with C-style
 comments. For readability we give here \emph{two} restrictions whereas the
 first one is already imported from module {\tt Layout}
 (Figure~\ref{CODE:safe-layout}).  The repetition of this first restriction is
@@ -2907,7 +2907,7 @@ exports
     LAYOUT? -/- [\/].[\*]
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Definition of C++ comments}\label{CODE:c-comment}
+\caption{Definition of C comments}\label{CODE:c-comment}
 \end{figure}
 
 One frequently asked question is when to use lexical restrictions
@@ -2956,7 +2956,7 @@ Priorities can be used to define a priority between two functions or between
 two groups of functions. In both cases the functions involved have to be
 listed explicitly in the priority declaration. In certain cases, however, it
 is desirable to define that a single rule has higher or lower priority than
-all other functions or the explicitly reject certain syntactic constructs.
+all other functions or to explicitly reject certain syntactic constructs.
 The former is achieved by the attributes {\tt prefer} and {\tt avoid}. The
 latter by the attribute {\tt reject}.
 
@@ -2986,7 +2986,7 @@ famous dangling else problem.
 \label{lex-ambiguity}
 
 \sdf\ provides a number of elementary lexical disambiguation features but does
-not offer {\em fully automatic} lexical disambiguation.
+not offer {\em fully automated} lexical disambiguation.
 As a result, the specification writer has to be aware of lexical ambiguities
 and has to specify disambiguation rules explicitly.
 We will discuss various
@@ -3025,27 +3025,26 @@ exports
 
 \paragraph{Prefer Literals} 
 
-In the left-hand side of a context-free syntax rule literals (keywords and/or
-operators) may be used. 
-If these literals overlap with  more general lexical tokens (such as identifier)
-this causes ambiguities.
+In the left-hand side of a context-free syntax rule literals (keywords
+and/or operators) may be used.  If these literals overlap with  more
+general lexical tokens (such as identifier) this causes ambiguities.
 
-The strategy \emph{Prefer Literals} give preference to interpretation as a literal, over
-interpretation as a more general lexical token.
-For instance, the keyword {\tt begin} may be recognized as an
-identifier given the lexical definition of Figure \ref{CODE:restrict-id}.
-There are two approaches to implement Prefer Literals.
+The strategy \emph{Prefer Literals} gives preference to interpretation
+as a literal, over interpretation as a more general lexical token.
+For instance, the keyword {\tt begin} may be recognized as an identifier
+given the lexical definition of Figure \ref{CODE:restrict-id}.  There are
+two approaches to implement Prefer Literals.
 
-In the first approach, we can explicitly forbid the recognition of literals as
-tokens of a specific sort using the reject mechanism (see
-Section~\ref{PreferAvoidReject}).  The idea is to define context-free grammar
-rules for all literals with the undesired lexical sort (e.g., {\tt Id}) in the
-right-hand side followed by the attribute {\tt reject},  Figure
-\ref{CODE:reject-id} illustrates this.  The {\tt reject} attribute indicates
-that the recognizition of a keyword as a literal of the sort {\tt Id} should be
-rejected. This approach has the major disadvantage that the addition of a
-literal in any context-free rule also requires the addition of a new reject
-rule for that literal.
+In the first approach, we can explicitly forbid the recognition of
+literals as tokens of a specific sort using the reject mechanism (see
+Section~\ref{PreferAvoidReject}).  The idea is to define context-free
+grammar rules for all literals with the undesired lexical sort (e.g.,
+{\tt Id}) in the right-hand side followed by the attribute {\tt reject},
+Figure \ref{CODE:reject-id} illustrates this.  The {\tt reject} attribute
+indicates that the recognizition of a keyword as a literal of the sort
+{\tt Id} should be rejected. This approach has the major disadvantage
+that the addition of a literal in any context-free rule also requires
+the addition of a new reject rule for that literal.
 
 \begin{figure}
 \begin{IncCode}
@@ -3174,13 +3173,12 @@ in three phases:
 
 \paragraph{Removing Trees containing {\tt prefer}/{\tt avoid} Attributes}
 
-After removing all trees containing conflicts, more than one tree may 
-still remain.
-To further reduce this set of remaining trees, the number of
-context-free functions with {\tt prefer}/{\tt avoid}
-attributes is calculated and compared. 
-A tree in the set is then rejected if there is another tree in the set with
-more {\tt prefer}s and less or equal {\tt avoid}s.
+After removing all trees containing conflicts, more than one tree may
+still remain.  To further reduce this set of remaining trees, the number
+of context-free functions with {\tt prefer}/{\tt avoid} attributes is
+calculated and compared.  A tree in the set is then rejected if there
+is another tree in the set with more {\tt prefer}s and less or equal
+{\tt avoid}s, or with equal {\tt prefer}s and more {\tt avoid}s.
 
 \paragraph{Injection count}
 Finally, the number of injections in each of the resulting trees
@@ -3368,8 +3366,8 @@ The equality of two terms $L$ and $R$ is defined  in \asfsdf\ by the following
 {\tt [$TagId$] $L$ = $R$} 
 \end{quote}
 
-\noindent where $TagId$ is a sequence of letters, digits, and/or minus signs ({\tt -}) 
-starting with an letter or a digit.
+\noindent where $TagId$ is a sequence of letters, digits, and/or minus
+signs ({\tt -}) starting with a letter or a digit.
 
 
 \subsubsection{Conditional Equations}
