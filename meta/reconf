@@ -12,7 +12,7 @@ LIBTOOL=`dirname ${LIBTOOL}`
 LIBTOOL=`dirname ${LIBTOOL}`
 LIBTOOL_INCLUDE=${LIBTOOL}/share/aclocal
 
-aclocal -I ${LIBTOOL_INCLUDE} -I .
+aclocal -I ${LIBTOOL_INCLUDE} -I ./config
 autoconf
 autoheader
 automake -a
