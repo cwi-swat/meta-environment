@@ -10,6 +10,8 @@ let
 in
   (
     rec-msg(make-asf-syntax(eqs(ModuleName?), Syntax?)) .
+    snd-msg(add-api-syntax(Syntax)).
+    rec-msg(extended-syntax(Syntax?)).
     snd-msg(add-eqs-syntax(ModuleName, Syntax)) .
     rec-msg(extended-syntax(Syntax?)) .
     snd-msg(asf-syntax(Syntax))  
