@@ -13,9 +13,9 @@ in
   (
     rec-msg(compiler-output-dir(OutputDir?))
   +
-    rec-msg(compile-module(ModuleName?, Syntax?, Equations?)) .
+    rec-msg(compile-module(ModuleName?, Equations?)) .
     execute(asfc, COM?) .
-    snd-eval(COM, compile-module(ModuleName, Syntax, Equations, OutputDir)) .
+    snd-eval(COM, compile-module(ModuleName, Equations, OutputDir)) .
     rec-value(COM, compilation-done) .
     snd-msg(compilation-done(ModuleName)).
     snd-terminate(COM,"done").

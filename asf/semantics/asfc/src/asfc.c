@@ -21,21 +21,17 @@
 
 #include "asfc.tif.h"
 #include "sdf.h"
-#include "asfsdf2muasf.h"
-
+#include "asf2muasf.h"
+#include "muasf2c.h"
 
 ATbool run_verbose;
 
 char myname[] = "asfc";
 char myversion[] = "2.0";
 
-static char *outputDirName = NULL;
+static char myarguments[] = "hi:n:o:vV";
 
-static char myarguments[] = "hi:n:e:o:vV";
-
-static ATerm compile(char *name, SDF_ModuleList modules, 
-		     ASF_CondEquationList equations);
-static void set_output_dir(char *dirName);
+static ATerm compile(char *name, ASF_CondEquationList equations);
 
 void usage(void)
 {
@@ -43,9 +39,8 @@ void usage(void)
             "Usage: %s [options]\n"
             "Options:\n"
             "\t-h              display help information (usage)\n"
-            "\t-e filename     input equations from file (default stdin)\n"
-            "\t-i filename     input syntax from file (default stdin)\n"
-            "\t-n name         name of the specification\n"
+            "\t-i filename     input equations from file (default stdin)\n"
+            "\t-n name         name of the specification (obligatory)\n"
             "\t-o filename     output to file (default stdout)\n"
             "\t-v              verbose mode\n"
             "\t-V              reveal program version (i.e. %s)\n",
@@ -64,70 +59,26 @@ void rec_terminate(int cid, ATerm t)
   exit(0);
 }
 
-ATerm compile_module(int cid, char *moduleName, ATerm syntax, ATerm equations, 
-		     char *output_dir)
+ATerm compile_module(int cid, char *moduleName, ATerm equations, 
+		     char *output)
 {
-  PT_ParseTree   pt;
-  SDF_SDF        sdf;
-  SDF_Definition definition;
-  SDF_ModuleList moduleList;
   ASF_CondEquationList eqsList;
-  ATerm result;/* temporary */
+  ATerm result;
 
-  set_output_dir(output_dir);
-
-  pt         = PT_makeParseTreeFromTerm(syntax);
-  sdf        = SDF_makeSDFFromTerm(
-                 PT_makeTermFromTree(PT_getParseTreeTree(pt)));
-  definition = SDF_getSDFDefinition(sdf);
-  moduleList = SDF_getDefinitionList(definition);
   eqsList    = ASF_makeCondEquationListFromTerm(equations);
 
-  result = compile(moduleName, moduleList, eqsList);
+  result = compile(moduleName, eqsList);
 
-  ATwriteToNamedTextFile(result, output_dir); /* temporary */
+  ATwriteToNamedTextFile(result, output); 
 
   return ATmake("snd-value(compilation-done)");
 }                              
 
-
-void set_output_dir(char *dirName)
+static ATerm compile(char *name, ASF_CondEquationList equations)
 {
-  int len = strlen(dirName) + 1;
+  MA_Module muasf = asfToMuASF(name, equations);
 
-  outputDirName = (char *) realloc(outputDirName, len);
-
-  if (outputDirName == NULL) {
-    ATerror("compiler: unable to allocate %d bytes\n", len);
-  }
-  else {
-    strcpy(outputDirName, dirName);
-  }
-}
-
-char* get_output_dir(void)
-{
-  if (outputDirName != NULL) {
-    return outputDirName;
-  }
-  else if (getenv("COMPILER_OUTPUT") != NULL) {
-    return getenv("COMPILER_OUTPUT");
-  }
-  else {
-    return ".";
-  }
-}
-
-static ATerm compile(char *name, SDF_ModuleList modules, 
-	       ASF_CondEquationList equations)
-{
-  SDF_ProductionList productions = getModuleListProductions(modules);
-  SDF_ModuleName moduleName = makeModuleNameFromString(name);
-  MA_Module muasf = asfSdfToMuASF(moduleName, productions,equations);
-
-  /* put MuASF2C here and reshuffler too */ 
-
-  return (ATerm) muasf;
+  return (ATerm) muasf; /* muasfToC(muasf); */
 }
 
 
@@ -135,13 +86,11 @@ int main(int argc, char *argv[])
 {
   ATerm bottom;
   int c, toolbus_mode = 0;
-  char *syntax = "-";
   char *equations = "-";
   char *output = "-";
   char *name = "";
 
   ATerm eqs;
-  ATerm syn;
 
   run_verbose = ATfalse;
 
@@ -170,8 +119,7 @@ int main(int argc, char *argv[])
     while ((c = getopt(argc, argv, myarguments)) != -1) {
       switch (c) {
       case 'v':  run_verbose = ATtrue;  break;
-      case 'e':  equations=optarg;      break;
-      case 'i':  syntax=optarg;         break;
+      case 'i':  equations=optarg;         break;
       case 'n':  name=optarg;           break;
       case 'o':  output=optarg;         break;
       case 'V':  version();             break;
@@ -185,14 +133,13 @@ int main(int argc, char *argv[])
       exit(1);
     }
 
-    syn = ATreadFromNamedFile(syntax);
     eqs = ATreadFromNamedFile(equations);
 
-    if (syn == NULL || eqs == NULL) {
+    if (eqs == NULL) {
       exit(1);
     }
 
-    compile_module(0,name,syn,eqs,output);
+    compile_module(0,name,eqs,output);
   }
 
   return 0;

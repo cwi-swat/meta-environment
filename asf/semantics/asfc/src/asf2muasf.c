@@ -6,11 +6,9 @@
 
 #include <MEPT-utils.h>
 #include <ASFME-utils.h>
-#include <SDFME-utils.h>
 #include <MuASF.h>
 
-#include "asfsdf2muasf.h"
-#include "sdf2pt.h"
+#include "asf2muasf.h"
 #include "chars.h"
 #include "lex-cons.h"
 
@@ -23,7 +21,6 @@ static MA_Layout nl2 = NULL; /* 2 newlines */
 static MA_Layout em  = NULL; /* empty */
 
 /* local functions */
-static MA_Term treeToTerm(PT_Tree tree, LayoutOption layout);
 static MA_Lexical stringToLexical(const char* str);
 static MA_Layout stringToLayout(const char *str);
 static MA_FunId stringToFunId(const char *str);
@@ -38,19 +35,22 @@ static MA_Term atermToTerm(ATerm aterm);
 static MA_Annotations attributesToAnnotations(PT_Attributes attributes);
 static MA_FunId prodToFunId(PT_Production prod);
 static MA_SigArgElems makeSigArgElems(int arity);
-static MA_FuncDef productionToFuncDef(SDF_Production prod, 
-                                      SDF_ModuleName moduleName);
 static MA_FuncDef prodToFuncDef(PT_Production prod);
-static MA_SignatureOpt productionListToSignature(SDF_ProductionList list,
-                                                 SDF_ModuleName moduleName);
-static MA_TermArgs argsToTermArgs(PT_Args args);
-static MA_Term treeToTerm(PT_Tree tree, LayoutOption layout);
-static MA_Cond conditionToCond(ASF_Condition condition);
-static MA_CondList conditionsToCondList(ASF_Conditions conditions);
-static MA_Rule condEquationToRule(ASF_CondEquation condEquation);
-static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list);
-static MA_ModId moduleNameToModId(SDF_ModuleName sdfModuleName);
+static MA_TermArgs argsToTermArgs(PT_Args args, MA_FuncDefElems *funcdefs);
+static MA_Term treeToTerm(PT_Tree tree, MA_FuncDefElems *funcdefs, 
+			  LayoutOption layout);
+static MA_Cond conditionToCond(ASF_Condition condition, 
+			       MA_FuncDefElems *funcdefs);
+static MA_CondList conditionsToCondList(ASF_Conditions conditions, 
+					MA_FuncDefElems *funcdefs);
 
+static MA_Rule condEquationToRule(ASF_CondEquation condEquation, 
+				  MA_FuncDefElems *funcdefs);
+static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
+					       MA_FuncDefElems *funcdefs);
+static MA_ModId makeModId(const char *str);
+
+static void addFuncDefToFuncDefs(MA_FuncDef funcdef, MA_FuncDefElems* funcdefs);
 
 
 static MA_Lexical stringToLexical(const char* str)
@@ -186,8 +186,6 @@ static MA_Term attrToTerm(PT_Attr attr)
     result =  atermToTerm(term);
   }
 
-  free(str);
-
   return result;
 }
 
@@ -243,14 +241,6 @@ static MA_SigArgElems makeSigArgElems(int arity)
   return list;
 }
 
-static MA_FuncDef productionToFuncDef(SDF_Production prod,
-				      SDF_ModuleName moduleName)
-{
-  PT_Production ptProd = flattenSdfProduction(prod,moduleName);
-
-  return prodToFuncDef(ptProd);
-}
-
 static MA_FuncDef prodToFuncDef(PT_Production ptProd) 
 {
   MA_FunId maFunId = prodToFunId(ptProd);
@@ -287,34 +277,7 @@ static MA_FuncDef prodToFuncDef(PT_Production ptProd)
 	 
 }
 
-static MA_SignatureOpt productionListToSignature(SDF_ProductionList list,
-						 SDF_ModuleName moduleName)
-{
-  SDF_Production sdfProd;
-  MA_FuncDefElems maFuncDefElems = MA_makeFuncDefElemsEmpty();
-  MA_FuncDef maFuncDef;
-
-  for (;SDF_hasProductionListHead(list);
-      list = SDF_getProductionListTail(list)) {
-    sdfProd = SDF_getProductionListHead(list);
-    maFuncDef = productionToFuncDef(sdfProd, moduleName);
-    if (!MA_isFuncDefElemsEmpty(maFuncDefElems)) {
-      maFuncDefElems = MA_makeFuncDefElemsMany(maFuncDef,em,";",nl,
-					       maFuncDefElems);
-    }
-    else {
-      maFuncDefElems = MA_makeFuncDefElemsSingle(maFuncDef);
-    }
-    if (!SDF_hasProductionListTail(list)) {
-      break;
-    }
-  }
-
-  return MA_makeSignatureOptPresent(nl,
-				    MA_makeFuncDefListDefault(maFuncDefElems));
-}
-
-static MA_TermArgs argsToTermArgs(PT_Args args)
+static MA_TermArgs argsToTermArgs(PT_Args args, MA_FuncDefElems *funcdefs)
 {
   MA_TermArgs termArgs = NULL;
   PT_Tree arg = NULL;
@@ -326,7 +289,7 @@ static MA_TermArgs argsToTermArgs(PT_Args args)
     /* first find the first argument */
     for(;term == NULL && PT_hasArgsHead(args); args = PT_getArgsTail(args)) {
       arg = PT_getArgsHead(args);
-      term = treeToTerm(arg, WITHOUT_LAYOUT); 
+      term = treeToTerm(arg,funcdefs, WITHOUT_LAYOUT); 
     } 
     
     if (term != NULL) {
@@ -345,7 +308,7 @@ static MA_TermArgs argsToTermArgs(PT_Args args)
   /* then do the rest */
   for(;PT_hasArgsHead(args); args = PT_getArgsTail(args)) {
     arg = PT_getArgsHead(args);
-    term = treeToTerm(arg, WITHOUT_LAYOUT);
+    term = treeToTerm(arg, funcdefs, WITHOUT_LAYOUT);
     if (term != NULL) { /* not ignored */
       termArgs = MA_makeTermArgsMany(term,sp,",",em,termArgs);
     }
@@ -354,7 +317,18 @@ static MA_TermArgs argsToTermArgs(PT_Args args)
   return (MA_TermArgs) ATreverse((ATermList) termArgs);
 }
 
-static MA_Term treeToTerm(PT_Tree tree, LayoutOption layout)
+static void addFuncDefToFuncDefs(MA_FuncDef funcdef, MA_FuncDefElems* funcdefs)
+{
+  if (MA_isFuncDefElemsEmpty(*funcdefs)) {
+    *funcdefs = MA_makeFuncDefElemsSingle(funcdef);
+  }
+  else {
+    *funcdefs = MA_makeFuncDefElemsMany(funcdef,em,";",nl, *funcdefs);
+  }
+}
+
+static MA_Term treeToTerm(PT_Tree tree, MA_FuncDefElems *funcdefs, 
+			  LayoutOption layout)
 {
   MA_Term result = NULL;
 
@@ -362,13 +336,16 @@ static MA_Term treeToTerm(PT_Tree tree, LayoutOption layout)
     result = NULL; /* ignore layout */
   }
   else if (ASF_isTreeLexicalConstructorFunction((ASF_Tree) tree)) {
-    return treeToTerm(constructorTreeToLexicalTree(tree), layout);
+    return treeToTerm(constructorTreeToLexicalTree(tree), funcdefs, layout);
   }
   else if (PT_isTreeAppl(tree)) {
     PT_Production prod = PT_getTreeProd(tree);
+    MA_FuncDef funcdef = prodToFuncDef(prod);
     PT_Args args = PT_getTreeArgs(tree);
     MA_FunId funid = prodToFunId(prod);
-    MA_TermArgs terms = argsToTermArgs(args);
+    MA_TermArgs terms = argsToTermArgs(args, funcdefs);
+
+    addFuncDefToFuncDefs(funcdef, funcdefs);
 
     if (terms != NULL) {
       result = MA_makeTermFunc(funid,em,em,terms,em);
@@ -394,12 +371,13 @@ static MA_Term treeToTerm(PT_Tree tree, LayoutOption layout)
   return result;
 }
 
-static MA_Cond conditionToCond(ASF_Condition condition)
+static MA_Cond conditionToCond(ASF_Condition condition,
+			       MA_FuncDefElems *funcdefs)
 {
   ASF_Tree asfLhs = ASF_getConditionLhs(condition);
   ASF_Tree asfRhs = ASF_getConditionRhs(condition);
-  MA_Term maLhs = treeToTerm((PT_Tree) asfLhs, WITHOUT_LAYOUT);
-  MA_Term maRhs = treeToTerm((PT_Tree) asfRhs, WITHOUT_LAYOUT);
+  MA_Term maLhs = treeToTerm((PT_Tree) asfLhs, funcdefs, WITHOUT_LAYOUT);
+  MA_Term maRhs = treeToTerm((PT_Tree) asfRhs, funcdefs, WITHOUT_LAYOUT);
   MA_Cond result = NULL;
 
   assert(maLhs != NULL && maRhs != NULL);
@@ -419,14 +397,15 @@ static MA_Cond conditionToCond(ASF_Condition condition)
   return result;
 }
 
-static MA_CondList conditionsToCondList(ASF_Conditions conditions)
+static MA_CondList conditionsToCondList(ASF_Conditions conditions,
+					MA_FuncDefElems *funcdefs)
 {
   ASF_ConditionList list = ASF_getConditionsList(conditions);
   MA_CondElems elems = MA_makeCondElemsEmpty();
 
   for(;ASF_hasConditionListHead(list); list = ASF_getConditionListTail(list)) {
     ASF_Condition condition = ASF_getConditionListHead(list);
-    MA_Cond cond = conditionToCond(condition);
+    MA_Cond cond = conditionToCond(condition, funcdefs);
 
     elems = MA_makeCondElemsMany(cond,em,"&",sp,elems);
 
@@ -439,21 +418,23 @@ static MA_CondList conditionsToCondList(ASF_Conditions conditions)
   return MA_makeCondListDefault(elems);
 }
 
-static MA_Rule condEquationToRule(ASF_CondEquation condEquation)
+static MA_Rule condEquationToRule(ASF_CondEquation condEquation,
+				  MA_FuncDefElems *funcdefs)
 {
   ASF_Equation asfEq = ASF_getCondEquationEquation(condEquation);
   ASF_Tree asfLhs = ASF_getEquationLhs(asfEq);
   ASF_Tree asfRhs = ASF_getEquationRhs(asfEq);
   ASF_Tag tag = ASF_getCondEquationTag(condEquation);
-  MA_Term lhs = treeToTerm((PT_Tree) asfLhs, WITHOUT_LAYOUT);
-  MA_Term rhs = treeToTerm((PT_Tree) asfRhs, WITHOUT_LAYOUT);
+  MA_Term lhs = treeToTerm((PT_Tree) asfLhs, funcdefs, WITHOUT_LAYOUT);
+  MA_Term rhs = treeToTerm((PT_Tree) asfRhs, funcdefs, WITHOUT_LAYOUT);
   MA_CondList conds = NULL;
   MA_Rule result = NULL;
 
   assert(lhs != NULL && rhs != NULL);
 
   if (ASF_hasCondEquationConditions(condEquation)) {
-    conds = conditionsToCondList(ASF_getCondEquationConditions(condEquation));
+    conds = conditionsToCondList(ASF_getCondEquationConditions(condEquation),
+				 funcdefs);
   }
 
   if (ASF_isTagDefault(tag)) {
@@ -476,7 +457,8 @@ static MA_Rule condEquationToRule(ASF_CondEquation condEquation)
   return result;
 }
 
-static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list)
+static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list,
+					       MA_FuncDefElems *funcdefs)
 {
   MA_RuleElems rules = MA_makeRuleElemsEmpty();
 
@@ -485,10 +467,11 @@ static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list)
     ASF_CondEquation eq = ASF_getCondEquationListHead(list);
 
     if (!MA_isRuleElemsEmpty(rules)) {
-      rules = MA_makeRuleElemsMany(condEquationToRule(eq),em,";",nl2,rules);
+      rules = MA_makeRuleElemsMany(condEquationToRule(eq,funcdefs),
+				   em,";",nl2,rules);
     }
     else {
-      rules = MA_makeRuleElemsSingle(condEquationToRule(eq));
+      rules = MA_makeRuleElemsSingle(condEquationToRule(eq,funcdefs));
     }
 
     if (ASF_isCondEquationListSingle(list)) {
@@ -499,37 +482,25 @@ static MA_RulesOpt  condEquationListToRulesOpt(ASF_CondEquationList list)
   return MA_makeRulesOptPresent(nl,MA_makeRuleListDefault(rules));
 }
 
-static MA_ModId moduleNameToModId(SDF_ModuleName sdfModuleName)
+static MA_ModId makeModId(const char *str)
 {
-  MA_ModId result;
-
-  if (SDF_isModuleNameUnparameterized(sdfModuleName)) {
-    char *str = strdup(PT_yieldTree((PT_Tree) sdfModuleName));
-    result = MA_makeModIdLexToCf(stringToLexical(str));
-    free(str);
-  }
-  else {
-    ATerror("moduleNameToModId: unable to interpret module name: %s\n",
-	    PT_yieldTree((PT_Tree) sdfModuleName));
-    result = NULL;
-  }
-
-  return result;
+  return MA_makeModIdLexToCf(stringToLexical(str));
 }
 
 MA_Module 
-asfSdfToMuASF(SDF_ModuleName name, SDF_ProductionList signature, 
-	    ASF_CondEquationList equations)
+asfToMuASF(char *name, ASF_CondEquationList equations)
 {
   MA_SignatureOpt maSignature;
+  MA_FuncDefElems funcdefs = MA_makeFuncDefElemsEmpty();
   MA_RulesOpt maRules;
   MA_ModId maName;
 
   initLayoutAbbreviations();
 
-  maSignature = productionListToSignature(signature, name);
-  maRules = condEquationListToRulesOpt(equations); 
-  maName = moduleNameToModId(name);
+  maRules = condEquationListToRulesOpt(equations, &funcdefs); 
+  maSignature = MA_makeSignatureOptPresent(nl,
+		  MA_makeFuncDefListDefault(funcdefs));
+  maName = makeModId(name);
 
   return MA_makeModuleModule(sp,maName,nl,maSignature,nl,maRules);
 }

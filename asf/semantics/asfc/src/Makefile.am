@@ -32,11 +32,9 @@ EXTRA_DIST       = asfc.idef asfc.tif.h asfc.tif.c
 CLEANFILES       = asfc.tif.h asfc.tif.c asfc.tifs
 
 asfc_SOURCES = asfc.c \
-               sdf2pt.c \
                chars.c \
                c-code.c \
-               asfsdf2muasf.c \
-               sdf.c \
+               asf2muasf.c \
                lex-cons.c \
                asfc.tif.c 
 
