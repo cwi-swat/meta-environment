@@ -1,0 +1,6 @@
+Makefile
+Makefile.in
+lower-error
+.deps
+*.tree
+*.sh
