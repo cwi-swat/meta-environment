@@ -80,6 +80,16 @@ public class CGenerator
 
   protected void generateEnum(PropertyContext enumContext)
   {
+    Enum enumeration = new Enum(enumName(enumContext.getName()));
+    Iterator elements = enumContext.getValueSet("element").iterator();
+    int value = 0;
+    while (elements.hasNext()) {
+      String identifier = enumName((String)elements.next());
+      EnumElement element = new EnumElement(identifier, value++);
+      enumeration.addElement(element);
+    }
+
+    compilationUnit.addEnum(enumeration);
   }
 
   //}}}
@@ -155,6 +165,7 @@ public class CGenerator
     println();
 
     emitIncludes(compilationUnit.fetchHeaderIncludeIterator());
+    emitEnums();
     emitTypedefs();
     emitFunctionDeclarations(false);
 
@@ -179,6 +190,43 @@ public class CGenerator
       }
     }
     foldClose();
+  }
+
+  //}}}
+  //{{{ protected void emitEnums()
+
+  protected void emitEnums()
+  {
+    foldOpen("enums");
+    Iterator iter = compilationUnit.fetchEnumIterator();
+    while (iter.hasNext()) {
+      Enum enumeration = (Enum)iter.next();
+      emitEnum(enumeration);
+    }
+    foldClose();
+  }
+
+  //}}}
+  //{{{ protected void emitEnum(Enum enumeration)
+
+  protected void emitEnum(Enum enumeration)
+  {
+    print("typedef enum { ");
+    Iterator elems = enumeration.fetchElementIterator();
+    int value = 0;
+    while (elems.hasNext()) {
+      EnumElement elem = (EnumElement)elems.next();
+      print(elem.getIdentifier());
+      if (elem.getValue() != value) {
+	value = elem.getValue();
+	print("=" + value);
+      }
+      if (elems.hasNext()) {
+	print(", ");
+      }
+      value++;
+    }
+    println(" } " + enumeration.getName() + ";");
   }
 
   //}}}
@@ -282,7 +330,7 @@ public class CGenerator
       emitField(field);
     }
     indentLevel--;
-    println("}");
+    println("};");
     foldClose();
   }
 
@@ -481,6 +529,22 @@ public class CGenerator
   public String structName(String name)
   {
     return "_" + name;
+  }
+
+  //}}}
+  //{{{ public String enumName(String name)
+
+  public String enumName(String name)
+  {
+    return typeName(name);
+  }
+
+  //}}}
+  //{{{ public String enumElementName(String name)
+
+  public String enumElementName(String name)
+  {
+    return macroName(name);
   }
 
   //}}}

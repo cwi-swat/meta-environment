@@ -4,6 +4,7 @@ type C-CompilationUnit :: CompilationUnit
   header-include : set<Include>
   source-include : set<Include>
   struct : map<string,Struct>
+  enum : set<Enum>
   macro : list<Macro>
   function : list<Function>
 }
@@ -25,6 +26,18 @@ type Field
   name : string
   type : string
   static : boolean
+}
+
+type Enum
+{
+  name : string
+  element : list<EnumElement>
+}
+
+type EnumElement
+{
+  identifier : string
+  value : integer
 }
 
 type Macro

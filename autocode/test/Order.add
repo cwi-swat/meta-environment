@@ -1,4 +1,4 @@
-enum Article { elements := { pen, pencil, note-book } }
+enum Article { element := { pen, pencil, note-book } }
 
 type Order
 {

@@ -24,6 +24,7 @@ application c-repository {
         operation := { init, add, merge-collection, fetch-iterator}
       }
       field struct { operation := { init, get, put, fetch-iterator } }
+      field enum { operation := { init, add, fetch-iterator } }
       field macro { operation := { init, add, fetch-iterator } }
       field function { operation := { init, add, fetch-iterator } }
     } 
@@ -40,6 +41,10 @@ application c-repository {
 
     type Struct {
       field field { operation := { init, add, contains-value, fetch-iterator } }
+    }
+
+    type Enum {
+      field element { operation := { init, add, fetch-iterator } }
     }
 
     type Macro {

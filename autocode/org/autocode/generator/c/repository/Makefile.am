@@ -4,6 +4,8 @@ JAVAROOT = ${top_builddir}
 
 java_JAVA = \
 	CCompilationUnit.java \
+	Enum.java \
+	EnumElement.java \
 	Field.java \
 	Function.java \
 	Include.java \

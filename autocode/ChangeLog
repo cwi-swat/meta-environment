@@ -1,5 +1,9 @@
 $Id$
 
+Sat Mar  9 18:15:03 CET 2002 <olivierp>
+ * Added hashCode support
+ * Added generation of enum's in CGenerator: client example compiles!
+
 Fri Mar  8 17:01:38 CET 2002 <olivierp>
  * Added generation of structs and fields in structs
  * Added Equality plugin for the JavaGenerator. It now generates
