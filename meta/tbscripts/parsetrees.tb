@@ -11,9 +11,7 @@ tool compiler is {
   command = "compiler -print-gc-info -termtable 20"
 }
 
-tool pgen is {
-  command = "pgen -termtable 20"
-}
+
 
 tool add-eqs-syntax is { 
   command = "add-eqs-syntax"
@@ -34,7 +32,6 @@ in
   execute(evaluator, Eval?).
   printf("evaluator tool connected.\n") .
   snd-do(Eval, create-equations-db).
-  execute(pgen,Pgen?).
   execute(add-eqs-syntax,Addsyn?).
   /* Start all controlling processes */
   create(Retrieve-eqs(Eval), Tid?).
@@ -42,7 +39,7 @@ in
   create(Rewrite(Eval), Tid?).
   create(Evaluator(Eval), Tid?).
   create(Compiler(), Tid?).
-  create(PGen(Pgen), Tid?).
+  create(PGen(), Tid?).
   create(AddEqSyn(Addsyn), Tid?).
   create(Clear-all(Eval), Tid?).
   create(Close-modules(Eval), Tid?)

@@ -1,5 +1,10 @@
-process PGen(PGEN: pgen) is
+tool pgen is {
+  command = "pgen -termtable 20"
+}
+
+process PGen is
 let 
+PGEN   : pgen,
 T      : term,
 T1     : term,
 Name   : term,
@@ -8,16 +13,22 @@ Syntax : term,
 NewSyntax : term,
 Str    : str,
 Table    : str,
-Mods   : list
+Mods   : list,
+Id     : int
 in
-  ( rec-msg(generate-parsetable(id(Str?))).
+  ( Id := process-id.
+    rec-msg(generate-parsetable(id(Str?))).
+    snd-note(ui-status(stat(Id,"Generating Parse Table"))).
+    execute(pgen,PGEN?).
     snd-msg(add-eqs-syntax(id(Str))).
     rec-msg(updated-syntax(Syntax?)).
     snd-msg(add-pgen-func(id(Str),Syntax)).
     rec-msg(decorated-syntax(NewSyntax?)). 
     snd-eval(PGEN,reduce-and-asource(NewSyntax,Str,"tbl")). 
     rec-value(PGEN,reduction-finished(Table?)).
-    snd-msg(parsetable(Table))
+    snd-msg(parsetable(Table)).
+    snd-note(ui-status(endstat(Id))).
+    snd-terminate(PGEN,"terminate")
   )*
   delta
 endlet
