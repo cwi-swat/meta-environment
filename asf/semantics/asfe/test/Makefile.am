@@ -27,7 +27,7 @@ TESTS           = reduce-test prepare-restore-test \
 
 EXTRA_DIST      = reduce-test.sh.src prepare-restore-test.sh.src \
                   equalModuloWhitespace-test.sh.src whitespace-test.sh.src \
-                  reduce-test-1.tb reduce-test-2.tb
+                  reduce-test-1.tb reduce-test-2.tb regress-test.sh.src 
 
 noinst_PROGRAMS = prepare-restore equalModuloWhitespace whitespace
 
