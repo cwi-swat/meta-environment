@@ -1,0 +1,25 @@
+/* $Id $ */
+
+tool graph-converter is {
+  command = "tree2graph"
+}
+
+process GraphConverter is
+let
+  GC : graph-converter,
+  Name : str,
+  Tree : term,
+  Graph : term
+in
+  (
+    rec-msg(graph-converter(Name?, Tree?))
+    . execute(graph-converter, GC?)
+    . snd-eval(GC, tree2graph(Name, Tree))
+    . rec-value(GC, graph(Graph?))
+    . snd-terminate(GC, "done")
+    . snd-msg(graph(Graph))
+  ) *
+  delta
+endlet
+
+toolbus(GraphConverter)

@@ -1,26 +1,19 @@
-/*
- * $Id$
- */
+/* $Id$ */
 
-/*{{{  standard includes */
+/*{{{  includes */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 
-/*}}}  */
-
-/*{{{  meta includes */
-
 #include <aterm1.h>
 #include <MEPT-utils.h>
 #include "PT2graph.h"
 
 #ifndef WITHOUT_TOOLBUS
-#include "tree2graph.tif.h"
+#include "graph-converter.tif.h"
 #endif
-
 
 /*}}}  */
 
@@ -106,7 +99,7 @@ int main (int argc, char *argv[])
     ATBinit(argc, argv, &bottomOfStack);
     PT_initMEPTApi();
     initGraphApi();
-    cid = ATBconnect(NULL, NULL, -1, tree2graph_handler);
+    cid = ATBconnect(NULL, NULL, -1, graph_converter_handler);
     ATBeventloop();
   }
   else

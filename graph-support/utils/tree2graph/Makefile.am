@@ -2,7 +2,7 @@
 
 include ${top_srcdir}/make_rules
 
-EXTRA_DIST = tree2graph.idef
+EXTRA_DIST = graph-converter.idef
 
 bin_PROGRAMS = tree2graph
 
@@ -12,11 +12,17 @@ INCLUDES = \
   -I${ATERM}/include \
   -I${TOOLBUSLIB}/include
 
-pkgdata_DATA = tree2graph.idef
+pkgdata_DATA = graph-converter.idef
 
-noinst_HEADERS = tree2graph.tif.h PT2graph.h
+noinst_HEADERS = \
+	graph-converter.tif.h \
+	PT2graph.h
 
-tree2graph_SOURCES = PT2graph.c tree2graph.tif.c tree2graph-main.c
+tree2graph_SOURCES = \
+	PT2graph.c \
+	graph-converter.tif.c \
+	tree2graph-main.c
+
 tree2graph_LDADD = \
    -L${top_builddir}/lib/ -lGraph \
    -L${PT_SUPPORT}/lib -lmept \
