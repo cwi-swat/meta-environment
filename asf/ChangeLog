@@ -1,4 +1,4 @@
-2003/05/07 (markvdb@cwi.nl)
+2003/05/07 ({markvdb,jong}@cwi.nl)
  * Improved the AsfSdfChecker wrt error messages in combination with
    traversal functions.
 
