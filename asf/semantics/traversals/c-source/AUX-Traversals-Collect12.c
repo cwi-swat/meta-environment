@@ -24,6 +24,12 @@
 #include  "asc-support.h"
 static Symbol lf_AUX_Traversals_Collect12_1sym ;
 static ATerm lf_AUX_Traversals_Collect12_1 ( ATerm arg1 ) ;
+static Symbol ef6sym ;
+static funcptr ef6 ;
+static Symbol ef5sym ;
+static funcptr ef5 ;
+static Symbol ef7sym ;
+static funcptr ef7 ;
 static Symbol ef1sym ;
 static funcptr ef1 ;
 static Symbol ef2sym ;
@@ -57,14 +63,22 @@ ef3 = lookup_func ( ATreadFromString ( "prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[q
 ef3sym = lookup_sym ( ATreadFromString ( "prod(id(\"Label-Sdf-Syntax\"),w(\"\"),[ql(\"traverse\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
 ef4 = lookup_func ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Production\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
 ef4sym = lookup_sym ( ATreadFromString ( "prod(id(\"Kernel-Sdf-Syntax\"),w(\"\"),[iter(sort(\"Production\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)" ) ) ;
+ef5 = lookup_func ( ATreadFromString ( "prod(id(\"Traversals-Utils\"),w(\"\"),[ql(\"traverse\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"TraverseDeclaration\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
+ef5sym = lookup_sym ( ATreadFromString ( "prod(id(\"Traversals-Utils\"),w(\"\"),[ql(\"traverse\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"TraverseDeclaration\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Attribute\"),w(\"\"),no-attrs)" ) ) ;
+ef6 = lookup_func ( ATreadFromString ( "prod(id(\"Traversals-Utils\"),w(\"\"),[ql(\"declare\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TraverseDeclaration\"),w(\"\"),no-attrs)" ) ) ;
+ef6sym = lookup_sym ( ATreadFromString ( "prod(id(\"Traversals-Utils\"),w(\"\"),[ql(\"declare\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Symbols\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TraverseDeclaration\"),w(\"\"),no-attrs)" ) ) ;
+ef7 = lookup_func ( ATreadFromString ( "prod(id(\"Traversals-Utils\"),w(\"\"),[ql(\"declare\"),w(\"\"),ql(\"(\"),w(\"\"),ql(\"reachables\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TraverseDeclaration\"),w(\"\"),no-attrs)" ) ) ;
+ef7sym = lookup_sym ( ATreadFromString ( "prod(id(\"Traversals-Utils\"),w(\"\"),[ql(\"declare\"),w(\"\"),ql(\"(\"),w(\"\"),ql(\"reachables\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"TraverseDeclaration\"),w(\"\"),no-attrs)" ) ) ;
 }
 static ATerm constant0 = NULL ;
+static ATerm constant1 = NULL ;
 void init_AUX_Traversals_Collect12 ( ) {
 ATprotect ( & constant0 ) ;
+ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Traversals_Collect12_1 ( ATerm arg0 ) {
 {
-ATerm tmp [ 2 ] ;
+ATerm tmp [ 4 ] ;
 FUNC_ENTRY ( lf_AUX_Traversals_Collect12_1sym , ATmakeAppl ( lf_AUX_Traversals_Collect12_1sym , arg0 ) ) ;
 if ( check_sym ( arg0 , ef1sym ) ) {
 {
@@ -92,6 +106,34 @@ FUNC_EXIT ( ( * ef4 ) ( lf3 ( make_list ( arg0 ) ) ) ) ;
 ( tmp [ 0 ] = atmp02000 [ 1 ] ) ;
 }
 }
+( tmp [ 0 ] = arg_0 ( atmp020 ) ) ;
+{
+ATerm atmp020010 ;
+ATerm atmp02000 [ 2 ] ;
+( atmp02000 [ 0 ] = tmp [ 0 ] ) ;
+( atmp02000 [ 1 ] = tmp [ 0 ] ) ;
+while ( not_empty_list ( tmp [ 0 ] ) ) {
+( atmp020010 = list_head ( tmp [ 0 ] ) ) ;
+( tmp [ 0 ] = list_tail ( tmp [ 0 ] ) ) ;
+{
+if ( check_sym ( atmp020010 , ef5sym ) ) {
+( tmp [ 2 ] = arg_0 ( atmp020010 ) ) ;
+{
+if ( check_sym ( tmp [ 2 ] , ef6sym ) ) {
+( tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ) ;
+FUNC_EXIT ( ( * ef4 ) ( lf3 ( make_list ( ( * ef1 ) ( atmp00 , atmp01 , ( * ef2 ) ( lf2 ( cons ( slice ( atmp02000 [ 0 ] , atmp02000 [ 1 ] ) , cons ( make_list ( ( * ef5 ) ( ( * ef6 ) ( tmp [ 3 ] ) ) ) , tmp [ 0 ] ) ) ) ) ) ) ) ) ) ;
+}
+if ( term_equal ( tmp [ 2 ] , ( constant0 ? constant0 : ( constant0 = ( * ef7 ) ( ) ) ) ) ) {
+FUNC_EXIT ( ( * ef4 ) ( lf3 ( make_list ( ( * ef1 ) ( atmp00 , atmp01 , ( * ef2 ) ( lf2 ( cons ( slice ( atmp02000 [ 0 ] , atmp02000 [ 1 ] ) , cons ( make_list ( ( * ef3 ) ( ) ) , tmp [ 0 ] ) ) ) ) ) ) ) ) ) ;
+}
+}
+}
+}
+( atmp02000 [ 1 ] = list_tail ( atmp02000 [ 1 ] ) ) ;
+( tmp [ 0 ] = atmp02000 [ 1 ] ) ;
+}
+}
+( tmp [ 0 ] = arg_0 ( atmp020 ) ) ;
 }
 }
 }
@@ -99,7 +141,7 @@ FUNC_EXIT ( ( * ef4 ) ( lf3 ( make_list ( arg0 ) ) ) ) ;
 }
 }
 }
-FUNC_EXIT_CONST ( constant0 , ( * ef4 ) ( lf3 ( make_list ( null ( ) ) ) ) ) ;
+FUNC_EXIT_CONST ( constant1 , ( * ef4 ) ( lf3 ( make_list ( null ( ) ) ) ) ) ;
 FUNC_EXIT ( make_nf1 ( lf_AUX_Traversals_Collect12_1sym , arg0 ) ) ;
 }
 }

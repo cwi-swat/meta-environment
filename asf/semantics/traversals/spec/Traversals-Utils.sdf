@@ -4,7 +4,14 @@ module Traversals-Utils
 imports Sdf2
 
 exports
-  
+  sorts TraverseType TraverseDeclaration
+
+  context-free syntax
+
+  "traverse" "(" TraverseDeclaration ")"  -> Attribute
+  "declare" "(" Symbols ")"               -> TraverseDeclaration
+  "declare" "(" "reachables" ")"          -> TraverseDeclaration
+
   variables
   
   "ModuleName" [0-9]* -> ModuleName

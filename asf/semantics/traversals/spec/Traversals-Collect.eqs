@@ -71,6 +71,16 @@ equations
 [tip-0] traversals_in_production($Symbols -> $Symbol {Attribute*1, traverse, Attribute*2}) = 
           $Symbols -> $Symbol {Attribute*1, traverse, Attribute*2}
 
+%% This is a test
+[tip-1] traversals_in_production($Symbols -> $Symbol {Attribute*1, traverse(declare($Symbols2)), Attribute*2}) =
+           $Symbols -> $Symbol {Attribute*1, traverse(declare($Symbols2)), Attribute*2}
+
+[tip-2]  traversals_in_production($Symbols -> $Symbol {Attribute*1, traverse(declare(reachables)), Attribute*2}) =
+           $Symbols -> $Symbol {Attribute*1, traverse, Attribute*2}
+
+
+%% End of test
+
 [default-tip] traversals_in_production(Production) =  
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

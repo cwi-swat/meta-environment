@@ -32,6 +32,18 @@ equations
                               $Symbols -> $Symbol {Attribute*1, traverse, Attribute*2} 
                                Production*2 ) = remove_in_productions(Production*1 Production*2)
 
+%% this is a test
+
+[rips-2] remove_in_productions(  Production*1 
+                              $Symbols -> $Symbol {Attribute*1, traverse(declare(reachables)), Attribute*2} 
+                               Production*2 ) = remove_in_productions(Production*1 Production*2)
+
+[rips-3] remove_in_productions(  Production*1 
+                              $Symbols -> $Symbol {Attribute*1, traverse(declare($Symbols2)), Attribute*2} 
+                               Production*2 ) = remove_in_productions(Production*1 Production*2)
+
+%% end of test
+
 [default-rips] remove_in_productions(Production*) = Production*
 
 

@@ -29,7 +29,7 @@ equations
 
 %% Sort preserving traversals first:
 
-[mt-0]  TraversalProduction = $Symbol*1 $Sort $Symbol*2 -> $Sort Attributes,
+[mt-0]  TraversalProduction = $Symbol*1 $Sort $Symbol*2 -> $Sort {Attribute*1, traverse, Attribute*2},
         close_sorts_set(NormalProductions,[$Sort]) = $SymbolSet,
         create_productions(TraversalProduction, $SymbolSet) = Productions
         ============================================================================
@@ -37,11 +37,27 @@ equations
 
 %% Analyzer transformations 
 
-[mt-1]  TraversalProduction = $Symbol*1 $Sort1 $Symbol*2 $Sort2 $Symbol*3 -> $Sort2 Attributes,
+[mt-1]  TraversalProduction = $Symbol*1 $Sort1 $Symbol*2 $Sort2 $Symbol*3 -> $Sort2 {Attribute*1, traverse, Attribute*2},
         close_sorts_set(NormalProductions, [$Sort1]) = $SymbolSet,
         create_productions(TraversalProduction, $SymbolSet) = Productions
         ====================================================================================
         make_traversal(NormalProductions, TraversalProduction) = Productions
+
+%% this is a test
+[mt-2]  TraversalProduction = $Symbol*1 $Sort $Symbol*2 -> $Sort {Attribute*1, traverse(declare($Symbol*3)), Attribute*2},
+        create_productions($Symbol*1 $Sort $Symbol*2 -> $Sort {Attribute*1, traverse, Attribute*2}, 
+            add $Sort to [$Symbol*3]) = Productions
+        ============================================================================
+        make_traversal(NormalProductions, TraversalProduction) = Productions
+
+[mt-3]  TraversalProduction = $Symbol*1 $Sort1 $Symbol*2 $Sort2 $Symbol*3 -> $Sort2 
+                                  {Attribute*1, traverse(declare($Symbol*4)), Attribute*2},
+        create_productions($Symbol*1 $Sort1 $Symbol*2 $Sort2 $Symbol*3 -> $Sort2 {Attribute*1, traverse, Attribute*2}, 
+            add $Sort1 to [$Symbol*4]) = Productions
+        ====================================================================================
+        make_traversal(NormalProductions, TraversalProduction) = Productions
+
+%% end of test
 
 %% default to prevent divergence in case of a typo
 [default-mt] make_traversal(NormalProductions, TraversalProduction) = 
