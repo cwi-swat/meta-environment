@@ -1,0 +1,6 @@
+Makefile.in
+Makefile
+.deps
+parse-client.tif.h
+parse-client.tif.c
+parse-client
