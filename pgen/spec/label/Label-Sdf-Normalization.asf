@@ -1,0 +1,3 @@
+equations
+  
+  [lsn-1'1] symbols(L:_A) = _A
