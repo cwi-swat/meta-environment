@@ -114,7 +114,7 @@ size_t num_reductions = 0;
 
 /*
  The input for the parser is a list of tokens closed by an end of
- file symbol |EOF|.  The list is accessed by means of a function that
+ file symbol |SG_EOF|.  The list is accessed by means of a function that
  produces the next token in the list.  The function is a parameter of
  the |SG_NextToken| function and can be determined by the caller of the
  parser.
@@ -237,7 +237,7 @@ path *SG_FindPaths(stack *st, int i, st_link *l0, ATbool link_seen,
  The function |SG_NextToken| reads the next token from the stream
  provided by the parameter function |get_next_token| and updates the
  line and column values taking account of newlines |\n|, tabs |\t| and
- end-of-file |EOF|.
+ end-of-file |SG_EOF|.
  */
 
 token SG_NextToken(int(*get_next_token)(void))
@@ -249,6 +249,7 @@ token SG_NextToken(int(*get_next_token)(void))
   switch(c) {
     case '\n' : line++; col = 0         ; break;
     case '\t' : col = (col / 8 + 1) * 8 ; break;
+    case SG_EOF:
     case EOF  : return SG_EOF_Token     ;
     default   : col++                   ; break;
   }
@@ -535,8 +536,7 @@ ATbool SG_CheckLookAhead(lookahead las)
   ATbool    permitted = ATtrue;
 
   /*  Without further input no lookahead restrictions apply  */
-  if((c = SG_GetChar()) == EOF) {
-    SG_UnGetChar();
+  if((c = SG_GetChar()) == SG_EOF) {
     return ATtrue;
   }
 

@@ -220,8 +220,8 @@ state SG_LookupGoto(parse_table *pt, state s, label l)
     }
   }
 
-  IF_DEBUG(fprintf(SG_log(), "Goto(%d,%d) == EOF\n", s, l))
-    return EOF;
+  IF_DEBUG(fprintf(SG_log(), "Goto(%d,%d) == EOF\n", s, l));
+  return SG_EOF;
 }
 
 

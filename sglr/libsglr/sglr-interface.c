@@ -239,7 +239,7 @@ ATerm SGreOpenLanguage(char *prgname, char *L, char *FN)
  variable |SG_theText|, which is accessed through the function
  |SG_GetCharFromString|.  This the function that is passed to the
  parser.  The end of string character |'\0'| is converted into the end
- of file value |EOF|.
+ of file value |SG_EOF|.
 
  Because the string passed to |SGparseString| might be a string that was
  contained in a term, we have to save it from being garbage collected.
