@@ -12,6 +12,9 @@ public abstract class TideTool
   private int id;
   private ToolManager manager;
 
+  private String name;
+  private Object target;
+
   //{{{ public TideTool(ToolManager manager)
 
   public TideTool(ToolManager manager)
@@ -38,6 +41,38 @@ public abstract class TideTool
   public int getId()
   {
     return id;
+  }
+
+  //}}}
+  //{{{ public String getName()
+
+  public String getName()
+  {
+    return name;
+  }
+
+  //}}}
+  //{{{ public Object getTarget()
+
+  public Object getTarget()
+  {
+    return target;
+  }
+
+  //}}}
+  //{{{ public void setName(String name)
+
+  public void setName(String name)
+  {
+    this.name = name;
+  }
+
+  //}}}
+  //{{{ public void setTarget(Object target)
+
+  public void setTarget(Object target)
+  {
+    this.target = target;
   }
 
   //}}}

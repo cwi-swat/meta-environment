@@ -8,6 +8,11 @@ import tide.tool.support.*;
 public class SourceViewerFactory
   implements ProcessToolFactory
 {
+  protected static final String PREF_SOURCECODE_FONT  =
+    "font.spec.sourcecode";
+  protected static final String PREF_LINENUMBER_FONT  =
+    "font.spec.linenumber";
+
   private ToolManager manager;
 
   //{{{ public SourceViewerFactory(ToolManager manager)
@@ -15,6 +20,9 @@ public class SourceViewerFactory
   public SourceViewerFactory(ToolManager manager)
   {
     this.manager = manager;
+
+    manager.getPreferences().registerPreference(PREF_SOURCECODE_FONT);
+    manager.getPreferences().registerPreference(PREF_LINENUMBER_FONT);
   }
 
   //}}}

@@ -62,6 +62,9 @@ in
     rec-msg(rule-deleted(Process)) .
     snd-ack-event(T, delete-rule(Process, Rule))
     +
+    rec-event(T, quit-tide) .
+    shutdown("Thank you for using tide.")
+    +
     rec-note(adapter-connected(Dap?)) .
     snd-do(T, adapter-connected(Dap))
     +

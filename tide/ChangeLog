@@ -1,14 +1,20 @@
+2001/06/26 (olivierp@cwi.nl)
+ * Version is now 0.2
+ * Tool instance windows can now be reopened after closing
+ * Added generic preferences support
+ * Added loading/saving of preferences
+ * Added possibility to change the font of the sourcecode/linenumbers
 
-2001-06-15 (olivierp@cwi.nl)
+2001/06/15 (olivierp@cwi.nl)
  * Changed highlighting behaviour to avoid overlapping highlights
  * Fixed step-over functionality
  * Introduced --with-develop mode to enable/disable debug prints
  * Introduced tabbed pane in source viewer to be able to switch between
    source files.
 
-2001-05-04 (olivierp@cwi.nl)
+2001/05/04 (olivierp@cwi.nl)
  * Initial working version of tide
 
-2001-04-10 (olivierp@cwi.nl)
+2001/04/10 (olivierp@cwi.nl)
  * Initial checkin of tide
 

@@ -8,11 +8,13 @@ bin_SCRIPTS	= tide.sh
 data_DATA	= tide.jar
 
 JARCLASSDIRS	= tide/tool tide/tool/support \
-		tide/tool/proclist tide/tool/ruleinspector tide/tool/srcviewer
+		tide/tool/proclist tide/tool/ruleinspector tide/tool/srcviewer \
+		tide/tool/prefeditor
 
 JARCLASSES	= ${JARCLASSDIRS:%=%/*.class}
 JARIMAGES	= ${srcdir}/images/*.gif
-JARFILES	= META-INF/MANIFEST.MF ${JARIMAGES}  ${JARCLASSES}
+JARFILES	= META-INF/MANIFEST.MF META-INF/tide-defaults.properties \
+		${JARIMAGES}  ${JARCLASSES}
 
 tide.jar: ${JARFILES}
 	FILES="${JARFILES}"; \

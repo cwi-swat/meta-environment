@@ -1,6 +1,6 @@
 
 AC_INIT(configure.in)
-AM_INIT_AUTOMAKE(tide, 0.1)
+AM_INIT_AUTOMAKE(tide, 0.2)
 
 ACLOCAL="${ACLOCAL} -I ."
 
@@ -75,6 +75,7 @@ AC_OUTPUT( \
 	tide/tool/proclist/Makefile \
 	tide/tool/ruleinspector/Makefile \
 	tide/tool/srcviewer/Makefile \
+	tide/tool/prefeditor/Makefile \
 	images/Makefile \
 	META-INF/Makefile \
         examples/Makefile \

@@ -19,12 +19,10 @@ import tide.tool.ruleinspector.*;
 class SourceFileViewer
   extends JScrollPane
   implements MouseListener, MouseMotionListener, PopupMenuListener,
-             ActionListener, DebugProcessListener
+             ActionListener, DebugProcessListener,
+	     PreferenceListener
 {
   //{{{ Constants
-
-  private static final Font SOURCE_FONT = new Font("Monospaced", 0, 12);
-  private static final Font LINENR_FONT = new Font("Monospaced", 0, 10);
 
   private static final String ITEM_ADD_BREAKPOINT = "Add Breakpoint";
   private static final String ITEM_ADD_WATCHPOINT = "Add Watchpoint";
@@ -47,6 +45,7 @@ class SourceFileViewer
   //{{{ Attributes
 
   private ToolManager manager;
+  private PreferenceSet prefs;
   private DebugProcess process;
   private String file;
   private String tag_view_var;
@@ -80,7 +79,7 @@ class SourceFileViewer
 
   //}}}
 
-  //{{{ public SourceFileViewer(String file)
+  //{{{ public SourceFileViewer(manager, process, file, id, tag_vv)
 
   public SourceFileViewer(ToolManager manager, DebugProcess process,
 			  String file, int id, String tag_view_var)
@@ -93,6 +92,9 @@ class SourceFileViewer
     this.tag_view_var = tag_view_var;
     process.addDebugProcessListener(this);
 
+    prefs = manager.getPreferences();
+    prefs.addPreferenceListener(this);
+
     tag_breakpoint = TAG_BREAKPOINT + "-" + id;
     tag_watchpoint = TAG_WATCHPOINT + "-" + id;
 
@@ -101,11 +103,11 @@ class SourceFileViewer
     glass.setLayout(null);
 
     text = new SourceBrowser();
-    text.setFont(SOURCE_FONT);
 
     lineNumbers = new LineNumberCanvas(text);
-    lineNumbers.setFont(LINENR_FONT);
     lineNumbers.setBackground(COLOR_LINEBG);
+
+    preferencesChanged(prefs);
 
     JPanel textPanel = new JPanel();
     textPanel.setLayout(new BorderLayout());
@@ -155,6 +157,16 @@ class SourceFileViewer
     } catch (IOException e) {
       System.err.println("cannot find source file " + file);
     }
+  }
+
+  //}}}
+  
+  //{{{ protected void cleanup()
+
+  protected void cleanup()
+  {
+    process.removeDebugProcessListener(this);
+    prefs.removePreferenceListener(this);
   }
 
   //}}}
@@ -614,6 +626,38 @@ class SourceFileViewer
 
   public void evaluationResult(DebugProcess process, Expr expr,
 			       Expr value, String tag)
+  {
+  }
+
+  //}}}
+
+  //{{{ public void preferencesChanged(PreferenceSet set)
+
+  public void preferencesChanged(PreferenceSet prefs)
+  {
+    String prefName = SourceViewerFactory.PREF_SOURCECODE_FONT;
+    text.setFont(prefs.getFontPreference(prefName));
+    prefName = SourceViewerFactory.PREF_LINENUMBER_FONT;
+    lineNumbers.setFont(prefs.getFontPreference(prefName));
+    repaint();
+  }
+
+  //}}}
+  //{{{ public void preferenceChanged(prefs, name, oldValue, newValue)
+
+  public void preferenceChanged(PreferenceSet prefs, String name,
+				String oldValue, String newValue)
+  {
+    if (name.equals(SourceViewerFactory.PREF_SOURCECODE_FONT) ||
+	name.equals(SourceViewerFactory.PREF_LINENUMBER_FONT)) {
+      preferencesChanged(prefs);
+    }
+  }
+
+  //}}}
+  //{{{ public void preferencesStatusChanged(PreferenceSet set, boolean clean)
+
+  public void preferencesStatusChanged(PreferenceSet set, boolean clean)
   {
   }
 

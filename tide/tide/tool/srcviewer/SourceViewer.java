@@ -198,6 +198,14 @@ public class SourceViewer
     if (ruleStepOver != null) {
       process.requestRuleDeletion(ruleStepOver);
     }
+
+    Iterator iter = residentViewers.values().iterator();
+    while (iter.hasNext()) {
+      SourceFileViewer viewer = (SourceFileViewer)iter.next();
+      viewer.cleanup();
+    }
+
+    getManager().removeTool(this);
   }
 
   //}}}

@@ -1,6 +1,7 @@
 package tide.tool;
 
 import java.util.*;
+import java.io.*;
 import java.beans.*;
 import javax.swing.*;
 
@@ -9,6 +10,8 @@ import tide.tool.support.*;
 public class ToolManager
 {
   private JDesktopPane desktop;
+
+  private Map tideTools;
 
   private List processToolList;
   private List processActionList;
@@ -20,11 +23,15 @@ public class ToolManager
 
   private Map toolInstances;
 
-  //{{{ public ToolManager(JDesktopPane desktop)
+  private PreferenceSet preferences;
 
-  public ToolManager(JDesktopPane desktop)
+  //{{{ public ToolManager(JDesktopPane desktop, Properties defaults)
+
+  public ToolManager(JDesktopPane desktop, Properties defaults)
   {
     this.desktop = desktop;
+
+    tideTools = new HashMap();
 
     processToolList = new LinkedList();
     processActionList = new LinkedList();
@@ -35,6 +42,24 @@ public class ToolManager
     adapterTools = new HashMap();
 
     toolInstances = new HashMap();
+
+    preferences = new PreferenceSet(defaults);
+
+    try {
+      preferences.loadPreferences();
+    } catch (IOException e) {
+      System.err.println("Warning: could not load preferences: "
+			 + e.getMessage());
+    }
+  }
+
+  //}}}
+
+  //{{{ public PreferenceSet getPreferences()
+
+  public PreferenceSet getPreferences()
+  {
+    return preferences;
   }
 
   //}}}
@@ -56,6 +81,8 @@ public class ToolManager
 
   public void putTool(String toolName, Object target, TideTool tool)
   {
+    tool.setName(toolName);
+    tool.setTarget(target);
     Map tools = (Map)toolInstances.get(toolName);
     if (tools == null) {
       tools = new HashMap();
@@ -63,6 +90,25 @@ public class ToolManager
     }
 
     tools.put(target, tool);
+  }
+
+  //}}}
+  //{{{ public void removeTool(TideTool tool)
+
+  public void removeTool(TideTool tool)
+  {
+    Map tools = (Map)toolInstances.get(tool.getName());
+    tools.remove(tool.getTarget());
+  }
+
+  //}}}
+
+  //{{{ public void registerTool(TideToolFactory factory)
+
+  public void registerTool(TideToolFactory factory)
+  {
+    String name = factory.getName();
+    tideTools.put(name, factory);
   }
 
   //}}}
@@ -120,6 +166,34 @@ public class ToolManager
   public Iterator adapterActionIterator()
   {
     return adapterActionList.iterator();
+  }
+
+  //}}}
+
+  //{{{ public TideTool launchTool(String toolName)
+
+  public TideTool launchTool(String toolName)
+  {
+    TideTool tool = (TideTool)getTool(toolName, this);
+    if (tool == null) {
+      TideToolFactory factory =
+	(TideToolFactory)tideTools.get(toolName);
+      tool = factory.createTool();
+      putTool(toolName, this, tool);
+
+      desktop.add(tool, 1);
+      tool.show();
+    }
+    try {
+      tool.setIcon(false);
+    } catch (PropertyVetoException e) {
+      System.err.println("Warning: cannot deiconify process tool: " +
+			 toolName);
+    }
+    desktop.moveToFront(tool);
+
+    return tool;
+
   }
 
   //}}}

@@ -1,0 +1,6 @@
+package tide;
+
+public class TideConfig
+{
+  public static final String DATADIR = "__DATADIR__";
+}

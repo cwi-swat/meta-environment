@@ -1,18 +1,20 @@
 
-SUBDIRS		= support proclist ruleinspector srcviewer
+SUBDIRS		= support proclist ruleinspector srcviewer prefeditor
 
 javadir		= ${prefix}/classes/tide/tool
 JAVAROOT	= ${top_builddir}
 
 java_JAVA	= ${CONTROL_GEN} \
-		TideControl.java ToolManager.java TideTool.java \
+		TideControl.java ToolManager.java \
+		TideToolFactory.java    TideTool.java \
 		AdapterToolFactory.java AdapterTool.java \
 		ProcessToolFactory.java ProcessTool.java \
-		AdapterAction.java ProcessAction.java
+		AdapterAction.java ProcessAction.java \
+		PreferenceSet.java PreferenceListener.java
 
 
 CONTROL_GEN	= TideControlTif.java TideControlTool.java \
-		TideControlBridge.java 
+		TideControlBridge.java
 
 # This is some kind of hack to make sure that generated Java files are
 # generated before compiling all other java files but that it will

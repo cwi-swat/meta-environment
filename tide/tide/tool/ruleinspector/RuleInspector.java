@@ -17,6 +17,7 @@ import tide.tool.support.*;
 
 public class RuleInspector
   extends ProcessTool
+  implements DebugAdapterListener
 {
   private RuleSelector selector;
   private RuleEditor   editor;
@@ -47,28 +48,13 @@ public class RuleInspector
     addInternalFrameListener(new InternalFrameAdapter() 
       {
         public void internalFrameClosed(InternalFrameEvent event) {
-	  selector.cleanup();
-	  editor.cleanup();
+	  cleanup();
 	}
       }
     );
 
     DebugAdapter adapter = process.getAdapter();
-    adapter.addDebugAdapterListener(new DebugAdapterListener()
-      {
-        public void processDestroyed(DebugAdapter adapter,
-				     DebugProcess proc) {
-	  if (proc == process) {
-	    Object lock = getTreeLock();
-	    synchronized (lock) {
-	      dispose();
-	    }
-	  }
-	}
-
-	public void processCreated(DebugAdapter adapter,
-				   DebugProcess proc) { }
-      });
+    adapter.addDebugAdapterListener(this);
   }
 
   //}}}
@@ -77,6 +63,39 @@ public class RuleInspector
   public void editRule(Rule rule)
   {
     selector.selectRule(rule);
+  }
+
+  //}}}
+
+  //{{{ private void cleanup()
+
+  private void cleanup()
+  {
+    selector.cleanup();
+    editor.cleanup();
+    process.getAdapter().removeDebugAdapterListener(this);
+    getManager().removeTool(this);
+  }
+
+  //}}}
+
+  //{{{ public void processDestroyed(DebugAdapter adapter, DebugProcess proc)
+
+  public void processDestroyed(DebugAdapter adapter, DebugProcess proc)
+  {
+    if (proc == process) {
+      Object lock = getTreeLock();
+      synchronized (lock) {
+	dispose();
+      }
+    }
+  }
+
+  //}}}
+  //{{{ public void processCreated(DebugAdapter adapter, DebugProcess proc)
+
+  public void processCreated(DebugAdapter adapter, DebugProcess proc)
+  {
   }
 
   //}}}

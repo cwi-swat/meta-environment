@@ -1,2 +1,2 @@
 
-EXTRA_DIST	= MANIFEST.MF
+EXTRA_DIST	= MANIFEST.MF tide-defaults.properties
