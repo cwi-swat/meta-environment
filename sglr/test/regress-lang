@@ -12,7 +12,7 @@ dirs="first grammars"
 Notify () {
 	if [ $VERBOSE -gt 0 ]
 	then
-		echo $*                                   >&2
+		echo $*                                   	>&2
 	fi
 }
 
@@ -20,13 +20,20 @@ GenTable() {
 	if sdf2table $1
 	then
 	        ptbl=`basename $1 .sdf2`.tbl
-	        Notify Comparing $ptbl...
-	        if diff -w $ptbl $reference/$ptbl		> /dev/null 2>&1
-	        then
-		        Notify "Regress test for $1 successful."
-		        rm -f $ptbl
-	        else
-		        Notify "Differences detected in parse table $ptbl!"
+		diff=1
+		if [ `wc -c < $ptbl` -eq `wc -c < $reference/$ptbl` ]
+		then
+	        	Notify Comparing $ptbl...
+	                if diff -w $ptbl $reference/$ptbl	>/dev/null 2>&1
+	                then
+		                Notify "Regress test for $1 successful"
+		                rm -f $ptbl
+			        diff=0
+	                fi
+		fi
+		if [ $diff -ne 0 ]
+		then
+		        Notify "Regress test for $1 failed"
 	        fi
 	else
 		Notify "Failed to generate parse table for $1"

@@ -37,16 +37,23 @@ do
 		out=$dir/`basename $base .$ext`.asfix2
 		if $SGLR -p $ptbl -i $file -to $out
 		then
-	                if diff -w $out $out.org	> /dev/null 2>&1
-	                then
-				Notify "Regression test for valid term $base succeeded."
-		                rm -f $out
-	                else
-				Notify "Regression test for valid term $base failed."
+			diff=1
+		        if [ `wc -c < $out` -eq `wc -c < $out.org` ]
+		        then
+	                        if diff -w $out $out.org	> /dev/null 2>&1
+	                        then
+				        Notify "Regression test for valid term $base succeeded"
+		                        rm -f $out
+				        diff=0
+	                        fi
+			fi
+			if [ $diff -ne 0 ]
+			then
+				Notify "Regression test for valid term $base failed"
 				ERROR=1
 	                fi
 		else
-			echo "Error parsing $file!"	>&2
+			echo "Error parsing $file"	>&2
 			ERROR=1
 		fi
 	done
