@@ -1,7 +1,24 @@
+/* meta-kernel */
+#include "configuration-manager.idef"
+#include "editor-hive.idef"
+#include "editor-manager.idef"
+#include "generic-adapter.idef" 
+#include "graph-converter.idef"
+#include "in-output.idef"
+#include "layout-graph.idef"
+#include "position-annotator.idef"
+#include "sglr.idef"
+#include "structure-editor.idef"
+#include "unparser.idef"
 
-/* The Meta-Environment protocol is expressed in the
- * following scripts:
- */
+/* sdf-meta */
+#include "parsetablegen.idef"
+
+/* asf-sdf-meta */
+#include "apply-function.idef"
+#include "restorebrackets.idef"
+
+/* to be resolved */
 #include "abort.tb"
 #include "parse-utils.tb"
 #include "editors.tb"
@@ -25,22 +42,7 @@
 #include "dump-equations.tb"
 #include "meta-interface.tb"
 
-/* Tool interfaces */
-#include "apply-function.idef"
-#include "configuration-manager.idef"
-#include "editor-hive.idef"
-#include "editor-manager.idef"
-#include "generic-adapter.idef" 
-#include "graph-converter.idef"
-#include "in-output.idef"
-#include "layout-graph.idef"
-#include "parsetablegen.idef"
-#include "position-annotator.idef"
-#include "restorebrackets.idef"
-#include "sglr.idef"
-#include "structure-editor.idef"
-#include "unparser.idef"
-
+/* Experimental */
 #ifdef QUERY
 #include "DisplayQuery.idef" 
 #endif
