@@ -324,19 +324,33 @@ ATerm SG_Parse(parse_table *ptable, char *sort, int(*get_next_char)(void))
   file an error in the middle of the file.
 */
 
-char *SG_ApplSort(ATerm t)
+char *SG_ProdSort(ATerm t)
 {
   char *sort;
 
-  if(ATmatch(t, "appl(prod([<term>,cf(sort(<str>)),<term>],<term>,<term>),"
-                "<list>)",
+  if(ATmatch(t, "prod([<term>,cf(sort(<str>)),<term>],<term>,<term>)",
          NULL, &sort, NULL, NULL, NULL, NULL)) {
     return sort;
   }
+  if(ATmatch(t, "prod([<term>],cf(sort(<str>)),<term>)", NULL, &sort, NULL)) {
+    return sort;
+  }
+
+  return "[unknown sort]";
+}
+
+char *SG_ApplSort(ATerm t)
+{
+  ATerm prod;
+
+  if(ATmatch(t, "appl(<term>,<list>)", &prod, NULL)) {
+    return SG_ProdSort(prod);
+  }
+
   if(ATgetAFun((ATermAppl) t) == SG_AmbAFun())
     return("[multiple sorts]"); 
 
-  return NULL;
+  return "[unknown sort]";
 }
 
 ATerm SG_Prune(ATerm forest, char *desiredsort)
@@ -623,7 +637,8 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
     /*  Reject?  */
     if (reject) {     /*  J$: Don't bother representing rejects  */
       if (SG_DEBUG)
-        ATfprintf(SGlog(), "Rejecting %t\n", t);
+        ATfprintf(SGlog(), "Rejecting as sort %s\n",
+          SG_ProdSort(SG_LookupProduction(table, prodl)));
       SG_PropagateReject(st1);
       return;
     }
@@ -752,6 +767,7 @@ void SG_Shifter(void)
       shift_pair = SG_SP_NEXT(shift_pair)) {
     s = SG_SP_STATE(shift_pair);
     st0 = SG_SP_STACK(shift_pair);
+
     if(!SG_Rejected(st0)) {
       if((st1 = SG_FindStack(s, new_active_stacks)) == NULL) {
         st1 = SG_NewStack(s, NULL);
@@ -768,7 +784,7 @@ void SG_Shifter(void)
     SG_PurgeOldStacks(active_stacks, new_active_stacks, accepting_stack);
 
   if((active_stacks = new_active_stacks) == NULL && SG_DEBUG)
-      ATfprintf(SGlog(), "Shifter: no more stacks left\n");
+      ATfprintf(SGlog(), "Shifter: no stacks left\n");
 } /*  Shifter  */
 
 

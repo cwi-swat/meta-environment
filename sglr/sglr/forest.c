@@ -223,7 +223,7 @@ void SG_ShowCycle(ATerm CurrTerm, ATerm CycleStart)
   #define SG_UNMARK(t)		ATtableRemove(MarkTable, t)
 #endif
 
-void SG_TermIsCyclic(ATerm t, int depth)
+void SG_TermIsCyclic(ATerm t)
 {
   ATermList ambs;
   ATermInt  idx;
@@ -233,25 +233,16 @@ void SG_TermIsCyclic(ATerm t, int depth)
     return;
 
   if(SG_IS_MARKED(t)) {                     /*  Cycle detected  */
-if(SG_DEBUG) fprintf(stderr, "%*s %s-%d: CYCLE\n", depth, "", SG_IS_MARKED(t)?"M":"U", (int) t);
     CycleStart = t;
     return;
   } else {
     SG_MARK(t);
   }
 
-if(SG_DEBUG) fprintf(stderr, "%*.*s> %d\n", depth, depth, "", (int) t);
-
   switch(ATgetType(t)) {
     case AT_APPL:
-
-if(SG_DEBUG) fprintf(stderr, "%*s %s-%d: %d", depth, "", SG_IS_MARKED(t)?"M":"U", (int) t,
-        ATgetInt(SG_GetApplProdLabel((ATermAppl) t)));
-
-      fun  = ATgetAFun(t);
-
-      if(fun == SG_AmbAFun()) {
-        SG_TermIsCyclic(ATgetArgument((ATermAppl) t, 0), depth+1);
+      if((fun  = ATgetAFun(t)) == SG_AmbAFun()) {
+        SG_TermIsCyclic(ATgetArgument((ATermAppl) t, 0));
         break;
       }
       if(fun == SG_AprodAFun()) {
@@ -262,19 +253,17 @@ if(SG_DEBUG) fprintf(stderr, "%*s %s-%d: %d", depth, "", SG_IS_MARKED(t)?"M":"U"
       /*  Ambiguity cluster?  */
       if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL))) {
         /*  No ambiguity  */
-if(SG_DEBUG) fprintf(stderr, "\n");
-        SG_TermIsCyclic(ATgetArgument((ATermAppl) t, 1), depth+1);
+        SG_TermIsCyclic(ATgetArgument((ATermAppl) t, 1));
       } else {
         /*  Encountered an ambiguity cluster  */
-if(SG_DEBUG) fprintf(stderr, " (amb)\n");
-         SG_TermIsCyclic((ATerm) ambs, depth+1);
+         SG_TermIsCyclic((ATerm) ambs);
       }
       break;
 
     case AT_LIST:
       if(!ATisEmpty((ATermList) t)) {
-        SG_TermIsCyclic(      ATgetFirst((ATermList) t), depth+1);
-        SG_TermIsCyclic((ATerm)ATgetNext((ATermList) t), depth+1);
+        SG_TermIsCyclic(      ATgetFirst((ATermList) t));
+        SG_TermIsCyclic((ATerm)ATgetNext((ATermList) t));
       }
       break;
 
@@ -283,7 +272,6 @@ if(SG_DEBUG) fprintf(stderr, " (amb)\n");
   }
 
   SG_UNMARK(t);
-if(SG_DEBUG) fprintf(stderr, "%*.*s< %d\n", depth, depth, "", (int) t);
 }
 
 
@@ -292,7 +280,7 @@ ATermList SG_CyclicTerm(ATerm t) {
   MarkTable = ATtableCreate(4096, 75);
 #endif
   CycleStart = NULL;
-  SG_TermIsCyclic(t, 0L);
+  SG_TermIsCyclic(t);
 #ifdef TABLE_INSTEAD_OF_MARKS
   ATtableDestroy(MarkTable);
 #endif
@@ -648,7 +636,6 @@ ATermAppl SG_Filter(parse_table *pt, ATermAppl t0, ATermAppl t1)
   ATermTable m0, m1;
   ATermAppl  max = NULL;
 
-
   /*  First apply direct priority filtering.  */
 
   l0 = SG_GetApplProdLabel((ATermAppl) t0);
@@ -656,12 +643,12 @@ ATermAppl SG_Filter(parse_table *pt, ATermAppl t0, ATermAppl t1)
 
   if(SG_GtrPriority(pt, l0, l1)) {
     if(SG_DEBUG)
-      ATfprintf(SGlog(), "Direct priority: %t > %t (bad parse table?)\n", l0, l1);
+      ATfprintf(SGlog(), "Direct Priority: %t > %t (bad parse table?)\n", l0, l1);
     return t0;
   }
   if(SG_GtrPriority(pt, l1, l0)) {
     if(SG_DEBUG)
-      ATfprintf(SGlog(), "Direct priority: %t > %t (bad parse table?)\n", l1, l0);
+      ATfprintf(SGlog(), "Direct Priority: %t < %t (bad parse table?)\n", l0, l1);
     return t1;
   }
 
@@ -676,7 +663,7 @@ ATermAppl SG_Filter(parse_table *pt, ATermAppl t0, ATermAppl t1)
                                             /*  multi-prio is irreflexive  */
     if(SG_MultiSetGtr(pt, m0, m1)) {
       if(SG_DEBUG)
-        ATfprintf(SGlog(), "Multiset Priority: aprod %t >> aprod %t\n", l0, l1);
+        ATfprintf(SGlog(), "Multiset Priority: %t > %t\n", l0, l1);
       max = t0;
     }
   /* else */
@@ -688,27 +675,32 @@ ATermAppl SG_Filter(parse_table *pt, ATermAppl t0, ATermAppl t1)
         max = NULL;
       } else {
         if(SG_DEBUG)
-          ATfprintf(SGlog(), "Multiset Priority: aprod %t << aprod %t\n", l0, l1);
+          ATfprintf(SGlog(), "Multiset Priority: %t < %t\n", l0, l1);
         max = t1;
       }
     }
-
-    if(max == NULL && SG_DEBUG)
-      ATfprintf(SGlog(), "Multiset Priority: %t >!< %t\n",
-                SG_GetApplProdLabel(t0), SG_GetApplProdLabel(t1));
   }
 
   /*  No multiset ordering either?  Count injections.  */
 
+#if 1
   if(max == NULL) {
     int in0, in1;
 
     in0 = SG_CountInjections(pt, m0);
     in1 = SG_CountInjections(pt, m1);
 
-    if(in0 > in1) max = t0;
-    if(in0 < in1) max = t1;
+    if(in0 > in1) {
+      if(SG_DEBUG)
+        ATfprintf(SGlog(), "Injection Priority: %t < %t\n", l0, l1);
+      max = t1;
+    } else if(in0 < in1) {
+      if(SG_DEBUG)
+        ATfprintf(SGlog(), "Injection Priority: %t > %t\n", l0, l1);
+      max = t0;
+    }
   }
+#endif
 
   ATtableDestroy(m0);
   ATtableDestroy(m1);
@@ -751,7 +743,7 @@ void SG_Amb(parse_table *pt, ATermAppl existing, ATermAppl new) {
       if(ATisEqual(max, existing)) {
         newtrms = ATmakeList1(ex_cln);
 	if(SG_DEBUG)
-          ATfprintf(SGlog(), "Priority: aprod %t > aprod %t (new amb)\n",
+          ATfprintf(SGlog(), "Priority: %t > %t (new amb)\n",
                     SG_GetApplProdLabel(existing), SG_GetApplProdLabel(new));
       } else {
         newtrms = ATmakeList2(ex_cln, nw_cln);
@@ -759,7 +751,7 @@ void SG_Amb(parse_table *pt, ATermAppl existing, ATermAppl new) {
     } else {
         newtrms = ATmakeList1(nw_cln);
 	if(SG_DEBUG)
-          ATfprintf(SGlog(), "Priority: aprod %t < aprod %t (new amb)\n",
+          ATfprintf(SGlog(), "Priority: %t < %t (new amb)\n",
                     SG_GetApplProdLabel(existing), SG_GetApplProdLabel(new));
     }
   } else {
