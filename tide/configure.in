@@ -66,6 +66,8 @@ AC_OUTPUT( \
 	tide/tool/proclist/Makefile \
 	tide/tool/ruleinspector/Makefile \
 	tide/tool/srcviewer/Makefile \
+	tide/tool/META-INF/Makefile \
+	tide/tool/images/Makefile \
         examples/Makefile \
 	examples/pico/Makefile \
 	, )

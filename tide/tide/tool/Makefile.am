@@ -1,5 +1,6 @@
 
-SUBDIRS		= support proclist ruleinspector srcviewer .
+JARSUBDIRS	= support proclist ruleinspector srcviewer .
+SUBDIRS		= ${JARSUBDIRS} META-INF images .
 
 javadir		= ${prefix}/classes/tide/tool
 JAVAROOT	= ${top_builddir}
@@ -14,8 +15,8 @@ java_JAVA	= ${CONTROL_GEN} \
 CONTROL_GEN	= TideControlTif.java TideControlTool.java \
 		TideControlBridge.java 
 
-JARCLASSES	= ${SUBDIRS:%=%/*.class}
-JARIMAGES	= images/*.gif
+JARCLASSES	= ${JARSUBDIRS:%=%/*.class}
+JARIMAGES	= ${srcdir}/images/*.gif
 
 JARFILES	= META-INF/MANIFEST.MF ${JARIMAGES} ${JARCLASSES}
 
@@ -35,5 +36,6 @@ ${noinst_SCRIPTS}: ../../tide.tifs
 
 tide.jar: ${JARFILES}
 	jar cf tide.jar $^
-	cp tide.jar ${datadir}
+
+#	cp tide.jar ${datadir}
 
