@@ -1,0 +1,22 @@
+module Procedure-Environment
+
+imports While-Proc-Syntax
+
+exports
+
+sorts Proc-Env
+
+context-free syntax
+
+update-p(PDecls, Proc-Env) -> Proc-Env
+
+
+Proc-Env PName -> Stms
+
+"[" PName "->" Stms "]" -> Proc-Binding
+
+Proc-Binding* -> Proc-Env
+
+variables
+"envp"[0-9\']* -> Proc-Binding*
+

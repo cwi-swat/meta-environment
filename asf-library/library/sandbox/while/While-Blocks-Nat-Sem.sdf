@@ -1,0 +1,9 @@
+module While-Blocks-Nat-Sem
+
+imports While-Nat-Sem While-Blocks-Syntax Declared-Vars
+
+exports
+
+context-free syntax
+
+update-v(VDecls, State) -> State

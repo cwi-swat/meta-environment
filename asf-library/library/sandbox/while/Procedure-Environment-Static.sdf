@@ -1,0 +1,23 @@
+module Procedure-Environment-Static
+
+imports Variable-Environment
+
+exports
+
+sorts Proc-Env Proc-Triple
+
+context-free syntax
+
+"[" PName "->" Proc-Triple "]" -> Proc-Binding
+Proc-Binding* -> Proc-Env
+
+Proc-Env PName -> Proc-Triple
+
+update-p(PDecls, Var-Env, Proc-Env) -> Proc-Env
+
+aliases
+ (Stms # Var-Env # Proc-Env) -> Proc-Triple
+
+variables
+"envp"[0-9\']* -> Proc-Binding*
+"p3"[0-9\']* -> Proc-Triple

@@ -1,0 +1,20 @@
+module Declared-Vars
+
+imports While-Proc-Syntax
+	State
+
+exports
+
+sorts Var-Set
+
+context-free syntax
+
+"DV" "(" VDecls ")" -> Var-Set
+
+State "[" Var-Set "|-->" State "]" -> State
+
+aliases
+Var* -> Var-Set
+
+variables
+"varset"[0-9\']* -> Var-Set

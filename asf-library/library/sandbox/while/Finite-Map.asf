@@ -1,0 +1,5 @@
+equations
+
+[fm1]	map1 [src -> trg] map2 src = trg
+
+[fm2]	map1 [src -> trg] map2 [src -> trg'] = map1 [src -> trg'] map2

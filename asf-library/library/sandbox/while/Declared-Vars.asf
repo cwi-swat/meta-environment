@@ -1,0 +1,18 @@
+equations
+
+[dv1]	DV() = 
+
+[dv2]	DV(var x := a; vdecls) = x DV(vdecls)
+
+[ssub]	def(x, s') = true,
+	s' x = i
+	===
+	s [x varset |--> s'] = (s [x -> i]) [varset |--> s']
+
+[ssub]	def(x, s') = false
+	===
+	s [x varset |--> s' ] = s [varset |--> s']
+
+[default]
+	s [ |--> s'] = s
+

@@ -1,0 +1,11 @@
+equations
+
+[s1]	s1 [x -> i] s2 x = i
+
+[s2]	s1 [x -> i] s2 [x -> i'] = s1 [x -> i'] s2
+
+[defined]	
+	def(x, s1 [x->i] s2) = true
+
+[default-def]
+	def(x, s) = false

@@ -1,0 +1,13 @@
+module While-Nat-Sem
+
+imports BExpr-Sem While-Syntax
+
+exports 
+
+sorts Configuration
+
+context-free syntax
+
+"(" Stms "," State ")" -> Configuration
+State -> Configuration
+
