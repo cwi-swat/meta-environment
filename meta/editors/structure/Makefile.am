@@ -8,15 +8,15 @@ pkgdata_DATA = structure-editor.idef
 noinst_HEADERS = \
 	StructureEditor.h \
 	StructureEditor_dict.h \
-	structure-editor.tif.h
+	structure-editor.tif.h \
+	slice-tree.h
 
 AM_CFLAGS = -Wall -Werror -g -O2
 
 IDEF2TIF = $(TOOLBUS)/bin/idef2tif
-TIFSTOC = $(TOOLBUS)/bin/tifstoc
+TIFSTOC  = $(TOOLBUS)/bin/tifstoc
 
 INCLUDES = \
-	-I$(top_srcdir)/editors/slicing \
 	-I$(ERROR_SUPPORT)/include \
 	-I$(PT_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
@@ -29,11 +29,11 @@ LOCATION_API = \
 
 structure_editor_SOURCES = \
 	structure-editor.c \
-	structure-editor.tif.c
+	structure-editor.tif.c \
+	slice-tree.c
 
 structure_editor_LDADD = \
 	-L$(top_builddir)/editors/structure -lStructureEditor \
-	-L$(top_builddir)/editors/slicing -lslicing \
 	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI -lLocationAPI \
 	-L$(TOOLBUSLIB)/lib -lATB \

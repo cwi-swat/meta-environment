@@ -11,7 +11,7 @@
 #include <Location.h>
 
 #include "StructureEditor.h"
-#include "Slicing-utils.h"
+#include "slice-tree.h"
 
 #include "structure-editor.tif.h"
 
@@ -393,7 +393,7 @@ ATerm get_tree_slices(int cid, ATerm editorId)
   editor = getEditor(editorId);
   if (editor != NULL) {
     SE_ParseTree parseTree;
-    S_Slices slices;
+    ATermList slices;
 
     parseTree = SE_getStructureEditorParseTree(editor);
     
@@ -404,7 +404,7 @@ ATerm get_tree_slices(int cid, ATerm editorId)
 					   ATtrue, ATtrue);
     slices = TreeToSyntaxSlices(PT_getParseTreeTop(parseTree));
 
-    return ATmake("snd-value(tree-slices(<term>))", S_SlicesToTerm(slices));
+    return ATmake("snd-value(tree-slices(<term>))", slices);
   }
 
   return ATmake("snd-value(no-tree-slices)"); 
@@ -432,7 +432,6 @@ int main(int argc, char *argv[])
   PT_initMEPTApi();
   LOC_initLocationApi();
   SE_initStructureEditorApi();
-  S_initSlicingApi();
 
   editors = ATtableCreate(100, 75);
 
