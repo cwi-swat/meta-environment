@@ -17,7 +17,6 @@ java_JAVA = \
 	HistoryPanel.java \
 	MainTabs.java \
 	MenuBar.java \
-	MessageList.java \
 	MessageTabs.java \
 	ModuleBrowser.java \
 	ModuleInfoPanel.java \

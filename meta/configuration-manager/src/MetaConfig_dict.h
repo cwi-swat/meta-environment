@@ -19,7 +19,6 @@ extern AFun MC_afun2;
 extern AFun MC_afun7;
 extern AFun MC_afun12;
 extern AFun MC_afun15;
-extern AFun MC_afun18;
 extern AFun MC_afun6;
 extern AFun MC_afun1;
 
@@ -38,7 +37,6 @@ extern ATerm MC_patternButtonTypeNewModulePopup;
 extern ATerm MC_patternButtonTypeModulePopup;
 extern ATerm MC_patternButtonTypeTreePanel;
 extern ATerm MC_patternButtonTypeFeedbackList;
-extern ATerm MC_patternButtonTypeMessageList;
 extern ATerm MC_patternButtonTypeSyntaxEditor;
 extern ATerm MC_patternButtonTypeEquationsEditor;
 extern ATerm MC_patternButtonTypeTermEditor;

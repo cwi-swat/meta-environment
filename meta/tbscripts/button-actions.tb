@@ -573,12 +573,6 @@ in
 	. EditLocation(Pid, Location)
 	. ReturnSuccess(EditorId, Stack)
       +
-        rec-msg(show-list, Stack?, EditorId?) .
-        StackPopString(Stack, Stack?, ModuleName?) .
-        StackPopString(Stack, Stack?, Text?) .
-	snd-msg(update-list-view(ModuleName, Text)) .
-        ReturnSuccess(EditorId,Stack)        
-      +
         rec-msg(show-feedback, Stack?, EditorId?) .
 	StackPopTerm(Stack, Stack?, Feedback?) .
 	snd-note(show-feedback-summary(Feedback)) .

@@ -80,10 +80,6 @@ equations
     [$Action*1, TREE, set-focus, $Action*2] = 
       [$Action*1, $Action*2]
 
-  [show-list-check]
-    [$Action*1, STRING, STRING, show-list, $Action*2] = 
-      [$Action*1, $Action*2]
-
   [reduce-check] 
     [$Action*1, TREE, STRING, reduce, $Action*2] = 
       [$Action*1, TREE, $Action*2]

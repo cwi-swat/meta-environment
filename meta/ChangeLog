@@ -1,5 +1,20 @@
 # $Id$
 
+Thu Apr 15 13:54:18 CEST 2004 <jurgenv@cwi.nl>
+ * Message-lists have been removed completely: 
+    * show-list button action is gone
+    * update-list-view in meta-studio.idef is gone
+    * message-list 'editor-type' in button scripts is gone
+   Please use the feedback lists from now on.
+
+Thu Apr 15 10:19:54 CEST 2004 <jurgenv@cwi.nl>
+ * Fixed a nasty bug: modules would dissappear if you would rename them into
+   a non-existing directory
+
+Wed Apr 14 11:03:01 CEST 2004 <{jong,kooiker}@cwi.nl>
+ * editors/text/{gvim,emacs}/connector.c:
+   - suppress off-by-one bug that has been solved properly on the trunk
+
 Thu Apr 15 14:51:47 CEST 2004 <jong@cwi.nl>
  * tbscripts/process-eqs:
    - simplified GetSpecification, improved error handling in parsing

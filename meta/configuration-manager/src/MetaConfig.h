@@ -24,26 +24,21 @@ typedef struct _MC_ModuleName *MC_ModuleName;
 
 /*}}}  */
 
-/*{{{  definition of bottom types */
-
-
-/*}}}  */
-
-/*{{{  protect macros */
-
-#define MC_protectConfiguration(arg) (ATprotect((ATerm*)((void*) arg)))
-#define MC_protectProperties(arg) (ATprotect((ATerm*)((void*) arg)))
-#define MC_protectProperty(arg) (ATprotect((ATerm*)((void*) arg)))
-#define MC_protectButtonDescriptionList(arg) (ATprotect((ATerm*)((void*) arg)))
-#define MC_protectButtonDescription(arg) (ATprotect((ATerm*)((void*) arg)))
-#define MC_protectButtonType(arg) (ATprotect((ATerm*)((void*) arg)))
-#define MC_protectButtonArgs(arg) (ATprotect((ATerm*)((void*) arg)))
-#define MC_protectMenuTitles(arg) (ATprotect((ATerm*)((void*) arg)))
-#define MC_protectModuleName(arg) (ATprotect((ATerm*)((void*) arg)))
-
-/*}}}  */
 void MC_initMetaConfigApi(void);
 
+/*{{{  protect functions */
+
+void MC_protectConfiguration(MC_Configuration *arg);
+void MC_protectProperties(MC_Properties *arg);
+void MC_protectProperty(MC_Property *arg);
+void MC_protectButtonDescriptionList(MC_ButtonDescriptionList *arg);
+void MC_protectButtonDescription(MC_ButtonDescription *arg);
+void MC_protectButtonType(MC_ButtonType *arg);
+void MC_protectButtonArgs(MC_ButtonArgs *arg);
+void MC_protectMenuTitles(MC_MenuTitles *arg);
+void MC_protectModuleName(MC_ModuleName *arg);
+
+/*}}}  */
 /*{{{  term conversion functions */
 
 MC_Configuration MC_ConfigurationFromTerm(ATerm t);
@@ -109,34 +104,33 @@ MC_MenuTitles MC_makeMenuTitles6(char* elem1, char* elem2, char* elem3, char* el
 /*{{{  constructors */
 
 MC_Configuration MC_makeConfigurationList(MC_Properties list);
-MC_Properties MC_makePropertiesEmpty();
+MC_Properties MC_makePropertiesEmpty(void);
 MC_Properties MC_makePropertiesSingle(MC_Property head);
 MC_Properties MC_makePropertiesMany(MC_Property head, MC_Properties tail);
-MC_Property MC_makePropertyButton(char* module, MC_ButtonDescriptionList descriptions, ATerm actions);
-MC_Property MC_makePropertyExtension(char* language, char* extension);
-MC_ButtonDescriptionList MC_makeButtonDescriptionListEmpty();
+MC_Property MC_makePropertyButton(const char* module, MC_ButtonDescriptionList descriptions, ATerm actions);
+MC_Property MC_makePropertyExtension(const char* language, const char* extension);
+MC_ButtonDescriptionList MC_makeButtonDescriptionListEmpty(void);
 MC_ButtonDescriptionList MC_makeButtonDescriptionListSingle(MC_ButtonDescription head);
 MC_ButtonDescriptionList MC_makeButtonDescriptionListMany(MC_ButtonDescription head, MC_ButtonDescriptionList tail);
 MC_ButtonDescription MC_makeButtonDescriptionDefault(MC_ButtonType type, MC_ButtonArgs args);
-MC_ButtonType MC_makeButtonTypeTermEditor();
-MC_ButtonType MC_makeButtonTypeEquationsEditor();
-MC_ButtonType MC_makeButtonTypeSyntaxEditor();
-MC_ButtonType MC_makeButtonTypeMessageList();
-MC_ButtonType MC_makeButtonTypeFeedbackList();
-MC_ButtonType MC_makeButtonTypeTreePanel();
-MC_ButtonType MC_makeButtonTypeModulePopup();
-MC_ButtonType MC_makeButtonTypeNewModulePopup();
-MC_ButtonType MC_makeButtonTypeStudioMenubar();
-MC_ButtonType MC_makeButtonTypeStudioToolbar();
-MC_ButtonType MC_makeButtonTypeWildcard();
-MC_ButtonArgs MC_makeButtonArgsClick();
+MC_ButtonType MC_makeButtonTypeTermEditor(void);
+MC_ButtonType MC_makeButtonTypeEquationsEditor(void);
+MC_ButtonType MC_makeButtonTypeSyntaxEditor(void);
+MC_ButtonType MC_makeButtonTypeFeedbackList(void);
+MC_ButtonType MC_makeButtonTypeTreePanel(void);
+MC_ButtonType MC_makeButtonTypeModulePopup(void);
+MC_ButtonType MC_makeButtonTypeNewModulePopup(void);
+MC_ButtonType MC_makeButtonTypeStudioMenubar(void);
+MC_ButtonType MC_makeButtonTypeStudioToolbar(void);
+MC_ButtonType MC_makeButtonTypeWildcard(void);
+MC_ButtonArgs MC_makeButtonArgsClick(void);
 MC_ButtonArgs MC_makeButtonArgsMenu(MC_MenuTitles list);
-MC_ButtonArgs MC_makeButtonArgsMenuwithshortcut(MC_MenuTitles list, char* shortcut);
-MC_ButtonArgs MC_makeButtonArgsIcon(char* title, char* path);
-MC_MenuTitles MC_makeMenuTitlesEmpty();
-MC_MenuTitles MC_makeMenuTitlesSingle(char* head);
-MC_MenuTitles MC_makeMenuTitlesMany(char* head, MC_MenuTitles tail);
-MC_ModuleName MC_makeModuleNameWildcard();
+MC_ButtonArgs MC_makeButtonArgsMenuwithshortcut(MC_MenuTitles list, const char* shortcut);
+MC_ButtonArgs MC_makeButtonArgsIcon(const char* title, const char* path);
+MC_MenuTitles MC_makeMenuTitlesEmpty(void);
+MC_MenuTitles MC_makeMenuTitlesSingle(const char* head);
+MC_MenuTitles MC_makeMenuTitlesMany(const char* head, MC_MenuTitles tail);
+MC_ModuleName MC_makeModuleNameWildcard(void);
 
 /*}}}  */
 /*{{{  equality functions */
@@ -182,7 +176,7 @@ inline ATbool MC_isPropertyButton(MC_Property arg);
 inline ATbool MC_isPropertyExtension(MC_Property arg);
 ATbool MC_hasPropertyModule(MC_Property arg);
 char* MC_getPropertyModule(MC_Property arg);
-MC_Property MC_setPropertyModule(MC_Property arg, char* module);
+MC_Property MC_setPropertyModule(MC_Property arg, const char* module);
 ATbool MC_hasPropertyDescriptions(MC_Property arg);
 MC_ButtonDescriptionList MC_getPropertyDescriptions(MC_Property arg);
 MC_Property MC_setPropertyDescriptions(MC_Property arg, MC_ButtonDescriptionList descriptions);
@@ -191,10 +185,10 @@ ATerm MC_getPropertyActions(MC_Property arg);
 MC_Property MC_setPropertyActions(MC_Property arg, ATerm actions);
 ATbool MC_hasPropertyLanguage(MC_Property arg);
 char* MC_getPropertyLanguage(MC_Property arg);
-MC_Property MC_setPropertyLanguage(MC_Property arg, char* language);
+MC_Property MC_setPropertyLanguage(MC_Property arg, const char* language);
 ATbool MC_hasPropertyExtension(MC_Property arg);
 char* MC_getPropertyExtension(MC_Property arg);
-MC_Property MC_setPropertyExtension(MC_Property arg, char* extension);
+MC_Property MC_setPropertyExtension(MC_Property arg, const char* extension);
 
 /*}}}  */
 /*{{{  MC_ButtonDescriptionList accessors */
@@ -229,7 +223,6 @@ ATbool MC_isValidButtonType(MC_ButtonType arg);
 inline ATbool MC_isButtonTypeTermEditor(MC_ButtonType arg);
 inline ATbool MC_isButtonTypeEquationsEditor(MC_ButtonType arg);
 inline ATbool MC_isButtonTypeSyntaxEditor(MC_ButtonType arg);
-inline ATbool MC_isButtonTypeMessageList(MC_ButtonType arg);
 inline ATbool MC_isButtonTypeFeedbackList(MC_ButtonType arg);
 inline ATbool MC_isButtonTypeTreePanel(MC_ButtonType arg);
 inline ATbool MC_isButtonTypeModulePopup(MC_ButtonType arg);
@@ -251,13 +244,13 @@ MC_MenuTitles MC_getButtonArgsList(MC_ButtonArgs arg);
 MC_ButtonArgs MC_setButtonArgsList(MC_ButtonArgs arg, MC_MenuTitles list);
 ATbool MC_hasButtonArgsShortcut(MC_ButtonArgs arg);
 char* MC_getButtonArgsShortcut(MC_ButtonArgs arg);
-MC_ButtonArgs MC_setButtonArgsShortcut(MC_ButtonArgs arg, char* shortcut);
+MC_ButtonArgs MC_setButtonArgsShortcut(MC_ButtonArgs arg, const char* shortcut);
 ATbool MC_hasButtonArgsTitle(MC_ButtonArgs arg);
 char* MC_getButtonArgsTitle(MC_ButtonArgs arg);
-MC_ButtonArgs MC_setButtonArgsTitle(MC_ButtonArgs arg, char* title);
+MC_ButtonArgs MC_setButtonArgsTitle(MC_ButtonArgs arg, const char* title);
 ATbool MC_hasButtonArgsPath(MC_ButtonArgs arg);
 char* MC_getButtonArgsPath(MC_ButtonArgs arg);
-MC_ButtonArgs MC_setButtonArgsPath(MC_ButtonArgs arg, char* path);
+MC_ButtonArgs MC_setButtonArgsPath(MC_ButtonArgs arg, const char* path);
 
 /*}}}  */
 /*{{{  MC_MenuTitles accessors */
@@ -268,7 +261,7 @@ inline ATbool MC_isMenuTitlesSingle(MC_MenuTitles arg);
 inline ATbool MC_isMenuTitlesMany(MC_MenuTitles arg);
 ATbool MC_hasMenuTitlesHead(MC_MenuTitles arg);
 char* MC_getMenuTitlesHead(MC_MenuTitles arg);
-MC_MenuTitles MC_setMenuTitlesHead(MC_MenuTitles arg, char* head);
+MC_MenuTitles MC_setMenuTitlesHead(MC_MenuTitles arg, const char* head);
 ATbool MC_hasMenuTitlesTail(MC_MenuTitles arg);
 MC_MenuTitles MC_getMenuTitlesTail(MC_MenuTitles arg);
 MC_MenuTitles MC_setMenuTitlesTail(MC_MenuTitles arg, MC_MenuTitles tail);

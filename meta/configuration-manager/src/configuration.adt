@@ -10,7 +10,6 @@
   constructor(ButtonType,term-editor,term-editor),
   constructor(ButtonType,equations-editor,equations-editor),
   constructor(ButtonType,syntax-editor,syntax-editor),
-  constructor(ButtonType,message-list,message-list),
   constructor(ButtonType,feedback-list,feedback-list),
   constructor(ButtonType,tree-panel,tree-panel),
   constructor(ButtonType,module-popup,module-popup),

@@ -21,11 +21,7 @@ public class MessageTabs extends UserInterfacePanel {
         HistoryPanel historyPanel = new HistoryPanel(getFactory(), getBridge());
         
         UserInterfacePanel errorList = new ErrorList(getFactory(), getBridge());
-        messageTabs.insertTab("error", null, errorList, "error messages", 0);
-        
-        UserInterfacePanel messageList = new MessageList(getFactory(), getBridge());
-        messageTabs.insertTab("messages", null, messageList, "old-style messages", 1);
-        
-        messageTabs.insertTab("history", null, historyPanel, "Execution history", 2);
+        messageTabs.insertTab("error", null, errorList, "Error messages", 0);
+        messageTabs.insertTab("history", null, historyPanel, "Execution history", 1);
     }
 }

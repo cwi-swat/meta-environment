@@ -153,16 +153,9 @@ in
       rec-msg(clear-history) .
       snd-do(UI, clear-history) 
     + 
-      rec-event(UI, element-selected(Modulename?, Tree?))
-      . snd-msg(ui-message-selected(Modulename, Tree))
-      . snd-ack-event(UI, element-selected(Modulename, Tree)) 
-    + 
       rec-event(UI, node-info(Modulename?, Tree?))
       . snd-msg(ui-node-selected(Modulename, Tree))
       . snd-ack-event(UI, node-info(Modulename, Tree)) 
-    +
-      rec-msg(update-list-view(Modulename?, ButtonNames?)) .
-      snd-do(UI, update-list(Modulename, ButtonNames))
     +
       rec-event(UI, error-selected(Error?)) .
       snd-msg(ui-error-selected(Error)) .
