@@ -8,54 +8,45 @@ imports MyPosInfo[PICO-ID]
 imports ListItems
 
 exports
-  sorts NodeId Item ItemType
+ imports RelationCalculator
+ imports RelationChecker
 
-  context-free syntax
-     Area		-> NodeId
-     PICO-ID | NodeId   -> Item
-     "id"               -> ItemType {prefer}
-     "node"             -> ItemType {prefer}
+ context-free syntax
 
-imports RelationCalculator[Item ItemType]
-imports RelationChecker[Item ItemType]
+      extractRelations(PROGRAM)                	-> RSTORE
+      convertl(Rel[[Elem]])                   	-> List
 
-exports
+hiddens
   context-free syntax
 
-      get-first({STATEMENT ";"}*)                  -> NodeId
-      get-last({STATEMENT ";"}*)                   -> Bag[[Item]]
+      get-first({STATEMENT ";"}*)               -> Area
+      get-last({STATEMENT ";"}*)                -> Bag[[Elem]]
 
-      add-pred(Rel[[Item]], RSTORE)                -> RSTORE
-      add-last({STATEMENT ";"}*, NodeId, RSTORE)   -> RSTORE
+      add-pred(Rel[[Elem]], RSTORE)             -> RSTORE
+      add-last({STATEMENT ";"}*, Area, RSTORE)  -> RSTORE
 
-      extract(PROGRAM, RSTORE)                     -> RSTORE {traversal(accu, bottom-up, continue)}
-      extract({ STATEMENT ";"}*, RSTORE)           -> RSTORE {traversal(accu, bottom-up, continue)}
+      extract(PROGRAM, RSTORE)                  -> RSTORE {traversal(accu, bottom-up, continue)}
+      extract({ STATEMENT ";"}*, RSTORE)        -> RSTORE {traversal(accu, bottom-up, continue)}
 
-      extract-used-vars(STATEMENT, RSTORE, NodeId) -> RSTORE  {traversal(accu,top-down,break)}
-      extract-used-vars(EXP, RSTORE, NodeId)       -> RSTORE  {traversal(accu,top-down,break)}
+      extract-used-vars(STATEMENT, RSTORE, Area)-> RSTORE  {traversal(accu,top-down,break)}
+      extract-used-vars(EXP, RSTORE, Area)      -> RSTORE  {traversal(accu,top-down,break)}
 
-      extractRelations(PROGRAM)                    -> RSTORE
 
-      convertl(Rel[[Item]])                        -> List
-      convert(Area # PICO-ID)                      -> ListItem
-      id2str(PICO-ID)		 	           -> String
-      rootNode					   -> Area
-
+      convert(String # Area)                    -> ListItem
+      id2str(PICO-ID)		 	        -> String
 
  hiddens
-  imports asf/syntax/Comments
+%%  imports asf/syntax/Comments
 
   variables
-      "Int" [0-9\']*     -> Integer
-      "Rstore" [0-9\']*  -> RSTORE
-      "Prg"              -> PROGRAM
+      "$Rstore" [0-9\']*  	-> RSTORE
       
-      "Rel" [0-9\']*     -> Rel[[Item]]
-      "Bag" [0-9\']*     -> Bag[[Item]]
-      "NodeId" [0-9\']*	 -> NodeId
-      "Area" [0-9\']*    -> Area
-      "Tuple" [0-9\']*   -> Item # Item
-      "Tuple*" [0-9\']*  -> {Item # Item ","}*
+      "$Rel" [0-9\']*     	-> Rel[[Elem]]
+      "$Bag" [0-9\']*     	-> Bag[[Elem]]
+      "$Area" [0-9\']*		 -> Area
+      "$Tuple" [0-9\']*   	-> Elem # Elem
+      "$Tuple*" [0-9\']*  	-> {Elem # Elem ","}*
 
-      "ListItem*" [0-9\']* -> {ListItem ","}*
-     "Chars" [0-9]*    	  -> CHAR*
+      "$ListItem*" [0-9\']*	-> {ListItem ","}*
+      "$Chars" [0-9]*   	-> CHAR*
+      "$String" [0-9\']*	-> String

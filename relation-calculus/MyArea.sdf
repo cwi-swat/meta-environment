@@ -1,0 +1,10 @@
+module MyArea
+
+imports aterm/Literals aterm/IntCon
+
+exports
+  sorts Area
+
+  context-free syntax
+  
+  area(Literal, IntCon, IntCon, IntCon, IntCon) -> Area

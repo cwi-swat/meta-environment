@@ -4,9 +4,4 @@ module Test
 
   imports Bags[Integer]
   imports Relations[Integer]
-
-
-  exports 
-    context-free syntax
- 	Integer -> Elem
- 	Integer # Integer  -> Elem
+ 

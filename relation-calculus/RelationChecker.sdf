@@ -1,11 +1,10 @@
-module RelationChecker[Elem ElemType]
+module RelationChecker
 
-imports RScripts[Elem ElemType]
+imports RScripts
 imports containers/Table[VAR REXPTYPE]
 
 exports
     sorts ERROR ERRORS REXPTYPE # TENV OP TENV DCLVARS  Boolean #  Table[[VAR,REXPTYPE]]
-
 
     context-free syntax
 
@@ -14,7 +13,6 @@ exports
         undefined                       	-> REXPTYPE
         empty                           	-> REXPTYPE
         "fun" {REXPTYPE ","}* to REXPTYPE	-> REXPTYPE
-        VAR                                     -> REXPTYPE
         "[" {REXPTYPE ","}* "]"                 -> REXPTYPE
 
         is-var(REXPTYPE)                        -> Boolean
@@ -27,7 +25,7 @@ exports
 	 Rel[[Elem]] cannot be typed 		-> ERROR
  	 "Undeclared" VAR			-> ERROR
   	 VAR "redeclared"			-> ERROR
-        "Incompatible" arguments in REXP        -> ERROR
+        "Incompatible" argument types REXPTYPE in REXP        -> ERROR
          REXP should have type REXPTYPE          -> ERROR
         REXP should be of type bag         	-> ERROR
         REXP should be of type rel         	-> ERROR
@@ -40,18 +38,13 @@ exports
 	TENV "+" ERROR				-> TENV
 
         if Boolean then TENV else TENV fi	-> TENV
+        if Boolean then REXPTYPE # TENV else REXPTYPE # TENV fi	-> REXPTYPE # TENV
 
 	lookup(TENV, VAR) 			-> REXPTYPE
 	store(TENV, VAR, REXPTYPE)		-> TENV
 	delete(TENV, VAR)			-> TENV
 
 	built-ins				-> Table[[VAR,REXPTYPE]]
-
-        check-bag-con(Bag[[Elem]], TENV)      	-> REXPTYPE # TENV
-        check-bag-exp(REXP,TENV)     	 	-> REXPTYPE # TENV
-
-        check-rel-con(Rel[[Elem]], TENV)      	-> REXPTYPE # TENV
-        check-rel-exp(REXP,TENV)     	 	-> REXPTYPE # TENV
 
 	check-rscript(STAT*)          		-> TENV
 
@@ -75,7 +68,7 @@ exports
 
          add-formals(DCLVARS, TENV)             -> TENV
          del-formals(DCLVARS, TENV)		-> TENV
-         "[" {REXPTYPE ","}* "]"		-> REXPTYPES
+        "[" {REXPTYPE ","}* "]"		-> REXPTYPES
 
  	ext-types(DCLVARS )                      -> {REXPTYPE ","}*
         collect-actuals({REXP ","}*, TENV)        -> REXPTYPES # TENV
@@ -83,7 +76,7 @@ exports
         find-result-type(VAR, REXPTYPE, TENV)   -> REXPTYPE # TENV
 
         match-types( REXPTYPE, REXPTYPE, Table[[VAR,REXPTYPE]]) 	-> Boolean #  Table[[VAR,REXPTYPE]]
-        substitute(REXPTYPE,  Table[[VAR,REXPTYPE]]) -> REXPTYPE
+        substitute(REXPTYPE,  Table[[VAR,REXPTYPE]], TENV) -> REXPTYPE # TENV
 
 
        "and"                          -> OP
@@ -104,56 +97,57 @@ exports
         "."                            -> OP
         "+"                            -> OP
         "*"                            -> OP
+        "#"                            -> OP
 
         compat "(" REXP "," REXPTYPE OP REXPTYPE "," TENV ")" -> REXPTYPE # TENV
-        compat "(" REXP "," REXPTYPE ("+" | "*") "," TENV ")" -> REXPTYPE #TENV
+        compat "(" REXP "," REXPTYPE OP "," TENV ")" -> REXPTYPE #TENV
+        compat "(" REXP "," OP REXPTYPE  "," TENV ")" -> REXPTYPE #TENV
 
 hiddens
-    imports asf/syntax/Comments
+%%    imports asf/syntax/Comments
     variables
-     "Table" [0-9\']* -> Table[[VAR,REXPTYPE]]
-     "Tenv"[0-9\']* -> TENV
-     "Error" [0-9\']* -> ERROR
-     "Error*" [0-9\']* -> {ERROR ";"}*
-     "Errors" [0-9\']*	-> ERRORS
-     "#Exp" [0-9\']*    -> REXP
-     "#Exp*" [0-9\']*    -> {REXP ","}*
-     "#Exp+" [0-9\']*    -> {REXP ","}+
+     "$Table" [0-9\']* 		-> Table[[VAR,REXPTYPE]]
+     "$Tenv"[0-9\']* 		-> TENV
+     "$Error" [0-9\']* 		-> ERROR
+     "$Error*" [0-9\']* 	-> {ERROR ";"}*
+     "$Errors" [0-9\']*		-> ERRORS
+     "$Exp" [0-9\']*    	-> REXP
+     "$Exp*" [0-9\']*    	-> {REXP ","}*
+     "$Exp+" [0-9\']*    	-> {REXP ","}+
 
-     "Op"               -> OP
-     "#Etype" [0-9\']*    -> REXPTYPE
-     "#Etype*" [0-9\']*    -> {REXPTYPE ","}*
-
-
-      "Elem" [0-9\']*     -> Elem
-     "Elem+" [0-9\']*     -> {Elem ","}+
-     "Elem*" [0-9\']*     -> {Elem ","}*
-
-     "#Tuple" [0-9\']*     -> Elem # Elem
-     "#Tuple*" [0-9\']*     -> {Elem # Elem ","}*
-     "#Tuple+" [0-9\']*     -> {Elem # Elem ","}+
+     "$Op"               	-> OP
+     "$Etype" [0-9\']*    	-> REXPTYPE
+     "$Etype*" [0-9\']*    	-> {REXPTYPE ","}*
 
 
-     "Bag" [0-9\']*        -> Bag[[Elem]]
-     "Rel" [0-9\']*        -> Rel[[Elem]]
+     "$Elem" [0-9\']*     	-> Elem
+     "$Elem+" [0-9\']*     	-> {Elem ","}+
+     "$Elem*" [0-9\']*     	-> {Elem ","}*
 
-     "Boolean" [0-9\']*    -> Boolean
-     "Integer" [0-9\']*    -> Integer
-     "#Var" [0-9\']*       -> VAR
+     "$Tuple" [0-9\']*     	-> Elem # Elem
+     "$Tuple*" [0-9\']*     	-> {Elem # Elem ","}*
+     "$Tuple+" [0-9\']*     	-> {Elem # Elem ","}+
 
-      "#TExp" [0-9\']*     -> TEXP
-     "#TExp*" [0-9\']*     -> {TEXP ","}*
-     "#TExp+" [0-9\']*     -> {TEXP ","}+
 
-     "#DclVar" [0-9\']*	   -> DCLVAR
+     "$Bag" [0-9\']*        	-> Bag[[Elem]]
+     "$Rel" [0-9\']*        	-> Rel[[Elem]]
 
-     "#DclVar*" [0-9\']*	   -> {DCLVAR ","}*
-     "#DclVar+" [0-9\']*	   -> {DCLVAR ","}+
+     "$Boolean" [0-9\']*    	-> Boolean
+     "$Integer" [0-9\']*    	-> Integer
+     "$Area" [0-9\']*    	-> Area
+     "$String" [0-9\']*    	-> String
 
-        "Stat" [0-9\']*               -> STAT
-        "Stat*" [0-9\']*              -> STAT*
+     "$Var" [0-9\']*       	-> VAR
 
-      "#From" [0-9\']*   -> FROM
-      "#From*" [0-9\']*   -> {FROM ","}*
-      "#From+" [0-9\']*   -> {FROM ","}+
+      "$DclVar" [0-9\']*	   	-> DCLVAR
+
+     "$DclVar*" [0-9\']*	-> {DCLVAR ","}*
+     "$DclVar+" [0-9\']*	-> {DCLVAR ","}+
+
+     "$Stat" [0-9\']*            -> STAT
+     "$Stat*" [0-9\']*           -> STAT*
+
+     "$From" [0-9\']*   	-> FROM
+     "$From*" [0-9\']*   	-> {FROM ","}*
+     "$From+" [0-9\']*   	-> {FROM ","}+
 	

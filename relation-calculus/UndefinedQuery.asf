@@ -1,24 +1,34 @@
 equations
 
-[an-1] extractRelations(Program) = Rstore,
-       undefined-query(Rstore) = Rstore'
+[ud-1] extractRelations($Program) = $Rstore,
+       queries($Rstore) = $Rstore'
        =========================================================
-       undefinedVars(Program) = convertl(rel-value(UNINIT, Rstore'))
+       undefinedVars($Program) = convertl(val2rel(value(UNDEF, $Rstore')))
+
+[uu-1] extractRelations($Program) = $Rstore,
+       queries($Rstore) = $Rstore'
+       =========================================================
+       undefinedVars($Program) = convertl(val2rel(value(UNUSED, $Rstore')))
 
 
-[uq-1] undefined-query(Rstore) =
+[qs-1] queries($Rstore) =
        eval-rscript(
         node ROOT
         rel[node,node] PRED
-        rel[node,node] CONTAINS
-        rel[node,id] USES
-        rel[node,id] DEFS
+        rel[<node,str>,node] USE_OCCURS
+        rel[<node,str>,node] DEF_OCCURS
+        rel[node,str] USES
+        rel[node,str] DEFS
 
-        bag[node] get_stat(node N) = CONTAINS . N
-        rel[node,id] UNINIT = { <N, V> in USES | (ROOT x get_stat(N)) <= carX(PRED, DEFS . V)+ }
+        rel[str,node] occurrences(<node,str> S) = sec(S) x (S . USE_OCCURS)
 
+        rel[str,node] UNDEF = { <N, V> in USES | <ROOT, N> elem carX(PRED, DEFS . V)+ |
+                           occurrences(<N,V>)}
+
+       rel[str,node] UNUSED = { <N, V> in DEFS | # (carX(PRED, DEFS . V \ N)+ inter USES . V) == 0 |
+                           occurrences(<N,V>)}
 ,
-        Rstore
+        $Rstore
        )
 
 

@@ -1,7 +1,7 @@
-module RelationCalculator[Elem ElemType]
+module RelationCalculator
 
-imports RScripts[Elem ElemType]
-imports Relations[Elem]
+imports RScripts
+%% imports Relations[Elem]
 
 exports
    sorts VALUE RSTORE
@@ -10,12 +10,8 @@ exports
 
 %% The values that a variable in the RSTORE may have
 
-        "*empty*"                     -> VALUE
-        Boolean                       -> VALUE
         Elem                          -> VALUE
-        Bag[[Elem]]                   -> VALUE
-        Rel[[Elem]]                   -> VALUE
-        Elem # Elem                   -> VALUE
+        "*empty*"                     -> VALUE
         VAR # REXP                    -> VALUE
         VAR # VAR # REXP              -> VALUE
         VAR # VAR # VAR # REXP        -> VALUE
@@ -29,9 +25,8 @@ exports
         assign(VAR, VALUE, RSTORE)           -> RSTORE
         value(VAR, RSTORE)                   -> VALUE
 
-	elm-value(VAR, RSTORE)	             -> Elem
-	bag-value(VAR, RSTORE)               -> Bag[[Elem]]
-        rel-value(VAR, RSTORE)               -> Rel[[Elem]]
+        val2rel(VALUE)			     -> Rel[[Elem]]
+        val2bag(VALUE)			     -> Bag[[Elem]]
 
 	add-tuple(VAR, Elem # Elem, RSTORE)  -> RSTORE
 
@@ -56,6 +51,7 @@ exports
 
         evalx(REXP, RSTORE)            -> VALUE
         apply "(" VALUE OP VALUE ")"   -> VALUE
+        apply "(" OP VALUE ")"         -> VALUE
 
         "dominators"                   -> VAR {prefer}
 
@@ -71,6 +67,7 @@ exports
         "o"                            -> OP
         "x"                            -> OP
         "."                            -> OP
+        "#"                            -> OP
 
         equal(Elem, Elem)              -> Boolean
 
@@ -86,46 +83,44 @@ exports
         valformer(GENS, VALUE, REXP, RSTORE, REXP)        -> VALUE
 
 hiddens
-  imports asf/syntax/Comments
+%%  imports asf/syntax/Comments
 
    variables
-        "Store" [0-9\']*              -> RSTORE
-        "Val" [0-9\']*                -> VALUE
-        "VPair*" [0-9\']*             -> { VAR # VALUE ","}*
+        "$Store" [0-9\']*              -> RSTORE
+        "$Val" [0-9\']*                -> VALUE
+        "$VPair*" [0-9\']*             -> { VAR # VALUE ","}*
 
-        "Var" [0-9\']*                -> VAR
-        "Exp"  [0-9\']*               -> REXP
-        "Exp*"  [0-9\']*              -> { REXP ","}*
-        "Exp+"  [0-9\']*              -> { REXP ","}+
+        "$Var" [0-9\']*                -> VAR
+        "$Exp"  [0-9\']*               -> REXP
+        "$Exp*"  [0-9\']*              -> { REXP ","}*
+        "$Exp+"  [0-9\']*              -> { REXP ","}+
 
-        "#Rel" [0-9\']*                -> Rel[[Elem]]
-        "#Bag" [0-9\']*                -> Bag[[Elem]]
-        "E"   [0-9\']*                -> Elem
-        "E*"  [0-9\']*                -> {Elem ","}*
-        "E+"  [0-9\']*                -> {Elem ","}+
+        "$Rel" [0-9\']*                -> Rel[[Elem]]
+        "$Bag" [0-9\']*                -> Bag[[Elem]]
+        "$Elem"   [0-9\']*             -> Elem
+        "$Elem*"  [0-9\']*             -> {Elem ","}*
+        "$Elem+"  [0-9\']*             -> {Elem ","}+
 
-        "Texp" [0-9\']*               -> REXP # REXP
-        "Texp*" [0-9\']*              -> { TEXP  ","}*
-        "Texp+" [0-9\']*              -> { TEXP  ","}+
+        "$Tuple" [0-9\']*              -> Elem # Elem
+        "$Tuple*" [0-9\']*             -> { Elem # Elem ","}*
+        "$Tuple+" [0-9\']*             -> { Elem # Elem ","}+
 
-        "Tuple" [0-9\']*              -> Elem # Elem
-        "Tuple*" [0-9\']*             -> { Elem # Elem ","}*
-        "Tuple+" [0-9\']*             -> { Elem # Elem ","}+
+        "$From*" [0-9\']*              -> {FROM ","}*
+        "$From+" [0-9\']*              -> {FROM ","}+
 
-        "From*" [0-9\']*              -> {FROM ","}*
-        "From+" [0-9\']*              -> {FROM ","}+
+        "$Gen*" [0-9\']*               -> { GEN ","}*
+        "$Gen+" [0-9\']*               -> { GEN ","}+
+        "$Gens" [0-9\']*               -> GENS
 
-        "Gen*" [0-9\']*               -> { GEN ","}*
-        "Gen+" [0-9\']*               -> { GEN ","}+
-        "Gens" [0-9\']*               -> GENS
+        "$Script" [0-9\']*             -> SCRIPT
 
-        "Script" [0-9\']*             -> SCRIPT
+        "$Stat" [0-9\']*               -> STAT
+        "$Stat*" [0-9\']*              -> STAT*
 
-        "Stat" [0-9\']*               -> STAT
-        "Stat*" [0-9\']*              -> STAT*
+        "$Bool" [0-9\']*               -> Boolean
+        "$Integer" [0-9\']*            -> Integer
 
-        "Bool" [0-9\']*               -> Boolean
-	"Etype" [0-9\']*              -> REXPTYPE
+	"$Etype" [0-9\']*              -> REXPTYPE
 
      
 

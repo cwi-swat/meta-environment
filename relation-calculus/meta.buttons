@@ -1,7 +1,7 @@
 buttons([
    button("Pico-syntax",
           "term",
-          ["Actions", "Undefined Vars"],
+          ["Actions", "Uninitialized Vars"],
           [get-root,
            check-sort("PROGRAM"),
            apply("undefinedVars", "List", 1),
@@ -10,6 +10,17 @@ buttons([
            execute-action("unparsePT"),
            show-list]),
 
+    button("Pico-syntax",
+          "term",
+          ["Actions", "Unused Vars"],
+          [get-root,
+           check-sort("PROGRAM"),
+           apply("unusedVars", "List", 1),
+           push-modulename("UndefinedQuery"),
+           reduce,
+           execute-action("unparsePT"),
+           show-list]),
+ 
     button("*",
           "message-list",
           ["ShowSource"],
