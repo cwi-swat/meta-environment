@@ -16,7 +16,7 @@ application client-app {
     type Client {
       operation := { constructor }
   
-      field * { access := public }
+      //field * { access := public }
 
       field order {
         operation += { init }
