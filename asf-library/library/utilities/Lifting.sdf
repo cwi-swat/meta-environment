@@ -7,5 +7,5 @@ exports
 
 context-free syntax
 
-  lift-to-tree(Sort) -> Tree  {built-in(lift-to-tree)}
-  lift-to-term(Sort) -> ATerm {built-in(lift-to-term)}
+  lift-to-tree(Sort) -> Tree  {built-in("lift-to-tree")}
+  lift-to-term(Sort) -> ATerm {built-in("lift-to-term")}
