@@ -46,7 +46,7 @@ CTIF		= @top_srcdir@/src/ctif
 COMPILE = $(CC) -c $< $(DEFS) $(INCLUDE) $(CPPFLAGS) $(CFLAGS)
 LINK = $(CC) $(LDFLAGS) $(LIB) -o $@
 
-INCLUDE	= -I$(top_srcdir)/src -I$(srcdir)
+INCLUDE	= -I$(top_srcdir)/src -I$(srcdir) -I$(includedir)
 LIB	= -L$(top_srcdir)/src -L$(top_srcdir)/tide
 
 PROGS	= buscontrol

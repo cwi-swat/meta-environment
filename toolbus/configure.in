@@ -281,7 +281,6 @@ AC_OUTPUT(Makefile src/Makefile tide/Makefile tide/tide doc/Makefile \
 	demos/spec/Makefile \
 	demos/wave/Makefile \
 	demos/ttt/Makefile \
-	demos/hearts/Makefile \
 	demos/swipl-ttt/Makefile \
 	adapters/Makefile \
 	adapters/wish-adapter/Makefile \

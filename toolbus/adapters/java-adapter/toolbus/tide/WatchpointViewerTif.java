@@ -1,6 +1,6 @@
 // Java tool interface class WatchpointViewerTif
 // This file is generated automatically, please do not edit!
-// generation time: 14-Apr-98 12:46:10 PM
+// generation time: 07-Sep-98 6:45:02 PM
 
 package toolbus.tide;
 import toolbus.aterm.*;
