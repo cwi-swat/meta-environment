@@ -10,5 +10,5 @@ TABLEGEN=${top_builddir}/src/parsetablegen
 	
 %.asfix : %.sdf2
 	PATH=$(SGLR)/bin:$$PATH; export PATH ;\
-	sglr -p $(srcdir)/Sdf2-bootstrap.tbl -1 -i $(srcdir)/Sdf2.sdf2 -o $@
+	sglr -p $(srcdir)/Sdf2-bootstrap.tbl -m -i $(srcdir)/Sdf2.sdf2 -o $@
 
