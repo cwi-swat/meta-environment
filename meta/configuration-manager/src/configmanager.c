@@ -126,7 +126,7 @@ ATerm get_button_actions(int cid, char *buttonName, char *moduleName)
       buttonActions = ATinsert(buttonActions, 
                                ATmake("get-root"));
     }
-    if (strcmp(buttonName, "FocusToDot") == 0) {
+    if (strcmp(buttonName, "ViewTree") == 0) {
       buttonActions = ATinsert(buttonActions,
                                ATmake("activate-given-tree(\"showdot\")"));
       buttonActions = ATinsert(buttonActions,
