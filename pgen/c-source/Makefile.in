@@ -31,7 +31,7 @@ DEBUG_LD_FLAGS	:=
 PROFILE_CC_FLAGS:= -pg
 PROFILE_LD_FLAGS:= -pg
 
-LOCALLIBS	:= -lasc-support -lATB -lAsFix -lATerm
+LOCALLIBS	:= -lasc-support -lATB -lAsFix -lATerm -lParseTable-Generator
 
 VPATH		:= @srcdir@
 srcdir		:= @srcdir@
@@ -39,6 +39,7 @@ top_srcdir	:= @top_srcdir@
 
 # Default compiler to use
 CC=@CC@
+RANLIB=@RANLIB@  
 
 # DEBUG-LIBS: libraries containing debugging information
 DEBUG-LIBS	 = $(LOCALLIBS:=-dbg) $(LIBS)
@@ -77,11 +78,12 @@ NEW_META	:= @exec_prefix@
 
 SOCKLIBS	:= @SOCKLIBS@
 XINCLUDES	:= -I$(top_srcdir)/asc-support -I$(ATERM)/include -I$(NEW_META)/include -I$(includedir)
-XLIBS		:= -L$(top_srcdir)/asc-support -L$(ATERM)/lib -L$(NEW_META)/lib -L$(libdir) $(SOCKLIBS)
+XLIBS		:= -L$(srcdir) -L$(top_srcdir)/asc-support -L$(ATERM)/lib -L$(NEW_META)/lib -L$(libdir) $(SOCKLIBS)
 
 DEFS		:= @DEFS@
 INCLUDES	:= @INCLUDES@ $(XINCLUDES)
 LIBS		:= @LIBS@ $(XLIBS)
+AR		= ar
 
 SPEC_SRCS	:= $(shell grep -v '^\#' $(srcdir)/ParseTable-Generator.module-list)
 SRCS		:= $(SPEC_SRCS) init.c
@@ -91,12 +93,12 @@ DEBUG-OBJS	:= $(SRCS:.c=-dbg.o)
 PROFILE-OBJS	:= $(SRCS:.c=-prof.o)
 
 BINFILES	:= ParseTable-Generator
-LIBFILES	:=
+LIBFILES	:= libParseTable-Generator-$(CC).a
 INCLUDEFILES	:=
 
 # Make rules
 
-all:	${BINFILES}
+all:	${LIBFILES} ${BINFILES} 
 
 libs:	${LIBFILES}
 
@@ -112,8 +114,12 @@ install:	${BINFILES}
 %-prof.o:	%.c
 	$(CC) $(FLAGS-$(CC)) $(PROFILE-CC-FLAGS) $(DEFS) $(INCLUDES) -c $< -o $@
 
+libParseTable-Generator-$(CC).a:	$(STD-OBJS)
+	$(AR) cr $@ $(STD-OBJS)
+	$(RANLIB) $@ 
+
 ParseTable-Generator:	$(STD-OBJS)
-	$(CC) $(STD-LD-FLAGS) -o $@ $(STD-OBJS) $(LIBDIR) $(STD-LIBS)
+	$(CC) $(STD-LD-FLAGS) -o $@ $(LIBDIR) $(STD-LIBS)
 
 ParseTable-Generator-debug:	$(DEBUG-OBJS)
 	$(CC) $(DEBUG-LD-FLAGS) -o $@ $(DEBUG-OBJS) $(LIBDIR) $(DEBUG-LIBS)
