@@ -1,4 +1,4 @@
-# Makefile for target "Sdf2-Parse-Table" generated automatically on Mon Dec 21 16:04:41 MET 1998
+# $Id$
 #
 
 LOCALLIBS=-lsupport -lATB -lAsFix -lATerm
@@ -56,7 +56,7 @@ SOCKLIBS        = @SOCKLIBS@
  
 ATERM           = @ATERM@
 
-XINCLUDES       = -I$(ATERM)/include -I$(top_srcdir)/compiler/support -I$(includedir)
+XINCLUDES       = -I$(top_srcdir)/compiler/support -I$(ATERM)/include -I$(includedir)
 XLIBS           = -L$(prefix)/lib $(SOCKLIBS) 
 
 SPEC_SRCS=\
