@@ -146,7 +146,7 @@ process EditorExists(EditorId : term, ModuleName : str, Type : str,
 
 process EditorActionsLoop(EditorId: term, Type : str, ModuleName: str) is
 let
-  ButtonName : str,
+  ButtonName : list,
   Pid : int,
   Command : term
 in

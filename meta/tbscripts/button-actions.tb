@@ -12,7 +12,7 @@
 
 process ButtonActionReceiver is
 let
-  ButtonName : str,
+  ButtonName : list,
   EditorType : str,
   ModuleName : str,
   Actions    : list,
@@ -186,6 +186,22 @@ in
       else
         ReturnFailed(EditorId,Stack)
       fi
+    +
+    rec-msg(move-left, Stack?, EditorId?).
+    snd-msg(move-focus(EditorId,"Left")) .
+    ReturnSuccess(EditorId,Stack)
+    +
+    rec-msg(move-right, Stack?, EditorId?).
+    snd-msg(move-focus(EditorId,"Right")) .
+    ReturnSuccess(EditorId,Stack)
+    +
+    rec-msg(move-up, Stack?, EditorId?).
+    snd-msg(move-focus(EditorId,"Up")) .
+    ReturnSuccess(EditorId,Stack)
+    +
+    rec-msg(move-down, Stack?, EditorId?).
+    snd-msg(move-focus(EditorId,"Down")) .
+    ReturnSuccess(EditorId,Stack)
     +
     rec-msg(parse-action(NewModName?), Stack?, EditorId?) .
     ParseTerm(EditorId, NewModName) .
