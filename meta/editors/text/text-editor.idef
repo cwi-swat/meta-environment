@@ -53,8 +53,7 @@ in
     snd-eval(TE, edit-text("*reduct*", Text))
   ) .
   rec-value(TE, file-id(Fid?)) .
-  snd-do(TE, tb-add-menu-item("Meta-Environment", "Parse Buffer")) .
-  snd-do(TE, tb-add-menu-item("Meta-Environment", "Parse Focus")) .
+  snd-do(TE, tb-add-menu-item("Meta-Environment", "Parse")) .
   if equal(EditorType, "term") then
     snd-do(TE, tb-add-menu-item("Meta-Environment", "Reduce"))
   else
@@ -99,13 +98,9 @@ in
     rec-msg(ack-delete-chars(EditorId)).
     snd-ack-event(TE, delete(Fid, Location, Count))
   +
-    rec-event(TE, menu-event("Meta-Environment", "Parse Focus", Fid)) .
-    snd-msg(parse-focus(EditorId)) .
-    snd-ack-event(TE, menu-event("Meta-Environment", "Parse Focus", Fid))
-  +
-    rec-event(TE, menu-event("Meta-Environment", "Parse Buffer", Fid)) .
+    rec-event(TE, menu-event("Meta-Environment", "Parse", Fid)) .
     snd-msg(parse-buffer(EditorId)) .
-    snd-ack-event(TE, menu-event("Meta-Environment", "Parse Buffer", Fid))
+    snd-ack-event(TE, menu-event("Meta-Environment", "Parse", Fid))
   +
     rec-event(TE, menu-event("Meta-Environment", "Reduce", Fid)) .
     snd-msg(reduce(EditorId)) .
