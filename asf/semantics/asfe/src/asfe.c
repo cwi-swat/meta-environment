@@ -485,7 +485,7 @@ ATerm interpret(int cid, char *modname, ATerm trm)
 #endif
 	
   if (ATisEmpty(rewrite_errors)) {
-	  return ATmake("snd-value(rewrite-result(<term>))", result);
+	  return ATmake("snd-value(rewrite-result(<term>))", ATBpack(result));
   } else {
 	  return ATmake("snd-value(rewrite-errors([<list>]))", rewrite_errors);
   }
