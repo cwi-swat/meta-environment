@@ -195,9 +195,7 @@ static PT_Args flattenList(PT_Tree tree, PT_Args tail)
       }
     }
   }
-
   
-
   ATerror("flattenList: illegal list: %t\n", tree);
   return PT_makeArgsEmpty();
 }
@@ -209,58 +207,61 @@ static PT_Args flattenSepList(PT_Tree tree, PT_Args tail)
   PT_Tree       leftBranch, layoutAfterLeft, 
                 separator, layoutAfterSep, rightBranch;
 
-  if (!PT_isTreeAppl(tree)) {
-    ATerror("flattenSepList: not an application: %t\n", tree);
+  if (PT_isTreeAmb(tree)) {
+    PT_Tree amb = flattenTree(tree);
+    return PT_makeArgsList(amb, PT_makeArgsEmpty());
   }
+  
+  if (PT_isTreeAppl(tree)) {
+    prod = PT_getTreeProd(tree);
+    args = PT_getTreeArgs(tree);
 
-  prod = PT_getTreeProd(tree);
-  args = PT_getTreeArgs(tree);
-
-  if (!isSepListProd(prod)) {
-    PT_Tree newTerm = flattenTerm(tree, ATtrue);
-    if (newTerm) {
-      return PT_makeArgsList(newTerm, tail);
+    if (!isSepListProd(prod)) {
+      PT_Tree newTerm = flattenTerm(tree, ATtrue);
+      if (newTerm) {
+	return PT_makeArgsList(newTerm, tail);
+      }
+      else {
+	return tail;
+      }
     }
-    else {
+
+    if (PT_isArgsEmpty(args)) {  
       return tail;
     }
-  }
 
-  if (PT_isArgsEmpty(args)) {  
-    return tail;
-  }
+    leftBranch = PT_getArgsHead(args);
+    args = PT_getArgsTail(args);
 
-  leftBranch = PT_getArgsHead(args);
-  args = PT_getArgsTail(args);
+    if (PT_isArgsEmpty(args)) {
+      return flattenSepList(leftBranch, tail);
+    }                                    
 
-  if (PT_isArgsEmpty(args)) {
-    return flattenSepList(leftBranch, tail);
-  }                                    
-
-  layoutAfterLeft = PT_getArgsHead(args);
-  args = PT_getArgsTail(args);
-
-  if (PT_hasArgsHead(args)) {
-    separator = PT_getArgsHead(args);
+    layoutAfterLeft = PT_getArgsHead(args);
     args = PT_getArgsTail(args);
 
     if (PT_hasArgsHead(args)) {
-      layoutAfterSep = PT_getArgsHead(args);
+      separator = PT_getArgsHead(args);
       args = PT_getArgsTail(args);
 
       if (PT_hasArgsHead(args)) {
-        rightBranch = PT_getArgsHead(args);
-        args = PT_getArgsTail(args);
+	layoutAfterSep = PT_getArgsHead(args);
+	args = PT_getArgsTail(args);
 
-        if (PT_isArgsEmpty(args)) {
-          tail = flattenSepList(rightBranch, tail);
-          tail = PT_makeArgsList(flattenLayout(layoutAfterSep), tail);
-          tail = PT_makeArgsList(flattenTerm(separator, ATfalse), tail);
-          tail = PT_makeArgsList(flattenLayout(layoutAfterLeft), tail);
-          tail = flattenSepList(leftBranch, tail);
+	if (PT_hasArgsHead(args)) {
+	  rightBranch = PT_getArgsHead(args);
+	  args = PT_getArgsTail(args);
 
-          return tail;
-        }
+	  if (PT_isArgsEmpty(args)) {
+	    tail = flattenSepList(rightBranch, tail);
+	    tail = PT_makeArgsList(flattenLayout(layoutAfterSep), tail);
+	    tail = PT_makeArgsList(flattenTerm(separator, ATfalse), tail);
+	    tail = PT_makeArgsList(flattenLayout(layoutAfterLeft), tail);
+	    tail = flattenSepList(leftBranch, tail);
+
+	    return tail;
+	  }
+	}
       }
     }
   }
