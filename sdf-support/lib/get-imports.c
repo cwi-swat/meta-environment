@@ -139,7 +139,7 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
 
   /* The todo list contains imports with actual module parameters.
    * The result of this function will be a list of imports with the
-   * actual parameters (not the formals!)
+   * parametrization represented as renamings.
    */
 
   assert(moduleTable != NULL && "module table not initialized");
@@ -149,21 +149,30 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
     SDF_ModuleName name = SDF_getImportModuleName(import);
     SDF_ModuleId   id   = SDF_getModuleNameModuleId(name);
     SDF_Module     module = MT_getModule(moduleTable, id);
+    SDF_Renamings  renamings = SDF_makeRenamingsRenamings(
+                                 SDF_makeLayoutSpace(),
+			         SDF_makeRenamingListEmpty(),
+				 SDF_makeLayoutSpace());
 
     if (module != NULL &&
 	!SDF_containsImportListImport(result, import)) {
       SDF_ImportList imports = SDF_getModuleImportsList(module);
 
       /* apply a renaming to the arguments of the import */
-      if (SDF_hasModuleNameParams(name)) {
+      if (SDF_isModuleNameParameterized(name)) {
 	SDF_ModuleName formalName = SDF_getModuleModuleName(module);
 	SDF_Symbols formals = SDF_getModuleNameParams(formalName);
 	SDF_Symbols actuals = SDF_getModuleNameParams(name);
 
+	renamings = SDF_makeRenamingsFromModuleNames(formalName, name);
 	imports = SDF_replaceParametersInImportList(imports, formals, actuals);
       }
 
       todo = SDF_concatImportList(todo, imports);
+
+      import = SDF_makeImportRenamedModule(
+	         SDF_makeModuleNameUnparameterized(id), 
+		 SDF_makeLayoutSpace(), renamings);
 
       if (SDF_isImportListEmpty(result)) {
 	result = SDF_makeImportListSingle(import);

@@ -260,7 +260,8 @@ SDF_ImportList SDF_replaceParametersInImportList(SDF_ImportList importList,
     if (SDF_hasImportListTail(importList)) {
       tail = SDF_getImportListTail(importList);
  
-      newTail = replaceParametersInImportList(tail, formalParams, actualParams);
+      newTail = SDF_replaceParametersInImportList(tail, formalParams, 
+						  actualParams);
       importList = SDF_setImportListTail(importList, newTail);
     }
   }
