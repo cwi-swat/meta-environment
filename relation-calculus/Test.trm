@@ -1,9 +1,7 @@
 
-eval-rscript(
+check-rscript(
 
+bool B = exists(<X, Y> : {<1,10>,<2,20>, <5,5>} | X >= Y)
 
-rel[int,int] I = { <X,Y> | <X,Y> in {<1,10>}}
 )
-
-
 

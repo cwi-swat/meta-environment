@@ -22,8 +22,14 @@ buttons([
 
     button("*",
           ["message-list"],
-          ["ShowSource"],
+          ["ShowRscriptSource"],
           [show-area("Rscript")]),
+
+
+    button("*",
+          ["message-list"],
+          ["ShowPicoSource"],
+          [show-area("Pico-syntax")]),
 
 
   button("Rscript",
@@ -76,7 +82,8 @@ buttons([
 	   push-filename("uninit.rscript"),
            parse("Rscript", "RSCRIPT"),
 
-	   push-string("UNDEF"),
+	   push-string("\"UNDEF\""),
+           parse("basic/Strings", "String"),
 
 	   push-filename("extracted-relations.trm"),
            parse("RscriptCalculator", "RSTORE"),
@@ -84,9 +91,8 @@ buttons([
            apply("pico-query", "List", 4),
            push-modulename("PicoQuery"),
            reduce,
-           push-filename("query.out"),
-           push-modulename("PicoQuery"),
-	   activate-editor
+	   execute-action("unparsePT"),
+           show-list
            ])
 
 

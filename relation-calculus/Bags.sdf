@@ -27,7 +27,7 @@ context-free syntax
    diff(Bag[[Elem]], Bag[[Elem]])            -> Bag[[Elem]]
 
    size(Bag[[Elem]])                         -> Integer
-   elem(Elem, Bag[[Elem]])                   -> Boolean
+   in(Elem, Bag[[Elem]])                   -> Boolean
 
    "if" Boolean "then" Bag[[Elem]] "else" Bag[[Elem]] "fi" 
                                            -> Bag[[Elem]]

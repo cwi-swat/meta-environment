@@ -37,9 +37,11 @@ exports
      REXP "and" REXP                         	-> REXP {left}
      REXP "or" REXP                          	-> REXP {left}
      "not" REXP                              	-> REXP
-     REXP "elem" REXP			     	-> REXP {non-assoc}
+     REXP "in" REXP			     	-> REXP {non-assoc}
+     REXP "notin" REXP			     	-> REXP {non-assoc}
 
      REXP "==" REXP                          	-> REXP {non-assoc}
+     REXP "!=" REXP                          	-> REXP {non-assoc}
      REXP "<=" REXP                          	-> REXP {non-assoc}
      REXP "<" REXP                           	-> REXP {non-assoc}
      REXP ">=" REXP                          	-> REXP {non-assoc}
@@ -65,12 +67,17 @@ exports
      "rel" "[" REXPTYPE "," REXPTYPE "]"     	-> REXPTYPE
      RVAR				     	-> REXPTYPE
 
-%% value formers
+%% Bag and relation formers
 
     "{" REXP "|" {FROM ","}+ ("," REXP)? "}"	-> REXP
 
-     RVAR "in" REXP                           	-> FROM
-     "<" RVAR "," RVAR ">" in REXP            	-> FROM
+     RVAR ":" REXP                           	-> FROM
+     "<" RVAR "," RVAR ">" ":" REXP            	-> FROM
+
+%% quantifiers
+
+     "exists" "(" FROM "|" REXP ")"		-> REXP
+     "forall" "(" FROM "|" REXP	")"		-> REXP
 
 %% functions
 
@@ -102,15 +109,18 @@ exports
      REXP "inter" REXP -> REXP >
      REXP "union" REXP -> REXP >
      REXP "\\" REXP -> REXP >
-     REXP "elem" REXP -> REXP >    
+
      "#" REXP -> REXP >
     
 
-     { REXP "<=" REXP -> REXP 
+     {	REXP "in" REXP -> REXP
+	REXP "in" REXP -> REXP  
+	REXP "<=" REXP -> REXP 
        REXP "<" REXP -> REXP
        REXP ">=" REXP -> REXP
        REXP ">" REXP -> REXP
-       REXP "==" REXP -> REXP  
+       REXP "!=" REXP -> REXP  
+      REXP "==" REXP -> REXP  
      }   
 
      

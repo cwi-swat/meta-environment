@@ -101,9 +101,11 @@ exports
         "and"                          				-> OP
         "or"                           				-> OP
         "not"                          				-> OP
-        "elem"			      				-> OP
+        "in"			      				-> OP
+        "notin"			      				-> OP
 
         "=="                           				-> OP
+        "!="                           				-> OP
         "<="                           				-> OP
         "<"                            				-> OP
         ">="                           				-> OP
@@ -131,7 +133,9 @@ hiddens
      "$Error*" [0-9\']* 	-> {ERROR ";"}*
      "$Error+" [0-9\']* 	-> {ERROR ";"}+
      "$Errors" [0-9\']*		-> ERRORS
+
      "$Exp" [0-9\']*    	-> REXP
+     "$Test" [0-9\']*    	-> REXP
      "$Exp*" [0-9\']*    	-> {REXP ","}*
      "$Exp+" [0-9\']*    	-> {REXP ","}+
 
