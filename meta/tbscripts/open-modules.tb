@@ -75,7 +75,7 @@ in
               snd-msg(read-parse-table(Name, eqs)).
               ( 
                 rec-msg(table-on-disk(Table?, Time?)).
-                snd-msg(add-parse-table-to-db(Name, Table, eqs, Time)).
+                snd-msg(add-parse-table-to-db(eqs(Name), Table, Time)).
                 rec-msg(parse-table-added).
                 snd-msg(open-eqs-file(Name)).
                 (
@@ -112,7 +112,7 @@ in
               snd-msg(read-parse-table(Name, trm)).
               ( 
                 rec-msg(table-on-disk(Table?, Time?)).
-                snd-msg(add-parse-table-to-db(Name, Table, trm, Time)).
+                snd-msg(add-parse-table-to-db(trm(Name), Table, Time)).
                 rec-msg(parse-table-added)
               +
                 rec-msg(no-table-on-disk)
