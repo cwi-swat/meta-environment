@@ -8,7 +8,10 @@ libtide_adapter_a_SOURCES	= TA.c TA_dict.c tide-adapter.c \
 				debug-adapter.c
 
 debug-adapter.tif.c debug-adapter.tif.h: ../toolbus/tide.tifs
-	${ATERM}/bin/tifstoc -tool debug-adapter ../toolbus/tide.tifs -prefix ta_
+	${TOOLBUS}/bin/tifstoc \
+		-tool debug-adapter \
+		-prefix ta_ \
+		../toolbus/tide.tifs
 
 #TA.h TA.c TA_dict.c TA_dict.h: TA.adt
 
@@ -19,5 +22,4 @@ regen:
 EXTRA_DIST	= TA.adt TA.h TA.c TA_dict.h TA_dict.c
 
 CFLAGS		+= ${DEVELOP_DEF}
-INCLUDES	= -I${ATERM}/include
-
+INCLUDES	= -I${ATERM}/include -I${TOOLBUS}/include
