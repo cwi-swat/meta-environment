@@ -73,31 +73,22 @@ in
               rec-msg(Id, opened-file(raw,Name2?,FT?,Path?)).
               snd-msg(ui,open-module(Name2)).
               snd-msg(open-language("Sdf2",
-                                    "/home/markvdb/NEW-META/lib/Sdf2.baf")).
-              snd-msg(Id,parse-string("Sdf2","",FT)).
-              ((
-                rec-msg(Id,parse-result(parsetree(T?,I?))).
-                if equal(I,0) then
-                 snd-msg(Id,a2toa1(T)).
-                 rec-msg(Id,converted(T1?)).
-                 snd-msg(add-sdf2-module-to-db(Path,T1)).
-                 rec-msg(need-modules(M1s?)).
-                 Ms := join(Ms,M1s)
-                else
-                 printf("Parse of %s returned %d ambiguities",Str,I).
-                 printf("Term is: %t\n",T)
-                fi
-               )
-               +
-               (
-                rec-msg(Id, parse-result(eof-error)). 
-                printf("EOF unexpected while parsing %s\n",Str)
-               )
-               +
-               (
-                rec-msg(Id, parse-result(parse-error([character(Ch?),line(Li?),col(Co?),char(Char?)]))).
-                printf("Character %d unexpected in line %d, column %d\n",Ch,Li,Co)
-                ))
+                                    "/home/kuipers/petr/lib/Sdf2.baf")).
+              snd-msg(Id,parse-string-as-asfix1("Sdf2","",FT)).
+              ( rec-msg(parse-result-asfix1(Id,parse-tree(T?))).
+/*              if equal(I,0) then*/
+                snd-msg(add-sdf2-module-to-db(Path,T)).
+                rec-msg(need-modules(M1s?)).
+                Ms := join(Ms,M1s)
+/*              else*/
+              + rec-msg(parse-result-asfix1(Id,ambiguities(I?))).
+                printf("Parse of %s returned %d ambiguities",Str,I).
+                printf("Term is: %t\n",T)
+/*              fi*/
+              + rec-msg(parse-result-asfix1(Id,T?)). 
+                printf("EOF unexpected while parsing %s\n",Str).
+                printf("Error was: %t\n",T)
+              )
               +
              /* File would not open (unreadable, not exist, wrong path...) */
               rec-msg(Id, error-opening(Str?)).
