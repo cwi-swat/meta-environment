@@ -21,6 +21,7 @@ exports
   lit2str(Literal)				-> String
 
 hiddens
+  imports basic/Comments
   variables
         "$NatCon" [0-9\']*            		-> NatCon
         "$Literal" [0-9\']*             	-> Literal
