@@ -114,6 +114,7 @@ do
 	-p)    
 	        shift;
 	        PATH="$1:${PATH}"
+		export PATH
 		;;
 
 	-P)     meta_script=${prefix}/share/meta/pt-dumper.tb ;;
