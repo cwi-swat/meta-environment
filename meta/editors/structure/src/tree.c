@@ -73,6 +73,9 @@ getTreeSort(PT_Tree tree)
                                   PT_makeCharRangeCharacter(ch),
                                   PT_makeCharRangesEmpty()));
   }
+  else if (PT_isTreeAmb(tree)) {
+    return PT_makeSymbolSort(SORT_AMBIGUOUS);
+  }
   else if (PT_isTreeFlatLayout(tree)) {
     return PT_makeSymbolSort(SORT_UNPARSED);
   }

@@ -5,9 +5,10 @@
 
 #include "EditorData.h"
 
-#define SORT_UNKNOWN  "<unknown>"
-#define SORT_UNPARSED "<unparsed>"
-#define SORT_TERM     "term"
+#define SORT_UNKNOWN   "<unknown>"
+#define SORT_AMBIGUOUS "<ambiguous>"
+#define SORT_UNPARSED  "<unparsed>"
+#define SORT_TERM      "term"
 
 SE_Editor insertChars(SE_Editor editor, int location, int nr_chars);
 SE_Editor deleteChars(SE_Editor editor, int location, int nr_chars);
