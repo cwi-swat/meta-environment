@@ -95,6 +95,7 @@ ATerm add_module(int cid, ATerm asfix)
                  &sections, &t[3], &t[4], &t[5], &t[6])) {
     if(GetValue(modules_db,modname) == ATfalse) {
       newasfix = AFexpandModule(asfix);
+			newasfix = AFaddPosInfoToModule(newasfix);
       PutValue(modules_db,modname,newasfix);
     };
     imports = get_import_section(sections);
