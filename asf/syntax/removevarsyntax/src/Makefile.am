@@ -15,7 +15,7 @@ man_MANS     = removevarsyntax.1
 data_DATA    = removevarsyntax.idef
 
 EXTRA_DIST   = removevarsyntax.idef removevarsyntax.tif.c removevarsyntax.tif.h \
-               removevarsyntax.pod
+               removevarsyntax.pod removevarsyntax.1
 
 removevarsyntax_SOURCES = removevarsyntax.c Remove-Var-Syntax.c
 removevarsyntax_LDADD   = removevarsyntax.tif.o \

@@ -15,7 +15,7 @@ man_MANS     = addeqssyntax.1
 data_DATA    = addeqssyntax.idef
 
 EXTRA_DIST   = addeqssyntax.idef addeqssyntax.tif.c addeqssyntax.tif.h \
-	       addeqssyntax.pod
+	       addeqssyntax.pod addeqssyntax.1
 
 addeqssyntax_SOURCES = addeqssyntax.c Add-Eqs-Syntax.c
 addeqssyntax_LDADD   = addeqssyntax.tif.o \
