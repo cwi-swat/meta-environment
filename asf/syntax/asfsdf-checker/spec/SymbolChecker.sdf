@@ -10,10 +10,10 @@ hiddens
   context-free syntax
     check-symbols(Definition, Messages)            -> Messages {traversal(accu, break, top-down)}
     check-symbols(Module, Messages)                -> Messages {traversal(accu, break, top-down)}
-    check-symbols(Module, Messages, ModuleId)      -> Messages {traversal(accu, break, top-down)}
-    check-symbols(Grammar, Messages, ModuleId)     -> Messages {traversal(accu, break, top-down)}
-    check-symbols(Production*, Messages, ModuleId) -> Messages {traversal(accu, break, top-down)}
-    check-symbols(Symbol, Messages, ModuleId)      -> Messages {traversal(accu, break, top-down)}
+    check-symbols2(Module, Messages, ModuleId)      -> Messages {traversal(accu, break, top-down)}
+    check-symbols2(Grammar, Messages, ModuleId)     -> Messages {traversal(accu, break, top-down)}
+    check-symbols2(Production*, Messages, ModuleId) -> Messages {traversal(accu, break, top-down)}
+    check-symbols2(Symbol, Messages, ModuleId)      -> Messages {traversal(accu, break, top-down)}
 
   context-free syntax
     check-charclass-list-symbols(Production*, Messages, ModuleId) -> Messages {traversal(accu, break, top-down)}
