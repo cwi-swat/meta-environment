@@ -1,6 +1,6 @@
 module Comments-to-Text
 
-imports languages/box/syntax/Comments Basic-to-Text
+imports Basic-to-Text
 
 hiddens
   variables

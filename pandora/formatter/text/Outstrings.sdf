@@ -1,9 +1,7 @@
 module Outstrings
 
 imports
-    basic/Comments
     basic/Strings 
-    basic/Integers
 
 exports
   context-free start-symbols String

@@ -1,6 +1,5 @@
 module Text
 
-imports basic/Comments
 imports Outstrings
 imports NewLine
 
