@@ -1,8 +1,5 @@
 Makefile.in
 Makefile
 .deps
-meta
-pt-dump
-eqs-dump
-meta.1
+generic-meta
 
