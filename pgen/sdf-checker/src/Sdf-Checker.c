@@ -6042,7 +6042,7 @@ int main(int argc, char *argv[])
   return asc_support_main(&bottom, argc, argv,           
                           register_Sdf_Checker,                   
                           resolve_Sdf_Checker,                    
-                          init_Sdf_Checker
+                          init_Sdf_Checker, NULL, -1
 );}                                                        
 #endif                                                   
 

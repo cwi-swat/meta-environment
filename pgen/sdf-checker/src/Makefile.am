@@ -18,10 +18,10 @@ EXTRA_DIST   = sdfchecker.idef
 noinst_HEADERS = sdfchecker.tif.h
 sdfchecker_SOURCES = sdfchecker.c Sdf-Checker.c sdfchecker.tif.c
 sdfchecker_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
+                       -L$(SGLR)/lib -lsglr \
                        -L$(SDF_SUPPORT)/lib -lSDFME \
                        -L$(ASF_SUPPORT)/lib -lASFME \
                        -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
                        -L$(TOOLBUSLIB)/lib -lATB \
                        -L$(ATERM)/lib -lATerm \
 			$(SOCKLIBS)
-
