@@ -10,7 +10,7 @@
 
 /* Prototypes for functions called from the event handler */
 ATerm rewrite(int conn, ATerm);
-ATerm apply_rewrite(int conn, char *, char *, ATerm);
+ATerm apply_rewrite(int conn, const char *, const char *, ATerm);
 void rec_terminate(int conn, ATerm);
 extern ATerm toolASFSDFApigen_handler(int conn, ATerm term);
 extern ATerm toolASFSDFApigen_checker(int conn, ATerm sigs);

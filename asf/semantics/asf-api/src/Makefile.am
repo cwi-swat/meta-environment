@@ -34,4 +34,4 @@ INCLUDES = \
 	-I${ATERM}/include 
 
 asfc: ${top_builddir}/semantics/asf-api/spec/ASFSDFApigen.eqs
-	asfc -i $< -o ASFSDFApigen.c -t -v 
+	asfc -i $< -o ASFSDFApigen.c -t -v -c 
