@@ -34,6 +34,6 @@ FILE  *SG_StackDot(void);
 ATerm      SG_TermYield(ATermAppl);
 ATerm      SG_DotTermYield(ATerm);
 
-char      *SG_PrintSymbolToString(ATerm t);
+char      *SG_PrintSymbolToString(ATerm t, ATbool escaped);
 
 #endif  /* _TREE_TO_DOT_H_ */
