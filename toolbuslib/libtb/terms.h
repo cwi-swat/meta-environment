@@ -126,7 +126,7 @@ typedef term env;
 #define is_anno(t)      (tkind(t) == t_anno)
 #define is_list(t)      (tkind(t) == t_list)   
 
-#define LENSPEC 8          /* size of length field for binary strings */
+#define LENSPEC 12          /* size of length field for binary strings */
 #define STRING_MARK '\377' /* marker for binary strings */
 
 term      *mk_bool(TBbool);

@@ -34,6 +34,8 @@
 #define MAX_NR_QUEUES	64
 #define MAX_QUEUE_LEN	128
 
+#define LENSPEC	12  /* keep in sync with libtb/term.h */
+
 /*}}}  */
 /*{{{  types */
 
@@ -365,11 +367,12 @@ int ATBwriteTerm(int fd, ATerm term)
 {
   int len, wirelen;
 
-  len = ATcalcTextSize(term)+8;	  /* Add lenspec */
+  len = ATcalcTextSize(term)+LENSPEC;
   wirelen = MAX(len, MIN_MSG_SIZE);
   resize_buffer(wirelen+1);               /* Add '\0' character */
-  sprintf(buffer, "%-.7d:", len);
-  AT_writeToStringBuffer(term, buffer+8);
+  sprintf(buffer, "%-.*d:", LENSPEC-1, len);
+  buffer[LENSPEC] = '\0';
+  AT_writeToStringBuffer(term, buffer+LENSPEC);
   if(mwrite(fd, buffer, wirelen) < 0) {
     return -1;
   }
@@ -395,8 +398,9 @@ ATerm  ATBreadTerm(int fd)
   }
 
   /* Retrieve the data length */
-  if(sscanf(buffer, "%7d:", &len) != 1)
+  if (sscanf(buffer, "%d:", &len) != 1) {
     ATerror("ATBreadTerm: error in lenspec: %s\n", buffer);
+  }
 
   /* Make sure the buffer is large enough */
   resize_buffer(len+1);
@@ -409,7 +413,7 @@ ATerm  ATBreadTerm(int fd)
   }
   buffer[len] = '\0';
 
-  t = ATparse(buffer+8);
+  t = ATparse(buffer+LENSPEC);
   assert(t);
 
   t = ATBunpack(t);
