@@ -2205,8 +2205,8 @@ sort {\tt SORT-B} is required.
 \subsection{Attributes of Lexical and Context-free Functions}
 
 The definition of a lexical or context-free functions may be followed by
-\emph{attibutes} that define additional properties of that function.
-The following attributes exist:
+\emph{attibutes} that define additional (syntactic or semantic) properties of
+that function.  The following syntax-related attributes exist:
 
 \begin{itemize}
 
@@ -2222,7 +2222,15 @@ are used for defining the associativity of functions
 be preferred or only be used as last resort in certain cases of
 syntactic ambiguity (Section~\ref{XXX}).
 
-\item {\tt reject} can be used to explicitly forbid certain syntactic constructs (Section~\ref{XXX}).
+
+\item {\tt reject} can be used to explicitly forbid certain syntactic
+  constructs (Section~\ref{XXX}).
+
+\end{itemize}
+
+\noindent The remaining attributes define semantic properties of a function:
+
+\begin{itemize}
 
 \item {\tt memo} declares a function to be a \emph{memo function} for
 which all calls and results will be cached during evaluation
@@ -2441,16 +2449,19 @@ exports
 \subsection{Restrictions} \label{Restrictions} \label{ContextFreeRestrictions}
 \label{LexicalRestrictions}
 
-One of the disambiguation rules on the lexical level is prefer longest match,
-the disambiguation will be discussed in more detail in 
-Section \ref{lex-ambiguity}.
-The restrictions offer the notion to express this lexical disambiguation
-rule.
+Lexical syntax can be highly ambiguous.  Consider a simple lexical definition
+for identifiers like the one in Figure~\ref{CODE:repetition}.  When
+recognizing the text {\tt abc}, what should we return: {\tt a}, {\tt ab} or
+{\tt abc}? In Section \ref{lex-ambiguity} we will discuss the strategy
+\emph{Prefer Longest Match} for resolving this kind of ambiguity.
 
-Via the restriction it is possible to indicate that a symbol may not be
-followed by a letter from some character class (lookahead). 
-There is the possibility to have a lookahead of more than one character. 
-There are two different restrictions:
+Here, we describe the notion of \emph{restrictions} that enable the formulation
+of this and other lexical disambiguation strategies.
+
+A restriction limits the \emph{lookahead} for a given symbol; it indicates
+that a symbol may not be followed by a character from a given character class.
+A lookahead may consist of more than one character class.  Restrictions come
+in two flavors:
 
 \begin{itemize}
 \item lexical restrictions;
@@ -2462,13 +2473,14 @@ There are two different restrictions:
 \begin{verbatim}
 <Symbol>+ -/- <Lookaheads>
 \end{verbatim}
+ 
+\noindent In case of lexical restrictions {\tt <Symbol>} may be   
+either a literal or a sort.  In case of context-free restrictions only a sort is
+allowed.
 
-\noindent Where {\tt <Symbol>} is in case of lexical restrictions 
-either a literal
-or a sort, and in case of context-free restrictions only sort is
-allowed. The {\tt Lookaheads} are slightly more complex.
-The most compact way is to give the \sdf\ definition of the
-{\tt Lookaheads} and illustrate its use by means of some examples.
+{\tt <Lookaheads>} are slightly more complex.  The most compact way is to
+give the \sdf\ definition of the {\tt <Lookaheads>} and illustrate their use by
+means of some examples.
 
 \begin{verbatim}
 context-free syntax
@@ -2480,16 +2492,19 @@ context-free syntax
   "[[" {Lookahead ","}* "]]"   -> Lookaheads 
 \end{verbatim}
 
-The first example is how the lexical restrictions can be used to
-prevent the recognition of erroneous expressions in a small functional
-language, see Figure \ref{CODE:functional}, this example is initial presented
-in \cite{Vis97}.
-The lexical restriction enforces the recognition of for instance {\tt letter}
-as a 6 character long lexical token instead of the keyword {\tt let}
-followed by {\tt ter} which is then recognized as a {\tt Var}.
-The context-free restriction forbids that a variable may be directly
-followed by a letter. This latter context-free restriction can also
-be formulated as a lexical restriction.
+Our first example\footnote{Taken from~\cite{Vis97}} (Figure
+\ref{CODE:functional}) shows how lexical restrictions can be used to prevent
+the recognition of erroneous expressions in a small functional language.
+
+The lexical restriction deals with the possible confusion between
+the reserved words {\tt let} and {\tt in} and variables (of sort {\tt Var}).
+It forbids the recognition of, for instance, {\tt let} as part
+of {\tt letter}. Without this restriction {\tt letter} would be recognized
+as the keyword {\tt let} followed by the variable  {\tt ter}.
+
+The context-free restriction forbids that a variable is directly
+followed by a letter. Note that this context-free restriction could also
+have been be formulated as a lexical restriction.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -2514,21 +2529,18 @@ exports
     Var -/- [a-z]
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Simple functional language}\label{CODE:functional}
+\caption{Using restrictions in the definition of a simple functional language}\label{CODE:functional}
 \end{figure}   
 
-The second example illustrates the use of restrictions in order to
-define a `safe' way of layout.
-Between the members in the left-hand side of a
-context-free syntax rule optional layout may be recognized. However,
-if a such a member recognizes the empty string, this gives rise to
-a lexical ambiguity, see Section \ref{lex-ambiguity}. 
-So, the safe way of defining {\tt LAYOUT} is
-presented in Figure \ref{CODE:safe-layout}.
-The automatic insertion of this optional layout non-terminal
-gives rise to the ``safe'' layout definition presented
-in Figure \ref{CODE:safe-layout}. A member may recognize the empty string
-and thus causing ambiguity.
+The second example illustrates the use of restrictions to define a
+`safe' way of layout.  Recall from Section~\ref{LexicalSyntax} that optional
+layout may be recognized between the members of the left-hand side of a
+context-free syntax rule.
+
+However, if a such a member recognizes the empty string, this gives rise to a
+lexical ambiguity, (Section \ref{lex-ambiguity}). This problem is avoided by
+the definition in Figure \ref{CODE:safe-layout}: it simply forbids that
+optional layout is followed by layout characters.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -2546,12 +2558,10 @@ exports
 \caption{Safe way of defining {\tt LAYOUT}}\label{CODE:safe-layout}
 \end{figure}
 
-The last example illustrates the use of the look aheads to improve
-the layout definition in combination with a definition of comments.
-Although it is impossible to give {\em one} lexical definition of
-comments.
-In Figure \ref{CODE:c-comment} the definition of the C comments
-were presented.
+The last example is shown in Figure~\ref{CODE:c-comment} and illustrates the
+use of restrictions to extend the previous layout definition with C-style
+comments. {\bf MARK: ik heb hier ook de eerdere restrictie uit Figure
+  \ref{CODE:safe-layout} toegevoegd.}
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -2570,25 +2580,31 @@ exports
     Comment             -> LAYOUT
 
   context-free restrictions
+    LAYOUT? -/- [\ \t\n]
     LAYOUT? -/- [\/].[\*]
 \end{boxedverbatim}
 \end{IncCode}
-\caption{Definition of C comments}\label{CODE:c-comment-improved}
+\caption{Definition of C comments}\label{CODE:c-comment}
 \end{figure}
 
 
 \subsection{Variables} \label{Variables}
 
-Variables are declared in the `variables' section of a module. It consists of
-a list of variables together with their sort. Each declaration defines a
-naming scheme for variables together with a result sort. A naming scheme is a
-regular expression like the ones allowed in the lexical syntax (See Section
-\ref{lexical-syntax}) except that sorts are not allowed. One variable
-declaration may thus define an unlimited number of variables. The sort of a
-variable may be a simple sort, or a list with or without separators. The
-variables `{\tt Id}', `{\tt Type3}', and `{\tt Id-list}'
-are examples of variables declared by
-the following specification presented in Figure \ref{CODE:variables}.
+Variables are declared in the `{\tt variables}' section of a module.  Like all
+other entities in a module---except equations---variables may be exported
+(Section \ref{modules}). A variables section consists of a list of variable
+names followed by their sort. In fact, a variable declaration can define an
+infinite collection of variables by using a \emph{naming scheme} instead of a
+simple variable name.  A naming scheme is a regular expression like the ones
+allowed in the lexical syntax (Section \ref{lexical-syntax}) except that sorts
+are not allowed. The sort of a variable may be a simple sort, or a list with
+or without separators.
+
+In Figure \ref{CODE:variables}, `{\tt Id}', `{\tt Type3}', and `{\tt Id-list}'
+are examples of variables declared by the naming schemes in the {\tt
+  variables} section.
+Strings that occur in the left-hand side of variable declarations
+should {\em always} be quoted.
 
 \begin{figure}[tb]
 \begin{IncCode}
@@ -2618,23 +2634,11 @@ exports
 \caption{Variable declarations}\label{CODE:variables}
 \end{figure}         
 
-Strings that occur in the left-hand side of variable declarations
-should {\em always} be quoted. The use of the character classes
-like in {\tt "Type"[0-9]*} and {\tt "Id-list"[\verb+\+\verb+'+]*} allows the
-generation of an infinite number of variable names.
+Declared variables can only be used when defining equations. It is not
+allowed to use them in terms.
 
-The variables can only be used when defining equations. It is not
-possible to use variables in ordinary terms. This would imply
-that we would allow the rewriting of {\em open} terms.
-
-In Section \ref{lex-ambiguity} we address the disambiguation rule
-{\em prefer variables}. This rule states that if a substring
-can be recognized as a variable it will be recognized as such.
-The parser generator decorates automatically each
-variable declaration with an attribute {\tt prefer}.
-
-Note that variables (as all other entities in a module --- except equations)
-may be exported, see Section \ref{modules}.
+Ambiguities due to variables are resolved by the {\em Prefer Variables}
+strategy that is further discussed in Section \ref{lex-ambiguity}.
 
 \subsection{Disambiguation}
 
@@ -2693,7 +2697,7 @@ identifier given the lexical definition of Figure \ref{CODE:restrict-id}.
 There are two approaches to implement Prefer Literals.
 
 In the first approach, we can explicitly forbid the recognition of literals as
-tokens of a specific sort. As a matter of fact, \sdf supports a very general
+tokens of a specific sort. As a matter of fact, \sdf\ supports a very general
 reject mechanism (see Section~\ref{XXX}) that can be used for this purpose.
 The idea is to define context-free grammar rules for all literals with the
 undesired lexical sort (e.g., {\tt Id} )in the right-hand side followed by the
@@ -2753,9 +2757,9 @@ exports
 as layout symbol. 
 
 \paragraph{Prefer Variables} Give preference to interpretation as a 
-variable (as defined in a variables section) over interpretation as a 
-lexical token. This strategy will be discussed in Section \ref{Variables}
-in more detail.
+variable (as defined in a variables section) over interpretation as a lexical
+token. To achieve this, the parser generator automatically decorates each
+variable declaration with the attribute {\tt prefer} (Section~\ref{XXX}).
 
 \subsection{Context-free ambiguities}
 
