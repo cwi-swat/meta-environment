@@ -23,6 +23,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* Some defines that are needed for pretty printing AsFix2 productions */
+#include "buffer.h"
+#define AF2PRODTOTEXT_BUFFER_SIZE 100
+#define MAX_SYMBOL_INTEGER_SIZE   1000
+#define MAX_SYMBOL_CHARACTER_SIZE 1000
+
 #include <aterm2.h>
 #include "deprecated.h"
 
@@ -291,6 +297,210 @@ void init_asfix2_patterns()
   asfix1_itersep_plus_pattern =
     ATparse("iter-sep(l(\"{\"),w(\"\"),sort(<str>),w(\"\"),ql(<str>)," \
             "w(\"\"),l(\"}\"),w(\"\"),l(\"+\"))");
+}
+
+
+void AF2SymbolToText(buffer *text, ATerm symbol)
+{
+	char *name;
+	ATerm arg, arg2;
+	ATermList args;
+	int c1, c2;
+
+	if (ATmatch(symbol, "layout")) {
+    AddStringToBuffer(text, "LAYOUT");
+  } else if (ATmatch(symbol, "sort(<str>)", &name)) {
+    AddStringToBuffer(text, name);
+  } else if (ATmatch(symbol, "lit(<str>)", &name)) {
+		AddStringToBuffer(text,"\\\"");
+    AddStringToBuffer(text,name);
+		AddStringToBuffer(text,"\\\"");
+  } else if (ATmatch(symbol, "lex(<term>)", &arg)) {
+    AF2SymbolToText(text, arg);
+  } else if (ATmatch(symbol, "cf(<term>)", &arg)) {
+    AF2SymbolToText(text, arg);
+  } else if (ATmatch(symbol, "iter-star(<term>)", &arg)) {
+    AF2SymbolToText(text, arg);
+    AddStringToBuffer(text, "*");
+  } else if (ATmatch(symbol, "iter(<term>)", &arg)) {
+    AF2SymbolToText(text, arg);
+    AddStringToBuffer(text, "+");
+  } else if (ATmatch(symbol, "iter-sep(<term>,<term>)", &arg, &arg2)) {
+    AddStringToBuffer(text, "{");
+    AF2SymbolToText(text, arg);
+    AddStringToBuffer(text, " ");
+    AF2SymbolToText(text, arg2);
+    AddStringToBuffer(text, "}+");
+  } else if (ATmatch(symbol, "iter-star-sep(<term>,<term>)", &arg, &arg2)) {
+    AddStringToBuffer(text, "{");
+    AF2SymbolToText(text, arg);
+    AddStringToBuffer(text, " ");
+    AF2SymbolToText(text, arg2);
+    AddStringToBuffer(text, "}*");
+  } else if (ATmatch(symbol, "iter-n(<term>, <int>)", &arg, &c1)) {
+		char number[MAX_SYMBOL_INTEGER_SIZE];  
+    AF2SymbolToText(text, arg);
+    sprintf(number, "%d", c1);
+		AddStringToBuffer(text, number);
+		AddStringToBuffer(text,"+");
+	} else if (ATmatch(symbol, "iter-sep-n(<term>,<term>,<int>)", &arg, &arg2, &c1)) {
+		char number[MAX_SYMBOL_INTEGER_SIZE];
+		AddStringToBuffer(text, "{");
+    AF2SymbolToText(text, arg);
+    AddStringToBuffer(text, " ");
+    AF2SymbolToText(text, arg2);
+		sprintf(number, "%d", c1);
+    AddStringToBuffer(text,"}");
+		AddCharToBuffer(text,c1);
+		AddStringToBuffer(text,"+");
+  } else if (ATmatch(symbol, "seq([<list>])", &args)) {
+    AddStringToBuffer(text, "(");
+    for (;!ATisEmpty(args);args = ATgetNext(args)) {
+      arg = ATgetFirst(args);
+      AF2SymbolToText(text, arg);
+      if (args) {
+				AddStringToBuffer(text, " ");
+			}
+    }
+    AddStringToBuffer(text, ")");
+  } else if (ATmatch(symbol, "opt(<term>)", &arg)) {
+    AF2SymbolToText(text, arg);
+    AddStringToBuffer(text, "?");
+  } else if (ATmatch(symbol, "alt(<term>,<term>)", &arg, &arg2)) {
+    AF2SymbolToText(text, arg);
+    AddStringToBuffer(text, "|");
+    AF2SymbolToText(text, arg2);
+  } else if (ATmatch(symbol, "char-class([<list>])", &args)) {
+		AddStringToBuffer(text, "[");
+    while (!ATisEmpty(args)) {
+      char letter[MAX_SYMBOL_CHARACTER_SIZE];
+      arg = ATgetFirst(args);
+      args = ATgetNext(args);
+      if (ATmatch(arg, "range(<int>,<int>)", &c1, &c2)) {
+				if(isprint(c1)) {
+					sprintf(letter,"%c", c1);
+					AddStringToBuffer(text,letter);
+				} else {
+					sprintf(letter,"\\\\%d", c1);
+					AddStringToBuffer(text,letter);
+        }
+				AddStringToBuffer(text,"-");
+
+        if(isprint(c2)) {
+					sprintf(letter,"%c", c2);
+					AddStringToBuffer(text,letter);
+				} else {
+					sprintf(letter,"\\\\%d", c2);
+					AddStringToBuffer(text,letter);
+        }
+			} else if (ATmatch(arg, "<int>", &c1)) {
+				if(isprint(c1)) {
+					sprintf(letter,"%c", c1);
+					AddStringToBuffer(text,letter);
+				} else {
+					sprintf(letter,"\\\\%d", c1);
+					AddStringToBuffer(text,letter);
+        }
+			}
+    }
+    AddStringToBuffer(text, "]");
+	} else if (ATmatch(symbol, "varsym(<term>)", &arg)) {
+    AF2SymbolToText(text, arg);
+  } else {
+		ATwarning("Unknown symbol type in AF2SymbolToText\n");
+    return;
+	}
+	return;
+}
+
+void AF2ProdAttrsToText(buffer *text, ATerm attrs)
+{
+	ATermList list;
+	char *str;
+
+	if(ATmatch(attrs, "no-attrs")) {
+		return;
+	} else {
+		if(ATmatchTerm(attrs, asfix2_attrs_pattern, &list)) {
+			AddStringToBuffer(text," { ");
+		
+			for(; !ATisEmpty(list); list = ATgetNext(list)) {
+				ATerm first = ATgetFirst(list);
+				
+				
+				if(ATmatchTerm(first, asfix2_cons_pattern, &str)) {
+					AddStringToBuffer(text,"cons(");
+					AddStringToBuffer(text, str);
+					AddStringToBuffer(text,")");
+				} else if(ATmatchTerm(first, asfix2_aterm_cons_pattern, &str)) {
+					AddStringToBuffer(text,"aterm(cons(");
+					AddStringToBuffer(text, str);
+					AddStringToBuffer(text,"))");
+				} else if(ATmatchTerm(first, asfix2_atr_pattern, &str)) {
+					AddStringToBuffer(text, str);
+				} else if(ATmatchTerm(first, asfix2_id_pattern, &str)) {
+					AddStringToBuffer(text,"id(");
+					AddStringToBuffer(text, str);
+					AddStringToBuffer(text,")");
+ 				} else if(ATmatch(first, "traverse")) {
+					AddStringToBuffer(text, "traverse");
+				}
+				
+				AddStringToBuffer(text," ");
+				
+			}
+
+			AddStringToBuffer(text,"} ");
+		}
+	}
+	return;
+}
+
+void AF2ProdArgsToText(buffer *text, ATermList args)
+{
+	ATerm sortname, sepname, litname;
+	char *sep, *lit, *sort;
+
+	for(; !ATisEmpty(args); args = ATgetNext(args)) {
+		AF2SymbolToText(text, ATgetFirst(args));
+    if(!ATisEmpty(ATgetNext(args))) {
+			AddStringToBuffer(text," ");
+    }
+	}
+
+	return;
+}
+
+/* ATerm AF2ProdToText(ATerm t)
+ *
+ * Prettyprints an asfix2 prod to an ATerm <str>
+ */
+ATerm AF2ProdToText(ATerm t) 
+{
+	buffer *text;
+	ATerm args = NULL;
+	ATerm result = NULL;
+	ATerm attrs = NULL;
+	ATerm str;
+
+	ATwarning("PPing: %t\n", t);
+	text = CreateBuffer(AF2PRODTOTEXT_BUFFER_SIZE, /* initial buffer size       */ 
+											AF2PRODTOTEXT_BUFFER_SIZE, /* step size when reallocing */
+											sizeof(char));             /* size of atomic elements   */
+	
+	if(ATmatchTerm(t, asfix2_prod_pattern, &args, &result, &attrs)) {
+		AF2ProdArgsToText(text, (ATermList) args);
+		AddStringToBuffer(text, " -> ");
+		AF2SymbolToText(text, result);
+		AF2ProdAttrsToText(text, attrs);
+	}
+	
+	AddCharToBuffer(text,'\0'); /* adding end of string */
+	str = ATmake("<str>", GetBufferContent(text));
+	DeleteBuffer(text);
+
+	ATwarning("STr: %t\n", str);
+	return str;
 }
 
 /*   ATermList trans_args(ATermList tl)  */

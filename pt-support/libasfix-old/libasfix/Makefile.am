@@ -32,13 +32,14 @@ EXTRA_LIBRARIES		= libAsFix-gcc.a libAsFix-cc.a libAsFix-dbg.a libAsFix-prof.a \
 			libAsFix-cc64.a
 
 ALLSRCS                  = abbrevs.c asfix.c asfix2src.c expand2asfix.c \
-                           init-patterns.c posinfo.c AsFix-access.c a2toa1.c
+                           init-patterns.c posinfo.c AsFix-access.c a2toa1.c \
+                           buffer.c
 
 PUBLIC_INCL              = AsFix-abbrevs.h AsFix-init-patterns.h AsFix2sym.h \
 		           AsFix-expand.h AsFix.h aterm-macs.h AsFix-fun.h \
 		           AsFix2src.h AsFix-access.h a2toa1.h
 
-PRIVATE_INCL	         = 
+PRIVATE_INCL	         = buffer.h
 
 ALLINCLUDES	         = ${PUBLIC_INCL} ${PRIVATE_INCL}
 

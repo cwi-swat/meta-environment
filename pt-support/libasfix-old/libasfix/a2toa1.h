@@ -21,3 +21,4 @@
 /* $Id$ */
 
 ATerm a2toa1(ATerm t, ATbool interp_cons);
+ATerm AF2ProdToText(ATerm t);
