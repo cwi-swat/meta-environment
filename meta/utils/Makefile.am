@@ -40,7 +40,7 @@ EXTRA_DIST         = parse-file.sh.src parse-sdf2.sh.src \
                      insert-license.sh.src test-help test-version \
                      lang.types perform-test.sh.src \
                      parse-sdf2.pod change-sdf2-ext \
-                     sdf2stats
+                     sdf2stats change-eqs-ext
 
 CLEANFILES         = parse-file parse-sdf2 ps-dot insert-header \
                      insert-license perform-test parse-sdf2.1 \
