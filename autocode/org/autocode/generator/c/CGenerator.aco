@@ -12,6 +12,10 @@ type * {
       static := false
     }
     type * {
+      include := { }
+      include * {
+        system := true
+      }
       prefix := { }
       static := false
       implementation := { }

@@ -40,6 +40,13 @@ type EnumElement
   value : integer
 }
 
+type Array
+{
+  name : string
+  type : string
+  dimensions : integer
+}
+
 type Macro
 {
   name : string

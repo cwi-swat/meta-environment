@@ -110,6 +110,16 @@ public class CGenerator
       = new PropertyContext(fieldContext, "type");
     fieldTypePrefix = fieldTypeContext.getString("prefix");
 
+    Set includes = fieldTypeContext.getValueSet("include");
+    Iterator iter = includes.iterator();
+    while (iter.hasNext()) {
+      String fileName = (String)iter.next();
+      PropertyContext includeContext
+	= new PropertyContext(fieldTypeContext, "include", fileName);
+      boolean isSystem = includeContext.getBoolean("system");
+      Include include = new Include(fileName, isSystem);
+      compilationUnit.addHeaderInclude(include);
+    }
     super.generateField(typeContext, fieldContext);
   }
 
@@ -165,7 +175,6 @@ public class CGenerator
     println();
 
     emitIncludes(compilationUnit.fetchHeaderIncludeIterator());
-    emitEnums();
     emitTypedefs();
     emitFunctionDeclarations(false);
 
@@ -193,48 +202,22 @@ public class CGenerator
   }
 
   //}}}
-  //{{{ protected void emitEnums()
 
-  protected void emitEnums()
-  {
-    foldOpen("enums");
-    Iterator iter = compilationUnit.fetchEnumIterator();
-    while (iter.hasNext()) {
-      Enum enumeration = (Enum)iter.next();
-      emitEnum(enumeration);
-    }
-    foldClose();
-  }
-
-  //}}}
-  //{{{ protected void emitEnum(Enum enumeration)
-
-  protected void emitEnum(Enum enumeration)
-  {
-    print("typedef enum { ");
-    Iterator elems = enumeration.fetchElementIterator();
-    int value = 0;
-    while (elems.hasNext()) {
-      EnumElement elem = (EnumElement)elems.next();
-      print(elem.getIdentifier());
-      if (elem.getValue() != value) {
-	value = elem.getValue();
-	print("=" + value);
-      }
-      if (elems.hasNext()) {
-	print(", ");
-      }
-      value++;
-    }
-    println(" } " + enumeration.getName() + ";");
-  }
-
-  //}}}
   //{{{ protected void emitTypedefs()
 
   protected void emitTypedefs()
   {
     foldOpen("typedefs");
+    emitStructTypedefs();
+    emitEnumTypedefs();
+    foldClose();
+  }
+
+  //}}}
+  //{{{ protected void emitStructTypedefs()
+
+  protected void emitStructTypedefs()
+  {
     Iterator iter = compilationUnit.fetchStructIterator();
     while (iter.hasNext()) {
       Struct structure = (Struct)iter.next();
@@ -242,10 +225,37 @@ public class CGenerator
       String structName = structName(typeName);
       println("typedef struct " + structName + " *" + typeName + ";");
     }
-    foldClose();
   }
 
   //}}}
+  //{{{ protected void emitEnumTypedefs()
+
+  protected void emitEnumTypedefs()
+  {
+    Iterator iter = compilationUnit.fetchEnumIterator();
+    while (iter.hasNext()) {
+      Enum enumeration = (Enum)iter.next();
+      print("typedef enum { ");
+      Iterator elems = enumeration.fetchElementIterator();
+      int value = 0;
+      while (elems.hasNext()) {
+	EnumElement elem = (EnumElement)elems.next();
+	print(elem.getIdentifier());
+	if (elem.getValue() != value) {
+	  value = elem.getValue();
+	  print("=" + value);
+	}
+	if (elems.hasNext()) {
+	  print(", ");
+	}
+	value++;
+      }
+      println(" } " + enumeration.getName() + ";");
+    }
+  }
+
+  //}}}
+
   //{{{ protected void emitFunctionDeclarations(boolean statics)
 
   protected void emitFunctionDeclarations(boolean statics)
@@ -545,6 +555,14 @@ public class CGenerator
   public String enumElementName(String name)
   {
     return macroName(name);
+  }
+
+  //}}}
+  //{{{ public String arrayName(String name)
+
+  public String arrayName(String name)
+  {
+    return typeName(name);
   }
 
   //}}}

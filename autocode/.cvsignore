@@ -10,3 +10,4 @@ config.status
 configure
 autocode
 autocode-test
+autocode.jar

@@ -6,6 +6,7 @@ java_JAVA = \
 	CCompilationUnit.java \
 	Enum.java \
 	EnumElement.java \
+	Array.java \
 	Field.java \
 	Function.java \
 	Include.java \
