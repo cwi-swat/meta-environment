@@ -1,7 +1,5 @@
 Makefile.in
 Makefile
 .deps
-removevarsyntax.tif.h
-removevarsyntax.tif.c
 removevarsyntax
-removevarsyntax.1
+*.tifs

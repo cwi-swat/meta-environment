@@ -2,6 +2,5 @@ Makefile.in
 Makefile
 .deps
 filtereqssyntax
-filtereqssyntaxtool.tif.h
-filtereqssyntaxtool.tif.c
 filtereqssyntaxtool
+*.tifs

@@ -1,3 +1,7 @@
+2002/10/29 (vinju@loria.fr)
+ * Made asf package independent of ToolBus tools by putting tool interfaces
+   in repository and removing implicit build rules for idef2tif and tifstoc
+
 2002/10/13 (vinju@loria.fr)
  * Meta-Environment scripting is put in a separate package: asfsdf-meta
  * Put syntax related tools in syntax subdirectory and semantics related
