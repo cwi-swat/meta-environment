@@ -1,0 +1,76 @@
+#!/usr/local/bin/perl
+
+$prog = "insert-header";
+$version = "1";
+
+$info = "$prog - A script to insert a file at the start of another file
+
+    version $version, Copyright (C) 2000  Leon Moonen \<leon\@cwi.nl\>
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+";
+
+#parse args
+$debug = 0;
+
+while ($_ = $ARGV[0], /^-/) {
+  shift || &error;
+  if (/^-i$/) {defined ($insert = shift) || &error }
+  elsif (/^-h$/ || /^--help$/) {&usage; exit 0}
+  elsif (/^-v$/ || /^--version$/) {&version; exit 0}
+  elsif (/^-d$/) {$debug = 1;}
+  else { &error }
+}
+
+if (!defined $insert) { &error };
+
+open(HEAD,$insert) || die "$insert $!";
+@head=<HEAD>;
+close(HEAD);
+
+while ($_ = $ARGV[0]) {
+ 	open(IN, $_) || die "$_ $!";
+ 	@in=<IN>;
+ 	close(IN);
+
+ 	open(OUT, ">$_.bak");
+ 	print OUT @in;
+ 	close(OUT);
+
+ 	open(IN, ">$_") || die "$_ $!";
+ 	print IN @head;
+ 	print IN @in;
+  	close(IN);
+
+ 	shift;
+}
+
+
+exit 0;
+
+sub usage {
+   print "$info\nUsage: $prog -i <file-to-be-inserted> <files-to-be-inserted-in>\n";
+}
+
+
+sub error {
+   &usage;
+   exit 1;
+}
+
+sub version {
+   die $info;
+}
+
