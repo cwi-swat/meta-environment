@@ -997,7 +997,7 @@ parse_table *SG_BuildParseTable(ATermAppl t)
   ptfun = ATgetAFun(t);
 
   if(ptfun != SG_PT3_AFun && ptfun != SG_PT4_AFun) {
-    ATwarning("parse table format error\n");
+    ATwarning("parse table format error: %t\n", t);
     return NULL;
   }
 
