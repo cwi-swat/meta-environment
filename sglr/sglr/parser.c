@@ -22,7 +22,9 @@
 #include  <ctype.h>
 
 #include <aterm2.h>
-#include <a2toa1.h>
+#ifdef HAVE_A2TOA1
+  #include <a2toa1.h>
+#endif
 
 #include "parse-table.h"
 #include "stack.h"
@@ -305,9 +307,10 @@ ATerm SG_Result(void)
 
     t = SG_YieldPT(SG_LK_TREE(head(SG_ST_LINKS(accepting_stack))));
 
-    if(SG_ASFIX1)
-      return a2toa1(t);
+#ifdef HAVE_A2TOA1
+    if(SG_ASFIX1) return a2toa1(t);
     else
+#endif
       return ATmake("parsetree(<term>,<int>)", t, SGnrAmb(SG_NRAMB_ASK));
   } else
     return ATmake("parse-error([character(<int>), line(<int>),"

@@ -41,26 +41,30 @@ int SGnrAmb(int mode)
   }
 }
 
-int SG_ApplID(void)
+int SG_ApplID(int Action)
 {
   static int count = 0;
 
-  return count++;
+  switch(Action) {
+    case SG_APPLID_ZERO:
+      return (count = 0);
+    default:
+      return count++;
+  }
 }
 
 /*
   The functions |apply| and |cons| are defined directly in terms
   of ATerm functions.
+  Note: the appl is annotated with a (unique) id, for ambiguity chain
+  forming
 */
 ATerm SG_Apply(parse_table *pt, label l, ATermList ts)
 {
-  ATerm t;
 /* Abbreviated:
   t =  ATmake("appl(aprod(<int>),<term>)", l, ts);
  */
-  t= ATmake("appl(<term>,<term>,<int>)", SG_LookupProduction(pt,l), ts, SG_ApplID());
-  ATprotect(&t);
-  return(t);
+  return ATmake("appl(<term>,<term>,<int>)", SG_LookupProduction(pt,l), ts, SG_ApplID(SG_APPLID_INC));
 }
 
 
@@ -154,25 +158,12 @@ ATermList SG_AmbTable(int Mode, ATermInt index, ATermList value)
       break;
     case SG_AMBTBL_CLEAR:
       if(ambtbl) {
-/*
-        ATerm   t;
-        ATermList   keys;
-
-        for(keys = ATtableKeys(ambtbl); keys && !ATisEmpty(keys);
-            keys=ATgetNext(keys)) {
-          t = ATtableGet(ambtbl, ATgetFirst(keys));
-          ATunprotect(&t);
-      }
-*/
         ATtableDestroy(ambtbl);
         ambtbl = NULL;
       }
       break;
     case SG_AMBTBL_ADD:
       if(!ambtbl) SG_AmbTable(SG_AMBTBL_INIT, NULL, NULL);
-/*
-      ATprotect((ATerm *) &value);
-*/
       ATtablePut(ambtbl, (ATerm) index, (ATerm) value);
       break;
     case SG_AMBTBL_REMOVE:

@@ -4,19 +4,17 @@
 # Configure variable substitutions
 PRODUCT		= @PRODUCT@
 VERSION		= @VERSION@
-DATE            = `date`
 
 @SET_MAKE@
-
 VPATH		= @srcdir@
 srcdir		= @srcdir@
 top_srcdir	= @top_srcdir@
 prefix		= @prefix@
 exec_prefix	= @exec_prefix@
-bindir		= $(exec_prefix)/bin
-libdir		= $(exec_prefix)/lib
-includedir	= $(prefix)/include
-docdir		= $(top_srcdir)/docs
+bindir		= ${exec_prefix}/bin
+libdir		= ${exec_prefix}/lib
+includedir	= ${prefix}/include
+docdir		= ${top_srcdir}/docs
 
 SHELL		= @SHELL@
 
@@ -33,12 +31,11 @@ LDFLAGSPROF     = ${LDFLAGS} -pg
 
 MAKE		= gmake
 
-DEFS		= @DEFS@ ${XDEFS} # -DHAVE_BOEHMGC
+DEFS		= @DEFS@
 INCLUDES	= @INCLUDES@ ${XINCLUDES}
-LIBS		= @LIBS@ ${SOCKLIBS} ${XLIBS}
-LIBSGC		= @LIBS@ ${SOCKLIBS} ${XGCLIBS}
-LIBSPROF	= @LIBS@ ${SOCKLIBS} ${XLIBSPROF}
-LIBSGCPROF	= @LIBS@ ${SOCKLIBS} ${XGCLIBSPROF}
+LIBSALL		= @LIBS@ ${SOCKLIBS} -L${libdir}
+LIBS		= ${LIBSALL} ${XLIBS}
+LIBSPROF	= ${LIBSALL} ${XLIBSPROF}
 SOCKLIBS	= @SOCKLIBS@
 
 INSTALL		= @INSTALL@
@@ -51,51 +48,59 @@ TOOLBUS         = @TOOLBUS@
 
 # The eXtra parts of some variables
 XCFLAGS		= ${DEFS}
-XGCCFLAGS	= ${XCFLAGS} -DHAVE_BOEHMGC
-XCGLIB		= -lgc
+XA2TOA1CFLAG	= -DHAVE_A2TOA1
+XA2TOA1LIB	= -la2toa1
+XGCCFLAG	= -DHAVE_BOEHMGC
+XGCLIB		= -lgc
 XCPPFLAGS	=
-XINCLUDES	= -I$(ATERM)/include
-XLIBSALL	= -L. -L${libdir} -lsglr -la2toa1 ${BOEHMGC}
-ATVERS		= dbg # ${CC}
-XLIBS		= ${XLIBSALL} -lATerm-${ATVERS} -lAsFix-${ATVERS} -lATB-${ATVERS}
-XGCLIBS		= ${XLIBS} ${XCGLIB}
-XLIBSPROF	= ${XLIBSALL} -lATerm-prof  -lAsFix-prof  -lATB-prof
-XGCLIBSPROF	= ${XLIBSPROF} ${XCGLIB}
+XINCLUDES	= -I${ATERM}/include
+ATVERS		= ${CC}
+#ATVERS		= dbg
+XLIBS		= -lATerm-${ATVERS} -lAsFix-${ATVERS} -lATB-${ATVERS}
+XLIBSPROF	= -lATerm-prof  -lAsFix-prof  -lATB-prof
 
 SGLRLIB         = libsglr.a
+SGLRLIBA2TOA1   = libsglr-a2toa1.a
+SGLRLIBGC       = libsglr-gc.a
 SGLRLIBPROF     = libsglr-prof.a
-SGLRLIBS        = ${SGLRLIB}
+SGLRLIBS        = ${SGLRLIB} ${SGLRLIBA2TOA1} ${SGLRLIBGC} ${SGLRLIBPROF}
 SGLRINC         = sglr.h
 LIBSRC          = sglr-interface.c parse-table.c parser.c forest.c stack.c tree-to-dot.c
-LIBOBJ          = $(patsubst %.c,%.o,$(LIBSRC))
-LIBOBJPROF      = $(patsubst %.c,%-prof.o,$(LIBSRC))
+LIBOBJ          = $(patsubst %.c,%.o,${LIBSRC})
+LIBOBJA2TOA1    = $(patsubst %.c,%-a2toa1.o,${LIBSRC})
+LIBOBJGC        = $(patsubst %.c,%-gc.o,${LIBSRC})
+LIBOBJPROF      = $(patsubst %.c,%-prof.o,${LIBSRC})
 
-PROGS           = sglr
+PROG            = sglr
+PROGS           = ${PROG} sglr-a2toa1 sglr-gc sglr-prof
 GETOPTC         = getopt.c getopt1.c
-GETOPTOBJ       = $(patsubst %.c,%.o,$(GETOPTC))
+GETOPTOBJ       = ${patsubst %.c,%.o,${GETOPTC}}
 CSRC            = sglr-main.c
-OBJ             = $(patsubst %.c,%.o,$(CSRC))
+OBJ             = ${patsubst %.c,%.o,${CSRC}}
+OBJA2TOA1       = ${patsubst %.c,%-a2toa1.o,${CSRC}}
 
-all:	${SGLRLIBS} ${PROGS}
+all:	${PROG}
+
+complete:	${PROGS}
 
 install:	incinstall libinstall bininstall
 
 incinstall:	${SGLRINC}
-	@for INC in $(SGLRINC);	\
+	@for INC in ${SGLRINC};	\
 	do \
-		$(INSTALL_DATA) $(INSTALL) $(includedir) $$INC; \
+		${INSTALL_DATA} ${INSTALL} ${includedir} $$INC; \
 	done
 
 libinstall:	${SGLRLIBS}
-	@for LIB in $(SGLRLIBS);	\
+	@for LIB in ${SGLRLIBS};	\
 	do \
-		$(INSTALL_DATA) $(INSTALL) $(libdir) $$LIB; \
+		${INSTALL_DATA} ${INSTALL} ${libdir} $$LIB; \
 	done
 
 bininstall:	${PROGS}
-	@for PROG in $(PROGS);	\
+	@for PROG in ${PROGS};	\
 	do \
-		$(INSTALL_PROG) $(INSTALL) $(bindir) $$PROG; \
+		${INSTALL_PROG} ${INSTALL} ${bindir} $$PROG; \
 	done
 
 distclean realclean:	clean
@@ -103,54 +108,67 @@ distclean realclean:	clean
 
 clean:
 	rm -f	core sglr.tifs sglr.tif.[ch] ${OBJ} ${GETOPTOBJ} \
-		${LIBOBJ} ${LIBOBJPROF}
+		${LIBOBJ} ${LIBOBJA2TOA1} ${LIBOBJGC} ${LIBOBJPROF}
 
 # Generic rules
 
 %.c:	%.h
 
+%-a2toa1.o:	%.c
+	${CC} ${CFLAGS} ${XA2TOA1CFLAG} ${INCLUDES} -c $< -o $@
+
+%-gc.o:	%.c
+	${CC} ${CFLAGS} ${XGCCFLAG} ${INCLUDES} -c $< -o $@
+
 %-prof.o:	%.c
-	$(CC) $(CFLAGSPROF) $(INCLUDES) -c $< -o $@
+	${CC} ${CFLAGSPROF} ${INCLUDES} -c $< -o $@
 
 %.o:	%.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $<
+	${CC} ${CFLAGS} ${INCLUDES} -c $<
 
 %.tif.c: %.tifs
-	$(prefix)/bin/tifstoc -tool $* $<
+	${prefix}/bin/tifstoc -tool $* $<
 
 %.tifs: %.tb
-	$(prefix)/bin/toolbus -gentifs $<
+	${prefix}/bin/toolbus -gentifs $<
 
 
 # Specific dependencies
 
+libsglr.a:  ${LIBOBJ}
+	${AR} ${AR_FLAGS} $@ ${LIBOBJ}
+
+libsglr-gc.a:  ${LIBOBJGC}
+	${AR} ${AR_FLAGS} $@ ${LIBOBJGC}
+
+libsglr-a2toa1.a:  ${LIBOBJA2TOA1}
+	${AR} ${AR_FLAGS} $@ ${LIBOBJA2TOA1}
+
 libsglr-prof.a:  ${LIBOBJPROF}
-	$(AR) $(AR_FLAGS) $@ $(LIBOBJPROF)
+	${AR} ${AR_FLAGS} $@ ${LIBOBJPROF}
+
+sglr: ${GETOPTOBJ} ${OBJ} ${SGLRLIB}
+	${CC} ${LDFLAGS} ${OBJ} ${GETOPTOBJ} ${SGLRLIB} ${LIBS} -o $@
+
+sglr-a2toa1: ${GETOPTOBJ} ${OBJA2TOA1} ${SGLRLIBA2TOA1}
+	${CC} ${LDFLAGS} ${OBJA2TOA1} ${GETOPTOBJ}		\
+		${SGLRLIBA2TOA1} ${XA2TOA1LIB} ${LIBS} -o $@
+
+sglr-gc: ${GETOPTOBJ} ${OBJ} ${SGLRLIBGC}
+	${CC} ${LDFLAGS} ${OBJ} ${GETOPTOBJ} ${SGLRLIBGC} ${XGCLIB} ${LIBS} -o $@
 
 sglr-prof: ${GETOPTOBJ} ${OBJ} ${SGLRLIBPROF}
-	${CC} ${LDFLAGSPROF} ${OBJ} ${GETOPTOBJ} $(LIBSPROF) -o $@
-
-sglr-prof-gc: ${GETOPTOBJ} ${OBJ} ${SGLRLIBPROF}
-	${CC} ${LDFLAGSPROF} ${OBJ} ${GETOPTOBJ} $(LIBSGCPROF) -o $@
-
-libsglr.a:  ${LIBOBJ}
-	$(AR) $(AR_FLAGS) $@ $(LIBOBJ)
-
-sglr: ${GETOPTOBJ} ${OBJ} ${SGLRLIBS}
-	${CC} ${LDFLAGS} ${OBJ} ${GETOPTOBJ} $(LIBS) -o $@
-
-sglr-gc: ${GETOPTOBJ} ${OBJ} ${SGLRLIBS}
-	${CC} ${LDFLAGS} ${OBJ} ${GETOPTOBJ} $(LIBSGC) -o $@
+	${CC} ${LDFLAGSPROF} ${OBJ} ${GETOPTOBJ} ${SGLRLIBPROF} ${LIBSPROF} -o $@
 
 sglr-main.o:	sglr.tif.c
 
 parse-table.o: parse-table.h
 
 
-# The GNU getopt sources $(GETOPTC) don't compile silently
+# The GNU getopt sources ${GETOPTC} don't compile silently
 
 getopt.o: getopt.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< 2> /dev/null
+	${CC} ${CFLAGS} ${INCLUDES} -c $< 2> /dev/null
 
 getopt1.o: getopt1.c
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< 2> /dev/null
+	${CC} ${CFLAGS} ${INCLUDES} -c $< 2> /dev/null
