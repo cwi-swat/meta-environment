@@ -75,7 +75,7 @@ language such as static type checking, interpretation, compilation or
 transformation.  \asdf\ has been applied successfully in a number of
 industrial projects \cite{BDKKM96,VanDenBrandKlintVerhoef:98}, such as
 the development of a domain-specific language for describing interest
-products (in the financial domain) \cite{ADR95} and a renovation
+products (in the financial domain)~\cite{ADR95} and a renovation
 factory for restructuring of COBOL code \cite{BSV97b}.  In such
 industrial applications, the execution speed is very important, but
 when processing huge COBOL programs memory usage becomes a critical
@@ -105,7 +105,7 @@ based on term rewriting into the realm of industrial applications.
 
 In the following two subsections we will now first give a quick
 introduction to \asdf\ (the input language of the compiler to be
-described) and to \muasf (the abstract intermediate representation
+described) and to \muasf\ (the abstract intermediate representation
 used internally by the compiler).  Next, we describe the generation of
 C code (Section~\ref{Codegeneration}) as well as memory management
 (Section~\ref{MemoryManagement}).  Section~\ref{Benchmarks} is devoted
@@ -637,12 +637,12 @@ and that terms should effectively be \emph{immutable} after creation.
 During rewriting of terms by the generated code this restriction
 causes no problems since terms are created in a fully functional way.
 Normal forms are constructed bottom-up and there is no need to perform
-destructive updates on a term once it has been constructed.
-When normalizing an input term, this term is not modified, the normal
-form is constructed independent of the input term. If we would modify
-the input term we would get graph rewriting instead of (innermost) term
-rewriting. Furthermore, the term library is very general and {\em not}
-strictly devoted to rewriting, destructive updates would cause unwanted
+destructive updates on a term once it has been constructed.  When
+normalizing an input term, this term is not modified, the normal form
+is constructed independent of the input term. If we would modify the
+input term we would get graph rewriting instead of (innermost) term
+rewriting. The term library is very general and is {\em not} only used
+for rewriting; destructive updates would therefore also cause unwanted
 side effects in other components based on this term library.
 
 However, destructive operations on lists, like list concatenation and
@@ -729,14 +729,16 @@ systems failed to compute results for the complete range $17 \leq n
 \leq 23$ in some benchmarks. In those cases, the corresponding graph
 also ends prematurely.  Measurements were performed on an ULTRA
 SPARC-5 (270 MHz) with 512 Mb of memory.
-
 So far we have used the following implementations
 in our benchmarks:
 
 \begin{itemize}
 
-\item The \asdf\ compiler as discussed in this paper.
-\item The Clean compiler developed at the University of Nijmegen~\cite{clean94}.
+\item The \asdf\ compiler as discussed in this paper: we give results
+      \emph{with} and \emph{without} maximal sharing.
+\item The Clean compiler developed at the University of Nijmegen~\cite{clean94}:
+      we give results for standard (\emph{lazy}) versions and for versions
+      optimized with strictness annotations (\emph{strict}).
 \item The ELAN compiler developed at INRIA, Nancy~\cite{BorovanskyEtAl:96}.
 \item The Opal compiler developed at the Technische Universit\"{a}t
 Berlin~\cite{DidrichEtAl:94}.
@@ -749,31 +751,18 @@ Berlin~\cite{DidrichEtAl:94}.
 %%  \centerline{\psfig{figure=evalsym-tlog.eps}}
 %%  \caption{\label{evalsym-tlog}Execution times for the {\tt evalsym} benchmark}
 %%\end{figure}
-
-\subsubsection{The {\tt evalsym} Benchmark}
-
-The first benchmark is called {\tt evalsym} and uses an algorithm that
-is CPU intensive, but does not use a lot of memory.  This benchmark is
-a worst case for our implementation, because little can be gained by
-maximal sharing.  The results are shown in 
-Table \ref{evalsym-table}.
-%%Figure \ref{evalsym-tlog}.
-The differences between the various systems are indeed small.
-Although, \asdf\ (with sharing) cannot benefit from maximal sharing, it does not
-loose much either.
-
 \begin{table}[tb]
 \begin{center} 
-\begin{tabular}{|l|r|} \hline
+\begin{tabular}{|l|c|} \hline
 Compiler & Time (sec)\\ \hline \hline
-Clean (strict)          & 32.3 \\ \hline
-SML                     & 32.9 \\ \hline 
-Clean (lazy)            & 36.9 \\ \hline
-\asdf{} (with sharing)  & 37.7 \\ \hline 
-Haskell                 & 42.4 \\ \hline
-Opal                    & 75.7 \\ \hline
+Clean (strict)          & \ 32.3 \\ \hline
+SML                     & \ 32.9 \\ \hline 
+Clean (lazy)            & \ 36.9 \\ \hline
+\asdf{} (with sharing)  & \ 37.7 \\ \hline 
+Haskell                 & \ 42.4 \\ \hline
+Opal                    & \ 75.7 \\ \hline
 \asdf{} (without sharing) & 190.4 \\ \hline 
-Elan                    & 287.0 \\ \hline 
+Elan                    &   287.0 \\ \hline 
 \end{tabular}
 \vspace{\baselineskip}
 \caption{\label{evalsym-table} The execution times for the evaluation of $2^{23}$.}
@@ -790,6 +779,29 @@ Elan                    & 287.0 \\ \hline
   \caption{\label{evalexp-tlog}Execution times for the {\tt evalexp} benchmark}
 \end{figure}
 
+\begin{figure}[tb]
+  \centerline{\psfig{figure=evaltree-mlin.eps}}
+  \caption{\label{evaltree-mlin}Memory usage for the {\tt evaltree} benchmark}
+\end{figure}
+
+\begin{figure}[tb]
+  \centerline{\psfig{figure=evaltree-tlin.eps}}
+  \caption{\label{evaltree-tlog}Execution times for the {\tt evaltree} benchmark}
+\end{figure}
+
+\subsubsection{The {\tt evalsym} Benchmark}
+
+The first benchmark is called {\tt evalsym} and uses an algorithm that
+is CPU intensive, but does not use a lot of memory.  This benchmark is
+a worst case for our implementation, because little can be gained by
+maximal sharing.  The results are shown in 
+Table \ref{evalsym-table}.
+%%Figure \ref{evalsym-tlog}.
+The differences between the various systems are indeed small.
+Although, \asdf\ (with sharing) cannot benefit from maximal sharing, it does not
+loose much either.
+
+
 \subsubsection{The {\tt evalexp} Benchmark}
 
 The second benchmark is called {\tt evalexp} and is based on an algorithm
@@ -804,19 +816,10 @@ requirements of this benchmark. Interestingly, \asdf\ (with sharing)
 has no problems whatsoever due to the use of maximal sharing, although
 it is also based on strict evaluation
 
-Execution times are plotted in Figure \ref{evalexp-tlog}. Only lazy
-Clean is faster than \asdf\ (with sharing) but the differences
+Execution times are plotted in Figure \ref{evalexp-tlog}. Only
+Clean (lazy) is faster than \asdf\ (with sharing) but the differences
 are small.
 
-\begin{figure}[tb]
-  \centerline{\psfig{figure=evaltree-mlin.eps}}
-  \caption{\label{evaltree-mlin}Memory usage for the {\tt evaltree} benchmark}
-\end{figure}
-
-\begin{figure}[tb]
-  \centerline{\psfig{figure=evaltree-tlin.eps}}
-  \caption{\label{evaltree-tlog}Execution times for the {\tt evaltree} benchmark}
-\end{figure}
 
 \subsubsection{The {\tt evaltree} Benchmark}
 
@@ -827,7 +830,6 @@ lazy nor the strict implementations can cope with the memory
 requirements of this benchmark.  Only \asdf\ (with sharing) can keep
 the memory requirements at an acceptable level due to its maximal
 sharing.
-
 The execution times plotted in Figure \ref{evaltree-tlog}
 show that only \asdf\ scales-up for $n > 20$.
 
@@ -835,19 +837,24 @@ show that only \asdf\ scales-up for $n > 20$.
 
 Table \ref{ASF2Ctable} gives an overview of the compilation times of
 four non-trivial \asdf{} specifications and their sizes in number of
-equations, lines of \asdf{} specification, and generated C code. 
-The \asdf{} compiler is the
-specification of the \asdf{} to C compiler discussed in this paper.
-The parser generator is an \asdf{} specification which generates a
-parse table for an GLR-parser \cite{Vis97}. The COBOL formatter
-is a pretty-printer for COBOL, this formatter is used within a renovation
-factory for COBOL \cite{BSV97b}.
-The Risla expander is an \asdf{} specification of a domain-specific language
-for interest products, it expands modular Risla specifications into
-``flat'' Risla specifications. These flat Risla specifications are later
-compiled into COBOL code by an auxiliary tool.
-The compilation times in the last column are produced by a
-native C compiler (SUN's \texttt{cc}) with maximal optimizations.
+equations, lines of \asdf{} specification, and generated C code.  The
+\asdf{} compiler is the specification of the \asdf{} to C compiler
+discussed in this paper.  The parser generator is an \asdf{}
+specification which generates a parse table for an GLR-parser
+\cite{Vis97}. The COBOL formatter is a pretty-printer for COBOL, this
+formatter is used within a renovation factory for COBOL \cite{BSV97b}.
+The Risla expander is an \asdf{} specification of a domain-specific
+language for interest products, it expands modular Risla
+specifications into ``flat'' Risla specifications~\cite{ADR95}. These
+flat Risla specifications are later compiled into COBOL code by an
+auxiliary tool.  The compilation times in the column ``\asdf{} compiler''
+give the time needed to compile each \asdf{} specification to C code.
+Note that the \asdf{} compiler has been fully bootstrapped and is itself
+a compiled \asdf{} specification. The times in this column give
+therefore also a general impression of the execution times that
+can be achieved with compiled \asdf{} specifications.
+The compilation times in the last column are produced
+by a native C compiler (SUN's \texttt{cc}) with maximal optimizations.
 
 \begin{table}[tb]
 \begin{center}
@@ -864,25 +871,25 @@ Risla expander   & 1082     & 7169     & 46787    	& 168  		& 531 \\ \hline
 \end{center}
 \end{table}
 
-Table \ref{sharingtable} gives an impression of the effect of maximal
-sharing on execution time and memory usage of compiled 
-\asdf\ specifications.  We show the results (with and without sharing) for
-the compilation of the \asdf{} to C compiler itself and for the
-expansion of a non-trivial Risla specification.
-
 \begin{table}[tb]
 \begin{center}
-\begin{tabular}{|l|r|r|} \hline
+\begin{tabular}{|l|c|c|} \hline
 Application 				& Time (sec) 	& Memory (Mb) \\ \hline \hline
-\asdf{} compiler (with sharing)    	& 216		& 16	\\ \hline
+\asdf{} compiler (with sharing)    	& 216		& \ 16	\\ \hline
 \asdf{} compiler (without sharing) 	& 661  		& 117 	\\ \hline 
-Risla expansion (with sharing)   	& 9  		& 8 	\\ \hline
-Risla expansion (without sharing)  	& 18 		& 13	\\ \hline
+Risla expansion (with sharing)   	& \ \ 9  	& \ \ 8 \\ \hline
+Risla expansion (without sharing)  	& \ 18 		& \ 13	\\ \hline
 \end{tabular}
 \vspace{\baselineskip}
 \caption{\label{sharingtable}Performance with and without maximal sharing.}
 \end{center}
 \end{table}
+
+Table \ref{sharingtable} gives an impression of the effect of maximal
+sharing on execution time and memory usage of compiled 
+\asdf\ specifications.  We show the results (with and without sharing) for
+the compilation of the \asdf{} to C compiler itself and for the
+expansion of a non-trivial Risla specification.
 
 \section{Concluding Remarks}
 \label{Conclusions}
