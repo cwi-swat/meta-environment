@@ -1,0 +1,38 @@
+rel[str, str] calls = {<"a", "b">, <"b", "c">, <"b", "d">, <"d", "c">, <"d",
+"e">, <"f", "e">, <"f", "g">, <"g", "e">}
+
+bag[str] topCalls = top(calls)
+
+assert "a1": topCalls == {"a", "f"}
+
+bag[str] bottomCalls = bottom(calls)
+
+assert "a2": bottomCalls == {"c", "e"}
+
+rel[str,str] closureCalls = calls+
+
+assert "a3": closurerCalls == 
+ 		{<"a", "b">, <"b", "c">, <"b", "d">, <"d", "c">, 
+		<"d","e">, <"f", "e">, <"f", "g">, <"g", "e">, 
+		<"a", "c">, <"a", "d">, <"b", "e">, <"a", "e">}>
+
+bag[str] calledFromA = closureCalls["a"]
+
+assert "a4": calledFromA == {"b", "c", "d", "e"}
+
+bag[str] calledFromF = closureCalls["f"]
+
+assert "a5": calledFromF == {"e", "g"}
+
+bag[str] shared = calledFromA inter calledFromF
+
+assert "a6": shared == {"e"}
+
+
+
+
+
+
+
+
+

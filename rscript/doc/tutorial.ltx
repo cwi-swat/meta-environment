@@ -5,10 +5,12 @@
 \usepackage{url}
 \usepackage{times}
 \usepackage{xspace}
+\usepackage{alltt}
 \usepackage{supertabular}
 
 \newcommand{\rscript}[0]{\textsc{Rscript}\xspace}
 \newcommand{\asfsdf}[0]{\textsc{Asf+Sdf}\xspace}
+\newcommand{\note}[1]{\paragraph{Note:} \emph{#1}}
 
 \title{A Tutorial Introduction to \rscript}
 \author{Paul Klint}
@@ -104,12 +106,17 @@ they are translated to a nested pair.  For instance, the type {\tt
 and the value {\tt <1, 2, 3, 4>} corresponds to {\tt <1, <2, <3, 4>>>}.
 
 \paragraph{Bags}
-Bags are represented by the type {\tt bag[$T$]}, where $T$ is an
-arbitrary type. Examples are {\tt bag[int]}, {{\tt bag[<int,int>]} and
-{\tt bag[bag[str]]}.  Bags are denoted by {\tt \{ $E_1$, $E_2$, ..., $E_n$ \}},
-where the $E_i$ ($1 <= i <= n$) are expressions that yield the desired element
-type. For example, {\tt \{1, 2, 3\}}, {\tt \{<1,10>, <2,20>,
-<3,30>\}}, and {\tt \{\{"a", "b"\}, \{"c", "d"\}\}}.
+Bags are represented by the type {\tt bag[$T$]}, where $T$ is an arbitrary
+type. Examples are {\tt bag[int]}, {{\tt bag[<int,int>]} and {\tt
+bag[bag[str]]}.  Bags are denoted by a list of elements, separated by comma's
+and enclosed in braces as in  {\tt \{ $E_1$, $E_2$, ..., $E_n$ \}},
+where the $E_i$ ($1 \leq i \leq n$) are expressions that yield the desired element
+type. For example, 
+\begin{itemize}
+\item {\tt \{1, 2, 3\}} is of type {\tt bag[int]},
+\item  {\tt \{<1,10>, <2,20>, <3,30>\}} is of type {\tt bag[<int,int>]}, and 
+\item {\tt \{\{"a", "b"\}, \{"c", "d"\}\}} is of type {\tt bag[bag[str]]}.
+\end{itemize}
 
 \paragraph{Relations}
 Bags are nothing more than bags of tuples, but since they are used so often
@@ -121,7 +128,7 @@ bag[<$T_1$, $T_2$>]}.  Examples are {\tt rel[int,str]} and {\tt
 rel[int,bag[str]]}.  Relations are denoted by {\tt \{<$E_{11}$, $E_{12}$>, <$E_{21}$,
 $E_{22}$>, ..., <$E_{n1}$, $E_{n2}$>\}}, where the $E_{ij}$ are expressions that
 yield the desired element type. For example, {\tt \{<1, "a">, <2, "b">,
-<3,"c">\}}.
+<3,"c">\}} is of type {\tt rel[int, str]}.
 
 Not surprisingly, $n$-ary relations are represented by the type {\tt rel[$T_1$, $T_2$, ..., $T_n$]}
 which is  a shorthand for  {\tt bag[<$T_1$, $T_2$, ..., $T_n$>]}
@@ -237,7 +244,7 @@ $E_i$, and then the value of expression $E$ is yielded.
 \subsection{Function declarations}
 A function declaration has the form
 \begin{quote}
-{\tt $T$ $F$($T_1 V_1$, ..., $T_n V_n$) = $E$}
+{\tt $T$ $F$($T_1 ~ V_1$, ..., $T_n ~ V_n$) = $E$}
 \end{quote}
 Here $T$ is the result type of the function and this should be equal to the
 type of the associated expression $E$.  Each $T_i$ $V_i$ represents a typed
@@ -246,10 +253,12 @@ get their value when $F$ is invoked from another expression.
 
 \paragraph{Example} The function declaration
 \begin{quote}
-{\tt rel[int, int] invert(rel[int,int] R) = \{<Y, X> | X, Y> : R \}} 
+{\tt rel[int, int] invert(rel[int,int] R) = \{<Y, X> | <X, Y> : R \}} 
 \end{quote}
 yields the inverse of the argument relation {\tt R}. For instance,
-{\tt invert(\{<1,10>, <2,20>\})} yields {\tt \{<10,1>, <20,2>\}}.
+\begin{itemize}
+\item {\tt invert(\{<1,10>, <2,20>\})} yields {\tt \{<10,1>, <20,2>\}}.
+\end{itemize}
 
 \paragraph{Parameterized types in function declarations}
 The types that occur in function declarations may also contain
@@ -259,13 +268,16 @@ types.
 \begin{sloppypar}
 \paragraph{Example} The declaration
 \begin{quote}
-{\tt rel[T2, T1] invert2(rel[T1,T2] R) = \{<Y, X> | X, Y> : R \}} 
+{\tt rel[T2, T1] invert2(rel[T1,T2] R) = \{<Y, X> | <X, Y> : R \}} 
 \end{quote}
 yields an inversion function that is applicable to any binary relation.
 For instance,
-{\tt invert2(\{<1,10>, <2,20>\})} yields {\tt \{<10,1>, <20,2>\}},
-and {\tt invert2(\{<"mon", 1>, <"tue", 2>\}}
+\begin{itemize}
+\item {\tt invert2(\{<1,10>, <2,20>\})} yields {\tt \{<10,1>, <20,2>\}},
+and 
+\item {\tt invert2(\{<"mon", 1>, <"tue", 2>\}}
 yields {\tt \{<1, "mon">, <2, "tue">\}}.
+\end{itemize}
 \end{sloppypar}
 
 \paragraph{Example} The function
@@ -273,8 +285,11 @@ yields {\tt \{<1, "mon">, <2, "tue">\}}.
 {\tt <T2, T1> swap(T1 A, T2 B) = <B, A>}
 \end{quote}
 can be used to swap the elements of pairs of arbitrary types.  For instance,
-{\tt swap(<1, 2>)} yields {\tt <2,1>} and {\tt swap(<"wed", 3>)} yields {\tt
+\begin{itemize}
+\item {\tt swap(<1, 2>)} yields {\tt <2,1>} and 
+\item {\tt swap(<"wed", 3>)} yields {\tt
 <3, "wed">}.
+\end{itemize}
 
 \subsection{Assertions}
 An assert statement may occur everywhere where a declaration is allowed.  It
@@ -311,7 +326,10 @@ Here, the expressions {\tt E}$_i$ may refer to any of the variables {\tt
   solving a set of dataflow equations. \footnote{Probably, the syntax of this
   construct should more emphasize that it is a set of equations.}
 
-\section{Built-in Operators and Functions}
+\section{Built-in Operators}
+
+\note{The format of this section will be changed to the style of the built-in
+  functions.}
 
 In the following two tables the built-in operators and functions are given.
 For readability, the argument types are indicated as follows:
@@ -449,83 +467,319 @@ and false otherwise\\ \hline \hline
 \tablehead{\hline}
 \tabletail{\hline}
 
-\begin{supertabular}{|p{4cm}|p{10cm}|} \hline
 
-{\tt id(} \emph{bag} {\tt )} & yields the relation that results from transforming
-each element in the argument into a pair with that element as first and
-second element \\ \hline
+\newcommand{\function}[4]{\subsection{#1}
+Definition:
+\begin{quote}
+#2
+\end{quote}
+#3
+Example(s):
+\begin{itemize}
+#4
+\end{itemize}
+}
 
-{\tt domain(} \emph{rel} {\tt )} & yields the bag that results from taking
-the first element of each tuple in the argument \\ \hline
+\function{The identity relation: {\tt id}}
+{\tt rel[$T$,$T$] id(bag[$T$] B) = \{ <X, X> | X : B \}}
+{Yields the relation that results from transforming
+each element in {\tt B} into a pair with that element as first and
+second element.
+}
+{
+\item {\tt id(\{1,2,3\})} yields {\tt \{<1,1>, <2,2>, <3,3>\}}.
+\item \begin{sloppypar} {\tt id(\{"mon", "tue", "wed"\}} yields {\tt \{<"mon","mon">,
+  <"tue","tue">, <"wed","wed">\}}. \end{sloppypar}
+}
 
-{\tt range(} \emph{rel} {\tt )} & yields the bag that results from taking
-the second element of each tuple in the argument \\ \hline
+\function{The domain of a relation: {\tt domain}}
+{\tt bag[$T_1$] domain (rel[$T_1$,$T_2$] R) = \{ X | <X, Y> : R \}}
+{Yields the bag that results from taking
+the first element of each tuple in relation {\tt R}.
+}
+{
+\item {\tt domain(\{<1,10>, <2,20>\})} yields {\tt \{1, 2\}}.
+\item {\tt domain(\{<"mon", 1>, <"tue", 2>\})} yields {\tt \{"mon", "tue"\}}.
 
-{\tt carrier(} \emph{rel} {\tt )} & yields the bag that results from taking
-the first and  second element of each tuple in the argument \\ \hline
+}
 
-{\tt top(} \emph{rel} {\tt )} &  yields the bag of all roots when the argument is
-viewed as a graph\\ \hline
+\function {The range of a relation: {\tt range}}
+{\tt bag[$T_2$] range (rel[$T_1$,$T_2$] R) = \{ Y | <X, Y> : R \}}
+{Yields the bag that results from taking
+the second element of each tuple in relation {\tt R}.
+}
+{
+\item {\tt range(\{<1,10>, <2,20>\})} yields {\tt \{10, 20\}}.
+\item {\tt range(\{<"mon", 1>, <"tue", 2>\})} yields {\tt \{1, 2\}}.
+}
 
-{\tt bottom(} \emph{rel} {\tt )} &  yields the bag of all leaves when the argument is
-viewed as a graph\\ \hline
+\function {The carrier of a relation: {\tt carrier}}
+{\tt bag[$T$]  carrier (rel[$T$,$T$] R) = domain(R) union range(R)}
+{Yields the bag that results from taking
+the first and  second element of each tuple in the relation {\tt R}.
+Note that the domain and range type of {\tt R} should be the same.
+}
+{
+\item {\tt carrier(\{<1,10>, <2,20>\})} yields {\tt \{1, 10, 2, 20\}}.
+}
 
-{\tt inv(} \emph{rel} {\tt )} &  yields the relation that is the inverse of the
-argument, i.e. the relation in which the elements of the tuples have been
-interchanged.\\ \hline
+\function {The top of a relation: {\tt top}}
+{\tt bag[$T$] top(rel[$T$, $T$] R) = domain(R) BACKSLASH range(R)}
+{Yields the bag of all roots when the relation {\tt R} is
+viewed as a graph. Note that the domain and range type of {\tt R} should be the same.
+}
+{
+\item {\tt top(\{<1,2>, <1,3>, <2,4>, <3,4>\}} yields {\tt \{1\}}.
+}
 
-{\tt compl(} \emph{rel} {\tt )} &  yields the relation that is the complement of the
-argument, using the carrier set of that argument oas universe \\ \hline
+\function{The bottom of a relation: {\tt bottom}}
+{\tt bag[$T$] bottom(rel[$T$,$T$] R) = range(R) BACKSLASH domain(R)}
+{Yields the bag of all leaves when the relation {\tt R} is
+viewed as a graph. Note that the domain and range type of {\tt R} should be
+the same.
+}
+{
+\item {\tt bottom(\{<1,2>, <1,3>, <2,4>, <3,4>\}} yields {\tt \{4\}}.
+}
 
-{\tt domainR(} \emph{rel}, \emph{bag} {\tt )} & yields a relation identical to the first
- argument but only containing tuples whose first element is in the second
- argument \\ \hline
+\function{The inverse of a relation: {\tt inv}}
+{\tt rel[$T_2$,$T_1$] inv (rel[$T_1$,$T_2$] R) = \{ <Y, X> | <X, Y> : R \}}
+{ Yields the relation that is the inverse of the
+argument relation {\tt R}, i.e. the relation in which the elements of all
+tuples in {\tt R} have been
+interchanged.
+}
+{
+\item {\tt inv(\{<1,10>, <2,20>\})} yields {\tt \{<10,1>,<20,2>]}.
+}
+\function{The complement of a relation: {\tt compl}}
+{\tt rel[$T_1$, $T_2$] compl(rel[$T_1$,$T_2$] R) = (domain(R) x range(R)) BACKSLASH R}
+{ Yields the relation that is the complement of the
+argument relation {\tt R}, using the carrier set of {\tt R} as universe.
+}
+{
+\item {\tt compl(\{<1,10>\}}  yields {\tt \{<1, 1>, <10, 1>, <10, 10>\}}.
+}
 
-{\tt rangeR(} \emph{rel}, \emph{bag} {\tt )} & yields a relation identical to the first
- argument but only containing tuples whose second element is in the second
- argument \\ \hline
+\function{Domain restriction of a relation: {\tt domainR}}
+{\tt rel[$T_1$,$T_2$] domainR (rel[$T_1$,$T_2$] R, Bag[$T_1$] B) = \\
+   \{ <X, Y> | <X, Y> : R, X in B \}}
+{ Yields a relation identical to the relation {\tt R}
+  but only containing tuples whose first element occurs in bag {\tt B}.
+}
+{
+\item {\tt domainR(\{<1,10>, <2,20>, <3,30>\}, \{3, 1\}} yields {\tt \{<1,10>, <3,30>\}}.
+}
 
-{\tt carrierR(} \emph{rel}, \emph{bag} {\tt )} &  yields a relation identical to the first
- argument but only containing tuples whose first and second element are in the second
- argument \\ \hline
+\function{Range restriction of a relation: {\tt rangeR}}
+{\tt rel[$T_1$,$T_2$] rangeR (rel[$T_1$,$T_2$] R, Bag[$T_2$] B) =  \\
+   \{ <X, Y> | <X, Y> : R, Y in B \}}
+{ Yields a relation identical to relation {\tt R} but only containing tuples
+  whose second element occurs in bag {\tt B}.
+}
+{
+ \item {\tt rangeR(\{<1,10>, <2,20>, <3,30>\}, \{30, 10\}} yields {\tt \{<1,10>, <3,30>\}}.
+}
 
-{\tt domainX(} \emph{rel}, \emph{bag} {\tt )} & yields a relation identical to the first
- argument but with all tuples removed whose first element is in the second
- argument \\ \hline
+\function{Carrier restriction of a relation: {\tt carrierR}}
+{\tt rel[$T$,$T$] carrierR (rel[$T$,$T$] R, Bag[$T$] B) = \\ 
+   \{ <X, Y> | <X, Y> : R, X in B, Y in B \}}
+{ Yields a relation identical to relation {\tt R}
+  but only containing tuples whose first and second element occur in bag {\tt
+    B}.
+}
+{
+ \item {\tt carrierR(\{<1,10>, <2,20>, <3,30>\}, \{10, 1, 20\}} yields {\tt \{<1,10>\}}.
+}
 
-{\tt rangeX(} \emph{rel}, \emph{bag} {\tt )} & yields a relation identical to the first
- argument but with all tuples removed whose second element is in the second
- argument \\ \hline
+\function{Domain exclusion of a relation: {\tt domainX}}
+{\tt rel[$T_1$,$T_2$] domainX (rel[$T_1$,$T_2$] R, Bag[$T_1$] B) = \\
+   \{ <X, Y> | <X, Y> : R, X notin B \}}
+{ Yields a relation identical to relation {\tt R}
+  but with all tuples removed whose first element occurs in bag {\tt B}.}
+{
+\item {\tt domainX(\{<1,10>, <2,20>, <3,30>\}, \{3, 1\}} yields {\tt \{<2, 20>\}}.
+}
+
+\function{Range exclusion of a relation: {\tt rangeX}}
+{\tt rel[$T_1$,$T_2$] rangeX (rel[$T_1$,$T_2$] R, Bag[$T_2$] B) = \\
+	   \{ <X, Y> | <X, Y> : R, Y notin B \}}
+{ Yields a relation identical to relation {\tt R} but with all tuples removed
+  whose  second element occurs in bag {\tt B}.}
+{
+ \item {\tt rangeX(\{<1,10>, <2,20>, <3,30>\}, \{30, 10\}} yields {\tt \{<2, 20>\}}.
+}
+
+\function{Carrier exclusion of a relation: {\tt carrierX}}
+{\tt rel[$T$,$T$] carrierX (rel[$T$,$T$] R, Bag[$T$] B) = \\
+   \{ <X, Y> | <X, Y> : R, X notin B, Y notin B \}}
+{ Yields a relation identical to relation {\tt R}
+  but with all tuples removed whose first or second element occurs in bag {\tt
+    B}.}
+{
+ \item {\tt carrierX(\{<1,10>, <2,20>, <3,30>\}, \{10, 1, 20\}} yields {\tt \{<3,30>\}}.
+}
+
+\function{First element of a tuple: {\tt first}}
+{\tt $T_1$ first(<$T_1$, $T_2$> P) = primitive}
+{ Yields the first element of the tuple {\tt P}.}
+{
+\item {\tt first(<1, 10>)} yields {\tt 1}.
+\item {\tt first(<"mon", 1>)} yields {\tt "mon"}.
+}
+
+\function{Second element of a tuple: {\tt second}}
+{\tt $T_2$ second(<$T_1$, $T_2$> P) = primitive}
+{ Yields the second element of the tuple {\tt P}.}
+{
+\item {\tt second(<1, 10>)} yields {\tt 10}.
+\item {\tt second(<"mon", 1>)} yields {\tt 1}.
+}
+
+\function{Reachability with restriction: {\tt reachR}}
+{\tt rel[$T$,$T$] reachR( bag[$T$] Start, bag[$T$] Restr, rel[T,T] Rel) =\\
+	       domainR(Rel, Start) o carrierR(Rel, Restr)+ }
+{ Yields the relation that describes
+which elements can be reached from  bag {\tt Start} using the relation {\tt Rel}, such that only elements in
+bag {\tt Restr} are used.
+}
+{
+\item  {\tt reachR(\{1\}, \{1, 2, 3\}, \{<1,2>, <1,3>, <2,4>, <3,4>\})} yields  {\tt
+  \{<1,2>, <1, 3>\}}.
+}
+
+\function{Reachability with exclusion: {\tt reachX}}
+{\tt rel[$T$,$T$] reachX( bag[$T$] Start, bag[$T$] Excl, rel[T,T] Rel) =\\
+	       domainR(Rel, Start) o carrierX(Rel, Excl)+ }
+{ Yields the relation that describes
+which elements can be reached from  bag {\tt Start} using the relation {\tt Rel}, such that no elements in
+bag {\tt Excl} are used.
+}
+{
+\item  {\tt reachX(\{1\}, \{2\}, \{<1,2>, <1,3>, <2,4>, <3,4>\})} yields  {\tt
+  \{<1,3>, <1, 4>\}}.
+}
+
+\function{Powerser of a bag: {\tt power}}
+{\tt bag[bag[$T$]] power(bag[$T$] B) = primitive}
+{ Yields the powerset of bag {\tt B}.}
+{
+\item \begin{sloppypar} {\tt power(\{1, 2, 3, 4})\} yields {\tt \{ \{\}, \{1\},
+    \{2\}, \{3\}, \{4\},\{1,2\}, \{1,3\}, \{1,4\}, \{2,3\}, \{2,4\}, \{3,4\},
+    \{1,2,3\}, \{1,2,4\}, \{1,3,4\}, \{2,3,4\}, \{1,2,3,4\}\}} \end{sloppypar}
+}
+
+\function{File name of an area: {\tt filename}}
+{\tt str filename(area A) = primitive}
+{Yields the file name of area {\tt A}.}
+{  
+\item {\tt filename(area("pico1.trm",5,2,6,8))} yields {\tt "pico1.trm"}.
+}
+
+\function{Beginning line of an area: {\tt beginline}}
+{\tt int beginline(area A) = primitive}
+{Yields the first line of area {\tt A}.}
+{  
+\item {\tt beginline(area("pico1.trm",5,2,6,8))} yields {\tt 5}.
+}
+
+\function{First column of an area: {\tt begincol}}
+{\tt int begincol(area A) = primitive}
+{Yields the first column of area {\tt A}.}
+{  
+\item {\tt begincol(area("pico1.trm",5,2,6,8))} yields {\tt 2}.
+}
+
+\function{Ending line of an area: {\tt endline}}
+{\tt int endline(area A) = primitive}
+{Yields the last line of area {\tt A}.}
+{  
+\item {\tt endline(area("pico1.trm",5,2,6,8))} yields {\tt 6}.
+}
+
+\function{Ending column of an area: {\tt endcol}}
+{\tt int endcol(area A) = primitive}
+{Yields the last column of area {\tt A}.}
+{  
+\item {\tt endcol(area("pico1.trm",5,2,6,8))} yields {\tt 8}.
+}
+
+\section{Examples}
+
+\subsection{Analyzing the call structure of an application}
+
+Now we will explore the call structure of an application.
+Suppose that the following facts have been extracted from the source
+code and are represented by the relation {\tt calls}:
+
+\begin{quote}
+{\tt rel[str, str] calls = \{<"a", "b">, <"b", "c">, <"b", "d">, 
+   <"d", "c">, <"d","e">, <"f", "e">, <"f", "g">, <"g", "e">\}}.
+\end{quote}
+A first step in the analysis is to determine which \emph{entry points}
+this application has, i.e., procedures which call others but are not called
+themselves. This can be done by determining the top of the
+{\tt calls} relation:
+
+\begin{quote}
+{\tt bag[str] topCalls = top(calls)}
+\end{quote}
+
+\noindent In this case, {\tt topCalls} is equal to  {\tt \{"a", "f"\}}.
+In other words, procedures {\tt "a"} and {\tt "f"} are the entry points
+of this application.
+
+In a similar spirit, we can determine the \emph{leaves} of this application,
+i.e., procedures that are being called but do not make any calls themselves:
+
+\begin{quote}
+{\tt bag[str] bottomCalls = bottom(calls)}.
+\end{quote}
+In this case, {\tt bottomCalls} is equal to  {\tt \{"c", "e"\}}.
+
+We can also determine the \emph{indirect calls} between procedures, by
+taking the transitive closure of the {\tt calls} relation:
+
+\begin{quote}
+{\tt rel[str,str] closureCalls = calls+}
+\end{quote}
+In this case, {\tt closureCalls} is equal to
+\begin{quote}
+	{\tt \{<"a", "b">, <"b", "c">, <"b", "d">, <"d", "c">, 
+	<"d","e">, <"f", "e">, <"f", "g">, <"g", "e">, 
+	<"a", "c">, <"a", "d">, <"b", "e">, <"a", "e">\}}
+\end{quote}
+
+We know now the entry points for this application and the indirect call
+relations. Combining this information, we can determine which procedures are
+called from each entry point:
+\begin{quote}
+{\tt bag[str] calledFromA = closureCalls["a"]}
+\end{quote}
+yields {\tt \{"b", "c", "d", "e"\}} and
+\begin{quote}
+{\tt bag[str] calledFromF = closureCalls["f"]}
+\end{quote}
+yields {\tt  \{"e", "g"\}}.
+Finally, we can determine which procedures are called from both entry points:
+\begin{quote}
+{\tt bag[str] shared = calledFromA inter calledFromF}
+\end{quote}
+which yields {\tt \{"e"\}}.
 
 
-{\tt carrierX(} \emph{rel}, \emph{bag} {\tt )} &  yields a relation identical to the first
- argument but with all tuples removed whose first or second element is in the second
- argument \\ \hline
 
-{\tt first(} \emph{tuple} {\tt )} &  yields the first element of the argument\\ \hline
 
-{\tt second(} \emph{tuple} {\tt )} &  yields the second element of the argument\\ \hline
 
-{\tt reachR(} \emph{bag}1, \emph{bag}2, \emph{rel} {\tt )} & yields the relation that describes
-which nodes can be reached from \emph{bag}1 using the relation rel, such that only nodes in
-bag2 are used. \\ \hline
-
-{\tt power(} \emph{bag} {\tt )} & yields the powerset of the value of its argument \\ \hline
-
-{\tt reachX(} \emph{bag}, \emph{bag}, \emph{rel} {\tt )} &  yields the relation that describes
-which nodes can be reached from bag1 using the relation rel, such that no nodes in
-bag2 are used. \\ \hline
-
-\end{supertabular}
 
 \section{Running a \rscript}
-Currently, the definition of \rscript resides in {\tt /ufs/paulk/research/RPA}
-but that \emph{will change soon}. You can also checkout your own copy by means of
-{\tt cvs -d /ufs/paulk/cvsroot co RPA}.
+Currently, the definition of \rscript resides in {\tt /ufs/glt/CVS}.
+ You can also checkout your own copy by means of
+{\tt cvs -d ssh.cwi.nl:/ufs/glt/CVS co relation-calculus}.
 
 \paragraph{Running a script}
 \begin{itemize}
-\item Change to the above directory (better to your own copy!).
+\item Change to your copy of the directory {\tt relation-calculus}.
 \item Start the ASF+SDF Meta-Environment by the command {\tt meta}.
 \item Open the module {\tt Rscript.sdf}.
 \item Open your own term, using the Rscript module.
@@ -587,123 +841,6 @@ bag[T1] .(rel[T1,T2] R, T2 E) = { V | <V, W> : R, W == E }
 bag[T1] .(rel[T1,T2] R, bag[T2] B) = { V | <V, W> : R, W in B }
 \end{verbatim}
 
-\paragraph{Identity: {\tt id}}
-\begin{verbatim}
-rel[T,T] id(bag[T] B) = { <X, X> | X in B }
-\end{verbatim}
-Example:
-\begin{verbatim}
-id({1,2,3}) = {<1,1>, <2,2>, <3,3>}
-\end{verbatim}
-
-\paragraph{Domain: {\tt domain}}
-\begin{verbatim}
-Def:	bag[T1] domain (rel[T1,T2] R) = { X | <X, Y> : R }
-\end{verbatim}
-Example:
-\begin{verbatim}
-domain({<1,10>, <2,20>}) = {1, 2}
-\end{verbatim}
-
-\paragraph{Range: {\tt range}}
-\begin{verbatim}
-bag[T2] range (rel[T1,T2] R) = { Y | <X, Y> : R }
-\end{verbatim}
-Example:
-\begin{verbatim}
-range({<1,10>, <2,20>}) = {10, 20}
-\end{verbatim}
-
-\paragraph{Carrier: {\tt carrier}}
-\begin{verbatim}
-bag[T]  carrier (rel[T,T] R) = domain(R) union range(R)
-\end{verbatim}
-Example:
-\begin{verbatim}
-carrier({<1,10>, <2,20>}) = {1, 10, 2, 20}
-\end{verbatim}
-
-\paragraph{Top: {\tt top}}
-\begin{verbatim}
-bag[T] top(rel{T, T] R) = domain(R) \ range(R)
-\end{verbatim}
-
-\paragraph{Bottom: {\tt bottom}}
-\begin{verbatim}
-bag[T] bottom(rel[T,T] R) = range(R) \ domain(R)
-\end{verbatim}
-
-\paragraph{Inverse: {\tt inv}}
-\begin{verbatim}
-rel[T2,T1] inv (rel[T1,T2] R) = { <Y, X> | <X, Y> : R }
-\end{verbatim}
-example:
-\begin{verbatim}
-inv({<1,10>, <2,20>}) = {<10,1>,<20,2>}
-\end{verbatim}
-
-\paragraph{Complement: {\tt compl}}
-\begin{verbatim}
-rel[T1, T2] compl(rel[T1,T2] R) = (domain(R) x range(R)) \ R
-\end{verbatim}
-
-\paragraph{Domain restriction: {\tt domainR}}
-\begin{verbatim}
-rel[T1,T2] domainR (rel[T1,T2] R, Bag[T1] B) = 
-   { <X, Y> | <X, Y> : R, X in B }
-\end{verbatim}
-
-\paragraph{Range Restriction: {\tt rangeR}}
-\begin{verbatim}
-rel[T1,T2] rangeR (rel[T1,T2] R, Bag[T2] B) =  
-   { <X, Y> | <X, Y> : R, Y in B }
-\end{verbatim}
-
-\paragraph{Carrier Restriction: {\tt carrierR}}
-\begin{verbatim}
-rel[T,T] carR (rel[T,2] R, Bag[T] B) =  
-   { <X, Y> | <X, Y> : R, X in B and Y in B }
-\end{verbatim}
-
-\paragraph{Domain Exclusion: {\tt domainX}}
-\begin{verbatim}
-rel[T1,T2] domainX (rel[T1,T2] R, Bag[T1] B) = 
-   { <X, Y> | <X, Y> : R, X notin B }
-\end{verbatim}
-
-\paragraph{Range Exclusion: {\tt rangeX}}
-\begin{verbatim}
-rel[T1,T2] rangeX (rel[T1,T2] R, Bag[T2] B) = 
-	   { <X, Y> | <X, Y> : R, Y notin B }
-\end{verbatim}
-
-\paragraph{Carrier Exclusion: {\tt carrierX}}
-\begin{verbatim}
-rel[T,T] carrierX (rel[T,T] R, Bag[T] B) = 
-   { <X, Y> | <X, Y> : R, X notin B or Y notin B }
-\end{verbatim}
-
-\paragraph{First of Tuple: {\tt first}}
-\begin{verbatim}
-T1 first(<T1, T2> P) = T1
-\end{verbatim}
-
-\paragraph{Second of Tuple: {\tt second}}
-\begin{verbatim}
-T2 second(<T1, T2> P) = T2
-\end{verbatim}
-
-\paragraph{Reach Exclusion: {\tt reachX}}
-\begin{verbatim}
-rel[T,T] reachX( bag[T] S, bag[T] E, rel[T,T] R) =
-	       domainR(R, S) o carrierX(R, E)+
-\end{verbatim}
-
-\paragraph{Reach Restriction: {\tt reachR}}
-\begin{verbatim}
-rel[T,T] reachR( bag[T] S, bag[T] E, rel[T,T] R) =
-	       domainR(R, S) o carrierR(R, E)+
-\end{verbatim}
 
 \section{Differences with previous versions}
 \rscript is in under active development and several (incompatible)  changes
