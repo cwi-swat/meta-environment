@@ -298,13 +298,11 @@ void reshuffle_lexical_constructor_functions(int cid,
   ATerm prod, amod, sort, newsection, newsubsection, newmodname;
   ATermList sorts, funcs, eqs;
 
-ATfprintf(stderr,"Reshuffling module per sort: %t\n", modname);
   amod = GetValue(modules_db,modname);
   sorts = AFgetModuleSorts(amod);
   sorts = asfix_filter_layout(sorts);
   while(!ATisEmpty(sorts)) {
     sort = ATgetFirst(sorts);
-ATfprintf(stderr,"Reshuffling sort: %t\n",sort);
     funcs = get_lex_funcs_for_sort(sort,orgmods);
     if(!ATisEmpty(funcs)) {
       newsubsection = AFinitLexicalSyntaxSection();
@@ -380,13 +378,11 @@ void reshuffle_modules(int cid,ATermList mods)
   ATerm newsubsection, newsection;
 
   change_compile_db(CreateValueStore());
-ATfprintf(stderr,"Reshuffling modules: %t\n",mods);
   orgmods = mods;
   while(!ATisEmpty(mods)) {
     mod = ATgetFirst(mods);
     newmod = create_new_module(mod);
     reshuffle_lexical_constructor_functions(cid,mod,newmod,orgmods);
-ATfprintf(stderr,"reshuffle_per_sort finished\n");
     oldamod = GetValue(modules_db,mod);
     cffuncs = AFgetModuleCFfuncs(oldamod);
     cffuncs = asfix_filter_layout(cffuncs);
