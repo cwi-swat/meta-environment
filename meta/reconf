@@ -24,19 +24,6 @@
 # distribution that is controlled by automake, run "reconf" for
 # that package prior to "configure".
 
-PACKAGES="asfix asc-support evaluator pgen sglr"
-
-for pkg in ${PACKAGES}
-do
-   echo "package: $pkg"
-   cd ${pkg}
-   if [ -x ./reconf ]
-   then
-      ./reconf
-   fi
-   cd ..
-done
-
 aclocal
 autoconf
 autoheader
