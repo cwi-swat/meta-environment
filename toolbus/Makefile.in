@@ -17,7 +17,7 @@ includedir	= $(prefix)/include
 CLEAN		= @CLEAN@
 
 MODULES		= 
-SUBDIRS		= src test adapters demos doc
+SUBDIRS		= src test tide adapters demos doc www
 DISTFILES	= Makefile.in README INSTALL CONTRIBUTORS install-sh mkinstalldirs \
 		  configure.in configure CHANGES.txt
 
