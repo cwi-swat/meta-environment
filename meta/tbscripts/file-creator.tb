@@ -50,7 +50,7 @@ in
       rec-msg(exists-in-module-db(ModuleName)) .
       snd-msg(get-path-from-db(ModuleName)) .
       rec-msg(path(Path?)) .
-      snd-msg(io-get-filename(Path, ModuleName, ".sdf")) .
+      snd-msg(io-get-filename(Path, ModuleName, ".asf")) .
       rec-msg(io-filename(FileName?)) .
       snd-msg(io-exists-file(FileName)) .
       (
