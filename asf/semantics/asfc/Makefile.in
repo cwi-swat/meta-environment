@@ -158,7 +158,10 @@ distclean realclean spotless: clean
 	   cd ..; \
 	done
 
+# Some extra dependencies, to work around problems with makedepend and
+# generated (.tif.?) sources
 
+compiler.o:	compiler.tif.c
 
 # Updating of included dependencies
 depend: $(CSRC)
