@@ -52,7 +52,7 @@ ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_VarEnv23_2 ( ATerm arg0 , ATerm arg1 ) {
 {
-ATerm tmp [ 29 ] ;
+ATerm tmp [ 24 ] ;
 FUNC_ENTRY ( lf_AUX_VarEnv23_2sym , ATmakeAppl ( lf_AUX_VarEnv23_2sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , lf_AUX_VarEnv23_1sym ) ) {
 {
@@ -69,80 +69,62 @@ tmp [ 4 ] = arg_2 ( tmp [ 0 ] ) ;
 {
 if ( check_sym ( tmp [ 4 ] , lf3sym ) ) {
 tmp [ 5 ] = arg_0 ( tmp [ 4 ] ) ;
-tmp [ 20 ] = tmp [ 5 ] ;
-tmp [ 21 ] = tmp [ 5 ] ;
-while ( not_empty_list ( tmp [ 5 ] ) ) {
-tmp [ 22 ] = list_head ( tmp [ 5 ] ) ;
-tmp [ 5 ] = list_tail ( tmp [ 5 ] ) ;
-if ( check_sym ( tmp [ 22 ] , ef3sym ) ) {
-tmp [ 23 ] = arg_0 ( tmp [ 22 ] ) ;
-if ( check_sym ( tmp [ 23 ] , ef4sym ) ) {
-tmp [ 24 ] = arg_0 ( tmp [ 23 ] ) ;
-if ( check_sym ( tmp [ 24 ] , lf4sym ) ) {
-tmp [ 25 ] = arg_0 ( tmp [ 24 ] ) ;
-if ( not_empty_list ( tmp [ 25 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 25 ] ) , make_char ( 109 ) ) ) {
-tmp [ 26 ] = list_tail ( tmp [ 25 ] ) ;
-if ( not_empty_list ( tmp [ 26 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 26 ] ) , make_char ( 101 ) ) ) {
-tmp [ 27 ] = list_tail ( tmp [ 26 ] ) ;
-if ( not_empty_list ( tmp [ 27 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 27 ] ) , make_char ( 109 ) ) ) {
-tmp [ 28 ] = list_tail ( tmp [ 27 ] ) ;
-if ( is_single_element ( tmp [ 28 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 28 ] ) , make_char ( 111 ) ) ) {
-if ( term_equal ( arg0 , tmp [ 3 ] ) ) {
-FUNC_EXIT_CONST ( constant0 , ( * ef5 ) ( ) ) ;
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-tmp [ 21 ] = list_tail ( tmp [ 21 ] ) ;
-tmp [ 5 ] = tmp [ 21 ] ;
-}
 tmp [ 6 ] = tmp [ 5 ] ;
 tmp [ 7 ] = tmp [ 5 ] ;
 while ( not_empty_list ( tmp [ 5 ] ) ) {
 tmp [ 8 ] = list_head ( tmp [ 5 ] ) ;
 tmp [ 5 ] = list_tail ( tmp [ 5 ] ) ;
+{
 if ( check_sym ( tmp [ 8 ] , ef3sym ) ) {
 tmp [ 9 ] = arg_0 ( tmp [ 8 ] ) ;
+{
 if ( check_sym ( tmp [ 9 ] , ef4sym ) ) {
 tmp [ 10 ] = arg_0 ( tmp [ 9 ] ) ;
+{
 if ( check_sym ( tmp [ 10 ] , lf4sym ) ) {
 tmp [ 11 ] = arg_0 ( tmp [ 10 ] ) ;
+{
 if ( not_empty_list ( tmp [ 11 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 11 ] ) , make_char ( 109 ) ) ) {
-tmp [ 12 ] = list_tail ( tmp [ 11 ] ) ;
-if ( not_empty_list ( tmp [ 12 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 12 ] ) , make_char ( 101 ) ) ) {
-tmp [ 13 ] = list_tail ( tmp [ 12 ] ) ;
+tmp [ 12 ] = list_head ( tmp [ 11 ] ) ;
+if ( term_equal ( tmp [ 12 ] , make_char ( 109 ) ) ) {
+tmp [ 13 ] = list_tail ( tmp [ 11 ] ) ;
+{
 if ( not_empty_list ( tmp [ 13 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 13 ] ) , make_char ( 109 ) ) ) {
-tmp [ 14 ] = list_tail ( tmp [ 13 ] ) ;
-if ( is_single_element ( tmp [ 14 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 14 ] ) , make_char ( 111 ) ) ) {
+tmp [ 14 ] = list_head ( tmp [ 13 ] ) ;
+if ( term_equal ( tmp [ 14 ] , make_char ( 101 ) ) ) {
+tmp [ 15 ] = list_tail ( tmp [ 13 ] ) ;
+{
+if ( not_empty_list ( tmp [ 15 ] ) ) {
+tmp [ 16 ] = list_head ( tmp [ 15 ] ) ;
+if ( term_equal ( tmp [ 16 ] , make_char ( 109 ) ) ) {
+tmp [ 17 ] = list_tail ( tmp [ 15 ] ) ;
+{
+if ( is_single_element ( tmp [ 17 ] ) ) {
+tmp [ 18 ] = list_head ( tmp [ 17 ] ) ;
+if ( term_equal ( tmp [ 18 ] , make_char ( 111 ) ) ) {
 if ( check_sym ( arg0 , ef4sym ) ) {
-tmp [ 15 ] = arg_0 ( arg0 ) ;
-if ( check_sym ( tmp [ 15 ] , lf4sym ) ) {
-tmp [ 16 ] = arg_0 ( tmp [ 15 ] ) ;
+tmp [ 19 ] = arg_0 ( arg0 ) ;
+if ( check_sym ( tmp [ 19 ] , lf4sym ) ) {
+tmp [ 20 ] = arg_0 ( tmp [ 19 ] ) ;
 if ( check_sym ( tmp [ 3 ] , ef4sym ) ) {
-tmp [ 17 ] = arg_0 ( tmp [ 3 ] ) ;
-if ( check_sym ( tmp [ 17 ] , lf4sym ) ) {
-tmp [ 18 ] = arg_0 ( tmp [ 17 ] ) ;
-if ( not_empty_list ( tmp [ 18 ] ) ) {
-if ( term_equal ( list_head ( tmp [ 18 ] ) , make_char ( 95 ) ) ) {
-tmp [ 19 ] = list_tail ( tmp [ 18 ] ) ;
-if ( term_equal ( ( * ef4 ) ( lf4 ( make_list ( tmp [ 16 ] ) ) ) , ( * ef4 ) ( lf4 ( make_list ( tmp [ 19 ] ) ) ) ) ) {
+tmp [ 21 ] = arg_0 ( tmp [ 3 ] ) ;
+if ( check_sym ( tmp [ 21 ] , lf4sym ) ) {
+tmp [ 22 ] = arg_0 ( tmp [ 21 ] ) ;
+if ( not_empty_list ( tmp [ 22 ] ) ) {
+if ( term_equal ( list_head ( tmp [ 22 ] ) , make_char ( 95 ) ) ) {
+tmp [ 23 ] = list_tail ( tmp [ 22 ] ) ;
+if ( term_equal ( ( * ef4 ) ( lf4 ( make_list ( tmp [ 20 ] ) ) ) , ( * ef4 ) ( lf4 ( make_list ( tmp [ 23 ] ) ) ) ) ) {
 FUNC_EXIT_CONST ( constant0 , ( * ef5 ) ( ) ) ;
+}
+}
+}
+}
+}
+}
+}
+if ( term_equal ( arg0 , tmp [ 3 ] ) ) {
+FUNC_EXIT_CONST ( constant0 , ( * ef5 ) ( ) ) ;
+}
 }
 }
 }

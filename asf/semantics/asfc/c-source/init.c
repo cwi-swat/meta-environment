@@ -910,9 +910,6 @@ extern void init_AUX_MuASF_Basics9();
 extern void register_AUX_MuASF_Conds2C1();
 extern void resolve_AUX_MuASF_Conds2C1();
 extern void init_AUX_MuASF_Conds2C1();
-extern void register_AUX_MuASF_Conds2C10();
-extern void resolve_AUX_MuASF_Conds2C10();
-extern void init_AUX_MuASF_Conds2C10();
 extern void register_AUX_MuASF_Conds2C2();
 extern void resolve_AUX_MuASF_Conds2C2();
 extern void init_AUX_MuASF_Conds2C2();
@@ -1950,7 +1947,6 @@ void register_all() {
    register_AUX_MuASF_Basics8();
    register_AUX_MuASF_Basics9();
    register_AUX_MuASF_Conds2C1();
-   register_AUX_MuASF_Conds2C10();
    register_AUX_MuASF_Conds2C2();
    register_AUX_MuASF_Conds2C3();
    register_AUX_MuASF_Conds2C4();
@@ -2501,7 +2497,6 @@ void resolve_all() {
    resolve_AUX_MuASF_Basics8();
    resolve_AUX_MuASF_Basics9();
    resolve_AUX_MuASF_Conds2C1();
-   resolve_AUX_MuASF_Conds2C10();
    resolve_AUX_MuASF_Conds2C2();
    resolve_AUX_MuASF_Conds2C3();
    resolve_AUX_MuASF_Conds2C4();
@@ -3052,7 +3047,6 @@ void init_all() {
    init_AUX_MuASF_Basics8();
    init_AUX_MuASF_Basics9();
    init_AUX_MuASF_Conds2C1();
-   init_AUX_MuASF_Conds2C10();
    init_AUX_MuASF_Conds2C2();
    init_AUX_MuASF_Conds2C3();
    init_AUX_MuASF_Conds2C4();

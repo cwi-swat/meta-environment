@@ -1,10 +1,10 @@
 #include  "support.h"
 static Symbol lf_AUX_Check_List_Pats6_1sym ;
 static ATerm lf_AUX_Check_List_Pats6_1 ( ATerm arg1 , ATerm arg2 ) ;
-static Symbol ef1sym ;
-static funcptr ef1 ;
 static Symbol ef3sym ;
 static funcptr ef3 ;
+static Symbol ef1sym ;
+static funcptr ef1 ;
 static Symbol lf2sym ;
 static ATerm lf2 ( ATerm arg1 ) ;
 static Symbol ef2sym ;
@@ -37,6 +37,8 @@ ATprotect ( & constant0 ) ;
 ATprotect ( & constant1 ) ;
 }
 ATerm lf_AUX_Check_List_Pats6_1 ( ATerm arg0 , ATerm arg1 ) {
+{
+ATerm tmp [ 4 ] ;
 FUNC_ENTRY ( lf_AUX_Check_List_Pats6_1sym , ATmakeAppl ( lf_AUX_Check_List_Pats6_1sym , arg0 , arg1 ) ) ;
 if ( check_sym ( arg1 , ef1sym ) ) {
 {
@@ -46,9 +48,19 @@ ATerm atmp11 = arg_1 ( arg1 ) ;
 if ( check_sym ( atmp11 , lf2sym ) ) {
 {
 ATerm atmp110 = arg_0 ( atmp11 ) ;
-if ( not_empty_list ( atmp110 ) ) {
-if ( term_equal ( ( * ef3 ) ( arg0 , lf2 ( make_list ( atmp110 ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ) ) ) ) ) {
+if ( is_single_element ( atmp110 ) ) {
+tmp [ 0 ] = list_head ( atmp110 ) ;
+if ( check_sym ( tmp [ 0 ] , ef1sym ) ) {
+tmp [ 1 ] = arg_0 ( tmp [ 0 ] ) ;
+tmp [ 2 ] = arg_1 ( tmp [ 0 ] ) ;
+if ( check_sym ( tmp [ 2 ] , lf2sym ) ) {
+tmp [ 3 ] = arg_0 ( tmp [ 2 ] ) ;
+if ( not_empty_list ( tmp [ 3 ] ) ) {
+if ( term_equal ( ( * ef3 ) ( arg0 , lf2 ( make_list ( ( * ef1 ) ( tmp [ 1 ] , lf2 ( make_list ( tmp [ 3 ] ) ) ) ) ) ) , ( constant0 ? constant0 : ( constant0 = ( * ef2 ) ( ) ) ) ) ) {
 FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
+}
+}
+}
 }
 }
 }
@@ -58,6 +70,7 @@ FUNC_EXIT_CONST ( constant0 , ( * ef2 ) ( ) ) ;
 }
 FUNC_EXIT_CONST ( constant1 , ( * ef4 ) ( ) ) ;
 FUNC_EXIT ( make_nf2 ( lf_AUX_Check_List_Pats6_1sym , arg0 , arg1 ) ) ;
+}
 }
 ATerm lf2 ( ATerm arg0 ) {
 CONS_ENTRY ( lf2sym , ATmakeAppl ( lf2sym , arg0 ) ) ;
