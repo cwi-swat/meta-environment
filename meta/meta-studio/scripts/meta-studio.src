@@ -1,4 +1,4 @@
-#!/bin/sh
+#! /bin/sh
 if [ x$META_DEBUG = "xtrue" ]
 then
   DEBUG_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address=7600,server=y,suspend=n"
@@ -12,9 +12,11 @@ if [ x$META_TEST = "xtrue" ]
 then
   echo "STARTING METASTUDIO IN TESTMODE: __JAVA__"
   BASE=__BUILDDIR__
-  export CLASSPATH=$BASE:__ATERM__/classes:__TOOLBUS__/classes:$CLASSPATH
+  CLASSPATH="$BASE:__ATERM__/classes:__TOOLBUS__/classes:$CLASSPATH"
+  export CLASSPATH
   __JAVA__/bin/java ${DEBUG_OPTS} ${DEFS} metastudio.MetaStudio $@
 else
-  export CLASSPATH=__JARDIR__/meta-studio.jar:__ATERM__/classes:__TOOLBUS__/classes:$CLASSPATH
+  CLASSPATH="__JARDIR__/meta-studio.jar:__ATERM__/classes:__TOOLBUS__/classes:$CLASSPATH"
+  export CLASSPATH
   __JAVA__/bin/java ${DEBUG_OPTS} ${DEFS} metastudio.MetaStudio $@
 fi
