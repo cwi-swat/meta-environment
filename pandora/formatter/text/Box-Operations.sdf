@@ -1,0 +1,22 @@
+module Box-Operations
+
+imports languages/box/syntax/Box
+
+exports
+
+context-free syntax
+
+BoxList "++" BoxList -> BoxList {right}
+
+hiddens
+
+ variables
+     [B-E][0-9]*    -> Box
+     [B-E]"+"[0-9]* -> Box+
+     [B-E]"*"[0-9]* -> Box*
+
+     "ss"[0-9]*      -> SpaceSymbol
+     "so"[0-9]*      -> SOption
+     "so""*"[0-9]*   -> SOption*
+     "o"[0-9]*       -> SOption
+     "o""*"[0-9]*    -> SOption*

@@ -34,7 +34,7 @@ hiddens
 
 hiddens
   variables
-    "String"[0-9]* -> String
+    "String"[0-9]* -> StrCon
     [B-E][0-9]*    -> Box
     [B-E]"+"[0-9]* -> Box+
     [B-E]"*"[0-9]* -> Box*

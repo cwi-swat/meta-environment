@@ -1,6 +1,7 @@
 module Frame
 
-  imports languages/box/syntax/Box Points
+  imports Box-Operations
+imports Points
   exports
     context-free start-symbols Frame Defs
   sorts Frame Defs
@@ -34,7 +35,7 @@ hiddens
     "Frame"[0-9]*   -> Frame
     "Defs"[0-9]*    -> Defs
     "Point"[0-9]*   -> Point
-    "Int"[0-9]*     -> Integer
+    "Int"[0-9]*     -> NatCon
     "Nat"[0-9]*     -> Natural
     "ss"[0-9]*      -> SpaceSymbol
     "so""*"[0-9]*   -> SOption*
