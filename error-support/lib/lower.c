@@ -12,7 +12,7 @@ static char *PERR_lowerStrCon(PERR_StrCon pStr)
 }
 
 /*}}}  */
-/*{{{  static PERR_NatCon ERR_liftNatCon(int natcon) */
+/*{{{  static PERR_NatCon ERR_lowerNatCon(int natcon) */
 
 static int PERR_lowerNatCon(PERR_NatCon pNatcon)
 {
@@ -21,7 +21,7 @@ static int PERR_lowerNatCon(PERR_NatCon pNatcon)
 
 /*}}}  */
 
-/*{{{  PERR_Area ERR_liftArea(ERR_Area area) */
+/*{{{  PERR_Area ERR_lowerArea(ERR_Area area) */
 
 ERR_Area PERR_lowerArea(PERR_Area pArea)
 {
@@ -61,7 +61,7 @@ ERR_Area PERR_lowerArea(PERR_Area pArea)
 }
 
 /*}}}  */
-/*{{{  PERR_Location ERR_liftLocation(ERR_Location pLocation) */
+/*{{{  PERR_Location ERR_lowerLocation(ERR_Location pLocation) */
 
 ERR_Location PERR_lowerLocation(PERR_Location pLocation)
 {
@@ -127,7 +127,7 @@ ERR_SubjectList PERR_lowerSubjects(PERR_SubjectList pSubjects)
 }
 
 /*}}}  */
-/*{{{  PERR_Feedback ERR_liftFeedback(ERR_Feedback feedback) */
+/*{{{  PERR_Feedback ERR_lowerFeedback(ERR_Feedback feedback) */
 
 ERR_Feedback PERR_lowerFeedback(PERR_Feedback pFeedback)
 {
@@ -158,4 +158,43 @@ ERR_Feedback PERR_lowerFeedback(PERR_Feedback pFeedback)
     ATerror("unknown feedback type: %t\n", pFeedback);
     return NULL;
   }
+}
+
+/*{{{  ERR_FeedbackList PERR_lowerFeedbacks(PERR_FeedbackList pFeedbacks) */
+
+ERR_FeedbackList PERR_lowerFeedbacks(PERR_FeedbackList pFeedbacks)
+{
+  ERR_FeedbackList feedbacks = ERR_makeFeedbackListEmpty();
+
+
+  while (!PERR_isFeedbackListEmpty(pFeedbacks)) { 
+    PERR_Feedback pFeedback = PERR_getFeedbackListHead(pFeedbacks);
+    ERR_Feedback feedback = PERR_lowerFeedback(pFeedback);
+    feedbacks = ERR_makeFeedbackListMany(feedback, feedbacks);
+    if (PERR_hasFeedbackListTail(pFeedbacks)) {
+      pFeedbacks = PERR_getFeedbackListTail(pFeedbacks);
+    }
+    else {
+      break;
+    }
+  }
+
+  return feedbacks;
+}
+
+/*}}}  */
+
+ERR_Summary PERR_lowerSummary(PERR_Summary pSummary)
+{
+  PERR_StrCon pProducer = PERR_getSummaryProducer(pSummary);
+  PERR_StrCon pId = PERR_getSummaryId(pSummary);
+  PERR_FeedbackList pFeedbackList = PERR_getSummaryList(pSummary);
+  char *producer, *id;
+  ERR_FeedbackList feedbackList;
+
+  producer = PERR_lowerStrCon(pProducer);
+  id = PERR_lowerStrCon(pId);
+  feedbackList = PERR_lowerFeedbacks(pFeedbackList);
+
+  return ERR_makeSummaryFeedback(producer, id, feedbackList);
 }
