@@ -1,3 +1,7 @@
+2002/08/07 (markvdb@cwi.nl)
+ * Bumped to pt-support to 0.11beta.
+ * Length calculation takes ambiguity cluster into consideration.
+
 2002/07/24 (jurgenv@cwi.nl)
  * Release 0.10
 

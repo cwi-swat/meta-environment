@@ -587,9 +587,34 @@ int PT_getArgsLength(PT_Args args)
 }
 
 /*}}}  */ 
-/*{{{  static PT_Args annotateArgsWithLength(PT_Args args, int *length) */
-
+/*{{{  static PT_Args annotateAmbArgsWithLength(PT_Args args, int *length) */
+ 
 static PT_Tree annotateTreeWithLength(PT_Tree tree, int *length);
+
+static PT_Args annotateAmbArgsWithLength(PT_Args args, int *length)
+{
+  PT_Tree head;
+  PT_Args tail;
+  int head_length, tail_length;
+ 
+  if (PT_isArgsEmpty(args)) {
+    *length = 0;
+    return args;
+  }
+ 
+  head = PT_getArgsHead(args);
+  tail = PT_getArgsTail(args);
+ 
+  head = annotateTreeWithLength(head, &head_length);
+  tail = annotateAmbArgsWithLength(tail, &tail_length);
+
+  *length = head_length;
+
+  return PT_makeArgsList(head, tail);
+}
+
+/*}}}  */
+/*{{{  static PT_Args annotateArgsWithLength(PT_Args args, int *length) */
 
 static PT_Args annotateArgsWithLength(PT_Args args, int *length)
 {
@@ -625,6 +650,13 @@ static PT_Tree annotateTreeWithLength(PT_Tree tree, int *length)
   }
   else if (PT_isTreeChar(tree)) {
     *length = 1;
+  }
+  else if (PT_isTreeAmb(tree)) {
+    PT_Args args = PT_getTreeArgs(tree);
+    args = annotateAmbArgsWithLength(args, length);
+    tree = PT_setTreeArgs(tree, args);
+    tree = PT_setTreeAnnotation(tree, ATparse(ANNO_LENGTH),
+                                ATmake("<int>", *length));
   }
   else if (PT_hasTreeArgs(tree)) {
     PT_Args args = PT_getTreeArgs(tree);
