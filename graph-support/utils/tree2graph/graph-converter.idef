@@ -12,7 +12,7 @@ let
   Graph : term
 in
   (
-    rec-msg(graph-converter(Name?, Tree?))
+    rec-msg(tree2graph(Name?, Tree?))
     . execute(graph-converter, GC?)
     . snd-eval(GC, tree2graph(Name, Tree))
     . rec-value(GC, graph(Graph?))
