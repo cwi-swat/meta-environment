@@ -11,6 +11,8 @@ in
   create(Ui, Pid?) .
   create(MetaCreator, Pid?) .
   rec-msg(creation-finished) .
+  snd-msg(post-initialization-hook) .
+  rec-msg(post-initialization-hook-finished) .
   InitializeTermStore(TERMSTORENAME) .
   if not-equal(MODULENAME, "") then
     snd-msg(open-modules([MODULENAME], sdf)) .
