@@ -38,13 +38,6 @@ AC_ARG_WITH(cflags,
 )
 AC_SUBST(CFLAGS)
 
-dnl Handle --with-layout
-AC_ARG_WITH(layout,
-   [  --with-layout           evaluator keeps layout while rewriting],
-   LAYOUTDEF=-DKEEP_LAYOUT
-)
-AC_SUBST(LAYOUTDEF)
-
 dnl Handle --with-traversals
 AC_ARG_WITH(traversals,
    [  --with-traversals       evaluator implements traveral functions],
@@ -55,32 +48,14 @@ AC_SUBST(TRAVERSALSDEF)
 dnl Check for required packages and perform version check when needed.
 
 dnl Require ATerm library
-AC_PACKAGE_REQUIRE(aterm, tifstoc,
+AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
-dnl Required for generated Makefile.am's to work until genamakefile patched:
-dnl (fixme)
-ATERMINC=${ATERM}/include
-ATERMLIB=${ATERM}/lib
-AC_SUBST(ATERMINC)
-AC_SUBST(ATERMLIB)
-
-
-dnl Require toolbus package
-AC_PACKAGE_REQUIRE(toolbus, toolbus,
-   [  --with-toolbus=DIR      ToolBus distribution is in DIR])
-AC_SUBST(TOOLBUS)
-
 dnl Require pt-support package
-AC_PACKAGE_REQUIRE(pt-support, asource,
+AC_PACKAGE_REQUIRE(pt-support, unparsePT,
    [  --with-pt-support=DIR   pt-support is in DIR])
 AC_SUBST(PT_SUPPORT)
-dnl Again the fix for generated Makefile.am's !! (fixme)
-ASFIXINC=${PT_SUPPORT}/include
-ASFIXLIB=${PT_SUPPORT}/include
-AC_SUBST(ASFIXINC)
-AC_SUBST(ASFIXLIB)
 
 dnl Handle --with-asf-support
 ASF_SUPPORT='${prefix}'
@@ -88,6 +63,14 @@ AC_ARG_WITH(asf-support,
    [  --with-asf-support=DIR  asf-support is in DIR],
    ASF_SUPPORT=${withval},)
 AC_SUBST(ASF_SUPPORT)
+
+dnl Handle --with-sdf-support
+SDF_SUPPORT='${prefix}'
+AC_ARG_WITH(sdf-support,
+   [  --with-sdf-support=DIR  sdf-support is in DIR],
+   SDF_SUPPORT=${withval},)
+AC_SUBST(SDF_SUPPORT)
+
 
 dnl Handle --with-asc-support=... argument to configure
 ASC_SUPPORT='${prefix}'
