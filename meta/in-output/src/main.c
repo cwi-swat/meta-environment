@@ -13,7 +13,7 @@
 #include <sys/stat.h>
 
 #include "in-output.tif.h"
-static char *expand_path(const char *relative_path);
+static char *expandPath(const char *relative_path);
 
 /*}}}  */
 /*{{{  defines */
@@ -60,24 +60,25 @@ static ATerm createSuccessMessage()
 
 /*}}}  */
 
-/*{{{  static int fileexists(const char *fname) */
+/*{{{  static int fileExists(const char *fname) */
 
-static int fileexists(const char *fname)
+static int fileExists(const char *fname)
 {
   struct stat st;
-  return stat(fname,&st) != EOF;
+  return stat(fname, &st) != EOF;
 }
 
 /*}}}  */
-/*{{{  static size_t filesize(const char *s) */
+/*{{{  static size_t getFileSize(const char *s) */
 
-static size_t filesize(const char *s)
+static size_t getFileSize(const char *s)
 {
   struct stat st;
-  return (stat((char*)s,&st)!=EOF) ? st.st_size : -1L;
+  return (stat((char *)s, &st)!=EOF) ? st.st_size : -1L;
 }
 
 /*}}}  */
+
 /*{{{  static char *readFileContents(char *fnam, size_t *size) */
 
 static char *readFileContents(char *fnam, size_t *size)
@@ -85,7 +86,7 @@ static char *readFileContents(char *fnam, size_t *size)
   char *buf;
   FILE *fd;
 
-  *size = filesize(fnam);
+  *size = getFileSize(fnam);
   if((fd = fopen(fnam, "rb")) == NULL) {
     /* fprintf(stderr, "could not open %s\n", fnam); */
     *size = 0;
@@ -133,9 +134,15 @@ static ATerm read_raw_from_named_file(char *fileName)
 }
 
 /*}}}  */
- /*{{{  static char *expand_path(const char *relative_path) */
+ /*{{{  static char *expandPath(const char *relative_path) */
 
-static char *expand_path(const char *relative_path)
+/* Expand a relative path to its absolute equivalent
+ *
+ * - ATerror upon serious failure (no current directory, no memory)
+ * - returns NULL when relative_path could not be expanded
+ * - returns calloc(3)-ed pointer containing absolute path otherwise.
+ */
+static char *expandPath(const char *relative_path)
 {
   char *absolute_path = NULL;
   char *trial_path = NULL;
@@ -154,7 +161,7 @@ static char *expand_path(const char *relative_path)
   /* Allocate sufficient memory for worstcase expansion */
   trial_path = (char *) calloc(PATH_LEN + 1, sizeof(char));
   if (trial_path == NULL) {
-    ATerror("expand_path: out of memory.\n");
+    ATerror("expandPath: out of memory.\n");
     return NULL;
   }
 
@@ -211,7 +218,7 @@ static void add_path(char *pathname)
 
 /*}}}  */
 
-/*{{{  static char *makeFileName(char *path, */
+/*{{{  static char *makeFileName(char *path, char *extension) */
 
 static char *makeFileName(char *path, char *extension)
 {
@@ -219,8 +226,7 @@ static char *makeFileName(char *path, char *extension)
 
   assert(strlen(path) != 0 && "path is empty");
 
-  fileName = calloc(sizeof(char), strlen(path) + 
-		    strlen(extension) + 1);
+  fileName = calloc(sizeof(char), strlen(path) + strlen(extension) + 1);
 
   if (fileName != NULL) {
     sprintf(fileName,"%s%s", path, extension);
@@ -363,7 +369,7 @@ ATerm exists_named_file(int cid, char *fileName)
 {
   ATerm result;
 
-  if (fileexists(fileName)) {
+  if (fileExists(fileName)) {
     result = createSuccessMessage();
   }
   else {
@@ -380,7 +386,7 @@ ATerm exists_file(int cid, char *path, char *extension)
   char *fileName = makeFileName(path, extension);
   ATerm result;
 
-  if (fileexists(fileName)) {
+  if (fileExists(fileName)) {
     result = createSuccessMessage();
   }
   else {
@@ -400,7 +406,7 @@ ATerm find_file(int cid, char *path, char *name, char *extension)
   char *fileName = makeFileName(newPath, extension);
   ATerm result;
 
-  if (fileexists(fileName)) { 
+  if (fileExists(fileName)) { 
     result = ATmake("snd-value(file-found(<str>))", newPath);
   }   
   else {
@@ -425,7 +431,7 @@ ATerm process_search_paths(int cid, ATerm paths)
     paths = (ATerm) ATgetNext((ATermList) paths);
 
     if (ATmatch(path, "<str>", &contents)) {
-      absolute_path = expand_path(contents);
+      absolute_path = expandPath(contents);
       if (absolute_path != NULL) {
 	add_path(absolute_path);
       }
@@ -447,6 +453,45 @@ ATerm retrieve_search_paths(int cid)
     atPaths = ATinsert(atPaths, ATmake("<str>", paths[i]));
   }
   return ATmake("snd-value(search-paths([<list>]))", atPaths);
+}
+
+/*}}}  */
+
+/*{{{  static ATerm createCompareMessage(ATbool result) */
+
+static ATerm createCompareMessage(ATbool filesEqual)
+{
+  if (filesEqual) {
+    return ATmake("snd-value(equal)");
+  }
+  else {
+    return ATmake("snd-value(different)");
+  }
+}
+
+/*}}}  */
+/*{{{  static ATbool filesEqual(const char *f1, const char *f2) */
+
+static ATbool filesEqual(const char *f1, const char *f2)
+{
+  struct stat st1;
+  struct stat st2;
+
+  if (stat(f1, &st1) == 0 && stat(f2, &st2) == 0) {
+    return st1.st_ino == st2.st_ino;
+  }
+  else {
+    perror("stat");
+    return ATfalse;
+  }
+}
+
+/*}}}  */
+/*{{{  ATerm compare_files(int cid, char *f1, char *f2) */
+
+ATerm compare_files(int cid, char *f1, char *f2)
+{
+  return createCompareMessage(filesEqual(f1, f2));
 }
 
 /*}}}  */

@@ -14,7 +14,8 @@ let
   Term       : term,
   SyntaxText : str,
   RulesText  : str,
-  FileName   : str,
+  FileName1 : str,
+  FileName2 : str,
   Contents   : term,
   ContentList: list,
   TableType  : term,
@@ -108,6 +109,16 @@ in
     +
       rec-value(IO, failure(ErrorMessage?)) .
       snd-msg(file-not-exists(Name))
+    )
+  +
+    rec-msg(compare-files(FileName1?, FileName2?)) .
+    snd-eval(IO, compare-files(FileName1, FileName2)) .
+    (
+      rec-value(IO, equal) .
+      snd-msg(files-equal(FileName1, FileName2))
+    +
+      rec-value(IO, different) .
+      snd-msg(files-differ(FileName1, FileName2))
     )
   ) *
   delta
