@@ -1,5 +1,9 @@
 $Id$
 
+2001/12/13 (jurgenv@cwi.nl)
+ * Bumped version of parsetablegen to 4.2
+ * Added asf-support library linkage (needed for normalizer spec).
+
 2001/11/29 (jurgenv@cwi.nl)
  * Adapted the normalizer such that in the attributes of productions 
    ATerm functions are no longer quoted automatically.

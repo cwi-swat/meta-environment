@@ -34,7 +34,7 @@ ATbool generationMode = ATfalse;
 ATbool normalizationMode = ATfalse;
 
 static char myname[] = "parsetablegen";
-static char myversion[] = "4.0";
+static char myversion[] = "4.1";
 
 int version_nr = 4;
 
