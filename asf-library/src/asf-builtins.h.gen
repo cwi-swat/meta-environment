@@ -4,7 +4,7 @@
 #
 # This script generates an include file
 
-BUILTIN_NAMES=`find $1 -name "*.c" -printf "%f " | sed "s/\.c//g;s/-/_/g"`
+BUILTIN_NAMES=`find $1 -name "*.c" | sed -e 's/.*\///; s/\.c//g; s/-/_/g'`
 
 cat  << END_OF_FILE 
 #ifndef BUILTINS_H
