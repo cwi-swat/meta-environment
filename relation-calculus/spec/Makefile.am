@@ -1,6 +1,5 @@
 
-# bin_PROGRAMS    = RscriptChecker RscriptCalculator Rstore
-bin_PROGRAMS    = RscriptChecker
+bin_PROGRAMS    = RscriptChecker RscriptCalculator Rstore
 
 CFLAGS          = -g -Wall -Wno-unused -O2 -DASF_MAIN
 
@@ -18,6 +17,8 @@ EXTRA_DIST      = \
 	$(wildcard *.tbl) \
 	$(wildcard *.eqs)
 
+# ---- RscriptChecker
+
 RscriptChecker_SOURCES	= RscriptChecker.c
 RscriptChecker_LDADD	= -L$(ASCLIB) -lasc-support-me \
 	                -L$(SGLR)/lib -lsglr \
@@ -25,22 +26,51 @@ RscriptChecker_LDADD	= -L$(ASCLIB) -lasc-support-me \
 	                -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
 	                -L$(ERROR_SUPPORT)/lib -lErrorAPI \
 	                -L$(ATERM)/lib -lATerm
-RscriptChecker.c: dump
+
+RscriptChecker.eqs:
+	eqs-dump -m RscriptChecker -o RscriptChecker.eqs
+
+RscriptChecker.c:
 	asfc -i RscriptChecker.eqs -o RscriptChecker.c -v
 
+# ---- RscriptCalculator
 
-table:
-	pt-dump -m Rscript -o Rscript.trm.tbl
+RscriptCalculator_SOURCES	= RscriptCalculator.c
+RscriptCalculator_LDADD	= -L$(ASCLIB) -lasc-support-me \
+	                -L$(SGLR)/lib -lsglr \
+	                -L$(ASF_SUPPORT)/lib -lASFME \
+	                -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
+	                -L$(ERROR_SUPPORT)/lib -lErrorAPI \
+	                -L$(ATERM)/lib -lATerm
 
-compile-spec: dump asfc
-
-dump:
-	eqs-dump -m RscriptChecker -o RscriptChecker.eqs
+RscriptCalculator.eqs:
 	eqs-dump -m RscriptCalculator -o RscriptCalculator.eqs
+
+RscriptCalculator.c:
+	asfc -i RscriptCalculator.eqs -o RscriptCalculator.c -v
+
+
+# ---- Rstore
+
+Rstore_SOURCES	= Rstore.c
+Rstore_LDADD	= -L$(ASCLIB) -lasc-support-me \
+	                -L$(SGLR)/lib -lsglr \
+	                -L$(ASF_SUPPORT)/lib -lASFME \
+	                -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
+	                -L$(ERROR_SUPPORT)/lib -lErrorAPI \
+	                -L$(ATERM)/lib -lATerm
+
+Rstore.eqs:
 	eqs-dump -m Rstore -o Rstore.eqs
 
-asfc:
-
-	asfc -i RscriptCalculator.eqs -o RscriptCalculator.c -v
+Rstore.c:
 	asfc -i Rstore.eqs -o Rstore.c -v
+
+
+# ---- Rscript.trm.tbl
+
+Rscript.trm.tbl:
+	pt-dump -m Rscript -o Rscript.trm.tbl
+
+
 
