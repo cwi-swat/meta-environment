@@ -66,7 +66,7 @@ ATbool TS_tableExists(char *name)
 }
 
 /*}}}  */
-/*{{{  void TS_addTable(char *name) */
+/*{{{  void TS_addTable(char *name, char* valueType) */
 
 void TS_addTable(char *name, char* valueType)
 {
@@ -285,31 +285,10 @@ ATermList TS_filterKeys(char *table, ATermList keysList)
 
 /*}}}  */
 
-/*{{{  SS_ValueType getTableType(Table table) */
-
-SS_ValueType getTableType(TableEntry table)
-{
-  SS_ValueType type = NULL;
-
-  if (streq(table.valueType,"str")) {
-    type = SS_makeValueTypeStringType();
-  }
-  else if (streq(table.valueType,"term")) {
-    type = SS_makeValueTypeTermType();
-  }
-  else {
-    ATwarning("getTableSnapshot: unknown table type: %s\n", table.valueType);
-  }
-
-  return type;
-}
-
-/*}}}  */
 /*{{{  SS_Table getTableSnapshot(Table table) */
 
 SS_Table getTableSnapshot(TableEntry table)
 {
-  SS_ValueType type = getTableType(table);
   ATermList pairs = T_getAllKeyValuePairs(table.table);
   SS_Rows rows = SS_makeRowsEmpty();
  
@@ -321,7 +300,7 @@ SS_Table getTableSnapshot(TableEntry table)
     rows = SS_makeRowsMany(row, rows);
   }
 
-  return SS_makeTableDefault(table.name, type, rows); 
+  return SS_makeTableDefault(table.name, table.valueType, rows); 
 }
 
 /*}}}  */
@@ -343,6 +322,56 @@ ATerm TS_getSnapshot()
   }
 
   return SS_SnapshotToTerm(SS_makeSnapshotMain(tables));
+}
+
+/*}}}  */
+
+/*{{{  void loadTable(SS_Table table) */
+
+void loadTable(SS_Table table)
+{
+  char *name = SS_getTableName(table);
+  char *valueType = SS_getTableValueType(table);
+  SS_Rows rows = SS_getTableRows(table);
+
+  TS_addTable(name, valueType);
+
+  for (; !SS_isRowsEmpty(rows); rows = SS_getRowsTail(rows)) {
+    SS_Row row = SS_getRowsHead(rows);
+    ATerm key = SS_getRowKey(row);
+    ATerm value = SS_getRowValue(row);
+
+    TS_putValue(name, key, value);
+  }
+}
+
+/*}}}  */
+/*{{{  void loadTables(SS_Tables tables) */
+
+void loadTables(SS_Tables tables)
+{
+  for (; SS_isTablesEmpty(tables); tables = SS_getTablesTail(tables)) {
+    SS_Table table = SS_getTablesHead(tables);
+    loadTable(table);
+  }
+}
+
+/*}}}  */
+/*{{{  void TS_loadSnapshot(ATerm s) */
+
+void TS_loadSnapshot(ATerm s)
+{
+  SS_Snapshot snapshot = SS_SnapshotFromTerm(s);
+  SS_Tables tables;
+
+  if (!SS_isValidSnapshot(snapshot)) {
+    ATwarning("TS_loadSnapshot: Invalid snapshot ignored\n");
+    return;
+  }
+
+  tables = SS_getSnapshotTables(snapshot);
+
+  loadTables(tables);
 }
 
 /*}}}  */

@@ -108,6 +108,11 @@ in
     snd-eval(TS, get-snapshot) .
     rec-value(TS, result(Snapshot?)) .
     snd-msg(ts-snapshot(Snapshot))
+  +
+    rec-msg(ts-load-snapshot(Snapshot?)) .
+    snd-eval(TS, load-snapshot(Snapshot)) .
+    rec-value(TS, result(snapshot-loaded)) .
+    snd-msg(ts-snapshot-loaded)
   )
   * delta
 endlet

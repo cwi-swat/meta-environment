@@ -206,6 +206,16 @@ ATerm get_snapshot(int conn)
 }
 
 /*}}}  */
+/*{{{  ATerm load_snapshot(int conn, ATerm snapshot) */
+
+ATerm load_snapshot(int conn, ATerm snapshot)
+{
+  TS_loadSnapshot(snapshot);
+
+  return RESULT(ATparse("snapshot-loaded"));
+}
+
+/*}}}  */
 /*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])

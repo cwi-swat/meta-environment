@@ -4,10 +4,7 @@
   [Tables, Empty, []],
   [Tables, Many,[<head(Table)>,<[tail(Tables)]>]],
 
-  [Table, default, table(<name(str)>,<value-type(ValueType)>,<tuples(Rows)>)],
-
-  [ValueType, string-type, string-type],
-  [ValueType, term-type, term-type],
+  [Table, default, table(<name(str)>,<value-type(str)>,<rows(Rows)>)],
 
   [Rows, Empty, []],
   [Rows, Many, [<head(Row)>,<[tail(Rows)]>]],

@@ -9,7 +9,6 @@
 typedef struct ATerm _SS_Snapshot;
 typedef struct ATerm _SS_Tables;
 typedef struct ATerm _SS_Table;
-typedef struct ATerm _SS_ValueType;
 typedef struct ATerm _SS_Rows;
 typedef struct ATerm _SS_Row;
 
@@ -69,22 +68,6 @@ SS_Table SS_TableFromTerm(ATerm t)
 /*{{{  ATerm SS_TableToTerm(SS_Table arg) */
 
 ATerm SS_TableToTerm(SS_Table arg)
-{
-  return (ATerm)arg;
-}
-
-/*}}}  */
-/*{{{  SS_ValueType SS_ValueTypeFromTerm(ATerm t) */
-
-SS_ValueType SS_ValueTypeFromTerm(ATerm t)
-{
-  return (SS_ValueType)t;
-}
-
-/*}}}  */
-/*{{{  ATerm SS_ValueTypeToTerm(SS_ValueType arg) */
-
-ATerm SS_ValueTypeToTerm(SS_ValueType arg)
 {
   return (ATerm)arg;
 }
@@ -150,27 +133,11 @@ SS_Tables SS_makeTablesMany(SS_Table head, SS_Tables tail)
 }
 
 /*}}}  */
-/*{{{  SS_Table SS_makeTableDefault(char* name, SS_ValueType valueType, SS_Rows tuples) */
+/*{{{  SS_Table SS_makeTableDefault(char* name, char* valueType, SS_Rows rows) */
 
-SS_Table SS_makeTableDefault(char* name, SS_ValueType valueType, SS_Rows tuples)
+SS_Table SS_makeTableDefault(char* name, char* valueType, SS_Rows rows)
 {
-  return (SS_Table)(ATerm)ATmakeAppl3(SS_afun1, (ATerm)ATmakeAppl0(ATmakeAFun(name, 0, ATtrue)), (ATerm)valueType, (ATerm)tuples);
-}
-
-/*}}}  */
-/*{{{  SS_ValueType SS_makeValueTypeStringType() */
-
-SS_ValueType SS_makeValueTypeStringType()
-{
-  return (SS_ValueType)(ATerm)ATmakeAppl0(SS_afun2);
-}
-
-/*}}}  */
-/*{{{  SS_ValueType SS_makeValueTypeTermType() */
-
-SS_ValueType SS_makeValueTypeTermType()
-{
-  return (SS_ValueType)(ATerm)ATmakeAppl0(SS_afun3);
+  return (SS_Table)(ATerm)ATmakeAppl3(SS_afun1, (ATerm)ATmakeAppl0(ATmakeAFun(name, 0, ATtrue)), (ATerm)ATmakeAppl0(ATmakeAFun(valueType, 0, ATtrue)), (ATerm)rows);
 }
 
 /*}}}  */
@@ -194,7 +161,7 @@ SS_Rows SS_makeRowsMany(SS_Row head, SS_Rows tail)
 
 SS_Row SS_makeRowDefault(ATerm key, ATerm value)
 {
-  return (SS_Row)(ATerm)ATmakeAppl2(SS_afun4, (ATerm)key, (ATerm)value);
+  return (SS_Row)(ATerm)ATmakeAppl2(SS_afun2, (ATerm)key, (ATerm)value);
 }
 
 /*}}}  */
@@ -213,11 +180,6 @@ ATbool SS_isEqualTables(SS_Tables arg0, SS_Tables arg1)
 }
 
 ATbool SS_isEqualTable(SS_Table arg0, SS_Table arg1)
-{
-  return ATisEqual((ATerm)arg0, (ATerm)arg1);
-}
-
-ATbool SS_isEqualValueType(SS_ValueType arg0, SS_ValueType arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -476,21 +438,21 @@ ATbool SS_hasTableValueType(SS_Table arg)
 }
 
 /*}}}  */
-/*{{{  SS_ValueType SS_getTableValueType(SS_Table arg) */
+/*{{{  char* SS_getTableValueType(SS_Table arg) */
 
-SS_ValueType SS_getTableValueType(SS_Table arg)
+char* SS_getTableValueType(SS_Table arg)
 {
   
-    return (SS_ValueType)ATgetArgument((ATermAppl)arg, 1);
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 1)));
 }
 
 /*}}}  */
-/*{{{  SS_Table SS_setTableValueType(SS_Table arg, SS_ValueType valueType) */
+/*{{{  SS_Table SS_setTableValueType(SS_Table arg, char* valueType) */
 
-SS_Table SS_setTableValueType(SS_Table arg, SS_ValueType valueType)
+SS_Table SS_setTableValueType(SS_Table arg, char* valueType)
 {
   if (SS_isTableDefault(arg)) {
-    return (SS_Table)ATsetArgument((ATermAppl)arg, (ATerm)valueType, 1);
+    return (SS_Table)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(valueType, 0, ATtrue)), 1);
   }
 
   ATabort("Table has no ValueType: %t\n", arg);
@@ -498,9 +460,9 @@ SS_Table SS_setTableValueType(SS_Table arg, SS_ValueType valueType)
 }
 
 /*}}}  */
-/*{{{  ATbool SS_hasTableTuples(SS_Table arg) */
+/*{{{  ATbool SS_hasTableRows(SS_Table arg) */
 
-ATbool SS_hasTableTuples(SS_Table arg)
+ATbool SS_hasTableRows(SS_Table arg)
 {
   if (SS_isTableDefault(arg)) {
     return ATtrue;
@@ -509,87 +471,25 @@ ATbool SS_hasTableTuples(SS_Table arg)
 }
 
 /*}}}  */
-/*{{{  SS_Rows SS_getTableTuples(SS_Table arg) */
+/*{{{  SS_Rows SS_getTableRows(SS_Table arg) */
 
-SS_Rows SS_getTableTuples(SS_Table arg)
+SS_Rows SS_getTableRows(SS_Table arg)
 {
   
     return (SS_Rows)ATgetArgument((ATermAppl)arg, 2);
 }
 
 /*}}}  */
-/*{{{  SS_Table SS_setTableTuples(SS_Table arg, SS_Rows tuples) */
+/*{{{  SS_Table SS_setTableRows(SS_Table arg, SS_Rows rows) */
 
-SS_Table SS_setTableTuples(SS_Table arg, SS_Rows tuples)
+SS_Table SS_setTableRows(SS_Table arg, SS_Rows rows)
 {
   if (SS_isTableDefault(arg)) {
-    return (SS_Table)ATsetArgument((ATermAppl)arg, (ATerm)tuples, 2);
+    return (SS_Table)ATsetArgument((ATermAppl)arg, (ATerm)rows, 2);
   }
 
-  ATabort("Table has no Tuples: %t\n", arg);
+  ATabort("Table has no Rows: %t\n", arg);
   return (SS_Table)NULL;
-}
-
-/*}}}  */
-
-/*}}}  */
-/*{{{  SS_ValueType accessors */
-
-/*{{{  ATbool SS_isValidValueType(SS_ValueType arg) */
-
-ATbool SS_isValidValueType(SS_ValueType arg)
-{
-  if (SS_isValueTypeStringType(arg)) {
-    return ATtrue;
-  }
-  else if (SS_isValueTypeTermType(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  inline ATbool SS_isValueTypeStringType(SS_ValueType arg) */
-
-inline ATbool SS_isValueTypeStringType(SS_ValueType arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SS_patternValueTypeStringType);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
-}
-
-/*}}}  */
-/*{{{  inline ATbool SS_isValueTypeTermType(SS_ValueType arg) */
-
-inline ATbool SS_isValueTypeTermType(SS_ValueType arg)
-{
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, SS_patternValueTypeTermType);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
 }
 
 /*}}}  */
@@ -834,33 +734,18 @@ SS_Tables SS_visitTables(SS_Tables arg, SS_Table (*acceptHead)(SS_Table))
 }
 
 /*}}}  */
-/*{{{  SS_Table SS_visitTable(SS_Table arg, char* (*acceptName)(char*), SS_ValueType (*acceptValueType)(SS_ValueType), SS_Rows (*acceptTuples)(SS_Rows)) */
+/*{{{  SS_Table SS_visitTable(SS_Table arg, char* (*acceptName)(char*), char* (*acceptValueType)(char*), SS_Rows (*acceptRows)(SS_Rows)) */
 
-SS_Table SS_visitTable(SS_Table arg, char* (*acceptName)(char*), SS_ValueType (*acceptValueType)(SS_ValueType), SS_Rows (*acceptTuples)(SS_Rows))
+SS_Table SS_visitTable(SS_Table arg, char* (*acceptName)(char*), char* (*acceptValueType)(char*), SS_Rows (*acceptRows)(SS_Rows))
 {
   if (SS_isTableDefault(arg)) {
     return SS_makeTableDefault(
         acceptName ? acceptName(SS_getTableName(arg)) : SS_getTableName(arg),
         acceptValueType ? acceptValueType(SS_getTableValueType(arg)) : SS_getTableValueType(arg),
-        acceptTuples ? acceptTuples(SS_getTableTuples(arg)) : SS_getTableTuples(arg));
+        acceptRows ? acceptRows(SS_getTableRows(arg)) : SS_getTableRows(arg));
   }
   ATabort("not a Table: %t\n", arg);
   return (SS_Table)NULL;
-}
-
-/*}}}  */
-/*{{{  SS_ValueType SS_visitValueType(SS_ValueType arg) */
-
-SS_ValueType SS_visitValueType(SS_ValueType arg)
-{
-  if (SS_isValueTypeStringType(arg)) {
-    return SS_makeValueTypeStringType();
-  }
-  if (SS_isValueTypeTermType(arg)) {
-    return SS_makeValueTypeTermType();
-  }
-  ATabort("not a ValueType: %t\n", arg);
-  return (SS_ValueType)NULL;
 }
 
 /*}}}  */
