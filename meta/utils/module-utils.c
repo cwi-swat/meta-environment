@@ -75,6 +75,7 @@ ATermList _getImports( char* path )
    ATerm module;
    PT_ParseTree parseTree;
    SDF_Module sdfModule;
+   ATermList imports;
    
    /* Read module */
    module = ATreadFromNamedFile( path );
@@ -92,11 +93,13 @@ ATermList _getImports( char* path )
  
    if (!SDF_isValidModule(sdfModule))
    {
-      ATwarning("Not a valid sdf module\n");
+      ATwarning("Not a valid sdf module: %t\n", sdfModule);
       exit( 1 );
    }
 
-   return SDF_getImports(sdfModule);
+   imports = SDF_getImports(sdfModule);
+ATwarning("imports = %t\n", imports);
+   return imports;
 }
 
 /*

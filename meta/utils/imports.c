@@ -49,8 +49,15 @@
 #include <errno.h>
 #include <limits.h>
 
+#if defined(MEPT)
+#include <SDFME-utils.h>
+#include <MEPT.h>
+#elif defined(ASFIX1)
 #include <SDF-utils.h>
 #include <PT.h>
+#else
+#error "MEPT or ASFIX1 need to be defined!"
+#endif
 
 #ifdef HAVE_GETOPT_H
 #include <getopt.h>
@@ -178,8 +185,16 @@ int main( int argc, char* argv[] )
    /* Initialize AsFix routines */
    silent = ATtrue;
    ATinit(argc, argv, &bottomOfStack);
+
+#if defined(MEPT)
+   SDF_initSDFMEApi();
+   PT_initMEPTApi();
+#elif defined(ASFIX1)
    SDF_initSDFApi();
    PT_initPTApi();
+#else
+   #error "MEPT or ASFIX1 need to be defined!"
+#endif
 
    /* Obtain list of imported modules */
    imports = getImports( argv[optind], argv[optind + 1], options );

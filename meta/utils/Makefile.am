@@ -22,7 +22,7 @@
 
 include ${top_srcdir}/make_rules
 
-bin_PROGRAMS       = meta-paths imports
+bin_PROGRAMS       = meta-paths imports imports_mept
 bin_SCRIPTS        = parse-file parse-sdf2 ps-dot insert-license \
                      insert-header change-sdf2-ext sdf2stats \
                      change-eqs-ext
@@ -40,7 +40,7 @@ EXTRA_DIST         = parse-file.sh.src parse-sdf2.sh.src \
                      insert-license.sh.src test-help test-version \
                      lang.types perform-test.sh.src \
                      parse-sdf2.pod change-sdf2-ext \
-                     sdf2stats.sh.src change-eqs-ext
+                     sdf2stats.sh.src change-eqs-ext imports.c
 
 CLEANFILES         = parse-file parse-sdf2 ps-dot insert-header \
                      insert-license perform-test parse-sdf2.1 \
@@ -50,11 +50,31 @@ meta_paths_SOURCES = meta-paths.c
 meta_paths_LDADD   = libutils.a \
                      -L$(ATERM)/lib -lATerm
 
-imports_SOURCES    = imports.c
-imports_LDADD      = libutils.a \
+imports_SOURCES    = 
+imports_LDADD      = imports.o libutils.a \
                      -L$(PT_SUPPORT)/lib -lPT \
                      -L$(SDF_SUPPORT)/lib -lSDF \
                      -L$(ATERM)/lib -lATerm
+
+imports_mept_SOURCES	=
+imports_mept_LDADD      = imports-mept.o \
+			meta-utils-mept.o \
+			module-utils-mept.o \
+                     	-L$(SDF_SUPPORT)/lib -lSDFME \
+			-L$(PT_SUPPORT)/lib -lmept \
+			-L$(ATERM)/lib -lATerm
+
+imports.o: imports.c
+	${COMPILE} -DASFIX1 -c imports.c -o imports.o
+
+imports-mept.o: imports.c
+	${COMPILE} -DMEPT -c imports.c -o imports-mept.o
+
+meta-utils-mept.o: meta-utils.c
+	${COMPILE} -DMEPT -c meta-utils.c -o meta-utils-mept.o
+
+module-utils-mept.o: module-utils.c
+	${COMPILE} -DMEPT -c module-utils.c -o module-utils-mept.o
 
 libutils_a_SOURCES = meta-utils.c meta-utils.h module-utils.c module-utils.h
 
