@@ -41,7 +41,7 @@ in
     snd-msg(initialize-structure-editor(EditorId, Text))
   ) .
   rec-msg(initial-focus(Focus?)) .
-  snd-msg(set-focus(EditorId, Focus)) .
+  snd-msg(initialization-done(EditorId)) .
   Killed := false .
   (
     (

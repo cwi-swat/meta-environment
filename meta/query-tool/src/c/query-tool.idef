@@ -19,6 +19,13 @@ in
     rec-value(QT, result(Term?)) .
     snd-terminate(QT,"done") .
     snd-msg(result("FindProduction", Term))
+  +
+    rec-msg(query("FindProdUse", Module?, Tree?)) .
+    execute(query-tool, QT?) .
+    snd-eval(QT, query("produse", Module, Tree)) .
+    rec-value(QT, result(Term?)) .
+    snd-terminate(QT,"done") .
+    snd-msg(result("FindProdUse", Term))
   ) *
   delta
 endlet

@@ -145,6 +145,7 @@ in
     ) +
     ( rec-event(UI, edit-eqs-module(ModName?)).
       snd-msg(edit-equations(ModName)) .
+      rec-msg(edit-equations(ModName, EditorId?)) .
       snd-ack-event(UI, edit-eqs-module(ModName))
     ) +
    ( rec-event(UI, edit-term(ModName?, FileName?)).

@@ -67,11 +67,13 @@ in
       rec-msg(new-editor(FileName, EditorId?)) .
       create(TextEditor("equations", EditorId, ModuleName), Pid1?) .
       snd-msg(set-filename(EditorId, FileName)) .
-      create(EditEquations(EditorId, ModuleName), Pid2?)
+      create(EditEquations(EditorId, ModuleName), Pid2?) .
+      rec-msg(initialization-done(EditorId))
     +
       rec-msg(existing-editor(FileName, EditorId?)) .
       snd-msg(move-editor-to-front(EditorId))
-    )
+    ) .
+    snd-msg(edit-equations(ModuleName, EditorId))
   +
     %% Edit a Term from file
     (rec-msg(edit-term-file(ModuleName?, FileName?)).

@@ -8,11 +8,51 @@ let
   Term : term,
   Errors : term,
   PosInfo : term,
+  Equations : term,
   FunSym : str
 in
   (
     rec-msg(get-query-actions) .
-    snd-msg(action-list(["findProduction"])) 
+    snd-msg(action-list(["findProduction", "findProdUse"])) 
+    +
+    rec-msg(execute-query(EditorId?, "findProdUse")) .
+    snd-msg(get-focussed-tree(EditorId)) .
+    (
+      rec-msg(tree(Focus?)) .
+      snd-msg(get-all-modules) .
+      rec-msg(all-modules(ModuleNames?)) .
+      (
+        if not-equal(ModuleNames, []) then
+          ModuleName := first(ModuleNames) .
+          printf("ModuleName: %s\n", ModuleName) .
+	  snd-msg(process-eqs(ModuleName)).
+	  rec-msg(eqs-processed(ModuleName)).
+          snd-msg(get-eqs-tree(ModuleName)) .
+          (
+ 	    rec-msg(tree(Equations?)) .
+ 	    snd-msg(query("FindProdUse", Equations, Focus)) .
+	    rec-msg(result("FindProdUse", Term?)) .
+	    FunSym := fun(Term) .
+	    if equal(FunSym, "found") then
+	      /*printf("Spawning editor for module %s\n", ModuleName) .*/
+	      snd-msg(edit-equations(ModuleName)) .
+	      rec-msg(edit-equations(ModuleName, EditorId?)) .
+	      PosInfo := first(args(Term)) .
+	      snd-msg(set-focus-at-posinfo(EditorId, PosInfo)) .
+	      ModuleNames := [] /* stop searching after 1st hit, for now */
+	    else
+	      tau
+	    fi
+          +
+ 	    rec-msg(unavailable)  /* ignore */
+          ) .
+          ModuleNames := next(ModuleNames)
+        fi
+      ) *
+      if equal(ModuleNames, []) then
+        tau
+      fi
+    )
     +
     rec-msg(execute-query(EditorId?, "findProduction")) .
     snd-msg(get-focussed-tree(EditorId)) .
@@ -22,28 +62,28 @@ in
       rec-msg(all-modules(ModuleNames?)) .
       (
         if not-equal(ModuleNames, []) then
-        ModuleName := first(ModuleNames) .
-	snd-msg(get-sdf2-asfix(ModuleName)) .
-	(
-	  rec-msg(syntax(Module?)) .
-	  snd-msg(query("FindProduction", Module, Focus)) .
-	  rec-msg(result("FindProduction", Term?)) .
-          FunSym := fun(Term) .
-	  if equal(FunSym, "found") then
-	    /*printf("Spawning editor for module %s\n", ModuleName) .*/
-	    snd-msg(edit-syntax(ModuleName)) .
-	    rec-msg(edit-syntax(ModuleName, EditorId?)) .
-            PosInfo := first(args(Term)) .
-            snd-msg(set-focus-at-posinfo(EditorId, PosInfo)) .
-	    ModuleNames := [] /* stop searching after 1st hit, for now */
-	  else
-	    tau
-	  fi
-	+
-	  rec-msg(unavailable) .
-	  printf("Unable to get parse tree for focus!\n")
-	) .
-        ModuleNames := next(ModuleNames)
+	  ModuleName := first(ModuleNames) .
+	  snd-msg(get-sdf2-asfix(ModuleName)) .
+	  (
+	    rec-msg(syntax(Module?)) .
+	    snd-msg(query("FindProduction", Module, Focus)) .
+	    rec-msg(result("FindProduction", Term?)) .
+	    FunSym := fun(Term) .
+	    if equal(FunSym, "found") then
+	      /*printf("Spawning editor for module %s\n", ModuleName) .*/
+	      snd-msg(edit-syntax(ModuleName)) .
+	      rec-msg(edit-syntax(ModuleName, EditorId?)) .
+	      PosInfo := first(args(Term)) .
+	      snd-msg(set-focus-at-posinfo(EditorId, PosInfo)) .
+	      ModuleNames := [] /* stop searching after 1st hit, for now */
+	    else
+	      tau
+	    fi
+	  +
+	    rec-msg(unavailable) .
+	    printf("Unable to get parse tree for focus!\n")
+	  ) .
+	  ModuleNames := next(ModuleNames)
         fi
       ) *
       if equal(ModuleNames, []) then

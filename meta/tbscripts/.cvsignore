@@ -1,4 +1,5 @@
+.*.swp
 Makefile
 Makefile.in
-sdf2-language.tb
 help.tb
+sdf2-language.tb

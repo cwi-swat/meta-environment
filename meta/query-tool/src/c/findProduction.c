@@ -4,6 +4,8 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include <PT2SDF.h>
 
@@ -12,7 +14,7 @@
 /*}}}  */
 /*{{{  types */
 
-typedef ATbool (*predicate)(SDF_Production, SDF_Production);
+typedef ATbool (*predicate)(SDF_Production, SDF_Production, void *cargo);
 
 /*}}}  */
 
@@ -59,9 +61,9 @@ static ATbool symbolListsMatch(SDF_SymbolList s1, SDF_SymbolList s2)
 }
 
 /*}}}  */
-/*{{{  static ATbool productionsMatch(SDF_Production p1, SDF_Production p2) */
+/*{{{  ATbool productionsMatch(SDF_Production p1, SDF_Production p2, void *cargo) */
 
-static ATbool productionsMatch(SDF_Production p1, SDF_Production p2)
+ATbool productionsMatch(SDF_Production p1, SDF_Production p2, void *cargo)
 {
   SDF_Symbol rhs1, rhs2;
 
@@ -76,35 +78,70 @@ static ATbool productionsMatch(SDF_Production p1, SDF_Production p2)
 }
 
 /*}}}  */
-/*{{{  static ATbool lexicalProductionsMatch(SDF_Production p1, SDF_Production p2) */
+/*{{{  static ATbool lexicalProductionsMatch(SDF_Production p1, SDF_Production p2, void *cargo) */
 
-static ATbool lexicalProductionsMatch(SDF_Production p1, SDF_Production p2)
+static ATbool lexicalProductionsMatch(SDF_Production p1, SDF_Production p2, void *cargo)
 {
   SDF_Symbol rhs1, rhs2;
 
   rhs1 = SDF_getProductionResult(p1);
   rhs2 = SDF_getProductionResult(p2);
 
-  if (SDF_isEqualSymbol(SDF_removeSymbolAnnotations(rhs1), rhs2)) {
+  return (SDF_isEqualSymbol(SDF_removeSymbolAnnotations(rhs1), rhs2));
+}
+
+/*}}}  */
+/*{{{  static ATbool variableProductionsMatch(SDF_Production p1, SDF_Production p2, void *cargo) */
+
+static ATbool
+variableProductionsMatch(SDF_Production p1, SDF_Production p2, char *yield)
+{
+  SDF_Symbol rhs1, rhs2;
+
+  rhs1 = SDF_removeSymbolAnnotations(SDF_getProductionResult(p1));
+  rhs2 = SDF_getProductionResult(p2);
+
+  if (SDF_isEqualSymbol(rhs1, rhs2)) {
+    SDF_Symbols symbols = SDF_getProductionSymbols(p1);
+    SDF_SymbolList symbolList = SDF_getSymbolsList(symbols);
+    SDF_Symbol symbol = SDF_getSymbolListHead(symbolList);
+
+    if (SDF_isSymbolLit(symbol)) {
+      SDF_Literal lit = SDF_getSymbolLiteral(symbol);
+      char unquoted[BUFSIZ];
+      char *str = PT_yieldTree(PT_TreeFromTerm(SDF_LiteralToTerm(lit)));
+
+      if (SDF_isLiteralQuoted(lit)) {
+	strcpy(unquoted, str+1);
+	unquoted[strlen(unquoted)-1] = '\0';
+      }
+      else {
+	strcpy(unquoted, str);
+      }
+
+      return strncmp(unquoted, yield, strlen(unquoted)) == 0;
+    }
+
     return ATtrue;
   }
-  else {
-    return ATfalse;
-  }
+
+  return ATfalse;
 }
 
 /*}}}  */
 
 /*{{{ static SDF_Production findProductionInModule(needle, haystack, predicate) */
 
-static SDF_Production findProductionInModule(SDF_Production needle, SDF_Module haystack, predicate pred)
+static SDF_Production
+findProductionInModule(SDF_Production needle,
+		       SDF_ProductionList productionList,
+		       predicate pred,
+		       void *cargo)
 {
-  SDF_ProductionList productionList = SDF_getModuleProductions(haystack);
-
   while (!SDF_isProductionListEmpty(productionList)) {
     SDF_Production suspect = SDF_getProductionListHead(productionList);
 
-    if (pred(suspect, needle)) {
+    if (pred(suspect, needle, cargo)) {
       return suspect;
     }
 
@@ -130,7 +167,7 @@ ATerm queryProductionInModule(SDF_Module sdfModule, PT_ParseTree parseTree)
   SDF_Production sdfProduction;
   SDF_Production found = NULL;
   ATerm pos = NULL;
-  predicate pred;
+  char buf[BUFSIZ];
 
   /* Useless when SDFME/PT are compiled with -DDISABLE_DYNAMIC_CHECKING */
   assert(SDF_isValidModule(sdfModule));
@@ -140,19 +177,32 @@ ATerm queryProductionInModule(SDF_Module sdfModule, PT_ParseTree parseTree)
   ptProduction = PT_getTreeProd(ptTree);
 
   if (PT_isProductionDefault(ptProduction)) {
+    SDF_ProductionList productionList;
+
     sdfProduction = PTProductionToSDFProduction(ptProduction);
     assert(SDF_isValidProduction(sdfProduction));
 
     if (PT_isLexicalInjectionProd(ptProduction)) {
-      pred = lexicalProductionsMatch;
+      productionList = SDF_getModuleLexicalProductions(sdfModule);
+      found = findProductionInModule(sdfProduction, productionList,
+				     lexicalProductionsMatch, NULL);
+    }
+    else if (PT_isProductionVariable(ptProduction)) {
+      strcpy(buf, PT_yieldTree(ptTree));
+      productionList = SDF_getModuleVariableProductions(sdfModule);
+      found = findProductionInModule(sdfProduction, productionList,
+				     (predicate)variableProductionsMatch,
+				     buf);
     }
     else {
-      pred = productionsMatch;
+      productionList = SDF_getModuleProductions(sdfModule);
+      found = findProductionInModule(sdfProduction, productionList,
+				     productionsMatch, NULL);
     }
-    found = findProductionInModule(sdfProduction, sdfModule, pred);
   }
 
   if (found != NULL) {
+    /*ATwarning("found = %t\n", found);*/
     pos = ATgetAnnotation(SDF_ProductionToTerm(found), ATmake("pos-info"));
   }
 

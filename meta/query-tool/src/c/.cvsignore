@@ -1,8 +1,9 @@
-Makefile
-Makefile.in
 *.o
 *.tifs
+.*.swp
 .deps
+Makefile
+Makefile.in
 query-tool
-testSortDefinition
 testProduction
+testSortDefinition

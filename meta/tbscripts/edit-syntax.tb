@@ -20,8 +20,7 @@ in
   (
     rec-msg(syntax(Tree?)) .
     snd-msg(initialize-structure-editor-with-tree(EditorId, Tree)) .
-    rec-msg(initial-focus(Focus?)) .
-    snd-msg(initialization-done(EditorId)) 
+    rec-msg(initial-focus(Focus?))
   +
     rec-msg(unavailable).
     snd-msg(open-syntax-file(ModuleName)) .
@@ -31,10 +30,9 @@ in
       rec-msg(error-opening(ModuleName))
     ) .
     snd-msg(initialize-structure-editor(EditorId, Text)) .
-    rec-msg(initial-focus(Focus?)) .
-    snd-msg(initialization-done(EditorId)) 
+    rec-msg(initial-focus(Focus?))
   ) .
-  /*snd-msg(set-focus(EditorId, Focus)) .*/
+  snd-msg(initialization-done(EditorId)) .
   Killed := false .
   (
     (  

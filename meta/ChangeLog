@@ -1,5 +1,11 @@
 # $Id$
 
+Tue Mar  4 09:51:15 CET 2003 <{markvdb,jong}@cwi.nl>
+ * add new queries:
+   - find Sdf definition of production used in Asf equation
+   - find Sdf definition of variable used in Asf equation
+   - find equation(s) that "implement" an Sdf production 
+
 Thu Feb 27 09:24:54 CET 2003 <jong@cwi.nl>
  * meta-studio: move NodeSizer.java from metastudio.graph to metastudio
    as it is not part of the generated graph package.
