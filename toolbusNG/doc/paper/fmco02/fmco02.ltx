@@ -1000,7 +1000,7 @@ Java interface, just as in plain RMI.
 
 Apart from Java RMI, which is optimized for connecting components
 that are all written in Java, there is also a connection from Java to
-CORBA\cite{XXX} using Java Interface Definition Language (IDL). This
+CORBA\cite{corba} using the Java Interface Definition Language (IDL). This
 alternative to Java RMI is for Java programmers who want to program in
 the Java programming language, based on interfaces defined in the CORBA
 Interface Definition Language.
@@ -1061,7 +1061,7 @@ are used to represent data as it is sent from one component to another.
 RMI allows programmers access to Java's Distributed Garbage Collection
 API. In RMI-IIOP and Java IDL however, this is not possible, because
 the underlying CORBA architecture is used, which does not support
-(distributed) GC, but places this burden entirely on the programmers
+(distributed) GC, but places this burden entirely on the developer.
 
 \item In the \TB\, all data is sent by-value. RMI and RMI-IIOP
 use both pass-by-value and pass-by-reference, depending on whether
@@ -1106,9 +1106,9 @@ or reference counting at the \TB\ level may solve this problem.
 
 \section{Current Status} \label{Sec:status}
 
-The current \TB\ has been first specified in \asdf\ and has then been
-implemented manually in C. It had as primary target the renovation
-of the \asdf\ Meta-Environment.
+The current \TB\ was first specified in \asdf\ and has then been
+implemented manually in C. Its primary target was the renovation of the
+\asdf\ Meta-Environment.
 
 The next generation \TB\ is being implemented in Java and aims at
 supporting larger applications such as, for instance, a multi-user game
@@ -1122,19 +1122,19 @@ implemented by a variety of classes:
 
 \begin{description}
 
-\item[\texttt{ClassicToolBusTool}:] this implements the \TB/tool communication
-as used in current applications. The tool is executed as separate,
-operating system level, process and the \TB/tool communication
-is done using sockets.
+\item[\texttt{ClassicToolBusTool}:] this implements the \TB/tool
+communication as used in current applications. The tool is executed as a
+separate, operating system level, process and the \TB/tool communication
+is achieved using sockets.
 
-\item[\texttt{JavaTool}:] this implements a new model that answer one
-  of the issues mentioned in \S\ref{Sec:issues-NG}: when \TB\ and tool
-  run on the same computer \emph{and} the tool is written in Java,
-  then the tool can be loaded dynamically in the executing \TB.  In
-  this way, the overhead of interprocess communication can be
-  eliminated.
+\item[\texttt{JavaTool}:] this implements a new model that addresses
+one of the issues mentioned in \S\ref{Sec:issues-NG}: when \TB\ and
+tool run on the same computer \emph{and} the tool is written in Java,
+then the tool can be loaded dynamically in the executing \TB, e.g. using
+Java Threads. In this way, the overhead of interprocess communication
+can be eliminated.
 
-\item[\texttt{JavaRMITool}:] this is a special case when a Java tool
+\item[\texttt{JavaRMITool}:] this is a special case where a Java tool
 runs on another computer.
 
 \item[\texttt{SOAPTool}:] this implements communication with a tool
@@ -1144,7 +1144,6 @@ that has a SOAP interface.
 
 \noindent A prototype implementation is under development that allows
 experimentation with the features mentioned in this paper.
-
 
 \section{Concluding Remarks}
 
