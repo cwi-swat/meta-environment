@@ -17,7 +17,7 @@ SHELL = /bin/sh
 
 srcdir = .
 top_srcdir = ../..
-prefix = /ufs/jurgenv/glt
+prefix = /home/markvdb/Research
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -46,7 +46,7 @@ AUTOCONF = autoconf
 AUTOMAKE = automake
 AUTOHEADER = autoheader
 
-INSTALL = /usr/bin/install -c
+INSTALL = ../.././install-sh -c
 INSTALL_PROGRAM = ${INSTALL} $(AM_INSTALL_PROGRAM_FLAGS)
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_SCRIPT = ${INSTALL_PROGRAM}
@@ -58,14 +58,14 @@ POST_INSTALL = :
 NORMAL_UNINSTALL = :
 PRE_UNINSTALL = :
 POST_UNINSTALL = :
-AR = /usr/bin/ar
-ATERM = /ufs/jurgenv/glt
+AR = /usr/ccs/bin/ar
+ATERM = /home/markvdb/Research
 CC = gcc
 MAKEINFO = makeinfo
 PACKAGE = asf-library
-PT_SUPPORT = /ufs/jurgenv/glt
+PT_SUPPORT = /home/markvdb/Research
 RANLIB = ranlib
-SH = /bin/sh
+SH = /usr/bin/sh
 VERSION = 0.2beta
 translit = @translit@
 
@@ -211,7 +211,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(distdir)/$$file; \
+	    cp -pr $$/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
