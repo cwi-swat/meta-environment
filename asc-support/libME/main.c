@@ -27,7 +27,7 @@
 void usage(char *prg)
 {
   fprintf(stderr, "Usage: %s -h -f <name> -i <file> -o <file> -m -r <sort>"
-	          " -s -v\n"
+	          " -s -t -v\n"
                   "Options:\n"
                   "\t-h              display help information (usage)\n"
                   "\t-f name         apply prefix function to input terms\n"
@@ -36,6 +36,7 @@ void usage(char *prg)
                   "\t-m              mute: produce no output\n"
                   "\t-r sort         result sort name of prefix function\n"
 		  "\t-s              print statistics\n"
+		  "\t-t              output textual term instead of baf\n"
                   "\t-v              verbose mode\n"
 		  "\nMore than one -i option can be supplied.\n"
                   "\nUse %s -at-help to get more aterm options.\n", prg, prg);
@@ -59,6 +60,7 @@ int asc_support_main(int argc, char *argv[],
   ATbool produce_output = ATtrue;
   ATbool run_verbose = ATfalse;
   ATbool printstats = ATfalse;
+  ATbool bafmode = ATtrue;
   char *inputs[MAX_ARGS] = { "-" };
   int nInputs = 0;
   char *output = "-";
@@ -93,6 +95,9 @@ int asc_support_main(int argc, char *argv[],
     }
     else if(streq(argv[i], "-s")) {
       printstats = ATtrue;
+    }
+    else if(streq(argv[i], "-t")) {
+      bafmode = ATfalse;
     }
     else if(streq(argv[i], "-m")) {
       produce_output = ATfalse;
@@ -208,7 +213,13 @@ int asc_support_main(int argc, char *argv[],
  
     if (produce_output) {
       asfix = toasfix(reduct);
-      ATwriteToNamedBinaryFile(PT_makeTermFromParseTree(asfix),output);
+      if (bafmode) {
+	ATwriteToNamedBinaryFile(PT_makeTermFromParseTree(asfix),output);
+      }
+      else {
+	ATwriteToNamedTextFile(PT_makeTermFromParseTree(asfix),output);
+      }
+
     }
   }
 
