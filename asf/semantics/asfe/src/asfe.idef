@@ -38,7 +38,7 @@ in
     snd-eval(Eval, run-tests(ModuleName, Equations, Tests)) .
     (
       rec-value(Eval, test-results(TestResults?)) .
-      printf ("test results: %t\n", TestResults)
+      snd-msg(test-results(TestResults))
     ) .
     Equations := none .
     Tests := none

@@ -17,7 +17,7 @@ static ASF_ASFTag testOne(ASF_ASFTestEquation test)
   ATbool equals = ATfalse;
    
   PT_Tree lhs = (PT_Tree) ASF_getASFConditionLhs(condition);
-  PT_Tree rhs = (PT_Tree) ASF_getASFConditionLhs(condition);
+  PT_Tree rhs = (PT_Tree) ASF_getASFConditionRhs(condition);
 
   lhs = RWprepareTerm(lhs, ATfalse);
   rhs = RWprepareTerm(rhs, ATfalse);
@@ -54,7 +54,14 @@ static ATermList testAll(ASF_ASFTestEquationTestList tests)
     ASF_ASFTag result = testOne(test);
 
     if (result != NULL) {
-      failed = ATinsert(failed, ASF_ASFTagToTerm(result));
+      failed = ATinsert(failed, 
+			ATmake("<str>", 
+			       PT_yieldTree((PT_Tree) 
+					    ASF_ASFTagToTerm(result))));
+    }
+
+    if (!ASF_hasASFTestEquationTestListTail(tests)) {
+      break;
     }
   }
 

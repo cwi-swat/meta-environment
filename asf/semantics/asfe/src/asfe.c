@@ -161,13 +161,13 @@ ATerm run_tests(int cid, char *modname, ATerm eqs, ATerm tests)
   eqs = ATBunpack(eqs);
   eqsList = ASF_makeASFConditionalEquationListFromTerm(eqs);
 
-  tests = ATBunpack(eqs);
-  testList = ASF_makeASFTestEquationTestListFromTerm(eqs);
+  tests = ATBunpack(tests);
+  testList = ASF_makeASFTestEquationTestListFromTerm(tests);
 
   result = (ATerm) runTests(eqsList, testList);
 
   if (RWgetError() == NULL) {
-    return ATmake("snd-value(test-result(<term>))", result);
+    return ATmake("snd-value(test-results(<term>))", result);
   }
   else {
     return ATmake("snd-value(rewrite-errors([<term>]))", RWgetError());
