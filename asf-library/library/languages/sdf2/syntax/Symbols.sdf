@@ -1,7 +1,8 @@
 %%% $Id$
                      
 module languages/sdf2/syntax/Symbols
-imports aterm/Layout
+imports languages/aterm/syntax/Layout
+
 exports
   sorts Symbol Symbols
   context-free syntax

@@ -1,7 +1,7 @@
 %%% $Id$
                      
 module languages/sdf2/syntax/Character
-imports aterm/Layout
+imports languages/aterm/syntax/Layout
 exports
   sorts Character NumChar ShortChar
   lexical syntax
