@@ -23,18 +23,15 @@
  */
 process AddEqSyn is
 let
-  Name      : str,
   NewSyntax : term,
   Syntax    : term,
   AES       : addeqssyntax,
-  Tid       : int
+  ModuleName : str
 in  
+  execute(addeqssyntax,AES?).
   (
-    execute(addeqssyntax,AES?).
-    rec-msg(add-eqs-syntax(Name?)).
-    snd-msg(get-all-sdf2-definitions(Name)).
-    rec-msg(syntax(Syntax?)).
-    snd-eval(AES,add-eqs-syntax(Name,Syntax)).
+    rec-msg(add-eqs-syntax(ModuleName?, Syntax?)).
+    snd-eval(AES,add-eqs-syntax(ModuleName, Syntax)).
     rec-value(AES,extended-syntax(NewSyntax?)). 
     snd-msg(extended-syntax(NewSyntax))
   )*

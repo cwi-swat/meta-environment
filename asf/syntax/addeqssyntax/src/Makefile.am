@@ -25,6 +25,8 @@ INCLUDES         = -I$(ASCINC) -I$(ASFIXINC) -I$(ATERMINC)
 bin_PROGRAMS = addeqssyntax
 man_MANS     = addeqssyntax.1
 
+data_DATA    = addeqssyntax.idef
+
 EXTRA_DIST   = addeqssyntax.idef addeqssyntax.tif.c addeqssyntax.tif.h \
 	       addeqssyntax.pod
 
