@@ -6,7 +6,7 @@ Rewr  : int,
 Str   : str,
 Name  : term,
 T     : term,
-Text:   str,
+Text:  str,
 Fn    : str,
 TE: text-edit,
 Clst: list, Flst: list, Tslst: list,
@@ -30,8 +30,7 @@ printf("%s\n",Src).
     snd-do(TE,inserttext(Src)).
     snd-note(ui-status(endstat(Id)))
     + (
-      rec-msg(opened-file(ascii,Name?,Text?)).
-      /* args are: type(=term), Name, Term, Filename, Id of this process */
+      rec-msg(Id,opened-file(raw,Name?,Text?,Fn?)).
       create(Editor(Name,Text,Fn,Id), Tid?)
       +
       rec-msg(error-opening(Str?)).
