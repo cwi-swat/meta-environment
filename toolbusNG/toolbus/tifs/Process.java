@@ -24,12 +24,20 @@ public class Process {
       ATermAppl appl = (ATermAppl) iter.getFirst();
       AFun fun = appl.getAFun();
       String name = fun.getName();
+      // <yuck>
       if (name.equals("eval")) {
         comm = new Eval(appl);
+      }
+      else if (name.equals("do")) {
+        comm = new Do(appl);
+      }
+      else if (name.equals("event")) {
+        comm = new Event(appl);
       }
       if (comm != null) {
         communicationList.add(comm);
       }
+      // </yuck>
       iter = iter.getNext();
     }
   }
@@ -51,7 +59,9 @@ public class Process {
     StringBuffer buf = new StringBuffer();
     buf.append("process(");
     buf.append("name(");
+    buf.append('"');
     buf.append(getName());
+    buf.append('"');
     buf.append(')');
     buf.append(',');
     buf.append('[');

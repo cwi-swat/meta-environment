@@ -11,13 +11,6 @@ public class Tif {
 
   public Tif(ATerm t) {
     setRepresentation(t);
-    System.out.println("version: " + getVersion());
-    System.out.println("package: " + getPackageName());
-    System.out.println("tool   : " + getToolName());
-    Iterator iter = fetchProcessIterator();
-    while (iter.hasNext()) {
-      System.out.println("  " + (Process) iter.next());
-    }
   }
   
   private void setRepresentation(ATerm t) {
@@ -55,6 +48,44 @@ public class Tif {
 
     return processList.iterator();
   }
+  
+  public String toString() {
+    StringBuffer buf = new StringBuffer();
+    buf.append("tifs");
+    buf.append('(');
+    buf.append("version");
+    buf.append('(');
+    buf.append(getVersion());
+    buf.append(')');
+    buf.append(',');
+    buf.append("package");
+    buf.append('(');
+    buf.append('"');
+    buf.append(getPackageName());
+    buf.append('"');
+    buf.append(')');
+    buf.append(',');
+    buf.append("tool");
+    buf.append('(');
+    buf.append('"');
+    buf.append(getToolName());
+    buf.append('"');
+    buf.append(')');
+    buf.append(',');
+    buf.append('[');
+    Iterator iter = fetchProcessIterator();
+    while (iter.hasNext()) {
+      Process process = (Process)iter.next();
+      buf.append(process);
+      if (iter.hasNext()) {
+        buf.append(',');
+      }
+    }
+    buf.append(']');
+    buf.append(')');
+
+    return buf.toString();
+  }
 
   public static void main(String[] args) {
     ATermFactory factory = new aterm.pure.PureFactory();
@@ -65,6 +96,8 @@ public class Tif {
     } catch (IOException e) {
       System.err.println("Error reading " + fileName + ": " + e);
     }
-    new Tif(tifsTerm);
+    Tif tif = new Tif(tifsTerm);
+    System.out.println("tif read: ");
+    System.out.println(tif);
   }
 }
