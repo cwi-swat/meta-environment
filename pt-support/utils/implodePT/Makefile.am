@@ -1,5 +1,7 @@
 # $Id$
 
+SUBDIRS=test
+
 bin_PROGRAMS		= implodePT 
 
 INCLUDES		= -I${top_srcdir}/libmept \
