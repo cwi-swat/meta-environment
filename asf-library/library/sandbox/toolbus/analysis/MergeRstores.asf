@@ -1,0 +1,16 @@
+equations
+
+%% Merge two rstores
+
+[MER1] merge([], $Store) = $Store
+
+[MER2] merge($Store, []) = $Store
+
+[MER3] merge([<$Var, {$Tuple*1}>, $VPair*], 
+             [$VPair*1, <$Var, {$Tuple*2}>, $VPair*2]) =
+         merge([$VPair*], 
+               [$VPair*1, <$Var,{$Tuple*1,$Tuple*2}>, $VPair*2])
+
+[default-MER4]
+  merge([<$Var, $Val>, $VPair*], [$VPair*1]) =
+    merge([$VPair*], [<$Var, $Val>, $VPair*1])
