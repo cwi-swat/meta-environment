@@ -34,10 +34,10 @@
 \htmlpanelfield{Contents}{hlxcontents}
 \htmlpanelfield{Index}{hlxindex}
 
-\newcommand{\ASmetaenv}{{Asf}+{Sdf} Meta-En\-vir\-on\-ment}
-\newcommand{\sdf}{{Sdf}}
-\newcommand{\asf}{{Asf}}
-\newcommand{\asfsdf}{{Asf}+{Sdf}}
+\newcommand{\ASmetaenv}{{\textsc ASF}+{\textsc SDF} Meta-En\-vir\-on\-ment}
+\newcommand{\sdf}{{\textsc SDF}}
+\newcommand{\asf}{{\textsc ASF}}
+\newcommand{\asfsdf}{{\textsc ASF}+{\textsc SDF}}
 \newcommand{\ATerm}{ATerm}
 \newcommand{\ATerms}{ATerms}
 \newcommand{\xemacs}{{\tt XEmacs}}
@@ -338,6 +338,7 @@ overview of selected publications:
 
 
 \section{Starting the System}
+\label{StartingMeta}
 
 \index{meta@{\tt meta}}
 \index{Asf+Sdf Meta-Environment@\ASmetaenv}
@@ -439,7 +440,7 @@ The main window consists of the following parts:
     
   \item {\tt Debug}: for turning on/off the display of diagnostic messages.
     The {\tt Debug} menu is described in 
-    \T \Section~\ref{DebugMenu}.
+    \T Section~\ref{DebugMenu}.
     \W \link{DebugMenu}[]{DebugMenu}.
     
   \item {\tt Help} for various forms of information and online help.  The {\tt
@@ -615,7 +616,7 @@ will only be shown when the loading of the specification is complete.
 \subsection{The Debug Menu}
 \label{DebugMenu}
 
-The \link{{\tt Debug} menu}[ is shown in Figure~\ref} and ]{FIG:debug-menu} 
+The \link{{\tt Debug} menu}[ is shown in Figure~\ref and ]{FIG:debug-menu} 
 contains the
 single check box {\tt Diagnostic messages}.  When enabled, diagnostic
 messages will be displayed.  Otherwise the systems runs silently.
@@ -1425,8 +1426,18 @@ If you save the changes the files `{\tt Bool-example.sdf}' and `{\tt
 \subsection{The Pico Specification}
 
 More features of the  \ASmetaenv\  can be studied by looking at the
-Pico specification.
+Pico specification. Pico is a toy language used demonstration purposes.
 
+
+
+
+
+\begin{itemize}
+
+
+
+\item Open an editor for the \link{syntax}[ (Figure~\ref)]{FIG:Pico-Booleans-sdf}
+      of {\tt Pico-Booleans}.
 
 \begin{figure}[t]
 \begin{Label}{FIG:Pico-Booleans-sdf}
@@ -1438,6 +1449,8 @@ Pico specification.
 \end{Label}
 \end{figure}
 
+\item Open an editor for the \link{equations}[ (Figure~\ref)]{FIG:Pico-Booleans-eqs}.
+
 \begin{figure}
 \begin{Label}{FIG:Pico-Booleans-eqs}
 \begin{center}
@@ -1448,27 +1461,20 @@ Pico specification.
 \end{Label}
 \end{figure}
 
-\begin{itemize}
-
-\item Open the module {\tt Pico-Booleans} and study the differences in
-syntax and equations with {\tt Bool-example}. 
+\item Study the differences in syntax and equations between with {\tt Bool-example}
+and {\tt Pico-Booleans}.
 
 \end{itemize}
 
-\begin{iftex} 
-Editors for syntax and equations of {\tt Pico-Booleans} are shown in
-Figures \ref{FIG:Pico-Booleans-sdf} and \ref{FIG:Pico-Booleans-eqs}.
-\end{iftex}
-\begin{ifhtml}
-Click \link{here}[]{FIG:Pico-Booleans-sdf} for the editor for the syntax
-of  {\tt Pico-Booleans} and \link{here}[]{FIG:Pico-Booleans-eqs} for the
-editor for the equations.
-\end{ifhtml}
+Now we turn our attention to the complete Pico specification.
 
 \begin{itemize}
   
-\item Start the Meta-Environment: go to directory {\tt
-    pico}, and type `{\tt meta}'.
+\item Leave the \ASmetaenv.  This is done by
+selecting {\tt Quit} from the \link{{\tt File} menu}[ (Section
+~\ref)]{FileMenu}.
+
+\item Go to {\tt pico}, and type \link{{\tt meta}}[ (Section~\ref)]{StartingMeta} at the command line.
   
 \item Add the module {\tt Pico-syntax} by selecting the {\tt File} menu, and
   selecting the {\tt Open...} button.  In the dialog window that appears, click
@@ -1777,6 +1783,10 @@ equations
 A module consists of a module header, followed by a list of zero or more
 import sections, followed by zero or more hidden or exported
 sections and an optional equations section that defines conditional equations.
+\T In Section~\ref{ParametersRenamings}
+\W \link{Later}[]{ParametersRenamings}
+we will see that modules can alse be \emph{parameterized} and
+that they can be \emph{renamed on import}.
 
 Conceptually, a module is a single unit but for technical reasons the
 syntax sections and the equations section are stored in physically
@@ -1802,8 +1812,13 @@ the module.
 An {\tt <ExportOrHiddenSection>} has thus one of the two forms:
 
 \begin{verbatim}
-exports                               hiddens
-  <Grammar>+                            <Grammar>+
+exports 
+  <Grammar>+
+\end{verbatim}
+\noindent or
+\begin{verbatim}
+hiddens
+  <Grammar>+
 \end{verbatim}
   
 \noindent A {\tt <Grammar>} 
@@ -1827,12 +1842,17 @@ of the grammars:
 \begin{itemize}
 \item \link{\sdf\ comment convention}[
 (Section~\ref{SdfComment})]{SdfComment}.
+
 \item \link{Symbols}[ (Section~\ref{Symbols})]{Symbols}.
+
 \item \link{Attributes of Lexical and Context-free Functions}[
 (Section~\ref{Attributes})]{Attributes}.
+
+\item \link{Disambiguation}[ (Section~\ref{Disambiguation})]{Disambiguation}.
+
 \item \link{Parameterization and Renamings}[
 (Section~\ref{ParametersRenamings})]{ParametersRenamings}.
-\item \link{Disambiguation}[ (Section~\ref{Disambiguation})]{Disambiguation}.
+
 \item \link{Equations}[ (Section~\ref{Equations})]{Equations}.
 \end{itemize}
 
@@ -1846,14 +1866,10 @@ will now be described and illustrated by examples.
 The comment convention within an \sdf\ specification is that character
 between {\tt "\%\%"} and the end of line is comment as well as every
 character between two {\tt "\%"} including the newline character.
-\begin{iftex}
-See Figure~\ref{CODE:sdfcomment} for an example, more details on
-defining layout can be found in Section~\ref{Restrictions}.
-\end{iftex}
-\begin{ifhtml}
-Below an example is given of how the \sdf\ comments look like, more details on
-defining layout can be found in Section \link{Restrictions}[]{Restrictions}.
-\end{ifhtml}
+An example of the use of comments is given
+\T in Figure~\ref{CODE:sdfcomment}.
+\W \link{below}[]{CODE:sdfcomment}.
+
 
 \begin{figure}
 \label{CODE:sdfcomment}
@@ -1871,7 +1887,12 @@ exports
 \end{verbatim}
 \end{IncCode}
 \caption{\sdf\ comment}
-\end{figure}   
+\end{figure}  
+
+This definition also defines the comment convention in \sdf\ itself.
+More details on defining layout can be found in
+\T Section~\ref{Restrictions}.
+\W \link{Restrictions}[]{Restrictions}. 
 
 \subsection{Imports}
 \label{Imports}
@@ -1898,13 +1919,10 @@ by the importing module.  However, if the import section occurs within the
 scope of a hiddens keyword, the exported entities are only visible in the
 importing module but they are not exported by the importing module.
 
-An imported module can be parameterized or decorated with renamings, 
-\begin{iftex}
-see Section~\ref{ParametersRenamings} for more details.
-\end{iftex}
-\begin{ifhtml}
-see Section \link{ParametersRenamings}[]{ParametersRenamings} for more details.
-\end{ifhtml}
+An imported module can be parameterized or decorated with renamings, see
+\T Section~\ref{ParametersRenamings}
+\W \link{ParametersRenamings}[]{ParametersRenamings} 
+for more details.
 
 \subsection{Symbols}
 \label{Symbols}
@@ -1924,25 +1942,20 @@ formalisms. The elementary symbols are:
 \item \emph{character class}: corresponds to a set of characters, 
 e.g., {\tt [a-z]}.
 Character classes will be explained in
-\begin{iftex}
-Section~\ref{CharacterClasses}, 
-\end{iftex}
-\begin{ifhtml}
-Section \link{Character Classes}[]{CharacterClasses}, 
-\end{ifhtml}
+\T Section~\ref{CharacterClasses}, 
+\T \link{Character Classes}[]{CharacterClasses}, 
 they are mainly used when describing the lexical syntax of a language.
 \end{itemize}
 
 Starting with the elementary symbols, more complex symbols can be constructed
 by way of operators that we will discuss now.
-Examples of the use of the various operators will be given in the
-\begin{iftex}
-Sections~\ref{LexicalSyntax} and~\ref{ContexFreeSyntax}.
-\end{iftex}
-\begin{ifhtml}
-Sections \link{Lexical Syntax}[]{LexicalSyntax} and \link{Context-free
-Syntax}[]{ContexFreeSyntax}. 
-\end{ifhtml}
+
+\htmlmenu{1}
+
+Examples of the use of the various operators will be given in
+\T Sections~\ref{LexicalSyntax} and~\ref{ContexFreeSyntax}.
+\W \link{Lexical Syntax}[]{LexicalSyntax} and 
+\W \link{Context-freeSyntax}[]{ContexFreeSyntax}. 
 
 \subsubsection{Option}
 \label{OptionOperator}
@@ -2065,15 +2078,13 @@ the module name. A parameterized sort may have the form
 {\tt List[[X,Y]]} where {\tt X} and {\tt Y} are generic sorts
 which will be provided via the parameters of the module name.
 See
-\begin{iftex} 
-Section~\ref{ParametersRenamings}
-\end{iftex}
-\begin{ifhtml}
-Section  \link{Parameterization and Renamings}[]{ParametersRenamings}
-\end{ifhtml}
+\T Section~\ref{ParametersRenamings}
+\W \link{Parameterization and Renamings}[]{ParametersRenamings}
 for more details.
-The context-free syntax rule for parameterized sorts is:
-{\tt Sort "[[" {Symbol ","}+ "]]" -> Symbol}.
+The context-free syntax rule describing parameterized sorts is:
+\begin{verbatim}
+   Sort "[[" {Symbol ","}+ "]]" -> Symbol
+\end{verbatim}
 
 \subsection{Aliases}
 \label{Aliases}
@@ -2110,9 +2121,6 @@ aliases
 
 \subsection{Sorts}
 \label{Sorts}
-
-Note: the keyword {\tt sorts} is a bit misleading, not only {\tt SortName}s
-can be declared, but in fact {\tt Symbol}s can be declare in the sorts section.
 Sorts are declared by listing their name in a sorts section of the form:
 
 \begin{verbatim}
@@ -2120,18 +2128,17 @@ sorts
   (<SortName>|<Symbol>)*
 \end{verbatim}
 
+The keyword {\tt sorts} is a bit misleading, since not only {\tt SortName}s
+can be declared, but in fact {\tt Symbol}s can be declare in the sorts section as well.
+
 \noindent Recall that a sort name should start with a capital letter and may be followed by 
 letters and/or digits. Hyphens (`{\tt -}') may be embedded in sort names.
 There is one predefined sort name ({\tt LAYOUT}). It is described in
-\begin{iftex}
-Section~\ref{LexicalSyntax}.
-\end{iftex}
-\begin{ifhtml}
-Section \link{Lexical Syntax}[]{LexicalSyntax}.
-\end{ifhtml}
+\T Section~\ref{LexicalSyntax}.
+\W \link{Lexical Syntax}[]{LexicalSyntax}.
 
-Sort declarations have a more liberal form and may contain
-arbitrary symbols rather than just sort names.
+XXX Sort declarations have a more liberal form and may contain
+arbitrary symbols rather than just sort names. XXX
 
 It is required that all sorts that occur in some symbol in the specification
 are declared. This has also the effect that input sentences corresponding to
@@ -2157,25 +2164,15 @@ each consisting of a regular expression and a result sort. All functions with
 the same result sort together define the lexical syntax of tokens of that
 sort. Regular expressions may contain any basic symbol and any symbol
 operator as described in 
-\begin{iftex}
-Section~\ref{Symbols}. 
-\end{iftex}
-\begin{ifhtml}
-Section \link{Symbols}[]{Symbols}. 
-\end{ifhtml}
+\T Section~\ref{Symbols}. 
+\W \link{Symbols}[]{Symbols}. 
 Spaces are only significant inside strings and character classes.
 
 The sort name {\tt LAYOUT} is predefined and may not be redeclared.  
 {\tt LAYOUT} defines which parts of the text are \emph{layout symbols} (also
 known as \emph{white space}) between lexical tokens and are to be skipped
-during lexical analysis. It may only be used as result sort of lexical
-functions
-\begin{iftex}
-(Section~\ref{LexicalFunctions}).  
-\end{iftex}
-\begin{ifhtml}
-(Section \link{Lexical Functions}[]{LexicalFunctions}).
-\end{ifhtml}
+during lexical analysis. It may only be used as result sort of
+\link{lexical functions}[ (Section~\ref)]{LexicalFunctions}.
 When a string is matched by both a
 LAYOUT function and by other non-LAYOUT functions, then the interpretation as
 layout symbol is ignored. {\tt LAYOUT} is typically used for defining layout
@@ -2211,12 +2208,8 @@ $L$.  All sort names appearing in left-hand sides of declarations are replaced
 by the regular expression associated with them. 
 %%Circular dependencies between declarations in the lexical syntax are 
 %%forbidden.\footnote{Does this limitation still apply?}  
-\begin{iftex}
-Figure \ref{CODE:simplelex} shows 
-\end{iftex} 
-\begin{ifhtml}
-Click \link{here}[]{CODE:simplelex} for
-\end{ifhtml}
+\T Figure \ref{CODE:simplelex} shows 
+\W \link{Below}[]{CODE:simplelex} we give
 an example of a
 simple lexical function definition for defining the first three words that
 Dutch children learn to read.  The three sorts {\tt Aap}, {\tt Noot} and {\tt
@@ -2278,21 +2271,9 @@ character code of $c_2$ is greater than that of $c_1$.
 
 Definitions for lower-case letter ({\tt LCLetter}), upper-case letters
 ({\tt UCLetter}), lower-case and upper-case letters ({\tt Letter}) and
-digits ({\tt Digit}) are shown 
-\begin{iftex}
-in Figure~\ref{CODE:LettersDigits1}. 
-\end{iftex}
-\begin{ifhtml}
-in the first example below.
-\end{ifhtml}
-\begin{iftex}
-Figure~\ref{CODE:LettersDigits2} gives
-\end{iftex}
-\begin{ifhtml} 
-The next example gives
-\end{ifhtml}
-a definition of the sort {\tt LetterOrDigit} that recognizes a single letter
-(upper-case or lower-case) or digit.
+digits ({\tt Digit}) are shown in
+\T Figure~\ref{CODE:LettersDigits1}. 
+\W in the first example \link{below}[]{CODE:LettersDigits1}. 
 
 \begin{figure}
 \label{CODE:LettersDigits1}
@@ -2313,6 +2294,12 @@ exports
 \end{IncCode}
 \caption{Defining letter (lower-case and upper-case) and digit}
 \end{figure}   
+
+\T Figure~\ref{CODE:LettersDigits2}
+\W The \link{next example}[]{CODE:LettersDigits2}
+gives
+a definition of the sort {\tt LetterOrDigit} that recognizes a single letter
+(upper-case or lower-case) or digit.
 
 \begin{figure}
 \label{CODE:LettersDigits2}
@@ -2380,6 +2367,13 @@ The following operators are available for character classes
 \noindent The first operator is a unary operator, whereas the other three are
 left-associative binary operators.
 
+\T Figure~\ref{CODE:LettersDigits3} shows 
+\W The example \link{below}[]{CODE:LettersDigits3} gives
+the definion of a single letter or digit
+using the alternative operator {\tt  \verb+\+/}.
+This definition is equivalent to the one given 
+\link{earlier}[ in Figure~\ref{CODE:LettersDigits2}]{CODE:LettersDigits2}.
+
 \begin{figure}
 \label{CODE:LettersDigits3}
 \begin{IncCode}
@@ -2394,23 +2388,10 @@ exports
 \caption{Defining a single letter or digit using the alternative operator}
 \end{figure}
 
-\begin{iftex} 
-Figure~\ref{CODE:LettersDigits3} shows 
-\end{iftex}
-\begin{ifhtml}
-The example above gives
-\end{ifhtml}
-the definion of a single letter or digit
-using the alternative operator {\tt  \verb+\+/}.
-This definition is equivalent to the one given 
-\link{earlier}[ in Figure~\ref{CODE:LettersDigits2}]{CODE:LettersDigits2}.
-Another example is 
-\begin{iftex}
-shown in Figure \ref{CODE:charclasses}.
-\end{iftex}
-\begin{ifhtml}
-given below.
-\end{ifhtml}
+
+Another example is shown 
+\T in Figure \ref{CODE:charclasses}.
+\W \link{below}[]{CODE:charclasses}.
 This definition of characters contains
 all possible characters, either by means of the ordinary representation
 or via their decimal representation.
@@ -2448,20 +2429,12 @@ exports
 \index{repetition operator@repetition operator}
 Lexical tokens are often described by patterns that exhibit a certain
 repetition. The operator described in 
-\begin{iftex} 
-Section~\ref{RepetitionOperator}
-\end{iftex}
-\begin{ifhtml}
-Section \link{Repetition}[]{RepetitionOperator} 
-\end{ifhtml}
+\T Section~\ref{RepetitionOperator}
+\W \link{Repetition}[]{RepetitionOperator} 
 can be used to express repetitions.
 
-\begin{iftex}
-Figure \ref{CODE:repetition} shows 
-\end{iftex}
-\begin{ifhtml}
-The example below demonstrates
-\end{ifhtml} 
+\T Figure \ref{CODE:repetition} shows 
+\W The example \link{below}[]{CODE:repetition} demonstrates
 the use of the repetition
 operator {\tt *} for defining identifiers consisting of a letter
 followed by zero or more letters or digits.
@@ -2491,22 +2464,14 @@ exports
 \index{option operator@option operator}
 If zero or exactly one occurrence of a lexical token is desired the
 option operator described in 
-\begin{iftex} 
-Section~\ref{OptionOperator}  
-\end{iftex}
-\begin{ifhtml}
-Section \link{Option}[]{OptionOperator}
-\end{ifhtml}
+\T Section~\ref{OptionOperator}  
+\W \link{Option}[]{OptionOperator}
 can be used.
 
 The use of the option operator is illustrated 
-\begin{iftex} 
-in Figure \ref{CODE:option} which 
-\end{iftex}
-\begin{ifhtml}
-below, it 
-\end{ifhtml} 
-defines identifiers consisting of one letter followed by one, optional,
+\T in Figure \ref{CODE:option}.
+\W \link{below}[]{CODE:option}.
+Identifiers are defined consisting of one letter followed by one, optional,
 digit. This definition accepts {\tt a} and {\tt z8}, but rejects {\tt ab} or {\tt
   z789}.
 
@@ -2539,12 +2504,28 @@ the alternatives for this function. Sometimes, it is more convenient to list
 these alternatives explicitly in a single left-hand side or to list
 alternative parts inside a left-hand side.  This is precisely the role of the
 alternative operator described in 
-\begin{iftex}
-Section~\ref{AlternativeOperator}.
-\end{iftex}
-\begin{ifhtml}
-Section \link{Alternative}[]{AlternativeOperator}.
-\end{ifhtml}
+\T Section~\ref{AlternativeOperator}.
+\W \link{Alternative}[]{AlternativeOperator}.
+
+
+
+The example 
+\T in Figure \ref{CODE:alternative1} 
+\W \link{below}[]{CODE:alternative1}
+shows how this operator can be used.  
+It describes identifiers starting with an upper-case letter
+followed by one of the following:
+\begin{itemize}
+\item  zero or more lower-case letters, 
+
+\item zero or more upper-case letters, or
+
+\item zero or more digits.
+\end{itemize}
+
+\noindent According to this definition, 
+{\tt Aap}, {\tt NOOT}, and {\tt B49} are acceptable, but {\tt MiES}, {\tt
+  B49a} and {\tt 007} are not.
 
 \begin{figure}
 \label{CODE:alternative1}
@@ -2567,27 +2548,6 @@ exports
 \caption{Example of alternative operator {\tt |} }
 \end{figure}   
 
-The example 
-\begin{iftex}
-in Figure \ref{CODE:alternative1} 
-\end{iftex}
-\begin{ifhtml}
-above
-\end{ifhtml}
-shows how this operator can be used.  
-It describes identifiers starting with an upper-case letter
-followed by one of the following:
-\begin{itemize}
-\item  zero or more lower-case letters, 
-
-\item zero or more upper-case letters, or
-
-\item zero or more digits.
-\end{itemize}
-
-\noindent According to this definition, 
-{\tt Aap}, {\tt NOOT}, and {\tt B49} are acceptable, but {\tt MiES}, {\tt
-  B49a} and {\tt 007} are not.
 
 Note that the relation between juxtaposition and alternative operator is best
 understood by looking at the line defining {\tt Id}. A parenthesized
@@ -2609,14 +2569,10 @@ uppercase letters or digits. According to this definition {\tt MiES}, {\tt
   B49a} and {\tt 007} would, for instance, be acceptable.
 
 \noindent A slightly more readable definition that is equivalent to the 
-\link{original one}[ in Figure~\ref{CODE:alternative1}]{CODE:alternative1}
+\link{previous one}[ in Figure~\ref{CODE:alternative1}]{CODE:alternative1}
 is shown 
-\begin{iftex}
-in Figure~\ref{CODE:alternative2}.  
-\end{iftex}
-\begin{ifhtml}
-below.
-\end{ifhtml}
+\T in Figure~\ref{CODE:alternative2}.  
+\W \link{below}[]{CODE:alternative2}.
 In any case, we recommend to use parentheses to make the scope of alternatives
 explicit.
 
@@ -2643,15 +2599,10 @@ exports
 
 \subsubsection{Miscellaneous Operators}
 The other operators described in 
-\begin{iftex}
-Section~\ref{Symbols} 
-\end{iftex}
-\begin{ifhtml}
-Section \link{Symbols}[]{Symbols}
-\end{ifhtml}
+\T Section~\ref{Symbols} 
+\W \link{Symbols}[]{Symbols}
 are less frequently used within lexical syntax definitions 
 and will not be illustrated by means of an example.
-
 
 \subsubsection{Examples of Lexical Syntax Definitions}
 
@@ -2662,12 +2613,8 @@ in order to get some ideas what can be specified using
 \paragraph{Defining Numbers}
 
 Definitions of integers and real numbers are shown 
-\begin{iftex}
-in Figure \ref{CODE:numbers}. 
-\end{iftex}
-\begin{ifhtml}
-in the example below.
-\end{ifhtml}
+\T in Figure \ref{CODE:numbers}. 
+\W \link{below}[]{CODE:numbers}.
 Note the use of the alternative operator in the
 definitions of {\tt UnsignedInt} and {\tt Number}.  Also note the use
 of the option operator in the definitions of {\tt SignedReal} and {\tt
@@ -2700,13 +2647,9 @@ exports
 
 \paragraph{Defining Strings}
 
-\begin{iftex} 
-Figure \ref{CODE:string} gives 
-\end{iftex}
-\begin{ifhtml}
-The specification below gives
-\end{ifhtml} 
-the lexical definition of
+\T Figure \ref{CODE:string} 
+\W The specification \link{below}[]{CODE:string}
+gives the lexical definition of
 strings which may contain escaped double quote characters.
 It defines a {\tt StringChar} as either
 \begin{itemize}
