@@ -1,5 +1,7 @@
 equations
 
+%% ---- Reduce tuples of one element to that element
+
 [st]	<$Elem> = $Elem
 
 %% ---- is-rel
@@ -63,16 +65,16 @@ equations
 	================================================
 	product1($BagIter, $Bag) = empty-bag
 
-%% ----	 domain
+%% ----	domain
 
 [dom-0]	 domain($Bag) = domain1(mk-iterator($Bag))
 
-[dom1-1]  is-empty-iter($BagIter) == false,
+[dom1-1] is-empty-iter($BagIter) == false,
 	 <$Elem,$Elem+> := head($BagIter)
 	 =================================================
 	 domain1($BagIter) = insert($Elem, domain1(tail($BagIter)))
 
-[dom1-2]  is-empty-iter($BagIter) == true
+[dom1-2] is-empty-iter($BagIter) == true
 	 =================================================
 	 domain1($BagIter) = empty-bag
 
@@ -102,126 +104,126 @@ equations
 	================================================
 	carrier1($BagIter) = empty-bag
 
-%% ----	domR
+%% ----	domainR
 
-[domR-0] domR($Bag1, $Bag2) = domR1(mk-iterator($Bag1), $Bag2)
+[domR-0] domainR($Bag1, $Bag2) = domainR1(mk-iterator($Bag1), $Bag2)
 
 [domR1-1] is-empty-iter($BagIter) == false,
 	 <$Elem, $Elem+> := head($BagIter),
 	 in($Elem, $Bag) == false
 	 ===================================================
-	 domR1($BagIter, $Bag) = domR1(tail($BagIter), $Bag)
+	 domainR1($BagIter, $Bag) = domainR1(tail($BagIter), $Bag)
 
 [domR1-2] is-empty-iter($BagIter) == false,
 	 <$Elem, $Elem+> := head($BagIter),
 	 in($Elem, $Bag) == true
 	 ===================================================
-	 domR1($BagIter, $Bag) = union1(<$Elem, $Elem+>, domR1(tail($BagIter),
+	 domainR1($BagIter, $Bag) = union1(<$Elem, $Elem+>, domainR1(tail($BagIter),
 	 $Bag))
 
 [domR1-3] is-empty-iter($BagIter) == true
 	 ===================================================
-	 domR1($BagIter, $Bag) = empty-bag
+	 domainR1($BagIter, $Bag) = empty-bag
 
-%% ----	 domX
+%% ----	 domainX
 
-[domX-0] domX($Bag1, $Bag2) = domX1(mk-iterator($Bag1), $Bag2)
+[domX-0] domainX($Bag1, $Bag2) = domainX1(mk-iterator($Bag1), $Bag2)
 
 [domX1-1] is-empty-iter($BagIter) == false,
 	 <$Elem, $Elem+> := head($BagIter),
 	 in($Elem, $Bag) == true
 	 ===================================================
-	 domX1($BagIter, $Bag) = domX1(tail($BagIter), $Bag)
+	 domainX1($BagIter, $Bag) = domainX1(tail($BagIter), $Bag)
 
 [domX1-2] is-empty-iter($BagIter) == false,
 	 <$Elem, $Elem+> := head($BagIter),
 	 in($Elem, $Bag) == false
 	 ===================================================
-	 domX1($BagIter, $Bag) = union1(<$Elem, $Elem+>, domX1(tail($BagIter), $Bag))
+	 domainX1($BagIter, $Bag) = union1(<$Elem, $Elem+>, domainX1(tail($BagIter), $Bag))
 
 [domX1-3] is-empty-iter($BagIter) == true
 	 ===================================================
-	 domX1($BagIter, $Bag) = empty-bag
+	 domainX1($BagIter, $Bag) = empty-bag
 	
-%% ----	ranR
+%% ----	rangeR
 
-[ranR-0] ranR($Bag1, $Bag2) = ranR1(mk-iterator($Bag1), $Bag2)
+[ranR-0] rangeR($Bag1, $Bag2) = rangeR1(mk-iterator($Bag1), $Bag2)
 
 [ranR1-1] is-empty-iter($BagIter) == false,
 	 <$Elem, $Elem+> := head($BagIter),
 	 in(<$Elem+>, $Bag) == false
 	 ===================================================
-	 ranR1($BagIter, $Bag) = ranR1(tail($BagIter), $Bag)
+	 rangeR1($BagIter, $Bag) = rangeR1(tail($BagIter), $Bag)
 
 [ranR1-2] is-empty-iter($BagIter) == false,
 	 <$Elem, $Elem+> := head($BagIter),
 	 in(<$Elem+>, $Bag) == true
 	 ===================================================
-	 ranR1($BagIter, $Bag) = union1(<$Elem, $Elem+>, ranR1(tail($BagIter), $Bag))
+	 rangeR1($BagIter, $Bag) = union1(<$Elem, $Elem+>, rangeR1(tail($BagIter), $Bag))
 
 [ranR1-3] is-empty-iter($BagIter) == true
 	 ===================================================
-	 ranR1($BagIter, $Bag) = empty-bag
+	 rangeR1($BagIter, $Bag) = empty-bag
 
-%% ----	 ranX
+%% ----	 rangeX
 
-[ranX-0] ranX($Bag1, $Bag2) = ranX1(mk-iterator($Bag1), $Bag2)
+[ranX-0] rangeX($Bag1, $Bag2) = rangeX1(mk-iterator($Bag1), $Bag2)
 
 [ranX1-1] is-empty-iter($BagIter) == false,
 	 <$Elem, $Elem+> := head($BagIter),
 	 in(<$Elem+>, $Bag) == true
 	 ===================================================
-	 ranX1($BagIter, $Bag) = ranX1(tail($BagIter), $Bag)
+	 rangeX1($BagIter, $Bag) = rangeX1(tail($BagIter), $Bag)
 
 [ranX1-2] is-empty-iter($BagIter) == false,
 	 <$Elem, $Elem+> := head($BagIter),
 	 in(<$Elem+>, $Bag) == false
 	 ===================================================
-	 ranX1($BagIter, $Bag) = union1(<$Elem, $Elem+>, ranX1(tail($BagIter), $Bag))
+	 rangeX1($BagIter, $Bag) = union1(<$Elem, $Elem+>, rangeX1(tail($BagIter), $Bag))
 
 [ranX1-3] is-empty-iter($BagIter) == true
 	 ===================================================
-	 ranX1($BagIter, $Bag) = empty-bag
+	 rangeX1($BagIter, $Bag) = empty-bag
 
-%% ----	 carR
+%% ----	 carrierR
 
-[carR-0] carR($Bag1, $Bag2) = carR1(mk-iterator($Bag1), $Bag2)
+[carR-0] carrierR($Bag1, $Bag2) = carrierR1(mk-iterator($Bag1), $Bag2)
 
 [carR1-1] is-empty-iter($BagIter) == false,
 	 <$Elem, $Elem+> := head($BagIter),
 	 in($Elem, $Bag) & in(<$Elem+>, $Bag) == false
 	 ===================================================
-	 carR1($BagIter, $Bag) = carR1(tail($BagIter), $Bag)
+	 carrierR1($BagIter, $Bag) = carrierR1(tail($BagIter), $Bag)
 
 [carR1-2] is-empty-iter($BagIter) == false,
 	 <$Elem, $Elem+> := head($BagIter),
 	 in($Elem, $Bag) & in(<$Elem+>, $Bag) == true	 
 	 ===================================================
-	 carR1($BagIter, $Bag) = union1(<$Elem, $Elem+>, carR1(tail($BagIter), $Bag))
+	 carrierR1($BagIter, $Bag) = union1(<$Elem, $Elem+>, carrierR1(tail($BagIter), $Bag))
 
 [carR1-3] is-empty-iter($BagIter) == true
 	 ===================================================
-	 carR1($BagIter, $Bag) = empty-bag
+	 carrierR1($BagIter, $Bag) = empty-bag
 
-%% ----	 carX
+%% ----	 carrierX
 
-[carX-0] carX($Bag1, $Bag2) = carX1(mk-iterator($Bag1), $Bag2)
+[carX-0] carrierX($Bag1, $Bag2) = carrierX1(mk-iterator($Bag1), $Bag2)
 
 [carX1-1] is-empty-iter($BagIter) == false,
 	 <$Elem, $Elem+> := head($BagIter),
 	 in($Elem, $Bag) | in(<$Elem+>, $Bag) == true
 	 ===================================================
-	 carX1($BagIter, $Bag) = carX1(tail($BagIter), $Bag)
+	 carrierX1($BagIter, $Bag) = carrierX1(tail($BagIter), $Bag)
 
 [carX1-2] is-empty-iter($BagIter) == false,
 	 <$Elem, $Elem+> := head($BagIter),
 	 in($Elem, $Bag) | in(<$Elem+>, $Bag) == false	 
 	 ===================================================
-	 carX1($BagIter, $Bag) = union1(<$Elem, $Elem+>, carX1(tail($BagIter), $Bag))
+	 carrierX1($BagIter, $Bag) = union1(<$Elem, $Elem+>, carrierX1(tail($BagIter), $Bag))
 
 [carX1-3] is-empty-iter($BagIter) == true
 	 ===================================================
-	 carX1($BagIter, $Bag) = empty-bag
+	 carrierX1($BagIter, $Bag) = empty-bag
 
 %% ---- bottom
 
@@ -380,15 +382,15 @@ equations
 
 %% ---- reachX
 
-[rX-3]	$Rel' := carX($Rel, $Bag2),
-	$Rel'':= domR($Rel', $Bag1)
+[rX-3]	$Rel' := carrierX($Rel, $Bag2),
+	$Rel'':= domainR($Rel', $Bag1)
 	=========================================
 	reachX($Bag1, $Bag2, $Rel) = closure($Rel', empty-bag, $Rel'')
 
 %% ---- reachR
 
-[rX-3]	$Rel' := carR($Rel, $Bag2),
-	$Rel'':= domR($Rel', $Bag1)
+[rX-3]	$Rel' := carrierR($Rel, $Bag2),
+	$Rel'':= domainR($Rel', $Bag1)
 	=========================================
 	reachR($Bag1, $Bag2, $Rel) = closure($Rel', empty-bag, $Rel'')
 

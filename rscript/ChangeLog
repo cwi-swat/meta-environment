@@ -1,4 +1,10 @@
+
 # $Id$
+
+2004-10-27  Paul Klint  <paulk@heelal.lan>
+ * Cleanup up definitions of Bags and Relations
+ * Removed typos from manual
+	
 
 Thu Oct 14 08:56:14 CEST 2004 <jurgenv@cwi.nl>
  * Added spec/TopologicalSort.{asf,sdf}. 

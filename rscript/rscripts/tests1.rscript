@@ -407,6 +407,7 @@ assert "Rel former 12": {<X, Y> | <int X, int Y> <- <3, 4>} == {<3,4>}
 assert "Compr nest 1":  { X | int X : {Y | int Y : {1,2,3}}} == {1, 2, 3}
 assert "Compr nest 2":  { X | bag[int] X <- {Y | int Y : {1,2,3}}} == {{3,2,1}}
 
+
 %% --- n-ary tuples
 
 rel[int,int,int] R3 = {<1,2,3>, <10,20,30>}

@@ -22,7 +22,7 @@ exports
 %% Extend Elem to allow nested bags and relations
 
      Bag[[Elem]]                   	    	-> Elem  
-     Tuple					-> Elem
+%%     Tuple					-> Elem
 
      elem-less(Elem, Elem)			-> Boolean
      elem-less-equal(Elem, Elem)		-> Boolean

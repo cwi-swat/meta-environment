@@ -581,27 +581,27 @@
 	
 [RdomR]	$Rel := evalr($Exp1, $Rstore), $Bag := evalb($Exp2, $Rstore)
 	===================================================
-	evalx(domainR($Exp1, $Exp2), $Rstore) = domR($Rel, $Bag)
+	evalx(domainR($Exp1, $Exp2), $Rstore) = domainR($Rel, $Bag)
 
 [FranR]	$Rel := evalr($Exp1, $Rstore), $Bag := evalb($Exp2, $Rstore)
 	===================================================
-	evalx(rangeR($Exp1, $Exp2), $Rstore) = ranR($Rel, $Bag)
+	evalx(rangeR($Exp1, $Exp2), $Rstore) = rangeR($Rel, $Bag)
 
 [FcarR]	$Rel := evalr($Exp1, $Rstore), $Bag := evalb($Exp2, $Rstore)
 	====================================================
-	evalx(carrierR($Exp1, $Exp2), $Rstore) = carR($Rel, $Bag)
+	evalx(carrierR($Exp1, $Exp2), $Rstore) = carierR($Rel, $Bag)
 
 [FdomX]	$Rel := evalr($Exp1, $Rstore), $Bag := evalb($Exp2, $Rstore)
 	====================================================
-	evalx(domainX($Exp1, $Exp2), $Rstore) = domX($Rel, $Bag)
+	evalx(domainX($Exp1, $Exp2), $Rstore) = domainX($Rel, $Bag)
 
 [FranX]	$Rel := evalr($Exp1, $Rstore), $Bag := evalb($Exp2, $Rstore)
 	====================================================
-	evalx(rangeX($Exp1, $Exp2), $Rstore) = ranX($Rel, $Bag)
+	evalx(rangeX($Exp1, $Exp2), $Rstore) = rangeX($Rel, $Bag)
 
 [FcarX]	$Rel := evalr($Exp1, $Rstore), $Bag := evalb($Exp2, $Rstore)
 	====================================================
-	evalx(carrierX($Exp1, $Exp2), $Rstore) = carX($Rel, $Bag)
+	evalx(carrierX($Exp1, $Exp2), $Rstore) = carrierX($Rel, $Bag)
 
 [FrX]	$Bag1 := evalb($Exp1, $Rstore),
 	$Bag2 := evalb($Exp2, $Rstore),

@@ -1560,7 +1560,7 @@ the same.
 \functiona{Reachability with Restriction}{reachR}
 \begin{exam}
 \begin{verbatim}
-rel[&T,&T] reachR( bag[&T] Start, bag[&T] Restr, rel[T,T] Rel) =
+rel[&T,&T] reachR( bag[&T] Start, bag[&T] Restr, rel[&T,&T] Rel) =
    domainR(Rel, Start) o carrierR(Rel, Restr)+
 \end{verbatim}
 \end{exam}
@@ -1577,7 +1577,7 @@ bag {\tt Restr} are used.
 \functiona{Reachability with Exclusion}{reachX}
 \begin{exam}
 \begin{verbatim}
-rel[&T,&T] reachX( bag[&T] Start, bag[&T] Excl, rel[T,T] Rel) =
+rel[&T,&T] reachX( bag[&T] Start, bag[&T] Excl, rel[&T,&T] Rel) =
    domainR(Rel, Start) o carrierX(Rel, Excl)+
 \end{verbatim}
 \end{exam}
