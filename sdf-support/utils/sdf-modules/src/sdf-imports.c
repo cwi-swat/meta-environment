@@ -170,7 +170,7 @@ static SDF_Renamings makeRenamingsFromParameters(SDF_Symbols formals,
     SDF_Symbol actual = SDF_getSymbolListHead(actualList);
     SDF_Renaming renaming = SDF_makeRenamingSymbol(formal,layout,layout,actual);
     
-    renamingList = SDF_makeRenamingListMany(renaming,layout,renamingList);
+    renamingList = SDF_insertRenaming(renaming,renamingList);
 
     if (SDF_hasSymbolListTail(actualList)) {
       actualList = SDF_getSymbolListTail(actualList);
@@ -260,23 +260,24 @@ static SDF_Symbol renameSymbol(SDF_Symbol from, SDF_Symbol into,
   SDF_Symbol newArgSymbol;
 
   symbol = SDF_removeSymbolAnnotations(symbol);
-
+  from = SDF_removeSymbolAnnotations(from);
+  
   if (SDF_isEqualSymbol(symbol, from)) {
     return into;
   }
   if (SDF_hasSymbolSymbol(symbol)) {
     argSymbol = SDF_getSymbolSymbol(symbol);
-    newArgSymbol = renameSymbol(argSymbol, from, into);
+    newArgSymbol = renameSymbol(from, into, argSymbol);
     symbol = SDF_setSymbolSymbol(symbol, newArgSymbol);
   }
   if (SDF_hasSymbolLeft(symbol)) {
     argSymbol = SDF_getSymbolLeft(symbol);
-    newArgSymbol = renameSymbol(argSymbol, from, into);
+    newArgSymbol = renameSymbol(from, into, argSymbol);
     symbol = SDF_setSymbolLeft(symbol, newArgSymbol);
   }
   if (SDF_hasSymbolRight(symbol)) {
     argSymbol = SDF_getSymbolRight(symbol);
-    newArgSymbol = renameSymbol(argSymbol, from, into);
+    newArgSymbol = renameSymbol(from, into, argSymbol);
     symbol = SDF_setSymbolRight(symbol, newArgSymbol);
   }
 
@@ -291,8 +292,11 @@ static SDF_Symbol applyRenamingToSymbol(SDF_Renaming renaming,
 {
   SDF_Symbol from = SDF_getRenamingFrom(renaming);
   SDF_Symbol into = SDF_getRenamingTo(renaming);
+  SDF_Symbol result;
 
-  return renameSymbol(from, into, symbol);
+  result = renameSymbol(from, into, symbol);
+
+  return result;
 }
 
 /*}}}  */
@@ -354,8 +358,9 @@ static SDF_Symbols applyRenamingToSymbols(SDF_Renaming renaming,
 
   while (!SDF_isSymbolListEmpty(list)) {
     SDF_Symbol symbol = SDF_getSymbolListHead(list);
-    SDF_Symbol new = applyRenamingToSymbol(renaming, symbol);
+    SDF_Symbol new;
 
+    new = applyRenamingToSymbol(renaming, symbol);
     result = SDF_insertSymbol(new, result);
 
     if (SDF_hasSymbolListTail(list)) {
@@ -379,7 +384,7 @@ static SDF_Import applyRenamingToImport(SDF_Renaming renaming,
 
   if (SDF_hasImportRenamings(import)) {
     SDF_Renamings renamings = SDF_getImportRenamings(import);
-    renamings = applyRenamingToRenamings(renaming, renamings); /*moetnog*/
+    renamings = applyRenamingToRenamings(renaming, renamings);
     import = SDF_setImportRenamings(import, renamings);
   }
 
@@ -402,12 +407,12 @@ static SDF_Import applyRenamingsToImport(SDF_Renamings renamings,
   SDF_RenamingList list = SDF_getRenamingsList(renamings);
   SDF_Import result = import;
 
+
   while (!SDF_isRenamingListEmpty(list)) {
     SDF_Renaming renaming = SDF_getRenamingListHead(list);
-    
     result = applyRenamingToImport(renaming, result);
-
-    if (!SDF_hasRenamingListTail(list)) {
+    
+    if (SDF_hasRenamingListTail(list)) {
       list = SDF_getRenamingListTail(list);
     }
     else {
@@ -425,7 +430,7 @@ static SDF_ImportList applyRenamingsToImports(SDF_Renamings renamings,
 					      SDF_ImportList imports)
 {
   SDF_ImportList result = SDF_makeImportListEmpty();
-
+  
   while (!SDF_isImportListEmpty(imports)) {
     SDF_Import import = SDF_getImportListHead(imports);
     SDF_Import new = applyRenamingsToImport(renamings, import);
@@ -445,15 +450,88 @@ static SDF_ImportList applyRenamingsToImports(SDF_Renamings renamings,
 
 /*}}}  */
 
+/*{{{  static SDF_Renamings concatRenamings(SDF_Renamings r1, SDF_Renamings r2) */
+
+static SDF_Renamings concatRenamings(SDF_Renamings r1, SDF_Renamings r2)
+{
+  SDF_RenamingList l1 = SDF_getRenamingsList(r1);
+  SDF_RenamingList l2 = SDF_getRenamingsList(r2);
+  SDF_OptLayout space = SDF_makeLayoutSpace();
+
+  return SDF_makeRenamingsRenamings(space,
+				    SDF_concatRenamingList(l1, l2),
+				    space);
+}
+
+/*}}}  */
+
+/*{{{  static SDF_Renamings appendUserRenamings(SDF_Import import, */
+
+static SDF_Renamings appendUserRenamings(SDF_Import import,
+					 SDF_Renamings renamings)
+{
+  if (SDF_hasImportRenamings(import)) {
+    SDF_Renamings importRenamings = SDF_getImportRenamings(import);
+    renamings = concatRenamings(renamings, importRenamings);
+  }
+
+  return renamings;
+}
+
+/*}}}  */
+
+/*{{{  static SDF_ImportList inheritUserRenamings(SDF_Import import, */
+
+static SDF_ImportList inheritUserRenamings(SDF_Import import,
+					   SDF_ImportList imports)
+{
+  SDF_ImportList result = imports;
+  
+  if (SDF_hasImportRenamings(import)) {
+    SDF_Renamings renamings = SDF_getImportRenamings(import);
+    result = SDF_makeImportListEmpty();
+
+    while (!SDF_isImportListEmpty(imports)) {
+      SDF_Import head = SDF_getImportListHead(imports);
+
+      if (SDF_hasImportRenamings(head)) {
+	renamings = concatRenamings(renamings,
+				    SDF_getImportRenamings(head));
+	head = SDF_setImportRenamings(head, renamings);
+      }
+      else {
+	SDF_ModuleName moduleName = SDF_getImportModuleName(head);
+	SDF_OptLayout space = SDF_makeLayoutSpace();
+	head = SDF_makeImportRenamedModule(moduleName, space, renamings);
+      }
+
+      result = SDF_insertImport(head, result);
+
+      if (SDF_hasImportListTail(imports)) {
+	imports = SDF_getImportListTail(imports);
+      }
+      else {
+	break;
+      }
+    }
+  }
+
+  return result;
+}
+
+/*}}}  */
+
 /*{{{  static ATermList get_transitive_imports(ATermList todo) */
 
 static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
 {
   SDF_ImportList result = SDF_makeImportListEmpty();
 
-  /* The todo list contains imports with actual module parameters.
+  /* The todo list contains imports with actual module parameters and
+   * with the renamings associated to the import.
    * The result of this function will be a list of imports with the
-   * parametrization represented as renamings.
+   * parametrization represented as renamings with the user defined 
+   * renamings appended.
    */
 
   assert(moduleTable != NULL && "module table not initialized");
@@ -476,13 +554,15 @@ static SDF_ImportList get_transitive_imports(SDF_ImportList todo)
       SDF_Module module = getModuleByImport(import);
       SDF_ModuleName formalName = SDF_getModuleModuleName(module);
       SDF_ModuleName actualName = SDF_getImportModuleName(import);
+
       renamings = makeRenamingsFromModuleNames(formalName, actualName);
+      renamings = appendUserRenamings(import, renamings);
 
       imports = SI_getModuleImportsList(module);
       imports = applyRenamingsToImports(renamings, imports);
+      imports = inheritUserRenamings(import, imports);
 
       todo = SDF_mergeImportList(todo, imports);
-      
       import = makeRenamedImport(actualName, renamings);
     
       if (!SDF_containsImportListImport(result, import)) { 

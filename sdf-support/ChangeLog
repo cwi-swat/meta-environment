@@ -3,6 +3,11 @@ $Id$
 2003/05/02 ({jong,jurgenv}@cwi.nl)
  * Added SDF_concatRenamingList
  * Changed order of includes in utils/src/sdf-modules
+ * Added dealing with user defined renamings to getTransitiveImports
+ * Fixed numerous bugs in the implementation of getTransitiveImports:
+     - forgot to remove position info once again
+     - compound symbols not dealt with correctly
+     - renaming in parameters went wrong when there were no parameters
 
 2003/05/30 (jurgenv@cwi.nl)
  * Introduced src directories for sdf-modules and sdf-renaming

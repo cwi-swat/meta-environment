@@ -15,7 +15,7 @@ sdf_modules_SOURCES = sdf-modules.c sdf-modules.tif.c \
 sdf_modules_LDADD =\
                  -L$(ATERM)/lib -lATerm \
                  -L$(TOOLBUSLIB)/lib -lATB \
-		 -L$(top_builddir)/lib -lSDFME \
+		 -L$(top_builddir)/lib -lSDFME  \
                  $(SOCKLIBS)
 
 noinst_HEADERS = sdf-modules.tif.h \
@@ -24,7 +24,7 @@ noinst_HEADERS = sdf-modules.tif.h \
 	plain-imports.h
 
 INCLUDES = \
+	-I$(top_srcdir)/lib  \
 	-I$(ATERM)/include  \
 	-I$(TOOLBUSLIB)/include \
-	-I$(SDF_SUPPORT)/include \
-	-I$(top_srcdir)/lib 
+	-I$(SDF_SUPPORT)/include
