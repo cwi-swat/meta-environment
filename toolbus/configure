@@ -417,7 +417,7 @@ fi
 
 
 PRODUCT=ToolBus
-VERSION=0.9.16f
+VERSION=0.9.16h
 DEMOS="auction battleships calc cons edit game go-moku hello ttt wave"
 SWIPL_DEMOS="swipl-ttt"
 PERL_DEMOS="perl"

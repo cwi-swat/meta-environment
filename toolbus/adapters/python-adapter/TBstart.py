@@ -183,6 +183,12 @@ def dispatch_term(T):
                                 # <PO>: print warning?
                                 TB.send("snd-void()")
                         return
+		elif T[1] == 'rec-monitor':
+			result = dispatch_user(T[2][0])
+			if result:
+				TB.send(result)
+			else:
+				TB.send("snd-void()")
                 elif T[1] == 'rec-ack-event':
                         result = dispatch_user(T)
                         return

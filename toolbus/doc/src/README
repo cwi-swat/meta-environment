@@ -1,0 +1,5 @@
+Every adapter that is written as a literate program, copies
+one or more latex files (ending in .tex) into this directory.
+These files can then be used to create a complete document
+describing the adapters as a literate program.
+

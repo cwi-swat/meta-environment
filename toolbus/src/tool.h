@@ -13,6 +13,9 @@ void TBsend(term *);
 void TBreceive(void);
 int  TBpeek(void);
 void TBeventloop(void);
+void TBmultiloop(void);
+void TBsuspend(int inport); /* -1 to suspend input form standard toolbus */
+void TBresume(int inport);  /* idem */
 int  mkports(TBbool, char *, char *, int *, int *, int *);
 
 extern term *Snd_Void;
@@ -21,6 +24,7 @@ typedef struct inport       /* connection info  */
 {                           /* for input ports  */
   int            in;
   TBbool         term_port;
+  TBbool	 suspended;
   TBcallbackTerm callbackTerm;
   TBcallbackChar callbackChar;
 } inport;

@@ -42,8 +42,8 @@ ToolBus (using {\tt TBsend "snd-eval(...)"}).
 a previously generated event.
 \item {\tt snd-terminate($Tid$, $A_1$)}: terminate execution of python-adapter.
 \item {\bf The monitor commands are not implemented yet! ***}
-	\texttt{snd-monitor(\emph{Trm})}: in this case the Python
-  function \texttt{monitor\_atom \{\emph{ProcId} \emph{AtFun},
+	\txttt{snd-monitor(\emph{Trm})}: in this case the Python
+  function \txttt{monitor\_atom \{\emph{ProcId} \emph{AtFun},
     \emph{Src} \emph{Blino} \emph{Bpos} \emph{Elino} \emph{Epos}\}}
   is called where \emph{ProcId} is the process-id of the process to
   which this atom belongs, \emph{AtFun} is the action function name of
@@ -59,26 +59,26 @@ a previously generated event.
   calls. The following situations are considered:
   \begin{itemize}
   \item \emph{process creation}:
-    \texttt{create\_proc \{\emph{ProcId} \emph{ProcName}\}} is
+    \txttt{create\_proc \{\emph{ProcId} \emph{ProcName}\}} is
     called.
-  \item \emph{tool creation}: \texttt{create\_tool \{\emph{ToolId}
+  \item \emph{tool creation}: \txttt{create\_tool \{\emph{ToolId}
       \emph{ToolName}\}} is called.
   \item \emph{process to tool communication}:
-    \texttt{proc\_tool\_comm \{\emph{ToolId} \emph{ProcId}\}} is
+    \txttt{proc\_tool\_comm \{\emph{ToolId} \emph{ProcId}\}} is
     called.
   \item \emph{tool to process communication}:
-    \texttt{tool\_proc\_comm \{\emph{ProcId} \emph{ToolId}\}} is
+    \txttt{tool\_proc\_comm \{\emph{ProcId} \emph{ToolId}\}} is
     called.
   \item \emph{process to process communication}:
-    \texttt{proc\_proc\_comm \{\emph{ProcId1} \emph{ProcId2}\}} is
+    \txttt{proc\_proc\_comm \{\emph{ProcId1} \emph{ProcId2}\}} is
     called.
   \item \emph{update the value of a variable in a process}:
-    \texttt{update\_var \{\emph{ProcId} \emph{VarName}
+    \txttt{update\_var \{\emph{ProcId} \emph{VarName}
       \emph{NewValue}\}} is called.
   \item \emph{update the list of subscribtions of a process}:
-    \texttt{update\_subs \{\emph{ProcId} \emph{Subs}\}} is called.
+    \txttt{update\_subs \{\emph{ProcId} \emph{Subs}\}} is called.
   \item \emph{update the list of notes of a process}:
-    \texttt{update\_notes \{\emph{ProcId} \emph{Notes}\}} is called.
+    \txttt{update\_notes \{\emph{ProcId} \emph{Notes}\}} is called.
   \end{itemize}
 \end{itemize}
 

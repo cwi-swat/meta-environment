@@ -1,0 +1,3 @@
+The adapters each copy one or more latex files (ending in .tex)
+into this directory. These files are then used to create a chapter
+in the ToolBus programmers guide.

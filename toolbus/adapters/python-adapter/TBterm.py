@@ -253,6 +253,6 @@ def doprof():
 	b2.sort_stats("cumulative")
 	b2.print_stats(10)
 
-test_it()
+#test_it()
 # bench_it(5000)
 # bench_it2(600)

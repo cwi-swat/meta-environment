@@ -15,6 +15,8 @@ int ninports = 0;           /* # of connections currently in use */
 inport inportset[TB_MAX_INPORT];
 
 int toToolBus;              /* port to ToolBus  */
+int fromToolBus;	    /* port from ToolBus */
+
 term_list *tool_in_sign = NULL;
 term_list *tool_out_sign = NULL;
 
@@ -31,6 +33,7 @@ int TBaddTermPort(int in, TBcallbackTerm fun)
       /* Reuse this inport */
       inportset[i].in = in;
       inportset[i].term_port = TBtrue;
+      inportset[i].suspended = TBfalse;
       inportset[i].callbackTerm = fun;
       return TB_OK;
     }
@@ -197,7 +200,7 @@ static int read_from_any_channel(inport **inp)
 retry:
   FD_ZERO(&read_template);
   for(i = 0; i < ninports; i++){
-    if(inportset[i].in >= 0)
+    if(inportset[i].in >= 0 && !inportset[i].suspended)
       FD_SET(inportset[i].in,&read_template);
   }
   /* TBmsg("read_from_any_channel, before select\n"); */
@@ -247,7 +250,7 @@ static int peek_channels(inport **inp)
 retry:
   FD_ZERO(&read_template);
   for(i = 0; i < ninports; i++){
-    if(inportset[i].in >= 0)
+    if(inportset[i].in >= 0 && !inportset[i].suspended)
       FD_SET(inportset[i].in,&read_template);
   }
   if((error = select(FD_SETSIZE, &read_template,
@@ -327,6 +330,44 @@ int TBpeek(void)
   return peek_channels(&port);
 }
 
+/*--- TBsuspend --------------------------------*/
+
+/* Suspend the input from a certain port.
+   inport == -1 to suspend the input from the standard ToolBus input port. */
+void TBsuspend(int inport)
+{
+  int i;
+
+  if(inport == -1)
+    inport = fromToolBus;
+
+  for(i=0; i<ninports; i++) {
+    if(inportset[i].in == inport) {
+      /* Suspend this inport */
+      inportset[i].suspended = TBtrue;
+    }
+  }
+}
+
+/*--- TBresume --------------------------------*/
+
+/* Resume the input from a certain port.
+   inport == -1 to suspend the input from the standard ToolBus input port. */
+void TBresume(int inport)
+{
+  int i;
+
+  if(inport == -1)
+    inport = fromToolBus;
+
+  for(i=0; i<ninports; i++) {
+    if(inportset[i].in == inport) {
+      /* Resume inpot from this inport */
+      inportset[i].suspended = TBfalse;
+    }
+  }
+}
+
 /*--- TBeventloop ------------------------------*/
 
 void TBeventloop(void)
@@ -335,5 +376,12 @@ void TBeventloop(void)
     TBreceive();
 }
 
+/*--- TBmultiloop ------------------------------*/
 
-
+void TBmultiloop(void)
+{
+  while(TBtrue) {
+    tool_read_term();
+    mark_and_collect();
+  }
+}

@@ -1,96 +1,96 @@
 \contentsline {section}{\numberline {1}Introduction}{3}
 \contentsline {subsection}{\numberline {1.1}Background and motivation}{3}
-\contentsline {subsection}{\numberline {1.2}The {\psc ToolBus}\ architecture}{3}
-\contentsline {paragraph}{Communication inside the {\psc ToolBus}.}{4}
-\contentsline {paragraph}{Communication between {\psc ToolBus}\ and tools.}{4}
+\contentsline {subsection}{\numberline {1.2}The {\sc ToolBus}\ architecture}{3}
+\contentsline {paragraph}{Communication inside the {\sc ToolBus}.}{4}
+\contentsline {paragraph}{Communication between {\sc ToolBus}\ and tools.}{4}
 \contentsline {subsection}{\numberline {1.3}Purpose of this guide}{4}
 \contentsline {subsection}{\numberline {1.4}Hello world}{4}
 \contentsline {paragraph}{Notes:}{6}
 \contentsline {subsection}{\numberline {1.5}Further reading}{6}
 \contentsline {section}{\numberline {2}Writing tools in C}{7}
 \contentsline {subsection}{\numberline {2.1}Overview}{7}
-\contentsline {subsubsection}{\numberline {2.1.1}The include file {\ptt TB.h}}{8}
-\contentsline {subsubsection}{\numberline {2.1.2}The tool library {\ptt libtb.a}}{9}
+\contentsline {subsubsection}{\numberline {2.1.1}The include file {\tt TB.h}}{8}
+\contentsline {subsubsection}{\numberline {2.1.2}The tool library {\tt libtb.a}}{9}
 \contentsline {subsection}{\numberline {2.2}Initialization and main event loop}{9}
-\contentsline {subsubsection}{\numberline {2.2.1}{\ptt TBinit}}{10}
-\contentsline {subsubsection}{\numberline {2.2.2}{\ptt TBaddTermPort}}{10}
-\contentsline {subsubsection}{\numberline {2.2.3}{\ptt TBaddCharPort}}{10}
-\contentsline {subsubsection}{\numberline {2.2.4}{\ptt TBreceive}}{11}
-\contentsline {subsubsection}{\numberline {2.2.5}{\ptt TBpeek}}{11}
-\contentsline {subsubsection}{\numberline {2.2.6}{\ptt TBeventloop}}{11}
-\contentsline {subsubsection}{\numberline {2.2.7}{\ptt TBsend}}{12}
+\contentsline {subsubsection}{\numberline {2.2.1}{\tt TBinit}}{10}
+\contentsline {subsubsection}{\numberline {2.2.2}{\tt TBaddTermPort}}{10}
+\contentsline {subsubsection}{\numberline {2.2.3}{\tt TBaddCharPort}}{10}
+\contentsline {subsubsection}{\numberline {2.2.4}{\tt TBreceive}}{11}
+\contentsline {subsubsection}{\numberline {2.2.5}{\tt TBpeek}}{11}
+\contentsline {subsubsection}{\numberline {2.2.6}{\tt TBeventloop}}{11}
+\contentsline {subsubsection}{\numberline {2.2.7}{\tt TBsend}}{12}
 \contentsline {subsection}{\numberline {2.3}Composing and decomposing terms}{12}
 \contentsline {subsubsection}{\numberline {2.3.1}Term patterns}{12}
-\contentsline {subsubsection}{\numberline {2.3.2}{\ptt TBmake}}{12}
-\contentsline {subsubsection}{\numberline {2.3.3}{\ptt TBmatch}}{13}
+\contentsline {subsubsection}{\numberline {2.3.2}{\tt TBmake}}{12}
+\contentsline {subsubsection}{\numberline {2.3.3}{\tt TBmatch}}{13}
 \contentsline {paragraph}{Notes}{14}
 \contentsline {subsection}{\numberline {2.4}Input and output of terms}{14}
-\contentsline {subsubsection}{\numberline {2.4.1}{\ptt TBread} and {\ptt TBwrite}}{14}
-\contentsline {subsubsection}{\numberline {2.4.2}{\ptt TBprintf} and {\ptt TBsprintf}}{15}
+\contentsline {subsubsection}{\numberline {2.4.1}{\tt TBread} and {\tt TBwrite}}{14}
+\contentsline {subsubsection}{\numberline {2.4.2}{\tt TBprintf} and {\tt TBsprintf}}{15}
 \contentsline {subsection}{\numberline {2.5}Memory management}{15}
 \contentsline {subsection}{\numberline {2.6}Compiling tools written in C}{16}
 \contentsline {paragraph}{Strategy 1:}{16}
 \contentsline {paragraph}{Strategy 2:}{16}
-\contentsline {subsection}{\numberline {2.7}Generating C tool interfaces with {\ptt ctif}}{17}
-\contentsline {section}{\numberline {3}Executing {\psc ToolBus}\ and tools}{17}
+\contentsline {subsection}{\numberline {2.7}Generating C tool interfaces with {\tt ctif}}{17}
+\contentsline {section}{\numberline {3}Executing {\sc ToolBus}\ and tools}{17}
 \contentsline {subsection}{\numberline {3.1}Common arguments}{17}
-\contentsline {subsection}{\numberline {3.2}{\psc ToolBus}\ arguments}{18}
+\contentsline {subsection}{\numberline {3.2}{\sc ToolBus}\ arguments}{18}
 \contentsline {subsection}{\numberline {3.3}Tool arguments}{19}
 \contentsline {section}{\numberline {4}Intermezzo: Tool adapters}{20}
 \contentsline {paragraph}{Common arguments of adapters.}{20}
 \contentsline {section}{\numberline {5}Writing tools in Perl}{21}
-\contentsline {subsection}{\numberline {5.1}{\ptt perl-adapter}}{21}
+\contentsline {subsection}{\numberline {5.1}{\tt perl-adapter}}{21}
 \contentsline {paragraph}{Synopsis.}{21}
 \contentsline {paragraph}{Example.}{21}
 \contentsline {paragraph}{Specific arguments.}{21}
 \contentsline {paragraph}{Communication.}{21}
 \contentsline {subsection}{\numberline {5.2}Predefined Perl functions}{22}
-\contentsline {subsection}{\numberline {5.3}The hello example in Perl: {\ptt hello.perl}}{22}
+\contentsline {subsection}{\numberline {5.3}The hello example in Perl: {\tt hello.perl}}{22}
 \contentsline {section}{\numberline {6}Writing tools in Python}{22}
-\contentsline {subsection}{\numberline {6.1}{\ptt python-adapter}}{23}
+\contentsline {subsection}{\numberline {6.1}{\tt python-adapter}}{23}
 \contentsline {paragraph}{Synopsis.}{23}
 \contentsline {paragraph}{Example.}{23}
 \contentsline {paragraph}{Specific arguments.}{23}
 \contentsline {paragraph}{Communication.}{23}
 \contentsline {subsection}{\numberline {6.2}Predefined Python functions}{24}
-\contentsline {subsection}{\numberline {6.3}The hello example in Python/Tk: {\ptt hello.py}}{24}
+\contentsline {subsection}{\numberline {6.3}The hello example in Python/Tk: {\tt hello.py}}{24}
 \contentsline {section}{\numberline {7}Writing tools in Tcl/Tk, second alternative}{24}
-\contentsline {subsection}{\numberline {7.1}{\ptt wish-adapter}}{24}
-\contentsline {paragraph}{Synopsis.}{24}
-\contentsline {paragraph}{Example.}{24}
+\contentsline {subsection}{\numberline {7.1}{\tt wish-adapter}}{25}
+\contentsline {paragraph}{Synopsis.}{25}
+\contentsline {paragraph}{Example.}{25}
 \contentsline {paragraph}{Specific arguments.}{25}
 \contentsline {paragraph}{Communication.}{25}
 \contentsline {subsection}{\numberline {7.2}Predefined Tcl functions}{26}
 \contentsline {paragraph}{Note.}{26}
-\contentsline {subsection}{\numberline {7.3}The hello example in tcl: {\ptt hello.tcl}}{26}
+\contentsline {subsection}{\numberline {7.3}The hello example in tcl: {\tt hello.tcl}}{27}
 \contentsline {section}{\numberline {8}Writing tools in Tcl/Tk}{27}
-\contentsline {subsection}{\numberline {8.1}{\ptt wish-adapter}}{27}
+\contentsline {subsection}{\numberline {8.1}{\tt wish-adapter}}{27}
 \contentsline {paragraph}{Synopsis.}{27}
 \contentsline {paragraph}{Example.}{27}
 \contentsline {paragraph}{Specific arguments.}{27}
 \contentsline {paragraph}{Communication.}{27}
 \contentsline {subsection}{\numberline {8.2}Predefined Tcl functions}{28}
-\contentsline {paragraph}{Note.}{28}
-\contentsline {subsection}{\numberline {8.3}The hello example in tcl: {\ptt hello.tcl}}{29}
-\contentsline {section}{\numberline {A}Differences with previous {\psc ToolBus}\ versions}{30}
-\contentsline {subsection}{\numberline {A.1}{\pbf T}\ scripts}{30}
+\contentsline {paragraph}{Note.}{29}
+\contentsline {subsection}{\numberline {8.3}The hello example in tcl: {\tt hello.tcl}}{29}
+\contentsline {section}{\numberline {A}Differences with previous {\sc ToolBus}\ versions}{30}
+\contentsline {subsection}{\numberline {A.1}{\bf T}\ scripts}{30}
 \contentsline {paragraph}{Incompatibilities}{30}
 \contentsline {paragraph}{New features}{31}
 \contentsline {subsection}{\numberline {A.2}Tools}{31}
 \contentsline {paragraph}{Incompatibilities}{31}
 \contentsline {paragraph}{New features}{31}
-\contentsline {subsection}{\numberline {A.3}The {\psc ToolBus}\ interpreter}{31}
+\contentsline {subsection}{\numberline {A.3}The {\sc ToolBus}\ interpreter}{31}
 \contentsline {paragraph}{Incompatibilities}{31}
 \contentsline {paragraph}{New features}{32}
 \contentsline {section}{\numberline {B}Limitations/extensions current implementation}{32}
 \contentsline {paragraph}{Extensions}{32}
 \contentsline {paragraph}{Limitations}{32}
-\contentsline {section}{\numberline {C}The syntax of {\pbf T}\ scripts}{33}
+\contentsline {section}{\numberline {C}The syntax of {\bf T}\ scripts}{33}
 \contentsline {subsection}{\numberline {C.1}Preprocessor directives}{33}
 \contentsline {subsection}{\numberline {C.2}Context-free syntax}{33}
-\contentsline {section}{\numberline {D}Expressions in {\pbf T}\ scripts}{35}
+\contentsline {section}{\numberline {D}Expressions in {\bf T}\ scripts}{35}
 \contentsline {subsection}{\numberline {D.1}Boolean and arithmetic functions}{35}
 \contentsline {subsection}{\numberline {D.2}Functions on lists and multi-sets}{36}
 \contentsline {subsection}{\numberline {D.3}Predicates and functions on terms}{36}
 \contentsline {subsection}{\numberline {D.4}Miscellaneous functions}{37}
-\contentsline {section}{\numberline {E}Synopsis of primitives available in {\pbf T}\ scripts}{38}
+\contentsline {section}{\numberline {E}Synopsis of primitives available in {\bf T}\ scripts}{38}

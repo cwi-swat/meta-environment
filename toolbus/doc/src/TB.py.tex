@@ -31,7 +31,7 @@ import regsub
 import regex
 import __main__
 \nwalsodefined{\\{NWTB.8-TB.5-2}\\{NWTB.8-TB.5-3}\\{NWTB.8-TB.5-4}\\{NWTB.8-TB.5-5}\\{NWTB.8-TB.5-6}\\{NWTB.8-TB.5-7}\\{NWTB.8-TB.5-8}}\nwnotused{TB.py}\nwendcode{}\nwbegindocs{2}\nwdocspar
-The function \texttt{TBstring} converts a Python string to a \TB\
+The function \txttt{TBstring} converts a Python string to a \TB\
 string i.e. all double quotes are escaped and the string is surrounded
 with double quotes.
 \nwenddocs{}\nwbegincode{3}\sublabel{NWTB.8-TB.5-2}\nwmargintag{{\nwtagstyle{}\subpageref{NWTB.8-TB.5-2}}}\moddef{TB.py~{\nwtagstyle{}\subpageref{NWTB.8-TB.5-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwprevnextdefs{NWTB.8-TB.5-1}{NWTB.8-TB.5-3}\nwenddeflinemarkup
@@ -39,7 +39,7 @@ def TBstring(str):
         newstr = regsub.gsub('\\"','\\\\\\"',str)
         return('\\"%s\\"' % newstr) 
 \nwendcode{}\nwbegindocs{4}\nwdocspar
-The function \texttt{PYstring} converts a \TB\ message to a Python
+The function \txttt{PYstring} converts a \TB\ message to a Python
 string i.e. strip the string length information and remove surrounding 
 double quotes.
 \nwenddocs{}\nwbegincode{5}\sublabel{NWTB.8-TB.5-3}\nwmargintag{{\nwtagstyle{}\subpageref{NWTB.8-TB.5-3}}}\moddef{TB.py~{\nwtagstyle{}\subpageref{NWTB.8-TB.5-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwprevnextdefs{NWTB.8-TB.5-2}{NWTB.8-TB.5-4}\nwenddeflinemarkup
@@ -54,7 +54,7 @@ def PYstring(str):
                 else:
                         return(str)
 \nwendcode{}\nwbegindocs{6}\nwdocspar
-The function \texttt{send} converts a Python message to a \TB\ message
+The function \txttt{send} converts a Python message to a \TB\ message
 (i.e. add length information) and sends it to the \TB.
 \nwenddocs{}\nwbegincode{7}\sublabel{NWTB.8-TB.5-4}\nwmargintag{{\nwtagstyle{}\subpageref{NWTB.8-TB.5-4}}}\moddef{TB.py~{\nwtagstyle{}\subpageref{NWTB.8-TB.5-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwprevnextdefs{NWTB.8-TB.5-3}{NWTB.8-TB.5-5}\nwenddeflinemarkup
 # The following function depends on
@@ -67,30 +67,30 @@ def send(msg):
         sys.stdout.write('%-128s' % msg)
         sys.stdout.flush()
 \nwendcode{}\nwbegindocs{8}\nwdocspar
-The function \texttt{msg} prints a message to the stderr object.
+The function \txttt{msg} prints a message to the stderr object.
 \nwenddocs{}\nwbegincode{9}\sublabel{NWTB.8-TB.5-5}\nwmargintag{{\nwtagstyle{}\subpageref{NWTB.8-TB.5-5}}}\moddef{TB.py~{\nwtagstyle{}\subpageref{NWTB.8-TB.5-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwprevnextdefs{NWTB.8-TB.5-4}{NWTB.8-TB.5-6}\nwenddeflinemarkup
 # <PO>: TB.msg is sometimes handy.
 def msg(message):
         sys.stderr.write('%s - %s' % (sys.argv[0], message))
         sys.stderr.flush()
 \nwendcode{}\nwbegindocs{10}\nwdocspar
-The function \texttt{error} converts a Python error message to a \TB\
+The function \txttt{error} converts a Python error message to a \TB\
 error message by converting it to a \TB\ string which is wrapped in a
-\texttt{python-adapter-error()} term and sent to the \TB\ (shorthand for
-  \texttt{TB.send('python-adapter-error(\%s)' \% msg)}).
+\txttt{python-adapter-error()} term and sent to the \TB\ (shorthand for
+  \txttt{TB.send('python-adapter-error(\%s)' \% msg)}).
 \nwenddocs{}\nwbegincode{11}\sublabel{NWTB.8-TB.5-6}\nwmargintag{{\nwtagstyle{}\subpageref{NWTB.8-TB.5-6}}}\moddef{TB.py~{\nwtagstyle{}\subpageref{NWTB.8-TB.5-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwprevnextdefs{NWTB.8-TB.5-5}{NWTB.8-TB.5-7}\nwenddeflinemarkup
 def error(msg):
         send('python-adapter-error(%s)' % TBstring(msg))
 \nwendcode{}\nwbegindocs{12}\nwdocspar
-The function \texttt{event} converts a Python message to a \TB\
+The function \txttt{event} converts a Python message to a \TB\
 event message by converting it to a \TB\ string which is wrapped in a
-\texttt{snd-event()} term and sent to the \TB\ (shorthand for
-  \texttt{TB.send('snd-event(\%s)' \% msg)}).
+\txttt{snd-event()} term and sent to the \TB\ (shorthand for
+  \txttt{TB.send('snd-event(\%s)' \% msg)}).
 \nwenddocs{}\nwbegincode{13}\sublabel{NWTB.8-TB.5-7}\nwmargintag{{\nwtagstyle{}\subpageref{NWTB.8-TB.5-7}}}\moddef{TB.py~{\nwtagstyle{}\subpageref{NWTB.8-TB.5-1}}}\plusendmoddef\let\nwnotused=\nwoutput{}\nwstartdeflinemarkup\nwprevnextdefs{NWTB.8-TB.5-6}{NWTB.8-TB.5-8}\nwenddeflinemarkup
 def event(msg):
         send('snd-event(%s)' % msg)
 \nwendcode{}\nwbegindocs{14}\nwdocspar
-The function \texttt{require} checks if the given function is defined
+The function \txttt{require} checks if the given function is defined
 in the given module otherwise an error message is send to the
 \TB. {\bf Note:} for the moment, it is impossible in Python to check
 the number or the type of the arguments of a function. The \emph{args}

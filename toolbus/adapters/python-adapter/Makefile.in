@@ -39,9 +39,8 @@ DISTFILES	= Makefile.in python-adapter.in \
 # these variables, and add some rules to actually build your programs:
 ADAPTER-NAME    = python-adapter
 PROGRAMS        = python-adapter
-SOURCE          = kjParsing.tex test.tb pabc.py
-LIBFILES        = TB.py TBstart.py kjParser.py kjSet.py TBterm.py \
-		kjParseBuild.py
+SOURCE          = TB.py.nw test.tb pabc.py
+LIBFILES        = TB.py TBstart.py TBterm.py
 DOC             = python-adapter.guide.tex
 SRCDOC          =
 GENSRC          =
@@ -58,8 +57,8 @@ TBstart.py TB.py TBterm.py: TB.py.nw
 	$(NOWEB) TB.py.nw
 	touch TBstart.py TB.py TBterm.py
 
-parser: TBterm.py
-	python -c "import TBterm; TBterm.build_term_parser()"
+#parser: TBterm.py
+#	python -c "import TBterm; TBterm.build_term_parser()"
 
 # The rules below this line are general rules and are based on the
 # defines listed above. You probably won't have to change them.
