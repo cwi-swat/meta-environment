@@ -1,3 +1,4 @@
 *.dict
 Makefile.in
 Makefile
+.deps

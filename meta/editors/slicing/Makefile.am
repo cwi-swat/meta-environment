@@ -6,7 +6,7 @@ include_HEADERS = \
 	Slicing.h \
 	Slicing-utils.h
 
-libmept_a_SOURCES = \
+libslicing_a_SOURCES = \
 	Slicing.c  \
 	slice-tree.c
 
@@ -14,11 +14,12 @@ INCLUDES = \
 	-I${ATERM}/include \
 	-I${ERROR_SUPPORT}/include
 
-api: slicing.adt
+api: Slicing.adt
 	adt-to-c \
 		--prefix S_ \
 		--name Slicing \
-		--input $<
+		--input Slicing.adt \
+		--prologue Slicing.pro
 
 api-clean:
 	${RM} Slicing.[ch] Slicing_dict.[ch] Slicing.dict

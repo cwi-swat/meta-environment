@@ -1,8 +1,14 @@
-#include <MEPT-utils.h>
 #include <ctype.h>
-#include <strings.h>
+#include <string.h>
+#include <stdlib.h>
+#include <assert.h>
+
+#include <MEPT-utils.h>
+#include "Slicing.h"
 
 static ATermTable slices;
+
+static void treeToSlices(PT_Tree tree);
 
 /*{{{  static ATbool containsVisibles(PT_Tree tree)  */
 
@@ -21,14 +27,14 @@ static ATbool containsVisibles(PT_Tree tree)
 
     assert(PT_isTreeChar(head) && "expected list of chars");
 
-    ch = PT_getTreeChar(tree);
+    ch = PT_getTreeCharacter(tree);
 
     if (!isspace(ch)) {
-      return true;
+      return ATtrue;
     }
   }
 
-  return false;
+  return ATfalse;
 }
 
 /*}}}  */
@@ -42,11 +48,11 @@ static ATbool allAlphaNumeric(const char* str)
 
   for (i = 0; i < len ; i++) {
     if (!isalnum((unsigned int) str[i])) {
-      return false;
+      return ATfalse;
     }
   }
 
-  return true;
+  return ATtrue;
 }
 
 /*}}}  */
@@ -55,26 +61,26 @@ static ATbool allAlphaNumeric(const char* str)
 
 static void storeTree(PT_Tree tree, const char *category)
 {
-  SH_CategoryName name;
+  S_CategoryName name;
   ATerm key;
-  SH_Areas slice;
+  S_Areas slice;
   LOC_Location location;
 
-  name = SH_makeCategoryNameExtern(category);
-  key = SH_CategoryNameToTerm(name);
-  slice = SH_AreasFromTerm(ATtableGet(slices, key));
-  loc = PT_getTreeLocation(tree);
+  name = S_makeCategoryNameExtern(category);
+  key = S_CategoryNameToTerm(name);
+  slice = S_AreasFromTerm(ATtableGet(slices, key));
+  location = PT_getTreeLocation(tree);
 
   if (slice == NULL) {
-    slice = SH_makeAreasEmpty();
+    slice = S_makeAreasEmpty();
   }
 
-  if (loc != NULLi && LOC_hasLocationArea(loc)) {
-    LOC_Area area = LOC_getLocationArea(loc);
+  if (location != NULL && LOC_hasLocationArea(location)) {
+    LOC_Area area = LOC_getLocationArea(location);
 
-    slice = SH_makeAreasMany((SH_Area) area, slice);
+    slice = S_makeAreasMany((S_Area) area, slice);
 
-    ATtablePut(slices, key, slice);
+    ATtablePut(slices, key, S_AreasToTerm(slice));
   }
 }
 
@@ -131,36 +137,37 @@ static void treeToSlices(PT_Tree tree)
 
 /*}}}  */
 
-/*{{{  SH_Slices TreeToSyntaxSlices(PT_Tree tree)  */
+/*{{{  S_Slices TreeToSyntaxSlices(PT_Tree tree)  */
 
-SH_Slices TreeToSyntaxSlices(PT_Tree tree) 
+S_Slices TreeToSyntaxSlices(PT_Tree tree) 
 {
-  SH_Slices result = SH_makeSlicesEmpty();
+  S_Slices result = S_makeSlicesEmpty();
   ATermList keys;
 
   slices = ATtableCreate(1024, 75);
 
   treeToSlices(tree);
 
-  keys = ATgetTableKeys(slices);
+  keys = ATtableKeys(slices);
 
   for ( ; !ATisEmpty(keys); keys = ATgetNext(keys)) {
-    CategoryName cat;
-    SH_Areas areas;
-    SH_Slice slice; 
+    ATerm key = ATgetFirst(keys);
+    S_CategoryName cat;
+    S_Areas areas;
+    S_Slice slice; 
 
-    cat = SH_CategoryNameFromTerm(ATgetFirst(keys));
-    areas = SH_AreasFromTerm(ATtableGet(slices, key));
+    cat = S_CategoryNameFromTerm(ATgetFirst(keys));
+    areas = S_AreasFromTerm(ATtableGet(slices, key));
 
-    slice = SH_makeSliceDefault(cat, areas);
+    slice = S_makeSliceDefault(cat, areas);
 
-    result = SH_makeSlicesMany(slice, result);
+    result = S_makeSlicesMany(slice, result);
   }
 
   ATtableDestroy(slices);
   slices = NULL;
 
-  return slices;
+  return result;
 }
 
 /*}}}  */
