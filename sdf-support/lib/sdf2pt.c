@@ -208,11 +208,6 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     PT_Symbol ptSym = SDFSymbolToPtSymbol(sdfSym);
     result = PT_makeSymbolOpt(ptSym);
   }
-  else if (SDF_isSymbolSet(sdfSymbol)) {
-    SDF_Symbol sdfSym = SDF_getSymbolSymbol(sdfSymbol);
-    PT_Symbol ptSym = SDFSymbolToPtSymbol(sdfSym);
-    result = PT_makeSymbolSet(ptSym);
-  }
   else if (SDF_isSymbolPair(sdfSymbol)) {
     SDF_Symbol sdfLeft = SDF_getSymbolLeft(sdfSymbol);
     SDF_Symbol sdfRight = SDF_getSymbolRight(sdfSymbol);
@@ -240,11 +235,6 @@ PT_Symbol     SDFSymbolToPtSymbol(SDF_Symbol sdfSymbol)
     PT_Symbol ptLeft = SDFSymbolToPtSymbol(sdfLeft);
     PT_Symbol ptRight = SDFSymbolToPtSymbol(sdfRight);
     result = PT_makeSymbolAlt(ptLeft, ptRight);
-  }
-  else if (SDF_isSymbolPerm(sdfSymbol)) {
-    SDF_Symbols sdfSyms = SDF_getSymbolSymbols(sdfSymbol);
-    PT_Symbols ptSyms = SDFSymbolsToPtSymbols(sdfSyms);
-    result = PT_makeSymbolPerm(ptSyms);
   }
   else if (SDF_isSymbolCharClass(sdfSymbol)) {
     SDF_CharClass sdfCC = SDF_getSymbolCharClass(sdfSymbol);

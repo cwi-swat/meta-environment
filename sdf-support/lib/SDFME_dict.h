@@ -1,5 +1,5 @@
 /*
- * Generated at Wed Oct  1 14:25:31 2003
+ * Generated at Fri Oct  3 17:25:39 2003
  */
 
 #ifndef __SDFME_dict_H
@@ -232,11 +232,6 @@ extern AFun SDF_afun221;
 extern AFun SDF_afun222;
 extern AFun SDF_afun223;
 extern AFun SDF_afun224;
-extern AFun SDF_afun225;
-extern AFun SDF_afun226;
-extern AFun SDF_afun227;
-extern AFun SDF_afun228;
-extern AFun SDF_afun229;
 
 extern ATerm SDF_patternStartAlias;
 extern ATerm SDF_patternStartAliases;
@@ -385,7 +380,7 @@ extern ATerm SDF_patternAssociativityAssoc;
 extern ATerm SDF_patternAssociativityNonAssoc;
 extern ATerm SDF_patternAssociativityRight;
 extern ATerm SDF_patternAssociativityLeft;
-extern ATerm SDF_patternCharClassBracket;
+extern ATerm SDF_patternCharClassDefault;
 extern ATerm SDF_patternCharClassUnion;
 extern ATerm SDF_patternCharClassIsect;
 extern ATerm SDF_patternCharClassDiff;
@@ -427,11 +422,9 @@ extern ATerm SDF_patternSymbolLayout;
 extern ATerm SDF_patternSymbolVarsym;
 extern ATerm SDF_patternSymbolLex;
 extern ATerm SDF_patternSymbolCf;
-extern ATerm SDF_patternSymbolPerm;
 extern ATerm SDF_patternSymbolAlt;
 extern ATerm SDF_patternSymbolFunc;
 extern ATerm SDF_patternSymbolPair;
-extern ATerm SDF_patternSymbolSet;
 extern ATerm SDF_patternSymbolIterSepN;
 extern ATerm SDF_patternSymbolIterN;
 extern ATerm SDF_patternSymbolIterStarSep;
