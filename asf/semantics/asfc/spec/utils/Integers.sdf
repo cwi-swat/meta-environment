@@ -23,7 +23,7 @@ hiddens
     NatCon "-//" NatCon          -> NatCon
     NatCon ">-"  NatCon          -> NatCon
     "(" NatCon ")"               -> NatCon {bracket}
-    gt "(" NatCon "," NatCon ")" -> Bool
+    "gt" "(" NatCon "," NatCon ")" -> Bool
   variables
     "c"  [0-9]*            -> CHAR
     "c*" [0-9]*            -> CHAR*

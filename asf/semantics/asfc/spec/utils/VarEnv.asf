@@ -20,11 +20,11 @@ equations
   [nv-4'1] newvar(natcon(Char+1),varid(Char+2)) =
              varid(Char+2 "n""e""w" Char+1)
 
-  [nv-4'2] newvar(Aint,Varid1) = Varid2
+  [nv-4'2] Varid2 := newvar(Aint,Varid1)
            ============================
            newvar(Aint,*Varid1) = *Varid2
 
-  [nv-4'3] newvar(Aint,Varid1) = Varid2
+  [nv-4'3] Varid2 := newvar(Aint,Varid1)
            ============================
            newvar(Aint,+Varid1) = +Varid2
 
@@ -43,7 +43,7 @@ equations
 
   [nv-1'1] newvar(natcon(Char+)) = varid("V" Char+)
 
-  [vve-1'1] newvar(Aint) = Varid2
+  [vve-1'1] Varid2 := newvar(Aint)
             =====================
             vv-enter(Varid1,[Aint,]) = [Varid2,[succ(Aint),(Varid1,Varid2)]]
 
@@ -51,16 +51,16 @@ equations
               [Varid2,[Aint,(Varid1,Varid2),VvPair*]]
 
   [vve-1'3] Varid1 != Varid2,
-            vv-enter(Varid1,[Aint1,VvPair*1]) = [Varid4,[Aint2,VvPair*2]]
+            [Varid4,[Aint2,VvPair*2]] := vv-enter(Varid1,[Aint1,VvPair*1])
             =============================================================
             vv-enter(Varid1,[Aint1,(Varid2,Varid3),VvPair*1]) =
               [Varid4,[Aint2,(Varid2,Varid3),VvPair*2]]
 
-  [u-1'1] gen-var(Aint) = Varid
+  [u-1'1] Varid := gen-var(Aint)
           =====================
           unique([Aint,Pair*]) = Varid
 
-  [l-1'1] Aint1 = natcon(Char*2)
+  [l-1'1] natcon(Char*2) := Aint1
           ======================
           nt-lookup(Funid,(,funid(Char*1),Aint1,Aint2)) =
             (funid(Char*1 Char*2),
@@ -70,13 +70,13 @@ equations
             (Funid2,((Funid1,Funid2,Term*),Namepair*1,Funid3,Aint1,Aint2))
 
   [l-1'3] Funid1 != Funid2,
-          nt-lookup(Funid1,(Namepair*1,Funid4,Aint1,Aint2)) =
-            (Funid5,(Namepair*2,Funid6,Aint3,Aint4))
+          (Funid5,(Namepair*2,Funid6,Aint3,Aint4)) :=
+            nt-lookup(Funid1,(Namepair*1,Funid4,Aint1,Aint2))
           ====================================
           nt-lookup(Funid1,((Funid2,Funid3,Term*),Namepair*1,Funid4,Aint1,Aint2)) =
             (Funid5,((Funid2,Funid3,Term*),Namepair*2,Funid6,Aint3,Aint4))
 
-  [l-2'1] Aint1 = natcon(Char*2)
+  [l-2'1] natcon(Char*2) := Aint1
           ======================
           nt-lookup(Funid,Term*,(,funid(Char*1),Aint1,Aint2)) =
             (funid(Char*1 Char*2),
@@ -86,8 +86,8 @@ equations
             (Funid2,((Funid1,Funid2,Term*2),Namepair*1,Funid3,Aint1,Aint2))
 
   [l-1'3] Funid1 != Funid2,
-          nt-lookup(Funid1,Term*1,(Namepair*1,Funid4,Aint1,Aint2)) =
-            (Funid5,(Namepair*2,Funid6,Aint3,Aint4))
+          (Funid5,(Namepair*2,Funid6,Aint3,Aint4)) :=
+            nt-lookup(Funid1,Term*1,(Namepair*1,Funid4,Aint1,Aint2))
           ==========================================
           nt-lookup(Funid1,Term*1,((Funid2,Funid3,Term*2),Namepair*1,Funid4,Aint1,Aint2)) =
             (Funid5,((Funid2,Funid3,Term*2),Namepair*2,Funid6,Aint3,Aint4))
@@ -99,8 +99,8 @@ equations
              ((Funid1,Funid2,Term*),Namepair*1,Funid3,Aint1,Aint2)
 
   [nta-1'3] Funid1 != Funid3,
-            nt-add(Funid1,Funid2,(Namepair*1,Funid5,Aint1,Aint2)) =
-              (Namepair*2,Funid6,Aint3,Aint4)
+            (Namepair*2,Funid6,Aint3,Aint4) :=
+              nt-add(Funid1,Funid2,(Namepair*1,Funid5,Aint1,Aint2))
             =================================
             nt-add(Funid1,Funid2,((Funid3,Funid4,Term*),Namepair*1,Funid5,Aint1,Aint2)) =
               ((Funid3,Funid4,Term*),Namepair*2,Funid6,Aint3,Aint4)
@@ -112,13 +112,13 @@ equations
              ((Funid1,Funid2,Term*2),Namepair*1,Funid3,Aint1,Aint2)
 
   [nta-1'3] Funid1 != Funid3,
-            nt-add(Funid1,Funid2,Term*1,(Namepair*1,Funid5,Aint1,Aint2)) =
-              (Namepair*2,Funid6,Aint3,Aint4)
+            (Namepair*2,Funid6,Aint3,Aint4) :=
+              nt-add(Funid1,Funid2,Term*1,(Namepair*1,Funid5,Aint1,Aint2))
             =================================
             nt-add(Funid1,Funid2,Term*1,((Funid3,Funid4,Term*2),Namepair*1,Funid5,Aint1,Aint2)) =
               ((Funid3,Funid4,Term*2),Namepair*2,Funid6,Aint3,Aint4)
 
-  [l-2'1] Aint2 = natcon(Char*2)
+  [l-2'1] natcon(Char*2) := Aint2
           ======================
           ntl-lookup(Funid1,(,Funid2,Aint1,Aint2)) =
             (funid("l""f" Char*2),
@@ -128,8 +128,8 @@ equations
             (Funid2,((Funid1,Funid2,Term*),Namepair*1,Funid3,Aint1,Aint2))
 
   [l-2'3] Funid1 != Funid2,
-          ntl-lookup(Funid1,(Namepair*1,Funid4,Aint1,Aint2)) =
-            (Funid5,(Namepair*2,Funid6,Aint3,Aint4))
+          (Funid5,(Namepair*2,Funid6,Aint3,Aint4)) :=
+            ntl-lookup(Funid1,(Namepair*1,Funid4,Aint1,Aint2))
           ==========================================
           ntl-lookup(Funid1,((Funid2,Funid3,Term*),Namepair*1,Funid4,Aint1,Aint2)) =
             (Funid5,((Funid2,Funid3,Term*),Namepair*2,Funid6,Aint3,Aint4))
@@ -156,9 +156,9 @@ equations
 
   [il-1'3] is-delaying(Funid,(Funid1,Funid,Term*1,delaying(Term+),Term*2),Namepair*) = true
 
-  [il-1'4] Funid = funid(Char*1),
-           Funid2 = funid("_" Char*2),
-           funid(Char*1) = funid(Char*2)
+  [il-1'4] funid(Char*1) := Funid,
+           funid("_" Char*2) := Funid2,
+           funid(Char*1) == funid(Char*2)
            =============================
            is-delaying(Funid,(Funid1,Funid2,Term*1,delaying(Term+),Term*2),Namepair*) = true
 
@@ -169,9 +169,9 @@ equations
 
   [im-1'2] is-memo(Funid,(Funid1,Funid,Term*1,memo,Term*2),Namepair*) = true
 
-  [im-1'3] Funid = funid(Char*1),
-           Funid2 = funid("_" Char*2),
-           funid(Char*1) = funid(Char*2)
+  [im-1'3] funid(Char*1) := Funid,
+           funid("_" Char*2) := Funid2,
+           funid(Char*1) == funid(Char*2)
            =============================
            is-memo(Funid,(Funid1,Funid2,Term*1,memo,Term*2),Namepair*) = true
 
@@ -182,9 +182,9 @@ equations
 
   [ic-1'2] is-constructor(Funid,(Funid1,Funid,Term*1,constructor,Term*2),Namepair*) = true
 
-  [ic-1'3] Funid = funid(Char*1),
-           Funid2 = funid("_" Char*2),
-           funid(Char*1) = funid(Char*2)
+  [ic-1'3] funid(Char*1) := Funid,
+           funid("_" Char*2) := Funid2,
+           funid(Char*1) == funid(Char*2)
            =============================
            is-constructor(Funid,(Funid1,Funid2,Term*1,constructor,Term*2),Namepair*) = true
 
@@ -194,9 +194,9 @@ equations
   [gpa-1'1] get-delaying-args(Funid,(Funid1,Funid,
                                      Term*1,delaying(Term+),Term*2),Namepair*) = Term+
 
-  [gpa-1'2] Funid = funid(Char*1),
-            Funid2 = funid("_" Char*2),
-            funid(Char*1) = funid(Char*2)
+  [gpa-1'2] funid(Char*1) := Funid,
+            funid("_" Char*2) := Funid2,
+            funid(Char*1) == funid(Char*2)
             =============================
             get-delaying-args(Funid,(Funid1,Funid2,
                                      Term*1,delaying(Term+),Term*2),Namepair*) = Term+

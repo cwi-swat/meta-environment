@@ -30,7 +30,7 @@ equations
 %% Greater than
 
    [133]
-        natcon(c1) -// natcon(c2) = natcon(c), natcon(c) != 0
+        natcon(c) := natcon(c1) -// natcon(c2), natcon(c) != 0
         =====================================================
         gt(natcon(c1), natcon(c2)) = true
    [134]
@@ -38,7 +38,7 @@ equations
    [135]
         gt(natcon(c+ c1), natcon(c+ c2)) = gt(natcon(c1), natcon(c2))
    [136]
-        gt(natcon(c+1), natcon(c+2)) = true
+        gt(natcon(c+1), natcon(c+2)) == true
         =========================================
         gt(natcon(c+1 c1), natcon(c+2 c2)) = true
 
@@ -49,26 +49,26 @@ equations
    [138]
         natcon(c1) >- natcon(c2) = natcon(c1) -// natcon(c2)
    [139a]
-        natcon(c1)  -// natcon(c2)    = natcon(c3),
-        natcon (c+1) >- natcon("0" c*2) = natcon(c+)
+        natcon(c3)    := natcon(c1)  -// natcon(c2),
+        natcon(c+) := natcon (c+1) >- natcon("0" c*2)
         ==================================================
         natcon(c+1 c1) >- natcon(c*2 c2) = natcon(c+ c3)
    [139b]
-        natcon(c2) -// natcon(c1) = natcon(c3),
-        10 -// natcon(c3) = natcon(c),
-        natcon ("0" c*2) + 1 = n,
-        natcon(c+1) >- n = natcon(c+)
+        natcon(c3) := natcon(c2) -// natcon(c1),
+        natcon(c) := 10 -// natcon(c3),
+        n := natcon ("0" c*2) + 1,
+        natcon(c+) := natcon(c+1) >- n
         ===============================================
         natcon(c+1 c1) >- natcon(c*2 c2) = natcon(c+ c)
 
 %% Cut off subtraction -/
 
-   [140] n1 -/ n2 = n1 >- n2    when gt(n1, n2) = true
+   [140] n1 -/ n2 = n1 >- n2    when gt(n1, n2) == true
    [141] n1 -/ n2 = 0           when gt(n1, n2) != true
 
 %% Subtraction of naturals
 
-   [142]  n1 - n2 = n1 >- n2    when gt(n1, n2) = true
+   [142]  n1 - n2 = n1 >- n2    when gt(n1, n2) == true
    [143]  n1 - n2 = - n2 >- n1  when gt(n1, n2) != true
 
 %% Multiplication of naturals
@@ -78,11 +78,11 @@ equations
    [145]
         n * 1 = n
    [146]
-        gt(natcon(c), 1) = true
+        gt(natcon(c), 1) == true
         =======================================
         n * natcon(c) = n + n * (natcon(c) - 1)
    [147]
-        natcon(c+1) * natcon(c+2) = natcon(c+)
+        natcon(c+) := natcon(c+1) * natcon(c+2)
         ======================================================================
         natcon(c+1) * natcon(c+2 c) = natcon(c+ "0") + natcon(c+1) * natcon(c)
 
@@ -90,17 +90,17 @@ equations
 
    [149]  n1 + -n2 = n1 - n2
    [150] -n1 +  n2 = n2 - n1
-   [151] -n1 + -n2 = -n         when n1  + n2 = n
+   [151] -n1 + -n2 = -n         when n := n1  + n2
    [152]  n1 - -n2 = n1 + n2
-   [153] -n1 -  n2 = -n         when n1 + n2 = n
+   [153] -n1 -  n2 = -n         when n := n1 + n2
    [154] -n1 - -n2 = n2 - n1
-   [155]  n1 * -n2 = -n         when n1 * n2 = n
-   [156] -n1 *  n2 = -n         when n1 * n2 = n
+   [155]  n1 * -n2 = -n         when n := n1 * n2
+   [156] -n1 *  n2 = -n         when n := n1 * n2
    [157] -n1 * -n2 = n1 * n2
 
 %% Relational operators
 
-   [158]  n1 >  n2 = true       when gt(n1, n2)  = true
+   [158]  n1 >  n2 = true       when gt(n1, n2)  == true
    [159]  n1 >  n2 = false      when gt(n1, n2) != true
    [160]  n1 > -n2 = true
    [161] -n1 >  n2 = false

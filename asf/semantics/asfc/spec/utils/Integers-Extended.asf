@@ -1,12 +1,12 @@
 equations
-  [1]  1 + Aint1 = Aint2
+  [1]  Aint2 := 1 + Aint1
        =================
        succ(Aint1) = Aint2
 
-  [2] Aint1 > Aint2 = true
+  [2] Aint1 > Aint2 == true
       ====================
       gtr(Aint1,Aint2) = Aint1
 
-  [3] Aint1 > Aint2 = false
+  [3] Aint1 > Aint2 == false
       =====================
       gtr(Aint1,Aint2) = Aint2

@@ -68,6 +68,7 @@ exports
     np-lookup(FunId,{NamePair ","}*)                        -> FunId
     pn-lookup(FunId,{NamePair ","}*)                        -> FunId
 
+
 exports
 sorts MN-struct
   context-free syntax

@@ -48,17 +48,17 @@ equations
 %% Addition of multiple digit natural numbers
 
    [85a]
-        natcon(c1)  + natcon(c2)                   = natcon(c* c),
-        natcon(c+1) + natcon(c+2) + natcon("0" c*) = natcon(c+)
+        natcon(c* c)                   := natcon(c1)  + natcon(c2),
+        natcon(c+) := natcon(c+1) + natcon(c+2) + natcon("0" c*)
         ========================================================
         natcon(c+1 c1) + natcon(c+2 c2) = natcon(c+ c)
    [85b]
-        natcon(c1) + natcon(c2) = natcon(c* c),
-        natcon(c+2) + natcon("0" c*) = natcon(c+)
+        natcon(c* c) := natcon(c1) + natcon(c2),
+        natcon(c+) := natcon(c+2) + natcon("0" c*)
         =========================================
         natcon(c1) + natcon(c+2 c2) = natcon(c+ c)
    [85c]
-        natcon(c1) + natcon(c2) = natcon(c* c),
-        natcon (c+1) + natcon("0" c*) = natcon(c+)
+        natcon(c* c) := natcon(c1) + natcon(c2),
+        natcon(c+) := natcon (c+1) + natcon("0" c*)
         ==========================================
         natcon(c+1 c1) + natcon(c2) = natcon(c+ c)
