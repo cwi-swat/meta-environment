@@ -90,5 +90,6 @@ AC_OUTPUT(
   lib/Makefile
   utils/Makefile
   utils/sdf-modules/Makefile
+  utils/sdf-renaming/Makefile
   test/Makefile
 )
