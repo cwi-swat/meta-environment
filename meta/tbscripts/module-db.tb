@@ -71,9 +71,7 @@ in
     . snd-msg(changed-modules(DependingModules))
   +
     rec-msg(close-module-in-db(Name?))
-    . GetDependingModules(Name, DependingModules?)
     . MDB-InvalidateModule(Name, sdf)
-    . MDB-InvalidateModules(DependingModules, sdf)
     . snd-msg(ts-remove-value-from-all-tables(Name))
     . snd-msg(module-closed(Name))
   +

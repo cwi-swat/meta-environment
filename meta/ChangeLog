@@ -1,5 +1,9 @@
 # $Id$
 
+Fri Nov 12 11:42:00 CET 2004 <{jong,kooiker}@cwi.nl>
+ * tbscripts/module-db.tb:
+   - fix remove redundant module database updates 
+
 Fri Nov 12 09:56:51 CET 2004 <{jong,kooiker}@cwi.nl>
  * configure.ac:
    - fix EXTERNAL_JARS uses both ToolBus jar and installed classes
