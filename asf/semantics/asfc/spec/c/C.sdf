@@ -136,3 +136,4 @@ exports
     "Declarator"[0-9\']*  -> Declarator
     "Post"[\']*           -> Primary-expression
     "Expr"[0-9\']*        -> Expression
+    "String"[0-9]*        -> String
