@@ -1,0 +1,15 @@
+
+class := "org.autocode.generator.c.CGenerator"
+
+folding := true		// Enable folding support by default
+
+prefix := ""
+
+type * {
+  module := "main"
+  prefix := { }
+}
+
+#@import "org/autocode/generator/java/plugin/Constructor.aco"
+#@import "org/autocode/generator/java/plugin/Accessor.aco"
+

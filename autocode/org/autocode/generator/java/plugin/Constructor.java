@@ -70,22 +70,22 @@ public class Constructor
 
       if (fieldTypeContext.getBoolean("collection")) {
 	String collectionName = fieldTypeContext.getString("interface");
-	String init = generator.javaMethodName("init-" + fieldName
-					       + "-" + collectionName);
+	String init = generator.methodName("init-" + fieldName
+					   + "-" + collectionName);
 	body.addLine(init + "();");
       } else {
 	FormalParameter param = new FormalParameter(paramName, paramType);
 	param.setDescription("the " + fieldContext.getString("description"));
 	constructor.addFormalParameter(param);
 
-	String setMethod = generator.javaMethodName("set-" + fieldName);
+	String setMethod = generator.methodName("set-" + fieldName);
 	body.addLine(setMethod + "(" + paramName + ");");
       }
     }
 
     //}}}
 
-    String typeName = generator.javaTypeName(typeContext.getName());
+    String typeName = generator.typeName(typeContext.getName());
     constructor.setDescription("creates a new " + typeName + ".");
 
     generator.getCompilationUnit().addMethod(constructor);

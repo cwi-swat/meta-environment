@@ -158,7 +158,7 @@ abstract public class AutocodeGenerator
 
     try {
       Class pluginClass = Class.forName(pluginClassName);
-      String methodName = javaMethodName("generate-" + operationName);
+      String methodName = methodNameJava("generate-" + operationName);
       Method method;
       try {
 	method = pluginClass.getMethod(methodName, getFormalParameters(parameters));
@@ -237,7 +237,7 @@ abstract public class AutocodeGenerator
     String className = pluginContext.getString("class");
     try {
       Class pluginClass = Class.forName(className);
-      String methodName = javaMethodName("generate-" + operationName);
+      String methodName = methodNameJava("generate-" + operationName);
       Method method;
       try {
 	method = pluginClass.getMethod(methodName,
@@ -295,9 +295,9 @@ abstract public class AutocodeGenerator
 
   //}}}
 
-  //{{{ public static String javaTypeName(String name)
+  //{{{ public static String typeNameJava(String name)
 
-  public static String javaTypeName(String name)
+  public static String typeNameJava(String name)
   {
     StringBuffer buf = new StringBuffer();
 
@@ -310,17 +310,17 @@ abstract public class AutocodeGenerator
   }
 
   //}}}
-  //{{{ public static String javaAttributeName(String name)
+  //{{{ public static String attributeNameJava(String name)
 
-  public static String javaAttributeName(String name)
+  public static String attributeNameJava(String name)
   {
-    return "_" + javaParameterName(name);
+    return "_" + parameterNameJava(name);
   }
 
   //}}}
-  //{{{ public static String javaMethodName(String name)
+  //{{{ public static String methodNameJava(String name)
 
-  public static String javaMethodName(String name)
+  public static String methodNameJava(String name)
   {
     StringBuffer buf = new StringBuffer();
 
@@ -334,15 +334,31 @@ abstract public class AutocodeGenerator
   }
 
   //}}}
-  //{{{ public static String javaParameterName(String name)
+  //{{{ public static String parameterNameJava(String name)
 
-  public static String javaParameterName(String name)
+  public static String parameterNameJava(String name)
   {
     StringBuffer buf = new StringBuffer("");
     WordIterator iter = new WordIterator(name);
     buf.append(iter.next());
     while (iter.hasNext()) {
       buf.append(capitalize(iter.next()));
+    }
+
+    return buf.toString();
+  }
+
+  //}}}
+  //{{{ public static String constantNameJava(String name)
+
+  public static String constantNameJava(String name)
+  {
+    StringBuffer buf = new StringBuffer("");
+    WordIterator iter = new WordIterator(name);
+    buf.append(iter.next().toUpperCase());
+    while (iter.hasNext()) {
+      buf.append("_");
+      buf.append(iter.next().toUpperCase());
     }
 
     return buf.toString();

@@ -1,7 +1,8 @@
-type CompilationUnit
+type C-CompilationUnit :: CompilationUnit
 {
-  path : string
-  include : list<Include>
+  module : string
+  header-include : list<Include>
+  source-include : list<Include>
   struct : list<Struct>
   macro : list<Macro>
   function : list<Function>
@@ -11,7 +12,6 @@ type Include
 {
   file : string
   system : boolean
-  public : boolean
 }
 
 type Struct

@@ -49,7 +49,7 @@ public class JavaGenerator
   {
     String typeName = typeContext.getName();
     String pkg = typeContext.getString("package");
-    String className = javaTypeName(typeName);
+    String className = typeNameJava(typeName);
     String superClass = typeContext.getString("super");
     String access = typeContext.getString("access");
     JavaAccessSpecifier accessSpecifier = JavaAccessSpecifier.parse(access);
@@ -79,7 +79,7 @@ public class JavaGenerator
   {
     String enumName = enumContext.getName();
     String pkg = enumContext.getString("package");
-    String className = javaTypeName(enumName);
+    String className = typeNameJava(enumName);
     String superClass = "AutocodeEnumeration";
 
     String access = "public";
@@ -413,7 +413,15 @@ public class JavaGenerator
       return typeName;
     }
 
-    return AutocodeGenerator.javaTypeName(fieldTypeContext.getName());
+    return typeName(fieldTypeContext.getName());
+  }
+
+  //}}}
+  //{{{ public String typeName(String type)
+
+  public String typeName(String type)
+  {
+    return AutocodeGenerator.typeNameJava(type);
   }
 
   //}}}
@@ -421,7 +429,7 @@ public class JavaGenerator
 
   public String attributeName(String name)
   {
-    return AutocodeGenerator.javaAttributeName(name);
+    return AutocodeGenerator.attributeNameJava(name);
   }
 
   //}}}
@@ -429,7 +437,7 @@ public class JavaGenerator
 
   public String methodName(String name)
   {
-    return javaMethodName(name);
+    return methodNameJava(name);
   }
 
   //}}}
@@ -437,7 +445,7 @@ public class JavaGenerator
 
   public String constructorName(String name)
   {
-    return javaTypeName(name);
+    return typeNameJava(name);
   }
 
   //}}}
@@ -449,7 +457,7 @@ public class JavaGenerator
       name = "arg-" + name;
     }
 
-    return AutocodeGenerator.javaParameterName(name);
+    return AutocodeGenerator.parameterNameJava(name);
   }
 
   //}}}

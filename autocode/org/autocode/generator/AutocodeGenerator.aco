@@ -17,6 +17,16 @@ application * {
       field * {
         operation += { }
         description := "no description"
+	type list? {
+          element-type := { }
+        }
+	type set? {
+          element-type := { }
+        }
+	type map? {
+          key-type := { }
+          value-type := { }
+        }
       }
     }
 
@@ -31,5 +41,8 @@ application * {
 
   generator java {
     @import "org/autocode/generator/java/JavaGenerator.aco"
+  }
+  generator C {
+    @import "org/autocode/generator/c/CGenerator.aco"
   }
 }

@@ -4,7 +4,7 @@ package org.autocode.generator.c;
 
 import org.autocode.property.*;
 import org.autocode.generator.*;
-import org.autocode.generator.repository.*;
+import org.autocode.generator.repository.Repository;
 import org.autocode.generator.c.repository.*;
 
 import java.io.*;
@@ -23,6 +23,20 @@ public class CGenerator
   private PrintWriter writer;
   private int indentLevel;
 
+  private Map unitMap;
+
+  private String prefix;
+  private String typePrefix;
+
+  //}}}
+
+  //{{{ public CGenerator()
+
+  public CGenerator()
+  {
+    unitMap = new HashMap();
+  }
+
   //}}}
 
   //{{{ public CCompilationUnit getCompilationUnit()
@@ -38,6 +52,7 @@ public class CGenerator
 
   public void generate(PropertyContext generatorContext)
   {
+    prefix = generatorContext.getString("prefix");
     repository = new Repository();
     super.generate(generatorContext);
   }
@@ -48,10 +63,15 @@ public class CGenerator
   protected void generateType(PropertyContext typeContext)
   {
     String typeName = typeContext.getName();
-    String path = typeContext.getString("path");
+    String module = typeContext.getString("module");
+    typePrefix = typeContext.getString("prefix");
 
-    compilationUnit = new CCompilationUnit(path);
-    repository.addCompilationUnit(compilationUnit);
+    compilationUnit = (CCompilationUnit)unitMap.get(module);
+    if (compilationUnit == null) {
+      compilationUnit = new CCompilationUnit(module);
+      unitMap.put(module, compilationUnit);
+      repository.addCompilationUnit(compilationUnit);
+    }
 
     super.generateType(typeContext);
   }
@@ -72,6 +92,14 @@ public class CGenerator
 
   //}}}
 
+  //{{{ protected void generateVerbatim(String source)
+
+  protected void generateVerbatim(String source)
+  {
+  }
+
+  //}}}
+
   //{{{ public void emit(PropertyContext generatorContext) throws IOException
 
   public void emit(PropertyContext generatorContext) throws IOException
@@ -81,171 +109,70 @@ public class CGenerator
     Iterator iter = repository.fetchCompilationUnitIterator();
     while (iter.hasNext()) {
       indentLevel = 0;
-      CCompilationUnit unit = (CCompilationUnit)iter.next();
-      String pkgName = unit.getPackageName();
-      String reldir = pkgName.replace('.', File.separatorChar);
-      String absdir = root + File.separatorChar + reldir;
-      File file = new File(absdir, unit.getClassName() + ".java");
-      System.out.println("emitting: " + file);
+      compilationUnit = (CCompilationUnit)iter.next();
+      String module = compilationUnit.getModule();
+      String fileName = root + File.separatorChar + module;
 
-      writer = new PrintWriter(new FileWriter(file));
+      System.out.println("emitting module : " + module);
 
-      emitCompilationUnit(unit);
+      File source = new File(fileName + ".c");
+      File header = new File(fileName + ".h");
+
+      compilationUnit.addSourceInclude(new Include(module + ".h", false));
+
+      writer = new PrintWriter(new FileWriter(header));
+      emitHeader();
+      writer.close();
+
+      writer = new PrintWriter(new FileWriter(source));
+      emitSource();
+      writer.close();
 
       writer.close();
     }
   }
 
   //}}}
-  //{{{ protected void emitCompilationUnit(CCompilationUnit unit)
+  //{{{ protected void emitHeader()
 
-  protected void emitCompilationUnit(CCompilationUnit unit)
+  protected void emitHeader()
   {
-    emitPackage(unit);
-    emitImports(unit);
-    println(unit.getAccess().yield() + " class " + unit.getClassName());
-    emitExtends(unit);
-    println("{");
-    indentLevel++;
-    emitAttributes(unit);
-    emitMethods(unit);
-    indentLevel--;
-    println("}");
-  }
-
-  //}}}
-  //{{{ protected void emitPackage(CCompilationUnit unit)
-
-  protected void emitPackage(CCompilationUnit unit)
-  {
-    println("package " + unit.getPackageName() + ";");
+    String protectionMacro
+      = "__" + macroName(compilationUnit.getModule()) + "_H";
+    println("#ifndef " + protectionMacro);
+    println("#define " + protectionMacro);
     println();
-  }
 
-  //}}}
-  //{{{ protected void emitImports(CCompilationUnit unit)
+    emitIncludes(compilationUnit.fetchHeaderIncludeIterator());
 
-  protected void emitImports(CCompilationUnit unit)
-  {
-    Iterator iter = unit.fetchImportedIterator();
-    if (iter.hasNext()) {
-      foldOpen("imports");
-      while (iter.hasNext()) {
-	println("import " + iter.next() + ";");
-      }
-      foldClose();
-      println();
-    }
-  }
-
-  //}}}
-  //{{{ protected void emitExtends(CCompilationUnit unit)
-
-  protected void emitExtends(CCompilationUnit unit)
-  {
-    String superClass = unit.getSuperClass();
-    if (!superClass.equals("")) {
-      indentLevel++;
-      println("extends " + superClass);
-      indentLevel--;
-    }
-  }
-
-  //}}}
-
-  //{{{ protected void emitAttributes(CCompilationUnit unit)
-
-  protected void emitAttributes(CCompilationUnit unit)
-  {
-    Iterator iter = unit.fetchAttributeIterator();
-    if (iter.hasNext()) {
-      foldOpen("attributes");
-      while (iter.hasNext()) {
-	emitAttribute((CAttribute)iter.next());
-      }
-      foldClose();
-      println();
-    }
-  }
-
-  //}}}
-  //{{{ protected void emitAttribute(CAttribute attribute)
-
-  protected void emitAttribute(CAttribute attr)
-  {
-    String access = attr.getAccess().yield();
-    String type = attr.getType();
-    String name = attr.getName();
-    String description = attr.getDescription();
-
-    emitAttributeDocumentation(attr);
-    println(access + " " + type + " " + name + ";");
     println();
+    println("#endif /* " + protectionMacro + " */");
   }
 
   //}}}
-  //{{{ protected void emitAttributeDocumentation(CAttribute attr)
+  //{{{ protected void emitSource()
 
-  protected void emitAttributeDocumentation(CAttribute attr)
+  protected void emitSource()
   {
-    if (getGeneratorContext().getBoolean("javadoc")) {
-      String desc = attr.getDescription();
-      if (desc != null ) {
-	println("/** " + capitalize(desc) + " */");
+    emitIncludes(compilationUnit.fetchSourceIncludeIterator());
+  }
+
+  //}}}
+
+  //{{{ protected void emitIncludes(Iterator includes)
+
+  protected void emitIncludes(Iterator includes)
+  {
+    foldOpen("includes");
+    while (includes.hasNext()) {
+      Include include = (Include)includes.next();
+      print("#include ");
+      if (include.isSystem()) {
+	println("<" + include.getFile() + ">");
+      } else {
+	println("\"" + include.getFile() + "\"");
       }
     }
-  }
-
-  //}}}
-
-  //{{{ protected void emitMethods(CCompilationUnit unit)
-
-  protected void emitMethods(CCompilationUnit unit)
-  {
-    for (Iterator i = unit.fetchMethodIterator(); i.hasNext();) {
-      emitMethod((CMethod)i.next());
-    }
-  }
-
-  //}}}
-  //{{{ protected void emitMethodDocumentation(CMethod method)
-
-  protected void emitMethodDocumentation(CMethod method)
-  {
-    if (getGeneratorContext().getBoolean("javadoc")) {
-      println("/**");
-
-      String methodDescription = method.getDescription();
-      if (methodDescription != null) {
-	println("* " + capitalize(method.getDescription()));
-      }
-
-      Iterator iter = method.fetchFormalParameterIterator();
-      if (iter.hasNext()) {
-	println("*");
-      }
-      while (iter.hasNext()) {
-	FormalParameter param = (FormalParameter)iter.next();
-	println("* @param " + param.getName() + " " + param.getDescription());
-      }
-
-      println("*/");
-    }
-  }
-
-  //}}}
-  //{{{ protected void emitMethod(CMethod method)
-
-  protected void emitMethod(CMethod method)
-  {
-    String decl = method.toString();
-
-    foldOpen(decl);
-    emitMethodDocumentation(method);
-    println(decl);
-    println("{");
-    method.getBody().emit(indentLevel+1, writer);
-    println("}");
     foldClose();
   }
 
@@ -303,31 +230,35 @@ public class CGenerator
 
   //}}}
 
+  //{{{ private String prefix(String name)
+
+  private String prefix(String name)
+  {
+    if (typePrefix != null) {
+      return typePrefix + name;
+    }
+
+    return prefix + name;
+  }
+
+  //}}}
   //{{{ public String typeName(PropertyContext fieldTypeContext)
 
   public String typeName(PropertyContext fieldTypeContext)
   {
     String fieldTypeName = fieldTypeContext.getName();
 
-    String typeName = fieldTypeContext.getString("interface");
+    String typeName = fieldTypeContext.getString("implementation");
     if (typeName != null) {
       PropertyContext interfaceContext
-	= new PropertyContext(fieldTypeContext, "interface");
-      Set imports = interfaceContext.getValueSet("import");
-      getCompilationUnit().mergeImportedCollection(imports);
-      return typeName;
-    }
-
-    typeName = fieldTypeContext.getString("implementation");
-    if (typeName != null) {
-      PropertyContext implementationContext
 	= new PropertyContext(fieldTypeContext, "implementation");
-      Set imports = implementationContext.getValueSet("import");
-      getCompilationUnit().mergeImportedCollection(imports);
+      Set includes = interfaceContext.getValueSet("include");
+      getCompilationUnit().mergeHeaderIncludeCollection(includes);
       return typeName;
     }
 
-    return AutocodeGenerator.javaTypeName(fieldTypeContext.getName());
+    String type = AutocodeGenerator.typeNameJava(fieldTypeContext.getName());
+    return prefix(type);
   }
 
   //}}}
@@ -335,7 +266,7 @@ public class CGenerator
 
   public String attributeName(String name)
   {
-    return AutocodeGenerator.javaAttributeName(name);
+    return AutocodeGenerator.attributeNameJava(name);
   }
 
   //}}}
@@ -343,15 +274,9 @@ public class CGenerator
 
   public String methodName(String name)
   {
-    return AutocodeGenerator.javaMethodName(name);
-  }
+    String method = AutocodeGenerator.methodNameJava(name);
 
-  //}}}
-  //{{{ public String constructorName(String name)
-
-  public String constructorName(String name)
-  {
-    return capitalize(methodName(name));
+    return prefix(method);
   }
 
   //}}}
@@ -359,7 +284,15 @@ public class CGenerator
 
   public String parameterName(String name)
   {
-    return AutocodeGenerator.javaParameterName(name);
+    return AutocodeGenerator.parameterNameJava(name);
+  }
+
+  //}}}
+  //{{{ public String macroName(String name)
+
+  public String macroName(String name)
+  {
+    return AutocodeGenerator.constantNameJava(name);
   }
 
   //}}}

@@ -41,18 +41,18 @@ public class Accessor
 
   //}}}
 
-  //{{{ public void generateGet(generator, type, field, operation)
+  //{{{ private void generateGet(name, generator, type, field, operation)
 
-  public void generateGet(JavaGenerator generator,
-			  PropertyContext typeContext,
-			  PropertyContext fieldContext,
-			  PropertyContext operationContext)
+  private void generateGet(String name, JavaGenerator generator,
+			   PropertyContext typeContext,
+			   PropertyContext fieldContext,
+			   PropertyContext operationContext)
   {
     PropertyContext fieldTypeContext = new PropertyContext(fieldContext, "type");
     String attrType = generator.typeName(fieldTypeContext);
 
     String fieldName = fieldContext.getName();
-    String methodName = generator.methodName("get-" + fieldName);
+    String methodName = generator.methodName(name + "-" + fieldName);
 
     String attrName = generator.attributeName(fieldName);
     MethodBody body = new MethodBody();
@@ -66,6 +66,28 @@ public class Accessor
     unit.addMethod(method);
 
     addAttribute(unit, fieldContext, attrName, attrType);
+  }
+
+  //}}}
+  //{{{ public void generateGet(generator, type, field, operation)
+
+  public void generateGet(JavaGenerator generator,
+			  PropertyContext typeContext,
+			  PropertyContext fieldContext,
+			  PropertyContext operationContext)
+  {
+    generateGet("get", generator, typeContext, fieldContext, operationContext);
+  }
+
+  //}}}
+  //{{{ public void generateIs(generator, type, field, operation)
+
+  public void generateIs(JavaGenerator generator,
+			 PropertyContext typeContext,
+			 PropertyContext fieldContext,
+			 PropertyContext operationContext)
+  {
+    generateGet("is", generator, typeContext, fieldContext, operationContext);
   }
 
   //}}}
@@ -101,6 +123,118 @@ public class Accessor
   }
 
   //}}}
+  //{{{ public void generateAdd(generator, type, field, operation)
+
+  public void generateAdd(JavaGenerator generator,
+			  PropertyContext typeContext,
+			  PropertyContext fieldContext,
+			  PropertyContext operationContext)
+  {
+    PropertyContext fieldTypeContext = new PropertyContext(fieldContext, "type");
+    String attrType = generator.typeName(fieldTypeContext);
+
+    String element = fieldTypeContext.getString("element-type");
+    if (element == null) {
+      throw new RuntimeException("field operation 'add' requires an "
+				 + "element-type to be present in the "
+				 + " field-type");
+    }
+    String elementType = generator.typeName(fieldTypeContext.getString("element-type"));
+    
+    String fieldName = fieldContext.getName();
+    String methodName = generator.methodName("add-" + fieldName);
+
+    String attrName = generator.attributeName(fieldName);
+
+    String paramName = generator.parameterName(fieldName);
+    FormalParameter param = new FormalParameter(paramName, elementType);
+    param.setDescription(fieldContext.getString("description"));
+
+    MethodBody body = new MethodBody();
+    body.addLine(attrName + ".add(" + paramName + ");");
+    JavaMethod method = createMethod(operationContext, methodName, "void", body);
+    method.addFormalParameter(param);
+    method.setDescription("adds a " + fieldContext.getString("description") + ".");
+
+    JavaCompilationUnit unit = generator.getCompilationUnit();
+    unit.addMethod(method);
+
+    addAttribute(unit, fieldContext, attrName, attrType);
+  }
+
+  //}}}
+  //{{{ public void generateMergeCollection(generator, type, field, operation)
+
+  public void generateMergeCollection(JavaGenerator generator,
+				      PropertyContext typeContext,
+				      PropertyContext fieldContext,
+				      PropertyContext operationContext)
+  {
+    JavaCompilationUnit unit = generator.getCompilationUnit();
+
+    PropertyContext fieldTypeContext
+      = new PropertyContext(fieldContext, "type");
+    String attrType = generator.typeName(fieldTypeContext);
+
+    String collection = fieldTypeContext.getString("collection-type");
+    PropertyContext collectionContext
+      = new PropertyContext(fieldTypeContext, "collection-type", collection);
+    unit.mergeImportedCollection(collectionContext.getValueSet("import"));
+
+    String fieldName = fieldContext.getName();
+    String methodName = generator.methodName("merge-" + fieldName
+					     + "-collection");
+
+    String attrName = generator.attributeName(fieldName);
+
+    FormalParameter param = new FormalParameter("collection", collection);
+
+    MethodBody body = new MethodBody();
+    body.addLine(attrName + ".addAll(collection);");
+    JavaMethod method = createMethod(operationContext, methodName, "void", body);
+    method.addFormalParameter(param);
+    method.setDescription("add all elements of a collection to "
+			  + fieldContext.getName() + ".");
+
+    unit.addMethod(method);
+
+    addAttribute(unit, fieldContext, attrName, attrType);
+  }
+
+  //}}}
+  //{{{ public void generateFetchIterator(generator, type, field, operation)
+
+  public void generateFetchIterator(JavaGenerator generator,
+				    PropertyContext typeContext,
+				    PropertyContext fieldContext,
+				    PropertyContext operationContext)
+  {
+    JavaCompilationUnit unit = generator.getCompilationUnit();
+
+    PropertyContext fieldTypeContext
+      = new PropertyContext(fieldContext, "type");
+    String attrType = generator.typeName(fieldTypeContext);
+
+    String fieldName = fieldContext.getName();
+    String methodName = generator.methodName("fetch-" + fieldName
+					     + "-iterator");
+
+    String attrName = generator.attributeName(fieldName);
+
+    MethodBody body = new MethodBody();
+    body.addLine("return " + attrName + ".iterator();");
+    JavaMethod method = createMethod(operationContext, methodName,
+				     "Iterator", body);
+    method.setDescription("retrieve an iterator for " 
+			  + fieldContext.getName() + ".");
+
+    unit.addMethod(method);
+    unit.addImported("java.util.Iterator");
+
+    addAttribute(unit, fieldContext, attrName, attrType);
+  }
+
+  //}}}
   //{{{ public void generateInit(JavaGenerator generator)
 
   public void generateInit(JavaGenerator generator,
@@ -118,7 +252,7 @@ public class Accessor
     String fieldName = fieldContext.getName();
     String collection = fieldTypeContext.getString("interface");
     String methodName
-      = generator.javaMethodName("init-" + fieldName + "-" + collection);
+      = generator.methodName("init-" + fieldName + "-" + collection);
 
     String implementation = fieldTypeContext.getString("implementation");
     PropertyContext implementationContext

@@ -60,4 +60,11 @@ application client-app {
 
     //}}}
   }
+
+  generator C {
+    enabled := true
+    @import "Client.add"
+    @import "Order.add"
+    @import "Article.add"
+  }
 }

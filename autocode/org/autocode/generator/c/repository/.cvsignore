@@ -2,7 +2,7 @@ Makefile.in
 Makefile
 classjava.stamp
 *.class
-CompilationUnit.java
+CCompilationUnit.java
 Field.java
 Formal.java
 FunctionBody.java

@@ -15,27 +15,42 @@ application c-repository {
       }
     }
 
-    type CompilationUnit {
-      field include { operation += { init } }
-      field struct { operation += { init } }
-      field macro { operation += { init } }
-      field function { operation += { init } }
+    type C-CompilationUnit {
+      import += "org.autocode.generator.repository.CompilationUnit"
+      field header-include {
+        operation := { init, add, merge-collection, fetch-iterator }
+      }
+      field source-include {
+        operation := { init, add, merge-collection, fetch-iterator}
+      }
+      field struct { operation := { init, fetch-iterator } }
+      field macro { operation := { init, fetch-iterator } }
+      field function { operation := { init, fetch-iterator } }
     } 
 
+    type Include {
+      field system {
+        operation := { is, set }
+        operation set {
+          access := private
+        }
+      }
+    }
+
     type Struct {
-      field field { operation += { init } }
+      field field { operation := { init, fetch-iterator } }
     }
 
     type Macro {
-      field argument { operation += { init } }
+      field argument { operation := { init, fetch-iterator } }
     }
 
     type Function {
-      field formal { operation += { init } }
+      field formal { operation := { init, fetch-iterator } }
     }
 
     type FunctionBody {
-      field line { operation += { init } }
+      field line { operation := { init, fetch-iterator } }
     }
   }
 }

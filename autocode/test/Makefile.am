@@ -32,9 +32,11 @@ CLEANFILES = $(foreach f, ${MODULES}, $f.sh $f.sh.log)
 
 mycheck:
 	mkdir -p ${top_builddir}/test/org/autocode/test
+	mkdir -p ${top_builddir}/test/c
 	${top_srcdir}/autocode-test \
 		--application client-app \
 		--property "java->rootdir:=\"${top_builddir}/test\"" \
+		--property "C->rootdir:=\"${top_builddir}/test/c\"" \
 		client-app.add
 	javadoc \
 		-classpath ${top_builddir} \
