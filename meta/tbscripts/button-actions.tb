@@ -682,11 +682,16 @@ in
 	rec-msg(cleared-all) .
 	ReturnSuccess(EditorId, Stack)		
       +
-        rec-msg(save-all, Stack?, EditorId?) .
-	snd-msg(save-all) .
-	rec-msg(saved) .
-        snd-note(ui-status(errorf("Saving done"))) .
-	ReturnSuccess(EditorId, Stack)		
+        rec-msg(save-termstore, Stack?, EditorId?) .
+	snd-msg(save-termstore) .
+	( 
+	  rec-msg(saved) .
+	  ReturnSuccess(EditorId, Stack)		
+	+
+	  rec-msg(not-saved(ErrorMessage?)) .
+	  snd-note(ui-status(errorf("Saving failed: %s", [ErrorMessage]))) .
+	  ReturnFailed(EditorId, Stack)
+        )
       +
         rec-msg(clear-history-list, Stack?, EditorId?) .
 	snd-msg(clear-history) .
