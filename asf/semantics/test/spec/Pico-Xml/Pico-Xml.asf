@@ -1,6 +1,6 @@
 equations
 
-[] xml(Program, 0) = <Program2,Int>
+[] <Program2,Int> := xml(Program, 0)
    ===>
    xml(Program) = Program2
 

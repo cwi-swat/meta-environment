@@ -14,7 +14,7 @@ imports Bags[Elem]
       Rel[[Elem]] "union" Rel[[Elem]]  -> Rel[[Elem]]
 
 hiddens
-  imports asf/syntax/Comments
+  imports basic/Whitespace
 
   variables
      "BagEE" [0-9\']*            -> Bag[[Elem # Elem]]

@@ -34,7 +34,7 @@ exports
 
 hiddens
   context-free syntax
-    gt "(" PICO-NAT "," PICO-NAT ")" -> PICO-BOOL
+    "gt" "(" PICO-NAT "," PICO-NAT ")" -> PICO-BOOL
     PICO-NAT "-//" PICO-NAT          -> PICO-NAT
     PICO-NAT ">-" PICO-NAT           -> PICO-NAT
 

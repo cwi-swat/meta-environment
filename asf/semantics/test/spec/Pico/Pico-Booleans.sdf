@@ -3,7 +3,7 @@ module Pico-Booleans
 imports Layout
 
 exports
-  sorts PICO-BOOL
+  sorts PICO-BOOL PICO-BOOL-CON
   context-free syntax
     "true"  -> PICO-BOOL-CON
     "false" -> PICO-BOOL-CON

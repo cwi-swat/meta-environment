@@ -1,7 +1,7 @@
 equations
 
-  [T2a] Tenv = [Pair*],
-        Pair* = Pair*1, (Id:Type), Pair*2
+  [T2a] [Pair*] := Tenv,
+        Pair*1, (Id:Type), Pair*2 := Pair*
         ================================
         lookup (Id, Tenv) = Type
 

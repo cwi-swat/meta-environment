@@ -17,7 +17,7 @@ context-free syntax
    "Bag[[Elem]]" [0-9\']*           -> Bag[[Elem]]
 
 hiddens
-  imports asf/syntax/Comments
+  imports basic/Whitespace
 
   variables
 

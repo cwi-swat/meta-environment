@@ -4,6 +4,6 @@ equations
 
 [b] collect(N,N*) = N*;N
 
-[c] collect(T+,N*;N) = N*2
+[c] N*2 := collect(T+,N*;N)
     ===>
     collect(N(T+),N*) = N*2

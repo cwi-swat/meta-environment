@@ -6,8 +6,8 @@ bug () =
 
 [bug-2]
 
-#Id+1 = AAP ,
-#Ids  = #Id+1 #Id*2 ,
-#Id*' = bug ( #Id*2 ) 
+#Id+1 := AAP ,
+#Id+1 #Id*2  := #Ids ,
+#Id*' := bug ( #Id*2 ) 
 ====>
 bug ( #Ids ) = #Id*'

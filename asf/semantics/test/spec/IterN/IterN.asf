@@ -1,11 +1,11 @@
 equations
 
-  [1] lp4+ = lp1; lp2; lp3; lp4; lp*
+  [1] lp1; lp2; lp3; lp4; lp* := lp4+
       ====>
       insert(lp, lp4+) = lp; lp1; lp2; lp3; lp4; lp*
 
-  [2] lp4+1 = lp11; lp21; lp31; lp41; lp*1,
-      lp4+2 = lp12; lp22; lp32; lp42; lp*2
+  [2] lp11; lp21; lp31; lp41; lp*1 := lp4+1,
+      lp12; lp22; lp32; lp42; lp*2 := lp4+2
       ====>
       concat(lp4+1, lp4+2) = 
         lp11; lp21; lp31; lp41; lp*1; lp12; lp22; lp32; lp42; lp*2
