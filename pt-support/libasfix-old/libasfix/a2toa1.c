@@ -52,6 +52,8 @@ ATerm trm_yield(ATerm );
 
 /* Definition of AsFix2 patterns and their initialization */
 
+AFun afun_asfix2_appl;
+
 ATerm asfix2_empty_iter = NULL;
 ATerm asfix2_empty_iter_star = NULL;
 ATerm asfix2_singleton_iter = NULL;
@@ -179,6 +181,9 @@ void init_asfix2_patterns()
   ATprotect(&asfix1_iter_plus_pattern);
   ATprotect(&asfix1_itersep_star_pattern);
   ATprotect(&asfix1_itersep_plus_pattern);
+
+  afun_asfix2_appl = ATmakeAFun("appl", 2, ATfalse);
+  ATprotectAFun(afun_asfix2_appl);
 
   asfix2_empty_iter =
     ATparse("appl(prod([],cf(iter(sort(<term>))),no-attrs),[])");
@@ -516,51 +521,39 @@ ATermList trans_args(ATermList tl, ATbool interpret_cons)
 
 /*  ATermList trans_list(ATermList l)  */
 
-ATermList trans_list(ATermList l, ATbool interpret_cons)
+ATermList trans_list(ATerm t, ATbool interpret_cons, ATermList tail)
 {
-  ATerm         asfix1_iter, iter, sort, arg[3], t = NULL;
+  ATerm         asfix1_iter, iter, sort, arg[3];
   ATermList     args, list;
-  int           len = ATgetLength(l);
-
-  switch(len) {
-    case 0:
-      return ATempty;
-      break;
-    case 1:
-      t = ATgetFirst(l);
-      break;
-    default:
-      ATerror("trans_list: unexpected list length %d, term %t\n", len, l);
-      break;
-  }
 
   /* Empty list */
   if(ATmatchTerm(t, asfix2_empty_iter, NULL)
      ||
      ATmatchTerm(t, asfix2_empty_iter_star, NULL)) {
-    return ATempty;
+    return tail;;
   }
   /* Singleton */
   else if(ATmatchTerm(t, asfix2_singleton_iter, NULL, NULL, &list)) {
     arg[0] = ATgetFirst(list);
-    return ATmakeList1(internal_trans(arg[0], interpret_cons));
+    return ATinsert(tail, internal_trans(arg[0], interpret_cons));
   }
   else if(ATmatchTerm(t, asfix2_singleton_iter_star, NULL, NULL, &list)) {
     arg[0] = ATgetFirst(list);
-    return trans_list(ATmakeList1(arg[0]), interpret_cons);
+    /*return ATinsert(tail, internal_trans(arg[0], interpret_cons));*/
+    return trans_list(arg[0], interpret_cons, tail);
   }
   /* We are dealing with a list variable */
   else if (ATmatchTerm(t, asfix2_appl_var_pattern,
                        NULL, &iter, NULL, &args)) {
     if (ATmatchTerm(iter, asfix2_iter_pattern, &sort)) {
       asfix1_iter = ATmakeTerm(asfix1_iter_plus_pattern,sort);
-      return ATmakeList1(ATmakeTerm(pattern_asfix_varterm,
-                                    trm_yield((ATerm) args), asfix1_iter));
+      return ATinsert(tail, ATmakeTerm(pattern_asfix_varterm,
+				       trm_yield((ATerm) args), asfix1_iter));
     }
     else if (ATmatchTerm(iter, asfix2_iter_star_pattern, &sort)) {
       asfix1_iter = ATmakeTerm(asfix1_iter_star_pattern,sort);
-      return ATmakeList1(ATmakeTerm(pattern_asfix_varterm,
-                                    trm_yield((ATerm) args), asfix1_iter));
+      return ATinsert(tail, ATmakeTerm(pattern_asfix_varterm,
+				       trm_yield((ATerm) args), asfix1_iter));
     }
     else {
       ATerror("trans_list: funny iter: %t\n\n", iter);
@@ -578,9 +571,16 @@ ATermList trans_list(ATermList l, ATbool interpret_cons)
     arg[0] = ATgetFirst(list);
     arg[1] = ATelementAt(list,1);
     arg[2] = ATelementAt(list,2);
-    return ATconcat(trans_list(ATmakeList1(arg[0]), interpret_cons),
-                    ATconcat(ATmakeList1(internal_trans(arg[1], interpret_cons)),
-                             trans_list(ATmakeList1(arg[2]), interpret_cons)));
+
+    tail = trans_list(arg[2], interpret_cons, tail);
+    tail = ATinsert(tail, internal_trans(arg[1], interpret_cons));
+    tail = trans_list(arg[0], interpret_cons, tail);
+
+    return tail;
+    /*return ATconcat(
+       trans_list(arg[0], interpret_cons),
+       ATinsert(trans_list(arg[2], interpret_cons, tail), internal_trans(arg[1], interpret_cons)));
+    */
   }
   else {
     ATerror("trans_list: funny term: %t\n\n", t);
@@ -962,23 +962,36 @@ char *trm_yield_aux_buf(int Mode, char c)
 
 void trm_yield_aux(ATerm t)
 {
-  ATermList args;
+  ATermList l;
+  ATermAppl appl;
+  AFun afun;
 
-  if (ATisEmpty((ATermList) t))
-    return;
-  else if (ATgetType(t) == AT_INT) {
-    trm_yield_aux_buf(TYA_ADD, ATgetInt((ATermInt) t));
-  }
-  else if (ATmatchTerm(t, asfix2_appl_term_list_pattern, NULL, &args)) {
-    trm_yield_aux((ATerm) args);
-  }
-  else if (ATmatchTerm(t, asfix2_list_pattern, &args)) {
-    trm_yield_aux(ATgetFirst(args));
-    trm_yield_aux((ATerm) ATgetNext(args));
-  }
-  else {
-    ATerror("trm_yield_aux: strange term: %t\n", t);
-  }
+  switch (ATgetType(t)) {
+    case AT_LIST:
+      l = (ATermList)t;
+      while (!ATisEmpty(l)) {
+	trm_yield_aux(ATgetFirst(l));
+	l = ATgetNext(l);
+      }
+      break;
+
+    case AT_INT:
+      trm_yield_aux_buf(TYA_ADD, ATgetInt((ATermInt) t));
+      break;
+
+    case AT_APPL:
+      appl = (ATermAppl)t;
+      afun = ATgetAFun(appl);
+      if (afun == afun_asfix2_appl) {
+	trm_yield_aux(ATgetArgument(appl, 1));
+      } else {
+	ATerror("trm_yield_aux: strange term: %t\n", t);
+      }
+      break;
+
+    default:
+      ATerror("trm_yield_aux: strange term: %t\n", t);
+  } 
 }
 
 /*  ATerm trm_yield(ATerm t)  */
@@ -1122,7 +1135,7 @@ ATerm internal_trans(ATerm t, ATbool interpret_cons)
     ATerm iter = ATmakeTerm(asfix1_iter_pattern,sort);
     return  ATmakeTerm(pattern_asfix_list,
                        iter, pattern_asfix_ews,
-                       trans_list(ATmakeList1(t), interpret_cons));
+                       trans_list(t, interpret_cons, ATempty));
   }
 
   /* Default: application */
