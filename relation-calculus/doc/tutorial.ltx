@@ -166,19 +166,18 @@ new variables $V_1 ,..., V_n$.
 A test is a boolean-valued expression. If the evaluation yields {\tt
 true} this indicates that the current combination of generated values is
 still as desired and execution continues with subsequent generators.
-otherwise.
 If the evaluation yields {\tt false} this indicates that the current
 combination of values is undesired, and that another combination
 should be tried.
 
 \paragraph{Assignment}
-Assignment assigns a value to one or more variables and comes in two forms:
+Assignments assign a value to one or more variables and also come in two flavours:
 
 \begin{itemize}
 
 \item {\tt $V$ <- $E$}: assigns the value of expression $E$ to the new variable $V$.
 
-\item {\tt <$V_1$, ..., $V_n$> : $E$}: assigns the elements of the $n$-tuple
+\item {\tt <$V_1$, ..., $V_n$> <- $E$}: assigns the elements of the $n$-tuple
 resulting from the evaluation of expression $E$ to the new variables $V_1 ,..., V_n$.
 
 \end{itemize}
@@ -192,7 +191,7 @@ resulting from the evaluation of expression $E$ to the new variables $V_1 ,..., 
 
 \paragraph{Example 2}
 
-{\tt \{X | X :\{1, 2, 3\}, Y :\{2, 3, 4\} | X >= Y\}} yields the relation
+{\tt \{<X, Y> | X :\{1, 2, 3\}, Y :\{2, 3, 4\}, X >= Y\}} yields the relation
 {\tt \{<2, 2>, <3, 2>, <3, 3>\}}.
 
 \paragraph{Example 3}
@@ -202,42 +201,61 @@ the given relation: {\tt \{<10,1>, <20,2>\}}.
 \section{Declarations}
 
 \paragraph{Variable declarations}
-A variable declaration has the form {\tt T V = E}, where {\tt T} is a type,
-{\tt V} is a variable name, and {\tt E} is an expression that should have type
-{\tt T}. The effect is that the value of expression {\tt E} is assigned to
-{\tt V} and can be used later on as {\tt V}'s values. Double declarations are
+A variable declaration has the form 
+\begin{quote}
+{\tt $T$ $V$ = $E$}
+\end{quote}
+where $T$ is a type,
+$V$ is a variable name, and $T$ is an expression that should have type
+$T$. The effect is that the value of expression $E$ is assigned to
+$V$ and can be used later on as $V$'s value. Double declarations are
 not allowed.
 
 As a convenience, also declarations without an initialization expression are
-permitted and have the form {\tt T V}. They only introduce the variable {\tt
-V}.
+permitted and have the form 
+\begin{quote}
+{\tt $T$ $V$} 
+\end{quote}
+and only introduce the variable $V$.
 
+\paragraph{Example X} {\tt int max = 100} declares the integer variable
+{\tt max} with value {\tt 100}.
+
+\paragraph{Example X} {\tt rel[str,int] day = \{<"mon", 1>, <"tue", 2>, <"wed",
+    3>, <"thu", 4>, <"fri", 5>, <"sat",6>, <"sun",7>\}}
+declares the variable {\tt day}, a relation that maps strings to integers.
+
+ 
 \paragraph{Function declarations}
 A function declaration has the form
-\begin{verbatim}
-T F(T1 V1, ..., Tn Vn) = E
-\end{verbatim}
-Here {\tt T} is the result type of the function and this should be equal to
-the type of the associated expression {\tt E}.  Each {\tt T}$_i$\ {\tt V}$_i$
-represents a formal parameter of the function. The formal parameters may occur
-in {\tt E} and get their value when {\tt F} is invoked from another
-expression.
+\begin{quote}
+{\tt $T$ $F$($T_1 V_1$, ..., $T_n V_n$) = $E$}
+\end{quote}
+Here $T$ is the result type of the function and this should be equal to the
+type of the associated expression $E$.  Each $T_i$ $V_i$ represents a typed
+formal parameter of the function. The formal parameters may occur in $E$ and
+get their value when $F$ is invoked from another expression.
 
 \paragraph{Where}
 Local variables can be introduced as follows:
-\begin{verbatim}
-E where T1 V1 = E1, ..., Tn Vn = En endwhere
-\end{verbatim}
-First the local variables {\tt V}$_i$ are bound to their respective values
-{\tt E}$_i$, and then the value of expression {\tt E} is yielded.
+\begin{quote}
+{\tt $E$ where $T_1$ $V_1$ = $E_1$, ..., $T_n$ $V_n$ = $E_n$ endwhere}
+\end{quote}
+First the local variables $V_i$ are bound to their respective values
+$E_i$, and then the value of expression $E$ is yielded.
 
 \paragraph{Assert}
 An assert statement may occur everywhere where a declaration is allowed.  It
-has the form {\tt assert M: E}, where {\tt M} is a string that serves as a
-label for this assertion, and {\tt E} is a boolean-value expression.  During
+has the form 
+\begin{quote}
+{\tt assert $L$: $E$}
+\end{quote}
+ where $L$ is a string that serves as a
+label for this assertion, and $E$ is a boolean-value expression.  During
 execution, a list of true and false assertions is maintained.  When the script
-is executed as \emph{testsuite} (see Section~\ref{running}) a summary of this
-information is shown to the user.
+is executed as a \emph{testsuite} (see Section~\ref{running}) a summary of this
+information is shown to the user. When the script is executed in the standard
+fashion, the assert statement has no affect.
 
 \paragraph{Solvers}
 It is also possible to define mutually recursive variables by
@@ -255,7 +273,6 @@ Here, the expressions {\tt E}$_i$ may refer to any of the variables {\tt
   value of one of the variables was changed. This is typically used for
   solving a set of dataflow equations. \footnote{Probably, the syntax of this
   construct should more emphasize that it is a set of equations.}
-
 
 \section{Built-in operators}
 
@@ -607,7 +624,7 @@ rel[T1,T2] rangeX (rel[T1,T2] R, Bag[T2] B) =
 
 \paragraph{Carrier Exclusion: {\tt carrierX}}
 \begin{verbatim}
-rel[T,T] carX (rel[T,T] R, Bag[T] B) = 
+rel[T,T] carrierX (rel[T,T] R, Bag[T] B) = 
    { <X, Y> | <X, Y> : R, X notin B or Y notin B }
 \end{verbatim}
 
