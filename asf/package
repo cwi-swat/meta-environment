@@ -19,7 +19,7 @@ requires
 
 asc-support 2.1
 
-sglr 3.12.1
+sglr 3.13
 
 asf-support 1.4
 
