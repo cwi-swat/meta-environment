@@ -82,7 +82,7 @@ void version(char *prg)
 
 void abort_handler(int signal)
 {
-  RWsetError("aborted by user", (ATerm) ATempty);
+  RWsetError("aborted by user", PT_makeTreeLit(""));
 }
 
 /*}}}  */

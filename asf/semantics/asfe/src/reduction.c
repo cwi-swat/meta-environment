@@ -61,10 +61,12 @@ static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra);
 static char* term_prefix(PT_Tree trm)
 {
   static const char abbreviated[] = " ... (etc.)";
-  char *tmp = PT_yieldTree(trm);
+  char *tmp;
+
+  tmp = PT_yieldTree(trm);
 
   if (strlen(tmp) > TERM_PREFIX_LENGTH - strlen(abbreviated)) {
-    sprintf(tmp+TERM_PREFIX_LENGTH,abbreviated);
+    sprintf(tmp+TERM_PREFIX_LENGTH-strlen(abbreviated),abbreviated);
   }
 
   return tmp;
@@ -402,7 +404,7 @@ static PT_Tree rewriteTraversalAppl(PT_Tree trm, ATerm env, int depth,
 {
   PT_Tree reduct = FAIL;
   Traversal traversal;
-ATsetChecking(ATtrue);
+
   assert(extra == NULL && "Nested traversal should have been reduced.");
 
   traversal = createTraversalPattern(trm);
@@ -560,7 +562,7 @@ static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra)
   if (depth > MAX_DEPTH) {
     char tmp[256];
     sprintf(tmp, "maximum stack depth (%d) exceeded.", MAX_DEPTH);
-    RWsetError(tmp, (ATerm) ATempty);
+    RWsetError(tmp, PT_makeTreeLit(""));
     reduct = trm;
   }
 

@@ -26,9 +26,9 @@ void RWclearError()
 }
 
 /*}}}  */
-/*{{{  void RWsetError(const char *message, ATerm subject) */
+/*{{{  void RWsetError(const char *message, PT_Tree subject) */
 
-void RWsetError(const char *message, ATerm subject)
+void RWsetError(const char *message, PT_Tree subject)
 {
   ASF_OptLayout e = ASF_makeOptLayoutAbsent();
 
