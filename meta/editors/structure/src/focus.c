@@ -393,18 +393,20 @@ moveFocusRight(ATerm editor)
   subTree = getSubTree(tree, path);
   if (subTree) {
     newPath = goRight(path);
-    subTree = getSubTree(tree, newPath);
-    if (subTree) {
-      newFocus = createFocus(tree, newPath);
-      editor = setCurrentFocus(editor, newFocus);
-      if (asfix_is_appl(subTree) ||
-	  asfix_is_list(subTree) ||
-	  asfix_is_lex(subTree) || asfix_is_var(subTree)) {
-	return editor;
-      }
-      return moveFocusRight(editor);
-    }
-  }
+		if(!ATisEqual(path, newPath)) {
+			subTree = getSubTree(tree, newPath);
+			if (subTree) {
+				newFocus = createFocus(tree, newPath);
+				editor = setCurrentFocus(editor, newFocus);
+				if (asfix_is_appl(subTree) ||
+						asfix_is_list(subTree) ||
+						asfix_is_lex(subTree) || asfix_is_var(subTree)) {
+					return editor;
+				}
+				return moveFocusRight(editor);
+			}
+		}
+	}
   return moveFocusUp(editor);
 }
 
@@ -418,21 +420,23 @@ moveFocusDown(ATerm editor)
   ATerm path = getFocusPath(curFocus), newPath;
   ATerm tree = getTreeInEditor(editor), subTree;
 
-  subTree = getSubTree(tree, path);
-  if (subTree) {
-    if (asfix_is_appl(subTree) || asfix_is_list(subTree)) {
+	subTree = getSubTree(tree, path);
+	
+	if (subTree) {
+    if (asfix_is_appl(subTree) || asfix_is_list(subTree) || isRootPath(path)) {
       newPath = goDown(path);
       subTree = getSubTree(tree, newPath);
       newFocus = createFocus(tree, newPath);
       editor = setCurrentFocus(editor, newFocus);
       if (asfix_is_appl(subTree) ||
-	  asfix_is_list(subTree) ||
-	  asfix_is_lex(subTree) || asfix_is_var(subTree)) {
-	return editor;
+					asfix_is_list(subTree) ||
+					asfix_is_lex(subTree) || asfix_is_var(subTree)) {
+				return editor;
       }
       return moveFocusRight(editor);
     }
-  }
+  } 
+
   return editor;
 }
 
@@ -454,9 +458,9 @@ moveFocusLeft(ATerm editor)
       newFocus = createFocus(tree, newPath);
       editor = setCurrentFocus(editor, newFocus);
       if (asfix_is_appl(subTree) ||
-	  asfix_is_list(subTree) ||
-	  asfix_is_lex(subTree) || asfix_is_var(subTree)) {
-	return editor;
+					asfix_is_list(subTree) ||
+					asfix_is_lex(subTree) || asfix_is_var(subTree)) {
+				return editor;
       }
       return moveFocusLeft(editor);
     }

@@ -85,7 +85,9 @@ goRight(ATerm path)
 
   if (isRootPath(path)) {
     return path;
-  }
+  } else if (ATisEqual(path, makeRightWsPath())) {
+		return newPath();
+	}
   else {
     steps = getSteps(path);
     idx = ATgetLength(steps) - 1;
@@ -108,7 +110,9 @@ goLeft(ATerm path)
 
   if (isRootPath(path)) {
     return path;
-  }
+  } else if (ATisEqual(path, makeLeftWsPath())) {
+		return newPath();
+	}
   else {
     steps = getSteps(path);
 
@@ -134,6 +138,10 @@ goDown(ATerm path)
 {
   ATermList steps;
   ATerm newStep;
+
+	if(isRootPath(path)) {
+		return makeAsFixTermPath();
+	}
 
   steps = getSteps(path);
   newStep = (ATerm) ATmakeInt(0);
