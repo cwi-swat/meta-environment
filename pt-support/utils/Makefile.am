@@ -2,6 +2,8 @@
 
 SUBDIRS = implodePT 
 
+AM_CFLAGS = -Wall -Werror -g -O2
+
 EXTRA_DIST = \
 	unparser.idef \
 	position-annotator.idef \

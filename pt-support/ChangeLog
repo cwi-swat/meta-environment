@@ -1,5 +1,9 @@
 $Id$
 
+Mon Mar 22 13:12:24 CET 2004 <{jong,kooiker}@cwi.nl>
+ * libmept/MEPT.adt: "upgrade-adt"'ed and API regenerated
+ * *.[ch]: updated wrt new API
+
 Fri Mar 19 08:34:16 CET 2004 <jong@cwi.nl>
  * libptmept:
    - API regenerated

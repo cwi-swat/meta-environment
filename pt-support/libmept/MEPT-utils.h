@@ -1,6 +1,4 @@
-/*
-   $Id$
-*/         
+/* $Id$ */         
 
 #ifndef _ME_PT_H
 #define _ME_PT_H
@@ -52,15 +50,9 @@ ATbool PT_prodHasSTARTAsRhs(PT_Production prod);
 ATbool PT_isOptLayoutSymbol(PT_Symbol arg);
 PT_Symbol PT_makeOptLayoutSymbol();
 
-PT_Args PT_concatArgs(PT_Args args1, PT_Args args2);
-PT_Args PT_appendArgs(PT_Args args, PT_Tree arg);
-PT_Args PT_reverseArgs(PT_Args args);
-int PT_getArgsLength(PT_Args args);
 PT_Tree PT_getArgsArgumentAt(PT_Args args, int arg_nr);
 PT_Args PT_setArgsArgumentAt(PT_Args args, PT_Tree arg, int arg_nr);
-PT_Args PT_sliceArgs(PT_Args args, int start, int end);
 PT_Args PT_makeArgsSingle(PT_Tree arg);
-#define PT_insertArgs(args, arg) (PT_makeArgsList(arg, args))
 
 char *PT_yieldAny(ATerm t);
 char *PT_yieldParseTree(PT_ParseTree tree);
@@ -100,11 +92,6 @@ ATerm PT_implodeParseTree(PT_ParseTree tree,
 typedef void* PT_TreeVisitorData;
 typedef PT_Tree (*PT_TreeVisitor)(PT_Tree tree, PT_TreeVisitorData data);
 PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor,                                           PT_TreeVisitorData data);
-
-PT_Symbols PT_appendSymbols(PT_Symbols symbols, PT_Symbol symbol);
-int PT_getSymbolsLength(PT_Symbols symbols);
-PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols symbols, int index);
-PT_Symbols PT_reverseSymbols(PT_Symbols symbols);
 
 typedef void* PT_SymbolVisitorData;
 typedef PT_Symbol (*PT_SymbolVisitor)(PT_Symbol symbol,
@@ -178,7 +165,6 @@ ATbool PT_hasProductionLexicalConstructorAttr(PT_Production prod);
 ATbool PT_hasProductionConstructorAttr(PT_Production prod); 
 ATbool PT_hasProductionTraversalAttribute(PT_Production prod); 
 
-PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2);
 PT_Symbol makeSymbolAllChars();
 PT_Tree PT_makeTreeFlatLexical(PT_Args charList);
 PT_Tree PT_makeTreeFlatLexicalFromString(const char *str);
@@ -191,8 +177,6 @@ ATbool PT_isTreeBracket(PT_Tree tree);
 PT_Tree PT_getTreeBracketTree(PT_Tree tree);
 
 PT_Attrs PT_reverseAttrs(PT_Attrs attrs);
-
-PT_CharRanges PT_concatCharRanges(PT_CharRanges ranges1, PT_CharRanges ranges2);
 
 PT_Tree PT_renameInTree(PT_Tree tree, PT_Symbol formalParam, 
                         PT_Symbol actualParam);

@@ -1,6 +1,6 @@
-/*
-    $Id$
-*/
+/* $Id$ */
+
+/*{{{  includes */
 
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +8,13 @@
 
 #include "MEPT-utils.h"
 
+/*}}}  */
+
+/*{{{  defines */
+
 #define ANNO_LENGTH "length"  
+
+/*}}}  */
 
 /* Productions */
 /*{{{  ATbool PT_prodHasLitAsRhs(PT_Production prod) */
@@ -299,45 +305,10 @@ PT_Symbol PT_makeOptLayoutSymbol()
 
 /*}}}  */
 
-/*{{{  PT_Symbols PT_appendSymbols(PT_Symbols symbols, PT_Symbol symbol)  */
-
-PT_Symbols PT_appendSymbols(PT_Symbols symbols, PT_Symbol symbol)
-{
-  return PT_SymbolsFromTerm(
-           (ATerm)ATappend((ATermList)PT_SymbolsToTerm(symbols),
-                           PT_SymbolToTerm(symbol)));
-
-}   
-
-/*}}}  */
-/*{{{  int PT_getSymbolsLength(PT_Symbols symbols)  */
-
-int PT_getSymbolsLength(PT_Symbols symbols) 
-{
-  return ATgetLength(PT_SymbolsToTerm(symbols));
-}
-
-/*}}}  */
-/*{{{  PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols symbols, int index) */
-
-PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols symbols, int index)
-{
-    return PT_SymbolFromTerm(
-	 ATelementAt((ATermList)PT_SymbolsToTerm(symbols), index));
-}
-
-/*}}}  */
-/*{{{  PT_Symbols PT_reverseSymbols(PT_Symbols symbols) */
-
-PT_Symbols PT_reverseSymbols(PT_Symbols symbols)
-{
-  return (PT_Symbols) ATreverse((ATermList) symbols);
-}
-
-/*}}}  */
 /*{{{  PT_Symbols PT_foreachSymbolInSymbols(symbols, visitor, data)  */
 
-PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols, PT_SymbolVisitor visitor,
+PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols,
+				     PT_SymbolVisitor visitor,
                                      PT_SymbolVisitorData data)
 {
   ATermList store;
@@ -360,7 +331,7 @@ PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols, PT_SymbolVisitor visito
   /* create new list */
   for (; !ATisEmpty(store); store = ATgetNext(store)) {
     PT_Symbol newSymbol = PT_SymbolFromTerm(ATgetFirst(store));
-    newSymbols = PT_makeSymbolsList(newSymbol,newSymbols);
+    newSymbols = PT_makeSymbolsMany(newSymbol, newSymbols);
   }
 
   return newSymbols;
@@ -372,21 +343,12 @@ PT_Symbols PT_foreachSymbolInSymbols(PT_Symbols symbols, PT_SymbolVisitor visito
 
 PT_Symbol makeSymbolAllChars()
 {
-  PT_CharRanges ranges = PT_makeCharRangesList(
-                           PT_makeCharRangeRange(0,255),
-                           PT_makeCharRangesEmpty());
+  PT_CharRanges ranges
+    = PT_makeCharRangesSingle(PT_makeCharRangeRange(0, 255));
+
   return PT_makeSymbolIterStar(
            PT_makeSymbolCharClass(ranges));
 }  
-
-/*}}}  */
-/*{{{  PT_CharRanges PT_concatCharRanges(PT_CharRanges ranges1, PT_CharRanges ranges2) */
-
-PT_CharRanges PT_concatCharRanges(PT_CharRanges ranges1, PT_CharRanges ranges2)
-{
-  return PT_CharRangesFromTerm((ATerm)ATconcat((ATermList) ranges1,
-                                               (ATermList) ranges2));
-}
 
 /*}}}  */
 
@@ -590,7 +552,7 @@ PT_Tree PT_makeTreeFlatLexicalFromString(const char *str)
   int i;
 
   for (i = strlen(str) - 1; i >= 0; i--) {
-    args = PT_makeArgsList(PT_makeTreeChar((int) str[i]), args);
+    args = PT_makeArgsMany(PT_makeTreeChar((int) str[i]), args);
   }
 
   return PT_makeTreeFlatLexical(args);
@@ -621,7 +583,7 @@ PT_Args PT_removeArgsAllLayoutAndAnnotations(PT_Args args)
   PT_Args new = PT_makeArgsEmpty();
 
   for (; !PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
-    new = PT_makeArgsList(PT_removeTreeAllLayoutAndAnnotations(
+    new = PT_makeArgsMany(PT_removeTreeAllLayoutAndAnnotations(
 		       PT_getArgsHead(args)),
 		       new);
   }
@@ -654,70 +616,6 @@ PT_Tree PT_removeTreeAllLayoutAndAnnotations(PT_Tree tree)
 /*}}}  */
 
 /* Args */
-/*{{{  PT_Args PT_concatArgs(PT_Args args1, PT_Args args2) */
-
-PT_Args PT_concatArgs(PT_Args args1, PT_Args args2)
-{
-  return PT_ArgsFromTerm((ATerm)ATconcat((ATermList)PT_ArgsToTerm(args1),
-					 (ATermList)PT_ArgsToTerm(args2)));
-}
-
-/*}}}  */
-/*{{{  PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2) */
-
-PT_Symbols PT_concatSymbols(PT_Symbols symbols1, PT_Symbols symbols2)
-{
-  return PT_SymbolsFromTerm(
-           (ATerm)ATconcat((ATermList)PT_SymbolsToTerm(symbols1),
-                           (ATermList)PT_SymbolsToTerm(symbols2)));
-}
-
-/*}}}  */
-/*{{{  PT_Args PT_sliceArgs(PT_Args args, int start, int end) */
-
-PT_Args PT_sliceArgs(PT_Args args, int start, int end)
-{
-  return PT_ArgsFromTerm((ATerm)ATgetSlice((ATermList)PT_ArgsToTerm(args),
-					   start, end));
-}
-
-/*}}}  */
-/*{{{  PT_Args PT_appendArgs(PT_Args args, PT_Tree arg) */
-
-PT_Args PT_appendArgs(PT_Args args, PT_Tree arg)
-{
-  return PT_ArgsFromTerm((ATerm)ATappend(
-                                      (ATermList)PT_ArgsToTerm(args),
-                                      (ATerm)PT_TreeToTerm(arg)));
-}
-
-/*}}}  */
-/*{{{  PT_Args PT_reverseArgs(PT_Args args) */
-
-PT_Args PT_reverseArgs(PT_Args args)
-{
-  return PT_ArgsFromTerm(
-           (ATerm)ATreverse(
-                    (ATermList)PT_ArgsToTerm(args)));
-}
-
-/*}}}  */
-/*{{{  PT_Args PT_makeArgsSingle(PT_Tree arg) */
-
-PT_Args PT_makeArgsSingle(PT_Tree arg)
-{
-  return PT_makeArgsList(arg, PT_makeArgsEmpty());
-}
-
-/*}}}  */
-/*{{{  int PT_getArgsLength(PT_Args args) */
-
-int PT_getArgsLength(PT_Args args)
-{
-   return ATgetLength((ATermList)PT_ArgsToTerm(args));
-}
-
-/*}}}  */ 
 /*{{{  PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor, */
 
 PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor,
@@ -738,7 +636,7 @@ PT_Args PT_foreachTreeInArgs(PT_Args args, PT_TreeVisitor visitor,
   /* create new list */
   for (; !ATisEmpty(store); store = ATgetNext(store)) {
     PT_Tree newTree = PT_TreeFromTerm(ATgetFirst(store));
-    newArgs = PT_makeArgsList(newTree,newArgs);
+    newArgs = PT_makeArgsMany(newTree, newArgs);
   }
 
   return newArgs;
@@ -787,8 +685,7 @@ PT_Tree PT_makeTreeLayoutNonEmpty(PT_Args args)
   PT_Symbol layoutSymbolRhs = PT_makeSymbolCf(
                                 PT_makeSymbolOpt(PT_makeSymbolLayout()));
   PT_Symbol layoutSymbolLhs = PT_makeSymbolCf(PT_makeSymbolLayout());
-  PT_Symbols layoutLhs = PT_makeSymbolsList(layoutSymbolLhs, 
-                                            PT_makeSymbolsEmpty());
+  PT_Symbols layoutLhs = PT_makeSymbolsSingle(layoutSymbolLhs);
   PT_Production optLayoutProd = PT_makeProductionDefault(
                                   layoutLhs,
                                   layoutSymbolRhs,
@@ -805,7 +702,7 @@ PT_Tree PT_makeTreeLayoutFromString(const char *str)
   int i;
 
   for (i = strlen(str) -1; i >= 0; i--) {
-    args = PT_makeArgsList(PT_makeTreeChar((int) str[i]), args);
+    args = PT_makeArgsMany(PT_makeTreeChar((int) str[i]), args);
   }
 
   return PT_makeTreeLayoutNonEmpty(args);
@@ -818,10 +715,10 @@ PT_Tree PT_makeTreeLexToCf(PT_Symbol sym, PT_Tree tree)
 {
   PT_Symbol lexSymbol = PT_makeSymbolLex(sym);
   PT_Symbol cfSymbol = PT_makeSymbolCf(sym);
-  PT_Symbols lhs = PT_makeSymbolsList(lexSymbol, PT_makeSymbolsEmpty());
+  PT_Symbols lhs = PT_makeSymbolsSingle(lexSymbol);
   PT_Attributes noattrs = PT_makeAttributesNoAttrs();
   PT_Production prod = PT_makeProductionDefault(lhs, cfSymbol, noattrs);
-  PT_Args args = PT_makeArgsList(tree, PT_makeArgsEmpty());
+  PT_Args args = PT_makeArgsSingle(tree);
 
   return PT_makeTreeAppl(prod, args);
 }
@@ -960,7 +857,7 @@ static PT_Args annotateAmbArgsWithLength(PT_Args args, int *length)
 
   *length = head_length;
 
-  return PT_makeArgsList(head, tail);
+  return PT_makeArgsMany(head, tail);
 }
 
 /*}}}  */
@@ -985,7 +882,7 @@ static PT_Args annotateArgsWithLength(PT_Args args, int *length)
 
   *length = head_length + tail_length;
 
-  return PT_makeArgsList(head, tail);
+  return PT_makeArgsMany(head, tail);
 }
 
 /*}}}  */
@@ -1257,12 +1154,10 @@ PT_ParseTree PT_makeValidParseTreeFromTree(PT_Tree tree)
 
   prod = PT_getTreeProd(tree);
   rhs = PT_getProductionRhs(prod);
-  lhs = PT_makeSymbolsList(PT_makeOptLayoutSymbol(),
-		  PT_makeSymbolsList(
+  lhs = PT_makeSymbolsMany(PT_makeOptLayoutSymbol(),
+		  PT_makeSymbolsMany(
 			  rhs,
-			  PT_makeSymbolsList(
-				  PT_makeOptLayoutSymbol(),
-				  PT_makeSymbolsEmpty())));
+			  PT_makeSymbolsSingle(PT_makeOptLayoutSymbol())));
 
   return PT_makeParseTreeTree(lhs,
                               PT_makeTreeLayoutEmpty(),
@@ -1284,10 +1179,9 @@ PT_ParseTree PT_makeParseTreeTree(PT_Symbols lhs, PT_Tree wsBefore,
   rhs = PT_makeSymbolSort("<START>");
   prod = PT_makeProductionDefault(lhs, rhs, PT_makeAttributesNoAttrs());
 
-  args = PT_makeArgsList(wsBefore, 
-			 PT_makeArgsList(tree,
-					 PT_makeArgsList(wsAfter,
-							 PT_makeArgsEmpty())));
+  args = PT_makeArgsMany(wsBefore, 
+			 PT_makeArgsMany(tree,
+					 PT_makeArgsSingle(wsAfter)));
 
   top = PT_makeTreeAppl(prod, args);
 

@@ -39,12 +39,12 @@ static char* vappend(char *str, const char* format, va_list ap)
    * that is at least the size needed for this append and then some more.
    */
 
-  count = vsnprintf(str+length,size - length,format,ap);
+  count = vsnprintf(str + length, size - length, format, ap);
 
   if (strlen(str) < count + length) {
     size += (STEP_SIZE + count);
 
-    str = realloc(str,size * sizeof(char));
+    str = realloc(str, size * sizeof(char));
 
     if (str == NULL) {
       ATerror("vappend: unable to allocate memory\n");

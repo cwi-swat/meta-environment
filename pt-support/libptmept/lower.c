@@ -219,7 +219,7 @@ static PT_CharRanges PTPT_lowerCharRanges(PTPT_CharRanges symbols)
        ranges = PTPT_getCharRangeListTail(ranges)) {
     PT_CharRange head =
       PTPT_lowerCharRange(PTPT_getCharRangeListHead(ranges));
-    list = PT_makeCharRangesList(head, list);
+    list = PT_makeCharRangesMany(head, list);
 
     if (!PTPT_hasCharRangeListTail(ranges)) {
       break;
@@ -243,7 +243,7 @@ static PT_Symbols PTPT_lowerSymbols(PTPT_Symbols symbols)
        elems = PTPT_getSymbolListTail(elems)) {
     PT_Symbol head = PTPT_lowerSymbol(PTPT_getSymbolListHead(elems));
 
-    list = PT_makeSymbolsList(head, list);
+    list = PT_makeSymbolsMany(head, list);
 
     if (!PTPT_hasSymbolListTail(elems)) {
       break;
@@ -310,10 +310,8 @@ static PT_Symbol PTPT_lowerSymbol(PTPT_Symbol symbol)
     PT_Symbol lhs = PTPT_lowerSymbol(PTPT_getSymbolLhs(symbol));
     PT_Symbol rhs = PTPT_lowerSymbol(PTPT_getSymbolRhs(symbol));
 
-    result = PT_makeSymbolSeq(PT_makeSymbolsList(lhs,
-						 PT_makeSymbolsList(rhs,
-								    PT_makeSymbolsEmpty
-								    ())));
+    result
+      = PT_makeSymbolSeq(PT_makeSymbolsMany(lhs, PT_makeSymbolsSingle(rhs)));
 
   }
   else if (PTPT_isSymbolOpt(symbol)) {
@@ -564,7 +562,7 @@ static PT_Args PTPT_lowerArgs(PTPT_Args args)
   for (; !PTPT_isTreeListEmpty(trees); trees = PTPT_getTreeListTail(trees)) {
     PT_Tree head = PTPT_lowerTree(PTPT_getTreeListHead(trees));
 
-    list = PT_makeArgsList(head, list);
+    list = PT_makeArgsMany(head, list);
 
     if (!PTPT_hasTreeListTail(trees)) {
       break;

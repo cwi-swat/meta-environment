@@ -4,11 +4,10 @@
 
 static PT_Symbols makeNewLhs(const char *sort)
 {
-  return  PT_makeSymbolsList(PT_makeOptLayoutSymbol(),
-            PT_makeSymbolsList(PT_makeSymbolCf(
-			         PT_makeSymbolSort((char*) sort)), 
-              PT_makeSymbolsList(PT_makeOptLayoutSymbol(),
-                PT_makeSymbolsEmpty())));
+  return  PT_makeSymbolsMany(PT_makeOptLayoutSymbol(),
+            PT_makeSymbolsMany(PT_makeSymbolCf(
+			         PT_makeSymbolSort(sort)), 
+              PT_makeSymbolsSingle(PT_makeOptLayoutSymbol())));
 }
 
 /*}}}  */
@@ -82,19 +81,19 @@ PT_Tree PT_applyFunctionToArgs(const char *function, const char* sort, PT_Args a
     symbolList = PT_appendSymbols(symbolList, bcSymbol);
 
     /* insert opening bracket before symbols and trees */
-    argList = PT_makeArgsList(layoutTree, argList);
-    symbolList = PT_makeSymbolsList(layoutSymbol, symbolList);
+    argList = PT_makeArgsMany(layoutTree, argList);
+    symbolList = PT_makeSymbolsMany(layoutSymbol, symbolList);
 
-    argList = PT_makeArgsList(boTree, argList);
-    symbolList = PT_makeSymbolsList(boSymbol, symbolList);
+    argList = PT_makeArgsMany(boTree, argList);
+    symbolList = PT_makeSymbolsMany(boSymbol, symbolList);
 
-    argList = PT_makeArgsList(layoutTree, argList);
-    symbolList = PT_makeSymbolsList(layoutSymbol, symbolList);
+    argList = PT_makeArgsMany(layoutTree, argList);
+    symbolList = PT_makeSymbolsMany(layoutSymbol, symbolList);
   }
 
   /* insert function literal before symbols and trees */
-  argList = PT_makeArgsList(functionTree, argList);
-  symbolList = PT_makeSymbolsList(functionSymbol, symbolList);
+  argList = PT_makeArgsMany(functionTree, argList);
+  symbolList = PT_makeSymbolsMany(functionSymbol, symbolList);
 
   prod = PT_makeProductionDefault(symbolList, rhs, attributes);
 

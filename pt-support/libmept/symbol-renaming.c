@@ -173,8 +173,7 @@ PT_Tree PT_renameInTree(PT_Tree tree,
 	!(PT_isIterSymbol(rhs) || PT_isIterSepSymbol(rhs))) {
       PT_Production listProd = PT_makeProductionList(newRhs);
       PT_Tree listTree = PT_makeTreeAppl(listProd,
-					 PT_makeArgsList(newTree,
-							 PT_makeArgsEmpty()));
+					 PT_makeArgsSingle(newTree));
       newTree = listTree;
     }
 

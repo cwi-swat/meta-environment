@@ -442,7 +442,7 @@ static PT_Args flattenArgs(PT_Args tl)
 
   newTerm = flattenTerm(PT_getArgsHead(tl), ATfalse);
   if (newTerm) {
-    return PT_makeArgsList(newTerm, flattenArgs(PT_getArgsTail(tl)));
+    return PT_makeArgsMany(newTerm, flattenArgs(PT_getArgsTail(tl)));
   }
   else {
     return flattenArgs(PT_getArgsTail(tl));
@@ -486,7 +486,7 @@ static PT_Args flattenLexicalList(PT_Tree t, PT_Args tail)
   if (!isLexicalListProd(prod)) {
     PT_Tree newTerm = flattenTerm(t, ATtrue);
     if (newTerm) {
-      return PT_makeArgsList(newTerm, tail);
+      return PT_makeArgsMany(newTerm, tail);
     }
     else {
       return tail;
@@ -534,7 +534,7 @@ static PT_Args flattenCharClassList(PT_Tree tree, PT_Args tail)
     if (!isCharClassListProd(prod)) {
       PT_Tree newTerm = flattenTerm(tree, ATtrue);
       if (newTerm) {
-        return PT_makeArgsList(newTerm, tail);
+        return PT_makeArgsMany(newTerm, tail);
       }
       else {
         return tail;
@@ -566,7 +566,7 @@ static PT_Args flattenCharClassList(PT_Tree tree, PT_Args tail)
     return PT_makeArgsEmpty();
   }
   else /*if (ATgetType(t) == AT_INT)*/ {
-    return PT_makeArgsList(makeCharFromInt(tree), tail);
+    return PT_makeArgsMany(makeCharFromInt(tree), tail);
   }
 }
 
@@ -582,7 +582,7 @@ static PT_Args flattenList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
 
   if (PT_isTreeAmb(tree)) {
     PT_Tree amb = flattenTree(tree);
-    return PT_makeArgsList(amb, tail);
+    return PT_makeArgsMany(amb, tail);
   }
 
   if (PT_isTreeAppl(tree)) {
@@ -595,7 +595,7 @@ static PT_Args flattenList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
       newTerm = flattenTerm(tree, sameListSymbol(PT_getProductionRhs(prod),
 			                         listSymbol));
       if (newTerm) {
-	return PT_makeArgsList(newTerm, tail);
+	return PT_makeArgsMany(newTerm, tail);
       }
       else {
 	return tail;
@@ -608,7 +608,7 @@ static PT_Args flattenList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
       PT_Tree newTerm;
       newTerm = flattenTerm(tree, ATfalse);
       if (newTerm) {
-	return PT_makeArgsList(newTerm, tail);
+	return PT_makeArgsMany(newTerm, tail);
       } 
       else {
 	return tail;
@@ -635,7 +635,7 @@ static PT_Args flattenList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
 
       if (PT_isArgsEmpty(args)) {
 	tail = flattenList(rightBranch, listSymbol, tail);
-	tail = PT_makeArgsList(flattenLayout(layoutAfterLeft), tail);
+	tail = PT_makeArgsMany(flattenLayout(layoutAfterLeft), tail);
 	tail = flattenList(leftBranch, listSymbol, tail);
     
 	return tail;
@@ -660,7 +660,7 @@ static PT_Args flattenSepList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
 
   if (PT_isTreeAmb(tree)) {
     PT_Tree amb = flattenTree(tree);
-    return PT_makeArgsList(amb, tail);
+    return PT_makeArgsMany(amb, tail);
   }
   
   if (PT_isTreeAppl(tree)) {
@@ -672,7 +672,7 @@ static PT_Args flattenSepList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
       newTerm = flattenTerm(tree, sameListSymbol(PT_getProductionRhs(prod),
 			                         listSymbol));
       if (newTerm) {
-	return PT_makeArgsList(newTerm, tail);
+	return PT_makeArgsMany(newTerm, tail);
       }
       else {
 	return tail;
@@ -685,7 +685,7 @@ static PT_Args flattenSepList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
       PT_Tree newTerm;
       newTerm = flattenTerm(tree, ATfalse);
       if (newTerm) {
-	return PT_makeArgsList(newTerm, tail);
+	return PT_makeArgsMany(newTerm, tail);
       } 
       else {
 	return tail;
@@ -720,9 +720,9 @@ static PT_Args flattenSepList(PT_Tree tree, PT_Symbol listSymbol, PT_Args tail)
 
 	  if (PT_isArgsEmpty(args)) {
 	    tail = flattenSepList(rightBranch, listSymbol, tail);
-	    tail = PT_makeArgsList(flattenLayout(layoutAfterSep), tail);
-	    tail = PT_makeArgsList(flattenTerm(separator, ATfalse), tail);
-	    tail = PT_makeArgsList(flattenLayout(layoutAfterLeft), tail);
+	    tail = PT_makeArgsMany(flattenLayout(layoutAfterSep), tail);
+	    tail = PT_makeArgsMany(flattenTerm(separator, ATfalse), tail);
+	    tail = PT_makeArgsMany(flattenLayout(layoutAfterLeft), tail);
 	    tail = flattenSepList(leftBranch, listSymbol, tail);
 
 	    return tail;
@@ -765,7 +765,7 @@ static PT_Tree flattenLexical(PT_Tree tree)
       PT_Tree newTerm = flattenTerm(arg, ATfalse);
 
       if (newTerm) {
-        newArgs = PT_insertArgs(newArgs, newTerm);
+        newArgs = PT_makeArgsMany(newTerm, newArgs);
       }
       args = PT_getArgsTail(args);
     }
@@ -785,7 +785,7 @@ static PT_Args flattenArgsRecursive(PT_Args treeArgs, PT_Args chars);
 static PT_Args flattenLexicalRecursive(PT_Tree tree, PT_Args chars)
 {
   if (PT_isTreeChar(tree)) {
-    chars = PT_insertArgs(chars, tree);
+    chars = PT_makeArgsMany(tree, chars);
   }
   else if (PT_isTreeAppl(tree)) {
     PT_Args treeArgs = PT_getTreeArgs(tree);
@@ -797,7 +797,7 @@ static PT_Args flattenLexicalRecursive(PT_Tree tree, PT_Args chars)
     len = strlen(lit);
 
     for (i = 0; i < len; i++) { 
-      chars = PT_insertArgs(chars, PT_makeTreeChar(lit[i]));
+      chars = PT_makeArgsMany(PT_makeTreeChar(lit[i]), chars);
     }
   }
   else if (PT_isTreeAmb(tree)) {
@@ -833,7 +833,7 @@ static PT_Tree flattenLexicalTotally(PT_Tree tree)
     PT_Args charList = flattenLexicalRecursive(newTree, PT_makeArgsEmpty());
 
     if (charList != NULL) {
-      PT_Args newArgs = PT_makeArgsList(
+      PT_Args newArgs = PT_makeArgsMany(
                           PT_makeTreeAppl(
                             PT_makeProductionList(makeSymbolAllChars()),
                             PT_reverseArgs(charList)),
@@ -870,12 +870,12 @@ static PT_Args flattenLayoutList(PT_Args args, PT_Args tail)
       else {
         PT_Tree newArg = flattenTerm(arg, ATfalse);
         if (newArg) {
-          tail = PT_makeArgsList(newArg, tail);
+          tail = PT_makeArgsMany(newArg, tail);
         }
       }
     }
     else /* if (PT_isTreeChar(arg)) */ {
-      tail = PT_makeArgsList(makeCharFromInt(arg), tail);
+      tail = PT_makeArgsMany(makeCharFromInt(arg), tail);
     }
     args = PT_getArgsTail(args);
   }
@@ -932,7 +932,7 @@ static PT_Tree flattenVar(PT_Tree tree)
       PT_Args newVarArg = PT_makeArgsEmpty();
       char *varStr = PT_yieldArgs(argsInner);
 
-      newVarArg = PT_makeArgsList(PT_makeTreeLit(varStr), newVarArg);
+      newVarArg = PT_makeArgsMany(PT_makeTreeLit(varStr), newVarArg);
       return PT_makeTreeAppl(flattenProd(prodVarsymOuter), newVarArg);
     }
   }
@@ -985,9 +985,7 @@ static PT_Tree flattenTerm(PT_Tree tree, ATbool inList)
     listSymbol = PT_getProductionRhs(prod);
   
     if (PT_isProductionVariable(prod)) {
-      newArgs = PT_makeArgsList(
-                  flattenVar(tree),
-                  PT_makeArgsEmpty());
+      newArgs = PT_makeArgsSingle(flattenVar(tree));
       return PT_makeTreeAppl(PT_makeProductionList(listSymbol),newArgs);
     }
     if (isSepListProd(prod)) {

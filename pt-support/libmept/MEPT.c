@@ -46,12 +46,12 @@ char *PT_charsToString(ATerm arg)
 
 typedef struct ATerm _PT_ParseTree;
 typedef struct ATerm _PT_Tree;
+typedef struct ATerm _PT_Args;
 typedef struct ATerm _PT_Production;
 typedef struct ATerm _PT_Attributes;
 typedef struct ATerm _PT_Attrs;
 typedef struct ATerm _PT_Attr;
 typedef struct ATerm _PT_Associativity;
-typedef struct ATerm _PT_Args;
 typedef struct ATerm _PT_Symbol;
 typedef struct ATerm _PT_Symbols;
 typedef struct ATerm _PT_CharRange;
@@ -80,6 +80,11 @@ void PT_protectTree(PT_Tree *arg)
   ATprotect((ATerm*)((void*) arg));
 }
 
+void PT_protectArgs(PT_Args *arg)
+{
+  ATprotect((ATerm*)((void*) arg));
+}
+
 void PT_protectProduction(PT_Production *arg)
 {
   ATprotect((ATerm*)((void*) arg));
@@ -101,11 +106,6 @@ void PT_protectAttr(PT_Attr *arg)
 }
 
 void PT_protectAssociativity(PT_Associativity *arg)
-{
-  ATprotect((ATerm*)((void*) arg));
-}
-
-void PT_protectArgs(PT_Args *arg)
 {
   ATprotect((ATerm*)((void*) arg));
 }
@@ -161,6 +161,22 @@ PT_Tree PT_TreeFromTerm(ATerm t)
 /*{{{  ATerm PT_TreeToTerm(PT_Tree arg) */
 
 ATerm PT_TreeToTerm(PT_Tree arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  PT_Args PT_ArgsFromTerm(ATerm t) */
+
+PT_Args PT_ArgsFromTerm(ATerm t)
+{
+  return (PT_Args)t;
+}
+
+/*}}}  */
+/*{{{  ATerm PT_ArgsToTerm(PT_Args arg) */
+
+ATerm PT_ArgsToTerm(PT_Args arg)
 {
   return (ATerm)arg;
 }
@@ -246,22 +262,6 @@ ATerm PT_AssociativityToTerm(PT_Associativity arg)
 }
 
 /*}}}  */
-/*{{{  PT_Args PT_ArgsFromTerm(ATerm t) */
-
-PT_Args PT_ArgsFromTerm(ATerm t)
-{
-  return (PT_Args)t;
-}
-
-/*}}}  */
-/*{{{  ATerm PT_ArgsToTerm(PT_Args arg) */
-
-ATerm PT_ArgsToTerm(PT_Args arg)
-{
-  return (ATerm)arg;
-}
-
-/*}}}  */
 /*{{{  PT_Symbol PT_SymbolFromTerm(ATerm t) */
 
 PT_Symbol PT_SymbolFromTerm(ATerm t)
@@ -330,6 +330,114 @@ ATerm PT_CharRangesToTerm(PT_CharRanges arg)
 /*}}}  */
 /*{{{  list functions */
 
+int PT_getArgsLength (PT_Args arg) {
+  return ATgetLength((ATermList) arg);
+}
+PT_Args PT_reverseArgs(PT_Args arg) {
+  return (PT_Args) ATreverse((ATermList) arg);
+}
+PT_Args PT_appendArgs(PT_Args arg, PT_Tree elem) {
+  return (PT_Args) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
+}
+PT_Args PT_concatArgs(PT_Args arg0, PT_Args arg1) {
+  return (PT_Args) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+PT_Args PT_sliceArgs(PT_Args arg, int start, int end) {
+  return (PT_Args) ATgetSlice((ATermList) arg, start, end);
+}
+PT_Tree PT_getArgsTreeAt(PT_Args arg, int index) {
+ return (PT_Tree)ATelementAt((ATermList) arg,index);
+}
+PT_Args PT_replaceArgsTreeAt(PT_Args arg, PT_Tree elem, int index) {
+ return (PT_Args) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
+}
+PT_Args PT_makeArgs2(PT_Tree elem1, PT_Tree elem2) {
+  return (PT_Args) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+}
+PT_Args PT_makeArgs3(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3) {
+  return (PT_Args) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+}
+PT_Args PT_makeArgs4(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4) {
+  return (PT_Args) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+}
+PT_Args PT_makeArgs5(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4, PT_Tree elem5) {
+  return (PT_Args) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+}
+PT_Args PT_makeArgs6(PT_Tree elem1, PT_Tree elem2, PT_Tree elem3, PT_Tree elem4, PT_Tree elem5, PT_Tree elem6) {
+  return (PT_Args) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+}
+int PT_getSymbolsLength (PT_Symbols arg) {
+  return ATgetLength((ATermList) arg);
+}
+PT_Symbols PT_reverseSymbols(PT_Symbols arg) {
+  return (PT_Symbols) ATreverse((ATermList) arg);
+}
+PT_Symbols PT_appendSymbols(PT_Symbols arg, PT_Symbol elem) {
+  return (PT_Symbols) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
+}
+PT_Symbols PT_concatSymbols(PT_Symbols arg0, PT_Symbols arg1) {
+  return (PT_Symbols) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+PT_Symbols PT_sliceSymbols(PT_Symbols arg, int start, int end) {
+  return (PT_Symbols) ATgetSlice((ATermList) arg, start, end);
+}
+PT_Symbol PT_getSymbolsSymbolAt(PT_Symbols arg, int index) {
+ return (PT_Symbol)ATelementAt((ATermList) arg,index);
+}
+PT_Symbols PT_replaceSymbolsSymbolAt(PT_Symbols arg, PT_Symbol elem, int index) {
+ return (PT_Symbols) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
+}
+PT_Symbols PT_makeSymbols2(PT_Symbol elem1, PT_Symbol elem2) {
+  return (PT_Symbols) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+}
+PT_Symbols PT_makeSymbols3(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3) {
+  return (PT_Symbols) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+}
+PT_Symbols PT_makeSymbols4(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3, PT_Symbol elem4) {
+  return (PT_Symbols) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+}
+PT_Symbols PT_makeSymbols5(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3, PT_Symbol elem4, PT_Symbol elem5) {
+  return (PT_Symbols) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+}
+PT_Symbols PT_makeSymbols6(PT_Symbol elem1, PT_Symbol elem2, PT_Symbol elem3, PT_Symbol elem4, PT_Symbol elem5, PT_Symbol elem6) {
+  return (PT_Symbols) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+}
+int PT_getCharRangesLength (PT_CharRanges arg) {
+  return ATgetLength((ATermList) arg);
+}
+PT_CharRanges PT_reverseCharRanges(PT_CharRanges arg) {
+  return (PT_CharRanges) ATreverse((ATermList) arg);
+}
+PT_CharRanges PT_appendCharRanges(PT_CharRanges arg, PT_CharRange elem) {
+  return (PT_CharRanges) ATappend((ATermList) arg, (ATerm) ((ATerm) elem));
+}
+PT_CharRanges PT_concatCharRanges(PT_CharRanges arg0, PT_CharRanges arg1) {
+  return (PT_CharRanges) ATconcat((ATermList) arg0, (ATermList) arg1);
+}
+PT_CharRanges PT_sliceCharRanges(PT_CharRanges arg, int start, int end) {
+  return (PT_CharRanges) ATgetSlice((ATermList) arg, start, end);
+}
+PT_CharRange PT_getCharRangesCharRangeAt(PT_CharRanges arg, int index) {
+ return (PT_CharRange)ATelementAt((ATermList) arg,index);
+}
+PT_CharRanges PT_replaceCharRangesCharRangeAt(PT_CharRanges arg, PT_CharRange elem, int index) {
+ return (PT_CharRanges) ATreplace((ATermList) arg, (ATerm) ((ATerm) elem), index);
+}
+PT_CharRanges PT_makeCharRanges2(PT_CharRange elem1, PT_CharRange elem2) {
+  return (PT_CharRanges) ATmakeList2((ATerm) ((ATerm) elem2), (ATerm) ((ATerm) elem2));
+}
+PT_CharRanges PT_makeCharRanges3(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3) {
+  return (PT_CharRanges) ATmakeList3((ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3), (ATerm) ((ATerm) elem3));
+}
+PT_CharRanges PT_makeCharRanges4(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3, PT_CharRange elem4) {
+  return (PT_CharRanges) ATmakeList4((ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4), (ATerm) ((ATerm) elem4));
+}
+PT_CharRanges PT_makeCharRanges5(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3, PT_CharRange elem4, PT_CharRange elem5) {
+  return (PT_CharRanges) ATmakeList5((ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5), (ATerm) ((ATerm) elem5));
+}
+PT_CharRanges PT_makeCharRanges6(PT_CharRange elem1, PT_CharRange elem2, PT_CharRange elem3, PT_CharRange elem4, PT_CharRange elem5, PT_CharRange elem6) {
+  return (PT_CharRanges) ATmakeList6((ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6), (ATerm) ((ATerm) elem6));
+}
 
 /*}}}  */
 /*{{{  constructors */
@@ -382,6 +490,30 @@ PT_Tree PT_makeTreeAmb(PT_Args args)
 }
 
 /*}}}  */
+/*{{{  PT_Args PT_makeArgsEmpty() */
+
+PT_Args PT_makeArgsEmpty()
+{
+  return (PT_Args)(ATerm)ATempty;
+}
+
+/*}}}  */
+/*{{{  PT_Args PT_makeArgsSingle(PT_Tree head) */
+
+PT_Args PT_makeArgsSingle(PT_Tree head)
+{
+  return (PT_Args)(ATerm)ATmakeList1((ATerm) head);
+}
+
+/*}}}  */
+/*{{{  PT_Args PT_makeArgsMany(PT_Tree head, PT_Args tail) */
+
+PT_Args PT_makeArgsMany(PT_Tree head, PT_Args tail)
+{
+  return (PT_Args)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
+}
+
+/*}}}  */
 /*{{{  PT_Production PT_makeProductionDefault(PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attributes) */
 
 PT_Production PT_makeProductionDefault(PT_Symbols lhs, PT_Symbol rhs, PT_Attributes attributes)
@@ -414,19 +546,19 @@ PT_Attributes PT_makeAttributesAttrs(PT_Attrs attrs)
 }
 
 /*}}}  */
-/*{{{  PT_Attrs PT_makeAttrsMany(PT_Attr head, PT_Attrs tail) */
-
-PT_Attrs PT_makeAttrsMany(PT_Attr head, PT_Attrs tail)
-{
-  return (PT_Attrs)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
-}
-
-/*}}}  */
 /*{{{  PT_Attrs PT_makeAttrsSingle(PT_Attr head) */
 
 PT_Attrs PT_makeAttrsSingle(PT_Attr head)
 {
   return (PT_Attrs)(ATerm)ATmakeList1((ATerm) head);
+}
+
+/*}}}  */
+/*{{{  PT_Attrs PT_makeAttrsMany(PT_Attr head, PT_Attrs tail) */
+
+PT_Attrs PT_makeAttrsMany(PT_Attr head, PT_Attrs tail)
+{
+  return (PT_Attrs)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
 
 /*}}}  */
@@ -515,22 +647,6 @@ PT_Associativity PT_makeAssociativityAssoc()
 PT_Associativity PT_makeAssociativityNonAssoc()
 {
   return (PT_Associativity)(ATerm)ATmakeAppl0(PT_afun19);
-}
-
-/*}}}  */
-/*{{{  PT_Args PT_makeArgsList(PT_Tree head, PT_Args tail) */
-
-PT_Args PT_makeArgsList(PT_Tree head, PT_Args tail)
-{
-  return (PT_Args)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
-}
-
-/*}}}  */
-/*{{{  PT_Args PT_makeArgsEmpty() */
-
-PT_Args PT_makeArgsEmpty()
-{
-  return (PT_Args)(ATerm)ATempty;
 }
 
 /*}}}  */
@@ -702,19 +818,27 @@ PT_Symbol PT_makeSymbolCharClass(PT_CharRanges ranges)
 }
 
 /*}}}  */
-/*{{{  PT_Symbols PT_makeSymbolsList(PT_Symbol head, PT_Symbols tail) */
-
-PT_Symbols PT_makeSymbolsList(PT_Symbol head, PT_Symbols tail)
-{
-  return (PT_Symbols)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
-}
-
-/*}}}  */
 /*{{{  PT_Symbols PT_makeSymbolsEmpty() */
 
 PT_Symbols PT_makeSymbolsEmpty()
 {
   return (PT_Symbols)(ATerm)ATempty;
+}
+
+/*}}}  */
+/*{{{  PT_Symbols PT_makeSymbolsSingle(PT_Symbol head) */
+
+PT_Symbols PT_makeSymbolsSingle(PT_Symbol head)
+{
+  return (PT_Symbols)(ATerm)ATmakeList1((ATerm) head);
+}
+
+/*}}}  */
+/*{{{  PT_Symbols PT_makeSymbolsMany(PT_Symbol head, PT_Symbols tail) */
+
+PT_Symbols PT_makeSymbolsMany(PT_Symbol head, PT_Symbols tail)
+{
+  return (PT_Symbols)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
 
 /*}}}  */
@@ -734,19 +858,27 @@ PT_CharRange PT_makeCharRangeRange(int start, int end)
 }
 
 /*}}}  */
-/*{{{  PT_CharRanges PT_makeCharRangesList(PT_CharRange head, PT_CharRanges tail) */
-
-PT_CharRanges PT_makeCharRangesList(PT_CharRange head, PT_CharRanges tail)
-{
-  return (PT_CharRanges)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
-}
-
-/*}}}  */
 /*{{{  PT_CharRanges PT_makeCharRangesEmpty() */
 
 PT_CharRanges PT_makeCharRangesEmpty()
 {
   return (PT_CharRanges)(ATerm)ATempty;
+}
+
+/*}}}  */
+/*{{{  PT_CharRanges PT_makeCharRangesSingle(PT_CharRange head) */
+
+PT_CharRanges PT_makeCharRangesSingle(PT_CharRange head)
+{
+  return (PT_CharRanges)(ATerm)ATmakeList1((ATerm) head);
+}
+
+/*}}}  */
+/*{{{  PT_CharRanges PT_makeCharRangesMany(PT_CharRange head, PT_CharRanges tail) */
+
+PT_CharRanges PT_makeCharRangesMany(PT_CharRange head, PT_CharRanges tail)
+{
+  return (PT_CharRanges)(ATerm)ATinsert((ATermList)tail, (ATerm) head);
 }
 
 /*}}}  */
@@ -760,6 +892,11 @@ ATbool PT_isEqualParseTree(PT_ParseTree arg0, PT_ParseTree arg1)
 }
 
 ATbool PT_isEqualTree(PT_Tree arg0, PT_Tree arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool PT_isEqualArgs(PT_Args arg0, PT_Args arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -785,11 +922,6 @@ ATbool PT_isEqualAttr(PT_Attr arg0, PT_Attr arg1)
 }
 
 ATbool PT_isEqualAssociativity(PT_Associativity arg0, PT_Associativity arg1)
-{
-  return ATisEqual((ATerm)arg0, (ATerm)arg1);
-}
-
-ATbool PT_isEqualArgs(PT_Args arg0, PT_Args arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -1200,6 +1332,167 @@ PT_Tree PT_setTreeString(PT_Tree arg, const char* string)
 /*}}}  */
 
 /*}}}  */
+/*{{{  PT_Args accessors */
+
+/*{{{  ATbool PT_isValidArgs(PT_Args arg) */
+
+ATbool PT_isValidArgs(PT_Args arg)
+{
+  if (PT_isArgsEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isArgsSingle(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isArgsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool PT_isArgsEmpty(PT_Args arg) */
+
+inline ATbool PT_isArgsEmpty(PT_Args arg)
+{
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, PT_patternArgsEmpty));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool PT_isArgsSingle(PT_Args arg) */
+
+inline ATbool PT_isArgsSingle(PT_Args arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternArgsSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool PT_isArgsMany(PT_Args arg) */
+
+inline ATbool PT_isArgsMany(PT_Args arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternArgsMany, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool PT_hasArgsHead(PT_Args arg) */
+
+ATbool PT_hasArgsHead(PT_Args arg)
+{
+  if (PT_isArgsSingle(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isArgsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PT_Tree PT_getArgsHead(PT_Args arg) */
+
+PT_Tree PT_getArgsHead(PT_Args arg)
+{
+  if (PT_isArgsSingle(arg)) {
+    return (PT_Tree)ATgetFirst((ATermList)arg);
+  }
+  else 
+    return (PT_Tree)ATgetFirst((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  PT_Args PT_setArgsHead(PT_Args arg, PT_Tree head) */
+
+PT_Args PT_setArgsHead(PT_Args arg, PT_Tree head)
+{
+  if (PT_isArgsSingle(arg)) {
+    return (PT_Args)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+  else if (PT_isArgsMany(arg)) {
+    return (PT_Args)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+
+  ATabort("Args has no Head: %t\n", arg);
+  return (PT_Args)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool PT_hasArgsTail(PT_Args arg) */
+
+ATbool PT_hasArgsTail(PT_Args arg)
+{
+  if (PT_isArgsMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  PT_Args PT_getArgsTail(PT_Args arg) */
+
+PT_Args PT_getArgsTail(PT_Args arg)
+{
+  
+    return (PT_Args)ATgetNext((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  PT_Args PT_setArgsTail(PT_Args arg, PT_Args tail) */
+
+PT_Args PT_setArgsTail(PT_Args arg, PT_Args tail)
+{
+  if (PT_isArgsMany(arg)) {
+    return (PT_Args)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
+  }
+
+  ATabort("Args has no Tail: %t\n", arg);
+  return (PT_Args)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
 /*{{{  PT_Production accessors */
 
 /*{{{  ATbool PT_isValidProduction(PT_Production arg) */
@@ -1471,38 +1764,13 @@ PT_Attributes PT_setAttributesAttrs(PT_Attributes arg, PT_Attrs attrs)
 
 ATbool PT_isValidAttrs(PT_Attrs arg)
 {
-  if (PT_isAttrsMany(arg)) {
+  if (PT_isAttrsSingle(arg)) {
     return ATtrue;
   }
-  else if (PT_isAttrsSingle(arg)) {
+  else if (PT_isAttrsMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
-}
-
-/*}}}  */
-/*{{{  inline ATbool PT_isAttrsMany(PT_Attrs arg) */
-
-inline ATbool PT_isAttrsMany(PT_Attrs arg)
-{
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-  {
-    static ATerm last_arg = NULL;
-    static int last_gc = -1;
-    static ATbool last_result;
-
-    assert(arg != NULL);
-
-    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
-      last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrsMany, NULL, NULL);
-      last_gc = ATgetGCCount();
-    }
-
-    return last_result;
-  }
 }
 
 /*}}}  */
@@ -1531,14 +1799,39 @@ inline ATbool PT_isAttrsSingle(PT_Attrs arg)
 }
 
 /*}}}  */
+/*{{{  inline ATbool PT_isAttrsMany(PT_Attrs arg) */
+
+inline ATbool PT_isAttrsMany(PT_Attrs arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternAttrsMany, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
 /*{{{  ATbool PT_hasAttrsHead(PT_Attrs arg) */
 
 ATbool PT_hasAttrsHead(PT_Attrs arg)
 {
-  if (PT_isAttrsMany(arg)) {
+  if (PT_isAttrsSingle(arg)) {
     return ATtrue;
   }
-  else if (PT_isAttrsSingle(arg)) {
+  else if (PT_isAttrsMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -1549,7 +1842,7 @@ ATbool PT_hasAttrsHead(PT_Attrs arg)
 
 PT_Attr PT_getAttrsHead(PT_Attrs arg)
 {
-  if (PT_isAttrsMany(arg)) {
+  if (PT_isAttrsSingle(arg)) {
     return (PT_Attr)ATgetFirst((ATermList)arg);
   }
   else 
@@ -1561,10 +1854,10 @@ PT_Attr PT_getAttrsHead(PT_Attrs arg)
 
 PT_Attrs PT_setAttrsHead(PT_Attrs arg, PT_Attr head)
 {
-  if (PT_isAttrsMany(arg)) {
+  if (PT_isAttrsSingle(arg)) {
     return (PT_Attrs)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
   }
-  else if (PT_isAttrsSingle(arg)) {
+  else if (PT_isAttrsMany(arg)) {
     return (PT_Attrs)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
   }
 
@@ -2001,120 +2294,6 @@ inline ATbool PT_isAssociativityNonAssoc(PT_Associativity arg)
 
     return last_result;
   }
-}
-
-/*}}}  */
-
-/*}}}  */
-/*{{{  PT_Args accessors */
-
-/*{{{  ATbool PT_isValidArgs(PT_Args arg) */
-
-ATbool PT_isValidArgs(PT_Args arg)
-{
-  if (PT_isArgsList(arg)) {
-    return ATtrue;
-  }
-  else if (PT_isArgsEmpty(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  inline ATbool PT_isArgsList(PT_Args arg) */
-
-inline ATbool PT_isArgsList(PT_Args arg)
-{
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternArgsList, NULL, NULL));
-#endif
-  return ATtrue;
-}
-
-/*}}}  */
-/*{{{  inline ATbool PT_isArgsEmpty(PT_Args arg) */
-
-inline ATbool PT_isArgsEmpty(PT_Args arg)
-{
-  if (!ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternArgsEmpty));
-#endif
-  return ATtrue;
-}
-
-/*}}}  */
-/*{{{  ATbool PT_hasArgsHead(PT_Args arg) */
-
-ATbool PT_hasArgsHead(PT_Args arg)
-{
-  if (PT_isArgsList(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PT_Tree PT_getArgsHead(PT_Args arg) */
-
-PT_Tree PT_getArgsHead(PT_Args arg)
-{
-  
-    return (PT_Tree)ATgetFirst((ATermList)arg);
-}
-
-/*}}}  */
-/*{{{  PT_Args PT_setArgsHead(PT_Args arg, PT_Tree head) */
-
-PT_Args PT_setArgsHead(PT_Args arg, PT_Tree head)
-{
-  if (PT_isArgsList(arg)) {
-    return (PT_Args)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
-  }
-
-  ATabort("Args has no Head: %t\n", arg);
-  return (PT_Args)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool PT_hasArgsTail(PT_Args arg) */
-
-ATbool PT_hasArgsTail(PT_Args arg)
-{
-  if (PT_isArgsList(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  PT_Args PT_getArgsTail(PT_Args arg) */
-
-PT_Args PT_getArgsTail(PT_Args arg)
-{
-  
-    return (PT_Args)ATgetNext((ATermList)arg);
-}
-
-/*}}}  */
-/*{{{  PT_Args PT_setArgsTail(PT_Args arg, PT_Args tail) */
-
-PT_Args PT_setArgsTail(PT_Args arg, PT_Args tail)
-{
-  if (PT_isArgsList(arg)) {
-    return (PT_Args)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
-  }
-
-  ATabort("Args has no Tail: %t\n", arg);
-  return (PT_Args)NULL;
 }
 
 /*}}}  */
@@ -3212,28 +3391,16 @@ PT_Symbol PT_setSymbolRanges(PT_Symbol arg, PT_CharRanges ranges)
 
 ATbool PT_isValidSymbols(PT_Symbols arg)
 {
-  if (PT_isSymbolsList(arg)) {
+  if (PT_isSymbolsEmpty(arg)) {
     return ATtrue;
   }
-  else if (PT_isSymbolsEmpty(arg)) {
+  else if (PT_isSymbolsSingle(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isSymbolsMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
-}
-
-/*}}}  */
-/*{{{  inline ATbool PT_isSymbolsList(PT_Symbols arg) */
-
-inline ATbool PT_isSymbolsList(PT_Symbols arg)
-{
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternSymbolsList, NULL, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -3252,11 +3419,64 @@ inline ATbool PT_isSymbolsEmpty(PT_Symbols arg)
 }
 
 /*}}}  */
+/*{{{  inline ATbool PT_isSymbolsSingle(PT_Symbols arg) */
+
+inline ATbool PT_isSymbolsSingle(PT_Symbols arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolsSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool PT_isSymbolsMany(PT_Symbols arg) */
+
+inline ATbool PT_isSymbolsMany(PT_Symbols arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternSymbolsMany, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
 /*{{{  ATbool PT_hasSymbolsHead(PT_Symbols arg) */
 
 ATbool PT_hasSymbolsHead(PT_Symbols arg)
 {
-  if (PT_isSymbolsList(arg)) {
+  if (PT_isSymbolsSingle(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isSymbolsMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -3267,7 +3487,10 @@ ATbool PT_hasSymbolsHead(PT_Symbols arg)
 
 PT_Symbol PT_getSymbolsHead(PT_Symbols arg)
 {
-  
+  if (PT_isSymbolsSingle(arg)) {
+    return (PT_Symbol)ATgetFirst((ATermList)arg);
+  }
+  else 
     return (PT_Symbol)ATgetFirst((ATermList)arg);
 }
 
@@ -3276,7 +3499,10 @@ PT_Symbol PT_getSymbolsHead(PT_Symbols arg)
 
 PT_Symbols PT_setSymbolsHead(PT_Symbols arg, PT_Symbol head)
 {
-  if (PT_isSymbolsList(arg)) {
+  if (PT_isSymbolsSingle(arg)) {
+    return (PT_Symbols)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+  else if (PT_isSymbolsMany(arg)) {
     return (PT_Symbols)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
   }
 
@@ -3289,7 +3515,7 @@ PT_Symbols PT_setSymbolsHead(PT_Symbols arg, PT_Symbol head)
 
 ATbool PT_hasSymbolsTail(PT_Symbols arg)
 {
-  if (PT_isSymbolsList(arg)) {
+  if (PT_isSymbolsMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -3309,7 +3535,7 @@ PT_Symbols PT_getSymbolsTail(PT_Symbols arg)
 
 PT_Symbols PT_setSymbolsTail(PT_Symbols arg, PT_Symbols tail)
 {
-  if (PT_isSymbolsList(arg)) {
+  if (PT_isSymbolsMany(arg)) {
     return (PT_Symbols)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
   }
 
@@ -3473,28 +3699,16 @@ PT_CharRange PT_setCharRangeEnd(PT_CharRange arg, int end)
 
 ATbool PT_isValidCharRanges(PT_CharRanges arg)
 {
-  if (PT_isCharRangesList(arg)) {
+  if (PT_isCharRangesEmpty(arg)) {
     return ATtrue;
   }
-  else if (PT_isCharRangesEmpty(arg)) {
+  else if (PT_isCharRangesSingle(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isCharRangesMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
-}
-
-/*}}}  */
-/*{{{  inline ATbool PT_isCharRangesList(PT_CharRanges arg) */
-
-inline ATbool PT_isCharRangesList(PT_CharRanges arg)
-{
-  if (ATisEmpty((ATermList)arg)) {
-    return ATfalse;
-  }
-#ifndef DISABLE_DYNAMIC_CHECKING
-  assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, PT_patternCharRangesList, NULL, NULL));
-#endif
-  return ATtrue;
 }
 
 /*}}}  */
@@ -3513,11 +3727,64 @@ inline ATbool PT_isCharRangesEmpty(PT_CharRanges arg)
 }
 
 /*}}}  */
+/*{{{  inline ATbool PT_isCharRangesSingle(PT_CharRanges arg) */
+
+inline ATbool PT_isCharRangesSingle(PT_CharRanges arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternCharRangesSingle, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool PT_isCharRangesMany(PT_CharRanges arg) */
+
+inline ATbool PT_isCharRangesMany(PT_CharRanges arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, PT_patternCharRangesMany, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
 /*{{{  ATbool PT_hasCharRangesHead(PT_CharRanges arg) */
 
 ATbool PT_hasCharRangesHead(PT_CharRanges arg)
 {
-  if (PT_isCharRangesList(arg)) {
+  if (PT_isCharRangesSingle(arg)) {
+    return ATtrue;
+  }
+  else if (PT_isCharRangesMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -3528,7 +3795,10 @@ ATbool PT_hasCharRangesHead(PT_CharRanges arg)
 
 PT_CharRange PT_getCharRangesHead(PT_CharRanges arg)
 {
-  
+  if (PT_isCharRangesSingle(arg)) {
+    return (PT_CharRange)ATgetFirst((ATermList)arg);
+  }
+  else 
     return (PT_CharRange)ATgetFirst((ATermList)arg);
 }
 
@@ -3537,7 +3807,10 @@ PT_CharRange PT_getCharRangesHead(PT_CharRanges arg)
 
 PT_CharRanges PT_setCharRangesHead(PT_CharRanges arg, PT_CharRange head)
 {
-  if (PT_isCharRangesList(arg)) {
+  if (PT_isCharRangesSingle(arg)) {
+    return (PT_CharRanges)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
+  }
+  else if (PT_isCharRangesMany(arg)) {
     return (PT_CharRanges)ATreplace((ATermList)arg, (ATerm)((ATerm) head), 0);
   }
 
@@ -3550,7 +3823,7 @@ PT_CharRanges PT_setCharRangesHead(PT_CharRanges arg, PT_CharRange head)
 
 ATbool PT_hasCharRangesTail(PT_CharRanges arg)
 {
-  if (PT_isCharRangesList(arg)) {
+  if (PT_isCharRangesMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -3570,7 +3843,7 @@ PT_CharRanges PT_getCharRangesTail(PT_CharRanges arg)
 
 PT_CharRanges PT_setCharRangesTail(PT_CharRanges arg, PT_CharRanges tail)
 {
-  if (PT_isCharRangesList(arg)) {
+  if (PT_isCharRangesMany(arg)) {
     return (PT_CharRanges)ATreplaceTail((ATermList)arg, (ATermList)((ATerm) tail), 1);
   }
 
@@ -3627,6 +3900,27 @@ PT_Tree PT_visitTree(PT_Tree arg, PT_Production (*acceptProd)(PT_Production), PT
 }
 
 /*}}}  */
+/*{{{  PT_Args PT_visitArgs(PT_Args arg, PT_Tree (*acceptHead)(PT_Tree)) */
+
+PT_Args PT_visitArgs(PT_Args arg, PT_Tree (*acceptHead)(PT_Tree))
+{
+  if (PT_isArgsEmpty(arg)) {
+    return PT_makeArgsEmpty();
+  }
+  if (PT_isArgsSingle(arg)) {
+    return PT_makeArgsSingle(
+        acceptHead ? acceptHead(PT_getArgsHead(arg)) : PT_getArgsHead(arg));
+  }
+  if (PT_isArgsMany(arg)) {
+    return PT_makeArgsMany(
+        acceptHead ? acceptHead(PT_getArgsHead(arg)) : PT_getArgsHead(arg),
+        PT_visitArgs(PT_getArgsTail(arg), acceptHead));
+  }
+  ATabort("not a Args: %t\n", arg);
+  return (PT_Args)NULL;
+}
+
+/*}}}  */
 /*{{{  PT_Production PT_visitProduction(PT_Production arg, PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes)) */
 
 PT_Production PT_visitProduction(PT_Production arg, PT_Symbols (*acceptLhs)(PT_Symbols), PT_Symbol (*acceptRhs)(PT_Symbol), PT_Attributes (*acceptAttributes)(PT_Attributes))
@@ -3666,14 +3960,14 @@ PT_Attributes PT_visitAttributes(PT_Attributes arg, PT_Attrs (*acceptAttrs)(PT_A
 
 PT_Attrs PT_visitAttrs(PT_Attrs arg, PT_Attr (*acceptHead)(PT_Attr))
 {
+  if (PT_isAttrsSingle(arg)) {
+    return PT_makeAttrsSingle(
+        acceptHead ? acceptHead(PT_getAttrsHead(arg)) : PT_getAttrsHead(arg));
+  }
   if (PT_isAttrsMany(arg)) {
     return PT_makeAttrsMany(
         acceptHead ? acceptHead(PT_getAttrsHead(arg)) : PT_getAttrsHead(arg),
         PT_visitAttrs(PT_getAttrsTail(arg), acceptHead));
-  }
-  if (PT_isAttrsSingle(arg)) {
-    return PT_makeAttrsSingle(
-        acceptHead ? acceptHead(PT_getAttrsHead(arg)) : PT_getAttrsHead(arg));
   }
   ATabort("not a Attrs: %t\n", arg);
   return (PT_Attrs)NULL;
@@ -3731,23 +4025,6 @@ PT_Associativity PT_visitAssociativity(PT_Associativity arg)
   }
   ATabort("not a Associativity: %t\n", arg);
   return (PT_Associativity)NULL;
-}
-
-/*}}}  */
-/*{{{  PT_Args PT_visitArgs(PT_Args arg, PT_Tree (*acceptHead)(PT_Tree)) */
-
-PT_Args PT_visitArgs(PT_Args arg, PT_Tree (*acceptHead)(PT_Tree))
-{
-  if (PT_isArgsList(arg)) {
-    return PT_makeArgsList(
-        acceptHead ? acceptHead(PT_getArgsHead(arg)) : PT_getArgsHead(arg),
-        PT_visitArgs(PT_getArgsTail(arg), acceptHead));
-  }
-  if (PT_isArgsEmpty(arg)) {
-    return PT_makeArgsEmpty();
-  }
-  ATabort("not a Args: %t\n", arg);
-  return (PT_Args)NULL;
 }
 
 /*}}}  */
@@ -3856,13 +4133,17 @@ PT_Symbol PT_visitSymbol(PT_Symbol arg, char* (*acceptString)(char*), PT_Symbols
 
 PT_Symbols PT_visitSymbols(PT_Symbols arg, PT_Symbol (*acceptHead)(PT_Symbol))
 {
-  if (PT_isSymbolsList(arg)) {
-    return PT_makeSymbolsList(
-        acceptHead ? acceptHead(PT_getSymbolsHead(arg)) : PT_getSymbolsHead(arg),
-        PT_visitSymbols(PT_getSymbolsTail(arg), acceptHead));
-  }
   if (PT_isSymbolsEmpty(arg)) {
     return PT_makeSymbolsEmpty();
+  }
+  if (PT_isSymbolsSingle(arg)) {
+    return PT_makeSymbolsSingle(
+        acceptHead ? acceptHead(PT_getSymbolsHead(arg)) : PT_getSymbolsHead(arg));
+  }
+  if (PT_isSymbolsMany(arg)) {
+    return PT_makeSymbolsMany(
+        acceptHead ? acceptHead(PT_getSymbolsHead(arg)) : PT_getSymbolsHead(arg),
+        PT_visitSymbols(PT_getSymbolsTail(arg), acceptHead));
   }
   ATabort("not a Symbols: %t\n", arg);
   return (PT_Symbols)NULL;
@@ -3891,13 +4172,17 @@ PT_CharRange PT_visitCharRange(PT_CharRange arg, int (*acceptInteger)(int), int 
 
 PT_CharRanges PT_visitCharRanges(PT_CharRanges arg, PT_CharRange (*acceptHead)(PT_CharRange))
 {
-  if (PT_isCharRangesList(arg)) {
-    return PT_makeCharRangesList(
-        acceptHead ? acceptHead(PT_getCharRangesHead(arg)) : PT_getCharRangesHead(arg),
-        PT_visitCharRanges(PT_getCharRangesTail(arg), acceptHead));
-  }
   if (PT_isCharRangesEmpty(arg)) {
     return PT_makeCharRangesEmpty();
+  }
+  if (PT_isCharRangesSingle(arg)) {
+    return PT_makeCharRangesSingle(
+        acceptHead ? acceptHead(PT_getCharRangesHead(arg)) : PT_getCharRangesHead(arg));
+  }
+  if (PT_isCharRangesMany(arg)) {
+    return PT_makeCharRangesMany(
+        acceptHead ? acceptHead(PT_getCharRangesHead(arg)) : PT_getCharRangesHead(arg),
+        PT_visitCharRanges(PT_getCharRangesTail(arg), acceptHead));
   }
   ATabort("not a CharRanges: %t\n", arg);
   return (PT_CharRanges)NULL;

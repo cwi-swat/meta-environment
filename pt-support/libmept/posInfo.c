@@ -200,7 +200,7 @@ static PT_Tree PT_addTreePosInfo(PT_Tree tree, PT_Position* current)
     for (;!PT_isArgsEmpty(args); args = PT_getArgsTail(args)) {
       PT_Tree arg = PT_getArgsHead(args);
       *current = save;
-      new = PT_makeArgsList(PT_addTreePosInfo(arg, current), new);
+      new = PT_makeArgsMany(PT_addTreePosInfo(arg, current), new);
       
     }
 

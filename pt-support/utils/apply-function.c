@@ -82,7 +82,7 @@ ATerm apply_function_to_args(int cid, const char *function, const char *sort, AT
     ATerm arg = ATgetFirst(argsList);
     PT_ParseTree parseTree = PT_ParseTreeFromTerm(ATBunpack(arg));
     argsList = ATgetNext(argsList);
-    ptArgs = PT_makeArgsList(PT_getParseTreeTree(parseTree), ptArgs);
+    ptArgs = PT_makeArgsMany(PT_getParseTreeTree(parseTree), ptArgs);
   }
  
   newParseTree = PT_applyFunctionToArgsParseTree(function, sort, ptArgs);
@@ -171,7 +171,7 @@ main (int argc, char **argv)
         ATerror("Unable to read in %s\n", inputs[nInputs]);
         exit(1);
       }
-      args = PT_makeArgsList(PT_getParseTreeTree(parseTree), args);
+      args = PT_makeArgsMany(PT_getParseTreeTree(parseTree), args);
     }
    
     newParseTree = PT_applyFunctionToArgsParseTree(function, sort, args);

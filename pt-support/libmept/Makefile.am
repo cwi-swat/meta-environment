@@ -21,18 +21,17 @@ libmept_a_SOURCES = \
 	symbol-renaming.c \
 	ordering.c
 
-AM_CFLAGS = -DDISABLE_DYNAMIC_CHECKING
+AM_CFLAGS = -Wall -Werror -g -O2 -DDISABLE_DYNAMIC_CHECKING
 
 INCLUDES = \
 	-I${ATERM}/include \
 	-I${ERROR_SUPPORT}/include
 
 api: MEPT.adt
-	upgrade-adt -i $< -o $<.1
 	adt-to-c \
 		--prefix PT_ \
 		--name MEPT \
-		--input $<.1
+		--input $<
 
 api-clean:
 	${RM} MEPT.[ch] MEPT_dict.[ch] MEPT.dict
