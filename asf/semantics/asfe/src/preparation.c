@@ -59,6 +59,12 @@ extern ATbool runVerbose;
 
 
 /*}}}  */
+/*{{{  local function declarations */
+
+static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data);
+static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data);
+
+/*}}}  */
 
 /*{{{  equation_table *create_equation_table(int size) */
 
@@ -635,6 +641,84 @@ static PT_Tree lexicalToList(PT_Tree lextrm)
 }
 
 /*}}}  */
+/*{{{  static PT_Tree ambToAmbConstructor(PT_Tree tree) */
+
+static PT_Tree ambToAmbConstructor(PT_Tree tree, PT_TreeVisitorData data)
+{
+  PT_Args ambs;
+  PT_Args args = PT_makeArgsEmpty();
+  PT_Args listargs = PT_makeArgsEmpty();
+  PT_Symbol symbol;
+  PT_Symbols symbols;
+  PT_Symbol listsym;
+  PT_Production prod, listprod;
+  PT_Tree first;
+  PT_Tree l = PT_makeTreeLayoutEmpty();
+  PT_Tree s = PT_makeTreeLit(",");
+  PT_Tree listTree;
+  PT_Symbol optl = PT_makeSymbolCf(PT_makeSymbolOpt(PT_makeSymbolLayout()));
+  PT_Attr attr = PT_makeAttrId("GEN-Equations");
+  PT_Attributes attrs = PT_makeAttributesAttrs(PT_makeAttrsSingle(attr));
+
+  assert(PT_isTreeAmb(tree));
+  ambs = PT_getTreeArgs(tree);
+
+  assert(PT_hasArgsHead(ambs));
+
+  first = PT_getArgsHead(ambs);
+
+  symbol = PT_getProductionRhs(PT_getTreeProd(first)); 
+
+  if (PT_isSymbolCf(symbol) || PT_isSymbolLex(symbol)) {
+    symbol = PT_getSymbolSymbol(symbol);
+  }
+
+  listsym = PT_makeSymbolCf(
+	    PT_makeSymbolIterPlusSep(symbol,PT_makeSymbolLit(",")));
+
+  ambs = PT_foreachTreeInArgs(ambs, prepareTerm, data);
+
+  for (; PT_hasArgsHead(ambs); ambs = PT_getArgsTail(ambs)) {
+    PT_Tree amb = PT_getArgsHead(ambs);
+    listargs = PT_makeArgsList(amb, listargs);
+
+    if (PT_hasArgsHead(PT_getArgsTail(ambs))) {
+      listargs = PT_makeArgsList(l,listargs);
+      listargs = PT_makeArgsList(s,listargs);
+      listargs = PT_makeArgsList(l,listargs);
+    }
+  }
+
+  listprod = PT_makeProductionList(listsym);
+
+  listTree = PT_makeTreeAppl(listprod,listargs);
+
+
+  symbols = PT_makeSymbolsEmpty();
+  symbols = PT_makeSymbolsList(PT_makeSymbolLit(")"),symbols);
+  symbols = PT_makeSymbolsList(optl,symbols);
+  symbols = PT_makeSymbolsList(listsym,symbols);
+  symbols = PT_makeSymbolsList(optl,symbols);
+  symbols = PT_makeSymbolsList(PT_makeSymbolLit("("),symbols);
+  symbols = PT_makeSymbolsList(optl,symbols);
+  symbols = PT_makeSymbolsList(PT_makeSymbolLit("amb"),symbols);
+
+  prod = PT_makeProductionDefault(symbols,PT_makeSymbolCf(symbol),attrs);
+
+
+  args = PT_makeArgsEmpty();
+  args = PT_makeArgsList(PT_makeTreeLit(")"),args);
+  args = PT_makeArgsList(l,args);
+  args = PT_makeArgsList(listTree,args);
+  args = PT_makeArgsList(l,args);
+  args = PT_makeArgsList(PT_makeTreeLit("("),args);
+  args = PT_makeArgsList(l,args);
+  args = PT_makeArgsList(PT_makeTreeLit("amb"),args);
+
+  return PT_makeTreeAppl(prod,args);
+}
+
+/*}}}  */
 /*{{{  static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data) */
 
 static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
@@ -658,6 +742,9 @@ static PT_Tree prepareTerm(PT_Tree tree, PT_TreeVisitorData data)
     args = PT_getTreeArgs(tree);
     newargs = PT_foreachTreeInArgs(args, prepareTerm, data);
     result = PT_setTreeArgs(tree, newargs);
+  }
+  else if (PT_isTreeAmb(tree)) {
+    result = ambToAmbConstructor(tree,data);
   }
   else {
     result = tree;
@@ -768,6 +855,37 @@ PT_Tree listToLexical(PT_Tree lexappl)
 }
 
 /*}}}  */
+/*{{{  static PT_Tree ambConstructorToAmb(PT_Tree tree, PT_TreeVisitorData data) */
+
+static PT_Tree ambConstructorToAmb(PT_Tree tree, PT_TreeVisitorData data)
+{
+  ASF_Tree asfTree = PTtoASF(tree);
+  PT_Args args = (PT_Args) ASF_getTreeAmbs(asfTree);
+  PT_Args ambs;
+
+  ambs = PT_makeArgsEmpty();
+
+  while (PT_hasArgsHead(args)) {
+    PT_Tree arg;
+    PT_Tree amb;
+
+    arg = PT_getArgsHead(args);
+    args = PT_getArgsTail(args);
+    amb = restoreTerm(arg, data);
+    ambs = PT_makeArgsList(amb,ambs);
+
+    
+    if (!PT_isArgsEmpty(args)) {
+      args = PT_getArgsTail(args); 
+      args = PT_getArgsTail(args); 
+      args = PT_getArgsTail(args); 
+    }
+  }
+
+  return PT_makeTreeAmb(ambs);
+}
+
+/*}}}  */
 
 /*{{{  static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data) */
 
@@ -778,6 +896,9 @@ static PT_Tree restoreTerm(PT_Tree tree, PT_TreeVisitorData data)
   if (PT_isTreeAppl(tree)) {
     if (ASF_isTreeLexicalConstructorFunction(PTtoASF(tree))) { 
       return listToLexical(tree);
+    }
+    else if (ASF_isTreeAmbConstructorFunction(PTtoASF(tree))) {
+      return ambConstructorToAmb(tree, data);
     }
 
     args = PT_getTreeArgs(tree);
