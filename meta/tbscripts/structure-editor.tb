@@ -32,7 +32,7 @@ in
     Foc := first(Fl).
     snd-msg(TE,set-focus(Fid, Foc))
     +
-    rec-event(TE,parse(Fid)).
+    rec-event(TE,menu-event("Meta-Environment","Parse",Fid)).
     snd-note(ui-status(stat(Id,"Parsing..."))).
     FF := []. (
       if not-equal(Fl,[]) then
@@ -76,7 +76,7 @@ in
     fi.
     /* Finished parsing operations */
     snd-note(ui-status(endstat(Id))).
-    snd-ack-event(TE,parse(Fid))
+    snd-ack-event(TE,menu-event("Meta-Environment","Parse",Fid))
     +
     rec-event(TE,get-focus(Fid,I?)).
     snd-eval(SE,getFocus(Fid, I)).
