@@ -3186,7 +3186,21 @@ ATbool SDF_isValidSymbol(SDF_Symbol arg)
 
 inline ATbool SDF_isSymbolStart(SDF_Symbol arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternSymbolStart);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolStart);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -3194,7 +3208,21 @@ inline ATbool SDF_isSymbolStart(SDF_Symbol arg)
 
 inline ATbool SDF_isSymbolFileStart(SDF_Symbol arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternSymbolFileStart);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolFileStart);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -3204,13 +3232,15 @@ inline ATbool SDF_isSymbolCf(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolCf, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3224,13 +3254,15 @@ inline ATbool SDF_isSymbolLex(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolLex, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3244,13 +3276,15 @@ inline ATbool SDF_isSymbolVarsym(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolVarsym, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3262,7 +3296,21 @@ inline ATbool SDF_isSymbolVarsym(SDF_Symbol arg)
 
 inline ATbool SDF_isSymbolLayout(SDF_Symbol arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternSymbolLayout);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolLayout);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -3272,13 +3320,15 @@ inline ATbool SDF_isSymbolEmpty(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolEmpty, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3292,13 +3342,15 @@ inline ATbool SDF_isSymbolSeq(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolSeq, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3312,13 +3364,15 @@ inline ATbool SDF_isSymbolOpt(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolOpt, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3332,13 +3386,15 @@ inline ATbool SDF_isSymbolIter(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolIter, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3352,13 +3408,15 @@ inline ATbool SDF_isSymbolIterStar(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolIterStar, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3372,13 +3430,15 @@ inline ATbool SDF_isSymbolIterSep(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolIterSep, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3392,13 +3452,15 @@ inline ATbool SDF_isSymbolIterStarSep(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolIterStarSep, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3412,13 +3474,15 @@ inline ATbool SDF_isSymbolIterN(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolIterN, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3432,13 +3496,15 @@ inline ATbool SDF_isSymbolIterSepN(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolIterSepN, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3452,13 +3518,15 @@ inline ATbool SDF_isSymbolSet(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolSet, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3472,13 +3540,15 @@ inline ATbool SDF_isSymbolPair(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolPair, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3492,13 +3562,15 @@ inline ATbool SDF_isSymbolFunc(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolFunc, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3512,13 +3584,15 @@ inline ATbool SDF_isSymbolAlt(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolAlt, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3532,13 +3606,15 @@ inline ATbool SDF_isSymbolPerm(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolPerm, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3552,13 +3628,15 @@ inline ATbool SDF_isSymbolCharClass(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolCharClass, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3572,13 +3650,15 @@ inline ATbool SDF_isSymbolSort(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolSort, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3592,13 +3672,15 @@ inline ATbool SDF_isSymbolLit(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolLit, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3612,13 +3694,15 @@ inline ATbool SDF_isSymbolLabel(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolLabel, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -3632,13 +3716,15 @@ inline ATbool SDF_isSymbolBracket(SDF_Symbol arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolBracket, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5338,13 +5424,15 @@ inline ATbool SDF_isGrammarLexicalPriorities(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarLexicalPriorities, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5358,13 +5446,15 @@ inline ATbool SDF_isGrammarContextFreePriorities(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarContextFreePriorities, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5378,13 +5468,15 @@ inline ATbool SDF_isGrammarLexicalRestrictions(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarLexicalRestrictions, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5398,13 +5490,15 @@ inline ATbool SDF_isGrammarContextFreeRestrictions(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarContextFreeRestrictions, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5418,13 +5512,15 @@ inline ATbool SDF_isGrammarSyntax(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarSyntax, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5438,13 +5534,15 @@ inline ATbool SDF_isGrammarLexicalSyntax(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarLexicalSyntax, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5458,13 +5556,15 @@ inline ATbool SDF_isGrammarContextFreeSyntax(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarContextFreeSyntax, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5478,13 +5578,15 @@ inline ATbool SDF_isGrammarVariables(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarVariables, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5498,13 +5600,15 @@ inline ATbool SDF_isGrammarLexicalVariables(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarLexicalVariables, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5518,13 +5622,15 @@ inline ATbool SDF_isGrammarImpSection(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarImpSection, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5538,13 +5644,15 @@ inline ATbool SDF_isGrammarPriorities(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarPriorities, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5558,13 +5666,15 @@ inline ATbool SDF_isGrammarSorts(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarSorts, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5578,13 +5688,15 @@ inline ATbool SDF_isGrammarRestrictions(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarRestrictions, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5598,13 +5710,15 @@ inline ATbool SDF_isGrammarAliases(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarAliases, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5616,7 +5730,21 @@ inline ATbool SDF_isGrammarAliases(SDF_Grammar arg)
 
 inline ATbool SDF_isGrammarEmptyGrammar(SDF_Grammar arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternGrammarEmptyGrammar);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarEmptyGrammar);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -5626,13 +5754,15 @@ inline ATbool SDF_isGrammarConcGrammars(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarConcGrammars, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -5646,13 +5776,15 @@ inline ATbool SDF_isGrammarBracket(SDF_Grammar arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGrammarBracket, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -6615,7 +6747,21 @@ ATbool SDF_isValidAttributes(SDF_Attributes arg)
 
 inline ATbool SDF_isAttributesAttrs(SDF_Attributes arg)
 {
-  return !(ATmatchTerm((ATerm)arg, SDF_patternAttributesNoAttrs));
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternAttributesAttrs, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -6623,7 +6769,21 @@ inline ATbool SDF_isAttributesAttrs(SDF_Attributes arg)
 
 inline ATbool SDF_isAttributesNoAttrs(SDF_Attributes arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternAttributesNoAttrs);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternAttributesNoAttrs);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -6751,7 +6911,14 @@ ATbool SDF_isValidAttributeList(SDF_AttributeList arg)
 
 inline ATbool SDF_isAttributeListEmpty(SDF_AttributeList arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternAttributeListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SDF_patternAttributeListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -6759,15 +6926,20 @@ inline ATbool SDF_isAttributeListEmpty(SDF_AttributeList arg)
 
 inline ATbool SDF_isAttributeListSingle(SDF_AttributeList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternAttributeListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -6779,15 +6951,20 @@ inline ATbool SDF_isAttributeListSingle(SDF_AttributeList arg)
 
 inline ATbool SDF_isAttributeListMany(SDF_AttributeList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternAttributeListMany, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -6993,13 +7170,15 @@ inline ATbool SDF_isProductionProd(SDF_Production arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternProductionProd, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -7013,13 +7192,15 @@ inline ATbool SDF_isProductionProdFun(SDF_Production arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternProductionProdFun, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -7544,7 +7725,14 @@ ATbool SDF_isValidProductionList(SDF_ProductionList arg)
 
 inline ATbool SDF_isProductionListEmpty(SDF_ProductionList arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternProductionListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SDF_patternProductionListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -7552,15 +7740,20 @@ inline ATbool SDF_isProductionListEmpty(SDF_ProductionList arg)
 
 inline ATbool SDF_isProductionListSingle(SDF_ProductionList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternProductionListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -7572,15 +7765,20 @@ inline ATbool SDF_isProductionListSingle(SDF_ProductionList arg)
 
 inline ATbool SDF_isProductionListMany(SDF_ProductionList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternProductionListMany, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -7901,7 +8099,14 @@ ATbool SDF_isValidModuleList(SDF_ModuleList arg)
 
 inline ATbool SDF_isModuleListEmpty(SDF_ModuleList arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternModuleListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SDF_patternModuleListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -7909,15 +8114,20 @@ inline ATbool SDF_isModuleListEmpty(SDF_ModuleList arg)
 
 inline ATbool SDF_isModuleListSingle(SDF_ModuleList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternModuleListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -7929,15 +8139,20 @@ inline ATbool SDF_isModuleListSingle(SDF_ModuleList arg)
 
 inline ATbool SDF_isModuleListMany(SDF_ModuleList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternModuleListMany, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -8303,7 +8518,14 @@ ATbool SDF_isValidImpSectionList(SDF_ImpSectionList arg)
 
 inline ATbool SDF_isImpSectionListEmpty(SDF_ImpSectionList arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternImpSectionListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SDF_patternImpSectionListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -8311,15 +8533,20 @@ inline ATbool SDF_isImpSectionListEmpty(SDF_ImpSectionList arg)
 
 inline ATbool SDF_isImpSectionListSingle(SDF_ImpSectionList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternImpSectionListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -8331,15 +8558,20 @@ inline ATbool SDF_isImpSectionListSingle(SDF_ImpSectionList arg)
 
 inline ATbool SDF_isImpSectionListMany(SDF_ImpSectionList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternImpSectionListMany, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -8479,13 +8711,15 @@ inline ATbool SDF_isSectionExports(SDF_Section arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSectionExports, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -8499,13 +8733,15 @@ inline ATbool SDF_isSectionHiddens(SDF_Section arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSectionHiddens, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -8706,7 +8942,14 @@ ATbool SDF_isValidSectionList(SDF_SectionList arg)
 
 inline ATbool SDF_isSectionListEmpty(SDF_SectionList arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternSectionListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SDF_patternSectionListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -8714,15 +8957,20 @@ inline ATbool SDF_isSectionListEmpty(SDF_SectionList arg)
 
 inline ATbool SDF_isSectionListSingle(SDF_SectionList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSectionListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -8734,15 +8982,20 @@ inline ATbool SDF_isSectionListSingle(SDF_SectionList arg)
 
 inline ATbool SDF_isSectionListMany(SDF_SectionList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSectionListMany, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -8882,13 +9135,15 @@ inline ATbool SDF_isModuleNameUnparameterized(SDF_ModuleName arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternModuleNameUnparameterized, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -8902,13 +9157,15 @@ inline ATbool SDF_isModuleNameParameterized(SDF_ModuleName arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternModuleNameParameterized, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -9138,13 +9395,15 @@ inline ATbool SDF_isAttributeId(SDF_Attribute arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternAttributeId, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -9156,7 +9415,21 @@ inline ATbool SDF_isAttributeId(SDF_Attribute arg)
 
 inline ATbool SDF_isAttributeBracket(SDF_Attribute arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternAttributeBracket);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternAttributeBracket);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -9166,13 +9439,15 @@ inline ATbool SDF_isAttributeAtr(SDF_Attribute arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternAttributeAtr, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -9186,13 +9461,15 @@ inline ATbool SDF_isAttributeCons(SDF_Attribute arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternAttributeCons, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -9204,7 +9481,21 @@ inline ATbool SDF_isAttributeCons(SDF_Attribute arg)
 
 inline ATbool SDF_isAttributeConstructor(SDF_Attribute arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternAttributeConstructor);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternAttributeConstructor);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -9212,7 +9503,21 @@ inline ATbool SDF_isAttributeConstructor(SDF_Attribute arg)
 
 inline ATbool SDF_isAttributeMemo(SDF_Attribute arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternAttributeMemo);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternAttributeMemo);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -9220,7 +9525,21 @@ inline ATbool SDF_isAttributeMemo(SDF_Attribute arg)
 
 inline ATbool SDF_isAttributeTraverse(SDF_Attribute arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternAttributeTraverse);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternAttributeTraverse);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -9228,7 +9547,21 @@ inline ATbool SDF_isAttributeTraverse(SDF_Attribute arg)
 
 inline ATbool SDF_isAttributeReject(SDF_Attribute arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternAttributeReject);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternAttributeReject);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -9236,7 +9569,21 @@ inline ATbool SDF_isAttributeReject(SDF_Attribute arg)
 
 inline ATbool SDF_isAttributePrefer(SDF_Attribute arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternAttributePrefer);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternAttributePrefer);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -9244,7 +9591,21 @@ inline ATbool SDF_isAttributePrefer(SDF_Attribute arg)
 
 inline ATbool SDF_isAttributeAvoid(SDF_Attribute arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternAttributeAvoid);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternAttributeAvoid);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -9699,7 +10060,14 @@ ATbool SDF_isValidImportList(SDF_ImportList arg)
 
 inline ATbool SDF_isImportListEmpty(SDF_ImportList arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternImportListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SDF_patternImportListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -9707,15 +10075,20 @@ inline ATbool SDF_isImportListEmpty(SDF_ImportList arg)
 
 inline ATbool SDF_isImportListSingle(SDF_ImportList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternImportListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -9727,15 +10100,20 @@ inline ATbool SDF_isImportListSingle(SDF_ImportList arg)
 
 inline ATbool SDF_isImportListMany(SDF_ImportList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternImportListMany, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -9878,13 +10256,15 @@ inline ATbool SDF_isImportModule(SDF_Import arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternImportModule, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -9898,13 +10278,15 @@ inline ATbool SDF_isImportRenamedModule(SDF_Import arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternImportRenamedModule, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -9918,13 +10300,15 @@ inline ATbool SDF_isImportBracket(SDF_Import arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternImportBracket, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -10161,15 +10545,20 @@ ATbool SDF_isValidSymbolTail(SDF_SymbolTail arg)
 
 inline ATbool SDF_isSymbolTailSingle(SDF_SymbolTail arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolTailSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -10181,15 +10570,20 @@ inline ATbool SDF_isSymbolTailSingle(SDF_SymbolTail arg)
 
 inline ATbool SDF_isSymbolTailMany(SDF_SymbolTail arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolTailMany, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -10333,7 +10727,21 @@ ATbool SDF_isValidAssociativity(SDF_Associativity arg)
 
 inline ATbool SDF_isAssociativityLeft(SDF_Associativity arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternAssociativityLeft);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternAssociativityLeft);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -10341,7 +10749,21 @@ inline ATbool SDF_isAssociativityLeft(SDF_Associativity arg)
 
 inline ATbool SDF_isAssociativityRight(SDF_Associativity arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternAssociativityRight);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternAssociativityRight);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -10349,7 +10771,21 @@ inline ATbool SDF_isAssociativityRight(SDF_Associativity arg)
 
 inline ATbool SDF_isAssociativityNonAssoc(SDF_Associativity arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternAssociativityNonAssoc);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternAssociativityNonAssoc);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -10357,7 +10793,21 @@ inline ATbool SDF_isAssociativityNonAssoc(SDF_Associativity arg)
 
 inline ATbool SDF_isAssociativityAssoc(SDF_Associativity arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternAssociativityAssoc);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternAssociativityAssoc);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -10388,13 +10838,15 @@ inline ATbool SDF_isGroupSimpleGroup(SDF_Group arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGroupSimpleGroup, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -10408,13 +10860,15 @@ inline ATbool SDF_isGroupProdsGroup(SDF_Group arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGroupProdsGroup, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -10428,13 +10882,15 @@ inline ATbool SDF_isGroupAssocGroup(SDF_Group arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGroupAssocGroup, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -10724,13 +11180,15 @@ inline ATbool SDF_isPriorityChain(SDF_Priority arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternPriorityChain, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -10744,13 +11202,15 @@ inline ATbool SDF_isPriorityAssoc(SDF_Priority arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternPriorityAssoc, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -10978,15 +11438,20 @@ ATbool SDF_isValidGroupList(SDF_GroupList arg)
 
 inline ATbool SDF_isGroupListSingle(SDF_GroupList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGroupListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -10998,15 +11463,20 @@ inline ATbool SDF_isGroupListSingle(SDF_GroupList arg)
 
 inline ATbool SDF_isGroupListMany(SDF_GroupList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternGroupListMany, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -11273,7 +11743,14 @@ ATbool SDF_isValidPriorityList(SDF_PriorityList arg)
 
 inline ATbool SDF_isPriorityListEmpty(SDF_PriorityList arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternPriorityListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SDF_patternPriorityListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -11281,15 +11758,20 @@ inline ATbool SDF_isPriorityListEmpty(SDF_PriorityList arg)
 
 inline ATbool SDF_isPriorityListSingle(SDF_PriorityList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternPriorityListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -11301,15 +11783,20 @@ inline ATbool SDF_isPriorityListSingle(SDF_PriorityList arg)
 
 inline ATbool SDF_isPriorityListMany(SDF_PriorityList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternPriorityListMany, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -11635,13 +12122,15 @@ inline ATbool SDF_isLiteralUqlit(SDF_Literal arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternLiteralUqlit, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -11655,13 +12144,15 @@ inline ATbool SDF_isLiteralLexToCf(SDF_Literal arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternLiteralLexToCf, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -11760,7 +12251,14 @@ ATbool SDF_isValidSymbolArguments(SDF_SymbolArguments arg)
 
 inline ATbool SDF_isSymbolArgumentsEmpty(SDF_SymbolArguments arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternSymbolArgumentsEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SDF_patternSymbolArgumentsEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -11768,15 +12266,20 @@ inline ATbool SDF_isSymbolArgumentsEmpty(SDF_SymbolArguments arg)
 
 inline ATbool SDF_isSymbolArgumentsSingle(SDF_SymbolArguments arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolArgumentsSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -11788,15 +12291,20 @@ inline ATbool SDF_isSymbolArgumentsSingle(SDF_SymbolArguments arg)
 
 inline ATbool SDF_isSymbolArgumentsMany(SDF_SymbolArguments arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolArgumentsMany, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -12002,13 +12510,15 @@ inline ATbool SDF_isLookaheadCharClass(SDF_Lookahead arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternLookaheadCharClass, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -12022,13 +12532,15 @@ inline ATbool SDF_isLookaheadSeq(SDF_Lookahead arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternLookaheadSeq, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -12231,13 +12743,15 @@ inline ATbool SDF_isLookaheadsSingle(SDF_Lookaheads arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternLookaheadsSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -12251,13 +12765,15 @@ inline ATbool SDF_isLookaheadsAlt(SDF_Lookaheads arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternLookaheadsAlt, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -12271,13 +12787,15 @@ inline ATbool SDF_isLookaheadsBracket(SDF_Lookaheads arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternLookaheadsBracket, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -12291,13 +12809,15 @@ inline ATbool SDF_isLookaheadsList(SDF_Lookaheads arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternLookaheadsList, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -12693,7 +13213,14 @@ ATbool SDF_isValidLookaheadList(SDF_LookaheadList arg)
 
 inline ATbool SDF_isLookaheadListEmpty(SDF_LookaheadList arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternLookaheadListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SDF_patternLookaheadListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -12701,15 +13228,20 @@ inline ATbool SDF_isLookaheadListEmpty(SDF_LookaheadList arg)
 
 inline ATbool SDF_isLookaheadListSingle(SDF_LookaheadList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternLookaheadListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -12721,15 +13253,20 @@ inline ATbool SDF_isLookaheadListSingle(SDF_LookaheadList arg)
 
 inline ATbool SDF_isLookaheadListMany(SDF_LookaheadList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternLookaheadListMany, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -13155,7 +13692,14 @@ ATbool SDF_isValidRestrictionList(SDF_RestrictionList arg)
 
 inline ATbool SDF_isRestrictionListEmpty(SDF_RestrictionList arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternRestrictionListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SDF_patternRestrictionListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -13163,15 +13707,20 @@ inline ATbool SDF_isRestrictionListEmpty(SDF_RestrictionList arg)
 
 inline ATbool SDF_isRestrictionListSingle(SDF_RestrictionList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternRestrictionListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -13183,15 +13732,20 @@ inline ATbool SDF_isRestrictionListSingle(SDF_RestrictionList arg)
 
 inline ATbool SDF_isRestrictionListMany(SDF_RestrictionList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternRestrictionListMany, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -13551,7 +14105,14 @@ ATbool SDF_isValidAliasList(SDF_AliasList arg)
 
 inline ATbool SDF_isAliasListEmpty(SDF_AliasList arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternAliasListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SDF_patternAliasListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -13559,15 +14120,20 @@ inline ATbool SDF_isAliasListEmpty(SDF_AliasList arg)
 
 inline ATbool SDF_isAliasListSingle(SDF_AliasList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternAliasListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -13579,15 +14145,20 @@ inline ATbool SDF_isAliasListSingle(SDF_AliasList arg)
 
 inline ATbool SDF_isAliasListMany(SDF_AliasList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternAliasListMany, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -13788,7 +14359,14 @@ ATbool SDF_isValidSymbolList(SDF_SymbolList arg)
 
 inline ATbool SDF_isSymbolListEmpty(SDF_SymbolList arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternSymbolListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SDF_patternSymbolListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -13796,15 +14374,20 @@ inline ATbool SDF_isSymbolListEmpty(SDF_SymbolList arg)
 
 inline ATbool SDF_isSymbolListSingle(SDF_SymbolList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -13816,15 +14399,20 @@ inline ATbool SDF_isSymbolListSingle(SDF_SymbolList arg)
 
 inline ATbool SDF_isSymbolListMany(SDF_SymbolList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternSymbolListMany, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -14091,7 +14679,14 @@ ATbool SDF_isValidRenamingList(SDF_RenamingList arg)
 
 inline ATbool SDF_isRenamingListEmpty(SDF_RenamingList arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternRenamingListEmpty);
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, SDF_patternRenamingListEmpty));
+#endif
+  return ATtrue;
 }
 
 /*}}}  */
@@ -14099,15 +14694,20 @@ inline ATbool SDF_isRenamingListEmpty(SDF_RenamingList arg)
 
 inline ATbool SDF_isRenamingListSingle(SDF_RenamingList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternRenamingListSingle, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -14119,15 +14719,20 @@ inline ATbool SDF_isRenamingListSingle(SDF_RenamingList arg)
 
 inline ATbool SDF_isRenamingListMany(SDF_RenamingList arg)
 {
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternRenamingListMany, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -14267,13 +14872,15 @@ inline ATbool SDF_isRenamingSymbol(SDF_Renaming arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternRenamingSymbol, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -14287,13 +14894,15 @@ inline ATbool SDF_isRenamingProduction(SDF_Renaming arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternRenamingProduction, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -14628,13 +15237,15 @@ inline ATbool SDF_isIntConNatural(SDF_IntCon arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternIntConNatural, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -14648,13 +15259,15 @@ inline ATbool SDF_isIntConPositive(SDF_IntCon arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternIntConPositive, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -14668,13 +15281,15 @@ inline ATbool SDF_isIntConNegative(SDF_IntCon arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternIntConNegative, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -14823,13 +15438,15 @@ inline ATbool SDF_isCharRangeDefault(SDF_CharRange arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternCharRangeDefault, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -14843,13 +15460,15 @@ inline ATbool SDF_isCharRangeRange(SDF_CharRange arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternCharRangeRange, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -15049,13 +15668,15 @@ inline ATbool SDF_isCharRangesDefault(SDF_CharRanges arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternCharRangesDefault, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -15069,13 +15690,15 @@ inline ATbool SDF_isCharRangesConc(SDF_CharRanges arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternCharRangesConc, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -15089,13 +15712,15 @@ inline ATbool SDF_isCharRangesBracket(SDF_CharRanges arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternCharRangesBracket, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -15356,7 +15981,21 @@ ATbool SDF_isValidOptCharRanges(SDF_OptCharRanges arg)
 
 inline ATbool SDF_isOptCharRangesAbsent(SDF_OptCharRanges arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternOptCharRangesAbsent);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternOptCharRangesAbsent);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -15364,7 +16003,21 @@ inline ATbool SDF_isOptCharRangesAbsent(SDF_OptCharRanges arg)
 
 inline ATbool SDF_isOptCharRangesPresent(SDF_OptCharRanges arg)
 {
-  return !(ATmatchTerm((ATerm)arg, SDF_patternOptCharRangesAbsent));
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternOptCharRangesPresent, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -15437,13 +16090,15 @@ inline ATbool SDF_isCharClassSimpleCharclass(SDF_CharClass arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternCharClassSimpleCharclass, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -15457,13 +16112,15 @@ inline ATbool SDF_isCharClassComp(SDF_CharClass arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternCharClassComp, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -15477,13 +16134,15 @@ inline ATbool SDF_isCharClassDiff(SDF_CharClass arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternCharClassDiff, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -15497,13 +16156,15 @@ inline ATbool SDF_isCharClassIsect(SDF_CharClass arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternCharClassIsect, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -15517,13 +16178,15 @@ inline ATbool SDF_isCharClassUnion(SDF_CharClass arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternCharClassUnion, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -15537,13 +16200,15 @@ inline ATbool SDF_isCharClassBracket(SDF_CharClass arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternCharClassBracket, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -16307,13 +16972,15 @@ inline ATbool SDF_isATermsAterm(SDF_ATerms arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternATermsAterm, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -16327,13 +16994,15 @@ inline ATbool SDF_isATermsCons(SDF_ATerms arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternATermsCons, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -16530,13 +17199,15 @@ inline ATbool SDF_isATermListEmpty(SDF_ATermList arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternATermListEmpty, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -16550,13 +17221,15 @@ inline ATbool SDF_isATermListNotEmpty(SDF_ATermList arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternATermListNotEmpty, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -16696,13 +17369,15 @@ inline ATbool SDF_isAConInt(SDF_ACon arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternAConInt, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -16716,13 +17391,15 @@ inline ATbool SDF_isAConReal(SDF_ACon arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternAConReal, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -16898,13 +17575,15 @@ inline ATbool SDF_isATermConstant(SDF_ATerm arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternATermConstant, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -16918,13 +17597,15 @@ inline ATbool SDF_isATermList(SDF_ATerm arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternATermList, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -16938,13 +17619,15 @@ inline ATbool SDF_isATermFun(SDF_ATerm arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternATermFun, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -16958,13 +17641,15 @@ inline ATbool SDF_isATermAppl(SDF_ATerm arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternATermAppl, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -16978,13 +17663,15 @@ inline ATbool SDF_isATermAnnotatedConstant(SDF_ATerm arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternATermAnnotatedConstant, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -16998,13 +17685,15 @@ inline ATbool SDF_isATermAnnotatedList(SDF_ATerm arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternATermAnnotatedList, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -17018,13 +17707,15 @@ inline ATbool SDF_isATermAnnotatedFun(SDF_ATerm arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternATermAnnotatedFun, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -17038,13 +17729,15 @@ inline ATbool SDF_isATermAnnotatedAppl(SDF_ATerm arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternATermAnnotatedAppl, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -17680,7 +18373,21 @@ ATbool SDF_isValidTagId(SDF_TagId arg)
 
 inline ATbool SDF_isTagIdLexToCf(SDF_TagId arg)
 {
-  return !(ATmatchTerm((ATerm)arg, SDF_patternTagIdEmpty));
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternTagIdLexToCf, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -17688,7 +18395,21 @@ inline ATbool SDF_isTagIdLexToCf(SDF_TagId arg)
 
 inline ATbool SDF_isTagIdEmpty(SDF_TagId arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternTagIdEmpty);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternTagIdEmpty);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -17875,13 +18596,15 @@ inline ATbool SDF_isCharacterNumeric(SDF_Character arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternCharacterNumeric, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -17895,13 +18618,15 @@ inline ATbool SDF_isCharacterShort(SDF_Character arg)
 {
   {
     static ATerm last_arg = NULL;
+    static int last_gc = -1;
     static ATbool last_result;
 
     assert(arg != NULL);
 
-    if ((ATerm)arg != last_arg) {
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
       last_result = ATmatchTerm((ATerm)arg, SDF_patternCharacterShort, NULL);
+      last_gc = ATgetGCCount();
     }
 
     return last_result;
@@ -17913,7 +18638,21 @@ inline ATbool SDF_isCharacterShort(SDF_Character arg)
 
 inline ATbool SDF_isCharacterTop(SDF_Character arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternCharacterTop);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternCharacterTop);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -17921,7 +18660,21 @@ inline ATbool SDF_isCharacterTop(SDF_Character arg)
 
 inline ATbool SDF_isCharacterEof(SDF_Character arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternCharacterEof);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternCharacterEof);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -18013,7 +18766,21 @@ ATbool SDF_isValidOptExp(SDF_OptExp arg)
 
 inline ATbool SDF_isOptExpPresent(SDF_OptExp arg)
 {
-  return !(ATmatchTerm((ATerm)arg, SDF_patternOptExpAbsent));
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternOptExpPresent, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
@@ -18021,7 +18788,21 @@ inline ATbool SDF_isOptExpPresent(SDF_OptExp arg)
 
 inline ATbool SDF_isOptExpAbsent(SDF_OptExp arg)
 {
-  return ATmatchTerm((ATerm)arg, SDF_patternOptExpAbsent);
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, SDF_patternOptExpAbsent);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
 }
 
 /*}}}  */
