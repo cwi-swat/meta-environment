@@ -135,7 +135,7 @@ ATerm SG_Apply(parse_table *pt, label l, ATermList ts, ATbool reject)
                         (ATerm) ATmakeInt(SG_ApplID(SG_APPLID_INC)));
 }
 
-ATerm SG_ExpandApplNode(ATerm t)
+ATerm SG_ExpandApplNode(ATerm t, ATbool recurse)
 {
   AFun      fun;
   ATermList args, ambs;
@@ -148,14 +148,21 @@ ATerm SG_ExpandApplNode(ATerm t)
     /*  Are we indeed encountering an ambiguity cluster?  */
     if(!idx || ATisEmpty(ambs = SG_AmbTable(SG_AMBTBL_LOOKUP, idx, NULL))) {
       /*  No ambiguity  */
-      return (ATerm)ATmakeAppl2(SG_ApplAfun(),
-                                SG_YieldPT(ATgetFirst(args)),
-                                SG_YieldPT(ATelementAt(args, 1)));
+      if(recurse)
+        return (ATerm)ATmakeAppl2(SG_ApplAfun(),
+                                  SG_YieldPT(ATgetFirst(args)),
+                                  SG_YieldPT(ATelementAt(args, 1)));
+      else
+        return t;
     } else {
       /*  Ambiguous node  */
       SGnrAmb(SG_NRAMB_INC);
-      return (ATerm)ATmake("amb(<list>)",
-                           (ATermList)SG_YieldPT(ATgetFirst((ATermList)ambs)));
+      if(recurse)
+        return (ATerm)ATmake("amb(<list>)",
+                             (ATermList)SG_YieldPT(ATgetFirst((ATermList)ambs)));
+      else
+        return (ATerm)ATmake("amb(<list>)",
+                             (ATermList)ATgetFirst((ATermList)ambs));
     }
   } else {
     return (ATerm) ATmakeApplList(fun,
@@ -175,7 +182,7 @@ ATerm SG_YieldPT(ATerm t)
 
   switch(ATgetType(t)) {
     case AT_APPL:
-      return SG_ExpandApplNode(t);
+      return SG_ExpandApplNode(t, ATtrue);
     case AT_LIST:
       if(ATisEmpty((ATermList) t)) return (ATerm) ATempty;
       for(l = ATempty, args = (ATermList) t;
@@ -216,13 +223,10 @@ ATermList SG_AmbTable(int Mode, ATermInt index, ATermList value)
       ATtablePut(ambtbl, (ATerm) index, (ATerm) value);
       break;
     case SG_AMBTBL_REMOVE:
-
-
       if(ambtbl) ATtableRemove(ambtbl, (ATerm) index);
       break;
     case SG_AMBTBL_LOOKUP:
-      if (    ambtbl
-          && (ambs = (ATermList) ATtableGet(ambtbl, (ATerm) index)))
+      if (ambtbl && (ambs = (ATermList) ATtableGet(ambtbl, (ATerm) index)))
         return ambs;
       break;
 /*

@@ -52,6 +52,9 @@ SG_AllocStats(INC);
 #endif
     res->kid       = NULL;
     res->links     = NULL;
+/*
+    res->rejected = ATfalse;
+*/
     res->protected = ATtrue;
   }
   return res;
@@ -308,12 +311,25 @@ st_link *SG_FindDirectLink(stack *st0, stack *st1)
   node for the representation of stacks!)
 */
 
-void SG_MarkStackRejected(stack *st, st_link *l)
+#if 0
+void SG_MarkStackRejected(stack *st)
 {
+/*
   SG_LK_REJECTED(l) = ATtrue;
+ */
+  st->rejected = ATtrue;
 }
 
-void SG_MarkLinkUnrejected(stack *st, st_link *l)
+void SG_MarkStackUnrejected(stack *st)
+{
+/*
+  SG_LK_REJECTED(l) = ATfalse;
+ */
+  st->rejected = ATfalse;
+}
+#endif
+
+void SG_MarkLinkUnrejected(st_link *l)
 {
   SG_LK_REJECTED(l) = ATfalse;
 /*
@@ -322,7 +338,7 @@ void SG_MarkLinkUnrejected(stack *st, st_link *l)
 */
 }
 
-void SG_MarkLinkRejected(stack *st, st_link *l)
+void SG_MarkLinkRejected(st_link *l)
 {
   SG_LK_REJECTED(l) = ATtrue;
 /*
@@ -330,15 +346,6 @@ void SG_MarkLinkRejected(stack *st, st_link *l)
            SG_ST_STATE(st), SG_ST_STATE(SG_LK_STACK(l)));
 */
 }
-
-void SG_MarkLinkRejected2(stack *st, st_link *l)
-{
-  ATfprintf(stderr, "Warning: link state %d ==> state %d rejected in "
-                   "presence of other links\n",
-           SG_ST_STATE(st), SG_ST_STATE(SG_LK_STACK(l)));
-  SG_MarkLinkRejected(st, l);
-}
-
 
 #ifdef DEBUG
 /*

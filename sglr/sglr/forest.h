@@ -28,9 +28,11 @@ enum SG_ApplIDAction { SG_APPLID_ZERO, SG_APPLID_INC };
 ATermList SG_AmbTable(int Mode, ATermInt key, ATermList value);
 int   SG_MaxNrAmb(int Mode);
 void  SG_Amb(ATerm, ATerm);
-ATerm SG_ExpandApplNode(ATerm t);
+ATerm SG_ExpandApplNode(ATerm t, ATbool recurse);
 ATerm SG_YieldPT(ATerm t);
 int   SG_ApplID(int Action);
+ATerm SG_ApplLabel(void);
+ATerm SG_RejectLabel(void);
 ATerm SG_Apply(parse_table *, label, ATermList, ATbool);
 ATerm SG_TreeType(ATerm);
 

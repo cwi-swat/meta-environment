@@ -78,6 +78,7 @@ typedef struct stack {
 #endif
   struct stack  *kid;
   st_links      *links;
+//  ATbool        rejected;
   ATbool        protected;
 } stack;
 
@@ -90,11 +91,14 @@ typedef struct stacks {
 #define SG_ST_STATE(s)          ((s)->state)     /* State of a stack * */
 #define SG_ST_LINKS(s)          ((s)->links)     /* List of links of a stack * */
 #define SG_ST_PARENT(s)         ((s)->parent     /* Parent stack of a stack * */
-#define SG_ST_KID(s)            ((s)->kid        /* Kid stack of a stack * */
+#define SG_ST_KID(s)            ((s)->kid)       /* Kid stack of a stack * */
+#define SG_ST_REJECTED(x)       ((s)->rejected)
+#define SG_ST_PROTECTED(x)      ((s)->protected)
 
 #define SG_LK_TREE(l)           ((l)->tree)      /* Tree of a link * */
 #define SG_LK_STACK(l)          ((l)->stack)     /* Stack of a link * */
 
+//#define SG_LK_REJECTED(x)       (SG_LK_STACK(x)->rejected)
 #define SG_LK_REJECTED(x)       (x)->rejected
 #define SG_LK_PROTECTED(x)      (x)->protected
 
@@ -117,10 +121,10 @@ void    SG_DeleteStack(stack *st);
 stack *   SG_FindStack(state , stacks *);
 st_link  *SG_FindDirectLink(stack *, stack *);
 
-void     SG_MarkStackRejected(stack *, st_link *);
-void     SG_MarkLinkRejected(stack *, st_link *);
-void     SG_MarkLinkUnrejected(stack *, st_link *);
-void     SG_MarkLinkRejected2(stack *, st_link *);
+void     SG_MarkStackRejected(stack *);
+void     SG_MarkStackUnrejected(stack *);
+void     SG_MarkLinkRejected(st_link *);
+void     SG_MarkLinkUnrejected(st_link *);
 ATbool   SG_Rejected(stack *);
 ATbool   SG_InStacks(stack *, stacks *, ATbool);
 ATbool   SG_SubStack(stack *, stack *);

@@ -358,9 +358,10 @@ ATerm SG_Result(char *sort)
     ATerm forest;
 
     forest = SG_LK_TREE(head(SG_ST_LINKS(accepting_stack)));
-    if (sort != NULL) {      /*  Select only the desired start symbols  */
+    if (sort != NULL && !SG_ABBREV) {
+      /*  Select only the desired start symbols  */
       if (SG_MaxNrAmb(SG_NRAMB_ASK) != 0)
-        forest = SG_ExpandApplNode(forest);
+        forest = SG_ExpandApplNode(forest, ATfalse);
       if ((forest = SG_Prune(forest, sort)) == NULL)
         return ATmake("parse-error([character(<int>), line(<int>),"
                       "col(<int>), char(<int>)])",
@@ -566,7 +567,13 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
       /* First check if one of the children of |st1| was not rejected already */
       nl = SG_AddLink(st1, st0, t);
       if (reject) {
-        SG_MarkLinkRejected2(st1, nl);
+        ATfprintf(stderr, "Warning: link state %d ==> state %d rejected in "
+                          "presence of other links\n",
+                  SG_ST_STATE(st1), SG_ST_STATE(st0));
+        SG_MarkLinkRejected(nl);
+/*
+      SG_MarkStackRejected(st1);
+*/
       }
       sts = active_stacks;
         while(sts != NULL) {
@@ -594,7 +601,10 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
     for_actor_delayed = SG_AddStack(st1, for_actor_delayed);
     if (reject) {
       if(SG_DEBUG)  ATfprintf(SGlog(), "Rejected [new]\n");
-      SG_MarkStackRejected(st1, nl);
+      SG_MarkLinkRejected(nl);
+/*
+      SG_MarkStackRejected(st1);
+ */
     }
   }
 } /* reducer */
@@ -683,8 +693,17 @@ void SG_AddStackHist(stack *parent, stack *kid)
 
 void SG_PropagateReject(stack *st)
 {
+  ATermList l;
+  ATermInt  annot;
+
   while(st != NULL) {
-    SG_MarkLinkRejected(st, head(SG_ST_LINKS(st)));
+    annot = (ATermInt) ATgetAnnotation(SG_LK_TREE(head(SG_ST_LINKS(st))),
+                                       SG_ApplLabel());
+    l = SG_AmbTable(SG_AMBTBL_LOOKUP, annot, NULL);
+    SG_MarkLinkRejected(head(SG_ST_LINKS(st)));
+/*
+    SG_MarkStackRejected(st);
+ */
     st = st->kid;
   }
 }
@@ -692,7 +711,10 @@ void SG_PropagateReject(stack *st)
 void SG_PropagateUnreject(stack *st)
 {
   while(st != NULL) {
-    SG_MarkLinkUnrejected(st, head(SG_ST_LINKS(st)));
+    SG_MarkLinkUnrejected(head(SG_ST_LINKS(st)));
+/*
+    SG_MarkStackUnrejected(st);
+ */
     st = st->kid;
   }
 }

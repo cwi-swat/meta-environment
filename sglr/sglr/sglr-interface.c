@@ -169,7 +169,7 @@ ATerm SGparseString(int conn, char *L, char *G, char *S)
   SG_Validate("SGparseString");
   SG_theText   = strdup(S);
   SG_textIndex = 0;
-  ret = SG_Parse(SG_LookupParseTable(L, ATfalse), G, SG_GetCharFromString);
+  ret = SG_Parse(SG_LookupParseTable(L,ATfalse), G?(*G?G:0):NULL, SG_GetCharFromString);
   return ATmake("snd-value(<term>)", ret ? ret : (ATerm) ATempty);
 }
 
@@ -201,7 +201,7 @@ ATerm SGparseFile(char *prgname, int conn, char *L, char *G, char *FN)
   SG_inputFile = SGopenFile(prgname, NULL, FN);
   if (SG_VERBOSE)
     ATfprintf(stderr, "%s: parsing file %s\n", prgname, FN);
-  ret = SG_Parse(SG_LookupParseTable(L, ATfalse), G, SG_GetChar);
+  ret = SG_Parse(SG_LookupParseTable(L, ATfalse), G?(*G?G:0):NULL, SG_GetChar);
   SGcloseFile(SG_inputFile);
   return ret ? ret : (ATerm) ATempty;
 }
