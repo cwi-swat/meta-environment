@@ -17,7 +17,7 @@ buttons([
          [move-left]),
   button("*",
          "*",
-         ["Actions","ViewTree"],
+         ["Visualization","ViewTree"],
          [get-focus, show-tree]),
   button("*",
          "syntax",

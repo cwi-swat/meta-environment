@@ -143,7 +143,6 @@ ATerm get_button_actions(int cid, ATerm buttonName, char *editortype,
     localButtons = ATgetNext(localButtons);
   }
 
-  ATwarning("actions for %s are %t\n", buttonName, buttonActions);
   return ATmake("snd-value(button-actions(<term>))", buttonActions);
 }
 
