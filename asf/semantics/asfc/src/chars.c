@@ -48,32 +48,6 @@ char* escape(const char* str, const char* escaped_chars, QuotedOption quoted)
 }
 
 /*}}}  */
-/*{{{  char* rmquotes(char *str) */
-
-char* rmquotes(char *str)
-{
-  char *new;
-  int len;
-
-  if (strlen(str) > 0) {
-    new = strdup(str+1);
-    if (new == NULL) {
-      ATerror("Could not allocate memory to copy string\n");
-      return NULL;
-    }
-
-    len = strlen(new);
-    if (len > 0) {
-      new[len - 1] = '\0';
-    }
-    return new;
-  }
-  else {
-    return str;
-  }
-}
-
-/*}}}  */
 /*{{{  char* toalfanum(const char* str) */
 
 char* toalfanum(const char* str)

@@ -5,7 +5,6 @@
 typedef enum { QUOTED, UNQUOTED } QuotedOption;
 
 char* escape(const char* str, const char* escaped_chars, QuotedOption quoted);
-char* rmquotes(char *str);
 char* toalfanum(const char* str);
 
 #endif
