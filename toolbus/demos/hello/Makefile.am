@@ -32,22 +32,17 @@ EXTRA_DIST        = hello1.tb \
                     hello2java.tb Hello.java HelloTool.java
 
 hello_SOURCES     = hello.c
-#hello_LDADD      = -L$(top_builddir)/libtb -ltb
-hello_LDADD       = -L$(ATERM)/lib -lATerm -lATB 	# $(SOCKLIBS)  
+hello_LDADD       = -L$(ATERM)/lib -lATerm -lATB 
 
-hello_gen_SOURCES = hello-gen.c
-#hello_gen_LDADD   = -L$(top_builddir)/libtb -ltb
+hello_gen_SOURCES = hello-gen.c hello.tif.c hello.tif.h
 hello_gen_LDADD   = -L$(ATERM)/lib -lATerm -lATB
 
-$(srcdir)/hello-gen.c : hello.tif.c
+#$(srcdir)/hello-gen.c : hello.tif.c
 
 printer_SOURCES   = printer.c
 printer_LDADD     = -L$(top_builddir)/libtb -ltb
 
-#INCLUDES          = -I$(top_srcdir)/libtb -I.
 INCLUDES          = -I$(ATERM)/include -I.
-
-CLEANFILES        = hello.tif.c hello2.tifs
 
 hello.tif.c: hello2.tifs
 	$(ATERM)/bin/tifstoc -tool hello $<

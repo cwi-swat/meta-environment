@@ -2,7 +2,6 @@ Makefile.in
 Makefile
 .deps
 hello2.tifs
-*.tif.c
 hello
 printer
 hello-gen
