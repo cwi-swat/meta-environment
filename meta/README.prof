@@ -1,0 +1,31 @@
+
+To profile using gcc:
+
+- add option -pg to both the compile and link phases.
+  This is most easily accomplished by replacing the line
+  CC		= gcc
+  in the Makefile with
+  CC		= gcc -pg
+
+- for every aterm library (libaterm.a, libasfix.a, libtoolbus.a)
+  you want to profile, replace the line
+  -lxxx.a with -lxxx-prof.a
+
+  so for instance:
+  -lasfix.a
+  becomes
+  -lasfix-prof.a
+
+- Do a 'make clean; make; make install'
+
+- Run the program you want to profile, this will yield the file
+  gmon.out
+
+- Run the program 'gprof' with two arguments: the first argument is
+  the absolute pathname of the program being profiled, the second
+  argument is the profile input, in this case 'gmon.out'. Pipe the
+  output of this program to the file 'gprof.out':
+  gprof /home/olivierp/test/program gmon.out > gprof.out
+
+If all went well, gprof.out now contains readable profiling information!
+   
