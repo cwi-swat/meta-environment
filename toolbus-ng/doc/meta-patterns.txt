@@ -1,0 +1,30 @@
+Inventory of atom sequences in the meta scripts
+===============================================
+
+
+rec-event . snd-msg . rec-msg . snd-ack-event
+
+rec-event . snd-note . snd-ack-event
+
+rec-event . shutdown
+
+rec-note . snd-do
+
+rec-msg . snd-do
+
+rec.msg . snd-msg
+
+rec-msg . snd-note . snd-msg
+
+rec-msg . snd-eval . rec-value . snd-msg
+
+rec-msg . snd-eval . rec-value . snd-note . snd-msg
+
+rec-msg . execute . snd-eval . rec-value . terminate . snd-msg
+
+rec-msg . execute . snd-eval . rec-value . snd-note . terminate . snd-msg
+
+
+snd-msg . rec-msg . snd-eval . rec-value . snd-note
+
+execute . P* . terminate
