@@ -19,6 +19,7 @@ exports
   context-free syntax
     StrCon             -> String {constructor}
     String "||" String -> String {left}
+    "(" String ")"     -> String {bracket}
     remove-continuations(String) -> String
 
 hiddens
