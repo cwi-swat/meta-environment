@@ -29,7 +29,7 @@
 
 \newcommand{\printindex}{%
   \htmlonly{\HlxSection{-5}{}*{\indexname}\label{hlxindex}}%
-  \texorhtml{\input{hyperlatex.ind}}{\htmlprintindex}}
+  \texorhtml{\input{manual.ind}}{\htmlprintindex}}
 
 \htmlpanelfield{Contents}{hlxcontents}
 \htmlpanelfield{Index}{hlxindex}
@@ -127,6 +127,8 @@ Section~\ref{ParameterizedSorts}]{ParameterizedSorts}.
 
 \subsection{When to use the \ASmetaenv?}
 
+\index{Asf+Sdf Meta-Environment@\ASmetaenv}
+\index{Asf+Sdf formalism@\asfsdf\ formalism}
 The \ASmetaenv\ is an interactive development environment
 for the automatic generation of interactive systems for manipulating
 programs, specifications, or other texts written in a formal
@@ -202,6 +204,9 @@ The advantages of creating interactive environments in this way are twofold:
 
 \subsection{Global Structure of the Meta-Environment}
 
+\index{generic syntax-directed editor@generic syntax-directed editor}
+\index{syntax-directed editor@syntax-directed editor}
+\index{term editor@term editor}
 You can create new specifications or modify and test existing ones
 using the Meta-Environment. Specifications consist of a series of
 modules, and individual modules can be edited by invoking editors
@@ -278,6 +283,7 @@ Section~\ref{SEC:Components}]{SEC:Components}.
 
 \subsection{Downloading the \ASmetaenv}
 
+\index{download@download}
 You can download the \ASmetaenv\ from the following location:
 \begin{verbatim}
    http://www.cwi.nl/projects/MetaEnv/
@@ -333,6 +339,8 @@ overview of selected publications:
 
 \section{Starting the System}
 
+\index{meta@{\tt meta}}
+\index{Asf+Sdf Meta-Environment@\ASmetaenv}
 The \ASmetaenv\ can be invoked via the command {\tt meta}.  As a
 result, 
 \link{the \ASmetaenv\ main window pops up.}[ This is shown in
@@ -1960,6 +1968,7 @@ will now be described and illustrated by examples.
 \subsection{\sdf\ comment convention} 
 \label{SdfComment}
 
+\index{Sdf comment@\sdf\ comment}
 The comment convention within an \sdf\ specification is that character
 between {\tt "\%\%"} and the end of line is comment as well as every
 character between two {\tt "\%"} including the newline character.
@@ -1968,12 +1977,13 @@ See Figure~\ref{CODE:sdfcomment} for an example, more details on
 defining layout can be found in Section~\ref{Restrictions}.
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{CODE:sdfcomment} for an example, more details on
+Below an example is given of how the \sdf\ comments look like, more details on
 defining layout can be found in Section \link{Restrictions}[]{Restrictions}.
 \end{ifhtml}
 
 \begin{figure}
-\T\begin{center}
+\label{CODE:sdfcomment}
+\begin{IncCode}
 \begin{verbatim}
 module Layout
 
@@ -1985,12 +1995,14 @@ exports
     "%%" ~[\n]* [\n]   -> LAYOUT
     "%" ~[\n\%]+ "%"   -> LAYOUT
 \end{verbatim}
-\T\end{center}
-\caption{\sdf\ comment}\label{CODE:sdfcomment}
+\end{IncCode}
+\caption{\sdf\ comment}
 \end{figure}   
 
 \subsection{Imports} \label{Imports}
 
+\index{imports@{\tt imports}}
+\index{{\tt <ImportSection>}@{\tt <ImportSection>}}
 Each {\tt <ImportSection>} starts with the keyword {\tt imports} followed
 by one or more module names:
 
@@ -2058,12 +2070,16 @@ Syntax}[]{ContexFreeSyntax}.
 
 \subsubsection{Option} \label{OptionOperator}
 
+\index{option operator@option operator}
+\index{{\tt ?}@{\tt ?}}
 The postfix option operator {\tt ?} describes an optional part in a syntax
 rule. For instance, {\tt ElsePart?}  defines zero or exactly one occurrence of
 {\tt ElsePart}.
 
 \subsubsection{Sequence} \label{SequenceOperator}
 
+\index{sequence operator@sequence operator}
+\index{{\tt (...)}@{\tt (...)}}
 The sequence operator {\tt (...)} describes the grouping of two or more
 symbols, e.g., {\tt (Bool "\&")}.  Sequences are mostly used to group symbols
 together to form a more complex symbol using one of the available operators,
@@ -2072,6 +2088,10 @@ of a single symbol.  The empty sequence is represented as {\tt ()}.
 
 \subsubsection{Repetition} \label{RepetitionOperator}
 
+\index{repetition operator@repetition operator}
+\index{list@list}
+\index{{\tt *}@{\tt *}}
+\index{{\tt +}@{\tt +}}
 Repetition operators express that a symbol should occur several times.  In
 this way it is possible to construct flat lists and therefore we usually refer
 to repetitions as \emph{lists}.
@@ -2097,6 +2117,8 @@ the same symbol, e.g., {\tt \{Bool Bool\}*}.
 
 \subsubsection{Alternative} \label{AlternativeOperator}
 
+\index{alternative operator@alternative operator}
+\index{{\tt |}@{\tt |}}
 The alternative operator {\tt |} expresses the choice between two symbols,
 e.g., {\tt true | false} represents that either a {\tt true} symbol or a {\tt
   false} symbol may occur here.  The alternative operator is right associative
@@ -2107,6 +2129,8 @@ sequence operator in combination with the alternative operator.
 
 \subsubsection{Tuple} \label{TupleOperator}
 
+\index{tuple operator@tuple operator}
+\index{{\tt \#}@{\tt \#}}
 The tuple operator {\tt \#} describes the grouping of a sequence of symbols of
 a fixed length into a tuple. The notation for tuples is {\tt < , , >}, i.e., a
 comma-separated list of elements enclosed in angle brackets.  For example,
@@ -2117,6 +2141,8 @@ right associative and binds weaker than the alternative operator.
 
 \subsubsection{Permutation} \label{PermutationOperator}
 
+\index{permutation operator@permutation operator}
+\index{{\tt <<...>>}@{\tt <<...>>}}
 The permutation operator {\tt <<...>>} describes an arbitrary permutation of
 a given sequence of symbols.  For example, {\tt <<Bool Int Id>>} represents a
 permutation of the symbols {\tt Bool}, {\tt Int}, and {\tt Id}.  Valid
@@ -2125,6 +2151,8 @@ are six valid instantiations for this permutation.
 
 \subsubsection{Set} \label{SetOperator}
 
+\index{set operator@set operator}
+\index{{\tt Set[...]}@{\tt Set[...]}}
 The set operator {\tt Set[...]} is an abbreviation for defining a set of
 elements of a given symbol.  For example, {\tt Set[Int]} abbreviates the
 definition {\tt "\{" \{Int ","\}* "\}"}. As a consequnce, {\tt \{1, 2, 3\}} is
@@ -2132,6 +2160,8 @@ a valid instantiation for the given definition.
 
 \subsubsection{Function} \label{FunctionOperator}
 
+\index{function operator@function operator}
+\index{{\tt (...=>...)}@{\tt (...=>...)}}
 The function operator {\tt (...=>...)} allows the definition of function
 types. Left of {\tt =>} zero or more symbols may occur, right of {\tt =>}
 exactly one symbol may occur.  For example, {\tt (Bool Int) => Int} represents
@@ -2140,6 +2170,8 @@ and a result type {\tt Int}.
 
 \subsubsection{Parameterized Sorts} \label{ParameterizedSorts}
 
+\index{parameterized sort@parameterized sort}
+\index{{\tt ...[[...]]}@{\tt ...[[...]]}}
 Sort names can have parameters. This provides a way of distinguishing 
 a generic sort {\tt List} for integers, e.g. {\tt List[[Int]]},
 from booleans, e.g. {\tt List[[Bool]]}.
@@ -2305,6 +2337,7 @@ education) recognizes the single string {\tt aapnootmies}.
 
 
 \begin{figure}
+\label{CODE:simplelex}
 \begin{IncCode}
 \begin{verbatim}
 module LeesPlank
@@ -2320,7 +2353,7 @@ exports
     Aap Noot Mies -> LeesPlank  
 \end{verbatim}
 \end{IncCode}
-\caption{Simple lexical functions}\label{CODE:simplelex}
+\caption{Simple lexical functions}
 \end{figure}   
       
 
@@ -2360,18 +2393,19 @@ digits ({\tt Digit}) are shown
 in Figure~\ref{CODE:LettersDigits1}. 
 \end{iftex}
 \begin{ifhtml}
-\link{here}[]{CODE:LettersDigits1}.
+in the first example below.
 \end{ifhtml}
 \begin{iftex}
 Figure~\ref{CODE:LettersDigits2} gives
 \end{iftex}
 \begin{ifhtml} 
-Click \link{here}[]{CODE:LettersDigits2} for
+The next example gives
 \end{ifhtml}
 a definition of the sort {\tt LetterOrDigit} that recognizes a single letter
 (upper-case or lower-case) or digit.
 
 \begin{figure}
+\label{CODE:LettersDigits1}
 \begin{IncCode}
 \begin{verbatim}
 module LettersDigits1
@@ -2387,10 +2421,11 @@ exports
     [0-9]    -> Digit
 \end{verbatim}
 \end{IncCode}
-\caption{Defining letter (lower-case and upper-case) and digit}\label{CODE:LettersDigits1}
+\caption{Defining letter (lower-case and upper-case) and digit}
 \end{figure}   
 
 \begin{figure}
+\label{CODE:LettersDigits2}
 \begin{IncCode}
 \begin{verbatim}
 module LettersDigits2
@@ -2404,7 +2439,7 @@ exports
     [0-9]    -> LetterOrDigit
 \end{verbatim}
 \end{IncCode}
-\caption{Defining a single letter or digit}\label{CODE:LettersDigits2}
+\caption{Defining a single letter or digit}
 \end{figure}   
 
 \paragraph{Escape Conventions}
@@ -2456,6 +2491,7 @@ The following operators are available for character classes
 left-associative binary operators.
 
 \begin{figure}
+\label{CODE:LettersDigits3}
 \begin{IncCode}
 \begin{verbatim}
 module LettersDigits3
@@ -2465,14 +2501,14 @@ exports
     [a-z] \/ [A-Z] \/ [0-9]   -> LetterOrDigit
 \end{verbatim}
 \end{IncCode}
-\caption{Defining a single letter or digit using the alternative operator}\label{CODE:LettersDigits3}
+\caption{Defining a single letter or digit using the alternative operator}
 \end{figure}
 
 \begin{iftex} 
 Figure~\ref{CODE:LettersDigits3} shows 
 \end{iftex}
 \begin{ifhtml}
-Click \link{here}[]{CODE:LettersDigits3} for
+The example above gives
 \end{ifhtml}
 the definion of a single letter or digit
 using the alternative operator {\tt  \verb+\+/}.
@@ -2483,13 +2519,14 @@ Another example is
 shown in Figure \ref{CODE:charclasses}.
 \end{iftex}
 \begin{ifhtml}
-given \link{here}[]{CODE:charclasses}.
+given below.
 \end{ifhtml}
 This definition of characters contains
 all possible characters, either by means of the ordinary representation
 or via their decimal representation.
 
 \begin{figure}
+\label{CODE:charclasses}
 \begin{IncCode}
 \begin{verbatim}
 module Characters
@@ -2512,10 +2549,35 @@ exports
     EscChar                  -> L-Char
 \end{verbatim}
 \end{IncCode}
-\caption{Example of character classes}\label{CODE:charclasses}
+\caption{Example of character classes}
 \end{figure}  
 
+
+\subsubsection{Repetition}
+
+\index{repetition operator@repetition operator}
+Lexical tokens are often described by patterns that exhibit a certain
+repetition. The operator described in 
+\begin{iftex} 
+Section~\ref{RepetitionOperator}
+\end{iftex}
+\begin{ifhtml}
+Section \link{Repetition}[]{RepetitionOperator} 
+\end{ifhtml}
+can be used to express repetitions.
+
+\begin{iftex}
+Figure \ref{CODE:repetition} shows 
+\end{iftex}
+\begin{ifhtml}
+The example below demonstrates
+\end{ifhtml} 
+the use of the repetition
+operator {\tt *} for defining identifiers consisting of a letter
+followed by zero or more letters or digits.
+
 \begin{figure}
+\label{CODE:repetition}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-repetition
@@ -2531,33 +2593,12 @@ exports
     Letter DigitLetter* -> Id
 \end{verbatim}
 \end{IncCode}
-\caption{Defining identifiers using the repetition operator {\tt *} }\label{CODE:repetition}
+\caption{Defining identifiers using the repetition operator {\tt *}}
 \end{figure}   
-
-\subsubsection{Repetition}
-
-Lexical tokens are often described by patterns that exhibit a certain
-repetition. The operator described in 
-\begin{iftex} 
-Section~\ref{RepetitionOperator}
-\end{iftex}
-\begin{ifhtml}
-Section \link{Repetition}[]{RepetitionOperator} 
-\end{ifhtml}
-can be used to express repetitions.
-
-\begin{iftex}
-Figure \ref{CODE:repetition} shows 
-\end{iftex}
-\begin{ifhtml}
-Click \link{here}[]{CODE:repetition} for an example of
-\end{ifhtml} 
-the use of the repetition
-operator {\tt *} for defining identifiers consisting of a letter
-followed by zero or more letters or digits.
 
 \subsubsection{Option}
 
+\index{option operator@option operator}
 If zero or exactly one occurrence of a lexical token is desired the
 option operator described in 
 \begin{iftex} 
@@ -2573,13 +2614,14 @@ The use of the option operator is illustrated
 in Figure \ref{CODE:option} which 
 \end{iftex}
 \begin{ifhtml}
-\link{here}[]{CODE:option}, it 
+below, it 
 \end{ifhtml} 
 defines identifiers consisting of one letter followed by one, optional,
 digit. This definition accepts {\tt a} and {\tt z8}, but rejects {\tt ab} or {\tt
   z789}.
 
 \begin{figure}
+\label{CODE:option}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-optional
@@ -2595,11 +2637,12 @@ exports
     Letter Digit? -> Id
 \end{verbatim}
 \end{IncCode}
-\caption{Defining a letter followed by an optional number using the option operator {\tt ?} }\label{CODE:option}
+\caption{Defining a letter followed by an optional number using the option operator {\tt ?} }
 \end{figure}   
 
 \subsubsection{Alternative}
 
+\index{alternative operator@alternative operator}
 Functions with the same result sort together define the lexical syntax of
 tokens of that sort. The left-hand sides of these function definitions form
 the alternatives for this function. Sometimes, it is more convenient to list
@@ -2613,12 +2656,33 @@ Section~\ref{AlternativeOperator}.
 Section \link{Alternative}[]{AlternativeOperator}.
 \end{ifhtml}
 
+\begin{figure}
+\label{CODE:alternative1}
+\begin{IncCode}
+\begin{verbatim}
+module Identifiers-alternative1
+
+imports Layout
+
+exports
+  sorts UCLetter Digit
+  lexical syntax
+    [A-Z]   -> UCLetter
+    [a-z]   -> LCLetter
+    [0-9]   -> Digit
+
+  UCLetter LCLetter* | UCLetter* | Digit* -> Id
+\end{verbatim}
+\end{IncCode}
+\caption{Example of alternative operator {\tt |} }
+\end{figure}   
+
 The example 
 \begin{iftex}
 in Figure \ref{CODE:alternative1} 
 \end{iftex}
 \begin{ifhtml}
-\link{here}[]{CODE:alternative1}
+above
 \end{ifhtml}
 shows how this operator can be used.  
 It describes identifiers starting with an upper-case letter
@@ -2654,26 +2718,6 @@ with an uppercase letter followed by zero or more lower-case letters,
 uppercase letters or digits. According to this definition {\tt MiES}, {\tt
   B49a} and {\tt 007} would, for instance, be acceptable.
 
-\begin{figure}
-\begin{IncCode}
-\begin{verbatim}
-module Identifiers-alternative1
-
-imports Layout
-
-exports
-  sorts UCLetter Digit
-  lexical syntax
-    [A-Z]   -> UCLetter
-    [a-z]   -> LCLetter
-    [0-9]   -> Digit
-
-  UCLetter LCLetter* | UCLetter* | Digit* -> Id
-\end{verbatim}
-\end{IncCode}
-\caption{Example of alternative operator {\tt |} }\label{CODE:alternative1}
-\end{figure}   
-
 \noindent A slightly more readable definition that is equivalent to the 
 \link{original one}[ in Figure~\ref{CODE:alternative1}]{CODE:alternative1}
 is shown 
@@ -2681,12 +2725,13 @@ is shown
 in Figure~\ref{CODE:alternative2}.  
 \end{iftex}
 \begin{ifhtml}
-\link{here}[]{CODE:alternative2}.
+below.
 \end{ifhtml}
 In any case, we recommend to use parentheses to make the scope of alternatives
 explicit.
 
 \begin{figure}
+\label{CODE:alternative2}
 \begin{IncCode}
 \begin{verbatim}
 module Identifiers-alternative2
@@ -2703,7 +2748,7 @@ exports
     (UCLetter LCLetter*) | (UCLetter UCLetter*) | (UCLetter Digit*) -> Id
 \end{verbatim}
 \end{IncCode}
-\caption{Example of alternative operator {\tt |} }\label{CODE:alternative2}
+\caption{Example of alternative operator {\tt |} }
 \end{figure}   
 
 \subsubsection{Miscellaneous Operators}
@@ -2731,7 +2776,7 @@ Definitions of integers and real numbers are shown
 in Figure \ref{CODE:numbers}. 
 \end{iftex}
 \begin{ifhtml}
-\link{here}[]{CODE:numbers}.
+in the example below.
 \end{ifhtml}
 Note the use of the alternative operator in the
 definitions of {\tt UnsignedInt} and {\tt Number}.  Also note the use
@@ -2739,6 +2784,7 @@ of the option operator in the definitions of {\tt SignedReal} and {\tt
 UnsignedReal}.
 
 \begin{figure}[t]
+\label{CODE:numbers}
 \begin{IncCode}
 \begin{verbatim}
 module Numbers
@@ -2759,7 +2805,7 @@ exports
     UnsignedInt | UnsignedReal                    -> Number
 \end{verbatim}
 \end{IncCode}
-\caption{Lexical definition of Numbers}\label{CODE:numbers}
+\caption{Lexical definition of Numbers}
 \end{figure}   
 
 \paragraph{Defining Strings}
@@ -2768,7 +2814,7 @@ exports
 Figure \ref{CODE:string} gives 
 \end{iftex}
 \begin{ifhtml}
-\link{Here}[]{CODE:string} an example is given of
+The specification below gives
 \end{ifhtml} 
 the lexical definition of
 strings which may contain escaped double quote characters.
@@ -2783,6 +2829,7 @@ arbitrary characters except double quote or newline, or
 double quotes.
 
 \begin{figure}
+\label{CODE:string}
 \begin{IncCode}
 \begin{verbatim}
 module Strings
@@ -2798,7 +2845,7 @@ exports
     "\"" StringChar* "\"" -> String
 \end{verbatim}
 \end{IncCode}
-\caption{Lexical definition of String}\label{CODE:string}
+\caption{Lexical definition of String}
 \end{figure}   
 
 \subsection{Context-free Syntax} \label{ContexFreeSyntax}
