@@ -1,5 +1,9 @@
 # $Id$
 
+Tue Jan  6 13:08:00 CET 2004 <jong@cwi.nl>
+ * export sort <Elem, Elem> which is needed for exported add-tuple production
+
+
 Mon Jan  5 14:52:57 CET 2004 <jong@cwi.nl>
  * ChangeLog added
  * {Bags, ExtendedIntegers, Relations, RscriptElem, Rstore}.asf:
