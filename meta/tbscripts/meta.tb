@@ -14,6 +14,10 @@
 #include "kernel-configuration.tb"
 #include "user-configuration.tb"
 
+/* tide support */
+#define TIDE_PASSIVE
+#include <tide.tb>
+
 /* sdf-meta */
 #include "parsetablegen.idef"
 #include "sdf-import-graph.idef"

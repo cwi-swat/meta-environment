@@ -377,6 +377,7 @@ in
     rec-msg(reduce, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
     . StackPopTerm(Stack, Stack?, STree?)
+    . snd-msg(debugging(off)) 
     . ReduceTerm(STree, Modulename, RTree?)
     .
     if not-equal(RTree, error-tree) then
@@ -390,11 +391,39 @@ in
       ReturnAbort(EditorId, Stack)
     fi
   +
+  /* TODO: changed reduce action to take an extra argument,
+     that will break all currently existing scripts, so we
+     leave it at this for the moment. In 1.6 this can be changed?
+   */
+    rec-msg(debug-reduce, Stack?, EditorId?) .
+    StackPopString(Stack,Stack?,Modulename?) .
+    StackPopTerm(Stack,Stack?,STree?) .
+    snd-msg(debugging(on)) .
+    ReduceTerm(STree, Modulename, RTree?) .
+    if not-equal(RTree, error-tree) then
+      snd-msg(promote-posinfo-to-origin(RTree))
+      . rec-msg(promoted-posinfo-to-origin(RTree?))
+      . AnnotateTree(RTree, "reduct.out", RTree?)
+      . snd-msg(put-term-tree("reduct.out", RTree))
+      . StackPushTerm(Stack, Stack?, RTree)
+      . ReturnSuccess(EditorId, Stack)
+    else
+      ReturnAbort(EditorId,Stack)
+    fi .
+    snd-msg(debugging(off)) 
+  +
     rec-msg(run-asf-tests, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
     . StackPopTerm(Stack, Stack?, STree?)
     . snd-msg(run-asf-tests(Modulename))
     . ReturnSuccess(EditorId, Stack)
+  +
+    rec-msg(debug-run-asf-tests, Stack?, EditorId?) .
+    StackPopString(Stack,Stack?,Modulename?) .
+    StackPopTerm(Stack,Stack?,STree?) .
+    snd-msg(debugging(on)) .
+    snd-msg(run-asf-tests(Modulename)) .
+    ReturnSuccess(EditorId,Stack)
   +
     rec-msg(pretty-print, Stack?, EditorId?)
     . StackPopString(Stack, Stack?, Modulename?)
