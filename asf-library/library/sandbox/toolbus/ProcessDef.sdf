@@ -16,8 +16,3 @@ exports
   sorts ProcessDef
   context-free syntax
     "process" ProcessSignature "is" ProcessBody -> ProcessDef {cons("procDef")}
-
-  sorts ProcessDefs
-  context-free syntax
-    ProcessDef*  -> ProcessDefs {cons("procDefStar")}
-

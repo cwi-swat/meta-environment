@@ -24,6 +24,7 @@ exports
     "subscribe" "(" AtomArgs ")"      -> Atom {cons("subscribe")}
     "unsubscribe" "(" AtomArgs ")"    -> Atom {cons("unsubscribe")}
     "snd-terminate" "(" AtomArgs ")"  -> Atom {cons("snd-terminate")}
+    "rec-connect" "(" AtomArgs ")" -> Atom {cons("rec-connect")}
     "rec-disconnect" "(" AtomArgs ")" -> Atom {cons("rec-disconnect")}
     "execute" "(" AtomArgs ")"   -> Atom {cons("execute")}
     "shutdown" "(" AtomArgs ")"  -> Atom {cons("shutdown")}
