@@ -17,6 +17,8 @@ public class FeedbackListCellRenderer extends JTextField implements ListCellRend
     public FeedbackListCellRenderer() {
         setOpaque(true);
     }
+    
+    
 
     public Component getListCellRendererComponent(
         JList list,
