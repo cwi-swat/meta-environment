@@ -1,5 +1,5 @@
 module SdfCollect
-imports languages/sdf2/syntax/Sdf2-Syntax
+imports languages/sdf2/syntax/Sdf2
 imports basic/Booleans
 
 exports

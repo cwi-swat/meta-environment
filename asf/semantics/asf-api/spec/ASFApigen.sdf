@@ -16,6 +16,8 @@ hiddens
 
 context-free start-symbols 
   Skeleton
+  Equation*
+  String
 
 context-free syntax
 
@@ -63,3 +65,6 @@ variables
 "ArgNr"[0-9]* -> Integer
 "Name" -> String
 "NatCon"[0-9]* -> NatCon
+"label" -> CHAR*
+"symbol" -> CHAR*
+"num" -> CHAR*

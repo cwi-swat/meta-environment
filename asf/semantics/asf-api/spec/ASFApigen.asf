@@ -78,18 +78,21 @@ generate-get-and-set(Symbol*, Pattern, ArgNr + 1)
 [literal]
 generate-get-and-set-field(Literal, Pattern, ArgNr) =
 
+[unquoted-field]
+generate-get-and-set-field(uqliteral(c*) : Symbol, Pattern, ArgNr) =
+generate-get-and-set-field(qliteral("""c*""") : Symbol, Pattern, ArgNr)
+
 [quoted-field]
-strcon("""c*""") := symbol2string(Symbol),
-natcon(c*3) := ArgNr,
-String := strcon("""c*""") || strcon("""c*3"""),
-Field := "$" || String || "_",
-Field2 := "$" || String || "_" || "'",
-Equation1 := [] "get-" || strcon("""c*""") || "(" || Pattern || ")" = Field,
-strcon("""c*1 "$" c* c*3 c*2 """) := Pattern,
-Pattern2 := strcon("""c*1 "$" c* c*3 "'" c*2 """),
-Equation2 := [] "set-" || strcon("""c*""") || "(" || Pattern || "," || Field2 || ")" = Pattern2
+strcon("""symbol""") := symbol2string(Symbol),
+natcon(num) := ArgNr,
+Field := "$" || strcon("""symbol""") || "_" || strcon("""num"""),
+Field2 := Field || "'",
+Equation1 := [] "get-" || strcon("""label""") || "(" || Pattern || ")" = Field,
+strcon("""c*1 "$" symbol "_" num c*2 """) := Pattern,
+Pattern2 := strcon("""c*1 "$" symbol "_" num "'" c*2 """),
+Equation2 := [] "set-" || strcon("""label""") || "(" || Pattern || "," || Field2 || ")" = Pattern2
 ====>
-generate-get-and-set-field(Literal : Symbol, Pattern, ArgNr) =
+generate-get-and-set-field(qliteral("""label""") : Symbol, Pattern, ArgNr) =
 Equation1
 Equation2
 

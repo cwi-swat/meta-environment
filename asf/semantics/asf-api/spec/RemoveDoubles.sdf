@@ -1,7 +1,7 @@
 module RemoveDoubles
 
 imports EquationsSkeleton
-imports languages/sdf2/syntax/Sdf2-Syntax
+imports languages/sdf2/syntax/Sdf2
 
 hiddens
 
