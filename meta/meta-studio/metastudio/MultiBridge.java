@@ -60,33 +60,6 @@ public class MultiBridge extends UserInterfaceTool {
 		}
 	}
 
-	public void addStatus(ATerm id, String message) {
-		Iterator iter = getToolComponents().iterator();
-
-		while (iter.hasNext()) {
-			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-			tif.addStatus(id, message);
-		}
-	}
-
-	public void addStatusf(ATerm id, String format, ATerm args) {
-		Iterator iter = getToolComponents().iterator();
-
-		while (iter.hasNext()) {
-			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-			tif.addStatusf(id, format, args);
-		}
-	}
-
-	public void endStatus(ATerm id) {
-		Iterator iter = getToolComponents().iterator();
-
-		while (iter.hasNext()) {
-			UserInterfaceTif tif = (UserInterfaceTif) iter.next();
-			tif.endStatus(id);
-		}
-	}
-
 	public void errorf(String format, ATerm args) {
 		Iterator iter = getToolComponents().iterator();
 

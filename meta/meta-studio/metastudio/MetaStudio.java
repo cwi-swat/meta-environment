@@ -24,8 +24,8 @@ import metastudio.components.MenuBar;
 import metastudio.components.MessageTabs;
 import metastudio.components.ModulePopupMenu;
 import metastudio.components.QuestionDialog;
-import metastudio.components.StatusBar;
 import metastudio.components.ToolBar;
+import metastudio.components.statusbar.StatusBar;
 import metastudio.utils.Preferences;
 import aterm.pure.PureFactory;
 
@@ -107,14 +107,17 @@ public class MetaStudio extends JFrame {
         setVisible(true);
     }
 
-    private JPanel createMessageStatusPanel() {
+    private JPanel createMessageStatusPanel(String[] args) {
         JPanel container = new JPanel();
         container.setLayout(new BorderLayout());
 
         container.add(new MessageTabs(factory, getBridge()), BorderLayout.CENTER);
 
-        StatusBar bar = new StatusBar(factory, getBridge());
-        getBridge().addToolComponent(bar);
+        StatusBar bar = new StatusBar(factory, args);
+        Thread barThread = new Thread(bar);
+        barThread.setName("status-bar");
+        barThread.start();
+        
         container.add(bar, BorderLayout.SOUTH);
 
         return container;
@@ -123,7 +126,7 @@ public class MetaStudio extends JFrame {
 
     private JSplitPane createMainPane(String[] args) {
         JComponent tabs = new MainTabs(factory, getBridge(), args);
-        JPanel panel = createMessageStatusPanel();
+        JPanel panel = createMessageStatusPanel(args);
 
         JSplitPane mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabs, panel);
         mainPanel.setResizeWeight(0.8);

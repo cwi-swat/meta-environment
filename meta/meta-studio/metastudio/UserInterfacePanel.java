@@ -119,20 +119,8 @@ public abstract class UserInterfacePanel extends JPanel
 	public void showFeedbackSummary(ATerm t0) {
 		// intentionally left empty
 	}
-
-	public void addStatusf(ATerm t0, String s1, ATerm t2) {
-		// intentionally left empty
-	}
-
+	
 	public void moduleInfo(String s0, ATerm t1) {
-		// intentionally left empty
-	}
-
-	public void endStatus(ATerm t0) {
-		// intentionally left empty
-	}
-
-	public void addStatus(ATerm t0, String s1) {
 		// intentionally left empty
 	}
 

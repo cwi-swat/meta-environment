@@ -1,6 +1,6 @@
 include ${top_srcdir}/make_rules
 
-SUBDIRS = graphs .
+SUBDIRS = graphs statusbar .
 
 CLASSPATH_ENV = CLASSPATH=${JAVAROOT}:${top_srcdir}/meta-studio:${EXTERNAL_JARS}
 
@@ -25,7 +25,6 @@ java_JAVA = \
 	ModuleTree.java \
 	ParseTreeBrowser.java \
 	QuestionDialog.java \
-	StatusBar.java \
 	ToolBar.java \
 	TideControl.java \
 	SystemInfoPanel.java

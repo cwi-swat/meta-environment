@@ -1,0 +1,32 @@
+tool status-bar is { }
+
+process StatusBar is
+let
+  T : status-bar,
+  Id: term,
+  List: list,
+  Arguments: list,
+  Str : str
+in
+  subscribe(ui-status(<term>))
+  . printf("te warskip")
+  . Id := process-id
+  . rec-connect(T?)
+  . (
+      rec-note(ui-status(stat(Id?, Str?)))
+      . printf("hiero")
+      . snd-do(T, add-status(Id, Str))
+    +
+      rec-note(ui-status(statf(Id?, Str?, Arguments?)))
+      . printf("daaro")
+      . snd-do(T, add-statusf(Id, Str, Arguments))
+    +
+      rec-note(ui-status(endstat(Id?)))
+      . printf("pulletje")
+      . snd-do(T, end-status(Id))
+    )
+    *
+    rec-disconnect(T)
+endlet
+
+toolbus(StatusBar)

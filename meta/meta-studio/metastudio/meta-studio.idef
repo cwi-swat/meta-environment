@@ -38,15 +38,6 @@ in
   .
   (
     (
-      rec-note(ui-status(stat(Id?, Str?)))
-      . snd-do(UI, add-status(Id, Str))
-    +
-      rec-note(ui-status(statf(Id?, Str?, Arguments?)))
-      . snd-do(UI, add-statusf(Id, Str, Arguments))
-    +
-      rec-note(ui-status(endstat(Id?)))
-      . snd-do(UI, end-status(Id))
-    +
       rec-note(ui-status(error(Str?)))
       . snd-do(UI, error(Str))
     +
@@ -139,12 +130,6 @@ in
       rec-event(UI, node-selected(GraphId?, Node?))
       . snd-msg(ui-node-selected(GraphId, Node))
       . snd-ack-event(UI, node-selected(GraphId, Node))
-    /*
-    +
-      rec-event(UI, node-info(ModuleId?, Tree?))
-      . snd-msg(ui-node-selected(ModuleId, Tree))
-      . snd-ack-event(UI, node-info(ModuleId, Tree))
-      */
     +
       rec-event(UI, error-selected(Error?))
       . snd-msg(ui-error-selected(Error))
