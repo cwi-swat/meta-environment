@@ -69,6 +69,7 @@ Version() {
     asfoperations -V
     baffle -v
     configmanager -V
+    editor-manager -V
     graph-browser -V
     in-output -V
     module-db -V
