@@ -714,7 +714,8 @@ The product operator combines two bags into a relation and can be defined as
 follows:
 
 \begin{verbatim}
-rel[&T1,&T2] x(bag[&T1] B1, bag[&T2] B2) = {<V, W> | &T1 V : B1, &T2 W : B2 }
+rel[&T1,&T2] x(bag[&T1] B1, bag[&T2] B2) = 
+   {<V, W> | &T1 V : B1, &T2 W : B2 }
 \end{verbatim}
 
 \paragraph{Example}
@@ -735,14 +736,16 @@ follows:
   allow {\tt .} as function name. The same applies to some of the following definitions.}
 
 \begin{verbatim}
-bag[&T1] left-image(rel[&T1,&T2] R, &T2 E) = { V | <&T1 V, &T2 W> : R, W == E }
+bag[&T1] left-image(rel[&T1,&T2] R, &T2 E) = 
+   { V | <&T1 V, &T2 W> : R, W == E }
 \end{verbatim}
 
 The left image operator can be extended to take a bag of elements as second
 element instead of a single element:
 
 \begin{verbatim}
-bag[&T1] left-image(rel[&T1,&T2] R, bag[&T2] B) = { V | <&T1 V, &T2 W> : R, W in B }
+bag[&T1] left-image(rel[&T1,&T2] R, bag[&T2] B) = 
+   { V | <&T1 V, &T2 W> : R, W in B }
 \end{verbatim}
 
 \paragraph{Examples}
@@ -763,14 +766,16 @@ that occur in tuples of the form {\tt <E$_i$, E>}. It can be defined as
 follows:
 
 \begin{verbatim}
-bag[&T2] right-image(&T1 E, rel[&T1,&T2] R) = { W | <&T1 V, &T2 W> : R, V == E }
+bag[&T2] right-image(&T1 E, rel[&T1,&T2] R) = 
+   { W | <&T1 V, &T2 W> : R, V == E }
 \end{verbatim}
 
 The right image operator can be extended to take a bag of elements as first
 element instead of a single element:
 
 \begin{verbatim}
-bag[&T2] right-image(bag[&T1] B, rel[&T1,&T2] R) = { W | <&T1 V, &T2 W> : R, V in B}
+bag[&T2] right-image(bag[&T1] B, rel[&T1,&T2] R) = 
+   { W | <&T1 V, &T2 W> : R, V in B}
 \end{verbatim}
 
 \paragraph{Examples}
@@ -1088,13 +1093,7 @@ bag {\tt Excl} are used.
 
 \subsection{Analyzing the Call Structure of an Application}
 
-\begin{figure}[tb]
-\begin{center}
-\epsfig{figure=figs/calls.eps,width=15cm}
-\vspace*{-14cm}
-\end{center}
-\caption{\label{FIG:calls} Graphical representation of the {\tt calls} relation}
-\end{figure}
+
 
 Now we will explore the call structure of an application. First,
 introduce a new type {\tt proc} (an alias for strings) to denote procedures:
@@ -1192,6 +1191,14 @@ which yields {\tt \{"e"\}}. In other words, the procedures called from both
 entry
 points are mostly disjoint except for the common procedure  {\tt \{"e"\}}.
 
+\begin{figure}[tb]
+\begin{center}
+\epsfig{figure=figs/calls.eps,width=14cm}
+\vspace*{-13cm}
+\end{center}
+\caption{\label{FIG:calls} Graphical representation of the {\tt calls} relation}
+\end{figure}
+
 These findings can be verified by inspecting a graph view of the calls
 relation as shown in Figure~\ref{FIG:calls}.  Such a visual inspection does
 \emph{not} scale very well to large graphs and this makes the above form of
@@ -1250,8 +1257,8 @@ and has as value:
 
 \begin{figure}[tb]
 \begin{center}
-\epsfig{figure=figs/parts.eps,width=15cm}
-\vspace*{-14.5cm}
+\epsfig{figure=figs/parts.eps,width=13cm}
+\vspace*{-12.5cm}
 \end{center}
 \caption{\label{FIG:parts} (a) {\tt Calls2}; (b) {\tt PartOf}; (c) {\tt ComponentCalls}}
 \end{figure}
@@ -1569,28 +1576,31 @@ The number of nodes $n$ is equal to the number of elements in the carrier of
 
 \subsection{Dataflow Analysis}
 
-\begin{figure}[tb]
-\begin{center}
-\epsfig{figure=figs/df-graph.eps,width=10cm}
-\vspace*{-6cm}
-\end{center}
-\caption{\label{FIG:df-graph} Flow graph for various dataflow problems}
-\end{figure}
+
 
 \emph{Dataflow analysis} is a program analysis technique that forms the basis
 for many compiler optimizations. It is described in any text book on compiler
 construction, e.g. \cite{ASU86}. The goal of dataflow analysis is to determine
 the effect of statements on their surroundings. Typical examples are:
+
 \begin{itemize}
-\item Reaching definitions: which definitions of variables are still valid at each statement?
+
+\item Dominators (Section~\ref{SEC:dominators}): which nodes in the
+flow dominate the execution of other nodes?
+
+\item Reaching definitions (Section~\ref{SEC:reaching}): which
+definitions of variables are still valid at each statement?
+
+\item Live variables (Section~\ref{SEC:live}): of which variables will
+  the values be used by successors of a statement?
+
 \item Available expressions: an expression is available if it is computed
   along each path from the start of the program to the current statement.
-\item Live variables: of which variables will the values be used by successors
-  of a statement?
+
 \item and more.
 \end{itemize}
 
-\subsubsection{Dominators}
+\subsubsection{Dominators} \label{SEC:dominators}
 
 \begin{figure}[tb]
 {\small
@@ -1604,12 +1614,19 @@ where
 
     rel[stat,stat] DOMINATES =
     { <S, S1> | stat S : STATEMENT , 
-                stat S1 : STATEMENT \ (ROOT union {S}) \ range(reachX(ROOT, {S}, PRED)) 
+                stat S1 : STATEMENT \ (ROOT union {S}) \ 
+                                      range(reachX(ROOT, {S}, PRED)) 
     }
 endwhere
-\end{verbatim}
-}
+\end{verbatim} }
 \caption{\label{FIG:dominators-function}The functions {\tt dominators}}
+\end{figure}
+
+\begin{figure}[tb]
+\hspace*{-2cm} \epsfig{figure=figs/dominators.eps,width=10cm} 
+\hspace*{-4cm} \epsfig{figure=figs/dominator-tree.eps,width=10cm}
+\vspace*{-4.5cm}
+\caption{\label{FIG:dominators} (a) Flow graph and (b) dominator tree}
 \end{figure}
 
 A node $d$ of a flow graph \emph{dominates} a node $n$, if every path from the
@@ -1654,28 +1671,21 @@ and the result of applying {\tt dominators} to it:
 <9, {}>, <10, {}>}
 \end{verbatim}
 
-The original flow graph and the resulting \emph{dominator tree} are shown in
-Figures~\ref{FIG:dominators} and \ref{FIG:dominator-tree}.
-The dominator tree has the initial node as root and each node $d$ in the tree
-only dominates its descendants in the tree.
+The original flow graph and the resulting \emph{dominator tree} are
+shown in Figure~\ref{FIG:dominators}.  The dominator tree has the
+initial node as root and each node $d$ in the tree only dominates its
+descendants in the tree.
 
+
+
+\subsubsection{Reaching Definitions} \label{SEC:reaching}
 \begin{figure}[tb]
 \begin{center}
-\epsfig{figure=figs/dominators.eps,width=10cm}
+\epsfig{figure=figs/df-graph.eps,width=10cm}
 \vspace*{-6cm}
 \end{center}
-\caption{\label{FIG:dominators} Flow graph for dominators example}
+\caption{\label{FIG:df-graph} Flow graph for various dataflow problems}
 \end{figure}
-
-\begin{figure}[tb]
-\begin{center}
-\epsfig{figure=figs/dominator-tree.eps,width=10cm}
-\vspace*{-8cm}
-\end{center}
-\caption{\label{FIG:dominator-tree} Dominator tree for flow graph in Figure~\ref{FIG:dominators}}
-\end{figure}
-
-\subsubsection{Reaching Definitions}
 
 \begin{figure}[tb]
 \begin{center}
@@ -1856,9 +1866,11 @@ where
            rel[stat,def] IN init {}
            rel[stat,def] OUT init DEF
        satisfy
-           IN  =  {<S, D> | int S : STATEMENT, stat P : predecessor(PRED,S), 
+           IN  =  {<S, D> | int S : STATEMENT, 
+                            stat P : predecessor(PRED,S), 
                             def D : OUT[P]}
-           OUT = {<S, D> |  int S : STATEMENT, def D : DEF[S] union (IN[S] \ KILL[S])}
+           OUT = {<S, D> |  int S : STATEMENT, 
+                            def D : DEF[S] union (IN[S] \ KILL[S])}
     end equations
 end where
 \end{verbatim}
@@ -1874,7 +1886,7 @@ end where
 \caption{\label{FIG:live} Live variables for flow graph in Figure~\ref{FIG:df-graph}}
 \end{figure}
 
-\subsubsection{Live Variables}
+\subsubsection{Live Variables} \label{SEC:live}
 
 The live variables of a statement are those variables whose value will be used
 by the current statement or some successor of it. The mathematical formulation
@@ -1909,6 +1921,54 @@ end equations
 illustrated in Figure~\ref{FIG:live}.
 
 \subsection{Program Slicing} \label{SEC:slicing}
+
+\begin{figure}[tb]
+\begin{center}
+{\small
+\begin{verbatim}
+[ 1] read(n)           [ 1] read(n)            [ 1] read(n)
+[ 2] i := 1            [ 2] i := 1             [ 2] i := 1
+[ 3] sum := 0          [ 3] sum := 0          
+[ 4] product := 1                              [ 4] product := 1
+[ 5] while i<= n do    [ 5] while i<= n do     [ 5] while i<= n do
+     begin                  begin                   begin
+[ 6]   sum := sum + i  [ 6]   sum := sum + i
+[ 7]   product :=                              [ 7]   product := 
+         product * i                                    product * i
+[ 8]   i := i + 1      [ 8]  i := i + 1        [ 8]   i := i + 1
+     end                    end                     end
+[ 9] write(sum)        [ 9] write(sum)
+[10] write(product)                            [10] write(product)
+\end{verbatim}
+}
+\end{center}
+\noindent\hspace{1cm}(a)\hspace{4cm}(b)\hspace{4cm}(c)
+
+\caption{\label{FIG:slicing}(a) Sample program, 
+(b) slice for statement {\tt [9]}, (c) slice for statement {\tt [10]}}
+\end{figure}
+
+
+Program slicing is a technique proposed by Weiser~\cite{Weiser84} for
+automatically decomposing programs in parts by analyzing their data
+flow and control flow. Typically, a given statement in a program is
+selected as the \emph{slicing criterion} and the original program is
+reduced to an independent subprogram, called a \emph{slice}, that is
+guaranteed to represent faithfully the behaviour of the original
+program at the slicing criterion.  An example is given in
+Figure~\ref{FIG:slicing}.  The initial program is given in
+Figure~\ref{FIG:slicing}(a).  The slice with statement {\tt [9]} as
+slicing criterion is shown in Figure~\ref{FIG:slicing}(b): statements
+{\tt [4]} and {\tt [7]} are irrelevant for computing statement {\tt
+[9]} and do not occur in the slice. Similarly, Figure~\ref{FIG:slicing}(c)
+shows the slice with statement {\tt [10]} as slicing criterion.
+Slicing can be used for debugging and program understanding,
+optimization and more. An overview of slicing techniques and
+applications can be found in ~\cite{Tip95}.
+
+Here we will explore a relational formulation of slicing as proposed
+in ~\cite{Jackson&Rollins94}.
+
 
 \subsubsection{Others}
 \note{Some ideas:
