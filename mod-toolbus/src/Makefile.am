@@ -37,8 +37,8 @@ tbrunv:
 
 # stop and start Apache
 apstop:
-	${AP_TARG_BASE}/bin/apachectl stop
+	${APACHE}/bin/apachectl stop
 
 aprun:
-	${AP_TARG_BASE}/bin/apachectl start	
+	${APACHE}/bin/apachectl start	
 		

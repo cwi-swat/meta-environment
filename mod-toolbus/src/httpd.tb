@@ -16,29 +16,29 @@ let
   Id      : int,
   MyTerm  : term,
   S       : str
-in	
-	%% loop, waiting for modToolbus tools to connect
-	(
-		printf( "Waiting for a mod_toolbus connection...\n" ) . 
-		rec-connect(MYTOOL?) .
-		
-		%% now we can receive multiple events from the tool
-		(
-			%%printf( "connected tool (id: %t, MYTOOL )\n", MYTOOL ) .
-			rec-event( MYTOOL, MyTerm? ) .
-			printf( "event received from mod_toolbus: %t\n", MyTerm ) .
-			snd-ack-event( MYTOOL, MyTerm ) .
-			%% snd-ack-event( MYTOOL, html(hoideboi) ) .
-			snd-do( MYTOOL, show-html(html([head(),body([p([sexual,gypsies]),p([live,at,covent,garden])])])) ) .
-			printf( "event acknowledged\n" ) 
-			%% rec-disconnect( MYTOOL ) 
-		)*
-		printf( "done.\n" ) 
-		%%rec-disconnect( MYTOOL ) 
-		%% printf( "disconnected tool (id: %, MYTOOL )\n", MYTOOL ) 
-	) *
-	
-	delta
+in  
+  %% loop, waiting for modToolbus tools to connect
+  (
+    printf( "Waiting for a mod_toolbus connection...\n" ) . 
+    rec-connect(MYTOOL?) .
+    
+    %% now we can receive multiple events from the tool
+    (
+      %%printf( "connected tool (id: %t, MYTOOL )\n", MYTOOL ) .
+      rec-event( MYTOOL, MyTerm? ) .
+      printf( "event received from mod_toolbus: %t\n", MyTerm ) .
+      snd-ack-event( MYTOOL, MyTerm ) .
+      %% snd-ack-event( MYTOOL, html(hoideboi) ) .
+      snd-do( MYTOOL, show-html(html([head(),body([p([sexual,gypsies]),p([live,at,covent,garden])])])) ) .
+      printf( "event acknowledged\n" ) 
+      %% rec-disconnect( MYTOOL ) 
+    )*
+    printf( "done.\n" ) 
+    %%rec-disconnect( MYTOOL ) 
+    %% printf( "disconnected tool (id: %, MYTOOL )\n", MYTOOL ) 
+  ) *
+  
+  delta
 endlet
 
 
@@ -51,7 +51,7 @@ endlet
 %% netcat syntax: nc [-v -v] hostname portnum
 tool netcat is 
 { 
-	command = "echo -e \"GET / HTTP/1.1\nHost: localhost\n\"| nc localhost 21000" 
+  command = "echo -e \"GET / HTTP/1.1\nHost: localhost\n\"| nc localhost 21000" 
 }
 
 tool apachestart is {} 
@@ -63,18 +63,18 @@ tool apachestop is { command = "" }
 process MainLoop is      
 let Httpd : modToolbus
 in
-	%% execute( apache, Httpd? ) .       	%% start Apache/mod_toolbus
-	printf( "Waiting for inbound connections from mod_toolbus...\n" ) . 
-	( 
-		tau
-		
-		+
-		
-		%%ConnectHttpd( Httpd? )
-		ConnectHttpd		
-	) *                           
-	rec-event( Httpd, hey-boppa-re-bop(bla) ) .	
-	shutdown( "Httpd.tb: finishing...\n" ) 		%% close the auction
+  %% execute( apache, Httpd? ) .         %% start Apache/mod_toolbus
+  printf( "Waiting for inbound connections from mod_toolbus...\n" ) . 
+  ( 
+    tau
+    
+    +
+    
+    %%ConnectHttpd( Httpd? )
+    ConnectHttpd    
+  ) *                           
+  rec-event( Httpd, hey-boppa-re-bop(bla) ) .  
+  shutdown( "Httpd.tb: finishing...\n" )     %% close the auction
 endlet
 
 
@@ -87,26 +87,26 @@ let
   Id      : int,
   MyTerm  : term,
   S       : str
-in	
-	%% loop, waiting for modToolbus tools to connect
+in  
+  %% loop, waiting for modToolbus tools to connect
 
-	rec-connect( ToolId? ) .
+  rec-connect( ToolId? ) .
 
-	%%printf( "connected tool (id: %t, ToolId )\n", ToolId ) .
-	rec-event( ToolId, MyTerm? ) .
-	printf( "event received from mod_toolbus: %t\n", MyTerm ) .
-	snd-ack-event( ToolId, MyTerm ) .
-	%% snd-ack-event( ToolId, html(hoideboi) ) .
-	printf( "event acknowledged\n" )
+  %%printf( "connected tool (id: %t, ToolId )\n", ToolId ) .
+  rec-event( ToolId, MyTerm? ) .
+  printf( "event received from mod_toolbus: %t\n", MyTerm ) .
+  snd-ack-event( ToolId, MyTerm ) .
+  %% snd-ack-event( ToolId, html(hoideboi) ) .
+  printf( "event acknowledged\n" )
 endlet
 
 
 process SendToModToolbus( T : term ) is
 let
-	S : str,
-	NC : netcat
+  S : str,
+  NC : netcat
 in
-	execute( netcat, NC? )
+  execute( netcat, NC? )
 endlet
 
 
