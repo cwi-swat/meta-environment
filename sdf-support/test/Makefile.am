@@ -15,6 +15,7 @@ CFLAGS = -g -Wall -O2
 INCLUDES = \
 	-I${top_srcdir}/lib \
 	-I$(PT_SUPPORT)/include \
+	-I$(ERROR_SUPPORT)/include \
 	-I$(ATERM)/include \
 	-DSRC_DIR=\"${srcdir}\"
 
@@ -22,6 +23,7 @@ pt2sdf_SOURCES = pt2sdf-test.c
 pt2sdf_LDADD = \
 	-L${top_builddir}/lib -lPT2SDF -lSDFME \
 	-L$(PT_SUPPORT)/lib -lmept \
+	-L$(ERROR_SUPPORT)/lib -lErrorAPI \
 	-L$(ATERM)/lib -lATerm
 
 LDLIBS = \

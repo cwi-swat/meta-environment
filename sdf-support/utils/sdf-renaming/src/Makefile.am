@@ -10,6 +10,7 @@ bin_PROGRAMS = sdf-renaming
 sdf_renaming_SOURCES = sdf-renaming.c sdf-renaming.tif.c
 sdf_renaming_LDADD = -L$(top_builddir)/lib -lSDFME -lSDF2PT \
 		 -L$(PT_SUPPORT)/lib -lmept \
+		 -L$(ERROR_SUPPORT)/lib -lErrorAPI \
                  -L$(ATERM)/lib -lATerm \
                  -L$(TOOLBUSLIB)/lib -lATB \
                  $(SOCKLIBS)
@@ -20,4 +21,5 @@ INCLUDES	        = -I$(top_srcdir)/lib \
                           -I$(ATERM)/include  \
                           -I$(TOOLBUSLIB)/include \
                           -I$(SDF_SUPPORT)/include \
+                          -I$(ERROR_SUPPORT)/include \
                           -I$(PT_SUPPORT)/include

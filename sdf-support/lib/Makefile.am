@@ -22,6 +22,7 @@ libPT2SDF_a_SOURCES = pt2sdf.c
 
 INCLUDES = \
 	-I${ATERM}/include \
+	-I${ERROR_SUPPORT}/include \
 	-I${PT_SUPPORT}/include
 
 UTILSRCS = \
