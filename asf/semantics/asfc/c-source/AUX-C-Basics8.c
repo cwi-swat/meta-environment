@@ -6,38 +6,30 @@ static funcptr ef1;
 static Symbol lf2sym;
 static ATerm lf2( ATerm arg1);
 void register_AUX_C_Basics8( ) {
-lf_AUX_C_Basics8_1sym= ATmakeSymbol( "prod(id(\"C-Basics\"),w(\"\"),[sort(\"C-env\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"C-env\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"C-env\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))"
+lf_AUX_C_Basics8_1sym= ATmakeSymbol( "prod(id(\"C-Basics\"),w(\"\"),[sort(\"Parameter-declaration\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Parameter-list\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Parameter-list\"),w(\"\"),no-attrs)"
  , 2 , ATtrue);
 ATprotectSymbol( lf_AUX_C_Basics8_1sym);
-lf2sym= ATmakeSymbol( "listtype(sort(\"TE-pair\"),ql(\",\"))" , 1 , ATtrue);
+lf2sym= ATmakeSymbol( "listtype(sort(\"Parameter-declaration\"),ql(\",\"))" , 1 , ATtrue);
 ATprotectSymbol( lf2sym);
-register_prod( ATparse( "prod(id(\"C-Basics\"),w(\"\"),[sort(\"C-env\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"C-env\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"C-env\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))") , lf_AUX_C_Basics8_1 , lf_AUX_C_Basics8_1sym);
-register_prod( ATparse( "listtype(sort(\"TE-pair\"),ql(\",\"))") , lf2 , lf2sym);
+register_prod( ATparse( "prod(id(\"C-Basics\"),w(\"\"),[sort(\"Parameter-declaration\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Parameter-list\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Parameter-list\"),w(\"\"),no-attrs)") , lf_AUX_C_Basics8_1 , lf_AUX_C_Basics8_1sym);
+register_prod( ATparse( "listtype(sort(\"Parameter-declaration\"),ql(\",\"))") , lf2 , lf2sym);
 }
 void resolve_AUX_C_Basics8( ) {
-ef1= lookup_func( ATreadFromString( "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"TE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"C-env\"),w(\"\"),no-attrs)"));
-ef1sym= lookup_sym( ATreadFromString( "prod(id(\"C-Basics\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"TE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"C-env\"),w(\"\"),no-attrs)"));
+ef1= lookup_func( ATreadFromString( "prod(id(\"Pure-C\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Parameter-declaration\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Parameter-list\"),w(\"\"),no-attrs)"));
+ef1sym= lookup_sym( ATreadFromString( "prod(id(\"Pure-C\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Parameter-declaration\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Parameter-list\"),w(\"\"),no-attrs)"));
 }
 void init_AUX_C_Basics8( ) {
 }
 ATerm lf_AUX_C_Basics8_1( ATerm arg0 , ATerm arg1) {
 PROF( prof_lf_AUX_C_Basics8_1);
-if( check_sym( arg0 , ef1sym)) {
-{
-ATerm atmp00= arg_0( arg0);
-if( check_sym( atmp00 , lf2sym)) {
-{
-ATerm atmp000= arg_0( atmp00);
 if( check_sym( arg1 , ef1sym)) {
 {
 ATerm atmp10= arg_0( arg1);
 if( check_sym( atmp10 , lf2sym)) {
 {
 ATerm atmp100= arg_0( atmp10);
-return ( * ef1)( lf2( cons( make_list( atmp000) , make_list( atmp100))));
-}
-}
-}
+if( not_empty_list( atmp100)) {
+return ( * ef1)( lf2( cons( make_list( arg0) , make_list( atmp100))));
 }
 }
 }

@@ -10,7 +10,7 @@ static funcptr ef2;
 static Symbol lf_AUX_VarEnv17_1sym;
 static ATerm lf_AUX_VarEnv17_1( ATerm arg1);
 void register_AUX_VarEnv17( ) {
-lf_AUX_VarEnv17_2sym= ATmakeSymbol( "prod(id(\"VarEnv\"),w(\"\"),[l(\"pn-lookup\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"
+lf_AUX_VarEnv17_2sym= ATmakeSymbol( "prod(id(\"VarEnv\"),w(\"\"),[l(\"np-lookup\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"
  , 2 , ATtrue);
 ATprotectSymbol( lf_AUX_VarEnv17_2sym);
 lf3sym= ATmakeSymbol( "listtype(sort(\"CHAR\"))" , 1 , ATtrue);
@@ -18,7 +18,7 @@ ATprotectSymbol( lf3sym);
 lf_AUX_VarEnv17_1sym= ATmakeSymbol( "listtype(sort(\"NamePair\"),ql(\",\"))" , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_VarEnv17_1sym);
 register_prod( ATparse( "listtype(sort(\"NamePair\"),ql(\",\"))") , lf_AUX_VarEnv17_1 , lf_AUX_VarEnv17_1sym);
-register_prod( ATparse( "prod(id(\"VarEnv\"),w(\"\"),[l(\"pn-lookup\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)") , lf_AUX_VarEnv17_2 , lf_AUX_VarEnv17_2sym);
+register_prod( ATparse( "prod(id(\"VarEnv\"),w(\"\"),[l(\"np-lookup\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)") , lf_AUX_VarEnv17_2 , lf_AUX_VarEnv17_2sym);
 register_prod( ATparse( "listtype(sort(\"CHAR\"))") , lf3 , lf3sym);
 }
 void resolve_AUX_VarEnv17( ) {
@@ -66,11 +66,11 @@ tmp[ 1]= list_tail( atmp10);
 if( check_sym( tmp[ 0] , ef2sym)) {
 tmp[ 2]= arg_0( tmp[ 0]);
 tmp[ 3]= arg_1( tmp[ 0]);
-if( ! term_equal( arg0 , tmp[ 2])) {
+if( ! term_equal( arg0 , tmp[ 3])) {
 return lf_AUX_VarEnv17_2( arg0 , lf_AUX_VarEnv17_1( make_list( tmp[ 1])));
 }
 else {
-return tmp[ 3];
+return tmp[ 2];
 }
 }
 }

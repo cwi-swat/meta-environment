@@ -10,12 +10,12 @@ static funcptr ef2;
 static Symbol ef3sym;
 static funcptr ef3;
 void register_AUX_C_Basics17( ) {
-lf_AUX_C_Basics17_1sym= ATmakeSymbol( "prod(id(\"C-Basics\"),w(\"\"),[l(\"is-false\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
+lf_AUX_C_Basics17_1sym= ATmakeSymbol( "prod(id(\"C-Basics\"),w(\"\"),[l(\"is-true\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
  , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_C_Basics17_1sym);
 lf2sym= ATmakeSymbol( "listtype(sort(\"CHAR\"))" , 1 , ATtrue);
 ATprotectSymbol( lf2sym);
-register_prod( ATparse( "prod(id(\"C-Basics\"),w(\"\"),[l(\"is-false\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_C_Basics17_1 , lf_AUX_C_Basics17_1sym);
+register_prod( ATparse( "prod(id(\"C-Basics\"),w(\"\"),[l(\"is-true\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"FunId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_C_Basics17_1 , lf_AUX_C_Basics17_1sym);
 register_prod( ATparse( "listtype(sort(\"CHAR\"))") , lf2 , lf2sym);
 }
 void resolve_AUX_C_Basics17( ) {
@@ -41,7 +41,7 @@ if( check_sym( atmp00 , lf2sym)) {
 {
 ATerm atmp000= arg_0( atmp00);
 if( is_single_element( atmp000)) {
-if( term_equal( list_head( atmp000) , make_char( 102))) {
+if( term_equal( list_head( atmp000) , make_char( 116))) {
 return ( constant0? constant0: ( constant0= ( * ef2)( )));
 }
 }

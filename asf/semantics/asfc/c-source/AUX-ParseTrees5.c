@@ -1,38 +1,29 @@
 #include "support.h"
 static Symbol lf_AUX_ParseTrees5_1sym;
 static ATerm lf_AUX_ParseTrees5_1( ATerm arg1);
+static Symbol ef8sym;
+static funcptr ef8;
 static Symbol ef2sym;
 static funcptr ef2;
 static Symbol ef3sym;
 static funcptr ef3;
+static Symbol ef4sym;
+static funcptr ef4;
 static Symbol ef6sym;
 static funcptr ef6;
 static Symbol ef7sym;
 static funcptr ef7;
-static Symbol lf2sym;
-static ATerm lf2( ATerm arg1);
-static Symbol ef8sym;
-static funcptr ef8;
-static Symbol ef9sym;
-static funcptr ef9;
-static Symbol ef10sym;
-static funcptr ef10;
-static Symbol ef4sym;
-static funcptr ef4;
 static Symbol ef1sym;
 static funcptr ef1;
 static Symbol ef5sym;
 static funcptr ef5;
-static Symbol ef11sym;
-static funcptr ef11;
+static Symbol ef9sym;
+static funcptr ef9;
 void register_AUX_ParseTrees5( ) {
-lf_AUX_ParseTrees5_1sym= ATmakeSymbol( "prod(id(\"ParseTrees\"),w(\"\"),[l(\"get-list-tail\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)"
+lf_AUX_ParseTrees5_1sym= ATmakeSymbol( "prod(id(\"ParseTrees\"),w(\"\"),[l(\"get-list-tail-with-sep\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)"
  , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_ParseTrees5_1sym);
-lf2sym= ATmakeSymbol( "listtype(sort(\"CHAR\"))" , 1 , ATtrue);
-ATprotectSymbol( lf2sym);
-register_prod( ATparse( "prod(id(\"ParseTrees\"),w(\"\"),[l(\"get-list-tail\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)") , lf_AUX_ParseTrees5_1 , lf_AUX_ParseTrees5_1sym);
-register_prod( ATparse( "listtype(sort(\"CHAR\"))") , lf2 , lf2sym);
+register_prod( ATparse( "prod(id(\"ParseTrees\"),w(\"\"),[l(\"get-list-tail-with-sep\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)") , lf_AUX_ParseTrees5_1 , lf_AUX_ParseTrees5_1sym);
 }
 void resolve_AUX_ParseTrees5( ) {
 ef1= lookup_func( ATreadFromString( "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),sort(\"ATerms\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)"));
@@ -49,14 +40,10 @@ ef6= lookup_func( ATreadFromString( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AFun\")
 ef6sym= lookup_sym( ATreadFromString( "prod(id(\"ATerms\"),w(\"\"),[sort(\"AFun\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"));
 ef7= lookup_func( ATreadFromString( "prod(id(\"ATerms\"),w(\"\"),[sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)"));
 ef7sym= lookup_sym( ATreadFromString( "prod(id(\"ATerms\"),w(\"\"),[sort(\"Literal\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)"));
-ef8= lookup_func( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)"));
-ef8sym= lookup_sym( ATreadFromString( "prod(id(\"caller\"),w(\"\"),[l(\"literal\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)"));
-ef9= lookup_func( ATreadFromString( "prod(id(\"ParseTrees\"),w(\"\"),[l(\"get-cons\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)"));
-ef9sym= lookup_sym( ATreadFromString( "prod(id(\"ParseTrees\"),w(\"\"),[l(\"get-cons\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)"));
-ef10= lookup_func( ATreadFromString( "prod(id(\"ATermLists\"),w(\"\"),[l(\"first\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"));
-ef10sym= lookup_sym( ATreadFromString( "prod(id(\"ATermLists\"),w(\"\"),[l(\"first\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATermList\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"));
-ef11= lookup_func( ATreadFromString( "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)"));
-ef11sym= lookup_sym( ATreadFromString( "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)"));
+ef8= lookup_func( ATreadFromString( "prod(id(\"ParseTrees\"),w(\"\"),[ql(\"sep\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)"));
+ef8sym= lookup_sym( ATreadFromString( "prod(id(\"ParseTrees\"),w(\"\"),[ql(\"sep\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"AFun\"),w(\"\"),no-attrs)"));
+ef9= lookup_func( ATreadFromString( "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)"));
+ef9sym= lookup_sym( ATreadFromString( "prod(id(\"ATerms\"),w(\"\"),[ql(\"[\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATermList\"),w(\"\"),no-attrs)"));
 }
 static ATerm constant0= NULL;
 static ATerm constant1= NULL;
@@ -96,24 +83,84 @@ if( check_sym( atmp0010100 , ef7sym)) {
 ATerm atmp00101000= arg_0( atmp0010100);
 {
 ATerm atmp0011= arg_1( atmp001);
-return ( * ef1)( ( * ef2)( ( * ef3)( ( constant0? constant0: ( constant0= ( * ef4)( ))) , ( * ef5)( ( * ef6)( ( * ef7)( atmp00101000)))) , atmp0011));
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
-}
+if( check_sym( atmp0011 , ef2sym)) {
 {
-ATerm atmp001= arg_1( atmp00);
-if( ! term_equal( ( * ef9)( ( * ef10)( ( * ef1)( atmp001))) , ( * ef4)( ))) {
-return ( * ef1)( ( * ef2)( ( constant1? constant1: ( constant1= ( * ef3)( ( * ef4)( ) , ( * ef5)( ( * ef6)( ( * ef7)( ( * ef8)( lf2( (ATerm) ATmakeList( 2 , char_table[ 34] , char_table[ 34]))))))))) , atmp001));
+ATerm atmp00110= arg_0( atmp0011);
+if( check_sym( atmp00110 , ef3sym)) {
+{
+ATerm atmp001100= arg_0( atmp00110);
+if( check_sym( atmp001100 , ef8sym)) {
+{
+ATerm atmp001101= arg_1( atmp00110);
+if( check_sym( atmp001101 , ef5sym)) {
+{
+ATerm atmp0011010= arg_0( atmp001101);
+if( check_sym( atmp0011010 , ef6sym)) {
+{
+ATerm atmp00110100= arg_0( atmp0011010);
+if( check_sym( atmp00110100 , ef7sym)) {
+{
+ATerm atmp001101000= arg_0( atmp00110100);
+{
+ATerm atmp00111= arg_1( atmp0011);
+if( check_sym( atmp00111 , ef2sym)) {
+{
+ATerm atmp001110= arg_0( atmp00111);
+if( check_sym( atmp001110 , ef3sym)) {
+{
+ATerm atmp0011100= arg_0( atmp001110);
+if( check_sym( atmp0011100 , ef4sym)) {
+{
+ATerm atmp0011101= arg_1( atmp001110);
+if( check_sym( atmp0011101 , ef5sym)) {
+{
+ATerm atmp00111010= arg_0( atmp0011101);
+if( check_sym( atmp00111010 , ef6sym)) {
+{
+ATerm atmp001110100= arg_0( atmp00111010);
+if( check_sym( atmp001110100 , ef7sym)) {
+{
+ATerm atmp0011101000= arg_0( atmp001110100);
+{
+ATerm atmp001111= arg_1( atmp00111);
+return ( * ef1)( ( * ef2)( ( * ef3)( ( constant0? constant0: ( constant0= ( * ef4)( ))) , ( * ef5)( ( * ef6)( ( * ef7)( atmp00101000)))) , ( * ef2)( ( * ef3)( ( constant1? constant1: ( constant1= ( * ef8)( ))) , ( * ef5)( ( * ef6)( ( * ef7)( atmp001101000)))) , ( * ef2)( ( * ef3)( ( constant0? constant0: ( constant0= ( * ef4)( ))) , ( * ef5)( ( * ef6)( ( * ef7)( atmp0011101000)))) , atmp001111))));
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
 }
 }
 }
@@ -124,16 +171,12 @@ ATerm atmp00= arg_0( arg0);
 if( check_sym( atmp00 , ef5sym)) {
 {
 ATerm atmp000= arg_0( atmp00);
-return ( constant2? constant2: ( constant2= ( * ef11)( )));
+return ( constant2? constant2: ( constant2= ( * ef9)( )));
 }
 }
 }
 }
 }
 return make_nf1( lf_AUX_ParseTrees5_1sym , arg0);
-}
-ATerm lf2( ATerm arg0) {
-PROF( prof_lf2);
-return make_nf1( lf2sym , arg0);
 }
 

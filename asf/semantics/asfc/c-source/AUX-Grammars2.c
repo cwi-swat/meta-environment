@@ -6,17 +6,17 @@ static funcptr ef1;
 static Symbol lf2sym;
 static ATerm lf2( ATerm arg1);
 void register_AUX_Grammars2( ) {
-lf_AUX_Grammars2_1sym= ATmakeSymbol( "prod(id(\"Grammars\"),w(\"\"),[sort(\"Productions\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))"
+lf_AUX_Grammars2_1sym= ATmakeSymbol( "prod(id(\"Grammars\"),w(\"\"),[sort(\"Symbols\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Symbols\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbols\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))"
  , 2 , ATtrue);
 ATprotectSymbol( lf_AUX_Grammars2_1sym);
-lf2sym= ATmakeSymbol( "listtype(sort(\"Production\"))" , 1 , ATtrue);
+lf2sym= ATmakeSymbol( "listtype(sort(\"Symbol\"))" , 1 , ATtrue);
 ATprotectSymbol( lf2sym);
-register_prod( ATparse( "prod(id(\"Grammars\"),w(\"\"),[sort(\"Productions\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Productions\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))") , lf_AUX_Grammars2_1 , lf_AUX_Grammars2_1sym);
-register_prod( ATparse( "listtype(sort(\"Production\"))") , lf2 , lf2sym);
+register_prod( ATparse( "prod(id(\"Grammars\"),w(\"\"),[sort(\"Symbols\"),w(\"\"),ql(\"++\"),w(\"\"),sort(\"Symbols\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbols\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))") , lf_AUX_Grammars2_1 , lf_AUX_Grammars2_1sym);
+register_prod( ATparse( "listtype(sort(\"Symbol\"))") , lf2 , lf2sym);
 }
 void resolve_AUX_Grammars2( ) {
-ef1= lookup_func( ATreadFromString( "prod(id(\"Grammars\"),w(\"\"),[iter(sort(\"Production\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)"));
-ef1sym= lookup_sym( ATreadFromString( "prod(id(\"Grammars\"),w(\"\"),[iter(sort(\"Production\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Productions\"),w(\"\"),no-attrs)"));
+ef1= lookup_func( ATreadFromString( "prod(id(\"Grammars\"),w(\"\"),[iter(sort(\"Symbol\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbols\"),w(\"\"),no-attrs)"));
+ef1sym= lookup_sym( ATreadFromString( "prod(id(\"Grammars\"),w(\"\"),[iter(sort(\"Symbol\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Symbols\"),w(\"\"),no-attrs)"));
 }
 void init_AUX_Grammars2( ) {
 }

@@ -1,32 +1,36 @@
 #include "support.h"
 static Symbol lf_AUX_Booleans4_1sym;
-static ATerm lf_AUX_Booleans4_1( ATerm arg1 , ATerm arg2 , ATerm arg3);
-static Symbol ef1sym;
-static funcptr ef1;
+static ATerm lf_AUX_Booleans4_1( ATerm arg1);
 static Symbol ef2sym;
 static funcptr ef2;
+static Symbol ef1sym;
+static funcptr ef1;
 void register_AUX_Booleans4( ) {
-lf_AUX_Booleans4_1sym= ATmakeSymbol( "prod(id(\"Booleans\"),w(\"\"),[l(\"if\"),w(\"\"),sort(\"Bool\"),w(\"\"),l(\"then\"),w(\"\"),sort(\"Bool\"),w(\"\"),l(\"else\"),w(\"\"),sort(\"Bool\"),w(\"\"),l(\"fi\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
- , 3 , ATtrue);
+lf_AUX_Booleans4_1sym= ATmakeSymbol( "prod(id(\"Booleans\"),w(\"\"),[ql(\"~\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
+ , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_Booleans4_1sym);
-register_prod( ATparse( "prod(id(\"Booleans\"),w(\"\"),[l(\"if\"),w(\"\"),sort(\"Bool\"),w(\"\"),l(\"then\"),w(\"\"),sort(\"Bool\"),w(\"\"),l(\"else\"),w(\"\"),sort(\"Bool\"),w(\"\"),l(\"fi\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_Booleans4_1 , lf_AUX_Booleans4_1sym);
+register_prod( ATparse( "prod(id(\"Booleans\"),w(\"\"),[ql(\"~\"),w(\"\"),sort(\"Bool\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_Booleans4_1 , lf_AUX_Booleans4_1sym);
 }
 void resolve_AUX_Booleans4( ) {
-ef1= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef1sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef2= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
-ef2sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef1= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef1sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef2= lookup_func( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
+ef2sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"));
 }
+static ATerm constant0= NULL;
+static ATerm constant1= NULL;
 void init_AUX_Booleans4( ) {
+ATprotect( & constant0);
+ATprotect( & constant1);
 }
-ATerm lf_AUX_Booleans4_1( ATerm arg0 , ATerm arg1 , ATerm arg2) {
+ATerm lf_AUX_Booleans4_1( ATerm arg0) {
 PROF( prof_lf_AUX_Booleans4_1);
 if( check_sym( arg0 , ef1sym)) {
-return arg1;
+return ( constant0? constant0: ( constant0= ( * ef2)( )));
 }
 if( check_sym( arg0 , ef2sym)) {
-return arg2;
+return ( constant1? constant1: ( constant1= ( * ef1)( )));
 }
-return make_nf3( lf_AUX_Booleans4_1sym , arg0 , arg1 , arg2);
+return make_nf1( lf_AUX_Booleans4_1sym , arg0);
 }
 

@@ -16,14 +16,14 @@ static funcptr ef3;
 static Symbol ef5sym;
 static funcptr ef5;
 void register_AUX_Remove_Lists_Aux2( ) {
-lf_AUX_Remove_Lists_Aux2_1sym= ATmakeSymbol( "prod(id(\"Remove-Lists-Aux\"),w(\"\"),[l(\"get-prefix-list\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)"
+lf_AUX_Remove_Lists_Aux2_1sym= ATmakeSymbol( "prod(id(\"Remove-Lists-Aux\"),w(\"\"),[l(\"get-last-element\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)"
  , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_Remove_Lists_Aux2_1sym);
 lf2sym= ATmakeSymbol( "listtype(sort(\"CHAR\"))" , 1 , ATtrue);
 ATprotectSymbol( lf2sym);
 lf3sym= ATmakeSymbol( "listtype(sort(\"Term\"),ql(\",\"))" , 1 , ATtrue);
 ATprotectSymbol( lf3sym);
-register_prod( ATparse( "prod(id(\"Remove-Lists-Aux\"),w(\"\"),[l(\"get-prefix-list\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)") , lf_AUX_Remove_Lists_Aux2_1 , lf_AUX_Remove_Lists_Aux2_1sym);
+register_prod( ATparse( "prod(id(\"Remove-Lists-Aux\"),w(\"\"),[l(\"get-last-element\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)") , lf_AUX_Remove_Lists_Aux2_1 , lf_AUX_Remove_Lists_Aux2_1sym);
 register_prod( ATparse( "listtype(sort(\"CHAR\"))") , lf2 , lf2sym);
 register_prod( ATparse( "listtype(sort(\"Term\"),ql(\",\"))") , lf3 , lf3sym);
 }
@@ -41,15 +41,13 @@ ef5sym= lookup_sym( ATreadFromString( "prod(id(\"Booleans\"),w(\"\"),[l(\"true\"
 }
 static ATerm constant0= NULL;
 static ATerm constant1= NULL;
-static ATerm constant2= NULL;
 void init_AUX_Remove_Lists_Aux2( ) {
 ATprotect( & constant0);
 ATprotect( & constant1);
-ATprotect( & constant2);
 }
 ATerm lf_AUX_Remove_Lists_Aux2_1( ATerm arg0) {
 {
-ATerm tmp[12];
+ATerm tmp[11];
 PROF( prof_lf_AUX_Remove_Lists_Aux2_1);
 if( check_sym( arg0 , ef1sym)) {
 {
@@ -92,11 +90,10 @@ if( is_single_element( tmp[ 8])) {
 tmp[ 9]= list_head( tmp[ 8]);
 tmp[ 10]= ( * ef3)( tmp[ 9]);
 if( term_equal( tmp[ 10] , ( constant0? constant0: ( constant0= ( * ef4)( ))))) {
-return tmp[ 7];
+return tmp[ 9];
 }
 if( term_equal( tmp[ 10] , ( constant1? constant1: ( constant1= ( * ef5)( ))))) {
-tmp[ 11]= lf_AUX_Remove_Lists_Aux2_1( tmp[ 9]);
-return ( * ef1)( ( constant2? constant2: ( constant2= ( * ef2)( lf2( (ATerm) ATmakeList( 4 , char_table[ 99] , char_table[ 111] , char_table[ 110] , char_table[ 115]))))) , lf3( cons( make_list( tmp[ 7]) , make_list( tmp[ 11]))));
+return lf_AUX_Remove_Lists_Aux2_1( tmp[ 9]);
 }
 }
 }

@@ -40,6 +40,7 @@ AUX-ATerms2.asfix\
 AUX-ATerms3.asfix\
 AUX-ATerms4.asfix\
 AUX-ATerms5.asfix\
+AUX-ATerms6.asfix\
 AUX-ATypes1.asfix\
 AUX-ATypes2.asfix\
 AUX-ATypes3.asfix\
@@ -251,7 +252,6 @@ AUX-MuASF-Basics28.asfix\
 AUX-MuASF-Basics29.asfix\
 AUX-MuASF-Basics3.asfix\
 AUX-MuASF-Basics30.asfix\
-AUX-MuASF-Basics31.asfix\
 AUX-MuASF-Basics4.asfix\
 AUX-MuASF-Basics5.asfix\
 AUX-MuASF-Basics6.asfix\
@@ -300,9 +300,6 @@ AUX-MuASF-Sign2C9.asfix\
 AUX-MuASF-Signs1.asfix\
 AUX-MuASF-Signs10.asfix\
 AUX-MuASF-Signs11.asfix\
-AUX-MuASF-Signs12.asfix\
-AUX-MuASF-Signs13.asfix\
-AUX-MuASF-Signs14.asfix\
 AUX-MuASF-Signs2.asfix\
 AUX-MuASF-Signs3.asfix\
 AUX-MuASF-Signs4.asfix\
@@ -375,7 +372,6 @@ AUX-Remove-Lists-Aux1.asfix\
 AUX-Remove-Lists-Aux10.asfix\
 AUX-Remove-Lists-Aux11.asfix\
 AUX-Remove-Lists-Aux12.asfix\
-AUX-Remove-Lists-Aux13.asfix\
 AUX-Remove-Lists-Aux2.asfix\
 AUX-Remove-Lists-Aux3.asfix\
 AUX-Remove-Lists-Aux4.asfix\
@@ -449,7 +445,6 @@ AUX-Rules2C-Aux37.asfix\
 AUX-Rules2C-Aux38.asfix\
 AUX-Rules2C-Aux39.asfix\
 AUX-Rules2C-Aux4.asfix\
-AUX-Rules2C-Aux40.asfix\
 AUX-Rules2C-Aux5.asfix\
 AUX-Rules2C-Aux6.asfix\
 AUX-Rules2C-Aux7.asfix\

@@ -8,12 +8,12 @@ static funcptr ef1;
 static Symbol lf2sym;
 static ATerm lf2( ATerm arg1);
 void register_AUX_Literals3( ) {
-lf_AUX_Literals3_1sym= ATmakeSymbol( "prod(id(\"Literals\"),w(\"\"),[l(\"de-escape\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Literal\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)"
+lf_AUX_Literals3_1sym= ATmakeSymbol( "prod(id(\"Literals\"),w(\"\"),[l(\"escape\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Literal\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)"
  , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_Literals3_1sym);
 lf2sym= ATmakeSymbol( "listtype(sort(\"CHAR\"))" , 1 , ATtrue);
 ATprotectSymbol( lf2sym);
-register_prod( ATparse( "prod(id(\"Literals\"),w(\"\"),[l(\"de-escape\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Literal\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)") , lf_AUX_Literals3_1 , lf_AUX_Literals3_1sym);
+register_prod( ATparse( "prod(id(\"Literals\"),w(\"\"),[l(\"escape\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Literal\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Literal\"),w(\"\"),no-attrs)") , lf_AUX_Literals3_1 , lf_AUX_Literals3_1sym);
 register_prod( ATparse( "listtype(sort(\"CHAR\"))") , lf2 , lf2sym);
 }
 void resolve_AUX_Literals3( ) {
@@ -36,7 +36,7 @@ ATprotect( & constant4);
 }
 ATerm lf_AUX_Literals3_1( ATerm arg0) {
 {
-ATerm tmp[7];
+ATerm tmp[5];
 PROF( prof_lf_AUX_Literals3_1);
 if( check_sym( arg0 , ef1sym)) {
 {
@@ -57,29 +57,21 @@ return ( constant0? constant0: ( constant0= ( * ef1)( lf2( (ATerm) ATmakeList( 2
 {
 if( not_empty_list( tmp[ 1])) {
 tmp[ 2]= list_head( tmp[ 1]);
+if( term_equal( tmp[ 2] , make_char( 34))) {
+tmp[ 3]= list_tail( tmp[ 1]);
+if( not_empty_list( tmp[ 3])) {
+tmp[ 4]= list_prefix( tmp[ 3]);
+if( term_equal( list_last( tmp[ 3]) , make_char( 34))) {
+return ( * ef2)( ( constant1? constant1: ( constant1= ( * ef1)( lf2( (ATerm) ATmakeList( 4 , char_table[ 34] , char_table[ 92] , char_table[ 34] , char_table[ 34]))))) , lf_AUX_Literals3_1( ( * ef1)( lf2( cons( ( constant2? constant2: ( constant2= make_list_char( 34))) , cons( make_list( tmp[ 4]) , ( constant3? constant3: ( constant3= make_list( make_char( 34))))))))));
+}
+}
+}
 if( term_equal( tmp[ 2] , make_char( 92))) {
 tmp[ 3]= list_tail( tmp[ 1]);
-{
 if( not_empty_list( tmp[ 3])) {
-tmp[ 4]= list_head( tmp[ 3]);
-if( term_equal( tmp[ 4] , make_char( 92))) {
-tmp[ 5]= list_tail( tmp[ 3]);
-if( not_empty_list( tmp[ 5])) {
-tmp[ 6]= list_prefix( tmp[ 5]);
-if( term_equal( list_last( tmp[ 5]) , make_char( 34))) {
-return ( * ef2)( ( constant1? constant1: ( constant1= ( * ef1)( lf2( (ATerm) ATmakeList( 3 , char_table[ 34] , char_table[ 92] , char_table[ 34]))))) , lf_AUX_Literals3_1( ( * ef1)( lf2( cons( ( constant2? constant2: ( constant2= make_list_char( 34))) , cons( make_list( tmp[ 6]) , ( constant3? constant3: ( constant3= make_list( make_char( 34))))))))));
-}
-}
-}
-if( term_equal( tmp[ 4] , make_char( 34))) {
-tmp[ 5]= list_tail( tmp[ 3]);
-if( not_empty_list( tmp[ 5])) {
-tmp[ 6]= list_prefix( tmp[ 5]);
-if( term_equal( list_last( tmp[ 5]) , make_char( 34))) {
-return ( * ef2)( ( constant4? constant4: ( constant4= ( * ef1)( lf2( (ATerm) ATmakeList( 3 , char_table[ 34] , char_table[ 34] , char_table[ 34]))))) , lf_AUX_Literals3_1( ( * ef1)( lf2( cons( ( constant2? constant2: ( constant2= make_list_char( 34))) , cons( make_list( tmp[ 6]) , ( constant3? constant3: ( constant3= make_list( make_char( 34))))))))));
-}
-}
-}
+tmp[ 4]= list_prefix( tmp[ 3]);
+if( term_equal( list_last( tmp[ 3]) , make_char( 34))) {
+return ( * ef2)( ( constant4? constant4: ( constant4= ( * ef1)( lf2( (ATerm) ATmakeList( 4 , char_table[ 34] , char_table[ 92] , char_table[ 92] , char_table[ 34]))))) , lf_AUX_Literals3_1( ( * ef1)( lf2( cons( ( constant2? constant2: ( constant2= make_list_char( 34))) , cons( make_list( tmp[ 4]) , ( constant3? constant3: ( constant3= make_list( make_char( 34))))))))));
 }
 }
 }

@@ -1,57 +1,90 @@
 #include "support.h"
-static Symbol lf_AUX_MuASF_Basics3_1sym;
-static ATerm lf_AUX_MuASF_Basics3_1( ATerm arg1);
+static Symbol lf_AUX_MuASF_Basics3_2sym;
+static ATerm lf_AUX_MuASF_Basics3_2( ATerm arg1 , ATerm arg2);
 static Symbol ef1sym;
 static funcptr ef1;
 static Symbol ef2sym;
 static funcptr ef2;
-static Symbol lf2sym;
-static ATerm lf2( ATerm arg1);
+static Symbol ef3sym;
+static funcptr ef3;
+static Symbol lf_AUX_MuASF_Basics3_1sym;
+static ATerm lf_AUX_MuASF_Basics3_1( ATerm arg1);
 void register_AUX_MuASF_Basics3( ) {
-lf_AUX_MuASF_Basics3_1sym= ATmakeSymbol( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"get-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)"
- , 1 , ATtrue);
+lf_AUX_MuASF_Basics3_2sym= ATmakeSymbol( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"addto-rulesopt\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)"
+ , 2 , ATtrue);
+ATprotectSymbol( lf_AUX_MuASF_Basics3_2sym);
+lf_AUX_MuASF_Basics3_1sym= ATmakeSymbol( "listtype(sort(\"Rule\"),ql(\";\"))" , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_MuASF_Basics3_1sym);
-lf2sym= ATmakeSymbol( "listtype(sort(\"Term\"),ql(\",\"))" , 1 , ATtrue);
-ATprotectSymbol( lf2sym);
-register_prod( ATparse( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"get-funid\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"FunId\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_Basics3_1 , lf_AUX_MuASF_Basics3_1sym);
-register_prod( ATparse( "listtype(sort(\"Term\"),ql(\",\"))") , lf2 , lf2sym);
+register_prod( ATparse( "listtype(sort(\"Rule\"),ql(\";\"))") , lf_AUX_MuASF_Basics3_1 , lf_AUX_MuASF_Basics3_1sym);
+register_prod( ATparse( "prod(id(\"MuASF-Basics\"),w(\"\"),[l(\"addto-rulesopt\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_Basics3_2 , lf_AUX_MuASF_Basics3_2sym);
 }
 void resolve_AUX_MuASF_Basics3( ) {
-ef1= lookup_func( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)"));
-ef1sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)"));
-ef2= lookup_func( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)"));
-ef2sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[sort(\"FunId\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)"));
+ef1= lookup_func( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)"));
+ef1sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)"));
+ef2= lookup_func( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"rules\"),w(\"\"),sort(\"RuleList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)"));
+ef2sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[ql(\"rules\"),w(\"\"),sort(\"RuleList\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"RulesOpt\"),w(\"\"),no-attrs)"));
+ef3= lookup_func( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"RuleList\"),w(\"\"),no-attrs)"));
+ef3sym= lookup_sym( ATreadFromString( "prod(id(\"MuASF-SingleSorted\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"RuleList\"),w(\"\"),no-attrs)"));
 }
+static ATerm constant0= NULL;
 void init_AUX_MuASF_Basics3( ) {
+ATprotect( & constant0);
 }
-ATerm lf_AUX_MuASF_Basics3_1( ATerm arg0) {
-PROF( prof_lf_AUX_MuASF_Basics3_1);
+ATerm lf_AUX_MuASF_Basics3_2( ATerm arg0 , ATerm arg1) {
+PROF( prof_lf_AUX_MuASF_Basics3_2);
 if( check_sym( arg0 , ef1sym)) {
+if( check_sym( arg1 , lf_AUX_MuASF_Basics3_1sym)) {
 {
-ATerm atmp00= arg_0( arg0);
-return atmp00;
+ATerm atmp10= arg_0( arg1);
+if( not_empty_list( atmp10)) {
+return ( * ef2)( ( * ef3)( lf_AUX_MuASF_Basics3_1( make_list( atmp10))));
+}
+else {
+return arg0;
+}
+}
 }
 }
 if( check_sym( arg0 , ef2sym)) {
 {
 ATerm atmp00= arg_0( arg0);
+if( check_sym( atmp00 , ef3sym)) {
 {
-ATerm atmp01= arg_1( arg0);
-if( check_sym( atmp01 , lf2sym)) {
+ATerm atmp000= arg_0( atmp00);
+if( check_sym( atmp000 , lf_AUX_MuASF_Basics3_1sym)) {
 {
-ATerm atmp010= arg_0( atmp01);
-if( not_empty_list( atmp010)) {
-return atmp00;
+ATerm atmp0000= arg_0( atmp000);
+if( check_sym( arg1 , lf_AUX_MuASF_Basics3_1sym)) {
+{
+ATerm atmp10= arg_0( arg1);
+if( ! not_empty_list( atmp0000)) {
+if( not_empty_list( atmp10)) {
+return ( * ef2)( ( * ef3)( lf_AUX_MuASF_Basics3_1( make_list( atmp10))));
+}
+else {
+return ( constant0? constant0: ( constant0= ( * ef1)( )));
+}
+}
+else {
+if( not_empty_list( atmp10)) {
+return ( * ef2)( ( * ef3)( lf_AUX_MuASF_Basics3_1( cons( make_list( atmp0000) , make_list( atmp10)))));
+}
+else {
+return ( * ef2)( ( * ef3)( lf_AUX_MuASF_Basics3_1( make_list( atmp0000))));
 }
 }
 }
 }
 }
 }
+}
+}
+}
+}
+return make_nf2( lf_AUX_MuASF_Basics3_2sym , arg0 , arg1);
+}
+ATerm lf_AUX_MuASF_Basics3_1( ATerm arg0) {
+PROF( prof_lf_AUX_MuASF_Basics3_1);
 return make_nf1( lf_AUX_MuASF_Basics3_1sym , arg0);
-}
-ATerm lf2( ATerm arg0) {
-PROF( prof_lf2);
-return make_nf1( lf2sym , arg0);
 }
 

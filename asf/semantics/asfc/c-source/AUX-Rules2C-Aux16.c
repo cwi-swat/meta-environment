@@ -22,7 +22,7 @@ static funcptr ef1;
 static Symbol lf_AUX_Rules2C_Aux16_1sym;
 static ATerm lf_AUX_Rules2C_Aux16_1( ATerm arg1);
 void register_AUX_Rules2C_Aux16( ) {
-lf_AUX_Rules2C_Aux16_2sym= ATmakeSymbol( "prod(id(\"Rules2C-Aux\"),w(\"\"),[l(\"select-conds-on-second-term\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"C-Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"C-RuleListPair\"),w(\"\"),no-attrs)"
+lf_AUX_Rules2C_Aux16_2sym= ATmakeSymbol( "prod(id(\"Rules2C-Aux\"),w(\"\"),[l(\"select-conds-on-first-term\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"C-Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"C-RuleListPair\"),w(\"\"),no-attrs)"
  , 2 , ATtrue);
 ATprotectSymbol( lf_AUX_Rules2C_Aux16_2sym);
 lf5sym= ATmakeSymbol( "listtype(sort(\"CHAR\"))" , 1 , ATtrue);
@@ -36,7 +36,7 @@ ATprotectSymbol( lf4sym);
 lf_AUX_Rules2C_Aux16_1sym= ATmakeSymbol( "listtype(sort(\"C-Rule\"),ql(\";\"))" , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_Rules2C_Aux16_1sym);
 register_prod( ATparse( "listtype(sort(\"C-Rule\"),ql(\";\"))") , lf_AUX_Rules2C_Aux16_1 , lf_AUX_Rules2C_Aux16_1sym);
-register_prod( ATparse( "prod(id(\"Rules2C-Aux\"),w(\"\"),[l(\"select-conds-on-second-term\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"C-Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"C-RuleListPair\"),w(\"\"),no-attrs)") , lf_AUX_Rules2C_Aux16_2 , lf_AUX_Rules2C_Aux16_2sym);
+register_prod( ATparse( "prod(id(\"Rules2C-Aux\"),w(\"\"),[l(\"select-conds-on-first-term\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"C-Rule\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"C-RuleListPair\"),w(\"\"),no-attrs)") , lf_AUX_Rules2C_Aux16_2 , lf_AUX_Rules2C_Aux16_2sym);
 register_prod( ATparse( "listtype(sort(\"FV-Path\"),ql(\",\"))") , lf3 , lf3sym);
 register_prod( ATparse( "listtype(sort(\"Cond\"),ql(\"&\"))") , lf4 , lf4sym);
 register_prod( ATparse( "listtype(sort(\"CHAR\"))") , lf5 , lf5sym);
@@ -129,7 +129,7 @@ tmp[ 27]= list_head( tmp[ 17]);
 tmp[ 28]= list_tail( tmp[ 17]);
 if( is_single_element( tmp[ 28])) {
 tmp[ 29]= list_head( tmp[ 28]);
-if( term_equal( arg0 , tmp[ 29])) {
+if( term_equal( arg0 , tmp[ 27])) {
 tmp[ 30]= lf_AUX_Rules2C_Aux16_2( arg0 , lf_AUX_Rules2C_Aux16_1( make_list( tmp[ 1])));
 if( check_sym( tmp[ 30] , ef1sym)) {
 tmp[ 31]= arg_0( tmp[ 30]);
@@ -138,7 +138,7 @@ if( check_sym( tmp[ 31] , lf_AUX_Rules2C_Aux16_1sym)) {
 tmp[ 33]= arg_0( tmp[ 31]);
 if( check_sym( tmp[ 32] , lf_AUX_Rules2C_Aux16_1sym)) {
 tmp[ 34]= arg_0( tmp[ 32]);
-return ( * ef1)( lf_AUX_Rules2C_Aux16_1( cons( make_list( ( * ef2)( lf3( make_list( tmp[ 7])) , lf4( cons( make_list( ( * ef3)( ( * ef4)( ( constant0? constant0: ( constant0= ( * ef5)( lf5( (ATerm) ATmakeList( 10 , char_table[ 116] , char_table[ 101] , char_table[ 114] , char_table[ 109] , char_table[ 45] , char_table[ 101] , char_table[ 113] , char_table[ 117] , char_table[ 97] , char_table[ 108]))))) , lf6( cons( make_list( tmp[ 27]) , make_list( arg0)))) , tmp[ 12])) , make_list( tmp[ 10]))) , tmp[ 4] , tmp[ 5] , tmp[ 6])) , make_list( tmp[ 33]))) , lf_AUX_Rules2C_Aux16_1( make_list( tmp[ 34])));
+return ( * ef1)( lf_AUX_Rules2C_Aux16_1( cons( make_list( ( * ef2)( lf3( make_list( tmp[ 7])) , lf4( cons( make_list( ( * ef3)( ( * ef4)( ( constant0? constant0: ( constant0= ( * ef5)( lf5( (ATerm) ATmakeList( 10 , char_table[ 116] , char_table[ 101] , char_table[ 114] , char_table[ 109] , char_table[ 45] , char_table[ 101] , char_table[ 113] , char_table[ 117] , char_table[ 97] , char_table[ 108]))))) , lf6( cons( make_list( arg0) , make_list( tmp[ 29])))) , tmp[ 12])) , make_list( tmp[ 10]))) , tmp[ 4] , tmp[ 5] , tmp[ 6])) , make_list( tmp[ 33]))) , lf_AUX_Rules2C_Aux16_1( make_list( tmp[ 34])));
 }
 }
 }

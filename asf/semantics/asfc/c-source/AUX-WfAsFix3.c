@@ -10,10 +10,10 @@ static funcptr ef3;
 static Symbol ef4sym;
 static funcptr ef4;
 void register_AUX_WfAsFix3( ) {
-lf_AUX_WfAsFix3_1sym= ATmakeSymbol( "prod(id(\"WfAsFix\"),w(\"\"),[l(\"expand-term\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"
+lf_AUX_WfAsFix3_1sym= ATmakeSymbol( "prod(id(\"WfAsFix\"),w(\"\"),[l(\"expand-module\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"
  , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_WfAsFix3_1sym);
-register_prod( ATparse( "prod(id(\"WfAsFix\"),w(\"\"),[l(\"expand-term\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)") , lf_AUX_WfAsFix3_1 , lf_AUX_WfAsFix3_1sym);
+register_prod( ATparse( "prod(id(\"WfAsFix\"),w(\"\"),[l(\"expand-module\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)") , lf_AUX_WfAsFix3_1 , lf_AUX_WfAsFix3_1sym);
 }
 void resolve_AUX_WfAsFix3( ) {
 ef1= lookup_func( ATreadFromString( "prod(id(\"WfAsFix\"),w(\"\"),[l(\"expand\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\",\"),w(\"\"),sort(\"ATerm\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"ATerm\"),w(\"\"),no-attrs)"));

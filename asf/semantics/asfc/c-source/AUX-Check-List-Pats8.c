@@ -16,14 +16,14 @@ static funcptr ef3;
 static Symbol ef5sym;
 static funcptr ef5;
 void register_AUX_Check_List_Pats8( ) {
-lf_AUX_Check_List_Pats8_1sym= ATmakeSymbol( "prod(id(\"Check-List-Pats\"),w(\"\"),[l(\"is-list-elem-list-list\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
+lf_AUX_Check_List_Pats8_1sym= ATmakeSymbol( "prod(id(\"Check-List-Pats\"),w(\"\"),[l(\"is-list-elem-list-elem-list\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
  , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_Check_List_Pats8_1sym);
 lf2sym= ATmakeSymbol( "listtype(sort(\"CHAR\"))" , 1 , ATtrue);
 ATprotectSymbol( lf2sym);
 lf3sym= ATmakeSymbol( "listtype(sort(\"Term\"),ql(\",\"))" , 1 , ATtrue);
 ATprotectSymbol( lf3sym);
-register_prod( ATparse( "prod(id(\"Check-List-Pats\"),w(\"\"),[l(\"is-list-elem-list-list\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_Check_List_Pats8_1 , lf_AUX_Check_List_Pats8_1sym);
+register_prod( ATparse( "prod(id(\"Check-List-Pats\"),w(\"\"),[l(\"is-list-elem-list-elem-list\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_Check_List_Pats8_1 , lf_AUX_Check_List_Pats8_1sym);
 register_prod( ATparse( "listtype(sort(\"CHAR\"))") , lf2 , lf2sym);
 register_prod( ATparse( "listtype(sort(\"Term\"),ql(\",\"))") , lf3 , lf3sym);
 }
@@ -47,7 +47,7 @@ ATprotect( & constant1);
 }
 ATerm lf_AUX_Check_List_Pats8_1( ATerm arg0) {
 {
-ATerm tmp[28];
+ATerm tmp[39];
 PROF( prof_lf_AUX_Check_List_Pats8_1);
 if( check_sym( arg0 , ef1sym)) {
 {
@@ -129,11 +129,52 @@ tmp[ 25]= list_head( tmp[ 21]);
 tmp[ 26]= list_tail( tmp[ 21]);
 if( is_single_element( tmp[ 26])) {
 tmp[ 27]= list_head( tmp[ 26]);
+if( check_sym( tmp[ 27] , ef1sym)) {
+tmp[ 28]= arg_0( tmp[ 27]);
+tmp[ 29]= arg_1( tmp[ 27]);
+if( check_sym( tmp[ 28] , ef2sym)) {
+tmp[ 30]= arg_0( tmp[ 28]);
+if( check_sym( tmp[ 30] , lf2sym)) {
+tmp[ 31]= arg_0( tmp[ 30]);
+if( check_sym( tmp[ 29] , lf3sym)) {
+tmp[ 32]= arg_0( tmp[ 29]);
+if( not_empty_list( tmp[ 31])) {
+if( term_equal( list_head( tmp[ 31]) , make_char( 99))) {
+tmp[ 33]= list_tail( tmp[ 31]);
+if( not_empty_list( tmp[ 33])) {
+if( term_equal( list_head( tmp[ 33]) , make_char( 111))) {
+tmp[ 34]= list_tail( tmp[ 33]);
+if( not_empty_list( tmp[ 34])) {
+if( term_equal( list_head( tmp[ 34]) , make_char( 110))) {
+tmp[ 35]= list_tail( tmp[ 34]);
+if( is_single_element( tmp[ 35])) {
+if( term_equal( list_head( tmp[ 35]) , make_char( 115))) {
+if( not_empty_list( tmp[ 32])) {
+tmp[ 36]= list_head( tmp[ 32]);
+tmp[ 37]= list_tail( tmp[ 32]);
+if( is_single_element( tmp[ 37])) {
+tmp[ 38]= list_head( tmp[ 37]);
 if( term_equal( ( * ef4)( tmp[ 3]) , ( constant0? constant0: ( constant0= ( * ef3)( ))))) {
 if( term_equal( ( * ef4)( tmp[ 14]) , ( constant1? constant1: ( constant1= ( * ef5)( ))))) {
 if( term_equal( ( * ef4)( tmp[ 25]) , ( constant0? constant0: ( constant0= ( * ef3)( ))))) {
-if( term_equal( ( * ef4)( tmp[ 27]) , ( constant0? constant0: ( constant0= ( * ef3)( ))))) {
+if( term_equal( ( * ef4)( tmp[ 36]) , ( constant1? constant1: ( constant1= ( * ef5)( ))))) {
+if( term_equal( ( * ef4)( tmp[ 38]) , ( constant0? constant0: ( constant0= ( * ef3)( ))))) {
 return ( constant0? constant0: ( constant0= ( * ef3)( )));
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
+}
 }
 }
 }

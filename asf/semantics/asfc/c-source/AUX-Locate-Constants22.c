@@ -1,90 +1,61 @@
 #include "support.h"
-static Symbol lf_AUX_Locate_Constants22_1sym;
-static ATerm lf_AUX_Locate_Constants22_1( ATerm arg1 , ATerm arg2);
-static Symbol lf_AUX_Locate_Constants22_3sym;
-static ATerm lf_AUX_Locate_Constants22_3( ATerm arg1 , ATerm arg2);
-static Symbol lf_AUX_Locate_Constants22_4sym;
-static ATerm lf_AUX_Locate_Constants22_4( ATerm arg1 , ATerm arg2 , ATerm arg3);
-static Symbol lf_AUX_Locate_Constants22_5sym;
-static ATerm lf_AUX_Locate_Constants22_5( ATerm arg1 , ATerm arg2 , ATerm arg3);
-static Symbol lf_AUX_Locate_Constants22_6sym;
-static ATerm lf_AUX_Locate_Constants22_6( ATerm arg1 , ATerm arg2 , ATerm arg3);
-static Symbol lf_AUX_Locate_Constants22_7sym;
-static ATerm lf_AUX_Locate_Constants22_7( ATerm arg1 , ATerm arg2 , ATerm arg3);
-static Symbol lf_AUX_Locate_Constants22_8sym;
-static ATerm lf_AUX_Locate_Constants22_8( ATerm arg1 , ATerm arg2 , ATerm arg3);
-static Symbol lf_AUX_Locate_Constants22_9sym;
-static ATerm lf_AUX_Locate_Constants22_9( ATerm arg1 , ATerm arg2 , ATerm arg3);
 static Symbol lf_AUX_Locate_Constants22_2sym;
 static ATerm lf_AUX_Locate_Constants22_2( ATerm arg1);
+static Symbol ef2sym;
+static funcptr ef2;
+static Symbol ef1sym;
+static funcptr ef1;
+static Symbol lf_AUX_Locate_Constants22_1sym;
+static ATerm lf_AUX_Locate_Constants22_1( ATerm arg1);
 void register_AUX_Locate_Constants22( ) {
-lf_AUX_Locate_Constants22_1sym= ATmakeSymbol( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),no-attrs)"
- , 2 , ATtrue);
-ATprotectSymbol( lf_AUX_Locate_Constants22_1sym);
-lf_AUX_Locate_Constants22_3sym= ATmakeSymbol( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CEI-tuple\"),w(\"\"),no-attrs)" , 2 , ATtrue);
-ATprotectSymbol( lf_AUX_Locate_Constants22_3sym);
-lf_AUX_Locate_Constants22_4sym= ATmakeSymbol( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"Declaration\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CEDI-tuple\"),w(\"\"),no-attrs)" , 3 , ATtrue);
-ATprotectSymbol( lf_AUX_Locate_Constants22_4sym);
-lf_AUX_Locate_Constants22_5sym= ATmakeSymbol( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"Declaration-list\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CEDLI-tuple\"),w(\"\"),no-attrs)" , 3 , ATtrue);
-ATprotectSymbol( lf_AUX_Locate_Constants22_5sym);
-lf_AUX_Locate_Constants22_6sym= ATmakeSymbol( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CEEI-tuple\"),w(\"\"),no-attrs)" , 3 , ATtrue);
-ATprotectSymbol( lf_AUX_Locate_Constants22_6sym);
-lf_AUX_Locate_Constants22_7sym= ATmakeSymbol( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CEELI-tuple\"),w(\"\"),no-attrs)" , 3 , ATtrue);
-ATprotectSymbol( lf_AUX_Locate_Constants22_7sym);
-lf_AUX_Locate_Constants22_8sym= ATmakeSymbol( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"Statement\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CESI-tuple\"),w(\"\"),no-attrs)" , 3 , ATtrue);
-ATprotectSymbol( lf_AUX_Locate_Constants22_8sym);
-lf_AUX_Locate_Constants22_9sym= ATmakeSymbol( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CESLI-tuple\"),w(\"\"),no-attrs)" , 3 , ATtrue);
-ATprotectSymbol( lf_AUX_Locate_Constants22_9sym);
-lf_AUX_Locate_Constants22_2sym= ATmakeSymbol( "listtype(sort(\"CE-pair\"),ql(\",\"))" , 1 , ATtrue);
+lf_AUX_Locate_Constants22_2sym= ATmakeSymbol( "prod(id(\"Locate-Constants\"),w(\"\"),[l(\"flatten-arguments\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),no-attrs)"
+ , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_Locate_Constants22_2sym);
-register_prod( ATparse( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),no-attrs)") , lf_AUX_Locate_Constants22_1 , lf_AUX_Locate_Constants22_1sym);
-register_prod( ATparse( "listtype(sort(\"CE-pair\"),ql(\",\"))") , lf_AUX_Locate_Constants22_2 , lf_AUX_Locate_Constants22_2sym);
-register_prod( ATparse( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CEI-tuple\"),w(\"\"),no-attrs)") , lf_AUX_Locate_Constants22_3 , lf_AUX_Locate_Constants22_3sym);
-register_prod( ATparse( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"Declaration\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CEDI-tuple\"),w(\"\"),no-attrs)") , lf_AUX_Locate_Constants22_4 , lf_AUX_Locate_Constants22_4sym);
-register_prod( ATparse( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"Declaration-list\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CEDLI-tuple\"),w(\"\"),no-attrs)") , lf_AUX_Locate_Constants22_5 , lf_AUX_Locate_Constants22_5sym);
-register_prod( ATparse( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CEEI-tuple\"),w(\"\"),no-attrs)") , lf_AUX_Locate_Constants22_6 , lf_AUX_Locate_Constants22_6sym);
-register_prod( ATparse( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CEELI-tuple\"),w(\"\"),no-attrs)") , lf_AUX_Locate_Constants22_7 , lf_AUX_Locate_Constants22_7sym);
-register_prod( ATparse( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"Statement\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CESI-tuple\"),w(\"\"),no-attrs)") , lf_AUX_Locate_Constants22_8 , lf_AUX_Locate_Constants22_8sym);
-register_prod( ATparse( "prod(id(\"Locate-Constants\"),w(\"\"),[ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"CE-pair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"Statement-list-opt\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"AInt\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CESLI-tuple\"),w(\"\"),no-attrs)") , lf_AUX_Locate_Constants22_9 , lf_AUX_Locate_Constants22_9sym);
+lf_AUX_Locate_Constants22_1sym= ATmakeSymbol( "listtype(sort(\"Expression\"),ql(\",\"))" , 1 , ATtrue);
+ATprotectSymbol( lf_AUX_Locate_Constants22_1sym);
+register_prod( ATparse( "listtype(sort(\"Expression\"),ql(\",\"))") , lf_AUX_Locate_Constants22_1 , lf_AUX_Locate_Constants22_1sym);
+register_prod( ATparse( "prod(id(\"Locate-Constants\"),w(\"\"),[l(\"flatten-arguments\"),w(\"\"),l(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),no-attrs)") , lf_AUX_Locate_Constants22_2 , lf_AUX_Locate_Constants22_2sym);
 }
 void resolve_AUX_Locate_Constants22( ) {
+ef1= lookup_func( ATreadFromString( "prod(id(\"Pure-C\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),no-attrs)"));
+ef1sym= lookup_sym( ATreadFromString( "prod(id(\"Pure-C\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),no-attrs)"));
+ef2= lookup_func( ATreadFromString( "prod(id(\"Locate-Constants\"),w(\"\"),[l(\"flatten-list-of-chars\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Expression\"),w(\"\"),no-attrs)"));
+ef2sym= lookup_sym( ATreadFromString( "prod(id(\"Locate-Constants\"),w(\"\"),[l(\"flatten-list-of-chars\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Expression\"),w(\"\"),no-attrs)"));
 }
+static ATerm constant0= NULL;
 void init_AUX_Locate_Constants22( ) {
+ATprotect( & constant0);
 }
 ATerm lf_AUX_Locate_Constants22_2( ATerm arg0) {
+{
+ATerm tmp[6];
 PROF( prof_lf_AUX_Locate_Constants22_2);
+if( check_sym( arg0 , lf_AUX_Locate_Constants22_1sym)) {
+{
+ATerm atmp00= arg_0( arg0);
+if( not_empty_list( atmp00)) {
+tmp[ 0]= list_head( atmp00);
+tmp[ 1]= list_tail( atmp00);
+tmp[ 2]= ( * ef2)( tmp[ 0]);
+tmp[ 3]= lf_AUX_Locate_Constants22_2( lf_AUX_Locate_Constants22_1( make_list( tmp[ 1])));
+if( check_sym( tmp[ 3] , ef1sym)) {
+tmp[ 4]= arg_0( tmp[ 3]);
+if( check_sym( tmp[ 4] , lf_AUX_Locate_Constants22_1sym)) {
+tmp[ 5]= arg_0( tmp[ 4]);
+return ( * ef1)( lf_AUX_Locate_Constants22_1( cons( make_list( tmp[ 2]) , make_list( tmp[ 5]))));
+}
+}
+}
+else {
+return ( constant0? constant0: ( constant0= ( * ef1)( lf_AUX_Locate_Constants22_1( make_list( null( ))))));
+}
+}
+}
 return make_nf1( lf_AUX_Locate_Constants22_2sym , arg0);
 }
-ATerm lf_AUX_Locate_Constants22_9( ATerm arg0 , ATerm arg1 , ATerm arg2) {
-PROF( prof_lf_AUX_Locate_Constants22_9);
-return make_nf3( lf_AUX_Locate_Constants22_9sym , arg0 , arg1 , arg2);
 }
-ATerm lf_AUX_Locate_Constants22_8( ATerm arg0 , ATerm arg1 , ATerm arg2) {
-PROF( prof_lf_AUX_Locate_Constants22_8);
-return make_nf3( lf_AUX_Locate_Constants22_8sym , arg0 , arg1 , arg2);
-}
-ATerm lf_AUX_Locate_Constants22_7( ATerm arg0 , ATerm arg1 , ATerm arg2) {
-PROF( prof_lf_AUX_Locate_Constants22_7);
-return make_nf3( lf_AUX_Locate_Constants22_7sym , arg0 , arg1 , arg2);
-}
-ATerm lf_AUX_Locate_Constants22_6( ATerm arg0 , ATerm arg1 , ATerm arg2) {
-PROF( prof_lf_AUX_Locate_Constants22_6);
-return make_nf3( lf_AUX_Locate_Constants22_6sym , arg0 , arg1 , arg2);
-}
-ATerm lf_AUX_Locate_Constants22_5( ATerm arg0 , ATerm arg1 , ATerm arg2) {
-PROF( prof_lf_AUX_Locate_Constants22_5);
-return make_nf3( lf_AUX_Locate_Constants22_5sym , arg0 , arg1 , arg2);
-}
-ATerm lf_AUX_Locate_Constants22_4( ATerm arg0 , ATerm arg1 , ATerm arg2) {
-PROF( prof_lf_AUX_Locate_Constants22_4);
-return make_nf3( lf_AUX_Locate_Constants22_4sym , arg0 , arg1 , arg2);
-}
-ATerm lf_AUX_Locate_Constants22_3( ATerm arg0 , ATerm arg1) {
-PROF( prof_lf_AUX_Locate_Constants22_3);
-return make_nf2( lf_AUX_Locate_Constants22_3sym , arg0 , arg1);
-}
-ATerm lf_AUX_Locate_Constants22_1( ATerm arg0 , ATerm arg1) {
+ATerm lf_AUX_Locate_Constants22_1( ATerm arg0) {
 PROF( prof_lf_AUX_Locate_Constants22_1);
-return make_nf2( lf_AUX_Locate_Constants22_1sym , arg0 , arg1);
+return make_nf1( lf_AUX_Locate_Constants22_1sym , arg0);
 }
 

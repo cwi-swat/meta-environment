@@ -14,12 +14,12 @@ static funcptr ef2;
 static Symbol lf2sym;
 static ATerm lf2( ATerm arg1);
 void register_AUX_MuASF_Sign2C6( ) {
-lf_AUX_MuASF_Sign2C6_1sym= ATmakeSymbol( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[l(\"modname2rname\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ModId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Identifier\"),w(\"\"),no-attrs)"
+lf_AUX_MuASF_Sign2C6_1sym= ATmakeSymbol( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[l(\"modname2iname\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ModId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Identifier\"),w(\"\"),no-attrs)"
  , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_MuASF_Sign2C6_1sym);
 lf2sym= ATmakeSymbol( "listtype(sort(\"CHAR\"))" , 1 , ATtrue);
 ATprotectSymbol( lf2sym);
-register_prod( ATparse( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[l(\"modname2rname\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ModId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Identifier\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_Sign2C6_1 , lf_AUX_MuASF_Sign2C6_1sym);
+register_prod( ATparse( "prod(id(\"MuASF-Sign2C\"),w(\"\"),[l(\"modname2iname\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"ModId\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Identifier\"),w(\"\"),no-attrs)") , lf_AUX_MuASF_Sign2C6_1 , lf_AUX_MuASF_Sign2C6_1sym);
 register_prod( ATparse( "listtype(sort(\"CHAR\"))") , lf2 , lf2sym);
 }
 void resolve_AUX_MuASF_Sign2C6( ) {
@@ -67,7 +67,7 @@ if( check_sym( tmp[ 1] , ef2sym)) {
 tmp[ 2]= arg_0( tmp[ 1]);
 if( check_sym( tmp[ 2] , lf2sym)) {
 tmp[ 3]= arg_0( tmp[ 2]);
-return ( * ef2)( lf2( cons( ( constant0? constant0: ( constant0= make_list_char( 114))) , cons( ( constant1? constant1: ( constant1= make_list_char( 101))) , cons( ( constant2? constant2: ( constant2= make_list_char( 115))) , cons( ( constant3? constant3: ( constant3= make_list_char( 111))) , cons( ( constant4? constant4: ( constant4= make_list_char( 108))) , cons( ( constant5? constant5: ( constant5= make_list_char( 118))) , cons( ( constant1? constant1: ( constant1= make_list_char( 101))) , cons( ( constant6? constant6: ( constant6= make_list_char( 95))) , make_list( tmp[ 3])))))))))));
+return ( * ef2)( lf2( cons( ( constant0? constant0: ( constant0= make_list_char( 114))) , cons( ( constant1? constant1: ( constant1= make_list_char( 101))) , cons( ( constant2? constant2: ( constant2= make_list_char( 103))) , cons( ( constant3? constant3: ( constant3= make_list_char( 105))) , cons( ( constant4? constant4: ( constant4= make_list_char( 115))) , cons( ( constant5? constant5: ( constant5= make_list_char( 116))) , cons( ( constant1? constant1: ( constant1= make_list_char( 101))) , cons( ( constant0? constant0: ( constant0= make_list_char( 114))) , cons( ( constant6? constant6: ( constant6= make_list_char( 95))) , make_list( tmp[ 3]))))))))))));
 }
 }
 }

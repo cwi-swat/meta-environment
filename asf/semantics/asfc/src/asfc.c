@@ -57,7 +57,7 @@ ATerm generate_code(int cid, ATerm modname, ATerm module)
    * Merijn.
    */
   
-  char *path = "/home/markvdb/AsFix2C/muASF-lists/asfixfiles3/";
+  char *path = ".";
   if( getenv( "COMPILER_OUTPUT" ) != NULL )
      path = getenv( "COMPILER_OUTPUT" );
 

@@ -16,14 +16,14 @@ static funcptr ef3;
 static Symbol ef5sym;
 static funcptr ef5;
 void register_AUX_Check_List_Pats9( ) {
-lf_AUX_Check_List_Pats9_1sym= ATmakeSymbol( "prod(id(\"Check-List-Pats\"),w(\"\"),[l(\"is-list-list-elem-list\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
+lf_AUX_Check_List_Pats9_1sym= ATmakeSymbol( "prod(id(\"Check-List-Pats\"),w(\"\"),[l(\"is-list-elem-list-list\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)"
  , 1 , ATtrue);
 ATprotectSymbol( lf_AUX_Check_List_Pats9_1sym);
 lf2sym= ATmakeSymbol( "listtype(sort(\"CHAR\"))" , 1 , ATtrue);
 ATprotectSymbol( lf2sym);
 lf3sym= ATmakeSymbol( "listtype(sort(\"Term\"),ql(\",\"))" , 1 , ATtrue);
 ATprotectSymbol( lf3sym);
-register_prod( ATparse( "prod(id(\"Check-List-Pats\"),w(\"\"),[l(\"is-list-list-elem-list\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_Check_List_Pats9_1 , lf_AUX_Check_List_Pats9_1sym);
+register_prod( ATparse( "prod(id(\"Check-List-Pats\"),w(\"\"),[l(\"is-list-elem-list-list\"),w(\"\"),l(\"(\"),w(\"\"),sort(\"Term\"),w(\"\"),l(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)") , lf_AUX_Check_List_Pats9_1 , lf_AUX_Check_List_Pats9_1sym);
 register_prod( ATparse( "listtype(sort(\"CHAR\"))") , lf2 , lf2sym);
 register_prod( ATparse( "listtype(sort(\"Term\"),ql(\",\"))") , lf3 , lf3sym);
 }
@@ -130,8 +130,8 @@ tmp[ 26]= list_tail( tmp[ 21]);
 if( is_single_element( tmp[ 26])) {
 tmp[ 27]= list_head( tmp[ 26]);
 if( term_equal( ( * ef4)( tmp[ 3]) , ( constant0? constant0: ( constant0= ( * ef3)( ))))) {
-if( term_equal( ( * ef4)( tmp[ 14]) , ( constant0? constant0: ( constant0= ( * ef3)( ))))) {
-if( term_equal( ( * ef4)( tmp[ 25]) , ( constant1? constant1: ( constant1= ( * ef5)( ))))) {
+if( term_equal( ( * ef4)( tmp[ 14]) , ( constant1? constant1: ( constant1= ( * ef5)( ))))) {
+if( term_equal( ( * ef4)( tmp[ 25]) , ( constant0? constant0: ( constant0= ( * ef3)( ))))) {
 if( term_equal( ( * ef4)( tmp[ 27]) , ( constant0? constant0: ( constant0= ( * ef3)( ))))) {
 return ( constant0? constant0: ( constant0= ( * ef3)( )));
 }
