@@ -47,7 +47,7 @@ in
   +
     rec-msg(sm-get-all-depending-module-names(ModuleImportPairs?, ModuleId?)) .
     snd-eval(SM, get-all-depending-module-names(ModuleImportPairs, ModuleId)) .
-    Modules := [] .
+    ModuleImportPairs := [] .
     rec-value(SM, all-depending-module-names(ModuleNames?)) .
     snd-msg(sm-all-depending-module-names(ModuleNames))
   +

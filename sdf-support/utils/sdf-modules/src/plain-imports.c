@@ -49,12 +49,17 @@ static ATermList getTransitiveImports(ATerm id)
   assert(importsTable != NULL && "importsTable should be initialized");
 
   while (!ATisEmpty(todo)) {
-    ATerm module = ATgetFirst(todo);
-    ATermList imports = (ATermList) ATtableGet(importsTable, module);
+    ATermList imports;
+    ATerm module;
 
+    module = ATgetFirst(todo);
+    todo = ATgetNext(todo);
+
+    imports = (ATermList) ATtableGet(importsTable, module);
     if (imports != NULL) {
-      todo = merge(imports, ATgetNext(todo));
+      todo = merge(imports, todo);
     }
+
     result = merge(ATmakeList1(module), result);
   }
 
