@@ -662,7 +662,7 @@ def register(mod, fun, args, result):
         #print "register: %s,%s,%s - " % (mod, fun, result), args
 
         if functions.has_key(fun):
-                (mod2, fun2, singletons, args2, result2) = functions[fun]
+                (mod2, fun2, singleton, args2, result2) = functions[fun]
                 # <PO>: We might want some more consistency checks here!
                         # Possible candidates (at first glance):
                         # - mod == mod2
@@ -674,10 +674,10 @@ def register(mod, fun, args, result):
         else:
                 singletons = []
                 for arg in args:
-                        if is_singleton(arg):
-                                singletons.append(1)
-                        else:
-                                singletons.append(0)
+                #        if is_singleton(arg):
+                #                singletons.append(1)
+                #        else:
+                	singletons.append(0)
                 function = (mod, fun, singletons, args, result)
  
         functions[fun] = function
