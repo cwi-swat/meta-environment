@@ -363,7 +363,7 @@ void SG_TYAux(ATerm t)
       SG_TYAuxBuf(TYA_ADD, ATgetInt((ATermInt) t));
       break;
     case AT_APPL:
-      SG_TYAux((ATerm) ATgetArguments((ATermAppl) t));
+      SG_TYAux(ATelementAt(ATgetArguments((ATermAppl) t), 1));
       break;
     case AT_LIST:
       SG_TYAux(ATgetFirst((ATermList) t));
@@ -407,16 +407,17 @@ void SG_DotTermYieldAux(ATerm t)
       break;
     case AT_APPL:
       fun  = ATgetAFun((ATermAppl) t);
-      args = ATgetArguments((ATermAppl) t);
       if(fun == SG_ApplAFun()) {
+        args = (ATermList) ATelementAt(ATgetArguments((ATermAppl) t), 1);
         if(ATgetLength(args) > 1) {
           SG_TYAuxBuf(TYA_ADD, '[');
-          SG_TYAux((ATerm) args);
+          SG_DotTermYieldAux((ATerm) args);
           SG_TYAuxBuf(TYA_ADD, ']');
         } else {
-          SG_TYAux((ATerm) args);
+          SG_DotTermYieldAux((ATerm) args);
         }
       } else if(fun == SG_AmbAFun()) {
+        args = ATgetArguments((ATermAppl) t);
         while(!ATisEmpty(args)) {
           SG_DotTermYieldAux(ATgetFirst(args));
           args = ATgetNext(args);
@@ -429,8 +430,8 @@ void SG_DotTermYieldAux(ATerm t)
       }
       break;
     case AT_LIST:
-      SG_TYAux(ATgetFirst((ATermList) t));
-      SG_TYAux((ATerm) ATgetNext((ATermList) t));
+      SG_DotTermYieldAux(ATgetFirst((ATermList) t));
+      SG_DotTermYieldAux((ATerm) ATgetNext((ATermList) t));
       break;
     default:
       ATerror("SG_DotTermYieldAux: strange term: %t\n", t);
@@ -440,8 +441,9 @@ void SG_DotTermYieldAux(ATerm t)
 
 ATerm SG_DotTermYield(ATerm t)
 {
-  SG_TYAuxBuf(TYA_INIT, 0);          /* Initialize (hidden) buffer */
+  SG_TYAuxBuf(TYA_INIT, 0);         /* Initialize (hidden) buffer */
   SG_DotTermYieldAux(t);            /* Yield to (hidden) buffer   */
+
                                     /* Collect & return buffer    */
   return ATmake("<str>", SG_TYAuxBuf(TYA_INQUIRE, 0));
 }

@@ -538,7 +538,7 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
 
   t = SG_Apply(table, prodl, kids, reject);
 
-  if(SG_DEBUG) ATfprintf(SGlog(), "Reducing %t\n", SG_DotTermYield(t));
+  if(SG_DEBUG) ATfprintf(SGlog(), "Reducing %t\n", SG_TermYield(t));
 
   if((st1 = SG_FindStack(s, active_stacks)) != NULL) {
     if((nl = SG_FindDirectLink(st1, st0)) != NULL) {
@@ -548,6 +548,8 @@ void SG_Reducer(stack *st0, state s, label prodl, ATermList kids,
                             SG_ST_STATE(st0), SG_ST_STATE(st1),
                             reject?" {reject}":"");
       if (reject) {     /* Don't bother to represent rejects prods -- J$ */
+        if (SG_DEBUG)
+          ATfprintf(SGlog(), "Rejecting %t\n", t);
         SG_PropagateReject(st1);
       } else {
 /*
@@ -712,6 +714,8 @@ void SG_PropagateReject(stack *st)
     cmpstid = (ATermInt) ATgetAnnotation(compost, SG_ApplLabel()),
     amb = SG_AmbTable(SG_AMBTBL_LOOKUP, cmpstid, NULL);
     if(!ATisEmpty(amb)) {             /*  Ambiguity encountered  */
+      if (SG_DEBUG)
+        ATfprintf(SGlog(), "Reject: resolving an ambiguity cluster...\n");
       compost = ATremoveAnnotation(compost, SG_ApplLabel());
       trms = (ATermList) ATgetFirst(amb);
       oldlen = ATgetLength(trms);
@@ -719,7 +723,12 @@ void SG_PropagateReject(stack *st)
       while(trms && !ATisEmpty(trms)) {
         t = ATgetFirst(trms); trms = ATgetNext(trms);
         i = ATgetFirst(idxs); idxs = ATgetNext(idxs);
-        if(!ATisEqual(compost, t)) {  /*  Ditch term from ambiguity  */
+        if(ATisEqual(compost, t)) {  /*  Ditch term from ambiguity  */
+          if (SG_DEBUG)
+            ATfprintf(SGlog(), "Removed from ambiguity cluster: %t\n", t);
+         } else {
+          if (SG_DEBUG)
+            ATfprintf(SGlog(), "Keeping in ambiguity cluster: %t\n", t);
           newtrms = ATinsert(newtrms, t);
         }
       }

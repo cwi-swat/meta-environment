@@ -126,6 +126,8 @@ ATerm SGopenLanguage(char *prgname, int conn, char *L, char *FN)
   if (SG_VERBOSE && (FN != NULL))
     ATfprintf(stderr, "%s: reading parse table %s\n", prgname, FN);
   input_file = SGopenFile(prgname, "parse table not specified", FN);
+  if (SG_DEBUG)
+    ATfprintf(SGlog(), "Reading parse table for language %s\n", L);
   table = SG_BuildParseTable(ATreadFromFile(input_file));
   SGcloseFile(input_file);
   if (table == NULL)

@@ -83,9 +83,9 @@ state SG_LookupGoto(parse_table *pt, state s, int token)
                   (ATerm) ATmakeList2((ATerm) ATmakeInt(s),
                                       (ATerm) ATmakeInt(token)));
   retstate = (val == NULL)?-1:ATgetInt((ATermInt) val);
-
+/*
   if (SG_DEBUG) ATfprintf(SGlog(), "Goto(%d,%d) == %d\n", s, token, retstate);
-
+ */
   return retstate;
 }
 
@@ -97,9 +97,9 @@ actions SG_LookupAction(parse_table *pt, state s, int token)
                  (ATerm) ATmakeList2((ATerm) ATmakeInt(s),
                                      (ATerm) ATmakeInt(token)));
   as = as ? as : ATempty;
-
+/*
   if (SG_DEBUG) ATfprintf(SGlog(), "Action(%d,%d) = %t\n", s, token, as);
-
+ */
   return as;
 }
 
@@ -259,8 +259,10 @@ void SG_AddPTStates(ATermList states, parse_table *pt)
     curstate=ATgetFirst(states);
     if (ATmatch(curstate, "state-rec(<int>,[<list>],actions([<list>]))",
                 &s, &gotos, &actions)) {
+/*
       if(SG_DEBUG)
         ATfprintf(SGlog(), "State %d: %t\n", s, curstate);
+ */
       nr_of_states = SG_Max(nr_of_states, s);
       SG_AddPTGotos(gotos, pt, s);
       SG_AddPTActions(actions, pt, s);
@@ -394,15 +396,18 @@ parse_table *SG_LookupParseTable(char *L, ATbool may_fail)
   for (i = 0; i < last_table; i++)
     if (!strcmp(L, tables[i].name)) {
       if (SG_DEBUG)
-        ATfprintf(SGlog(), "table for language %s found at index %d\n", L, i);
+        ATfprintf(SGlog(), "Table for language %s available with index %d\n", L, i);
       return tables[i].table;
     } else if (SG_DEBUG)
-      ATfprintf(SGlog(), "language %s not at index %d (%s)\n",
+      ATfprintf(SGlog(), "Language %s not at index %d (%s)\n",
                 L, i, tables[i].name);
 
   if (i > MAX_TABLES)
     ATerror("maximum number (%d) of languages exceeded\n", MAX_TABLES);
-  else
-    if(!may_fail) ATerror("no language %s open\n", L);
-  return NULL;    /* Silence the compiler */
+  else {
+    if (SG_DEBUG)
+      ATfprintf(SGlog(), "Language %s not available\n", L);
+    if(!may_fail) ATerror("No language %s open\n", L);
+  }
+  return NULL;
 }
