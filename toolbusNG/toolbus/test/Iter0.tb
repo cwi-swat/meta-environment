@@ -1,0 +1,16 @@
+process P is
+let N : int
+in
+    N := 0 .
+    print before .
+    ( if less(N, 5)
+      then
+         print N . N := add(N, 1)
+      else
+         tau
+      fi
+    ) * delta
+endlet
+
+toolbus(P)
+

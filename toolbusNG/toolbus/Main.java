@@ -630,8 +630,8 @@ static void producerTest(){
     ToolBus T = new ToolBus();
 
     try {
-      T.parse("toolbus/test/If4.tb");
       T.setVerbose(true);
+      T.parse("toolbus/test/Iter0.tb");
       T.execute();
       
     } catch (ToolBusException e) { System.out.println(e.getMessage()); e.printStackTrace();}

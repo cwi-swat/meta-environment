@@ -34,7 +34,6 @@ public class Iteration extends AbstractProcessExpression {
 
     left.compile(P, getFirst());
     right.compile(P, follow);
-
     setFollow(follow);
   }
 

@@ -21,11 +21,11 @@ exports
    "create" "(" Invocation  "," GenVar ")" 	-> ProcessExpr {cons("Create")}
     Invocation					-> ProcessCall  {cons("ProcessCall")}
 
-    ProcessExpr "." ProcessExpr 		-> ProcessExpr {left, cons("Sequence")}
+    ProcessExpr "." ProcessExpr 		-> ProcessExpr {right, cons("Sequence")}
     ProcessExpr "+" ProcessExpr 		-> ProcessExpr {left, cons("Alternative")}
     ProcessExpr "*" ProcessExpr 		-> ProcessExpr {left, cons("Iteration")}
     ProcessExpr "||" ProcessExpr 		-> ProcessExpr {left, cons("Merge")}
-    ProcessExpr ">>" ProcessExpr 		-> ProcessExpr {left, cons("Disrupt")}
+    ProcessExpr ">>" ProcessExpr 		-> ProcessExpr {right, cons("Disrupt")}
     "(" ProcessExpr ")" 			-> ProcessExpr {bracket}
     "let" VarDecls "in" ProcessExpr "endlet" 	-> ProcessExpr {cons("LetDefinition")}
     "if" TBTerm "then" ProcessExpr "fi" 	-> ProcessExpr {cons("IfThen")}
@@ -33,8 +33,8 @@ exports
 						-> ProcessExpr {cons("IfElse")}
 
   context-free priorities
-    ProcessExpr "." ProcessExpr -> ProcessExpr  >
-    ProcessExpr "*" ProcessExpr -> ProcessExpr  >
-    ProcessExpr "||" ProcessExpr -> ProcessExpr  >
-    ProcessExpr "+" ProcessExpr -> ProcessExpr >
-    ProcessExpr ">>" ProcessExpr -> ProcessExpr
+    ProcessExpr "*" ProcessExpr -> ProcessExpr {left, cons("Iteration")} >
+    ProcessExpr "." ProcessExpr -> ProcessExpr{right, cons("Sequence")}  >
+    ProcessExpr "+" ProcessExpr -> ProcessExpr  {left, cons("Alternative")}>
+    ProcessExpr "||" ProcessExpr -> ProcessExpr  {left, cons("Merge")} >
+    ProcessExpr ">>" ProcessExpr -> ProcessExpr {right, cons("Disrupt")}
