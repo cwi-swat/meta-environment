@@ -502,3 +502,9 @@ assert "type, 19": MP.theStr == P.theStr
 
 assert "type, 20": first(P) == 1
 assert "type, 21": second(P) == "a"
+
+type BagType = bag[int]
+
+BagType BT1 = {1,2,3}
+
+assert "type, 22": BT1 == {1,2,3}

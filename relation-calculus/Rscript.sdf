@@ -11,6 +11,13 @@ exports
      [A-Za-z][A-Za-z0-9\_\-]*             	-> RVAR {avoid}
       "comment" ~[]* "endcomment"		-> LAYOUT
 
+     "and" | "or" | "implies" | "in" | "notin" |
+     "union" | "inter" | "o" | "x" | "exists" |
+      "forall" | "bool" | "int" | "str" | 
+      "area" | "bag" | "rel" | "init" | "yield" | 
+      "equations" | "limit" | "initial" | 
+      "satisfy" | "end"				-> RVAR {reject}
+
   context-free restrictions
      RVAR -/- [A-Za-z0-9\_\-]
 
