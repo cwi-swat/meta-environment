@@ -238,7 +238,13 @@ static ATbool isChildSteps(SE_Steps child, SE_Steps parent)
 
 ATbool isChildPath(SE_Path child, SE_Path parent)
 {
-  return isChildSteps(SE_getPathSteps(child), SE_getPathSteps(parent));
+  if (SE_isPathRoot(parent) || SE_isEqualPath(child, parent)) {
+    return ATtrue;
+  }
+  if (SE_hasPathSteps(child)) {
+    return isChildSteps(SE_getPathSteps(child), SE_getPathSteps(parent));
+  }
+  return ATfalse;
 }
 
 /*}}}  */

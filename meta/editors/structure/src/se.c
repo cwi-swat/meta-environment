@@ -364,13 +364,18 @@ ATerm get_modification_status(int cid, ATerm editorId)
   SE_FocusList foci;
   char *status;
   
-  assert(editor);
 
-  foci = SE_getEditorDirtyFoci(editor);
+  if (editor) {
+    foci = SE_getEditorDirtyFoci(editor);
 
-  status = SE_isFocusListEmpty(foci) ? "unmodified" : "modified";
-
-  return ATmake("snd-value(modification-status(<term>))", ATparse(status));
+    status = SE_isFocusListEmpty(foci) ? "unmodified" : "modified";
+  
+    return ATmake("snd-value(modification-status(<term>))", ATparse(status));
+  }
+  else {
+    return ATmake("snd-value(modification-status(<term>))", 
+                  ATparse("modified"));
+  }
 }
 
 /*}}}  */
