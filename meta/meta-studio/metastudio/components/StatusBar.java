@@ -72,7 +72,6 @@ public class StatusBar extends ToolComponent {
 
     public void addStatusf(ATerm id, String format, ATerm args) {
         String message = StringFormatter.format(format, (ATermList) args);
-        history.addMessage(message);
         addStatus(id, message);
     }
 }

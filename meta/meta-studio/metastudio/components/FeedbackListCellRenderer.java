@@ -56,7 +56,7 @@ public class FeedbackListCellRenderer extends JTextField implements ListCellRend
             Location loc = subjects.getHead().getLocation();
 
             if (!loc.isNoLocation()) {
-                tip += "click to go to source: " + loc.getFilename();
+                tip = "click to go to source location (" + loc.getFilename() + ")";
             }
 
             subjects = subjects.getTail();
