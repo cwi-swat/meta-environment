@@ -26,7 +26,7 @@ SDF_ImportList MDB_getImports(ATerm moduleName)
     result = SDF_getModuleImportsList(module);
   }
   else {
-    ATwarning("Module %t not in database!\n", moduleName);
+    ATwarning("getImports: Module %t not in database!\n", moduleName);
   }
   return result;
 }
@@ -49,7 +49,7 @@ SDF_Symbols MDB_getFormalParams(ATerm moduleName)
     result = SDF_getModuleNameParams(SDF_getModuleModuleName(module));
   }
   else {
-    ATwarning("Module %t not in database!\n", moduleName);
+    ATwarning("getFormalParams: Module %t not in database!\n", moduleName);
   }
 
   return result;
@@ -301,16 +301,3 @@ void MDB_deleteModuleFromImportsInModules(ATermList modules, ATerm moduleName)
     modules = ATgetNext(modules);
   }
 }
-void MDB_renameModuleInImportsInModules(ATermList modules,
-					ATerm old, ATerm new)
-{
-   ATwarning("MDB: Not implemented at line %d\n", __LINE__);
-
-}
-
-
-void MDB_renameModule(ATerm old, ATerm new, char *path)
-{
-   ATwarning("MDB: Not implemented at line %d\n", __LINE__);
-}
-

@@ -72,7 +72,7 @@ void clear_module_db(int cid)
 ATerm add_sdf_module(int cid, char *moduleName, char *path, 
                      ATerm sdfTree, int timestamp)
 {
-  ATerm atModuleName, importGraph;
+  ATerm atModuleName;
   ATermList unknowns;
 
   SDF_Module sdfModule = SDF_getStartTopModule(
@@ -97,15 +97,13 @@ ATerm add_sdf_module(int cid, char *moduleName, char *path,
 
   unknowns = MDB_unavailableImportedModules(atModuleName);
 
-  importGraph = MDB_retrieveImportGraph();
-
   return ATmake("snd-value(module(<term>,imports(need-modules([<list>]),<term>)))",
-                atModuleName, unknowns, importGraph);;
+                atModuleName, unknowns, MDB_retrieveImportGraph());
 }
 
 ATerm update_sdf2_module(int cid, char *moduleName, ATerm sdfTree)
 {
-  ATerm atModuleName, importGraph;
+  ATerm atModuleName;
   ATermList dependingModules;
   ATerm oldSdfTree;
   ATermList unknowns;
@@ -137,18 +135,16 @@ ATerm update_sdf2_module(int cid, char *moduleName, ATerm sdfTree)
       MDB_invalidateModules(dependingModules);
      
       unknowns = MDB_unavailableImportedModules(atModuleName);
-      importGraph = MDB_retrieveImportGraph();
 
       return ATmake("snd-value(imports(changed-modules([<term>,<list>]),"
 		    "need-modules([<list>]),<term>))",
-		    atModuleName, dependingModules, unknowns, importGraph);
+		    atModuleName, dependingModules, unknowns, 
+                    MDB_retrieveImportGraph());
     }
     else {
-      importGraph = MDB_retrieveImportGraph();
-
       return ATmake("snd-value(imports(changed-modules([<term>,<list>]),"
 		    "need-modules([<list>]),<term>))",
-		    ATempty, ATempty, importGraph);
+		    ATempty, ATempty, MDB_retrieveImportGraph());
     }
   }
   return ATmake("snd-value(name-consistency-error(<str>))", moduleName);
@@ -162,7 +158,8 @@ ATerm get_sdf_tree(int cid, char *moduleName)
     return ATmake("snd-value(asfix(syntax(<term>)))", ATBpack(tree)); 
   }
   else {
-    ATwarning("Module %t not in database!", moduleName);
+    ATwarning("get_sdf_tree: Module %t not in database!\n", 
+              moduleName);
     return ATmake("snd-value(asfix(unavailable))");
   }
 }
@@ -440,14 +437,15 @@ ATerm get_path(int cid, char *moduleName, ATerm type)
     }
   }
   else {
-    ATwarning("Module %t not in database!\n", atModuleName);
+    ATwarning("get_path: Module %t not in database!\n", atModuleName);
     return ATmake("snd-value(no-path)");
   }
 }
 
-void invalidate_parse_tables(int cid, char *modulename)
+void invalidate_parse_tables(int cid, char *moduleName)
 {
-  ATwarning("Not implemented at line %d\n", __LINE__);
+  MDB_invalidateModules(MDB_getDependingModules(
+                          makeString(moduleName)));
 }
 
 ATerm close_module(int cid, char *moduleName)
@@ -480,45 +478,35 @@ ATerm delete_module(int cid, char *moduleName)
   return ATmake("snd-value(changed-modules([<list>]))", dependingModules);
 }
 
-ATerm rename_module(int cid, char *oldModuleName, char *newModuleName, 
+ATerm rename_module(int cid, char *oldModuleName, 
+                    char *newModuleName, 
 		    char *newPath)
 {
-  ATerm atOldModuleName = makeString(oldModuleName);
-  ATerm atNewModuleName = makeString(newModuleName);
-  ATermList dependingModules;
-
-  if (!SO_checkModuleNameWithPath(newModuleName, newPath)) {
-    return ATmake("snd-value(illegal-module-name(<str>))", newModuleName);
-  }
-  
-  dependingModules = MDB_getDependingModules(atOldModuleName);
-  MDB_renameModuleInImportsInModules(dependingModules, 
-				     atOldModuleName,
-				     atNewModuleName);
-  MDB_invalidateModules(dependingModules);
-  MDB_renameModule(atOldModuleName, atNewModuleName, newPath);
-
-  return ATmake("snd-value(imports(changed-modules([<list>]),<term>))",
-		dependingModules, MDB_retrieveImportGraph);
+  ATwarning("Not implemented at line %d\n", __LINE__);
+  return ATmake("snd-value(imports(changed-modules([]),<term>))",
+                MDB_retrieveImportGraph());
 }
 
 ATerm copy_module(int cid, char *oldModuleName, char *newModuleName,
 		  char *newPath)
 {
   ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  return ATmake("snd-value(imports(changed-modules([]),<term>))",
+                MDB_retrieveImportGraph());
 }
 
 ATerm add_import(int cid, char *modName, char *importedModName, char *ImportedPath)
 {
   ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  return ATmake("snd-value(imports(changed-modules([]),<term>))",
+                MDB_retrieveImportGraph());
 }
 
 ATerm remove_import(int cid, char *modName, char *importedModName, char *path)
 {
   ATwarning("Not implemented at line %d\n", __LINE__);
-  return NULL;
+  return ATmake("snd-value(imports(changed-modules([]),<term>))",
+                MDB_retrieveImportGraph());
 }
 
 ATerm get_all_modules(int cid)

@@ -14,9 +14,5 @@ ATermList MDB_getDependingModules(ATerm moduleName);
 void MDB_invalidateModule(ATerm module);
 void MDB_invalidateModules(ATermList modules);
 void MDB_deleteModuleFromImportsInModules(ATermList modules, ATerm moduleName);
-void MDB_renameModuleInImportsInModules(ATermList modules, 
-					ATerm old, ATerm new);
-void MDB_renameModule(ATerm old, ATerm new, char *path);
-
 
 #endif
