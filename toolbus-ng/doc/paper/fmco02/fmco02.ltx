@@ -480,38 +480,6 @@ endlet
 \end{verbatim}
 \end{footnotesize}
 
-\texttt{TODO} where shall we put this? We don't need a Java implementation
-here .. move to Appendix? move to Case Study section?
-
-\begin{footnotesize}
-\begin{verbatim}
-public class AddressBookEntry {
-  private String name;
-  public void setName(String name) { this.name = name; }
-  public String getName() { return name; }
-
-  private String address;
-  public void setAddress(String address) { this.address = address; }
-  public String getAddress() { return address; }
-}
-\end{verbatim}
-\end{footnotesize}
-
-The \emph{AddressBookService} has the following interface:
-
-\begin{footnotesize}
-\begin{verbatim}
-public interface IAddressBookService {
-  public int createEntry();
-  public void deleteEntry(int id);
-  public int findByName(String name);
-  public void setName(int id, String name);
-  public void setAddress(int id, String address);
-}
-\end{verbatim}
-\end{footnotesize}
-
-
 
 \section{Application to the \asdf\ Meta-Environment}
 
@@ -835,7 +803,7 @@ lead to disaster.
 Call-by-value (Figure~\ref{Fig:value}) is inefficient for large values
 and any sharing between calls is lost.\footnote{This is of particular
 interest to us, as we want to preserve sharing in huge parse trees.}
-In the case of Java/RMI~\cite{java-rmi}, value transmission is achieved
+In the case of Java RMI~\cite{java-rmi}, value transmission is achieved
 via serialization and works only for communication with other Java
 components. Using IIOP~\cite{XXX} communication with non-Java components
 is possible.
@@ -895,7 +863,7 @@ receivers have retrieved their copy.  Adding expiration times to values
 or reference counting at the \TB\ level may solve this problem.
 
 
-\subsection{Case studies: Java RMI, RMI over IIOP and Java IDL}
+\subsection{Related frameworks: Java RMI, RMI-IIOP and Java IDL}
 
 Given our needs and desires for a next generation ToolBus, it is
 interesting to see what other solutions are applied in similar projects.
@@ -916,29 +884,27 @@ RMI, but uses IIOP as the underlying protocol;
 
 \subsubsection{Java RMI}
 
-Java Remote Method Invocation is similar to the ToolBus architecture
-in the sense that it connects different tools, possibly running on
-different machines. It differs from the ToolBus setting because it is
-strictly Java based: only components written in Java can communicate via
-RMI. In this section we have a closer look at RMI details in relation
-to our ToolBus needs.
+Java Remote Method Invocation is similar to the ToolBus architecture in
+the sense that it connects different tools, possibly running on different
+machines. It differs from the ToolBus setting because it is strictly
+Java based: only components written in Java can communicate via RMI.
 
 For components to work together in RMI, first a \emph{remote interface}
-is established. This Java interface has a ``real'' implementation
+is established. This is a Java interface has a ``real'' implementation
 in the tool (or \emph{server}) and a ``stub'' implementation on the
-client sides. The interface is typed by the programmer as opposed to
-the generated interfaces in a ToolBus setting where they are derived
-from the communication patterns found in the ToolBus script. The stubs
-in the RMI setting, are then generated from this Java interface using
-\texttt{rmic}: the RMI compiler. Stubs act as a client-side proxy,
-delegating the method call via the RMI system to the server object.
+client sides. The interface is typed by the programmer as opposed to the
+generated interfaces in a ToolBus setting where they are derived from the
+communication patterns found in the ToolBus script. The stubs in the RMI
+setting are then generated from this Java interface using \texttt{rmic}:
+the RMI compiler. Stubs act as a client-side proxy, delegating the method
+call via the RMI system to the server object. In RMI, any object that
+implements a remote interface is called a \emph{remote object}.
 
-Obviously any methods that have arguments or yield result values
-will need to pass data in some way. In RMI, arguments to or return
-values from remote methods can be primitive data, remote objects,
-or \emph{serializable}\footnote{These are objects that implement the
-\texttt{java.util.Serializable} interface.} objects. Both primitive
-data and serializable objects are passed by value using Java's object
+In RMI, arguments to or return values from remote methods can be
+primitive data (e.g. \texttt{int}), remote objects, or \emph{serializable}
+objects. In java, an object is said to be serializable if it implements
+the \texttt{java.util.Serializable} interface. Both primitive data
+and serializable objects are passed by value using Java's object
 serialization. Remote objects are essentially passed by reference.
 This means that changes to them are actually performed on the server,
 and updates become available to all clients. Only the behavior that was
@@ -962,32 +928,6 @@ instances will have a \emph{local} state change only.
 Finally, before two RMI components can connect, the server side needs
 to register itself with an \texttt{rmiregistry}, after which the client
 needs to explicitly obtain a reference to the (remote) server object.
-
-\begin{itemize}
-
-\item RMI makes an explicit distinction between \emph{client} and
-\emph{server} sides of a set of cooperating components. In the ToolBus
-setting all components are considered equal (and none are more equal
-than others).
-
-\item In RMI, the programmer writes the interface which describes the
-component's incoming and outgoing method signature, from which client
-side stubs are generated. In a ToolBus setting, these signatures are
-generated from the ToolBus script which describes much more of the
-component's behavior in terms of method call interaction, rather than
-just the methods' signatures.
-
-\item RMI uses both pass-by-value and pass-by-referece, depending on
-whether the relevant data is serializable (it is a primitive type, or it
-implements \texttt{Serializable}) or is a remote reference. The ToolBus
-setting only uses pass-by-value (although pass-by-reference can be
-mimicked by sending unique ids by value that refer to a remote object).
-
-\item Although we do not discuss security issues in this paper, it should
-be noted that there are no security features (yet) in the ToolBus, whereas
-RMI offers security-related support using \texttt{SecurityManagers}.
-
-\end{itemize}
 
 \subsubsection{Java RMI over IIOP}
 
@@ -1030,178 +970,55 @@ method invocations to the server) and \emph{skeletons}, \emph{holder}
 and \emph{helper} classes (server side classes that hide low-level
 CORBA details).
 
-\medskip
-\begin{figure}
-\begin{tabular}{|l|l|l|l|l|}\hline
-          & ToolBus & RMI & RMI-IIOP & CORBA \\ \hline
+\subsubsection{Feature summary}
+Figure~\ref{Fig:feature-overview} shows some of the similarities and
+differences in ToolBus, RMI, RMI-IIOP and Java IDL.
+
+\begin{figure}[tb]
+\begin{center}
+\begin{tabular}{|l||l|l|l|l|}\hline
+          & ToolBus & RMI & RMI-IIOP & Java IDL \\ \hline\hline
 Interface & ToolBus Script & Java Interface & Java Interface & IDL \\ \hline
 GC        & yes & yes & yes & no \\ \hline
 params and    & by-value & local: by-value & local: by-value & "in" and "out" \\
 return values & & remote: by-ref & remote: by-ref & params \\ \hline
 language & any via    & only Java & CORBA objects if &  any via \\
          & TB adapter &           & interface in Java & IDL compiler \\ \hline
-\hline
+inter-component & yes & no & no & no \\
+behavior coordination & & & & \\ \hline
+
 \end{tabular}
+\caption{\label{Fig:feature-overview}Feature overview of related
+architectures.}
+\end{center}
 \end{figure}
 
-%%Using the ToolBus communication primitives we can exactly specify which
-%%pattern of messages (communications) are allowed and in what order. The
-%%behavior of several tools working together is written \emph{outside}
-%%the tools themselves. This means that tool programmers in a ToolBus
-%%setting do not have to add complexity to the tool's internals to steer
-%%communication with other tools, or to prevent execution of one part
-%%of the tool before another. By separating the concerns of the tool's
-%%external \emph{behavior} in relation to other tools from the tool's
-%%implementation, both aspects improve in terms of complexity, readability
-%%and maintenance.
-%%
-%%In this case study we show how a simple \emph{address book} service
-%%could be implemented in both the ToolBus and the Java RMI setting.
-%%The example is quite small, and as such it is not intended to be a real
-%%world production version of an address book. It does, however, highlight
-%%the differences between ToolBus and RMI.
-%%
-%%An immediate difference between the ToolBus and RMI is the fact that
-%%where in a ToolBus setting components can be written in any language,
-%%RMI can \emph{only} be used to connect Java components.
-%%
-%%Because in RMI every component is a Java component, a Java interface
-%%is used to describe the external functionality of these components.
-%%This inherently means that it can only describe the signature of the
-%%methods, but nothing about the way method calls should interact.
-%%
-%%The Java/RMI interface of our running example, the Address Book Service,
-%%is defined as follows:
-%%
-%%\begin{footnotesize}
-%%\begin{verbatim}
-%%import java.rmi.Remote;
-%%import java.rmi.RemoteException;
-%%
-%%public interface IAddressBookService extends Remote {
-%%  public int createEntry() throws RemoteException;
-%%  public void deleteEntry(int id) throws RemoteException;
-%%  public void setName(int id, String name) throws RemoteException;
-%%  public void setAddress(int id, String address) throws RemoteException;
-%%  public int findByName(String name) throws RemoteException;
-%%}
-%%\end{verbatim}
-%%\end{footnotesize}
-%%
-%%The interface extends \texttt{java.rmi.Remote}: a marking interface
-%%that identifies which methods are remotely available. Each method in
-%%this interface is now a \emph{remote method} which means that it is
-%%capable of throwing a \texttt{RemoteException}. An object implementing
-%%the \texttt{Remote} interface is said to be a \emph{remote object}.
-%%
-%%Note that this interface is written by the programmer. In the ToolBus
-%%setting, the interface is derived from the inter-component communication
-%%described by ToolBus processes.
-%%
-%%\subsection{Comparison of the \texttt{findByName} implementation}
-%%Take a look at the implementation of \texttt{findByName}. First the
-%%ToolBus version:
-%%
-%%\begin{footnotesize}
-%%\begin{verbatim}
-%%  public ATerm findByName(String name) {
-%%    Integer id = (Integer) addressByName.get(name);
-%%    if (id == null) {
-%%      return factory.make("snd-value(not-found)");
-%%    } else {
-%%      return factory.make("snd-value(found(<int>))", id);
-%%    }
-%%  }
-%%\end{verbatim}
-%%\end{footnotesize}
-%%
-%%Here you see how the ATerm library is used to encode the result
-%%of the \texttt{findByName} request. When the requested address is
-%%present in the database, the term \texttt{snd-value(found(<int>))}
-%%is created, where \texttt{<int>} is a placeholder that is substituted
-%%by the \texttt{id} parameter. If the requested address is not present,
-%%the term \texttt{not-found} is created. The ToolBus then sends this
-%%result term to a corresponding \texttt{rec-value(found(Aid?))} or
-%%\texttt{rec-value(not-found)}, respectively as shown in the explanation
-%%of the SEARCH process in~\ref{tb:search}.
-%%
-%%The RMI version of \texttt{findByName} is similar to the ToolBus version:
-%%
-%%\begin{footnotesize}
-%%\begin{verbatim}
-%%  public int findByName(String name) {
-%%    Integer id = (Integer) addressByName.get(name);
-%%    if (id == null) {
-%%      return -1;
-%%    } else {
-%%      return id.intValue();
-%%    }
-%%  }
-%%\end{verbatim}
-%%\end{footnotesize}
-%%
-%%The difference lies mainly in the fact that because the method yields
-%%an \texttt{int} (the unique id of the addressbook entry), we have to
-%%pick a number outside the range of valid identities (here we chose $-1$)
-%%to represent the case that the address is not in the database.
-%%
-%%\subsection{Passing compound data structures}
-%%So far, information about address book entries is exchanged by means
-%%of an identifier represented as an \texttt{int} and other parameters
-%%as \texttt{String}s. As an extension to the example, consider the case
-%%where we send compound information instead of just basic types. The
-%%address book entry consists of a name and an address, represented as
-%%a class in Java. So let us look at the modifications necessary to send
-%%the entire record.
-%%
-%%First, we take a look at the ToolBus version.
-%%
-%%\begin{footnotesize}
-%%\begin{verbatim}
-%%  public ATerm findByName(String name) {
-%%  ...
-%%    return factory.make("snd-value(found(name(<string>),address(<string>)))",
-%%                        entry.getName(), entry.getAddress());
-%%  }
-%%\end{verbatim}
-%%\end{footnotesize}
-%%
-%%The \texttt{name} and \texttt{address} fields are encoded in the result
-%%term, each surrounded by a function symbol describing the fields. An
-%%example of such a result term, assuming that \texttt{name} equals
-%%\texttt{John Doe}, and \texttt{address} equals \texttt{"1234 Elm Street"} is:
-%%
-%%\begin{footnotesize}
-%%\begin{verbatim}
-%% snd-value(found(name("John Doe"), address("1234 Elm Street")))
-%%\end{verbatim}
-%%\end{footnotesize}
-%%
-%%In RMI, sending an instance of a class to another tool is done through
-%%Java Serialization. For our address book entries to be serialized in Java,
-%%we need to add \texttt{implements Serializable} to the class definition.
-%%In contrast to the ToolBus version, we do not write explicit serialization
-%%code (to linearize the entry to a stream for example), this is taken
-%%care of by the Java Serialization Protocol. RMI exploits the fact that
-%%only Java tools are interacting with each other, whereas in the ToolBus
-%%setting we represent the data in a platform and programming language
-%%independent term format, enabling data exchange between components
-%%written in different languages.
-%%
-%%\begin{footnotesize}
-%%\begin{verbatim}
-%%public class AddressBookEntry implements IAddressBookEntry, Serializable {
-%%  private String name;
-%%  public String getName() { return name; }
-%%  ...
-%%}
-%%
-%%public IAddressBookEntry findByName(String name) {
-%%  return (IAddressBookEntry) addressByName.get(name);
-%%}
-%%\end{verbatim}
-%%\end{footnotesize}
+\begin{itemize}
 
+\item RMI, RMI-IIOP and Java IDL make an explicit distinction
+between \emph{client} and \emph{server} sides of a set of cooperating
+components. In the ToolBus setting all components are considered equal
+(and none are more equal than others).
+
+\item In RMI and RMI-IIOP, the programmer writes a Java interface which
+describes the component's incoming and outgoing method signature, from
+which stubs and skeletons are generated. In Java IDL a CORBA interface
+is written. In the ToolBus setting, these signatures are generated from
+the ToolBus script which describes much more of the component's behavior
+in terms of method call interaction, rather than just method signatures.
+
+\item RMI uses both pass-by-value and pass-by-referece, depending on
+whether the relevant data is serializable (it is a primitive type, or it
+implements \texttt{Serializable}) or is a remote object. The ToolBus
+setting only uses pass-by-value (although pass-by-reference can be
+mimicked by sending unique ids by value that refer to a remote object).
+
+\item Only the ToolBus has coordination support for component interaction.
+In the three other cases any undesired sequence of incoming and outgoing
+method calls will have to be prohibited by adding code to the component's
+internals.
+
+\end{itemize}
 
 \section{Current Status} \label{Sec:status}
 
