@@ -21,12 +21,14 @@
 include ../make_rules
 
 lib_LIBRARIES    = libtree2dot.a
-noinst_LIBRARIES = libtree2dot-prof.a
+include_HEADERS  = tree-to-dot.h
+
+# noinst_LIBRARIES = libtree2dot-prof.a
 
 SRCS             = tree-to-dot.c sg_growbuf.c
 HDRS             = tree-to-dot.h sg_growbuf.h
 
 libtree2dot_a_SOURCES      = $(SRCS) $(HDRS)
 
-libtree2dot_prof_a_SOURCES = $(HDRS)
-libtree2dot_prof_a_LIBADD  = $(SRCS:.c=-prof.o)
+# libtree2dot_prof_a_SOURCES = $(HDRS)
+# libtree2dot_prof_a_LIBADD  = $(SRCS:.c=-prof.o)

@@ -21,6 +21,8 @@
 include ../make_rules
 
 lib_LIBRARIES          = libsglr.a
+include_HEADERS        = sglr.h
+
 # noinst_LIBRARIES       = libsglr-prof.a
 
 EXTRA_LIBRARIES        = libsglr-gc.a libsglr-prof.a
