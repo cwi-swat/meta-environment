@@ -14,7 +14,7 @@ PT_ParseTree PT_applyFunctionToArgsParseTree(char *function, char *sort,
 					     PT_Args args);
 PT_Tree PT_applyFunctionToTree(char *function, char* sort, int nArgs, ...);
 
-PT_ParseTree PT_makeParseTree(PT_Tree tree);
+PT_ParseTree PT_makeValidParseTreeFromTree(PT_Tree tree);
 
 ATbool PT_prodHasLitAsRhs(PT_Production arg);
 ATbool PT_isLexicalProd(PT_Production arg);
