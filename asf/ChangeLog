@@ -1,5 +1,8 @@
 
 
+Mon Feb  7 16:39:27 CET 2005 <jurgenv@cwi.nl>
+ * Added debugging and bootstrapping tool for ASF: lift-asf.
+
 Fri Feb  4 16:33:56 CET 2005 <jurgenv@cwi.nl>
  * Compiler adapted such that constant lists are not translated to
    nested if-then-else, but to constant terms that are compared with
