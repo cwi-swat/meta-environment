@@ -42,7 +42,6 @@ lexical syntax
   "err"			-> Action
   "and-catch"		-> InfixAction
   "fail"		-> Action
-  "maybe"		-> PrefixAction
   "else"		-> InfixAction
   "choose-nat"		-> Action
 
@@ -54,6 +53,7 @@ lexical syntax
   "update"		-> Action
 
   "enact"		-> Action
+  "apply"		-> Action
   "close"		-> Action
   "recursively"		-> PrefixAction
 
@@ -70,6 +70,45 @@ lexical syntax
   "overriding"		-> PrefixDataOp {prefer}
 
   "no-bindings"		-> Datum {prefer}
+
+%%%%%%%%%%%%%
+%% Full AN %%
+%%%%%%%%%%%%%
+
+context-free syntax
+
+  "give"  AtmYielder	-> Action
+  "given" AtmYielder	-> Action
+  "check" AtmYielder	-> Action
+  Action AtmYielder	-> Action {right}
+  Action DataOp		-> Action {right}
+
+
+  Data			-> AtmYielder
+  DataOp		-> Yielder
+  AtmYielder		-> Yielder
+  "current-bindings"	-> AtmYielder
+  "bound-to" Yielder	-> AtmYielder
+  "stored-at" Yielder	-> AtmYielder
+  "closure" Yielder	-> AtmYielder
+
+  "it"			-> DataOp
+
+  "maybe"		-> PrefixAction
+
+  "bind"		-> Action
+  "furthermore"		-> PrefixAction
+  "before"		-> InfixAction
+	
+  Yielder InfixDataOp Yielder	-> Yielder {left}
+
+  PrefixDataOp Yielder		-> Yielder
+  "(" {Yielder ","}+ ")" 	-> AtmYielder
+	
+  InfixAction			-> InfixDataOp  {avoid}
+  PrefixAction			-> PrefixDataOp  {avoid}
+
+  "(" Action ")"		-> Action 
 
 context-free priorities
 
@@ -103,48 +142,6 @@ context-free priorities
   { PrefixAction Action         -> Action }
   >
   { Action InfixAction Action	-> Action }
-
-%%%%%%%%%%%%%
-%% Full AN %%
-%%%%%%%%%%%%%
-
-context-free syntax
-
-  Data			-> AtmYielder
-  DataOp		-> Yielder
-  AtmYielder		-> Yielder
-  "current-bindings"	-> AtmYielder
-  "bound-to" Yielder	-> AtmYielder
-  "stored-at" Yielder	-> AtmYielder
-  "closure" Yielder	-> AtmYielder
-
-  "it"			-> DataOp
-
-  "the" Type		-> PrefixDataOp
-
-  "give"  AtmYielder	-> Action
-  "check" AtmYielder	-> Action
-  "given" AtmYielder	-> Action
-
-  "bind"		-> Action
-  "furthermore"		-> PrefixAction
-  "before"		-> InfixAction
-  "apply"		-> Action
-
-
-  Action AtmYielder		-> Action {right}
-  Action DataOp			-> Action {right}
-
-	
-  Yielder InfixDataOp Yielder	-> Yielder {left}
-
-  PrefixDataOp Yielder		-> Yielder
-  "(" {Yielder ","}+ ")" 	-> AtmYielder
-	
-  InfixAction			-> InfixDataOp  {avoid}
-  PrefixAction			-> PrefixDataOp  {avoid}
-
-  "(" Action ")"		-> Action 
 	
 
 %%%%%%%%
@@ -154,11 +151,11 @@ context-free syntax
 context-free syntax
 
   "#" Index       -> PrefixDataOp
-
+  "the" Type		-> PrefixDataOp
 
 lexical syntax
 
-  "-1" | [0-9]+   -> Index
+  "-1" | [1-9][0-9]*   -> Index
 
 context-free syntax
 
