@@ -27,4 +27,5 @@ java_JAVA = \
 	QuestionDialog.java \
 	StatusBar.java \
 	ToolBar.java \
+	TideControl.java \
 	SystemInfoPanel.java
