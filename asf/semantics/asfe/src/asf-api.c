@@ -222,7 +222,7 @@ PT_Tree interpretGetterCall(PT_Tree in, AA_Calls calls)
   PT_Tree arg;
   PT_Production childprod;
   ATbool cf;
-ATwarning("in getter\n");
+
   arg = getFirstArgument(in);
   childprod = PT_getTreeProd(arg);
   cf = PT_isSymbolCf(PT_getProductionRhs(childprod));
@@ -242,13 +242,11 @@ ATwarning("in getter\n");
     if (PT_isEqualProduction(childprod, ref)) {
       int argnr = AA_getCallArgNr(call);
       PT_Args args = PT_getTreeArgs(arg);
-      ATwarning("getter returning: %s\n", PT_yieldTree(PT_getArgsArgumentAt(args, cf ? argnr * 2 : argnr)));
       return PT_getArgsArgumentAt(args, cf ? argnr * 2 : argnr);
     }
   }
 
   /* if nothing matches, we return the getter */
-  ATwarning("getter does nothing\n");
   return NULL;
 }
 

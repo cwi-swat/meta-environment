@@ -1722,8 +1722,6 @@ static PT_Tree rewriteTraversalTopDown(PT_Tree trm, ATerm env, int depth,
     }
   }
 
-ATwarning("reduct %p\n", reduct);
-  
   return reduct;
 }
 
@@ -1824,7 +1822,6 @@ static PT_Tree rewriteArgs(PT_Tree trm, ATerm env, int depth, void* extra)
     reduct = PT_setTreeArgs(trm, newargs);
   }
 
-ATwarning("rewriteArgs: %p\n", reduct);
   return reduct;
 }
 
@@ -1984,13 +1981,10 @@ static PT_Tree rewriteTraversalAppl(PT_Tree trm, ATerm env, int depth,
 
   trm = selectTraversedArg(PT_getTreeArgs(trm));
 
-  ATwarning("before rewriteTraversal: %s\n", PT_yieldTree(trm));
   reduct = rewriteTraversal(trm, env, depth, &traversal);
-if (reduct == FAIL) { ATwarning("FAILED: %d\n", __LINE__); }
   /* a traversal function never fails */ 
   reduct = chooseNormalform(reduct == FAIL ? trm : reduct, traversal);
 
-  ATwarning("chosen normal form: %s\n", PT_yieldTree(reduct));
   return reduct; 
 }
 
