@@ -1,0 +1,27 @@
+equations
+
+[get-using-1] get-using($SAT1* & using $TY & $SAT2*) = $TY
+
+[default-get-using-1] get-using($AT) = notpresent 
+
+[get-giving-1] get-giving($SAT1* & giving $TY & $SAT2*) = $TY
+
+[default-get-giving-1] get-giving($AT) = notpresent
+
+[get-raising-1] get-raising($SAT1* & raising $TY & $SAT2*) = $TY
+
+[default-get-raising-1] get-raising($AT) = notpresent 
+
+[rm-using-1] rm-using($SAT1* & using $TY & $SAT2*) = $SAT1* & $SAT2*
+
+[default-rm-using-1] rm-using($AT) = $AT
+
+[rm-giving-1] rm-giving($SAT1* & giving $TY & $SAT2*) = $SAT1* & $SAT2*
+
+[default-rm-giving-1] rm-giving($AT) = $AT
+
+[rm-raising-1] rm-raising($SAT1* & raising $TY & $SAT2*) = $SAT1* & $SAT2*
+
+[default-rm-raising-1] rm-raising($AT) = $AT
+
+[rm-ugr-1] rm-ugr($AT) = rm-using(rm-giving(rm-raising($AT)))

@@ -1,0 +1,9 @@
+equations
+
+[typecheck-1] 
+
+   <$AT1, $EN2> := typecheck-action($A, $EN1),
+   <$M1, $LC> := solve-constraints(get-constraints($EN2), $EN2),
+   $M2 := solve($M1, $EN2)
+   =======================================================
+   typecheck($A, $EN1) = <$AT1, $M2, $LC, $EN2>
