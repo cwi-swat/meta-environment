@@ -168,8 +168,9 @@ static PT_Tree parse_result(char *builtin, char *file, ATerm result)
     return (PT_Tree) makeParseError(builtin, file, result);
   }
 
+  ATwarning("result is: %t\n", result);
   return (PT_Tree) 
-    makeGeneralError(builtin, "completely unexpected output from parser");
+    makeGeneralError(builtin, "unknown parse tree format");
 }
 
 /*}}}  */
@@ -327,6 +328,7 @@ static PT_Tree read_term_from_file(PT_Tree file_arg)
   char *filestr = NULL;
   ATerm term;
 
+  SG_InitPTGlobals();
   filestr = getFilename(file_arg);
 
   term = ATreadFromNamedFile(filestr);
