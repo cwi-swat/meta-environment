@@ -70,7 +70,7 @@ all:	${BINFILES} ${LIBFILES} ${DATAFILES}
 
 # Unit test target
 test:	all
-	test-grammar
+	./test-grammar
 
 %.baf : %.tbl.asfix
 	$(TABLEGEN) < $< > $@
