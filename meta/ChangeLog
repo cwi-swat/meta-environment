@@ -1,5 +1,11 @@
 # $Id$
 
+Fri Apr 16 15:04:45 CEST 2004 <kooiker@cwi.nl>
+ * tbscripts/button-actions.tb: 
+   - create ParseText process iso call to be able to receive result messages
+ * tbscripts/parse-focusses.tb: 
+   - if editors are in sync send parse-editor-ok iso parse-ok 
+
 Fri Apr 16 10:02:50 CEST 2004 <{jong,kooiker}@cwi.nl>
  * tbscripts: fixed ReduceTerm and ShowOrigin
  * editors/text/editor-hive.c:removeEditorProcess()

@@ -995,6 +995,7 @@ process ParseTerm(Sid: term, ModuleName: str) is
 let
   Id: int,
   Nonterminal: term,
+  Pid: int,
   Table: term
 in
   Id := process-id
@@ -1002,7 +1003,7 @@ in
   . GetParseTable(ModuleName, trm, false, Table?)
   . snd-msg(other-top-sort-hook(trm))
   . rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
-  . ParseEditor(Sid, Table, Nonterminal)
+  . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
   .
   (
     rec-msg(parse-editor-ok(Sid))
@@ -1029,15 +1030,16 @@ endlet
 
 process ParseSyntax(Sid: term, Type: term) is
 let
+  DependingModules: list,
   Id: int,
-  Nonterminal: term,
-  Table: term,
-  Tree: term,
-  Text: str,
+  ModuleId: str, /* module to be parsed over */
   Modulename: str, /* name of module whose syntax is to be parsed */
   NewModules: list,
-  DependingModules: list,
-  ModuleId: str /* module to be parsed over */
+  Nonterminal: term,
+  Pid: int,
+  Table: term,
+  Text: str,
+  Tree: term
 in
   Id := process-id
   . snd-msg(em-get-modulename(Sid))
@@ -1050,7 +1052,7 @@ in
   . GetParseTable(ModuleId, sdf, true, Table?)
   . snd-msg(syntax-top-sort-hook(sdf))
   . rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?)))
-  . ParseEditor(Sid, Table, Nonterminal)
+  . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
   .
   (
     rec-msg(parse-editor-ok(Sid)) .
@@ -1097,6 +1099,7 @@ process ParseEquations(Sid: term, ModuleName: str) is
 let
   Id: int,
   Nonterminal: term,
+  Pid: int,
   Table: term,
   Text: str,
   Tree: term
@@ -1107,7 +1110,7 @@ in
   . GetParseTable(ModuleName, eqs, true, Table?)
   . snd-msg(get-rules-top-sort)
   . rec-msg(set-rules-top-sort(sort(Nonterminal?)))
-  . ParseEditor(Sid, Table, Nonterminal)
+  . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
   .
   (
     rec-msg(parse-editor-ok(Sid))

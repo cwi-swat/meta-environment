@@ -36,7 +36,7 @@ in
   .
   if equal(Registered, true)
   then
-    snd-msg(parse-ok(Sid))
+    snd-msg(parse-editor-ok(Sid))
   else
     GetFilename(Sid, Filename?)
     . ClearSummaryInGUI("sglr", Filename)
