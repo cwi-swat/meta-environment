@@ -1,3 +1,7 @@
+2001/08/28 (jong@cwi.nl)
+ * Code improvements to satisfy gcc-3.0.1
+ * version 1.2beta started
+
 2001/08/14 (jong@cwi.nl)
  * Folded configure.in and weeded out some unused libs/dlopen/INSTDIR stuff
  * filtereqssyntaxtool now linked against $(SOCKLIBS)

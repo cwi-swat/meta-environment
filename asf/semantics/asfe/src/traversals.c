@@ -1,26 +1,4 @@
-/*
-
-    Meta-Environment - An environment for language prototyping.
-    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-/*
-  $Id$
- */
+/*{{{  includes */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,6 +8,10 @@
 #include "asfix_utils.h"
 #include "asfe.h"
 #include "traversals.h"
+
+/*}}}  */
+
+/*{{{  structures */
 
 typedef struct PositionSymbolTuple_tag {
   int pos;
@@ -41,9 +23,16 @@ typedef struct PositionTreeTuple_tag {
   PT_Tree tree;
 } PositionTreeTuple;
 
+
+/*}}}  */
+/*{{{  externals */
+
 extern ATbool run_verbose;
 
-/* first we define a number of visitors for Tree and Symbol */
+/*}}}  */
+
+/*{{{  PT_Symbol getSymbol(PT_Symbol symbol, PT_SymbolVisitorData data) */
+
 PT_Symbol getSymbol(PT_Symbol symbol, PT_SymbolVisitorData data)
 {
   if (((PositionSymbolTuple*)data)->pos == 0) {
@@ -55,6 +44,10 @@ PT_Symbol getSymbol(PT_Symbol symbol, PT_SymbolVisitorData data)
   return symbol;
 }
 
+/*}}}  */
+
+/*{{{  PT_Symbol replaceSymbol(PT_Symbol symbol, PT_SymbolVisitorData data) */
+
 PT_Symbol replaceSymbol(PT_Symbol symbol, PT_SymbolVisitorData data)
 {
   if (((PositionSymbolTuple*)data)->pos == 0) {
@@ -64,6 +57,9 @@ PT_Symbol replaceSymbol(PT_Symbol symbol, PT_SymbolVisitorData data)
   ((PositionSymbolTuple*)data)->pos--;
   return symbol;
 }
+
+/*}}}  */
+/*{{{  PT_Tree getTree(PT_Tree tree, PT_TreeVisitorData data) */
 
 PT_Tree getTree(PT_Tree tree, PT_TreeVisitorData data)
 {
@@ -76,6 +72,9 @@ PT_Tree getTree(PT_Tree tree, PT_TreeVisitorData data)
   return tree;
 }
 
+/*}}}  */
+/*{{{  PT_Tree replaceTree(PT_Tree tree, PT_TreeVisitorData data) */
+
 PT_Tree replaceTree(PT_Tree tree, PT_TreeVisitorData data)
 {
   if (((PositionTreeTuple*)data)->pos == 0) {
@@ -86,12 +85,16 @@ PT_Tree replaceTree(PT_Tree tree, PT_TreeVisitorData data)
   return tree;
 }
 
+/*}}}  */
+/*{{{  PT_Tree selectTree(PT_Args args, int pos) */
+
 /* selectTree
  *
  * input: a traversal appl
  * output: The argument term at pos of this appl. 
  *
  */
+
 PT_Tree selectTree(PT_Args args, int pos)
 {
   PositionTreeTuple data;
@@ -106,6 +109,10 @@ PT_Tree selectTree(PT_Args args, int pos)
   return data.tree;
 }
 
+/*}}}  */
+
+/*{{{  Traversal createTraversalPattern(PT_Tree term) */
+
 /* create_traversal_pattern
  *
  * input: a PT_TreeAppl
@@ -113,8 +120,8 @@ PT_Tree selectTree(PT_Args args, int pos)
  *         and an indication if it is a transformer or an analyzer.
  * 
  */
-Traversal
-createTraversalPattern(PT_Tree term)
+
+Traversal createTraversalPattern(PT_Tree term)
 {
   PT_Production prod;
   PT_Args args;
@@ -179,7 +186,8 @@ createTraversalPattern(PT_Tree term)
   return traversal;
 }
 
-
+/*}}}  */
+/*{{{  PT_Tree makeTraversalAppl(PT_Tree appl, Traversal traversal) */
 
 /* make_traversal_appl
  *
@@ -187,8 +195,8 @@ createTraversalPattern(PT_Tree term)
  * output: the traversal pattern instantiated by the symbol and the term 
  *         of the first argument.
  */
-PT_Tree
-makeTraversalAppl(PT_Tree appl, Traversal traversal)
+
+PT_Tree makeTraversalAppl(PT_Tree appl, Traversal traversal)
 {
   PT_Production prod;
   PT_Args args;
@@ -228,6 +236,12 @@ makeTraversalAppl(PT_Tree appl, Traversal traversal)
   case UNDEFINED:
   default:
     /* do nothing */
+
+    /* Not putting "break" here implied the "default:" just seen is
+     * a label, which causes a warning in gcc-3.0.1:
+     *   warning: deprecated use of label at end of compound statement
+     */
+    break;
   }
 
   newappl = PT_setTreeProd(appl, prod);
@@ -236,13 +250,16 @@ makeTraversalAppl(PT_Tree appl, Traversal traversal)
   return newappl;
 }
 
+/*}}}  */
+/*{{{  Traversal updateAccumulator(Traversal traversal, PT_Tree newarg) */
+
 /* update_accumulator
  *
  * Changes the second argument of the traversal pattern. This is used
  * as a value environment for traversals.
  */
-Traversal
-updateAccumulator(Traversal traversal, PT_Tree newarg)
+
+Traversal updateAccumulator(Traversal traversal, PT_Tree newarg)
 {
   PositionTreeTuple data;
   data.pos = ACCUMULATED_ARG_POS;
@@ -256,12 +273,18 @@ updateAccumulator(Traversal traversal, PT_Tree newarg)
   return traversal;
 }
 
+/*}}}  */
+/*{{{  PT_Tree getTupleFirst(PT_Tree tuple) */
+
 PT_Tree getTupleFirst(PT_Tree tuple)
 {
    PT_Args args = PT_getTreeArgs(tuple);
 
    return PT_getArgsArgumentAt(args, TUPLE_FIRST_POS);
 }
+
+/*}}}  */
+/*{{{  PT_Tree getTupleSecond(PT_Tree tuple) */
 
 PT_Tree getTupleSecond(PT_Tree tuple)
 {
@@ -270,8 +293,11 @@ PT_Tree getTupleSecond(PT_Tree tuple)
    return PT_getArgsArgumentAt(args, TUPLE_SECOND_POS);
 }
 
-static PT_Tree
-makeTuple(PT_Tree tree, PT_Tree accu)
+/*}}}  */
+
+/*{{{  static PT_Tree makeTuple(PT_Tree tree, PT_Tree accu) */
+
+static PT_Tree makeTuple(PT_Tree tree, PT_Tree accu)
 {
    PT_Symbol treeSymbol = PT_getProductionRhs(PT_getTreeProd(tree));
    PT_Symbol accuSymbol = PT_getProductionRhs(PT_getTreeProd(accu));
@@ -326,13 +352,16 @@ makeTuple(PT_Tree tree, PT_Tree accu)
    return PT_makeTreeAppl(prod,args);
 }
 
+/*}}}  */
+/*{{{  PT_Tree chooseNormalform(PT_Tree term, Traversal traversal) */
+
 /* chooseNormalform
  *
  * depending on the type of traversal, constructs a normal form.
  * This function is used after the toplevel traversal prod returns.
  */
-PT_Tree
-chooseNormalform(PT_Tree term, Traversal traversal)
+
+PT_Tree chooseNormalform(PT_Tree term, Traversal traversal)
 {
   switch (traversal.type) {
   case TRANSFORMER:
@@ -353,3 +382,5 @@ chooseNormalform(PT_Tree term, Traversal traversal)
 
   return term;
 }
+
+/*}}}  */
