@@ -1,0 +1,15 @@
+module strategies/Terms[X]
+
+imports strategies/Operators
+
+exports
+
+sorts Term
+
+context-free syntax
+
+ X -> Term {cons("term")}
+
+hiddens
+
+sorts X

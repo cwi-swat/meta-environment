@@ -34,6 +34,7 @@ AC_OUTPUT(
 	lib/basic/Makefile 
 	lib/containers/Makefile 
 	lib/functions/Makefile 
+	lib/strategies/Makefile 
 	lib/traversal/Makefile 
 	lib/aterm/Makefile 
         lib/system/Makefile

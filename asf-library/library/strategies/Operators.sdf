@@ -1,0 +1,47 @@
+module strategies/Operators
+
+imports basic/Whitespace
+
+exports sorts Strategy Term
+
+lexical syntax
+
+[a-z] -> StrategyVar
+
+context-free syntax
+    "fail"                         -> Strategy {cons("fail")}
+    "id"                           -> Strategy {cons("id")}
+    "(" Strategy ")"               -> Strategy {bracket}
+    Strategy ";" Strategy          -> Strategy {cons("seq"), right}
+    Strategy "+" Strategy          -> Strategy {cons("choice"), right}
+    Strategy "<+" Strategy         -> Strategy {cons("lchoice"), right}
+    StrategyVar                    -> Strategy {cons("var")}
+    "rec" StrategyVar "(" Strategy ")" -> Strategy {cons("recursion")}
+    "some" "(" Strategy ")"        -> Strategy {cons("some")}
+    "one" "(" Strategy ")"         -> Strategy {cons("one")}
+    "all" "(" Strategy ")"         -> Strategy {cons("all")}
+    "thread" "(" Strategy ")"      -> Strategy {cons("thread")}
+
+    "<" Strategy ">" Term          -> Term     {cons("apply")}
+
+context-free priorities
+    Strategy ";" Strategy          -> Strategy {cons("seq"), right} >
+  { right: Strategy "+" Strategy          -> Strategy {cons("choice"), right} 
+           Strategy "<+" Strategy         -> Strategy {cons("lchoice"), right} }
+   
+hiddens
+
+context-free syntax
+   some(Strategy,Term)   -> Term {built-in("strategy-some")}
+   all(Strategy,Term)    -> Term {built-in("strategy-all")}
+   one(Strategy,Term)    -> Term {built-in("strategy-one")}
+   thread(Strategy,Term) -> Term {built-in("strategy-thread")}
+
+context-free syntax
+   subst(Strategy,StrategyVar,Strategy) -> Strategy {traversal(trafo,bottom-up)}
+ 
+variables
+
+"S"[0-9\']* -> Strategy
+"T"[0-9\']* -> Term
+"x"[0-9\']* -> StrategyVar

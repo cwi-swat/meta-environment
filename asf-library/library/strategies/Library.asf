@@ -1,0 +1,12 @@
+equations
+
+[] try(s)        = s <+ id
+[] repeat(s)     = rec x (try(s;x))
+[] bottomup(s)   = rec x(all(x);s)
+[] topdown(s)    = rec x(s;all(x))
+[] downup(s)     = rec x(s;all(x);s)
+[] oncebu(s)     = rec x(one(x) <+ s)
+[] oncetd(s)     = rec x(s <+ one(x))
+[] somebu(s)     = rec x(some(x); try(s) <+ s)
+[] sometd(s)     = rec x(s; all(try(x)) <+ some(x))
+[] somedownup(s) = rec x(s; all(x); try(s) <+ some(x); try(s))

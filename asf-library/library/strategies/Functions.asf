@@ -1,0 +1,11 @@
+equations
+
+[] f ( A ) = fail
+   ================
+   <f> A = <fail> A
+
+[default] 
+   <f> A = f ( A )
+
+[default] 
+   f ( A ) = fail
