@@ -36,6 +36,7 @@ let
   EqsText   : str,
   FileName  : str,
   Contents  : term,
+  Time      : int,
   TimeStamp : term,
   TableType : term,
   Table     : term,
@@ -65,8 +66,8 @@ in
       rec-msg(get-table-timestamp(trm(Name?))).
       snd-eval(IO,get-timestamp(Name,".trm.tbl"))
     ) .
-    rec-value(IO, TimeStamp?) .
-    snd-msg(table-timestamp(TimeStamp))
+    rec-value(IO, timestamp(Name,Time?)) .
+    snd-msg(table-timestamp(timestamp(Time)))
     +
     rec-msg(read-parse-table(Name?, TableType?)) .
     snd-eval(IO,read-parse-table(Name, TableType)) .

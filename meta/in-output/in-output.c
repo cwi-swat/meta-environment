@@ -397,7 +397,8 @@ ATerm get_timestamp(int cid, char *name, char *ext)
   char file[PATH_LEN];
 
   sprintf(file, "%s%s", name, ext);
-  return ATmake("snd-value(timestamp(<int>))", filetime(find_in_path(file)));
+  return ATmake("snd-value(timestamp(<str>,<int>))", 
+                name, filetime(find_in_path(file)));
 }
 
 /*}}}  */
