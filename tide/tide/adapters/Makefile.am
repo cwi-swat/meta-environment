@@ -26,7 +26,7 @@ EXTRA_DIST	= ${java_JAVA}
 noinst_SCRIPTS  = ${ADAPTER_GEN}
 
 ${ADAPTER_GEN}: ${top_srcdir}/toolbus/tide.tifs 
-	${TOOLBUS}/bin/tifstojava \
+	${TOOLBUS_JAVA_ADAPTER}/bin/tifstojava \
 		-tifs ${top_srcdir}/toolbus/tide.tifs \
 		-tool debug-adapter \
 		-package tide.adapters 
