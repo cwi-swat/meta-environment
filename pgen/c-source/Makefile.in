@@ -83,7 +83,7 @@ INSTALL_PROG    = @INSTALL_PROG@
 UNINSTALL       = @UNINSTALL@
 
 ATERM           = @ATERM@
-NEW_META        = @NEW_META@
+NEW_META        = ${top_srcdir}
 
 XINCLUDES       = -I$(ATERM)/include -I$(NEW_META)/include -I$(includedir)
 XLIBS           = -L$(prefix)/lib $(SOCKLIBS)
