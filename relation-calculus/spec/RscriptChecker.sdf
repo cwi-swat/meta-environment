@@ -16,7 +16,7 @@ imports Rstore
 exports
     sorts ERROR ERRORS TENV DCLRVARS  
 
-    start-symbols Summary
+    context-free start-symbols Summary
 
     context-free syntax
 
