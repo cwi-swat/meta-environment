@@ -24,12 +24,21 @@ Analysis of Software Systems}
 
 \section{Deadline}
 
+Friday october 24, 12:00.
+
 \section{Introduction}
 
 This series of exercises is intended to get some experience with
 the analysis of the source code of software systems.
 
 \section{Preparations}
+\begin{verbatim}
+- naam + locatie van de tar file
+- wat zit erin?
+- Werken in de Meta-Environment
+- Werken op de command line
+- Welke datafiles?
+\end{verbatim}
 
 \section{Exercises}
 
@@ -53,7 +62,7 @@ Write an \rscript to answer each of the following questions:
 \begin{itemize}
 
 \item[Q1]
-Compute {\tt rel[int,bag[int] R} such that each element in {\tt B1} is related to all
+Compute {\tt rel[int,bag[int]] R} such that each element in {\tt B1} is related to all
 elements in {\tt B1} that are smaller than that element.
 
 \item[Q2] What are the \emph{entry points} of {\tt calls}?
@@ -106,9 +115,13 @@ Write an \rscript to answer each of the following questions:
 \item[Q10] What is the largests method?
 
 \item[Q11] Which cases of degenerate inheritance are there?
+Recall: if a class inherits an interface directly and indirectly,
+then we call this degenerate inheritance.
 
-\item[Q12] Find similar classes. Here we define similar as: (a) contain the
-same classes; (b) inherit from the same classes.
+\item[Q12] Find similar classes. Two classes are \emph{similar}
+  if (a) they \emph{contain} the same classes; (b) they \emph{inherit} from the
+  same classes. (This definition is slightly simpler than the one used in
+  series 1).
 
 \end{itemize}
 
