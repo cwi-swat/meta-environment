@@ -1,7 +1,5 @@
 *.tar.gz
 .classpath
-.classpath
-.project
 .project
 Makefile
 Makefile.in
