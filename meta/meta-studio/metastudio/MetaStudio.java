@@ -689,30 +689,22 @@ public class MetaStudio
 
   String formatString(String format, ATermList args)
   {
+    int index;
     String prefix = "";
     String postfix = format;
-    while (!args.isEmpty()) {
-      int index = postfix.indexOf("%s");
-      if (index >= 0) {
-	prefix += postfix.substring(0, index);
-	prefix += ((ATermAppl)args.getFirst()).getName();
-	postfix = postfix.substring(index+2);
-	args = args.getNext();
-	continue;
+    while ((index = postfix.indexOf("%s")) != -1) {
+      prefix += postfix.substring(0, index);
+      postfix = postfix.substring(index+2);
+      switch (postfix.charAt(index+1)) {
+	case 'd':
+	  prefix += args.getFirst().toString();
+	  break;
+	case 's':
+	  prefix += ((ATermAppl)args.getFirst()).getName();
+	  break;
       }
-
-      index = postfix.indexOf("%d");
-      if (index >= 0) {
-	prefix += postfix.substring(0, index);
-	prefix += args.getFirst().toString();
-	postfix = postfix.substring(index+2);
-	args = args.getNext();
-	continue;
-      }
-      throw new RuntimeException("too many arguments in format: "
-				 + format + ",args=" + args);
+      args = args.getNext();
     }
-
     return prefix + postfix;
   }
 

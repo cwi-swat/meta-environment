@@ -1,0 +1,29 @@
+application metastudio {
+  generator java {
+    enabled := true
+    @import "Module.ace"
+    
+    type * {
+      package := "metastudio"
+
+      field * {
+        operation := { get, set }
+        operation set? {
+          access := private
+        }
+	operation init? {
+	  access := private
+	}
+      }
+    }
+
+    type Module {
+      field parent {
+        operation := { add, init, fetch-iterator }
+      }
+      field child {
+        operation := { add, init, fetch-iterator }
+      }
+    }
+  }
+}
