@@ -229,13 +229,14 @@ equation_entry *find_equation(equation_entry *from, ATerm top_ofs,
 }
 
 /*}}}  */
-/*{{{  void select_equations(ATerm module) */
+/*{{{  void select_equations(char *module) */
 
-void select_equations(ATerm module)
+void select_equations(char *module)
 {
   equation_table *cur = tables;
+  ATerm t_module = ATmake("<str>", module);
 
-  while(cur && !ATisEqual(cur->module, module))
+  while(cur && !ATisEqual(cur->module, t_module))
     cur = cur->next;
 
   if(!cur)
@@ -246,12 +247,13 @@ void select_equations(ATerm module)
 
 
 /*}}}  */
-/*{{{  ATbool find_module(ATerm module) */
-ATbool find_module(ATerm module)
+/*{{{  ATbool find_module(char *module) */
+ATbool find_module(char *module)
 {
   equation_table *cur = tables;
+  ATerm t_module = ATmake("<str>", module);
  
-  while(cur && !ATisEqual(cur->module, module))
+  while(cur && !ATisEqual(cur->module, t_module))
     cur = cur->next;
 
   if(cur) 
@@ -260,19 +262,20 @@ ATbool find_module(ATerm module)
     return ATfalse;
 }
 /*}}}  */
-/*{{{  void enter_equations(ATerm module, ATermList eqs) */
+/*{{{  void enter_equations(char *module, ATermList eqs) */
 
-void enter_equations(ATerm module, ATermList eqs)
+void enter_equations(char *module, ATermList eqs)
 {
   equation_table *cur = tables;
+  ATerm t_module = ATmake("<str>", module);
  
-  while(cur && !ATisEqual(cur->module, module))
+  while(cur && !ATisEqual(cur->module, t_module))
     cur = cur->next;
 
   if(!cur) {
     cur = create_equation_table(ATgetLength(eqs)*2);
-    cur->module = module;
-		ATprotect(&cur->module);
+    cur->module = t_module;
+    ATprotect(&cur->module);
     cur->next = tables;
     tables = cur;
   }

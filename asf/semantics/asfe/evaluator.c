@@ -262,17 +262,17 @@ ATermList append_slice(ATermList list, ATermAppl slice)
    - ``add_equations'' to add a set of equations for a certain module.
    - ``interpret'' to rewrite a given term over a given module.  */
 
-ATerm equations_available(int cid, ATerm name)
+ATerm equations_available(int cid, char *name)
 {
   if(find_module(name))
-    return ATmake("snd-value(eqs-available(<term>))", name);
+    return ATmake("snd-value(eqs-available(<str>))", name);
   else
-    return ATmake("snd-value(eqs-not-available(<term>))", name);
+    return ATmake("snd-value(eqs-not-available(<str>))", name);
 }
 
 
 /*}}}  */
-/*{{{  ATerm add_equations(int cid, ATerm name, ATermList equs) */
+/*{{{  ATerm add_equations(int cid, char *name, ATermList equs) */
 
 /* The function ``add_equations'' takes care of adding a new list
    of equations is added to the internal database. The arguments
@@ -288,7 +288,7 @@ ATerm equations_available(int cid, ATerm name)
       the original list of equations minus the equations which
       where stored. Therefore the function ``add_equations''
       contains a loop. */
-ATerm add_equations(int cid, ATerm name, ATerm equs)
+ATerm add_equations(int cid, char *name, ATerm equs)
 {
   ATermList newequs;
   int l;
@@ -299,8 +299,8 @@ ATerm add_equations(int cid, ATerm name, ATerm equs)
 
   enter_equations(name, newequs);
 
-  ATfprintf(stderr,"Processing %d equations of module %t\n",l,name);
-  return ATmake("snd-value(equ-added(<term>))",name);
+  ATfprintf(stderr,"Processing %d equations of module %s\n",l,name);
+  return ATmake("snd-value(equ-added(<str>))",name);
 }
 
 
@@ -325,7 +325,7 @@ ATerm add_equations(int cid, ATerm name, ATerm equs)
       the list of lexical characters are mapped into lexicals
       again. */
 
-ATerm interpret(int cid,ATerm modname, ATerm trm)
+ATerm interpret(int cid, char *modname, ATerm trm)
 {
   ATerm newtrm, newatrm, result;
   ATerm atrm, realtrm;
