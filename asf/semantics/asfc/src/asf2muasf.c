@@ -629,8 +629,9 @@ static MA_Term treeToTerm(PT_Tree tree, ATermIndexedSet funcdefs,
     result = NULL; /* ignore layout */
   }
   else if (ASF_isTreeLexicalConstructorFunction((ASF_Tree) tree)) {
-    PT_Tree converted = constructorTreeToLexicalTree(tree);
-    result = treeToTerm(converted, funcdefs, layout);
+    ASF_Tree asfTree = (ASF_Tree) tree;
+    ASF_Tree converted = ASF_LexicalConstructorTreeToLexicalTree(asfTree);
+    result = treeToTerm((PT_Tree) converted, funcdefs, layout);
   }
   else if (ASF_isTreeTraversalFunction((ASF_Tree) tree)) {
     PT_Tree converted;

@@ -55,21 +55,34 @@ static PT_Tree constructorVarToLexicalVar(ASF_CHAR var)
   return appl2;
 }
 
+/*{{{  static PT_Args constructorArgsToLexicalArgs(ASF_CHARList chars) */
+
 static PT_Args constructorArgsToLexicalArgs(ASF_CHARList chars)
 {
   PT_Args list = PT_makeArgsEmpty();
 
-  for(;ASF_hasCHARListHead(chars); chars = ASF_getCHARListTail(chars)) {
+  for ( ;ASF_hasCHARListHead(chars); chars = ASF_getCHARListTail(chars)) {
     ASF_CHAR head = ASF_getCHARListHead(chars);
-    PT_Tree elem;
+    PT_Tree elem = NULL;
 
+    /* Runtime type-check: the children of lexical constructor functions
+     * may only be variables, or characters. It suffices to check for
+     * variables, or lexical injection productions since the parser will
+     * have checked if the types correspond. What we filter out here is
+     * the possibility of user-defined productions that return CHAR or CHAR*
+     */
     if (PT_isTreeVar((PT_Tree) head)) {
       elem = constructorVarToLexicalVar(head);
+      list = PT_makeArgsMany(elem, list);
     }
-    else {
-      elem = constructorCharToLexicalChar(head);
+    else if (PT_isTreeAppl((PT_Tree) head)) {
+      PT_Production prod = PT_getTreeProd((PT_Tree) head);
+
+      if (PT_isLexicalInjectionProd(prod)) {
+	elem = constructorCharToLexicalChar(head);
+	list = PT_makeArgsMany(elem, list);
+      }
     }
-    list = PT_makeArgsMany(elem, list);
 
     if (!ASF_hasCHARListTail(chars)) {
       break;
@@ -78,6 +91,8 @@ static PT_Args constructorArgsToLexicalArgs(ASF_CHARList chars)
 
   return PT_reverseArgs(list);
 }
+
+/*}}}  */
 
 PT_Tree constructorTreeToLexicalTree(PT_Tree constructor)
 {
