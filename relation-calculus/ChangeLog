@@ -1,0 +1,7 @@
+# $Id$
+
+Mon Jan  5 14:52:57 CET 2004 <jong@cwi.nl>
+ * ChangeLog added
+ * {Bags, ExtendedIntegers, Relations, RscriptElem, Rstore}.asf:
+   upgraded condition syntax
+

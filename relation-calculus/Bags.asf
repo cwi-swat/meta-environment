@@ -34,7 +34,7 @@ equations
 [sort2]	sort({$Elem}) = {$Elem}
 
 [default-sort] 
-	 <{$Elem*1}, {$Elem*2}> = divide(true, {$Elem+})
+	 <{$Elem*1}, {$Elem*2}> := divide(true, {$Elem+})
 	 ================================
 	sort({$Elem+}) = merge(sort({$Elem*1}), sort({$Elem*2}))
 
@@ -42,23 +42,23 @@ equations
 
 [mrg2]	merge($Bag, {}) = $Bag
 
-[mrg3]	elem-greater($Elem1, $Elem2) = true,
-	{$Elem*} = merge({$Elem1, $Elem*1}, {$Elem*2})
+[mrg3]	elem-greater($Elem1, $Elem2) == true,
+	{$Elem*} := merge({$Elem1, $Elem*1}, {$Elem*2})
 	==================================
 	merge({$Elem1, $Elem*1}, {$Elem2, $Elem*2}) = {$Elem2, $Elem*}
 
 [default-mrg]	
-	{$Elem*} = merge({$Elem*1}, {$Elem2, $Elem*2})
+	{$Elem*} := merge({$Elem*1}, {$Elem2, $Elem*2})
 	==================================
 	merge({$Elem1, $Elem*1}, {$Elem2, $Elem*2}) = {$Elem1, $Elem*}
 
 %% ---- divide
 
-[div1]  <{$Elem*1}, {$Elem*2}> = divide(false, {$Elem*})
+[div1]  <{$Elem*1}, {$Elem*2}> := divide(false, {$Elem*})
 	=================================
 	divide(true, {$Elem, $Elem*}) = <{$Elem, $Elem*1}, {$Elem*2}>
 
-[div1]  <{$Elem*1}, {$Elem*2}> = divide(false, {$Elem*})
+[div1]  <{$Elem*1}, {$Elem*2}> := divide(false, {$Elem*})
 	=================================
 	divide(false, {$Elem, $Elem*}) = <{$Elem*1}, {$Elem, $Elem*2}>
 
@@ -123,7 +123,7 @@ equations
 
 %% --- union1($Elem, Rel)
 
-[un1-1]	in($Elem, {$Elem*}) = true	
+[un1-1]	in($Elem, {$Elem*}) == true	
 	=============================	
 	union1($Elem, {$Elem*}) = {$Elem*}
 
@@ -132,7 +132,7 @@ equations
 
 %% --- union2($Bag, $Elem)
 
-[un2-1]	in($Elem, {$Elem*}) = true
+[un2-1]	in($Elem, {$Elem*}) == true
 	=============================
 	union2({$Elem*}, $Elem) = {$Elem*}
 
@@ -144,12 +144,12 @@ equations
 [un-1] 	union({}, {$Elem*}) = {$Elem*}
 [un-2] 	union({$Elem*}, {}) = {$Elem*}
 
-[un-3] {$Elem*4} = union({$Elem*1}, {$Elem*2, $Elem*3})
+[un-3] {$Elem*4} := union({$Elem*1}, {$Elem*2, $Elem*3})
        ==============================
        union({$Elem, $Elem*1}, {$Elem*2, $Elem, $Elem*3}) = insert($Elem, {$Elem*4})
 
 [default-un]
-       {$Elem*3} = union({$Elem*1}, {$Elem*2})
+       {$Elem*3} := union({$Elem*1}, {$Elem*2})
        ==============================
        union({$Elem, $Elem*1}, {$Elem*2}) = insert($Elem, {$Elem*3})
 
@@ -161,7 +161,7 @@ equations
 
 %% --- $Bag1 inter $Bag2
 
-[in-1] inter({$Elem*1, $Elem*2}, {$Elem*3, $Elem*4}) = {$Elem*'}
+[in-1] {$Elem*'} := inter({$Elem*1, $Elem*2}, {$Elem*3, $Elem*4})
        ==================================
        inter({$Elem*1, $Elem, $Elem*2}, {$Elem*3, $Elem, $Elem*4}) = insert($Elem, {$Elem*'})
 
@@ -176,7 +176,7 @@ equations
 %% --- in($Elem, $Bag)
 
 [in-1]  %%elem-equal($Elem1, $Elem2) = true		%% Should be elem-equal, but this
-	$Elem1 = $Elem2					%% is much too expensive
+	$Elem1 == $Elem2					%% is much too expensive
 	============================================
 	in($Elem1, {$Elem*1, $Elem2, $Elem*2}) = true
 

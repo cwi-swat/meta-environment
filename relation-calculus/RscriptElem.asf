@@ -5,21 +5,21 @@ equations
 [default-ib]	
 	is-bag($Elem) = false
 
-[ec1]	equal($Bag1, $Bag2) = true
+[ec1]	equal($Bag1, $Bag2) == true
 	====================================================
 	elem-compare($Bag1, $Bag2) = equal
 
 [default-ec]
 	elem-compare($Elem1, $Elem2) = compare($Elem1, $Elem2)
 
-[ee1]	elem-compare($Elem1, $Elem2) = equal
+[ee1]	elem-compare($Elem1, $Elem2) == equal
 	===================================================
 	elem-equal($Elem1, $Elem2) = true
 
 [default-ee]
 	elem-equal($Elem1, $Elem2) = false
 
-[elt1]	elem-compare($Elem1, $Elem2) = less
+[elt1]	elem-compare($Elem1, $Elem2) == less
 	===================================================
 	elem-less($Elem1, $Elem2) = true
 [default-elt]
@@ -27,7 +27,7 @@ equations
 
 [ele1]	elem-less-equal($Elem1, $Elem2) = elem-equal($Elem1, $Elem2) | elem-less($Elem1, $Elem2)
 
-[egt1]	elem-compare($Elem1, $Elem2) = greater
+[egt1]	elem-compare($Elem1, $Elem2) == greater
 	===================================================
 	elem-greater($Elem1, $Elem2) = true
 [default-gt]
