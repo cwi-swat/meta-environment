@@ -138,7 +138,7 @@ int main( int argc, char* argv[] )
       else
       { /* short listing: remove directory and extension from file name */
          strcpy( buffer, s );
-         s = strchr( buffer, '/' );
+         s = strrchr( buffer, '/' );
          if( strrchr( s, '/' ) != NULL )
             strcpy( buffer, s + 1 );
          s = strrchr( buffer, '.' );
