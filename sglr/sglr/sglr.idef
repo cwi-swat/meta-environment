@@ -79,6 +79,25 @@ process Parser is
         snd-msg(parse-result-asfix1(Id, parse-error(Err,cycle(T?))))
       )
     +
+      rec-msg(Id?, parse-string-as-asfix2me(Lid?, G?, S?)) .
+      snd-eval(P, parse-string-as-asfix2me(Lid, G, S)) .
+      (
+        rec-value(P, parsetree(T?, Amb?)) .
+        snd-msg(parse-result-asfix2me(Id, parse-tree(parsetree(T, Amb))))
+      +
+        rec-value(P, parse-error(Err?,plain)) .
+        snd-msg(parse-result-asfix2me(Id, parse-error(Err,plain)))
+      +
+        rec-value(P, parse-error(Err?,eof)) .
+        snd-msg(parse-result-asfix2me(Id, parse-error(Err,eof)))
+      +
+        rec-value(P, parse-error(Err?,ambiguities(Amb?, Ambs?))) .
+        snd-msg(parse-result-asfix2me(Id, parse-error(Err,ambiguities(Amb, Ambs))))
+      +
+        rec-value(P, parse-error(Err?,cycle(T?))) .
+        snd-msg(parse-result-asfix2me(Id, parse-error(Err,cycle(T?))))
+      )
+    +
       (
         rec-msg(open-language-from-term(Lid?, Tbl?)) .
         snd-eval(P, open-language-from-term(Lid, Tbl))

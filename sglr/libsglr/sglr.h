@@ -101,6 +101,7 @@ ATerm SGgetTopSymbols(language L);
 ATerm SGparseString(language L, char *G, char *S);
 ATerm SGparseStringAsAsFix2(language L, char *G, char *S);
 ATerm SGparseStringAsAsFix1(language L, char *G, char *S);
+ATerm SGparseStringAsAsFix2ME(language L, char *G, char *S);
 
 ATerm SGparseFile(char *prgname, language L, char *G, char *FN);
 ATerm SGtermToFile(char *prgname, ATerm t, char *FN);

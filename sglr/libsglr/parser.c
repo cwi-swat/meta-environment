@@ -1207,19 +1207,16 @@ tree SG_ParseResult(char *sort)
         return SG_ConvertA2ToA1(t);
       }
 
-      /* If you'd want return ambiguity tracks instead of ambiguous
-       * AsFix2, that could be taken care of here...
-       */
-      if (SG_ASFIX2ME) {
-        t = SG_ConvertA2ToA2ME(t);
-      }
-
       if(SG_TOOLBUS) {
         ATerm ambtrak = SG_AmbTracker(t);
 
         if(ambtrak) {
           return SG_ParseError(ATempty, SGnrAmb(SG_NR_ASK), ambtrak);
         }
+      }
+
+      if (SG_ASFIX2ME) {
+        t = SG_ConvertA2ToA2ME(t);
       }
 
       t = (tree) ATmakeAppl2(SG_ParseTree_AFun, (ATerm) t,
