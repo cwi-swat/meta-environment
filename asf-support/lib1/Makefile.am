@@ -20,6 +20,4 @@
 #
 # $Id$
 
-SUBDIRS = lib utils
-
-EXTRA_DIST = reconf make_rules
+EXTRA_DIST=ASF.adt
