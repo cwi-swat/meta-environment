@@ -20,15 +20,15 @@ in
     rec-msg(path(Path?)) .
     snd-msg(io-get-filename(Path, ModuleName, ".txt")) .
     rec-msg(io-filename(FileName?)) .
-    snd-msg(get-sdf-text(ModuleName)) .
+    snd-msg(ts-get-str-value("sdf-text", ModuleName)) .
     (
-      rec-msg(sdf-text(ModuleName,SdfText?)) .
-      snd-msg(get-eqs-text(ModuleName)) .
+      rec-msg(ts-value(SdfText?)) .
+      snd-msg(ts-get-str-value("asf-text", ModuleName)) .
       (
-        rec-msg(eqs-text(ModuleName, AsfText?)) .
+        rec-msg(ts-value(AsfText?)) .
         snd-msg(io-write-text-file(FileName,[SdfText,"\n",AsfText]))
       +
-        rec-msg(no-eqs-text(ModuleName)) .
+        rec-msg(ts-no-value) .
         snd-msg(io-write-text-file(FileName,[SdfText]))
       ) . 
       (
@@ -38,7 +38,7 @@ in
 	snd-note(ui-status(errorf("Printing of %s failed: %s",[ModuleName,ErrMsg])))
       )
     +
-      rec-msg(no-sdf-text(ModuleName)) .
+      rec-msg(ts-no-value) .
       snd-note(ui-status(errorf("Printing of %s failed",[ModuleName])))
     ) .
     snd-note(ui-status(endstat(Id))) .  
