@@ -114,6 +114,9 @@ in
     snd-eval(SE,getFocus(Fid, I)).
     rec-value(SE,Foc?).
     snd-msg(TE,set-focus(Fid,Foc)).
+    snd-eval(SE,setFocus(Fid,Foc)).
+    rec-value(SE,Fl?).
+printf("New focus list: %t\n", Fl).
     snd-ack-event(TE,get-focus(Fid,I))
     +
     rec-event(TE,menu-event("Meta-Environment","Show Tree", Fid)).
@@ -121,11 +124,8 @@ in
     snd-ack-event(TE,menu-event("Meta-Environment","Show Tree",Fid))
     +
     rec-event(TE,menu-event("Move",Str?,Fid)).
-    printf("Focus moving not yet implemented\n").
     snd-eval(SE,moveFocus(Fid,Str)).
-    printf("After moveFocus\n").
     rec-value(SE,Fl?).
-    printf("List coming back: %l",Fl).
     Foc := first(Fl).
     snd-msg(TE,set-focus(Fid,Foc)).
     snd-ack-event(TE,menu-event("Move",Str,Fid))
