@@ -8,6 +8,11 @@ lib_LIBRARIES		= libPT.a
 include_HEADERS		= PT.h PT_dict.h
 libPT_a_SOURCES		= PT.c PT_dict.c
 
+bin_PROGRAMS		= get-parsetree
+
+get_parsetree_SOURCES	= get-parsetree.c
+get_parsetree_LDADD	= libPT.a ${LDFLAGS} ${LDADD}
+
 EXTRA_DIST		= AsFix.adt
 
 CFLAGS			= -g -Wall -O2
