@@ -25,7 +25,7 @@ static char myarguments[] = "h1:2:V";
 void usage(void)
 {
     fprintf(stderr,
-        "Usage: %s <file1> <file2>\n"
+        "Usage: %s -1 <file1> -2 <file2>\n"
         "Options:\n"
         "\t-h              display help information (usage)\n"
         "\t-V              reveal program version (i.e. %s)\n",
@@ -40,10 +40,18 @@ static ATbool ERR_subjectEqual(ERR_Subject subject1, ERR_Subject subject2)
 {
   char *description1 = ERR_getSubjectDescription(subject1);
   char *description2 = ERR_getSubjectDescription(subject2);
+
   if (strcmp(description1, description2) == 0) {
     ERR_Location location1 = ERR_getSubjectLocation(subject1);
     ERR_Location location2 = ERR_getSubjectLocation(subject2);
 
+    if (ERR_isLocationAreaInFile(location1) &&
+	ERR_isLocationAreaInFile(location2)) {
+      ERR_Area area1 = ERR_getLocationArea(location1);
+      ERR_Area area2 = ERR_getLocationArea(location2);
+
+      return ERR_isEqualArea(area1, area2);
+    }
     if (ERR_isLocationArea(location1) &&
 	ERR_isLocationArea(location2)) {
       ERR_Area area1 = ERR_getLocationArea(location1);

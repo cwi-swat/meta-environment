@@ -1,5 +1,8 @@
 $Id$
 
+Fri Aug 20 10:18:36 CEST 2004 <markvdb@cwi.nl>
+ * Adapted error-diff to new error format.
+
 Thu Jul  1 14:25:05 CEST 2004 <jurgenv@cwi.nl>
  * added Slices to locations api
 
