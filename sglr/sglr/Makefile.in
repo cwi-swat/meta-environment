@@ -49,7 +49,7 @@ TOOLBUS         = @TOOLBUS@
 # The eXtra parts of some variables
 XCFLAGS		= ${DEFS}
 XA2TOA1CFLAG	= -DHAVE_A2TOA1
-XA2TOA1LIB	= -la2toa1
+XA2TOA1LIB	= -L${top_srcdir}/a2toa1 -la2toa1
 XGCCFLAG	= -DHAVE_BOEHMGC
 XGCLIB		= -lgc
 XA2TOA1GCCFLAG	= ${XA2TOA1CFLAG} ${XGCCFLAG}
