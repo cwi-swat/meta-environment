@@ -292,6 +292,7 @@ public class StackViewer
 			unwind.setEnabled(false);
 			viewSource.setEnabled(false);
 			inspectVar.setEnabled(false);
+			frameVars.removeAll();
 		} else {
 			String name = frame.getName();
 			int depth = frame.getDepth();
@@ -299,7 +300,7 @@ public class StackViewer
 			frameName.setText(name);
 			frameDepth.setText(String.valueOf(depth));
 			frameLocation.setText(location.toString());
-			unwind.setEnabled(true);
+			unwind.setEnabled(false); // TODO: set back to true and fix functionality (what is it?)
 			viewSource.setEnabled(!location.isLocationUnknown());
 			inspectVar.setEnabled(false);
 
