@@ -42,19 +42,19 @@ call_toolbus () {
   fi
 }    
 
-# Test 1. Check whether a non-existing sdf2 module exists.
+# Test 1. Check whether a non-existing sdf module exists.
 call_toolbus in-output-test-1.tb
 
-# Test 2. Check whether an existing sdf2 module (in ascii) exists.
+# Test 2. Check whether an existing sdf module (in ascii) exists.
 call_toolbus in-output-test-2.tb
 
-# Test 3. Check whether an existing sdf2 module (in baf) exists.
+# Test 3. Check whether an existing sdf module (in baf) exists.
 call_toolbus in-output-test-3.tb
 
-# Test 4. Attempt to create an empty sdf2 module.
-rm -f EmptySdf2Module.sdf2
+# Test 4. Attempt to create an empty sdf module.
+rm -f EmptySdf2Module.sdf
 call_toolbus in-output-test-4.tb
-rm -f EmptySdf2Module.sdf2
+rm -f EmptySdf2Module.sdf
 
 # Test 5. Attempt to create an empty equations section.
 rm -f EmptyEqsSection.eqs
@@ -69,15 +69,15 @@ rm -f TestEqs.eqs
 # Test 7. Attempt to open a non-existing equations section.
 call_toolbus in-output-test-7.tb
 
-# Test 8. Attempt to open an existing sdf2 definition.
-echo "module TestSdf" > TestSdf.sdf2
+# Test 8. Attempt to open an existing sdf definition.
+echo "module TestSdf" > TestSdf.sdf
 call_toolbus in-output-test-8.tb
-rm -f TestSdf.sdf2
+rm -f TestSdf.sdf
 
-# Test 9. Attempt to open a non-existing sdf2 section.
+# Test 9. Attempt to open a non-existing sdf section.
 call_toolbus in-output-test-9.tb
 
-# Test 10. Attempt to open an existing sdf2 section in baf.
+# Test 10. Attempt to open an existing sdf section in baf.
 call_toolbus in-output-test-10.tb
 
 echo ""
