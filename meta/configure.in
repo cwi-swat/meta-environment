@@ -1,3 +1,5 @@
+dnl $Id$
+
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT
 
@@ -14,7 +16,7 @@ AC_PREFIX_DEFAULT(`echo $PWD`/..)
 dnl Default locations of other components
 EPIC='$(prefix)'
 GEL='$(prefix)'
-TOOLBUS='$(prefix)'
+TOOLBUS=$prefix
 ATERM='$(prefix)'
 
 dnl Installation scripts 
@@ -63,7 +65,7 @@ AC_SUBST(INCLUDES)
 dnl Handle --with-gel=... argument to configure
 GELLIBS="-L$(GEL)/gel -lgel"
 AC_ARG_WITH(gel,
-[  --with-gel              use GeL for interfacing with ASF+SDF system],
+[  --with-gel    	use GeL for interfacing with ASF+SDF system],
 if test ${withval} = "yes"
 then
    GEL="$(top_srcdir)/../gel"
@@ -96,6 +98,21 @@ AC_ARG_WITH(toolbus,
 [  --with-toolbus	which ToolBus distribution to use],
 TOOLBUS=${withval},)
 AC_SUBST(TOOLBUS)
+
+dnl Handle --with-tcldot=... argument to configure
+AC_ARG_WITH(tcldot,
+[  --with-tcldot 	location of tcldot library to use],
+TCLDOT=${withval},
+AC_MSG_ERROR(\nPlease specify location of tcldot using --with-tcldot=/path/to/tcldot.so\nIf you are at CWI/UvA a good guess would be ~kuipers/lib/Tcldot)
+)
+AC_SUBST(TCLDOT)
+
+dnl Of course, the latest version of wish is not always called "wish". :-(
+dnl If we can't find something called wish8.0, we'll assume that "wish"
+dnl is at version 8 or higher (as it is in a _normal_ setup)
+AC_CHECK_PROG(WISH, wish8.0, wish8.0, wish)
+AC_SUBST(WISH)
+
 
 dnl Determine which libraries to use for programs using sockets
 NOSOCKLIBS=$LIBS
