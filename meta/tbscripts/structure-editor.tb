@@ -4,7 +4,7 @@ tool se is {
   command = "java-adapter -class nl.cwi.gipe.stred.SeTool"
 }
 
-process Structure-editor(TE: text-edit, Text: str) is
+process Structure-editor(TE: text-edit, Fid: str, Text: str) is
 let
 Id: term, SE: se, Fl: list, Foc: term, Loc: int, Str: str, FF: list,
 L: str, I: int, T: term, T1: term, Ch: int, Li: int, Co: int, Char: term
@@ -15,23 +15,23 @@ in
 /* And here we'll tell the parser to open it */
   snd-msg(open-language(L,"/ufs/kuipers/petr/new-meta/sglr/tables/Pico.tbl")).
   execute(se, SE?).
-  snd-eval(SE, newEditor(Text)).
+  snd-eval(SE, newEditor(Fid, Text)).
   rec-value(SE,Fl?).
   Foc := first(Fl).
   snd-msg(TE,set-focus(Foc)). ( ( 
-      rec-event(TE,insert(Loc?,Str?)).
-      snd-eval(SE,insertChars(Loc,Str)).
-      snd-ack-event(TE,insert(Loc,Str))
+      rec-event(TE,insert(Fid, Loc?, Str?)).
+      snd-eval(SE,insertChars(Fid, Loc, Str)).
+      snd-ack-event(TE,insert(Fid, Loc, Str))
       +
-      rec-event(TE,delete(Loc?)).
-      snd-eval(SE,deleteChars(Loc)).
-      snd-ack-event(TE,delete(Loc))
+      rec-event(TE,delete(Fid,Loc?)).
+      snd-eval(SE,deleteChars(Fid, Loc)).
+      snd-ack-event(TE,delete(Fid,Loc))
     ).
     rec-value(SE,Fl?).
     Foc := first(Fl).
-    snd-msg(TE,set-focus(Foc))
+    snd-msg(TE,set-focus(Fid, Foc))
     +
-    rec-event(TE,parse).
+    rec-event(TE,parse(Fid)).
     FF := []. (
       if not-equal(Fl,[]) then
         Foc:= first(Fl).
@@ -43,7 +43,7 @@ in
               snd-msg(Id,a2toa1(T)).
               rec-msg(Id,converted(T1?)).
               printf("Replacement term: %t\n",T1).
-              snd-eval(SE,replaceFocus(T1)).
+              snd-eval(SE,replaceFocus(Fid, T1)).
               rec-value(SE,Fl?)
             else
               printf("Parse of %s returned %d ambiguities",Str,I).
@@ -61,7 +61,7 @@ in
             FF := join(FF,Foc)
           )
         ).
-        snd-eval(SE,nextFocus).
+        snd-eval(SE,nextFocus(Fid)).
         rec-value(SE,Fl?)
       fi
     ) *
@@ -71,7 +71,7 @@ in
         snd-msg(TE,clear-focus)
       else
         /* Some parses were ambiguous */
-        snd-eval(SE,setFocus(FF)).
+        snd-eval(SE,setFocus(Fid, FF)).
         rec-value(SE,Fl?).
         Foc := first(Fl).
         snd-msg(TE,set-focus(Foc))
@@ -80,10 +80,10 @@ in
     /* Finished parsing operations */
     snd-ack-event(TE,parse)
     +
-    rec-msg(TE,get-focus(I?)).
-    snd-eval(SE,getFocus(I)).
-    rec-value(SE,focus(Foc?)).
-    snd-msg(TE,set-focus(focus(Foc)))
+    rec-msg(TE,get-focus(Fid,I?)).
+    snd-eval(SE,getFocus(Fid, I)).
+    rec-value(SE,Foc?).
+    snd-msg(TE,set-focus(Foc))
   ) *
   delta
 endlet
