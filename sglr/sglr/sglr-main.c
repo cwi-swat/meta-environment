@@ -213,6 +213,7 @@ void handle_filter_options(void)
           break;
         case 'p':
           filter_priorityflag = !filter_priorityflag;
+	  break;
         case 'r':
           filter_rejectflag = !filter_rejectflag;
           break;
