@@ -140,6 +140,7 @@ parse_table  *SG_LookupParseTable(language L);
 #define       SG_A_TOKEN(a)         ATgetArgument(a, 1)
 #define       SG_A_NR_ARGS(a)       ATgetInt((ATermInt) ATgetArgument(a, 0))
 #define       SG_A_PROD(a)          ATgetInt((ATermInt) ATgetArgument(a, 1))
+#define       SG_A_KWPROD(a)        ATgetInt((ATermInt) ATgetArgument(a, 0))
 #define       SG_A_ATTRIBUTE(a)     ATgetInt((ATermInt) ATgetArgument(a, 2))
 #define       SG_A_LOOKAHEAD(a)     (lookahead) ATgetArgument(a, 3)
 

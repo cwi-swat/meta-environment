@@ -37,7 +37,7 @@ typedef struct shift_pair {
 
 typedef struct shift_tuple {
   struct shift_tuple *next;
-  state     state;
+  label     prod;
   ATermList token;
   int       index;
   int       length;
@@ -49,6 +49,7 @@ typedef struct shift_tuple {
 #define SG_STPL_INDEX(x)                  (x)->index
 #define SG_STPL_STACK(x)                  (x)->stack
 #define SG_STPL_LENGTH(x)                 (x)->length
+#define SG_STPL_PROD(x)                   (x)->prod
 
 /*
  A path is a pair of a stack and a list of terms.  A path represents the
@@ -215,7 +216,7 @@ static shift_tuple *SG_AddShiftTuple(stack *st, action a)
   sg_shift_tuples = tuple;
 
   tuple->stack = st;
-  tuple->state = SG_A_STATE(a);
+  tuple->prod = SG_A_KWPROD(a);
   tuple->token = (ATermList)SG_A_TOKEN(a);
   tuple->index = 0;
   tuple->length = ATgetLength((ATermList)SG_A_TOKEN(a))-1;
@@ -975,6 +976,7 @@ void SG_Shifter(void)
   st_link *l;
   shift_tuple *cur_tuple, *next_tuple;
   int i;
+  tree rt;
 
   IF_DEBUG(
     fprintf(SG_log(), "#%ld: shifting %d parser(s) -- token ",
@@ -989,7 +991,7 @@ void SG_Shifter(void)
     ATermList token = SG_STPL_TOKEN(cur_tuple);
     int index       = SG_STPL_INDEX(cur_tuple);
     int length      = SG_STPL_LENGTH(cur_tuple);
-    s               = SG_STPL_STATE(cur_tuple);
+    label prod      = SG_STPL_PROD(cur_tuple);
     st0             = SG_STPL_STACK(cur_tuple);
 
     next_tuple = cur_tuple->next;
@@ -997,12 +999,14 @@ void SG_Shifter(void)
     /*ATwarning("entering shifter with %t and %d\n", token, index);  */
 
     if (index == length) { 
-      if (!SG_PT_HAS_REJECTS(table) || !SG_Rejected(st0)) {
-        if (!(st1 = SG_FindStack(s, new_active_stacks))) {
-          st1 = SG_NewStack(s, ATtrue);
+      if (!SG_PT_HAS_REJECTS(table) || !SG_Rejected(st0)) { 
+        state rs = SG_LookupGoto(table, SG_ST_STATE(st0), prod);
+        if (!(st1 = SG_FindStack(rs, new_active_stacks))) {
+          st1 = SG_NewStack(rs, ATfalse);
           new_active_stacks = SG_AddStack(st1, new_active_stacks);
         }
-        l = SG_AddLink(st1, st0, (tree) t, 1);
+        rt = SG_Apply(table, prod, token, 0); 
+        l = SG_AddLink(st1, st0, rt, 1);
       }
       SG_DiscardShiftTuple(cur_tuple);
     }

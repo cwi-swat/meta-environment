@@ -269,11 +269,7 @@ st_links *SG_MallocLinks(void)
 #endif  /*  SG_GENERIC_POOL_ALLOC  */
 #endif  /*  SG_POOL_ALLOC  */
 
-#ifndef DEBUG
 stack *SG_NewStack(state s, ATbool isshift)
-#else
-stack *SG_NewStack(state s, stack *ancestor, ATbool isshift)
-#endif
 {
   stack *st;
 
@@ -282,17 +278,10 @@ stack *SG_NewStack(state s, stack *ancestor, ATbool isshift)
     st->links     = NULL;
     st->refcount  = 0;
     st->isshift   = isshift;
-#ifdef DEBUG
-    st->parent = ancestor;
-#endif
 #ifdef  MEMSTATS
     IF_STATISTICS(sg_num_stack++);
 #endif
   }
-#ifdef DEBUG
-  if(SG_DEBUG)
-    ATwarning("%xd stack created [%d]\n", st, sg_num_stack);
-#endif
   return st;
 }
 
@@ -306,10 +295,6 @@ void SG_DeleteStack(stack *st)
 #ifdef  MEMSTATS
   IF_STATISTICS(sg_num_stack--);
 #endif
-#ifdef DEBUG
-  if(SG_DEBUG)
-    ATwarning("%xd stack deleted [%d]\n", st, sg_num_stack);
-#endif
 }
 
 stacks *SG_AddStack(stack *st, stacks *osts) {
@@ -322,10 +307,6 @@ stacks *SG_AddStack(stack *st, stacks *osts) {
     IF_STATISTICS(sg_num_stacks++);
 #endif
   }
-#ifdef DEBUG
-  if(SG_DEBUG)
-    ATwarning("%xd stack list created [%d]\n", nsts, sg_num_stacks);
-#endif
   return nsts;
 }
 
@@ -334,10 +315,6 @@ void SG_DeleteStacks(stacks *sts)
   SG_FreeStacks(sts);
 #ifdef  MEMSTATS
   IF_STATISTICS(sg_num_stacks--);
-#endif
-#ifdef DEBUG
-  if(SG_DEBUG)
-    ATwarning("%xd stack list deleted [%d]\n", sts, sg_num_stacks);
 #endif
 }
 
@@ -367,10 +344,6 @@ st_link *SG_NewLink(tree t, size_t tl, stack *st)
     IF_STATISTICS(sg_num_link++);
 #endif
   }
-#ifdef DEBUG
-  if(SG_DEBUG)
-    ATwarning("%xd link created [%d]\n", lk, sg_num_link);
-#endif
   return lk;
 }
 
@@ -383,10 +356,6 @@ void SG_DeleteLink(st_link *lk)
 
 #ifdef  MEMSTATS
   IF_STATISTICS(sg_num_link--);
-#endif
-#ifdef DEBUG
-  if(SG_DEBUG)
-    ATwarning("%xd link deleted [%d]\n", lk, sg_num_link);
 #endif
 }
 
@@ -411,10 +380,6 @@ st_links *SG_AddLinks(st_link *l, st_links *ls)
     IF_STATISTICS(sg_num_links++);
 #endif
   }
-#ifdef DEBUG
-  if(SG_DEBUG)
-    ATwarning("%xd link list created [%d]\n", lks, sg_num_links);
-#endif
   return lks;
 }
 
@@ -423,10 +388,6 @@ void SG_DeleteLinks(st_links *lks)
   SG_FreeLinks(lks);
 #ifdef  MEMSTATS
   IF_STATISTICS(sg_num_links--);
-#endif
-#ifdef DEBUG
-  if(SG_DEBUG)
-    ATwarning("%xd link list deleted [%d]\n", lks, sg_num_links);
 #endif
 }
 
