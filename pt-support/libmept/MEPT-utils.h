@@ -88,7 +88,18 @@ char* PT_printAnyToDot(ATerm term, ATbool sharing, ATbool characters,
 		       ATbool characters_sharing, ATbool productions, 
 		       ATbool layout, ATbool literals);
 
-ATerm implodeParseTree(PT_ParseTree tree);
+ATerm PT_implodeParseTree(PT_ParseTree tree,
+			  ATbool _interpret_cons ,
+			  ATbool _remove_layout ,
+			  ATbool _remove_literals ,
+			  ATbool _remove_injections ,
+			  ATbool _remove_parsetree ,
+			  ATbool _implode_lexicals ,
+			  ATbool _keep_annotations ,
+			  ATbool _interpret_alt ,
+			  ATbool _interpret_seq ,
+			  ATbool _interpret_opt ,
+			  ATbool _interpret_layout_place_holder);
 
 typedef void* PT_TreeVisitorData;
 typedef PT_Tree (*PT_TreeVisitor)(PT_Tree tree, PT_TreeVisitorData data);

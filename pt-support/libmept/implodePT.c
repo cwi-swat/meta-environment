@@ -8,17 +8,17 @@
 
 #include "MEPT-utils.h"
 
-ATbool interpret_cons = ATfalse;
-ATbool remove_layout = ATfalse;
-ATbool remove_literals = ATfalse;
-ATbool remove_injections = ATfalse;
-ATbool remove_parsetree = ATfalse;
-ATbool implode_lexicals = ATfalse;
-ATbool keep_annotations = ATtrue;
-ATbool interpret_alt = ATfalse;
-ATbool interpret_seq = ATfalse;
-ATbool interpret_opt = ATfalse;
-ATbool interpret_layout_place_holder = ATfalse;
+static ATbool interpret_cons = ATfalse;
+static ATbool remove_layout = ATfalse;
+static ATbool remove_literals = ATfalse;
+static ATbool remove_injections = ATfalse;
+static ATbool remove_parsetree = ATfalse;
+static ATbool implode_lexicals = ATfalse;
+static ATbool keep_annotations = ATtrue;
+static ATbool interpret_alt = ATfalse;
+static ATbool interpret_seq = ATfalse;
+static ATbool interpret_opt = ATfalse;
+static ATbool interpret_layout_place_holder = ATfalse;
 
 #define DIRTY_LAYOUT_MARKER "layout-place-holder"
 
@@ -383,9 +383,32 @@ static ATerm implodeTerm(PT_Tree tree)
 
 /*{{{  ATerm implodeParseTree(PT_ParseTree tree) */
 
-ATerm implodeParseTree(PT_ParseTree tree)
+ATerm PT_implodeParseTree(PT_ParseTree tree,
+			  ATbool _interpret_cons ,
+			  ATbool _remove_layout ,
+			  ATbool _remove_literals ,
+			  ATbool _remove_injections ,
+			  ATbool _remove_parsetree ,
+			  ATbool _implode_lexicals ,
+			  ATbool _keep_annotations ,
+			  ATbool _interpret_alt ,
+			  ATbool _interpret_seq ,
+			  ATbool _interpret_opt ,
+			  ATbool _interpret_layout_place_holder)
 {
   ATerm atermTree;
+
+  interpret_cons = _interpret_cons ;
+  remove_layout = _remove_layout ;
+  remove_literals = _remove_literals ;
+  remove_injections = _remove_injections ;
+  remove_parsetree = _remove_parsetree ;
+  implode_lexicals = _implode_lexicals ;
+  keep_annotations = _keep_annotations ;
+  interpret_alt = _interpret_alt ;
+  interpret_seq = _interpret_seq ;
+  interpret_opt = _interpret_opt ;
+  interpret_layout_place_holder = _interpret_layout_place_holder;
 
   if (PT_isParseTreeTop(tree)) {
     PT_Tree newTree = PT_getParseTreeTop(tree);

@@ -70,17 +70,17 @@ int main(int argc, char **argv)
   ATbool bafmode=ATtrue;
   ATbool verbose=ATfalse;
   ATbool proceed=ATtrue;
-  extern ATbool interpret_cons;
-  extern ATbool remove_layout;
-  extern ATbool remove_literals;
-  extern ATbool remove_injections;
-  extern ATbool remove_parsetree;
-  extern ATbool implode_lexicals;
-  extern ATbool keep_annotations;
-  extern ATbool interpret_alt;
-  extern ATbool interpret_seq;
-  extern ATbool interpret_opt;
-  extern ATbool interpret_layout_place_holder;
+  ATbool interpret_cons =ATfalse;
+  ATbool remove_layout =ATfalse;
+  ATbool remove_literals =ATfalse;
+  ATbool remove_injections =ATfalse;
+  ATbool remove_parsetree =ATfalse;
+  ATbool implode_lexicals =ATfalse;
+  ATbool keep_annotations =ATtrue;
+  ATbool interpret_alt =ATfalse;
+  ATbool interpret_seq =ATfalse;
+  ATbool interpret_opt =ATfalse;
+  ATbool interpret_layout_place_holder=ATfalse;
 
   /*  Commandline mode  */
 
@@ -142,7 +142,18 @@ int main(int argc, char **argv)
 
     if (inputTerm != NULL) {
       tree = PT_makeParseTreeFromTerm(inputTerm);
-      implodedTree = implodeParseTree(tree);
+      implodedTree = PT_implodeParseTree(tree,
+					 interpret_cons ,
+					 remove_layout ,
+					 remove_literals ,
+					 remove_injections ,
+					 remove_parsetree ,
+					 implode_lexicals ,
+					 keep_annotations,
+					 interpret_alt ,
+					 interpret_seq ,
+					 interpret_opt ,
+					 interpret_layout_place_holder);
 
       if(!implodedTree) {
 	ATerror("%s implosion conversion failed.", myname);

@@ -1,4 +1,7 @@
 
+2002/12/10 (jurgenv@cwi.nl)
+ * Removed use of global variables between files in implodePT
+
 2002/12/10 (jurgenv@cwi.nl tvdstorm@science.uva.nl)
  * Fixed a bug in implodePT (concerning list variables)
  * Removed isTreeListInjection function from pt-support
