@@ -327,8 +327,18 @@ ATerm get_focussed_tree(int cid, ATerm editorId)
   SE_Focus focus = SE_getEditorFocus(editor); 
   if (SE_isFocusNotEmpty(focus)) {
     if (strcmp(SE_getFocusSort(focus), SORT_UNPARSED) != 0) {
-      PT_Tree tree = getFocussedTree(editor, focus);
-      PT_ParseTree parse_tree =  PT_makeValidParseTreeFromTree(tree);
+      PT_Tree tree;
+      PT_ParseTree parse_tree;
+     ATwarning("focus: %t\n", focus); 
+
+      if (!SE_isFocusRoot(focus)) {
+	tree = getFocussedTree(editor, focus);
+	parse_tree = PT_makeValidParseTreeFromTree(tree);
+      }
+      else {
+	parse_tree = SE_getEditorParseTree(editor);
+      }
+
       return ATmake("snd-value(parse-tree(<term>))", 
                     PT_makeTermFromParseTree(parse_tree));
     }

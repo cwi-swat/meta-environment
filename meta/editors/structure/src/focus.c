@@ -255,3 +255,13 @@ SE_FocusList removeFocus(SE_FocusList foci, SE_Focus focus)
 
 /*}}}  */
 
+/*{{{  ATbool SE isFocusRoot(SE_Focus focus) */
+
+ATbool SE_isFocusRoot(SE_Focus focus)
+{
+  return SE_isPathRoot(SE_getFocusPath(focus));
+}
+
+/*}}}  */
+
+
