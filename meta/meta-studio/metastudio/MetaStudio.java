@@ -404,6 +404,14 @@ public class MetaStudio extends JFrame implements UserInterfaceTif, Runnable, Mo
         }
       }
     });
+    newModulePopup.add(new AbstractAction("Delete this module") {
+      public void actionPerformed(ActionEvent event) {
+        Object[] values = moduleList.getSelectedValues();
+        for (int i = 0; i < values.length; i++) {
+          bridge.postEvent(factory.make("delete-module(<str>)", (String) values[i]));
+        }
+      }
+    });
 
     //}}}
 
