@@ -1,0 +1,12 @@
+module Nats
+
+imports Layout
+
+exports
+  sorts NAT-CON
+  lexical syntax
+    [0-9]+ -> NAT-CON 
+
+hiddens
+  variables
+    "Char+"[0-9]* -> CHAR+

@@ -1,0 +1,13 @@
+module Types
+
+imports Booleans
+
+exports
+  sorts Type
+  context-free syntax
+    "natural"     -> Type
+    "string"      -> Type
+    "nil-type"    -> Type
+    "compatible" "(" Type "," Type ")" -> Bool 
+  variables
+    "Type"[0-9]*  -> Type
