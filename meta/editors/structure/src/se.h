@@ -43,24 +43,4 @@
 
 void AFinitAsFixPatterns();
 
-extern ATerm pattern_asfix_module;
-extern ATerm pattern_asfix_term;
-extern ATerm pattern_asfix_imports;
-extern ATerm pattern_asfix_ews;
-extern ATerm pattern_asfix_ws;
-extern ATerm pattern_asfix_nlws;
-extern ATerm pattern_asfix_sort;
-extern ATerm pattern_asfix_l;
-extern ATerm pattern_asfix_ql;
-extern ATerm pattern_asfix_sep;
-extern ATerm pattern_asfix_iter;
-extern ATerm pattern_asfix_itersep;
-extern ATerm pattern_asfix_noattrs;
-extern ATerm pattern_asfix_attrs;
-extern ATerm pattern_asfix_prod;
-extern ATerm pattern_asfix_appl;
-extern ATerm pattern_asfix_list;
-extern ATerm pattern_asfix_lex;
-extern ATerm pattern_asfix_id;
-
 #endif /* SE_H */
