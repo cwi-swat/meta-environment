@@ -1,0 +1,27 @@
+muasf2muasf(
+
+module AUX-MuASF2C6 
+
+signature lf_AUX_MuASF2C6_2_recursive(_,_) {recursive(lf_AUX_MuASF2C6_2)};
+lf_AUX_MuASF2C6_2(_,_);
+ef1(_,_) {external};
+"{sort(\"FuncDef\"),ql(\";\")}"(_) 
+
+rules 
+
+lf_AUX_MuASF2C6_2_recursive("{sort(\"FuncDef\"),ql(\";\")-ignored}"(Funcdef)) = ef1(Funcdef, Nametable);
+
+ef1(Funcdef,Nametable1) == Nametable2 & 
+lf_AUX_MuASF2C6_2("{sort(\"FuncDef\"),ql(\";\")}"(+Funcdefp),Nametable2) == Nametable3 
+==> 
+lf_AUX_MuASF2C6_2_recursive("{sort(\"FuncDef\"),ql(\";\")-ignored}"(cons(Funcdef,+Funcdefp))) = Nametable3;
+
+lf_AUX_MuASF2C6_2("{sort(\"FuncDef\"),ql(\";\")}"(Funcdef),Nametable) = ef1(Funcdef, Nametable) ; 
+
+ef1(Funcdef,Nametable1) == Nametable2 & 
+lf_AUX_MuASF2C6_2("{sort(\"FuncDef\"),ql(\";\")}"(+Funcdefp),Nametable2) == Nametable3 
+==> 
+lf_AUX_MuASF2C6_2("{sort(\"FuncDef\"),ql(\";\")}"(cons(Funcdef,+Funcdefp)),Nametable1) = Nametable3, 
+
+(("{sort(\"FuncDef\"),ql(\";\")}",lf_AUX_MuASF2C6_1,), ("prod(id(\"MuASF2C\"),w(\"\"),[ql(\"funcdefs2table\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NameTable\"),w(\"\"),no-attrs)", lf_AUX_MuASF2C6_2, ), ("prod(id(\"MuASF2C\"),w(\"\"),[ql(\"funcdefs2table\"),w(\"\"),ql(\"(\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\";\"),w(\"\"),l(\"}\"),w(\"\"),l(\"+\")),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NameTable\"),w(\"\"),no-attrs)", lf_AUX_MuASF2C6_2_recursive, ), ("prod(id(\"MuASF2C\"),w(\"\"),[ql(\"funcdef2table\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"FuncDef\"),w(\"\"),ql(\",\"),w(\"\"),sort(\"NameTable\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NameTable\"),w(\"\"),no-attrs)",ef1,),
+           ef, 2, 3))

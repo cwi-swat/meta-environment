@@ -1,0 +1,48 @@
+%% Old Module
+%% ----------
+%% module AUX-Set4 
+%% 
+%% signature 
+%%   lf_AUX_Set4_1(_,_);
+%%   ef1(_) {external};
+%%   "{sort(\"E\")}"(_) 
+%% 
+%% rules 
+%% 
+%%   lf_AUX_Set4_1(E,ef1("{sort(\"E\")}"(cons(*E1,cons(E,*E2))))) = 
+%%     lf_AUX_Set4_1(E,ef1("{sort(\"E\")}"(cons(*E1,*E2)))); 
+%% 
+%% default: 
+%% 
+%%   lf_AUX_Set4_1(E,S) = S
+%% 
+%% 
+%% Old Module's table
+%% 
+%% ,(("prod(id(\"Set\"),w(\"\"),[ql(\"filter\"),w(\"\"),sort(\"E\"),w(\"\"),ql(\"from\"),w(\"\"),sort(\"S\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"S\"),w(\"\"),no-attrs)",lf_AUX_Set4_1,),("prod(id(\"Set\"),w(\"\"),[iter(sort(\"E\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"S\"),w(\"\"),no-attrs)",ef1,),("{sort(\"E\")}",lf2,),ef,2,3)
+%% 
+
+
+module AUX-Set4 
+ 
+ signature 
+   lf_AUX_Set4_1(_,_);
+   lf_AUX_Set4_rec(_,_);
+   ef1(_) {external};
+   "{sort(\"E\")}"(_) 
+ 
+ rules 
+ 
+   lf_AUX_Set4_1(E,ef1("{sort(\"E\")}"(cons(*E1,cons(E,*E2))))) = 
+     lf_AUX_Set4_rec(E,cons(*E1,*E2)); 
+
+ default: 
+ 
+   lf_AUX_Set4_1(E,S) = S
+
+ lf_AUX_Set4_rec(E,cons(*E1,cons(E,*E2))) = 
+     lf_AUX_Set4_rec(E,cons(*E1,*E2)); 
+
+ default: 
+ 
+   lf_AUX_Set4_rec(E,S) = ef1("{sort(\"E\")}"(S))

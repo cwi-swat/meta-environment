@@ -1,0 +1,40 @@
+muasf2muasf(module 
+
+AUX-MuASF-Term2C10 
+
+signature 
+
+lf_AUX_MuASF_Term2C10_4(_,_,_,_);
+ef2(_) {external};
+ef3(_,_) {external};
+ef4(_,_) {external};
+ef5(_) {external};
+ef6(_) {external};
+"{sort(\"CHAR\")}"(_);
+ef7(_) {external};
+"{sort(\"Term\"),ql(\",\")}"(_);
+"{sort(\"NamePair\"),ql(\",\")}"(_);
+ef1(_) {external};
+"{sort(\"Expression\"),ql(\",\")}"(_) 
+
+rules 
+
+lf_AUX_MuASF_Term2C10_4(Int,"{sort(\"Term\"),ql(\",\")}"(null),"{sort(\"Expression\"),ql(\",\")}"(*ActualArgs),"{sort(\"NamePair\"),ql(\",\")}"(*Namepairs)) = 
+  ef1("{sort(\"Expression\"),ql(\",\")}"(*ActualArgs));
+
+ef3(ActualArg1,"{sort(\"NamePair\"),ql(\",\")}"(*Namepairs)) == ActualArg2 & 
+lf_AUX_MuASF_Term2C10_4(ef4(ef5(ef6(ef7("{sort(\"CHAR\")}"(1)))),Int),"{sort(\"Term\"),ql(\",\")}"(cons(*Terms1,*Terms2)),"{sort(\"Expression\"),ql(\",\")}"(*ActualArgs1),"{sort(\"NamePair\"),ql(\",\")}"(*Namepairs)) == ef1("{sort(\"Expression\"),ql(\",\")}"(*ActualArgs2)) 
+==> 
+lf_AUX_MuASF_Term2C10_4(Int,"{sort(\"Term\"),ql(\",\")}"(cons(*Terms1,cons(ef2(Int),*Terms2))),"{sort(\"Expression\"),ql(\",\")}"(cons(ActualArg1,*ActualArgs1)),"{sort(\"NamePair\"),ql(\",\")}"(*Namepairs)) = 
+  ef1("{sort(\"Expression\"),ql(\",\")}"(cons(ActualArg2,*ActualArgs2)));
+
+ default: 
+lf_AUX_MuASF_Term2C10_4(ef4(ef5(ef6(ef7("{sort(\"CHAR\")}"(1)))),Int),"{sort(\"Term\"),ql(\",\")}"(*Terms),"{sort(\"Expression\"),ql(\",\")}"(*ActualArgs1),"{sort(\"NamePair\"),ql(\",\")}"(*Namepairs)) == ef1("{sort(\"Expression\"),ql(\",\")}"(*ActualArgs2)) 
+==> 
+lf_AUX_MuASF_Term2C10_4(Int,"{sort(\"Term\"),ql(\",\")}"(*Terms),"{sort(\"Expression\"),ql(\",\")}"(cons(ActualArg,*ActualArgs1)),"{sort(\"NamePair\"),ql(\",\")}"(*Namepairs)) =
+  ef1("{sort(\"Expression\"),ql(\",\")}"(cons(ActualArg,*ActualArgs2))),
+
+
+
+
+(("{sort(\"Term\"),ql(\",\")}",lf_AUX_MuASF_Term2C10_1,),("{sort(\"Expression\"),ql(\",\")}",lf_AUX_MuASF_Term2C10_2,),("{sort(\"NamePair\"),ql(\",\")}",lf_AUX_MuASF_Term2C10_3,),("prod(id(\"MuASF-Term2C\"),w(\"\"),[ql(\"delay-args\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Int\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Term\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),no-attrs)",lf_AUX_MuASF_Term2C10_4,),("prod(id(\"C\"),w(\"\"),[iter-sep(l(\"{\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\"))],w(\"\"),l(\"->\"),w(\"\"),sort(\"Argument-expression-list\"),w(\"\"),no-attrs)",ef1,),("prod(id(\"MuASF\"),w(\"\"),[sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Term\"),w(\"\"),no-attrs)",ef2,),("prod(id(\"MuASF-Term2C\"),w(\"\"),[ql(\"delay-term\"),w(\"\"),ql(\"(\"),w(\"\"),sort(\"Expression\"),w(\"\"),ql(\",\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"NamePair\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Expression\"),w(\"\"),no-attrs)",ef3,),("prod(id(\"Basic-Integers\"),w(\"\"),[sort(\"Int\"),w(\"\"),ql(\"+\"),w(\"\"),sort(\"Int\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))",ef4,left),("prod(id(\"Basic-Integers\"),w(\"\"),[sort(\"IntCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Int\"),w(\"\"),no-attrs)",ef5,),("prod(id(\"IntCon\"),w(\"\"),[sort(\"NatCon\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"IntCon\"),w(\"\"),no-attrs)",ef6,),("{sort(\"CHAR\")}",lf5,),("prod(id(\"GEN-LexConsFuncs\"),w(\"\"),[ql(\"natcon\"),w(\"\"),ql(\"(\"),w(\"\"),iter(sort(\"CHAR\"),w(\"\"),l(\"*\")),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"NatCon\"),w(\"\"),no-attrs)",ef7,),ef,8,6))

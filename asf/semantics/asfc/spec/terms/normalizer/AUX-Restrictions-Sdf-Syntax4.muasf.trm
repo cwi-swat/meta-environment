@@ -1,0 +1,37 @@
+optimize-muasf(module AUX-Restrictions-Sdf-Syntax4 
+
+signature 
+
+lf_AUX_Restrictions_Sdf_Syntax4_2(_);
+ef5(_,_) {external};
+ef1(_) {external};
+"{sort(\"Lookahead\"),ql(\",\")}"(_);
+ef8(_,_) {external};
+ef4(_,_) {external};
+ef6(_,_) {external};
+ef7(_,_) {external};
+ef2(_) {external};
+ef3 {external} 
+
+rules 
+
+lf_AUX_Restrictions_Sdf_Syntax4_2("{sort(\"Lookahead\"),ql(\",\")}"(cons(*La1,cons(ef1(ef2(ef3)),*La2)))) = lf_AUX_Restrictions_Sdf_Syntax4_2("{sort(\"Lookahead\"),ql(\",\")}"(cons(*La1,*La2)));
+
+ lf_AUX_Restrictions_Sdf_Syntax4_2("{sort(\"Lookahead\"),ql(\",\")}"(cons(ef4(cc2,las),cons(*La1,cons(ef1(cc1),*La2))))) = lf_AUX_Restrictions_Sdf_Syntax4_2("{sort(\"Lookahead\"),ql(\",\")}"(cons(ef1(cc1),cons(ef4(cc2,las),cons(*La1,*La2)))));
+
+ lf_AUX_Restrictions_Sdf_Syntax4_2("{sort(\"Lookahead\"),ql(\",\")}"(cons(*La1,cons(ef1(cc1),cons(*La2,cons(ef1(cc2),*La3)))))) = lf_AUX_Restrictions_Sdf_Syntax4_2("{sort(\"Lookahead\"),ql(\",\")}"(cons(*La1,cons(ef1(ef5(cc1,cc2)),cons(*La2,*La3)))));
+
+ ef7(cc1,cc2) == cc3 & 
+cc3 != ef2(ef3) 
+==> 
+lf_AUX_Restrictions_Sdf_Syntax4_2("{sort(\"Lookahead\"),ql(\",\")}"(cons(ef1(cc1),cons(*La2,cons(ef4(cc2,las),*La3))))) = 
+lf_AUX_Restrictions_Sdf_Syntax4_2("{sort(\"Lookahead\"),ql(\",\")}"(cons(ef1(cc1),cons(*La2,cons(ef4(ef6(cc2,cc3),las),*La3)))));
+
+ef7(cc1,cc2) == cc3 & 
+cc3 != ef2(ef3) 
+==> 
+lf_AUX_Restrictions_Sdf_Syntax4_2("{sort(\"Lookahead\"),ql(\",\")}"(cons(*La1,cons(ef4(cc1,las1),cons(*La2,cons(ef4(cc2,las2),*La3)))))) = 
+  lf_AUX_Restrictions_Sdf_Syntax4_2("{sort(\"Lookahead\"),ql(\",\")}"(cons(*La1,cons(ef4(ef6(cc1,cc3),las1),cons(ef4(cc3,ef8(las1,las2)),cons(*La2,cons(ef4(ef6(cc2,cc3),las2),*La3))))))),
+
+
+(("{sort(\"Lookahead\"),ql(\",\")}",lf_AUX_Restrictions_Sdf_Syntax4_1,),("prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[ql(\"[[\"),w(\"\"),iter-sep(l(\"{\"),w(\"\"),sort(\"Lookahead\"),w(\"\"),ql(\",\"),w(\"\"),l(\"}\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"]]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Lookaheads\"),w(\"\"),no-attrs)",lf_AUX_Restrictions_Sdf_Syntax4_2,),("prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Lookahead\"),w(\"\"),no-attrs)",ef1,),("prod(id(\"Character-Class-Syntax\"),w(\"\"),[ql(\"[\"),w(\"\"),sort(\"OptCharRanges\"),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClass\"),w(\"\"),no-attrs)",ef2,),("prod(id(\"Character-Class-Syntax\"),w(\"\"),[],w(\"\"),l(\"->\"),w(\"\"),sort(\"OptCharRanges\"),w(\"\"),no-attrs)",ef3,),("prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[sort(\"CharClass\"),w(\"\"),ql(\".\"),w(\"\"),sort(\"Lookaheads\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Lookahead\"),w(\"\"),no-attrs)",ef4,),("prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"CharClass\"),w(\"\"),ql(\"\\\\\\\\/\"),w(\"\"),sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClass\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\")],w(\"\"),l(\"}\")))",ef5,left),("prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"CharClass\"),w(\"\"),ql(\"/\"),w(\"\"),sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClass\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\"),w(\"\"),sep(\",\"),w(\"\"),l(\"memo\")],w(\"\"),l(\"}\")))",ef6,left,memo),("prod(id(\"Character-Class-Syntax\"),w(\"\"),[sort(\"CharClass\"),w(\"\"),ql(\"/\\\\\\\\\"),w(\"\"),sort(\"CharClass\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"CharClass\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"left\"),w(\"\"),sep(\",\"),w(\"\"),l(\"memo\")],w(\"\"),l(\"}\")))",ef7,left,memo),("prod(id(\"Restrictions-Sdf-Syntax\"),w(\"\"),[sort(\"Lookaheads\"),w(\"\"),ql(\"|\"),w(\"\"),sort(\"Lookaheads\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Lookaheads\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"right\")],w(\"\"),l(\"}\")))",ef8,right),ef,9,3))

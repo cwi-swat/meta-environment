@@ -1,0 +1,21 @@
+optimize-muasf(
+
+
+module AUXSet2 
+
+signature 
+
+  lf_AUXSet2_2(_);
+  ef1(_) {external};
+  "{sort(\"E\")}"(_) 
+
+rules 
+ 
+   lf_AUXSet2_2("{sort(\"E\")}"(cons(*E1,
+    cons(ef1(lf_AUXSet2_2("{sort(\"E\")}"(*E2))),*E3)))) = 
+  lf_AUXSet2_2("{sort(\"E\")}"(cons(*E1,cons(*E2,*E3))))
+
+
+, (("{sort(\"E\")}",lf_AUXSet2_1,),("prod(id(\"Set\"),w(\"\"),[ql(\"[\"),w(\"\"),iter(sort(\"E\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"S\"),w(\"\"),no-attrs)",lf_AUXSet2_2,),("prod(id(\"Flatten\"),w(\"\"),[sort(\"S\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"E\"),w(\"\"),no-attrs)",ef1,),ef,2,3)
+
+)

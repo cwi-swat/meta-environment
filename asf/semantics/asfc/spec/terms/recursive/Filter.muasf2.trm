@@ -1,0 +1,17 @@
+module AUX-Set4
+                     
+signature 
+  lf_AUX_Set4_1(_,_);
+  ef1(_) {external};
+  "{sort(\"E\")}"(_)
+                     
+rules 
+
+  term_equal(E,Enew1) =: t 
+  ==> 
+  lf_AUX_Set4_1(E,ef1("{sort(\"E\")}"(cons(*E1,cons(Enew1,*E2))))) = 
+    lf_AUX_Set4_1(E,ef1("{sort(\"E\")}"(cons(*E1,*E2)))); 
+
+default:
+  
+  lf_AUX_Set4_1(E,S) = S

@@ -1,0 +1,93 @@
+#include "asc-support.h"
+static Symbol lf_AUXSet2_2sym;
+static ATerm lf_AUXSet2_2 (ATerm arg1);
+static Symbol ef1sym;
+static funcptr ef1;
+static Symbol lf_AUXSet2_1sym;
+static ATerm lf_AUXSet2_1 (ATerm arg1);
+void
+register_AUXSet2 ()
+{
+  lf_AUXSet2_2sym =
+    ATmakeSymbol
+    ("prod(id(\"Set\"),w(\"\"),[ql(\"[\"),w(\"\"),iter(sort(\"E\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"S\"),w(\"\"),no-attrs)",
+     1, ATtrue);
+  ATprotectSymbol (lf_AUXSet2_2sym);
+  lf_AUXSet2_1sym = ATmakeSymbol ("listtype(sort(\"E\"))", 1, ATtrue);
+  ATprotectSymbol (lf_AUXSet2_1sym);
+  register_prod (ATparse ("listtype(sort(\"E\"))"),
+		 lf_AUXSet2_1, lf_AUXSet2_1sym);
+    register_prod (ATparse
+		   ("prod(id(\"Set\"),w(\"\"),[ql(\"[\"),w(\"\"),iter(sort(\"E\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"S\"),w(\"\"),no-attrs)"),
+		   lf_AUXSet2_2, lf_AUXSet2_2sym);
+}
+
+void
+resolve_AUXSet2 ()
+{
+  ef1 =
+    lookup_func (ATreadFromString
+		 ("prod(id(\"Flatten\"),w(\"\"),[sort(\"S\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"E\"),w(\"\"),no-attrs)"));
+  ef1sym =
+    lookup_sym (ATreadFromString
+		("prod(id(\"Flatten\"),w(\"\"),[sort(\"S\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"E\"),w(\"\"),no-attrs)"));
+}
+
+void
+init_AUXSet2 ()
+{
+
+}
+ATerm
+lf_AUXSet2_2 (ATerm arg0)
+{
+  {
+    ATerm tmp[4];
+    FUNC_ENTRY (lf_AUXSet2_2sym, ATmakeAppl (lf_AUXSet2_2sym, arg0));
+    {
+      ATerm ltmp[1];
+    lbl_lf_AUXSet2_2:ltmp[0] = arg0;
+      if (check_sym (ltmp[0], lf_AUXSet2_1sym))
+	{
+	  (tmp[0] = arg_0 (ltmp[0]));
+	  {
+	    ATerm atmp0010;
+	    ATerm atmp000[2];
+	    (atmp000[0] = tmp[0]);
+	    (atmp000[1] = tmp[0]);
+	    while (not_empty_list (tmp[0]))
+	      {
+		(atmp0010 = list_head (tmp[0]));
+		(tmp[0] = list_tail (tmp[0]));
+		if (check_sym (atmp0010, ef1sym))
+		  {
+		    (tmp[1] = arg_0 (atmp0010));
+		    if (check_sym (tmp[1], lf_AUXSet2_2sym))
+		      {
+			(tmp[2] = arg_0 (tmp[1]));
+			if (check_sym (tmp[2], lf_AUXSet2_1sym))
+			  {
+			    (tmp[3] = arg_0 (tmp[2]));
+			    (arg0 =
+			     lf_AUXSet2_1 (cons
+					   (slice (atmp000[0], atmp000[1]),
+					    cons (make_list (tmp[3]),
+						  tmp[0]))));
+			      goto lbl_lf_AUXSet2_2;}
+		      }
+		  }
+		(atmp000[1] = list_tail (atmp000[1]));
+		(tmp[0] = atmp000[1]);
+	      }
+	  }
+	}
+      FUNC_EXIT (make_nf1 (lf_AUXSet2_2sym, ltmp[0]));
+    }
+  }
+}
+ATerm
+lf_AUXSet2_1 (ATerm arg0)
+{
+  CONS_ENTRY (lf_AUXSet2_1sym, ATmakeAppl (lf_AUXSet2_1sym, arg0));
+  CONS_EXIT (make_nf1 (lf_AUXSet2_1sym, arg0));
+}

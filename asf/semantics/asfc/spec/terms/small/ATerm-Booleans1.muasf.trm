@@ -1,0 +1,14 @@
+(
+module AUX-ATerm-Booleans1 
+
+signature 
+
+  lf_AUX_ATerm_Booleans1_1;
+  lf_AUX_ATerm_Booleans1_2;
+  lf_AUX_ATerm_Booleans1_3(_) 
+
+rules 
+
+,(("prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"true\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)",lf_AUX_ATerm_Booleans1_1,),("prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"false\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),no-attrs)",lf_AUX_ATerm_Booleans1_2,),("prod(id(\"ATerm-Booleans\"),w(\"\"),[ql(\"(\"),w(\"\"),sort(\"Bool\"),w(\"\"),ql(\")\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"Bool\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"bracket\")],w(\"\"),l(\"}\")))",lf_AUX_ATerm_Booleans1_3,bracket),ef,1,4)
+
+)

@@ -1,0 +1,4 @@
+(module AUX-Set2 signature lf_AUX_Set2_1(_);ef1(_) {external};"{sort(\"E\")}"(_) rules lf_AUX_Set2_1(ef1("{sort(\"E\")}"(cons(E2,*E*)))) == ef1("{sort(\"E\")}"(*E*2)) ==> lf_AUX_Set2_1(ef1("{sort(\"E\")}"(cons(E1,cons(E2,*E*))))) = ef1("{sort(\"E\")}"(cons(*E*2,E1))); default: lf_AUX_Set2_1(ef1("{sort(\"E\")}"(E))) = ef1("{sort(\"E\")}"(E)),(("prod(id(\"Set\"),w(\"\"),[ql(\"reverse\"),w(\"\"),sort(\"S\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"S\"),w(\"\"),no-attrs)",lf_AUX_Set2_1,),("prod(id(\"Set\"),w(\"\"),
+
+
+[ql(\"[\"),w(\"\"),iter(sort(\"E\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"S\"),w(\"\"),attrs(l(\"{\"),w(\"\"),[l(\"constructor\")],w(\"\"),l(\"}\")))",ef1,constructor),("{sort(\"E\")}",lf2,),ef,2,3))

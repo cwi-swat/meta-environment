@@ -1,0 +1,28 @@
+muASF2C-internal(AUXSet2,
+module AUXSet2
+                     
+
+signature lf_AUXSet2_2_recursive(_) {recursive(lf_AUXSet2_2)};lf_AUXSet2_2(_);
+  ef1(_) {external};
+  "{sort(\"E\")}"(_)
+                     
+
+rules 
+
+V1 =: ef1(CV1) & 
+CV1 =: lf_AUXSet2_2(CV2) & 
+CV2 =: "{sort(\"E\")}-trans"(V2) 
+==> 
+lf_AUXSet2_2_recursive("{sort(\"E\")-removed}"(cons(*E1,cons(V1,*E3)))) = 
+  lf_AUXSet2_2_recursive("{sort(\"E\")-removed}"(cons(*E1,cons(V2,*E3)))); 
+
+V1 =: ef1(CV1) & 
+CV1 =: lf_AUXSet2_2(CV2) & 
+CV2 =: "{sort(\"E\")}-trans"(V2) 
+==> 
+lf_AUXSet2_2("{sort(\"E\")}"(cons(*E1,cons(V1,*E3)))) = 
+  lf_AUXSet2_2_recursive("{sort(\"E\")-removed}"(cons(*E1,cons(V2,*E3))))
+
+, (("{sort(\"E\")}",lf_AUXSet2_1,),("prod(id(\"Set\"),w(\"\"),[ql(\"[\"),w(\"\"),iter(sort(\"E\"),w(\"\"),l(\"*\")),w(\"\"),ql(\"]\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"S\"),w(\"\"),no-attrs)",lf_AUXSet2_2,),("prod(id(\"Flatten\"),w(\"\"),[sort(\"S\")],w(\"\"),l(\"->\"),w(\"\"),sort(\"E\"),w(\"\"),no-attrs)",ef1,),ef,2,3)
+
+)
