@@ -5,8 +5,6 @@
 #include <string.h>
 
 #include <MEPT-utils.h>
-#include <asfix2.h>
-#include <conversion.h>
 
 #ifndef WIN32
 #include <atb-tool.h>

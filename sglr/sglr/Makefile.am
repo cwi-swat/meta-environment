@@ -18,7 +18,7 @@ bin_PROGRAMS = sglr
 sglr_SOURCES = sglr.tif.c sglr-main.c getopt.c getopt1.c
 sglr_LDADD = \
 	-L$(top_builddir)/libsglr -lsglr \
-	-L$(PT_SUPPORT)/lib -lconversion -lmept -lasfix2 \
+	-L$(PT_SUPPORT)/lib -lmept \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ATERM)/lib -lATerm \
 	$(SOCKLIBS)
