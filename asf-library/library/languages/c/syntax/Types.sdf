@@ -95,7 +95,8 @@ exports
     "double"   -> BasicTypeName 
     "signed"   -> BasicTypeName 
     "unsigned" -> BasicTypeName 
-    "void"     -> BasicTypeName 
+    "void"     -> BasicTypeName
+    Identifier -> BasicTypeName 
 
   context-free syntax
     StructSpecifier -> ElaboratedTypeName

@@ -64,6 +64,12 @@ exports
     "(" PostfixingAbstractDeclarator ")" -> PostfixAbstractDeclarator 
     "(" UnaryAbstractDeclarator ")" PostfixingAbstractDeclarator -> PostfixAbstractDeclarator 
 
+  context-free priorities
+
+     IdentifierDeclarator PostfixingAbstractDeclarator -> IdentifierDeclarator >
+     "*" TypeQualifierList? IdentifierDeclarator -> IdentifierDeclarator 
+
+
 hiddens 
 
 sorts

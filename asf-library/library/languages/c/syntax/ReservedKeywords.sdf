@@ -37,3 +37,7 @@ exports
     "static"    |
     "while"    -> Identifier {reject}
 
+lexical restrictions
+
+   "&" -/- [\&] %% a && b should not be a &(&b)
+   "+" -/- [\+] %% (a ++ b) is illegal

@@ -21,22 +21,19 @@ sorts Expression CommaExpression CommaExpressionOpt StringLiteralList Constant
     StringLiteralList          -> Expression 
     "(" CommaExpressionOpt ")" -> Expression 
 
-
   context-free syntax
-    Expression "[" Expression "]"             -> Expression
-    Expression "(" ExpressionList ")"         -> Expression
-    Expression "." | "->" MemberName          -> Expression
+    "[" Expression "]" -> ArrayIndexer
+    Expression ArrayIndexer             -> Expression
+    "(" {Expression ","}* ")"           -> BracketedExpressionList
+    Expression BracketedExpressionList   -> Expression
+    Expression "." | "->" Identifier          -> Expression
     Expression "++" | "--"                    -> Expression
-
-  aliases
-    Identifier         -> MemberName
-    {Expression ","}*  -> ExpressionList
 
   context-free syntax
     "++" | "--" | "sizeof"  Expression -> Expression 
     "sizeof" "(" TypeName ")"          -> Expression 
     "&" | "*" | "+" | "-" | "~" | "!" Expression -> Expression 
-    "(" TypeName ")" Expression -> Expression 
+    "(" TypeName ")" Expression -> Expression
     Expression "*" | "/" | "%" Expression -> Expression {left}
     Expression "+" |  "-" Expression -> Expression {left}
     Expression "<<" | ">>" Expression -> Expression {left}
@@ -58,9 +55,9 @@ sorts Expression CommaExpression CommaExpressionOpt StringLiteralList Constant
 
 context-free priorities
 {
-Expression "[" Expression "]"             -> Expression
-Expression "(" ExpressionList ")"         -> Expression
-Expression "." | "->" MemberName          -> Expression
+Expression ArrayIndexer             -> Expression
+Expression BracketedExpressionList         -> Expression
+Expression "." | "->" Identifier          -> Expression
 Expression "++" | "--"                    -> Expression } >
 
 Expression  "="  | "*="  | "/="  |
@@ -71,9 +68,9 @@ Expression  "="  | "*="  | "/="  |
 context-free priorities
 
 {
-Expression "[" Expression "]"             -> Expression
-Expression "(" ExpressionList ")"      -> Expression
-Expression "." | "->" MemberName          -> Expression
+Expression ArrayIndexer             -> Expression
+Expression BracketedExpressionList      -> Expression
+Expression "." | "->" Identifier          -> Expression
 Expression "++" | "--"                    -> Expression } >
 
 {
@@ -97,3 +94,10 @@ Expression  "="  | "*="  | "/="  |
 		 "%="  | "+="  | "-="  |
 		 "<<=" | ">>=" | "&="  |
 		 "^="  | "|="  Expression -> Expression {left}
+
+
+context-free priorities
+
+  Expression BracketedExpressionList -> Expression >
+  "(" CommaExpressionOpt ")" -> Expression
+
