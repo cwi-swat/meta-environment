@@ -137,6 +137,7 @@ public class MetaStudio extends JFrame  {
         JSplitPane mainPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tabs, panel);
         mainPanel.setResizeWeight(0.8);
         mainPanel.setDividerLocation(0.8);
+        mainPanel.setOneTouchExpandable(true);
         
         return mainPanel;
     }

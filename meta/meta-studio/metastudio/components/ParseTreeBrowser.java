@@ -17,8 +17,10 @@ public class ParseTreeBrowser extends ToolComponent {
                 new ParseTreePanel((PureFactory)factory, getBridge()),
                 new BoxTree(factory, getBridge()));
         
+        //TODO: Preferences?
         pane.setDividerLocation(0.5);
         pane.setResizeWeight(0.5);
+        pane.setOneTouchExpandable(true);
         
         add(pane);
     }

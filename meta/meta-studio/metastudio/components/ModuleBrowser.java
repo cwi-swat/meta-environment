@@ -33,6 +33,7 @@ public class ModuleBrowser extends ToolComponent {
         JSplitPane moduleBrowser =
         new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, left, importGraphPanel);
         moduleBrowser.setDividerLocation(-1);
+        moduleBrowser.setOneTouchExpandable(true);
         
         add(moduleBrowser);
     }
