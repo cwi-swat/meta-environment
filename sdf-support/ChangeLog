@@ -1,5 +1,9 @@
 $Id$
 
+2003/02/11 ({jong,markvdb}@cwi.nl)
+ * Added \r and restructured the AlphaNumericEscapeChar.
+ * Regenerated.
+
 Sat Feb  8 08:46:04 CET 2003 <jong@cwi.nl>
  * add SDF_removeSymbolAnnotations:
    FIXME: duplicate escape() function from asf-library until we have
