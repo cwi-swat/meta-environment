@@ -3,7 +3,6 @@ module RscriptCalculator
 imports Rstore
 
 exports
-   sorts TESTREPORT %%{ DCLRVAR ","}+
 
    context-free syntax
 
@@ -11,15 +10,6 @@ exports
 
         eval-rscript(RSCRIPT)                 			-> RSTORE
         eval-rscript(RSCRIPT, RVAR, RSTORE)   			-> Elem
-
-%% Test suite support
-
-	"All" Integer "tests" "passed"				-> TESTREPORT
-	Integer "of" Integer "tests" "failed:" RVALUE 		-> TESTREPORT
-
-	testsuite-report(Integer, Integer, RVALUE) 		-> TESTREPORT
-	eval-rscript-testsuite(RSCRIPT)				-> TESTREPORT
-	increment(RVAR, RSTORE)					-> RSTORE
 
 %% should be hidden
 

@@ -1,0 +1,28 @@
+equations
+
+[ETS1]	$Rstore = eval-rstats($Stat*, rstore(<NPASSED,0>,<NFAILED,0>,<FAILED,{}>)),
+	$Integer1 = value(NPASSED, $Rstore),
+	$Integer2 = value(NFAILED, $Rstore),
+	$Val = value(FAILED, $Rstore)
+	==========================================================
+	eval-rscript-testsuite($Stat*) = testsuite-report($Integer1, $Integer2, $Val)
+
+[TSR1] testsuite-report($Integer, 0, $Val) = All $Integer tests passed
+[TSR2] 	$Integer2 != 0
+	===========================================================
+	testsuite-report($Integer1, $Integer2, $Val) = 
+	$Integer2 of $Integer1 tests failed: $Val
+
+%% Increment a variable
+
+[INC1]	value($Var, $Rstore) = $Integer
+	==================================================
+	increment($Var, $Rstore) = assign($Var, $Integer + 1, $Rstore)
+
+[S10]	evalp($Exp,$Rstore) = true
+	===================================================
+	eval-rstat(assert $String : $Exp, $Rstore)= increment(NPASSED, $Rstore)
+
+[S11]	evalp($Exp,$Rstore) = false, add-elem(FAILED, $String, $Rstore) = $Rstore'
+	===================================================
+	eval-rstat(assert $String : $Exp, $Rstore)= increment(NFAILED, $Rstore')
