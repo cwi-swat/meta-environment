@@ -1,7 +1,7 @@
 equations
 
 [] try(s)        = s <+ id
-[] repeat(s)     = rec x (try(s;x))
+[] repeat(s)     = rec x(try(s;x)) 
 [] bottomup(s)   = rec x(all(x);s)
 [] topdown(s)    = rec x(s;all(x))
 [] downup(s)     = rec x(s;all(x);s)

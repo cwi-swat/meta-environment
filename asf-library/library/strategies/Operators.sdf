@@ -1,16 +1,20 @@
 module strategies/Operators[X]
 
 imports basic/Whitespace
+imports basic/Booleans
 
-exports sorts Strategy Term[[X]]
+exports sorts Strategy
 
 lexical syntax
 
 [a-z] -> StrategyVar
 
 context-free syntax
-    (X=>X)                         -> Strategy {cons("rule")}
-    "fail"                         -> X{cons("fail")}
+    (X=>X)                         	-> Strategy   {cons("rule")}
+    "fail"                     	   	-> X          {cons("fail")}
+    "<" Strategy ">" X 				    	-> X          {cons("apply")}
+
+context-free syntax
     "fail"                         -> Strategy {cons("fail")}
     "id"                           -> Strategy {cons("id")}
     "(" Strategy ")"               -> Strategy {bracket}
@@ -19,11 +23,12 @@ context-free syntax
     Strategy "<+" Strategy         -> Strategy {cons("lchoice"), right}
     StrategyVar                    -> Strategy {cons("var")}
     "rec" StrategyVar "(" Strategy ")" -> Strategy {cons("recursion")}
+
     "some" "(" Strategy ")"        -> Strategy {cons("some")}
     "one" "(" Strategy ")"         -> Strategy {cons("one")}
     "all" "(" Strategy ")"         -> Strategy {cons("all")}
 
-    "<" Strategy ">" X     -> X   {cons("apply")}
+
 
 context-free priorities
     Strategy ";" Strategy          -> Strategy {cons("seq"), right} >
