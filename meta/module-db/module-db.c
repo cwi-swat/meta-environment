@@ -81,6 +81,8 @@ ATerm exists(int cid, char *modulename)
 
 /*}}}  */
 
+/*{{{  ASF_CondEquationList getEquations(ATermList mods) */
+
 ASF_CondEquationList getEquations(ATermList mods)
 {
   ATerm mod, entry, eqsTerm;
@@ -110,6 +112,10 @@ ASF_CondEquationList getEquations(ATermList mods)
   return newAsfEqsList;
 }
 
+/*}}}  */
+
+/*{{{  ATerm get_all_equations(int cid, char *moduleName) */
+
 ATerm get_all_equations(int cid, char *moduleName)
 {
   ATerm name;
@@ -129,6 +135,10 @@ ATerm get_all_equations(int cid, char *moduleName)
   }
 }
 
+/*}}}  */
+
+/*{{{  static ATerm transformEquations(ATermList equations) */
+
 static ATerm transformEquations(ATermList equations)
 {
   ATermList newEquations = ATempty;
@@ -141,6 +151,10 @@ static ATerm transformEquations(ATermList equations)
   }
   return (ATerm)newEquations;
 }  
+
+/*}}}  */
+
+/*{{{  ATerm get_all_equations_for_compiler(int cid, char *moduleName) */
 
 ATerm get_all_equations_for_compiler(int cid, char *moduleName)
 {
@@ -164,6 +178,7 @@ ATerm get_all_equations_for_compiler(int cid, char *moduleName)
 }
 
 /*}}}  */
+
 /*{{{  static void reset_trans_db(void) */
 
 static void reset_trans_db(void)
@@ -185,6 +200,7 @@ void create_module_db(int cid)
 }
 
 /*}}}  */
+
 /*{{{  void clear_module_db(int cid) */
 
 void clear_module_db(int cid)
@@ -481,6 +497,8 @@ void add_text_eqs_section(int cid, char *moduleName, char* path,
 
 /*}}}  */
 
+/*{{{  void update_eqs_text(int cid, char *moduleName, char *eqsText) */
+
 void update_eqs_text(int cid, char *moduleName, char *eqsText)
 {
   ATerm entry;
@@ -501,6 +519,10 @@ void update_eqs_text(int cid, char *moduleName, char *eqsText)
   PutValue(modules_db, atModuleName, entry);
 }
 
+/*}}}  */
+
+/*{{{  void invalidate_sdf(int cid, char *moduleName) */
+
 void invalidate_sdf(int cid, char *moduleName)
 {
   ATerm entry;
@@ -516,6 +538,8 @@ void invalidate_sdf(int cid, char *moduleName)
 
   PutValue(modules_db, atModuleName, entry);
 }
+
+/*}}}  */
 
 /*{{{  void add_empty_eqs_section(int cid, char *moduleName, char* path) */
 
