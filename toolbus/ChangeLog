@@ -1,8 +1,13 @@
 $Id$
 
+2003/11/07 <{jong,jurgenv}@cwi.nl>
+ * Set version of toolbus to 1.0. Notice that versions 0.3 and 0.3.1 
+   are strange because the version before 0.3 was 0.25 (a later version).
+
 Tue Oct 14 09:51:09 CEST 2003 <jong@cwi.nl>
  * toolbus/tools.c:
    - only warn about lost connections if TBverbose is set. Closes #75.
+
 
 2003/09/30 <kooiker@cwi.nl>
  * toolbus/viewer.tcl.src:
