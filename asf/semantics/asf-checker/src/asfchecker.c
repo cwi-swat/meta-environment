@@ -158,8 +158,13 @@ int main(int argc, char *argv[])
 
     msgs = checkAsf(rules);
 
-    displayMessages(msgs);
+    if (!ATisEmpty(msgs)) {
+      displayMessages(msgs);
+      return 1;
+    }
   }
+
+
   return 0;
 }
 
