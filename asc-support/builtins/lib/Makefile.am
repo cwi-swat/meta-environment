@@ -25,6 +25,7 @@ noinst_PROGRAMS=link-test
 link_test_SOURCES=$(BUILTIN_SOURCES) link-test.c
 link_test_LDADD=-L${PT_SUPPORT}/lib -lmept \
 		-L${ATERM}/lib -lATerm
+
 INCLUDES=-I$(ATERM)/include -I$(PT_SUPPORT)/include
 
 UTILS=${top_srcdir}/semantics/builtins/utils
@@ -34,12 +35,12 @@ GENLNKTST=${UTILS}/gen-link-test.sh
 
 CLEANFILES+=forward.c asf-builtins.h link-test.c
 
-forward.c: ${BUILTIN_SOURCES} Makefile
+forward.c: asf-builtins.h ${BUILTIN_SOURCES} Makefile
 	${GENFWD} "${BUILTIN_NAMES}" > $@
 
 asf-builtins.h: ${BUILTIN_SOURCES} Makefile
 	${GENPRTS} "${BUILTIN_NAMES}" > $@
 
-link-test.c: Makefile asf-builtins.h ${BUILTIN_SOURCES}
+link-test.c: asf-builtins.h ${BUILTIN_SOURCES} Makefile 
 	${GENLNKTST} "${BUILTIN_NAMES}" > $@
 
