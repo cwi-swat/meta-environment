@@ -95,6 +95,7 @@ in
   +
     rec-msg(em-delete-session(Sid?))
     . snd-do(EM, delete-session(Sid))
+    . snd-note(em-session-deleted(Sid))
   +
     rec-msg(em-request-transaction(Sid?))
     . snd-eval(EM, request-transaction(Sid))

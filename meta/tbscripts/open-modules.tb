@@ -210,6 +210,7 @@ let
   Filename: str,
   Imports: list,
   ModuleId: str,
+  ParseError: term,
   ParseResult: term,
   Pid: int,
   Summary: term
@@ -221,7 +222,9 @@ in
       rec-msg(parse-tree(Pid, ParseResult?))
     +
       rec-msg(parse-forest(Pid, ParseResult?, Error?))
-      . ParseErrorToSummary(Error, Path, Summary?)
+      . AddFilenameToParseError(Error, Path, ParseError?)
+      . snd-msg(es-make-summary("sglr", Path, [ParseError]))
+      . rec-msg(es-summary(Summary?))
       . snd-msg(ui-show-feedback-summary(Summary))
     )
     . AnnotateTree(ParseResult, Path, AnnotatedTree?)
@@ -249,7 +252,9 @@ in
     . snd-msg(open-syntax-parse-handler-done(Pid, ModuleId))
   +
     rec-msg(parse-error(Pid, Error?))
-    . ParseErrorToSummary(Error, Path, Summary?)
+    . AddFilenameToParseError(Error, Path, ParseError?)
+    . snd-msg(es-make-summary("sglr", Path, [ParseError]))
+    . rec-msg(es-summary(Summary?))
     . snd-msg(ui-show-feedback-summary(Summary))
     . snd-msg(open-syntax-parse-handler-done(Pid))
   )

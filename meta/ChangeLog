@@ -1,5 +1,10 @@
 # $Id$
 
+Wed Apr  6 14:54:18 CEST 2005 <{jong,kooiker}@cwi.nl>
+ * tbscripts:
+   - Update scripts to generate unique errors for each scenario
+   - Untangle ui internals in parsesyntax scenario
+
 Thu Mar 24 11:25:35 CET 2005 <kooiker@cwi.nl>
  * tbscripts/editing.tb:
    - When the modulename for a termfile cannot be determined by its extension

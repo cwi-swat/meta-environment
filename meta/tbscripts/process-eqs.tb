@@ -60,6 +60,7 @@ process GetAsfModule(ModuleId: str) is
 let
   Error: term,
   Equations: term,
+  ParseError: term,
   Summary: term,
   Text: str
 in
@@ -88,7 +89,9 @@ in
         . snd-msg(equations(ModuleId, Equations))
       +
         rec-msg(parse-equations-failed(ModuleId, Error?))
-        . ParseErrorToSummary(Error, ModuleId, Summary?)
+	. AddFilenameToParseError(Error, ModuleId, ParseError?)
+        . snd-msg(es-make-summary("sglr", ModuleId, [ParseError]))
+	. rec-msg(es-summary(Summary?))
         . snd-msg(error-in-equations(ModuleId, Summary))
       )
     fi

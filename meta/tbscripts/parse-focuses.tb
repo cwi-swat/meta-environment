@@ -20,15 +20,9 @@ process HasTextChanged(Sid: term, TextChanged: bool?) is
   snd-msg(te-is-modified(Sid))
   . rec-msg(te-is-modified(Sid, TextChanged?))
 
-process ParseErrorToSummary(Error: term, Filename: str, Summary: term?) is
-let
-  Result: term
-in
+process AddFilenameToParseError(Error: term, Filename: str, Result: term?) is
   snd-msg(es-add-filename-in-error(Filename, Error))
   . rec-msg(es-filename-in-error(Filename, Result?))
-  . snd-msg(es-make-summary("sglr", Filename, [Result]))
-  . rec-msg(es-summary(Summary?))
-endlet
 
 process ParseEditor(Sid: term, Table: term, Nonterminal: term) is
 let
@@ -52,7 +46,6 @@ in
     snd-msg(parse-editor-ok(Sid))
   else
     GetPath(Sid, Path?)
-    . snd-msg(ui-remove-feedback-summary("sglr", Path))
     . ReadFile(Path, Text?)
     . create(EditorParseHandler(Sid), Pid?)
     . ParseText(Pid, Text, Table, Nonterminal)
@@ -65,8 +58,8 @@ let
   Error: term,
   Filename: str,
   Pid: int,
-  ParseResult: term,
-  Summary: term
+  ParseError: term,
+  ParseResult: term
 in
   Pid := process-id
   . GetPath(Sid, Filename?)
@@ -80,15 +73,13 @@ in
     rec-msg(parse-forest(Pid, ParseResult?, Error?))
     . AnnotateTree(ParseResult, Filename, AnnotatedTree?)
     . EditStructure(Sid, AnnotatedTree)
-    . ParseErrorToSummary(Error, Filename, Summary?)
-    . snd-msg(ui-show-feedback-summary(Summary))
-    . snd-msg(parse-editor-failed(Sid))
+    . AddFilenameToParseError(Error, Filename, ParseError?)
+    . snd-msg(parse-editor-failed(Sid, ParseError))
   +
     rec-msg(parse-error(Pid, Error?))
-    . ParseErrorToSummary(Error, Filename, Summary?)
-    . ShowSummary(Sid, Summary)
-    . snd-msg(ui-show-feedback-summary(Summary))
-    . snd-msg(parse-editor-failed(Sid))
+    . AddFilenameToParseError(Error, Filename, ParseError?)
+    . ShowError(Sid, ParseError)
+    . snd-msg(parse-editor-failed(Sid, ParseError))
   )
 endlet
 

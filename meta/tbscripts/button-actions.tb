@@ -493,6 +493,7 @@ in
     . LocateFile(Modulename, sdf, Path?)
     . create(EditSyntax(Path), Pid?)
     . rec-msg(syntax-editor-started(Path, Sid?))
+    . create(CleanupEditTerm(Sid), Pid?)
     . snd-msg(EditorId, done)
   )
   *
@@ -521,6 +522,7 @@ in
       . ReplaceExtension(SdfPath, AsfExt, Path?)
       . snd-msg(ts-put-str-value("path-modulename", Path, Modulename))
       . create(EditEquations(Path), Pid?)
+      . create(CleanupEditTerm(Sid), Pid?)
       . rec-msg(equations-editor-started(Path, Sid?))
       . snd-msg(EditorId, done)
     fi
@@ -978,6 +980,15 @@ in
   delta
 endlet
 
+process CleanupEditTerm(Sid: term) is
+let
+  Path: str
+in
+  subscribe(em-session-deleted(<term>))
+  . rec-note(em-session-deleted(Sid))
+  . snd-msg(ui-remove-feedback-summary("sglr", "sid(42)"))
+endlet
+
 process ActionEditTerm is
 let
   EditorId : term,
@@ -993,6 +1004,7 @@ in
     .
     (
       rec-msg(term-editor-started(Filename, Modulename, Sid?))
+      . create(CleanupEditTerm(Sid), Pid?)
     +
       rec-msg(term-editor-not-started(Filename, Modulename, ErrorMessage?))
       . Error(ErrorMessage, [])
@@ -1381,11 +1393,18 @@ process UnParseTerm(Tree: term, Text: str?) is
   snd-msg(unparse(Tree))
   . rec-msg(unparsed-text(Text?))
 
+process ParseErrorToSummary(ParseError:term, Sid: term, Summary:term?) is
+  snd-msg(es-make-summary("sglr", "sid(42)", [ParseError]))
+  . rec-msg(es-summary(Summary?))
+
 process ParseTerm(Sid: term, Modulename: str) is
 let
   Id: int,
   Nonterminal: term,
+  ParseError: term,
+  Path: str,
   Pid: int,
+  Summary: term,
   Table: term
 in
   Id := process-id
@@ -1393,6 +1412,8 @@ in
   . GetParseTable(Modulename, trm, false, Table?)
   . snd-msg(other-top-sort-hook(trm))
   . rec-msg(other-top-sort-hook-result(sort(Nonterminal?)))
+  . GetPath(Sid, Path?)
+  . snd-msg(ui-remove-feedback-summary("sglr", "sid(42)"))
   . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
   .
   (
@@ -1400,7 +1421,9 @@ in
     . snd-msg(te-clear-focus(Sid))
     . snd-msg(te-display-message(Sid, "Parse OK"))
   +
-    rec-msg(parse-editor-failed(Sid))
+    rec-msg(parse-editor-failed(Sid, ParseError?))
+    . ParseErrorToSummary(ParseError, Sid, Summary?)
+    . snd-msg(ui-show-feedback-summary(Summary))
   )
   . snd-note(ui-status(endstat(Id)))
 endlet
@@ -1414,8 +1437,10 @@ let
   Modulename: str,
   NewModules: list,
   Nonterminal: term,
+  ParseError: term,
   Path: str,
   Pid: int,
+  Summary: term,
   Table: term,
   Text: str,
   Tree: term
@@ -1429,11 +1454,12 @@ in
   . GetParseTable(ModuleId, sdf, true, Table?)
   . snd-msg(syntax-top-sort-hook(sdf))
   . rec-msg(syntax-top-sort-hook-result(sort(Nonterminal?)))
+  . GetPath(Sid, Path?)
+  . snd-msg(ui-remove-feedback-summary("sglr", "sid(42)"))
   . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
   .
   (
     rec-msg(parse-editor-ok(Sid))
-    . GetPath(Sid, Path?)
     . snd-msg(io-get-path-directory(Path))
     . rec-msg(io-directory(Path, Directory?))
     . snd-msg(ts-put-str-value("module-path", Modulename, Directory))
@@ -1469,7 +1495,9 @@ in
                                   [Modulename])))
     )
   +
-    rec-msg(parse-editor-failed(Sid))
+    rec-msg(parse-editor-failed(Sid, ParseError?))
+    . ParseErrorToSummary(ParseError, Sid, Summary?)
+    . snd-msg(ui-show-feedback-summary(Summary))
     . ParseSucceeded := false
     . snd-msg(invalidate-sdf-in-db(Modulename))
   )
@@ -1480,7 +1508,10 @@ process ParseEquations(Sid: term, Modulename: str) is
 let
   Id: int,
   Nonterminal: term,
+  ParseError: term,
+  Path: str,
   Pid: int,
+  Summary: term,
   Table: term,
   Tree: term
 in
@@ -1489,6 +1520,8 @@ in
   . GetParseTable(Modulename, eqs, true, Table?)
   . snd-msg(get-rules-top-sort)
   . rec-msg(set-rules-top-sort(sort(Nonterminal?)))
+  . GetPath(Sid, Path?)
+  . snd-msg(ui-remove-feedback-summary("sglr", "sid(42)"))
   . create(ParseEditor(Sid, Table, Nonterminal), Pid?)
   .
   (
@@ -1502,7 +1535,9 @@ in
     . snd-msg(te-clear-focus(Sid))
     . snd-msg(te-display-message(Sid, "Parse successful"))
   +
-    rec-msg(parse-editor-failed(Sid))
+    rec-msg(parse-editor-failed(Sid, ParseError?))
+    . ParseErrorToSummary(ParseError, Sid, Summary?)
+    . snd-msg(ui-show-feedback-summary(Summary))
   )
   . snd-note(ui-status(endstat(Id)))
 endlet
