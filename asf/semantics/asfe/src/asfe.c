@@ -188,21 +188,14 @@ ATerm RWgetError()
 
 void debugging(ATerm on)
 {
-#ifdef USE_TIDE
   if (ATmatch(on, "on")) {
-    /* Switch on debugging */
-    fprintf(stderr, "switching on debugging!\n");
+#ifdef USE_TIDE
     Tide_connect();
-  }
-  else {
-    /* Switch off debugging */
-    fprintf(stderr, "switching off debugging.\n");
-    Tide_disconnect();
-  }
 #else
-  fprintf(stderr, "*** SORRY, NO DEBUGGING SUPPORT AVAILABLE "
-	  "(you might want to try to configure the asf module --with-tide)\n");
+    ATwarning("*** SORRY, NO DEBUGGING SUPPORT AVAILABLE "
+	      "(you might want to try to configure the asf module --with-tide)\n");
 #endif
+  }
 }
 
 /*}}}  */
@@ -1305,6 +1298,11 @@ static ATermList apply_rule(PT_Tree trm, int depth)
 	currentRule = entry;
 
         if (!is_fail_env(env)) {
+	  /*
+	  if (strcmp(PT_yieldTree(tagCurrentRule), "[l-1'3]") == 0) {
+	    ATwarning("env = %t\n", env);
+	  }
+	  */
 	  TIDE_STEP(PT_getTreeAnnotation(entry->rhs, posinfo), env, depth);
 	  if (runVerbose) {
 	    ATwarning("Equation %s was successful.\n", 
@@ -1345,6 +1343,11 @@ static ATermList apply_rule(PT_Tree trm, int depth)
     currentRule = entry;
 
     if (!is_fail_env(env)) {
+      /*
+      if (strcmp(PT_yieldTree(tagCurrentRule), "[l-1'3]") == 0) {
+	ATwarning("env = %t\n", env);
+      }
+      */
       TIDE_STEP(PT_getTreeAnnotation(entry->rhs, posinfo), env, depth);
       if (runVerbose) {
 	ATwarning("Equation: %s was successful.\n", 

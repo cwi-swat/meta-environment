@@ -1,3 +1,7 @@
+2001/06/15 ({jurgenv,olivierp}@cwi.nl)
+  * Fixed bug in rewriting with layout
+  * Changed TB interface to completely functional approach
+
 2001/06/15 (markvdb@cwi.nl)
   * adapted apply-function in order to be AsFix2ME compatible.
 

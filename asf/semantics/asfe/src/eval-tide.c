@@ -62,7 +62,7 @@ static PT_Tree find_variable(PT_Tree tree, int *line, int *col,
       cur_line = *line;
       cur_col  = *col;
       for (i=0; i<length; i++) {
-	if (yield[length] == '\n') {
+	if (yield[i] == '\n') {
 	  cur_line++;
 	  cur_col = 0;
 	} else {
@@ -267,7 +267,7 @@ void Tide_step(ATerm position, ATerm newenv, int level)
     env = newenv;
 
 
-    TA_atCPE(pid, TA_makeLocationFromTerm(position));
+    TA_atCPE(pid, TA_makeLocationFromTerm(position), level);
     TA_activateRules(pid, TA_makePortStep());
 
     if (TA_getProcessState(pid) == STATE_STOPPED) {

@@ -55,12 +55,16 @@ ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2)
 
   if (!PT_isEqualTree(asfix1, asfix2)) {
     if (PT_isTreeAppl(asfix1) && PT_isTreeAppl(asfix2)) {
-      /* If it is an appl, prods should be ATequal and kids should be
-       * equal modulo whitespace 
-       */
       PT_Production prod1 = PT_getTreeProd(asfix1);
       PT_Production prod2 = PT_getTreeProd(asfix2);
 
+      if (PT_isOptLayoutProd(prod1) && PT_isOptLayoutProd(prod2)) {
+	return ATtrue;
+      }
+
+      /* If it is an appl, prods should be ATequal and kids should be
+       * equal modulo whitespace 
+       */
       if (PT_isEqualProduction(prod1, prod2)) {
 	PT_Args args1 = PT_getTreeArgs(asfix1);
 	PT_Args args2 = PT_getTreeArgs(asfix2);
@@ -81,18 +85,10 @@ ATbool isEqualModuloWhitespace(PT_Tree asfix1, PT_Tree asfix2)
 	return ATfalse;
       }
     }
-    else if (PT_isTreeLayout(asfix1) && PT_isTreeLayout(asfix2)) {
-      /* here we treat all whitespace equally */
-      return ATtrue;
-    }
     else {
       /* different or not handled types of asfix terms are not equal by definition */
 
-      if (PT_isTreeLayout(asfix1) || PT_isTreeLayout(asfix2)) {
-	ATabort
-	  ("Internal error. Normal term compared with whitespace in %t\n",
-	   yieldTree((PT_Tree)tagCurrentRule));
-      }
+      assert(!PT_isTreeLayout(asfix1) && !PT_isTreeLayout(asfix2));
 
       return ATfalse;
     }

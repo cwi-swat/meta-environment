@@ -229,7 +229,8 @@ int main(int argc, char *argv[])
     }
 
     /* Rewrite the term */
-    result = evaluator(name, parseTree, eqsList, ATfalse);
+    result = evaluator(name, parseTree, eqsList,
+		       use_tide ? ATparse("on") : ATparse("off"));
 
     /* If we have collected errors, pretty print them now */
     returncode = (RWgetError() == NULL) ? 0 : 1;
