@@ -1,6 +1,7 @@
 $Id$
 
 2002/07/03 (jurgenv@cwi.nl)
+ * Fixed bug in building the documentation.
  * Release 0.24
 
 2002/07/03 ({jong,olivierp}@cwi.nl)
