@@ -203,18 +203,15 @@ equations
 [default-celr] check-emb-lhs-rule(Rule, FunIdHasEmbeddingAt) = false
 
 
-%% locate the correct argument using the number. A term may be not specific at all:
-%% namely a variable, or it has the same embedding exaclty.
+%% locate the correct argument using the number.
 
-[cets-0] is-var-term(Term) =  Bool1,
-         check-emb-term(Term, Embedding) = Bool2
+[cets-0] check-emb-term(Term, Embedding) = Bool
          =====
-         check-emb-terms(Term, Embedding at 0) = Bool1 \/ Bool2 
+         check-emb-terms(Term, Embedding at 0) = Bool
 
-[cets-1] is-var-term(Term) =  Bool1,
-         check-emb-term(Term, Embedding) = Bool2
+[cets-1] check-emb-term(Term, Embedding) = Bool
          ====
-         check-emb-terms(Term, Term+, Embedding at 0) = Bool1 \/ Bool2
+         check-emb-terms(Term, Term+, Embedding at 0) = Bool
 
 %% Skip to the next argument
 [cets-2] Int != 0 
@@ -416,10 +413,7 @@ equations
          ====
          remove-emb-arg(FunId(Term), [ FunId ], remove) = Term
 
-%% We do accept any matching variable for the embedding off course
-[default-rea] is-var-term(Term)
-              ====
-              remove-emb-arg(Term, Embedding, IgnoreOrRemove) = Term
+[default-rea] remove-emb-arg(Term, Embedding, IgnoreOrRemove) = Term
 
 %%
 %% call-helper-rules
