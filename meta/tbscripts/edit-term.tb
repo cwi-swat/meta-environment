@@ -163,6 +163,48 @@ in
   )
 endlet
 
+process ReplaceFocus(EditorId: term, Tree: term) is
+let
+  Id          : int,
+  TotalTree   : term,
+  Text        : str,
+  Focus       : term
+in
+  Id := process-id .
+  snd-msg(replace-focussed-tree(EditorId, Tree)) .
+  rec-msg(focus(Focus?)) .
+  snd-msg(get-tree(EditorId)) .
+  rec-msg(tree(TotalTree?)) .
+  snd-msg(unparse(TotalTree)) .
+  rec-msg(unparsed-text(Text?)) .
+  snd-msg(replace-text(EditorId, Text)) .
+  snd-msg(set-focus(EditorId, Focus))
+endlet
+
+process CheckTreeSort(Tree: term, Sort: str, RTree: term?) is
+let 
+  Id          : int 
+in
+  Id := process-id .
+  snd-msg(check-tree-sort(Sort, Tree)) .
+  ( 
+    rec-msg(sort-not-ok) .
+    RTree := error-tree
+  +
+    rec-msg(sort-ok) .
+    RTree := Tree
+  )
+endlet
+
+process ApplyFunction(Function: str, Sort: str, ArgList: list, RTree: term?) is 
+let
+  Id          : int
+in
+  Id := process-id .
+  snd-msg(apply-function(Function, Sort, ArgList)) .
+  rec-msg(tree(RTree?))
+endlet
+
 process PlainReduceTerm(Tree: term, ModuleName: str, NormalForm: term?) is
 let
   Id          : int,
@@ -221,6 +263,7 @@ let
   Focus      : term,
   DirtyFoci  : term,
   ErrList    : list,
+  ArgList    : list,
   Stack      : list,
   Killed     : term,
   ActionTree : term,
@@ -229,9 +272,12 @@ let
   RTree      : term,
   Trees      : list,
   ButtonName : str,
+  SortName   : str,
   FilePath   : str,
   NewModName : str,
-  EditorName : str
+  EditorName : str,
+  FuncName   : str,
+  NrOfArgs   : int
 in
   subscribe(syntax-changed(ModuleName)) . 
   if equal(quote(Tree), none) then 
@@ -289,6 +335,28 @@ in
           fi
         fi
       +
+        rec-msg(apply-function-action(FuncName?, SortName?, NrOfArgs?), 
+                Stack?) .
+        ArgList := [] .
+        (
+          if greater(NrOfArgs, 0) then
+            STree := first(Stack) .
+            Stack := next(Stack) .
+            NrOfArgs := sub(NrOfArgs, 1) .
+            ArgList := join(ArgList, STree)
+          fi 
+        ) *
+        if equal(NrOfArgs, 0) then
+          tau
+        fi .
+        ApplyFunction(FuncName, SortName, ArgList, RTree?) .
+        if not-equal(RTree, error-tree) then
+          Stack := join(RTree, Stack) .
+          snd-msg(stack(Stack))
+        else
+          snd-msg(error-stack)
+        fi
+      +
         rec-msg(get-tree-action(NewModName?), Stack?) .
         GetTree(EditorId, RTree?) .
         if not-equal(RTree, error-tree) then
@@ -300,6 +368,23 @@ in
       +
         rec-msg(get-focus-action(NewModName?), Stack?) .
         GetFocus(EditorId, RTree?) .
+        if not-equal(RTree, error-tree) then
+          Stack := join(RTree, Stack) .
+          snd-msg(stack(Stack))
+        else
+          snd-msg(error-stack)
+        fi
+      +
+        rec-msg(replace-focus-action(NewModName?), Stack?) .
+        STree := first(Stack) .
+        Stack := next(Stack) .
+        ReplaceFocus(EditorId, STree) .
+        snd-msg(stack(Stack))
+      +
+        rec-msg(check-tree-sort-action(SortName?), Stack?) .
+        STree := first(Stack) .
+        Stack := next(Stack) .
+        CheckTreeSort(STree, SortName, RTree?) .
         if not-equal(RTree, error-tree) then
           Stack := join(RTree, Stack) .
           snd-msg(stack(Stack))

@@ -1,0 +1,7 @@
+module SimplifyExpr
+
+imports Pico-syntax
+
+exports
+  context-free syntax
+    simplify(EXP)        -> EXP

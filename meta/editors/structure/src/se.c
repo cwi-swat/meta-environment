@@ -11,6 +11,7 @@
 #include "EditorData.h"
 #include "editor.h"
 #include "focus.h"
+#include "tree.h"
 
 /*}}}  */
 /*{{{   globals */
@@ -306,6 +307,34 @@ ATerm get_focussed_tree(int cid, ATerm editorId)
 }
 
 /*}}}  */
+/*{{{  ATerm replace_focussed_tree(int cid, ATerm editorId, ATerm tree) */
+
+ATerm replace_focussed_tree(int cid, ATerm editorId, ATerm t)
+{
+  SE_Editor editor = getEditor(editorId);
+  SE_Focus focus = SE_getEditorFocus(editor);
+  PT_ParseTree parse_tree = PT_makeParseTreeFromTerm(t);
+  PT_Tree tree =  PT_getParseTreeTree(parse_tree);
+  PT_Args left_layout, right_layout;
+
+  if (SE_isFocusNotEmpty(focus)) {
+    if (strcmp(SE_getFocusSort(focus), SORT_UNPARSED) != 0) {
+      left_layout  = 
+        PT_getTreeArgs(PT_getParseTreeLayoutBeforeTree(parse_tree));
+      right_layout = 
+        PT_getTreeArgs(PT_getParseTreeLayoutAfterTree(parse_tree));
+
+      editor = replaceEditorTreeAtFocus(editor, focus, tree, 
+                                        left_layout, right_layout);
+      putEditor(editorId, editor);
+    }
+  }
+  focus = SE_getEditorFocus(editor);
+
+  return ATmake("snd-value(focus(<term>))", SE_makeTermFromFocus(focus));
+}
+      
+/*}}}  */
 /*{{{  ATerm get_focus_sort(int cid, char *nonterminal, ATerm f) */
 
 ATerm get_focus_sort(int cid, char *nonterminal, ATerm f)
@@ -323,6 +352,25 @@ ATerm get_focus_sort(int cid, char *nonterminal, ATerm f)
   }
 
   return ATmake("snd-value(focus-sort(<str>))", nonterminal);
+}
+
+/*}}}  */
+/*{{{  ATerm check_tree_sort(int cid, char *nonterminal, ATerm t) */
+ 
+ATerm check_tree_sort(int cid, char *nonterminal, ATerm t)
+{
+  char *sort;
+  PT_ParseTree parse_tree = PT_makeParseTreeFromTerm(t);
+  PT_Symbol symbol = getParseTreeSort(parse_tree);
+ 
+  sort = PT_yieldSymbol(symbol);
+
+  if (strcmp(sort, nonterminal) != 0) {
+    return ATmake("snd-value(msg(sort-not-ok))");
+  }
+  else {
+    return ATmake("snd-value(msg(sort-ok))");
+  }
 }
 
 /*}}}  */

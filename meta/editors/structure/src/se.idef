@@ -21,7 +21,8 @@ let
   Number       : int,
   Nonterminal  : str,
   Tree         : term,
-  ModifiedStatus : term
+  ModifiedStatus : term,
+  Msg          : term
 in 
   execute(se, SE?) .
   (
@@ -85,6 +86,16 @@ in
       rec-value(SE, no-parse-tree) .
       snd-msg(no-tree)
     )
+  +
+    rec-msg(replace-focussed-tree(EditorId?, Tree?)) .
+    snd-eval(SE, replace-focussed-tree(EditorId, Tree)) .
+    rec-value(SE, focus(Focus?)) .
+    snd-msg(focus(Focus))
+  +
+    rec-msg(check-tree-sort(Nonterminal?, Tree?)) .
+    snd-eval(SE, check-tree-sort(Nonterminal, Tree)) .
+    rec-value(SE, msg(Msg?)) .
+    snd-msg(Msg)
   +
     rec-msg(get-focus-sort(Nonterminal?, Focus?)) .
     snd-eval(SE, get-focus-sort(Nonterminal, Focus)) .

@@ -18,6 +18,7 @@
 #include "asfe.idef"
 #include "restorebrackets.idef"
 #include "unparsePT.idef"
+#include "apply-function.idef"
 #include "in-output.idef"
 #include "open-modules.tb"
 #include "file-creator.tb"
@@ -70,7 +71,7 @@ toolbus(META, Parser, Unparser, Io, ConfigManager, Ui, EditorCreator, ModuleDB,
 	Set-parsetable, GetParseTable, Open-Sdf2-Language, Asfe, AsfSdfChecker,
 	RestoreBrackets, Notify-about-changed-modules, DisplayErrors,
 	Asf-Syntax, AddEqSyn, AddAPISyn, RemoveVars, Open-initial-module,
-        Open-modules, Asfc, PGen, 
+        Open-modules, Asfc, PGen, ApplyFunc,
 	Help, GenAdapt, ClearAll, CloseModule, ParseFocusses, DumpEquations,
         DumpParseTable, Compile-module, RenameModule
 #ifdef METASTUDIO

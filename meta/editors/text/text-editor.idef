@@ -15,6 +15,7 @@ let
   Sort       : term,
   Dirty      : int,
   Fid        : str,
+  Ignored    : str,
   Count      : int,
   Text       : str,
   FileName   : str,
@@ -80,6 +81,9 @@ in
   +
     rec-msg(move-editor-to-front(EditorId)) .
     snd-do(TE, move-editor-to-front(Fid))
+  +
+    rec-msg(replace-text(EditorId, Text?)) .
+    snd-do(TE, replace-text(Fid, Text)) 
   +
     rec-event(TE, set-current-location(Fid, Location?)) .
     snd-msg(set-current-location(EditorId, Location)) .

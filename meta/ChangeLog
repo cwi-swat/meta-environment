@@ -1,5 +1,11 @@
 # $Id$
 
+2002/05/07 (vandenbr@loria.fr) 
+ * Improved button manipulation:
+   - Check on top sort added.
+   - apply-function is now a toolbus component.
+   - In place replacement of result of normalization of focus
+
 2002/05/07 <olivierp@cwi.nl>
  * Fixed 'empty module list' syndrome
 
