@@ -128,6 +128,7 @@ ATerm get_module_path(int cid, char *path, char *id)
 
   /* if i < 0, then the module name is not compound */
   if (i >= 0) {
+    int lp = p;
     assert(id[i] == SEP);
     id[i] = '\0';
     i--;
@@ -137,9 +138,11 @@ ATerm get_module_path(int cid, char *path, char *id)
       if (path[p] != id[i]) {
 	break;
       }
-      else {
-	path[p] = '\0';
-      }
+    }
+    /* if the original prefix of the module names has not 
+     * entirely disappeared we had a mismatch! */
+    if (i > 0) {
+      p = lp;
     }
   }
 
