@@ -1,7 +1,7 @@
 package 
 identification
-   name=asfsdf-meta
-   version=1.4beta
+   name=__PACKAGE__
+   version=__VERSION__
    location=http://www.cwi.nl/projects/MetaEnv/daily-dist
    info=http://www.cwi.nl/projects/MetaEnv/asfsdf-meta
    description='The ASF+SDF Meta-Environment is an interactive tool suite
