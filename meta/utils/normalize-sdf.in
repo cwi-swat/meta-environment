@@ -30,6 +30,9 @@ while [ $# -gt 0 ]	# Handle command line options
 do
 	case $1
 	in
+	  -h*)
+			echo "Usage: $0 [-v] file(s) ..."
+			exit 1;;
 		-v*)
 			VERBOSE=1 ;;
 		-*)
