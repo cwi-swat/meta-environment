@@ -238,7 +238,7 @@ public class MetaStudio
     //}}}
     //{{{ Create module menu
 
-    modulePopup = new JPopupMenu("TEst");
+    modulePopup = new JPopupMenu("Module Menu");
 
 
     modulePopup.add(new AbstractAction("Edit Syntax")
@@ -828,10 +828,16 @@ public class MetaStudio
   }
 
   //}}}
-  //{{{ public void deleteModule(String s0)
+  //{{{ public void deleteModule(String module)
 
-  public void deleteModule(String s0)
+  public void deleteModule(String name)
   {
+    Module module = moduleManager.getModule(name);
+    if (module != null) {
+      moduleManager.removeModule(name);
+      graph.deleteNode(name);
+      layoutGraph();
+    }
   }
 
   //}}}
@@ -899,9 +905,9 @@ public class MetaStudio
       moduleList.clearSelection();
     } else {
       moduleList.setSelectedValue(module.getName(), true);
+      bridge.postEvent(factory.make("get-module-info(<str>)",
+				    module.getName()));
     }
-    bridge.postEvent(factory.make("get-module-info(<str>)",
-				  module.getName()));
     //System.out.println("MetaStudio: moduleSelected " + module.getName());
   }
 

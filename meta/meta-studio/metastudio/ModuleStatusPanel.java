@@ -118,6 +118,8 @@ public class ModuleStatusPanel
 
   private void clearInfo()
   {
+    infoKeys.removeAll();
+    infoValues.removeAll();
   }
 
   //}}}
@@ -125,8 +127,7 @@ public class ModuleStatusPanel
 
   private void updateInfo(List infoList)
   {
-    infoKeys.removeAll();
-    infoValues.removeAll();
+    clearInfo();
 
     Iterator iter = infoList.iterator();
     while (iter.hasNext()) {

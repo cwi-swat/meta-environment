@@ -53,6 +53,14 @@ public class ModuleManager
   }
 
   //}}}
+  //{{{ public void removeModule(String name)
+
+  public void removeModule(String name)
+  {
+    moduleTable.remove(name);
+  }
+
+  //}}}
   //{{{ public void clearModules()
 
   public void clearModules()
