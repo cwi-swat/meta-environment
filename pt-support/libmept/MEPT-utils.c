@@ -979,7 +979,7 @@ PT_Tree PT_getParseTreeTop(PT_ParseTree parseTree)
 {
   ATerm ATparseTree = PT_ParseTreeToTerm(parseTree);
   
-  return PT_TreeFromTerm(ATgetArgument(ATparseTree,0));
+  return PT_TreeFromTerm(ATgetArgument(parseTree,0));
 }
 
 /*}}}  */

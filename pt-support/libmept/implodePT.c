@@ -242,15 +242,9 @@ ATerm implodeParseTree(PT_ParseTree tree)
   ATerm atermTree;
 
   if (PT_isParseTreeTree(tree)) {
-    PT_Tree newTree = PT_getParseTreeTree(tree);
+    PT_Tree newTree = PT_getParseTreeTop(tree);
     int     ambs = PT_getParseTreeAmbCnt(tree);
 
-    /*
-    PT_Args args = PT_getTreeArgs(newTree);
-    PT_Production prod = PT_getTreeProd(newTree);
-    ATermList newArgs = implodeArgs(args);
-    atermTree = implodeProd(prod, newArgs);
-    */
     atermTree = implodeTerm(newTree);
 
     if (remove_parsetree) {
