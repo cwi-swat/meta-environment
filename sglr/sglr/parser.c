@@ -273,7 +273,7 @@ parse_character(void)
   for_actor_delayed = NULL;
   for_shifter = NULL;
 
-  while(for_actor != NULL && for_actor_delayed != NULL) {
+  while(for_actor != NULL || for_actor_delayed != NULL) {
     if(for_actor == NULL)
       pop(st, for_actor_delayed);
     else
