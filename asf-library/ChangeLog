@@ -3,6 +3,10 @@
   * Strategies now support full traversal and heterogeneous data-types.
     To use it, import the strategies/Operators for every non-terminal in
     the traversed grammar.
+  * Added side-effect: Counter
+  * Added side-effect: Normalization (to normalize terms that have been
+    obtained by other side-effects)
+  * Restructured library for ASF
 
 2002/07/03 (jurgenv@cwi.nl)
   * Added asf/Variables. A module that defines variables for a specific sort.
