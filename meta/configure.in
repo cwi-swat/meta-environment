@@ -174,7 +174,10 @@ AC_OUTPUT(
    meta-studio/images/Makefile
    meta-studio/scripts/Makefile
    meta-studio/metastudio/Makefile
-   meta-studio/metastudio/graph/Makefile
+   meta-studio/metastudio/components/Makefile
+   meta-studio/metastudio/components/graphs/Makefile
+   meta-studio/metastudio/data/Makefile
+   meta-studio/metastudio/data/graph/Makefile
    in-output/Makefile
    in-output/src/Makefile
    term-store/Makefile
