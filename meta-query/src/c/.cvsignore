@@ -1,7 +1,6 @@
 .deps
 Makefile
 Makefile.in
-query-tool.tif.[ch]
 query-tool.tifs
 query-tool
 testProduction
