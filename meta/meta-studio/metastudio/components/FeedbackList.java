@@ -5,7 +5,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -139,16 +138,14 @@ public class FeedbackList extends UserInterfacePanel {
 
     public void removeFeedbackSummary(String producer, String summaryId) {
         Iterator iter = data.iterator();
-        List removed = new LinkedList();
         while (iter.hasNext()) {
             FeedbackItem item = (FeedbackItem) iter.next();
             if (item.getProducer().equals(producer)
                 && item.getSummaryId().equals(summaryId)) {
-                removed.add(item);
+                iter.remove();
             }
         }
 
-        data.removeAll(removed);
         repaint();
     }
 }
