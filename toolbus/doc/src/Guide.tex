@@ -91,7 +91,7 @@ and therefore we call it a ``\TB''.
 
 \subsection{The \TB\ architecture}
 
-\begin{figure}[t]
+\begin{figure}[tb]
 \rule{\textwidth}{0.5mm}
 
   \input{Arch.tex}
@@ -191,7 +191,7 @@ Typing the command
 \end{quote}
 will simply print the desired message.
 
-\begin{figure}[tb]
+\begin{figure}[tbh]
 \rule{\textwidth}{0.5mm}
 \input{hello1.tb.tex}
   \caption{{\tt hello1}: first script for the {\tt hello} application.}
@@ -199,7 +199,7 @@ will simply print the desired message.
 \rule{\textwidth}{0.5mm}
 \end{figure}
 
-\begin{figure}[tb]
+\begin{figure}[tbh]
 \rule{\textwidth}{0.5mm}
 \input{hello2.tb.tex}
   \caption{{\tt hello2}: second script for the {\tt hello} application.}
@@ -207,7 +207,7 @@ will simply print the desired message.
 \rule{\textwidth}{0.5mm}
 \end{figure}
 
-\begin{figure}[tb]
+\begin{figure}[tbh]
 \rule{\textwidth}{0.5mm}
 \input{hello.c.tex}
   \caption{{\tt hello.c}: simple C code for the {\tt hello} tool.}
@@ -215,7 +215,7 @@ will simply print the desired message.
 \rule{\textwidth}{0.5mm}
 \end{figure}
 
-\begin{figure}[tb]
+\begin{figure}[tbh]
 \rule{\textwidth}{0.5mm}
 \input{hello-gen.c.tex}
   \caption{{\tt hello-gen.c}: C code for the {\tt hello} tool using a generated tool interface.}
@@ -1054,7 +1054,7 @@ like:
 As a result, the location information is hardwired in the make file
 rather then in a command that has to be repeated over and over again.
 
-\begin{figure}
+\begin{figure}[tb]
 \rule{\textwidth}{0.5mm}
   \input{Tifs.tex}  
   \centerline{\box\graph}
@@ -1110,7 +1110,7 @@ In Figure~\ref{fig:Tifs} it is also shown how tool interface generators
 for {\em other} languages (e.g., Fortan, Cobol) would fit into this scheme.
 These are, however, not yet available.
 
-\begin{figure}
+\begin{figure}[tb]
 \rule{\textwidth}{0.5mm}
 \input{hello.tif.c.tex}
   \caption{{\tt hello.tif.c}: generated tool interface {\tt hello.tif.c}.}
@@ -1289,7 +1289,7 @@ Starting the execution from {\em another} host is achieved by typing
 \end{figure}
 
 \section{Intermezzo: Tool adapters}
-\begin{figure}[t]
+\begin{figure}[tb]
 \rule{\textwidth}{0.5mm}
   \input{Adapter.tex}
   \centerline{\box\graph}

@@ -1,45 +1,35 @@
-/*
+/*  hello.c -- hello tool in C */
 
-    ToolBus -- The ToolBus Application Architecture
-    Copyright (C) 1998-2000  Stichting Mathematisch Centrum, Amsterdam, 
-                             The  Netherlands.
+#include <stdio.h>
+#include <aterm1.h>                   /* ATerms, level 1 interface */
+#include <atb-tool.h>                 /* ToolBus tool interface */
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-
-*/
-#include "TB.h"                     /* Standard header file */
-
-term *hello_handler(term *inp)      /* Handle input from ToolBus */
+ATerm hello_handler(int conn, ATerm inp)      /* Handle input from ToolBus */
 {
-  term *arg;
+  ATerm arg, isig, osig;
 
-  if(TBmatch(inp, "rec-eval(get-text)"))
-    return TBmake("snd-value(\"Hello World, my first ToolBus tool in C!\n\")");
-  if(TBmatch(inp, "rec-terminate(%t)", &arg))
+  if(ATmatch(inp, "rec-eval(get-text)"))
+    return ATmake("snd-value(\"Hello World, my first ToolBus tool in C!\n\")");
+  if(ATmatch(inp, "rec-terminate(<term>)", &arg))
     exit(0);
-  else {
-    TBprintf(stderr, "hello: wrong input %t received\n", inp);
-    return NULL;                    /* Return NULL to indicate that no term
-                                       has to be sent back to the ToolBus */
+  if(ATmatch(inp, "rec-do(signature(<term>,<term>))", &isig, &osig)){
+    return NULL;                      /* we are sloppy and don't do a signature check */
   }
+  
+  ATerror("hello: wrong input %t received\n", inp);
+  return NULL;                    /* Return NULL to indicate that no term
+                                       has to be sent back to the ToolBus */
 }
 
 int main(int argc, char *argv[])   /* main program of hello tool */
-{
-  TBinit("hello", argc, argv, hello_handler, NULL);
-  TBeventloop();
+{ ATerm bottomOfStack;
 
+  ATBinit(argc, argv, &bottomOfStack);
+  if(ATBconnect(NULL, NULL, -1, hello_handler) >= 0){
+    ATBeventloop();
+  } else {
+    fprintf(stderr, "Could not connect to the ToolBus, giving up!\n");
+    return -1;
+  }
   return 0;
 }
