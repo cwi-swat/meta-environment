@@ -82,7 +82,7 @@ static ATbool isIndentedType(PT_Production production)
   while (!PT_isSymbolsEmpty(productionLhs)) {
     symbol = PT_getSymbolsHead(productionLhs);
     if (!PT_isOptLayoutSymbol(symbol)) {
-      if (expectTerminal == ATtrue) {
+      if (expectTerminal) {
 	if (!PT_isSymbolLit(symbol)) {
 	  return ATfalse;
 	}
@@ -162,7 +162,7 @@ static BOX_BoxList argsManyToBox(PT_Args args, ATbool isLex, ATbool indent)
 
     args = PT_getArgsTail(args);
   }
-  
+
   return BOX_reverseBoxList(boxList);
 }
 
@@ -182,16 +182,16 @@ static BOX_Box applToBox(PT_Tree tree, ATbool isLex)
   
   indent = isIndentedType(PT_getTreeProd(tree));
   boxList = argsManyToBox(args, isLex, indent);
-  
+
   if (!isLex) {
     if (indent) {
       return BOX_makeVBox(boxList);
     } else {
       return BOX_makeHVBox(boxList);
     }  
-  } else {
-    return BOX_makeHBoxWithHs(boxList, HSOPTION);
   }
+
+  return BOX_makeHBoxWithHs(boxList, HSOPTION);
 }
 
 /*}}}  */
@@ -240,12 +240,10 @@ static BOX_Box listToBox(PT_Tree tree, ATbool isLex)
   BOX_BoxList boxList = BOX_makeBoxListEmpty();
   
   if (PT_isArgsEmpty(args)) {
-    return BOX_makeHBox(boxList);
+      return BOX_makeHBox(boxList);
   }
 
   symbol = PT_getSymbolSymbol(symbol);
-
-
   indent = isIndentedType(production);
 
   if (PT_isSymbolIterStarSep(symbol) || PT_isSymbolIterPlusSep(symbol)) {
@@ -254,7 +252,11 @@ static BOX_Box listToBox(PT_Tree tree, ATbool isLex)
     boxList = argsManyToBox(args, isLex, indent);
   }
 
-  if (isLex == ATtrue) {
+  if (BOX_isBoxListEmpty(boxList)) {
+    return NULL;
+  }
+
+  if (isLex) {
     return BOX_makeHBoxWithHs(boxList, HSOPTION);
   } else {
     return BOX_makeVBox(boxList);
@@ -354,6 +356,9 @@ static BOX_Box treeToBox(PT_Tree tree, ATbool isLex)
     const char yield[2] = {ch, '\0'};
     BOX_StrCon strcon = BOX_makeStrCon(yield);
     return BOX_makeBoxString(strcon);
+  }
+  else if (PT_isArgsEmpty(PT_getTreeArgs(tree))) {
+    return NULL;
   }
   else if (hasProductionFromBoxAttribute(PT_getTreeProd(tree))) {
     return processBox(tree, isLex);

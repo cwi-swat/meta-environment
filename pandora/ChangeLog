@@ -1,5 +1,9 @@
 
 
+Fri Feb 18 11:24:08 CET 2005 <kooiker@cwi.nl>
+ * generator/pandora.c:
+   - Remove empty boxes
+
 Fri Feb 18 10:35:38 CET 2005 <{jurgenv, kooiker}@cwi.nl>
  * generator/pandora.c:
    - Applied structured lexicals
