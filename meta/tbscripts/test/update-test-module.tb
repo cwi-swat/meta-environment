@@ -1,0 +1,33 @@
+#include "module-db.idef"
+#include "in-output.idef"
+
+process Test is
+let 
+  Id: term,
+  ParseTree: term,
+  Path: str,
+  I: int,
+  Modules: list
+in
+
+/* Setup a module in the module database */
+Id := process-id.
+snd-msg(is-module-in-db("Pico-Booleans")).
+rec-msg(not-exists-in-module-db("Pico-Booleans")).
+snd-msg(Id,open-file("Pico-Booleans")).
+rec-msg(Id,opened-file(baf,"Pico-Booleans",ParseTree?,Path?,timestamp(I?))).
+snd-msg(add-sdf2-module-to-db(Path,ParseTree,timestamp(I),"changed")).
+rec-msg(need-modules(Modules?)).
+/* Finished setup. */
+
+/* Now try and see whether updating an unchanged module works */
+snd-msg(update-module-in-db(ParseTree,"sdf2")).
+(
+   rec-msg(extra-modules(Modules?))
++
+   printf("FAILED Waiting for update to return\n") delay(sec(2))
+).
+shutdown("") delay(sec(2))
+endlet
+
+toolbus(Test,Io,ModuleDB)

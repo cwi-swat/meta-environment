@@ -41,7 +41,14 @@ rm -f Empty.eqs
 
 # Test whether ambiguities for asfix1 are corrected
 call_toolbus ambi-test.tb
+
+# Test for updating of unchanged modules
+call_toolbus update-test-module.tb
+
+
+
 echo ""
+
 
 if [ $failed != 0 ]; then
 	echo "FAILED:" $failed "out of" $tests "tests"
