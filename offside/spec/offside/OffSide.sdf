@@ -1,0 +1,34 @@
+module OffSide
+
+imports AsFixWithAnnotations Integers
+
+hiddens
+
+context-free syntax
+  "offside" -> Tree
+
+  h(Tree)  -> Int
+  h(Ann)   -> Int
+  hm(Tree) -> Int
+  hm(Args) -> Int
+
+  hm-rec(Tree,Int) -> Int {traversal(accu)}
+  hm-rec(Args,Int) -> Int {traversal(accu)}
+ 
+  
+ 
+variables
+
+"!"[0-9]*  -> Ann
+"s"[0-9]*  -> Symbol
+"s"[0-9]*  -> Symbols
+"i"[0-9]*  -> Int
+"p"[0-9]*  -> Production
+"t"[0-9]*  -> Tree
+"t*"[0-9]* -> {Tree ","}*
+"a"[0-9]*  -> Args
+"a*"[0-9]* -> {Attr ","}*
+"at*"[0-9]* -> {ATerm ","}*
+"r"[0-9]*   -> IntCon
+"c"[0-9]*   -> IntCon
+"at"        -> ATerm

@@ -1,0 +1,63 @@
+#! /bin/sh
+
+name=`basename $0`
+version=0.1
+
+TABLE=__DATADIR__/OffSide.trm.tbl
+OFFSIDE=__LIBEXECDIR__/OffSide
+ADDPOSINFO=__PT_SUPPORT__/bin/addPosInfo
+ASOURCE=__PT_SUPPORT__/bin/unparsePT
+SGLR=__SGLR__/bin/sglr
+
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $name [options]
+Options:
+	-h	: display usage information
+	-i file	: input from |file|
+	-o file	: output to file
+	-V	: reveal program version (i.e. $version)
+E_O_USAGE
+}
+
+Version() {
+  echo "$name v$version" >&2
+}
+
+input=""
+output="-"
+
+myarguments="i:o:Vh"
+
+args=`getopt $myarguments $* 2> /dev/null`
+if test $? != 0
+then
+        Usage
+        exit 2
+fi
+
+set -- $args
+
+# Argument interpretation...
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in
+        -i)
+            shift; input=$1 ;;
+	-o)
+	    shift; output=$1 ;;
+        -h)
+            Usage ; exit 0 ;;
+        -V)
+            Version ; exit 0 ;;
+    esac
+    shift
+done
+
+set -e;
+
+${ADDPOSINFO} -p ${input} -i ${input} -t | \
+${SGLR}       -p ${TABLE} | \
+${OFFSIDE} | \
+${ASOURCE} -o ${output}

@@ -1,0 +1,6 @@
+$Id$
+
+Offside -- filter parse forests with the offside rule
+
+This package provides one tools that interprets the 'offside' production
+attribute to implement an offside filter.

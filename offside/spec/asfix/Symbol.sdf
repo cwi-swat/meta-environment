@@ -1,0 +1,38 @@
+module Symbol
+
+imports ATerms
+
+exports
+
+sorts Symbol Symbols CharRange CharRanges
+
+context-free syntax
+
+empty                                                    -> Symbol 
+lit(Literal)                                      -> Symbol 
+cf(Symbol)                                        -> Symbol 
+lex(Symbol)                                       -> Symbol 
+opt(Symbol)                                       -> Symbol 
+alt(Symbol,Symbol)                               -> Symbol 
+seq(Symbols)                               -> Symbol 
+pair(Symbol,Symbol)                              -> Symbol 
+sort(Literal)                                     -> Symbol 
+iter(Symbol)                                      -> Symbol 
+iter-star(Symbol)                                 -> Symbol 
+iter-sep(Symbol,Symbol)                 -> Symbol 
+iter-star-sep(Symbol,Symbol)            -> Symbol 
+iter-n(Symbol,NatCon)                      -> Symbol 
+iter-sep-n(Symbol,Symbol,IntCon)-> Symbol 
+perm(Symbols)                                    -> Symbol 
+set(Symbol)                                       -> Symbol 
+func(Symbols,Symbol)                      -> Symbol 
+varsym(Symbol)                                    -> Symbol 
+layout                                                   -> Symbol 
+char-class(CharRanges)                                   -> Symbol 
+
+"[" {Symbol ","}* "]"          -> Symbols
+
+"[" { CharRange ","}* "]"      -> CharRanges 
+
+ IntCon                 -> CharRange 
+range(IntCon,IntCon) -> CharRange 

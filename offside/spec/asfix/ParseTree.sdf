@@ -1,0 +1,10 @@
+module ParseTree
+ imports Attributes Tree 
+
+exports
+sorts ParseTree 
+
+context-free syntax
+
+parsetree( Tree, Integer)  -> ParseTree 
+          

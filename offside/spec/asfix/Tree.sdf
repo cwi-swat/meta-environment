@@ -1,0 +1,23 @@
+module Tree
+
+imports Symbol Attributes
+
+exports
+
+sorts Tree Args Production
+
+context-free syntax
+
+appl(Production,Args) -> Tree 
+IntCon               -> Tree 
+amb(Args)             -> Tree 
+lit(Literal)          -> Tree
+
+"[" {Tree ","}* "]"             -> Args 
+
+prod(Symbols,Symbol,Attributes) -> Production 
+list(Symbol)                    -> Production 
+
+lexical syntax
+[a-z]                          -> Literal
+[a-z][A-Za-z0-9\-]*[A-Za-z0-9] -> Literal

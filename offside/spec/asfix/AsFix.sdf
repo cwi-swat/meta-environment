@@ -1,0 +1,11 @@
+module AsFix
+ imports  Tree
+
+exports
+sorts ParseTree 
+
+context-free syntax
+
+parsetree(Tree,IntCon) -> ParseTree
+
+          
