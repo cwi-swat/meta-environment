@@ -5,9 +5,12 @@ include_HEADERS		= ASFME.h ASFME-utils.h ASFME_dict.h
 libASFME_a_SOURCES	= ASFME.c ASFME_dict.c ASFME-utils.c lex-cons.c \
 		          ASFME_bottom.c
 
-INCLUDES		= -I${ATERM}/include -I${PT_SUPPORT}/include
-CFLAGS			+= -DDISABLE_DYNAMIC_CHECKING
-#CFLAGS			+= -pg -DDISABLE_DYNAMIC_CHECKING
+INCLUDES =\
+	-I${ATERM}/include \
+	-I${ERROR_SUPPORT}/include \
+	-I${PT_SUPPORT}/include
+
+CFLAGS	+= -DDISABLE_DYNAMIC_CHECKING
 
 ADT=/ufs/sen1/software/installed/apigen-bundle-1.5/linux/i386
 
