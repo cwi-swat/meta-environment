@@ -19,7 +19,7 @@ import aterm.ATerm;
 
 public class NodePanel extends JPanel {
     private final Node node;
-    private static final int BOX_BORDER_THICKNESS = 4;
+    private static final int BOX_BORDER_THICKNESS = 8;
 
     public NodePanel(final MultiBridge bridge, Node node) {
         this.node = node;
