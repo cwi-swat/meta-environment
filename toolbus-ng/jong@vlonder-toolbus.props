@@ -1,3 +1,4 @@
 sglr.path=/export/scratch1/jong/installed/bin/sglr
 parsetable.path=/ufs/jong/eclipse/workspace/toolbusNG/toolbus/parser/Tscript.trm.tbl
 implodePT.path=/export/scratch1/jong/installed/bin/implodePT
+test=true
