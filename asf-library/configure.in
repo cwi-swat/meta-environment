@@ -16,7 +16,6 @@ AC_PACKAGE_REQUIRE(pt-support, unparsePT,
    [  --with-pt-support=DIR   pt-support is in DIR])
 AC_SUBST(PT_SUPPORT)
 
-
 AC_PROG_CC
 AC_PROG_INSTALL
 
