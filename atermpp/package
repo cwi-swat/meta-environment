@@ -11,5 +11,4 @@ configuration interface
 
 requires
   aterm 2.3.1
-
-
+  boost 1.32
