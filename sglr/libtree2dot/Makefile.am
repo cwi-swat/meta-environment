@@ -4,6 +4,7 @@ include $(top_srcdir)/make_rules
 
 INCLUDES		= -I$(top_srcdir)/libsglr \
 			-I$(ATERM)/include \
+			-I$(TOOLBUS)/include \
 			-I$(PT_SUPPORT)/include
 
 lib_LIBRARIES		= libtree2dot.a
