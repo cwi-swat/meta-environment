@@ -1,13 +1,13 @@
 equations
 
-  [cs-1'1] Msgs1 := check-labels(Definition1),
+  [cs-1'1] Msg*1 := check-labels(Definition1),
            Definition2 := remove-labels(Definition1),
-           Msgs2 := check-sorts-and-prods(Definition2),
-           Msgs3 := check-sdf-attributes(Definition2),
-           Msgs4 := check-for-deprecated-symbols(Definition2)
+           Msg*2 := check-sorts-and-prods(Definition2),
+           Msg*3 := check-sdf-attributes(Definition2),
+           Msg*4 := check-for-deprecated-symbols(Definition2)
            =================================================
            check-sdf(definition Definition1) =
-             Msgs1 ++ Msgs2 ++ Msgs3 ++ Msgs4
+             feedback([Msg*1, Msg*2, Msg*3, Msg*4])
  
   [cms-1'1] InfoMsgTuple2 := check-module(Module, Definition, InfoMsgTuple1)
             ===============================================================

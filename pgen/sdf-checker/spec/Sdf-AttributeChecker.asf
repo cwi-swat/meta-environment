@@ -1,64 +1,78 @@
 equations
 
   [ca-1'1] check-sdf-attributes(Definition) =
-             check-attributes(Definition, {})
+             check-attributes(Definition, )
 
   [ca-1'2] $ModuleId := get-module-name(Module)
-           ====================================
+           ====>
            check-attributes(Module, Msgs) = 
              check-attributes2(Module, Msgs, $ModuleId)
 
-  [ca-2'1] is-bracket-definition($Symbol* -> $Symbol) == false
+  [ca-2'1] $Symbol* -> $Symbol {Attr*1, bracket, Attr*2} := Production,
+           $Location := get-location(Production),
+           is-bracket-definition($Symbol* -> $Symbol) == false
+           ====>
+           check-attributes2(Production, Msgs, $ModuleId) = 
+             Msgs, warning("", "", "", "illegal-attribute: bracket", [subject("", $Location)])
+
+  [ca-2'2] $Literal ( $Symbol,* ) -> $Symbol {Attr*1, bracket, Attr*2} := Production,
+           $Location := get-location(Production)
+           ====>
+           check-attributes2(Production, Msgs, $ModuleId) =
+             Msgs, warning("", "", "", "illegal-attribute: bracket", [subject("", $Location)])
+
+  [ca-2'3] $Symbol* -> $Symbol {Attr*1, left, Attr*2} := Production,
+           $Location := get-location(Production),
+           is-binary-definition($Symbol* -> $Symbol) == false
+           ====>
+           check-attributes2(Production, Msgs, $ModuleId) = 
+             Msgs, warning("", "", "", "illegal-attribute: left", [subject("", $Location)])
+
+  [ca-2'4] $Literal ( $Symbol,* ) -> $Symbol {Attr*1, left, Attr*2} := Production,
+           $Location := get-location(Production)
+           ====>
+           check-attributes2(Production, Msgs, $ModuleId) = 
+             Msgs, warning("", "", "", "illegal-attribute: left", [subject("", $Location)])
+
+  [ca-2'5] $Symbol* -> $Symbol {Attr*1, assoc, Attr*2} := Production,
+           $Location := get-location(Production),
+           is-binary-definition($Symbol* -> $Symbol) == false
            =================================================
-           check-attributes2($Symbol* -> $Symbol {Attr*1, bracket, Attr*2},
-                             Msgs, $ModuleId) = 
-             Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, bracket, Attr*2})
+           check-attributes2(Production, Msgs, $ModuleId) = 
+             Msgs, warning("", "", "", "illegal-attribute: assoc", [subject("", $Location)])
 
-  [ca-2'2] check-attributes2($Literal ( $Symbol,* ) -> $Symbol {Attr*1, bracket, Attr*2},
-                            Msgs, $ModuleId) = 
-             Msgs + 
-             illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, bracket, Attr*2})
+  [ca-2'6] $Literal ( $Symbol,* ) -> $Symbol {Attr*1, assoc, Attr*2} := Production,
+           $Location := get-location(Production)
+           ====>
+           check-attributes2(Production, Msgs, $ModuleId) = 
+             Msgs, warning("", "", "", "illegal-attribute: assoc", [subject("", $Location)])
 
-  [ca-2'2] is-binary-definition($Symbol* -> $Symbol) == false
+  [ca-2'7] $Symbol* -> $Symbol {Attr*1, right, Attr*2} := Production,
+           $Location := get-location(Production),
+           is-binary-definition($Symbol* -> $Symbol) == false
            =================================================
-           check-attributes2($Symbol* -> $Symbol {Attr*1, left, Attr*2},
-                             Msgs, $ModuleId) = 
-             Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, left, Attr*2})
+           check-attributes2(Production, Msgs, $ModuleId) = 
+             Msgs, warning("", "", "", "illegal-attribute: right", [subject("", $Location)])
 
-  [ca-2'3] check-attributes2($Literal ( $Symbol,* ) -> $Symbol {Attr*1, left, Attr*2},
-                            Msgs, $ModuleId) = 
-             Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, left, Attr*2})
 
-  [ca-2'4] is-binary-definition($Symbol* -> $Symbol) == false
+  [ca-2'8] $Literal ( $Symbol,* ) -> $Symbol {Attr*1, right, Attr*2} := Production,
+           $Location := get-location(Production)
+           ====>
+           check-attributes2(Production, Msgs, $ModuleId) = 
+             Msgs, warning("", "", "", "illegal-attribute: right", [subject("", $Location)])
+
+  [ca-2'8] $Symbol* -> $Symbol {Attr*1, non-assoc, Attr*2} := Production,
+           $Location := get-location(Production),
+           is-binary-definition($Symbol* -> $Symbol) == false
            =================================================
-           check-attributes2($Symbol* -> $Symbol {Attr*1, assoc, Attr*2},
-                             Msgs, $ModuleId) = 
-             Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, assoc, Attr*2})
+           check-attributes2(Production, Msgs, $ModuleId) = 
+             Msgs, warning("", "", "", "illegal-attribute: non-assoc", [subject("", $Location)])
 
-  [ca-2'5] check-attributes2($Literal ( $Symbol,* ) -> $Symbol {Attr*1, assoc, Attr*2},
-                            Msgs, $ModuleId) = 
-             Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, assoc, Attr*2})
-
-  [ca-2'6] is-binary-definition($Symbol* -> $Symbol) == false
-           =================================================
-           check-attributes2($Symbol* -> $Symbol {Attr*1, right, Attr*2},
-                            Msgs, $ModuleId) = 
-             Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, right, Attr*2})
-
-
-  [ca-2'7] check-attributes2($Literal ( $Symbol,* ) -> $Symbol {Attr*1, right, Attr*2},
-                            Msgs, $ModuleId) = 
-             Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, right, Attr*2})
-
-  [ca-2'8] is-binary-definition($Symbol* -> $Symbol) == false
-           =================================================
-           check-attributes2($Symbol* -> $Symbol {Attr*1, non-assoc, Attr*2},
-                            Msgs, $ModuleId) = 
-             Msgs + illegal-attribute($ModuleId, $Symbol* -> $Symbol {Attr*1, non-assoc, Attr*2})
-
-  [ca-2'9] check-attributes2($Literal ( $Symbol,* ) -> $Symbol {Attr*1, non-assoc, Attr*2},
-                            Msgs, $ModuleId) = 
-             Msgs + illegal-attribute($ModuleId, $Literal ( $Symbol,* ) -> $Symbol {Attr*1, non-assoc, Attr*2})
+  [ca-2'9] $Literal ( $Symbol,* ) -> $Symbol {Attr*1, non-assoc, Attr*2} := Production,
+           $Location := get-location(Production)
+           ====>
+           check-attributes2(Production, Msgs, $ModuleId) = 
+             Msgs, warning("", "", "", "illegal-attribute: non-assoc", [subject("", $Location)])
 
   [ibd-1'1] is-binary-definition($Symbol1 $Symbol2 $Symbol1 -> $Symbol1) = true 
 

@@ -1,27 +1,30 @@
 module LabelChecker
 
-imports Sdf-Messages ModuleOperations
+%%imports utilities/PosInfo[Literal]
+imports Sdf-Messages 
+imports ModuleOperations
 
 exports
+  context-free start-symbols {Feedback ","}*
   context-free syntax
-    check-labels(Definition) -> Messages
+    check-labels(Definition) -> {Feedback ","}*
 
 hiddens
   sorts LabelsSet Labels-Msgs-Tuple
 
   context-free syntax
     labels(Literal*)               -> LabelsSet
-    "[" LabelsSet "," Messages "]" -> Labels-Msgs-Tuple
+    "[" LabelsSet "," {Feedback ","}* "]" -> Labels-Msgs-Tuple
 
   context-free syntax
     contains(Literal, LabelsSet) -> Boolean
     Literal "++" LabelsSet       -> LabelsSet
 
   context-free syntax
-    check-labels(Definition, Messages)            -> Messages {traversal(accu, break, top-down)}
-    check-labels(Module, Messages)                -> Messages {traversal(accu, break, top-down)}
-    check-labels2(Module, Messages, ModuleId)      -> Messages {traversal(accu, break, top-down)}
-    check-labels2(Production, Messages, ModuleId)  -> Messages {traversal(accu, break, top-down)}
+    check-labels(Definition, {Feedback ","}*)            -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-labels(Module, {Feedback ","}*)                -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-labels2(Module, {Feedback ","}*, ModuleId)      -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-labels2(Production, {Feedback ","}*, ModuleId)  -> {Feedback ","}* {traversal(accu, break, top-down)}
     check-labels3(Symbol*, Labels-Msgs-Tuple, 
                   ModuleId, Production)            -> Labels-Msgs-Tuple {traversal(accu, break, top-down)}
     check-labels3({Symbol ","}*, Labels-Msgs-Tuple, 
@@ -35,7 +38,7 @@ hiddens
     "Module"[0-9]*     -> Module
     "$ModuleId"[0-9]*  -> ModuleId
     "Definition"[0-9]* -> Definition
-    "Msgs"[0-9]*       -> Messages
+    "Msgs"[0-9]*       -> {Feedback ","}*
     "$Symbol"[0-9]*    -> Symbol
     "$Literal"[0-9]*   -> Literal
     "$Literal*"[0-9]*  -> Literal*
@@ -44,5 +47,8 @@ hiddens
     "Attrs"[0-9]*      -> Attributes
 
     "LabelsSet"[0-9]*  -> LabelsSet
+
+%%    "$Location"[0-9]* -> Location
+    "$String"[0-9]*   -> StrCon
 
 

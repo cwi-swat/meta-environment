@@ -5,14 +5,14 @@ imports Sdf-AttributeChecker LabelChecker SortChecker
         RemoveLabels DeprecatedSymbols
 
 exports
-  context-free start-symbols Messages
+  context-free start-symbols Summary
 
   context-free syntax
-    check-sdf(SDF) -> Messages
+    check-sdf(SDF) -> Summary
 
 hiddens
   context-free syntax
-    check-sorts-and-prods(Definition)                          -> Messages
+    check-sorts-and-prods(Definition)                          -> {Feedback ","}*
     pre-check-module(Module, Definition, Info-Msg-Tuple)       -> Info-Msg-Tuple
     pre-check-modules(Definition, Definition, Info-Msg-Tuple)  -> Info-Msg-Tuple
     pre-check-imports(ImportsSet, Definition, Info-Msg-Tuple)  -> Info-Msg-Tuple
@@ -26,8 +26,8 @@ hiddens
   variables
     "Definition"[0-9]* -> Definition
 
-    "Msg"[0-9]*        -> Message
-    "Msg*"[0-9]*       -> Message*
+    "Msg"[0-9]*        -> Feedback
+    "Msg*"[0-9]*       -> {Feedback ","}*
     "Msgs"[0-9]*       -> Messages
 
     "Module"[0-9]*       -> Module

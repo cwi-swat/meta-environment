@@ -1,17 +1,19 @@
 module Sdf-AttributeChecker
 
+imports utilities/PosInfo[Production]
 imports Sdf-Messages ModuleOperations
 
 exports
+  context-free start-symbols {Feedback ","}*
   context-free syntax
-    check-sdf-attributes(Definition) -> Messages
+    check-sdf-attributes(Definition) -> {Feedback ","}*
 
 hiddens
   context-free syntax
-    check-attributes(Definition, Messages)           -> Messages {traversal(accu, break, top-down)}
-    check-attributes(Module, Messages)               -> Messages {traversal(accu, break, top-down)}
-    check-attributes2(Module, Messages, ModuleId)     -> Messages {traversal(accu, break, top-down)}
-    check-attributes2(Production, Messages, ModuleId) -> Messages {traversal(accu, break, top-down)}
+    check-attributes(Definition, {Feedback ","}*)            -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-attributes(Module, {Feedback ","}*)                -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-attributes2(Module, {Feedback ","}*, ModuleId)     -> {Feedback ","}* {traversal(accu, break, top-down)}
+    check-attributes2(Production, {Feedback ","}*, ModuleId) -> {Feedback ","}* {traversal(accu, break, top-down)}
 
   context-free syntax
     is-binary-definition(Production)       -> Boolean
@@ -31,5 +33,7 @@ hiddens
     "$Symbol*"[0-9]*   -> Symbol*
     "$Symbol,*"[0-9]*  -> {Symbol ","}*
     "$Symbol"[0-9]*    -> Symbol
-    "Msgs"[0-9]*       -> Messages
+    "Msgs"[0-9]*       -> {Feedback ","}*
     "$Literal"[0-9]*   -> Literal
+
+    "$Location"[0-9]* -> Location

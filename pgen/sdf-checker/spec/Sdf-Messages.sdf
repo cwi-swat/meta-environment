@@ -1,6 +1,9 @@
 module Sdf-Messages
 
-imports SymbolSetOperations ProductionSetOperations
+imports basic/Feedback
+imports SymbolSetOperations 
+imports SdfOperations
+imports ProductionSetOperations
 
 exports 
   sorts Message Messages

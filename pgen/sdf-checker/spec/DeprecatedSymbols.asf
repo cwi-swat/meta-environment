@@ -2,16 +2,22 @@ equations
 
 [cs-1'1]
   check-for-deprecated-symbols(Definition) =
-    check-for-deprecated-symbols(Definition, {})
+    check-for-deprecated-symbols(Definition, )
 
 [cs-1'2]
   check-for-deprecated-symbols(Module, Msgs) =
     check-for-deprecated-symbols2(Module, Msgs, get-module-name(Module))
 
 [cl-2'1]
-  check-for-deprecated-symbols2($Symbol1 # $Symbol2, Msgs, $ModuleId) =
-    Msgs + deprecated-tuple-notation($ModuleId, $Symbol1 # $Symbol2)
+  $Symbol1 # $Symbol2 := $Symbol0,
+  $Location := get-location($Symbol0)
+  ====> 
+  check-for-deprecated-symbols2($Symbol0, Msgs, $ModuleId) =
+    Msgs, warning("", "", "", "deprecated-tuple-notation", [subject("", $Location)])
 
 [cl-2'2]
-  check-for-deprecated-symbols2($UQLiteral, Msgs, $ModuleId) =
-    Msgs + deprecated-unquoted-symbol-notation($ModuleId, $UQLiteral)
+  $UQLiteral := $Symbol,
+  $Location := get-location($Symbol)
+  ====> 
+  check-for-deprecated-symbols2($Symbol, Msgs, $ModuleId) =
+    Msgs, warning("", "", "", "deprecated-unquoted-symbol-notation", [subject("", $Location)])

@@ -1,0 +1,97 @@
+equations
+
+  [production2str-plain]
+    production2str($Symbol* -> $Symbol $Attributes) =
+      symbols2str($Symbol*) 
+      || strcon(""" "-"">" """)
+      || symbol2str($Symbol) 
+
+  [production2str-prefix]
+    production2str($Literal($Symbolstar) -> $Symbol $Attributes) =
+      literal2str($Literal)  
+      || strcon(""" "(" """)
+      || symbolssep2str($Symbolstar)  
+      || strcon(""" ")" """)
+      || strcon(""" "-"">" """)
+      || symbol2str($Symbol)
+
+  [symbols2str-empty]
+    symbols2str() = strcon(""" """) 
+
+  [symbols2str-one]
+    symbols2str($Symbol) = symbol2str($Symbol)
+
+  [symbols2str-many]
+    symbols2str($Symbol $Symbol+) = 
+      symbol2str($Symbol)
+      || strcon(""" " " """)
+      || symbols2str($Symbol+)
+
+  [symbolssep2str-empty]
+    symbolssep2str() = strcon(""" """) 
+
+  [symbolssep2str-one]
+    symbolssep2str($Symbol) = symbol2str($Symbol)
+
+  [symbolssep2str-many]
+    symbolssep2str($Symbol , $Symbolplus) = 
+      symbol2str($Symbol)
+      || strcon(""" "," """)
+      || symbolssep2str($Symbolplus)
+
+  [symbol2str-plainsort]
+    symbol2str(sort($Char*)) = strcon(""" $Char* """)
+
+  [symbol2str-parameterizedsort]
+    symbol2str(sort($Char*)[[$Symbolplus]]) = 
+      strcon(""" $Char* """)
+      || strcon(""" "[""[" """)
+      || symbolssep2str($Symbolplus)
+      || strcon(""" "]""]" """)
+
+  [symbol2str-literal]
+    symbol2str($Literal) = literal2str($Literal)
+
+  [symbol2str-star]
+    symbol2str($Symbol*) = symbol2str($Symbol) || strcon(""" "*" """)
+
+  [symbol2str-plus]
+    symbol2str($Symbol+) = symbol2str($Symbol) || strcon(""" "+" """)
+
+  [symbol2str-option]
+    symbol2str($Symbol?) = symbol2str($Symbol) || strcon(""" "?" """)
+
+  [symbol2str-sepstar]
+    symbol2str({$Symbol1 $Symbol2}*) = 
+      strcon(""" "{" """)
+      || symbol2str($Symbol1) 
+      || strcon(""" " " """)
+      || symbol2str($Symbol2) 
+      || strcon(""" "}" """)  
+      || strcon(""" "*" """) 
+
+  [symbol2str-sepplus]
+    symbol2str({$Symbol1 $Symbol2}+) = 
+      strcon(""" "{" """)
+      || symbol2str($Symbol1) 
+      || strcon(""" " " """)
+      || symbol2str($Symbol2) 
+      || strcon(""" "}" """)  
+      || strcon(""" "+" """) 
+
+  [symbol2str-tuple]
+    symbol2str($Symbol1 # $Symbol2) = 
+      symbol2str($Symbol1) 
+      || strcon(""" "#" """)
+      || symbol2str($Symbol2)  
+
+  [default-symbol2str-notimplemented]
+    symbol2str($Symbol) = 
+      strcon(""" "n""o""t""-""i""m""p""l""e""m""e""n""t""e""d" """)
+
+  [literal2str-uqliteral]
+    literal2str(uqliteral($Char*)) = strcon(""" $Char* """)
+
+  [literal2str-qliteral]
+    literal2str(qliteral(""" $Char* """)) = 
+      strcon(""" "\"""" $Char* "\"""" """)
