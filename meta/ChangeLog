@@ -1,5 +1,11 @@
 # $Id$
 
+2002/11/25 (vandenbr@loria.fr)
+ * Fixed a bug in the structure editors wrt "unparsed"-ness of
+   trees.
+ * Removed annotations when removing ModuleIds from the list
+   of imports.
+
 2002/11/20 (vinju@loria.fr)
  * Set versions of shared-objects and aterm-java jarfiles to 1.0
  * Refactored module-db to use Start symbols instead of pt-support API.
