@@ -3,7 +3,7 @@
 include ../make_rules
 
 bin_PROGRAMS      = sglr
-pkgdata_DATA      = sglr.idef
+data_DATA      = sglr.idef
 # noinst_PROGRAMS   = sglr-prof
 
 SRCS              = sglr-main.c  getopt.c getopt1.c 
