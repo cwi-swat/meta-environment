@@ -1,0 +1,187 @@
+#!/bin/sh
+#
+#    SGLR - the Scannerless Generalized LR parser.
+#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
+#
+#    This program is free software; you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation; either version 2 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program; if not, write to the Free Software
+#    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
+#
+# $Id$
+Revision='$Revision$'
+
+###
+#  Some global variables, that might require occasional modification
+###
+
+update=0
+verbose=0
+
+cd `dirname $0`;
+mydir=`pwd`
+#echo $mydir
+MV=mv
+RM=rm
+COMPARE="$mydir/trmdiff"
+SDF2TABLE=sdf2table
+
+reference=$mydir/tables
+dirs="first grammars"
+
+
+###
+#  Handle the command line, &c.
+###
+
+myname=`basename $0`
+myversion=`echo $Revision| cut -d' ' -f2`
+
+# The argument vector: list of option letters, colons denote option
+# arguments.  See Usage function, immediately below, for option
+# explanation.
+myarguments="hvUV"
+
+if [ $myarguments ] ; then
+    myargsexplained=$myarguments
+    # Add ' -' before, and add ' ' after, all options that have an argument
+    myargsexplained="`echo $myargsexplained|sed -e \"s/\(.:\)/ -\1 /g\"`"
+    # Add '-' where necessary
+    myargsexplained="`echo $myargsexplained|sed -e \"s/ \([^-:]\)/ -\1/g\"`"
+    # Replace argument position indicator ':' by ' arg'
+    myargsexplained="`echo $myargsexplained|sed -e \"s/:/ arg/g\"`"
+
+    myargsexplained=" -$myargsexplained"
+fi
+
+# Usage: displays helpful usage information
+Usage() {
+cat << E_O_USAGE >&2
+Usage: $myname$myargsexplained . . .
+Options:
+    -h              display help information (usage)
+    -v              verbose mode
+    -U              update outdated originals
+    -V              reveal program version (i.e. $myversion)
+E_O_USAGE
+}
+
+Version() {
+    echo "$myname v$myversion" >&2
+}
+
+# getopt handles command line...
+args=`getopt $myarguments $* 2> /dev/null`
+if test $? != 0
+then
+        Usage
+        exit 2
+fi
+set -- $args
+
+# Argument interpretation...
+while [ $#  -gt 0 ]
+do
+    case "$1"
+    in
+        -h)
+            Usage; exit 0;;
+        -v)
+            verbose=1; shift;;
+        -U)
+            update=1; shift;;
+        -V)
+            Version; shift;;
+        --)
+            shift; break;;
+    # Add additional command line options here...
+    *)
+            Usage; shift ;;
+    esac
+done
+
+
+###
+#  Get to the real work now...
+###
+
+
+Warn () {
+	echo $*                                   	>&2
+}
+
+Error () {
+	Warn $*
+	error=1
+}
+
+Abort () {
+	Error $*
+	exit 2
+}
+
+Notify () {
+	if [ $verbose -gt 0 ] ; then
+		Warn $*
+	fi
+}
+
+
+RegressGenTable () {
+	ptbl=`basename $1 .sdf`.tbl
+	if [ ! -f $reference/$ptbl ] ; then
+		Notify "No reference table for $ptbl"
+		continue
+	fi
+	if $SDF2TABLE $VERBOSE -i $1 -o $ptbl ; then
+	        Notify Comparing $ptbl...
+	        if $COMPARE $VERBOSE $ptbl $reference/$ptbl	>/dev/null
+	        then
+		        Notify "Regress test for $1 succeeded"
+	        else
+		        Error "Regress test for $1 failed"
+	        fi
+	        if [ $update -eq 0 ] ; then
+			if [ $error -eq 0 ] ; then
+				${RM} -f $ptbl
+			fi
+		else
+			${MV} $ptbl $reference/$ptbl
+		fi
+	else
+		Abort "Failed to generate parse table for $1"
+	fi
+}
+
+
+#
+## Main bit...
+#
+
+if [ $verbose -gt 0 ] ; then
+	VERBOSE="-v"
+else
+	VERBOSE=""
+fi
+
+error=0
+for dir in $dirs
+do
+	cd $dir
+        for stx in `ls *.sdf` ; do
+	        RegressGenTable $stx
+        done
+	${RM} -f *.asfix[12]
+	cd ..
+done
+
+exit $error

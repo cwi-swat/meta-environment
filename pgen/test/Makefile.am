@@ -1,6 +1,7 @@
 #
-#    PGEN - the SDF2 parse table generator.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+#    SGLR - the Scannerless Generalized LR parser.
+#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, 
+#                        The Netherlands.
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -18,8 +19,13 @@
 #
 # $Id$
 
-SUBDIRS    = c-lib c-source normalizer src grammar regress-test
+SUBDIRS    = first grammars tables
 
-EXTRA_DIST = make_rules
+EXTRA_DIST = lang-types regress-lang trmdiff trmdiff.in
 
-test: check
+TESTS      = regress-lang
+
+regress-lang: dummy
+	@chmod +x $@
+
+dummy:

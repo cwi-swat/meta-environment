@@ -171,7 +171,7 @@ SPEC_SRCS5=\
    AUX-Sdf2-Normalization8.c AUX-Sdf2-Normalization7.c\
    AUX-Sdf2-Normalization6.c AUX-Sdf2-Normalization5.c\
    AUX-Sdf2-Normalization4.c AUX-Sdf2-Normalization3.c\
-   AUX-Sdf2-Normalization2.c AUX-Sdf2-Normalization1.c
+   AUX-Sdf2-Normalization2.c AUX-Sdf2-Normalization1.c Basic-Integers.c
 
 SPEC_SRCS = $(SPEC_SRCS1) $(SPEC_SRCS2) $(SPEC_SRCS3) $(SPEC_SRCS4) $(SPEC_SRCS5)
 

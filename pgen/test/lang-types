@@ -1,6 +1,6 @@
 #
-#    PGEN - the SDF2 parse table generator.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
+#    SGLR - the Scannerless Generalized LR parser.
+#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -16,10 +16,24 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 #
-# $Id$
+# Extensions mapping
+# Ext	Lang         (use TABS between extension and language!!!)
+sdf	Sdf2
+sdf2	Sdf2
+amb	Ambi
+casl	Casl
+cycle	Cyclops
+cycle2	Cyclops2
+c	C
+flow	Follower
+h	C
+m	ObjectiveC
+isle	Isle
+java	Java
+pico	Pico
+rmo	Risla
+simcob	SimpleCobol
+flt	Flat
+jcb	Jacob
+pfr	Prefer
 
-SUBDIRS    = c-lib c-source normalizer src grammar regress-test
-
-EXTRA_DIST = make_rules
-
-test: check
