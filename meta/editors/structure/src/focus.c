@@ -54,7 +54,7 @@ SE_Focus createFocus(PT_ParseTree parse_tree, SE_Path path, int focus_status)
     PT_Production prod = PT_getTreeProd(tree);
     length = PT_getTreeLengthAnno(tree);
     SE_makeAreaDefault(calcParseTreeStart(parse_tree, path), length);
-    if (PT_isVarDefault(prod)) {
+    if (PT_isProductionVariable(prod)) {
       focus = SE_makeFocusNotEmpty(path, 
 				   PT_yieldSymbolVisualVariables(
 	 		             getTreeSort(tree)),
@@ -121,6 +121,8 @@ SE_Focus expandFocusToStartSymbol(SE_Editor editor, SE_Focus focus)
 
 /*}}}  */
 
+/*{{{  ATbool isFocusInUnparsedFoci(SE_Editor editor, SE_Focus focus) */
+
 ATbool isFocusInUnparsedFoci(SE_Editor editor, SE_Focus focus)
 {
   SE_FocusList unparsedFoci = SE_getEditorUnparsedFoci(editor);
@@ -135,6 +137,8 @@ ATbool isFocusInUnparsedFoci(SE_Editor editor, SE_Focus focus)
 
   return ATfalse;
 }
+
+/*}}}  */
 
 /*{{{  SE_Focus updateFocus(SE_Focus focus, int location, int length) */
 
