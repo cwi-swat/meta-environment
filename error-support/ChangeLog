@@ -1,5 +1,8 @@
 $Id$
 
+Thu Jun 10 13:31:22 CEST 2004 <M336@cwi.nl>
+ * fix error-diff to diff errors, not summaries
+
 Tue May 18 10:02:26 CEST 2004 <jurgenv@cwi.nl>
  * Removed -Werror flag
  * Bumped to 0.2.1
