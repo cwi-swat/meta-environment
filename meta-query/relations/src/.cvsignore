@@ -1,0 +1,9 @@
+.deps
+Makefile
+Makefile.in
+DisplayQuery
+DisplayQuery.c
+DisplayQuery.idef
+DisplayQuery.tifs
+toolDisplayQuery.tif.c
+toolDisplayQuery.tif.h
