@@ -3,6 +3,11 @@ module Normalization
 imports Tscript
 imports utilities/PosInfo[ProcessExpr]
 
+exports
+  context-free syntax
+  %% hack
+  "star" "{" Location "}" -> Atom
+ 
 hiddens
   context-free syntax
     ProcessExpr "||_" ProcessExpr -> ProcessExpr {non-assoc}
@@ -10,9 +15,11 @@ hiddens
   context-free syntax
     isAtomic(ProcessExpr) -> Boolean
 
+
 hiddens
   variables
     "$Atom"[0-9]* -> Atom
+    "$Location" -> Location
     "$ProcessExpr"[0-9]* -> ProcessExpr
     "$Term" -> Term
 

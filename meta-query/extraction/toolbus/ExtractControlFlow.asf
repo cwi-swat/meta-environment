@@ -13,13 +13,15 @@ equations
 [remove-if-0]
   removeif(prod($ProcessExpr*1, if $Term then tau fi, $ProcessExpr*2)) = removeif(prod($ProcessExpr*1, $ProcessExpr*2))
 
-
 [extract-processexpr-flow-0]
+  extractProcessExprFlow($ProcessExpr, $Rstore1) = $Rstore1
+
+[extract-processexpr-flow-1]
   $Rstore2 := addControlFlow($ProcessExpr1, $ProcessExpr2, $Rstore1)
   ===>
   extractProcessExprFlow($ProcessExpr1, $ProcessExpr2, $Rstore1) = $Rstore2
 
-[extract-processexpr-flow-1]
+[extract-processexpr-flow-2]
   $Rstore2 := addControlFlow($ProcessExpr1, $ProcessExpr2, $Rstore1)
   ===>
   extractProcessExprFlow($ProcessExpr1, $ProcessExpr2, $ProcessExpr+, $Rstore1) =  
@@ -27,10 +29,10 @@ equations
 
 
 [add-flow-control-0]
-  $ProcessExprId1 := get-location($ProcessExpr1),
-  $ProcessExprId2 := get-location($ProcessExpr2),
-  $ProcessExprStr1 := unparse-to-string($ProcessExpr1),
-  $ProcessExprStr2 := unparse-to-string($ProcessExpr2),
+  $ProcessExprId1 := get-loc($ProcessExpr1),
+  $ProcessExprId2 := get-loc($ProcessExpr2),
+  $ProcessExprStr1 := processexpr2string($ProcessExpr1),
+  $ProcessExprStr2 := processexpr2string($ProcessExpr2),
   $Tuple1 := <$ProcessExprId1, $ProcessExprId2>,
   $Rstore2 := add-tuple(CONTROL_FLOW, $Tuple1, $Rstore1),
   $Tuple2 := <$ProcessExprId1, $ProcessExprStr1>,
@@ -40,3 +42,15 @@ equations
   ===>
   addControlFlow($ProcessExpr1, $ProcessExpr2, $Rstore1) = $Rstore4
 
+
+[default-get-loc]
+  get-loc($ProcessExpr) = get-location($ProcessExpr)
+
+[get-loc-0]
+  get-loc(star{$Location}) = $Location
+
+[default-processexpr-to-string]
+  processexpr2string($ProcessExpr) = unparse-to-string($ProcessExpr)
+
+[processexpr-to-string-0]
+  processexpr2string(star{$Location}) = "star"

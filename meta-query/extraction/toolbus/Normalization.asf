@@ -4,9 +4,6 @@ equations
    $ProcessExpr1 + ($ProcessExpr2  + $ProcessExpr3) =
     ($ProcessExpr1 +  $ProcessExpr2) + $ProcessExpr3 
 
-%%[A3]
-%%  $ProcessExpr + $ProcessExpr = $ProcessExpr
-
 [A4]
   ( $ProcessExpr1 + $ProcessExpr2 ) . $ProcessExpr3 =
      ( $ProcessExpr1 . $ProcessExpr3 ) + ( $ProcessExpr2 . $ProcessExpr3 ) 
@@ -19,18 +16,15 @@ equations
    ( $ProcessExpr1 . $ProcessExpr2 ) . $ProcessExpr3 =
      $ProcessExpr1 . ( $ProcessExpr2 . $ProcessExpr3 )
 
-%%[A6']
-%%  $ProcessExpr + delta = $ProcessExpr
-
-%%[A7]
-%%  delta . $ProcessExpr = delta
 
 [star-normalization]
-  $ProcessExpr1 * $ProcessExpr2 = $ProcessExpr1 . $ProcessExpr1 . $ProcessExpr2 + $ProcessExpr1 . $ProcessExpr2 + $ProcessExpr2
+  $Location := get-location($ProcessExpr1)
+  ===>
+  $ProcessExpr1 * $ProcessExpr2 = star{$Location} . $ProcessExpr1 . star{$Location} + star{$Location} . $ProcessExpr2
 
-%%[star-normalization-0]
-%%  ( $ProcessExpr1 + $ProcessExpr2 ) * $ProcessExpr3 =
-%%    ( $ProcessExpr1 ) * $ProcessExpr3 + $ProcessExpr2 . $ProcessExpr3 + $ProcessExpr3
+%%[star-normalization]
+%%  $ProcessExpr1 * $ProcessExpr2 = $ProcessExpr1 . $ProcessExpr1 . $ProcessExpr2 . $ProcessExpr1 . $ProcessExpr2 + $ProcessExpr2
+
 
 [if-then-0]
   tau != $ProcessExpr
@@ -60,6 +54,7 @@ equations
 [M4]
   ( $ProcessExpr1 + $ProcessExpr2 ) ||_ $ProcessExpr3 =
     $ProcessExpr1 ||_ $ProcessExpr3 + $ProcessExpr2 ||_ $ProcessExpr3
+
 
 [default-isAtomic]
   isAtomic($ProcessExpr) = false

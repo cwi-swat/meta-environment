@@ -16,7 +16,13 @@ hiddens
     removeif(ProcessExpr) -> ProcessExpr
 
 hiddens
+  context-free syntax
+    get-loc(ProcessExpr) -> Location
+    processexpr2string(ProcessExpr) -> String
+
+hiddens
   variables
+    "$Location" -> Location
     "$ProcessExpr"[0-9]* -> ProcessExpr
     "$ProcessExpr*"[0-9]* -> {ProcessExpr ","}*
     "$ProcessExpr+"[0-9]* -> {ProcessExpr ","}+
