@@ -73,6 +73,7 @@ exports
    context-free syntax
 	 "[" {FROM ","}+ "::" REXP "]"		-> REXP
 	 "{" {FROM ","}+ "::" REXP  "}"		-> REXP
+	FROM "::" REXP				-> REXP
  
         evalp(REXP, RSTORE)            		-> Boolean
         evale(REXP, RSTORE)            		-> Elem
@@ -120,11 +121,10 @@ exports
         equal-elem(Elem, Elem)              				-> Boolean
 	equal-rval(RVALUE, RVALUE)					-> Boolean
 
-        eval-iter(RVAR, Bag[[Elem]], RVALUE, REXP, RSTORE)		-> RVALUE
-        eval-citer(RVAR, Bag[[Elem]], RVALUE, REXP, REXP, RSTORE)	-> RVALUE
+        eval-iter(RVAR, RVALUE, RVALUE, REXP, RSTORE)			-> RVALUE
 
-        eval-iter2(RVAR, RVAR, Rel[[Elem]], RVALUE, REXP, RSTORE)	-> RVALUE
-        eval-citer2(RVAR, RVAR, Rel[[Elem]], RVALUE, REXP, REXP, RSTORE)-> RVALUE
+        eval-iter2(RVAR, RVAR, RVALUE, RVALUE, REXP, RSTORE)		-> RVALUE
+
 	append(RVALUE, RVALUE)						-> RVALUE
 	existsb(RVAR, Bag[[Elem]], REXP, RSTORE)			-> Boolean
 	existsr(RVAR, RVAR, Rel[[Elem]], REXP, RSTORE)			-> Boolean

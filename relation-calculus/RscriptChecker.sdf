@@ -52,7 +52,7 @@ exports
 	 convert-errors1(ERRORS)                    		-> List
          rvar2str(RVAR)		 	        		-> String
  
-	Table[[RVAR,REXPTYPE]] # ERRORS  			-> TENV
+	Table[[RVAR,REXPTYPE]] # ERRORS  			-> TENV {prefer}
 
 	TENV "+" ERROR						-> TENV
 

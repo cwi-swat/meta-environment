@@ -1,4 +1,4 @@
-eval-rscript(
+check-rscript(
 
 %%
 %% Test all built-in functions

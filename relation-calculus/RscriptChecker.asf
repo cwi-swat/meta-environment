@@ -156,7 +156,6 @@ $Error]>
 [check-const-bag1]
       check-const($Bag, $Tenv) = check-const-bag($Bag, $Tenv)
 
-
 [check-const-rel1]
        check-const($Rel, $Tenv) = check-const-rel($Rel, $Tenv) 	
 
@@ -207,7 +206,7 @@ $Error]>
       	============================================
       	check(<$Exp1, $Exp2>, $Tenv) = <<$Etype1, $Etype2>, $Tenv''>
 
-%% --- Check bag or relation expressions
+%% --- Check bag expressions
 
 [check-bag-exp1] 
        check($Exp, $Tenv) = <$Etype, $Tenv'>,
@@ -222,8 +221,32 @@ $Error]>
        ==========================================
        check([ $Exp ], $Tenv) = <$Etype', $Tenv'>
 
-[default-check-bag-or-rel]
-	check([$Exp*], $Tenv) = <undefined, $Tenv + {$Exp*} cannot be typed>
+[check-bag-exp3]
+	check( [], $Tenv) =  <undefined, $Tenv + [] cannot be typed>
+
+[default-check-bag]
+	check([$Exp*], $Tenv) = <undefined, $Tenv + [$Exp*] cannot be typed>
+
+%% --- Check relation  expressions
+
+[check-rel-exp1] 
+       check($Exp, $Tenv) = <$Etype, $Tenv'>,
+       $Etype' =  container-type($Etype),
+       check({ $Exp+ }, $Tenv') = <$Etype', $Tenv''>
+       ==========================================
+       check({ $Exp, $Exp+ }, $Tenv) = <$Etype', $Tenv''>
+
+[check-rel-exp2] 
+       check($Exp, $Tenv) = <$Etype, $Tenv'>,
+       $Etype' =  container-type($Etype)
+       ==========================================
+       check({ $Exp }, $Tenv) = <$Etype', $Tenv'>
+
+[check-rel-exp3]
+	check( {}, $Tenv) =  <undefined, $Tenv + {} cannot be typed>
+
+[default-rel-bag]
+	check({ $Exp* }, $Tenv) = <undefined, $Tenv + {$Exp*} cannot be typed>
 
 %% --- Check Operators
 
@@ -485,6 +508,12 @@ $Error]>
       ==========================================
       require-rel-type($Exp, $Var1, $Var2, rel[$Etype1, $Etype2], $Tenv) = $Tenv''
 
+[rbt1]
+      store($Tenv, $Var1, $Etype1) = $Tenv',
+      store($Tenv', $Var2, $Etype2) = $Tenv''
+      ==========================================
+      require-rel-type($Exp, $Var1, $Var2, bag[<$Etype1, $Etype2>], $Tenv) = $Tenv''
+
 [default-rbt]
       store($Tenv, $Var1, undefined) = $Tenv',
       store($Tenv', $Var2, undefined) = $Tenv''
@@ -647,6 +676,12 @@ $Error]>
       check-stat($Etype $Var, $Tenv) = store($Tenv, $Var, $Etype)
 [check-vardef2] 
       check-stat($Etype $Var = $Exp, $Tenv) =  check-stat($Etype $Var() = $Exp, $Tenv)
+
+[check-vardef3]
+      check-stat(bag[$Etype] $Var = [], $Tenv) = store($Tenv, $Var, bag[$Etype])
+[check-vardef4]
+      check-stat(rel[$Etype1,$Etype2] $Var = {}, $Tenv) = store($Tenv, $Var, rel[$Etype1,$Etype2])
+
 
 [check-fundef] 
       check-not-defined($Var, $Tenv) = $Tenv1,
