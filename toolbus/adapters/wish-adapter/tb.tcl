@@ -8,7 +8,7 @@
 # TBrequire:    require that function exists in script
 
 proc TBstring {txt} {
-  regsub -all "\\\"" $txt "\\\\\"" txt
+  regsub -all "\\\\"" $txt "\\\\\\" txt
   regsub -all "\"" $txt "\\\"" txt
   return "\"$txt\""
 }

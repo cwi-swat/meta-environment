@@ -4,7 +4,7 @@
 This new wish-adapter, implemented by Merijn de Jonge, seems good
 enough to replace the old one. The old one was part of the ToolBus
 distribution from the start, and its long evolution left its mark
-on the clearness and conciceness of the code.
+on the clearness and conciseness of the code.
 
 <<wish-adapter.c*>>=
 <<notice>>
@@ -14,6 +14,7 @@ on the clearness and conciceness of the code.
 <<function declarations>>
 
 <<error>>
+<<print_backslashes>>
 <<print_string>>
 <<print_var>>
 <<print_env>>
@@ -68,7 +69,7 @@ on the clearness and conciceness of the code.
 
 /*
  * Modified, nowebbed, and documented by Pieter Olivier.
- * Date:     Wed Aug 28 10:59:23 MET DST 1996
+ * Date:     Wed Aug 28 10:09:23 MET DST 1996
  * 
  */
 
@@ -136,6 +137,7 @@ We define some constants, which make it easy to change some defaults.
    "-script Name          use Name as Tcl script for wish\n" \
    "-script-args A1 ...   use A1 ... as arguments for the wish execution\n"
 
+#define DEBUG_ON
 #ifdef DEBUG_ON
 #define CHAR2WISH(c)			fputc(c, to_wish); \
 					fputc(c, stderr)
@@ -177,6 +179,7 @@ static FILE*  from_wish            = NULL;
 static TBbool connected            = TBfalse;
 static TBbool lazy_exec            = TBfalse;
 static char*  name                 = NULL;
+static char   backslashes[16]	   = "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\";
 
 extern term_list* tool_in_sign; /* for check_in_sign */
 extern char*      tool_name;    /* idem */
@@ -186,26 +189,26 @@ extern char*      tool_name;    /* idem */
 %{{{ function declarations
 
 <<function declarations>>=
-static void error( const char* msg );
-static void print_string( char* s, int n );
-static void print_var( term* e );
-static void print_env( env* e );
-static void print_term( term* t );
-static void print_list( term_list* l, char* left, char* sep, char* right );
-static TBbool is_to_tool_comm( const char* s );
-static TBbool is_from_tool_comm( char* s );
-static int bytes_in_term( term* t );
-static TBbool rec_monitor( term* e, term** out );
-static TBbool rec_do( term* e, term** out );
-static TBbool rec_eval( term* e, term** out );
-static TBbool rec_ack_event( term* e, term** out );
-static TBbool rec_terminate( term* e, term** out );
+static void error(const char* msg);
+static void print_string(char* s, int n, int depth);
+static void print_var(term* e, int depth);
+static void print_env(env* e, int depth);
+static void print_term(term* t, int depth);
+static void print_list(term_list* l, char* left, char* sep, char* right, int depth);
+static TBbool is_to_tool_comm(const char* s );
+static TBbool is_from_tool_comm(char* s );
+static int bytes_in_term(term* t);
+static TBbool rec_monitor(term* e, term** out);
+static TBbool rec_do(term* e, term** out);
+static TBbool rec_eval(term* e, term** out);
+static TBbool rec_ack_event(term* e, term** out);
+static TBbool rec_terminate(term* e, term** out);
 
-static term*  handle_input_from_toolbus( term* e );
-static term*  handle_input_from_wish( term* e );
-static term*  dummy_check_in_sign( term* t );
+static term*  handle_input_from_toolbus(term* e);
+static term*  handle_input_from_wish(term* e);
+static term*  dummy_check_in_sign(term* t);
 
-static void require_fun( char* fname, term_list* fargs );
+static void require_fun(char* fname, term_list* fargs);
 static void check_in_sign();
 static void wish_create();
 static void wish_start();
@@ -233,7 +236,22 @@ static void error( const char* msg )
 @
 
 %}}}
-%{{{ static void print_string(char* s, int n)
+%{{{ static void print_backslashes(FILE *f, int n)
+
+<<print_backslashes>>=
+static void print_backslashes(int n)
+{
+  while(n > 16) {
+    PRINT2WISH0(backslashes);
+    n -= 16;
+  }
+  if(n > 0)
+    PRINT2WISH0(&backslashes[16-n]);
+}
+@
+
+%}}}
+%{{{ static void print_string(char* s, int n, int depth)
 
 {\tt print_string} writes a string to the {\tt to\_wish} channel. 
 at most $n$ characters are written.
@@ -241,99 +259,103 @@ when non-printable characters are found in the string,
 their octal values are written.
 
 <<print_string>>=
-static void print_string(char* s, int n)
+static void print_string(char* s, int n, int depth)
 {
-   CHAR2WISH('"');
-   while(n--)
-   {
-      if(isprint(*s)) {
-         switch (*s)
-         {
-            case '\\':
-            case '"':
-            case '[':
-            case ']':
-            case '{':
-            case '}':
-            case '$':
-               CHAR2WISH('\\');
-            default:
-               CHAR2WISH(*s);
-         }
-      } else {
-         PRINT2WISH1("\\%o", (unsigned int)*s);
+  print_backslashes(depth*2);
+  CHAR2WISH('"');
+  while(n--)
+  {
+    if(isprint(*s)) {
+      switch (*s) {
+	case '\\':
+	case '"':	print_backslashes(depth*2+1);
+			CHAR2WISH(*s);
+			break;
+	case '{':
+	case '}':
+	case '[':
+	case ']':
+	case '$':	CHAR2WISH('\\');
+	default:	CHAR2WISH(*s);
       }
-      s++;
-   }
-   CHAR2WISH('"');
+    } else {
+      PRINT2WISH1("\\%03o", (unsigned int)*s);
+    }
+    s++;
+  }
+  print_backslashes(depth*2);
+  CHAR2WISH('"');
 }
 @
 
 %}}}
-%{{{ static void print_var(term* e)
+%{{{ static void print_var(term* e, int depth)
 
 {\tt print_var} prints variables to the {\tt to\_wish} channel.
 
 <<print_var>>=
-static void print_var( term* e )
+static void print_var(term* e, int depth)
 {
    char* txt;
-   txt = get_txt( var_sym( e ) );
-   print_string( txt, strlen( txt ) );
-   fputc( ':', to_wish );
-   print_term( var_type( e ) );
-   if( var_result( e ) )
-      fputc( '?', to_wish );
+   txt = get_txt(var_sym(e));
+   print_string(txt, strlen(txt), depth);
+   CHAR2WISH(':');
+   print_term(var_type(e), depth);
+   if(var_result(e))
+     CHAR2WISH('?');
 }
 @
 
 %}}}
-%{{{ static void print_env(env* e)
+%{{{ static void print_env(env* e, int depth)
 
 {\tt print_env} prints environment terms to the {\tt to\_wish} channel.
 
 <<print_env>>=
-static void print_env( env* e )
+static void print_env(env* e, int depth)
 {
    TBbool first = TBtrue;
    char* txt;
    
-   fputc( '{',  to_wish );
-   while( e != NULL )
+   print_backslashes(depth*2);
+   CHAR2WISH('"');
+   while(e != NULL)
    {
-      assert( is_env( e ) );
-      if( first )
-         first = TBfalse;
+      assert(is_env(e));
+      if(first)
+        first = TBfalse;
       else
-         fputc( ' ', to_wish );
-      txt = get_txt( env_sym( e ) );
-      print_string( txt, strlen( txt ) );
-      fputc( ' ', to_wish );
-      print_term( env_val( e ) );
-      e = env_next( e );
+	CHAR2WISH(' ');
+      txt = get_txt(env_sym(e));
+      print_string(txt, strlen(txt), depth+1);
+      CHAR2WISH(' ');
+      print_term(env_val(e), depth+1);
+      e = env_next(e);
    }
+   print_backslashes(depth*2);
+   CHAR2WISH('"');
 }
 @
 
 %}}}
 
-%{{{ static void print_term(term* t)
+%{{{ static void print_term(term* t, int depth)
 
 Print a term to the {\tt to\_wish} channel.
 
 <<print_term>>=
-static void print_term( term* t )
+static void print_term(term* t, int depth)
 {
-   switch( tkind( t ) )
+   switch(tkind(t))
    {
       case t_str:
-         print_string( str_val( t ), strlen( str_val( t ) ) );
+         print_string(str_val(t), strlen(str_val(t)), depth);
          break;
       case t_bstr:
-         print_string( bstr_val( t ), bstr_len( t ) );
+         print_string(bstr_val(t), bstr_len(t), depth);
          break;
       case t_bool:
-         if( bool_val( t ) == TBtrue ) {
+         if(bool_val(t) == TBtrue) {
             PRINT2WISH0("true");
          } else {
             PRINT2WISH0("false");
@@ -346,35 +368,39 @@ static void print_term( term* t )
          PRINT2WISH1("%f", real_val(t));
          break;
       case t_var:
-         print_var(t);
+         print_var(t, depth);
          break;
       case t_placeholder:
          CHAR2WISH('<');
-         print_term( placeholder_type( t ) );
+         print_term(placeholder_type(t), depth);
          CHAR2WISH('>');
          break;
       case t_appl:
          PRINT2WISH1("%s", get_txt(fun_sym(t)));
          if(fun_args(t) != NULL)
-            print_list(fun_args(t), "(", ",", ")");
+            print_list(fun_args(t), "(", ",", ")", depth);
          break;
       case t_list:
-         print_list(t, " { ", " ", " } ");
+	 print_backslashes(depth*2);
+	 CHAR2WISH('"');
+         print_list(t, "", " ", "", depth+1);	
+	 print_backslashes(depth*2);
+	 CHAR2WISH('"');
          break;
       case t_env:
-         print_env(t);
+         print_env(t, depth);
          break;
    }
 }
 @
 
 %}}}
-%{{{ static void print_list(term_list* l, char* left, char* sep,char* right)
+%{{{ static void print_list(term_list* l, char* left, char* sep,char* right,int depth)
 
 Print a list to the {\tt to\_wish} channel. A custom separator is used.
 
 <<print_list>>=
-static void print_list( term_list* l, char* left, char* sep, char* right )
+static void print_list(term_list* l, char* left, char* sep, char* right, int depth)
 {
    int i;
    PRINT2WISH0(left);
@@ -382,7 +408,7 @@ static void print_list( term_list* l, char* left, char* sep, char* right )
       if(i>1) {
          PRINT2WISH0(sep);
       }
-      print_term(list_index(l, i));
+      print_term(list_index(l, i), depth);
    }
    PRINT2WISH0(right);
 }
@@ -394,16 +420,20 @@ static void print_list( term_list* l, char* left, char* sep, char* right )
 Print a list of arguments.
 
 <<print_args>>=
-static void print_args(term_list *args)
+static void print_args(term_list *args, int depth)
 {
-  while(args) {
+  print_list(args, "", " ", "", depth);
+/*  while(args) {
     if(tkind(first(args)) != t_list)
-      PRINT2WISH0("   { ");
-    print_term(first(args));
+      PRINT2WISH0(" \"");
+
+    print_term(first(args), depth);
     if(tkind(first(args)) != t_list)
-      PRINT2WISH0("   } ");
-    args = next(args);
+      PRINT2WISH0("\"");
+
+    args = list_next(args);
   }
+*/
 }
 @
 
@@ -710,7 +740,7 @@ static TBbool rec_do(term* e, term** out)
    PRINT2WISH1("if [catch {%s ", fname);
    /* Only print list when list isn't empty */
    if(fargs)
-     print_args(fargs);
+     print_args(fargs, 0);
      /*print_list(fargs, "\"", "\" \"", "\"");*/
    PRINT2WISH0(" } msg] {TBerror $msg}\n");
    fflush(to_wish);
@@ -737,8 +767,8 @@ static TBbool rec_eval( term* e, term** out )
    PRINT2WISH1("if [catch {%s ", fname);
    /* Only print list when list isn't empty */
    if(list_length(fargs))
-     print_args(fargs);     
-     /*print_term(fargs, "\"", "\" \"", "\"");*/
+     print_args(fargs, 0);
+     /*print_list(fargs, "\"", "\" \"", "\"");*/
    PRINT2WISH0("} msg] {TBerror $msg}\n");
    fflush(to_wish);
    return TBtrue;
@@ -760,9 +790,9 @@ static TBbool rec_ack_event(term* e, term** out)
    /* rec-ack-event */
    if(TBmatch(e, "rec-ack-event(%t)", &farg) == TBfalse)
       return TBfalse;
-   PRINT2WISH0("if [catch {rec-ack-event {");
-   print_term(farg);
-   PRINT2WISH0("}} msg] {TBerror $msg}\n" );
+   PRINT2WISH0("if [catch {rec-ack-event ");
+   print_term(farg, 0);
+   PRINT2WISH0("} msg] {TBerror $msg}\n" );
    fflush(to_wish);
    return TBtrue;
 }
@@ -785,9 +815,9 @@ static TBbool rec_terminate( term* e, term** out )
    /* rec-terminate */
    if(TBmatch(e, "rec-terminate(%t)", &farg) == TBfalse)
       return TBfalse;
-   PRINT2WISH0("if [catch {rec-terminate {");
-   print_term(farg);
-   PRINT2WISH0("}} msg] {TBerror $msg}; exit\n" );
+   PRINT2WISH0("if [catch {rec-terminate ");
+   print_term(farg, 0);
+   PRINT2WISH0("} msg] {TBerror $msg}; exit\n" );
    fflush(to_wish);
    connected = TBfalse;
    shutdown(0);

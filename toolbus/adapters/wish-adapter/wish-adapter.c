@@ -1,4 +1,4 @@
-#line 61 "wish-adapter.c.nw"
+#line 62 "wish-adapter.c.nw"
 /*
  * Praktikum: Programmeer Omgevingen II
  * File:      ./serie3/src/wa.c
@@ -9,7 +9,7 @@
 
 /*
  * Modified, nowebbed, and documented by Pieter Olivier.
- * Date:     Wed Aug 28 10:59:23 MET DST 1996
+ * Date:     Wed Aug 28 10:09:23 MET DST 1996
  * 
  */
 
@@ -31,7 +31,7 @@
  *    -not very well tested yet
  *
  */
-#line 102 "wish-adapter.c.nw"
+#line 103 "wish-adapter.c.nw"
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
@@ -39,7 +39,7 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <TB.h>
-#line 117 "wish-adapter.c.nw"
+#line 118 "wish-adapter.c.nw"
 #ifndef WISH
 #define WISH    "wish"
 #endif
@@ -62,6 +62,7 @@
    "-script Name          use Name as Tcl script for wish\n" \
    "-script-args A1 ...   use A1 ... as arguments for the wish execution\n"
 
+#define DEBUG_ON
 #ifdef DEBUG_ON
 #define CHAR2WISH(c)			fputc(c, to_wish); \
 					fputc(c, stderr)
@@ -85,7 +86,7 @@
 #define PRINT2WISH7(fmt,a1,a2,a3,a4,a5,a6,a7) \
 		fprintf(to_wish, fmt, a1, a2, a3, a4, a5, a6, a7)
 #endif
-#line 170 "wish-adapter.c.nw"
+#line 172 "wish-adapter.c.nw"
 static char*  progname             = WISH;
 static char*  script               = NULL;
 static char*  script_args[MAX_ARG];
@@ -96,30 +97,31 @@ static FILE*  from_wish            = NULL;
 static TBbool connected            = TBfalse;
 static TBbool lazy_exec            = TBfalse;
 static char*  name                 = NULL;
+static char   backslashes[16]	   = "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\";
 
 extern term_list* tool_in_sign; /* for check_in_sign */
 extern char*      tool_name;    /* idem */
-#line 189 "wish-adapter.c.nw"
-static void error( const char* msg );
-static void print_string( char* s, int n );
-static void print_var( term* e );
-static void print_env( env* e );
-static void print_term( term* t );
-static void print_list( term_list* l, char* left, char* sep, char* right );
-static TBbool is_to_tool_comm( const char* s );
-static TBbool is_from_tool_comm( char* s );
-static int bytes_in_term( term* t );
-static TBbool rec_monitor( term* e, term** out );
-static TBbool rec_do( term* e, term** out );
-static TBbool rec_eval( term* e, term** out );
-static TBbool rec_ack_event( term* e, term** out );
-static TBbool rec_terminate( term* e, term** out );
+#line 192 "wish-adapter.c.nw"
+static void error(const char* msg);
+static void print_string(char* s, int n, int depth);
+static void print_var(term* e, int depth);
+static void print_env(env* e, int depth);
+static void print_term(term* t, int depth);
+static void print_list(term_list* l, char* left, char* sep, char* right, int depth);
+static TBbool is_to_tool_comm(const char* s );
+static TBbool is_from_tool_comm(char* s );
+static int bytes_in_term(term* t);
+static TBbool rec_monitor(term* e, term** out);
+static TBbool rec_do(term* e, term** out);
+static TBbool rec_eval(term* e, term** out);
+static TBbool rec_ack_event(term* e, term** out);
+static TBbool rec_terminate(term* e, term** out);
 
-static term*  handle_input_from_toolbus( term* e );
-static term*  handle_input_from_wish( term* e );
-static term*  dummy_check_in_sign( term* t );
+static term*  handle_input_from_toolbus(term* e);
+static term*  handle_input_from_wish(term* e);
+static term*  dummy_check_in_sign(term* t);
 
-static void require_fun( char* fname, term_list* fargs );
+static void require_fun(char* fname, term_list* fargs);
 static void check_in_sign();
 static void wish_create();
 static void wish_start();
@@ -130,85 +132,99 @@ static void signals_set();
 static void help();
 static void cmd_options( int argc, char* argv[] );
 
-#line 227 "wish-adapter.c.nw"
+#line 230 "wish-adapter.c.nw"
 static void error( const char* msg )
 {
    disconnect();
    fprintf(stderr, "%s: %s : %s\n", progname, msg, strerror(errno));
    shutdown(1);
 }
-#line 244 "wish-adapter.c.nw"
-static void print_string(char* s, int n)
+#line 242 "wish-adapter.c.nw"
+static void print_backslashes(int n)
 {
-   CHAR2WISH('"');
-   while(n--)
-   {
-      if(isprint(*s)) {
-         switch (*s)
-         {
-            case '\\':
-            case '"':
-            case '[':
-            case ']':
-            case '{':
-            case '}':
-            case '$':
-               CHAR2WISH('\\');
-            default:
-               CHAR2WISH(*s);
-         }
-      } else {
-         PRINT2WISH1("\\%o", (unsigned int)*s);
-      }
-      s++;
-   }
-   CHAR2WISH('"');
+  while(n > 16) {
+    PRINT2WISH0(backslashes);
+    n -= 16;
+  }
+  if(n > 0)
+    PRINT2WISH0(&backslashes[16-n]);
 }
-#line 278 "wish-adapter.c.nw"
-static void print_var( term* e )
+#line 262 "wish-adapter.c.nw"
+static void print_string(char* s, int n, int depth)
+{
+  print_backslashes(depth*2);
+  CHAR2WISH('"');
+  while(n--)
+  {
+    if(isprint(*s)) {
+      switch (*s) {
+	case '\\':
+	case '"':	print_backslashes(depth*2+1);
+			CHAR2WISH(*s);
+			break;
+	case '{':
+	case '}':
+	case '[':
+	case ']':
+	case '$':	CHAR2WISH('\\');
+	default:	CHAR2WISH(*s);
+      }
+    } else {
+      PRINT2WISH1("\\%03o", (unsigned int)*s);
+    }
+    s++;
+  }
+  print_backslashes(depth*2);
+  CHAR2WISH('"');
+}
+#line 297 "wish-adapter.c.nw"
+static void print_var(term* e, int depth)
 {
    char* txt;
-   txt = get_txt( var_sym( e ) );
-   print_string( txt, strlen( txt ) );
-   fputc( ':', to_wish );
-   print_term( var_type( e ) );
-   if( var_result( e ) )
-      fputc( '?', to_wish );
+   txt = get_txt(var_sym(e));
+   print_string(txt, strlen(txt), depth);
+   CHAR2WISH(':');
+   print_term(var_type(e), depth);
+   if(var_result(e))
+     CHAR2WISH('?');
 }
-#line 296 "wish-adapter.c.nw"
-static void print_env( env* e )
+#line 315 "wish-adapter.c.nw"
+static void print_env(env* e, int depth)
 {
    TBbool first = TBtrue;
    char* txt;
    
-   fputc( '{',  to_wish );
-   while( e != NULL )
+   print_backslashes(depth*2);
+   CHAR2WISH('"');
+   while(e != NULL)
    {
-      assert( is_env( e ) );
-      if( first )
-         first = TBfalse;
+      assert(is_env(e));
+      if(first)
+        first = TBfalse;
       else
-         fputc( ' ', to_wish );
-      txt = get_txt( env_sym( e ) );
-      print_string( txt, strlen( txt ) );
-      fputc( ' ', to_wish );
-      print_term( env_val( e ) );
-      e = env_next( e );
+	CHAR2WISH(' ');
+      txt = get_txt(env_sym(e));
+      print_string(txt, strlen(txt), depth+1);
+      CHAR2WISH(' ');
+      print_term(env_val(e), depth+1);
+      e = env_next(e);
    }
+   print_backslashes(depth*2);
+   CHAR2WISH('"');
 }
-#line 325 "wish-adapter.c.nw"
-static void print_term( term* t )
+#line 347 "wish-adapter.c.nw"
+static void print_term(term* t, int depth)
 {
-   switch( tkind( t ) )
+   switch(tkind(t))
    {
       case t_str:
-         print_string( str_val( t ), strlen( str_val( t ) ) );
+         print_string(str_val(t), strlen(str_val(t)), depth);
          break;
       case t_bstr:
-         print_string( bstr_val( t ), bstr_len( t ) );
+         print_string(bstr_val(t), bstr_len(t), depth);
          break;
       case t_bool:
-         if( bool_val( t ) == TBtrue ) {
+         if(bool_val(t) == TBtrue) {
             PRINT2WISH0("true");
          } else {
             PRINT2WISH0("false");
@@ -221,28 +237,32 @@ static void print_term( term* t )
          PRINT2WISH1("%f", real_val(t));
          break;
       case t_var:
-         print_var(t);
+         print_var(t, depth);
          break;
       case t_placeholder:
          CHAR2WISH('<');
-         print_term( placeholder_type( t ) );
+         print_term(placeholder_type(t), depth);
          CHAR2WISH('>');
          break;
       case t_appl:
          PRINT2WISH1("%s", get_txt(fun_sym(t)));
          if(fun_args(t) != NULL)
-            print_list(fun_args(t), "(", ",", ")");
+            print_list(fun_args(t), "(", ",", ")", depth);
          break;
       case t_list:
-         print_list(t, " { ", " ", " } ");
+	 print_backslashes(depth*2);
+	 CHAR2WISH('"');
+         print_list(t, "", " ", "", depth+1);	
+	 print_backslashes(depth*2);
+	 CHAR2WISH('"');
          break;
       case t_env:
-         print_env(t);
+         print_env(t, depth);
          break;
    }
 }
-#line 377 "wish-adapter.c.nw"
-static void print_list( term_list* l, char* left, char* sep, char* right )
+#line 403 "wish-adapter.c.nw"
+static void print_list(term_list* l, char* left, char* sep, char* right, int depth)
 {
    int i;
    PRINT2WISH0(left);
@@ -250,23 +270,27 @@ static void print_list( term_list* l, char* left, char* sep, char* right )
       if(i>1) {
          PRINT2WISH0(sep);
       }
-      print_term(list_index(l, i));
+      print_term(list_index(l, i), depth);
    }
    PRINT2WISH0(right);
 }
-#line 397 "wish-adapter.c.nw"
-static void print_args(term_list *args)
+#line 423 "wish-adapter.c.nw"
+static void print_args(term_list *args, int depth)
 {
-  while(args) {
+  print_list(args, "", " ", "", depth);
+/*  while(args) {
     if(tkind(first(args)) != t_list)
-      PRINT2WISH0("   { ");
-    print_term(first(args));
+      PRINT2WISH0(" \"");
+
+    print_term(first(args), depth);
     if(tkind(first(args)) != t_list)
-      PRINT2WISH0("   } ");
-    args = next(args);
+      PRINT2WISH0("\"");
+
+    args = list_next(args);
   }
+*/
 }
-#line 416 "wish-adapter.c.nw"
+#line 446 "wish-adapter.c.nw"
 static TBbool is_to_tool_comm( const char* s )
 {
    return streq( s, "snd-eval" )      || 
@@ -275,14 +299,14 @@ static TBbool is_to_tool_comm( const char* s )
           streq( s, "snd-ack-event" ) ||
           streq( s, "snd-terminate" );
 }
-#line 432 "wish-adapter.c.nw"
+#line 462 "wish-adapter.c.nw"
 static TBbool is_from_tool_comm( char* s )
 {
    return streq( s, "rec-value" ) ||  
           streq( s, "rec-event" ) ||
           streq( s, "rec-disconnect" );
 }
-#line 447 "wish-adapter.c.nw"
+#line 477 "wish-adapter.c.nw"
 static int bytes_in_term( term* t )
 { 
    int length;
@@ -291,11 +315,11 @@ static int bytes_in_term( term* t )
    length += strlen( TBsprintf( "%t", t ) );
    return length;
 }
-#line 463 "wish-adapter.c.nw"
+#line 493 "wish-adapter.c.nw"
 static TBbool rec_monitor( term* e, term** out )
 {
   
-#line 517 "wish-adapter.c.nw"
+#line 547 "wish-adapter.c.nw"
   int        pid1;
   int        pid2;
   int        blino;
@@ -319,11 +343,11 @@ static TBbool rec_monitor( term* e, term** out )
   char*      name;
   char*      filename;
 
-#line 467 "wish-adapter.c.nw"
+#line 497 "wish-adapter.c.nw"
   *out = NULL;
 
   
-#line 547 "wish-adapter.c.nw"
+#line 577 "wish-adapter.c.nw"
   if( TBmatch( e, "rec-monitor(%f(%d,%f,%t,%t,%t,%t,%t,%d,%t))",
 	&mon_point,
 	&pid1,
@@ -337,11 +361,11 @@ static TBbool rec_monitor( term* e, term** out )
 	&pe ) == TBfalse )
     return TBfalse;
 
-#line 471 "wish-adapter.c.nw"
+#line 501 "wish-adapter.c.nw"
   PRINT2WISH0("if [catch { ");
 
   
-#line 569 "wish-adapter.c.nw"
+#line 599 "wish-adapter.c.nw"
   if(Coords == NULL) {
       filename = "INIT";
       blino = elino = bpos = epos = 0;
@@ -350,18 +374,18 @@ static TBbool rec_monitor( term* e, term** out )
 		&filename, &blino, &bpos, &elino, &epos) == TBfalse )
          TBmsg( "**** coords do not match\n" );
   }
-#line 474 "wish-adapter.c.nw"
+#line 504 "wish-adapter.c.nw"
    
    if(streq(AtFun, "create")) {
      
-#line 586 "wish-adapter.c.nw"
+#line 616 "wish-adapter.c.nw"
   if(TBmatch(AtArgs, "[%f(%l), %t]", &name, &args, &var) == TBfalse)
     TBmsg( "**** args of create do not match\n" );
   TBprintf(to_wish, "create_proc %t %s\n", list_get(Env, var), name);
-#line 477 "wish-adapter.c.nw"
+#line 507 "wish-adapter.c.nw"
    } else  if(streq(AtFun, "rec-connect")) {
      
-#line 598 "wish-adapter.c.nw"
+#line 628 "wish-adapter.c.nw"
   if(TBmatch(AtArgs, "[%t]", &var ) == TBfalse)
     TBmsg( "**** args of rec-connect do not match: %t\n", AtArgs );
   if(TBmatch(get_list_as_env(var, Env), "%f(%d)", &name,&tid) == TBfalse) {
@@ -370,62 +394,62 @@ static TBbool rec_monitor( term* e, term** out )
     TBmsg( "**** value_list(var, Env) = %t\n", get_list_as_env(var, Env));
   }
   TBprintf( to_wish, "create_tool %d %s\n", tid, name );
-#line 479 "wish-adapter.c.nw"
+#line 509 "wish-adapter.c.nw"
    }
    else if(is_to_tool_comm(AtFun)) {
      
-#line 615 "wish-adapter.c.nw"
+#line 645 "wish-adapter.c.nw"
   if(TBmatch(AtArgs, "[%t, %l]", &var, &args) == TBfalse)
     TBmsg( "**** args of tool comm do not match:%t\n", AtArgs );
   if(TBmatch(get_list_as_env(var, Env ), "%f(%d)", &name, &tid) == TBfalse)
     TBmsg("**** to_tool: value of var does not match: var=%t, env=%t",var,Env);
   TBprintf(to_wish, "proc_tool_comm %d %d %d\n", pid1,tid,bytes_in_term(args));
-#line 482 "wish-adapter.c.nw"
+#line 512 "wish-adapter.c.nw"
    }
    else if(is_from_tool_comm(AtFun)) {
      
-#line 629 "wish-adapter.c.nw"
+#line 659 "wish-adapter.c.nw"
   if(TBmatch( AtArgs, "[%t, %l]", &var, &args) == TBfalse)
     TBmsg("**** args of tool comm do not match:%t\n", AtArgs);
   if(TBmatch(get_list_as_env(var, Env), "%f(%d)", &name, &tid) == TBfalse)
     TBmsg("**** from_tool: val of var doesn't match: var=%t, env=%t", var,Env);
   TBprintf(to_wish, "tool_proc_comm %d %d %d\n", pid1,tid,bytes_in_term(args));
-#line 485 "wish-adapter.c.nw"
+#line 515 "wish-adapter.c.nw"
    }
 
    if(pid1 > 0) {
      
-#line 642 "wish-adapter.c.nw"
+#line 672 "wish-adapter.c.nw"
   for(ts = Env; ts != NULL ; ts = next(ts)) {
     pair = first(ts);
     if(get_txt(var_sym(first(pair)))[0] != '_')
     TBprintf(to_wish, "update_var %d {%t} {%t}\n", 
 				pid1, first(pair), first(next(pair)));
   }
-#line 489 "wish-adapter.c.nw"
+#line 519 "wish-adapter.c.nw"
      
-#line 656 "wish-adapter.c.nw"
+#line 686 "wish-adapter.c.nw"
   for(ts = Subs; ts != NULL; ts = next(ts))
     TBprintf(to_wish, "update_subs %d {%t}\n", pid1, first(ts));
-#line 490 "wish-adapter.c.nw"
+#line 520 "wish-adapter.c.nw"
      
-#line 661 "wish-adapter.c.nw"
+#line 691 "wish-adapter.c.nw"
   for(ts = Notes; ts != NULL; ts = next(ts))
     TBprintf(to_wish, "update_notes %d {%t}\n", pid1, first(ts));
-#line 491 "wish-adapter.c.nw"
+#line 521 "wish-adapter.c.nw"
    }
    
    if( pid2 > 0 ) {
      
-#line 672 "wish-adapter.c.nw"
+#line 702 "wish-adapter.c.nw"
   dir = streq(AtFun, "snd-msg") ? 1 : -1;
   TBprintf(to_wish, "proc_proc_comm %d %d %d\n", pid1, pid2, dir);
-#line 495 "wish-adapter.c.nw"
+#line 525 "wish-adapter.c.nw"
    }
    
    if(streq(AtFun, "endlet")) {
      
-#line 683 "wish-adapter.c.nw"
+#line 713 "wish-adapter.c.nw"
   if(TBmatch(AtArgs, "[%l]", &args) == TBfalse)
     TBmsg("**** args of end_let do not match\n");
   for( ; args != NULL; args = next(args))
@@ -433,7 +457,7 @@ static TBbool rec_monitor( term* e, term** out )
   TBprintf(to_wish, "} msg] { TBerror $msg }\n");
   *out = TBmake( "snd-continue(%d)", pid1);
   return TBtrue;
-#line 499 "wish-adapter.c.nw"
+#line 529 "wish-adapter.c.nw"
    } else {
      PRINT2WISH7("monitor_atom %d %s %s %d %d %d %d\n",
          		pid1, AtFun, filename, blino, bpos, elino, epos);
@@ -444,7 +468,7 @@ static TBbool rec_monitor( term* e, term** out )
 
    return TBtrue;
 }
-#line 700 "wish-adapter.c.nw"
+#line 730 "wish-adapter.c.nw"
 static TBbool rec_do(term* e, term** out)
 {
    char* fname;
@@ -458,13 +482,13 @@ static TBbool rec_do(term* e, term** out)
    PRINT2WISH1("if [catch {%s ", fname);
    /* Only print list when list isn't empty */
    if(fargs)
-     print_args(fargs);
+     print_args(fargs, 0);
      /*print_list(fargs, "\"", "\" \"", "\"");*/
    PRINT2WISH0(" } msg] {TBerror $msg}\n");
    fflush(to_wish);
    return TBtrue;
 }
-#line 727 "wish-adapter.c.nw"
+#line 757 "wish-adapter.c.nw"
 static TBbool rec_eval( term* e, term** out )
 {
    char* fname;
@@ -478,13 +502,13 @@ static TBbool rec_eval( term* e, term** out )
    PRINT2WISH1("if [catch {%s ", fname);
    /* Only print list when list isn't empty */
    if(list_length(fargs))
-     print_args(fargs);     
-     /*print_term(fargs, "\"", "\" \"", "\"");*/
+     print_args(fargs, 0);
+     /*print_list(fargs, "\"", "\" \"", "\"");*/
    PRINT2WISH0("} msg] {TBerror $msg}\n");
    fflush(to_wish);
    return TBtrue;
 }
-#line 754 "wish-adapter.c.nw"
+#line 784 "wish-adapter.c.nw"
 static TBbool rec_ack_event(term* e, term** out)
 {
    term* farg;
@@ -494,13 +518,13 @@ static TBbool rec_ack_event(term* e, term** out)
    /* rec-ack-event */
    if(TBmatch(e, "rec-ack-event(%t)", &farg) == TBfalse)
       return TBfalse;
-   PRINT2WISH0("if [catch {rec-ack-event {");
-   print_term(farg);
-   PRINT2WISH0("}} msg] {TBerror $msg}\n" );
+   PRINT2WISH0("if [catch {rec-ack-event ");
+   print_term(farg, 0);
+   PRINT2WISH0("} msg] {TBerror $msg}\n" );
    fflush(to_wish);
    return TBtrue;
 }
-#line 779 "wish-adapter.c.nw"
+#line 809 "wish-adapter.c.nw"
 static TBbool rec_terminate( term* e, term** out )
 {
    term* farg;
@@ -510,9 +534,9 @@ static TBbool rec_terminate( term* e, term** out )
    /* rec-terminate */
    if(TBmatch(e, "rec-terminate(%t)", &farg) == TBfalse)
       return TBfalse;
-   PRINT2WISH0("if [catch {rec-terminate {");
-   print_term(farg);
-   PRINT2WISH0("}} msg] {TBerror $msg}; exit\n" );
+   PRINT2WISH0("if [catch {rec-terminate ");
+   print_term(farg, 0);
+   PRINT2WISH0("} msg] {TBerror $msg}; exit\n" );
    fflush(to_wish);
    connected = TBfalse;
    shutdown(0);
@@ -520,7 +544,7 @@ static TBbool rec_terminate( term* e, term** out )
    /* not reached */
    return TBtrue;
 }
-#line 807 "wish-adapter.c.nw"
+#line 837 "wish-adapter.c.nw"
 term* handle_input_from_toolbus( term* e )
 {
    term* result;
@@ -536,7 +560,7 @@ term* handle_input_from_toolbus( term* e )
    TBmsg("Ignored: %t\n", e);
    return NULL;
 }
-#line 830 "wish-adapter.c.nw"
+#line 860 "wish-adapter.c.nw"
 term* handle_input_from_wish( term* e ) 
 {
    char* msg;
@@ -555,18 +579,18 @@ term* handle_input_from_wish( term* e )
       
    return e;
 }
-#line 855 "wish-adapter.c.nw"
+#line 885 "wish-adapter.c.nw"
 term *dummy_check_in_sign( term* t )
 {
    return NULL;
 }
-#line 868 "wish-adapter.c.nw"
+#line 898 "wish-adapter.c.nw"
 static void require_fun( char* fname, term_list* fargs )
 {
    PRINT2WISH3("TBrequire %s %s %d\n", tool_name, fname, list_length(fargs));
    fflush(to_wish);
 }
-#line 881 "wish-adapter.c.nw"
+#line 911 "wish-adapter.c.nw"
 static void check_in_sign()
 {
    char*      atf;
@@ -599,7 +623,7 @@ static void check_in_sign()
          TBmsg( "check_in_sign: skipped %t\n", first( reqs ) );
    }
 }
-#line 922 "wish-adapter.c.nw"
+#line 952 "wish-adapter.c.nw"
 static void wish_create()
 {
    pid_t pid;
@@ -639,7 +663,7 @@ static void wish_create()
          return;
    }
 }
-#line 969 "wish-adapter.c.nw"
+#line 999 "wish-adapter.c.nw"
 static void wish_start()
 {
    int i;
@@ -660,7 +684,7 @@ static void wish_start()
    PRINT2WISH1("source %s\n", script);
    check_in_sign();
 }
-#line 998 "wish-adapter.c.nw"
+#line 1028 "wish-adapter.c.nw"
 static void signal_handler( int sig )
 {
    int status;
@@ -682,14 +706,14 @@ static void signal_handler( int sig )
          shutdown( 1 );
    }
 }
-#line 1027 "wish-adapter.c.nw"
+#line 1057 "wish-adapter.c.nw"
 static void disconnect()
 {
    if(connected)
       TBsend(TBmake("snd-disconnect"));
    connected = TBfalse;
 }
-#line 1041 "wish-adapter.c.nw"
+#line 1071 "wish-adapter.c.nw"
 static void shutdown( int ret )
 {
    sleep(1);
@@ -699,7 +723,7 @@ static void shutdown( int ret )
    
    exit(ret);
 }
-#line 1058 "wish-adapter.c.nw"
+#line 1088 "wish-adapter.c.nw"
 static void signals_set()
 {
    struct sigaction act;
@@ -715,12 +739,12 @@ static void signals_set()
    sigaction( SIGQUIT, &act, NULL );
    sigaction( SIGCHLD, &act, NULL );  
 }
-#line 1081 "wish-adapter.c.nw"
+#line 1111 "wish-adapter.c.nw"
 static void help()
 {
    fprintf( stderr, USAGE_MSG );
 }
-#line 1093 "wish-adapter.c.nw"
+#line 1123 "wish-adapter.c.nw"
 static void cmd_options( int argc, char* argv[] )
 {
    int i;
@@ -748,7 +772,7 @@ static void cmd_options( int argc, char* argv[] )
       i++;
    }
 }
-#line 1130 "wish-adapter.c.nw"
+#line 1160 "wish-adapter.c.nw"
 void main( int argc, char* argv[] )
 {
    cmd_options(argc, argv);
@@ -772,7 +796,7 @@ void main( int argc, char* argv[] )
    TBeventloop();
 }
 
-#line 46 "wish-adapter.c.nw"
+#line 47 "wish-adapter.c.nw"
 /*
  * EOF ./serie3/src/wa.c
  */
