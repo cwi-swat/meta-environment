@@ -28,7 +28,6 @@
 #include "print-module.tb"
 #include "asfsdfchecker.idef"
 #include "ui.tb"
-#include "status-display.tb"
 #include "clear-all.tb"
 #include "asfc.idef"
 #include "module-db.idef"
