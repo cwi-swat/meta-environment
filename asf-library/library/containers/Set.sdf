@@ -13,12 +13,19 @@ exports
     in(X, Set[[X]])      -> Boolean
 
     intersection(Set[[X]], Set[[X]])	-> Set[[X]]
-    Set[[X]] "/\\" Set[[X]]) -> Set[[X]] {left}
+    Set[[X]] "/\\" Set[[X]] -> Set[[X]] {left}
 
     Set[[X]] "\\" Set[[X]] -> Set[[X]] {non-assoc}
     difference(Set[[X]], Set[[X]]) -> Set[[X]]
 
     "(" Set[[X]] ")" -> Set[[X]] {bracket}
+
+    equal(Set[[X]],Set[[X]]) -> Boolean
+
+  context-free priorities
+    Set[[X]] "\\" Set[[X]] -> Set[[X]] >
+    Set[[X]] "\\/" Set[[X]] -> Set[[X]] >
+    Set[[X]] "/\\" Set[[X]] -> Set[[X]]
 
 hiddens
   sorts Set[[X]]
