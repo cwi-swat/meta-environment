@@ -52,6 +52,11 @@ AC_PACKAGE_REQUIRE(aterm, baffle,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
+dnl Require ToolBus
+AC_PACKAGE_REQUIRE(toolbus, toolbus,
+   [  --with-toolbus=DIR      ToolBus is in DIR])
+AC_SUBST(TOOLBUS)
+
 dnl Require pt-support package
 AC_PACKAGE_REQUIRE(pt-support, unparsePT,
    [  --with-pt-support=DIR   pt-support is in DIR])
@@ -71,13 +76,11 @@ AC_ARG_WITH(sdf-support,
    SDF_SUPPORT=${withval},)
 AC_SUBST(SDF_SUPPORT)
 
-
 dnl Handle --with-asc-support=... argument to configure
 ASC_SUPPORT='${prefix}'
 AC_ARG_WITH(asc-support,
    [  --with-asc-support=DIR  asc-support is in DIR],
    ASC_SUPPORT=${withval},)
-
 AC_SUBST(ASC_SUPPORT)
 
 dnl Again for Asc (which is a part of THIS package now)
@@ -157,6 +160,7 @@ AC_OUTPUT(
    removevarsyntax/c-source/Makefile
    asfc/Makefile
    asfc/src/Makefile
+   asfc/src/muasf/Makefile
    asfc/c-source/Makefile
    asfc/test/Makefile
    asfc/test/terms/Makefile
