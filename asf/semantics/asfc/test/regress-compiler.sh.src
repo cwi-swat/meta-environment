@@ -23,14 +23,14 @@ Revision='$Revision$'
 ###
 #  Some global variables, that might require occasional modification
 ###
-
+set -x;
 verbose=0
 
 cd `dirname $0`;
-mydir=`pwd`
+mydir=__TOP_SRCDIR__/asfc/test
 
 RM=rm
-COMPILER="$mydir/../src/asfc"
+COMPILER="__TOP_BUILDDIR__/asfc/src/asfc"
 COMPARE="$mydir/codediff"
 
 terms=$mydir/terms
