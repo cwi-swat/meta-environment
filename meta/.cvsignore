@@ -19,3 +19,6 @@ meta.1
 missing
 meta-*.pkg
 libtool
+config.guess
+config.sub
+ltmain.sh
