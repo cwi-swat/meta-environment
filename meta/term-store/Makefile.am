@@ -2,6 +2,9 @@
 
 include $(top_srcdir)/make_rules
 
+EXTRA_DIST = term-store.idef
+pkgdata_DATA = term-store.idef
+
 noinst_LIBRARIES	= libtables.a
 
 noinst_HEADERS		= table.h table-store.h term-conversion.h

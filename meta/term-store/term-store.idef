@@ -1,0 +1,46 @@
+
+tool term-store is { command = "term-store" }
+
+process TermStore is
+let
+ TS : term-store,
+ TableName : str,
+ Key : term,
+ Value : list,
+ ContainsKey : bool
+in
+  execute(term-store, TS?)
+  (
+    rec-msg(ts-add-table(TableName?)).
+    printf("not implemented\n")
+  +
+    rec-msg(ts-remove-table(TableName?)).
+    printf("not implemented\n")
+  +
+    rec-msg(ts-clear-table(TableName?)).
+    printf("not implemented\n")
+  +
+    rec-msg(ts-put-value(TableName?,Key?,Value?)).
+    printf("not implemented\n")
+  +
+    rec-msg(ts-get-value(TableName?,Key?)).
+    printf("not implemented\n")
+  +
+    rec-msg(ts-remove-value(TableName?,Key?)).
+    printf("not implemented\n")
+  +
+    rec-msg(ts-contains-key(TableName?,Key?)).
+    printf("not implemented\n")
+  +
+    rec-msg(ts-get-all-keys(TableName?)).
+    printf("not implemented\n")
+  +
+    rec-msg(ts-get-all-values(TableName?)).
+    printf("not implemented\n")
+  +
+    rec-msg(ts-remove-value-from-all-tables(Key?)).
+    printf("not implemented\n")
+
+  )
+  * delta
+endlet
