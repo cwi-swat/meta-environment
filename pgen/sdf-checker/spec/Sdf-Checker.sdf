@@ -2,11 +2,12 @@ module  Sdf-Checker
 
 imports Sdf-AttributeChecker LabelChecker SortChecker 
         ProductionChecker ConstructorChecker
-        RemoveLabels DeprecatedSymbols
+        RemoveLabels DeprecatedSymbols StartSymbolChecker
+
 imports utilities/PosInfo[Import]
 
 exports
-  context-free start-symbols Summary 
+  context-free start-symbols Summary Info-Msg-Tuple ModuleId ImportsSet
 
   context-free syntax
     check-sdf(SDF)           -> Summary

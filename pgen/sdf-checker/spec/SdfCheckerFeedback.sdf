@@ -8,7 +8,9 @@ imports ProductionSetOperations
 
 exports
   context-free syntax
+    make-warning(StrCon, StrCon)           -> {Error ","}*
     make-warning(StrCon, StrCon, Location) -> {Error ","}*
+    make-error(StrCon, StrCon)             -> {Error ","}*
     make-error(StrCon, StrCon, Location)   -> {Error ","}*
 
 hiddens

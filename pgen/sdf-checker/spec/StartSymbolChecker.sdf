@@ -1,0 +1,24 @@
+module StartSymbolChecker
+
+imports Sdf-Type-Environment
+
+imports utilities/PosInfo[Grammar]
+        basic/Booleans
+
+exports
+  context-free syntax
+    contains-visible-startsymbols(Definition) -> {Error ","}*
+
+hiddens
+  context-free syntax
+    collect-visible-startsymbols(Definition, Boolean) -> Boolean {traversal(accu, break, top-down)}
+    collect-visible-startsymbols(Section, Boolean)    -> Boolean {traversal(accu, break, top-down)}
+    collect-visible-startsymbols(Grammar, Boolean)    -> Boolean {traversal(accu, break, top-down)}
+
+hiddens
+  variables
+    "$Boolean"[0-9]*    -> Boolean
+    "$Definition"[0-9]* -> Definition
+    "$Grammar"[0-9]*    -> Grammar
+    "$Symbol*"[0-9]*    -> Symbol*
+    

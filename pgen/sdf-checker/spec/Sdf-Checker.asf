@@ -15,9 +15,10 @@ equations
            Definition2 := remove-labels(Definition1),
            Msg*2 := check-sorts-and-prods(Definition2),
            Msg*3 := check-sdf-attributes(Definition2),
-           Msg*4 := check-for-deprecated-symbols(Definition2)
-           =================================================
-           check-sdf(Definition1) = Msg*1, Msg*2, Msg*3, Msg*4
+           Msg*4 := check-for-deprecated-symbols(Definition2),
+           Msg*5 := contains-visible-startsymbols(Definition2)
+           ====>
+           check-sdf(Definition1) = Msg*1, Msg*2, Msg*3, Msg*4, Msg*5
  
   [cms-1'1] InfoMsgTuple2 := check-module(Module, Definition, InfoMsgTuple1)
             ===============================================================
