@@ -2,6 +2,12 @@ $Id$
 
 ASF Support
 
+This package contains the largely generated library for handling parsetrees
+over ASF syntax. The syntax of terms in ASF is user-defined, so this 
+library only contains the fixed parts of the ASF syntax. 
+
+For handling terms in user-defined syntax, use the PT support library.
+
 Installation Instructions
 =========================
 
