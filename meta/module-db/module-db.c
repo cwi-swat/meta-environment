@@ -63,9 +63,8 @@ Manipulation of modules in database:
 
 #include "module-db.h"
 
-static char myversion[] = "1.0";
+static char myversion[] = "1.1";
 
-ATermTable modules_db;
 ATermTable new_modules_db;
 ATermTable import_db;
 ATermTable trans_db;
@@ -117,7 +116,7 @@ get_output_dir(void)
 ATerm exists(int cid, char *modulename)
 {
   ATerm name = ATmake("<str>",modulename);
-  if(GetValue(modules_db,name) || GetValue(new_modules_db,name))
+  if(GetValue(new_modules_db,name))
     return ATmake("snd-value(result(exists(<term>)))", name);
   else
     return ATmake("snd-value(result(notexists(<term>)))", name);
@@ -157,7 +156,6 @@ ATerm get_all_equations(int cid, char *moduleName)
 void create_module_db(int cid)
 {
   new_modules_db = CreateValueStore(100,75);
-  modules_db = CreateValueStore(100,75);
   import_db = CreateValueStore(100,75);
   trans_db = CreateValueStore(100,75);
 }
@@ -165,7 +163,6 @@ void create_module_db(int cid)
 void clear_module_db(int cid)
 {
   new_modules_db = CreateValueStore(100,75);
-  modules_db = CreateValueStore(100,75);
   import_db = CreateValueStore(100,75);
   trans_db = CreateValueStore(100,75);
 }
@@ -197,39 +194,6 @@ ATerm calc_import_graph(void)
   return ATmake("import-graph([<list>],[<list>])", actualmodules, result);
 }
 
-/*The Asf+Sdf variant */
-ATerm add_module(int cid, ATerm asfix)
-{
-  ATerm t[8];
-  ATerm modname, modname_term, import_graph;
-  ATermList sections, imports, unknowns;
-  ATerm newasfix;
-  char *modname_str;
-
-  if(ATmatchTerm(asfix,pattern_asfix_module,
-                 &t[0], &t[1], &modname, &t[2],
-                 &sections, &t[3], &t[4], &t[5], &t[6])) {
-    if(ATmatchTerm(modname,pattern_asfix_id,&modname_str)) {
-      modname_term = ATmake("<str>", modname_str);
-      if(GetValue(modules_db,modname_term) == ATfalse) {
-        newasfix = AFexpandModule(asfix);
-        PutValue(modules_db,modname_term,newasfix);
-      };
-      imports = get_import_section(sections);
-      unknowns = add_imports(modname_term,imports);
-      import_graph = calc_import_graph();
-      return ATmake("snd-value(imports(need-modules([<list>]),<term>))",
-                    unknowns,import_graph);
-    }
-    else {
-      ATerror("not an identifier: %t\n", modname);
-      return NULL;
-    }
-  } else {
-    ATerror("not an asfix module: %t\n", asfix);
-    return NULL;
-  }
-}
 
 /* Creation of a new entry in the database of a new Sdf2 definition. 
  */
@@ -728,7 +692,6 @@ ATerm delete_module(int cid, char *moduleName)
 
   changedMods = modules_depend_on(name,ATempty);
   update_syntax_status_of_modules(changedMods); 
-  RemoveKey(modules_db,name);
   RemoveKey(new_modules_db,name);
   RemoveKey(import_db,name);
   trans_db = CreateValueStore(100,75);
@@ -769,31 +732,6 @@ ATermList replace_imports(ATerm name, ATermList mods)
   ATtableRemove(import_db, name);
   PutValue(import_db, name, (ATerm) mods);
   return select_unknowns(mods);
-}
-
-ATbool complete_specification(ATermList visited, ATerm module)
-{
-  if(ATindexOf(visited, module, 0) < 0) {
-    if(GetValue(modules_db, module)) {
-      ATerm first;
-      ATbool result = ATtrue;
-      ATermList imports = (ATermList) GetValue(import_db,module);
-
-      visited = ATinsert(visited,module);
-      while(!ATisEmpty(imports) && result) {
-        first = ATgetFirst(imports);
-        result = complete_specification(visited,first);
-        imports = ATgetNext(imports);
-      }
-      return result;
-    }
-    else {
-      ATfprintf(stderr,"%t is missing\n",module);
-      return ATfalse;
-    }
-  }
-  else
-    return ATtrue;
 }
 
 ATbool complete_sdf2_specification(ATermList visited, ATerm module)
@@ -1353,7 +1291,6 @@ void rec_ack_event(int cid, ATerm term)
 }
 
 void AFTreshuffleModules(int cid, ATermList mods);
-void AFreshuffleModules(int cid, ATermList mods);
 
 void reshuffle_modules_from(int cid, char *modulename)
 {
@@ -1374,22 +1311,8 @@ void reshuffle_modules_from(int cid, char *modulename)
       ATBwriteTerm(cid,ATmake("snd-event(done)"));
     }
   }
-  else if(GetValue(modules_db, mod)) {
-    /* We are working with the module asfix representation. */
-    if(complete_specification(ATempty,mod)) {
-      top_module = mod;
-      modules_to_process = ATempty;
-      imports = get_imported_modules(mod);
-      AFreshuffleModules(cid,imports);
-    }
-    else {
-      ATwarning("Specification is incomplete and can not be compiled!\n");
-      ATBwriteTerm(cid,ATmake("snd-event(done)"));
-    } 
-  }
   else {
-    ATfprintf(stderr,
-              "Module %t not in module databases!\n", mod);
+    ATwarning("Module %t not in module databases!\n", mod);
     ATBwriteTerm(cid,ATmake("snd-event(done)"));
   } 
 }

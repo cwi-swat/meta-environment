@@ -67,15 +67,6 @@ in
           /* If it is not open, open it. */
           rec-msg(not-exists-in-module-db(Name?)). ( 
             snd-msg(open-file(Name)). ( 
-              rec-msg(opened-file(asfix,Name2?,T?,Path?,Time?)).
-             /* Tell mdb we add module Name containing term T */
-              snd-msg(add-module-to-db(T,Time)).
-             /* mdb returns the imports section of Name as well as the
-              * list of modules which have to be still opened M1s */
-              rec-msg(need-modules(M1s?)).
-             /* Add those modules to the list */
-              Ms := join(Ms,M1s)
-              +
               rec-msg(opened-file(Name2?,tree(T?),Path?,Time?)).
               snd-msg(add-sdf2-module-to-db(Name, Path, T, Time, "unchanged")).
               rec-msg(need-modules(M1s?)).

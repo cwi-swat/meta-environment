@@ -77,7 +77,7 @@ XLIBS		= -L$(ASFIXLIB) -L$(ATERMLIB) -lATerm -lAsFix -lATB $(SOCKLIBS)
 
 # Other variables
 # CSRC/CHDR are used to calculate dependencies.
-CSRC		= module-db.c af-reshuffle.c aft-reshuffle.c module-db.tif.c
+CSRC		= module-db.c aft-reshuffle.c module-db.tif.c
 CHDR		= module-db.tif.h module-db.h
 OBJ             = $(subst .c,.o,$(CSRC))
 # All files in BINFILES are installed in $(bindir)

@@ -97,15 +97,6 @@ snd-do(Mdb, create-module-db).
     snd-msg(not-exists-in-module-db(Name))
   )
 +
-/* Add a module-asfix module to the database */
-  rec-msg(add-module-to-db(AsFixModule?,timestamp(Time?))).
-  snd-eval(Mdb,add-module(AsFixModule)) .
-  rec-value(Mdb,imports(need-modules(Modules?),
-                import-graph(ActualMods?, Pairs?))).
-/* If a new module is added, we tell the world the current import relations */
-  snd-note(import-graph(ActualMods, Pairs)).
-  snd-msg(need-modules(Modules))
-+
   rec-msg(add-empty-module-to-db(Name?)).
   snd-eval(Mdb,add-empty-module(Name)).
   rec-value(Mdb,empty-module-added(import-graph(ActualMods?, Pairs?))) .
