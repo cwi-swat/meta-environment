@@ -2,6 +2,7 @@ module languages/asfix/syntax/Tree
 
 imports languages/asfix/syntax/Annotations
 imports languages/asfix/syntax/Symbol
+imports languages/asfix/syntax/Attributes
 imports languages/aterm/syntax/Literals
 
 exports
