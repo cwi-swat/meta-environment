@@ -1,5 +1,9 @@
 # $Id$
 
+2003/10/13 <markvdb@cwi.nl>
+  * Added an error message when starting the meta-environment with a non-existing
+    term store, this fixes bug #70.
+
 Thu Oct  9 14:11:48 CEST 2003 <jong@cwi.nl>
  * editors/text/gvim:
    - install meta.vim in pkgdata-dir: install/share/meta/meta.vim and read
