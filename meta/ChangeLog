@@ -1,6 +1,7 @@
 # $Id$
 
 Tue Aug 12 13:31:39 CEST 2003 <{jong,kooiker}@cwi.nl>
+ * remove dependency on xemacs 20.4 from meta.pkg
  * merge EDITOR_HIVE changes into HEAD.
    closes separate work on EDITOR_HIVE branch
 
