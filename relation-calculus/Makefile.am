@@ -1,4 +1,4 @@
-
+include make_rules
 
 SUBDIRS		= util spec rscripts demo rviz
 
