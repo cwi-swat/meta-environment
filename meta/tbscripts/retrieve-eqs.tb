@@ -6,7 +6,6 @@ process Retrieve-eqs(Eval: evaluator) is
 let
   Id   : term,
   Mod  : str,
-  Tmod : term,
   Eqs  : list
 in
   Id := process-id.
@@ -17,7 +16,7 @@ in
       rec-msg(eqs-not-available).
       snd-note(ui-status(stat(Id,"Retrieving equations"))).
       snd-msg(process-eqs(Mod)).
-      rec-msg(eqs-processed(Tmod?)).
+      rec-msg(eqs-processed(Mod)).
       snd-msg(get-all-equations(Mod)).
       rec-msg(all-equations(Eqs?)).
       snd-eval(Eval,add-equations(Mod,Eqs)).

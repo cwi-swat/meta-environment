@@ -2,7 +2,7 @@
 
 usage () { 
 	echo "Usage: $1 <program-under-test>"
-	exit 1
+	exit 0
 }
 	
 if [ $# != 1 ]; then
@@ -16,7 +16,7 @@ fi
 output=`$1 -h 2>&1`
 result=$?
 
-if [ $result != 1 ]; then
+if [ $result != 0 ]; then
 	echo "$1 -h returned $result result"
 	exit 1
 fi

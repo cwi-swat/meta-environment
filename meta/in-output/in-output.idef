@@ -115,10 +115,10 @@ in
     rec-msg(open-eqs-text-file(Name?)).
     snd-eval(IO,open-eqs-text-file(Name)).
     (
-      rec-value(IO,opened-file(raw,Name?,Text?,Path?,timestamp(TS?))).
+      rec-value(IO,opened-file(raw,Name,Text?,Path?,timestamp(TS?))).
       snd-msg(opened-file(raw,Name,Text,Path,timestamp(TS))) 
       +
-      rec-value(IO,error-opening(Name?)).
+      rec-value(IO,error-opening(Name)).
       snd-msg(error-opening(Name))
     )
   +

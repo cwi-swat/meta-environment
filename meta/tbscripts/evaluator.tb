@@ -3,12 +3,10 @@
  */
 process Evaluator(Eval: evaluator) is
 let
-  Id   : term,
   NF   : term,
   Mod  : str,
   Term : term
 in
-  Id := process-id.
   (
     rec-msg(interpret(Mod?,Term?)).
     snd-eval(Eval,interpret(Mod,Term)).
