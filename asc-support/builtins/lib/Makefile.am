@@ -7,7 +7,8 @@ BUILTIN_NAMES=\
 	      strategy-some strategy-all strategy-one \
               toolbus-event toolbus-term-event \
 	      term-compare-less\
-	      lift-to-tree lift-to-term
+	      lift-to-tree lift-to-term \
+	      unparse
 
 BUILTIN_SOURCES=common.c \
                 annos.c \
@@ -17,7 +18,8 @@ BUILTIN_SOURCES=common.c \
 		traversal.c \
                 toolbus.c \
 		term-compare.c \
-		lifting.c
+		lifting.c\
+		unparse.c
 
 #The names of the modules that need to be included in a generated lib
 LIBRARY_MODULES=basic/Booleans
