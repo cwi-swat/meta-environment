@@ -41,12 +41,14 @@ let
 in
   if equal(Recursive,recursive) then
     printf("Recursive closing is not yet implemented, sorry!\n")
-  fi.
+  else tau fi.
   Status := success.
   SoftCloseModuleInDB(ModuleName, Status?).
   if equal(Status,success) then
     CloseModuleInUI(ModuleName)
-  else tau fi
+  else 
+    snd-note(ui-status(errorf("Module %s not closed because other modules depend on it", [ModuleName])))
+  fi
 endlet
 
 
