@@ -1,17 +1,18 @@
 $Id$
 
-2003-06-17 <kooiker@cwi.nl>
+2003-06-17 <jurgenv@cwi.nl>
+  * Added an error message for when no 'toolbus' command at all are contained
+    in the script. 
 
+2003-06-17 <kooiker@cwi.nl>
   * toolbus/viewer.tcl.src: added slider to be able to shorten the delay
     time dynamically
 
 2003-06-13 <kooiker@cwi.nl>
-
   * fix toolbus/viewer.tcl.src: for some reason double click to show the
     process variables didn't work anymore
 
 2003-06-13 <kooiker@cwi.nl>
-
   * toolbus/viewer.tcl.src:
     - Tool and process breakpoints do work now
     - Right click (re-)sets breakpoint at line or on process/tool
@@ -23,7 +24,6 @@ $Id$
     - By resizing the viewer window, hidden tools will be displayed 
 
 2003-06-11 <kooiker@cwi.nl>
-
  * fix toolbus/viewer.tcl.src: bug introduced in previous version prevented 
    resetting of breakpoints 
 
