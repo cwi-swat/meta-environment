@@ -9,8 +9,11 @@
 typedef struct ATerm _MB_Buttons;
 typedef struct ATerm _MB_ButtonList;
 typedef struct ATerm _MB_Button;
-typedef struct ATerm _MB_EditorTypes;
-typedef struct ATerm _MB_EditorType;
+typedef struct ATerm _MB_ButtonDescriptionList;
+typedef struct ATerm _MB_ButtonDescription;
+typedef struct ATerm _MB_ButtonType;
+typedef struct ATerm _MB_ButtonArgs;
+typedef struct ATerm _MB_MenuTitles;
 typedef struct ATerm _MB_ModuleName;
 
 /*}}}  */
@@ -74,33 +77,81 @@ ATerm MB_ButtonToTerm(MB_Button arg)
 }
 
 /*}}}  */
-/*{{{  MB_EditorTypes MB_EditorTypesFromTerm(ATerm t) */
+/*{{{  MB_ButtonDescriptionList MB_ButtonDescriptionListFromTerm(ATerm t) */
 
-MB_EditorTypes MB_EditorTypesFromTerm(ATerm t)
+MB_ButtonDescriptionList MB_ButtonDescriptionListFromTerm(ATerm t)
 {
-  return (MB_EditorTypes)t;
+  return (MB_ButtonDescriptionList)t;
 }
 
 /*}}}  */
-/*{{{  ATerm MB_EditorTypesToTerm(MB_EditorTypes arg) */
+/*{{{  ATerm MB_ButtonDescriptionListToTerm(MB_ButtonDescriptionList arg) */
 
-ATerm MB_EditorTypesToTerm(MB_EditorTypes arg)
+ATerm MB_ButtonDescriptionListToTerm(MB_ButtonDescriptionList arg)
 {
   return (ATerm)arg;
 }
 
 /*}}}  */
-/*{{{  MB_EditorType MB_EditorTypeFromTerm(ATerm t) */
+/*{{{  MB_ButtonDescription MB_ButtonDescriptionFromTerm(ATerm t) */
 
-MB_EditorType MB_EditorTypeFromTerm(ATerm t)
+MB_ButtonDescription MB_ButtonDescriptionFromTerm(ATerm t)
 {
-  return (MB_EditorType)t;
+  return (MB_ButtonDescription)t;
 }
 
 /*}}}  */
-/*{{{  ATerm MB_EditorTypeToTerm(MB_EditorType arg) */
+/*{{{  ATerm MB_ButtonDescriptionToTerm(MB_ButtonDescription arg) */
 
-ATerm MB_EditorTypeToTerm(MB_EditorType arg)
+ATerm MB_ButtonDescriptionToTerm(MB_ButtonDescription arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  MB_ButtonType MB_ButtonTypeFromTerm(ATerm t) */
+
+MB_ButtonType MB_ButtonTypeFromTerm(ATerm t)
+{
+  return (MB_ButtonType)t;
+}
+
+/*}}}  */
+/*{{{  ATerm MB_ButtonTypeToTerm(MB_ButtonType arg) */
+
+ATerm MB_ButtonTypeToTerm(MB_ButtonType arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  MB_ButtonArgs MB_ButtonArgsFromTerm(ATerm t) */
+
+MB_ButtonArgs MB_ButtonArgsFromTerm(ATerm t)
+{
+  return (MB_ButtonArgs)t;
+}
+
+/*}}}  */
+/*{{{  ATerm MB_ButtonArgsToTerm(MB_ButtonArgs arg) */
+
+ATerm MB_ButtonArgsToTerm(MB_ButtonArgs arg)
+{
+  return (ATerm)arg;
+}
+
+/*}}}  */
+/*{{{  MB_MenuTitles MB_MenuTitlesFromTerm(ATerm t) */
+
+MB_MenuTitles MB_MenuTitlesFromTerm(ATerm t)
+{
+  return (MB_MenuTitles)t;
+}
+
+/*}}}  */
+/*{{{  ATerm MB_MenuTitlesToTerm(MB_MenuTitles arg) */
+
+ATerm MB_MenuTitlesToTerm(MB_MenuTitles arg)
 {
   return (ATerm)arg;
 }
@@ -150,75 +201,147 @@ MB_ButtonList MB_makeButtonListMany(MB_Button head, MB_ButtonList tail)
 }
 
 /*}}}  */
-/*{{{  MB_Button MB_makeButtonEditor(char * module, MB_EditorTypes list, ATerm name, ATerm actions) */
+/*{{{  MB_Button MB_makeButtonDefault(char* module, MB_ButtonDescriptionList descriptions, ATerm actions) */
 
-MB_Button MB_makeButtonEditor(char * module, MB_EditorTypes list, ATerm name, ATerm actions)
+MB_Button MB_makeButtonDefault(char* module, MB_ButtonDescriptionList descriptions, ATerm actions)
 {
-  return (MB_Button)(ATerm)ATmakeAppl4(MB_afun1, (ATerm)ATmakeAppl0(ATmakeAFun(module, 0, ATtrue)), (ATerm)list, (ATerm)name, (ATerm)actions);
+  return (MB_Button)(ATerm)ATmakeAppl3(MB_afun1, (ATerm)ATmakeAppl0(ATmakeAFun(module, 0, ATtrue)), (ATerm)descriptions, (ATerm)actions);
 }
 
 /*}}}  */
-/*{{{  MB_EditorTypes MB_makeEditorTypesEmpty() */
+/*{{{  MB_ButtonDescriptionList MB_makeButtonDescriptionListEmpty() */
 
-MB_EditorTypes MB_makeEditorTypesEmpty()
+MB_ButtonDescriptionList MB_makeButtonDescriptionListEmpty()
 {
-  return (MB_EditorTypes)(ATerm)ATempty;
+  return (MB_ButtonDescriptionList)(ATerm)ATempty;
 }
 
 /*}}}  */
-/*{{{  MB_EditorTypes MB_makeEditorTypesMany(MB_EditorType head, MB_EditorTypes tail) */
+/*{{{  MB_ButtonDescriptionList MB_makeButtonDescriptionListMany(MB_ButtonDescription head, MB_ButtonDescriptionList tail) */
 
-MB_EditorTypes MB_makeEditorTypesMany(MB_EditorType head, MB_EditorTypes tail)
+MB_ButtonDescriptionList MB_makeButtonDescriptionListMany(MB_ButtonDescription head, MB_ButtonDescriptionList tail)
 {
-  return (MB_EditorTypes)(ATerm)ATinsert((ATermList)tail, (ATerm)head);
+  return (MB_ButtonDescriptionList)(ATerm)ATinsert((ATermList)tail, (ATerm)head);
 }
 
 /*}}}  */
-/*{{{  MB_EditorType MB_makeEditorTypeTerm() */
+/*{{{  MB_ButtonDescription MB_makeButtonDescriptionDefault(MB_ButtonType type, MB_ButtonArgs args) */
 
-MB_EditorType MB_makeEditorTypeTerm()
+MB_ButtonDescription MB_makeButtonDescriptionDefault(MB_ButtonType type, MB_ButtonArgs args)
 {
-  return (MB_EditorType)(ATerm)ATmakeAppl0(MB_afun2);
+  return (MB_ButtonDescription)(ATerm)ATmakeAppl2(MB_afun2, (ATerm)type, (ATerm)args);
 }
 
 /*}}}  */
-/*{{{  MB_EditorType MB_makeEditorTypeEquations() */
+/*{{{  MB_ButtonType MB_makeButtonTypeTerm() */
 
-MB_EditorType MB_makeEditorTypeEquations()
+MB_ButtonType MB_makeButtonTypeTerm()
 {
-  return (MB_EditorType)(ATerm)ATmakeAppl0(MB_afun3);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun3);
 }
 
 /*}}}  */
-/*{{{  MB_EditorType MB_makeEditorTypeSyntax() */
+/*{{{  MB_ButtonType MB_makeButtonTypeEquations() */
 
-MB_EditorType MB_makeEditorTypeSyntax()
+MB_ButtonType MB_makeButtonTypeEquations()
 {
-  return (MB_EditorType)(ATerm)ATmakeAppl0(MB_afun4);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun4);
 }
 
 /*}}}  */
-/*{{{  MB_EditorType MB_makeEditorTypeMessageList() */
+/*{{{  MB_ButtonType MB_makeButtonTypeSyntax() */
 
-MB_EditorType MB_makeEditorTypeMessageList()
+MB_ButtonType MB_makeButtonTypeSyntax()
 {
-  return (MB_EditorType)(ATerm)ATmakeAppl0(MB_afun5);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun5);
 }
 
 /*}}}  */
-/*{{{  MB_EditorType MB_makeEditorTypeAll() */
+/*{{{  MB_ButtonType MB_makeButtonTypeMessageList() */
 
-MB_EditorType MB_makeEditorTypeAll()
+MB_ButtonType MB_makeButtonTypeMessageList()
 {
-  return (MB_EditorType)(ATerm)ATmakeAppl0(MB_afun6);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun6);
 }
 
 /*}}}  */
-/*{{{  MB_ModuleName MB_makeModuleNameAll() */
+/*{{{  MB_ButtonType MB_makeButtonTypeModulePopup() */
 
-MB_ModuleName MB_makeModuleNameAll()
+MB_ButtonType MB_makeButtonTypeModulePopup()
 {
-  return (MB_ModuleName)(ATerm)ATmakeAppl0(MB_afun6);
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun7);
+}
+
+/*}}}  */
+/*{{{  MB_ButtonType MB_makeButtonTypeNewModulePopup() */
+
+MB_ButtonType MB_makeButtonTypeNewModulePopup()
+{
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun8);
+}
+
+/*}}}  */
+/*{{{  MB_ButtonType MB_makeButtonTypeStudioMenubar() */
+
+MB_ButtonType MB_makeButtonTypeStudioMenubar()
+{
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun9);
+}
+
+/*}}}  */
+/*{{{  MB_ButtonType MB_makeButtonTypeStudioToolbar() */
+
+MB_ButtonType MB_makeButtonTypeStudioToolbar()
+{
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun10);
+}
+
+/*}}}  */
+/*{{{  MB_ButtonType MB_makeButtonTypeWildcard() */
+
+MB_ButtonType MB_makeButtonTypeWildcard()
+{
+  return (MB_ButtonType)(ATerm)ATmakeAppl0(MB_afun11);
+}
+
+/*}}}  */
+/*{{{  MB_ButtonArgs MB_makeButtonArgsMenu(MB_MenuTitles list) */
+
+MB_ButtonArgs MB_makeButtonArgsMenu(MB_MenuTitles list)
+{
+  return (MB_ButtonArgs)(ATerm)ATmakeAppl1(MB_afun12, (ATerm)list);
+}
+
+/*}}}  */
+/*{{{  MB_ButtonArgs MB_makeButtonArgsIcon(char* title, char* path) */
+
+MB_ButtonArgs MB_makeButtonArgsIcon(char* title, char* path)
+{
+  return (MB_ButtonArgs)(ATerm)ATmakeAppl2(MB_afun13, (ATerm)ATmakeAppl0(ATmakeAFun(title, 0, ATtrue)), (ATerm)ATmakeAppl0(ATmakeAFun(path, 0, ATtrue)));
+}
+
+/*}}}  */
+/*{{{  MB_MenuTitles MB_makeMenuTitlesEmpty() */
+
+MB_MenuTitles MB_makeMenuTitlesEmpty()
+{
+  return (MB_MenuTitles)(ATerm)ATempty;
+}
+
+/*}}}  */
+/*{{{  MB_MenuTitles MB_makeMenuTitlesMany(char* head, MB_MenuTitles tail) */
+
+MB_MenuTitles MB_makeMenuTitlesMany(char* head, MB_MenuTitles tail)
+{
+  return (MB_MenuTitles)(ATerm)ATinsert((ATermList)tail, (ATerm)ATmakeAppl0(ATmakeAFun(head, 0, ATtrue)));
+}
+
+/*}}}  */
+/*{{{  MB_ModuleName MB_makeModuleNameWildcard() */
+
+MB_ModuleName MB_makeModuleNameWildcard()
+{
+  return (MB_ModuleName)(ATerm)ATmakeAppl0(MB_afun11);
 }
 
 /*}}}  */
@@ -241,12 +364,27 @@ ATbool MB_isEqualButton(MB_Button arg0, MB_Button arg1)
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool MB_isEqualEditorTypes(MB_EditorTypes arg0, MB_EditorTypes arg1)
+ATbool MB_isEqualButtonDescriptionList(MB_ButtonDescriptionList arg0, MB_ButtonDescriptionList arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
 
-ATbool MB_isEqualEditorType(MB_EditorType arg0, MB_EditorType arg1)
+ATbool MB_isEqualButtonDescription(MB_ButtonDescription arg0, MB_ButtonDescription arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool MB_isEqualButtonType(MB_ButtonType arg0, MB_ButtonType arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool MB_isEqualButtonArgs(MB_ButtonArgs arg0, MB_ButtonArgs arg1)
+{
+  return ATisEqual((ATerm)arg0, (ATerm)arg1);
+}
+
+ATbool MB_isEqualMenuTitles(MB_MenuTitles arg0, MB_MenuTitles arg1)
 {
   return ATisEqual((ATerm)arg0, (ATerm)arg1);
 }
@@ -437,20 +575,20 @@ MB_ButtonList MB_setButtonListTail(MB_ButtonList arg, MB_ButtonList tail)
 
 ATbool MB_isValidButton(MB_Button arg)
 {
-  if (MB_isButtonEditor(arg)) {
+  if (MB_isButtonDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  inline ATbool MB_isButtonEditor(MB_Button arg) */
+/*{{{  inline ATbool MB_isButtonDefault(MB_Button arg) */
 
-inline ATbool MB_isButtonEditor(MB_Button arg)
+inline ATbool MB_isButtonDefault(MB_Button arg)
 {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, MB_patternButtonEditor, NULL, NULL, NULL, NULL));
+  assert(ATmatchTerm((ATerm)arg, MB_patternButtonDefault, NULL, NULL, NULL));
 #endif
   return ATtrue;
 }
@@ -460,27 +598,27 @@ inline ATbool MB_isButtonEditor(MB_Button arg)
 
 ATbool MB_hasButtonModule(MB_Button arg)
 {
-  if (MB_isButtonEditor(arg)) {
+  if (MB_isButtonDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  char * MB_getButtonModule(MB_Button arg) */
+/*{{{  char* MB_getButtonModule(MB_Button arg) */
 
-char * MB_getButtonModule(MB_Button arg)
+char* MB_getButtonModule(MB_Button arg)
 {
   
-    return (char *)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
 }
 
 /*}}}  */
-/*{{{  MB_Button MB_setButtonModule(MB_Button arg, char * module) */
+/*{{{  MB_Button MB_setButtonModule(MB_Button arg, char* module) */
 
-MB_Button MB_setButtonModule(MB_Button arg, char * module)
+MB_Button MB_setButtonModule(MB_Button arg, char* module)
 {
-  if (MB_isButtonEditor(arg)) {
+  if (MB_isButtonDefault(arg)) {
     return (MB_Button)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(module, 0, ATtrue)), 0);
   }
 
@@ -489,68 +627,35 @@ MB_Button MB_setButtonModule(MB_Button arg, char * module)
 }
 
 /*}}}  */
-/*{{{  ATbool MB_hasButtonList(MB_Button arg) */
+/*{{{  ATbool MB_hasButtonDescriptions(MB_Button arg) */
 
-ATbool MB_hasButtonList(MB_Button arg)
+ATbool MB_hasButtonDescriptions(MB_Button arg)
 {
-  if (MB_isButtonEditor(arg)) {
+  if (MB_isButtonDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  MB_EditorTypes MB_getButtonList(MB_Button arg) */
+/*{{{  MB_ButtonDescriptionList MB_getButtonDescriptions(MB_Button arg) */
 
-MB_EditorTypes MB_getButtonList(MB_Button arg)
+MB_ButtonDescriptionList MB_getButtonDescriptions(MB_Button arg)
 {
   
-    return (MB_EditorTypes)ATgetArgument((ATermAppl)arg, 1);
+    return (MB_ButtonDescriptionList)ATgetArgument((ATermAppl)arg, 1);
 }
 
 /*}}}  */
-/*{{{  MB_Button MB_setButtonList(MB_Button arg, MB_EditorTypes list) */
+/*{{{  MB_Button MB_setButtonDescriptions(MB_Button arg, MB_ButtonDescriptionList descriptions) */
 
-MB_Button MB_setButtonList(MB_Button arg, MB_EditorTypes list)
+MB_Button MB_setButtonDescriptions(MB_Button arg, MB_ButtonDescriptionList descriptions)
 {
-  if (MB_isButtonEditor(arg)) {
-    return (MB_Button)ATsetArgument((ATermAppl)arg, (ATerm)list, 1);
+  if (MB_isButtonDefault(arg)) {
+    return (MB_Button)ATsetArgument((ATermAppl)arg, (ATerm)descriptions, 1);
   }
 
-  ATabort("Button has no List: %t\n", arg);
-  return (MB_Button)NULL;
-}
-
-/*}}}  */
-/*{{{  ATbool MB_hasButtonName(MB_Button arg) */
-
-ATbool MB_hasButtonName(MB_Button arg)
-{
-  if (MB_isButtonEditor(arg)) {
-    return ATtrue;
-  }
-  return ATfalse;
-}
-
-/*}}}  */
-/*{{{  ATerm MB_getButtonName(MB_Button arg) */
-
-ATerm MB_getButtonName(MB_Button arg)
-{
-  
-    return (ATerm)ATgetArgument((ATermAppl)arg, 2);
-}
-
-/*}}}  */
-/*{{{  MB_Button MB_setButtonName(MB_Button arg, ATerm name) */
-
-MB_Button MB_setButtonName(MB_Button arg, ATerm name)
-{
-  if (MB_isButtonEditor(arg)) {
-    return (MB_Button)ATsetArgument((ATermAppl)arg, (ATerm)name, 2);
-  }
-
-  ATabort("Button has no Name: %t\n", arg);
+  ATabort("Button has no Descriptions: %t\n", arg);
   return (MB_Button)NULL;
 }
 
@@ -559,7 +664,7 @@ MB_Button MB_setButtonName(MB_Button arg, ATerm name)
 
 ATbool MB_hasButtonActions(MB_Button arg)
 {
-  if (MB_isButtonEditor(arg)) {
+  if (MB_isButtonDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
@@ -571,7 +676,7 @@ ATbool MB_hasButtonActions(MB_Button arg)
 ATerm MB_getButtonActions(MB_Button arg)
 {
   
-    return (ATerm)ATgetArgument((ATermAppl)arg, 3);
+    return (ATerm)ATgetArgument((ATermAppl)arg, 2);
 }
 
 /*}}}  */
@@ -579,8 +684,8 @@ ATerm MB_getButtonActions(MB_Button arg)
 
 MB_Button MB_setButtonActions(MB_Button arg, ATerm actions)
 {
-  if (MB_isButtonEditor(arg)) {
-    return (MB_Button)ATsetArgument((ATermAppl)arg, (ATerm)actions, 3);
+  if (MB_isButtonDefault(arg)) {
+    return (MB_Button)ATsetArgument((ATermAppl)arg, (ATerm)actions, 2);
   }
 
   ATabort("Button has no Actions: %t\n", arg);
@@ -590,148 +695,253 @@ MB_Button MB_setButtonActions(MB_Button arg, ATerm actions)
 /*}}}  */
 
 /*}}}  */
-/*{{{  MB_EditorTypes accessors */
+/*{{{  MB_ButtonDescriptionList accessors */
 
-/*{{{  ATbool MB_isValidEditorTypes(MB_EditorTypes arg) */
+/*{{{  ATbool MB_isValidButtonDescriptionList(MB_ButtonDescriptionList arg) */
 
-ATbool MB_isValidEditorTypes(MB_EditorTypes arg)
+ATbool MB_isValidButtonDescriptionList(MB_ButtonDescriptionList arg)
 {
-  if (MB_isEditorTypesEmpty(arg)) {
+  if (MB_isButtonDescriptionListEmpty(arg)) {
     return ATtrue;
   }
-  else if (MB_isEditorTypesMany(arg)) {
+  else if (MB_isButtonDescriptionListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  inline ATbool MB_isEditorTypesEmpty(MB_EditorTypes arg) */
+/*{{{  inline ATbool MB_isButtonDescriptionListEmpty(MB_ButtonDescriptionList arg) */
 
-inline ATbool MB_isEditorTypesEmpty(MB_EditorTypes arg)
+inline ATbool MB_isButtonDescriptionListEmpty(MB_ButtonDescriptionList arg)
 {
   if (!ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, MB_patternEditorTypesEmpty));
+  assert(ATmatchTerm((ATerm)arg, MB_patternButtonDescriptionListEmpty));
 #endif
   return ATtrue;
 }
 
 /*}}}  */
-/*{{{  inline ATbool MB_isEditorTypesMany(MB_EditorTypes arg) */
+/*{{{  inline ATbool MB_isButtonDescriptionListMany(MB_ButtonDescriptionList arg) */
 
-inline ATbool MB_isEditorTypesMany(MB_EditorTypes arg)
+inline ATbool MB_isButtonDescriptionListMany(MB_ButtonDescriptionList arg)
 {
   if (ATisEmpty((ATermList)arg)) {
     return ATfalse;
   }
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, MB_patternEditorTypesMany, NULL, NULL));
+  assert(ATmatchTerm((ATerm)arg, MB_patternButtonDescriptionListMany, NULL, NULL));
 #endif
   return ATtrue;
 }
 
 /*}}}  */
-/*{{{  ATbool MB_hasEditorTypesHead(MB_EditorTypes arg) */
+/*{{{  ATbool MB_hasButtonDescriptionListHead(MB_ButtonDescriptionList arg) */
 
-ATbool MB_hasEditorTypesHead(MB_EditorTypes arg)
+ATbool MB_hasButtonDescriptionListHead(MB_ButtonDescriptionList arg)
 {
-  if (MB_isEditorTypesMany(arg)) {
+  if (MB_isButtonDescriptionListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  MB_EditorType MB_getEditorTypesHead(MB_EditorTypes arg) */
+/*{{{  MB_ButtonDescription MB_getButtonDescriptionListHead(MB_ButtonDescriptionList arg) */
 
-MB_EditorType MB_getEditorTypesHead(MB_EditorTypes arg)
+MB_ButtonDescription MB_getButtonDescriptionListHead(MB_ButtonDescriptionList arg)
 {
   
-    return (MB_EditorType)ATgetFirst((ATermList)arg);
+    return (MB_ButtonDescription)ATgetFirst((ATermList)arg);
 }
 
 /*}}}  */
-/*{{{  MB_EditorTypes MB_setEditorTypesHead(MB_EditorTypes arg, MB_EditorType head) */
+/*{{{  MB_ButtonDescriptionList MB_setButtonDescriptionListHead(MB_ButtonDescriptionList arg, MB_ButtonDescription head) */
 
-MB_EditorTypes MB_setEditorTypesHead(MB_EditorTypes arg, MB_EditorType head)
+MB_ButtonDescriptionList MB_setButtonDescriptionListHead(MB_ButtonDescriptionList arg, MB_ButtonDescription head)
 {
-  if (MB_isEditorTypesMany(arg)) {
-    return (MB_EditorTypes)ATreplace((ATermList)arg, (ATerm)head, 0);
+  if (MB_isButtonDescriptionListMany(arg)) {
+    return (MB_ButtonDescriptionList)ATreplace((ATermList)arg, (ATerm)head, 0);
   }
 
-  ATabort("EditorTypes has no Head: %t\n", arg);
-  return (MB_EditorTypes)NULL;
+  ATabort("ButtonDescriptionList has no Head: %t\n", arg);
+  return (MB_ButtonDescriptionList)NULL;
 }
 
 /*}}}  */
-/*{{{  ATbool MB_hasEditorTypesTail(MB_EditorTypes arg) */
+/*{{{  ATbool MB_hasButtonDescriptionListTail(MB_ButtonDescriptionList arg) */
 
-ATbool MB_hasEditorTypesTail(MB_EditorTypes arg)
+ATbool MB_hasButtonDescriptionListTail(MB_ButtonDescriptionList arg)
 {
-  if (MB_isEditorTypesMany(arg)) {
+  if (MB_isButtonDescriptionListMany(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  MB_EditorTypes MB_getEditorTypesTail(MB_EditorTypes arg) */
+/*{{{  MB_ButtonDescriptionList MB_getButtonDescriptionListTail(MB_ButtonDescriptionList arg) */
 
-MB_EditorTypes MB_getEditorTypesTail(MB_EditorTypes arg)
+MB_ButtonDescriptionList MB_getButtonDescriptionListTail(MB_ButtonDescriptionList arg)
 {
   
-    return (MB_EditorTypes)ATgetNext((ATermList)arg);
+    return (MB_ButtonDescriptionList)ATgetNext((ATermList)arg);
 }
 
 /*}}}  */
-/*{{{  MB_EditorTypes MB_setEditorTypesTail(MB_EditorTypes arg, MB_EditorTypes tail) */
+/*{{{  MB_ButtonDescriptionList MB_setButtonDescriptionListTail(MB_ButtonDescriptionList arg, MB_ButtonDescriptionList tail) */
 
-MB_EditorTypes MB_setEditorTypesTail(MB_EditorTypes arg, MB_EditorTypes tail)
+MB_ButtonDescriptionList MB_setButtonDescriptionListTail(MB_ButtonDescriptionList arg, MB_ButtonDescriptionList tail)
 {
-  if (MB_isEditorTypesMany(arg)) {
-    return (MB_EditorTypes)ATreplaceTail((ATermList)arg, (ATermList)tail, 1);
+  if (MB_isButtonDescriptionListMany(arg)) {
+    return (MB_ButtonDescriptionList)ATreplaceTail((ATermList)arg, (ATermList)tail, 1);
   }
 
-  ATabort("EditorTypes has no Tail: %t\n", arg);
-  return (MB_EditorTypes)NULL;
+  ATabort("ButtonDescriptionList has no Tail: %t\n", arg);
+  return (MB_ButtonDescriptionList)NULL;
 }
 
 /*}}}  */
 
 /*}}}  */
-/*{{{  MB_EditorType accessors */
+/*{{{  MB_ButtonDescription accessors */
 
-/*{{{  ATbool MB_isValidEditorType(MB_EditorType arg) */
+/*{{{  ATbool MB_isValidButtonDescription(MB_ButtonDescription arg) */
 
-ATbool MB_isValidEditorType(MB_EditorType arg)
+ATbool MB_isValidButtonDescription(MB_ButtonDescription arg)
 {
-  if (MB_isEditorTypeTerm(arg)) {
-    return ATtrue;
-  }
-  else if (MB_isEditorTypeEquations(arg)) {
-    return ATtrue;
-  }
-  else if (MB_isEditorTypeSyntax(arg)) {
-    return ATtrue;
-  }
-  else if (MB_isEditorTypeMessageList(arg)) {
-    return ATtrue;
-  }
-  else if (MB_isEditorTypeAll(arg)) {
+  if (MB_isButtonDescriptionDefault(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  inline ATbool MB_isEditorTypeTerm(MB_EditorType arg) */
+/*{{{  inline ATbool MB_isButtonDescriptionDefault(MB_ButtonDescription arg) */
 
-inline ATbool MB_isEditorTypeTerm(MB_EditorType arg)
+inline ATbool MB_isButtonDescriptionDefault(MB_ButtonDescription arg)
+{
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, MB_patternButtonDescriptionDefault, NULL, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool MB_hasButtonDescriptionType(MB_ButtonDescription arg) */
+
+ATbool MB_hasButtonDescriptionType(MB_ButtonDescription arg)
+{
+  if (MB_isButtonDescriptionDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  MB_ButtonType MB_getButtonDescriptionType(MB_ButtonDescription arg) */
+
+MB_ButtonType MB_getButtonDescriptionType(MB_ButtonDescription arg)
+{
+  
+    return (MB_ButtonType)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  MB_ButtonDescription MB_setButtonDescriptionType(MB_ButtonDescription arg, MB_ButtonType type) */
+
+MB_ButtonDescription MB_setButtonDescriptionType(MB_ButtonDescription arg, MB_ButtonType type)
+{
+  if (MB_isButtonDescriptionDefault(arg)) {
+    return (MB_ButtonDescription)ATsetArgument((ATermAppl)arg, (ATerm)type, 0);
+  }
+
+  ATabort("ButtonDescription has no Type: %t\n", arg);
+  return (MB_ButtonDescription)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool MB_hasButtonDescriptionArgs(MB_ButtonDescription arg) */
+
+ATbool MB_hasButtonDescriptionArgs(MB_ButtonDescription arg)
+{
+  if (MB_isButtonDescriptionDefault(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  MB_ButtonArgs MB_getButtonDescriptionArgs(MB_ButtonDescription arg) */
+
+MB_ButtonArgs MB_getButtonDescriptionArgs(MB_ButtonDescription arg)
+{
+  
+    return (MB_ButtonArgs)ATgetArgument((ATermAppl)arg, 1);
+}
+
+/*}}}  */
+/*{{{  MB_ButtonDescription MB_setButtonDescriptionArgs(MB_ButtonDescription arg, MB_ButtonArgs args) */
+
+MB_ButtonDescription MB_setButtonDescriptionArgs(MB_ButtonDescription arg, MB_ButtonArgs args)
+{
+  if (MB_isButtonDescriptionDefault(arg)) {
+    return (MB_ButtonDescription)ATsetArgument((ATermAppl)arg, (ATerm)args, 1);
+  }
+
+  ATabort("ButtonDescription has no Args: %t\n", arg);
+  return (MB_ButtonDescription)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  MB_ButtonType accessors */
+
+/*{{{  ATbool MB_isValidButtonType(MB_ButtonType arg) */
+
+ATbool MB_isValidButtonType(MB_ButtonType arg)
+{
+  if (MB_isButtonTypeTerm(arg)) {
+    return ATtrue;
+  }
+  else if (MB_isButtonTypeEquations(arg)) {
+    return ATtrue;
+  }
+  else if (MB_isButtonTypeSyntax(arg)) {
+    return ATtrue;
+  }
+  else if (MB_isButtonTypeMessageList(arg)) {
+    return ATtrue;
+  }
+  else if (MB_isButtonTypeModulePopup(arg)) {
+    return ATtrue;
+  }
+  else if (MB_isButtonTypeNewModulePopup(arg)) {
+    return ATtrue;
+  }
+  else if (MB_isButtonTypeStudioMenubar(arg)) {
+    return ATtrue;
+  }
+  else if (MB_isButtonTypeStudioToolbar(arg)) {
+    return ATtrue;
+  }
+  else if (MB_isButtonTypeWildcard(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MB_isButtonTypeTerm(MB_ButtonType arg) */
+
+inline ATbool MB_isButtonTypeTerm(MB_ButtonType arg)
 {
   {
     static ATerm last_arg = NULL;
@@ -742,7 +952,7 @@ inline ATbool MB_isEditorTypeTerm(MB_EditorType arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, MB_patternEditorTypeTerm);
+      last_result = ATmatchTerm((ATerm)arg, MB_patternButtonTypeTerm);
       last_gc = ATgetGCCount();
     }
 
@@ -751,9 +961,9 @@ inline ATbool MB_isEditorTypeTerm(MB_EditorType arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool MB_isEditorTypeEquations(MB_EditorType arg) */
+/*{{{  inline ATbool MB_isButtonTypeEquations(MB_ButtonType arg) */
 
-inline ATbool MB_isEditorTypeEquations(MB_EditorType arg)
+inline ATbool MB_isButtonTypeEquations(MB_ButtonType arg)
 {
   {
     static ATerm last_arg = NULL;
@@ -764,7 +974,7 @@ inline ATbool MB_isEditorTypeEquations(MB_EditorType arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, MB_patternEditorTypeEquations);
+      last_result = ATmatchTerm((ATerm)arg, MB_patternButtonTypeEquations);
       last_gc = ATgetGCCount();
     }
 
@@ -773,9 +983,9 @@ inline ATbool MB_isEditorTypeEquations(MB_EditorType arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool MB_isEditorTypeSyntax(MB_EditorType arg) */
+/*{{{  inline ATbool MB_isButtonTypeSyntax(MB_ButtonType arg) */
 
-inline ATbool MB_isEditorTypeSyntax(MB_EditorType arg)
+inline ATbool MB_isButtonTypeSyntax(MB_ButtonType arg)
 {
   {
     static ATerm last_arg = NULL;
@@ -786,7 +996,7 @@ inline ATbool MB_isEditorTypeSyntax(MB_EditorType arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, MB_patternEditorTypeSyntax);
+      last_result = ATmatchTerm((ATerm)arg, MB_patternButtonTypeSyntax);
       last_gc = ATgetGCCount();
     }
 
@@ -795,9 +1005,9 @@ inline ATbool MB_isEditorTypeSyntax(MB_EditorType arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool MB_isEditorTypeMessageList(MB_EditorType arg) */
+/*{{{  inline ATbool MB_isButtonTypeMessageList(MB_ButtonType arg) */
 
-inline ATbool MB_isEditorTypeMessageList(MB_EditorType arg)
+inline ATbool MB_isButtonTypeMessageList(MB_ButtonType arg)
 {
   {
     static ATerm last_arg = NULL;
@@ -808,7 +1018,7 @@ inline ATbool MB_isEditorTypeMessageList(MB_EditorType arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, MB_patternEditorTypeMessageList);
+      last_result = ATmatchTerm((ATerm)arg, MB_patternButtonTypeMessageList);
       last_gc = ATgetGCCount();
     }
 
@@ -817,9 +1027,9 @@ inline ATbool MB_isEditorTypeMessageList(MB_EditorType arg)
 }
 
 /*}}}  */
-/*{{{  inline ATbool MB_isEditorTypeAll(MB_EditorType arg) */
+/*{{{  inline ATbool MB_isButtonTypeModulePopup(MB_ButtonType arg) */
 
-inline ATbool MB_isEditorTypeAll(MB_EditorType arg)
+inline ATbool MB_isButtonTypeModulePopup(MB_ButtonType arg)
 {
   {
     static ATerm last_arg = NULL;
@@ -830,12 +1040,375 @@ inline ATbool MB_isEditorTypeAll(MB_EditorType arg)
 
     if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
       last_arg = (ATerm)arg;
-      last_result = ATmatchTerm((ATerm)arg, MB_patternEditorTypeAll);
+      last_result = ATmatchTerm((ATerm)arg, MB_patternButtonTypeModulePopup);
       last_gc = ATgetGCCount();
     }
 
     return last_result;
   }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MB_isButtonTypeNewModulePopup(MB_ButtonType arg) */
+
+inline ATbool MB_isButtonTypeNewModulePopup(MB_ButtonType arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MB_patternButtonTypeNewModulePopup);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MB_isButtonTypeStudioMenubar(MB_ButtonType arg) */
+
+inline ATbool MB_isButtonTypeStudioMenubar(MB_ButtonType arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MB_patternButtonTypeStudioMenubar);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MB_isButtonTypeStudioToolbar(MB_ButtonType arg) */
+
+inline ATbool MB_isButtonTypeStudioToolbar(MB_ButtonType arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MB_patternButtonTypeStudioToolbar);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MB_isButtonTypeWildcard(MB_ButtonType arg) */
+
+inline ATbool MB_isButtonTypeWildcard(MB_ButtonType arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MB_patternButtonTypeWildcard);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  MB_ButtonArgs accessors */
+
+/*{{{  ATbool MB_isValidButtonArgs(MB_ButtonArgs arg) */
+
+ATbool MB_isValidButtonArgs(MB_ButtonArgs arg)
+{
+  if (MB_isButtonArgsMenu(arg)) {
+    return ATtrue;
+  }
+  else if (MB_isButtonArgsIcon(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MB_isButtonArgsMenu(MB_ButtonArgs arg) */
+
+inline ATbool MB_isButtonArgsMenu(MB_ButtonArgs arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MB_patternButtonArgsMenu, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  inline ATbool MB_isButtonArgsIcon(MB_ButtonArgs arg) */
+
+inline ATbool MB_isButtonArgsIcon(MB_ButtonArgs arg)
+{
+  {
+    static ATerm last_arg = NULL;
+    static int last_gc = -1;
+    static ATbool last_result;
+
+    assert(arg != NULL);
+
+    if (last_gc != ATgetGCCount() || (ATerm)arg != last_arg) {
+      last_arg = (ATerm)arg;
+      last_result = ATmatchTerm((ATerm)arg, MB_patternButtonArgsIcon, NULL, NULL);
+      last_gc = ATgetGCCount();
+    }
+
+    return last_result;
+  }
+}
+
+/*}}}  */
+/*{{{  ATbool MB_hasButtonArgsList(MB_ButtonArgs arg) */
+
+ATbool MB_hasButtonArgsList(MB_ButtonArgs arg)
+{
+  if (MB_isButtonArgsMenu(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  MB_MenuTitles MB_getButtonArgsList(MB_ButtonArgs arg) */
+
+MB_MenuTitles MB_getButtonArgsList(MB_ButtonArgs arg)
+{
+  
+    return (MB_MenuTitles)ATgetArgument((ATermAppl)arg, 0);
+}
+
+/*}}}  */
+/*{{{  MB_ButtonArgs MB_setButtonArgsList(MB_ButtonArgs arg, MB_MenuTitles list) */
+
+MB_ButtonArgs MB_setButtonArgsList(MB_ButtonArgs arg, MB_MenuTitles list)
+{
+  if (MB_isButtonArgsMenu(arg)) {
+    return (MB_ButtonArgs)ATsetArgument((ATermAppl)arg, (ATerm)list, 0);
+  }
+
+  ATabort("ButtonArgs has no List: %t\n", arg);
+  return (MB_ButtonArgs)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool MB_hasButtonArgsTitle(MB_ButtonArgs arg) */
+
+ATbool MB_hasButtonArgsTitle(MB_ButtonArgs arg)
+{
+  if (MB_isButtonArgsIcon(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* MB_getButtonArgsTitle(MB_ButtonArgs arg) */
+
+char* MB_getButtonArgsTitle(MB_ButtonArgs arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 0)));
+}
+
+/*}}}  */
+/*{{{  MB_ButtonArgs MB_setButtonArgsTitle(MB_ButtonArgs arg, char* title) */
+
+MB_ButtonArgs MB_setButtonArgsTitle(MB_ButtonArgs arg, char* title)
+{
+  if (MB_isButtonArgsIcon(arg)) {
+    return (MB_ButtonArgs)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(title, 0, ATtrue)), 0);
+  }
+
+  ATabort("ButtonArgs has no Title: %t\n", arg);
+  return (MB_ButtonArgs)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool MB_hasButtonArgsPath(MB_ButtonArgs arg) */
+
+ATbool MB_hasButtonArgsPath(MB_ButtonArgs arg)
+{
+  if (MB_isButtonArgsIcon(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* MB_getButtonArgsPath(MB_ButtonArgs arg) */
+
+char* MB_getButtonArgsPath(MB_ButtonArgs arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetArgument((ATermAppl)arg, 1)));
+}
+
+/*}}}  */
+/*{{{  MB_ButtonArgs MB_setButtonArgsPath(MB_ButtonArgs arg, char* path) */
+
+MB_ButtonArgs MB_setButtonArgsPath(MB_ButtonArgs arg, char* path)
+{
+  if (MB_isButtonArgsIcon(arg)) {
+    return (MB_ButtonArgs)ATsetArgument((ATermAppl)arg, (ATerm)ATmakeAppl0(ATmakeAFun(path, 0, ATtrue)), 1);
+  }
+
+  ATabort("ButtonArgs has no Path: %t\n", arg);
+  return (MB_ButtonArgs)NULL;
+}
+
+/*}}}  */
+
+/*}}}  */
+/*{{{  MB_MenuTitles accessors */
+
+/*{{{  ATbool MB_isValidMenuTitles(MB_MenuTitles arg) */
+
+ATbool MB_isValidMenuTitles(MB_MenuTitles arg)
+{
+  if (MB_isMenuTitlesEmpty(arg)) {
+    return ATtrue;
+  }
+  else if (MB_isMenuTitlesMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MB_isMenuTitlesEmpty(MB_MenuTitles arg) */
+
+inline ATbool MB_isMenuTitlesEmpty(MB_MenuTitles arg)
+{
+  if (!ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, MB_patternMenuTitlesEmpty));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  inline ATbool MB_isMenuTitlesMany(MB_MenuTitles arg) */
+
+inline ATbool MB_isMenuTitlesMany(MB_MenuTitles arg)
+{
+  if (ATisEmpty((ATermList)arg)) {
+    return ATfalse;
+  }
+#ifndef DISABLE_DYNAMIC_CHECKING
+  assert(arg != NULL);
+  assert(ATmatchTerm((ATerm)arg, MB_patternMenuTitlesMany, NULL, NULL));
+#endif
+  return ATtrue;
+}
+
+/*}}}  */
+/*{{{  ATbool MB_hasMenuTitlesHead(MB_MenuTitles arg) */
+
+ATbool MB_hasMenuTitlesHead(MB_MenuTitles arg)
+{
+  if (MB_isMenuTitlesMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  char* MB_getMenuTitlesHead(MB_MenuTitles arg) */
+
+char* MB_getMenuTitlesHead(MB_MenuTitles arg)
+{
+  
+    return (char*)ATgetName(ATgetAFun((ATermAppl)ATgetFirst((ATermList)arg)));
+}
+
+/*}}}  */
+/*{{{  MB_MenuTitles MB_setMenuTitlesHead(MB_MenuTitles arg, char* head) */
+
+MB_MenuTitles MB_setMenuTitlesHead(MB_MenuTitles arg, char* head)
+{
+  if (MB_isMenuTitlesMany(arg)) {
+    return (MB_MenuTitles)ATreplace((ATermList)arg, (ATerm)ATmakeAppl0(ATmakeAFun(head, 0, ATtrue)), 0);
+  }
+
+  ATabort("MenuTitles has no Head: %t\n", arg);
+  return (MB_MenuTitles)NULL;
+}
+
+/*}}}  */
+/*{{{  ATbool MB_hasMenuTitlesTail(MB_MenuTitles arg) */
+
+ATbool MB_hasMenuTitlesTail(MB_MenuTitles arg)
+{
+  if (MB_isMenuTitlesMany(arg)) {
+    return ATtrue;
+  }
+  return ATfalse;
+}
+
+/*}}}  */
+/*{{{  MB_MenuTitles MB_getMenuTitlesTail(MB_MenuTitles arg) */
+
+MB_MenuTitles MB_getMenuTitlesTail(MB_MenuTitles arg)
+{
+  
+    return (MB_MenuTitles)ATgetNext((ATermList)arg);
+}
+
+/*}}}  */
+/*{{{  MB_MenuTitles MB_setMenuTitlesTail(MB_MenuTitles arg, MB_MenuTitles tail) */
+
+MB_MenuTitles MB_setMenuTitlesTail(MB_MenuTitles arg, MB_MenuTitles tail)
+{
+  if (MB_isMenuTitlesMany(arg)) {
+    return (MB_MenuTitles)ATreplaceTail((ATermList)arg, (ATermList)tail, 1);
+  }
+
+  ATabort("MenuTitles has no Tail: %t\n", arg);
+  return (MB_MenuTitles)NULL;
 }
 
 /*}}}  */
@@ -847,20 +1420,20 @@ inline ATbool MB_isEditorTypeAll(MB_EditorType arg)
 
 ATbool MB_isValidModuleName(MB_ModuleName arg)
 {
-  if (MB_isModuleNameAll(arg)) {
+  if (MB_isModuleNameWildcard(arg)) {
     return ATtrue;
   }
   return ATfalse;
 }
 
 /*}}}  */
-/*{{{  inline ATbool MB_isModuleNameAll(MB_ModuleName arg) */
+/*{{{  inline ATbool MB_isModuleNameWildcard(MB_ModuleName arg) */
 
-inline ATbool MB_isModuleNameAll(MB_ModuleName arg)
+inline ATbool MB_isModuleNameWildcard(MB_ModuleName arg)
 {
 #ifndef DISABLE_DYNAMIC_CHECKING
   assert(arg != NULL);
-  assert(ATmatchTerm((ATerm)arg, MB_patternModuleNameAll));
+  assert(ATmatchTerm((ATerm)arg, MB_patternModuleNameWildcard));
 #endif
   return ATtrue;
 }
@@ -900,15 +1473,14 @@ MB_ButtonList MB_visitButtonList(MB_ButtonList arg, MB_Button (*acceptHead)(MB_B
 }
 
 /*}}}  */
-/*{{{  MB_Button MB_visitButton(MB_Button arg, char * (*acceptModule)(char *), MB_EditorTypes (*acceptList)(MB_EditorTypes), ATerm (*acceptName)(ATerm), ATerm (*acceptActions)(ATerm)) */
+/*{{{  MB_Button MB_visitButton(MB_Button arg, char* (*acceptModule)(char*), MB_ButtonDescriptionList (*acceptDescriptions)(MB_ButtonDescriptionList), ATerm (*acceptActions)(ATerm)) */
 
-MB_Button MB_visitButton(MB_Button arg, char * (*acceptModule)(char *), MB_EditorTypes (*acceptList)(MB_EditorTypes), ATerm (*acceptName)(ATerm), ATerm (*acceptActions)(ATerm))
+MB_Button MB_visitButton(MB_Button arg, char* (*acceptModule)(char*), MB_ButtonDescriptionList (*acceptDescriptions)(MB_ButtonDescriptionList), ATerm (*acceptActions)(ATerm))
 {
-  if (MB_isButtonEditor(arg)) {
-    return MB_makeButtonEditor(
+  if (MB_isButtonDefault(arg)) {
+    return MB_makeButtonDefault(
         acceptModule ? acceptModule(MB_getButtonModule(arg)) : MB_getButtonModule(arg),
-        acceptList ? acceptList(MB_getButtonList(arg)) : MB_getButtonList(arg),
-        acceptName ? acceptName(MB_getButtonName(arg)) : MB_getButtonName(arg),
+        acceptDescriptions ? acceptDescriptions(MB_getButtonDescriptions(arg)) : MB_getButtonDescriptions(arg),
         acceptActions ? acceptActions(MB_getButtonActions(arg)) : MB_getButtonActions(arg));
   }
   ATabort("not a Button: %t\n", arg);
@@ -916,44 +1488,105 @@ MB_Button MB_visitButton(MB_Button arg, char * (*acceptModule)(char *), MB_Edito
 }
 
 /*}}}  */
-/*{{{  MB_EditorTypes MB_visitEditorTypes(MB_EditorTypes arg, MB_EditorType (*acceptHead)(MB_EditorType)) */
+/*{{{  MB_ButtonDescriptionList MB_visitButtonDescriptionList(MB_ButtonDescriptionList arg, MB_ButtonDescription (*acceptHead)(MB_ButtonDescription)) */
 
-MB_EditorTypes MB_visitEditorTypes(MB_EditorTypes arg, MB_EditorType (*acceptHead)(MB_EditorType))
+MB_ButtonDescriptionList MB_visitButtonDescriptionList(MB_ButtonDescriptionList arg, MB_ButtonDescription (*acceptHead)(MB_ButtonDescription))
 {
-  if (MB_isEditorTypesEmpty(arg)) {
-    return MB_makeEditorTypesEmpty();
+  if (MB_isButtonDescriptionListEmpty(arg)) {
+    return MB_makeButtonDescriptionListEmpty();
   }
-  if (MB_isEditorTypesMany(arg)) {
-    return MB_makeEditorTypesMany(
-        acceptHead ? acceptHead(MB_getEditorTypesHead(arg)) : MB_getEditorTypesHead(arg),
-        MB_visitEditorTypes(MB_getEditorTypesTail(arg), acceptHead));
+  if (MB_isButtonDescriptionListMany(arg)) {
+    return MB_makeButtonDescriptionListMany(
+        acceptHead ? acceptHead(MB_getButtonDescriptionListHead(arg)) : MB_getButtonDescriptionListHead(arg),
+        MB_visitButtonDescriptionList(MB_getButtonDescriptionListTail(arg), acceptHead));
   }
-  ATabort("not a EditorTypes: %t\n", arg);
-  return (MB_EditorTypes)NULL;
+  ATabort("not a ButtonDescriptionList: %t\n", arg);
+  return (MB_ButtonDescriptionList)NULL;
 }
 
 /*}}}  */
-/*{{{  MB_EditorType MB_visitEditorType(MB_EditorType arg) */
+/*{{{  MB_ButtonDescription MB_visitButtonDescription(MB_ButtonDescription arg, MB_ButtonType (*acceptType)(MB_ButtonType), MB_ButtonArgs (*acceptArgs)(MB_ButtonArgs)) */
 
-MB_EditorType MB_visitEditorType(MB_EditorType arg)
+MB_ButtonDescription MB_visitButtonDescription(MB_ButtonDescription arg, MB_ButtonType (*acceptType)(MB_ButtonType), MB_ButtonArgs (*acceptArgs)(MB_ButtonArgs))
 {
-  if (MB_isEditorTypeTerm(arg)) {
-    return MB_makeEditorTypeTerm();
+  if (MB_isButtonDescriptionDefault(arg)) {
+    return MB_makeButtonDescriptionDefault(
+        acceptType ? acceptType(MB_getButtonDescriptionType(arg)) : MB_getButtonDescriptionType(arg),
+        acceptArgs ? acceptArgs(MB_getButtonDescriptionArgs(arg)) : MB_getButtonDescriptionArgs(arg));
   }
-  if (MB_isEditorTypeEquations(arg)) {
-    return MB_makeEditorTypeEquations();
+  ATabort("not a ButtonDescription: %t\n", arg);
+  return (MB_ButtonDescription)NULL;
+}
+
+/*}}}  */
+/*{{{  MB_ButtonType MB_visitButtonType(MB_ButtonType arg) */
+
+MB_ButtonType MB_visitButtonType(MB_ButtonType arg)
+{
+  if (MB_isButtonTypeTerm(arg)) {
+    return MB_makeButtonTypeTerm();
   }
-  if (MB_isEditorTypeSyntax(arg)) {
-    return MB_makeEditorTypeSyntax();
+  if (MB_isButtonTypeEquations(arg)) {
+    return MB_makeButtonTypeEquations();
   }
-  if (MB_isEditorTypeMessageList(arg)) {
-    return MB_makeEditorTypeMessageList();
+  if (MB_isButtonTypeSyntax(arg)) {
+    return MB_makeButtonTypeSyntax();
   }
-  if (MB_isEditorTypeAll(arg)) {
-    return MB_makeEditorTypeAll();
+  if (MB_isButtonTypeMessageList(arg)) {
+    return MB_makeButtonTypeMessageList();
   }
-  ATabort("not a EditorType: %t\n", arg);
-  return (MB_EditorType)NULL;
+  if (MB_isButtonTypeModulePopup(arg)) {
+    return MB_makeButtonTypeModulePopup();
+  }
+  if (MB_isButtonTypeNewModulePopup(arg)) {
+    return MB_makeButtonTypeNewModulePopup();
+  }
+  if (MB_isButtonTypeStudioMenubar(arg)) {
+    return MB_makeButtonTypeStudioMenubar();
+  }
+  if (MB_isButtonTypeStudioToolbar(arg)) {
+    return MB_makeButtonTypeStudioToolbar();
+  }
+  if (MB_isButtonTypeWildcard(arg)) {
+    return MB_makeButtonTypeWildcard();
+  }
+  ATabort("not a ButtonType: %t\n", arg);
+  return (MB_ButtonType)NULL;
+}
+
+/*}}}  */
+/*{{{  MB_ButtonArgs MB_visitButtonArgs(MB_ButtonArgs arg, MB_MenuTitles (*acceptList)(MB_MenuTitles), char* (*acceptTitle)(char*), char* (*acceptPath)(char*)) */
+
+MB_ButtonArgs MB_visitButtonArgs(MB_ButtonArgs arg, MB_MenuTitles (*acceptList)(MB_MenuTitles), char* (*acceptTitle)(char*), char* (*acceptPath)(char*))
+{
+  if (MB_isButtonArgsMenu(arg)) {
+    return MB_makeButtonArgsMenu(
+        acceptList ? acceptList(MB_getButtonArgsList(arg)) : MB_getButtonArgsList(arg));
+  }
+  if (MB_isButtonArgsIcon(arg)) {
+    return MB_makeButtonArgsIcon(
+        acceptTitle ? acceptTitle(MB_getButtonArgsTitle(arg)) : MB_getButtonArgsTitle(arg),
+        acceptPath ? acceptPath(MB_getButtonArgsPath(arg)) : MB_getButtonArgsPath(arg));
+  }
+  ATabort("not a ButtonArgs: %t\n", arg);
+  return (MB_ButtonArgs)NULL;
+}
+
+/*}}}  */
+/*{{{  MB_MenuTitles MB_visitMenuTitles(MB_MenuTitles arg, char* (*acceptHead)(char*)) */
+
+MB_MenuTitles MB_visitMenuTitles(MB_MenuTitles arg, char* (*acceptHead)(char*))
+{
+  if (MB_isMenuTitlesEmpty(arg)) {
+    return MB_makeMenuTitlesEmpty();
+  }
+  if (MB_isMenuTitlesMany(arg)) {
+    return MB_makeMenuTitlesMany(
+        acceptHead ? acceptHead(MB_getMenuTitlesHead(arg)) : MB_getMenuTitlesHead(arg),
+        MB_visitMenuTitles(MB_getMenuTitlesTail(arg), acceptHead));
+  }
+  ATabort("not a MenuTitles: %t\n", arg);
+  return (MB_MenuTitles)NULL;
 }
 
 /*}}}  */
@@ -961,8 +1594,8 @@ MB_EditorType MB_visitEditorType(MB_EditorType arg)
 
 MB_ModuleName MB_visitModuleName(MB_ModuleName arg)
 {
-  if (MB_isModuleNameAll(arg)) {
-    return MB_makeModuleNameAll();
+  if (MB_isModuleNameWildcard(arg)) {
+    return MB_makeModuleNameWildcard();
   }
   ATabort("not a ModuleName: %t\n", arg);
   return (MB_ModuleName)NULL;

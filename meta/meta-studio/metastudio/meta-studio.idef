@@ -48,13 +48,13 @@ let
   ModuleName : str,
   EnvironmentName : str,
   GraphId : str,
-  ButtonName : list,
+  ActionEvent : term,
   Tree : term,
-  Actions : str,
+  ButtonNames : str,
   ButtonList : list,
   Title : str,
   Answer : term,
-  T : str
+  Type : term
 in
   subscribe(display-import-graph(<list>)) .
   Id := process-id.
@@ -74,23 +74,23 @@ in
     rec-msg(ui-delete-modules(Mods?)).
     snd-do(UI, delete-modules(Mods))
   +
-    rec-event(UI,get-module-info(ModuleName?)).
+    rec-event(UI, get-module-info(ModuleName?)).
     snd-msg(get-module-info(ModuleName)) .           
     rec-msg(module-info(ModuleName, Info?)) .
-    snd-do(UI,module-info(ModuleName,Info)) .
-    snd-ack-event(UI,get-module-info(ModuleName))
+    snd-do(UI, module-info(ModuleName,Info)) .
+    snd-ack-event(UI, get-module-info(ModuleName))
   +
-    rec-event(UI,clear-all).
+    rec-event(UI, clear-all).
     snd-msg(clear-all).
     rec-msg(cleared-all).
-    snd-ack-event(UI,clear-all)
+    snd-ack-event(UI, clear-all)
   +
-   ( rec-event(UI,debugging(On?)) .
+   ( rec-event(UI, debugging(On?)) .
      snd-msg(debugging(On)) .
-     snd-ack-event(UI,debugging(On))
+     snd-ack-event(UI, debugging(On))
    ) +
    ( rec-note(display-import-graph(Pairs?)).
-     snd-do(UI,new-graph(Pairs)) .
+     snd-do(UI, new-graph(Pairs)) .
      Pairs := []
    )
    +
@@ -101,22 +101,22 @@ in
      snd-ack-event(UI, layout-graph(GraphId, Graph))
    )
    + /* Get buttons for UI items */
-   ( rec-event(UI, get-buttons(T?, ModuleName?)) .
-     snd-msg(get-auxilary-buttons(T, ModuleName)) .
-     rec-msg(button-list(ModuleName,ButtonList?)).
-     snd-do(UI, buttons-found(T, ModuleName, ButtonList)) .
-     snd-ack-event(UI, get-buttons(T, ModuleName))
+   ( rec-event(UI, get-buttons(Type?, ModuleName?)) .
+     snd-msg(get-auxilary-buttons(Type, ModuleName)) .
+     rec-msg(button-list(ModuleName, ButtonList?)).
+     snd-do(UI, buttons-found(Type, ModuleName, ButtonList)) .
+     snd-ack-event(UI, get-buttons(Type, ModuleName))
    )
    +
-   ( rec-event(UI, button-selected(T?, ModuleName?, ButtonName?)) .
-     snd-msg(extra-button-action(ButtonName, [str(ModuleName)], T, 
+   ( rec-event(UI, button-selected(Type?, ModuleName?, ActionEvent?)) .
+     snd-msg(extra-button-action(ActionEvent, [str(ModuleName)], Type, 
                                  ModuleName, ui-id)) .
-     snd-ack-event(UI, button-selected(T, ModuleName, ButtonName))
+     snd-ack-event(UI, button-selected(Type, ModuleName, ActionEvent))
    )
    +
-   ( rec-event(UI, button-selected(T?, ButtonName?)) .
-     snd-msg(extra-button-action(ButtonName, [], T, "*", ui-id)) .
-     snd-ack-event(UI, button-selected(T, ButtonName))
+   ( rec-event(UI, button-selected(Type?, ActionEvent?)) .
+     snd-msg(extra-button-action(ActionEvent, [], Type, "*", ui-id)) .
+     snd-ack-event(UI, button-selected(Type, ActionEvent))
    )
    +
    ( rec-msg(ask-for-file(Title?, Path?, Extension?)) .
@@ -142,19 +142,19 @@ in
    )
    + /*  Message list */
    (
-     rec-event(UI, element-selected(ButtonName?, ModuleName?, Tree?)).
-     snd-msg(extra-button-action(ButtonName, [Tree, str(ModuleName)], 
+     rec-event(UI, element-selected(ActionEvent?, ModuleName?, Tree?)).
+     snd-msg(extra-button-action(ActionEvent, [Tree, str(ModuleName)], 
                                  "message-list", "*", message-id)).
-     snd-ack-event(UI, element-selected(ButtonName, ModuleName, Tree)) 
+     snd-ack-event(UI, element-selected(ActionEvent, ModuleName, Tree)) 
    )
    +
    (  
-     rec-msg(update-list-view(ModuleName?, Actions?)).
-     snd-do(UI, update-list(ModuleName, Actions))
+     rec-msg(update-list-view(ModuleName?, ButtonNames?)).
+     snd-do(UI, update-list(ModuleName, ButtonNames))
    ) 
   ) *
   (
-    rec-event(UI,quit)
+    rec-event(UI, quit)
   + 
     rec-disconnect(UI)
   ) .

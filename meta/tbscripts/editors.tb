@@ -64,7 +64,7 @@ in
       rec-msg(io-error-reading(Message?))
     )
   ) .
-  CreateEditor("syntax",ModuleName,FileName,Text,Tree)
+  CreateEditor(syntax-editor, ModuleName, FileName, Text, Tree)
 endlet
 
 process EquationsEditorCreator (ModuleName : str) is
@@ -106,7 +106,7 @@ in
     )
   ) .
   if equal(Status, success) then
-    CreateEditor("equations",ModuleName,FileName,Text,Tree)
+    CreateEditor(equations-editor, ModuleName, FileName, Text, Tree)
   else
     tau
   fi   
@@ -124,10 +124,10 @@ in
     +
     rec-msg(io-error-reading(ErrorMessage?)) 
   ).
-  CreateEditor("term",ModuleName,FileName,Text,Tree)
+  CreateEditor(term-editor, ModuleName, FileName, Text, Tree)
 endlet
 
-process CreateEditor(Type : str, ModuleName : str, 
+process CreateEditor(Type : term, ModuleName : str, 
                      FileName : str, 
 		     Text : str, Tree : term) is
 let
@@ -172,17 +172,17 @@ in
   )
 endlet
 
-process EditorActionsLoop(EditorId: term, Type : str, ModuleName: str) is
+process EditorActionsLoop(EditorId: term, Type : term, ModuleName: str) is
 let
-  ButtonName : list,
+  ActionEvent : term,
   Pid : int,
   Command : term
 in
   subscribe(delete-editor(<term>)) .
   subscribe(syntax-changed(ModuleName)) .
   (
-    rec-msg(extra-button-action(EditorId, ButtonName?)) .
-    snd-msg(extra-button-action(ButtonName, [], Type, ModuleName, EditorId)) 
+    rec-msg(extra-button-action(EditorId, ActionEvent?)) .
+    snd-msg(extra-button-action(ActionEvent, [], Type, ModuleName, EditorId)) 
   +
     rec-msg(text-editor-disconnected(EditorId)) .
     create(KillEditor(EditorId, Type, ModuleName), Pid?)
@@ -193,7 +193,7 @@ in
     create(KillEditor(EditorId, Type, ModuleName), Pid?)
   +
     rec-note(syntax-changed(ModuleName)).
-    InvalidateDependendEditor(EditorId,Type)
+    InvalidateDependendEditor(EditorId, Type)
   +
     rec-msg(get-editor-modulename(EditorId)) .
     snd-msg(editor-modulename(EditorId,ModuleName))
@@ -201,8 +201,8 @@ in
   rec-note(delete-editor(EditorId)) 
 endlet
 
-process InvalidateDependendEditor(EditorId : term, Type : str) is
-  if not(equal(Type,"syntax")) then
+process InvalidateDependendEditor(EditorId : term, Type : term) is
+  if not(equal(Type, syntax-editor)) then
     InvalidateEditor(EditorId)
   else
     tau
@@ -217,13 +217,13 @@ in
   snd-note(set-focus(EditorId, Focus))  
 endlet
 
-process KillEditor(EditorId : term, Type : str, ModuleName : str) is
+process KillEditor(EditorId : term, Type : term, ModuleName : str) is
   snd-note(delete-editor(EditorId)) .
-  if or(equal(Type, "syntax"), 
-        equal(Type, "equations")) then
+  if or(equal(Type, syntax-editor), 
+        equal(Type, equations-editor)) then
     KillModuleEditor(EditorId, ModuleName, Type) 
   else	
-    if not(equal(Type, "term")) then
+    if not(equal(Type, term-editor)) then
       snd-msg(kill-editor-unknown-type-hook(EditorId, Type, ModuleName)) .
       rec-msg(kill-editor-unknown-type-hook-result)
     else
@@ -232,7 +232,7 @@ process KillEditor(EditorId : term, Type : str, ModuleName : str) is
   fi.
   snd-msg(delete-structure-editor(EditorId)) 
 
-process KillModuleEditor(EditorId : term, ModuleName : str, Type : str) is
+process KillModuleEditor(EditorId : term, ModuleName : str, Type : term) is
 let
   ModifiedStatus : term
 in

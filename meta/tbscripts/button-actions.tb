@@ -12,19 +12,19 @@
 
 process ButtonActionReceiver is
 let
-  ButtonName : list,
-  EditorType : str,
+  ActionEvent : term,
+  EditorType : term,
   ModuleName : str,
   Actions    : list,
   EditorId   : term,
   Arguments  : list
 in
   (
-    rec-msg(extra-button-action(ButtonName?, Arguments?, 
+    rec-msg(extra-button-action(ActionEvent?, Arguments?, 
                                 EditorType?, ModuleName?,
                                 EditorId?)) .
-    snd-msg(get-button-actions(ButtonName, EditorType, ModuleName)).
-    rec-msg(button-actions(ButtonName, EditorType, ModuleName, Actions?)).
+    snd-msg(get-button-actions(ActionEvent, EditorType, ModuleName)).
+    rec-msg(button-actions(ActionEvent, EditorType, ModuleName, Actions?)).
     PerformButtonActions(EditorId, Arguments, Actions) 
   )* delta
 endlet
@@ -115,7 +115,7 @@ let
   RTree      : term,
   Error      : term,
   Trees      : list,
-  ButtonName : str,
+  ActionEvent : term,
   SortName   : str,
   FilePath   : str,
   NewModuleName : str,
@@ -553,8 +553,8 @@ in
 	ReturnSuccess(EditorId, Stack)	
       + 
 	rec-msg(revert-module, Stack?, EditorId?) .
-        StackPopString(Stack,Stack?,ModuleName?) .
-        snd-msg(revert-module(ModuleName, "syntax")) .           
+        StackPopString(Stack, Stack?, ModuleName?) .
+        snd-msg(revert-module(ModuleName, syntax-editor)) .           
         rec-msg(module-reverted(ModuleName)) .
 	ReturnSuccess(EditorId, Stack)	
       + 

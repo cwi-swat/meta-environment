@@ -1,6 +1,6 @@
 // Java tool bridge UserInterfaceBridge
 // This file is generated automatically, please do not edit!
-// generation time: Jul 3, 2003 11:55:48 AM
+// generation time: Jul 10, 2003 3:35:54 PM
 
 package metastudio;
 
@@ -99,12 +99,12 @@ public class UserInterfaceBridge
   }
 
   //}}}
-  //{{{  public void buttonsFound(String s0, String s1, ATerm t2)
+  //{{{  public void buttonsFound(ATerm t0, String s1, ATerm t2)
 
-  public void buttonsFound(String s0, String s1, ATerm t2)
+  public void buttonsFound(ATerm t0, String s1, ATerm t2)
   {
     if (tool != null) {
-      tool.buttonsFound(s0, s1, t2);
+      tool.buttonsFound(t0, s1, t2);
     }
     else {
       throw new UnsupportedOperationException("method `buttonsFound' not supported.");

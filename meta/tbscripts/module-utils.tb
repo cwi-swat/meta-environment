@@ -7,7 +7,7 @@ let
   ModuleName2 : str,
   Extension : str,
   Path : str,
-  Type : str,
+  Type : term,
   Option1 : term
 in
   Id := process-id.
@@ -41,8 +41,7 @@ in
     snd-note(ui-status(endstat(Id)))
   +
     rec-msg(revert-module(ModuleName1?, Type?)).
-    snd-note(ui-status(statf(Id, 
-             "Reverting %s",[ModuleName1]))).
+    snd-note(ui-status(statf(Id, "Reverting %s",[ModuleName1]))).
     DoRevertModule(ModuleName1, Type).
     snd-note(ui-status(endstat(Id)))
   +
@@ -130,8 +129,8 @@ in
   fi
 endlet
 
-process DoRevertModule(ModuleName : str, Type : str) is
-  if equal(Type, "syntax") then
+process DoRevertModule(ModuleName : str, Type : term) is
+  if equal(Type, syntax-editor) then
     HardCloseModuleInDB(ModuleName).
     snd-msg(open-modules([ModuleName], sdf)) .
     rec-msg(finished-opening-modules).

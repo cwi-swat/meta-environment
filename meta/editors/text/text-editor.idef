@@ -20,7 +20,7 @@ let
   Focus : term,
   QueryList : list,
   QueryName : str,
-  ActionName : str,
+  ActionName : term,
   ButtonName : list,
   ButtonItem : str,
   ButtonMenu : str,
@@ -39,9 +39,10 @@ in
   ButtonWalker := ButtonList .
   (
     if not-equal(ButtonWalker, []) then
-      ButtonName := first(ButtonWalker) .
-      ButtonItem := index(ButtonName,size(ButtonName)).
-      ButtonMenu := first(diff(ButtonName,[ButtonItem])).
+      ActionName := first(ButtonWalker) .
+      ButtonName := first(args(ActionName)) .
+      ButtonItem := index(ButtonName, size(ButtonName)).
+      ButtonMenu := first(diff(ButtonName, [ButtonItem])).
       snd-do(TE, tb-add-menu-item(ButtonMenu, ButtonItem)) .
       ButtonWalker := next(ButtonWalker)
     fi
@@ -98,7 +99,7 @@ in
     snd-ack-event(TE, modified(Fid))
   +
     rec-event(TE, menu-event(ButtonMenu?, ButtonItem?, Fid)) .
-    snd-msg(extra-button-action(EditorId, [ButtonMenu,ButtonItem])) .
+    snd-msg(extra-button-action(EditorId, menu([ButtonMenu, ButtonItem]))) .
     snd-ack-event(TE, menu-event(ButtonMenu, ButtonItem, Fid))
   ) *
   (

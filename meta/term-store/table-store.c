@@ -86,15 +86,15 @@ void addTable(char *name, char* valueType)
     }
   }
   else {
-    if (!streq(tableStore[TS_findTable(name)].valueType,valueType)) {
-      ATwarning("WARNING: Table %s already exists with different "
-		"value type than %s\n", name, valueType);
+    if (!streq(tableStore[TS_findTable(name)].valueType, valueType)) {
+      ATabort("Table %s already exists with different value type than %s\n",
+	      name, valueType);
     }
 
     return;
   }
 
-  ATabort("addTable: table store exhausted.\n");
+  ATerror("addTable: table store exhausted.\n");
 }  
 
 /*}}}  */

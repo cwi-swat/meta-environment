@@ -1,5 +1,11 @@
 # $Id$
 
+Thu Jul 10 15:45:49 CEST 2003 <{jong,markvdb,jurgenv}@cwi.nl>
+ * images/*gif restored and renamed
+ * improved buttons-adt and update several files to reflect new API
+ * restored toolbar functionality
+ * changed some warnings/errors in term-store
+
 2003/07/09 (markvdb@cs.vu.nl)
  * Introduced the button actions "pack-tree" and "unpack-tree".
  * Made the saving and reading of the term store a bit more verbose.

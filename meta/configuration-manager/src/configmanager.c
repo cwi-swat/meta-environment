@@ -1,19 +1,27 @@
-/*
-   $Id$
-   */   
+/* $Id$ */   
+
+/*{{{  includes */
 
 #include "configmanager.h"
 #include "MetaButtons.h"
 #include <unistd.h> 
 #include <assert.h>
 
+/*}}}  */
+/*{{{  defines */
+
 #define MAX_MESSAGE_LENGTH 133
+
+/*}}}  */
+/*{{{  globals */
 
 static char myversion[] = "3.0";     
 static MB_ButtonList buttons = NULL;
 static MB_ButtonList standardButtons = NULL;
 static ATermList userSearchPaths = NULL;
 static ATerm librarySearchPath = NULL;
+
+/*}}}  */
 
 /*{{{  static MB_ButtonList MB_concatButtonList(MB_ButtonList l1, MB_ButtonList l2) */
 
@@ -108,90 +116,147 @@ ATerm process_button_file(int cid, char *filename, char *contents)
 }
 
 /*}}}  */
-/*{{{  ATerm get_button_names(int cid, char *editortype, char *modulename) */
 
-ATerm get_button_names(int cid, char *editortype, char *modulename)
+/*{{{  static MB_ButtonList getButtonList() */
+
+static MB_ButtonList getButtonList()
 {
-  MB_ButtonList localButtons = MB_concatButtonList(buttons,standardButtons);
-  ATermList buttonNames = ATempty;
-  MB_EditorType editorType = 
-    MB_EditorTypeFromTerm(ATmake("<str>",editortype));
-
-  while (!ATisEmpty(localButtons)) {
-    MB_Button buttonDesc = MB_getButtonListHead(localButtons);
-    char* buttonDescModule = MB_getButtonModule(buttonDesc);
-    MB_EditorTypes buttonDescTypes = 
-      MB_getButtonList(buttonDesc);
-    ATerm buttonDescName = MB_getButtonName(buttonDesc);
-
-    assert(MB_isValidEditorTypes(buttonDescTypes));
-
-    if (!strcmp(buttonDescModule, modulename) 
-	|| !strcmp(buttonDescModule, "*")) {
-      while (!ATisEmpty(buttonDescTypes)) {
-        MB_EditorType buttonDescType = 
-	  MB_getEditorTypesHead(buttonDescTypes);
-
-        if (ATisEqual(buttonDescType, editorType) 
-	    || MB_isEditorTypeAll(buttonDescType)) {
-	  buttonNames = ATinsert(buttonNames,buttonDescName);
-        }
-	buttonDescTypes = 
-	  MB_getEditorTypesTail(buttonDescTypes);
-      }
-    }
-    localButtons = MB_getButtonListTail(localButtons);
-  }
-
-  return ATmake("snd-value(button-names(<term>))", buttonNames);
+  return MB_concatButtonList(buttons, standardButtons);
 }
 
 /*}}}  */
-/*{{{  ATerm get_button_actions(int cid, ATerm buttonName, char *editortype,  */
+/*{{{  static ATbool moduleNameMatches(const char *suspect, const char *peer) */
 
-ATerm get_button_actions(int cid, ATerm buttonName, char *editortype, 
-			 char *modulename)
+static ATbool moduleNameMatches(const char *suspect, const char *peer)
 {
-  char message[MAX_MESSAGE_LENGTH] = "undefined button: ";
-  MB_ButtonList localButtons = MB_concatButtonList(buttons,standardButtons);
-  MB_EditorType editorType = 
-    MB_EditorTypeFromTerm(ATmake("<str>",editortype));
-  ATermList buttonActions;
-  
-  strncat(message, ATwriteToString(buttonName), 
-          MAX_MESSAGE_LENGTH - strlen(message));
+  return !strcmp(suspect, peer) || !strcmp(suspect, "*");
+}
 
-  buttonActions = (ATermList) ATmake("[message(<str>)]", message);
+/*}}}  */
+/*{{{  static ATbool typeMatches(MB_ButtonType suspect, MB_ButtonType peer) */
 
-  while (!ATisEmpty(localButtons)) {
-    MB_Button buttonDesc = MB_getButtonListHead(localButtons);
-    char* buttonDescModule = MB_getButtonModule(buttonDesc);
-    ATerm buttonDescName = MB_getButtonName(buttonDesc);
-    MB_EditorTypes buttonDescTypes = MB_getButtonList(buttonDesc);
-    ATerm buttonDescActions = MB_getButtonActions(buttonDesc);
+static ATbool typeMatches(MB_ButtonType suspect, MB_ButtonType peer)
+{
+  return MB_isEqualButtonType(suspect, peer)
+    || MB_isButtonTypeWildcard(suspect);
+}
 
-    assert(MB_isValidEditorTypes(buttonDescTypes));
+/*}}}  */
 
-    if (!strcmp(buttonDescModule, modulename) 
-	|| !strcmp(buttonDescModule, "*")) {
-      while (!ATisEmpty(buttonDescTypes)) {
-        MB_EditorType buttonDescType = 
-	  MB_getEditorTypesHead(buttonDescTypes);
+/*{{{  static ATermList getButtonArgs(MB_Button button, MB_ButtonType requestedType) */
 
-        if (MB_isEqualEditorType(buttonDescType, editorType) 
-	    || MB_isEditorTypeAll(buttonDescType)) {
-	  if (ATisEqual(buttonDescName, buttonName)) {
-	    buttonActions = (ATermList) buttonDescActions;
-	  }
-        }
-	buttonDescTypes = 
-	  MB_getEditorTypesTail(buttonDescTypes);
+static ATermList getButtonArgs(MB_Button button, MB_ButtonType requestedType)
+{
+  ATermList events = ATempty;
+  MB_ButtonDescriptionList descriptions;
+
+  descriptions = MB_getButtonDescriptions(button);
+  assert(MB_isValidButtonDescriptionList(descriptions));
+
+  while (!MB_isButtonDescriptionListEmpty(descriptions)) {
+    MB_ButtonDescription desc = MB_getButtonDescriptionListHead(descriptions);
+    MB_ButtonType type = MB_getButtonDescriptionType(desc);
+
+    assert(MB_isValidButtonType(type));
+
+    if (typeMatches(type, requestedType)) {
+      MB_ButtonArgs args = MB_getButtonDescriptionArgs(desc);
+      if (!MB_isValidButtonArgs(args)) {
+	ATerror("configmanager.c:getButtonArgs: illegal args: %t\n", args);
       }
+      events = ATinsert(events, MB_ButtonArgsToTerm(args));
     }
-    localButtons = MB_getButtonListTail(localButtons);
+
+    descriptions = MB_getButtonDescriptionListTail(descriptions);
   }
 
-  return ATmake("snd-value(button-actions(<term>))", buttonActions);
+  return events;
+}
+
+/*}}}  */
+/*{{{  static ATbool buttonContainsDescription(MB_Button button, MB_ButtonDescription desc) */
+
+static ATbool buttonContainsDescription(MB_Button button,
+					MB_ButtonType type,
+					MB_ButtonArgs args)
+{
+  MB_ButtonDescriptionList descriptions;
+
+  descriptions = MB_getButtonDescriptions(button);
+  assert(MB_isValidButtonDescriptionList(descriptions));
+
+  while (!MB_isButtonDescriptionListEmpty(descriptions)) {
+    MB_ButtonDescription cur = MB_getButtonDescriptionListHead(descriptions);
+    MB_ButtonType curType = MB_getButtonDescriptionType(cur);
+    MB_ButtonArgs curArgs = MB_getButtonDescriptionArgs(cur);
+
+    assert(MB_isValidButtonType(curType));
+
+    if (typeMatches(curType, type) && MB_isEqualButtonArgs(curArgs, args)) {
+      return ATtrue;
+    }
+
+    descriptions = MB_getButtonDescriptionListTail(descriptions);
+  }
+
+  return ATfalse;
+}
+
+/*}}}  */
+
+/*{{{  ATerm get_button_names(int cid, char *modulename, ATerm requestedType) */
+
+ATerm get_button_names(int cid, char *modulename, ATerm requestedType)
+{
+  MB_ButtonList buttonList = getButtonList();
+  ATermList events = ATempty;
+
+  while (!ATisEmpty(buttonList)) {
+    MB_Button button = MB_getButtonListHead(buttonList);
+    char *buttonModule = MB_getButtonModule(button);
+
+    if (moduleNameMatches(buttonModule, modulename)) {
+      MB_ButtonType requestedButtonType = MB_ButtonTypeFromTerm(requestedType);
+      events = ATconcat(events, getButtonArgs(button, requestedButtonType));
+    }
+    buttonList = MB_getButtonListTail(buttonList);
+  }
+
+  return ATmake("snd-value(button-names(<term>))", events);
+}
+
+/*}}}  */
+/*{{{  ATerm get_button_actions(int cid, char *modulename, ATerm requestedType, ATerm requestedArgs) */
+
+ATerm get_button_actions(int cid, char *modulename, ATerm type, ATerm args)
+{
+  MB_ButtonList buttonList = getButtonList();
+  ATerm actions = NULL;
+
+  while (!ATisEmpty(buttonList)) {
+    MB_Button button = MB_getButtonListHead(buttonList);
+    char *buttonModule = MB_getButtonModule(button);
+
+    if (moduleNameMatches(buttonModule, modulename)) {
+      MB_ButtonType curType = MB_ButtonTypeFromTerm(type);
+      MB_ButtonArgs curArgs = MB_ButtonArgsFromTerm(args);
+      if (buttonContainsDescription(button, curType, curArgs)) {
+	actions = MB_getButtonActions(button);
+	break;
+      }
+    }
+    buttonList = MB_getButtonListTail(buttonList);
+  }
+
+  if (actions == NULL) {
+    char message[MAX_MESSAGE_LENGTH] = "undefined button: ";
+    strncat(message, ATwriteToString(args), 
+	    MAX_MESSAGE_LENGTH - strlen(message));
+
+    actions = ATmake("[message(<str>)]", message); /* XXX */
+  }
+
+  return ATmake("snd-value(button-actions(<term>))", actions);
 }
 
 /*}}}  */
@@ -259,7 +324,7 @@ int main(int argc, char *argv[])
     }
   }
   else {
-    ATwarning("Could not read in: " STANDARD_BUTTONS "\n");
+    ATwarning("Could not read: " STANDARD_BUTTONS "\n");
   }
 
   cid = ATBconnect(NULL, NULL, -1, configmanager_handler);

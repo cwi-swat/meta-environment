@@ -1,20 +1,35 @@
 [
  [Buttons, List, buttons(<list(ButtonList)>)],
  
- [ButtonList, Empty, []],
- [ButtonList, Many,[<head(Button)>,<[tail(ButtonList)]>]],
+ [ButtonList, empty, []],
+ [ButtonList, many,[<head(Button)>, <[tail(ButtonList)]>]],
 
- [Button, Editor, button(<module(str)>,<list(EditorTypes)>,
-                         <name(term)>,<actions(term)>)],
+ [Button, default, button(<module(str)>,
+                          <descriptions(ButtonDescriptionList)>,
+                          <actions(term)>)],
 
- [EditorTypes, Empty, []],
- [EditorTypes, Many,[<head(EditorType)>,<[tail(EditorTypes)]>]],
+ [ButtonDescriptionList, empty, []],
+ [ButtonDescriptionList, many,
+   [<head(ButtonDescription)>, <[tail(ButtonDescriptionList)]>]],
 
- [EditorType, term, "term"],
- [EditorType, equations, "equations"],
- [EditorType, syntax, "syntax"],
- [EditorType, message-list, "message-list"],
- [EditorType, all, "*"],
+ [ButtonDescription, default,
+    description(<type(ButtonType)>, <args(ButtonArgs)>)],
 
- [ModuleName, all, "*"]
+ [ButtonType, term, term-editor],
+ [ButtonType, equations, equations-editor],
+ [ButtonType, syntax, syntax-editor],
+ [ButtonType, message-list, message-list],
+ [ButtonType, module-popup, module-popup],
+ [ButtonType, new-module-popup, new-module-popup],
+ [ButtonType, studio-menubar, studio-menubar],
+ [ButtonType, studio-toolbar, studio-toolbar],
+ [ButtonType, wildcard, "*"],
+
+ [ButtonArgs, menu, menu(<list(MenuTitles)>)],
+ [ButtonArgs, icon, icon(<title(str)>, <path(str)>)],
+
+ [MenuTitles, empty, []],
+ [MenuTitles, many,[<head(str)>, <[tail(MenuTitles)]>]],
+
+ [ModuleName, wildcard, "*"]
 ]

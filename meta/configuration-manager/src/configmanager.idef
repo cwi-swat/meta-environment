@@ -35,11 +35,11 @@ let
   Text          : str,
   Fid           : str,
   SearchPaths : list,
-  ButtonName    : list,
+  ButtonName    : term,
   ButtonNames   : list,
   ButtonActions : list,
   ModuleName    : str,
-  EditorType    : str,
+  EditorType    : term,
   Tree          : term,
   Term          : term,
   Pid           : int,
@@ -71,14 +71,14 @@ in
     snd-msg(buttons-refreshed)
   +
     rec-msg(get-auxilary-buttons(EditorType?, ModuleName?)) .
-    snd-eval(CMNG, get-button-names(EditorType, ModuleName)) .
+    snd-eval(CMNG, get-button-names(ModuleName, EditorType)) .
     rec-value(CMNG, button-names(ButtonNames?)) .
     snd-msg(button-list(ModuleName, ButtonNames))
   +
     rec-msg(get-button-actions(ButtonName?, EditorType?, ModuleName?)) .
-    snd-eval(CMNG, get-button-actions(ButtonName, EditorType, ModuleName)) .
+    snd-eval(CMNG, get-button-actions(ModuleName, EditorType, ButtonName)) .
     rec-value(CMNG, button-actions(ButtonActions?)) .
-    snd-msg(button-actions(ButtonName,EditorType,ModuleName,ButtonActions))
+    snd-msg(button-actions(ButtonName, EditorType, ModuleName, ButtonActions))
   +
     rec-msg(get-search-paths) .
     snd-eval(CMNG, get-search-paths) .

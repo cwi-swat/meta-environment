@@ -1,6 +1,6 @@
 // Java tool interface class UserInterfaceTool
 // This file is generated automatically, please do not edit!
-// generation time: Jul 3, 2003 11:55:48 AM
+// generation time: Jul 10, 2003 3:35:54 PM
 
 package metastudio;
 
@@ -67,7 +67,7 @@ abstract public class UserInterfaceTool
     sigTable.put(factory.parse("rec-do(<user-interface>,module-info(<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,new-graph(<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-do(<user-interface>,graph-layouted(<str>,<term>))"), new Boolean(true));
-    sigTable.put(factory.parse("rec-do(<user-interface>,buttons-found(<str>,<str>,<list>))"), new Boolean(true));
+    sigTable.put(factory.parse("rec-do(<user-interface>,buttons-found(<term>,<str>,<list>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<user-interface>,show-file-dialog(<str>,<str>,<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<user-interface>,show-question-dialog(<str>))"), new Boolean(true));
     sigTable.put(factory.parse("rec-eval(<user-interface>,decons-filename(<str>,<str>))"), new Boolean(true));
@@ -89,7 +89,7 @@ abstract public class UserInterfaceTool
     Perrorf0 = factory.parse("rec-do(errorf(<str>,<term>))");
     PgraphLayouted0 = factory.parse("rec-do(graph-layouted(<str>,<term>))");
     PinitializeUi0 = factory.parse("rec-do(initialize-ui(<str>))");
-    PbuttonsFound0 = factory.parse("rec-do(buttons-found(<str>,<str>,<term>))");
+    PbuttonsFound0 = factory.parse("rec-do(buttons-found(<term>,<str>,<term>))");
     PclearHistory0 = factory.parse("rec-do(clear-history)");
     PdeleteModules0 = factory.parse("rec-do(delete-modules(<term>))");
     Perror0 = factory.parse("rec-do(error(<str>))");
@@ -145,7 +145,7 @@ abstract public class UserInterfaceTool
     }
     result = term.match(PbuttonsFound0);
     if (result != null) {
-      buttonsFound((String)result.get(0), (String)result.get(1), (ATerm)result.get(2));
+      buttonsFound((ATerm)result.get(0), (String)result.get(1), (ATerm)result.get(2));
       return null;
     }
     result = term.match(PclearHistory0);
