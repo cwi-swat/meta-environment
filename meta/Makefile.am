@@ -37,7 +37,8 @@ CLEANFILES  = meta meta.1
 % : %.sh.src Makefile
 	sed 's@__PREFIX__@$(prefix)@g;\
 	     s@__ATERM__@$(ATERM)@g;\
-	     s@__SDF__@$(SDF)@g;\
+	     s@__SGLR__@$(SGLR)@g;\
+	     s@__PGEN__@$(PGEN)@g;\
 	     s@__EVALUATOR__@$(EVALUATOR)@g;\
 	     s@__TOOLBUS__@$(TOOLBUS)/toolbus@g;\
 	     s@__WISH__@$(WISH)@g;\

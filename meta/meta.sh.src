@@ -23,7 +23,8 @@ Revision='$Revision$'
 
 aterm=__ATERM__
 pt_support=__PT_SUPPORT__
-sdf=__SDF__
+sglr=__SGLR__
+pgen=__PGEN__
 asf=__ASF__
 evaluator=__EVALUATOR__
 toolbus=__TOOLBUS__
@@ -33,7 +34,7 @@ prefix=__PREFIX__
 
 wish=__WISH__
 
-PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sdf}/bin:\
+PATH="${prefix}/bin:${aterm}/bin:${pt_support}/bin:${sglr}/bin:${pgen}/bin:\
       ${asf}/bin:${evaluator}/bin:${toolbus}/bin}:${xemacs}/bin:${PATH}"; 
 export PATH
 
@@ -159,7 +160,8 @@ fi
 
 toolbus $xargs ${toolbusdefs} \
    -I${prefix}/share -I${aterm}/share -I${pt_support}/share \
-   -I${sdf}/share \
+   -I${sglr}/share \
+   -I${pgen}/share \
    -I${evaluator}/share \
    -I${asf}/share \
    ${prefix}/share/meta.tb

@@ -56,10 +56,15 @@ AC_PACKAGE_REQUIRE(aterm, tifstoc,
    [  --with-aterm=DIR        ATerm-library is in DIR])
 AC_SUBST(ATERM)
 
-dnl Require sdf package
-AC_PACKAGE_REQUIRE(sdf, sglr,
-   [  --with-sdf=DIR          sdf is in DIR])
-AC_SUBST(SDF)
+dnl Require sglr package
+AC_PACKAGE_REQUIRE(sglr, sglr,
+   [  --with-sglr=DIR         sglr is in DIR])
+AC_SUBST(SGLR)
+
+dnl Require pgen package
+AC_PACKAGE_REQUIRE(pgen, sglr,
+   [  --with-pgen=DIR         pgen is in DIR])
+AC_SUBST(PGEN)
 
 dnl Require asf package
 AC_PACKAGE_REQUIRE(asf, addeqssyntax,

@@ -40,5 +40,5 @@ CLEANFILES    = sdf2-language.tb help.tb
 data_DATA     = $(TBSCRIPTS) $(GEN_TBSCRIPTS)
 
 %.tb : %.tb.src Makefile
-	sed 's@__SDF2TABLE__@$(SDF)/share/sdf/Sdf2.baf@g;\
+	sed 's@__SDF2TABLE__@$(PGEN)/share/pgen/Sdf2.baf@g;\
 	     s@__PKGDATA__@$(pkgdatadir)@g' < $< > $@ 
