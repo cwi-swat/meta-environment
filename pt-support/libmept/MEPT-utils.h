@@ -73,6 +73,9 @@ char* PT_printParseTreeToDot(PT_ParseTree parsetree, ATbool sharing,
 			     ATbool characters_sharing, ATbool characters, 
 			     ATbool productions, ATbool layout, 
 			     ATbool literals);
+char* PT_printAnyToDot(ATerm term, ATbool sharing, ATbool characters, 
+		       ATbool characters_sharing, ATbool productions, 
+		       ATbool layout, ATbool literals);
 
 ATerm implodeParseTree(PT_ParseTree tree);
 

@@ -358,3 +358,29 @@ char* PT_printParseTreeToDot(PT_ParseTree parsetree, ATbool sharing,
 }
 
 /*}}}  */
+
+/*{{{  char* PT_printAnyToDot(ATerm term, ATbool sharing, ATbool characters,  */
+
+char* PT_printAnyToDot(ATerm term, ATbool sharing, ATbool characters, 
+		       ATbool characters_sharing, ATbool productions, 
+		       ATbool layout, ATbool literals)
+{
+  if (ATmatchTerm(term, PT_patternParseTreeTree, NULL, NULL, NULL, NULL, NULL)){
+    return PT_printParseTreeToDot((PT_ParseTree) term, sharing, characters, 
+				  characters_sharing, productions, layout,
+				  literals);
+  }
+  else if (ATgetType(term) == AT_LIST) {
+    PT_Production prod = PT_makeProductionList(PT_makeSymbolLit("*dummy*"));
+    PT_Tree dummy = PT_makeTreeAppl(prod, (PT_Args) term);
+
+    return PT_printTreeToDot(dummy, sharing, characters, characters_sharing, 
+			     productions, layout, literals);
+  }
+
+  return PT_printTreeToDot((PT_Tree) term, sharing, characters, 
+			     characters_sharing, productions, layout, literals);
+}
+
+/*}}}  */
+
