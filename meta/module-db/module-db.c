@@ -1171,6 +1171,11 @@ is_valid_parse_table(ATermList visited, ATerm module,
   int time;
 
   entry = MDB_EntryFromTerm(GetValue(modules_db, module));
+
+  if (entry == NULL) {
+    return ATfalse;
+  }
+
   time = MDB_getEntrySdfTreeCreationTime(entry);
 
   if((timeOfEqsTable > 0 && time > timeOfEqsTable) ||
@@ -1187,6 +1192,11 @@ is_valid_parse_table(ATermList visited, ATerm module,
       first = ATgetFirst(imports);
 
       entry = MDB_EntryFromTerm(GetValue(modules_db, first));
+
+      if (entry == NULL) {
+	return ATfalse;
+      }
+
       if (MDB_isValidEntry(entry)) {
 	timeOfEqsTable = MDB_getEntryAsfTableCreationTime(entry);
 	timeOfTrmTable = MDB_getEntryTrmTableCreationTime(entry);
@@ -1220,12 +1230,21 @@ complete_asf_specification(ATermList visited, ATerm module)
     result = ATtrue;
     imports = (ATermList)GetValue(import_db,module);
 
+    if (imports == NULL) {
+      return ATfalse;
+    }
+
     visited = ATinsert(visited,module); 
     
     while (!ATisEmpty(imports) && result) {
       first = ATgetFirst(imports);
 
       entry = MDB_EntryFromTerm(GetValue(modules_db, first));
+
+      if (entry == NULL) {
+	 return ATfalse;
+      }
+
       if (MDB_isValidEntry(entry)) {
         EqsTree = MDB_getEntryAsfTree(entry);
         EqsText = MDB_getEntryAsfText(entry);
@@ -1274,7 +1293,8 @@ ATerm eqs_available_for_modules(int cid, char *moduleName)
 
   atModuleName = ATmake("<str>",moduleName);
   entry = MDB_EntryFromTerm(GetValue(modules_db, atModuleName));
-  if (MDB_isValidEntry(entry)) {
+
+  if (entry != NULL && MDB_isValidEntry(entry)) {
     /* Get all imported modules (including the module itself) */
     modules = get_imported_modules(moduleName);
 
@@ -1308,12 +1328,16 @@ ATerm get_eqs_text(int cid, char *moduleName)
   atName = ATmake("<str>",moduleName);
   
   entry = MDB_EntryFromTerm(GetValue(modules_db, atName));
-  eqsText = MDB_getEntryAsfText(entry);
-  if (!ATisEqual(eqsText, MDB_NONE)) {
-    return ATmake("snd-value(eqs-text(<str>,<term>))", moduleName, eqsText);
-  } else {
-    return ATmake("snd-value(no-eqs-text(<str>))", moduleName);
+
+  if (entry != NULL) {
+    eqsText = MDB_getEntryAsfText(entry);
+
+    if (!ATisEqual(eqsText, MDB_NONE)) {
+      return ATmake("snd-value(eqs-text(<str>,<term>))", moduleName, eqsText);
+    } 
   }
+
+  return ATmake("snd-value(no-eqs-text(<str>))", moduleName);
 }
 
 /*}}}  */
