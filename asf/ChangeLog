@@ -1,3 +1,6 @@
+2002/01/09 (jurgenv@cwi.nl)
+ * Added asfix syntax to library
+
 2002/10/31 (vandenbr@loria.fr)
  * simplified the code with respect to storing equations. In fact, this
    functionality has been complete removed.

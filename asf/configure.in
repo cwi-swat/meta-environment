@@ -167,6 +167,8 @@ AC_OUTPUT(
    semantics/test/output/Makefile
    semantics/test/c-code/Makefile
    library/Makefile
+   library/asfix/Makefile
+   library/asfix/syntax/Makefile
    library/asf/Makefile
    library/asf/syntax/Makefile
    library/asf/tools/Makefile
