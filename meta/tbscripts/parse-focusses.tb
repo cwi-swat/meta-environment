@@ -86,7 +86,7 @@ in
           snd-msg(get-error-position(Focus, ErrList)).
           rec-msg(error-position(Pos?)).
           snd-msg(display-error(EditorId, Pos)).
-          snd-note(ui-status(errorf("Cycle detected:\n%s\n", Cycle))). 
+          snd-note(ui-status(error("Cycle detected\n"))). 
           ErrorFoci := join(ErrorFoci, Focus)
         ).
         snd-note(ui-status(endstat(Id)))
