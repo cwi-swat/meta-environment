@@ -1,5 +1,8 @@
 $Id$
 
+Wed Oct 20 14:54:04 CEST 2004 <kooiker@cwi.nl>
+ * Added location api to error-support-config 
+
 Fri Aug 20 10:18:36 CEST 2004 <markvdb@cwi.nl>
  * Adapted error-diff to new error format.
 

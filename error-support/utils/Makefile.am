@@ -33,7 +33,7 @@ CLEANFILES=${bin_SCRIPTS}
 
 ${PACKAGE}-config: Makefile
 	@(	echo "#! /bin/sh";\
-		echo "echo ${prefix}/share/${PACKAGE}/errorapi-${VERSION}.jar" \
+		echo "echo ${prefix}/share/${PACKAGE}/errorapi-${VERSION}.jar:${prefix}/share/${PACKAGE}/locationapi-${VERSION}.jar" \
 	) > $@ && chmod +x $@
 
 IDEF = idef2tif
