@@ -26,14 +26,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
-
-#ifndef WIN32
-  #include <unistd.h>
-#else  /*  For broken platform with limited functionality  */
-  #include <getopt.h>
-  #include <atb-tool.h>
-#endif /*  MS-DOS  */
-
+#include <unistd.h>
 #include <aterm1.h>
 
 #include "tree-to-dot.h"

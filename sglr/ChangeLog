@@ -19,6 +19,12 @@
 
 $Id$
 
+2001/05/03 (jong@cwi.nl)
+ * version 3.2.2
+ * cleaned up all Makefile.ams that caused "make install" to rebuild
+   (=recompile) due to wrong -I include paths.
+ * removed JS legacy ("crippled platform" remark erased)
+
 2001/04/23 (mdejonge@cwi.nl)
   * Increased version number to 3.2.1
 

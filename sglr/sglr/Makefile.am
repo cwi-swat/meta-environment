@@ -21,24 +21,23 @@
 
 include $(top_srcdir)/make_rules
 
-INCLUDES += -I$(top_srcdir)/libsglr -I$(top_srcdir)/libtree2dot
+INCLUDES		= -I$(top_srcdir)/libsglr \
+			-I$(top_srcdir)/libtree2dot \
+			-I$(PT_SUPPORT)/include
 
-bin_PROGRAMS      = sglr 
-data_DATA         = sglr.idef
+bin_PROGRAMS		= sglr 
+sglr_SOURCES		= sglr-main.c getopt.c getopt1.c
 
-EXTRA_DIST        = sglr.idef sglr.tif.c sglr.tif.h
+data_DATA		= sglr.idef
+noinst_HEADERS		= getopt.h
 
-SRCS              = sglr-main.c  getopt.c getopt1.c
-HDRS              = getopt.h
+EXTRA_DIST		= sglr.idef sglr.tif.c sglr.tif.h
+CLEANFILES		= sglr.tifs
 
-sglr_SOURCES      = $(SRCS) $(HDRS)
-sglr_LDADD        = -L$(top_srcdir)/libsglr -lsglr \
-                    -L$(top_srcdir)/libtree2dot -ltree2dot \
-                    -L$(PT_SUPPORT)/lib -lconversion -lmept -lasfix2 \
-                    -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
-
-# remove built files during "make clean"
-CLEANFILES = sglr.tifs
+sglr_LDADD		= -L$(top_srcdir)/libsglr -lsglr \
+			-L$(top_srcdir)/libtree2dot -ltree2dot \
+			-L$(PT_SUPPORT)/lib -lconversion -lmept -lasfix2 \
+			-L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
 
 # extra dependency for sglr-main.c to generate sglr.tif.[ch]
 sglr-main.o : sglr.tif.c sglr.tif.h $(top_srcdir)/libsglr/libsglr.a \

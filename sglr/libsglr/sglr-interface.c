@@ -30,12 +30,6 @@
 
 #include <aterm1.h>
 #include <atb-tool.h>
-/*
-#include <AsFix.h>
-#include <a2toa1.h>
-*/
-
-#include <tree-to-dot.h>
 
 #include "sglr.h"
 #include "sglr-strings.h"
@@ -43,6 +37,7 @@
 #include "parser.h"
 #include "forest.h"
 #include "rsrc-usage.h"
+#include "tree-to-dot.h"
 
 
 ATerm  SG_TermToToolbus(ATerm t);

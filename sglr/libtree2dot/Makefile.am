@@ -20,17 +20,12 @@
 
 include $(top_srcdir)/make_rules
 
-lib_LIBRARIES    = libtree2dot.a
-include_HEADERS  = tree-to-dot.h
+INCLUDES		= -I$(top_srcdir)/libsglr \
+			-I$(ATERM)/include \
+			-I$(PT_SUPPORT)/include
 
-# noinst_LIBRARIES = libtree2dot-prof.a
+lib_LIBRARIES		= libtree2dot.a
+libtree2dot_a_SOURCES	= tree-to-dot.c sg_growbuf.c
 
-SRCS             = tree-to-dot.c sg_growbuf.c
-HDRS             = tree-to-dot.h sg_growbuf.h
-
-libtree2dot_a_SOURCES      = $(SRCS) $(HDRS) 
-
-INCLUDES += -I$(top_srcdir)/libsglr
-
-# libtree2dot_prof_a_SOURCES = $(HDRS)
-# libtree2dot_prof_a_LIBADD  = $(SRCS:.c=-prof.o)
+include_HEADERS		= tree-to-dot.h
+noinst_HEADERS		= sg_growbuf.h

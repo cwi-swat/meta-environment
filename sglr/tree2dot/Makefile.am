@@ -1,6 +1,7 @@
 #
 #    SGLR - the Scannerless Generalized LR parser.
-#    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands.
+#    Copyright (C) 2001  Stichting Mathematisch Centrum, Amsterdam,
+#                        The Netherlands.
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -20,19 +21,14 @@
 
 include $(top_srcdir)/make_rules
 
-bin_PROGRAMS     = tree2dot
+INCLUDES		= -I${top_srcdir}/libsglr \
+			-I${top_srcdir}/libtree2dot \
+			-I$(ATERM)/include
 
-SRCS             = tree2dot-main.c
-HDRS             =
+bin_PROGRAMS		= tree2dot
+tree2dot_SOURCES	= tree2dot-main.c
 
-tree2dot_SOURCES = $(SRCS) $(HDRS)
-
-LDADD            =  -L${top_srcdir}/libtree2dot -ltree2dot \
-                    -L${top_srcdir}/libsglr -lsglr \
-                    -L$(PT_SUPPORT)/lib -lconversion -lmept -lasfix2 \
-                    -L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
-
-INCLUDES        += -I${top_srcdir}/libsglr \
-                   -I${top_srcdir}/libtree2dot
-
-tree2dot-main.o: $(top_srcdir)/libtree2dot/libtree2dot.a
+tree2dot_LDADD		= -L${top_srcdir}/libtree2dot -ltree2dot \
+			-L${top_srcdir}/libsglr -lsglr \
+			-L$(PT_SUPPORT)/lib -lconversion -lmept -lasfix2 \
+			-L$(ATERM)/lib -lATerm -lATB $(SOCKLIBS)
