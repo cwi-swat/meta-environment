@@ -16,13 +16,40 @@
 %%   6: a := u2 ---> 7: i := u3 ---			   i := u3
 %%						while e2
 
+%%int ROOT = 1
+
+%%rel[int,int] PRED	= { <1,2>, <2,3>, <3,4>, <4,5>, <5,6>, <5,7>, <6,7>, <7,4>}
+
+%%rel[str,int] DEF 	= { <"i",1>, <"j",2>, <"a",3>, <"i",4>, < "j",5>, <"a",6>, <"i",7>}
+
+%%rel[str,int] USE 	= {<"m",1>, <"n",2>, <"u1",3>, <"i",4>, <"j",5>, <"u2",6>, <"u3",7>}
+
+%% Example from Frank Tip's slicing survey
+
+%%       1: read(n)
+%%	 2: i := 1
+%%	 3: sum := 0
+%%	 4: product := 1
+%%	 5: while i<= n do
+%%	    begin
+%%	 6:	sum := sum + i
+%%	 7:	product := product * i;
+%%	 8:	i := i + 1
+%%	    end
+%%       9: write(sum)
+%%	 10: write(product)
+
 int ROOT = 1
 
-rel[int,int] PRED	= { <1,2>, <2,3>, <3,4>, <4,5>, <5,6>, <5,7>, <6,7>, <7,4>}
+rel[int,int] PRED	= {<1,2>, <2,3>, <3,4>, <4,5>, <5,6>, <5,9>, <6,7>,
+			    <7,8>,<8,5>, <8,9>, <9,10>}
 
-rel[str,int] DEF 	= { <"i",1>, <"j",2>, <"a",3>, <"i",4>, < "j",5>, <"a",6>, <"i",7>}
+rel[str,int] DEF	= {<"n", 1>, <"i", 2>, <"sum", 3>, <"product", 4>,
+			  <"sum", 6>, <"product", 7>, <"i", 8>}
 
-rel[str,int] USE 	= {<"m",1>, <"n",2>, <"u1",3>, <"i",4>, <"j",5>, <"u2",6>, <"u3",7>}
+rel[str,int] USE	= {<"i", 5>, <"n", 5>, <"sum", 6>, <"i", 6>,
+			   <"product", 7>, <"i", 7>, <"i", 8>, <"sum", 9>, <"product", 10>}
+
 
 %% Here ends the program specific information.
 %%
@@ -100,5 +127,10 @@ rel[<str,int>,<str,int>] UU = (ucd o du)*
 rel[<str,int>,<str,int>] DD = (du o ucd)*
 rel[<str,int>,<str,int>] UD = ucd o (du o ucd)*
 rel[<str,int>,<str,int>] DU = du o (ucd o du)*
+
+bag[<str,int>] BackwardSlice(<str,int> Criterion) =
+	       UU[Criterion]
+
+bag[<str,int>] Example1 = BackwardSlice(<"product",10>)
 
 
