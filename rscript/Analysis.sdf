@@ -2,19 +2,32 @@ module Analysis
 
 imports Pico-syntax
 imports basic/Integers
-imports Relation[Integer]
+
 
 exports
+
+  sorts RelItem
+
+  context-free syntax
+        PICO-ID           -> RelItem
+        PICO-ID # PICO-ID -> RelItem
+
+imports Relations[RelItem]
+ 
   context-free syntax
 
-     NatCon ":" PICO-ID       -> PICO-ID
+   uninitialized(Rel[[RelItem]], 
+                 Rel[[RelItem]],
+                 Rel[[RelItem]] )  -> Rel[[RelItem]]               
 
-%%     label(PROGRAM, Integer) -> PROGRAM # Integer {traversal(accu,trafo,top-down)}
-
-%%     label(PICO-ID, Integer)  -> PICO-ID # Integer {traversal(accu,trafo,top-down)}
- 
-%%    extract(STATEMENT, RELS) -> RELS {traversal(accu)}
-%%     extract(EXP, RELS)       -> RELS {traversal(accu)}
+  imports asf/syntax/Comments
 
   variables
       "Int" [0-9\']*  -> Integer
+      "Defines"       -> Rel[[RelItem]]
+      "Uses"          -> Rel[[RelItem]]
+      "Pred"          -> Rel[[RelItem]]
+      "Succ"          -> Rel[[RelItem]]
+
+
+      "Bag" [0-9\']*  -> Bag[[RelItem]]

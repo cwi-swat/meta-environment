@@ -1,15 +1,17 @@
-module Relation[Elem]
+module Relations[Elem]
 
 exports
 
-imports Bag[Elem # Elem]
-imports Bag[Elem]
+imports Bags[Elem # Elem]
+imports Bags[Elem]
 
   sorts Rel[[Elem]]
 
   context-free syntax
 
      Bag[[Elem # Elem]]               -> Rel[[Elem]]
+
+     "EmptyRel"                       -> Rel[[Elem]]
 
      Rel[[Elem]] "==" Rel[[Elem]]     -> Boolean
      Rel[[Elem]] "<=" Rel[[Elem]]     -> Boolean
@@ -30,20 +32,27 @@ imports Bag[Elem]
      ran Rel[[Elem]]                  -> Bag[[Elem]]
      car Rel[[Elem]]                  -> Bag[[Elem]]
 
-     Rel[[Elem]] "^dom" Bag[[Elem]]   -> Rel[[Elem]]
-     Rel[[Elem]] "^ran" Bag[[Elem]]   -> Rel[[Elem]]
-     Rel[[Elem]] "^car" Bag[[Elem]]   -> Rel[[Elem]]
+     Rel[[Elem]] "domR" Bag[[Elem]]   -> Rel[[Elem]]
+     Rel[[Elem]] "ranR" Bag[[Elem]]   -> Rel[[Elem]]
+     Rel[[Elem]] "carR" Bag[[Elem]]   -> Rel[[Elem]]
 
-     Rel[[Elem]] "\\dom" Bag[[Elem]]   -> Rel[[Elem]]
-     Rel[[Elem]] "\\ran" Bag[[Elem]]   -> Rel[[Elem]]
-     Rel[[Elem]] "\\car" Bag[[Elem]]   -> Rel[[Elem]]
+     Rel[[Elem]] "domX" Bag[[Elem]]   -> Rel[[Elem]]
+     Rel[[Elem]] "ranX" Bag[[Elem]]   -> Rel[[Elem]]
+     Rel[[Elem]] "carX" Bag[[Elem]]   -> Rel[[Elem]]
+
+     top Rel[[Elem]]                  -> Bag[[Elem]]
+     bot Rel[[Elem]]                  -> Bag[[Elem]]
 
      inv Rel[[Elem]]                  -> Rel[[Elem]]
+     compl Rel[[Elem]]                -> Rel[[Elem]]
 
      id Bag[[Elem]]                   -> Rel[[Elem]]
 
      Rel[[Elem]] "." Elem             -> Bag[[Elem]]
+     Rel[[Elem]] "." Bag[[Elem]]      -> Bag[[Elem]]
+
      Elem "." Rel[[Elem]]             -> Bag[[Elem]]
+     Bag[[Elem]] "." Rel[[Elem]]      -> Bag[[Elem]]
 
      "#" Rel[[Elem]]                  -> Integer
 
@@ -52,13 +61,23 @@ imports Bag[Elem]
      Rel[[Elem]] "+"                  -> Rel[[Elem]]
      Rel[[Elem]] "*"                  -> Rel[[Elem]]
 
+     Bag[[Elem]] ".+" Rel[[Elem]]     -> Rel[[Elem]]
+
+     closurex(Rel[[Elem]], Bag[[Elem]], Bag[[Elem]], Bag[[Elem]]) -> Bag[[Elem]]
+
+     Bag[[Elem]] "until" "(" Bag[[Elem]] "," Rel[[Elem]] ")" -> Bag[[Elem]]
+
+
      "(" Rel[[Elem]] ")"              -> Rel[[Elem]] {bracket}
 
+     "if" Boolean "then" Rel[[Elem]] "else" Rel[[Elem]] "fi" -> Rel[[Elem]]
+
 hiddens
-  imports asf/Comments
+  imports asf/syntax/Comments
 
   variables
      "BagEE" [0-9\']*            -> Bag[[Elem # Elem]]
+     "Bag" [0-9\']*              -> Bag[[Elem]]
      "Rel" [0-9\']*              -> Rel[[Elem]]
      "E" [0-9\']*                -> Elem
      "E*" [0-9\']*               -> { Elem ","}*

@@ -1,0 +1,165 @@
+equations
+
+[empty]   EmptyRel = {}
+
+[eq-1]   Rel1 = BagEE1, Rel2 = BagEE2
+         =========================
+         Rel1 == Rel2 = BagEE1 == BagEE2
+
+[le-1]   Rel1 = BagEE1, Rel2 = BagEE2
+         =========================
+         Rel1 <= Rel2 = BagEE1 <= BagEE2
+
+[lt-1]   Rel1 = BagEE1, Rel2 = BagEE2
+         =========================
+         Rel1 < Rel2 = BagEE1 < BagEE2
+
+[ge-1]   Rel1 = BagEE1, Rel2 = BagEE2
+         =========================
+         Rel1 >= Rel2 = BagEE1 >= BagEE2
+
+[gt-1]   Rel1 = BagEE1, Rel2 = BagEE2
+         =========================
+         Rel1 > Rel2 = BagEE1 > BagEE2
+
+[un-1]   Rel1 = BagEE1, Rel2 = BagEE2
+         =========================
+         Rel1 union Rel2 = BagEE1 union BagEE2
+
+[intr-1] Rel1 = BagEE1, Rel2 = BagEE2
+         =========================
+         Rel1 inter Rel2 = BagEE1 inter BagEE2
+
+[diff-1] Rel1 = BagEE1, Rel2 = BagEE2
+         =========================
+         Rel1 \ Rel2 = BagEE1 \ BagEE2	
+
+[comp-1] {<E, E'>, Tuple*1} o {Tuple*2} = 
+         E x (E' . {Tuple*2}) union ({Tuple*1} o {Tuple*2})
+[comp-2] {} o {Tuple*} = {}
+
+[x-1]    E x {E', E*} = {<E, E'>} union (E x {E*})
+[x-2]    E x {} = {}
+
+[bx-1]   {E, E*1} x {E*2} = (E x {E*2}) union ({E*1} x {E*2})
+[bx-2]   {} x {E*2} = {}
+
+[dom-1]  dom {<E,E'>, Tuple*} = {E} union dom {Tuple*}
+[dom-2]  dom {} = {}
+
+[ran-1]  ran {<E,E'>, Tuple*} = {E'} union ran {Tuple*}
+[ran-2]  ran {} = {}
+
+[car-1]  car {<E,E'>, Tuple*} = {E} union ({E'} union (car {Tuple*}))
+[car-2]  car {} = {}
+
+[domR-1] {<E, E'>, Tuple*} domR {E*1} = 
+         if E in {E*1} then {<E,E'>} union ({Tuple*} domR {E*1})
+                       else {Tuple*} domR {E*1}
+         fi
+[domR-2] {} domR {E*1} = {}
+
+[domX-1] {<E, E'>, Tuple*} domX {E*1} = 
+         if E in {E*1} then {Tuple*} domX {E*1}
+                       else {<E,E'>} union ({Tuple*} domX {E*1})
+         fi
+[domX-2] {} domX {E*1} = {}
+
+[ranR-1] {<E, E'>, Tuple*} ranR {E*1} = 
+         if E' in {E*1} then {<E,E'>} union ({Tuple*} ranR {E*1})
+                        else {Tuple*} ranR {E*1}
+         fi
+[ranR-2] {} ranR {E*1} = {}
+
+[ranX-1] {<E, E'>, Tuple*} ranX {E*1} = 
+         if E' in {E*1} then {Tuple*} ranX {E*1}
+                        else {<E,E'>} union ({Tuple*} ranX {E*1})
+         fi
+[ranX-2] {} ranX {E*1} = {}
+
+[carR-1] {<E, E'>, Tuple*} carR {E*1} = 
+         if E in {E*1} & E' in {E*1} then {<E,E'>} union ({Tuple*} carR {E*1})
+                                     else {Tuple*} carR {E*1}
+         fi
+[carR-2] {} carR {E*1} = {}
+
+[carX-1] {<E, E'>, Tuple*} carX {E*1} = 
+         if E in {E*1} | E'in {E*1} then {Tuple*} carX {E*1}
+                                    else {<E,E'>} union ({Tuple*} carX {E*1})
+         fi
+[carX-2] {} carX {E*1} = {}
+
+[top-1]  top Rel = dom Rel \ ran Rel
+
+[bot-1]  bot Rel = ran Rel\ dom Rel
+
+[rim-1]  E . {Tuple*1, Tuple*2} = {E*}
+         =====================================
+         E . {Tuple*1, <E, E'>, Tuple*2} = {E', E*}
+
+[default-rim-2]
+         E . {Tuple*} = {}
+
+[brim-1] {E, E*} . Rel  = (E . Rel) union ({E*} . Rel)
+[brim-2] {} . Rel = {}
+
+
+[lim-1]  {Tuple*1, Tuple*2} . E'  = {E*}
+         =====================================
+         {Tuple*1, <E, E'>, Tuple*2} . E' = {E, E*}
+
+[default-lim-2]
+         {Tuple*} . E' = {}
+ 
+[slim-1] Rel . {E, E*} = (Rel . E) union ({E*} . Rel)
+[slim-2] Rel . {} = {}
+
+[size-1] Rel = {Tuple*}
+         ====================================
+         #Rel = #{Tuple*}
+
+[inv-1]  inv {<E,E'>, Tuple*} = {<E',E>} union inv {Tuple*}
+[inv-2]  inv {} = {}
+
+[cmp-1]  Bag = (car Rel)
+         =====================================
+         compl Rel = (Bag x Bag) \ Rel 
+
+
+[id-1]   id {E, E*} = {<E, E>} union id {E*}
+[id-2]   id {} ={}
+
+[cl-1]   Rel2 o Rel = {}
+         =========================================
+    	 closure(Rel, Rel1, Rel2) = Rel1 union Rel2
+
+[cl-2]   Rel2 o Rel = Rel', Rel' != {}
+         =========================================
+	 closure(Rel, Rel1, Rel2) = closure(Rel, Rel1 union Rel2, Rel')
+
+[tcl-1]  Rel+ = closure(Rel, {}, Rel)
+
+[rtcl-1] Rel* = closure(Rel, id car Rel, Rel)
+
+[icl-1]  Bag .+ Rel = closure(Rel, {}, Rel domR Bag)
+
+%%[clx-1]  Bag2 . Rel = {}
+%%         =========================================
+%%    	 closurex(Rel, Bag1, Bag2, Bag3) = Bag1 union Bag2
+
+%%[clx-2]  Bag2 . Rel = Bag', Bag' != {}
+%%         =========================================
+%%	 closurex(Rel, Bag1, Bag2, Bag3) = closurex(Rel, Bag1 union Bag2, Bag' \ Bag3, Bag3)
+
+[clx-1]  Bag2 . Rel = {}
+         =========================================
+    	 closurex(Rel, Bag1, Bag2, Bag3) = Bag1 union Bag2
+
+[clx-2]  Bag2 . Rel = Bag', Bag' != {}
+         =========================================
+	 closurex(Rel, Bag1, Bag2, Bag3) = closurex(Rel, Bag1 union (Bag' inter Bag3), Bag' \ Bag3, Bag3)
+
+[un-1]   Bag1 until(Bag2, Rel) = closurex(Rel, {}, Bag1, Bag2)
+
+[if-1]   if true then Rel1 else Rel2 fi = Rel1
+[if-2]   if false then Rel1 else Rel2 fi = Rel2

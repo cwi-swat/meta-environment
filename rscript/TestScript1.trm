@@ -1,0 +1,34 @@
+%% begin declare x : natural, y : natural, natural z;
+%%      [s1] x := 3;
+%%      if [s2] 3 then
+%%         [s3] z := y + x
+%%      else
+%%         [s4] x := 4
+%%      fi
+%%      [s5] y := z
+%%
+%% end
+
+eval(
+rel DEFS    = {<s1, x>, <s3, z>, <s4, x>, <s5, y>}
+rel ISCON   = {<s1, x>}
+rel USES    = {<s3, y>, <s3, x>, <s5, z>}
+rel PRED    = {<s0, s1>,<s1, s2>, <s2, s3>, <s2, s4>, <s3, s5>, <s4, s5>}
+
+%%rel  REL1    = {<$u, $x> in USES | $x == x }
+
+bag  Bag1    = {$u in {a, b, c} | false }
+
+rel UNINITIALIZED = {<$u, $x> in USES | s0 in ({$u} until((DEFS.{$x}) union {s0}, inv(PRED)))}
+
+%%bag Bag1     = {a, b, c}
+%%bag Bag2     = {d, e, f}
+
+%%bag Tst      = {$x in Bag1 | true }
+%%rel REL      =  {$x in Bag1, $y in Bag2 | true | {<$x, $y>}}
+
+%%fun f(Bag)   = Bag
+
+%%bag Bag3      = f(Bag1)
+)
+
