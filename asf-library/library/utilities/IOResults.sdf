@@ -1,0 +1,30 @@
+module utilities/IOResults[Sort]
+
+imports basic/Bytes
+imports basic/Integers
+imports basic/Feedback
+
+exports 
+
+
+context-free syntax
+
+  "parse-tree" "(" left-layout:Bytes  "," 
+                   tree:Sort          "," 
+                   right-layout:Bytes  ","
+                   amb-cnt:NatCon
+               ")"                   -> ParseResult[[Sort]] {cons("success")}
+
+  "parse-error" "(" Feedback ")"     -> ParseResult[[Sort]] {cons("failure")}
+ 
+sorts BytesResult
+context-free syntax
+
+  "read" "(" Bytes ")" -> BytesResult {cons("success")}
+  "error" "(" Feedback ")" -> BytesResult {cons("failure")}
+
+sorts WriteResult
+context-free syntax
+
+  "written" -> WriteResult     {cons("success")}
+  "write-error" -> WriteResult {cons("failure")}
