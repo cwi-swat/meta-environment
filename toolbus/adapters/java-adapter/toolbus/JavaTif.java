@@ -20,12 +20,14 @@ public class JavaTif
   private String tool_class;
   private String tool_bridge;
 
+  private boolean swingTool;
+
   //{{{ static void usage()
 
   static void usage()
   {
     System.err.println("usage: javatif -tool <tool> -tifs <tifs> " +
-		       "[-class <class>] [-package <package>]");
+		       "[-class <class>] [-package <package>] [-swing]");
     System.exit(0);
   }
 
@@ -39,6 +41,7 @@ public class JavaTif
       String package_name = null, tool_interface = null, tool_class = null;
       String tool_bridge = null;
       String output = null;
+      boolean swingTool = false;
 
       for(int i=0; i<args.length; i++) {
 	if (args[i].equals("-h")) {
@@ -55,6 +58,8 @@ public class JavaTif
 	  tool_class = args[++i];
 	} else if (args[i].equals("-tool-bridge")) {
 	  tool_bridge = args[++i];
+	} else if (args[i].equals("-swing")) {
+	  swingTool = true;
 	}
       }
 
@@ -73,7 +78,7 @@ public class JavaTif
 	}
 
 	JavaTif gen = new JavaTif(package_name, tool_interface,
-				  tool_class, tool_bridge);
+				  tool_class, tool_bridge, swingTool);
 	gen.readTifs(tifsfile);
 	gen.selectTifs(tool);
 	if (!gen.found_one) {
@@ -87,10 +92,10 @@ public class JavaTif
 
   //}}}
 
-  //{{{ public JavaTif(pkg_name, tool_interface, tool_class, tool_bridge)
+  //{{{ public JavaTif(pkg_name, tool_interface, tool_class, tool_bridge, swing)
 
   public JavaTif(String pkg_name, String tool_interface,
-		 String tool_class, String tool_bridge)
+		 String tool_class, String tool_bridge, boolean swingTool)
   {
     doEvents = new Hashtable();
     evalEvents = new Hashtable();
@@ -101,6 +106,7 @@ public class JavaTif
     this.tool_interface = tool_interface;
     this.tool_class = tool_class;
     this.tool_bridge = tool_bridge;
+    this.swingTool = swingTool;
   }
 
   //}}}
@@ -298,7 +304,11 @@ public class JavaTif
       out.println("import java.util.*;");
       out.println();
       out.println("abstract public class " + tool_class);
-      out.println("  extends AbstractTool");
+      if (swingTool) {
+	out.println("  extends SwingTool");
+      } else {
+	out.println("  extends AbstractTool");
+      }
       out.println("  implements " + tool_interface);
       out.println("{");
     }

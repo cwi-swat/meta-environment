@@ -385,7 +385,16 @@ abstract public class AbstractTool
   public void handleIncomingTerm()
     throws IOException
   {
-    handleIncomingTerm(readTerm());
+    ATerm t = readTerm();
+
+    info("tool " + toolname + " handling term from toolbus: " + t);
+
+    if (t.match("rec-terminate(<term>)") != null) {
+      running = false;
+      connected = false;
+    }
+
+    handleIncomingTerm(t);
   }
 
   //}}}
@@ -394,13 +403,17 @@ abstract public class AbstractTool
   public void handleIncomingTerm(ATerm t)
     throws IOException
   {
+    handleTerm(t);
+  }
+
+  //}}}
+  //{{{ protected void handleTerm(ATerm t) throws IOException
+
+  protected void handleTerm(ATerm t)
+    throws IOException
+  {
     synchronized (getLockObject()) {
-      info("tool " + toolname + " handling term from toolbus: " + t);
       ATerm result = handler(t);
-      if (t.match("rec-terminate(<term>)") != null) {
-	running = false;
-	connected = false;
-      }
 
       if (t.match("rec-do(<term>)") != null) {
 	sendTerm(termSndVoid);

@@ -7,7 +7,7 @@ CLEANFILES	= test.tifs example.tifs \
 EXTRA_DIST	= test.tb test.tifs example.tb example.tifs
 
 java_JAVA	= Tool.java AbstractTool.java TestTool.java JavaTif.java \
-		Testing.java Example.java
+		Testing.java Example.java SwingTool.java
 
 JAVAROOT	= ${top_builddir}/adapters/java-adapter/
 
@@ -26,6 +26,7 @@ CLASSPATH_ENV	= CLASSPATH=${JAVAROOT}:${JAVA_ATERM}:${SHARED_OBJECTS}
 JAVATIFCLASSES = \
 	Tool.class \
 	AbstractTool.class \
+	SwingTool.class \
 	JavaTif.class \
 	SpecOrderVector.class
 
