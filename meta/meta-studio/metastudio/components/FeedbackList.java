@@ -79,11 +79,14 @@ public class FeedbackList extends UserInterfacePanel {
         String summaryId = summary.getId();
 
         errorapi.types.FeedbackList messages = summary.getList();
-        for (; !messages.isEmpty(); messages = messages.getTail()) {
-            data.add(new FeedbackItem(producer, summaryId, messages.getHead()));
-        }
         
-        scrollToLast();
+        if (!messages.isEmpty()) {
+          for (; !messages.isEmpty(); messages = messages.getTail()) {
+              data.add(new FeedbackItem(producer, summaryId, messages.getHead()));
+          }
+        
+          scrollToLast();
+        }
     }
 
     private void scrollToLast() {
@@ -97,8 +100,6 @@ public class FeedbackList extends UserInterfacePanel {
         // to know what type of parent it has!
         JTabbedPane parent = (JTabbedPane) getParent();
         parent.setSelectedComponent(this);
-        
-        repaint();
     }
 
     private FeedbackItem makeAnonymousError(String msg) {
