@@ -2,7 +2,7 @@
 \label{interpreter}
 
 The interpreter or evaluator takes care of rewriting terms given a set
-of equations.  The interpreter rewrite terms in \asfix\ format using
+of equations.  The interpreter rewrites terms in \asfix\ format using
 equations in \asfix\ format. The interpreter was first specified in
 \asdf, and later this specification was used to make a C
 implementation.
@@ -24,16 +24,17 @@ transitive closure of the import graph from the import manager and
 sending this set of modules to the tree repository which then returns
 the set of equations.  Finally, the \asfix\ representation of the term
 is sent to the interpreter.
+This is all coded in the \TB-script.
 
 When the interpreter receives a set of equations it performs some
-simple transformations to it, for instance, unnecessary layout is removed,
+simple transformations on it, for instance, unnecessary layout is removed,
 layout and lexicals are transformed into lists of characters.  The
-interpreter stores the ons in a hash table to have fast access to them
+interpreter stores the equations in a hash table to have fast access to them
 during rewriting.
 
 The term to be rewritten is also slightly modified.  Unnecessary
-layout is removed as well as the transformation of the lexicals.
-After rewriting the result term is again modified, layout is inserted
+layout is removed and the lexicals are transformed.
+After rewriting, the result term is again modified: layout is inserted
 and the lists of characters are translated into lexicals.  This term
 is sent to the \TB\ to be displayed in an editor.
 
@@ -54,15 +55,17 @@ of the characteristics of the \asdf-formalism, and more specific of
 \item Default equations.
 \item Innermost rewriting.
 \end{itemize}
-So, the interpreter should support the innermost rewriting of
-many-sorted, non left-linear, conditional rewrite rules with both
-default rules and list matching.
+%%So, the interpreter should support the innermost rewriting of
+%%many-sorted, non left-linear, conditional rewrite rules with both
+%%default rules and list matching.
 
 The main functionality of the interpreter consists of a rewriting
 machinery and a local repository to store equations.  This repository
 is organised as a table, the keys in this table are module names and
 the values are sets of equations corresponding to the transitive
-closure of the import graph of the corresponding module.  In the C
+closure of the import graph of the corresponding module.  
+The C implementation of the shared term library takes care of
+unnecessary duplication of of the rewrite rules. In the C
 implementation of the interpreter the set of equations are stored in a
 hash-table and the hash key is calculated using the outermost function
 symbol of the left hand side of an equation and the outermost function
@@ -70,7 +73,7 @@ symbol (if any) of the first argument of the left hand side of the
 equation.  This improves the efficiency of the rewriting machine
 enormously, but it influences the semantics as well. In fact this
 implements a form of syntactic specificity, because when the
-interpreter is looking for an equation that matches with a aterm, it
+interpreter is looking for an equation that matches with a term, it
 first looks for an equation that has the same outermost function
 symbol (ofs), {\em and} has the same ofs at the first argument
 position.  If no match can be found, the search is continued for an
@@ -107,7 +110,7 @@ condition, leading to new variable bindings.
 There are a few open issues with respect to the interpreter.  First,
 the performance of the current version is reasonable.  If there is no
 list matching involved the interpreter performs 6000 rewrite steps per
-second, the interpreter in the old \metaenv\ performs 20.000 rewrite
+second, the interpreter in the old \metaenv\ performs 20000 rewrite
 steps per second for the same specification and term. So, there is at
 least a factor 3 to be gained.
 

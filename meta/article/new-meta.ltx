@@ -81,14 +81,14 @@
 \begin{abstract}
 The \metaenv\ has become a legacy system over the last few years.
 This paper describes the first steps towards a new implementation
-of the \metaenv. This implementation is based on the latest techniques
+of this system. This implementation is based on the latest techniques
 concerning the coupling of software components, construction
-of \ui\ and modern programming languages such as \java.
+of \ui s and modern programming languages such as \java.
 
 The general architecture of the new environment is discussed as
 well as the components which are currently implemented and 
 operational in the environment. Each component is independent
-of the other components and communicates via the \TB.
+of the other components and communicates using the \TB.
 \end{abstract}
 
 \section{Introduction}
@@ -96,17 +96,19 @@ of the other components and communicates via the \TB.
 In the beginning of the eighties the design and implementation of the
 current version of the \metaenv~\cite{Kli93.meta} was started.  On top
 of \centaur~\cite{BCDIKLP89} a programming environment (generator) for
-writing language definitions in \asdf\ was developed.  An overview of
+writing language definitions in \asdf~\cite{HHKR89.update,BHK89,DHK96}
+was developed.  An overview of
 these activities can be found in~\cite{HK95}.
 
-The implementation could be considered a test environment for all
+The implementation could be considered a test case for all
 kinds of ideas concerning the lazy and incremental generation of
 scanners, parsers, and term rewriting machines.  The development of
 advanced hybrid editing techniques~\cite{Koo94.thesis}, origin
 tracking techniques~\cite{Deu94.thesis}, incremental
 rewriting~\cite{Meu94.thesis}, automatic generation of
-unparsers~\cite{BV96}, debugging facilities of term rewriting, and the
-generation of \LaTeX\ code were performed within or with this
+unparsers~\cite{BV96}, debugging facilities of term rewriting~\cite{Tip91},
+and the
+generation of \LaTeX\ code~\cite{Vis95.tolatex} were performed in or with this
 implementation as well.
 
 The current implementation of the \metaenv\ has a number of drawbacks
@@ -126,6 +128,7 @@ However, it turned out that the resulting implementation was not
 deadlock free.  This initiated the development of the \TB, a software
 interconnection architecture~\cite{BK96a,TB-AMAST96} which takes care
 of the communication of software components.
+This \TB\ will be the backbone of the implementation of the new \metaenv.
 
 \begin{table}
 \centering
@@ -163,7 +166,7 @@ Based on the experiences gained with the Epoch-\gse-UI coupling it was
 decided to design and implement the new \metaenv\ from scratch.  The
 fact that the version of \lelisp\ on which the \metaenv\ is based
 may become obsolete makes a ``from scratch'' approach even
-more pressing.  In this paper we discuss the first prototype of the
+more urgent.  In this paper we discuss the first prototype of the
 new \metaenv\ based on the \TB.  This prototype has a very restricted
 functionality but offers an extendible infrastructure to experiment
 with various designs.
@@ -174,9 +177,9 @@ In Section \ref{garch} the architecture of the new \metaenv\ is discussed.
 Section \ref{repos} describes various repository to store information
 on \asdf\ modules, furthermore the tree representation format
 is briefly discussed.
-The \ui\ is discussed in Section \ref{userin}.
-The structure editor is discussed in Section \ref{edit}. 
-The interpreter is described in Section \ref{interpreter}.
+The \ui\ is discussed in Section \ref{userin},
+the structure editor in Section \ref{edit}, and the
+interpreter in Section \ref{interpreter}.
 
 
 \separator
@@ -211,9 +214,9 @@ The \metaenv\ is first of all a research tool, which means that
 it should be able to test all kind of new ideas.
 
 Although all sections conclude with a short discussion in which 
-also the future work is described there are some general future
+also the future work is described there is some general future
 work left. The \metaenv\ should
-provided facilities to compile specifications in order to generate
+provide facilities to compile specifications in order to generate
 stand-alone environments.  Finally, the new \metaenv\ should provide
 sophisticated help facilities and demonstration modes with WWW support.
 

@@ -2,20 +2,27 @@
 \label{repos}
 
 There are several repositories in the current prototype of the
-\metaenv.  The new \metaenv\ provides facilities to store (abstract)
-syntax trees in \asfix-format in a repository.  The import relation is
+\metaenv.  
+%%The new \metaenv\ provides facilities to store (abstract)
+%%syntax trees in \asfix-format in a repository.  
+The (abstract) syntax trees in \asfix-format are stored in a
+tree-repository.
+The import relations are
 stored in a separate repository.  Finally, the interpreter has its own
 repository to store the equations which are used to rewrite terms.
 All repositories were first specified in \asdf\ but for efficiency
 reasons implemented in C.
+Before discussing the implementation details of the repositories,
+we discuss the general format of all stored and exchanged information.
 
 \subsection{Tree Representation}
 \label{treerepr}
 
-In the current version of the \metaenv\ the abstract syntax trees are
-represented by means of VTP (Virtual Tree Processing formalism)
-offered by \centaur.  There are two problems connected to VTP: it is
-hard to learn programming in VTP and VTP does not offer enough
+In the old \metaenv\ the abstract syntax trees are
+represented by means of VTP (Virtual Tree Processing formalism)~\cite{Aus90}
+offered by \centaur~\cite{BCDIKLP89}. 
+There are two problems connected to VTP: it is
+hard to learn programming in VTP, furthermore VTP does not offer enough
 facilities to prevent illegal access to constructed trees. This latter
 drawback causes a number of the maintenance problems in the \metaenv.
 
@@ -46,8 +53,7 @@ These functions are formally specified in \asdf~\cite{BKOV97} and
 this formal specification is used to make a library of C functions
 to manipulate terms.
 The redundancy in the \aterms\ format is solved by a powerful sharing
-mechanism provided by the function in the C implementation
-of the \aterms\ library.
+mechanism provided by the C implementation of the \aterms\ library.
 
 \subsubsection{\asfix}
 
@@ -73,8 +79,8 @@ implementation these are all shared).
 \subsection{Implementation}
 The ``tree-repository'' contains the \asfix\ representation of all
 modules of a specification under construction and of all terms being
-edited or rewritten.  The tree-repository provides facilities to add a
-new module or term, to remove a module or term, and to clear its
+edited or rewritten.  The tree-repository provides facilities to add 
+or remove a module or term, and to clear its
 entire repository.  It is possible to check whether a module or term
 is already in the repository.  Furthermore, given the name of a module
 it is possible to retrieve a specific section of a module, its import
@@ -88,16 +94,17 @@ specification.  It contains of all modules of a specification in the
 tree-repository the import sections.  The import-repository provides
 facilities to add the import section of a new module, to remove the
 import section of a given module, and to clear its entire repository.
-Of course it is possible to retrieve the imports for a given module
-name.  It is also possible to calculate given a list of module names
-which modules are not yet in ``store''.  Finally, a number of
-operations are provided to retrieve the transitive closure of the
+Of course, it is possible to retrieve the imports for a given module
+name.  It is also possible to retrieve 
+which modules are not yet in ``store'' given a list of module names. 
+Finally, a number of
+operations are provided to calculate the transitive closure of the
 import relation for a given module.  The import-repository stores this
 calculated closure in a separate database.
  
 The ``equations-repository'' of the interpreter will be discussed in
-Section \ref{interpreter}. In fact, there are facilities to retrieve
-any information from this repository for other tools than the
+Section \ref{interpreter}. In fact, there are {\em no} facilities to retrieve
+any information from this repository by other tools than the
 interpreter itself.
 
 \subsection{Discussion}
@@ -106,9 +113,9 @@ The current implementation of the import-repository and
 the equations-repository are based on a lazy mechanism.
 Only when the import relation or equations of some module are needed
 this information is derived and stored to be used later on.
-If the contents of the tree repository is changed this leads to clearing
+If the contents of the tree repository are changed this leads to clearing
 both the import-repository and equations-repository.
-There is thus no smart incremental updating algorithm implemented yet.
+There is no smart incremental updating algorithm implemented yet.
 
 The information stored in the tree-repository could be extended with
 all kind of extra information such as size of the file,
