@@ -96,6 +96,7 @@ proc message {Pid Gid Message From} {
   } else {
     $win(msg) insert end "> $players($From,name): $Message\n"
   }
+  $win(msg) see end
 }
 @
 
@@ -107,6 +108,7 @@ proc broadcast {Pid Message From} {
   global win players
 
   $win(msg) insert end ">>> $players($From,name): $Message\n"
+  $win(msg) see end
 }
 @
 
@@ -229,6 +231,7 @@ proc invitation { Pid Gid By Accepted } {
     $win(msg) insert end \
 	"- Player $By declined your invitation to join game $Gid\n"
   }
+  $win(msg) see end
 }
 @
 

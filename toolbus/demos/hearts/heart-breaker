@@ -22,10 +22,10 @@ else
 fi
 if test x$4 = x
 then
-  echo wish-adapter -TB_PORT $PORT -TB_TOOL_NAME player -script heart-breaker.tcl \
+  wish-adapter -wish wish4.0 -TB_PORT $PORT -TB_TOOL_NAME player -script heart-breaker.tcl \
 		-script-args $NAME $LEVEL 
 else
-  echo wish-adapter -TB_HOST $4 -TB_PORT $PORT -TB_TOOL_NAME player \
+  wish-adapter -wish wish4.0 -TB_HOST $4 -TB_PORT $PORT -TB_TOOL_NAME player \
 		-script heart-breaker.tcl -script-args $NAME $LEVEL
 fi
 
