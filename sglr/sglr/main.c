@@ -32,8 +32,8 @@ char *program_name   = "sglr";
 int   debugflag;
 int   verboseflag;
 FILE *log = NULL;
-char *input_file_name = "";
-char *output_file_name = "";
+char *input_file_name = "-";
+char *output_file_name = "-";
 int   write_output = TRUE;
 char *parse_table_name = NULL;
 int   abbreviation_flag = FALSE;
@@ -297,7 +297,7 @@ FILE *
 open_file(char *std_error, char *FN)
 {
   FILE *file;
-  if (FN == NULL || strcmp(FN, "") == 0)
+  if (FN == NULL || strcmp(FN, "") == 0 || strcmp(FN, "-") == 0)
     {
       if (std_error == NULL) return stdin;
       fprintf(stderr, "%s: %s\n", program_name, std_error);
@@ -409,7 +409,7 @@ term_to_file(term *t, char *FN)
   FILE *output_file;
   if (write_output)
     {
-      if (strcmp(FN, "") == 0) output_file = stdout;
+      if (strcmp(FN, "") == 0 || strcmp(FN, "-") == 0) output_file = stdout;
       else if ((output_file = fopen(FN, "w")) == NULL)
 	{
 	  fprintf(stderr, "%s: cannot create %s\n", program_name, FN);

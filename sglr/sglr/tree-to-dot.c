@@ -222,7 +222,7 @@ amb_node(FILE *dot, term *t, term *arg)
     {
       TBprintf(dot, "\tN%d [label = \"", (int)t);
       print_symbol(dot, res);
-      TBprintf(dot, "\"]\n");
+      TBprintf(dot, " (amb)\"]\n");
     }
   else
     {
