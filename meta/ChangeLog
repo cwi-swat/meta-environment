@@ -1,5 +1,9 @@
 # $Id$
 
+2003/07/18 (markvdb@cwi.nl)
+ * Repaired the "bug" with opening a term editor for a file which
+   was already opened for a different module.
+
 2003/07/17 (markvdb@cwi.nl)
  * Repaired the Move-Down bug reported by Hayco.
  * show-area now activates also syntax and equations editors correctly.
