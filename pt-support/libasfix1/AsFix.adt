@@ -1,8 +1,8 @@
 [
   [AsFix, Tree, term(l("term"),
-                     w(" "),
+                     <ws-after-term(Layout)>,
                      l("X"),
-					 w(" "),
+                     <ws-after-path(Layout)>,
 					 <module-name(ModuleName)>,
 					 <ws-before-tree(Layout)>,
 					 <tree(Tree)>,
