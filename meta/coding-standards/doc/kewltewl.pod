@@ -4,8 +4,38 @@ KEWLTEWL - the Kewlest Tewl ever
 
 =head1 SYNOPSIS
 
+B<kewltewl> [-B<bht>] [-B<i> I<file>] [-B<o> I<file>] [-B<D> I<file>]
+
 =head1 DESCRIPTION
 
+The B<kewltewl> tool [blabla].
+
+A number of options can be supplied; these are as follows:
+
+=over 4
+
+=item B<-b>
+
+Write term output in BAF (Binary AsFix) format. (default)
+
+=item -B<h>
+
+Displays concise usage information.
+
+=item -B<i> I<file>
+
+Read input from F<file>; by default, input is read from stdin.
+
+=item -B<o> I<file>
+
+Write output to F<file>.  By default, output goes to stdout.
+
+=item B<-t>
+
+Write term output in plain text format.
+
+
+=back
 =head1 USAGE
 
 =head1 SEE ALSO
