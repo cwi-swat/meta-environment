@@ -5,35 +5,45 @@ let
   Id : int,
   ModuleName1 : str,
   ModuleName2 : str,
-  NewPath : str
+  Path : str,
+  Option1 : term
 in
   Id := process-id.
   (
-    rec-msg(rename-module(ModuleName1?, ModuleName2?, NewPath?)) .
-    DoRenameModule(ModuleName1, ModuleName2, NewPath)
+    rec-msg(rename-module(ModuleName1?, ModuleName2?, Path?)) .
+    DoRenameModule(ModuleName1, ModuleName2, Path)
   +
-    rec-msg(copy-module(ModuleName1?, ModuleName2?, NewPath?)).
-    DoCopyModule(ModuleName1, ModuleName2, NewPath)
+    rec-msg(copy-module(ModuleName1?, ModuleName2?, Path?)).
+    DoCopyModule(ModuleName1, ModuleName2, Path)
   +
-    rec-msg(import-module(ModuleName1?, ModuleName2?, NewPath?)).
-    DoImportModule(ModuleName1, ModuleName2, NewPath)
+    rec-msg(import-module(ModuleName1?, ModuleName2?, Path?)).
+    DoImportModule(ModuleName1, ModuleName2, Path)
   +
     rec-msg(delete-module(ModuleName1?)) .
     DoDeleteModule(ModuleName1)
   +
-    rec-msg(unimport-module(ModuleName1?, ModuleName2?, NewPath?)).
-    DoUnimportModule(ModuleName1, ModuleName2, NewPath)
+    rec-msg(unimport-module(ModuleName1?, ModuleName2?, Path?)).
+    DoUnimportModule(ModuleName1, ModuleName2, Path)
   +
     rec-msg(revert-module(ModuleName1?)).
     DoRevertModule(ModuleName1)
+  +
+    rec-msg(close-module(ModuleName1?, Option1?)).
+    DoCloseModule(ModuleName1, Option1).
+    snd-msg(module-closed(ModuleName1))
   ) *
   delta
 endlet
 
+process DoCloseModule(ModuleName : str, Recursive : term) is
+  printf ("closing a module is not yet implemented: %s\n", ModuleName)
+
+
 process DoRevertModule(ModuleName : str) is
+  DoCloseModule(ModuleName, top).
   snd-msg(open-modules([ModuleName])) .
   rec-msg(finished-opening-modules).
-  snd-msg(module-reverted)
+  snd-msg(module-reverted(ModuleName))
 
 process DoDeleteModule(ModuleName : str) is
 let
