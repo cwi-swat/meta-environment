@@ -918,20 +918,21 @@ delegating the method call via the RMI system to the server object.
 
 Obviously any methods that have arguments or yield result values
 will need to pass data in some way. In RMI, arguments to or return
-values from remote methods can be primitive data, remote objects, or
-\emph{serializable}\footnote{implementing \texttt{These are objects
-that implement java.util.Serializable}} objects. Both primitive data
-and serializable objects are passed by value using Java's object
+values from remote methods can be primitive data, remote objects,
+or \emph{serializable}\footnote{These are objects that implement the
+\texttt{java.util.Serializable} interface.} objects. Both primitive
+data and serializable objects are passed by value using Java's object
 serialization. Remote objects are essentially passed by reference.
 This means that changes to them are actually performed on the server,
 and updates become available to all clients. Only the behavior that was
 defined in the remote interface is available to the clients.
 
-RMI programmers should be aware of the fact that any parameters, return
-values and exceptions that are not remote objects are passed by value.
-This makes it hard to understand when looking at a system of RMI objects
-exactly which method calls will result in a \emph{local} state change,
-and which will have \emph{global} effect.
+RMI programmers should be aware of the fact that any parameters,
+return values and exceptions that are not remote objects are passed
+by value.  This makes it hard to understand when looking at a system of
+RMI objects exactly which method calls will result in a \emph{local}
+(i.e. client side) state change, and which will have \emph{global}
+(server side) effect.
 
 As an example of this, consider our address book example. If the
 AddressBookService is implemented as a remote object in RMI, then
@@ -944,6 +945,23 @@ instances will have a \emph{local} state change only.
 Finally, before two RMI components can connect, the server side needs
 to register itself with an \texttt{rmiregistry}, after which the client
 needs to explicitly obtain a reference to the (remote) server object.
+
+\begin{itemize}
+
+\item RMI makes an explicit distinction between \emph{client} and
+\emph{server} sides of a set of cooperating components. In the ToolBus
+setting all components are considered equal (and none are more equal
+than others).
+
+\item In RMI, the programmer writes the interface which describes the
+component's incoming and outgoing method signature, from which client
+side stubs are generated. In a ToolBus setting, these signatures are
+generated from the ToolBus script which describes much more of the
+component's behavior in terms of method call interaction, rather than
+just the methods' signatures.
+
+
+\end{itemize}
 
 %%Using the ToolBus communication primitives we can exactly specify which
 %%pattern of messages (communications) are allowed and in what order. The
