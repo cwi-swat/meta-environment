@@ -12,7 +12,6 @@
 
 #include <MEPT-utils.h>
 #include <ASFME-utils.h>
-/*#include <SDFME-utils.h>*/
 
 #include "equationChecker.h"
 
@@ -24,15 +23,11 @@ ATbool run_verbose;
 
 static char myname[] = "asfchecker";
 static char myversion[] = "0.0";
-
-/*
- * The argument vector: list of option letters, colons denote option
- * arguments.  See Usage function, immediately below, for option
- * explanation.
- * */
-
 static char myarguments[] = "hi:vV";
 
+/*}}}  */
+
+/*{{{  static ATermList checkAsf(ATerm term) */
 
 static ATermList checkAsf(ATerm term)
 {
@@ -48,6 +43,10 @@ static ATermList checkAsf(ATerm term)
     return checkEquations(rules);
   }
 }
+
+/*}}}  */
+
+/*{{{  static void displayMessages(ATermList errorList) */
 
 static void displayMessages(ATermList errorList)
 {
@@ -65,6 +64,10 @@ static void displayMessages(ATermList errorList)
   }
 }
 
+/*}}}  */
+
+/*{{{  ATerm check_asf(int cid, ATerm term) */
+
 ATerm check_asf(int cid, ATerm term)
 {
   ATermList errorList = checkAsf(term);    
@@ -72,10 +75,17 @@ ATerm check_asf(int cid, ATerm term)
   return ATmake("snd-value(messages(<term>))", errorList);
 }
 
+/*}}}  */
+/*{{{  void rec_terminate(int cid, ATerm arg) */
+
 void rec_terminate(int cid, ATerm arg)
 {
   exit(0);
 }
+
+/*}}}  */
+
+/*{{{  static void usage(void) */
 
 static void usage(void)
 {
@@ -89,10 +99,17 @@ static void usage(void)
     myname, myversion);
 }
 
+/*}}}  */
+/*{{{  static void version(void) */
+
 static void version(void)
 {
   ATwarning("%s v%s\n", myname, myversion);
 }
+
+/*}}}  */
+
+/*{{{  int main(int argc, char *argv[]) */
 
 int main(int argc, char *argv[])
 {
@@ -145,3 +162,5 @@ int main(int argc, char *argv[])
   }
   return 0;
 }
+
+/*}}}  */
