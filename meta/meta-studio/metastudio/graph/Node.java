@@ -47,7 +47,6 @@ abstract public class Node extends NodeImpl {
     }
 
     private Node setSizeAttribute(Attribute_Size sizeAttr) {
-        MetaGraphFactory factory = (MetaGraphFactory) getFactory();
         AttributeList result = factory.makeAttributeList_Empty();
         AttributeList attrs = getAttributes();
         while (!attrs.isEmpty()) {
@@ -78,7 +77,6 @@ abstract public class Node extends NodeImpl {
     }
 
     private Node setInfoAttribute(Attribute_Info infoAttr) {
-        MetaGraphFactory factory = (MetaGraphFactory) getFactory();
         AttributeList result = factory.makeAttributeList_Empty();
         AttributeList attrs = getAttributes();
         while (!attrs.isEmpty()) {
@@ -123,8 +121,7 @@ abstract public class Node extends NodeImpl {
     }
 
     public Node setSize(int width, int height) {
-        MetaGraphFactory f = (MetaGraphFactory) getFactory();
-        return setSizeAttribute(f.makeAttribute_Size(width, height));
+        return setSizeAttribute(factory.makeAttribute_Size(width, height));
     }
 
     public boolean isPositioned() {
