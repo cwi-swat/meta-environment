@@ -30,6 +30,7 @@ void initBuiltins(void)
   CO_initLibraryApi();
   PTPT_initPTMEPTApi();
   PT_initAsFix2Api(); 
+  ERR_initErrorApi();
   initialized = ATtrue;
 
   return;
