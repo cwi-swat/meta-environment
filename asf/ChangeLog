@@ -1,3 +1,9 @@
+2002/10/13 (vinju@loria.fr)
+ * Meta-Environment scripting is put in a separate package: asfsdf-meta
+ * Put syntax related tools in syntax subdirectory and semantics related
+   tools in semantics directory to create a better overview in this 
+   large package.
+
 2002/10/09 (vinju@loria.fr)
  * Added dependency on meta package
  * Added directory meta-scripts that contains the meta-environment ToolBus
