@@ -1,5 +1,9 @@
 $Id$
 
+Mon May 17 11:37:15 CEST 2004 <{markvdb,jurgenv}@cwi.nl>
+ * Regenerated due to extension of SDF grammar in order to
+   represent priority definitions.
+
 Tue Apr  6 16:02:42 CEST 2004 <{jong,kooiker}@cwi.nl>
  * remove sm-module-path-inconsistent from sdf-modules.idef
    as the C implementation never sends this value.
