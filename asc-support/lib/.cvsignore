@@ -1,5 +1,7 @@
 .deps
 Makefile
 Makefile.in
-rewriter-me.tif.c
-rewriter-me.tif.h
+asc-builtins.h
+builtin-forward.c
+builtin-link-test
+builtin-link-test.c

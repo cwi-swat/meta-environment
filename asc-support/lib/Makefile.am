@@ -92,7 +92,7 @@ builtin-forward.c: asc-builtins.h ${BUILTIN_SOURCEFILES} Makefile
 asc-builtins.h: ${BUILTIN_SOURCES} Makefile
 	${GENPRTS} "${BUILTIN_NAMES_ARITY}" > $@
 
-builtin-link-test.c: asc-builtins.h ${BUILTIN_SOURCEFILES} Makefile 
+builtin-link-test.c: asc-builtins.h ${BUILTIN_SOURCEFILES} Makefile ${GENLNKTEST}
 	${GENLNKTST} "${BUILTIN_NAMES_ARITY}" > $@
 
 # Developers only:

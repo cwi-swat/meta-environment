@@ -44,6 +44,7 @@ cat  << END_OF_FILE
 #include <assert.h>
 #include <MEPT-utils.h>
 #include <aterm2.h>
+#include <asc-support2-me.h>
 
 /* DO NOT EDIT: This file is generated */
 
@@ -63,9 +64,6 @@ done
  */
 int main(void)
 {
-
-  ASC_initRunTime(10);
-
   if (fprintf(stderr, "This program does nothing\n") == 0) {
 `
 for b in \${BUILTIN_NAMES}; do
