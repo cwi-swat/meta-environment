@@ -8,7 +8,7 @@ bin_PROGRAMS      = asfe
 
 pkgdata_DATA         = asfe.idef
 EXTRA_DIST        = asfe.idef
-CLEANFILES        = asfe.tif.c asfe.tif.h asfe.tifs
+CLEANFILES        = asfe.tifs
 
 noinst_HEADERS = asf-api.h matching.h reduction.h environment.h values.h \
                  errors.h debug.h traversalfunctions.h equations.h \
@@ -29,7 +29,6 @@ asfe_LDADD		= asfe.tif.o \
 			${TIDELIB} $(SOCKLIBS)
 
 INCLUDES		= ${TIDEINC} \
-			-I$(ASC)/include \
 			-I$(PT_SUPPORT)/include \
 			-I$(ATERM)/include \
 			-I$(TOOLBUSLIB)/include \
