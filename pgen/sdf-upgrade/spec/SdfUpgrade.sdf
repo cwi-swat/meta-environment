@@ -1,0 +1,44 @@
+module SdfUpgrade
+
+imports basic/Booleans
+        languages/sdf2/syntax/Sdf2
+
+exports
+  context-free syntax
+    sdf-upgrade(Module) -> Module
+
+hiddens
+  context-free syntax
+    literal-upgrade(Module)     -> Module {traversal(trafo, top-down, break)}
+    literal-upgrade(Production) -> Production {traversal(trafo, top-down, break)}
+    literal-upgrade(Literal)    -> Literal {traversal(trafo, top-down, break)}
+
+hiddens
+  context-free syntax
+    tuple-upgrade(Module) -> Module {traversal(trafo, top-down, break)}
+    tuple-upgrade(Symbol) -> Symbol {traversal(trafo, top-down, break)}
+    is-tuple(Symbol)      -> Boolean
+
+hiddens
+  context-free syntax
+    sorts-to-startsymbols-upgrade(Module)   -> Module
+    contains-startsymbols(Module, Boolean)  -> Boolean {traversal(accu, top-down, break)}
+    contains-startsymbols(Grammar, Boolean) -> Boolean {traversal(accu, top-down, break)}
+    startsymbols-upgrade(Module)            -> Module {traversal(trafo, top-down, break)}
+    startsymbols-upgrade(Grammar)           -> Grammar {traversal(trafo, top-down, break)}
+    remove-no-sort-symbols(Symbol*)         -> Symbol*
+
+
+hiddens
+  variables
+    "$Char*"[0-9]*      -> CHAR*
+
+    "$Attributes"[0-9]* -> Attributes
+    "$Literal"[0-9]*    -> Literal
+    "$Module"[0-9]*     -> Module
+    "$Args"[0-9]*       -> {Symbol ","}*
+    "$TupleArgs"[0-9]*  -> {Symbol ","}+
+    "$Sort"[0-9]*       -> Sort
+    "$Symbol"[0-9]*     -> Symbol
+    "$Symbol*"[0-9]*    -> Symbol*
+    

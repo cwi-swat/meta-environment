@@ -1,0 +1,61 @@
+equations
+
+  [su-1'1] $Module2 := literal-upgrade($Module1),
+           $Module3 := tuple-upgrade($Module2),
+           $Module4 := sorts-to-startsymbols-upgrade($Module3)
+           =====>
+           sdf-upgrade($Module1) = $Module4
+
+  [lu-1'1] literal-upgrade($Literal($Args) -> $Symbol $Attributes) =
+             $Literal($Args) -> $Symbol $Attributes
+
+  [lu-1'2] literal-upgrade(uqliteral($Char*)) = qliteral(""" $Char* """)
+
+  [tu-1'1] is-tuple($Symbol1) == true,
+           <$Symbol3, $TupleArgs> := tuple-upgrade($Symbol1),
+           is-tuple($Symbol2) == false
+           ====>
+           tuple-upgrade($Symbol1 # $Symbol2) = <$Symbol3, $TupleArgs, $Symbol2>
+  [tu-1'2] is-tuple($Symbol1) == false,
+           is-tuple($Symbol2) == true,
+           <$Symbol3, $TupleArgs> := tuple-upgrade($Symbol2)
+           ====>
+           tuple-upgrade($Symbol1 # $Symbol2) = <$Symbol1, $Symbol3, $TupleArgs>
+
+  [tu-1'3] is-tuple($Symbol1) == true,
+           <$Symbol3, $TupleArgs1> := tuple-upgrade($Symbol1),
+           is-tuple($Symbol2) == true,
+           <$Symbol4, $TupleArgs2> := tuple-upgrade($Symbol2)
+           ====>
+           tuple-upgrade($Symbol1 # $Symbol2) = <$Symbol3, $TupleArgs1, $Symbol4, $TupleArgs2>
+
+  [tu-1'4] is-tuple($Symbol1) == false,
+           is-tuple($Symbol2) == false
+           ====>
+           tuple-upgrade($Symbol1 # $Symbol2) = <$Symbol1, $Symbol2>
+
+  [it-1'1] is-tuple($Symbol1 # $Symbol2) = true
+
+  [default-it-1'2] is-tuple($Symbol) = false
+
+  [ssu-1'1] contains-startsymbols($Module, false) == true
+            =====>
+            sorts-to-startsymbols-upgrade($Module) = $Module
+
+  [ssu-1'2] contains-startsymbols($Module1, false) == false,
+            $Module2 := startsymbols-upgrade($Module1)
+            =====>
+            sorts-to-startsymbols-upgrade($Module1) = $Module2
+
+  [su-1'1] $Symbol*2 := remove-no-sort-symbols($Symbol*1)
+           =====>
+           startsymbols-upgrade(sorts $Symbol*1) = context-free start-symbols $Symbol*1
+  sorts $Symbol*2
+
+  [css-1'1] contains-startsymbols(context-free start-symbols $Symbol*, false) = true
+
+  [rnss-1'1] remove-no-sort-symbols() = 
+
+  [rnss-1'2] remove-no-sort-symbols($Sort $Symbol*) = $Sort remove-no-sort-symbols($Symbol*)
+
+  [default-rnss-1'3] remove-no-sort-symbols($Symbol $Symbol*) = remove-no-sort-symbols($Symbol*)
