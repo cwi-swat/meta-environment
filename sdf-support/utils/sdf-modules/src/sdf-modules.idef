@@ -61,7 +61,7 @@ in
     rec-value(SM, all-needed-imports(Imports?)) .
     snd-msg(sm-all-needed-imports(Imports))
   +
-    rec-msg(sm-get-imported-module-names(Module)) .
+    rec-msg(sm-get-imported-module-names(Module?)) .
     snd-eval(SM, get-imported-module-names(Module)) .
     rec-value(SM, imported-module-names(ModuleNames?)) .
     snd-msg(sm-imported-module-names(ModuleNames))

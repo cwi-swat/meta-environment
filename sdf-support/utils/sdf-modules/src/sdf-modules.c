@@ -117,7 +117,7 @@ ATerm get_all_needed_imports(int cid, ATerm atModules, char* name)
 
 ATerm get_imported_module_names(int cid, ATerm atModule)
 {
-  SDF_Start start = SDF_StartFromTerm(atModule);
+  SDF_Start start = SDF_StartFromTerm(ATBunpack(atModule));
   SDF_Module module = SDF_getStartTopModule(start);
   ATermList imports = SDF_getImports(module);
  
@@ -255,7 +255,7 @@ ATerm get_import_graph(int cid, ATerm atModules)
   ATermList edges = ATempty;
 
   for (; !ATisEmpty(list); list = ATgetNext(list)) {
-    SDF_Start start = SDF_StartFromTerm(ATgetFirst(list));
+    SDF_Start start = SDF_StartFromTerm(ATBunpack(ATgetFirst(list)));
     SDF_Module module = SDF_getStartTopModule(start);
     SDF_ModuleId id = SDF_getModuleNameModuleId(
 			SDF_getModuleModuleName(module));

@@ -2,6 +2,7 @@
 #include "module-table.h"
 #include <assert.h>
 #include <aterm2.h>
+#include <atb-tool.h>
 
 static ModuleTable moduleTable = NULL;
 
@@ -204,7 +205,8 @@ static void initModuleTable(ATermList modules)
 {
   /* initialize the hash table with all modules */
   for (;!ATisEmpty(modules); modules = ATgetNext(modules)) {
-    SDF_Start smodule = SDF_StartFromTerm(ATgetFirst(modules));
+    ATerm atModule = ATBunpack(ATgetFirst(modules));
+    SDF_Start smodule = SDF_StartFromTerm(atModule);
     SDF_Module module = SDF_getStartTopModule(smodule);
     SDF_ModuleId id = SDF_removeModuleIdAnnotations(
 			SDF_getModuleNameModuleId(
