@@ -16,7 +16,8 @@ man_MANS	= sdf2table.1
 
 EXTRA_DIST	= parsetablegen.idef \
                   sdf2table.src \
-                  sdf2table.pod
+                  sdf2table.pod \
+                  sdf2table.1
 
 SRCS		= parsetablegen.tif.c parsetablegen.c ksdf2table.c atsets.c \
 		flatten.c characters.c first.c follow.c goto.c parse-table.c \

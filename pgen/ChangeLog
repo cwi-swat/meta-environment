@@ -1,5 +1,9 @@
 $Id$
 
+2001/10/11 (mdejonge@cwi.nl)
+ * Added (generated) manual pages to EXTRA_DIST variable because not
+   everybody has pod2man available
+
 2001/10/01 (jurgenv@cwi.nl)
  * Bumped version of parsetablegen to 3.1
  * Bumped version of sdf2table to 1.11
