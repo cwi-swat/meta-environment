@@ -1,5 +1,9 @@
 # $Id$
 
+Thu Feb 27 09:24:54 CET 2003 <jong@cwi.nl>
+ * meta-studio: move NodeSizer.java from metastudio.graph to metastudio
+   as it is not part of the generated graph package.
+
 Wed Feb 26 10:38:59 CET 2003 <jong@cwi.nl>
  * MetaStudio.java: cleanup in file actions. Improved consistency,
    added missing default-properties, refactored fileBrowser code,
