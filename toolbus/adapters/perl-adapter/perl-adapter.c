@@ -253,7 +253,7 @@ Options are:\n\
   fprintf(stderr, str);
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   int i = 1;
   char *name = "perl-adapter";
@@ -280,4 +280,5 @@ void main(int argc, char *argv[])
   connect_to_perl(script, handle_input_from_perl);
   TBeventloop();
   unlink_tmp();
+  return 0;
 }

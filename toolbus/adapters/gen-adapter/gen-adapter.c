@@ -263,7 +263,7 @@ Options are:\n\
   fprintf(stderr, str);
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   int i = 1;
   char *name = "gen-adapter";
@@ -296,5 +296,6 @@ void main(int argc, char *argv[])
 
   TBinit(name, argc, argv, handle_input_from_toolbus, NULL);
   TBeventloop();
+  return 0;
 }
 

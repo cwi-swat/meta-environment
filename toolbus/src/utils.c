@@ -767,7 +767,7 @@ int mwrite(int fd, char *buf, int len)
 static TBbool toBuffer = TBfalse;
 
 /* Current output file */
-static FILE *toFile = stderr;
+static FILE *toFile = NULL;
 
 void TBwrite(int out, term *t)
 {
@@ -808,7 +808,7 @@ void printn(const char *s, int n)
     buf_ptr += n;
   } else {
     while(n){
-      fputc(*s++, toFile);
+      fputc(*s++, toFile ? toFile : stderr);
       n--;
     }
   }    

@@ -19,7 +19,7 @@ int is_comment(char *line)
   return (strlen(line) >= 2) && (line[0] == '%') && (line[1] == '%');
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   char line[256];
   int strip = 0;
@@ -79,5 +79,5 @@ void main(int argc, char *argv[])
     printf("\\end{verbatim}\n");
     printf(text_size);
   }
-  exit(0);  
+  return 0;  
 }

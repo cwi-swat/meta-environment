@@ -128,7 +128,7 @@ void interrupt_handler(int sig){
   exit(-1);
 }
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   int i = 0;
   char *name = "bc-adapter";
@@ -147,4 +147,5 @@ void main(int argc, char *argv[])
   TBinit(name, argc, argv, handle_input_from_toolbus, NULL);
   connect_to_bc(handle_input_from_bc);
   TBeventloop();
+  return 0;
 }

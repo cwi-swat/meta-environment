@@ -44,7 +44,7 @@ int nerr = 0;
         t = TBmake(s1); \
         if(!TBmatch(t, s2)) { nerr++; fprintf(stderr, "KO"); } else fprintf(stderr, "ok");
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   term *t, *tval;
   int ival;
@@ -229,5 +229,5 @@ void main(int argc, char *argv[])
     fprintf(stderr, "TBmatch1: %d ERRORS\n", nerr);
   else
     fprintf(stderr, "TBmatch1 TESTS OK\n");
-  exit(nerr);
+  return nerr;
 }

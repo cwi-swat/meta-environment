@@ -599,7 +599,7 @@ are separated in ToolName.tif.h and ToolName.tif.c\n";
 
 /* ctif -- main program */
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
   int tifs;
   char * search_tool_name = NULL, *tifs_name = NULL, 
@@ -694,5 +694,5 @@ void main(int argc, char **argv)
     fprintf( h_handler, "#endif\n" );
     fclose(h_handler);
   }
-  exit(0);
+  return 0;
 } 
