@@ -4,6 +4,6 @@
 #include <MEPT-utils.h>
 #include <SDFME-utils.h>
 
-ATbool queryProductionInModule(SDF_Module sdfModule, PT_ParseTree parseTree);
+ATerm queryProductionInModule(SDF_Module sdfModule, PT_ParseTree parseTree);
 
 #endif /* _FIND_PRODUCTION_H */

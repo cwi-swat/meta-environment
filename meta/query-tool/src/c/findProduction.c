@@ -9,6 +9,8 @@
 
 #include "findProduction.h"
 
+#define SDFremoveAllAnnotationsFromSymbol(s) (SDF_SymbolFromTerm(ATremoveAllAnnotations(SDF_SymbolToTerm(s))))
+
 /*}}}  */
 
 /*{{{  static ATbool symbolListsMatch(SDF_SymbolList s1, SDF_SymbolList s2) */
@@ -26,7 +28,7 @@ static ATbool symbolListsMatch(SDF_SymbolList s1, SDF_SymbolList s2)
     symbol1 = SDF_getSymbolListHead(s1);
     symbol2 = SDF_getSymbolListHead(s2);
 
-    if (SDF_isEqualSymbol(symbol1, symbol2)) {
+    if (SDF_isEqualSymbol(SDFremoveAllAnnotationsFromSymbol(symbol1), symbol2)) {
       equalLists = ATtrue;
     }
     else if (SDF_isSymbolLit(symbol1) &&
@@ -68,7 +70,7 @@ static ATbool productionsMatch(SDF_Production p1, SDF_Production p2)
   rhs1 = SDF_getProductionResult(p1);
   rhs2 = SDF_getProductionResult(p2);
 
-  if (!SDF_isEqualSymbol(rhs1, rhs2)) {
+  if (!SDF_isEqualSymbol(SDFremoveAllAnnotationsFromSymbol(rhs1), rhs2)) {
     return ATfalse;
   }
 
@@ -77,17 +79,23 @@ static ATbool productionsMatch(SDF_Production p1, SDF_Production p2)
 }
 
 /*}}}  */
-/*{{{  static ATbool findProductionInModule(SDF_Production needle, SDF_Module haystack) */
+/*{{{  static ATerm findProductionInModule(SDF_Production needle, SDF_Module haystack) */
 
-static ATbool findProductionInModule(SDF_Production needle, SDF_Module haystack)
+static ATerm findProductionInModule(SDF_Production needle, SDF_Module haystack)
 {
   ATbool found = ATfalse;
+  ATerm posInfo = NULL;
   SDF_ProductionList productionList = SDF_getModuleProductions(haystack);
 
   while (!SDF_isProductionListEmpty(productionList) && !found) {
     SDF_Production suspect = SDF_getProductionListHead(productionList);
 
     found = productionsMatch(suspect, needle);
+
+    if (found) {
+      posInfo = ATgetAnnotation(SDF_ProductionToTerm(suspect), 
+                                ATmake("pos-info"));
+    }
 
     if (SDF_hasProductionListTail(productionList)) {
       productionList = SDF_getProductionListTail(productionList);
@@ -97,13 +105,13 @@ static ATbool findProductionInModule(SDF_Production needle, SDF_Module haystack)
     }
   }
 
-  return found;
+  return posInfo;
 }
 
 /*}}}  */
 /*{{{  ATbool queryProductionInModule(SDF_Module sdfModule, PT_ParseTree parseTree) */
 
-ATbool queryProductionInModule(SDF_Module sdfModule, PT_ParseTree parseTree)
+ATerm queryProductionInModule(SDF_Module sdfModule, PT_ParseTree parseTree)
 {
   PT_Tree ptTree;
   PT_Production ptProduction;

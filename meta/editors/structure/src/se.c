@@ -256,6 +256,28 @@ ATerm set_focus(int cid, ATerm editorId, int location)
 }
 
 /*}}}  */
+/*{{{  ATerm get_focus_at_posinfo(int cid, ATerm editorId, ATerm posInfo) */
+
+ATerm get_focus_at_posinfo(int cid, ATerm editorId, ATerm posInfo)
+{
+  SE_Focus focus;
+  SE_Editor editor = getEditor(editorId);
+  PT_ParseTree parse_tree;
+  
+  assert(editor);
+
+  parse_tree = SE_getEditorParseTree(editor);
+
+  focus = getFocusAtPosInfo(editor, parse_tree, posInfo);
+
+  editor = SE_setEditorFocus(editor, focus);
+
+  putEditor(editorId, editor);
+
+  return ATmake("snd-value(focus(<term>))", SE_makeTermFromFocus(focus));
+}
+
+/*}}}  */
 
 /*{{{  ATerm invalidate_tree(int cid, ATerm editorId) */
 

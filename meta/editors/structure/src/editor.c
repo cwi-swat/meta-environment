@@ -383,13 +383,38 @@ SE_Editor newEditorGivenLength(int length)
 }
 
 /*}}}  */
-
 /*{{{  SE_Focus getFocusAt(PT_ParseTree parse_tree, int location) */
 
 SE_Focus getFocusAt(SE_Editor editor, PT_ParseTree parse_tree, int location)
 {
   SE_Focus focus;
   SE_Path path = getPathInParseTree(parse_tree, location, 0);
+
+  if (SE_isPathTerm(path)) {
+    PT_Tree tree = PT_getParseTreeTree(parse_tree);
+    SE_Steps steps = SE_getPathSteps(path);
+    PT_Tree sub_tree = getTreeAt(tree, steps);
+
+    if (isBasicLeafNode(sub_tree)) {
+      steps = stepUp(steps);
+    }
+    path = SE_makePathTerm(steps);
+  }
+
+  focus = createEditorFocus(editor, parse_tree, path);
+
+  return focus;
+}
+
+/*}}}  */
+/*{{{  SE_Focus getFocusAtPosInfo(PT_ParseTree parse_tree, ATerm posInfo) */
+
+SE_Focus getFocusAtPosInfo(SE_Editor editor, 
+                           PT_ParseTree parse_tree, 
+                           ATerm posInfo)
+{
+  SE_Focus focus;
+  SE_Path path = getPathInParseTreeAtPosInfo(parse_tree, posInfo);
 
   if (SE_isPathTerm(path)) {
     PT_Tree tree = PT_getParseTreeTree(parse_tree);

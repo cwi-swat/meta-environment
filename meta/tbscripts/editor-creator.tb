@@ -50,11 +50,13 @@ in
       rec-msg(new-editor(FileName, EditorId?)) .
       create(TextEditor("syntax", EditorId, ModuleName), Pid1?) .
       snd-msg(set-filename(EditorId, FileName)) .
-      create(EditSyntax(EditorId, ModuleName), Pid2?) 
+      create(EditSyntax(EditorId, ModuleName), Pid2?) .
+      rec-msg(initialization-done(EditorId))
     +
       rec-msg(existing-editor(FileName, EditorId?)) .
       snd-msg(move-editor-to-front(EditorId))
-    )
+    ) .
+    snd-msg(edit-syntax(ModuleName, EditorId))
   +
     %% Edit an Equations file
     rec-msg(edit-equations(ModuleName?)) .

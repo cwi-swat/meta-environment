@@ -10,7 +10,6 @@
 #define SORT_UNPARSED  "<unparsed>"
 #define SORT_TERM      "term"
 
-SE_Editor changeStatus(SE_Editor editor);
 SE_Editor insertChars(SE_Editor editor, int location, int nr_chars);
 SE_Editor deleteChars(SE_Editor editor, int location, int nr_chars);
 
@@ -20,6 +19,7 @@ SE_Editor replaceEditorTreeAtFocus(SE_Editor editor, SE_Focus focus,
 SE_Editor moveFocus(SE_Editor editor, SE_Move move);
 SE_Editor moveFocusToTop(SE_Editor editor);
 SE_Focus getFocusAt(SE_Editor editor, PT_ParseTree parse_tree, int location);
+SE_Focus getFocusAtPosInfo(SE_Editor editor, PT_ParseTree parse_tree, ATerm posInfo);
 
 SE_Editor newEditorGivenTree(PT_ParseTree parse_tree, char *sort, ATbool dirty);
 SE_Editor newEditorGivenText(char *text);

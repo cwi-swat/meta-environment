@@ -61,6 +61,7 @@ let
   TermExt : str,
   EnvironmentName : str,
   Recursive : term,
+  EditorId : term,
   GraphId : str
 in
   Id := process-id.
@@ -134,6 +135,7 @@ in
     ) +
     ( rec-event(UI, edit-module(ModName?)) .
       snd-msg(edit-syntax(ModName)) .
+      rec-msg(edit-syntax(ModName, EditorId?)) .
       snd-ack-event(UI, edit-module(ModName))
     ) +
     ( rec-event(UI, edit-eqs-module(ModName?)).

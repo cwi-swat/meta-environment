@@ -69,9 +69,10 @@ ATerm findProduction(ATerm atModule, ATerm atTree)
 {
   SDF_Module sdfModule = SDF_getStartTopModule(SDF_StartFromTerm(atModule));
   PT_ParseTree parseTree = PT_ParseTreeFromTerm(atTree);
+  ATerm posInfo = queryProductionInModule(sdfModule, parseTree);
 
-  if (queryProductionInModule(sdfModule, parseTree)) {
-    return ATmake("snd-value(result(found))");
+  if (posInfo) {
+    return ATmake("snd-value(result(found(<term>)))", posInfo);
   }
   else {
     return ATmake("snd-value(result(not-found))");

@@ -3,6 +3,8 @@ EXTRA_DIST	= meta-studio.src
 
 bin_SCRIPTS	= meta-studio
 
+CLEANFILES	= meta-studio
+
 %: %.src Makefile
 	reldir_to_absdir=`cd ${top_builddir}; pwd`/meta-studio; \
 	sed "\

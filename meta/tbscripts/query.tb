@@ -6,7 +6,9 @@ let
   Focus : term,
   Module : term,
   Term : term,
-  Errors : term
+  Errors : term,
+  PosInfo : term,
+  FunSym : str
 in
   (
     rec-msg(find-focus-source(EditorId?)) .
@@ -23,10 +25,13 @@ in
 	  rec-msg(syntax(Module?)) .
 	  snd-msg(query("FindSortDefinition", Module, Focus)) .
 	  rec-msg(result("FindSortDefinition", Term?)) .
-	  printf("term = %t\n", Term) .
-	  if equal(Term, found) then
-	    printf("Spawning editor for module %s\n", ModuleName) .
+          FunSym := fun(Term) .
+	  if equal(FunSym, "found") then
+	    /*printf("Spawning editor for module %s\n", ModuleName) .*/
 	    snd-msg(edit-syntax(ModuleName)) .
+	    rec-msg(edit-syntax(ModuleName, EditorId?)) .
+            PosInfo := first(args(Term)) .
+            snd-msg(set-focus-at-posinfo(EditorId, PosInfo)) .
 	    ModuleNames := [] /* stop searching after 1st hit, for now */
 	  else
 	    tau

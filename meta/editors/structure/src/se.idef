@@ -18,7 +18,8 @@ let
   Nonterminal  : str,
   Tree         : term,
   ModifiedStatus : term,
-  Msg            : term
+  Msg            : term,
+  PosInfo : term
 in 
   execute(se, SE?) .
   (
@@ -58,6 +59,11 @@ in
   +
     rec-msg(set-current-location(EditorId?, Location?)) .
     snd-eval(SE, set-focus(EditorId, Location)) .
+    rec-value(SE, focus(Focus?)) .  
+    snd-msg(set-focus(EditorId, Focus)) 
+  +
+    rec-msg(set-focus-at-posinfo(EditorId?, PosInfo?)) .
+    snd-eval(SE, get-focus-at-posinfo(EditorId, PosInfo)) .
     rec-value(SE, focus(Focus?)) .  
     snd-msg(set-focus(EditorId, Focus)) 
   +

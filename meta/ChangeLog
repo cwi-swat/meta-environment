@@ -1,5 +1,9 @@
 # $Id$
 
+2003/02/07 <{markvdb,jong}@cwi.nl>
+ * Improved the query tool a bit.
+ * Added meta-studio to cleaning.
+
 Thu Feb  6 09:41:25 CET 2003 <{jong,markvdb,olivierp}@cwi.nl>
  * Added basic support for multiple graph display
  * Adapter graph layouting to work with generated API
