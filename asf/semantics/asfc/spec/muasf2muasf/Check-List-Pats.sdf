@@ -1,29 +1,3 @@
-%%
-%%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
-%%
-%%    This program is free software; you can redistribute it and/or modify
-%%    it under the terms of the GNU General Public License as published by
-%%    the Free Software Foundation; either version 2 of the License, or
-%%    (at your option) any later version.
-%%
-%%    This program is distributed in the hope that it will be useful,
-%%    but WITHOUT ANY WARRANTY; without even the implied warranty of
-%%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%%    GNU General Public License for more details.
-%%
-%%    You should have received a copy of the GNU General Public License
-%%    along with this program; if not, write to the Free Software
-%%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-%%
-%% The module {\tt Check-List-Pats} looks whether in
-%% a \muasf\ specification certain list matching patterns
-%% occur.
-%% These patterns will be transform into simpler list
-%% matching algorithms later on.
-%% First, it is checked whether patterns like:
-%% lookup(V,{set}(*V1,V,*V2)) = ... occur in the \muasf\
-%% specification.
 module Check-List-Pats
 
 imports Remove-Lists-Aux
@@ -39,8 +13,6 @@ exports
     is-list-elem-list-elem-list(Term) -> Bool
     is-list-elem-list-list(Term)      -> Bool
     is-list-list-elem-list(Term)      -> Bool
-%%%    is-list-elem-list(Term)           -> Bool
-%%%    is-list-list(Term)                -> Bool
     contains-lhs-pattern(FunId,Term)  -> Bool
     contains-rhs-pattern(FunId,Term)  -> Bool
 

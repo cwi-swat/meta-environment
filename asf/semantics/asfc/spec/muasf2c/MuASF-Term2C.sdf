@@ -1,22 +1,3 @@
-%%
-%%    Meta-Environment - An environment for language prototyping.
-%%    Copyright (C) 2000  Stichting Mathematisch Centrum, Amsterdam, The Netherlands. 
-%%
-%%    This program is free software; you can redistribute it and/or modify
-%%    it under the terms of the GNU General Public License as published by
-%%    the Free Software Foundation; either version 2 of the License, or
-%%    (at your option) any later version.
-%%
-%%    This program is distributed in the hope that it will be useful,
-%%    but WITHOUT ANY WARRANTY; without even the implied warranty of
-%%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%%    GNU General Public License for more details.
-%%
-%%    You should have received a copy of the GNU General Public License
-%%    along with this program; if not, write to the Free Software
-%%    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
-%%
-%%  MuASF-Term2C
 module MuASF-Term2C
 
 imports Rules2C-Aux
@@ -46,8 +27,6 @@ exports
                  {NamePair ","}*)                            -> Argument-expression-list
     delay-term(Expression,{NamePair ","}*)                   -> Expression
     delay-terms({Expression ","}*,{NamePair ","}*)           -> Argument-expression-list
-%%%    is-protected-name(Identifier)                            -> Bool
-%%%    is-normal-form-name(Identifier)                          -> Bool
     is-special-name(Identifier)                              -> Bool
     unquote-plain-argument(Expression,FunId,{NamePair ","}*) -> Expression
 
