@@ -2,6 +2,10 @@ equations
 
 %%-----------------------------------------------------------------------------------
 
+[xxx] fun [] to $Etype = $Etype
+
+%%[xxx] bag[<$Etype1,$Etype2>] = rel[$Etype1,$Etype2]
+
 %% --- Type of element
 
 [to1] type-of($Integer) = int 
@@ -15,6 +19,30 @@ equations
 
 [default-eqt]
 	$Etype1 == $Etype2 = false
+
+%% --- Is simple type
+
+[is-st1]
+	is-simple-type(int)= true
+
+[is-st2]
+	is-simple-type(bool)= true
+[is-st3]
+	is-simple-type(str)	= true
+[is-st4]
+	is-simple-type(area) 	= true
+[default-is-st5]
+	is-simple-type($Etype) 	= false
+
+%% --- Is compound type
+
+[is-ct1]
+	is-compound-type(bag[$Etype]) = true
+[is-ct2]
+	is-compound-type(rel[$Etype1,$Etype2]) = true
+
+[default-is-ct5]
+	is-compound-type($Etype) = false
 
 %% --- If-then-else on type environments
 
@@ -330,9 +358,9 @@ $Error]>
       ===========================================
       check($Exp, $Tenv) = <$Etype3, $Tenv'''>
 
-[cu1] compat($Exp, $Etype               union $Etype, $Tenv)               = <bag[$Etype], $Tenv>
+[cu1] compat($Exp, $Etype               union $Etype, $Tenv)               = <bag[$Etype], $Tenv> when is-simple-type($Etype) = true
 [cu2] compat($Exp, bag[$Etype]          union bag[$Etype], $Tenv)          = <bag[$Etype], $Tenv>
-[cu3] compat($Exp, bag[$Etype]          union $Etype, $Tenv)               = <bag[$Etype], $Tenv>
+[cu3] compat($Exp, bag[$Etype]          union $Etype, $Tenv)               = <bag[$Etype], $Tenv> when is-simple-type($Etype) = true
 [cu4] compat($Exp, $Etype               union bag[$Etype], $Tenv)          = <bag[$Etype], $Tenv>
 [cu5] compat($Exp, rel[$Etype1,$Etype2] union rel[$Etype1,$Etype2], $Tenv) = <rel[$Etype1,$Etype2], $Tenv>
 [cu6] compat($Exp, <$Etype1,$Etype2>    union rel[$Etype1,$Etype2], $Tenv) = <rel[$Etype1,$Etype2], $Tenv>
@@ -347,7 +375,7 @@ $Error]>
       ===========================================
       check($Exp, $Tenv) = <$Etype3, $Tenv'''>
 
-[xxx] compat($Exp, $Etype               inter $Etype, $Tenv)               = <bag[$Etype], $Tenv>
+[xxx] compat($Exp, $Etype               inter $Etype, $Tenv)               = <bag[$Etype], $Tenv> when is-simple-type($Etype) = true
 [xxx] compat($Exp, bag[$Etype]          inter bag[$Etype], $Tenv)          = <bag[$Etype], $Tenv>
 [xxx] compat($Exp, bag[$Etype]          inter $Etype, $Tenv)               = <bag[$Etype], $Tenv>
 [xxx] compat($Exp, $Etype               inter bag[$Etype], $Tenv)          = <bag[$Etype], $Tenv>
@@ -363,7 +391,7 @@ $Error]>
       ===========================================
       check($Exp, $Tenv) = <$Etype3, $Tenv'''>
 
-[xxx] compat($Exp, $Etype               \ $Etype, $Tenv)               = <bag[$Etype], $Tenv>
+[xxx] compat($Exp, $Etype               \ $Etype, $Tenv)               = <bag[$Etype], $Tenv> when is-simple-type($Etype) = true
 [xxx] compat($Exp, bag[$Etype]          \ bag[$Etype], $Tenv)          = <bag[$Etype], $Tenv>
 [xxx] compat($Exp, bag[$Etype]          \ $Etype, $Tenv)               = <bag[$Etype], $Tenv>
 [xxx] compat($Exp, $Etype               \ bag[$Etype], $Tenv)          = <bag[$Etype], $Tenv>
@@ -389,9 +417,9 @@ $Error]>
       check($Exp, $Tenv) = <$Etype3, $Tenv'''>
 
 [xxx] compat($Exp, bag[$Etype1] x bag[$Etype2], $Tenv) = <rel[$Etype1,$Etype2], $Tenv>
-[xxx] compat($Exp, $Etype1 x bag[$Etype2], $Tenv) = <rel[$Etype1,$Etype2], $Tenv>
-[xxx] compat($Exp, bag[$Etype1] x $Etype2, $Tenv) = <rel[$Etype1,$Etype2], $Tenv>
-[xxx] compat($Exp, $Etype1 x $Etype2, $Tenv) = <rel[$Etype1,$Etype2], $Tenv>
+[xxx] compat($Exp, $Etype1 x bag[$Etype2], $Tenv) = <rel[$Etype1,$Etype2], $Tenv> when is-simple-type($Etype1) = true
+[xxx] compat($Exp, bag[$Etype1] x $Etype2, $Tenv) = <rel[$Etype1,$Etype2], $Tenv> when is-simple-type($Etype2) = true
+[xxx] compat($Exp, $Etype1 x $Etype2, $Tenv) = <rel[$Etype1,$Etype2], $Tenv> when is-simple-type($Etype1) = true, is-simple-type($Etype2) = true
 
 [c03] $Exp = $Exp1 . $Exp2,
       check($Exp1, $Tenv) = <$Etype1, $Tenv'>, 
@@ -400,9 +428,9 @@ $Error]>
       ===========================================
       check($Exp, $Tenv) = <$Etype3, $Tenv'''>
 
-[xxx] compat($Exp, rel[$Etype1,$Etype2] . $Etype2, $Tenv)              = <bag[$Etype1], $Tenv>
+[xxx] compat($Exp, rel[$Etype1,$Etype2] . $Etype2, $Tenv)              = <bag[$Etype1], $Tenv> when is-simple-type($Etype2) = true
 [xxx] compat($Exp, rel[$Etype1,$Etype2] . bag[$Etype2], $Tenv)         = <bag[$Etype1], $Tenv>
-[xxx] compat($Exp, $Etype1              . rel[$Etype1,$Etype2], $Tenv) = <bag[$Etype2], $Tenv>
+[xxx] compat($Exp, $Etype1              . rel[$Etype1,$Etype2], $Tenv) = <bag[$Etype2], $Tenv> when is-simple-type($Etype1) = true
 [xxx] compat($Exp, bag[$Etype1]         . rel[$Etype1,$Etype2], $Tenv) = <bag[$Etype2], $Tenv>
 
 [xxx] 	$Exp = $Exp1 [ $Exp2 ],
@@ -460,6 +488,12 @@ $Error]>
       store($Tenv', $Var2, $Etype2) = $Tenv''
       ==========================================
       require-rel-type($Exp, $Var1, $Var2, rel[$Etype1, $Etype2], $Tenv) = $Tenv''
+
+%%[rbt2]
+%%      store($Tenv, $Var1, $Etype1) = $Tenv',
+%%      store($Tenv', $Var2, $Etype2) = $Tenv''
+%%      ==========================================
+%%      require-rel-type($Exp, $Var1, $Var2, bag[<$Etype1, $Etype2>], $Tenv) = $Tenv''
 
 [default-rbt]
       store($Tenv, $Var1, undefined) = $Tenv',
@@ -595,7 +629,7 @@ $Error]>
       ===========================================
       check-stat($Etype $Var ($DclVar*) = $Exp, $Tenv) = $Tenv5
 
-[xxx] fun [] to $Etype = $Etype
+
 
 %% --- Check set of equations
 

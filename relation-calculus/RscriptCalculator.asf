@@ -69,7 +69,8 @@
 
 [EVP]	$Bool = evalx($Exp, $Store)               ===> evalp($Exp, $Store) = $Bool
 
-[EVE1]	$Elem = evalx($Exp, $Store)                 ===> evale($Exp, $Store) = $Elem
+[EVE2]	*empty* = evalx($Exp, $Store)        	  ===> evale($Exp, $Store) = EmptyElemBag
+[EVE2]	$Elem = evalx($Exp, $Store)               ===> evale($Exp, $Store) = $Elem
 
 [EVB1]	$Bag = evalx($Exp, $Store)     ===> evalb($Exp, $Store) = $Bag
 
@@ -88,18 +89,23 @@
 [ES2]	eval-rscript($Stat $Stat*, $Store) = eval-rscript($Stat*, eval-rscript($Stat, $Store))
 [ES3]	eval-rscript( , $Store) = $Store
 
+
+[xxx] EmptyElemBag = EmptyBag
+
+[xxx] EmptyElemRel = EmptyBag
+
 %% ---- Eval statements
 
 [S1]	eval-rscript(bool $Var, $Store) 	= assign($Var, true, $Store)
 [S2]	eval-rscript(int $Var, $Store)  	= assign($Var, 0, $Store)
 [S3]	eval-rscript(str $Var, $Store)  	= assign($Var, "", $Store)
-[S4]	eval-rscript(bag[$Etype] $Var, $Store)  = assign($Var, *empty*, $Store)	
-[S4]	eval-rscript(bag[$Etype] $Var = {}, $Store)  = assign($Var, *empty*, $Store)
+[S4]	eval-rscript(bag[$Etype] $Var, $Store)  = assign($Var, EmptyElemBag, $Store)	
+[S4]	eval-rscript(bag[$Etype] $Var = {}, $Store)  = assign($Var, EmptyElemBag, $Store)
 	
 [S5]	eval-rscript(rel[$Etype1, $Etype2] $Var, $Store) 
-						 = assign($Var, *empty*, $Store)
+						 = assign($Var, EmptyElemRel, $Store)
 [S5]	eval-rscript(rel[$Etype1, $Etype2] $Var = {}, $Store) 
-						 = assign($Var, *empty*, $Store)
+						 = assign($Var, EmptyElemRel, $Store)
 
 [S6]	eval-rscript($Etype $Var = $Exp, $Store) = assign($Var, evalx($Exp, $Store), $Store)
 [S7]	eval-rscript($Etype1 $Var1($Etype2 $Var2) = $Exp, $Store) 
@@ -180,24 +186,34 @@
 
 %% ---- Eval bags
 
-[EB2]	$Elem = evale($Exp, $Store), {$Elem+} = evalb({$Exp+}, $Store)
+[EB2]   $Elem = evale($Exp, $Store), is-tuple($Elem) = false, 
+	{$Elem+} = evalb({$Exp+}, $Store)
 	===================================================
 	evalx({$Exp, $Exp+}, $Store) = {$Elem, $Elem+}
 
-[EB3]	$Elem = evale($Exp, $Store)
+[EB3]	$Elem = evale($Exp, $Store), is-tuple($Elem) = false
 	===================================================
 	evalx({$Exp}, $Store) = {$Elem}
 
 %% ---- Eval relations
 
-[ER2]	$Elem1 = evale($Exp1, $Store), $Elem2 = evale($Exp2, $Store),
+%%[ER2]	$Elem1 = evale($Exp1, $Store), $Elem2 = evale($Exp2, $Store),
+%%	evalr({$Exp+}, $Store) = {$Tuple+}
+%%	====================================================
+%%	evalx({<$Exp1, $Exp2>, $Exp+}, $Store) = {<$Elem1, $Elem2>, $Tuple+}
+
+[ER2]	$Tuple = evale($Exp, $Store),
 	evalr({$Exp+}, $Store) = {$Tuple+}
 	====================================================
-	evalx({<$Exp1, $Exp2>, $Exp+}, $Store) = {<$Elem1, $Elem2>, $Tuple+}
+	evalx({$Exp, $Exp+}, $Store) = {$Tuple, $Tuple+}
 
-[ER3]	$Elem1 = evale($Exp1, $Store), $Elem2 = evale($Exp2, $Store)
+%%[ER3]	$Elem1 = evale($Exp1, $Store), $Elem2 = evale($Exp2, $Store)
+%%	====================================================
+%%	evalx({<$Exp1, $Exp2>}, $Store) = {<$Elem1, $Elem2>}
+
+[ER3]	$Tuple = evale($Exp, $Store)
 	====================================================
-	evalx({<$Exp1, $Exp2>}, $Store) = {<$Elem1, $Elem2>}
+	evalx({$Exp}, $Store) = {$Tuple}
 
 %% ---- Eval binary infix operators
 
@@ -381,6 +397,9 @@
 [IM9]	apply($Elem . $Rel)		= $Elem. $Rel
 [IM10]	apply($Bag . $Rel)		= $Bag . $Rel
 
+[default-IM11]
+	apply($Val1 . $Val2)		= *empty*
+
 %% -- [ ]
 [IM1]	evalx($Exp1 [ $Exp2 ], $Store)	= evalx($Exp2 . $Exp1, $Store)
 
@@ -488,6 +507,7 @@
 
 [AP1]	append(*empty*, *empty*)	= *empty*
 [AP2]	append(*empty*, $Elem)		= $Elem
+[AP2]	append($Elem, *empty*)		= $Elem
 
 [AP3]	is-tuple($Elem1) = false, is-tuple($Elem2) = false
 	==================================================
@@ -508,6 +528,8 @@
 [AP9]	append($Tuple, {$Tuple*})	= {$Tuple, $Tuple*}
 [AP10]	append({$Tuple*}, $Tuple)	= {$Tuple*, $Tuple}
 [AP11]	append({$Tuple*1}, {$Tuple*2}) 	= {$Tuple*1, $Tuple*2}
+[AP12]	append({$Tuple*}, *empty*)	= {$Tuple*}
+[AP12]	append(*empty*, {$Tuple*})	= {$Tuple*}
 
 
 [it1]   is-tuple(<$Elem1,$Elem2>) = true
