@@ -991,12 +991,6 @@ $Error]>
 [default-frt]
 	find-result-type($Var, [$Etype*1], $Tenv) = <undefined, $Tenv + No definition for $Var with argument [$Etype*1]>
 
-%% ---- is-var 
-
-%%[iv1]	is-var(& $Var) = true
-%%[default-iv] 
-%%	is-var($Etype) = false
-
 %% ---- match types
 
 [mt1]	equal-type($Etype, $Etype', $Tenv) = true

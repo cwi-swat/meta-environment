@@ -3,7 +3,8 @@ module Rscript
 exports
 
   sorts ElemType RSCRIPT RSTAT RVAR DCLRVAR SIMPLE-GENERATOR GENERATOR 
-	REXP REXPTYPE EQU DESTINATION {REXP ","}+ INITVAR TARGET
+	REXP REXPTYPE EQU DESTINATION %% {REXP ","}+ 
+	INITVAR TARGET
 
   imports RscriptElem basic/Comments
 
@@ -111,8 +112,8 @@ exports
 
      DCLRVAR				      	-> RSTAT
 
-     type RVAR "=" "<" {DCLRVAR ","}+ ">"	-> RSTAT
-     type RVAR "=" REXPTYPE			-> RSTAT
+     "type" RVAR "=" "<" {DCLRVAR ","}+ ">"	-> RSTAT
+     "type" RVAR "=" REXPTYPE			-> RSTAT
 
      DCLRVAR "=" REXP                         	-> INITVAR
      DCLRVAR "init" REXP                        -> INITVAR	%% used in equations; remove?

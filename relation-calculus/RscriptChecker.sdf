@@ -11,11 +11,8 @@ imports MyPosInfo[Bag[[Elem]]]
 
 imports Rstore
 
-
 exports
-    sorts ERROR ERRORS REXPTYPE # TENV TENV DCLRVARS  
-          Boolean # Table[[RVAR,REXPTYPE]] {REXPTYPE ","}+
-	  List[[REXPTYPE]]
+    sorts ERROR ERRORS TENV DCLRVARS  
 
     context-free syntax
 
@@ -25,12 +22,10 @@ exports
         "undefined"                       			-> REXPTYPE
 	field(Integer)						-> REXPTYPE
 	"<" { DCLRVAR ","}* ">"					-> REXPTYPE
-        "fun" {REXPTYPE ","}* to REXPTYPE			-> REXPTYPE
+        "fun" {REXPTYPE ","}* "to" REXPTYPE			-> REXPTYPE
         "[" {REXPTYPE ","}* "]"                 		-> REXPTYPE
 	"empty-bag-type"					-> REXPTYPE
 	cover-empty(REXPTYPE)					-> REXPTYPE
-
-%%        is-var(REXPTYPE)                        		-> Boolean
 
 	first(REXPTYPE, TENV)					-> REXPTYPE
 	second(REXPTYPE, TENV)					-> REXPTYPE
@@ -42,24 +37,24 @@ exports
 	equal-type(REXPTYPE, REXPTYPE, TENV)			-> Boolean
 	get-tuple-type(REXPTYPE)				-> REXPTYPE
 
-	RSTAT cannot be typed 					-> ERROR
-	REXP cannot be typed 					-> ERROR
+	RSTAT "cannot be typed" 				-> ERROR
+	REXP "cannot be typed" 					-> ERROR
 
-	GENERATOR cannot be typed				-> ERROR
-	Bag[[Elem]] cannot be typed 				-> ERROR
+	GENERATOR "cannot be typed"				-> ERROR
+	Bag[[Elem]] "cannot be typed" 				-> ERROR
  	"Undeclared" RVAR					-> ERROR
   	RVAR "redeclared"					-> ERROR
-	RVAR not initialized in "Rstore"			-> ERROR
-	RVAR conflicting initialization in "Rscript" and in "Rstore"		
+	RVAR "not initialized in Rstore"			-> ERROR
+	RVAR "conflicting initialization in Rscript and in Rstore"		
 								-> ERROR
 
-        "Incompatible" argument types REXPTYPE in REXP        	-> ERROR
-        REXP should have type REXPTYPE          		-> ERROR
-        REXP should be of type bag         			-> ERROR
-        REXP should be of type rel         			-> ERROR
-        "No" "definition" for RVAR with argument REXPTYPE       -> ERROR
-	"No" "definition" for field RVAR			-> ERROR
-	RVAR exceeds number of targets of generator		-> ERROR
+        "Incompatible argument types" REXPTYPE "in" REXP        -> ERROR
+        REXP "should have type" REXPTYPE          		-> ERROR
+        REXP "should be of type bag"         			-> ERROR
+        REXP "should be of type rel"         			-> ERROR
+        "No definition for" RVAR "with argument" REXPTYPE       -> ERROR
+	"No definition for field" RVAR				-> ERROR
+	RVAR "exceeds number of targets of generator"		-> ERROR
 	"Field name" RVAR "used at different record positions"	-> ERROR
 
         "errors" "[" {ERROR ";"} * "]"                		-> ERRORS {prefer}
@@ -71,12 +66,13 @@ exports
 	 convert-errors1(ERRORS)                    		-> List
          rvar2str(RVAR)		 	        		-> String
  
-	Table[[RVAR,REXPTYPE]] # ERRORS  			-> TENV {prefer}
+	<Table[[RVAR,REXPTYPE]], ERRORS> 			-> TENV {prefer}
 
 	TENV "+" ERROR						-> TENV
 
-        if Boolean then TENV else TENV fi			-> TENV
-        if Boolean then REXPTYPE # TENV else REXPTYPE # TENV fi	-> REXPTYPE # TENV
+        "if" Boolean "then" TENV "else" TENV "fi"		-> TENV
+        "if" Boolean "then" <REXPTYPE, TENV> "else" <REXPTYPE, TENV> "fi"	->
+        <REXPTYPE, TENV>
 
 	lookup(TENV, RVAR) 					-> REXPTYPE
 	store(TENV, RVAR, REXPTYPE)				-> TENV
@@ -85,17 +81,17 @@ exports
 	match-targets({TARGET ","}*, REXPTYPE, TENV)		-> TENV
 	delete-targets({TARGET ","}*, TENV)			-> TENV
 
-	built-ins						-> Table[[RVAR,REXPTYPE]]
+	"built-ins"						-> Table[[RVAR,REXPTYPE]]
 
 	check-rscript(RSCRIPT)					-> List
 	check-rscript-with-rstore(RSCRIPT, RSTORE)		-> List
         check-rscript(RSTAT*, TENV)				-> TENV
 	check-rstore(RSTAT*, RSTORE, TENV)			-> TENV
-	check(REXP, TENV) 					-> REXPTYPE # TENV
+	check(REXP, TENV) 					-> <REXPTYPE, TENV>
 
-	check-const(Elem, TENV) 				-> REXPTYPE # TENV
-	check-const-tuple(Elem, TENV)				-> REXPTYPE # TENV
-	check-const-bag-or-rel(BagIterator[[Elem]], TENV) 	-> REXPTYPE # TENV
+	check-const(Elem, TENV) 				-> <REXPTYPE, TENV>
+	check-const-tuple(Elem, TENV)				-> <REXPTYPE, TENV>
+	check-const-bag-or-rel(BagIterator[[Elem]], TENV) 	-> <REXPTYPE, TENV>
 	check-stat(RSTAT, TENV) 				-> TENV
 
         check-not-defined(RVAR, TENV)            		-> TENV
@@ -106,24 +102,24 @@ exports
 	check-eqs(INITVAR*, EQU*, TENV)				-> TENV
 
 	check-duplicate-fields({DCLRVAR ","}*, Integer, TENV)	-> TENV
-	get-field-type(REXPTYPE, RVAR, TENV)			-> REXPTYPE # TENV
+	get-field-type(REXPTYPE, RVAR, TENV)			-> <REXPTYPE, TENV>
 	get-field-index(RVAR, List[[REXPTYPE]])			-> Integer
 	get-field-index1(RVAR, {DCLRVAR ","}*, Integer)		-> Integer
 	
 	compat-cmp(REXP, REXPTYPE, REXPTYPE, TENV)		-> TENV
-	check-cmp(REXP, REXP, REXP, TENV)			-> REXPTYPE # TENV
+	check-cmp(REXP, REXP, REXP, TENV)			-> <REXPTYPE, TENV>
 
-	check-int(REXP, REXP, REXP, TENV)			-> REXPTYPE # TENV
+	check-int(REXP, REXP, REXP, TENV)			-> <REXPTYPE, TENV>
 
-	compat-un(REXP, REXPTYPE, REXPTYPE, TENV)		-> REXPTYPE # TENV
-	check-un(REXP, REXP, REXP, TENV)			-> REXPTYPE # TENV
+	compat-un(REXP, REXPTYPE, REXPTYPE, TENV)		-> <REXPTYPE, TENV>
+	check-un(REXP, REXP, REXP, TENV)			-> <REXPTYPE, TENV>
 
-	compat-comp(REXP, REXPTYPE, REXPTYPE, TENV)		-> REXPTYPE # TENV
-	compat-prod(REXP, REXPTYPE, REXPTYPE, TENV)		-> REXPTYPE # TENV
-	compat-lim(REXP, REXPTYPE, REXPTYPE, TENV)		-> REXPTYPE # TENV
-	compat-rim(REXP, REXPTYPE, REXPTYPE, TENV)		-> REXPTYPE # TENV
-	compat-trans(REXP, REXPTYPE, TENV)			-> REXPTYPE # TENV
-	compat-size(REXP, REXPTYPE, TENV)			-> REXPTYPE # TENV
+	compat-comp(REXP, REXPTYPE, REXPTYPE, TENV)		-> <REXPTYPE, TENV>
+	compat-prod(REXP, REXPTYPE, REXPTYPE, TENV)		-> <REXPTYPE, TENV>
+	compat-lim(REXP, REXPTYPE, REXPTYPE, TENV)		-> <REXPTYPE, TENV>
+	compat-rim(REXP, REXPTYPE, REXPTYPE, TENV)		-> <REXPTYPE, TENV>
+	compat-trans(REXP, REXPTYPE, TENV)			-> <REXPTYPE, TENV>
+	compat-size(REXP, REXPTYPE, TENV)			-> <REXPTYPE, TENV>
 
         container-type(REXPTYPE)				-> REXPTYPE
         
@@ -136,12 +132,12 @@ exports
         del-formals(DCLRVARS, TENV)				-> TENV
 
  	extract-types(DCLRVARS )                     		-> REXPTYPE
-        collect-actuals({REXP ","}*, TENV)        		-> REXPTYPE # TENV
+        collect-actuals({REXP ","}*, TENV)        		-> <REXPTYPE, TENV>
 
-        find-result-type(RVAR, REXPTYPE, TENV)   		-> REXPTYPE # TENV
+        find-result-type(RVAR, REXPTYPE, TENV)   		-> <REXPTYPE, TENV>
 
-        match-types(REXPTYPE, REXPTYPE, Table[[RVAR,REXPTYPE]], TENV)	-> Boolean #  Table[[RVAR,REXPTYPE]]
-        substitute(REXPTYPE,  Table[[RVAR,REXPTYPE]], TENV) 	-> REXPTYPE # TENV
+        match-types(REXPTYPE, REXPTYPE, Table[[RVAR,REXPTYPE]], TENV)	-> <Boolean, Table[[RVAR,REXPTYPE]]>
+        substitute(REXPTYPE,  Table[[RVAR,REXPTYPE]], TENV) 	-> <REXPTYPE, TENV>
 
 hiddens
     imports basic/Comments
