@@ -113,6 +113,7 @@
 #define v_is_slice(val)   (ATgetAFun((ATermAppl)val) == list_var)
 #define v_get_first(val)  ((ATermList)ATgetArgument((ATermAppl)val, 1))
 #define v_get_last(val)  ((ATermList)ATgetArgument((ATermAppl)val, 2))
+#define v_is_empty_slice(val) (v_get_first(val) == v_get_last(val))
 #define v_put(env,var,val) ((ATerm)ATinsert((ATermList)env, \
 													(ATerm)ATmakeAppl2(plain_var, var,val)))
 #define v_put_list(env,var,start,end) \
@@ -121,6 +122,7 @@
 #define get_term(cenv)		(ATgetFirst(cenv))
 #define get_env(cenv)		(ATgetFirst(ATgetNext(cenv)))
 #define make_cenv(t,e)		(ATmakeList(2, t, e))
+
 
 /*}}}  */
 /*{{{  globals */
@@ -521,8 +523,8 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
   ATermList elems1, elems2;
   ATerm newenv = env;
 
-	/*	if(run_verbose) */
-	ATwarning("RULE %t:matching arguments: %t with %t\n\n",asource(tagCurrentRule), asource(arg1),asource(arg2));
+	if(run_verbose)
+		ATwarning("%t:matching arguments: %t with %t\n\n",asource(tagCurrentRule), asource(arg1),asource(arg2));
 		
 	if(!keep_whitespace && isAsFixEqual(arg1,arg2)) {
 		/* we don't test for equality with whitespace, because we might need some
@@ -555,7 +557,6 @@ ATerm arg_matching(ATerm env, ATerm arg1, ATerm arg2,
 		if(ok) {
       elems1 = (ATermList) asfix_get_list_elems(arg1);
       elems2 = (ATermList) asfix_get_list_elems(arg2);
-			ATwarning("List matching: %t AND %t\n",asource((ATerm)elems1),asource((ATerm)elems2));
       newenv = list_matching(sym1,newenv,elems1,elems2,
                              conds,orgargs1,orgargs2);
     }
@@ -711,8 +712,6 @@ ATerm sub_list_matching(ATerm asym, ATerm env, ATerm elem,
   ATerm subenv, newenv;
   ATermList last;
 
-	ATwarning("ENTERING SUBLISTMATCHING for %t\n",asource(elem));
-
 	if(AT_getAnnotations(elem) != NULL)
 		elem = AT_removeAnnotations(elem);
 
@@ -757,9 +756,7 @@ ATerm list_matching(ATerm sym,
   ATermList newargs1, newargs2;
 	
 	if(keep_whitespace) {
-		ATwarning("Before skipping LHS: %t\n",asource((ATerm)elems1));
 		elems1 = skipWhitespace(elems1);
-		ATwarning("After skipping LHS: %t\n",asource((ATerm)elems1));
 	}
 	
   if(!ATisEmpty(elems1)) {
@@ -805,8 +802,6 @@ ATerm list_matching(ATerm sym,
       elems1 = ATgetNext(elems1);
       if(asfix_is_list_var(elem1)) {
 				ATermAppl trms = v_lookup_list(env, elem1);
-				ATwarning("List encountered: %t = %t\n",asource((ATerm)elem1),
-									trms?asource((ATerm)trms):(ATerm)ATempty);
         if(trms) {
           elems2 = compare_sub_lists(trms,elems2);
           if(elems2)
@@ -836,16 +831,6 @@ ATerm list_matching(ATerm sym,
           newargs2 = ATinsert(args2, newarg2);
           newenv = arg_matching(env,elem1,elem2,conds,newargs1,newargs2);
         } else {
-					ATwarning("RHS EMPTY, LHS NOT A STAR VAR\n");
-#ifdef HALLO
-					 if(keep_whitespace) {
-						/* the right list is empty, but what if the pattern consists
-						 * of a star variable? Then the separator and the whitespace in
-						 * front of the star variable are still there, preventing a match.
-						 */
-						return match_list_tail(sym,env,elems1,elems2,conds,args1,args2);
-					}
-#endif
 					newenv = fail_env;
 				}
       }
@@ -893,7 +878,6 @@ static ATerm match_list_tail(ATerm sym, ATerm env,ATermList elems1, ATermList el
 			 asfix_is_whitespace(ws2) && 
 			 asfix_is_list_var(var)) {
 			/* continue matching after skipping ws and sep */
-			ATwarning("11111111111111\n");
 			return list_matching(sym,env,elems1,elems2,conds,args1, args2);
 		}
 	} else if(ATgetLength(elems1) == 3) { /* [sep,ws,var] */
@@ -911,7 +895,6 @@ static ATerm match_list_tail(ATerm sym, ATerm env,ATermList elems1, ATermList el
 		}
 	}
 	
-	ATwarning("TAIL MATCH RETURNS FAIL_ENV\n");
 	return fail_env;
 }
 
@@ -1168,24 +1151,25 @@ ATermList rewrite_elems(ATerm sym, ATermList elems, ATerm env)
 				newelem_table[i] = rewrite(elem, env);
 			}
       elems = ATgetNext(elems);
-			ATwarning("newelem_table[%d] = %t\n",i,asource(newelem_table[i]));
-      i++;
+			i++;
     }
 
     for(--i; i>=0; i--) {
       newelem = newelem_table[i];
       if(ATgetAFun((ATermAppl)newelem) == list_var) {
-				newelems = prepend_slice((ATermAppl)newelem, newelems);
+				if(keep_whitespace && v_is_empty_slice(newelem)) {
+					newelems = skipWhitespace(newelems);
+				} else {
+					newelems = prepend_slice((ATermAppl)newelem, newelems);
+				}
 			} else {
 				if(!(keep_whitespace && ATisEmpty(newelems) &&
 						 (asfix_is_list_sep(newelem) || asfix_is_whitespace(newelem)))) {												newelems = ATinsert(newelems, newelem);
 				}
 			}
-      ATwarning("NEW---ELEMS: %t\n",asource((ATerm)newelems));
-    }
+		}
   }
 
-	ATwarning("NEWELEMS: %t\n",asource((ATerm)newelems));
   return newelems;
 }
 

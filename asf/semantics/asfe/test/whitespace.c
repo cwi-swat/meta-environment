@@ -85,16 +85,12 @@ ATerm reduce_test(ATerm eqs, ATerm term, ATbool with_whitespace)
 	ATerm oldterm;
 	char name[] = "Reduce_test";
 
-	ATwarning("\nReducing %s whitespace\n", with_whitespace ? "with" : "without");
-
 	/* set the global */
 	keep_whitespace = with_whitespace;
 
 	/* prepare equations */
 	preparedeqs =  RWprepareEqs((ATermList) eqs);
 	enter_equations(name, preparedeqs);
-
-	ATprintf("Term is: %t\n", asource(term));
 
 	/* prepare term */
 	term = ATremoveAllAnnotations(term);
@@ -109,8 +105,6 @@ ATerm reduce_test(ATerm eqs, ATerm term, ATbool with_whitespace)
 	term = rewrite(term,(ATerm) ATempty);
 	term = RWrestoreTerm(term);
 	
-	ATprintf("Normal form is: %t\n", asource(term));
-
 	if(!ATisEmpty(rewrite_errors))
 		ATerror("errors during rewriting: %l", rewrite_errors);
 
