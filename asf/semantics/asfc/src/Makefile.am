@@ -30,6 +30,7 @@ noinst_HEADERS = asfc.tif.h \
 
 asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
                -L$(SGLR)/lib -lsglr \
+               -L$(TIDE)/lib -ltide-adapter \
                -L$(PT_SUPPORT)/lib -lmept -lPTMEPT \
                -L$(ASF_SUPPORT)/lib -lASFME \
                -L./muasf -lMuASF \
@@ -40,6 +41,7 @@ asfc_LDADD   = -L$(ASC_SUPPORT)/lib -lasc-support-me \
 
 DEFINES = -DASC_SUPPORT="\"$(ASC_SUPPORT)\"" \
           -DSGLR="\"$(SGLR)\""   \
+          -DTIDE="\"$(TIDE)\""   \
           -DPT_SUPPORT="\"$(PT_SUPPORT)\""   \
           -DASF_SUPPORT="\"$(ASF_SUPPORT)\""   \
           -DERROR_SUPPORT="\"$(ERROR_SUPPORT)\""   \

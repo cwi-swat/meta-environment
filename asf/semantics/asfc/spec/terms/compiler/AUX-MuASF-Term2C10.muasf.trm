@@ -32,7 +32,9 @@ lf_AUX_MuASF_Term2C10_4(Int,"{sort(\"Term\"),ql(\",\")}"(cons(*Terms1,cons(ef2(I
 lf_AUX_MuASF_Term2C10_4(ef4(ef5(ef6(ef7("{sort(\"CHAR\")}"(1)))),Int),"{sort(\"Term\"),ql(\",\")}"(*Terms),"{sort(\"Expression\"),ql(\",\")}"(*ActualArgs1),"{sort(\"NamePair\"),ql(\",\")}"(*Namepairs)) == ef1("{sort(\"Expression\"),ql(\",\")}"(*ActualArgs2)) 
 ==> 
 lf_AUX_MuASF_Term2C10_4(Int,"{sort(\"Term\"),ql(\",\")}"(*Terms),"{sort(\"Expression\"),ql(\",\")}"(cons(ActualArg,*ActualArgs1)),"{sort(\"NamePair\"),ql(\",\")}"(*Namepairs)) =
-  ef1("{sort(\"Expression\"),ql(\",\")}"(cons(ActualArg,*ActualArgs2))),
+  ef1("{sort(\"Expression\"),ql(\",\")}"(cons(ActualArg,*ActualArgs2)))
+
+,
 
 
 

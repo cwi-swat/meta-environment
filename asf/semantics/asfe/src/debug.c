@@ -1,7 +1,4 @@
-
-/*
-	$Id$
-*/
+/* $Id$ */
 
 /*{{{  eval-tide.c */
 
@@ -28,13 +25,9 @@
 #include "environment.h"
 #include "pre-post.h"
 
-#ifdef USE_TIDE
 #include <tide-adapter.h>
-#endif
 
 /*}}}  */
-
-#ifdef USE_TIDE
 
 /*{{{  variables */
 
@@ -105,7 +98,6 @@ static ATermList varlist_from_env(ATerm environment)
     ATermAppl tuple = (ATermAppl) ATgetFirst(env);
     ATermAppl variable = (ATermAppl) ATgetArgument(tuple, 0);
     /* Check for a 'slice' (list variable) */
-    /*ATwarning("tuple=%t\n\n\n", tuple);*/
     if (ATgetArity(ATgetAFun((ATermAppl)tuple)) == 3) {
       PT_Args args = appendSlice(PT_makeArgsEmpty(), (Slice)tuple);
       args = RWrestoreArgs(args, ATfalse);
@@ -130,7 +122,7 @@ static ATermList varlist_from_env(ATerm environment)
 static TA_Expr eval_resume(int pid, AFun fun, TA_ExprList args)
 {
   TA_setProcessState(pid, STATE_RUNNING);
-
+  
   return ATparse("true");
 }
 
@@ -159,7 +151,7 @@ static TA_Expr eval_var(int pid, AFun fun, TA_ExprList args)
     ATermAppl variable = (ATermAppl) ATgetArgument(tuple, 0);
     ATerm name = ATgetArgument(variable, 0);
     if (ATisEqual(name, var)) {
-      PT_Tree val = PT_makeTreeFromTerm(ATgetArgument(tuple, 1));
+      PT_Tree val = PT_TreeFromTerm(ATgetArgument(tuple, 1));
       val = RWrestoreTerm(val, ATfalse);
       return ATmake("<str>", PT_yieldTreeToString(val, ATfalse));
     }
@@ -185,9 +177,6 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
   PT_Tree var, value, restored;
   ATerm val;
 
-
-  /*ATfprintf(stderr, "getting source var: %t\n", args);*/
-
   if (!currentRule) {
     return TA_makeExprError("no current rule", NULL);
   }
@@ -197,8 +186,7 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
     return TA_makeExprError("illegal arguments", (ATerm)args);
   }
 
-  equ_tree =
-    PT_makeTreeFromTerm(ASF_makeTermFromASFConditionalEquation(currentRule->equation));
+  equ_tree = (PT_Tree) currentRule->equation;
   pos_anno = PT_getTreeAnnotation(equ_tree, pos_info);
 
   if (!pos_anno) {
@@ -211,7 +199,7 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
 	       &file, &start_line, &start_col, &end_line, &end_col, NULL, NULL)) {
     return TA_makeExprError("malformed position information", pos_anno);
   }
-    
+
   if ((strcmp(file, req_file) != 0)
       || (req_line < start_line)
       || (req_line == start_line && req_col < start_col)
@@ -219,8 +207,6 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
       || (req_line == end_line && req_col >= end_col)) {
     return TA_makeExprVarUnknown("outside current equation");
   }
-
-  /*fprintf(stderr, "coordinates are inside current equation\n");*/
 
   line = start_line;
   col  = start_col;
@@ -232,9 +218,6 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
   }
   diff_start = col - req_col;
 
-  /*fprintf(stderr, "variable found: '%s' at %d,%d (diff_start=%d)\n",*/
-	  /*PT_yieldTreeToString(var, ATfalse), line, col, diff_start);*/
-
   value = getVariableValue(env, var);
 
   if (value == NULL) {
@@ -243,12 +226,11 @@ static TA_Expr eval_source_var(int pid, AFun fun, TA_ExprList args)
     restored = RWrestoreTerm(value, ATfalse);
     yield = PT_yieldTreeToString(restored, ATfalse);
   }
-  
-  /*fprintf(stderr, "value = '%s'\n", yield);*/
+
 
   val = ATmake("<str>", yield);
   name = PT_yieldTreeToString(var, ATfalse);
-  
+
   return TA_makeExprVar(name, val, req_pos + diff_start, line, col, strlen(name));
 }
 
@@ -310,27 +292,24 @@ static TA_Expr eval_stack_trace(int pid, AFun fun, TA_ExprList args)
 
 /*{{{  void Tide_connect() */
 
-/*
- * Connect to tide
- */
-
-void Tide_connect()
+void Tide_connect(int port)
 {
-  char *name = "Asf+Sdf";
+  int cid;
+  char *name = "ASF+SDF";
 
   pos_info = ATmake("pos-info");
   ATprotect(&pos_info);
 
-  TA_registerFunction(ATmakeAFun("resume",     0, ATfalse), eval_resume);
-  TA_registerFunction(ATmakeAFun("break",      0, ATfalse), eval_break);
-  TA_registerFunction(ATmakeAFun("var",        1, ATfalse), eval_var);
-  TA_registerFunction(ATmakeAFun("source-var", 5, ATfalse), eval_source_var);
-  TA_registerFunction(ATmakeAFun("list-sources", 0, ATfalse), eval_list_sources);
-  TA_registerFunction(ATmakeAFun("stack-trace",0, ATfalse), eval_stack_trace);
+  cid = TA_connect(port);
 
-  TA_connect();
+  pid = TA_createProcess(cid, name);
 
-  pid = TA_createProcess(name);
+  TA_registerFunction(pid, ATmakeAFun("resume",     0, ATfalse), eval_resume);
+  TA_registerFunction(pid, ATmakeAFun("break",      0, ATfalse), eval_break);
+  TA_registerFunction(pid, ATmakeAFun("var",        1, ATfalse), eval_var);
+  TA_registerFunction(pid, ATmakeAFun("source-var", 5, ATfalse), eval_source_var);
+  TA_registerFunction(pid, ATmakeAFun("list-sources", 0, ATfalse), eval_list_sources);
+  TA_registerFunction(pid, ATmakeAFun("stack-trace",0, ATfalse), eval_stack_trace);
 }
 
 /*}}}  */
@@ -340,7 +319,7 @@ void Tide_disconnect()
 {
   /* Switch off debugging */
   if (TA_isConnected()) {
-    TA_disconnect(ATtrue);
+    TA_disconnect(ATtrue, pid);
   }
   ATunprotect(&pos_info);
 }
@@ -363,22 +342,15 @@ void Tide_step(ATerm position, ATerm newenv, int level)
   if (TA_isConnected()) {
     int old_state;
 
-    assert(tagCurrentRule);
-    assert(currentRule);
-
     if (!position) {
-      static ATbool warning_printed = ATfalse;
-      if (!warning_printed) {
-	ATwarning("Position information not available or incomplete, "
-		  "debugging will probably not work!\n");
-	warning_printed = ATtrue;
+      if (runVerbose) {
+        ATwarning("Warning: position information not available\n");
       }
       return;
     }
-
+	
     old_state = TA_getProcessState(pid);
     env = newenv;
-
 
     TA_atCPE(pid, TA_LocationFromTerm(position), level);
     TA_activateRules(pid, TA_makePortStep());
@@ -389,11 +361,11 @@ void Tide_step(ATerm position, ATerm newenv, int level)
       }
 
       while (TA_getProcessState(pid) == STATE_STOPPED) {
-	TA_handleOne();
+	TA_handleAny(pid);
       }
 
       if (TA_isConnected()) {
-	TA_activateRules(pid, TA_makePortStarted());
+			TA_activateRules(pid, TA_makePortStarted());
       }
     }
   }
@@ -406,10 +378,9 @@ void Tide_step(ATerm position, ATerm newenv, int level)
 void signal_handler(int sig)
 {
   fprintf(stderr, "signal handler called: %d\n", sig);
-  TA_disconnect(ATtrue);
+  TA_disconnect(ATtrue, pid);
   exit(1);
 }
 
 /*}}}  */
 
-#endif

@@ -1,11 +1,8 @@
-#ifndef WIN32
-/* These files can not be included in Windows NT*/
 #include <atb-tool.h>
 #include "asfoperations.tif.h"
-#endif
 
 #include <stdio.h>
-#include <stdlib.h>     /* used for exit(0) */
+#include <stdlib.h>  
 #include <assert.h>
 #include <ctype.h>
 #include <unistd.h>
@@ -37,7 +34,7 @@ ATerm extract_equations(int cid, ATerm modules)
     ATerm head = ATBunpack(ATgetFirst(list));
     ASF_ASFModule module = ASF_getStartTopASFModule(ASF_StartFromTerm(head));
 
-    eqsList = ASF_unionASFConditionalEquationList(eqsList,
+    eqsList = ASF_unionASFConditionalEquationList(eqsList, ASF_makeLayoutNewline(),
 		  ASF_getASFModuleEquationList(module));
   }
 

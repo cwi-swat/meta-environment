@@ -16,13 +16,6 @@
 #include "builtins.h"
 #include <string.h>
 
-/*
-#ifdef USE_TIDE
-#include "debug.h"
-#endif
-*/
-
-
 #define FAIL NULL
 #define TERM_PREFIX_LENGTH 50
 
@@ -80,7 +73,7 @@ static char* term_prefix(PT_Tree trm)
 static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
 {
   ATerm env = fail_env;
-
+  ASF_ASFTag savedTag = tagCurrentRule;
 
   tagCurrentRule = entry->tag;
   currentRule = entry;
@@ -96,11 +89,14 @@ static ATerm try(PT_Tree trm, equation_entry *entry, int depth)
     print_short_equation(depth, "success", entry);
 
     TIDE_STEP(entry->rhs, env, depth);
+
     rewrite_steps++;
   }
   else {
     print_short_equation(depth, "fail", entry);
   }
+
+  tagCurrentRule = savedTag;
 
   return env;
 }
@@ -167,6 +163,7 @@ static PT_Tree rewriteTop(PT_Tree trm, ATerm env, int depth, void *extra)
   if (runVerbose) {
     ATwarning("rewriting: %s\n", term_prefix(trm));
   }
+
 
   /* The order of this if-then-else is important because the conditions
    * are not mutually exclusive.
@@ -434,7 +431,7 @@ static PT_Tree rewriteBracketAppl(PT_Tree trm, ATerm env, int depth,
 static PT_Tree rewriteBuiltinAppl(ATerm builtin, PT_Tree trm, ATerm env, 
 				  int depth, void* extra)
 {
-  return rewriteInnermost(forwardBuiltin(builtin, trm), env, depth, 
+  return rewriteInnermost(forwardBuiltin(builtin, trm), env, depth+1, 
 			  NO_TRAVERSAL);
 }
 
@@ -588,29 +585,43 @@ static PT_Tree rewriteRecursive(PT_Tree trm, ATerm env, int depth, void* extra)
 PT_Tree rewriteInnermost(PT_Tree trm, ATerm env, int depth, void *extra)
 {
   PT_Tree reduct = FAIL;
+  PT_Tree save = trm;
 
   if (PT_isTreeLayout(trm)) {
     reduct = trm;
   }
-  else if (PT_isTreeVar(trm) || PT_isTreeVarList(trm)) {
-    reduct = rewriteVariableAppl(trm, env, depth, extra);
-  }
-  else if (PT_hasTreeArgs(trm)) {
-    /* first the kids */    
-    reduct = rewriteArgs(trm, env, depth, extra);
+  else {
+    ASF_ASFTag tag = tagCurrentRule;
 
-    if (reduct != FAIL) {
-      trm = reduct;
+    if (PT_isTreeVar(trm) || PT_isTreeVarList(trm)) {
+      reduct = rewriteVariableAppl(trm, env, depth, extra);
+      tagCurrentRule = innermostTag;
+      TIDE_STEP(save, putVariableValue(env, innermostSubject, reduct), depth);
+      tagCurrentRule = tag;
     }
+    else if (PT_hasTreeArgs(trm)) {
+      /* first the kids */    
+      reduct = rewriteArgs(trm, env, depth, extra);
 
-    if (trm) {
-      /* Then the parent */
-      reduct = rewriteTop(trm, env, depth, extra);
+      if (reduct != FAIL) {
+	trm = reduct;
+      }
 
-      if (reduct == FAIL) {
-	reduct = trm;
+      if (trm) {
+	/* Then the parent */
+
+	tagCurrentRule = innermostTag;
+	TIDE_STEP(save, putVariableValue(env, innermostSubject, trm), depth);
+	tagCurrentRule = tag;
+
+	reduct = rewriteTop(trm, env, depth+1, extra);
+
+	if (reduct == FAIL) {
+	  reduct = trm;
+	}
       }
     }
+
   }
 
   return reduct;

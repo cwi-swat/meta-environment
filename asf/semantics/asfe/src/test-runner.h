@@ -5,6 +5,6 @@
 #include <ASFME.h>
 
 ATerm runTests(ASF_ASFConditionalEquationList eqs,
-	       ASF_ASFTestEquationTestList tests);
+	       ASF_ASFTestEquationTestList tests, ATbool debug);
 
 #endif

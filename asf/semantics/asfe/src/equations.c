@@ -137,10 +137,6 @@ ASF_ASFConditionalEquation add_equ_pos_info(ASF_ASFConditionalEquation equ)
     return equ;
   }
 
-  /* Annotate to a depth so that the list of conditions is annotated */
-  tree = PT_addTreePosInfoSome(path, tree, DEPTH_OF_CONDITIONS_AND_EQUATION,
-			       ATfalse, ATtrue, start_line, start_col);
-  /*ATwarning("tree after annotating the equations: %t\n", tree);*/
   equ = ASF_ASFConditionalEquationFromTerm(PT_TreeToTerm(tree));
 
   if (ASF_hasASFConditionalEquationASFConditions(equ)) {
@@ -151,15 +147,8 @@ ASF_ASFConditionalEquation add_equ_pos_info(ASF_ASFConditionalEquation equ)
       ATwarning("no position information on conditions, "
 		"crippled debugging: %t\n", tree);
     } else {
-      /* Annotate to a depth so that the lhs and rhs of the conditions is
-       * annotated
-       */
-      tree = PT_addTreePosInfoSome(path, tree,
-				      DEPTH_OF_CONDITION_SIDES_IN_CONDITIONS,
-				      ATfalse, ATtrue, start_line, start_col);
       conds = ASF_ASFConditionsFromTerm(PT_TreeToTerm(tree));
       equ = ASF_setASFConditionalEquationASFConditions(equ, conds);
-      /*ATwarning("tree after annotating the conditions: %t\n", tree);*/
     }
   }
 
@@ -170,9 +159,6 @@ ASF_ASFConditionalEquation add_equ_pos_info(ASF_ASFConditionalEquation equ)
     ATwarning("no position information on equation, crippled debugging: %t\n",
 	      tree);
   } else {
-    tree = PT_addTreePosInfoSome(path, tree,
-				    DEPTH_OF_EQUATION_SIDES_IN_EQUATION,
-				    ATfalse, ATtrue, start_line, start_col);
     equation = ASF_ASFEquationFromTerm(PT_TreeToTerm(tree));
 
     equ = ASF_setASFConditionalEquationASFEquation(equ, equation);

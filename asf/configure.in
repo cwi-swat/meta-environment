@@ -26,17 +26,10 @@ AC_SUBST(CFLAGS)
 dnl }}}
 dnl {{{  Handle --with-tide
 
-AC_ARG_WITH(tide,
-   [  --with-tide             TIDE is in DIR],
-   TIDE=${withval}
-   TIDEDEF="-DUSE_TIDE"
-   TIDEINC="-I${TIDE}/include"
-   TIDELIB="-L${TIDE}/lib -ltide-adapter",
-)
+
+AC_PACKAGE_REQUIRE(tide, tide,
+   [  --with-tide=DIR         Tide is in DIR])
 AC_SUBST(TIDE)
-AC_SUBST(TIDEDEF)
-AC_SUBST(TIDEINC)
-AC_SUBST(TIDELIB)
 
 dnl }}}
 dnl {{{  Require ATerm library

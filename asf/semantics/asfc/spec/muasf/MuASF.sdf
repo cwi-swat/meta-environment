@@ -36,6 +36,7 @@ exports
 
 %% Terms can be annotated by types
     Term ":" Term             -> Term {assoc}
+    "default" ":" Term        -> Term {reject}
 
 %% \vspace{\baselineskip}
   sorts Annotations FuncDef FuncDefList SigArg SigArgList

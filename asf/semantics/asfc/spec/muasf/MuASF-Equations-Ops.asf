@@ -123,25 +123,25 @@ equations
 [default-gtc] get-traversal-continuation(Funid) = break
 
 [] is-traversal-top-down(Funid) = true when get-traversal-strategy(Funid) == top-down
-[default] is-traversal-top-down(Funid) = false
+[default-0] is-traversal-top-down(Funid) = false
 
 [] is-traversal-bottom-up(Funid) = true when get-traversal-strategy(Funid) == bottom-up
-[default] is-traversal-bottom-up(Funid) = false
+[default-0] is-traversal-bottom-up(Funid) = false
 
 [] is-traversal-break(Funid) = true when get-traversal-continuation(Funid) == break
-[default] is-traversal-break(Funid) = false
+[default-0] is-traversal-break(Funid) = false
 
 [] is-traversal-continue(Funid) = true when get-traversal-continuation(Funid) == continue
-[default] is-traversal-continue(Funid) = false
+[default-0] is-traversal-continue(Funid) = false
 
 [] is-traversal-trafo(Funid) = true when get-traversal-type(Funid) == trafo
-[default] is-traversal-trafo(Funid) = false
+[default-0] is-traversal-trafo(Funid) = false
 
 [] is-traversal-accu(Funid) = true when get-traversal-type(Funid) == accu
-[default] is-traversal-accu(Funid) = false
+[default-0] is-traversal-accu(Funid) = false
 
 [] is-traversal-accutrafo(Funid) = true when get-traversal-type(Funid) == accutrafo
-[default] is-traversal-accutrafo(Funid) = false
+[default-0] is-traversal-accutrafo(Funid) = false
 
 equations
 

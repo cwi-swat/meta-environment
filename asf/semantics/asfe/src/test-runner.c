@@ -13,6 +13,7 @@
 #include <Error.h>
 #include "equations.h"
 #include "values.h"
+#include "debug.h"
 
 /*}}}  */
 
@@ -21,6 +22,9 @@
 #define BUFFER_SIZE 10240
 
 /*}}}  */
+
+static PT_Tree leftSubject;
+static PT_Tree rightSubject;
 
 /*{{{  static ATerm prettyTag(ASF_ASFTag tag) */
 
@@ -60,8 +64,12 @@ static ASF_ASFTag testOne(ASF_ASFTestEquation test)
   PT_Tree rhs;
   ATbool equal = ATfalse;
 
+
+  tagCurrentRule = testRunnerTag;
+  TIDE_STEP(tobetested, environment, 0);
   tobetested = prepareCondition(tobetested);
 
+  tagCurrentRule = tag;
   if (ASF_hasASFTestEquationASFConditions(test)) {
     ASF_ASFConditions conditions;
     ASF_ASFConditionList condList;
@@ -70,7 +78,7 @@ static ASF_ASFTag testOne(ASF_ASFTestEquation test)
     conditions = prepareConditions(conditions);
     
     condList = ASF_getASFConditionsList(conditions);
-    environment = matchConditions(condList, environment, 0);
+    environment = matchConditions(condList, environment, 1);
 
     if (is_fail_env(environment)) {
       return tag;
@@ -80,10 +88,9 @@ static ASF_ASFTag testOne(ASF_ASFTestEquation test)
   lhs = (PT_Tree) ASF_getASFConditionLhs(tobetested);
   rhs = (PT_Tree) ASF_getASFConditionRhs(tobetested);
 
-  lhs = rewriteInnermost(lhs, environment, 0, NO_TRAVERSAL);
-  rhs = rewriteInnermost(rhs, environment, 0, NO_TRAVERSAL); 
+  lhs = rewriteInnermost(lhs, environment, 1, NO_TRAVERSAL);
+  rhs = rewriteInnermost(rhs, environment, 1, NO_TRAVERSAL); 
 
-  tagCurrentRule = tag;
 
   if (!no_new_vars(lhs, environment)) {
     RWaddError("Left side of test introduces a variable", 
@@ -97,6 +104,13 @@ static ASF_ASFTag testOne(ASF_ASFTestEquation test)
   }
 
   equal = isAsFixEqual(lhs, rhs);
+
+  environment = putVariableValue(environment, leftSubject, lhs);
+  environment = putVariableValue(environment, rightSubject, rhs);
+
+
+  tagCurrentRule = testRunnerTag;
+  TIDE_STEP(tobetested, environment, 0);
 
   if (ASF_isASFConditionNegative(tobetested)) {
     equal = !equal;
@@ -137,7 +151,7 @@ static ERR_ErrorList testAll(ASF_ASFTestEquationTestList tests,
 /*{{{  ATermList runTests(ASF_ASFConditionalEquationList eqs, */
 
 ATerm runTests(ASF_ASFConditionalEquationList eqs,
-	       ASF_ASFTestEquationTestList tests)
+	       ASF_ASFTestEquationTestList tests, ATbool debug)
 {
    ASF_OptLayout e = ASF_makeOptLayoutAbsent();
    ERR_ErrorList failed = ERR_makeErrorListEmpty();
@@ -147,8 +161,13 @@ ATerm runTests(ASF_ASFConditionalEquationList eqs,
    }
 
    ASF_protectASFTag(&tagCurrentRule);
+   PT_protectTree(&innermostSubject);
+   PT_protectTree(&leftSubject);
+   PT_protectTree(&rightSubject);
+   ASF_protectASFTag(&innermostTag);
+   ASF_protectASFTag(&testRunnerTag);
 
-   useTide = ATfalse;
+   useTide = debug;
 
    eqs = RWprepareEquations(eqs, ATfalse);
    enter_equations(eqs);
@@ -158,7 +177,14 @@ ATerm runTests(ASF_ASFConditionalEquationList eqs,
    }
 
    tagCurrentRule = ASF_makeASFTagNotEmpty(e,
-			   ASF_makeASFTagIdManyChars("*undefined*"),e);
+				   ASF_makeASFTagIdManyChars("*undefined*"),e);
+   innermostTag = ASF_makeASFTagNotEmpty(e,
+				 ASF_makeASFTagIdManyChars("*innermost*"),e);
+   testRunnerTag = ASF_makeASFTagNotEmpty(e,
+				  ASF_makeASFTagIdManyChars("*test-runner*"),e);
+   innermostSubject = PT_makeTreeLit("*subject*");
+   leftSubject = PT_makeTreeLit("*lhs*");
+   rightSubject = PT_makeTreeLit("*rhs*");
    rewrite_steps = 0;
    initBuiltins();
 

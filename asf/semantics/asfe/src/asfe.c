@@ -21,26 +21,25 @@
 #include "evaluator.h"
 #include "errors.h"
 #include "test-runner.h"
-
-#ifdef USE_TIDE
 #include "debug.h"
-#endif
 
 /*}}}  */
 /*{{{  defines */
 
 #define TICK2SEC(t)             (((double)(t))/CLK_TCK)
+#include "asc-support-me.h"
+#include "debug.h"
 
 /*}}}  */
 /*{{{  variables */
 
-static char myarguments[] = "abde:hi:lmo:p:tvV";
+static char myarguments[] = "abd:e:hi:lmo:p:tvV";
 static char myname[] = "asfe";
-static char myversion[] = "0.7";
+static char myversion[] = "0.8";
 
-/* global tool id for ToolBus purposes */
 int toolbus_id = -1;
 ATerm acknowledgement = NULL;
+static int tide_port;
 /*}}}  */
 
 /*{{{  void usage(char *prg, ATbool is_err) */
@@ -56,9 +55,7 @@ void usage(char *prg, ATbool is_err)
 	    "Options:\n"
 	    "\t-a              allow ambiguous trees as input (default off)\n"
 	    "\t-b              output terms in BAF format (default)\n"
-#ifdef USE_TIDE
-	    "\t-d              connect to the tide debugger\n"
-#endif
+	    "\t-d port         connect to the tide debugger at a port\n"
 	    "\t-t              output terms in plaintext format\n"
 	    "\t-h              display help information (usage)\n"
 	    "\t-e file         use the equations |file|\n"
@@ -98,11 +95,9 @@ void abort_handler(int signal)
 
 void rec_terminate(int cid, ATerm t)
 {
-#ifdef USE_TIDE
   if (useTide) {
     Tide_disconnect();
   }
-#endif
   exit(0);
 }
 
@@ -121,7 +116,7 @@ void rec_ack_event(int cid, ATerm t)
 /*}}}  */
 /*{{{  ATerm interpret(int cid, char *modname, ATerm trm, ATerm tide) */
 
-ATerm interpret(int cid, char *modname, ATerm eqs, ATerm parseTable, 
+ATerm interpret(int cid, const char *modname, ATerm eqs, ATerm parseTable, 
 		ATerm trm, ATerm tide)
 {
   PT_ParseTree parseTree;
@@ -133,11 +128,12 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm parseTable,
     setParseTable(parseTable); 
   }
 
+  setCid(cid);		// render cid accessible from the outside
+
+  /* connect to TIDE debugger in case TIDE support is currently active */
   if (ATmatch(tide, "on")) {
     debug = ATtrue;
-#ifdef USE_TIDE
-    Tide_connect();
-#endif
+    Tide_connect(ATBgetPort(cid));
   }
   else {
     debug = ATfalse;
@@ -163,11 +159,21 @@ ATerm interpret(int cid, char *modname, ATerm eqs, ATerm parseTable,
 /*}}}  */
 /*{{{  ATerm run_tests(int cid, char *modname, ATerm eqs, ATerm tests) */
 
-ATerm run_tests(int cid, char *modname, ATerm eqs, ATerm tests)
+ATerm run_tests(int cid, const char *modname, ATerm eqs, ATerm tests, ATerm tide)
 {
   ASF_ASFConditionalEquationList eqsList;
   ASF_ASFTestEquationTestList testList;
   ATerm result;
+  ATbool debug;
+
+  /* connect to TIDE debugger in case TIDE support is currently active */
+  if (ATmatch(tide, "on")) {
+    debug = ATtrue;
+    Tide_connect(ATBgetPort(cid));
+  }
+  else {
+    debug = ATfalse;
+  }
 
   eqs = ATBunpack(eqs);
   eqsList = ASF_ASFConditionalEquationListFromTerm(eqs);
@@ -175,7 +181,17 @@ ATerm run_tests(int cid, char *modname, ATerm eqs, ATerm tests)
   tests = ATBunpack(tests);
   testList = ASF_ASFTestEquationTestListFromTerm(tests);
 
-  result = (ATerm) runTests(eqsList, testList);
+  result = (ATerm) runTests(eqsList, testList, debug);
+
+  if (debug) {
+    Tide_disconnect();
+  }
+
+  result = (ATerm) runTests(eqsList, testList, debug);
+
+  if (debug) {
+    Tide_disconnect();
+  }
 
   if (RWgetErrors() == NULL || !ERR_isErrorListEmpty(RWgetErrors())) {
     return ATmake("snd-value(<term>)", result);
@@ -241,6 +257,10 @@ int main(int argc, char *argv[])
       switch (c) {
 	case 'a': allow_ambs = ATtrue;             break;
 	case 'b': bafmode = 1;                     break;
+	case 'd': 
+		  use_tide = ATtrue;
+		  tide_port = atoi(optarg);
+		  break;
 	case 't': bafmode = 0;                     break;
 	case 'v': runVerbose = ATtrue;             break;
 	case 'e': eqsfile = optarg;                break;
@@ -249,7 +269,6 @@ int main(int argc, char *argv[])
         case 'm': mark_new_layout=ATtrue;          break;		  
 	case 'o': output = optarg;                 break;
 	case 'p': parsetable = optarg;             break;
-	case 'd': use_tide = ATtrue;		   break;
 	case 'V': version(argv[0]);                break;
 	case 'h': usage(argv[0], ATfalse);         break;
 	default: usage(argv[0], ATtrue);           break;
@@ -286,15 +305,13 @@ int main(int argc, char *argv[])
     parseTree = PT_ParseTreeFromTerm(term);
     fclose(iofile);
 
-    /* Optionally connect to the tide debugger */
+    /* Optionally connect to the tide debugger, but always initialize
+     * the ToolBus layer, just in case somebody uses a builtin that
+     * connects to the ToolBus
+     */
+    ATBinit(argc, argv, &bottomOfStack);
     if (use_tide) {
-#ifdef USE_TIDE
-      ATBinit(argc, argv, &bottomOfStack);
-      Tide_connect();
-#else
-      ATwarning("tide support is not enabled! (try configuring --with-tide)\n");
-      exit(1);
-#endif
+      Tide_connect(tide_port);
     }
 
     /* Rewrite the term */
@@ -328,11 +345,9 @@ int main(int argc, char *argv[])
     fclose(iofile);
   }
 
-#ifdef USE_TIDE
   if (use_tide) {
     Tide_disconnect();
   }
-#endif
 
   return returncode;
 }

@@ -251,8 +251,8 @@ equations
 
 [ci-cont] continuation-id(Term*1, continue, Term*2) = continue
 [ci-break] continuation-id(Term*1, break, Term*2) = break
-[default] continuation-id(Term*1, bottom-up, Term*2) = continue
-[default] continuation-id(Term*1, top-down, Term*2) = break
+[default-0] continuation-id(Term*1, bottom-up, Term*2) = continue
+[default-0] continuation-id(Term*1, top-down, Term*2) = break
 
 equations
 

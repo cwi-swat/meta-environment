@@ -1,7 +1,9 @@
 equations
 
-  [cd1] Msgs1 := check-sdf(Definition1),
+  [cd1] InfoMsgTuple1 := check-sdf(Definition1, Unknown),
         Definition2 := remove-labels(Definition1),
+        InfoMsgTuple2 := check-constructors(Definition2, InfoMsgTuple1),
+        Msgs1 := get-messages(InfoMsgTuple2),
         Msgs2 := check-asf-attributes(Definition2),
         Msgs3 := check-symbols(Definition2),
         Msgs4 := check-for-asf-sorts(Definition2),
@@ -12,8 +14,10 @@ equations
           summary("AsfSdfChecker", "Unknown", 
                    [Msgs1, Msgs2, Msgs3, Msgs4, Msgs5, Msgs6])
 
-  [cd1] Msgs1 := check-sdf(Definition1),
+  [cd1] InfoMsgTuple1 := check-sdf(Definition1, $ModuleId),
         Definition2 := remove-labels(Definition1),
+        InfoMsgTuple2 := check-constructors(Definition2, InfoMsgTuple1),
+        Msgs1 := get-messages(InfoMsgTuple2),
         Msgs2 := check-asf-attributes(Definition2),
         Msgs3 := check-symbols(Definition2),
         Msgs4 := check-for-asf-sorts(Definition2),

@@ -49,7 +49,7 @@ equations
                ((identifier("t""a""b""l""e""_" Char*),NULL),ce-pair*2,
                 ATerm Ident(FormalArgs) { Decl+ Stat*2 },Aint2)
 
-  [default] locate-constants-in-decl(Decl,(ce-pair*,Aint)) = 
+  [default-0] locate-constants-in-decl(Decl,(ce-pair*,Aint)) = 
             (ce-pair*,Decl,Aint)
 
 equations

@@ -11,12 +11,6 @@
 #include "debug.h"
 #include "errors.h"
 
-/*
-#ifdef USE_TIDE
-#include "debug.h"
-#endif
-*/
-
 /* This algorithm matches a term against an ASF equation.
  *
  * Because list matching requires backtracking, the algorithm is modelled in 
@@ -61,28 +55,6 @@ static ATerm matchArgument(ATerm env,
 
 /*}}}  */
 
-/* Retrieve the sign (= or !=) part of a condition as a term.
- * Note that this function uses MEPT specific knowledge because
- * apigen is not good enough (yet) to generate getters for literals!
- *
- * This function is only used to make it possible to retrieve the
- * position information of the sign for debugging using tide!
- */
-
-/*{{{  ATerm getConditionSign(ASF_ASFCondition cond) */
-
-ATerm getConditionSign(ASF_ASFCondition cond)
-{
-  PT_Tree tree = PT_TreeFromTerm(ASF_ASFConditionToTerm(cond));
-
-  PT_Args args = PT_getTreeArgs(tree);
-  PT_Tree sign = PT_getArgsHead(PT_getArgsTail(PT_getArgsTail(args)));
-
-  return PT_TreeToTerm(sign);
-}
-
-/*}}}  */
-
 /*{{{  static ATerm matchEqualityCondition(ASF_ASFCondition cond, */
 
 static ATerm matchEqualityCondition(ASF_ASFCondition cond,
@@ -92,6 +64,7 @@ static ATerm matchEqualityCondition(ASF_ASFCondition cond,
 				    int depth)
 {
   PT_Tree lhstrm, rhstrm;
+  equation_entry *cur = currentRule;
 
   /* assuming that none of the sides introduce new variables */
 
@@ -109,7 +82,8 @@ static ATerm matchEqualityCondition(ASF_ASFCondition cond,
     return fail_env;
   }
 
-  TIDE_STEP(getConditionSign(cond), env, depth);
+  currentRule = cur;
+  TIDE_STEP((PT_Tree) cond, env, depth);
   if (isAsFixEqual(lhstrm, rhstrm)) {
     return matchConditions(conds, env, depth);
   }
@@ -127,6 +101,7 @@ static ATerm matchNegativeCondition(ASF_ASFCondition cond,
 				    int depth)
 {
   PT_Tree lhstrm, rhstrm;
+  equation_entry *cur = currentRule;
 
   /* assuming that none of the sides introduce new variables */
 
@@ -144,7 +119,8 @@ static ATerm matchNegativeCondition(ASF_ASFCondition cond,
     return fail_env;
   }
 
-  TIDE_STEP(getConditionSign(cond), env, depth);
+  currentRule = cur;
+  TIDE_STEP((PT_Tree) cond, env, depth);
   if (isAsFixEqual(lhstrm, rhstrm)) {
     return fail_env;
   }
@@ -160,6 +136,7 @@ static ATerm matchMatchCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree rhs
 				    ATerm env, int depth)
 {
   PT_Tree rhstrm = NULL;
+  equation_entry *cur = currentRule;
 
   TIDE_STEP(rhs, env, depth);
   rhstrm = rewriteInnermost(rhs, env, depth + 1, NO_TRAVERSAL);
@@ -168,8 +145,8 @@ static ATerm matchMatchCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree rhs
     return fail_env;
   }
 
-  TIDE_STEP(lhs, env, depth);
-  TIDE_STEP(getConditionSign(cond), env, depth);
+  currentRule = cur;
+  TIDE_STEP((PT_Tree) cond, env, depth);
 
   env = matchArgument(env, lhs, rhstrm, conds, 
 		      PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
@@ -189,6 +166,7 @@ static ATerm matchNoMatchCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree r
   PT_Tree rhstrm = NULL;
   ATerm oldEnv = env;
   ATerm result = fail_env;
+  equation_entry *cur = currentRule;
 
   TIDE_STEP(rhs, env, depth);
   rhstrm = rewriteInnermost(rhs, env, depth + 1, NO_TRAVERSAL);
@@ -202,7 +180,8 @@ static ATerm matchNoMatchCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree r
 			 PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
 			 NULL, depth);
 
-  TIDE_STEP(getConditionSign(cond), result, depth);
+  currentRule = cur;
+  TIDE_STEP((PT_Tree) cond, result, depth);
 
   if (is_fail_env(result)) {
     return matchConditions(conds, oldEnv, depth);
@@ -221,6 +200,7 @@ static ATerm matchPositiveCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree 
 				    ATerm env, int depth)
 {
   PT_Tree lhstrm, rhstrm;
+  equation_entry *cur = currentRule;
 
   /* assuming that not both sides have new vars */
 
@@ -231,7 +211,8 @@ static ATerm matchPositiveCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree 
       return fail_env;
     }
     TIDE_STEP(rhs, env, depth);
-    TIDE_STEP(getConditionSign(cond), env, depth);
+    currentRule = cur;
+    TIDE_STEP((PT_Tree) cond, env, depth);
     return matchArgument(env, rhs, lhstrm, conds, 
 			 PT_makeArgsEmpty(), PT_makeArgsEmpty(), 
 			 NULL, depth);
@@ -252,7 +233,8 @@ static ATerm matchPositiveCondition(ASF_ASFCondition cond, PT_Tree lhs, PT_Tree 
       return fail_env;
     }
 
-    TIDE_STEP(getConditionSign(cond), env, depth);
+    currentRule = cur;
+    TIDE_STEP((PT_Tree) cond, env, depth);
     if (isAsFixEqual(lhstrm, rhstrm)) {
       return matchConditions(conds, env, depth);
     }

@@ -1,6 +1,4 @@
-/*
- * $Id$
- */
+/* $Id$ */
 
 #include <stdio.h>
 #include <aterm1.h>
@@ -104,10 +102,17 @@ main (int argc, char **argv)
 
   for(;!ATisEmpty(list); list = ATgetNext(list)) {
     ATerm head = ATgetFirst(list);
-    ASF_ASFModule module = ASF_getStartTopASFModule(ASF_StartFromTerm(head));
+    ASF_ASFConditionalEquationList list;
 
-    alleqs = ASF_unionASFConditionalEquationList(alleqs,
-		  ASF_getASFModuleEquationList(module));
+    if (ATgetType(head) == AT_LIST) {
+      list = ASF_ASFConditionalEquationListFromTerm(head);
+    }
+    else {
+      ASF_ASFModule module = ASF_getStartTopASFModule(ASF_StartFromTerm(head));
+      list = ASF_getASFModuleEquationList(module);
+    }
+
+    alleqs = ASF_unionASFConditionalEquationList(alleqs, ASF_makeLayoutNewline(), list);
   }
 
   ATwriteToNamedBinaryFile(ASF_ASFConditionalEquationListToTerm(alleqs),

@@ -48,10 +48,11 @@ asfe_LDADD = \
 	-L$(TOOLBUSLIB)/lib -lATB \
 	-L$(ERROR_SUPPORT)/lib -lErrorAPI -lLocationAPI \
 	-L$(ATERM)/lib -lATerm \
-	${TIDELIB} $(SOCKLIBS)
+	-L$(TIDE)/lib -ltide-adapter \
+	$(SOCKLIBS)
 
 INCLUDES = \
-	${TIDEINC} \
+	-I${TIDE}/include \
 	-I$(PT_SUPPORT)/include \
 	-I$(SGLR)/include \
 	-I$(ATERM)/include \
@@ -60,4 +61,4 @@ INCLUDES = \
 	-I$(ASF_SUPPORT)/include \
 	-I$(ASC_SUPPORT)/include \
 	-I$(top_builddir)/semantics/builtins/lib \
-	${TIDEDEF} ${TRAVERSALSDEF} ${LAYOUTDEF}
+	${TRAVERSALSDEF} ${LAYOUTDEF}

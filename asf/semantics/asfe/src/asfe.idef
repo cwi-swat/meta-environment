@@ -40,7 +40,7 @@ in
   +
     rec-msg(run-tests(ModuleName?, Equations?, Tests?)) .
     execute(asfe, Eval?) .
-    snd-eval(Eval, run-tests(ModuleName, Equations, Tests)) .
+    snd-eval(Eval, run-tests(ModuleName, Equations, Tests, Tide)) .
     (
       rec-value(Eval, test-results(ErrorList?)) .
       snd-msg(test-results(ErrorList))

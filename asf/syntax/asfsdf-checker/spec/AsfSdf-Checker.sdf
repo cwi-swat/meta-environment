@@ -1,5 +1,6 @@
 module AsfSdf-Checker
 
+imports ConstructorChecker
 imports ExportedVariablesChecker
 imports Sdf-Checker AsfSdf-AttributeChecker KernelSyntaxChecker 
         SymbolChecker RemoveLabels AsfSortChecker
@@ -13,7 +14,8 @@ exports
 
 hiddens
   variables
-    "Definition"[0-9]* -> Definition
-    "Msgs"[0-9]*       -> {Error ","}*
-    "$ModuleId"[0-9]*  -> ModuleId
-    "$Char*" [0-9]*    -> CHAR*
+    "Definition"[0-9]*   -> Definition
+    "Msgs"[0-9]*         -> {Error ","}*
+    "$ModuleId"[0-9]*    -> ModuleId
+    "$Char*" [0-9]*      -> CHAR*
+    "InfoMsgTuple"[0-9]* -> Info-Msg-Tuple

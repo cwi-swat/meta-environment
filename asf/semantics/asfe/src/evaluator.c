@@ -1,6 +1,4 @@
-/*
-  $Id$
- */
+/* $Id$ */
 
 #include "equations.h"
 #include "asfe.tif.h"
@@ -9,10 +7,7 @@
 #include "errors.h"
 #include "pre-post.h"
 #include <asc-builtins.h>
-
-#ifdef USE_TIDE
 #include "debug.h"
-#endif
 
 
 /*{{{  defines */
@@ -23,6 +18,9 @@
 
 /* global variables */
 ASF_ASFTag tagCurrentRule = NULL;
+PT_Tree innermostSubject = NULL;
+ASF_ASFTag innermostTag = NULL;
+ASF_ASFTag testRunnerTag = NULL;
 ATbool aborted = ATfalse;
 ATbool runVerbose = ATfalse;
 ATbool useTide = ATfalse;
@@ -32,7 +30,7 @@ unsigned rewrite_steps = 0;
 
 /*{{{  ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_ASFConditionalEquationList eqs, */
 
-ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_ASFConditionalEquationList eqs,
+ATerm evaluator(const char *name, PT_ParseTree parseTree, ASF_ASFConditionalEquationList eqs,
                 ATbool debug, ATbool remove_layout, ATbool mark_new_layout,
 		ATbool allow_ambs)
 {
@@ -41,6 +39,8 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_ASFConditionalEquationLi
   PT_Tree tree;
 
   ASF_protectASFTag(&tagCurrentRule);
+  PT_protectTree(&innermostSubject);
+  ASF_protectASFTag(&innermostTag);
 
   useTide = debug;
 
@@ -60,10 +60,12 @@ ATerm evaluator(char *name, PT_ParseTree parseTree, ASF_ASFConditionalEquationLi
     memo_table = MemoTableCreate();
   }
 
-  tagCurrentRule
-    = ASF_makeASFTagNotEmpty(e,
-			     ASF_makeASFTagIdManyChars("*undefined*"),
-			     e);
+  tagCurrentRule = ASF_makeASFTagNotEmpty(e,
+				  ASF_makeASFTagIdManyChars("*undefined*"),e);
+  innermostTag = ASF_makeASFTagNotEmpty(e,
+				ASF_makeASFTagIdManyChars("*innermost*"),e);
+  innermostSubject = PT_makeTreeLit("*subject*");
+
   rewrite_steps = 0;
   initBuiltins();
   
