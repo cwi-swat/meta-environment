@@ -1,3 +1,6 @@
+2002/01/23 (jurgenv@cwi.nl)
+ * Fixed a bug in addapisyntax; sequences were not supported.
+
 2002/01/22 (jurgenv@cwi.nl)
  * Changed addapisyntax a bit after suggestions of P. Mosses. 
    1. You can use labels without a cons now.
