@@ -8,6 +8,7 @@ INCLUDES = \
 	-I$(top_srcdir)/editors/text/common \
 	-I$(top_srcdir)/editors/structure/src \
 	-I$(ATERM)/include \
+	-I$(PT_SUPPORT)/include \
 	-I$(TOOLBUSLIB)/include \
 	-I$(ERROR_SUPPORT)/include \
 	-DSTARTUP_SCRIPT="\"$(datadir)/meta/$(SCRIPT)\""
