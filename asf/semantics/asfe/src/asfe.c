@@ -243,7 +243,6 @@ int main(int argc, char *argv[])
       }
     }
 
-    ATsetChecking(ATtrue);
     /* Get the equations from file */
     if (!(iofile = fopen(eqsfile, "rb"))) {
       ATerror("%s: cannot open %s\n", myname, eqsfile);
