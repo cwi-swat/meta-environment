@@ -1,5 +1,9 @@
 $Id$
 
+Tue May  4 11:16:57 CEST 2004 <jurgenv@cwi.nl>
+ * Refactored IO module into Parsing and Files, and IOResults into
+   ParsetreeCon and ReadWriteCon.
+
 Mon May  3 13:11:18 CEST 2004 <jurgenv@cwi.nl>
  * Added hidden context-free start-symbols in all library modules
    where appropriate. Removed some context-free start-symbols that
