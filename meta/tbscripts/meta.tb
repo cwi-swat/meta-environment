@@ -56,7 +56,8 @@ let
   Syntax  : str,
   Semantics : str,
   Term : str,
-  Sort : term
+  Sort : term,
+  Pid  : int
 in
   Id := process-id .
   (
