@@ -85,3 +85,16 @@ ASF_Layout ASF_makeLayoutEmpty()
 } 
 
 /*}}}  */
+
+ATbool ASF_isTreeLexicalConstructorFunction(ASF_Tree tree)
+{
+  extern ATerm ASF_patternTreeLexicalConstructor;
+
+  if (ATmatchTerm(ASF_TreeToTerm(tree), ASF_patternTreeLexicalConstructor,
+                  NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
+    return ATtrue;
+  }
+
+  return ATfalse;
+}
+

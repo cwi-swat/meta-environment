@@ -1,3 +1,8 @@
+2001/06/21 (jurgenv@cwi.nl)
+  * added a function that checks if a tree is a lexical constructor function:
+    ASF_isTreeLexicalConstructorFunction. Do not use the generated function
+    ASF_isTreeLexicalConstructor, because it will always return true when
+    DISABLE_DYNAMIC_CHECKING is defined.
 
 2001/04/23 (markvdb@cwi.nl)
   * Released version 0.2, and bumped into 0.3. 
