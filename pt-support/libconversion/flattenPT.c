@@ -151,7 +151,7 @@ static PT_Args flattenList(PT_Tree tree, PT_Args tail)
 
   if (PT_isTreeAmb(tree)) {
     PT_Tree amb = flattenTree(tree);
-    return PT_makeArgsList(amb, PT_makeArgsEmpty());
+    return PT_makeArgsList(amb, tail);
   }
 
   if (PT_isTreeAppl(tree)) {
@@ -209,7 +209,7 @@ static PT_Args flattenSepList(PT_Tree tree, PT_Args tail)
 
   if (PT_isTreeAmb(tree)) {
     PT_Tree amb = flattenTree(tree);
-    return PT_makeArgsList(amb, PT_makeArgsEmpty());
+    return PT_makeArgsList(amb, tail);
   }
   
   if (PT_isTreeAppl(tree)) {
